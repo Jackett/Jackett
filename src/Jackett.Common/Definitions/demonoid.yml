@@ -6,7 +6,7 @@
   type: public
   encoding: UTF-8
   links:
-    - https://www.dnoid.to/
+    - https://www.demonoid.is/
 
   caps:
     categorymappings:
@@ -258,9 +258,9 @@
       - {id: 235, cat: TV, desc: "TV Western"}
 
     modes:
-      search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
+      query: [q]
+      tv-query: [q, season, ep]
+      movie-query: [q]
 
   settings: []
 
@@ -269,13 +269,13 @@
 
   search:
     paths:
-      # https://www.dnoid.to/files/?c1&c2&c3&lang=0&incldead=3&search=&sort=added&order=desc
+      # https://www.demonoid.is/files/?c1&c2&c3&lang=0&seeded=2&query=&sort=added&order=desc
       - path: files/
     inputs:
       $raw: "{{range .Categories}}c{{.}}&{{end}}"
-      # 1 active 2 dead 3 both
-      incldead: 3
-      search: "{{.Keywords}}"
+      # 0 active 1 dead 2 both
+      seeded: 3
+      query: "{{.Keywords}}"
       sort: added
       order: desc
     rows:
