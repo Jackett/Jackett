@@ -105,6 +105,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * ArenaBG
  * BaibaKo
  * BookTracker
+ * CasStudioTV
  * Crazy's Corner
  * CzTorrent
  * Deildu
@@ -120,6 +121,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * MVGroup Forum
  * MVGroup Main
  * NetHD (VietTorrent)
+ * PiratBit
  * RockBox
  * RuTracker
  * Sharewood
@@ -185,7 +187,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Carpathians
  * CartoonChaos (CC)
  * CasaTorrent
- * CasStudioTV
  * CCFBits
  * CGPeers
  * CHDBits
@@ -302,7 +303,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Passione Torrent <!-- maintained by bonny1992 -->
  * PassThePopcorn (PTP)
  * Peers.FM
- * PiratBit
  * PirateTheNet (PTN)
  * PixelCove (Ultimate Gamer)
  * PiXELHD (PxHD)
