@@ -6,6 +6,8 @@
   type: public
   encoding: UTF-8
   links:
+    - https://www.demonoid.is/
+  legacylinks:
     - https://www.dnoid.to/
 
   caps:
@@ -269,20 +271,25 @@
 
   search:
     paths:
-      # https://www.dnoid.to/files/?c1&c2&c3&lang=0&incldead=3&search=&sort=added&order=desc
+      # https://www.demonoid.is/files/?c154&language=0&quality=0&seeded=2&query=world&to=on&sort=
+      # https://www.demonoid.is/files/?seeded=2&language=0&quality=0&to=on&query=world
       - path: files/
     inputs:
       $raw: "{{range .Categories}}c{{.}}&{{end}}"
-      # 1 active 2 dead 3 both
-      incldead: 3
-      search: "{{.Keywords}}"
-      sort: added
-      order: desc
+      # 0 seeded 1 unseeded 2 both
+      seeded: 2
+      # 0 all 1 English etc
+      language: 0
+      # 0 all
+      quality: 0
+      # search in titles only
+      to: on
+      query: "{{.Keywords}}"
     rows:
-      selector: table.ttable_headinner tr:has(td[class^="tone_1"])
+      selector: table.font_12px tr:has(td[class^="tone_1"])
       after: 1
-      filters:
-        - name: andmatch
+#      filters:
+#        - name: andmatch
       dateheaders:
         selector: tr td.added_today:not(:contains("Sponsored links"))
         filters:
