@@ -2,7 +2,7 @@
   site: vanila
   name: Vanila
   description: "Vanila is a RUSSIAN Semi-Private Torrent Tracker for MOVIES / TV / MUSIC"
-  language: ru
+  language: ru-ru
   type: semi-private
   encoding: UTF-8
   links:

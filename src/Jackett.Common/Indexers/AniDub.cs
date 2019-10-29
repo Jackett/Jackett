@@ -37,7 +37,7 @@ namespace Jackett.Common.Indexers
                            configData: new ConfigurationDataAniDub())
         {
             Encoding = Encoding.UTF8;
-            Language = "ru-RU";
+            Language = "ru-ru";
             Type = "semi-private";
 
             AddCategoryMapping(2, TorznabCatType.TVAnime, "Аниме TV");
