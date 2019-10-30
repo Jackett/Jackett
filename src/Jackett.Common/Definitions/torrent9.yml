@@ -7,9 +7,7 @@
   encoding: UTF-8
   followredirect: true
   links:
-    - https://www.torrent9.is/
     - https://www.torrent09.uno/
-    - https://www4.torrent9.to/
 
   legacylinks:
     - http://www.torrent9.ec/
@@ -33,6 +31,8 @@
     - https://www.torrent9.cat/
     - https://ww1.torrent9.is/
     - https://ww1.torrent9.to/
+    - https://www.torrent9.is/
+    - https://www4.torrent9.to/
 
   caps:
     categorymappings:
