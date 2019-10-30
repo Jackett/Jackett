@@ -60,7 +60,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(81, TorznabCatType.MoviesBluRay, "Movies/BluRay");
             AddCategoryMapping(82, TorznabCatType.MoviesOther, "Movies/CAM-TS");
             AddCategoryMapping(102, TorznabCatType.MoviesOther, "Movies/Remux");
-            AddCategoryMapping(103, TorznabCatType.MoviesWEBDL, "Movies/Web-Rip");
+            AddCategoryMapping(22, TorznabCatType.MoviesWEBDL, "Movies/Web-Rip/DL");
             AddCategoryMapping(105, TorznabCatType.Movies, "Movies/Kids");
             AddCategoryMapping(16, TorznabCatType.MoviesUHD, "Movies/4K");
             AddCategoryMapping(17, TorznabCatType.MoviesBluRay, "Movies/4K bluray");
@@ -96,10 +96,12 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(52, TorznabCatType.PCMac, "Mac");
             AddCategoryMapping(65, TorznabCatType.BooksComics, "Books/Comic");
             AddCategoryMapping(53, TorznabCatType.PC, "Appz");
+            AddCategoryMapping(24, TorznabCatType.PCPhoneOther, "Mobile/Appz");
 
             // Music
             AddCategoryMapping(4, TorznabCatType.Audio, "Music/Audio");
             AddCategoryMapping(11, TorznabCatType.AudioVideo, "Music/Videos");
+            AddCategoryMapping(116, TorznabCatType.Audio, "Music/Pack");
         }
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
