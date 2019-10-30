@@ -164,7 +164,7 @@
         selector: td[valign="middle"] a
         filters:
           - name: append
-            args: " [spanish]"
+            args: " [spanish] [english]"
       details:
         selector: td[valign="middle"] a
         attribute: href
