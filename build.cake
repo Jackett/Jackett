@@ -185,6 +185,7 @@ Task("Package-DotNetCore-LinuxAMDx64")
 		DeleteDirectory(updaterOutputPath, new DeleteDirectorySettings {Recursive = true, Force = true});
 
 		CopyFileToDirectory("./install_service_systemd.sh", buildOutputPath);
+		CopyFileToDirectory("./jackett_launcher.sh", buildOutputPath);
 
 		Gzip($"./BuildOutput/{netCoreFramework}/{runtimeId}", $"./{artifactsDirName}", "Jackett", "Jackett.Binaries.LinuxAMDx64.tar.gz");
 	});
@@ -204,6 +205,7 @@ Task("Package-DotNetCore-LinuxARM32")
 		DeleteDirectory(updaterOutputPath, new DeleteDirectorySettings {Recursive = true, Force = true});
 
 		CopyFileToDirectory("./install_service_systemd.sh", buildOutputPath);
+		CopyFileToDirectory("./jackett_launcher.sh", buildOutputPath);
 
 		Gzip($"./BuildOutput/{netCoreFramework}/{runtimeId}", $"./{artifactsDirName}", "Jackett", "Jackett.Binaries.LinuxARM32.tar.gz");
 	});
@@ -223,6 +225,7 @@ Task("Package-DotNetCore-LinuxARM64")
 		DeleteDirectory(updaterOutputPath, new DeleteDirectorySettings {Recursive = true, Force = true});
 
 		CopyFileToDirectory("./install_service_systemd.sh", buildOutputPath);
+		CopyFileToDirectory("./jackett_launcher.sh", buildOutputPath);
 
 		Gzip($"./BuildOutput/{netCoreFramework}/{runtimeId}", $"./{artifactsDirName}", "Jackett", "Jackett.Binaries.LinuxARM64.tar.gz");
 	});
@@ -406,16 +409,28 @@ private void Gzip(string sourceFolder, string outputDirectory, string tarCdirect
 		RunLinuxCommand("chmod", $"755 {MakeAbsolute(Directory(sourceFolder))}/Jackett/jackett");
 		RunLinuxCommand("chmod", $"755 {MakeAbsolute(Directory(sourceFolder))}/Jackett/JackettUpdater");
 
+		string macOsServiceScript = MakeAbsolute(Directory(sourceFolder)) + "/Jackett/install_service_macos";
+		if (FileExists(macOsServiceScript))
+		{
+			RunLinuxCommand("chmod", $"755 {macOsServiceScript}");
+		}
+
+		string systemdMonoScript = MakeAbsolute(Directory(sourceFolder)) + "/Jackett/install_service_systemd_mono.sh";
+		if (FileExists(systemdMonoScript))
+		{
+			RunLinuxCommand("chmod", $"755 {systemdMonoScript}");
+		}
+
 		string systemdScript = MakeAbsolute(Directory(sourceFolder)) + "/Jackett/install_service_systemd.sh";
 		if (FileExists(systemdScript))
 		{
 			RunLinuxCommand("chmod", $"755 {systemdScript}");
 		}
 
-		string macOsServiceScript = MakeAbsolute(Directory(sourceFolder)) + "/Jackett/install_service_macos";
-		if (FileExists(macOsServiceScript))
+		string launcherScript = MakeAbsolute(Directory(sourceFolder)) + "/Jackett/jackett_launcher.sh";
+		if (FileExists(launcherScript))
 		{
-			RunLinuxCommand("chmod", $"755 {macOsServiceScript}");
+			RunLinuxCommand("chmod", $"755 {launcherScript}");
 		}
 
 		RunLinuxCommand("tar",  $"-C {sourceFolder} -zcvf {outputDirectory}/{tarFileName}.gz {tarCdirectoryOption}");
