@@ -161,7 +161,14 @@
           - name: querystring
             args: category
       title:
-        selector: td[valign="middle"] a
+        selector: td[valign="middle"] a:contains("VOSE")
+        optional: true
+        filters:
+          - name: append
+            args: " [english]"
+      title:
+        selector: td[valign="middle"] a:not(:contains("VOSE"))
+        optional: true
         filters:
           - name: append
             args: " [spanish] [english]"
