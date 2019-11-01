@@ -143,6 +143,8 @@
         filters:
           - name: replace
             args: ["Grey's Anatomy", "Greys Anatomy"]
+          - name: replace
+            args: ["\u000f", ""] # get rid of unwanted character
       category:
         optional: true
         selector:  td[class^="coll-1"] a[href^="/sub/"]
