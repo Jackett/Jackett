@@ -274,7 +274,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * JPopsuki
  * Kapaki
  * Karagarga
- * Le Chaudron
  * Le Saloon
  * LearnFlakes
  * LibraNet (LN)
