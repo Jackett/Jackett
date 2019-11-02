@@ -6,11 +6,10 @@
   type: private
   encoding: UTF-8
   links:
-    - https://torrent.ai/
+    - https://torrent.lt/
   legacylinks:
     - http://www.torrent.ai/
-  certificates:
-    - 87B5A1F83FEEA465EF81D582CF461B8F564AFE91
+    - https://torrent.ai/
   caps:
     categorymappings:
       - {id: 27, cat: TV, desc: "Animacija"}
