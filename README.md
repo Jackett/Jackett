@@ -46,6 +46,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * EZTV
  * Frozen Layer
  * GkTorrent
+ * GloDLS
  * Hon3yHD.net
  * Horrible Subs
  * Idope
