@@ -122,6 +122,8 @@
       - name: urldecode
       - name: replace
         args: [" ⭐", ""]
+      - name: replace
+        args: ["&#039;", "%27"]
 
   search:
     paths:
