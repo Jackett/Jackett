@@ -250,23 +250,23 @@
       - {id: 497, cat: Audio/Lossless, desc: "Flamenco, Акустическая гитара (lossless)"}
       - {id: 498, cat: Audio/MP3, desc: "NewAge, Meditative (mp3)"}
       - {id: 499, cat: Audio/MP3, desc: "Flamenco, Акустическая гитара (mp3)"}
-      - {id: 500, cat: Audio/Video, desc: "New Age, Relax, Meditative &amp; Flamenco (video)"}
+      - {id: 500, cat: Audio/Video, desc: "New Age, Relax, Meditative & Flamenco (video)"}
       - {id: 501, cat: Audio, desc: "Звуки природы"}
       - {id: 502, cat: Audio, desc: "Психоактивныe аудиопрограммы"}
-      - {id: 504, cat: Audio/Lossless, desc: "Зарубежный Rap, Hip-Hop, R&#039;n&#039;B (lossless)"}
-      - {id: 505, cat: Audio/Lossless, desc: "Отечественный Rap, Hip-Hop, R&#039;n&#039;B (lossless)"}
-      - {id: 506, cat: Audio/MP3, desc: "Зарубежный Rap, Hip-Hop, R&#039;n&#039;B (mp3)"}
-      - {id: 507, cat: Audio/MP3, desc: "Отечественный Rap, Hip-Hop, R&#039;n&#039;B (mp3)"}
-      - {id: 508, cat: Audio/Video, desc: "Rap, Hip-Hop, R&#039;n&#039;B (video)"}
+      - {id: 504, cat: Audio/Lossless, desc: "Зарубежный Rap, Hip-Hop, R'n'B (lossless)"}
+      - {id: 505, cat: Audio/Lossless, desc: "Отечественный Rap, Hip-Hop, R'n'B (lossless)"}
+      - {id: 506, cat: Audio/MP3, desc: "Зарубежный Rap, Hip-Hop, R'n'B (mp3)"}
+      - {id: 507, cat: Audio/MP3, desc: "Отечественный Rap, Hip-Hop, R'n'B (mp3)"}
+      - {id: 508, cat: Audio/Video, desc: "Rap, Hip-Hop, R'n'B (video)"}
       - {id: 510, cat: Audio/Lossless, desc: "Trance, Goa Trance, Psy-Trance, PsyChill, Ambient Dub (lossl.."}
       - {id: 511, cat: Audio/Lossless, desc: "House, Techno, Hardcore, Hardstyle, Jumpstyle (lossless)"}
-      - {id: 512, cat: Audio/Lossless, desc: "Drum &amp; Bass, Jungle, Breakbeat, Dubstep, IDM (lossless)"}
+      - {id: 512, cat: Audio/Lossless, desc: "Drum & Bass, Jungle, Breakbeat, Dubstep, IDM (lossless)"}
       - {id: 513, cat: Audio/Lossless, desc: "Chillout, Lounge, Downtempo, Trip-Hop (lossless)"}
       - {id: 514, cat: Audio/Lossless, desc: "Traditional Electronic, Ambient, Experimental (lossless)"}
       - {id: 515, cat: Audio, desc: "Industrial, Noise, EBM, Dark Electro, Aggrotech, Synthpop, N.."}
       - {id: 516, cat: Audio/MP3, desc: "Trance, Goa Trance, Psy-Trance, PsyChill, Ambient Dub (mp3)"}
       - {id: 517, cat: Audio/MP3, desc: "House, Techno, Hardcore, Hardstyle, Jumpstyle (mp3)"}
-      - {id: 518, cat: Audio/MP3, desc: "Drum &amp; Bass, Jungle, Breakbeat, Dubstep, IDM (mp3)"}
+      - {id: 518, cat: Audio/MP3, desc: "Drum & Bass, Jungle, Breakbeat, Dubstep, IDM (mp3)"}
       - {id: 519, cat: Audio/MP3, desc: "Chillout, Lounge, Downtempo, Trip-Hop (mp3)"}
       - {id: 520, cat: Audio/MP3, desc: "Traditional Electronic, Ambient, Experimental (mp3)"}
       - {id: 521, cat: Audio, desc: "Industrial, Noise, EBM, Dark Electro, Aggrotech, Synthpop, N.."}
