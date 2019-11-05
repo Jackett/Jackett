@@ -47,11 +47,8 @@
     filters:
       - name: querystring
         args: url
-      - name: urldecode
-      # temp fix for #5372
-      - name: replace
-        args: [" ⭐", ""]
-
+      - name: replace # temp fix for #5372
+        args: ["%E2%AD%90", ""]
   search:
     paths:
       - path: torrents
