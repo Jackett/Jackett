@@ -117,13 +117,9 @@
   download:
     # the .torrent url is on the on the details page 
     selector: ul li a[href^="{{ .Config.downloadlink }}"]
-    # temp fix for #5372
-    filters: 
-      - name: urldecode
-      - name: replace
-        args: [" ⭐", ""]
-      - name: replace
-        args: ["&#039;", "%27"]
+    filters:
+      - name: replace # temp fix for #5372
+        args: ["%E2%AD%90", ""]
 
   search:
     paths:
