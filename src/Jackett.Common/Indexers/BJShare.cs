@@ -107,7 +107,6 @@ namespace Jackett.Common.Indexers
             string cleanTitle = Regex.Replace(title, @".* \[(.*?)\](.*)", "$1$2");
             cleanTitle = Regex.Replace(cleanTitle, @"(?:.*)\/(.*)", "$1");
 
-            logger.Info($"Clean title {cleanTitle}");
             return cleanTitle.Trim();
         }
         private string StripSearchString(string term, bool isAnime)
@@ -394,6 +393,8 @@ namespace Jackett.Common.Indexers
                                 
                                 title = Regex.Replace(title.Trim(), @"\s+", " ");
                                 var seasonEp = Regex.Replace(title, @"((S\d{2})?(E\d{2,4})?) .*", "$1");
+                                if (seasonEp[0] == '[')
+                                    seasonEp = "";
 
                                 // do not include year to animes
                                 if (categoryStr == "14")
@@ -417,6 +418,8 @@ namespace Jackett.Common.Indexers
                                 cleanTitle = InternationalTitle(cleanTitle);
                                 
                                 var seasonEp = Regex.Replace(title, @"^(.*?) - ((S\d{2})?(E\d{2,4})?)", "$2");
+                                if (seasonEp[0] == '[')
+                                    seasonEp = "";
 
                                 // do not include year to animes
                                 if (categoryStr == "14")
@@ -445,25 +448,24 @@ namespace Jackett.Common.Indexers
                             release.Description = release.Description.Replace("4K", "2160p");
                             release.Description = release.Description.Replace("SD", "480p");
                             release.Description = release.Description.Replace("Dual Áudio", "Dual");
+                            // If it ain't nacional there will be the type of the audio / original audio
+                            if(release.Description.IndexOf("Nacional") == -1)
+                            {
+                                release.Description = Regex.Replace(release.Description, @"(Dual|Legendado|Dublado) \/ (.*?) \/", "$1 /");
+                            }
 
                             // Adjust the description in order to can be read by Radarr and Sonarr
 
                             var cleanDescription = release.Description.Trim().TrimStart('[').TrimEnd(']');
                             String[] titleElements;
-                            logger.Info(cleanDescription);
-
+                            
                             //Formats the title so it can be parsed later
                             string[] stringSeparators = new string[] { " / " };
                             titleElements = cleanDescription.Split(stringSeparators, StringSplitOptions.None);
-                            if (titleElements[titleElements.Length - 1] == "3D")
-                            {
-                                release.Title += " " + titleElements[titleElements.Length - 2] + " " + titleElements[titleElements.Length - 1] + " " + titleElements[3] + " " + titleElements[2] + " " + titleElements[1] + " " + titleElements[4];
-                            }
-                            else
-                            {
-                                release.Title += " " + titleElements[titleElements.Length - 1] + " " + titleElements[3] + " " + titleElements[2] + " " + titleElements[1] + " " + titleElements[4];
-                            }
+                            // release.Title += string.Join(" ", titleElements);
+                            release.Title = release.Title.Trim();
 
+                            release.Title += " " + titleElements[5] + " " + titleElements[3] + " " + titleElements[1] + " " + titleElements[2] + " " + titleElements[4] + " " + String.Join(" ", titleElements.Skip(6).Take(titleElements.Length - 6).ToArray());
 
                             // This tracker does not provide an publish date to search terms (only on last 24h page)
                             release.PublishDate = DateTime.Today;
