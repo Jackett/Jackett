@@ -101,6 +101,15 @@ namespace Jackett.Common.Indexers
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
+        private string InternationalTitle(string title)
+        {
+            // Get international title if available, or use the full title if not
+            string cleanTitle = Regex.Replace(title, @".* \[(.*?)\](.*)", "$1$2");
+            cleanTitle = Regex.Replace(cleanTitle, @"(.*)\/(.*)", "$2");
+
+            logger.Info($"Clean title {cleanTitle}");
+            return cleanTitle;
+        }
         private string StripSearchString(string term, bool isAnime)
         {
             // Search does not support searching with episode numbers so strip it if we have one
@@ -373,6 +382,8 @@ namespace Jackett.Common.Indexers
                             var qLeechers = row.QuerySelector("td:nth-last-child(1)");
                             var qFreeLeech = row.QuerySelector("strong[title=\"Free\"]");
 
+                            logger.Info(title);
+
                             if (row.ClassList.Contains("group_torrent")) // torrents belonging to a group
                             {
                                 var description = Regex.Replace(qDetailsLink.TextContent.Trim(), @"\s+", " ");
@@ -380,6 +391,9 @@ namespace Jackett.Common.Indexers
                                 release.Description = description;
 
                                 var cleanTitle = Regex.Replace(groupTitle, @" - ((S(\d{2}))?E(\d{1,4}))", "");
+                                // Get international title if available, or use the full title if not
+                                cleanTitle = InternationalTitle(cleanTitle);
+                                
                                 title = Regex.Replace(title.Trim(), @"\s+", " ");
                                 var seasonEp = Regex.Replace(title, @"((S\d{2})?(E\d{2,4})?) .*", "$1");
 
@@ -401,6 +415,9 @@ namespace Jackett.Common.Indexers
                                 title = FixAbsoluteNumbering(title);
 
                                 var cleanTitle = Regex.Replace(title, @" - ((S\d{2})?(E\d{2,4})?)", "");
+                                // Get international title if available, or use the full title if not
+                                cleanTitle = InternationalTitle(cleanTitle);
+                                
                                 var seasonEp = Regex.Replace(title, @"^(.*?) - ((S\d{2})?(E\d{2,4})?)", "$2");
 
                                 // do not include year to animes
@@ -434,13 +451,9 @@ namespace Jackett.Common.Indexers
                             var cleanDescription = release.Description.Trim().TrimStart('[').TrimEnd(']');
                             String[] titleElements;
 
-                            string[] stringSeparators = new string[] {" / "};
-                            titleElements = cleanDescription.Split(stringSeparators,StringSplitOptions.None);
-
-                            logger.Info(release.Title);
-                            // Get international title if available, or use the full title if not
-                            release.Title = Regex.Replace(release.Title, @".* \[(.*?)\](.*)", "$1$2");
-
+                            //Formats the title so it can be parsed later
+                            string[] stringSeparators = new string[] { " / " };
+                            titleElements = cleanDescription.Split(stringSeparators, StringSplitOptions.None);
                             if (titleElements[titleElements.Length - 1] == "3D")
                             {
                                 release.Title += " " + titleElements[titleElements.Length - 2] + " " + titleElements[titleElements.Length - 1] + " " + titleElements[3] + " " + titleElements[2] + " " + titleElements[1] + " " + titleElements[4];
