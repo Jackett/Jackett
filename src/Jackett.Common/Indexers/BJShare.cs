@@ -105,10 +105,10 @@ namespace Jackett.Common.Indexers
         {
             // Get international title if available, or use the full title if not
             string cleanTitle = Regex.Replace(title, @".* \[(.*?)\](.*)", "$1$2");
-            cleanTitle = Regex.Replace(cleanTitle, @"(.*)\/(.*)", "$2");
+            cleanTitle = Regex.Replace(cleanTitle, @"(?:.*)\/(.*)", "$1");
 
             logger.Info($"Clean title {cleanTitle}");
-            return cleanTitle;
+            return cleanTitle.Trim();
         }
         private string StripSearchString(string term, bool isAnime)
         {
@@ -382,8 +382,6 @@ namespace Jackett.Common.Indexers
                             var qLeechers = row.QuerySelector("td:nth-last-child(1)");
                             var qFreeLeech = row.QuerySelector("strong[title=\"Free\"]");
 
-                            logger.Info(title);
-
                             if (row.ClassList.Contains("group_torrent")) // torrents belonging to a group
                             {
                                 var description = Regex.Replace(qDetailsLink.TextContent.Trim(), @"\s+", " ");
@@ -441,7 +439,9 @@ namespace Jackett.Common.Indexers
 
                             release.Description = release.Description.Replace(" / Free", ""); // Remove Free Tag
                             release.Description = release.Description.Replace("Full HD", "1080p");
-                            release.Description = release.Description.Replace("HD", "720p");
+                            // Handles HDR conflict
+                            release.Description = release.Description.Replace("/ HD /", "/ 720p /");
+                            release.Description = release.Description.Replace("/ HD]", "/ 720p]");
                             release.Description = release.Description.Replace("4K", "2160p");
                             release.Description = release.Description.Replace("SD", "480p");
                             release.Description = release.Description.Replace("Dual Áudio", "Dual");
@@ -450,6 +450,7 @@ namespace Jackett.Common.Indexers
 
                             var cleanDescription = release.Description.Trim().TrimStart('[').TrimEnd(']');
                             String[] titleElements;
+                            logger.Info(cleanDescription);
 
                             //Formats the title so it can be parsed later
                             string[] stringSeparators = new string[] { " / " };
@@ -462,8 +463,6 @@ namespace Jackett.Common.Indexers
                             {
                                 release.Title += " " + titleElements[titleElements.Length - 1] + " " + titleElements[3] + " " + titleElements[2] + " " + titleElements[1] + " " + titleElements[4];
                             }
-
-                            logger.Info(release.Title);
 
 
                             // This tracker does not provide an publish date to search terms (only on last 24h page)
