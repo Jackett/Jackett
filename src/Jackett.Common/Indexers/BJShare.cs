@@ -427,6 +427,7 @@ namespace Jackett.Common.Indexers
                             release.Description = release.Description.Replace("HD", "720p");
                             release.Description = release.Description.Replace("4K", "2160p");
                             release.Description = release.Description.Replace("SD", "480p");
+                            release.Description = release.Description.Replace("Dual Áudio", "Dual");
 
                             // Adjust the description in order to can be read by Radarr and Sonarr
 
@@ -436,18 +437,21 @@ namespace Jackett.Common.Indexers
                             string[] stringSeparators = new string[] {" / "};
                             titleElements = cleanDescription.Split(stringSeparators,StringSplitOptions.None);
 
+                            logger.Info(release.Title);
+                            // Get international title if available, or use the full title if not
+                            release.Title = Regex.Replace(release.Title, @".* \[(.*?)\](.*)", "$1$2");
+
                             if (titleElements[titleElements.Length - 1] == "3D")
                             {
-                              release.Title += " " + titleElements[titleElements.Length - 2] + " " + titleElements[titleElements.Length - 1] + " " + titleElements[3] + " " + titleElements[2] + " " + titleElements[1] + " " + titleElements[4];
+                                release.Title += " " + titleElements[titleElements.Length - 2] + " " + titleElements[titleElements.Length - 1] + " " + titleElements[3] + " " + titleElements[2] + " " + titleElements[1] + " " + titleElements[4];
                             }
                             else
                             {
-                              release.Title += " " + titleElements[titleElements.Length - 1] + " " + titleElements[3] + " " + titleElements[2] + " " + titleElements[1] + " " + titleElements[4];
+                                release.Title += " " + titleElements[titleElements.Length - 1] + " " + titleElements[3] + " " + titleElements[2] + " " + titleElements[1] + " " + titleElements[4];
                             }
 
+                            logger.Info(release.Title);
 
-                            // Get international title if available, or use the full title if not
-                            release.Title = Regex.Replace(release.Title, @".* \[(.*?)\](.*)", "$1$2");
 
                             // This tracker does not provide an publish date to search terms (only on last 24h page)
                             release.PublishDate = DateTime.Today;
