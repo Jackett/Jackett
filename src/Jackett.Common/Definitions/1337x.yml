@@ -42,7 +42,6 @@
       - {id: 2, cat: Movies/SD, desc: "Movies/Divx/Xvid"}
       - {id: 3, cat: Movies, desc: "Movies/SVCD/VCD"}
       - {id: 4, cat: Movies/Foreign, desc: "Movies/Dubs/Dual Audio"}
-      - {id: 9, cat: Movies, desc: "Documentaries/Documentary"}
       - {id: 42, cat: Movies/HD, desc: "Movies/HD"}
       - {id: 54, cat: Movies, desc: "Movies/h.264/x264"}
       - {id: 55, cat: Movies, desc: "Movies/Mp4"}
@@ -59,6 +58,7 @@
       - {id: 71, cat: TV, desc: "TV/HEVC/x265"}
       - {id: 74, cat: TV, desc: "TV/Cartoons"}
       - {id: 75, cat: TV/SD, desc: "TV/SD"}
+      - {id: 9, cat: TV/Documentary, desc: "TV/Documentary"}
 
       #Apps
       - {id: 18, cat: PC, desc: "Apps/PC Software"}
