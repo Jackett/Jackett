@@ -364,6 +364,7 @@ namespace Jackett.Updater
                 "Definitions/scenereactor.yml",
                 "Definitions/lapausetorrents.yml",
                 "Definitions/lechaudron.yml",
+                "Definitions/katcrs.yml",
             };
 
             foreach (var oldFile in oldFiles)
