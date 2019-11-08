@@ -45,6 +45,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * EXT Torrents
  * EZTV
  * Frozen Layer
+ * GamesTorrents
  * GkTorrent
  * GloDLS
  * HDReactor
