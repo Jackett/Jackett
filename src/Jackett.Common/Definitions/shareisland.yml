@@ -33,7 +33,7 @@
       # Music
        - {id: 36, cat: Audio/MP3, desc: "Music MP3"}
        - {id: 37, cat: Audio/Lossless, desc: "Music Flac"}
-       - {id: 46, cat: Audio, desc: "Music"}
+       - {id: 2, cat: Audio, desc: "Music"}
       # Games
        - {id: 18, cat: PC/Games, desc: "Games PC"}
        - {id: 19, cat: Console/PS3, desc: "Games PS3"}
@@ -43,6 +43,7 @@
       # Anime
        - {id: 5, cat: TV/Anime, desc: "Anime"}
       # Edicola
+       - {id: 6, cat: Books, desc: "Edicola"}
        - {id: 16, cat: Books, desc: "Edicola Quotidiani"}
        - {id: 28, cat: Books, desc: "Edicola Libri"}
        - {id: 17, cat: Books, desc: "Edicola Riviste"}
@@ -57,61 +58,54 @@
       # Vip
        - {id: 38, cat: Other, desc: "V.I.P."}
       # Adult
+       - {id: 12, cat: XXX, desc: "Adulti"}
        - {id: 13, cat: XXX, desc: "Riviste XXX"}
        - {id: 14, cat: XXX, desc: "Fumetti XXX"}
-       - {id: 44, cat: XXX, desc: "Adulti"}
+       - {id: 44, cat: XXX, desc: "XXX Video"}
 
     modes:
       search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
+      tv-search: [q, season, ep, imdbid]
+      movie-search: [q, imdbid]
 
   login:
-    path: index.php?page=login
-    method: post
+    path: login
+    method: form
     inputs:
-      uid: "{{ .Config.username }}"
-      pwd: "{{ .Config.password }}"
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+      remember: 1
     error:
-      - selector: div.error
-      - selector: body:has(h1:contains("403 Forbidden")) # for banned IP notices
-      - selector: td.lista > span[style="color:#FF0000;"] # Nome Utente non corretto
+      - selector: script[nonce]:contains("Error")
+        message:
+          selector: script[nonce]:contains("Error")
     test:
-      path: index.php
-      selector: a[href="logout.php"]
+      path: torrents
+      selector: a[href$="/logout"]
 
-  # download:
-  #   before:
-  #     path: thanks.php
-  #     method: "post"
-  #     inputs:
-  #       infohash: "{{ .DownloadUri.Query.id }}"
-  #       thanks: "1"
-  #       rndval: "1487013827343"
-  #   selector: a[href^="download.php?id="]
+  ratio:
+    path: torrents
+    selector: li:has(i.fa-sync-alt)
+    filters:
+      - name: regexp
+        args: "Ratio : (\\d+)"
 
   search:
     paths:
-      # 30 entries per page
-      - path: index.php
-        inputs:
-          pages: 1
-      - path: index.php
-        inputs:
-          pages: 2
-      - path: index.php
-        inputs:
-          pages: 3
-      - path: index.php
-        inputs:
-          pages: 4
+      - path: filterTorrents
     inputs:
-      search: "{{ .Keywords }}"
-      category: "{{range .Categories}}{{.}};{{end}}"
-      page: torrents
-      active: 0
-      order: 3
-      by: 2
+      $raw: "{{range .Categories}}categories[]={{.}}&{{end}}"
+      search: "{{if .Query.IMDBID}}{{else}}{{ .Keywords }}{{end}}"
+      description: ""
+      uploader: ""
+      imdb: "{{ .Query.IMDBIDShort }}"
+      tvdb: ""
+      tmdb: ""
+      mal: ""
+      igdb: ""
+      sort: created_at
+      direction: desc
+      qty: 100
     keywordsfilters:
       - name: diacritics
         args: replace
@@ -119,22 +113,19 @@
         args: ["(?i)\\bS0*(\\d+)\\b", "$1"]
       - name: re_replace # S01E01 to 1 1
         args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "$1 $2"]
+
     rows:
-      selector: table.lista > tbody > tr:has(a[href^="index.php?page=torrents&category="])
-      filters:
-        - name: andmatch
+      selector: table > tbody > tr
     fields:
       category:
-        selector: a[href^="index.php?page=torrents&category="]
+        selector: a[href*="/categories/"]
         attribute: href
         filters:
-          - name: querystring
-            args: category
+          - name: regexp
+            args: "/categories/.*?\\.(\\d+)"
       title:
-        selector: a[href^="index.php?page=torrent-details&id="]
+        selector: a.view-torrent
         filters:
-          # - name: re_replace # replace special characters with " " (space)
-          #   args: ["[^a-zA-Z0-9\\s]|\\.", " "]
           - name: re_replace # replace special characters with " " (space)
             args: ["[\\[!\"#$%&'()*+,\\-.\\/:;<=>?@[\\]^_`{|}~]", " "]
           - name: diacritics
@@ -158,54 +149,76 @@
             args: ["(?i)\\b(?:Puntate\\s*)(\\d+)\\s?(\\d+)", "E0$1-0$2"]
           - name: re_replace # rimozioni varie
             args: ["(?i)(Serie completa|Completat?a?|in pausa)", ""]
+      download:
+        selector: a[href*="/download/"]
+        attribute: href
       details:
-        selector: a[href^="index.php?page=torrent-details&id="]
+        selector: a.view-torrent
         attribute: href
       banner:
         optional: true
-        selector: a[href^="index.php?page=torrent-details&id="]
-        attribute: onmouseover
-        filters:
-          - name: regexp
-            args: "src=(.+?) "
-      download:
-        # selector: a[href^="index.php?page=downloadcheck&id="]
-        selector: a[href^="download.php?id="]
-        attribute: href
-      size:
-        selector: td:nth-child(2) p:nth-last-child(5)
-        filters:
-          - name: regexp
-            args: ":\\s+(.+?)$" 
-      date:
-        selector: td:nth-child(2) p:nth-last-child(4)
-        filters:
-          - name: regexp
-            args: ":\\s+(.+?)$" 
-          - name: dateparse
-            args: "15:04:05 02/01/2006"
-      seeders:
-        selector: td:nth-child(2) p:nth-last-child(3) a:nth-child(1)
-      leechers:
-        selector: td:nth-child(2) p:nth-last-child(3) a:nth-child(2)
-      grabs:
-        text: 0
-      grabs:
-        selector: td:nth-child(2) p:nth-last-child(3) a:nth-child(3)
-        optional: true
-      downloadvolumefactor:
-        case:
-          img[alt="Free Leech"]: "0"
-          img[alt="Gold 100% Free"]: "0"
-          img[alt="Silver 50% Free"]: "0.5"
-          img[alt="Bronze 25% Free"]: "0.75"
-          "*": "1"
-      uploadvolumefactor:
-        text: "1"
-      uploadvolumefactor:
-        optional: true
-        selector: img[alt$="x Upload Multiplier"]
-        attribute: alt
+        selector: div.torrent-poster img
+        attribute: src
         filters:
           - name: replace
-            args: ["x Upload Multiplier", ""]
+            args: ["https://via.placeholder.com/600x900", ""]
+      comments:
+        selector: a[href*="#comments"]
+        attribute: href
+      size:
+        selector: td:nth-last-child(4)
+      seeders:
+        selector: td:nth-last-child(3)
+      leechers:
+        selector: td:nth-last-child(2)
+      grabs:
+        selector: td:nth-last-child(1)
+        filters:
+          - name: regexp
+            args: ([\d\.]+)
+      imdb:
+        optional: true
+        selector: a[href*="www.imdb.com/title/tt"]
+        attribute: href
+      date:
+        selector: time
+        filters:
+            # translations for Turkish|Estonian|Danish|Italian|Polish|Norwegian|Portoguese|Czech|Russian|Romanian|Spanish|French|German|Bulgarian|Dutch
+          - name: re_replace
+            args: ["(önce|tagasi|geleden|fa|temu|siden|atrás|nazpět|назад|acum|hace|il y a|vor|преди)", "ago"]
+          - name: re_replace
+            args: ["(dakika|minut|minuto|minuta|minutt|минута|Minute|minuut)", "minute"]
+          - name: re_replace
+            args: ["(dakika|minutit|minutter|minuti|minuty|minutos|минуты|минут|Minuten|минути|minuten)", "minutes"]
+          - name: re_replace
+            args: ["(saat|tund|time|ora|godzina|hora|hodina|час|oră|heure|Stunde|uur)", "hour"]
+          - name: re_replace
+            args: ["(saat|tundi|timer|ore|godziny|horas|hodiny|hoden|часа|часов|ore|heures|Stunden)", "hours"]
+          - name: re_replace
+            args: ["(gün|päev|dag|giorno|dzień|dia|den|день|zi|día|jour|Tag|ден)", "day"]
+          - name: re_replace
+            args: ["(gün|päeva|dage|giorni|dni|dias|dny|дня|дней|zile|días|jours|Tagen|дни|dagen)", "days"]
+          - name: re_replace
+            args: ["(hafta|nädal|uge|settimana|tydzień|uke|semana|týden|неделю|săptămână|semaine|Woche|седмица)", "week"]
+          - name: re_replace
+            args: ["(hafta|nädalat|uger|settimane|tygodnie|uker|semanas|týdny|недели|недель|săptămâni|semaines|Wochen|седмици|weken)", "weeks"]
+          - name: re_replace
+            args: [" (ay|kuu|måned|mese|miesiąc|mês|měsíc|месяц|lună|mes|mois|Monat|месец|maand)", "month"]
+          - name: re_replace
+            args: [" (ay|kuud|måneder|mesi|miesiące|meses|měsíce|месяца|месяцев|luni|meses|mois|Monaten|месеца|maanden)", "months"]
+      downloadvolumefactor:
+        case:
+          "i[data-original-title=\"Personal Freeleech\"]": "0" # 24 Hour FreeLeech From BON Store
+          "i[data-original-title=\"Special Freeleech\"]": "0" # Special FreeLeech For Certain User Groups
+          "i[data-original-title=\"Freeleech Token\"]": "0" # Freeleech From Token
+          "i[data-original-title=\"Global Freeleech\"]": "0" # Global Freeleech
+          "i[data-original-title=\"Freeleech\"]": "0" # Freeleech
+          "i[data-original-title=\"Featured\"]": "0" # Featured Torrent
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "i[data-original-title=\"Double Upload\"]": "2" # Single Torrent Double Upload
+          "i[data-original-title=\"Global Double Upload\"]": "2" # Global Double Upload
+          "i[data-original-title=\"Featured\"]": "2" # Featured Torrent
+          "*": "1"
+# UNIT3D 1.9.4
