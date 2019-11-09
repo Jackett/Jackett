@@ -7,9 +7,10 @@
   encoding: UTF-8
   followredirect: true
   links:
-    - https://www.smartorrent.tv/
+    - https://www.oxtorrent.com/
   legacylinks:
     - https://wwv.oxtorrent.com/
+    - https://www.smartorrent.tv/
 
   caps:
     categorymappings:
@@ -29,7 +30,7 @@
   settings: []
 
   download:
-    selector: a[href^="/download/"]
+    selector: a[href^="/get_torrent/"]
 
   search:
     paths:
