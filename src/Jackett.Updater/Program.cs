@@ -365,6 +365,7 @@ namespace Jackett.Updater
                 "Definitions/lapausetorrents.yml",
                 "Definitions/lechaudron.yml",
                 "Definitions/katcrs.yml",
+                "Definitions/iloveclassics.yml",
             };
 
             foreach (var oldFile in oldFiles)

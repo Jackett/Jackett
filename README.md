@@ -268,7 +268,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HQSource (HQS)
  * HuSh 
  * ICE Torrent
- * iLoveClassics (iLC)
  * ImmortalSeed (iS)
  * Immortuos
  * inPeril
