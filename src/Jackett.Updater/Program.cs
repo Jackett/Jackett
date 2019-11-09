@@ -367,6 +367,7 @@ namespace Jackett.Updater
                 "Definitions/katcrs.yml",
                 "Definitions/iloveclassics.yml",
                 "Definitions/hd4free.yml",
+                "Definitions/lemencili.yml",
             };
 
             foreach (var oldFile in oldFiles)
