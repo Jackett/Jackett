@@ -29,7 +29,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * AniRena
  * AudioBook Bay (ABB)
  * BigFANGroup
- * btbit
  * BTDB
  * BTDIGG
  * ConCen
@@ -58,7 +57,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * iTorrent
  * KickAssTorrent (KATcr)
  * KickAssTorrent (kat.li)
- * LemenCili
  * LePorno
  * LimeTorrents
  * MacTorrents
@@ -245,7 +243,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * GiroTorrent
  * Greek Team
  * HacheDe
- * HD4Free (HD4)
  * HD-Forever (HDF)
  * HD-Only (HDO)
  * HD-Space (HDS)
@@ -268,7 +265,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HQSource (HQS)
  * HuSh 
  * ICE Torrent
- * iLoveClassics (iLC)
  * ImmortalSeed (iS)
  * Immortuos
  * inPeril
