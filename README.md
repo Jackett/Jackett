@@ -29,7 +29,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * AniRena
  * AudioBook Bay (ABB)
  * BigFANGroup
- * btbit
  * BTDB
  * BTDIGG
  * ConCen
