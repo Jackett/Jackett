@@ -134,17 +134,18 @@
             args: [" (ay|kuud|måneder|mesi|miesiące|meses|měsíce|месяца|месяцев|luni|meses|mois|Monaten|месеца|maanden)", "months"]
       downloadvolumefactor:
         case:
-          "i[data-original-title=\"Personal Freeleech\"]": "0" # 24 Hour FreeLeech From BON Store
-          "i[data-original-title=\"Special Freeleech\"]": "0" # Special FreeLeech For Certain User Groups
-          "i[data-original-title=\"Freeleech Token\"]": "0" # Freeleech From Token
-          "i[data-original-title=\"Global Freeleech\"]": "0" # Global Freeleech
-          "i[data-original-title=\"Freeleech\"]": "0" # Freeleech
-          "i[data-original-title=\"Featured\"]": "0" # Featured Torrent
-          "*": "1"
+          i[class*="fa-id-badge text-orange"]: 0 # 24 Hour FreeLeech From BON Store
+          i[class*="fa-trophy text-purple"]: 0 # Special FreeLeech For Certain User Groups
+          i[class*="fa-star text-bold"]: 0 # Freeleech From Token
+          i[class*="fa-coins text-bold"]: 0 # Freeleech From Token
+          i[class*="fa-globe text-blue"]: 0 # Global Freeleech
+          i[class*="fa-star text-gold"]: 0 # Freeleech
+          i[class*="fa-certificate text-pink"]: 0 # Featured Torrent
+          "*": 1
       uploadvolumefactor:
         case:
-          "i[data-original-title=\"Double Upload\"]": "2" # Single Torrent Double Upload
-          "i[data-original-title=\"Global Double Upload\"]": "2" # Global Double Upload
-          "i[data-original-title=\"Featured\"]": "2" # Featured Torrent
-          "*": "1"
+          i[class*="fa-gem text-green"]: 2 # Single Torrent Double Upload
+          i[class*="fa-globe text-green"]: 2 # Global Double Upload
+          i[class*="fa-certificate text-pink"]: 2 # Featured Torrent
+          "*": 1
 # UNIT3D 1.9.4

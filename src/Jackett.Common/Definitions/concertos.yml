@@ -90,12 +90,11 @@
       downloadvolumefactor:
         case:
           i.fa-star: 0 # Freeleech
-          i.fa-gem: 0 # Double Upload
           i.fa-certificate: 0 # Featured
-          "*": "1"
+          "*": 1
       uploadvolumefactor:
         case:
           i.fa-certificate: 2 # Featured
           i.fa-gem: 2 # Double Upload
-          "*": "1"
+          "*": 1
 # UNIT3D
