@@ -80,11 +80,11 @@
         message:
           selector: script[nonce]:contains("Error")
     test:
-      path: torrents
+      path: /
       selector: a[href$="/logout"]
 
   ratio:
-    path: torrents
+    path: /
     selector: li:has(i.fa-sync-alt)
     filters:
       - name: regexp
@@ -92,7 +92,7 @@
 
   search:
     paths:
-      - path: filterTorrents
+      - path: torrents/filter
     inputs:
       $raw: "{{range .Categories}}categories[]={{.}}&{{end}}"
       search: "{{if .Query.IMDBID}}{{else}}{{ .Keywords }}{{end}}"
@@ -122,7 +122,7 @@
         attribute: href
         filters:
           - name: regexp
-            args: "/categories/.*?\\.(\\d+)"
+            args: "/categories/(\\d+)"
       title:
         selector: a.view-torrent
         filters:
@@ -175,7 +175,7 @@
         selector: td:nth-last-child(1)
         filters:
           - name: regexp
-            args: ([\d\.]+)
+            args: (\d+)
       imdb:
         optional: true
         selector: a[href*="www.imdb.com/title/tt"]
@@ -222,4 +222,4 @@
           i[class*="fa-globe text-green"]: 2 # Global Double Upload
           i[class*="fa-certificate text-pink"]: 2 # Featured Torrent
           "*": 1
-# UNIT3D 1.9.4
+# UNIT3D 2.1.0
