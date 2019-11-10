@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -336,7 +336,7 @@ namespace Jackett.Common.Indexers
 
                         CQ qLink = qRow.Find(".br_right > a").First();
                         release.Guid = new Uri(SiteLink + qLink.Attr("href"));
-                        release.Comments = new Uri(SiteLink + qLink.Attr("href") + "&tocomm=1");
+                        release.Comments = new Uri(SiteLink + qLink.Attr("href"));
                         release.Title = qLink.Find("b").Text();
                         release.Description = release.Title;
 
