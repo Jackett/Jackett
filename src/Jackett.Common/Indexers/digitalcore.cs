@@ -156,10 +156,11 @@ namespace Jackett.Common.Indexers
                         release.DownloadVolumeFactor = 1;
                     release.UploadVolumeFactor = 1;
 
-                  //  if (!string.IsNullOrWhiteSpace(row.customcover.ToString()))
-                   // {
-                    //    release.BannerUrl = new Uri(SiteLink + row.customcover);
-                    //}
+
+                    if (!string.IsNullOrWhiteSpace(row.firstpic.ToString()))
+                    {
+                        release.BannerUrl = (row.firstpic);
+                    }
 
                     if (row.imdbid2 != null && row.imdbid2.ToString().StartsWith("tt"))
                     {
@@ -170,8 +171,6 @@ namespace Jackett.Common.Indexers
                         descriptions.Add("Tagline: " + row.tagline);
                         descriptions.Add("Cast: " + row.cast);
                         descriptions.Add("Rating: " + row.rating);
-                        //descriptions.Add("Plot: " + row.plot);
-
                         release.BannerUrl = new Uri(SiteLink + "img/imdb/" + row.imdbid2 + ".jpg");
                     }
 
@@ -185,15 +184,17 @@ namespace Jackett.Common.Indexers
                     if (tags.Count > 0)
                         descriptions.Add("Tags: " + string.Join(", ", tags));
 
-                   // var preDate = row.preDate.ToString();
-                   // if (!string.IsNullOrWhiteSpace(preDate) && preDate != "1970-01-01 01:00:00")
-                   //     descriptions.Add("PRE: " + preDate);
-
+                    var preDate = row.preDate.ToString();
+                    if (!string.IsNullOrWhiteSpace(preDate) && preDate != "1970-01-01 01:00:00")
+                    {
+                        descriptions.Add("Pre: " + preDate);
+                    }
                     descriptions.Add("Section: " + row.section);
 
                     release.Description = string.Join("<br>\n", descriptions);
 
                     releases.Add(release);
+
                 }
             }
             catch (Exception ex)
