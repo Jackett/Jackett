@@ -116,6 +116,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Gay-Torrents.net
  * Gay-Torrents.org
  * HamsterStudio
+ * HD Dolby
  * Kinozal
  * LostFilm.tv
  * Marine Tracker
