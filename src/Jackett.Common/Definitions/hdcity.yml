@@ -167,7 +167,7 @@
         optional: true
         filters:
           - name: append
-            args: " [english]"
+            args: " [English]"
           - name: re_replace
           args: ["(?i)T\\s?(\\d{1,2})\\b", "S$1"]
       title:
@@ -175,7 +175,7 @@
         optional: true
         filters:
           - name: append
-            args: " [spanish] [english]"
+            args: " [Spanish]"
           - name: re_replace
             args: ["(?i)T\\s?(\\d{1,2})\\b", "S$1"]
       details:
