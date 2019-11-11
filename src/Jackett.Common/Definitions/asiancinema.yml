@@ -25,17 +25,17 @@
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
-      remember: 1
+      remember: on
     error:
       - selector: script[nonce]:contains("Error")
         message:
           selector: script[nonce]:contains("Error")
     test:
-      path: torrents
+      path: /
       selector: a[href$="/logout"]
 
   ratio:
-    path: torrents
+    path: /
     selector: li:has(i.fa-sync-alt)
     filters:
       - name: regexp
@@ -96,7 +96,7 @@
         selector: td:nth-last-child(1)
         filters:
           - name: regexp
-            args: ([\d\.]+)
+            args: (\d+)
       imdb:
         optional: true
         selector: a[href*="www.imdb.com/title/tt"]
