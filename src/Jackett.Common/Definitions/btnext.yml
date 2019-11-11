@@ -95,7 +95,7 @@
       action: "login"
       loginbox_membername: "{{ .Config.username }}"
       loginbox_password: "{{ .Config.password }}"
-      loginbox_remember: "true"
+      loginbox_remember: 1
     selectorinputs:
       securitytoken:
         selector: "script:contains(\"stKey: \")"
