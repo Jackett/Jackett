@@ -146,6 +146,8 @@
         args: ["S0?(\\d{1,2})E(\\d{1,2})", "$1x$2"]
       - name: re_replace
         args: ["[^a-zA-Z0-9]+", " "]
+      - name: re_replace
+        args: ["(?i)\\bS0*(\\d+)\\b", "T$1"]
     inputs:
       page: "torrents"
       $raw: "&category={{range .Categories}}{{.}};{{end}}"
@@ -165,13 +167,17 @@
         optional: true
         filters:
           - name: append
-            args: " [english]"
+            args: " [English]"
+          - name: re_replace
+          args: ["(?i)T\\s?(\\d{1,2})\\b", "S$1"]
       title:
         selector: td[valign="middle"] a:not(:contains("VOSE"))
         optional: true
         filters:
           - name: append
-            args: " [spanish] [english]"
+            args: " [Spanish]"
+          - name: re_replace
+            args: ["(?i)T\\s?(\\d{1,2})\\b", "S$1"]
       details:
         selector: td[valign="middle"] a
         attribute: href
