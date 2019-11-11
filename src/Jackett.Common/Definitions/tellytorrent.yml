@@ -32,7 +32,7 @@
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
-      remember: 1
+      remember: on
     error:
       - selector: script[nonce]:contains("Error")
         message:
@@ -148,4 +148,4 @@
           i[class*="fa-globe text-green"]: 2 # Global Double Upload
           i[class*="fa-certificate text-pink"]: 2 # Featured Torrent
           "*": 1
-# UNIT3D 2.0.0
+# UNIT3D 2.1.1
