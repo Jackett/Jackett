@@ -1,6 +1,6 @@
 ---
   site: greeklegends
-  name: greeklegends
+  name: GreekLegends
   description: "Greek Legends is a Private Torrent Tracker for High Quality Content"
   language: en-us
   type: private
@@ -12,13 +12,15 @@
     categorymappings:
       - {id: 1, cat: Movies, desc: "Movies"}
       - {id: 2, cat: TV, desc: "TV"}
-      - {id: 6, cat: PC, desc: "Apps"}
-      - {id: 4, cat: Books/Ebook, desc: "E-Books"}
-      - {id: 5, cat: Console, desc: "Games"}
-      - {id: 5, cat: TV/Documentary, desc: "Documentaries"}
-      - {id: 106, cat: PC/Phone-Other, desc: "Mobile Apps"}
-      - {id: 40, cat: Other/Misc, desc: "misc"}
-      - {id: 24, cat: TV/Sport, desc: "Sports"}
+      - {id: 3, cat: Audio, desc: "Music"}
+      - {id: 4, cat: PC, desc: "Apps"}
+      - {id: 5, cat: Books, desc: "Books"}
+      - {id: 6, cat: Console, desc: "Games"}
+      - {id: 7, cat: TV/Documentary, desc: "Documentaries"}
+      - {id: 8, cat: PC/Phone-Other, desc: "Mobile Apps"}
+      - {id: 9, cat: Other/Misc, desc: "misc"}
+      - {id: 10, cat: TV/Sport, desc: "Sports"}
+      - {id: 11, cat: TV/Anime, desc: "Anime/Cartoon"}
 
     modes:
       search: [q]
