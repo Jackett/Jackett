@@ -169,7 +169,7 @@
           - name: append
             args: " [English]"
           - name: re_replace
-          args: ["(?i)T\\s?(\\d{1,2})\\b", "S$1"]
+            args: ["(?i)T\\s?(\\d{1,2})\\b", "S$1"]
       title:
         selector: td[valign="middle"] a:not(:contains("VOSE"))
         optional: true
