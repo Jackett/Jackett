@@ -697,7 +697,7 @@
       allw: 0
 
     rows:
-      selector: tr[id^="tor_"]:has(a[href^="./download.php?id="])
+      selector: tr[id^="tor_"]:has(a[href^="magnet:?xt="])
 
     fields:
       title:
@@ -720,9 +720,6 @@
             args: ["HDTVRip", "HDTV"]
       details:
         selector: a.tLink
-        attribute: href
-      download:
-        selector: a[href^="./download.php?id="]
         attribute: href
       magnet:
         selector: a[href^="magnet:?xt="]      
