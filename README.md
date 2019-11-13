@@ -72,6 +72,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Nyaa.si
  * Nyaa-Pantsu
  * OxTorrent
+ * PiratBit
  * ProStyleX
  * RARBG
  * RuTor
@@ -124,7 +125,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * MVGroup Forum
  * MVGroup Main
  * NetHD (VietTorrent)
- * PiratBit
  * RockBox
  * RuTracker
  * Sharewood
