@@ -1541,7 +1541,7 @@ namespace Jackett.Common.Indexers
                                 while (PrevRow != null)
                                 {
                                     var CurRow = PrevRow;
-                                    logger.Info(PrevRow.OuterHtml);
+                                    logger.Debug(PrevRow.OuterHtml);
                                     try
                                     {
                                         value = handleSelector(DateHeaders, CurRow);
