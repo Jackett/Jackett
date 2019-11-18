@@ -12,63 +12,31 @@
     categorymappings:
 
       # Movies
-      - {id: 91, cat: Movies/HD, desc: "DSS"}
-      - {id: 92, cat: Movies/HD, desc: "DSS 3D"}
-      - {id: 14, cat: Movies, desc: "Screener"}     
-      - {id: 15, cat: Movies/SD, desc: "DVDRip"}
-      - {id: 16, cat: Movies/HD, desc: "BDRip"}
-      - {id: 17, cat: Movies/HD, desc: "HD 720p"}
-      - {id: 18, cat: Movies/HD, desc: "HD 1080p"}
-      - {id: 19, cat: Movies/HD, desc: "HD 3D"}
-      - {id: 83, cat: Movies/HD, desc: "4K (Ultra HD)"}
-      - {id: 89, cat: Movies/DVD, desc: "DVD 5"}
-      - {id: 90, cat: Movies/DVD, desc: "DVD 9"}
-      - {id: 37, cat: Movies, desc: "MP4"}
-      - {id: 61, cat: TV, desc: "TV Show"}
-      - {id: 78, cat: TV, desc: "Serie TV"}
-      - {id: 96, cat: TV/HD, desc: "Serie TV 720p"}
-      - {id: 97, cat: TV/HD, desc: "Serie TV 1080p"}
-      - {id: 98, cat: TV, desc: "Serie TV MP4"}
-      - {id: 24, cat: TV/Anime, desc: "Cartoni"}
-      - {id: 66, cat: TV/Anime, desc: "Anime"}
-      - {id: 71, cat: TV, desc: "SUB iTA"}
-      - {id: 75, cat: TV/Documentary, desc: "Documentari"}
-      - {id: 72, cat: TV/Sport, desc: "Sport"}
+      - {id: 11, cat: Movies/HD, desc: "DSS"}
+      - {id: 1, cat: Movies, desc: "Screener"}     
+      - {id: 2, cat: Movies, desc: "DVDRip & BDRip"}
+      - {id: 3, cat: Movies/HD, desc: "Bluray 1080p & 720p"}
+      - {id: 5, cat: Movies/HD, desc: "Ultra HD 4K"}
+      - {id: 6, cat: TV, desc: "Serie TV"}
+      - {id: 4, cat: TV/Anime, desc: "Cartoni"}
 
       # GAMES
-      - {id: 28, cat: PC/Games, desc: "PC Games"}
-      - {id: 63, cat: Console/Xbox 360, desc: "XBOX 360"}
-      - {id: 64, cat: Console/PS3, desc: "PS3"}
-      - {id: 33, cat: Console/Wii, desc: "WII"}
-      - {id: 76, cat: Console/Other, desc: "PS2"}
-      - {id: 81, cat: Console/Xbox One, desc: "XBOX ONE"}
-      - {id: 84, cat: Console/PS4, desc: "PS4"}
+      - {id: 7, cat: PC/Games, desc: "Giochi"}
 
       # MUSIC
-      - {id: 35, cat: Audio, desc: "MP3"}
-      - {id: 67, cat: Audio, desc: "FLAC"}
+      - {id: 8, cat: Audio, desc: "Musica"}
     
       # SOFTWARE
-      - {id: 52, cat: PC/ISO, desc: "Windows"}
-      - {id: 54, cat: PC/ISO, desc: "Mac"}
-      - {id: 69, cat: PC/ISO, desc: "Linux"}
+      - {id: 9, cat: PC/ISO, desc: "Software"}
     
       # PHONE
-      - {id: 40, cat: PC/Phone-IOS, desc: "Android"}
-      - {id: 41, cat: PC/Phone-Android, desc: "Iphone"}
+      - {id: 12, cat: PC/Phone-Android, desc: "Applicazioni"}
 
       # OTHER
-      - {id: 44, cat: Other, desc: "Varie"}
-      - {id: 82, cat: Other, desc: "Music Video"}
-      - {id: 86, cat: Other, desc: "Navigatori"}
-      - {id: 95, cat: Other, desc: "Immagini"}
-      - {id: 99, cat: Other, desc: "AudioLibri"}
+      - {id: 14, cat: Other, desc: "Varie & Altro"}
 
       # EBOOK
-      - {id: 46, cat: Books, desc: "Ebook"}
-      - {id: 73, cat: Books/Comics, desc: "Fumetti"}
-      - {id: 74, cat: Books/Comics, desc: "Manga"}
-      - {id: 87, cat: Books, desc: "Giornali"}
+      - {id: 13, cat: Books, desc: "Libri & Edicola"}
 
     modes:
       search: [q]
