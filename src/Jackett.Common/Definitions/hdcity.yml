@@ -147,7 +147,7 @@
       - name: re_replace
         args: ["[^a-zA-Z0-9]+", " "]
       - name: re_replace
-        args: ["(?i)\\bS0*(\\d+)\\b", "T$1"]
+        args: ["(?i)\\bS0*(\\d+)\\b", " $1 "]
     inputs:
       page: "torrents"
       $raw: "&category={{range .Categories}}{{.}};{{end}}"
@@ -169,7 +169,11 @@
           - name: append
             args: " [English]"
           - name: re_replace
-            args: ["(?i)T\\s?(\\d{1,2})\\b", "S$1"]
+            args: ["(?i)T[\\s\\S]?(\\d{1,2})\\b", " S$1 "]
+          - name: re_replace
+            args: ["(?i)\\w*Temp\\w*\\b\\s?(\\d{1,2})(ª|\\D)?\\b", " S$1 "]
+          - name: re_replace
+            args: ["(?i)(\\d{1,2})(ª|\\D)?\\s?\\w*Temp\\w*\\b"," S$1 "]
       title:
         selector: td[valign="middle"] a:not(:contains("VOSE"))
         optional: true
@@ -177,7 +181,11 @@
           - name: append
             args: " [Spanish]"
           - name: re_replace
-            args: ["(?i)T\\s?(\\d{1,2})\\b", "S$1"]
+            args: ["(?i)T[\\s\\S]?(\\d{1,2})\\b", " S$1 "]
+          - name: re_replace
+            args: ["(?i)\\w*Temp\\w*\\b\\s?(\\d{1,2})(ª|\\D)?\\b", " S$1 "]
+          - name: re_replace
+            args: ["(?i)(\\d{1,2})(ª|\\D)?\\s?\\w*Temp\\w*\\b"," S$1 "]
       details:
         selector: td[valign="middle"] a
         attribute: href
