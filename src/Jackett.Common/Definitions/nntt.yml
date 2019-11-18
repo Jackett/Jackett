@@ -719,7 +719,7 @@
           - name: replace
             args: ["дек", "Dec"]
           - name: dateparse
-            args: "02 Jan 06"
+            args: "02 Jan 2006"
       downloadvolumefactor:
         text: "0"
       uploadvolumefactor:
