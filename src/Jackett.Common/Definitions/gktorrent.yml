@@ -45,7 +45,7 @@
   settings: []
 
   download:
-    selector: a[href^="/download/"]
+    selector: a[href^="magnet:?xt="]
 
   search:
     paths:
