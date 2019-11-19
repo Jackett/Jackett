@@ -89,14 +89,15 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Tokyo Tosho
  * Torlock
  * Torrent Downloads (TD)
+ * Torrent9
+ * Torrent9Clone
  * TorrentFunk
  * TorrentGalaxy (TGx)
+ * TorrentParadise
  * TorrentProject2
  * TorrentQuest
  * Torrents.csv
  * TorrentWal
- * Torrent9
- * Torrent9Clone
  * Torrentz2
  * Underverse
  * YourBittorrent
