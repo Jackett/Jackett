@@ -114,6 +114,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Crazy's Corner
  * CzTorrent
  * Deildu
+ * DXP (Deaf Experts)
  * EniaHD
  * Film-Paleis
  * Gay-Torrents.net
