@@ -27,8 +27,9 @@ namespace Jackett.Common.Indexers
     public class ResurrectTheNet: BaseCachingWebIndexer
     {
         private string LoginUrl => SiteLink + "rbg_login_new.php";
-        // private string LoginCheckUrl => SiteLink + "index.php"; // unsure how to determine
-        private string LoginCheckUrl => SiteLink + "index.php?page=login"; // unsure how to determine
+        private string indexPageUrl => SiteLink + "index.php";
+        private string changeProfileUrl => SiteLink + "account_change.php?style=22&returnto={returnpage}"; // unsure how to determine
+        private string LoginCheckUrl => SiteLink + "index.php?page=login";
         private string SearchUrl => SiteLink + "index.php?page=torrents";
         private string TorrentCommentUrl => SiteLink + "index.php?page=torrent-details&id={id}#comments";
         private string TorrentDescriptionUrl => SiteLink + "index.php?page=torrent-details&id={id}";
@@ -64,6 +65,10 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("category=15", TorznabCatType.MoviesSD, "Movies XviD");
             AddCategoryMapping("category=24", TorznabCatType.TVSD, "Episodes XviD");
             AddCategoryMapping("category=23", TorznabCatType.TVHD, "Episodes X264");
+            AddCategoryMapping("category=1", TorznabCatType.PC, "Appz/Misc");
+            AddCategoryMapping("category=7", TorznabCatType.TVAnime, "Anime");
+            AddCategoryMapping("category=4", TorznabCatType.AudioAudiobook, "Books/Audio books");
+            AddCategoryMapping("category=19", TorznabCatType.TVSport, "Sport");
         }
 
         /// <summary>
@@ -173,6 +178,24 @@ namespace Jackett.Common.Indexers
                 Output("-> Login failed: " + message, "error");
                 throw new ExceptionWithConfigData("Login failed: " + message, configData);
             });
+
+            Output("Changing layout to retro to ensure the expected DOM is loaded");
+            /* This request will change the default styling to the "retro" theme,
+             * because the parsing will not work on other themes as they 
+             * present a different DOM
+             */
+            var stylingrequest = new Utils.Clients.WebRequest()
+            {
+                Referer = indexPageUrl,
+                Type = RequestType.GET,
+                Url = changeProfileUrl.Replace("{returnpage}", "%2Findex.php"),
+                Headers = _emulatedBrowserHeaders,
+                Cookies = indexPage.Cookies,
+                Encoding = Encoding
+            };
+
+            var styleRequest = await webclient.GetString(stylingrequest);
+            Output("changed styling to retro");
 
             Output("\nCookies saved for future uses...");
             ConfigData.CookieHeader.Value = indexPage.Cookies + " " + response.Cookies + " ts_username=" + ConfigData.Username.Value; // todo check
