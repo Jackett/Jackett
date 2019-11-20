@@ -27,10 +27,11 @@ namespace Jackett.Common.Indexers
     public class ResurrectTheNet: BaseCachingWebIndexer
     {
         private string LoginUrl => SiteLink + "rbg_login_new.php";
-        private string LoginCheckUrl => SiteLink + "index.php"; // unsure how to determine
+        // private string LoginCheckUrl => SiteLink + "index.php"; // unsure how to determine
+        private string LoginCheckUrl => SiteLink + "index.php?page=login"; // unsure how to determine
         private string SearchUrl => SiteLink + "index.php?page=torrents";
-        private string TorrentCommentUrl => SiteLink + "page=torrent-details&id={id}#comments";
-        private string TorrentDescriptionUrl => SiteLink + "page=torrent-details&id={id}";
+        private string TorrentCommentUrl => SiteLink + "index.php?page=torrent-details&id={id}#comments";
+        private string TorrentDescriptionUrl => SiteLink + "index.php?page=torrent-details&id={id}";
         private string TorrentDownloadUrl => SiteLink + "download.php?id={id}&f={filename}";
         private bool Latency => ConfigData.Latency.Value;
         private bool DevMode => ConfigData.DevMode.Value;
@@ -43,8 +44,8 @@ namespace Jackett.Common.Indexers
 
         public ResurrectTheNet(IIndexerConfigurationService configService, Utils.Clients.WebClient w, Logger l, IProtectionService ps)
             : base(
-                name: "ResurrectTheNet",
-                description: "ResurrectTheNet is a Private site for MOVIES and TV",
+                name: "Resurrect the net",
+                description: "Resurrect the net is a Private site for MOVIES and TV",
                 link: "http://resurrectthe.net/",
                 caps: new TorznabCapabilities(),
                 configService: configService,
@@ -61,7 +62,7 @@ namespace Jackett.Common.Indexers
 
             AddCategoryMapping("category=11", TorznabCatType.MoviesHD, "Movies X264");
             AddCategoryMapping("category=15", TorznabCatType.MoviesSD, "Movies XviD");
-            AddCategoryMapping("category=24", TorznabCatType.TVHD, "Episodes XviD");
+            AddCategoryMapping("category=24", TorznabCatType.TVSD, "Episodes XviD");
             AddCategoryMapping("category=23", TorznabCatType.TVHD, "Episodes X264");
         }
 
@@ -123,8 +124,8 @@ namespace Jackett.Common.Indexers
 
             // Building login form data
             var pairs = new Dictionary<string, string> {
-                { "username", ConfigData.Username.Value },
-                { "password", ConfigData.Password.Value }
+                { "uid", ConfigData.Username.Value },
+                { "pwd", ConfigData.Password.Value }
             };
 
             // Build WebRequest for login
@@ -174,7 +175,7 @@ namespace Jackett.Common.Indexers
             });
 
             Output("\nCookies saved for future uses...");
-            ConfigData.CookieHeader.Value = indexPage.Cookies + " " + response.Cookies + " ts_username=" + ConfigData.Username.Value;
+            ConfigData.CookieHeader.Value = indexPage.Cookies + " " + response.Cookies + " ts_username=" + ConfigData.Username.Value; // todo check
 
             Output("\n-> Login Success\n");
         }
@@ -287,10 +288,33 @@ namespace Jackett.Common.Indexers
 
                     foreach (var tRow in torrentRowList)
                     {
+                        // ICollection<CsQuery.INodeList> childNodes = tRow.Elements.First().ChildNodes as ICollection<CsQuery.INodeList>;
+                        // int childElements = tRow.Elements.First().ChildNodes.Count;
+                        int childNodeCount = 0;
+                        using (IEnumerator<IDomObject> enumerator = tRow.Elements.First().ChildNodes.GetEnumerator()){
+                            while (enumerator.MoveNext())
+                            {
+                                childNodeCount++;
+                            }
+                        }
+                        if (childNodeCount != 20 )
+                        { 
+                            Output("skipping a row with count != 20 (e.g row separators)");
+                            continue;
+                        }
                         Output("Torrent #" + (releases.Count + 1));
 
                         // ID
-                        var id = tRow.Find("td:eq(2) > a:eq(0)").Attr("href").Split('&').Last();
+                        string element2 = "";
+                        try
+                        {
+                            element2 = tRow.Find("td:eq(2) > a:eq(0)").Attr("href").Split('=').Last();
+                        }
+                        catch ( Exception err ) {
+                            Output(err.ToString());
+                            Output(tRow.Find("td:eq(4) > a:eq(0)").Attr("href").Split('=').Last());
+                        }
+                        var id = tRow.Find("td:eq(2) > a:eq(0)").Attr("href").Split('=').Last();
                         Output("ID: " + id);
 
                         // Release Name
@@ -311,7 +335,12 @@ namespace Jackett.Common.Indexers
                         Output("Leechers: " + leechers);
 
                         // Completed
-                        var completed = ParseUtil.CoerceInt(tRow.Find("td:eq(8) > a").Text());
+                        var completedCell = tRow.Find("td:eq(7) > a").Text();
+                        if ( completedCell == "---" )
+                        {
+                            completedCell = "0";
+                        }
+                        var completed = ParseUtil.CoerceInt(completedCell);
                         Output("Completed: " + completed);
 
                         // Files
@@ -326,7 +355,7 @@ namespace Jackett.Common.Indexers
                         // --> Date
                         var dateTimeOrig = tRow.Find("td:eq(5)").Text();
                         var dateTime = Regex.Replace(dateTimeOrig, @"<[^>]+>|&nbsp;", "").Trim();
-                        var date = DateTime.ParseExact(dateTime, "yyyy-MM-ddHH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
+                        var date = DateTime.ParseExact(dateTime, "HH:mm:ss dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
                         Output("Released on: " + date);
 
                         // Torrent Details URL
@@ -420,10 +449,13 @@ namespace Jackett.Common.Indexers
 
             parameters.Add("options", searchFileandDesc);
 
-            var CatQryStr = categoriesList.First();
+            var CatQryStr = "";
             if (categoriesList.Count > 1) // the search page only allows searching in one category or all
             {
                 CatQryStr = "category=0";
+            } else if (categoriesList.Count == 1)
+            {
+                CatQryStr = categoriesList[0];
             }
 
             // Building our query
