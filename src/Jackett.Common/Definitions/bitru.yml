@@ -1,0 +1,147 @@
+---
+  site: bitru
+  name: BitRu
+  description: "BitRu is a RUSSIAN Public Torrent Tracker for MOVIES / TV / GENERAL"
+  language: ru-ru
+  type: public
+  encoding: UTF-8
+  links:
+    - http://bitru.org/
+
+  caps:
+    categories:
+      "movie": Movies
+      "serial": TV
+      "music": Audio
+      "game": PC/Games
+      "soft": PC
+      "literature": Books
+      "audiobook": Audio/Audiobook
+      "video": Movies
+      "image": Other
+      "xxx": XXX
+
+    modes:
+      search: [q]
+
+  settings:
+    - name: adverts
+      type: select
+      label: Include Advertising
+      default: "yes"
+      options:
+        yes: yes
+        no: no
+
+  search:
+    paths:
+      - path: browse.php
+    inputs:
+      s: "{{ .Keywords }}"
+      rek: "{{ .Config.adverts }}"
+
+    rows:
+      selector: table.browse-list > tbody > tr
+    fields:
+      category:
+        selector: td:nth-child(1) a
+        attribute: href
+        filters:
+          - name: querystring
+            args: tmp
+      title:
+        selector: a[href^="details.php?id="]
+      details:
+        selector: a[href^="details.php?id="]
+        attribute: href
+      download:
+        selector: a[href^="details.php?id="]
+        attribute: href
+        filters:
+          - name: replace
+            args: ["details", "download"]
+      description:
+        selector: img[src="styles/images/adwarn.png"]
+        optional: true
+        attribute: title
+        filters:
+          - name: replace
+            args: ["Присутствует реклама", "Contains Adverts"]
+      banner:
+        selector: a[href^="details.php?id="]
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: "src=(.*?) "
+      date:
+        # Сегодня в 09:09 от 
+        # Вчера в 22:47 от 
+        selector: td:nth-child(2) div.b-info div span:nth-child(2):contains("Сегодня"),  td:nth-child(2) div.b-info div span:nth-child(2):contains("Вчера")
+        optional: true
+        filters:
+          - name: regexp
+            args: "(.*?) от "
+          - name: replace
+            args: ["Сегодня в", "Today"]
+          - name: replace
+            args: ["Вчера в", "Yesterday"]
+      date:
+        # 08 ноября 2019 в 23:53 от 
+        selector: td:nth-child(2) div.b-info div span:nth-child(2):not(:contains("Сегодня")):not(:contains("Вчера"))
+        optional: true
+        filters:
+          - name: regexp
+            args: "(.*?) от "
+          - name: replace
+            args: [" в ", " "]
+          - name: replace
+            args: ["января", "January"]
+          - name: replace
+            args: ["февраля", "February"]
+          - name: replace
+            args: ["марта ", "March"]
+          - name: replace
+            args: ["апреля", "April"]
+          - name: replace
+            args: ["мая", "May"]
+          - name: replace
+            args: ["июня", "June"]
+          - name: replace
+            args: ["июля", "July"]
+          - name: replace
+            args: ["августа", "August"]
+          - name: replace
+            args: ["сентября", "September"]
+          - name: replace
+            args: ["октября", "October"]
+          - name: replace
+            args: ["ноября", "November"]
+          - name: replace
+            args: ["декабря", "December"]
+          - name: dateparse
+            args: "02 January 2006 15:04"
+      size:
+        selector: td:nth-child(3)
+        filters:
+          - name: replace
+            args: ["ТБ", "TB"] 
+          - name: replace
+            args: ["ГБ", "GB"]
+          - name: replace
+            args: ["МБ", "MB"]
+          - name: replace
+            args: ["КБ", "KB"]
+      seeders:
+        selector: td:nth-child(4)
+        filters:
+          - name: replace
+            args: ["?", "1"] 
+      leechers:
+        selector: td:nth-child(5) 
+        filters:
+          - name: replace
+            args: ["?", "0"] 
+      downloadvolumefactor:
+        text: "0"
+      uploadvolumefactor:
+        text: "1"
