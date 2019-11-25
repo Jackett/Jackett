@@ -44,7 +44,7 @@
 
   search:
     paths:
-      - path: filterTorrents
+      - path: torrents/filter
     inputs:
       $raw: "{{range .Categories}}categories[]={{.}}&{{end}}"
       search: "{{if .Query.IMDBID}}{{else}}{{ .Keywords }}{{end}}"
@@ -66,7 +66,7 @@
         attribute: href
         filters:
           - name: regexp
-            args: "/categories/.*?\\.(\\d+)"
+            args: "/categories/(\\d+)"
       title:
         selector: a.view-torrent
       download:
@@ -142,4 +142,4 @@
           i[class*="fa-globe text-green"]: 2 # Global Double Upload
           i[class*="fa-certificate text-pink"]: 2 # Featured Torrent
           "*": 1
-# UNIT3D 1.9.4
+# UNIT3D 2.2.5
