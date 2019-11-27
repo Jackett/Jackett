@@ -1,0 +1,74 @@
+---
+  site: estrenosdtl
+  name: EstrenosDTL
+  description: "EstrenosDTL is a SPANISH Public tracker for MOVIES"
+  language: es-es
+  type: public
+  encoding: UTF-8
+  links:
+    - https://www.estrenosdtl.la/
+
+  caps:
+    categories:
+      "1080p": Movies/HD
+      "720p": Movies/HD
+      "BR-RIP": Movies/BluRay
+      "BR-SCREENER": Movies/Other
+      "DVDRip": Movies/DVD
+      "DVDScreener": Movies/Other
+      "HC HDRip": Movies/HD
+      "HD-RIP": Movies/HD
+      "HD-TC": Movies/HD
+      "HD-TS": Movies/HD
+      "HDRip": Movies/HD
+      "HDTC-SCREENER": Movies/Other
+      "HDTV-SCREENER": Movies/Other
+      "HQ-TC": Movies
+      "MKV": Movies
+      "TeleCine": Movies
+      "TS-HQ": Movies
+      "TS-Screener": Movies/Other
+      "V.O. Subtituladas": Movies
+      "VHS-Screener": Movies/Other
+      "Web DL": Movies/WEBDL
+      "WEB-RIP": Movies/WEBDL
+      "WEB-Screener": Movies/Other
+      "WEB-SCREENER HC": Movies/Other
+
+    modes:
+      search: [q]
+
+  settings: []
+
+  download:
+    selector: a.linktorrent
+
+  search:
+    paths:
+      - path: /
+    inputs:
+      s: "{{ .Keywords }}"
+    rows:
+      selector: div.new_post
+    fields:
+      title:
+        selector: div.nombre_big1 a
+      details:
+        selector: div.nombre_big1 a
+        attribute: href
+      category:
+        selector: div.nombre_big1 p b
+      download:
+        selector: div.nombre_big1 a
+        attribute: href
+      date:
+        selector: div.fecha p
+        filters:
+          - name: dateparse
+            args: "02-01-2006"
+      size:
+        selector: div.tamanio p
+      downloadvolumefactor:
+        text: 0
+      uploadvolumefactor:
+        text: 1

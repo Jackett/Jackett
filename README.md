@@ -41,6 +41,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * dmhy
  * ETTV
  * EliteTorrent.biz
+ * EstrenosDTL
  * ExtraTorrent.ag
  * EXT Torrents
  * EZTV
