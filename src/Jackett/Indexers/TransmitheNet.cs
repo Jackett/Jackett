@@ -83,13 +83,13 @@ namespace Jackett.Indexers
                 await DoLogin();
             }
 
-            string Url;
-            if (string.IsNullOrEmpty(query.GetQueryString()))
-                Url = SearchUrl;
-            else
-            {
-                Url = $"{SearchUrl}&searchtext={HttpUtility.UrlEncode(query.GetQueryString())}";
-            }
+            //string Url;
+            //if (string.IsNullOrEmpty(query.GetQueryString()))
+            //    Url = SearchUrl;
+            //else
+            //{
+            string Url = $"{SearchUrl}&searchtext={HttpUtility.UrlEncode(query.GetQueryString())}";
+            //}
 
             var response = await RequestStringWithCookiesAndRetry(Url);
             List<ReleaseInfo> releases = ParseResponse(response.Content);
