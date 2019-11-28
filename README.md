@@ -68,6 +68,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * MejorTorrent <!-- maintained by ivandelabeldad -->
  * Monova
  * MovCr
+ * MoviesDVDR
  * Newpct (aka: tvsinpagar, descargas2020, torrentlocura, torrentrapid, tumejortorrent, pctnew, etc)
  * Newstudio
  * Nitro
