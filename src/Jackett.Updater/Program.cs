@@ -370,6 +370,7 @@ namespace Jackett.Updater
                 "Definitions/lemencili.yml",
                 "Definitions/btbit.yml",
                 "Definitions/digbt.yml",
+                "Definitions/mkvcage.yml",
             };
 
             foreach (var oldFile in oldFiles)
