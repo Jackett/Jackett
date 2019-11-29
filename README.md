@@ -17,7 +17,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 
 #### Supported Systems
 * Windows 7SP1 or greater using .NET 4.6.1 or above [Download here](https://www.microsoft.com/net/framework/versions/net461)
-* Linux [supported operating systems here](https://github.com/dotnet/core/blob/master/release-notes/3.0/3.0-supported-os.md)
+* Linux [supported operating systems here](https://github.com/dotnet/core/blob/master/release-notes/2.1/2.1-supported-os.md#linux)
 * macOS 10.12 or greater
 
 ### Supported Public Trackers
@@ -485,7 +485,7 @@ If you want to run it with a user without a /home directory you need to add `Env
 
 
 ## Install on Linux (ARMv7 or above)
-On most operating systems all the required dependencies will already be present. In case they are not, you can refer to this page https://docs.microsoft.com/en-us/dotnet/core/linux-prerequisites?tabs=netcore2x#linux-distribution-dependencies
+On most operating systems all the required dependencies will already be present. In case they are not, you can refer to this page https://github.com/dotnet/core/blob/master/Documentation/linux-prereqs.md
 
 ### Install as service
 1. Download and extract the latest `Jackett.Binaries.LinuxARM32.tar.gz` or `Jackett.Binaries.LinuxARM64.tar.gz` (32 bit is the most common on ARM) release from the [releases page](https://github.com/Jackett/Jackett/releases) 
