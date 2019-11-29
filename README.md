@@ -17,7 +17,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 
 #### Supported Systems
 * Windows 7SP1 or greater using .NET 4.6.1 or above [Download here](https://www.microsoft.com/net/framework/versions/net461)
-* Linux ([supported operating systems here](https://github.com/dotnet/core/blob/master/release-notes/2.1/2.1-supported-os.md))
+* Linux [supported operating systems here](https://github.com/dotnet/core/blob/master/release-notes/3.0/3.0-supported-os.md)
 * macOS 10.12 or greater
 
 ### Supported Public Trackers
@@ -462,7 +462,16 @@ Jackett can also be run from the command line if you would like to see log messa
 
 
 ## Install on Linux (AMDx64)
-On most operating systems all the required dependencies will already be present. In case they are not, you can refer to this page https://docs.microsoft.com/en-us/dotnet/core/linux-prerequisites?tabs=netcore2x#linux-distribution-dependencies
+On most operating systems all the required dependencies will already be present. In case they are not, you can refer to this page https://github.com/dotnet/core/blob/master/Documentation/linux-prereqs.md
+and follow https://github.com/dotnet/core/blob/master/Documentation/linux-setup.md for platform specific prereqs setup.
+for Ubuntu 19.04 the prereqs setup is as follows:
+```
+wget -q https://packages.microsoft.com/config/ubuntu/19.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+sudo dpkg -i packages-microsoft-prod.deb
+
+sudo apt-get update
+sudo apt-get apt-transport-https dotnet-runtime-3.0
+```
 
 ### Install as service
 1. Download and extract the latest `Jackett.Binaries.LinuxAMDx64.tar.gz` release from the [releases page](https://github.com/Jackett/Jackett/releases)
