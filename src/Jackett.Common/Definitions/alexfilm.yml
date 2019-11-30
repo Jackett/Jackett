@@ -9,6 +9,8 @@
     - https://alexfilm.org/
   legacylinks:
     - https://alexfilm.cc/
+  certificates:
+    - 9200e15406272061df1f609a0f40d76282f54295 # expired 30 nov '19
 
   caps:
     categorymappings:
