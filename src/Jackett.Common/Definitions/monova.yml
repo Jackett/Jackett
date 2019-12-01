@@ -11,6 +11,7 @@
 
   caps:
     categories:
+      "venus-mars": XXX
       "video-camera": Movies
       "music": Audio
       "book": Books
@@ -36,8 +37,7 @@
       # https://monova.to/video
       - path: "{{if .Keywords}}search?term={{.Keywords}}{{else}}video{{end}}"
     rows:
-      #selector: tr.desktop:not(tr.success)
-      selector: tr.desktop
+      selector: tr.desktop:has(a[href^="//"])
       filters:
         - name: andmatch
     fields:
@@ -63,13 +63,13 @@
           - name: replace
             args: ["N/A","500 MB"]
       seeders:
-        text: "1"
+        text: 1
       leechers:
-        text: "1"
+        text: 1
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
       date:
         optional: true
         selector: td.torrent_name
