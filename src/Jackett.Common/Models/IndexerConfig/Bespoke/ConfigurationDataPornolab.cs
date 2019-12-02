@@ -1,4 +1,4 @@
-﻿namespace Jackett.Common.Models.IndexerConfig.Bespoke
+namespace Jackett.Common.Models.IndexerConfig.Bespoke
 {
     class ConfigurationDataPornolab : ConfigurationDataCaptchaLogin
     {
@@ -7,7 +7,7 @@
         public ConfigurationDataPornolab()
             : base()
         {
-            StripRussianLetters = new BoolItem() { Name = "Strip Russian Letters", Value = true };
+            StripRussianLetters = new BoolItem() { Name = "Strip Russian Letters", Value = false };
         }
     }
 }
