@@ -6,6 +6,8 @@
   type: public
   encoding: UTF-8
   links:
+    - https://torrentparadise.cl/
+  legacylinks:
     - https://torrentparadise.org/
 
   caps:
