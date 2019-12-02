@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Text;
@@ -26,22 +26,22 @@ namespace Jackett.Common.Indexers
         protected string cap_sid = null;
         protected string cap_code_field = null;
 
-        private new ConfigurationDataRutracker configData
+        private new ConfigurationDataPornolab configData
         {
-            get { return (ConfigurationDataRutracker)base.configData; }
+            get { return (ConfigurationDataPornolab)base.configData; }
             set { base.configData = value; }
         }
 
         public Pornolab(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base(name: "Pornolab",
-                   description: "Pornolab is a Semi-Private Russian  torrent site with a thriving file-sharing community",
+                   description: "Pornolab is a Semi-Private Russian site for Adult content",
                    link: "https://pornolab.net/",
                    caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                    configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
-                   configData: new ConfigurationDataRutracker())
+                   configData: new ConfigurationDataPornolab())
         {
             Encoding = Encoding.GetEncoding("windows-1251");
             Language = "ru-ru";
@@ -164,10 +164,10 @@ namespace Jackett.Common.Indexers
             var response = await RequestStringWithCookies(LoginUrl);
             var LoginResultParser = new HtmlParser();
             var LoginResultDocument = LoginResultParser.ParseDocument(response.Content);
-            var captchaimg = LoginResultDocument.QuerySelector("img[src^=\"https://static.t-ru.org/captcha/\"]");
+            var captchaimg = LoginResultDocument.QuerySelector("img[src*=\"/captcha/\"]");
             if (captchaimg != null)
             {
-                var captchaImage = await RequestBytesWithCookies(captchaimg.GetAttribute("src"));
+                var captchaImage = await RequestBytesWithCookies("https:" + captchaimg.GetAttribute("src"));
                 configData.CaptchaImage.Value = captchaImage.Content;
 
                 var codefield = LoginResultDocument.QuerySelector("input[name^=\"cap_code_\"]");
@@ -234,10 +234,6 @@ namespace Jackett.Common.Indexers
             else // use the normal search
             {
                 searchString = searchString.Replace("-", " ");
-                if (query.Season != 0)
-                {
-                    searchString += " Сезон: " + query.Season;
-                }
                 queryCollection.Add("nm", searchString);
             }
 
@@ -265,19 +261,21 @@ namespace Jackett.Common.Indexers
                         release.MinimumRatio = 1;
                         release.MinimumSeedTime = 0;
 
-                        var qDownloadLink = Row.QuerySelector("td.tor-size > a.tr-dl");
+                        var qDownloadLink = Row.QuerySelector("a.tr-dl");
                         if (qDownloadLink == null) // Expects moderation
                             continue;
 
-                        var qDetailsLink = Row.QuerySelector("td.t-title > div.t-title > a.tLink");
-                        var qSize = Row.QuerySelector("td.tor-size");
+                        var qForumLink = Row.QuerySelector("a.f");
+                        var qDetailsLink = Row.QuerySelector("a.tLink");
+                        var qSize = Row.QuerySelector("td:nth-child(6) u");
 
                         release.Title = qDetailsLink.TextContent;
 
                         release.Comments = new Uri(SiteLink + "forum/" + qDetailsLink.GetAttribute("href"));
+                        release.Description = qForumLink.TextContent;
                         release.Link = new Uri(SiteLink + "forum/" + qDownloadLink.GetAttribute("href"));
                         release.Guid = release.Comments;
-                        release.Size = ReleaseInfo.GetBytes(qSize.GetAttribute("data-ts_text"));
+                        release.Size = ReleaseInfo.GetBytes(qSize.TextContent);
 
                         var seeders = Row.QuerySelector("td:nth-child(7) b").TextContent;
                         if (string.IsNullOrWhiteSpace(seeders))
@@ -286,32 +284,17 @@ namespace Jackett.Common.Indexers
                         release.Peers = ParseUtil.CoerceInt(Row.QuerySelector("td:nth-child(8)").TextContent) + release.Seeders;
                         release.Grabs = ParseUtil.CoerceLong(Row.QuerySelector("td:nth-child(9)").TextContent);
 
-                        var timestr = Row.QuerySelector("td:nth-child(10)").GetAttribute("data-ts_text");
+                        var timestr = Row.QuerySelector("td:nth-child(10) u").TextContent;
                         release.PublishDate = DateTimeUtil.UnixTimestampToDateTime(long.Parse(timestr));
 
-                        var forum = Row.QuerySelector("td.f-name > div.f-name > a");
+                        var forum = qForumLink;
                         var forumid = forum.GetAttribute("href").Split('=')[1];
                         release.Category = MapTrackerCatToNewznab(forumid);
 
                         release.DownloadVolumeFactor = 1;
                         release.UploadVolumeFactor = 1;
 
-                        if (release.Category.Contains(TorznabCatType.TV.ID))
-                        {
-                            // extract season and episodes
-                            //var regex = new Regex(".+\\/\\s([^а-яА-я\\/]+)\\s\\/.+Сезон\\s*[:]*\\s+(\\d+).+(?:Серии|Эпизод)+\\s*[:]*\\s+(\\d+-*\\d*).+,\\s+(.+)\\].+(\\(.+\\)).*");
-                            var regex = new Regex(".+\\/\\s([^а-яА-я\\/]+)\\s\\/.+Сезон\\s*[:]*\\s+(\\d+).+(?:Серии|Эпизод)+\\s*[:]*\\s+(\\d+-*\\d*).+,\\s+(.+)\\]\\s(.+)");
-
-                            var title = regex.Replace(release.Title, "$1 - S$2E$3 - rus $4 $5");
-                            title = Regex.Replace(title, "-Rip", "Rip", RegexOptions.IgnoreCase);
-                            title = Regex.Replace(title, "WEB-DLRip", "WEBDL", RegexOptions.IgnoreCase);
-                            title = Regex.Replace(title, "WEB-DL", "WEBDL", RegexOptions.IgnoreCase);
-                            title = Regex.Replace(title, "HDTVRip", "HDTV", RegexOptions.IgnoreCase);
-                            title = Regex.Replace(title, "Кураж-Бамбей", "kurazh", RegexOptions.IgnoreCase);
-
-                            release.Title = title;
-                        }
-                        else if (configData.StripRussianLetters.Value)
+                        if (configData.StripRussianLetters.Value)
                         {
                             var regex = new Regex(@"(\([А-Яа-яЁё\W]+\))|(^[А-Яа-яЁё\W\d]+\/ )|([а-яА-ЯЁё \-]+,+)|([а-яА-ЯЁё]+)");
                             release.Title = regex.Replace(release.Title, "");
