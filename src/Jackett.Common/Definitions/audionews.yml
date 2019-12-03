@@ -162,7 +162,30 @@
       - {id: 164, cat: Audio/Other, desc: "PRESETS Sylenth"}
       - {id: 168, cat: Audio/Other, desc: "PRESETS Toontrack"}
       - {id: 21, cat: Other, desc: "UPDATE"}
-
+      - {id: 222, cat: Other, desc: "GFXNEWS 3D"}
+      - {id: 207, cat: Other, desc: "GFXNEWS APPS WIN"}
+      - {id: 215, cat: Other, desc: "GFXNEWS APPS LINUX"}
+      - {id: 214, cat: Other, desc: "GFXNEWS APPS MAC"}
+      - {id: 211, cat: Other, desc: "GFXNEWS BOOKS"}
+      - {id: 224, cat: Other, desc: "GFXNEWS CAD/CAM"}
+      - {id: 212, cat: Other, desc: "GFXNEWS FONTS"}
+      - {id: 213, cat: Other, desc: "GFXNEWS FOOTAGE"}
+      - {id: 226, cat: Other, desc: "GFXNEWS MAGAZINE"}
+      - {id: 216, cat: Other, desc: "GFXNEWS PHOTOSTOCK"}
+      - {id: 220, cat: Other, desc: "GFXNEWS PHOTOGRAPHY - ART"}
+      - {id: 227, cat: Other, desc: "GFXNEWS PHOTOSHOP"}
+      - {id: 228, cat: Other, desc: "GFXNEWS PHOTOSHOP Actions, Pattern & Styles"}
+      - {id: 229, cat: Other, desc: "GFXNEWS PHOTOSHOP Background & PSD Source"}
+      - {id: 230, cat: Other, desc: "GFXNEWS PHOTOSHOP Brushes & Gradient"}
+      - {id: 231, cat: Other, desc: "GFXNEWS PHOTOSHOP Toolkits, Papers & Objects"}
+      - {id: 225, cat: Other, desc: "GFXNEWS PLUGINS LINUX"}
+      - {id: 223, cat: Other, desc: "GFXNEWS PLUGINS MAC"}
+      - {id: 210, cat: Other, desc: "GFXNEWS PLUGINS WIN"}
+      - {id: 217, cat: Other, desc: "GFXNEWS SCRIPTS - WEB PROGRAMMING"}
+      - {id: 218, cat: Other, desc: "GFXNEWS TEMPLATES"}
+      - {id: 232, cat: Other, desc: "GFXNEWS TEXTURES"}
+      - {id: 219, cat: Other, desc: "GFXNEWS TUTORIALS"}
+      - {id: 221, cat: Other, desc: "GFXNEWS VIDEO PRODUCTION"}
 
     modes:
       search: [q]
@@ -216,7 +239,7 @@
       submit: "Search"
 
     rows:
-      selector: table > tbody > tr:has(a[href*="/dl.php?id="])
+      selector: table.forumline > tbody > tr:has(a[href*="/dl.php?id="])
       dateheaders:
         selector: td[colspan="20"] > strong
         filters:
