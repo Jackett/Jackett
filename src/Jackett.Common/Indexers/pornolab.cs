@@ -315,5 +315,26 @@ namespace Jackett.Common.Indexers
 
             return releases;
         }
+
+        public override async Task<byte[]> Download(Uri link)
+        {
+            var response = await RequestStringWithCookies(link.ToString());
+            var results = response.Content;
+            var SearchResultParser = new HtmlParser();
+            var SearchResultDocument = SearchResultParser.ParseDocument(results);
+            var downloadSelector = "a[class=\"dl-stub dl-link\"]";
+            var DlUri = SearchResultDocument.QuerySelector(downloadSelector);
+            if (DlUri != null)
+            {
+                logger.Debug("Link Found");
+                var href = DlUri.GetAttribute("href");
+                link = new Uri(href);
+            }
+            else
+            {
+                logger.Error("CANT FIND LINK :(");
+            }
+            return await base.Download(link);
+        }
     }
 }
