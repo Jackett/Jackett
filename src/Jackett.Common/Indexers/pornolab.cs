@@ -273,8 +273,8 @@ namespace Jackett.Common.Indexers
 
                         release.Comments = new Uri(SiteLink + "forum/" + qDetailsLink.GetAttribute("href"));
                         release.Description = qForumLink.TextContent;
-                        release.Link = new Uri(SiteLink + "forum/" + qDownloadLink.GetAttribute("href"));
-                        release.Guid = release.Comments;
+                        release.Link = release.Comments;
+                        release.Guid = release.Link;
                         release.Size = ReleaseInfo.GetBytes(qSize.TextContent);
 
                         var seeders = Row.QuerySelector("td:nth-child(7) b").TextContent;
@@ -316,8 +316,10 @@ namespace Jackett.Common.Indexers
             return releases;
         }
 
+        // referer link support
         public override async Task<byte[]> Download(Uri link)
         {
+            Uri downloadlink = link;
             var response = await RequestStringWithCookies(link.ToString());
             var results = response.Content;
             var SearchResultParser = new HtmlParser();
@@ -328,13 +330,14 @@ namespace Jackett.Common.Indexers
             {
                 logger.Debug("Link Found");
                 var href = DlUri.GetAttribute("href");
-                link = new Uri(href);
+                downloadlink = new Uri(SiteLink + "forum/" +href);
+                
             }
             else
             {
-                logger.Error("CANT FIND LINK :(");
+                logger.Error("CANT FIND LINK :( !!!");
             }
-            return await base.Download(link);
+            return await base.Download(downloadlink, RequestType.POST, link.ToString());
         }
     }
 }
