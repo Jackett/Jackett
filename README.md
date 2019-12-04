@@ -135,6 +135,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * MVGroup Forum
  * MVGroup Main
  * NetHD (VietTorrent)
+ * Pornolab
  * RiperAM
  * RockBox
  * RuTracker
