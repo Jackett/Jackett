@@ -47,6 +47,9 @@ namespace Jackett.Common.Indexers
             Language = "ru-ru";
             Type = "semi-private";
 
+            // Clean capabilities
+            TorznabCaps.Categories.Clear();
+
             AddCategoryMapping(1768, TorznabCatType.XXX, "Эротические фильмы / Erotic Movies");
             AddCategoryMapping(60, TorznabCatType.XXX, "Документальные фильмы / Documentary & Reality");
             AddCategoryMapping(1644, TorznabCatType.XXX, "Нудизм-Натуризм / Nudity");
