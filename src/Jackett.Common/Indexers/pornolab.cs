@@ -51,7 +51,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(60, TorznabCatType.XXX, "Документальные фильмы / Documentary & Reality");
             AddCategoryMapping(1644, TorznabCatType.XXX, "Нудизм-Натуризм / Nudity");
 
-            AddCategoryMapping(1111, TorznabCatType.XXX, "Паки полных фильмов / Full Length Movies Packs");
+            AddCategoryMapping(1111, TorznabCatType.XXXPacks, "Паки полных фильмов / Full Length Movies Packs");
             AddCategoryMapping(508, TorznabCatType.XXX, "Классические фильмы / Classic");
             AddCategoryMapping(555, TorznabCatType.XXX, "Фильмы с сюжетом / Feature & Vignettes");
             AddCategoryMapping(1673, TorznabCatType.XXX, "Гонзо-фильмы / Gonzo");
@@ -62,13 +62,13 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(1646, TorznabCatType.XXX, "Видео для телефонов и КПК / Pocket РС & Phone Video");
 
             AddCategoryMapping(1712, TorznabCatType.XXX, "Эротические и Документальные фильмы (DVD и HD) / Erotic, Documentary & Reality (DVD & HD)");
-            AddCategoryMapping(1713, TorznabCatType.XXX, "Фильмы с сюжетом, Классические (DVD) / Feature & Vignettes, Classic (DVD)");
-            AddCategoryMapping(512, TorznabCatType.XXX, "Гонзо, Лесбо и Фильмы без сюжета (DVD) / Gonzo, All Girl & Solo, All Sex (DVD)");
+            AddCategoryMapping(1713, TorznabCatType.XXXDVD, "Фильмы с сюжетом, Классические (DVD) / Feature & Vignettes, Classic (DVD)");
+            AddCategoryMapping(512, TorznabCatType.XXXDVD, "Гонзо, Лесбо и Фильмы без сюжета (DVD) / Gonzo, All Girl & Solo, All Sex (DVD)");
             AddCategoryMapping(1775, TorznabCatType.XXX, "Фильмы с сюжетом (HD Video) / Feature & Vignettes (HD Video)");
             AddCategoryMapping(1450, TorznabCatType.XXX, "Гонзо, Лесбо и Фильмы без сюжета (HD Video) / Gonzo, All Girl & Solo, All Sex (HD Video)");
 
             AddCategoryMapping(902, TorznabCatType.XXX, "Русские порнофильмы / Russian Full Length Movies");
-            AddCategoryMapping(1675, TorznabCatType.XXX, "Паки русских порнороликов / Russian Clips Packs");
+            AddCategoryMapping(1675, TorznabCatType.XXXPacks, "Паки русских порнороликов / Russian Clips Packs");
             AddCategoryMapping(36, TorznabCatType.XXX, "Сайтрипы с русскими актрисами 1991-2015 / Russian SiteRip's 1991-2015");
             AddCategoryMapping(1830, TorznabCatType.XXX, "Сайтрипы с русскими актрисами 1991-2015 (HD Video) / Russian SiteRip's 1991-2015 (HD Video)");
             AddCategoryMapping(1803, TorznabCatType.XXX, "Сайтрипы с русскими актрисами 2016-2019 / Russian SiteRip's 2016-2019");
@@ -76,9 +76,9 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(1741, TorznabCatType.XXX, "Русские Порноролики Разное / Russian Clips (various)");
             AddCategoryMapping(1676, TorznabCatType.XXX, "Русское любительское видео / Russian Amateur Video");
 
-            AddCategoryMapping(1780, TorznabCatType.XXX, "Паки сайтрипов (HD Video) / SiteRip's Packs (HD Video)");
-            AddCategoryMapping(1110, TorznabCatType.XXX, "Паки сайтрипов / SiteRip's Packs");
-            AddCategoryMapping(1678, TorznabCatType.XXX, "Паки порнороликов по актрисам / Actresses Clips Packs");
+            AddCategoryMapping(1780, TorznabCatType.XXXPacks, "Паки сайтрипов (HD Video) / SiteRip's Packs (HD Video)");
+            AddCategoryMapping(1110, TorznabCatType.XXXPacks, "Паки сайтрипов / SiteRip's Packs");
+            AddCategoryMapping(1678, TorznabCatType.XXXPacks, "Паки порнороликов по актрисам / Actresses Clips Packs");
             AddCategoryMapping(1124, TorznabCatType.XXX, "Сайтрипы 1991-2010 (HD Video) / SiteRip's 1991-2010 (HD Video)");
             AddCategoryMapping(1784, TorznabCatType.XXX, "Сайтрипы 2011-2012 (HD Video) / SiteRip's 2011-2012 (HD Video)");
             AddCategoryMapping(1769, TorznabCatType.XXX, "Сайтрипы 2013 (HD Video) / SiteRip's 2013 (HD Video)");
@@ -101,21 +101,21 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(284, TorznabCatType.XXX, "Порноролики Разное / Clips (various)");
             AddCategoryMapping(1823, TorznabCatType.XXX, "Порноролики в 3D и Virtual Reality (VR) / 3D & Virtual Reality Videos");
 
-            AddCategoryMapping(1801, TorznabCatType.XXX, "Паки японских фильмов и сайтрипов / Full Length Japanese Movies Packs & SiteRip's Packs");
+            AddCategoryMapping(1801, TorznabCatType.XXXPacks, "Паки японских фильмов и сайтрипов / Full Length Japanese Movies Packs & SiteRip's Packs");
             AddCategoryMapping(1719, TorznabCatType.XXX, "Японские фильмы и сайтрипы (DVD и HD Video) / Japanese Movies & SiteRip's (DVD & HD Video)");
             AddCategoryMapping(997, TorznabCatType.XXX, "Японские фильмы и сайтрипы 1991-2014 / Japanese Movies & SiteRip's 1991-2014");
             AddCategoryMapping(1818, TorznabCatType.XXX, "Японские фильмы и сайтрипы 2015-2019 / Japanese Movies & SiteRip's 2015-2019");
 
             AddCategoryMapping(1671, TorznabCatType.XXX, "Эротические студии (видео) / Erotic Video Library");
             AddCategoryMapping(1726, TorznabCatType.XXX, "Met-Art & MetModels");
-            AddCategoryMapping(883, TorznabCatType.XXX, "Эротические студии Разное / Erotic Picture Gallery (various)");
-            AddCategoryMapping(1759, TorznabCatType.XXX, "Паки сайтрипов эротических студий / Erotic Picture SiteRip's Packs");
-            AddCategoryMapping(1728, TorznabCatType.XXX, "Любительское фото / Amateur Picture Gallery");
-            AddCategoryMapping(1729, TorznabCatType.XXX, "Подборки по актрисам / Actresses Picture Packs");
-            AddCategoryMapping(38, TorznabCatType.XXX, "Подборки сайтрипов / SiteRip's Picture Packs");
-            AddCategoryMapping(1757, TorznabCatType.XXX, "Подборки сетов / Picture Sets Packs");
-            AddCategoryMapping(1735, TorznabCatType.XXX, "Тематическое и нетрадиционное фото / Misc & Special Interest Picture Packs");
-            AddCategoryMapping(1731, TorznabCatType.XXX, "Журналы / Magazines");
+            AddCategoryMapping(883, TorznabCatType.XXXImageset, "Эротические студии Разное / Erotic Picture Gallery (various)");
+            AddCategoryMapping(1759, TorznabCatType.XXXImageset, "Паки сайтрипов эротических студий / Erotic Picture SiteRip's Packs");
+            AddCategoryMapping(1728, TorznabCatType.XXXImageset, "Любительское фото / Amateur Picture Gallery");
+            AddCategoryMapping(1729, TorznabCatType.XXXPacks, "Подборки по актрисам / Actresses Picture Packs");
+            AddCategoryMapping(38, TorznabCatType.XXXImageset, "Подборки сайтрипов / SiteRip's Picture Packs");
+            AddCategoryMapping(1757, TorznabCatType.XXXImageset, "Подборки сетов / Picture Sets Packs");
+            AddCategoryMapping(1735, TorznabCatType.XXXImageset, "Тематическое и нетрадиционное фото / Misc & Special Interest Picture Packs");
+            AddCategoryMapping(1731, TorznabCatType.XXXImageset, "Журналы / Magazines");
 
             AddCategoryMapping(1679, TorznabCatType.XXX, "Хентай: основной подраздел / Hentai: main subsection");
             AddCategoryMapping(1740, TorznabCatType.XXX, "Хентай в высоком качестве (DVD и HD) / Hentai DVD & HD");
@@ -151,10 +151,10 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(1767, TorznabCatType.XXX, "Классические гей-фильмы (до 1990 года) / Classic Gay Films (Pre-1990's)");
             AddCategoryMapping(1755, TorznabCatType.XXX, "Гей-фильмы в высоком качестве (DVD и HD) / High-Quality Full Length Movies (Gay DVD & HD)");
             AddCategoryMapping(1787, TorznabCatType.XXX, "Азиатские гей-фильмы в высоком качестве (DVD и HD) / High-Quality Full Length Asian Movies (Gay DVD & HD)");
-            AddCategoryMapping(1763, TorznabCatType.XXX, "ПАКи гей-роликов и сайтрипов / Clip's & SiteRip's Packs (Gay)");
+            AddCategoryMapping(1763, TorznabCatType.XXXPacks, "ПАКи гей-роликов и сайтрипов / Clip's & SiteRip's Packs (Gay)");
             AddCategoryMapping(1777, TorznabCatType.XXX, "Гей-ролики в высоком качестве (HD Video) / Gay Clips (HD Video)");
             AddCategoryMapping(1691, TorznabCatType.XXX, "Ролики, SiteRip'ы и сцены из гей-фильмов / Clips & Movie Scenes (Gay)");
-            AddCategoryMapping(1692, TorznabCatType.XXX, "Гей-журналы, фото, разное / Magazines, Photo, Rest (Gay)");
+            AddCategoryMapping(1692, TorznabCatType.XXXImageset, "Гей-журналы, фото, разное / Magazines, Photo, Rest (Gay)");
 
         }
 
@@ -328,14 +328,15 @@ namespace Jackett.Common.Indexers
             var DlUri = SearchResultDocument.QuerySelector(downloadSelector);
             if (DlUri != null)
             {
-                logger.Debug("Link Found");
+                logger.Debug(string.Format("{0}: Download selector {1} matched:{2}", ID, downloadSelector, DlUri.OuterHtml));
                 var href = DlUri.GetAttribute("href");
                 downloadlink = new Uri(SiteLink + "forum/" +href);
                 
             }
             else
             {
-                logger.Error("CANT FIND LINK :( !!!");
+                logger.Error(string.Format("{0}: Download selector {1} didn't match:\n{2}", ID, downloadSelector, results));
+                throw new Exception(string.Format("Download selector {0} didn't match", downloadSelector));
             }
             return await base.Download(downloadlink, RequestType.POST, link.ToString());
         }
