@@ -36,7 +36,7 @@ namespace Jackett.Common.Indexers
             : base(name: "Pornolab",
                    description: "Pornolab is a Semi-Private Russian site for Adult content",
                    link: "https://pornolab.net/",
-                   caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                   caps: new TorznabCapabilities(),
                    configService: configService,
                    client: wc,
                    logger: l,
