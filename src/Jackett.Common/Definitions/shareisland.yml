@@ -14,54 +14,37 @@
   caps:
     categorymappings:
       # Movie
-       - {id: 21, cat: Movies/DVD, desc: "Movie DVD-9"}
+       - {id: 1, cat: Movies/HD, desc: "Movie 1080p"}
+       - {id: 5, cat: Movies/HD, desc: "Movie 720p"}
+       - {id: 6, cat: Movies/UHD, desc: "Movie 4K-Ultra-HD"}
+       - {id: 9, cat: Movies/BluRay, desc: "Movie BluRay Full"}
+       - {id: 8, cat: Movies/SD, desc: "Movie BDRip"}
+       - {id: 10, cat: Movies/DVD, desc: "Movie DVD-9"}
        - {id: 11, cat: Movies/DVD, desc: "Movie DVD-5"}
-       - {id: 20, cat: Movies/SD, desc: "Movie DVDRip"}
-       - {id: 45, cat: Movies, desc: "Movie RIP mp4"}
-       - {id: 22, cat: Movies/UHD, desc: "Movie 4K-Ultra-HD"}
-       - {id: 23, cat: Movies/HD, desc: "Movie H-265"}
-       - {id: 24, cat: Movies/HD, desc: "Movie 1080p"}
-       - {id: 25, cat: Movies/HD, desc: "Movie 720p"}
-       - {id: 26, cat: Movies/3D, desc: "Movie 3D-FullHD"}
-       - {id: 27, cat: Movies/BluRay, desc: "Movie BluRay"}
-       - {id: 43, cat: Movies/SD, desc: "Movie BDRip"}
-       - {id: 29, cat: Movies/SD, desc: "Movie Cine News"}
-       - {id: 30, cat: TV/HD, desc: "Serie TV HD"}
-       - {id: 31, cat: TV/SD, desc: "Serie TV SD"}
-       - {id: 35, cat: TV/Other, desc: "Programmi TV"}
-       - {id: 42, cat: TV/Documentary, desc: "Documentari"}
-      # Music
-       - {id: 36, cat: Audio/MP3, desc: "Music MP3"}
-       - {id: 37, cat: Audio/Lossless, desc: "Music Flac"}
-       - {id: 2, cat: Audio, desc: "Music"}
-      # Games
-       - {id: 18, cat: PC/Games, desc: "Games PC"}
-       - {id: 19, cat: Console/PS3, desc: "Games PS3"}
-       - {id: 33, cat: Console/Xbox, desc: "Games XboX"}
-       - {id: 39, cat: Console/Wii, desc: "Games Wii"}
-       - {id: 40, cat: Console/Other, desc: "Games Nintendo"}
+       - {id: 12, cat: Movies/DVD, desc: "Movie DVD-Rip"}
+       - {id: 13, cat: Movies/SD, desc: "Movie Divx"}
+       - {id: 14, cat: Movies, desc: "Movie CineCam"}
+       - {id: 25, cat: Movies/Foreign, desc: "Movie Lingua Originale"}
+      # TV
+       - {id: 4, cat: TV/HD, desc: "Serie TV HD"}
+       - {id: 2, cat: TV/SD, desc: "Serie TV SD"}
       # Anime
-       - {id: 5, cat: TV/Anime, desc: "Anime"}
+       - {id: 20, cat: TV/Anime, desc: "Anime"}
+       - {id: 22, cat: TV/Anime, desc: "Cartoons"}
       # Edicola
-       - {id: 6, cat: Books, desc: "Edicola"}
-       - {id: 16, cat: Books, desc: "Edicola Quotidiani"}
-       - {id: 28, cat: Books, desc: "Edicola Libri"}
-       - {id: 17, cat: Books, desc: "Edicola Riviste"}
-       - {id: 41, cat: Books, desc: "Edicola Fumetti"}
+       - {id: 15, cat: Books/Ebook, desc: "Ebook"}
+       - {id: 17, cat: Books, desc: "Riviste e Giornali"}
+       - {id: 18, cat: Books, desc: "Fumetti"}
+       - {id: 19, cat: XXX, desc: "Fumetti XXX"}
+      # Music
+       - {id: 3, cat: Audio, desc: "Music"}
+      # Games
+       - {id: 7, cat: PC/Games, desc: "Games PC"}
+       - {id: 21, cat: Console/Xbox, desc: "Games XboX"}
+       - {id: 16, cat: Console/PS3, desc: "Games PS3"}
       # Applicazioni
-       - {id: 4, cat: PC, desc: "IPTV"}
-       - {id: 7, cat: PC/0day, desc: "Applicazioni PC"}
-       - {id: 8, cat: PC/0day, desc: "Applicazioni Linux"}
-       - {id: 9, cat: PC/Mac, desc: "Applicazioni Mac"}
-       - {id: 32, cat: PC/Phone-Android, desc: "Applicazioni Android"}
-       - {id: 34, cat: PC/Phone-IOS, desc: "Applicazioni Iphone"}
-      # Vip
-       - {id: 38, cat: Other, desc: "V.I.P."}
-      # Adult
-       - {id: 12, cat: XXX, desc: "Adulti"}
-       - {id: 13, cat: XXX, desc: "Riviste XXX"}
-       - {id: 14, cat: XXX, desc: "Fumetti XXX"}
-       - {id: 44, cat: XXX, desc: "XXX Video"}
+       - {id: 23, cat: PC, desc: "Programmi PC"}
+       - {id: 24, cat: PC/Mac, desc: "Applicazioni Mac"}
 
     modes:
       search: [q]
