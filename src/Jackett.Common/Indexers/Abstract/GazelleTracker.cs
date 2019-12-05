@@ -74,6 +74,7 @@ namespace Jackett.Common.Indexers.Abstract
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
                 { "password", configData.Password.Value },
+                { "keeplogged", "1"},
             };
 
             var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, string.Empty, true, SiteLink);

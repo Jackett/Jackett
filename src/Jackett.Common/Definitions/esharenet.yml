@@ -82,7 +82,7 @@
       igdb: ""
       sort: created_at
       direction: desc
-      qty: 100
+      qty: 50
     rows:
       selector: table > tbody > tr
     fields:

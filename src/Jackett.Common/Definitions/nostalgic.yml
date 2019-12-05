@@ -76,7 +76,7 @@
       taglist: ""
       autocomplete_toggle: 1
     rows:
-      selector: table#torrent_table tr:not(:first-child)
+      selector: table#torrent_table tr:has(a[href^="torrents.php?action=download"])
     fields:
       title:
         selector: a[href^="/torrents.php?id="]
