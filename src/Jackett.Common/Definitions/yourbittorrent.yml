@@ -41,16 +41,13 @@
       - name: re_replace
         args: ["[\\s]+", "-"]
     rows:
-      selector: tr.table-default, tr.table-success
-      filters:
-        - name: andmatch
+      selector: tr.table-default
     fields:
       category:
         selector: td:nth-child(1) a
         attribute: title
       title:
         selector: td:nth-child(2) a
-        attribute: title
       details:
         selector: td:nth-child(2) a
         attribute: href
