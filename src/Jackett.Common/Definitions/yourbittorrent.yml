@@ -7,6 +7,8 @@
   encoding: UTF-8
   links:
     - https://yourbittorrent.com/
+  legacylinks:
+    - https://yourbittorrent.host/
 
   caps:
     categories:
@@ -28,9 +30,6 @@
 
   settings: []
 
-  download:
-    selector: a[href^="/down/"]
-
   search:
     paths:
       - path: /
@@ -51,16 +50,25 @@
         attribute: title
       title:
         selector: td:nth-child(2) a
+        attribute: title
       details:
         selector: td:nth-child(2) a
         attribute: href
       download:
         selector: td:nth-child(2) a
         attribute: href
+        # /down/22019747.torrent
+        filters:
+          - name: split
+            args: ["/", 2]
+          - name: prepend
+            args: "/down/"
+          - name: append
+            args: ".torrent"
       size:
-        selector: td:nth-child(4)
+        selector: td:nth-child(3)
       date:
-        selector: td:nth-child(5):not(:contains("/"))
+        selector: td:nth-child(4):not(:contains("/"))
         optional: true
         filters:
           - name: replace
@@ -69,16 +77,16 @@
             args: ["Yesterday", "1 day"]
           - name: timeago
       date:
-        selector: td:nth-child(5):contains("/")
+        selector: td:nth-child(4):contains("/")
         optional: true
         filters:
           - name: dateparse
             args: "02/01/06"
       seeders:
-        selector: td:nth-child(6)
+        selector: td:nth-child(5)
       leechers:
-        selector: td:nth-child(7)
+        selector: td:nth-child(6)
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
