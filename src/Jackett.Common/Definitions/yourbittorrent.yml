@@ -6,13 +6,20 @@
   type: public
   encoding: UTF-8
   links:
-    - https://yourbittorrent.host/
-  legacylinks:
     - https://yourbittorrent.com/
 
   caps:
     categories:
+      "Anime": TV/Anime
+      "Software": PC
+      "eBooks": Books
+      "XXX": XXX
+      "Games": PC/Games
+      "Movies": Movies
+      "Music": Audio
+      "Television": TV
       "Other": Other
+      "Pictures": Other
 
     modes:
       search: [q]
@@ -28,29 +35,32 @@
     paths:
       - path: /
     inputs:
+      v: ""
+      c: ""
       q: "{{ .Keywords}}"
     keywordsfilters:
       - name: re_replace
         args: ["[\\s]+", "-"]
     rows:
-      selector: table.table > tbody > tr:has(a[href^="/torrent/"])
-#      filters:
-#        - name: andmatch
+      selector: tr.table-default, tr.table-success
+      filters:
+        - name: andmatch
     fields:
       category:
-        text: Other
+        selector: td:nth-child(1) a
+        attribute: title
       title:
-        selector: td.n div a, td.v div a
+        selector: td:nth-child(2) a
       details:
-        selector: td.n div a, td.v div a
+        selector: td:nth-child(2) a
         attribute: href
       download:
-        selector: td.n div a, td.v div a
+        selector: td:nth-child(2) a
         attribute: href
       size:
-        selector: td.s
+        selector: td:nth-child(4)
       date:
-        selector: td.t:not(:contains("/"))
+        selector: td:nth-child(5):not(:contains("/"))
         optional: true
         filters:
           - name: replace
@@ -59,15 +69,15 @@
             args: ["Yesterday", "1 day"]
           - name: timeago
       date:
-        selector: td.t:contains("/")
+        selector: td:nth-child(5):contains("/")
         optional: true
         filters:
           - name: dateparse
             args: "02/01/06"
       seeders:
-        selector: td.u
+        selector: td:nth-child(6)
       leechers:
-        selector: td.d
+        selector: td:nth-child(7)
       downloadvolumefactor:
         text: "0"
       uploadvolumefactor:
