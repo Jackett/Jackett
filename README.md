@@ -364,6 +364,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * SpeedTorrent Reloaded
  * SportHD
  * SportsCult
+ * SpringSunday
  * SuperBits (SBS)
  * TakeaByte
  * Tapochek
