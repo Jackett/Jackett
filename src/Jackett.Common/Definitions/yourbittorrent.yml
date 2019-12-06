@@ -7,6 +7,7 @@
   encoding: UTF-8
   links:
     - https://yourbittorrent.com/
+    - https://yourbittorrent2.com/
   legacylinks:
     - https://yourbittorrent.host/
 
@@ -36,10 +37,11 @@
     inputs:
       v: ""
       c: ""
-      q: "{{ .Keywords}}"
+      q: "{{ .Keywords }}"
     keywordsfilters:
       - name: re_replace
         args: ["[\\s]+", "-"]
+      - name: tolower
     rows:
       selector: tr.table-default
     fields:
