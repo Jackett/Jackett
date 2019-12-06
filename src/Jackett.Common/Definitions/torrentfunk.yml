@@ -32,8 +32,11 @@
   search:
     paths:
       # https://www.torrentfunk.com/all/torrents/morty-402-castellano.html
-      - path: "all/torrents/{{ re_replace .Keywords \"[\\s]+\" \"-\" }}.html"
-
+      - path: "all/torrents/{{ .Keywords }}.html"
+    keywordsfilters:
+      - name: re_replace
+        args: ["[\\s]+", "-"]
+      - name: tolower
     rows:
       selector: table.tmain tbody tr:has(a[href^="/torrent/"])
     fields:
