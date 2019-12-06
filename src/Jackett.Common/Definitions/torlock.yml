@@ -6,10 +6,10 @@
   type: public
   encoding: UTF-8
   links:
+    - https://www.torlock.com/
     - https://www.torlock2.com/
   legacylinks:
     - https://torlock.com/
-    - https://www.torlock.com/
 
   caps:
     categorymappings:

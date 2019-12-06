@@ -27,7 +27,7 @@
     inputs:
       s: "{{.Keywords}}"
     rows:
-      selector: div.iso-item article
+      selector: div.iso-item article:has(a.download)
     fields:
       title:
         selector: div.blog-content h3 a

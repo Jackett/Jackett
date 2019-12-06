@@ -17,7 +17,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 
 #### Supported Systems
 * Windows 7SP1 or greater using .NET 4.6.1 or above [Download here](https://www.microsoft.com/net/framework/versions/net461)
-* Linux ([supported operating systems here](https://github.com/dotnet/core/blob/master/release-notes/2.1/2.1-supported-os.md))
+* Linux [supported operating systems here](https://github.com/dotnet/core/blob/master/release-notes/2.1/2.1-supported-os.md#linux)
 * macOS 10.12 or greater
 
 ### Supported Public Trackers
@@ -29,20 +29,24 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * AniRena
  * AudioBook Bay (ABB)
  * BigFANGroup
+ * BitRu
+ * BitTorrent.AM
  * BTDB
  * BTDIGG
+ * BT.etree
  * ConCen
  * Corsaro.red
  * cpasbien
  * cpasbienClone
  * Demonoid
- * DIGBT
  * dmhy
  * ETTV
  * EliteTorrent.biz
+ * EstrenosDTL
  * ExtraTorrent.ag
  * EXT Torrents
  * EZTV
+ * FireBit
  * Frozen Layer
  * GamesTorrents
  * GkTorrent
@@ -57,14 +61,15 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * iTorrent
  * KickAssTorrent (KATcr)
  * KickAssTorrent (kat.li)
+ * Legit Torrents
  * LePorno
  * LimeTorrents
  * MacTorrents
  * MagnetDL
  * MejorTorrent <!-- maintained by ivandelabeldad -->
- * MkvCage
  * Monova
  * MovCr
+ * MoviesDVDR
  * Newpct (aka: tvsinpagar, descargas2020, torrentlocura, torrentrapid, tumejortorrent, pctnew, etc)
  * Newstudio
  * Nitro
@@ -88,9 +93,11 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * The Pirate Bay (TPB)
  * Tokyo Tosho
  * Torlock
+ * TOROS
  * Torrent Downloads (TD)
  * Torrent9
  * Torrent9Clone
+ * TorrentDownload
  * TorrentFunk
  * TorrentGalaxy (TGx)
  * TorrentParadise
@@ -129,6 +136,8 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * MVGroup Forum
  * MVGroup Main
  * NetHD (VietTorrent)
+ * Pornolab
+ * RiperAM
  * RockBox
  * RuTracker
  * Sharewood
@@ -255,6 +264,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HD-Spain
  * HD-Torrents (HDT)
  * HD-Bits.com
+ * HD4FANS
  * HDArea (HDA)
  * HDBits
  * HDCenter
@@ -262,9 +272,11 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HDCity
  * HDHome (HDBigger)
  * HDME
+ * HDRoute
  * HDSky
  * HDTorrents.it
  * HDTurk
+ * HDU
  * HDZone
  * Hebits
  * Hon3y HD
@@ -354,6 +366,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * SpeedTorrent Reloaded
  * SportHD
  * SportsCult
+ * SpringSunday
  * SuperBits (SBS)
  * TakeaByte
  * Tapochek
@@ -457,7 +470,7 @@ Jackett can also be run from the command line if you would like to see log messa
 
 
 ## Install on Linux (AMDx64)
-On most operating systems all the required dependencies will already be present. In case they are not, you can refer to this page https://docs.microsoft.com/en-us/dotnet/core/linux-prerequisites?tabs=netcore2x#linux-distribution-dependencies
+On most operating systems all the required dependencies will already be present. In case they are not, you can refer to this page https://github.com/dotnet/core/blob/master/Documentation/linux-prereqs.md      
 
 ### Install as service
 1. Download and extract the latest `Jackett.Binaries.LinuxAMDx64.tar.gz` release from the [releases page](https://github.com/Jackett/Jackett/releases)
@@ -471,7 +484,7 @@ If you want to run it with a user without a /home directory you need to add `Env
 
 
 ## Install on Linux (ARMv7 or above)
-On most operating systems all the required dependencies will already be present. In case they are not, you can refer to this page https://docs.microsoft.com/en-us/dotnet/core/linux-prerequisites?tabs=netcore2x#linux-distribution-dependencies
+On most operating systems all the required dependencies will already be present. In case they are not, you can refer to this page https://github.com/dotnet/core/blob/master/Documentation/linux-prereqs.md    
 
 ### Install as service
 1. Download and extract the latest `Jackett.Binaries.LinuxARM32.tar.gz` or `Jackett.Binaries.LinuxARM64.tar.gz` (32 bit is the most common on ARM) release from the [releases page](https://github.com/Jackett/Jackett/releases) 

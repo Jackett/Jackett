@@ -1,9 +1,9 @@
 ﻿---
   site: torrent-explosiv
   name: Torrent-Explosiv
-  description: "Torrent-Explosiv is a German Semi-Private site for TV / MOVIES / GENERAL"
+  description: "Torrent-Explosiv is a German Private site for TV / MOVIES / GENERAL"
   language: de-de
-  type: semi-private
+  type: private
   encoding: UTF-8
   links:
     - https://torrent-explosiv.eu/

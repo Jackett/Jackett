@@ -6,6 +6,8 @@
   type: public
   encoding: UTF-8
   links:
+    - https://torrentparadise.cl/
+  legacylinks:
     - https://torrentparadise.org/
 
   caps:
@@ -51,7 +53,7 @@
       "VIDEO > HD - TV SHOWS": TV/HD
       "VIDEO > MOVIES": Movies
       "VIDEO > SD - MOVIES": Movies/SD
-      "VIDEO > SD - TV SHOWS": TV/SHD
+      "VIDEO > SD - TV SHOWS": TV/SD
       "VIDEO > UHD - MOVIES": Movies/UHD
       "VIDEO > UHD - TV SHOWS": TV/UHD
       "XXX": XXX

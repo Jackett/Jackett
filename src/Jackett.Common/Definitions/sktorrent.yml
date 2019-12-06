@@ -32,8 +32,9 @@
       - {id: 18, cat: PC/Games, desc: "Hry na Windows"}
       - {id: 30, cat: PC/Games, desc: "Hry na Konzole"}
       - {id: 37, cat: PC/Games, desc: "Hry na Linux"}
+      - {id: 59, cat: PC/Games, desc: "Hry na Mac"}
       - {id: 2, cat: Audio, desc: "Hudba"}
-      - {id: 55, cat:  Other, desc: "Neschválené"}
+      - {id: 58, cat:  Other, desc: "Neschválené"}
       - {id: 23, cat: Books, desc: "Knihy a Časopisy"}
       - {id: 24, cat: Audio, desc: "Mluvené slovo"}
       - {id: 27, cat: PC/Phone-Other, desc: "Mobil, PDA"}

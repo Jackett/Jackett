@@ -6,6 +6,8 @@
   type: private
   encoding: UTF-8
   links:
+    - https://hdturk.de/
+  legacylinks:
     - http://hdturk.de/
 
   caps:
@@ -81,13 +83,13 @@
   login:
     path: login.php
     method: form
-    form: form[action="takelogin.php"]
+    form: form[action$="takelogin.php"]
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
     captcha:
       type: image
-      selector: img#regimage
+      selector: img#regimage2
       input: imagestring
     error:
       - selector: table:contains("Bir hata oluştu!")

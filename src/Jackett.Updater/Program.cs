@@ -369,6 +369,8 @@ namespace Jackett.Updater
                 "Definitions/hd4free.yml",
                 "Definitions/lemencili.yml",
                 "Definitions/btbit.yml",
+                "Definitions/digbt.yml",
+                "Definitions/mkvcage.yml",
             };
 
             foreach (var oldFile in oldFiles)

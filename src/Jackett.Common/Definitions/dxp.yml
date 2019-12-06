@@ -35,8 +35,8 @@
       - {id: 18, cat: Other, desc: "Эксклюзивы"}
       - {id: 21, cat: Other, desc: "Лавка субтитров"}
       - {id: 20, cat: Other, desc: "DEMO"}
-      - {id: 17, cat: Other, desc: "VIP"}
-      - {id: 24, cat: Other, desc: "SuperVIP"}
+      - {id: 17, cat: Other/Misc, desc: "VIP"}
+      - {id: 24, cat: Other/Misc, desc: "SuperVIP"}
 
     modes:
       search: [q]
