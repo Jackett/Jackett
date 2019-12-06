@@ -93,6 +93,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * The Pirate Bay (TPB)
  * Tokyo Tosho
  * Torlock
+ * TOROS
  * Torrent Downloads (TD)
  * Torrent9
  * Torrent9Clone
