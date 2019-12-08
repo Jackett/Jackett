@@ -58,6 +58,7 @@
         attribute: href
       category:
         selector: div.nombre_big1 p b
+        optional: true
       download:
         selector: div.nombre_big1 a
         attribute: href
