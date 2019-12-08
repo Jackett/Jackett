@@ -33,7 +33,11 @@
   search:
     paths:
     # https://www.toros.co/all/torrents/capital-hill.html?v=&smi=&sma=&i=100&sort=added&o=desc
-      - path: "{{if .Keywords}}all/torrents/{{ re_replace .Keywords \"[\\s]+\" \"-\" }}.html?v=&smi=&sma=&i=100&sort=added&o=desc{{else}}top100.html{{end}}"
+      - path: "{{ if .Keywords }}all/torrents/{{ .Keywords }}.html?v=&smi=&sma=&i=100&sort=added&o=desc{{ else }}top100.html{{ end }}"
+    keywordsfilters:
+      - name: re_replace
+        args: ["[\\s]+", "-"]
+      - name: tolower
     rows:
       selector: table.table-responsive tr:has(a[href^="/torrent/"])
       filters:
