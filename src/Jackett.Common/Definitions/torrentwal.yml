@@ -38,7 +38,7 @@
     paths:
       - path: "{{ if .Keywords }}bbs/s-1-{{ .Keywords }}{{else}}bbs/s-1-유희열{{end}}"
     rows:
-      selector: tr.bg1
+      selector: tr.bg1:has(a[href^="/bbs/bc.php?bo_table="])
     fields:
       magnet:
         selector: td:nth-child(1) a[href^="javascript:"]
