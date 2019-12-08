@@ -104,29 +104,31 @@
       date:
         selector: time
         filters:
-            # translations for Turkish|Estonian|Danish|Italian|Polish|Norwegian|Portoguese|Czech|Russian|Romanian|Spanish|French|German|Bulgarian|Dutch
+            # translations for Turkish|Estonian|Danish|Italian|Polish|Norwegian|Portuguese|Czech|Russian|Romanian|Spanish|French|German|Bulgarian|Dutch|Chinese
           - name: re_replace
-            args: ["(önce|tagasi|geleden|fa|temu|siden|atrás|nazpět|назад|acum|hace|il y a|vor|преди)", "ago"]
+            args: ["(önce|tagasi|geleden|fa|temu|siden|atrás|nazpět|назад|acum|hace|il y a|vor|преди|前)", " ago"]
           - name: re_replace
-            args: ["(dakika|minut|minuto|minuta|minutt|минута|Minute|minuut)", "minute"]
+            args: ["(dakika|minut|minuto|minuta|minutt|минута|Minute|minuut|分钟)", "minute"]
           - name: re_replace
-            args: ["(dakika|minutit|minutter|minuti|minuty|minutos|минуты|минут|Minuten|минути|minuten)", "minutes"]
+            args: ["(minutit|minutter|minuti|minuty|minutos|минуты|минут|Minuten|минути|minuten)", " minutes"]
           - name: re_replace
-            args: ["(saat|tund|time|ora|godzina|hora|hodina|час|oră|heure|Stunde|uur)", "hour"]
+            args: ["(saat|tund|time|ora|godzina|hora|hodina|час|oră|heure|Stunde|uur|小时)", " hour"]
           - name: re_replace
-            args: ["(saat|tundi|timer|ore|godziny|horas|hodiny|hoden|часа|часов|ore|heures|Stunden)", "hours"]
+            args: ["(tundi|timer|ore|godziny|horas|hodiny|hoden|часа|часов|ore|heures|Stunden)", " hours"]
           - name: re_replace
-            args: ["(gün|päev|dag|giorno|dzień|dia|den|день|zi|día|jour|Tag|ден)", "day"]
+            args: ["(gün|päev|dag|giorno|dzień|dia|den|день|zi|día|jour|Tag|ден|天)", " day"]
           - name: re_replace
-            args: ["(gün|päeva|dage|giorni|dni|dias|dny|дня|дней|zile|días|jours|Tagen|дни|dagen)", "days"]
+            args: ["(päeva|dage|giorni|dni|dias|dny|дня|дней|zile|días|jours|Tagen|дни|dagen)", " days"]
           - name: re_replace
-            args: ["(hafta|nädal|uge|settimana|tydzień|uke|semana|týden|неделю|săptămână|semaine|Woche|седмица)", "week"]
+            args: ["(hafta|nädal|uge|settimana|tydzień|uke|semana|týden|неделю|săptămână|semaine|Woche|седмица|周)", " week"]
           - name: re_replace
-            args: ["(hafta|nädalat|uger|settimane|tygodnie|uker|semanas|týdny|недели|недель|săptămâni|semaines|Wochen|седмици|weken)", "weeks"]
+            args: ["(nädalat|uger|settimane|tygodnie|uker|semanas|týdny|недели|недель|săptămâni|semaines|Wochen|седмици|weken)", " weeks"]
           - name: re_replace
-            args: [" (ay|kuu|måned|mese|miesiąc|mês|měsíc|месяц|lună|mes|mois|Monat|месец|maand)", "month"]
+            args: [" (ay)", " month"]
           - name: re_replace
-            args: [" (ay|kuud|måneder|mesi|miesiące|meses|měsíce|месяца|месяцев|luni|meses|mois|Monaten|месеца|maanden)", "months"]
+            args: ["(kuu|måned|mese|miesiąc|mês|měsíc|месяц|lună|mes|mois|Monat|месец|maand|个月)", " month"]
+          - name: re_replace
+            args: ["(kuud|måneder|mesi|miesiące|meses|měsíce|месяца|месяцев|luni|meses|mois|Monaten|месеца|maanden)", " months"]
       downloadvolumefactor:
         case:
           i[class*="fa-id-badge text-orange"]: 0 # 24 Hour FreeLeech From BON Store
