@@ -73,7 +73,7 @@
         selector: td:nth-child(2) a[title]
         attribute: href
       download:
-        selector: a[href^="/down.php?id="]
+        selector: a[href^="/down.php?id="], a[href*="itorrents.org/torrent/"]
         attribute: href
       magnet:
         selector: a[href^="magnet:?xt="]
