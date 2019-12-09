@@ -39,6 +39,8 @@
       - name: tolower
     rows:
       selector: table.tmain tbody tr:has(a[href^="/torrent/"])
+      filters:
+        - name: andmatch
     fields:
       title:
         selector: div a[href^="/torrent/"]
