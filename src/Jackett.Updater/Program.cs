@@ -371,6 +371,8 @@ namespace Jackett.Updater
                 "Definitions/btbit.yml",
                 "Definitions/digbt.yml",
                 "Definitions/mkvcage.yml",
+                "Content/congruent_outline.png",
+                "Content/crissXcross.png",
             };
 
             foreach (var oldFile in oldFiles)
