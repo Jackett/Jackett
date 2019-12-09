@@ -894,11 +894,22 @@
         selector: td.t a
         attribute: href
       size:
-        selector: td:nth-child(4)
+        selector: td:nth-child(4):not(:contains("B"))
+        optional: true
+        text: "0 B"
+      size:
+        selector: td:nth-child(4):contains("B")
+        optional: true
+      seeders: 
+        text: 0
       seeders:
         selector: b.sd
+        optional: true
+      leechers:
+        text: 0
       leechers:
         selector: b.lc
+        optional: true
       date:
         selector: td.ms
         filters:
