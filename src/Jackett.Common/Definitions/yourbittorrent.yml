@@ -15,12 +15,15 @@
     categories:
       "Anime": TV/Anime
       "Software": PC
+      "Apps": PC
       "eBooks": Books
       "XXX": XXX
+      "Adult": XXX
       "Games": PC/Games
       "Movies": Movies
       "Music": Audio
       "Television": TV
+      "Series": TV
       "Other": Other
       "Pictures": Other
 
@@ -44,6 +47,8 @@
       - name: tolower
     rows:
       selector: tr.table-default
+      filters:
+        - name: andmatch
     fields:
       category:
         selector: td:nth-child(1) a
