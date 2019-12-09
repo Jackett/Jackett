@@ -54,7 +54,12 @@
         filters:
           - name: timeago
       size:
-        selector: td.leeches
+        selector: td.leeches:not(:contains("B"))
+        optional: true
+        text: "0 B"
+      size:
+        selector: td.leeches:contains("B")
+        optional: true
       seeders:
         selector: td:nth-child(2)
         filters:
