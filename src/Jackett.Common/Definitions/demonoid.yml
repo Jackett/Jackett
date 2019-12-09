@@ -304,6 +304,7 @@
       category:
         selector:  a[href*="&subcategory="]
         attribute: href
+        optional: true
         filters:
           - name: querystring
             args: subcategory
