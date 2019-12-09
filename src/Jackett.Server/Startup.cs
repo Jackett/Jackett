@@ -45,9 +45,9 @@ namespace Jackett.Server
                     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
                         options =>
                         {
-                            options.LoginPath = new PathString("/UI/Login");
-                            options.AccessDeniedPath = new PathString("/UI/Login");
-                            options.LogoutPath = new PathString("/UI/Logout");
+                            options.LoginPath = new PathString(Helper.ServerService.BasePath() + "/UI/Login");
+                            options.AccessDeniedPath = new PathString(Helper.ServerService.BasePath() + "/UI/Login");
+                            options.LogoutPath = new PathString(Helper.ServerService.BasePath() + "/UI/Logout");
                             options.Cookie.Name = "Jackett";
                             options.Cookie.SameSite = SameSiteMode.None;
                         });
