@@ -6,9 +6,9 @@
   type: semi-private
   encoding: UTF-8
   links:
-    - http://www.film-paleis.me/
-  legacylinks:
     - https://www.film-paleis.me/
+  legacylinks:
+    - http://www.film-paleis.me/
 
   caps:
     categorymappings:

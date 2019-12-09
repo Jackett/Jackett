@@ -45,7 +45,7 @@
     # https://www.acgsou.com/search.php?keyword=test
       - path: "{{ if .Keywords }}search.php?keyword={{ .Keywords }}{{else}}1.html{{end}}"
     rows:
-      selector: table tbody tr[class^="alt"]
+      selector: table tbody tr[class^="alt"]:has(td:nth-child(3) a)
     fields:
       date:
         selector: td:nth-child(1):contains("昨天")

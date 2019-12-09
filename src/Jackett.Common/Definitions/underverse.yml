@@ -1,11 +1,12 @@
 ﻿---
   site: underverse
   name: Underverse
-  description: "Underverse is a RUSSIAN Semi-Private Torrent Tracker for 0DAY / GENERAL"
+  description: "Underverse is a RUSSIAN Public Torrent Tracker for MOVIES / TV / MUSIC / GENERAL"
   language: ru-ru
-  type: semi-private
+  type: public
   encoding: windows-1251
   links:
+    - https://underver.se/
     - https://underverse.su/
 
   caps:
@@ -632,10 +633,6 @@
       # Cart???
       - {id: 614, cat: Other, desc: "Отстойник"}
       - {id: 615, cat: Other, desc: "Для поглощенных раздач"}
-      # Приватные форумы
-      # Private forums
-      - {id: 603, cat: Other, desc: "Релизерская каптерка"}
-      - {id: 604, cat: TV, desc: " |- Черновики"}
 
     modes:
       search: [q]
@@ -643,35 +640,10 @@
       movie-search: [q]
 
   settings:
-    - name: username
-      type: text
-      label: Username
-    - name: password
-      type: password
-      label: Password
     - name: striprussian
       type: checkbox
       label: Strip Russian Letters
       default: false
-
-  login:
-    path: login.php
-    method: form
-    form: form[action$="/login.php"]
-    inputs:
-      login_username: "{{ .Config.username }}"
-      login_password: "{{ .Config.password }}"
-      redirect: "index.php"
-      autologin: 1
-    selectorinputs:
-      cookie_test:
-        selector: input[name="cookie_test"]
-        attribute: value
-    error:
-      - selector: h4.warnColor1
-    test:
-      path: index.php
-      selector: a[href="./login.php?logout=1"]
 
   search:
     paths:
@@ -725,11 +697,11 @@
       allw: 0
 
     rows:
-      selector: tr[id^="tor_"]:has(a[href^="./download.php?id="])
+      selector: tr[id^="tor_"]:has(a[href^="magnet:?xt="])
 
     fields:
       title:
-        selector: a.genmed:nth-child(2)
+        selector: a.genmed:nth-child(2), a.seedmed:nth-child(2)
         filters:
           # normalize to SXXEYY format
           - name: re_replace
@@ -739,7 +711,7 @@
           - name: re_replace
             args: ["(.*)\\([CСcс]езон\\s+(\\d+)\\)(.*)", "$1 S$2 rus $3"]
           - name: re_replace
-            args: ["(\\([А-Яа-я\\W]+\\))|(^[А-Яа-я\\W\\d]+\\/ )|([а-яА-Я \\-]+,+)|([а-яА-Я]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
+            args: ["(\\([А-Яа-яЁё\\W]+\\))|(^[А-Яа-яЁё\\W\\d]+\\/ )|([а-яА-ЯЁё \\-]+,+)|([а-яА-ЯЁё]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
           - name: replace
             args: ["WEB DL", "WEBDL"]
           - name: replace
@@ -748,9 +720,6 @@
             args: ["HDTVRip", "HDTV"]
       details:
         selector: a.tLink
-        attribute: href
-      download:
-        selector: a[href^="./download.php?id="]
         attribute: href
       magnet:
         selector: a[href^="magnet:?xt="]      

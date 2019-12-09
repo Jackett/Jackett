@@ -1,12 +1,12 @@
 ﻿---
-  site: lapausetorrents
-  name: Lapausetorrents
-  description: "Lapausetorrents is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
+  site: galeriens
+  name: Galeriens
+  description: "Galeriens is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
   language: fr-fr
   type: private
   encoding: UTF-8
   links:
-    - https://tempsdepause.eu/
+    - https://galeriens.eu/
 
   caps:
     categorymappings:
@@ -189,8 +189,9 @@
     - name: torrentlanguage
       type: select
       label: Torrent Language
-      default: "11"
+      default: "0"
       options:
+        "0": "Toutes Les Langues"
         "1": "Allemand"
         "2": "Anglais(UK)"
         "3": "Anglais(US)"
@@ -233,7 +234,7 @@
 
   search:
     paths:
-    # https://tempsdepause.eu/TTV3/Torrents/Recherche?recherche=voyez&type=exacte&endroit=nomtorrent&langue=11&tl=peuimporte
+    # https://galeriens.eu/TTV3/Torrents/Recherche?recherche=&type=tout&endroit=nomtorrent&langue=0&tl=peuimporte
     # categories for searching are unsupported
       - path: TTV3/Torrents/Recherche
     inputs:
@@ -271,18 +272,38 @@
           - name: regexp
             args: "src= (.*?)><"
       size:
-        selector: td:nth-last-child(6)
-      grabs:
         selector: td:nth-last-child(5)
-      seeders:
+      grabs:
         selector: td:nth-last-child(4)
-      leechers:
+      seeders:
         selector: td:nth-last-child(3)
+      leechers:
+        selector: td:nth-last-child(2)
       date:
-        selector: td:nth-last-child(1)
+        selector: td:nth-child(2) a font[color="#F2F2F2"]
         filters:
-          - name: dateparse
-            args: "02-01-2006 15:04:05"
+          - name: replace
+            args: ["il y a ", ""]
+          - name: replace
+            args: [ " Jours", " days"]
+          - name: replace
+            args: [ " Jour", " day"]
+          - name: replace
+            args: [ " heures", " hours"]
+          - name: replace
+            args: [ " heure", " hour"]
+          - name: replace
+            args: [ " Semaines", " weeks"]
+          - name: replace
+            args: [ " Semaine", " week"]
+          - name: replace
+            args: [ " mois", " month"]
+          - name: replace
+            args: [ " ans", " years"]
+          - name: replace
+            args: [ " an", " year"]
+          - name: append
+            args: " ago"
       downloadvolumefactor:
         case:
           img[src$="/images/Torrents/TLibre.png"]: "0"

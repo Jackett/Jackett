@@ -110,7 +110,7 @@
         selector: td:has(a[href$="filelist=1#filelist"])
         remove: a
       date:
-        selector: td > small:has(i.fa-clock)
+        selector: td > small:has(i.fa-clock), td > span.small:has(i.fa-clock)
         filters:
           - name: replace
             args: ["\xA0", " "]
@@ -133,8 +133,6 @@
       leechers:
         selector: td:nth-last-child(1)
       downloadvolumefactor:
-        case:
-          "*": "0"
+        text: 0
       uploadvolumefactor:
-        case:
-          "*": "1"
+        text: 1

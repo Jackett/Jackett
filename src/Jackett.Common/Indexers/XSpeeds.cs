@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 using CsQuery;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -218,7 +217,6 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();
             var prevCook = CookieHeader + "";
-            Regex IMDBRegEx = new Regex(@"tt(\d+)", RegexOptions.Compiled);
             var searchStringIsImdbQuery = (ParseUtil.GetImdbID(searchString) != null);
 
             // If we have no query use the RSS Page as their server is slow enough at times!
@@ -281,107 +279,97 @@ namespace Jackett.Common.Indexers
             }
             */
             //if (query.IsTest || !string.IsNullOrWhiteSpace(searchString))
-            if (true)
+            /*
+            if (searchString.Length < 3 && !query.IsTest)
             {
-                /*
-                if (searchString.Length < 3 && !query.IsTest)
-                {
-                    OnParseError("", new Exception("Minimum search length is 3"));
-                    return releases;
-                }
-                */
-                var searchParams = new Dictionary<string, string> {
-                    { "do", "search" },
-                    { "category", "0" },
-                    { "include_dead_torrents", "no" }
-                };
+                OnParseError("", new Exception("Minimum search length is 3"));
+                return releases;
+            }
+            */
+            var searchParams = new Dictionary<string, string> {
+                { "do", "search" },
+                { "category", "0" },
+                { "include_dead_torrents", "no" }
+            };
 
-                if (query.IsImdbQuery)
-                {
-                    searchParams.Add("keywords", query.ImdbID);
+            if (query.IsImdbQuery)
+            {
+                searchParams.Add("keywords", query.ImdbID);
+                searchParams.Add("search_type", "t_both");
+            }
+            else
+            {
+                searchParams.Add("keywords", searchString);
+                if (searchStringIsImdbQuery)
                     searchParams.Add("search_type", "t_both");
-                }
-                else if (searchStringIsImdbQuery)
-                {
-                    searchParams.Add("keywords", searchString);
-                    searchParams.Add("search_type", "t_both");
-                }
                 else
-                {
-                    searchParams.Add("keywords", searchString);
                     searchParams.Add("search_type", "t_name");
-                }
+            }
 
-                var pairs = new Dictionary<string, string> {
-                    { "username", configData.Username.Value },
-                    { "password", configData.Password.Value }
-                };
+            var searchPage = await PostDataWithCookiesAndRetry(SearchUrl, searchParams, CookieHeader);
+            // Occasionally the cookies become invalid, login again if that happens
+            if (searchPage.IsRedirect)
+            {
+                await ApplyConfiguration(null);
+                searchPage = await PostDataWithCookiesAndRetry(SearchUrl, searchParams, CookieHeader);
+            }
 
-                var searchPage = await PostDataWithCookiesAndRetry(SearchUrl, searchParams, CookieHeader);
-                // Occasionally the cookies become invalid, login again if that happens
-                if (searchPage.IsRedirect)
+            try
+            {
+                CQ dom = searchPage.Content;
+                var rows = dom["table#sortabletable > tbody > tr:has(div > a[href*=\"details.php?id=\"])"];
+                foreach (var row in rows)
                 {
-                    await ApplyConfiguration(null);
-                    searchPage = await PostDataWithCookiesAndRetry(SearchUrl, searchParams, CookieHeader);
-                }
+                    var release = new ReleaseInfo();
+                    var qRow = row.Cq();
 
-                try
-                {
-                    CQ dom = searchPage.Content;
-                    var rows = dom["table#sortabletable > tbody > tr:has(div > a[href*=\"details.php?id=\"])"];
-                    foreach (var row in rows)
+                    var qDetails = qRow.Find("div > a[href*=\"details.php?id=\"]"); // details link, release name get's shortened if it's to long
+                    var qTitle = qRow.Find("td:eq(1) .tooltip-content div:eq(0)"); // use Title from tooltip
+                    if (!qTitle.Any()) // fallback to Details link if there's no tooltip
                     {
-                        var release = new ReleaseInfo();
-                        var qRow = row.Cq();
-
-                        var qDetails = qRow.Find("div > a[href*=\"details.php?id=\"]"); // details link, release name get's shortened if it's to long
-                        var qTitle = qRow.Find("td:eq(1) .tooltip-content div:eq(0)"); // use Title from tooltip
-                        if (!qTitle.Any()) // fallback to Details link if there's no tooltip
-                        {
-                            qTitle = qDetails;
-                        }
-                        release.Title = qTitle.Text();
-
-                        release.Guid = new Uri(qRow.Find("td:eq(2) a").Attr("href"));
-                        release.Link = release.Guid;
-                        release.Comments = new Uri(qDetails.Attr("href"));
-                        release.PublishDate = DateTime.ParseExact(qRow.Find("td:eq(1) div").Last().Text().Trim(), "dd-MM-yyyy H:mm", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal); //08-08-2015 12:51
-                        release.Seeders = ParseUtil.CoerceInt(qRow.Find("td:eq(6)").Text());
-                        release.Peers = release.Seeders + ParseUtil.CoerceInt(qRow.Find("td:eq(7)").Text().Trim());
-                        release.Size = ReleaseInfo.GetBytes(qRow.Find("td:eq(4)").Text().Trim());
-
-                        var qBanner = qRow.Find("td:eq(1) .tooltip-content img").First();
-                        if (qBanner.Length > 0)
-                            release.BannerUrl = new Uri(qBanner.Attr("src"));
-
-                        var cat = row.Cq().Find("td:eq(0) a").First().Attr("href");
-                        var catSplit = cat.LastIndexOf('=');
-                        if (catSplit > -1)
-                            cat = cat.Substring(catSplit + 1);
-                        release.Category = MapTrackerCatToNewznab(cat);
-
-                        var grabs = qRow.Find("td:nth-child(6)").Text();
-                        release.Grabs = ParseUtil.CoerceInt(grabs);
-
-                        if (qRow.Find("img[alt^=\"Free Torrent\"]").Length >= 1)
-                            release.DownloadVolumeFactor = 0;
-                        else if (qRow.Find("img[alt^=\"Silver Torrent\"]").Length >= 1)
-                            release.DownloadVolumeFactor = 0.5;
-                        else
-                            release.DownloadVolumeFactor = 1;
-
-                        if (qRow.Find("img[alt^=\"x2 Torrent\"]").Length >= 1)
-                            release.UploadVolumeFactor = 2;
-                        else
-                            release.UploadVolumeFactor = 1;
-
-                        releases.Add(release);
+                        qTitle = qDetails;
                     }
+                    release.Title = qTitle.Text();
+
+                    release.Guid = new Uri(qRow.Find("td:eq(2) a").Attr("href"));
+                    release.Link = release.Guid;
+                    release.Comments = new Uri(qDetails.Attr("href"));
+                    release.PublishDate = DateTime.ParseExact(qRow.Find("td:eq(1) div").Last().Text().Trim(), "dd-MM-yyyy H:mm", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal); //08-08-2015 12:51
+                    release.Seeders = ParseUtil.CoerceInt(qRow.Find("td:eq(6)").Text());
+                    release.Peers = release.Seeders + ParseUtil.CoerceInt(qRow.Find("td:eq(7)").Text().Trim());
+                    release.Size = ReleaseInfo.GetBytes(qRow.Find("td:eq(4)").Text().Trim());
+
+                    var qBanner = qRow.Find("td:eq(1) .tooltip-content img").First();
+                    if (qBanner.Length > 0)
+                        release.BannerUrl = new Uri(qBanner.Attr("src"));
+
+                    var cat = row.Cq().Find("td:eq(0) a").First().Attr("href");
+                    var catSplit = cat.LastIndexOf('=');
+                    if (catSplit > -1)
+                        cat = cat.Substring(catSplit + 1);
+                    release.Category = MapTrackerCatToNewznab(cat);
+
+                    var grabs = qRow.Find("td:nth-child(6)").Text();
+                    release.Grabs = ParseUtil.CoerceInt(grabs);
+
+                    if (qRow.Find("img[alt^=\"Free Torrent\"]").Length >= 1)
+                        release.DownloadVolumeFactor = 0;
+                    else if (qRow.Find("img[alt^=\"Silver Torrent\"]").Length >= 1)
+                        release.DownloadVolumeFactor = 0.5;
+                    else
+                        release.DownloadVolumeFactor = 1;
+
+                    if (qRow.Find("img[alt^=\"x2 Torrent\"]").Length >= 1)
+                        release.UploadVolumeFactor = 2;
+                    else
+                        release.UploadVolumeFactor = 1;
+
+                    releases.Add(release);
                 }
-                catch (Exception ex)
-                {
-                    OnParseError(searchPage.Content, ex);
-                }
+            }
+            catch (Exception ex)
+            {
+                OnParseError(searchPage.Content, ex);
             }
             if (!CookieHeader.Trim().Equals(prevCook.Trim()))
             {

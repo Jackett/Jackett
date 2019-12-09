@@ -25,7 +25,7 @@
     modes:
       search: [q]
       tv-search: [q, season, ep, imdbid]
-      movie-search: [imdbid]
+      movie-search: [q, imdbid]
 
   login:
     path: takelogin.php
@@ -38,11 +38,11 @@
         message:
           selector: td.text
     test:
-      path: torrents.php
+      path: index.php
       selector: a[href="logout.php"]
 
   ratio:
-    path: torrents.php
+    path: index.php
     selector: span.medium:has(a[href="logout.php"])
     filters:
       - name: replace
@@ -53,7 +53,6 @@
   search:
     paths:
       - path: torrents.php
-        method: get
     inputs:
       $raw: "{{range .Categories}}cat{{.}}=1&{{end}}"
       search: "{{if .Query.IMDBID}}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"

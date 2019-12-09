@@ -1,7 +1,7 @@
 ﻿using Jackett.Common.Services.Interfaces;
 using NLog;
 using System;
-#if NETCOREAPP2_2
+#if !NET461
 using Mono.Unix;
 #endif
 
@@ -18,7 +18,7 @@ namespace Jackett.Server.Services
 
         public void MakeFileExecutable(string path)
         {
-#if NETCOREAPP2_2
+#if !NET461
 
             //Calling the file permission service to limit usage to netcoreapp. The Mono.Posix.NETStandard library causes issues outside of .NET Core
             //https://github.com/xamarin/XamarinComponents/issues/282

@@ -21,7 +21,7 @@
       - {id: 63, cat: Books, desc: "College"}
       - {id: 53, cat: Books, desc: "Cooking"}
       - {id: 42, cat: Books, desc: "Documentary"}
-      - {id: 37, cat: Books, desc: "e-Books"}
+      - {id: 37, cat: Books/Ebook, desc: "e-Books"}
       - {id: 65, cat: Books, desc: "Engineering"}
       - {id: 54, cat: Books, desc: "Health-Fitness"}
       - {id: 64, cat: Books, desc: "Kids"}
@@ -29,27 +29,26 @@
       - {id: 49, cat: Books, desc: "Linux CBTs"}
       - {id: 43, cat: Books, desc: "Lynda.com"}
       - {id: 57, cat: Books/Magazines, desc: "Magazines"}
-      - {id: 71, cat: Books, desc: "Magic"}
+      - {id: 71, cat: Books, desc: "Pluralsight"}
       - {id: 60, cat: Books, desc: "Medical"}
       - {id: 44, cat: Books, desc: "Misc Learning"}
       - {id: 51, cat: Books, desc: "Music Learning"}
       - {id: 41, cat: Books, desc: "Others"}
       - {id: 52, cat: Books, desc: "Photography"}
-      - {id: 35, cat: Books, desc: "PPT 'n Docs"}
-      - {id: 38, cat: Books, desc: "Religion"}
+      - {id: 35, cat: Books, desc: "Developer"}
+      - {id: 38, cat: Books, desc: "Udemy"}
       - {id: 68, cat: Books, desc: "Self Growth"}
       - {id: 72, cat: Books, desc: "Templates"}
-      - {id: 58, cat: Books, desc: "Total Training"}
-      - {id: 45, cat: Books, desc: "Trainsignal"}
-      - {id: 59, cat: Books, desc: "VTC"}
+      - {id: 58, cat: Books, desc: "Packt"}
+      - {id: 45, cat: Books, desc: "Ethical hacking"}
+      - {id: 59, cat: Books, desc: "WEB | SocialMedia"}
 
 
     modes:
       search: [q]
-      tv-search: [q, season, ep]
 
   login:
-    path: processid.php
+    path: processf.php
     method: post
     inputs:
       username: "{{ .Config.username }}"
@@ -64,8 +63,11 @@
       - path: browse.php
         method: post
     inputs:
-      search: "{{ .Query.Keywords }}"
-      incldead: "1"
+      search: "{{ .Keywords }}"
+      # 0 active 1 incldead 2 onlydead
+      incldead: 1
+      # 0 title 1 default
+      scope: 1
     rows:
       selector: table > tbody > tr[class]
       filters:

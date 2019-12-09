@@ -60,7 +60,7 @@
       - {id: 291, cat: Books/Ebook, desc: "Collections: Fiction"}
       - {id: 292, cat: Books/Ebook, desc: "Collections: Non Fiction"}
       - {id: 220, cat: Books/Comics, desc: "Comics: Archie"}
-      - {id: 222, cat: Books/Comics, desc: "Comics: Books &amp; Mags - Comics"}
+      - {id: 222, cat: Books/Comics, desc: "Comics: Books & Mags - Comics"}
       - {id: 225, cat: Books/Comics, desc: "Comics: ComicStrip Collection"}
       - {id: 228, cat: Books/Comics, desc: "Comics: DC"}
       - {id: 244, cat: Books/Comics, desc: "Comics: Manga"}
@@ -94,12 +94,12 @@
       - {id: 287, cat: Books/Ebook, desc: "Doc/Vid/Tut: Martial Arts/Boxing/Wrestling"}
       - {id: 121, cat: Books/Ebook, desc: "Educational: Arts"}
       - {id: 122, cat: Books/Ebook, desc: "Educational: Astronomy/Cosmology"}
-      - {id: 123, cat: Books/Ebook, desc: "Educational: Biology &amp; Genetics"}
+      - {id: 123, cat: Books/Ebook, desc: "Educational: Biology & Genetics"}
       - {id: 124, cat: Books/Ebook, desc: "Educational: Chemistry"}
       - {id: 125, cat: Books/Ebook, desc: "Educational: Culture/Languages"}
       - {id: 126, cat: Books/Ebook, desc: "Educational: Earth Sciences"}
       - {id: 127, cat: Books/Ebook, desc: "Educational:  Educational"}
-      - {id: 128, cat: Books/Ebook, desc: "Educational: Engineering &amp; Technology "}
+      - {id: 128, cat: Books/Ebook, desc: "Educational: Engineering & Technology "}
       - {id: 129, cat: Books/Ebook, desc: "Educational: Environmental Studies"}
       - {id: 130, cat: Books/Ebook, desc: "Educational: General Science Titles"}
       - {id: 131, cat: Books/Ebook, desc: "Educational: Literature / Writing"}
@@ -120,7 +120,7 @@
       - {id: 302, cat: Books/Ebook, desc: "Fiction: Cozy Mysteries"}
       - {id: 82, cat: Books/Ebook, desc: "Fiction: General Fiction"}
       - {id: 83, cat: Books/Ebook, desc: "Fiction: Horror"}
-      - {id: 84, cat: Books/Ebook, desc: "Fiction: Military &amp; Historic"}
+      - {id: 84, cat: Books/Ebook, desc: "Fiction: Military & Historic"}
       - {id: 86, cat: Books/Ebook, desc: "Fiction: Romance"}
       - {id: 87, cat: Books/Ebook, desc: "Fiction: Sci-Fi/Fantasy"}
       - {id: 88, cat: Books/Ebook, desc: "Fiction: Westerns"}
@@ -130,7 +130,7 @@
       - {id: 140, cat: Books/Ebook, desc: "Hobby/Pastime: Art"}
       - {id: 141, cat: Books/Ebook, desc: "Hobby/Pastime: Boating"}
       - {id: 142, cat: Books/Ebook, desc: "Hobby/Pastime: Crafts/Knitting/Sewing"}
-      - {id: 143, cat: Books/Ebook, desc: "Hobby/Pastime: Food &amp; Drink"}
+      - {id: 143, cat: Books/Ebook, desc: "Hobby/Pastime: Food & Drink"}
       - {id: 144, cat: Books/Ebook, desc: "Hobby/Pastime: Games/RPG/Gaming"}
       - {id: 145, cat: Books/Ebook, desc: "Hobby/Pastime: General Pastimes"}
       - {id: 146, cat: Books/Ebook, desc: "Hobby/Pastime: Graphic Arts and Design"}
@@ -192,26 +192,26 @@
       - {id: 89, cat: Books/Ebook, desc: "Non Fict/Ref: Agricultural"}
       - {id: 90, cat: Books/Ebook, desc: "Non Fict/Ref: Alt. Therapies"}
       - {id: 95, cat: Books/Ebook, desc: "Non Fict/Ref: Architecture"}
-      - {id: 91, cat: Books/Ebook, desc: "Non Fict/Ref: Auto &amp; Repair"}
+      - {id: 91, cat: Books/Ebook, desc: "Non Fict/Ref: Auto & Repair"}
       - {id: 92, cat: Books/Ebook, desc: "Non Fict/Ref: Aviation"}
       - {id: 94, cat: Books/Ebook, desc: "Non Fict/Ref: Biographies and Memoirs"}
       - {id: 96, cat: Books/Ebook, desc: "Non Fict/Ref: Business/Finance"}
       - {id: 97, cat: Books/Ebook, desc: "Non Fict/Ref: Comedy/Humorous"}
       - {id: 98, cat: Books/Ebook, desc: "Non Fict/Ref: Crime"}
       - {id: 99, cat: Books/Ebook, desc: "Non Fict/Ref: Criminology"}
-      - {id: 100, cat: Books/Ebook, desc: "Non Fict/Ref: Economics &amp; Math"}
+      - {id: 100, cat: Books/Ebook, desc: "Non Fict/Ref: Economics & Math"}
       - {id: 102, cat: Books/Ebook, desc: "Non Fict/Ref: Electronics"}
       - {id: 103, cat: Books/Ebook, desc: "Non Fict/Ref: Enc/Dict/Atlas,s"}
       - {id: 104, cat: Books/Ebook, desc: "Non Fict/Ref: Entertainment"}
       - {id: 105, cat: Books/Ebook, desc: "Non Fict/Ref: General Ref"}
-      - {id: 106, cat: Books/Ebook, desc: "Non Fict/Ref: Geo &amp; Archaeology"}
+      - {id: 106, cat: Books/Ebook, desc: "Non Fict/Ref: Geo & Archaeology"}
       - {id: 107, cat: Books/Ebook, desc: "Non Fict/Ref: Journ/Current Affairs "}
       - {id: 108, cat: Books/Ebook, desc: "Non Fict/Ref: Legal"}
       - {id: 109, cat: Books/Ebook, desc: "Non Fict/Ref: Medical/Health"}
       - {id: 110, cat: Books/Ebook, desc: "Non Fict/Ref: Motorcycle"}
       - {id: 111, cat: Books/Ebook, desc: "Non Fict/Ref:  Music"}
       - {id: 112, cat: Books/Ebook, desc: "Non Fict/Ref: Parenting/Family"}
-      - {id: 113, cat: Books/Ebook, desc: "Non Fict/Ref: Philosophy &amp; Belief"}
+      - {id: 113, cat: Books/Ebook, desc: "Non Fict/Ref: Philosophy & Belief"}
       - {id: 114, cat: Books/Ebook, desc: "Non Fict/Ref: Literature / Writing"}
       - {id: 115, cat: Books/Ebook, desc: "Non Fict/Ref: Political Science"}
       - {id: 116, cat: Books/Ebook, desc: "Non Fict/Ref: Project Management"}
@@ -228,7 +228,7 @@
       - {id: 279, cat: Books/Ebook, desc: "Non Fict/Ref: Psychology"}
       - {id: 280, cat: Books/Ebook, desc: "Non Fict/Ref: Education"}
       - {id: 282, cat: Books/Ebook, desc: "Non Fict/Ref: Martial Arts/Boxing/Wrestling"}
-      - {id: 293, cat: Books/Ebook, desc: "Non Fict/Ref: Zoology &amp; Veterinary Science"}
+      - {id: 293, cat: Books/Ebook, desc: "Non Fict/Ref: Zoology & Veterinary Science"}
       - {id: 294, cat: Books/Ebook, desc: "Non Fict/Ref: True Stories"}
       - {id: 300, cat: Books/Ebook, desc: "Non Fict/Ref: Maritime Books (Building,navig"}
       - {id: 200, cat: Books/Ebook, desc: "Teens: Collections"}

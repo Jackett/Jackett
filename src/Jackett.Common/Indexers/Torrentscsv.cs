@@ -70,6 +70,7 @@ namespace Jackett.Common.Indexers {
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery (TorznabQuery query, int attempts) {
             var releases = new List<ReleaseInfo> ();
             var searchString = query.GetQueryString ();
+            if (string.IsNullOrEmpty(searchString)) searchString = "*";
 
             var queryCollection = new NameValueCollection ();
 
@@ -136,7 +137,7 @@ namespace Jackett.Common.Indexers {
                     release.InfoHash = torrent.Value<JToken> ("infohash").ToString ();
 
                     // convert unix timestamp to human readable date
-                    double createdunix = torrent.Value<int> ("created_unix");
+                    double createdunix = torrent.Value<long> ("created_unix");
                     System.DateTime dateTime = new System.DateTime (1970, 1, 1, 0, 0, 0, 0);
                     dateTime = dateTime.AddSeconds (createdunix);
                     release.PublishDate = dateTime;

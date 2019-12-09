@@ -6,13 +6,26 @@
   type: public
   encoding: UTF-8
   links:
-    - https://yourbittorrent.host/
-  legacylinks:
     - https://yourbittorrent.com/
+    - https://yourbittorrent2.com/
+  legacylinks:
+    - https://yourbittorrent.host/
 
   caps:
     categories:
+      "Anime": TV/Anime
+      "Software": PC
+      "Apps": PC
+      "eBooks": Books
+      "XXX": XXX
+      "Adult": XXX
+      "Games": PC/Games
+      "Movies": Movies
+      "Music": Audio
+      "Television": TV
+      "Series": TV
       "Other": Other
+      "Pictures": Other
 
     modes:
       search: [q]
@@ -21,36 +34,45 @@
 
   settings: []
 
-  download:
-    selector: a[href^="/down/"]
-
   search:
     paths:
       - path: /
     inputs:
-      q: "{{ .Keywords}}"
+      v: ""
+      c: ""
+      q: "{{ .Keywords }}"
     keywordsfilters:
       - name: re_replace
         args: ["[\\s]+", "-"]
+      - name: tolower
     rows:
-      selector: table.table > tbody > tr:has(a[href^="/torrent/"])
-#      filters:
-#        - name: andmatch
+      selector: tr.table-default
+      filters:
+        - name: andmatch
     fields:
       category:
-        text: Other
+        selector: td:nth-child(1) a
+        attribute: title
       title:
-        selector: td.n div a, td.v div a
+        selector: td:nth-child(2) a
       details:
-        selector: td.n div a, td.v div a
+        selector: td:nth-child(2) a
         attribute: href
       download:
-        selector: td.n div a, td.v div a
+        selector: td:nth-child(2) a
         attribute: href
+        # /down/22019747.torrent
+        filters:
+          - name: split
+            args: ["/", 2]
+          - name: prepend
+            args: "/down/"
+          - name: append
+            args: ".torrent"
       size:
-        selector: td.s
+        selector: td:nth-child(3)
       date:
-        selector: td.t:not(:contains("/"))
+        selector: td:nth-child(4):not(:contains("/"))
         optional: true
         filters:
           - name: replace
@@ -59,16 +81,16 @@
             args: ["Yesterday", "1 day"]
           - name: timeago
       date:
-        selector: td.t:contains("/")
+        selector: td:nth-child(4):contains("/")
         optional: true
         filters:
           - name: dateparse
             args: "02/01/06"
       seeders:
-        selector: td.u
+        selector: td:nth-child(5)
       leechers:
-        selector: td.d
+        selector: td:nth-child(6)
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1

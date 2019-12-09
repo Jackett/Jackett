@@ -155,7 +155,7 @@ namespace Jackett.Common.Indexers
                     var bannerURL = new Uri(SiteLink + groupPoster.GetAttribute("src"));
 
                     long? IMDBId = null;
-                    var imdbLink = Group.QuerySelector("a[href^=\"http://anonym.to/?http://www.imdb.com/title/tt\"]");
+                    var imdbLink = Group.QuerySelector("a[href*=\"www.imdb.com/title/tt\"]");
                     if (imdbLink != null)
                     {
                         var IMDBMatch = IMDBRegEx.Match(imdbLink.GetAttribute("href"));

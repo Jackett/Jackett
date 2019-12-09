@@ -123,7 +123,7 @@
       action: "login"
       loginbox_membername: "{{ .Config.username }}"
       loginbox_password: "{{ .Config.password }}"
-      loginbox_remember: "true"
+      loginbox_remember: 1
     selectorinputs:
       securitytoken:
         selector: "script:contains(\"stKey: \")"
@@ -172,7 +172,7 @@
         selector: a[href*="?p=torrents&pid=10&action=download"]
         attribute: href
       imdb:
-        selector: a[href^="http://www.imdb.com/title/tt"]
+        selector: a[href*="www.imdb.com/title/tt"]
         attribute: href
       size:
         selector: a[rel="torrent_size"]

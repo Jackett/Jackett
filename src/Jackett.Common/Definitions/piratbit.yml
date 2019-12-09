@@ -1,16 +1,17 @@
 ﻿---
   site: piratbit
   name: PiratBit
-  description: "PirateBit is a RUSSIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
+  description: "PirateBit is a RUSSIAN Public Torrent Tracker for MOVIES / TV / GENERAL"
   language: ru-ru
-  type: private
+  type: public
   encoding: UTF-8
   links:
-    - https://piratbit.top/
-    - https://piratbit.ml/
+    - http://piratbit.top/
   legacylinks:
     - https://pb.wtf/
     - https://piratbit.pw/
+    - https://piratbit.ml/
+    - https://piratbit.top/
 
   caps:
     categorymappings:
@@ -605,22 +606,10 @@
     modes:
       search: [q]
 
-  login:
-    path: login.php
-    method: post
-    inputs:
-      "login_username": "{{ .Config.username }}"
-      "login_password": "{{ .Config.password }}"
-      autologin: 1
-      login: "Вход"
-      redirect: "/"
-    error:
-      - selector: table tr td div.alert
-#        message:
-#          selector: table tr td div.msg
-    test:
-      path: index.php
-      selector: li a[href="/login.php?logout=1"]
+  settings: []
+
+  download:
+    selector: a[href^="magnet:?xt="]
 
   search:
     paths:
@@ -659,7 +648,7 @@
         selector: td a.genmed
         attribute: href
       download:
-        selector: td div a.dLink
+        selector: td a.genmed
         attribute: href
       category:
         selector: td a.gen
@@ -668,72 +657,30 @@
           - name: querystring
             args: f
       size:
-        selector: td div a.dLink
-        filters:
-          - name: re_replace
-            args: ["\u2193", ""] # down arrow
+        selector: td > u
       seeders:
         selector: td.seedmed
       leechers:
         selector: td.leechmed
         # Russian and Ukranian and English languages are supported
       grabs:
-        optional: true
-        selector: td[title^="Ответов"]
-      grabs:
-        optional: true
-        selector: td[title^="Відповідей"]
-      grabs:
-        optional: true
-        selector: td[title^="Replies"]
+        selector: td[title^="Ответов"], td[title^="Відповідей"], td[title^="Replies"]
         # 2 date flavours for 3 languages
       date:
       # 15:04
         optional: true
-        selector: td[title="Добавлен"] p:first-of-type:not(:contains("-"))
+        selector: td[title="Добавлен"] p:first-of-type:not(:contains("-")), td[title="Доданий"] p:first-of-type:not(:contains("-")), td[title="Added"] p:first-of-type:not(:contains("-"))
         filters:
           - name: dateparse
             args: "15:04"
       date:
       # 15:04 24-02-19
         optional: true
-        selector: td[title="Добавлен"] p:first-of-type:contains("-")
-        filters:
-          - name: dateparse
-            args: "15:04 2-01-06"
-      date:
-      # 15:04
-        optional: true
-        selector: td[title="Доданий"] p:first-of-type:not(:contains("-"))
-        filters:
-          - name: dateparse
-            args: "15:04"
-      date:
-      # 15:04 24-02-19
-        optional: true
-        selector: td[title="Доданий"] p:first-of-type:contains("-")
-        filters:
-          - name: dateparse
-            args: "15:04 2-01-06"
-      date:
-      # 15:04
-        optional: true
-        selector: td[title="Added"] p:first-of-type:not(:contains("-"))
-        filters:
-          - name: dateparse
-            args: "15:04"
-      date:
-      # 15:04 24-02-19
-        optional: true
-        selector: td[title="Added"] p:first-of-type:contains("-")
+        selector: td[title="Добавлен"] p:first-of-type:contains("-"), td[title="Доданий"] p:first-of-type:contains("-"), td[title="Added"] p:first-of-type:contains("-")
         filters:
           - name: dateparse
             args: "15:04 2-01-06"
       downloadvolumefactor:
-        case:
-          "span.isgold": "0"
-          "span.issilver": "0.5"
-          "*": "1"
+        text: 0
       uploadvolumefactor:
-        case:
-          "*": "1"
+        text: 1

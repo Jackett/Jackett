@@ -108,7 +108,7 @@
       action: "login"
       loginbox_membername: "{{ .Config.username }}"
       loginbox_password: "{{ .Config.password }}"
-      loginbox_remember: "true"
+      loginbox_remember: 1
     selectorinputs:
       securitytoken:
         selector: "script:contains(\"stKey: \")"
@@ -128,7 +128,7 @@
       - name: replace # use this as a workaround till #893 is implemented
         args: ["Greys Anatomy", "Grey's Anatomy"]
       - name: re_replace
-        args: ["[^a-zA-Z0-9]+", "%25"]
+        args: ["[^\\w\\d]+", "%25"]
     inputs:
       p: "torrents"
       pid: "32"
@@ -162,7 +162,7 @@
         attribute: href
       imdb:
         optional: true
-        selector: a[href^="http://www.imdb.com/title/tt"]
+        selector: a[href*="www.imdb.com/title/tt"]
         attribute: href
       size:
         selector: a[rel="torrent_size"]

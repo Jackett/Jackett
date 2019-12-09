@@ -15,7 +15,7 @@
       - {id: "xvid", cat: Movies, desc: "Movies / XviD"}
       - {id: "dvd-r", cat: Movies, desc: "Movies / DVD-R"}
       - {id: "x264", cat: Movies, desc: "Movies / x264"}
-      - {id: "animemanga", cat: Movies, desc: "Movies / Anime &amp; Manga"}
+      - {id: "animemanga", cat: Movies, desc: "Movies / Anime & Manga"}
       - {id: "documentaries", cat: Movies, desc: "Movies / Documentaries"}
       - {id: "blu-ray", cat: Movies, desc: "Movies / Blu-ray"}
       - {id: "boxset", cat: Movies, desc: "Movies / Boxset"}

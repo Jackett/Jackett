@@ -1593,7 +1593,7 @@ namespace Jackett.Common.Indexers
                         }
                         else if (configData.StripRussianLetters.Value)
                         {
-                            var regex = new Regex(@"(\([А-Яа-я\W]+\))|(^[А-Яа-я\W\d]+\/ )|([а-яА-Я \-]+,+)|([а-яА-Я]+)");
+                            var regex = new Regex(@"(\([А-Яа-яЁё\W]+\))|(^[А-Яа-яЁё\W\d]+\/ )|([а-яА-ЯЁё \-]+,+)|([а-яА-ЯЁё]+)");
                             release.Title = regex.Replace(release.Title, "");
                         }
 

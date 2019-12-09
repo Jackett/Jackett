@@ -80,7 +80,6 @@
       loginbox_membername: "{{ .Config.username }}"
       loginbox_password: "{{ .Config.password }}"
       loginbox_remember: 1
-      loginbox_remember: "true"
     selectorinputs:
       securitytoken:
         selector: "script:contains(\"stKey: \")"

@@ -14,7 +14,7 @@
   caps:
     categories:
       "mac-os-apps": PC/Mac
-      "mac-os-games": PC/Games
+      "mac-games": PC/Games
 
     modes:
       search: [q]
@@ -27,12 +27,12 @@
     inputs:
       s: "{{.Keywords}}"
     rows:
-      selector: div.iso-item article
+      selector: div.iso-item article:has(a.download)
     fields:
       title:
         selector: div.blog-content h3 a
       category:
-        selector: a[href*="/mac-os-"]
+        selector: a[href$="/mac-os-apps/"], a[href$="/mac-games/"]
         attribute: href
         filters:
           - name: split

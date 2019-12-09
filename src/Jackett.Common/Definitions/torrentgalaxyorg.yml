@@ -56,6 +56,22 @@
 
   settings: []
 
+  login:
+    # https://torrentgalaxy.to/galaxyfence.php?f&dropoff=%2Ftorrents.php%3Fsearch%3DHarry%2BPotter
+    path: galaxyfence.php?f
+    method: form
+    form: form[action="/galaxyfence.php"]
+    inputs:
+      dropoff: "/torrents.php"
+    captcha:
+      type: image
+      selector: img#captcha
+      input: captcha
+    error:
+      - selector: span:contains("Captcha incorrect")
+    test:
+      path: /
+
   search:
     # https://torrentgalaxy.org/torrents.php?c41=1&search=mercedes+s02e04&lang=0&sort=id&order=desc
     path: torrents.php

@@ -24,10 +24,11 @@ namespace Jackett.Common.Indexers
     /// </summary>
     public class Xthor : BaseCachingWebIndexer
     {
-        private static string ApiEndpoint => "https://api.xthor.to/";
+        private static string ApiEndpoint => "https://api.xthor.tk/";
 
         public override string[] LegacySiteLinks { get; protected set; } = new string[] {
             "https://xthor.bz/",
+            "https://xthor.to",
         };
 
         private string TorrentCommentUrl => TorrentDescriptionUrl;
@@ -44,13 +45,13 @@ namespace Jackett.Common.Indexers
             : base(
                 name: "Xthor",
                 description: "General French Private Tracker",
-                link: "https://xthor.to/",
+                link: "https://xthor.tk/",
                 caps: new TorznabCapabilities(),
                 configService: configService,
                 client: w,
                 logger: l,
                 p: ps,
-                downloadBase: "https://xthor.to/download.php?torrent=",
+                downloadBase: "https://xthor.tk/download.php?torrent=",
                 configData: new ConfigurationDataXthor())
         {
             Encoding = Encoding.UTF8;
@@ -181,7 +182,7 @@ namespace Jackett.Common.Indexers
             searchTerm = searchTerm.Trim();
             searchTerm = searchTerm.ToLower();
 
-            if (EnhancedAnime && query.HasSpecifiedCategories && query.Categories.Contains(TorznabCatType.TVAnime.ID))
+            if (EnhancedAnime && query.HasSpecifiedCategories && (query.Categories.Contains(TorznabCatType.TVAnime.ID) || query.Categories.Contains(100032) || query.Categories.Contains(100101) || query.Categories.Contains(100110)))
             {
                 System.Text.RegularExpressions.Regex regex = new Regex(" ([0-9]+)");
                 searchTerm = regex.Replace(searchTerm, " E$1");

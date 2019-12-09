@@ -10,13 +10,13 @@
 
   caps:
     categories:
-      "Apps": PC
+      "app": PC
       "book": Books
-      "Games": PC/Games
-      "Movies": Movies
-      "Music": Audio
-      "XXX": XXX
-      "TV": TV
+      "game": PC/Games
+      "movies": Movies
+      "music": Audio
+      "heart": XXX
+      "tv": TV
 
     modes:
       search: [q]
@@ -40,11 +40,8 @@
         selector: td:nth-child(1) i
         attribute: class
         filters:
-        # patch. books are "fa fa-book" while all the other categories are "ico-list-*"
           - name: replace
-            args: [" ", "-"]
-          - name: split
-            args: ["-", 2]
+            args: ["zqf zqf-", ""]
       title:
         selector: td:nth-child(2) a
       details:
@@ -61,7 +58,7 @@
           - name: dateparse
             args: "2006.01.02 15:04"
       date:
-        selector: td:nth-child(4):not(span)
+        selector: td:nth-child(4):not(:has(span))
         optional: true
         filters:
           - name: dateparse
@@ -70,11 +67,14 @@
         selector: td:nth-child(5)
       grabs:
         selector: td:nth-child(6)
+        filters:
+          - name: replace
+            args: [" ", ""]
       seeders:
         selector: td:nth-child(7)
       leechers:
         selector: td:nth-child(8) 
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1

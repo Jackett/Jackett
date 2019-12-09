@@ -19,16 +19,17 @@
 
   search:
     paths:
-      - path: "torrents/concen.org/content/ufos-extraterrestrials-and-classified-free-energy-pack"
+      # https://concen.org/torrents?title_op=allwords&title=cbc+national&title_1_op=not&title_1=&seeds=1
+      - path: torrents
     inputs:
-      title_op: "allwords"
+      title_op: allwords
       title: "{{.Keywords}}"
-      title_1_op: "not"
+      title_1_op: not
       title_1: ""
-      seeds: "All"
+      seeds: All
 
     rows:
-      selector: table  > tbody > tr
+      selector: table  > tbody > tr:has(td.views-field-title)
     fields:
       title:
         selector: td.views-field-title a
@@ -57,6 +58,6 @@
       grabs:
         selector: td.views-field-completed 
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1

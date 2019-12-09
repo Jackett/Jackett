@@ -22,22 +22,18 @@
       - {id: 10, cat: TV, desc: "Kidz Boxset"}
       - {id: 54, cat: Movies/SD, desc: "Movies SD"}
       - {id: 55, cat: Movies/DVD, desc: "Movies DVDR"}
-      - {id: 13, cat: Movies/HD, desc: "Movies 720p"}
-      - {id: 14, cat: Movies/HD, desc: "Movies 1080p"}
-      - {id: 56, cat: Movies/HD, desc: "Movies x265"}
+      - {id: 14, cat: Movies/HD, desc: "Movies HD"}
       - {id: 15, cat: Movies/UHD, desc: "Movies 4K"}
-      - {id: 16, cat: Movies, desc: "Movies Remux"}
-      - {id: 17, cat: Movies/BluRay, desc: "Movies Bluray Disc"}
-      - {id: 53, cat: Movies, desc: "Movies Boxset"}
+      - {id: 17, cat: Movies/BluRay, desc: "Movies BD"}
+      - {id: 73, cat: Movies, desc: "Movies Boxset"}
       - {id: 51, cat: Movies, desc: "Movies No Nordic Subs"}
       - {id: 52, cat: TV/SD, desc: "TV SD"}
       - {id: 58, cat: TV/SD, desc: "TV DVDR"}
-      - {id: 18, cat: TV/HD, desc: "TV 720p"}
-      - {id: 19, cat: TV/HD, desc: "TV 1080p"}
-      - {id: 60, cat: TV/HD, desc: "TV Bluray Disc"}
+      - {id: 18, cat: TV/HD, desc: "TV HD"}
+      - {id: 19, cat: TV/UHD, desc: "TV 4K"}
+      - {id: 60, cat: TV/HD, desc: "TV BD"}
       - {id: 20, cat: TV, desc: "TV Boxset"}
       - {id: 50, cat: TV, desc: "TV No Nordic Subs"}
-      - {id: 59, cat: TV/UHD, desc: "TV 4K"}
       - {id: 49, cat: Audio/Video, desc: "Music Video"}
       - {id: 23, cat: Audio/MP3, desc: "Music MP3"}
       - {id: 61, cat: Audio/MP3, desc: "Music MP3 Boxset"}
@@ -144,7 +140,7 @@
         selector: a[href*="download.php?torrent="]
         attribute: href
       date:
-        selector: div:has(span[id^="staff_pick_"])
+        selector: td:nth-child(2) > div > div:last-of-type
         filters:
           - name: dateparse
             args: "2 Jan 2006 15:04:05"

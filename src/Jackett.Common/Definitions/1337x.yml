@@ -7,6 +7,13 @@
   encoding: UTF-8
   links:
     - https://1337x.to/
+    - https://1337x.gd/
+    - https://1337x.is/
+    - https://1337x.st/
+    - https://x1337x.ws/
+    - https://x1337x.eu/
+    - https://x1337x.se/
+    - https://1337x.unblocked.earth/
 
   caps:
     categorymappings:
@@ -36,7 +43,6 @@
       - {id: 2, cat: Movies/SD, desc: "Movies/Divx/Xvid"}
       - {id: 3, cat: Movies, desc: "Movies/SVCD/VCD"}
       - {id: 4, cat: Movies/Foreign, desc: "Movies/Dubs/Dual Audio"}
-      - {id: 9, cat: Movies, desc: "Documentaries/Documentary"}
       - {id: 42, cat: Movies/HD, desc: "Movies/HD"}
       - {id: 54, cat: Movies, desc: "Movies/h.264/x264"}
       - {id: 55, cat: Movies, desc: "Movies/Mp4"}
@@ -53,6 +59,7 @@
       - {id: 71, cat: TV, desc: "TV/HEVC/x265"}
       - {id: 74, cat: TV, desc: "TV/Cartoons"}
       - {id: 75, cat: TV/SD, desc: "TV/SD"}
+      - {id: 9, cat: TV/Documentary, desc: "TV/Documentary"}
 
       #Apps
       - {id: 18, cat: PC, desc: "Apps/PC Software"}
@@ -117,11 +124,9 @@
   download:
     # the .torrent url is on the on the details page 
     selector: ul li a[href^="{{ .Config.downloadlink }}"]
-    # temp fix for #5372
-    filters: 
-      - name: urldecode
-      - name: replace
-        args: [" ⭐", ""]
+    filters:
+      - name: replace # temp fix for #5372
+        args: ["%E2%AD%90", ""]
 
   search:
     paths:
@@ -143,6 +148,8 @@
         filters:
           - name: replace
             args: ["Grey's Anatomy", "Greys Anatomy"]
+          - name: replace
+            args: ["\u000f", ""] # get rid of unwanted character
       category:
         optional: true
         selector:  td[class^="coll-1"] a[href^="/sub/"]

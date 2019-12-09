@@ -19,11 +19,10 @@
       - {id: 7, cat: TV, desc: "Animations"}
       - {id: 8, cat: PC, desc: "Linux"}
       - {id: 9, cat: PC/Mac, desc: "MacOS"}
-      - {id: 10, cat: PC/Phone-Android, desc: "Android app"}
-      - {id: 11, cat: PC/Phone-Android, desc: "Android ROMs"}
       - {id: 12, cat: TV/Documentary, desc: "Documentaries"}
       - {id: 13, cat: TV, desc: "Shows"}
       - {id: 14, cat: Audio/Video, desc: "Music clips"}
+      - {id: 15, cat: PC/Phone-Android, desc: "Apps APK"}
 
     modes:
       search: [q]
@@ -36,16 +35,25 @@
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
+      remember: on
     error:
       - selector: script[nonce]:contains("Error")
         message:
           selector: script[nonce]:contains("Error")
     test:
-      path: torrents
+      path: /
+      selector: a[href$="/logout"]
+      
+  ratio:
+    path: /
+    selector: li:has(i.fa-sync-alt)
+    filters:
+      - name: regexp
+        args: "Ratio : (\\d+)"
 
   search:
     paths:
-      - path: filterTorrents
+      - path: torrents/filter
     inputs:
       $raw: "{{range .Categories}}categories[]={{.}}&{{end}}"
       search: "{{if .Query.IMDBID}}{{else}}{{ .Keywords }}{{end}}"
@@ -55,6 +63,7 @@
       tvdb: ""
       tmdb: ""
       mal: ""
+      igdb: ""
       sort: created_at
       direction: desc
       qty: 100
@@ -66,7 +75,7 @@
         attribute: href
         filters:
           - name: regexp
-            args: "/categories/.*?\\.(\\d+)"
+            args: "/categories/(\\d+)"
       title:
         selector: a.view-torrent
       download:
@@ -82,6 +91,9 @@
         filters:
           - name: replace
             args: ["https://via.placeholder.com/600x900", ""]
+      comments:
+        selector: a[href*="#comments"]
+        attribute: href
       size:
         selector: td:nth-last-child(4)
       seeders:
@@ -92,7 +104,7 @@
         selector: td:nth-last-child(1)
         filters:
           - name: regexp
-            args: ([\d\.]+)
+            args: (\d+)
       imdb:
         optional: true
         selector: a[href*="www.imdb.com/title/tt"]
@@ -100,42 +112,45 @@
       date:
         selector: time
         filters:
-            # translations for Turkish|Estonian|Danish|Italian|Polish|Norwegian|Portoguese|Czech|Russian|Romanian|Spanish|French|German|Bulgarian|Dutch
+            # translations for Turkish|Estonian|Danish|Italian|Polish|Norwegian|Portuguese|Czech|Russian|Romanian|Spanish|French|German|Bulgarian|Dutch|Chinese
           - name: re_replace
-            args: ["(önce|tagasi|geleden|fa|temu|siden|atrás|nazpět|назад|acum|hace|il y a|vor|преди)", "ago"]
+            args: ["(?i)(önce|tagasi|geleden|fa|temu|siden|atrás|nazpět|назад|acum|hace|il y a|vor|преди|前)", " ago"]
           - name: re_replace
-            args: ["(dakika|minut|minuto|minuta|minutt|минута|Minute|minuut)", "minute"]
+            args: ["(?i)(dakika|minut|minuto|minuta|minutt|минута|Minute|minuut|分钟)", " minute"]
           - name: re_replace
-            args: ["(dakika|minutit|minutter|minuti|minuty|minutos|минуты|минут|Minuten|минути|minuten)", "minutes"]
+            args: ["(?i)(minutit|minutter|minuti|minuty|minutos|минуты|минут|Minuten|минути|minuten)", "minutes"]
           - name: re_replace
-            args: ["(saat|tund|time|ora|godzina|hora|hodina|час|oră|heure|Stunde|uur)", "hour"]
+            args: ["(?i)(saat|tund|time|ora|godzina|hora|hodina|час|oră|heure|Stunde|uur|小时)", " hour"]
           - name: re_replace
-            args: ["(saat|tundi|timer|ore|godziny|horas|hodiny|hoden|часа|часов|ore|heures|Stunden)", "hours"]
+            args: ["(?i)(tundi|timer|ore|godziny|horas|hodiny|hoden|часа|часов|ore|heures|Stunden)", "hours"]
           - name: re_replace
-            args: ["(gün|päev|dag|giorno|dzień|dia|den|день|zi|día|jour|Tag|ден)", "day"]
+            args: ["(?i)(gün|päev|dag|giorno|dzień|dia|den|день|zi|día|jour|Tag|ден|天)", " day"]
           - name: re_replace
-            args: ["(gün|päeva|dage|giorni|dni|dias|dny|дня|дней|zile|días|jours|Tagen|дни|dagen)", "days"]
+            args: ["(?i)(päeva|dage|giorni|dni|dias|dny|дня|дней|zile|días|jours|Tagen|дни|dagen)", "days"]
           - name: re_replace
-            args: ["(hafta|nädal|uge|settimana|tydzień|uke|semana|týden|неделю|săptămână|semaine|Woche|седмица)", "week"]
+            args: ["(?i)(hafta|nädal|uge|settimana|tydzień|uke|semana|týden|неделю|săptămână|semaine|Woche|седмица|周)", " week"]
           - name: re_replace
-            args: ["(hafta|nädalat|uger|settimane|tygodnie|uker|semanas|týdny|недели|недель|săptămâni|semaines|Wochen|седмици|weken)", "weeks"]
+            args: ["(?i)(nädalat|uger|settimane|tygodnie|uker|semanas|týdny|недели|недель|săptămâni|semaines|Wochen|седмици|weken)", "weeks"]
           - name: re_replace
-            args: [" (ay|kuu|måned|mese|miesiąc|mês|měsíc|месяц|lună|mes|mois|Monat|месец|maand)", "month"]
+            args: ["(?i) (ay)", "month"]
           - name: re_replace
-            args: [" (ay|kuud|måneder|mesi|miesiące|meses|měsíce|месяца|месяцев|luni|meses|mois|Monaten|месеца|maanden)", "months"]
+            args: ["(?i)(kuu|måned|mese|miesiąc|mês|měsíc|месяц|lună|mes|mois|Monat|месец|maand|个月)", " month"]
+          - name: re_replace
+            args: ["(?i)(kuud|måneder|mesi|miesiące|meses|měsíce|месяца|месяцев|luni|meses|mois|Monaten|месеца|maanden)", "months"]
       downloadvolumefactor:
         case:
-          "i[data-original-title=\"Personal Freeleech\"]": "0" # 24 Hour FreeLeech From BON Store
-          "i[data-original-title=\"Special Freeleech\"]": "0" # Special FreeLeech For Certain User Groups
-          "i[data-original-title=\"Freeleech Token\"]": "0" # Freeleech From Token
-          "i[data-original-title=\"Global Freeleech\"]": "0" # Global Freeleech
-          "i[data-original-title=\"Freeleech\"]": "0" # Freeleech
-          "i[data-original-title=\"Featured\"]": "0" # Featured Torrent
-          "*": "1"
+          i[class*="fa-id-badge text-orange"]: 0 # 24 Hour FreeLeech From BON Store
+          i[class*="fa-trophy text-purple"]: 0 # Special FreeLeech For Certain User Groups
+          i[class*="fa-star text-bold"]: 0 # Freeleech From Token
+          i[class*="fa-coins text-bold"]: 0 # Freeleech From Token
+          i[class*="fa-globe text-blue"]: 0 # Global Freeleech
+          i[class*="fa-star text-gold"]: 0 # Freeleech
+          i[class*="fa-certificate text-pink"]: 0 # Featured Torrent
+          "*": 1
       uploadvolumefactor:
         case:
-          "i[data-original-title=\"Double Upload\"]": "2" # Single Torrent Double Upload
-          "i[data-original-title=\"Global Double Upload\"]": "2" # Global Double Upload
-          "i[data-original-title=\"Featured\"]": "2" # Featured Torrent
-          "*": "1"
-# UNIT3D 1.9.2
+          i[class*="fa-gem text-green"]: 2 # Single Torrent Double Upload
+          i[class*="fa-globe text-green"]: 2 # Global Double Upload
+          i[class*="fa-certificate text-pink"]: 2 # Featured Torrent
+          "*": 1
+# UNIT3D 2.2.5

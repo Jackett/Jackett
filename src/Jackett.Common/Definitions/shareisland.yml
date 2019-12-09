@@ -14,104 +14,81 @@
   caps:
     categorymappings:
       # Movie
-       - {id: 21, cat: Movies/DVD, desc: "Movie DVD-9"}
+       - {id: 1, cat: Movies/HD, desc: "Movie 1080p"}
+       - {id: 5, cat: Movies/HD, desc: "Movie 720p"}
+       - {id: 6, cat: Movies/UHD, desc: "Movie 4K-Ultra-HD"}
+       - {id: 9, cat: Movies/BluRay, desc: "Movie BluRay Full"}
+       - {id: 8, cat: Movies/SD, desc: "Movie BDRip"}
+       - {id: 10, cat: Movies/DVD, desc: "Movie DVD-9"}
        - {id: 11, cat: Movies/DVD, desc: "Movie DVD-5"}
-       - {id: 20, cat: Movies/SD, desc: "Movie DVDRip"}
-       - {id: 45, cat: Movies, desc: "Movie RIP mp4"}
-       - {id: 22, cat: Movies/UHD, desc: "Movie 4K-Ultra-HD"}
-       - {id: 23, cat: Movies/HD, desc: "Movie H-265"}
-       - {id: 24, cat: Movies/HD, desc: "Movie 1080p"}
-       - {id: 25, cat: Movies/HD, desc: "Movie 720p"}
-       - {id: 26, cat: Movies/3D, desc: "Movie 3D-FullHD"}
-       - {id: 27, cat: Movies/BluRay, desc: "Movie BluRay"}
-       - {id: 43, cat: Movies/SD, desc: "Movie BDRip"}
-       - {id: 29, cat: Movies/SD, desc: "Movie Cine News"}
-       - {id: 30, cat: TV/HD, desc: "Serie TV HD"}
-       - {id: 31, cat: TV/SD, desc: "Serie TV SD"}
-       - {id: 35, cat: TV/Other, desc: "Programmi TV"}
-       - {id: 42, cat: TV/Documentary, desc: "Documentari"}
-      # Music
-       - {id: 36, cat: Audio/MP3, desc: "Music MP3"}
-       - {id: 37, cat: Audio/Lossless, desc: "Music Flac"}
-       - {id: 46, cat: Audio, desc: "Music"}
-      # Games
-       - {id: 18, cat: PC/Games, desc: "Games PC"}
-       - {id: 19, cat: Console/PS3, desc: "Games PS3"}
-       - {id: 33, cat: Console/Xbox, desc: "Games XboX"}
-       - {id: 39, cat: Console/Wii, desc: "Games Wii"}
-       - {id: 40, cat: Console/Other, desc: "Games Nintendo"}
+       - {id: 12, cat: Movies/DVD, desc: "Movie DVD-Rip"}
+       - {id: 13, cat: Movies/SD, desc: "Movie Divx"}
+       - {id: 14, cat: Movies, desc: "Movie CineCam"}
+       - {id: 25, cat: Movies/Foreign, desc: "Movie Lingua Originale"}
+      # TV
+       - {id: 4, cat: TV/HD, desc: "Serie TV HD"}
+       - {id: 2, cat: TV/SD, desc: "Serie TV SD"}
       # Anime
-       - {id: 5, cat: TV/Anime, desc: "Anime"}
+       - {id: 20, cat: TV/Anime, desc: "Anime"}
+       - {id: 22, cat: TV/Anime, desc: "Cartoons"}
       # Edicola
-       - {id: 16, cat: Books, desc: "Edicola Quotidiani"}
-       - {id: 28, cat: Books, desc: "Edicola Libri"}
-       - {id: 17, cat: Books, desc: "Edicola Riviste"}
-       - {id: 41, cat: Books, desc: "Edicola Fumetti"}
+       - {id: 15, cat: Books/Ebook, desc: "Ebook"}
+       - {id: 17, cat: Books, desc: "Riviste e Giornali"}
+       - {id: 18, cat: Books, desc: "Fumetti"}
+       - {id: 19, cat: XXX, desc: "Fumetti XXX"}
+      # Music
+       - {id: 3, cat: Audio, desc: "Music"}
+      # Games
+       - {id: 7, cat: PC/Games, desc: "Games PC"}
+       - {id: 21, cat: Console/Xbox, desc: "Games XboX"}
+       - {id: 16, cat: Console/PS3, desc: "Games PS3"}
       # Applicazioni
-       - {id: 4, cat: PC, desc: "IPTV"}
-       - {id: 7, cat: PC/0day, desc: "Applicazioni PC"}
-       - {id: 8, cat: PC/0day, desc: "Applicazioni Linux"}
-       - {id: 9, cat: PC/Mac, desc: "Applicazioni Mac"}
-       - {id: 32, cat: PC/Phone-Android, desc: "Applicazioni Android"}
-       - {id: 34, cat: PC/Phone-IOS, desc: "Applicazioni Iphone"}
-      # Vip
-       - {id: 38, cat: Other, desc: "V.I.P."}
-      # Adult
-       - {id: 13, cat: XXX, desc: "Riviste XXX"}
-       - {id: 14, cat: XXX, desc: "Fumetti XXX"}
-       - {id: 44, cat: XXX, desc: "Adulti"}
+       - {id: 23, cat: PC, desc: "Programmi PC"}
+       - {id: 24, cat: PC/Mac, desc: "Applicazioni Mac"}
 
     modes:
       search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
+      tv-search: [q, season, ep, imdbid]
+      movie-search: [q, imdbid]
 
   login:
-    path: index.php?page=login
-    method: post
+    path: login
+    method: form
     inputs:
-      uid: "{{ .Config.username }}"
-      pwd: "{{ .Config.password }}"
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+      remember: on
     error:
-      - selector: div.error
-      - selector: body:has(h1:contains("403 Forbidden")) # for banned IP notices
-      - selector: td.lista > span[style="color:#FF0000;"] # Nome Utente non corretto
+      - selector: script[nonce]:contains("Error")
+        message:
+          selector: script[nonce]:contains("Error")
     test:
-      path: index.php
-      selector: a[href="logout.php"]
+      path: /
+      selector: a[href$="/logout"]
 
-  # download:
-  #   before:
-  #     path: thanks.php
-  #     method: "post"
-  #     inputs:
-  #       infohash: "{{ .DownloadUri.Query.id }}"
-  #       thanks: "1"
-  #       rndval: "1487013827343"
-  #   selector: a[href^="download.php?id="]
+  ratio:
+    path: /
+    selector: li:has(i.fa-sync-alt)
+    filters:
+      - name: regexp
+        args: "Ratio : (\\d+)"
 
   search:
     paths:
-      # 30 entries per page
-      - path: index.php
-        inputs:
-          pages: 1
-      - path: index.php
-        inputs:
-          pages: 2
-      - path: index.php
-        inputs:
-          pages: 3
-      - path: index.php
-        inputs:
-          pages: 4
+      - path: torrents/filter
     inputs:
-      search: "{{ .Keywords }}"
-      category: "{{range .Categories}}{{.}};{{end}}"
-      page: torrents
-      active: 0
-      order: 3
-      by: 2
+      $raw: "{{range .Categories}}categories[]={{.}}&{{end}}"
+      search: "{{if .Query.IMDBID}}{{else}}{{ .Keywords }}{{end}}"
+      description: ""
+      uploader: ""
+      imdb: "{{ .Query.IMDBIDShort }}"
+      tvdb: ""
+      tmdb: ""
+      mal: ""
+      igdb: ""
+      sort: created_at
+      direction: desc
+      qty: 100
     keywordsfilters:
       - name: diacritics
         args: replace
@@ -119,22 +96,19 @@
         args: ["(?i)\\bS0*(\\d+)\\b", "$1"]
       - name: re_replace # S01E01 to 1 1
         args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "$1 $2"]
+
     rows:
-      selector: table.lista > tbody > tr:has(a[href^="index.php?page=torrents&category="])
-      filters:
-        - name: andmatch
+      selector: table > tbody > tr
     fields:
       category:
-        selector: a[href^="index.php?page=torrents&category="]
+        selector: a[href*="/categories/"]
         attribute: href
         filters:
-          - name: querystring
-            args: category
+          - name: regexp
+            args: "/categories/(\\d+)"
       title:
-        selector: a[href^="index.php?page=torrent-details&id="]
+        selector: a.view-torrent
         filters:
-          # - name: re_replace # replace special characters with " " (space)
-          #   args: ["[^a-zA-Z0-9\\s]|\\.", " "]
           - name: re_replace # replace special characters with " " (space)
             args: ["[\\[!\"#$%&'()*+,\\-.\\/:;<=>?@[\\]^_`{|}~]", " "]
           - name: diacritics
@@ -158,54 +132,79 @@
             args: ["(?i)\\b(?:Puntate\\s*)(\\d+)\\s?(\\d+)", "E0$1-0$2"]
           - name: re_replace # rimozioni varie
             args: ["(?i)(Serie completa|Completat?a?|in pausa)", ""]
+      download:
+        selector: a[href*="/download/"]
+        attribute: href
       details:
-        selector: a[href^="index.php?page=torrent-details&id="]
+        selector: a.view-torrent
         attribute: href
       banner:
         optional: true
-        selector: a[href^="index.php?page=torrent-details&id="]
-        attribute: onmouseover
-        filters:
-          - name: regexp
-            args: "src=(.+?) "
-      download:
-        # selector: a[href^="index.php?page=downloadcheck&id="]
-        selector: a[href^="download.php?id="]
-        attribute: href
-      size:
-        selector: td:nth-child(2) p:nth-last-child(5)
-        filters:
-          - name: regexp
-            args: ":\\s+(.+?)$" 
-      date:
-        selector: td:nth-child(2) p:nth-last-child(4)
-        filters:
-          - name: regexp
-            args: ":\\s+(.+?)$" 
-          - name: dateparse
-            args: "15:04:05 02/01/2006"
-      seeders:
-        selector: td:nth-child(2) p:nth-last-child(3) a:nth-child(1)
-      leechers:
-        selector: td:nth-child(2) p:nth-last-child(3) a:nth-child(2)
-      grabs:
-        text: 0
-      grabs:
-        selector: td:nth-child(2) p:nth-last-child(3) a:nth-child(3)
-        optional: true
-      downloadvolumefactor:
-        case:
-          img[alt="Free Leech"]: "0"
-          img[alt="Gold 100% Free"]: "0"
-          img[alt="Silver 50% Free"]: "0.5"
-          img[alt="Bronze 25% Free"]: "0.75"
-          "*": "1"
-      uploadvolumefactor:
-        text: "1"
-      uploadvolumefactor:
-        optional: true
-        selector: img[alt$="x Upload Multiplier"]
-        attribute: alt
+        selector: div.torrent-poster img
+        attribute: src
         filters:
           - name: replace
-            args: ["x Upload Multiplier", ""]
+            args: ["https://via.placeholder.com/600x900", ""]
+      comments:
+        selector: a[href*="#comments"]
+        attribute: href
+      size:
+        selector: td:nth-last-child(4)
+      seeders:
+        selector: td:nth-last-child(3)
+      leechers:
+        selector: td:nth-last-child(2)
+      grabs:
+        selector: td:nth-last-child(1)
+        filters:
+          - name: regexp
+            args: (\d+)
+      imdb:
+        optional: true
+        selector: a[href*="www.imdb.com/title/tt"]
+        attribute: href
+      date:
+        selector: time
+        filters:
+            # translations for Turkish|Estonian|Danish|Italian|Polish|Norwegian|Portuguese|Czech|Russian|Romanian|Spanish|French|German|Bulgarian|Dutch|Chinese
+          - name: re_replace
+            args: ["(?i)(önce|tagasi|geleden|fa|temu|siden|atrás|nazpět|назад|acum|hace|il y a|vor|преди|前)", " ago"]
+          - name: re_replace
+            args: ["(?i)(dakika|minut|minuto|minuta|minutt|минута|Minute|minuut|分钟)", " minute"]
+          - name: re_replace
+            args: ["(?i)(minutit|minutter|minuti|minuty|minutos|минуты|минут|Minuten|минути|minuten)", "minutes"]
+          - name: re_replace
+            args: ["(?i)(saat|tund|time|ora|godzina|hora|hodina|час|oră|heure|Stunde|uur|小时)", " hour"]
+          - name: re_replace
+            args: ["(?i)(tundi|timer|ore|godziny|horas|hodiny|hoden|часа|часов|ore|heures|Stunden)", "hours"]
+          - name: re_replace
+            args: ["(?i)(gün|päev|dag|giorno|dzień|dia|den|день|zi|día|jour|Tag|ден|天)", " day"]
+          - name: re_replace
+            args: ["(?i)(päeva|dage|giorni|dni|dias|dny|дня|дней|zile|días|jours|Tagen|дни|dagen)", "days"]
+          - name: re_replace
+            args: ["(?i)(hafta|nädal|uge|settimana|tydzień|uke|semana|týden|неделю|săptămână|semaine|Woche|седмица|周)", " week"]
+          - name: re_replace
+            args: ["(?i)(nädalat|uger|settimane|tygodnie|uker|semanas|týdny|недели|недель|săptămâni|semaines|Wochen|седмици|weken)", "weeks"]
+          - name: re_replace
+            args: ["(?i) (ay)", "month"]
+          - name: re_replace
+            args: ["(?i)(kuu|måned|mese|miesiąc|mês|měsíc|месяц|lună|mes|mois|Monat|месец|maand|个月)", " month"]
+          - name: re_replace
+            args: ["(?i)(kuud|måneder|mesi|miesiące|meses|měsíce|месяца|месяцев|luni|meses|mois|Monaten|месеца|maanden)", "months"]
+      downloadvolumefactor:
+        case:
+          i[class*="fa-id-badge text-orange"]: 0 # 24 Hour FreeLeech From BON Store
+          i[class*="fa-trophy text-purple"]: 0 # Special FreeLeech For Certain User Groups
+          i[class*="fa-star text-bold"]: 0 # Freeleech From Token
+          i[class*="fa-coins text-bold"]: 0 # Freeleech From Token
+          i[class*="fa-globe text-blue"]: 0 # Global Freeleech
+          i[class*="fa-star text-gold"]: 0 # Freeleech
+          i[class*="fa-certificate text-pink"]: 0 # Featured Torrent
+          "*": 1
+      uploadvolumefactor:
+        case:
+          i[class*="fa-gem text-green"]: 2 # Single Torrent Double Upload
+          i[class*="fa-globe text-green"]: 2 # Global Double Upload
+          i[class*="fa-certificate text-pink"]: 2 # Featured Torrent
+          "*": 1
+# UNIT3D 2.1.0

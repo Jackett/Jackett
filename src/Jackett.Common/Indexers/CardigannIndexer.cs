@@ -788,9 +788,17 @@ namespace Jackett.Common.Indexers
 
             var hasCaptcha = false;
 
-            var CloudFlareCaptchaChallenge = landingResultDocument.QuerySelector("script[src*=\"/recaptcha/api.js\"]");
+            var cloudFlareCaptchaScript = landingResultDocument.QuerySelector("script[src*=\"/recaptcha/api.js\"]");
+            var cloudFlareCaptchaGroup = landingResultDocument.QuerySelector("#recaptca_group");
+            var cloudFlareCaptchaDisplay = true;
+            if (cloudFlareCaptchaGroup != null)
+            {
+                var cloudFlareCaptchaGroupStyle = cloudFlareCaptchaGroup.GetAttribute("style");
+                if (cloudFlareCaptchaGroupStyle != null)
+                    cloudFlareCaptchaDisplay = !cloudFlareCaptchaGroupStyle.Contains("display:none;");
+            }
             var grecaptcha = landingResultDocument.QuerySelector(".g-recaptcha");
-            if (CloudFlareCaptchaChallenge != null && grecaptcha != null)
+            if (cloudFlareCaptchaScript != null && grecaptcha != null && cloudFlareCaptchaDisplay)
             {
                 hasCaptcha = true;
                 var CaptchaItem = new RecaptchaItem();
@@ -1533,7 +1541,7 @@ namespace Jackett.Common.Indexers
                                 while (PrevRow != null)
                                 {
                                     var CurRow = PrevRow;
-                                    logger.Info(PrevRow.OuterHtml);
+                                    logger.Debug(PrevRow.OuterHtml);
                                     try
                                     {
                                         value = handleSelector(DateHeaders, CurRow);

@@ -43,8 +43,8 @@ namespace Jackett.Common.Models.DTO
                 stringQuery.Categories = new int[0];
             stringQuery.ExpandCatsToSubCats();
 
-            // try to build an IMDB Query
-            if (stringQuery.SanitizedSearchTerm.StartsWith("tt") && stringQuery.SanitizedSearchTerm.Length <= 9)
+            // try to build an IMDB Query (tt plus 6 to 8 digits)
+            if (stringQuery.SanitizedSearchTerm.StartsWith("tt") && stringQuery.SanitizedSearchTerm.Length <= 10)
             {
                 var imdbID = ParseUtil.GetFullImdbID(stringQuery.SanitizedSearchTerm);
                 TorznabQuery imdbQuery = null;

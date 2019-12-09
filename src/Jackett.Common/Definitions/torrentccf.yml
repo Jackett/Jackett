@@ -6,9 +6,9 @@
   type: private
   encoding: UTF-8
   links:
-    - http://et8.org/
-  legacylinks:
     - https://et8.org/
+  legacylinks:
+    - http://et8.org/
 
   caps:
     categorymappings:
@@ -37,7 +37,7 @@
     modes:
       search: [q]
       tv-search: [q, season, ep, imdbid]
-      movie-search: [imdbid]
+      movie-search: [q, imdbid]
 
   login:
     path: login.php

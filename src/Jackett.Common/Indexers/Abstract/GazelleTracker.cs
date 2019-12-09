@@ -23,6 +23,7 @@ namespace Jackett.Common.Indexers.Abstract
         protected string DownloadUrl { get { return SiteLink + "torrents.php?action=download&usetoken=" + (useTokens ? "1" : "0") + "&id="; } }
         protected string DetailsUrl { get { return SiteLink + "torrents.php?torrentid="; } }
         protected bool supportsFreeleechTokens;
+        protected bool imdbInTags;
         protected bool supportsCategories = true; // set to false if the tracker doesn't include the categories in the API search results
         protected bool useTokens = false;
 
@@ -32,7 +33,7 @@ namespace Jackett.Common.Indexers.Abstract
             set { base.configData = value; }
         }
 
-        public GazelleTracker(IIndexerConfigurationService configService, Utils.Clients.WebClient webClient, Logger logger, IProtectionService protectionService, string name, string desc, string link, bool supportsFreeleechTokens)
+        public GazelleTracker(IIndexerConfigurationService configService, Utils.Clients.WebClient webClient, Logger logger, IProtectionService protectionService, string name, string desc, string link, bool supportsFreeleechTokens, bool imdbInTags = false)
             : base(name: name,
                 description: desc,
                 link: link,
@@ -45,6 +46,7 @@ namespace Jackett.Common.Indexers.Abstract
         {
             Encoding = Encoding.UTF8;
             this.supportsFreeleechTokens = supportsFreeleechTokens;
+            this.imdbInTags = imdbInTags;
 
             if (supportsFreeleechTokens)
             {
@@ -72,6 +74,7 @@ namespace Jackett.Common.Indexers.Abstract
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
                 { "password", configData.Password.Value },
+                { "keeplogged", "1"},
             };
 
             var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, string.Empty, true, SiteLink);
@@ -112,7 +115,10 @@ namespace Jackett.Common.Indexers.Abstract
 
             if (!string.IsNullOrWhiteSpace(query.ImdbID))
             {
-                queryCollection.Add("cataloguenumber", query.ImdbID);
+                if (this.imdbInTags)
+                    queryCollection.Add("taglist", query.ImdbID);
+                else
+                    queryCollection.Add("cataloguenumber", query.ImdbID);
             }
             else if (!string.IsNullOrWhiteSpace(searchString))
             {
@@ -182,6 +188,15 @@ namespace Jackett.Common.Indexers.Abstract
                     release.Description = "";
                     if (tags != null && tags.Count > 0 && (string)tags[0] != "")
                         release.Description += "Tags: " + string.Join(", ", tags) + "\n";
+
+                    if (imdbInTags)
+                    {
+                        var imdbTags = tags
+                            .Select(tag => ParseUtil.GetImdbID((string)tag))
+                            .Where(tag => tag != null);
+                        if (imdbTags.Count() == 1)
+                            release.Imdb = imdbTags.First();
+                    }
 
                     if (r["torrents"] is JArray)
                     {

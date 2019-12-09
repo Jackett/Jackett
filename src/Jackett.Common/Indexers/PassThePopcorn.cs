@@ -168,6 +168,8 @@ namespace Jackett.Common.Indexers
                         release.Guid = release.Link;
                         release.MinimumRatio = 1;
                         release.MinimumSeedTime = 345600;
+                        release.DownloadVolumeFactor = 1;
+                        release.UploadVolumeFactor = 1;
                         release.Category = new List<int> { 2000 };
 
                         bool golden, scene, check;
@@ -241,6 +243,11 @@ namespace Jackett.Common.Indexers
 
                         if (titletags.Count() > 0)
                             release.Title += " [" + string.Join(" / ", titletags) + "]";
+
+                        bool freeleech;
+                        bool.TryParse((string)torrent["FreeleechType"], out freeleech);
+                        if (freeleech)
+                            release.DownloadVolumeFactor = 0;
 
                         releases.Add(release);
                     }

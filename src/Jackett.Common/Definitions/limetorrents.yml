@@ -7,6 +7,10 @@
   encoding: UTF-8
   links:
     - https://www.limetorrents.info/
+    - https://www.limetorrents.asia/
+    - https://www.limetorrents.co/
+    - https://www.limetorrents.zone/
+    - https://limetor.com/
   legacylinks:
     - https://www.limetorrents.io/
     - https://www.limetorrents.cc/
@@ -25,6 +29,7 @@
     modes:
       search: [q]
       tv-search: [q, season, ep]
+      movie-search: [q]
 
   settings:
     - name: downloadlink
@@ -79,6 +84,8 @@
             args: ["-", 1]
           - name: replace
             args: [" in ", ""]
+          - name: replace
+            args: [".", ""]
       downloadvolumefactor:
         text: "0"
       uploadvolumefactor:

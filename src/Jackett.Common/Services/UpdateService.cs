@@ -292,7 +292,8 @@ namespace Jackett.Common.Services
                 inStream.Close();
 
                 if (variant == Variants.JackettVariant.CoreMacOs || variant == Variants.JackettVariant.CoreLinuxAmdx64
-                || variant == Variants.JackettVariant.CoreLinuxArm32 || variant == Variants.JackettVariant.CoreLinuxArm64)
+                || variant == Variants.JackettVariant.CoreLinuxArm32 || variant == Variants.JackettVariant.CoreLinuxArm64
+                || variant == Variants.JackettVariant.Mono)
                 {
                     //Calling the file permission service to limit usage to netcoreapp. The Mono.Posix.NETStandard library causes issues outside of .NET Core
                     //https://github.com/xamarin/XamarinComponents/issues/282
@@ -310,10 +311,18 @@ namespace Jackett.Common.Services
                         string macosServicePath = tempDir + "/Jackett/install_service_macos";
                         filePermissionService.MakeFileExecutable(macosServicePath);
                     }
+                    else if (variant == Variants.JackettVariant.Mono)
+                    {
+                        string systemdPath = tempDir + "/Jackett/install_service_systemd_mono.sh";
+                        filePermissionService.MakeFileExecutable(systemdPath);
+                    }
                     else
                     {
                         string systemdPath = tempDir + "/Jackett/install_service_systemd.sh";
                         filePermissionService.MakeFileExecutable(systemdPath);
+
+                        string launcherPath = tempDir + "/Jackett/jackett_launcher.sh";
+                        filePermissionService.MakeFileExecutable(launcherPath);
                     }
                 }
             }

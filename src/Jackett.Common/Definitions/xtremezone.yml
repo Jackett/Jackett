@@ -48,6 +48,7 @@
       - {id: 50, cat: XXX, desc: "XXX-Packs"}
       - {id: 51, cat: XXX, desc: "XXX-SD"}
       - {id: 60, cat: TV/FOREIGN, desc: "TV-RO"}
+      - {id: 66, cat: TV/FOREIGN, desc: "TV-Packs-RO"}
 
     modes:
       search: [q]
@@ -61,7 +62,7 @@
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
-      _remember_me: 1
+      _remember_me: on
     error:
       - selector: td.embedded:has(center > h2:contains(failed))
     test:

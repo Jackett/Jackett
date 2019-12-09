@@ -1,0 +1,374 @@
+﻿---
+  site: rus-media
+  name: Rus-media
+  description: "Rus-media is a RUSSIAN Public Torrent Tracker for MOVIES / TV / GENERAL"
+  language: ru-ru
+  type: public
+  encoding: UTF-8
+  links:
+    - http://rus-media.org/
+
+  caps:
+    categorymappings:
+      - {id: 1, cat: Movies, desc: "Кино, Видео и ТВ"}
+      - {id: 29, cat: Movies, desc: "Зарубежное кино"}
+      - {id: 52, cat: Movies/SD, desc: "Зарубежное кино (DVDRip, HQRip)"}
+      - {id: 54, cat: Movies/Other, desc: "Новинки зарубежного кино (CAMRip, TS, Screener)"}
+      - {id: 234, cat: Movies/HD, desc: "Зарубежное кино (HD)"}
+      - {id: 53, cat: Movies/DVD, desc: "Зарубежное кино (DVD)"}
+      - {id: 673, cat: Movies/Foreign, desc: "Индийское кино"}
+      - {id: 30, cat: Movies/Foreign, desc: "Наше кино"}
+      - {id: 56, cat: Movies/Foreign, desc: "Наше кино (DVDRip, HQRip)"}
+      - {id: 55, cat: Movies/Foreign, desc: "Новинки нашего кино (CAMRip, TS, Screener)"}
+      - {id: 235, cat: Movies/Foreign, desc: "Наше кино (HD)"}
+      - {id: 57, cat: Movies/Foreign, desc: "Наше кино (DVD)"}
+      - {id: 58, cat: Movies/Foreign, desc: "Советское кино"}
+      - {id: 991, cat: Movies/3D, desc: "3D Фильмы, Видео, TV и Спорт"}
+      - {id: 541, cat: Movies/3D, desc: "3D Фильмы"}
+      - {id: 556, cat: Movies/3D, desc: "3D Мультфильмы"}
+      - {id: 992, cat: Movies/3D, desc: "3D Документальные фильмы"}
+      - {id: 993, cat: Movies/3D, desc: "3D Спорт"}
+      - {id: 994, cat: Movies/3D, desc: "3D Ролики, музыкальное видео, трейлеры к фильмам"}
+      - {id: 33, cat: TV/OTHER, desc: "Сериалы"}
+      - {id: 31, cat: TV/OTHER, desc: "Мультфильмы и мультсериалы"}
+      - {id: 201, cat: TV/Anime, desc: "Аниме"}
+      - {id: 32, cat: TV/OTHER, desc: "TV, развлекательные телепередачи и шоу"}
+      - {id: 344, cat: TV/Sport, desc: "Спорт"}
+      - {id: 542, cat: TV/Documentary, desc: "Документальные фильмы и телепередачи"}
+      - {id: 757, cat: TV/OTHER, desc: "Обучающие видео и видеоуроки"}
+      - {id: 34, cat: Audio, desc: "Музыка"}
+      - {id: 36, cat: Audio/Other, desc: "Поп музыка"}
+      - {id: 222, cat: Audio/Other, desc: "Зарубежный рок"}
+      - {id: 228, cat: Audio/Foreign, desc: "Русский рок"}
+      - {id: 37, cat: Audio/Other, desc: "Шансон"}
+      - {id: 38, cat: Audio/Other, desc: "Рэп, Хип-Хоп, R'n'B"}
+      - {id: 717, cat: Audio/Other, desc: "Электронная музыка"}
+      - {id: 40, cat: Audio/Other, desc: "Другие жанры"}
+      - {id: 241, cat: Audio/Lossless, desc: "Многоканальная и lossless музыка"}
+      - {id: 41, cat: Audio/Video, desc: "Музыкальное видео"}
+      - {id: 42, cat: Other, desc: "Игры"}
+      - {id: 44, cat: PC/Games, desc: "Игры PC"}
+      - {id: 209, cat: Console, desc: "Игры для консолей"}
+      - {id: 405, cat: PC, desc: "Программы"}
+      - {id: 802, cat: PC, desc: "Операционные системы"}
+      - {id: 1009, cat: PC, desc: "Софт"}
+      - {id: 479, cat: PC, desc: "Разное"}
+      - {id: 511, cat: PC/Phone-Other, desc: "Всё для мобильных телефонов, КПК и Iphone"}
+      - {id: 983, cat: PC/Phone-Other, desc: "Мобильное видео"}
+      - {id: 606, cat: Other, desc: "Книги, аудиокниги, журналы"}
+      - {id: 607, cat: Books, desc: "Книги"}
+      - {id: 629, cat: Audio/Audiobook, desc: "Аудиокниги"}
+      - {id: 662, cat: Books/Magazines, desc: "Журналы"}
+      - {id: 312, cat: XXX, desc: "Э[ротика] и Pr[o]n"}
+      - {id: 536, cat: XXX, desc: "Pr[o]n"}
+      - {id: 782, cat: XXX/Imageset, desc: "Фотографии, картинки, обои"}
+      - {id: 363, cat: XXX, desc: "Э[ротика]"}
+      - {id: 182, cat: Other, desc: "Разное"}
+      - {id: 789, cat: Other, desc: "Автомобильный раздел"}
+      - {id: 797, cat: Other, desc: "Караоке Онлайн"}
+
+      - {id: 137, cat: Other, desc: "Форумы"}
+      - {id: 138, cat: Other, desc: "О нашем сайте"}
+      - {id: 140, cat: Other, desc: "Новости трекера"}
+      - {id: 990, cat: Other, desc: "Объявления"}
+      - {id: 179, cat: Other, desc: "Правила форума и трекера"}
+      - {id: 139, cat: Other, desc: "Инструкции"}
+      - {id: 360, cat: Other, desc: "Лучшие фильмы"}
+      - {id: 172, cat: Other, desc: "Вопросы и ответы"}
+      - {id: 141, cat: Other, desc: "Предложения по улучшению трекера"}
+      - {id: 341, cat: Other, desc: "Стол заказов"}
+      - {id: 573, cat: Other, desc: "Новости"}
+      - {id: 582, cat: Other, desc: "В России"}
+      - {id: 581, cat: Other, desc: "В Мире"}
+      - {id: 574, cat: Other, desc: "Наука | Космос"}
+      - {id: 846, cat: Other, desc: "Видеорепортаж"}
+      - {id: 575, cat: Other, desc: "Фоторепортаж"}
+      - {id: 576, cat: Other, desc: "Софт"}
+      - {id: 578, cat: Other, desc: "Кино"}
+      - {id: 577, cat: Other, desc: "Технологии"}
+      - {id: 580, cat: Other, desc: "Музыка"}
+      - {id: 583, cat: Other, desc: "Здоровье"}
+      - {id: 584, cat: Other, desc: "Авто"}
+      - {id: 585, cat: Other, desc: "Спорт | F1 | Футбол"}
+      - {id: 586, cat: Other, desc: "Интернет"}
+      - {id: 587, cat: Other, desc: "Игры"}
+      - {id: 589, cat: Other, desc: "Интим"}
+      - {id: 590, cat: Other, desc: "Курьёзы"}
+      - {id: 591, cat: Other, desc: "Культура"}
+      - {id: 592, cat: Other, desc: "Знаменитости"}
+      - {id: 593, cat: Other, desc: "Экономика"}
+      - {id: 594, cat: Other, desc: "День в истории"}
+      - {id: 690, cat: Other, desc: "Форум"}
+      - {id: 598, cat: Other, desc: "Игровой форум"}
+      - {id: 557, cat: Other, desc: "Общение"}
+      - {id: 691, cat: Other, desc: "Юмор"}
+      - {id: 816, cat: Other, desc: "Видео-YouTube"}
+      - {id: 595, cat: Other, desc: "Кулинарные рецепты"}
+      - {id: 596, cat: Other, desc: "Салаты"}
+      - {id: 597, cat: Other, desc: "Первые блюда"}
+      - {id: 365, cat: Other, desc: "Обсуждение кинематографа"}
+      - {id: 366, cat: Other, desc: "Скоро на экранах"}
+      - {id: 367, cat: Other, desc: "Трейлеры и доп. материалы"}
+      - {id: 372, cat: Other, desc: "Фильмографии (режиссеры, актеры)"}
+      - {id: 674, cat: Other, desc: "Зарубежные фильмографии"}
+      - {id: 695, cat: Other, desc: "Культура и искусство"}
+      - {id: 694, cat: Other, desc: "Видеолекции"}
+      - {id: 696, cat: Other, desc: "Релакс"}
+      - {id: 697, cat: Other, desc: "Космос"}
+      - {id: 698, cat: Other, desc: "Философия"}
+      - {id: 699, cat: Other, desc: "Разное"}
+      - {id: 700, cat: Other, desc: "Телевизионные передачи"}
+      - {id: 702, cat: Other, desc: "Тайны и загадки"}
+      - {id: 703, cat: Other, desc: "Путешествия и туризм"}
+      - {id: 704, cat: Other, desc: "Криминал"}
+      - {id: 705, cat: Other, desc: "Катастрофы"}
+      - {id: 706, cat: Other, desc: "Биографии. Личности"}
+      - {id: 707, cat: Other, desc: "Техника и вооружение"}
+      - {id: 708, cat: Other, desc: "Вторая мировая война"}
+      - {id: 709, cat: Other, desc: "Мир вокруг нас"}
+      - {id: 710, cat: Other, desc: "Непознанное и сверхъестественное"}
+      - {id: 711, cat: Other, desc: "Рыбалка и охота"}
+      - {id: 712, cat: Other, desc: "Армия. Войны и конфликты"}
+      - {id: 543, cat: Other, desc: "Научно-познавательные"}
+      - {id: 713, cat: Other, desc: "Общественная Безопасность"}
+      - {id: 714, cat: Other, desc: "Исторические"}
+      - {id: 758, cat: Other, desc: "Гимнастика, фитнес, йога"}
+      - {id: 759, cat: Other, desc: "Другое"}
+      - {id: 760, cat: Other, desc: "Музыкальная школа"}
+      - {id: 761, cat: Other, desc: "Ремонт и эксплуатация авто"}
+      - {id: 762, cat: Other, desc: "Сделай сам!"}
+      - {id: 763, cat: Other, desc: "Политика"}
+      - {id: 764, cat: Other, desc: "Бизнес, экономика, финансы"}
+      - {id: 765, cat: Other, desc: "Компьютерная графика"}
+      - {id: 766, cat: Other, desc: "Для детей и родителей"}
+      - {id: 767, cat: Other, desc: "Здоровье"}
+      - {id: 768, cat: Other, desc: "Иностранные языки"}
+      - {id: 769, cat: Other, desc: "Компьютерные видеоуроки"}
+      - {id: 770, cat: Other, desc: "Кулинария"}
+      - {id: 771, cat: Other, desc: "Работа с аудио и видео"}
+      - {id: 772, cat: Other, desc: "Салон красоты"}
+      - {id: 773, cat: Other, desc: "Операционные системы"}
+      - {id: 774, cat: Other, desc: "Офисные программы"}
+      - {id: 775, cat: Other, desc: "Психология"}
+      - {id: 776, cat: Other, desc: "Спортивные уроки"}
+      - {id: 777, cat: Other, desc: "Стройка и ремонт"}
+      - {id: 778, cat: Other, desc: "Учимся танцевать"}
+      - {id: 104, cat: Other, desc: "Классическая"}
+      - {id: 105, cat: Other, desc: "Блюз, Джаз"}
+      - {id: 107, cat: Other, desc: "Детская музыка"}
+      - {id: 136, cat: Other, desc: "Минусовки и караоке"}
+      - {id: 106, cat: Other, desc: "Рэгги"}
+      - {id: 249, cat: Other, desc: "Авторская песня"}
+      - {id: 748, cat: Other, desc: "Саундтреки"}
+      - {id: 111, cat: Other, desc: "Рок музыка"}
+      - {id: 112, cat: Other, desc: "Поп музыка"}
+      - {id: 113, cat: Other, desc: "Шансон"}
+      - {id: 114, cat: Other, desc: "Рэп, Хип-Хоп, R'n'B"}
+      - {id: 115, cat: Other, desc: "Электронная музыка"}
+      - {id: 116, cat: Other, desc: "Другие жанры"}
+      - {id: 435, cat: Other, desc: "Операционные системы от Microsoft"}
+      - {id: 443, cat: Other, desc: "Операционные системы и ПО для Apple Macintosh"}
+      - {id: 487, cat: Other, desc: "Операционные системы и ПО для Linux, Unix и других ОС"}
+      - {id: 510, cat: Other, desc: "Всё для мобильных телефонов, КПК и Iphone"}
+      - {id: 519, cat: Other, desc: "Игры"}
+      - {id: 520, cat: Other, desc: "Приложения"}
+      - {id: 808, cat: Other, desc: "Системы навигации, Карты"}
+      - {id: 809, cat: Other, desc: "Рингтоны"}
+      - {id: 810, cat: Other, desc: "На базе Android"}
+      - {id: 811, cat: Other, desc: "На базе SYMBIAN"}
+      - {id: 812, cat: Other, desc: "Графическое оформление"}
+      - {id: 813, cat: Other, desc: "На базе Windows Mobile"}
+      - {id: 515, cat: Other, desc: "iPhone, iPod, iPod Touch"}
+      - {id: 513, cat: Other, desc: "КПК"}
+      - {id: 534, cat: Other, desc: "Прошивки"}
+      - {id: 814, cat: Other, desc: "Разное"}
+      - {id: 984, cat: Other, desc: "Видео для телефонов и смартфонов"}
+      - {id: 985, cat: Other, desc: "Видео для КПК"}
+      - {id: 986, cat: Other, desc: "Видео для iPhone и iPod"}
+      - {id: 987, cat: Other, desc: "Видео для PSP"}
+      - {id: 988, cat: Other, desc: "Видео для других устройств"}
+      - {id: 608, cat: Other, desc: "Экономика и бизнес"}
+      - {id: 609, cat: Other, desc: "Поэзия"}
+      - {id: 610, cat: Other, desc: "Публицистика"}
+      - {id: 611, cat: Other, desc: "Любовные романы"}
+      - {id: 612, cat: Other, desc: "Библиотеки"}
+      - {id: 613, cat: Other, desc: "Техническая литература"}
+      - {id: 614, cat: Other, desc: "Медицина и здоровье"}
+      - {id: 615, cat: Other, desc: "Кулинария"}
+      - {id: 616, cat: Other, desc: "Литература без перевода"}
+      - {id: 617, cat: Other, desc: "Классика"}
+      - {id: 618, cat: Other, desc: "Обучение и развитие детей"}
+      - {id: 619, cat: Other, desc: "Детектив"}
+      - {id: 620, cat: Other, desc: "Программирование"}
+      - {id: 621, cat: Other, desc: "Философия"}
+      - {id: 622, cat: Other, desc: "Психология"}
+      - {id: 623, cat: Other, desc: "Художественная литература"}
+      - {id: 624, cat: Other, desc: "Хобби"}
+      - {id: 625, cat: Other, desc: "Учебники, справочники, энциклопедии"}
+      - {id: 626, cat: Other, desc: "Компьютерная литература"}
+      - {id: 627, cat: Other, desc: "Фантастика, фентези, мистика"}
+      - {id: 628, cat: Other, desc: "Разное"}
+      - {id: 630, cat: Other, desc: "Поэзия"}
+      - {id: 631, cat: Other, desc: "Аудио учебники"}
+      - {id: 632, cat: Other, desc: "Любовные романы"}
+      - {id: 633, cat: Other, desc: "Современная проза"}
+      - {id: 849, cat: Other, desc: "Мировая проза ХХ века"}
+      - {id: 850, cat: Other, desc: "Отечественная проза ХХ века"}
+      - {id: 634, cat: Other, desc: "Радиоспектакли и аудиофильмы"}
+      - {id: 635, cat: Other, desc: "Изучение иностранных языков"}
+      - {id: 636, cat: Other, desc: "Бизнес-литература"}
+      - {id: 637, cat: Other, desc: "Детективы и боевики"}
+      - {id: 642, cat: Other, desc: "Фантастика и фэнтези"}
+      - {id: 851, cat: Other, desc: "Путешествия и приключения"}
+      - {id: 638, cat: Other, desc: "Детская аудиокнига"}
+      - {id: 639, cat: Other, desc: "Историческая литература"}
+      - {id: 640, cat: Other, desc: "Классика"}
+      - {id: 641, cat: Other, desc: "Психология и философия"}
+      - {id: 848, cat: Other, desc: "Научно-популярная аудиокнига"}
+      - {id: 645, cat: Other, desc: "Юмор"}
+      - {id: 646, cat: Other, desc: "Разное"}
+      - {id: 663, cat: Other, desc: "Digital Photo"}
+      - {id: 664, cat: Other, desc: "Мужские журналы"}
+      - {id: 665, cat: Other, desc: "Мир фантастики"}
+      - {id: 666, cat: Other, desc: "Наука, техника, авто"}
+      - {id: 667, cat: Other, desc: "Компьютерные журналы"}
+      - {id: 668, cat: Other, desc: "Строительство, дизайн и ремонт"}
+      - {id: 669, cat: Other, desc: "Женские журналы (кулинария, мода, шитьё)"}
+      - {id: 670, cat: Other, desc: "Комиксы"}
+      - {id: 671, cat: Other, desc: "Игромания"}
+      - {id: 319, cat: Other, desc: "Русский pr[o]n"}
+      - {id: 331, cat: Other, desc: "Русские pr[o]n ролики"}
+      - {id: 329, cat: Other, desc: "Pr[o]n фильмы"}
+      - {id: 330, cat: Other, desc: "Паки русских pr[o]n роликов"}
+      - {id: 320, cat: Other, desc: "Зарубежный Pr[o]n"}
+      - {id: 334, cat: Other, desc: "Зарубежные pr[o]n ролики"}
+      - {id: 317, cat: Other, desc: "Зарубежные pr[o]n фильмы"}
+      - {id: 323, cat: Other, desc: "С сюжетом"}
+      - {id: 325, cat: Other, desc: "Без сюжета"}
+      - {id: 322, cat: Other, desc: "Классические"}
+      - {id: 324, cat: Other, desc: "Гонзо-фильмы"}
+      - {id: 326, cat: Other, desc: "Лесбо-фильмы"}
+      - {id: 327, cat: Other, desc: "Этнические фильмы"}
+      - {id: 328, cat: Other, desc: "Японские фильмы"}
+      - {id: 321, cat: Other, desc: "Паки полных фильмов"}
+      - {id: 399, cat: Other, desc: "Зарубежные фильмы в высоком качестве (HD)"}
+      - {id: 336, cat: Other, desc: "Зарубежные сайтрипы"}
+      - {id: 338, cat: Other, desc: "Паки зарубежных pr[o]n роликов по актрисам"}
+      - {id: 783, cat: Other, desc: "Эротические фильмы и сериалы"}
+      - {id: 784, cat: Other, desc: "Мультфильмы ( Эротика)"}
+      - {id: 785, cat: Other, desc: "Документальное и обучающее видео"}
+      - {id: 787, cat: Other, desc: "Литература ( Эротика)"}
+      - {id: 788, cat: Other, desc: "Разное ( Эротика)"}
+      - {id: 790, cat: Other, desc: "Документация, мануалы"}
+      - {id: 791, cat: Other, desc: "Фильмы и телепередачи по авто/мото"}
+      - {id: 792, cat: Other, desc: "Автомобильный Софт"}
+      - {id: 793, cat: Other, desc: "Раздел авто (разное)"}
+      - {id: 794, cat: Other, desc: "Разное (документы)"}
+      - {id: 795, cat: Other, desc: "Разное (фильмы)"}
+      - {id: 796, cat: Other, desc: "Разное (программы)"}
+      - {id: 798, cat: Other, desc: "Русский РОК (Караоке Онлайн)"}
+      - {id: 799, cat: Other, desc: "Русский ПОП (Караоке Онлайн)"}
+      - {id: 800, cat: Other, desc: "Русский Шансон (Караоке Онлайн)"}
+      - {id: 184, cat: Other, desc: "Тестовый форум"}
+      - {id: 183, cat: Other, desc: "Корзина"}
+
+    modes:
+      search: [q]
+
+  settings: []
+
+  download:
+    selector: a[href^="./download/file.php?id="]
+
+  search:
+    # http://rus-media.org/search.php?tracker_search=torrent&sr=topics&keywords=2019&fid[]=54
+    paths:
+      - path: search.php
+    inputs:
+      sr: topics
+      sf: titleonly
+      fp: 1
+      tracker_search: torrent
+      keywords: "{{if .Keywords }}{{.Keywords}}{{else}}2019{{end}}"
+      $raw: "{{range .Categories}}&fid[]={{.}}{{end}}"
+      
+    rows:
+      selector: table.tablebg tr.col_line
+    fields:
+      category:
+        selector: a[href^="./viewtopic.php?f="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: f
+      title:
+        selector: a.topictitle
+      details:
+        selector: a.topictitle
+        attribute: href
+      download:
+        selector: a.topictitle
+        attribute: href
+      size:
+        selector: td:nth-of-type(5) p
+        filters:
+          - name: replace
+            args: ["ТБ", "TB"] 
+          - name: replace
+            args: ["ГБ", "GB"]
+          - name: replace
+            args: ["МБ", "MB"]
+          - name: replace
+            args: ["КБ", "KB"]
+      seeders:
+        selector: span.seed
+      leechers:
+        selector: span.leech
+      date:
+        # Сегодня, 03:04
+        # Вчера, 22:47
+        selector: td:nth-of-type(6) p:nth-of-type(1):contains("Сегодня"),  td:nth-of-type(6) p:contains("Вчера")
+        optional: true
+        filters:
+          - name: replace
+            args: ["Сегодня", "Today"]
+          - name: replace
+            args: ["Вчера", "Yesterday"]
+      date:
+        # 12 янв 2019, 12:47
+        selector: td:nth-of-type(6) p:nth-of-type(1):not(:contains("Сегодня")):not(:contains("Вчера"))
+        optional: true
+        filters:
+            # replace month abbreviations
+          - name: replace
+            args: ["янв", "Jan"]
+          - name: replace
+            args: ["фев", "Feb"]
+          - name: replace
+            args: ["мар", "Mar"]
+          - name: replace
+            args: ["апр", "Apr"]
+          - name: replace
+            args: ["май", "May"]
+          - name: replace
+            args: ["июн", "Jun"]
+          - name: replace
+            args: ["июл", "Jul"]
+          - name: replace
+            args: ["авг", "Aug"]
+          - name: replace
+            args: ["сен", "Sep"]
+          - name: replace
+            args: ["окт", "Oct"]
+          - name: replace
+            args: ["ноя", "Nov"]
+          - name: replace
+            args: ["дек", "Dec"]
+          - name: replace
+            args: [",", ""]
+          - name: dateparse
+            args: "02 Jan 2006 15:04"
+      downloadvolumefactor:
+        text: "0"
+      uploadvolumefactor:
+        text: "1"

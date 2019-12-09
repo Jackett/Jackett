@@ -17,7 +17,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 
 #### Supported Systems
 * Windows 7SP1 or greater using .NET 4.6.1 or above [Download here](https://www.microsoft.com/net/framework/versions/net461)
-* Linux ([supported operating systems here](https://github.com/dotnet/core/blob/master/release-notes/2.1/2.1-supported-os.md))
+* Linux [supported operating systems here](https://github.com/dotnet/core/blob/master/release-notes/2.1/2.1-supported-os.md#linux)
 * macOS 10.12 or greater
 
 ### Supported Public Trackers
@@ -28,22 +28,30 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Anime Tosho
  * AniRena
  * AudioBook Bay (ABB)
- * btbit
+ * BigFANGroup
+ * BitRu
+ * BitTorrent.AM
  * BTDB
  * BTDIGG
+ * BT.etree
  * ConCen
  * Corsaro.red
  * cpasbien
  * cpasbienClone
  * Demonoid
- * DIGBT
  * dmhy
  * ETTV
  * EliteTorrent.biz
+ * EstrenosDTL
  * ExtraTorrent.ag
+ * EXT Torrents
  * EZTV
+ * FireBit
  * Frozen Layer
+ * GamesTorrents
  * GkTorrent
+ * GloDLS
+ * HDReactor
  * Hon3yHD.net
  * Horrible Subs
  * Idope
@@ -51,10 +59,9 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Il Corsaro Blu
  * Isohunt2
  * iTorrent
- * KATcrs
  * KickAssTorrent (KATcr)
- * KickAssTorrent (thekat.se clone)
- * LemenCili
+ * KickAssTorrent (kat.li)
+ * Legit Torrents
  * LePorno
  * LimeTorrents
  * MacTorrents
@@ -62,13 +69,19 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * MejorTorrent <!-- maintained by ivandelabeldad -->
  * Monova
  * MovCr
+ * MoviesDVDR
  * Newpct (aka: tvsinpagar, descargas2020, torrentlocura, torrentrapid, tumejortorrent, pctnew, etc)
+ * Newstudio
  * Nitro
+ * NNTT
+ * NoName Club (NNM-Club)
  * Nyaa.si
  * Nyaa-Pantsu
  * OxTorrent
+ * PiratBit
  * ProStyleX
  * RARBG
+ * Rus-media
  * RuTor
  * shokweb
  * ShowRSS
@@ -80,16 +93,20 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * The Pirate Bay (TPB)
  * Tokyo Tosho
  * Torlock
+ * TOROS
  * Torrent Downloads (TD)
+ * Torrent9
+ * Torrent9Clone
+ * TorrentDownload
  * TorrentFunk
- * TorrentGalaxy.org (TGx)
+ * TorrentGalaxy (TGx)
+ * TorrentParadise
  * TorrentProject2
  * TorrentQuest
  * Torrents.csv
  * TorrentWal
- * Torrent9
- * Torernt9 clone (torrents9.ch)
  * Torrentz2
+ * Underverse
  * YourBittorrent
  * YTS.ag
  * Zooqle
@@ -101,31 +118,35 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * ArenaBG
  * BaibaKo
  * BookTracker
+ * CasStudioTV
  * Crazy's Corner
  * CzTorrent
  * Deildu
+ * DXP (Deaf Experts)
+ * EniaHD
  * Film-Paleis
  * Gay-Torrents.net
  * Gay-Torrents.org
- * GDF76
  * HamsterStudio
+ * HD Dolby
  * Kinozal
  * LostFilm.tv
  * Marine Tracker
  * Metal Tracker
  * MVGroup Forum
  * MVGroup Main
- * Newstudio
  * NetHD (VietTorrent)
- * NoName Club (NNM-Club)
+ * Pornolab
+ * RiperAM
  * RockBox
  * RuTracker
  * Sharewood
  * SkTorrent
  * SoundPark
  * Toloka.to
+ * Torrent-Explosiv
  * Torrents-Local
- * Underverse
+ * TribalMixes
  * Union Fansub
  * Vanila
  * YggTorrent (YGG)
@@ -146,7 +167,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * AnimeBytes (AB)
  * AnimeTorrents (AnT)
  * Anthelion
- * AOX (Chippu)
  * Araba Fenice (Phoenix)
  * Asgaard (AG)
  * AsianCinema
@@ -155,7 +175,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Audiobook Torrents (ABT)
  * AudioNews (AN)
  * Awesome-HD (AHD)
- * AVG (Audio Video Games)
  * Avistaz (AsiaTorrents)
  * Back-ups
  * BakaBT
@@ -169,7 +188,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Bithorlo (BHO)
  * BitHUmen
  * BitMe
- * BitMeTV
  * BitsPiracy
  * Bitspyder
  * BitTorrentFiles
@@ -185,7 +203,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Carpathians
  * CartoonChaos (CC)
  * CasaTorrent
- * CasStudioTV
  * CCFBits
  * CGPeers
  * CHDBits
@@ -194,6 +211,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Cinematik
  * CinemaZ (EuTorrents)
  * Classix
+ * Concertos
  * CrazyHD
  * CrazySpirits
  * CrnaBerza
@@ -210,12 +228,10 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * DocumentaryTorrents (DT)
  * Downloadville
  * Dragonworld Reloaded
- * Dream Team
  * DXDHD
  * EbookParadijs
  * Ebooks-Shares
  * EfectoDoppler
- * EliteHD (HDClub) [![(invite needed)][inviteneeded]](#)
  * Elit Tracker (ET)
  * Elite-Tracker
  * Empornium (EMP)
@@ -231,6 +247,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * FunFile (FF)
  * FunkyTorrents (FT)
  * Fuzer (FZ)
+ * Galeriens (LaPauseTorrents)
  * GAYtorrent.ru
  * GazelleGames (GGn)
  * Generation-Free
@@ -238,16 +255,16 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * GigaTorrents
  * GimmePeers (formerly ILT) <!-- maintained by jamesb2147 -->
  * GiroTorrent
+ * Greek Legends
  * Greek Team
  * HacheDe
- * Hardbay
- * HD4Free (HD4)
  * HD-Forever (HDF)
  * HD-Only (HDO)
  * HD-Space (HDS)
  * HD-Spain
  * HD-Torrents (HDT)
  * HD-Bits.com
+ * HD4FANS
  * HDArea (HDA)
  * HDBits
  * HDCenter
@@ -255,15 +272,17 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HDCity
  * HDHome (HDBigger)
  * HDME
+ * HDRoute
  * HDSky
  * HDTorrents.it
+ * HDTurk
+ * HDU
+ * HDZone
  * Hebits
  * Hon3y HD
  * HQSource (HQS)
  * HuSh 
- * Hyperay
  * ICE Torrent
- * iLoveClassics (iLC)
  * ImmortalSeed (iS)
  * Immortuos
  * inPeril
@@ -272,8 +291,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * JPopsuki
  * Kapaki
  * Karagarga
- * LaPauseTorrents
- * Le Chaudron
  * Le Saloon
  * LearnFlakes
  * LibraNet (LN)
@@ -303,7 +320,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Passione Torrent <!-- maintained by bonny1992 -->
  * PassThePopcorn (PTP)
  * Peers.FM
- * PiratBit
  * PirateTheNet (PTN)
  * PixelCove (Ultimate Gamer)
  * PiXELHD (PxHD)
@@ -328,14 +344,12 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * RetroFlix
  * RevolutionTT
  * RGU
- * RocketHD
  * RoDVD (Cinefiles)
  * Romanian Metal Torrent (RMT)
  * RPTorrents
  * SceneFZ
  * SceneHD
  * ScenePalace (SP)
- * SceneReactor
  * SceneRush
  * SceneTime
  * SDBits
@@ -352,6 +366,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * SpeedTorrent Reloaded
  * SportHD
  * SportsCult
+ * SpringSunday
  * SuperBits (SBS)
  * TakeaByte
  * Tapochek
@@ -359,6 +374,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Tazmania-Den
  * TeamHD
  * TeamOS
+ * TEKNO3D
  * TellyTorrent
  * TenYardTorrents (TYT)
  * TheAudioScene
@@ -394,7 +410,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * ToTheGlory
  * TranceTraffic
  * Trezzor
- * TurkTorrent (TT)
+ * TurkTorrent (TT) [![(invite needed)][inviteneeded]](#)
  * TV Chaos UK (TVCUK)
  * TV-Vault
  * TVstore
@@ -407,7 +423,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Waffles
  * World-In-HD
  * World-of-Tomorrow
- * WorldOfP2P (WOP)
  * x-ite.me (XM)
  * xBytesV2
  * XSpeeds (XS)
@@ -455,28 +470,28 @@ Jackett can also be run from the command line if you would like to see log messa
 
 
 ## Install on Linux (AMDx64)
-On most operating systems all the required dependencies will already be present. In case they are not, you can refer to this page https://docs.microsoft.com/en-us/dotnet/core/linux-prerequisites?tabs=netcore2x#linux-distribution-dependencies
+On most operating systems all the required dependencies will already be present. In case they are not, you can refer to this page https://github.com/dotnet/core/blob/master/Documentation/linux-prereqs.md      
 
 ### Install as service
 1. Download and extract the latest `Jackett.Binaries.LinuxAMDx64.tar.gz` release from the [releases page](https://github.com/Jackett/Jackett/releases)
-2. To install Jackett as a service, open the Terminal and run `sudo ./install_service_systemd.sh` You need root permissions to install the service. The service will start on each logon. You can always stop it by running `systemctl stop jackett.service` from Terminal. You can start it again it using `systemctl start jackett.service`. Logs are stored as usual under `~/.config/Jackett/log.txt` and also in `journalctl -u jackett.service`.
+2. To install Jackett as a service, open a Terminal, cd to the jackett folder and run `sudo ./install_service_systemd.sh` You need root permissions to install the service. The service will start on each logon. You can always stop it by running `systemctl stop jackett.service` from Terminal. You can start it again it using `systemctl start jackett.service`. Logs are stored as usual under `~/.config/Jackett/log.txt` and also in `journalctl -u jackett.service`.
 
 ### Run without installing as a service
-Download and extract the latest `Jackett.Binaries.LinuxAMDx64.tar.gz` release from the [releases page](https://github.com/Jackett/Jackett/releases) and run Jackett with the command `./jackett`
+Download and extract the latest `Jackett.Binaries.LinuxAMDx64.tar.gz` release from the [releases page](https://github.com/Jackett/Jackett/releases), open a Terminal, cd to the jackett folder and run Jackett with the command `./jackett`
 
 ### home directory
 If you want to run it with a user without a /home directory you need to add `Environment=XDG_CONFIG_HOME=/path/to/folder` to your systemd file, this folder will be used to store your config files.  
 
 
 ## Install on Linux (ARMv7 or above)
-On most operating systems all the required dependencies will already be present. In case they are not, you can refer to this page https://docs.microsoft.com/en-us/dotnet/core/linux-prerequisites?tabs=netcore2x#linux-distribution-dependencies
+On most operating systems all the required dependencies will already be present. In case they are not, you can refer to this page https://github.com/dotnet/core/blob/master/Documentation/linux-prereqs.md    
 
 ### Install as service
 1. Download and extract the latest `Jackett.Binaries.LinuxARM32.tar.gz` or `Jackett.Binaries.LinuxARM64.tar.gz` (32 bit is the most common on ARM) release from the [releases page](https://github.com/Jackett/Jackett/releases) 
-2. To install Jackett as a service, open the Terminal and run `sudo ./install_service_systemd.sh` You need root permissions to install the service. The service will start on each logon. You can always stop it by running `systemctl stop jackett.service` from Terminal. You can start it again it using `systemctl start jackett.service`. Logs are stored as usual under `~/.config/Jackett/log.txt` and also in `journalctl -u jackett.service`.
+2. To install Jackett as a service, open a Terminal, cd to the jackett folder and run `sudo ./install_service_systemd.sh` You need root permissions to install the service. The service will start on each logon. You can always stop it by running `systemctl stop jackett.service` from Terminal. You can start it again it using `systemctl start jackett.service`. Logs are stored as usual under `~/.config/Jackett/log.txt` and also in `journalctl -u jackett.service`.
 
 ### Run without installing as a service
-Download and extract the latest `Jackett.Binaries.LinuxARM32.tar.gz` or `Jackett.Binaries.LinuxARM64.tar.gz` (32 bit is the most common on ARM) release from the [releases page](https://github.com/Jackett/Jackett/releases) and run Jackett with the command `./jackett`
+Download and extract the latest `Jackett.Binaries.LinuxARM32.tar.gz` or `Jackett.Binaries.LinuxARM64.tar.gz` (32 bit is the most common on ARM) release from the [releases page](https://github.com/Jackett/Jackett/releases), open a Terminal, cd to the jackett folder and run Jackett with the command `./jackett`
 
 ### home directory
 If you want to run it with a user without a /home directory you need to add `Environment=XDG_CONFIG_HOME=/path/to/folder` to your systemd file, this folder will be used to store your config files.  
@@ -520,9 +535,6 @@ Logs are stored as usual under `~/.config/Jackett/log.txt`.
 
 ### Run without installing as a service
 Download and extract the latest `Jackett.Binaries.macOS.tar.gz` release from the [releases page](https://github.com/Jackett/Jackett/releases) and run Jackett with the command `./jackett`.
-
-### upgrading from mono
-If you were previously using the Mono flavour of Jackett then you should shutdown the service from a terminal with with the command `systemctl stop jackett.service` and then remove the startup script at `/etc/systemd/system/jackett.service` and delete the content of the `/Applications/Jackett` folder, prior to performing this install.
 
 
 ## Installation using Docker
@@ -607,7 +619,7 @@ All contributions are welcome just send a pull request.
 * Install the .NET Core [SDK](https://www.microsoft.com/net/download/windows)
 * Clone Jackett
 * Open Powershell and from the `src` directory, run `dotnet restore`
-* Open the Jackett solution in Visual Studio 2017 (version 15.9 or above)
+* Open the Jackett solution in Visual Studio 2019 (version 16.3 or above)
 * Right click on the Jackett solution and click 'Rebuild Solution' to restore nuget packages
 * Select Jackett.Server as startup project
 * In the drop down menu of the run button select "Jackett.Server" instead of "IIS Express"
@@ -624,21 +636,21 @@ git clone https://github.com/Jackett/Jackett.git
 cd Jackett/src
 
 # dotnet core version
-dotnet publish Jackett.Server -f netcoreapp2.2 --self-contained -r osx-x64 -c Debug # takes care of everything
-./Jackett.Server/bin/Debug/netcoreapp2.2/osx-x64/jackett # run jackett
+dotnet publish Jackett.Server -f netcoreapp3.0 --self-contained -r osx-x64 -c Debug # takes care of everything
+./Jackett.Server/bin/Debug/netcoreapp3.0/osx-x64/jackett # run jackett
 ```
 
 ### Linux
 
 
 ```bash
-sudo apt install mono-complete nuget msbuild dotnet-sdk-2.2 # install build tools (debian/ubuntu)
+sudo apt install mono-complete nuget msbuild dotnet-sdk-3.0 # install build tools (debian/ubuntu)
 git clone https://github.com/Jackett/Jackett.git
 cd Jackett/src
 
 # dotnet core version
-dotnet publish Jackett.Server -f netcoreapp2.2 --self-contained -r linux-x64 -c Debug # takes care of everything
-./Jackett.Server/bin/Debug/netcoreapp2.2/linux-x64/jackett # run jackett
+dotnet publish Jackett.Server -f netcoreapp3.0 --self-contained -r linux-x64 -c Debug # takes care of everything
+./Jackett.Server/bin/Debug/netcoreapp3.0/linux-x64/jackett # run jackett
 ```
 
 ## Screenshots

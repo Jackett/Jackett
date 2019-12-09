@@ -3,7 +3,7 @@
   name: BaibaKo
   description: "BaibaKo is a RUSSIAN Semi-Private Torrent Tracker for TV"
   language: ru-ru
-  type: private
+  type: semi-private
   encoding: windows-1251
   links:
     - http://baibako.tv/
@@ -77,7 +77,7 @@
           - name: replace
             args: ["HDR1080p", "HD 1080p"]
           - name: re_replace
-            args: ["(\\([А-Яа-я\\W]+\\))|(^[А-Яа-я\\W\\d]+\\/ )|([а-яА-Я \\-]+,+)|([а-яА-Я]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
+            args: ["(\\([А-Яа-яЁё\\W]+\\))|(^[А-Яа-яЁё\\W\\d]+\\/ )|([а-яА-ЯЁё \\-]+,+)|([а-яА-ЯЁё]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
           - name: append
             args: " - rus"
       details:

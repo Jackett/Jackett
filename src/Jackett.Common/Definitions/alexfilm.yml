@@ -6,7 +6,11 @@
   type: semi-private
   encoding: UTF-8
   links:
+    - https://alexfilm.org/
+  legacylinks:
     - https://alexfilm.cc/
+  certificates:
+    - 9200e15406272061df1f609a0f40d76282f54295 # expired 30 nov '19
 
   caps:
     categorymappings:
@@ -106,7 +110,7 @@
           - name: re_replace
             args: ["(.*)[CСcс]езон\\s+(\\d+)(.*)", "$1 S$2 rus $3"]
           - name: re_replace
-            args: ["(\\([А-Яа-я\\W]+\\))|(^[А-Яа-я\\W\\d]+\\/ )|([а-яА-Я \\-]+,+)|([а-яА-Я]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
+            args: ["(\\([А-Яа-яЁё\\W]+\\))|(^[А-Яа-яЁё\\W\\d]+\\/ )|([а-яА-ЯЁё \\-]+,+)|([а-яА-ЯЁё]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
       details:
         selector: td a.tLink
         attribute: href

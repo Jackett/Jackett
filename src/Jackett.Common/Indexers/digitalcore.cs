@@ -44,15 +44,16 @@ namespace Jackett.Common.Indexers
             TorznabCaps.SupportsImdbMovieSearch = true;
 
             AddCategoryMapping(1, TorznabCatType.MoviesDVD, "Movies/DVDR");
-            AddCategoryMapping(2, TorznabCatType.MoviesSD, "Movies/XviD");
+            AddCategoryMapping(2, TorznabCatType.MoviesSD, "Movies/SD");
             AddCategoryMapping(3, TorznabCatType.MoviesBluRay, "Movies/BluRay");
             AddCategoryMapping(4, TorznabCatType.MoviesUHD, "Movies/4K");
             AddCategoryMapping(5, TorznabCatType.MoviesHD, "Movies/720p");
             AddCategoryMapping(6, TorznabCatType.MoviesHD, "Movies/1080p");
+            AddCategoryMapping(7, TorznabCatType.MoviesHD, "Movies/PACKS");
 
             AddCategoryMapping(8, TorznabCatType.TVHD, "Tv/720p");
             AddCategoryMapping(9, TorznabCatType.TVHD, "Tv/1080p");
-            AddCategoryMapping(10, TorznabCatType.TVSD, "Tv/XVID");
+            AddCategoryMapping(10, TorznabCatType.TVSD, "Tv/SD");
             AddCategoryMapping(11, TorznabCatType.TVSD, "Tv/DVDR");
             AddCategoryMapping(12, TorznabCatType.TVHD, "Tv/PACKS");
             AddCategoryMapping(13, TorznabCatType.TVUHD, "Tv/4K");
@@ -60,12 +61,18 @@ namespace Jackett.Common.Indexers
 
             AddCategoryMapping(17, TorznabCatType.Other, "Unknown");
             AddCategoryMapping(18, TorznabCatType.PC0day, "Apps/0day");
-            AddCategoryMapping(19, TorznabCatType.PCGames, "Games/PC");
             AddCategoryMapping(20, TorznabCatType.PCISO, "Apps/PC");
+            AddCategoryMapping(21, TorznabCatType.PCMac, "Apps/Mac");
 
             AddCategoryMapping(22, TorznabCatType.AudioMP3, "Music/MP3");
             AddCategoryMapping(23, TorznabCatType.AudioLossless, "Music/FLAC");
             AddCategoryMapping(24, TorznabCatType.Audio, "Music/MTV");
+
+            AddCategoryMapping(25, TorznabCatType.PCGames, "Games/PC");
+            AddCategoryMapping(26, TorznabCatType.Console, "Games/NSW");
+            AddCategoryMapping(27, TorznabCatType.PCMac, "Games/Mac");
+            
+            AddCategoryMapping(28, TorznabCatType.Books, "Ebooks");
 
             AddCategoryMapping(30, TorznabCatType.XXX, "XXX/SD");
             AddCategoryMapping(31, TorznabCatType.XXX, "XXX/HD");
@@ -149,10 +156,11 @@ namespace Jackett.Common.Indexers
                         release.DownloadVolumeFactor = 1;
                     release.UploadVolumeFactor = 1;
 
-                  //  if (!string.IsNullOrWhiteSpace(row.customcover.ToString()))
-                   // {
-                    //    release.BannerUrl = new Uri(SiteLink + row.customcover);
-                    //}
+
+                    if (!string.IsNullOrWhiteSpace(row.firstpic.ToString()))
+                    {
+                        release.BannerUrl = (row.firstpic);
+                    }
 
                     if (row.imdbid2 != null && row.imdbid2.ToString().StartsWith("tt"))
                     {
@@ -163,8 +171,6 @@ namespace Jackett.Common.Indexers
                         descriptions.Add("Tagline: " + row.tagline);
                         descriptions.Add("Cast: " + row.cast);
                         descriptions.Add("Rating: " + row.rating);
-                        //descriptions.Add("Plot: " + row.plot);
-
                         release.BannerUrl = new Uri(SiteLink + "img/imdb/" + row.imdbid2 + ".jpg");
                     }
 
@@ -178,15 +184,17 @@ namespace Jackett.Common.Indexers
                     if (tags.Count > 0)
                         descriptions.Add("Tags: " + string.Join(", ", tags));
 
-                   // var preDate = row.preDate.ToString();
-                   // if (!string.IsNullOrWhiteSpace(preDate) && preDate != "1970-01-01 01:00:00")
-                   //     descriptions.Add("PRE: " + preDate);
-
+                    var preDate = row.preDate.ToString();
+                    if (!string.IsNullOrWhiteSpace(preDate) && preDate != "1970-01-01 01:00:00")
+                    {
+                        descriptions.Add("Pre: " + preDate);
+                    }
                     descriptions.Add("Section: " + row.section);
 
                     release.Description = string.Join("<br>\n", descriptions);
 
                     releases.Add(release);
+
                 }
             }
             catch (Exception ex)
