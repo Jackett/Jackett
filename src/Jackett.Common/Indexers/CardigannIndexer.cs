@@ -659,6 +659,16 @@ namespace Jackett.Common.Indexers
 
                 checkForError(loginResult, Definition.Login.Error);
             }
+            else if (Login.Method == "oneurl")
+            {
+                var OneUrl = applyGoTemplateText(Definition.Login.Inputs["oneurl"]);
+                var LoginUrl = resolvePath(Login.Path + OneUrl).ToString();
+                configData.CookieHeader.Value = null;
+                var loginResult = await RequestStringWithCookies(LoginUrl, null, SiteLink);
+                configData.CookieHeader.Value = loginResult.Cookies;
+
+                checkForError(loginResult, Definition.Login.Error);
+            }
             else
             {
                 throw new NotImplementedException("Login method " + Definition.Login.Method + " not implemented");
