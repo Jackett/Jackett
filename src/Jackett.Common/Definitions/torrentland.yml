@@ -75,6 +75,9 @@
 
   search:
     path: index.php
+    keywordsfilters:
+      - name: re_replace
+        args: ["(?i)\\bS(\\d+)", "T$1"]
     inputs:
       page: "torrents"
       $raw: "&category={{range .Categories}}{{.}};{{end}}"
@@ -91,6 +94,9 @@
             args: category
       title:
         selector: td:nth-child(2) a
+        filters:
+          - name: re_replace
+            args: ["(?i)\\bT(\\d+)", "S$1"]
       banner:
         optional: true
         selector: td:nth-child(2) a
