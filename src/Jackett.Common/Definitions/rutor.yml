@@ -115,6 +115,6 @@
       leechers:
         selector: td span.red
       downloadvolumefactor:
-          text: "0"
+        text: "0"
       uploadvolumefactor:
-          text: "1"
+        text: "1"
