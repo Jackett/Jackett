@@ -248,6 +248,11 @@ namespace Jackett.Common.Indexers
                     release.DownloadVolumeFactor = 1;
                     release.UploadVolumeFactor = 1;
 
+                    // look at tags for freeleech #6579
+                    // "tags": ["comedy","Family","FREELEECH"],
+                    if (torrent.tags.ToString().Contains("FREELEECH"))
+                        release.DownloadVolumeFactor = 0;
+
                     releases.Add(release);
                 }
             }
