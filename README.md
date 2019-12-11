@@ -317,6 +317,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Orpheus
  * Ourbits (HDPter)
  * P2PBG
+ * Partis
  * Passione Torrent <!-- maintained by bonny1992 -->
  * PassThePopcorn (PTP)
  * Peers.FM
