@@ -125,12 +125,33 @@
           - name: dateparse
             args: "2006-01-02 15:04 -07"
       seeders:
-        selector: td:nth-child(6)
+        selector: td:nth-child(6):empty
+        optional: true
+        filters:
+          - name: append
+            args: 0
+      seeders:
+        selector: td:nth-child(6):not(:empty)
+        optional: true
       leechers:
-        selector: td:nth-child(7)
+        selector: td:nth-child(7):empty
+        optional: true
+        filters:
+          - name: append
+            args: 0
+      leechers:
+        selector: td:nth-child(7):not(:empty)
+        optional: true
       grabs:
-        selector: td:nth-child(8)
+        selector: td:nth-child(8):empty
+        optional: true
+        filters:
+          - name: append
+            args: 0
+      grabs:
+        selector: td:nth-child(8):not(:empty)
+        optional: true
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
