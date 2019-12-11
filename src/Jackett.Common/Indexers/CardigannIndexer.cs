@@ -1362,8 +1362,11 @@ namespace Jackett.Common.Indexers
                                             }
                                             break;
                                         case "magnet":
-                                            release.MagnetUri = new Uri(value);
-                                            value = release.MagnetUri.ToString();
+                                            var magnetUri = new Uri(value);
+                                            release.MagnetUri = magnetUri;
+                                            value = magnetUri.ToString();
+                                            if (release.Guid == null)
+                                                release.Guid = magnetUri;
                                             break;
                                         case "details":
                                             var url = resolvePath(value, searchUrlUri);
