@@ -246,10 +246,8 @@
             args: "02.01.2006 15:04"
       downloadvolumefactor:
         case:
-          # gold
-          a.r1: "0"
-          # silver
-          a.r2: "0.5"
+          a.r1: "0" # gold
+          a.r2: "0.5" # silver
           "*": "1"
       uploadvolumefactor:
-          text: "1"
+        text: "1"
