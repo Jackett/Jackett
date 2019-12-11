@@ -90,7 +90,7 @@
         selector: td:nth-child(1) a
         attribute: href
       date:
-          text: "now"
+        text: "now"
       size:
         selector: td:nth-child(2)
       seeders:
