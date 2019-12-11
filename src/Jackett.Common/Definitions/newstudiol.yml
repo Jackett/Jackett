@@ -115,4 +115,4 @@
           img[src="images/tor_gold.gif"]: "0"
           "*": "1"
       uploadvolumefactor:
-          text: "1"
+        text: "1"
