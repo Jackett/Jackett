@@ -61,6 +61,6 @@
       leechers:
         selector: td.leechmed > b
       downloadvolumefactor:
-          text: 0
+        text: 0
       uploadvolumefactor:
         text: 1
