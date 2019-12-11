@@ -31,6 +31,30 @@
       tv-search: [q, season, ep]
       movie-search: [q]
 
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "4"
+      options:
+        "4": "created"
+        "7": "seeders"
+        "5": "size"
+        "1": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
+
   login:
     path: takelogin.php
     method: post
@@ -56,6 +80,9 @@
       searchin: title
       # 0 active 1 incldead 2 onlydead
       incldead: 1
+      sort: "{{ .Config.sort }}"
+      type: "{{ .Config.type }}"
+
     rows:
       selector: table.responsive-card-table tr:has(td[data-label])
       filters:
