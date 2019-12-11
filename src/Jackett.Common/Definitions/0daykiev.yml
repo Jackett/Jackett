@@ -182,4 +182,4 @@
           img[src="pic/silverdownload.gif"]: 0.5
           "*": 1
       uploadvolumefactor:
-          text: 1
+        text: 1
