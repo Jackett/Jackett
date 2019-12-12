@@ -62,16 +62,32 @@
       movie-search: [q, imdbid]
 
   settings:
+    - name: info
+      type: info
+      label: "About the Username field"
+      default: "Enter your <b>Email address</b> in the username field."
     - name: username
       type: text
       label: Username
     - name: password
       type: password
       label: Password
-    - name: info
-      type: info
-      label: "About the Username field"
-      default: "Enter your <b>Email address</b> in the username field."
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "2"
+      options:
+        "2": "created"
+        "7": "seeders"
+        "5": "size"
+        "1": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
 
   login:
     path: login.php
@@ -94,9 +110,9 @@
     # https://asgrd.org/browse.php?sns=&sna=&spf=&sr=&sg=&sys=&sye=&srs=&sre=&si=tt2401090&ss=&incldead=0&only_free=0&sort=4&type=desc
     - path: browse.php
     inputs:
-      $raw: "{{range .Categories}}cats[]={{.}}&{{end}}"
+      $raw: "{{ range .Categories }}cats[]={{.}}&{{end}}"
       sns: ""
-      sna: "{{if .Query.IMDBID}}{{else}}{{ .Keywords }}{{end}}"
+      sna: "{{ if .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
       spf: ""
       sr: ""
       sg: ""
@@ -110,8 +126,9 @@
       incldead: 0
       # 0 incl non-free 1 incl only-free
       only_free: 0
-      sort: 4
-      type: desc
+      sort: "{{ .Config.sort }}"
+      type: "{{ .Config.type }}"
+
     rows:
       selector: table.table-striped > tbody > tr:has(a[href*="details.php?id="])
       filters:
@@ -157,8 +174,8 @@
         selector: td:nth-child(10)
       downloadvolumefactor:
         case:
-          img[src="./images/gold.png"]: "0"
-          "*": "1"
+          img[src="./images/gold.png"]: 0
+          "*": 1
       uploadvolumefactor:
         case:
-          "*": "1"
+          "*": 1
