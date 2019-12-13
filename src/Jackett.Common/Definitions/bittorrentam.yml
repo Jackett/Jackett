@@ -24,14 +24,27 @@
       tv-search: [q, season, ep]
       movie-search: [q]
 
-  settings: []
+  settings:
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "pdd"
+      options:
+        "pdd": "created desc"
+        "pd": "created asc"
+        "sdsd": "seeders desc"
+        "sds": "seeders asc"
+        "szd": "size desc"
+        "sz": "size asc"
+        "td": "title desc"
+        "t": "title asc"
 
   download:
     selector: a[ href^="magnet:?xt="]
 
   search:
     paths:
-      - path: "{{if .Keywords}}search.php?kwds={{ .Keywords}}{{else}}/{{end}}"
+      - path: "{{if .Keywords}}search.php?kwds={{ .Keywords}}&ord={{ .Config.sort }}&cat=100{{else}}/{{end}}"
     rows:
       selector: table.torrentsTable:has(tr.r) tbody tr.r
     fields:
