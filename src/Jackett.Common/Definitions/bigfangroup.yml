@@ -71,6 +71,22 @@
       type: checkbox
       label: Strip Russian Letters
       default: false
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "added"
+      options:
+        "added": "created"
+        "seed": "seeders"
+        "size": "size"
+        "name": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
 
   search:
     # https://bigfangroup.org/browse.php?search=black+lightning&cat=0&incldead=0&year=0&format=0
@@ -92,8 +108,11 @@
       cat: 0
       # 0 active 1 incldead 2 onlydead 3 gold 4 noseed 5 silver 7 BFG
       incldead: 1
+      ajax: 1
       year: 0
       format: 0
+      s: "{{ .Config.sort }}"
+      d: "{{ .Config.type }}"
 
     rows:
       selector: table > tbody#highlighted > tr:has(a[href^="browse.php?cat="])
