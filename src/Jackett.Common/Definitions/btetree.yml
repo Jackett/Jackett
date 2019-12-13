@@ -16,18 +16,30 @@
       search: [q]
       music-search: [q, album, artist, label, year]
 
-  settings: []
+  settings:
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "added"
+      options:
+        "added": "created"
+        "seeders": "seeders"
+        "name": "title"
 
   search:
     paths:
       # http://bt.etree.org/?searchzzzz=&cat=0
       - path: /
     inputs:
-      searchzzzz: "{{if .Query.Artist}}{{ .Query.Artist }}{{else}}{{ .Keywords }}{{end}}"
+      searchzzzz: "{{ if .Query.Artist }}{{ .Query.Artist }}{{else}}{{ .Keywords }}{{end}}"
       cat: 0
+      sort: "{{ .Config.sort }}"
 
     rows:
       selector: table[bgcolor="#CCCCCC"] tbody tr:has(a[href^="download.php"])
+      filters:
+        - name: andmatch
+
     fields:
       category:
         text: "Music"
