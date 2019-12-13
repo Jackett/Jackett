@@ -245,9 +245,10 @@ namespace Jackett.Common.Indexers
             /*
             MinimumRatio = copyFrom.MinimumRatio;
             MinimumSeedTime = copyFrom.MinimumSeedTime;
-            DownloadVolumeFactor = copyFrom.DownloadVolumeFactor;
-            UploadVolumeFactor = copyFrom.UploadVolumeFactor;
             */
+
+            release.DownloadVolumeFactor = 0;
+            release.UploadVolumeFactor = 1;
 
             return release;
         }
