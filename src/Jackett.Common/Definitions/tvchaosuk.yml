@@ -10,7 +10,7 @@
 
   caps:
     categorymappings:
-      - {id: 4, cat: PC, desc: "Applications"}
+      - {id: 4, cat: TV, desc: "Holding Bin"}
       - {id: 29, cat: TV, desc: "Comedy"}
       - {id: 5, cat: TV/Documentary, desc: "Documentary"}
       - {id: 11, cat: TV, desc: "Drama"}
@@ -21,6 +21,7 @@
       - {id: 44, cat: Movies, desc: "Movies"}
       - {id: 45, cat: TV, desc: "News & Current Affairs"}
       - {id: 51, cat: Audio, desc: "Radio"}
+      - {id: 52, cat: TV, desc: "Reality"}
       - {id: 30, cat: TV, desc: "Soaps"}
       - {id: 33, cat: TV, desc: "Sci-Fi"}
       - {id: 42, cat: TV/Sport, desc: "Sport"}
@@ -29,6 +30,30 @@
       search: [q]
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
+
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "created_at"
+      options:
+        "created_at": "created"
+        "seeders": "seeders"
+        "size": "size"
+        "name": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
 
   login:
     path: login
@@ -56,8 +81,8 @@
     paths:
       - path: torrents/filter
     inputs:
-      $raw: "{{range .Categories}}categories[]={{.}}&{{end}}"
-      search: "{{if .Query.IMDBID}}{{else}}{{ .Keywords }}{{end}}"
+      $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
+      search: "{{ if .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
       description: ""
       uploader: ""
       imdb: "{{ .Query.IMDBIDShort }}"
@@ -65,8 +90,9 @@
       tmdb: ""
       mal: ""
       igdb: ""
-      sort: created_at
-      direction: desc
+      sorting: "{{ .Config.sort }}"
+      sort: "{{ .Config.sort }}"
+      direction: "{{ .Config.type }}"
       qty: 100
     rows:
       selector: table > tbody > tr
@@ -92,6 +118,13 @@
         filters:
           - name: replace
             args: ["https://via.placeholder.com/600x900", ""]
+      description:
+        # add a little extra to the banner
+        selector: a[href*="/categories/"] div i
+        attribute: data-original-title
+        filters:
+          - name: replace
+            args: [" torrent", ""]
       comments:
         selector: a[href*="#comments"]
         attribute: href
@@ -154,4 +187,4 @@
           i[class*="fa-globe text-green"]: 2 # Global Double Upload
           i[class*="fa-certificate text-pink"]: 2 # Featured Torrent
           "*": 1
-# UNIT3D 2.1.1
+# UNIT3D 2.2.6
