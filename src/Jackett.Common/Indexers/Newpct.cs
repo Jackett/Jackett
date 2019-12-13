@@ -904,6 +904,8 @@ namespace Jackett.Common.Indexers
             result.Peers = 1;
 
             result.Title = FixedTitle(result, quality, language);
+            result.DownloadVolumeFactor = 0;
+            result.UploadVolumeFactor = 1;
 
             return result;
         }
