@@ -18,12 +18,34 @@
       - {id: 8, cat: TV, desc: "Musical"}
       - {id: 9, cat: Audio, desc: "Podcast"}
 
-
     modes:
       search: [q, imdbid]
       tv-search: [q, imdbid]
       movie-search: [q, imdbid]
       music-search: [q, imdbid]
+
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "created_at"
+      options:
+        "created_at": "created"
+        "seeders": "seeders"
+        "size": "size"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
 
   login:
     path: login
@@ -48,13 +70,15 @@
     paths:
       - path: torrents
     inputs:
-      $raw: "{{range .Categories}}categories[]={{.}}&{{end}}"
-      title: "{{if .Query.IMDBID}}{{else}}{{ .Keywords }}{{end}}"
+      $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
+      title: "{{ if .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
       imdb: "{{ .Query.IMDBIDShort }}"
-      order_by: created_at
-      direction: desc
+      order_by: "{{ .Config.sort }}"
+      direction: "{{ .Config.type }}"
+
     rows:
       selector: table > tbody > tr
+
     fields:
       category:
         selector: a[href*="?category_"]
