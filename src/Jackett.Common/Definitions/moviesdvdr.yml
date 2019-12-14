@@ -14,6 +14,7 @@
 
     modes:
       search: [q]
+      movie-search: [q]
 
   settings: []
 
@@ -25,8 +26,10 @@
       - path: /
     inputs:
       s: "{{ .Keywords }}"
+
     rows:
       selector: div.hitem
+
     fields:
       category:
         text: "Movies"
@@ -45,6 +48,12 @@
         text: now
       description:
         selector: span
+      size:
+        text: "500 MB"
+      seeders:
+        text: 1
+      leechers:
+        text: 1
       downloadvolumefactor:
         text: 0
       uploadvolumefactor:
