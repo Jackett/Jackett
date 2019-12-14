@@ -15,7 +15,9 @@
 
   caps:
     categorymappings:
-      - {id: 1, cat: Other, desc: "Other"}
+      - {id: films, cat: Movies, desc: "Movies"}
+      - {id: series, cat: TV, desc: "TV"}
+      - {id: other, cat: Other, desc: "Other"}
 
     modes:
       search: [q]
@@ -50,7 +52,7 @@
 
     fields:
       category:
-        text: 1
+        text: other
       site_date:
         selector: a
         filters:

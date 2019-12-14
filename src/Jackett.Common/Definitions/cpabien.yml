@@ -43,10 +43,12 @@
     categorymappings:
       - {id: films, cat: Movies, desc: "Movies"}
       - {id: series, cat: TV, desc: "TV"}
+      - {id: other, cat: Other, desc: "Other"}
 
     modes:
       search: [q]
       tv-search: [q, season, ep]
+      movie-search: [q]
 
   settings: []
 
@@ -57,10 +59,14 @@
   search:
     paths:
     # https://vww.cpasbien-fr.fr/index.php?do=search&subaction=search&story=dickinson%20s01e10
-      - path: "{{if .Keywords}}index.php?do=search&subaction=search&story={{.Keywords}}{{else}}{{end}}"
+      - path: "{{ if .Keywords }}index.php?do=search&subaction=search&story={{ .Keywords }}{{else}}{{end}}"
+
     rows:
       selector: div#gauche > table > tbody > tr:has(a)
+
     fields:
+      category:
+        text: other
       site_date:
         selector: a
         filters:
@@ -91,7 +97,7 @@
       size:
         selector: div.poid
       date:
-        text: "now"
+        text: now
       seeders:
         text: 0
       seeders:
@@ -103,6 +109,6 @@
         selector: div.down
         optional: true
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
