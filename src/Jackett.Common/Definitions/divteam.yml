@@ -64,6 +64,22 @@
       type: info
       label: How to get the Cookie
       default: "<ol><li>Login to this tracker in your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find 'cookie:' in the <b>Request Headers</b> section<li>Copy & paste the whole cookie string to here</ol>"
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "3"
+      options:
+        "3": "created"
+        "5": "seeders"
+        "4": "size"
+        "2": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "2"
+      options:
+        "2": "desc"
+        "1": "asc"
           
   login:
     method: cookie
@@ -78,13 +94,16 @@
       - path: index.php
     inputs:
       page: "torrents"
-      category: "{{range .Categories}}{{.}};{{end}}"
-      search: "{{if .Keywords }}{{.Keywords}}{{else}}{{end}}"
+      category: "{{ range .Categories }}{{.}};{{end}}"
+      search: "{{ if .Keywords }}{{ .Keywords }}{{else}}{{end}}"
       active: 0
       options: 0
+      order: "{{ .Config.sort }}"
+      by: "{{ .Config.type }}"
 
     rows:
       selector: table.table.table-bordered > tbody > tr:has(a[href^="download.php?id="])
+
     fields:
       download:
         selector: a[href^="download.php?id="]
@@ -121,13 +140,13 @@
         selector: td:nth-last-child(2)
       downloadvolumefactor:
         case:
-          img[src="images/gold.png"]: "0"
-          img[src="images/silver.png"]: "0.5"
-          "*": "1"
+          img[src="images/gold.png"]: 0
+          img[src="images/silver.png"]: 0.5
+          "*": 1
       uploadvolumefactor:
         case:
-          img[src="images/2x.png"]: "2"
-          img[src="images/3x.png"]: "3"
-          img[src="images/4x.png"]: "4"
-          img[src="images/5x.png"]: "5"
-          "*": "1"
+          img[src="images/2x.png"]: 2
+          img[src="images/3x.png"]: 3
+          img[src="images/4x.png"]: 4
+          img[src="images/5x.png"]: 5
+          "*": 1
