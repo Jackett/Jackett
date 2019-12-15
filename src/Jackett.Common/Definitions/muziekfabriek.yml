@@ -1,0 +1,144 @@
+﻿---
+  site: muziekfabriek
+  name: MuziekFabriek
+  description: "MuziekFabriek is a DUTCH Semi-Private Torrent Tracker for MUSIC"
+  language: nl-NL
+  type: semi-private
+  encoding: UTF-8
+  links:
+    - https://www.muziekfabriek.org/
+
+  caps:
+    categorymappings:
+      - {id: 1, cat: Audio, desc: "Eigen Verzamel"}
+      - {id: 2, cat: Audio, desc: "NL Album"}
+      - {id: 3, cat: Audio, desc: "NL Diverse"}
+      - {id: 4, cat: Audio, desc: "Engels"}
+      - {id: 5, cat: Audio, desc: "Country"}
+      - {id: 6, cat: Audio, desc: "DVD Muziek"}
+      - {id: 7, cat: Audio, desc: "Instrumentaal"}
+      - {id: 8, cat: Audio, desc: "Reggae"}
+      - {id: 9, cat: Audio, desc: "Kinderen"}
+      - {id: 28, cat: Audio, desc: "Allerlei Albums"}
+      - {id: 11, cat: Audio, desc: "Duits"}
+      - {id: 26, cat: Audio, desc: "Carnaval"}
+      - {id: 13, cat: Audio, desc: "Verzamel"}
+      - {id: 14, cat: Audio, desc: "Soul"}
+      - {id: 15, cat: Audio, desc: "Classic"}
+      - {id: 16, cat: Audio, desc: "Rock-Roll"}
+      - {id: 17, cat: Audio, desc: "Blues"}
+      - {id: 18, cat: Audio, desc: "MuziekFabriek"}
+      - {id: 19, cat: Audio, desc: "Trance"}
+      - {id: 20, cat: Audio, desc: "Dance"}
+      - {id: 21, cat: Audio, desc: "Oldies"}
+      - {id: 22, cat: Audio, desc: "Hardcore"}
+      - {id: 23, cat: Audio, desc: "Sint"}
+      - {id: 24, cat: Audio, desc: "Kerstfeest"}
+
+    modes:
+      search: [q]
+      music-search: [q, album, artist, label, year]
+
+  login:
+    path: takelogin.php
+    method: post
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: table[border="0"][cellspacing="0"][cellpadding="10"] tr td font[color="orange"]
+    test:
+      path: /
+      selector: :has(a[href="logout.php"])
+
+  search:
+    paths:
+      - path: browse.php
+    inputs:
+      $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+      search: "{{ if .Query.Artist }}{{ .Query.Artist }}{{else}}{{ .Keywords }}{{end}}"
+      incldead: 1
+
+    rows:
+      selector: table.mainouter
+      filters:
+        - name: andmatch
+
+    fields:
+      title:
+        selector: a[href^="details.php?id="]
+      details:
+        selector: a[href^="details.php?id="]
+        attribute: href
+      category:
+        selector: a[href^="browse.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      download:
+        selector: a[href^="download.php?id="]
+        attribute: href
+      banner:
+        selector: div[id^="Style"] img
+        attribute: src
+      size:
+        selector: td:nth-child(4) table tr:nth-child(1) td:nth-child(2)
+        filters:
+          - name: regexp
+            args: "(.+?) in"
+      files:
+        selector: td:nth-child(4) table tr:nth-child(1) td:nth-child(2)
+        filters:
+          - name: regexp
+            args: "in (\\d+) bestan"
+      grabs:
+        selector: td:nth-child(4) table tr:nth-child(2) td:nth-child(1)
+        filters:
+          - name: regexp
+            args: (\d+)
+      date:
+        selector: td:nth-child(4) table tr:nth-child(2) td:nth-child(3)
+        filters:
+          - name: replace
+            args: ["januari", "January"]
+          - name: replace
+            args: ["februari", "February"]
+          - name: replace
+            args: ["maart", "March"]
+          - name: replace
+            args: ["april", "April"]
+          - name: replace
+            args: ["mei", "May"]
+          - name: replace
+            args: ["juni", "June"]
+          - name: replace
+            args: ["juli", "July"]
+          - name: replace
+            args: ["augustus", "August"]
+          - name: replace
+            args: ["september", "September"]
+          - name: replace
+            args: ["oktober", "October"]
+          - name: replace
+            args: ["november", "November"]
+          - name: replace
+            args: ["december", "December"]
+          - name: re_replace
+            args: ["\\s*om\\s*"," "]
+          - name: dateparse
+            args: "2 January 2006 15:04:05"
+      seeders:
+        text: 0
+      seeders:
+        optional: true
+        selector: td:nth-child(4) table tr:nth-child(3) td:nth-child(5) font b
+      leechers:
+        text: 0
+      leechers:
+        optional: true
+        selector: td:nth-child(4) table tr:nth-child(3) td:nth-child(5) font font b
+      downloadvolumefactor:
+        text: 0
+      uploadvolumefactor:
+        text: 1

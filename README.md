@@ -136,6 +136,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * LostFilm.tv
  * Marine Tracker
  * Metal Tracker
+ * MuziekFrabriek
  * MVGroup Forum
  * MVGroup Main
  * NetHD (VietTorrent)
