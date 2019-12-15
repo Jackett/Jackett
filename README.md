@@ -219,7 +219,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * CrazySpirits
  * CrnaBerza
  * DanishBits (DB)
- * Dark-Shadow
  * Das Unerwartete
  * DataScene (DS)
  * DesiReleasers

@@ -373,6 +373,7 @@ namespace Jackett.Updater
                 "Definitions/mkvcage.yml",
                 "Content/congruent_outline.png",
                 "Content/crissXcross.png",
+                "Definitions/dark-shadow.yml",
             };
 
             foreach (var oldFile in oldFiles)
