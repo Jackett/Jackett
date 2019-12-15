@@ -54,18 +54,26 @@
     - name: password
       type: password
       label: Password
-    - name: incldead
-      type: select
-      label: "Search Torrents that are:"
-      default: "0"
-      options:
-        "0" : "Active"
-        "1": "Including Dead"
-        "2": "Only Dead"
     - name: info
       type: info
       label: Results Per Page
       default: For best results, change the 'Torrents per page' setting to 100 on your 'Personal Options' from the 'Personal' menu on the Crna Berza webpage.
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "4"
+      options:
+        "4": "created"
+        "7": "seeders"
+        "5": "size"
+        "1": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
 
   login:
     path: login.php
@@ -74,7 +82,6 @@
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
-      submitme: "X"
     error:
       - selector: h2
         message:
@@ -92,13 +99,16 @@
 
   search:
     paths:
-    # http://www.crnaberza.com/browse.php?c52=1&c20=1&c73=1&c48=1&c29=1&c75=1&c77=1&c78=1&c30=1&c34=1&incldead=1&search=star+trek
+    # http://www.crnaberza.com/browse.php?c52=1&c20=1&c34=1&incldead=1&search=star+trek
       - path: browse.php      
     inputs:
-      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
       search: "{{ .Keywords }}"
-      searchin: "title"
-      incldead: "{{ .Config.incldead }}"
+      searchin: title
+      # 0 active 1 incldead 2 onlydead
+      incldead: 1
+      sort: "{{ .Config.sort }}"
+      type: "{{ .Config.type }}"
 
     rows:
       selector: tr:has(td.trowtorrent)
@@ -121,16 +131,12 @@
         selector: td:nth-of-type(4)
       date:
         # Danas<br>08:10 AM
+        # Juče<br>06:44 PM
         optional: true
-        selector: td:nth-of-type(6):contains("Danas")
+        selector: td:nth-of-type(6):contains("Danas"), td:nth-of-type(6):contains("Juče")
         filters:
           - name: replace
             args: ["Danas", "Today"]
-      date:
-        # Juče<br>06:44 PM
-        optional: true
-        selector: td:nth-of-type(6):contains("Juče")
-        filters:
           - name: replace
             args: ["Juče", "Yesterday"]
       date:
@@ -146,14 +152,14 @@
         selector: td:nth-of-type(8) a
         filters:
           - name: regexp
-            args: "([\\d]+)"
+            args: ([\d]+)
       seeders:
         selector: td:nth-of-type(9)
       leechers:
         selector: td:nth-of-type(10)
       downloadvolumefactor:
         case:
-          "img[src$=\"/pic/freedownload.gif\"]": "0"
-          "*": "1"
+          "img[src$=\"/pic/freedownload.gif\"]": 0
+          "*": 1
       uploadvolumefactor:
-        text: "1"
+        text: 1
