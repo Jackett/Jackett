@@ -258,13 +258,29 @@
       - {id: 233, cat: TV, desc: "TV Trailers"}
       - {id: 234, cat: TV, desc: "TV War"}
       - {id: 235, cat: TV, desc: "TV Western"}
+      # cat misc has no subcats
 
     modes:
       search: [q]
       tv-search: [q, season, ep]
       movie-search: [q]
 
-  settings: []
+  settings:
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "added"
+      options:
+        "added": "created"
+        "seeders": "seeders"
+        "size": "size"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
 
   download:
     selector: a[href^="magnet:?xt="]
@@ -275,7 +291,7 @@
       # https://www.demonoid.is/files/?seeded=2&language=0&quality=0&to=on&query=world
       - path: files/
     inputs:
-      $raw: "{{range .Categories}}c{{.}}&{{end}}"
+      $raw: "{{ range .Categories }}c{{.}}&{{end}}"
       # 0 seeded 1 unseeded 2 both
       seeded: 2
       # 0 all 1 English etc
@@ -284,12 +300,13 @@
       quality: 0
       # search in titles only
       to: on
-      query: "{{.Keywords}}"
+      query: "{{ .Keywords }}"
+      sort: "{{ .Config.sort }}"
+      order: "{{ .Config.type }}"
+
     rows:
       selector: table.font_12px tr:has(td[class^="tone_1"])
       after: 1
-#      filters:
-#        - name: andmatch
       dateheaders:
         selector: tr td.added_today:not(:contains("Sponsored links"))
         filters:
@@ -297,6 +314,7 @@
             args: ["Added ", ""]
           - name: replace
             args: ["on  ", ""]
+
     fields:
       title:
         selector: a[href^="/files/details/"]
@@ -325,6 +343,6 @@
       leechers:
         selector: td:nth-last-child(2)
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
