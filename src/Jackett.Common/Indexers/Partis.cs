@@ -1,4 +1,4 @@
-﻿using AngleSharp.Html.Parser;
+using AngleSharp.Html.Parser;
 using CsQuery;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -99,10 +99,10 @@ namespace Jackett.Common.Indexers
             };
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, String.Empty, false, null, null, true);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Cookies.Contains(configData.Username.Value), () =>
+            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("/odjava"), () =>
             {
                 CQ dom = result.Content;
-                var errorMessage = dom["div.obvet > span.najvecji"].Html(); // Prijava ni uspela! obvestilo
+                var errorMessage = dom["div.obvet > span.najvecji"].Text().Trim(); // Prijava ni uspela! obvestilo
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
             return IndexerConfigurationStatus.RequiresTesting;
@@ -129,7 +129,7 @@ namespace Jackett.Common.Indexers
             var searchUrl = SearchUrl + "?" + queryCollection.GetQueryString();
 
             // log search URL
-            logger.Info(string.Format("Searh URL Partis: {0}", searchUrl));
+            logger.Info(string.Format("Searh URL Partis_: {0}", searchUrl));
 
             // add necessary headers
             var heder = new Dictionary<string, string>
@@ -141,12 +141,12 @@ namespace Jackett.Common.Indexers
             results = await RequestStringWithCookies(searchUrl, null, SearchUrl, heder);
             await FollowIfRedirect(results, null, null, null, true);
 
-            // are we logged in? check based on cookies
-            if (!results.Cookies.Contains(configData.Username.Value))
+            /// are we logged in?
+            if (!results.Content.Contains("/odjava"))
             {
                 await ApplyConfiguration(null);
             }
-            // another request with specific query - NEEDED for succesful response
+            // another request with specific query - NEEDED for succesful response - return data
             results = await RequestStringWithCookies(SiteLink + "brskaj/?rs=false&offset=0", null, SearchUrl, heder);
             await FollowIfRedirect(results, null, null, null, true);
 
