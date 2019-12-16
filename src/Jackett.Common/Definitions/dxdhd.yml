@@ -1,7 +1,7 @@
 ---
   site: dxdhd
   name: DXDHD
-  description: "General Tracker"
+  description: "DXDHD is a Private General Tracker"
   language: en-us
   type: private
   encoding: UTF-8
@@ -28,6 +28,30 @@
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
 
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "created_at"
+      options:
+        "created_at": "created"
+        "seeders": "seeders"
+        "size": "size"
+        "name": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
+
   login:
     path: login
     method: form
@@ -52,10 +76,10 @@
 
   search:
     paths:
-      - path: filterTorrents
+      - path: torrents/filter
     inputs:
-      $raw: "{{range .Categories}}categories[]={{.}}&{{end}}"
-      search: "{{if .Query.IMDBID}}{{else}}{{ .Keywords }}{{end}}"
+      $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
+      search: "{{ if .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
       description: ""
       uploader: ""
       imdb: "{{ .Query.IMDBIDShort }}"
@@ -63,18 +87,21 @@
       tmdb: ""
       mal: ""
       igdb: ""
-      sort: created_at
-      direction: desc
+      sorting: "{{ .Config.sort }}"
+      sort: "{{ .Config.sort }}"
+      direction: "{{ .Config.type }}"
       qty: 100
+
     rows:
       selector: table > tbody > tr
+
     fields:
       category:
         selector: a[href*="/categories/"]
         attribute: href
         filters:
           - name: regexp
-            args: "/categories/.*?\\.(\\d+)"
+            args: "/categories/(\\d+)"
       title:
         selector: a.view-torrent
       download:
@@ -152,4 +179,4 @@
           i[class*="fa-globe text-green"]: 2 # Global Double Upload
           i[class*="fa-certificate text-pink"]: 2 # Featured Torrent
           "*": 1
-# UNIT3D 1.9.4
+# UNIT3D 2.2.7
