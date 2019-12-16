@@ -330,6 +330,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Pleasuredome
  * PolishSource (PS)
  * PolishTracker
+ * Pornbay
  * Pretome
  * PrivateHD (PHD)
  * ProAudioTorrents (PAT)
