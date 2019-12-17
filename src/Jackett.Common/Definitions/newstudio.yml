@@ -16,18 +16,40 @@
       search: [q]
       tv-search: [q, season, ep]
 
-  settings: []
+  settings:
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "1"
+      options:
+        "1": "created"
+        "10": "seeders"
+        "7": "size"
+        "2": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "2"
+      options:
+        "2": "desc"
+        "1": "asc"
 
   search:
     paths:
-      - path: "tracker.php?nm={{ .Keywords}}"
-      - path: "tracker.php?nm={{ .Keywords}}&start=50"
-      - path: "tracker.php?nm={{ .Keywords}}&start=100"
-      - path: "tracker.php?nm={{ .Keywords}}&start=150"
+      - path: tracker.php
+      - path: tracker.php
+        inputs:
+          start: 50
+    inputs:
+      nm: "{{.Keywords}}"
+      o: "{{ .Config.sort }}"
+      s: "{{ .Config.type }}"
+
     rows:
       selector: table.well > tbody > tr:has(a[href^="./viewtopic.php?t="])
       filters:
         - name: andmatch
+
     fields:
       title:
         selector: a[href^="./viewtopic.php?t="] > b
@@ -99,9 +121,13 @@
             args: ":00 +05:00"
           - name: dateparse
             args: "2 Jan 06 15:04:05 -07:00"
+      seeders:
+        text: 1
+      leechers:
+        text: 1
       downloadvolumefactor:
         case:
-          img[src="images/tor_gold.gif"]: "0"
-          "*": "1"
+          img[src="images/tor_gold.gif"]: 0
+          "*": 1
       uploadvolumefactor:
-        text: "1"
+        text: 1
