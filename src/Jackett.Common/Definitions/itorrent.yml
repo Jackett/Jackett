@@ -23,14 +23,31 @@
       tv-search: [q, season, ep]
       movie-search: [q]
 
-  settings: []
+  settings:
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "date_added"
+      options:
+        "date_added": "created"
+        "seeders": "seeders"
+        "size": "size"
+        "title": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "DESC"
+      options:
+        "DESC": "desc"
+        "ASC": "asc"
+
 
   download:
     selector: a[href^="/torrentfiles/"]
 
   search:
     paths:
-      - path: "torrentek/title/{{ .Keywords}}/"
+      - path: "torrentek/title/{{ .Keywords }}/order/{{ .Config.sort }}/by/{{ .Config.type }}/"
     rows:
       selector: tr.gradeX
       filters:
