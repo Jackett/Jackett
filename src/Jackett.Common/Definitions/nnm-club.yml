@@ -16,6 +16,22 @@
       type: checkbox
       label: Strip Russian Letters
       default: true
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "1"
+      options:
+        "1": "created"
+        "10": "seeders"
+        "7": "size"
+        "2": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "2"
+      options:
+        "2": "desc"
+        "1": "asc"
 
   caps:
     categorymappings:
@@ -723,22 +739,10 @@
     paths:
       - path: forum/tracker.php
         method: post
-      - path: forum/tracker.php
-        inputs:
-          start: 50
-        method: post
-      - path: forum/tracker.php
-        inputs:
-          start: 100
-        method: post
-      - path: forum/tracker.php
-        inputs:
-          start: 150
-        method: post
     inputs:
       $raw: "{{ if .Categories }}{{ range .Categories }}f[]={{.}}&{{end}}{{else}}f[]=-1{{end}}"
-      o: 1
-      s: 2
+      o: "{{ .Config.sort }}"
+      s: "{{ .Config.type }}"
       tm: -1
       shf: 1
       sha: 1
@@ -748,8 +752,10 @@
       nm: "{{ .Keywords }}"
       pn: ""
       submit: "Поиск"
+
     rows:
       selector: table.forumline.tablesorter > tbody > tr:has(a[href^="viewtopic.php?t="]):has(a[href^="download.php?id="])
+
     fields:
       category:
         selector: a[href^="tracker.php?f="]
@@ -803,10 +809,10 @@
         selector: td.leechmed > b
       downloadvolumefactor:
         case:
-          img[src$="/images/gold.gif"]: "0"
-          img[src$="/images/platinum.gif"]: "0"
-          img[src$="/images/bronze.gif"]: "0.75"
-          img[src$="/images/silver.gif"]: "0.5"
-          "*": "1"
+          img[src$="/images/gold.gif"]: 0
+          img[src$="/images/platinum.gif"]: 0
+          img[src$="/images/bronze.gif"]: 0.75
+          img[src$="/images/silver.gif"]: 0.5
+          "*": 1
       uploadvolumefactor:
-        text: "1"
+        text: 1
