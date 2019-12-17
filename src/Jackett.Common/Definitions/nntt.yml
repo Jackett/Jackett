@@ -640,7 +640,23 @@
     modes:
       search: [q]
 
-  settings: []
+  settings:
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "t"
+      options:
+        "t": "created"
+        "ts": "seeders"
+        "sz": "size"
+        "i": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "d"
+      options:
+        "d": "desc"
+        "a": "asc"
 
   download:
     selector: a[href^="./download/file.php?id="]
@@ -654,11 +670,14 @@
       sf: titleonly
       fp: 1
       tracker_search: torrent
-      keywords: "{{if .Keywords }}{{.Keywords}}{{else}}2019{{end}}"
-      $raw: "{{range .Categories}}&fid[]={{.}}{{end}}"
+      sk: "{{ .Config.sort }}"
+      sd: "{{ .Config.type }}"
+      keywords: "{{ if .Keywords }}{{ .Keywords }}{{else}}2019{{end}}"
+      $raw: "{{ range .Categories }}&fid[]={{.}}{{end}}"
       
     rows:
       selector: table.tablebg tr.col_line
+
     fields:
       category:
         selector: a[href^="./viewtopic.php?f="]
@@ -721,6 +740,6 @@
           - name: dateparse
             args: "02 Jan 2006"
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
