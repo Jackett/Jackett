@@ -45,13 +45,36 @@
       tv-search: [q, season, ep]
       movie-search: [q]
 
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "added"
+      options:
+        "added": "created"
+        "seeders": "seeders"
+        "size": "size"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
+
   login:
     path: ?p=home&pid=1
     method: form
     form: form#loginbox_form
     submitpath: ajax/login.php
     inputs:
-      action: "login"
+      action: login
       loginbox_membername: "{{ .Config.username }}"
       loginbox_password: "{{ .Config.password }}"
       loginbox_remember: 1
@@ -73,22 +96,26 @@
     # 15 results per page
       - path: /
         inputs:
-          page: "1"
+          page: 1
       - path: /
         inputs:
-          page: "2"
+          page: 2
       - path: /
         inputs:
-          page: "3"
+          page: 3
     inputs:
-      p: "torrents"
-      pid: "10"
-      $raw: "{{range .Categories}}&cid[]={{.}}{{end}}"
+      p: torrents
+      pid: 10
+      $raw: "{{ range .Categories }}&cid[]={{.}}{{end}}"
       keywords: "{{ .Keywords }}"
       # name description both uploader
-      search_type: "name"
+      search_type: name
+      "sortOptions[sortBy]": "{{ .Config.sort }}"
+      "sortOptions[sortOrder]": "{{ .Config.type }}"
+
     rows:
       selector: div.torrent-box[id^="torrent_"]
+
     fields:
       title:
         selector: a[href*="?p=torrents&pid=10&action=details&tid="]
@@ -138,8 +165,8 @@
             args: "02-01-2006 15:04"
       downloadvolumefactor:
         case:
-          img[src$="/torrent_free.png"]: "0"
-          "*": "1"
+          img[src$="/torrent_free.png"]: 0
+          "*": 1
       uploadvolumefactor:
         case:
-          "*": "1"
+          "*": 1
