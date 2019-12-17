@@ -102,19 +102,33 @@
       type: info
       label: Category for Sonarr and Radarr
       default: MVGroup does not use categories. In your Sonarr or Radarr Torznab Indexer settings, set the category to 100001.
-
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "added"
+      options:
+        "added": "created"
+        "seeders": "seeders"
+        "filename": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "DESC"
+      options:
+        "DESC": "desc"
+        "ASC": "asc"
   login:
     path: index.php?act=Login&CODE=00
     method: form
     form: form[action^="?act=Login"]
     inputs:
-      "UserName": "{{ .Config.username }}"
-      "PassWord": "{{ .Config.password }}"
-      "Privacy": 1
-      "CookieDate": 0
-      "CODE": "01"
-      "referer": "https://forums.mvgroup.org/index.php?"
-      "act": "Login"
+      UserName: "{{ .Config.username }}"
+      PassWord: "{{ .Config.password }}"
+      Privacy: 1
+      CookieDate: 1
+      CODE: 01
+      referer: "https://forums.mvgroup.org/index.php?"
+      act: Login
     error:
       - selector: div.borderwrap:has(div.tablepad)
         message:
@@ -127,15 +141,18 @@
     paths:
       - path: forumtracker.php
     inputs:
-      "seed": "{{ if .Config.seed }}1{{else}}0{{end}}"
-      "withsubs": "{{ re_replace .Config.withsubs \"_\" \"\" }}"
-      "filter": "{{ if .Config.hidef }}hd+{{else}}{{end}}{{ .Keywords }}"
+      seed: "{{ if .Config.seed }}1{{else}}0{{end}}"
+      withsubs: "{{ re_replace .Config.withsubs \"_\" \"\" }}"
+      filter: "{{ if .Config.hidef }}hd+{{else}}{{end}}{{ .Keywords }}"
+      orderby: "{{ .Config.sort }}"
+      order: "{{ .Config.type }}"
     keywordsfilters: 
       - name: re_replace
         args: ["S01E01", "{{ if .Config.stripS01E01 }}{{else}}S01E01{{end}}"] # optionally remove S01E01 from search
-      
+
     rows:
       selector: tr:has(a.magnetlink)
+
     fields:
       title:
         # fallback title (to prevent abend if optional is not found)
@@ -147,7 +164,7 @@
           - name: re_replace
             args: ["^BBC (.*)", "{{ if .Config.dropbbc }}{{ else }}BBC {{ end }}$1"]
           - name: append
-            args: "{{ if .Config.stripS01E01 }} S01E01{{else}}{{end}}"
+            args: "{{ if .Config.stripS01E01 }}{{else}} S01E01{{end}}"
       details:
         optional: true
         selector: td.singleindent a[href^="/index.php?showtopic="]
@@ -159,7 +176,7 @@
         selector: td a.magnetlink
         attribute: href
       category:
-        text: "1"
+        text: 1
       size:
         text: "500 MB"
       date:
@@ -174,6 +191,6 @@
       grabs:
         selector: td:nth-of-type(6)
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
