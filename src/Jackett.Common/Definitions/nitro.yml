@@ -28,7 +28,22 @@
       tv-search: [q, season, ep]
       movie-search: [q]
 
-  settings: []
+  settings:
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "data"
+      options:
+        "data": "created"
+        "seeds": "seeders"
+        "size": "size"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
 
   search:
     paths:
@@ -40,9 +55,12 @@
       per: 50
       # 0 all 1 active 2 dead
       active: 1
-      order: data
+      order: "{{ .Config.sort }}"
+      by: "{{ .Config.type }}"
+
     rows:
       selector: table[width="100%"] > tbody > tr:has(a[onclick="getMagnet(this)"])
+
     fields:
       title:
         selector: a[href^="/torrent/"]
