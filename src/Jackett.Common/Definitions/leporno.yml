@@ -8,8 +8,6 @@
   links:
     - http://leporno.org/
 
-  settings: []
-
   caps:
     categorymappings:
       - {id: 1, cat: XXX, desc: "XXX"}
@@ -18,6 +16,24 @@
       search: [q]
       tv-search: [q, season, ep]
       movie-search: [q]
+
+  settings:
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "1"
+      options:
+        "1": "created"
+        "10": "seeders"
+        "7": "size"
+        "2": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "2"
+      options:
+        "2": "desc"
+        "1": "asc"
 
   download:
     selector: a[href*="/dl.php?id="]
@@ -28,8 +44,8 @@
         method: post
     inputs:
       "f[]": -1
-      o: 1
-      s: 2
+      o: "{{ .Config.sort }}"
+      s: "{{ .Config.type }}"
       tm: -1
       sns: -1
       srg: -1
@@ -38,9 +54,11 @@
       pn: ""
       nm: "{{ .Keywords }}"
       allw: 1
-      submit: "Search"
+      submit: Search
+
     rows:
       selector: table#tor-tbl tr[id^="tor_"]
+
     fields:
       title:
         selector: a[href^="./viewtopic.php?t="]
