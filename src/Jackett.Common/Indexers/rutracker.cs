@@ -1593,6 +1593,18 @@ namespace Jackett.Common.Indexers
                         }
                         else if (configData.StripRussianLetters.Value)
                         {
+                            if (release.Category.Contains(TorznabCatType.Movies.ID) || release.Category.Contains(TorznabCatType.MoviesHD.ID))
+                            {
+                                // remove director's name from title
+                                // rutracker movies titles look like: russian name / english name (russian director / english director) other stuff
+                                // Ирландец / The Irishman (Мартин Скорсезе / Martin Scorsese) [2019, США, криминал, драма, биография, WEB-DL 1080p] Dub (Пифагор) + MVO (Jaskier) + AVO (Юрий Сербин) + Sub Rus, Eng + Original Eng
+                                // this part should be removed: (Мартин Скорсезе / Martin Scorsese)
+                                var director = new Regex(@"(\([А-Яа-яЁё\W]+)\s/\s(.+?)\)");
+                                var title = director.Replace(release.Title, "");
+                                release.Title = title;
+
+                            }
+                            
                             var regex = new Regex(@"(\([А-Яа-яЁё\W]+\))|(^[А-Яа-яЁё\W\d]+\/ )|([а-яА-ЯЁё \-]+,+)|([а-яА-ЯЁё]+)");
                             release.Title = regex.Replace(release.Title, "");
                         }
