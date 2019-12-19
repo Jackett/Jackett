@@ -381,6 +381,7 @@ namespace Jackett.Updater
                 "Definitions/torviet.yml",
                 "Definitions/waffles.yml",
                 "Definitions/rgu.yml",
+                "Definitions/elittracker.yml",
             };
 
             foreach (var oldFile in oldFiles)
