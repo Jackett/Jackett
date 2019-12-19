@@ -376,7 +376,6 @@ namespace Jackett.Updater
                 "Definitions/dark-shadow.yml",
                 "Definitions/bitme.yml",
                 "Definitions/asiandvdclub.yml",
-                "Definitions/hdtorrentsit.yml",
                 "Definitions/music-master.yml",
                 "Definitions/torviet.yml",
                 "Definitions/waffles.yml",
