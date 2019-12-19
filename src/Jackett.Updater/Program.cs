@@ -377,6 +377,7 @@ namespace Jackett.Updater
                 "Definitions/bitme.yml",
                 "Definitions/asiandvdclub.yml",
                 "Definitions/hdtorrentsit.yml",
+                "Definitions/music-master.yml",
             };
 
             foreach (var oldFile in oldFiles)
