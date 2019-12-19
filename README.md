@@ -343,7 +343,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Red Star Torrent (RST)
  * RetroFlix
  * RevolutionTT
- * RGU
  * RoDVD (Cinefiles)
  * Romanian Metal Torrent (RMT)
  * RPTorrents

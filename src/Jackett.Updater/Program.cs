@@ -380,6 +380,7 @@ namespace Jackett.Updater
                 "Definitions/music-master.yml",
                 "Definitions/torviet.yml",
                 "Definitions/waffles.yml",
+                "Definitions/rgu.yml",
             };
 
             foreach (var oldFile in oldFiles)
