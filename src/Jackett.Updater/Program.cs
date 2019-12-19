@@ -376,6 +376,7 @@ namespace Jackett.Updater
                 "Definitions/dark-shadow.yml",
                 "Definitions/bitme.yml",
                 "Definitions/asiandvdclub.yml",
+                "Definitions/hdtorrentsit.yml",
             };
 
             foreach (var oldFile in oldFiles)

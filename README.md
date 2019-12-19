@@ -274,7 +274,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HDME
  * HDRoute
  * HDSky
- * HDTorrents.it
  * HDTurk
  * HDU
  * HDZone
