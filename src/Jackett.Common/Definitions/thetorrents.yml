@@ -66,9 +66,8 @@
       tv-search: [q, season, ep]
 
   login:
-    path: login.php
-    method: form
-    form: form[action="takelogin.php"]
+    path: takelogin.php
+    method: post
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
@@ -81,9 +80,10 @@
     paths:
       - path: browse.php
     inputs:
-      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-      search: "{{ .Query.Keywords }}"
-      incldead: "1"
+      $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+      search: "{{ .Keywords }}"
+      incldead: 1
+
     rows:
       selector: table > tbody > tr:has(a[href^="details.php?id="])
       dateheaders:
@@ -92,6 +92,7 @@
         filters:
           - name: dateparse
             args: "Monday 2-January-2006"
+
     fields:
       title:
         selector: a[href^="details.php?id="]
@@ -142,9 +143,9 @@
         selector: td:nth-child(9)
       downloadvolumefactor:
         case:
-          img[title="FreeLeech"]: "0"
-          "*": "1"
+          img[title="FreeLeech"]: 0
+          "*": 1
       uploadvolumefactor:
         case:
-          img[title="DoubleUpload"]: "2"
-          "*": "1"
+          img[title="DoubleUpload"]: 2
+          "*": 1
