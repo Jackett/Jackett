@@ -174,7 +174,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Araba Fenice (Phoenix)
  * Asgaard (AG)
  * AsianCinema
- * AsianDVDClub
  * AST4u
  * Audiobook Torrents (ABT)
  * AudioNews (AN)

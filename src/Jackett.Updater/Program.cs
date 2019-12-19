@@ -375,6 +375,7 @@ namespace Jackett.Updater
                 "Content/crissXcross.png",
                 "Definitions/dark-shadow.yml",
                 "Definitions/bitme.yml",
+                "Definitions/asiandvdclub.yml",
             };
 
             foreach (var oldFile in oldFiles)
