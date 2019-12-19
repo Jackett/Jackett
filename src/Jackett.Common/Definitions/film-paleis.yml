@@ -40,9 +40,8 @@
       movie-search: [q]
 
   login:
-    path: login.php
-    method: form
-    form: form[action="takelogin.php"]
+    path: takelogin.php
+    method: post
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
@@ -59,10 +58,12 @@
       $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
       search: "{{ .Keywords }}"
       incldead: 1
+
     rows:
       selector: table.mainouter
       filters:
         - name: andmatch
+
     fields:
       title:
         selector: a[href^="details.php?id="]
