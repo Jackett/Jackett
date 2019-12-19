@@ -419,7 +419,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * UnionGang
  * UnlimitZ
  * Vizuk
- * Waffles
  * World-In-HD
  * World-of-Tomorrow
  * x-ite.me (XM)

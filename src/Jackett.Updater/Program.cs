@@ -379,6 +379,7 @@ namespace Jackett.Updater
                 "Definitions/hdtorrentsit.yml",
                 "Definitions/music-master.yml",
                 "Definitions/torviet.yml",
+                "Definitions/waffles.yml",
             };
 
             foreach (var oldFile in oldFiles)
