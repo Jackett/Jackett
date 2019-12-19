@@ -432,6 +432,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * xBytesV2
  * XSpeeds (XS)
  * XWTorrents (XWT)
+ * XWT-Classics
  * Xthor
  * XtremeFile
  * XtreMeZone (MYXZ)
