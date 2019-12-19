@@ -405,7 +405,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TorrentSeeds (TS)
  * Torrent-Syndikat
  * TOrrent-tuRK (TORK)
- * TorViet  (HDVNBits)
  * TotallyKids (TK)
  * ToTheGlory
  * TranceTraffic
