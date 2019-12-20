@@ -480,9 +480,15 @@
       sns: -1
 
     rows:
-      selector: tr[id^="tor_"]
+      selector: tr[id^="tor_"]:has(a[href^="./download.php?id="])
 
     fields:
+      category:
+        selector: td a.gen
+        attribute: href
+        filters:
+          - name: querystring
+            args: f
       title:
         selector: a.genmed
         filters:
@@ -508,15 +514,8 @@
         selector: a.genmed
         attribute: href
       download:
-        optional: true
         selector: a[href^="./download.php?id="]
         attribute: href
-      category:
-        selector: td a.gen
-        attribute: href
-        filters:
-          - name: querystring
-            args: f
       size:
         selector: td:nth-child(6) > u
       date:
