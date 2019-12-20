@@ -11,13 +11,13 @@
   caps:
     categorymappings:
       - {id: "Films", cat: Movies, desc: "Films"}
-      - {id: "Films_Animation", cat: TV/Anime, desc: "Films Animation"}
+      - {id: "Films_Animations", cat: TV/Anime, desc: "Films Animation"}
       - {id: "Animes", cat: TV/Anime, desc: " Séries Animations"}
       - {id: "Series", cat: TV, desc: "TV Series"}
       - {id: "Documentaires", cat: TV/Documentary, desc: "TV Documentaires"}
       - {id: "Emissions", cat: TV, desc: "TV Emissions"}
       - {id: "Sports", cat: TV/Sport, desc: "TV Sports"}
-      - {id: "Spectacles_Concerts", cat: TV, desc: "TV Spectacles/Concerts"}
+      - {id: "Spectacles", cat: TV, desc: "TV Spectacles/Concerts"}
       - {id: "Karaoke_Video", cat: Audio/Video, desc: "Karaoké Vidéo"}
       - {id: "Videos_Clips", cat: Audio/Video, desc: "TV Videos Clips"}
       - {id: "Musiques", cat: Audio, desc: "Audio Musiques"}
@@ -120,7 +120,7 @@
         attribute: src
         filters:
           - name: regexp
-            args: "/img/(.+?).png"
+            args: "/img/NewIcones/(.+?).png"
       title:
         selector: a.view-torrent
       download:
