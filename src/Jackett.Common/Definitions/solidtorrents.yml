@@ -28,14 +28,24 @@
       tv-search: [q, season, ep]
       movie-search: [q]
 
-  settings: []
+  settings:
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "date"
+      options:
+        "date": "created"
+        "seeders": "seeders"
+        "size": "size"
 
   search:
     paths:
        # https://solidtorrents.net/search?q=gotham%20s05e02&sort=date&category=all
-      - path: "search?q={{.Keywords}}&sort=date&category=all"
+      - path: "search?q={{ .Keywords }}&sort={{ .Config.sort }}&category=all"
+
     rows:
       selector: div[role="listitem"]:has(a[href^="magnet:?xt="])
+
     fields:
       title:
         selector: div[class$="__title"] a[title]
@@ -51,6 +61,8 @@
         filters:
           - name: regexp
             args: "(.+?) \\|"
+      size:
+        selector: div.v-list__tile__sub-title:last-of-type strong
       date:
         selector: div.v-list__tile__content div:nth-of-type(2)
         filters:
@@ -62,15 +74,13 @@
             args: ["a ", "1 "]
           - name: regexp
             args: "(\\d+ \\w+ \\w+)"
+      grabs:
+        selector: div.v-list__tile__sub-title span:last-of-type
       seeders:
         selector: div.v-list__tile__sub-title span.green--text
       leechers:
         selector: div.v-list__tile__sub-title span.red--text
-      grabs:
-        selector: div.v-list__tile__sub-title span:last-of-type
-      size:
-        selector: div.v-list__tile__sub-title:last-of-type strong
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
