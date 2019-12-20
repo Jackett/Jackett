@@ -31,15 +31,22 @@
         2_: "Real Life"
         2_1: "Real Life - Photobooks and Pictures"
         2_2: "Real Life - Videos"
-    - name: filter-id
+    - name: sort
       type: select
-      label: Filter
-      default: "0"
+      label: Sort requested from site
+      default: "2"
       options:
-        0: "Show all"
-        1: "Filter Remakes"
-        2: "Trusted"
-        3: "A+"
+        "2": "created"
+        "5": "seeders"
+        "4": "size"
+        "1": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "false"
+      options:
+        "false": "desc"
+        "true": "asc"
 
   caps:
     categorymappings:
@@ -54,6 +61,7 @@
       - {id: 2_,  cat: XXX, desc: "Adult Real Life"}
       - {id: 2_1,  cat: XXX, desc: "Adult Photobooks and Pictures"}
       - {id: 2_2,  cat: XXX, desc: "Adult Videos"}
+
     modes:
       search: [q]
       tv-search: [q]
@@ -62,11 +70,16 @@
     paths:
       - path: search
     inputs:
-      q: "{{ .Query.Keywords }}"
+      q: "{{ .Keywords }}"
       c: "{{ .Config.cat-id }}"
-      s: "{{ .Config.filter-id }}"
+      # 0 all 1 remakes 2 trusted 3 A+
+      s: 0
+      sort: "{{ .Config.sort }}"
+      order: "{{ .Config.type }}"
+
     rows:
       selector: tr.torrent-info
+
     fields:
       title:
         selector: td.tr-name a
@@ -83,11 +96,17 @@
         selector: a[title="Magnet Link"]
         attribute: href
       seeders:
+        text: 0
+      seeders:
         selector: td.tr-se
         optional: true
       leechers:
+        text: 0
+      leechers:
         selector: td.tr-le
         optional: true
+      grabs:
+        text: 0
       grabs:
         selector: td.tr-dl
         optional: true
@@ -102,6 +121,6 @@
           - name: replace
             args: ["Unknown", "0"]
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
