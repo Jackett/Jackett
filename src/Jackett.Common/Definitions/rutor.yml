@@ -15,32 +15,43 @@
     # albeit you can select a single category in its search options
     # so I've opted not to support categories
     categorymappings:
-      - {id: 4, cat: TV, desc: "TV Shows"}
+      - {id: 1, cat: Movies, desc: "Movies"}
+      - {id: 2, cat: TV, desc: "TV"}
+      - {id: 3, cat: Other, desc: "Other"}
 
     modes:
       search: [q]
 
   settings:
-    - name: method
-      type: select
-      label: Search Method
-      default: "0"
-      options:
-        "0" : "Full Phrase"
-        "1" : "All Words"
-        "2" : "Any Words"
     - name: info
       type: info
       label: A note about RuTor
       default: RuTor does not display categories in its search results page. This definition is probably only suitable for Jackett Dashboard Manual searches.
+    - name: sort
+      type: select
+      label: Sort requested from site (Applies only to Search with Keywords)
+      default: "0"
+      options:
+        "0": "created desc"
+        "1": "created asc"
+        "2": "seeders desc"
+        "3": "seeders asc"
+        "6": "size desc"
+        "7": "size asc"
+        "8": "title desc"
+        "9": "title asc"
 
   search:
     paths:
-      # http://rutor.info/search/0/0/000/0/gotham%2004x01
-      - path:  "{{ if .Keywords }}search/0/0/{{ .Config.method }}00/0/{{ .Keywords }}/{{else}}top/{{end}}"
+      # http://rutor.info/search/0/0/100/0/gotham%2004x01
+      - path:  "{{ if .Keywords }}search/0/0/100/{{ .Config.sort }}/{{ .Keywords }}/{{else}}top/{{end}}"
+
     rows:
       selector: tr:has(td:has(a.downgif))
+
     fields:
+      category:
+        text: 3
       title:
         selector: td:nth-of-type(2) a[href^="/torrent/"]
         filters:
@@ -115,6 +126,6 @@
       leechers:
         selector: td span.red
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
