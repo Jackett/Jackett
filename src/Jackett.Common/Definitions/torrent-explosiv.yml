@@ -80,6 +80,22 @@
     - name: pin
       type: text
       label: Pin
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "added"
+      options:
+        "added": "created"
+        "seeds": "seeders"
+        "size": "size"
+        "name": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
 
   login:
     path: login.php
@@ -108,14 +124,16 @@
     paths:
       - path: selection.php
     inputs:
-      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
       search: "{{ .Keywords }}"
       # 0 name 1 descr 2 both
       blah: 0
-      orderby: added
-      sort: desc
+      orderby: "{{ .Config.sort }}"
+      sort: "{{ .Config.type }}"
+
     rows:
       selector: div.selection_wrap
+
     fields:
       download:
         selector: a.selection_a
@@ -204,27 +222,6 @@
             args: [".", ""]
           - name: replace
             args: [",", "."]
-      seeders:
-        selector: div.selection_unter_aa
-        filters:
-          - name: replace
-            args: [".", ""]
-          - name: replace
-            args: [",", "."]
-      leechers:
-        selector: div.selection_unter_aaa
-        filters:
-          - name: replace
-            args: [".", ""]
-          - name: replace
-            args: [",", "."]
-      downloadvolumefactor:
-        case:
-          ":root:has(div.onlyup)": "0"
-          "*": "1"
-      uploadvolumefactor:
-        case:
-          "*": "1"
         # 2 flavours of dates
       date:
         # Heute 13:30:04
@@ -248,3 +245,24 @@
       description:
         selector: selection_unter_af
         optional: true
+      seeders:
+        selector: div.selection_unter_aa
+        filters:
+          - name: replace
+            args: [".", ""]
+          - name: replace
+            args: [",", "."]
+      leechers:
+        selector: div.selection_unter_aaa
+        filters:
+          - name: replace
+            args: [".", ""]
+          - name: replace
+            args: [",", "."]
+      downloadvolumefactor:
+        case:
+          ":root:has(div.onlyup)": 0
+          "*": 1
+      uploadvolumefactor:
+        case:
+          "*": 1
