@@ -727,6 +727,8 @@
 
     modes:
       search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
 
   settings:
     - name: username
@@ -738,7 +740,23 @@
     - name: info
       type: info
       label: Layout
-      default: "<ul>Only the Classic forum style is supported.<ul>On the TorrentsLocal web site navigate to the <b>Личные настройки (Preferences)</b> section and set the <b>Стиль форума (Forum Style)</b> option to <b>Классическая тема (Classic Theme)</b></ul>"
+      default: "<b>Only the Classic forum style is supported.</b><br/><li>On the TorrentsLocal web site navigate to the <b>Личные настройки (Preferences)</b> section and set the <b>Стиль форума (Forum Style)</b> option to <b>Классическая тема (Classic Theme)</b></li>"
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "1"
+      options:
+        "1": "created"
+        "10": "seeders"
+        "7": "size"
+        "2": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "2"
+      options:
+        "2": "desc"
+        "1": "asc"
 
   login:
     path: login.php
@@ -774,10 +792,8 @@
       prev_df: 1
       prev_ds: 0
       prev_tor_type: 0
-      # sort by 1=registered 2=topicTitle 4=completed 10=seed 11=leech 12=up 13=down 5=replies 6=views 7=size 8=lastPost 9=seedLastSeen
-      o: 1
-      # 1=asc 2=desc
-      s: 2
+      o: "{{ .Config.sort }}"
+      s: "{{ .Config.type }}"
       # show category
       dc: 0
       # show forum
@@ -798,6 +814,7 @@
 
     rows:
       selector: tr[id^="tor_"]
+
     fields:
       title:
         selector: td a.genmed b
@@ -812,7 +829,7 @@
         attribute: href
         filters:
           - name: querystring
-            args: "f"
+            args: f
       size:
         selector: td a.tr-dl
         filters:
@@ -867,9 +884,9 @@
             args: "2-Jan-06"
       downloadvolumefactor:
         case:
-          img[src="styles/images/tor_gold.gif"]: "0"
-          img[src="styles/images/tor_silver.gif"]: "0.5"
-          "*": "1"
+          img[src="styles/images/tor_gold.gif"]: 0
+          img[src="styles/images/tor_silver.gif"]: 0.5
+          "*": 1
       uploadvolumefactor:
         case:
-          "*": "1"
+          "*": 1
