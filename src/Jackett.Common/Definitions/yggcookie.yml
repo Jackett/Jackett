@@ -146,15 +146,26 @@
       type: checkbox
       label: Enhance sonarr compatibility with anime by renaming episode (xxx to exxx). Works only if episode is at the end of the query. Can disturb movies search. (back to the future 3 -> back to the future e3)
       default: false
-# NEW SEARCH ENGINE MIGH BE BETTER THAN THAT
-#    - name: sonarrv3hack
-#      type: checkbox
-#      label: "REMOVED"
-#      default: false
     - name: betasearchengine
       type: checkbox
       label: "Use Beta Search engine URL (Less restrictive) / SonarrV3 Full Series Search NEW"
       default: false
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "publish_date"
+      options:
+        "publish_date": "created"
+        "seed": "seeders"
+        "size": "size"
+        "name": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
 
   login:
     method: cookie
@@ -188,21 +199,23 @@
         args: ["\"", ""]
       - name: trim
     paths:
-      - path: "https://{{ .Config.searchanddlurl }}/{{if .Config.betasearchengine}}new_search{{else}}engine{{end}}/search?category={{ .Config.category }}&name={{if .Config.betasearchengine}}{{ .Keywords }}{{else}}{{ re_replace .Keywords \"\\b[^\\s]+\\b\"  \"\"$&\"\"}}{{end}}&description=&file=&uploader=&sub_category=&do=search&order=desc&sort=publish_date"
-      - path: "https://{{ .Config.searchanddlurl }}/{{if .Config.betasearchengine}}new_search{{else}}engine{{end}}/search?category={{ .Config.category }}&name={{if .Config.betasearchengine}}{{ .Keywords }}{{else}}{{ re_replace .Keywords \"\\b[^\\s]+\\b\"  \"\"$&\"\"}}{{end}}&description=&file=&uploader=&sub_category=&do=search&order=desc&sort=publish_date&page=50"
+      - path: "https://{{ .Config.searchanddlurl }}/{{ if .Config.betasearchengine }}new_search{{else}}engine{{end}}/search?category={{ .Config.category }}&name={{ if .Config.betasearchengine }}{{ .Keywords }}{{else}}{{ re_replace .Keywords \"\\b[^\\s]+\\b\"  \"\"$&\"\"}}{{end}}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}"
+      - path: "https://{{ .Config.searchanddlurl }}/{{ if .Config.betasearchengine }}new_search{{else}}engine{{end}}/search?category={{ .Config.category }}&name={{ if .Config.betasearchengine }}{{ .Keywords }}{{else}}{{ re_replace .Keywords \"\\b[^\\s]+\\b\"  \"\"$&\"\"}}{{end}}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}&page=50"
+
     rows:
-      selector: "table.table > tbody > tr"
+      selector: table.table > tbody > tr
+
     fields:
       _id:
-        selector: ":nth-child(2) > a"
+        selector: td:nth-child(2) > a
         attribute: href
         filters:
           - name: regexp
             args: "/(\\d+)-"
       title_normal:
-        selector: ":nth-child(2) > a"
+        selector: td:nth-child(2) > a
       title_filtered:
-        selector: ":nth-child(2) > a"
+        selector: td:nth-child(2) > a
         filters:
           - name: re_replace
             args: ["(?i)^(?:(.+?)((?:[\\.\\-\\s_\\[]+(?:imax|(?:dvd|bd|tv)(?:rip|scr)|bluray(?:\\-?rip)?|720\\s*p?|1080\\s*p?|vof?|vost(?:fr)?|multi|vf(?:f|q)?[1-3]?|(?:true)?french|eng?)[\\.\\-\\s_\\]]*)*)([\\(\\[]?(?:20|1[7-9])\\d{2}[\\)\\]]?)(.*)$|(.*))$", "$1 $3 $2 $4 $5"]
@@ -250,7 +263,7 @@
       title:
         text: "{{if .Config.enhancedAnime }}{{ .Result.title_anime }}{{else}}{{ .Result.title_phase3 }}{{end}}"
       details:
-        selector: ":nth-child(2) > a"
+        selector: td:nth-child(2) > a
         attribute: href
       category:
       # changed the catid into and hidden div as of last tracker problem
@@ -258,12 +271,12 @@
         
       comments:
         optional: true
-        selector: "td:nth-child(1) > a[href$=\"#comments\"]"
+        selector: td:nth-child(1) > a[href$="#comments"]
         attribute: href
       download:
         text: "https://{{ .Config.searchanddlurl }}/engine/download_torrent?id={{ .Result._id }}"
       date:
-        selector: "td:nth-child(5)"
+        selector: td:nth-child(5)
         filters:
           - name: replace
             args: ["il y a ", ""]
@@ -288,23 +301,23 @@
           - name: append
             args: " ago"
       size:
-        selector: "td:nth-child(6)"
+        selector: td:nth-child(6)
         filters:
           - name: replace
             args: ["o", "B"]
       grabs:
-        selector: "td:nth-child(7)"
+        selector: td:nth-child(7)
       seeders:
         text: 0
       seeders:
-        selector: "td:nth-child(8)"
+        selector: td:nth-child(8)
         optional: true
       leechers:
         text: 0
       leechers:
-        selector: "td:nth-child(9)"
+        selector: td:nth-child(9)
         optional: true
       downloadvolumefactor:
-        text: "1"
+        text: 1
       uploadvolumefactor:
-        text: "1"
+        text: 1
