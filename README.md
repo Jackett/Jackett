@@ -197,6 +197,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BlueBird
  * Blutopia (BLU)
  * BroadcastTheNet (BTN)
+ * BroadCity
  * BrokenStones
  * BTGigs (TG)
  * BTNext (BTNT)
