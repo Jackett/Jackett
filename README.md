@@ -410,7 +410,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * ToTheGlory
  * TranceTraffic
  * Trezzor
- * TurkTorrent (TT) [![(invite needed)][inviteneeded]](#)
+ * TurkTorrent (TT)
  * TV Chaos UK (TVCUK)
  * TV-Vault
  * TVstore
