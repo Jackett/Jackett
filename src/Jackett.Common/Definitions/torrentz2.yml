@@ -40,6 +40,7 @@
       "adult fisting": XXX
       "adult hairy": XXX
       "adult hentai": XXX
+      "adult interracial": XXX
       "adult lesbian": XXX
       "adult milf": XXX
       "adult squirting": XXX
@@ -87,14 +88,6 @@
       # andmatch filter removed, see #3737
 
     fields:
-      category:
-        optional: true
-        selector: dt
-        remove: a
-        filters:
-          - name: re_replace
-            args:  ["[^a-zA-Z\\s]+", ""]
-          - name: trim
       title:
         selector: dt a
       details:
@@ -128,6 +121,14 @@
             args: "magnet:?xt=urn:btih:"
           - name: append
             args: "&dn={{ .Result.magfile }}.torrent&tr=udp://tracker.coppersurfer.tk:6969&tr=udp://tracker.leechers-paradise.org:6969&tr=udp://tracker.opentrackr.org:1337"
+      category:
+        optional: true
+        selector: dt
+        remove: a
+        filters:
+          - name: re_replace
+            args:  ["[^a-zA-Z0-9\\s]+", ""]
+          - name: trim
       date:
         selector: dd span:nth-child(2)
         attribute: title
