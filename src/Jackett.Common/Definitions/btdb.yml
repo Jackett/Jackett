@@ -33,6 +33,7 @@
       options:
         "time": "created"
         "length": "size"
+        "popular": "seeders"
 
   search:
     paths:
