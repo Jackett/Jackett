@@ -210,6 +210,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * CHDBits
  * ChannelX
  * Cinemageddon
+ * CinemaMovies
  * Cinematik
  * CinemaZ (EuTorrents)
  * Classix
