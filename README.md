@@ -127,6 +127,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Deildu
  * DXP (Deaf Experts)
  * EniaHD
+ * ExtremlymTorrents
  * Film-Paleis
  * Gay-Torrents.net
  * Gay-Torrents.org
