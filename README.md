@@ -244,6 +244,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * FANO.IN
  * FileList (FL)
  * Femdomcult
+ * FinVip
  * FocusX
  * FreeTorrent
  * FullMixMusic
