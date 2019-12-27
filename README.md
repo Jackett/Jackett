@@ -241,6 +241,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * eShareNet
  * eStone (XiDER, BeLoad)
  * Ethor.net (Thor's Land)
+ * ExtremeTorrents
  * FANO.IN
  * FileList (FL)
  * Femdomcult
