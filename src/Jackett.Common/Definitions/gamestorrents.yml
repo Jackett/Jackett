@@ -36,8 +36,12 @@
       - path: /
     inputs:
       s: "{{ .Keywords }}"
+
     rows:
       selector: table.metalion > tbody > tr
+      filters:
+        - name: andmatch
+
     fields:
       title:
         selector: td:nth-child(1) a
@@ -65,7 +69,11 @@
             args: ["s", ""]
       description:
         selector: td:nth-child(4)
+      seeders:
+        text: 1
+      leechers:
+        text: 1
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
