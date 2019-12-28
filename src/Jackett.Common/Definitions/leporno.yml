@@ -58,6 +58,8 @@
 
     rows:
       selector: table#tor-tbl tr[id^="tor_"]
+      filters:
+        - name: andmatch
 
     fields:
       title:
