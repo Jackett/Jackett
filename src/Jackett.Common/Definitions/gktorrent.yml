@@ -36,6 +36,7 @@
       - {id: console-games, cat: Console, desc: "Console Games"}
       - {id: pc-games, cat: PC/Games, desc: "PC Games"}
       - {id: books, cat: Books, desc: "Books"}
+      - {id: xxx, cat: XXX, desc: "XXX"}
 
     modes:
       search: [q]
@@ -100,5 +101,6 @@
           .Jeux-Consoles: "console-games"
           .Jeux-PC: "pc-games"
           .Ebook: "books"
+          .Porno: "xxx"
       date:
         text: "now"
