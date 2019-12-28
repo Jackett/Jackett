@@ -92,7 +92,7 @@
       search: "{{ .Keywords }}"
 
     rows:
-      selector: "#Mcol table.table-inverse ~ table.table-inverse > tbody > tr:not(:first-child)"
+      selector: "#Mcol table.table-inverse ~ table.table-inverse > tbody > tr:has(a[href^=\"index.php?page=torrent-details\"])"
 
     fields:
       category:
