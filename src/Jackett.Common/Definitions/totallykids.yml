@@ -18,8 +18,23 @@
     - name: info_results
       type: info
       label: "Search results"
-      default: "For best results, increase the torrents number in your profile to 100.<br />Default is 15."
-
+      default: "Only the <b>xBtit_Default</b> style is supported with this indexer.<br />For best results, increase the torrents number in your profile to 100.<br />Default is 15."
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "3"
+      options:
+        "3": "created"
+        "5": "seeders"
+        "4": "size"
+        "2": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "2"
+      options:
+        "2": "desc"
+        "1": "asc"
   caps:
     categorymappings:
       - {id:  5, cat: Audio, desc: "Music"}
@@ -60,12 +75,15 @@
     inputs:
       page: torrents
       search: "{{ if .Keywords }}{{ .Keywords }}{{else}}{{end}}"
-      category: "{{if .Categories}}{{range .Categories}}{{.}};{{end}}{{else}}0{{end}}"
+      category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{else}}0{{end}}"
       options: 0
       active: 0
+      order: "{{ .Config.sort }}"
+      by: "{{ .Config.type }}"
 
     rows:
       selector: table.lista tr td table.lista tr:has(a[href^="index.php?page=torrent-details"])
+
     fields:
       title:
         selector: td a[href^="index.php?page=torrent-details"]
@@ -118,8 +136,8 @@
         selector: td:nth-child(8)
       downloadvolumefactor:
         case:
-          img[src="gold/gold.gif"]: "0"
-          "*": "1"
+          img[src="gold/gold.gif"]: 0
+          "*": 1
       uploadvolumefactor:
-        text: "1"
+        text: 1
 
