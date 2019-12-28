@@ -83,32 +83,6 @@
         - name: andmatch
 
     fields:
-      title:
-        selector: td:nth-child(1) > div > a
-      details:
-        selector: td:nth-child(1) > div > a[href^="/torrent/"]
-        attribute: href
-      download:
-        selector: td:nth-child(1) > div > a[href^="/torrent/"]
-        attribute: href
-        filters:
-        - name: replace
-          args: ["/torrent/", "/tor/"]
-        - name: regexp
-          args: (^/tor/\d*)
-        - name: append
-          args: ".torrent"
-      date:
-        selector: td:nth-child(2)
-        filters: 
-          - name: re_replace
-            args: ["(day|hour|min)s?$", "$0s ago"] # add ago to relative dates (fresh torrents page)
-      size:
-        selector: td:nth-child(3)
-      seeders:
-        selector: td:nth-child(4)
-      leechers:
-        selector: td:nth-child(5)
       category:
         selector: span[class^="tv"]
         attribute: class
@@ -125,6 +99,45 @@
           span.tv9: IMAGES
           span.tv12: AUDIOBOOK
           "*": "" # some torrents have invalid categories
+      title:
+        selector: td:nth-child(1) > div > a
+      details:
+        selector: td:nth-child(1) > div > a[href^="/torrent/"]
+        attribute: href
+      download:
+        selector: td:nth-child(1) > div > a[href^="/torrent/"]
+        attribute: href
+        filters:
+        - name: replace
+          args: ["/torrent/", "/tor/"]
+        - name: regexp
+          args: (^/tor/\d*)
+        - name: append
+          args: ".torrent"
+      date:
+        selector: td:nth-child(2):contains("/")
+        optional: true
+        filters: 
+          - name: dateparse
+            args: "01/02/2006"
+      date:
+        selector: td:nth-child(2):contains("Today"), td:nth-child(2):contains("Yesterday")
+        optional: true
+        filters: 
+          - name: fuzzytime
+      date:
+        selector: td:nth-child(2):not(:contains("Today")):not(:contains("Yesterday")):not(:contains("/"))
+        optional: true
+        filters: 
+          - name: re_replace
+            args: ["(min|mins)", "minutes"]
+          - name: timeago
+      size:
+        selector: td:nth-child(3)
+      seeders:
+        selector: td:nth-child(4)
+      leechers:
+        selector: td:nth-child(5)
       downloadvolumefactor:
         text: 0
       uploadvolumefactor:
