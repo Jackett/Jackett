@@ -10,7 +10,7 @@
 
   caps:
     categories:
-      "Movies": Movies
+      Movies: Movies
 
     modes:
       search: [q]
@@ -29,10 +29,12 @@
 
     rows:
       selector: div.hitem
+      filters:
+        - name: andmatch
 
     fields:
       category:
-        text: "Movies"
+        text: Movies
       title:
         selector: div.titulo
       details:
