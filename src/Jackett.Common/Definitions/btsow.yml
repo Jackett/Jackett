@@ -31,6 +31,7 @@
         text: other
       title:
         selector: a[href*="/detail/hash/"]
+        attribute: title
       details:
         selector: a[href*="/detail/hash/"]
         attribute: href
