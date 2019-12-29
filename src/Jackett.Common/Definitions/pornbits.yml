@@ -54,7 +54,7 @@
       - path: "browse/{{ if .Keywords }}search/{{ .Config.sort }}/name/{{ .Keywords }}{{else}}index/{{ .Config.sort }}{{end}}"
 
     rows:
-      selector: table.table-condensed tbody tr.success
+      selector: tr.default, tr.danger, tr.success
 
     fields:
       category:
