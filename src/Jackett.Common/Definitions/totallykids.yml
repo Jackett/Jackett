@@ -22,19 +22,19 @@
     - name: sort
       type: select
       label: Sort requested from site
-      default: "3"
+      default: "data"
       options:
-        "3": "created"
-        "5": "seeders"
-        "4": "size"
-        "2": "title"
+        "data": "created"
+        "seeds": "seeders"
+        "size": "size"
+        "filename": "title"
     - name: type
       type: select
       label: Order requested from site
-      default: "2"
+      default: "DESC"
       options:
-        "2": "desc"
-        "1": "asc"
+        "DESC": "desc"
+        "ASC": "asc"
   caps:
     categorymappings:
       - {id:  5, cat: Audio, desc: "Music"}
@@ -76,7 +76,9 @@
       page: torrents
       search: "{{ if .Keywords }}{{ .Keywords }}{{else}}{{end}}"
       category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{else}}0{{end}}"
+      # 0 filename 1 file&descr 2 descr
       options: 0
+      # 0 all 1 activeonly 2 deadonly
       active: 0
       order: "{{ .Config.sort }}"
       by: "{{ .Config.type }}"
