@@ -33,7 +33,7 @@ namespace Jackett.Common.Indexers
         public Yts(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base(name: "YTS",
                 description: "YTS is a Public torrent site specialising in HD movies of small size",
-                link: "https://yts.lt/",
+                link: "https://yts.ms/",
                 caps: new TorznabCapabilities(),
                 configService: configService,
                 client: wc,
@@ -115,6 +115,11 @@ namespace Jackett.Common.Indexers
             var searchUrl = ApiEndpoint + "?" + queryCollection.GetQueryString();
             var response = await RequestStringWithCookiesAndRetry(searchUrl, string.Empty);
 
+            if (response.Status != System.Net.HttpStatusCode.OK)
+            {
+                return releases.ToArray();
+            }
+
             try
             {
                 // returned content might start with an html error message, remove it first
@@ -122,12 +127,6 @@ namespace Jackett.Common.Indexers
                 var jsonContentStr = response.Content.Remove(0, jsonStart);
 
                 var jsonContent = JObject.Parse(jsonContentStr);
-
-                string result = jsonContent.Value<string>("status");
-                if (result != "ok") // query was not successful
-                {
-                    return releases.ToArray();
-                }
 
                 var data_items = jsonContent.Value<JToken>("data");
                 int movie_count = data_items.Value<int>("movie_count");
@@ -180,9 +179,9 @@ namespace Jackett.Common.Indexers
                         release.MagnetUri = new Uri(magnet_uri);
                         release.InfoHash = torrent_info.Value<string>("hash");
 
-                        // ex: 2015-08-16 21:25:08 +0000
+                        // ex: 2019-12-29T21:27:02.000Z
                         var dateStr = torrent_info.Value<string>("date_uploaded");
-                        var dateTime = DateTime.ParseExact(dateStr, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                        var dateTime = DateTime.ParseExact(dateStr, "MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
                         release.PublishDate = DateTime.SpecifyKind(dateTime, DateTimeKind.Utc).ToLocalTime();
                         release.Link = new Uri(torrent_info.Value<string>("url"));                  
                         release.Seeders = torrent_info.Value<int>("seeds");
