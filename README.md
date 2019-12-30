@@ -198,6 +198,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BJ-Share (BJ)
  * BlueBird
  * Blutopia (BLU)
+ * Brasil Tracker
  * BroadcastTheNet (BTN)
  * BroadCity
  * BrokenStones
