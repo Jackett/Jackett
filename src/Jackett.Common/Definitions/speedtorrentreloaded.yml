@@ -69,7 +69,7 @@
       orderby: "added"
       sort: desc
     rows:
-      selector: table.tableinborder > tbody > tr > td > table.tableinborder > tbody > tr:has(a[href^="details.php"])
+      selector: table > tbody > tr > td > table.tableinborder > tbody > tr:has(a[href^="details.php"])
     fields:
       title:
         selector: a[href^="details.php"]
