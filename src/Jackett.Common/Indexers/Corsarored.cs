@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,38 +11,28 @@ using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
-using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
 {
 	public class Corsarored : BaseWebIndexer
 	{
-		private string APILatest { get { return SiteLink + "api/latests"; } }
-		private string APISearch { get { return SiteLink + "api/search"; } }
+		private const int MaxSearchPageLimit = 8; // 1page 25 items, 200
 
-		private Dictionary<string, string> APIHeaders = new Dictionary<string, string>()
+		private readonly Dictionary<string, string> _apiHeaders = new Dictionary<string, string>
 		{
-			{"Content-Type", "application/json"},
+			{"Content-Type", "application/json"}
 		};
 
-		private readonly int MAX_SEARCH_PAGE_LIMIT = 8; // 1page 25 items, 200
-
-		private new ConfigurationData configData
-		{
-			get { return (ConfigurationData)base.configData; }
-			set { base.configData = value; }
-		}
-
 		public Corsarored(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-			: base(name: "Corsaro.red",
-				   description: "Italian Torrents",
-				   link: "https://corsaro.red/",
-				   caps: new TorznabCapabilities(),
-				   configService: configService,
-				   client: wc,
-				   logger: l,
-				   p: ps,
-				   configData: new ConfigurationData())
+			: base("Corsaro.red",
+				description: "Italian Torrents",
+				link: "https://corsaro.red/",
+				caps: new TorznabCapabilities(),
+				configService: configService,
+				client: wc,
+				logger: l,
+				p: ps,
+				configData: new ConfigurationData())
 		{
 			Encoding = Encoding.UTF8;
 			Language = "it-it";
@@ -81,30 +70,33 @@ namespace Jackett.Common.Indexers
 			AddCategoryMapping(37, TorznabCatType.PC, "Software");
 		}
 
+		private string ApiLatest => $"{SiteLink}api/latests";
+		private string ApiSearch => $"{SiteLink}api/search";
+
 		public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
 		{
 			base.LoadValuesFromJson(configJson);
 			var releases = await PerformQuery(new TorznabQuery());
 
-			await ConfigureIfOK(String.Empty, releases.Count() > 0, () =>
-			{
-				throw new Exception("Could not find release from this URL.");
-			});
+			await ConfigureIfOK(string.Empty, releases.Any(),
+				() => throw new Exception("Could not find release from this URL."));
 
 			return IndexerConfigurationStatus.Completed;
 		}
 
-		private dynamic checkResponse(WebClientStringResult result)
+		private dynamic CheckResponse(WebClientStringResult result)
 		{
 			try
 			{
-				dynamic json = JsonConvert.DeserializeObject<dynamic>(result.Content);
+				var json = JsonConvert.DeserializeObject<dynamic>(result.Content);
 
-				if (json is JObject)
-					if (json["ok"] != null && ((bool)json["ok"]) == false)
+				switch (json)
+				{
+					case JObject _ when json["ok"] != null && (bool) json["ok"] == false:
 						throw new Exception("Server error");
-
-				return json;
+					default:
+						return json;
+				}
 			}
 			catch (Exception e)
 			{
@@ -113,17 +105,17 @@ namespace Jackett.Common.Indexers
 			}
 		}
 
-		private async Task<dynamic> SendAPIRequest(List<KeyValuePair<string, string>> data)
+		private async Task<dynamic> SendApiRequest(IEnumerable<KeyValuePair<string, string>> data)
 		{
-			var jsonData = JsonConvert.SerializeObject(data);
-			var result = await PostDataWithCookiesAndRetry(APISearch, data, null, SiteLink, APIHeaders, null, true);
-			return checkResponse(result);
+			//var jsonData = JsonConvert.SerializeObject(data);
+			var result = await PostDataWithCookiesAndRetry(ApiSearch, data, null, SiteLink, _apiHeaders, null, true);
+			return CheckResponse(result);
 		}
 
-		private async Task<dynamic> SendAPIRequestLatest()
+		private async Task<dynamic> SendApiRequestLatest()
 		{
-			var result = await RequestStringWithCookiesAndRetry(APILatest, null, SiteLink, APIHeaders);
-			return checkResponse(result);
+			var result = await RequestStringWithCookiesAndRetry(ApiLatest, null, SiteLink, _apiHeaders);
+			return CheckResponse(result);
 		}
 
 		protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
@@ -132,25 +124,23 @@ namespace Jackett.Common.Indexers
 
 			var searchString = query.GetQueryString();
 			var queryCollection = new List<KeyValuePair<string, string>>();
-			int page = 0;
+			var page = 0;
 
 			if (!string.IsNullOrWhiteSpace(searchString))
+			{
 				queryCollection.Add("term", searchString);
+			}
 			else
 			{
 				// no term execute latest search
-				var result = await SendAPIRequestLatest();
+				var result = await SendApiRequestLatest();
 
 				try
 				{
 					// this time is a jarray
-					JArray json = (JArray)result;
+					var json = (JArray) result;
 
-					foreach (var torrent in json)
-					{
-						// add release
-						releases.Add(makeRelease(torrent));
-					}
+					releases.AddRange(json.Select(MakeRelease));
 				}
 				catch (Exception ex)
 				{
@@ -161,10 +151,7 @@ namespace Jackett.Common.Indexers
 			}
 
 			var cats = MapTorznabCapsToTrackers(query);
-			if (cats.Count > 0)
-				queryCollection.Add("category", string.Join(",", cats));
-			else
-				queryCollection.Add("category", "0");   // set ALL category
+			queryCollection.Add("category", cats.Count > 0 ? string.Join(",", cats) : "0");
 
 			// lazy horrible page initialization
 			queryCollection.Add("page", page.ToString());
@@ -172,83 +159,62 @@ namespace Jackett.Common.Indexers
 			do
 			{
 				// update page number
-				queryCollection.RemoveAt(queryCollection.Count - 1); // remove last elem: page number 
+				queryCollection.RemoveAt(queryCollection.Count - 1); // remove last elem: page number
 				queryCollection.Add("page", (++page).ToString());
 
-				var result = await SendAPIRequest(queryCollection);
+				var result = await SendApiRequest(queryCollection);
 				try
 				{
 					// this time is a jobject
-					JObject json = (JObject)result;
+					var json = (JObject) result;
 
 					if (json["results"] == null)
 						throw new Exception("Error invalid JSON response");
 
 					// check number result
-					if (((JArray)json["results"]).Count() == 0)
+					if (!((JArray) json["results"]).Any())
 						break;
 
-					foreach (var torrent in json["results"])
-					{
-						// add release
-						releases.Add( makeRelease(torrent) );
-					}
+					releases.AddRange(json["results"].Select(MakeRelease));
 				}
 				catch (Exception ex)
 				{
 					OnParseError(result.ToString(), ex);
 				}
-
-			} while (page < MAX_SEARCH_PAGE_LIMIT);
+			} while (page < MaxSearchPageLimit);
 
 			return releases;
 		}
 
-		private ReleaseInfo makeRelease(JToken torrent)
+		private ReleaseInfo MakeRelease(JToken torrent)
 		{
-			var release = new ReleaseInfo();
-
-			release.Title = (String)torrent["title"];
-
 			//https://corsaro.red/details/E5BB62E2E58C654F4450325046723A3F013CD7A4
-			release.Comments = new Uri(SiteLink + "details/" + (string)torrent["hash"]);
+			var release = new ReleaseInfo
+			{
+				Title = (string) torrent["title"],
+				Grabs = (long) torrent["completed"],
+				Description = $"{(string) torrent["category"]} {(string) torrent["description"]}",
+				Seeders = (int) torrent["seeders"],
+				InfoHash = (string) torrent["hash"],
+				MagnetUri = new Uri((string) torrent["magnet"]),
+				Comments = new Uri($"{SiteLink}details/{(string) torrent["hash"]}"),
+				DownloadVolumeFactor = 0,
+				UploadVolumeFactor = 1
+			};
+
 			release.Guid = release.Comments;
-			//release.Link = release.Comments;
+			release.Peers = release.Seeders + (int) torrent["leechers"];
 
 			release.PublishDate = DateTime.Now;
 			if (torrent["last_updated"] != null)
-				release.PublishDate = DateTime.Parse((string)torrent["last_updated"]);
+				release.PublishDate = DateTime.Parse((string) torrent["last_updated"]);
 
 			// TODO: don't know how to map this cats..
-			int cat = (int)torrent["category"];
+			var cat = (int) torrent["category"];
 			release.Category = MapTrackerCatToNewznab(cat.ToString());
 
 			if (torrent["size"] != null)
-				release.Size = (long)torrent["size"];
-
-			release.Grabs = (long)torrent["completed"];
-
-			release.Description = (string)torrent["category"] + " " + (string)torrent["description"];
-
-			/*
-			RageID = copyFrom.RageID;
-			Imdb = copyFrom.Imdb;
-			TMDb = copyFrom.TMDb;
-			*/
-
-			release.Seeders = (int)torrent["seeders"];
-			release.Peers = release.Seeders + (int)torrent["leechers"];
-
-			release.InfoHash = (string)torrent["hash"];
-			release.MagnetUri = new Uri((string)torrent["magnet"]);
-
-			/*
-			MinimumRatio = copyFrom.MinimumRatio;
-			MinimumSeedTime = copyFrom.MinimumSeedTime;
-			*/
-
-			release.DownloadVolumeFactor = 0;
-			release.UploadVolumeFactor = 1;
+				release.Size = (long) torrent["size"];
 
 			return release;
 		}
