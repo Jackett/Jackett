@@ -20,7 +20,7 @@
       - {id: 1080, cat: Movies/DVD, desc: "Movies DVD"}
       - {id: 1090, cat: Movies/BluRay, desc: "Movies BluRay"}
       - {id: 1100, cat: Movies/DVD, desc: "Movies HD2DVD"}
-      - {id: 1110, cat: Movies/Foreign, desc: "Movies nternational"}
+      - {id: 1110, cat: Movies/Foreign, desc: "Movies International"}
       - {id: 1120, cat: Movies/HD, desc: "Movies HD Packs"}
       - {id: 1130, cat: Movies/SD, desc: "Movies SD Packs"}
       - {id: 2010, cat: TV/UHD, desc: "TV 2160p"}
@@ -55,6 +55,7 @@
       - {id: 5060, cat: XXX, desc: "XXX XviD"}
       - {id: 5070, cat: XXX, desc: "XXX HD Packs"}
       - {id: 5080, cat: XXX, desc: "XXX SD Packs"}
+      - {id: 5090, cat: XXX, desc: "XXX Sonstiges"}
       - {id: 6010, cat: PC/Games, desc: "Games Windows"}
       - {id: 6020, cat: Console, desc: "Games Linux"}
       - {id: 6030, cat: PC/Mac, desc: "Games MacOS"}
@@ -101,19 +102,19 @@
     - name: sort
       type: select
       label: Sort requested from site
-      default: "added"
+      default: "1"
       options:
-        "added": "created"
-        "seeds": "seeders"
-        "size": "size"
-        "name": "title"
+        "1": "created"
+        "8": "seeders"
+        "6": "size"
+        "2": "title"
     - name: type
       type: select
       label: Order requested from site
-      default: "desc"
+      default: "1"
       options:
-        "desc": "desc"
-        "asc": "asc"
+        "2": "desc"
+        "1": "asc"
 
   login:
     path: login.php
@@ -144,46 +145,49 @@
 
   search:
     paths:
+    # browse.php?suchfeld=2&alleanzeigen=1&kategorie[]=1050&kategorie[]=1060&suche=terra&durchsuche=1&suchein=2&sucheaus=1&sortierenach=6&sortierung=1
       - path: browse.php
     inputs:
-      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-      search: "{{ .Keywords }}"
-      # seachin 0=name 1=descr 2=both
-      blah: 0
-      # include dead 0=active 1=all 2=dead
-      incldead: 1
-      orderby: "{{ .Config.sort }}"
-      sort: "{{ .Config.type }}"
-      showsearch: 0
+      $raw: "{{ range .Categories }}kategorie[]={{.}}&{{end}}"
+      suche: "{{ .Keywords }}"
+      suchfeld: 2
+      alleanzeigen: 1
+      # seachin 0 name 1 descr 2 both
+      durchsuche: 0
+      # includedead 1 active 2 all 3 dead 4 highlight 5 bookmark 6 onlyups 7 freeleech 8 multi2 9 multi5 10 multi10 11 25%dl 12 50%dl 13 75%dl
+      suchein: 2
+      # cat 1 all 1000 film 2000 tv 3000 docs 4000 sport 5000 xxx 6000 games 7000 apps 8000 music 9000 other
+      sucheaus: 1
+      sortierenach: "{{ .Config.sort }}"
+      sortierung: "{{ .Config.type }}"
 
     rows:
       selector: table.tableinborder[border="0"][cellspacing="0"][cellpadding="0"] tr
 
     fields:
       category:
-        selector: td.tableb a
+        selector: a.bt-cat
         attribute: href
         filters:
-          - name: querystring
-            args: cat
+          - name: regexp
+            args: (\d+)$
       title:
-        selector: div a.tor-name
+        selector: a.tor-name
       details:
-        selector: div a.tor-name
+        selector: a.tor-name
         attribute: href
       download:
-        selector: div a.tor-name
+        selector: div.tor-metadl a
         attribute: href
-        filters:
-          - name: replace
-            args: ["details.php?id=", "download.php?torrent="]
       banner:
         selector: div[id^="details-"] img
         attribute: src
       seeders:
-        selector: div.tor-sl b
+        selector: div.tor-seeder
       leechers:
-        selector: div.tor-sl b:last-of-type
+        selector: div.tor-leecher
+      grabs:
+        selector: div.tor-snatcher
         # 2 flavours of dates
       date:
         # Heute 13:30:04
@@ -196,12 +200,12 @@
           - name: replace
             args: ["Gestern", "Yesterday"]
       date:
-          # 30.02.2018&nbsp;23:12:50
+          # &nbsp;&nbsp;27.05.2019 <b>12:52:11</b>
         selector: div.tor-date:contains(".")
         optional: true
         filters:
           - name: replace
-            args: ["\u00a0", " "]
+            args: ["\u00a0", ""]
           - name: dateparse
             args: "02.01.2006 15:04:05"
       size:
@@ -211,21 +215,15 @@
             args: [".", ""]
           - name: replace
             args: [",", "."]
-      grabs:
-        selector: div.tor-take
-        filters:
-          - name: regexp
-            args: (\d+)
       downloadvolumefactor:
         case:
-          img[src="pic/new_details/25k.png"]: 0.25
-          img[src="pic/new_details/50k.png"]: 0.5
-          img[src="pic/new_details/75k.png"]: 0.75
-          img[src="pic/ou_new.png"]: 0
+          font.ou: 0 # only upload is counted
+          font.fl: 0 # freeleech neither dl or ul is counted
           "*": 1
       uploadvolumefactor:
         case:
-          img[src="pic/sc-dark/multi2.jpg"]: 2
-          img[src="pic/sc-dark/multi5.jpg"]: 5
-          img[src="pic/sc-dark/multi10.jpg"]: 10
+          "font.mu:contains(\"2x\")": 2
+          "font.mu:contains(\"5x\")": 5
+          "font.mu:contains(\"10x\")": 10
+          font.fl: 0  # freeleech neither dl or ul is counted
           "*": 1
