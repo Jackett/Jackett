@@ -321,6 +321,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * NORDiCHD
  * Nostalgic (The Archive)
  * notwhat.cd
+ * OnlineSelfEducation
  * Orpheus
  * Ourbits (HDPter)
  * P2PBG
