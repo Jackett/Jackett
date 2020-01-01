@@ -402,7 +402,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Torrent Network (TN)
  * Torrent Sector Crew (TSC)
  * Torrent.LT
- * TorrentBD
+ * TorrentBD [![(invite needed)][inviteneeded]](#)
  * TorrentBytes (TBy)
  * TorrentCCF (TCCF)
  * TorrentDay (TD)
@@ -443,7 +443,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Zamunda.net
  * Zelka.org
 
-Trackers marked with  [![(invite needed)][inviteneeded]](#) have no active maintainer and are missing features or are broken. If you have an invite for them please send it to kaso1717 -at- gmail.com to get them fixed/improved.
+Trackers marked with  [![(invite needed)][inviteneeded]](#) have no active maintainer and are missing features or are broken. If you have an invite for them please send it to garfieldsixtynine -at- gmail.com to get them fixed/improved.
 
 ### Aggregate indexers
 
