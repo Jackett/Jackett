@@ -185,6 +185,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Back-ups
  * BakaBT
  * BaconBits (bB)
+ * BeiTai
  * BeyondHD (BHD)
  * BIGTorrent
  * BigTower
