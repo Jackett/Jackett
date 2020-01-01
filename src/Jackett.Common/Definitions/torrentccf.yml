@@ -75,9 +75,11 @@
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
     error:
+      - selector: td.embedded:has(h2:contains("失败"))
       - selector: td.embedded:has(h2:contains("登录失败"))
     test:
-      path: torrents.php
+      path: index.php
+      selector: a[href="logout.php"]
 
   search:
     paths:
