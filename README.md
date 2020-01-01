@@ -164,6 +164,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * 3D Torrents (3DT) 
  * 3evils
  * 4thD (4th Dimension)
+ * 52PT
  * 720pier
  * Abnormal
  * Acid Lounge (A-L)
