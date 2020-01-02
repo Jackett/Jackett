@@ -307,6 +307,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * M-Team TP (MTTP)
  * Magico (Trellas)
  * Majomparádé (TurkDepo)
+ * MoeCat
  * Mononoké-BT
  * MoreThanTV (MTV)
  * MyAnonamouse (MAM)
@@ -404,7 +405,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Torrent Network (TN)
  * Torrent Sector Crew (TSC)
  * Torrent.LT
- * TorrentBD [![(invite needed)][inviteneeded]](#)
+ * TorrentBD
  * TorrentBytes (TBy)
  * TorrentCCF (TCCF)
  * TorrentDay (TD)
