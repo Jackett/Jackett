@@ -402,6 +402,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * The Show
  * The-Torrents
  * The Vault
+ * TLFBits
  * Torrent Network (TN)
  * Torrent Sector Crew (TSC)
  * Torrent.LT
