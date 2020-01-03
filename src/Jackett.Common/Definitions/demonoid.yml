@@ -318,6 +318,9 @@
     fields:
       title:
         selector: a[href^="/files/details/"]
+      title:
+        selector: a[href^="/files/details/"]
+        optional: true
         attribute: title
       category:
         selector:  a[href*="&subcategory="]
