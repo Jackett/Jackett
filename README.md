@@ -18,7 +18,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 #### Supported Systems
 * Windows 7SP1 or greater using .NET 4.6.1 or above [Download here](https://www.microsoft.com/net/framework/versions/net461)
 * Linux [supported operating systems here](https://github.com/dotnet/core/blob/master/release-notes/2.1/2.1-supported-os.md#linux)
-* macOS 10.12 or greater
+* macOS 10.13 or greater
 
 ### Supported Public Trackers
  * 1337x
