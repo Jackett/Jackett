@@ -381,6 +381,7 @@ namespace Jackett.Updater
                 "Definitions/waffles.yml",
                 "Definitions/rgu.yml",
                 "Definitions/elittracker.yml",
+                "Definitions/hon3yhd-net.yml",
             };
 
             foreach (var oldFile in oldFiles)
