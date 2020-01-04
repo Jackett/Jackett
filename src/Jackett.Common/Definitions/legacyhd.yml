@@ -1,7 +1,7 @@
 ---
   site: legacyhd
-  name: legacyhd
-  description: "General Tracker Movies/TV/Apps/Games/Music/Books"
+  name: LegacyHD
+  description: "LegacyHD (HD4Free) is a Private Torrent Tracker for HD MOVIES / TV / GENERAL"
   language: en-us
   type: private
   encoding: UTF-8
@@ -13,12 +13,12 @@
       - {id: 1, cat: Movies, desc: "Movies"}
       - {id: 2, cat: TV, desc: "TV"}
       - {id: 3, cat: Music, desc: "Music"}
-      - {id: 4, cat: Ebook, desc: "Ebook"}
-      - {id: 5, cat: TV Pack, desc: "TV Pack"}
-      - {id: 6, cat: Software, desc: "Software"}
-      - {id: 7, cat: Movie Pack, desc: "Movie Pack"}
-      - {id: 8, cat: Documentary, desc: "Documentary"}
-      - {id: 9, cat: Animation, desc: "Animation"}
+      - {id: 4, cat: Books/Ebook, desc: "Ebook"}
+      - {id: 5, cat: TV, desc: "TV Pack"}
+      - {id: 6, cat: PC, desc: "Software"}
+      - {id: 7, cat: Movie, desc: "Movie Pack"}
+      - {id: 8, cat: TV/Documentary, desc: "Documentary"}
+      - {id: 9, cat: TV/Anime, desc: "Animation"}
 
     modes:
       search: [q]
