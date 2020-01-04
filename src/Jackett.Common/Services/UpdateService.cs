@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Security;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
@@ -19,23 +20,25 @@ using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json;
 using NLog;
+using WebClient = Jackett.Common.Utils.Clients.WebClient;
+using WebRequest = Jackett.Common.Utils.Clients.WebRequest;
 
 namespace Jackett.Common.Services
 {
 
     public class UpdateService: IUpdateService
     {
-        Logger logger;
-        WebClient client;
-        IConfigurationService configService;
-        ManualResetEvent locker = new ManualResetEvent(false);
-        ITrayLockService lockService;
-        IProcessService processService;
-        IServiceConfigService windowsService;
-        IFilePermissionService filePermissionService;
-        private ServerConfig serverConfig;
-        bool forceupdatecheck = false;
-        Variants.JackettVariant variant = Variants.JackettVariant.NotFound;
+        private readonly Logger logger;
+        private readonly WebClient client;
+        private IConfigurationService configService;
+        private readonly ManualResetEvent locker = new ManualResetEvent(false);
+        private readonly ITrayLockService lockService;
+        private IProcessService processService;
+        private readonly IServiceConfigService windowsService;
+        private readonly IFilePermissionService filePermissionService;
+        private readonly ServerConfig serverConfig;
+        private bool forceupdatecheck;
+        private Variants.JackettVariant variant = Variants.JackettVariant.NotFound;
 
         public UpdateService(Logger l, WebClient c, IConfigurationService cfg, ITrayLockService ls, IProcessService ps, IServiceConfigService ws, IFilePermissionService fps, ServerConfig sc)
         {
@@ -90,54 +93,45 @@ namespace Jackett.Common.Services
         {
             if (serverConfig.RuntimeSettings.NoUpdates)
             {
-                logger.Info($"Updates are disabled via --NoUpdates.");
+                logger.Info("Updates are disabled via --NoUpdates.");
                 return;
             }
             if (serverConfig.UpdateDisabled && !forceupdatecheck)
             {
-                logger.Info($"Skipping update check as it is disabled.");
+                logger.Info("Skipping update check as it is disabled.");
                 return;
             }
 
-            Variants variants = new Variants();
+            var variants = new Variants();
             variant = variants.GetVariant();
-            logger.Info("Jackett variant: " + variant.ToString());
+            logger.Info($"Jackett variant: {variant}");
 
             forceupdatecheck = true;
 
-            var isWindows = System.Environment.OSVersion.Platform != PlatformID.Unix;
+            var isWindows = Environment.OSVersion.Platform != PlatformID.Unix;
             if (Debugger.IsAttached)
             {
-                logger.Info($"Skipping checking for new releases as the debugger is attached.");
+                logger.Info("Skipping checking for new releases as the debugger is attached.");
                 return;
             }
 
-            bool trayIsRunning = false;
-            if (isWindows)
-            {
-                trayIsRunning = Process.GetProcessesByName("JackettTray").Length > 0;
-            }
+            var trayIsRunning = false;
+            if (isWindows) trayIsRunning = Process.GetProcessesByName("JackettTray").Length > 0;
 
             try
             {
-                var response = await client.GetString(new WebRequest()
+                var response = await client.GetString(new WebRequest
                 {
                     Url = "https://api.github.com/repos/Jackett/Jackett/releases",
                     Encoding = Encoding.UTF8,
                     EmulateBrowser = false
                 });
 
-                if(response.Status != System.Net.HttpStatusCode.OK)
-                {
-                    logger.Error("Failed to get the release list: " + response.Status);
-                }
+                if(response.Status != HttpStatusCode.OK) logger.Error($"Failed to get the release list: {response.Status}");
 
                 var releases = JsonConvert.DeserializeObject<List<Release>>(response.Content);
 
-                if (!serverConfig.UpdatePrerelease)
-                {
-                    releases = releases.Where(r => !r.Prerelease).ToList();
-                }
+                if (!serverConfig.UpdatePrerelease) releases = releases.Where(r => !r.Prerelease).ToList();
 
                 if (releases.Count > 0)
                 {
@@ -153,10 +147,7 @@ namespace Jackett.Common.Services
                             // Copy updater
                             var installDir = Path.GetDirectoryName(ExePath());
                             var updaterPath = GetUpdaterPath(tempDir);
-                            if (updaterPath != null)
-                            {
-                                StartUpdate(updaterPath, installDir, isWindows, serverConfig.RuntimeSettings.NoRestart, trayIsRunning);
-                            }
+                            if (updaterPath != null) StartUpdate(updaterPath, installDir, isWindows, serverConfig.RuntimeSettings.NoRestart, trayIsRunning);
                         }
                         catch (Exception e)
                         {
@@ -175,10 +166,7 @@ namespace Jackett.Common.Services
             }
             finally
             {
-                if (!isWindows)
-                {
-                    System.Net.ServicePointManager.ServerCertificateValidationCallback -= AcceptCert;
-                }
+                if (!isWindows) ServicePointManager.ServerCertificateValidationCallback -= AcceptCert;
             }
         }
 
@@ -186,13 +174,9 @@ namespace Jackett.Common.Services
         {
             if (variant == Variants.JackettVariant.CoreMacOs || variant == Variants.JackettVariant.CoreLinuxAmdx64 ||
                 variant == Variants.JackettVariant.CoreLinuxArm32 || variant == Variants.JackettVariant.CoreLinuxArm64)
-            {
                 return Path.Combine(tempDirectory, "Jackett", "JackettUpdater");
-            }
-            else
-            {
-                return Path.Combine(tempDirectory, "Jackett", "JackettUpdater.exe");
-            }         
+
+            return Path.Combine(tempDirectory, "Jackett", "JackettUpdater.exe");
         }
 
         private string GetCurrentVersion()
@@ -204,7 +188,7 @@ namespace Jackett.Common.Services
 
         private WebRequest SetDownloadHeaders(WebRequest req)
         {
-            req.Headers = new Dictionary<string, string>()
+            req.Headers = new Dictionary<string, string>
             {
                 { "Accept", "application/octet-stream" }
             };
@@ -218,37 +202,35 @@ namespace Jackett.Common.Services
 
             if (!Directory.Exists(tempDir))
             {
-                logger.Error("Temp dir doesn't exist: " + tempDir.ToString());
+                logger.Error($"Temp dir doesn't exist: {tempDir}");
                 return;
             }
 
             try {
-                DirectoryInfo d = new DirectoryInfo(tempDir);
+                var d = new DirectoryInfo(tempDir);
                 foreach (var dir in d.GetDirectories("JackettUpdate-*"))
-                {
                     try {
-                        logger.Info("Deleting JackettUpdate temp files from " + dir.FullName);
+                        logger.Info($"Deleting JackettUpdate temp files from {dir.FullName}");
                         dir.Delete(true);
                     }
                     catch (Exception e)
                     {
-                        logger.Error("Error while deleting temp files from " + dir.FullName);
+                        logger.Error($"Error while deleting temp files from {dir.FullName}");
                         logger.Error(e);
                     }
-                }
             }
             catch (Exception e)
             {
-                logger.Error("Unexpected error while deleting temp files from " + tempDir.ToString());
+                logger.Error($"Unexpected error while deleting temp files from {tempDir}");
                 logger.Error(e);
             }
         }
 
-        private async Task<string> DownloadRelease(List<Asset> assets, bool isWindows, string version)
+        private async Task<string> DownloadRelease(IEnumerable<Asset> assets, bool isWindows, string version)
         {
-            Variants variants = new Variants();
-            string artifactFileName = variants.GetArtifactFileName(variant);
-            Asset targetAsset = assets.Where(a => a.Browser_download_url.EndsWith(artifactFileName, StringComparison.OrdinalIgnoreCase) && artifactFileName.Length > 0).FirstOrDefault();
+            var variants = new Variants();
+            var artifactFileName = variants.GetArtifactFileName(variant);
+            var targetAsset = assets.FirstOrDefault(a => a.Browser_download_url.EndsWith(artifactFileName, StringComparison.OrdinalIgnoreCase) && artifactFileName.Length > 0);
 
             if (targetAsset == null)
             {
@@ -258,19 +240,13 @@ namespace Jackett.Common.Services
 
             var url = targetAsset.Browser_download_url;
 
-            var data = await client.GetBytes(SetDownloadHeaders(new WebRequest() { Url = url, EmulateBrowser = true, Type = RequestType.GET }));
+            var data = await client.GetBytes(SetDownloadHeaders(new WebRequest { Url = url, EmulateBrowser = true, Type = RequestType.GET }));
 
-            while (data.IsRedirect)
-            {
-                data = await client.GetBytes(new WebRequest() { Url = data.RedirectingTo, EmulateBrowser = true, Type = RequestType.GET });
-            }
+            while (data.IsRedirect) data = await client.GetBytes(new WebRequest { Url = data.RedirectingTo, EmulateBrowser = true, Type = RequestType.GET });
 
-            var tempDir = Path.Combine(Path.GetTempPath(), "JackettUpdate-" + version + "-" + DateTime.Now.Ticks);
+            var tempDir = Path.Combine(Path.GetTempPath(), $"JackettUpdate-{version}-{DateTime.Now.Ticks}");
 
-            if (Directory.Exists(tempDir))
-            {
-                Directory.Delete(tempDir, true);
-            }
+            if (Directory.Exists(tempDir)) Directory.Delete(tempDir, true);
 
             Directory.CreateDirectory(tempDir);
 
@@ -288,43 +264,43 @@ namespace Jackett.Common.Services
                 Stream inStream = File.OpenRead(gzPath);
                 Stream gzipStream = new GZipInputStream(inStream);
 
-                TarArchive tarArchive = TarArchive.CreateInputTarArchive(gzipStream);
+                var tarArchive = TarArchive.CreateInputTarArchive(gzipStream);
                 tarArchive.ExtractContents(tempDir);
                 tarArchive.Close();
                 gzipStream.Close();
                 inStream.Close();
 
                 if (variant == Variants.JackettVariant.CoreMacOs || variant == Variants.JackettVariant.CoreLinuxAmdx64
-                || variant == Variants.JackettVariant.CoreLinuxArm32 || variant == Variants.JackettVariant.CoreLinuxArm64
-                || variant == Variants.JackettVariant.Mono)
+                                                                 || variant == Variants.JackettVariant.CoreLinuxArm32 || variant == Variants.JackettVariant.CoreLinuxArm64
+                                                                 || variant == Variants.JackettVariant.Mono)
                 {
                     //Calling the file permission service to limit usage to netcoreapp. The Mono.Posix.NETStandard library causes issues outside of .NET Core
                     //https://github.com/xamarin/XamarinComponents/issues/282
 
                     // When the files get extracted, the execute permission for jackett and JackettUpdater don't get carried across
 
-                    string jackettPath = tempDir + "/Jackett/jackett";
+                    var jackettPath = $"{tempDir}/Jackett/jackett";
                     filePermissionService.MakeFileExecutable(jackettPath);
 
-                    string jackettUpdaterPath = tempDir + "/Jackett/JackettUpdater";
+                    var jackettUpdaterPath = $"{tempDir}/Jackett/JackettUpdater";
                     filePermissionService.MakeFileExecutable(jackettUpdaterPath);
 
                     if (variant == Variants.JackettVariant.CoreMacOs)
                     {
-                        string macosServicePath = tempDir + "/Jackett/install_service_macos";
+                        var macosServicePath = $"{tempDir}/Jackett/install_service_macos";
                         filePermissionService.MakeFileExecutable(macosServicePath);
                     }
                     else if (variant == Variants.JackettVariant.Mono)
                     {
-                        string systemdPath = tempDir + "/Jackett/install_service_systemd_mono.sh";
+                        var systemdPath = $"{tempDir}/Jackett/install_service_systemd_mono.sh";
                         filePermissionService.MakeFileExecutable(systemdPath);
                     }
                     else
                     {
-                        string systemdPath = tempDir + "/Jackett/install_service_systemd.sh";
+                        var systemdPath = $"{tempDir}/Jackett/install_service_systemd.sh";
                         filePermissionService.MakeFileExecutable(systemdPath);
 
-                        string launcherPath = tempDir + "/Jackett/jackett_launcher.sh";
+                        var launcherPath = $"{tempDir}/Jackett/jackett_launcher.sh";
                         filePermissionService.MakeFileExecutable(launcherPath);
                     }
                 }
@@ -335,26 +311,25 @@ namespace Jackett.Common.Services
 
         private void StartUpdate(string updaterExePath, string installLocation, bool isWindows, bool NoRestart, bool trayIsRunning)
         {
-            string appType = "Console";
+            var appType = "Console";
 
-            if (isWindows && windowsService.ServiceExists() && windowsService.ServiceRunning())
-            {
-                appType = "WindowsService";
-            }
+            if (isWindows && windowsService.ServiceExists() && windowsService.ServiceRunning()) appType = "WindowsService";
 
             var exe = Path.GetFileName(ExePath());
-            var args = string.Join(" ", Environment.GetCommandLineArgs().Skip(1).Select(a => a.Contains(" ") ? "\"" + a + "\"" : a )).Replace("\"", "\\\"");
+            var args = string.Join(" ", Environment.GetCommandLineArgs().Skip(1).Select(a => a.Contains(" ") ? $"\"{a}\""
+                : a )).Replace("\"", "\\\"");
 
-            var startInfo = new ProcessStartInfo();
-            startInfo.UseShellExecute = false;
-            startInfo.CreateNoWindow = true;
+            var startInfo = new ProcessStartInfo
+            {
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
 
             // Note: add a leading space to the --Args argument to avoid parsing as arguments
             if (variant == Variants.JackettVariant.Mono)
             {
                 // Wrap mono
-                args = exe + " " + args;
-                exe = "mono";
+                args = $"{exe} {args}";
 
                 startInfo.Arguments = $"{Path.Combine(updaterExePath)} --Path \"{installLocation}\" --Type \"{appType}\" --Args \" {args}\"";
                 startInfo.FileName = "mono";
@@ -376,32 +351,24 @@ namespace Jackett.Common.Services
                 logger.Error(e);
             }
 
-            if (NoRestart)
-            {
-                startInfo.Arguments += " --NoRestart";
-            }
+            if (NoRestart) startInfo.Arguments += " --NoRestart";
 
-            if (trayIsRunning && appType == "Console")
-            {
-                startInfo.Arguments += " --StartTray";
-            }
+            if (trayIsRunning && appType == "Console") startInfo.Arguments += " --StartTray";
 
             logger.Info($"Starting updater: {startInfo.FileName} {startInfo.Arguments}");
             var procInfo = Process.Start(startInfo);
             logger.Info($"Updater started process id: {procInfo.Id}");
 
-            if (!NoRestart)
+            if (NoRestart) return;
+            if (isWindows)
             {
-                if (isWindows)
-                {
-                    logger.Info("Signal sent to lock service");
-                    lockService.Signal();
-                    Thread.Sleep(2000);
-                }
-
-                logger.Info("Exiting Jackett..");
-                Environment.Exit(0);
+                logger.Info("Signal sent to lock service");
+                lockService.Signal();
+                Thread.Sleep(2000);
             }
+
+            logger.Info("Exiting Jackett..");
+            Environment.Exit(0);
         }
     }
 }
