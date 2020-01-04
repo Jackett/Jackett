@@ -73,7 +73,6 @@ namespace Jackett.Common.Indexers
 
         private static Uri[] LegacySiteLinkUris = new Uri[]
         {
-            new Uri("https://pctnew.site"),
             new Uri("http://descargas2020.com/"),
             new Uri("http://www.tvsinpagar.com/"),
             new Uri("http://torrentlocura.com/"),
