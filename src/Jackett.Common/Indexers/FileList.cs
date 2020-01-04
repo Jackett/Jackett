@@ -80,12 +80,16 @@ namespace Jackett.Common.Indexers
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
+            var responseFirstPage = await RequestStringWithCookiesAndRetry(SiteLink + "login.php?returnto=%2F", "", null);
+            CQ domFirstPage = responseFirstPage.Content;
+            var validator = domFirstPage.Find("input[name =\"validator\"]").Attr("value");   
             var pairs = new Dictionary<string, string> {
+                { "validator", validator},
                 { "username", configData.Username.Value },
                 { "password", configData.Password.Value }
             };
 
-            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl);
+            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, response.Cookies, true, null, LoginUrl);
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
             {
                 CQ dom = result.Content;
