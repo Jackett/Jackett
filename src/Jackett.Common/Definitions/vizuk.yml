@@ -1,7 +1,7 @@
 ---
   site: vizuk
   name: Vizuk
-  description: "Vizuk is a SPANISH site for HD content"
+  description: "Vizuk is a SPANISH private site for HD content"
   language: es-es
   type: private
   encoding: UTF-8
@@ -9,6 +9,9 @@
     - https://torrent.vizuk.li/
   legacylinks:	
     - http://torrent.vizuk.li/
+  certificates:
+    - ef305c114b583a155728ec7802f4e8c4bcd9a526 # expired 28 Dec 19
+
   caps:
     categorymappings:
       - {id: 1, cat: Movies, desc: "Películas"}
@@ -27,7 +30,6 @@
       - {id: 67, cat: Movies/3D, desc: "Películas 3D Remux"}
       - {id: 68, cat: Movies/3D, desc: "Películas 3D Rip (SBS/OU)"}
       - {id: 64, cat: Movies/HD, desc: "Películas Web-DL-2.0"}
-
       - {id: 49, cat: TV/HD, desc: "Series"}
       - {id: 59, cat: TV/HD, desc: "Series UHD F/R/Rip 4K"}
       - {id: 61, cat: TV/HD, desc: "Series Full/Remux 1080p"}
@@ -35,7 +37,6 @@
       - {id: 91, cat: TV/HD, desc: "Series BDRip 720p"}
       - {id: 92, cat: TV/HD, desc: "Series Web-DL-2.0"}
       - {id: 95, cat: TV/HD, desc: "Series HDTV"}
-
       - {id: 47, cat: Movies, desc: "Animación"}
       - {id: 69, cat: Movies/UHD, desc: "Animación UHDFull 4K"}
       - {id: 72, cat: Movies/UHD, desc: "Animación UHDRemux 4K"}
@@ -52,12 +53,10 @@
       - {id: 77, cat: Movies/3D, desc: "Animación 3D Remux"}
       - {id: 78, cat: Movies/3D, desc: "Animación 3D Rip (SBS/OU)"}
       - {id: 79, cat: Movies/HD, desc: "Animación Web-DL-2.0"}
-
       - {id: 50, cat: Other/Misc, desc: "Música , Conciertos, Teatro y Deportes"}
       - {id: 62, cat: Audio/MP3, desc: "Música"}
       - {id: 63, cat: TV/Sport, desc: "Deporte"}
       - {id: 21, cat: Movies/HD, desc: "Teatro"}
-
       - {id: 48, cat: Movies, desc: "Documentales"}
       - {id: 80, cat: Movies/UHD, desc: "Documentales UHDFull 4K"}
       - {id: 81, cat: Movies/UHD, desc: "Documentales UHDRemux 4K"}
@@ -71,8 +70,8 @@
       - {id: 87, cat: Movies/3D, desc: "Documentales 3D Remux"}
       - {id: 88, cat: Movies/3D, desc: "Documentales 3D Rip (SBS/OU)"}
       - {id: 89, cat: Movies/HD, desc: "Documentales Web-DL-2.0"}
-
       - {id: 93, cat: XXX, desc: "XXX"}
+
     modes:
       search: [q]
       tv-search: [q, season, ep]
@@ -96,7 +95,7 @@
     inputs:
       loginbox_membername: "{{ .Config.username }}"
       loginbox_password: "{{ .Config.password }}"
-      action: "login"
+      action: login
       loginbox_remember: 1
     error:
       - selector: div.error
@@ -110,16 +109,24 @@
       - name: re_replace
         args: ["S0?(\\d{1,2})E(\\d{1,2})", "$1x$2"]
     inputs:
-      p: "torrents"
-      page: "1"
-      pid: "10"
-      $raw: "{{range .Categories}}&cid[]={{.}}{{end}}"
+      p: torrents
+      page: 1
+      pid: 10
+      $raw: "{{ range .Categories }}&cid[]={{.}}{{end}}"
       keywords: "{{ .Keywords }}"
-      search_type: "name"
-      searchin: "title"
+      search_type: name
+      searchin: title
+
     rows:
       selector: table#torrents_table_classic > tbody > tr:not(:first-child), .torrent-box[id^="torrent_"]
+
     fields:
+      category:
+        selector:  td.torrent_image div.category_image a, .categoryImage a
+        attribute: href
+        filters:
+          - name: querystring
+            args: cid
       title:
         selector: td.torrent_name > a, .newIndicator > a
         filters:
@@ -128,12 +135,6 @@
       details:
         selector: td.torrent_name > a, .newIndicator > a
         attribute: href
-      category:
-        selector:  td.torrent_image div.category_image a, .categoryImage a
-        attribute: href
-        filters:
-          - name: querystring
-            args: cid
       download:
         selector: .torrentImages > span:first-child a
         attribute: href
@@ -141,14 +142,6 @@
         optional: true
         selector: td.torrent_image div.relativeDiv div:not(.category_image) a, .previewImage a
         attribute: href
-      size:
-        selector: td.size a, .torrentInfo a[rel="torrent_size"]
-      grabs:
-        selector: td.completed a, .torrentInfo a[rel="times_completed"]
-      seeders:
-        selector: td.seeders a, .torrentInfo a[rel="torrent_seeders"]
-      leechers:
-        selector: td.leechers a, .torrentInfo a[rel="torrent_leechers"]
       imdb:
         optional: true
         selector: .torrentFlags a[href*="www.imdb.com/title/tt"]
@@ -160,19 +153,27 @@
             args: "(?<=Subido )(.*)(?= por)"
           - name: dateparse
             args: "02-01-2006 15:04"
+      size:
+        selector: td.size a, .torrentInfo a[rel="torrent_size"]
+      grabs:
+        selector: td.completed a, .torrentInfo a[rel="times_completed"]
+      seeders:
+        selector: td.seeders a, .torrentInfo a[rel="torrent_seeders"]
+      leechers:
+        selector: td.leechers a, .torrentInfo a[rel="torrent_leechers"]
       downloadvolumefactor:
-        text: "1"
+        text: 1
       downloadvolumefactor:
         optional: true
         selector: img[src$="torrent_free.png"]
         attribute: title
         filters:
           - name: replace
-            args: ["No cuenta la descarga", "0"]
+            args: ["No cuenta la descarga", 0]
           - name: replace
-            args: ["Cuenta descarga: 0.5", "0.5"]
+            args: ["Cuenta descarga: 0.5", 0.5]
       uploadvolumefactor:
-        text: "1"
+        text: 1
       uploadvolumefactor:
         optional: true
         selector: img[src$="torrent_multiple_upload.png"]
@@ -181,6 +182,6 @@
           - name: replace
             args: ["Cuenta subida por: 2", 2]
       minimumratio:
-        text: "1.0"
+        text: 1.0
       minimumseedtime:
-        text: "345600" # 4 day (96h)
+        text: 345600 # 4 day (96h)
