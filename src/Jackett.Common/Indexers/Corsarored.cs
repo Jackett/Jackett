@@ -17,6 +17,26 @@ namespace Jackett.Common.Indexers
 	{
 		private const int MaxSearchPageLimit = 8; // 1page 25 items, 200
 
+		private readonly Dictionary<string, string[]> _apiCategories = new Dictionary<string, string[]>
+		{
+			// 0 = Misc. Probably only shows up in search all anyway
+			["0"] = new[] {"25", "27"},
+			// 1 = TV
+			["1"] = new[] {"1", "14", "22", "23", "24", "29", "31"},
+			// 2 = Movies
+			["2"] = new[] {"4"},
+			// 3 = Music/podcasts/audiobooks
+			["3"] = new[] {"2", "21", "34", "35"},
+			// 4 = ebooks
+			["4"] = new[] {"3", "13", "30", "36"},
+			// 5 = Software
+			["5"] = new[] {"6", "9", "10", "37"},
+			// 6 = Video Games
+			["6"] = new[] {"11", "12", "26", "28", "32"},
+			// 7 = Anime
+			["7"] = new[] {"7", "8"}
+		};
+
 		private readonly Dictionary<string, string> _apiHeaders = new Dictionary<string, string>
 		{
 			["Content-Type"] = "application/json"
@@ -37,36 +57,36 @@ namespace Jackett.Common.Indexers
 			Language = "it-it";
 			Type = "public";
 
-			//wc.requestDelay = 2.5;
-
 			// TNTVillage cats
-			AddCategoryMapping(1, TorznabCatType.TV, "TV");
+			AddCategoryMapping(1, TorznabCatType.TV, "TV Movies");
 			AddCategoryMapping(2, TorznabCatType.Audio, "Music");
-			AddCategoryMapping(3, TorznabCatType.BooksEbook, "Books");
+			AddCategoryMapping(3, TorznabCatType.BooksEbook, "eBooks");
 			AddCategoryMapping(4, TorznabCatType.Movies, "Movies");
-			AddCategoryMapping(6, TorznabCatType.PC, "Software");
+			AddCategoryMapping(6, TorznabCatType.PC, "Linux");
 			AddCategoryMapping(7, TorznabCatType.TVAnime, "Anime");
 			AddCategoryMapping(8, TorznabCatType.TVAnime, "Cartoons");
-			AddCategoryMapping(9, TorznabCatType.PC, "Software");
-			AddCategoryMapping(10, TorznabCatType.PC0day, "Software");
-			AddCategoryMapping(11, TorznabCatType.PCGames, "Games");
-			AddCategoryMapping(12, TorznabCatType.Console, "Games");
-			AddCategoryMapping(13, TorznabCatType.Books, "Books");
+			AddCategoryMapping(9, TorznabCatType.PC, "Mac Software");
+			AddCategoryMapping(10, TorznabCatType.PC, "Windows Software");
+			AddCategoryMapping(11, TorznabCatType.PCGames, "PC Games");
+			AddCategoryMapping(12, TorznabCatType.Console, "Playstation Games");
+			AddCategoryMapping(13, TorznabCatType.Books, "Textbooks");
 			AddCategoryMapping(14, TorznabCatType.TVDocumentary, "Documentaries");
 			AddCategoryMapping(21, TorznabCatType.AudioVideo, "Music Video");
 			AddCategoryMapping(22, TorznabCatType.TVSport, "Sport");
-			AddCategoryMapping(23, TorznabCatType.TV, "TV");
-			AddCategoryMapping(24, TorznabCatType.TV, "TV");
-			AddCategoryMapping(26, TorznabCatType.Console, "Games");
+			AddCategoryMapping(23, TorznabCatType.TV, "Theater");
+			AddCategoryMapping(24, TorznabCatType.TV, "Wrestling");
+			AddCategoryMapping(25, TorznabCatType.OtherMisc, "Other");
+			AddCategoryMapping(26, TorznabCatType.Console, "Xbox Games");
 			AddCategoryMapping(27, TorznabCatType.Other, "Wallpaper");
+			AddCategoryMapping(28, TorznabCatType.ConsoleOther, "Other Games");
 			AddCategoryMapping(29, TorznabCatType.TV, "TV Series");
 			AddCategoryMapping(30, TorznabCatType.BooksComics, "Comics");
 			AddCategoryMapping(31, TorznabCatType.TV, "TV");
-			AddCategoryMapping(32, TorznabCatType.Console, "Games");
+			AddCategoryMapping(32, TorznabCatType.Console, "Nintendo Games");
 			AddCategoryMapping(34, TorznabCatType.AudioAudiobook, "Audiobook");
-			AddCategoryMapping(35, TorznabCatType.Audio, "Music");
-			AddCategoryMapping(36, TorznabCatType.Books, "Books");
-			AddCategoryMapping(37, TorznabCatType.PC, "Software");
+			AddCategoryMapping(35, TorznabCatType.Audio, "Podcasts");
+			AddCategoryMapping(36, TorznabCatType.BooksMagazines, "Newspapers");
+			AddCategoryMapping(37, TorznabCatType.PCPhoneOther, "Phone Apps");
 		}
 
 		private string ApiLatest => $"{SiteLink}api/latests";
@@ -117,6 +137,22 @@ namespace Jackett.Common.Indexers
 			return CheckResponse(result);
 		}
 
+		private string GetApiCategory(TorznabQuery query)
+		{
+			var cats = MapTorznabCapsToTrackers(query);
+			var apiList = new List<string>();
+			foreach (var apiCat in cats.Select(cat =>
+				_apiCategories.FirstOrDefault(kvp => kvp.Value.Contains(cat)).Key))
+			{
+				if (apiCat == "0") return apiCat;
+				if (!apiList.Contains(apiCat))
+					apiList.Add(apiCat);
+				if (apiList.Count > 1) return "0";
+			}
+
+			return apiList[0];
+		}
+
 		protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
 		{
 			var releases = new List<ReleaseInfo>();
@@ -142,11 +178,10 @@ namespace Jackett.Common.Indexers
 				return releases;
 			}
 
-			var cats = MapTorznabCapsToTrackers(query);
 			var queryCollection = new Dictionary<string, string>
 			{
 				["term"] = searchString,
-				["category"] = cats.Count > 0 ? string.Join(",", cats) : "0"
+				["category"] = GetApiCategory(query)
 			};
 
 			for (var page = 1; page <= MaxSearchPageLimit; page++)
