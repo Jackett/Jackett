@@ -805,6 +805,23 @@
     - name: password
       type: password
       label: Password
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "t"
+      options:
+        "t": "created"
+        "ts": "seeders"
+        "sz": "size"
+        "i": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "d": "desc"
+        "a": "asc"
+
 
   login:
     path: ucp.php?mode=login
@@ -822,26 +839,27 @@
 
   search:
     paths:
-      # http://riperam.org/search.php?tracker_search=torrent&keywords=captain&terms=all&fp=1&author=&fid%5B%5D=1404&sc=1&sf=titleonly&sr=topics&sk=t&sd=d&st=0&ch=300&t=0
+      # http://riperam.org/search.php?tracker_search=torrent&keywords=captain&terms=all&fp=1&author=&fid[]=1404&sc=1&sf=titleonly&sr=topics&sk=t&sd=d&st=0&ch=300&t=0
       - path: search.php
     inputs:
-      $raw: "{{range .Categories}}&fid[]={{.}}{{end}}"
-      tracker_search: "torrent"
-      keywords: "{{if .Keywords }}{{.Keywords}}{{else}}2019{{end}}"
+      $raw: "{{ range .Categories }}&fid[]={{.}}{{end}}"
+      tracker_search: torrent
+      keywords: "{{ if .Keywords }}{{ .Keywords }}{{else}}2019{{end}}"
       terms: all
       fp: 1
       author: ""
       sc: 1
       sf: titleonly
       sr: topics
-      sk: t
-      sd: d
+      sk: "{{ .Config.sort }}"
+      sd: "{{ .Config.type }}"
       st: 0
       ch: 300
       t: 0
 
     rows:
       selector: li.row:has(a[href^="./download/file.php?id="])
+
     fields:
       title:
         selector: a.topictitle
@@ -1693,6 +1711,6 @@
           - name: dateparse
             args: "02 Jan 2006, 15:04"
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1

@@ -41,7 +41,7 @@ namespace Jackett.Common.Indexers
             Type = "private";
             TorznabCaps.SupportsImdbMovieSearch = true;
             webclient.EmulateBrowser = false;
-            webclient.AddTrustedCertificate(new Uri(SiteLink).Host, "81CC4E41B6F8FF656CA0E2396EE6D63383198BF1");
+            webclient.AddTrustedCertificate(new Uri(SiteLink).Host, "D948487DD52462F2D1E62B990D608051E3DE5AA6");
 
             AddCategoryMapping(2, TorznabCatType.MoviesUHD, "Movie/2160");
             AddCategoryMapping(1, TorznabCatType.MoviesHD, "Movie/1080");

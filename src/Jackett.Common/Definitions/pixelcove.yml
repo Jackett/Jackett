@@ -58,6 +58,29 @@
     modes:
       search: [q]
 
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "time"
+      options:
+        "time": "created"
+        "seeders": "seeders"
+        "size": "size"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
+
   login:
     path: login
     method: form
@@ -76,15 +99,17 @@
     paths:
       - path: torrents.php
     inputs:
-      $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
+      $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
       title: "{{ .Keywords }}"
-      order_by: time
-      order_way: desc
+      order_by: "{{ .Config.sort }}"
+      order_way: "{{ .Config.type }}"
       action: basic
       searchsubmit: 1
+
     rows:
       # exclude redbar torrents
       selector: table#torrent_table > tbody > tr[class^="torrent row"]
+
     fields:
       download:
         selector: a[href^="torrents.php?action=download&id="]
@@ -132,8 +157,8 @@
         selector: td:nth-child(9)
       downloadvolumefactor:
         case:
-          "span.fltag": "0"
-          "*": "1"
+          "span.fltag": 0
+          "*": 1
       uploadvolumefactor:
         case:
-          "*": "1"
+          "*": 1

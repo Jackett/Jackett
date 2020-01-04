@@ -1,0 +1,176 @@
+---
+  site: netcosmo
+  name: NetCosmo
+  description: "NetCosmo is an ITALIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
+  language: it-it
+  type: private
+  encoding: UTF-8
+  links:
+    - http://netcosmo.it/
+
+  caps:
+    categorymappings:
+      - {id: 14, cat: Movies, desc: "Screener"}
+      - {id: 39, cat: Movies/WEBDL, desc: "BDRip - Download WEB"}
+      - {id: 15, cat: Movies/HD, desc: "Rip H264"}
+      - {id: 16, cat: Movies/HD, desc: "Rip H265"}
+      - {id: 24, cat: Movies/UHD, desc: "Rip 4K"}
+      - {id: 21, cat: Movies/HD, desc: "Full HD"}
+      - {id: 31, cat: TV/HD, desc: "Serie TV 720P"}
+      - {id: 25, cat: Audio, desc: "Musica"}
+      - {id: 27, cat: PC, desc: "Software"}
+      - {id: 28, cat: Books, desc: "Letture"}
+      - {id: 32, cat: Other, desc: "Navigazione Saghe"}
+      - {id: 35, cat: Other, desc: "Cat. provvisoria"}
+      - {id: 37, cat: Other, desc: "Tutte le saghe"}
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep, imdbid]
+      movie-search: [q, imdbid]
+
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "3"
+      options:
+        "3": "created"
+        "5": "seeders"
+        "4": "size"
+        "2": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "2"
+      options:
+        "2": "desc"
+        "1": "asc"
+
+  login:
+    path: sbg_login_new.php
+    method: form
+    form: form[action="index.php?page=login"]
+    inputs:
+      uid: "{{ .Config.username }}"
+      pwd: "{{ .Config.password }}"
+    error:
+      - selector: body[onLoad^="makeAlert('"]
+        message:
+          selector: body[onLoad^="makeAlert('"]
+          attribute: onLoad
+          filters:
+            - name: replace
+              args: ["makeAlert('Error' , '", ""]
+            - name: replace
+              args: ["');", ""]
+    test:
+      path: index.php
+      selector: a[href="logout.php"]
+
+#  download:
+#    before:
+#      path: thanks.php
+#      method: "post"
+#      inputs:
+#        infohash: "{{ .DownloadUri.Query.id }}"
+#        thanks: "1"
+#        rndval: "1487013827343"
+#    selector: a[href^="download.php?id="]
+
+  search:
+    paths:
+      - path: index.php
+    keywordsfilters:
+      # most ITA TV torrents are in XXxYY format, so we search without S/E prefixes and filter later
+      - name: re_replace
+        args: ["S0?(\\d{1,2})", " $1 "]
+      - name: re_replace
+        args: ["E(\\d{2,3})", " $1 "]
+      - name: replace
+        args: ["-", ""]
+    inputs:
+      search: "{{ if .Query.IMDBID }}{{ .Query.IMDBIDShort }}{{else}}{{ .Keywords }}{{end}}"
+      page: torrents
+      category: "{{ range .Categories }}{{.}};{{end}}"
+      options: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
+      # 0 all 1 active 2 dead
+      active: 0
+      # 0 filename 1 file&descr 2 descr 3 uploader 5 gold 6 silver 7 bronze
+      options: 0
+      order: "{{ .Config.sort }}"
+      by: "{{ .Config.type }}"
+
+    rows:
+      selector: table > tbody > tr > td > table.lista > tbody > tr:has(a[href^="index.php?page=torrent-details&id="])
+
+    fields:
+      category:
+        selector: a[href^="index.php?page=torrents&category="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: category
+      title:
+        selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
+        filters:
+          # normalize to SXXEYY format
+          - name: re_replace
+            args: ["(\\d{2})x(\\d{2})", "S$1E$2"]
+          - name: re_replace
+            args: ["(\\d{1})x(\\d{2})", "S0$1E$2"]
+      banner:
+        selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: "src=(.*?) "
+      details:
+        selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
+        attribute: href
+      download:
+#        selector: a[href^="index.php?page=downloadcheck&id="]
+        selector: a[href^="download.php?id="]
+        attribute: href
+      size:
+        selector: td:nth-last-child(3)
+      date:
+        selector: td:nth-last-child(7)
+        filters:
+          - name: append
+            args: " +01:00"
+          - name: dateparse
+            args: "02/01/2006 -07:00"
+      grabs:
+        selector: td:nth-last-child(4)
+        filters:
+          - name: replace
+            args: ["---", "0"]
+      seeders:
+        selector: td:nth-last-child(6)
+      leechers:
+        selector: td:nth-last-child(5)
+      downloadvolumefactor:
+        case:
+          img[alt="Gold 100% Free"]: 0
+          img[alt="Silver 50% Free"]: 0.5
+          img[alt="Bronze 25% Free"]: 0.75
+          "*": 1
+      uploadvolumefactor:
+        case:
+          img[alt="2x Upload Multiplier"]: 2
+          img[alt="3x Upload Multiplier"]: 3
+          img[alt="4x Upload Multiplier"]: 4
+          img[alt="5x Upload Multiplier"]: 5
+          img[alt="6x Upload Multiplier"]: 6
+          img[alt="7x Upload Multiplier"]: 7
+          img[alt="8x Upload Multiplier"]: 8
+          img[alt="9x Upload Multiplier"]: 9
+          img[alt="10x Upload Multiplier"]: 10
+          "*": 1

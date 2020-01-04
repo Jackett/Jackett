@@ -10,94 +10,109 @@
 
   caps:
     categorymappings:
-      - {id: 10, cat: TV/HD, desc: "Animation: HD720P"}
-      - {id: 11, cat: TV/HD, desc: "Animation: HD1080P"}
-      - {id: 56, cat: TV/SD, desc: "Animation: DVDRip"}
-      - {id: 13, cat: TV/SD, desc: "Animation: DVD"}
-      - {id: 105, cat: TV/HD, desc: "Animation: Bluray"}
       - {id: 106, cat: TV/HD, desc: "Animation: HDTV"}
       - {id: 108, cat: TV/WEB-DL, desc: "Animation: WEBDL"}
+      - {id: 56, cat: TV/SD, desc: "Animation: DVDRip"}
       - {id: 109, cat: TV/WEB-DL, desc: "Animation: WEBRIP"}
-      - {id: 18, cat: PC/0day, desc: "Applications: PC"}
-      - {id: 16, cat: PC/Games, desc: "Applications: Jeux"}
+      - {id: 13, cat: TV/SD, desc: "Animation: DVD"}
+      - {id: 105, cat: TV/HD, desc: "Animation: Bluray"}
+      - {id: 10, cat: TV/HD, desc: "Animation: HD720P"}
+      - {id: 11, cat: TV/HD, desc: "Animation: HD1080P"}
+      - {id: 140, cat: PC, desc: "Applications: Noel"}
       - {id: 19, cat: PC/Phone-Android, desc: "Applications: Android"}
       - {id: 38, cat: PC/Phone-Other, desc: "Applications: Mobile Phone"}
-      - {id: 17, cat: PC/Mac, desc: "Applications: Mac"}
-      - {id: 117, cat: PC, desc: "Applications: Appli-autre"}
       - {id: 40, cat: PC, desc: "Applications: Linux"}
+      - {id: 17, cat: PC/Mac, desc: "Applications: Mac"}
+      - {id: 16, cat: PC/Games, desc: "Applications: Jeux"}
+      - {id: 18, cat: PC/0day, desc: "Applications: PC"}
+      - {id: 117, cat: PC, desc: "Applications: Appli-autre"}
       - {id: 67, cat: TV/OTHER, desc: "Autres: Emission TV"}
-      - {id: 118, cat: TV/Documentary, desc: "Documentaires: Sport"}
+      - {id: 141, cat: TV/OTHER, desc: "Autres: Noel"}
+      - {id: 90, cat: Books/Ebook, desc: "BD: Livres"}
+      - {id: 132, cat: TV/Documentary, desc: "Documentaires: BluRay"}
+      - {id: 133, cat: TV/Documentary, desc: "Documentaires: 4k"}
+      - {id: 134, cat: TV/Documentary, desc: "Documentaires: Vostfr"}
       - {id: 15, cat: TV/Documentary, desc: "Documentaires: HD"}
       - {id: 14, cat: TV/Documentary, desc: "Documentaires: DivX"}
       - {id: 76, cat: TV/Documentary, desc: "Documentaires: TVRip/HDTV"}
-      - {id: 62, cat: Audio/Audiobook, desc: "E-Books: E-Books Audio"}
-      - {id: 51, cat: Books/Ebook, desc: "E-Books: BD"}
-      - {id: 50, cat: Books/Ebook, desc: "E-Books: Manuel Français"}
-      - {id: 49, cat: Books/Ebook, desc: "E-Books: Manuel Anglais"}
-      - {id: 36, cat: Books/Ebook, desc: "E-Books: Livres Français"}
+      - {id: 118, cat: TV/Documentary, desc: "Documentaires: Sport"}
+      - {id: 139, cat: TV/Documentary, desc: "Documentaires: Noel"}
+      - {id: 138, cat: Books/Ebook, desc: "E-Books: Noel"}
       - {id: 53, cat: Books/Ebook, desc: "E-Books: Livre Anglais"}
       - {id: 52, cat: Books/Ebook, desc: "E-Books: Revue - Journaux"}
-      - {id: 3, cat: Movies/DVD, desc: "Films: DVDRIP"}
-      - {id: 4, cat: Movies/DVD, desc: "Films: DVD5"}
-      - {id: 66, cat: Movies, desc: "Films: VOSTFR"}
+      - {id: 36, cat: Books/Ebook, desc: "E-Books: Livres Français"}
+      - {id: 62, cat: Audio/Audiobook, desc: "E-Books: E-Books Audio"}
+      - {id: 49, cat: Books/Ebook, desc: "E-Books: Manuel Anglais"}
+      - {id: 50, cat: Books/Ebook, desc: "E-Books: Manuel Français"}
+      - {id: 51, cat: Books/Ebook, desc: "E-Books: BD"}
       - {id: 88, cat: Movies/BluRay, desc: "Films: Full BD/BR"}
+      - {id: 72, cat: TV/HD, desc: "Films: TVRip/HDTV"}
       - {id: 89, cat: Movies/BluRay, desc: "Films: BD/BR Rip"}
-      - {id: 5, cat: Movies/DVD, desc: "Films: DVD9"}
+      - {id: 3, cat: Movies/DVD, desc: "Films: DVDRIP"}
+      - {id: 55, cat: Movies/HD, desc: "Films: MHD 720P"}
+      - {id: 66, cat: Movies, desc: "Films: VOSTFR"}
       - {id: 94, cat: Movies/DVD, desc: "Films: DVDscreen"}
-      - {id: 91, cat: Movies, desc: "Films: RemuX"}
+      - {id: 96, cat: Movies/HD, desc: "Films: HDlight"}
+      - {id: 131, cat: Movies/3D, desc: "Films: Remux Bluray 3D"}
       - {id: 104, cat: Movies/BluRay, desc: "Films: Film-BDRip"}
-      - {id: 110, cat: Movies/WEBDL, desc: "Films: WEBRip"}
-      - {id: 111, cat: Movies/WEBDL, desc: "Films: WEBRip-720p-P"}
+      - {id: 91, cat: Movies, desc: "Films: RemuX"}
       - {id: 95, cat: Movies/BluRay, desc: "Films: bluray"}
-      - {id: 102, cat: Movies/WEBDL, desc: "Films: WEB-DL 720P"}
-      - {id: 101, cat: Movies/WEBDL, desc: "Films: WEB-DL 1080P"}
-      - {id: 92, cat: Movies/UHD, desc: "Films: 4K"}
-      - {id: 100, cat: Movies/UHD, desc: "Films: 4KLight"}
+      - {id: 110, cat: Movies/WEBDL, desc: "Films: WEBRip"}
+      - {id: 129, cat: Movies/BluRay, desc: "Films: Remux Bluray"}
+      - {id: 54, cat: Movies/HD, desc: "Films: MHD 1080P"}
       - {id: 71, cat: Movies/WEBDL, desc: "Films: WEB-DL"}
       - {id: 69, cat: Movies/3D, desc: "Films: Film 3D"}
-      - {id: 65, cat: TV, desc: "Films: VO"}
-      - {id: 72, cat: TV/HD, desc: "Films: TVRip/HDTV"}
-      - {id: 96, cat: Movies/HD, desc: "Films: HDlight"}
-      - {id: 70, cat: Movies/HD, desc: "Films: MHD X265"}
+      - {id: 65, cat: Movies, desc: "Films: VO"}
+      - {id: 1, cat: Movies/HD, desc: "Films: Remux Bluray 4K"}
+      - {id: 130, cat: Movies/UHD, desc: "Films: HD720P"}
+      - {id: 102, cat: Movies/WEBDL, desc: "Films: WEB-DL 720P"}
       - {id: 103, cat: Movies/HD, desc: "Films: Film-HDRIP"}
-      - {id: 57, cat: TV, desc: "Films: TS/CAM"}
-      - {id: 59, cat: TV, desc: "Films: Spectacle"}
-      - {id: 87, cat: XXX, desc: "Films: XXX"}
-      - {id: 55, cat: Movies/HD, desc: "Films: MHD 720P"}
-      - {id: 54, cat: Movies/HD, desc: "Films: MHD 1080P"}
-      - {id: 1, cat: Movies/HD, desc: "Films: HD720P"}
+      - {id: 111, cat: Movies/WEBDL, desc: "Films: WEBRip-720P"}
+      - {id: 101, cat: Movies/WEBDL, desc: "Films: WEB-DL 1080P"}
       - {id: 2, cat: Movies/HD, desc: "Films: HD1080P"}
-      - {id: 90, cat: Movies/HD, desc: "Films: HD X265"}
-      - {id: 112, cat: Movies/WEBDL, desc: "Films: WEBrip-1080-P"}
+      - {id: 87, cat: XXX, desc: "Films: XXX"}
+      - {id: 112, cat: Movies/WEBDL, desc: "Films: WEBrip-1080P"}
+      - {id: 4, cat: Movies/DVD, desc: "Films: DVD5"}
+      - {id: 126, cat: Movies/HD, desc: "Films: HD X265"}
+      - {id: 70, cat: Movies/HD, desc: "Films: MHD X265"}
+      - {id: 100, cat: Movies/UHD, desc: "Films: 4KLight"}
+      - {id: 5, cat: Movies/DVD, desc: "Films: DVD9"}
+      - {id: 57, cat: Movies, desc: "Films: TS/CAM"}
+      - {id: 128, cat: Movies/UHD, desc: "Films: Webdl 4K"}
+      - {id: 92, cat: Movies/UHD, desc: "Films: 4K"}
+      - {id: 59, cat: TV, desc: "Films: Spectacle"}
+      - {id: 135, cat: Movies, desc: "Films: Noel"}
       - {id: 77, cat: PC/Phone-Other, desc: "GPS: Cartes"}
       - {id: 78, cat: PC/Phone-Other, desc: "GPS: Radars"}
       - {id: 125, cat: TV/Anime, desc: "Mangas: DVDRip"}
       - {id: 124, cat: TV/Anime, desc: "Mangas: HD720P"}
-      - {id: 97, cat: Audio, desc: "Musique: Podcast"}
-      - {id: 98, cat: Audio, desc: "Musique: karaoké"}
-      - {id: 75, cat: Audio, desc: "Musique: Concert TVRip"}
-      - {id: 24, cat: Audio/Lossless, desc: "Musique: Single Flac"}
-      - {id: 25, cat: Audio/MP3, desc: "Musique: Single MP3"}
+      - {id: 137, cat: Audio, desc: "Musique: Noel"}
       - {id: 22, cat: Audio/MP3, desc: "Musique: Album MP3"}
       - {id: 115, cat: Audio/MP3, desc: "Musique: Coffret mp3"}
+      - {id: 25, cat: Audio/MP3, desc: "Musique: Single MP3"}
+      - {id: 24, cat: Audio/Lossless, desc: "Musique: Single Flac"}
       - {id: 23, cat: Audio/Lossless, desc: "Musique: Album Flac"}
-      - {id: 116, cat: Audio/Lossless, desc: "Musique: Coffret flac"}
+      - {id: 97, cat: Audio, desc: "Musique: Podcast"}
       - {id: 64, cat: Audio, desc: "Musique: Mégamix Maison"}
+      - {id: 98, cat: Audio, desc: "Musique: karaoké"}
+      - {id: 116, cat: Audio/Lossless, desc: "Musique: Coffret flac"}
       - {id: 58, cat: Audio, desc: "Musique: Concert"}
+      - {id: 75, cat: Audio, desc: "Musique: Concert TVRip"}
       - {id: 6, cat: TV, desc: "Serie TV: Saison FR"}
-      - {id: 7, cat: TV, desc: "Serie TV: Episode FR"}
-      - {id: 61, cat: TV, desc: "Serie TV: Episode VOSTFR"}
-      - {id: 93, cat: TV, desc: "Serie TV: Saison VOSTFR"}
       - {id: 113, cat: TV, desc: "Serie TV: Episode QC"}
-      - {id: 114, cat: TV, desc: "Serie TV: Saison QC"}
-      - {id: 73, cat: TV/WEB-DL, desc: "Serie TV: WEB-DL"}
-      - {id: 74, cat: TV/HD, desc: "Serie TV: TVRip/HDTV"}
-      - {id: 12, cat: TV, desc: "Serie TV: Animation"}
+      - {id: 136, cat: TV, desc: "Serie TV: Noel"}
       - {id: 63, cat: TV, desc: "Serie TV: Episode VO"}
-      - {id: 120, cat: TV/HD, desc: "Serie TV: Episode Bluray 1080p"}
-      - {id: 121, cat: TV/HD, desc: "Serie TV: Saison Bluray 720p"}
+      - {id: 7, cat: TV, desc: "Serie TV: Episode FR"}
+      - {id: 12, cat: TV, desc: "Serie TV: Animation"}
+      - {id: 74, cat: TV/HD, desc: "Serie TV: TVRip/HDTV"}
       - {id: 122, cat: TV/HD, desc: "Serie TV: Saison Bluray 1080p"}
+      - {id: 121, cat: TV/HD, desc: "Serie TV: Saison Bluray 720p"}
+      - {id: 120, cat: TV/HD, desc: "Serie TV: Episode Bluray 1080p"}
+      - {id: 93, cat: TV, desc: "Serie TV: Saison VOSTFR"}
+      - {id: 73, cat: TV/WEB-DL, desc: "Serie TV: WEB-DL"}
       - {id: 119, cat: TV/HD, desc: "Serie TV: Episode Bluray 720p"}
+      - {id: 61, cat: TV, desc: "Serie TV: Episode VOSTFR"}
+      - {id: 114, cat: TV, desc: "Serie TV: Saison QC"}
 
     modes:
       search: [q]
@@ -126,6 +141,22 @@
         "MULTI ENGLISH": "MULTI ENGLISH"
         VOSTFR: "VOSTFR"
         "MULTI VOSTFR": "MULTI VOSTFR"
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "id"
+      options:
+        "id": "created"
+        "seeders": "seeders"
+        "size": "size"
+        "name": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
 
   login:
     path: account-login.php
@@ -164,11 +195,12 @@
       freeleech: 0
       inclexternal: 0
       lang: 0
-      sort: id
-      order: desc
+      sort: "{{ .Config.sort }}"
+      order: "{{ .Config.type }}"
 
     rows:
       selector: table.ttable_headinner > tbody > tr.t-row
+
     fields:
       title_original:
         selector: a[href^="torrents-details.php?id="] b
@@ -178,7 +210,7 @@
           - name: re_replace
             args: ["\\s[Mm][Uu][Ll][Tt][Ii]\\s", " {{ .Config.multilanguage }} "]
       title:
-        text: "{{if .Config.multilang }}{{ .Result.title_multilang }}{{else}}{{ .Result.title_original }}{{end}}"
+        text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{else}}{{ .Result.title_original }}{{end}}"
       category:
         selector: a[href^="torrents.php?cat="]
         attribute: href
@@ -192,6 +224,8 @@
         selector: a[href^="torrents-details.php?id="]
         attribute: href
       size:
+        selector: td:nth-last-child(5)
+      grabs:
         selector: td:nth-last-child(4)
       seeders:
         selector: td:nth-last-child(3)
@@ -201,8 +235,8 @@
         text: now
       downloadvolumefactor:
         case:
-          img[src="images/fl.gif"]: "0"
-          "*": "1"
+          img[src="images/fl.gif"]: 0
+          "*": 1
       uploadvolumefactor:
         case:
-          "*": "1"
+          "*": 1

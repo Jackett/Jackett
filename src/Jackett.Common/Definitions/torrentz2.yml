@@ -29,6 +29,7 @@
       "game": PC/Games
       "game pc": PC/Games
       "game xbox": Console/Xbox
+      "game nintendo": Console/NDS
       "adult": XXX
       "adult amateur": XXX
       "adult anal": XXX
@@ -38,6 +39,8 @@
       "adult double p": XXX
       "adult fisting": XXX
       "adult hairy": XXX
+      "adult hentai": XXX
+      "adult interracial": XXX
       "adult lesbian": XXX
       "adult milf": XXX
       "adult squirting": XXX
@@ -64,16 +67,26 @@
       type: checkbox
       label: "Only include verifed content in results"
       default: false
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "A"
+      options:
+        "A": "created"
+        "P": "seeders"
+        "S": "size"
 
   search:
     paths:
-      - path: "{{if .Config.filter-verified }}verified{{else}}searchA{{end}}"
+      - path: "{{if .Config.filter-verified }}verified{{else}}search{{end}}{{ .Config.sort }}"
     inputs:
-       f: "{{if .Keywords }}title: {{else}}{{end}}{{ .Keywords }}"
-       safe: "{{if .Config.filter-safe }}1{{else}}0{{end}}"
+       f: "{{ if .Keywords }}title: {{ .Keywords }}{{else}}{{end}}"
+       safe: "{{ if .Config.filter-safe }}1{{else}}0{{end}}"
+
     rows:
       selector: "html body #wrap .results dl:has(a)"
-    # andmatch filter removed, see #3737
+      # andmatch filter removed, see #3737
+
     fields:
       title:
         selector: dt a
@@ -114,7 +127,7 @@
         remove: a
         filters:
           - name: re_replace
-            args:  ["[^a-zA-Z\\s]+", ""]
+            args:  ["[^a-zA-Z0-9\\s]+", ""]
           - name: trim
       date:
         selector: dd span:nth-child(2)
@@ -126,6 +139,6 @@
       leechers:
         selector: dd span:nth-child(5)
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1

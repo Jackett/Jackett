@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Text;
@@ -69,7 +69,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(2091, TorznabCatType.MoviesForeign, " | - Movies 2001-2005");
             AddCategoryMapping(2092, TorznabCatType.MoviesForeign, " | - Movies 2006-2010");
             AddCategoryMapping(2093, TorznabCatType.MoviesForeign, " | - Movies 2011-2015");
-            AddCategoryMapping(2200, TorznabCatType.MoviesForeign, " | - Movies 2016");
+            AddCategoryMapping(2200, TorznabCatType.MoviesForeign, " | - Movies 2016-2018");
+            AddCategoryMapping(1950, TorznabCatType.MoviesForeign, " | - Movies 2019");
             AddCategoryMapping(934, TorznabCatType.MoviesForeign, " | - Asian movies");
             AddCategoryMapping(505, TorznabCatType.MoviesForeign, " | - Indian Cinema");
             AddCategoryMapping(212, TorznabCatType.MoviesForeign, " | - Movie Collections");
@@ -1593,6 +1594,25 @@ namespace Jackett.Common.Indexers
                         }
                         else if (configData.StripRussianLetters.Value)
                         {
+                            if (release.Category.Contains(TorznabCatType.Movies.ID) || 
+                                release.Category.Contains(TorznabCatType.MoviesHD.ID) || 
+                                release.Category.Contains(TorznabCatType.Movies3D.ID) || 
+                                release.Category.Contains(TorznabCatType.MoviesForeign.ID))
+                            {
+                                // remove director's name from title
+                                // rutracker movies titles look like: russian name / english name (russian director / english director) other stuff
+                                // Ирландец / The Irishman (Мартин Скорсезе / Martin Scorsese) [2019, США, криминал, драма, биография, WEB-DL 1080p] Dub (Пифагор) + MVO (Jaskier) + AVO (Юрий Сербин) + Sub Rus, Eng + Original Eng
+                                // this part should be removed: (Мартин Скорсезе / Martin Scorsese)
+                                var director = new Regex(@"(\([А-Яа-яЁё\W]+)\s/\s(.+?)\)");
+                                release.Title = director.Replace(release.Title, "");
+                                
+                                // Bluray quality fix: radarr parse Blu-ray Disc as Bluray-1080p but should be BR-DISK
+                                release.Title = Regex.Replace(release.Title, "Blu-ray Disc", "BR-DISK", RegexOptions.IgnoreCase);
+                                // language fix: all rutracker releases contains russian track
+                                if (release.Title.IndexOf("rus", StringComparison.OrdinalIgnoreCase) < 0)
+                                    release.Title += " rus";
+
+                            }
                             var regex = new Regex(@"(\([А-Яа-яЁё\W]+\))|(^[А-Яа-яЁё\W\d]+\/ )|([а-яА-ЯЁё \-]+,+)|([а-яА-ЯЁё]+)");
                             release.Title = regex.Replace(release.Title, "");
                         }

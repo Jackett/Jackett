@@ -16,41 +16,41 @@
       - {id: 1030, cat: TV/Sport, desc: "F1 Full Season 1981-1990"}
       - {id: 1040, cat: TV/Sport, desc: "F1 Full Season 1991-2000"}
       - {id: 1050, cat: TV/Sport, desc: "F1 Full Season 2001-2010"}
-      - {id: 1060, cat: TV/Sport, desc: "F1 Full Season 2011-2017"}
-      - {id: 1070, cat: TV/Sport, desc: "F1 Full Season 2011-2017 (HD)"}
+      - {id: 1060, cat: TV/Sport, desc: "F1 Full Season 2011-2019"}
+      - {id: 1070, cat: TV/Sport, desc: "F1 Full Season 2011-2019 (HD)"}
       - {id: 2000, cat: TV/Sport, desc: "Formula 1 - Highlights"}
       - {id: 2010, cat: TV/Sport, desc: "F1 Highlights 1950-1980"}
       - {id: 2020, cat: TV/Sport, desc: "F1 Highlights 1981-1990"}
       - {id: 2030, cat: TV/Sport, desc: "F1 Highlights 1991-2000"}
       - {id: 2040, cat: TV/Sport, desc: "F1 Highlights 2001-2010"}
-      - {id: 2050, cat: TV/Sport, desc: "F1 Highlights 2011-2017"}
-      - {id: 2060, cat: TV/Sport, desc: "F1 Highlights 2011-2017 (HD)"}
+      - {id: 2050, cat: TV/Sport, desc: "F1 Highlights 2011-2019"}
+      - {id: 2060, cat: TV/Sport, desc: "F1 Highlights 2011-2019 (HD)"}
       - {id: 3000, cat: TV/Sport, desc: "Formula 1 - FP and quali"}
       - {id: 3010, cat: TV/Sport, desc: "F1 FP and quali 1950-1980"}
       - {id: 3020, cat: TV/Sport, desc: "F1 FP and quali 1981-1990"}
       - {id: 3030, cat: TV/Sport, desc: "F1 FP and quali 1991-2000"}
       - {id: 3040, cat: TV/Sport, desc: "F1 FP and quali 2001-2010"}
-      - {id: 3050, cat: TV/Sport, desc: "F1 FP and quali 2011-2017"}
-      - {id: 3060, cat: TV/Sport, desc: "F1 FP and quali 2011-2017 (HD)"}
+      - {id: 3050, cat: TV/Sport, desc: "F1 FP and quali 2011-2019"}
+      - {id: 3060, cat: TV/Sport, desc: "F1 FP and quali 2011-2019 (HD)"}
       - {id: 4000, cat: TV/Sport, desc: "Formula 1 - Onboard"}
       - {id: 4010, cat: TV/Sport, desc: "F1 Onboard 1950-1980"}
       - {id: 4020, cat: TV/Sport, desc: "F1 Onboard 1981-1990"}
       - {id: 4030, cat: TV/Sport, desc: "F1 Onboard 1991-2000"}
       - {id: 4040, cat: TV/Sport, desc: "F1 Onboard 2001-2010"}
-      - {id: 4050, cat: TV/Sport, desc: "F1 Onboard 2011-2017"}
+      - {id: 4050, cat: TV/Sport, desc: "F1 Onboard 2011-2019"}
       - {id: 5000, cat: TV/Sport, desc: "Formula 1 - Miscellaneous"}
       - {id: 5010, cat: TV/Sport, desc: "F1 Misc Documentaries"}
       - {id: 5020, cat: TV/Sport, desc: "F1 Misc Driver/team specials"}
       - {id: 5030, cat: TV/Sport, desc: "F1 Misc Event specials"}
       - {id: 5040, cat: TV/Sport, desc: "F1 Misc Other"}
-      - {id: 6000, cat: TV/Sport, desc: "Formula 1 - 2018"}
+      - {id: 6000, cat: TV/Sport, desc: "Formula 1 - 2020"}
       - {id: 6010, cat: TV/Sport, desc: "F1 2018 Free practices"}
       - {id: 6020, cat: TV/Sport, desc: "F1 2018 Qualifications"}
       - {id: 6030, cat: TV/Sport, desc: "F1 2018 Races"}
       - {id: 6040, cat: TV/Sport, desc: "F1 2018 Highlights"}
       - {id: 6050, cat: TV/Sport, desc: "F1 2018 Onboards"}
       - {id: 6060, cat: TV/Sport, desc: "F1 2018 Other"}
-      - {id: 7000, cat: TV/Sport, desc: "Formula 1 - 2018 (HD)"}
+      - {id: 7000, cat: TV/Sport, desc: "Formula 1 - 2020 (HD)"}
       - {id: 7010, cat: TV/Sport, desc: "F1 2018 (HD) Free practices"}
       - {id: 7020, cat: TV/Sport, desc: "F1 2018 (HD) Qualifications"}
       - {id: 7030, cat: TV/Sport, desc: "F1 2018 (HD) Races"}
@@ -112,7 +112,7 @@
       - {id: 15010, cat: TV/Sport, desc: "F2 1985-1990"}
       - {id: 15020, cat: TV/Sport, desc: "F2 1991-2000"}
       - {id: 15030, cat: TV/Sport, desc: "F2 2001-2011"}
-      - {id: 15040, cat: TV/Sport, desc: "F2 2012-2017"}
+      - {id: 15040, cat: TV/Sport, desc: "F2 2012-2019"}
       - {id: 15050, cat: TV/Sport, desc: "F2 GP2 Asia"}
       - {id: 16000, cat: TV/Sport, desc: "Single seaters"}
       - {id: 16010, cat: TV/Sport, desc: "Single seaters Formula 2"}
@@ -146,6 +146,27 @@
     modes:
       search: [q]
 
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "date_desc"
+      options:
+        "date_desc": "created desc"
+        "date_asc": "created asc"
+        "sd_desc": "seeders desc"
+        "sd_asc": "seeders asc"
+        "sz_desc": "size desc"
+        "sz_asc": "size asc"
+        "name_desc": "title desc"
+        "name_asc": "title asc"
+
   login:
     path: login
     method: post
@@ -161,15 +182,23 @@
 
   search:
     paths:
-      # only 20 results per page so attempt to fetch 5 pages
-      # https://www.racingfor.me/search/australia%20f1%202018?c=7000&ob=&offset=20#results
-      - path: "search/{{if .Keywords}}{{.Keywords}}{{else}}*{{end}}"
-      - path: "search/{{if .Keywords}}{{.Keywords}}&offset=20{{else}}*?offset=20{{end}}"
-      - path: "search/{{if .Keywords}}{{.Keywords}}&offset=40{{else}}*?offset=40{{end}}"
-      - path: "search/{{if .Keywords}}{{.Keywords}}&offset=60{{else}}*?offset=60{{end}}"
-      - path: "search/{{if .Keywords}}{{.Keywords}}&offset=80{{else}}*?offset=80{{end}}"
+      # only 20 results per page
+      # https://www.racingfor.me/search/truck?c=-1&ob=sz_desc&offset=20#results
+      - path: "search/{{ if .Keywords }}{{ .Keywords }}{{else}}*{{end}}"
+      - path: "search/{{ if .Keywords }}{{ .Keywords }}{{else}}*{{end}}"
+        inputs:
+          offset: 20
+      - path: "search/{{ if .Keywords }}{{ .Keywords }}{{else}}*{{end}}"
+        inputs:
+          offset: 40
+      - path: "search/{{ if .Keywords }}{{ .Keywords }}{{else}}*{{end}}"
+    inputs:
+      c: -1
+      ob: "{{ .Config.sort }}"
+
     rows:
       selector: div#torrentBorder
+
     fields:
       category:
         selector: span.catIcon a
@@ -214,10 +243,10 @@
         selector: span.torrentData span.torrentSnatched
         filters:
           - name: regexp
-            args: "(\\d+)"
+            args: (\d+)
       date:
         text: now
       downloadvolumefactor:
-          text: "1"
+        text: 1
       uploadvolumefactor:
-          text: "1"
+        text: 1

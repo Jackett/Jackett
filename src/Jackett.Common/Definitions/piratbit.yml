@@ -606,7 +606,23 @@
     modes:
       search: [q]
 
-  settings: []
+  settings:
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "1"
+      options:
+        "1": "created"
+        "10": "seeders"
+        "7": "size"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "2"
+      options:
+        "2": "desc"
+        "1": "asc"
+
 
   download:
     selector: a[href^="magnet:?xt="]
@@ -631,8 +647,8 @@
       prev_dc: 0
       prev_df: 1
       prev_ds: 0
-      o: 1
-      s: 2
+      o: "{{ .Config.sort }}"
+      s: "{{ .Config.type }}"
       df: 1
       da: 1
       ss: "{{ .Keywords }}"
@@ -641,7 +657,16 @@
 
     rows:
       selector: tr[id^="tor_"]
+      filters:
+        - name: andmatch
+
     fields:
+      category:
+        selector: td a.gen
+        attribute: href
+        filters:
+          - name: querystring
+            args: f
       title:
         selector: td a.genmed b
       details:
@@ -650,21 +675,8 @@
       download:
         selector: td a.genmed
         attribute: href
-      category:
-        selector: td a.gen
-        attribute: href
-        filters:
-          - name: querystring
-            args: f
       size:
         selector: td > u
-      seeders:
-        selector: td.seedmed
-      leechers:
-        selector: td.leechmed
-        # Russian and Ukranian and English languages are supported
-      grabs:
-        selector: td[title^="Ответов"], td[title^="Відповідей"], td[title^="Replies"]
         # 2 date flavours for 3 languages
       date:
       # 15:04
@@ -680,6 +692,13 @@
         filters:
           - name: dateparse
             args: "15:04 2-01-06"
+        # Russian and Ukranian and English languages are supported
+      grabs:
+        selector: td[title^="Ответов"], td[title^="Відповідей"], td[title^="Replies"]
+      seeders:
+        selector: td.seedmed
+      leechers:
+        selector: td.leechmed
       downloadvolumefactor:
         text: 0
       uploadvolumefactor:

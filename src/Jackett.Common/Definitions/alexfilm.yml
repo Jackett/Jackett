@@ -31,6 +31,22 @@
       type: checkbox
       label: Strip Russian Letters
       default: false
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "1"
+      options:
+        "1": "created"
+        "10": "seeders"
+        "7": "size"
+        "2": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "1"
+      options:
+        "2": "desc"
+        "1": "asc"
 
   login:
     path: login.php
@@ -66,9 +82,9 @@
       prev_ds: 0
       prev_tor_type: 0
       # sort by 1=registered 2=topicTitle 4=completed 10=seed 11=leech 12=up 13=down 5=replies 6=views 7=size 8=lastPost 9=seedLastSeen
-      o: 1
+      o: "{{ .Config.sort }}"
       # 1=asc 2=desc
-      s: 2
+      s: "{{ .Config.type }}"
       # show category
       dc: 0
       # show forum

@@ -10,7 +10,7 @@
 
   caps:
     categorymappings:
-      - {id: 4, cat: PC, desc: "Applications"}
+      - {id: 4, cat: TV, desc: "Holding Bin"}
       - {id: 29, cat: TV, desc: "Comedy"}
       - {id: 5, cat: TV/Documentary, desc: "Documentary"}
       - {id: 11, cat: TV, desc: "Drama"}
@@ -21,6 +21,7 @@
       - {id: 44, cat: Movies, desc: "Movies"}
       - {id: 45, cat: TV, desc: "News & Current Affairs"}
       - {id: 51, cat: Audio, desc: "Radio"}
+      - {id: 52, cat: TV, desc: "Reality"}
       - {id: 30, cat: TV, desc: "Soaps"}
       - {id: 33, cat: TV, desc: "Sci-Fi"}
       - {id: 42, cat: TV/Sport, desc: "Sport"}
@@ -29,6 +30,30 @@
       search: [q]
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
+
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "created_at"
+      options:
+        "created_at": "created"
+        "seeders": "seeders"
+        "size": "size"
+        "name": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
 
   login:
     path: login
@@ -56,8 +81,8 @@
     paths:
       - path: torrents/filter
     inputs:
-      $raw: "{{range .Categories}}categories[]={{.}}&{{end}}"
-      search: "{{if .Query.IMDBID}}{{else}}{{ .Keywords }}{{end}}"
+      $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
+      search: "{{ if .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
       description: ""
       uploader: ""
       imdb: "{{ .Query.IMDBIDShort }}"
@@ -65,8 +90,9 @@
       tmdb: ""
       mal: ""
       igdb: ""
-      sort: created_at
-      direction: desc
+      sorting: "{{ .Config.sort }}"
+      sort: "{{ .Config.sort }}"
+      direction: "{{ .Config.type }}"
       qty: 100
     rows:
       selector: table > tbody > tr
@@ -92,6 +118,13 @@
         filters:
           - name: replace
             args: ["https://via.placeholder.com/600x900", ""]
+      description:
+        # add a little extra to the banner
+        selector: a[href*="/categories/"] div i
+        attribute: data-original-title
+        filters:
+          - name: replace
+            args: [" torrent", ""]
       comments:
         selector: a[href*="#comments"]
         attribute: href
@@ -115,29 +148,35 @@
         filters:
             # translations for Turkish|Estonian|Danish|Italian|Polish|Norwegian|Portuguese|Czech|Russian|Romanian|Spanish|French|German|Bulgarian|Dutch|Chinese
           - name: re_replace
-            args: ["(?i)(önce|tagasi|geleden|fa|temu|siden|atrás|nazpět|назад|acum|hace|il y a|vor|преди|前)", " ago"]
-          - name: re_replace
-            args: ["(?i)(dakika|minut|minuto|minuta|minutt|минута|Minute|minuut|分钟)", " minute"]
+            args: ["(?i)(önce|tagasi|geleden|fa|temu|siden|atrás|nazpět|назад|acum|în urmă|hace|il y a|vor|преди|前)", " ago"]
           - name: re_replace
             args: ["(?i)(minutit|minutter|minuti|minuty|minutos|минуты|минут|Minuten|минути|minuten)", "minutes"]
           - name: re_replace
-            args: ["(?i)(saat|tund|time|ora|godzina|hora|hodina|час|oră|heure|Stunde|uur|小时)", " hour"]
+            args: ["(?i)(dakika|minut|minuto|minuta|minutt|минута|Minute|minuut|分钟)", " minute"]
           - name: re_replace
             args: ["(?i)(tundi|timer|ore|godziny|horas|hodiny|hoden|часа|часов|ore|heures|Stunden)", "hours"]
           - name: re_replace
-            args: ["(?i)(gün|päev|dag|giorno|dzień|dia|den|день|zi|día|jour|Tag|ден|天)", " day"]
+            args: ["(?i)(saat|tund|time|ora|godzina|hora|hodina|час|oră|heure|Stunde|uur|小时)", " hour"]
           - name: re_replace
             args: ["(?i)(päeva|dage|giorni|dni|dias|dny|дня|дней|zile|días|jours|Tagen|дни|dagen)", "days"]
           - name: re_replace
-            args: ["(?i)(hafta|nädal|uge|settimana|tydzień|uke|semana|týden|неделю|săptămână|semaine|Woche|седмица|周)", " week"]
+            args: ["(?i)(gün|päev|dag|giorno|dzień|dia|den|день|zi|día|jour|Tag|ден|天)", " day"]
           - name: re_replace
             args: ["(?i)(nädalat|uger|settimane|tygodnie|uker|semanas|týdny|недели|недель|săptămâni|semaines|Wochen|седмици|weken)", "weeks"]
           - name: re_replace
+            args: ["(?i)(hafta|nädal|uge|settimana|tydzień|uke|semana|týden|неделю|săptămână|semaine|Woche|седмица|周)", " week"]
+          - name: re_replace
             args: ["(?i) (ay)", "month"]
           - name: re_replace
-            args: ["(?i)(kuu|måned|mese|miesiąc|mês|měsíc|месяц|lună|mes|mois|Monat|месец|maand|个月)", " month"]
-          - name: re_replace
             args: ["(?i)(kuud|måneder|mesi|miesiące|meses|měsíce|месяца|месяцев|luni|meses|mois|Monaten|месеца|maanden)", "months"]
+          - name: re_replace
+            args: ["(?i)(kuu|måned|mese|miesiąc|mês|měsíc|месяц|lună|mes|Monat|месец|maand|个月)", " month"]
+          - name: re_replace
+            args: ["(?i)(aastat|anni|lata|anos|roky|года|ani|años|ans|Jahren|години)", " years"]
+          - name: re_replace
+            args: ["(?i)(yil|aasta|år|anno|rok|ano|год|año|Jahr|година|jaar|年)", " year"]
+          - name: re_replace
+            args: ["(?i) (an)", "year"]
       downloadvolumefactor:
         case:
           i[class*="fa-id-badge text-orange"]: 0 # 24 Hour FreeLeech From BON Store
@@ -154,4 +193,4 @@
           i[class*="fa-globe text-green"]: 2 # Global Double Upload
           i[class*="fa-certificate text-pink"]: 2 # Featured Torrent
           "*": 1
-# UNIT3D 2.1.1
+# UNIT3D 2.2.6

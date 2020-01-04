@@ -25,20 +25,38 @@
     modes:
       search: [q]
 
-  settings: []
+  settings:
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "3"
+      options:
+        "3": "created"
+        "5": "seeders"
+        "2": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "2"
+      options:
+        "2": "desc"
+        "1": "asc"
+
 
   search:
     paths:
     # http://www.legittorrents.info/index.php?page=torrents&search=windows&category=0&active=0
       - path: index.php
     inputs:
-      page: "torrents"
+      page: torrents
       search: "{{ .Keywords }}"
-      category: "{{range .Categories}}{{.}};{{end}}"
+      category: "{{ range .Categories }}{{.}};{{end}}"
       # 0 all 1 active 2 deadonly
       active: 1
+
     rows:
       selector: table table table.lista > tbody > tr:has(a[href^="download.php?id="])
+
     fields:
       category:
         selector: a[href^="index.php?page=torrents&category="]

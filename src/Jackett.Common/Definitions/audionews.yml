@@ -190,6 +190,30 @@
     modes:
       search: [q]
 
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "1"
+      options:
+        "1": "created"
+        "10": "seeders"
+        "7": "size"
+        "2": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "2"
+      options:
+        "2": "desc"
+        "1": "asc"
+
   login:
     path: login.php
     method: post
@@ -230,8 +254,8 @@
       prev_date_from: ""
       prev_date_to: ""
       prev_hide_rereg: 0
-      o: 1
-      s: 2
+      o: "{{ .Config.sort }}"
+      s: "{{ .Config.type }}"
       df: 1
       da: 1
       nm: "{{ .Keywords }}"
@@ -290,6 +314,6 @@
         optional: true
         selector: td[title^="Replies:"]
       downloadvolumefactor:
-        text: "1"
+        text: 1
       uploadvolumefactor:
-        text: "1"
+        text: 1

@@ -248,6 +248,10 @@ namespace Jackett.Common.Indexers
                     release.DownloadVolumeFactor = 1;
                     release.UploadVolumeFactor = 1;
 
+                    // freeleech #6579 #6624
+
+                    release.DownloadVolumeFactor = ParseUtil.CoerceInt(torrent.download_multiplier.ToString());
+
                     releases.Add(release);
                 }
             }

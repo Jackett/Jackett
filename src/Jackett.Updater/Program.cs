@@ -373,6 +373,15 @@ namespace Jackett.Updater
                 "Definitions/mkvcage.yml",
                 "Content/congruent_outline.png",
                 "Content/crissXcross.png",
+                "Definitions/dark-shadow.yml",
+                "Definitions/bitme.yml",
+                "Definitions/asiandvdclub.yml",
+                "Definitions/music-master.yml",
+                "Definitions/torviet.yml",
+                "Definitions/waffles.yml",
+                "Definitions/rgu.yml",
+                "Definitions/elittracker.yml",
+                "Definitions/hon3yhd-net.yml",
             };
 
             foreach (var oldFile in oldFiles)

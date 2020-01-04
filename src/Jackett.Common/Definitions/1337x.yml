@@ -120,6 +120,21 @@
         "http://torrage.info/" : "Torrage.info"
         "http://btcache.me/" : "BTcache.me"
         "magnet:": "magnet"
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "time"
+      options:
+        "time": "created"
+        "seeders": "seeders"
+        "size": "size"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
 
   download:
     # the .torrent url is on the on the details page 
@@ -131,12 +146,12 @@
   search:
     paths:
       # present first page of movies and tv results if there are no search parms supplied
-      - path: "{{if .Keywords}}sort-search/{{ .Keywords}}/time/desc/1/{{else}}cat/Movies/1/{{end}}"
-      - path: "{{if .Keywords}}{{else}}cat/TV/1/{{end}}"
-      - path: "{{if .Keywords}}sort-search/{{ .Keywords}}/time/desc/2/{{else}}{{end}}"
-      - path: "{{if .Keywords}}sort-search/{{ .Keywords}}/time/desc/3/{{else}}{{end}}"
-      - path: "{{if .Keywords}}sort-search/{{ .Keywords}}/time/desc/4/{{else}}{{end}}"
-      - path: "{{if .Keywords}}sort-search/{{ .Keywords}}/time/desc/5/{{else}}{{end}}"
+      - path: "{{if .Keywords}}sort-search/{{ .Keywords}}/{{ .Config.sort }}/{{ .Config.type }}/1/{{else}}cat/Movies/{{ .Config.sort }}/{{ .Config.type }}/1/{{end}}"
+      - path: "{{if .Keywords}}{{else}}cat/TV/{{ .Config.sort }}/{{ .Config.type }}/1/{{end}}"
+      - path: "{{if .Keywords}}sort-search/{{ .Keywords}}/{{ .Config.sort }}/{{ .Config.type }}/2/{{else}}{{end}}"
+      - path: "{{if .Keywords}}sort-search/{{ .Keywords}}/{{ .Config.sort }}/{{ .Config.type }}/3/{{else}}{{end}}"
+      - path: "{{if .Keywords}}sort-search/{{ .Keywords}}/{{ .Config.sort }}/{{ .Config.type }}/4/{{else}}{{end}}"
+      - path: "{{if .Keywords}}sort-search/{{ .Keywords}}/{{ .Config.sort }}/{{ .Config.type }}/5/{{else}}{{end}}"
     keywordsfilters: 
       - name: replace # use this as a workaround till #893 is implemented
         args: ["Greys Anatomy", "Grey's Anatomy"]
@@ -199,7 +214,7 @@
           - name: dateparse
             args: "Jan. 2 06"
       date:
-        # # (today) 12:25am
+        # (today) 12:25am
         optional: true
         selector: td[class^="coll-date"]:contains(":")
         filters:
@@ -212,6 +227,6 @@
       leechers:
         selector: td[class^="coll-3"]
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1

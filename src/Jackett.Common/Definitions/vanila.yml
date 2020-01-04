@@ -1296,6 +1296,22 @@
     - name: password
       type: password
       label: Password
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "t"
+      options:
+        "t": "created"
+        "ts": "seeders"
+        "sz": "size"
+        "i": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "d"
+      options:
+        "d": "desc"
+        "a": "asc"
 
   login:
     path: ucp.php?mode=login
@@ -1304,11 +1320,13 @@
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
+      autologin: on
+      viewonline: on
     error:
       - selector: fieldset:has(div.error)
     test:
       path: /
-      selector: :has(a[href^="./ucp.php?mode=logout&sid="])
+      selector: a[href^="./ucp.php?mode=logout&sid="]
 
   download:
     selector: a[href^="./download/file.php?id="]:not(img)
@@ -1318,15 +1336,16 @@
       # https://vanila.org/search.php?sr=topics&sf=titleonly&tracker_search=torrent&keywords=venom&submit.x=0&submit.y=0
       - path: search.php
     inputs:
-      sr: "topics"
-      sf: "titleonly"
-      tracker_search: "torrent"
-      keywords: "{{if .Keywords }}{{.Keywords}}{{else}}test{{end}}"
-      submit.x: "0"
-      submit.y: "0"
+      sr: topics
+      sf: titleonly
+      tracker_search: torrent
+      keywords: "{{ if .Keywords }}{{ .Keywords }}{{else}}test{{end}}"
+      sk: "{{ .Config.sort }}"
+      sd: "{{ .Config.type }}"
 
     rows:
       selector: li.row
+
     fields:
       title:
         selector: a.topictitle
@@ -1398,6 +1417,6 @@
           - name: dateparse
             args: "02 Jan 2006, 15:04"
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1

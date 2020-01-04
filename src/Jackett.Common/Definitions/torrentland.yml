@@ -11,20 +11,20 @@
   caps:
     categorymappings:
       #Peliculas
+      - {id: 75, cat: Movies/UHD, desc: "Peliculas - 4K"}
+      - {id: 83, cat: Movies/UHD, desc: "Peliculas - 4K CUSTOM"}
+      - {id: 81, cat: Movies/UHD, desc: "Peliculas - 4K Remux"}
       - {id: 23, cat: Movies/BluRay, desc: "Peliculas - Full BluRay"}
+      - {id: 82, cat: Movies/BluRay, desc: "Peliculas - CUSTOM FULLBR"}
+      - {id: 72, cat: Movies/3D, desc: "Peliculas - 3D"}
       - {id: 62, cat: Movies/BluRay, desc: "Peliculas - BluRay Remux"}
+      - {id: 80, cat: Movies/BluRay, desc: "Peliculas - JMBD"}
       - {id: 66, cat: Movies/HD, desc: "Peliculas - HD 1080"}
       - {id: 65, cat: Movies/HD, desc: "Peliculas - HD 720"}
-      - {id: 14, cat: Movies/SD, desc: "Peliculas - HDRip"}
       - {id: 32, cat: Movies/DVD, desc: "Peliculas - DVDFULL"}
+      - {id: 14, cat: Movies/SD, desc: "Peliculas - HDRip"}
       - {id: 15, cat: Movies/DVD, desc: "Peliculas - DVDRip"}
       - {id: 71, cat: Movies/Other, desc: "Peliculas - Peliculas V.O."}
-      - {id: 72, cat: Movies/3D, desc: "Peliculas - 3D"}
-      - {id: 75, cat: Movies/UHD, desc: "Peliculas - 4K"}
-      - {id: 80, cat: Movies/BluRay, desc: "Peliculas - JMBD"}
-      - {id: 81, cat: Movies/UHD, desc: "Peliculas - 4K Remux"}
-      - {id: 82, cat: Movies/BluRay, desc: "Peliculas - CUSTOM FULLBR"}
-      - {id: 83, cat: Movies/UHD, desc: "Peliculas - 4K CUSTOM"}
       #Eml HDTeam
       - {id: 69, cat: Movies/BluRay, desc: "Eml HDTeam - FULLBR"}
       - {id: 68, cat: Movies/BluRay, desc: "Eml HDTeam - JMBD"}
@@ -40,10 +40,10 @@
       #Series
       - {id: 50, cat: TV/HD, desc: "Series - Full BluRay"}
       - {id: 49, cat: TV/HD, desc: "Series - H264"}
-      - {id: 20, cat: TV/SD, desc: "Series - HDRip"}
-      - {id: 22, cat: TV/SD, desc: "Series - DVD"}
-      - {id: 51, cat: TV/OTHER, desc: "Series - Otros Formatos"}
       - {id: 84, cat: TV/HD, desc: "Series - H265"}
+      - {id: 22, cat: TV/SD, desc: "Series - DVD"}
+      - {id: 20, cat: TV/SD, desc: "Series - HDRip"}
+      - {id: 51, cat: TV/OTHER, desc: "Series - Otros Formatos"}
       #Documentales
       - {id: 53, cat: TV/Documentary, desc: "Documentales - HD"}
       - {id: 52, cat: TV/Documentary, desc: "Documentales - SD"}
@@ -57,9 +57,13 @@
       #Deportes
       - {id: 61, cat: TV/Sport, desc: "Deportes - HD"}
       - {id: 60, cat: TV/Sport, desc: "Deportes - SD"}
+
+      - {id: 85, cat: Books, desc: "Manuales"}
       
     modes:
       search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
 
   login:
     path: index.php?page=login
@@ -75,13 +79,21 @@
 
   search:
     path: index.php
+    keywordsfilters:
+      - name: re_replace
+        args: ["(?i)\\bS(\\d+)", "T$1"]
     inputs:
-      page: "torrents"
-      $raw: "&category={{range .Categories}}{{.}};{{end}}"
-      active: "0"
-      search: "{{ .Query.Keywords }}"
+      page: torrents
+      $raw: "category={{ range .Categories }}{{.}};{{end}}"
+      # 0 filename 1 file&dsc 2 descr 5 gold 6 silver 7 bronze
+      options: 0      
+      # 0 all 1 active 2 dead
+      active: 0
+      search: "{{ .Keywords }}"
+
     rows:
-      selector: "#Mcol table.table-inverse ~ table.table-inverse > tbody > tr:not(:first-child)"
+      selector: "#Mcol table.table-inverse ~ table.table-inverse > tbody > tr:has(a[href^=\"index.php?page=torrent-details\"])"
+
     fields:
       category:
         selector:  td:nth-child(1) a
@@ -91,6 +103,9 @@
             args: category
       title:
         selector: td:nth-child(2) a
+        filters:
+          - name: re_replace
+            args: ["(?i)\\bT(\\d+)", "S$1"]
       banner:
         optional: true
         selector: td:nth-child(2) a
@@ -122,7 +137,7 @@
         selector: a[href^="download.php"]
         attribute: href
       downloadvolumefactor:
-        text: "1"
+        text: 1
       downloadvolumefactor:
         optional: true
         selector: tr
@@ -138,10 +153,10 @@
             args: ["f6c8a6", "0.75"]
       uploadvolumefactor: 
           case:
-            img[src$="2x.gif"]: "2"
-            img[src$="3x.gif"]: "3"
-            img[src$="4x.gif"]: "4"
-            img[src$="5x.gif"]: "5"
-            img[src$="6x.gif"]: "6"
-            img[src$="7x.gif"]: "7"
-            "*": "1"
+            img[src$="2x.gif"]: 2
+            img[src$="3x.gif"]: 3
+            img[src$="4x.gif"]: 4
+            img[src$="5x.gif"]: 5
+            img[src$="6x.gif"]: 6
+            img[src$="7x.gif"]: 7
+            "*": 1

@@ -28,18 +28,27 @@
       tv-search: [q, season, ep]
       movie-search: [q]
 
-  settings: []
+  settings:
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "created"
+      options:
+        "created": "created"
+        "seeders": "seeders"
 
   search:
     # https://www.skytorrents.lol/?query=mr+mercedes+s02e05&sort=created
-    # https://www.skytorrents.lol/top100
+    # https://www.skytorrents.lol/top100?sort=created
     paths:
-      - path: "{{ if .Keywords }}?query={{ .Keywords }}&sort=created{{else}}top100{{end}}"
-      - path: "{{ if .Keywords }}?query={{ .Keywords }}&sort=created&page=2{{else}}{{end}}"
-      - path: "{{ if .Keywords }}?query={{ .Keywords }}&sort=created&page=3{{else}}{{end}}"
-      - path: "{{ if .Keywords }}?query={{ .Keywords }}&sort=created&page=4{{else}}{{end}}"
+      - path: "{{ if .Keywords }}?query={{ .Keywords }}&sort={{ .Config.sort }}{{else}}top100?sort={{ .Config.sort }}{{end}}"
+      - path: "{{ if .Keywords }}?query={{ .Keywords }}&sort={{ .Config.sort }}&page=2{{else}}{{end}}"
+      - path: "{{ if .Keywords }}?query={{ .Keywords }}&sort={{ .Config.sort }}&page=3{{else}}{{end}}"
+      - path: "{{ if .Keywords }}?query={{ .Keywords }}&sort={{ .Config.sort }}&page=4{{else}}{{end}}"
+
     rows:
       selector: tr.result
+
     fields:
       title:
         selector: td a
@@ -71,6 +80,6 @@
       leechers:
         selector: td:nth-child(6)
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1

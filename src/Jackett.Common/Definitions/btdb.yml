@@ -6,10 +6,11 @@
   type: public
   encoding: UTF-8
   links:
-    -  https://btdb.eu/
+    -  https://btdb.io/
   legacylinks:
     -  https://btdb.to/
     -  https://btdb.unblocked.app/
+    -  https://btdb.eu/
 
   caps:
     categorymappings:
@@ -25,10 +26,18 @@
       type: info
       label: Category for Sonarr and Radarr
       default: BTDB does not use categories. In your Sonarr or Radarr Torznab Indexer settings, set the category to 100001.
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "time"
+      options:
+        "time": "created"
+        "length": "size"
+        "popular": "seeders"
 
   search:
     paths:
-      - path: "{{if .Keywords}}?s={{ .Keywords}}&sort=time{{else}}recent{{end}}"
+      - path: "{{ if .Keywords }}?s={{ .Keywords }}&sort={{ .Config.sort }}{{else}}recent?sort={{ .Config.sort }}{{end}}"
     rows:
       selector: li[class$="item"]
     fields:
@@ -36,7 +45,7 @@
         selector: h2[class$="title"] a[href*="/torrent/"]
         attribute: title
       category:
-        text: "1"
+        text: 1
       details:
         selector: h2[class$="title"] a[href*="/torrent/"]
         attribute: href
@@ -51,13 +60,11 @@
         selector: div[class$="info"] span:nth-of-type(3)
         filters:
           - name: timeago
-      grabs:
-        selector: div[class$="info"] span:nth-of-type(4)
       seeders:
-        text: 1
+        selector: div[class$="info"] span:nth-of-type(4)
       leechers:
-        text: 1
+        selector: div[class$="info"] span:nth-of-type(5)
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1

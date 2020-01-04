@@ -27,9 +27,23 @@ namespace Jackett.Common.Indexers
         private readonly Dictionary<string, string> _commonSearchTerms = new Dictionary<string, string>
         {
             { "agents of shield", "Agents of S.H.I.E.L.D."},
-            { "greys anatomy", "grey's anatomy"},
-    };
-
+            { "tell me a story us", "Tell Me a Story"},
+            { "greys anatomy", "grey's anatomy"}
+        };
+        
+        private readonly Dictionary<string, string> _commonResultTerms = new Dictionary<string, string>
+        {
+            { "tell me a story", "Tell Me a Story US"},
+            { "fairy tail: final season", "Fairy Tail: Final Series"},
+            { "agents of s.h.i.e.l.d.", "Marvels Agents of SHIELD"},
+            { "legends of tomorrow", "DCs Legends of Tomorrow"}
+        };
+        
+        private readonly List<string> _absoluteNumbering = new List<string>
+        {
+            "One Piece", "Boruto", "Black Clover", "Fairy Tail", "Super Dragon Ball Heroes"
+        };
+        
         public override string[] LegacySiteLinks { get; protected set; } = new string[] {
             "https://bj-share.me/"
         };
@@ -117,10 +131,22 @@ namespace Jackett.Common.Indexers
             return isAnime ? term.TrimEnd(_digits) : term;
         }
 
-        private static string FixAbsoluteNumbering(string title)
+        private bool IsAbsoluteNumbering(string title)
         {
-            // if result is One piece, convert title from SXXEXX to EXX
-            // One piece is the only anime that i'm aware that is in "absolute" numbering, the problem is that they include
+            foreach (var absoluteTitle in _absoluteNumbering)
+            {
+                if (title.ToLower().Contains(absoluteTitle.ToLower()))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private string FixAbsoluteNumbering(string title)
+        {
+            // if result is absolute numbered, convert title from SXXEXX to EXX
+            // Only few animes that i'm aware is in "absolute" numbering, the problem is that they include
             // the season (wrong season) and episode as absolute, eg: One Piece - S08E836
             // 836 is the latest episode in absolute numbering, that is correct, but S08 is not the current season...
             // So for this show, i don't see a other way to make it work...
@@ -131,10 +157,10 @@ namespace Jackett.Common.Indexers
             // In this indexer, it looks that it is added "automatically", so all current and new releases will be broken
             // until they or the source from where they get that info fix it...
 
-            if (title.Contains("One Piece"))
-            {
-               title = Regex.Replace(title, @"(Ep[\.]?[ ]?)|([S]\d\d[Ee])", "E");
-               return title;
+            if (IsAbsoluteNumbering(title))
+            { 
+                title = Regex.Replace(title, @"(Ep[\.]?[ ]?)|([S]\d\d[Ee])", "");
+                return title;
             }
             else if (title.Contains("[Novela]"))
             {
@@ -147,20 +173,13 @@ namespace Jackett.Common.Indexers
             {
               return title;
             }
-
-
-
-            // return title.Contains("One Piece") ? Regex.Replace(title, @"(Ep[\.]?[ ]?)|([S]\d\d[Ee])", "E") : title;
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             query = query.Clone(); // avoid modifing the original query
-
-
+            
             var releases = new List<ReleaseInfo>();
-
-
 
             // if the search string is empty use the "last 24h torrents" view
             if (string.IsNullOrWhiteSpace(query.SearchTerm) && !query.IsImdbQuery)
@@ -188,7 +207,6 @@ namespace Jackett.Common.Indexers
                                 MinimumRatio = 1,
                                 MinimumSeedTime = 0
                             };
-
 
                             var qDetailsLink = row.QuerySelector("a.BJinfoBox");
                             var qBJinfoBox = qDetailsLink.QuerySelector("span");
@@ -348,7 +366,6 @@ namespace Jackett.Common.Indexers
                             string yearStr = null;
 
 
-
                             if (row.ClassList.Contains("group") || row.ClassList.Contains("torrent")) // group/ungrouped headers
                             {
                                 var qCatLink = row.QuerySelector("a[href^=\"/torrents.php?filter_cat\"]");
@@ -391,6 +408,15 @@ namespace Jackett.Common.Indexers
                                 // Get international title if available, or use the full title if not
                                 cleanTitle = InternationalTitle(cleanTitle);
                                 
+                                foreach (var resultTerm in _commonResultTerms)
+                                {
+                                    var newTitle = cleanTitle.ToLower().Replace(resultTerm.Key.ToLower(), resultTerm.Value);
+                                    if (!string.Equals(newTitle, cleanTitle, StringComparison.CurrentCultureIgnoreCase))
+                                    {
+                                        cleanTitle = newTitle;
+                                    }
+                                }
+                                
                                 title = Regex.Replace(title.Trim(), @"\s+", " ");
                                 var seasonEp = Regex.Replace(title, @"((S\d{2})?(E\d{2,4})?) .*", "$1");
                                 if (seasonEp[0] == '[')
@@ -416,6 +442,15 @@ namespace Jackett.Common.Indexers
                                 var cleanTitle = Regex.Replace(title, @" - ((S\d{2})?(E\d{2,4})?)", "");
                                 // Get international title if available, or use the full title if not
                                 cleanTitle = InternationalTitle(cleanTitle);
+                                
+                                foreach (var resultTerm in _commonResultTerms)
+                                {
+                                    var newTitle = cleanTitle.ToLower().Replace(resultTerm.Key.ToLower(), resultTerm.Value);
+                                    if (!string.Equals(newTitle, cleanTitle, StringComparison.CurrentCultureIgnoreCase))
+                                    {
+                                        cleanTitle = newTitle;
+                                    }
+                                }
                                 
                                 var seasonEp = Regex.Replace(title, @"^(.*?) - ((S\d{2})?(E\d{2,4})?)", "$2");
                                 if (seasonEp[0] == '[')

@@ -10,80 +10,84 @@
 
   caps:
     categorymappings:
-      - {id: 11, cat: Movies/DVD, desc: "VIP MOVIES DVD-R"}
-      - {id: 34, cat: Movies/3D, desc: "VIP MOVIES 3D-Movies"}
-      - {id: 46, cat: Movies, desc: "VIP MOVIES VENOM-Packs"}
-      - {id: 52, cat: Movies/HD, desc: "VIP MOVIES High Def Mkv/Mp4"}
-      - {id: 70, cat: Movies, desc: "VIP MOVIES Movies Animation"}
+      - {id: 34, cat: Movies/3D, desc: "MOVIES 3D"}
+      - {id: 52, cat: Movies/HD, desc: "MOVIES High Def Mkv/Mp4"}
+      - {id: 70, cat: Movies, desc: "MOVIES Animation"}
+      - {id: 97, cat: Movies, desc: "MOVIES DISNEY"}
+      - {id: 112, cat: Movies, desc: "MOVIES itunes"}
       - {id: 78, cat: TV, desc: "MISC POD CASTS"}
-      - {id: 35, cat: Movies/BluRay, desc: "VIP MOVIES Blu-Ray Movies"}
-      - {id: 36, cat: Movies/DVD, desc: "VIP MOVIES DvD-Rips"}
-      - {id: 37, cat: Movies, desc: "VIP MOVIES Classic-Movies"}
-      - {id: 38, cat: Movies, desc: "VIP MOVIES Classic-Kids-Movies"}
-      - {id: 47, cat: Movies/WEBDL, desc: "VIP MOVIES Webrip/WEB-DL"}
-      - {id: 39, cat: Movies, desc: "VIP MOVIES Movie-Packs"}
-      - {id: 1, cat: Movies, desc: "VIP MOVIES Movies"}
-      - {id: 5, cat: Movies, desc: "VIP MOVIES Anime"}
-      - {id: 32, cat: XXX, desc: "VIP MOVIES Adult-Movies"}
-      - {id: 33, cat: Movies/UHD, desc: "VIP MOVIES 4K-Movies"}
-      - {id: 4, cat: Movies, desc: "VIP MOVIES Misc-Torrents"}
+      - {id: 99, cat: Movies, desc: "MOVIES Cam Ratio Free"}
+      - {id: 11, cat: Movies/DVD, desc: "MOVIES DVD-R"}
+      - {id: 35, cat: Movies/BluRay, desc: "MOVIES Blu-Ray"}
+      - {id: 95, cat: Movies, desc: "MOVIES Classic picks"}
+      - {id: 100, cat: Movies/SD, desc: "MOVIES XVD"}
+      - {id: 105, cat: Movies/HD, desc: "MOVIES HD RIPS"}
+      - {id: 108, cat: Movies, desc: "MOVIES Musical"}
+      - {id: 107, cat: Movies, desc: "MOVIES Packs"}
+      - {id: 36, cat: Movies/DVD, desc: "MOVIES DvD-Rips"}
+      - {id: 37, cat: Movies, desc: "MOVIES Classic"}
+      - {id: 38, cat: Movies, desc: "MOVIES Classic-Kids"}
+      - {id: 47, cat: Movies/WEBDL, desc: "MOVIES Webrip/WEB-DL"}
+      - {id: 39, cat: Movies, desc: "MOVIES Packs"}
+      - {id: 5, cat: Movies, desc: "MOVIES Anime"}
+      - {id: 32, cat: XXX, desc: "MOVIES Adult"}
+      - {id: 33, cat: Movies/UHD, desc: "MOVIES 4K Ratio Free"}
+      - {id: 4, cat: Movies, desc: "MOVIES Misc"}
       - {id: 79, cat: Audio/Audiobook, desc: "MISC AUDIO BOOKS"}
       - {id: 81, cat: Audio/Other, desc: "MISC RADIO SHOWS"}
-      - {id: 43, cat: TV, desc: "VIP TV Kids-tv"}
-      - {id: 48, cat: TV/Sport, desc: "VIP SPORTS Sport-Misc"}
-      - {id: 97, cat: Movies, desc: "DISNEY Movies"}
-      - {id: 44, cat: PC/ISO, desc: "VIP GAMES Games-Pc-Iso"}
-      - {id: 45, cat: Console, desc: "VIP GAMES All Console Games"}
-      - {id: 41, cat: TV, desc: "VIP TV Tv Episodes"}
-      - {id: 91, cat: Movies, desc: "U.B.D Movies"}
-      - {id: 92, cat: Audio, desc: "U.B.D Music"}
-      - {id: 93, cat: TV, desc: "U.B.D MISC TV"}
-      - {id: 94, cat: Other, desc: "U.B.D MISC"}
-      - {id: 95, cat: Movies, desc: "U.B.D.Classic picks"}
-      - {id: 42, cat: TV, desc: "VIP TV Tv Packs"}
-      - {id: 84, cat: PC, desc: "VIP APPS MISC"}
-      - {id: 2, cat: Audio, desc: "VIP Music"}
-      - {id: 30, cat: Audio, desc: "VIP Music-Packs"}
-      - {id: 31, cat: Audio, desc: "VIP Music-Albums"}
-      - {id: 3, cat: PC/Games, desc: "VIP Misc Games"}
-      - {id: 40, cat: TV, desc: "VIP TV Tv  Single Seasons"}
-      - {id: 7, cat: PC/0day, desc: "VIP Apps Win"}
-      - {id: 8, cat: PC, desc: "VIP Apps Linux"}
-      - {id: 9, cat: PC/Mac, desc: "VIP Apps Mac"}
-      - {id: 15, cat: Books/Ebook, desc: "E Books Adventure"}
-      - {id: 55, cat: Books/Ebook, desc: "E Books Sci-Fi"}
+      - {id: 43, cat: TV, desc: "TV Kids"}
+      - {id: 48, cat: Movies, desc: "SPORTS Misc"}
+      - {id: 110, cat: TV/Sport, desc: "MOVIES Christmas"}
+      - {id: 44, cat: PC/ISO, desc: "GAMES Pc-Iso"}
+      - {id: 45, cat: Console, desc: "GAMES All Console"}
+      - {id: 41, cat: TV, desc: "TV Episodes"}
+      - {id: 101, cat: TV, desc: "TV Soaps"}
+      - {id: 104, cat: TV, desc: "TV MISC"}
+      - {id: 103, cat: Audio, desc: "karaoke Misc"}
+      - {id: 111, cat: Audio, desc: "MUSIC Christmas"}
+      - {id: 42, cat: TV, desc: "VIP TV Packs"}
+      - {id: 84, cat: PC, desc: "APPS MISC"}
+      - {id: 2, cat: Audio, desc: "Music"}
+      - {id: 30, cat: Audio, desc: "Music Packs"}
+      - {id: 31, cat: Audio, desc: "Music Albums"}
+      - {id: 3, cat: PC/Games, desc: "Games Misc"}
+      - {id: 40, cat: TV, desc: "TV Single Seasons"}
+      - {id: 7, cat: PC/0day, desc: "Apps Win"}
+      - {id: 8, cat: PC, desc: "Apps Linux"}
+      - {id: 9, cat: PC/Mac, desc: "Apps Mac"}
       - {id: 51, cat: Books/Ebook, desc: "E Books Food/Cook-Books"}
-      - {id: 56, cat: Books/Ebook, desc: "E Books Fantasy/Paranormal"}
-      - {id: 57, cat: Books/Ebook, desc: "E Books Science"}
-      - {id: 58, cat: Books/Ebook, desc: "E Books Wildlife & Pets"}
-      - {id: 59, cat: Books/Ebook, desc: "E Books Hobbies"}
-      - {id: 60, cat: Books/Ebook, desc: "E Books Arts & Crafts"}
-      - {id: 61, cat: Books/Ebook, desc: "E Books Reference/Manuals"}
-      - {id: 62, cat: Books/Ebook, desc: "E Books Outdoors/Gardening"}
-      - {id: 63, cat: Books/Ebook, desc: "E Books Romance"}
       - {id: 64, cat: Books/Ebook, desc: "E Books Book Packs"}
-      - {id: 65, cat: Books/Ebook, desc: "E Books Thriller"}
-      - {id: 66, cat: Books/Ebook, desc: "E Books Travel"}
-      - {id: 71, cat: Books/Ebook, desc: "E Books Children's Books"}
-      - {id: 16, cat: Books/Ebook, desc: "E Books Biography"}
-      - {id: 17, cat: Books/Ebook, desc: "E Books Fiction & Literature"}
-      - {id: 18, cat: Books/Ebook, desc: "E Books Gay/Lesbian"}
-      - {id: 19, cat: Books/Ebook, desc: "E Books Ghost Stories"}
-      - {id: 20, cat: Books/Ebook, desc: "E Books Health"}
-      - {id: 21, cat: Books/Ebook, desc: "E Books History"}
-      - {id: 22, cat: Books/Ebook, desc: "E Books Horror"}
-      - {id: 23, cat: Books/Ebook, desc: "E Books Humor"}
-      - {id: 24, cat: Books/Ebook, desc: "E Books Nature"}
       - {id: 26, cat: Books/Ebook, desc: "E Books Magazines"}
-      - {id: 27, cat: Books/Ebook, desc: "E Books War & Crime"}
-      - {id: 28, cat: Books/Ebook, desc: "E Books Comics"}
       - {id: 29, cat: Books/Ebook, desc: "E Books Misc Books"}
-      - {id: 12, cat: Books/Ebook, desc: "E Books Adult"}
 
     modes:
       search: [q]
       tv-search: [q, season, ep]
       movie-search: [q]
+
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "3"
+      options:
+        "3": "created"
+        "5": "seeders"
+        "4": "size"
+        "2": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
 
   login:
     path: index.php?page=login
@@ -103,8 +107,8 @@
       - path: index.php
     inputs:
       search: "{{ .Keywords }}"
-      page: "torrents"
-      category: "{{range .Categories}}{{.}};{{end}}"
+      page: torrents
+      category: "{{ range .Categories }}{{.}};{{end}}"
       uploader: 0
       # 0 filename 1 file&descr 2 descr
       options: 0
@@ -112,8 +116,12 @@
       active: 0
       # 0 all 1 classic 2 silver 3 gold 4 silver&gold
       gold: 0
+      order: "{{ .Config.sort }}"
+      by: "{{ .Config.type }}"
+
     rows:
-      selector: table.lista tr:has(a[href^="index.php?page=torrent-details&id="])
+      selector: table.lista tr:has(a[onmouseover][href^="index.php?page=torrent-details&id="])
+
     fields:
       category:
         selector: a[href^="index.php?page=torrents&category="]
@@ -122,27 +130,27 @@
           - name: querystring
             args: category
       title:
-        selector: a[title][href^="index.php?page=torrent-details&id="]
+        selector: a[href^="index.php?page=torrent-details&id="]
       details:
-        selector: a[title][href^="index.php?page=torrent-details&id="]
+        selector: a[href^="index.php?page=torrent-details&id="]
         attribute: href
       download:
         selector: a[href^="download.php?id="]
         attribute: href
       banner:
-        selector: a[title][href^="index.php?page=torrent-details&id="]
+        selector: a[href^="index.php?page=torrent-details&id="]
         attribute: onmouseover
         filters:
           - name: regexp
             args: "src=(.+?)  width"
       size:
-        selector: a[title][href^="index.php?page=torrent-details&id="]
+        selector: a[href^="index.php?page=torrent-details&id="]
         attribute: onmouseover
         filters:
           - name: regexp
             args: "Size: (.+?)<"
       date:
-        selector: a[title][href^="index.php?page=torrent-details&id="]
+        selector: a[href^="index.php?page=torrent-details&id="]
         attribute: onmouseover
         filters:
           - name: regexp
@@ -168,9 +176,9 @@
             args: "Done: (\\d+)<"
       downloadvolumefactor:
         case:
-          img[src="images/freeleech.gif"]: "0"
-          img[src="gold/gold.gif"]: "0"
-          "*": "1"
+          img[src="images/freeleech.gif"]: 0
+          img[src="gold/gold.gif"]: 0
+          "*": 1
       uploadvolumefactor:
         case:
-          "*": "1"
+          "*": 1

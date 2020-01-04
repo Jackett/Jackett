@@ -6,6 +6,8 @@
   type: private
   encoding: UTF-8
   links:
+    - https://galeriens.com/
+  legacylinks:
     - https://galeriens.eu/
 
   caps:

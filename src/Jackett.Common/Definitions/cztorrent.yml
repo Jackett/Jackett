@@ -38,6 +38,23 @@
       tv-search: [q, season, ep]
       movie-search: [q]
 
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "7"
+      options:
+        "7": "created"
+        "2": "seeders"
+        "6": "size"
+        "5": "title"
+
   login:
     path: login-page
     method: form
@@ -55,11 +72,14 @@
     paths:
       - path: torrents
     inputs:
-      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
       s: "{{ .Keywords }}"
-      t: "1"
+      t: 1
+      o: "{{ .Config.sort }}"
+
     rows:
       selector: tr.torr_hover
+
     fields:
       title:
         selector: td.detaily a

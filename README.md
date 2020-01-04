@@ -18,7 +18,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 #### Supported Systems
 * Windows 7SP1 or greater using .NET 4.6.1 or above [Download here](https://www.microsoft.com/net/framework/versions/net461)
 * Linux [supported operating systems here](https://github.com/dotnet/core/blob/master/release-notes/2.1/2.1-supported-os.md#linux)
-* macOS 10.12 or greater
+* macOS 10.13 or greater
 
 ### Supported Public Trackers
  * 1337x
@@ -34,6 +34,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BTDB
  * BTDIGG
  * BT.etree
+ * BTSOW
  * ConCen
  * Corsaro.red
  * cpasbien
@@ -46,13 +47,13 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * ExtraTorrent.ag
  * EXT Torrents
  * EZTV
+ * Filebase
  * FireBit
  * Frozen Layer
  * GamesTorrents
  * GkTorrent
  * GloDLS
  * HDReactor
- * Hon3yHD.net
  * Horrible Subs
  * Idope
  * Il Corsaro Nero <!-- maintained by bonny1992 -->
@@ -83,6 +84,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * RARBG
  * Rus-media
  * RuTor
+ * Seedpeer
  * shokweb
  * ShowRSS
  * SkyTorrentsClone
@@ -92,6 +94,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TFile
  * The Pirate Bay (TPB)
  * Tokyo Tosho
+ * TopNow
  * Torlock
  * TOROS
  * Torrent Downloads (TD)
@@ -124,6 +127,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Deildu
  * DXP (Deaf Experts)
  * EniaHD
+ * ExtremlymTorrents
  * Film-Paleis
  * Gay-Torrents.net
  * Gay-Torrents.org
@@ -133,6 +137,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * LostFilm.tv
  * Marine Tracker
  * Metal Tracker
+ * MuziekFrabriek
  * MVGroup Forum
  * MVGroup Main
  * NetHD (VietTorrent)
@@ -158,6 +163,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * 3D Torrents (3DT) 
  * 3evils
  * 4thD (4th Dimension)
+ * 52PT
  * 720pier
  * Abnormal
  * Acid Lounge (A-L)
@@ -170,7 +176,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Araba Fenice (Phoenix)
  * Asgaard (AG)
  * AsianCinema
- * AsianDVDClub
  * AST4u
  * Audiobook Torrents (ABT)
  * AudioNews (AN)
@@ -179,6 +184,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Back-ups
  * BakaBT
  * BaconBits (bB)
+ * BeiTai
  * BeyondHD (BHD)
  * BIGTorrent
  * BigTower
@@ -187,15 +193,15 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BiT-TiTAN
  * Bithorlo (BHO)
  * BitHUmen
- * BitMe
- * BitsPiracy
  * Bitspyder
  * BitTorrentFiles
  * BitTurk
  * BJ-Share (BJ)
  * BlueBird
  * Blutopia (BLU)
+ * Brasil Tracker
  * BroadcastTheNet (BTN)
+ * BroadCity
  * BrokenStones
  * BTGigs (TG)
  * BTNext (BTNT)
@@ -208,6 +214,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * CHDBits
  * ChannelX
  * Cinemageddon
+ * CinemaMovies
  * Cinematik
  * CinemaZ (EuTorrents)
  * Classix
@@ -216,7 +223,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * CrazySpirits
  * CrnaBerza
  * DanishBits (DB)
- * Dark-Shadow
  * Das Unerwartete
  * DataScene (DS)
  * DesiReleasers
@@ -232,15 +238,16 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * EbookParadijs
  * Ebooks-Shares
  * EfectoDoppler
- * Elit Tracker (ET)
  * Elite-Tracker
  * Empornium (EMP)
  * eShareNet
  * eStone (XiDER, BeLoad)
  * Ethor.net (Thor's Land)
+ * ExtremeTorrents
  * FANO.IN
  * FileList (FL)
  * Femdomcult
+ * FinVip
  * FocusX
  * FreeTorrent
  * FullMixMusic
@@ -299,24 +306,28 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * M-Team TP (MTTP)
  * Magico (Trellas)
  * Majomparádé (TurkDepo)
+ * MoeCat
  * Mononoké-BT
  * MoreThanTV (MTV)
- * Music-Master
  * MyAnonamouse (MAM)
  * myAmity
  * MySpleen
  * NBTorrents
  * NCore
  * Nebulance (NBL) (TransmiTheNet)
+ * NetCosmo
  * NetLab
  * New Real World
  * Norbits
  * NordicBits (NB)
+ * NORDiCHD
  * Nostalgic (The Archive)
  * notwhat.cd
+ * OnlineSelfEducation
  * Orpheus
  * Ourbits (HDPter)
  * P2PBG
+ * Partis
  * Passione Torrent <!-- maintained by bonny1992 -->
  * PassThePopcorn (PTP)
  * Peers.FM
@@ -326,6 +337,8 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Pleasuredome
  * PolishSource (PS)
  * PolishTracker
+ * Pornbay
+ * PornBits (PB)
  * Pretome
  * PrivateHD (PHD)
  * ProAudioTorrents (PAT)
@@ -343,7 +356,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Red Star Torrent (RST)
  * RetroFlix
  * RevolutionTT
- * RGU
  * RoDVD (Cinefiles)
  * Romanian Metal Torrent (RMT)
  * RPTorrents
@@ -389,6 +401,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * The Show
  * The-Torrents
  * The Vault
+ * TLFBits
  * Torrent Network (TN)
  * Torrent Sector Crew (TSC)
  * Torrent.LT
@@ -405,12 +418,11 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TorrentSeeds (TS)
  * Torrent-Syndikat
  * TOrrent-tuRK (TORK)
- * TorViet  (HDVNBits)
  * TotallyKids (TK)
  * ToTheGlory
  * TranceTraffic
  * Trezzor
- * TurkTorrent (TT) [![(invite needed)][inviteneeded]](#)
+ * TurkTorrent (TT)
  * TV Chaos UK (TVCUK)
  * TV-Vault
  * TVstore
@@ -420,13 +432,13 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * UnionGang
  * UnlimitZ
  * Vizuk
- * Waffles
  * World-In-HD
  * World-of-Tomorrow
  * x-ite.me (XM)
  * xBytesV2
  * XSpeeds (XS)
  * XWTorrents (XWT)
+ * XWT-Classics
  * Xthor
  * XtremeFile
  * XtreMeZone (MYXZ)
@@ -434,7 +446,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Zamunda.net
  * Zelka.org
 
-Trackers marked with  [![(invite needed)][inviteneeded]](#) have no active maintainer and are missing features or are broken. If you have an invite for them please send it to kaso1717 -at- gmail.com to get them fixed/improved.
+Trackers marked with  [![(invite needed)][inviteneeded]](#) have no active maintainer and are missing features or are broken. If you have an invite for them please send it to garfieldsixtynine -at- gmail.com to get them fixed/improved.
 
 ### Aggregate indexers
 
@@ -523,7 +535,7 @@ On an Ubuntu 16 system: [chrisjohnson00.jackett](https://galaxy.ansible.com/chri
 ## Installation on macOS
 
 ### Prerequisites
-macOS 10.12 or greater
+macOS 10.13 or greater
 
 ### Install as service
 1. Download and extract the latest `Jackett.Binaries.macOS.tar.gz` release from the [releases page](https://github.com/Jackett/Jackett/releases).

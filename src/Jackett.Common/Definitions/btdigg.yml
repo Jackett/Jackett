@@ -21,6 +21,13 @@
     - name: info
       type: info
       default: BTDigg does not use categories. In your software Indexer settings, set the category to 100001.
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "2"
+      options:
+        "2": "created"
+        "3": "size"
 
   search:
     # https://btdig.com/search?q=test&order=2
@@ -28,12 +35,15 @@
     paths:
       - path: search
     inputs:
-      q: "{{if .Keywords }}{{.Keywords}}{{else}}test{{end}}"
-      order: 2
+      q: "{{ if .Keywords }}{{ .Keywords }}{{else}}test{{end}}"
+      # 0 relevance 2 age 3 size 4 files
+      order: "{{ .Config.sort }}"
+
     rows:
       selector: div.one_result
       filters:
         - name: andmatch
+
     fields:
       title:
         selector: div.torrent_name a
@@ -62,6 +72,6 @@
       leechers:
         text: 1
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1

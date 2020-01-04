@@ -10,42 +10,59 @@
 
   caps:
     categories:
-      "TV shows": TV
+      "TVshows": TV
+      "Television": TV
+      "Anime": TV/Anime
+      "MoviesDocumentary": TV/Documentary
       "Movies": Movies
+      "VideoMobile": Movies
       "Music": Audio
+      "AudioBooks": Audio/Audiobook
       "Games": Console
       "Applications": PC/0day
       "Other": Other/Misc
-      "Anime": TV/Anime
-      "Audio Books": Audio/Audiobook
+      "OtherUnsorted": Other/Misc
 
     modes:
       search: [q]
       tv-search: [q, season, ep]
       movie-search: [q]
 
-  settings: []
+  settings:
+    - name: sort
+      type: select
+      label: Sort requested from site (Applies only to Search with Keywords)
+      default: "d"
+      options:
+        "d": "created"
+        "s": "seeders"
+        "_": "size"
 
   download:
     selector: a[href^="magnet:?xt="]
 
   search:
     paths:
-      - path: "{{if .Keywords}}searchd?q={{ .Keywords}}{{else}}latest{{end}}"
+      - path: "{{ if .Keywords }}search{{ re_replace .Config.sort \"_\" \"\" }}?q={{ .Keywords }}{{else}}latest{{end}}"
+
     rows:
       selector: table.table2 > tbody > tr:has(span.smallish)
+
     fields:
+      category:
+        selector: div.tt-name > span.smallish
+        optional: true
+        filters:
+          - name: re_replace
+            args: ["[^A-Za-z]+", ""] # strip everything but letters
       title:
         selector: div.tt-name > a[href^="/"]
       details:
         selector: div.tt-name > a[href^="/"]
         attribute: href
-      size:
-        selector: td:nth-child(3)
-      seeders:
-        selector: td.tdseed
-      leechers:
-        selector: td.tdleech
+      download:
+        selector: div.tt-name > a[href^="/"]
+        attribute: href
       date:
         selector: td:nth-child(2)
         filters:
@@ -55,15 +72,12 @@
             args: ["Last Month", "1 month ago"]
           - name: replace
             args: ["+", " ago"]
-      download:
-        selector: div.tt-name > a[href^="/"]
-        attribute: href
-      category:
-        selector: div.tt-name > span.smallish
-        optional: true
-        filters:
-          - name: replace
-            args: ["» ", ""]
+      size:
+        selector: td:nth-child(3)
+      seeders:
+        selector: td.tdseed
+      leechers:
+        selector: td.tdleech
       downloadvolumefactor:
         text: 0
       uploadvolumefactor:

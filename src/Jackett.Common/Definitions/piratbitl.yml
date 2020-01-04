@@ -606,6 +606,29 @@
     modes:
       search: [q]
 
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "1"
+      options:
+        "1": "created"
+        "10": "seeders"
+        "7": "size"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "2"
+      options:
+        "2": "desc"
+        "1": "asc"
+
   login:
     path: login.php
     method: post
@@ -643,8 +666,8 @@
       prev_dc: 0
       prev_df: 1
       prev_ds: 0
-      o: 1
-      s: 2
+      o: "{{ .Config.sort }}"
+      s: "{{ .Config.type }}"
       df: 1
       da: 1
       ss: "{{ .Keywords }}"
@@ -653,7 +676,16 @@
 
     rows:
       selector: tr[id^="tor_"]
+      filters:
+        - name: andmatch
+
     fields:
+      category:
+        selector: td a.gen
+        attribute: href
+        filters:
+          - name: querystring
+            args: f
       title:
         selector: td a.genmed b
       details:
@@ -662,21 +694,8 @@
       download:
         selector: td div a.dLink
         attribute: href
-      category:
-        selector: td a.gen
-        attribute: href
-        filters:
-          - name: querystring
-            args: f
       size:
         selector: td > u
-      seeders:
-        selector: td.seedmed
-      leechers:
-        selector: td.leechmed
-        # Russian and Ukranian and English languages are supported
-      grabs:
-        selector: td[title^="Ответов"], td[title^="Відповідей"], td[title^="Replies"]
         # 2 date flavours for 3 languages
       date:
       # 15:04
@@ -692,11 +711,17 @@
         filters:
           - name: dateparse
             args: "15:04 2-01-06"
+        # Russian and Ukranian and English languages are supported
+      grabs:
+        selector: td[title^="Ответов"], td[title^="Відповідей"], td[title^="Replies"]
+      seeders:
+        selector: td.seedmed
+      leechers:
+        selector: td.leechmed
       downloadvolumefactor:
         case:
-          "span.isgold": "0"
-          "span.issilver": "0.5"
-          "*": "1"
+          span.isgold: 0
+          span.issilver: 0.5
+          "*": 1
       uploadvolumefactor:
-        case:
-          "*": "1"
+        text: 1

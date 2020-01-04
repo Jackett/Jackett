@@ -40,7 +40,6 @@
       - {id: 24, cat: PC/Phone-Other, desc: "Mobile-GSM"}
       - {id: 23, cat: TV/Sport, desc: "Sport"}
 
-
     modes:
       search: [q]
       tv-search: [q, season, ep]
@@ -53,6 +52,22 @@
     - name: password
       type: password
       label: Password
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "3"
+      options:
+        "3": "created"
+        "5": "seeders"
+        "4": "size"
+        "2": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "2"
+      options:
+        "2": "desc"
+        "1": "asc"
 
   login:
     path: index.php?page=login
@@ -65,17 +80,20 @@
       - selector: td.lista span[style="color:#FF0000;"]
     test:
       path: /
-      selector: :has(a[href="logout.php"])
+      selector: a[href="logout.php"]
 
   search:
     paths:
-    # http://alein.org/index.php?page=torrents&category=1%3B15%3B41%3B14%3B48%3B39%3B20%3B16%3B5%3B21%3B22%3B11&search=venom&active=1
+      # http://alein.org/index.php?page=torrents&category=1;15;41;14;48;39;20;16;5;21;22;11&search=venom&active=1
       - path: index.php
     inputs:
-      page: "torrents"
-      category: "{{range .Categories}}{{.}};{{end}}"
-      search: "{{if .Keywords }}{{.Keywords}}{{else}}{{end}}"
-      active: "1"
+      page: torrents
+      category: "{{ range .Categories }}{{.}};{{end}}"
+      search: "{{ .Keywords }}"
+      # 0 all 1 active only 2 dead only
+      active: 0
+      order: "{{ .Config.sort }}"
+      by: "{{ .Config.type }}"
 
     rows:
       selector: tr.trclass:not(:has(td.lista-cat-rec))
@@ -100,7 +118,7 @@
           - name: prepend
             args: "download.php?id="
           - name: append
-            args: "&f={{.Result.title}}.torrent"
+            args: "&f={{ .Result.title }}.torrent"
       banner:
         selector: td a[href*="id="]
         attribute: onmouseover
@@ -121,6 +139,7 @@
           - name: dateparse
             args: "02/01/2006"
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
+  

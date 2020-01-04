@@ -12,23 +12,14 @@
 
   caps:
     categorymappings:
-      - {id: 49, cat: Movies/3D, desc: "Movies - 3D"}
-      - {id: 1, cat: Movies/HD, desc: "Movies - HD 1080p"}
-      - {id: 2, cat: Movies/HD, desc: "Movies - HD 720p"}
-      - {id: 3, cat: Movies/UHD, desc: "Movies - UltraHD/4K"}
-      - {id: 47, cat: Movies/SD, desc: "Movies - X264/H264"}
-      - {id: 76, cat: Movies/SD, desc: "Movies - HEVC/x265"}
-      - {id: 42, cat: Movies/SD, desc: "Movies - XviD"}
-      - {id: 65, cat: Movies, desc: "Movies - CAM/TS"}
-      - {id: 51, cat: Movies, desc: "Movies - Dubs/Dual Audio"}
-      - {id: 67, cat: Movies/DVD, desc: "Movies - DVDR"}
-      - {id: 66, cat: Movies/BluRay, desc: "Movies - BluRay Disc/Remux"}
-      - {id: 41, cat: TV/HD, desc: "TV - HD/X264/H264"}
-      - {id: 5, cat: TV/SD, desc: "TV - SD/X264/H264"}
-      - {id: 77, cat: TV/SD, desc: "TV - HEVC/x265"}
-      - {id: 50, cat: TV/SD, desc: "TV - SD/XVID"}
-      - {id: 7, cat: TV, desc: "TV - TV Packs"}
-      - {id: 72, cat: TV/Sport, desc: "TV - Sport"}
+      - {id: 88, cat: XXX, desc: "Adult - Books"}
+      - {id: 84, cat: XXX, desc: "Adult - Games"}
+      - {id: 82, cat: XXX, desc: "Adult - HD-Movies"}
+      - {id: 83, cat: XXX, desc: "Adult - Hentai"}
+      - {id: 86, cat: XXX, desc: "Adult - Magazines"}
+      - {id: 81, cat: XXX, desc: "Adult - Movies"}
+      - {id: 87, cat: XXX, desc: "Adult - Other"}
+      - {id: 85, cat: XXX, desc: "Adult - Pictures"}
       - {id: 74, cat: TV/Anime, desc: "Anime - Dubbed/Subbed"}
       - {id: 73, cat: TV/Anime, desc: "Anime - Movies"}
       - {id: 75, cat: TV/Anime, desc: "Anime - Others"}
@@ -40,14 +31,38 @@
       - {id: 58, cat: PC/Games, desc: "Games - Android"}
       - {id: 71, cat: PC/Games, desc: "Games - Others"}
       - {id: 57, cat: PC/Games, desc: "Games - Windows"}
+      - {id: 49, cat: Movies/3D, desc: "Movies - 3D"}
+      - {id: 66, cat: Movies/BluRay, desc: "Movies - BluRay Disc/Remux"}
+      - {id: 91, cat: Movies, desc: "Movies - Bollywood"}
+      - {id: 65, cat: Movies, desc: "Movies - CAM/TS"}
+      - {id: 80, cat: TV/Documentary, desc: "Documentary"}
+      - {id: 51, cat: Movies, desc: "Movies - Dubs/Dual Audio"}
+      - {id: 67, cat: Movies/DVD, desc: "Movies - DVDR"}
+      - {id: 1, cat: Movies/HD, desc: "Movies - HD 1080p"}
+      - {id: 2, cat: Movies/HD, desc: "Movies - HD 720p"}
+      - {id: 76, cat: Movies/HD, desc: "Movies - HEVC/x265"}
+      - {id: 47, cat: Movies/HD, desc: "Movies - X264/H264"}
+      - {id: 3, cat: Movies/UHD, desc: "Movies - UltraHD/4K"}
+      - {id: 42, cat: Movies/SD, desc: "Movies - XviD"}
       - {id: 60, cat: Audio/Lossless, desc: "Music - FLAC"}
       - {id: 59, cat: Audio/MP3, desc: "Music - MP3"}
       - {id: 61, cat: Audio/Video, desc: "Music - Music Videos"}
       - {id: 69, cat: Audio/Other, desc: "Music - Others"}
+      - {id: 95, cat: Other/Misc, desc: "Others - Misc"}
+      - {id: 78, cat: Other, desc: "Others - Unsorted"}
       - {id: 63, cat: PC/Phone-Android, desc: "Software - Android"}
       - {id: 64, cat: PC/Mac, desc: "Software - Mac"}
       - {id: 70, cat: PC, desc: "Software - Others"}
       - {id: 62, cat: PC/0Day, desc: "Software - Windows"}
+      - {id: 94, cat: Books, desc: "Tutorials - Tutorials"}
+      - {id: 79, cat: TV/Documentary, desc: "Documentary"}
+      - {id: 41, cat: TV/HD, desc: "TV - HD/X264/H264"}
+      - {id: 77, cat: TV/HD, desc: "TV - HEVC/x265"}
+      - {id: 5, cat: TV/HD, desc: "TV - SD/X264/H264"}
+      - {id: 50, cat: TV/SD, desc: "TV - SD/XVID"}
+      - {id: 72, cat: TV/Sport, desc: "TV - Sport"}
+      - {id: 7, cat: TV, desc: "TV - TV Packs"}
+      - {id: 89, cat: TV/UHD, desc: "TV - UltraHD/4K"}
 
     modes:
       search: [q]
@@ -62,18 +77,34 @@
       options:
         "https://etorrent.click/" : "eTorrent.click"
         "magnet:": "magnet"
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "id"
+      options:
+        "id": "created"
+        "seeders": "seeders"
+        "size": "size"
+        "name": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
   
   download:
     selector: a[href^="{{ .Config.downloadlink }}"]
 
   search:
-    path: "{{if .Keywords}}torrents-search.php{{else}}torrents.php{{end}}"
+    path: "{{ if .Keywords }}torrents-search.php{{else}}torrents.php{{end}}"
     inputs:
-      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
       search: "{{ .Keywords }}"
-      sort: "id"
-      order: "desc"
-      incldead: "1"
+      sort: "{{ .Config.sort }}"
+      order: "{{ .Config.type }}"
+      incldead: 1
     keywordsfilters:
       - name: replace
         args: ["-", " "] # remove special search character (negative search)
@@ -83,10 +114,12 @@
         args: ["(\\w+)", " +$1"] # prepend + to each word
       - name: re_replace
         args: ["\\s+", " "] # clean up whitespaces (multiple consecutive spaces confuses the search engine)
+
     rows:
       selector: div.myFrame-content > div > table > tbody > tr[class]
       filters:
         - name: andmatch # they ignore keywords <= characters, so we still andmatch it, see https://www.ettv.tv/forum/view/topic/and-search-operator-broken--70
+
     fields:
       download:
         selector: a[href^="/torrent/"]
@@ -112,6 +145,6 @@
       leechers:
         selector: td:nth-child(7)
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1

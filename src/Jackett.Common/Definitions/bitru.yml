@@ -30,8 +30,16 @@
       label: Include Advertising
       default: "yes"
       options:
-        yes: yes
-        no: no
+        "yes": "yes"
+        "no": "no"
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "_"
+      options:
+        "_": "created"
+        "seeders": "seeders"
+        "size": "size"
 
   search:
     paths:
@@ -39,6 +47,7 @@
     inputs:
       s: "{{ .Keywords }}"
       rek: "{{ .Config.adverts }}"
+      sort: "{{ re_replace .Config.sort \"_\" \"\"}}"
 
     rows:
       selector: table.browse-list > tbody > tr
@@ -142,6 +151,6 @@
           - name: replace
             args: ["?", "0"] 
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1

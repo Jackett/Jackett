@@ -659,6 +659,16 @@ namespace Jackett.Common.Indexers
 
                 checkForError(loginResult, Definition.Login.Error);
             }
+            else if (Login.Method == "oneurl")
+            {
+                var OneUrl = applyGoTemplateText(Definition.Login.Inputs["oneurl"]);
+                var LoginUrl = resolvePath(Login.Path + OneUrl).ToString();
+                configData.CookieHeader.Value = null;
+                var loginResult = await RequestStringWithCookies(LoginUrl, null, SiteLink);
+                configData.CookieHeader.Value = loginResult.Cookies;
+
+                checkForError(loginResult, Definition.Login.Error);
+            }
             else
             {
                 throw new NotImplementedException("Login method " + Definition.Login.Method + " not implemented");
@@ -1352,8 +1362,11 @@ namespace Jackett.Common.Indexers
                                             }
                                             break;
                                         case "magnet":
-                                            release.MagnetUri = new Uri(value);
-                                            value = release.MagnetUri.ToString();
+                                            var magnetUri = new Uri(value);
+                                            release.MagnetUri = magnetUri;
+                                            value = magnetUri.ToString();
+                                            if (release.Guid == null)
+                                                release.Guid = magnetUri;
                                             break;
                                         case "details":
                                             var url = resolvePath(value, searchUrlUri);

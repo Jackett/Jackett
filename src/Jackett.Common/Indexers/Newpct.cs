@@ -216,8 +216,8 @@ namespace Jackett.Common.Indexers
                 Match match = matcher.MatchRegex.Match(content);
                 if (match.Success)
                 {
-                    string linkText; 
-                        
+                    string linkText;
+
                     if (matcher.MatchEvaluator != null)
                         linkText = (string)matcher.MatchEvaluator.DynamicInvoke(match);
                     else
@@ -238,8 +238,8 @@ namespace Jackett.Common.Indexers
                 uris.Add(DefaultSiteLinkUri);
 
             uris = uris.Concat(ExtraSiteLinkUris.
-                Where(u => 
-                    (u.Scheme != referenceLink.Scheme || u.Host != referenceLink.Host) && 
+                Where(u =>
+                    (u.Scheme != referenceLink.Scheme || u.Host != referenceLink.Host) &&
                     (u.Scheme != DefaultSiteLinkUri.Scheme || u.Host != DefaultSiteLinkUri.Host))).ToList();
 
             List<Uri> result = new List<Uri>();
@@ -631,7 +631,14 @@ namespace Jackett.Common.Indexers
                                     else
                                         uri = uris.Current;
 
-                                    results = await PostDataWithCookies(uri.AbsoluteUri, queryCollection);
+                                    try
+                                    {
+                                        results = await PostDataWithCookies(uri.AbsoluteUri, queryCollection);
+                                    }
+                                    catch
+                                    {
+                                        results = null;
+                                    }
 
                                     if (results != null && !string.IsNullOrEmpty(results.Content))
                                     {
@@ -721,7 +728,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(content, ex);
+                return null;
             }
 
             if (!someFound)
@@ -786,7 +793,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(content, ex);
+                return null;
             }
 
             if (!someFound)
@@ -897,6 +904,8 @@ namespace Jackett.Common.Indexers
             result.Peers = 1;
 
             result.Title = FixedTitle(result, quality, language);
+            result.DownloadVolumeFactor = 0;
+            result.UploadVolumeFactor = 1;
 
             return result;
         }

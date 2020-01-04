@@ -63,6 +63,22 @@
       type: info
       label: How to get the Cookie
       default: "<ol><li>Login to this tracker in your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find 'cookie:' in the <b>Request Headers</b> section<li>Copy & paste the whole cookie string to here</ol>"
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "4"
+      options:
+        "4": "created"
+        "7": "seeders"
+        "5": "size"
+        "1": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
 
   login:
     method: cookie
@@ -73,33 +89,15 @@
     paths:
       - path: browse.php
     inputs:
-      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
       search: "{{ .Keywords }}"
+      sort: "{{ .Config.sort }}"
+      type: "{{ .Config.type }}"
+
     rows:
       selector: tr[class^="browse"]
+
     fields:
-      download:
-        selector: a[href^="download.php?id="]
-        attribute: href
-      title:
-        selector: a[href^="torrent.php?id="]
-        attribute: title
-      banner:
-        optional: true
-        selector: a[href^="torrent.php?id="][onmouseover]
-        attribute: onmouseover
-        filters:
-          - name: regexp
-            args: ", '(.*)'"
-      downloadvolumefactor:
-        case:
-          img[title="Ingyenes letöltés"]: "0"
-          "*": "1"
-      uploadvolumefactor:
-        selector: span:contains("Feltöltési szorzó")
-        filters:
-          - name: replace
-            args: ["Feltöltési szorzó × ", ""]
       category:
         selector: a[href^="browse.php?cat="]
         attribute: href
@@ -107,9 +105,22 @@
           - name: querystring
             args: cat
           - name: trim # some torrents have an extra space
+      title:
+        selector: a[href^="torrent.php?id="]
+        attribute: title
       details:
         selector: a[href^="torrent.php?id="]
         attribute: href
+      download:
+        selector: a[href^="download.php?id="]
+        attribute: href
+      banner:
+        optional: true
+        selector: a[href^="torrent.php?id="][onmouseover]
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: ", '(.*)'"
       size:
         selector: td:nth-child(4)
       grabs:
@@ -120,3 +131,12 @@
         selector: td:nth-child(7)
       date:
         selector: "a[style=\"font-size: 8pt;cursor: pointer;\"][title]"
+      downloadvolumefactor:
+        case:
+          img[title="Ingyenes letöltés"]: "0"
+          "*": "1"
+      uploadvolumefactor:
+        selector: span:contains("Feltöltési szorzó")
+        filters:
+          - name: replace
+            args: ["Feltöltési szorzó × ", ""]
