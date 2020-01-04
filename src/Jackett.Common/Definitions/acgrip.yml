@@ -8,6 +8,8 @@
   encoding: UTF-8
   links:
     - https://acg.rip/
+  certificates:
+    - bfd88de41aeeda5c9d98d5e081e8c4ec40204b6b # expired 4 jan 20
 
   caps:
     categories:
