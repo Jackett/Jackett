@@ -89,7 +89,7 @@ namespace Jackett.Common.Indexers
                 { "password", configData.Password.Value }
             };
 
-            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, response.Cookies, true, null, LoginUrl);
+            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, responseFirstPage.Cookies, true, null, LoginUrl);
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
             {
                 CQ dom = result.Content;
