@@ -67,6 +67,8 @@
       do: search
       subaction: search
       showposts: 1
+      # 0 in article 1 in comments 2 in static pages 3 in article titles
+      titleonly: 3
       story: "{{ if .Keywords }}{{ .Keywords }}{{ else }}2019{{ end }}"
       sortby: "{{ .Config.sort }}"
       resorder: "{{ .Config.type }}"
