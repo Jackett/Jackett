@@ -726,7 +726,7 @@ namespace Jackett.Common.Indexers
                     releases.Add(newpctRelease);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
@@ -791,7 +791,7 @@ namespace Jackett.Common.Indexers
 
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
