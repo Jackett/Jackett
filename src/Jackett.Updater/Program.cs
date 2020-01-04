@@ -553,8 +553,11 @@ namespace Jackett.Updater
 
         private string GetUpdateLocation()
         {
-            var location = new Uri(Assembly.GetEntryAssembly().GetName().CodeBase);
-            return new FileInfo(WebUtility.UrlDecode(location.AbsolutePath)).DirectoryName;
+	        // Use EscapedCodeBase to avoid Uri reserved characters from causing bugs
+	        // https://stackoverflow.com/questions/896572
+            var location = new Uri(Assembly.GetEntryAssembly().GetName().EscapedCodeBase);
+            // Use LocalPath instead of AbsolutePath to avoid needing to unescape Uri format.
+            return new FileInfo(location.LocalPath).DirectoryName;
         }
 
         private string GetJackettConsolePath(string directoryPath)
