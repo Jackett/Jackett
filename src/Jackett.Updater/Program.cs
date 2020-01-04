@@ -382,6 +382,7 @@ namespace Jackett.Updater
                 "Definitions/rgu.yml",
                 "Definitions/elittracker.yml",
                 "Definitions/hon3yhd-net.yml",
+                "Definitions/solidtorrents.yml",
             };
 
             foreach (var oldFile in oldFiles)
