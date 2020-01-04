@@ -55,8 +55,6 @@
     filters:
       - name: querystring
         args: url
-      - name: replace # temp fix for #5372
-        args: ["%E2%AD%90", ""]
   search:
     paths:
       - path: torrents
