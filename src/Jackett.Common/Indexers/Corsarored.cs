@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
-using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -20,7 +19,7 @@ namespace Jackett.Common.Indexers
 
 		private readonly Dictionary<string, string> _apiHeaders = new Dictionary<string, string>
 		{
-			{"Content-Type", "application/json"}
+			["Content-Type"] = "application/json"
 		};
 
 		public Corsarored(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
@@ -121,16 +120,9 @@ namespace Jackett.Common.Indexers
 		protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
 		{
 			var releases = new List<ReleaseInfo>();
-
 			var searchString = query.GetQueryString();
-			var queryCollection = new List<KeyValuePair<string, string>>();
-			var page = 0;
 
-			if (!string.IsNullOrWhiteSpace(searchString))
-			{
-				queryCollection.Add("term", searchString);
-			}
-			else
+			if (string.IsNullOrWhiteSpace(searchString))
 			{
 				// no term execute latest search
 				var result = await SendApiRequestLatest();
@@ -151,16 +143,16 @@ namespace Jackett.Common.Indexers
 			}
 
 			var cats = MapTorznabCapsToTrackers(query);
-			queryCollection.Add("category", cats.Count > 0 ? string.Join(",", cats) : "0");
+			var queryCollection = new Dictionary<string, string>
+			{
+				["term"] = searchString,
+				["category"] = cats.Count > 0 ? string.Join(",", cats) : "0"
+			};
 
-			// lazy horrible page initialization
-			queryCollection.Add("page", page.ToString());
-
-			do
+			for (var page = 1; page <= MaxSearchPageLimit; page++)
 			{
 				// update page number
-				queryCollection.RemoveAt(queryCollection.Count - 1); // remove last elem: page number
-				queryCollection.Add("page", (++page).ToString());
+				queryCollection["page"] = page.ToString();
 
 				var result = await SendApiRequest(queryCollection);
 				try
@@ -168,11 +160,9 @@ namespace Jackett.Common.Indexers
 					// this time is a jobject
 					var json = (JObject) result;
 
-					if (json["results"] == null)
-						throw new Exception("Error invalid JSON response");
-
-					// check number result
-					if (!((JArray) json["results"]).Any())
+					// check JSON response and exit if no results (!x.Any())
+					// throws exception if json["results"] is null or not a JArray
+					if (!(json["results"] as JArray ?? throw new Exception("Error invalid JSON response")).Any())
 						break;
 
 					releases.AddRange(json["results"].Select(MakeRelease));
@@ -181,7 +171,7 @@ namespace Jackett.Common.Indexers
 				{
 					OnParseError(result.ToString(), ex);
 				}
-			} while (page < MaxSearchPageLimit);
+			}
 
 			return releases;
 		}
