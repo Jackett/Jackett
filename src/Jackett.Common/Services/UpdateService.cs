@@ -146,7 +146,8 @@ namespace Jackett.Common.Services
 
                     if (latestRelease.Name != currentVersion && currentVersion != "v0.0.0.0")
                     {
-                        logger.Info($"New release found.  Current: {currentVersion} New: {latestRelease.Name}");
+                        logger.Info($"New release found. Current: {currentVersion} New: {latestRelease.Name}");
+                        logger.Info($"Downloading release {latestRelease.Name} It could take a while...");
                         try
                         {
                             var tempDir = await DownloadRelease(latestRelease.Assets, isWindows, latestRelease.Name);
