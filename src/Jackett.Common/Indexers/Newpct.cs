@@ -68,6 +68,12 @@ namespace Jackett.Common.Indexers
 
         private static Uri[] ExtraSiteLinkUris = new Uri[]
         {
+            new Uri("https://pctnew.org"),
+        };
+
+        private static Uri[] LegacySiteLinkUris = new Uri[]
+        {
+            new Uri("http://descargas2020.com/"),
             new Uri("http://www.tvsinpagar.com/"),
             new Uri("http://torrentlocura.com/"),
             new Uri("https://pctnew.site"),
@@ -75,12 +81,6 @@ namespace Jackett.Common.Indexers
             new Uri("http://torrentrapid.com/"),
             new Uri("http://tumejortorrent.com/"),
             new Uri("http://pctnew.com/"),
-        };
-
-        private static Uri[] LegacySiteLinkUris = new Uri[]
-        {
-            new Uri("https://pctnew.site"),
-            new Uri("http://descargas2020.com/"),
         };
 
         private NewpctRelease _mostRecentRelease;
@@ -726,7 +726,7 @@ namespace Jackett.Common.Indexers
                     releases.Add(newpctRelease);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
@@ -791,7 +791,7 @@ namespace Jackett.Common.Indexers
 
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }

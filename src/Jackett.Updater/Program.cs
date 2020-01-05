@@ -362,6 +362,7 @@ namespace Jackett.Updater
                 "Definitions/rgu.yml",
                 "Definitions/elittracker.yml",
                 "Definitions/hon3yhd-net.yml",
+                "Definitions/solidtorrents.yml",
             };
 
             foreach (var oldFile in oldFiles)
@@ -526,8 +527,8 @@ namespace Jackett.Updater
 
         private string GetUpdateLocation()
         {
-            // Use EscapedCodeBase to avoid Uri reserved characters from causing bugs
-            // https://stackoverflow.com/questions/896572
+	        // Use EscapedCodeBase to avoid Uri reserved characters from causing bugs
+	        // https://stackoverflow.com/questions/896572
             var location = new Uri(Assembly.GetEntryAssembly().GetName().EscapedCodeBase);
             // Use LocalPath instead of AbsolutePath to avoid needing to unescape Uri format.
             return new FileInfo(location.LocalPath).DirectoryName;
