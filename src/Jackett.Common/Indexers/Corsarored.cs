@@ -15,7 +15,8 @@ namespace Jackett.Common.Indexers
 {
 	public class Corsarored : BaseWebIndexer
 	{
-		private const int MaxSearchPageLimit = 8; // 1page 25 items, 200
+		private const int MaxSearchPageLimit = 4;
+		private const int MaxResultsPerPage = 25;
 
 		private readonly Dictionary<string, string[]> _apiCategories = new Dictionary<string, string[]>
 		{
@@ -126,7 +127,6 @@ namespace Jackett.Common.Indexers
 
 		private async Task<dynamic> SendApiRequest(IEnumerable<KeyValuePair<string, string>> data)
 		{
-			//var jsonData = JsonConvert.SerializeObject(data);
 			var result = await PostDataWithCookiesAndRetry(ApiSearch, data, null, SiteLink, _apiHeaders, null, true);
 			return CheckResponse(result);
 		}
@@ -140,17 +140,19 @@ namespace Jackett.Common.Indexers
 		private string GetApiCategory(TorznabQuery query)
 		{
 			var cats = MapTorznabCapsToTrackers(query);
-			var apiList = new List<string>();
-			foreach (var apiCat in cats.Select(cat =>
+			if (cats.Count == 0) return "0";
+			string apiCat = null;
+			foreach (var cat in cats.Select(cat =>
 				_apiCategories.FirstOrDefault(kvp => kvp.Value.Contains(cat)).Key))
 			{
-				if (apiCat == "0") return apiCat;
-				if (!apiList.Contains(apiCat))
-					apiList.Add(apiCat);
-				if (apiList.Count > 1) return "0";
+				if (apiCat == null)
+					apiCat = cat;
+				if (apiCat != cat)
+					return "0";
+
 			}
 
-			return apiList[0];
+			return apiCat;
 		}
 
 		protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
@@ -195,12 +197,14 @@ namespace Jackett.Common.Indexers
 					// this time is a jobject
 					var json = (JObject) result;
 
-					// check JSON response and exit if no results (!x.Any())
 					// throws exception if json["results"] is null or not a JArray
-					if (!(json["results"] as JArray ?? throw new Exception("Error invalid JSON response")).Any())
-						break;
+					if(json["results"] == null)
+						throw new Exception("Error invalid JSON response");
 
-					releases.AddRange(json["results"].Select(MakeRelease));
+					var results = json["results"].Select(MakeRelease).ToList();
+					releases.AddRange(results);
+					if (results.Count < MaxResultsPerPage)
+						break;
 				}
 				catch (Exception ex)
 				{
@@ -234,7 +238,6 @@ namespace Jackett.Common.Indexers
 			if (torrent["last_updated"] != null)
 				release.PublishDate = DateTime.Parse((string) torrent["last_updated"]);
 
-			// TODO: don't know how to map this cats..
 			var cat = (int) torrent["category"];
 			release.Category = MapTrackerCatToNewznab(cat.ToString());
 
