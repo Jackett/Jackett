@@ -17,14 +17,14 @@ namespace Jackett.Server.Controllers
     [Route("dl/{indexerID}")]
     public class DownloadController : Controller
     {
-        private ServerConfig config;
+        private ServerConfig serverConfig;
         private Logger logger;
         private IIndexerManagerService indexerService;
         private IProtectionService protectionService;
 
-        public DownloadController(IIndexerManagerService i, Logger l, IProtectionService ps, ServerConfig serverConfig)
+        public DownloadController(IIndexerManagerService i, Logger l, IProtectionService ps, ServerConfig sConfig)
         {
-            config = serverConfig;
+            serverConfig = sConfig;
             logger = l;
             indexerService = i;
             protectionService = ps;
@@ -35,6 +35,9 @@ namespace Jackett.Server.Controllers
         {
             try
             {
+                if (serverConfig.APIKey != jackett_apikey)
+                    return Unauthorized();
+
                 var indexer = indexerService.GetWebIndexer(indexerID);
 
                 if (!indexer.IsConfigured)
@@ -45,9 +48,6 @@ namespace Jackett.Server.Controllers
 
                 path = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(path));
                 path = protectionService.UnProtect(path);
-
-                if (config.APIKey != jackett_apikey)
-                    return Unauthorized();
 
                 var target = new Uri(path, UriKind.RelativeOrAbsolute);
                 var downloadBytes = await indexer.Download(target);

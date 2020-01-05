@@ -20,14 +20,14 @@ namespace Jackett.Server.Controllers
     {
         private Logger logger;
         private IIndexerManagerService indexerService;
-        private readonly ServerConfig serverConfig;
+        private ServerConfig serverConfig;
         private IProtectionService protectionService;
 
-        public BlackholeController(IIndexerManagerService i, Logger l, ServerConfig config, IProtectionService ps)
+        public BlackholeController(IIndexerManagerService i, Logger l, ServerConfig sConfig, IProtectionService ps)
         {
             logger = l;
             indexerService = i;
-            serverConfig = config;
+            serverConfig = sConfig;
             protectionService = ps;
         }
 
@@ -37,15 +37,15 @@ namespace Jackett.Server.Controllers
             var jsonReply = new JObject();
             try
             {
+                if (serverConfig.APIKey != jackett_apikey)
+                    return Unauthorized();
+
                 var indexer = indexerService.GetWebIndexer(indexerID);
                 if (!indexer.IsConfigured)
                 {
                     logger.Warn(string.Format("Rejected a request to {0} which is unconfigured.", indexer.DisplayName));
                     throw new Exception("This indexer is not configured.");
                 }
-
-                if (serverConfig.APIKey != jackett_apikey)
-                    throw new Exception("Incorrect API key");
 
                 path = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(path));
                 path = protectionService.UnProtect(path);
