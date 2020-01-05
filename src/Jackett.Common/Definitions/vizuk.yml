@@ -37,6 +37,8 @@
       - {id: 91, cat: TV/HD, desc: "Series BDRip 720p"}
       - {id: 92, cat: TV/HD, desc: "Series Web-DL-2.0"}
       - {id: 95, cat: TV/HD, desc: "Series HDTV"}
+      - {id: 96, cat: TV/HD, desc: "Series HDTV 1080p"}
+      - {id: 97, cat: TV/HD, desc: "Series HDTV 720p"}
       - {id: 47, cat: Movies, desc: "Animación"}
       - {id: 69, cat: Movies/UHD, desc: "Animación UHDFull 4K"}
       - {id: 72, cat: Movies/UHD, desc: "Animación UHDRemux 4K"}
@@ -45,6 +47,7 @@
       - {id: 73, cat: Movies/HD, desc: "Animación FullBR 1080p"}
       - {id: 74, cat: Movies/BluRay, desc: "Animación Remux 1080p"}
       - {id: 53, cat: Movies/HD, desc: "Animación BDRip 1080p"}
+      - {id: 99, cat: Movies/HD, desc: "Animación Rip 1080p x265"}
       - {id: 54, cat: Movies/HD, desc: "Animación BDRip 720p"}
       - {id: 55, cat: Movies/HD, desc: "Animación Micro 1080p"}
       - {id: 56, cat: Movies/HD, desc: "Animación Micro 720p"}
@@ -88,6 +91,21 @@
       type: info
       label: "Languages"
       default: "This Indexer only works if your Vizuk account is set for the <b>Spanish</b> language. Using another language will not return results."
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "added"
+      options:
+        "added": "created"
+        "seeders": "seeders"
+        "size": "size"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
 
   login:
     path: ajax/login.php
@@ -114,8 +132,10 @@
       pid: 10
       $raw: "{{ range .Categories }}&cid[]={{.}}{{end}}"
       keywords: "{{ .Keywords }}"
+      # name description both uploader
       search_type: name
-      searchin: title
+      "sortOptions[sortBy]": "{{ .Config.sort }}"
+      "sortOptions[sortOrder]": "{{ .Config.type }}"
 
     rows:
       selector: table#torrents_table_classic > tbody > tr:not(:first-child), .torrent-box[id^="torrent_"]
