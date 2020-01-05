@@ -957,9 +957,6 @@
       download:
         selector: td a[href^="magnet:?xt="]
         attribute: href
-        filters:
-          - name: replace # temp fix for #5372
-            args: ["%E2%AD%90", ""]
       date:
         selector: td:nth-last-of-type(5)
         filters:
