@@ -115,8 +115,7 @@ namespace Jackett.Common.Services
                 return;
             }
 
-            var trayIsRunning = false;
-            if (isWindows) trayIsRunning = Process.GetProcessesByName("JackettTray").Length > 0;
+            var trayIsRunning = isWindows && Process.GetProcessesByName("JackettTray").Length > 0;
 
             try
             {
@@ -127,11 +126,13 @@ namespace Jackett.Common.Services
                     EmulateBrowser = false
                 });
 
-                if(response.Status != HttpStatusCode.OK) logger.Error($"Failed to get the release list: {response.Status}");
+                if (response.Status != HttpStatusCode.OK)
+	                logger.Error($"Failed to get the release list: {response.Status}");
 
                 var releases = JsonConvert.DeserializeObject<List<Release>>(response.Content);
 
-                if (!serverConfig.UpdatePrerelease) releases = releases.Where(r => !r.Prerelease).ToList();
+                if (!serverConfig.UpdatePrerelease)
+	                releases = releases.Where(r => !r.Prerelease).ToList();
 
                 if (releases.Count > 0)
                 {
@@ -147,7 +148,8 @@ namespace Jackett.Common.Services
                             // Copy updater
                             var installDir = Path.GetDirectoryName(ExePath());
                             var updaterPath = GetUpdaterPath(tempDir);
-                            if (updaterPath != null) StartUpdate(updaterPath, installDir, isWindows, serverConfig.RuntimeSettings.NoRestart, trayIsRunning);
+                            if (updaterPath != null)
+	                            StartUpdate(updaterPath, installDir, isWindows, serverConfig.RuntimeSettings.NoRestart, trayIsRunning);
                         }
                         catch (Exception e)
                         {
@@ -166,7 +168,8 @@ namespace Jackett.Common.Services
             }
             finally
             {
-                if (!isWindows) ServicePointManager.ServerCertificateValidationCallback -= AcceptCert;
+                if (!isWindows)
+	                ServicePointManager.ServerCertificateValidationCallback -= AcceptCert;
             }
         }
 
@@ -246,7 +249,8 @@ namespace Jackett.Common.Services
 
             var tempDir = Path.Combine(Path.GetTempPath(), $"JackettUpdate-{version}-{DateTime.Now.Ticks}");
 
-            if (Directory.Exists(tempDir)) Directory.Delete(tempDir, true);
+            if (Directory.Exists(tempDir))
+	            Directory.Delete(tempDir, true);
 
             Directory.CreateDirectory(tempDir);
 
@@ -313,10 +317,12 @@ namespace Jackett.Common.Services
         {
             var appType = "Console";
 
-            if (isWindows && windowsService.ServiceExists() && windowsService.ServiceRunning()) appType = "WindowsService";
+            if (isWindows && windowsService.ServiceExists() && windowsService.ServiceRunning())
+	            appType = "WindowsService";
 
             var exe = Path.GetFileName(ExePath());
-            var args = string.Join(" ", Environment.GetCommandLineArgs().Skip(1).Select(a => a.Contains(" ") ? $"\"{a}\""
+            var args = string.Join(" ", Environment.GetCommandLineArgs().Skip(1).Select(a => a.Contains(" ") 
+	            ? $"\"{a}\""
                 : a )).Replace("\"", "\\\"");
 
             var startInfo = new ProcessStartInfo
@@ -351,15 +357,19 @@ namespace Jackett.Common.Services
                 logger.Error(e);
             }
 
-            if (NoRestart) startInfo.Arguments += " --NoRestart";
+            if (NoRestart)
+	            startInfo.Arguments += " --NoRestart";
 
-            if (trayIsRunning && appType == "Console") startInfo.Arguments += " --StartTray";
+            if (trayIsRunning && appType == "Console")
+	            startInfo.Arguments += " --StartTray";
 
             logger.Info($"Starting updater: {startInfo.FileName} {startInfo.Arguments}");
             var procInfo = Process.Start(startInfo);
             logger.Info($"Updater started process id: {procInfo.Id}");
 
-            if (NoRestart) return;
+            if (NoRestart)
+	            return;
+
             if (isWindows)
             {
                 logger.Info("Signal sent to lock service");

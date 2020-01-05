@@ -113,7 +113,8 @@ namespace Jackett.Updater
                         if (!exited)
                             logger.Info($"Process {pid} didn't exit within 2 seconds after a SIGTERM");
                     }
-                    if (!exited) proc.Kill(); // send SIGKILL
+                    if (!exited)
+	                    proc.Kill(); // send SIGKILL
                     exited = proc.WaitForExit(5000);
                     if (!exited)
                         logger.Info($"Process {pid} didn't exit within 5 seconds after a SIGKILL");
@@ -132,7 +133,8 @@ namespace Jackett.Updater
         private void ProcessUpdate(UpdaterConsoleOptions options)
         {
             var updateLocation = GetUpdateLocation();
-            if (!(updateLocation.EndsWith("\\") || updateLocation.EndsWith("/"))) updateLocation += Path.DirectorySeparatorChar;
+            if (!(updateLocation.EndsWith("\\") || updateLocation.EndsWith("/")))
+	            updateLocation += Path.DirectorySeparatorChar;
 
             var pids = new int[] { };
             if (options.KillPids != null)
@@ -209,7 +211,8 @@ namespace Jackett.Updater
                 {
                     var fileName = Path.GetFileName(file).ToLowerInvariant();
 
-                    if (fileName.EndsWith(".zip") || fileName.EndsWith(".tar") || fileName.EndsWith(".gz")) continue;
+                    if (fileName.EndsWith(".zip") || fileName.EndsWith(".tar") || fileName.EndsWith(".gz"))
+	                    continue;
 
                     var fileCopySuccess = CopyUpdateFile(options.Path, file, updateLocation, false);
 
@@ -232,11 +235,10 @@ namespace Jackett.Updater
                 try
                 {
                     var deleteDir = Path.Combine(options.Path, oldDir);
-                    if (Directory.Exists(deleteDir))
-                    {
-                        logger.Info($"Deleting directory {deleteDir}");
-                        Directory.Delete(deleteDir, true);
-                    }
+                    if (!Directory.Exists(deleteDir))
+	                    continue;
+                    logger.Info($"Deleting directory {deleteDir}");
+                    Directory.Delete(deleteDir, true);
                 }
                 catch (Exception e)
                 {
@@ -534,9 +536,9 @@ namespace Jackett.Updater
         private string GetJackettConsolePath(string directoryPath)
         {
             var variants = new Variants();
-            if (variants.IsNonWindowsDotNetCoreVariant(variant))
-                return Path.Combine(directoryPath, "jackett");
-            return Path.Combine(directoryPath, "JackettConsole.exe");
+            return Path.Combine(directoryPath, variants.IsNonWindowsDotNetCoreVariant(variant)
+		            ? "jackett"
+		            : "JackettConsole.exe");
         }
 
         private static void UnhandledExceptionTrapper(object sender, UnhandledExceptionEventArgs e)
