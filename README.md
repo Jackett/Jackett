@@ -268,6 +268,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Greek Team
  * HacheDe
  * HD-Forever (HDF)
+ * HD-Olimpo
  * HD-Only (HDO)
  * HD-Space (HDS)
  * HD-Spain
