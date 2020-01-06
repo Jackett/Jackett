@@ -123,6 +123,7 @@ namespace Jackett.Common.Utils
         public static Regex todayRegexp = new Regex(@"(?i)\btoday([\s,]*|$)", RegexOptions.Compiled);
         public static Regex tomorrowRegexp = new Regex(@"(?i)\btomorrow([\s,]*|$)", RegexOptions.Compiled);
         public static Regex yesterdayRegexp = new Regex(@"(?i)\byesterday([\s,]*|$)", RegexOptions.Compiled);
+        public static Regex daysOfWeekRegexp = new Regex(@"(?i)\b(monday|tuesday|wednesday|thursday|friday|saturday|sunday)([\s,]*|$)", RegexOptions.Compiled);
         public static Regex missingYearRegexp = new Regex(@"^(\d{1,2}-\d{1,2})(\s|$)", RegexOptions.Compiled);
         public static Regex missingYearRegexp2 = new Regex(@"^(\d{1,2}\s+\w{3})\s+(\d{1,2}\:\d{1,2}.*)$", RegexOptions.Compiled); // 1 Jan 10:30
 
@@ -174,6 +175,36 @@ namespace Jackett.Common.Utils
                     DateTime dt = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified);
                     dt += ParseTimeSpan(time);
                     dt += TimeSpan.FromDays(1);
+                    return dt;
+                }
+
+                // Days of the week ...
+                match = daysOfWeekRegexp.Match(str);
+                if (match.Success)
+                {
+                    var time = str.Replace(match.Groups[0].Value, "");
+                    DateTime dt = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified);
+                    dt += ParseTimeSpan(time);
+
+                    var dow = DayOfWeek.Monday;
+                    var groupMatchLower = match.Groups[0].Value.ToLower();
+                    if (groupMatchLower.StartsWith("monday")) 
+                        dow = DayOfWeek.Monday;
+                    else if (groupMatchLower.StartsWith("tuesday")) 
+                        dow = DayOfWeek.Tuesday;
+                    else if (groupMatchLower.StartsWith("wednesday")) 
+                        dow = DayOfWeek.Wednesday;
+                    else if (groupMatchLower.StartsWith("thursday")) 
+                        dow = DayOfWeek.Thursday;
+                    else if (groupMatchLower.StartsWith("friday")) 
+                        dow = DayOfWeek.Friday;
+                    else if (groupMatchLower.StartsWith("saturday")) 
+                        dow = DayOfWeek.Saturday;
+                    else 
+                        dow = DayOfWeek.Sunday;
+
+                    while (dt.DayOfWeek != dow)
+                        dt = dt.AddDays(-1);
                     return dt;
                 }
 
