@@ -21,11 +21,9 @@
       - {id: 119, cat: Movies/HD, desc: "Películas HDiTunes"}
       - {id: 84, cat: Movies/HD, desc: "Películas MicroHD 1080p"}
       - {id: 100, cat: Movies/HD, desc: "Películas MicroHD 720p"}
-
       - {id: 32, cat: Other/Misc, desc: "Documentales"}
       - {id: 51, cat: Audio/Video, desc: "Conciertos/Videos Musicales"}
       - {id: 131, cat: Movies/HD, desc: "Películas UHD"}
-
       - {id: 16, cat: TV/HD, desc: "Series"}
       - {id: 44, cat: TV/HD, desc: "Series HDTVrip"}
       - {id: 89, cat: TV/HD, desc: "Series HDiTunes"}
@@ -37,11 +35,9 @@
       - {id: 101, cat: TV/HD, desc: "Series BDrip 720p"}
       - {id: 45, cat: TV/HD, desc: "Series MicroHD 1080p"}
       - {id: 102, cat: TV/HD, desc: "Series MicroHD 720p"}
-
       - {id: 114, cat: TV/HD, desc: "TV"}
       - {id: 115, cat: TV/HD, desc: "TV 1080p"}
       - {id: 116, cat: TV/HD, desc: "TV 720p"}
-
       - {id: 90, cat: Movies, desc: "Animación"}
       - {id: 91, cat: Movies/3D, desc: "Animación 3D"}
       - {id: 92, cat: Movies/BluRay, desc: "Animación Full Bluray"}
@@ -52,12 +48,12 @@
       - {id: 96, cat: Movies/HD, desc: "Animación HDTVrip"}
       - {id: 98, cat: Movies/HD, desc: "Animación MicroHD 1080p"}
       - {id: 105, cat: Movies/HD, desc: "Animación MicroHD 720p"}
-
       - {id: 126, cat: Movies/HD, desc: "Peliculas H265"}
       - {id: 127, cat: TV/HD, desc: "Series H265"}
       - {id: 130, cat: Movies/3D, desc: "3D H265"}
       - {id: 128, cat: Movies/HD, desc: "Animación H265"}
       - {id: 129, cat: Other/Misc, desc: "Documentales H265"}
+
     modes:
       search: [q]
       tv-search: [q, season, ep]
@@ -71,6 +67,21 @@
       type: info
       label: How to get the Cookie
       default: "<ol><li>Login to this tracker in your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find 'cookie:' in the <b>Request Headers</b> section<li>Copy & paste the whole cookie string to here</ol>"
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "added"
+      options:
+        "added": "created"
+        "seeders": "seeders"
+        "size": "size"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
 
   login:
     method: cookie
@@ -78,6 +89,7 @@
       cookie: "{{ .Config.cookie }}"
     test:
       path: ?p=home&pid=1
+      selector: div#member_info_bar
 
   search:
     path: /
@@ -85,16 +97,26 @@
       - name: re_replace
         args: ["S0?(\\d{1,2})E(\\d{1,2})", "$1x$2"]
     inputs:
-      p: "torrents"
-      page: "1"
-      pid: "10"
+      p: torrents
+      page: 1
+      pid: 10
       $raw: "{{range .Categories}}&cid[]={{.}}{{end}}"
       keywords: "{{ .Keywords }}"
-      search_type: "name"
-      searchin: "title"
+      # name description both uploader
+      search_type: name
+      "sortOptions[sortBy]": "{{ .Config.sort }}"
+      "sortOptions[sortOrder]": "{{ .Config.type }}"
+
     rows:
       selector: table#torrents_table_classic > tbody > tr:not(:first-child), .torrent-box[id^="torrent_"]
+
     fields:
+      category:
+        selector:  td.torrent_image div.category_image a, .categoryImage a
+        attribute: href
+        filters:
+          - name: querystring
+            args: cid
       title:
         selector: td.torrent_name > a, .newIndicator > a
         filters:
@@ -103,12 +125,6 @@
       details:
         selector: td.torrent_name > a, .newIndicator > a
         attribute: href
-      category:
-        selector:  td.torrent_image div.category_image a, .categoryImage a
-        attribute: href
-        filters:
-          - name: querystring
-            args: cid
       download:
         selector: .torrentImages > span:first-child a
         attribute: href
@@ -116,6 +132,66 @@
         optional: true
         selector: td.torrent_image div.relativeDiv div:not(.category_image) a, .previewImage a
         attribute: href
+      imdb:
+        optional: true
+        selector: .torrentFlags a[href*="www.imdb.com/title/tt"]
+        attribute: href
+      date:
+        selector: td.torrent_name:contains("Subido"):contains("-"), .torrentOwner:contains("Subido"):contains("-")
+        optional: true
+        filters:
+          - name: regexp
+            args: "(?<=Subido )(.*)(?= por)"
+          - name: replace
+            args: [": ", ":"]
+          - name: dateparse
+            args: "02-01-2006 15:04"
+      date:
+        selector: td.torrent_name:contains("Subido"):not(:contains("-")), .torrentOwner:contains("Subido"):not(:contains("-"))
+        optional: true
+        filters:
+          - name: regexp
+            args: "(?<=Subido )(.*)(?= por)"
+          - name: replace
+            args: [": ", ":"]
+          - name: replace
+            args: ["Ayer a las", "Yesterday"]
+          - name: replace
+            args: ["Hoy en", "Today"]
+          - name: replace
+            args: ["Lunes a", "Monday"]
+          - name: replace
+            args: ["Martes a", "Tuesday"]
+          - name: replace
+            args: ["Miércoles a", "Wednesday"]
+          - name: replace
+            args: ["Jueves a", "Thursday"]
+          - name: replace
+            args: ["Viernes a", "Friday"]
+          - name: replace # WTF?
+            args: ["Friday a", "Friday"]
+          - name: replace
+            args: ["Sábado a", "Saturday"]
+          - name: replace
+            args: ["Domingo a", "Sunday"]
+          - name: fuzzytime
+      date:
+        selector: td.torrent_name:contains("Uploaded"):contains("-"), .torrentOwner:contains("Uploaded"):contains("-")
+        optional: true
+        filters:
+          - name: regexp
+            args: "(?<=Uploaded )(.*)(?= by)"
+          - name: dateparse
+            args: "02-01-2006 15:04"
+      date:
+        selector: td.torrent_name:contains("Uploaded"):not(:contains("-")), .torrentOwner:contains("Uploaded"):not(:contains("-"))
+        optional: true
+        filters:
+          - name: regexp
+            args: "(?<=Uploaded )(.*)(?= by)"
+          - name: replace
+            args: [" at ", " "]
+          - name: fuzzytime
       size:
         selector: td.size a, .torrentInfo a[rel="torrent_size"]
       grabs:
@@ -124,19 +200,8 @@
         selector: td.seeders a, .torrentInfo a[rel="torrent_seeders"]
       leechers:
         selector: td.leechers a, .torrentInfo a[rel="torrent_leechers"]
-      imdb:
-        optional: true
-        selector: .torrentFlags a[href*="www.imdb.com/title/tt"]
-        attribute: href
-      date:
-        selector: td.torrent_name, .torrentOwner
-        filters:
-          - name: regexp
-            args: "(?<=Subido )(.*)(?= por)"
-          - name: dateparse
-            args: "02-01-2006 15:04"    
       downloadvolumefactor:
-        text: "1"
+        text: 1
       downloadvolumefactor:
         optional: true
         selector: img[src$="torrent_free.png"]
@@ -153,7 +218,7 @@
             args: [":", 1]
           - name: trim
       uploadvolumefactor:
-        text: "1"
+        text: 1
       uploadvolumefactor:
         optional: true
         selector: img[src$="torrent_multiple_upload.png"]
@@ -163,6 +228,7 @@
             args: [":", 1]
           - name: trim
       minimumratio:
-        text: "1.0"
+        text: 1.0
       minimumseedtime:
-        text: "259200" # 3 day (72h)
+        text: 259200 # 3 day (72h)
+# BT Tracker 2.2
