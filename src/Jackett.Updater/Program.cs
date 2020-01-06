@@ -352,7 +352,6 @@ namespace Jackett.Updater
                 "Definitions/xktorrent.yml",
                 "Definitions/btkitty.yml",
                 "Definitions/kikibt.yml",
-                "Definitions/torrentkitty.yml",
                 "Definitions/rockethd.yml",
                 "Definitions/worldofp2p.yml",
                 "Definitions/avg.yml",
