@@ -26,6 +26,7 @@ namespace Jackett.Common.Indexers
 
         private readonly int MAX_RESULTS_PER_PAGE = 15;
         private readonly int MAX_SEARCH_PAGE_LIMIT = 3;
+        private readonly long DEFAULT_FILESIZE = 524288000; // 500 MB
 
         public DivxTotal(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
             : base(name: "DivxTotal",
@@ -75,6 +76,7 @@ namespace Jackett.Common.Indexers
             var matchWords = ((BoolItem)configData.GetDynamic("MatchWords")).Value;
             matchWords = queryStr != "" && matchWords;
 
+            // TODO: remove year (2019) and episode (S01E02) to make it work with Sonarr
             var qc = new NameValueCollection();
             qc.Add("s", queryStr);
 
@@ -154,7 +156,7 @@ namespace Jackett.Common.Indexers
             var publishStr = row.QuerySelectorAll("td")[2].TextContent.Trim();
             var publishDate = TryToParseDate(publishStr, DateTime.Now);
             var sizeStr = row.QuerySelectorAll("td")[3].TextContent.Trim();
-            var size = TryToParseSize(sizeStr, 0);
+            var size = TryToParseSize(sizeStr, DEFAULT_FILESIZE);
 
             // return results only for requested categories
             if (queryCats.Any() && !queryCats.Contains(categories.First()))
@@ -214,7 +216,8 @@ namespace Jackett.Common.Indexers
                     episodeTitle = TryToCleanSeriesTitle(title, episodeTitle);
                     episodeTitle += " [HDTV]";
 
-                    GenerateRelease(releases, episodeTitle, commentsLink, downloadLink, cat, episodePublish, 0);
+                    GenerateRelease(releases, episodeTitle, commentsLink, downloadLink, cat, episodePublish,
+                        DEFAULT_FILESIZE);
                 }
             }
         }
