@@ -273,6 +273,65 @@ namespace Jackett.Common.Indexers
                 JoinMatches = JoinMatches.NextMatch();
             }
 
+            // handle or, and functions
+            Regex AndOrRegex = new Regex(@"(and|or)\s+\((\..+?)\)\s+\((\..+?)\)(\s+\((\..+?)\)){0,1}");
+            var AndOrRegexMatches = AndOrRegex.Match(template);
+
+            while (AndOrRegexMatches.Success)
+            {
+                string functionResult = "";
+                string all = AndOrRegexMatches.Groups[0].Value;
+                string op = AndOrRegexMatches.Groups[1].Value;
+                string first = AndOrRegexMatches.Groups[2].Value;
+                string second = AndOrRegexMatches.Groups[3].Value;
+                string third = "";
+                if (AndOrRegexMatches.Groups.Count > 5)
+                {
+                    third = AndOrRegexMatches.Groups[5].Value;
+                }
+
+                var value = variables[first];
+                if (op == "and")
+                {
+                    functionResult = second;
+                    if (value == null || (value is string && string.IsNullOrWhiteSpace((string)value)))
+                    {
+                        functionResult = first;
+                    }
+                    else
+                    {
+                        if (!string.IsNullOrWhiteSpace(third))
+                        {
+                            functionResult = third;
+                            value = variables[second];
+                            if (value == null || (value is string && string.IsNullOrWhiteSpace((string)value)))
+                            {
+                                functionResult = second;
+                            }
+                        }
+                    }
+                }
+                if (op == "or")
+                {
+                    functionResult = first;
+                    if (value == null || (value is string && string.IsNullOrWhiteSpace((string)value)))
+                    {
+                        functionResult = second;
+                        if (!string.IsNullOrWhiteSpace(third))
+                        {
+                            value = variables[second];
+                            if (value == null || (value is string && string.IsNullOrWhiteSpace((string)value)))
+                            {
+                                functionResult = third;
+                            }
+                        }
+                    }
+
+                }
+                template = template.Replace(all, functionResult);
+                AndOrRegexMatches = AndOrRegexMatches.NextMatch();
+            }
+
             // handle if ... else ... expression
             Regex IfElseRegex = new Regex(@"{{\s*if\s*(.+?)\s*}}(.*?){{\s*else\s*}}(.*?){{\s*end\s*}}");
             var IfElseRegexMatches = IfElseRegex.Match(template);
