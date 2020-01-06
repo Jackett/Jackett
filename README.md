@@ -233,6 +233,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * DigitalCore
  * DigitalHive
  * DivTeam
+ * DivxTotal
  * DocumentaryTorrents (DT)
  * Downloadville
  * Dragonworld Reloaded
