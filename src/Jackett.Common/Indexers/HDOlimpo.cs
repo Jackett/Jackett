@@ -12,6 +12,7 @@ using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
+using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
 {
@@ -43,6 +44,9 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "es-es";
             Type = "private";
+
+            var premiumItem = new BoolItem() { Name = "Include Premium torrents in search results", Value = false };
+            configData.AddDynamic("IncludePremium", premiumItem);
 
             // TODO: add subcategories
             AddCategoryMapping(1, TorznabCatType.Movies, "Movies");
@@ -86,6 +90,8 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
+            var includePremium = ((BoolItem)configData.GetDynamic("IncludePremium")).Value;
+
             var pairs = new Dictionary<string, string>();
             pairs.Add("freetorrent", "false");
             pairs.Add("ordenar_por", "created_at");
@@ -125,7 +131,7 @@ namespace Jackett.Common.Indexers
                 response = await PostDataWithCookies(SearchUrl, pairs, configData.CookieHeader.Value, SiteLink, headers, body);
             }
 
-            List<ReleaseInfo> releases = ParseResponse(query, response);
+            List<ReleaseInfo> releases = ParseResponse(query, response, includePremium);
 
             return releases;
         }
@@ -137,7 +143,7 @@ namespace Jackett.Common.Indexers
             headers["X-XSRF-TOKEN"] = xsrfToken;
         }
 
-        private List<ReleaseInfo> ParseResponse(TorznabQuery query, WebClientStringResult response)
+        private List<ReleaseInfo> ParseResponse(TorznabQuery query, WebClientStringResult response, bool includePremium)
         {
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
 
@@ -149,11 +155,16 @@ namespace Jackett.Common.Indexers
                 {
                     var release = new ReleaseInfo();
 
-                    // TODO: add a check in configuration to show "premium" torrents
-                    if ((string) torrent["premium"] == "si")
-                        continue;
-
                     release.Title = (string)torrent["titulo"] + " " + (string)torrent["titulo_extra"];
+
+                    // for downloading "premium" torrents you need special account
+                    if ((string) torrent["premium"] == "si")
+                    {
+                        if (includePremium)
+                            release.Title += " [PREMIUM]";
+                        else
+                            continue;
+                    }
 
                     release.Comments = new Uri(CommentsUrl + (string)torrent["id"]);
                     release.Guid = release.Comments;
@@ -175,9 +186,8 @@ namespace Jackett.Common.Indexers
                     var files = (JArray)JsonConvert.DeserializeObject<dynamic>((string)torrent["files_list"]);
                     release.Files = files.Count;
 
-                    // TODO: add factor for torrents with "doubletorrent" flag
                     release.DownloadVolumeFactor = (string)torrent["freetorrent"] == "0" ? 1 : 0;
-                    release.UploadVolumeFactor = 1;
+                    release.UploadVolumeFactor = (string)torrent["doubletorrent"] == "0" ? 1 : 2;
 
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800;
