@@ -17,7 +17,7 @@
       - { id: 7, cat: Books/Magazines, desc: "Magazines" }
 
     modes:
-      search: [search]
+      search: [q]
 
   settings:
     - name: username
