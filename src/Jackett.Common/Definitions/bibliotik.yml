@@ -54,7 +54,6 @@
     method: form
     form: form#loginform
     submitpath: /
-    cookies: ["__cfduid", "id"]
     inputs:
       action: login
       username: "{{ .Config.username }}"
@@ -87,7 +86,6 @@
           div[title="Comics"]: 4
           div[title="Ebooks"]: 5
           div[title="Magazines"]: 7
-          "*": 0
       _year:
         selector: .torYear
         optional: true    
@@ -115,8 +113,8 @@
       files:
         selector: .t_files_size_added
         filters:
-          - name: split
-            args: [" file", 0]
+          - name: regex
+            args: "(\\d+) file"
       size:
         selector: .t_files_size_added
         filters:
