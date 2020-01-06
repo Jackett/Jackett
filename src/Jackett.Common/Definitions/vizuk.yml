@@ -173,7 +173,7 @@
           - name: dateparse
             args: "02-01-2006 15:04"
       date:
-        selector: td.torrent_name:contains("Subido"):contains(" a "), .torrentOwner:contains("Subido"):contains(" a ")
+        selector: td.torrent_name:contains("Subido"):not(:contains("-")), .torrentOwner:contains("Subido"):not(:contains("-"))
         optional: true
         filters:
           - name: regexp
@@ -200,17 +200,6 @@
             args: ["Sábado a", "Saturday"]
           - name: replace
             args: ["Domingo a", "Sunday"]
-          - name: fuzzytime
-      date:
-        selector: td.torrent_name:contains("Subido"):contains("Hoy"), .torrentOwner:contains("Subido"):contains("Hoy")
-        optional: true
-        filters:
-          - name: regexp
-            args: "(?<=Subido )(.*)(?= por)"
-          - name: replace
-            args: [": ", ":"]
-          - name: replace
-            args: ["Hoy en", "Today"]
           - name: fuzzytime
       date:
         selector: td.torrent_name:contains("Uploaded"):contains("-"), .torrentOwner:contains("Uploaded"):contains("-")
