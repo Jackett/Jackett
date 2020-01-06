@@ -61,6 +61,9 @@
       download:
         selector: tr:nth-child(1) td:nth-child(1) h2 a, div h3 a
         attribute: href
+        filters:
+          - name: replace
+            args: ["/album/torrent-", "/album/download/torrent-"]
       # dates come in two flavours:
       # Russian, Spanish and English supported
       date:
