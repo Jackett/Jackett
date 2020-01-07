@@ -5,6 +5,7 @@ image:
   - Visual Studio 2019
 environment:
   APPVEYOR_YML_DISABLE_PS_LINUX: true
+  CAKE_SETTINGS_SKIPPACKAGEVERSIONCHECK: true
 configuration: Release
 assembly_info:
   patch: true
