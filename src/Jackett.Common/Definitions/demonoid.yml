@@ -313,7 +313,7 @@
           - name: replace
             args: ["Added ", ""]
           - name: replace
-            args: ["on  ", ""]
+            args: ["on ", ""]
 
     fields:
       title:
