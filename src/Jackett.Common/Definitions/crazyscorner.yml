@@ -63,10 +63,10 @@
     - name: type
       type: select
       label: Order requested from site
-      default: "desc"
+      default: "2"
       options:
-        "desc": "desc"
-        "asc": "asc"
+        "2": "desc"
+        "1": "asc"
     - name: info
       type: info
       label: Results Per Page
