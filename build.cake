@@ -16,7 +16,7 @@ var configuration = Argument("configuration", "Debug");
 var workingDir = MakeAbsolute(Directory("./"));
 string artifactsDirName = "Artifacts";
 string testResultsDirName = "TestResults";
-string netCoreFramework = "netcoreapp3.0";
+string netCoreFramework = "netcoreapp3.1";
 string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
 string updaterProjectPath = "./src/Jackett.Updater/Jackett.Updater.csproj";
 
