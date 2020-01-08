@@ -140,6 +140,27 @@
         FRENCH : "FRENCH"
         MULTI.FRENCH : "MULTI.FRENCH" 
         ENGLISH: "ENGLISH"
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "3"
+      options:
+        "3": "created"
+        "5": "seeders"
+        "4": "size"
+        "2": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "2"
+      options:
+        "2": "desc"
+        "1": "asc"
+    - name: info
+      type: info
+      label: Results Per Page
+      default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+
   login:
     path: tracker/index.php?page=login
     method: post
@@ -158,10 +179,10 @@
   download:
     before:
       path: tracker/thanks.php
-      method: "post"
+      method: post
       inputs:
         infohash: "{{ .DownloadUri.Query.id }}"
-        thanks: "1"
+        thanks: 1
         rndval: "1487013827343"
     selector: a[href^="download.php?id="]
 
@@ -169,15 +190,18 @@
     paths:
       - path: tracker/index.php
     inputs:
-      page: "torrents"
+      page: torrents
       search: "{{ .Keywords }}"
       category: "{{ range .Categories }}{{.}};{{end}}"
-      options: "0"
+      options: 0
       active: "{{ .Config.active }}"
       gold: "{{ .Config.gold }}"
+      order: "{{ .Config.sort }}"
+      by: "{{ .Config.type }}"
 
     rows:
       selector: table > tbody > tr > td > table.lista > tbody > tr:has(td[onmouseover="this.className='post'"])
+
     fields:
       title_phase1:
         selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
@@ -226,9 +250,10 @@
         selector: td:nth-last-of-type(4)
       downloadvolumefactor:
         case:
-          img[src="images/freeleech.gif"]: "0"
-          img[src="gold/gold.gif"]: "0"
-          img[src="gold/slver.gif"]: "0.5"
-          "*": "1"
+          img[src="images/freeleech.gif"]: 0
+          img[src="gold/gold.gif"]: 0
+          img[src="gold/slver.gif"]: 0.5
+          "*": 1
       uploadvolumefactor:
-        text: "1"
+        text: 1
+# xbtit dt fm v20.0

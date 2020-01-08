@@ -56,7 +56,6 @@
       - {id: 53, cat: XXX, desc: "XXX Hentai"}
       - {id: 48, cat: XXX, desc: "XXX BG Amateurs"}
 
-
     modes:
       search: [q]
       tv-search: [q, season, ep]
@@ -72,7 +71,7 @@
     - name: info_results
       type: info
       label: "Search results"
-      default: "For best results, increase the torrents number in your profile to 100.<br />Default is 15."
+      default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
     - name: sort
       type: select
       label: Sort requested from site
@@ -185,3 +184,4 @@
         text: 0
       uploadvolumefactor:
         text: 1
+# xbtit customised
