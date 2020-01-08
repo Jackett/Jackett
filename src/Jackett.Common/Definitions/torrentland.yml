@@ -65,6 +65,36 @@
       tv-search: [q, season, ep]
       movie-search: [q]
 
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "3"
+      options:
+        "3": "created"
+        "5": "seeders"
+        "4": "size"
+        "2": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "2"
+      options:
+        "2": "desc"
+        "1": "asc"
+    - name: info
+      type: info
+    - name: info
+      type: info
+      label: Results Per Page
+      default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+
   login:
     path: index.php?page=login
     method: post
@@ -90,6 +120,8 @@
       # 0 all 1 active 2 dead
       active: 0
       search: "{{ .Keywords }}"
+      order: "{{ .Config.sort }}"
+      by: "{{ .Config.type }}"
 
     rows:
       selector: "#Mcol table.table-inverse ~ table.table-inverse > tbody > tr:has(a[href^=\"index.php?page=torrent-details\"])"
@@ -160,3 +192,4 @@
             img[src$="6x.gif"]: 6
             img[src$="7x.gif"]: 7
             "*": 1
+# xbtit customised
