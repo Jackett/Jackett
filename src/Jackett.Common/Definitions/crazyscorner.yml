@@ -1,7 +1,7 @@
 ﻿---
   site: crazyscorner
   name: Crazy's Corner
-  description: "Crazy's Corner is a Private Torrent Tracker"
+  description: "Crazy's Corner is a Private Torrent Tracker for MUSIC"
   language: en-us
   type: private
   encoding: UTF-8
@@ -10,60 +10,39 @@
 
   caps:
     categorymappings:
-      - {id: 34, cat: Movies/3D, desc: "MOVIES 3D"}
-      - {id: 52, cat: Movies/HD, desc: "MOVIES High Def Mkv/Mp4"}
-      - {id: 70, cat: Movies, desc: "MOVIES Animation"}
-      - {id: 97, cat: Movies, desc: "MOVIES DISNEY"}
-      - {id: 112, cat: Movies, desc: "MOVIES itunes"}
-      - {id: 78, cat: TV, desc: "MISC POD CASTS"}
-      - {id: 99, cat: Movies, desc: "MOVIES Cam Ratio Free"}
-      - {id: 11, cat: Movies/DVD, desc: "MOVIES DVD-R"}
-      - {id: 35, cat: Movies/BluRay, desc: "MOVIES Blu-Ray"}
-      - {id: 95, cat: Movies, desc: "MOVIES Classic picks"}
-      - {id: 100, cat: Movies/SD, desc: "MOVIES XVD"}
-      - {id: 105, cat: Movies/HD, desc: "MOVIES HD RIPS"}
-      - {id: 108, cat: Movies, desc: "MOVIES Musical"}
-      - {id: 107, cat: Movies, desc: "MOVIES Packs"}
-      - {id: 36, cat: Movies/DVD, desc: "MOVIES DvD-Rips"}
-      - {id: 37, cat: Movies, desc: "MOVIES Classic"}
-      - {id: 38, cat: Movies, desc: "MOVIES Classic-Kids"}
-      - {id: 47, cat: Movies/WEBDL, desc: "MOVIES Webrip/WEB-DL"}
-      - {id: 39, cat: Movies, desc: "MOVIES Packs"}
-      - {id: 5, cat: Movies, desc: "MOVIES Anime"}
-      - {id: 32, cat: XXX, desc: "MOVIES Adult"}
-      - {id: 33, cat: Movies/UHD, desc: "MOVIES 4K Ratio Free"}
-      - {id: 4, cat: Movies, desc: "MOVIES Misc"}
-      - {id: 79, cat: Audio/Audiobook, desc: "MISC AUDIO BOOKS"}
-      - {id: 81, cat: Audio/Other, desc: "MISC RADIO SHOWS"}
-      - {id: 43, cat: TV, desc: "TV Kids"}
-      - {id: 48, cat: Movies, desc: "SPORTS Misc"}
-      - {id: 110, cat: TV/Sport, desc: "MOVIES Christmas"}
-      - {id: 44, cat: PC/ISO, desc: "GAMES Pc-Iso"}
-      - {id: 45, cat: Console, desc: "GAMES All Console"}
-      - {id: 41, cat: TV, desc: "TV Episodes"}
-      - {id: 101, cat: TV, desc: "TV Soaps"}
-      - {id: 104, cat: TV, desc: "TV MISC"}
-      - {id: 103, cat: Audio, desc: "karaoke Misc"}
-      - {id: 111, cat: Audio, desc: "MUSIC Christmas"}
-      - {id: 42, cat: TV, desc: "VIP TV Packs"}
-      - {id: 84, cat: PC, desc: "APPS MISC"}
+      - {id: 73, cat: Audio/Misc, desc: "POD CASTS"}
+      - {id: 102, cat: Audio/Misc, desc: "karaoke"}
+      - {id: 81, cat: Audio/Misc, desc: "MISC RADIO SHOWS"}
+      - {id: 34, cat: Audio, desc: "ROCK MUSIC"}
+      - {id: 48, cat: Audio, desc: "METAL MUSIC"}
+      - {id: 78, cat: Audio, desc: "RAP"}
+      - {id: 79, cat: Audio, desc: "TEEN POP"}
+      - {id: 106, cat: Audio, desc: "ELECTRONIC"}
+      - {id: 11, cat: Audio, desc: "MUSIC APPS "}
+      - {id: 13, cat: Audio, desc: "HEAVY METAL"}
+      - {id: 44, cat: Audio, desc: "JAZZ"}
+      - {id: 45, cat: Audio, desc: "FOLK MUSIC"}
+      - {id: 51, cat: Audio, desc: "HIP HOP"}
+      - {id: 85, cat: Audio, desc: "COUNTRY MUSIC "}
+      - {id: 88, cat: Audio, desc: "ALTERNATIVE MUSIC"}
+      - {id: 95, cat: Audio, desc: "REGGAE MUSIC"}
+      - {id: 103, cat: Audio/Misc, desc: "karaoke Misc"}
+      - {id: 108, cat: Audio, desc: "PUNK POP"}
+      - {id: 14, cat: Audio, desc: "TRANCE MUSIC"}
+      - {id: 26, cat: Audio, desc: "ROCK 80S"}
+      - {id: 29, cat: Audio, desc: "BLUES"}
       - {id: 2, cat: Audio, desc: "Music"}
-      - {id: 30, cat: Audio, desc: "Music Packs"}
-      - {id: 31, cat: Audio, desc: "Music Albums"}
-      - {id: 3, cat: PC/Games, desc: "Games Misc"}
-      - {id: 40, cat: TV, desc: "TV Single Seasons"}
-      - {id: 7, cat: PC/0day, desc: "Apps Win"}
-      - {id: 8, cat: PC, desc: "Apps Linux"}
-      - {id: 9, cat: PC/Mac, desc: "Apps Mac"}
-      - {id: 51, cat: Books/Ebook, desc: "E Books Food/Cook-Books"}
-      - {id: 64, cat: Books/Ebook, desc: "E Books Book Packs"}
-      - {id: 26, cat: Books/Ebook, desc: "E Books Magazines"}
-      - {id: 29, cat: Books/Ebook, desc: "E Books Misc Books"}
+      - {id: 30, cat: Audio, desc: "Music-Packs"}
+      - {id: 31, cat: Audio, desc: "Music-Albums"}
+      - {id: 3, cat: Audio, desc: "SOUNDTRACKS"}
+      - {id: 5, cat: Audio, desc: "TECHNO/HARDCORE"}
+      - {id: 33, cat: Audio, desc: "RNB MUSIC"}
+      - {id: 8, cat: Audio, desc: "POP/CHART"}
+      - {id: 9, cat: Audio, desc: "DANCE MUSIC"}
 
     modes:
       search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
+      music-search: [q, album, artist, label, year]
 
   settings:
     - name: username
@@ -88,6 +67,10 @@
       options:
         "desc": "desc"
         "asc": "asc"
+    - name: info
+      type: info
+      label: Results Per Page
+      default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
 
   login:
     path: index.php?page=login
@@ -101,14 +84,23 @@
       path: index.php
       selector: a[href="logout.php"]
 
+  download:
+    before:
+      path: thanks.php
+      method: post
+      inputs:
+        infohash: "\"{{ .DownloadUri.Query.id }}\""
+        thanks: 1
+    selector: a[href^="download.php?id="]
+
   search:
     paths:
-    # http://crazys-corner.info/index.php?page=torrents&search=captain&category=0&uploader=0&options=0&active=0&gold=0
+      # http://crazys-corner.info/index.php?page=torrents&search=captain&category=0&uploader=0&options=0&active=0&gold=0
       - path: index.php
     inputs:
-      search: "{{ .Keywords }}"
+      search: "{{if or (.Query.Album) (.Query.Artist) }}{{ or (.Query.Album) (.Query.Artist) }}{{else}}{{ .Keywords }}{{end}}"
       page: torrents
-      category: "{{ range .Categories }}{{.}};{{end}}"
+      category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{else}}0{{end}}"
       uploader: 0
       # 0 filename 1 file&descr 2 descr
       options: 0
@@ -135,7 +127,7 @@
         selector: a[href^="index.php?page=torrent-details&id="]
         attribute: href
       download:
-        selector: a[href^="download.php?id="]
+        selector: a[href^="index.php?page=torrent-details&id="]
         attribute: href
       banner:
         selector: a[href^="index.php?page=torrent-details&id="]
@@ -182,3 +174,4 @@
       uploadvolumefactor:
         case:
           "*": 1
+# xbtit 19.0
