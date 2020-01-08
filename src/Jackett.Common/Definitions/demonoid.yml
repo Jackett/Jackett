@@ -314,6 +314,20 @@
             args: ["Added ", ""]
           - name: replace
             args: ["on ", ""]
+          - name: replace
+            args: ["Monday", "Mon"]
+          - name: replace
+            args: ["Tuesday", "Tue"]
+          - name: replace
+            args: ["Wesnesday", "Wed"]
+          - name: replace
+            args: ["Thursday", "Thu"]
+          - name: replace
+            args: ["Friday", "Fri"]
+          - name: replace
+            args: ["Saturday", "Sat"]
+          - name: replace
+            args: ["Sunday", "Sun"]
 
     fields:
       title:
