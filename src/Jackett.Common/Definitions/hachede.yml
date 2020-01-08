@@ -159,22 +159,22 @@
           - name: replace
             args: ["Hoy en", "Today"]
           - name: replace
-            args: ["Lunes a", "Monday"]
+            args: ["Lunes a", "Monday at"]
           - name: replace
-            args: ["Martes a", "Tuesday"]
+            args: ["Martes a", "Tuesday at"]
           - name: replace
-            args: ["Miércoles a", "Wednesday"]
+            args: ["Miércoles a", "Wednesday at"]
           - name: replace
-            args: ["Jueves a", "Thursday"]
+            args: ["Jueves a", "Thursday at"]
           - name: replace
-            args: ["Viernes a", "Friday"]
+            args: ["Viernes a", "Friday at"]
           - name: replace # WTF?
-            args: ["Friday a", "Friday"]
+            args: ["Friday a", "Friday at"]
           - name: replace
-            args: ["Sábado a", "Saturday"]
+            args: ["Sábado a", "Saturday at"]
           - name: replace
-            args: ["Domingo a", "Sunday"]
-          - name: fuzzytime
+            args: ["Domingo a", "Sunday at"]
+          - name: fuzzytime # eg: Yesterday 14:22 or Monday at 14:22
       date:
         selector: td.torrent_name:contains("Uploaded"):contains("-"), .torrentOwner:contains("Uploaded"):contains("-")
         optional: true
@@ -190,8 +190,10 @@
           - name: regexp
             args: "(?<=Uploaded )(.*)(?= by)"
           - name: replace
-            args: [" at ", " "]
-          - name: fuzzytime
+            args: ["Yesterday at", "Yesterday"]
+          - name: replace
+            args: ["Today at", "Today"]
+          - name: fuzzytime # eg: Yesterday 14:22 or Monday at 14:22
       size:
         selector: td.size a, .torrentInfo a[rel="torrent_size"]
       grabs:
