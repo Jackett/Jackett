@@ -1,0 +1,171 @@
+﻿---
+  site: the-madhouse
+  name: The-Madhouse
+  description: "The-Madhouse is a Private Torrent Tracker"
+  language: en-us
+  type: private
+  encoding: UTF-8
+  links:
+    - http://the-madhouse.info/
+
+  caps:
+    categorymappings:
+      - {id: 6, cat: PC/Mac, desc: "Apps Mac"}
+      - {id: 5, cat: PC, desc: "Apps Linux"}
+      - {id: 8, cat: PC, desc: "Apps Misc"}
+      - {id: 9, cat: PC/Phone-Other, desc: "Apps Phone"}
+      - {id: 7, cat: PC/0day, desc: "Apps Win"}
+      - {id: 10, cat: Books/Ebook, desc: "E Books"}
+      - {id: 11, cat: Books/Ebook, desc: "E Books Packs"}
+      - {id: 13, cat: Console, desc: "Games Console"}
+      - {id: 14, cat: PC/Games, desc: "Games Misc"}
+      - {id: 12, cat: PC/Games, desc: "Games PC"}
+      - {id: 15, cat: Books/Magazines, desc: "Books Magazines"}
+      - {id: 48, cat: Movies, desc: "MOVIES Packs"}
+      - {id: 25, cat: Movies, desc: "MOVIES itunes"}
+      - {id: 17, cat: Movies/3D, desc: "MOVIES 3D"}
+      - {id: 18, cat: Movies/UHD, desc: "MOVIES 4K Ratio Free"}
+      - {id: 46, cat: Movies/UHD, desc: "MOVIES 4K Packs Ratio Free"}
+      - {id: 20, cat: Movies/BluRay, desc: "MOVIES Blu-Ray"}
+      - {id: 19, cat: Movies, desc: "MOVIES Cam/DVDScr Ratio Free"}
+      - {id: 21, cat: Movies, desc: "MOVIES Classic pre-1990"}
+      - {id: 22, cat: Movies/DVD, desc: "MOVIES DVD-R"}
+      - {id: 23, cat: Movies/DVD, desc: "MOVIES DVD-Rip"}
+      - {id: 24, cat: Movies/HD, desc: "MOVIES HD RIPS"}
+      - {id: 26, cat: Movies, desc: "MOVIES Kids Classic Pre-1990"}
+      - {id: 33, cat: Movies, desc: "MOVIES Kids Pack"}
+      - {id: 28, cat: Movies, desc: "MOVIES Pack"}
+      - {id: 44, cat: Movies/WEBDL, desc: "MOVIES WEB-DL"}
+      - {id: 30, cat: Movies, desc: "MOVIES Xmas"}
+      - {id: 29, cat: Movies, desc: "MOVIES Xmas Packs"}
+      - {id: 31, cat: Movies/SD, desc: "MOVIES XVID"}
+      - {id: 34, cat: Audio/Other, desc: "RADIO MISC"}
+      - {id: 35, cat: Audio/Other, desc: "RADIO OMNIBUS-EDITIONS"}
+      - {id: 36, cat: Audio/Other, desc: "RADIO SHOWS"}
+      - {id: 47, cat: TV, desc: "TV Episodes"}
+      - {id: 40, cat: TV/HD, desc: "TV HD"}
+      - {id: 41, cat: TV, desc: "TV Kids"}
+      - {id: 38, cat: TV, desc: "TV Kids Classic"}
+      - {id: 45, cat: TV, desc: "TV NF"}
+      - {id: 42, cat: TV, desc: "TV Packs"}
+      - {id: 39, cat: TV, desc: "TV Packs Classic Pre-1990"}
+      - {id: 43, cat: TV, desc: "TV Soaps"}
+      - {id: 37, cat: TV/Sport, desc: "TV Sports"}
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "added"
+      options:
+        "added": "created"
+        "seeders": "seeders"
+        "size": "size"
+        "name": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
+
+  login:
+    path: login.php
+    method: form
+    form: form[action="takelogin.php"]
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+      logout: ""
+      submit: LOGIN
+    error:
+      - selector: table:contains("ERROR:")
+    test:
+      path: index.php
+      selector: a[href*="/logout.php?logouthash="]
+
+  download:
+    before:
+      path: takethanks.php
+      method: post
+      inputs:
+        torrentid: "{{ .DownloadUri.Query.id }}"
+    selector: a[href*="/download.php?id="]
+
+  search:
+    paths:
+      - path: browse.php
+    inputs:
+      do: search
+      keywords: "{{ .Keywords }}"
+      # t_name T_description t_both t_uploader t_genre
+      search_type: t_name
+      category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{else}}0{{end}}"
+      include_dead_torrents: yes
+      sort: "{{ .Config.sort }}"
+      order: "{{ .Config.type }}"
+
+    rows:
+      selector: table.sortable tr:has(a[href*="/download.php?id="])
+
+    fields:
+      category:
+        selector: a[href*="/browse.php?category="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: category
+      title:
+      # abbreviated title
+        selector: a[href*="/details.php?id="]
+      title:
+        selector: div.tooltip-content > div
+        optional: true
+      details:
+        selector: a[href*="/details.php?id="]
+        attribute: href
+      download:
+        selector: a[href*="/details.php?id="]
+        attribute: href
+      magnet:
+        selector: a[href^="magnet:?xt="]
+        attribute: href
+      banner:
+        selector: img[src*="/torrents/images/"]
+        attribute: src
+      date:
+        selector: td:nth-child(2)
+        filters:
+          - name: regexp
+            args: "(\\d{2}-\\d{2}-\\d{4} \\d{2}:\\d{2})"
+          - name: dateparse
+            args: "02-01-2006 15:04"
+      size:
+        selector: td:nth-last-child(5)
+      grabs:
+        selector: td:nth-last-child(4)
+      seeders:
+        selector: td:nth-last-child(3)
+      leechers:
+        selector: td:nth-last-child(2)
+      downloadvolumefactor:
+        case:
+          img[src$="_flags/freedownload.gif"]: 0
+          "*": 1
+      uploadvolumefactor:
+        case:
+          img[src$="_flags/x2.gif"]: 2
+          "*": 1
+# TS Special Edition v.7.5

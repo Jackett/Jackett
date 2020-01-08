@@ -405,6 +405,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * The Place
  * The Shinning (TsH)
  * The Show
+ * The-Madhouse
  * The-Torrents
  * The Vault
  * TLFBits
