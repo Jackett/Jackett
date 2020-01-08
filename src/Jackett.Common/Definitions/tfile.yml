@@ -862,8 +862,10 @@
       $raw: "{{range .Categories}}f[]={{.}}&{{end}}"
       q: "{{ .Keywords }}"
       o: newest
+
     rows:
-      selector: table > tbody > tr.tor
+      selector: table > tbody > tr.tor:has(td:nth-child(4):contains("B"))
+
     fields:
       category:
         selector: td.f a[href*="?f="]
@@ -894,12 +896,7 @@
         selector: td.t a
         attribute: href
       size:
-        selector: td:nth-child(4):not(:contains("B"))
-        optional: true
-        text: "0 B"
-      size:
-        selector: td:nth-child(4):contains("B")
-        optional: true
+        selector: td:nth-child(4)
       seeders: 
         text: 0
       seeders:
