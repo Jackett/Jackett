@@ -23,7 +23,7 @@ namespace Jackett.Common.Indexers
         private string SearchUrl { get { return SiteLink + "t.json"; } }
 
         public override string[] LegacySiteLinks { get; protected set; } = new string[] {
-            "https://torrentday.com/"
+            "https://torrentday.com/",
             "https://tday.love/",
         };
 
