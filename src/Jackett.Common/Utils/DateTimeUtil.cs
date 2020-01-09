@@ -123,7 +123,7 @@ namespace Jackett.Common.Utils
         public static Regex todayRegexp = new Regex(@"(?i)\btoday([\s,]*|$)", RegexOptions.Compiled);
         public static Regex tomorrowRegexp = new Regex(@"(?i)\btomorrow([\s,]*|$)", RegexOptions.Compiled);
         public static Regex yesterdayRegexp = new Regex(@"(?i)\byesterday([\s,]*|$)", RegexOptions.Compiled);
-        public static Regex daysOfWeekRegexp = new Regex(@"(?i)\b(monday|tuesday|wednesday|thursday|friday|saturday|sunday)([\s,]*|$)", RegexOptions.Compiled);
+        public static Regex daysOfWeekRegexp = new Regex(@"(?i)\b(monday|tuesday|wednesday|thursday|friday|saturday|sunday)\s+at\s+", RegexOptions.Compiled);
         public static Regex missingYearRegexp = new Regex(@"^(\d{1,2}-\d{1,2})(\s|$)", RegexOptions.Compiled);
         public static Regex missingYearRegexp2 = new Regex(@"^(\d{1,2}\s+\w{3})\s+(\d{1,2}\:\d{1,2}.*)$", RegexOptions.Compiled); // 1 Jan 10:30
 
@@ -178,7 +178,7 @@ namespace Jackett.Common.Utils
                     return dt;
                 }
 
-                // Days of the week ...
+                // [day of the week] at ... (eg: Saturday at 14:22)
                 match = daysOfWeekRegexp.Match(str);
                 if (match.Success)
                 {
@@ -187,7 +187,7 @@ namespace Jackett.Common.Utils
                     dt += ParseTimeSpan(time);
 
                     var dow = DayOfWeek.Monday;
-                    var groupMatchLower = match.Groups[0].Value.ToLower();
+                    var groupMatchLower = match.Groups[1].Value.ToLower();
                     if (groupMatchLower.StartsWith("monday")) 
                         dow = DayOfWeek.Monday;
                     else if (groupMatchLower.StartsWith("tuesday")) 
