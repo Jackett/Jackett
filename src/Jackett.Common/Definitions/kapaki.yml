@@ -120,7 +120,7 @@
     form: form#loginbox_form
     submitpath: ajax/login.php
     inputs:
-      action: "login"
+      action: login
       loginbox_membername: "{{ .Config.username }}"
       loginbox_password: "{{ .Config.password }}"
       loginbox_remember: 1
@@ -143,18 +143,20 @@
       - name: re_replace
         args: ["[^a-zA-Z0-9]+", "%25"]
     inputs:
-      p: "torrents"
-      pid: "32"
-      $raw: "{{range .Categories}}cid[]={{.}}&{{end}}"
+      p: torrents
+      pid: 32
+      $raw: "{{ range .Categories }}cid[]={{.}}&{{end}}"
       keywords: "{{ .Keywords }}"
-      search_type: "name"
-      searchin: "title"
+      search_type: name
+      searchin: title
     error:
       - selector: div#show_error:not(:contains("Ουπς! Λάθος!Δεν βρέθηκαν αποτελέσματα."))
+
     rows:
       selector: table#torrents_table_classic > tbody > tr:not(:first-child), div#content > div.torrent-box[id^="torrent_"]
       filters:
         - name: andmatch
+
     # the tracker has two different styles (modern/classic) it should work with both
     fields:
       title:
@@ -188,15 +190,14 @@
         attribute: href
       downloadvolumefactor:
         case:
-          "img[title=\"ΧΡΥΣΟ!\"]": "0"
-          "img[title=\"100% FREE!\"]": "0"
-          "img[title=\"Πολλαπλασιαστής Κατεβάσματος: 0.5\"]": "0.5"
-          
-          "*": "1"
+          "img[title=\"ΧΡΥΣΟ!\"]": 0
+          "img[title=\"100% FREE!\"]": 0
+          "img[title=\"Πολλαπλασιαστής Κατεβάσματος: 0.5\"]": 0.5
+          "*": 1
       uploadvolumefactor:
         case:
-          "img[title=\"Πολλαπλασιαστής Ανεβάσματος: 2\"]": "2"
-          "*": "1"
+          "img[title=\"Πολλαπλασιαστής Ανεβάσματος: 2\"]": 2
+          "*": 1
       date:
         optional: true
         selector: div.torrentOwner > abbr.timeago
@@ -234,3 +235,4 @@
             args: ["Κυριακή", "Sunday"]
           - name: dateparse
             args: "02-01-2006 15:04"
+# TSUE 2.2
