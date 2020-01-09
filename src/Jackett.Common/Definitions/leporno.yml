@@ -37,6 +37,7 @@
 
   download:
     selector: a[href*="/dl.php?id="]
+    attribute: href
 
   search:
     paths:

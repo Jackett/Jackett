@@ -30,6 +30,7 @@
 
   download:
     selector: a#download-file
+    attribute: href
 
   search:
     paths:

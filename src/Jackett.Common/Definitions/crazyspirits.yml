@@ -142,6 +142,7 @@
         to: "give"
         torrent: "{{ .DownloadUri.Query.id }}"
     selector: a:contains("Télécharger ce torrent")
+    attribute: href
 
   search:
     paths:

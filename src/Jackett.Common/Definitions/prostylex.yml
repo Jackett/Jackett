@@ -91,6 +91,7 @@
 
   download:
     selector: a[href^="magnet:?"]
+    attribute: href
 
   search:
     paths:

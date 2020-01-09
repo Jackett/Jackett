@@ -1734,13 +1734,23 @@ namespace Jackett.Common.Indexers
                     if (response.IsRedirect)
                         response = await RequestStringWithCookies(response.RedirectingTo);
                     var results = response.Content;
-                    var SearchResultParser = new HtmlParser();
-                    var SearchResultDocument = SearchResultParser.ParseDocument(results);
-                    var DlUri = SearchResultDocument.QuerySelector(selector);
-                    if (DlUri != null)
+                    var searchResultParser = new HtmlParser();
+                    var searchResultDocument = searchResultParser.ParseDocument(results);
+                    var downloadElement = searchResultDocument.QuerySelector(selector);
+                    if (downloadElement != null)
                     {
-                        logger.Debug(string.Format("CardigannIndexer ({0}): Download selector {1} matched:{2}", ID, selector, DlUri.ToHtmlPretty()));
-                        var href = DlUri.GetAttribute("href");
+                        logger.Debug(string.Format("CardigannIndexer ({0}): Download selector {1} matched:{2}", ID, selector, downloadElement.ToHtmlPretty()));
+                        var href = "";
+                        if (Download.Attribute != null)
+                        {
+                            href = downloadElement.GetAttribute(Download.Attribute);
+                            if (href == null)
+                                throw new Exception(string.Format("Attribute \"{0}\" is not set for element {1}", Download.Attribute, downloadElement.ToHtmlPretty()));
+                        }
+                        else
+                        {
+                            href = downloadElement.TextContent;
+                        }
                         href = applyFilters(href, Download.Filters, variables);
                         link = resolvePath(href, link);
                     }

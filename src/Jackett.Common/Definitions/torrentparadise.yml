@@ -67,6 +67,7 @@
 
   download:
     selector: a[href^="magnet:?xt="]
+    attribute: href
 
   search:
     # https://torrentparadise.org/search.php?f=monday+night
