@@ -127,6 +127,9 @@
       title:
         selector: a[href^="/torrent/"][title]
         attribute: title
+        filters:
+          - name: re_replace
+            args: ["( torrent)$", ""]
       category:
         selector: a[href^="/torrents.php?cat="]
         attribute: href
