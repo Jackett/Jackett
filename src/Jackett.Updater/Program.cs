@@ -384,6 +384,7 @@ namespace Jackett.Updater
                 "Definitions/solidtorrents.yml",
                 "Definitions/extratorrent-ag.yml",
                 "Definitions/passionetorrent.yml",
+                "Definitions/thetorrents.yml",
             };
 
             foreach (var oldFile in oldFiles)

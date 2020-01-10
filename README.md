@@ -407,7 +407,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * The Shinning (TsH)
  * The Show
  * The-Madhouse
- * The-Torrents
  * The Vault
  * TLFBits
  * Torrent Network (TN)
