@@ -70,7 +70,7 @@ namespace Jackett.Common.Indexers {
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery (TorznabQuery query, int attempts) {
             var releases = new List<ReleaseInfo> ();
             var searchString = query.GetQueryString ();
-            if (string.IsNullOrEmpty(searchString)) searchString = "*";
+            if (string.IsNullOrEmpty(searchString)) searchString = "%";
 
             var queryCollection = new NameValueCollection ();
 
