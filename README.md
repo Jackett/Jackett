@@ -249,8 +249,9 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Ethor.net (Thor's Land)
  * ExtremeTorrents
  * FANO.IN
- * FileList (FL)
+ * FeedUrNeed (FuN)
  * Femdomcult
+ * FileList (FL)
  * FinVip
  * FocusX
  * FreeTorrent

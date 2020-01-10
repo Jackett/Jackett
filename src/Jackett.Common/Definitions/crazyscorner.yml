@@ -10,9 +10,9 @@
 
   caps:
     categorymappings:
-      - {id: 73, cat: Audio/Misc, desc: "POD CASTS"}
-      - {id: 102, cat: Audio/Misc, desc: "karaoke"}
-      - {id: 81, cat: Audio/Misc, desc: "MISC RADIO SHOWS"}
+      - {id: 73, cat: Audio, desc: "POD CASTS"}
+      - {id: 102, cat: Audio, desc: "karaoke"}
+      - {id: 81, cat: Audio, desc: "MISC RADIO SHOWS"}
       - {id: 34, cat: Audio, desc: "ROCK MUSIC"}
       - {id: 48, cat: Audio, desc: "METAL MUSIC"}
       - {id: 78, cat: Audio, desc: "RAP"}
@@ -26,7 +26,7 @@
       - {id: 85, cat: Audio, desc: "COUNTRY MUSIC "}
       - {id: 88, cat: Audio, desc: "ALTERNATIVE MUSIC"}
       - {id: 95, cat: Audio, desc: "REGGAE MUSIC"}
-      - {id: 103, cat: Audio/Misc, desc: "karaoke Misc"}
+      - {id: 103, cat: Audio, desc: "karaoke Misc"}
       - {id: 108, cat: Audio, desc: "PUNK POP"}
       - {id: 14, cat: Audio, desc: "TRANCE MUSIC"}
       - {id: 26, cat: Audio, desc: "ROCK 80S"}
