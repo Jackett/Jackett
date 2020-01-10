@@ -46,10 +46,12 @@
     inputs:
       s: "{{ .Keywords }}"
       $raw: "&x=0&y=0"
+
     rows:
       selector: "#principal .miniboxs-ficha li"
       filters:
       - name: andmatch
+
     fields:
       title:
         selector: .meta a
@@ -88,10 +90,11 @@
       date:
         text: now
       seeders:
-        text: "1"
+        text: 1
       leechers:
-        text: "1"
+        text: 1
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
+# engine n/a

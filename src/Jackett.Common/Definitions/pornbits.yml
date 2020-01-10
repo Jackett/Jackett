@@ -6,6 +6,8 @@
   type: private
   encoding: UTF-8
   links:
+    - https://pornbits.net/
+  legacylinks:
     - https://pornbits.org/
 
   caps:
@@ -100,3 +102,4 @@
           "*": 1
       uploadvolumefactor:
         text: 1
+# engine n/a
