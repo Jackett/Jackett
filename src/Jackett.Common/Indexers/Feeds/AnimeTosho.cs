@@ -57,6 +57,6 @@ namespace Jackett.Common.Indexers.Feeds
             return release;
         }
 
-        protected override Uri FeedUri => new Uri(SiteLink + "/feed/api");
+        protected override Uri FeedUri => new Uri(SiteLink + "feed/api");
     }
 }
