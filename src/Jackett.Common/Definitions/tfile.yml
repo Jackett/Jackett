@@ -1,4 +1,4 @@
-﻿---
+---
   site: tfile
   name: TFile
   description: "TFile is a RUSSIAN Public Torrent Tracker for MOVIES / TV / GENERAL"
@@ -844,9 +844,16 @@
       type: checkbox
       label: Strip Russian Letters
       default: false
+    - name: downloadlink
+      type: select
+      label: Download link
+      default: "magnet:?xt"
+      options:
+        "download.php?id" : ".torrent"
+        "magnet:?xt": "magnet"
 
   download:
-    selector: a[href^="download.php?id="]
+    selector: a[href^="{{ .Config.downloadlink }}"]
     attribute: href
 
   search:
@@ -917,3 +924,5 @@
         text: 0
       uploadvolumefactor:
         text: 1
+# engine n/a
+
