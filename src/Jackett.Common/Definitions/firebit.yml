@@ -32,6 +32,7 @@
 
   download:
     selector: a[href^="/download.php?id="]
+    attribute: href
 
   search:
     # http://firebit.net/index.php?do=search&type=simple&q=2019

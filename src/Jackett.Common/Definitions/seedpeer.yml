@@ -21,6 +21,7 @@
 
   download:
     selector: a[href*="/torrent/"]
+    attribute: href
 
   search:
     # https://seedpeer.me/today

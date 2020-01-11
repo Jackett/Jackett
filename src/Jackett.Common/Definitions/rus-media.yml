@@ -295,6 +295,7 @@
 
   download:
     selector: a[href^="./download/file.php?id="]
+    attribute: href
 
   search:
     # http://rus-media.org/search.php?tracker_search=torrent&sr=topics&keywords=2019&fid[]=54

@@ -35,6 +35,7 @@
 
   download:
     selector: a[href^="/album/download-torrent/"]
+    attribute: href
 
   search:
     paths:

@@ -21,6 +21,8 @@
 
   download:
     selector: a#magnetOpen
+    attribute: href
+
   search:
     paths:
       - path: "search/{{if .Keywords}}{{ .Keywords}}{{else}}2019{{end}}"

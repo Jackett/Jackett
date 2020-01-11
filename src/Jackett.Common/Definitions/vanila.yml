@@ -1330,6 +1330,7 @@
 
   download:
     selector: a[href^="./download/file.php?id="]:not(img)
+    attribute: href
 
   search:
     paths:

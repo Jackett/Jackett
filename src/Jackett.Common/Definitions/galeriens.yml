@@ -233,6 +233,7 @@
 
   download:
     selector: a[href*="/Telechargement/"]
+    attribute: href
 
   search:
     paths:

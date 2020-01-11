@@ -160,6 +160,7 @@ namespace Jackett.Common.Indexers
             return content;
         }
 
+
         private async Task ParseRelease(ICollection<ReleaseInfo> releases, IParentNode row, TorznabQuery query,
             bool matchWords)
         {

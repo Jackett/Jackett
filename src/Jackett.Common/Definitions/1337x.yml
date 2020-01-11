@@ -140,6 +140,7 @@
   download:
     # the .torrent url is on the on the details page 
     selector: ul li a[href^="{{ .Config.downloadlink }}"]
+    attribute: href
 
   search:
     paths:

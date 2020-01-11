@@ -92,6 +92,7 @@
         infohash: "\"{{ .DownloadUri.Query.id }}\""
         thanks: 1
     selector: a[href^="download.php?id="]
+    attribute: href
 
   search:
     paths:
