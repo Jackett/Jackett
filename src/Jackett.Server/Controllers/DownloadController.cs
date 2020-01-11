@@ -1,4 +1,5 @@
-﻿using BencodeNET.Parsing;
+﻿using BencodeNET.Objects;
+using BencodeNET.Parsing;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
