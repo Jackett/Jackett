@@ -241,7 +241,7 @@ namespace Jackett.Common.Indexers
                         release.Title = main_title_link.Text();
 
                     release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800;
+                    release.MinimumSeedTime = 172800; // 48 hours
 
                     int seeders, peers;
                     if (ParseUtil.TryCoerceInt(qRow.Find("td:nth-child(7) > div").Text(), out seeders))

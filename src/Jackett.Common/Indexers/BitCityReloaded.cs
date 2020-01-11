@@ -138,7 +138,7 @@ namespace Jackett.Common.Indexers
                 {
                     var release = new ReleaseInfo();
                     release.MinimumRatio = 0.7;
-                    release.MinimumSeedTime = 48 * 60 * 60;
+                    release.MinimumSeedTime = 172800; // 48 hours
                     release.DownloadVolumeFactor = 1;
                     release.UploadVolumeFactor = 1;
 

@@ -221,7 +221,7 @@ namespace Jackett.Common.Indexers
                     var release = new ReleaseInfo();
 
                     release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800;
+                    release.MinimumSeedTime = 172800; // 48 hours
 
                     release.Guid = new Uri(SiteLink + "torrent/" + torrent.fid);
                     release.Comments = release.Guid;

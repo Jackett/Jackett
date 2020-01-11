@@ -257,6 +257,8 @@ namespace Jackett.Common.Indexers
                     release.Seeders = item.Value<int>("seeders");
                     release.Peers = item.Value<int>("leechers") + release.Seeders;
                     release.Size = item.Value<long>("size");
+                    release.MinimumRatio = 1;
+                    release.MinimumSeedTime = 172800; // 48 hours
                     release.DownloadVolumeFactor = 0;
                     release.UploadVolumeFactor = 1;
 

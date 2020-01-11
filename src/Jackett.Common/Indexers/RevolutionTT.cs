@@ -332,7 +332,7 @@ namespace Jackett.Common.Indexers
                         var debug = qRow.Html();
 
                         release.MinimumRatio = 1;
-                        release.MinimumSeedTime = 172800;
+                        release.MinimumSeedTime = 172800; // 48 hours
 
                         CQ qLink = qRow.Find(".br_right > a").First();
                         release.Guid = new Uri(SiteLink + qLink.Attr("href"));

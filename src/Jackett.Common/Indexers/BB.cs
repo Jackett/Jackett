@@ -142,7 +142,7 @@ namespace Jackett.Common.Indexers
                         var release = new ReleaseInfo();
 
                         release.MinimumRatio = 1;
-                        release.MinimumSeedTime = 172800;
+                        release.MinimumSeedTime = 172800; // 48 hours
 
                         var catStr = row.ChildElements.ElementAt(0).FirstElementChild.GetAttribute("href").Split(new char[] { '[', ']' })[1];
                         release.Category = MapTrackerCatToNewznab(catStr);

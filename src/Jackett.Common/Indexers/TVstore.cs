@@ -179,7 +179,7 @@ namespace Jackett.Common.Indexers
                     release.Peers = (int.Parse(parameters[peers_id]) + release.Seeders);
                     release.Grabs = int.Parse(parameters[grabs_id]);
                     release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800;
+                    release.MinimumSeedTime = 172800; // 48 hours
                     release.DownloadVolumeFactor = 1;
                     release.UploadVolumeFactor = UploadFactorCalculator(release.PublishDate, type);
                     release.Category = new List<int> { TvCategoryParser.ParseTvShowQuality(release.Title) };

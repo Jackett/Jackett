@@ -190,7 +190,7 @@ namespace Jackett.Common.Indexers
                     release.UploadVolumeFactor = (string)torrent["doubletorrent"] == "0" ? 1 : 2;
 
                     release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800;
+                    release.MinimumSeedTime = 172800; // 48 hours
 
                     releases.Add(release);
                 }
