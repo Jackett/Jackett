@@ -56,6 +56,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * GloDLS
  * HDReactor
  * Horrible Subs
+ * IBit
  * Idope
  * Il Corsaro Nero <!-- maintained by bonny1992 -->
  * Il Corsaro Blu
