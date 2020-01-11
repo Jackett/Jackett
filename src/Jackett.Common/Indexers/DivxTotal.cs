@@ -21,12 +21,12 @@ using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
 {
+    // ReSharper disable once UnusedType.Global
     public class DivxTotal : BaseWebIndexer
     {
-
-        private readonly int MAX_RESULTS_PER_PAGE = 15;
-        private readonly int MAX_SEARCH_PAGE_LIMIT = 3;
-        private readonly long DEFAULT_FILESIZE = 524288000; // 500 MB
+        private const int MaxResultsPerPage = 15;
+        private const int MaxSearchPageLimit = 3;
+        private const long DefaultFilesize = 524288000; // 500 MB
 
         public DivxTotal(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
             : base(name: "DivxTotal",
@@ -61,9 +61,7 @@ namespace Jackett.Common.Indexers
             var releases = await PerformQuery(new TorznabQuery());
 
             await ConfigureIfOK(string.Empty, releases.Any(), () =>
-            {
-                throw new Exception("Could not find releases from this URL");
-            });
+                throw new Exception("Could not find releases from this URL"));
 
             return IndexerConfigurationStatus.Completed;
         }
@@ -77,8 +75,7 @@ namespace Jackett.Common.Indexers
             matchWords = queryStr != "" && matchWords;
 
             // TODO: remove year (2019) and episode (S01E02) to make it work with Sonarr
-            var qc = new NameValueCollection();
-            qc.Add("s", queryStr);
+            var qc = new NameValueCollection {{"s", queryStr}};
 
             var page = 1;
             var isLastPage = false;
@@ -96,8 +93,10 @@ namespace Jackett.Common.Indexers
                     var doc = searchResultParser.ParseDocument(result.Content);
 
                     var table = doc.QuerySelector("table.table");
+                    if (table == null)
+                        break;
                     var rows = table.QuerySelectorAll("tr");
-                    isLastPage = rows.Length -1 < MAX_RESULTS_PER_PAGE; // rows includes the header
+                    isLastPage = rows.Length -1 < MaxResultsPerPage; // rows includes the header
                     var isHeader = true;
                     foreach (var row in rows)
                     {
@@ -116,7 +115,7 @@ namespace Jackett.Common.Indexers
 
                 page++; // update page number
 
-            } while (!isLastPage && page <= MAX_SEARCH_PAGE_LIMIT);
+            } while (!isLastPage && page <= MaxSearchPageLimit);
 
             return releases;
         }
@@ -145,8 +144,8 @@ namespace Jackett.Common.Indexers
             return content;
         }
 
-        private async Task ParseRelease(List<ReleaseInfo> releases, IElement row, string queryStr, int[] queryCats,
-            bool matchWords)
+        private async Task ParseRelease(ICollection<ReleaseInfo> releases, IParentNode row, string queryStr,
+            int[] queryCats, bool matchWords)
         {
             var anchor = row.QuerySelector("a");
             var commentsLink = anchor.GetAttribute("href");
@@ -156,7 +155,7 @@ namespace Jackett.Common.Indexers
             var publishStr = row.QuerySelectorAll("td")[2].TextContent.Trim();
             var publishDate = TryToParseDate(publishStr, DateTime.Now);
             var sizeStr = row.QuerySelectorAll("td")[3].TextContent.Trim();
-            var size = TryToParseSize(sizeStr, DEFAULT_FILESIZE);
+            var size = TryToParseSize(sizeStr, DefaultFilesize);
 
             // return results only for requested categories
             if (queryCats.Any() && !queryCats.Contains(categories.First()))
@@ -182,7 +181,7 @@ namespace Jackett.Common.Indexers
             }
         }
 
-        private async Task ParseSeriesRelease(List<ReleaseInfo> releases, string title, string commentsLink,
+        private async Task ParseSeriesRelease(ICollection<ReleaseInfo> releases, string title, string commentsLink,
             string cat, DateTime publishDate)
         {
             var result = await RequestStringWithCookies(commentsLink);
@@ -217,14 +216,15 @@ namespace Jackett.Common.Indexers
                     episodeTitle += " [HDTV]";
 
                     GenerateRelease(releases, episodeTitle, commentsLink, downloadLink, cat, episodePublish,
-                        DEFAULT_FILESIZE);
+                        DefaultFilesize);
                 }
             }
         }
 
-        private void GenerateRelease(List<ReleaseInfo> releases, string title, string commentsLink, string downloadLink,
-            string cat, DateTime publishDate, long size)
+        private void GenerateRelease(ICollection<ReleaseInfo> releases, string title, string commentsLink,
+            string downloadLink, string cat, DateTime publishDate, long size)
         {
+            // ReSharper disable once UseObjectOrCollectionInitializer
             var release = new ReleaseInfo();
 
             release.Title = title + " [Spanish]";
@@ -247,38 +247,32 @@ namespace Jackett.Common.Indexers
             releases.Add(release);
         }
 
-        private string OnclickToDownloadLink(string onclick)
+        private static string OnclickToDownloadLink(string onclick)
         {
-            // onclick="post('/download/torrent.php', {u: 'aHR0cHM6Ly93d3cuZGl2eHRvdGFlbnQ='});"
+            // onclick="post('/download/torrent.php', {u: 'aHR0cHM6Ly93d3cuZGl2eHRvdGF='});"
             var base64EncodedData = onclick.Split('\'')[3];
             var base64EncodedBytes = Convert.FromBase64String(base64EncodedData);
             return Encoding.UTF8.GetString(base64EncodedBytes);
         }
 
-        private bool CheckTitleMatchWords(string queryStr, string title)
+        private static bool CheckTitleMatchWords(string queryStr, string title)
         {
             // this code split the words, remove words with 2 letters or less, remove accents and lowercase
-            MatchCollection queryMatches = Regex.Matches(queryStr, @"\b[\w']*\b");
+            var queryMatches = Regex.Matches(queryStr, @"\b[\w']*\b");
             var queryWords = from m in queryMatches.Cast<Match>()
                 where !string.IsNullOrEmpty(m.Value) && m.Value.Length > 2
                 select Encoding.UTF8.GetString(Encoding.GetEncoding("ISO-8859-8").GetBytes(m.Value.ToLower()));
 
-            MatchCollection titleMatches = Regex.Matches(title, @"\b[\w']*\b");
+            var titleMatches = Regex.Matches(title, @"\b[\w']*\b");
             var titleWords = from m in titleMatches.Cast<Match>()
                 where !string.IsNullOrEmpty(m.Value) && m.Value.Length > 2
                 select Encoding.UTF8.GetString(Encoding.GetEncoding("ISO-8859-8").GetBytes(m.Value.ToLower()));
             titleWords = titleWords.ToArray();
 
-            foreach (var word in queryWords)
-            {
-                if (!titleWords.Contains(word))
-                    return false;
-            }
-
-            return true;
+            return queryWords.All(word => titleWords.Contains(word));
         }
 
-        private string TryToCleanSeriesTitle(string title, string episodeTitle)
+        private static string TryToCleanSeriesTitle(string title, string episodeTitle)
         {
             // title = Superman
             // episodeTitle = Superman1x12
@@ -286,8 +280,8 @@ namespace Jackett.Common.Indexers
             try
             {
                 newTitle = newTitle.Replace(title, title + " ");
-                Regex r = new Regex("(([0-9]+)x([0-9]+))", RegexOptions.IgnoreCase);
-                Match m = r.Match(newTitle);
+                var r = new Regex("(([0-9]+)x([0-9]+))", RegexOptions.IgnoreCase);
+                var m = r.Match(newTitle);
                 if (m.Success)
                 {
                     var season = "S" + m.Groups[2].Value.PadLeft(2, '0');
@@ -305,32 +299,30 @@ namespace Jackett.Common.Indexers
             return newTitle;
         }
 
-        private DateTime TryToParseDate(string dateToParse, DateTime dateDefault)
+        private static DateTime TryToParseDate(string dateToParse, DateTime dateDefault)
         {
-            var date = dateDefault;
             try
             {
-                date = DateTime.ParseExact(dateToParse, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+                return DateTime.ParseExact(dateToParse, "dd-MM-yyyy", CultureInfo.InvariantCulture);
             }
             catch
             {
                 // ignored
             }
-            return date;
+            return dateDefault;
         }
 
-        private long TryToParseSize(string sizeToParse, long sizeDefault)
+        private static long TryToParseSize(string sizeToParse, long sizeDefault)
         {
-            var size = sizeDefault;
             try
-            {
-                size = ReleaseInfo.GetBytes(sizeToParse);
+            { 
+                return ReleaseInfo.GetBytes(sizeToParse);
             }
             catch
             {
                 // ignored
             }
-            return size;
+            return sizeDefault;
         }
     }
 }
