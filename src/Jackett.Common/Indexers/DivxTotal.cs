@@ -26,7 +26,23 @@ namespace Jackett.Common.Indexers
     {
         private const int MaxResultsPerPage = 15;
         private const int MaxSearchPageLimit = 3;
-        private const long DefaultFilesize = 524288000; // 500 MB
+        private static class DivxTotalCategories
+        {
+            public static string Peliculas => "peliculas";
+            public static string PeliculasHd => "peliculas-hd";
+            public static string Peliculas3D => "peliculas-3-d";
+            public static string PeliculasDvdr => "peliculas-dvdr";
+            public static string Series => "series";
+            public static string Programas => "programas";
+            public static string Otros => "otros";
+        }
+        private static class DivxTotalFizeSizes
+        {
+            public static long Peliculas => 2147483648; // 2 GB
+            public static long PeliculasDvdr => 5368709120; // 5 GB
+            public static long Series => 524288000; // 500 MB
+            public static long Otros => 524288000; // 500 MB
+        }
 
         public DivxTotal(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
             : base(name: "DivxTotal",
@@ -46,13 +62,13 @@ namespace Jackett.Common.Indexers
             var matchWords = new BoolItem() { Name = "Match words in title", Value = true };
             configData.AddDynamic("MatchWords", matchWords);
 
-            AddCategoryMapping("peliculas", TorznabCatType.MoviesSD);
-            AddCategoryMapping("peliculas-hd", TorznabCatType.MoviesSD);
-            AddCategoryMapping("peliculas-3-d", TorznabCatType.MoviesHD);
-            AddCategoryMapping("peliculas-dvdr", TorznabCatType.MoviesDVD);
-            AddCategoryMapping("series", TorznabCatType.TVSD);
-            AddCategoryMapping("programas", TorznabCatType.PC);
-            AddCategoryMapping("otros", TorznabCatType.OtherMisc);
+            AddCategoryMapping(DivxTotalCategories.Peliculas, TorznabCatType.MoviesSD);
+            AddCategoryMapping(DivxTotalCategories.PeliculasHd, TorznabCatType.MoviesSD);
+            AddCategoryMapping(DivxTotalCategories.Peliculas3D, TorznabCatType.MoviesHD);
+            AddCategoryMapping(DivxTotalCategories.PeliculasDvdr, TorznabCatType.MoviesDVD);
+            AddCategoryMapping(DivxTotalCategories.Series, TorznabCatType.TVSD);
+            AddCategoryMapping(DivxTotalCategories.Programas, TorznabCatType.PC);
+            AddCategoryMapping(DivxTotalCategories.Otros, TorznabCatType.OtherMisc);
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -70,12 +86,12 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
 
-            var queryStr = query.GetQueryString().Trim();
             var matchWords = ((BoolItem)configData.GetDynamic("MatchWords")).Value;
-            matchWords = queryStr != "" && matchWords;
+            matchWords = query.SearchTerm != "" && matchWords;
 
-            // TODO: remove year (2019) and episode (S01E02) to make it work with Sonarr
-            var qc = new NameValueCollection {{"s", queryStr}};
+            // we remove parts from the original query
+            query = ParseQuery(query);
+            var qc = new NameValueCollection {{"s", query.SearchTerm}};
 
             var page = 1;
             var isLastPage = false;
@@ -105,7 +121,7 @@ namespace Jackett.Common.Indexers
                             continue;
                         }
 
-                        await ParseRelease(releases, row, queryStr, query.Categories, matchWords);
+                        await ParseRelease(releases, row, query, matchWords);
                     }
                 }
                 catch (Exception ex)
@@ -144,8 +160,9 @@ namespace Jackett.Common.Indexers
             return content;
         }
 
-        private async Task ParseRelease(ICollection<ReleaseInfo> releases, IParentNode row, string queryStr,
-            int[] queryCats, bool matchWords)
+
+        private async Task ParseRelease(ICollection<ReleaseInfo> releases, IParentNode row, TorznabQuery query,
+            bool matchWords)
         {
             var anchor = row.QuerySelector("a");
             var commentsLink = anchor.GetAttribute("href");
@@ -155,34 +172,34 @@ namespace Jackett.Common.Indexers
             var publishStr = row.QuerySelectorAll("td")[2].TextContent.Trim();
             var publishDate = TryToParseDate(publishStr, DateTime.Now);
             var sizeStr = row.QuerySelectorAll("td")[3].TextContent.Trim();
-            var size = TryToParseSize(sizeStr, DefaultFilesize);
 
             // return results only for requested categories
-            if (queryCats.Any() && !queryCats.Contains(categories.First()))
+            if (query.Categories.Any() && !query.Categories.Contains(categories.First()))
                 return;
 
             // match the words in the query with the titles
-            if (matchWords && !CheckTitleMatchWords(queryStr, title))
+            if (matchWords && !CheckTitleMatchWords(query.SearchTerm, title))
                 return;
 
             // parsing is different for each category
-            if (cat == "series")
+            if (cat == DivxTotalCategories.Series)
             {
-                await ParseSeriesRelease(releases, title, commentsLink, cat, publishDate);
-            } else
+                await ParseSeriesRelease(releases, query, commentsLink, cat, publishDate);
+            } else if (query.Episode == null) // if it's scene series, we don't return other categories
             {
-                if (cat == "peliculas")
-                    title += " [DVDRip]";
-                else if (cat == "peliculas-hd")
-                    title += " [HDRip]";
-                else if (cat == "programas")
-                    title += " [Windows]";
-                GenerateRelease(releases, title, commentsLink, commentsLink, cat, publishDate, size);
+                if (cat == DivxTotalCategories.Peliculas || cat == DivxTotalCategories.PeliculasHd ||
+                    cat == DivxTotalCategories.Peliculas3D || cat == DivxTotalCategories.PeliculasDvdr)
+                    ParseMovieRelease(releases, query, title, commentsLink, cat, publishDate, sizeStr);
+                else
+                {
+                    var size = TryToParseSize(sizeStr, DivxTotalFizeSizes.Otros);
+                    GenerateRelease(releases, title, commentsLink, commentsLink, cat, publishDate, size);
+                }
             }
         }
 
-        private async Task ParseSeriesRelease(ICollection<ReleaseInfo> releases, string title, string commentsLink,
-            string cat, DateTime publishDate)
+        private async Task ParseSeriesRelease(ICollection<ReleaseInfo> releases, TorznabQuery query,
+            string commentsLink, string cat, DateTime publishDate)
         {
             var result = await RequestStringWithCookies(commentsLink);
 
@@ -211,14 +228,58 @@ namespace Jackett.Common.Indexers
                     var episodePublishStr = row.QuerySelectorAll("td")[3].TextContent.Trim();
                     var episodePublish = TryToParseDate(episodePublishStr, publishDate);
 
-                    // clean up the title
-                    episodeTitle = TryToCleanSeriesTitle(title, episodeTitle);
-                    episodeTitle += " [HDTV]";
+                    // Convert the title to Scene format
+                    episodeTitle = ParseDivxTotalSeriesTitle(episodeTitle, query);
+
+                    // if the original query was in scene format, we filter the results to match episode
+                    // query.Episode != null means scene title
+                    if (query.Episode != null && !episodeTitle.Contains(query.GetEpisodeSearchString()))
+                        continue;
 
                     GenerateRelease(releases, episodeTitle, commentsLink, downloadLink, cat, episodePublish,
-                        DefaultFilesize);
+                        DivxTotalFizeSizes.Series);
                 }
             }
+        }
+
+        private void ParseMovieRelease(ICollection<ReleaseInfo> releases, TorznabQuery query, string title,
+            string commentsLink, string cat, DateTime publishDate, string sizeStr)
+        {
+            // parse tags in title, we need to put the year after the real title (before the tags)
+            // La Maldicion ( HD-CAM)
+            // Mascotas 2 4K (1080p) (DUAL)
+            // Dragon Ball Super: Broly [2018] [DVD9] [PAL] [Español]
+            var tags = "";
+            var queryMatches = Regex.Matches(title, @"[\[\(]([^\]\)]+)[\]\)]", RegexOptions.IgnoreCase);
+            foreach (Match m in queryMatches)
+            {
+                tags += " " + m.Groups[1].Value.Trim();
+                title = title.Replace(m.Groups[0].Value, "");
+            }
+            title = title.Trim();
+            title = Regex.Replace(title, " 4K$", "", RegexOptions.IgnoreCase);
+
+            // add the year
+            title = query.Year != null ? title + " " + query.Year : title;
+
+            // add the tags
+            title += tags.ToUpper();
+
+            // add suffix and calculate the size
+            var size = TryToParseSize(sizeStr, DivxTotalFizeSizes.Peliculas);
+            if (cat == DivxTotalCategories.Peliculas)
+                title += " SPANISH DVDRip XviD";
+            else if (cat == DivxTotalCategories.PeliculasHd || cat == DivxTotalCategories.Peliculas3D)
+                title += " SPANISH BDRip x264";
+            else if (cat == DivxTotalCategories.PeliculasDvdr)
+            {
+                 title += " SPANISH DVDR";
+                 size = TryToParseSize(sizeStr, DivxTotalFizeSizes.PeliculasDvdr);
+            }
+            else
+                throw new Exception("Unknown category " + cat);
+
+            GenerateRelease(releases, title, commentsLink, commentsLink, cat, publishDate, size);
         }
 
         private void GenerateRelease(ICollection<ReleaseInfo> releases, string title, string commentsLink,
@@ -227,7 +288,7 @@ namespace Jackett.Common.Indexers
             // ReSharper disable once UseObjectOrCollectionInitializer
             var release = new ReleaseInfo();
 
-            release.Title = title + " [Spanish]";
+            release.Title = title;
             release.Comments = new Uri(commentsLink);
             release.Link = new Uri(downloadLink);
             release.Guid = release.Link;
@@ -236,11 +297,13 @@ namespace Jackett.Common.Indexers
             release.PublishDate = publishDate;
             release.Size = size;
 
+            release.Files = 1;
+
             release.Seeders = 1;
             release.Peers = 2;
 
-            release.MinimumRatio = 0;
-            release.MinimumSeedTime = 0;
+            release.MinimumRatio = 1;
+            release.MinimumSeedTime = 172800;
             release.DownloadVolumeFactor = 0;
             release.UploadVolumeFactor = 1;
 
@@ -272,30 +335,65 @@ namespace Jackett.Common.Indexers
             return queryWords.All(word => titleWords.Contains(word));
         }
 
-        private static string TryToCleanSeriesTitle(string title, string episodeTitle)
+        private static TorznabQuery ParseQuery(TorznabQuery query)
         {
-            // title = Superman
-            // episodeTitle = Superman1x12
+            // Eg. Marco.Polo.2014.S02E08
+
+            // the season/episode part is already parsed by Jackett
+            // query.SanitizedSearchTerm = Marco.Polo.2014.
+            // query.Season = 2
+            // query.Episode = 8
+            var searchTerm = query.SanitizedSearchTerm;
+
+            // replace punctuation symbols with spaces
+            // searchTerm = Marco Polo 2014
+            searchTerm = Regex.Replace(searchTerm, @"[-._\(\)@/\\\[\]\+\%]", " ");
+            searchTerm = Regex.Replace(searchTerm, @"\s+", " ");
+            searchTerm = searchTerm.Trim();
+
+            // we parse the year and remove it from search
+            // searchTerm = Marco Polo
+            // query.Year = 2014
+            var r = new Regex("([ ]+([0-9]{4}))$", RegexOptions.IgnoreCase);
+            var m = r.Match(searchTerm);
+            if (m.Success)
+            {
+                query.Year = int.Parse(m.Groups[2].Value);
+                searchTerm = searchTerm.Replace(m.Groups[1].Value, "");
+            }
+
+            // remove some words
+            searchTerm = Regex.Replace(searchTerm, @"\b(espa[ñn]ol|spanish|castellano|spa)\b", "", RegexOptions.IgnoreCase);
+
+            query.SearchTerm = searchTerm;
+            return query;
+        }
+
+        private static string ParseDivxTotalSeriesTitle(string episodeTitle, TorznabQuery query)
+        {
+            // episodeTitle = American Horror Story6x04
             var newTitle = episodeTitle;
             try
             {
-                newTitle = newTitle.Replace(title, title + " ");
-                var r = new Regex("(([0-9]+)x([0-9]+))", RegexOptions.IgnoreCase);
+                var r = new Regex("(([0-9]+)x([0-9]+)[^0-9]*)$", RegexOptions.IgnoreCase);
                 var m = r.Match(newTitle);
                 if (m.Success)
                 {
                     var season = "S" + m.Groups[2].Value.PadLeft(2, '0');
                     var episode = "E" + m.Groups[3].Value.PadLeft(2, '0');
-                    newTitle = newTitle.Replace(m.Groups[1].Value, season + episode);
+                    // if the original query was in scene format, we have to put the year back
+                    // query.Episode != null means scene title
+                    var year = query.Episode != null && query.Year != null ? " " + query.Year : "";
+                    newTitle = newTitle.Replace(m.Groups[1].Value, year + " " + season + episode);
                 }
-                newTitle = newTitle.Replace(" COMPLETA", "").Replace(" FINAL TEMPORADA", "");
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 throw;
             }
-            // return Superman S01E012
+            newTitle += " SPANISH SDTV XviD";
+            // return American Horror Story S06E04 SPANISH SDTV XviD
             return newTitle;
         }
 
