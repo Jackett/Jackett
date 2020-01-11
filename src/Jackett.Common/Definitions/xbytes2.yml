@@ -139,7 +139,10 @@
       leechers:
         selector: td:nth-child(8) a
       grabs:
+        text: 0
+      grabs:
         selector: td:nth-child(9) a
+        optional: true
       date:
         selector: td:nth-child(6)
         filters:
