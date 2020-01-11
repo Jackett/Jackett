@@ -156,7 +156,7 @@ namespace Jackett.Common.Indexers
                     release.Description = qRow.Find("td:nth-child(3) > span").Text();
 
                     release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800;
+                    release.MinimumSeedTime = 172800; // 48 hours
                     
                     int tdIndex = 0;
                     if(qRow.Find("td:nth-last-child(1)").Text() == "Edit") tdIndex = 1;

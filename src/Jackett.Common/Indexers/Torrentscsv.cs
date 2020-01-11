@@ -147,6 +147,8 @@ namespace Jackett.Common.Indexers {
                     var grabs = torrent.Value<string>("completed");
                     if (grabs == null) grabs = "0";
                     release.Grabs = ParseUtil.CoerceInt(grabs);
+                    release.MinimumRatio = 1;
+                    release.MinimumSeedTime = 172800; // 48 hours
                     release.DownloadVolumeFactor = 0;
                     release.UploadVolumeFactor = 1;
 

@@ -401,15 +401,15 @@ namespace Jackett.Common.Indexers
                             Title = name,
                             Seeders = seeders,
                             Peers = seeders + leechers,
-                            MinimumRatio = 1,
-                            MinimumSeedTime = 172800,
                             PublishDate = date,
                             Size = size,
                             Files = files,
                             Grabs = completed,
                             Guid = detailsLink,
                             Comments = commentsLink,
-                            Link = downloadLink
+                            Link = downloadLink,
+                            MinimumRatio = 1,
+                            MinimumSeedTime = 172800 // 48 hours
                         };
 
                         // IMDB

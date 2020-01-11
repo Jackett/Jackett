@@ -80,7 +80,7 @@ namespace Jackett.Common.Indexers
                     release = new ReleaseInfo();
 
                     release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800;
+                    release.MinimumSeedTime = 172800; // 48 hours
 
                     serie_title = node.SelectSingleNode(".//*[local-name()='raw_title']").InnerText;
                     release.Title = serie_title;

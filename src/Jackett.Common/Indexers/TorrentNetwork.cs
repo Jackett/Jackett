@@ -198,7 +198,7 @@ namespace Jackett.Common.Indexers
                 {
                     var release = new ReleaseInfo();
                     release.MinimumRatio = 0.8;
-                    release.MinimumSeedTime = 48 * 60 * 60;
+                    release.MinimumSeedTime = 172800; // 48 hours
 
                     release.Category = MapTrackerCatToNewznab(torrent[0].ToString());
                     release.Title = torrent[1].ToString();

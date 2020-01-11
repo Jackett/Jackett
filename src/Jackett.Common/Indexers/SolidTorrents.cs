@@ -165,11 +165,8 @@ namespace Jackett.Common.Indexers
             release.InfoHash = (string)torrent["infohash"];
             release.MagnetUri = new Uri((string)torrent["magnet"]);
 
-            /*
-            release.MinimumRatio = 0;
-            release.MinimumSeedTime = 0;
-            */
-
+            release.MinimumRatio = 1;
+            release.MinimumSeedTime = 172800; // 48 hours
             release.DownloadVolumeFactor = 0;
             release.UploadVolumeFactor = 1;
 

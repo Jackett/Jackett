@@ -303,7 +303,7 @@ namespace Jackett.Common.Indexers
             release.Peers = 2;
 
             release.MinimumRatio = 1;
-            release.MinimumSeedTime = 172800;
+            release.MinimumSeedTime = 172800; // 48 hours
             release.DownloadVolumeFactor = 0;
             release.UploadVolumeFactor = 1;
 

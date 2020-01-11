@@ -156,6 +156,7 @@ namespace Jackett.Common.Indexers
                         release.Peers = release.Seeders + int.Parse(qRow.Find(".peers a").Get(1).InnerText);
 
                         release.MinimumRatio = 1;
+                        release.MinimumSeedTime = 172800; // 48 hours
 
                         var size = qRow.Find(".size").First().Text();
                         release.Size = ReleaseInfo.GetBytes(size);

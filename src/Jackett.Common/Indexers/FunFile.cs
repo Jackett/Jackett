@@ -114,7 +114,7 @@ namespace Jackett.Common.Indexers
                 {
                     var release = new ReleaseInfo();
                     release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 48 * 60 * 60;
+                    release.MinimumSeedTime = 172800; // 48 hours
 
                     var qRow = row.Cq();
                     var qCatLink = qRow.Find("a[href^=browse.php?cat=]").First();

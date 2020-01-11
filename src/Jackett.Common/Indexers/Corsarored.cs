@@ -227,6 +227,8 @@ namespace Jackett.Common.Indexers
 				InfoHash = (string) torrent["hash"],
 				MagnetUri = new Uri((string) torrent["magnet"]),
 				Comments = new Uri($"{SiteLink}details/{(string) torrent["hash"]}"),
+				MinimumRatio = 1,
+				MinimumSeedTime = 172800, // 48 hours
 				DownloadVolumeFactor = 0,
 				UploadVolumeFactor = 1
 			};

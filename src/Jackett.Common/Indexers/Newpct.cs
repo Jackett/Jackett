@@ -904,6 +904,8 @@ namespace Jackett.Common.Indexers
             result.Peers = 1;
 
             result.Title = FixedTitle(result, quality, language);
+            result.MinimumRatio = 1;
+            result.MinimumSeedTime = 172800; // 48 hours
             result.DownloadVolumeFactor = 0;
             result.UploadVolumeFactor = 1;
 
