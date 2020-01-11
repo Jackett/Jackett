@@ -16,9 +16,9 @@ namespace Jackett.Common.Indexers
 {
     public class BakaBT : BaseWebIndexer
     {
-        public string SearchUrl { get { return SiteLink + "browse.php?only=0&hentai=1&incomplete=1&lossless=1&hd=1&multiaudio=1&bonus=1&reorder=1&q="; } }
-        public string LoginUrl { get { return SiteLink + "login.php"; } }
-        public string id = "bakabt";
+        private string SearchUrl => SiteLink + "browse.php?only=0&hentai=1&incomplete=1&lossless=1&hd=1&multiaudio=1&bonus=1&reorder=1&q=";
+        private string LoginUrl => SiteLink + "login.php";
+        private string LogoutStr = "<a href=\"logout.php\">Logout</a>";
 
         private new ConfigurationDataBasicLogin configData
         {
@@ -45,7 +45,12 @@ namespace Jackett.Common.Indexers
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
+            await DoLogin();
+            return IndexerConfigurationStatus.RequiresTesting;
+        }
 
+        private async Task DoLogin()
+        {
             var loginForm = await webclient.GetString(new Utils.Clients.WebRequest()
             {
                 Url = LoginUrl,
@@ -60,15 +65,13 @@ namespace Jackett.Common.Indexers
 
             var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginForm.Cookies, true, null, SiteLink);
             var responseContent = response.Content;
-            await ConfigureIfOK(response.Cookies, responseContent.Contains("<a href=\"logout.php\">Logout</a>"), () =>
-                {
-                    CQ dom = responseContent;
-                    var messageEl = dom[".error"].First();
-                    var errorMessage = messageEl.Text().Trim();
-                    throw new ExceptionWithConfigData(errorMessage, configData);
-                });
-
-            return IndexerConfigurationStatus.RequiresTesting;
+            await ConfigureIfOK(response.Cookies, responseContent.Contains(LogoutStr), () =>
+            {
+                CQ dom = responseContent;
+                var messageEl = dom[".error"].First();
+                var errorMessage = messageEl.Text().Trim();
+                throw new ExceptionWithConfigData(errorMessage, configData);
+            });
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
@@ -85,6 +88,12 @@ namespace Jackett.Common.Indexers
             var searchString = query.SanitizedSearchTerm;
             var episodeSearchUrl = SearchUrl + WebUtility.UrlEncode(searchString);
             var response = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
+            if (!response.Content.Contains(LogoutStr))
+            {
+                //Cookie appears to expire after a period of time or logging in to the site via browser
+                await DoLogin();
+                response = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
+            }
 
             try
             {
@@ -169,11 +178,7 @@ namespace Jackett.Common.Indexers
                             release.PublishDate = DateTime.ParseExact(dateStr, "dd MMM yy", CultureInfo.InvariantCulture);
                         }
 
-                        if (qRow.Find("span.freeleech").Length > 0)
-                            release.DownloadVolumeFactor = 0;
-                        else
-                            release.DownloadVolumeFactor = 1;
-
+                        release.DownloadVolumeFactor = qRow.Find("span.freeleech").Length > 0 ? 0 : 1;
                         release.UploadVolumeFactor = 1;
 
                         releases.Add(release);
