@@ -45,6 +45,12 @@
         "desc": "desc"
         "asc": "asc"
 
+  download:
+    selector: script:contains("magnet:")
+    filters:
+      - name: regexp
+        args: "(magnet:[^\"]+)\""
+
   search:
     paths:
       - path: tags.php
@@ -73,7 +79,7 @@
         filters:
           - name: querystring
             args: tags
-      magnet:
+      download:
         selector: a[onclick="getMagnet(this)"]
         attribute: title
         filters:
