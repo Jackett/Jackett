@@ -42,6 +42,7 @@
 
   download:
     selector: a.linktorrent
+    attribute: href
 
   search:
     paths:

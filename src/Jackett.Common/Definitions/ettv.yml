@@ -96,6 +96,7 @@
   
   download:
     selector: a[href^="{{ .Config.downloadlink }}"]
+    attribute: href
 
   search:
     path: "{{ if .Keywords }}torrents-search.php{{else}}torrents.php{{end}}"

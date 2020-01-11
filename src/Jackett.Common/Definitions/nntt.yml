@@ -660,6 +660,7 @@
 
   download:
     selector: a[href^="./download/file.php?id="]
+    attribute: href
 
   search:
     # http://www.nntt.org/search.php?sr=topics&sf=titleonly&fp=1&tracker_search=torrent&keywords=2019&fid[]=154

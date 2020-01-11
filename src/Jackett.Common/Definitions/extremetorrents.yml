@@ -76,6 +76,7 @@
         text: "{{ .Config.thankyou }}"
         submit: Opslaan
     selector: a[href^="download.php?id="]
+    attribute: href
 
   search:
     paths:

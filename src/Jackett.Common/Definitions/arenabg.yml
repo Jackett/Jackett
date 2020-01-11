@@ -102,6 +102,7 @@
 
   download:
     selector: a[href*="{{ .Config.downloadlink }}"]
+    attribute: href
 
   search:
     paths:
