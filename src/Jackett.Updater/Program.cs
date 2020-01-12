@@ -352,7 +352,6 @@ namespace Jackett.Updater
                 "Definitions/xktorrent.yml",
                 "Definitions/btkitty.yml",
                 "Definitions/kikibt.yml",
-                "Definitions/torrentkitty.yml",
                 "Definitions/rockethd.yml",
                 "Definitions/worldofp2p.yml",
                 "Definitions/avg.yml",
@@ -382,6 +381,10 @@ namespace Jackett.Updater
                 "Definitions/rgu.yml",
                 "Definitions/elittracker.yml",
                 "Definitions/hon3yhd-net.yml",
+                "Definitions/solidtorrents.yml",
+                "Definitions/extratorrent-ag.yml",
+                "Definitions/passionetorrent.yml",
+                "Definitions/thetorrents.yml",
             };
 
             foreach (var oldFile in oldFiles)
@@ -553,8 +556,11 @@ namespace Jackett.Updater
 
         private string GetUpdateLocation()
         {
-            var location = new Uri(Assembly.GetEntryAssembly().GetName().CodeBase);
-            return new FileInfo(WebUtility.UrlDecode(location.AbsolutePath)).DirectoryName;
+	        // Use EscapedCodeBase to avoid Uri reserved characters from causing bugs
+	        // https://stackoverflow.com/questions/896572
+            var location = new Uri(Assembly.GetEntryAssembly().GetName().EscapedCodeBase);
+            // Use LocalPath instead of AbsolutePath to avoid needing to unescape Uri format.
+            return new FileInfo(location.LocalPath).DirectoryName;
         }
 
         private string GetJackettConsolePath(string directoryPath)

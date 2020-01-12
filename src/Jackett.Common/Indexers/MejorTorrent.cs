@@ -18,11 +18,11 @@ namespace Jackett.Common.Indexers
 {
     class MejorTorrent : BaseWebIndexer
     {
-        public static Uri WebUri = new Uri("http://www.mejortorrentt.org/");
-        public static Uri DownloadUri = new Uri(WebUri, "secciones.php?sec=descargas&ap=contar_varios");
+        private static Uri WebUri = new Uri("http://www.mejortorrentt.org/");
+        private static Uri DownloadUri = new Uri(WebUri, "secciones.php?sec=descargas&ap=contar_varios");
         private static Uri SearchUriBase = new Uri(WebUri, "secciones.php");
-        public static Uri NewTorrentsUri = new Uri(WebUri, "secciones.php?sec=ultimos_torrents");
-        public static Encoding MEEncoding = Encoding.GetEncoding("utf-8");
+        private static Uri NewTorrentsUri = new Uri(WebUri, "secciones.php?sec=ultimos_torrents");
+        private static Encoding MEEncoding = Encoding.GetEncoding("utf-8");
 
         public override string[] LegacySiteLinks { get; protected set; } = new string[] {
             "http://www.mejortorrent.org/",
@@ -74,7 +74,7 @@ namespace Jackett.Common.Indexers
             return await PerformQuery(query, 0);
         }
 
-        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query, int attempts)
+        private async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query, int attempts)
         {
             query = query.Clone();
 
@@ -404,9 +404,14 @@ namespace Jackett.Common.Indexers
         {
             public IEnumerable<Uri> Extract(IHtmlDocument html)
             {
-                return html.QuerySelectorAll("a[href*=\".torrent\"]")
-                    .Select(e => e.Attributes["href"].Value)
-                    .Select(link => new Uri(WebUri, link));
+                List<Uri> uris = new List<Uri>();
+                foreach(var elem in html.QuerySelectorAll("a[onclick*=\"/uploads/\"]")) {
+                    var onclick = elem.Attributes["onclick"].Value;
+                    var table = onclick.Split(new string[] {"table: '"}, StringSplitOptions.None)[1].Split(new string[] {"'"}, StringSplitOptions.None)[0];
+                    var name = onclick.Split(new string[] {"name: '"}, StringSplitOptions.None)[1].Split(new string[] {"'"}, StringSplitOptions.None)[0];
+                    uris.Add(new Uri(WebUri, "/uploads/torrents/" + table + "/" + name));
+                }
+                return uris;
             }
         }
 
@@ -458,7 +463,7 @@ namespace Jackett.Common.Indexers
             public MTReleaseInfo()
             {
                 this.Category = new List<int>();
-                this.Grabs = 5;
+                this.Grabs = null;
                 this.Files = 1;
                 this.PublishDate = new DateTime();
                 this.Peers = 1;
@@ -683,6 +688,12 @@ namespace Jackett.Common.Indexers
                 } catch { }
                 try
                 {
+                    var grabsStr = selectors.Where(s => s.TextContent.ToLower().Contains("total descargas"))
+                        .First().NextSibling.TextContent.Trim();
+                    release.Grabs = long.Parse(grabsStr.Replace(".", string.Empty));
+                } catch { }
+                try
+                {
                     var dateStr = selectors.Where(s => s.TextContent.ToLower().Contains("fecha"))
                         .First().NextSibling.TextContent.Trim();
                     var date = Convert.ToDateTime(dateStr);
@@ -759,7 +770,10 @@ namespace Jackett.Common.Indexers
             {
                 try
                 {
-                    return new Uri(WebUri, html.QuerySelector("a[href*=\".torrent\"]").GetAttribute("href"));
+                    var onclick = html.QuerySelector("a[onclick*=\"/uploads/\"]").GetAttribute("onclick");
+                    var table = onclick.Split(new string[] {"table: '"}, StringSplitOptions.None)[1].Split(new string[] {"'"}, StringSplitOptions.None)[0];
+                    var name = onclick.Split(new string[] {"name: '"}, StringSplitOptions.None)[1].Split(new string[] {"'"}, StringSplitOptions.None)[0];
+                    return new Uri(WebUri, "/uploads/torrents/" + table + "/" + name);
                 }
                 catch
                 {

@@ -80,6 +80,7 @@
 
   download:
     selector: a[href^="download.php?id="]
+    attribute: href
 
   search:
     # https://dxp.ru/torrents.php?search=&sort=4&type=desc

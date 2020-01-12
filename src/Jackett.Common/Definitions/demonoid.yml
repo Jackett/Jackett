@@ -284,6 +284,7 @@
 
   download:
     selector: a[href^="magnet:?xt="]
+    attribute: href
 
   search:
     paths:
@@ -313,7 +314,7 @@
           - name: replace
             args: ["Added ", ""]
           - name: replace
-            args: ["on  ", ""]
+            args: ["on ", ""]
 
     fields:
       title:

@@ -23,11 +23,11 @@ namespace Jackett.Common.Indexers
         private string SearchUrl { get { return SiteLink + "t.json"; } }
 
         public override string[] LegacySiteLinks { get; protected set; } = new string[] {
-            "https://torrentday.com/"
+            "https://torrentday.com/",
+            "https://tday.love/",
         };
 
         public override string[] AlternativeSiteLinks { get; protected set; } = new string[] {
-            "https://tday.love/",
             "https://torrentday.cool/",
             "https://tdonline.org/",
             "https://secure.torrentday.com/",
@@ -54,7 +54,7 @@ namespace Jackett.Common.Indexers
         public TorrentDay(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base(name: "TorrentDay",
                 description: "TorrentDay (TD) is a Private site for TV / MOVIES / GENERAL",
-                link: "https://tday.love/",
+                link: "https://torrentday.cool/",
                 caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 configService: configService,
                 client: wc,
@@ -234,7 +234,7 @@ namespace Jackett.Common.Indexers
                         continue;
 
                     release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800;
+                    release.MinimumSeedTime = 172800; // 48 hours
                     release.Category = MapTrackerCatToNewznab(torrent.c.ToString());
                     
                     var torrentID = (long)torrent.t;

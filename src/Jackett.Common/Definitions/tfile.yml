@@ -1,4 +1,4 @@
-﻿---
+---
   site: tfile
   name: TFile
   description: "TFile is a RUSSIAN Public Torrent Tracker for MOVIES / TV / GENERAL"
@@ -844,9 +844,17 @@
       type: checkbox
       label: Strip Russian Letters
       default: false
+    - name: downloadlink
+      type: select
+      label: Download link
+      default: "magnet:?xt"
+      options:
+        "download.php?id" : ".torrent"
+        "magnet:?xt": "magnet"
 
   download:
-    selector: a[href^="download.php?id="]
+    selector: a[href^="{{ .Config.downloadlink }}"]
+    attribute: href
 
   search:
     paths:
@@ -862,8 +870,10 @@
       $raw: "{{range .Categories}}f[]={{.}}&{{end}}"
       q: "{{ .Keywords }}"
       o: newest
+
     rows:
-      selector: table > tbody > tr.tor
+      selector: table > tbody > tr.tor:has(td:nth-child(4):contains("B"))
+
     fields:
       category:
         selector: td.f a[href*="?f="]
@@ -894,12 +904,7 @@
         selector: td.t a
         attribute: href
       size:
-        selector: td:nth-child(4):not(:contains("B"))
-        optional: true
-        text: "0 B"
-      size:
-        selector: td:nth-child(4):contains("B")
-        optional: true
+        selector: td:nth-child(4)
       seeders: 
         text: 0
       seeders:
@@ -919,3 +924,4 @@
         text: 0
       uploadvolumefactor:
         text: 1
+# engine n/a

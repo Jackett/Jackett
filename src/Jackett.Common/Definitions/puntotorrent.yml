@@ -91,8 +91,37 @@
       - {id: 98, cat: Other, desc: "Otros formatos - Adulto (+18)"}
       - {id: 99, cat: Other, desc: "Otros formatos - Música"}
       - {id: 10, cat: Other, desc: "Otros formatos - Estrenos"}
+
     modes:
       search: [q]
+
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "3"
+      options:
+        "3": "created"
+        "5": "seeders"
+        "4": "size"
+        "2": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "2"
+      options:
+        "2": "desc"
+        "1": "asc"
+    - name: info
+      type: info
+      label: Results Per Page
+      default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
 
   login:
     path: index.php?page=login
@@ -116,12 +145,16 @@
       - name: re_replace
         args: ["[^a-zA-Z0-9]+", " "]
     inputs:
-      page: "torrents"
-      $raw: "&category={{range .Categories}}{{.}};{{end}}"
-      active: "1"
+      page: torrents
+      $raw: "&category={{ range .Categories }}{{.}};{{end}}"
+      active: 1
       search: "{{ .Keywords }}"
+      order: "{{ .Config.sort }}"
+      by: "{{ .Config.type }}"
+
     rows:
       selector: "#mcol .block-content-l table table.lista > tbody > tr:not(:first-child):not(.descripcion)"
+
     fields:
       category:
         selector:  td:nth-child(1) a
@@ -163,9 +196,14 @@
             args: ["(?i)(\\d{1,2})(ª|\\D)?\\s?\\w*Temp\\w*\\b"," S$1 "]
           - name: re_replace
             args: ["(?i)(\\d{1,2})[x|\\/|\\\\](\\d{1,2})", "S$1E$2"]
+          - name: re_replace # S02/C01 => S02E01  /  S02xC01 => S02E01  /  S02C01 => S02E01
+            args: ["(?i)S(\\d{1,2})[/x]?C(\\d{1,2})", "S$1E$2"]
       details:
-        selector: td:nth-child(3) a
+        selector: a[href^="download.php"]
         attribute: href
+        filters:
+          - name: replace
+            args: ["download.php?", "index.php?page=torrent-details&"]
       size:
         # 1,36 GB
         # 296,98 MB
@@ -195,11 +233,12 @@
         attribute: href
       downloadvolumefactor: 
         case:
-          img[src$="golden.gif"]: "0"
-          img[src$="silver.gif"]: "0.5"
-          "*": "1"
+          img[src$="golden.gif"]: 0
+          img[src$="silver.gif"]: 0.5
+          "*": 1
       uploadvolumefactor: 
           case:
-            img[src$="x2.gif"]: "2"
-            img[src$="x3.gif"]: "3"
-            "*": "1"
+            img[src$="x2.gif"]: 2
+            img[src$="x3.gif"]: 3
+            "*": 1
+# xbtit 2.3.0

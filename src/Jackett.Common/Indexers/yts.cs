@@ -188,6 +188,8 @@ namespace Jackett.Common.Indexers
                         release.Seeders = torrent_info.Value<int>("seeds");
                         release.Peers = torrent_info.Value<int>("peers") + release.Seeders;
                         release.Size = torrent_info.Value<long>("size_bytes");
+                        release.MinimumRatio = 1;
+                        release.MinimumSeedTime = 172800; // 48 hours
                         release.DownloadVolumeFactor = 0;
                         release.UploadVolumeFactor = 1;
 

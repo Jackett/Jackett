@@ -50,9 +50,10 @@
       - selector: div.recover-error2
     test:
       path: profile.php
-      
+
   download:
     selector: a[href^="download.php/"]
+    attribute: href
 
   search:
     paths:

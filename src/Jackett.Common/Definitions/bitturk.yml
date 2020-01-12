@@ -91,7 +91,7 @@
     form: form#loginbox_form
     submitpath: ajax/login.php
     inputs:
-      action: "login"
+      action: login
       loginbox_membername: "{{ .Config.username }}"
       loginbox_password: "{{ .Config.password }}"
       loginbox_remember: 1
@@ -124,8 +124,10 @@
       "sortOptions[sortOrder]": "{{ .Config.type }}"
     error:
       - selector: div.error:not(:contains("Gösterilecek sonuç bulunamadı."))
+
     rows:
       selector: table#torrents_table_classic tr:has(td.torrent_name)
+
     fields:
       title:
         selector: a[href*="?p=torrents&pid=10&action=details"]
@@ -181,3 +183,4 @@
         case:
           "img[src$=\"/torrent_multiple_upload.png\"]": 2
           "*": 1
+# TSUE 2.2

@@ -115,16 +115,18 @@
       - name: re_replace
         args: ["[^a-zA-Z0-9]+", "%25"]
     inputs:
-      p: "torrents"
-      pid: "32"
-      $raw: "{{range .Categories}}cid[]={{.}}&{{end}}"
+      p: torrents
+      pid: 32
+      $raw: "{{ range .Categories }}cid[]={{.}}&{{end}}"
       keywords: "{{ .Keywords }}"
-      search_type: "name"
-      searchin: "title"
+      search_type: name
+      searchin: title
     error:
-      - selector: div.error:not(:contains("Não existem resultados encontrados."))
+      - selector: div.error:not(:contains("Não existem resultados encontrados.")):not(:contains("There are no results found."))
+
     rows:
       selector: table#torrents_table_classic > tbody > tr:has(td.torrent_name)
+
     fields:
       title:
         selector: a[href*="?p=torrents&pid=10&action=details"]
@@ -154,11 +156,11 @@
         attribute: href
       downloadvolumefactor:
         case:
-          "img[title=\"FREE!\"]": "0"
-          "*": "1"
+          "img[title=\"FREE!\"]": 0
+          "*": 1
       uploadvolumefactor:
         case:
-          "*": "1"
+          "*": 1
       date:
         selector: td.torrent_name > abbr.timeago
         optional: true
@@ -194,3 +196,4 @@
             args: ["Domingo", "Sunday"]
           - name: dateparse
             args: "02-01-2006 15:04"
+# TSUE 2.2

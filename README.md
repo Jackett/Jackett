@@ -35,6 +35,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BTDIGG
  * BT.etree
  * BTSOW
+ * Cili180
  * ConCen
  * Corsaro.red
  * cpasbien
@@ -44,7 +45,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * ETTV
  * EliteTorrent.biz
  * EstrenosDTL
- * ExtraTorrent.ag
+ * ExtraTorrent.cd
  * EXT Torrents
  * EZTV
  * Filebase
@@ -55,6 +56,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * GloDLS
  * HDReactor
  * Horrible Subs
+ * IBit
  * Idope
  * Il Corsaro Nero <!-- maintained by bonny1992 -->
  * Il Corsaro Blu
@@ -103,6 +105,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TorrentDownload
  * TorrentFunk
  * TorrentGalaxy (TGx)
+ * TorrentKitty
  * TorrentParadise
  * TorrentProject2
  * TorrentQuest
@@ -186,6 +189,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BaconBits (bB)
  * BeiTai
  * BeyondHD (BHD)
+ * Bibliotik
  * BIGTorrent
  * BigTower
  * Bit-City Reloaded
@@ -231,6 +235,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * DigitalCore
  * DigitalHive
  * DivTeam
+ * DivxTotal
  * DocumentaryTorrents (DT)
  * Downloadville
  * Dragonworld Reloaded
@@ -245,8 +250,9 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Ethor.net (Thor's Land)
  * ExtremeTorrents
  * FANO.IN
- * FileList (FL)
+ * FeedUrNeed (FuN)
  * Femdomcult
+ * FileList (FL)
  * FinVip
  * FocusX
  * FreeTorrent
@@ -266,6 +272,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Greek Team
  * HacheDe
  * HD-Forever (HDF)
+ * HD-Olimpo
  * HD-Only (HDO)
  * HD-Space (HDS)
  * HD-Spain
@@ -298,6 +305,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * JPopsuki
  * Kapaki
  * Karagarga
+ * LegacyHD (HD4Free)
  * Le Saloon
  * LearnFlakes
  * LibraNet (LN)
@@ -328,7 +336,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Ourbits (HDPter)
  * P2PBG
  * Partis
- * Passione Torrent <!-- maintained by bonny1992 -->
  * PassThePopcorn (PTP)
  * Peers.FM
  * PirateTheNet (PTN)
@@ -364,6 +371,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * ScenePalace (SP)
  * SceneRush
  * SceneTime
+ * SceneXpress
  * SDBits
  * Secret Cinema
  * SeedFile (SF)
@@ -399,7 +407,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * The Place
  * The Shinning (TsH)
  * The Show
- * The-Torrents
+ * The-Madhouse
  * The Vault
  * TLFBits
  * Torrent Network (TN)
@@ -631,7 +639,7 @@ All contributions are welcome just send a pull request.
 * Install the .NET Core [SDK](https://www.microsoft.com/net/download/windows)
 * Clone Jackett
 * Open Powershell and from the `src` directory, run `dotnet restore`
-* Open the Jackett solution in Visual Studio 2019 (version 16.3 or above)
+* Open the Jackett solution in Visual Studio 2019 (version 16.4 or above)
 * Right click on the Jackett solution and click 'Rebuild Solution' to restore nuget packages
 * Select Jackett.Server as startup project
 * In the drop down menu of the run button select "Jackett.Server" instead of "IIS Express"
@@ -648,21 +656,21 @@ git clone https://github.com/Jackett/Jackett.git
 cd Jackett/src
 
 # dotnet core version
-dotnet publish Jackett.Server -f netcoreapp3.0 --self-contained -r osx-x64 -c Debug # takes care of everything
-./Jackett.Server/bin/Debug/netcoreapp3.0/osx-x64/jackett # run jackett
+dotnet publish Jackett.Server -f netcoreapp3.1 --self-contained -r osx-x64 -c Debug # takes care of everything
+./Jackett.Server/bin/Debug/netcoreapp3.1/osx-x64/jackett # run jackett
 ```
 
 ### Linux
 
 
 ```bash
-sudo apt install mono-complete nuget msbuild dotnet-sdk-3.0 # install build tools (debian/ubuntu)
+sudo apt install mono-complete nuget msbuild dotnet-sdk-3.1 # install build tools (debian/ubuntu)
 git clone https://github.com/Jackett/Jackett.git
 cd Jackett/src
 
 # dotnet core version
-dotnet publish Jackett.Server -f netcoreapp3.0 --self-contained -r linux-x64 -c Debug # takes care of everything
-./Jackett.Server/bin/Debug/netcoreapp3.0/linux-x64/jackett # run jackett
+dotnet publish Jackett.Server -f netcoreapp3.1 --self-contained -r linux-x64 -c Debug # takes care of everything
+./Jackett.Server/bin/Debug/netcoreapp3.1/linux-x64/jackett # run jackett
 ```
 
 ## Screenshots

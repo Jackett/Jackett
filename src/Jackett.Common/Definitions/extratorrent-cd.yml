@@ -1,12 +1,12 @@
 ---
-  site: extratorrent-ag
-  name: ExtraTorrent.ag
-  description: "ExtraTorrent.ag is a Public tracker, a  popular alternative to the original ET site, providing Movie / TV / General magnets"
+  site: extratorrent-cd
+  name: ExtraTorrent.cd
+  description: "ExtraTorrent.cd is a Public tracker, a  popular alternative to the original ET site, providing Movie / TV / General magnets"
   language: en-us
   type: public
   encoding: UTF-8
   links:
-    - https://extratorrent.ag/
+    - https://extratorrent.si/
 
   caps:
     categorymappings:
@@ -940,43 +940,56 @@
   search:
     paths:
       - path: "{{if .Keywords}}search/?search={{ .Keywords}}{{else}}{{end}}"
+
     rows:
       selector: tr[class^="tl"]
+
     fields:
-      title:
-        selector: td.tli a
       category:
-        selector:  td a[href^="/category/"]
+        selector:  a[href*="/category/"]
         attribute: href
         filters:
-          - name: split
-            args: ["/", 2]
+          - name: regexp
+            args: "/category/(\\d+)/"
+      title:
+        selector: a[href*="/torrent/"][title^="view"]
       details:
-        selector: td.tli a
+        selector: a[href*="/torrent/"]
         attribute: href
+        filters:
+          - name: replace
+            args: ["///", "//"]
       download:
-        selector: td a[href^="magnet:?xt="]
+        selector: a[href^="magnet:?xt="]
         attribute: href
-        filters:
-          - name: replace # temp fix for #5372
-            args: ["%E2%AD%90", ""]
       date:
-        selector: td:nth-last-of-type(5)
+        selector: td:nth-last-of-type(5):contains(":")
+        optional: true
         filters:
-          - name: timeago
+          - name: replace
+            args: ["\xA0", " "]
+          - name: fuzzytime
+      date:
+        selector: td:nth-last-of-type(5):not(:contains(":"))
+        optional: true
+        filters:
+          - name: replace
+            args: ["\xA0", "-"]
+          - name: dateparse
+            args: "01-02-2006"
       size:
         selector: td:nth-last-of-type(4)
       seeders:
         text: 0
-      leechers:
-        text: 0
       seeders:
         optional: true
-        selector: td.sy
+        selector: td.sy, td.sn
+      leechers:
+        text: 0
       leechers:
         optional: true
-        selector: td.ly
+        selector: td.ly, td.ln
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1

@@ -28,10 +28,18 @@
       tv-search: [q, season, ep]
       movie-search: [q]
 
-  settings: []
+  settings:
+    - name: downloadlink
+      type: select
+      label: Download link
+      default: "magnet:?xt="
+      options:
+        "/get_torrents/" : ".torrent"
+        "magnet:?xt=": "magnet"
 
   download:
-    selector: a[href^="magnet:?xt="]
+    selector: a[href*="{{ .Config.downloadlink }}"]
+    attribute: href
 
   search:
     paths:

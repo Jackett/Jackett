@@ -270,6 +270,11 @@ namespace Jackett.Common.Indexers
                         System.Text.RegularExpressions.Regex regex = new Regex("(?i)([\\.\\- ])MULTI([\\.\\- ])");
                         release.Title = regex.Replace(release.Title, "$1" + ReplaceMulti + "$2");
                     }
+                    // issue #6855 Replace VOSTFR with ENGLISH
+                    if (configData.Vostfr.Value)
+                    {
+                        release.Title = release.Title.Replace("VOSTFR", "ENGLISH");
+                    }
 
                     if (pretime != null)
                     {
