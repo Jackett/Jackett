@@ -147,6 +147,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Pornolab
  * RiperAM
  * RockBox
+ * Rustorka
  * RuTracker
  * Sharewood
  * SkTorrent
