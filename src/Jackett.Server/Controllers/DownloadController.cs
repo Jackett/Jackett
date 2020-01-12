@@ -10,10 +10,12 @@ using NLog;
 using System;
 using System.Text;
 using System.Threading.Tasks;
+using Jackett.Server.ActionFilters;
 
 namespace Jackett.Server.Controllers
 {
     [AllowAnonymous]
+    [DownloadActionFilter]
     [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     [Route("dl/{indexerID}")]
     public class DownloadController : Controller
