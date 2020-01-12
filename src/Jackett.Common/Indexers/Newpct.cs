@@ -92,7 +92,10 @@ namespace Jackett.Common.Indexers
         private Regex _titleClassicTvQualityRegex = new Regex(@"\[([^\]]*HDTV[^\]]*)", RegexOptions.IgnoreCase);
         private DownloadMatcher[] _downloadMatchers = new DownloadMatcher[]
         {
-            new DownloadMatcher() { MatchRegex = new Regex("([^\"]*/descargar-torrent/[^\"]*)") },
+            new DownloadMatcher()
+            {
+                MatchRegex = new Regex("(/descargar-torrent/[^\"]+)\"")
+            },
             new DownloadMatcher()
             {
                 MatchRegex = new Regex(@"nalt\s*=\s*'([^\/]*)"),
@@ -393,6 +396,9 @@ namespace Jackett.Common.Indexers
                     cache.Add(new CachedQueryResult(seriesName.ToLower(), newpctReleases));
                 }
             }
+
+            // remove duplicates
+            newpctReleases = newpctReleases.GroupBy(x => x.Guid).Select(y => y.First()).ToList();
 
             //Filter only episodes needed
             return newpctReleases.Where(r =>
