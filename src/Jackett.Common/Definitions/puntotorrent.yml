@@ -196,9 +196,14 @@
             args: ["(?i)(\\d{1,2})(ª|\\D)?\\s?\\w*Temp\\w*\\b"," S$1 "]
           - name: re_replace
             args: ["(?i)(\\d{1,2})[x|\\/|\\\\](\\d{1,2})", "S$1E$2"]
+          - name: re_replace # S02/C01 => S02E01  /  S02xC01 => S02E01  /  S02C01 => S02E01
+            args: ["(?i)S(\\d{1,2})[/x]?C(\\d{1,2})", "S$1E$2"]
       details:
-        selector: td:nth-child(3) a
+        selector: a[href^="download.php"]
         attribute: href
+        filters:
+          - name: replace
+            args: ["download.php?", "index.php?page=torrent-details&"]
       size:
         # 1,36 GB
         # 296,98 MB
