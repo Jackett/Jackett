@@ -113,8 +113,8 @@
       label: Order requested from site
       default: "1"
       options:
-        "2": "desc"
-        "1": "asc"
+        "1": "desc"
+        "2": "asc"
 
   login:
     path: login.php
@@ -145,15 +145,14 @@
 
   search:
     paths:
-    # browse.php?suchfeld=2&alleanzeigen=1&kategorie[]=1050&kategorie[]=1060&suche=terra&durchsuche=1&suchein=2&sucheaus=1&sortierenach=6&sortierung=1
       - path: browse.php
     inputs:
-      $raw: "{{ range .Categories }}kategorie[]={{.}}&{{end}}"
-      suche: "{{ .Keywords }}"
       suchfeld: 2
       alleanzeigen: 1
-      # seachin 0 name 1 descr 2 both
-      durchsuche: 0
+      $raw: "{{ range .Categories }}kategorie[]={{.}}&{{end}}"
+      suche: "{{ .Keywords }}"
+      # searchin 1 name 2 descr 3 both
+      durchsuche: 1
       # includedead 1 active 2 all 3 dead 4 highlight 5 bookmark 6 onlyups 7 freeleech 8 multi2 9 multi5 10 multi10 11 25%dl 12 50%dl 13 75%dl
       suchein: 2
       # cat 1 all 1000 film 2000 tv 3000 docs 4000 sport 5000 xxx 6000 games 7000 apps 8000 music 9000 other
@@ -227,3 +226,4 @@
           "font.mu:contains(\"10x\")": 10
           font.fl: 0  # freeleech neither dl or ul is counted
           "*": 1
+# engine n/a
