@@ -203,7 +203,7 @@
         selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
         attribute: href
       download:
-        selector: a[href^="index.php?page=downloadcheck&id="]
+        selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
         attribute: href
       banner:
         optional: true
@@ -213,21 +213,21 @@
           - name: regexp
             args: "src=(.+?) "
       size:
-        selector: td:nth-last-child(3)
+        selector: td:nth-last-child(4)
       date:
-        selector: td:nth-last-child(8)
+        selector: td:nth-last-child(6)
         filters:
           - name: dateparse
             args: "02/01/2006"
       grabs:
-        selector: td:nth-last-child(5)
+        selector: td:nth-last-child(8)
         filters:
           - name: replace
             args: ["---", "0"]
       seeders:
-        selector: td:nth-last-child(7)
+        selector: td:nth-last-child(3)
       leechers:
-        selector: td:nth-last-child(6)
+        selector: td:nth-last-child(2)
       downloadvolumefactor:
         case:
           img[alt="Free Leech"]: 0
@@ -244,3 +244,4 @@
         filters:
           - name: replace
             args: ["x Upload Multiplier", ""]
+# xbtitFM 3.0.00
