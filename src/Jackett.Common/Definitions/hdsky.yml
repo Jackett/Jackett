@@ -56,8 +56,8 @@
     paths:
       - path: torrents.php
     inputs:
-      $raw: "{{range .Categories}}cat{{.}}=1&{{end}}"
-      search: "{{if .Query.IMDBID}}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+      $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
+      search: "{{if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
       # 0=including dead 1=active 2=dead
       incldead: 0
       # show promotions 0=all 1=normal 2=free 3=2x 4=2x free 5=50% 6=2x50% 7=30%
@@ -68,10 +68,12 @@
       search_area: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
       # 0=AND 1=OR 2=exact
       search_mode: 0
+
     rows:
       selector: table.torrents > tbody > tr:has(table.torrentname)
       filters:
         - name: andmatch
+
     fields:
       title:
         selector: a[title][href^="details.php?id="]
@@ -109,19 +111,19 @@
             args: "2006-01-02 15:04:05 -07:00"
       downloadvolumefactor:
         case:
-          img.pro_free: "0"
-          img.pro_free2up: "0"
-          img.pro_50pctdown: "0.5"
-          img.pro_50pctdown2up: "0.5"
-          img.pro_30pctdown: "0.3"
-          "*": "1"
+          img.pro_free: 0
+          img.pro_free2up: 0
+          img.pro_50pctdown: 0.5
+          img.pro_50pctdown2up: 0.5
+          img.pro_30pctdown: 0.3
+          "*": 1
       uploadvolumefactor:
         case:
-          img.pro_50pctdown2up: "2"
-          img.pro_free2up: "2"
-          img.pro_2up: "2"
-          "*": "1"
+          img.pro_50pctdown2up: 2
+          img.pro_free2up: 2
+          img.pro_2up: 2
+          "*": 1
       description:
         selector: td:nth-child(2)
         remove: a, img
-# NexusPHP
+# NexusPHP Standard v1.5 Beta 5
