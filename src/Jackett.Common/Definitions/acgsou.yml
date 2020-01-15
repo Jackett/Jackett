@@ -45,8 +45,10 @@
     # https://www.acgsou.com/1.html
     # https://www.acgsou.com/search.php?keyword=test
       - path: "{{ if .Keywords }}search.php?keyword={{ .Keywords }}{{else}}1.html{{end}}"
+
     rows:
       selector: table tbody tr[class^="alt"]:has(td:nth-child(3) a)
+
     fields:
       date:
         selector: td:nth-child(1):contains("昨天")
@@ -87,6 +89,7 @@
       leechers:
         text: 1
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
+# BTMaster 2.1.1

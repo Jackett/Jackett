@@ -119,6 +119,7 @@
 
     rows:
       selector: tr:has(td.category)
+
     fields:
       title:
         # use the second div for full title
@@ -178,3 +179,4 @@
         text: 0
       uploadvolumefactor:
         text: 1
+# engine n/a
