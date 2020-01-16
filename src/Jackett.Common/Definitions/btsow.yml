@@ -25,7 +25,7 @@
 
   search:
     paths:
-      - path: "search/{{if .Keywords}}{{ .Keywords}}{{else}}2019{{end}}"
+      - path: "search/{{ if .Keywords }}{{ .Keywords }}{{else}}2019{{end}}"
     rows:
       selector: div.row:has(a[href*="/detail/hash/"])
     fields:
@@ -55,3 +55,4 @@
         text: 0
       uploadvolumefactor:
         text: 1
+# engine n/a
