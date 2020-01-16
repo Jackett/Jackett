@@ -5,9 +5,9 @@
   language: en-us
   type: public
   encoding: UTF-8
-  links:
-    -  http://www.cili180.com/
     -  http://www.cilijj.xyz/
+  legacylinks:
+    -  http://www.cili180.com/
 
   caps:
     categories:
@@ -59,3 +59,4 @@
         text: 0
       uploadvolumefactor:
         text: 1
+# engine n/a
