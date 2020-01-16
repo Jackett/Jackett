@@ -6,9 +6,10 @@
   type: private
   encoding: UTF-8
   links:
-    - https://nostalgic.is/
+    - https://vhstapes.org/
   legacylinks:
     - https://nostalgic.to/
+    - https://nostalgic.is/
 
   caps:
     categorymappings:
