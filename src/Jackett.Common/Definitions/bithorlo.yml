@@ -133,10 +133,11 @@
         selector: "a[style=\"font-size: 8pt;cursor: pointer;\"][title]"
       downloadvolumefactor:
         case:
-          img[title="Ingyenes letöltés"]: "0"
-          "*": "1"
+          img[title="Ingyenes letöltés"]: 0
+          "*": 1
       uploadvolumefactor:
         selector: span:contains("Feltöltési szorzó")
         filters:
           - name: replace
             args: ["Feltöltési szorzó × ", ""]
+# engine n/a
