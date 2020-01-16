@@ -149,6 +149,7 @@
 
     rows:
       selector: div.inf-table-row
+
     fields:
       title:
         selector: div.list-name a.tlink
@@ -199,3 +200,4 @@
           "*": 1
       uploadvolumefactor:
         text: 1
+# engine n/a

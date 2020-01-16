@@ -155,8 +155,7 @@
       leechers:
         selector: td:nth-child(8) span
       downloadvolumefactor:
-        case:
-          "*": "1"
+        text: 1
       uploadvolumefactor:
-        case:
-          "*": "1"
+        text: 1
+# engine n/a
