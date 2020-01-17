@@ -85,6 +85,10 @@
       options:
         "2": "desc"
         "1": "asc"
+    - name: info
+      type: info
+      label: Results Per Page
+      default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
 
   login:
     path: ?page=login
@@ -156,3 +160,4 @@
       uploadvolumefactor:
         case:
           "*": 1
+# xbtit 2.3.0

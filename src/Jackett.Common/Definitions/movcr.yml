@@ -23,6 +23,7 @@
 
   download:
     selector: a[href^="/torrents/"]
+    attribute: href
 
   search:
     paths:

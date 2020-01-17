@@ -51,8 +51,11 @@ namespace Jackett.Common.Services
 
         private string ExePath()
         {
-            var location = new Uri(Assembly.GetEntryAssembly().GetName().CodeBase);
-            return new FileInfo(location.AbsolutePath).FullName;
+            // Use EscapedCodeBase to avoid Uri reserved characters from causing bugs
+            // https://stackoverflow.com/questions/896572
+            var location = new Uri(Assembly.GetEntryAssembly().GetName().EscapedCodeBase);
+            // Use LocalPath instead of AbsolutePath to avoid needing to unescape Uri format.
+            return new FileInfo(location.LocalPath).FullName;
         }
 
         public void StartUpdateChecker()
@@ -143,7 +146,8 @@ namespace Jackett.Common.Services
 
                     if (latestRelease.Name != currentVersion && currentVersion != "v0.0.0.0")
                     {
-                        logger.Info($"New release found.  Current: {currentVersion} New: {latestRelease.Name}");
+                        logger.Info($"New release found. Current: {currentVersion} New: {latestRelease.Name}");
+                        logger.Info($"Downloading release {latestRelease.Name} It could take a while...");
                         try
                         {
                             var tempDir = await DownloadRelease(latestRelease.Assets, isWindows, latestRelease.Name);

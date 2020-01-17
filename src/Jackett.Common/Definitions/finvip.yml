@@ -19,6 +19,7 @@
       type: info
       label: "Search results"
       default: "For best results, increase the torrents number in your profile to 100."
+      default: "<ol><li>Only the Xbtit style is supported.</li><ul>Make sure to set the <b>Style</b> option in your profile to <b>Xbtit</b>.</ul><li>For best results, increase the torrents number in your profile to 100.</li><ul>Set the <b>Torrents Per Page</b> option to <b>100</b>.</ul></ol>"
     - name: sort
       type: select
       label: Sort requested from site
@@ -90,6 +91,7 @@
 
   download:
     selector: a[href^="download.php?id="]
+    attribute: href
 
   search:
     paths:

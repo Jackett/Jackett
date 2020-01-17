@@ -66,4 +66,4 @@
       downloadvolumefactor:
         text: 0
       uploadvolumefactor:
-        text: 0
+        text: 1

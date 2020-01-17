@@ -93,7 +93,7 @@ namespace Jackett.Common.Services
             logger.Info("Loading Cardigann definitions from: " + string.Join(", ", path));
 
             var deserializer = new DeserializerBuilder()
-                        .WithNamingConvention(new CamelCaseNamingConvention())
+                        .WithNamingConvention(CamelCaseNamingConvention.Instance)
                         .IgnoreUnmatchedProperties()
                         .Build();
 

@@ -179,7 +179,7 @@ namespace Jackett.Common.Indexers
                     release.Seeders = seeders;
                     release.Peers = seeders + leechers;
                     release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800;
+                    release.MinimumSeedTime = 172800; // 48 hours
                     release.Category = MapTrackerCatToNewznab(category.ToString());
                     release.Comments = comments;
 

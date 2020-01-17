@@ -110,7 +110,7 @@ namespace Jackett.Common.Indexers.Abstract
                     var release = new ReleaseInfo();
 
                     release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800;
+                    release.MinimumSeedTime = 172800; // 48 hours
 
                     var qLink = qRow.Find("a.torrent-filename"); ;
                     release.Title = qLink.Text().Trim();

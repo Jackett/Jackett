@@ -220,7 +220,7 @@ namespace Jackett.Common.Indexers
                 {
                     var release = new ReleaseInfo();
                     release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800;
+                    release.MinimumSeedTime = 172800; // 48 hours
 
                     var categoryCol = row.ChildElements.ElementAt(categoryIndex);
                     string catLink = categoryCol.Cq().Find("a").Attr("href");

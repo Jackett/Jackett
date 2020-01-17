@@ -102,7 +102,7 @@
     paths:
       - path: browse.php
     inputs:
-      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
       search: "{{ .Keywords }}"
       incldead: 1
       sort: "{{ .Config.sort }}"
@@ -164,9 +164,10 @@
             args: "2006-01-02 15:04:05"
       downloadvolumefactor:
         case:
-          span.icon_gift: "0"
-          "*": "1"
+          span.icon_gift: 0
+          "*": 1
       uploadvolumefactor:
         case:
-          span.icon_upload: "2"
-          "*": "1"
+          span.icon_upload: 2
+          "*": 1
+# XBT v3

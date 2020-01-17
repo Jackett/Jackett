@@ -50,6 +50,7 @@
 
   download:
     selector: a[href^="magnet:?xt="]
+    attribute: href
 
   search:
     # https://hdreactor.net/index.php?do=search&subaction=search&showposts=1&story=2019&catlist[]=2001&catlist[]=2006
@@ -67,6 +68,8 @@
       do: search
       subaction: search
       showposts: 1
+      # 0 in article 1 in comments 2 in static pages 3 in article titles
+      titleonly: 3
       story: "{{ if .Keywords }}{{ .Keywords }}{{ else }}2019{{ end }}"
       sortby: "{{ .Config.sort }}"
       resorder: "{{ .Config.type }}"

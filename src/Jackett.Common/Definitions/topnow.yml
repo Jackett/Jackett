@@ -21,6 +21,8 @@
 
   download:
     selector: a#torrent
+    attribute: href
+
   search:
     paths:
     # http://topnow.se/search.php?dayq=mandalorian

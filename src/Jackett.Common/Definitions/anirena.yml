@@ -36,8 +36,10 @@
   search:
     paths:
       - path: "{{if .Keywords}}?s={{ .Keywords}}{{else}}{{end}}"
+
     rows:
       selector: table tbody tr:has(td.torrents_small_type_data1)
+
     fields:
       title:
         selector: .torrents_small_info_data1 div
@@ -61,18 +63,19 @@
         selector: .torrents_small_type_data1 img
         attribute: src
         case:
-          "[src=\"./styles/tracker/imageset/cat_raw_small.png\"]": "1"
-          "[src=\"./styles/tracker/imageset/cat_anime_small.png\"]": "2"
-          "[src=\"./styles/tracker/imageset/cat_hentai_small.png\"]": "3"
-          "[src=\"./styles/tracker/imageset/cat_drama_small.png\"]": "4"
-          "[src=\"./styles/tracker/imageset/cat_dvd_small.png\"]": "5"
-          "[src=\"./styles/tracker/imageset/cat_hgame2_small.png\"]": "6"
-          "[src=\"./styles/tracker/imageset/cat_manga_small.png\"]": "7"
-          "[src=\"./styles/tracker/imageset/cat_music_small.png\"]": "8"
-          "[src=\"./styles/tracker/imageset/cat_musicvid_small.png\"]": "9"
-          "[src=\"./styles/tracker/imageset/cat_noneng_small.png\"]": "10"
-          "[src=\"./styles/tracker/imageset/cat_other_small.png\"]": "11"
+          "[src=\"./styles/tracker/imageset/cat_raw_small.png\"]": 1
+          "[src=\"./styles/tracker/imageset/cat_anime_small.png\"]": 2
+          "[src=\"./styles/tracker/imageset/cat_hentai_small.png\"]": "
+          "[src=\"./styles/tracker/imageset/cat_drama_small.png\"]": 4
+          "[src=\"./styles/tracker/imageset/cat_dvd_small.png\"]": 5
+          "[src=\"./styles/tracker/imageset/cat_hgame2_small.png\"]": 6
+          "[src=\"./styles/tracker/imageset/cat_manga_small.png\"]": 7
+          "[src=\"./styles/tracker/imageset/cat_music_small.png\"]": 8
+          "[src=\"./styles/tracker/imageset/cat_musicvid_small.png\"]": 9
+          "[src=\"./styles/tracker/imageset/cat_noneng_small.png\"]": 10
+          "[src=\"./styles/tracker/imageset/cat_other_small.png\"]": 11
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
+# engine n/a

@@ -23,9 +23,9 @@ namespace Jackett.Common.Indexers
         private string DetailURL { get { return "https://passthepopcorn.me/torrents.php?torrentid="; } }
         private string AuthKey { get; set; }
 
-        private new ConfigurationDataBasicLoginWithFilterAndPasskey configData
+        private new ConfigurationDataAPILoginWithUserAndPasskeyAndFilter configData
         {
-            get { return (ConfigurationDataBasicLoginWithFilterAndPasskey)base.configData; }
+            get { return (ConfigurationDataAPILoginWithUserAndPasskeyAndFilter)base.configData; }
             set { base.configData = value; }
         }
 
@@ -38,7 +38,7 @@ namespace Jackett.Common.Indexers
                 client: c,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataBasicLoginWithFilterAndPasskey(@"Enter filter options below to restrict search results.
+                configData: new ConfigurationDataAPILoginWithUserAndPasskeyAndFilter(@"Enter filter options below to restrict search results.
                                                                         Separate options with a space if using more than one option.<br>Filter options available:
                                                                         <br><code>GoldenPopcorn</code><br><code>Scene</code><br><code>Checked</code><br><code>Free</code>"))
         {
@@ -69,29 +69,21 @@ namespace Jackett.Common.Indexers
         {
             LoadValuesFromJson(configJson);
 
-            await DoLogin();
-
-            return IndexerConfigurationStatus.RequiresTesting;
-        }
-
-        private async Task DoLogin()
-        {
-            var pairs = new Dictionary<string, string> {
-                { "username", configData.Username.Value },
-                { "password", configData.Password.Value },
-                { "passkey", configData.Passkey.Value },
-                { "keeplogged", "1" },
-                { "login", "Log In!" }
-            };
-
-            var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, indexUrl, SiteLink);
-            JObject js_response = JObject.Parse(response.Content);
-            await ConfigureIfOK(response.Cookies, response.Content != null && (string)js_response["Result"] != "Error", () =>
+            IsConfigured = false;
+            try
             {
-                // Landing page wil have "Result":"Error" if log in fails
-                string errorMessage = (string)js_response["Message"];
-                throw new ExceptionWithConfigData(errorMessage, configData);
-            });
+                var results = await PerformQuery(new TorznabQuery());
+                if (results.Count() == 0)
+                    throw new Exception("Testing returned no results!");
+                IsConfigured = true;
+                SaveConfig();
+            }
+            catch (Exception e)
+            {
+                throw new ExceptionWithConfigData(e.Message, configData);
+            }
+
+            return IndexerConfigurationStatus.Completed;
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
@@ -124,12 +116,16 @@ namespace Jackett.Common.Indexers
                 movieListSearchUrl += "?" + queryCollection.GetQueryString();
             }
 
-            var results = await RequestStringWithCookiesAndRetry(movieListSearchUrl);
+            var authHeaders = new Dictionary<string, string>()
+            {
+                { "ApiUser", configData.User.Value },
+                { "ApiKey", configData.Key.Value }
+            };
+
+            var results = await RequestStringWithCookiesAndRetry(movieListSearchUrl, null, null, authHeaders);
             if (results.IsRedirect) // untested
             {
-                // re-login
-                await DoLogin();
-                results = await RequestStringWithCookiesAndRetry(movieListSearchUrl);
+                results = await RequestStringWithCookiesAndRetry(movieListSearchUrl, null, null, authHeaders);
             }
             try
             {

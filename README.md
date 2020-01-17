@@ -18,7 +18,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 #### Supported Systems
 * Windows 7SP1 or greater using .NET 4.6.1 or above [Download here](https://www.microsoft.com/net/framework/versions/net461)
 * Linux [supported operating systems here](https://github.com/dotnet/core/blob/master/release-notes/2.1/2.1-supported-os.md#linux)
-* macOS 10.12 or greater
+* macOS 10.13 or greater
 
 ### Supported Public Trackers
  * 1337x
@@ -35,6 +35,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BTDIGG
  * BT.etree
  * BTSOW
+ * Cili180
  * ConCen
  * Corsaro.red
  * cpasbien
@@ -44,7 +45,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * ETTV
  * EliteTorrent.biz
  * EstrenosDTL
- * ExtraTorrent.ag
+ * ExtraTorrent.cd
  * EXT Torrents
  * EZTV
  * Filebase
@@ -54,8 +55,8 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * GkTorrent
  * GloDLS
  * HDReactor
- * Hon3yHD.net
  * Horrible Subs
+ * IBit
  * Idope
  * Il Corsaro Nero <!-- maintained by bonny1992 -->
  * Il Corsaro Blu
@@ -104,6 +105,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TorrentDownload
  * TorrentFunk
  * TorrentGalaxy (TGx)
+ * TorrentKitty
  * TorrentParadise
  * TorrentProject2
  * TorrentQuest
@@ -145,6 +147,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Pornolab
  * RiperAM
  * RockBox
+ * Rustorka
  * RuTracker
  * Sharewood
  * SkTorrent
@@ -164,6 +167,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * 3D Torrents (3DT) 
  * 3evils
  * 4thD (4th Dimension)
+ * 52PT
  * 720pier
  * Abnormal
  * Acid Lounge (A-L)
@@ -184,7 +188,9 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Back-ups
  * BakaBT
  * BaconBits (bB)
+ * BeiTai
  * BeyondHD (BHD)
+ * Bibliotik
  * BIGTorrent
  * BigTower
  * Bit-City Reloaded
@@ -198,8 +204,10 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BJ-Share (BJ)
  * BlueBird
  * Blutopia (BLU)
+ * Brasil Tracker
  * BroadcastTheNet (BTN)
  * BroadCity
+ * BRObits
  * BrokenStones
  * BTGigs (TG)
  * BTNext (BTNT)
@@ -229,6 +237,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * DigitalCore
  * DigitalHive
  * DivTeam
+ * DivxTotal
  * DocumentaryTorrents (DT)
  * Downloadville
  * Dragonworld Reloaded
@@ -241,9 +250,11 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * eShareNet
  * eStone (XiDER, BeLoad)
  * Ethor.net (Thor's Land)
+ * ExtremeTorrents
  * FANO.IN
- * FileList (FL)
+ * FeedUrNeed (FuN)
  * Femdomcult
+ * FileList (FL)
  * FinVip
  * FocusX
  * FreeTorrent
@@ -263,6 +274,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Greek Team
  * HacheDe
  * HD-Forever (HDF)
+ * HD-Olimpo
  * HD-Only (HDO)
  * HD-Space (HDS)
  * HD-Spain
@@ -295,6 +307,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * JPopsuki
  * Kapaki
  * Karagarga
+ * LegacyHD (HD4Free)
  * Le Saloon
  * LearnFlakes
  * LibraNet (LN)
@@ -303,6 +316,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * M-Team TP (MTTP)
  * Magico (Trellas)
  * Majomparádé (TurkDepo)
+ * MoeCat
  * Mononoké-BT
  * MoreThanTV (MTV)
  * MyAnonamouse (MAM)
@@ -316,13 +330,14 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * New Real World
  * Norbits
  * NordicBits (NB)
+ * NORDiCHD
  * Nostalgic (The Archive)
  * notwhat.cd
+ * OnlineSelfEducation
  * Orpheus
  * Ourbits (HDPter)
  * P2PBG
  * Partis
- * Passione Torrent <!-- maintained by bonny1992 -->
  * PassThePopcorn (PTP)
  * Peers.FM
  * PirateTheNet (PTN)
@@ -332,6 +347,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * PolishSource (PS)
  * PolishTracker
  * Pornbay
+ * PornBits (PB)
  * Pretome
  * PrivateHD (PHD)
  * ProAudioTorrents (PAT)
@@ -357,6 +373,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * ScenePalace (SP)
  * SceneRush
  * SceneTime
+ * SceneXpress
  * SDBits
  * Secret Cinema
  * SeedFile (SF)
@@ -392,8 +409,9 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * The Place
  * The Shinning (TsH)
  * The Show
- * The-Torrents
+ * The-Madhouse
  * The Vault
+ * TLFBits
  * Torrent Network (TN)
  * Torrent Sector Crew (TSC)
  * Torrent.LT
@@ -438,7 +456,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Zamunda.net
  * Zelka.org
 
-Trackers marked with  [![(invite needed)][inviteneeded]](#) have no active maintainer and are missing features or are broken. If you have an invite for them please send it to kaso1717 -at- gmail.com to get them fixed/improved.
+Trackers marked with  [![(invite needed)][inviteneeded]](#) have no active maintainer and are missing features or are broken. If you have an invite for them please send it to garfieldsixtynine -at- gmail.com to get them fixed/improved.
 
 ### Aggregate indexers
 
@@ -527,7 +545,7 @@ On an Ubuntu 16 system: [chrisjohnson00.jackett](https://galaxy.ansible.com/chri
 ## Installation on macOS
 
 ### Prerequisites
-macOS 10.12 or greater
+macOS 10.13 or greater
 
 ### Install as service
 1. Download and extract the latest `Jackett.Binaries.macOS.tar.gz` release from the [releases page](https://github.com/Jackett/Jackett/releases).
@@ -623,7 +641,7 @@ All contributions are welcome just send a pull request.
 * Install the .NET Core [SDK](https://www.microsoft.com/net/download/windows)
 * Clone Jackett
 * Open Powershell and from the `src` directory, run `dotnet restore`
-* Open the Jackett solution in Visual Studio 2019 (version 16.3 or above)
+* Open the Jackett solution in Visual Studio 2019 (version 16.4 or above)
 * Right click on the Jackett solution and click 'Rebuild Solution' to restore nuget packages
 * Select Jackett.Server as startup project
 * In the drop down menu of the run button select "Jackett.Server" instead of "IIS Express"
@@ -640,21 +658,21 @@ git clone https://github.com/Jackett/Jackett.git
 cd Jackett/src
 
 # dotnet core version
-dotnet publish Jackett.Server -f netcoreapp3.0 --self-contained -r osx-x64 -c Debug # takes care of everything
-./Jackett.Server/bin/Debug/netcoreapp3.0/osx-x64/jackett # run jackett
+dotnet publish Jackett.Server -f netcoreapp3.1 --self-contained -r osx-x64 -c Debug # takes care of everything
+./Jackett.Server/bin/Debug/netcoreapp3.1/osx-x64/jackett # run jackett
 ```
 
 ### Linux
 
 
 ```bash
-sudo apt install mono-complete nuget msbuild dotnet-sdk-3.0 # install build tools (debian/ubuntu)
+sudo apt install mono-complete nuget msbuild dotnet-sdk-3.1 # install build tools (debian/ubuntu)
 git clone https://github.com/Jackett/Jackett.git
 cd Jackett/src
 
 # dotnet core version
-dotnet publish Jackett.Server -f netcoreapp3.0 --self-contained -r linux-x64 -c Debug # takes care of everything
-./Jackett.Server/bin/Debug/netcoreapp3.0/linux-x64/jackett # run jackett
+dotnet publish Jackett.Server -f netcoreapp3.1 --self-contained -r linux-x64 -c Debug # takes care of everything
+./Jackett.Server/bin/Debug/netcoreapp3.1/linux-x64/jackett # run jackett
 ```
 
 ## Screenshots

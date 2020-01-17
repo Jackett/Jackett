@@ -16,7 +16,7 @@ var configuration = Argument("configuration", "Debug");
 var workingDir = MakeAbsolute(Directory("./"));
 string artifactsDirName = "Artifacts";
 string testResultsDirName = "TestResults";
-string netCoreFramework = "netcoreapp3.0";
+string netCoreFramework = "netcoreapp3.1";
 string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
 string updaterProjectPath = "./src/Jackett.Updater/Jackett.Updater.csproj";
 
@@ -95,9 +95,9 @@ Task("Package-Windows-Full-Framework")
 		
 		DotNetCorePublish(serverProjectPath, "net461", "win7-x86", buildOutputPath);
 
-		CopyFiles("./src/Jackett.Service/bin/" + configuration + "/JackettService.*", buildOutputPath);
-		CopyFiles("./src/Jackett.Tray/bin/" + configuration + "/JackettTray.*", buildOutputPath);
-		CopyFiles("./src/Jackett.Updater/bin/" + configuration + "/net461" + "/JackettUpdater.*", buildOutputPath);  //builds against multiple frameworks
+		CopyFiles("./src/Jackett.Service/bin/" + configuration + "/net461" + "/JackettService.*", buildOutputPath);
+		CopyFiles("./src/Jackett.Tray/bin/" + configuration + "/net461" + "/JackettTray.*", buildOutputPath);
+		CopyFiles("./src/Jackett.Updater/bin/" + configuration + "/net461" + "/JackettUpdater.*", buildOutputPath);
 
 		Zip("./BuildOutput/net461/win7-x86", $"./{artifactsDirName}/Jackett.Binaries.Windows.zip");
 
@@ -147,7 +147,7 @@ Task("Package-Mono-Full-Framework")
 
 		DeleteFile(buildOutputPath + "/System.Runtime.InteropServices.RuntimeInformation.dll");
 
-		InstallMsysTar();
+		CheckForGzipAndTar();
 		Gzip("./BuildOutput/net461/linux-x64", $"./{artifactsDirName}", "Jackett", "Jackett.Binaries.Mono.tar.gz");
 	});
 
@@ -437,20 +437,8 @@ private void Gzip(string sourceFolder, string outputDirectory, string tarCdirect
 	}	
 }
 
-private void InstallMsysTar()
+private void CheckForGzipAndTar()
 {
-	//Gzip is included by default with MSYS2, but not tar. Use the package manager to install tar
-
-	var startInfo = new System.Diagnostics.ProcessStartInfo()
-	{
-		Arguments = "-S --noconfirm tar",
-		FileName = @"C:\msys64\usr\bin\pacman.exe",
-		UseShellExecute = false
-	};
-
-	var process = System.Diagnostics.Process.Start(startInfo);
-	process.WaitForExit();
-
 	if (FileExists(@"C:\msys64\usr\bin\tar.exe") && FileExists(@"C:\msys64\usr\bin\gzip.exe"))
 	{
 		Information("tar.exe and gzip.exe were found");

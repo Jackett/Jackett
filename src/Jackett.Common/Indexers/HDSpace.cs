@@ -134,7 +134,7 @@ namespace Jackett.Common.Indexers
                     var release = new ReleaseInfo();
 
                     release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800;
+                    release.MinimumSeedTime = 172800; // 48 hours
 
                     var qLink = row.ChildElements.ElementAt(1).FirstElementChild.Cq();
                     release.Title = qLink.Text().Trim();

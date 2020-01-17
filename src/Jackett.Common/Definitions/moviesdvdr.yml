@@ -10,7 +10,7 @@
 
   caps:
     categories:
-      "Movies": Movies
+      Movies: Movies
 
     modes:
       search: [q]
@@ -20,6 +20,7 @@
 
   download:
     selector: a.torrent_download
+    attribute: href
 
   search:
     paths:
@@ -29,10 +30,12 @@
 
     rows:
       selector: div.hitem
+      filters:
+        - name: andmatch
 
     fields:
       category:
-        text: "Movies"
+        text: Movies
       title:
         selector: div.titulo
       details:

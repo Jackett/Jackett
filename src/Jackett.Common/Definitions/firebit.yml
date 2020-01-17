@@ -23,7 +23,6 @@
       "Видео": Movies
       "Музыка": Audio 
       "Другие категории": Other
-      "Новинки": Other/Misc
       "Сериалы": TV
 
     modes:
@@ -33,6 +32,7 @@
 
   download:
     selector: a[href^="/download.php?id="]
+    attribute: href
 
   search:
     # http://firebit.net/index.php?do=search&type=simple&q=2019
@@ -48,6 +48,12 @@
     fields:
       category:
         selector: td:nth-child(1), div.article-indent div b a
+        filters:
+          - name: replace
+            args: ["Новинки", ""]
+          - name: replace
+            args: [",", ""]
+          - name: trim
       title:
         selector: td:nth-child(2), span.article-title
       details:

@@ -6,13 +6,14 @@
   type: public
   encoding: UTF-8
   links:
-    - https://kat.li/
+    - https://kickass.ws/
   legacylinks:
     - https://kickass.gg/
     - https://katcr.io/
     - https://thekat.nz/  
     - https://thekat.se/
     - https://kat.how/
+    - https://kat.li/
 
   caps:
     categories:
@@ -73,8 +74,6 @@
         filters:
           - name: querystring
             args: url
-          - name: replace # temp fix for #5372
-            args: ["%E2%AD%90", ""]
       size:
         selector: td:nth-child(2)
         filters:

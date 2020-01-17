@@ -47,7 +47,7 @@
       password: "{{ .Config.password }}"
     error:
       - selector: td.embedded:has(h2:contains("failed"))
-      - selector: td.embedded:has(h2:contains("Error"))aD
+      - selector: td.embedded:has(h2:contains("Error"))
     test:
       selector: a[href^="logout.php"]
       path: browse.php
@@ -56,12 +56,14 @@
     paths:
       - path: browse.php
     inputs:
-      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-      search: "{{ .Query.Keywords }}"
+      $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+      search: "{{ .Keywords }}"
       incldead: 1
       polish: 0
+
     rows:
       selector: table[border="1"][cellpadding="5"] > tbody > tr:has(a[href^="/details.php?id="])
+
     fields:
       title:
         selector: a[href^="/details.php?id="]
@@ -118,4 +120,5 @@
           td.darmowy: 0
           "*": 1
       uploadvolumefactor:
-        text: "1"
+        text: 1
+#  engine tbc

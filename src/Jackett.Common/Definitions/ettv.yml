@@ -96,6 +96,7 @@
   
   download:
     selector: a[href^="{{ .Config.downloadlink }}"]
+    attribute: href
 
   search:
     path: "{{ if .Keywords }}torrents-search.php{{else}}torrents.php{{end}}"
@@ -127,6 +128,9 @@
       title:
         selector: a[href^="/torrent/"][title]
         attribute: title
+        filters:
+          - name: re_replace
+            args: ["( torrent)$", ""]
       category:
         selector: a[href^="/torrents.php?cat="]
         attribute: href

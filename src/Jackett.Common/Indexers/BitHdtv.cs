@@ -147,7 +147,7 @@ namespace Jackett.Common.Indexers
                         var qLink = qRow.Children().ElementAt(2).Cq().Children("a").First();
 
                         release.MinimumRatio = 1;
-                        release.MinimumSeedTime = 172800;
+                        release.MinimumSeedTime = 172800; // 48 hours
                         release.Title = qLink.Attr("title");
                         if (!query.MatchQueryStringAND(release.Title))
                             continue;

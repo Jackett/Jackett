@@ -41,10 +41,11 @@
 
   download:
     selector: a[ href^="magnet:?xt="]
+    attribute: href
 
   search:
     paths:
-      - path: "{{if .Keywords}}search.php?kwds={{ .Keywords}}&ord={{ .Config.sort }}&cat=100{{else}}/{{end}}"
+      - path: "{{ if .Keywords }}search.php?kwds={{ .Keywords }}&ord={{ .Config.sort }}&cat=100{{else}}/{{end}}"
     rows:
       selector: table.torrentsTable:has(tr.r) tbody tr.r
     fields:
@@ -79,3 +80,4 @@
         text: 0
       uploadvolumefactor:
         text: 1
+# engine n/a

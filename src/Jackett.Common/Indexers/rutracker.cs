@@ -69,7 +69,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(2091, TorznabCatType.MoviesForeign, " | - Movies 2001-2005");
             AddCategoryMapping(2092, TorznabCatType.MoviesForeign, " | - Movies 2006-2010");
             AddCategoryMapping(2093, TorznabCatType.MoviesForeign, " | - Movies 2011-2015");
-            AddCategoryMapping(2200, TorznabCatType.MoviesForeign, " | - Movies 2016");
+            AddCategoryMapping(2200, TorznabCatType.MoviesForeign, " | - Movies 2016-2018");
+            AddCategoryMapping(1950, TorznabCatType.MoviesForeign, " | - Movies 2019");
             AddCategoryMapping(934, TorznabCatType.MoviesForeign, " | - Asian movies");
             AddCategoryMapping(505, TorznabCatType.MoviesForeign, " | - Indian Cinema");
             AddCategoryMapping(212, TorznabCatType.MoviesForeign, " | - Movie Collections");

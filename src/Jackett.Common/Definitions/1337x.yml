@@ -109,6 +109,7 @@
       search: [q]
       tv-search: [q, season, ep]
       movie-search: [q]
+      music-search: [q, album, artist, label, year]
 
   settings:
     - name: downloadlink
@@ -139,24 +140,21 @@
   download:
     # the .torrent url is on the on the details page 
     selector: ul li a[href^="{{ .Config.downloadlink }}"]
-    filters:
-      - name: replace # temp fix for #5372
-        args: ["%E2%AD%90", ""]
+    attribute: href
 
   search:
     paths:
-      # present first page of movies and tv results if there are no search parms supplied
-      - path: "{{if .Keywords}}sort-search/{{ .Keywords}}/{{ .Config.sort }}/{{ .Config.type }}/1/{{else}}cat/Movies/{{ .Config.sort }}/{{ .Config.type }}/1/{{end}}"
-      - path: "{{if .Keywords}}{{else}}cat/TV/{{ .Config.sort }}/{{ .Config.type }}/1/{{end}}"
-      - path: "{{if .Keywords}}sort-search/{{ .Keywords}}/{{ .Config.sort }}/{{ .Config.type }}/2/{{else}}{{end}}"
-      - path: "{{if .Keywords}}sort-search/{{ .Keywords}}/{{ .Config.sort }}/{{ .Config.type }}/3/{{else}}{{end}}"
-      - path: "{{if .Keywords}}sort-search/{{ .Keywords}}/{{ .Config.sort }}/{{ .Config.type }}/4/{{else}}{{end}}"
-      - path: "{{if .Keywords}}sort-search/{{ .Keywords}}/{{ .Config.sort }}/{{ .Config.type }}/5/{{else}}{{end}}"
+      # present first page of movies tv and music results if there are no search parms supplied (20 hits per page)
+      - path: "{{if or (.Query.Album) (.Query.Artist) (.Keywords) }}sort-search{{else}}cat/Movies{{end}}{{if or (.Query.Album) (.Query.Artist) }}/{{ or (.Query.Album) (.Query.Artist) }}{{else}}/{{ .Keywords }}{{end}}{{if or (.Query.Album) (.Query.Artist) (.Keywords) }}/{{else}}{{end}}{{ .Config.sort }}/{{ .Config.type }}/1/"
+      - path: "{{if or (.Query.Album) (.Query.Artist) (.Keywords) }}sort-search{{else}}cat/TV{{end}}{{if or (.Query.Album) (.Query.Artist) }}/{{ or (.Query.Album) (.Query.Artist) }}{{else}}/{{ .Keywords }}{{end}}{{if or (.Query.Album) (.Query.Artist) (.Keywords) }}/{{else}}{{end}}{{ .Config.sort }}/{{ .Config.type }}/{{if or (.Query.Album) (.Query.Artist) (.Keywords) }}2{{else}}1{{end}}/"
+      - path: "{{if or (.Query.Album) (.Query.Artist) (.Keywords) }}sort-search{{else}}cat/Music{{end}}{{if or (.Query.Album) (.Query.Artist) }}/{{ or (.Query.Album) (.Query.Artist) }}{{else}}/{{ .Keywords }}{{end}}{{if or (.Query.Album) (.Query.Artist) (.Keywords) }}/{{else}}{{end}}{{ .Config.sort }}/{{ .Config.type }}/{{if or (.Query.Album) (.Query.Artist) (.Keywords) }}3{{else}}1{{end}}/"
     keywordsfilters: 
       - name: replace # use this as a workaround till #893 is implemented
         args: ["Greys Anatomy", "Grey's Anatomy"]
+
     rows:
       selector: tr:has(a[href^="/torrent/"])
+
     fields:
       title:
         selector: td[class^="coll-1"] a[href^="/torrent/"]
@@ -230,3 +228,4 @@
         text: 0
       uploadvolumefactor:
         text: 1
+# engine n/a

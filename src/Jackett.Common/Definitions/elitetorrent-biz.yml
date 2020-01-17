@@ -6,13 +6,14 @@
   type: public
   encoding: UTF-8
   links:
-    - https://www.elitetorrent.tv/
+    - https://www.elitetorrent.li/
   legacylinks:
     - https://www.elitetorrent.biz/
     - https://www.elitetorrent.io/
     - https://www.elitetorrent.one/
     - https://www.elitetorrent.is/
     - https://www.elitetorrent.nu/
+    - https://www.elitetorrent.tv/
 
   caps:
     categories:
@@ -45,10 +46,12 @@
     inputs:
       s: "{{ .Keywords }}"
       $raw: "&x=0&y=0"
+
     rows:
       selector: "#principal .miniboxs-ficha li"
       filters:
       - name: andmatch
+
     fields:
       title:
         selector: .meta a
@@ -87,10 +90,11 @@
       date:
         text: now
       seeders:
-        text: "1"
+        text: 1
       leechers:
-        text: "1"
+        text: 1
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
+# engine n/a

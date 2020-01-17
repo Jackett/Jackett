@@ -37,13 +37,31 @@
 
   download:
     selector: a[href*="/dl.php?id="]
+    attribute: href
+    filters:
+      - name: replace
+        args: ["https://gotozin.com/?", ""]
 
   search:
     paths:
       - path: tracker.php#results
         method: post
     inputs:
-      "f[]": -1
+      prev_allw: 1
+      prev_a: 0
+      prev_dla: 0
+      prev_dlc: 0
+      prev_dld: 0
+      prev_dlw: 0
+      prev_my: 0
+      prev_new: 0
+      prev_sd: 0
+      prev_da: 1
+      prev_dc: 0
+      prev_df: 1
+      prev_ds: 0
+      prev_tor_type: 0
+      f[]: -1
       o: "{{ .Config.sort }}"
       s: "{{ .Config.type }}"
       tm: -1
@@ -58,6 +76,8 @@
 
     rows:
       selector: table#tor-tbl tr[id^="tor_"]
+      filters:
+        - name: andmatch
 
     fields:
       title:

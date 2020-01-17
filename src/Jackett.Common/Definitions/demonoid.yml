@@ -284,6 +284,7 @@
 
   download:
     selector: a[href^="magnet:?xt="]
+    attribute: href
 
   search:
     paths:
@@ -313,11 +314,14 @@
           - name: replace
             args: ["Added ", ""]
           - name: replace
-            args: ["on  ", ""]
+            args: ["on ", ""]
 
     fields:
       title:
         selector: a[href^="/files/details/"]
+      title:
+        selector: a[href^="/files/details/"]
+        optional: true
         attribute: title
       category:
         selector:  a[href*="&subcategory="]
