@@ -25,7 +25,7 @@
     paths:
       - path: /
     inputs:
-      s: "{{.Keywords}}"
+      s: "{{ .Keywords }}"
     rows:
       selector: div.iso-item article:has(a.download)
     fields:
@@ -57,10 +57,11 @@
       size:
         text: "500 MB"
       seeders:
-        text: "1"
+        text: 1
       leechers:
-        text: "1"
+        text: 1
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
+# engine n/a
