@@ -173,3 +173,4 @@
       description:
         selector: td:nth-child(2)
         remove: a, img
+# NexusPHP Standard v1.5 Beta 5

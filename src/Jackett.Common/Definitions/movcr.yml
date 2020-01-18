@@ -27,11 +27,13 @@
 
   search:
     paths:
-      - path: "{{if .Keywords}}search/search.php?q={{ .Keywords}}{{else}}/{{end}}"
+      - path: "{{ if .Keywords }}search/search.php?q={{ .Keywords }}{{else}}/{{end}}"
+
     rows:
       selector: tr:has(td.name a[href^="/download-"])
       filters:
         - name: andmatch
+
     fields:
       category:
         text: other
@@ -72,6 +74,7 @@
           - name: split
             args: ["/", 1]
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
+# engine n/a
