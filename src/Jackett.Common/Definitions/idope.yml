@@ -53,8 +53,10 @@
       # sort torrent-list by age in descending order
       - path: "{{ if .Keywords }}torrent-list/{{ .Keywords }}?o={{ .Config.sort }}&c={{ range .Categories }}{{.}}{{end}}{{else}}browse.html{{end}}"
       - path: "{{ if .Keywords }}torrent-list/{{ .Keywords }}?p=2&o={{ .Config.sort }}&c={{ range .Categories }}{{.}}{{end}}{{else}}browse.html?&p=2{{end}}"
+
     rows:
       selector: div.resultdiv
+
     fields:
       title:
         selector: div.resultdivtop a div.resultdivtopname
@@ -115,3 +117,4 @@
         text: 0
       uploadvolumefactor:
         text: 1
+# engine n/a
