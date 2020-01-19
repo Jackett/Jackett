@@ -6,7 +6,6 @@
     <UseWindowsForms>true</UseWindowsForms>
     <AssemblyName>JackettTray</AssemblyName>
     <ApplicationIcon>jackett.ico</ApplicationIcon>
-    <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
   </PropertyGroup>
 
   <ItemGroup>
