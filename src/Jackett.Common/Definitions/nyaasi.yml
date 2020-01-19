@@ -121,8 +121,8 @@
         selector: td:nth-child(2) a:last-of-type:contains("[PuyaSubs!] ")
         optional: true
         filters:
-          - name: replace
-            args: ["[PuyaSubs!] ", "[PuyaSubs!] [Spanish] "]
+          - name: append
+            args: " [Spanish]"
       details:
         selector: td:nth-child(2) a:last-of-type
         attribute: href
