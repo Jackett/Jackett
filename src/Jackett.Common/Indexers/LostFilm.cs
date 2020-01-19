@@ -227,6 +227,8 @@ namespace Jackett.Common.Indexers
             /*
             Torznab query for some series could contains sanitized title. E.g. "Star Wars: The Clone Wars" will become "Star Wars The Clone Wars".
             Search API on LostFilm.tv doesn't return anything on such search query so the query should be "morphed" even for "tvsearch" queries.
+            Also the queries to Specials is a union of Series and Episode titles. E.g.: "Breaking Bad - El Camino: A Breaking Bad Movie".
+
             The algorythm works in the following way:
                 1. Search with the full SearchTerm. Just for example, let's search for episode by it's name
                     - {Star Wars The Clone Wars To Catch a Jedi}
@@ -243,7 +245,16 @@ namespace Jackett.Common.Indexers
                         .filterBy(The Clone Wars To Catch) / a Jedi
                         ...
                         .filterBy(The Clone Wars) / To Catch a Jedi
-                5. Fetch series detail page for "Star Wars The Clone Wars" with a "To Catch a Jedi" filterTerm to find required episode
+                5. [loop] Now we know that series we're looking for is called "Star Wars The Clone Wars". Fetch series detail page for it and try to apply remaining words as episode filter, reducing filter by 1 word each time we get no results:
+                    - .episodes().filteredBy(To Catch a Jedi)
+                    - .episodes().filteredBy(To Catch a) / Jedi
+                    - ...
+                    - .episodes() / To Catch a Jedi
+
+            Test queries:
+                - "Star Wars The Clone Wars To Catch a Jedi"    -> S05E19
+                - "Breaking Bad El Camino A Breaking Bad Movie" -> Special
+                - "The Magicians (2015)"                        -> Year should be ignored
             */
 
             // Search query words. Consists of Series keywords that will be used for series search request, and Episode keywords that will be used for episode filtering.
@@ -319,11 +330,25 @@ namespace Jackett.Common.Indexers
                         }
                         else // Fetch the whole series OR episode with filter applied
                         {
-                            var filterKeywords = keywords.Skip(searchKeywords + serieFilterKeywords);
-                            var filter = string.Join(" ", filterKeywords);
+                            var episodeKeywords = keywords.Skip(searchKeywords + serieFilterKeywords);
+                            var episodeFilterKeywords = episodeKeywords.Count();
 
-                            var taskReleases = await FetchSeriesReleases(url, query, filter);
-                            releases.AddRange(taskReleases);
+                            // Search for episodes dropping 1 filter word each time when no results has found.
+                            // Last search will be performed with empty filter
+                            do
+                            {
+                                var filter = string.Join(" ", episodeKeywords.Take(episodeFilterKeywords));
+                                logger.Debug("> Searching episodes with filter [" + filter + "]");
+                                var taskReleases = await FetchSeriesReleases(url, query, filter);
+
+                                if (taskReleases.Count() > 0)
+                                {
+                                    logger.Debug("> Found " + taskReleases.Count().ToString() + " episodes");
+                                    releases.AddRange(taskReleases);
+                                    break; // Episodes Filter loop
+                                }
+                            }
+                            while (--episodeFilterKeywords >= 0);
                         }
                     }
 
