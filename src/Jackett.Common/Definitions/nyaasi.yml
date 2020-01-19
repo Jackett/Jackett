@@ -122,9 +122,7 @@
         optional: true
         filters:
           - name: replace
-            args: ["[PuyaSubs!] ", ""]
-          - name: append
-            args:  " Spanish"
+            args: ["[PuyaSubs!] ", "[PuyaSubs!] [Spanish] "]
       details:
         selector: td:nth-child(2) a:last-of-type
         attribute: href
