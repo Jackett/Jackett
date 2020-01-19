@@ -6,10 +6,16 @@
     <UseWindowsForms>true</UseWindowsForms>
     <AssemblyName>JackettTray</AssemblyName>
     <ApplicationIcon>jackett.ico</ApplicationIcon>
+    <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.7.82" />
+  </ItemGroup>
+  
+    <!-- Conditionally obtain references for the .NET461 target -->
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
+    <PackageReference Include="System.Resources.Extensions" Version="4.7.0" />
   </ItemGroup>
 
   <ItemGroup>
