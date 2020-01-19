@@ -84,8 +84,7 @@ namespace Jackett.Common.Indexers
                 requestData["imdb"] = new JObject();
                 requestData["imdb"]["id"] = query.ImdbID;
             }
-
-            if (!string.IsNullOrWhiteSpace(queryString))
+            else if (!string.IsNullOrWhiteSpace(queryString))
             {
                 requestData["search"] = queryString;
             }
