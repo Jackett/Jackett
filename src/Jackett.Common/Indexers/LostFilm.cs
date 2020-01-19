@@ -579,6 +579,10 @@ namespace Jackett.Common.Indexers
 
             // Get redirection page with generated link on it. This link can't be constructed manually as it contains Hash field and hashing algo is unknown.
             var results = await RequestStringWithCookies(url);
+            if (results.Content == null)
+            {
+                throw new ExceptionWithConfigData("Empty response from " + url, configData);
+            }
             if (results.Content == "log in first")
             {
                 throw new ExceptionWithConfigData(results.Content, configData);
