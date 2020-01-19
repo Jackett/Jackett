@@ -130,8 +130,7 @@
       leechers:
         selector: td:nth-child(10)
       downloadvolumefactor:
-        case:
-          "*": 1
+        text: 1
       uploadvolumefactor:
-        case:
-          "*": 1
+        text: 1
+# engine n/a
