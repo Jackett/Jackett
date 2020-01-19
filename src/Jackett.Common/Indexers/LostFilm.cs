@@ -276,10 +276,20 @@ namespace Jackett.Common.Indexers
                 };
                 logger.Debug("> Searching: " + searchString);
                 var response = await PostDataWithCookies(url: ApiUrl, data: data);
+                if (response.Content == null)
+                {
+                    logger.Debug("> Empty series response for query: " + searchString);
+                    continue;
+                }
 
                 try
                 {
                     var json = JToken.Parse(response.Content);
+                    if (json == null || json.Type == JTokenType.Array)
+                    {
+                        logger.Debug("> Invalid response for query: " + searchString);
+                        continue; // Search loop
+                    }
 
                     // Protect from {"data":false,"result":"ok"}
                     var jsonData = json["data"];
