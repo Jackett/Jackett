@@ -152,7 +152,9 @@ namespace Jackett.Common.Indexers
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("\"success\":true"), () =>
             {
                 var errorMessage = result.Content;
-                if (errorMessage.StartsWith("\"error\":3,"))
+                if (errorMessage.Contains("\"error\":2"))
+                    errorMessage = "Captcha is incorrect";
+                if (errorMessage.Contains("\"error\":3"))
                     errorMessage = "E-mail or password is incorrect";
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
