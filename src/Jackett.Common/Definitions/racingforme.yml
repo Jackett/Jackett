@@ -191,7 +191,6 @@
       - path: "search/{{ if .Keywords }}{{ .Keywords }}{{else}}*{{end}}"
         inputs:
           offset: 40
-      - path: "search/{{ if .Keywords }}{{ .Keywords }}{{else}}*{{end}}"
     inputs:
       c: -1
       ob: "{{ .Config.sort }}"
@@ -250,3 +249,4 @@
         text: 1
       uploadvolumefactor:
         text: 1
+# crankShaft v0.1.6
