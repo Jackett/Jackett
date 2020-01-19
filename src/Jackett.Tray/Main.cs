@@ -139,7 +139,14 @@ namespace Jackett.Tray
         {
             get
             {
-                return File.Exists(ShortcutPath);
+                if (File.Exists(ShortcutPath) || File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Startup), "Jackett.lnk")))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             set
             {
@@ -158,7 +165,7 @@ namespace Jackett.Tray
         {
             get
             {
-                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Startup), "Jackett.lnk");
+                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Startup), "Jackett.url");
             }
         }
 
@@ -166,12 +173,15 @@ namespace Jackett.Tray
         {
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
             {
-                var appPath = Assembly.GetExecutingAssembly().Location;
-                var shell = new IWshRuntimeLibrary.WshShell();
-                var shortcut = (IWshRuntimeLibrary.IWshShortcut)shell.CreateShortcut(ShortcutPath);
-                shortcut.Description = Assembly.GetExecutingAssembly().GetName().Name;
-                shortcut.TargetPath = appPath;
-                shortcut.Save();
+                using (StreamWriter writer = new StreamWriter(ShortcutPath))
+                {
+                    var appPath = Assembly.GetExecutingAssembly().Location;
+                    writer.WriteLine("[InternetShortcut]");
+                    writer.WriteLine("URL=file:///" + appPath);
+                    writer.WriteLine("IconIndex=0");
+                    string icon = appPath.Replace('\\', '/');
+                    writer.WriteLine("IconFile=" + icon);
+                }
             }
         }
 
