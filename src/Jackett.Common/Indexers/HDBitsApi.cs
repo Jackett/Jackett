@@ -78,11 +78,12 @@ namespace Jackett.Common.Indexers
         {
             dynamic requestData = new JObject();
             var queryString = query.GetQueryString();
+            int? imdbId = ParseUtil.GetImdbID(query.ImdbID)
 
-            if (!string.IsNullOrWhiteSpace(query.ImdbID))
+            if (imdbId != null)
             {
                 requestData["imdb"] = new JObject();
-                requestData["imdb"]["id"] = query.ImdbID;
+                requestData["imdb"]["id"] = imdbId;
             }
             else if (!string.IsNullOrWhiteSpace(queryString))
             {
