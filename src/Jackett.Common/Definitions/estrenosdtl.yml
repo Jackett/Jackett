@@ -76,7 +76,10 @@
           - name: dateparse
             args: "02-01-2006"
       size:
+        text: "0 B"
+      size:
         selector: div.tamanio p
+        optional: true
       seeders:
         text: 1
       leechers:
