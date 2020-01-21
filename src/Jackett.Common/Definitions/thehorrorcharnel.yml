@@ -213,5 +213,5 @@
           img[src="free.gif"]: 0
           "*": 1
       uploadvolumefactor:
-        case:
-          "*": 1
+        text: 1
+# Btdev,U232
