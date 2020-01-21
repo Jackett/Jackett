@@ -13,6 +13,7 @@ using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
+using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
 {
@@ -38,7 +39,8 @@ namespace Jackett.Common.Indexers
         private DateTime lastTokenFetch;
         private string token;
         private string app_id;
-        private bool provideTorrentLink = false;
+        private bool _provideTorrentLink;
+        private string _sort;
 
         private readonly TimeSpan TOKEN_DURATION = TimeSpan.FromMinutes(10);
 
@@ -59,7 +61,15 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "public";
 
-            var provideTorrentLinkItem = new ConfigurationData.BoolItem { Value = false };
+            var sort = new SelectItem(new Dictionary<string, string>
+            {
+                {"last", "created"},
+                {"seeders", "seeders"},
+                {"leechers", "leechers"}
+            }) {Name = "Sort requested from site", Value = "last"};
+            configData.AddDynamic("sort", sort);
+
+            var provideTorrentLinkItem = new BoolItem { Value = false };
             provideTorrentLinkItem.Name = "Generate torrent download link additionally to magnet (not recommended due to DDoS protection).";
             configData.AddDynamic("providetorrentlink", provideTorrentLinkItem);
 
@@ -99,11 +109,11 @@ namespace Jackett.Common.Indexers
         {
             base.LoadValuesFromJson(jsonConfig, useProtectionService);
 
-            var provideTorrentLinkItem = (ConfigurationData.BoolItem)configData.GetDynamic("providetorrentlink");
-            if (provideTorrentLinkItem != null)
-            {
-                provideTorrentLink = provideTorrentLinkItem.Value;
-            }
+            var sort = (SelectItem) configData.GetDynamic("sort");
+            _sort = sort != null ? sort.Value : "last";
+
+            var provideTorrentLinkItem = (BoolItem)configData.GetDynamic("providetorrentlink");
+            _provideTorrentLink = provideTorrentLinkItem != null && provideTorrentLinkItem.Value;
         }
 
         private async Task CheckToken()
@@ -113,7 +123,6 @@ namespace Jackett.Common.Indexers
                 var queryCollection = new NameValueCollection();
                 queryCollection.Add("get_token", "get_token");
                 queryCollection.Add("app_id", app_id);
-                
 
                 var tokenUrl = ApiEndpoint + "?" + queryCollection.GetQueryString();
 
@@ -129,10 +138,8 @@ namespace Jackett.Common.Indexers
             LoadValuesFromJson(configJson);
             var releases = await PerformQuery(new TorznabQuery());
 
-            await ConfigureIfOK(string.Empty, releases.Count() > 0, () =>
-            {
-                throw new Exception("Could not find releases from this URL");
-            });
+            await ConfigureIfOK(string.Empty, releases.Any(), () =>
+                throw new Exception("Could not find releases from this URL"));
 
             return IndexerConfigurationStatus.Completed;
         }
@@ -142,7 +149,7 @@ namespace Jackett.Common.Indexers
             return await PerformQuery(query, 0);
         }
 
-        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query, int attempts)
+        private async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query, int attempts)
         {
             await CheckToken();
             var releases = new List<ReleaseInfo>();
@@ -154,6 +161,7 @@ namespace Jackett.Common.Indexers
             queryCollection.Add("app_id", app_id);
             queryCollection.Add("limit", "100");
             queryCollection.Add("ranked", "0");
+            queryCollection.Add("sort", _sort);
 
             if (query.ImdbID != null)
             {
@@ -179,6 +187,7 @@ namespace Jackett.Common.Indexers
             else
             {
                 queryCollection.Add("mode", "list");
+                queryCollection.Remove("sort");
             }
 
             var querycats = MapTorznabCapsToTrackers(query);
@@ -194,7 +203,7 @@ namespace Jackett.Common.Indexers
             {
                 var jsonContent = JObject.Parse(response.Content);
 
-                int errorCode = jsonContent.Value<int>("error_code");
+                var errorCode = jsonContent.Value<int>("error_code");
                 if (errorCode == 20) // no results found
                 {
                     return releases.ToArray();
@@ -234,19 +243,19 @@ namespace Jackett.Common.Indexers
                     release.InfoHash = release.MagnetUri.ToString().Split(':')[3].Split('&')[0];
                     // append app_id to prevent api server returning 403 forbidden
                     release.Comments = new Uri(item.Value<string>("info_page") + "&app_id=" + app_id);
-                    if (provideTorrentLink)
+                    if (_provideTorrentLink)
                         release.Link = release.Comments; // in case of a torrent download we grab the link from the details page in Download()
                     release.Guid = release.MagnetUri;
 
-                    var episode_info = item.Value<JToken>("episode_info");
+                    var episodeInfo = item.Value<JToken>("episode_info");
 
-                    if (episode_info.HasValues)
+                    if (episodeInfo.HasValues)
                     {
-                        var imdb = episode_info.Value<string>("imdb");
+                        var imdb = episodeInfo.Value<string>("imdb");
                         release.Imdb = ParseUtil.GetImdbID(imdb);
-                        release.TVDBId = episode_info.Value<long?>("tvdb");
-                        release.RageID = episode_info.Value<long?>("tvrage");
-                        release.TMDb = episode_info.Value<long?>("themoviedb");
+                        release.TVDBId = episodeInfo.Value<long?>("tvdb");
+                        release.RageID = episodeInfo.Value<long?>("tvrage");
+                        release.TMDb = episodeInfo.Value<long?>("themoviedb");
                     }
 
                     // ex: 2015-08-16 21:25:08 +0000
