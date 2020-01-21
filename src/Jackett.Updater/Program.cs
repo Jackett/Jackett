@@ -385,6 +385,7 @@ namespace Jackett.Updater
                 "Definitions/extratorrent-ag.yml",
                 "Definitions/passionetorrent.yml",
                 "Definitions/thetorrents.yml",
+                "Definitions/themoviecave.yml",
             };
 
             foreach (var oldFile in oldFiles)
