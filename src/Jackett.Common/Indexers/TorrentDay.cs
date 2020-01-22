@@ -24,10 +24,10 @@ namespace Jackett.Common.Indexers
 
         public override string[] LegacySiteLinks { get; protected set; } = new string[] {
             "https://torrentday.com/",
-            "https://tday.love/",
         };
 
         public override string[] AlternativeSiteLinks { get; protected set; } = new string[] {
+            "https://tday.love/",
             "https://torrentday.cool/",
             "https://tdonline.org/",
             "https://secure.torrentday.com/",
@@ -54,7 +54,7 @@ namespace Jackett.Common.Indexers
         public TorrentDay(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base(name: "TorrentDay",
                 description: "TorrentDay (TD) is a Private site for TV / MOVIES / GENERAL",
-                link: "https://torrentday.cool/",
+                link: "https://tday.love/",
                 caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 configService: configService,
                 client: wc,
