@@ -2,8 +2,6 @@
   
   <PropertyGroup>
     <TargetFrameworks>netcoreapp3.1;net461</TargetFrameworks>
-    <PlatformTarget>x86</PlatformTarget>
-    <IsPackable>false</IsPackable>
   </PropertyGroup>
   
   <ItemGroup>
@@ -43,6 +41,7 @@
 
   <!-- Conditionally obtain references for the .NET461 target -->
   <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" />
     <Reference Include="System.Web" />
   </ItemGroup>
 
