@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web;
 using AutoMapper;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
@@ -183,6 +186,34 @@ namespace Jackett.Common.Utils.Clients
         public virtual void OnNext(ServerConfig value)
         {
             // nothing by default
+        }
+
+        /**
+         * This method does the same as FormUrlEncodedContent but with custom encoding instead of utf-8
+         * https://stackoverflow.com/a/13832544
+         */
+        protected static ByteArrayContent FormUrlEncodedContentWithEncoding(
+            IEnumerable<KeyValuePair<string, string>> nameValueCollection, Encoding encoding)
+        {
+            // utf-8 / default
+            if (Encoding.UTF8.Equals(encoding) || encoding == null)
+                return new FormUrlEncodedContent(nameValueCollection);
+
+            // other encodings
+            var builder = new StringBuilder();
+            foreach (KeyValuePair<string, string> pair in nameValueCollection)
+            {
+                if (builder.Length > 0)
+                    builder.Append('&');
+                builder.Append(HttpUtility.UrlEncode(pair.Key, encoding));
+                builder.Append('=');
+                builder.Append(HttpUtility.UrlEncode(pair.Value, encoding));
+            }
+            // HttpRuleParser.DefaultHttpEncoding == "latin1"
+            var data = Encoding.GetEncoding("latin1").GetBytes(builder.ToString());
+            var content = new ByteArrayContent(data);
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
+            return content;
         }
     }
 }

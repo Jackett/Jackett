@@ -49,11 +49,6 @@ namespace Jackett.Common.Utils
             return Encoding.UTF8.GetString(Convert.FromBase64String(str));
         }
 
-        public static string PostDataFromDict(IEnumerable<KeyValuePair<string, string>> dict)
-        {
-            return new FormUrlEncodedContent(dict).ReadAsStringAsync().Result;
-        }
-
         /// <summary>
         /// Convert an array of bytes to a string of hex digits
         /// </summary>
