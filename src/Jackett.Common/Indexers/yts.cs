@@ -49,8 +49,11 @@ namespace Jackett.Common.Indexers
 
             webclient.requestDelay = 2.5; // 0.5 requests per second (2 causes problems)
 
-            AddCategoryMapping(45, TorznabCatType.MoviesHD, "Movies/x264/720");
-            AddCategoryMapping(44, TorznabCatType.MoviesHD, "Movies/x264/1080");
+            // note: the API does not support searching with categories, so these are dummy ones for torznab compatibility
+            // we map these newznab cats with the returned quality value in the releases routine. 
+            AddCategoryMapping(45, TorznabCatType.MoviesHD, "Movies/x264/720p");
+            AddCategoryMapping(44, TorznabCatType.MoviesHD, "Movies/x264/1080p");
+            AddCategoryMapping(46, TorznabCatType.MoviesUHD, "Movies/x264/2160p"); // added for #7010
             AddCategoryMapping(47, TorznabCatType.Movies3D, "Movies/x264/3D");
         }
 
@@ -93,25 +96,6 @@ namespace Jackett.Common.Indexers
                 queryCollection.Add("query_term", searchString);
             }
 
-            // This API does not seem to be working for quality=720p or quality=1080p
-            // Only quality=3D seems to return a proper result?
-            //var cats = string.Join(";", MapTorznabCapsToTrackers(query));
-            //if (!string.IsNullOrEmpty(cats))
-            //{
-            //    if (cats == "45")
-            //    {
-            //        queryCollection.Add("quality", "720p");
-            //    }
-            //    if (cats == "44")
-            //    {
-            //        queryCollection.Add("quality", "1080p");
-            //    }
-            //    if (cats == "2050")
-            //    {
-            //        queryCollection.Add("quality", "3D");
-            //    }
-            //}
-
             var searchUrl = ApiEndpoint + "?" + queryCollection.GetQueryString();
             var response = await RequestStringWithCookiesAndRetry(searchUrl, string.Empty);
 
@@ -149,7 +133,6 @@ namespace Jackett.Common.Indexers
                     {
                         var release = new ReleaseInfo();
 
-                        // Append the quality to the title because thats how radarr seems to be determining the quality?
                         // append type: BRRip or WEBRip, resolves #3558 via #4577
                         var type = torrent_info.Value<string>("type");
                         switch (type)
@@ -161,7 +144,8 @@ namespace Jackett.Common.Indexers
                                 type = " BRRip";
                                 break;
                         }
-                        release.Title = "[YTS] " + movie_item.Value<string>("title_long") + " " + torrent_info.Value<string>("quality") + type;
+                        var quality = torrent_info.Value<string>("quality");
+                        release.Title = "[YTS] " + movie_item.Value<string>("title_long") + " " + quality + type;
                         var imdb = movie_item.Value<string>("imdb_code");
                         release.Imdb = ParseUtil.GetImdbID(imdb);
 
@@ -197,41 +181,26 @@ namespace Jackett.Common.Indexers
                         release.BannerUrl = new Uri(movie_item.Value<string>("large_cover_image"));
                         release.Guid = release.Link;
 
-                        // Hack to prevent adding non-specified catogery, since API doesn't seem to be working
-                        string categories = string.Join(";", MapTorznabCapsToTrackers(query));
-
-                        if (!string.IsNullOrEmpty(categories))
+                        // map the quality to a newznab category for torznab compatibility (for Radarr, etc)
+                        switch (quality)
                         {
-                            if (categories.Contains("45") || categories.Contains("2040"))
-                            {
-                                if (torrent_info.Value<string>("quality") == "720p")
-                                {
-                                    release.Category = MapTrackerCatToNewznab("45");
-                                    releases.Add(release);
-                                }
-                            }
-                            if (categories.Contains("44") || categories.Contains("2040"))
-                            {
-                                if (torrent_info.Value<string>("quality") == "1080p")
-                                {
-                                    release.Category = MapTrackerCatToNewznab("44");
-                                    releases.Add(release);
-                                }
-                            }
-                            if (categories.Contains("47"))
-                            {
-                                if (torrent_info.Value<string>("quality") == "3D")
-                                {
-                                    release.Category = MapTrackerCatToNewznab("47");
-                                    releases.Add(release);
-                                }
-                            }
+                            case "720p":
+                                release.Category = MapTrackerCatToNewznab("45");
+                                break;
+                            case "1080p":
+                                release.Category = MapTrackerCatToNewznab("44");
+                                break;
+                            case "2160p":
+                                release.Category = MapTrackerCatToNewznab("46");
+                                break;
+                            case "3D":
+                                release.Category = MapTrackerCatToNewznab("47");
+                                break;
+                            default:
+                                release.Category = MapTrackerCatToNewznab("45");
+                                break;
                         }
-                        else
-                        {
-                            release.Category = MapTrackerCatToNewznab("45");
-                            releases.Add(release);
-                        }
+                        releases.Add(release);
                     }
                 }
             }
