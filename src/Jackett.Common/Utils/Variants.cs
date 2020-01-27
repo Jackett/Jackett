@@ -79,7 +79,7 @@ namespace Jackett.Common.Utils
                 }
                 case JackettVariant.CoreWindows:
                 {
-                    return ""; //Not implemented yet
+                    return "Jackett.Binaries.Windows.zip";
                 }
                 case JackettVariant.CoreMacOs:
                 {
