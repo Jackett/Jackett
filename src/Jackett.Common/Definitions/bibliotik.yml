@@ -96,7 +96,9 @@
         selector: .title a
         filters:
           - name: append
-            args: "{{ if .Result._year }} {{ .Result._year }}{{else}}{{end}}{{ if .Result._filetype }} {{ .Result._filetype }}{{else}}{{end}}"
+            args: "{{if .Result._year}} {{.Result._year}}{{else}}{{end}}"
+          - name: append
+            args: "{{if .Result._filetype}} {{.Result._filetype}}{{else}}{{end}}"
       details:
         selector: .title a
         attribute: href
@@ -108,11 +110,11 @@
       download:
         selector: a[title="Download"]
         attribute: href
-#      files:
-#        selector: .t_files_size_added
-#        filters:
-#          - name: regexp
-#            args: "^\\s*(\\d+)\\s*file"
+      files:
+        selector: .t_files_size_added
+        filters:
+          - name: regex
+            args: "(\\d+) file"
       size:
         selector: .t_files_size_added
         filters:
@@ -120,24 +122,23 @@
             args: [",", 1]
           - name: trim
       seeders:
-        text: 0
+        text: "0"
       seeders:
         optional: true
         selector: .seeders
       leechers:
-        text: 0
+        text: "0"
       leechers:
         optional: true
         selector: .leechers
       grabs:
-        text: 0
+        text: "0"
       grabs:
         optional: true  
         selector: .snatches
       downloadvolumefactor:
         case:
-          "*": 1
+          "*": "1"
       uploadvolumefactor:
         case:
-          "*": 1
-# engine tbc
+          "*": "1"
