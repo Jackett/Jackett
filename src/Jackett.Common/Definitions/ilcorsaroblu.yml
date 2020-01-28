@@ -85,19 +85,19 @@
         args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "$1 $2"]
     inputs:
       search: "{{ .Keywords }}"
-      category: "{{range .Categories}}{{.}};{{end}}"
+      category: "{{ range .Categories }}{{.}};{{end}}"
       page: torrents
       active: 0
+
     rows:
       selector: div.b-content > table > tbody > tr > td > table.lista > tbody > tr:has(a[href^="index.php?page=torrents&category="])
       filters:
         - name: andmatch
+
     fields:
       title:
         selector: td:nth-child(2) > a
         filters:
-          # - name: re_replace # replace special characters with " " (space)
-          #   args: ["[^a-zA-Z0-9\\s]|\\.", " "]
           - name: re_replace # replace special characters with " " (space)
             args: ["[\\[!\"#$%&'()*+,\\-.\\/:;<=>?@[\\]^_`{|}~]", " "]
           - name: diacritics
@@ -121,7 +121,7 @@
             args: ["(?i)\\b(?:Puntate\\s*)(\\d+)\\s?(\\d+)", "E0$1-0$2"]
           - name: re_replace # rimozioni varie
             args: ["(?i)(Serie completa|Completat?a?|in pausa)", ""]
-      download: # handle torrents with normal torrent file download
+      download:
         optional: true
         selector: a[href^="download.php?id="]
         attribute: href
@@ -149,9 +149,9 @@
             args: "magnet:?xt=urn:btih:"
           - name: append
             args: "&dn={{ .Result._magnetfilename }}.torrent"
-          - name: append # add some well known public trackers
+          - name: append
             args: "&tr=udp://tracker.openbittorrent.com:80/announce&tr=udp://tracker.opentrackr.org:1337/announce" 
-      magnet: # in case a direct magnet link is provided use it
+      magnet:
         optional: true
         selector: a[href^="magnet:?xt="]
         attribute: href
@@ -164,13 +164,6 @@
       details:
         selector: td:nth-child(2) > a
         attribute: href
-#      banner:
-#        optional: true
-#        selector: td:nth-child(2) > a
-#        attribute: onmouseover
-#        filters:
-#          - name: regexp
-#            args: "src=(.+?) "
       size:
         selector: td:nth-last-child(2)
       date:
@@ -194,11 +187,7 @@
       leechers:
         selector: td:nth-last-child(5)
       downloadvolumefactor:
-#        case:
-#          img[src="images/gold.gif"]: "0"
-#          img[src="images/silver.gif"]: "0.5"
-#          img[src="images/bronze.gif"]: "0.75"
-#          "*": "1"
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
+# engine n/a

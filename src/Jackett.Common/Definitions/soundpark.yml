@@ -47,6 +47,7 @@
     rows:
     # first selector is for the music page (recent uploads) and the second selector is for the search page
       selector: div[itemscope] > table.browse_albums, div.div-rellist
+
     fields:
       title:
         selector: tr:nth-child(1) td:nth-child(1) h2 a, div h3 a
@@ -134,3 +135,4 @@
         text: 1
       uploadvolumefactor:
         text: 1
+# engine n/a

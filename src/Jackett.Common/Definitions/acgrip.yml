@@ -15,8 +15,8 @@
     categories:
       1: TV
     modes:
-      tv-search: [q, season, ep]
       search: [q]
+      tv-search: [q, season, ep]
 
   settings: []
 
@@ -24,9 +24,11 @@
     paths:
       - path: /
     inputs:
-      term: "{{ .Query.Keywords }}"
+      term: "{{ .Keywords }}"
+
     rows:
       selector: tbody tr
+
     fields:
       title:
         selector: td.title > span.title a
@@ -52,6 +54,7 @@
         filters:
           - name: fuzzytime
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
+# engine n/a

@@ -6,9 +6,10 @@
   type: private
   encoding: UTF-8
   links:
-    - https://nostalgic.is/
+    - https://vhstapes.org/
   legacylinks:
     - https://nostalgic.to/
+    - https://nostalgic.is/
 
   caps:
     categorymappings:
@@ -140,5 +141,5 @@
           "img[alt=\"Freeleech\"]": 0
           "*": 1
       uploadvolumefactor:
-        case:
-          "*": 1
+        text: 1
+# engine n/a

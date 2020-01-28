@@ -10,35 +10,41 @@
 
   caps:
     categorymappings:
-      - {id: 73, cat: Audio, desc: "POD CASTS"}
-      - {id: 102, cat: Audio, desc: "karaoke"}
-      - {id: 81, cat: Audio, desc: "MISC RADIO SHOWS"}
-      - {id: 34, cat: Audio, desc: "ROCK MUSIC"}
-      - {id: 48, cat: Audio, desc: "METAL MUSIC"}
-      - {id: 78, cat: Audio, desc: "RAP"}
-      - {id: 79, cat: Audio, desc: "TEEN POP"}
-      - {id: 106, cat: Audio, desc: "ELECTRONIC"}
-      - {id: 11, cat: Audio, desc: "MUSIC APPS "}
-      - {id: 13, cat: Audio, desc: "HEAVY METAL"}
-      - {id: 44, cat: Audio, desc: "JAZZ"}
-      - {id: 45, cat: Audio, desc: "FOLK MUSIC"}
-      - {id: 51, cat: Audio, desc: "HIP HOP"}
-      - {id: 85, cat: Audio, desc: "COUNTRY MUSIC "}
-      - {id: 88, cat: Audio, desc: "ALTERNATIVE MUSIC"}
-      - {id: 95, cat: Audio, desc: "REGGAE MUSIC"}
-      - {id: 103, cat: Audio, desc: "karaoke Misc"}
-      - {id: 108, cat: Audio, desc: "PUNK POP"}
-      - {id: 14, cat: Audio, desc: "TRANCE MUSIC"}
-      - {id: 26, cat: Audio, desc: "ROCK 80S"}
-      - {id: 29, cat: Audio, desc: "BLUES"}
-      - {id: 2, cat: Audio, desc: "Music"}
-      - {id: 30, cat: Audio, desc: "Music-Packs"}
-      - {id: 31, cat: Audio, desc: "Music-Albums"}
-      - {id: 3, cat: Audio, desc: "SOUNDTRACKS"}
-      - {id: 5, cat: Audio, desc: "TECHNO/HARDCORE"}
-      - {id: 33, cat: Audio, desc: "RNB MUSIC"}
-      - {id: 8, cat: Audio, desc: "POP/CHART"}
-      - {id: 9, cat: Audio, desc: "DANCE MUSIC"}
+      - {id: 1, cat: Audio, desc: "Alternative"}
+      - {id: 2, cat: Audio, desc: "  |-- "}
+      - {id: 3, cat: Audio, desc: "Blues"}
+      - {id: 35, cat: Audio, desc: "Christmas Music"}
+      - {id: 4, cat: Audio, desc: "Classic Rock"}
+      - {id: 6, cat: Audio, desc: "Country"}
+      - {id: 7, cat: Audio, desc: "Dance"}
+      - {id: 8, cat: Audio, desc: "Disco"}
+      - {id: 9, cat: Audio, desc: "Electronic"}
+      - {id: 10, cat: Audio, desc: "Folk"}
+      - {id: 11, cat: Audio, desc: "Gospel"}
+      - {id: 37, cat: Audio, desc: "HardCore"}
+      - {id: 12, cat: Audio, desc: "Heavy-Metal"}
+      - {id: 13, cat: Audio, desc: "Hip-Hop"}
+      - {id: 14, cat: Audio, desc: "Jazz"}
+      - {id: 15, cat: Audio, desc: "Karaoke"}
+      - {id: 16, cat: Audio, desc: "Metal"}
+      - {id: 34, cat: Audio, desc: "Misc Compilation Albums Packs"}
+      - {id: 17, cat: Audio, desc: "Music Apps"}
+      - {id: 18, cat: Audio, desc: "Music Video"}
+      - {id: 19, cat: Audio, desc: "Opera"}
+      - {id: 20, cat: Audio, desc: "Pop"}
+      - {id: 21, cat: Audio, desc: "Punk"}
+      - {id: 22, cat: Audio, desc: "Punk Pop"}
+      - {id: 24, cat: Audio, desc: "R & B"}
+      - {id: 23, cat: Audio, desc: "Rap"}
+      - {id: 25, cat: Audio, desc: "Reggae"}
+      - {id: 26, cat: Audio, desc: "Rock"}
+      - {id: 27, cat: Audio, desc: "Rock-70s"}
+      - {id: 28, cat: Audio, desc: "Rock-80s"}
+      - {id: 29, cat: Audio, desc: "Soul"}
+      - {id: 30, cat: Audio, desc: "Sound Tracks"}
+      - {id: 31, cat: Audio, desc: "Techno"}
+      - {id: 32, cat: Audio, desc: "Teen-Pop"}
+      - {id: 33, cat: Audio, desc: "Trance"}
 
     modes:
       search: [q]
@@ -54,125 +60,105 @@
     - name: sort
       type: select
       label: Sort requested from site
-      default: "3"
+      default: "added"
       options:
-        "3": "created"
-        "5": "seeders"
-        "4": "size"
-        "2": "title"
+        "added": "created"
+        "seeders": "seeders"
+        "size": "size"
+        "name": "title"
     - name: type
       type: select
       label: Order requested from site
-      default: "2"
+      default: "desc"
       options:
-        "2": "desc"
-        "1": "asc"
-    - name: info
-      type: info
-      label: Results Per Page
-      default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+        "desc": "desc"
+        "asc": "asc"
 
   login:
-    path: index.php?page=login
+    path: takelogin.php
     method: post
     inputs:
-      uid: "{{ .Config.username }}"
-      pwd: "{{ .Config.password }}"
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+      submit: LOGIN
     error:
-      - selector: tr td span[style="color:#FF0000;"]
+      - selector: table:contains("ERROR")
     test:
       path: index.php
-      selector: a[href="logout.php"]
+      selector: a[href*="/logout.php?logouthash="]
 
   download:
     before:
-      path: thanks.php
+      path: takethanks.php
       method: post
       inputs:
-        infohash: "\"{{ .DownloadUri.Query.id }}\""
-        thanks: 1
-    selector: a[href^="download.php?id="]
+        torrentid: "{{ .DownloadUri.Query.id }}"
+    selector: a[href*="/download.php?id="]
     attribute: href
 
   search:
     paths:
-      # http://crazys-corner.info/index.php?page=torrents&search=captain&category=0&uploader=0&options=0&active=0&gold=0
-      - path: index.php
+      - path: browse.php
+        method: post
     inputs:
-      search: "{{if or (.Query.Album) (.Query.Artist) }}{{ or (.Query.Album) (.Query.Artist) }}{{else}}{{ .Keywords }}{{end}}"
-      page: torrents
+      do: search
+      keywords: "{{if or (.Query.Album) (.Query.Artist) }}{{ or (.Query.Album) (.Query.Artist) }}{{else}}{{ .Keywords }}{{end}}"
       category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{else}}0{{end}}"
-      uploader: 0
-      # 0 filename 1 file&descr 2 descr
-      options: 0
-      # 0 all 1 active 2 deadonly
-      active: 0
-      # 0 all 1 classic 2 silver 3 gold 4 silver&gold
-      gold: 0
-      order: "{{ .Config.sort }}"
-      by: "{{ .Config.type }}"
+      # t_name t_description t_both t_uploader t_genre
+      search_type: t_name
+      include_dead_torrents: yes
+      sort: "{{ .Config.sort }}"
+      order: "{{ .Config.type }}"
 
     rows:
-      selector: table.lista tr:has(a[onmouseover][href^="index.php?page=torrent-details&id="])
+      selector: table.sortable tr:has(a[href*="/download.php?id="])
 
     fields:
       category:
-        selector: a[href^="index.php?page=torrents&category="]
+        selector: a[href*="/browse.php?category="]
         attribute: href
         filters:
           - name: querystring
             args: category
       title:
-        selector: a[href^="index.php?page=torrent-details&id="]
+      # abbreviated title
+        selector: a[href*="/details.php?id="]
+      title:
+        selector: div.tooltip-content > div
+        optional: true
       details:
-        selector: a[href^="index.php?page=torrent-details&id="]
+        selector: a[href*="/details.php?id="]
         attribute: href
       download:
-        selector: a[href^="index.php?page=torrent-details&id="]
+        selector: a[href*="/details.php?id="]
+        attribute: href
+      magnet:
+        selector: a[href^="magnet:?xt="]
         attribute: href
       banner:
-        selector: a[href^="index.php?page=torrent-details&id="]
-        attribute: onmouseover
-        filters:
-          - name: regexp
-            args: "src=(.+?)  width"
-      size:
-        selector: a[href^="index.php?page=torrent-details&id="]
-        attribute: onmouseover
-        filters:
-          - name: regexp
-            args: "Size: (.+?)<"
+        selector: img[src*="/torrents/images/"]
+        attribute: src
       date:
-        selector: a[href^="index.php?page=torrent-details&id="]
-        attribute: onmouseover
+        selector: td:nth-child(2)
         filters:
           - name: regexp
-            args: "Added:(.+?)<"
-          - name: timeago
-      seeders:
-        selector: a[title][href^="index.php?page=torrent-details&id="]
-        attribute: onmouseover
-        filters:
-          - name: regexp
-            args: "Seeders: (\\d+)<"
-      leechers:
-        selector: a[title][href^="index.php?page=torrent-details&id="]
-        attribute: onmouseover
-        filters:
-          - name: regexp
-            args: "Leechers: (\\d+)<"
+            args: "(\\d{2}-\\d{2}-\\d{4} \\d{2}:\\d{2})"
+          - name: dateparse
+            args: "02-01-2006 15:04"
+      size:
+        selector: td:nth-last-child(5)
       grabs:
-        selector: a[title][href^="index.php?page=torrent-details&id="]
-        attribute: onmouseover
-        filters:
-          - name: regexp
-            args: "Done: (\\d+)<"
+        selector: td:nth-last-child(4)
+      seeders:
+        selector: td:nth-last-child(3)
+      leechers:
+        selector: td:nth-last-child(2)
       downloadvolumefactor:
         case:
-          img[src="images/freeleech.gif"]: 0
-          img[src="gold/gold.gif"]: 0
+          img[src$="_flags/freedownload.gif"]: 0
           "*": 1
       uploadvolumefactor:
         case:
+          img[src$="_flags/x2.gif"]: 2
           "*": 1
-# xbtit 19.0
+# TS Special Edition v.7.5

@@ -55,6 +55,7 @@
 
     rows:
       selector: table[class="data"] tr[id]
+
     fields:
       category:
         optional: true
@@ -99,4 +100,4 @@
         text: 0
       uploadvolumefactor:
         text: 1
-
+# engine n/a

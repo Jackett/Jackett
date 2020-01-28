@@ -1,25 +1,18 @@
 ---
-  site: 52pt
-  name: 52PT
-  description: "52PT is a CHINESE Private Torrent Tracker for HD MOVIES / TV"
+  site: brobits
+  name: BRObits
+  description: "BRObits is a CHINESE Private Torrent Tracker for HD MOVIES / TV"
   language: zh-cn
   type: private
   encoding: UTF-8
   links:
-    - https://52pt.site/
+    - https://brobits.cc/
 
   caps:
     categorymappings:
       - {id: 401, cat: Movies, desc: "Movies/电影"}
       - {id: 404, cat: TV/Documentary, desc: "Documentaries/纪录片"}
-      - {id: 405, cat: TV/Anime, desc: "Animations/动漫"}
-      - {id: 402, cat: TV, desc: "TV Series/剧集"}
-      - {id: 403, cat: TV, desc: "TV Shows/综艺"}
-      - {id: 406, cat: Audio/Video, desc: "MusicVideo/音乐MV"}
-      - {id: 407, cat: TV/Sport, desc: "Sports/运体"}
-      - {id: 409, cat: Other, desc: "Misc/其他"}
-      - {id: 410, cat: Other, desc: "Opera/戏曲 曲艺"}
-      - {id: 408, cat: Audio, desc: "HQ Audio/无损音乐"}
+      - {id: 410, cat: TV, desc: "TV Series/剧集"}
 
     modes:
       search: [q]
@@ -27,12 +20,13 @@
       movie-search: [q, imdbid]
 
   settings:
-    - name: username
+    - name: cookie
       type: text
-      label: Username
-    - name: password
-      type: password
-      label: Password
+      label: Cookie
+    - name: info
+      type: info
+      label: How to get the Cookie
+      default: "<ol><li>Login to this tracker in your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find 'cookie:' in the <b>Request Headers</b> section<li>Copy & paste the whole cookie string to here</ol>"
     - name: sort
       type: select
       label: Sort requested from site
@@ -49,24 +43,13 @@
       options:
         "desc": "desc"
         "asc": "asc"
-
+          
   login:
-    path: login.php
-    method: form
-    form: form[action="takelogin.php"]
-    captcha:
-      type: image
-      selector: img[alt="CAPTCHA"]
-      input: imagestring
+    method: cookie
     inputs:
-      username: "{{ .Config.username }}"
-      password: "{{ .Config.password }}"
-    error:
-      - selector: td.embedded:has(h2:contains("失败"))
-      - selector: td.embedded:has(h2:contains("登录失败"))
+      cookie: "{{ .Config.cookie }}"
     test:
       path: index.php
-      selector: a[href*="logout.php"]
 
   search:
     paths:
@@ -78,7 +61,7 @@
       incldead: 0
       # 0 all 1 normal 2 free 3 2x 4 2xfree 5 50% 6 2x50% 7 30%
       spstate: 0
-      # 0 title 1 descr 3 uploaded 4 imdburl
+      # 0 title 1 descr 3 uploader 4 imdburl
       search_area: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
       # 0 AND 1 OR 2 exact
       search_mode: 0

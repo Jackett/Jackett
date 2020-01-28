@@ -140,6 +140,7 @@
 
     rows:
       selector: table.ttable_headinner > tbody > tr[class^="t-row"]
+
     fields:
       category:
         selector: a[href^="torrents.php?cat="]
@@ -179,3 +180,4 @@
       uploadvolumefactor:
         case:
           "*": 1
+# engine n/a

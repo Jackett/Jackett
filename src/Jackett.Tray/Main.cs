@@ -114,7 +114,13 @@ namespace Jackett.Tray
 
         private void toolStripMenuItemWebUI_Click(object sender, EventArgs e)
         {
-            Process.Start("http://127.0.0.1:" + serverConfig.Port);
+            ProcessStartInfo psi = new ProcessStartInfo
+            {
+                FileName = "http://127.0.0.1:" + serverConfig.Port,
+                UseShellExecute = true
+            };
+
+            Process.Start(psi);
         }
 
         private void toolStripMenuItemShutdown_Click(object sender, EventArgs e)
@@ -139,7 +145,7 @@ namespace Jackett.Tray
         {
             get
             {
-                return File.Exists(ShortcutPath);
+                return File.Exists(ShortcutPath) || File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Startup), "Jackett.lnk"));
             }
             set
             {
@@ -158,7 +164,7 @@ namespace Jackett.Tray
         {
             get
             {
-                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Startup), "Jackett.lnk");
+                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Startup), "Jackett.url");
             }
         }
 
@@ -166,12 +172,15 @@ namespace Jackett.Tray
         {
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
             {
-                var appPath = Assembly.GetExecutingAssembly().Location;
-                var shell = new IWshRuntimeLibrary.WshShell();
-                var shortcut = (IWshRuntimeLibrary.IWshShortcut)shell.CreateShortcut(ShortcutPath);
-                shortcut.Description = Assembly.GetExecutingAssembly().GetName().Name;
-                shortcut.TargetPath = appPath;
-                shortcut.Save();
+                using (StreamWriter writer = new StreamWriter(ShortcutPath))
+                {
+                    var appPath = Assembly.GetExecutingAssembly().Location;
+                    writer.WriteLine("[InternetShortcut]");
+                    writer.WriteLine("URL=file:///" + appPath);
+                    writer.WriteLine("IconIndex=0");
+                    string icon = appPath.Replace('\\', '/');
+                    writer.WriteLine("IconFile=" + icon);
+                }
             }
         }
 
