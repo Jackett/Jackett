@@ -74,14 +74,12 @@
     - path: browseadult.php
       categorymappings: [9]
     inputs:
-      $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-      search: "{{ if .Query.IMDBID }}{{ .Query.IMDBIDShort }}{{else}}{{ .Keywords }}{{end}}"
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{if .Query.IMDBID}}{{ .Query.IMDBIDShort }}{{else}}{{ .Keywords }}{{end}}"
       incldead: 1
       search_by: "{{ if .Query.IMDBID }}imdb{{else}}name{{end}}"
-
     rows:
       selector: table.table-striped > tbody > tr:has(a[href^="details.php?id="])
-
     fields:
       title:
         selector: a[href^="details.php?id="]
@@ -138,4 +136,3 @@
         text: 0
       uploadvolumefactor:
         text: 1
-# engine n/a

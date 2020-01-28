@@ -311,10 +311,8 @@
       incldead: "1"
       sort: "{{ .Config.sort }}"
       type: "{{ .Config.type }}"
-
     rows:
       selector: table.embedded > tbody > tr:has(a[href^="details.php?id="])
-
     fields:
       title:
         selector: a[href^="details.php?id="]
@@ -371,4 +369,3 @@
         case:
           img[src="pic/diamond.png"]: 2
           "*": 1
-# TBDev v2.1.12

@@ -75,7 +75,6 @@
     rows:
       selector: table.ttable_headinner tr.t-row
       after: 1
-
     fields:
       category:
         selector: a[href^="/search.php?cat="]
@@ -107,4 +106,3 @@
         text: 0
       uploadvolumefactor:
         text: 1
-# engine n/a

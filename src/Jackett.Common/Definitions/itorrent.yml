@@ -49,12 +49,10 @@
   search:
     paths:
       - path: "torrentek/title/{{ .Keywords }}/order/{{ .Config.sort }}/by/{{ .Config.type }}/"
-
     rows:
       selector: tr.gradeX
       filters:
         - name: andmatch
-
     fields:
       category:
         selector: td:nth-child(1) i
@@ -98,4 +96,3 @@
         text: 0
       uploadvolumefactor:
         text: 1
-# engine n/a
