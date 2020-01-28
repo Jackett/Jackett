@@ -2,7 +2,7 @@
   site: casstudiotv
   name: CasStudioTV
   description: "CasStudioTV is a RUSSIAN Semi-Private Torrent Tracker for TV"
-  language: ru-ru
+  language: ru
   type: semi-private
   encoding: UTF-8
   links:
