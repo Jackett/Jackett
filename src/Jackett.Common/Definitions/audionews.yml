@@ -269,7 +269,6 @@
         filters:
           - name: dateparse
             args: "01-02-2006"
-
     fields:
       title:
         selector: td a[href*="/viewtopic.php?t="]
@@ -300,17 +299,17 @@
         optional: true
         selector: td:contains(\00a0B)
       seeders:
-        text: 0
+        text: "0"
       seeders:
         optional: true
         selector: td[title="Seeders"]
       leechers:
-        text: 0
+        text: "0"
       leechers:
         optional: true
         selector: td[title="Leechers"]
       grabs:
-        text: 0
+        text: "0"
       grabs:
         optional: true
         selector: td[title^="Replies:"]
@@ -318,4 +317,3 @@
         text: 1
       uploadvolumefactor:
         text: 1
-# engine n/a

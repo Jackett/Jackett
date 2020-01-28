@@ -87,7 +87,6 @@
       selector: table.responsive-card-table tr:has(td[data-label])
       filters:
         - name: andmatch
-
     fields:
       category:
         selector: td[data-label="Type"] a
@@ -151,4 +150,3 @@
       uploadvolumefactor:
         case:
           "*": 1
-# U-232 V5

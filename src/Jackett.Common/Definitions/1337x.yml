@@ -151,10 +151,8 @@
     keywordsfilters: 
       - name: replace # use this as a workaround till #893 is implemented
         args: ["Greys Anatomy", "Grey's Anatomy"]
-
     rows:
       selector: tr:has(a[href^="/torrent/"])
-
     fields:
       title:
         selector: td[class^="coll-1"] a[href^="/torrent/"]
@@ -228,4 +226,3 @@
         text: 0
       uploadvolumefactor:
         text: 1
-# engine n/a

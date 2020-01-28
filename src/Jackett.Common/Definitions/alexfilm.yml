@@ -107,7 +107,6 @@
 
     rows:
       selector: tr[id^="tor_"]
-
     fields:
       title:
         selector: td a.tLink
@@ -148,10 +147,9 @@
         selector: td:nth-child(6) span:nth-last-child(1)
       downloadvolumefactor:
         case:
-          img[src="./styles/images/tor_gold.gif"]: 0
-          img[src="./styles/images/tor_silver.gif"]: 0.5
-          "*": 1
+          img[src="./styles/images/tor_gold.gif"]: "0"
+          img[src="./styles/images/tor_silver.gif"]: "0.5"
+          "*": "1"
       uploadvolumefactor:
         case:
-          "*": 1
-# engine n/a
+          "*": "1"

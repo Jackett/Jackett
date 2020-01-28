@@ -93,7 +93,7 @@
     method: get
     before:
       path:  https://audiobookbay.nl/member/login.php
-      method: post
+      method: "post"
       inputs:
         username: "{{ .Config.username }}"
         password: "{{ .Config.password }}"
@@ -103,15 +103,13 @@
       # with just 7 results per page, try to grab up to 35 results
       # http://audiobookbay.nl/?s=teeth
       # http://audiobookbay.nl/page/2/?s=teeth
-      - path: "{{ if .Keywords }}/?s={{ .Keywords }}{{else}}/{{end}}"
-      - path: "{{ if .Keywords }}/page/2/?s={{ .Keywords }}{{else}}{{end}}"
-      - path: "{{ if .Keywords }}/page/3/?s={{ .Keywords }}{{else}}{{end}}"
-      - path: "{{ if .Keywords }}/page/4/?s={{ .Keywords }}{{else}}{{end}}"
-      - path: "{{ if .Keywords }}/page/5/?s={{ .Keywords }}{{else}}{{end}}"
-
+      - path: "{{if .Keywords}}/?s={{ .Keywords}}{{else}}/{{end}}"
+      - path: "{{if .Keywords}}/page/2/?s={{ .Keywords}}{{else}}{{end}}"
+      - path: "{{if .Keywords}}/page/3/?s={{ .Keywords}}{{else}}{{end}}"
+      - path: "{{if .Keywords}}/page/4/?s={{ .Keywords}}{{else}}{{end}}"
+      - path: "{{if .Keywords}}/page/5/?s={{ .Keywords}}{{else}}{{end}}"
     rows:
       selector: div.post:has(div[class="postTitle"])
-
     fields:
       title:
         selector: div.postTitle
@@ -153,4 +151,3 @@
         text: 0
       uploadvolumefactor:
         text: 1
-# engine n/a

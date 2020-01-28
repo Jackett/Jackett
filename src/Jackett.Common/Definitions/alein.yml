@@ -97,7 +97,6 @@
 
     rows:
       selector: tr.trclass:not(:has(td.lista-cat-rec))
-
     fields:
       title:
         selector: td a[href*="id="]
@@ -143,4 +142,4 @@
         text: 0
       uploadvolumefactor:
         text: 1
-# xbtit 2.3
+  
