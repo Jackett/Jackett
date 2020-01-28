@@ -43,7 +43,7 @@
 
   search:
     paths:
-      - path: "{{ if .Keywords }}recherche/{{ .Keywords }}{{else}}{{end}}"
+      - path: "{{if .Keywords}}recherche/{{.Keywords}}{{else}}{{end}}"
 
     rows:
       selector: div.listing-torrent > table > tbody > tr:has(a)
@@ -99,4 +99,3 @@
         text: 0
       uploadvolumefactor:
         text: 1
-# engine n/a

@@ -147,7 +147,6 @@
 
     rows:
       selector: tr.browse_color, tr.freeleech_color
-
     fields:
       category:
         selector: td:nth-of-type(1) a
@@ -207,4 +206,3 @@
           "*": 1
       uploadvolumefactor:
         text: 1
-# U-232 V4
