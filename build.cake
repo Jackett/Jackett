@@ -76,7 +76,7 @@ Task("Run-Unit-Tests")
 		CreateDirectory("./" + testResultsDirName);
 		var resultsFile = $"./{testResultsDirName}/JackettTestResult.xml";
 
-		NUnit3("./src/**/bin/" + configuration + "/net461/*.Test.dll", new NUnit3Settings
+		NUnit3("./src/**/bin/" + configuration + "/**/*.Test.dll", new NUnit3Settings
 		{
 			Results = new[] { new NUnit3Result { FileName = resultsFile } }
 		});

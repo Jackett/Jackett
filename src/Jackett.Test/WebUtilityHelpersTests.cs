@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using System.Web;
 using Jackett.Common.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -14,14 +13,6 @@ namespace Jackett.Test
 
         public WebUtilityHelpersTests()
         {
-            //https://docs.microsoft.com/en-us/dotnet/api/system.text.codepagesencodingprovider?view=netcore-2.0
-#if !NET461
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
-            {
-                Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-            }
-#endif
-
             _codePagesToTest = new Encoding[]{
                 Encoding.UTF8,
                 Encoding.ASCII,
@@ -37,6 +28,14 @@ namespace Jackett.Test
                 "Å[ÉfÉBÉìÉOÇÕìÔÇµÇ≠Ç»Ç¢",
                 "J͖ͥͨ̑͂̄̈́ḁ̹ͧͦ͡ͅc̲̗̮͍̻͓ͤk̳̥̖͗ͭ̾͌e̖̲̟̽ț̠͕͈͓͎̱t͕͕͓̹̹ͫͧ̆͑ͤ͝ ̼͓̟̣͔̇̒T̻̺̙̣̘͔̤̅͒̈̈͛̅e̥̗̍͟s̖̬̭͈̠t̫̩͙̯̩ͣ̏̕ ̸̰̬̄̀ͧ̀S̨̻̼̜̹̼͓̺ͨ̍ͦt͇̻̺̂́̄͌͗̕r̥͈̙͙̰͈̙͗̆̽̀i͉͔̖̻̹̗̣̍ͭ̒͗n̴̻͔̹̘̱̳͈͐ͦ̃̽͐̓̂g̴͚͙̲ͩ͌̆̉̀̾"
             };
+
+            //https://docs.microsoft.com/en-us/dotnet/api/system.text.codepagesencodingprovider?view=netcore-2.0
+#if !NET461
+                if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+                {
+                    Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+                }
+#endif
         }
 
         

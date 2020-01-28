@@ -1,7 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.1;net461</TargetFrameworks>
+    <TargetFramework>net461</TargetFramework>
+    <PlatformTarget>x86</PlatformTarget>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
   
   <ItemGroup>
@@ -27,7 +29,7 @@
     <PackageReference Include="MSTest.TestFramework" Version="2.0.0" />
     <PackageReference Include="NUnit" Version="3.12.0" />
     <PackageReference Include="NUnit.ConsoleRunner" Version="3.10.0" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.16.1" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.16.0" />
   </ItemGroup>
   
   <ItemGroup>
@@ -38,10 +40,8 @@
     <ProjectReference Include="..\Jackett.Common\Jackett.Common.csproj" />
     <ProjectReference Include="..\Jackett.Server\Jackett.Server.csproj" />
   </ItemGroup>
-
-  <!-- Conditionally obtain references for the .NET461 target -->
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" />
+  
+  <ItemGroup>
     <Reference Include="System.Web" />
   </ItemGroup>
 
