@@ -36,7 +36,7 @@
 
   search:
     paths:
-      - path: "{{ if .Keywords }}search.php{{else}}index.php{{end}}"
+      - path: "{{if .Keywords }}search.php{{else}}index.php{{end}}"
     inputs:
       terms: "{{ .Keywords }}"
       type: "{{ .Config.type-id }}"
@@ -45,7 +45,6 @@
     rows:
       selector: "table.listing tr.category_0"
       after: 1
-
     fields:
       category:
         selector: a[href*="?cat="]
@@ -91,4 +90,3 @@
         text: 0
       uploadvolumefactor:
         text: 1
-# Engine n/a

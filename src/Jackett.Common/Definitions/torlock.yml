@@ -50,6 +50,28 @@
   search:
     paths:
       - path: "{{if .Keywords}}/all/torrents/{{ .Keywords }}.html?sort={{ .Config.sort }}&order={{ .Config.type }}{{else}}/fresh.html{{end}}"
+#      - path: "{{if .Keywords}}/television/torrents/{{ .Keywords }}.html{{else}}/television/1/added/desc.html{{end}}"
+#        categorymappings: [TELEVISION]
+#      - path: "{{if .Keywords}}/movies/torrents/{{ .Keywords }}.html{{else}}/movies/1/added/desc.html{{end}}"
+#        categorymappings: [MOVIES]
+#      - path: "{{if .Keywords}}/music/torrents/{{ .Keywords }}.html{{else}}/music/1/added/desc.html{{end}}"
+#        categorymappings: [MUSIC]
+#      - path: "{{if .Keywords}}/games/torrents/{{ .Keywords }}.html{{else}}/games/1/added/desc.html{{end}}"
+#        categorymappings: [GAMES]
+#      - path: "{{if .Keywords}}/software/torrents/{{ .Keywords }}.html{{else}}/software/1/added/desc.html{{end}}"
+#        categorymappings: [SOFTWARE]
+#      - path: "{{if .Keywords}}/anime/torrents/{{ .Keywords }}.html{{else}}/anime/1/added/desc.html{{end}}"
+#        categorymappings: [ANIME]
+#      - path: "{{if .Keywords}}/ebooks/torrents/{{ .Keywords }}.html{{else}}/ebooks/1/added/desc.html{{end}}"
+#        categorymappings: [EBOOKS]
+#      - path: "{{if .Keywords}}/unknown/torrents/{{ .Keywords }}.html{{else}}/unknown.html{{end}}" # sorting is broken for unknown
+#        categorymappings: [OTHER]
+#      - path: "{{if .Keywords}}/adult/torrents/{{ .Keywords }}.html{{else}}/adult/1/added/desc.html{{end}}"
+#        categorymappings: [ADULT]
+#      - path: "{{if .Keywords}}/audiobooks/torrents/{{ .Keywords }}.html{{else}}/audiobooks/1/added/desc.html{{end}}"
+#        categorymappings: [AUDIOBOOK]
+#      - path: "{{if .Keywords}}/images/torrents/{{ .Keywords }}.html{{else}}/images/1/added/desc.html{{end}}"
+#        categorymappings: [IMAGES]
     keywordsfilters:
       - name: tolower
       - name: re_replace
@@ -120,4 +142,3 @@
         text: 0
       uploadvolumefactor:
         text: 1
-# Engine n/a
