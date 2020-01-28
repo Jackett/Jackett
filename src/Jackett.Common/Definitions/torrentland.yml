@@ -132,21 +132,10 @@
           - name: querystring
             args: category
       title:
-        selector: td:nth-child(2) a:contains("VOSE")
-        optional: true
+        selector: td:nth-child(2) a
         filters:
           - name: re_replace
             args: ["(?i)\\bT(\\d+)", "S$1"]
-          - name: append
-            args: " [English]"
-      title:
-        selector: td:nth-child(2) a:not(:contains("VOSE"))
-        optional: true
-        filters:
-          - name: re_replace
-            args: ["(?i)\\bT(\\d+)", "S$1"]
-          - name: append
-            args: " [Spanish]"
       banner:
         optional: true
         selector: td:nth-child(2) a
