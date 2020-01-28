@@ -205,5 +205,5 @@
           img[src="images/tor_silver.gif"]: 0.5
           "*": 1
       uploadvolumefactor:
-        text: 1
-# Engine n/a
+        case:
+          "*": 1

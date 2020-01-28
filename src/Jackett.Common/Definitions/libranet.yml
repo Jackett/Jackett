@@ -43,8 +43,8 @@
     # http://libranet.org/browse.php?cat56=1&cat57=1&search=&searchwhere=&subcat=&musicstyle=&format=
       - path: browse.php
     inputs:
-      $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
-      search: "{{ .Keywords }}"
+      $raw: "{{range .Categories}}cat{{.}}=1&{{end}}"
+      search: "{{.Keywords}}"
       searchwhere: ""
       subcat: ""
       musicstyle: ""
@@ -52,7 +52,6 @@
 
     rows:
       selector: table.rounded tr:has(a[href^="browse.php?cat="])
-
     fields:
       category:
         selector: a[href^="browse.php?cat="]
@@ -102,7 +101,7 @@
       downloadvolumefactor:
         case:
           img[src$="/pic/freeleech.gif"]: 0
-          "*": 1
+          "*": "1"
       uploadvolumefactor:
-        text: 1
-# TBdev
+        case:
+          "*": "1"
