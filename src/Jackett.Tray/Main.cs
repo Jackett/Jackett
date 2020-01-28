@@ -114,13 +114,7 @@ namespace Jackett.Tray
 
         private void toolStripMenuItemWebUI_Click(object sender, EventArgs e)
         {
-            ProcessStartInfo psi = new ProcessStartInfo
-            {
-                FileName = "http://127.0.0.1:" + serverConfig.Port,
-                UseShellExecute = true
-            };
-
-            Process.Start(psi);
+            Process.Start("http://127.0.0.1:" + serverConfig.Port);
         }
 
         private void toolStripMenuItemShutdown_Click(object sender, EventArgs e)
