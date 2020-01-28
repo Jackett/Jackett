@@ -35,7 +35,7 @@ namespace Jackett.Common.Indexers
                 client: wc,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataBasicLogin("To prevent 0-results-error, Enable the Show-Adult-Content option in your BakaBT account Settings."))
+                configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
