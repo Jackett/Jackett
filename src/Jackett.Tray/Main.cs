@@ -145,7 +145,14 @@ namespace Jackett.Tray
         {
             get
             {
-                return File.Exists(ShortcutPath) || File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Startup), "Jackett.lnk"));
+                if (File.Exists(ShortcutPath) || File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Startup), "Jackett.lnk")))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             set
             {
