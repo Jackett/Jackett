@@ -1,3 +1,8 @@
+#,==========,
+#|   |  |   |
+#`-./    \.-'   - Config'd by Quatroking (05-05-2017), updated by AeonLucid (26-05-2017) -
+#   `.__.'
+
 ---
   site: nyaa-pantsu
   name: Nyaa-pantsu
@@ -153,4 +158,3 @@
         text: 0
       uploadvolumefactor:
         text: 1
-# engine n/a
