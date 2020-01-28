@@ -245,11 +245,15 @@ namespace Jackett.Common.Indexers
             const string BASE_URI_BASE64_ENCODED = "aHR0cHM6Ly9hbmlkZXguaW5mbw=="; // "http://anidex.info"
             const string DDOS_POST_URL = "https://ddgu.ddos-guard.net/ddgu/";
 
-            // TODO: Check if the cookie already exists and is valid, if so exit without doing anything
-            //if (this.CookieHeader)
+            // Check if the cookie already exists, if so exit without doing anything
+            if (this.IsCookiePresent("__ddgu") && this.IsCookiePresent("__ddg1"))
+            {
+                this.logger.Debug("DDOS Guard cookies are already present. Skipping bypass.");
+                return;
+            }
 
             // Make a request to DDoS Guard to get the redirect URL
-            List<KeyValuePair<string,string>> ddosPostData = new List<KeyValuePair<string, string>>();
+            List <KeyValuePair<string,string>> ddosPostData = new List<KeyValuePair<string, string>>();
             ddosPostData.Add("u", PATH_AND_QUERY_BASE64_ENCODED);
             ddosPostData.Add("h", BASE_URI_BASE64_ENCODED);
             ddosPostData.Add("p", string.Empty);
@@ -271,6 +275,14 @@ namespace Jackett.Common.Indexers
             }
 
             // If we got to this point, the bypass should have succeeded and we have stored the necessary cookies to access the site normally.
+        }
+
+        private bool IsCookiePresent(string name)
+        {
+            string[] rawCookies = this.CookieHeader.Split(';');
+            IDictionary<string, string> cookies = rawCookies.ToDictionary((e) => e.Split('=')[0].Trim(), (e) => e.Split('=')[1].Trim());
+
+            return cookies.ContainsKey(name);
         }
 
         private TResult ParseValueFromRow<TResult>(IElement row, string propertyName, string selector, Func<IElement, TResult> parseFunction)
@@ -349,7 +361,7 @@ namespace Jackett.Common.Indexers
 
         private void LogIndexerError(string message)
         {
-            logger.Error($"{nameof(Anidex)} indexer ({this.ID}): {message}");
+            this.logger.Error($"{nameof(Anidex)} indexer ({this.ID}): {message}");
         }
     }
 }
