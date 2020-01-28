@@ -267,6 +267,9 @@
       path: /
       selector: :has(a[href^="./ucp.php?mode=logout&sid="])
 
+#  download:
+#    selector: a[href^="./download/file.php?id="]:not(img)
+
   search:
     paths:
       #https://casstudio.tv/search.php?tracker_search=torrent&keywords=star&terms=all&author=&sc=1&sf=titleonly&sr=topics&sk=t&sd=d&st=0&ch=300&t=0&submit=Search
@@ -359,4 +362,3 @@
         text: 1
       uploadvolumefactor:
         text: 1
-# phpBB

@@ -75,7 +75,6 @@
       grabs:
         selector: td:nth-child(8)
       downloadvolumefactor:
-        text: 0
+        text: "0"
       uploadvolumefactor:
-        text: 1
-# tedmind 1.8.1
+        text: "1"

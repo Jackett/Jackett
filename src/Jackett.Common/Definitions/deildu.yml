@@ -103,7 +103,7 @@
         selector: td:nth-child(8)
         filters:
           - name: regexp
-            args: (\d+)
+            args: ([\d,]+)
       seeders:
         selector: td:nth-child(9)
       leechers:
@@ -117,4 +117,3 @@
         text: 1
       uploadvolumefactor:
         text: 1
-# engine n/a

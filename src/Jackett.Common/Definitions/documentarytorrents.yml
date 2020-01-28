@@ -135,7 +135,6 @@
       selector: table.ttable_headinner tr.t-row
       filters:
         - name: andmatch
-
     fields:
       download:
         selector: a[href^="download.php?id="]
@@ -165,5 +164,5 @@
           img[src="images/freeleech_star.gif"]: 0
           "*": 1
       uploadvolumefactor:
-        text: 1
-# TorrentTrader v2-svn
+        case:
+          "*": 1
