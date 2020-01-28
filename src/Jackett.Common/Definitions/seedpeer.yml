@@ -27,11 +27,9 @@
     # https://seedpeer.me/today
     # https://seedpeer.me/search/Harry%20Potter
     paths:
-      - path: "{{ if .Keywords }}search/{{ .Keywords }}{{else}}today{{end}}"
-
+      - path: "{{if .Keywords}}search/{{ .Keywords}}{{else}}today{{end}}"
     rows:
       selector: table.table > tbody > tr:has(a[href^="/details/"])
-
     fields:
       category:
         text: other
@@ -57,4 +55,3 @@
         text: 0
       uploadvolumefactor:
         text: 1
-# engine n/a
