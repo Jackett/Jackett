@@ -955,22 +955,22 @@ function updateSearchResultTable(element, results) {
                     "searchable": false,
                     "type": 'num'
                 },
-                    {
-                        "targets": 5,
-                        "visible": true,
-                        "searchable": false,
-                        "iDataSort": 4
-                    }
+                {
+                    "targets": 5,
+                    "visible": true,
+                    "searchable": false,
+                    "iDataSort": 4
+                }
             ],
             fnPreDrawCallback: function () {
                 var table = this;
                 var deadfilterdiv = element.find(".dataTables_deadfilter");
                 var deadfiltercheckbox = deadfilterdiv.find("input");
                 if (!deadfiltercheckbox.length) {
-                    deadfilterlabel = $('<label><input type="checkbox" id="jackett-search-results-datatable_deadfilter_checkbox" value="1">Show dead torrents</label>'
+                    deadfilterlabel = $('<label><input type="checkbox" id="jackett-search-results-datatable_deadfilter_checkbox" value="1"> Show dead torrents</label>'
                         );
                     deadfilterdiv.append(deadfilterlabel);
-                    deadfiltercheckbox = deadfilterlabel.find("input")
+                    deadfiltercheckbox = deadfilterlabel.find("input");
                     deadfiltercheckbox.on("change", function () {
                         settings.deadfilter = this.checked;
                         table.api().draw();
