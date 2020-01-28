@@ -211,15 +211,15 @@ namespace Jackett.Common.Indexers
                     {
                         ReleaseInfo release = new ReleaseInfo();
 
-                        release.Category = this.MapTrackerCatToNewznab(r.QuerySelector("td:nth-child(1) a").Attributes["href"].Value.Substring(5));
-                        release.Title = r.QuerySelector("td:nth-child(3) span").Text();
-                        release.MagnetUri = new Uri(r.QuerySelector("a[href^=\"magnet:?\"]").Attributes["href"].Value);
-                        release.Size = ReleaseInfo.GetBytes(r.QuerySelector("td:nth-child(7)").Text());
-                        release.PublishDate = DateTime.ParseExact(r.QuerySelector("td:nth-child(8)").Attributes["title"].Value, "yyyy-MM-dd HH:mm:ss UTC", CultureInfo.InvariantCulture);
-                        release.Seeders = int.Parse(r.QuerySelector("td:nth-child(9)").Text());
-                        release.Peers = int.Parse(r.QuerySelector("td:nth-child(10)").Text()) + release.Seeders;
-                        release.Grabs = int.Parse(r.QuerySelector("td:nth-child(11)").Text());
-                        release.Comments = new Uri(this.SiteUri, r.QuerySelector("td:nth-child(3) a").Attributes["href"].Value);
+                        release.Category = this.ParseValueFromRow(r, nameof(release.Category), "td:nth-child(1) a", (e) => this.MapTrackerCatToNewznab(e.Attributes["href"].Value.Substring(5)));
+                        release.Title = this.ParseStringValueFromRow(r, nameof(release.Title), "td:nth-child(3) span");
+                        release.MagnetUri = this.ParseValueFromRow(r, nameof(release.MagnetUri), "a[href^=\"magnet:?\"]", (e) => new Uri(e.Attributes["href"].Value));
+                        release.Size = this.ParseValueFromRow(r, nameof(release.Size), "td:nth-child(7)", (e) => ReleaseInfo.GetBytes(e.Text()));
+                        release.PublishDate = this.ParseValueFromRow(r, nameof(release.PublishDate), "td:nth-child(8)", (e) => DateTime.ParseExact(e.Attributes["title"].Value, "yyyy-MM-dd HH:mm:ss UTC", CultureInfo.InvariantCulture));
+                        release.Seeders = this.ParseIntValueFromRow(r, nameof(release.Seeders), "td:nth-child(9)");
+                        release.Peers = this.ParseIntValueFromRow(r, nameof(release.Peers), "td:nth-child(10)") + release.Seeders;
+                        release.Grabs = this.ParseIntValueFromRow(r, nameof(release.Grabs), "td:nth-child(11)");
+                        release.Comments = this.ParseValueFromRow(r, nameof(release.Comments), "td:nth-child(3) a", (e) => new Uri(this.SiteUri, e.Attributes["href"].Value));
                         release.MinimumRatio = 1;
                         release.MinimumSeedTime = 172800; // 48 hours
 
@@ -271,6 +271,80 @@ namespace Jackett.Common.Indexers
             }
 
             // If we got to this point, the bypass should have succeeded and we have stored the necessary cookies to access the site normally.
+        }
+
+        private TResult ParseValueFromRow<TResult>(IElement row, string propertyName, string selector, Func<IElement, TResult> parseFunction)
+        {
+            try
+            {
+                IElement selectedElement = row.QuerySelector(selector);
+                if (selectedElement == null)
+                {
+                    throw new IOException($"Unable to find '{selector}'.");
+                }
+
+                return parseFunction(selectedElement);
+            }
+            catch (Exception ex)
+            {
+                throw new IOException($"Error parsing for property '{propertyName}': {ex.Message}");
+            }
+        }
+
+        private string ParseStringValueFromRow(IElement row, string propertyName, string selector)
+        {
+            try
+            {
+                IElement selectedElement = row.QuerySelector(selector);
+                if (selectedElement == null)
+                {
+                    throw new IOException($"Unable to find '{selector}'.");
+                }
+
+                return selectedElement.Text();
+            }
+            catch (Exception ex)
+            {
+                throw new IOException($"Error parsing for property '{propertyName}': {ex.Message}");
+            }
+        }
+
+        private int ParseIntValueFromRow(IElement row, string propertyName, string selector)
+        {
+            try
+            {
+                string text = this.ParseStringValueFromRow(row, propertyName, selector);
+                int value;
+                if (!int.TryParse(text, out value))
+                {
+                    throw new IOException($"Could not convert '{text}' to int.");
+                }
+
+                return value;
+            }
+            catch (Exception ex)
+            {
+                throw new IOException($"Error parsing for property '{propertyName}': {ex.Message}");
+            }
+        }
+
+        private long ParseLongValueFromRow(IElement row, string propertyName, string selector)
+        {
+            try
+            {
+                string text = this.ParseStringValueFromRow(row, propertyName, selector);
+                long value;
+                if (!long.TryParse(text, out value))
+                {
+                    throw new IOException($"Could not convert '{text}' to long.");
+                }
+
+                return value;
+            }
+            catch (Exception ex)
+            {
+                throw new IOException($"Error parsing for property '{propertyName}': {ex.Message}");
+            }
         }
 
         private void LogIndexerError(string message)
