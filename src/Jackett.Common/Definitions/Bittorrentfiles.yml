@@ -150,7 +150,6 @@
 
     rows:
       selector: table.tableinborder > tbody > tr:has(a[href^="details.php"])
-
     fields:
       title:
         selector: a[href^="details.php"]
@@ -226,4 +225,3 @@
         case:
           img[alt="2xU"]: 2
           "*": 1
-# engine n/a

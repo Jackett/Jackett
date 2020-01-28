@@ -51,7 +51,6 @@
 
     rows:
       selector: table.browse-list > tbody > tr
-
     fields:
       category:
         selector: td:nth-child(1) a
@@ -155,4 +154,3 @@
         text: 0
       uploadvolumefactor:
         text: 1
-# engine n/a
