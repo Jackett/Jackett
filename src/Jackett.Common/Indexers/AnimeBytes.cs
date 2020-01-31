@@ -208,9 +208,9 @@ namespace Jackett.Common.Indexers
                             mainTitle = SeriesName;
 
                         synonyms.Add(mainTitle);
-                        foreach (string synonym in group["Synonymns"])
-                        {
-                            synonyms.Add(synonym);
+                        if (AddSynonyms){
+                            foreach (string synonym in group["Synonymns"])
+                                synonyms.Add(synonym);
                         }
 
                         List<int> Category = null;
