@@ -333,6 +333,7 @@ function copyToClipboard(text) {
     var succeed;
     try {
         succeed = document.execCommand("copy");
+        doNotify("Copied to clipboard!", "success", "glyphicon glyphicon-ok");
     } catch (e) {
         succeed = false;
     }
