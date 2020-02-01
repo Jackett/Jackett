@@ -4,6 +4,7 @@ using System.Linq;
 using AutoMapper;
 using Jackett.Common.Indexers;
 using Jackett.Common.Models;
+using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
 
 namespace Jackett.Common.Services
@@ -14,9 +15,18 @@ namespace Jackett.Common.Services
         private readonly List<TrackerCache> cache = new List<TrackerCache>();
         private readonly int MAX_RESULTS_PER_TRACKER = 1000;
         private readonly TimeSpan AGE_LIMIT = new TimeSpan(0, 1, 0, 0);
+        private ServerConfig serverConfig;
+
+        public CacheService(ServerConfig serverConfig)
+        {
+            this.serverConfig = serverConfig;
+        }
 
         public void CacheRssResults(IIndexer indexer, IEnumerable<ReleaseInfo> releases)
         {
+            if (serverConfig.CacheDisabled)
+                return;
+
             lock (cache)
             {
                 var trackerCache = cache.FirstOrDefault(c => c.TrackerId == indexer.ID);
@@ -55,6 +65,9 @@ namespace Jackett.Common.Services
 
         public int GetNewItemCount(IIndexer indexer, IEnumerable<ReleaseInfo> releases)
         {
+            if (serverConfig.CacheDisabled)
+                return 0;
+
             lock (cache)
             {
                 var newItemCount = 0;
@@ -80,6 +93,9 @@ namespace Jackett.Common.Services
 
         public List<TrackerCacheResult> GetCachedResults()
         {
+            if (serverConfig.CacheDisabled)
+                return new List<TrackerCacheResult>();
+
             lock (cache)
             {
                 var results = new List<TrackerCacheResult>();

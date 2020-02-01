@@ -78,6 +78,7 @@ namespace Jackett.Server.Controllers
             var saveDir = config.blackholedir;
             var updateDisabled = config.updatedisabled;
             var preRelease = config.prerelease;
+            var cacheDisabled = config.cachedisabled;
             var logging = config.logging;
             var basePathOverride = config.basepathoverride;
             if (basePathOverride != null)
@@ -97,6 +98,7 @@ namespace Jackett.Server.Controllers
 
             serverConfig.UpdateDisabled = updateDisabled;
             serverConfig.UpdatePrerelease = preRelease;
+            serverConfig.CacheDisabled = cacheDisabled;
             serverConfig.BasePathOverride = basePathOverride;
             serverConfig.RuntimeSettings.BasePath = serverService.BasePath();
             configService.SaveConfig(serverConfig);

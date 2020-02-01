@@ -98,6 +98,12 @@ function loadJackettSettings() {
         $("#jackett-allowext").attr('checked', data.external);
         $("#jackett-allowupdate").attr('checked', data.updatedisabled);
         $("#jackett-prerelease").attr('checked', data.prerelease);
+
+        $("#jackett-cachedisabled").attr('checked', data.cachedisabled);
+        if (data.cachedisabled) {
+            $("#jackett-show-releases").attr("disabled", true);
+        }
+
         $("#jackett-logging").attr('checked', data.logging);
         $("#jackett-omdbkey").val(data.omdbkey);
         $("#jackett-omdburl").val(data.omdburl);
@@ -1211,6 +1217,7 @@ function bindUIButtons() {
         var jackett_external = $("#jackett-allowext").is(':checked');
         var jackett_update = $("#jackett-allowupdate").is(':checked');
         var jackett_prerelease = $("#jackett-prerelease").is(':checked');
+        var jackett_cachedisabled = $("#jackett-cachedisabled").is(':checked');
         var jackett_logging = $("#jackett-logging").is(':checked');
         var jackett_omdb_key = $("#jackett-omdbkey").val();
         var jackett_omdb_url = $("#jackett-omdburl").val();
@@ -1226,6 +1233,7 @@ function bindUIButtons() {
             external: jackett_external,
             updatedisabled: jackett_update,
             prerelease: jackett_prerelease,
+            cachedisabled: jackett_cachedisabled,
             blackholedir: $("#jackett-savedir").val(),
             logging: jackett_logging,
             basepathoverride: jackett_basepathoverride,

@@ -25,6 +25,7 @@ namespace Jackett.Common.Models.Config
         public string BlackholeDir { get; set; }
         public bool UpdateDisabled { get; set; }
         public bool UpdatePrerelease { get; set; }
+        public bool CacheDisabled { get; set; }
         public string BasePathOverride { get; set; }
         public string OmdbApiKey { get; set; }
         public string OmdbApiUrl { get; set; }

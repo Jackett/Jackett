@@ -22,6 +22,8 @@ namespace Jackett.Common.Models.DTO
         [DataMember]
         public bool prerelease { get; set; }
         [DataMember]
+        public bool cachedisabled { get; set; }
+        [DataMember]
         public string password { get; set; }
         [DataMember]
         public bool logging { get; set; }
@@ -58,6 +60,7 @@ namespace Jackett.Common.Models.DTO
             blackholedir = config.BlackholeDir;
             updatedisabled = config.UpdateDisabled;
             prerelease = config.UpdatePrerelease;
+            cachedisabled = config.CacheDisabled;
             password = string.IsNullOrEmpty(config.AdminPassword) ? string.Empty : config.AdminPassword.Substring(0, 10);
             logging = config.RuntimeSettings.TracingEnabled;
             basepathoverride = config.BasePathOverride;
