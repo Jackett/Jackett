@@ -24,15 +24,15 @@
       - {id: 51, cat: Console/Xbox 360, desc: "Žaidimai / XBOX-360"}
       - {id: 73, cat: Console, desc: "Žaidimai / Priedai"}
       - {id: 36, cat: Console/Other, desc: "Žaidimai / Kita"}
-      - {id: 80, cat: Movies, desc: "HD / Animacija LT"}
-      - {id: 52, cat: Movies, desc: "HD / Animacija"}
+      - {id: 80, cat: Movies/HD, desc: "HD / Animacija LT"}
+      - {id: 52, cat: Movies/HD, desc: "HD / Animacija"}
       - {id: 53, cat: TV/Documentary, desc: "HD / Dokumentika"}
       - {id: 54, cat: Movies/HD, desc: "HD / Filmai"}
       - {id: 55, cat: Audio/Video, desc: "HD / Music videos"}
       - {id: 56, cat: TV/HD, desc: "HD / Serialai"}
       - {id: 72, cat: Movies/3D, desc: "HD / 3D"}
       - {id: 74, cat: TV/HD, desc: "HD / Filmai LT"}
-      - {id: 79, cat: TV, desc: "HD / Serialai LT"}
+      - {id: 79, cat: TV/HD, desc: "HD / Serialai LT"}
       - {id: 78, cat: TV/HD, desc: "HD / Filmai RU"}
       - {id: 37, cat: TV/HD, desc: "HD / Kita"}
       - {id: 57, cat: Audio/MP3, desc: "Muzika / VA"}
