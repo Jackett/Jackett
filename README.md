@@ -60,6 +60,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Idope
  * Il Corsaro Nero <!-- maintained by bonny1992 -->
  * Il Corsaro Blu
+ * Internet Archive (archive.org)
  * Isohunt2
  * iTorrent
  * KickAssTorrent (KATcr)
