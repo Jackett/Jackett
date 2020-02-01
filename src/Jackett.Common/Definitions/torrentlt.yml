@@ -24,13 +24,16 @@
       - {id: 51, cat: Console/Xbox 360, desc: "Žaidimai / XBOX-360"}
       - {id: 73, cat: Console, desc: "Žaidimai / Priedai"}
       - {id: 36, cat: Console/Other, desc: "Žaidimai / Kita"}
-      - {id: 52, cat: Movies, desc: "HD / Animacija"}
+      - {id: 80, cat: Movies/HD, desc: "HD / Animacija LT"}
+      - {id: 52, cat: Movies/HD, desc: "HD / Animacija"}
       - {id: 53, cat: TV/Documentary, desc: "HD / Dokumentika"}
       - {id: 54, cat: Movies/HD, desc: "HD / Filmai"}
       - {id: 55, cat: Audio/Video, desc: "HD / Music videos"}
       - {id: 56, cat: TV/HD, desc: "HD / Serialai"}
       - {id: 72, cat: Movies/3D, desc: "HD / 3D"}
-      - {id: 74, cat: TV/HD, desc: "HD / LT"}
+      - {id: 74, cat: TV/HD, desc: "HD / Filmai LT"}
+      - {id: 79, cat: TV/HD, desc: "HD / Serialai LT"}
+      - {id: 78, cat: TV/HD, desc: "HD / Filmai RU"}
       - {id: 37, cat: TV/HD, desc: "HD / Kita"}
       - {id: 57, cat: Audio/MP3, desc: "Muzika / VA"}
       - {id: 26, cat: Audio, desc: "Muzika / DJ Sets"}
@@ -44,8 +47,8 @@
       - {id: 44, cat: PC/Mac, desc: "Soft / MAC"}
       - {id: 61, cat: PC, desc: "Soft / PDA"}
       - {id: 75, cat: PC/Phone-Other, desc: "Soft / Kita"}
-      - {id: 62, cat: TV/Sport, desc: "Sport / Basketball"}
       - {id: 40, cat: TV/Sport, desc: "Sport / Kita"}
+      - {id: 62, cat: TV/Sport, desc: "Sport / Basketball"}
       - {id: 63, cat: TV/Sport, desc: "Sport / Cars"}
       - {id: 65, cat: TV/Sport, desc: "Sport / Fights"}
       - {id: 66, cat: TV/Sport, desc: "Sport / Football"}
@@ -58,6 +61,7 @@
       - {id: 30, cat: Other, desc: "Kita"}
       - {id: 41, cat: Books, desc: "E-Books"}
       - {id: 76, cat: TV, desc: "Animacija / LT"}
+      - {id: 77, cat: Other, desc: "Educational"}
 
     modes:
       search: [q]
