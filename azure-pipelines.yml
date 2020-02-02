@@ -243,7 +243,7 @@ stages:
           pathtoPublish: '$(Build.ArtifactStagingDirectory)'
 
       - task: DotNetCoreCLI@2
-        displayName: Test Jackett (Windows only)
+        displayName: Unit Tests (Windows only)
         condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
         inputs:
           command: test
@@ -251,7 +251,7 @@ stages:
           arguments: '--configuration $(buildConfiguration) --framework $(framework)'
 
       - task: DotNetCoreCLI@2
-        displayName: Test Jackett (Mono, Linux and macOS)
+        displayName: Unit Tests (Mono, Linux and macOS)
         condition: and(succeeded(), not(startsWith(variables['runtime'], 'win')))
         inputs:
           command: test
