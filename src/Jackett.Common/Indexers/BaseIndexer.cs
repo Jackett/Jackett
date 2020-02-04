@@ -346,6 +346,11 @@ namespace Jackett.Common.Indexers
                     return r;
                 });
 
+                // Force garbage collector to free some RAM.
+                // This can reduce the performance, but it limits the memory usage when you perform the search in all
+                // configured trackers. If you are searching in only one indexer, the impact is not noticeable.
+                GC.Collect();
+
                 return new IndexerResult(this, results);
             }
             catch (Exception ex)
