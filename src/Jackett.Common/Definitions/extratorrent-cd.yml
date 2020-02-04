@@ -939,7 +939,7 @@
 
   search:
     paths:
-      - path: "{{if .Keywords}}search/?search={{ .Keywords}}{{else}}{{end}}"
+      - path: "search/?search={{ .Keywords }}"
 
     rows:
       selector: tr[class^="tl"]
@@ -993,3 +993,4 @@
         text: 0
       uploadvolumefactor:
         text: 1
+# engine n/a
