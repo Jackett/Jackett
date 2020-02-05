@@ -144,6 +144,9 @@
         selector: td:nth-child(3)
       size:
         selector: td:nth-child(4)
+        filters:
+          - name: replace
+            args: ["N/A", "0 B"]
       seeders:
         selector: td:nth-child(6)
       leechers:
