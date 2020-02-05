@@ -132,6 +132,13 @@
           - name: re_replace
             args: ["( torrent)$", ""]
       category:
+        optional: true
+        selector: td:nth-child(1):contains("-")
+        filters:
+          - name: replace #7110 provide default for missing category
+            args: ["-", "78"]
+      category:
+        optional: true
         selector: a[href^="/torrents.php?cat="]
         attribute: href
         filters:
