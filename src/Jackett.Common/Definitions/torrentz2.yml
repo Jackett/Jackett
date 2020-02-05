@@ -47,7 +47,7 @@
       "adult tattoo": XXX
       "other": Other
       "images": Other
-      
+
 
     modes:
       search: [q]
@@ -70,15 +70,16 @@
     - name: sort
       type: select
       label: Sort requested from site
-      default: "A"
+      default: "_"
       options:
+        "_": "peers"
+        "N": "rating"
         "A": "created"
-        "P": "seeders"
         "S": "size"
 
   search:
     paths:
-      - path: "{{if .Config.filter-verified }}verified{{else}}search{{end}}{{ .Config.sort }}"
+      - path: "{{if .Config.filter-verified }}verified{{else}}search{{end}}{{ re_replace .Config.sort \"_\" \"\" }}"
     inputs:
        f: "{{ if .Keywords }}title: {{ .Keywords }}{{else}}{{end}}"
        safe: "{{ if .Config.filter-safe }}1{{else}}0{{end}}"
