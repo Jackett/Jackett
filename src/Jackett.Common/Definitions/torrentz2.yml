@@ -70,7 +70,7 @@
     - name: sort
       type: select
       label: Sort requested from site
-      default: "_"
+      default: "A"
       options:
         "_": "peers"
         "N": "rating"
