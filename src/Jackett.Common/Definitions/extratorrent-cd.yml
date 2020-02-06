@@ -939,16 +939,18 @@
 
   search:
     paths:
-      - path: "{{if .Keywords}}search/?search={{ .Keywords}}{{else}}{{end}}"
+      - path: "search/?search={{ .Keywords }}"
 
     rows:
       selector: tr[class^="tl"]
 
     fields:
       category:
-        selector:  a[href*="/category/"]
+        selector:  a[href*="/category/"], a[href="#"]
         attribute: href
         filters:
+          - name: replace #7108 provide default for missing category
+            args: ["#", "/category/9/"]
           - name: regexp
             args: "/category/(\\d+)/"
       title:
@@ -963,14 +965,25 @@
         selector: a[href^="magnet:?xt="]
         attribute: href
       date:
-        selector: td:nth-last-of-type(5):contains(":")
+        selector: td:nth-last-of-type(5):contains("Y-day-"), td:nth-last-of-type(5):contains("Today-")
+        optional: true
+        filters:
+          - name: replace
+            args: ["\xA0", " "]
+          - name: re_replace
+            args: ["(Today-.*)", "Today"]
+          - name: re_replace
+            args: ["(Y-day-.*)", "Yesterday"]
+          - name: fuzzytime
+      date:
+        selector: td:nth-last-of-type(5):contains(":"):not(:contains("Y-day-")):not(:contains("Today-"))
         optional: true
         filters:
           - name: replace
             args: ["\xA0", " "]
           - name: fuzzytime
       date:
-        selector: td:nth-last-of-type(5):not(:contains(":"))
+        selector: td:nth-last-of-type(5):not(:contains(":")):not(:contains("Y-day-")):not(:contains("Today-"))
         optional: true
         filters:
           - name: replace
@@ -993,3 +1006,4 @@
         text: 0
       uploadvolumefactor:
         text: 1
+# engine n/a

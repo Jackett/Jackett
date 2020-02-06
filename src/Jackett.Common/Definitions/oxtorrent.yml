@@ -46,7 +46,7 @@
       - path: "{{ if .Keywords }}recherche/{{ .Keywords }}{{else}}{{end}}"
 
     rows:
-      selector: div.listing-torrent > table > tbody > tr:has(a)
+      selector: div.listing-torrent > table > tbody > tr:has(a[href^="torrent/"]), div.listing-torrent > table > tbody > tr:has(a[href^="/torrent/"])
 
     fields:
       category:

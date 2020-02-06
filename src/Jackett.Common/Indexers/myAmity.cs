@@ -47,6 +47,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(52, TorznabCatType.Movies3D); // Filme - 3D
             AddCategoryMapping(51, TorznabCatType.MoviesBluRay); // Filme - BluRay Complete
             AddCategoryMapping(1,  TorznabCatType.MoviesDVD); // Filme - DVD
+            AddCategoryMapping(56, TorznabCatType.MoviesUHD); // Filme - UHD/4K
             AddCategoryMapping(54, TorznabCatType.MoviesHD); // Filme - HD/1080p
             AddCategoryMapping(3,  TorznabCatType.MoviesHD); // Filme - HD/720p
             AddCategoryMapping(48, TorznabCatType.XXX); // Filme - Heimatfilme.XXX
@@ -57,8 +58,10 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(53, TorznabCatType.Other); // International - Complete
             AddCategoryMapping(36, TorznabCatType.Books); // Sonstige - E-Books
             AddCategoryMapping(38, TorznabCatType.Other); // Sonstige - Handy
+            AddCategoryMapping(59, TorznabCatType.TVAnime); // Sonstige - Anime
             AddCategoryMapping(7,  TorznabCatType.TVDocumentary); // TV/HDTV - Dokus
             AddCategoryMapping(8,  TorznabCatType.TV); // TV/HDTV - Serien
+            AddCategoryMapping(57, TorznabCatType.TVSport); // Sport - Allgemein
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -135,7 +138,8 @@ namespace Jackett.Common.Indexers
                     var qRow = row.Cq();
 
                     var qDetailsLink = qRow.Find("a[href^=torrents-details.php?id=]").First();
-                    release.Title = qDetailsLink.Attr("title");
+                    var qDetailsTitle = qRow.Find("td:has(a[href^=\"torrents-details.php?id=\"]) b"); // #7100
+                    release.Title = qDetailsTitle.Text();
 
                     if (!query.MatchQueryStringAND(release.Title))
                         continue;

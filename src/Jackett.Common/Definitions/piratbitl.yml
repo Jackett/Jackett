@@ -687,7 +687,7 @@
           - name: querystring
             args: f
       title:
-        selector: td a.genmed b
+        selector: td a.genmed
       details:
         selector: td a.genmed
         attribute: href
