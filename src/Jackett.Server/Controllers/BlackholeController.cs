@@ -53,7 +53,7 @@ namespace Jackett.Server.Controllers
                 var fileExtension = ".torrent";
 
                 byte[] downloadBytes;
-                if (remoteFile.Scheme == "magnet")
+                if (remoteFile.OriginalString.StartsWith("magnet"))
                     downloadBytes = Encoding.UTF8.GetBytes(remoteFile.OriginalString);
                 else
                     downloadBytes = await indexer.Download(remoteFile);

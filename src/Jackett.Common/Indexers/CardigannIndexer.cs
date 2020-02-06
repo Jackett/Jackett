@@ -835,7 +835,15 @@ namespace Jackett.Common.Indexers
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
-            return await GetConfigurationForSetup(false);
+            try
+            {
+                return await GetConfigurationForSetup(false);
+            }
+            catch (Exception e)
+            {
+                logger.Error("Exception in GetConfigurationForSetup (" + ID + "): " + e);
+                return configData;
+            }
         }
 
         public async Task<ConfigurationData> GetConfigurationForSetup(bool automaticlogin)

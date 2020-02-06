@@ -1,28 +1,39 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
+
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
-using Jackett.Common.Utils.Clients;
-using Jackett.Common.Helpers;
+using Jackett.Common.Utils;
 using Newtonsoft.Json.Linq;
 using NLog;
+using WebClient = Jackett.Common.Utils.Clients.WebClient;
+using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
 {
-    class MejorTorrent : BaseWebIndexer
+    // ReSharper disable once UnusedType.Global
+    public class MejorTorrent : BaseWebIndexer
     {
-        private static Uri WebUri = new Uri("http://www.mejortorrentt.org/");
-        private static Uri DownloadUri = new Uri(WebUri, "secciones.php?sec=descargas&ap=contar_varios");
-        private static Uri SearchUriBase = new Uri(WebUri, "secciones.php");
-        private static Uri NewTorrentsUri = new Uri(WebUri, "secciones.php?sec=ultimos_torrents");
-        private static Encoding MEEncoding = Encoding.GetEncoding("utf-8");
+        private static class MejorTorrentCatType
+        {
+            public static string Pelicula => "Película";
+            public static string Serie => "Serie";
+            public static string SerieHd => "SerieHD"; // this category is created, doesn't exist in the site
+            public static string Musica => "Música";
+            public static string Otro => "Otro";
+        }
+
+        private const string NewTorrentsUrl = "secciones.php?sec=ultimos_torrents";
+        private const string SearchUrl = "secciones.php";
 
         public override string[] LegacySiteLinks { get; protected set; } = new string[] {
             "http://www.mejortorrent.org/",
@@ -31,994 +42,535 @@ namespace Jackett.Common.Indexers
             "https://www.mejortorrentt.org/",
         };
 
-        public MejorTorrent(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public MejorTorrent(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
             : base(name: "MejorTorrent",
                 description: "MejorTorrent - Hay veces que un torrent viene mejor! :)",
-                link: WebUri.AbsoluteUri,
-                caps: new TorznabCapabilities(TorznabCatType.TV,
-                                              TorznabCatType.TVSD,
-                                              TorznabCatType.TVHD,
-                                              TorznabCatType.Movies),
+                link: "http://www.mejortorrentt.org/",
+                caps: new TorznabCapabilities(),
                 configService: configService,
-                client: wc,
+                client: w,
                 logger: l,
                 p: ps,
                 configData: new ConfigurationData())
         {
-            Encoding = MEEncoding;
+            Encoding = Encoding.UTF8;
             Language = "es-es";
             Type = "public";
+
+            var matchWords = new BoolItem() { Name = "Match words in title", Value = true };
+            configData.AddDynamic("MatchWords", matchWords);
+
+            AddCategoryMapping(MejorTorrentCatType.Pelicula, TorznabCatType.Movies);
+            AddCategoryMapping(MejorTorrentCatType.Serie, TorznabCatType.TVSD);
+            AddCategoryMapping(MejorTorrentCatType.SerieHd, TorznabCatType.TVHD);
+            AddCategoryMapping(MejorTorrentCatType.Musica, TorznabCatType.Audio);
+            AddCategoryMapping(MejorTorrentCatType.Otro, TorznabCatType.Other);
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             configData.LoadValuesFromJson(configJson);
-
-            WebUri = new Uri(configData.SiteLink.Value);
-            DownloadUri = new Uri(WebUri, "secciones.php?sec=descargas&ap=contar_varios");
-            SearchUriBase = new Uri(WebUri, "secciones.php");
-            NewTorrentsUri = new Uri(WebUri, "secciones.php?sec=ultimos_torrents");
-
             var releases = await PerformQuery(new TorznabQuery());
 
-            await ConfigureIfOK(string.Empty, releases.Count() > 0, () =>
-            {
-                throw new Exception("Could not find releases from this URL");
-            });
+            await ConfigureIfOK(string.Empty, releases.Any(), () =>
+                throw new Exception("Could not find releases from this URL"));
 
             return IndexerConfigurationStatus.Completed;
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            return await PerformQuery(query, 0);
+            var matchWords = ((BoolItem)configData.GetDynamic("MatchWords")).Value;
+            matchWords = query.SearchTerm != "" && matchWords;
+
+            // we remove parts from the original query
+            query = ParseQuery(query);
+
+            var releases = string.IsNullOrEmpty(query.SearchTerm) ? 
+                await PerformQueryNewest(query) :
+                await PerformQuerySearch(query, matchWords);
+
+            return releases;
         }
 
-        private async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query, int attempts)
+        public override async Task<byte[]> Download(Uri link)
         {
-            query = query.Clone();
+            var downloadUrl = link.ToString();
+            // Eg http://www.mejortorrentt.org/peli-descargar-torrent-11995-Harry-Potter-y-la-piedra-filosofal.html
+            var result = await RequestStringWithCookies(downloadUrl);
+            if (result.Status != HttpStatusCode.OK)
+                throw new ExceptionWithConfigData(result.Content, configData);
+            var searchResultParser = new HtmlParser();
+            var html = searchResultParser.ParseDocument(result.Content);
+            downloadUrl = SiteLink + html.QuerySelector("a[href*=\"sec=descargas\"]").GetAttribute("href");
 
-            var originalSearchTerm = query.SearchTerm;
-            if (query.SearchTerm == null)
-            {
-                query.SearchTerm = "";
-            }
-            query.SearchTerm = query.SearchTerm.Replace("'", "");
+            // Eg http://www.mejortorrentt.org/secciones.php?sec=descargas&ap=contar&tabla=peliculas&id=11995&link_bajar=1
+            result = await RequestStringWithCookies(downloadUrl);
+            if (result.Status != HttpStatusCode.OK)
+                throw new ExceptionWithConfigData(result.Content, configData);
+            searchResultParser = new HtmlParser();
+            html = searchResultParser.ParseDocument(result.Content);
+            var onclick = html.QuerySelector("a[onclick*=\"/uploads/\"]").GetAttribute("onclick");
+            var table = onclick.Split(new[] {"table: '"}, StringSplitOptions.None)[1].Split(new [] {"'"}, StringSplitOptions.None)[0];
+            var name = onclick.Split(new[] {"name: '"}, StringSplitOptions.None)[1].Split(new [] {"'"}, StringSplitOptions.None)[0];
+            downloadUrl = SiteLink + "uploads/torrents/" + table + "/" + name;
 
-            var requester = new MejorTorrentRequester(this);
-            var tvShowScraper = new TvShowScraper();
-            var seasonScraper = new SeasonScraper();
-            var downloadScraper = new DownloadScraper();
-            var rssScraper = new RssScraper();
-            var downloadGenerator = new DownloadGenerator(requester, downloadScraper);
-            var tvShowPerformer = new TvShowPerformer(requester, tvShowScraper, seasonScraper, downloadGenerator);
-            var rssPerformer = new RssPerformer(requester, rssScraper, seasonScraper, downloadGenerator);
-            var movieSearchScraper = new MovieSearchScraper();
-            var movieInfoScraper = new MovieInfoScraper();
-            var movieDownloadScraper = new MovieDownloadScraper();
-            var moviePerformer = new MoviePerformer(requester, movieSearchScraper, movieInfoScraper, movieDownloadScraper);
+            // Eg https://www.mejortorrentt.org/uploads/torrents/peliculas/Harry_Potter_1_y_la_Piedra_Filosofal_MicroHD_1080p.torrent
+            var content = await base.Download(new Uri(downloadUrl));
+            return content;
+        }
 
+        private async Task<List<ReleaseInfo>> PerformQueryNewest(TorznabQuery query)
+        {
             var releases = new List<ReleaseInfo>();
-
-            if (string.IsNullOrEmpty(query.SanitizedSearchTerm))
+            var url = SiteLink + NewTorrentsUrl;
+            var result = await RequestStringWithCookies(url);
+            if (result.Status != HttpStatusCode.OK)
+                throw new ExceptionWithConfigData(result.Content, configData);
+            try
             {
-                releases = (await rssPerformer.PerformQuery(query)).ToList();
-                var movie = releases.First();
-                movie.Category.Add(TorznabCatType.Movies.ID);
-                releases.ToList().Add(movie);
-                if (releases.Count() == 0)
+                var searchResultParser = new HtmlParser();
+                var doc = searchResultParser.ParseDocument(result.Content);
+
+                var container = doc.QuerySelector("#main_table_center_center1 table div");
+                var parsedCommentsLink = new List<string>();
+                string rowTitle = null;
+                string rowCommentsLink = null;
+                string rowPublishDate = null;
+                string rowQuality = null;
+
+                foreach (var row in container.Children)
                 {
-                    releases = (await AliveCheck(tvShowPerformer)).ToList();
+                    if (row.TagName.Equals("A"))
+                    {
+                        rowTitle = row.TextContent;
+                        rowCommentsLink = SiteLink + row.GetAttribute("href");
+                    }
+                    else if (rowPublishDate == null && row.TagName.Equals("SPAN"))
+                    {
+                        rowPublishDate = row.TextContent;
+                    }
+                    else if (rowPublishDate != null && row.TagName.Equals("SPAN"))
+                    {
+                        rowQuality = row.TextContent;
+                    }
+                    else if (row.TagName.Equals("BR"))
+                    {
+                        // we add parsed items to parsedCommentsLink to avoid duplicates in newest torrents
+                        // list results
+                        if(!parsedCommentsLink.Contains(rowCommentsLink))
+                        {
+                            await ParseRelease(releases, rowTitle, rowCommentsLink, null, 
+                                rowPublishDate, rowQuality, query, false);
+                            parsedCommentsLink.Add(rowCommentsLink);
+                        }
+                        // clean the current row
+                        rowTitle = null;
+                        rowCommentsLink = null;
+                        rowPublishDate = null;
+                        rowQuality = null;
+                    }
+
                 }
-                return releases;
+            }
+            catch (Exception ex)
+            {
+                OnParseError(result.Content, ex);
             }
 
-            if (query.Categories.Contains(TorznabCatType.Movies.ID) || query.Categories.Count() == 0)
-            {
-                releases.AddRange(await moviePerformer.PerformQuery(query));
-            }
-            if (query.Categories.Contains(TorznabCatType.TV.ID) || 
-                query.Categories.Contains(TorznabCatType.TVSD.ID) ||
-                query.Categories.Contains(TorznabCatType.TVHD.ID) ||
-                query.Categories.Count() == 0)
-            {
-                releases.AddRange(await tvShowPerformer.PerformQuery(query));
-            }
-
-            query.SearchTerm = originalSearchTerm;
             return releases;
         }
 
-        private async Task<IEnumerable<ReleaseInfo>> AliveCheck(TvShowPerformer tvShowPerformer)
+        private async Task<List<ReleaseInfo>> PerformQuerySearch(TorznabQuery query, bool matchWords)
         {
-            IEnumerable<ReleaseInfo> releases = new List<ReleaseInfo>();
-            var tests = new Queue<string>(new[] { "stranger things", "westworld", "friends" });
-            while (releases.Count() == 0 && tests.Count > 0)
+            var releases = new List<ReleaseInfo>();
+            // search only the longest word, we filter the results later
+            var searchTerm = GetLongestWord(query.SearchTerm);
+            var qc = new NameValueCollection {{"sec", "buscador"}, {"valor", searchTerm}};
+            var url = SiteLink + SearchUrl + "?" + qc.GetQueryString();
+            var result = await RequestStringWithCookies(url);
+            if (result.Status != HttpStatusCode.OK)
+                throw new ExceptionWithConfigData(result.Content, configData);
+
+            try
             {
-                var query = new TorznabQuery();
-                query.SearchTerm = tests.Dequeue();
-                releases = await tvShowPerformer.PerformQuery(query);
+                var searchResultParser = new HtmlParser();
+                var doc = searchResultParser.ParseDocument(result.Content);
+
+                var table = doc.QuerySelector("#main_table_center_center2 table table");
+                // check the search term is valid
+                if (table != null && table.QuerySelector("tr table") != null)
+                {
+                    // check there are results
+                    table = table.QuerySelector("tr table");
+                    var rows = table.QuerySelectorAll("tr");
+                    if (rows != null && rows.Length > 0 && rows[0].QuerySelectorAll("td").Length == 2)
+                    {
+                        foreach (var row in rows)
+                        {
+                            var link = row.QuerySelector("td a");
+                            var rowTitle = link.TextContent;
+                            var rowCommentsLink = SiteLink + link.GetAttribute("href").TrimStart('/');
+                            var rowMejortorrentCat = row.QuerySelectorAll("td")[1].TextContent;
+                            string rowQuality = null;
+                            if (row.QuerySelector("td span") != null)
+                                rowQuality = row.QuerySelector("td span").TextContent;
+
+                            await ParseRelease(releases, rowTitle, rowCommentsLink, rowMejortorrentCat, 
+                                null, rowQuality, query, matchWords);
+                        }
+                    }
+                }
             }
+            catch (Exception ex)
+            {
+                OnParseError(result.Content, ex);
+            }
+
             return releases;
         }
 
-        public static Uri CreateSearchUri(string search)
+        private async Task ParseRelease(ICollection<ReleaseInfo> releases, string title, string commentsLink,
+            string mejortorrentCat, string publishStr, string quality, TorznabQuery query, bool matchWords)
         {
-            var finalUri = SearchUriBase.AbsoluteUri;
-            finalUri += "?sec=buscador&valor=" + WebUtilityHelpers.UrlEncode(search, MEEncoding);
-            return new Uri(finalUri);
-        }
+            // Remove trailing dot. Eg Harry Potter Y La Orden Del Fénix.
+            title = title.Trim();
+            if (title.EndsWith("."))
+                title = title.Remove(title.Length - 1).Trim();
 
-        interface IScraper<T>
-        {
-            T Extract(IHtmlDocument html);
-        }
+            var cat = GetMejortorrentCategory(mejortorrentCat, commentsLink, title);
+            var categories = MapTrackerCatToNewznab(cat);
+            var publishDate = TryToParseDate(publishStr, DateTime.Now);
 
-        class RssScraper : IScraper<IEnumerable<KeyValuePair<MTReleaseInfo, Uri>>>
-        {
-            private readonly string LinkQuerySelector = "a[href*=series_extend]";
+            // return results only for requested categories
+            if (query.Categories.Any() && !query.Categories.Contains(categories.First()))
+                return;
 
-            public IEnumerable<KeyValuePair<MTReleaseInfo, Uri>> Extract(IHtmlDocument html)
+            // match the words in the query with the titles
+            if (matchWords && !CheckTitleMatchWords(query.SearchTerm, title))
+                return;
+
+            // parsing is different for each category
+            if (cat == MejorTorrentCatType.Serie || cat == MejorTorrentCatType.SerieHd)
             {
-                var episodes = GetNewEpisodesScratch(html);
-                var links = GetLinks(html);
-                var results = new List<KeyValuePair<MTReleaseInfo, Uri>>();
-                for (var i = 0; i < episodes.Count(); i++)
+                await ParseSeriesRelease(releases, query, title, commentsLink, cat, publishDate);
+            } else if (query.Episode == null) // if it's scene series, we don't return other categories
+            {
+                if (cat == MejorTorrentCatType.Pelicula)
+                    ParseMovieRelease(releases, query, title, commentsLink, cat, publishDate, quality);
+                else
                 {
-                    results.Add(new KeyValuePair<MTReleaseInfo, Uri>(episodes.ElementAt(i), links.ElementAt(i)));
+                    const long size = 104857600L; // 100 MB
+                    GenerateRelease(releases, title, commentsLink, commentsLink, cat, publishDate, size);
                 }
-                return results;
+            }
+        }
+
+        private async Task ParseSeriesRelease(ICollection<ReleaseInfo> releases, TorznabQuery query, string title,
+            string commentsLink, string cat, DateTime publishDate)
+        {
+            var result = await RequestStringWithCookies(commentsLink);
+            if (result.Status != HttpStatusCode.OK)
+                throw new ExceptionWithConfigData(result.Content, configData);
+
+            var searchResultParser = new HtmlParser();
+            var doc = searchResultParser.ParseDocument(result.Content);
+
+            var rows = doc.QuerySelectorAll("#main_table_center_center1 table table table tr");
+            foreach (var row in rows)
+            {
+                var anchor = row.QuerySelector("a");
+                if (anchor == null)
+                    continue;
+
+                var episodeTitle = anchor.TextContent.Trim();
+                var downloadLink = SiteLink + anchor.GetAttribute("href").TrimStart('/');
+                var episodePublishStr = row.QuerySelector("div").TextContent.Trim().Replace("Fecha: ", "");
+                var episodePublish = TryToParseDate(episodePublishStr, publishDate);
+
+                // Convert the title to Scene format
+                episodeTitle = ParseMejorTorrentSeriesTitle(title, episodeTitle, query);
+
+                // if the original query was in scene format, we filter the results to match episode
+                // query.Episode != null means scene title
+                if (query.Episode != null && !episodeTitle.Contains(query.GetEpisodeSearchString()))
+                    continue;
+
+                // guess size
+                var size = 524288000L; // 500 MB
+                if (episodeTitle.ToLower().Contains("720p"))
+                    size = 1288490188L; // 1.2 GB
+
+                GenerateRelease(releases, episodeTitle, commentsLink, downloadLink, cat, episodePublish, size);
             }
 
-            private List<MTReleaseInfo> GetNewEpisodesScratch(IHtmlDocument html)
-            {
-                var tvShowsElements = html.QuerySelectorAll(LinkQuerySelector);
-                var seasonLinks = tvShowsElements.Select(e => e.Attributes["href"].Value);
-                var dates = GetDates(html);
-                var titles = GetTitles(html);
-                var qualities = GetQualities(html);
-                var seasonsFirstEpisodesAndLast = GetSeasonsFirstEpisodesAndLast(html);
+        }
 
-                var episodes = new List<MTReleaseInfo>();
-                for(var i = 0; i < tvShowsElements.Count(); i++)
+        private void ParseMovieRelease(ICollection<ReleaseInfo> releases, TorznabQuery query, string title,
+            string commentsLink, string cat, DateTime publishDate, string quality)
+        {
+            title = title.Trim();
+
+            // parse tags in title, we need to put the year after the real title (before the tags)
+            // Harry Potter And The Deathly Hallows: Part 1 [subs. Integrados]
+            var tags = "";
+            var queryMatches = Regex.Matches(title, @"[\[\(]([^\]\)]+)[\]\)]", RegexOptions.IgnoreCase);
+            foreach (Match m in queryMatches)
+            {
+                var tag = m.Groups[1].Value.Trim().ToUpper();
+                if (tag.Equals("4K")) // Fix 4K quality. Eg Harry Potter Y La Orden Del Fénix [4k]
+                    quality = "(UHD 4K 2160p)";
+                else if (tag.Equals("FULLBLURAY")) // Fix 4K quality. Eg Harry Potter Y El Cáliz De Fuego (fullbluray)
+                    quality = "(COMPLETE BLURAY)";
+                else // Add the tag to the title
+                    tags += " " + tag;
+                title = title.Replace(m.Groups[0].Value, "");
+            }
+            title = title.Trim();
+
+            // clean quality
+            if (quality != null)
+            {
+                var queryMatch = Regex.Match(quality, @"[\[\(]([^\]\)]+)[\]\)]", RegexOptions.IgnoreCase);
+                if (queryMatch.Success)
+                    quality = queryMatch.Groups[1].Value;
+                quality = quality.Trim().Replace("-", " ");
+            }
+
+            // add the year
+            title = query.Year != null ? title + " " + query.Year : title;
+
+            // add the tags
+            title += tags;
+
+            // add spanish
+            title += " SPANISH";
+
+            // add quality
+            if (quality != null)
+                title += " " + quality;
+
+            // guess size
+            var size = 1610612736L; // 1.5 GB
+            if (title.ToLower().Contains("microhd"))
+                size = 7516192768L; // 7 GB
+            else if (title.ToLower().Contains("complete bluray") || title.ToLower().Contains("2160p"))
+                size = 53687091200L; // 50 GB
+            else if (title.ToLower().Contains("bluray"))
+                size = 17179869184L; // 16 GB
+            else if (title.ToLower().Contains("bdremux"))
+                size = 21474836480L; // 20 GB
+
+            GenerateRelease(releases, title, commentsLink, commentsLink, cat, publishDate, size);
+        }
+
+        private void GenerateRelease(ICollection<ReleaseInfo> releases, string title, string commentsLink,
+            string downloadLink, string cat, DateTime publishDate, long size)
+        {
+            // ReSharper disable once UseObjectOrCollectionInitializer
+            var release = new ReleaseInfo();
+
+            release.Title = title;
+            release.Comments = new Uri(commentsLink);
+            release.Link = new Uri(downloadLink);
+            release.Guid = release.Link;
+
+            release.Category = MapTrackerCatToNewznab(cat);
+            release.PublishDate = publishDate;
+            release.Size = size;
+
+            release.Files = 1;
+
+            release.Seeders = 1;
+            release.Peers = 2;
+
+            release.MinimumRatio = 1;
+            release.MinimumSeedTime = 172800; // 48 hours
+            release.DownloadVolumeFactor = 0;
+            release.UploadVolumeFactor = 1;
+
+            releases.Add(release);
+        }
+
+        private static bool CheckTitleMatchWords(string queryStr, string title)
+        {
+            // this code split the words, remove words with 2 letters or less, remove accents and lowercase
+            var queryMatches = Regex.Matches(queryStr, @"\b[\w']*\b");
+            var queryWords = from m in queryMatches.Cast<Match>()
+                where !string.IsNullOrEmpty(m.Value) && m.Value.Length > 2
+                select Encoding.UTF8.GetString(Encoding.GetEncoding("ISO-8859-8").GetBytes(m.Value.ToLower()));
+
+            var titleMatches = Regex.Matches(title, @"\b[\w']*\b");
+            var titleWords = from m in titleMatches.Cast<Match>()
+                where !string.IsNullOrEmpty(m.Value) && m.Value.Length > 2
+                select Encoding.UTF8.GetString(Encoding.GetEncoding("ISO-8859-8").GetBytes(m.Value.ToLower()));
+            titleWords = titleWords.ToArray();
+
+            return queryWords.All(word => titleWords.Contains(word));
+        }
+
+        private static TorznabQuery ParseQuery(TorznabQuery query)
+        {
+            // Eg. Marco.Polo.2014.S02E08
+
+            // the season/episode part is already parsed by Jackett
+            // query.SanitizedSearchTerm = Marco.Polo.2014.
+            // query.Season = 2
+            // query.Episode = 8
+            var searchTerm = query.SanitizedSearchTerm;
+
+            // replace punctuation symbols with spaces
+            // searchTerm = Marco Polo 2014
+            searchTerm = Regex.Replace(searchTerm, @"[-._\(\)@/\\\[\]\+\%]", " ");
+            searchTerm = Regex.Replace(searchTerm, @"\s+", " ");
+            searchTerm = searchTerm.Trim();
+
+            // we parse the year and remove it from search
+            // searchTerm = Marco Polo
+            // query.Year = 2014
+            var r = new Regex("([ ]+([0-9]{4}))$", RegexOptions.IgnoreCase);
+            var m = r.Match(searchTerm);
+            if (m.Success)
+            {
+                query.Year = int.Parse(m.Groups[2].Value);
+                searchTerm = searchTerm.Replace(m.Groups[1].Value, "");
+            }
+
+            // remove some words
+            searchTerm = Regex.Replace(searchTerm, @"\b(espa[ñn]ol|spanish|castellano|spa)\b", "", RegexOptions.IgnoreCase);
+
+            query.SearchTerm = searchTerm;
+            return query;
+        }
+
+        private static string ParseMejorTorrentSeriesTitle(string title, string episodeTitle, TorznabQuery query)
+        {
+            // parse title
+            // title = The Mandalorian - 1ª Temporada
+            // title = The Mandalorian - 1ª Temporada [720p] 
+            // title = Grace and Frankie - 5ª Temporada [720p]: 5x08 al 5x13.
+            var newTitle = title.Split(new [] { " - " }, StringSplitOptions.RemoveEmptyEntries)[0].Trim();
+            // newTitle = The Mandalorian
+
+            // parse episode title
+            var newEpisodeTitle = episodeTitle.Trim();
+            // episodeTitle = 5x08 al 5x13.
+            // episodeTitle = 2x01 - 2x02 - 2x03.
+            var matches = Regex.Matches(newEpisodeTitle, "([0-9]+)x([0-9]+)", RegexOptions.IgnoreCase);
+            if (matches.Count > 1)
+            {
+                newEpisodeTitle = "";
+                foreach (Match m in matches)
                 {
-                    var e = new MTReleaseInfo();
-                    e.TitleOriginal = titles.ElementAt(i);
-                    e.PublishDate = dates.ElementAt(i);
-                    e.CategoryText = qualities.ElementAt(i);
-                    var sfeal = seasonsFirstEpisodesAndLast.ElementAt(i);
-                    e.Season = sfeal.Key;
-                    e.EpisodeNumber = sfeal.Value.Key;
-                    if (sfeal.Value.Value != null && sfeal.Value.Value > sfeal.Value.Key)
+                    if (newEpisodeTitle.Equals(""))
                     {
-                        e.Files = sfeal.Value.Value - sfeal.Value.Key + 1;
+                        newEpisodeTitle += "S" + m.Groups[1].Value.PadLeft(2, '0') 
+                                               + "E" + m.Groups[2].Value.PadLeft(2, '0');
                     }
                     else
                     {
-                        e.Files = 1;
+                        newEpisodeTitle += "-E" + m.Groups[2].Value.PadLeft(2, '0');
                     }
-                    episodes.Add(e);
                 }
-                return episodes;
+                // newEpisodeTitle = S05E08-E13
+                // newEpisodeTitle = S02E01-E02-E03
             }
-
-            private List<Uri> GetLinks(IHtmlDocument html)
+            else
             {
-                return html.QuerySelectorAll(LinkQuerySelector)
-                    .Select(e => e.Attributes["href"].Value)
-                    .Select(relativeLink => new Uri(WebUri, relativeLink))
-                    .ToList();
-            }
-
-            private List<DateTime> GetDates(IHtmlDocument html)
-            {
-                return html.QuerySelectorAll(LinkQuerySelector)
-                    .Select(e => e.PreviousElementSibling.TextContent)
-                    .Select(dateString => dateString.Split('-'))
-                    .Select(parts => new int[] { Int32.Parse(parts[0]), Int32.Parse(parts[1]), Int32.Parse(parts[2]) })
-                    .Select(intParts => new DateTime(intParts[0], intParts[1], intParts[2]))
-                    .ToList();
-            }
-
-            private List<string> GetTitles(IHtmlDocument html)
-            {
-                var texts = LinkTexts(html);
-                var completeTitles = texts.Select(text => text.Substring(0, text.IndexOf('-') - 1));
-                var regex = new Regex(@".+\((.+)\)");
-                var finalTitles = completeTitles.Select(title =>
+                // episodeTitle = 1x04 - 05.
+                var m = Regex.Match(newEpisodeTitle, "^([0-9]+)x([0-9]+)[^0-9]+([0-9]+)[.]?$", RegexOptions.IgnoreCase);
+                if (m.Success)
                 {
-                    var match = regex.Match(title);
-                    if (!match.Success) return title;
-                    return match.Groups[1].Value;
-                });
-                return finalTitles.ToList();
-            }
-
-            private List<string> GetQualities(IHtmlDocument html)
-            {
-                var texts = LinkTexts(html);
-                var regex = new Regex(@".+\[(.*)\].+");
-                var qualities = texts.Select(text =>
+                    newEpisodeTitle = "S" + m.Groups[1].Value.PadLeft(2, '0')
+                                          + "E" + m.Groups[2].Value.PadLeft(2, '0') + "-"
+                                          + "E" + m.Groups[3].Value.PadLeft(2, '0');
+                    // newEpisodeTitle = S01E04-E05
+                }
+                else
                 {
-                    var match = regex.Match(text);
-                    if (!match.Success) return "HDTV";
-                    var quality = match.Groups[1].Value;
-                    switch(quality)
+                    // episodeTitle = 1x02
+                    // episodeTitle = 1x02 -
+                    // episodeTitle = 1x08 -​ CONTRASEÑA: WWW.​PCTNEW ORG bebe
+                    m = Regex.Match(newEpisodeTitle, "^([0-9]+)x([0-9]+)(.*)$", RegexOptions.IgnoreCase);
+                    if (m.Success)
                     {
-                        case "720p":
-                            return "HDTV-720p";
-                        case "1080p":
-                            return "HDTV-1080p";
-                        default:
-                            return "HDTV";
+                        newEpisodeTitle = "S" + m.Groups[1].Value.PadLeft(2, '0') 
+                                              + "E" + m.Groups[2].Value.PadLeft(2, '0');
+                        // newEpisodeTitle = S01E02
+                        if (!m.Groups[3].Value.Equals(""))
+                            newEpisodeTitle += " " + m.Groups[3].Value.Replace(" -", "").Trim();
+                        // newEpisodeTitle = S01E08 CONTRASEÑA: WWW.​PCTNEW ORG bebe
                     }
-                });
-                return qualities.ToList();
+                }
             }
 
-            private List<KeyValuePair<int, KeyValuePair<int,int?>>> GetSeasonsFirstEpisodesAndLast(IHtmlDocument html)
-            {
-                var texts = LinkTexts(html);
-                // SEASON | START EPISODE | [END EPISODE]
-                var regex = new Regex(@"(\d{1,2})x(\d{1,2})(?:.*\d{1,2}x(\d{1,2})?)?", RegexOptions.IgnoreCase);
-                var seasonsFirstEpisodesAndLast = texts.Select(text =>
-                {
-                    var match = regex.Match(text);
-                    int season = 0;
-                    int episode = 0;
-                    int? finalEpisode = null;
-                    if (!match.Success) return new KeyValuePair<int, KeyValuePair<int, int?>>(season, new KeyValuePair<int, int?>(episode, finalEpisode));
-                    season = Int32.Parse(match.Groups[1].Value);
-                    episode = Int32.Parse(match.Groups[2].Value);
-                    if (match.Groups[3].Success)
-                    {
-                        finalEpisode = Int32.Parse(match.Groups[3].Value);
-                    }
-                    return new KeyValuePair<int, KeyValuePair<int, int?>>(season, new KeyValuePair<int, int?>(episode, finalEpisode));
-                });
-                return seasonsFirstEpisodesAndLast.ToList();
-            }
+            // if the original query was in scene format, we have to put the year back
+            // query.Episode != null means scene title
+            var year = query.Episode != null && query.Year != null ? " " + query.Year : "";
+            newTitle += year + " " + newEpisodeTitle;
 
-            private List<string> LinkTexts(IHtmlDocument html)
-            {
-                return html.QuerySelectorAll(LinkQuerySelector)
-                    .Select(e => e.TextContent).ToList();
-            }
+            // add quality
+            if (title.ToLower().Contains("[720p]")) 
+                newTitle += " SPANISH 720p HDTV x264";
+            else
+                newTitle += " SPANISH SDTV XviD";
 
+            // return The Mandalorian S01E04 SPANISH 720p HDTV x264
+            return newTitle;
         }
 
-        class TvShowScraper : IScraper<IEnumerable<Season>>
+        private static string GetMejortorrentCategory(string mejortorrentCat, string commentsLink, string title)
         {
-            public IEnumerable<Season> Extract(IHtmlDocument html)
+            // get root category
+            var cat = MejorTorrentCatType.Otro;
+            if (mejortorrentCat == null)
             {
-                var tvSelector = "a[href*=\"/serie-\"]";
-                var seasonsElements = html.QuerySelectorAll(tvSelector).Select(e => e.ParentElement);
-                
-                var newTvShows = new List<Season>();
-
-                // EXAMPLES:
-                // Stranger Things - 1ª Temporada (HDTV)
-                // Stranger Things - 1ª Temporada [720p] (HDTV-720p)
-                var regex = new Regex(@"(.+) - ([0-9]+).*\((.*)\)");
-                foreach (var seasonElement in seasonsElements)
-                {
-                    var link = seasonElement.QuerySelector("a[href*=\"/serie-\"]").Attributes["href"].Value;
-                    var info = seasonElement.TextContent; // Stranger Things - 1 ...
-                    var searchMatch = regex.Match(info);
-                    if (!searchMatch.Success)
-                    {
-                        continue;
-                    }
-                    int seasonNumber;
-                    if (!Int32.TryParse(searchMatch.Groups[2].Value, out seasonNumber))
-                    {
-                        seasonNumber = 0;
-                    }
-                    var season = new Season
-                    {
-                        Title = searchMatch.Groups[1].Value,
-                        Number = seasonNumber,
-                        Type = searchMatch.Groups[3].Value,
-                        Link = new Uri(WebUri, link)
-                    };
-
-                    // EXAMPLE: El cuento de la criada (Handmaids Tale)
-                    var originalTitleRegex = new Regex(@".+\((.+)\)");
-                    var originalTitleMath = originalTitleRegex.Match(season.Title);
-                    if (originalTitleMath.Success)
-                    {
-                        season.Title = originalTitleMath.Groups[1].Value;
-                    }
-                    newTvShows.Add(season);
-                }
-                return newTvShows;
+                if (commentsLink.Contains("peliculas_extend"))
+                    cat = MejorTorrentCatType.Pelicula;
+                else if (commentsLink.Contains("series_extend"))
+                    cat = MejorTorrentCatType.Serie;
+                else if (commentsLink.Contains("musica_extend"))
+                    cat = MejorTorrentCatType.Musica;
             }
+            else if (mejortorrentCat.Equals(MejorTorrentCatType.Pelicula) ||
+                     mejortorrentCat.Equals(MejorTorrentCatType.Serie) ||
+                     mejortorrentCat.Equals(MejorTorrentCatType.Musica))
+            {
+                cat = mejortorrentCat;
+            }
+
+            // hack to separate SD & HD series
+            if (cat.Equals(MejorTorrentCatType.Serie) && title.ToLower().Contains("720p"))
+                cat = MejorTorrentCatType.SerieHd;
+
+            return cat;
         }
 
-        class SeasonScraper : IScraper<IEnumerable<MTReleaseInfo>>
+        private static string GetLongestWord(string text)
         {
-            public IEnumerable<MTReleaseInfo> Extract(IHtmlDocument html)
+            var words = text.Split(' ');
+            if (!words.Any())
+                return null;
+            var longestWord = words.First();
+            foreach(var word in words)
             {
-                var episodesLinksHtml = html.QuerySelectorAll("a[href*=\"/serie-episodio-descargar-torrent\"]");
-                var episodesTexts = episodesLinksHtml.Select(l => l.TextContent).ToList();
-                var episodesLinks = episodesLinksHtml.Select(e => e.Attributes["href"].Value).ToList();
-                var dates = episodesLinksHtml
-                    .Select(e => e.ParentElement.ParentElement.QuerySelector("div").TextContent)
-                    .Select(stringDate => stringDate.Replace("Fecha: ", ""))
-                    .Select(stringDate => stringDate.Split('-'))
-                    .Select(stringParts => new int[]{ Int32.Parse(stringParts[0]), Int32.Parse(stringParts[1]), Int32.Parse(stringParts[2]) })
-                    .Select(intParts => new DateTime(intParts[0], intParts[1], intParts[2]));
-
-                var episodes = episodesLinks.Select(e => new MTReleaseInfo()).ToList();
-
-                for (var i = 0; i < episodes.Count(); i++)
-                {
-                    GuessEpisodes(episodes.ElementAt(i), episodesTexts.ElementAt(i));
-                    ExtractLinkInfo(episodes.ElementAt(i), episodesLinks.ElementAt(i));
-                    episodes.ElementAt(i).PublishDate = dates.ElementAt(i);
-                }
-
-                return episodes;
+                if (word.Length >= longestWord.Length)
+                    longestWord = word;
             }
-
-            private void GuessEpisodes(MTReleaseInfo release, string episodeText)
-            {
-                var seasonEpisodeRegex = new Regex(@"(\d{1,2}).*?(\d{1,2})", RegexOptions.IgnoreCase);
-                var matchSeasonEpisode = seasonEpisodeRegex.Match(episodeText);
-                if (!matchSeasonEpisode.Success) return;
-                release.Season = Int32.Parse(matchSeasonEpisode.Groups[1].Value);
-                release.EpisodeNumber = Int32.Parse(matchSeasonEpisode.Groups[2].Value);
-
-                char[] textArray = episodeText.ToCharArray();
-                Array.Reverse(textArray);
-                var reversedText = new string(textArray);
-                var finalEpisodeRegex = new Regex(@"(\d{1,2})");
-                var matchFinalEpisode = finalEpisodeRegex.Match(reversedText);
-                if (!matchFinalEpisode.Success) return;
-                var finalEpisodeArray = matchFinalEpisode.Groups[1].Value.ToCharArray();
-                Array.Reverse(finalEpisodeArray);
-                var finalEpisode = Int32.Parse(new string(finalEpisodeArray));
-                if (finalEpisode > release.EpisodeNumber)
-                {
-                    release.Files = (finalEpisode + 1) - release.EpisodeNumber;
-                    release.Size = release.Size * release.Files;
-                }
-            }
-
-            private void ExtractLinkInfo(MTReleaseInfo release, String link)
-            {
-                // LINK FORMAT: /serie-episodio-descargar-torrent-${ID}-${TITLE}-${SEASON_NUMBER}x${EPISODE_NUMBER}[range].html
-                var regex = new Regex(@"\/serie-episodio-descargar-torrent-(\d+)-(.*)-(\d{1,2}).*(\d{1,2}).*\.html", RegexOptions.IgnoreCase);
-                var linkMatch = regex.Match(link);
-
-                if (!linkMatch.Success)
-                {
-                    return;
-                }
-                release.MejorTorrentID = linkMatch.Groups[1].Value;
-                release.Title = linkMatch.Groups[2].Value;
-            }
+            return longestWord;
         }
 
-        class DownloadScraper : IScraper<IEnumerable<Uri>>
+        private static DateTime TryToParseDate(string dateToParse, DateTime dateDefault)
         {
-            public IEnumerable<Uri> Extract(IHtmlDocument html)
+            try
             {
-                List<Uri> uris = new List<Uri>();
-                foreach(var elem in html.QuerySelectorAll("a[onclick*=\"/uploads/\"]")) {
-                    var onclick = elem.Attributes["onclick"].Value;
-                    var table = onclick.Split(new string[] {"table: '"}, StringSplitOptions.None)[1].Split(new string[] {"'"}, StringSplitOptions.None)[0];
-                    var name = onclick.Split(new string[] {"name: '"}, StringSplitOptions.None)[1].Split(new string[] {"'"}, StringSplitOptions.None)[0];
-                    uris.Add(new Uri(WebUri, "/uploads/torrents/" + table + "/" + name));
-                }
-                return uris;
+                return DateTime.ParseExact(dateToParse, "yyyy-MM-dd", CultureInfo.InvariantCulture);
             }
-        }
-
-        class Season
-        {
-            public String Title;
-            public int Number;
-            public Uri Link;
-            public TorznabCategory Category; // HDTV or HDTV-720
-            private string _type;
-            public string Type
+            catch
             {
-                get { return _type; }
-                set
-                {
-                    switch(value)
-                    {
-                        case "HDTV":
-                            Category = TorznabCatType.TVSD;
-                            _type = "SDTV";
-                            break;
-                        case "HDTV-720p":
-                            Category = TorznabCatType.TVHD;
-                            _type = "HDTV-720p";
-                            break;
-                        case "HDTV-1080p":
-                            Category = TorznabCatType.TVHD;
-                            _type = "HDTV-1080p";
-                            break;
-                        default:
-                            Category = TorznabCatType.TV;
-                            _type = "HDTV-720p";
-                            break;
-                    }
-                }
+                // ignored
             }
-        }
-
-        class MTReleaseInfo : ReleaseInfo
-        {
-            public string MejorTorrentID;
-            public bool IsMovie;
-            public int? Year;
-            public int _season;
-            public int _episodeNumber;
-            private string _categoryText;
-            private string _originalTitle;
-
-            public MTReleaseInfo()
-            {
-                this.Category = new List<int>();
-                this.Grabs = null;
-                this.Files = 1;
-                this.PublishDate = new DateTime();
-                this.Peers = 1;
-                this.Seeders = 1;
-                this.Size = ReleaseInfo.BytesFromGB(1);
-                this._originalTitle = "";
-                this.DownloadVolumeFactor = 0;
-                this.UploadVolumeFactor = 1;
-            }
-
-            public int Season { get { return _season; } set { _season = value; TitleOriginal = _originalTitle; } }
-
-            public int EpisodeNumber { get { return _episodeNumber; } set { _episodeNumber = value; TitleOriginal = _originalTitle; } }
-
-            public string CategoryText {
-                get { return _categoryText; }
-                set
-                {
-                    if (IsMovie)
-                    {
-                        Category.Add(TorznabCatType.Movies.ID);
-                        _categoryText = value;
-                    }
-                    else
-                    {
-                        switch (value)
-                        {
-                            case "SDTV":
-                                Category.Add(TorznabCatType.TVSD.ID);
-                                _categoryText = "SDTV";
-                                break;
-                            case "HDTV":
-                                Category.Add(TorznabCatType.TVSD.ID);
-                                _categoryText = "SDTV";
-                                break;
-                            case "HDTV-720p":
-                                Category.Add(TorznabCatType.TVHD.ID);
-                                _categoryText = "HDTV-720p";
-                                break;
-                            case "HDTV-1080p":
-                                Category.Add(TorznabCatType.TVHD.ID);
-                                _categoryText = "HDTV-1080p";
-                                break;
-                            default:
-                                Category.Add(TorznabCatType.TV.ID);
-                                _categoryText = "HDTV-720p";
-                                break;
-                        }
-                    }
-                    TitleOriginal = _originalTitle;
-                }
-            }
-        
-            public int FinalEpisodeNumber { get { return (int)(EpisodeNumber + Files - 1); } }
-
-            public string TitleOriginal
-            {
-                get { return _originalTitle; }
-                set
-                {
-                    _originalTitle = value;
-                    if (_originalTitle != "")
-                    {
-                        Title = _originalTitle;
-                        Title = char.ToUpper(Title[0]) + Title.Substring(1);
-                    }
-                    var seasonAndEpisode = "";
-                    if (!Category.Contains(TorznabCatType.Movies.ID))
-                    {
-                        seasonAndEpisode = "S" + Season.ToString("00") + "E" + EpisodeNumber.ToString("00");
-                        if (Files > 1)
-                        {
-                            seasonAndEpisode += "-" + FinalEpisodeNumber.ToString("00");
-                        }
-                    }
-                    Title = String.Join(".", new List<string>() { Title, seasonAndEpisode, CategoryText, "Spanish" }.Where(s => s != ""));
-                }
-            }
-        }
-
-        class MoviePerformer : IPerformer
-        {
-            private IRequester requester;
-            private IScraper<IEnumerable<Uri>> movieSearchScraper;
-            private IScraper<MTReleaseInfo> movieInfoScraper;
-            private IScraper<Uri> movieDownloadScraper;
-
-            public MoviePerformer(
-                IRequester requester,
-                IScraper<IEnumerable<Uri>> movieSearchScraper,
-                IScraper<MTReleaseInfo> movieInfoScraper,
-                IScraper<Uri> movieDownloadScraper)
-            {
-                this.requester = requester;
-                this.movieSearchScraper = movieSearchScraper;
-                this.movieInfoScraper = movieInfoScraper;
-                this.movieDownloadScraper = movieDownloadScraper;
-            }
-
-            public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
-            {
-                query = SanitizeQuery(query);
-                var movies = await FetchMoviesBasedOnLongestWord(query);
-                return movies;
-            }
-            
-            private async Task<IEnumerable<MTReleaseInfo>> FetchMoviesBasedOnLongestWord(TorznabQuery query)
-            {
-                var originalSearch = query.SearchTerm;
-                var regexStr = ".*" + originalSearch.Replace(" ", ".*") + ".*";
-                var regex = new Regex(regexStr, RegexOptions.IgnoreCase);
-                query.SearchTerm = LongestWord(query);
-                var movies = await FetchMovies(query);
-                return movies.Where(m => regex.Match(m.Title).Success);
-            }
-
-            private async Task<IEnumerable<MTReleaseInfo>> FetchMovies(TorznabQuery query)
-            {
-                var uriSearch = CreateSearchUri(query.SearchTerm);
-                var htmlSearch = await requester.MakeRequest(uriSearch);
-                var moviesInfoUris = movieSearchScraper.Extract(htmlSearch);
-                var infoHtmlTasks = moviesInfoUris.Select(async u => await requester.MakeRequest(u));
-                var infoHtmls = await Task.WhenAll(infoHtmlTasks);
-                var movies = infoHtmls.Select(h => movieInfoScraper.Extract(h));
-
-                var tasks = movies.Select(async m =>
-                {
-                    var html = await requester.MakeRequest(m.Link);
-                    return new KeyValuePair<MTReleaseInfo, IHtmlDocument>(m, html);
-                });
-                var moviesWithHtml = await Task.WhenAll(tasks.ToArray());
-                movies = moviesWithHtml.Select(movieWithHtml =>
-                {
-                    var movie = movieWithHtml.Key;
-                    var html = movieWithHtml.Value;
-                    movie.Link = movieDownloadScraper.Extract(html);
-                    movie.Guid = movieWithHtml.Key.Link;
-                    return movie;
-                });
-
-                if (query.Year != null)
-                {
-                    movies = movies
-                        .Where(m => 
-                            m.Year == query.Year ||
-                            m.Year == query.Year + 1 ||
-                            m.Year == query.Year - 1)
-                        .Select(m => 
-                        {
-                            m.TitleOriginal = m.TitleOriginal.Replace("(" + m.Year + ")", "(" + query.Year + ")");
-                            return m;
-                        });
-                }
-
-                return movies;
-            }
-
-            private string LongestWord(TorznabQuery query)
-            {
-                var words = query.SearchTerm.Split(' ');
-                if (words.Count() == 0) return null;
-                var longestWord = words.First();
-                foreach(var word in words)
-                {
-                    if (word.Length >= longestWord.Length)
-                    {
-                        longestWord = word;
-                    }
-                }
-                return longestWord;
-            }
-
-            private TorznabQuery SanitizeQuery(TorznabQuery query)
-            {
-                var regex = new Regex(@"\d{4}$");
-                var match = regex.Match(query.SanitizedSearchTerm);
-                if (match.Success)
-                {
-                    var yearStr = match.Groups[0].Value;
-                    query.Year = Int32.Parse(yearStr);
-                    query.SearchTerm = query.SearchTerm.Replace(yearStr, "").Trim();
-                }
-                return query;
-            }
-        }
-
-        class MovieSearchScraper : IScraper<IEnumerable<Uri>>
-        {
-            public IEnumerable<Uri> Extract(IHtmlDocument html)
-            {
-                return html.QuerySelectorAll("a[href*=\"/peli-\"]")
-                    .Select(e => e.GetAttribute("href"))
-                    .Select(relativeUri => new Uri(WebUri, relativeUri));
-            }
-        }
-
-        class MovieInfoScraper : IScraper<MTReleaseInfo>
-        {
-            public MTReleaseInfo Extract(IHtmlDocument html)
-            {
-                var release = new MTReleaseInfo();
-                release.IsMovie = true;
-                var selectors = html.QuerySelectorAll("b");
-                var titleSelector = html.QuerySelector("span>b");
-                var titleSelector3do4k = html.QuerySelector("span:nth-child(4) > b:nth-child(1)");
-                try
-                {
-                    var title = titleSelector.TextContent;
-                    if (title.Contains("("))
-                    {
-                        title = title.Substring(0, title.IndexOf("(")).Trim();
-                    }
-                    release.TitleOriginal = title;
-                }
-                catch { }
-                try
-                {
-                    var year = selectors.Where(s => s.TextContent.ToLower().Contains("año"))
-                        .First().NextSibling.TextContent.Trim();
-                    release.Year = Int32.Parse(year);
-                    release.TitleOriginal += " (" + year + ")";
-                } catch { }
-                try
-                {
-                    var grabsStr = selectors.Where(s => s.TextContent.ToLower().Contains("total descargas"))
-                        .First().NextSibling.TextContent.Trim();
-                    release.Grabs = long.Parse(grabsStr.Replace(".", string.Empty));
-                } catch { }
-                try
-                {
-                    var dateStr = selectors.Where(s => s.TextContent.ToLower().Contains("fecha"))
-                        .First().NextSibling.TextContent.Trim();
-                    var date = Convert.ToDateTime(dateStr);
-                    release.PublishDate = date;
-                } catch { }
-                try
-                {
-                    var sizeStr = selectors.Where(s => s.TextContent.ToLower().Contains("tamaño"))
-                        .First().NextSibling.TextContent.Trim();
-                    Regex rgx = new Regex(@"[^0-9,.]");
-                    long size;
-                    if (sizeStr.ToLower().Trim().EndsWith("mb"))
-                    {
-                        size = ReleaseInfo.BytesFromMB(float.Parse(rgx.Replace(sizeStr, "")));
-                    }
-                    else
-                    {
-                        sizeStr = rgx.Replace(sizeStr, "").Replace(",", ".");
-                        size = ReleaseInfo.BytesFromGB(float.Parse(rgx.Replace(sizeStr, "")));
-                    }
-                    release.Size = size;
-                } catch { }
-                try
-                {
-                    var category = selectors.Where(s => s.TextContent.ToLower().Contains("formato"))
-                        .First().NextSibling.TextContent.Trim();
-                    release.CategoryText = category;
-                } catch { }
-                try
-                {
-                    var title = titleSelector.TextContent;
-                    if (title.Contains("(") && title.Contains(")") && title.Contains("3D"))
-                    {
-                        release.CategoryText = "3D";
-                    }
-                } catch { }
-                try
-                {
-                    var title = titleSelector.TextContent;
-                    if (title.Contains("(") && title.Contains(")") && title.Contains("4K"))
-                    {
-                        release.CategoryText = "4K";
-                    }
-                } catch { }
-                try
-                {
-                    var title = titleSelector3do4k.TextContent;
-                    if (title.Contains("[") && title.Contains("]") && title.Contains("3D"))
-                    {
-                        release.CategoryText = "3D";
-                    }
-                } catch { }
-                try
-                {
-                    var title = titleSelector3do4k.TextContent;
-                    if (title.Contains("[") && title.Contains("]") && title.Contains("4K"))
-                    {
-                        release.CategoryText = "4K";
-                    }
-                } catch { }
-                try
-                {
-                    var link = html.QuerySelector("a[href*=\"sec=descargas\"]").GetAttribute("href");
-                    release.Link = new Uri(WebUri, link);
-                    release.Guid = release.Link;
-                } catch { }
-                return release;
-            }
-        }
-
-        class MovieDownloadScraper : IScraper<Uri>
-        {
-            public Uri Extract(IHtmlDocument html)
-            {
-                try
-                {
-                    var onclick = html.QuerySelector("a[onclick*=\"/uploads/\"]").GetAttribute("onclick");
-                    var table = onclick.Split(new string[] {"table: '"}, StringSplitOptions.None)[1].Split(new string[] {"'"}, StringSplitOptions.None)[0];
-                    var name = onclick.Split(new string[] {"name: '"}, StringSplitOptions.None)[1].Split(new string[] {"'"}, StringSplitOptions.None)[0];
-                    return new Uri(WebUri, "/uploads/torrents/" + table + "/" + name);
-                }
-                catch
-                {
-                    return null;
-                }
-            }
-        }
-
-        interface IRequester
-        {
-            Task<IHtmlDocument> MakeRequest(
-                Uri uri,
-                RequestType method = RequestType.GET,
-                IEnumerable<KeyValuePair<string, string>> data = null,
-                Dictionary<string, string> headers = null);
-        }
-
-        class MejorTorrentRequester : IRequester
-        {
-            private MejorTorrent mt;
-
-            public MejorTorrentRequester(MejorTorrent mt)
-            {
-                this.mt = mt;
-            }
-
-            public async Task<IHtmlDocument> MakeRequest(
-                Uri uri,
-                RequestType method = RequestType.GET,
-                IEnumerable<KeyValuePair<string, string>> data = null,
-                Dictionary<string, string> headers = null)
-            {
-                var result = await mt.RequestBytesWithCookies(uri.AbsoluteUri, null, method, null, data, headers);
-                var SearchResultParser = new HtmlParser();
-                var doc = SearchResultParser.ParseDocument(mt.Encoding.GetString(result.Content));
-                return doc;
-            }
-        }
-
-        class MejorTorrentDownloadRequesterDecorator
-        {
-            private IRequester r;
-
-            public MejorTorrentDownloadRequesterDecorator(IRequester r)
-            {
-                this.r = r;
-            }
-
-            public async Task<IHtmlDocument> MakeRequest(IEnumerable<string> ids)
-            {
-                var downloadHtmlTasks = new List<Task<IHtmlDocument>>();
-                var formData = new List<KeyValuePair<string, string>>();
-                int index = 1;
-                ids.ToList().ForEach(id =>
-                {
-                    var episodeID = new KeyValuePair<string, string>("episodios[" + index + "]", id);
-                    formData.Add(episodeID);
-                    index++;
-                });
-                formData.Add(new KeyValuePair<string, string>("total_capis", index.ToString()));
-                formData.Add(new KeyValuePair<string, string>("tabla", "series"));
-                return await r.MakeRequest(DownloadUri, RequestType.POST, formData);
-            }
-        }
-
-        interface IPerformer
-        {
-            Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query);
-        }
-
-        class RssPerformer : IPerformer
-        {
-            private IRequester requester;
-            private IScraper<IEnumerable<KeyValuePair<MTReleaseInfo, Uri>>> rssScraper;
-            private IScraper<IEnumerable<MTReleaseInfo>> seasonScraper;
-            private IDownloadGenerator downloadGenerator;
-
-            public RssPerformer(
-                IRequester requester,
-                IScraper<IEnumerable<KeyValuePair<MTReleaseInfo, Uri>>> rssScraper,
-                IScraper<IEnumerable<MTReleaseInfo>> seasonScraper,
-                IDownloadGenerator downloadGenerator)
-            {
-                this.requester = requester;
-                this.rssScraper = rssScraper;
-                this.seasonScraper = seasonScraper;
-                this.downloadGenerator = downloadGenerator;
-            }
-
-            public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
-            {
-                var html = await requester.MakeRequest(NewTorrentsUri);
-                var episodesAndSeasonsUri = rssScraper.Extract(html);
-
-                Task.WaitAll(episodesAndSeasonsUri.ToList().Select(async epAndSeasonUri =>
-                {
-                    var episode = epAndSeasonUri.Key;
-                    var seasonUri = epAndSeasonUri.Value;
-                    await AddMejorTorrentIDs(episode, seasonUri);
-                }).ToArray());
-
-                var episodes = episodesAndSeasonsUri.Select(epAndSeason => epAndSeason.Key).ToList();
-                await downloadGenerator.AddDownloadLinks(episodes);
-                return episodes;
-            }
-
-            private async Task AddMejorTorrentIDs(MTReleaseInfo episode, Uri seasonUri)
-            {
-                var html = await requester.MakeRequest(seasonUri);
-                var newEpisodes = seasonScraper.Extract(html);
-                // GET BY EPISODE NUMBER
-                newEpisodes = newEpisodes.Where(e => e.EpisodeNumber.Equals(episode.EpisodeNumber));
-                if (newEpisodes.Count() == 0)
-                {
-                    throw new Exception("Imposible to detect episode ID in RSS");
-                }
-                episode.MejorTorrentID = newEpisodes.First().MejorTorrentID;
-            }
-
-        }
-
-        class TvShowPerformer : IPerformer
-        {
-            private IRequester requester;
-            private IScraper<IEnumerable<Season>> tvShowScraper;
-            private IScraper<IEnumerable<MTReleaseInfo>> seasonScraper;
-            private IDownloadGenerator downloadGenerator;
-
-            public TvShowPerformer(
-                IRequester requester,
-                IScraper<IEnumerable<Season>> tvShowScraper,
-                IScraper<IEnumerable<MTReleaseInfo>> seasonScraper,
-                IDownloadGenerator downloadGenerator)
-            {
-                this.requester = requester;
-                this.tvShowScraper = tvShowScraper;
-                this.seasonScraper = seasonScraper;
-                this.downloadGenerator = downloadGenerator;
-            }
-
-            public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
-            {
-                query = FixQuery(query);
-                var seasons = await GetSeasons(query);
-                var episodes = await GetEpisodes(query, seasons);
-                await downloadGenerator.AddDownloadLinks(episodes);
-                if (seasons.Count() > 0)
-                {
-                    episodes.ForEach(e => e.TitleOriginal = seasons.First().Title);
-                }
-                return episodes;
-            }
-
-            private TorznabQuery FixQuery(TorznabQuery query)
-            {
-                var seasonRegex = new Regex(@".*?(s\d{1,2})", RegexOptions.IgnoreCase);
-                var episodeRegex = new Regex(@".*?(e\d{1,2})", RegexOptions.IgnoreCase);
-                var seasonMatch = seasonRegex.Match(query.SearchTerm);
-                var episodeMatch = episodeRegex.Match(query.SearchTerm);
-                if (seasonMatch.Success)
-                {
-                    query.Season = Int32.Parse(seasonMatch.Groups[1].Value.Substring(1));
-                    query.SearchTerm = query.SearchTerm.Replace(seasonMatch.Groups[1].Value, "");
-                }
-                if (episodeMatch.Success)
-                {
-                    query.Episode = episodeMatch.Groups[1].Value.Substring(1);
-                    query.SearchTerm = query.SearchTerm.Replace(episodeMatch.Groups[1].Value, "");
-                }
-                query.SearchTerm = query.SearchTerm.Trim();
-                return query;
-            }
-
-            private async Task<List<Season>> GetSeasons(TorznabQuery query)
-            {
-                var seasonHtml = await requester.MakeRequest(CreateSearchUri(query.SanitizedSearchTerm));
-                var seasons = tvShowScraper.Extract(seasonHtml);
-                if (query.Season != 0)
-                {
-                    seasons = seasons.Where(s => s.Number == query.Season);
-                }
-                if (query.Categories.Count() != 0)
-                {
-                    seasons = seasons.Where(s => new List<int>(query.Categories).Contains(s.Category.ID));
-                }
-                return seasons.ToList();
-            }
-
-            private async Task<List<MTReleaseInfo>> GetEpisodes(TorznabQuery query, IEnumerable<Season> seasons)
-            {
-                var episodesHtmlTasks = new Dictionary<Season, Task<IHtmlDocument>>();
-                seasons.ToList().ForEach(season =>
-                {
-                    episodesHtmlTasks.Add(season, requester.MakeRequest(new Uri(WebUri, season.Link)));
-                });
-                var episodesHtml = await Task.WhenAll(episodesHtmlTasks.Values);
-                var episodes = episodesHtmlTasks.SelectMany(seasonAndHtml =>
-                {
-                    var season = seasonAndHtml.Key;
-                    var html = seasonAndHtml.Value.Result;
-                    var eps = seasonScraper.Extract(html);
-                    return eps.ToList().Select(e =>
-                    {
-                        e.CategoryText = season.Type;
-                        return e;
-                    });
-                });
-                if (!string.IsNullOrEmpty(query.Episode))
-                {
-                    var episodeNumber = Int32.Parse(query.Episode);
-                    episodes = episodes.Where(e => e.EpisodeNumber <= episodeNumber && episodeNumber <= e.FinalEpisodeNumber);
-                }
-                return episodes.ToList();
-            }
-        }
-
-        interface IDownloadGenerator
-        {
-            Task AddDownloadLinks(IEnumerable<MTReleaseInfo> episodes);
-        }
-
-        class DownloadGenerator : IDownloadGenerator
-        {
-            private IRequester requester;
-            private IScraper<IEnumerable<Uri>> downloadScraper;
-
-            public DownloadGenerator(IRequester requester, IScraper<IEnumerable<Uri>> downloadScraper)
-            {
-                this.requester = requester;
-                this.downloadScraper = downloadScraper;
-            }
-
-            public async Task AddDownloadLinks(IEnumerable<MTReleaseInfo> episodes)
-            {
-                var downloadRequester = new MejorTorrentDownloadRequesterDecorator(requester);
-                var downloadHtml = await downloadRequester.MakeRequest(episodes.Select(e => e.MejorTorrentID));
-                var downloads = downloadScraper.Extract(downloadHtml).ToList();
-
-                for (var i = 0; i < downloads.Count; i++)
-                {
-                    var e = episodes.ElementAt(i);
-                    episodes.ElementAt(i).Link = downloads.ElementAt(i);
-                    episodes.ElementAt(i).Guid = downloads.ElementAt(i);
-                }
-            }
+            return dateDefault;
         }
     }
 }

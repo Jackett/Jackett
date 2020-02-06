@@ -337,6 +337,10 @@ namespace Jackett.Common.Indexers
                 }
             }
 
+            // Database lost on 2018/04/05, all previous torrents don't have download links
+            var failureDay = new DateTime(2018, 04, 05);
+            releases = releases.Where(r => r.PublishDate > failureDay).ToList();
+
             return releases;
         }
 

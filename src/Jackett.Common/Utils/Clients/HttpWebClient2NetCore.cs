@@ -230,7 +230,7 @@ namespace Jackett.Common.Utils.Clients
             else if (webRequest.Type == RequestType.POST)
             {
                 if (webRequest.PostData != null)
-                    request.Content = new FormUrlEncodedContent(webRequest.PostData);
+                    request.Content = FormUrlEncodedContentWithEncoding(webRequest.PostData, webRequest.Encoding);
                 request.Method = HttpMethod.Post;
             }
             else
@@ -250,7 +250,7 @@ namespace Jackett.Common.Utils.Clients
             }
 
             // some cloudflare clients are using a refresh header
-            // Pull it out manually 
+            // Pull it out manually
             if (response.StatusCode == System.Net.HttpStatusCode.ServiceUnavailable && response.Headers.Contains("Refresh"))
             {
                 var refreshHeaders = response.Headers.GetValues("Refresh");

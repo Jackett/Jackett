@@ -249,6 +249,9 @@
             args: ["---", "0"]
       size:
         selector: td:nth-last-of-type(4)
+        filters:
+          - name: replace
+            args: [",", "."]
       downloadvolumefactor:
         case:
           img[src="images/freeleech.gif"]: 0

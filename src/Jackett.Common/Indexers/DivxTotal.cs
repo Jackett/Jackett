@@ -112,7 +112,7 @@ namespace Jackett.Common.Indexers
                     if (table == null)
                         break;
                     var rows = table.QuerySelectorAll("tr");
-                    isLastPage = rows.Length -1 < MaxResultsPerPage; // rows includes the header
+                    isLastPage = rows.Length -1 <= MaxResultsPerPage; // rows includes the header
                     var isHeader = true;
                     foreach (var row in rows)
                     {

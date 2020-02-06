@@ -1,4 +1,4 @@
-﻿using Jackett.Common.Models.Config;
+using Jackett.Common.Models.Config;
 using Jackett.Common.Services;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
@@ -174,7 +174,7 @@ namespace Jackett.Tray
             {
                 using (StreamWriter writer = new StreamWriter(ShortcutPath))
                 {
-                    var appPath = Assembly.GetExecutingAssembly().Location;
+                    var appPath = Process.GetCurrentProcess().MainModule.FileName;
                     writer.WriteLine("[InternetShortcut]");
                     writer.WriteLine("URL=file:///" + appPath);
                     writer.WriteLine("IconIndex=0");
