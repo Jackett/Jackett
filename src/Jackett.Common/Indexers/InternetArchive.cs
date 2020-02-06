@@ -27,7 +27,7 @@ namespace Jackett.Common.Indexers
         private readonly NameValueCollection _trackers = new NameValueCollection
         {
             {"tr", "udp://tracker.coppersurfer.tk:6969/announce"},
-            {"tr", "udp://tracker.leechers-paradise.org:6969/announce"}, 
+            {"tr", "udp://tracker.leechers-paradise.org:6969/announce"},
             {"tr", "udp://tracker.opentrackr.org:1337/announce"},
             {"tr", "udp://tracker.internetwarriors.net:1337/announce"},
             {"tr", "udp://open.demonii.si:1337/announce"}
@@ -117,7 +117,7 @@ namespace Jackett.Common.Indexers
             var sort = "-publicdate";
             if (!string.IsNullOrEmpty(query.SearchTerm))
             {
-                if (_titleOnly) 
+                if (_titleOnly)
                     searchTerm = "title:(" + query.SearchTerm + ") AND " + searchTerm;
                 else
                     searchTerm = query.SearchTerm + " AND " + searchTerm;
@@ -131,7 +131,7 @@ namespace Jackett.Common.Indexers
             {
                 {"q", searchTerm},
                 {"fl[]", "identifier,title,mediatype,item_size,downloads,btih,publicdate"},
-                {"sort", sort}, 
+                {"sort", sort},
                 {"rows", "100"},
                 {"output", "json"}
             };
@@ -167,8 +167,11 @@ namespace Jackett.Common.Indexers
             var release = new ReleaseInfo();
 
             var id = (string) torrent["identifier"];
-            release.Title = (string)torrent["title"];
+            var title = torrent["title"] is JArray ?
+                (string)((JArray)torrent["title"])[0] :
+                (string)torrent["title"];
 
+            release.Title = title;
             release.Comments = new Uri(CommentsUrl + id);
             release.Guid = release.Comments;
 
@@ -184,7 +187,7 @@ namespace Jackett.Common.Indexers
             release.Grabs = (long)torrent["downloads"];
 
             release.Link = new Uri(LinkUrl + id + "/" + id + "_archive.torrent");
-            release.MagnetUri = GenerateMagnetLink((string)torrent["btih"], (string)torrent["title"]);
+            release.MagnetUri = GenerateMagnetLink((string)torrent["btih"], title);
             release.InfoHash = (string)torrent["btih"];
 
             release.MinimumRatio = 1;
