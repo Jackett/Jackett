@@ -78,6 +78,13 @@
 
     fields:
       category:
+        optional: true
+        selector: td:nth-child(1):contains("-")
+        filters:
+          - name: replace #7113 provide default for missing category
+            args: ["-", "33"]
+      category:
+        optional: true
         selector: a[href^="/search.php?cat="]
         attribute: href
         filters:
