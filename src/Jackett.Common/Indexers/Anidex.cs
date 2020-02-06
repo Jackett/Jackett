@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -280,7 +280,9 @@ namespace Jackett.Common.Indexers
         private bool IsCookiePresent(string name)
         {
             string[] rawCookies = this.CookieHeader.Split(';');
-            IDictionary<string, string> cookies = rawCookies.ToDictionary((e) => e.Split('=')[0].Trim(), (e) => e.Split('=')[1].Trim());
+            IDictionary<string, string> cookies = rawCookies
+                .Where(e => e.Contains('='))
+                .ToDictionary((e) => e.Split('=')[0].Trim(), (e) => e.Split('=')[1].Trim());
 
             return cookies.ContainsKey(name);
         }
