@@ -372,7 +372,7 @@ stages:
       - task: GitHubRelease@0
         displayName: Create Github release
         inputs:
-          gitHubConnection: github.com_junglebus
+          gitHubConnection: github.com_jackett
           repositoryName: '$(Build.Repository.Name)' 
           action: create
           target: $(Build.SourceVersion)
