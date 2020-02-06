@@ -10,26 +10,7 @@ using Jackett.Common.Models.Config;
 using Jackett.Common.Services;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
-using NLog; /* Unmerged change from project 'Jackett.Updater (netcoreapp3.1)'
-Before:
-using Jackett.Common.Utils;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Net;
-After:
-using Jackett.Net;
-using System.Reflection;
-using CommandLine;
-using CommandLine.Text;
-using System.Common.Models.Config;
-using Jackett.Common.Services;
-using Jackett.Common.Services.Interfaces;
-using Jackett.Common.Net;
-*/
 
 namespace Jackett.Updater
 {
@@ -368,7 +349,8 @@ namespace Jackett.Updater
                 "Definitions/extratorrent-ag.yml",
                 "Definitions/passionetorrent.yml",
                 "Definitions/thetorrents.yml",
-                "Definitions/themoviecave.yml"
+                "Definitions/themoviecave.yml",
+                "Definitions/tazmaniaden.yml",
             };
             foreach (var oldFile in oldFiles)
                 try
