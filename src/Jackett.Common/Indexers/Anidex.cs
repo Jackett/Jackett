@@ -152,7 +152,14 @@ namespace Jackett.Common.Indexers
         {
             try
             {
-                await this.ConfigureDDoSGuardCookie();
+                try
+                {
+                    await this.ConfigureDDoSGuardCookie();
+                }
+                catch (Exception ex)
+                {
+                    this.logger.Log(LogLevel.Warn, ex, $"Exception while configuring DDoS Guard cookie. Attempting search without. (Exception: {ex})");
+                }
 
                 // Get specified categories. If none were specified, use all available.
                 List<string> searchCategories = this.MapTorznabCapsToTrackers(query);
