@@ -344,16 +344,10 @@ namespace Jackett.Common.Indexers
                             {
                                 releasegroup = string.Empty;
                             }
+                            if (!AllowRaws && releaseTags.Contains("raw", StringComparer.InvariantCultureIgnoreCase))
+                                continue;
 
-                            var infoString = "";
-
-                            for (int i = 0; i + 1 < releaseTags.Count(); i++)
-                            {
-                                if (releaseTags[i] == "Raw" && !AllowRaws)
-                                    continue;
-                                infoString += "[" + releaseTags[i] + "]";
-                            }
-
+                            var infoString = releaseTags.Aggregate("", (prev, cur) => prev + "[" + cur + "]" );
                             var MinimumSeedTime = 259200;
                             //  Additional 5 hours per GB
                             MinimumSeedTime += (int)((Size / 1000000000) * 18000);
