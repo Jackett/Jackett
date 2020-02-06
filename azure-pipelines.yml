@@ -379,7 +379,7 @@ stages:
           tagSource: manual
           tag: v$(Build.BuildNumber)
           title: v$(Build.BuildNumber)
-          assets: $(Build.ArtifactStagingDirectory)/*
+          assets: $(Build.ArtifactStagingDirectory)/drop/*
           isDraft: true
           addChangeLog: true
           compareWith: lastNonDraftRelease
