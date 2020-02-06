@@ -4,6 +4,7 @@ VisualStudioVersion = 16.0.29519.181
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BE7B0C8A-6144-47CD-821E-B09BA1B7BADE}"
 	ProjectSection(SolutionItems) = preProject
+		..\.editorconfig = ..\.editorconfig
 		..\appveyor.yml = ..\appveyor.yml
 		..\build.cake = ..\build.cake
 		..\Installer.iss = ..\Installer.iss
@@ -25,7 +26,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jackett.Common", "Jackett.C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jackett.Server", "Jackett.Server\Jackett.Server.csproj", "{84182782-EDBC-4342-ADA6-72B7694D0862}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jackett.IntegrationTests", "Jackett.IntegrationTests\Jackett.IntegrationTests.csproj", "{0250DEAA-ED2E-4F72-BE76-D92D80B40080}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jackett.IntegrationTests", "Jackett.IntegrationTests\Jackett.IntegrationTests.csproj", "{0250DEAA-ED2E-4F72-BE76-D92D80B40080}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
