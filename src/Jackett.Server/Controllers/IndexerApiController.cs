@@ -111,9 +111,10 @@ namespace Jackett.Server.Controllers
 
         [HttpGet]
         [Route("")]
-        public IEnumerable<Common.Models.DTO.Indexer> Indexers()
+        public IEnumerable<Common.Models.DTO.Indexer> Indexers([FromQuery(Name = "configured")] bool configured)
         {
             var dto = IndexerService.GetAllIndexers().Select(i => new Common.Models.DTO.Indexer(i));
+            dto = configured ? dto.Where(i => i.configured) : dto;
             return dto;
         }
 
