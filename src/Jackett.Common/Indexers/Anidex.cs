@@ -169,13 +169,15 @@ namespace Jackett.Common.Indexers
                 }
 
                 // Prepare the search query
-                NameValueCollection queryParameters = new NameValueCollection();
-                queryParameters.Add("page", "search");
-                queryParameters.Add("id", string.Join(",", searchCategories));
-                queryParameters.Add("group", "0"); // No group
-                queryParameters.Add("q", query.SearchTerm ?? string.Empty);
-                queryParameters.Add("s", this.SortBy);
-                queryParameters.Add("o", this.Order);
+                NameValueCollection queryParameters = new NameValueCollection
+                {
+                    { "page", "search" },
+                    { "id", string.Join(",", searchCategories) },
+                    { "group", "0" }, // No group
+                    { "q", query.SearchTerm ?? string.Empty },
+                    { "s", this.SortBy },
+                    { "o", this.Order }
+                };
 
                 // Make search request
                 Uri searchUri = new Uri(this.SiteUri, "?" + queryParameters.GetQueryString());
@@ -252,36 +254,45 @@ namespace Jackett.Common.Indexers
             const string BASE_URI_BASE64_ENCODED = "aHR0cHM6Ly9hbmlkZXguaW5mbw=="; // "http://anidex.info"
             const string DDOS_POST_URL = "https://ddgu.ddos-guard.net/ddgu/";
 
-            // Check if the cookie already exists, if so exit without doing anything
-            if (this.IsCookiePresent("__ddgu") && this.IsCookiePresent("__ddg1"))
+            try
             {
-                this.logger.Debug("DDOS Guard cookies are already present. Skipping bypass.");
-                return;
+                // Check if the cookie already exists, if so exit without doing anything
+                if (this.IsCookiePresent("__ddgu") && this.IsCookiePresent("__ddg1"))
+                {
+                    this.logger.Debug("DDOS Guard cookies are already present. Skipping bypass.");
+                    return;
+                }
+
+                // Make a request to DDoS Guard to get the redirect URL
+                List<KeyValuePair<string, string>> ddosPostData = new List<KeyValuePair<string, string>>
+                {
+                    { "u", PATH_AND_QUERY_BASE64_ENCODED },
+                    { "h", BASE_URI_BASE64_ENCODED },
+                    { "p", string.Empty }
+                };
+
+                WebClientStringResult result = await this.PostDataWithCookiesAndRetry(DDOS_POST_URL, ddosPostData);
+
+                if (!result.IsRedirect)
+                {
+                    // Success returns a redirect. For anything else, assume a failure.
+                    throw new IOException($"Unexpected result from DDOS Guard while attempting to bypass: {result.Content}");
+                }
+
+                // Call the redirect URL to retrieve the cookie
+                result = await this.RequestStringWithCookiesAndRetry(result.RedirectingTo);
+                if (!result.IsRedirect)
+                {
+                    // Success is another redirect. For anything else, assume a failure.
+                    throw new IOException($"Unexpected result when returning from DDOS Guard bypass: {result.Content}");
+                }
+
+                // If we got to this point, the bypass should have succeeded and we have stored the necessary cookies to access the site normally.
             }
-
-            // Make a request to DDoS Guard to get the redirect URL
-            List <KeyValuePair<string,string>> ddosPostData = new List<KeyValuePair<string, string>>();
-            ddosPostData.Add("u", PATH_AND_QUERY_BASE64_ENCODED);
-            ddosPostData.Add("h", BASE_URI_BASE64_ENCODED);
-            ddosPostData.Add("p", string.Empty);
-
-            WebClientStringResult result = await this.PostDataWithCookiesAndRetry(DDOS_POST_URL, ddosPostData);
-
-            if (!result.IsRedirect)
+            catch (Exception ex)
             {
-                // Success returns a redirect. For anything else, assume a failure.
-                throw new IOException($"Unexpected result from DDOS Guard while attempting to bypass: {result.Content}");
+                throw new IOException($"Error while configuring DDoS Guard cookie: {ex}");
             }
-
-            // Call the redirect URL to retrieve the cookie
-            result = await this.RequestStringWithCookiesAndRetry(result.RedirectingTo);
-            if (!result.IsRedirect)
-            {
-                // Success is another redirect. For anything else, assume a failure.
-                throw new IOException($"Unexpected result when returning from DDOS Guard bypass: {result.Content}");
-            }
-
-            // If we got to this point, the bypass should have succeeded and we have stored the necessary cookies to access the site normally.
         }
 
         private bool IsCookiePresent(string name)
