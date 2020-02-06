@@ -18,32 +18,26 @@ namespace Jackett.Common.Indexers
     public class BroadcastTheNet : BaseWebIndexer
     {
         // Docs at http://apidocs.broadcasthe.net/docs.php
-        private string APIBASE = "https://api.broadcasthe.net";
+        private readonly string _apibase = "https://api.broadcasthe.net";
 
         private new ConfigurationDataAPIKey configData
         {
-            get { return (ConfigurationDataAPIKey)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataAPIKey)base.configData;
+            set => base.configData = value;
         }
 
-        public BroadcastTheNet(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "BroadcastTheNet",
+        public BroadcastTheNet(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps) :
+            base(
+                "BroadcastTheNet",
                 description: "Broadcasthe.net (BTN) is an invite-only torrent tracker focused on TV shows",
-                link: "https://broadcasthe.net/",
-                caps: new TorznabCapabilities(),
-                configService: configService,
-                client: wc,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataAPIKey())
+                link: "https://broadcasthe.net/", caps: new TorznabCapabilities(), configService: configService, client: wc,
+                logger: l, p: ps, configData: new ConfigurationDataAPIKey())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
-
             TorznabCaps.LimitsDefault = 100;
             TorznabCaps.LimitsMax = 1000;
-
             AddCategoryMapping("SD", TorznabCatType.TVSD, "SD");
             AddCategoryMapping("720p", TorznabCatType.TVHD, "720p");
             AddCategoryMapping("1080p", TorznabCatType.TVHD, "1080p");
@@ -55,7 +49,6 @@ namespace Jackett.Common.Indexers
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-
             IsConfigured = false;
             try
             {
@@ -95,27 +88,24 @@ namespace Jackett.Common.Indexers
             // If only the season is searched for then change format to match expected format
             var seasonOnlyMatch = new Regex(@".*\s[Ss]{1}\d{2}(?<![Ee]{1}\d{2,3})?$").Match(searchString);
             if (seasonOnlyMatch.Success)
-            {
                 searchString = Regex.Replace(searchString, @"[Ss]{1}\d{2}", $"Season {query.Season}");
-            }
-
-            var parameters = new JArray();
-            parameters.Add(new JValue(configData.Key.Value));
-            parameters.Add(new JValue(searchString.Trim()));
-            parameters.Add(new JValue(btnResults));
-            parameters.Add(new JValue(btnOffset));
-            var response = await PostDataWithCookiesAndRetry(APIBASE, null, null, null, new Dictionary<string, string>()
+            var parameters = new JArray
             {
-                { "Accept", "application/json-rpc, application/json"},
-                {"Content-Type", "application/json-rpc"}
-            }, JsonRPCRequest("getTorrents", parameters), false);
-
+                new JValue(configData.Key.Value),
+                new JValue(searchString.Trim()),
+                new JValue(btnResults),
+                new JValue(btnOffset)
+            };
+            var response = await PostDataWithCookiesAndRetryAsync(
+                _apibase, null, null, null,
+                new Dictionary<string, string>
+                {
+                    {"Accept", "application/json-rpc, application/json"}, {"Content-Type", "application/json-rpc"}
+                }, JsonRPCRequest("getTorrents", parameters), false);
             try
             {
                 var btnResponse = JsonConvert.DeserializeObject<BTNRPCResponse>(response.Content);
-
-                if (btnResponse != null && btnResponse.Result != null && btnResponse.Result.Torrents != null)
-                {
+                if (btnResponse?.Result?.Torrents != null)
                     foreach (var itemKey in btnResponse.Result.Torrents)
                     {
                         var descriptions = new List<string>();
@@ -126,7 +116,8 @@ namespace Jackett.Common.Indexers
                         item.Category = MapTrackerCatToNewznab(btnResult.Resolution);
                         if (item.Category.Count == 0) // default to TV
                             item.Category.Add(TorznabCatType.TV.ID);
-                        item.Comments = new Uri($"{SiteLink}torrents.php?id={btnResult.GroupID}&torrentid={btnResult.TorrentID}");
+                        item.Comments = new Uri(
+                            $"{SiteLink}torrents.php?id={btnResult.GroupID}&torrentid={btnResult.TorrentID}");
                         item.Guid = new Uri(btnResult.DownloadURL);
                         if (!string.IsNullOrWhiteSpace(btnResult.ImdbID))
                             item.Imdb = ParseUtil.CoerceLong(btnResult.ImdbID);
@@ -142,34 +133,32 @@ namespace Jackett.Common.Indexers
                         item.UploadVolumeFactor = 1;
                         item.DownloadVolumeFactor = 0; // ratioless
                         item.Grabs = btnResult.Snatched;
-
                         if (!string.IsNullOrWhiteSpace(btnResult.Series))
-                            descriptions.Add("Series: " + btnResult.Series);
+                            descriptions.Add($"Series: {btnResult.Series}");
                         if (!string.IsNullOrWhiteSpace(btnResult.GroupName))
-                            descriptions.Add("Group Name: " + btnResult.GroupName);
+                            descriptions.Add($"Group Name: {btnResult.GroupName}");
                         if (!string.IsNullOrWhiteSpace(btnResult.Source))
-                            descriptions.Add("Source: " + btnResult.Source);
+                            descriptions.Add($"Source: {btnResult.Source}");
                         if (!string.IsNullOrWhiteSpace(btnResult.Container))
-                            descriptions.Add("Container: " + btnResult.Container);
+                            descriptions.Add($"Container: {btnResult.Container}");
                         if (!string.IsNullOrWhiteSpace(btnResult.Codec))
-                            descriptions.Add("Codec: " + btnResult.Codec);
+                            descriptions.Add($"Codec: {btnResult.Codec}");
                         if (!string.IsNullOrWhiteSpace(btnResult.Resolution))
-                            descriptions.Add("Resolution: " + btnResult.Resolution);
+                            descriptions.Add($"Resolution: {btnResult.Resolution}");
                         if (!string.IsNullOrWhiteSpace(btnResult.Origin))
-                            descriptions.Add("Origin: " + btnResult.Origin);
+                            descriptions.Add($"Origin: {btnResult.Origin}");
                         if (!string.IsNullOrWhiteSpace(btnResult.Series))
-                            descriptions.Add("Youtube Trailer: <a href=\"" + btnResult.YoutubeTrailer + "\">" + btnResult.YoutubeTrailer + "</a>");
-
+                            descriptions.Add(
+                                $"Youtube Trailer: <a href=\"{btnResult.YoutubeTrailer}\">{btnResult.YoutubeTrailer}</a>");
                         item.Description = string.Join("<br />\n", descriptions);
-
                         releases.Add(item);
                     }
-                }
             }
             catch (Exception ex)
             {
                 OnParseError(response.Content, ex);
             }
+
             return releases;
         }
 

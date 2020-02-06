@@ -1,4 +1,4 @@
-﻿namespace Jackett.Common.Models.IndexerConfig
+namespace Jackett.Common.Models.IndexerConfig
 {
     public class ConfigurationDataBasicLoginWithRSSAndDisplay : ConfigurationData
     {
@@ -12,7 +12,7 @@
             Username = new StringItem { Name = "Username" };
             Password = new StringItem { Name = "Password" };
             RSSKey = new HiddenItem { Name = "RSSKey" };
-            DisplayText = new DisplayItem(""){ Name = "" };
+            DisplayText = new DisplayItem("") { Name = "" };
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Jackett.Common.Models.IndexerConfig
+namespace Jackett.Common.Models.IndexerConfig
 {
     public class ConfigurationDataRecaptchaLogin : ConfigurationData
     {
@@ -11,10 +11,8 @@
         {
             Username = new StringItem { Name = "Username" };
             Password = new StringItem { Name = "Password" };
-            Captcha = new RecaptchaItem() { Name = "Recaptcha" };
+            Captcha = new RecaptchaItem { Name = "Recaptcha" };
             Instructions = new DisplayItem(instructionMessageOptional) { Name = "" };
         }
-
-
     }
 }

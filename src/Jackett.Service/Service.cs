@@ -1,61 +1,52 @@
-﻿using Jackett.Common.Models.Config;
-using Jackett.Common.Services;
-using Jackett.Common.Services.Interfaces;
-using Jackett.Common.Utils;
-using NLog;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.ServiceProcess;
+using Jackett.Common.Models.Config;
+using Jackett.Common.Services;
+using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
+using NLog;
 
 namespace Jackett.Service
 {
     public partial class Service : ServiceBase
     {
-        private IProcessService processService;
-        private Process consoleProcess;
-        private Logger logger;
-        private bool serviceStopInitiated;
+        private readonly IProcessService _processService;
+        private Process _consoleProcess;
+        private readonly Logger _logger;
+        private bool _serviceStopInitiated;
 
         public Service()
         {
             InitializeComponent();
-
-            RuntimeSettings runtimeSettings = new RuntimeSettings()
-            {
-                CustomLogFileName = "ServiceLog.txt"
-            };
-
+            var runtimeSettings = new RuntimeSettings { CustomLogFileName = "ServiceLog.txt" };
             LogManager.Configuration = LoggingSetup.GetLoggingConfiguration(runtimeSettings);
-            logger = LogManager.GetCurrentClassLogger();
-
-            logger.Info("Initiating Jackett Service v" + EnvironmentUtil.JackettVersion);
-
-            processService = new ProcessService(logger);
+            _logger = LogManager.GetCurrentClassLogger();
+            _logger.Info($"Initiating Jackett Service v{EnvironmentUtil.JackettVersion}");
+            _processService = new ProcessService(_logger);
         }
 
         protected override void OnStart(string[] args)
         {
-            logger.Info("Service starting");
-            serviceStopInitiated = false;
+            _logger.Info("Service starting");
+            _serviceStopInitiated = false;
             StartConsoleApplication();
         }
 
         protected override void OnStop()
         {
-            logger.Info("Service stopping");
-            serviceStopInitiated = true;
+            _logger.Info("Service stopping");
+            _serviceStopInitiated = true;
             StopConsoleApplication();
         }
 
         private void StartConsoleApplication()
         {
-            string applicationFolder = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath);
-
+            var applicationFolder = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath);
             var exePath = Path.Combine(applicationFolder, "JackettConsole.exe");
-
-            var startInfo = new ProcessStartInfo()
+            var startInfo = new ProcessStartInfo
             {
                 CreateNoWindow = true,
                 UseShellExecute = false,
@@ -63,39 +54,32 @@ namespace Jackett.Service
                 RedirectStandardInput = true,
                 RedirectStandardError = true
             };
-
-            consoleProcess = Process.Start(startInfo);
-            consoleProcess.EnableRaisingEvents = true;
-            consoleProcess.Exited += ProcessExited;
-            consoleProcess.ErrorDataReceived += ProcessErrorDataReceived;
+            _consoleProcess = Process.Start(startInfo);
+            _consoleProcess.EnableRaisingEvents = true;
+            _consoleProcess.Exited += ProcessExited;
+            _consoleProcess.ErrorDataReceived += ProcessErrorDataReceived;
         }
 
-        private void ProcessErrorDataReceived(object sender, DataReceivedEventArgs e)
-        {
-            logger.Error(e.Data);
-        }
+        private void ProcessErrorDataReceived(object sender, DataReceivedEventArgs e) => _logger.Error(e.Data);
 
         private void ProcessExited(object sender, EventArgs e)
         {
-            logger.Info("Console process exited");
-
-            if (!serviceStopInitiated)
+            _logger.Info("Console process exited");
+            if (!_serviceStopInitiated)
             {
-                logger.Info("Service stop not responsible for process exit");
+                _logger.Info("Service stop not responsible for process exit");
                 Stop();
             }
         }
 
         private void StopConsoleApplication()
         {
-            if (consoleProcess != null && !consoleProcess.HasExited)
+            if (_consoleProcess?.HasExited == false)
             {
-                consoleProcess.StandardInput.Close();
-                consoleProcess.WaitForExit(2000);
-                if (consoleProcess != null && !consoleProcess.HasExited)
-                {
-                    consoleProcess.Kill();
-                }
+                _consoleProcess.StandardInput.Close();
+                _consoleProcess.WaitForExit(2000);
+                if (_consoleProcess?.HasExited == false)
+                    _consoleProcess.Kill();
             }
         }
     }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,27 +14,21 @@ namespace Jackett.Common.Indexers.Meta
 {
     public abstract class BaseMetaIndexer : BaseWebIndexer
     {
-        protected BaseMetaIndexer(string name, string description, IFallbackStrategyProvider fallbackStrategyProvider, IResultFilterProvider resultFilterProvider, IIndexerConfigurationService configService, WebClient webClient, Logger logger, ConfigurationData configData, IProtectionService p, Func<IIndexer, bool> filter)
-            : base(name, "http://127.0.0.1/", description, configService, webClient, logger, configData, p, null, null)
+        protected BaseMetaIndexer(string name, string description, IFallbackStrategyProvider fallbackStrategyProvider,
+                                  IResultFilterProvider resultFilterProvider, IIndexerConfigurationService configService,
+                                  WebClient webClient, Logger logger, ConfigurationData configData, IProtectionService p,
+                                  Func<IIndexer, bool> filter) : base(
+            name, "http://127.0.0.1/", description, configService, webClient, logger, configData, p)
         {
-            filterFunc = filter;
-            this.fallbackStrategyProvider = fallbackStrategyProvider;
-            this.resultFilterProvider = resultFilterProvider;
+            _filterFunc = filter;
+            _fallbackStrategyProvider = fallbackStrategyProvider;
+            _resultFilterProvider = resultFilterProvider;
         }
 
-        public override bool CanHandleQuery(TorznabQuery query)
-        {
-            if (query == null)
-                return false;
-            if (query.QueryType == "indexers")
-                return true;
-            return base.CanHandleQuery(query);
-        }
+        public override bool CanHandleQuery(TorznabQuery query) => query != null && (query.QueryType == "indexers" || base.CanHandleQuery(query));
 
-        public override Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
-        {
-            return Task.FromResult(IndexerConfigurationStatus.Completed);
-        }
+        public override Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson) =>
+            Task.FromResult(IndexerConfigurationStatus.Completed);
 
         public override async Task<IndexerResult> ResultsForQuery(TorznabQuery query)
         {
@@ -43,13 +37,13 @@ namespace Jackett.Common.Indexers.Meta
                 if (!CanHandleQuery(query))
                     return new IndexerResult(this, new ReleaseInfo[0]);
                 var results = await PerformQuery(query);
-                var correctedResults = results.Select(r =>
-                {
-                    if (r.PublishDate > DateTime.Now)
-                        r.PublishDate = DateTime.Now;
-                    return r;
-                });
-
+                var correctedResults = results.Select(
+                    r =>
+                    {
+                        if (r.PublishDate > DateTime.Now)
+                            r.PublishDate = DateTime.Now;
+                        return r;
+                    });
                 return new IndexerResult(this, correctedResults);
             }
             catch (Exception ex)
@@ -61,11 +55,14 @@ namespace Jackett.Common.Indexers.Meta
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var indexers = validIndexers;
-            IEnumerable<Task<IndexerResult>> supportedTasks = indexers.Where(i => i.CanHandleQuery(query)).Select(i => i.ResultsForQuery(query)).ToList(); // explicit conversion to List to execute LINQ query
-
-            var fallbackStrategies = fallbackStrategyProvider.FallbackStrategiesForQuery(query);
+            IEnumerable<Task<IndexerResult>> supportedTasks =
+                indexers.Where(i => i.CanHandleQuery(query)).Select(i => i.ResultsForQuery(query))
+                        .ToList(); // explicit conversion to List to execute LINQ query
+            var fallbackStrategies = _fallbackStrategyProvider.FallbackStrategiesForQuery(query);
             var fallbackQueries = fallbackStrategies.Select(async f => await f.FallbackQueries()).SelectMany(t => t.Result);
-            var fallbackTasks = fallbackQueries.SelectMany(q => indexers.Where(i => !i.CanHandleQuery(query) && i.CanHandleQuery(q)).Select(i => i.ResultsForQuery(q.Clone())));
+            var fallbackTasks = fallbackQueries.SelectMany(
+                q => indexers.Where(i => !i.CanHandleQuery(query) && i.CanHandleQuery(q))
+                             .Select(i => i.ResultsForQuery(q.Clone())));
             var tasks = supportedTasks.Concat(fallbackTasks.ToList()); // explicit conversion to List to execute LINQ query
 
             // When there are many indexers used by a metaindexer querying each and every one of them can take very very
@@ -78,19 +75,19 @@ namespace Jackett.Common.Indexers.Meta
             // I hope in the future these queries will speed up (using caching or some other magic), however until then
             // just stick with a timeout.
             var aggregateTask = tasks.Until(TimeSpan.FromSeconds(40));
-
             try
             {
                 await aggregateTask;
             }
             catch
             {
-                logger.Error(aggregateTask.Exception, "Error during request in metaindexer " + ID);
+                logger.Error(aggregateTask.Exception, $"Error during request in metaindexer {ID}");
             }
 
             var unorderedResult = aggregateTask.Result.Select(r => r.Releases).Flatten();
-            var resultFilters = resultFilterProvider.FiltersForQuery(query);
-            var filteredResults = resultFilters.Select(async f => await f.FilterResults(unorderedResult)).SelectMany(t => t.Result);
+            var resultFilters = _resultFilterProvider.FiltersForQuery(query);
+            var filteredResults = resultFilters.Select(async f => await f.FilterResults(unorderedResult))
+                                               .SelectMany(t => t.Result);
             var uniqueFilteredResults = filteredResults.Distinct();
             var orderedResults = uniqueFilteredResults.OrderByDescending(r => r.Gain);
             // Limiting the response size might be interesting for use-cases where there are
@@ -102,37 +99,18 @@ namespace Jackett.Common.Indexers.Meta
             return result;
         }
 
-        public override TorznabCapabilities TorznabCaps
-        {
-            get
-            {
-                return validIndexers.Select(i => i.TorznabCaps).Aggregate(new TorznabCapabilities(), TorznabCapabilities.Concat);
-            }
-        }
+        public override TorznabCapabilities TorznabCaps => validIndexers
+                                                           .Select(i => i.TorznabCaps).Aggregate(
+                                                               new TorznabCapabilities(), TorznabCapabilities.Concat);
 
-        public override bool IsConfigured
-        {
-            get
-            {
-                return Indexers != null;
-            }
-        }
+        public override bool IsConfigured => Indexers != null;
 
-        private IEnumerable<IIndexer> validIndexers
-        {
-            get
-            {
-                if (Indexers == null)
-                    return null;
-
-                return Indexers.Where(i => i.IsConfigured && filterFunc(i));
-            }
-        }
+        private IEnumerable<IIndexer> validIndexers => Indexers?.Where(i => i.IsConfigured && _filterFunc(i));
 
         public IEnumerable<IIndexer> Indexers;
 
-        private Func<IIndexer, bool> filterFunc;
-        private IFallbackStrategyProvider fallbackStrategyProvider;
-        private IResultFilterProvider resultFilterProvider;
+        private readonly Func<IIndexer, bool> _filterFunc;
+        private readonly IFallbackStrategyProvider _fallbackStrategyProvider;
+        private readonly IResultFilterProvider _resultFilterProvider;
     }
 }

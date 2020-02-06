@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 
@@ -12,7 +12,7 @@ namespace Jackett.Common.Services.Interfaces
         void ReserveUrls(bool doInstall = true);
         Uri ConvertToProxyLink(Uri link, string serverUrl, string indexerId, string action = "dl", string file = "t");
         string BasePath();
-        string GetServerUrl(HttpRequest Request);
+        string GetServerUrl(HttpRequest request);
         List<string> notices { get; }
         string GetBlackholeDirectory();
         string GetApiKey();

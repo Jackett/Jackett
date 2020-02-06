@@ -1,4 +1,4 @@
-﻿using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
 using Jackett.Common.Utils;
 
 namespace Jackett.Common.Models.DTO
@@ -11,9 +11,7 @@ namespace Jackett.Common.Models.DTO
 
         public static TorznabQuery ToTorznabQuery(ApiSearch request)
         {
-            var stringQuery = new TorznabQuery();
-            stringQuery.QueryType = "search";
-
+            var stringQuery = new TorznabQuery { QueryType = "search" };
             var queryStr = request.Query;
             if (queryStr != null)
             {
@@ -27,15 +25,14 @@ namespace Jackett.Common.Models.DTO
                 var episodeMatch = Regex.Match(queryStr, @"E(\d{2,4}[A-Za-z]?)");
                 if (episodeMatch.Success)
                 {
-                    stringQuery.Episode = episodeMatch.Groups[1].Value.TrimStart(new char[] { '0' });
+                    stringQuery.Episode = episodeMatch.Groups[1].Value.TrimStart('0');
                     queryStr = queryStr.Remove(episodeMatch.Index, episodeMatch.Length);
                 }
+
                 queryStr = queryStr.Trim();
             }
             else
-            {
                 queryStr = ""; // empty string search is interpreted as null 
-            }
 
             stringQuery.SearchTerm = queryStr;
             stringQuery.Categories = request.Category;
@@ -46,19 +43,17 @@ namespace Jackett.Common.Models.DTO
             // try to build an IMDB Query (tt plus 6 to 8 digits)
             if (stringQuery.SanitizedSearchTerm.StartsWith("tt") && stringQuery.SanitizedSearchTerm.Length <= 10)
             {
-                var imdbID = ParseUtil.GetFullImdbID(stringQuery.SanitizedSearchTerm);
-                TorznabQuery imdbQuery = null;
-                if (imdbID != null)
+                var imdbId = ParseUtil.GetFullImdbID(stringQuery.SanitizedSearchTerm);
+                if (imdbId != null)
                 {
-                    imdbQuery = new TorznabQuery()
+                    var imdbQuery = new TorznabQuery
                     {
-                        ImdbID = imdbID,
+                        ImdbID = imdbId,
                         Categories = stringQuery.Categories,
                         Season = stringQuery.Season,
-                        Episode = stringQuery.Episode,
+                        Episode = stringQuery.Episode
                     };
                     imdbQuery.ExpandCatsToSubCats();
-
                     return imdbQuery;
                 }
             }

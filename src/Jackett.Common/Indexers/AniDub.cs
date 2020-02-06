@@ -1,4 +1,11 @@
-﻿using AngleSharp.Dom;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
@@ -8,38 +15,31 @@ using Jackett.Common.Utils.Clients;
 using Microsoft.AspNetCore.WebUtilities;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Jackett.Common.Indexers
 {
     internal class AniDub : BaseWebIndexer
     {
-        private static readonly Regex EpisodeInfoRegex = new Regex(@"\[(.*?)(?: \(.*?\))? из (.*?)\]$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-        private static readonly Regex SeasonInfoQueryRegex = new Regex(@"S(\d+)(?:E\d*)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-        private static readonly Regex SeasonInfoRegex = new Regex(@"(?:(?:TV-)|(?:ТВ-))(\d+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-        private static readonly Lazy<Regex> StripRussianTitleRegex = new Lazy<Regex>(() => new Regex(@"^.*?\/\s*", RegexOptions.Compiled));
+        private static readonly Regex EpisodeInfoRegex = new Regex(
+            @"\[(.*?)(?: \(.*?\))? из (.*?)\]$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        public AniDub(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-                    : base(name: "AniDUB",
-                           description: "AniDUB Tracker is a semi-private russian tracker and release group for anime",
-                           link: "https://tr.anidub.com/",
-                           caps: new TorznabCapabilities(),
-                           configService: configService,
-                           client: wc,
-                           logger: l,
-                           p: ps,
-                           configData: new ConfigurationDataAniDub())
+        private static readonly Regex SeasonInfoQueryRegex = new Regex(
+            @"S(\d+)(?:E\d*)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        private static readonly Regex SeasonInfoRegex = new Regex(
+            @"(?:(?:TV-)|(?:ТВ-))(\d+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        private static readonly Lazy<Regex> StripRussianTitleRegex =
+            new Lazy<Regex>(() => new Regex(@"^.*?\/\s*", RegexOptions.Compiled));
+
+        public AniDub(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps) : base(
+            "AniDUB", description: "AniDUB Tracker is a semi-private russian tracker and release group for anime",
+            link: "https://tr.anidub.com/", caps: new TorznabCapabilities(), configService: configService, client: wc,
+            logger: l, p: ps, configData: new ConfigurationDataAniDub())
         {
             Encoding = Encoding.UTF8;
             Language = "ru-ru";
             Type = "semi-private";
-
             AddCategoryMapping(2, TorznabCatType.TVAnime, "Аниме TV");
             AddCategoryMapping(14, TorznabCatType.TVAnime, "Аниме TV / Законченные сериалы");
             AddCategoryMapping(10, TorznabCatType.TVAnime, "Аниме TV / Аниме Ongoing");
@@ -60,119 +60,97 @@ namespace Jackett.Common.Indexers
         }
 
         private static Dictionary<string, string> CategoriesMap => new Dictionary<string, string>
-            {
-                { "/anime_tv/full", "14" },
-                { "/anime_tv/anime_ongoing", "10" },
-                { "/anime_tv/shonen", "11" },
-                { "/anime_tv", "2" },
-                { "/xxx", "13" },
-                { "/manga", "15" },
-                { "/ost", "16" },
-                { "/podcast", "17" },
-                { "/anime_movie", "3" },
-                { "/anime_ova/anime_ona", "5" },
-                { "/anime_ova", "4" },
-                { "/dorama/japan_dorama", "6" },
-                { "/dorama/korea_dorama", "7" },
-                { "/dorama/china_dorama", "8" },
-                { "/dorama", "9" },
-                { "/anons_ongoing", "12" },
-            };
+        {
+            {"/anime_tv/full", "14"},
+            {"/anime_tv/anime_ongoing", "10"},
+            {"/anime_tv/shonen", "11"},
+            {"/anime_tv", "2"},
+            {"/xxx", "13"},
+            {"/manga", "15"},
+            {"/ost", "16"},
+            {"/podcast", "17"},
+            {"/anime_movie", "3"},
+            {"/anime_ova/anime_ona", "5"},
+            {"/anime_ova", "4"},
+            {"/dorama/japan_dorama", "6"},
+            {"/dorama/korea_dorama", "7"},
+            {"/dorama/china_dorama", "8"},
+            {"/dorama", "9"},
+            {"/anons_ongoing", "12"}
+        };
 
-        private static ICollection<string> DefaultSearchCategories => new[] { "0" };
+        private static ICollection<string> DefaultSearchCategories => new[]
+        {
+            "0"
+        };
 
         private ConfigurationDataAniDub Configuration
         {
-            get { return (ConfigurationDataAniDub)configData; }
-            set { configData = value; }
+            get => (ConfigurationDataAniDub)configData;
+            set => configData = value;
         }
 
         /// <summary>
         /// https://tr.anidub.com/index.php
         /// </summary>
-        private string LoginUrl => SiteLink + "index.php";
+        private string LoginUrl => $"{SiteLink}index.php";
 
         /// <summary>
         /// https://tr.anidub.com/index.php?do=search
         /// </summary>
-        private string SearchUrl => SiteLink + "index.php?do=search";
+        private string SearchUrl => $"{SiteLink}index.php?do=search";
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-
             var data = new Dictionary<string, string>
             {
-                { "login_name", Configuration.Username.Value },
-                { "login_password", Configuration.Password.Value },
-                { "login", "submit" }
+                {"login_name", Configuration.Username.Value},
+                {"login_password", Configuration.Password.Value},
+                {"login", "submit"}
             };
-
-            var result = await RequestLoginAndFollowRedirect(
-                LoginUrl,
-                data,
-                CookieHeader,
-                returnCookiesFromFirstCall: true
-            );
-
+            var result = await RequestLoginAndFollowRedirectAsync(LoginUrl, data, CookieHeader, true);
             var parser = new HtmlParser();
             var document = await parser.ParseDocumentAsync(result.Content);
-
-            await ConfigureIfOK(result.Cookies, IsAuthorized(result), () =>
-            {
-                const string ErrorSelector = "#content .berror .berror_c";
-                var errorMessage = document.QuerySelector(ErrorSelector).Text().Trim();
-                throw new ExceptionWithConfigData(errorMessage, Configuration);
-            });
-
+            await ConfigureIfOkAsync(
+                result.Cookies, IsAuthorized(result), () =>
+                {
+                    const string errorSelector = "#content .berror .berror_c";
+                    var errorMessage = document.QuerySelector(errorSelector).Text().Trim();
+                    throw new ExceptionWithConfigData(errorMessage, Configuration);
+                });
             return IndexerConfigurationStatus.Completed;
         }
 
         public override async Task<byte[]> Download(Uri link)
         {
-            await EnsureAuthorized();
+            await EnsureAuthorizedAsync();
             return await base.Download(link);
         }
 
-        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
-        {
-            // If the search string is empty use the latest releases
-            if (query.IsTest || query.SearchTerm.IsNullOrEmptyOrWhitespace())
-            {
-                return await FetchNewReleases();
-            }
-            else
-            {
-                return await PerformSearch(query);
-            }
-        }
+        // If the search string is empty use the latest releases
+        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query) => query.IsTest || query.SearchTerm.IsNullOrEmptyOrWhitespace() ? await FetchNewReleasesAsync() : await PerformSearchAsync(query);
 
-        private async Task EnsureAuthorized()
+        private async Task EnsureAuthorizedAsync()
         {
-            var result = await RequestStringWithCookiesAndRetry(SiteLink);
-
+            var result = await RequestStringWithCookiesAndRetryAsync(SiteLink);
             if (!IsAuthorized(result))
-            {
                 await ApplyConfiguration(null);
-            }
         }
 
-        private async Task<List<ReleaseInfo>> FetchNewReleases()
+        private async Task<List<ReleaseInfo>> FetchNewReleasesAsync()
         {
-            const string ReleaseLinksSelector = "#dle-content > .story > .story_h > .lcol > h2 > a";
-
-            var result = await RequestStringWithCookiesAndRetry(SiteLink);
+            const string releaseLinksSelector = "#dle-content > .story > .story_h > .lcol > h2 > a";
+            var result = await RequestStringWithCookiesAndRetryAsync(SiteLink);
             var releases = new List<ReleaseInfo>();
-
             try
             {
                 var parser = new HtmlParser();
                 var document = await parser.ParseDocumentAsync(result.Content);
-
-                foreach (var linkNode in document.QuerySelectorAll(ReleaseLinksSelector))
+                foreach (var linkNode in document.QuerySelectorAll(releaseLinksSelector))
                 {
                     var url = linkNode.GetAttribute("href");
-                    releases.AddRange(await FetchShowReleases(url));
+                    releases.AddRange(await FetchShowReleasesAsync(url));
                 }
             }
             catch (Exception ex)
@@ -183,43 +161,32 @@ namespace Jackett.Common.Indexers
             return releases;
         }
 
-        private async Task<List<ReleaseInfo>> FetchShowReleases(string url)
+        private async Task<List<ReleaseInfo>> FetchShowReleasesAsync(string url)
         {
-            const string ContentId = "dle-content";
-            const string ReleasesSelector = "#tabs .torrent_c > div";
-
+            const string contentId = "dle-content";
+            const string releasesSelector = "#tabs .torrent_c > div";
             var releases = new List<ReleaseInfo>();
-
             var uri = new Uri(url);
             var categories = ParseCategories(uri)?.ToArray();
             if (categories == null)
-            {
                 // If no category then it should be a news topic
                 // Doesn't happen often
                 return releases;
-            }
-
-            var result = await RequestStringWithCookiesAndRetry(url);
-
+            var result = await RequestStringWithCookiesAndRetryAsync(url);
             try
             {
                 var parser = new HtmlParser();
                 var document = await parser.ParseDocumentAsync(result.Content);
-                var content = document.GetElementById(ContentId);
-
+                var content = document.GetElementById(contentId);
                 var date = GetDateFromShowPage(url, content);
-
                 var baseTitle = GetBaseTitle(categories, content);
                 var bannerUrl = GetBannerUrl(url, content);
-
-                foreach (var releaseNode in content.QuerySelectorAll(ReleasesSelector))
+                foreach (var releaseNode in content.QuerySelectorAll(releasesSelector))
                 {
                     IElement tabNode;
                     if (releaseNode.Children.Any(node => node.ClassName?.Contains("torrent_h") == true))
-                    {
                         // No quality, one tab, seems like a buggy page
                         tabNode = releaseNode;
-                    }
                     else
                     {
                         const StringComparison comparisonType = StringComparison.InvariantCultureIgnoreCase;
@@ -227,8 +194,6 @@ namespace Jackett.Common.Indexers
                     }
 
                     var seeders = GetReleaseSeeders(tabNode);
-
-
                     var release = new ReleaseInfo
                     {
                         Title = BuildReleaseTitle(baseTitle, tabNode),
@@ -246,7 +211,6 @@ namespace Jackett.Common.Indexers
                         Peers = GetReleaseLeechers(tabNode) + seeders,
                         BannerUrl = bannerUrl
                     };
-
                     releases.Add(release);
                 }
             }
@@ -258,96 +222,84 @@ namespace Jackett.Common.Indexers
             return releases;
         }
 
-        private static string GetReleaseGuid(string url, IElement tabNode)
-        {
-            // Appending id to differentiate between different quality versions
-            return QueryHelpers.AddQueryString(url, "id", GetTorrentId(tabNode));
-        }
+        // Appending id to differentiate between different quality versions
+        private static string GetReleaseGuid(string url, IElement tabNode) =>
+            QueryHelpers.AddQueryString(url, "id", GetTorrentId(tabNode));
 
         private static int GetReleaseLeechers(IElement tabNode)
         {
-            const string LeechersSelector = ".list.down > .li_swing_m";
-
-            var leechersStr = tabNode.QuerySelector(LeechersSelector).Text();
+            const string leechersSelector = ".list.down > .li_swing_m";
+            var leechersStr = tabNode.QuerySelector(leechersSelector).Text();
             int.TryParse(leechersStr, out var leechers);
             return leechers;
         }
 
         private static int GetReleaseSeeders(IElement tabNode)
         {
-            const string SeedersSelector = ".list.down > .li_distribute_m";
-
-            var seedersStr = tabNode.QuerySelector(SeedersSelector).Text();
+            const string seedersSelector = ".list.down > .li_distribute_m";
+            var seedersStr = tabNode.QuerySelector(seedersSelector).Text();
             int.TryParse(seedersStr, out var seeders);
             return seeders;
         }
 
         private static string GetReleaseDescription(IElement tabNode)
         {
-            const string DescriptionSelector = ".tech > pre";
-            return tabNode.QuerySelector(DescriptionSelector)?.Text()?.Trim();
+            const string descriptionSelector = ".tech > pre";
+            return tabNode.QuerySelector(descriptionSelector)?.Text()?.Trim();
         }
 
         private static long GetReleaseGrabs(IElement tabNode)
         {
-            const string GrabsSelector = ".list.down > .li_download_m";
-
-            var grabsStr = tabNode.QuerySelector(GrabsSelector).Text();
+            const string grabsSelector = ".list.down > .li_download_m";
+            var grabsStr = tabNode.QuerySelector(grabsSelector).Text();
             long.TryParse(grabsStr, out var grabs);
             return grabs;
         }
 
         private static long GetReleaseSize(IElement tabNode)
         {
-            const string SizeSelector = ".list.down > .red";
-
-            var sizeStr = tabNode.QuerySelector(SizeSelector).Text();
+            const string sizeSelector = ".list.down > .red";
+            var sizeStr = tabNode.QuerySelector(sizeSelector).Text();
             return ReleaseInfo.GetBytes(sizeStr);
         }
 
-        private Uri GetReleaseLink(IElement tabNode) =>
-            new Uri($"{SiteLink}engine/download.php?id={GetTorrentId(tabNode)}");
+        private Uri GetReleaseLink(IElement tabNode) => new Uri($"{SiteLink}engine/download.php?id={GetTorrentId(tabNode)}");
 
         private static string GetTorrentId(IElement tabNode)
         {
             var nodeId = tabNode.Id;
 
             // Format is "torrent_{id}_info"
-            return nodeId
-                .Replace("torrent_", string.Empty)
-                .Replace("_info", string.Empty);
+            return nodeId.Replace("torrent_", string.Empty).Replace("_info", string.Empty);
         }
 
         private static string BuildReleaseTitle(string baseTitle, IElement tabNode)
         {
             var releaseNode = tabNode.ParentElement;
             var quality = GetQuality(releaseNode);
-
-            if (!quality.IsNullOrEmptyOrWhitespace())
-            {
-                return $"{baseTitle} [{quality}]";
-            }
-
-            return baseTitle;
+            return !quality.IsNullOrEmptyOrWhitespace() ? $"{baseTitle} [{quality}]" : baseTitle;
         }
 
         private static string GetQuality(IElement releaseNode)
         {
             // For some releases there's no block with quality
             if (releaseNode.Id.IsNullOrEmptyOrWhitespace())
-            {
                 return null;
-            }
-
             var quality = releaseNode.Id.Trim();
             switch (quality.ToLowerInvariant())
             {
-                case "tv720": return "HDTV 720p";
-                case "tv1080": return "HDTV 1080p";
-                case "bd720": return "BDRip 720p";
-                case "bd1080": return "BDRip 1080p";
-                case "hwp": return "SDTV";
-                default: return quality.ToUpperInvariant();
+                case "tv720":
+                    return "HDTV 720p";
+                case "tv1080":
+                    return "HDTV 1080p";
+                case "bd720":
+                    return "BDRip 720p";
+                case "bd1080":
+                    return "BDRip 1080p";
+                case "hwp":
+                    return "SDTV";
+                default:
+                    return quality.ToUpperInvariant();
             }
         }
 
@@ -355,31 +307,21 @@ namespace Jackett.Common.Indexers
         {
             var bannerNode = content.QuerySelector(".poster_bg .poster img");
             var bannerSrc = bannerNode.GetAttribute("src");
-
             if (Uri.TryCreate(bannerSrc, UriKind.Absolute, out var bannerUrl))
-            {
                 return bannerUrl;
-            }
-
             logger.Warn($"[AniDub] Banner URL couldn't be parsed on '{url}'. Banner node src: {bannerSrc}");
-
             return null;
         }
 
         private string GetBaseTitle(int[] categories, IElement content)
         {
             var domTitle = content.QuerySelector("#news-title");
-
             var baseTitle = domTitle.Text().Trim();
             baseTitle = StripRussianTitle(baseTitle);
             baseTitle = FixBookInfo(baseTitle);
-
             var isShow = categories.Contains(TorznabCatType.TVAnime.ID);
-
             if (isShow)
-            {
                 baseTitle = FixShowTitle(baseTitle);
-            }
             else
             {
                 // Just fix TV-\d to S\d and [\d+] to E\d
@@ -392,12 +334,8 @@ namespace Jackett.Common.Indexers
             // Mostly audio is in original name, which can't be known during parsing
             // Skipping appending russing language tag
             var isAudio = categories.Contains(TorznabCatType.Audio.ID);
-
             if (!isAudio)
-            {
                 baseTitle = AppendRussianLanguageTag(baseTitle);
-            }
-
             return baseTitle.Trim();
         }
 
@@ -411,61 +349,33 @@ namespace Jackett.Common.Indexers
             // Normalize for parsing usages
             // Should look like S01E01-E09
             return EpisodeInfoRegex.Replace(
-                title,
-                match => match.Success ? $"S{seasonNum:00}E01-E{match.Groups[1]}" : string.Empty
-            );
+                title, match => match.Success ? $"S{seasonNum:00}E01-E{match.Groups[1]}" : string.Empty);
         }
 
         private int GetSeasonNum(string title)
         {
             // First season is often skipped so return 1 if nothing matched
             const int defaultSeason = 1;
-
             var seasonMatch = SeasonInfoRegex.Match(title);
-
             if (!seasonMatch.Success)
-            {
                 return defaultSeason;
-            }
-
             var seasonVal = seasonMatch.Groups[defaultSeason].Value;
-            if (int.TryParse(seasonVal, out var seasonNum))
-            {
-                return seasonNum;
-            }
-
-            return defaultSeason;
+            return int.TryParse(seasonVal, out var seasonNum) ? seasonNum : defaultSeason;
         }
 
-        private string StripRussianTitle(string title)
-        {
-            if (Configuration.StripRussianTitle.Value)
-            {
-                return StripRussianTitleRegex.Value.Replace(title, string.Empty);
-            }
+        private string StripRussianTitle(string title) => Configuration.StripRussianTitle.Value ? StripRussianTitleRegex.Value.Replace(title, string.Empty) : title;
 
-            return title;
-        }
+        private static string FixBookInfo(string title) => title.Replace("[Главы ", "[");
 
-        private static string FixBookInfo(string title) =>
-            title.Replace("[Главы ", "[");
+        private static string FixEpisodeInfo(string title) => EpisodeInfoRegex.Replace(
+            title, match => match.Success ? $"E01-E{match.Groups[1]}" : string.Empty);
 
-        private static string FixEpisodeInfo(string title) =>
-            EpisodeInfoRegex.Replace(
-                title,
-                match => match.Success ? $"E01-E{match.Groups[1]}" : string.Empty
-            );
+        private static string FixMovieInfo(string title) => title.Replace(" [Movie]", string.Empty);
 
-        private static string FixMovieInfo(string title) =>
-            title.Replace(" [Movie]", string.Empty);
+        private static string FixSeasonInfo(string title) => SeasonInfoRegex.Replace(
+            title, match => match.Success ? $"S{int.Parse(match.Groups[1].Value):00}" : string.Empty);
 
-        private static string FixSeasonInfo(string title) =>
-            SeasonInfoRegex.Replace(
-                title,
-                match => match.Success ? $"S{int.Parse(match.Groups[1].Value):00}" : string.Empty
-            );
-
-        private static string AppendRussianLanguageTag(string title) => title + " [RUS]";
+        private static string AppendRussianLanguageTag(string title) => $"{title} [RUS]";
 
         private DateTime GetDateFromShowPage(string url, IElement content)
         {
@@ -475,9 +385,7 @@ namespace Jackett.Common.Indexers
             // Would be better to use AssumeLocal and provide "ru-RU" culture,
             // but doesn't work cross-platform
             const DateTimeStyles style = DateTimeStyles.AssumeUniversal;
-
             var culture = CultureInfo.InvariantCulture;
-
             var dateText = GetDateFromDocument(content);
 
             //Correct way but will not always work on cross-platform
@@ -487,11 +395,8 @@ namespace Jackett.Common.Indexers
             // Russian Standard Time is +03:00, no DST
             const int russianStandardTimeDiff = 3;
             var nowLocal = DateTime.UtcNow.AddHours(russianStandardTimeDiff);
-
-            dateText = dateText
-                .Replace("Вчера", nowLocal.AddDays(-1).ToString(dateFormat))
-                .Replace("Сегодня", nowLocal.ToString(dateFormat));
-
+            dateText = dateText.Replace("Вчера", nowLocal.AddDays(-1).ToString(dateFormat))
+                               .Replace("Сегодня", nowLocal.ToString(dateFormat));
             if (DateTime.TryParseExact(dateText, dateTimeFormat, culture, style, out var date))
             {
                 var utcDate = date.ToUniversalTime();
@@ -499,56 +404,39 @@ namespace Jackett.Common.Indexers
             }
 
             logger.Warn($"[AniDub] Date time couldn't be parsed on '{url}'. Date text: {dateText}");
-
             return DateTime.UtcNow;
         }
 
         private static string GetDateFromDocument(IElement content)
         {
-            const string DateSelector = ".story_inf > li:nth-child(2)";
-
-            var domDate = content.QuerySelector(DateSelector).LastChild;
-
-            if (domDate?.NodeName != "#text")
-            {
-                return string.Empty;
-            }
-
-            return domDate.NodeValue.Trim();
+            const string dateSelector = ".story_inf > li:nth-child(2)";
+            var domDate = content.QuerySelector(dateSelector).LastChild;
+            return domDate?.NodeName != "#text" ? string.Empty : domDate.NodeValue.Trim();
         }
 
-        private bool IsAuthorized(WebClientStringResult result) =>
-            result.Content.Contains("index.php?action=logout");
+        private bool IsAuthorized(WebClientStringResult result) => result.Content.Contains("index.php?action=logout");
 
         private IEnumerable<int> ParseCategories(Uri showUri)
         {
-            Dictionary<string, string> categoriesMap = CategoriesMap;
-
+            var categoriesMap = CategoriesMap;
             var path = showUri.AbsolutePath.ToLowerInvariant();
-
-            return categoriesMap
-                .Where(categoryMap => path.StartsWith(categoryMap.Key))
-                .Select(categoryMap => MapTrackerCatToNewznab(categoryMap.Value))
-                .FirstOrDefault();
+            return categoriesMap.Where(categoryMap => path.StartsWith(categoryMap.Key))
+                                .Select(categoryMap => MapTrackerCatToNewznab(categoryMap.Value)).FirstOrDefault();
         }
 
-        private async Task<List<ReleaseInfo>> PerformSearch(TorznabQuery query)
+        private async Task<List<ReleaseInfo>> PerformSearchAsync(TorznabQuery query)
         {
             const string searchLinkSelector = "#dle-content > .searchitem > h3 > a";
-
             var releases = new List<ReleaseInfo>();
-
-            var response = await PostDataWithCookiesAndRetry(SearchUrl, PreparePostData(query));
-
+            var response = await PostDataWithCookiesAndRetryAsync(SearchUrl, PreparePostData(query));
             try
             {
                 var parser = new HtmlParser();
                 var document = await parser.ParseDocumentAsync(response.Content);
-
                 foreach (var linkNode in document.QuerySelectorAll(searchLinkSelector))
                 {
                     var link = linkNode.GetAttribute("href");
-                    releases.AddRange(await FetchShowReleases(link));
+                    releases.AddRange(await FetchShowReleasesAsync(link));
                 }
             }
             catch (Exception ex)
@@ -563,37 +451,30 @@ namespace Jackett.Common.Indexers
         {
             var data = new List<KeyValuePair<string, string>>
             {
-                { "do", "search" },
-                { "subaction", "search" },
-                { "search_start", "1" },
-                { "full_search", "1" },
-                { "result_from", "1" },
-                { "story", NormalizeSearchQuery(query)},
-                { "titleonly", "0" },
-                { "searchuser", "" },
-                { "replyless", "0" },
-                { "replylimit", "0" },
-                { "searchdate", "0" },
-                { "beforeafter", "after" },
-                { "sortby", "" },
-                { "resorder", "desc" },
-                { "showposts", "1" },
+                {"do", "search"},
+                {"subaction", "search"},
+                {"search_start", "1"},
+                {"full_search", "1"},
+                {"result_from", "1"},
+                {"story", NormalizeSearchQuery(query)},
+                {"titleonly", "0"},
+                {"searchuser", ""},
+                {"replyless", "0"},
+                {"replylimit", "0"},
+                {"searchdate", "0"},
+                {"beforeafter", "after"},
+                {"sortby", ""},
+                {"resorder", "desc"},
+                {"showposts", "1"}
             };
-
             data.AddRange(PrepareCategoriesQuery(query));
-
             return data;
         }
 
         private IEnumerable<KeyValuePair<string, string>> PrepareCategoriesQuery(TorznabQuery query)
         {
-            var categories = query.HasSpecifiedCategories
-                ? MapTorznabCapsToTrackers(query)
-                : DefaultSearchCategories;
-
-            return categories.Select(
-                category => new KeyValuePair<string, string>("catlist[]", category)
-            );
+            var categories = query.HasSpecifiedCategories ? MapTorznabCapsToTrackers(query) : DefaultSearchCategories;
+            return categories.Select(category => new KeyValuePair<string, string>("catlist[]", category));
         }
 
         private static string NormalizeSearchQuery(TorznabQuery query)
@@ -603,10 +484,7 @@ namespace Jackett.Common.Indexers
             // Convert S\dE\d to TV-{Season}
             // because of the convention on the tracker
             searchQuery = SeasonInfoQueryRegex.Replace(
-                searchQuery,
-                match => match.Success ? $"TV-{int.Parse(match.Groups[1].Value)}" : string.Empty
-            );
-
+                searchQuery, match => match.Success ? $"TV-{int.Parse(match.Groups[1].Value)}" : string.Empty);
             if (query.Season > 0)
             {
                 // Replace "TV- " with season from query

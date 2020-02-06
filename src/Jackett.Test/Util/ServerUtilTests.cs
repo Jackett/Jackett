@@ -5,20 +5,13 @@ using NUnit.Framework;
 namespace Jackett.Test.Util
 {
     [TestFixture]
-    class ServerUtilTests : TestBase
+    internal class ServerUtilTests : TestBase
     {
         [Test]
         public void ResureRedirectIsFullyQualified_makes_redicts_fully_qualified()
         {
-            var res = new WebClientByteResult()
-            {
-                RedirectingTo = "list?p=1"
-            };
-
-            var req = new WebRequest()
-            {
-                Url = "http://my.domain.com/page.php"
-            };
+            var res = new WebClientByteResult { RedirectingTo = "list?p=1" };
+            var req = new WebRequest { Url = "http://my.domain.com/page.php" };
 
             // Not fully qualified  requiring redirect
             ServerUtil.ResureRedirectIsFullyQualified(req, res);

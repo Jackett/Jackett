@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Text;
@@ -17,98 +17,80 @@ namespace Jackett.Common.Indexers
 {
     public class PiXELHD : BaseWebIndexer
     {
-        private string LoginUrl
-        { get { return SiteLink + "login.php"; } }
-        private string BrowseUrl
-        { get { return SiteLink + "torrents.php"; } }
+        private string LoginUrl => $"{SiteLink}login.php";
+        private string BrowseUrl => $"{SiteLink}torrents.php";
 
         private new ConfigurationDataCaptchaLogin configData
         {
-            get { return (ConfigurationDataCaptchaLogin)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataCaptchaLogin)base.configData;
+            set => base.configData = value;
         }
 
-        private string input_captcha = null;
-        private string input_username = null;
-        private string input_password = null;
+        private string _inputCaptcha;
+        private string _inputUsername;
+        private string _inputPassword;
 
-        public PiXELHD(IIndexerConfigurationService configService, WebClient webClient, Logger logger, IProtectionService protectionService)
-            : base(name: "PiXELHD",
-                description: "PixelHD (PxHD) is a Private Torrent Tracker for HD .MP4 MOVIES / TV",
-                link: "https://pixelhd.me/",
-                caps: new TorznabCapabilities(),
-                configService: configService,
-                logger: logger,
-                p: protectionService,
-                client: webClient,
-                configData: new ConfigurationDataCaptchaLogin()
-                )
+        public PiXELHD(IIndexerConfigurationService configService, WebClient webClient, Logger logger,
+                       IProtectionService protectionService) : base(
+            "PiXELHD", description: "PixelHD (PxHD) is a Private Torrent Tracker for HD .MP4 MOVIES / TV",
+            link: "https://pixelhd.me/", caps: new TorznabCapabilities(), configService: configService, logger: logger,
+            p: protectionService, client: webClient, configData: new ConfigurationDataCaptchaLogin())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
-
             TorznabCaps.SupportsImdbMovieSearch = true;
-
             AddCategoryMapping(1, TorznabCatType.MoviesHD);
         }
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
-            var LoginParser = new HtmlParser();
-            var LoginDocument = LoginParser.ParseDocument(loginPage.Content);
-
+            var loginPage = await RequestStringWithCookiesAsync(LoginUrl, string.Empty);
+            var loginParser = new HtmlParser();
+            var loginDocument = loginParser.ParseDocument(loginPage.Content);
             configData.CaptchaCookie.Value = loginPage.Cookies;
-
-            var catchaImg = LoginDocument.QuerySelector("img[alt=\"FuckOff Image\"]");
+            var catchaImg = loginDocument.QuerySelector("img[alt=\"FuckOff Image\"]");
             if (catchaImg != null)
             {
-                var catchaInput = LoginDocument.QuerySelector("input[maxlength=\"6\"]");
-                input_captcha = catchaInput.GetAttribute("name");
-
-                var captchaImage = await RequestBytesWithCookies(SiteLink + catchaImg.GetAttribute("src"), loginPage.Cookies, RequestType.GET, LoginUrl);
+                var catchaInput = loginDocument.QuerySelector("input[maxlength=\"6\"]");
+                _inputCaptcha = catchaInput.GetAttribute("name");
+                var captchaImage = await RequestBytesWithCookiesAsync(
+                    SiteLink + catchaImg.GetAttribute("src"), loginPage.Cookies, RequestType.Get, LoginUrl);
                 configData.CaptchaImage.Value = captchaImage.Content;
             }
             else
             {
-                input_captcha = null;
+                _inputCaptcha = null;
                 configData.CaptchaImage.Value = null;
             }
 
-            var usernameInput = LoginDocument.QuerySelector("input[maxlength=\"20\"]");
-            input_username = usernameInput.GetAttribute("name");
-
-            var passwordInput = LoginDocument.QuerySelector("input[maxlength=\"40\"]");
-            input_password = passwordInput.GetAttribute("name");
-
+            var usernameInput = loginDocument.QuerySelector("input[maxlength=\"20\"]");
+            _inputUsername = usernameInput.GetAttribute("name");
+            var passwordInput = loginDocument.QuerySelector("input[maxlength=\"40\"]");
+            _inputPassword = passwordInput.GetAttribute("name");
             return configData;
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             configData.LoadValuesFromJson(configJson);
-
             var pairs = new Dictionary<string, string>
             {
-                { input_username, configData.Username.Value },
-                { input_password, configData.Password.Value },
-                { "keeplogged", "1" }
+                {_inputUsername, configData.Username.Value},
+                {_inputPassword, configData.Password.Value},
+                {"keeplogged", "1"}
             };
-
-            if (input_captcha != null)
-                pairs.Add(input_captcha, configData.CaptchaText.Value);
-
-            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, configData.CaptchaCookie.Value, true);
-
-            await ConfigureIfOK(result.Cookies, result.Content.Contains("logout.php"), () =>
-           {
-               var LoginParser = new HtmlParser();
-               var LoginDocument = LoginParser.ParseDocument(result.Content);
-               var errorMessage = LoginDocument.QuerySelector("span.warning[id!=\"no-cookies\"]:has(br)").TextContent;
-               throw new ExceptionWithConfigData(errorMessage, configData);
-           });
-
+            if (_inputCaptcha != null)
+                pairs.Add(_inputCaptcha, configData.CaptchaText.Value);
+            var result = await RequestLoginAndFollowRedirectAsync(LoginUrl, pairs, configData.CaptchaCookie.Value, true);
+            await ConfigureIfOkAsync(
+                result.Cookies, result.Content.Contains("logout.php"), () =>
+                {
+                    var loginParser = new HtmlParser();
+                    var loginDocument = loginParser.ParseDocument(result.Content);
+                    var errorMessage = loginDocument.QuerySelector("span.warning[id!=\"no-cookies\"]:has(br)").TextContent;
+                    throw new ExceptionWithConfigData(errorMessage, configData);
+                });
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
@@ -116,82 +98,65 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();
-            var queryCollection = new NameValueCollection();
-            queryCollection.Add("order_by", "time");
-            queryCollection.Add("order_way", "desc");
-
+            var queryCollection = new NameValueCollection { { "order_by", "time" }, { "order_way", "desc" } };
             if (!string.IsNullOrWhiteSpace(query.ImdbID))
-            {
                 queryCollection.Add("imdbid", query.ImdbID);
-            }
             else if (!string.IsNullOrWhiteSpace(searchString))
-            {
                 queryCollection.Add("groupname", searchString);
-            }
-
             queryCollection.Add("groupname", searchString);
-
-            var searchUrl = BrowseUrl + "?" + queryCollection.GetQueryString();
-
-            var results = await RequestStringWithCookies(searchUrl);
+            var searchUrl = $"{BrowseUrl}?{queryCollection.GetQueryString()}";
+            var results = await RequestStringWithCookiesAsync(searchUrl);
             if (results.IsRedirect)
             {
                 // re login
                 await GetConfigurationForSetup();
                 await ApplyConfiguration(null);
-                results = await RequestStringWithCookies(searchUrl);
+                results = await RequestStringWithCookiesAsync(searchUrl);
             }
 
-            Regex IMDBRegEx = new Regex(@"tt(\d+)", RegexOptions.Compiled);
+            var imdbRegEx = new Regex(@"tt(\d+)", RegexOptions.Compiled);
             var hParser = new HtmlParser();
-            var ResultDocument = hParser.ParseDocument(results.Content);
+            var resultDocument = hParser.ParseDocument(results.Content);
             try
             {
-                var Groups = ResultDocument.QuerySelectorAll("div.browsePoster");
-
-                foreach (var Group in Groups)
+                var groups = resultDocument.QuerySelectorAll("div.browsePoster");
+                foreach (var @group in groups)
                 {
-                    var groupPoster = Group.QuerySelector("img.classBrowsePoster");
-                    var bannerURL = new Uri(SiteLink + groupPoster.GetAttribute("src"));
-
-                    long? IMDBId = null;
-                    var imdbLink = Group.QuerySelector("a[href*=\"www.imdb.com/title/tt\"]");
+                    var groupPoster = @group.QuerySelector("img.classBrowsePoster");
+                    var bannerUrl = new Uri(SiteLink + groupPoster.GetAttribute("src"));
+                    long? imdbId = null;
+                    var imdbLink = @group.QuerySelector("a[href*=\"www.imdb.com/title/tt\"]");
                     if (imdbLink != null)
                     {
-                        var IMDBMatch = IMDBRegEx.Match(imdbLink.GetAttribute("href"));
-                        IMDBId = ParseUtil.CoerceLong(IMDBMatch.Groups[1].Value);
+                        var imdbMatch = imdbRegEx.Match(imdbLink.GetAttribute("href"));
+                        imdbId = ParseUtil.CoerceLong(imdbMatch.Groups[1].Value);
                     }
 
-                    var GroupTitle = Group.QuerySelector("strong:has(a[title=\"View Torrent\"])").TextContent.Replace(" ]", "]");
-
-                    var Rows = Group.QuerySelectorAll("tr.group_torrent:has(a[href^=\"torrents.php?id=\"])");
-                    foreach (var Row in Rows)
+                    var groupTitle = @group.QuerySelector("strong:has(a[title=\"View Torrent\"])").TextContent
+                                          .Replace(" ]", "]");
+                    var rows = @group.QuerySelectorAll("tr.group_torrent:has(a[href^=\"torrents.php?id=\"])");
+                    foreach (var row in rows)
                     {
-                        var release = new ReleaseInfo();
-                        release.MinimumRatio = 1;
-                        release.MinimumSeedTime = 72 * 60 * 60;
-
-                        var title = Row.QuerySelector("a[href^=\"torrents.php?id=\"]");
-                        var link = Row.QuerySelector("a[href^=\"torrents.php?action=download\"]");
-                        var added = Row.QuerySelector("td:nth-child(3)");
-                        var Size = Row.QuerySelector("td:nth-child(4)");
-                        var Grabs = Row.QuerySelector("td:nth-child(6)");
-                        var Seeders = Row.QuerySelector("td:nth-child(7)");
-                        var Leechers = Row.QuerySelector("td:nth-child(8)");
-
-                        release.Title = GroupTitle + " " + title.TextContent;
+                        var release = new ReleaseInfo { MinimumRatio = 1, MinimumSeedTime = 72 * 60 * 60 };
+                        var title = row.QuerySelector("a[href^=\"torrents.php?id=\"]");
+                        var link = row.QuerySelector("a[href^=\"torrents.php?action=download\"]");
+                        var added = row.QuerySelector("td:nth-child(3)");
+                        var size = row.QuerySelector("td:nth-child(4)");
+                        var grabs = row.QuerySelector("td:nth-child(6)");
+                        var seeders = row.QuerySelector("td:nth-child(7)");
+                        var leechers = row.QuerySelector("td:nth-child(8)");
+                        release.Title = $"{groupTitle} {title.TextContent}";
                         release.Category = new List<int> { TorznabCatType.MoviesHD.ID };
                         release.Link = new Uri(SiteLink + link.GetAttribute("href"));
                         release.Comments = new Uri(SiteLink + title.GetAttribute("href"));
                         release.Guid = release.Link;
-                        release.Size = ReleaseInfo.GetBytes(Size.TextContent);
-                        release.Seeders = ParseUtil.CoerceInt(Seeders.TextContent);
-                        release.Peers = ParseUtil.CoerceInt(Leechers.TextContent) + release.Seeders;
-                        release.Grabs = ParseUtil.CoerceLong(Grabs.TextContent);
+                        release.Size = ReleaseInfo.GetBytes(size.TextContent);
+                        release.Seeders = ParseUtil.CoerceInt(seeders.TextContent);
+                        release.Peers = ParseUtil.CoerceInt(leechers.TextContent) + release.Seeders;
+                        release.Grabs = ParseUtil.CoerceLong(grabs.TextContent);
                         release.PublishDate = DateTimeUtil.FromTimeAgo(added.TextContent);
-                        release.BannerUrl = bannerURL;
-                        release.Imdb = IMDBId;
-
+                        release.BannerUrl = bannerUrl;
+                        release.Imdb = imdbId;
                         releases.Add(release);
                     }
                 }

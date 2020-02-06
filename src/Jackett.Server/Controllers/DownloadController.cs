@@ -1,69 +1,63 @@
-﻿using BencodeNET.Objects;
+﻿using System;
+using System.Text;
+using System.Threading.Tasks;
+using BencodeNET.Objects;
 using BencodeNET.Parsing;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+using Jackett.Server.ActionFilters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using NLog;
-using System;
-using System.Text;
-using System.Threading.Tasks;
-using Jackett.Server.ActionFilters;
 
 namespace Jackett.Server.Controllers
 {
-    [AllowAnonymous]
-    [DownloadActionFilter]
-    [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
-    [Route("dl/{indexerID}")]
+    [AllowAnonymous, DownloadActionFilter, ResponseCache(Location = ResponseCacheLocation.None, NoStore = true),
+     Route("dl/{indexerID}")]
     public class DownloadController : Controller
     {
-        private ServerConfig serverConfig;
-        private Logger logger;
-        private IIndexerManagerService indexerService;
-        private IProtectionService protectionService;
+        private readonly ServerConfig _serverConfig;
+        private readonly Logger _logger;
+        private readonly IIndexerManagerService _indexerService;
+        private readonly IProtectionService _protectionService;
 
         public DownloadController(IIndexerManagerService i, Logger l, IProtectionService ps, ServerConfig sConfig)
         {
-            serverConfig = sConfig;
-            logger = l;
-            indexerService = i;
-            protectionService = ps;
+            _serverConfig = sConfig;
+            _logger = l;
+            _indexerService = i;
+            _protectionService = ps;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Download(string indexerID, string path, string jackett_apikey, string file)
+        public async Task<IActionResult> DownloadAsync(string indexerId, string path, string jackettApikey, string file)
         {
             try
             {
-                if (serverConfig.APIKey != jackett_apikey)
+                if (_serverConfig.APIKey != jackettApikey)
                     return Unauthorized();
-
-                var indexer = indexerService.GetWebIndexer(indexerID);
-
+                var indexer = _indexerService.GetWebIndexer(indexerId);
                 if (!indexer.IsConfigured)
                 {
-                    logger.Warn(string.Format("Rejected a request to {0} which is unconfigured.", indexer.DisplayName));
+                    _logger.Warn(string.Format("Rejected a request to {0} which is unconfigured.", indexer.DisplayName));
                     return Forbid("This indexer is not configured.");
                 }
 
                 path = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(path));
-                path = protectionService.UnProtect(path);
-
+                path = _protectionService.UnProtect(path);
                 var target = new Uri(path, UriKind.RelativeOrAbsolute);
                 var downloadBytes = await indexer.Download(target);
 
                 // handle magnet URLs
-                if (downloadBytes.Length >= 7
-                    && downloadBytes[0] == 0x6d // m
-                    && downloadBytes[1] == 0x61 // a
-                    && downloadBytes[2] == 0x67 // g
-                    && downloadBytes[3] == 0x6e // n
-                    && downloadBytes[4] == 0x65 // e
-                    && downloadBytes[5] == 0x74 // t
-                    && downloadBytes[6] == 0x3a // :
+                if (downloadBytes.Length >= 7 && downloadBytes[0] == 0x6d // m
+                                              && downloadBytes[1] == 0x61 // a
+                                              && downloadBytes[2] == 0x67 // g
+                                              && downloadBytes[3] == 0x6e // n
+                                              && downloadBytes[4] == 0x65 // e
+                                              && downloadBytes[5] == 0x74 // t
+                                              && downloadBytes[6] == 0x3a // :
                     )
                 {
                     // some sites provide magnet links with non-ascii characters, the only way to be sure the url
@@ -85,17 +79,16 @@ namespace Jackett.Server.Controllers
                 catch (Exception e)
                 {
                     var content = indexer.Encoding.GetString(downloadBytes);
-                    logger.Error(content);
+                    _logger.Error(content);
                     throw new Exception("BencodeParser failed", e);
                 }
 
-                string fileName = StringUtil.MakeValidFileName(file, '_', false) + ".torrent"; // call MakeValidFileName again to avoid any kind of injection attack
-
+                var fileName = $"{StringUtil.MakeValidFileName(file, '_', false)}.torrent"; // call MakeValidFileName again to avoid any kind of injection attack
                 return File(sortedDownloadBytes, "application/x-bittorrent", fileName);
             }
             catch (Exception e)
             {
-                logger.Error(e, "Error downloading " + indexerID + " " + path);
+                _logger.Error(e, $"Error downloading {indexerId} {path}");
                 return NotFound();
             }
         }

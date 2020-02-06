@@ -2,12 +2,9 @@
 
 namespace Jackett.Test
 {
-    abstract class TestBase
+    internal abstract class TestBase
     {
         [SetUp]
-        public void Setup()
-        {
-            TestUtil.SetupContainer();
-        }
+        public void Setup() => TestUtil.SetupContainer();
     }
 }

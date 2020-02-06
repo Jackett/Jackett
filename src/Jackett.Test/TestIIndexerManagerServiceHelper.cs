@@ -7,48 +7,24 @@ using Newtonsoft.Json.Linq;
 
 namespace Jackett.Test
 {
-    class TestIndexerManagerServiceHelper : IIndexerManagerService
+    internal class TestIndexerManagerServiceHelper : IIndexerManagerService
     {
         public JToken LastSavedConfig { get; set; }
 
-        public void DeleteIndexer(string name)
-        {
-            throw new NotImplementedException();
-        }
+        public void DeleteIndexer(string name) => throw new NotImplementedException();
 
-        public IEnumerable<IIndexer> GetAllIndexers()
-        {
-            throw new NotImplementedException();
-        }
+        public IEnumerable<IIndexer> GetAllIndexers() => throw new NotImplementedException();
 
-        public IIndexer GetIndexer(string name)
-        {
-            throw new NotImplementedException();
-        }
+        public IIndexer GetIndexer(string name) => throw new NotImplementedException();
 
-        public IWebIndexer GetWebIndexer(string name)
-        {
-            throw new NotImplementedException();
-        }
+        public IWebIndexer GetWebIndexer(string name) => throw new NotImplementedException();
 
-        public void InitIndexers(IEnumerable<string> path)
-        {
-            throw new NotImplementedException();
-        }
+        public void InitIndexers(IEnumerable<string> path) => throw new NotImplementedException();
 
-        public void SaveConfig(IIndexer indexer, JToken obj)
-        {
-            LastSavedConfig = obj;
-        }
+        public void SaveConfig(IIndexer indexer, JToken obj) => LastSavedConfig = obj;
 
-        public Task TestIndexer(string name)
-        {
-            throw new NotImplementedException();
-        }
+        public Task TestIndexer(string name) => throw new NotImplementedException();
 
-        public void InitAggregateIndexer()
-        {
-            throw new NotImplementedException();
-        }
+        public void InitAggregateIndexer() => throw new NotImplementedException();
     }
 }

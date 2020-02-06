@@ -1,4 +1,4 @@
-﻿namespace Jackett.Common.Models.IndexerConfig
+namespace Jackett.Common.Models.IndexerConfig
 {
     public class ConfigurationDataBasicLoginWithFilterAndPasskey : ConfigurationData
     {
@@ -8,18 +8,13 @@
         public DisplayItem FilterExample { get; private set; }
         public StringItem FilterString { get; private set; }
 
-        public ConfigurationDataBasicLoginWithFilterAndPasskey(string FilterInstructions)
+        public ConfigurationDataBasicLoginWithFilterAndPasskey(string filterInstructions)
         {
             Username = new StringItem { Name = "Username" };
             Password = new StringItem { Name = "Password" };
             Passkey = new StringItem { Name = "Passkey" };
-            FilterExample = new DisplayItem(FilterInstructions)
-            {
-                Name = ""
-            };
+            FilterExample = new DisplayItem(filterInstructions) { Name = "" };
             FilterString = new StringItem { Name = "Filters (optional)" };
         }
-
-
     }
 }

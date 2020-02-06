@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
@@ -19,47 +19,41 @@ namespace Jackett.Common.Indexers.Meta
 
     public class NoFallbackStrategy : IFallbackStrategy
     {
-        public Task<IEnumerable<TorznabQuery>> FallbackQueries()
-        {
-            return Task.FromResult<IEnumerable<TorznabQuery>>(new List<TorznabQuery>());
-        }
+        public Task<IEnumerable<TorznabQuery>> FallbackQueries() =>
+            Task.FromResult<IEnumerable<TorznabQuery>>(new List<TorznabQuery>());
     }
 
     public class NoFallbackStrategyProvider : IFallbackStrategyProvider
     {
-        public IEnumerable<IFallbackStrategy> FallbackStrategiesForQuery(TorznabQuery query)
-        {
-            return (new NoFallbackStrategy()).ToEnumerable();
-        }
+        public IEnumerable<IFallbackStrategy> FallbackStrategiesForQuery(TorznabQuery query) =>
+            (new NoFallbackStrategy()).ToEnumerable();
     }
 
     public class ImdbFallbackStrategy : IFallbackStrategy
     {
         public ImdbFallbackStrategy(IImdbResolver resolver, TorznabQuery query)
         {
-            this.resolver = resolver;
-            this.titles = null;
-            this.query = query;
+            _resolver = resolver;
+            _titles = null;
+            _query = query;
         }
 
         public async Task<IEnumerable<TorznabQuery>> FallbackQueries()
         {
-            if (titles == null)
-                titles = (await resolver.MovieForId(query.ImdbID.ToNonNull())).Title?.ToEnumerable() ?? Enumerable.Empty<string>();
-            return titles.Select(t => query.CreateFallback(t));
+            if (_titles == null)
+                _titles = (await _resolver.MovieForId(_query.ImdbID.ToNonNull())).Title?.ToEnumerable() ??
+                         Enumerable.Empty<string>();
+            return _titles.Select(t => _query.CreateFallback(t));
         }
 
-        private IImdbResolver resolver;
-        private IEnumerable<string> titles;
-        private TorznabQuery query;
+        private readonly IImdbResolver _resolver;
+        private IEnumerable<string> _titles;
+        private readonly TorznabQuery _query;
     }
 
     public class ImdbFallbackStrategyProvider : IFallbackStrategyProvider
     {
-        public ImdbFallbackStrategyProvider(IImdbResolver resolver)
-        {
-            this.resolver = resolver;
-        }
+        public ImdbFallbackStrategyProvider(IImdbResolver resolver) => _resolver = resolver;
 
         public IEnumerable<IFallbackStrategy> FallbackStrategiesForQuery(TorznabQuery query)
         {
@@ -67,10 +61,10 @@ namespace Jackett.Common.Indexers.Meta
             if (!query.IsImdbQuery)
                 result.Add(new NoFallbackStrategy());
             else
-                result.Add(new ImdbFallbackStrategy(resolver, query));
+                result.Add(new ImdbFallbackStrategy(_resolver, query));
             return result;
         }
 
-        private IImdbResolver resolver;
+        private readonly IImdbResolver _resolver;
     }
 }

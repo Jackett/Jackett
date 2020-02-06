@@ -1,3 +1,9 @@
+using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Globalization;
+using System.Text;
+using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
 using CsQuery;
 using Jackett.Common.Models;
@@ -7,36 +13,24 @@ using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Globalization;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Jackett.Common.Indexers
 {
     public class Partis : BaseWebIndexer
     {
-        private string LoginUrl { get { return SiteLink + "user/login/"; } }
-        private string SearchUrl { get { return SiteLink + "torrent/show/"; } }
+        private string LoginUrl => $"{SiteLink}user/login/";
+        private string SearchUrl => $"{SiteLink}torrent/show/";
 
         private new ConfigurationDataBasicLogin configData
         {
-            get { return (ConfigurationDataBasicLogin)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataBasicLogin)base.configData;
+            set => base.configData = value;
         }
 
-        public Partis(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "Partis",
-                   description: "Partis is a SLOVENIAN Private Torrent Tracker",
-                   link: "https://www.partis.si/",
-                   caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                   configService: configService,
-                   client: wc,
-                   logger: l,
-                   p: ps,
-                   configData: new ConfigurationDataBasicLogin())
+        public Partis(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps) : base(
+            "Partis", description: "Partis is a SLOVENIAN Private Torrent Tracker", link: "https://www.partis.si/",
+            caps: TorznabUtil.CreateDefaultTorznabTVCaps(), configService: configService, client: wc, logger: l, p: ps,
+            configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.UTF8;
             Language = "sl-sl";
@@ -68,7 +62,6 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(38, TorznabCatType.TVSD, "SD-TV");
             AddCategoryMapping(51, TorznabCatType.TVHD, "TV 1080p/i");
             AddCategoryMapping(52, TorznabCatType.TVHD, "TV 720p/i");
-
             AddCategoryMapping(54, TorznabCatType.MoviesSD, "WEBRip");
             AddCategoryMapping(59, TorznabCatType.MoviesWEBDL, "WEB-DL");
             AddCategoryMapping(24, TorznabCatType.TVDocumentary, "Dokumentarci");
@@ -91,32 +84,28 @@ namespace Jackett.Common.Indexers
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-
             var pairs = new Dictionary<string, string>
             {
-                { "user[username]", configData.Username.Value },
-                { "user[password]", configData.Password.Value }
+                {"user[username]", configData.Username.Value}, {"user[password]", configData.Password.Value}
             };
-
-            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, String.Empty, false, null, null, true);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("/odjava"), () =>
-            {
-                CQ dom = result.Content;
-                var errorMessage = dom["div.obvet > span.najvecji"].Text().Trim(); // Prijava ni uspela! obvestilo
-                throw new ExceptionWithConfigData(errorMessage, configData);
-            });
+            var result = await RequestLoginAndFollowRedirectAsync(LoginUrl, pairs, string.Empty, false, null, null, true);
+            await ConfigureIfOkAsync(
+                result.Cookies, result.Content?.Contains("/odjava") == true, () =>
+                {
+                    CQ dom = result.Content;
+                    var errorMessage = dom["div.obvet > span.najvecji"].Text().Trim(); // Prijava ni uspela! obvestilo
+                    throw new ExceptionWithConfigData(errorMessage, configData);
+                });
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            var releases = new List<ReleaseInfo>();     //List of releases initialization
-            var searchString = query.GetQueryString();  //get search string from query
-
-            WebClientStringResult results = null;
+            var releases = new List<ReleaseInfo>(); //List of releases initialization
+            var searchString = query.GetQueryString(); //get search string from query
             var queryCollection = new NameValueCollection();
-            List<string> catList = MapTorznabCapsToTrackers(query);     // map categories from query to indexer specific
-            var categ = String.Join(",", catList);
+            var catList = MapTorznabCapsToTrackers(query); // map categories from query to indexer specific
+            var categ = string.Join(",", catList);
 
             //create GET request - search URI
             queryCollection.Add("offset", "0");
@@ -126,54 +115,41 @@ namespace Jackett.Common.Indexers
             queryCollection.Add("ns", "true");
 
             //concatenate base search url with query
-            var searchUrl = SearchUrl + "?" + queryCollection.GetQueryString();
+            var searchUrl = $"{SearchUrl}?{queryCollection.GetQueryString()}";
 
             // log search URL
             logger.Info(string.Format("Searh URL Partis_: {0}", searchUrl));
 
             // add necessary headers
-            var heder = new Dictionary<string, string>
-            {
-                { "X-requested-with", "XMLHttpRequest" }
-            };
+            var heder = new Dictionary<string, string> { { "X-requested-with", "XMLHttpRequest" } };
 
             //get results and follow redirect
-            results = await RequestStringWithCookies(searchUrl, null, SearchUrl, heder);
-            await FollowIfRedirect(results, null, null, null, true);
-
+            var results = await RequestStringWithCookiesAsync(searchUrl, null, SearchUrl, heder);
+            await FollowIfRedirectAsync(results, null, null, null, true);
             /// are we logged in?
             if (!results.Content.Contains("/odjava"))
-            {
                 await ApplyConfiguration(null);
-            }
             // another request with specific query - NEEDED for succesful response - return data
-            results = await RequestStringWithCookies(SiteLink + "brskaj/?rs=false&offset=0", null, SearchUrl, heder);
-            await FollowIfRedirect(results, null, null, null, true);
+            results = await RequestStringWithCookiesAsync($"{SiteLink}brskaj/?rs=false&offset=0", null, SearchUrl, heder);
+            await FollowIfRedirectAsync(results, null, null, null, true);
 
             // parse results
             try
             {
-                string RowsSelector = "div.list > div[name=\"torrrow\"]";
-
-                var ResultParser = new HtmlParser();
-                var SearchResultDocument = ResultParser.ParseDocument(results.Content);
-                var Rows = SearchResultDocument.QuerySelectorAll(RowsSelector);
-                foreach (var Row in Rows)
-                {
+                var rowsSelector = "div.list > div[name=\"torrrow\"]";
+                var resultParser = new HtmlParser();
+                var searchResultDocument = resultParser.ParseDocument(results.Content);
+                var rows = searchResultDocument.QuerySelectorAll(rowsSelector);
+                foreach (var row in rows)
                     try
                     {
                         // initialize REleaseInfo
-                        var release = new ReleaseInfo
-                        {
-                            MinimumRatio = 1,
-                            MinimumSeedTime = 0
-                        };
+                        var release = new ReleaseInfo { MinimumRatio = 1, MinimumSeedTime = 0 };
 
                         // Get Category
-                        var catega = Row.QuerySelector("div.likona div").GetAttribute("alt");
+                        var catega = row.QuerySelector("div.likona div").GetAttribute("alt");
                         release.Category = MapTrackerCatDescToNewznab(catega);
-
-                        var qDetailsLink = Row.QuerySelector("div.listeklink a");
+                        var qDetailsLink = row.QuerySelector("div.listeklink a");
 
                         // Title and torrent link
                         release.Title = qDetailsLink.TextContent;
@@ -181,23 +157,25 @@ namespace Jackett.Common.Indexers
                         release.Guid = release.Comments;
 
                         // Date of torrent creation
-                        var liopis = Row.QuerySelector("div.listeklink div span.middle");
-                        int ind = liopis.TextContent.IndexOf("Naloženo:");
-                        String reldate = liopis.TextContent.Substring(ind + 10, 22);
-                        release.PublishDate = DateTime.ParseExact(reldate, "dd.MM.yyyy ob HH:mm:ss", CultureInfo.InvariantCulture);
+                        var liopis = row.QuerySelector("div.listeklink div span.middle");
+                        var ind = liopis.TextContent.IndexOf("Naloženo:");
+                        var reldate = liopis.TextContent.Substring(ind + 10, 22);
+                        release.PublishDate = DateTime.ParseExact(
+                            reldate, "dd.MM.yyyy ob HH:mm:ss", CultureInfo.InvariantCulture);
 
                         // Is freeleech?
-                        var checkIfFree = (Row.QuerySelector("div.listeklink div.liopisl img[title=\"freeleech\"]") != null) ? true : false;
+                        var checkIfFree = (row.QuerySelector("div.listeklink div.liopisl img[title=\"freeleech\"]") != null)
+                            ? true
+                            : false;
 
                         // Download link
-                        var qDownloadLink = Row.QuerySelector("div.data3t a").GetAttribute("href");
+                        var qDownloadLink = row.QuerySelector("div.data3t a").GetAttribute("href");
                         release.Link = new Uri(SiteLink + qDownloadLink.TrimStart('/'));
 
                         // Various data - size, seeders, leechers, download count
-                        var sel = Row.QuerySelectorAll("div.datat");
+                        var sel = row.QuerySelectorAll("div.datat");
                         var size = sel[0].TextContent;
                         release.Size = ReleaseInfo.GetBytes(size);
-
                         release.Seeders = ParseUtil.CoerceInt(sel[1].TextContent);
                         release.Peers = ParseUtil.CoerceInt(sel[2].TextContent) + release.Seeders;
                         release.Grabs = ParseUtil.CoerceLong(sel[3].TextContent);
@@ -211,9 +189,8 @@ namespace Jackett.Common.Indexers
                     }
                     catch (Exception ex)
                     {
-                        logger.Error(string.Format("{0}: Error while parsing row '{1}':\n\n{2}", ID, Row.OuterHtml, ex));
+                        logger.Error(string.Format("{0}: Error while parsing row '{1}':\n\n{2}", ID, row.OuterHtml, ex));
                     }
-                }
             }
             catch (Exception ex)
             {

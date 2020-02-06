@@ -1,5 +1,5 @@
-﻿using CommandLine;
 using System;
+using CommandLine;
 
 namespace Jackett.Common.Models.Config
 {
@@ -8,7 +8,9 @@ namespace Jackett.Common.Models.Config
         [Option('i', "Install", HelpText = "Install Jackett windows service (Must be admin)")]
         public bool Install { get; set; }
 
-        [Option('r', "ReserveUrls", HelpText = "(Re)Register windows port reservations (Required for listening on all interfaces).")]
+        [Option(
+            'r', "ReserveUrls",
+            HelpText = "(Re)Register windows port reservations (Required for listening on all interfaces).")]
         public bool ReserveUrls { get; set; }
 
         [Option('u', "Uninstall", HelpText = "Uninstall Jackett windows service (Must be admin).")]
@@ -47,7 +49,10 @@ namespace Jackett.Common.Models.Config
         [Option('n', "IgnoreSslErrors", HelpText = "[true/false] Ignores invalid SSL certificates")]
         public bool? IgnoreSslErrors { get; set; }
 
-        [Option('d', "DataFolder", HelpText = "Specify the location of the data folder (Must be admin on Windows) eg. --DataFolder=\"D:\\Your Data\\Jackett\\\". Don't use this on Unix (mono) systems. On Unix just adjust the HOME directory of the user to the datadir or set the XDG_CONFIG_HOME environment variable.")]
+        [Option(
+            'd', "DataFolder",
+            HelpText =
+                "Specify the location of the data folder (Must be admin on Windows) eg. --DataFolder=\"D:\\Your Data\\Jackett\\\". Don't use this on Unix (mono) systems. On Unix just adjust the HOME directory of the user to the datadir or set the XDG_CONFIG_HOME environment variable.")]
         public string DataFolder { get; set; }
 
         [Option("NoRestart", HelpText = "Don't restart after update")]
@@ -70,7 +75,6 @@ namespace Jackett.Common.Models.Config
             // Tracing
             if (options.Tracing)
                 runtimeSettings.TracingEnabled = true;
-
             if (options.ListenPublic && options.ListenPrivate)
             {
                 Console.WriteLine("You can only use listen private OR listen publicly.");
@@ -83,19 +87,14 @@ namespace Jackett.Common.Models.Config
 
             // Use Proxy
             if (options.ProxyConnection != null)
-            {
                 runtimeSettings.ProxyConnection = options.ProxyConnection.ToLowerInvariant();
-            }
             // Ignore SSL errors on Curl
             runtimeSettings.IgnoreSslErrors = options.IgnoreSslErrors;
             runtimeSettings.NoRestart = options.NoRestart;
             runtimeSettings.NoUpdates = options.NoUpdates;
-
             if (!string.IsNullOrWhiteSpace(options.DataFolder))
                 runtimeSettings.CustomDataFolder = options.DataFolder;
-
             runtimeSettings.PIDFile = options.PIDFile;
-
             return runtimeSettings;
         }
     }

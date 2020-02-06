@@ -15,13 +15,10 @@ namespace Jackett.Test.Util
         {
             get
             {
-                var type = typeof(ParseUtilTests);                
+                var type = typeof(ParseUtilTests);
                 using (var resourceStream = type.Assembly.GetManifestResourceStream($"{type.Namespace}.Invalid-RSS.xml"))
                 using (var sr = new StreamReader(resourceStream))
-                {
                     return sr.ReadToEnd();
-                }
-                
             }
         }
 
@@ -30,8 +27,8 @@ namespace Jackett.Test.Util
         {
             var invalidRss = InvalidRssXml;
             Action parseAction = () => XDocument.Parse(invalidRss);
-            parseAction.Should().Throw<Exception>().WithMessage("'\a', hexadecimal value 0x07, is an invalid character. Line 12, position 7.");
-
+            parseAction.Should().Throw<Exception>().WithMessage(
+                "'\a', hexadecimal value 0x07, is an invalid character. Line 12, position 7.");
             var validRSs = ParseUtil.RemoveInvalidXmlChars(invalidRss);
             var rssDoc = XDocument.Parse(validRSs);
             rssDoc.Root.Should().NotBeNull();

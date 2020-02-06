@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Jackett.Common.Models
 {
@@ -6,12 +6,14 @@ namespace Jackett.Common.Models
     {
         public ReleaseInfo Result
         {
-            set; get;
+            set;
+            get;
         }
 
         public DateTime Created
         {
-            set; get;
+            set;
+            get;
         }
     }
 }

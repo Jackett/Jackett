@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -18,33 +18,25 @@ namespace Jackett.Common.Indexers
 {
     public class SpeedCD : BaseWebIndexer
     {
-        private string LoginUrl { get { return SiteLink + "take_login.php"; } }
-        private string SearchUrl { get { return SiteLink + "browse.php"; } }
+        private string LoginUrl => $"{SiteLink}take_login.php";
+        private string SearchUrl => $"{SiteLink}browse.php";
 
         private new ConfigurationDataBasicLogin configData
         {
-            get { return (ConfigurationDataBasicLogin)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataBasicLogin)base.configData;
+            set => base.configData = value;
         }
 
-        public SpeedCD(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "Speed.cd",
-                description: "Your home now!",
-                link: "https://speed.cd/",
-                caps: new TorznabCapabilities(),
-                configService: configService,
-                client: wc,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataBasicLogin(@"Speed.Cd have increased their security. If you are having problems please check the security tab in your Speed.Cd profile.
+        public SpeedCD(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps) : base(
+            "Speed.cd", description: "Your home now!", link: "https://speed.cd/", caps: new TorznabCapabilities(),
+            configService: configService, client: wc, logger: l, p: ps, configData: new ConfigurationDataBasicLogin(
+                @"Speed.Cd have increased their security. If you are having problems please check the security tab in your Speed.Cd profile.
                                                             eg. Geo Locking, your seedbox may be in a different country to the one where you login via your web browser"))
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
-
             TorznabCaps.SupportsImdbMovieSearch = true;
-
             AddCategoryMapping(1, TorznabCatType.MoviesOther, "Movies/XviD");
             AddCategoryMapping(42, TorznabCatType.Movies, "Movies/Packs");
             AddCategoryMapping(32, TorznabCatType.Movies, "Movies/Kids");
@@ -81,115 +73,98 @@ namespace Jackett.Common.Indexers
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-
-            await DoLogin();
-
+            await DoLoginAsync();
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
-        private async Task DoLogin()
+        private async Task DoLoginAsync()
         {
-            var pairs = new Dictionary<string, string> {
-                { "username", configData.Username.Value },
-                { "password", configData.Password.Value },
-            };
-
-            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, SiteLink);
-
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("/browse.php"), () =>
+            var pairs = new Dictionary<string, string>
             {
-                CQ dom = result.Content;
-                var errorMessage = dom.Text();
-                if (errorMessage.Contains("Wrong Captcha!"))
-                    errorMessage = "Captcha requiered due to a failed login attempt. Login via a browser to whitelist your IP and then reconfigure jackett.";
-                throw new ExceptionWithConfigData(errorMessage, configData);
-            });
+                {"username", configData.Username.Value}, {"password", configData.Password.Value}
+            };
+            var result = await RequestLoginAndFollowRedirectAsync(LoginUrl, pairs, null, true, null, SiteLink);
+            await ConfigureIfOkAsync(
+                result.Cookies, result.Content?.Contains("/browse.php") == true, () =>
+                {
+                    CQ dom = result.Content;
+                    var errorMessage = dom.Text();
+                    if (errorMessage.Contains("Wrong Captcha!"))
+                        errorMessage =
+                            "Captcha requiered due to a failed login attempt. Login via a browser to whitelist your IP and then reconfigure jackett.";
+                    throw new ExceptionWithConfigData(errorMessage, configData);
+                });
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-
-            NameValueCollection qParams = new NameValueCollection();
-
+            var qParams = new NameValueCollection();
             if (!string.IsNullOrWhiteSpace(query.ImdbID))
             {
                 qParams.Add("search", query.ImdbID);
                 qParams.Add("d", "on");
             }
             else if (!string.IsNullOrEmpty(query.GetQueryString()))
-            {
                 qParams.Add("search", query.GetQueryString());
-            }
 
-            List<string> catList = MapTorznabCapsToTrackers(query);
-            foreach (string cat in catList)
-            {
-                qParams.Add("c" + cat, "1");
-            }
-
-            string urlSearch = SearchUrl;
+            var catList = MapTorznabCapsToTrackers(query);
+            foreach (var cat in catList)
+                qParams.Add($"c{cat}", "1");
+            var urlSearch = SearchUrl;
             if (qParams.Count > 0)
-            {
                 urlSearch += $"?{qParams.GetQueryString()}";
-            }
-
-            var response = await RequestStringWithCookiesAndRetry(urlSearch);
+            var response = await RequestStringWithCookiesAndRetryAsync(urlSearch);
             if (!response.Content.Contains("/logout.php"))
             {
                 //Cookie appears to expire after a period of time or logging in to the site via browser
-                await DoLogin();
-                response = await RequestStringWithCookiesAndRetry(urlSearch);
+                await DoLoginAsync();
+                response = await RequestStringWithCookiesAndRetryAsync(urlSearch);
             }
 
             try
             {
                 CQ dom = response.Content;
-                var rows = dom["div[id='torrentTable'] > div[class^='box torrentBox'] > div[class='boxContent'] > table > tbody > tr"];
-
-                foreach (IDomObject row in rows)
+                var rows = dom[
+                    "div[id='torrentTable'] > div[class^='box torrentBox'] > div[class='boxContent'] > table > tbody > tr"];
+                foreach (var row in rows)
                 {
                     CQ torrentData = row.OuterHTML;
-                    CQ cells = row.Cq().Find("td");
-
-                    string title = torrentData.Find("td[class='lft'] > div > a").First().Text().Trim();
-                    Uri link = new Uri(SiteLink + torrentData.Find("img[title='Download']").First().Parent().Attr("href").Trim());
-                    Uri guid = link;
-                    Uri comments = new Uri(SiteLink + torrentData.Find("td[class='lft'] > div > a").First().Attr("href").Trim().Remove(0, 1));
-                    long size = ReleaseInfo.GetBytes(cells.Elements.ElementAt(4).Cq().Text());
-                    int grabs = ParseUtil.CoerceInt(cells.Elements.ElementAt(5).Cq().Text());
-                    int seeders = ParseUtil.CoerceInt(cells.Elements.ElementAt(6).Cq().Text());
-                    int leechers = ParseUtil.CoerceInt(cells.Elements.ElementAt(7).Cq().Text());
-
-                    string pubDateStr = torrentData.Find("span[class^='elapsedDate']").First().Attr("title").Trim().Replace(" at", "");
-                    DateTime publishDate = DateTime.ParseExact(pubDateStr, "dddd, MMMM d, yyyy h:mmtt", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
-
-                    long category = 0;
-                    string cat = torrentData.Find("img[class^='Tcat']").First().Parent().Attr("href").Trim().Remove(0, 5);
-                    long.TryParse(cat, out category);
-
-                    var release = new ReleaseInfo();
-
-                    release.Title = title;
-                    release.Guid = guid;
-                    release.Link = link;
-                    release.PublishDate = publishDate;
-                    release.Size = size;
-                    release.Grabs = grabs;
-                    release.Seeders = seeders;
-                    release.Peers = seeders + leechers;
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800; // 48 hours
-                    release.Category = MapTrackerCatToNewznab(category.ToString());
-                    release.Comments = comments;
-
-                    if (torrentData.Find("span:contains(\"[Freeleech]\")").Any())
-                        release.DownloadVolumeFactor = 0;
-                    else
-                        release.DownloadVolumeFactor = 1;
-
+                    var cells = row.Cq().Find("td");
+                    var title = torrentData.Find("td[class='lft'] > div > a").First().Text().Trim();
+                    var link = new Uri(
+                        SiteLink + torrentData.Find("img[title='Download']").First().Parent().Attr("href").Trim());
+                    var guid = link;
+                    var comments = new Uri(
+                        SiteLink + torrentData.Find("td[class='lft'] > div > a").First().Attr("href").Trim().Remove(0, 1));
+                    var size = ReleaseInfo.GetBytes(cells.Elements.ElementAt(4).Cq().Text());
+                    var grabs = ParseUtil.CoerceInt(cells.Elements.ElementAt(5).Cq().Text());
+                    var seeders = ParseUtil.CoerceInt(cells.Elements.ElementAt(6).Cq().Text());
+                    var leechers = ParseUtil.CoerceInt(cells.Elements.ElementAt(7).Cq().Text());
+                    var pubDateStr = torrentData.Find("span[class^='elapsedDate']").First().Attr("title").Trim()
+                                                .Replace(" at", "");
+                    var publishDate = DateTime.ParseExact(
+                        pubDateStr, "dddd, MMMM d, yyyy h:mmtt", CultureInfo.InvariantCulture,
+                        DateTimeStyles.AssumeUniversal).ToLocalTime();
+                    var cat = torrentData.Find("img[class^='Tcat']").First().Parent().Attr("href").Trim().Remove(0, 5);
+                    long.TryParse(cat, out var category);
+                    var release = new ReleaseInfo
+                    {
+                        Title = title,
+                        Guid = guid,
+                        Link = link,
+                        PublishDate = publishDate,
+                        Size = size,
+                        Grabs = grabs,
+                        Seeders = seeders,
+                        Peers = seeders + leechers,
+                        MinimumRatio = 1,
+                        MinimumSeedTime = 172800, // 48 hours
+                        Category = MapTrackerCatToNewznab(category.ToString()),
+                        Comments = comments
+                    };
+                    release.DownloadVolumeFactor = torrentData.Find("span:contains(\"[Freeleech]\")").Any() ? 0 : 1;
                     release.UploadVolumeFactor = 1;
-
                     releases.Add(release);
                 }
             }
@@ -197,6 +172,7 @@ namespace Jackett.Common.Indexers
             {
                 OnParseError(response.Content, ex);
             }
+
             return releases;
         }
     }

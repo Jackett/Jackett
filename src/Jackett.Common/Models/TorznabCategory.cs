@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 
@@ -11,10 +10,7 @@ namespace Jackett.Common.Models
 
         public List<TorznabCategory> SubCategories { get; private set; }
 
-        public TorznabCategory()
-        {
-            SubCategories = new List<TorznabCategory>();
-        }
+        public TorznabCategory() => SubCategories = new List<TorznabCategory>();
 
         public TorznabCategory(int id, string name)
         {
@@ -27,32 +23,17 @@ namespace Jackett.Common.Models
         {
             if (this == cat)
                 return true;
-
-            if (SubCategories.Contains(cat))
-                return true;
-
-            return false;
+            return SubCategories.Contains(cat);
         }
 
         public JToken ToJson()
         {
-            var t = new JObject();
-            t["ID"] = ID;
-            t["Name"] = Name;
+            var t = new JObject { ["ID"] = ID, ["Name"] = Name };
             return t;
         }
 
-        public override bool Equals(Object obj)
-        {
-            if (obj == null || GetType() != obj.GetType())
-                return false;
+        public override bool Equals(object obj) => obj == null || GetType() != obj.GetType() ? false : ID == ((TorznabCategory)obj).ID;
 
-            return ID == ((TorznabCategory)obj).ID;
-        }
-
-        public override int GetHashCode()
-        {
-            return ID;
-        }
+        public override int GetHashCode() => ID;
     }
 }

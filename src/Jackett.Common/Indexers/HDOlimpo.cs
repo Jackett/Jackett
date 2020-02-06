@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,26 +26,19 @@ namespace Jackett.Common.Indexers
 
         private new ConfigurationDataBasicLoginWithEmail configData
         {
-            get { return (ConfigurationDataBasicLoginWithEmail)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataBasicLoginWithEmail)base.configData;
+            set => base.configData = value;
         }
 
-        public HDOlimpo(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
-            : base(name: "HD-Olimpo",
-                description: "HD-Olimpo is a SPANISH site for HD content",
-                link: "https://hdolimpo.co/",
-                caps: new TorznabCapabilities(),
-                configService: configService,
-                client: w,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataBasicLoginWithEmail())
+        public HDOlimpo(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps) : base(
+            "HD-Olimpo", description: "HD-Olimpo is a SPANISH site for HD content", link: "https://hdolimpo.co/",
+            caps: new TorznabCapabilities(), configService: configService, client: w, logger: l, p: ps,
+            configData: new ConfigurationDataBasicLoginWithEmail())
         {
             Encoding = Encoding.UTF8;
             Language = "es-es";
             Type = "private";
-
-            var premiumItem = new BoolItem() { Name = "Include Premium torrents in search results", Value = false };
+            var premiumItem = new BoolItem { Name = "Include Premium torrents in search results", Value = false };
             configData.AddDynamic("IncludePremium", premiumItem);
 
             // TODO: add subcategories
@@ -61,78 +54,71 @@ namespace Jackett.Common.Indexers
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-
-            await DoLogin();
-
+            await DoLoginAsync();
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
-        private async Task DoLogin()
+        private async Task DoLoginAsync()
         {
-            var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
+            var loginPage = await RequestStringWithCookiesAsync(LoginUrl, string.Empty);
             var token = new Regex("name=\"_token\" value=\"(.*?)\">").Match(loginPage.Content).Groups[1].ToString();
-            var pairs = new Dictionary<string, string> {
-                { "_token", token },
-                { "email", configData.Email.Value },
-                { "password", configData.Password.Value },
-                { "remember", "on" }
-            };
-
-            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, null, LoginUrl);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains(LogoutUrl), () =>
+            var pairs = new Dictionary<string, string>
             {
-                CQ dom = result.Content;
-                var messageEl = dom[".error"];
-                var errorMessage = messageEl.Text().Trim();
-                throw new ExceptionWithConfigData(errorMessage, configData);
-            });
+                {"_token", token},
+                {"email", configData.Email.Value},
+                {"password", configData.Password.Value},
+                {"remember", "on"}
+            };
+            var result = await RequestLoginAndFollowRedirectAsync(LoginUrl, pairs, loginPage.Cookies, true, null, LoginUrl);
+            await ConfigureIfOkAsync(
+                result.Cookies, result.Content?.Contains(LogoutUrl) == true, () =>
+                {
+                    CQ dom = result.Content;
+                    var messageEl = dom[".error"];
+                    var errorMessage = messageEl.Text().Trim();
+                    throw new ExceptionWithConfigData(errorMessage, configData);
+                });
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var includePremium = ((BoolItem)configData.GetDynamic("IncludePremium")).Value;
-
-            var pairs = new Dictionary<string, string>();
-            pairs.Add("freetorrent", "false");
-            pairs.Add("ordenar_por", "created_at");
-            pairs.Add("orden", "desc");
-            pairs.Add("titulo", query.GetQueryString());
-
+            var pairs = new Dictionary<string, string>
+            {
+                {"freetorrent", "false"},
+                {"ordenar_por", "created_at"},
+                {"orden", "desc"},
+                {"titulo", query.GetQueryString()}
+            };
             var cats = MapTorznabCapsToTrackers(query);
             var category = cats.Count == 1 ? cats.First() : "0";
             pairs.Add("categoria", category);
-
-            var boundary = "---------------------------" + (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds.ToString().Replace(".", "");
+            var boundary = "---------------------------" + (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)))
+                                                           .TotalSeconds.ToString().Replace(".", "");
             var bodyParts = new List<string>();
-
             foreach (var pair in pairs)
             {
-                var part = "--" + boundary + "\r\n" +
-                           "Content-Disposition: form-data; name=\"" + pair.Key + "\"\r\n" +
-                           "\r\n" +
-                           pair.Value;
+                var part = "--" + boundary + "\r\n" + "Content-Disposition: form-data; name=\"" + pair.Key + "\"\r\n" +
+                           "\r\n" + pair.Value;
                 bodyParts.Add(part);
             }
 
             bodyParts.Add("--" + boundary + "--");
             var body = string.Join("\r\n", bodyParts);
-
-            var headers = new Dictionary<string, string>();
-            headers.Add("Content-Type", "multipart/form-data; boundary=" + boundary);
+            var headers = new Dictionary<string, string> { { "Content-Type", "multipart/form-data; boundary=" + boundary } };
             addXsrfTokenHeader(headers, configData.CookieHeader.Value);
-
-            var response = await PostDataWithCookies(SearchUrl, pairs, configData.CookieHeader.Value, SiteLink, headers, body);
+            var response = await PostDataWithCookiesAsync(
+                SearchUrl, pairs, configData.CookieHeader.Value, SiteLink, headers, body);
             if (response.Content.StartsWith("<!doctype html>"))
             {
                 //Cookie appears to expire after a period of time or logging in to the site via browser
-                await DoLogin();
-
+                await DoLoginAsync();
                 addXsrfTokenHeader(headers, configData.CookieHeader.Value);
-                response = await PostDataWithCookies(SearchUrl, pairs, configData.CookieHeader.Value, SiteLink, headers, body);
+                response = await PostDataWithCookiesAsync(
+                    SearchUrl, pairs, configData.CookieHeader.Value, SiteLink, headers, body);
             }
 
-            List<ReleaseInfo> releases = ParseResponse(query, response, includePremium);
-
+            var releases = ParseResponse(query, response, includePremium);
             return releases;
         }
 
@@ -145,20 +131,19 @@ namespace Jackett.Common.Indexers
 
         private List<ReleaseInfo> ParseResponse(TorznabQuery query, WebClientStringResult response, bool includePremium)
         {
-            List<ReleaseInfo> releases = new List<ReleaseInfo>();
-
+            var releases = new List<ReleaseInfo>();
             var torrents = CheckResponse(response);
-
             try
             {
                 foreach (var torrent in torrents)
                 {
-                    var release = new ReleaseInfo();
-
-                    release.Title = (string)torrent["titulo"] + " " + (string)torrent["titulo_extra"];
+                    var release = new ReleaseInfo
+                    {
+                        Title = (string)torrent["titulo"] + " " + (string)torrent["titulo_extra"]
+                    };
 
                     // for downloading "premium" torrents you need special account
-                    if ((string) torrent["premium"] == "si")
+                    if ((string)torrent["premium"] == "si")
                     {
                         if (includePremium)
                             release.Title += " [PREMIUM]";
@@ -168,30 +153,22 @@ namespace Jackett.Common.Indexers
 
                     release.Comments = new Uri(CommentsUrl + (string)torrent["id"]);
                     release.Guid = release.Comments;
-
                     release.PublishDate = DateTime.Now;
                     if (torrent["created_at"] != null)
                         release.PublishDate = DateTime.Parse((string)torrent["created_at"]);
-
                     release.Category = MapTrackerCatToNewznab((string)torrent["categoria"]);
                     release.Size = (long)torrent["size"];
-
                     release.Seeders = (int)torrent["seeders"];
                     release.Peers = release.Seeders + (int)torrent["leechers"];
                     release.Grabs = (long)torrent["snatched"];
-
                     release.InfoHash = (string)torrent["plain_info_hash"];
-                    release.Link = new Uri(DownloadUrl + (string) torrent["id"]);
-
+                    release.Link = new Uri(DownloadUrl + (string)torrent["id"]);
                     var files = (JArray)JsonConvert.DeserializeObject<dynamic>((string)torrent["files_list"]);
                     release.Files = files.Count;
-
                     release.DownloadVolumeFactor = (string)torrent["freetorrent"] == "0" ? 1 : 0;
                     release.UploadVolumeFactor = (string)torrent["doubletorrent"] == "0" ? 1 : 2;
-
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800; // 48 hours
-
                     releases.Add(release);
                 }
             }
@@ -208,7 +185,8 @@ namespace Jackett.Common.Indexers
             try
             {
                 var json = JsonConvert.DeserializeObject<dynamic>(response.Content);
-                if (!(json is JObject) || json["torrents"] == null || !(json["torrents"]["data"] is JArray) || json["torrents"]["data"] == null)
+                if (!(json is JObject) || json["torrents"] == null || !(json["torrents"]["data"] is JArray) ||
+                    json["torrents"]["data"] == null)
                     throw new Exception("Server error");
                 return (JArray)json["torrents"]["data"];
             }

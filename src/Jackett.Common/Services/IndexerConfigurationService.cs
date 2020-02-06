@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using Jackett.Common.Indexers;
 using Jackett.Common.Services.Interfaces;
@@ -7,10 +7,8 @@ using NLog;
 
 namespace Jackett.Common.Services
 {
-
     public class IndexerConfigurationService : IIndexerConfigurationService
     {
-
         //public override void LoadFromSavedConfiguration(JToken jsonConfig)
         //{
         //    if (jsonConfig is JObject)
@@ -27,26 +25,23 @@ namespace Jackett.Common.Services
 
         public IndexerConfigurationService(IConfigurationService configService, Logger logger)
         {
-            this.configService = configService;
-            this.logger = logger;
+            _configService = configService;
+            _logger = logger;
         }
 
         public void Delete(IIndexer indexer)
         {
             var configFilePath = GetIndexerConfigFilePath(indexer);
             File.Delete(configFilePath);
-            var configFilePathBak = configFilePath + ".bak";
+            var configFilePathBak = $"{configFilePath}.bak";
             if (File.Exists(configFilePathBak))
-            {
                 File.Delete(configFilePathBak);
-            }
         }
 
         public void Load(IIndexer idx)
         {
             var configFilePath = GetIndexerConfigFilePath(idx);
             if (File.Exists(configFilePath))
-            {
                 try
                 {
                     var fileStr = File.ReadAllText(configFilePath);
@@ -55,78 +50,73 @@ namespace Jackett.Common.Services
                 }
                 catch (Exception ex)
                 {
-                    logger.Error(ex, "Failed loading configuration for {0}, trying backup", idx.DisplayName);
-                    var configFilePathBak = configFilePath + ".bak";
+                    _logger.Error(ex, "Failed loading configuration for {0}, trying backup", idx.DisplayName);
+                    var configFilePathBak = $"{configFilePath}.bak";
                     if (File.Exists(configFilePathBak))
-                    {
                         try
                         {
                             var fileStrBak = File.ReadAllText(configFilePathBak);
                             var jsonStringBak = JToken.Parse(fileStrBak);
                             idx.LoadFromSavedConfiguration(jsonStringBak);
-                            logger.Info("Successfully loaded backup config for {0}", idx.DisplayName);
+                            _logger.Info("Successfully loaded backup config for {0}", idx.DisplayName);
                             idx.SaveConfig();
                         }
                         catch (Exception exbak)
                         {
-                            logger.Error(exbak, "Failed loading backup configuration for {0}, you must reconfigure this indexer", idx.DisplayName);
+                            _logger.Error(
+                                exbak, "Failed loading backup configuration for {0}, you must reconfigure this indexer",
+                                idx.DisplayName);
                         }
-                    }
                     else
-                    {
-                        logger.Error(ex, "Failed loading backup configuration for {0} (no backup available), you must reconfigure this indexer", idx.DisplayName);
-                    }
+                        _logger.Error(
+                            ex,
+                            "Failed loading backup configuration for {0} (no backup available), you must reconfigure this indexer",
+                            idx.DisplayName);
                 }
-            }
         }
 
         public void Save(IIndexer indexer, JToken obj)
         {
-            lock (configWriteLock)
+            lock (s_ConfigWriteLock)
             {
-                var uID = Guid.NewGuid().ToString("N");
+                var uId = Guid.NewGuid().ToString("N");
                 var configFilePath = GetIndexerConfigFilePath(indexer);
-                var configFilePathBak = configFilePath + ".bak";
-                var configFilePathTmp = configFilePath + "." + uID + ".tmp";
+                var configFilePathBak = $"{configFilePath}.bak";
+                var configFilePathTmp = $"{configFilePath}.{uId}.tmp";
                 var content = obj.ToString();
-
-                logger.Debug(string.Format("Saving new config file: {0}", configFilePathTmp));
-
+                _logger.Debug(string.Format("Saving new config file: {0}", configFilePathTmp));
                 if (string.IsNullOrWhiteSpace(content))
-                {
-                    throw new Exception(string.Format("New config content for {0} is empty, please report this bug.", indexer.ID));
-                }
-
+                    throw new Exception(
+                        string.Format("New config content for {0} is empty, please report this bug.", indexer.ID));
                 if (content.Contains("\x00"))
-                {
-                    throw new Exception(string.Format("New config content for {0} contains 0x00, please report this bug. Content: {1}", indexer.ID, content));
-                }
+                    throw new Exception(
+                        string.Format(
+                            "New config content for {0} contains 0x00, please report this bug. Content: {1}", indexer.ID,
+                            content));
 
                 // make sure the config directory exists
-                if (!Directory.Exists(configService.GetIndexerConfigDir()))
-                    Directory.CreateDirectory(configService.GetIndexerConfigDir());
+                if (!Directory.Exists(_configService.GetIndexerConfigDir()))
+                    Directory.CreateDirectory(_configService.GetIndexerConfigDir());
 
                 // create new temporary config file
                 File.WriteAllText(configFilePathTmp, content);
                 var fileInfo = new FileInfo(configFilePathTmp);
                 if (fileInfo.Length == 0)
-                {
-                    throw new Exception(string.Format("New config file {0} is empty, please report this bug.", configFilePathTmp));
-                }
+                    throw new Exception(
+                        string.Format("New config file {0} is empty, please report this bug.", configFilePathTmp));
 
                 // create backup file
                 File.Delete(configFilePathBak);
                 if (File.Exists(configFilePath))
-                {
                     try
                     {
                         File.Move(configFilePath, configFilePathBak);
                     }
                     catch (IOException ex)
                     {
-                        logger.Error(string.Format("Error while moving {0} to {1}: {2}", configFilePath, configFilePathBak, ex.ToString()));
+                        _logger.Error(
+                            string.Format("Error while moving {0} to {1}: {2}", configFilePath, configFilePathBak, ex));
                     }
-                }
 
                 // replace the actual config file
                 File.Delete(configFilePath);
@@ -136,19 +126,17 @@ namespace Jackett.Common.Services
                 }
                 catch (IOException ex)
                 {
-                    logger.Error(string.Format("Error while moving {0} to {1}: {2}", configFilePathTmp, configFilePath, ex.ToString()));
+                    _logger.Error(string.Format("Error while moving {0} to {1}: {2}", configFilePathTmp, configFilePath, ex));
                 }
             }
         }
 
-        private string GetIndexerConfigFilePath(IIndexer indexer)
-        {
-            return Path.Combine(configService.GetIndexerConfigDir(), indexer.ID + ".json");
-        }
+        private string GetIndexerConfigFilePath(IIndexer indexer) => Path.Combine(
+            _configService.GetIndexerConfigDir(), $"{indexer.ID}.json");
 
-        private IConfigurationService configService;
-        private Logger logger;
+        private readonly IConfigurationService _configService;
+        private readonly Logger _logger;
 
-        private static readonly object configWriteLock = new object();
+        private static readonly object s_ConfigWriteLock = new object();
     }
 }

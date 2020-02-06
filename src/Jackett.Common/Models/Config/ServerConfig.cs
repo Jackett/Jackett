@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
@@ -13,7 +13,7 @@ namespace Jackett.Common.Models.Config
         {
             observers = new List<IObserver<ServerConfig>>();
             Port = 9117;
-            AllowExternal = System.Environment.OSVersion.Platform == PlatformID.Unix;
+            AllowExternal = Environment.OSVersion.Platform == PlatformID.Unix;
             RuntimeSettings = runtimeSettings;
         }
 
@@ -42,108 +42,77 @@ namespace Jackett.Common.Models.Config
         public string ProxyUsername { get; set; }
         public string ProxyPassword { get; set; }
 
-        public bool ProxyIsAnonymous
-        {
-            get
-            {
-                return string.IsNullOrWhiteSpace(ProxyUsername) || string.IsNullOrWhiteSpace(ProxyPassword);
-            }
-        }
+        public bool ProxyIsAnonymous => string.IsNullOrWhiteSpace(ProxyUsername) || string.IsNullOrWhiteSpace(ProxyPassword);
 
-        public string GetProxyAuthString()
-        {
-            if (!ProxyIsAnonymous)
-            {
-                return $"{ProxyUsername}:{ProxyPassword}";
-            }
-            return null;
-        }
+        public string GetProxyAuthString() => !ProxyIsAnonymous ? $"{ProxyUsername}:{ProxyPassword}" : null;
 
         public string GetProxyUrl(bool withCreds = false)
         {
             var url = ProxyUrl;
             if (string.IsNullOrWhiteSpace(url))
-            {
                 return null;
-            }
             //remove protocol from url
             var index = url.IndexOf("://");
             if (index > -1)
-            {
                 url = url.Substring(index + 3);
-            }
             url = ProxyPort.HasValue ? $"{url}:{ProxyPort}" : url;
-
             var authString = GetProxyAuthString();
             if (withCreds && authString != null)
-            {
                 url = $"{authString}@{url}";
-            }
-
             if (ProxyType != ProxyType.Http)
             {
                 var protocol = (Enum.GetName(typeof(ProxyType), ProxyType) ?? "").ToLower();
                 if (!string.IsNullOrEmpty(protocol))
-                {
                     url = $"{protocol}://{url}";
-                }
             }
+
             return url;
         }
 
         public string[] GetListenAddresses(bool? external = null)
         {
             if (external == null)
-            {
                 external = AllowExternal;
-            }
-            if (external.Value)
+            return external.Value
+                ? (new[]
+                {
+                    $"http://*:{Port}/"
+                })
+                : (new[]
             {
-                return new string[] { "http://*:" + Port + "/" };
-            }
-            else
-            {
-                return new string[] {
-                    "http://127.0.0.1:" + Port + "/"
-                };
-            }
+                $"http://127.0.0.1:{Port}/"
+            });
         }
 
         public IDisposable Subscribe(IObserver<ServerConfig> observer)
         {
             if (!observers.Contains(observer))
-            {
                 observers.Add(observer);
-            }
             return new UnSubscriber(observers, observer);
         }
 
         private class UnSubscriber : IDisposable
         {
-            private List<IObserver<ServerConfig>> lstObservers;
-            private IObserver<ServerConfig> observer;
+            private readonly List<IObserver<ServerConfig>> _lstObservers;
+            private readonly IObserver<ServerConfig> _observer;
 
-            public UnSubscriber(List<IObserver<ServerConfig>> ObserversCollection, IObserver<ServerConfig> observer)
+            public UnSubscriber(List<IObserver<ServerConfig>> observersCollection, IObserver<ServerConfig> observer)
             {
-                this.lstObservers = ObserversCollection;
-                this.observer = observer;
+                _lstObservers = observersCollection;
+                _observer = observer;
             }
 
             public void Dispose()
             {
-                if (this.observer != null)
-                {
-                    lstObservers.Remove(this.observer);
-                }
+                if (_observer != null)
+                    _lstObservers.Remove(_observer);
             }
         }
 
         public void ConfigChanged()
         {
             foreach (var obs in observers)
-            {
                 obs.OnNext(this);
-            }
         }
     }
 }

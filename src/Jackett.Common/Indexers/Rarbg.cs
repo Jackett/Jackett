@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -14,69 +14,60 @@ using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
+using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
 namespace Jackett.Common.Indexers
 {
     public class Rarbg : BaseWebIndexer
     {
         // API doc: https://torrentapi.org/apidocs_v2.txt?app_id=Jackett
-        private static readonly string defaultSiteLink = "https://torrentapi.org/";
+        private static readonly string s_DefaultSiteLink = "https://torrentapi.org/";
 
         private Uri BaseUri
         {
-            get { return new Uri(configData.Url.Value); }
-            set { configData.Url.Value = value.ToString(); }
+            get => new Uri(configData.Url.Value);
+            set => configData.Url.Value = value.ToString();
         }
 
-        private string ApiEndpoint { get { return BaseUri + "pubapi_v2.php"; } }
+        private string ApiEndpoint => $"{BaseUri}pubapi_v2.php";
 
         private new ConfigurationDataUrl configData
         {
-            get { return (ConfigurationDataUrl)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataUrl)base.configData;
+            set => base.configData = value;
         }
 
-        private DateTime lastTokenFetch;
-        private string token;
-        private string app_id;
+        private DateTime _lastTokenFetch;
+        private string _token;
+        private readonly string _appId;
         private bool _provideTorrentLink;
         private string _sort;
 
-        private readonly TimeSpan TOKEN_DURATION = TimeSpan.FromMinutes(10);
+        private readonly TimeSpan _tokenDuration = TimeSpan.FromMinutes(10);
 
-        private bool HasValidToken { get { return !string.IsNullOrEmpty(token) && lastTokenFetch > DateTime.Now - TOKEN_DURATION; } }
+        private bool HasValidToken => !string.IsNullOrEmpty(_token) && _lastTokenFetch > DateTime.Now - _tokenDuration;
 
-        public Rarbg(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "RARBG",
-                description: "RARBG is a Public torrent site for MOVIES / TV / GENERAL",
-                link: "https://rarbg.to/",
-                caps: new TorznabCapabilities(),
-                configService: configService,
-                client: wc,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataUrl(defaultSiteLink))
+        public Rarbg(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps) : base(
+            "RARBG", description: "RARBG is a Public torrent site for MOVIES / TV / GENERAL", link: "https://rarbg.to/",
+            caps: new TorznabCapabilities(), configService: configService, client: wc, logger: l, p: ps,
+            configData: new ConfigurationDataUrl(s_DefaultSiteLink))
         {
             Encoding = Encoding.GetEncoding("windows-1252");
             Language = "en-us";
             Type = "public";
-
-            var sort = new SelectItem(new Dictionary<string, string>
+            var sort = new SelectItem(
+                new Dictionary<string, string> { { "last", "created" }, { "seeders", "seeders" }, { "leechers", "leechers" } })
             {
-                {"last", "created"},
-                {"seeders", "seeders"},
-                {"leechers", "leechers"}
-            }) {Name = "Sort requested from site", Value = "last"};
+                Name = "Sort requested from site",
+                Value = "last"
+            };
             configData.AddDynamic("sort", sort);
-
             var provideTorrentLinkItem = new BoolItem { Value = false };
-            provideTorrentLinkItem.Name = "Generate torrent download link additionally to magnet (not recommended due to DDoS protection).";
+            provideTorrentLinkItem.Name =
+                "Generate torrent download link additionally to magnet (not recommended due to DDoS protection).";
             configData.AddDynamic("providetorrentlink", provideTorrentLinkItem);
-
             TorznabCaps.SupportsImdbMovieSearch = true;
-
             webclient.requestDelay = 2.1; // The api has a 1req/2s limit.
-
             AddCategoryMapping(4, TorznabCatType.XXX, "XXX (18+)");
             AddCategoryMapping(14, TorznabCatType.MoviesSD, "Movies/XVID");
             AddCategoryMapping(48, TorznabCatType.MoviesHD, "Movies/XVID/720");
@@ -91,8 +82,12 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(46, TorznabCatType.MoviesBluRay, "Movies/BD Remux");
             AddCategoryMapping(18, TorznabCatType.TVSD, "TV Episodes");
             AddCategoryMapping(41, TorznabCatType.TVHD, "TV HD Episodes");
-            AddCategoryMapping(49, TorznabCatType.TVHD, "TV UHD Episodes");        // torrentapi.org returns "Movies/TV-UHD-episodes" for some reason
-            AddCategoryMapping(49, TorznabCatType.TVHD, "Movies/TV-UHD-episodes"); // possibly because thats what the category is called on the /top100.php page
+            AddCategoryMapping(
+                49, TorznabCatType.TVHD,
+                "TV UHD Episodes"); // torrentapi.org returns "Movies/TV-UHD-episodes" for some reason
+            AddCategoryMapping(
+                49, TorznabCatType.TVHD,
+                "Movies/TV-UHD-episodes"); // possibly because thats what the category is called on the /top100.php page
             AddCategoryMapping(23, TorznabCatType.AudioMP3, "Music/MP3");
             AddCategoryMapping(25, TorznabCatType.AudioLossless, "Music/FLAC");
             AddCategoryMapping(27, TorznabCatType.PCGames, "Games/PC ISO");
@@ -101,35 +96,28 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(32, TorznabCatType.ConsoleXbox360, "Games/XBOX-360");
             AddCategoryMapping(33, TorznabCatType.PCISO, "Software/PC ISO");
             AddCategoryMapping(35, TorznabCatType.BooksEbook, "e-Books");
-
-            app_id = "jackett_v" + EnvironmentUtil.JackettVersion;
+            _appId = $"jackett_v{EnvironmentUtil.JackettVersion}";
         }
 
         public override void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)
         {
             base.LoadValuesFromJson(jsonConfig, useProtectionService);
-
-            var sort = (SelectItem) configData.GetDynamic("sort");
+            var sort = (SelectItem)configData.GetDynamic("sort");
             _sort = sort != null ? sort.Value : "last";
-
             var provideTorrentLinkItem = (BoolItem)configData.GetDynamic("providetorrentlink");
-            _provideTorrentLink = provideTorrentLinkItem != null && provideTorrentLinkItem.Value;
+            _provideTorrentLink = provideTorrentLinkItem?.Value == true;
         }
 
-        private async Task CheckToken()
+        private async Task CheckTokenAsync()
         {
             if (!HasValidToken)
             {
-                var queryCollection = new NameValueCollection();
-                queryCollection.Add("get_token", "get_token");
-                queryCollection.Add("app_id", app_id);
-
-                var tokenUrl = ApiEndpoint + "?" + queryCollection.GetQueryString();
-
-                var result = await RequestStringWithCookiesAndRetry(tokenUrl);
+                var queryCollection = new NameValueCollection { { "get_token", "get_token" }, { "app_id", _appId } };
+                var tokenUrl = $"{ApiEndpoint}?{queryCollection.GetQueryString()}";
+                var result = await RequestStringWithCookiesAndRetryAsync(tokenUrl);
                 var json = JObject.Parse(result.Content);
-                token = json.Value<string>("token");
-                lastTokenFetch = DateTime.Now;
+                _token = json.Value<string>("token");
+                _lastTokenFetch = DateTime.Now;
             }
         }
 
@@ -137,32 +125,28 @@ namespace Jackett.Common.Indexers
         {
             LoadValuesFromJson(configJson);
             var releases = await PerformQuery(new TorznabQuery());
-
-            await ConfigureIfOK(string.Empty, releases.Any(), () =>
-                throw new Exception("Could not find releases from this URL"));
-
+            await ConfigureIfOkAsync(
+                string.Empty, releases.Any(), () => throw new Exception("Could not find releases from this URL"));
             return IndexerConfigurationStatus.Completed;
         }
 
-        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
-        {
-            return await PerformQuery(query, 0);
-        }
+        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query) =>
+            await PerformQueryAsync(query, 0);
 
-        private async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query, int attempts)
+        private async Task<IEnumerable<ReleaseInfo>> PerformQueryAsync(TorznabQuery query, int attempts)
         {
-            await CheckToken();
+            await CheckTokenAsync();
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();
-
-            var queryCollection = new NameValueCollection();
-            queryCollection.Add("token", token);
-            queryCollection.Add("format", "json_extended");
-            queryCollection.Add("app_id", app_id);
-            queryCollection.Add("limit", "100");
-            queryCollection.Add("ranked", "0");
-            queryCollection.Add("sort", _sort);
-
+            var queryCollection = new NameValueCollection
+            {
+                {"token", _token},
+                {"format", "json_extended"},
+                {"app_id", _appId},
+                {"limit", "100"},
+                {"ranked", "0"},
+                {"sort", _sort}
+            };
             if (query.ImdbID != null)
             {
                 queryCollection.Add("mode", "search");
@@ -192,63 +176,50 @@ namespace Jackett.Common.Indexers
 
             var querycats = MapTorznabCapsToTrackers(query);
             if (querycats.Count == 0)
-                querycats = GetAllTrackerCategories(); // default to all, without specifing it some categories are missing (e.g. games), see #4146
+                querycats =
+                    GetAllTrackerCategories(); // default to all, without specifing it some categories are missing (e.g. games), see #4146
             var cats = string.Join(";", querycats);
             queryCollection.Add("category", cats);
-
-            var searchUrl = ApiEndpoint + "?" + queryCollection.GetQueryString();
-            var response = await RequestStringWithCookiesAndRetry(searchUrl, string.Empty);
-
+            var searchUrl = $"{ApiEndpoint}?{queryCollection.GetQueryString()}";
+            var response = await RequestStringWithCookiesAndRetryAsync(searchUrl, string.Empty);
             try
             {
                 var jsonContent = JObject.Parse(response.Content);
-
                 var errorCode = jsonContent.Value<int>("error_code");
                 if (errorCode == 20) // no results found
-                {
                     return releases.ToArray();
-                }
 
                 // return empty results in case of invalid imdb ID, see issue #1486
                 if (errorCode == 10) // Cant find imdb in database. Are you sure this imdb exists?
                     return releases;
-
-                if (errorCode == 2  // Invalid token set!
+                if (errorCode == 2 // Invalid token set!
                     || errorCode == 4) // Invalid token. Use get_token for a new one!
                 {
-                    token = null;
+                    _token = null;
                     if (attempts < 3)
-                    {
-                        return await PerformQuery(query, ++attempts);
-                    }
-                    else
-                    {
-                        throw new Exception("error " + errorCode.ToString() + " after " + attempts.ToString() + " attempts: " + jsonContent.Value<string>("error"));
-                    }
+                        return await PerformQueryAsync(query, ++attempts);
+                    throw new Exception($"error {errorCode} after {attempts} attempts: {jsonContent.Value<string>("error")}");
                 }
 
                 if (errorCode > 0) // too many requests per seconds ???
-                {
                     // we use the IwebClient rate limiter now, this shouldn't happen
-                    throw new Exception("error " + errorCode.ToString() + ": " + jsonContent.Value<string>("error"));
-                }
-
+                    throw new Exception($"error {errorCode}: {jsonContent.Value<string>("error")}");
                 foreach (var item in jsonContent.Value<JArray>("torrent_results"))
                 {
-                    var release = new ReleaseInfo();
-                    release.Title = WebUtility.HtmlDecode(item.Value<string>("title"));
-                    release.Category = MapTrackerCatDescToNewznab(item.Value<string>("category"));
-
-                    release.MagnetUri = new Uri(item.Value<string>("download"));
+                    var release = new ReleaseInfo
+                    {
+                        Title = WebUtility.HtmlDecode(item.Value<string>("title")),
+                        Category = MapTrackerCatDescToNewznab(item.Value<string>("category")),
+                        MagnetUri = new Uri(item.Value<string>("download"))
+                    };
                     release.InfoHash = release.MagnetUri.ToString().Split(':')[3].Split('&')[0];
                     // append app_id to prevent api server returning 403 forbidden
-                    release.Comments = new Uri(item.Value<string>("info_page") + "&app_id=" + app_id);
+                    release.Comments = new Uri($"{item.Value<string>("info_page")}&app_id={_appId}");
                     if (_provideTorrentLink)
-                        release.Link = release.Comments; // in case of a torrent download we grab the link from the details page in Download()
+                        release.Link =
+                            release.Comments; // in case of a torrent download we grab the link from the details page in Download()
                     release.Guid = release.MagnetUri;
-
                     var episodeInfo = item.Value<JToken>("episode_info");
-
                     if (episodeInfo.HasValues)
                     {
                         var imdb = episodeInfo.Value<string>("imdb");
@@ -262,7 +233,6 @@ namespace Jackett.Common.Indexers
                     var dateStr = item.Value<string>("pubdate").Replace(" +0000", "");
                     var dateTime = DateTime.ParseExact(dateStr, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
                     release.PublishDate = DateTime.SpecifyKind(dateTime, DateTimeKind.Utc).ToLocalTime();
-
                     release.Seeders = item.Value<int>("seeders");
                     release.Peers = item.Value<int>("leechers") + release.Seeders;
                     release.Size = item.Value<long>("size");
@@ -270,7 +240,6 @@ namespace Jackett.Common.Indexers
                     release.MinimumSeedTime = 172800; // 48 hours
                     release.DownloadVolumeFactor = 0;
                     release.UploadVolumeFactor = 1;
-
                     releases.Add(release);
                 }
             }
@@ -286,22 +255,22 @@ namespace Jackett.Common.Indexers
         {
             // build download link from info redirect link
             var slink = link.ToString();
-            var response = await RequestStringWithCookies(slink);
+            var response = await RequestStringWithCookiesAsync(slink);
             if (!response.IsRedirect && response.Content.Contains("Invalid token."))
             {
                 // get new token
-                token = null;
-                await CheckToken();
-                slink += "&token=" + token;
-                response = await RequestStringWithCookies(slink);
+                _token = null;
+                await CheckTokenAsync();
+                slink += $"&token={_token}";
+                response = await RequestStringWithCookiesAsync(slink);
             }
+
             if (!response.IsRedirect)
                 throw new Exception("Downlaod Failed, expected redirect");
-
             var targeturi = new Uri(response.RedirectingTo);
             var id = targeturi.Segments.Last();
-            var dluri = new Uri(targeturi, "/download.php?id=" + id + "&f=jackett.torrent");
-            return await base.Download(dluri, RequestType.GET);
+            var dluri = new Uri(targeturi, $"/download.php?id={id}&f=jackett.torrent");
+            return await DownloadAsync(dluri, RequestType.Get);
         }
     }
 }

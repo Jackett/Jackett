@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -13,171 +14,167 @@ using AngleSharp.Html.Parser;
 using Jackett.Common.Helpers;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
-using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Microsoft.AspNetCore.WebUtilities;
 using Newtonsoft.Json.Linq;
 using NLog;
+using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
+using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
 namespace Jackett.Common.Indexers
 {
     public class CardigannIndexer : BaseWebIndexer
     {
         protected IndexerDefinition Definition;
-        public override string ID { get { return (Definition != null ? Definition.Site : GetIndexerID(GetType())); } }
+        public override string ID => (Definition != null ? Definition.Site : GetIndexerID(GetType()));
 
         protected WebClientStringResult landingResult;
         protected IHtmlDocument landingResultDocument;
 
         protected List<string> DefaultCategories = new List<string>();
 
-        new ConfigurationData configData
+        private new ConfigurationData configData
         {
-            get { return (ConfigurationData)base.configData; }
-            set { base.configData = value; }
+            get => base.configData;
+            set => base.configData = value;
         }
 
-        protected readonly string[] OptionalFileds = new string[] { "imdb", "rageid", "tvdbid", "banner" };
-
-        public CardigannIndexer(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps, IndexerDefinition Definition)
-            : base(configService: configService,
-                   client: wc,
-                   logger: l,
-                   p: ps)
+        protected readonly string[] OptionalFileds =
         {
-            this.Definition = Definition;
+            "imdb",
+            "rageid",
+            "tvdbid",
+            "banner"
+        };
+
+        public CardigannIndexer(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+                                IndexerDefinition definition) : base(configService, wc, l, ps)
+        {
+            Definition = definition;
 
             // Add default data if necessary
-            if (Definition.Settings == null)
-            {
-                Definition.Settings = new List<settingsField>();
-                Definition.Settings.Add(new settingsField { Name = "username", Label = "Username", Type = "text" });
-                Definition.Settings.Add(new settingsField { Name = "password", Label = "Password", Type = "password" });
-            }
-
-            if (Definition.Encoding == null)
-                Definition.Encoding = "UTF-8";
-
-            if (Definition.Login != null && Definition.Login.Method == null)
-                Definition.Login.Method = "form";
-
-            if (Definition.Search.Paths == null)
-            {
-                Definition.Search.Paths = new List<searchPathBlock>();
-            }
+            if (definition.Settings == null)
+                definition.Settings = new List<settingsField>
+                {
+                    new settingsField {Name = "username", Label = "Username", Type = "text"},
+                    new settingsField {Name = "password", Label = "Password", Type = "password"}
+                };
+            if (definition.Encoding == null)
+                definition.Encoding = "UTF-8";
+            if (definition.Login != null && definition.Login.Method == null)
+                definition.Login.Method = "form";
+            if (definition.Search.Paths == null)
+                definition.Search.Paths = new List<searchPathBlock>();
 
             // convert definitions with a single search Path to a Paths entry
-            if (Definition.Search.Path != null)
+            if (definition.Search.Path != null)
             {
-                var legacySearchPath = new searchPathBlock();
-                legacySearchPath.Path = Definition.Search.Path;
-                legacySearchPath.Inheritinputs = true;
-                Definition.Search.Paths.Add(legacySearchPath);
+                var legacySearchPath = new searchPathBlock { Path = definition.Search.Path, Inheritinputs = true };
+                definition.Search.Paths.Add(legacySearchPath);
             }
 
             // init missing mandatory attributes
-            DisplayName = Definition.Name;
-            DisplayDescription = Definition.Description;
-            if (Definition.Links.Count > 1)
-                AlternativeSiteLinks = Definition.Links.ToArray();
-            DefaultSiteLink = Definition.Links[0];
-            if (Definition.Legacylinks != null)
-                LegacySiteLinks = Definition.Legacylinks.ToArray();
-            Encoding = Encoding.GetEncoding(Definition.Encoding);
+            DisplayName = definition.Name;
+            DisplayDescription = definition.Description;
+            if (definition.Links.Count > 1)
+                AlternativeSiteLinks = definition.Links.ToArray();
+            DefaultSiteLink = definition.Links[0];
+            if (definition.Legacylinks != null)
+                LegacySiteLinks = definition.Legacylinks.ToArray();
+            Encoding = Encoding.GetEncoding(definition.Encoding);
             if (!DefaultSiteLink.EndsWith("/"))
                 DefaultSiteLink += "/";
-            Language = Definition.Language;
-            Type = Definition.Type;
-            TorznabCaps = new TorznabCapabilities();
-
-            TorznabCaps.SupportsImdbMovieSearch = Definition.Caps.Modes.Where(c => c.Key == "movie-search" && c.Value.Contains("imdbid")).Any();
-            if (Definition.Caps.Modes.ContainsKey("music-search"))
-                TorznabCaps.SupportedMusicSearchParamsList = Definition.Caps.Modes["music-search"];
+            Language = definition.Language;
+            Type = definition.Type;
+            TorznabCaps = new TorznabCapabilities
+            {
+                SupportsImdbMovieSearch = definition
+                                          .Caps.Modes.Where(c => c.Key == "movie-search" && c.Value.Contains("imdbid"))
+                                          .Any()
+            };
+            if (definition.Caps.Modes.ContainsKey("music-search"))
+                TorznabCaps.SupportedMusicSearchParamsList = definition.Caps.Modes["music-search"];
 
             // init config Data
             configData = new ConfigurationData();
-            foreach (var Setting in Definition.Settings)
+            foreach (var setting in definition.Settings)
             {
                 Item item;
-
-                if (Setting.Type != null)
-                {
-                    switch (Setting.Type)
+                if (setting.Type != null)
+                    switch (setting.Type)
                     {
                         case "checkbox":
                             item = new BoolItem { Value = false };
-
-                            if (Setting.Default != null && Setting.Default == "true")
-                            {
+                            if (setting.Default != null && setting.Default == "true")
                                 ((BoolItem)item).Value = true;
-                            }
                             break;
                         case "password":
                         case "text":
-                            item = new StringItem { Value = Setting.Default };
+                            item = new StringItem { Value = setting.Default };
                             break;
                         case "select":
-                            if (Setting.Options == null)
-                            {
+                            if (setting.Options == null)
                                 throw new Exception("Options must be given for the 'select' type.");
-                            }
-
-                            item = new SelectItem(Setting.Options) { Value = Setting.Default };
+                            item = new SelectItem(setting.Options) { Value = setting.Default };
                             break;
                         case "info":
-                            item = new DisplayItem(Setting.Default);
+                            item = new DisplayItem(setting.Default);
                             break;
                         default:
-                            throw new Exception($"Invalid setting type '{Setting.Type}' specified.");
+                            throw new Exception($"Invalid setting type '{setting.Type}' specified.");
                     }
-                }
                 else
                 {
-                    item = new StringItem { Value = Setting.Default }; ;
+                    item = new StringItem { Value = setting.Default };
+                    ;
                 }
 
-                item.Name = Setting.Label;
+                item.Name = setting.Label;
                 if (item.Name == null)
-                    item.Name = Setting.Name;
-                configData.AddDynamic(Setting.Name, item);
+                    item.Name = setting.Name;
+                configData.AddDynamic(setting.Name, item);
             }
 
-            if (Definition.Caps.Categories != null)
-            {
-                foreach (var Category in Definition.Caps.Categories)
+            if (definition.Caps.Categories != null)
+                foreach (var category in definition.Caps.Categories)
                 {
-                    var cat = TorznabCatType.GetCatByName(Category.Value);
+                    var cat = TorznabCatType.GetCatByName(category.Value);
                     if (cat == null)
                     {
-                        logger.Error(string.Format("CardigannIndexer ({0}): invalid Torznab category for id {1}: {2}", ID, Category.Key, Category.Value));
+                        logger.Error(
+                            string.Format(
+                                "CardigannIndexer ({0}): invalid Torznab category for id {1}: {2}", ID, category.Key,
+                                category.Value));
                         continue;
                     }
-                    AddCategoryMapping(Category.Key, cat);
+
+                    AddCategoryMapping(category.Key, cat);
                 }
-            }
 
-            if (Definition.Caps.Categorymappings != null)
-            {
-                foreach (var Categorymapping in Definition.Caps.Categorymappings)
+            if (definition.Caps.Categorymappings != null)
+                foreach (var categorymapping in definition.Caps.Categorymappings)
                 {
-                    TorznabCategory TorznabCat = null;
-
-                    if (Categorymapping.cat != null)
+                    TorznabCategory torznabCat = null;
+                    if (categorymapping.cat != null)
                     {
-                        TorznabCat = TorznabCatType.GetCatByName(Categorymapping.cat);
-                        if (TorznabCat == null)
+                        torznabCat = TorznabCatType.GetCatByName(categorymapping.cat);
+                        if (torznabCat == null)
                         {
-                            logger.Error(string.Format("CardigannIndexer ({0}): invalid Torznab category for id {1}: {2}", ID, Categorymapping.id, Categorymapping.cat));
+                            logger.Error(
+                                string.Format(
+                                    "CardigannIndexer ({0}): invalid Torznab category for id {1}: {2}", ID,
+                                    categorymapping.id, categorymapping.cat));
                             continue;
                         }
                     }
-                    AddCategoryMapping(Categorymapping.id, TorznabCat, Categorymapping.desc);
-                    if (Categorymapping.Default)
-                        DefaultCategories.Add(Categorymapping.id);
+
+                    AddCategoryMapping(categorymapping.id, torznabCat, categorymapping.desc);
+                    if (categorymapping.Default)
+                        DefaultCategories.Add(categorymapping.id);
                 }
-            }
+
             LoadValuesFromJson(null);
         }
 
@@ -187,117 +184,91 @@ namespace Jackett.Common.Indexers
 
             // add self signed cert to trusted certs
             if (Definition.Certificates != null)
-            {
                 foreach (var certificateHash in Definition.Certificates)
                     webclient.AddTrustedCertificate(new Uri(SiteLink).Host, certificateHash);
-            }
         }
 
         protected Dictionary<string, object> getTemplateVariablesFromConfigData()
         {
-            Dictionary<string, object> variables = new Dictionary<string, object>();
-
-            variables[".Config.sitelink"] = SiteLink;
-            foreach (settingsField Setting in Definition.Settings)
+            var variables = new Dictionary<string, object> { [".Config.sitelink"] = SiteLink };
+            foreach (var setting in Definition.Settings)
             {
                 string value;
-                var item = configData.GetDynamic(Setting.Name);
-                if (item.GetType() == typeof(BoolItem))
-                {
-                    value = (((BoolItem)item).Value == true ? "true" : "");
-                }
-                else if (item.GetType() == typeof(SelectItem))
-                {
-                    value = ((SelectItem)item).Value;
-                }
-                else
-                {
-                    value = ((StringItem)item).Value;
-                }
-                variables[".Config." + Setting.Name] = value;
+                var item = configData.GetDynamic(setting.Name);
+                value = item.GetType() == typeof(BoolItem)
+                    ? ((BoolItem)item).Value ? "true" : ""
+                    : item.GetType() == typeof(SelectItem) ? ((SelectItem)item).Value : ((StringItem)item).Value;
+                variables[$".Config.{setting.Name}"] = value;
             }
+
             return variables;
         }
 
         // A very bad implementation of the golang template/text templating engine.
         // But it should work for most basic constucts used by Cardigann definitions.
         protected delegate string TemplateTextModifier(string str);
-        protected string applyGoTemplateText(string template, Dictionary<string, object> variables = null, TemplateTextModifier modifier = null)
+
+        protected string applyGoTemplateText(string template, Dictionary<string, object> variables = null,
+                                             TemplateTextModifier modifier = null)
         {
             if (variables == null)
-            {
                 variables = getTemplateVariablesFromConfigData();
-            }
 
             // handle re_replace expression
             // Example: {{ re_replace .Query.Keywords "[^a-zA-Z0-9]+" "%" }}
-            Regex ReReplaceRegex = new Regex(@"{{\s*re_replace\s+(\..+?)\s+""(.*?)""\s+""(.*?)""\s*}}");
-            var ReReplaceRegexMatches = ReReplaceRegex.Match(template);
-
-            while (ReReplaceRegexMatches.Success)
+            var reReplaceRegex = new Regex(@"{{\s*re_replace\s+(\..+?)\s+""(.*?)""\s+""(.*?)""\s*}}");
+            var reReplaceRegexMatches = reReplaceRegex.Match(template);
+            while (reReplaceRegexMatches.Success)
             {
-                string all = ReReplaceRegexMatches.Groups[0].Value;
-                string variable = ReReplaceRegexMatches.Groups[1].Value;
-                string regexp = ReReplaceRegexMatches.Groups[2].Value;
-                string newvalue = ReReplaceRegexMatches.Groups[3].Value;
-
-                Regex ReplaceRegex = new Regex(regexp);
+                var all = reReplaceRegexMatches.Groups[0].Value;
+                var variable = reReplaceRegexMatches.Groups[1].Value;
+                var regexp = reReplaceRegexMatches.Groups[2].Value;
+                var newvalue = reReplaceRegexMatches.Groups[3].Value;
+                var replaceRegex = new Regex(regexp);
                 var input = (string)variables[variable];
-                var expanded = ReplaceRegex.Replace(input, newvalue);
-
+                var expanded = replaceRegex.Replace(input, newvalue);
                 if (modifier != null)
                     expanded = modifier(expanded);
-
                 template = template.Replace(all, expanded);
-                ReReplaceRegexMatches = ReReplaceRegexMatches.NextMatch();
+                reReplaceRegexMatches = reReplaceRegexMatches.NextMatch();
             }
 
             // handle join expression
             // Example: {{ join .Categories "," }}
-            Regex JoinRegex = new Regex(@"{{\s*join\s+(\..+?)\s+""(.*?)""\s*}}");
-            var JoinMatches = JoinRegex.Match(template);
-
-            while (JoinMatches.Success)
+            var joinRegex = new Regex(@"{{\s*join\s+(\..+?)\s+""(.*?)""\s*}}");
+            var joinMatches = joinRegex.Match(template);
+            while (joinMatches.Success)
             {
-                string all = JoinMatches.Groups[0].Value;
-                string variable = JoinMatches.Groups[1].Value;
-                string delimiter = JoinMatches.Groups[2].Value;
-
+                var all = joinMatches.Groups[0].Value;
+                var variable = joinMatches.Groups[1].Value;
+                var delimiter = joinMatches.Groups[2].Value;
                 var input = (ICollection<string>)variables[variable];
                 var expanded = string.Join(delimiter, input);
-
                 if (modifier != null)
                     expanded = modifier(expanded);
-
                 template = template.Replace(all, expanded);
-                JoinMatches = JoinMatches.NextMatch();
+                joinMatches = joinMatches.NextMatch();
             }
 
             // handle or, and functions
-            Regex AndOrRegex = new Regex(@"(and|or)\s+\((\..+?)\)\s+\((\..+?)\)(\s+\((\..+?)\)){0,1}");
-            var AndOrRegexMatches = AndOrRegex.Match(template);
-
-            while (AndOrRegexMatches.Success)
+            var andOrRegex = new Regex(@"(and|or)\s+\((\..+?)\)\s+\((\..+?)\)(\s+\((\..+?)\)){0,1}");
+            var andOrRegexMatches = andOrRegex.Match(template);
+            while (andOrRegexMatches.Success)
             {
-                string functionResult = "";
-                string all = AndOrRegexMatches.Groups[0].Value;
-                string op = AndOrRegexMatches.Groups[1].Value;
-                string first = AndOrRegexMatches.Groups[2].Value;
-                string second = AndOrRegexMatches.Groups[3].Value;
-                string third = "";
-                if (AndOrRegexMatches.Groups.Count > 5)
-                {
-                    third = AndOrRegexMatches.Groups[5].Value;
-                }
-
+                var functionResult = "";
+                var all = andOrRegexMatches.Groups[0].Value;
+                var op = andOrRegexMatches.Groups[1].Value;
+                var first = andOrRegexMatches.Groups[2].Value;
+                var second = andOrRegexMatches.Groups[3].Value;
+                var third = "";
+                if (andOrRegexMatches.Groups.Count > 5)
+                    third = andOrRegexMatches.Groups[5].Value;
                 var value = variables[first];
                 if (op == "and")
                 {
                     functionResult = second;
                     if (value == null || (value is string && string.IsNullOrWhiteSpace((string)value)))
-                    {
                         functionResult = first;
-                    }
                     else
                     {
                         if (!string.IsNullOrWhiteSpace(third))
@@ -305,12 +276,11 @@ namespace Jackett.Common.Indexers
                             functionResult = third;
                             value = variables[second];
                             if (value == null || (value is string && string.IsNullOrWhiteSpace((string)value)))
-                            {
                                 functionResult = second;
-                            }
                         }
                     }
                 }
+
                 if (op == "or")
                 {
                     functionResult = first;
@@ -321,35 +291,29 @@ namespace Jackett.Common.Indexers
                         {
                             value = variables[second];
                             if (value == null || (value is string && string.IsNullOrWhiteSpace((string)value)))
-                            {
                                 functionResult = third;
-                            }
                         }
                     }
-
                 }
+
                 template = template.Replace(all, functionResult);
-                AndOrRegexMatches = AndOrRegexMatches.NextMatch();
+                andOrRegexMatches = andOrRegexMatches.NextMatch();
             }
 
             // handle if ... else ... expression
-            Regex IfElseRegex = new Regex(@"{{\s*if\s*(.+?)\s*}}(.*?){{\s*else\s*}}(.*?){{\s*end\s*}}");
-            var IfElseRegexMatches = IfElseRegex.Match(template);
-
-            while (IfElseRegexMatches.Success)
+            var ifElseRegex = new Regex(@"{{\s*if\s*(.+?)\s*}}(.*?){{\s*else\s*}}(.*?){{\s*end\s*}}");
+            var ifElseRegexMatches = ifElseRegex.Match(template);
+            while (ifElseRegexMatches.Success)
             {
-                string conditionResult = null;
-
-                string all = IfElseRegexMatches.Groups[0].Value;
-                string condition = IfElseRegexMatches.Groups[1].Value;
-                string onTrue = IfElseRegexMatches.Groups[2].Value;
-                string onFalse = IfElseRegexMatches.Groups[3].Value;
-
+                var all = ifElseRegexMatches.Groups[0].Value;
+                var condition = ifElseRegexMatches.Groups[1].Value;
+                var onTrue = ifElseRegexMatches.Groups[2].Value;
+                var onFalse = ifElseRegexMatches.Groups[3].Value;
+                string conditionResult;
                 if (condition.StartsWith("."))
                 {
-                    var conditionResultState = false;
                     var value = variables[condition];
-
+                    bool conditionResultState;
                     if (value == null)
                         conditionResultState = false;
                     else if (value is string)
@@ -357,65 +321,51 @@ namespace Jackett.Common.Indexers
                     else if (value is ICollection)
                         conditionResultState = ((ICollection)value).Count > 0;
                     else
-                        throw new Exception(string.Format("Unexpceted type for variable {0}: {1}", condition, value.GetType()));
-
-                    if (conditionResultState)
-                    {
-                        conditionResult = onTrue;
-                    }
-                    else
-                    {
-                        conditionResult = onFalse;
-                    }
+                        throw new Exception(
+                            string.Format("Unexpceted type for variable {0}: {1}", condition, value.GetType()));
+                    conditionResult = conditionResultState ? onTrue : onFalse;
                 }
                 else
-                {
-                    throw new NotImplementedException("CardigannIndexer: Condition operation '" + condition + "' not implemented");
-                }
+                    throw new NotImplementedException($"CardigannIndexer: Condition operation '{condition}' not implemented");
+
                 template = template.Replace(all, conditionResult);
-                IfElseRegexMatches = IfElseRegexMatches.NextMatch();
+                ifElseRegexMatches = ifElseRegexMatches.NextMatch();
             }
 
             // handle range expression
-            Regex RangeRegex = new Regex(@"{{\s*range\s*(.+?)\s*}}(.*?){{\.}}(.*?){{end}}");
-            var RangeRegexMatches = RangeRegex.Match(template);
-
-            while (RangeRegexMatches.Success)
+            var rangeRegex = new Regex(@"{{\s*range\s*(.+?)\s*}}(.*?){{\.}}(.*?){{end}}");
+            var rangeRegexMatches = rangeRegex.Match(template);
+            while (rangeRegexMatches.Success)
             {
-                string expanded = string.Empty;
-
-                string all = RangeRegexMatches.Groups[0].Value;
-                string variable = RangeRegexMatches.Groups[1].Value;
-                string prefix = RangeRegexMatches.Groups[2].Value;
-                string postfix = RangeRegexMatches.Groups[3].Value;
-
-                foreach (string value in (ICollection<string>)variables[variable])
+                var expanded = string.Empty;
+                var all = rangeRegexMatches.Groups[0].Value;
+                var variable = rangeRegexMatches.Groups[1].Value;
+                var prefix = rangeRegexMatches.Groups[2].Value;
+                var postfix = rangeRegexMatches.Groups[3].Value;
+                foreach (var value in (ICollection<string>)variables[variable])
                 {
                     var newvalue = value;
                     if (modifier != null)
                         newvalue = modifier(newvalue);
                     expanded += prefix + newvalue + postfix;
                 }
+
                 template = template.Replace(all, expanded);
-                RangeRegexMatches = RangeRegexMatches.NextMatch();
+                rangeRegexMatches = rangeRegexMatches.NextMatch();
             }
 
             // handle simple variables
-            Regex VariablesRegEx = new Regex(@"{{\s*(\..+?)\s*}}");
-            var VariablesRegExMatches = VariablesRegEx.Match(template);
-
-            while (VariablesRegExMatches.Success)
+            var variablesRegEx = new Regex(@"{{\s*(\..+?)\s*}}");
+            var variablesRegExMatches = variablesRegEx.Match(template);
+            while (variablesRegExMatches.Success)
             {
-                string expanded = string.Empty;
-
-                string all = VariablesRegExMatches.Groups[0].Value;
-                string variable = VariablesRegExMatches.Groups[1].Value;
-
-                string value = (string)variables[variable];
+                var all = variablesRegExMatches.Groups[0].Value;
+                var variable = variablesRegExMatches.Groups[1].Value;
+                var value = (string)variables[variable];
                 if (modifier != null)
                     value = modifier(value);
                 template = template.Replace(all, value);
-                VariablesRegExMatches = VariablesRegExMatches.NextMatch();
+                variablesRegExMatches = variablesRegExMatches.NextMatch();
             }
 
             return template;
@@ -423,241 +373,238 @@ namespace Jackett.Common.Indexers
 
         protected bool checkForError(WebClientStringResult loginResult, IList<errorBlock> errorBlocks)
         {
-            if(loginResult.Status == HttpStatusCode.Unauthorized) // e.g. used by YGGtorrent
+            if (loginResult.Status == HttpStatusCode.Unauthorized) // e.g. used by YGGtorrent
                 throw new ExceptionWithConfigData("401 Unauthorized, check your credentials", configData);
-
             if (errorBlocks == null)
                 return true; // no error
-
-            var ResultParser = new HtmlParser();
-            var ResultDocument = ResultParser.ParseDocument(loginResult.Content);
-            foreach (errorBlock error in errorBlocks)
+            var resultParser = new HtmlParser();
+            var resultDocument = resultParser.ParseDocument(loginResult.Content);
+            foreach (var error in errorBlocks)
             {
-                var selection = ResultDocument.QuerySelector(error.Selector);
+                var selection = resultDocument.QuerySelector(error.Selector);
                 if (selection != null)
                 {
-                    string errorMessage = selection.TextContent;
+                    var errorMessage = selection.TextContent;
                     if (error.Message != null)
-                    {
-                        errorMessage = handleSelector(error.Message, ResultDocument.FirstElementChild);
-                    }
+                        errorMessage = handleSelector(error.Message, resultDocument.FirstElementChild);
                     throw new ExceptionWithConfigData(string.Format("Error: {0}", errorMessage.Trim()), configData);
                 }
             }
+
             return true; // no error
         }
 
-        protected async Task<bool> DoLogin()
+        protected async Task<bool> DoLoginAsync()
         {
-            var Login = Definition.Login;
-
-            if (Login == null)
+            var login = Definition.Login;
+            if (login == null)
                 return true;
-
-            if (Login.Method == "post")
+            if (login.Method == "post")
             {
                 var pairs = new Dictionary<string, string>();
-                foreach (var Input in Definition.Login.Inputs)
+                foreach (var input in Definition.Login.Inputs)
                 {
-                    var value = applyGoTemplateText(Input.Value);
-                    pairs.Add(Input.Key, value);
+                    var value = applyGoTemplateText(input.Value);
+                    pairs.Add(input.Key, value);
                 }
 
-                var LoginUrl = resolvePath(Login.Path).ToString();
+                var loginUrl = resolvePath(login.Path).ToString();
                 configData.CookieHeader.Value = null;
-                var loginResult = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, SiteLink, true);
+                var loginResult = await RequestLoginAndFollowRedirectAsync(loginUrl, pairs, null, true, null, SiteLink, true);
                 configData.CookieHeader.Value = loginResult.Cookies;
-
                 checkForError(loginResult, Definition.Login.Error);
             }
-            else if (Login.Method == "form")
+            else if (login.Method == "form")
             {
-                var LoginUrl = resolvePath(Login.Path).ToString();
-
+                var loginUrl = resolvePath(login.Path).ToString();
                 var queryCollection = new NameValueCollection();
                 var pairs = new Dictionary<string, string>();
-
-                var CaptchaConfigItem = (RecaptchaItem)configData.GetDynamic("Captcha");
-
-                if (CaptchaConfigItem != null)
+                var captchaConfigItem = (RecaptchaItem)configData.GetDynamic("Captcha");
+                if (captchaConfigItem != null)
                 {
-                    if (!string.IsNullOrWhiteSpace(CaptchaConfigItem.Cookie))
+                    if (!string.IsNullOrWhiteSpace(captchaConfigItem.Cookie))
                     {
                         // for remote users just set the cookie and return
-                        CookieHeader = CaptchaConfigItem.Cookie;
+                        CookieHeader = captchaConfigItem.Cookie;
                         return true;
                     }
 
-                    var CloudFlareCaptchaChallenge = landingResultDocument.QuerySelector("script[src=\"/cdn-cgi/scripts/cf.challenge.js\"]");
-                    if (CloudFlareCaptchaChallenge != null)
+                    var cloudFlareCaptchaChallenge =
+                        landingResultDocument.QuerySelector("script[src=\"/cdn-cgi/scripts/cf.challenge.js\"]");
+                    if (cloudFlareCaptchaChallenge != null)
                     {
-                        var CloudFlareQueryCollection = new NameValueCollection();
-                        CloudFlareQueryCollection["id"] = CloudFlareCaptchaChallenge.GetAttribute("data-ray");
-
-                        CloudFlareQueryCollection["g-recaptcha-response"] = CaptchaConfigItem.Value;
-                        var ClearanceUrl = resolvePath("/cdn-cgi/l/chk_captcha?" + CloudFlareQueryCollection.GetQueryString());
-
-                        var ClearanceResult = await RequestStringWithCookies(ClearanceUrl.ToString(), null, SiteLink);
-
-                        if (ClearanceResult.IsRedirect) // clearance successfull
+                        var cloudFlareQueryCollection = new NameValueCollection
+                        {
+                            ["id"] = cloudFlareCaptchaChallenge.GetAttribute("data-ray"),
+                            ["g-recaptcha-response"] = captchaConfigItem.Value
+                        };
+                        var clearanceUrl = resolvePath(
+                            $"/cdn-cgi/l/chk_captcha?{cloudFlareQueryCollection.GetQueryString()}");
+                        var clearanceResult = await RequestStringWithCookiesAsync(clearanceUrl.ToString(), null, SiteLink);
+                        if (clearanceResult.IsRedirect) // clearance successfull
                         {
                             // request real login page again
-                            landingResult = await RequestStringWithCookies(LoginUrl, null, SiteLink);
+                            landingResult = await RequestStringWithCookiesAsync(loginUrl, null, SiteLink);
                             var htmlParser = new HtmlParser();
                             landingResultDocument = htmlParser.ParseDocument(landingResult.Content);
                         }
                         else
-                        {
-                            throw new ExceptionWithConfigData(string.Format("Login failed: Cloudflare clearance failed using cookies {0}: {1}", CookieHeader, ClearanceResult.Content), configData);
-                        }
+                            throw new ExceptionWithConfigData(
+                                string.Format(
+                                    "Login failed: Cloudflare clearance failed using cookies {0}: {1}", CookieHeader,
+                                    clearanceResult.Content), configData);
                     }
                     else
-                    {
-                        pairs.Add("g-recaptcha-response", CaptchaConfigItem.Value);
-                    }
+                        pairs.Add("g-recaptcha-response", captchaConfigItem.Value);
                 }
 
-                var FormSelector = Login.Form;
-                if (FormSelector == null)
-                    FormSelector = "form";
+                var formSelector = login.Form;
+                if (formSelector == null)
+                    formSelector = "form";
 
                 // landingResultDocument might not be initiated if the login is caused by a relogin during a query
                 if (landingResultDocument == null)
                 {
-                    var ConfigurationResult = await GetConfigurationForSetup(true);
-                    if (ConfigurationResult == null) // got captcha
-                    {
+                    var configurationResult = await GetConfigurationForSetupAsync(true);
+                    if (configurationResult == null) // got captcha
                         return false;
-                    }
                 }
 
-                var form = landingResultDocument.QuerySelector(FormSelector);
+                var form = landingResultDocument.QuerySelector(formSelector);
                 if (form == null)
-                {
-                    throw new ExceptionWithConfigData(string.Format("Login failed: No form found on {0} using form selector {1}", LoginUrl, FormSelector), configData);
-                }
-
+                    throw new ExceptionWithConfigData(
+                        string.Format("Login failed: No form found on {0} using form selector {1}", loginUrl, formSelector),
+                        configData);
                 var inputs = form.QuerySelectorAll("input");
                 if (inputs == null)
-                {
-                    throw new ExceptionWithConfigData(string.Format("Login failed: No inputs found on {0} using form selector {1}", LoginUrl, FormSelector), configData);
-                }
-
+                    throw new ExceptionWithConfigData(
+                        string.Format(
+                            "Login failed: No inputs found on {0} using form selector {1}", loginUrl, formSelector),
+                        configData);
                 var submitUrlstr = form.GetAttribute("action");
-                if (Login.Submitpath != null)
-                    submitUrlstr = Login.Submitpath;
-
+                if (login.Submitpath != null)
+                    submitUrlstr = login.Submitpath;
                 foreach (var input in inputs)
                 {
                     var name = input.GetAttribute("name");
                     if (name == null)
                         continue;
-
                     var value = input.GetAttribute("value");
                     if (value == null)
                         value = "";
-
                     pairs[name] = value;
                 }
 
-                foreach (var Input in Definition.Login.Inputs)
+                foreach (var input in Definition.Login.Inputs)
                 {
-                    var value = applyGoTemplateText(Input.Value);
-                    var input = Input.Key;
-                    if (Login.Selectors)
+                    var value = applyGoTemplateText(input.Value);
+                    var inputKey = input.Key;
+                    if (login.Selectors)
                     {
-                        var inputElement = landingResultDocument.QuerySelector(Input.Key);
+                        var inputElement = landingResultDocument.QuerySelector(input.Key);
                         if (inputElement == null)
-                            throw new ExceptionWithConfigData(string.Format("Login failed: No input found using selector {0}", Input.Key), configData);
-                        input = inputElement.GetAttribute("name");
+                            throw new ExceptionWithConfigData(
+                                string.Format("Login failed: No input found using selector {0}", input.Key), configData);
+                        inputKey = inputElement.GetAttribute("name");
                     }
-                    pairs[input] = value;
+
+                    pairs[inputKey] = value;
                 }
 
                 // selector inputs
-                if (Login.Selectorinputs != null)
-                {
-                    foreach (var Selectorinput in Login.Selectorinputs)
+                if (login.Selectorinputs != null)
+                    foreach (var selectorinput in login.Selectorinputs)
                     {
                         string value = null;
                         try
                         {
-                            value = handleSelector(Selectorinput.Value, landingResultDocument.FirstElementChild);
-                            pairs[Selectorinput.Key] = value;
+                            value = handleSelector(selectorinput.Value, landingResultDocument.FirstElementChild);
+                            pairs[selectorinput.Key] = value;
                         }
                         catch (Exception ex)
                         {
-                            throw new Exception(string.Format("Error while parsing selector input={0}, selector={1}, value={2}: {3}", Selectorinput.Key, Selectorinput.Value.Selector, value, ex.Message));
+                            throw new Exception(
+                                string.Format(
+                                    "Error while parsing selector input={0}, selector={1}, value={2}: {3}",
+                                    selectorinput.Key, selectorinput.Value.Selector, value, ex.Message));
                         }
                     }
-                }
 
                 // getselector inputs
-                if (Login.Getselectorinputs != null)
-                {
-                    foreach (var Selectorinput in Login.Getselectorinputs)
+                if (login.Getselectorinputs != null)
+                    foreach (var selectorinput in login.Getselectorinputs)
                     {
                         string value = null;
                         try
                         {
-                            value = handleSelector(Selectorinput.Value, landingResultDocument.FirstElementChild);
-                            queryCollection[Selectorinput.Key] = value;
+                            value = handleSelector(selectorinput.Value, landingResultDocument.FirstElementChild);
+                            queryCollection[selectorinput.Key] = value;
                         }
                         catch (Exception ex)
                         {
-                            throw new Exception(string.Format("Error while parsing get selector input={0}, selector={1}, value={2}: {3}", Selectorinput.Key, Selectorinput.Value.Selector, value, ex.Message));
+                            throw new Exception(
+                                string.Format(
+                                    "Error while parsing get selector input={0}, selector={1}, value={2}: {3}",
+                                    selectorinput.Key, selectorinput.Value.Selector, value, ex.Message));
                         }
                     }
-                }
+
                 if (queryCollection.Count > 0)
-                    submitUrlstr += "?" + queryCollection.GetQueryString();
-                var submitUrl = resolvePath(submitUrlstr, new Uri(LoginUrl));
+                    submitUrlstr += $"?{queryCollection.GetQueryString()}";
+                var submitUrl = resolvePath(submitUrlstr, new Uri(loginUrl));
 
                 // automatically solve simpleCaptchas, if used
                 var simpleCaptchaPresent = landingResultDocument.QuerySelector("script[src*=\"simpleCaptcha\"]");
                 if (simpleCaptchaPresent != null)
                 {
                     var captchaUrl = resolvePath("simpleCaptcha.php?numImages=1");
-                    var simpleCaptchaResult = await RequestStringWithCookies(captchaUrl.ToString(), null, LoginUrl);
-                    var simpleCaptchaJSON = JObject.Parse(simpleCaptchaResult.Content);
-                    var captchaSelection = simpleCaptchaJSON["images"][0]["hash"].ToString();
+                    var simpleCaptchaResult = await RequestStringWithCookiesAsync(captchaUrl.ToString(), null, loginUrl);
+                    var simpleCaptchaJson = JObject.Parse(simpleCaptchaResult.Content);
+                    var captchaSelection = simpleCaptchaJson["images"][0]["hash"].ToString();
                     pairs["captchaSelection"] = captchaSelection;
                     pairs["submitme"] = "X";
                 }
 
-                if (Login.Captcha != null)
+                if (login.Captcha != null)
                 {
-                    var Captcha = Login.Captcha;
-                    if (Captcha.Type == "image")
+                    var captcha = login.Captcha;
+                    if (captcha.Type == "image")
                     {
-                        var CaptchaText = (StringItem)configData.GetDynamic("CaptchaText");
-                        if (CaptchaText != null)
+                        var captchaText = (StringItem)configData.GetDynamic("CaptchaText");
+                        if (captchaText != null)
                         {
-                            var input = Captcha.Input;
-                            if (Login.Selectors)
+                            var input = captcha.Input;
+                            if (login.Selectors)
                             {
-                                var inputElement = landingResultDocument.QuerySelector(Captcha.Input);
+                                var inputElement = landingResultDocument.QuerySelector(captcha.Input);
                                 if (inputElement == null)
-                                    throw new ExceptionWithConfigData(string.Format("Login failed: No captcha input found using {0}", Captcha.Input), configData);
+                                    throw new ExceptionWithConfigData(
+                                        string.Format("Login failed: No captcha input found using {0}", captcha.Input),
+                                        configData);
                                 input = inputElement.GetAttribute("name");
                             }
-                            pairs[input] = CaptchaText.Value;
+
+                            pairs[input] = captchaText.Value;
                         }
                     }
-                    if (Captcha.Type == "text")
+
+                    if (captcha.Type == "text")
                     {
-                        var CaptchaAnswer = (StringItem)configData.GetDynamic("CaptchaAnswer");
-                        if (CaptchaAnswer != null)
+                        var captchaAnswer = (StringItem)configData.GetDynamic("CaptchaAnswer");
+                        if (captchaAnswer != null)
                         {
-                            var input = Captcha.Input;
-                            if (Login.Selectors)
+                            var input = captcha.Input;
+                            if (login.Selectors)
                             {
-                                var inputElement = landingResultDocument.QuerySelector(Captcha.Input);
+                                var inputElement = landingResultDocument.QuerySelector(captcha.Input);
                                 if (inputElement == null)
-                                    throw new ExceptionWithConfigData(string.Format("Login failed: No captcha input found using {0}", Captcha.Input), configData);
+                                    throw new ExceptionWithConfigData(
+                                        string.Format("Login failed: No captcha input found using {0}", captcha.Input),
+                                        configData);
                                 input = inputElement.GetAttribute("name");
                             }
-                            pairs[input] = CaptchaAnswer.Value;
+
+                            pairs[input] = captchaAnswer.Value;
                         }
                     }
                 }
@@ -665,171 +612,156 @@ namespace Jackett.Common.Indexers
                 // clear landingResults/Document, otherwise we might use an old version for a new relogin (if GetConfigurationForSetup() wasn't called before)
                 landingResult = null;
                 landingResultDocument = null;
-
-                WebClientStringResult loginResult = null;
                 var enctype = form.GetAttribute("enctype");
+                WebClientStringResult loginResult;
                 if (enctype == "multipart/form-data")
                 {
                     var headers = new Dictionary<string, string>();
-                    var boundary = "---------------------------" + (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds.ToString().Replace(".", "");
+                    var boundary =
+                        $"---------------------------{(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds.ToString().Replace(".", "")}";
                     var bodyParts = new List<string>();
-
                     foreach (var pair in pairs)
                     {
-                        var part = "--" + boundary + "\r\n" +
-                          "Content-Disposition: form-data; name=\"" + pair.Key + "\"\r\n" +
-                          "\r\n" +
-                          pair.Value;
+                        var part =
+                            $"--{boundary}\r\nContent-Disposition: form-data; name=\"{pair.Key}\"\r\n\r\n{pair.Value}";
                         bodyParts.Add(part);
                     }
 
-                    bodyParts.Add("--" + boundary + "--");
-
-                    headers.Add("Content-Type", "multipart/form-data; boundary=" + boundary);
+                    bodyParts.Add($"--{boundary}--");
+                    headers.Add("Content-Type", $"multipart/form-data; boundary={boundary}");
                     var body = string.Join("\r\n", bodyParts);
-                    loginResult = await PostDataWithCookies(submitUrl.ToString(), pairs, configData.CookieHeader.Value, SiteLink, headers, body);
+                    loginResult = await PostDataWithCookiesAsync(
+                        submitUrl.ToString(), pairs, configData.CookieHeader.Value, SiteLink, headers, body);
                 }
                 else
-                {
-                    loginResult = await RequestLoginAndFollowRedirect(submitUrl.ToString(), pairs, configData.CookieHeader.Value, true, null, LoginUrl, true);
-                }
+                    loginResult = await RequestLoginAndFollowRedirectAsync(
+                        submitUrl.ToString(), pairs, configData.CookieHeader.Value, true, null, loginUrl, true);
 
                 configData.CookieHeader.Value = loginResult.Cookies;
-
                 checkForError(loginResult, Definition.Login.Error);
             }
-            else if (Login.Method == "cookie")
-            {
+            else if (login.Method == "cookie")
                 configData.CookieHeader.Value = ((StringItem)configData.GetDynamic("cookie")).Value;
-            }
-            else if (Login.Method == "get")
+            else if (login.Method == "get")
             {
                 var queryCollection = new NameValueCollection();
-                foreach (var Input in Definition.Login.Inputs)
+                foreach (var input in Definition.Login.Inputs)
                 {
-                    var value = applyGoTemplateText(Input.Value);
-                    queryCollection.Add(Input.Key, value);
+                    var value = applyGoTemplateText(input.Value);
+                    queryCollection.Add(input.Key, value);
                 }
 
-                var LoginUrl = resolvePath(Login.Path + "?" + queryCollection.GetQueryString()).ToString();
+                var loginUrl = resolvePath($"{login.Path}?{queryCollection.GetQueryString()}").ToString();
                 configData.CookieHeader.Value = null;
-                var loginResult = await RequestStringWithCookies(LoginUrl, null, SiteLink);
+                var loginResult = await RequestStringWithCookiesAsync(loginUrl, null, SiteLink);
                 configData.CookieHeader.Value = loginResult.Cookies;
-
                 checkForError(loginResult, Definition.Login.Error);
             }
-            else if (Login.Method == "oneurl")
+            else if (login.Method == "oneurl")
             {
-                var OneUrl = applyGoTemplateText(Definition.Login.Inputs["oneurl"]);
-                var LoginUrl = resolvePath(Login.Path + OneUrl).ToString();
+                var oneUrl = applyGoTemplateText(Definition.Login.Inputs["oneurl"]);
+                var loginUrl = resolvePath(login.Path + oneUrl).ToString();
                 configData.CookieHeader.Value = null;
-                var loginResult = await RequestStringWithCookies(LoginUrl, null, SiteLink);
+                var loginResult = await RequestStringWithCookiesAsync(loginUrl, null, SiteLink);
                 configData.CookieHeader.Value = loginResult.Cookies;
-
                 checkForError(loginResult, Definition.Login.Error);
             }
             else
-            {
-                throw new NotImplementedException("Login method " + Definition.Login.Method + " not implemented");
-            }
+                throw new NotImplementedException($"Login method {Definition.Login.Method} not implemented");
+
             logger.Debug(string.Format("CardigannIndexer ({0}): Cookies after login: {1}", ID, CookieHeader));
             return true;
         }
 
-        protected string getRedirectDomainHint(string requestUrl, string RedirectUrl)
+        protected string getRedirectDomainHint(string requestUrl, string redirectUrl)
         {
-            if (requestUrl.StartsWith(SiteLink) && !RedirectUrl.StartsWith(SiteLink))
+            if (requestUrl.StartsWith(SiteLink) && !redirectUrl.StartsWith(SiteLink))
             {
-                var uri = new Uri(RedirectUrl);
-                return uri.Scheme + "://" + uri.Host + "/";
+                var uri = new Uri(redirectUrl);
+                return $"{uri.Scheme}://{uri.Host}/";
             }
+
             return null;
         }
 
-        protected string getRedirectDomainHint(WebClientByteResult result)
-        {
-            return getRedirectDomainHint(result.Request.Url, result.RedirectingTo);
-        }
+        protected string getRedirectDomainHint(WebClientByteResult result) =>
+            getRedirectDomainHint(result.Request.Url, result.RedirectingTo);
 
-        protected string getRedirectDomainHint(WebClientStringResult result)
-        {
-            return getRedirectDomainHint(result.Request.Url, result.RedirectingTo);
-        }
+        protected string getRedirectDomainHint(WebClientStringResult result) =>
+            getRedirectDomainHint(result.Request.Url, result.RedirectingTo);
 
-        protected async Task<bool> TestLogin()
+        protected async Task<bool> TestLoginAsync()
         {
-            var Login = Definition.Login;
-
-            if (Login == null || Login.Test == null)
+            var login = Definition.Login;
+            if (login?.Test == null)
                 return false;
 
             // test if login was successful
-            var LoginTestUrl = resolvePath(Login.Test.Path).ToString();
-            var testResult = await RequestStringWithCookies(LoginTestUrl);
-
+            var loginTestUrl = resolvePath(login.Test.Path).ToString();
+            var testResult = await RequestStringWithCookiesAsync(loginTestUrl);
             if (testResult.IsRedirect)
             {
                 var errormessage = "Login Failed, got redirected.";
-                var DomainHint = getRedirectDomainHint(testResult);
-                if (DomainHint != null)
+                var domainHint = getRedirectDomainHint(testResult);
+                if (domainHint != null)
                 {
-                    errormessage += " Try changing the indexer URL to " + DomainHint + ".";
+                    errormessage += $" Try changing the indexer URL to {domainHint}.";
                     if (Definition.Followredirect)
                     {
-                        configData.SiteLink.Value = DomainHint;
+                        configData.SiteLink.Value = domainHint;
                         SiteLink = configData.SiteLink.Value;
                         SaveConfig();
                         errormessage += " Updated site link, please try again.";
                     }
                 }
+
                 throw new ExceptionWithConfigData(errormessage, configData);
             }
 
-            if (Login.Test.Selector != null)
+            if (login.Test.Selector != null)
             {
                 var testResultParser = new HtmlParser();
                 var testResultDocument = testResultParser.ParseDocument(testResult.Content);
-                var selection = testResultDocument.QuerySelectorAll(Login.Test.Selector);
+                var selection = testResultDocument.QuerySelectorAll(login.Test.Selector);
                 if (selection.Length == 0)
-                {
-                    throw new ExceptionWithConfigData(string.Format("Login failed: Selector \"{0}\" didn't match", Login.Test.Selector), configData);
-                }
+                    throw new ExceptionWithConfigData(
+                        string.Format("Login failed: Selector \"{0}\" didn't match", login.Test.Selector), configData);
             }
+
             return true;
         }
 
-        protected bool CheckIfLoginIsNeeded(WebClientStringResult Result, IHtmlDocument document)
+        protected bool CheckIfLoginIsNeeded(WebClientStringResult result, IHtmlDocument document)
         {
-            if (Result.IsRedirect)
+            if (result.IsRedirect)
             {
-                var DomainHint = getRedirectDomainHint(Result);
-                if (DomainHint != null)
+                var domainHint = getRedirectDomainHint(result);
+                if (domainHint != null)
                 {
-                    var errormessage = "Got redirected to another domain. Try changing the indexer URL to " + DomainHint + ".";
+                    var errormessage = $"Got redirected to another domain. Try changing the indexer URL to {domainHint}.";
                     if (Definition.Followredirect)
                     {
-                        configData.SiteLink.Value = DomainHint;
+                        configData.SiteLink.Value = domainHint;
                         SiteLink = configData.SiteLink.Value;
                         SaveConfig();
                         errormessage += " Updated site link, please try again.";
                     }
+
                     throw new ExceptionWithConfigData(errormessage, configData);
                 }
 
                 return true;
             }
 
-            if (Definition.Login == null || Definition.Login.Test == null)
+            if (Definition.Login?.Test == null)
                 return false;
-
             if (Definition.Login.Test.Selector != null)
             {
                 var selection = document.QuerySelectorAll(Definition.Login.Test.Selector);
                 if (selection.Length == 0)
-                {
                     return true;
-                }
             }
+
             return false;
         }
 
@@ -837,34 +769,28 @@ namespace Jackett.Common.Indexers
         {
             try
             {
-                return await GetConfigurationForSetup(false);
+                return await GetConfigurationForSetupAsync(false);
             }
             catch (Exception e)
             {
-                logger.Error("Exception in GetConfigurationForSetup (" + ID + "): " + e);
+                logger.Error($"Exception in GetConfigurationForSetup ({ID}): {e}");
                 return configData;
             }
         }
 
-        public async Task<ConfigurationData> GetConfigurationForSetup(bool automaticlogin)
+        public async Task<ConfigurationData> GetConfigurationForSetupAsync(bool automaticlogin)
         {
-            var Login = Definition.Login;
-
-            if (Login == null || Login.Method != "form")
+            var login = Definition.Login;
+            if (login == null || login.Method != "form")
                 return configData;
-
-            var LoginUrl = resolvePath(Login.Path);
-
+            var loginUrl = resolvePath(login.Path);
             configData.CookieHeader.Value = null;
-            if (Login.Cookies != null)
-                configData.CookieHeader.Value = String.Join("; ", Login.Cookies);
-            landingResult = await RequestStringWithCookies(LoginUrl.AbsoluteUri, null, SiteLink);
-
+            if (login.Cookies != null)
+                configData.CookieHeader.Value = string.Join("; ", login.Cookies);
+            landingResult = await RequestStringWithCookiesAsync(loginUrl.AbsoluteUri, null, SiteLink);
             var htmlParser = new HtmlParser();
             landingResultDocument = htmlParser.ParseDocument(landingResult.Content);
-
             var hasCaptcha = false;
-
             var cloudFlareCaptchaScript = landingResultDocument.QuerySelector("script[src*=\"/recaptcha/api.js\"]");
             var cloudFlareCaptchaGroup = landingResultDocument.QuerySelector("#recaptca_group");
             var cloudFlareCaptchaDisplay = true;
@@ -874,67 +800,61 @@ namespace Jackett.Common.Indexers
                 if (cloudFlareCaptchaGroupStyle != null)
                     cloudFlareCaptchaDisplay = !cloudFlareCaptchaGroupStyle.Contains("display:none;");
             }
+
             var grecaptcha = landingResultDocument.QuerySelector(".g-recaptcha");
             if (cloudFlareCaptchaScript != null && grecaptcha != null && cloudFlareCaptchaDisplay)
             {
                 hasCaptcha = true;
-                var CaptchaItem = new RecaptchaItem();
-                CaptchaItem.Name = "Captcha";
-                CaptchaItem.Version = "2";
-                CaptchaItem.SiteKey = grecaptcha.GetAttribute("data-sitekey");
-                if (CaptchaItem.SiteKey == null) // some sites don't store the sitekey in the .g-recaptcha div (e.g. cloudflare captcha challenge page)
-                    CaptchaItem.SiteKey = landingResultDocument.QuerySelector("[data-sitekey]").GetAttribute("data-sitekey");
-
-                configData.AddDynamic("Captcha", CaptchaItem);
+                var captchaItem = new RecaptchaItem
+                {
+                    Name = "Captcha",
+                    Version = "2",
+                    SiteKey = grecaptcha.GetAttribute("data-sitekey")
+                };
+                if (captchaItem.SiteKey == null
+                    ) // some sites don't store the sitekey in the .g-recaptcha div (e.g. cloudflare captcha challenge page)
+                    captchaItem.SiteKey = landingResultDocument.QuerySelector("[data-sitekey]").GetAttribute("data-sitekey");
+                configData.AddDynamic("Captcha", captchaItem);
             }
 
-            if (Login.Captcha != null)
+            if (login.Captcha != null)
             {
-                var Captcha = Login.Captcha;
-                if (Captcha.Type == "image")
+                var captcha = login.Captcha;
+                if (captcha.Type == "image")
                 {
-                    var captchaElement = landingResultDocument.QuerySelector(Captcha.Selector);
+                    var captchaElement = landingResultDocument.QuerySelector(captcha.Selector);
                     if (captchaElement != null)
                     {
                         hasCaptcha = true;
-
-                        var CaptchaUrl = resolvePath(captchaElement.GetAttribute("src"), LoginUrl);
-                        var captchaImageData = await RequestBytesWithCookies(CaptchaUrl.ToString(), landingResult.Cookies, RequestType.GET, LoginUrl.AbsoluteUri);
-                        var CaptchaImage = new ImageItem { Name = "Captcha Image" };
-                        var CaptchaText = new StringItem { Name = "Captcha Text" };
-
-                        CaptchaImage.Value = captchaImageData.Content;
-
-                        configData.AddDynamic("CaptchaImage", CaptchaImage);
-                        configData.AddDynamic("CaptchaText", CaptchaText);
+                        var captchaUrl = resolvePath(captchaElement.GetAttribute("src"), loginUrl);
+                        var captchaImageData = await RequestBytesWithCookiesAsync(
+                            captchaUrl.ToString(), landingResult.Cookies, RequestType.Get, loginUrl.AbsoluteUri);
+                        var captchaImage = new ImageItem { Name = "Captcha Image" };
+                        var captchaText = new StringItem { Name = "Captcha Text" };
+                        captchaImage.Value = captchaImageData.Content;
+                        configData.AddDynamic("CaptchaImage", captchaImage);
+                        configData.AddDynamic("CaptchaText", captchaText);
                     }
                     else
-                    {
                         logger.Debug(string.Format("CardigannIndexer ({0}): No captcha image found", ID));
-                    }
                 }
-                else if (Captcha.Type == "text")
+                else if (captcha.Type == "text")
                 {
-                    var captchaElement = landingResultDocument.QuerySelector(Captcha.Selector);
+                    var captchaElement = landingResultDocument.QuerySelector(captcha.Selector);
                     if (captchaElement != null)
                     {
                         hasCaptcha = true;
-
-                        var CaptchaChallenge = new DisplayItem(captchaElement.TextContent) { Name = "Captcha Challenge" };
-                        var CaptchaAnswer = new StringItem { Name = "Captcha Answer" };
-
-                        configData.AddDynamic("CaptchaChallenge", CaptchaChallenge);
-                        configData.AddDynamic("CaptchaAnswer", CaptchaAnswer);
+                        var captchaChallenge = new DisplayItem(captchaElement.TextContent) { Name = "Captcha Challenge" };
+                        var captchaAnswer = new StringItem { Name = "Captcha Answer" };
+                        configData.AddDynamic("CaptchaChallenge", captchaChallenge);
+                        configData.AddDynamic("CaptchaAnswer", captchaAnswer);
                     }
                     else
-                    {
                         logger.Debug(string.Format("CardigannIndexer ({0}): No captcha image found", ID));
-                    }
                 }
                 else
-                {
-                    throw new NotImplementedException(string.Format("Captcha type \"{0}\" is not implemented", Captcha.Type));
-                }
+                    throw new NotImplementedException(
+                        string.Format("Captcha type \"{0}\" is not implemented", captcha.Type));
             }
 
             if (hasCaptcha && automaticlogin)
@@ -950,243 +870,218 @@ namespace Jackett.Common.Indexers
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-
-            await DoLogin();
-            await TestLogin();
-
+            await DoLoginAsync();
+            await TestLoginAsync();
             IsConfigured = true;
             SaveConfig();
             return IndexerConfigurationStatus.Completed;
         }
 
-        protected string applyFilters(string Data, List<filterBlock> Filters, Dictionary<string, object> variables = null)
+        protected string applyFilters(string data, List<filterBlock> filters, Dictionary<string, object> variables = null)
         {
-            if (Filters == null)
-                return Data;
-
-            foreach (filterBlock Filter in Filters)
-            {
-                switch (Filter.Name)
+            if (filters == null)
+                return data;
+            foreach (var filter in filters)
+                switch (filter.Name)
                 {
                     case "querystring":
-                        var param = (string)Filter.Args;
-                        Data = ParseUtil.GetArgumentFromQueryString(Data, param);
+                        var param = (string)filter.Args;
+                        data = ParseUtil.GetArgumentFromQueryString(data, param);
                         break;
                     case "timeparse":
                     case "dateparse":
-                        var layout = (string)Filter.Args;
+                        var layout = (string)filter.Args;
                         try
                         {
-                            var Date = DateTimeUtil.ParseDateTimeGoLang(Data, layout);
-                            Data = Date.ToString(DateTimeUtil.RFC1123ZPattern);
+                            var date = DateTimeUtil.ParseDateTimeGoLang(data, layout);
+                            data = date.ToString(DateTimeUtil.RFC1123ZPattern);
                         }
                         catch (FormatException ex)
                         {
                             logger.Debug(ex.Message);
                         }
+
                         break;
                     case "regexp":
-                        var pattern = (string)Filter.Args;
-                        var Regexp = new Regex(pattern);
-                        var Match = Regexp.Match(Data);
-                        Data = Match.Groups[1].Value;
+                        var pattern = (string)filter.Args;
+                        var regexp = new Regex(pattern);
+                        var match = regexp.Match(data);
+                        data = match.Groups[1].Value;
                         break;
                     case "re_replace":
-                        var regexpreplace_pattern = (string)Filter.Args[0];
-                        var regexpreplace_replacement = (string)Filter.Args[1];
-                        regexpreplace_replacement = applyGoTemplateText(regexpreplace_replacement, variables);
-                        Regex regexpreplace_regex = new Regex(regexpreplace_pattern);
-                        Data = regexpreplace_regex.Replace(Data, regexpreplace_replacement);
+                        var regexpreplacePattern = (string)filter.Args[0];
+                        var regexpreplaceReplacement = (string)filter.Args[1];
+                        regexpreplaceReplacement = applyGoTemplateText(regexpreplaceReplacement, variables);
+                        var regexpreplaceRegex = new Regex(regexpreplacePattern);
+                        data = regexpreplaceRegex.Replace(data, regexpreplaceReplacement);
                         break;
                     case "split":
-                        var sep = (string)Filter.Args[0];
-                        var pos = (string)Filter.Args[1];
+                        var sep = (string)filter.Args[0];
+                        var pos = (string)filter.Args[1];
                         var posInt = int.Parse(pos);
-                        var strParts = Data.Split(sep[0]);
+                        var strParts = data.Split(sep[0]);
                         if (posInt < 0)
-                        {
                             posInt += strParts.Length;
-                        }
-                        Data = strParts[posInt];
+                        data = strParts[posInt];
                         break;
                     case "replace":
-                        var from = (string)Filter.Args[0];
-                        var to = (string)Filter.Args[1];
+                        var from = (string)filter.Args[0];
+                        var to = (string)filter.Args[1];
                         to = applyGoTemplateText(to, variables);
-                        Data = Data.Replace(from, to);
+                        data = data.Replace(from, to);
                         break;
                     case "trim":
-                        var cutset = (string)Filter.Args;
-                        if (cutset != null)
-                            Data = Data.Trim(cutset[0]);
-                        else
-                            Data = Data.Trim();
+                        var cutset = (string)filter.Args;
+                        data = cutset != null ? data.Trim(cutset[0]) : data.Trim();
                         break;
                     case "prepend":
-                        var prependstr = (string)Filter.Args;
-                        Data = applyGoTemplateText(prependstr, variables) + Data;
+                        var prependstr = (string)filter.Args;
+                        data = applyGoTemplateText(prependstr, variables) + data;
                         break;
                     case "append":
-                        var str = (string)Filter.Args;
-                        Data += applyGoTemplateText(str, variables);
+                        var str = (string)filter.Args;
+                        data += applyGoTemplateText(str, variables);
                         break;
                     case "tolower":
-                        Data = Data.ToLower();
+                        data = data.ToLower();
                         break;
                     case "toupper":
-                        Data = Data.ToUpper();
+                        data = data.ToUpper();
                         break;
                     case "urldecode":
-                        Data = WebUtilityHelpers.UrlDecode(Data, Encoding);
+                        data = WebUtilityHelpers.UrlDecode(data, Encoding);
                         break;
                     case "urlencode":
-                        Data = WebUtilityHelpers.UrlEncode(Data, Encoding);
+                        data = WebUtilityHelpers.UrlEncode(data, Encoding);
                         break;
                     case "timeago":
                     case "reltime":
-                        Data = DateTimeUtil.FromTimeAgo(Data).ToString(DateTimeUtil.RFC1123ZPattern);
+                        data = DateTimeUtil.FromTimeAgo(data).ToString(DateTimeUtil.RFC1123ZPattern);
                         break;
                     case "fuzzytime":
-                        Data = DateTimeUtil.FromUnknown(Data).ToString(DateTimeUtil.RFC1123ZPattern);
+                        data = DateTimeUtil.FromUnknown(data).ToString(DateTimeUtil.RFC1123ZPattern);
                         break;
                     case "validfilename":
-                        Data = StringUtil.MakeValidFileName(Data, '_', false);
+                        data = StringUtil.MakeValidFileName(data, '_', false);
                         break;
                     case "diacritics":
-                        var diacriticsOp = (string)Filter.Args;
+                        var diacriticsOp = (string)filter.Args;
                         if (diacriticsOp == "replace")
                         {
                             // Should replace diacritics charcaters with their base character
                             // It's not perfect, e.g. "ŠĐĆŽ - šđčćž" becomes "SĐCZ-sđccz"
-                            string stFormD = Data.Normalize(NormalizationForm.FormD);
-                            int len = stFormD.Length;
-                            StringBuilder sb = new StringBuilder();
-                            for (int i = 0; i < len; i++)
+                            var stFormD = data.Normalize(NormalizationForm.FormD);
+                            var len = stFormD.Length;
+                            var sb = new StringBuilder();
+                            for (var i = 0; i < len; i++)
                             {
-                                System.Globalization.UnicodeCategory uc = System.Globalization.CharUnicodeInfo.GetUnicodeCategory(stFormD[i]);
-                                if (uc != System.Globalization.UnicodeCategory.NonSpacingMark)
-                                {
+                                var uc = CharUnicodeInfo.GetUnicodeCategory(stFormD[i]);
+                                if (uc != UnicodeCategory.NonSpacingMark)
                                     sb.Append(stFormD[i]);
-                                }
                             }
-                            Data = (sb.ToString().Normalize(NormalizationForm.FormC));
+
+                            data = (sb.ToString().Normalize(NormalizationForm.FormC));
                         }
                         else
                             throw new Exception("unsupported diacritics filter argument");
+
                         break;
                     case "jsonjoinarray":
-                        var jsonjoinarrayJSONPath = (string)Filter.Args[0];
-                        var jsonjoinarraySeparator = (string)Filter.Args[1];
-                        var jsonjoinarrayO = JObject.Parse(Data);
-                        var jsonjoinarrayOResult = jsonjoinarrayO.SelectToken(jsonjoinarrayJSONPath);
+                        var jsonjoinarrayJsonPath = (string)filter.Args[0];
+                        var jsonjoinarraySeparator = (string)filter.Args[1];
+                        var jsonjoinarrayO = JObject.Parse(data);
+                        var jsonjoinarrayOResult = jsonjoinarrayO.SelectToken(jsonjoinarrayJsonPath);
                         var jsonjoinarrayOResultStrings = jsonjoinarrayOResult.Select(j => j.ToString());
-                        Data = string.Join(jsonjoinarraySeparator, jsonjoinarrayOResultStrings);
+                        data = string.Join(jsonjoinarraySeparator, jsonjoinarrayOResultStrings);
                         break;
                     case "hexdump":
                         // this is mainly for debugging invisible special char related issues
-                        var HexData = string.Join("", Data.Select(c => c + "(" + ((int)c).ToString("X2") + ")"));
-                        logger.Debug(string.Format("CardigannIndexer ({0}): strdump: {1}", ID, HexData));
+                        var hexData = string.Join("", data.Select(c => $"{c}({((int)c):X2})"));
+                        logger.Debug(string.Format("CardigannIndexer ({0}): strdump: {1}", ID, hexData));
                         break;
                     case "strdump":
                         // for debugging
-                        var DebugData = Data.Replace("\r", "\\r").Replace("\n", "\\n").Replace("\xA0", "\\xA0");
-                        logger.Debug(string.Format("CardigannIndexer ({0}): strdump: {1}", ID, DebugData));
-                        break;
-                    default:
+                        var debugData = data.Replace("\r", "\\r").Replace("\n", "\\n").Replace("\xA0", "\\xA0");
+                        logger.Debug(string.Format("CardigannIndexer ({0}): strdump: {1}", ID, debugData));
                         break;
                 }
-            }
-            return Data;
+
+            return data;
         }
 
-        protected IElement QuerySelector(IElement Element, string Selector)
+        protected IElement QuerySelector(IElement element, string selector)
         {
             // AngleSharp doesn't support the :root pseudo selector, so we check for it manually
-            if (Selector.StartsWith(":root"))
+            if (selector.StartsWith(":root"))
             {
-                Selector = Selector.Substring(5);
-                while (Element.ParentElement != null)
-                {
-                    Element = Element.ParentElement;
-                }
+                selector = selector.Substring(5);
+                while (element.ParentElement != null)
+                    element = element.ParentElement;
             }
-            return Element.QuerySelector(Selector);
+
+            return element.QuerySelector(selector);
         }
 
-        protected string handleSelector(selectorBlock Selector, IElement Dom, Dictionary<string, object> variables = null)
+        protected string handleSelector(selectorBlock selector, IElement dom, Dictionary<string, object> variables = null)
         {
-            if (Selector.Text != null)
-            {
-                return applyFilters(applyGoTemplateText(Selector.Text, variables), Selector.Filters, variables);
-            }
-
-            IElement selection = Dom;
+            if (selector.Text != null)
+                return applyFilters(applyGoTemplateText(selector.Text, variables), selector.Filters, variables);
+            var selection = dom;
             string value = null;
-
-            if (Selector.Selector != null)
+            if (selector.Selector != null)
             {
-                if (Dom.Matches(Selector.Selector))
-                    selection = Dom;
-                else
-                    selection = QuerySelector(Dom, Selector.Selector);
+                selection = dom.Matches(selector.Selector) ? dom : QuerySelector(dom, selector.Selector);
                 if (selection == null)
-                {
-                    throw new Exception(string.Format("Selector \"{0}\" didn't match {1}", Selector.Selector, Dom.ToHtmlPretty()));
-                }
+                    throw new Exception(
+                        string.Format("Selector \"{0}\" didn't match {1}", selector.Selector, dom.ToHtmlPretty()));
             }
 
-            if (Selector.Remove != null)
-            {
-                foreach (var i in selection.QuerySelectorAll(Selector.Remove))
-                {
+            if (selector.Remove != null)
+                foreach (var i in selection.QuerySelectorAll(selector.Remove))
                     i.Remove();
-                }
-            }
-
-            if (Selector.Case != null)
+            if (selector.Case != null)
             {
-                foreach (var Case in Selector.Case)
-                {
-                    if (selection.Matches(Case.Key) || QuerySelector(selection, Case.Key) != null)
+                foreach (var @case in selector.Case)
+                    if (selection.Matches(@case.Key) || QuerySelector(selection, @case.Key) != null)
                     {
-                        value = Case.Value;
+                        value = @case.Value;
                         break;
                     }
-                }
+
                 if (value == null)
-                    throw new Exception(string.Format("None of the case selectors \"{0}\" matched {1}", string.Join(",", Selector.Case), selection.ToHtmlPretty()));
+                    throw new Exception(
+                        string.Format(
+                            "None of the case selectors \"{0}\" matched {1}", string.Join(",", selector.Case),
+                            selection.ToHtmlPretty()));
             }
-            else if (Selector.Attribute != null)
+            else if (selector.Attribute != null)
             {
-                value = selection.GetAttribute(Selector.Attribute);
+                value = selection.GetAttribute(selector.Attribute);
                 if (value == null)
-                    throw new Exception(string.Format("Attribute \"{0}\" is not set for element {1}", Selector.Attribute, selection.ToHtmlPretty()));
+                    throw new Exception(
+                        string.Format(
+                            "Attribute \"{0}\" is not set for element {1}", selector.Attribute, selection.ToHtmlPretty()));
             }
             else
-            {
                 value = selection.TextContent;
-            }
 
-            return applyFilters(ParseUtil.NormalizeSpace(value), Selector.Filters, variables);
+            return applyFilters(ParseUtil.NormalizeSpace(value), selector.Filters, variables);
         }
 
         protected Uri resolvePath(string path, Uri currentUrl = null)
         {
             if (currentUrl == null)
                 currentUrl = new Uri(SiteLink);
-
             return new Uri(currentUrl, path);
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-
-            searchBlock Search = Definition.Search;
+            var search = Definition.Search;
 
             // init template context
             var variables = getTemplateVariablesFromConfigData();
-
             variables[".Query.Type"] = query.QueryType;
             variables[".Query.Q"] = query.SearchTerm;
             variables[".Query.Series"] = null;
@@ -1211,38 +1106,33 @@ namespace Jackett.Common.Indexers
             variables[".Query.Track"] = query.Track;
             //variables[".Query.Genre"] = query.Genre ?? new List<string>();
             variables[".Query.Episode"] = query.GetEpisodeSearchString();
-
             var mappedCategories = MapTorznabCapsToTrackers(query);
             if (mappedCategories.Count == 0)
-            {
-                mappedCategories = this.DefaultCategories;
-            }
-
+                mappedCategories = DefaultCategories;
             variables[".Categories"] = mappedCategories;
-
-            var KeywordTokens = new List<string>();
-            var KeywordTokenKeys = new List<string> { "Q", "Series", "Movie", "Year" };
-            foreach (var key in KeywordTokenKeys)
+            var keywordTokens = new List<string>();
+            var keywordTokenKeys = new List<string> { "Q", "Series", "Movie", "Year" };
+            foreach (var key in keywordTokenKeys)
             {
-                var Value = (string)variables[".Query." + key];
-                if (!string.IsNullOrWhiteSpace(Value))
-                    KeywordTokens.Add(Value);
+                var value = (string)variables[$".Query.{key}"];
+                if (!string.IsNullOrWhiteSpace(value))
+                    keywordTokens.Add(value);
             }
 
             if (!string.IsNullOrWhiteSpace((string)variables[".Query.Episode"]))
-                KeywordTokens.Add((string)variables[".Query.Episode"]);
-            variables[".Query.Keywords"] = string.Join(" ", KeywordTokens);
-            variables[".Keywords"] = applyFilters((string)variables[".Query.Keywords"], Search.Keywordsfilters);
+                keywordTokens.Add((string)variables[".Query.Episode"]);
+            variables[".Query.Keywords"] = string.Join(" ", keywordTokens);
+            variables[".Keywords"] = applyFilters((string)variables[".Query.Keywords"], search.Keywordsfilters);
 
             // TODO: prepare queries first and then send them parallel 
-            var SearchPaths = Search.Paths;
-            foreach (var SearchPath in SearchPaths)
+            var searchPaths = search.Paths;
+            foreach (var searchPath in searchPaths)
             {
                 // skip path if categories don't match
-                if (SearchPath.Categories != null && mappedCategories.Count > 0)
+                if (searchPath.Categories != null && mappedCategories.Count > 0)
                 {
-                    var invertMatch = (SearchPath.Categories[0] == "!");
-                    var hasIntersect = mappedCategories.Intersect(SearchPath.Categories).Any();
+                    var invertMatch = (searchPath.Categories[0] == "!");
+                    var hasIntersect = mappedCategories.Intersect(searchPath.Categories).Any();
                     if (invertMatch)
                         hasIntersect = !hasIntersect;
                     if (!hasIntersect)
@@ -1251,32 +1141,29 @@ namespace Jackett.Common.Indexers
 
                 // build search URL
                 // HttpUtility.UrlPathEncode seems to only encode spaces, we use UrlEncode and replace + with %20 as a workaround
-                var searchUrl = resolvePath(applyGoTemplateText(SearchPath.Path, variables, WebUtility.UrlEncode).Replace("+", "%20")).AbsoluteUri;
+                var searchUrl = resolvePath(
+                    applyGoTemplateText(searchPath.Path, variables, WebUtility.UrlEncode).Replace("+", "%20")).AbsoluteUri;
                 var queryCollection = new List<KeyValuePair<string, string>>();
-                RequestType method = RequestType.GET;
-
-                if (String.Equals(SearchPath.Method, "post", StringComparison.OrdinalIgnoreCase))
-                {
-                    method = RequestType.POST;
-                }
-
-                var InputsList = new List<Dictionary<string, string>>();
-                if (SearchPath.Inheritinputs)
-                    InputsList.Add(Search.Inputs);
-                InputsList.Add(SearchPath.Inputs);
-
-                foreach (var Inputs in InputsList)
-                {
-                    if (Inputs != null)
-                    {
-                        foreach (var Input in Inputs)
-                        {
-                            if (Input.Key == "$raw")
+                var method = RequestType.Get;
+                if (string.Equals(searchPath.Method, "post", StringComparison.OrdinalIgnoreCase))
+                    method = RequestType.Post;
+                var inputsList = new List<Dictionary<string, string>>();
+                if (searchPath.Inheritinputs)
+                    inputsList.Add(search.Inputs);
+                inputsList.Add(searchPath.Inputs);
+                foreach (var inputs in inputsList)
+                    if (inputs != null)
+                        foreach (var input in inputs)
+                            if (input.Key == "$raw")
                             {
-                                var rawStr = applyGoTemplateText(Input.Value, variables, WebUtility.UrlEncode);
-                                foreach (string part in rawStr.Split('&'))
+                                var rawStr = applyGoTemplateText(input.Value, variables, WebUtility.UrlEncode);
+                                foreach (var part in rawStr.Split('&'))
                                 {
-                                    var parts = part.Split(new char[] { '=' }, 2);
+                                    var parts = part.Split(
+                                        new[]
+                                        {
+                                            '='
+                                        }, 2);
                                     var key = parts[0];
                                     if (key.Length == 0)
                                         continue;
@@ -1287,127 +1174,108 @@ namespace Jackett.Common.Indexers
                                 }
                             }
                             else
-                                queryCollection.Add(Input.Key, applyGoTemplateText(Input.Value, variables));
-                        }
-                    }
-                }
+                                queryCollection.Add(input.Key, applyGoTemplateText(input.Value, variables));
 
-                if (method == RequestType.GET)
-                {
+                if (method == RequestType.Get)
                     if (queryCollection.Count > 0)
-                        searchUrl += "?" + queryCollection.GetQueryString(Encoding);
-                }
+                        searchUrl += $"?{queryCollection.GetQueryString(Encoding)}";
                 var searchUrlUri = new Uri(searchUrl);
 
                 // send HTTP request
                 WebClientStringResult response = null;
                 Dictionary<string, string> headers = null;
-                if (Search.Headers != null)
+                if (search.Headers != null)
                 {
                     // FIXME: fix jackett header handling (allow it to specifiy the same header multipe times)
                     headers = new Dictionary<string, string>();
-                    foreach (var header in Search.Headers)
+                    foreach (var header in search.Headers)
                         headers.Add(header.Key, header.Value[0]);
                 }
-                if (method == RequestType.POST)
-                    response = await PostDataWithCookies(searchUrl, queryCollection, null, null, headers);
-                else
-                    response = await RequestStringWithCookies(searchUrl, null, null, headers);
 
-                if (response.IsRedirect && SearchPath.Followredirect)
-                    await FollowIfRedirect(response);
-
+                response = method == RequestType.Post
+                    ? await PostDataWithCookiesAsync(searchUrl, queryCollection, null, null, headers)
+                    : await RequestStringWithCookiesAsync(searchUrl, null, null, headers);
+                if (response.IsRedirect && searchPath.Followredirect)
+                    await FollowIfRedirectAsync(response);
                 var results = response.Content;
-
-
                 try
                 {
-                    var SearchResultParser = new HtmlParser();
-                    var SearchResultDocument = SearchResultParser.ParseDocument(results);
+                    var searchResultParser = new HtmlParser();
+                    var searchResultDocument = searchResultParser.ParseDocument(results);
 
                     // check if we need to login again
-                    var loginNeeded = CheckIfLoginIsNeeded(response, SearchResultDocument);
+                    var loginNeeded = CheckIfLoginIsNeeded(response, searchResultDocument);
                     if (loginNeeded)
                     {
                         logger.Info(string.Format("CardigannIndexer ({0}): Relogin required", ID));
-                        var LoginResult = await DoLogin();
-                        if (!LoginResult)
-                            throw new Exception(string.Format("Relogin failed"));
-                        await TestLogin();
-                        if (method == RequestType.POST)
-                            response = await PostDataWithCookies(searchUrl, queryCollection);
-                        else
-                            response = await RequestStringWithCookies(searchUrl);
-
-                        if (response.IsRedirect && SearchPath.Followredirect)
-                            await FollowIfRedirect(response);
-
+                        var loginResult = await DoLoginAsync();
+                        if (!loginResult)
+                            throw new Exception("Relogin failed");
+                        await TestLoginAsync();
+                        response = method == RequestType.Post ? await PostDataWithCookiesAsync(searchUrl, queryCollection) : await RequestStringWithCookiesAsync(searchUrl);
+                        if (response.IsRedirect && searchPath.Followredirect)
+                            await FollowIfRedirectAsync(response);
                         results = response.Content;
-                        SearchResultDocument = SearchResultParser.ParseDocument(results);
+                        searchResultDocument = searchResultParser.ParseDocument(results);
                     }
 
                     checkForError(response, Definition.Search.Error);
-
-                    if (Search.Preprocessingfilters != null)
+                    if (search.Preprocessingfilters != null)
                     {
-                        results = applyFilters(results, Search.Preprocessingfilters, variables);
-                        SearchResultDocument = SearchResultParser.ParseDocument(results);
-                        logger.Debug(string.Format("CardigannIndexer ({0}): result after preprocessingfilters: {1}", ID, results));
+                        results = applyFilters(results, search.Preprocessingfilters, variables);
+                        searchResultDocument = searchResultParser.ParseDocument(results);
+                        logger.Debug(
+                            string.Format("CardigannIndexer ({0}): result after preprocessingfilters: {1}", ID, results));
                     }
 
-                    var rowsSelector = applyGoTemplateText(Search.Rows.Selector, variables);
-                    var RowsDom = SearchResultDocument.QuerySelectorAll(rowsSelector);
-                    List<IElement> Rows = new List<IElement>();
-                    foreach (var RowDom in RowsDom)
-                    {
-                        Rows.Add(RowDom);
-                    }
+                    var rowsSelector = applyGoTemplateText(search.Rows.Selector, variables);
+                    var rowsDom = searchResultDocument.QuerySelectorAll(rowsSelector);
+                    var rows = new List<IElement>();
+                    foreach (var rowDom in rowsDom)
+                        rows.Add(rowDom);
 
                     // merge following rows for After selector
-                    var After = Definition.Search.Rows.After;
-                    if (After > 0)
-                    {
-                        for (int i = 0; i < Rows.Count; i += 1)
+                    var after = Definition.Search.Rows.After;
+                    if (after > 0)
+                        for (var i = 0; i < rows.Count; i += 1)
                         {
-                            var CurrentRow = Rows[i];
-                            for (int j = 0; j < After; j += 1)
+                            var currentRow = rows[i];
+                            for (var j = 0; j < after; j += 1)
                             {
-                                var MergeRowIndex = i + j + 1;
-                                var MergeRow = Rows[MergeRowIndex];
-                                List<INode> MergeNodes = new List<INode>();
-                                foreach (var node in MergeRow.ChildNodes)
-                                {
-                                    MergeNodes.Add(node);
-                                }
-                                CurrentRow.Append(MergeNodes.ToArray());
+                                var mergeRowIndex = i + j + 1;
+                                var mergeRow = rows[mergeRowIndex];
+                                var mergeNodes = new List<INode>();
+                                foreach (var node in mergeRow.ChildNodes)
+                                    mergeNodes.Add(node);
+                                currentRow.Append(mergeNodes.ToArray());
                             }
-                            Rows.RemoveRange(i + 1, After);
-                        }
-                    }
 
-                    foreach (var Row in Rows)
-                    {
+                            rows.RemoveRange(i + 1, after);
+                        }
+
+                    foreach (var row in rows)
                         try
                         {
-                            var release = new ReleaseInfo();
-                            release.MinimumRatio = 1;
-                            release.MinimumSeedTime = 172800; // 48 hours
+                            var release = new ReleaseInfo
+                            {
+                                MinimumRatio = 1,
+                                MinimumSeedTime = 172800 // 48 hours
+                            };
 
                             // Parse fields
-                            foreach (var Field in Search.Fields)
+                            foreach (var field in search.Fields)
                             {
-                                var FieldParts = Field.Key.Split('|');
-                                var FieldName = FieldParts[0];
-                                var FieldModifiers = new List<string>();
-                                for (var i = 1; i < FieldParts.Length; i++)
-                                    FieldModifiers.Add(FieldParts[i]);
-
+                                var fieldParts = field.Key.Split('|');
+                                var fieldName = fieldParts[0];
+                                var fieldModifiers = new List<string>();
+                                for (var i = 1; i < fieldParts.Length; i++)
+                                    fieldModifiers.Add(fieldParts[i]);
                                 string value = null;
-                                var variablesKey = ".Result." + FieldName;
+                                var variablesKey = $".Result.{fieldName}";
                                 try
                                 {
-                                    value = handleSelector(Field.Value, Row, variables);
-                                    switch (FieldName)
+                                    value = handleSelector(field.Value, row, variables);
+                                    switch (fieldName)
                                     {
                                         case "download":
                                             if (string.IsNullOrEmpty(value))
@@ -1416,6 +1284,7 @@ namespace Jackett.Common.Indexers
                                                 release.Link = null;
                                                 break;
                                             }
+
                                             if (value.StartsWith("magnet:"))
                                             {
                                                 release.MagnetUri = new Uri(value);
@@ -1427,6 +1296,7 @@ namespace Jackett.Common.Indexers
                                                 release.Link = resolvePath(value, searchUrlUri);
                                                 value = release.Link.ToString();
                                             }
+
                                             break;
                                         case "magnet":
                                             var magnetUri = new Uri(value);
@@ -1444,22 +1314,22 @@ namespace Jackett.Common.Indexers
                                             value = url.ToString();
                                             break;
                                         case "comments":
-                                            var CommentsUrl = resolvePath(value, searchUrlUri);
+                                            var commentsUrl = resolvePath(value, searchUrlUri);
                                             if (release.Comments == null)
-                                                release.Comments = CommentsUrl;
+                                                release.Comments = commentsUrl;
                                             if (release.Guid == null)
-                                                release.Guid = CommentsUrl;
-                                            value = CommentsUrl.ToString();
+                                                release.Guid = commentsUrl;
+                                            value = commentsUrl.ToString();
                                             break;
                                         case "title":
-                                            if (FieldModifiers.Contains("append"))
+                                            if (fieldModifiers.Contains("append"))
                                                 release.Title += value;
                                             else
                                                 release.Title = value;
                                             value = release.Title;
                                             break;
                                         case "description":
-                                            if (FieldModifiers.Contains("append"))
+                                            if (fieldModifiers.Contains("append"))
                                                 release.Description += value;
                                             else
                                                 release.Description = value;
@@ -1468,17 +1338,11 @@ namespace Jackett.Common.Indexers
                                         case "category":
                                             var cats = MapTrackerCatToNewznab(value);
                                             if (release.Category == null)
-                                            {
                                                 release.Category = cats;
-                                            }
                                             else
-                                            {
                                                 foreach (var cat in cats)
-                                                {
                                                     if (!release.Category.Contains(cat))
                                                         release.Category.Add(cat);
-                                                }
-                                            }
                                             value = release.Category.ToString();
                                             break;
                                         case "size":
@@ -1486,12 +1350,12 @@ namespace Jackett.Common.Indexers
                                             value = release.Size.ToString();
                                             break;
                                         case "leechers":
-                                            var Leechers = ParseUtil.CoerceInt(value);
+                                            var leechers = ParseUtil.CoerceInt(value);
                                             if (release.Peers == null)
-                                                release.Peers = Leechers;
+                                                release.Peers = leechers;
                                             else
-                                                release.Peers += Leechers;
-                                            value = Leechers.ToString();
+                                                release.Peers += leechers;
+                                            value = leechers.ToString();
                                             break;
                                         case "seeders":
                                             release.Seeders = ParseUtil.CoerceInt(value);
@@ -1534,17 +1398,17 @@ namespace Jackett.Common.Indexers
                                             value = release.Imdb.ToString();
                                             break;
                                         case "rageid":
-                                            Regex RageIDRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
-                                            var RageIDMatch = RageIDRegEx.Match(value);
-                                            var RageID = RageIDMatch.Groups[1].Value;
-                                            release.RageID = ParseUtil.CoerceLong(RageID);
+                                            var rageIdRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
+                                            var rageIdMatch = rageIdRegEx.Match(value);
+                                            var rageId = rageIdMatch.Groups[1].Value;
+                                            release.RageID = ParseUtil.CoerceLong(rageId);
                                             value = release.RageID.ToString();
                                             break;
                                         case "tvdbid":
-                                            Regex TVDBIdRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
-                                            var TVDBIdMatch = TVDBIdRegEx.Match(value);
-                                            var TVDBId = TVDBIdMatch.Groups[1].Value;
-                                            release.TVDBId = ParseUtil.CoerceLong(TVDBId);
+                                            var tvdbIdRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
+                                            var tvdbIdMatch = tvdbIdRegEx.Match(value);
+                                            var tvdbId = tvdbIdMatch.Groups[1].Value;
+                                            release.TVDBId = ParseUtil.CoerceLong(tvdbId);
                                             value = release.TVDBId.ToString();
                                             break;
                                         case "banner":
@@ -1553,95 +1417,104 @@ namespace Jackett.Common.Indexers
                                                 var bannerurl = resolvePath(value, searchUrlUri);
                                                 release.BannerUrl = bannerurl;
                                             }
+
                                             value = release.BannerUrl.ToString();
                                             break;
-                                        default:
-                                            break;
                                     }
+
                                     variables[variablesKey] = value;
                                 }
                                 catch (Exception ex)
                                 {
                                     if (!variables.ContainsKey(variablesKey))
                                         variables[variablesKey] = null;
-                                    if (OptionalFileds.Contains(Field.Key) || FieldModifiers.Contains("optional") || Field.Value.Optional)
+                                    if (OptionalFileds.Contains(field.Key) || fieldModifiers.Contains("optional") ||
+                                        field.Value.Optional)
                                         continue;
-                                    throw new Exception(string.Format("Error while parsing field={0}, selector={1}, value={2}: {3}", Field.Key, Field.Value.Selector, (value == null ? "<null>" : value), ex.Message));
+                                    throw new Exception(
+                                        string.Format(
+                                            "Error while parsing field={0}, selector={1}, value={2}: {3}", field.Key,
+                                            field.Value.Selector, value ?? "<null>", ex.Message));
                                 }
                             }
 
-                            var Filters = Definition.Search.Rows.Filters;
-                            var SkipRelease = false;
-                            if (Filters != null)
-                            {
-                                foreach (filterBlock Filter in Filters)
-                                {
-                                    switch (Filter.Name)
+                            var filters = Definition.Search.Rows.Filters;
+                            var skipRelease = false;
+                            if (filters != null)
+                                foreach (var filter in filters)
+                                    switch (filter.Name)
                                     {
                                         case "andmatch":
-                                            int CharacterLimit = -1;
-                                            if (Filter.Args != null)
-                                                CharacterLimit = int.Parse(Filter.Args);
-
+                                            var characterLimit = -1;
+                                            if (filter.Args != null)
+                                                characterLimit = int.Parse(filter.Args);
                                             if (query.ImdbID != null && TorznabCaps.SupportsImdbMovieSearch)
                                                 break; // skip andmatch filter for imdb searches
-
-                                            if (!query.MatchQueryStringAND(release.Title, CharacterLimit))
+                                            if (!query.MatchQueryStringAND(release.Title, characterLimit))
                                             {
-                                                logger.Debug(string.Format("CardigannIndexer ({0}): skipping {1} (andmatch filter)", ID, release.Title));
-                                                SkipRelease = true;
+                                                logger.Debug(
+                                                    string.Format(
+                                                        "CardigannIndexer ({0}): skipping {1} (andmatch filter)", ID,
+                                                        release.Title));
+                                                skipRelease = true;
                                             }
+
                                             break;
                                         case "strdump":
                                             // for debugging
-                                            logger.Debug(string.Format("CardigannIndexer ({0}): row strdump: {1}", ID, Row.ToHtmlPretty()));
+                                            logger.Debug(
+                                                string.Format(
+                                                    "CardigannIndexer ({0}): row strdump: {1}", ID, row.ToHtmlPretty()));
                                             break;
                                         default:
-                                            logger.Error(string.Format("CardigannIndexer ({0}): Unsupported rows filter: {1}", ID, Filter.Name));
+                                            logger.Error(
+                                                string.Format(
+                                                    "CardigannIndexer ({0}): Unsupported rows filter: {1}", ID,
+                                                    filter.Name));
                                             break;
                                     }
-                                }
-                            }
 
-                            if (SkipRelease)
+                            if (skipRelease)
                                 continue;
 
                             // if DateHeaders is set go through the previous rows and look for the header selector
-                            var DateHeaders = Definition.Search.Rows.Dateheaders;
-                            if (release.PublishDate == DateTime.MinValue && DateHeaders != null)
+                            var dateHeaders = Definition.Search.Rows.Dateheaders;
+                            if (release.PublishDate == DateTime.MinValue && dateHeaders != null)
                             {
-                                var PrevRow = Row.PreviousElementSibling;
+                                var prevRow = row.PreviousElementSibling;
                                 string value = null;
-                                if (PrevRow == null) // continue with parent
+                                if (prevRow == null) // continue with parent
                                 {
-                                    var Parent = Row.ParentElement;
-                                    if (Parent != null)
-                                        PrevRow = Parent.PreviousElementSibling;
+                                    var parent = row.ParentElement;
+                                    if (parent != null)
+                                        prevRow = parent.PreviousElementSibling;
                                 }
-                                while (PrevRow != null)
+
+                                while (prevRow != null)
                                 {
-                                    var CurRow = PrevRow;
-                                    logger.Debug(PrevRow.OuterHtml);
+                                    var curRow = prevRow;
+                                    logger.Debug(prevRow.OuterHtml);
                                     try
                                     {
-                                        value = handleSelector(DateHeaders, CurRow);
+                                        value = handleSelector(dateHeaders, curRow);
                                         break;
                                     }
                                     catch (Exception)
                                     {
                                         // do nothing
                                     }
-                                    PrevRow = CurRow.PreviousElementSibling;
-                                    if (PrevRow == null) // continue with parent
+
+                                    prevRow = curRow.PreviousElementSibling;
+                                    if (prevRow == null) // continue with parent
                                     {
-                                        var Parent = CurRow.ParentElement;
-                                        if (Parent != null)
-                                            PrevRow = Parent.PreviousElementSibling;
+                                        var parent = curRow.ParentElement;
+                                        if (parent != null)
+                                            prevRow = parent.PreviousElementSibling;
                                     }
                                 }
 
-                                if (value == null && DateHeaders.Optional == false)
-                                    throw new Exception(string.Format("No date header row found for {0}", release.ToString()));
+                                if (value == null && dateHeaders.Optional == false)
+                                    throw new Exception(string.Format("No date header row found for {0}", release));
                                 if (value != null)
                                     release.PublishDate = DateTimeUtil.FromUnknown(value);
                             }
@@ -1650,127 +1523,137 @@ namespace Jackett.Common.Indexers
                         }
                         catch (Exception ex)
                         {
-                            logger.Error(string.Format("CardigannIndexer ({0}): Error while parsing row '{1}':\n\n{2}", ID, Row.ToHtmlPretty(), ex));
+                            logger.Error(
+                                string.Format(
+                                    "CardigannIndexer ({0}): Error while parsing row '{1}':\n\n{2}", ID, row.ToHtmlPretty(),
+                                    ex));
                         }
-                    }
                 }
                 catch (Exception ex)
                 {
                     OnParseError(results, ex);
                 }
             }
+
             if (query.Limit > 0)
                 releases = releases.Take(query.Limit).ToList();
             return releases;
         }
 
-        protected async Task<WebClientByteResult> handleRequest(requestBlock request, Dictionary<string, object> variables = null, string referer = null)
+        protected async Task<WebClientByteResult> HandleRequestAsync(requestBlock request,
+                                                                Dictionary<string, object> variables = null,
+                                                                string referer = null)
         {
             var requestLinkStr = resolvePath(applyGoTemplateText(request.Path, variables)).ToString();
-
             Dictionary<string, string> pairs = null;
             var queryCollection = new NameValueCollection();
-
-            RequestType method = RequestType.GET;
-            if (String.Equals(request.Method, "post", StringComparison.OrdinalIgnoreCase))
+            var method = RequestType.Get;
+            if (string.Equals(request.Method, "post", StringComparison.OrdinalIgnoreCase))
             {
-                method = RequestType.POST;
+                method = RequestType.Post;
                 pairs = new Dictionary<string, string>();
             }
 
-            foreach (var Input in request.Inputs)
+            foreach (var input in request.Inputs)
             {
-                var value = applyGoTemplateText(Input.Value, variables);
-                if (method == RequestType.GET)
-                    queryCollection.Add(Input.Key, value);
-                else if (method == RequestType.POST)
-                    pairs.Add(Input.Key, value);
+                var value = applyGoTemplateText(input.Value, variables);
+                if (method == RequestType.Get)
+                    queryCollection.Add(input.Key, value);
+                else if (method == RequestType.Post)
+                    pairs.Add(input.Key, value);
             }
 
             if (queryCollection.Count > 0)
             {
                 if (!requestLinkStr.Contains("?"))
-                    requestLinkStr += "?" + queryCollection.GetQueryString(Encoding).Substring(1);
+                    requestLinkStr += $"?{queryCollection.GetQueryString(Encoding).Substring(1)}";
                 else
                     requestLinkStr += queryCollection.GetQueryString(Encoding);
             }
 
-            var response = await RequestBytesWithCookiesAndRetry(requestLinkStr, null, method, referer, pairs);
-            logger.Debug($"CardigannIndexer ({ID}): handleRequest() remote server returned {response.Status.ToString()}" + (response.IsRedirect ? " => " + response.RedirectingTo : ""));
+            var response = await RequestBytesWithCookiesAndRetryAsync(requestLinkStr, null, method, referer, pairs);
+            logger.Debug(
+                $"CardigannIndexer ({ID}): handleRequest() remote server returned {response.Status.ToString()}{(response.IsRedirect ? $" => {response.RedirectingTo}" : "")}");
             return response;
         }
 
-        protected IDictionary<string, object> AddTemplateVariablesFromUri(IDictionary<string, object> variables, Uri uri, string prefix = "")
+        protected IDictionary<string, object> AddTemplateVariablesFromUri(IDictionary<string, object> variables, Uri uri,
+                                                                          string prefix = "")
         {
-            variables[prefix + ".AbsoluteUri"] = uri.AbsoluteUri;
-            variables[prefix + ".AbsolutePath"] = uri.AbsolutePath;
-            variables[prefix + ".Scheme"] = uri.Scheme;
-            variables[prefix + ".Host"] = uri.Host;
-            variables[prefix + ".Port"] = uri.Port.ToString();
-            variables[prefix + ".PathAndQuery"] = uri.PathAndQuery;
-            variables[prefix + ".Query"] = uri.Query;
+            variables[$"{prefix}.AbsoluteUri"] = uri.AbsoluteUri;
+            variables[$"{prefix}.AbsolutePath"] = uri.AbsolutePath;
+            variables[$"{prefix}.Scheme"] = uri.Scheme;
+            variables[$"{prefix}.Host"] = uri.Host;
+            variables[$"{prefix}.Port"] = uri.Port.ToString();
+            variables[$"{prefix}.PathAndQuery"] = uri.PathAndQuery;
+            variables[$"{prefix}.Query"] = uri.Query;
             var queryString = QueryHelpers.ParseQuery(uri.Query);
-            foreach (string key in queryString.Keys)
-            {
+            foreach (var key in queryString.Keys)
                 //If we have supplied the same query string multiple time, just take the first.
-                variables[prefix + ".Query." + key] = queryString[key].First();
-            }
+                variables[$"{prefix}.Query.{key}"] = queryString[key].First();
             return variables;
         }
 
         public override async Task<byte[]> Download(Uri link)
         {
-            var method = RequestType.GET;
+            var method = RequestType.Get;
             if (Definition.Download != null)
             {
-                var Download = Definition.Download;
+                var download = Definition.Download;
                 var variables = getTemplateVariablesFromConfigData();
                 AddTemplateVariablesFromUri(variables, link, ".DownloadUri");
-                if (Download.Before != null)
+                if (download.Before != null)
                 {
-                    var beforeresult = await handleRequest(Download.Before, variables, link.ToString());
+                    var beforeresult = await HandleRequestAsync(download.Before, variables, link.ToString());
                 }
-                if (Download.Method != null)
+
+                if (download.Method != null)
+                    if (download.Method == "post")
+                        method = RequestType.Post;
+                if (download.Selector != null)
                 {
-                    if (Download.Method == "post")
-                        method = RequestType.POST;
-                }
-                if (Download.Selector != null)
-                {
-                    var selector = applyGoTemplateText(Download.Selector, variables);
-                    var response = await RequestStringWithCookies(link.ToString());
+                    var selector = applyGoTemplateText(download.Selector, variables);
+                    var response = await RequestStringWithCookiesAsync(link.ToString());
                     if (response.IsRedirect)
-                        response = await RequestStringWithCookies(response.RedirectingTo);
+                        response = await RequestStringWithCookiesAsync(response.RedirectingTo);
                     var results = response.Content;
                     var searchResultParser = new HtmlParser();
                     var searchResultDocument = searchResultParser.ParseDocument(results);
                     var downloadElement = searchResultDocument.QuerySelector(selector);
                     if (downloadElement != null)
                     {
-                        logger.Debug(string.Format("CardigannIndexer ({0}): Download selector {1} matched:{2}", ID, selector, downloadElement.ToHtmlPretty()));
-                        var href = "";
-                        if (Download.Attribute != null)
+                        logger.Debug(
+                            string.Format(
+                                "CardigannIndexer ({0}): Download selector {1} matched:{2}", ID, selector,
+                                downloadElement.ToHtmlPretty()));
+                        string href;
+                        if (download.Attribute != null)
                         {
-                            href = downloadElement.GetAttribute(Download.Attribute);
+                            href = downloadElement.GetAttribute(download.Attribute);
                             if (href == null)
-                                throw new Exception(string.Format("Attribute \"{0}\" is not set for element {1}", Download.Attribute, downloadElement.ToHtmlPretty()));
+                                throw new Exception(
+                                    string.Format(
+                                        "Attribute \"{0}\" is not set for element {1}", download.Attribute,
+                                        downloadElement.ToHtmlPretty()));
                         }
                         else
-                        {
                             href = downloadElement.TextContent;
-                        }
-                        href = applyFilters(href, Download.Filters, variables);
+
+                        href = applyFilters(href, download.Filters, variables);
                         link = resolvePath(href, link);
                     }
                     else
                     {
-                        logger.Error(string.Format("CardigannIndexer ({0}): Download selector {1} didn't match:\n{2}", ID, Download.Selector, results));
-                        throw new Exception(string.Format("Download selector {0} didn't match", Download.Selector));
+                        logger.Error(
+                            string.Format(
+                                "CardigannIndexer ({0}): Download selector {1} didn't match:\n{2}", ID, download.Selector,
+                                results));
+                        throw new Exception(string.Format("Download selector {0} didn't match", download.Selector));
                     }
                 }
             }
-            return await base.Download(link, method);
+
+            return await DownloadAsync(link, method);
         }
     }
 }
-

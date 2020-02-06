@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Jackett.Common.Models.DTO
@@ -7,14 +7,6 @@ namespace Jackett.Common.Models.DTO
     {
         public IEnumerable<TorrentPotatoResponseItem> results { get; set; }
 
-        public int total_results
-        {
-            get
-            {
-                if (results == null)
-                    return 0;
-                return results.Count();
-            }
-        }
+        public int total_results => results?.Count() ?? 0;
     }
 }

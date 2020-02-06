@@ -1,4 +1,4 @@
-﻿namespace Jackett.Common.Models.IndexerConfig
+namespace Jackett.Common.Models.IndexerConfig
 {
     public class ConfigurationDataLoginLink : ConfigurationData
     {
@@ -10,7 +10,7 @@
         {
             LoginLink = new StringItem { Name = "Login Link" };
             RSSKey = new HiddenItem { Name = "RSSKey" };
-            DisplayText = new DisplayItem(""){ Name = "" };
+            DisplayText = new DisplayItem("") { Name = "" };
         }
     }
 }

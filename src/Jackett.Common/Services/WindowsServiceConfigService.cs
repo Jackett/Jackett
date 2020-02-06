@@ -1,119 +1,99 @@
-﻿using Jackett.Common.Services.Interfaces;
-using NLog;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.ServiceProcess;
+using Jackett.Common.Services.Interfaces;
+using NLog;
 
 namespace Jackett.Common.Services
 {
     public class WindowsServiceConfigService : IServiceConfigService
     {
-        private const string NAME = "Jackett";
-        private const string DESCRIPTION = "API Support for your favorite torrent trackers";
-        private const string SERVICEEXE = "JackettService.exe";
+        private const string Name = "Jackett";
+        private const string Description = "API Support for your favorite torrent trackers";
+        private const string Serviceexe = "JackettService.exe";
 
-        private IProcessService processService;
-        private Logger logger;
+        private readonly IProcessService _processService;
+        private readonly Logger _logger;
 
         public WindowsServiceConfigService(IProcessService p, Logger l)
         {
-            processService = p;
-            logger = l;
+            _processService = p;
+            _logger = l;
         }
 
-        public bool ServiceExists()
-        {
-            return GetService(NAME) != null;
-        }
+        public bool ServiceExists() => GetService(Name) != null;
 
         public bool ServiceRunning()
         {
-            var service = GetService(NAME);
-            if (service == null)
-                return false;
-            return service.Status == ServiceControllerStatus.Running;
+            var service = GetService(Name);
+            return service == null ? false : service.Status == ServiceControllerStatus.Running;
         }
 
         public void Start()
         {
-            var service = GetService(NAME);
+            var service = GetService(Name);
             service.Start();
         }
 
         public void Stop()
         {
-            var service = GetService(NAME);
+            var service = GetService(Name);
             service.Stop();
         }
 
-        public ServiceController GetService(string serviceName)
-        {
-            return ServiceController.GetServices().FirstOrDefault(c => String.Equals(c.ServiceName, serviceName, StringComparison.InvariantCultureIgnoreCase));
-        }
+        public ServiceController GetService(string serviceName) => ServiceController
+                                                                   .GetServices().FirstOrDefault(
+                                                                       c => string.Equals(
+                                                                           c.ServiceName, serviceName,
+                                                                           StringComparison.InvariantCultureIgnoreCase));
 
         public void Install()
         {
             if (ServiceExists())
-            {
-                logger.Warn("The service is already installed!");
-            }
+                _logger.Warn("The service is already installed!");
             else
             {
-                string applicationFolder = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath);
-
-                var exePath = Path.Combine(applicationFolder, SERVICEEXE);
+                var applicationFolder = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath);
+                var exePath = Path.Combine(applicationFolder, Serviceexe);
                 if (!File.Exists(exePath) && Debugger.IsAttached)
-                {
-                    exePath = Path.Combine(applicationFolder, "..\\..\\..\\Jackett.Service\\bin\\Debug", SERVICEEXE);
-                }
-
-                string arg = $"create {NAME} start= auto binpath= \"{exePath}\" DisplayName= {NAME}";
-
-                processService.StartProcessAndLog("sc.exe", arg, true);
-
-                processService.StartProcessAndLog("sc.exe", $"description {NAME} \"{DESCRIPTION}\"", true);
+                    exePath = Path.Combine(applicationFolder, "..\\..\\..\\Jackett.Service\\bin\\Debug", Serviceexe);
+                var arg = $"create {Name} start= auto binpath= \"{exePath}\" DisplayName= {Name}";
+                _processService.StartProcessAndLog("sc.exe", arg, true);
+                _processService.StartProcessAndLog("sc.exe", $"description {Name} \"{Description}\"", true);
             }
         }
 
         public void Uninstall()
         {
             RemoveService();
-
-            processService.StartProcessAndLog("sc.exe", $"delete {NAME}", true);
-
-            logger.Info("The service was uninstalled.");
+            _processService.StartProcessAndLog("sc.exe", $"delete {Name}", true);
+            _logger.Info("The service was uninstalled.");
         }
 
         public void RemoveService()
         {
-            var service = GetService(NAME);
+            var service = GetService(Name);
             if (service == null)
             {
-                logger.Warn("The service is already uninstalled");
+                _logger.Warn("The service is already uninstalled");
                 return;
             }
+
             if (service.Status != ServiceControllerStatus.Stopped)
             {
                 service.Stop();
                 service.WaitForStatus(ServiceControllerStatus.Stopped, TimeSpan.FromSeconds(60));
-
                 service.Refresh();
                 if (service.Status == ServiceControllerStatus.Stopped)
-                {
-                    logger.Info("Service stopped.");
-                }
+                    _logger.Info("Service stopped.");
                 else
-                {
-                    logger.Error("Failed to stop the service");
-                }
+                    _logger.Error("Failed to stop the service");
             }
             else
-            {
-                logger.Warn("The service was already stopped");
-            }
+                _logger.Warn("The service was already stopped");
         }
     }
 }

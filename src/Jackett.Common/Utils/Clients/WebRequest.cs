@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,14 +10,14 @@ namespace Jackett.Common.Utils.Clients
         public WebRequest()
         {
             PostData = new List<KeyValuePair<string, string>>();
-            Type = RequestType.GET;
+            Type = RequestType.Get;
             Headers = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
         }
 
         public WebRequest(string url)
         {
             PostData = new List<KeyValuePair<string, string>>();
-            Type = RequestType.GET;
+            Type = RequestType.Get;
             Url = url;
             Headers = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
         }
@@ -36,14 +36,13 @@ namespace Jackett.Common.Utils.Clients
         /// </summary>
         public Dictionary<string, string> Headers { get; set; }
 
-        public override bool Equals(System.Object obj)
+        public override bool Equals(object obj)
         {
             if (obj is WebRequest)
             {
                 var other = obj as WebRequest;
                 var postDataSame = PostData == null && other.PostData == null;
                 if (!postDataSame)
-                {
                     if (!(PostData == null || other.PostData == null))
                     {
                         var ok = PostData.Count() == other.PostData.Count();
@@ -55,7 +54,8 @@ namespace Jackett.Common.Utils.Clients
                                 break;
                             }
 
-                            if (PostData.FirstOrDefault(item => item.Key == i.Key).Value != other.PostData.FirstOrDefault(item => item.Key == i.Key).Value)
+                            if (PostData.FirstOrDefault(item => item.Key == i.Key).Value !=
+                                other.PostData.FirstOrDefault(item => item.Key == i.Key).Value)
                             {
                                 ok = false;
                                 break;
@@ -63,35 +63,22 @@ namespace Jackett.Common.Utils.Clients
                         }
 
                         if (ok)
-                        {
                             postDataSame = true;
-                        }
                     }
-                }
 
-                return other.Url == Url &&
-                       other.Referer == Referer &&
-                       other.Cookies == Cookies &&
-                       other.Type == Type &&
-                       other.Encoding == Encoding &&
-                       postDataSame;
+                return other.Url == Url && other.Referer == Referer && other.Cookies == Cookies && other.Type == Type &&
+                       other.Encoding == Encoding && postDataSame;
+            }
 
-            }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
+        public override int GetHashCode() => base.GetHashCode();
     }
 
     public enum RequestType
     {
-        GET,
-        POST
+        Get,
+        Post
     }
 }

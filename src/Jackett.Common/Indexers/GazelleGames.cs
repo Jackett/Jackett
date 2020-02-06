@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -18,25 +18,20 @@ namespace Jackett.Common.Indexers
 {
     public class GazelleGames : BaseWebIndexer
     {
-        private string LoginUrl { get { return SiteLink + "login.php"; } }
-        private string BrowseUrl { get { return SiteLink + "torrents.php"; } }
+        private string LoginUrl => $"{SiteLink}login.php";
+        private string BrowseUrl => $"{SiteLink}torrents.php";
 
         private new ConfigurationDataCookie configData
         {
-            get { return (ConfigurationDataCookie)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataCookie)base.configData;
+            set => base.configData = value;
         }
 
-        public GazelleGames(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "GazelleGames",
-                   description: "A gaming tracker.",
-                   link: "https://gazellegames.net/",
-                   caps: new TorznabCapabilities(),
-                   configService: configService,
-                   client: wc,
-                   logger: l,
-                   p: ps,
-                   configData: new ConfigurationDataCookie())
+        public GazelleGames(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps) :
+            base(
+                "GazelleGames", description: "A gaming tracker.", link: "https://gazellegames.net/",
+                caps: new TorznabCapabilities(), configService: configService, client: wc, logger: l, p: ps,
+                configData: new ConfigurationDataCookie())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
@@ -183,10 +178,7 @@ namespace Jackett.Common.Indexers
             {
                 var results = await PerformQuery(new TorznabQuery());
                 if (results.Count() == 0)
-                {
                     throw new Exception("Your cookie did not work");
-                }
-
                 IsConfigured = true;
                 SaveConfig();
                 return IndexerConfigurationStatus.Completed;
@@ -194,7 +186,7 @@ namespace Jackett.Common.Indexers
             catch (Exception e)
             {
                 IsConfigured = false;
-                throw new Exception("Your cookie did not work: " + e.Message);
+                throw new Exception($"Your cookie did not work: {e.Message}");
             }
         }
 
@@ -203,7 +195,6 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
             var searchUrl = BrowseUrl;
             var searchString = query.GetQueryString();
-
             var queryCollection = new NameValueCollection
             {
                 {"searchstr", searchString},
@@ -212,108 +203,89 @@ namespace Jackett.Common.Indexers
                 {"action", "basic"},
                 {"searchsubmit", "1"}
             };
-
             var i = 0;
             foreach (var cat in MapTorznabCapsToTrackers(query))
             {
-                queryCollection.Add("artistcheck["+i+"]", cat);
+                queryCollection.Add($"artistcheck[{i}]", cat);
                 i++;
             }
 
-            searchUrl += "?" + queryCollection.GetQueryString();
-
-            var results = await RequestStringWithCookies(searchUrl);
+            searchUrl += $"?{queryCollection.GetQueryString()}";
+            var results = await RequestStringWithCookiesAsync(searchUrl);
             if (results.IsRedirect && results.RedirectingTo.EndsWith("login.php"))
-            {
                 throw new Exception("relogin needed, please update your cookie");
-            }
-
             try
             {
-                string RowsSelector = ".torrent_table > tbody > tr";
-
-                var SearchResultParser = new HtmlParser();
-                var SearchResultDocument = SearchResultParser.ParseDocument(results.Content);
-                var Rows = SearchResultDocument.QuerySelectorAll(RowsSelector);
-
-                bool stickyGroup = false;
-                string CategoryStr;
-                ICollection<int> GroupCategory = null;
-                string GroupTitle = null;
+                var rowsSelector = ".torrent_table > tbody > tr";
+                var searchResultParser = new HtmlParser();
+                var searchResultDocument = searchResultParser.ParseDocument(results.Content);
+                var rows = searchResultDocument.QuerySelectorAll(rowsSelector);
+                var stickyGroup = false;
+                string categoryStr;
+                ICollection<int> groupCategory = null;
+                string groupTitle = null;
                 //Nullable<DateTime> GroupPublishDate = null;
-
-                foreach (var Row in Rows)
-                {
-                    if (Row.ClassList.Contains("torrent"))
-                    {
+                foreach (var row in rows)
+                    if (row.ClassList.Contains("torrent"))
                         // garbage rows
                         continue;
-                    }
-                    else if (Row.ClassList.Contains("group"))
+                    else if (row.ClassList.Contains("group"))
                     {
-                        stickyGroup = Row.ClassList.Contains("sticky");
-                        var dispalyname = Row.QuerySelector("#displayname");
-                        var qCat = Row.QuerySelector("td.cats_col > div");
-                        CategoryStr = qCat.GetAttribute("title");
+                        stickyGroup = row.ClassList.Contains("sticky");
+                        var dispalyname = row.QuerySelector("#displayname");
+                        var qCat = row.QuerySelector("td.cats_col > div");
+                        categoryStr = qCat.GetAttribute("title");
                         var qArtistLink = dispalyname.QuerySelector("#groupplatform > a");
                         if (qArtistLink != null)
-                            CategoryStr = ParseUtil.GetArgumentFromQueryString(qArtistLink.GetAttribute("href"), "artistname");
-                        GroupCategory = MapTrackerCatToNewznab(CategoryStr);
-
+                            categoryStr = ParseUtil.GetArgumentFromQueryString(
+                                qArtistLink.GetAttribute("href"), "artistname");
+                        groupCategory = MapTrackerCatToNewznab(categoryStr);
                         var qDetailsLink = dispalyname.QuerySelector("#groupname > a");
-                        GroupTitle = qDetailsLink.TextContent;
+                        groupTitle = qDetailsLink.TextContent;
                     }
-                    else if (Row.ClassList.Contains("group_torrent"))
+                    else if (row.ClassList.Contains("group_torrent"))
                     {
-                        if (Row.QuerySelector("td.edition_info") != null) // ignore edition rows
+                        if (row.QuerySelector("td.edition_info") != null) // ignore edition rows
                             continue;
-
-                        var release = new ReleaseInfo();
-
-                        release.MinimumRatio = 1;
-                        release.MinimumSeedTime = 80 * 3600;
-
-                        var qDetailsLink = Row.QuerySelector("a[href^=\"torrents.php?id=\"]");
+                        var release = new ReleaseInfo { MinimumRatio = 1, MinimumSeedTime = 80 * 3600 };
+                        var qDetailsLink = row.QuerySelector("a[href^=\"torrents.php?id=\"]");
                         var qDescription = qDetailsLink.QuerySelector("span.torrent_info_tags");
-                        var qDLLink = Row.QuerySelector("a[href^=\"torrents.php?action=download\"]");
-                        var qTime = Row.QuerySelector("span.time");
+                        var qDlLink = row.QuerySelector("a[href^=\"torrents.php?action=download\"]");
+                        var qTime = row.QuerySelector("span.time");
                         // some users have an extra colum (8), we can't use nth-last-child
-                        var qSize = Row.QuerySelector("td:nth-child(4)"); 
-                        var qGrabs = Row.QuerySelector("td:nth-child(5)");
-                        var qSeeders = Row.QuerySelector("td:nth-child(6)");
-                        var qLeechers = Row.QuerySelector("td:nth-child(7)");
-                        var qFreeLeech = Row.QuerySelector("strong.freeleech_label");
-                        var qNeutralLeech = Row.QuerySelector("strong.neutralleech_label");
-                        var RowTitle = Row.GetAttribute("title");
-                        
-                        var Time = qTime.GetAttribute("title");
-                        release.PublishDate = DateTime.SpecifyKind(DateTime.ParseExact(Time, "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture), DateTimeKind.Unspecified).ToLocalTime();
-                        release.Category = GroupCategory;
-
+                        var qSize = row.QuerySelector("td:nth-child(4)");
+                        var qGrabs = row.QuerySelector("td:nth-child(5)");
+                        var qSeeders = row.QuerySelector("td:nth-child(6)");
+                        var qLeechers = row.QuerySelector("td:nth-child(7)");
+                        var qFreeLeech = row.QuerySelector("strong.freeleech_label");
+                        var qNeutralLeech = row.QuerySelector("strong.neutralleech_label");
+                        var rowTitle = row.GetAttribute("title");
+                        var time = qTime.GetAttribute("title");
+                        release.PublishDate = DateTime.SpecifyKind(
+                            DateTime.ParseExact(
+                                time, "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture),
+                            DateTimeKind.Unspecified).ToLocalTime();
+                        release.Category = groupCategory;
                         if (qDescription != null)
                             release.Description = qDescription.TextContent;
-
                         release.Title = qDetailsLink.TextContent;
                         release.Title = release.Title.Replace(", Freeleech!", "");
                         release.Title = release.Title.Replace(", Neutral Leech!", "");
-
                         if (stickyGroup) // AND match for sticky releases
-                            if ((query.ImdbID == null || !TorznabCaps.SupportsImdbMovieSearch) && !query.MatchQueryStringAND(release.Title))
+                            if ((query.ImdbID == null || !TorznabCaps.SupportsImdbMovieSearch) &&
+                                !query.MatchQueryStringAND(release.Title))
                                 continue;
-
-                        var Size = qSize.TextContent;
-                        if (string.IsNullOrEmpty(Size)) // external links, example BlazBlue: Calamity Trigger Manual - Guide [GameDOX - External Link]
+                        var size = qSize.TextContent;
+                        if (string.IsNullOrEmpty(size)
+                            ) // external links, example BlazBlue: Calamity Trigger Manual - Guide [GameDOX - External Link]
                             continue;
-                        release.Size = ReleaseInfo.GetBytes(Size);
-
-                        release.Link = new Uri(SiteLink + qDLLink.GetAttribute("href"));
+                        release.Size = ReleaseInfo.GetBytes(size);
+                        release.Link = new Uri(SiteLink + qDlLink.GetAttribute("href"));
                         release.Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
                         release.Guid = release.Link;
-
                         release.Grabs = ParseUtil.CoerceLong(qGrabs.TextContent);
                         release.Seeders = ParseUtil.CoerceInt(qSeeders.TextContent);
                         release.Peers = ParseUtil.CoerceInt(qLeechers.TextContent) + release.Seeders;
-
                         if (qFreeLeech != null)
                         {
                             release.UploadVolumeFactor = 1;
@@ -332,7 +304,6 @@ namespace Jackett.Common.Indexers
 
                         releases.Add(release);
                     }
-                }
             }
             catch (Exception ex)
             {

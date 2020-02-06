@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -21,20 +21,18 @@ namespace Jackett.Common.Utils.Clients
         protected TimeSpan requestDelayTimeSpan;
         protected string ClientType;
         public bool EmulateBrowser = true;
+
         public double requestDelay
         {
-            get { return requestDelayTimeSpan.TotalSeconds; }
-            set
-            {
-                requestDelayTimeSpan = TimeSpan.FromSeconds(value);
-            }
+            get => requestDelayTimeSpan.TotalSeconds;
+            set => requestDelayTimeSpan = TimeSpan.FromSeconds(value);
         }
 
-        virtual protected void OnConfigChange()
+        protected virtual void OnConfigChange()
         {
         }
 
-        virtual public void AddTrustedCertificate(string host, string hash)
+        public virtual void AddTrustedCertificate(string host, string hash)
         {
             // not implemented by default
         }
@@ -49,24 +47,26 @@ namespace Jackett.Common.Utils.Clients
             ServerConfigUnsubscriber = serverConfig.Subscribe(this);
         }
 
-        async protected Task DelayRequest(WebRequest request)
+        protected async Task DelayRequestAsync(WebRequest request)
         {
             if (request.EmulateBrowser == null)
                 request.EmulateBrowser = EmulateBrowser;
-
             if (requestDelay != 0)
             {
                 var timeElapsed = DateTime.Now - lastRequest;
                 if (timeElapsed < requestDelayTimeSpan)
                 {
                     var delay = requestDelayTimeSpan - timeElapsed;
-                    logger.Debug(string.Format("WebClient({0}): delaying request for {1} by {2} seconds", ClientType, request.Url, delay.TotalSeconds.ToString()));
+                    logger.Debug(
+                        string.Format(
+                            "WebClient({0}): delaying request for {1} by {2} seconds", ClientType, request.Url,
+                            delay.TotalSeconds.ToString()));
                     await Task.Delay(delay);
                 }
             }
         }
 
-        virtual protected void PrepareRequest(WebRequest request)
+        protected virtual void PrepareRequest(WebRequest request)
         {
             // add Accept/Accept-Language header if not set
             // some webservers won't accept requests without accept
@@ -79,106 +79,104 @@ namespace Jackett.Common.Utils.Clients
             {
                 var key = header.Key.ToLower();
                 if (key == "accept")
-                {
                     hasAccept = true;
-                }
                 else if (key == "accept-language")
-                {
                     hasAcceptLanguage = true;
-                }
             }
+
             if (!hasAccept)
                 request.Headers.Add("Accept", "*/*");
             if (!hasAcceptLanguage)
                 request.Headers.Add("Accept-Language", "*");
-            return;
         }
 
-        virtual public async Task<WebClientByteResult> GetBytes(WebRequest request)
+        public virtual async Task<WebClientByteResult> GetBytesAsync(WebRequest request)
         {
             logger.Debug(string.Format("WebClient({0}).GetBytes(Url:{1})", ClientType, request.Url));
             PrepareRequest(request);
-            await DelayRequest(request);
-            var result = await Run(request);
+            await DelayRequestAsync(request);
+            var result = await RunAsync(request);
             lastRequest = DateTime.Now;
             result.Request = request;
-            logger.Debug(string.Format("WebClient({0}): Returning {1} => {2} bytes", ClientType, result.Status, (result.IsRedirect ? result.RedirectingTo + " " : "") + (result.Content == null ? "<NULL>" : result.Content.Length.ToString())));
+            logger.Debug(
+                string.Format(
+                    "WebClient({0}): Returning {1} => {2} bytes", ClientType, result.Status,
+                    (result.IsRedirect ? $"{result.RedirectingTo} " : "") +
+                    (result.Content == null ? "<NULL>" : result.Content.Length.ToString())));
             return result;
         }
 
-        virtual public async Task<WebClientStringResult> GetString(WebRequest request)
+        public virtual async Task<WebClientStringResult> GetStringAsync(WebRequest request)
         {
             logger.Debug(string.Format("WebClient({0}).GetString(Url:{1})", ClientType, request.Url));
             PrepareRequest(request);
-            await DelayRequest(request);
-            var result = await Run(request);
+            await DelayRequestAsync(request);
+            var result = await RunAsync(request);
             lastRequest = DateTime.Now;
             result.Request = request;
-            WebClientStringResult stringResult = Mapper.Map<WebClientStringResult>(result);
+            var stringResult = Mapper.Map<WebClientStringResult>(result);
             Encoding encoding = null;
             if (request.Encoding != null)
-            {
                 encoding = request.Encoding;
-            }
             else if (result.Headers.ContainsKey("content-type"))
             {
-                Regex CharsetRegex = new Regex(@"charset=([\w-]+)", RegexOptions.Compiled);
-                var CharsetRegexMatch = CharsetRegex.Match(result.Headers["content-type"][0]);
-                if (CharsetRegexMatch.Success)
+                var charsetRegex = new Regex(@"charset=([\w-]+)", RegexOptions.Compiled);
+                var charsetRegexMatch = charsetRegex.Match(result.Headers["content-type"][0]);
+                if (charsetRegexMatch.Success)
                 {
-                    var charset = CharsetRegexMatch.Groups[1].Value;
+                    var charset = charsetRegexMatch.Groups[1].Value;
                     try
                     {
                         encoding = Encoding.GetEncoding(charset);
                     }
                     catch (Exception ex)
                     {
-                        logger.Error(string.Format("WebClient({0}).GetString(Url:{1}): Error loading encoding {2} based on header {3}: {4}", ClientType, request.Url, charset, result.Headers["content-type"][0], ex));
+                        logger.Error(
+                            string.Format(
+                                "WebClient({0}).GetString(Url:{1}): Error loading encoding {2} based on header {3}: {4}",
+                                ClientType, request.Url, charset, result.Headers["content-type"][0], ex));
                     }
                 }
                 else
-                {
-                    logger.Error(string.Format("WebClient({0}).GetString(Url:{1}): Got header without charset: {2}", ClientType, request.Url, result.Headers["content-type"][0]));
-                }
+                    logger.Error(
+                        string.Format(
+                            "WebClient({0}).GetString(Url:{1}): Got header without charset: {2}", ClientType, request.Url,
+                            result.Headers["content-type"][0]));
             }
 
             if (encoding == null)
             {
-                logger.Error(string.Format("WebClient({0}).GetString(Url:{1}): No encoding detected, defaulting to UTF-8", ClientType, request.Url));
+                logger.Error(
+                    string.Format(
+                        "WebClient({0}).GetString(Url:{1}): No encoding detected, defaulting to UTF-8", ClientType,
+                        request.Url));
                 encoding = Encoding.UTF8;
             }
 
             string decodedContent = null;
             if (result.Content != null)
                 decodedContent = encoding.GetString(result.Content);
-
             stringResult.Content = decodedContent;
-            logger.Debug(string.Format("WebClient({0}): Returning {1} => {2}", ClientType, result.Status, (result.IsRedirect ? result.RedirectingTo + " " : "") + (decodedContent == null ? "<NULL>" : decodedContent)));
-
-            string[] server;
-            if (stringResult.Headers.TryGetValue("server", out server))
-            {
+            logger.Debug(
+                string.Format(
+                    "WebClient({0}): Returning {1} => {2}", ClientType, result.Status,
+                    (result.IsRedirect ? $"{result.RedirectingTo} " : "") +
+                    (decodedContent ?? "<NULL>")));
+            if (stringResult.Headers.TryGetValue("server", out var server))
                 if (server[0] == "cloudflare-nginx")
                     stringResult.Content = BrowserUtil.DecodeCloudFlareProtectedEmailFromHTML(stringResult.Content);
-            }
             return stringResult;
         }
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-        virtual protected async Task<WebClientByteResult> Run(WebRequest webRequest) { throw new NotImplementedException(); }
+        protected virtual async Task<WebClientByteResult> RunAsync(WebRequest webRequest) => throw new NotImplementedException();
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
 
-        abstract public void Init();
+        public abstract void Init();
 
-        public virtual void OnCompleted()
-        {
-            throw new NotImplementedException();
-        }
+        public virtual void OnCompleted() => throw new NotImplementedException();
 
-        public virtual void OnError(Exception error)
-        {
-            throw new NotImplementedException();
-        }
+        public virtual void OnError(Exception error) => throw new NotImplementedException();
 
         public virtual void OnNext(ServerConfig value)
         {

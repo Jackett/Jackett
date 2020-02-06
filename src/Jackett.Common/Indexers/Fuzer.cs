@@ -1,6 +1,5 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -12,6 +11,7 @@ using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 
@@ -19,29 +19,24 @@ namespace Jackett.Common.Indexers
 {
     public class Fuzer : BaseWebIndexer
     {
-        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
-            "https://fuzer.me/",
+        public override string[] LegacySiteLinks { get; protected set; } =
+        {
+            "https://fuzer.me/"
         };
 
-        private string SearchUrl { get { return SiteLink + "browse.php"; } }
-        private string LoginUrl { get { return SiteLink + "login.php"; } }
-        private const int MAXPAGES = 3;
+        private string SearchUrl => $"{SiteLink}browse.php";
+        private string LoginUrl => $"{SiteLink}login.php";
+        private const int Maxpages = 3;
 
         private new ConfigurationDataRecaptchaLogin configData
         {
-            get { return (ConfigurationDataRecaptchaLogin)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataRecaptchaLogin)base.configData;
+            set => base.configData = value;
         }
 
-        public Fuzer(IIndexerConfigurationService configService, Utils.Clients.WebClient w, Logger l, IProtectionService ps)
-            : base(name: "Fuzer",
-                description: "Fuzer is a private torrent website with israeli torrents.",
-                link: "https://www.fuzer.me/",
-                configService: configService,
-                client: w,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataRecaptchaLogin())
+        public Fuzer(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps) : base(
+            "Fuzer", description: "Fuzer is a private torrent website with israeli torrents.", link: "https://www.fuzer.me/",
+            configService: configService, client: w, logger: l, p: ps, configData: new ConfigurationDataRecaptchaLogin())
         {
             Encoding = Encoding.GetEncoding("windows-1255");
             Language = "he-il";
@@ -102,12 +97,12 @@ namespace Jackett.Common.Indexers
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
+            var loginPage = await RequestStringWithCookiesAsync(LoginUrl, string.Empty);
             CQ cq = loginPage.Content;
             var captcha = cq.Find(".g-recaptcha"); // invisible recaptcha
             if (captcha.Any())
             {
-                var result = this.configData;
+                var result = configData;
                 result.CookieHeader.Value = loginPage.Cookies;
                 result.Captcha.SiteKey = captcha.Attr("data-sitekey");
                 result.Captcha.Version = "2";
@@ -128,7 +123,6 @@ namespace Jackett.Common.Indexers
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-
             if (!string.IsNullOrWhiteSpace(configData.Captcha.Cookie))
             {
                 CookieHeader = configData.Captcha.Cookie;
@@ -136,10 +130,7 @@ namespace Jackett.Common.Indexers
                 {
                     var results = await PerformQuery(new TorznabQuery());
                     if (results.Count() == 0)
-                    {
                         throw new Exception("Your cookie did not work");
-                    }
-
                     IsConfigured = true;
                     SaveConfig();
                     return IndexerConfigurationStatus.Completed;
@@ -147,117 +138,90 @@ namespace Jackett.Common.Indexers
                 catch (Exception e)
                 {
                     IsConfigured = false;
-                    throw new Exception("Your cookie did not work: " + e.Message);
+                    throw new Exception($"Your cookie did not work: {e.Message}");
                 }
             }
 
-            var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
-
-            var pairs = new Dictionary<string, string> {
-                { "vb_login_username", configData.Username.Value },
-                { "vb_login_password", "" },
-                { "securitytoken", "guest" },
-                { "do","login"},
-                { "vb_login_md5password", StringUtil.Hash(configData.Password.Value).ToLower()},
-                { "vb_login_md5password_utf", StringUtil.Hash(configData.Password.Value).ToLower()},
-                { "cookieuser", "1" }
-            };
-
-            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, null, LoginUrl);
-
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("images/loading.gif"), () =>
+            var loginPage = await RequestStringWithCookiesAsync(LoginUrl, string.Empty);
+            var pairs = new Dictionary<string, string>
             {
-                var errorMessage = "Couldn't login";
-                throw new ExceptionWithConfigData(errorMessage, configData);
-            });
+                {"vb_login_username", configData.Username.Value},
+                {"vb_login_password", ""},
+                {"securitytoken", "guest"},
+                {"do", "login"},
+                {"vb_login_md5password", StringUtil.Hash(configData.Password.Value).ToLower()},
+                {"vb_login_md5password_utf", StringUtil.Hash(configData.Password.Value).ToLower()},
+                {"cookieuser", "1"}
+            };
+            var result = await RequestLoginAndFollowRedirectAsync(LoginUrl, pairs, loginPage.Cookies, true, null, LoginUrl);
+            await ConfigureIfOkAsync(
+                result.Cookies, result.Content?.Contains("images/loading.gif") == true, () =>
+                {
+                    var errorMessage = "Couldn't login";
+                    throw new ExceptionWithConfigData(errorMessage, configData);
+                });
             Thread.Sleep(2);
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            var results = await performRegularQuery(query);
-            if (results.Count() == 0 && !query.IsImdbQuery)
-            {
-                return await performHebrewQuery(query);
-            }
-
-            return results;
+            var results = await PerformRegularQueryAsync(query);
+            return results.Count() == 0 && !query.IsImdbQuery ? await PerformHebrewQueryAsync(query) : results;
         }
 
-        private async Task<IEnumerable<ReleaseInfo>> performHebrewQuery(TorznabQuery query)
+        private async Task<IEnumerable<ReleaseInfo>> PerformHebrewQueryAsync(TorznabQuery query)
         {
-            var name = await getHebName(query.SearchTerm);
-
-            if (string.IsNullOrEmpty(name))
-            {
-                return new List<ReleaseInfo>();
-            }
-            else
-            {
-                return await performRegularQuery(query, name);
-            }
+            var name = await GetHebNameAsync(query.SearchTerm);
+            return string.IsNullOrEmpty(name) ? new List<ReleaseInfo>() : await PerformRegularQueryAsync(query, name);
         }
 
-        private async Task<IEnumerable<ReleaseInfo>> performRegularQuery(TorznabQuery query, string hebName = null)
+        private async Task<IEnumerable<ReleaseInfo>> PerformRegularQueryAsync(TorznabQuery query, string hebName = null)
         {
             var releases = new List<ReleaseInfo>();
-            var searchurls = new List<string>();
             var searchUrl = SearchUrl;
-            var queryCollection = new NameValueCollection();
             var searchString = query.GetQueryString();
             if (query.IsImdbQuery)
                 searchString = query.ImdbID;
-
             if (hebName != null)
-            {
-                searchString = hebName + " - עונה " + query.Season + " פרק " + query.Episode;
-            }
+                searchString = $"{hebName} - עונה {query.Season} פרק {query.Episode}";
             searchUrl += "?";
             if (!string.IsNullOrWhiteSpace(searchString))
             {
                 var strEncoded = WebUtilityHelpers.UrlEncode(searchString, Encoding);
-                searchUrl += "&query=" + strEncoded + "&matchquery=any";
+                searchUrl += $"&query={strEncoded}&matchquery=any";
             }
 
             foreach (var cat in MapTorznabCapsToTrackers(query))
-            {
-                searchUrl += "&c[]=" + cat;
-            }
-
-            var data = await RequestStringWithCookiesAndRetry(searchUrl);
+                searchUrl += $"&c[]={cat}";
+            var data = await RequestStringWithCookiesAndRetryAsync(searchUrl);
             try
             {
                 CQ dom = data.Content;
                 var rows = dom["tr.box_torrent"];
                 foreach (var row in rows)
                 {
-                    CQ qRow = row.Cq();
-
+                    var qRow = row.Cq();
                     var release = new ReleaseInfo();
-                    var main_title_link = qRow.Find("div.main_title > a");
-                    release.Title = main_title_link.Attr("longtitle");
+                    var mainTitleLink = qRow.Find("div.main_title > a");
+                    release.Title = mainTitleLink.Attr("longtitle");
                     if (release.Title.IsNullOrEmptyOrWhitespace())
-                        release.Title = main_title_link.Text();
-
+                        release.Title = mainTitleLink.Text();
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800; // 48 hours
-
-                    int seeders, peers;
-                    if (ParseUtil.TryCoerceInt(qRow.Find("td:nth-child(7) > div").Text(), out seeders))
+                    if (ParseUtil.TryCoerceInt(qRow.Find("td:nth-child(7) > div").Text(), out var seeders))
                     {
                         release.Seeders = seeders;
-                        if (ParseUtil.TryCoerceInt(qRow.Find("td:nth-child(8) > div").Text(), out peers))
-                        {
+                        if (ParseUtil.TryCoerceInt(qRow.Find("td:nth-child(8) > div").Text(), out var peers))
                             release.Peers = peers + release.Seeders;
-                        }
                     }
+
                     release.Grabs = ParseUtil.CoerceLong(qRow.Find("td:nth-child(5)").Text().Replace(",", ""));
                     release.Seeders = ParseUtil.CoerceInt(qRow.Find("td:nth-child(6)").Text().Replace(",", ""));
-                    release.Peers = ParseUtil.CoerceInt(qRow.Find("td:nth-child(7)").Text().Replace(",", "")) + release.Seeders;
-                    string fullSize = qRow.Find("td:nth-child(4)").Text();
+                    release.Peers = ParseUtil.CoerceInt(qRow.Find("td:nth-child(7)").Text().Replace(",", "")) +
+                                    release.Seeders;
+                    var fullSize = qRow.Find("td:nth-child(4)").Text();
                     release.Size = ReleaseInfo.GetBytes(fullSize);
-
                     release.Comments = new Uri(SiteLink + qRow.Find("a.threadlink[href]").Attr("href"));
                     release.Link = new Uri(SiteLink + qRow.Find("a:has(div.dlimg)").Attr("href"));
                     release.Guid = release.Comments;
@@ -272,26 +236,18 @@ namespace Jackett.Common.Indexers
 
                     var dateStringAll = qRow.Find("div.up_info2")[0].ChildNodes.Last().ToString();
                     var dateParts = dateStringAll.Split(' ');
-                    string dateString = dateParts[dateParts.Length - 2] + " " + dateParts[dateParts.Length - 1];
+                    var dateString = $"{dateParts[dateParts.Length - 2]} {dateParts[dateParts.Length - 1]}";
                     release.PublishDate = DateTime.ParseExact(dateString, "dd/MM/yy HH:mm", CultureInfo.InvariantCulture);
-
-                    string categoryLink = qRow.Find("a[href^=\"/browse.php?cat=\"]").Attr("href");
+                    var categoryLink = qRow.Find("a[href^=\"/browse.php?cat=\"]").Attr("href");
                     var catid = ParseUtil.GetArgumentFromQueryString(categoryLink, "cat");
                     release.Category = MapTrackerCatToNewznab(catid);
-
-                    if (qRow.Find("a[href^=\"?freeleech=1\"]").Length >= 1)
-                        release.DownloadVolumeFactor = 0;
-                    else
-                        release.DownloadVolumeFactor = 1;
-
+                    release.DownloadVolumeFactor = qRow.Find("a[href^=\"?freeleech=1\"]").Length >= 1 ? 0 : 1;
                     release.UploadVolumeFactor = 1;
-
-                    var sub_title = qRow.Find("div.sub_title");
-                    var imdb_link = sub_title.Find("span.imdb-inline > a");
-                    release.Imdb = ParseUtil.GetLongFromString(imdb_link.Attr("href"));
-                    sub_title.Find("span.imdb-inline").Remove();
-                    release.Description = sub_title.Text();
-
+                    var subTitle = qRow.Find("div.sub_title");
+                    var imdbLink = subTitle.Find("span.imdb-inline > a");
+                    release.Imdb = ParseUtil.GetLongFromString(imdbLink.Attr("href"));
+                    subTitle.Find("span.imdb-inline").Remove();
+                    release.Description = subTitle.Text();
                     releases.Add(release);
                 }
             }
@@ -303,19 +259,15 @@ namespace Jackett.Common.Indexers
             return releases;
         }
 
-        private async Task<string> getHebName(string searchTerm)
+        private async Task<string> GetHebNameAsync(string searchTerm)
         {
             const string site = "http://thetvdb.com";
-            var url = site + "/index.php?searchseriesid=&tab=listseries&function=Search&";
-            url += "string=" + searchTerm; // eretz + nehedert
-
-            var results = await RequestStringWithCookies(url);
-
+            var url = $"{site}/index.php?searchseriesid=&tab=listseries&function=Search&";
+            url += $"string={searchTerm}"; // eretz + nehedert
+            var results = await RequestStringWithCookiesAsync(url);
             CQ dom = results.Content;
-
-            int rowCount = 0;
+            var rowCount = 0;
             var rows = dom["#listtable > tbody > tr"];
-
             foreach (var row in rows)
             {
                 if (rowCount < 1)
@@ -324,16 +276,15 @@ namespace Jackett.Common.Indexers
                     continue;
                 }
 
-                CQ qRow = row.Cq();
-                CQ link = qRow.Find("td:nth-child(1) > a");
+                var qRow = row.Cq();
+                var link = qRow.Find("td:nth-child(1) > a");
                 if (link.Text().Trim().ToLower() == searchTerm.Trim().ToLower())
                 {
                     var address = link.Attr("href");
-                    if (string.IsNullOrEmpty(address)) { continue; }
-
+                    if (string.IsNullOrEmpty(address))
+                        continue;
                     var realAddress = site + address.Replace("lid=7", "lid=24");
-                    var realData = await RequestStringWithCookies(realAddress);
-
+                    var realData = await RequestStringWithCookiesAsync(realAddress);
                     CQ realDom = realData.Content;
                     return realDom["#content:nth-child(1) > h1"].Text();
                 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -18,32 +18,24 @@ namespace Jackett.Common.Indexers
 {
     public class Superbits : BaseWebIndexer
     {
-        private string SearchUrl { get { return SiteLink + "api/v1/torrents"; } }
-        private string LoginUrl { get { return SiteLink + "api/v1/auth"; } }
+        private string SearchUrl => $"{SiteLink}api/v1/torrents";
+        private string LoginUrl => $"{SiteLink}api/v1/auth";
 
         private new ConfigurationDataCookie configData
         {
-            get { return (ConfigurationDataCookie)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataCookie)base.configData;
+            set => base.configData = value;
         }
 
-        public Superbits(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
-            : base(name: "Superbits",
-                description: "SuperBits is a SWEDISH Private Torrent Tracker for MOVIES / TV / GENERAL",
-                link: "https://superbits.org/",
-                caps: new TorznabCapabilities(),
-                configService: configService,
-                client: w,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataCookie())
+        public Superbits(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps) : base(
+            "Superbits", description: "SuperBits is a SWEDISH Private Torrent Tracker for MOVIES / TV / GENERAL",
+            link: "https://superbits.org/", caps: new TorznabCapabilities(), configService: configService, client: w,
+            logger: l, p: ps, configData: new ConfigurationDataCookie())
         {
             Encoding = Encoding.UTF8;
             Language = "sv-sw";
             Type = "private";
-
             TorznabCaps.SupportsImdbMovieSearch = true;
-
             AddCategoryMapping(1, TorznabCatType.MoviesDVD, "DVD-R Swesub");
             AddCategoryMapping(2, TorznabCatType.TV, "DVD-R TV");
             AddCategoryMapping(3, TorznabCatType.BooksEbook, "eBok");
@@ -80,10 +72,7 @@ namespace Jackett.Common.Indexers
             {
                 var results = await PerformQuery(new TorznabQuery());
                 if (results.Count() == 0)
-                {
                     throw new Exception("Your cookie did not work");
-                }
-
                 IsConfigured = true;
                 SaveConfig();
                 return IndexerConfigurationStatus.Completed;
@@ -91,17 +80,16 @@ namespace Jackett.Common.Indexers
             catch (Exception e)
             {
                 IsConfigured = false;
-                throw new Exception("Your cookie did not work: " + e.Message);
+                throw new Exception($"Your cookie did not work: {e.Message}");
             }
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            List<ReleaseInfo> releases = new List<ReleaseInfo>();
+            var releases = new List<ReleaseInfo>();
             var queryCollection = new NameValueCollection();
             var searchString = query.GetQueryString();
             var searchUrl = SearchUrl;
-
             queryCollection.Add("extendedSearch", "false");
             queryCollection.Add("freeleech", "false");
             queryCollection.Add("index", "0");
@@ -118,22 +106,19 @@ namespace Jackett.Common.Indexers
             queryCollection.Add("sweaudio", "false");
             queryCollection.Add("swesub", "false");
             queryCollection.Add("watchview", "false");
-
-            searchUrl += "?" + queryCollection.GetQueryString();
+            searchUrl += $"?{queryCollection.GetQueryString()}";
             foreach (var cat in MapTorznabCapsToTrackers(query))
-                searchUrl += "&categories[]=" + cat;
-            var results = await RequestStringWithCookies(searchUrl, null, SiteLink);
-
+                searchUrl += $"&categories[]={cat}";
+            var results = await RequestStringWithCookiesAsync(searchUrl, null, SiteLink);
             try
             {
                 //var json = JArray.Parse(results.Content);
-                dynamic json = JsonConvert.DeserializeObject<dynamic>(results.Content);
-                foreach (var row in json ?? System.Linq.Enumerable.Empty<dynamic>())
+                var json = JsonConvert.DeserializeObject<dynamic>(results.Content);
+                foreach (var row in json ?? Enumerable.Empty<dynamic>())
                 {
                     var release = new ReleaseInfo();
                     var descriptions = new List<string>();
                     var tags = new List<string>();
-
                     release.MinimumRatio = 1.1;
                     release.MinimumSeedTime = 172800; // 48 hours
                     release.Title = row.name;
@@ -141,23 +126,17 @@ namespace Jackett.Common.Indexers
                     release.Size = row.size;
                     release.Seeders = row.seeders;
                     release.Peers = row.leechers + release.Seeders;
-                    release.PublishDate = DateTime.ParseExact(row.added.ToString() + " +01:00", "yyyy-MM-dd HH:mm:ss zzz", CultureInfo.InvariantCulture);
+                    release.PublishDate = DateTime.ParseExact(
+                        row.added.ToString() + " +01:00", "yyyy-MM-dd HH:mm:ss zzz", CultureInfo.InvariantCulture);
                     release.Files = row.numfiles;
                     release.Grabs = row.times_completed;
-
-                    release.Comments = new Uri(SiteLink + "torrent/" + row.id.ToString() + "/");
+                    release.Comments = new Uri($"{SiteLink}torrent/" + row.id.ToString() + "/");
                     release.Guid = release.Comments;
-                    release.Link = new Uri(SiteLink + "api/v1/torrents/download/" + row.id.ToString());
-
-                    if (row.frileech == 1)
-                        release.DownloadVolumeFactor = 0;
-                    else
-                        release.DownloadVolumeFactor = 1;
+                    release.Link = new Uri($"{SiteLink}api/v1/torrents/download/" + row.id.ToString());
+                    release.DownloadVolumeFactor = row.frileech == 1 ? 0 : 1;
                     release.UploadVolumeFactor = 1;
-
                     if (!string.IsNullOrWhiteSpace(row.customcover.ToString()))
                         release.BannerUrl = new Uri(SiteLink + row.customcover);
-
                     if (row.imdbid2 != null && row.imdbid2.ToString().StartsWith("tt"))
                     {
                         release.Imdb = ParseUtil.CoerceLong(row.imdbid2.ToString().Substring(2));
@@ -168,8 +147,7 @@ namespace Jackett.Common.Indexers
                         descriptions.Add("Cast: " + row.cast);
                         descriptions.Add("Rating: " + row.rating);
                         descriptions.Add("Plot: " + row.plot);
-
-                        release.BannerUrl = new Uri(SiteLink + "img/imdb/" + row.imdbid2 + ".jpg");
+                        release.BannerUrl = new Uri($"{SiteLink}img/imdb/" + row.imdbid2 + ".jpg");
                     }
 
                     if ((int)row.p2p == 1)
@@ -182,18 +160,13 @@ namespace Jackett.Common.Indexers
                         tags.Add("Swedish audio");
                     if ((int)row.swesub != 0)
                         tags.Add("Swedish subtitles");
-
                     if (tags.Count > 0)
-                        descriptions.Add("Tags: " + string.Join(", ", tags));
-
+                        descriptions.Add($"Tags: {string.Join(", ", tags)}");
                     var preDate = row.preDate.ToString();
                     if (!string.IsNullOrWhiteSpace(preDate) && preDate != "1970-01-01 01:00:00")
                         descriptions.Add("PRE: " + preDate);
-
                     descriptions.Add("Section: " + row.section);
-
                     release.Description = string.Join("<br>\n", descriptions);
-
                     releases.Add(release);
                 }
             }

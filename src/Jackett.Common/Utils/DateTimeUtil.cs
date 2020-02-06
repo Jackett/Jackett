@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
@@ -10,15 +10,15 @@ namespace Jackett.Common.Utils
 
         public static DateTime UnixTimestampToDateTime(long unixTime)
         {
-            DateTime dt = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+            var dt = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
             dt = dt.AddSeconds(unixTime).ToLocalTime();
             return dt;
         }
 
         public static DateTime UnixTimestampToDateTime(double unixTime)
         {
-            DateTime unixStart = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
-            long unixTimeStampInTicks = (long)(unixTime * TimeSpan.TicksPerSecond);
+            var unixStart = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            var unixTimeStampInTicks = (long)(unixTime * TimeSpan.TicksPerSecond);
             return new DateTime(unixStart.Ticks + unixTimeStampInTicks);
         }
 
@@ -35,33 +35,25 @@ namespace Jackett.Common.Utils
         {
             str = str.ToLowerInvariant();
             if (str.Contains("now"))
-            {
                 return DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Local);
-            }
-
             str = str.Replace(",", "");
             str = str.Replace("ago", "");
             str = str.Replace("and", "");
-
-            TimeSpan timeAgo = TimeSpan.Zero;
-            Regex TimeagoRegex = new Regex(@"\s*?([\d\.]+)\s*?([^\d\s\.]+)\s*?");
-            var TimeagoMatches = TimeagoRegex.Match(str);
-
-            while (TimeagoMatches.Success)
+            var timeAgo = TimeSpan.Zero;
+            var timeagoRegex = new Regex(@"\s*?([\d\.]+)\s*?([^\d\s\.]+)\s*?");
+            var timeagoMatches = timeagoRegex.Match(str);
+            while (timeagoMatches.Success)
             {
-                string expanded = string.Empty;
-
-                var val = ParseUtil.CoerceFloat(TimeagoMatches.Groups[1].Value);
-                var unit = TimeagoMatches.Groups[2].Value;
-                TimeagoMatches = TimeagoMatches.NextMatch();
-
+                var val = ParseUtil.CoerceFloat(timeagoMatches.Groups[1].Value);
+                var unit = timeagoMatches.Groups[2].Value;
+                timeagoMatches = timeagoMatches.NextMatch();
                 if (unit.Contains("sec") || unit == "s")
                     timeAgo += TimeSpan.FromSeconds(val);
                 else if (unit.Contains("min") || unit == "m")
                     timeAgo += TimeSpan.FromMinutes(val);
                 else if (unit.Contains("hour") || unit.Contains("hr") || unit == "h")
                     timeAgo += TimeSpan.FromHours(val);
-                else if (unit.Contains("day") ||unit == "d")
+                else if (unit.Contains("day") || unit == "d")
                     timeAgo += TimeSpan.FromDays(val);
                 else if (unit.Contains("week") || unit.Contains("wk") || unit == "w")
                     timeAgo += TimeSpan.FromDays(val * 7);
@@ -70,9 +62,7 @@ namespace Jackett.Common.Utils
                 else if (unit.Contains("year") || unit == "y")
                     timeAgo += TimeSpan.FromDays(val * 365);
                 else
-                {
-                    throw new Exception("TimeAgo parsing failed, unknown unit: "+unit);
-                }
+                    throw new Exception($"TimeAgo parsing failed, unknown unit: {unit}");
             }
 
             return DateTime.SpecifyKind(DateTime.Now - timeAgo, DateTimeKind.Local);
@@ -82,13 +72,12 @@ namespace Jackett.Common.Utils
         {
             if (string.IsNullOrWhiteSpace(time))
                 return TimeSpan.Zero;
-
-            TimeSpan offset = TimeSpan.Zero;
+            var offset = TimeSpan.Zero;
             if (time.EndsWith("AM"))
             {
                 time = time.Substring(0, time.Length - 2);
-                if(time.StartsWith("12")) // 12:15 AM becomes 00:15
-                    time = "00" + time.Substring(2);
+                if (time.StartsWith("12")) // 12:15 AM becomes 00:15
+                    time = $"00{time.Substring(2)}";
             }
             else if (time.EndsWith("PM"))
             {
@@ -105,17 +94,12 @@ namespace Jackett.Common.Utils
         // http://www.codeproject.com/Articles/33298/C-Date-Time-Parser
         public static DateTime FromFuzzyTime(string str, string format = null)
         {
-            DateTimeRoutines.DateTimeRoutines.DateTimeFormat dt_format = DateTimeRoutines.DateTimeRoutines.DateTimeFormat.USA_DATE;
+            var dtFormat = DateTimeRoutines.DateTimeRoutines.DateTimeFormat.UsaDate;
             if (format == "UK")
-            {
-                dt_format = DateTimeRoutines.DateTimeRoutines.DateTimeFormat.UK_DATE;
-            }
-
-            DateTimeRoutines.DateTimeRoutines.ParsedDateTime dt;
-            if (DateTimeRoutines.DateTimeRoutines.TryParseDateOrTime(str, dt_format, out dt))
-            {
+                dtFormat = DateTimeRoutines.DateTimeRoutines.DateTimeFormat.UkDate;
+            if (DateTimeRoutines.DateTimeRoutines.TryParseDateOrTime(
+                str, dtFormat, out DateTimeRoutines.DateTimeRoutines.ParsedDateTime dt))
                 return dt.DateTime;
-            }
             throw new Exception("FromFuzzyTime parsing failed");
         }
 
@@ -123,20 +107,23 @@ namespace Jackett.Common.Utils
         public static Regex todayRegexp = new Regex(@"(?i)\btoday([\s,]*|$)", RegexOptions.Compiled);
         public static Regex tomorrowRegexp = new Regex(@"(?i)\btomorrow([\s,]*|$)", RegexOptions.Compiled);
         public static Regex yesterdayRegexp = new Regex(@"(?i)\byesterday([\s,]*|$)", RegexOptions.Compiled);
-        public static Regex daysOfWeekRegexp = new Regex(@"(?i)\b(monday|tuesday|wednesday|thursday|friday|saturday|sunday)\s+at\s+", RegexOptions.Compiled);
+
+        public static Regex daysOfWeekRegexp = new Regex(
+            @"(?i)\b(monday|tuesday|wednesday|thursday|friday|saturday|sunday)\s+at\s+", RegexOptions.Compiled);
+
         public static Regex missingYearRegexp = new Regex(@"^(\d{1,2}-\d{1,2})(\s|$)", RegexOptions.Compiled);
-        public static Regex missingYearRegexp2 = new Regex(@"^(\d{1,2}\s+\w{3})\s+(\d{1,2}\:\d{1,2}.*)$", RegexOptions.Compiled); // 1 Jan 10:30
+
+        public static Regex missingYearRegexp2 = new Regex(
+            @"^(\d{1,2}\s+\w{3})\s+(\d{1,2}\:\d{1,2}.*)$", RegexOptions.Compiled); // 1 Jan 10:30
 
         public static DateTime FromUnknown(string str, string format = null)
         {
-            try {
+            try
+            {
                 str = ParseUtil.NormalizeSpace(str);
                 Match match;
-
-                if(str.ToLower().Contains("now"))
-                {
+                if (str.ToLower().Contains("now"))
                     return DateTime.UtcNow;
-                }
 
                 // ... ago
                 match = timeAgoRegexp.Match(str);
@@ -151,7 +138,7 @@ namespace Jackett.Common.Utils
                 if (match.Success)
                 {
                     var time = str.Replace(match.Groups[0].Value, "");
-                    DateTime dt = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified);
+                    var dt = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified);
                     dt += ParseTimeSpan(time);
                     return dt;
                 }
@@ -161,7 +148,7 @@ namespace Jackett.Common.Utils
                 if (match.Success)
                 {
                     var time = str.Replace(match.Groups[0].Value, "");
-                    DateTime dt = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified);
+                    var dt = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified);
                     dt += ParseTimeSpan(time);
                     dt -= TimeSpan.FromDays(1);
                     return dt;
@@ -172,7 +159,7 @@ namespace Jackett.Common.Utils
                 if (match.Success)
                 {
                     var time = str.Replace(match.Groups[0].Value, "");
-                    DateTime dt = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified);
+                    var dt = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified);
                     dt += ParseTimeSpan(time);
                     dt += TimeSpan.FromDays(1);
                     return dt;
@@ -183,26 +170,22 @@ namespace Jackett.Common.Utils
                 if (match.Success)
                 {
                     var time = str.Replace(match.Groups[0].Value, "");
-                    DateTime dt = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified);
+                    var dt = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified);
                     dt += ParseTimeSpan(time);
-
                     var dow = DayOfWeek.Monday;
                     var groupMatchLower = match.Groups[1].Value.ToLower();
-                    if (groupMatchLower.StartsWith("monday")) 
+                    if (groupMatchLower.StartsWith("monday"))
                         dow = DayOfWeek.Monday;
-                    else if (groupMatchLower.StartsWith("tuesday")) 
+                    else if (groupMatchLower.StartsWith("tuesday"))
                         dow = DayOfWeek.Tuesday;
-                    else if (groupMatchLower.StartsWith("wednesday")) 
+                    else if (groupMatchLower.StartsWith("wednesday"))
                         dow = DayOfWeek.Wednesday;
-                    else if (groupMatchLower.StartsWith("thursday")) 
-                        dow = DayOfWeek.Thursday;
-                    else if (groupMatchLower.StartsWith("friday")) 
-                        dow = DayOfWeek.Friday;
-                    else if (groupMatchLower.StartsWith("saturday")) 
-                        dow = DayOfWeek.Saturday;
-                    else 
-                        dow = DayOfWeek.Sunday;
-
+                    else
+                        dow = groupMatchLower.StartsWith("thursday")
+                       ? DayOfWeek.Thursday
+                       : groupMatchLower.StartsWith("friday")
+                       ? DayOfWeek.Friday
+                       : groupMatchLower.StartsWith("saturday") ? DayOfWeek.Saturday : DayOfWeek.Sunday;
                     while (dt.DayOfWeek != dow)
                         dt = dt.AddDays(-1);
                     return dt;
@@ -224,7 +207,7 @@ namespace Jackett.Common.Utils
                 if (match.Success)
                 {
                     var date = match.Groups[1].Value;
-                    string newDate = DateTime.Now.Year.ToString()+ "-"+date;
+                    var newDate = $"{DateTime.Now.Year}-{date}";
                     str = str.Replace(date, newDate);
                 }
 
@@ -234,14 +217,14 @@ namespace Jackett.Common.Utils
                 {
                     var date = match.Groups[1].Value;
                     var time = match.Groups[2].Value;
-                    str = date + " " + DateTime.Now.Year.ToString() + " " + time;
+                    str = $"{date} {DateTime.Now.Year} {time}";
                 }
 
                 return FromFuzzyTime(str, format);
             }
             catch (Exception ex)
             {
-                throw new Exception(string.Format("DateTime parsing failed for \"{0}\": {1}", str, ex.ToString()));
+                throw new Exception(string.Format("DateTime parsing failed for \"{0}\": {1}", str, ex));
             }
         }
 
@@ -269,14 +252,11 @@ namespace Jackett.Common.Utils
 
             // hours/minutes/seconds
             pattern = pattern.Replace("05", "ss");
-
             pattern = pattern.Replace("15", "HH");
             pattern = pattern.Replace("03", "hh");
             pattern = pattern.Replace("3", "h");
-
             pattern = pattern.Replace("04", "mm");
             pattern = pattern.Replace("4", "m");
-
             pattern = pattern.Replace("5", "s");
 
             // month again
@@ -287,7 +267,6 @@ namespace Jackett.Common.Utils
             pattern = pattern.Replace(".000", "fff");
             pattern = pattern.Replace(".00", "ff");
             pattern = pattern.Replace(".0", "f");
-
             pattern = pattern.Replace(".9999", "FFFF");
             pattern = pattern.Replace(".999", "FFF");
             pattern = pattern.Replace(".99", "FF");
@@ -311,14 +290,16 @@ namespace Jackett.Common.Utils
             pattern = pattern.Replace("-07:00", "zzz");
             //pattern = pattern.Replace("-0700", "zz");
             pattern = pattern.Replace("-07", "zz");
-
             try
             {
                 return DateTime.ParseExact(date, pattern, CultureInfo.InvariantCulture);
             }
             catch (FormatException ex)
             {
-                throw new FormatException(string.Format("Error while parsing DateTime \"{0}\", using layout \"{1}\" ({2}): {3}", date, layout, pattern, ex.Message));
+                throw new FormatException(
+                    string.Format(
+                        "Error while parsing DateTime \"{0}\", using layout \"{1}\" ({2}): {3}", date, layout, pattern,
+                        ex.Message));
             }
         }
     }

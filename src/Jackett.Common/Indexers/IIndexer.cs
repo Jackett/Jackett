@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,10 +13,10 @@ namespace Jackett.Common.Indexers
         public IIndexer Indexer { get; set; }
         public IEnumerable<ReleaseInfo> Releases { get; set; }
 
-        public IndexerResult(IIndexer Indexer, IEnumerable<ReleaseInfo> Releases)
+        public IndexerResult(IIndexer indexer, IEnumerable<ReleaseInfo> releases)
         {
-            this.Indexer = Indexer;
-            this.Releases = Releases;
+            Indexer = indexer;
+            Releases = releases;
         }
     }
 

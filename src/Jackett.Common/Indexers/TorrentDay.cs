@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,15 +18,17 @@ namespace Jackett.Common.Indexers
 {
     public class TorrentDay : BaseWebIndexer
     {
-        private string StartPageUrl { get { return SiteLink + "login.php"; } }
-        private string LoginUrl { get { return SiteLink + "tak3login.php"; } }
-        private string SearchUrl { get { return SiteLink + "t.json"; } }
+        private string StartPageUrl => $"{SiteLink}login.php";
+        private string LoginUrl => $"{SiteLink}tak3login.php";
+        private string SearchUrl => $"{SiteLink}t.json";
 
-        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
-            "https://torrentday.com/",
+        public override string[] LegacySiteLinks { get; protected set; } =
+        {
+            "https://torrentday.com/"
         };
 
-        public override string[] AlternativeSiteLinks { get; protected set; } = new string[] {
+        public override string[] AlternativeSiteLinks { get; protected set; } =
+        {
             "https://tday.love/",
             "https://torrentday.cool/",
             "https://tdonline.org/",
@@ -42,33 +44,27 @@ namespace Jackett.Common.Indexers
             "https://td.findnemo.net/",
             "https://td.getcrazy.me/",
             "https://td.venom.global/",
-            "https://td.workisboring.net/",
+            "https://td.workisboring.net/"
         };
 
         private new ConfigurationDataRecaptchaLogin configData
         {
-            get { return (ConfigurationDataRecaptchaLogin)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataRecaptchaLogin)base.configData;
+            set => base.configData = value;
         }
 
-        public TorrentDay(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "TorrentDay",
-                description: "TorrentDay (TD) is a Private site for TV / MOVIES / GENERAL",
-                link: "https://tday.love/",
-                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                configService: configService,
-                client: wc,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataRecaptchaLogin("Make sure you get the cookies from the same torrent day domain as configured above."))
+        public TorrentDay(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps) : base(
+            "TorrentDay", description: "TorrentDay (TD) is a Private site for TV / MOVIES / GENERAL",
+            link: "https://tday.love/", caps: TorznabUtil.CreateDefaultTorznabTVCaps(), configService: configService,
+            client: wc, logger: l, p: ps,
+            configData: new ConfigurationDataRecaptchaLogin(
+                "Make sure you get the cookies from the same torrent day domain as configured above."))
         {
             wc.EmulateBrowser = false;
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
-
             TorznabCaps.SupportsImdbMovieSearch = true;
-
             AddCategoryMapping(29, TorznabCatType.TVAnime, "Anime");
             AddCategoryMapping(28, TorznabCatType.PC, "Appz/Packs");
             AddCategoryMapping(42, TorznabCatType.AudioAudiobook, "Audio Books");
@@ -76,7 +72,6 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(30, TorznabCatType.TVDocumentary, "Documentary");
             AddCategoryMapping(47, TorznabCatType.Other, "Fonts");
             AddCategoryMapping(43, TorznabCatType.PCMac, "Mac");
-
             AddCategoryMapping(96, TorznabCatType.MoviesUHD, "Movie/4K");
             AddCategoryMapping(25, TorznabCatType.MoviesSD, "Movies/480p");
             AddCategoryMapping(11, TorznabCatType.MoviesBluRay, "Movies/Bluray");
@@ -88,21 +83,17 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(44, TorznabCatType.MoviesSD, "Movies/SD/x264");
             AddCategoryMapping(48, TorznabCatType.Movies, "Movies/x265");
             AddCategoryMapping(1, TorznabCatType.MoviesSD, "Movies/XviD");
-
             AddCategoryMapping(17, TorznabCatType.AudioMP3, "Music/Audio");
             AddCategoryMapping(23, TorznabCatType.AudioForeign, "Music/Non-English");
             AddCategoryMapping(41, TorznabCatType.Audio, "Music/Packs");
             AddCategoryMapping(16, TorznabCatType.AudioVideo, "Music/Video");
             AddCategoryMapping(27, TorznabCatType.Audio, "Music/Flac");
-            
             AddCategoryMapping(45, TorznabCatType.AudioOther, "Podcast");
-
             AddCategoryMapping(4, TorznabCatType.PCGames, "PC/Games");
             AddCategoryMapping(18, TorznabCatType.ConsolePS3, "PS3");
             AddCategoryMapping(8, TorznabCatType.ConsolePSP, "PSP");
             AddCategoryMapping(10, TorznabCatType.ConsoleWii, "Wii");
             AddCategoryMapping(9, TorznabCatType.ConsoleXbox360, "Xbox-360");
-
             AddCategoryMapping(24, TorznabCatType.TVSD, "TV/480p");
             AddCategoryMapping(32, TorznabCatType.TVHD, "TV/Bluray");
             AddCategoryMapping(31, TorznabCatType.TVSD, "TV/DVD-R");
@@ -113,21 +104,20 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(7, TorznabCatType.TVHD, "TV/x264");
             AddCategoryMapping(34, TorznabCatType.TVUHD, "TV/x265");
             AddCategoryMapping(2, TorznabCatType.TVSD, "TV/XviD");
-
             AddCategoryMapping(6, TorznabCatType.XXX, "XXX/Movies");
             AddCategoryMapping(15, TorznabCatType.XXXPacks, "XXX/Packs");
         }
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var loginPage = await RequestStringWithCookies(StartPageUrl, string.Empty);
+            var loginPage = await RequestStringWithCookiesAsync(StartPageUrl, string.Empty);
             if (loginPage.IsRedirect)
-                loginPage = await RequestStringWithCookies(loginPage.RedirectingTo, string.Empty);
+                loginPage = await RequestStringWithCookiesAsync(loginPage.RedirectingTo, string.Empty);
             if (loginPage.IsRedirect)
-                loginPage = await RequestStringWithCookies(loginPage.RedirectingTo, string.Empty);
+                loginPage = await RequestStringWithCookiesAsync(loginPage.RedirectingTo, string.Empty);
             CQ cq = loginPage.Content;
-            var result = this.configData;
-            
+            var result = configData;
+
             //result.CookieHeader.Value = loginPage.Cookies;
             UpdateCookieHeader(loginPage.Cookies); // update cookies instead of replacing them, see #3717
             result.Captcha.SiteKey = cq.Find(".g-recaptcha").Attr("data-sitekey");
@@ -138,12 +128,12 @@ namespace Jackett.Common.Indexers
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-            var pairs = new Dictionary<string, string> {
-                { "username", configData.Username.Value },
-                { "password", configData.Password.Value },
-                { "g-recaptcha-response", configData.Captcha.Value }
+            var pairs = new Dictionary<string, string>
+            {
+                {"username", configData.Username.Value},
+                {"password", configData.Password.Value},
+                {"g-recaptcha-response", configData.Captcha.Value}
             };
-
             if (!string.IsNullOrWhiteSpace(configData.Captcha.Cookie))
             {
                 // Cookie was manually supplied
@@ -152,10 +142,7 @@ namespace Jackett.Common.Indexers
                 {
                     var results = await PerformQuery(new TorznabQuery());
                     if (results.Count() == 0)
-                    {
                         throw new Exception("no results found, please report this bug");
-                    }
-
                     IsConfigured = true;
                     SaveConfig();
                     return IndexerConfigurationStatus.Completed;
@@ -163,30 +150,26 @@ namespace Jackett.Common.Indexers
                 catch (Exception e)
                 {
                     IsConfigured = false;
-                    throw new Exception("Your cookie did not work: " + e.Message);
+                    throw new Exception($"Your cookie did not work: {e.Message}");
                 }
             }
 
-            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, configData.CookieHeader.Value, true, null, LoginUrl);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
-            {
-                CQ dom = result.Content;
-                var messageEl = dom["#login"];
-                messageEl.Children("form").Remove();
-                var errorMessage = messageEl.Text().Trim();
-
-                if (string.IsNullOrWhiteSpace(errorMessage))
+            var result = await RequestLoginAndFollowRedirectAsync(
+                LoginUrl, pairs, configData.CookieHeader.Value, true, null, LoginUrl);
+            await ConfigureIfOkAsync(
+                result.Cookies, result.Content?.Contains("logout.php") == true, () =>
                 {
-                    errorMessage = dom.Text();
-                }
-
-                if (string.IsNullOrWhiteSpace(errorMessage) && result.IsRedirect)
-                {
-                    errorMessage = string.Format("Got a redirect to {0}, please adjust your the alternative link", result.RedirectingTo);
-                }
-
-                throw new ExceptionWithConfigData(errorMessage, configData);
-            });
+                    CQ dom = result.Content;
+                    var messageEl = dom["#login"];
+                    messageEl.Children("form").Remove();
+                    var errorMessage = messageEl.Text().Trim();
+                    if (string.IsNullOrWhiteSpace(errorMessage))
+                        errorMessage = dom.Text();
+                    if (string.IsNullOrWhiteSpace(errorMessage) && result.IsRedirect)
+                        errorMessage = string.Format(
+                            "Got a redirect to {0}, please adjust your the alternative link", result.RedirectingTo);
+                    throw new ExceptionWithConfigData(errorMessage, configData);
+                });
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
@@ -195,54 +178,44 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();
             var queryUrl = SearchUrl;
-
             var cats = MapTorznabCapsToTrackers(query);
             if (cats.Count == 0)
                 cats = GetAllTrackerCategories();
-
             var catStr = string.Join(";", cats);
-            queryUrl += "?" + catStr;
-
+            queryUrl += $"?{catStr}";
             if (!string.IsNullOrWhiteSpace(query.ImdbID))
-            {
-                queryUrl += ";q=" + query.ImdbID;
-            }
+                queryUrl += $";q={query.ImdbID}";
             else
-            {
-                queryUrl += ";q=" + WebUtilityHelpers.UrlEncode(searchString, Encoding);
-            }
-
-            var results = await RequestStringWithCookiesAndRetry(queryUrl);
+                queryUrl += $";q={WebUtilityHelpers.UrlEncode(searchString, Encoding)}";
+            var results = await RequestStringWithCookiesAndRetryAsync(queryUrl);
 
             // Check for being logged out
             if (results.IsRedirect)
                 if (results.RedirectingTo.Contains("login.php"))
-                    throw new ExceptionWithConfigData("Login failed, please reconfigure the tracker to update the cookies", configData);
+                    throw new ExceptionWithConfigData(
+                        "Login failed, please reconfigure the tracker to update the cookies", configData);
                 else
-                    throw new ExceptionWithConfigData(string.Format("Got a redirect to {0}, please adjust your the alternative link", results.RedirectingTo), configData);
-
+                    throw new ExceptionWithConfigData(
+                        string.Format(
+                            "Got a redirect to {0}, please adjust your the alternative link", results.RedirectingTo),
+                        configData);
             try
             {
-                dynamic json = JsonConvert.DeserializeObject<dynamic>(results.Content);
-
+                var json = JsonConvert.DeserializeObject<dynamic>(results.Content);
                 foreach (var torrent in json)
                 {
-                    var release = new ReleaseInfo();
-
-                    release.Title = torrent.name;
-                    if ((query.ImdbID == null || !TorznabCaps.SupportsImdbMovieSearch) && !query.MatchQueryStringAND(release.Title))
+                    var release = new ReleaseInfo { Title = torrent.name };
+                    if ((query.ImdbID == null || !TorznabCaps.SupportsImdbMovieSearch) &&
+                        !query.MatchQueryStringAND(release.Title))
                         continue;
-
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800; // 48 hours
                     release.Category = MapTrackerCatToNewznab(torrent.c.ToString());
-                    
-                    var torrentID = (long)torrent.t;
-                    release.Comments = new Uri(SiteLink + "details.php?id=" + torrentID);
+                    var torrentId = (long)torrent.t;
+                    release.Comments = new Uri($"{SiteLink}details.php?id={torrentId}");
                     release.Guid = release.Comments;
-                    release.Link = new Uri(SiteLink + "download.php/" + torrentID + "/"+ torrentID + ".torrent");
+                    release.Link = new Uri($"{SiteLink}download.php/{torrentId}/{torrentId}.torrent");
                     release.PublishDate = DateTimeUtil.UnixTimestampToDateTime((long)torrent.ctime).ToLocalTime();
-
                     release.Size = (long)torrent.size;
                     release.Seeders = (int)torrent.seeders;
                     release.Peers = release.Seeders + (int)torrent.leechers;
@@ -253,7 +226,6 @@ namespace Jackett.Common.Indexers
                     var downloadMultiplier = (double?)torrent["download-multiplier"];
                     release.DownloadVolumeFactor = downloadMultiplier ?? 1;
                     release.UploadVolumeFactor = 1;
-
                     releases.Add(release);
                 }
             }
@@ -261,6 +233,7 @@ namespace Jackett.Common.Indexers
             {
                 OnParseError(results.Content, ex);
             }
+
             return releases;
         }
     }

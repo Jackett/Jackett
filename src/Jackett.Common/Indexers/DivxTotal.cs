@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -9,15 +9,14 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
-
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Newtonsoft.Json.Linq;
 using NLog;
-using WebClient = Jackett.Common.Utils.Clients.WebClient;
 using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
+using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
 namespace Jackett.Common.Indexers
 {
@@ -26,6 +25,7 @@ namespace Jackett.Common.Indexers
     {
         private const int MaxResultsPerPage = 15;
         private const int MaxSearchPageLimit = 3;
+
         private static class DivxTotalCategories
         {
             public static string Peliculas => "peliculas";
@@ -36,6 +36,7 @@ namespace Jackett.Common.Indexers
             public static string Programas => "programas";
             public static string Otros => "otros";
         }
+
         private static class DivxTotalFizeSizes
         {
             public static long Peliculas => 2147483648; // 2 GB
@@ -44,24 +45,16 @@ namespace Jackett.Common.Indexers
             public static long Otros => 524288000; // 500 MB
         }
 
-        public DivxTotal(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
-            : base(name: "DivxTotal",
-                description: "DivxTotal is a SPANISH site for Movies, TV series and Software",
-                link: "https://www.divxtotal.la/",
-                caps: new TorznabCapabilities(),
-                configService: configService,
-                client: w,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationData())
+        public DivxTotal(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps) : base(
+            "DivxTotal", description: "DivxTotal is a SPANISH site for Movies, TV series and Software",
+            link: "https://www.divxtotal.la/", caps: new TorznabCapabilities(), configService: configService, client: w,
+            logger: l, p: ps, configData: new ConfigurationData())
         {
             Encoding = Encoding.UTF8;
             Language = "es-es";
             Type = "public";
-
-            var matchWords = new BoolItem() { Name = "Match words in title", Value = true };
+            var matchWords = new BoolItem { Name = "Match words in title", Value = true };
             configData.AddDynamic("MatchWords", matchWords);
-
             AddCategoryMapping(DivxTotalCategories.Peliculas, TorznabCatType.MoviesSD);
             AddCategoryMapping(DivxTotalCategories.PeliculasHd, TorznabCatType.MoviesSD);
             AddCategoryMapping(DivxTotalCategories.Peliculas3D, TorznabCatType.MoviesHD);
@@ -75,53 +68,47 @@ namespace Jackett.Common.Indexers
         {
             configData.LoadValuesFromJson(configJson);
             var releases = await PerformQuery(new TorznabQuery());
-
-            await ConfigureIfOK(string.Empty, releases.Any(), () =>
-                throw new Exception("Could not find releases from this URL"));
-
+            await ConfigureIfOkAsync(
+                string.Empty, releases.Any(), () => throw new Exception("Could not find releases from this URL"));
             return IndexerConfigurationStatus.Completed;
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-
             var matchWords = ((BoolItem)configData.GetDynamic("MatchWords")).Value;
             matchWords = query.SearchTerm != "" && matchWords;
 
             // we remove parts from the original query
             query = ParseQuery(query);
-            var qc = new NameValueCollection {{"s", query.SearchTerm}};
-
+            var qc = new NameValueCollection { { "s", query.SearchTerm } };
             var page = 1;
             var isLastPage = false;
             do
             {
-                var url = SiteLink + "page/" + page + "/?" + qc.GetQueryString();
-                var result = await RequestStringWithCookies(url);
-
+                var url = $"{SiteLink}page/{page}/?{qc.GetQueryString()}";
+                var result = await RequestStringWithCookiesAsync(url);
                 if (result.Status != HttpStatusCode.OK)
                     throw new ExceptionWithConfigData(result.Content, configData);
-
                 try
                 {
                     var searchResultParser = new HtmlParser();
                     var doc = searchResultParser.ParseDocument(result.Content);
-
                     var table = doc.QuerySelector("table.table");
                     if (table == null)
                         break;
                     var rows = table.QuerySelectorAll("tr");
-                    isLastPage = rows.Length -1 <= MaxResultsPerPage; // rows includes the header
+                    isLastPage = rows.Length - 1 <= MaxResultsPerPage; // rows includes the header
                     var isHeader = true;
                     foreach (var row in rows)
                     {
-                        if (isHeader) {
+                        if (isHeader)
+                        {
                             isHeader = false;
                             continue;
                         }
 
-                        await ParseRelease(releases, row, query, matchWords);
+                        await ParseReleaseAsync(releases, row, query, matchWords);
                     }
                 }
                 catch (Exception ex)
@@ -130,7 +117,6 @@ namespace Jackett.Common.Indexers
                 }
 
                 page++; // update page number
-
             } while (!isLastPage && page <= MaxSearchPageLimit);
 
             return releases;
@@ -143,16 +129,12 @@ namespace Jackett.Common.Indexers
             // for other categories we have to do another step
             if (!downloadUrl.EndsWith(".torrent"))
             {
-                var result = await RequestStringWithCookies(downloadUrl);
-
+                var result = await RequestStringWithCookiesAsync(downloadUrl);
                 if (result.Status != HttpStatusCode.OK)
                     throw new ExceptionWithConfigData(result.Content, configData);
-
                 var searchResultParser = new HtmlParser();
                 var doc = searchResultParser.ParseDocument(result.Content);
-
-                var onclick = doc.QuerySelector("a[onclick*=\"/download/torrent.php\"]")
-                    .GetAttribute("onclick");
+                var onclick = doc.QuerySelector("a[onclick*=\"/download/torrent.php\"]").GetAttribute("onclick");
                 downloadUrl = OnclickToDownloadLink(onclick);
             }
 
@@ -160,9 +142,8 @@ namespace Jackett.Common.Indexers
             return content;
         }
 
-
-        private async Task ParseRelease(ICollection<ReleaseInfo> releases, IParentNode row, TorznabQuery query,
-            bool matchWords)
+        private async Task ParseReleaseAsync(ICollection<ReleaseInfo> releases, IParentNode row, TorznabQuery query,
+                                        bool matchWords)
         {
             var anchor = row.QuerySelector("a");
             var commentsLink = anchor.GetAttribute("href");
@@ -183,9 +164,8 @@ namespace Jackett.Common.Indexers
 
             // parsing is different for each category
             if (cat == DivxTotalCategories.Series)
-            {
-                await ParseSeriesRelease(releases, query, commentsLink, cat, publishDate);
-            } else if (query.Episode == null) // if it's scene series, we don't return other categories
+                await ParseSeriesReleaseAsync(releases, query, commentsLink, cat, publishDate);
+            else if (query.Episode == null) // if it's scene series, we don't return other categories
             {
                 if (cat == DivxTotalCategories.Peliculas || cat == DivxTotalCategories.PeliculasHd ||
                     cat == DivxTotalCategories.Peliculas3D || cat == DivxTotalCategories.PeliculasDvdr)
@@ -198,17 +178,14 @@ namespace Jackett.Common.Indexers
             }
         }
 
-        private async Task ParseSeriesRelease(ICollection<ReleaseInfo> releases, TorznabQuery query,
-            string commentsLink, string cat, DateTime publishDate)
+        private async Task ParseSeriesReleaseAsync(ICollection<ReleaseInfo> releases, TorznabQuery query, string commentsLink,
+                                              string cat, DateTime publishDate)
         {
-            var result = await RequestStringWithCookies(commentsLink);
-
+            var result = await RequestStringWithCookiesAsync(commentsLink);
             if (result.Status != HttpStatusCode.OK)
                 throw new ExceptionWithConfigData(result.Content, configData);
-
             var searchResultParser = new HtmlParser();
             var doc = searchResultParser.ParseDocument(result.Content);
-
             var tables = doc.QuerySelectorAll("table.table");
             foreach (var table in tables)
             {
@@ -216,7 +193,8 @@ namespace Jackett.Common.Indexers
                 var isHeader = true;
                 foreach (var row in rows)
                 {
-                    if (isHeader) {
+                    if (isHeader)
+                    {
                         isHeader = false;
                         continue;
                     }
@@ -235,15 +213,14 @@ namespace Jackett.Common.Indexers
                     // query.Episode != null means scene title
                     if (query.Episode != null && !episodeTitle.Contains(query.GetEpisodeSearchString()))
                         continue;
-
-                    GenerateRelease(releases, episodeTitle, commentsLink, downloadLink, cat, episodePublish,
-                        DivxTotalFizeSizes.Series);
+                    GenerateRelease(
+                        releases, episodeTitle, commentsLink, downloadLink, cat, episodePublish, DivxTotalFizeSizes.Series);
                 }
             }
         }
 
         private void ParseMovieRelease(ICollection<ReleaseInfo> releases, TorznabQuery query, string title,
-            string commentsLink, string cat, DateTime publishDate, string sizeStr)
+                                       string commentsLink, string cat, DateTime publishDate, string sizeStr)
         {
             // parse tags in title, we need to put the year after the real title (before the tags)
             // La Maldicion ( HD-CAM)
@@ -253,14 +230,15 @@ namespace Jackett.Common.Indexers
             var queryMatches = Regex.Matches(title, @"[\[\(]([^\]\)]+)[\]\)]", RegexOptions.IgnoreCase);
             foreach (Match m in queryMatches)
             {
-                tags += " " + m.Groups[1].Value.Trim();
+                tags += $" {m.Groups[1].Value.Trim()}";
                 title = title.Replace(m.Groups[0].Value, "");
             }
+
             title = title.Trim();
             title = Regex.Replace(title, " 4K$", "", RegexOptions.IgnoreCase);
 
             // add the year
-            title = query.Year != null ? title + " " + query.Year : title;
+            title = query.Year != null ? $"{title} {query.Year}" : title;
 
             // add the tags
             title += tags.ToUpper();
@@ -273,40 +251,31 @@ namespace Jackett.Common.Indexers
                 title += " SPANISH BDRip x264";
             else if (cat == DivxTotalCategories.PeliculasDvdr)
             {
-                 title += " SPANISH DVDR";
-                 size = TryToParseSize(sizeStr, DivxTotalFizeSizes.PeliculasDvdr);
+                title += " SPANISH DVDR";
+                size = TryToParseSize(sizeStr, DivxTotalFizeSizes.PeliculasDvdr);
             }
             else
-                throw new Exception("Unknown category " + cat);
+                throw new Exception($"Unknown category {cat}");
 
             GenerateRelease(releases, title, commentsLink, commentsLink, cat, publishDate, size);
         }
 
         private void GenerateRelease(ICollection<ReleaseInfo> releases, string title, string commentsLink,
-            string downloadLink, string cat, DateTime publishDate, long size)
+                                     string downloadLink, string cat, DateTime publishDate, long size)
         {
             // ReSharper disable once UseObjectOrCollectionInitializer
-            var release = new ReleaseInfo();
-
-            release.Title = title;
-            release.Comments = new Uri(commentsLink);
-            release.Link = new Uri(downloadLink);
+            var release = new ReleaseInfo { Title = title, Comments = new Uri(commentsLink), Link = new Uri(downloadLink) };
             release.Guid = release.Link;
-
             release.Category = MapTrackerCatToNewznab(cat);
             release.PublishDate = publishDate;
             release.Size = size;
-
             release.Files = 1;
-
             release.Seeders = 1;
             release.Peers = 2;
-
             release.MinimumRatio = 1;
             release.MinimumSeedTime = 172800; // 48 hours
             release.DownloadVolumeFactor = 0;
             release.UploadVolumeFactor = 1;
-
             releases.Add(release);
         }
 
@@ -323,15 +292,13 @@ namespace Jackett.Common.Indexers
             // this code split the words, remove words with 2 letters or less, remove accents and lowercase
             var queryMatches = Regex.Matches(queryStr, @"\b[\w']*\b");
             var queryWords = from m in queryMatches.Cast<Match>()
-                where !string.IsNullOrEmpty(m.Value) && m.Value.Length > 2
-                select Encoding.UTF8.GetString(Encoding.GetEncoding("ISO-8859-8").GetBytes(m.Value.ToLower()));
-
+                             where !string.IsNullOrEmpty(m.Value) && m.Value.Length > 2
+                             select Encoding.UTF8.GetString(Encoding.GetEncoding("ISO-8859-8").GetBytes(m.Value.ToLower()));
             var titleMatches = Regex.Matches(title, @"\b[\w']*\b");
             var titleWords = from m in titleMatches.Cast<Match>()
-                where !string.IsNullOrEmpty(m.Value) && m.Value.Length > 2
-                select Encoding.UTF8.GetString(Encoding.GetEncoding("ISO-8859-8").GetBytes(m.Value.ToLower()));
+                             where !string.IsNullOrEmpty(m.Value) && m.Value.Length > 2
+                             select Encoding.UTF8.GetString(Encoding.GetEncoding("ISO-8859-8").GetBytes(m.Value.ToLower()));
             titleWords = titleWords.ToArray();
-
             return queryWords.All(word => titleWords.Contains(word));
         }
 
@@ -364,7 +331,6 @@ namespace Jackett.Common.Indexers
 
             // remove some words
             searchTerm = Regex.Replace(searchTerm, @"\b(espa[ñn]ol|spanish|castellano|spa)\b", "", RegexOptions.IgnoreCase);
-
             query.SearchTerm = searchTerm;
             return query;
         }
@@ -379,12 +345,12 @@ namespace Jackett.Common.Indexers
                 var m = r.Match(newTitle);
                 if (m.Success)
                 {
-                    var season = "S" + m.Groups[2].Value.PadLeft(2, '0');
-                    var episode = "E" + m.Groups[3].Value.PadLeft(2, '0');
+                    var season = $"S{m.Groups[2].Value.PadLeft(2, '0')}";
+                    var episode = $"E{m.Groups[3].Value.PadLeft(2, '0')}";
                     // if the original query was in scene format, we have to put the year back
                     // query.Episode != null means scene title
-                    var year = query.Episode != null && query.Year != null ? " " + query.Year : "";
-                    newTitle = newTitle.Replace(m.Groups[1].Value, year + " " + season + episode);
+                    var year = query.Episode != null && query.Year != null ? $" {query.Year}" : "";
+                    newTitle = newTitle.Replace(m.Groups[1].Value, $"{year} {season}{episode}");
                 }
             }
             catch (Exception e)
@@ -392,6 +358,7 @@ namespace Jackett.Common.Indexers
                 Console.WriteLine(e);
                 throw;
             }
+
             newTitle += " SPANISH SDTV XviD";
             // return American Horror Story S06E04 SPANISH SDTV XviD
             return newTitle;
@@ -407,19 +374,21 @@ namespace Jackett.Common.Indexers
             {
                 // ignored
             }
+
             return dateDefault;
         }
 
         private static long TryToParseSize(string sizeToParse, long sizeDefault)
         {
             try
-            { 
+            {
                 return ReleaseInfo.GetBytes(sizeToParse);
             }
             catch
             {
                 // ignored
             }
+
             return sizeDefault;
         }
     }

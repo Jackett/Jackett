@@ -1,6 +1,6 @@
-﻿namespace Jackett.Common.Models.IndexerConfig
+namespace Jackett.Common.Models.IndexerConfig
 {
-    class ConfigurationDataCaptchaLogin : ConfigurationData
+    internal class ConfigurationDataCaptchaLogin : ConfigurationData
     {
         public StringItem Username { get; private set; }
 
@@ -21,7 +21,7 @@
             Password = new StringItem { Name = "Password" };
             CaptchaImage = new ImageItem { Name = "Captcha Image" };
             CaptchaText = new StringItem { Name = "Captcha Text" };
-            CaptchaCookie = new HiddenItem("") { Name = "Captcha Cookie" };
+            CaptchaCookie = new HiddenItem() { Name = "Captcha Cookie" };
             Instructions = new DisplayItem(instructionMessageOptional) { Name = "" };
         }
     }

@@ -1,88 +1,85 @@
-﻿using Jackett.Common.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Threading;
+using Jackett.Common.Models;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Microsoft.AspNetCore.Mvc;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading;
 
 namespace Jackett.Server.Controllers
 {
-    [Route("api/v2.0/server/[action]")]
-    [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
+    [Route("api/v2.0/server/[action]"), ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     public class ServerConfigurationController : Controller
     {
-        private readonly IConfigurationService configService;
-        private ServerConfig serverConfig;
-        private IServerService serverService;
-        private IProcessService processService;
-        private IIndexerManagerService indexerService;
-        private ISecuityService securityService;
-        private IUpdateService updater;
-        private ILogCacheService logCache;
-        private Logger logger;
+        private readonly IConfigurationService _configService;
+        private readonly ServerConfig _serverConfig;
+        private readonly IServerService _serverService;
+        private readonly IProcessService _processService;
+        private readonly IIndexerManagerService _indexerService;
+        private readonly ISecuityService _securityService;
+        private readonly IUpdateService _updater;
+        private readonly ILogCacheService _logCache;
+        private readonly Logger _logger;
 
-        public ServerConfigurationController(IConfigurationService c, IServerService s, IProcessService p, IIndexerManagerService i, ISecuityService ss, IUpdateService u, ILogCacheService lc, Logger l, ServerConfig sc)
+        public ServerConfigurationController(IConfigurationService c, IServerService s, IProcessService p,
+                                             IIndexerManagerService i, ISecuityService ss, IUpdateService u,
+                                             ILogCacheService lc, Logger l, ServerConfig sc)
         {
-            configService = c;
-            serverConfig = sc;
-            serverService = s;
-            processService = p;
-            indexerService = i;
-            securityService = ss;
-            updater = u;
-            logCache = lc;
-            logger = l;
+            _configService = c;
+            _serverConfig = sc;
+            _serverService = s;
+            _processService = p;
+            _indexerService = i;
+            _securityService = ss;
+            _updater = u;
+            _logCache = lc;
+            _logger = l;
         }
 
         [HttpPost]
-        public IActionResult AdminPassword([FromBody]string password)
+        public IActionResult AdminPassword([FromBody] string password)
         {
-            var oldPassword = serverConfig.AdminPassword;
+            var oldPassword = _serverConfig.AdminPassword;
             if (string.IsNullOrEmpty(password))
                 password = null;
-
             if (oldPassword != password)
             {
-                serverConfig.AdminPassword = securityService.HashPassword(password);
-                configService.SaveConfig(serverConfig);
+                _serverConfig.AdminPassword = _securityService.HashPassword(password);
+                _configService.SaveConfig(_serverConfig);
             }
 
             return new NoContentResult();
         }
 
         [HttpPost]
-        public void Update()
-        {
-            updater.CheckForUpdatesNow();
-        }
+        public void Update() => _updater.CheckForUpdatesNow();
 
         [HttpGet]
         public Common.Models.DTO.ServerConfig Config()
         {
-            var dto = new Common.Models.DTO.ServerConfig(serverService.notices, serverConfig, configService.GetVersion(), serverService.MonoUserCanRunNetCore());
+            var dto = new Common.Models.DTO.ServerConfig(
+                _serverService.notices, _serverConfig, _configService.GetVersion(), _serverService.MonoUserCanRunNetCore());
             return dto;
         }
 
-        [ActionName("Config")]
-        [HttpPost]
-        public IActionResult UpdateConfig([FromBody]Common.Models.DTO.ServerConfig config)
+        [ActionName("Config"), HttpPost]
+        public IActionResult UpdateConfig([FromBody] Common.Models.DTO.ServerConfig config)
         {
-            bool webHostRestartNeeded = false;
-
-            var originalPort = serverConfig.Port;
-            var originalAllowExternal = serverConfig.AllowExternal;
-            int port = config.port;
-            bool external = config.external;
-            string saveDir = config.blackholedir;
-            bool updateDisabled = config.updatedisabled;
-            bool preRelease = config.prerelease;
-            bool logging = config.logging;
-            string basePathOverride = config.basepathoverride;
+            var webHostRestartNeeded = false;
+            var originalPort = _serverConfig.Port;
+            var originalAllowExternal = _serverConfig.AllowExternal;
+            var port = config.port;
+            var external = config.external;
+            var saveDir = config.blackholedir;
+            var updateDisabled = config.updatedisabled;
+            var preRelease = config.prerelease;
+            var logging = config.logging;
+            var basePathOverride = config.basepathoverride;
             if (basePathOverride != null)
             {
                 basePathOverride = basePathOverride.TrimEnd('/');
@@ -90,121 +87,97 @@ namespace Jackett.Server.Controllers
                     throw new Exception("The Base Path Override must start with a /");
             }
 
-            string omdbApiKey = config.omdbkey;
-            string omdbApiUrl = config.omdburl;
-
-            if (config.basepathoverride != serverConfig.BasePathOverride)
-            {
+            var omdbApiKey = config.omdbkey;
+            var omdbApiUrl = config.omdburl;
+            if (config.basepathoverride != _serverConfig.BasePathOverride)
                 webHostRestartNeeded = true;
-            }
-
-            serverConfig.UpdateDisabled = updateDisabled;
-            serverConfig.UpdatePrerelease = preRelease;
-            serverConfig.BasePathOverride = basePathOverride;
-            serverConfig.RuntimeSettings.BasePath = serverService.BasePath();
-            configService.SaveConfig(serverConfig);
-
+            _serverConfig.UpdateDisabled = updateDisabled;
+            _serverConfig.UpdatePrerelease = preRelease;
+            _serverConfig.BasePathOverride = basePathOverride;
+            _serverConfig.RuntimeSettings.BasePath = _serverService.BasePath();
+            _configService.SaveConfig(_serverConfig);
             Helper.SetLogLevel(logging ? LogLevel.Debug : LogLevel.Info);
-            serverConfig.RuntimeSettings.TracingEnabled = logging;
-
-            if (omdbApiKey != serverConfig.OmdbApiKey || omdbApiUrl != serverConfig.OmdbApiUrl)
+            _serverConfig.RuntimeSettings.TracingEnabled = logging;
+            if (omdbApiKey != _serverConfig.OmdbApiKey || omdbApiUrl != _serverConfig.OmdbApiUrl)
             {
-                serverConfig.OmdbApiKey = omdbApiKey;
-                serverConfig.OmdbApiUrl = omdbApiUrl.TrimEnd('/');
-                configService.SaveConfig(serverConfig);
+                _serverConfig.OmdbApiKey = omdbApiKey;
+                _serverConfig.OmdbApiUrl = omdbApiUrl.TrimEnd('/');
+                _configService.SaveConfig(_serverConfig);
                 // HACK
-                indexerService.InitAggregateIndexer();
+                _indexerService.InitAggregateIndexer();
             }
 
-            if (config.proxy_type != serverConfig.ProxyType ||
-                config.proxy_url != serverConfig.ProxyUrl ||
-                config.proxy_port != serverConfig.ProxyPort ||
-                config.proxy_username != serverConfig.ProxyUsername ||
-                config.proxy_password != serverConfig.ProxyPassword)
+            if (config.proxy_type != _serverConfig.ProxyType || config.proxy_url != _serverConfig.ProxyUrl ||
+                config.proxy_port != _serverConfig.ProxyPort || config.proxy_username != _serverConfig.ProxyUsername ||
+                config.proxy_password != _serverConfig.ProxyPassword)
             {
                 if (config.proxy_port < 1 || config.proxy_port > 65535)
                     throw new Exception("The port you have selected is invalid, it must be below 65535.");
-
-                serverConfig.ProxyUrl = config.proxy_url;
-                serverConfig.ProxyType = config.proxy_type;
-                serverConfig.ProxyPort = config.proxy_port;
-                serverConfig.ProxyUsername = config.proxy_username;
-                serverConfig.ProxyPassword = config.proxy_password;
-                configService.SaveConfig(serverConfig);
+                _serverConfig.ProxyUrl = config.proxy_url;
+                _serverConfig.ProxyType = config.proxy_type;
+                _serverConfig.ProxyPort = config.proxy_port;
+                _serverConfig.ProxyUsername = config.proxy_username;
+                _serverConfig.ProxyPassword = config.proxy_password;
+                _configService.SaveConfig(_serverConfig);
                 webHostRestartNeeded = true;
             }
 
-            if (port != serverConfig.Port || external != serverConfig.AllowExternal)
+            if (port != _serverConfig.Port || external != _serverConfig.AllowExternal)
             {
                 if (ServerUtil.RestrictedPorts.Contains(port))
                     throw new Exception("The port you have selected is restricted, try a different one.");
-
                 if (port < 1 || port > 65535)
                     throw new Exception("The port you have selected is invalid, it must be below 65535.");
 
                 // Save port to the config so it can be picked up by the if needed when running as admin below.
-                serverConfig.AllowExternal = external;
-                serverConfig.Port = port;
-                configService.SaveConfig(serverConfig);
+                _serverConfig.AllowExternal = external;
+                _serverConfig.Port = port;
+                _configService.SaveConfig(_serverConfig);
 
                 // On Windows change the url reservations
-                if (System.Environment.OSVersion.Platform != PlatformID.Unix)
+                if (Environment.OSVersion.Platform != PlatformID.Unix)
                 {
                     if (!ServerUtil.IsUserAdministrator())
-                    {
                         try
                         {
-                            var consoleExePath = System.Reflection.Assembly.GetExecutingAssembly().CodeBase.Replace(".dll", ".exe");
-                            processService.StartProcessAndLog(consoleExePath, "--ReserveUrls", true);
+                            var consoleExePath = Assembly.GetExecutingAssembly().CodeBase.Replace(".dll", ".exe");
+                            _processService.StartProcessAndLog(consoleExePath, "--ReserveUrls", true);
                         }
                         catch
                         {
-                            serverConfig.Port = originalPort;
-                            serverConfig.AllowExternal = originalAllowExternal;
-                            configService.SaveConfig(serverConfig);
-
+                            _serverConfig.Port = originalPort;
+                            _serverConfig.AllowExternal = originalAllowExternal;
+                            _configService.SaveConfig(_serverConfig);
                             throw new Exception("Failed to acquire admin permissions to reserve the new port.");
                         }
-                    }
                     else
-                    {
-                        serverService.ReserveUrls(true);
-                    }
+                        _serverService.ReserveUrls();
                 }
 
                 webHostRestartNeeded = true;
             }
 
-            if (saveDir != serverConfig.BlackholeDir)
+            if (saveDir != _serverConfig.BlackholeDir)
             {
                 if (!string.IsNullOrEmpty(saveDir))
-                {
                     if (!Directory.Exists(saveDir))
-                    {
                         throw new Exception("Blackhole directory does not exist");
-                    }
-                }
-
-                serverConfig.BlackholeDir = saveDir;
-                configService.SaveConfig(serverConfig);
+                _serverConfig.BlackholeDir = saveDir;
+                _configService.SaveConfig(_serverConfig);
             }
 
             if (webHostRestartNeeded)
             {
                 Thread.Sleep(500);
-                logger.Info("Restarting webhost due to configuration change");
+                _logger.Info("Restarting webhost due to configuration change");
                 Helper.RestartWebHost();
             }
 
-            serverConfig.ConfigChanged();
-
-            return Json(serverConfig);
+            _serverConfig.ConfigChanged();
+            return Json(_serverConfig);
         }
 
         [HttpGet]
-        public List<CachedLog> Logs()
-        {
-            return logCache.Logs;
-        }
+        public List<CachedLog> Logs() => _logCache.Logs;
     }
 }

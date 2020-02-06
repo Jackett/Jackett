@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,30 +17,22 @@ namespace Jackett.Common.Indexers
 {
     public class Shazbat : BaseWebIndexer
     {
-        private string LoginUrl { get { return SiteLink + "login"; } }
-        private string SearchUrl { get { return SiteLink + "search"; } }
-        private string TorrentsUrl { get { return SiteLink + "torrents"; } }
-        private string ShowUrl { get { return SiteLink + "show?id="; } }
-        private string RSSProfile { get { return SiteLink + "rss_feeds"; } }
+        private string LoginUrl => $"{SiteLink}login";
+        private string SearchUrl => $"{SiteLink}search";
+        private string TorrentsUrl => $"{SiteLink}torrents";
+        private string ShowUrl => $"{SiteLink}show?id=";
+        private string RSSProfile => $"{SiteLink}rss_feeds";
 
         private new ConfigurationDataBasicLoginWithRSS configData
         {
-            get { return (ConfigurationDataBasicLoginWithRSS)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataBasicLoginWithRSS)base.configData;
+            set => base.configData = value;
         }
 
-        public Shazbat(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps)
-            : base(name: "Shazbat",
-                description: "Modern indexer",
-                link: "https://www.shazbat.tv/",
-                caps: new TorznabCapabilities(TorznabCatType.TV,
-                                              TorznabCatType.TVHD,
-                                              TorznabCatType.TVSD),
-                configService: configService,
-                client: c,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataBasicLoginWithRSS())
+        public Shazbat(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps) : base(
+            "Shazbat", description: "Modern indexer", link: "https://www.shazbat.tv/",
+            caps: new TorznabCapabilities(TorznabCatType.TV, TorznabCatType.TVHD, TorznabCatType.TVSD),
+            configService: configService, client: c, logger: l, p: ps, configData: new ConfigurationDataBasicLoginWithRSS())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
@@ -50,63 +42,53 @@ namespace Jackett.Common.Indexers
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-            var pairs = new Dictionary<string, string> {
-                { "referer", "login"},
-                { "query", ""},
-                { "tv_login", configData.Username.Value },
-                { "tv_password", configData.Password.Value },
-                { "email", "" }
+            var pairs = new Dictionary<string, string>
+            {
+                {"referer", "login"},
+                {"query", ""},
+                {"tv_login", configData.Username.Value},
+                {"tv_password", configData.Password.Value},
+                {"email", ""}
             };
 
             // Get cookie
-            var firstRequest = await RequestStringWithCookiesAndRetry(LoginUrl);
-
-            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("glyphicon-log-out"), () =>
-            {
-                throw new ExceptionWithConfigData("The username and password entered do not match.", configData);
-            });
-
-            var rssProfile = await RequestStringWithCookiesAndRetry(RSSProfile);
+            var firstRequest = await RequestStringWithCookiesAndRetryAsync(LoginUrl);
+            var result = await RequestLoginAndFollowRedirectAsync(LoginUrl, pairs, null, true, null, LoginUrl);
+            await ConfigureIfOkAsync(
+                result.Cookies, result.Content?.Contains("glyphicon-log-out") == true, () => throw new ExceptionWithConfigData("The username and password entered do not match.", configData));
+            var rssProfile = await RequestStringWithCookiesAndRetryAsync(RSSProfile);
             CQ rssDom = rssProfile.Content;
             configData.RSSKey.Value = rssDom.Find(".col-sm-9:eq(0)").Text().Trim();
             if (string.IsNullOrWhiteSpace(configData.RSSKey.Value))
-            {
                 throw new ExceptionWithConfigData("Failed to find RSS key.", configData);
-            }
-
             SaveConfig();
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
-        protected async Task<WebClientStringResult> ReloginIfNecessary(WebClientStringResult response)
+        protected async Task<WebClientStringResult> ReloginIfNecessaryAsync(WebClientStringResult response)
         {
             if (!response.Content.Contains("onclick=\"document.location='logout'\""))
             {
                 await ApplyConfiguration(null);
                 response.Request.Cookies = CookieHeader;
-                return await webclient.GetString(response.Request);
+                return await webclient.GetStringAsync(response.Request);
             }
+
             return response;
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-
             var queryString = query.GetQueryString();
             var url = TorrentsUrl;
-
             WebClientStringResult results = null;
-
             var searchUrls = new List<string>();
             if (!string.IsNullOrWhiteSpace(query.SanitizedSearchTerm))
             {
-                var pairs = new Dictionary<string, string>();
-                pairs.Add("search", query.SanitizedSearchTerm);
-
-                results = await PostDataWithCookiesAndRetry(SearchUrl, pairs, null, TorrentsUrl);
-                results = await ReloginIfNecessary(results);
+                var pairs = new Dictionary<string, string> { { "search", query.SanitizedSearchTerm } };
+                results = await PostDataWithCookiesAndRetryAsync(SearchUrl, pairs, null, TorrentsUrl);
+                results = await ReloginIfNecessaryAsync(results);
                 CQ dom = results.Content;
                 var shows = dom.Find("div.show[data-id]");
                 foreach (var show in shows)
@@ -116,27 +98,19 @@ namespace Jackett.Common.Indexers
                 }
             }
             else
-            {
                 searchUrls.Add(TorrentsUrl);
-            }
 
             try
             {
                 foreach (var searchUrl in searchUrls)
                 {
-                    results = await RequestStringWithCookies(searchUrl);
-                    results = await ReloginIfNecessary(results);
-
+                    results = await RequestStringWithCookiesAsync(searchUrl);
+                    results = await ReloginIfNecessaryAsync(results);
                     CQ dom = results.Content;
                     var rows = dom["#torrent-table tr"];
-
                     if (!string.IsNullOrWhiteSpace(queryString))
-                    {
                         rows = dom["table tr"];
-                    }
-
                     var globalFreeleech = dom.Find("span:contains(\"Freeleech until:\"):has(span.datetime)").Any();
-
                     foreach (var row in rows.Skip(1))
                     {
                         var release = new ReleaseInfo();
@@ -144,9 +118,9 @@ namespace Jackett.Common.Indexers
                         var titleRow = qRow.Find("td:eq(2)").First();
                         titleRow.Children().Remove();
                         release.Title = titleRow.Text().Trim();
-                        if ((query.ImdbID == null || !TorznabCaps.SupportsImdbMovieSearch) && !query.MatchQueryStringAND(release.Title))
+                        if ((query.ImdbID == null || !TorznabCaps.SupportsImdbMovieSearch) &&
+                            !query.MatchQueryStringAND(release.Title))
                             continue;
-
                         var qBanner = qRow.Find("div[style^=\"cursor: pointer; background-image:url\"]");
                         var qBannerStyle = qBanner.Attr("style");
                         if (!string.IsNullOrEmpty(qBannerStyle))
@@ -160,27 +134,20 @@ namespace Jackett.Common.Indexers
                         release.Guid = release.Link;
                         var qLinkComm = row.Cq().Find("td:eq(4) a:eq(1)");
                         release.Comments = new Uri(SiteLink + qLinkComm.Attr("href"));
-
                         var dateString = qRow.Find(".datetime").Attr("data-timestamp");
                         if (dateString != null)
-                            release.PublishDate = DateTimeUtil.UnixTimestampToDateTime(ParseUtil.CoerceDouble(dateString)).ToLocalTime();
+                            release.PublishDate = DateTimeUtil
+                                                  .UnixTimestampToDateTime(ParseUtil.CoerceDouble(dateString)).ToLocalTime();
                         var infoString = row.Cq().Find("td:eq(3)").Text();
-
-                        release.Size = ParseUtil.CoerceLong(Regex.Match(infoString, "\\((\\d+)\\)").Value.Replace("(", "").Replace(")", ""));
-
+                        release.Size = ParseUtil.CoerceLong(
+                            Regex.Match(infoString, "\\((\\d+)\\)").Value.Replace("(", "").Replace(")", ""));
                         var infosplit = infoString.Replace("/", string.Empty).Split(":".ToCharArray());
                         release.Seeders = ParseUtil.CoerceInt(infosplit[1]);
                         release.Peers = release.Seeders + ParseUtil.CoerceInt(infosplit[2]);
-
-                        if (globalFreeleech)
-                            release.DownloadVolumeFactor = 0;
-                        else
-                            release.DownloadVolumeFactor = 1;
-
+                        release.DownloadVolumeFactor = globalFreeleech ? 0 : 1;
                         release.UploadVolumeFactor = 1;
 
                         // var tags = row.Cq().Find(".label-tag").Text(); These don't see to parse - bad tags?
-
                         releases.Add(release);
                     }
                 }
@@ -240,17 +207,9 @@ namespace Jackett.Common.Indexers
                  }*/
 
             foreach (var release in releases)
-            {
-                if (release.Title.Contains("1080p") || release.Title.Contains("720p"))
-                {
-                    release.Category = new List<int> { TorznabCatType.TVHD.ID };
-                }
-                else
-                {
-                    release.Category = new List<int> { TorznabCatType.TVSD.ID };
-                }
-            }
-
+                release.Category = release.Title.Contains("1080p") || release.Title.Contains("720p")
+                    ? new List<int> { TorznabCatType.TVHD.ID }
+                    : new List<int> { TorznabCatType.TVSD.ID };
             return releases;
         }
     }

@@ -1,33 +1,23 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Jackett.Common.Models
 {
     public class CachedQueryResult
     {
-        private List<ReleaseInfo> results;
-        private DateTime created;
-        private string query;
+        private readonly List<ReleaseInfo> _results;
 
-        public CachedQueryResult(string query, List<ReleaseInfo> results){
-            this.results = results;
-            created = DateTime.Now;
-            this.query = query;
-        }
-
-        public IReadOnlyList<ReleaseInfo> Results
+        public CachedQueryResult(string query, List<ReleaseInfo> results)
         {
-            get { return results.AsReadOnly(); }
+            _results = results;
+            Created = DateTime.Now;
+            Query = query;
         }
 
-        public DateTime Created
-        {
-            get { return created; }
-        }
+        public IReadOnlyList<ReleaseInfo> Results => _results.AsReadOnly();
 
-        public string Query
-        {
-            get { return query; }
-        }
+        public DateTime Created { get; }
+
+        public string Query { get; }
     }
 }

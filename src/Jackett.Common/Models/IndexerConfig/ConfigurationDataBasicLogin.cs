@@ -1,4 +1,4 @@
-﻿namespace Jackett.Common.Models.IndexerConfig
+namespace Jackett.Common.Models.IndexerConfig
 {
     public class ConfigurationDataBasicLogin : ConfigurationData
     {
@@ -12,7 +12,5 @@
             Password = new StringItem { Name = "Password" };
             Instructions = new DisplayItem(instructionMessageOptional) { Name = "" };
         }
-
-
     }
 }

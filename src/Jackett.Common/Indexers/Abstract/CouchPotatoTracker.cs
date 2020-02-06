@@ -15,25 +15,19 @@ namespace Jackett.Common.Indexers.Abstract
     public abstract class CouchPotatoTracker : BaseWebIndexer
     {
         protected string endpoint;
-        protected string APIUrl { get { return SiteLink + endpoint; } }
+        protected string APIUrl => SiteLink + endpoint;
 
-        new ConfigurationDataUserPasskey configData
+        private new ConfigurationDataUserPasskey configData
         {
-            get { return (ConfigurationDataUserPasskey)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataUserPasskey)base.configData;
+            set => base.configData = value;
         }
 
-        public CouchPotatoTracker(IIndexerConfigurationService configService, WebClient client, Logger logger, IProtectionService p, ConfigurationDataUserPasskey configData, string name, string description, string link, string endpoint)
-            : base(name: name,
-                description: description,
-                link: link,
-                caps: new TorznabCapabilities(),
-                configService: configService,
-                client: client,
-                logger: logger,
-                p: p,
-                configData: configData
-            )
+        public CouchPotatoTracker(IIndexerConfigurationService configService, WebClient client, Logger logger,
+                                  IProtectionService p, ConfigurationDataUserPasskey configData, string name,
+                                  string description, string link, string endpoint) : base(
+            name, description: description, link: link, caps: new TorznabCapabilities(), configService: configService,
+            client: client, logger: logger, p: p, configData: configData)
         {
             this.endpoint = endpoint;
             TorznabCaps.SupportsImdbMovieSearch = true;
@@ -47,66 +41,52 @@ namespace Jackett.Common.Indexers.Abstract
             return await Task.FromResult(IndexerConfigurationStatus.RequiresTesting);
         }
 
-        protected virtual string GetSearchString(TorznabQuery query)
-        {
-            // can be overriden to alter the search string
-            return query.GetQueryString();
-        }
+        // can be overriden to alter the search string
+        protected virtual string GetSearchString(TorznabQuery query) => query.GetQueryString();
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
             var searchString = GetSearchString(query);
-
             var searchUrl = APIUrl;
             var queryCollection = new NameValueCollection();
-            
             if (!string.IsNullOrEmpty(query.ImdbID))
-            { 
                 queryCollection.Add("imdbid", query.ImdbID);
-            }
             if (searchString != null)
-            {
                 queryCollection.Add("search", searchString);
-            }
             queryCollection.Add("passkey", configData.Passkey.Value);
             queryCollection.Add("user", configData.Username.Value);
-
-            searchUrl += "?" + queryCollection.GetQueryString();
-
-            var response = await RequestStringWithCookiesAndRetry(searchUrl);
-
-            JObject json = null;
+            searchUrl += $"?{queryCollection.GetQueryString()}";
+            var response = await RequestStringWithCookiesAndRetryAsync(searchUrl);
+            JObject json;
             try
             {
                 json = JObject.Parse(response.Content);
             }
             catch (Exception ex)
             {
-                throw new Exception("Error while parsing json: " + response.Content, ex);
+                throw new Exception($"Error while parsing json: {response.Content}", ex);
             }
+
             var error = (string)json["error"];
             if (error != null)
                 throw new Exception(error);
-
             if ((int)json["total_results"] == 0)
                 return releases;
-
             try
             {
                 foreach (JObject r in json["results"])
                 {
-                    var release = new ReleaseInfo();
-                    release.Title = (string)r["release_name"];
-                    release.Comments = new Uri((string)r["details_url"]);
-                    release.Link = new Uri((string)r["download_url"]);
+                    var release = new ReleaseInfo
+                    {
+                        Title = (string)r["release_name"],
+                        Comments = new Uri((string)r["details_url"]),
+                        Link = new Uri((string)r["download_url"])
+                    };
                     release.Guid = release.Link;
                     release.Imdb = ParseUtil.GetImdbID((string)r["imdb_id"]);
                     var freeleech = (bool)r["freeleech"];
-                    if (freeleech)
-                        release.DownloadVolumeFactor = 0;
-                    else
-                        release.DownloadVolumeFactor = 1;
+                    release.DownloadVolumeFactor = freeleech ? 0 : 1;
                     release.UploadVolumeFactor = 1;
                     var type = (string)r["type"];
                     release.Category = MapTrackerCatToNewznab(type);

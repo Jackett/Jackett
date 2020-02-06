@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -18,32 +18,25 @@ namespace Jackett.Common.Indexers
 {
     public class BitHdtv : BaseWebIndexer
     {
-        private string LoginUrl { get { return SiteLink + "login.php"; } }
-        private string TakeLoginUrl { get { return SiteLink + "takelogin.php"; } }
-        private string SearchUrl { get { return SiteLink + "torrents.php?"; } }
-        private string DownloadUrl { get { return SiteLink + "download.php?id={0}"; } }
+        private string LoginUrl => $"{SiteLink}login.php";
+        private string TakeLoginUrl => $"{SiteLink}takelogin.php";
+        private string SearchUrl => $"{SiteLink}torrents.php?";
+        private string DownloadUrl => $"{SiteLink}download.php?id={{0}}";
 
         private new ConfigurationDataRecaptchaLogin configData
         {
-            get { return (ConfigurationDataRecaptchaLogin)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataRecaptchaLogin)base.configData;
+            set => base.configData = value;
         }
 
-        public BitHdtv(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
-            : base(name: "BIT-HDTV",
-                description: "Home of high definition invites",
-                link: "https://www.bit-hdtv.com/",
-                caps: new TorznabCapabilities(),
-                configService: configService,
-                client: w,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataRecaptchaLogin())
+        public BitHdtv(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps) : base(
+            "BIT-HDTV", description: "Home of high definition invites", link: "https://www.bit-hdtv.com/",
+            caps: new TorznabCapabilities(), configService: configService, client: w, logger: l, p: ps,
+            configData: new ConfigurationDataRecaptchaLogin())
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "en-us";
             Type = "private";
-
             AddCategoryMapping(1, TorznabCatType.TVAnime); // Anime
             AddCategoryMapping(2, TorznabCatType.MoviesBluRay); // Blu-ray
             AddCategoryMapping(4, TorznabCatType.TVDocumentary); // Documentaries
@@ -58,10 +51,10 @@ namespace Jackett.Common.Indexers
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var loginPage = await RequestStringWithCookies(LoginUrl, configData.CookieHeader.Value);
+            var loginPage = await RequestStringWithCookiesAsync(LoginUrl, configData.CookieHeader.Value);
             CQ cq = loginPage.Content;
-            string recaptchaSiteKey = cq.Find(".g-recaptcha").Attr("data-sitekey");
-            var result = this.configData;
+            var recaptchaSiteKey = cq.Find(".g-recaptcha").Attr("data-sitekey");
+            var result = configData;
             result.CookieHeader.Value = loginPage.Cookies;
             result.Captcha.SiteKey = recaptchaSiteKey;
             result.Captcha.Version = "2";
@@ -71,13 +64,12 @@ namespace Jackett.Common.Indexers
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-
-            var pairs = new Dictionary<string, string> {
-                { "username", configData.Username.Value },
-                { "password", configData.Password.Value },
-                { "g-recaptcha-response", configData.Captcha.Value },
+            var pairs = new Dictionary<string, string>
+            {
+                {"username", configData.Username.Value},
+                {"password", configData.Password.Value},
+                {"g-recaptcha-response", configData.Captcha.Value}
             };
-
             if (!string.IsNullOrWhiteSpace(configData.Captcha.Cookie))
             {
                 // Cookie was manually supplied
@@ -86,10 +78,7 @@ namespace Jackett.Common.Indexers
                 {
                     var results = await PerformQuery(new TorznabQuery());
                     if (!results.Any())
-                    {
                         throw new Exception("Your cookie did not work");
-                    }
-
                     IsConfigured = true;
                     SaveConfig();
                     return IndexerConfigurationStatus.Completed;
@@ -97,20 +86,21 @@ namespace Jackett.Common.Indexers
                 catch (Exception e)
                 {
                     IsConfigured = false;
-                    throw new Exception("Your cookie did not work: " + e.Message);
+                    throw new Exception($"Your cookie did not work: {e.Message}");
                 }
             }
 
-            var response = await RequestLoginAndFollowRedirect(TakeLoginUrl, pairs, null, true, null, SiteLink);
-            await ConfigureIfOK(response.Cookies, response.Content != null && response.Content.Contains("logout.php"), () =>
-            {
-                CQ dom = response.Content;
-                var messageEl = dom["table.detail td.text"].Last();
-                messageEl.Children("a").Remove();
-                messageEl.Children("style").Remove();
-                var errorMessage = messageEl.Text().Trim();
-                throw new ExceptionWithConfigData(errorMessage, configData);
-            });
+            var response = await RequestLoginAndFollowRedirectAsync(TakeLoginUrl, pairs, null, true, null, SiteLink);
+            await ConfigureIfOkAsync(
+                response.Cookies, response.Content?.Contains("logout.php") == true, () =>
+                {
+                    CQ dom = response.Content;
+                    var messageEl = dom["table.detail td.text"].Last();
+                    messageEl.Children("a").Remove();
+                    messageEl.Children("style").Remove();
+                    var errorMessage = messageEl.Text().Trim();
+                    throw new ExceptionWithConfigData(errorMessage, configData);
+                });
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
@@ -119,19 +109,12 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();
             var queryCollection = new NameValueCollection();
-
             if (!string.IsNullOrWhiteSpace(searchString))
-            {
                 queryCollection.Add("search", searchString);
-            }
-
             queryCollection.Add("incldead", "1");
-
             var searchUrl = SearchUrl + queryCollection.GetQueryString();
-
-            var trackerCats = MapTorznabCapsToTrackers(query, mapChildrenCatsToParent: true);
-
-            var results = await RequestStringWithCookiesAndRetry(searchUrl);
+            var trackerCats = MapTorznabCapsToTrackers(query, true);
+            var results = await RequestStringWithCookiesAndRetryAsync(searchUrl);
             try
             {
                 CQ dom = results.Content;
@@ -142,10 +125,8 @@ namespace Jackett.Common.Indexers
                     foreach (var row in rows.Skip(1))
                     {
                         var release = new ReleaseInfo();
-
                         var qRow = row.Cq();
                         var qLink = qRow.Children().ElementAt(2).Cq().Children("a").First();
-
                         release.MinimumRatio = 1;
                         release.MinimumSeedTime = 172800; // 48 hours
                         release.Title = qLink.Attr("title");
@@ -156,25 +137,21 @@ namespace Jackett.Common.Indexers
                         release.Guid = new Uri(qLink.Attr("href"));
                         release.Comments = release.Guid;
                         release.Link = new Uri(string.Format(DownloadUrl, qLink.Attr("href").Split('=')[1]));
-
                         var catUrl = qRow.Children().ElementAt(1).FirstElementChild.Cq().Attr("href");
-                        var catNum = catUrl.Split(new char[] { '=', '&' })[1];
+                        var catNum = catUrl.Split('=', '&')[1];
                         release.Category = MapTrackerCatToNewznab(catNum);
 
                         // This tracker cannot search multiple cats at a time, so search all cats then filter out results from different cats
                         if (trackerCats.Count > 0 && !trackerCats.Contains(catNum))
                             continue;
-
                         var dateString = qRow.Children().ElementAt(5).Cq().Text().Trim();
                         var pubDate = DateTime.ParseExact(dateString, "yyyy-MM-ddHH:mm:ss", CultureInfo.InvariantCulture);
                         release.PublishDate = DateTime.SpecifyKind(pubDate, DateTimeKind.Local);
-
                         var sizeStr = qRow.Children().ElementAt(6).Cq().Text();
                         release.Size = ReleaseInfo.GetBytes(sizeStr);
-
                         release.Seeders = ParseUtil.CoerceInt(qRow.Children().ElementAt(8).Cq().Text().Trim());
-                        release.Peers = ParseUtil.CoerceInt(qRow.Children().ElementAt(9).Cq().Text().Trim()) + release.Seeders;
-
+                        release.Peers = ParseUtil.CoerceInt(qRow.Children().ElementAt(9).Cq().Text().Trim()) +
+                                        release.Seeders;
                         var bgcolor = qRow.Attr("bgcolor");
                         if (bgcolor == "#DDDDDD")
                         {
@@ -196,6 +173,7 @@ namespace Jackett.Common.Indexers
                             release.DownloadVolumeFactor = 1;
                             release.UploadVolumeFactor = 1;
                         }
+
                         releases.Add(release);
                     }
                 }

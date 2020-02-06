@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
@@ -15,17 +15,18 @@ namespace Jackett.Common.Indexers.Feeds
     {
         protected abstract Uri FeedUri { get; }
 
-        protected BaseFeedIndexer(string name, string link, string description, IIndexerConfigurationService configService, WebClient client, Logger logger, ConfigurationData configData, IProtectionService p, TorznabCapabilities caps = null, string downloadBase = null) : base(name, link, description, configService, client, logger, configData, p, caps, downloadBase)
+        protected BaseFeedIndexer(string name, string link, string description, IIndexerConfigurationService configService,
+                                  WebClient client, Logger logger, ConfigurationData configData, IProtectionService p,
+                                  TorznabCapabilities caps = null, string downloadBase = null) : base(
+            name, link, description, configService, client, logger, configData, p, caps, downloadBase)
         {
         }
 
         public override Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-
             IsConfigured = true;
             SaveConfig();
-
             return Task.FromResult(IndexerConfigurationStatus.RequiresTesting);
         }
 
@@ -34,16 +35,9 @@ namespace Jackett.Common.Indexers.Feeds
             var requestUri = FeedUri.ToString();
             if (!query.SearchTerm.IsNullOrEmptyOrWhitespace())
                 requestUri = requestUri + "?q=" + query.SearchTerm;
-            var request = new WebRequest
-            {
-                Url = requestUri,
-                Type = RequestType.GET,
-                Encoding = Encoding
-            };
-            var result = await webclient.GetString(request);
-
+            var request = new WebRequest { Url = requestUri, Type = RequestType.Get, Encoding = Encoding };
+            var result = await webclient.GetStringAsync(request);
             var results = ParseFeedForResults(result.Content);
-
             return results;
         }
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -14,46 +14,38 @@ using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
-using static Jackett.Common.Utils.ParseUtil;
 
 namespace Jackett.Common.Indexers
 {
     public class XSpeeds : BaseWebIndexer
     {
-        private string LandingUrl => SiteLink + "login.php";
-        private string LoginUrl => SiteLink + "takelogin.php";
-        private string GetRSSKeyUrl => SiteLink + "getrss.php";
-        private string SearchUrl => SiteLink + "browse.php";
-        private string RSSUrl => SiteLink + "rss.php?secret_key={0}&feedtype=download&timezone=0&showrows=50&categories=all";
-        private string CommentUrl => SiteLink + "details.php?id={0}";
-        private string DownloadUrl => SiteLink + "download.php?id={0}";
+        private string LandingUrl => $"{SiteLink}login.php";
+        private string LoginUrl => $"{SiteLink}takelogin.php";
+        private string GetRSSKeyUrl => $"{SiteLink}getrss.php";
+        private string SearchUrl => $"{SiteLink}browse.php";
+        private string RSSUrl =>
+            $"{SiteLink}rss.php?secret_key={{0}}&feedtype=download&timezone=0&showrows=50&categories=all";
+        private string CommentUrl => $"{SiteLink}details.php?id={{0}}";
+        private string DownloadUrl => $"{SiteLink}download.php?id={{0}}";
 
         private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
         {
-            get { return (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData;
+            set => base.configData = value;
         }
 
-        public XSpeeds(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "XSpeeds",
-                description: "XSpeeds (XS) is a Private Torrent Tracker for MOVIES / TV / GENERAL",
-                link: "https://www.xspeeds.eu/",
-                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                configService: configService,
-                client: wc,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
+        public XSpeeds(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps) : base(
+            "XSpeeds", description: "XSpeeds (XS) is a Private Torrent Tracker for MOVIES / TV / GENERAL",
+            link: "https://www.xspeeds.eu/", caps: TorznabUtil.CreateDefaultTorznabTVCaps(), configService: configService,
+            client: wc, logger: l, p: ps, configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
-
-            configData.DisplayText.Value = "Expect an initial delay (often around 10 seconds) due to XSpeeds CloudFlare DDoS protection";
+            configData.DisplayText.Value =
+                "Expect an initial delay (often around 10 seconds) due to XSpeeds CloudFlare DDoS protection";
             configData.DisplayText.Name = "Notice";
-
             TorznabCaps.SupportsImdbMovieSearch = true;
-
             AddCategoryMapping(92, TorznabCatType.MoviesUHD, "4K Movies");
             AddCategoryMapping(91, TorznabCatType.TVUHD, "4K TV");
             AddCategoryMapping(94, TorznabCatType.TVUHD, "4K TV Boxsets");
@@ -136,26 +128,21 @@ namespace Jackett.Common.Indexers
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var loginPage = await RequestStringWithCookies(LandingUrl);
+            var loginPage = await RequestStringWithCookiesAsync(LandingUrl);
             CQ dom = loginPage.Content;
-            CQ qCaptchaImg = dom.Find("img#regimage").First();
+            var qCaptchaImg = dom.Find("img#regimage").First();
             if (qCaptchaImg.Length > 0)
             {
-                var CaptchaUrl = qCaptchaImg.Attr("src");
-                var captchaImage = await RequestBytesWithCookies(CaptchaUrl, loginPage.Cookies, RequestType.GET, LandingUrl);
-
-                var CaptchaImage = new ImageItem { Name = "Captcha Image" };
-                var CaptchaText = new StringItem { Name = "Captcha Text" };
-
-                CaptchaImage.Value = captchaImage.Content;
-
-                configData.AddDynamic("CaptchaImage", CaptchaImage);
-                configData.AddDynamic("CaptchaText", CaptchaText);
+                var captchaUrl = qCaptchaImg.Attr("src");
+                var captchaResult = await RequestBytesWithCookiesAsync(captchaUrl, loginPage.Cookies, RequestType.Get, LandingUrl);
+                var captchaImage = new ImageItem { Name = "Captcha Image" };
+                var captchaText = new StringItem { Name = "Captcha Text" };
+                captchaImage.Value = captchaResult.Content;
+                configData.AddDynamic("CaptchaImage", captchaImage);
+                configData.AddDynamic("CaptchaText", captchaText);
             }
             else
-            {
                 logger.Debug(string.Format("{0}: No captcha image found", ID));
-            }
 
             return configData;
         }
@@ -163,23 +150,18 @@ namespace Jackett.Common.Indexers
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-
             var pairs = new Dictionary<string, string>
-                        {
-                            {"username", configData.Username.Value},
-                            {"password", configData.Password.Value}
-                        };
-
-            var CaptchaText = (StringItem)configData.GetDynamic("CaptchaText");
-            if (CaptchaText != null)
             {
-                pairs.Add("imagestring", CaptchaText.Value);
-            }
+                {"username", configData.Username.Value}, {"password", configData.Password.Value}
+            };
+            var captchaText = (StringItem)configData.GetDynamic("CaptchaText");
+            if (captchaText != null)
+                pairs.Add("imagestring", captchaText.Value);
 
             //var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, SiteLink, true);
-            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, SearchUrl, LandingUrl, true);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"),
-                () =>
+            var result = await RequestLoginAndFollowRedirectAsync(LoginUrl, pairs, null, true, SearchUrl, LandingUrl, true);
+            await ConfigureIfOkAsync(
+                result.Cookies, result.Content?.Contains("logout.php") == true, () =>
                 {
                     CQ dom = result.Content;
                     var errorMessage = dom[".left_side table:eq(0) tr:eq(1)"].Text().Trim().Replace("\n\t", " ");
@@ -187,17 +169,14 @@ namespace Jackett.Common.Indexers
                         errorMessage = dom["div.notification-body"].Text().Trim().Replace("\n\t", " ");
                     throw new ExceptionWithConfigData(errorMessage, configData);
                 });
-
             try
             {
                 // Get RSS key
                 var rssParams = new Dictionary<string, string>
-                                {
-                                    {"feedtype", "download"},
-                                    {"timezone", "0"},
-                                    {"showrows", "50"}
-                                };
-                var rssPage = await PostDataWithCookies(GetRSSKeyUrl, rssParams, result.Cookies);
+                {
+                    {"feedtype", "download"}, {"timezone", "0"}, {"showrows", "50"}
+                };
+                var rssPage = await PostDataWithCookiesAsync(GetRSSKeyUrl, rssParams, result.Cookies);
                 var match = Regex.Match(rssPage.Content, "(?<=secret_key\\=)([a-zA-z0-9]*)");
                 configData.RSSKey.Value = match.Success ? match.Value : string.Empty;
                 if (string.IsNullOrWhiteSpace(configData.RSSKey.Value))
@@ -209,6 +188,7 @@ namespace Jackett.Common.Indexers
                 IsConfigured = false;
                 throw;
             }
+
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
@@ -216,7 +196,7 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();
-            var prevCook = CookieHeader + "";
+            var prevCook = $"{CookieHeader}";
             var searchStringIsImdbQuery = (ParseUtil.GetImdbID(searchString) != null);
 
             // If we have no query use the RSS Page as their server is slow enough at times!
@@ -286,12 +266,8 @@ namespace Jackett.Common.Indexers
                 return releases;
             }
             */
-            var searchParams = new Dictionary<string, string> {
-                { "do", "search" },
-                { "category", "0" },
-                { "include_dead_torrents", "no" }
-            };
-
+            var searchParams =
+                new Dictionary<string, string> { { "do", "search" }, { "category", "0" }, { "include_dead_torrents", "no" } };
             if (query.IsImdbQuery)
             {
                 searchParams.Add("keywords", query.ImdbID);
@@ -306,12 +282,12 @@ namespace Jackett.Common.Indexers
                     searchParams.Add("search_type", "t_name");
             }
 
-            var searchPage = await PostDataWithCookiesAndRetry(SearchUrl, searchParams, CookieHeader);
+            var searchPage = await PostDataWithCookiesAndRetryAsync(SearchUrl, searchParams, CookieHeader);
             // Occasionally the cookies become invalid, login again if that happens
             if (searchPage.IsRedirect)
             {
                 await ApplyConfiguration(null);
-                searchPage = await PostDataWithCookiesAndRetry(SearchUrl, searchParams, CookieHeader);
+                searchPage = await PostDataWithCookiesAndRetryAsync(SearchUrl, searchParams, CookieHeader);
             }
 
             try
@@ -322,48 +298,34 @@ namespace Jackett.Common.Indexers
                 {
                     var release = new ReleaseInfo();
                     var qRow = row.Cq();
-
-                    var qDetails = qRow.Find("div > a[href*=\"details.php?id=\"]"); // details link, release name get's shortened if it's to long
+                    var qDetails =
+                        qRow.Find(
+                            "div > a[href*=\"details.php?id=\"]"); // details link, release name get's shortened if it's to long
                     var qTitle = qRow.Find("td:eq(1) .tooltip-content div:eq(0)"); // use Title from tooltip
                     if (!qTitle.Any()) // fallback to Details link if there's no tooltip
-                    {
                         qTitle = qDetails;
-                    }
                     release.Title = qTitle.Text();
-
                     release.Guid = new Uri(qRow.Find("td:eq(2) a").Attr("href"));
                     release.Link = release.Guid;
                     release.Comments = new Uri(qDetails.Attr("href"));
-                    release.PublishDate = DateTime.ParseExact(qRow.Find("td:eq(1) div").Last().Text().Trim(), "dd-MM-yyyy H:mm", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal); //08-08-2015 12:51
+                    release.PublishDate = DateTime.ParseExact(
+                        qRow.Find("td:eq(1) div").Last().Text().Trim(), "dd-MM-yyyy H:mm", CultureInfo.InvariantCulture,
+                        DateTimeStyles.AssumeUniversal); //08-08-2015 12:51
                     release.Seeders = ParseUtil.CoerceInt(qRow.Find("td:eq(6)").Text());
                     release.Peers = release.Seeders + ParseUtil.CoerceInt(qRow.Find("td:eq(7)").Text().Trim());
                     release.Size = ReleaseInfo.GetBytes(qRow.Find("td:eq(4)").Text().Trim());
-
                     var qBanner = qRow.Find("td:eq(1) .tooltip-content img").First();
                     if (qBanner.Length > 0)
                         release.BannerUrl = new Uri(qBanner.Attr("src"));
-
                     var cat = row.Cq().Find("td:eq(0) a").First().Attr("href");
                     var catSplit = cat.LastIndexOf('=');
                     if (catSplit > -1)
                         cat = cat.Substring(catSplit + 1);
                     release.Category = MapTrackerCatToNewznab(cat);
-
                     var grabs = qRow.Find("td:nth-child(6)").Text();
                     release.Grabs = ParseUtil.CoerceInt(grabs);
-
-                    if (qRow.Find("img[alt^=\"Free Torrent\"]").Length >= 1)
-                        release.DownloadVolumeFactor = 0;
-                    else if (qRow.Find("img[alt^=\"Silver Torrent\"]").Length >= 1)
-                        release.DownloadVolumeFactor = 0.5;
-                    else
-                        release.DownloadVolumeFactor = 1;
-
-                    if (qRow.Find("img[alt^=\"x2 Torrent\"]").Length >= 1)
-                        release.UploadVolumeFactor = 2;
-                    else
-                        release.UploadVolumeFactor = 1;
-
+                    release.DownloadVolumeFactor = qRow.Find("img[alt^=\"Free Torrent\"]").Length >= 1 ? 0 : qRow.Find("img[alt^=\"Silver Torrent\"]").Length >= 1 ? 0.5 : 1;
+                    release.UploadVolumeFactor = qRow.Find("img[alt^=\"x2 Torrent\"]").Length >= 1 ? 2 : 1;
                     releases.Add(release);
                 }
             }
@@ -371,10 +333,9 @@ namespace Jackett.Common.Indexers
             {
                 OnParseError(searchPage.Content, ex);
             }
+
             if (!CookieHeader.Trim().Equals(prevCook.Trim()))
-            {
                 SaveConfig();
-            }
             return releases;
         }
     }

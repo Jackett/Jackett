@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Jackett.Common.Indexers.Abstract;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
@@ -10,22 +10,24 @@ namespace Jackett.Common.Indexers
 {
     public class SecretCinema : GazelleTracker
     {
-        public SecretCinema(IIndexerConfigurationService configService, WebClient webClient, Logger logger, IProtectionService protectionService)
-            : base(name: "Secret Cinema",
-                desc: "A tracker for rare movies.",
-                link: "https://secret-cinema.pw/",
-                configService: configService,
-                logger: logger,
-                protectionService: protectionService,
-                webClient: webClient,
-                supportsFreeleechTokens: false // ratio free tracker
-                )
+        public SecretCinema(IIndexerConfigurationService configService, WebClient webClient, Logger logger,
+                            IProtectionService protectionService) : base(
+            name: "Secret Cinema", desc: "A tracker for rare movies.", link: "https://secret-cinema.pw/",
+            configService: configService, logger: logger, protectionService: protectionService, webClient: webClient,
+            supportsFreeleechTokens: false // ratio free tracker
+            )
         {
             Language = "en-us";
             Type = "private";
-            TorznabCaps.SupportedMusicSearchParamsList = new List<string>() { "q", "album", "artist", "label", "year" };
+            TorznabCaps.SupportedMusicSearchParamsList = new List<string>
+            {
+                "q",
+                "album",
+                "artist",
+                "label",
+                "year"
+            };
             TorznabCaps.SupportsImdbMovieSearch = true;
-
             AddCategoryMapping(1, TorznabCatType.Movies, "Movies");
             AddCategoryMapping(2, TorznabCatType.Audio, "Music");
             AddCategoryMapping(3, TorznabCatType.Books, "E-Books");
@@ -35,7 +37,6 @@ namespace Jackett.Common.Indexers
         {
             var media = (string)torrent["media"];
             if (!string.IsNullOrEmpty(media))
-            {
                 switch (media)
                 {
                     case "SD":
@@ -57,7 +58,7 @@ namespace Jackett.Common.Indexers
                         release.Category.Add(TorznabCatType.MoviesBluRay.ID);
                         break;
                 }
-            }
+
             return true;
         }
     }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
@@ -22,13 +22,7 @@ namespace Jackett.Common.Models
 
         public bool SupportsImdbTVSearch { get; set; }
 
-        public bool MusicSearchAvailable
-        {
-            get
-            {
-                return (SupportedMusicSearchParamsList.Count > 0);
-            }
-        }
+        public bool MusicSearchAvailable => (SupportedMusicSearchParamsList.Count > 0);
 
         public List<string> SupportedMusicSearchParamsList;
 
@@ -59,11 +53,11 @@ namespace Jackett.Common.Models
             MovieSearchAvailable = Categories.Any(i => TorznabCatType.Movies.Contains(i));
         }
 
-        string SupportedTVSearchParams
+        private string SupportedTVSearchParams
         {
             get
             {
-                var parameters = new List<string>() { "q", "season", "ep" };
+                var parameters = new List<string> { "q", "season", "ep" };
                 if (SupportsTVRageSearch)
                     parameters.Add("rid");
                 if (SupportsImdbTVSearch)
@@ -72,24 +66,18 @@ namespace Jackett.Common.Models
             }
         }
 
-        string SupportedMovieSearchParams
+        private string SupportedMovieSearchParams
         {
             get
             {
-                var parameters = new List<string>() { "q" };
+                var parameters = new List<string> { "q" };
                 if (SupportsImdbMovieSearch)
                     parameters.Add("imdbid");
                 return string.Join(",", parameters);
             }
         }
 
-        string SupportedMusicSearchParams
-        {
-            get
-            {
-                return string.Join(",", SupportedMusicSearchParamsList);
-            }
-        }
+        private string SupportedMusicSearchParams => string.Join(",", SupportedMusicSearchParamsList);
 
         public bool SupportsCategories(int[] categories)
         {
@@ -102,63 +90,46 @@ namespace Jackett.Common.Models
         public XDocument GetXDocument()
         {
             var xdoc = new XDocument(
-                new XDeclaration("1.0", "UTF-8", null),
-                new XElement("caps",
-                    new XElement("server",
-                        new XAttribute("title", "Jackett")
-                    ),
-                    LimitsMax != null || LimitsDefault != null ?
-                        new XElement("limits",
-                            LimitsMax != null ? new XAttribute("max", LimitsMax) : null,
-                            LimitsDefault != null ? new XAttribute("default", LimitsDefault) : null
-                        )
-                    : null,
-                    new XElement("searching",
-                        new XElement("search",
-                            new XAttribute("available", SearchAvailable ? "yes" : "no"),
-                            new XAttribute("supportedParams", "q")
-                        ),
-                        new XElement("tv-search",
-                            new XAttribute("available", TVSearchAvailable ? "yes" : "no"),
-                            new XAttribute("supportedParams", SupportedTVSearchParams)
-                        ),
-                        new XElement("movie-search",
-                            new XAttribute("available", MovieSearchAvailable ? "yes" : "no"),
-                            new XAttribute("supportedParams", SupportedMovieSearchParams)
-                        ),
-                        new XElement("music-search",
-                            new XAttribute("available", MusicSearchAvailable ? "yes" : "no"),
-                            new XAttribute("supportedParams", SupportedMusicSearchParams)
-                        ),
+                new XDeclaration("1.0", "UTF-8", null), new XElement(
+                    "caps", new XElement("server", new XAttribute("title", "Jackett")),
+                    LimitsMax != null || LimitsDefault != null
+                        ? new XElement(
+                            "limits", LimitsMax != null ? new XAttribute("max", LimitsMax) : null,
+                            LimitsDefault != null ? new XAttribute("default", LimitsDefault) : null)
+                        : null, new XElement(
+                        "searching",
+                        new XElement(
+                            "search", new XAttribute("available", SearchAvailable ? "yes" : "no"),
+                            new XAttribute("supportedParams", "q")),
+                        new XElement(
+                            "tv-search", new XAttribute("available", TVSearchAvailable ? "yes" : "no"),
+                            new XAttribute("supportedParams", SupportedTVSearchParams)),
+                        new XElement(
+                            "movie-search", new XAttribute("available", MovieSearchAvailable ? "yes" : "no"),
+                            new XAttribute("supportedParams", SupportedMovieSearchParams)),
+                        new XElement(
+                            "music-search", new XAttribute("available", MusicSearchAvailable ? "yes" : "no"),
+                            new XAttribute("supportedParams", SupportedMusicSearchParams)),
                         // inconsistend but apparently already used by various newznab indexers (see #1896)
-                        new XElement("audio-search",
-                            new XAttribute("available", MusicSearchAvailable ? "yes" : "no"),
-                            new XAttribute("supportedParams", SupportedMusicSearchParams)
-                        )
-                    ),
-                    new XElement("categories",
-                        from c in Categories.OrderBy(x => x.ID < 100000 ? "z" + x.ID.ToString() : x.Name)
-                        select new XElement("category",
-                            new XAttribute("id", c.ID),
-                            new XAttribute("name", c.Name),
+                        new XElement(
+                            "audio-search", new XAttribute("available", MusicSearchAvailable ? "yes" : "no"),
+                            new XAttribute("supportedParams", SupportedMusicSearchParams))),
+                    new XElement(
+                        "categories",
+                        from c in Categories.OrderBy(x => x.ID < 100000 ? $"z{x.ID}" : x.Name)
+                        select new XElement(
+                            "category", new XAttribute("id", c.ID), new XAttribute("name", c.Name),
                             from sc in c.SubCategories
-                            select new XElement("subcat",
-                                new XAttribute("id", sc.ID),
-                                new XAttribute("name", sc.Name)
-                            )
-                        )
-                    )
-                )
-            );
+                            select new XElement("subcat", new XAttribute("id", sc.ID), new XAttribute("name", sc.Name))))));
             return xdoc;
         }
 
         public string ToXml()
         {
             var xdoc = GetXDocument();
-
-            return xdoc.Declaration.ToString() + Environment.NewLine + xdoc.ToString();
+            return xdoc.Declaration + Environment.NewLine + xdoc;
         }
+
         public static TorznabCapabilities Concat(TorznabCapabilities lhs, TorznabCapabilities rhs)
         {
             lhs.SearchAvailable = lhs.SearchAvailable || rhs.SearchAvailable;
@@ -167,8 +138,9 @@ namespace Jackett.Common.Models
             lhs.SupportsTVRageSearch = lhs.SupportsTVRageSearch || rhs.SupportsTVRageSearch;
             lhs.SupportsImdbMovieSearch = lhs.SupportsImdbMovieSearch || rhs.SupportsImdbMovieSearch;
             lhs.SupportsImdbTVSearch = lhs.SupportsImdbTVSearch || rhs.SupportsImdbTVSearch;
-            lhs.Categories.AddRange(rhs.Categories.Where(x => x.ID < 100000).Except(lhs.Categories)); // exclude indexer specific categories (>= 100000)
-
+            lhs.Categories.AddRange(
+                rhs.Categories.Where(x => x.ID < 100000)
+                   .Except(lhs.Categories)); // exclude indexer specific categories (>= 100000)
             return lhs;
         }
     }

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Jackett.Common.Indexers.Abstract;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
@@ -10,16 +10,12 @@ namespace Jackett.Common.Indexers
 {
     public class HDOnly : GazelleTracker
     {
-        public HDOnly(IIndexerConfigurationService configService, WebClient webClient, Logger logger, IProtectionService protectionService)
-            : base(name: "HD-Only",
-                desc: "HD-Only (HD-O) is a FRENCH Private Torrent Tracker for HD MOVIES / TV",
-                link: "https://hd-only.org/",
-                configService: configService,
-                logger: logger,
-                protectionService: protectionService,
-                webClient: webClient,
-                supportsFreeleechTokens: false // ratiofree
-                )
+        public HDOnly(IIndexerConfigurationService configService, WebClient webClient, Logger logger,
+                      IProtectionService protectionService) : base(
+            name: "HD-Only", desc: "HD-Only (HD-O) is a FRENCH Private Torrent Tracker for HD MOVIES / TV",
+            link: "https://hd-only.org/", configService: configService, logger: logger, protectionService: protectionService,
+            webClient: webClient, supportsFreeleechTokens: false // ratiofree
+            )
         {
             Language = "fr-fr";
             Type = "private";
@@ -51,13 +47,12 @@ namespace Jackett.Common.Indexers
                 var releaseType = (string)result["releaseType"];
                 release.Category = MapTrackerCatDescToNewznab(releaseType);
             }
+
             return true;
         }
 
-        protected override List<string> MapTorznabCapsToTrackers(TorznabQuery query, bool mapChildrenCatsToParent = false)
-        {
-            // don't use category filtering
-            return new List<string>();
-        }
+        // don't use category filtering
+        protected override List<string> MapTorznabCapsToTrackers(TorznabQuery query, bool mapChildrenCatsToParent = false) =>
+            new List<string>();
     }
 }

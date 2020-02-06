@@ -17,37 +17,31 @@ namespace Jackett.Common.Indexers
 {
     public class SolidTorrents : BaseWebIndexer
     {
-        private string SearchUrl => SiteLink + "api/v1/search";
+        private string SearchUrl => $"{SiteLink}api/v1/search";
 
-        private readonly Dictionary<string, string> APIHeaders = new Dictionary<string, string>()
+        private readonly Dictionary<string, string> _apiHeaders = new Dictionary<string, string>
         {
-            {"Accept", "application/json, text/plain, */*"},
+            {"Accept", "application/json, text/plain, */*"}
         };
 
-        private readonly int MAX_RESULTS_PER_PAGE = 20;
-        private readonly int MAX_SEARCH_PAGE_LIMIT = 3; // 20 items per page, 60
+        private readonly int _maxResultsPerPage = 20;
+        private readonly int _maxSearchPageLimit = 3; // 20 items per page, 60
 
         private ConfigurationData ConfigData
         {
-            get => (ConfigurationData)base.configData;
-            set => base.configData = value;
+            get => configData;
+            set => configData = value;
         }
 
-        public SolidTorrents(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "Solid Torrents",
-                   description: "SolidTorrents is a Public torrent meta-search engine",
-                   link: "https://solidtorrents.net/",
-                   caps: new TorznabCapabilities(),
-                   configService: configService,
-                   client: wc,
-                   logger: l,
-                   p: ps,
-                   configData: new ConfigurationData())
+        public SolidTorrents(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps) :
+            base(
+                "Solid Torrents", description: "SolidTorrents is a Public torrent meta-search engine",
+                link: "https://solidtorrents.net/", caps: new TorznabCapabilities(), configService: configService,
+                client: wc, logger: l, p: ps, configData: new ConfigurationData())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "public";
-
             AddCategoryMapping("Audio", TorznabCatType.Audio);
             AddCategoryMapping("Video", TorznabCatType.Movies);
             AddCategoryMapping("Image", TorznabCatType.OtherMisc);
@@ -66,12 +60,8 @@ namespace Jackett.Common.Indexers
         {
             base.LoadValuesFromJson(configJson);
             var releases = await PerformQuery(new TorznabQuery());
-
-            await ConfigureIfOK(string.Empty, releases.Any(), () =>
-            {
-                throw new Exception("Could not find release from this URL.");
-            });
-
+            await ConfigureIfOkAsync(
+                string.Empty, releases.Any(), () => throw new Exception("Could not find release from this URL."));
             return IndexerConfigurationStatus.Completed;
         }
 
@@ -91,85 +81,75 @@ namespace Jackett.Common.Indexers
             }
         }
 
-        private async Task<JArray> SendSearchRequest(string searchString, string category, int page)
+        private async Task<JArray> SendSearchRequestAsync(string searchString, string category, int page)
         {
-            var queryCollection = new NameValueCollection();
-            queryCollection.Add("q", searchString);
-            queryCollection.Add("category", category);
-            queryCollection.Add("skip", (page * MAX_RESULTS_PER_PAGE).ToString());
-            queryCollection.Add("sort", "date");
-            queryCollection.Add("fuv", "no");
-            var fullSearchUrl = SearchUrl + "?" + queryCollection.GetQueryString();
-            var result = await RequestStringWithCookiesAndRetry(fullSearchUrl, null, null, APIHeaders);
+            var queryCollection = new NameValueCollection
+            {
+                {"q", searchString},
+                {"category", category},
+                {"skip", (page * _maxResultsPerPage).ToString()},
+                {"sort", "date"},
+                {"fuv", "no"}
+            };
+            var fullSearchUrl = $"{SearchUrl}?{queryCollection.GetQueryString()}";
+            var result = await RequestStringWithCookiesAndRetryAsync(fullSearchUrl, null, null, _apiHeaders);
             return CheckResponse(result);
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-
             var searchString = query.GetQueryString();
             var page = 0;
-
             var cats = MapTorznabCapsToTrackers(query);
             var category = cats.Count > 0 ? string.Join(",", cats) : "all";
-
             var isLatestSearch = string.IsNullOrWhiteSpace(searchString);
-            var isLastPage = false;
-
+            bool isLastPage;
             do
             {
-                var result = await SendSearchRequest(searchString, category, page);
+                var result = await SendSearchRequestAsync(searchString, category, page);
                 try
                 {
                     foreach (var torrent in result)
-                    {
                         releases.Add(MakeRelease(torrent));
-                    }
                 }
                 catch (Exception ex)
                 {
                     OnParseError(result.ToString(), ex);
                 }
 
-                isLastPage = result.Count < MAX_RESULTS_PER_PAGE;
+                isLastPage = result.Count < _maxResultsPerPage;
                 page++; // update page number
-
-            } while (!isLatestSearch && !isLastPage && page < MAX_SEARCH_PAGE_LIMIT);
+            } while (!isLatestSearch && !isLastPage && page < _maxSearchPageLimit);
 
             return releases;
         }
 
         private ReleaseInfo MakeRelease(JToken torrent)
         {
-            var release = new ReleaseInfo();
+            var release = new ReleaseInfo
+            {
+                Title = (string)torrent["title"],
 
-            release.Title = (string)torrent["title"];
-
-            // https://solidtorrents.net/view/5e10885d651df640a70ee826
-            release.Comments = new Uri(SiteLink + "view/" + (string)torrent["_id"]);
+                // https://solidtorrents.net/view/5e10885d651df640a70ee826
+                Comments = new Uri($"{SiteLink}view/{(string)torrent["_id"]}")
+            };
             release.Guid = release.Comments;
-
             release.PublishDate = DateTime.Now;
             if (torrent["imported"] != null)
                 release.PublishDate = DateTime.Parse((string)torrent["imported"]);
-
             release.Category = MapTrackerCatToNewznab((string)torrent["category"]);
             release.Size = (long)torrent["size"];
-
             var swarm = torrent["swarm"];
             release.Seeders = (int)swarm["seeders"];
             release.Peers = release.Seeders + (int)swarm["leechers"];
             release.Grabs = (long)swarm["downloads"];
-
             release.InfoHash = (string)torrent["infohash"];
             release.MagnetUri = new Uri((string)torrent["magnet"]);
-
             release.MinimumRatio = 1;
             release.MinimumSeedTime = 172800; // 48 hours
             release.DownloadVolumeFactor = 0;
             release.UploadVolumeFactor = 1;
-
             return release;
         }
     }

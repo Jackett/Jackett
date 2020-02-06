@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Jackett.Common.Indexers.Abstract;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
@@ -9,21 +9,21 @@ namespace Jackett.Common.Indexers
 {
     public class Orpheus : GazelleTracker
     {
-        public Orpheus(IIndexerConfigurationService configService, WebClient webClient, Logger logger, IProtectionService protectionService)
-            : base(name: "Orpheus",
-                desc: "A music tracker",
-                link: "https://orpheus.network/",
-                configService: configService,
-                logger: logger,
-                protectionService: protectionService,
-                webClient: webClient,
-                supportsFreeleechTokens: true
-                )
+        public Orpheus(IIndexerConfigurationService configService, WebClient webClient, Logger logger,
+                       IProtectionService protectionService) : base(
+            name: "Orpheus", desc: "A music tracker", link: "https://orpheus.network/", configService: configService,
+            logger: logger, protectionService: protectionService, webClient: webClient, supportsFreeleechTokens: true)
         {
             Language = "en-us";
             Type = "private";
-            TorznabCaps.SupportedMusicSearchParamsList = new List<string>() { "q", "album", "artist", "label", "year" };
-
+            TorznabCaps.SupportedMusicSearchParamsList = new List<string>
+            {
+                "q",
+                "album",
+                "artist",
+                "label",
+                "year"
+            };
             AddCategoryMapping(1, TorznabCatType.Audio, "Music");
             AddCategoryMapping(2, TorznabCatType.PC, "Applications");
             AddCategoryMapping(3, TorznabCatType.Books, "E-Books");

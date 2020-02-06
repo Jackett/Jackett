@@ -1,4 +1,4 @@
-﻿namespace Jackett.Common.Models.IndexerConfig
+namespace Jackett.Common.Models.IndexerConfig
 {
     public class ConfigurationDataBasicLoginWithFilter : ConfigurationData
     {
@@ -7,19 +7,14 @@
         public HiddenItem LastLoggedInCheck { get; private set; }
         public DisplayItem FilterExample { get; private set; }
         public StringItem FilterString { get; private set; }
-        
-        public ConfigurationDataBasicLoginWithFilter(string FilterInstructions)
+
+        public ConfigurationDataBasicLoginWithFilter(string filterInstructions)
         {
             Username = new StringItem { Name = "Username" };
             Password = new StringItem { Name = "Password" };
             LastLoggedInCheck = new HiddenItem { Name = "LastLoggedInCheck" };
-            FilterExample = new DisplayItem(FilterInstructions)
-            {
-                Name = ""
-            };
+            FilterExample = new DisplayItem(filterInstructions) { Name = "" };
             FilterString = new StringItem { Name = "Filters (optional)" };
         }
-
-
     }
 }

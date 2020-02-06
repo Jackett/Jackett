@@ -1,21 +1,35 @@
-﻿using CommandLine;
-using CommandLine.Text;
-using Jackett.Common.Models.Config;
-using Jackett.Common.Services;
-using Jackett.Common.Services.Interfaces;
-using Jackett.Common.Utils;
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using NLog;
-using NLog.Web;
+/* Unmerged change from project 'Jackett.Server (net461)'
+Before:
+using CommandLine;
+After:
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using CommandLine;
+*/
+
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using CommandLine;
+using CommandLine.Text;
+using Jackett.Common.Models.Config;
+using Jackett.Common.Services;
+using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
+using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Connections;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using NLog;
+using NLog.Web;
+using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace Jackett.Server
 {
@@ -23,53 +37,42 @@ namespace Jackett.Server
     {
         public static IConfiguration Configuration { get; set; }
         private static RuntimeSettings Settings { get; set; }
-        public static bool isWebHostRestart = false;
+        public static bool isWebHostRestart;
 
         public static void Main(string[] args)
         {
             AppDomain.CurrentDomain.ProcessExit += CurrentDomain_ProcessExit;
-
             var commandLineParser = new Parser(settings => settings.CaseSensitive = false);
             var optionsResult = commandLineParser.ParseArguments<ConsoleOptions>(args);
             var runtimeDictionary = new Dictionary<string, string>();
-            ConsoleOptions consoleOptions = new ConsoleOptions();
-
-            optionsResult.WithNotParsed(errors =>
-            {
-                var text = HelpText.AutoBuild(optionsResult);
-                text.Copyright = " ";
-                text.Heading = "Jackett v" + EnvironmentUtil.JackettVersion;
-                Console.WriteLine(text);
-                Environment.Exit(1);
-                return;
-            });
-
-            optionsResult.WithParsed(options =>
-            {
-                if (string.IsNullOrEmpty(options.Client))
+            var consoleOptions = new ConsoleOptions();
+            optionsResult.WithNotParsed(
+                errors =>
                 {
-                    if (DotNetCoreUtil.IsRunningOnDotNetCore)
+                    var text = HelpText.AutoBuild(optionsResult);
+                    text.Copyright = " ";
+                    text.Heading = $"Jackett v{EnvironmentUtil.JackettVersion}";
+                    Console.WriteLine(text);
+                    Environment.Exit(1);
+                });
+            optionsResult.WithParsed(
+                options =>
+                {
+                    if (string.IsNullOrEmpty(options.Client))
                     {
-                        options.Client = "httpclient2netcore";
+                        options.Client = DotNetCoreUtil.IsRunningOnDotNetCore ? "httpclient2netcore" : "httpclient";
                     }
-                    else
-                    {
-                        options.Client = "httpclient";
-                    }
-                }
 
-                Settings = options.ToRunTimeSettings();
-                consoleOptions = options;
-                runtimeDictionary = GetValues(Settings);
-            });
-
+                    Settings = options.ToRunTimeSettings();
+                    consoleOptions = options;
+                    runtimeDictionary = GetValues(Settings);
+                });
             LogManager.Configuration = LoggingSetup.GetLoggingConfiguration(Settings);
-            Logger logger = LogManager.GetCurrentClassLogger();
-            logger.Info("Starting Jackett v" + EnvironmentUtil.JackettVersion);
+            var logger = LogManager.GetCurrentClassLogger();
+            logger.Info($"Starting Jackett v{EnvironmentUtil.JackettVersion}");
 
             // create PID file early
             if (!string.IsNullOrWhiteSpace(Settings.PIDFile))
-            {
                 try
                 {
                     var proc = Process.GetCurrentProcess();
@@ -79,95 +82,86 @@ namespace Jackett.Server
                 {
                     logger.Error(e, "Error while creating the PID file");
                 }
-            }
 
             Initialisation.CheckEnvironmentalVariables(logger);
             Initialisation.ProcessSettings(Settings, logger);
-
             ISerializeService serializeService = new SerializeService();
             IProcessService processService = new ProcessService(logger);
-            IConfigurationService configurationService = new ConfigurationService(serializeService, processService, logger, Settings);
-
-            if (consoleOptions.Install || consoleOptions.Uninstall || consoleOptions.StartService || consoleOptions.StopService || consoleOptions.ReserveUrls)
+            IConfigurationService configurationService =
+                new ConfigurationService(serializeService, processService, logger, Settings);
+            if (consoleOptions.Install || consoleOptions.Uninstall || consoleOptions.StartService ||
+                consoleOptions.StopService || consoleOptions.ReserveUrls)
             {
-                bool isWindows = Environment.OSVersion.Platform == PlatformID.Win32NT;
-
+                var isWindows = Environment.OSVersion.Platform == PlatformID.Win32NT;
                 if (isWindows)
                 {
-                    ServerConfig serverConfig = configurationService.BuildServerConfig(Settings);
+                    var serverConfig = configurationService.BuildServerConfig(Settings);
                     Initialisation.ProcessWindowsSpecificArgs(consoleOptions, processService, serverConfig, logger);
                 }
                 else
                 {
-                    logger.Error($"ReserveUrls and service arguments only apply to Windows, please remove them from your start arguments");
+                    logger.Error(
+                        "ReserveUrls and service arguments only apply to Windows, please remove them from your start arguments");
                     Environment.Exit(1);
                 }
             }
 
             var builder = new ConfigurationBuilder();
             builder.AddInMemoryCollection(runtimeDictionary);
-            builder.AddJsonFile(Path.Combine(configurationService.GetAppDataFolder(), "appsettings.json"), optional: true);
-
+            builder.AddJsonFile(Path.Combine(configurationService.GetAppDataFolder(), "appsettings.json"), true);
             Configuration = builder.Build();
-
             do
             {
                 if (!isWebHostRestart)
-                {
                     if (consoleOptions.Port != 0 || consoleOptions.ListenPublic || consoleOptions.ListenPrivate)
                     {
-                        ServerConfig serverConfiguration = configurationService.BuildServerConfig(Settings);
-                        Initialisation.ProcessConsoleOverrides(consoleOptions, processService, serverConfiguration, configurationService, logger);
+                        var serverConfiguration = configurationService.BuildServerConfig(Settings);
+                        Initialisation.ProcessConsoleOverrides(
+                            consoleOptions, processService, serverConfiguration, configurationService, logger);
                     }
-                }
 
-                ServerConfig serverConfig = configurationService.BuildServerConfig(Settings);
-                Int32.TryParse(serverConfig.Port.ToString(), out Int32 configPort);
-                string[] url = serverConfig.GetListenAddresses(serverConfig.AllowExternal);
-
+                var serverConfig = configurationService.BuildServerConfig(Settings);
+                int.TryParse(serverConfig.Port.ToString(), out var configPort);
+                var url = serverConfig.GetListenAddresses(serverConfig.AllowExternal);
                 isWebHostRestart = false;
-
                 try
                 {
                     logger.Debug("Creating web host...");
-                    string applicationFolder = Path.Combine(configurationService.ApplicationFolder(), "Content");
+                    var applicationFolder = Path.Combine(configurationService.ApplicationFolder(), "Content");
                     logger.Debug($"Content root path is: {applicationFolder}");
-
                     CreateWebHostBuilder(args, url, applicationFolder).Build().Run();
                 }
                 catch (Exception ex)
                 {
-                    if (ex.InnerException is Microsoft.AspNetCore.Connections.AddressInUseException)
+                    if (ex.InnerException is AddressInUseException)
                     {
-                        logger.Error("Address already in use: Most likely Jackett is already running. " + ex.Message);
+                        logger.Error($"Address already in use: Most likely Jackett is already running. {ex.Message}");
                         Environment.Exit(1);
                     }
+
                     logger.Error(ex);
                     throw;
                 }
             } while (isWebHostRestart);
         }
 
-        public static Dictionary<string, string> GetValues(object obj)
-        {
-            return obj
-                    .GetType()
-                    .GetProperties()
-                    .ToDictionary(p => "RuntimeSettings:" + p.Name, p => p.GetValue(obj) == null ? null : p.GetValue(obj).ToString());
-        }
+        public static Dictionary<string, string> GetValues(object obj) => obj.GetType().GetProperties().ToDictionary(
+            p => $"RuntimeSettings:{p.Name}",
+            p => p.GetValue(obj)?.ToString());
 
         private static void CurrentDomain_ProcessExit(object sender, EventArgs e)
         {
             try
             {
-                if (Settings != null && !string.IsNullOrWhiteSpace(Settings.PIDFile))
+                if (!string.IsNullOrWhiteSpace(Settings?.PIDFile))
                 {
-                    var PIDFile = Settings.PIDFile;
-                    if (File.Exists(PIDFile))
+                    var pidFile = Settings.PIDFile;
+                    if (File.Exists(pidFile))
                     {
-                        Console.WriteLine("Deleting PID file " + PIDFile);
-                        File.Delete(PIDFile);
+                        Console.WriteLine($"Deleting PID file {pidFile}");
+                        File.Delete(pidFile);
                     }
+
                     LogManager.Shutdown();
                 }
             }
@@ -177,19 +171,32 @@ namespace Jackett.Server
             }
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args, string[] urls, string contentRoot) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseContentRoot(contentRoot)
-                .UseWebRoot(contentRoot)
-                .UseUrls(urls)
-                .PreferHostingUrls(true)
-                .UseConfiguration(Configuration)
-                .UseStartup<Startup>()
-                .ConfigureLogging(logging =>
-                {
-                    logging.ClearProviders();
-                    logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
-                })
-                .UseNLog();
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args, string[] urls, string contentRoot) => WebHost
+                                                                                                                .CreateDefaultBuilder(
+                                                                                                                    args)
+                                                                                                                .UseContentRoot(
+                                                                                                                    contentRoot)
+                                                                                                                .UseWebRoot(
+                                                                                                                    contentRoot)
+                                                                                                                .UseUrls(
+                                                                                                                    urls)
+                                                                                                                .PreferHostingUrls(
+                                                                                                                    true)
+                                                                                                                .UseConfiguration(
+                                                                                                                    Configuration)
+                                                                                                                .UseStartup<
+                                                                                                                    Startup
+                                                                                                                    >()
+                                                                                                                .ConfigureLogging(
+                                                                                                                    logging =>
+                                                                                                                    {
+                                                                                                                        logging
+                                                                                                                            .ClearProviders();
+                                                                                                                        logging
+                                                                                                                            .SetMinimumLevel(
+                                                                                                                                LogLevel
+                                                                                                                                    .Trace);
+                                                                                                                    })
+                                                                                                                .UseNLog();
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -17,24 +17,18 @@ namespace Jackett.Common.Indexers
 {
     public class SceneHD : BaseWebIndexer
     {
-        private string SearchUrl { get { return SiteLink + "browse.php"; } }
+        private string SearchUrl => $"{SiteLink}browse.php";
 
         private new ConfigurationDataCookie configData
         {
-            get { return (ConfigurationDataCookie)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataCookie)base.configData;
+            set => base.configData = value;
         }
 
-        public SceneHD(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps)
-            : base(name: "SceneHD",
-                description: "SceneHD is Private site for HD TV / MOVIES",
-                link: "https://scenehd.org/",
-                configService: configService,
-                caps: new TorznabCapabilities(),
-                client: c,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataCookie())
+        public SceneHD(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps) : base(
+            "SceneHD", description: "SceneHD is Private site for HD TV / MOVIES", link: "https://scenehd.org/",
+            configService: configService, caps: new TorznabCapabilities(), client: c, logger: l, p: ps,
+            configData: new ConfigurationDataCookie())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
@@ -42,7 +36,6 @@ namespace Jackett.Common.Indexers
             TorznabCaps.SupportsImdbMovieSearch = true;
             webclient.EmulateBrowser = false;
             webclient.AddTrustedCertificate(new Uri(SiteLink).Host, "D948487DD52462F2D1E62B990D608051E3DE5AA6");
-
             AddCategoryMapping(2, TorznabCatType.MoviesUHD, "Movie/2160");
             AddCategoryMapping(1, TorznabCatType.MoviesHD, "Movie/1080");
             AddCategoryMapping(4, TorznabCatType.MoviesHD, "Movie/720");
@@ -67,10 +60,7 @@ namespace Jackett.Common.Indexers
             {
                 var results = await PerformQuery(new TorznabQuery());
                 if (results.Count() == 0)
-                {
                     throw new Exception("Your cookie did not work");
-                }
-
                 IsConfigured = true;
                 SaveConfig();
                 return IndexerConfigurationStatus.Completed;
@@ -78,82 +68,71 @@ namespace Jackett.Common.Indexers
             catch (Exception e)
             {
                 IsConfigured = false;
-                throw new Exception("Your cookie did not work: " + e.Message);
+                throw new Exception($"Your cookie did not work: {e.Message}");
             }
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            TimeZoneInfo.TransitionTime startTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 3, 0, 0), 3, 5, DayOfWeek.Sunday);
-            TimeZoneInfo.TransitionTime endTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 4, 0, 0), 10, 5, DayOfWeek.Sunday);
-            TimeSpan delta = new TimeSpan(1, 0, 0);
-            TimeZoneInfo.AdjustmentRule adjustment = TimeZoneInfo.AdjustmentRule.CreateAdjustmentRule(new DateTime(1999, 10, 1), DateTime.MaxValue.Date, delta, startTransition, endTransition);
-            TimeZoneInfo.AdjustmentRule[] adjustments = { adjustment };
-            TimeZoneInfo Tz = TimeZoneInfo.CreateCustomTimeZone("custom", new TimeSpan(1, 0, 0), "custom", "custom", "custom", adjustments);
-
+            var startTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(
+                new DateTime(1, 1, 1, 3, 0, 0), 3, 5, DayOfWeek.Sunday);
+            var endTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(
+                new DateTime(1, 1, 1, 4, 0, 0), 10, 5, DayOfWeek.Sunday);
+            var delta = new TimeSpan(1, 0, 0);
+            var adjustment = TimeZoneInfo.AdjustmentRule.CreateAdjustmentRule(
+                new DateTime(1999, 10, 1), DateTime.MaxValue.Date, delta, startTransition,
+                endTransition);
+            TimeZoneInfo.AdjustmentRule[] adjustments =
+            {
+                adjustment
+            };
+            var tz = TimeZoneInfo.CreateCustomTimeZone(
+                "custom", new TimeSpan(1, 0, 0), "custom", "custom", "custom", adjustments);
             var releases = new List<ReleaseInfo>();
-
-            NameValueCollection qParams = new NameValueCollection();
-            qParams.Add("api", "");
-            if(query.ImdbIDShort != null)
+            var qParams = new NameValueCollection { { "api", "" } };
+            if (query.ImdbIDShort != null)
                 qParams.Add("imdb", query.ImdbIDShort);
             else
                 qParams.Add("search", query.SearchTerm);
-
             foreach (var cat in MapTorznabCapsToTrackers(query))
-            {
-                qParams.Add("categories["+cat+"]", "1");
-            }
-
-            string urlSearch = SearchUrl;
-            urlSearch += "?" + qParams.GetQueryString();
-
-            var response = await RequestStringWithCookiesAndRetry(urlSearch);
+                qParams.Add($"categories[{cat}]", "1");
+            var urlSearch = SearchUrl;
+            urlSearch += $"?{qParams.GetQueryString()}";
+            var response = await RequestStringWithCookiesAndRetryAsync(urlSearch);
             if (response.IsRedirect)
                 throw new Exception("not logged in");
-
             try
             {
                 var jsonContent = JArray.Parse(response.Content);
                 var sitelink = new Uri(SiteLink);
-
                 foreach (var item in jsonContent)
                 {
                     var release = new ReleaseInfo();
-
                     var id = item.Value<long>("id");
                     release.Title = item.Value<string>("name");
-
                     var imdbid = item.Value<string>("imdbid");
                     if (!string.IsNullOrEmpty(imdbid))
                         release.Imdb = long.Parse(imdbid);
-
                     var category = item.Value<string>("category");
                     release.Category = MapTrackerCatToNewznab(category);
-
-                    release.Link = new Uri(sitelink, "/download.php?id=" + id);
-                    release.Comments = new Uri(sitelink, "/details.php?id=" + id);
+                    release.Link = new Uri(sitelink, $"/download.php?id={id}");
+                    release.Comments = new Uri(sitelink, $"/details.php?id={id}");
                     release.Guid = release.Comments;
-
                     var dateStr = item.Value<string>("added");
-                    var dateTime = DateTime.SpecifyKind(DateTime.ParseExact(dateStr, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture), DateTimeKind.Unspecified);
-                    var pubDateUtc = TimeZoneInfo.ConvertTimeToUtc(dateTime, Tz);
+                    var dateTime = DateTime.SpecifyKind(
+                        DateTime.ParseExact(dateStr, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture),
+                        DateTimeKind.Unspecified);
+                    var pubDateUtc = TimeZoneInfo.ConvertTimeToUtc(dateTime, tz);
                     release.PublishDate = pubDateUtc;
-
                     release.Grabs = item.Value<long>("times_completed");
                     release.Files = item.Value<long>("numfiles");
                     release.Seeders = item.Value<int>("seeders");
                     release.Peers = item.Value<int>("leechers") + release.Seeders;
                     var size = item.Value<string>("size");
                     release.Size = ReleaseInfo.GetBytes(size);
-                    var is_freeleech = item.Value<int>("is_freeleech");
-                    
-                    if (is_freeleech == 1)
-                        release.DownloadVolumeFactor = 0;
-                    else
-                        release.DownloadVolumeFactor = 1;
+                    var isFreeleech = item.Value<int>("is_freeleech");
+                    release.DownloadVolumeFactor = isFreeleech == 1 ? 0 : 1;
                     release.UploadVolumeFactor = 1;
-
                     releases.Add(release);
                 }
             }

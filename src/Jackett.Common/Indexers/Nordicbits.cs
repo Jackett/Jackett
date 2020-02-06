@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using CsQuery;
 using Jackett.Common.Helpers;
@@ -26,37 +26,31 @@ namespace Jackett.Common.Indexers
     /// </summary>
     public class Nordicbits : BaseCachingWebIndexer
     {
-        private string LoginUrl => SiteLink + "login.php";
-        private string LoginCheckUrl => SiteLink + "takelogin.php";
-        private string SearchUrl => SiteLink + "browse.php";
-        private string TorrentCommentUrl => SiteLink + "details.php?id={id}&comonly=1#page1";
-        private string TorrentDescriptionUrl => SiteLink + "details.php?id={id}";
-        private string TorrentDownloadUrl => SiteLink + "download.php?torrent={id}&torrent_pass={passkey}";
+        private string LoginUrl => $"{SiteLink}login.php";
+        private string LoginCheckUrl => $"{SiteLink}takelogin.php";
+        private string SearchUrl => $"{SiteLink}browse.php";
+        private string TorrentCommentUrl => $"{SiteLink}details.php?id={{id}}&comonly=1#page1";
+        private string TorrentDescriptionUrl => $"{SiteLink}details.php?id={{id}}";
+        private string TorrentDownloadUrl => $"{SiteLink}download.php?torrent={{id}}&torrent_pass={{passkey}}";
         private bool Latency => ConfigData.Latency.Value;
         private bool DevMode => ConfigData.DevMode.Value;
         private bool CacheMode => ConfigData.HardDriveCache.Value;
-        private static string Directory => Path.Combine(Path.GetTempPath(), "Jackett", MethodBase.GetCurrentMethod().DeclaringType?.Name);
+
+        private static string Directory => Path.Combine(
+            Path.GetTempPath(), "Jackett", MethodBase.GetCurrentMethod().DeclaringType?.Name);
 
         private readonly Dictionary<string, string> _emulatedBrowserHeaders = new Dictionary<string, string>();
         private CQ _fDom;
         private ConfigurationDataNordicbits ConfigData => (ConfigurationDataNordicbits)configData;
 
-        public Nordicbits(IIndexerConfigurationService configService, Utils.Clients.WebClient w, Logger l, IProtectionService ps)
-            : base(
-                name: "Nordicbits",
-                description: "Nordicbits is a Danish Private site for MOVIES / TV / GENERAL",
-                link: "https://nordicb.org/",
-                caps: new TorznabCapabilities(),
-                configService: configService,
-                client: w,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataNordicbits())
+        public Nordicbits(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps) : base(
+            "Nordicbits", description: "Nordicbits is a Danish Private site for MOVIES / TV / GENERAL",
+            link: "https://nordicb.org/", caps: new TorznabCapabilities(), configService: configService, client: w,
+            logger: l, p: ps, configData: new ConfigurationDataNordicbits())
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "da-dk";
             Type = "private";
-
             TorznabCaps.SupportsImdbMovieSearch = false;
 
             // Apps
@@ -140,13 +134,13 @@ namespace Jackett.Common.Indexers
                 _emulatedBrowserHeaders.Add("Accept", ConfigData.HeaderAccept.Value);
                 _emulatedBrowserHeaders.Add("Accept-Language", ConfigData.HeaderAcceptLang.Value);
                 _emulatedBrowserHeaders.Add("DNT", Convert.ToInt32(ConfigData.HeaderDnt.Value).ToString());
-                _emulatedBrowserHeaders.Add("Upgrade-Insecure-Requests", Convert.ToInt32(ConfigData.HeaderUpgradeInsecure.Value).ToString());
+                _emulatedBrowserHeaders.Add(
+                    "Upgrade-Insecure-Requests", Convert.ToInt32(ConfigData.HeaderUpgradeInsecure.Value).ToString());
                 _emulatedBrowserHeaders.Add("User-Agent", ConfigData.HeaderUserAgent.Value);
                 _emulatedBrowserHeaders.Add("Referer", LoginUrl);
             }
 
-            await DoLogin();
-
+            await DoLoginAsync();
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
@@ -154,31 +148,31 @@ namespace Jackett.Common.Indexers
         /// Perform login to racker
         /// </summary>
         /// <returns></returns>
-        private async Task DoLogin()
+        private async Task DoLoginAsync()
         {
             // Build WebRequest for index
-            var myIndexRequest = new Utils.Clients.WebRequest()
+            var myIndexRequest = new WebRequest
             {
-                Type = RequestType.GET,
+                Type = RequestType.Get,
                 Url = SiteLink,
                 Headers = _emulatedBrowserHeaders,
                 Encoding = Encoding
             };
 
             // Get index page for cookies
-            Output("\nGetting index page (for cookies).. with " + SiteLink);
-            var indexPage = await webclient.GetString(myIndexRequest);
+            Output($"\nGetting index page (for cookies).. with {SiteLink}");
+            var indexPage = await webclient.GetStringAsync(myIndexRequest);
 
             // Building login form data
-            var pairs = new Dictionary<string, string> {
-                { "username", ConfigData.Username.Value },
-                { "password", ConfigData.Password.Value }
+            var pairs = new Dictionary<string, string>
+            {
+                {"username", ConfigData.Username.Value}, {"password", ConfigData.Password.Value}
             };
 
             // Build WebRequest for login
-            var myRequestLogin = new Utils.Clients.WebRequest()
+            var myRequestLogin = new WebRequest
             {
-                Type = RequestType.GET,
+                Type = RequestType.Get,
                 Url = LoginUrl,
                 Headers = _emulatedBrowserHeaders,
                 Cookies = indexPage.Cookies,
@@ -188,15 +182,15 @@ namespace Jackett.Common.Indexers
 
             // Get login page -- (not used, but simulation needed by tracker security's checks)
             LatencyNow();
-            Output("\nGetting login page (user simulation).. with " + LoginUrl);
-            await webclient.GetString(myRequestLogin);
+            Output($"\nGetting login page (user simulation).. with {LoginUrl}");
+            await webclient.GetStringAsync(myRequestLogin);
 
             // Build WebRequest for submitting authentification
-            var request = new Utils.Clients.WebRequest()
+            var request = new WebRequest
             {
                 PostData = pairs,
                 Referer = LoginUrl,
-                Type = RequestType.POST,
+                Type = RequestType.Post,
                 Url = LoginCheckUrl,
                 Headers = _emulatedBrowserHeaders,
                 Cookies = indexPage.Cookies,
@@ -205,25 +199,25 @@ namespace Jackett.Common.Indexers
 
             // Perform loggin
             LatencyNow();
-            Output("\nPerform loggin.. with " + LoginCheckUrl);
-            var response = await webclient.GetString(request);
+            Output($"\nPerform loggin.. with {LoginCheckUrl}");
+            var response = await webclient.GetStringAsync(request);
 
             // Test if we are logged in
-            await ConfigureIfOK(response.Cookies, response.Cookies != null && response.Cookies.Contains("uid="), () =>
-            {
-                // Default error message
-                var message = "Error during attempt !";
-                // Parse redirect header
-                var redirectTo = response.RedirectingTo;
+            await ConfigureIfOkAsync(
+                response.Cookies, response.Cookies?.Contains("uid=") == true, () =>
+                {
+                    // Default error message
+                    var message = "Error during attempt !";
+                    // Parse redirect header
+                    var redirectTo = response.RedirectingTo;
 
-                // Oops, unable to login
-                Output("-> Login failed: " + message, "error");
-                throw new ExceptionWithConfigData("Login failed: " + message, configData);
-            });
-
+                    // Oops, unable to login
+                    Output($"-> Login failed: {message}", "error");
+                    throw new ExceptionWithConfigData($"Login failed: {message}", configData);
+                });
             Output("\nCookies saved for future uses...");
-            ConfigData.CookieHeader.Value = indexPage.Cookies + " " + response.Cookies + " ts_username=" + ConfigData.Username.Value;
-
+            ConfigData.CookieHeader.Value =
+                $"{indexPage.Cookies} {response.Cookies} ts_username={ConfigData.Username.Value}";
             Output("\n-> Login Success\n");
         }
 
@@ -231,23 +225,20 @@ namespace Jackett.Common.Indexers
         /// Check logged-in state for provider
         /// </summary>
         /// <returns></returns>
-        private async Task CheckLogin()
+        private async Task CheckLoginAsync()
         {
             // Checking ...
             Output("\n-> Checking logged-in state....");
-            var loggedInCheck = await RequestStringWithCookies(SearchUrl);
+            var loggedInCheck = await RequestStringWithCookiesAsync(SearchUrl);
             if (!loggedInCheck.Content.Contains("logout.php"))
             {
                 // Cookie expired, renew session on provider
                 Output("-> Not logged, login now...\n");
-
-                await DoLogin();
+                await DoLoginAsync();
             }
             else
-            {
                 // Already logged, session active
                 Output("-> Already logged, continue...\n");
-            }
         }
 
         /// <summary>
@@ -263,11 +254,10 @@ namespace Jackett.Common.Indexers
             var searchUrl = SearchUrl;
 
             // Check login before performing a query
-            await CheckLogin();
+            await CheckLoginAsync();
 
             // Check cache first so we don't query the server (if search term used or not in dev mode)
             if (!DevMode && !string.IsNullOrEmpty(exactSearchTerm))
-            {
                 lock (cache)
                 {
                     // Remove old cache items
@@ -278,24 +268,21 @@ namespace Jackett.Common.Indexers
                     if (cachedResult != null)
                         return cachedResult.Results.Select(s => (ReleaseInfo)s.Clone()).ToArray();
                 }
-            }
 
-            var SearchTerms = new List<string> { exactSearchTerm };
+            var searchTerms = new List<string> { exactSearchTerm };
 
             // duplicate search without diacritics
             var baseSearchTerm = StringUtil.RemoveDiacritics(exactSearchTerm);
             if (baseSearchTerm != exactSearchTerm)
-                SearchTerms.Add(baseSearchTerm);
-
-            foreach (var searchTerm in SearchTerms)
+                searchTerms.Add(baseSearchTerm);
+            foreach (var searchTerm in searchTerms)
             {
                 // Build our query
                 var request = BuildQuery(searchTerm, query, searchUrl);
 
                 // Getting results & Store content
-                var response = await RequestStringWithCookiesAndRetry(request, ConfigData.CookieHeader.Value);
+                var response = await RequestStringWithCookiesAndRetryAsync(request, ConfigData.CookieHeader.Value);
                 _fDom = response.Content;
- 
                 try
                 {
                     var firstPageRows = FindTorrentRows();
@@ -311,88 +298,93 @@ namespace Jackett.Common.Indexers
 
                     // Check if we have a minimum of one result
                     if (firstPageRows.Length > 1)
-                    {
                         // Retrieve total count on our alone page
                         nbResults = firstPageRows.Count();
-                    }
                     else
                     {
                         // Check if no result
                         if (torrentRowList.Count == 0)
                         {
                             // No results found
-                            Output("\nNo result found for your query, please try another search term or change the theme you're currently using on the site as this is an unsupported solution...\n", "info");
+                            Output(
+                                "\nNo result found for your query, please try another search term or change the theme you're currently using on the site as this is an unsupported solution...\n",
+                                "info");
 
                             // No result found for this query
                             break;
                         }
                     }
 
-                    Output("\nFound " + nbResults + " result(s) (+/- " + firstPageRows.Length + ") in " + pageLinkCount + " page(s) for this query !");
-                    Output("\nThere are " + (firstPageRows.Length -2 ) + " results on the first page !");
+                    Output(
+                        $"\nFound {nbResults} result(s) (+/- {firstPageRows.Length}) in {pageLinkCount} page(s) for this query !");
+                    Output($"\nThere are {(firstPageRows.Length - 2)} results on the first page !");
 
                     // Loop on results
-
-                    foreach (var tRow in torrentRowList.Skip(1).Take(torrentRowList.Count-2))
+                    foreach (var tRow in torrentRowList.Skip(1).Take(torrentRowList.Count - 2))
                     {
-                        Output("Torrent #" + (releases.Count + 1));
+                        Output($"Torrent #{(releases.Count + 1)}");
 
                         // ID
                         var idOrig = tRow.Find("td:eq(1) > a:eq(0)").Attr("href").Split('=')[1];
                         var id = idOrig.Substring(0, idOrig.Length - 4);
-                        Output("ID: " + id);
+                        Output($"ID: {id}");
 
                         // Release Name
                         var name = tRow.Find("td:eq(1) > a:eq(0)").Text();
 
                         // Category
-                        string categoryID = tRow.Find("td:eq(0) > a:eq(0)").Attr("href").Split('?').Last();
-                        var newznab = MapTrackerCatToNewznab(categoryID);
-                        Output("Category: " + (newznab.Count > 0 ? newznab.First().ToString() : "unknown category") + " (" + categoryID + ")");
+                        var categoryId = tRow.Find("td:eq(0) > a:eq(0)").Attr("href").Split('?').Last();
+                        var newznab = MapTrackerCatToNewznab(categoryId);
+                        Output(
+                            $"Category: {(newznab.Count > 0 ? newznab.First().ToString() : "unknown category")} ({categoryId})");
 
                         // Seeders
-                        int seeders = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(9)").Text(), @"\d+").Value);
-                        Output("Seeders: " + seeders);
+                        var seeders = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(9)").Text(), @"\d+").Value);
+                        Output($"Seeders: {seeders}");
 
                         // Leechers
-                        int leechers = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(10)").Text(), @"\d+").Value);
-                        Output("Leechers: " + leechers);
+                        var leechers = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(10)").Text(), @"\d+").Value);
+                        Output($"Leechers: {leechers}");
 
                         // Files
-                        int files = 1;
+                        var files = 1;
                         files = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(4)").Text(), @"\d+").Value);
-                        Output("Files: " + files);
+                        Output($"Files: {files}");
 
                         // Completed
-                        int completed = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(8)").Text(), @"\d+").Value);
-                        Output("Completed: " + completed);
+                        var completed = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(8)").Text(), @"\d+").Value);
+                        Output($"Completed: {completed}");
 
                         // Size
                         var humanSize = tRow.Find("td:eq(7)").Text().ToLowerInvariant();
                         var size = ReleaseInfo.GetBytes(humanSize);
-                        Output("Size: " + humanSize + " (" + size + " bytes)");
+                        Output($"Size: {humanSize} ({size} bytes)");
 
                         // Publish DateToString
                         var dateTimeOrig = tRow.Find("td:eq(6)").Text();
                         var datestr = Regex.Replace(dateTimeOrig, @"<[^>]+>|&nbsp;", "").Trim();
-                        datestr = Regex.Replace(datestr, "Today", DateTime.Now.ToString("MMM dd yyyy"), RegexOptions.IgnoreCase);
-                        datestr = Regex.Replace(datestr, "Yesterday", DateTime.Now.Date.AddDays(-1).ToString("MMM dd yyyy"), RegexOptions.IgnoreCase);
-                        DateTime date = DateTimeUtil.FromUnknown(datestr, "DK");
-                        Output("Released on: " + date);
+                        datestr = Regex.Replace(
+                            datestr, "Today", DateTime.Now.ToString("MMM dd yyyy"), RegexOptions.IgnoreCase);
+                        datestr = Regex.Replace(
+                            datestr, "Yesterday", DateTime.Now.Date.AddDays(-1).ToString("MMM dd yyyy"),
+                            RegexOptions.IgnoreCase);
+                        var date = DateTimeUtil.FromUnknown(datestr, "DK");
+                        Output($"Released on: {date}");
 
                         // Torrent Details URL
-                        var detailsLink = new Uri(TorrentDescriptionUrl.Replace("{id}", id.ToString()));
-                        Output("Details: " + detailsLink.AbsoluteUri);
+                        var detailsLink = new Uri(TorrentDescriptionUrl.Replace("{id}", id));
+                        Output($"Details: {detailsLink.AbsoluteUri}");
 
                         // Torrent Comments URL
-                        var commentsLink = new Uri(TorrentCommentUrl.Replace("{id}", id.ToString()));
-                        Output("Comments Link: " + commentsLink.AbsoluteUri);
+                        var commentsLink = new Uri(TorrentCommentUrl.Replace("{id}", id));
+                        Output($"Comments Link: {commentsLink.AbsoluteUri}");
 
                         // Torrent Download URL
                         var passkey = tRow.Find("td:eq(2) > a:eq(0)").Attr("href");
                         var key = Regex.Match(passkey, "(?<=torrent_pass\\=)([a-zA-z0-9]*)");
-                        Uri downloadLink = new Uri(TorrentDownloadUrl.Replace("{id}", id.ToString()).Replace("{passkey}", key.ToString()));
-                        Output("Download Link: " + downloadLink.AbsoluteUri);
+                        var downloadLink = new Uri(
+                            TorrentDownloadUrl.Replace("{id}", id).Replace("{passkey}", key.ToString()));
+                        Output($"Download Link: {downloadLink.AbsoluteUri}");
 
                         // Building release infos
                         var release = new ReleaseInfo
@@ -415,26 +407,19 @@ namespace Jackett.Common.Indexers
                         // IMDB
                         var imdbLink = tRow.Find("a[href*=\"imdb.com/title/tt\"]").First().Attr("href");
                         release.Imdb = ParseUtil.GetLongFromString(imdbLink);
-
-                        if (tRow.Find("img[title=\"Free Torrent\"]").Length >= 1)
-                            release.DownloadVolumeFactor = 0;
-                        else if (tRow.Find("img[title=\"Halfleech\"]").Length >= 1)
-                            release.DownloadVolumeFactor = 0.5;
-                        else if (tRow.Find("img[title=\"90% Freeleech\"]").Length >= 1)
-                            release.DownloadVolumeFactor = 0.1;
-                        else
-                            release.DownloadVolumeFactor = 1;
-
+                        release.DownloadVolumeFactor = tRow.Find("img[title=\"Free Torrent\"]").Length >= 1
+                            ? 0
+                            : tRow.Find("img[title=\"Halfleech\"]").Length >= 1 ? 0.5 : tRow.Find("img[title=\"90% Freeleech\"]").Length >= 1 ? 0.1 : 1;
                         release.UploadVolumeFactor = 1;
-
                         releases.Add(release);
                     }
                 }
                 catch (Exception ex)
                 {
-                    OnParseError("Error, unable to parse result \n" + ex.StackTrace, ex);
+                    OnParseError($"Error, unable to parse result \n{ex.StackTrace}", ex);
                 }
             }
+
             // Return found releases
             return releases;
         }
@@ -451,7 +436,7 @@ namespace Jackett.Common.Indexers
         {
             var parameters = new NameValueCollection();
             var categoriesList = MapTorznabCapsToTrackers(query);
-            string searchterm = term;
+            var searchterm = term;
 
             // Building our tracker query
             parameters.Add("searchin", "title");
@@ -459,13 +444,9 @@ namespace Jackett.Common.Indexers
 
             // If search term provided
             if (!string.IsNullOrWhiteSpace(query.ImdbID))
-            {
-                searchterm = "imdbsearch=" + query.ImdbID;
-            }
+                searchterm = $"imdbsearch={query.ImdbID}";
             else if (!string.IsNullOrWhiteSpace(term))
-            {
-                searchterm = "search=" + WebUtilityHelpers.UrlEncode(term, Encoding.GetEncoding(28591));
-            }
+                searchterm = $"search={WebUtilityHelpers.UrlEncode(term, Encoding.GetEncoding(28591))}";
             else
             {
                 // Showing all torrents (just for output function)
@@ -474,49 +455,89 @@ namespace Jackett.Common.Indexers
             }
 
             // Loop on categories and change the catagories for search purposes
-            for (int i = 0; i < categoriesList.Count; i++)
+            for (var i = 0; i < categoriesList.Count; i++)
             {
                 // APPS
-                if (new[] { "63", "17", "12", "62", "64" }.Any(c => categoriesList[i].Contains(categoriesList[i])))
+                if (new[]
                 {
+                    "63",
+                    "17",
+                    "12",
+                    "62",
+                    "64"
+                }.Any(c => categoriesList[i].Contains(categoriesList[i])))
                     categoriesList[i] = categoriesList[i].Replace("cat=", "cats5[]=");
-                }
                 // Books
-                if (new[] { "54", "9" }.Any(c => categoriesList[i].Contains(categoriesList[i])))
+                if (new[]
                 {
+                    "54",
+                    "9"
+                }.Any(c => categoriesList[i].Contains(categoriesList[i])))
                     categoriesList[i] = categoriesList[i].Replace("cat=", "cats6[]=");
-                }
                 // Games
-                if (new[] { "24", "53", "49", "51" }.Any(c => categoriesList[i].Contains(categoriesList[i])))
+                if (new[]
                 {
+                    "24",
+                    "53",
+                    "49",
+                    "51"
+                }.Any(c => categoriesList[i].Contains(categoriesList[i])))
                     categoriesList[i] = categoriesList[i].Replace("cat=", "cats3[]=");
-                }
                 // Movies
-                if (new[] { "35", "42", "47", "15", "58", "16", "6", "21", "19", "22", "20", "25", "10", "23", "65" }.Any(c => categoriesList[i].Contains(categoriesList[i])))
+                if (new[]
                 {
+                    "35",
+                    "42",
+                    "47",
+                    "15",
+                    "58",
+                    "16",
+                    "6",
+                    "21",
+                    "19",
+                    "22",
+                    "20",
+                    "25",
+                    "10",
+                    "23",
+                    "65"
+                }.Any(c => categoriesList[i].Contains(categoriesList[i])))
                     categoriesList[i] = categoriesList[i].Replace("cat=", "cats1[]=");
-                }
                 // Music
-                if (new[] { "28", "60", "4", "59", "61", "1" }.Any(c => categoriesList[i].Contains(categoriesList[i])))
+                if (new[]
                 {
+                    "28",
+                    "60",
+                    "4",
+                    "59",
+                    "61",
+                    "1"
+                }.Any(c => categoriesList[i].Contains(categoriesList[i])))
                     categoriesList[i] = categoriesList[i].Replace("cat=", "cats4[]=");
-                }
                 // Series
-                if (new[] { "48", "57", "11", "7", "31", "30", "32", "5", "66" }.Any(c => categoriesList[i].Contains(categoriesList[i])))
+                if (new[]
                 {
+                    "48",
+                    "57",
+                    "11",
+                    "7",
+                    "31",
+                    "30",
+                    "32",
+                    "5",
+                    "66"
+                }.Any(c => categoriesList[i].Contains(categoriesList[i])))
                     categoriesList[i] = categoriesList[i].Replace("cat=", "cats2[]=");
-                }
             }
 
             // Build category search string
-            var CatQryStr = "";
+            var catQryStr = "";
             foreach (var cat in categoriesList)
-                CatQryStr += cat + "&";
+                catQryStr += $"{cat}&";
 
             // Building our query
-            url += "?" + CatQryStr + searchterm + "&" + parameters.GetQueryString();
-
-            Output("\nBuilded query for \"" + term + "\"... " + url);
+            url += $"?{catQryStr}{searchterm}&{parameters.GetQueryString()}";
+            Output($"\nBuilded query for \"{term}\"... {url}");
 
             // Return our search url
             return url;
@@ -527,21 +548,17 @@ namespace Jackett.Common.Indexers
         /// </summary>
         /// <param name="request">URL created by Query Builder</param>
         /// <returns>Results from query</returns>
-        private async Task<WebClientStringResult> QueryExec(string request)
+        private async Task<WebClientStringResult> QueryExecAsync(string request)
         {
             WebClientStringResult results;
 
             // Switch in we are in DEV mode with Hard Drive Cache or not
             if (DevMode && CacheMode)
-            {
                 // Check Cache before querying and load previous results if available
-                results = await QueryCache(request);
-            }
+                results = await QueryCacheAsync(request);
             else
-            {
                 // Querying tracker directly
-                results = await QueryTracker(request);
-            }
+                results = await QueryTrackerAsync(request);
             return results;
         }
 
@@ -550,7 +567,7 @@ namespace Jackett.Common.Indexers
         /// </summary>
         /// <param name="request">URL created by Query Builder</param>
         /// <returns>Results from query</returns>
-        private async Task<WebClientStringResult> QueryCache(string request)
+        private async Task<WebClientStringResult> QueryCacheAsync(string request)
         {
             WebClientStringResult results;
 
@@ -561,24 +578,25 @@ namespace Jackett.Common.Indexers
             CleanCacheStorage();
 
             // Create fingerprint for request
-            var file = Directory + request.GetHashCode() + ".json";
+            var file = $"{Directory}{request.GetHashCode()}.json";
 
             // Checking modes states
-            if (System.IO.File.Exists(file))
+            if (File.Exists(file))
             {
                 // File exist... loading it right now !
-                Output("Loading results from hard drive cache ..." + request.GetHashCode() + ".json");
-                results = JsonConvert.DeserializeObject<WebClientStringResult>(System.IO.File.ReadAllText(file));
+                Output($"Loading results from hard drive cache ...{request.GetHashCode()}.json");
+                results = JsonConvert.DeserializeObject<WebClientStringResult>(File.ReadAllText(file));
             }
             else
             {
                 // No cached file found, querying tracker directly
-                results = await QueryTracker(request);
+                results = await QueryTrackerAsync(request);
 
                 // Cached file didn't exist for our query, writing it right now !
-                Output("Writing results to hard drive cache ..." + request.GetHashCode() + ".json");
-                System.IO.File.WriteAllText(file, JsonConvert.SerializeObject(results));
+                Output($"Writing results to hard drive cache ...{request.GetHashCode()}.json");
+                File.WriteAllText(file, JsonConvert.SerializeObject(results));
             }
+
             return results;
         }
 
@@ -587,14 +605,15 @@ namespace Jackett.Common.Indexers
         /// </summary>
         /// <param name="request">URL created by Query Builder</param>
         /// <returns>Results from query</returns>
-        private async Task<WebClientStringResult> QueryTracker(string request)
+        private async Task<WebClientStringResult> QueryTrackerAsync(string request)
         {
             // Cache mode not enabled or cached file didn't exist for our query
             Output("\nQuerying tracker for results....");
 
             // Request our first page
             LatencyNow();
-            var results = await RequestStringWithCookiesAndRetry(request, ConfigData.CookieHeader.Value, SearchUrl, _emulatedBrowserHeaders);
+            var results = await RequestStringWithCookiesAndRetryAsync(
+                request, ConfigData.CookieHeader.Value, SearchUrl, _emulatedBrowserHeaders);
 
             // Return results from tracker
             return results;
@@ -620,36 +639,30 @@ namespace Jackett.Common.Indexers
                     Output("-> Storage folder deleted successfully.");
                 }
                 else
-                {
                     // No directory, so nothing to do
                     Output("-> No Storage folder found for this provider !");
-                }
             }
             else
             {
                 var i = 0;
                 // Check if there is file older than ... and delete them
                 Output("\nCleaning Provider Storage folder... in progress.");
-                System.IO.Directory.GetFiles(Directory)
-                .Select(f => new System.IO.FileInfo(f))
-                .Where(f => f.LastAccessTime < DateTime.Now.AddMilliseconds(-Convert.ToInt32(ConfigData.HardDriveCacheKeepTime.Value)))
-                .ToList()
-                .ForEach(f =>
-                {
-                    Output("Deleting cached file << " + f.Name + " >> ... done.");
-                    f.Delete();
-                    i++;
-                });
+                System.IO.Directory.GetFiles(Directory).Select(f => new FileInfo(f)).Where(
+                          f => f.LastAccessTime <
+                               DateTime.Now.AddMilliseconds(-Convert.ToInt32(ConfigData.HardDriveCacheKeepTime.Value)))
+                      .ToList().ForEach(
+                          f =>
+                          {
+                              Output($"Deleting cached file << {f.Name} >> ... done.");
+                              f.Delete();
+                              i++;
+                          });
 
                 // Inform on what was cleaned during process
                 if (i > 0)
-                {
-                    Output("-> Deleted " + i + " cached files during cleaning.");
-                }
+                    Output($"-> Deleted {i} cached files during cleaning.");
                 else
-                {
                     Output("-> Nothing deleted during cleaning.");
-                }
             }
         }
 
@@ -662,13 +675,14 @@ namespace Jackett.Common.Indexers
             if (Latency)
             {
                 var random = new Random(DateTime.Now.Millisecond);
-                var waiting = random.Next(Convert.ToInt32(ConfigData.LatencyStart.Value),
-                    Convert.ToInt32(ConfigData.LatencyEnd.Value));
-                Output("\nLatency Faker => Sleeping for " + waiting + " ms...");
+                var waiting = random.Next(
+                    Convert.ToInt32(ConfigData.LatencyStart.Value), Convert.ToInt32(ConfigData.LatencyEnd.Value));
+                Output($"\nLatency Faker => Sleeping for {waiting} ms...");
 
                 // Sleep now...
-                System.Threading.Thread.Sleep(waiting);
+                Thread.Sleep(waiting);
             }
+
             // Generate a random value in our range
         }
 
@@ -678,31 +692,44 @@ namespace Jackett.Common.Indexers
         /// <returns>JQuery Object</returns>
         private CQ FindTorrentRows()
         {
-            var defaultTheme = new[] { "/templates/1/", "/templates/2/", "/templates/3/", "/templates/4/", "/templates/5/", "/templates/6/", "/templates/11/", "/templates/12/" };
-            var oldV2 = new[] { "/templates/7/", "/templates/8/", "/templates/9/", "/templates/10/" };
-            var xmas = new[] { "/templates/14/" };
-
-            if (xmas.Any(_fDom.Document.Body.InnerHTML.Contains))
+            var defaultTheme = new[]
             {
+                "/templates/1/",
+                "/templates/2/",
+                "/templates/3/",
+                "/templates/4/",
+                "/templates/5/",
+                "/templates/6/",
+                "/templates/11/",
+                "/templates/12/"
+            };
+            var oldV2 = new[]
+            {
+                "/templates/7/",
+                "/templates/8/",
+                "/templates/9/",
+                "/templates/10/"
+            };
+            var xmas = new[]
+            {
+                "/templates/14/"
+            };
+            if (xmas.Any(_fDom.Document.Body.InnerHTML.Contains))
                 // Return all occurencis of torrents found
                 // $('#base_around > table.mainouter > tbody > tr > td.outer > div.article > table  > tbody:not(:first) > tr')
-                return _fDom["#base_around > table.mainouter > tbody > tr > td.outer > div.article > table  > tbody:not(:first) > tr"];
-            }
+                return _fDom[
+                    "#base_around > table.mainouter > tbody > tr > td.outer > div.article > table  > tbody:not(:first) > tr"];
 
             // template 7 contains a reference to template 2 (logout button), so check for oldV2 first
             if (oldV2.Any(_fDom.Document.Body.InnerHTML.Contains))
-            {
                 // Return all occurencis of torrents found
                 // $('#base_content > table.mainouter > tbody > tr > td.outer > div.article > table > tbody > tr:not(:first)')
-                return _fDom["# base_content > table.mainouter > tbody > tr > td.outer > div.article > table > tbody > tr:not(:first)"];
-            }
-
+                return _fDom[
+                    "# base_content > table.mainouter > tbody > tr > td.outer > div.article > table > tbody > tr:not(:first)"];
             if (defaultTheme.Any(_fDom.Document.Body.InnerHTML.Contains))
-            {
                 // Return all occurencis of torrents found
                 // $('#base_content2 > div.article > table > tbody:not(:first) > tr')
                 return _fDom["# base_content2 > div.article > table > tbody:not(:first) > tr"];
-            }
             return _fDom;
         }
 
@@ -715,12 +742,12 @@ namespace Jackett.Common.Indexers
         {
             // Retrieving ID from link provided
             var id = ParseUtil.CoerceInt(Regex.Match(link.AbsoluteUri, @"\d+").Value);
-            Output("Torrent Requested ID: " + id);
+            Output($"Torrent Requested ID: {id}");
 
             // Building login form data
-            var pairs = new Dictionary<string, string> {
-                { "torrentid", id.ToString() },
-                { "_", string.Empty } // ~~ Strange, blank param...
+            var pairs = new Dictionary<string, string>
+            {
+                {"torrentid", id.ToString()}, {"_", string.Empty} // ~~ Strange, blank param...
             };
 
             // Add emulated XHR request
@@ -748,12 +775,9 @@ namespace Jackett.Common.Indexers
         {
             // Check if we are in dev mode
             if (DevMode)
-            {
                 // Output message to console
                 Console.WriteLine(message);
-            }
             else
-            {
                 // Send message to logger with level
                 switch (level)
                 {
@@ -762,20 +786,15 @@ namespace Jackett.Common.Indexers
                     case "debug":
                         // Only if Debug Level Enabled on Jackett
                         if (logger.IsDebugEnabled)
-                        {
                             logger.Debug(message);
-                        }
                         break;
-
                     case "info":
                         logger.Info(message);
                         break;
-
                     case "error":
                         logger.Error(message);
                         break;
                 }
-            }
         }
 
         /// <summary>
@@ -787,40 +806,28 @@ namespace Jackett.Common.Indexers
 
             // Check Username Setting
             if (string.IsNullOrEmpty(ConfigData.Username.Value))
-            {
                 throw new ExceptionWithConfigData("You must provide a username for this tracker to login !", ConfigData);
-            }
-            else
-            {
-                Output("Validated Setting -- Username (auth) => " + ConfigData.Username.Value);
-            }
+            Output($"Validated Setting -- Username (auth) => {ConfigData.Username.Value}");
 
             // Check Password Setting
             if (string.IsNullOrEmpty(ConfigData.Password.Value))
-            {
-                throw new ExceptionWithConfigData("You must provide a password with your username for this tracker to login !", ConfigData);
-            }
-            else
-            {
-                Output("Validated Setting -- Password (auth) => " + ConfigData.Password.Value);
-            }
+                throw new ExceptionWithConfigData(
+                    "You must provide a password with your username for this tracker to login !", ConfigData);
+            Output($"Validated Setting -- Password (auth) => {ConfigData.Password.Value}");
 
             // Check Max Page Setting
             if (!string.IsNullOrEmpty(ConfigData.Pages.Value))
-            {
                 try
                 {
-                    Output("Validated Setting -- Max Pages => " + Convert.ToInt32(ConfigData.Pages.Value));
+                    Output($"Validated Setting -- Max Pages => {Convert.ToInt32(ConfigData.Pages.Value)}");
                 }
                 catch (Exception)
                 {
-                    throw new ExceptionWithConfigData("Please enter a numeric maximum number of pages to crawl !", ConfigData);
+                    throw new ExceptionWithConfigData(
+                        "Please enter a numeric maximum number of pages to crawl !", ConfigData);
                 }
-            }
             else
-            {
                 throw new ExceptionWithConfigData("Please enter a maximum number of pages to crawl !", ConfigData);
-            }
 
             // Check Latency Setting
             if (ConfigData.Latency.Value)
@@ -829,37 +836,31 @@ namespace Jackett.Common.Indexers
 
                 // Check Latency Start Setting
                 if (!string.IsNullOrEmpty(ConfigData.LatencyStart.Value))
-                {
                     try
                     {
-                        Output("Validated Setting -- Latency Start => " + Convert.ToInt32(ConfigData.LatencyStart.Value));
+                        Output($"Validated Setting -- Latency Start => {Convert.ToInt32(ConfigData.LatencyStart.Value)}");
                     }
                     catch (Exception)
                     {
                         throw new ExceptionWithConfigData("Please enter a numeric latency start in ms !", ConfigData);
                     }
-                }
                 else
-                {
-                    throw new ExceptionWithConfigData("Latency Simulation enabled, Please enter a start latency !", ConfigData);
-                }
+                    throw new ExceptionWithConfigData(
+                        "Latency Simulation enabled, Please enter a start latency !", ConfigData);
 
                 // Check Latency End Setting
                 if (!string.IsNullOrEmpty(ConfigData.LatencyEnd.Value))
-                {
                     try
                     {
-                        Output("Validated Setting -- Latency End => " + Convert.ToInt32(ConfigData.LatencyEnd.Value));
+                        Output($"Validated Setting -- Latency End => {Convert.ToInt32(ConfigData.LatencyEnd.Value)}");
                     }
                     catch (Exception)
                     {
                         throw new ExceptionWithConfigData("Please enter a numeric latency end in ms !", ConfigData);
                     }
-                }
                 else
-                {
-                    throw new ExceptionWithConfigData("Latency Simulation enabled, Please enter a end latency !", ConfigData);
-                }
+                    throw new ExceptionWithConfigData(
+                        "Latency Simulation enabled, Please enter a end latency !", ConfigData);
             }
 
             // Check Browser Setting
@@ -869,39 +870,26 @@ namespace Jackett.Common.Indexers
 
                 // Check ACCEPT header Setting
                 if (string.IsNullOrEmpty(ConfigData.HeaderAccept.Value))
-                {
-                    throw new ExceptionWithConfigData("Browser Simulation enabled, Please enter an ACCEPT header !", ConfigData);
-                }
-                else
-                {
-                    Output("Validated Setting -- ACCEPT (header) => " + ConfigData.HeaderAccept.Value);
-                }
+                    throw new ExceptionWithConfigData(
+                        "Browser Simulation enabled, Please enter an ACCEPT header !", ConfigData);
+                Output($"Validated Setting -- ACCEPT (header) => {ConfigData.HeaderAccept.Value}");
 
                 // Check ACCEPT-LANG header Setting
                 if (string.IsNullOrEmpty(ConfigData.HeaderAcceptLang.Value))
-                {
-                    throw new ExceptionWithConfigData("Browser Simulation enabled, Please enter an ACCEPT-LANG header !", ConfigData);
-                }
-                else
-                {
-                    Output("Validated Setting -- ACCEPT-LANG (header) => " + ConfigData.HeaderAcceptLang.Value);
-                }
+                    throw new ExceptionWithConfigData(
+                        "Browser Simulation enabled, Please enter an ACCEPT-LANG header !", ConfigData);
+                Output($"Validated Setting -- ACCEPT-LANG (header) => {ConfigData.HeaderAcceptLang.Value}");
 
                 // Check USER-AGENT header Setting
                 if (string.IsNullOrEmpty(ConfigData.HeaderUserAgent.Value))
-                {
-                    throw new ExceptionWithConfigData("Browser Simulation enabled, Please enter an USER-AGENT header !", ConfigData);
-                }
-                else
-                {
-                    Output("Validated Setting -- USER-AGENT (header) => " + ConfigData.HeaderUserAgent.Value);
-                }
+                    throw new ExceptionWithConfigData(
+                        "Browser Simulation enabled, Please enter an USER-AGENT header !", ConfigData);
+                Output($"Validated Setting -- USER-AGENT (header) => {ConfigData.HeaderUserAgent.Value}");
             }
             else
-            {
                 // Browser simulation must be enabled (otherwhise, this provider will not work due to tracker's security)
-                throw new ExceptionWithConfigData("Browser Simulation must be enabled for this provider to work, please enable it !", ConfigData);
-            }
+                throw new ExceptionWithConfigData(
+                    "Browser Simulation must be enabled for this provider to work, please enable it !", ConfigData);
 
             // Check Dev Cache Settings
             if (ConfigData.HardDriveCache.Value)
@@ -910,32 +898,27 @@ namespace Jackett.Common.Indexers
 
                 // Check if Dev Mode enabled !
                 if (!ConfigData.DevMode.Value)
-                {
-                    throw new ExceptionWithConfigData("Hard Drive is enabled but not in DEV MODE, Please enable DEV MODE !", ConfigData);
-                }
+                    throw new ExceptionWithConfigData(
+                        "Hard Drive is enabled but not in DEV MODE, Please enable DEV MODE !", ConfigData);
 
                 // Check Cache Keep Time Setting
                 if (!string.IsNullOrEmpty(ConfigData.HardDriveCacheKeepTime.Value))
-                {
                     try
                     {
-                        Output("Validated Setting -- Cache Keep Time (ms) => " + Convert.ToInt32(ConfigData.HardDriveCacheKeepTime.Value));
+                        Output(
+                            $"Validated Setting -- Cache Keep Time (ms) => {Convert.ToInt32(ConfigData.HardDriveCacheKeepTime.Value)}");
                     }
                     catch (Exception)
                     {
                         throw new ExceptionWithConfigData("Please enter a numeric hard drive keep time in ms !", ConfigData);
                     }
-                }
                 else
-                {
-                    throw new ExceptionWithConfigData("Hard Drive Cache enabled, Please enter a maximum keep time for cache !", ConfigData);
-                }
+                    throw new ExceptionWithConfigData(
+                        "Hard Drive Cache enabled, Please enter a maximum keep time for cache !", ConfigData);
             }
             else
-            {
                 // Delete cache if previously existed
                 CleanCacheStorage(true);
-            }
         }
     }
 }

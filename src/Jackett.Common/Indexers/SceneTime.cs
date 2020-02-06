@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -19,28 +19,20 @@ namespace Jackett.Common.Indexers
 {
     public class SceneTime : BaseWebIndexer
     {
-        private string StartPageUrl { get { return SiteLink + "login.php"; } }
-        private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
-        private string SearchUrl { get { return SiteLink + "browse.php"; } }
-        private string DownloadUrl { get { return SiteLink + "download.php/{0}/download.torrent"; } }
-
+        private string StartPageUrl => $"{SiteLink}login.php";
+        private string LoginUrl => $"{SiteLink}takelogin.php";
+        private string SearchUrl => $"{SiteLink}browse.php";
+        private string DownloadUrl => $"{SiteLink}download.php/{{0}}/download.torrent";
 
         private new ConfigurationDataSceneTime configData
         {
-            get { return (ConfigurationDataSceneTime)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataSceneTime)base.configData;
+            set => base.configData = value;
         }
 
-        public SceneTime(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
-            : base(name: "SceneTime",
-                description: "Always on time",
-                link: "https://www.scenetime.com/",
-                caps: new TorznabCapabilities(),
-                configService: configService,
-                client: w,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataSceneTime())
+        public SceneTime(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps) : base(
+            "SceneTime", description: "Always on time", link: "https://www.scenetime.com/", caps: new TorznabCapabilities(),
+            configService: configService, client: w, logger: l, p: ps, configData: new ConfigurationDataSceneTime())
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "en-us";
@@ -106,9 +98,9 @@ namespace Jackett.Common.Indexers
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var loginPage = await RequestStringWithCookies(StartPageUrl, string.Empty);
+            var loginPage = await RequestStringWithCookiesAsync(StartPageUrl, string.Empty);
             CQ cq = loginPage.Content;
-            var result = this.configData;
+            var result = configData;
             result.Captcha.Version = "2";
             CQ recaptcha = cq.Find(".g-recaptcha").Attr("data-sitekey");
             if (recaptcha.Length != 0)
@@ -117,26 +109,24 @@ namespace Jackett.Common.Indexers
                 result.Captcha.SiteKey = cq.Find(".g-recaptcha").Attr("data-sitekey");
                 return result;
             }
-            else
-            {
-                var stdResult = new ConfigurationDataBasicLogin();
-                stdResult.SiteLink.Value = configData.SiteLink.Value;
-                stdResult.Username.Value = configData.Username.Value;
-                stdResult.Password.Value = configData.Password.Value;
-                stdResult.CookieHeader.Value = loginPage.Cookies;
-                return stdResult;
-            }
+
+            var stdResult = new ConfigurationDataBasicLogin();
+            stdResult.SiteLink.Value = configData.SiteLink.Value;
+            stdResult.Username.Value = configData.Username.Value;
+            stdResult.Password.Value = configData.Password.Value;
+            stdResult.CookieHeader.Value = loginPage.Cookies;
+            return stdResult;
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-            var pairs = new Dictionary<string, string> {
-                { "username", configData.Username.Value },
-                { "password", configData.Password.Value },
-                { "g-recaptcha-response", configData.Captcha.Value }
+            var pairs = new Dictionary<string, string>
+            {
+                {"username", configData.Username.Value},
+                {"password", configData.Password.Value},
+                {"g-recaptcha-response", configData.Captcha.Value}
             };
-
             if (!string.IsNullOrWhiteSpace(configData.Captcha.Cookie))
             {
                 CookieHeader = configData.Captcha.Cookie;
@@ -144,10 +134,7 @@ namespace Jackett.Common.Indexers
                 {
                     var results = await PerformQuery(new TorznabQuery());
                     if (results.Count() == 0)
-                    {
                         throw new Exception("Your cookie did not work");
-                    }
-
                     IsConfigured = true;
                     SaveConfig();
                     return IndexerConfigurationStatus.Completed;
@@ -155,78 +142,65 @@ namespace Jackett.Common.Indexers
                 catch (Exception e)
                 {
                     IsConfigured = false;
-                    throw new Exception("Your cookie did not work: " + e.Message);
+                    throw new Exception($"Your cookie did not work: {e.Message}");
                 }
             }
 
-            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
-            {
-                CQ dom = result.Content;
-                var errorMessage = dom["td.text"].Text().Trim();
-                throw new ExceptionWithConfigData(errorMessage, configData);
-            });
-
+            var result = await RequestLoginAndFollowRedirectAsync(LoginUrl, pairs, null, true, null, LoginUrl);
+            await ConfigureIfOkAsync(
+                result.Cookies, result.Content?.Contains("logout.php") == true, () =>
+                {
+                    CQ dom = result.Content;
+                    var errorMessage = dom["td.text"].Text().Trim();
+                    throw new ExceptionWithConfigData(errorMessage, configData);
+                });
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            var qParams = new NameValueCollection();
-            qParams.Add("cata", "yes");
-            qParams.Add("sec", "jax");
-
-            List<string> catList = MapTorznabCapsToTrackers(query);
-            foreach (string cat in catList)
-            {
-                qParams.Add("c" + cat, "1");
-            }
-
+            var qParams = new NameValueCollection { { "cata", "yes" }, { "sec", "jax" } };
+            var catList = MapTorznabCapsToTrackers(query);
+            foreach (var cat in catList)
+                qParams.Add($"c{cat}", "1");
             if (!string.IsNullOrEmpty(query.SanitizedSearchTerm))
-            {
                 qParams.Add("search", query.GetQueryString());
-            }
 
             // If Only Freeleech Enabled
             if (configData.Freeleech.Value)
-            {
                 qParams.Add("freeleech", "on");
-            }
-            var searchUrl = SearchUrl + "?" + qParams.GetQueryString();
-
-            var results = await RequestStringWithCookies(searchUrl);
-            List<ReleaseInfo> releases = ParseResponse(query, results.Content);
-
+            var searchUrl = $"{SearchUrl}?{qParams.GetQueryString()}";
+            var results = await RequestStringWithCookiesAsync(searchUrl);
+            var releases = ParseResponse(query, results.Content);
             return releases;
         }
 
         public List<ReleaseInfo> ParseResponse(TorznabQuery query, string htmlResponse)
         {
-            List<ReleaseInfo> releases = new List<ReleaseInfo>();
-
+            var releases = new List<ReleaseInfo>();
             try
             {
                 CQ dom = htmlResponse;
-
-                List<string> headerColumns = dom["table[class*='movehere']"].First().Find("tbody > tr > td[class='cat_Head']").Select(x => x.Cq().Text()).ToList();
-                int categoryIndex = headerColumns.FindIndex(x => x.Equals("Type"));
-                int nameIndex = headerColumns.FindIndex(x => x.Equals("Name"));
-                int sizeIndex = headerColumns.FindIndex(x => x.Equals("Size"));
-                int seedersIndex = headerColumns.FindIndex(x => x.Equals("Seeders"));
-                int leechersIndex = headerColumns.FindIndex(x => x.Equals("Leechers"));
-
+                var headerColumns = dom["table[class*='movehere']"]
+                                    .First().Find("tbody > tr > td[class='cat_Head']").Select(x => x.Cq().Text()).ToList();
+                var categoryIndex = headerColumns.FindIndex(x => x.Equals("Type"));
+                var nameIndex = headerColumns.FindIndex(x => x.Equals("Name"));
+                var sizeIndex = headerColumns.FindIndex(x => x.Equals("Size"));
+                var seedersIndex = headerColumns.FindIndex(x => x.Equals("Seeders"));
+                var leechersIndex = headerColumns.FindIndex(x => x.Equals("Leechers"));
                 var rows = dom["tr.browse"];
                 foreach (var row in rows)
                 {
-                    var release = new ReleaseInfo();
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800; // 48 hours
-
+                    var release = new ReleaseInfo
+                    {
+                        MinimumRatio = 1,
+                        MinimumSeedTime = 172800 // 48 hours
+                    };
                     var categoryCol = row.ChildElements.ElementAt(categoryIndex);
-                    string catLink = categoryCol.Cq().Find("a").Attr("href");
+                    var catLink = categoryCol.Cq().Find("a").Attr("href");
                     if (catLink != null)
                     {
-                        string catId = new Regex(@"\?cat=(\d*)").Match(catLink).Groups[1].ToString().Trim();
+                        var catId = new Regex(@"\?cat=(\d*)").Match(catLink).Groups[1].ToString().Trim();
                         release.Category = MapTrackerCatToNewznab(catId);
                     }
 
@@ -236,27 +210,18 @@ namespace Jackett.Common.Indexers
                     release.Title = qLink.Text();
                     if (!query.MatchQueryStringAND(release.Title))
                         continue;
-
-                    release.Comments = new Uri(SiteLink + "/" + qLink.Attr("href"));
+                    release.Comments = new Uri($"{SiteLink}/{qLink.Attr("href")}");
                     release.Guid = release.Comments;
                     var torrentId = qLink.Attr("href").Split('=')[1];
                     release.Link = new Uri(string.Format(DownloadUrl, torrentId));
-
                     release.PublishDate = DateTimeUtil.FromTimeAgo(descCol.ChildNodes.Last().InnerText);
-
                     var sizeStr = row.ChildElements.ElementAt(sizeIndex).Cq().Text();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
-
                     release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(seedersIndex).Cq().Text().Trim());
-                    release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(leechersIndex).Cq().Text().Trim()) + release.Seeders;
-
-                    if (row.Cq().Find("font > b:contains(Freeleech)").Length >= 1)
-                        release.DownloadVolumeFactor = 0;
-                    else
-                        release.DownloadVolumeFactor = 1;
-
+                    release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(leechersIndex).Cq().Text().Trim()) +
+                                    release.Seeders;
+                    release.DownloadVolumeFactor = row.Cq().Find("font > b:contains(Freeleech)").Length >= 1 ? 0 : 1;
                     release.UploadVolumeFactor = 1;
-
                     releases.Add(release);
                 }
             }

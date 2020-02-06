@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using Jackett.Common.Utils;
 
@@ -11,17 +11,12 @@ namespace Jackett.Common.Models.IndexerConfig
 
         public DateTime LastTokenFetchDateTime
         {
-            get
-            {
-                return DateTimeUtil.UnixTimestampToDateTime(ParseUtil.CoerceDouble(LastTokenFetchDate.Value));
-            }
-            set
-            {
-                LastTokenFetchDate.Value = DateTimeUtil.DateTimeToUnixTimestamp(value).ToString(CultureInfo.InvariantCulture);
-            }
+            get => DateTimeUtil.UnixTimestampToDateTime(ParseUtil.CoerceDouble(LastTokenFetchDate.Value));
+            set => LastTokenFetchDate.Value =
+                DateTimeUtil.DateTimeToUnixTimestamp(value).ToString(CultureInfo.InvariantCulture);
         }
 
-        public ConfigurationDataLoginTokin() : base()
+        public ConfigurationDataLoginTokin()
         {
             ApiToken = new HiddenItem { Name = "ApiToken" };
             LastTokenFetchDate = new HiddenItem { Name = "LastTokenFetchDate" };

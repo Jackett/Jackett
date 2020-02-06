@@ -18,30 +18,23 @@ namespace Jackett.Common.Indexers
 {
     public class RuTracker : BaseWebIndexer
     {
-        private string LoginUrl
-        { get { return SiteLink + "forum/login.php"; } }
-        private string SearchUrl
-        { get { return SiteLink + "forum/tracker.php"; } }
+        private string LoginUrl => $"{SiteLink}forum/login.php";
+        private string SearchUrl => $"{SiteLink}forum/tracker.php";
 
-        protected string cap_sid = null;
-        protected string cap_code_field = null;
+        protected string cap_sid;
+        protected string cap_code_field;
 
         private new ConfigurationDataRutracker configData
         {
-            get { return (ConfigurationDataRutracker)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataRutracker)base.configData;
+            set => base.configData = value;
         }
 
-        public RuTracker(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "RuTracker",
-                   description: "RuTracker is a Semi-Private Russian torrent site with a thriving file-sharing community",
-                   link: "https://rutracker.org/",
-                   caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                   configService: configService,
-                   client: wc,
-                   logger: l,
-                   p: ps,
-                   configData: new ConfigurationDataRutracker())
+        public RuTracker(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps) : base(
+            "RuTracker",
+            description: "RuTracker is a Semi-Private Russian torrent site with a thriving file-sharing community",
+            link: "https://rutracker.org/", caps: TorznabUtil.CreateDefaultTorznabTVCaps(), configService: configService,
+            client: wc, logger: l, p: ps, configData: new ConfigurationDataRutracker())
         {
             Encoding = Encoding.GetEncoding("windows-1251");
             Language = "ru-ru";
@@ -164,7 +157,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(2538, TorznabCatType.TVDocumentary, " | - Art, Art History");
             AddCategoryMapping(2159, TorznabCatType.TVDocumentary, " | - Music");
             AddCategoryMapping(251, TorznabCatType.TVDocumentary, " | - Kriminalynaya documentary");
-            AddCategoryMapping(98, TorznabCatType.TVDocumentary, " | - Secrets of the Ages / Special Services / Conspiracy Theory");
+            AddCategoryMapping(
+                98, TorznabCatType.TVDocumentary, " | - Secrets of the Ages / Special Services / Conspiracy Theory");
             AddCategoryMapping(97, TorznabCatType.TVDocumentary, " | - Military");
             AddCategoryMapping(851, TorznabCatType.TVDocumentary, " | - World War II");
             AddCategoryMapping(2178, TorznabCatType.TVDocumentary, " | - Accidents / Accidents / Disasters");
@@ -174,7 +168,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(2123, TorznabCatType.TVDocumentary, " | - Flora and fauna");
             AddCategoryMapping(876, TorznabCatType.TVDocumentary, " | - Travel and Tourism");
             AddCategoryMapping(2380, TorznabCatType.TVDocumentary, " | - Social talk show");
-            AddCategoryMapping(1467, TorznabCatType.TVDocumentary, " | - Information-analytical and socio-political etc. ..");
+            AddCategoryMapping(
+                1467, TorznabCatType.TVDocumentary, " | - Information-analytical and socio-political etc. ..");
             AddCategoryMapping(1469, TorznabCatType.TVDocumentary, " | - Architecture and Construction");
             AddCategoryMapping(672, TorznabCatType.TVDocumentary, " | - All about home, life and design");
             AddCategoryMapping(249, TorznabCatType.TVDocumentary, " |- BBC");
@@ -183,17 +178,21 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(2112, TorznabCatType.TVDocumentary, " | - History: Ancient World / Antiquity / Middle Ages");
             AddCategoryMapping(1327, TorznabCatType.TVDocumentary, " | - History: modern and contemporary times");
             AddCategoryMapping(1468, TorznabCatType.TVDocumentary, " | - The Age of the USSR");
-            AddCategoryMapping(1280, TorznabCatType.TVDocumentary, " | - The Battle of psychics / Theory improbability / Seekers / G ..");
-            AddCategoryMapping(752, TorznabCatType.TVDocumentary, " | - Russian sensation / Program Maximum / Profession report ..");
+            AddCategoryMapping(
+                1280, TorznabCatType.TVDocumentary, " | - The Battle of psychics / Theory improbability / Seekers / G ..");
+            AddCategoryMapping(
+                752, TorznabCatType.TVDocumentary, " | - Russian sensation / Program Maximum / Profession report ..");
             AddCategoryMapping(1114, TorznabCatType.TVDocumentary, " | - Paranormal");
             AddCategoryMapping(2168, TorznabCatType.TVDocumentary, " | - Alternative history and science");
             AddCategoryMapping(2160, TorznabCatType.TVDocumentary, " | - Vnezhanrovaya documentary");
             AddCategoryMapping(2176, TorznabCatType.TVDocumentary, " | - Other / nekonditsiya");
             AddCategoryMapping(314, TorznabCatType.TVDocumentary, "Documentary (HD Video)");
-            AddCategoryMapping(2323, TorznabCatType.TVDocumentary, " | - Information-analytical and socio-political etc. ..");
+            AddCategoryMapping(
+                2323, TorznabCatType.TVDocumentary, " | - Information-analytical and socio-political etc. ..");
             AddCategoryMapping(1278, TorznabCatType.TVDocumentary, "| - Biographies. Personality and idols (HD Video)");
             AddCategoryMapping(1281, TorznabCatType.TVDocumentary, " | - Military Science (HD Video)");
-            AddCategoryMapping(2110, TorznabCatType.TVDocumentary, " | - Natural History, Science and Technology (HD Video)");
+            AddCategoryMapping(
+                2110, TorznabCatType.TVDocumentary, " | - Natural History, Science and Technology (HD Video)");
             AddCategoryMapping(979, TorznabCatType.TVDocumentary, " | - Travel and Tourism (HD Video)");
             AddCategoryMapping(2169, TorznabCatType.TVDocumentary, " |- Флора и фауна (HD Video)");
             AddCategoryMapping(2166, TorznabCatType.TVDocumentary, " | - History (HD Video)");
@@ -404,7 +403,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(1301, TorznabCatType.TV, " | - Indian series");
             AddCategoryMapping(704, TorznabCatType.TV, " | - Turkish serials");
             AddCategoryMapping(1940, TorznabCatType.TV, " | - Official brief version of Latin American soap operas");
-            AddCategoryMapping(1574, TorznabCatType.TV, " | - Latin American soap operas with the voice acting (folders distribution)");
+            AddCategoryMapping(
+                1574, TorznabCatType.TV, " | - Latin American soap operas with the voice acting (folders distribution)");
             AddCategoryMapping(1539, TorznabCatType.TV, " | - Latin American serials with subtitles");
             AddCategoryMapping(1500, TorznabCatType.TV, " |- OST");
             AddCategoryMapping(823, TorznabCatType.TV, " | - Богатые тоже плачут / The Rich Also Cry");
@@ -473,7 +473,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(745, TorznabCatType.Books, " | - Textbooks for kindergarten and primary school (..");
             AddCategoryMapping(1689, TorznabCatType.Books, " | - Textbooks for high school (grades 5-11)");
             AddCategoryMapping(2336, TorznabCatType.Books, " | - Teachers and educators");
-            AddCategoryMapping(2337, TorznabCatType.Books, " | - Scientific-popular and informative literature (for children ..");
+            AddCategoryMapping(
+                2337, TorznabCatType.Books, " | - Scientific-popular and informative literature (for children ..");
             AddCategoryMapping(1353, TorznabCatType.Books, " | - Leisure and creativity");
             AddCategoryMapping(1400, TorznabCatType.Books, " | - Education and development");
             AddCategoryMapping(1415, TorznabCatType.Books, "| - Hood. lit-ra for preschool and elementary grades");
@@ -554,7 +555,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(2215, TorznabCatType.Books, " | - Christianity");
             AddCategoryMapping(2216, TorznabCatType.Books, " | - Islam");
             AddCategoryMapping(2217, TorznabCatType.Books, " | - Religions of India, Tibet and East Asia / Judaism");
-            AddCategoryMapping(2218, TorznabCatType.Books, " | - Non-traditional religious, spiritual and mystical teachings ..");
+            AddCategoryMapping(
+                2218, TorznabCatType.Books, " | - Non-traditional religious, spiritual and mystical teachings ..");
             AddCategoryMapping(2252, TorznabCatType.Books, "| - Religion. History of Religions. Atheism");
             AddCategoryMapping(767, TorznabCatType.Books, "psychology");
             AddCategoryMapping(2515, TorznabCatType.Books, " | - General and Applied Psychology");
@@ -735,7 +737,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(2389, TorznabCatType.Audio, "Science fiction, fantasy, mystery, horror, fanfiction");
             AddCategoryMapping(2388, TorznabCatType.Audio, " | - [Audio] Foreign fiction, fantasy, mystery, horror, ..");
             AddCategoryMapping(2387, TorznabCatType.Audio, " | - [Audio] Russian fiction, fantasy, mystery, horror, ..");
-            AddCategoryMapping(2348, TorznabCatType.Audio, " | - [Audio] Puzzle / Miscellaneous Science Fiction, Fantasy, Mystery, too ..");
+            AddCategoryMapping(
+                2348, TorznabCatType.Audio, " | - [Audio] Puzzle / Miscellaneous Science Fiction, Fantasy, Mystery, too ..");
             AddCategoryMapping(2327, TorznabCatType.Audio, "Fiction");
             AddCategoryMapping(695, TorznabCatType.Audio, " | - [Audio] Poetry");
             AddCategoryMapping(399, TorznabCatType.Audio, " | - [Audio] Foreign literature");
@@ -746,7 +749,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(2325, TorznabCatType.Audio, " | - [Audio] Orthodoxy");
             AddCategoryMapping(2342, TorznabCatType.Audio, " | - [Audio] Islam");
             AddCategoryMapping(530, TorznabCatType.Audio, " | - [Audio] Other traditional religion");
-            AddCategoryMapping(2152, TorznabCatType.Audio, " | - [Audio] Non-traditional religious and philosophical teachings");
+            AddCategoryMapping(
+                2152, TorznabCatType.Audio, " | - [Audio] Non-traditional religious and philosophical teachings");
             AddCategoryMapping(2328, TorznabCatType.Audio, "other literature");
             AddCategoryMapping(403, TorznabCatType.Audio, " | - [Audio] academic and popular literature");
             AddCategoryMapping(1279, TorznabCatType.Audio, " | - [Audio] lossless-audio books");
@@ -760,8 +764,10 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(1974, TorznabCatType.Books, " | - Non-original spare parts catalogs for selection");
             AddCategoryMapping(1975, TorznabCatType.Books, " | - Diagnostic and repair programs");
             AddCategoryMapping(1976, TorznabCatType.Books, " | - Tuning, chip tuning, tuning");
-            AddCategoryMapping(1977, TorznabCatType.Books, " | - Books for the repair / maintenance / operation of the vehicle");
-            AddCategoryMapping(1203, TorznabCatType.Books, " | - Multimediyki repair / maintenance / operation of the vehicle");
+            AddCategoryMapping(
+                1977, TorznabCatType.Books, " | - Books for the repair / maintenance / operation of the vehicle");
+            AddCategoryMapping(
+                1203, TorznabCatType.Books, " | - Multimediyki repair / maintenance / operation of the vehicle");
             AddCategoryMapping(1978, TorznabCatType.Books, " | - Accounting, utilities, etc.");
             AddCategoryMapping(1979, TorznabCatType.Books, " | - Virtual Driving School");
             AddCategoryMapping(1980, TorznabCatType.Books, " | - Video lessons on driving vehicles");
@@ -785,7 +791,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(702, TorznabCatType.Audio, " | - Opera (Video)");
             AddCategoryMapping(983, TorznabCatType.Audio, " |- Опера (DVD и HD Видео)");
             AddCategoryMapping(1990, TorznabCatType.Audio, " | - Ballet and contemporary dance (Video, DVD and HD Video)");
-            AddCategoryMapping(560, TorznabCatType.Audio, " | - Complete collection of works and multi-disc edition (lossl ..");
+            AddCategoryMapping(
+                560, TorznabCatType.Audio, " | - Complete collection of works and multi-disc edition (lossl ..");
             AddCategoryMapping(794, TorznabCatType.Audio, " |- Опера (lossless)");
             AddCategoryMapping(556, TorznabCatType.Audio, " | - Vocal music (lossless)");
             AddCategoryMapping(2307, TorznabCatType.Audio, " | - Horovaya Music (lossless)");
@@ -793,7 +800,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(2308, TorznabCatType.Audio, " | - Concerto for Orchestra Instrument (lossless)");
             AddCategoryMapping(558, TorznabCatType.Audio, " | - Chamber instrumental music (lossless)");
             AddCategoryMapping(793, TorznabCatType.Audio, " | - Solo instrumental music (lossless)");
-            AddCategoryMapping(436, TorznabCatType.Audio, " | - Complete collection of works and multi-disc edition (lossy ..");
+            AddCategoryMapping(
+                436, TorznabCatType.Audio, " | - Complete collection of works and multi-disc edition (lossy ..");
             AddCategoryMapping(2309, TorznabCatType.Audio, " | - Vocal and choral music (lossy)");
             AddCategoryMapping(2310, TorznabCatType.Audio, " | - Orchestral music (lossy)");
             AddCategoryMapping(2311, TorznabCatType.Audio, " | - Chamber and solo instrumental music (lossy)");
@@ -810,7 +818,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(2430, TorznabCatType.Audio, " | - World Music India (lossless)");
             AddCategoryMapping(1283, TorznabCatType.Audio, " | - World Music Africa and the Middle East (lossy)");
             AddCategoryMapping(2085, TorznabCatType.Audio, " | - World Music Africa and the Middle East (lossless)");
-            AddCategoryMapping(1282, TorznabCatType.Audio, " | - Ethnic Music of the Caucasus and Transcaucasia (lossy and lossless ..");
+            AddCategoryMapping(
+                1282, TorznabCatType.Audio, " | - Ethnic Music of the Caucasus and Transcaucasia (lossy and lossless ..");
             AddCategoryMapping(1284, TorznabCatType.Audio, " | - World Music Americas (lossy)");
             AddCategoryMapping(1285, TorznabCatType.Audio, " | - World Music Americas (lossless)");
             AddCategoryMapping(1138, TorznabCatType.Audio, " | - World Music Australia, the Pacific and Indian oceans ..");
@@ -844,7 +853,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(1107, TorznabCatType.Audio, " |- Рэп, Хип-Хоп, R'n'B (DVD Video)");
             AddCategoryMapping(2529, TorznabCatType.Audio, " |- Рэп, Хип-Хоп, R'n'B (HD Видео)");
             AddCategoryMapping(1760, TorznabCatType.Audio, "Reggae, Ska, Dub");
-            AddCategoryMapping(1764, TorznabCatType.Audio, " | - Rocksteady, Early Reggae, Ska-Jazz, Trad.Ska (lossy и lo ..");
+            AddCategoryMapping(
+                1764, TorznabCatType.Audio, " | - Rocksteady, Early Reggae, Ska-Jazz, Trad.Ska (lossy и lo ..");
             AddCategoryMapping(1766, TorznabCatType.Audio, " |- Punky-Reggae, Rocksteady-Punk, Ska Revival (lossy)");
             AddCategoryMapping(1767, TorznabCatType.Audio, " | - 3rd Wave Ska (lossy)");
             AddCategoryMapping(1769, TorznabCatType.Audio, " | - Ska-Punk, Ska-Core (lossy)");
@@ -872,7 +882,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(784, TorznabCatType.Audio, " | - Soundtracks for games (lossless)");
             AddCategoryMapping(783, TorznabCatType.Audio, " | - Soundtracks for games (lossy)");
             AddCategoryMapping(2331, TorznabCatType.Audio, " | - Informal soundtracks for games (lossy)");
-            AddCategoryMapping(2431, TorznabCatType.Audio, " | - The arrangements of music from the game (lossy and lossless)");
+            AddCategoryMapping(
+                2431, TorznabCatType.Audio, " | - The arrangements of music from the game (lossy and lossless)");
             AddCategoryMapping(1397, TorznabCatType.Audio, " | - Hi-Res stereo and multi-channel music (Soundtracks)");
             AddCategoryMapping(1215, TorznabCatType.Audio, "Chanson, Author and military songs");
             AddCategoryMapping(1220, TorznabCatType.Audio, " | - The domestic chanson (lossless)");
@@ -929,7 +940,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(2504, TorznabCatType.Audio, " |- Eurodance, Euro-House, Technopop (сборники) (lossy)");
             AddCategoryMapping(2502, TorznabCatType.Audio, " |- Eurodance, Euro-House, Technopop (lossless)");
             AddCategoryMapping(2501, TorznabCatType.Audio, " |- Disco, Italo-Disco, Euro-Disco, Hi-NRG (lossy)");
-            AddCategoryMapping(2505, TorznabCatType.Audio, " | - Disco, Italo-Disco, Euro-Disco, Hi-NRG (сборники) (lossy ..");
+            AddCategoryMapping(
+                2505, TorznabCatType.Audio, " | - Disco, Italo-Disco, Euro-Disco, Hi-NRG (сборники) (lossy ..");
             AddCategoryMapping(2500, TorznabCatType.Audio, " |- Disco, Italo-Disco, Euro-Disco, Hi-NRG (lossless)");
             AddCategoryMapping(2507, TorznabCatType.Audio, "Видео, DVD Video, HD Video (поп-музыка)");
             AddCategoryMapping(1121, TorznabCatType.Audio, " | - Patriotic Pop (Video)");
@@ -947,7 +959,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(2088, TorznabCatType.Audio, " | - Patriotic Pop (National concerts, video dock.) ..");
             AddCategoryMapping(2089, TorznabCatType.Audio, " | - Foreign pop music (National concerts, video dock.) (Bu ..");
             AddCategoryMapping(2426, TorznabCatType.Audio, " | - Patriotic Pop Music, Chanson, Eurodance, Disco (HD V ..");
-            AddCategoryMapping(2508, TorznabCatType.Audio, " | - International Pop Music, Chanson, Eurodance, Disco (HD Vide ..");
+            AddCategoryMapping(
+                2508, TorznabCatType.Audio, " | - International Pop Music, Chanson, Eurodance, Disco (HD Vide ..");
             AddCategoryMapping(2512, TorznabCatType.Audio, "The multi-channel music and own digitization (pop music)");
             AddCategoryMapping(1444, TorznabCatType.Audio, " | - Foreign pop music (own digitization)");
             AddCategoryMapping(1785, TorznabCatType.Audio, " | - Eastern pop music (own digitization)");
@@ -1245,8 +1258,10 @@ namespace Jackett.Common.Indexers
 
             // Программы и Дизайн
             AddCategoryMapping(1012, TorznabCatType.PC0day, "Operating systems from Microsoft");
-            AddCategoryMapping(1019, TorznabCatType.PC0day, " | - Desktop operating system from Microsoft (released prior to Windows XP)");
-            AddCategoryMapping(2153, TorznabCatType.PC0day, " | - Desktop operating system from Microsoft (since Windows XP)");
+            AddCategoryMapping(
+                1019, TorznabCatType.PC0day, " | - Desktop operating system from Microsoft (released prior to Windows XP)");
+            AddCategoryMapping(
+                2153, TorznabCatType.PC0day, " | - Desktop operating system from Microsoft (since Windows XP)");
             AddCategoryMapping(1021, TorznabCatType.PC0day, " | - Server operating system from Microsoft");
             AddCategoryMapping(1025, TorznabCatType.PC0day, " | - Other (Operating Systems from Microsoft)");
             AddCategoryMapping(1376, TorznabCatType.PC0day, "Linux, Unix and other operating systems");
@@ -1263,7 +1278,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(1033, TorznabCatType.PC0day, " | - Work with data carriers");
             AddCategoryMapping(1034, TorznabCatType.PC0day, " | - Information and Diagnostics");
             AddCategoryMapping(1066, TorznabCatType.PC0day, " | - Software for Internet and networks");
-            AddCategoryMapping(1035, TorznabCatType.PC0day, " | - Software to protect your computer (antivirus software, firewalls)");
+            AddCategoryMapping(
+                1035, TorznabCatType.PC0day, " | - Software to protect your computer (antivirus software, firewalls)");
             AddCategoryMapping(1038, TorznabCatType.PC0day, " | - Anti-spyware and anti-trojan");
             AddCategoryMapping(1039, TorznabCatType.PC0day, " | - Software to protect information");
             AddCategoryMapping(1536, TorznabCatType.PC0day, " | - Drivers and Firmware");
@@ -1283,9 +1299,11 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(1087, TorznabCatType.PC0day, " | - CAD (general and engineering)");
             AddCategoryMapping(1192, TorznabCatType.PC0day, " | - CAD (electronics, automation, GAP)");
             AddCategoryMapping(1088, TorznabCatType.PC0day, " | - Software for architects and builders");
-            AddCategoryMapping(1193, TorznabCatType.PC0day, " | - Library and projects for architects and designers inter ..");
+            AddCategoryMapping(
+                1193, TorznabCatType.PC0day, " | - Library and projects for architects and designers inter ..");
             AddCategoryMapping(1071, TorznabCatType.PC0day, " | - Other reference systems");
-            AddCategoryMapping(1073, TorznabCatType.PC0day, " | - Miscellaneous (business systems, office, research and design ..");
+            AddCategoryMapping(
+                1073, TorznabCatType.PC0day, " | - Miscellaneous (business systems, office, research and design ..");
             AddCategoryMapping(1052, TorznabCatType.PC0day, "Web Development and Programming");
             AddCategoryMapping(1053, TorznabCatType.PC0day, " | - WYSIWYG editors for web diz");
             AddCategoryMapping(1054, TorznabCatType.PC0day, " | - Text editors Illuminated");
@@ -1299,7 +1317,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(1079, TorznabCatType.PC0day, " | - Software Kits");
             AddCategoryMapping(1080, TorznabCatType.PC0day, " | - Plug-ins for Adobe's programs");
             AddCategoryMapping(1081, TorznabCatType.PC0day, " | - Graphic Editors");
-            AddCategoryMapping(1082, TorznabCatType.PC0day, " | - Software for typesetting, printing, and working with fonts");
+            AddCategoryMapping(
+                1082, TorznabCatType.PC0day, " | - Software for typesetting, printing, and working with fonts");
             AddCategoryMapping(1083, TorznabCatType.PC0day, " | - 3D modeling, rendering and plugins for them");
             AddCategoryMapping(1084, TorznabCatType.PC0day, " | - Animation");
             AddCategoryMapping(1085, TorznabCatType.PC0day, " | - Creating a BD / HD / DVD-Video");
@@ -1356,8 +1375,10 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(289, TorznabCatType.PCPhoneOther, " | - Applications for Symbian");
             AddCategoryMapping(1001, TorznabCatType.PCPhoneOther, " | - Games for Java");
             AddCategoryMapping(1005, TorznabCatType.PCPhoneOther, " | - Applications for Java");
-            AddCategoryMapping(1002, TorznabCatType.PCPhoneOther, " | - Games for Windows Mobile, Palm OS, BlackBerry and so on.");
-            AddCategoryMapping(290, TorznabCatType.PCPhoneOther, " | - Applications for Windows Mobile, Palm OS, BlackBerry and so on.");
+            AddCategoryMapping(
+                1002, TorznabCatType.PCPhoneOther, " | - Games for Windows Mobile, Palm OS, BlackBerry and so on.");
+            AddCategoryMapping(
+                290, TorznabCatType.PCPhoneOther, " | - Applications for Windows Mobile, Palm OS, BlackBerry and so on.");
             AddCategoryMapping(288, TorznabCatType.PCPhoneOther, " | - Software for your phone");
             AddCategoryMapping(292, TorznabCatType.PCPhoneOther, " | - Firmware for phones");
             AddCategoryMapping(291, TorznabCatType.PCPhoneOther, " | - Wallpapers and Themes");
@@ -1411,7 +1432,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(2528, TorznabCatType.Books, " | - Scientific medical periodicals (newspapers and magazines)");
             AddCategoryMapping(2129, TorznabCatType.Books, " | - Life Sciences");
             AddCategoryMapping(2141, TorznabCatType.Books, " | - Pharmacy and Pharmacology");
-            AddCategoryMapping(2132, TorznabCatType.Books, " | - Non-traditional, traditional medicine and popular books on the s ..");
+            AddCategoryMapping(
+                2132, TorznabCatType.Books, " | - Non-traditional, traditional medicine and popular books on the s ..");
             AddCategoryMapping(2131, TorznabCatType.Books, " | - Veterinary Medicine, Miscellaneous");
             AddCategoryMapping(2315, TorznabCatType.Books, " | - Thematic collection of books");
             AddCategoryMapping(1350, TorznabCatType.Books, " | - Audio Books on medicine");
@@ -1442,61 +1464,55 @@ namespace Jackett.Common.Indexers
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
             configData.CookieHeader.Value = null;
-            var response = await RequestStringWithCookies(LoginUrl);
-            var LoginResultParser = new HtmlParser();
-            var LoginResultDocument = LoginResultParser.ParseDocument(response.Content);
-            var captchaimg = LoginResultDocument.QuerySelector("img[src^=\"https://static.t-ru.org/captcha/\"]");
+            var response = await RequestStringWithCookiesAsync(LoginUrl);
+            var loginResultParser = new HtmlParser();
+            var loginResultDocument = loginResultParser.ParseDocument(response.Content);
+            var captchaimg = loginResultDocument.QuerySelector("img[src^=\"https://static.t-ru.org/captcha/\"]");
             if (captchaimg != null)
             {
-                var captchaImage = await RequestBytesWithCookies(captchaimg.GetAttribute("src"));
+                var captchaImage = await RequestBytesWithCookiesAsync(captchaimg.GetAttribute("src"));
                 configData.CaptchaImage.Value = captchaImage.Content;
-
-                var codefield = LoginResultDocument.QuerySelector("input[name^=\"cap_code_\"]");
+                var codefield = loginResultDocument.QuerySelector("input[name^=\"cap_code_\"]");
                 cap_code_field = codefield.GetAttribute("name");
-
-                var sidfield = LoginResultDocument.QuerySelector("input[name=\"cap_sid\"]");
+                var sidfield = loginResultDocument.QuerySelector("input[name=\"cap_sid\"]");
                 cap_sid = sidfield.GetAttribute("value");
             }
             else
-            {
                 configData.CaptchaImage.Value = null;
-            }
+
             return configData;
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-
             var pairs = new Dictionary<string, string>
             {
-                { "login_username", configData.Username.Value },
-                { "login_password", configData.Password.Value },
-                { "login", "Login" }
+                {"login_username", configData.Username.Value},
+                {"login_password", configData.Password.Value},
+                {"login", "Login"}
             };
-
             if (!string.IsNullOrWhiteSpace(cap_sid))
             {
                 pairs.Add("cap_sid", cap_sid);
                 pairs.Add(cap_code_field, configData.CaptchaText.Value);
-
                 cap_sid = null;
                 cap_code_field = null;
             }
 
-            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, CookieHeader, true, null, LoginUrl, true);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("id=\"logged-in-username\""), () =>
-            {
-                logger.Debug(result.Content);
-                var errorMessage = "Unknown error message, please report";
-                var LoginResultParser = new HtmlParser();
-                var LoginResultDocument = LoginResultParser.ParseDocument(result.Content);
-                var errormsg = LoginResultDocument.QuerySelector("h4[class=\"warnColor1 tCenter mrg_16\"]");
-                if (errormsg != null)
-                    errorMessage = errormsg.TextContent;
-
-                throw new ExceptionWithConfigData(errorMessage, configData);
-            });
+            var result = await RequestLoginAndFollowRedirectAsync(LoginUrl, pairs, CookieHeader, true, null, LoginUrl, true);
+            await ConfigureIfOkAsync(
+                result.Cookies, result.Content?.Contains("id=\"logged-in-username\"") == true, () =>
+                {
+                    logger.Debug(result.Content);
+                    var errorMessage = "Unknown error message, please report";
+                    var loginResultParser = new HtmlParser();
+                    var loginResultDocument = loginResultParser.ParseDocument(result.Content);
+                    var errormsg = loginResultDocument.QuerySelector("h4[class=\"warnColor1 tCenter mrg_16\"]");
+                    if (errormsg != null)
+                        errorMessage = errormsg.TextContent;
+                    throw new ExceptionWithConfigData(errorMessage, configData);
+                });
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
@@ -1504,99 +1520,81 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
             var searchString = query.SanitizedSearchTerm;
-
             var queryCollection = new NameValueCollection();
 
             // if the search string is empty use the getnew view
             if (string.IsNullOrWhiteSpace(searchString))
-            {
                 queryCollection.Add("nm", searchString);
-            }
             else // use the normal search
             {
                 searchString = searchString.Replace("-", " ");
                 if (query.Season != 0)
-                {
-                    searchString += " Сезон: " + query.Season;
-                }
+                    searchString += $" Сезон: {query.Season}";
                 queryCollection.Add("nm", searchString);
             }
 
-            var searchUrl = SearchUrl + "?" + queryCollection.GetQueryString();
-            var results = await RequestStringWithCookies(searchUrl);
+            var searchUrl = $"{SearchUrl}?{queryCollection.GetQueryString()}";
+            var results = await RequestStringWithCookiesAsync(searchUrl);
             if (!results.Content.Contains("id=\"logged-in-username\""))
             {
                 // re login
                 await ApplyConfiguration(null);
-                results = await RequestStringWithCookies(searchUrl);
+                results = await RequestStringWithCookiesAsync(searchUrl);
             }
+
             try
             {
-                string RowsSelector = "table#tor-tbl > tbody > tr";
-
-                var SearchResultParser = new HtmlParser();
-                var SearchResultDocument = SearchResultParser.ParseDocument(results.Content);
-                var Rows = SearchResultDocument.QuerySelectorAll(RowsSelector);
-                foreach (var Row in Rows)
-                {
+                var rowsSelector = "table#tor-tbl > tbody > tr";
+                var searchResultParser = new HtmlParser();
+                var searchResultDocument = searchResultParser.ParseDocument(results.Content);
+                var rows = searchResultDocument.QuerySelectorAll(rowsSelector);
+                foreach (var row in rows)
                     try
                     {
-                        var release = new ReleaseInfo();
-
-                        release.MinimumRatio = 1;
-                        release.MinimumSeedTime = 0;
-
-                        var qDownloadLink = Row.QuerySelector("td.tor-size > a.tr-dl");
+                        var release = new ReleaseInfo { MinimumRatio = 1, MinimumSeedTime = 0 };
+                        var qDownloadLink = row.QuerySelector("td.tor-size > a.tr-dl");
                         if (qDownloadLink == null) // Expects moderation
                             continue;
-
-                        var qDetailsLink = Row.QuerySelector("td.t-title > div.t-title > a.tLink");
-                        var qSize = Row.QuerySelector("td.tor-size");
-
+                        var qDetailsLink = row.QuerySelector("td.t-title > div.t-title > a.tLink");
+                        var qSize = row.QuerySelector("td.tor-size");
                         release.Title = qDetailsLink.TextContent;
-
-                        release.Comments = new Uri(SiteLink + "forum/" + qDetailsLink.GetAttribute("href"));
-                        release.Link = new Uri(SiteLink + "forum/" + qDownloadLink.GetAttribute("href"));
+                        release.Comments = new Uri($"{SiteLink}forum/{qDetailsLink.GetAttribute("href")}");
+                        release.Link = new Uri($"{SiteLink}forum/{qDownloadLink.GetAttribute("href")}");
                         release.Guid = release.Comments;
                         release.Size = ReleaseInfo.GetBytes(qSize.GetAttribute("data-ts_text"));
-
-                        var seeders = Row.QuerySelector("td:nth-child(7) b").TextContent;
+                        var seeders = row.QuerySelector("td:nth-child(7) b").TextContent;
                         if (string.IsNullOrWhiteSpace(seeders))
                             seeders = "0";
                         release.Seeders = ParseUtil.CoerceInt(seeders);
-                        release.Peers = ParseUtil.CoerceInt(Row.QuerySelector("td:nth-child(8)").TextContent) + release.Seeders;
-                        release.Grabs = ParseUtil.CoerceLong(Row.QuerySelector("td:nth-child(9)").TextContent);
-
-                        var timestr = Row.QuerySelector("td:nth-child(10)").GetAttribute("data-ts_text");
+                        release.Peers = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(8)").TextContent) +
+                                        release.Seeders;
+                        release.Grabs = ParseUtil.CoerceLong(row.QuerySelector("td:nth-child(9)").TextContent);
+                        var timestr = row.QuerySelector("td:nth-child(10)").GetAttribute("data-ts_text");
                         release.PublishDate = DateTimeUtil.UnixTimestampToDateTime(long.Parse(timestr));
-
-                        var forum = Row.QuerySelector("td.f-name > div.f-name > a");
+                        var forum = row.QuerySelector("td.f-name > div.f-name > a");
                         var forumid = forum.GetAttribute("href").Split('=')[1];
                         release.Category = MapTrackerCatToNewznab(forumid);
-
                         release.DownloadVolumeFactor = 1;
                         release.UploadVolumeFactor = 1;
-
                         if (release.Category.Contains(TorznabCatType.TV.ID))
                         {
                             // extract season and episodes
                             //var regex = new Regex(".+\\/\\s([^а-яА-я\\/]+)\\s\\/.+Сезон\\s*[:]*\\s+(\\d+).+(?:Серии|Эпизод)+\\s*[:]*\\s+(\\d+-*\\d*).+,\\s+(.+)\\].+(\\(.+\\)).*");
-                            var regex = new Regex(".+\\/\\s([^а-яА-я\\/]+)\\s\\/.+Сезон\\s*[:]*\\s+(\\d+).+(?:Серии|Эпизод)+\\s*[:]*\\s+(\\d+-*\\d*).+,\\s+(.+)\\]\\s(.+)");
-
+                            var regex = new Regex(
+                                ".+\\/\\s([^а-яА-я\\/]+)\\s\\/.+Сезон\\s*[:]*\\s+(\\d+).+(?:Серии|Эпизод)+\\s*[:]*\\s+(\\d+-*\\d*).+,\\s+(.+)\\]\\s(.+)");
                             var title = regex.Replace(release.Title, "$1 - S$2E$3 - rus $4 $5");
                             title = Regex.Replace(title, "-Rip", "Rip", RegexOptions.IgnoreCase);
                             title = Regex.Replace(title, "WEB-DLRip", "WEBDL", RegexOptions.IgnoreCase);
                             title = Regex.Replace(title, "WEB-DL", "WEBDL", RegexOptions.IgnoreCase);
                             title = Regex.Replace(title, "HDTVRip", "HDTV", RegexOptions.IgnoreCase);
                             title = Regex.Replace(title, "Кураж-Бамбей", "kurazh", RegexOptions.IgnoreCase);
-
                             release.Title = title;
                         }
                         else if (configData.StripRussianLetters.Value)
                         {
-                            if (release.Category.Contains(TorznabCatType.Movies.ID) || 
-                                release.Category.Contains(TorznabCatType.MoviesHD.ID) || 
-                                release.Category.Contains(TorznabCatType.Movies3D.ID) || 
+                            if (release.Category.Contains(TorznabCatType.Movies.ID) ||
+                                release.Category.Contains(TorznabCatType.MoviesHD.ID) ||
+                                release.Category.Contains(TorznabCatType.Movies3D.ID) ||
                                 release.Category.Contains(TorznabCatType.MoviesForeign.ID))
                             {
                                 // remove director's name from title
@@ -1605,15 +1603,17 @@ namespace Jackett.Common.Indexers
                                 // this part should be removed: (Мартин Скорсезе / Martin Scorsese)
                                 var director = new Regex(@"(\([А-Яа-яЁё\W]+)\s/\s(.+?)\)");
                                 release.Title = director.Replace(release.Title, "");
-                                
+
                                 // Bluray quality fix: radarr parse Blu-ray Disc as Bluray-1080p but should be BR-DISK
-                                release.Title = Regex.Replace(release.Title, "Blu-ray Disc", "BR-DISK", RegexOptions.IgnoreCase);
+                                release.Title = Regex.Replace(
+                                    release.Title, "Blu-ray Disc", "BR-DISK", RegexOptions.IgnoreCase);
                                 // language fix: all rutracker releases contains russian track
                                 if (release.Title.IndexOf("rus", StringComparison.OrdinalIgnoreCase) < 0)
                                     release.Title += " rus";
-
                             }
-                            var regex = new Regex(@"(\([А-Яа-яЁё\W]+\))|(^[А-Яа-яЁё\W\d]+\/ )|([а-яА-ЯЁё \-]+,+)|([а-яА-ЯЁё]+)");
+
+                            var regex = new Regex(
+                                @"(\([А-Яа-яЁё\W]+\))|(^[А-Яа-яЁё\W\d]+\/ )|([а-яА-ЯЁё \-]+,+)|([а-яА-ЯЁё]+)");
                             release.Title = regex.Replace(release.Title, "");
                         }
 
@@ -1621,9 +1621,8 @@ namespace Jackett.Common.Indexers
                     }
                     catch (Exception ex)
                     {
-                        logger.Error(string.Format("{0}: Error while parsing row '{1}':\n\n{2}", ID, Row.OuterHtml, ex));
+                        logger.Error(string.Format("{0}: Error while parsing row '{1}':\n\n{2}", ID, row.OuterHtml, ex));
                     }
-                }
             }
             catch (Exception ex)
             {

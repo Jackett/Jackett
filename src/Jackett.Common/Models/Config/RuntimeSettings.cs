@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 
 namespace Jackett.Common.Models.Config
@@ -27,25 +27,13 @@ namespace Jackett.Common.Models.Config
 
         public bool NoUpdates { get; set; }
 
-
-        public string DataFolder
-        {
-            get
-            {                
-                if (!string.IsNullOrWhiteSpace(this.CustomDataFolder))
-                {
-                    return this.CustomDataFolder;
-                }
-
-                if (System.Environment.OSVersion.Platform == PlatformID.Unix)
-                {
-                    return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Jackett");
-                }
-                else
-                {
-                    return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Jackett");
-                }
-            }
-        }
+        public string DataFolder => !string.IsNullOrWhiteSpace(CustomDataFolder)
+            ? CustomDataFolder
+            :
+            Environment.OSVersion.Platform == PlatformID.Unix
+                ?
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Jackett")
+                : Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Jackett");
     }
 }

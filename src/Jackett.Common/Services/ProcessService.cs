@@ -1,23 +1,19 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Text;
 using Jackett.Common.Services.Interfaces;
 using NLog;
 
 namespace Jackett.Common.Services
 {
-
     public class ProcessService : IProcessService
     {
-        private Logger logger;
+        private readonly Logger _logger;
 
-        public ProcessService(Logger l)
-        {
-            logger = l;
-        }
+        public ProcessService(Logger l) => _logger = l;
 
         private void Run(string exe, string args, bool asAdmin, DataReceivedEventHandler d, DataReceivedEventHandler r)
         {
-            var startInfo = new ProcessStartInfo()
+            var startInfo = new ProcessStartInfo
             {
                 CreateNoWindow = true,
                 UseShellExecute = false,
@@ -27,7 +23,6 @@ namespace Jackett.Common.Services
                 RedirectStandardOutput = true,
                 RedirectStandardInput = true
             };
-
             if (asAdmin)
             {
                 startInfo.Verb = "runas";
@@ -36,9 +31,9 @@ namespace Jackett.Common.Services
                 startInfo.RedirectStandardOutput = false;
                 startInfo.RedirectStandardInput = false;
             }
-            logger.Debug("Running " + startInfo.FileName + " " + startInfo.Arguments);
-            var proc = Process.Start(startInfo);
 
+            _logger.Debug($"Running {startInfo.FileName} {startInfo.Arguments}");
+            var proc = Process.Start(startInfo);
             if (!asAdmin)
             {
                 proc.OutputDataReceived += d;
@@ -46,6 +41,7 @@ namespace Jackett.Common.Services
                 proc.BeginErrorReadLine();
                 proc.BeginOutputReadLine();
             }
+
             proc.WaitForExit();
             if (!asAdmin)
             {
@@ -57,19 +53,16 @@ namespace Jackett.Common.Services
         public string StartProcessAndGetOutput(string exe, string args, bool keepnewlines = false, bool asAdmin = false)
         {
             var sb = new StringBuilder();
-            DataReceivedEventHandler rxData = (a, e) => {
+            DataReceivedEventHandler rxData = (a, e) =>
+            {
                 if (keepnewlines || !string.IsNullOrWhiteSpace(e.Data))
-                {
                     sb.AppendLine(e.Data);
-                }
             };
-            DataReceivedEventHandler rxError = (s, e) => {
+            DataReceivedEventHandler rxError = (s, e) =>
+            {
                 if (keepnewlines || !string.IsNullOrWhiteSpace(e.Data))
-                {
                     sb.AppendLine(e.Data);
-                }
             };
-
             Run(exe, args, asAdmin, rxData, rxError);
             return sb.ToString();
         }
@@ -80,18 +73,13 @@ namespace Jackett.Common.Services
             DataReceivedEventHandler rxData = (a, e) =>
             {
                 if (!string.IsNullOrWhiteSpace(e.Data))
-                {
-                    logger.Debug(e.Data);
-                }
+                    _logger.Debug(e.Data);
             };
             DataReceivedEventHandler rxError = (s, e) =>
             {
                 if (!string.IsNullOrWhiteSpace(e.Data))
-                {
-                    logger.Error(e.Data);
-                }
+                    _logger.Error(e.Data);
             };
-
             Run(exe, args, asAdmin, rxData, rxError);
         }
     }

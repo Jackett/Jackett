@@ -1,19 +1,16 @@
-﻿using System.Threading;
+using System.Threading;
 using Jackett.Common.Services.Interfaces;
 
 namespace Jackett.Common.Services
 {
-
-    class RunTimeService : IRunTimeService
+    internal class RunTimeService : IRunTimeService
     {
-        private bool isRunning = true;
+        private readonly bool _isRunning = true;
 
         public void Spin()
         {
-            while (isRunning)
-            {
+            while (_isRunning)
                 Thread.Sleep(2000);
-            }
         }
     }
 }

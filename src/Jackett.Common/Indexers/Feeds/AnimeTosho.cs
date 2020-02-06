@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
@@ -15,14 +15,9 @@ namespace Jackett.Common.Indexers.Feeds
     {
         public AnimeTosho(IIndexerConfigurationService configService, WebClient client, Logger logger, IProtectionService p)
             : base(
-                "Anime Tosho",
-                "https://animetosho.org/",
+                "Anime Tosho", "https://animetosho.org/",
                 "AnimeTosho (AT) is an automated service that provides torrent files, magnet links and DDL for all anime releases",
-                configService,
-                client,
-                logger,
-                new ConfigurationData(),
-                p)
+                configService, client, logger, new ConfigurationData(), p)
         {
             // TODO
             // this might be downloaded and refreshed instead of hard-coding it
@@ -34,7 +29,6 @@ namespace Jackett.Common.Indexers.Feeds
                 SupportsImdbMovieSearch = false,
                 SupportsTVRageSearch = false
             };
-
             Encoding = Encoding.UTF8;
             Language = "en-en";
             Type = "public";
@@ -43,12 +37,14 @@ namespace Jackett.Common.Indexers.Feeds
         protected override ReleaseInfo ResultFromFeedItem(XElement item)
         {
             var release = base.ResultFromFeedItem(item);
-            var enclosures = item.Descendants("enclosure").Where(e => e.Attribute("type").Value == "application/x-bittorrent");
+            var enclosures = item.Descendants("enclosure")
+                                 .Where(e => e.Attribute("type").Value == "application/x-bittorrent");
             if (enclosures.Any())
             {
                 var enclosure = enclosures.First().Attribute("url").Value;
                 release.Link = enclosure.ToUri();
             }
+
             // add some default values if none returned by feed
             release.Seeders = release.Seeders > 0 ? release.Seeders : 0;
             release.Peers = release.Peers > 0 ? release.Peers : 0;
@@ -59,6 +55,6 @@ namespace Jackett.Common.Indexers.Feeds
             return release;
         }
 
-        protected override Uri FeedUri => new Uri(SiteLink + "feed/api");
+        protected override Uri FeedUri => new Uri($"{SiteLink}feed/api");
     }
 }

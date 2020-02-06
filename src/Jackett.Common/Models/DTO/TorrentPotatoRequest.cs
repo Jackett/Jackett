@@ -1,4 +1,4 @@
-﻿namespace Jackett.Common.Models.DTO
+namespace Jackett.Common.Models.DTO
 {
     public class TorrentPotatoRequest
     {
@@ -8,15 +8,17 @@
 
         public static TorznabQuery ToTorznabQuery(TorrentPotatoRequest request)
         {
-            var torznabQuery = new TorznabQuery()
+            var torznabQuery = new TorznabQuery
             {
-                Categories = new int[1] { TorznabCatType.Movies.ID },
+                Categories = new int[1]
+                {
+                    TorznabCatType.Movies.ID
+                },
                 SearchTerm = request.Search,
                 ImdbID = request.Imdbid,
                 QueryType = "TorrentPotato"
             };
             torznabQuery.ExpandCatsToSubCats();
-
             return torznabQuery;
         }
     }

@@ -1,4 +1,4 @@
-﻿using Jackett.Common.Indexers.Abstract;
+using Jackett.Common.Indexers.Abstract;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
@@ -8,20 +8,14 @@ namespace Jackett.Common.Indexers
 {
     public class BrokenStones : GazelleTracker
     {
-        public BrokenStones(IIndexerConfigurationService configService, WebClient webClient, Logger logger, IProtectionService protectionService)
-            : base(name: "BrokenStones",
-                desc: "Broken Stones is a Private site for MacOS and iOS APPS / GAMES",
-                link: "https://brokenstones.club/",
-                configService: configService,
-                logger: logger,
-                protectionService: protectionService,
-                webClient: webClient,
-                supportsFreeleechTokens: true
-                )
+        public BrokenStones(IIndexerConfigurationService configService, WebClient webClient, Logger logger,
+                            IProtectionService protectionService) : base(
+            name: "BrokenStones", desc: "Broken Stones is a Private site for MacOS and iOS APPS / GAMES",
+            link: "https://brokenstones.club/", configService: configService, logger: logger,
+            protectionService: protectionService, webClient: webClient, supportsFreeleechTokens: true)
         {
             Language = "en-us";
             Type = "private";
-
             AddCategoryMapping(1, TorznabCatType.PCMac, "MacOS Apps");
             AddCategoryMapping(2, TorznabCatType.PCMac, "MacOS Games");
             AddCategoryMapping(3, TorznabCatType.PCPhoneIOS, "iOS Apps");

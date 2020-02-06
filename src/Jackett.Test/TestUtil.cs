@@ -1,71 +1,56 @@
-﻿using Autofac;
-using NLog;
-using System;
+﻿using System;
 using System.IO;
 using System.Reflection;
-using Jackett.Common.Plumbing;
+using Autofac;
 using Jackett.Common.Models.Config;
+using Jackett.Common.Plumbing;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
+using Jackett.Server.Services;
 using Microsoft.AspNetCore.DataProtection;
+using NLog;
 
 namespace Jackett.Test
 {
-    static class TestUtil
+    internal static class TestUtil
     {
-        private static IContainer testContainer;
-
         public static void SetupContainer()
         {
             IDataProtectionProvider dataProtectionProvider = new EphemeralDataProtectionProvider();
-
-            var builder = new ContainerBuilder();            
+            var builder = new ContainerBuilder();
             builder.RegisterModule(new JackettModule(new RuntimeSettings()));
-            builder.RegisterType<Jackett.Server.Services.ProtectionService>().As<IProtectionService>();
+            builder.RegisterType<ProtectionService>().As<IProtectionService>();
             builder.RegisterType<TestWebClient>().As<WebClient>().SingleInstance();
             builder.RegisterInstance(LogManager.GetCurrentClassLogger()).SingleInstance();
             builder.RegisterType<TestIndexerManagerServiceHelper>().As<IIndexerManagerService>().SingleInstance();
             builder.RegisterInstance(dataProtectionProvider).SingleInstance();
-            testContainer = builder.Build();
+            Container = builder.Build();
         }
 
-        public static TestIndexerManagerServiceHelper IndexManager
-        {
-            get
-            {
-                return testContainer.Resolve<IIndexerManagerService>() as TestIndexerManagerServiceHelper;
-            }
-        }
+        public static TestIndexerManagerServiceHelper IndexManager =>
+            Container.Resolve<IIndexerManagerService>() as TestIndexerManagerServiceHelper;
 
-        public static IContainer Container
-        {
-            get { return testContainer;  }
-        }
+        public static IContainer Container { get; private set; }
 
         public static void RegisterByteCall(WebRequest r, Func<WebRequest, WebClientByteResult> f)
         {
-            var client = testContainer.Resolve<WebClient>() as TestWebClient;
+            var client = Container.Resolve<WebClient>() as TestWebClient;
             client.RegisterByteCall(r, f);
         }
 
         public static void RegisterStringCall(WebRequest r, Func<WebRequest, WebClientStringResult> f)
         {
-            var client = testContainer.Resolve<WebClient>() as TestWebClient;
+            var client = Container.Resolve<WebClient>() as TestWebClient;
             client.RegisterStringCall(r, f);
         }
 
         public static string GetResource(string item)
         {
             var assembly = Assembly.GetExecutingAssembly();
-            var resourceName = "Jackett.Test." + item.Replace('/','.');
-
-            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
-            {
-                using (StreamReader reader = new StreamReader(stream))
-                {
-                    return reader.ReadToEnd();
-                }
-            }
+            var resourceName = "Jackett.Test." + item.Replace('/', '.');
+            using (var stream = assembly.GetManifestResourceStream(resourceName))
+            using (var reader = new StreamReader(stream))
+                return reader.ReadToEnd();
         }
     }
 }

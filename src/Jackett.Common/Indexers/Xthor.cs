@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
@@ -16,6 +16,8 @@ using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
+using WebClient = Jackett.Common.Utils.Clients.WebClient;
+using WebRequest = Jackett.Common.Utils.Clients.WebRequest;
 
 namespace Jackett.Common.Indexers
 {
@@ -26,33 +28,30 @@ namespace Jackett.Common.Indexers
     {
         private static string ApiEndpoint => "https://api.xthor.tk/";
 
-        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
+        public override string[] LegacySiteLinks { get; protected set; } =
+        {
             "https://xthor.bz/",
-            "https://xthor.to",
+            "https://xthor.to"
         };
 
         private string TorrentCommentUrl => TorrentDescriptionUrl;
-        private string TorrentDescriptionUrl => SiteLink + "details.php?id={id}";
+        private string TorrentDescriptionUrl => $"{SiteLink}details.php?id={{id}}";
         private string ReplaceMulti => ConfigData.ReplaceMulti.Value;
         private bool EnhancedAnime => ConfigData.EnhancedAnime.Value;
         private bool DevMode => ConfigData.DevMode.Value;
         private bool CacheMode => ConfigData.HardDriveCache.Value;
-        private static string Directory => Path.Combine(Path.GetTempPath(), Assembly.GetExecutingAssembly().GetName().Name.ToLower(), MethodBase.GetCurrentMethod().DeclaringType?.Name.ToLower());
+
+        private static string Directory => Path.Combine(
+            Path.GetTempPath(), Assembly.GetExecutingAssembly().GetName().Name.ToLower(),
+            MethodBase.GetCurrentMethod().DeclaringType?.Name.ToLower());
+
         public Dictionary<string, string> EmulatedBrowserHeaders { get; } = new Dictionary<string, string>();
         private ConfigurationDataXthor ConfigData => (ConfigurationDataXthor)configData;
 
-        public Xthor(IIndexerConfigurationService configService, Utils.Clients.WebClient w, Logger l, IProtectionService ps)
-            : base(
-                name: "Xthor",
-                description: "General French Private Tracker",
-                link: "https://xthor.tk/",
-                caps: new TorznabCapabilities(),
-                configService: configService,
-                client: w,
-                logger: l,
-                p: ps,
-                downloadBase: "https://xthor.tk/download.php?torrent=",
-                configData: new ConfigurationDataXthor())
+        public Xthor(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps) : base(
+            "Xthor", description: "General French Private Tracker", link: "https://xthor.tk/",
+            caps: new TorznabCapabilities(), configService: configService, client: w, logger: l, p: ps,
+            downloadBase: "https://xthor.tk/download.php?torrent=", configData: new ConfigurationDataXthor())
         {
             Encoding = Encoding.UTF8;
             Language = "fr-fr";
@@ -62,73 +61,73 @@ namespace Jackett.Common.Indexers
             TorznabCaps.Categories.Clear();
 
             // Movies
-            AddCategoryMapping(118, TorznabCatType.MoviesBluRay,    "UHD FULL BLURAY");
-            AddCategoryMapping(119, TorznabCatType.MoviesBluRay,    "UHD BLURAY REMUX");
-            AddCategoryMapping(107, TorznabCatType.MoviesUHD,       "UHD 2160P X265");
-            AddCategoryMapping(1,   TorznabCatType.MoviesBluRay,    "FULL BLURAY");
-            AddCategoryMapping(2,   TorznabCatType.MoviesBluRay,    "BLURAY REMUX");
-            AddCategoryMapping(100, TorznabCatType.MoviesHD,        "HD 1080P X265");
-            AddCategoryMapping(4,   TorznabCatType.MoviesHD,        "HD 1080P X264");
-            AddCategoryMapping(5,   TorznabCatType.MoviesHD,        "HD 720P X264");
-            AddCategoryMapping(7,   TorznabCatType.MoviesSD,        "SD X264");
-            AddCategoryMapping(8,   TorznabCatType.MoviesDVD,       "FULL DVD");
-            AddCategoryMapping(3,   TorznabCatType.Movies3D,        "3D");
-            AddCategoryMapping(6,   TorznabCatType.MoviesSD,        "XVID");
-            AddCategoryMapping(122, TorznabCatType.MoviesHD,        "HDTV");
-            AddCategoryMapping(94,  TorznabCatType.MoviesWEBDL,     "WEBDL");
-            AddCategoryMapping(95,  TorznabCatType.MoviesWEBDL,     "WEBRIP");
-            AddCategoryMapping(12,  TorznabCatType.TVDocumentary,   "DOCS");
-            AddCategoryMapping(33,  TorznabCatType.MoviesOther,     "SPECTACLE");
-            AddCategoryMapping(31,  TorznabCatType.MoviesOther,     "ANIMATION");
-            AddCategoryMapping(9,   TorznabCatType.MoviesOther,     "VOSTFR");
+            AddCategoryMapping(118, TorznabCatType.MoviesBluRay, "UHD FULL BLURAY");
+            AddCategoryMapping(119, TorznabCatType.MoviesBluRay, "UHD BLURAY REMUX");
+            AddCategoryMapping(107, TorznabCatType.MoviesUHD, "UHD 2160P X265");
+            AddCategoryMapping(1, TorznabCatType.MoviesBluRay, "FULL BLURAY");
+            AddCategoryMapping(2, TorznabCatType.MoviesBluRay, "BLURAY REMUX");
+            AddCategoryMapping(100, TorznabCatType.MoviesHD, "HD 1080P X265");
+            AddCategoryMapping(4, TorznabCatType.MoviesHD, "HD 1080P X264");
+            AddCategoryMapping(5, TorznabCatType.MoviesHD, "HD 720P X264");
+            AddCategoryMapping(7, TorznabCatType.MoviesSD, "SD X264");
+            AddCategoryMapping(8, TorznabCatType.MoviesDVD, "FULL DVD");
+            AddCategoryMapping(3, TorznabCatType.Movies3D, "3D");
+            AddCategoryMapping(6, TorznabCatType.MoviesSD, "XVID");
+            AddCategoryMapping(122, TorznabCatType.MoviesHD, "HDTV");
+            AddCategoryMapping(94, TorznabCatType.MoviesWEBDL, "WEBDL");
+            AddCategoryMapping(95, TorznabCatType.MoviesWEBDL, "WEBRIP");
+            AddCategoryMapping(12, TorznabCatType.TVDocumentary, "DOCS");
+            AddCategoryMapping(33, TorznabCatType.MoviesOther, "SPECTACLE");
+            AddCategoryMapping(31, TorznabCatType.MoviesOther, "ANIMATION");
+            AddCategoryMapping(9, TorznabCatType.MoviesOther, "VOSTFR");
 
             // Series
-            AddCategoryMapping(104, TorznabCatType.TVOTHER,         "BLURAY");
-            AddCategoryMapping(13,  TorznabCatType.TVOTHER,         "PACK VF");
-            AddCategoryMapping(15,  TorznabCatType.TVHD,            "HD VF");
-            AddCategoryMapping(14,  TorznabCatType.TVSD,            "SD VF");
-            AddCategoryMapping(98,  TorznabCatType.TVOTHER,         "PACK VOSTFR");
-            AddCategoryMapping(17,  TorznabCatType.TVHD,            "HD VF VOSTFR");
-            AddCategoryMapping(16,  TorznabCatType.TVSD,            "SD VF VOSTFR");
-            AddCategoryMapping(101, TorznabCatType.TVAnime,         "PACK ANIME");
-            AddCategoryMapping(32,  TorznabCatType.TVAnime,         "ANIME VF");
-            AddCategoryMapping(110, TorznabCatType.TVAnime,         "ANIME VOSTFR");
-            AddCategoryMapping(123, TorznabCatType.TVOTHER,         "ANIMATION");
-            AddCategoryMapping(109, TorznabCatType.TVDocumentary,   "DOCS");
-            AddCategoryMapping(30,  TorznabCatType.TVOTHER,         "EMISSIONS");
-            AddCategoryMapping(34,  TorznabCatType.TVOTHER,         "SPORT");
+            AddCategoryMapping(104, TorznabCatType.TVOTHER, "BLURAY");
+            AddCategoryMapping(13, TorznabCatType.TVOTHER, "PACK VF");
+            AddCategoryMapping(15, TorznabCatType.TVHD, "HD VF");
+            AddCategoryMapping(14, TorznabCatType.TVSD, "SD VF");
+            AddCategoryMapping(98, TorznabCatType.TVOTHER, "PACK VOSTFR");
+            AddCategoryMapping(17, TorznabCatType.TVHD, "HD VF VOSTFR");
+            AddCategoryMapping(16, TorznabCatType.TVSD, "SD VF VOSTFR");
+            AddCategoryMapping(101, TorznabCatType.TVAnime, "PACK ANIME");
+            AddCategoryMapping(32, TorznabCatType.TVAnime, "ANIME VF");
+            AddCategoryMapping(110, TorznabCatType.TVAnime, "ANIME VOSTFR");
+            AddCategoryMapping(123, TorznabCatType.TVOTHER, "ANIMATION");
+            AddCategoryMapping(109, TorznabCatType.TVDocumentary, "DOCS");
+            AddCategoryMapping(30, TorznabCatType.TVOTHER, "EMISSIONS");
+            AddCategoryMapping(34, TorznabCatType.TVOTHER, "SPORT");
 
             // Music
-            AddCategoryMapping(20,  TorznabCatType.AudioVideo,      "CONCERT");
+            AddCategoryMapping(20, TorznabCatType.AudioVideo, "CONCERT");
 
             // Books
-            AddCategoryMapping(24,  TorznabCatType.BooksEbook,      "ENOOKS NOVEL");
-            AddCategoryMapping(96,  TorznabCatType.BooksMagazines,  "EBOOKS MAGAZINES");
-            AddCategoryMapping(116, TorznabCatType.BooksEbook,      "EBOOKS NOVEL JUNIOR");
-            AddCategoryMapping(99,  TorznabCatType.BooksOther,      "EBOOKS BD");
-            AddCategoryMapping(102, TorznabCatType.BooksComics,     "EBOOKS COMICS");
-            AddCategoryMapping(103, TorznabCatType.BooksOther,      "EBOOKS MANGA");
+            AddCategoryMapping(24, TorznabCatType.BooksEbook, "ENOOKS NOVEL");
+            AddCategoryMapping(96, TorznabCatType.BooksMagazines, "EBOOKS MAGAZINES");
+            AddCategoryMapping(116, TorznabCatType.BooksEbook, "EBOOKS NOVEL JUNIOR");
+            AddCategoryMapping(99, TorznabCatType.BooksOther, "EBOOKS BD");
+            AddCategoryMapping(102, TorznabCatType.BooksComics, "EBOOKS COMICS");
+            AddCategoryMapping(103, TorznabCatType.BooksOther, "EBOOKS MANGA");
 
             // SOFTWARE
-            AddCategoryMapping(25,  TorznabCatType.PCGames,         "PC GAMES");
-            AddCategoryMapping(27,  TorznabCatType.ConsolePS3,      "PS GAMES");
-            AddCategoryMapping(111, TorznabCatType.PCMac,           "MAC GAMES");
-            AddCategoryMapping(112, TorznabCatType.PC,              "LINUX GAMES");
-            AddCategoryMapping(26,  TorznabCatType.ConsoleXbox360,  "XBOX GAMES");
-            AddCategoryMapping(28,  TorznabCatType.ConsoleWii,      "WII GAMES");
-            AddCategoryMapping(29,  TorznabCatType.ConsoleNDS,      "NDS GAMES");
-            AddCategoryMapping(117, TorznabCatType.PC,              "ROM");
-            AddCategoryMapping(21,  TorznabCatType.PC,              "PC SOFTWARE");
-            AddCategoryMapping(22,  TorznabCatType.PCMac,           "MAC SOFTWARE");
-            AddCategoryMapping(23,  TorznabCatType.PCPhoneAndroid,  "ANDROID");
+            AddCategoryMapping(25, TorznabCatType.PCGames, "PC GAMES");
+            AddCategoryMapping(27, TorznabCatType.ConsolePS3, "PS GAMES");
+            AddCategoryMapping(111, TorznabCatType.PCMac, "MAC GAMES");
+            AddCategoryMapping(112, TorznabCatType.PC, "LINUX GAMES");
+            AddCategoryMapping(26, TorznabCatType.ConsoleXbox360, "XBOX GAMES");
+            AddCategoryMapping(28, TorznabCatType.ConsoleWii, "WII GAMES");
+            AddCategoryMapping(29, TorznabCatType.ConsoleNDS, "NDS GAMES");
+            AddCategoryMapping(117, TorznabCatType.PC, "ROM");
+            AddCategoryMapping(21, TorznabCatType.PC, "PC SOFTWARE");
+            AddCategoryMapping(22, TorznabCatType.PCMac, "MAC SOFTWARE");
+            AddCategoryMapping(23, TorznabCatType.PCPhoneAndroid, "ANDROID");
 
             // XxX
-            AddCategoryMapping(36,  TorznabCatType.XXX,             "XxX / Films");
-            AddCategoryMapping(105, TorznabCatType.XXX,             "XxX / Séries");
-            AddCategoryMapping(114, TorznabCatType.XXX,             "XxX / Lesbiennes");
-            AddCategoryMapping(115, TorznabCatType.XXX,             "XxX / Gays");
-            AddCategoryMapping(113, TorznabCatType.XXX,             "XxX / Hentai");
-            AddCategoryMapping(120, TorznabCatType.XXX,             "XxX / Magazines");
+            AddCategoryMapping(36, TorznabCatType.XXX, "XxX / Films");
+            AddCategoryMapping(105, TorznabCatType.XXX, "XxX / Séries");
+            AddCategoryMapping(114, TorznabCatType.XXX, "XxX / Lesbiennes");
+            AddCategoryMapping(115, TorznabCatType.XXX, "XxX / Gays");
+            AddCategoryMapping(113, TorznabCatType.XXX, "XxX / Hentai");
+            AddCategoryMapping(120, TorznabCatType.XXX, "XxX / Magazines");
         }
 
         /// <summary>
@@ -137,7 +136,6 @@ namespace Jackett.Common.Indexers
         /// <param name="configJson">Our params in Json</param>
         /// <returns>Configuration state</returns>
 #pragma warning disable 1998
-
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
 #pragma warning restore 1998
         {
@@ -166,7 +164,6 @@ namespace Jackett.Common.Indexers
 
             // Saving data
             SaveConfig();
-
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
@@ -178,19 +175,19 @@ namespace Jackett.Common.Indexers
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var searchTerm = query.GetEpisodeSearchString() + " " + query.SanitizedSearchTerm; // use episode search string first, see issue #1202
+            var searchTerm = $"{query.GetEpisodeSearchString()} {query.SanitizedSearchTerm}"; // use episode search string first, see issue #1202
             searchTerm = searchTerm.Trim();
             searchTerm = searchTerm.ToLower();
-
-            if (EnhancedAnime && query.HasSpecifiedCategories && (query.Categories.Contains(TorznabCatType.TVAnime.ID) || query.Categories.Contains(100032) || query.Categories.Contains(100101) || query.Categories.Contains(100110)))
+            if (EnhancedAnime && query.HasSpecifiedCategories &&
+                (query.Categories.Contains(TorznabCatType.TVAnime.ID) || query.Categories.Contains(100032) ||
+                 query.Categories.Contains(100101) || query.Categories.Contains(100110)))
             {
-                System.Text.RegularExpressions.Regex regex = new Regex(" ([0-9]+)");
+                var regex = new Regex(" ([0-9]+)");
                 searchTerm = regex.Replace(searchTerm, " E$1");
             }
 
             // Check cache first so we don't query the server (if search term used or not in dev mode)
             if (!DevMode && !string.IsNullOrEmpty(searchTerm))
-            {
                 lock (cache)
                 {
                     // Remove old cache items
@@ -201,14 +198,12 @@ namespace Jackett.Common.Indexers
                     if (cachedResult != null)
                         return cachedResult.Results.Select(s => (ReleaseInfo)s.Clone()).ToArray();
                 }
-            }
 
             // Build our query
             var request = BuildQuery(searchTerm, query, ApiEndpoint);
 
             // Getting results & Store content
-            var results = await QueryExec(request);
-
+            var results = await QueryExecAsync(request);
             try
             {
                 // Deserialize our Json Response
@@ -219,50 +214,48 @@ namespace Jackett.Common.Indexers
 
                 // If contains torrents
                 if (xthorResponse.torrents != null)
-                {
                     // Adding each torrent row to releases
-                    releases.AddRange(xthorResponse.torrents.Select(torrent =>
-                    {
-                        //issue #3847 replace multi keyword
-                        if (!string.IsNullOrEmpty(ReplaceMulti))
-                        {
-                            System.Text.RegularExpressions.Regex regex = new Regex("(?i)([\\.\\- ])MULTI([\\.\\- ])");
-                            torrent.name = regex.Replace(torrent.name, "$1" + ReplaceMulti + "$2");
-                        }
+                    releases.AddRange(
+                        xthorResponse.torrents.Select(
+                            torrent =>
+                            {
+                                //issue #3847 replace multi keyword
+                                if (!string.IsNullOrEmpty(ReplaceMulti))
+                                {
+                                    var regex = new Regex("(?i)([\\.\\- ])MULTI([\\.\\- ])");
+                                    torrent.name = regex.Replace(torrent.name, $"$1{ReplaceMulti}$2");
+                                }
 
-                        var release = new ReleaseInfo
-                        {
-                            // Mapping data
-                            Category = MapTrackerCatToNewznab(torrent.category.ToString()),
-                            Title = torrent.name,
-                            Seeders = torrent.seeders,
-                            Peers = torrent.seeders + torrent.leechers,
-                            MinimumRatio = 1,
-                            MinimumSeedTime = 345600,
-                            PublishDate = DateTimeUtil.UnixTimestampToDateTime(torrent.added),
-                            Size = torrent.size,
-                            Grabs = torrent.times_completed,
-                            Files = torrent.numfiles,
-                            UploadVolumeFactor = 1,
-                            DownloadVolumeFactor = (torrent.freeleech == 1 ? 0 : 1),
-                            Guid = new Uri(TorrentDescriptionUrl.Replace("{id}", torrent.id.ToString())),
-                            Comments = new Uri(TorrentCommentUrl.Replace("{id}", torrent.id.ToString())),
-                            Link = new Uri(torrent.download_link),
-                            TMDb = torrent.tmdb_id
-                        };
-
-                        if (DevMode)
-                        {
-                            Output(release.ToString());
-                        }
-
-                        return release;
-                    }));
-                }
+                                var release = new ReleaseInfo
+                                {
+                                    // Mapping data
+                                    Category = MapTrackerCatToNewznab(torrent.category.ToString()),
+                                    Title = torrent.name,
+                                    Seeders = torrent.seeders,
+                                    Peers = torrent.seeders + torrent.leechers,
+                                    MinimumRatio = 1,
+                                    MinimumSeedTime = 345600,
+                                    PublishDate = DateTimeUtil.UnixTimestampToDateTime(torrent.added),
+                                    Size = torrent.size,
+                                    Grabs = torrent.times_completed,
+                                    Files = torrent.numfiles,
+                                    UploadVolumeFactor = 1,
+                                    DownloadVolumeFactor = (torrent.freeleech == 1 ? 0 : 1),
+                                    Guid = new Uri(
+                                        TorrentDescriptionUrl.Replace("{id}", torrent.id.ToString())),
+                                    Comments = new Uri(
+                                        TorrentCommentUrl.Replace("{id}", torrent.id.ToString())),
+                                    Link = new Uri(torrent.download_link),
+                                    TMDb = torrent.tmdb_id
+                                };
+                                if (DevMode)
+                                    Output(release.ToString());
+                                return release;
+                            }));
             }
             catch (Exception ex)
             {
-                OnParseError("Unable to parse result \n" + ex.StackTrace, ex);
+                OnParseError($"Unable to parse result \n{ex.StackTrace}", ex);
             }
 
             // Return found releases
@@ -322,10 +315,10 @@ namespace Jackett.Common.Indexers
             public string download_link { get; set; }
             public int tmdb_id { get; set; }
 
-            public override string ToString()
-            {
-                return string.Format("[XthorTorrent: id={0}, category={1}, seeders={2}, leechers={3}, name={4}, times_completed={5}, size={6}, added={7}, freeleech={8}, numfiles={9}, release_group={10}, download_link={11}, tmdb_id={12}]", id, category, seeders, leechers, name, times_completed, size, added, freeleech, numfiles, release_group, download_link, tmdb_id);
-            }
+            public override string ToString() => string.Format(
+                "[XthorTorrent: id={0}, category={1}, seeders={2}, leechers={3}, name={4}, times_completed={5}, size={6}, added={7}, freeleech={8}, numfiles={9}, release_group={10}, download_link={11}, tmdb_id={12}]",
+                id, category, seeders, leechers, name, times_completed, size, added, freeleech, numfiles, release_group,
+                download_link, tmdb_id);
         }
 
         /// <summary>
@@ -345,11 +338,9 @@ namespace Jackett.Common.Indexers
 
             // If search term provided
             if (!string.IsNullOrWhiteSpace(term))
-            {
                 // Add search term
                 // ReSharper disable once AssignNullToNotNullAttribute
                 parameters.Add("search", WebUtility.UrlEncode(term));
-            }
             else
             {
                 parameters.Add("search", string.Empty);
@@ -359,25 +350,17 @@ namespace Jackett.Common.Indexers
 
             // Loop on Categories needed
             if (categoriesList.Count > 0)
-            {
                 parameters.Add("category", string.Join("+", categoriesList));
-            }
 
             // If Only Freeleech Enabled
             if (ConfigData.Freeleech.Value)
-            {
                 parameters.Add("freeleech", "1");
-            }
-
             if (!string.IsNullOrEmpty(ConfigData.Accent.Value))
-            {
                 parameters.Add("accent", ConfigData.Accent.Value);
-            }
 
             // Building our query -- Cannot use GetQueryString due to UrlEncode (generating wrong category param)
-            url += "?" + string.Join("&", parameters.AllKeys.Select(a => a + "=" + parameters[a]));
-
-            Output("\nBuilded query for \"" + term + "\"... " + url);
+            url += $"?{string.Join("&", parameters.AllKeys.Select(a => $"{a}={parameters[a]}"))}";
+            Output($"\nBuilded query for \"{term}\"... {url}");
 
             // Return our search url
             return url;
@@ -388,21 +371,17 @@ namespace Jackett.Common.Indexers
         /// </summary>
         /// <param name="request">URL created by Query Builder</param>
         /// <returns>Results from query</returns>
-        private async Task<String> QueryExec(string request)
+        private async Task<string> QueryExecAsync(string request)
         {
-            String results;
+            string results;
 
             // Switch in we are in DEV mode with Hard Drive Cache or not
             if (DevMode && CacheMode)
-            {
                 // Check Cache before querying and load previous results if available
-                results = await QueryCache(request);
-            }
+                results = await QueryCacheAsync(request);
             else
-            {
                 // Querying tracker directly
-                results = await QueryTracker(request);
-            }
+                results = await QueryTrackerAsync(request);
             return results;
         }
 
@@ -411,9 +390,9 @@ namespace Jackett.Common.Indexers
         /// </summary>
         /// <param name="request">URL created by Query Builder</param>
         /// <returns>Results from query</returns>
-        private async Task<String> QueryCache(string request)
+        private async Task<string> QueryCacheAsync(string request)
         {
-            String results;
+            string results;
 
             // Create Directory if not exist
             System.IO.Directory.CreateDirectory(Directory);
@@ -422,43 +401,44 @@ namespace Jackett.Common.Indexers
             CleanCacheStorage();
 
             // File Name
-            string fileName = StringUtil.HashSHA1(request) + ".json";
+            var fileName = $"{StringUtil.HashSHA1(request)}.json";
 
             // Create fingerprint for request
-            string file = Path.Combine(Directory, fileName);
+            var file = Path.Combine(Directory, fileName);
 
             // Checking modes states
             if (File.Exists(file))
             {
                 // File exist... loading it right now !
-                Output("Loading results from hard drive cache ..." + fileName);
+                Output($"Loading results from hard drive cache ...{fileName}");
                 try
                 {
-                    using (StreamReader fileReader = File.OpenText(file))
+                    using (var fileReader = File.OpenText(file))
                     {
-                        JsonSerializer serializer = new JsonSerializer();
-                        results = (String)serializer.Deserialize(fileReader, typeof(String));
+                        var serializer = new JsonSerializer();
+                        results = (string)serializer.Deserialize(fileReader, typeof(string));
                     }
                 }
                 catch (Exception e)
                 {
-                    Output("Error loading cached results ! " + e.Message, "error");
+                    Output($"Error loading cached results ! {e.Message}", "error");
                     results = null;
                 }
             }
             else
             {
                 // No cached file found, querying tracker directly
-                results = await QueryTracker(request);
+                results = await QueryTrackerAsync(request);
 
                 // Cached file didn't exist for our query, writing it right now !
-                Output("Writing results to hard drive cache ..." + fileName);
-                using (StreamWriter fileWriter = File.CreateText(file))
+                Output($"Writing results to hard drive cache ...{fileName}");
+                using (var fileWriter = File.CreateText(file))
                 {
-                    JsonSerializer serializer = new JsonSerializer();
+                    var serializer = new JsonSerializer();
                     serializer.Serialize(fileWriter, results);
                 }
             }
+
             return results;
         }
 
@@ -467,24 +447,25 @@ namespace Jackett.Common.Indexers
         /// </summary>
         /// <param name="request">URL created by Query Builder</param>
         /// <returns>Results from query</returns>
-        private async Task<String> QueryTracker(string request)
+        private async Task<string> QueryTrackerAsync(string request)
         {
             // Cache mode not enabled or cached file didn't exist for our query
             Output("\nQuerying tracker for results....");
 
             // Build WebRequest for index
-            var myIndexRequest = new Utils.Clients.WebRequest()
+            var myIndexRequest = new WebRequest
             {
-                Type = RequestType.GET,
+                Type = RequestType.Get,
                 Url = request,
                 Encoding = Encoding,
                 Headers = EmulatedBrowserHeaders
             };
 
             // Request our first page
-            var results = await webclient.GetString(myIndexRequest);
+            var results = await webclient.GetStringAsync(myIndexRequest);
             if (results.Status == HttpStatusCode.InternalServerError) // See issue #2110
-                throw new Exception("Internal Server Error (" + results.Content + "), probably you reached the API limits, please reduce the number of queries");
+                throw new Exception(
+                    $"Internal Server Error ({results.Content}), probably you reached the API limits, please reduce the number of queries");
 
             // Return results from tracker
             return results.Content;
@@ -501,30 +482,28 @@ namespace Jackett.Common.Indexers
             {
                 case 0:
                     // Everything OK
-                    Output("\nAPI State : Everything OK ... -> " + state.descr);
+                    Output($"\nAPI State : Everything OK ... -> {state.descr}");
                     break;
-
                 case 1:
                     // Passkey not found
-                    Output("\nAPI State : Error, Passkey not found in tracker's database, aborting... -> " + state.descr);
+                    Output($"\nAPI State : Error, Passkey not found in tracker's database, aborting... -> {state.descr}");
                     throw new Exception("Passkey not found in tracker's database");
                 case 2:
                     // No results
-                    Output("\nAPI State : No results for query ... -> " + state.descr);
+                    Output($"\nAPI State : No results for query ... -> {state.descr}");
                     break;
-
                 case 3:
                     // Power Saver
-                    Output("\nAPI State : Power Saver mode, only cached query with no parameters available ... -> " + state.descr);
+                    Output(
+                        $"\nAPI State : Power Saver mode, only cached query with no parameters available ... -> {state.descr}");
                     break;
-
                 case 4:
                     // DDOS Attack, API disabled
-                    Output("\nAPI State : Tracker is under DDOS attack, API disabled, aborting ... -> " + state.descr);
+                    Output($"\nAPI State : Tracker is under DDOS attack, API disabled, aborting ... -> {state.descr}");
                     throw new Exception("Tracker is under DDOS attack, API disabled");
                 default:
                     // Unknown state
-                    Output("\nAPI State : Unknown state, aborting querying ... -> " + state.descr);
+                    Output($"\nAPI State : Unknown state, aborting querying ... -> {state.descr}");
                     throw new Exception("Unknown state, aborting querying");
             }
         }
@@ -549,36 +528,30 @@ namespace Jackett.Common.Indexers
                     Output("-> Storage folder deleted successfully.");
                 }
                 else
-                {
                     // No directory, so nothing to do
                     Output("-> No Storage folder found for this provider !");
-                }
             }
             else
             {
                 var i = 0;
                 // Check if there is file older than ... and delete them
                 Output("\nCleaning Provider Storage folder... in progress.");
-                System.IO.Directory.GetFiles(Directory)
-                .Select(f => new FileInfo(f))
-                .Where(f => f.LastAccessTime < DateTime.Now.AddMilliseconds(-Convert.ToInt32(ConfigData.HardDriveCacheKeepTime.Value)))
-                .ToList()
-                .ForEach(f =>
-                {
-                    Output("Deleting cached file << " + f.Name + " >> ... done.");
-                    f.Delete();
-                    i++;
-                });
+                System.IO.Directory.GetFiles(Directory).Select(f => new FileInfo(f)).Where(
+                          f => f.LastAccessTime <
+                               DateTime.Now.AddMilliseconds(-Convert.ToInt32(ConfigData.HardDriveCacheKeepTime.Value)))
+                      .ToList().ForEach(
+                          f =>
+                          {
+                              Output($"Deleting cached file << {f.Name} >> ... done.");
+                              f.Delete();
+                              i++;
+                          });
 
                 // Inform on what was cleaned during process
                 if (i > 0)
-                {
-                    Output("-> Deleted " + i + " cached files during cleaning.");
-                }
+                    Output($"-> Deleted {i} cached files during cleaning.");
                 else
-                {
                     Output("-> Nothing deleted during cleaning.");
-                }
             }
         }
 
@@ -591,12 +564,9 @@ namespace Jackett.Common.Indexers
         {
             // Check if we are in dev mode
             if (DevMode)
-            {
                 // Output message to console
                 Console.WriteLine(message);
-            }
             else
-            {
                 // Send message to logger with level
                 switch (level)
                 {
@@ -605,20 +575,15 @@ namespace Jackett.Common.Indexers
                     case "debug":
                         // Only if Debug Level Enabled on Jackett
                         if (logger.IsDebugEnabled)
-                        {
                             logger.Debug(message);
-                        }
                         break;
-
                     case "info":
                         logger.Info(message);
                         break;
-
                     case "error":
                         logger.Error(message);
                         break;
                 }
-            }
         }
 
         /// <summary>
@@ -630,22 +595,13 @@ namespace Jackett.Common.Indexers
 
             // Check Passkey Setting
             if (string.IsNullOrEmpty(ConfigData.PassKey.Value))
-            {
-                throw new ExceptionWithConfigData("You must provide your passkey for this tracker to be allowed to use API !", ConfigData);
-            }
-            else
-            {
-                Output("Validated Setting -- PassKey (auth) => " + ConfigData.PassKey.Value);
-            }
-
-            if (!string.IsNullOrEmpty(ConfigData.Accent.Value) && !string.Equals(ConfigData.Accent.Value, "1") && !string.Equals(ConfigData.Accent.Value, "2"))
-            {
+                throw new ExceptionWithConfigData(
+                    "You must provide your passkey for this tracker to be allowed to use API !", ConfigData);
+            Output($"Validated Setting -- PassKey (auth) => {ConfigData.PassKey.Value}");
+            if (!string.IsNullOrEmpty(ConfigData.Accent.Value) && !string.Equals(ConfigData.Accent.Value, "1") &&
+                !string.Equals(ConfigData.Accent.Value, "2"))
                 throw new ExceptionWithConfigData("Only '1' or '2' are available in the Accent parameter.", ConfigData);
-            }
-            else
-            {
-                Output("Validated Setting -- Accent (audio) => " + ConfigData.Accent.Value);
-            }
+            Output($"Validated Setting -- Accent (audio) => {ConfigData.Accent.Value}");
             // Check Dev Cache Settings
             if (ConfigData.HardDriveCache.Value)
             {
@@ -653,32 +609,27 @@ namespace Jackett.Common.Indexers
 
                 // Check if Dev Mode enabled !
                 if (!ConfigData.DevMode.Value)
-                {
-                    throw new ExceptionWithConfigData("Hard Drive is enabled but not in DEV MODE, Please enable DEV MODE !", ConfigData);
-                }
+                    throw new ExceptionWithConfigData(
+                        "Hard Drive is enabled but not in DEV MODE, Please enable DEV MODE !", ConfigData);
 
                 // Check Cache Keep Time Setting
                 if (!string.IsNullOrEmpty(ConfigData.HardDriveCacheKeepTime.Value))
-                {
                     try
                     {
-                        Output("Validated Setting -- Cache Keep Time (ms) => " + Convert.ToInt32(ConfigData.HardDriveCacheKeepTime.Value));
+                        Output(
+                            $"Validated Setting -- Cache Keep Time (ms) => {Convert.ToInt32(ConfigData.HardDriveCacheKeepTime.Value)}");
                     }
                     catch (Exception)
                     {
                         throw new ExceptionWithConfigData("Please enter a numeric hard drive keep time in ms !", ConfigData);
                     }
-                }
                 else
-                {
-                    throw new ExceptionWithConfigData("Hard Drive Cache enabled, Please enter a maximum keep time for cache !", ConfigData);
-                }
+                    throw new ExceptionWithConfigData(
+                        "Hard Drive Cache enabled, Please enter a maximum keep time for cache !", ConfigData);
             }
             else
-            {
                 // Delete cache if previously existed
                 CleanCacheStorage(true);
-            }
         }
     }
 }

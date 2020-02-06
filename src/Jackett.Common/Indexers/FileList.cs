@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -19,36 +19,29 @@ namespace Jackett.Common.Indexers
 {
     public class FileList : BaseWebIndexer
     {
-        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
-            "http://filelist.ro/",
+        public override string[] LegacySiteLinks { get; protected set; } =
+        {
+            "http://filelist.ro/"
         };
 
-        private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
-        private string BrowseUrl { get { return SiteLink + "browse.php"; } }
+        private string LoginUrl => $"{SiteLink}takelogin.php";
+        private string BrowseUrl => $"{SiteLink}browse.php";
 
         private new ConfigurationDataFileList configData
         {
-            get { return (ConfigurationDataFileList)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataFileList)base.configData;
+            set => base.configData = value;
         }
 
-        public FileList(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "FileList",
-                description: "The best Romanian site.",
-                link: "https://filelist.ro/",
-                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                configService: configService,
-                client: wc,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataFileList())
+        public FileList(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps) : base(
+            "FileList", description: "The best Romanian site.", link: "https://filelist.ro/",
+            caps: TorznabUtil.CreateDefaultTorznabTVCaps(), configService: configService, client: wc, logger: l, p: ps,
+            configData: new ConfigurationDataFileList())
         {
             Encoding = Encoding.UTF8;
             Language = "ro-ro";
             Type = "private";
-
             TorznabCaps.SupportsImdbMovieSearch = true;
-
             AddCategoryMapping(24, TorznabCatType.TVAnime, "Anime");
             AddCategoryMapping(11, TorznabCatType.Audio, "Audio");
             AddCategoryMapping(15, TorznabCatType.TV, "Desene");
@@ -80,22 +73,24 @@ namespace Jackett.Common.Indexers
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-            var responseFirstPage = await RequestStringWithCookiesAndRetry(SiteLink + "login.php?returnto=%2F", "", null);
+            var responseFirstPage = await RequestStringWithCookiesAndRetryAsync($"{SiteLink}login.php?returnto=%2F", "");
             CQ domFirstPage = responseFirstPage.Content;
-            var validator = domFirstPage.Find("input[name =\"validator\"]").Attr("value");   
-            var pairs = new Dictionary<string, string> {
-                { "validator", validator},
-                { "username", configData.Username.Value },
-                { "password", configData.Password.Value }
-            };
-
-            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, responseFirstPage.Cookies, true, null, LoginUrl);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
+            var validator = domFirstPage.Find("input[name =\"validator\"]").Attr("value");
+            var pairs = new Dictionary<string, string>
             {
-                CQ dom = result.Content;
-                var errorMessage = dom[".main"].Text().Trim();
-                throw new ExceptionWithConfigData(errorMessage, configData);
-            });
+                {"validator", validator},
+                {"username", configData.Username.Value},
+                {"password", configData.Password.Value}
+            };
+            var result = await RequestLoginAndFollowRedirectAsync(
+                LoginUrl, pairs, responseFirstPage.Cookies, true, null, LoginUrl);
+            await ConfigureIfOkAsync(
+                result.Cookies, result.Content?.Contains("logout.php") == true, () =>
+                {
+                    CQ dom = result.Content;
+                    var errorMessage = dom[".main"].Text().Trim();
+                    throw new ExceptionWithConfigData(errorMessage, configData);
+                });
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
@@ -104,38 +99,26 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
             var searchUrl = BrowseUrl;
             var searchString = query.GetQueryString();
-
             var cats = MapTorznabCapsToTrackers(query);
-            string cat = "0";
+            var cat = "0";
             if (cats.Count == 1)
-            {
                 cat = cats[0];
-            }
-
             var queryCollection = new NameValueCollection();
-
             if (query.ImdbID != null)
-            {
                 queryCollection.Add("search", query.ImdbID);
-            }
             else if (!string.IsNullOrWhiteSpace(searchString))
-            {
                 queryCollection.Add("search", searchString);
-            }
-
             queryCollection.Add("cat", cat);
             queryCollection.Add("searchin", "1");
             queryCollection.Add("sort", "2");
-
-            searchUrl += "?" + queryCollection.GetQueryString();
-
-            var response = await RequestStringWithCookiesAndRetry(searchUrl, null, BrowseUrl);
+            searchUrl += $"?{queryCollection.GetQueryString()}";
+            var response = await RequestStringWithCookiesAndRetryAsync(searchUrl, null, BrowseUrl);
 
             // Occasionally the cookies become invalid, login again if that happens
             if (response.IsRedirect)
             {
                 await ApplyConfiguration(null);
-                response = await RequestStringWithCookiesAndRetry(searchUrl, null, BrowseUrl);
+                response = await RequestStringWithCookiesAndRetryAsync(searchUrl, null, BrowseUrl);
             }
 
             var results = response.Content;
@@ -151,56 +134,45 @@ namespace Jackett.Common.Indexers
                     var qTitleLink = qRow.Find(".torrenttable:eq(1) a").First();
                     release.Title = qRow.Find(".torrenttable:eq(1) b").Text();
                     var longtitle = qRow.Find(".torrenttable:eq(1) a[title]").Attr("title");
-                    if (!string.IsNullOrEmpty(longtitle) && !longtitle.Contains("<")) // releases with cover image have no full title
+                    if (!string.IsNullOrEmpty(longtitle) && !longtitle.Contains("<")
+                        ) // releases with cover image have no full title
                         release.Title = longtitle;
-
                     if (query.ImdbID == null && !query.MatchQueryStringAND(release.Title))
                         continue;
-
                     release.Description = qRow.Find(".torrenttable:eq(1) > span > font.small").First().Text();
-
                     var tooltip = qTitleLink.Attr("title");
                     if (!string.IsNullOrEmpty(tooltip))
                     {
-                        var ImgRegexp = new Regex("src='(.*?)'");
-                        var ImgRegexpMatch = ImgRegexp.Match(tooltip);
-                        if (ImgRegexpMatch.Success)
-                            release.BannerUrl = new Uri(ImgRegexpMatch.Groups[1].Value);
+                        var imgRegexp = new Regex("src='(.*?)'");
+                        var imgRegexpMatch = imgRegexp.Match(tooltip);
+                        if (imgRegexpMatch.Success)
+                            release.BannerUrl = new Uri(imgRegexpMatch.Groups[1].Value);
                     }
 
                     release.Guid = new Uri(SiteLink + qTitleLink.Attr("href"));
                     release.Comments = release.Guid;
 
                     //22:05:3716/02/2013
-                    var dateStr = qRow.Find(".torrenttable:eq(5)").Text().Trim() + " +0200";
-                    release.PublishDate = DateTime.ParseExact(dateStr, "H:mm:ssdd/MM/yyyy zzz", CultureInfo.InvariantCulture);
-
+                    var dateStr = $"{qRow.Find(".torrenttable:eq(5)").Text().Trim()} +0200";
+                    release.PublishDate = DateTime.ParseExact(
+                        dateStr, "H:mm:ssdd/MM/yyyy zzz", CultureInfo.InvariantCulture);
                     var qLink = qRow.Find("a[href^=\"download.php?id=\"]").First();
                     release.Link = new Uri(SiteLink + qLink.Attr("href").Replace("&usetoken=1", ""));
-
                     var sizeStr = qRow.Find(".torrenttable:eq(6)").Text().Trim();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
-
                     release.Seeders = ParseUtil.CoerceInt(qRow.Find(".torrenttable:eq(8)").Text().Trim());
                     release.Peers = ParseUtil.CoerceInt(qRow.Find(".torrenttable:eq(9)").Text().Trim()) + release.Seeders;
-
                     var catId = qRow.Find(".torrenttable:eq(0) a").First().Attr("href").Substring(15);
                     release.Category = MapTrackerCatToNewznab(catId);
-
                     var grabs = qRow.Find(".torrenttable:eq(7)").First().Get(0).FirstChild;
                     release.Grabs = ParseUtil.CoerceLong(catId);
-
-                    if (globalFreeLeech || row.Cq().Find("img[alt=\"FreeLeech\"]").Any())
-                        release.DownloadVolumeFactor = 0;
-                    else
-                        release.DownloadVolumeFactor = 1;
-
+                    release.DownloadVolumeFactor = globalFreeLeech || row.Cq().Find("img[alt=\"FreeLeech\"]").Any() ? 0 : 1;
                     release.UploadVolumeFactor = 1;
 
                     // Skip Romanian releases
-                    if (release.Category.Contains(TorznabCatType.MoviesForeign.ID) && !configData.IncludeRomanianReleases.Value)
+                    if (release.Category.Contains(TorznabCatType.MoviesForeign.ID) &&
+                        !configData.IncludeRomanianReleases.Value)
                         continue;
-
                     releases.Add(release);
                 }
             }

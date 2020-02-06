@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Jackett.Common.Indexers;
@@ -7,7 +7,6 @@ using Newtonsoft.Json;
 
 namespace Jackett.Common.Models
 {
-
     public class ReleaseInfo : ICloneable
     {
         public string Title { get; set; }
@@ -33,6 +32,7 @@ namespace Jackett.Common.Models
         public long? MinimumSeedTime { get; set; }
         public double? DownloadVolumeFactor { get; set; }
         public double? UploadVolumeFactor { get; set; }
+
         [JsonIgnore] // don't export the Origin to the manul search API, otherwise each result line contains a full recursive indexer JSON structure
         public IIndexer Origin;
 
@@ -40,8 +40,8 @@ namespace Jackett.Common.Models
         {
             get
             {
-                var sizeInGB = Size / 1024.0 / 1024.0 / 1024.0;
-                return Seeders * sizeInGB;
+                var sizeInGb = Size / 1024.0 / 1024.0 / 1024.0;
+                return Seeders * sizeInGb;
             }
         }
 
@@ -75,10 +75,7 @@ namespace Jackett.Common.Models
             UploadVolumeFactor = copyFrom.UploadVolumeFactor;
         }
 
-        public virtual object Clone()
-        {
-            return new ReleaseInfo(this);
-        }
+        public virtual object Clone() => new ReleaseInfo(this);
 
         // ex: " 3.5  gb   "
         public static long GetBytes(string str)
@@ -98,34 +95,21 @@ namespace Jackett.Common.Models
                 return BytesFromMB(value);
             if (unit.Contains("gb"))
                 return BytesFromGB(value);
-            if (unit.Contains("tb"))
-                return BytesFromTB(value);
-            return (long)value;
+            return unit.Contains("tb") ? BytesFromTB(value) : (long)value;
         }
 
-        public static long BytesFromTB(float tb)
-        {
-            return BytesFromGB(tb * 1024f);
-        }
+        public static long BytesFromTB(float tb) => BytesFromGB(tb * 1024f);
 
-        public static long BytesFromGB(float gb)
-        {
-            return BytesFromMB(gb * 1024f);
-        }
+        public static long BytesFromGB(float gb) => BytesFromMB(gb * 1024f);
 
-        public static long BytesFromMB(float mb)
-        {
-            return BytesFromKB(mb * 1024f);
-        }
+        public static long BytesFromMB(float mb) => BytesFromKB(mb * 1024f);
 
-        public static long BytesFromKB(float kb)
-        {
-            return (long)(kb * 1024f);
-        }
+        public static long BytesFromKB(float kb) => (long)(kb * 1024f);
 
-        public override string ToString()
-        {
-            return string.Format("[ReleaseInfo: Title={0}, Guid={1}, Link={2}, Comments={3}, PublishDate={4}, Category={5}, Size={6}, Files={7}, Grabs={8}, Description={9}, RageID={10}, TVDBId={11}, Imdb={12}, TMDb={13}, Seeders={14}, Peers={15}, BannerUrl={16}, InfoHash={17}, MagnetUri={18}, MinimumRatio={19}, MinimumSeedTime={20}, DownloadVolumeFactor={21}, UploadVolumeFactor={22}, Gain={23}]", Title, Guid, Link, Comments, PublishDate, Category, Size, Files, Grabs, Description, RageID, TVDBId, Imdb, TMDb, Seeders, Peers, BannerUrl, InfoHash, MagnetUri, MinimumRatio, MinimumSeedTime, DownloadVolumeFactor, UploadVolumeFactor, Gain);
-        }
+        public override string ToString() => string.Format(
+            "[ReleaseInfo: Title={0}, Guid={1}, Link={2}, Comments={3}, PublishDate={4}, Category={5}, Size={6}, Files={7}, Grabs={8}, Description={9}, RageID={10}, TVDBId={11}, Imdb={12}, TMDb={13}, Seeders={14}, Peers={15}, BannerUrl={16}, InfoHash={17}, MagnetUri={18}, MinimumRatio={19}, MinimumSeedTime={20}, DownloadVolumeFactor={21}, UploadVolumeFactor={22}, Gain={23}]",
+            Title, Guid, Link, Comments, PublishDate, Category, Size, Files, Grabs, Description, RageID, TVDBId, Imdb, TMDb,
+            Seeders, Peers, BannerUrl, InfoHash, MagnetUri, MinimumRatio, MinimumSeedTime, DownloadVolumeFactor,
+            UploadVolumeFactor, Gain);
     }
 }

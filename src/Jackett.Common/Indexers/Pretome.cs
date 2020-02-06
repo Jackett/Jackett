@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -18,39 +18,30 @@ namespace Jackett.Common.Indexers
 {
     public class Pretome : BaseWebIndexer
     {
-        private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
-        private string LoginReferer { get { return SiteLink + "index.php?cat=1"; } }
-        private string SearchUrl { get { return SiteLink + "browse.php"; } }
+        private string LoginUrl => $"{SiteLink}takelogin.php";
+        private string LoginReferer => $"{SiteLink}index.php?cat=1";
+        private string SearchUrl => $"{SiteLink}browse.php";
 
-        private List<CategoryMapping> resultMapping = new List<CategoryMapping>();
+        private readonly List<CategoryMapping> _resultMapping = new List<CategoryMapping>();
 
         private new ConfigurationDataPinNumber configData
         {
-            get { return (ConfigurationDataPinNumber)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataPinNumber)base.configData;
+            set => base.configData = value;
         }
 
-        public Pretome(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "PreToMe",
-                description: "BitTorrent site for High Quality, High Definition (HD) movies and TV Shows",
-                link: "https://pretome.info/",
-                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                client: wc,
-                configService: configService,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataPinNumber())
+        public Pretome(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps) : base(
+            "PreToMe", description: "BitTorrent site for High Quality, High Definition (HD) movies and TV Shows",
+            link: "https://pretome.info/", caps: TorznabUtil.CreateDefaultTorznabTVCaps(), client: wc,
+            configService: configService, logger: l, p: ps, configData: new ConfigurationDataPinNumber())
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "en-us";
             Type = "private";
-
             AddCategoryMapping("cat[]=22&tags=Windows", TorznabCatType.PC0day);
             AddCategoryMapping("cat[]=22&tags=MAC", TorznabCatType.PCMac);
             AddCategoryMapping("cat[]=22&tags=Linux", TorznabCatType.PC);
-
             AddCategoryMapping("cat[]=27", TorznabCatType.BooksEbook);
-
             AddCategoryMapping("cat[]=4&tags=PC", TorznabCatType.PCGames);
             AddCategoryMapping("cat[]=4&tags=RIP", TorznabCatType.PCGames);
             AddCategoryMapping("cat[]=4&tags=ISO", TorznabCatType.PCGames);
@@ -61,10 +52,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("cat[]=4&tags=NSD", TorznabCatType.ConsoleNDS);
             AddCategoryMapping("cat[]=4&tags=XBox", TorznabCatType.ConsoleXbox);
             AddCategoryMapping("cat[]=4&tags=PS2", TorznabCatType.ConsoleOther);
-
             AddCategoryMapping("cat[]=31&tags=Ebook", TorznabCatType.BooksEbook);
             AddCategoryMapping("cat[]=31&tags=RARFiX", TorznabCatType.Other);
-
             AddCategoryMapping("cat[]=19&tags=x264", TorznabCatType.Movies);
             AddCategoryMapping("cat[]=19&tags=720p", TorznabCatType.MoviesHD);
             AddCategoryMapping("cat[]=19&tags=XviD", TorznabCatType.MoviesSD);
@@ -75,12 +64,10 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("cat[]=19&tags=DVDR", TorznabCatType.MoviesSD);
             AddCategoryMapping("cat[]=19&tags=WMV", TorznabCatType.Movies);
             AddCategoryMapping("cat[]=19&tags=CAM", TorznabCatType.Movies);
-
             AddCategoryMapping("cat[]=6&tags=MP3", TorznabCatType.AudioMP3);
             AddCategoryMapping("cat[]=6&tags=V2", TorznabCatType.AudioMP3);
             AddCategoryMapping("cat[]=6&tags=FLAC", TorznabCatType.AudioLossless);
             AddCategoryMapping("cat[]=6&tags=320kbps", TorznabCatType.AudioMP3);
-
             AddCategoryMapping("cat[]=7&tags=x264", TorznabCatType.TVHD);
             AddCategoryMapping("cat[]=7&tags=720p", TorznabCatType.TVHD);
             AddCategoryMapping("cat[]=7&tags=HDTV", TorznabCatType.TVHD);
@@ -91,22 +78,18 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("cat[]=7&tags=Documentary", TorznabCatType.TVDocumentary);
             AddCategoryMapping("cat[]=7&tags=PDTV", TorznabCatType.TVSD);
             AddCategoryMapping("cat[]=7&tags=HD-DVD", TorznabCatType.TVSD);
-
             AddCategoryMapping("cat[]=51&tags=XviD", TorznabCatType.XXXXviD);
             AddCategoryMapping("cat[]=51&tags=DVDRiP", TorznabCatType.XXXDVD);
 
             // Unfortunately they are tags not categories so return the results
             // as the parent category so do not get results removed with the filtering.
-
             AddResultCategoryMapping("cat[]=22&tags=Windows", TorznabCatType.PC);
             AddResultCategoryMapping("cat[]=22&tags=MAC", TorznabCatType.PC);
             AddResultCategoryMapping("cat[]=22&tags=Linux", TorznabCatType.PC);
             AddResultCategoryMapping("cat[]=22&tags=All", TorznabCatType.PC);
             AddResultCategoryMapping("cat[]=22", TorznabCatType.PC);
-
             AddResultCategoryMapping("cat[]=27&tags=All", TorznabCatType.Books);
             AddResultCategoryMapping("cat[]=27", TorznabCatType.Books);
-
             AddResultCategoryMapping("cat[]=4&tags=PC", TorznabCatType.PC);
             AddResultCategoryMapping("cat[]=4&tags=RIP", TorznabCatType.PC);
             AddResultCategoryMapping("cat[]=4&tags=ISO", TorznabCatType.PC);
@@ -119,12 +102,10 @@ namespace Jackett.Common.Indexers
             AddResultCategoryMapping("cat[]=4&tags=PS2", TorznabCatType.Console);
             AddResultCategoryMapping("cat[]=4&tags=All", TorznabCatType.Console);
             AddResultCategoryMapping("cat[]=4", TorznabCatType.Console);
-
             AddResultCategoryMapping("cat[]=31&tags=Ebook", TorznabCatType.Books);
             AddResultCategoryMapping("cat[]=31&tags=RARFiX", TorznabCatType.Other);
             AddResultCategoryMapping("cat[]=31&tags=All", TorznabCatType.Other);
             AddResultCategoryMapping("cat[]=31", TorznabCatType.Other);
-
             AddResultCategoryMapping("cat[]=19&tags=x264", TorznabCatType.Movies);
             AddResultCategoryMapping("cat[]=19&tags=720p", TorznabCatType.Movies);
             AddResultCategoryMapping("cat[]=19&tags=XviD", TorznabCatType.Movies);
@@ -137,14 +118,12 @@ namespace Jackett.Common.Indexers
             AddResultCategoryMapping("cat[]=19&tags=CAM", TorznabCatType.Movies);
             AddResultCategoryMapping("cat[]=19&tags=All", TorznabCatType.Movies);
             AddResultCategoryMapping("cat[]=19", TorznabCatType.Movies);
-
             AddResultCategoryMapping("cat[]=6&tags=MP3", TorznabCatType.Audio);
             AddResultCategoryMapping("cat[]=6&tags=V2", TorznabCatType.Audio);
             AddResultCategoryMapping("cat[]=6&tags=FLAC", TorznabCatType.Audio);
             AddResultCategoryMapping("cat[]=6&tags=320kbps", TorznabCatType.Audio);
             AddResultCategoryMapping("cat[]=6&tags=All", TorznabCatType.Audio);
             AddResultCategoryMapping("cat[]=6", TorznabCatType.Audio);
-
             AddResultCategoryMapping("cat[]=7&tags=x264", TorznabCatType.TV);
             AddResultCategoryMapping("cat[]=7&tags=720p", TorznabCatType.TV);
             AddResultCategoryMapping("cat[]=7&tags=HDTV", TorznabCatType.TV);
@@ -157,7 +136,6 @@ namespace Jackett.Common.Indexers
             AddResultCategoryMapping("cat[]=7&tags=HD-DVD", TorznabCatType.TV);
             AddResultCategoryMapping("cat[]=7&tags=All", TorznabCatType.TV);
             AddResultCategoryMapping("cat[]=7", TorznabCatType.TV);
-
             AddResultCategoryMapping("cat[]=51&tags=XviD", TorznabCatType.XXX);
             AddResultCategoryMapping("cat[]=51&tags=DVDRiP", TorznabCatType.XXX);
             AddResultCategoryMapping("cat[]=51&tags=All", TorznabCatType.XXX);
@@ -166,7 +144,7 @@ namespace Jackett.Common.Indexers
 
         protected void AddResultCategoryMapping(string trackerCategory, TorznabCategory newznabCategory)
         {
-            resultMapping.Add(new CategoryMapping(trackerCategory.ToString(), null, newznabCategory.ID));
+            _resultMapping.Add(new CategoryMapping(trackerCategory, null, newznabCategory.ID));
             if (!TorznabCaps.Categories.Contains(newznabCategory))
                 TorznabCaps.Categories.Add(newznabCategory);
         }
@@ -174,33 +152,30 @@ namespace Jackett.Common.Indexers
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-
-            var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
-
-            var pairs = new Dictionary<string, string> {
-                { "returnto", "%2F" },
-                { "login_pin", configData.Pin.Value },
-                { "username", configData.Username.Value },
-                { "password", configData.Password.Value },
-                { "login", "Login" }
+            var loginPage = await RequestStringWithCookiesAsync(LoginUrl, string.Empty);
+            var pairs = new Dictionary<string, string>
+            {
+                {"returnto", "%2F"},
+                {"login_pin", configData.Pin.Value},
+                {"username", configData.Username.Value},
+                {"password", configData.Password.Value},
+                {"login", "Login"}
             };
 
             // Send Post
-            var result = await PostDataWithCookies(LoginUrl, pairs, loginPage.Cookies);
+            var result = await PostDataWithCookiesAsync(LoginUrl, pairs, loginPage.Cookies);
             if (result.RedirectingTo == null)
-            {
-                throw new ExceptionWithConfigData("Login failed. Did you use the PIN number that pretome emailed you?", configData);
-            }
+                throw new ExceptionWithConfigData(
+                    "Login failed. Did you use the PIN number that pretome emailed you?", configData);
             var loginCookies = result.Cookies;
             // Get result from redirect
-            await FollowIfRedirect(result, LoginUrl, null, loginCookies);
-
-            await ConfigureIfOK(loginCookies, result.Content != null && result.Content.Contains("logout.php"), () =>
-            {
-                CookieHeader = string.Empty;
-                throw new ExceptionWithConfigData("Failed", configData);
-            });
-
+            await FollowIfRedirectAsync(result, LoginUrl, null, loginCookies);
+            await ConfigureIfOkAsync(
+                loginCookies, result.Content?.Contains("logout.php") == true, () =>
+                {
+                    CookieHeader = string.Empty;
+                    throw new ExceptionWithConfigData("Failed", configData);
+                });
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
@@ -220,9 +195,7 @@ namespace Jackett.Common.Indexers
                 {
                     var gsplit = cSplit[0].Split('=');
                     if (gsplit.Length > 1)
-                    {
                         catGroups.Add(gsplit[1]);
-                    }
                 }
 
                 if (cSplit.Length > 1)
@@ -238,10 +211,7 @@ namespace Jackett.Common.Indexers
             }
 
             if (catGroups.Distinct().Count() == 1)
-            {
                 queryCollection.Add("cat[]", catGroups.First());
-            }
-
             if (!string.IsNullOrWhiteSpace(query.GetQueryString()))
             {
                 queryCollection.Add("st", "1");
@@ -253,28 +223,20 @@ namespace Jackett.Common.Indexers
             {
                 queryCollection.Add("tags", tags);
                 if (!string.IsNullOrWhiteSpace(tags))
-                {
                     // if tags are specified match any
                     queryCollection.Add("tf", "any");
-                }
                 else
-                {
                     // if no tags are specified match all, with any we get random results
                     queryCollection.Add("tf", "all");
-                }
             }
 
             if (queryCollection.Count > 0)
-            {
-                queryUrl += "?" + queryCollection.GetQueryString();
-            }
-
-            var response = await RequestStringWithCookiesAndRetry(queryUrl);
-
+                queryUrl += $"?{queryCollection.GetQueryString()}";
+            var response = await RequestStringWithCookiesAndRetryAsync(queryUrl);
             if (response.IsRedirect)
             {
                 await ApplyConfiguration(null);
-                response = await RequestStringWithCookiesAndRetry(queryUrl);
+                response = await RequestStringWithCookiesAndRetryAsync(queryUrl);
             }
 
             try
@@ -283,46 +245,35 @@ namespace Jackett.Common.Indexers
                 var rows = dom["table > tbody > tr.browse"];
                 foreach (var row in rows)
                 {
-                    CQ qRow = row.Cq();
-                    var release = new ReleaseInfo();
-
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800; // 48 hours
-
+                    var qRow = row.Cq();
+                    var release = new ReleaseInfo
+                    {
+                        MinimumRatio = 1,
+                        MinimumSeedTime = 172800 // 48 hours
+                    };
                     var qLink = row.ChildElements.ElementAt(1).Cq().Find("a").First();
                     release.Title = qLink.Attr("title");
                     if (qLink.Find("span").Count() == 1 && release.Title.StartsWith("NEW! |"))
-                    {
                         release.Title = release.Title.Substring(6).Trim();
-                    }
-
                     release.Comments = new Uri(SiteLink + qLink.Attr("href"));
                     release.Guid = release.Comments;
-
                     var qDownload = row.ChildElements.ElementAt(2).Cq().Find("a").First();
                     release.Link = new Uri(SiteLink + qDownload.Attr("href"));
-
                     var dateStr = Regex.Replace(row.ChildElements.ElementAt(5).InnerHTML, @"\<br[\s]{0,1}[\/]{0,1}\>", " ");
                     release.PublishDate = DateTimeUtil.FromTimeAgo(dateStr);
-
                     var sizeStr = row.ChildElements.ElementAt(7).Cq().Text();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
-
                     release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(9).InnerText);
                     release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(10).InnerText) + release.Seeders;
-
-                    var cat = row.ChildElements.ElementAt(0).ChildElements.ElementAt(0).GetAttribute("href").Replace("browse.php?", string.Empty);
+                    var cat = row.ChildElements.ElementAt(0).ChildElements.ElementAt(0).GetAttribute("href")
+                                 .Replace("browse.php?", string.Empty);
                     release.Category = MapTrackerCatToNewznab(cat);
-
                     var files = qRow.Find("td:nth-child(4)").Text();
                     release.Files = ParseUtil.CoerceInt(files);
-
                     var grabs = qRow.Find("td:nth-child(9)").Text();
                     release.Grabs = ParseUtil.CoerceInt(grabs);
-
                     release.DownloadVolumeFactor = 0; // ratioless
                     release.UploadVolumeFactor = 1;
-
                     releases.Add(release);
                 }
             }
@@ -330,6 +281,7 @@ namespace Jackett.Common.Indexers
             {
                 OnParseError(response.Content, ex);
             }
+
             return releases;
         }
     }

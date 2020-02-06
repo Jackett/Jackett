@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -18,31 +18,24 @@ namespace Jackett.Common.Indexers
 {
     public class Myanonamouse : BaseWebIndexer
     {
-        private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
-        private string SearchUrl { get { return SiteLink + "tor/js/loadSearchJSONbasic.php"; } }
+        private string LoginUrl => $"{SiteLink}takelogin.php";
+        private string SearchUrl => $"{SiteLink}tor/js/loadSearchJSONbasic.php";
 
         private new ConfigurationDataMyAnonamouse configData
         {
-            get { return (ConfigurationDataMyAnonamouse)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataMyAnonamouse)base.configData;
+            set => base.configData = value;
         }
 
-        public Myanonamouse(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps)
-            : base(name: "MyAnonamouse",
-                description: "Friendliness, Warmth and Sharing",
-                link: "https://www.myanonamouse.net/",
-                configService: configService,
-                caps: new TorznabCapabilities(),
-                client: c,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataMyAnonamouse())
+        public Myanonamouse(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps) : base(
+            "MyAnonamouse", description: "Friendliness, Warmth and Sharing", link: "https://www.myanonamouse.net/",
+            configService: configService, caps: new TorznabCapabilities(), client: c, logger: l, p: ps,
+            configData: new ConfigurationDataMyAnonamouse())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
             webclient.EmulateBrowser = false;
-
             AddCategoryMapping("13", TorznabCatType.AudioAudiobook, "AudioBooks");
             AddCategoryMapping("14", TorznabCatType.BooksEbook, "E-Books");
             AddCategoryMapping("15", TorznabCatType.AudioAudiobook, "Musicology");
@@ -144,15 +137,12 @@ namespace Jackett.Common.Indexers
             LoadValuesFromJson(configJson);
 
             // TODO: implement captcha
-            CookieHeader = "mam_id=" + configData.MamId.Value;
+            CookieHeader = $"mam_id={configData.MamId.Value}";
             try
             {
                 var results = await PerformQuery(new TorznabQuery());
                 if (results.Count() == 0)
-                {
                     throw new Exception("Your man_id did not work");
-                }
-
                 IsConfigured = true;
                 SaveConfig();
                 return IndexerConfigurationStatus.Completed;
@@ -160,113 +150,90 @@ namespace Jackett.Common.Indexers
             catch (Exception e)
             {
                 IsConfigured = false;
-                throw new Exception("Your man_id did not work: " + e.Message);
+                throw new Exception($"Your man_id did not work: {e.Message}");
             }
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-
-            NameValueCollection qParams = new NameValueCollection();
-            qParams.Add("tor[text]", query.GetQueryString());
-            qParams.Add("tor[srchIn][title]", "true");
-            qParams.Add("tor[srchIn][author]", "true");
-            qParams.Add("tor[searchType]", "all");
-            qParams.Add("tor[searchIn]", "torrents");
-            qParams.Add("tor[hash]", "");
-            qParams.Add("tor[sortType]", "default");
-            qParams.Add("tor[startNumber]", "0");
-
-            qParams.Add("thumbnails", "1"); // gives links for thumbnail sized versions of their posters
-            //qParams.Add("posterLink", "1"); // gives links for a full sized poster
-            //qParams.Add("dlLink", "1"); // include the url to download the torrent
-            qParams.Add("description", "1"); // include the description
+            var qParams = new NameValueCollection
+            {
+                {"tor[text]", query.GetQueryString()},
+                {"tor[srchIn][title]", "true"},
+                {"tor[srchIn][author]", "true"},
+                {"tor[searchType]", "all"},
+                {"tor[searchIn]", "torrents"},
+                {"tor[hash]", ""},
+                {"tor[sortType]", "default"},
+                {"tor[startNumber]", "0"},
+                {"thumbnails", "1"}, // gives links for thumbnail sized versions of their posters
+                //qParams.Add("posterLink", "1"); // gives links for a full sized poster
+                //qParams.Add("dlLink", "1"); // include the url to download the torrent
+                {"description", "1"} // include the description
+            };
             //qParams.Add("bookmarks", "0"); // include if the item is bookmarked or not
-
-            List<string> catList = MapTorznabCapsToTrackers(query);
+            var catList = MapTorznabCapsToTrackers(query);
             if (catList.Any())
             {
-                int index = 0;
-                foreach (string cat in catList)
+                var index = 0;
+                foreach (var cat in catList)
                 {
-                    qParams.Add("tor[cat]["+index+"]", cat);
+                    qParams.Add($"tor[cat][{index}]", cat);
                     index++;
                 }
             }
             else
-            {
                 qParams.Add("tor[cat][]", "0");
-            }
 
-            string urlSearch = SearchUrl;
+            var urlSearch = SearchUrl;
             if (qParams.Count > 0)
-            {
                 urlSearch += $"?{qParams.GetQueryString()}";
-            }
-
-            var response = await RequestStringWithCookiesAndRetry(urlSearch);
+            var response = await RequestStringWithCookiesAndRetryAsync(urlSearch);
             if (response.Content.StartsWith("Error"))
-            {
                 throw new Exception(response.Content);
-            }
-
             try
             {
                 var jsonContent = JObject.Parse(response.Content);
                 var sitelink = new Uri(SiteLink);
-
                 var error = jsonContent.Value<string>("error");
-                if(error != null)
-                {
+                if (error != null)
                     if (error == "Nothing returned, out of 0")
                         return releases;
-                }
-
                 foreach (var item in jsonContent.Value<JArray>("data"))
                 {
                     var release = new ReleaseInfo();
-                        
                     var id = item.Value<long>("id");
                     release.Title = item.Value<string>("title");
-
                     release.Description = item.Value<string>("description");
-
-                    var author_info = item.Value<string>("author_info");
+                    var authorInfo = item.Value<string>("author_info");
                     string author = null;
-                    if (!string.IsNullOrWhiteSpace(author_info))
+                    if (!string.IsNullOrWhiteSpace(authorInfo))
                     {
-                        author_info = Regex.Unescape(author_info);
-                        var author_info_json = JObject.Parse(author_info);
-                        author = author_info_json.First.Last.Value<string>();
+                        authorInfo = Regex.Unescape(authorInfo);
+                        var authorInfoJson = JObject.Parse(authorInfo);
+                        author = authorInfoJson.First.Last.Value<string>();
                     }
+
                     if (author != null)
-                        release.Title += " by " + author;
-
+                        release.Title += $" by {author}";
                     var flags = new List<string>();
-
-                    var lang_code = item.Value<string>("lang_code");
-                    if (!string.IsNullOrEmpty(lang_code))
-                        flags.Add(lang_code);
-
+                    var langCode = item.Value<string>("lang_code");
+                    if (!string.IsNullOrEmpty(langCode))
+                        flags.Add(langCode);
                     var filetype = item.Value<string>("filetype");
                     if (!string.IsNullOrEmpty(filetype))
                         flags.Add(filetype);
-
                     if (flags.Count > 0)
-                        release.Title += " [" + string.Join(" / ", flags) + "]";
-
+                        release.Title += $" [{string.Join(" / ", flags)}]";
                     var category = item.Value<string>("category");
                     release.Category = MapTrackerCatToNewznab(category);
-
-                    release.Link = new Uri(sitelink, "/tor/download.php?tid=" + id);
-                    release.Comments = new Uri(sitelink, "/t/" + id);
+                    release.Link = new Uri(sitelink, $"/tor/download.php?tid={id}");
+                    release.Comments = new Uri(sitelink, $"/t/{id}");
                     release.Guid = release.Comments;
-
                     var dateStr = item.Value<string>("added");
                     var dateTime = DateTime.ParseExact(dateStr, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
                     release.PublishDate = DateTime.SpecifyKind(dateTime, DateTimeKind.Utc).ToLocalTime();
-
                     release.Grabs = item.Value<long>("times_completed");
                     release.Files = item.Value<long>("numfiles");
                     release.Seeders = item.Value<int>("seeders");
@@ -274,13 +241,8 @@ namespace Jackett.Common.Indexers
                     var size = item.Value<string>("size");
                     release.Size = ReleaseInfo.GetBytes(size);
                     var free = item.Value<int>("free");
-                    
-                    if (free == 1)
-                        release.DownloadVolumeFactor = 0;
-                    else
-                        release.DownloadVolumeFactor = 1;
+                    release.DownloadVolumeFactor = free == 1 ? 0 : 1;
                     release.UploadVolumeFactor = 1;
-
                     releases.Add(release);
                 }
             }
