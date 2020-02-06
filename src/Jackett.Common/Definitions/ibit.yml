@@ -81,6 +81,9 @@
           - name: timeago
       size:
         selector: td:nth-child(5)
+        filters:
+          - name: replace
+            args: ["-", "0 B"]
       seeders:
         selector: td:nth-child(6)
         filters:
