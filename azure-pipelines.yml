@@ -364,7 +364,7 @@ stages:
       - checkout: self
 
       - task: DownloadPipelineArtifact@2
-        displayName: Download artifacts for publish
+        displayName: Download Artifacts for Publish
         inputs:
           patterns: '**/Jackett*'
           path: $(Build.ArtifactStagingDirectory)
