@@ -26,7 +26,7 @@
       - {id: 17, cat: Console, desc: "Játék/Konzol"}
       - {id: 18, cat: PC/Games, desc: "Játék/Rip"}
       - {id: 19, cat: Other, desc: "Képek"}
-      - {id: 11, cat: Music/Video, desc: "Klippek/Videók"}
+      - {id: 11, cat: Audio/Video, desc: "Klippek/Videók"}
       - {id: 8, cat: PC/Phone-Other, desc: "Mobil"}
       - {id: 35, cat: Books, desc: "Oktató Anyagok"}
       - {id: 28, cat: PC, desc: "PC/Egyéb"}
