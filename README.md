@@ -433,6 +433,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Torrenting (TT)
  * Torrentland
  * TorrentLeech (TL)
+ * TorrentLeech.pl
  * TorrentSeeds (TS)
  * Torrent-Syndikat
  * TOrrent-tuRK (TORK)
