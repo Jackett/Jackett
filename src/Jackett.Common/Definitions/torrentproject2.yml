@@ -96,6 +96,9 @@
         selector: div > span:nth-child(2)
       leechers:
         selector: div > span:nth-child(3)
+        filters:
+          - name: replace
+            args: ["N/A", "0"]
       downloadvolumefactor:
         text: 0
       uploadvolumefactor:
