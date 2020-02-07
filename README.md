@@ -319,6 +319,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Karagarga
  * LegacyHD (HD4Free)
  * Le Saloon
+ * LeagueHD
  * LearnFlakes
  * LibraNet (LN)
  * LinkoManija
