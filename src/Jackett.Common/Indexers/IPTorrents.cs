@@ -18,11 +18,11 @@ namespace Jackett.Common.Indexers
 {
     public class IPTorrents : BaseWebIndexer
     {
-        private string LoginUrl { get { return SiteLink + "login.php"; } }
-        private string TakeLoginUrl { get { return SiteLink + "take_login.php"; } }
-        private string BrowseUrl { get { return SiteLink + "t"; } }
+        private string LoginUrl => SiteLink + "login.php";
+        private string TakeLoginUrl => SiteLink + "take_login.php";
+        private string BrowseUrl => SiteLink + "t";
 
-        public override string[] AlternativeSiteLinks { get; protected set; } = new string[] {
+        public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://iptorrents.com/",
             "https://www.iptorrents.com/",
             "https://ipt-update.com/",
@@ -35,20 +35,20 @@ namespace Jackett.Common.Indexers
             "http://ghost.cable-modem.org/",
             "http://logan.unusualperson.com/",
             "http://baywatch.workisboring.com/",
-            "https://ipt.getcrazy.me",
-            "https://ipt.findnemo.net",
-            "https://ipt.beelyrics.net",
-            "https://ipt.venom.global",
-            "https://ipt.workisboring.net",
-            "https://ipt.lol",
-            "https://ipt.cool",
-            "https://ipt.world",
+            "https://ipt.getcrazy.me/",
+            "https://ipt.findnemo.net/",
+            "https://ipt.beelyrics.net/",
+            "https://ipt.venom.global/",
+            "https://ipt.workisboring.net/",
+            "https://ipt.lol/",
+            "https://ipt.cool/",
+            "https://ipt.world/",
         };
 
         private new ConfigurationDataRecaptchaLogin configData
         {
-            get { return (ConfigurationDataRecaptchaLogin)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataRecaptchaLogin)base.configData;
+            set => base.configData = value;
         }
 
         public IPTorrents(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)
@@ -149,7 +149,7 @@ namespace Jackett.Common.Indexers
             var captcha = cq.Find(".g-recaptcha");
             if (captcha.Any())
             {
-                var result = this.configData;
+                var result = configData;
                 result.CookieHeader.Value = loginPage.Cookies;
                 result.Captcha.SiteKey = captcha.Attr("data-sitekey");
                 result.Captcha.Version = "2";
@@ -157,12 +157,14 @@ namespace Jackett.Common.Indexers
             }
             else
             {
-                var result = new ConfigurationDataBasicLogin();
-                result.SiteLink.Value = configData.SiteLink.Value;
-                result.Instructions.Value = configData.Instructions.Value;
-                result.Username.Value = configData.Username.Value;
-                result.Password.Value = configData.Password.Value;
-                result.CookieHeader.Value = loginPage.Cookies;
+                var result = new ConfigurationDataBasicLogin
+                {
+                    SiteLink = {Value = configData.SiteLink.Value},
+                    Instructions = {Value = configData.Instructions.Value},
+                    Username = {Value = configData.Username.Value},
+                    Password = {Value = configData.Password.Value},
+                    CookieHeader = {Value = loginPage.Cookies}
+                };
                 return result;
             }
         }
@@ -182,10 +184,8 @@ namespace Jackett.Common.Indexers
                 try
                 {
                     var results = await PerformQuery(new TorznabQuery());
-                    if (results.Count() == 0)
-                    {
+                    if (!results.Any())
                         throw new Exception("Your cookie did not work");
-                    }
 
                     IsConfigured = true;
                     SaveConfig();
@@ -215,7 +215,7 @@ namespace Jackett.Common.Indexers
             {
                 CQ dom = response.Content;
                 var messageEl = dom["body > div"].First();
-                var errorMessage = messageEl.Text().Trim();
+                var errorMessage = messageEl.Any() ? messageEl.Text().Trim() : response.Content;
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
             return IndexerConfigurationStatus.RequiresTesting;
@@ -229,23 +229,15 @@ namespace Jackett.Common.Indexers
             var queryCollection = new NameValueCollection();
 
             if (!string.IsNullOrWhiteSpace(query.ImdbID))
-            {
                 queryCollection.Add("q", query.ImdbID);
-            }
             else if (!string.IsNullOrWhiteSpace(searchString))
-            {
                 queryCollection.Add("q", searchString);
-            }
 
             foreach (var cat in MapTorznabCapsToTrackers(query))
-            {
                 queryCollection.Add(cat, string.Empty);
-            }
 
             if (queryCollection.Count > 0)
-            {
                 searchUrl += "?" + queryCollection.GetQueryString();
-            }
 
             var response = await RequestStringWithCookiesAndRetry(searchUrl, null, BrowseUrl);
 
@@ -269,16 +261,14 @@ namespace Jackett.Common.Indexers
 
                     // If we search an get no results, we still get a table just with no info.
                     if (string.IsNullOrWhiteSpace(release.Title))
-                    {
                         break;
-                    }
 
                     release.Guid = new Uri(SiteLink + qTitleLink.Attr("href").Substring(1));
                     release.Comments = release.Guid;
 
                     var descString = qRow.Find(".t_ctime").Text();
                     var dateString = descString.Split('|').Last().Trim();
-                    dateString = dateString.Split(new string[] { " by " }, StringSplitOptions.None)[0];
+                    dateString = dateString.Split(new [] { " by " }, StringSplitOptions.None)[0];
                     release.PublishDate = DateTimeUtil.FromTimeAgo(dateString);
 
                     var qLink = row.ChildElements.ElementAt(3).Cq().Children("a");
@@ -294,8 +284,8 @@ namespace Jackett.Common.Indexers
                     if (catIcon.Length >= 1) // Torrents - Category column == Icons
                         release.Category = MapTrackerCatToNewznab(catIcon.First().Attr("href").Substring(1));
                     else // Torrents - Category column == Text or Code
-                        throw new Exception("Please go to " + SiteLink + "settings.php and change the \"Torrents - Category column\" option to \"Icons\". Wait a minute (cache) and then try again.");
                         //release.Category = MapTrackerCatDescToNewznab(row.Cq().Find("td:eq(0)").Text()); // Works for "Text" but only contains the parent category
+                        throw new Exception("Please go to " + SiteLink + "settings.php and change the \"Torrents - Category column\" option to \"Icons\". Wait a minute (cache) and then try again.");
 
                     var filesElement = row.Cq().Find("a[href*=\"/files\"]"); // optional
                     if (filesElement.Length == 1)
@@ -304,11 +294,7 @@ namespace Jackett.Common.Indexers
                     var grabs = row.Cq().Find("td:nth-last-child(3)").Text();
                     release.Grabs = ParseUtil.CoerceInt(grabs);
 
-                    if (row.Cq().Find("span.t_tag_free_leech").Any())
-                        release.DownloadVolumeFactor = 0;
-                    else
-                        release.DownloadVolumeFactor = 1;
-
+                    release.DownloadVolumeFactor = row.Cq().Find("span.t_tag_free_leech").Any() ? 0 : 1;
                     release.UploadVolumeFactor = 1;
 
                     releases.Add(release);
