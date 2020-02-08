@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -329,7 +329,8 @@ namespace Jackett.Common.Indexers
                 if (link.Text().Trim().ToLower() == searchTerm.Trim().ToLower())
                 {
                     var address = link.Attr("href");
-                    if (string.IsNullOrEmpty(address)) { continue; }
+                    if (string.IsNullOrEmpty(address))
+                    { continue; }
 
                     var realAddress = site + address.Replace("lid=7", "lid=24");
                     var realData = await RequestStringWithCookies(realAddress);

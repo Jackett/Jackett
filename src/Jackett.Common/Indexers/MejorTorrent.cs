@@ -86,7 +86,7 @@ namespace Jackett.Common.Indexers
             // we remove parts from the original query
             query = ParseQuery(query);
 
-            var releases = string.IsNullOrEmpty(query.SearchTerm) ? 
+            var releases = string.IsNullOrEmpty(query.SearchTerm) ?
                 await PerformQueryNewest(query) :
                 await PerformQuerySearch(query, matchWords);
 
@@ -111,8 +111,8 @@ namespace Jackett.Common.Indexers
             searchResultParser = new HtmlParser();
             html = searchResultParser.ParseDocument(result.Content);
             var onclick = html.QuerySelector("a[onclick*=\"/uploads/\"]").GetAttribute("onclick");
-            var table = onclick.Split(new[] {"table: '"}, StringSplitOptions.None)[1].Split(new [] {"'"}, StringSplitOptions.None)[0];
-            var name = onclick.Split(new[] {"name: '"}, StringSplitOptions.None)[1].Split(new [] {"'"}, StringSplitOptions.None)[0];
+            var table = onclick.Split(new[] { "table: '" }, StringSplitOptions.None)[1].Split(new[] { "'" }, StringSplitOptions.None)[0];
+            var name = onclick.Split(new[] { "name: '" }, StringSplitOptions.None)[1].Split(new[] { "'" }, StringSplitOptions.None)[0];
             downloadUrl = SiteLink + "uploads/torrents/" + table + "/" + name;
 
             // Eg https://www.mejortorrentt.org/uploads/torrents/peliculas/Harry_Potter_1_y_la_Piedra_Filosofal_MicroHD_1080p.torrent
@@ -158,9 +158,9 @@ namespace Jackett.Common.Indexers
                     {
                         // we add parsed items to parsedCommentsLink to avoid duplicates in newest torrents
                         // list results
-                        if(!parsedCommentsLink.Contains(rowCommentsLink))
+                        if (!parsedCommentsLink.Contains(rowCommentsLink))
                         {
-                            await ParseRelease(releases, rowTitle, rowCommentsLink, null, 
+                            await ParseRelease(releases, rowTitle, rowCommentsLink, null,
                                 rowPublishDate, rowQuality, query, false);
                             parsedCommentsLink.Add(rowCommentsLink);
                         }
@@ -186,7 +186,7 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
             // search only the longest word, we filter the results later
             var searchTerm = GetLongestWord(query.SearchTerm);
-            var qc = new NameValueCollection {{"sec", "buscador"}, {"valor", searchTerm}};
+            var qc = new NameValueCollection { { "sec", "buscador" }, { "valor", searchTerm } };
             var url = SiteLink + SearchUrl + "?" + qc.GetQueryString();
             var result = await RequestStringWithCookies(url);
             if (result.Status != HttpStatusCode.OK)
@@ -216,7 +216,7 @@ namespace Jackett.Common.Indexers
                             if (row.QuerySelector("td span") != null)
                                 rowQuality = row.QuerySelector("td span").TextContent;
 
-                            await ParseRelease(releases, rowTitle, rowCommentsLink, rowMejortorrentCat, 
+                            await ParseRelease(releases, rowTitle, rowCommentsLink, rowMejortorrentCat,
                                 null, rowQuality, query, matchWords);
                         }
                     }
@@ -254,7 +254,8 @@ namespace Jackett.Common.Indexers
             if (cat == MejorTorrentCatType.Serie || cat == MejorTorrentCatType.SerieHd)
             {
                 await ParseSeriesRelease(releases, query, title, commentsLink, cat, publishDate);
-            } else if (query.Episode == null) // if it's scene series, we don't return other categories
+            }
+            else if (query.Episode == null) // if it's scene series, we don't return other categories
             {
                 if (cat == MejorTorrentCatType.Pelicula)
                     ParseMovieRelease(releases, query, title, commentsLink, cat, publishDate, quality);
@@ -397,13 +398,13 @@ namespace Jackett.Common.Indexers
             // this code split the words, remove words with 2 letters or less, remove accents and lowercase
             var queryMatches = Regex.Matches(queryStr, @"\b[\w']*\b");
             var queryWords = from m in queryMatches.Cast<Match>()
-                where !string.IsNullOrEmpty(m.Value) && m.Value.Length > 2
-                select Encoding.UTF8.GetString(Encoding.GetEncoding("ISO-8859-8").GetBytes(m.Value.ToLower()));
+                             where !string.IsNullOrEmpty(m.Value) && m.Value.Length > 2
+                             select Encoding.UTF8.GetString(Encoding.GetEncoding("ISO-8859-8").GetBytes(m.Value.ToLower()));
 
             var titleMatches = Regex.Matches(title, @"\b[\w']*\b");
             var titleWords = from m in titleMatches.Cast<Match>()
-                where !string.IsNullOrEmpty(m.Value) && m.Value.Length > 2
-                select Encoding.UTF8.GetString(Encoding.GetEncoding("ISO-8859-8").GetBytes(m.Value.ToLower()));
+                             where !string.IsNullOrEmpty(m.Value) && m.Value.Length > 2
+                             select Encoding.UTF8.GetString(Encoding.GetEncoding("ISO-8859-8").GetBytes(m.Value.ToLower()));
             titleWords = titleWords.ToArray();
 
             return queryWords.All(word => titleWords.Contains(word));
@@ -449,7 +450,7 @@ namespace Jackett.Common.Indexers
             // title = The Mandalorian - 1ª Temporada
             // title = The Mandalorian - 1ª Temporada [720p] 
             // title = Grace and Frankie - 5ª Temporada [720p]: 5x08 al 5x13.
-            var newTitle = title.Split(new [] { " - " }, StringSplitOptions.RemoveEmptyEntries)[0].Trim();
+            var newTitle = title.Split(new[] { " - " }, StringSplitOptions.RemoveEmptyEntries)[0].Trim();
             // newTitle = The Mandalorian
 
             // parse episode title
@@ -464,7 +465,7 @@ namespace Jackett.Common.Indexers
                 {
                     if (newEpisodeTitle.Equals(""))
                     {
-                        newEpisodeTitle += "S" + m.Groups[1].Value.PadLeft(2, '0') 
+                        newEpisodeTitle += "S" + m.Groups[1].Value.PadLeft(2, '0')
                                                + "E" + m.Groups[2].Value.PadLeft(2, '0');
                     }
                     else
@@ -494,7 +495,7 @@ namespace Jackett.Common.Indexers
                     m = Regex.Match(newEpisodeTitle, "^([0-9]+)x([0-9]+)(.*)$", RegexOptions.IgnoreCase);
                     if (m.Success)
                     {
-                        newEpisodeTitle = "S" + m.Groups[1].Value.PadLeft(2, '0') 
+                        newEpisodeTitle = "S" + m.Groups[1].Value.PadLeft(2, '0')
                                               + "E" + m.Groups[2].Value.PadLeft(2, '0');
                         // newEpisodeTitle = S01E02
                         if (!m.Groups[3].Value.Equals(""))
@@ -510,7 +511,7 @@ namespace Jackett.Common.Indexers
             newTitle += year + " " + newEpisodeTitle;
 
             // add quality
-            if (title.ToLower().Contains("[720p]")) 
+            if (title.ToLower().Contains("[720p]"))
                 newTitle += " SPANISH 720p HDTV x264";
             else
                 newTitle += " SPANISH SDTV XviD";
@@ -552,7 +553,7 @@ namespace Jackett.Common.Indexers
             if (!words.Any())
                 return null;
             var longestWord = words.First();
-            foreach(var word in words)
+            foreach (var word in words)
             {
                 if (word.Length >= longestWord.Length)
                     longestWord = word;

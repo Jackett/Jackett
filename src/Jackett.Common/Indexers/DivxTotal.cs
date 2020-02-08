@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -91,7 +91,7 @@ namespace Jackett.Common.Indexers
 
             // we remove parts from the original query
             query = ParseQuery(query);
-            var qc = new NameValueCollection {{"s", query.SearchTerm}};
+            var qc = new NameValueCollection { { "s", query.SearchTerm } };
 
             var page = 1;
             var isLastPage = false;
@@ -112,11 +112,12 @@ namespace Jackett.Common.Indexers
                     if (table == null)
                         break;
                     var rows = table.QuerySelectorAll("tr");
-                    isLastPage = rows.Length -1 <= MaxResultsPerPage; // rows includes the header
+                    isLastPage = rows.Length - 1 <= MaxResultsPerPage; // rows includes the header
                     var isHeader = true;
                     foreach (var row in rows)
                     {
-                        if (isHeader) {
+                        if (isHeader)
+                        {
                             isHeader = false;
                             continue;
                         }
@@ -185,7 +186,8 @@ namespace Jackett.Common.Indexers
             if (cat == DivxTotalCategories.Series)
             {
                 await ParseSeriesRelease(releases, query, commentsLink, cat, publishDate);
-            } else if (query.Episode == null) // if it's scene series, we don't return other categories
+            }
+            else if (query.Episode == null) // if it's scene series, we don't return other categories
             {
                 if (cat == DivxTotalCategories.Peliculas || cat == DivxTotalCategories.PeliculasHd ||
                     cat == DivxTotalCategories.Peliculas3D || cat == DivxTotalCategories.PeliculasDvdr)
@@ -216,7 +218,8 @@ namespace Jackett.Common.Indexers
                 var isHeader = true;
                 foreach (var row in rows)
                 {
-                    if (isHeader) {
+                    if (isHeader)
+                    {
                         isHeader = false;
                         continue;
                     }
@@ -273,8 +276,8 @@ namespace Jackett.Common.Indexers
                 title += " SPANISH BDRip x264";
             else if (cat == DivxTotalCategories.PeliculasDvdr)
             {
-                 title += " SPANISH DVDR";
-                 size = TryToParseSize(sizeStr, DivxTotalFizeSizes.PeliculasDvdr);
+                title += " SPANISH DVDR";
+                size = TryToParseSize(sizeStr, DivxTotalFizeSizes.PeliculasDvdr);
             }
             else
                 throw new Exception("Unknown category " + cat);
@@ -323,13 +326,13 @@ namespace Jackett.Common.Indexers
             // this code split the words, remove words with 2 letters or less, remove accents and lowercase
             var queryMatches = Regex.Matches(queryStr, @"\b[\w']*\b");
             var queryWords = from m in queryMatches.Cast<Match>()
-                where !string.IsNullOrEmpty(m.Value) && m.Value.Length > 2
-                select Encoding.UTF8.GetString(Encoding.GetEncoding("ISO-8859-8").GetBytes(m.Value.ToLower()));
+                             where !string.IsNullOrEmpty(m.Value) && m.Value.Length > 2
+                             select Encoding.UTF8.GetString(Encoding.GetEncoding("ISO-8859-8").GetBytes(m.Value.ToLower()));
 
             var titleMatches = Regex.Matches(title, @"\b[\w']*\b");
             var titleWords = from m in titleMatches.Cast<Match>()
-                where !string.IsNullOrEmpty(m.Value) && m.Value.Length > 2
-                select Encoding.UTF8.GetString(Encoding.GetEncoding("ISO-8859-8").GetBytes(m.Value.ToLower()));
+                             where !string.IsNullOrEmpty(m.Value) && m.Value.Length > 2
+                             select Encoding.UTF8.GetString(Encoding.GetEncoding("ISO-8859-8").GetBytes(m.Value.ToLower()));
             titleWords = titleWords.ToArray();
 
             return queryWords.All(word => titleWords.Contains(word));
@@ -413,7 +416,7 @@ namespace Jackett.Common.Indexers
         private static long TryToParseSize(string sizeToParse, long sizeDefault)
         {
             try
-            { 
+            {
                 return ReleaseInfo.GetBytes(sizeToParse);
             }
             catch

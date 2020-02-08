@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading;
 using Jackett.Common.Services.Interfaces;
 
@@ -11,7 +11,7 @@ namespace Jackett.Common.Services
 
         private EventWaitHandle GetEventHandle()
         {
-            return new EventWaitHandle(false, EventResetMode.ManualReset, EVENT_HANDLE_NAME); 
+            return new EventWaitHandle(false, EventResetMode.ManualReset, EVENT_HANDLE_NAME);
         }
 
         public void WaitForSignal()

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -66,7 +66,8 @@ namespace Jackett.Common.Indexers
                 {"last", "created"},
                 {"seeders", "seeders"},
                 {"leechers", "leechers"}
-            }) {Name = "Sort requested from site", Value = "last"};
+            })
+            { Name = "Sort requested from site", Value = "last" };
             configData.AddDynamic("sort", sort);
 
             var provideTorrentLinkItem = new BoolItem { Value = false };
@@ -109,7 +110,7 @@ namespace Jackett.Common.Indexers
         {
             base.LoadValuesFromJson(jsonConfig, useProtectionService);
 
-            var sort = (SelectItem) configData.GetDynamic("sort");
+            var sort = (SelectItem)configData.GetDynamic("sort");
             _sort = sort != null ? sort.Value : "last";
 
             var provideTorrentLinkItem = (BoolItem)configData.GetDynamic("providetorrentlink");

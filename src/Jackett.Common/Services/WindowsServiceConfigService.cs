@@ -1,4 +1,4 @@
-﻿using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Services.Interfaces;
 using NLog;
 using System;
 using System.Diagnostics;

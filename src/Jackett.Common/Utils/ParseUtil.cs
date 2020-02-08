@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.WebUtilities;
@@ -20,7 +20,8 @@ namespace Jackett.Common.Utils
 
         public static string NormalizeMultiSpaces(string s)
         {
-            return new Regex(@"\s+").Replace(NormalizeSpace(s), " "); ;
+            return new Regex(@"\s+").Replace(NormalizeSpace(s), " ");
+            ;
         }
 
         public static string NormalizeNumber(string s)
@@ -114,7 +115,7 @@ namespace Jackett.Common.Utils
             var imdbid = GetImdbID(imdbstr);
             if (imdbid == null)
                 return null;
-         
+
             return "tt" + ((int)imdbid).ToString("D7");
         }
     }

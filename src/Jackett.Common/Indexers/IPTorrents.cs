@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -159,11 +159,11 @@ namespace Jackett.Common.Indexers
             {
                 var result = new ConfigurationDataBasicLogin
                 {
-                    SiteLink = {Value = configData.SiteLink.Value},
-                    Instructions = {Value = configData.Instructions.Value},
-                    Username = {Value = configData.Username.Value},
-                    Password = {Value = configData.Password.Value},
-                    CookieHeader = {Value = loginPage.Cookies}
+                    SiteLink = { Value = configData.SiteLink.Value },
+                    Instructions = { Value = configData.Instructions.Value },
+                    Username = { Value = configData.Username.Value },
+                    Password = { Value = configData.Password.Value },
+                    CookieHeader = { Value = loginPage.Cookies }
                 };
                 return result;
             }
@@ -258,7 +258,7 @@ namespace Jackett.Common.Indexers
                     var release = new ReleaseInfo();
                     var qRow = row.Cq();
                     var qTitleLink = qRow.Find("a[href^=\"/details.php?id=\"]").First();
-					// drop invalid char that seems to have cropped up in some titles. #6582
+                    // drop invalid char that seems to have cropped up in some titles. #6582
                     release.Title = qTitleLink.Text().Trim().Replace("\u000f", "");
 
                     // If we search an get no results, we still get a table just with no info.
@@ -270,7 +270,7 @@ namespace Jackett.Common.Indexers
 
                     var descString = qRow.Find(".t_ctime").Text();
                     var dateString = descString.Split('|').Last().Trim();
-                    dateString = dateString.Split(new [] { " by " }, StringSplitOptions.None)[0];
+                    dateString = dateString.Split(new[] { " by " }, StringSplitOptions.None)[0];
                     release.PublishDate = DateTimeUtil.FromTimeAgo(dateString);
 
                     var qLink = row.ChildElements.ElementAt(3).Cq().Children("a");

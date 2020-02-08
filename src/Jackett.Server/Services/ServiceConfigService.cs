@@ -92,7 +92,7 @@ namespace Jackett.Server.Services
         public void RemoveService()
         {
             var service = GetService(NAME);
-            if(service == null)
+            if (service == null)
             {
                 logger.Warn("The service is already uninstalled");
                 return;

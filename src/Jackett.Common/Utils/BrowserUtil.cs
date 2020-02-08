@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text.RegularExpressions;
 
 namespace Jackett.Common.Utils
@@ -7,7 +7,8 @@ namespace Jackett.Common.Utils
     {
         public static string ChromeUserAgent
         {
-            get {
+            get
+            {
                 // When updating these make sure they are not detected by the incapsula bot detection engine (e.g. kickasstorrent indexer)
                 if (System.Environment.OSVersion.Platform == PlatformID.Unix)
                 {

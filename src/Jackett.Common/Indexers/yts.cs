@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -138,7 +138,7 @@ namespace Jackett.Common.Indexers
                         var type = torrent_info.Value<string>("type");
                         switch (type)
                         {
-                             case "web":
+                            case "web":
                                 type = " WEBRip";
                                 break;
                             default:
@@ -169,7 +169,7 @@ namespace Jackett.Common.Indexers
                         var dateStr = torrent_info.Value<string>("date_uploaded");
                         var dateTime = DateTime.ParseExact(dateStr, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
                         release.PublishDate = DateTime.SpecifyKind(dateTime, DateTimeKind.Utc).ToLocalTime();
-                        release.Link = new Uri(torrent_info.Value<string>("url"));                  
+                        release.Link = new Uri(torrent_info.Value<string>("url"));
                         release.Seeders = torrent_info.Value<int>("seeds");
                         release.Peers = torrent_info.Value<int>("peers") + release.Seeders;
                         release.Size = torrent_info.Value<long>("size_bytes");

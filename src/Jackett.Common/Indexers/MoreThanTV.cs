@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -141,10 +141,12 @@ namespace Jackett.Common.Indexers
                     {
                         var groupItem = previousElement.NextElementSibling;
 
-                        if (groupItem == null) break;
+                        if (groupItem == null)
+                            break;
 
                         if (!groupItem.ClassList[0].Equals("group_torrent") ||
-                            !groupItem.ClassList[1].StartsWith("groupid_")) break;
+                            !groupItem.ClassList[1].StartsWith("groupid_"))
+                            break;
 
                         // Found a new edition
                         if (groupItem.ClassList[2].Equals("edition"))
@@ -153,7 +155,8 @@ namespace Jackett.Common.Indexers
                         }
                         else if (groupItem.ClassList[2].StartsWith("edition_"))
                         {
-                            if (qualityEdition.Equals(string.Empty)) break;
+                            if (qualityEdition.Equals(string.Empty))
+                                break;
 
                             // Parse required data
                             var downloadAnchor = groupItem.QuerySelectorAll("td a").Last();

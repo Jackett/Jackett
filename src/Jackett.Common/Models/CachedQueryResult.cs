@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Jackett.Common.Models
@@ -9,7 +9,8 @@ namespace Jackett.Common.Models
         private DateTime created;
         private string query;
 
-        public CachedQueryResult(string query, List<ReleaseInfo> results){
+        public CachedQueryResult(string query, List<ReleaseInfo> results)
+        {
             this.results = results;
             created = DateTime.Now;
             this.query = query;

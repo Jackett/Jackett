@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
@@ -61,7 +61,7 @@ namespace Jackett.Common.Utils
                     timeAgo += TimeSpan.FromMinutes(val);
                 else if (unit.Contains("hour") || unit.Contains("hr") || unit == "h")
                     timeAgo += TimeSpan.FromHours(val);
-                else if (unit.Contains("day") ||unit == "d")
+                else if (unit.Contains("day") || unit == "d")
                     timeAgo += TimeSpan.FromDays(val);
                 else if (unit.Contains("week") || unit.Contains("wk") || unit == "w")
                     timeAgo += TimeSpan.FromDays(val * 7);
@@ -71,7 +71,7 @@ namespace Jackett.Common.Utils
                     timeAgo += TimeSpan.FromDays(val * 365);
                 else
                 {
-                    throw new Exception("TimeAgo parsing failed, unknown unit: "+unit);
+                    throw new Exception("TimeAgo parsing failed, unknown unit: " + unit);
                 }
             }
 
@@ -87,7 +87,7 @@ namespace Jackett.Common.Utils
             if (time.EndsWith("AM"))
             {
                 time = time.Substring(0, time.Length - 2);
-                if(time.StartsWith("12")) // 12:15 AM becomes 00:15
+                if (time.StartsWith("12")) // 12:15 AM becomes 00:15
                     time = "00" + time.Substring(2);
             }
             else if (time.EndsWith("PM"))
@@ -129,11 +129,12 @@ namespace Jackett.Common.Utils
 
         public static DateTime FromUnknown(string str, string format = null)
         {
-            try {
+            try
+            {
                 str = ParseUtil.NormalizeSpace(str);
                 Match match;
 
-                if(str.ToLower().Contains("now"))
+                if (str.ToLower().Contains("now"))
                 {
                     return DateTime.UtcNow;
                 }
@@ -188,19 +189,19 @@ namespace Jackett.Common.Utils
 
                     var dow = DayOfWeek.Monday;
                     var groupMatchLower = match.Groups[1].Value.ToLower();
-                    if (groupMatchLower.StartsWith("monday")) 
+                    if (groupMatchLower.StartsWith("monday"))
                         dow = DayOfWeek.Monday;
-                    else if (groupMatchLower.StartsWith("tuesday")) 
+                    else if (groupMatchLower.StartsWith("tuesday"))
                         dow = DayOfWeek.Tuesday;
-                    else if (groupMatchLower.StartsWith("wednesday")) 
+                    else if (groupMatchLower.StartsWith("wednesday"))
                         dow = DayOfWeek.Wednesday;
-                    else if (groupMatchLower.StartsWith("thursday")) 
+                    else if (groupMatchLower.StartsWith("thursday"))
                         dow = DayOfWeek.Thursday;
-                    else if (groupMatchLower.StartsWith("friday")) 
+                    else if (groupMatchLower.StartsWith("friday"))
                         dow = DayOfWeek.Friday;
-                    else if (groupMatchLower.StartsWith("saturday")) 
+                    else if (groupMatchLower.StartsWith("saturday"))
                         dow = DayOfWeek.Saturday;
-                    else 
+                    else
                         dow = DayOfWeek.Sunday;
 
                     while (dt.DayOfWeek != dow)
@@ -224,7 +225,7 @@ namespace Jackett.Common.Utils
                 if (match.Success)
                 {
                     var date = match.Groups[1].Value;
-                    string newDate = DateTime.Now.Year.ToString()+ "-"+date;
+                    string newDate = DateTime.Now.Year.ToString() + "-" + date;
                     str = str.Replace(date, newDate);
                 }
 

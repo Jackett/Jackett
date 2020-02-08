@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -304,9 +304,10 @@ namespace Jackett.Common.Indexers
                     // Release Name
                     string name = tRow.Find("td:eq(1) > a").Text();
                     //issue #3847 replace multi keyword
-                    if(!string.IsNullOrEmpty(ReplaceMulti)){
+                    if (!string.IsNullOrEmpty(ReplaceMulti))
+                    {
                         System.Text.RegularExpressions.Regex regex = new Regex("(?i)([\\.\\- ])MULTI([\\.\\- ])");
-                        name = regex.Replace(name, "$1"+ReplaceMulti+"$2");
+                        name = regex.Replace(name, "$1" + ReplaceMulti + "$2");
                     }
                     output("Release: " + name);
 

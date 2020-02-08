@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -46,21 +46,21 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(22, TorznabCatType.Audio); // Audio - Musik
             AddCategoryMapping(52, TorznabCatType.Movies3D); // Filme - 3D
             AddCategoryMapping(51, TorznabCatType.MoviesBluRay); // Filme - BluRay Complete
-            AddCategoryMapping(1,  TorznabCatType.MoviesDVD); // Filme - DVD
+            AddCategoryMapping(1, TorznabCatType.MoviesDVD); // Filme - DVD
             AddCategoryMapping(56, TorznabCatType.MoviesUHD); // Filme - UHD/4K
             AddCategoryMapping(54, TorznabCatType.MoviesHD); // Filme - HD/1080p
-            AddCategoryMapping(3,  TorznabCatType.MoviesHD); // Filme - HD/720p
+            AddCategoryMapping(3, TorznabCatType.MoviesHD); // Filme - HD/720p
             AddCategoryMapping(48, TorznabCatType.XXX); // Filme - Heimatfilme.XXX
             AddCategoryMapping(50, TorznabCatType.Movies); // Filme - x264/H.264
-            AddCategoryMapping(2,  TorznabCatType.MoviesSD); // Filme - XViD
+            AddCategoryMapping(2, TorznabCatType.MoviesSD); // Filme - XViD
             AddCategoryMapping(11, TorznabCatType.Console); // Games - Konsolen
             AddCategoryMapping(10, TorznabCatType.PCGames); // Games - PC
             AddCategoryMapping(53, TorznabCatType.Other); // International - Complete
             AddCategoryMapping(36, TorznabCatType.Books); // Sonstige - E-Books
             AddCategoryMapping(38, TorznabCatType.Other); // Sonstige - Handy
             AddCategoryMapping(59, TorznabCatType.TVAnime); // Sonstige - Anime
-            AddCategoryMapping(7,  TorznabCatType.TVDocumentary); // TV/HDTV - Dokus
-            AddCategoryMapping(8,  TorznabCatType.TV); // TV/HDTV - Serien
+            AddCategoryMapping(7, TorznabCatType.TVDocumentary); // TV/HDTV - Dokus
+            AddCategoryMapping(8, TorznabCatType.TV); // TV/HDTV - Serien
             AddCategoryMapping(57, TorznabCatType.TVSport); // Sport - Allgemein
         }
 

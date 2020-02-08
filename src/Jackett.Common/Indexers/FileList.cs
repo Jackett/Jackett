@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -82,7 +82,7 @@ namespace Jackett.Common.Indexers
             LoadValuesFromJson(configJson);
             var responseFirstPage = await RequestStringWithCookiesAndRetry(SiteLink + "login.php?returnto=%2F", "", null);
             CQ domFirstPage = responseFirstPage.Content;
-            var validator = domFirstPage.Find("input[name =\"validator\"]").Attr("value");   
+            var validator = domFirstPage.Find("input[name =\"validator\"]").Attr("value");
             var pairs = new Dictionary<string, string> {
                 { "validator", validator},
                 { "username", configData.Username.Value },

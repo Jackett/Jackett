@@ -1594,9 +1594,9 @@ namespace Jackett.Common.Indexers
                         }
                         else if (configData.StripRussianLetters.Value)
                         {
-                            if (release.Category.Contains(TorznabCatType.Movies.ID) || 
-                                release.Category.Contains(TorznabCatType.MoviesHD.ID) || 
-                                release.Category.Contains(TorznabCatType.Movies3D.ID) || 
+                            if (release.Category.Contains(TorznabCatType.Movies.ID) ||
+                                release.Category.Contains(TorznabCatType.MoviesHD.ID) ||
+                                release.Category.Contains(TorznabCatType.Movies3D.ID) ||
                                 release.Category.Contains(TorznabCatType.MoviesForeign.ID))
                             {
                                 // remove director's name from title
@@ -1605,7 +1605,7 @@ namespace Jackett.Common.Indexers
                                 // this part should be removed: (Мартин Скорсезе / Martin Scorsese)
                                 var director = new Regex(@"(\([А-Яа-яЁё\W]+)\s/\s(.+?)\)");
                                 release.Title = director.Replace(release.Title, "");
-                                
+
                                 // Bluray quality fix: radarr parse Blu-ray Disc as Bluray-1080p but should be BR-DISK
                                 release.Title = Regex.Replace(release.Title, "Blu-ray Disc", "BR-DISK", RegexOptions.IgnoreCase);
                                 // language fix: all rutracker releases contains russian track

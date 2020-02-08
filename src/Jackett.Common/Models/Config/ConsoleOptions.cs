@@ -1,4 +1,4 @@
-﻿using CommandLine;
+using CommandLine;
 using System;
 
 namespace Jackett.Common.Models.Config

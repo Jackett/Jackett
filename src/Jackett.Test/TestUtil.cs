@@ -19,7 +19,7 @@ namespace Jackett.Test
         {
             IDataProtectionProvider dataProtectionProvider = new EphemeralDataProtectionProvider();
 
-            var builder = new ContainerBuilder();            
+            var builder = new ContainerBuilder();
             builder.RegisterModule(new JackettModule(new RuntimeSettings()));
             builder.RegisterType<Jackett.Server.Services.ProtectionService>().As<IProtectionService>();
             builder.RegisterType<TestWebClient>().As<WebClient>().SingleInstance();
@@ -39,7 +39,7 @@ namespace Jackett.Test
 
         public static IContainer Container
         {
-            get { return testContainer;  }
+            get { return testContainer; }
         }
 
         public static void RegisterByteCall(WebRequest r, Func<WebRequest, WebClientByteResult> f)
@@ -57,7 +57,7 @@ namespace Jackett.Test
         public static string GetResource(string item)
         {
             var assembly = Assembly.GetExecutingAssembly();
-            var resourceName = "Jackett.Test." + item.Replace('/','.');
+            var resourceName = "Jackett.Test." + item.Replace('/', '.');
 
             using (Stream stream = assembly.GetManifestResourceStream(resourceName))
             {

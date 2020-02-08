@@ -58,14 +58,16 @@ namespace Jackett.Common.Indexers
                 {"publicdate", "created"},
                 {"downloads", "downloads"},
                 {"item_size", "size"}
-            }) {Name = "Sort requested from site", Value = "publicdate"};
+            })
+            { Name = "Sort requested from site", Value = "publicdate" };
             configData.AddDynamic("sort", sort);
 
             var order = new SelectItem(new Dictionary<string, string>
             {
                 {"desc", "desc"},
                 {"asc", "asc"},
-            }) {Name = "Order requested from site", Value = "desc"};
+            })
+            { Name = "Order requested from site", Value = "desc" };
             configData.AddDynamic("order", order);
 
             var titleOnly = new BoolItem() { Name = "Search only in title", Value = true };
@@ -99,10 +101,10 @@ namespace Jackett.Common.Indexers
         {
             base.LoadValuesFromJson(jsonConfig, useProtectionService);
 
-            var sort = (SelectItem) configData.GetDynamic("sort");
+            var sort = (SelectItem)configData.GetDynamic("sort");
             _sort = sort != null ? sort.Value : "publicdate";
 
-            var order = (SelectItem) configData.GetDynamic("order");
+            var order = (SelectItem)configData.GetDynamic("order");
             _order = order != null && order.Value.Equals("asc") ? "" : "-";
 
             var titleOnly = (BoolItem)configData.GetDynamic("titleOnly");
@@ -125,7 +127,7 @@ namespace Jackett.Common.Indexers
             }
             var querycats = MapTorznabCapsToTrackers(query);
             if (querycats.Any())
-                searchTerm += " AND mediatype:(" + string.Join( " OR ", querycats) + ")";
+                searchTerm += " AND mediatype:(" + string.Join(" OR ", querycats) + ")";
 
             var qc = new NameValueCollection
             {
@@ -166,7 +168,7 @@ namespace Jackett.Common.Indexers
         {
             var release = new ReleaseInfo();
 
-            var id = (string) torrent["identifier"];
+            var id = (string)torrent["identifier"];
             var title = torrent["title"] is JArray ?
                 (string)((JArray)torrent["title"])[0] :
                 (string)torrent["title"];

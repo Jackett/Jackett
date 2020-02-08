@@ -111,8 +111,8 @@ namespace Jackett.Common.Indexers
             {
                 var release = new ReleaseInfo();
                 release.Title = (string)r["name"];
-                release.Comments = new Uri(SiteLink+"details.php?id="+(string)r["id"]);
-                release.Link = new Uri(SiteLink+"download.php/"+(string)r["filename"]+"?id="+(string)r["id"]+"&passkey="+configData.Passkey.Value);
+                release.Comments = new Uri(SiteLink + "details.php?id=" + (string)r["id"]);
+                release.Link = new Uri(SiteLink + "download.php/" + (string)r["filename"] + "?id=" + (string)r["id"] + "&passkey=" + configData.Passkey.Value);
                 release.Guid = release.Link;
 
                 if (r.ContainsKey("imdb"))
@@ -126,7 +126,7 @@ namespace Jackett.Common.Indexers
                 }
 
                 release.UploadVolumeFactor = 1;
-                int[] mediumsFor50 = {1,5,4};
+                int[] mediumsFor50 = { 1, 5, 4 };
 
                 // 100% Neutral Leech: all XXX content.
                 if ((int)r["type_category"] == 7)

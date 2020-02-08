@@ -157,11 +157,13 @@ namespace Jackett.Common.Indexers
 
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800; // 48 hours
-                    
+
                     int tdIndex = 0;
-                    if(qRow.Find("td:nth-last-child(1)").Text() == "Edit") tdIndex = 1;
+                    if (qRow.Find("td:nth-last-child(1)").Text() == "Edit")
+                        tdIndex = 1;
                     // moderators get additional delete, recomend and like links
-                    if (qRow.Find("td:nth-last-child(4)").Text() == "Edit") tdIndex = 4;
+                    if (qRow.Find("td:nth-last-child(4)").Text() == "Edit")
+                        tdIndex = 4;
 
                     // Sometimes the uploader column is missing
                     if (ParseUtil.TryCoerceInt(qRow.Find($"td:nth-last-child({tdIndex + 3})").Text(), out int seeders))
@@ -200,7 +202,7 @@ namespace Jackett.Common.Indexers
                         release.DownloadVolumeFactor = 0;
                         release.UploadVolumeFactor = 0;
                     }
-                    else if(hasFreeleech)
+                    else if (hasFreeleech)
                         release.DownloadVolumeFactor = 0;
                     else if (qRow.Find("img[alt=\"Silver Torrent\"]").Length >= 1)
                         release.DownloadVolumeFactor = 0.5;

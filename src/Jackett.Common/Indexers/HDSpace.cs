@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -128,7 +128,8 @@ namespace Jackett.Common.Indexers
                 {
                     // this tracker has horrible markup, find the result rows by looking for the style tag before each one
                     var prev = row.PreviousElementSibling;
-                    if (prev == null || prev.NodeName.ToLowerInvariant() != "style") continue;
+                    if (prev == null || prev.NodeName.ToLowerInvariant() != "style")
+                        continue;
 
                     CQ qRow = row.Cq();
                     var release = new ReleaseInfo();

@@ -101,7 +101,7 @@ namespace Jackett.Common.Indexers
             TimeZoneInfo.AdjustmentRule adjustment = TimeZoneInfo.AdjustmentRule.CreateAdjustmentRule(new DateTime(1999, 10, 1), DateTime.MaxValue.Date, delta, startTransition, endTransition);
             TimeZoneInfo.AdjustmentRule[] adjustments = { adjustment };
             germanyTz = TimeZoneInfo.CreateCustomTimeZone("W. Europe Standard Time", new TimeSpan(1, 0, 0), "(GMT+01:00) W. Europe Standard Time", "W. Europe Standard Time", "W. Europe DST Time", adjustments);
-    }
+        }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
@@ -140,13 +140,15 @@ namespace Jackett.Common.Indexers
             queryCollection.Add("incldead", "1");
             queryCollection.Add("rel_type", "0"); // Alle
 
-            if(query.ImdbID != null)
+            if (query.ImdbID != null)
             {
                 queryCollection.Add("searchin", "imdb");
                 queryCollection.Add("search", query.ImdbID);
-            } else {
+            }
+            else
+            {
                 queryCollection.Add("searchin", "title");
-                
+
                 if (!string.IsNullOrWhiteSpace(searchString))
                 {
                     // use AND+wildcard operator to avoid getting to many useless results
@@ -154,7 +156,7 @@ namespace Jackett.Common.Indexers
                     searchStringArray = searchStringArray.Select(x => "+" + x).ToList(); // add AND operators
                     var searchStringFinal = String.Join(" ", searchStringArray);
                     queryCollection.Add("search", searchStringFinal);
-            }
+                }
 
             }
             foreach (var cat in MapTorznabCapsToTrackers(query))

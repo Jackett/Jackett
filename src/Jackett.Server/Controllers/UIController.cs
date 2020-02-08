@@ -44,7 +44,8 @@ namespace Jackett.Server.Controllers
                 return Redirect("Dashboard");
             }
 
-            return new PhysicalFileResult(config.GetContentFolder() + "/login.html", "text/html"); ;
+            return new PhysicalFileResult(config.GetContentFolder() + "/login.html", "text/html");
+            ;
         }
 
         [HttpGet]

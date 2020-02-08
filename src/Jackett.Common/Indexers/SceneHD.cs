@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -95,14 +95,14 @@ namespace Jackett.Common.Indexers
 
             NameValueCollection qParams = new NameValueCollection();
             qParams.Add("api", "");
-            if(query.ImdbIDShort != null)
+            if (query.ImdbIDShort != null)
                 qParams.Add("imdb", query.ImdbIDShort);
             else
                 qParams.Add("search", query.SearchTerm);
 
             foreach (var cat in MapTorznabCapsToTrackers(query))
             {
-                qParams.Add("categories["+cat+"]", "1");
+                qParams.Add("categories[" + cat + "]", "1");
             }
 
             string urlSearch = SearchUrl;
@@ -147,7 +147,7 @@ namespace Jackett.Common.Indexers
                     var size = item.Value<string>("size");
                     release.Size = ReleaseInfo.GetBytes(size);
                     var is_freeleech = item.Value<int>("is_freeleech");
-                    
+
                     if (is_freeleech == 1)
                         release.DownloadVolumeFactor = 0;
                     else

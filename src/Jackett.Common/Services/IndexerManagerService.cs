@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -106,7 +106,8 @@ namespace Jackett.Common.Services
                 {
                     logger.Info("Loading Cardigann definition " + file.FullName);
 
-                    try { 
+                    try
+                    {
                         string DefinitionString = File.ReadAllText(file.FullName);
                         var definition = deserializer.Deserialize<IndexerDefinition>(DefinitionString);
                         return definition;

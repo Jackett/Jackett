@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -170,7 +170,7 @@ namespace Jackett.Common.Indexers
                 foreach (string apiUrl in apiUrls)
                 {
                     int nextId = 0;
-                    while(true)
+                    while (true)
                     {
                         var showAPIResponse = await RequestStringWithCookiesAndRetry(apiUrl + "&nextid=" + nextId, string.Empty);
                         var showAPIdom = ResultParser.ParseDocument(showAPIResponse.Content);
@@ -178,7 +178,8 @@ namespace Jackett.Common.Indexers
                         releaserows.AddRange(releaseRowResults);
                         nextId++;
 
-                        if (releaseRowResults.Length == 0 || latestOnly) {
+                        if (releaseRowResults.Length == 0 || latestOnly)
+                        {
                             break;
                         }
                     }

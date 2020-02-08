@@ -11,7 +11,7 @@ namespace Jackett.Server.Middleware
         {
             HttpRequest request = context.HttpContext.Request;
 
-            if (request.Path == null || string.IsNullOrWhiteSpace(request.Path.ToString()) || request.Path.ToString() == "/" 
+            if (request.Path == null || string.IsNullOrWhiteSpace(request.Path.ToString()) || request.Path.ToString() == "/"
                 || request.Path.ToString().Equals("/index.html", StringComparison.OrdinalIgnoreCase))
             {
                 // 301 is the status code of permanent redirect

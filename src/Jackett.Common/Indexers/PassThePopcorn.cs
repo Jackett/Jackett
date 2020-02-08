@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -108,7 +108,7 @@ namespace Jackett.Common.Indexers
                 queryCollection.Add("searchstr", query.GetQueryString());
             }
 
-            if(configFreeOnly)
+            if (configFreeOnly)
                 queryCollection.Add("freetorrent", "1");
 
             if (queryCollection.Count > 0)

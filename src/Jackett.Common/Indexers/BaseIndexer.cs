@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -624,7 +624,8 @@ namespace Jackett.Common.Indexers
             var matches = expression.Match(redirRequestCookies);
             while (matches.Success)
             {
-                if (matches.Groups.Count > 2) cookieDIctionary[matches.Groups[1].Value] = matches.Groups[2].Value;
+                if (matches.Groups.Count > 2)
+                    cookieDIctionary[matches.Groups[1].Value] = matches.Groups[2].Value;
                 matches = matches.NextMatch();
             }
             return string.Join("; ", cookieDIctionary

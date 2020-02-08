@@ -6,7 +6,7 @@ using Jackett.Common.Services.Interfaces;
 namespace Jackett.Test.Services
 {
     [TestFixture]
-    class ProtectionServiceTests :  TestBase
+    class ProtectionServiceTests : TestBase
     {
 
         [Test]

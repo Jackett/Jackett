@@ -1,4 +1,4 @@
-﻿using Jackett.Common.Indexers;
+using Jackett.Common.Indexers;
 using Newtonsoft.Json.Linq;
 
 namespace Jackett.Common.Services.Interfaces

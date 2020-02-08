@@ -73,7 +73,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(25, TorznabCatType.PCGames, "Games/PC");
             AddCategoryMapping(26, TorznabCatType.Console, "Games/NSW");
             AddCategoryMapping(27, TorznabCatType.PCMac, "Games/Mac");
-            
+
             AddCategoryMapping(28, TorznabCatType.Books, "Ebooks");
 
             AddCategoryMapping(30, TorznabCatType.XXX, "XXX/SD");
@@ -205,7 +205,7 @@ namespace Jackett.Common.Indexers
 
                     release.Description = string.Join("<br>\n", descriptions);
 
-                    releases.Add(release);                    
+                    releases.Add(release);
 
                 }
             }
