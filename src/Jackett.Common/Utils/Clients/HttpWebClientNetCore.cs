@@ -213,7 +213,7 @@ namespace Jackett.Common.Utils.Clients
                             else if (webRequest.Type == RequestType.POST)
                             {
                                 if (webRequest.PostData != null)
-                                    request.Content = new FormUrlEncodedContent(webRequest.PostData);
+                                    request.Content = FormUrlEncodedContentWithEncoding(webRequest.PostData, webRequest.Encoding);
                                 request.Method = HttpMethod.Post;
                             }
                             else
