@@ -140,9 +140,8 @@ namespace Jackett.Common.Indexers
             var fullSearchUrl = SearchUrl + "?" + qc.GetQueryString();
             var result = await RequestStringWithCookiesAndRetry(fullSearchUrl);
             foreach (var torrent in ParseResponse(result))
-            {
                 releases.Add(MakeRelease(torrent));
-            }
+
             return releases;
         }
 
@@ -168,29 +167,26 @@ namespace Jackett.Common.Indexers
         {
             var release = new ReleaseInfo();
 
-            var id = (string)torrent["identifier"];
-            var title = torrent["title"] is JArray ?
-                (string)((JArray)torrent["title"])[0] :
-                (string)torrent["title"];
+            var id = GetFieldAsString(torrent, "identifier");
+            var title = GetFieldAsString(torrent, "title");
+            var btih = GetFieldAsString(torrent, "btih");
 
             release.Title = title;
             release.Comments = new Uri(CommentsUrl + id);
             release.Guid = release.Comments;
 
-            release.PublishDate = DateTime.Now;
-            if (torrent["publicdate"] != null)
-                release.PublishDate = DateTime.Parse((string)torrent["publicdate"]);
+            release.PublishDate = DateTime.Parse(GetFieldAsString(torrent, "publicdate"));
 
-            release.Category = MapTrackerCatToNewznab((string)torrent["mediatype"]);
-            release.Size = (long)torrent["item_size"];
+            release.Category = MapTrackerCatToNewznab(GetFieldAsString(torrent, "mediatype"));
+            release.Size = GetFieldAsLong(torrent, "item_size");
 
             release.Seeders = 1;
             release.Peers = 2;
-            release.Grabs = (long)torrent["downloads"];
+            release.Grabs = GetFieldAsLong(torrent, "downloads");
 
             release.Link = new Uri(LinkUrl + id + "/" + id + "_archive.torrent");
-            release.MagnetUri = GenerateMagnetLink((string)torrent["btih"], title);
-            release.InfoHash = (string)torrent["btih"];
+            release.MagnetUri = GenerateMagnetLink(btih, title);
+            release.InfoHash = btih;
 
             release.MinimumRatio = 1;
             release.MinimumSeedTime = 172800; // 48 hours
@@ -205,5 +201,15 @@ namespace Jackett.Common.Indexers
             _trackers.Set("dn", title);
             return new Uri("magnet:?xt=urn:btih:" + btih + "&" + _trackers.GetQueryString());
         }
+
+        private static string GetFieldAsString(JToken torrent, string field) =>
+            torrent[field] is JArray ?
+            (string)((JArray)torrent[field])[0] :
+            (string)torrent[field];
+
+        private static long GetFieldAsLong(JToken torrent, string field) =>
+            torrent[field] is JArray ?
+                (long)((JArray)torrent[field])[0] :
+                (long)torrent[field];
     }
 }
