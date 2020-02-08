@@ -67,6 +67,8 @@
         selector: td:nth-child(3)
         filters:
           - name: replace
+            args: ["Undefined", "0 B"]
+          - name: replace
             args: ["s", ""]
       description:
         selector: td:nth-child(4)

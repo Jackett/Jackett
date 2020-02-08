@@ -97,7 +97,7 @@
         optional: true
         filters: 
           - name: dateparse
-            args: "01/02/2006"
+            args: "1/2/2006"
       date:
         selector: td:nth-child(2):contains("Today"), td:nth-child(2):contains("Yesterday")
         optional: true
