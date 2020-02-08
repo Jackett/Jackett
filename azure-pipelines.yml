@@ -6,6 +6,7 @@ variables:
   jackettVersion: $(majorVersion).$(minorVersion).$(patchVersion)
   buildConfiguration: Release
   netCoreFramework: netcoreapp3.1
+  netCoreSdkVersion: 3.1.x
 
 stages:
   - stage: BuildJackett
@@ -26,7 +27,7 @@ stages:
           Windows:
             buildDescription: Windows
             imageName: windows-latest
-            framework: netcoreapp3.1
+            framework: $(netCoreFramework)
             runtime: win-x86
             archiveType: zip
             artifactName: Jackett.Binaries.Windows.zip
@@ -68,7 +69,7 @@ stages:
         displayName: Install .NET Core SDK
         inputs:
           packageType: sdk
-          version: 3.1.100
+          version: $(netCoreSdkVersion)
           installationPath: $(Agent.ToolsDirectory)/dotnet
 
       - task: DotNetCoreCLI@2
@@ -342,7 +343,7 @@ stages:
         displayName: Install .NET Core SDK
         inputs:
           packageType: sdk
-          version: 3.1.100
+          version: $(netCoreSdkVersion)
           installationPath: $(Agent.ToolsDirectory)/dotnet
 
       - task: DotNetCoreCLI@2
