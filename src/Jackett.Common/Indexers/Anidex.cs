@@ -7,13 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
-using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
-using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
@@ -22,8 +20,6 @@ namespace Jackett.Common.Indexers
 {
     public class Anidex : BaseWebIndexer
     {
-        private const string DEFAULT_SITE_LINK = "https://anidex.info/";
-
         public Anidex(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)
             : base(name: "Anidex",
                 description: "Anidex is a Public torrent tracker and indexer, primarily for English fansub groups of anime",
@@ -33,7 +29,7 @@ namespace Jackett.Common.Indexers
                 client: wc,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataUrl(DEFAULT_SITE_LINK))
+                configData: new ConfigurationData())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
@@ -58,7 +54,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(16, TorznabCatType.TVAnime, "Other");
 
             // Configure the language select option
-            SelectItem languageSelect = new SelectItem(new Dictionary<string, string>()
+            var languageSelect = new SelectItem(new Dictionary<string, string>()
             {
                 {"1", "English"},
                 {"2", "Japanese"},
@@ -95,7 +91,7 @@ namespace Jackett.Common.Indexers
             configData.AddDynamic("languageid", languageSelect);
 
             // Configure the sort selects
-            SelectItem sortBySelect = new SelectItem(new Dictionary<string, string>()
+            var sortBySelect = new SelectItem(new Dictionary<string, string>()
             {
                 {"upload_timestamp", "created"},
                 {"seeders", "seeders"},
@@ -104,38 +100,20 @@ namespace Jackett.Common.Indexers
             }) { Name = "Sort by", Value = "upload_timestamp" };
             configData.AddDynamic("sortrequestedfromsite", sortBySelect);
 
-            SelectItem orderSelect = new SelectItem(new Dictionary<string, string>()
-            {
-                {"desc", "Descending"},
-                {"asc", "Ascending"}
-            })
+            var orderSelect = new SelectItem(new Dictionary<string, string>()
+                {
+                    {"desc", "Descending"},
+                    {"asc", "Ascending"}
+                })
             { Name = "Order", Value = "desc" };
             configData.AddDynamic("orderrequestedfromsite", orderSelect);
         }
 
-        public string SortBy
-        {
-            get
-            {
-                return ((SelectItem)this.configData.GetDynamic("sortrequestedfromsite")).Value;
-            }
-        }
+        private string GetSortBy => ((SelectItem)configData.GetDynamic("sortrequestedfromsite")).Value;
 
-        public string Order
-        {
-            get
-            {
-                return ((SelectItem)this.configData.GetDynamic("orderrequestedfromsite")).Value;
-            }
-        }
+        private string GetOrder => ((SelectItem)configData.GetDynamic("orderrequestedfromsite")).Value;
 
-        private Uri SiteUri
-        {
-            get
-            {
-                return new Uri(this.SiteLink);
-            }
-        }
+        private Uri GetAbsoluteUrl(string relativeUrl) => new Uri(SiteLink + relativeUrl.TrimStart('/'));
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
@@ -152,93 +130,82 @@ namespace Jackett.Common.Indexers
         {
             try
             {
-                try
-                {
-                    await this.ConfigureDDoSGuardCookie();
-                }
-                catch (Exception ex)
-                {
-                    this.logger.Log(LogLevel.Warn, ex, $"Exception while configuring DDoS Guard cookie. Attempting search without. (Exception: {ex})");
-                }
-
-                // Get specified categories. If none were specified, use all available.
-                List<string> searchCategories = this.MapTorznabCapsToTrackers(query);
-                if (searchCategories.Count == 0)
-                {
-                    searchCategories = this.GetAllTrackerCategories();
-                }
-
-                // Prepare the search query
-                NameValueCollection queryParameters = new NameValueCollection
-                {
-                    { "page", "search" },
-                    { "id", string.Join(",", searchCategories) },
-                    { "group", "0" }, // No group
-                    { "q", query.SearchTerm ?? string.Empty },
-                    { "s", this.SortBy },
-                    { "o", this.Order }
-                };
-
-                // Make search request
-                Uri searchUri = new Uri(this.SiteUri, "?" + queryParameters.GetQueryString());
-                WebClientStringResult response = await RequestStringWithCookiesAndRetry(searchUri.AbsoluteUri);
-
-                // Check for DDOS Guard or other error
-                if (response.Status == System.Net.HttpStatusCode.Forbidden)
-                {
-                    throw new IOException("Anidex search was forbidden. This was likely caused by DDOS protection.");
-                }
-                else if (response.Status != System.Net.HttpStatusCode.OK)
-                {
-                    throw new IOException($"Anidex search returned unexpected result. Expected 200 OK but got {response.Status.ToString()}.");
-                }
-
-                // Search seems to have been a success so parse it
-                return this.ParseResult(response.Content);
+                await ConfigureDDoSGuardCookie();
             }
             catch (Exception ex)
             {
-                this.LogIndexerError(ex.Message);
-                throw ex;
+                logger.Log(LogLevel.Warn, ex, $"Exception while configuring DDoS Guard cookie. Attempting search without. (Exception: {ex})");
             }
+
+            // Get specified categories. If none were specified, use all available.
+            var searchCategories = MapTorznabCapsToTrackers(query);
+            if (searchCategories.Count == 0)
+                searchCategories = GetAllTrackerCategories();
+
+            // Prepare the search query
+            var queryParameters = new NameValueCollection
+            {
+                { "page", "search" },
+                { "id", string.Join(",", searchCategories) },
+                { "group", "0" }, // No group
+                { "q", query.SearchTerm ?? string.Empty },
+                { "s", GetSortBy },
+                { "o", GetOrder }
+            };
+
+            // Make search request
+            var searchUri = GetAbsoluteUrl("?" + queryParameters.GetQueryString());
+            var response = await RequestStringWithCookiesAndRetry(searchUri.AbsoluteUri);
+
+            // Check for DDOS Guard or other error
+            if (response.Status == System.Net.HttpStatusCode.Forbidden)
+                throw new IOException("Anidex search was forbidden. This was likely caused by DDOS protection.");
+
+            if (response.Status != System.Net.HttpStatusCode.OK)
+                throw new IOException($"Anidex search returned unexpected result. Expected 200 OK but got {response.Status.ToString()}.");
+
+            // Search seems to have been a success so parse it
+            return ParseResult(response.Content);
         }
 
         private IEnumerable<ReleaseInfo> ParseResult(string response)
         {
-            const string ROW_SELECTOR = "div#content table > tbody > tr";
+            const string rowSelector = "div#content table > tbody > tr";
 
             try
             {
-                HtmlParser resultParser = new HtmlParser();
-                IHtmlDocument resultDocument = resultParser.ParseDocument(response);
-                IEnumerable<IElement> rows = resultDocument.QuerySelectorAll(ROW_SELECTOR);
+                var resultParser = new HtmlParser();
+                var resultDocument = resultParser.ParseDocument(response);
+                IEnumerable<IElement> rows = resultDocument.QuerySelectorAll(rowSelector);
 
-                List<ReleaseInfo> releases = new List<ReleaseInfo>();
-                foreach (IElement r in rows)
-                {
+                var releases = new List<ReleaseInfo>();
+                foreach (var r in rows)
                     try
                     {
-                        ReleaseInfo release = new ReleaseInfo();
+                        var release = new ReleaseInfo();
 
-                        release.Category = this.ParseValueFromRow(r, nameof(release.Category), "td:nth-child(1) a", (e) => this.MapTrackerCatToNewznab(e.Attributes["href"].Value.Substring(5)));
-                        release.Title = this.ParseStringValueFromRow(r, nameof(release.Title), "td:nth-child(3) span");
-                        release.MagnetUri = this.ParseValueFromRow(r, nameof(release.MagnetUri), "a[href^=\"magnet:?\"]", (e) => new Uri(e.Attributes["href"].Value));
-                        release.Size = this.ParseValueFromRow(r, nameof(release.Size), "td:nth-child(7)", (e) => ReleaseInfo.GetBytes(e.Text()));
-                        release.PublishDate = this.ParseValueFromRow(r, nameof(release.PublishDate), "td:nth-child(8)", (e) => DateTime.ParseExact(e.Attributes["title"].Value, "yyyy-MM-dd HH:mm:ss UTC", CultureInfo.InvariantCulture));
-                        release.Seeders = this.ParseIntValueFromRow(r, nameof(release.Seeders), "td:nth-child(9)");
-                        release.Peers = this.ParseIntValueFromRow(r, nameof(release.Peers), "td:nth-child(10)") + release.Seeders;
-                        release.Grabs = this.ParseIntValueFromRow(r, nameof(release.Grabs), "td:nth-child(11)");
-                        release.Comments = this.ParseValueFromRow(r, nameof(release.Comments), "td:nth-child(3) a", (e) => new Uri(this.SiteUri, e.Attributes["href"].Value));
+                        release.Category = ParseValueFromRow(r, nameof(release.Category), "td:nth-child(1) a", (e) => MapTrackerCatToNewznab(e.Attributes["href"].Value.Substring(5)));
+                        release.Title = ParseStringValueFromRow(r, nameof(release.Title), "td:nth-child(3) span");
+                        release.Link = ParseValueFromRow(r, nameof(release.Link), "a[href^=\"/dl/\"]", (e) => GetAbsoluteUrl(e.Attributes["href"].Value));
+                        release.MagnetUri = ParseValueFromRow(r, nameof(release.MagnetUri), "a[href^=\"magnet:?\"]", (e) => new Uri(e.Attributes["href"].Value));
+                        release.Size = ParseValueFromRow(r, nameof(release.Size), "td:nth-child(7)", (e) => ReleaseInfo.GetBytes(e.Text()));
+                        release.PublishDate = ParseValueFromRow(r, nameof(release.PublishDate), "td:nth-child(8)", (e) => DateTime.ParseExact(e.Attributes["title"].Value, "yyyy-MM-dd HH:mm:ss UTC", CultureInfo.InvariantCulture));
+                        release.Seeders = ParseIntValueFromRow(r, nameof(release.Seeders), "td:nth-child(9)");
+                        release.Peers = ParseIntValueFromRow(r, nameof(release.Peers), "td:nth-child(10)") + release.Seeders;
+                        release.Grabs = ParseIntValueFromRow(r, nameof(release.Grabs), "td:nth-child(11)");
+                        release.Comments = ParseValueFromRow(r, nameof(release.Comments), "td:nth-child(3) a", (e) => GetAbsoluteUrl(e.Attributes["href"].Value));
+                        release.Guid = release.Comments;
                         release.MinimumRatio = 1;
                         release.MinimumSeedTime = 172800; // 48 hours
+                        release.DownloadVolumeFactor = 0;
+                        release.UploadVolumeFactor = 1;
 
                         releases.Add(release);
                     }
                     catch (Exception ex)
                     {
-                        this.LogIndexerError($"Error parsing search result row '{r.ToHtmlPretty()}':\n\n{ex}");
+                        logger.Error($"Anidex: Error parsing search result row '{r.ToHtmlPretty()}':\n\n{ex}");
                     }
-                }
 
                 return releases;
             }
@@ -250,42 +217,38 @@ namespace Jackett.Common.Indexers
 
         private async Task ConfigureDDoSGuardCookie()
         {
-            const string PATH_AND_QUERY_BASE64_ENCODED = "Lw=="; // "/"
-            const string BASE_URI_BASE64_ENCODED = "aHR0cHM6Ly9hbmlkZXguaW5mbw=="; // "http://anidex.info"
-            const string DDOS_POST_URL = "https://ddgu.ddos-guard.net/ddgu/";
+            const string pathAndQueryBase64Encoded = "Lw=="; // "/"
+            const string baseUriBase64Encoded = "aHR0cHM6Ly9hbmlkZXguaW5mbw=="; // "http://anidex.info"
+            const string ddosPostUrl = "https://ddgu.ddos-guard.net/ddgu/";
 
             try
             {
                 // Check if the cookie already exists, if so exit without doing anything
-                if (this.IsCookiePresent("__ddgu") && this.IsCookiePresent("__ddg1"))
+                if (IsCookiePresent("__ddgu") && IsCookiePresent("__ddg1"))
                 {
-                    this.logger.Debug("DDOS Guard cookies are already present. Skipping bypass.");
+                    logger.Debug("DDOS Guard cookies are already present. Skipping bypass.");
                     return;
                 }
 
                 // Make a request to DDoS Guard to get the redirect URL
-                List<KeyValuePair<string, string>> ddosPostData = new List<KeyValuePair<string, string>>
+                var ddosPostData = new List<KeyValuePair<string, string>>
                 {
-                    { "u", PATH_AND_QUERY_BASE64_ENCODED },
-                    { "h", BASE_URI_BASE64_ENCODED },
+                    { "u", pathAndQueryBase64Encoded },
+                    { "h", baseUriBase64Encoded },
                     { "p", string.Empty }
                 };
 
-                WebClientStringResult result = await this.PostDataWithCookiesAndRetry(DDOS_POST_URL, ddosPostData);
+                var result = await PostDataWithCookiesAndRetry(ddosPostUrl, ddosPostData);
 
                 if (!result.IsRedirect)
-                {
                     // Success returns a redirect. For anything else, assume a failure.
                     throw new IOException($"Unexpected result from DDOS Guard while attempting to bypass: {result.Content}");
-                }
 
                 // Call the redirect URL to retrieve the cookie
-                result = await this.RequestStringWithCookiesAndRetry(result.RedirectingTo);
+                result = await RequestStringWithCookiesAndRetry(result.RedirectingTo);
                 if (!result.IsRedirect)
-                {
                     // Success is another redirect. For anything else, assume a failure.
                     throw new IOException($"Unexpected result when returning from DDOS Guard bypass: {result.Content}");
-                }
 
                 // If we got to this point, the bypass should have succeeded and we have stored the necessary cookies to access the site normally.
             }
@@ -297,7 +260,7 @@ namespace Jackett.Common.Indexers
 
         private bool IsCookiePresent(string name)
         {
-            string[] rawCookies = this.CookieHeader.Split(';');
+            var rawCookies = CookieHeader.Split(';');
             IDictionary<string, string> cookies = rawCookies
                 .Where(e => e.Contains('='))
                 .ToDictionary((e) => e.Split('=')[0].Trim(), (e) => e.Split('=')[1].Trim());
@@ -305,15 +268,14 @@ namespace Jackett.Common.Indexers
             return cookies.ContainsKey(name);
         }
 
-        private TResult ParseValueFromRow<TResult>(IElement row, string propertyName, string selector, Func<IElement, TResult> parseFunction)
+        private static TResult ParseValueFromRow<TResult>(IElement row, string propertyName, string selector,
+                                                          Func<IElement, TResult> parseFunction)
         {
             try
             {
-                IElement selectedElement = row.QuerySelector(selector);
+                var selectedElement = row.QuerySelector(selector);
                 if (selectedElement == null)
-                {
                     throw new IOException($"Unable to find '{selector}'.");
-                }
 
                 return parseFunction(selectedElement);
             }
@@ -323,15 +285,13 @@ namespace Jackett.Common.Indexers
             }
         }
 
-        private string ParseStringValueFromRow(IElement row, string propertyName, string selector)
+        private static string ParseStringValueFromRow(IElement row, string propertyName, string selector)
         {
             try
             {
-                IElement selectedElement = row.QuerySelector(selector);
+                var selectedElement = row.QuerySelector(selector);
                 if (selectedElement == null)
-                {
                     throw new IOException($"Unable to find '{selector}'.");
-                }
 
                 return selectedElement.Text();
             }
@@ -341,47 +301,19 @@ namespace Jackett.Common.Indexers
             }
         }
 
-        private int ParseIntValueFromRow(IElement row, string propertyName, string selector)
+        private static int ParseIntValueFromRow(IElement row, string propertyName, string selector)
         {
             try
             {
-                string text = this.ParseStringValueFromRow(row, propertyName, selector);
-                int value;
-                if (!int.TryParse(text, out value))
-                {
+                var text = ParseStringValueFromRow(row, propertyName, selector);
+                if (!int.TryParse(text, out var value))
                     throw new IOException($"Could not convert '{text}' to int.");
-                }
-
                 return value;
             }
             catch (Exception ex)
             {
                 throw new IOException($"Error parsing for property '{propertyName}': {ex.Message}");
             }
-        }
-
-        private long ParseLongValueFromRow(IElement row, string propertyName, string selector)
-        {
-            try
-            {
-                string text = this.ParseStringValueFromRow(row, propertyName, selector);
-                long value;
-                if (!long.TryParse(text, out value))
-                {
-                    throw new IOException($"Could not convert '{text}' to long.");
-                }
-
-                return value;
-            }
-            catch (Exception ex)
-            {
-                throw new IOException($"Error parsing for property '{propertyName}': {ex.Message}");
-            }
-        }
-
-        private void LogIndexerError(string message)
-        {
-            this.logger.Error($"{nameof(Anidex)} indexer ({this.ID}): {message}");
         }
     }
 }
