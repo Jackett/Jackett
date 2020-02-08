@@ -240,8 +240,10 @@ namespace Jackett.Common.Indexers
                 searchUrl += "?" + queryCollection.GetQueryString();
 
             var response = await RequestStringWithCookiesAndRetry(searchUrl, null, BrowseUrl);
-
             var results = response.Content;
+
+            if (results == null || !results.Contains("/lout.php"))
+                throw new Exception("The user is not logged in. It is possible that the cookie has expired or you made a mistake when copying it. Please check the settings.");
 
             if (string.IsNullOrWhiteSpace(query.ImdbID) && string.IsNullOrWhiteSpace(query.SearchTerm) && results.Contains("No Torrents Found!"))
                 throw new Exception("Got No Torrents Found! Make sure your IPTorrents profile config contain proper default category settings.");
