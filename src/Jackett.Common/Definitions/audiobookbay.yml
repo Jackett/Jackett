@@ -127,7 +127,13 @@
         selector: div.postContent p:contains("File Size:")
         filters:
           - name: regexp
-            args: "File Size: (.+?)s"
+            args: "File Size: (.+?)$"
+          - name: replace
+            args: ["MBs", "MB"]
+          - name: replace
+            args: ["GBs", "GB"]
+          - name: replace
+            args: ["KBs", "KB"]
       seeders:
         text: 1
       leechers:
