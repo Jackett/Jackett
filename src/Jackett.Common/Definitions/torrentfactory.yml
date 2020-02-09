@@ -1,0 +1,176 @@
+---
+  site: torrentfactory
+  name: TorrentFactory
+  description: "TorrentFactory is a SPANISH site for General content"
+  language: es-es
+  type: private
+  encoding: ISO-8859-1
+  links:
+    - https://torrentfactory.net/
+
+  caps:
+    categorymappings:
+      - {id: 6 , cat: Movies/DVD, desc: "DvD - DVD9"}
+      - {id: 7 , cat: Movies/DVD, desc: "DvD - DVD5"}
+      - {id: 12 , cat: Movies/Other, desc: "Estrenos - Taquilla"}
+      - {id: 105 , cat: Movies/Foreign, desc: "Estrenos - V.O.S.E."}
+      - {id: 14 , cat: TV/Anime, desc: "HD - Anime"}
+      - {id: 16 , cat: TV/Documentary, desc: "HD - Documentales"}
+      - {id: 17 , cat: TV/HD, desc: "HD - Animacion"}
+      - {id: 18 , cat: Audio/Video, desc: "HD - Musica"}
+      - {id: 19 , cat: Movies/HD, desc: "HD - Peliculas"}
+      - {id: 20 , cat: TV/HD, desc: "HD - Series"}
+      - {id: 86 , cat: TV/Sport, desc: "HD - Deportes"}
+      - {id: 87 , cat: Movies/3D, desc: "HD - 3D Full HD"}
+      - {id: 91 , cat: Movies/BluRay, desc: "HD - Blu Ray"}
+      - {id: 107 , cat: Movies/UHD, desc: "HD - 4K"}
+      - {id: 109 , cat: Movies/BluRay, desc: "HD - HDRemux"}
+      - {id: 23 , cat: PC/Games, desc: "Juegos - Emuladores"}
+      - {id: 24 , cat: Console, desc: "Juegos - Microsoft"}
+      - {id: 25 , cat: Console, desc: "Juegos - Nintendo"}
+      - {id: 26 , cat: PC/Games, desc: "Juegos - PC"}
+      - {id: 27 , cat: Console, desc: "Juegos - Sony"}
+      - {id: 29 , cat: Audio/Lossless, desc: "Música - Flac"}
+      - {id: 30 , cat: Audio/MP3, desc: "Música - MP3"}
+      - {id: 31 , cat: Audio/Other, desc: "Música - Otros"}
+      - {id: 73 , cat: Audio/Other, desc: "Música - Discografias"}
+      - {id: 35 , cat: PC/0day, desc: "Software - Linux"}
+      - {id: 36 , cat: PC/Mac, desc: "Software - Mac"}
+      - {id: 37 , cat: PC/0day, desc: "Software - Windows"}
+      - {id: 89 , cat: PC/Phone-Android, desc: "Software - Android"}
+      - {id: 52 , cat: Movies/HD, desc: "HDrip DVDrip - Peliculas"}
+      - {id: 53 , cat: TV, desc: "HDrip DVDrip - Series"}
+      - {id: 62 , cat: Audio/Video, desc: "HDrip DVDrip - Musica"}
+      - {id: 98 , cat: Movies/Foreign, desc: "HDrip DVDrip - V.O.S.E."}
+      - {id: 67 , cat: TV/HD, desc: "MicroHD - Animacion"}
+      - {id: 68 , cat: TV/HD, desc: "MicroHD - Series"}
+      - {id: 69 , cat: TV/Anime, desc: "MicroHD - Anime"}
+      - {id: 70 , cat: TV/Sport, desc: "MicroHD - Deportes"}
+      - {id: 71 , cat: TV/Documentary, desc: "MicroHD - Documentales"}
+      - {id: 72 , cat: Audio/Video, desc: "MicroHD - Musica"}
+      - {id: 103 , cat: Movies/HD, desc: "MicroHD - Peliculas"}
+      - {id: 54 , cat: XXX, desc: "XXX - xxx (Hetero)"}
+      - {id: 74 , cat: XXX, desc: "XXX - xxxy (Gay)"}
+      - {id: 76 , cat: XXX/Imageset, desc: "XXX - xxx (Imagenes)"}
+      - {id: 85 , cat: XXX, desc: "XXX - xxx Hentai"}
+      - {id: 55 , cat: Books/Ebook, desc: "Ebooks - LIBROS"}
+      - {id: 63 , cat: Books/Magazines, desc: "Ebooks - Publicacion Semanal"}
+      - {id: 64 , cat: Books/Magazines, desc: "Ebooks - Prensa Diaria"}
+      - {id: 79 , cat: Books/Other, desc: "Ebooks - Adultos Ebooks"}
+      - {id: 83 , cat: Books/Magazines, desc: "Ebooks - Publicacion Quincena"}
+      - {id: 88 , cat: Books/Magazines, desc: "Ebooks - Publicacion Mensual"}
+      - {id: 97 , cat: Books/Comics, desc: "Ebooks - Comic eBooks"}
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "3"
+      options:
+        "3": "created"
+        "5": "seeders"
+        "4": "size"
+        "2": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "2"
+      options:
+        "2": "desc"
+        "1": "asc"
+    - name: info
+      type: info
+      label: Results Per Page
+      default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+
+  login:
+    path: index.php?page=login
+    method: post
+    inputs:
+      uid: "{{ .Config.username }}"
+      pwd: "{{ .Config.password }}"
+    error:
+      - selector: td.lista span[style="color:#FF0000;"]
+    test:
+      path: index.php
+
+  search:
+    path: index.php
+    inputs:
+      page: torrents
+      $raw: "&category={{ range .Categories }}{{.}};{{end}}"
+      active: 1
+      search: "{{ .Keywords }}"
+      order: "{{ .Config.sort }}"
+      by: "{{ .Config.type }}"
+
+    rows:
+      selector: "#Mcol > div > div.block-content > div > div > div > table > tbody > tr:nth-child(3) > td > table tr:not(:first-child)"
+
+    fields:
+      category:
+        selector: td:nth-child(1) a
+        attribute: href
+        filters:
+          - name: querystring
+            args: category
+      title:
+        selector: td[valign="middle"] a
+      details:
+        selector: td[valign="middle"] a
+        attribute: href
+      banner:
+        optional: true
+        selector: td[valign="middle"] a
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: "src=(.+?) "
+      size:
+        selector: td:nth-child(9)
+      seeders:
+        selector: td:nth-child(5) a
+      leechers:
+        selector: td:nth-child(6) a
+      grabs:
+        text: 0
+      grabs:
+        selector: td:nth-child(7) a
+        optional: true
+      date:
+        selector: td:nth-child(4)
+        filters:
+          - name: dateparse
+            args: "02/01/2006"
+      download:
+        selector: a[href^="download.php"]
+        attribute: href
+      downloadvolumefactor:
+        case:
+          img[src$="gold.gif"]: 0.05
+          img[src$="bronze.gif"]: 0.2
+          img[src$="silver.gif"]: 0.4
+          "*": 1
+      uploadvolumefactor:
+        case:
+          img[src$="2x.gif"]: 2
+          img[src$="3x.gif"]: 3
+          img[src$="4x.gif"]: 4
+          img[src$="5x.gif"]: 5
+          img[src$="6x.gif"]: 6
+          img[src$="7x.gif"]: 7
+          img[src$="8x.gif"]: 8
+          img[src$="9x.gif"]: 9
+          "*": 1
+# xbtitFM 2.1.08
