@@ -4,7 +4,7 @@
   description: "XtremeWrestlingTorrents (XWT) is a Private Torrent Tracker for PROFESSIONAL WRESTLING / MMA"
   language: en-us
   type: private
-  encoding: UTF-8
+  encoding: windows-1252
   links:
     - https://xtremewrestlingtorrents.net/
 
