@@ -1,4 +1,8 @@
-﻿using Jackett.Common.Models.Config;
+﻿using System;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
+using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Microsoft.AspNetCore.Authorization;
@@ -6,10 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System;
-using System.IO;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Jackett.Server.Controllers
 {

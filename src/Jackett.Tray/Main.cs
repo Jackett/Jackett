@@ -1,8 +1,3 @@
-using Jackett.Common.Models.Config;
-using Jackett.Common.Services;
-using Jackett.Common.Services.Interfaces;
-using Jackett.Common.Utils;
-using NLog;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -10,6 +5,11 @@ using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Jackett.Common.Models.Config;
+using Jackett.Common.Services;
+using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
+using NLog;
 
 namespace Jackett.Tray
 {

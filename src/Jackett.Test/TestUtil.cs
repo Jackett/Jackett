@@ -1,13 +1,13 @@
-﻿using Autofac;
-using NLog;
-using System;
+﻿using System;
 using System.IO;
 using System.Reflection;
-using Jackett.Common.Plumbing;
+using Autofac;
 using Jackett.Common.Models.Config;
+using Jackett.Common.Plumbing;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
 using Microsoft.AspNetCore.DataProtection;
+using NLog;
 
 namespace Jackett.Test
 {

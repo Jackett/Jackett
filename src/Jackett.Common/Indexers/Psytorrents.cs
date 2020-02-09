@@ -1,9 +1,9 @@
+using System;
 using Jackett.Common.Indexers.Abstract;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
 using NLog;
-using System;
 
 namespace Jackett.Common.Indexers
 {

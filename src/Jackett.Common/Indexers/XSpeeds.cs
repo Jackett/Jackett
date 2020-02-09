@@ -14,7 +14,6 @@ using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
-using static Jackett.Common.Utils.ParseUtil;
 
 namespace Jackett.Common.Indexers
 {

@@ -1,6 +1,6 @@
-﻿using Jackett.Common.Services.Interfaces;
+﻿using System;
+using Jackett.Common.Services.Interfaces;
 using NLog;
-using System;
 #if !NET461
 using Mono.Unix;
 #endif

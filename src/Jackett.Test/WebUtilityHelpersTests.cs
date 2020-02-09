@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using System.Web;
 using Jackett.Common.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
