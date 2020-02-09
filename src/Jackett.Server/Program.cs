@@ -1,4 +1,9 @@
-﻿using CommandLine;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using CommandLine;
 using CommandLine.Text;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services;
@@ -10,12 +15,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NLog;
 using NLog.Web;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
 
 namespace Jackett.Server
 {

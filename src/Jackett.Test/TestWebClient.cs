@@ -1,11 +1,11 @@
-﻿using Jackett.Common.Models.Config;
-using Jackett.Common.Services.Interfaces;
-using Jackett.Common.Utils.Clients;
-using NLog;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Jackett.Common.Models.Config;
+using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils.Clients;
+using NLog;
 
 namespace Jackett.Test
 {

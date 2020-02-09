@@ -1,3 +1,9 @@
+using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Globalization;
+using System.Text;
+using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
 using CsQuery;
 using Jackett.Common.Models;
@@ -7,12 +13,6 @@ using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Globalization;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Jackett.Common.Indexers
 {

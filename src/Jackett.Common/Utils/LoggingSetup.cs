@@ -1,12 +1,12 @@
+using System;
+using System.IO;
+using System.Text;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services;
 using NLog;
 using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Targets;
-using System;
-using System.IO;
-using System.Text;
 
 namespace Jackett.Common.Utils
 {

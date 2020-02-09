@@ -1,4 +1,7 @@
-﻿using Autofac;
+﻿using System;
+using System.IO;
+using System.Text;
+using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Plumbing;
@@ -12,15 +15,11 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
-using System;
-using System.IO;
-using System.Text;
 #if !NET461
 using Microsoft.Extensions.Hosting;
 #endif

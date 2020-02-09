@@ -1,12 +1,12 @@
-﻿using NLog;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.ServiceProcess;
-using Jackett.Common.Services.Interfaces;
 using System.Reflection;
+using System.ServiceProcess;
 using Jackett.Common.Services;
+using Jackett.Common.Services.Interfaces;
+using NLog;
 
 namespace Jackett.Server.Services
 {

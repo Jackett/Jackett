@@ -1,16 +1,16 @@
-﻿using BencodeNET.Objects;
+﻿using System;
+using System.Text;
+using System.Threading.Tasks;
+using BencodeNET.Objects;
 using BencodeNET.Parsing;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+using Jackett.Server.ActionFilters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using NLog;
-using System;
-using System.Text;
-using System.Threading.Tasks;
-using Jackett.Server.ActionFilters;
 
 namespace Jackett.Server.Controllers
 {

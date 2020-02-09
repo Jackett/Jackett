@@ -1,7 +1,7 @@
-﻿using NUnit.Framework;
-using Autofac;
+﻿using Autofac;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
+using NUnit.Framework;
 
 namespace Jackett.Test.Services
 {

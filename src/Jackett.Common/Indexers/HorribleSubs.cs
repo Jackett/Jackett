@@ -4,7 +4,9 @@ using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -12,8 +14,6 @@ using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System.Text.RegularExpressions;
-using AngleSharp.Html.Parser;
 
 namespace Jackett.Common.Indexers
 {
