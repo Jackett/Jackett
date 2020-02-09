@@ -60,9 +60,9 @@ namespace Jackett.Common.Indexers.Abstract
 
             var searchUrl = APIUrl;
             var queryCollection = new NameValueCollection();
-            
+
             if (!string.IsNullOrEmpty(query.ImdbID))
-            { 
+            {
                 queryCollection.Add("imdbid", query.ImdbID);
             }
             if (searchString != null)

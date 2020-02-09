@@ -91,14 +91,19 @@ namespace Jackett.Common.Indexers
             /* In case of season Packs */
             if (type.Equals("season"))
             {
-                if (dd >= 90) return 4;
-                if (dd >= 30) return 2;
-                if (dd >= 14) return 1.5;
+                if (dd >= 90)
+                    return 4;
+                if (dd >= 30)
+                    return 2;
+                if (dd >= 14)
+                    return 1.5;
             }
             else /* In case of single episodes */
             {
-                if (dd >= 60) return 2; 
-                if (dd >= 30) return 1.5;
+                if (dd >= 60)
+                    return 2;
+                if (dd >= 30)
+                    return 1.5;
             }
             return 1;
         }
@@ -339,7 +344,7 @@ namespace Jackett.Common.Indexers
             int previously_parsed_on_page = query.Offset - (start_page * torrent_per_page) + 1; //+1 because indexing start from 0
             if (previously_parsed_on_page <= 0)
                 previously_parsed_on_page = query.Offset;
-                
+
 
             double pages = Math.Ceiling((double)max_found / (double)torrent_per_page);
 
@@ -351,9 +356,9 @@ namespace Jackett.Common.Indexers
                 start_page++;
             }
 
-            for (page =start_page; (page<=pages && releases.Count<limit);page++)
+            for (page = start_page; (page <= pages && releases.Count < limit); page++)
             {
-                if(query.IsImdbQuery && seriesinfo != null )
+                if (query.IsImdbQuery && seriesinfo != null)
                     exactSearchURL = SearchUrl + "?s=" + query.Season + "&e=" + query.Episode + "&g=" + seriesinfo.id + "&p=" + page + "&now=" + unixTimestamp.ToString();
                 else
                     exactSearchURL = SearchUrl + "?gyors=" + base64coded + "&p=" + page + "&now=" + unixTimestamp.ToString();

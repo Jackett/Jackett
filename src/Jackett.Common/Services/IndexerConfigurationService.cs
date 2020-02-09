@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using Jackett.Common.Indexers;
 using Jackett.Common.Services.Interfaces;

@@ -537,7 +537,7 @@ namespace Jackett.Updater
             }
 
             try
-            {               
+            {
                 if (!Directory.Exists(fileDestinationDirectory))
                 {
                     logger.Info("Creating directory " + fileDestinationDirectory);
@@ -558,8 +558,8 @@ namespace Jackett.Updater
 
         private string GetUpdateLocation()
         {
-	        // Use EscapedCodeBase to avoid Uri reserved characters from causing bugs
-	        // https://stackoverflow.com/questions/896572
+            // Use EscapedCodeBase to avoid Uri reserved characters from causing bugs
+            // https://stackoverflow.com/questions/896572
             var location = new Uri(Assembly.GetEntryAssembly().GetName().EscapedCodeBase);
             // Use LocalPath instead of AbsolutePath to avoid needing to unescape Uri format.
             return new FileInfo(location.LocalPath).DirectoryName;

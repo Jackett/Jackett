@@ -1,4 +1,4 @@
-﻿//Regex sourced from Sonarr  - https://github.com/Sonarr/Sonarr/blob/develop/src/NzbDrone.Core/Parser/QualityParser.cs
+//Regex sourced from Sonarr  - https://github.com/Sonarr/Sonarr/blob/develop/src/NzbDrone.Core/Parser/QualityParser.cs
 
 using System.Text.RegularExpressions;
 using Jackett.Common.Models;

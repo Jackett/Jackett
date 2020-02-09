@@ -1,4 +1,4 @@
-﻿using AngleSharp.Dom;
+using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
@@ -342,12 +342,18 @@ namespace Jackett.Common.Indexers
             var quality = releaseNode.Id.Trim();
             switch (quality.ToLowerInvariant())
             {
-                case "tv720": return "HDTV 720p";
-                case "tv1080": return "HDTV 1080p";
-                case "bd720": return "BDRip 720p";
-                case "bd1080": return "BDRip 1080p";
-                case "hwp": return "SDTV";
-                default: return quality.ToUpperInvariant();
+                case "tv720":
+                    return "HDTV 720p";
+                case "tv1080":
+                    return "HDTV 1080p";
+                case "bd720":
+                    return "BDRip 720p";
+                case "bd1080":
+                    return "BDRip 1080p";
+                case "hwp":
+                    return "SDTV";
+                default:
+                    return quality.ToUpperInvariant();
             }
         }
 

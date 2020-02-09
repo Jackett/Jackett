@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -131,9 +131,12 @@ namespace Jackett.Common.Utils
                     var repl = replacement ?? '\0';
                     if (fancy)
                     {
-                        if (c == '"') repl = '”'; // U+201D right double quotation mark
-                        else if (c == '\'') repl = '’'; // U+2019 right single quotation mark
-                        else if (c == '/') repl = '⁄'; // U+2044 fraction slash
+                        if (c == '"')
+                            repl = '”'; // U+201D right double quotation mark
+                        else if (c == '\'')
+                            repl = '’'; // U+2019 right single quotation mark
+                        else if (c == '/')
+                            repl = '⁄'; // U+2044 fraction slash
                     }
                     if (repl != '\0')
                         sb.Append(repl);

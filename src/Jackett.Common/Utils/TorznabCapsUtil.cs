@@ -1,4 +1,4 @@
-﻿using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
 using Jackett.Common.Models;
 
 namespace Jackett.Common.Utils

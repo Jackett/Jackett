@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 
 namespace Jackett.Common.Models.Config
@@ -31,7 +31,7 @@ namespace Jackett.Common.Models.Config
         public string DataFolder
         {
             get
-            {                
+            {
                 if (!string.IsNullOrWhiteSpace(this.CustomDataFolder))
                 {
                     return this.CustomDataFolder;

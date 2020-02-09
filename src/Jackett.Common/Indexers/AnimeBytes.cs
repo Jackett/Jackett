@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -164,7 +164,7 @@ namespace Jackett.Common.Indexers
             queryCollection.Add("type", searchType);
             queryCollection.Add("searchstr", searchTerm);
             var queryUrl = ScrapeUrl + "?" + queryCollection.GetQueryString();
-            
+
             // Check cache first so we don't query the server for each episode when searching for each episode in a series.
             lock (cache)
             {
@@ -190,7 +190,7 @@ namespace Jackett.Common.Indexers
 
                 var Matches = (long)json["Matches"];
 
-                if(Matches > 0)
+                if (Matches > 0)
                 {
                     var groups = (JArray)json.Groups;
 
@@ -208,7 +208,8 @@ namespace Jackett.Common.Indexers
                             mainTitle = SeriesName;
 
                         synonyms.Add(mainTitle);
-                        if (AddSynonyms){
+                        if (AddSynonyms)
+                        {
                             foreach (string synonym in group["Synonymns"])
                                 synonyms.Add(synonym);
                         }
@@ -347,7 +348,7 @@ namespace Jackett.Common.Indexers
                             if (!AllowRaws && releaseTags.Contains("raw", StringComparer.InvariantCultureIgnoreCase))
                                 continue;
 
-                            var infoString = releaseTags.Aggregate("", (prev, cur) => prev + "[" + cur + "]" );
+                            var infoString = releaseTags.Aggregate("", (prev, cur) => prev + "[" + cur + "]");
                             var MinimumSeedTime = 259200;
                             //  Additional 5 hours per GB
                             MinimumSeedTime += (int)((Size / 1000000000) * 18000);

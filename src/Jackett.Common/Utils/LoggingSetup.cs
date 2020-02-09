@@ -1,4 +1,4 @@
-﻿using Jackett.Common.Models.Config;
+using Jackett.Common.Models.Config;
 using Jackett.Common.Services;
 using NLog;
 using NLog.Config;

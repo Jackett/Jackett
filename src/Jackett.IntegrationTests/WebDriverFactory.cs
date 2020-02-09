@@ -11,7 +11,8 @@ namespace Jackett.IntegrationTests
     // of initializing Selenium, you can keep using that as-is and ignore this sample file; skip ahead to SamplePageTests.cs.
     public static class WebDriverFactory
     {
-        public static IWebDriver CreateFromEnvironmentVariableSettings() {
+        public static IWebDriver CreateFromEnvironmentVariableSettings()
+        {
             // This environment variable gets set by our Azure Pipelines build definition in ./azure-pipelines.yml.
             // That file uses a matrix strategy to run multiple different build jobs for different combinations of OS/browser.
             // Each job sets this environment variable accordingly, and we use it to decide which browser the tests will use.

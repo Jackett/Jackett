@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -158,7 +158,7 @@ namespace Jackett.Common.Indexers
                     release.Title = (string)torrent["titulo"] + " " + (string)torrent["titulo_extra"];
 
                     // for downloading "premium" torrents you need special account
-                    if ((string) torrent["premium"] == "si")
+                    if ((string)torrent["premium"] == "si")
                     {
                         if (includePremium)
                             release.Title += " [PREMIUM]";
@@ -181,7 +181,7 @@ namespace Jackett.Common.Indexers
                     release.Grabs = (long)torrent["snatched"];
 
                     release.InfoHash = (string)torrent["plain_info_hash"];
-                    release.Link = new Uri(DownloadUrl + (string) torrent["id"]);
+                    release.Link = new Uri(DownloadUrl + (string)torrent["id"]);
 
                     var files = (JArray)JsonConvert.DeserializeObject<dynamic>((string)torrent["files_list"]);
                     release.Files = files.Count;

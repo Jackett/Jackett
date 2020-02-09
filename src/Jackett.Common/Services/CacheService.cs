@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
@@ -28,7 +28,7 @@ namespace Jackett.Common.Services
                     cache.Add(trackerCache);
                 }
 
-                foreach(var release in releases.OrderByDescending(i=>i.PublishDate))
+                foreach (var release in releases.OrderByDescending(i => i.PublishDate))
                 {
                     var existingItem = trackerCache.Results.Where(i => i.Result.Guid == release.Guid).FirstOrDefault();
                     if (existingItem == null)
@@ -42,7 +42,7 @@ namespace Jackett.Common.Services
                 }
 
                 // Prune cache
-                foreach(var tracker in cache)
+                foreach (var tracker in cache)
                 {
                     tracker.Results = tracker.Results.Where(x => x.Created > DateTime.Now.Subtract(AGE_LIMIT)).OrderByDescending(i => i.Created).Take(MAX_RESULTS_PER_TRACKER).ToList();
                 }
@@ -65,7 +65,8 @@ namespace Jackett.Common.Services
                         }
                     }
                 }
-                else {
+                else
+                {
                     newItemCount++;
                 }
 
@@ -79,9 +80,9 @@ namespace Jackett.Common.Services
             {
                 var results = new List<TrackerCacheResult>();
 
-                foreach(var tracker in cache)
+                foreach (var tracker in cache)
                 {
-                    foreach(var release in tracker.Results.OrderByDescending(i => i.Result.PublishDate).Take(300))
+                    foreach (var release in tracker.Results.OrderByDescending(i => i.Result.PublishDate).Take(300))
                     {
                         var item = Mapper.Map<TrackerCacheResult>(release.Result);
                         item.FirstSeen = release.Created;
@@ -92,7 +93,7 @@ namespace Jackett.Common.Services
                     }
                 }
 
-                return results.Take(3000).OrderByDescending(i=>i.PublishDate).ToList();
+                return results.Take(3000).OrderByDescending(i => i.PublishDate).ToList();
             }
         }
     }

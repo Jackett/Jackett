@@ -295,7 +295,7 @@ namespace Jackett.Common.Indexers
                 // Getting results & Store content
                 var response = await RequestStringWithCookiesAndRetry(request, ConfigData.CookieHeader.Value);
                 _fDom = response.Content;
- 
+
                 try
                 {
                     var firstPageRows = FindTorrentRows();
@@ -329,11 +329,11 @@ namespace Jackett.Common.Indexers
                     }
 
                     Output("\nFound " + nbResults + " result(s) (+/- " + firstPageRows.Length + ") in " + pageLinkCount + " page(s) for this query !");
-                    Output("\nThere are " + (firstPageRows.Length -2 ) + " results on the first page !");
+                    Output("\nThere are " + (firstPageRows.Length - 2) + " results on the first page !");
 
                     // Loop on results
 
-                    foreach (var tRow in torrentRowList.Skip(1).Take(torrentRowList.Count-2))
+                    foreach (var tRow in torrentRowList.Skip(1).Take(torrentRowList.Count - 2))
                     {
                         Output("Torrent #" + (releases.Count + 1));
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -19,9 +19,9 @@ namespace Jackett.Common.Indexers
 {
     public class TorrentHeaven : BaseWebIndexer
     {
-        public override string[] LegacySiteLinks { get; protected set; } = new string[] { 
-            "https://torrentheaven.myfqdn.info/", 
-        }; 
+        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
+            "https://torrentheaven.myfqdn.info/",
+        };
 
         private string IndexUrl { get { return SiteLink + "index.php"; } }
         private string LoginCompleteUrl { get { return SiteLink + "index.php?strWebValue=account&strWebAction=login_complete&ancestry=verify"; } }

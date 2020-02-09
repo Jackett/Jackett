@@ -333,8 +333,8 @@ namespace Jackett.Common.Indexers
             {
                 logger.Debug(string.Format("{0}: Download selector {1} matched:{2}", ID, downloadSelector, DlUri.OuterHtml));
                 var href = DlUri.GetAttribute("href");
-                downloadlink = new Uri(SiteLink + "forum/" +href);
-                
+                downloadlink = new Uri(SiteLink + "forum/" + href);
+
             }
             else
             {

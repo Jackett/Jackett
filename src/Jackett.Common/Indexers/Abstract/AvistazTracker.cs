@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -112,12 +112,14 @@ namespace Jackett.Common.Indexers.Abstract
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800; // 48 hours
 
-                    var qLink = qRow.Find("a.torrent-filename"); ;
+                    var qLink = qRow.Find("a.torrent-filename");
+                    ;
                     release.Title = qLink.Text().Trim();
                     release.Comments = new Uri(qLink.Attr("href"));
                     release.Guid = release.Comments;
 
-                    var qDownload = qRow.Find("a.torrent-download-icon"); ;
+                    var qDownload = qRow.Find("a.torrent-download-icon");
+                    ;
                     release.Link = new Uri(qDownload.Attr("href"));
 
                     var dateStr = qRow.Find("td:eq(3) > span").Text().Trim();

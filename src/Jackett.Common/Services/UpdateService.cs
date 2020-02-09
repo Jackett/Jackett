@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -23,7 +23,7 @@ using NLog;
 namespace Jackett.Common.Services
 {
 
-    public class UpdateService: IUpdateService
+    public class UpdateService : IUpdateService
     {
         Logger logger;
         WebClient client;
@@ -127,7 +127,7 @@ namespace Jackett.Common.Services
                     EmulateBrowser = false
                 });
 
-                if(response.Status != System.Net.HttpStatusCode.OK)
+                if (response.Status != System.Net.HttpStatusCode.OK)
                 {
                     logger.Error("Failed to get the release list: " + response.Status);
                 }
@@ -193,7 +193,7 @@ namespace Jackett.Common.Services
             else
             {
                 return Path.Combine(tempDirectory, "Jackett", "JackettUpdater.exe");
-            }         
+            }
         }
 
         private string GetCurrentVersion()
@@ -223,11 +223,13 @@ namespace Jackett.Common.Services
                 return;
             }
 
-            try {
+            try
+            {
                 DirectoryInfo d = new DirectoryInfo(tempDir);
                 foreach (var dir in d.GetDirectories("JackettUpdate-*"))
                 {
-                    try {
+                    try
+                    {
                         logger.Info("Deleting JackettUpdate temp files from " + dir.FullName);
                         dir.Delete(true);
                     }
@@ -344,7 +346,7 @@ namespace Jackett.Common.Services
             }
 
             var exe = Path.GetFileName(ExePath());
-            var args = string.Join(" ", Environment.GetCommandLineArgs().Skip(1).Select(a => a.Contains(" ") ? "\"" + a + "\"" : a )).Replace("\"", "\\\"");
+            var args = string.Join(" ", Environment.GetCommandLineArgs().Skip(1).Select(a => a.Contains(" ") ? "\"" + a + "\"" : a)).Replace("\"", "\\\"");
 
             var startInfo = new ProcessStartInfo();
             startInfo.UseShellExecute = false;

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -45,14 +45,14 @@ namespace Jackett.Common.Indexers
             this.configData.DisplayText.Value = "Only the results from the first search result page are shown, adjust your profile settings to show a reasonable amount (it looks like there's no maximum).";
             this.configData.DisplayText.Name = "Notice";
 
-            AddCategoryMapping(1,  TorznabCatType.Other); // Anderes
-            AddCategoryMapping(2,  TorznabCatType.TVAnime); // Anime
+            AddCategoryMapping(1, TorznabCatType.Other); // Anderes
+            AddCategoryMapping(2, TorznabCatType.TVAnime); // Anime
             AddCategoryMapping(34, TorznabCatType.PC); // Appz/Linux
             AddCategoryMapping(35, TorznabCatType.PCMac); // Appz/Mac
             AddCategoryMapping(36, TorznabCatType.PC); // Appz/Other
             AddCategoryMapping(20, TorznabCatType.PC); // Appz/Win
-            AddCategoryMapping(3,  TorznabCatType.TVDocumentary); // Doku/Alle Formate
-            AddCategoryMapping(4,  TorznabCatType.Books); // EBooks
+            AddCategoryMapping(3, TorznabCatType.TVDocumentary); // Doku/Alle Formate
+            AddCategoryMapping(4, TorznabCatType.Books); // EBooks
             AddCategoryMapping(12, TorznabCatType.ConsolePS4); // Games PS / PSX
             AddCategoryMapping(11, TorznabCatType.ConsoleNDS); // Games/Nintendo DS
             AddCategoryMapping(10, TorznabCatType.PCGames); // Games/PC
@@ -63,11 +63,11 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(30, TorznabCatType.Other); // International
             AddCategoryMapping(17, TorznabCatType.Other); // MegaPack
             AddCategoryMapping(43, TorznabCatType.Movies3D); // Movie/3D
-            AddCategoryMapping(5,  TorznabCatType.MoviesDVD); // Movie/DVD/R
-            AddCategoryMapping(6,  TorznabCatType.MoviesHD); // Movie/HD 1080p
-            AddCategoryMapping(7,  TorznabCatType.MoviesHD); // Movie/HD 720p
+            AddCategoryMapping(5, TorznabCatType.MoviesDVD); // Movie/DVD/R
+            AddCategoryMapping(6, TorznabCatType.MoviesHD); // Movie/HD 1080p
+            AddCategoryMapping(7, TorznabCatType.MoviesHD); // Movie/HD 720p
             AddCategoryMapping(32, TorznabCatType.MoviesOther); // Movie/TVRip
-            AddCategoryMapping(9,  TorznabCatType.MoviesOther); // Movie/XviD,DivX,h264
+            AddCategoryMapping(9, TorznabCatType.MoviesOther); // Movie/XviD,DivX,h264
             AddCategoryMapping(26, TorznabCatType.XXX); // Movie/XXX
             AddCategoryMapping(41, TorznabCatType.XXXOther); // Movie/XXX/Other
             AddCategoryMapping(42, TorznabCatType.XXXPacks); // Movie/XXX/Pack
@@ -105,7 +105,7 @@ namespace Jackett.Common.Indexers
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            
+
             var searchString = query.GetQueryString();
             var searchUrl = BrowseUrl;
             var queryCollection = new NameValueCollection();
@@ -145,14 +145,15 @@ namespace Jackett.Common.Indexers
                     var qRow = row.Cq();
                     var flagImgs = qRow.Find("table tbody tr: eq(0) td > img");
                     List<string> flags = new List<string>();
-                    flagImgs.Each(flagImg => {
+                    flagImgs.Each(flagImg =>
+                    {
                         var flag = flagImg.GetAttribute("src").Replace("pic/torrent_", "").Replace(".gif", "").ToUpper();
                         if (flag == "OU")
                             release.DownloadVolumeFactor = 0;
                         else
                             flags.Add(flag);
                     });
-                        
+
                     var titleLink = qRow.Find("table tbody tr:eq(0) td a:has(b)").First();
                     var DLLink = qRow.Find("td.tableb > a:has(img[title=\"Torrent herunterladen\"])").First();
                     release.Comments = new Uri(SiteLink + titleLink.Attr("href").Replace("&hit=1", ""));

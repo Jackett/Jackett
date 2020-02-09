@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
@@ -175,7 +175,8 @@ namespace Jackett.Common.Services
         public string GetContentFolder()
         {
             // If we are debugging we can use the non copied content.
-            string dir = Path.Combine(ApplicationFolder(), "Content"); ;
+            string dir = Path.Combine(ApplicationFolder(), "Content");
+            ;
 
 #if DEBUG
             // When we are running in debug use the source files
@@ -204,7 +205,8 @@ namespace Jackett.Common.Services
             }
 
             // If we are debugging we can use the non copied definitions.
-            string dir = Path.Combine(ApplicationFolder(), "Definitions"); ;
+            string dir = Path.Combine(ApplicationFolder(), "Definitions");
+            ;
 
 #if DEBUG
             // When we are running in debug use the source files
@@ -266,7 +268,8 @@ namespace Jackett.Common.Services
 
                 // Check for legacy settings
 
-                var path = Path.Combine(GetAppDataFolder(), "config.json"); ;
+                var path = Path.Combine(GetAppDataFolder(), "config.json");
+                ;
                 var jsonReply = new JObject();
                 if (File.Exists(path))
                 {

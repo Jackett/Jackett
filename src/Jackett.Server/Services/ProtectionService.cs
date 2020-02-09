@@ -37,7 +37,7 @@ namespace Jackett.Server.Services
 
                 _protector = provider.CreateProtector(purpose);
             }
-            
+
         }
 
         public string Protect(string plainText)

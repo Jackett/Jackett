@@ -1,4 +1,4 @@
-﻿using System.Threading;
+using System.Threading;
 using Jackett.Common.Services.Interfaces;
 
 namespace Jackett.Common.Services

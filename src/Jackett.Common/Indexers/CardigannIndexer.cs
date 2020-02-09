@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -135,7 +135,8 @@ namespace Jackett.Common.Indexers
                 }
                 else
                 {
-                    item = new StringItem { Value = Setting.Default }; ;
+                    item = new StringItem { Value = Setting.Default };
+                    ;
                 }
 
                 item.Name = Setting.Label;
@@ -423,7 +424,7 @@ namespace Jackett.Common.Indexers
 
         protected bool checkForError(WebClientStringResult loginResult, IList<errorBlock> errorBlocks)
         {
-            if(loginResult.Status == HttpStatusCode.Unauthorized) // e.g. used by YGGtorrent
+            if (loginResult.Status == HttpStatusCode.Unauthorized) // e.g. used by YGGtorrent
                 throw new ExceptionWithConfigData("401 Unauthorized, check your credentials", configData);
 
             if (errorBlocks == null)

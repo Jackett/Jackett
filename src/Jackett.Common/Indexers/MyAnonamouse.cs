@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -190,7 +190,7 @@ namespace Jackett.Common.Indexers
                 int index = 0;
                 foreach (string cat in catList)
                 {
-                    qParams.Add("tor[cat]["+index+"]", cat);
+                    qParams.Add("tor[cat][" + index + "]", cat);
                     index++;
                 }
             }
@@ -217,7 +217,7 @@ namespace Jackett.Common.Indexers
                 var sitelink = new Uri(SiteLink);
 
                 var error = jsonContent.Value<string>("error");
-                if(error != null)
+                if (error != null)
                 {
                     if (error == "Nothing returned, out of 0")
                         return releases;
@@ -226,7 +226,7 @@ namespace Jackett.Common.Indexers
                 foreach (var item in jsonContent.Value<JArray>("data"))
                 {
                     var release = new ReleaseInfo();
-                        
+
                     var id = item.Value<long>("id");
                     release.Title = item.Value<string>("title");
 
@@ -274,7 +274,7 @@ namespace Jackett.Common.Indexers
                     var size = item.Value<string>("size");
                     release.Size = ReleaseInfo.GetBytes(size);
                     var free = item.Value<int>("free");
-                    
+
                     if (free == 1)
                         release.DownloadVolumeFactor = 0;
                     else

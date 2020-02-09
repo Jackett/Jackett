@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Net;
 
 namespace Jackett.Common.Utils.Clients
@@ -13,13 +13,13 @@ namespace Jackett.Common.Utils.Clients
 
         public bool IsRedirect
         {
-          get
+            get
             {
-             return  Status == System.Net.HttpStatusCode.Redirect ||
-                     Status == System.Net.HttpStatusCode.RedirectKeepVerb ||
-                     Status == System.Net.HttpStatusCode.RedirectMethod ||
-                     Status == System.Net.HttpStatusCode.Found ||
-                     Status == System.Net.HttpStatusCode.MovedPermanently;
+                return Status == System.Net.HttpStatusCode.Redirect ||
+                        Status == System.Net.HttpStatusCode.RedirectKeepVerb ||
+                        Status == System.Net.HttpStatusCode.RedirectMethod ||
+                        Status == System.Net.HttpStatusCode.Found ||
+                        Status == System.Net.HttpStatusCode.MovedPermanently;
             }
         }
     }

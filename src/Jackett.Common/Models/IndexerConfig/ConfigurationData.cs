@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Jackett.Common.Services.Interfaces;
@@ -37,7 +37,7 @@ namespace Jackett.Common.Models.IndexerConfig
             LoadValuesFromJson(json, ps);
         }
 
-        public void LoadValuesFromJson(JToken json, IProtectionService ps= null)
+        public void LoadValuesFromJson(JToken json, IProtectionService ps = null)
         {
             if (json == null)
                 return;
@@ -184,7 +184,7 @@ namespace Jackett.Common.Models.IndexerConfig
             {
                 return dynamics[ID];
             }
-            catch(KeyNotFoundException)
+            catch (KeyNotFoundException)
             {
                 return null;
             }

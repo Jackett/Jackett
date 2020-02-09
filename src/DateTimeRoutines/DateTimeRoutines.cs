@@ -351,7 +351,7 @@ namespace DateTimeRoutines
             parsed_time = null;
 
             string time_zone_r;
-            if(default_format == DateTimeFormat.USA_DATE)
+            if (default_format == DateTimeFormat.USA_DATE)
                 time_zone_r = @"(?:\s*(?'time_zone'UTC|GMT|CST|EST))?";
             else
                 time_zone_r = @"(?:\s*(?'time_zone'UTC|GMT))?";
@@ -363,13 +363,13 @@ namespace DateTimeRoutines
                 m = Regex.Match(str.Substring(parsed_date.IndexOfDate + parsed_date.LengthOfDate), @"(?<=^\s*,?\s+|^\s*at\s*|^\s*[T\-]\s*)(?'hour'\d{2})\s*:\s*(?'minute'\d{2})\s*:\s*(?'second'\d{2})\s+(?'offset_sign'[\+\-])(?'offset_hh'\d{2}):?(?'offset_mm'\d{2})(?=$|[^\d\w])", RegexOptions.Compiled);
                 if (!m.Success)
                     //look for <date> [h]h:mm[:ss] [PM/AM] [UTC/GMT] 
-                    m = Regex.Match(str.Substring(parsed_date.IndexOfDate + parsed_date.LengthOfDate), @"(?<=^\s*,?\s+|^\s*at\s*|^\s*[T\-]\s*)(?'hour'\d{1,2})\s*:\s*(?'minute'\d{2})\s*(?::\s*(?'second'\d{2}))?(?:\s*(?'ampm'AM|am|PM|pm))?"+time_zone_r+@"(?=$|[^\d\w])", RegexOptions.Compiled);
+                    m = Regex.Match(str.Substring(parsed_date.IndexOfDate + parsed_date.LengthOfDate), @"(?<=^\s*,?\s+|^\s*at\s*|^\s*[T\-]\s*)(?'hour'\d{1,2})\s*:\s*(?'minute'\d{2})\s*(?::\s*(?'second'\d{2}))?(?:\s*(?'ampm'AM|am|PM|pm))?" + time_zone_r + @"(?=$|[^\d\w])", RegexOptions.Compiled);
                 if (!m.Success)
                     //look for [h]h:mm:ss [PM/AM] [UTC/GMT] <date>
-                    m = Regex.Match(str.Substring(0, parsed_date.IndexOfDate), @"(?<=^|[^\d])(?'hour'\d{1,2})\s*:\s*(?'minute'\d{2})\s*(?::\s*(?'second'\d{2}))?(?:\s*(?'ampm'AM|am|PM|pm))?"+time_zone_r+@"(?=$|[\s,]+)", RegexOptions.Compiled);
+                    m = Regex.Match(str.Substring(0, parsed_date.IndexOfDate), @"(?<=^|[^\d])(?'hour'\d{1,2})\s*:\s*(?'minute'\d{2})\s*(?::\s*(?'second'\d{2}))?(?:\s*(?'ampm'AM|am|PM|pm))?" + time_zone_r + @"(?=$|[\s,]+)", RegexOptions.Compiled);
                 if (!m.Success)
                     //look for [h]h:mm:ss [PM/AM] [UTC/GMT] within <date>
-                    m = Regex.Match(str.Substring(parsed_date.IndexOfDate, parsed_date.LengthOfDate), @"(?<=^|[^\d])(?'hour'\d{1,2})\s*:\s*(?'minute'\d{2})\s*(?::\s*(?'second'\d{2}))?(?:\s*(?'ampm'AM|am|PM|pm))?"+time_zone_r+@"(?=$|[\s,]+)", RegexOptions.Compiled);
+                    m = Regex.Match(str.Substring(parsed_date.IndexOfDate, parsed_date.LengthOfDate), @"(?<=^|[^\d])(?'hour'\d{1,2})\s*:\s*(?'minute'\d{2})\s*(?::\s*(?'second'\d{2}))?(?:\s*(?'ampm'AM|am|PM|pm))?" + time_zone_r + @"(?=$|[\s,]+)", RegexOptions.Compiled);
             }
             else//look anywhere within string
             {
@@ -377,7 +377,7 @@ namespace DateTimeRoutines
                 m = Regex.Match(str, @"(?<=^|\s+|\s*T\s*)(?'hour'\d{2})\s*:\s*(?'minute'\d{2})\s*:\s*(?'second'\d{2})\s+(?'offset_sign'[\+\-])(?'offset_hh'\d{2}):?(?'offset_mm'\d{2})?(?=$|[^\d\w])", RegexOptions.Compiled);
                 if (!m.Success)
                     //look for [h]h:mm[:ss] [PM/AM] [UTC/GMT]
-                    m = Regex.Match(str, @"(?<=^|\s+|\s*T\s*)(?'hour'\d{1,2})\s*:\s*(?'minute'\d{2})\s*(?::\s*(?'second'\d{2}))?(?:\s*(?'ampm'AM|am|PM|pm))?"+time_zone_r+@"(?=$|[^\d\w])", RegexOptions.Compiled);
+                    m = Regex.Match(str, @"(?<=^|\s+|\s*T\s*)(?'hour'\d{1,2})\s*:\s*(?'minute'\d{2})\s*(?::\s*(?'second'\d{2}))?(?:\s*(?'ampm'AM|am|PM|pm))?" + time_zone_r + @"(?=$|[^\d\w])", RegexOptions.Compiled);
             }
 
             if (!m.Success)
@@ -407,7 +407,7 @@ namespace DateTimeRoutines
                 hour -= 12;
 
             DateTime date_time = new DateTime(1, 1, 1, hour, minute, second);
-            
+
             if (m.Groups["offset_hh"].Success)
             {
                 int offset_hh = int.Parse(m.Groups["offset_hh"].Value);
@@ -428,7 +428,7 @@ namespace DateTimeRoutines
                 {
                     case "UTC":
                     case "GMT":
-                    utc_offset = new TimeSpan(0, 0, 0);
+                        utc_offset = new TimeSpan(0, 0, 0);
                         break;
                     case "CST":
                         utc_offset = new TimeSpan(-6, 0, 0);
@@ -597,9 +597,9 @@ namespace DateTimeRoutines
             }
             else
                 if (year > 30)
-                    year += 1900;
-                else
-                    year += 2000;
+                year += 1900;
+            else
+                year += 2000;
 
             try
             {

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
@@ -9,7 +9,7 @@ namespace Jackett.Common.Services
 {
 
     [Target("LogService")]
-    public class LogCacheService: TargetWithLayout, ILogCacheService
+    public class LogCacheService : TargetWithLayout, ILogCacheService
     {
         private static List<CachedLog> logs = new List<CachedLog>();
 
@@ -21,7 +21,7 @@ namespace Jackett.Common.Services
                 {
                     Level = l.Level.Name,
                     Message = l.FormattedMessage,
-                    When = l.TimeStamp 
+                    When = l.TimeStamp
                 });
                 logs = logs.Take(200).ToList();
             }

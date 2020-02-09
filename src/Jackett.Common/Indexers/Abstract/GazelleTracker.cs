@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -235,8 +235,9 @@ namespace Jackett.Common.Indexers.Abstract
             var torrentId = torrent["torrentId"];
 
             var time = (string)torrent["time"];
-            if (!string.IsNullOrEmpty(time)) {
-                release.PublishDate = DateTime.ParseExact(time+" +0000", "yyyy-MM-dd HH:mm:ss zzz", CultureInfo.InvariantCulture);
+            if (!string.IsNullOrEmpty(time))
+            {
+                release.PublishDate = DateTime.ParseExact(time + " +0000", "yyyy-MM-dd HH:mm:ss zzz", CultureInfo.InvariantCulture);
             }
 
             var flags = new List<string>();
@@ -249,7 +250,7 @@ namespace Jackett.Common.Indexers.Abstract
             if (!string.IsNullOrEmpty(encoding))
                 flags.Add(encoding);
 
-            if(torrent["hasLog"] != null && (bool)torrent["hasLog"])
+            if (torrent["hasLog"] != null && (bool)torrent["hasLog"])
             {
                 var logScore = (string)torrent["logScore"];
                 flags.Add("Log (" + logScore + "%)");

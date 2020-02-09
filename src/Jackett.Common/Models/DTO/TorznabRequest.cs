@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Jackett.Common.Utils;
 
 namespace Jackett.Common.Models.DTO

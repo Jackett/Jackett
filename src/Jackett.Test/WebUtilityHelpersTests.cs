@@ -34,7 +34,7 @@ namespace Jackett.Test
             };
         }
 
-        
+
 
         [TestMethod]
         public void WebUtilityHelpers_UrlEncode_CorrectlyEncodes()

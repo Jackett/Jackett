@@ -1,4 +1,4 @@
-﻿using Autofac;
+using Autofac;
 using System;
 using System.Reflection;
 using System.IO;
@@ -17,30 +17,30 @@ namespace Jackett.Common.Plumbing
     {
         private RuntimeSettings _runtimeSettings;
 
-        public JackettModule (RuntimeSettings runtimeSettings)
-            {
+        public JackettModule(RuntimeSettings runtimeSettings)
+        {
             _runtimeSettings = runtimeSettings;
         }
 
         protected override void Load(ContainerBuilder builder)
         {
             // Just register everything! TODO: Something better and more explicit than scanning everything.
-                builder.RegisterAssemblyTypes(typeof(JackettModule).Assembly)
-                       .Except<IIndexer>()
-                       .Except<IImdbResolver>()
-                       .Except<OmdbResolver>()
-                       .Except<IFallbackStrategyProvider>()
-                       .Except<ImdbFallbackStrategyProvider>()
-                       .Except<IFallbackStrategy>()
-                       .Except<ImdbFallbackStrategy>()
-                       .Except<IResultFilterProvider>()
-                       .Except<ImdbTitleResultFilterProvider>()
-                       .Except<IResultFilter>()
-                       .Except<ImdbTitleResultFilterProvider>()
-                       .Except<BaseMetaIndexer>()
-                       .Except<AggregateIndexer>()
-                       .Except<CardigannIndexer>()
-                       .AsImplementedInterfaces().SingleInstance();
+            builder.RegisterAssemblyTypes(typeof(JackettModule).Assembly)
+                   .Except<IIndexer>()
+                   .Except<IImdbResolver>()
+                   .Except<OmdbResolver>()
+                   .Except<IFallbackStrategyProvider>()
+                   .Except<ImdbFallbackStrategyProvider>()
+                   .Except<IFallbackStrategy>()
+                   .Except<ImdbFallbackStrategy>()
+                   .Except<IResultFilterProvider>()
+                   .Except<ImdbTitleResultFilterProvider>()
+                   .Except<IResultFilter>()
+                   .Except<ImdbTitleResultFilterProvider>()
+                   .Except<BaseMetaIndexer>()
+                   .Except<AggregateIndexer>()
+                   .Except<CardigannIndexer>()
+                   .AsImplementedInterfaces().SingleInstance();
 
 
             builder.RegisterInstance(_runtimeSettings);
@@ -131,6 +131,6 @@ namespace Jackett.Common.Plumbing
             return usehttpclient;
         }
 
-      
+
     }
 }

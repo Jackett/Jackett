@@ -34,7 +34,7 @@ namespace Jackett.Test
 
         override public Task<WebClientByteResult> GetBytes(WebRequest request)
         {
-           return Task.FromResult< WebClientByteResult>(byteCallbacks.Where(r => r.Key.Equals(request)).First().Value.Invoke(request));
+            return Task.FromResult<WebClientByteResult>(byteCallbacks.Where(r => r.Key.Equals(request)).First().Value.Invoke(request));
         }
 
         override public Task<WebClientStringResult> GetString(WebRequest request)
@@ -44,7 +44,7 @@ namespace Jackett.Test
 
         override public void Init()
         {
-          
+
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Runtime.InteropServices;
 
 namespace Jackett.Common.Utils
@@ -70,37 +70,37 @@ namespace Jackett.Common.Utils
             switch (variant)
             {
                 case JackettVariant.FullFrameworkWindows:
-                {
-                    return "Jackett.Binaries.Windows.zip";
-                }
+                    {
+                        return "Jackett.Binaries.Windows.zip";
+                    }
                 case JackettVariant.Mono:
-                {
-                    return "Jackett.Binaries.Mono.tar.gz";
-                }
+                    {
+                        return "Jackett.Binaries.Mono.tar.gz";
+                    }
                 case JackettVariant.CoreWindows:
-                {
-                    return "Jackett.Binaries.Windows.zip";
-                }
+                    {
+                        return "Jackett.Binaries.Windows.zip";
+                    }
                 case JackettVariant.CoreMacOs:
-                {
-                    return "Jackett.Binaries.macOS.tar.gz";
-                }
+                    {
+                        return "Jackett.Binaries.macOS.tar.gz";
+                    }
                 case JackettVariant.CoreLinuxAmdx64:
-                {
-                    return "Jackett.Binaries.LinuxAMDx64.tar.gz";
-                }
+                    {
+                        return "Jackett.Binaries.LinuxAMDx64.tar.gz";
+                    }
                 case JackettVariant.CoreLinuxArm32:
-                {
-                    return "Jackett.Binaries.LinuxARM32.tar.gz";
-                }
+                    {
+                        return "Jackett.Binaries.LinuxARM32.tar.gz";
+                    }
                 case JackettVariant.CoreLinuxArm64:
-                {
-                    return "Jackett.Binaries.LinuxARM64.tar.gz";
-                }
+                    {
+                        return "Jackett.Binaries.LinuxARM64.tar.gz";
+                    }
                 default:
-                {
-                    return "";
-                }
+                    {
+                        return "";
+                    }
             }
         }
 
