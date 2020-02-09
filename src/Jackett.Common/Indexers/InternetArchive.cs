@@ -24,6 +24,7 @@ namespace Jackett.Common.Indexers
         private string SearchUrl => SiteLink + "advancedsearch.php";
         private string CommentsUrl => SiteLink + "details/";
         private string LinkUrl => SiteLink + "download/";
+
         private readonly NameValueCollection _trackers = new NameValueCollection
         {
             {"tr", "udp://tracker.coppersurfer.tk:6969/announce"},
@@ -32,6 +33,7 @@ namespace Jackett.Common.Indexers
             {"tr", "udp://tracker.internetwarriors.net:1337/announce"},
             {"tr", "udp://open.demonii.si:1337/announce"}
         };
+
         private string _sort;
         private string _order;
         private bool _titleOnly;
@@ -125,6 +127,7 @@ namespace Jackett.Common.Indexers
                     searchTerm = query.SearchTerm + " AND " + searchTerm;
                 sort = _order + _sort;
             }
+
             var querycats = MapTorznabCapsToTrackers(query);
             if (querycats.Any())
                 searchTerm += " AND mediatype:(" + string.Join(" OR ", querycats) + ")";
@@ -140,9 +143,8 @@ namespace Jackett.Common.Indexers
             var fullSearchUrl = SearchUrl + "?" + qc.GetQueryString();
             var result = await RequestStringWithCookiesAndRetry(fullSearchUrl);
             foreach (var torrent in ParseResponse(result))
-            {
                 releases.Add(MakeRelease(torrent));
-            }
+
             return releases;
         }
 
@@ -168,29 +170,24 @@ namespace Jackett.Common.Indexers
         {
             var release = new ReleaseInfo();
 
-            var id = (string)torrent["identifier"];
-            var title = torrent["title"] is JArray ?
-                (string)((JArray)torrent["title"])[0] :
-                (string)torrent["title"];
-
+            var title = GetFieldAs<string>("title", torrent);
             release.Title = title;
+
+            var id = GetFieldAs<string>("identifier", torrent);
             release.Comments = new Uri(CommentsUrl + id);
             release.Guid = release.Comments;
 
-            release.PublishDate = DateTime.Now;
-            if (torrent["publicdate"] != null)
-                release.PublishDate = DateTime.Parse((string)torrent["publicdate"]);
-
-            release.Category = MapTrackerCatToNewznab((string)torrent["mediatype"]);
-            release.Size = (long)torrent["item_size"];
-
+            release.PublishDate = GetFieldAs<DateTime>("publicdate", torrent);
+            release.Category = MapTrackerCatToNewznab(GetFieldAs<string>("mediatype", torrent));
+            release.Size = GetFieldAs<long>("item_size", torrent);
             release.Seeders = 1;
             release.Peers = 2;
-            release.Grabs = (long)torrent["downloads"];
+            release.Grabs = GetFieldAs<long>("downloads", torrent);
 
+            var btih = GetFieldAs<string>("btih", torrent);
             release.Link = new Uri(LinkUrl + id + "/" + id + "_archive.torrent");
-            release.MagnetUri = GenerateMagnetLink((string)torrent["btih"], title);
-            release.InfoHash = (string)torrent["btih"];
+            release.MagnetUri = GenerateMagnetLink(btih, title);
+            release.InfoHash = btih;
 
             release.MinimumRatio = 1;
             release.MinimumSeedTime = 172800; // 48 hours
@@ -205,5 +202,8 @@ namespace Jackett.Common.Indexers
             _trackers.Set("dn", title);
             return new Uri("magnet:?xt=urn:btih:" + btih + "&" + _trackers.GetQueryString());
         }
+
+        private static T GetFieldAs<T>(string field, JToken torrent) =>
+            torrent[field] is JArray array ? array.First.ToObject<T>() : torrent.Value<T>(field);
     }
 }
