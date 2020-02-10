@@ -86,6 +86,10 @@
     test:
       path: index.php
 
+  download:
+    selector: a[href^="download.php?id="]
+    attribute: href
+
   search:
     paths:
       - path: index.php
@@ -115,7 +119,7 @@
             args: category
       details:
         selector: a[href^="index.php?page=torrent-details"]
-        attribute: href            
+        attribute: href
       download:
         selector: a[href^="index.php?page=downloadcheck"]
         attribute: href
