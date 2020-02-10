@@ -17,20 +17,17 @@ namespace Jackett.Common.Indexers.Abstract
 {
     public abstract class AvistazTracker : BaseWebIndexer
     {
-        private string LoginUrl { get { return SiteLink + "auth/login"; } }
-        private string SearchUrl { get { return SiteLink + "torrents?in=1&type={0}&search={1}"; } }
+        private string LoginUrl => SiteLink + "auth/login";
+        private string SearchUrl => SiteLink + "torrents?in=1&type={0}&search={1}";
 
-        new ConfigurationDataBasicLogin configData
+        private new ConfigurationDataBasicLogin configData
         {
-            get { return (ConfigurationDataBasicLogin)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataBasicLogin)base.configData;
+            set => base.configData = value;
         }
 
         // hook to adjust the search term
-        protected virtual string GetSearchTerm(TorznabQuery query)
-        {
-            return query.GetQueryString();
-        }
+        protected string GetSearchTerm(TorznabQuery query) => $"{query.SearchTerm} {query.GetEpisodeSearchString()}";
 
         public AvistazTracker(IIndexerConfigurationService configService, Utils.Clients.WebClient webClient, Logger logger, IProtectionService protectionService, string name, string desc, string link)
             : base(name: name,
@@ -83,7 +80,7 @@ namespace Jackett.Common.Indexers.Abstract
             var releases = new List<ReleaseInfo>();
 
             var categoryMapping = MapTorznabCapsToTrackers(query).Distinct();
-            string category = "0"; // Aka all
+            var category = "0"; // Aka all
             if (categoryMapping.Count() == 1)
             {
                 category = categoryMapping.First();
@@ -106,11 +103,12 @@ namespace Jackett.Common.Indexers.Abstract
                 var rows = dom["table:has(thead) > tbody > tr"];
                 foreach (var row in rows)
                 {
-                    CQ qRow = row.Cq();
-                    var release = new ReleaseInfo();
-
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800; // 48 hours
+                    var qRow = row.Cq();
+                    var release = new ReleaseInfo
+                    {
+                        MinimumRatio = 1,
+                        MinimumSeedTime = 172800 // 48 hours
+                    };
 
                     var qLink = qRow.Find("a.torrent-filename");
                     ;
