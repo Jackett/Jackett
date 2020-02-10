@@ -120,8 +120,6 @@
       details:
         selector: a[href^="index.php?page=torrent-details"]
         attribute: href
-      # https://the-resurrection.pro/index.php?page=downloadcheck&id=c48be660fb089aa14a00b4ef04b1d6ce1eb4752e
-      # https://the-resurrection.pro/download.php?id=c48be660fb089aa14a00b4ef04b1d6ce1eb4752e&f=Die.fantastische.Reise.des.Dr.Dolittle.2020.German.DL.LD.1080p.WEBRip.x264-PRD.torrent&key=0
       download:
         selector: a[href^="index.php?page=downloadcheck"]
         attribute: href
