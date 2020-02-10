@@ -395,6 +395,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Shazbat
  * Shellife (SL)
  * SiamBIT
+ * SnowPT (SSPT)
  * SpaceTorrent
  * SpeedCD
  * SpeedTorrent Reloaded
