@@ -703,6 +703,10 @@ dotnet publish Jackett.Server -f netcoreapp3.1 --self-contained -r linux-x64 -c 
 
 ## Screenshots
 
-![screenshot](https://i.imgur.com/0d1nl7g.png "screenshot")
+![screenshot](https://raw.githubusercontent.com/Jackett/Jackett/master/.github/jackett-screenshot1.png)
+
+![screenshot](https://raw.githubusercontent.com/Jackett/Jackett/master/.github/jackett-screenshot2.png)
+
+![screenshot](https://raw.githubusercontent.com/Jackett/Jackett/master/.github/jackett-screenshot3.png)
 
 [inviteneeded]: https://raw.githubusercontent.com/Jackett/Jackett/master/.github/label-inviteneeded.png
