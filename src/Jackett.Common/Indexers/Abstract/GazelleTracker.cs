@@ -347,6 +347,7 @@ namespace Jackett.Common.Indexers.Abstract
             {
                 var html = Encoding.GetString(content);
                 if (html.Contains("You do not have any freeleech tokens left.")
+                    || html.Contains("You do not have enough freeleech tokens left.")
                     || html.Contains("This torrent is too large."))
                 {
                     // download again with usetoken=0
