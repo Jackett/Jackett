@@ -1532,7 +1532,7 @@ namespace Jackett.Common.Indexers
             }
             try
             {
-                string RowsSelector = "table#tor-tbl > tbody > tr";
+                var RowsSelector = "table#tor-tbl > tbody > tr";
 
                 var SearchResultParser = new HtmlParser();
                 var SearchResultDocument = SearchResultParser.ParseDocument(results.Content);

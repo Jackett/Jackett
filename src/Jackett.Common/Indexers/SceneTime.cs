@@ -108,7 +108,7 @@ namespace Jackett.Common.Indexers
         {
             var loginPage = await RequestStringWithCookies(StartPageUrl, string.Empty);
             CQ cq = loginPage.Content;
-            var result = this.configData;
+            var result = configData;
             result.Captcha.Version = "2";
             CQ recaptcha = cq.Find(".g-recaptcha").Attr("data-sitekey");
             if (recaptcha.Length != 0)
@@ -176,8 +176,8 @@ namespace Jackett.Common.Indexers
             qParams.Add("cata", "yes");
             qParams.Add("sec", "jax");
 
-            List<string> catList = MapTorznabCapsToTrackers(query);
-            foreach (string cat in catList)
+            var catList = MapTorznabCapsToTrackers(query);
+            foreach (var cat in catList)
             {
                 qParams.Add("c" + cat, "1");
             }
@@ -195,25 +195,25 @@ namespace Jackett.Common.Indexers
             var searchUrl = SearchUrl + "?" + qParams.GetQueryString();
 
             var results = await RequestStringWithCookies(searchUrl);
-            List<ReleaseInfo> releases = ParseResponse(query, results.Content);
+            var releases = ParseResponse(query, results.Content);
 
             return releases;
         }
 
         public List<ReleaseInfo> ParseResponse(TorznabQuery query, string htmlResponse)
         {
-            List<ReleaseInfo> releases = new List<ReleaseInfo>();
+            var releases = new List<ReleaseInfo>();
 
             try
             {
                 CQ dom = htmlResponse;
 
-                List<string> headerColumns = dom["table[class*='movehere']"].First().Find("tbody > tr > td[class='cat_Head']").Select(x => x.Cq().Text()).ToList();
-                int categoryIndex = headerColumns.FindIndex(x => x.Equals("Type"));
-                int nameIndex = headerColumns.FindIndex(x => x.Equals("Name"));
-                int sizeIndex = headerColumns.FindIndex(x => x.Equals("Size"));
-                int seedersIndex = headerColumns.FindIndex(x => x.Equals("Seeders"));
-                int leechersIndex = headerColumns.FindIndex(x => x.Equals("Leechers"));
+                var headerColumns = dom["table[class*='movehere']"].First().Find("tbody > tr > td[class='cat_Head']").Select(x => x.Cq().Text()).ToList();
+                var categoryIndex = headerColumns.FindIndex(x => x.Equals("Type"));
+                var nameIndex = headerColumns.FindIndex(x => x.Equals("Name"));
+                var sizeIndex = headerColumns.FindIndex(x => x.Equals("Size"));
+                var seedersIndex = headerColumns.FindIndex(x => x.Equals("Seeders"));
+                var leechersIndex = headerColumns.FindIndex(x => x.Equals("Leechers"));
 
                 var rows = dom["tr.browse"];
                 foreach (var row in rows)
@@ -223,10 +223,10 @@ namespace Jackett.Common.Indexers
                     release.MinimumSeedTime = 172800; // 48 hours
 
                     var categoryCol = row.ChildElements.ElementAt(categoryIndex);
-                    string catLink = categoryCol.Cq().Find("a").Attr("href");
+                    var catLink = categoryCol.Cq().Find("a").Attr("href");
                     if (catLink != null)
                     {
-                        string catId = new Regex(@"\?cat=(\d*)").Match(catLink).Groups[1].ToString().Trim();
+                        var catId = new Regex(@"\?cat=(\d*)").Match(catLink).Groups[1].ToString().Trim();
                         release.Category = MapTrackerCatToNewznab(catId);
                     }
 

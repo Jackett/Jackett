@@ -32,9 +32,9 @@ namespace Jackett.Common.Models.Config
         {
             get
             {
-                if (!string.IsNullOrWhiteSpace(this.CustomDataFolder))
+                if (!string.IsNullOrWhiteSpace(CustomDataFolder))
                 {
-                    return this.CustomDataFolder;
+                    return CustomDataFolder;
                 }
 
                 if (System.Environment.OSVersion.Platform == PlatformID.Unix)

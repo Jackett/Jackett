@@ -8,7 +8,7 @@ namespace Jackett.Common.Services
 
     public class ProcessService : IProcessService
     {
-        private Logger logger;
+        private readonly Logger logger;
 
         public ProcessService(Logger l)
         {

@@ -1,6 +1,6 @@
 namespace Jackett.Common.Models.IndexerConfig.Bespoke
 {
-    class ConfigurationDataFileList : ConfigurationDataBasicLogin
+    internal class ConfigurationDataFileList : ConfigurationDataBasicLogin
     {
         public BoolItem IncludeRomanianReleases { get; private set; }
         public DisplayItem CatWarning { get; private set; }

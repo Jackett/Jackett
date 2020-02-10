@@ -37,7 +37,7 @@ namespace Jackett.Common.Utils
 
         public static int ParseTvShowQuality(string tvShowFileName)
         {
-            string normalizedName = tvShowFileName.Trim().Replace('_', ' ').Trim().ToLower();
+            var normalizedName = tvShowFileName.Trim().Replace('_', ' ').Trim().ToLower();
 
             var sourceMatch = SourceRegex.Match(normalizedName);
             var resolutionMatch = ResolutionRegex.Match(normalizedName);

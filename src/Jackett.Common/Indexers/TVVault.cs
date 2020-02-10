@@ -92,7 +92,7 @@ namespace Jackett.Common.Indexers
             var results = await RequestStringWithCookies(searchUrl);
             try
             {
-                string RowsSelector = "table.torrent_table > tbody > tr.torrent";
+                var RowsSelector = "table.torrent_table > tbody > tr.torrent";
 
                 var SearchResultParser = new HtmlParser();
                 var SearchResultDocument = SearchResultParser.ParseDocument(results.Content);

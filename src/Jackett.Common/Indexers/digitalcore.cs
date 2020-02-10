@@ -109,7 +109,7 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            List<ReleaseInfo> releases = new List<ReleaseInfo>();
+            var releases = new List<ReleaseInfo>();
             var queryCollection = new NameValueCollection();
             var searchString = query.GetQueryString();
             var searchUrl = SearchUrl;

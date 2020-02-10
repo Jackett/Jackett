@@ -38,7 +38,7 @@ namespace Jackett.Common.Indexers
 
         private DateTime lastTokenFetch;
         private string token;
-        private string app_id;
+        private readonly string app_id;
         private bool _provideTorrentLink;
         private string _sort;
 

@@ -17,7 +17,7 @@ namespace Jackett.Common.Indexers.Abstract
         protected string endpoint;
         protected string APIUrl { get { return SiteLink + endpoint; } }
 
-        new ConfigurationDataUserPasskey configData
+        private new ConfigurationDataUserPasskey configData
         {
             get { return (ConfigurationDataUserPasskey)base.configData; }
             set { base.configData = value; }

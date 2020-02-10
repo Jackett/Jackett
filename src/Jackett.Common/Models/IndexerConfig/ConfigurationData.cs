@@ -9,7 +9,7 @@ namespace Jackett.Common.Models.IndexerConfig
 {
     public class ConfigurationData
     {
-        const string PASSWORD_REPLACEMENT = "|||%%PREVJACKPASSWD%%|||";
+        private const string PASSWORD_REPLACEMENT = "|||%%PREVJACKPASSWD%%|||";
         protected Dictionary<string, Item> dynamics = new Dictionary<string, Item>(); // list for dynamic items
 
         public enum ItemType
@@ -140,7 +140,7 @@ namespace Jackett.Common.Models.IndexerConfig
                         }
                         break;
                     case ItemType.DisplayImage:
-                        string dataUri = DataUrlUtils.BytesToDataUrl(((ImageItem)item).Value, "image/jpeg");
+                        var dataUri = DataUrlUtils.BytesToDataUrl(((ImageItem)item).Value, "image/jpeg");
                         jObject["value"] = dataUri;
                         break;
                 }
@@ -149,9 +149,9 @@ namespace Jackett.Common.Models.IndexerConfig
             return jArray;
         }
 
-        Item[] GetItems(bool forDisplay)
+        private Item[] GetItems(bool forDisplay)
         {
-            List<Item> properties = GetType()
+            var properties = GetType()
                 .GetProperties()
                 .Where(p => p.CanRead)
                 .Where(p => p.PropertyType.IsSubclassOf(typeof(Item)))
@@ -237,7 +237,7 @@ namespace Jackett.Common.Models.IndexerConfig
             public string Challenge { get; set; }
             public RecaptchaItem()
             {
-                this.Version = "2";
+                Version = "2";
                 ItemType = ConfigurationData.ItemType.Recaptcha;
             }
         }

@@ -36,7 +36,7 @@ namespace Jackett.Common.Utils.Clients
         /// </summary>
         public Dictionary<string, string> Headers { get; set; }
 
-        public override bool Equals(System.Object obj)
+        public override bool Equals(object obj)
         {
             if (obj is WebRequest)
             {

@@ -33,9 +33,9 @@ namespace Jackett.Common.Indexers
 
         protected List<string> DefaultCategories = new List<string>();
 
-        new ConfigurationData configData
+        private new ConfigurationData configData
         {
-            get { return (ConfigurationData)base.configData; }
+            get { return base.configData; }
             set { base.configData = value; }
         }
 
@@ -196,10 +196,10 @@ namespace Jackett.Common.Indexers
 
         protected Dictionary<string, object> getTemplateVariablesFromConfigData()
         {
-            Dictionary<string, object> variables = new Dictionary<string, object>();
+            var variables = new Dictionary<string, object>();
 
             variables[".Config.sitelink"] = SiteLink;
-            foreach (settingsField Setting in Definition.Settings)
+            foreach (var Setting in Definition.Settings)
             {
                 string value;
                 var item = configData.GetDynamic(Setting.Name);
@@ -232,17 +232,17 @@ namespace Jackett.Common.Indexers
 
             // handle re_replace expression
             // Example: {{ re_replace .Query.Keywords "[^a-zA-Z0-9]+" "%" }}
-            Regex ReReplaceRegex = new Regex(@"{{\s*re_replace\s+(\..+?)\s+""(.*?)""\s+""(.*?)""\s*}}");
+            var ReReplaceRegex = new Regex(@"{{\s*re_replace\s+(\..+?)\s+""(.*?)""\s+""(.*?)""\s*}}");
             var ReReplaceRegexMatches = ReReplaceRegex.Match(template);
 
             while (ReReplaceRegexMatches.Success)
             {
-                string all = ReReplaceRegexMatches.Groups[0].Value;
-                string variable = ReReplaceRegexMatches.Groups[1].Value;
-                string regexp = ReReplaceRegexMatches.Groups[2].Value;
-                string newvalue = ReReplaceRegexMatches.Groups[3].Value;
+                var all = ReReplaceRegexMatches.Groups[0].Value;
+                var variable = ReReplaceRegexMatches.Groups[1].Value;
+                var regexp = ReReplaceRegexMatches.Groups[2].Value;
+                var newvalue = ReReplaceRegexMatches.Groups[3].Value;
 
-                Regex ReplaceRegex = new Regex(regexp);
+                var ReplaceRegex = new Regex(regexp);
                 var input = (string)variables[variable];
                 var expanded = ReplaceRegex.Replace(input, newvalue);
 
@@ -255,14 +255,14 @@ namespace Jackett.Common.Indexers
 
             // handle join expression
             // Example: {{ join .Categories "," }}
-            Regex JoinRegex = new Regex(@"{{\s*join\s+(\..+?)\s+""(.*?)""\s*}}");
+            var JoinRegex = new Regex(@"{{\s*join\s+(\..+?)\s+""(.*?)""\s*}}");
             var JoinMatches = JoinRegex.Match(template);
 
             while (JoinMatches.Success)
             {
-                string all = JoinMatches.Groups[0].Value;
-                string variable = JoinMatches.Groups[1].Value;
-                string delimiter = JoinMatches.Groups[2].Value;
+                var all = JoinMatches.Groups[0].Value;
+                var variable = JoinMatches.Groups[1].Value;
+                var delimiter = JoinMatches.Groups[2].Value;
 
                 var input = (ICollection<string>)variables[variable];
                 var expanded = string.Join(delimiter, input);
@@ -275,17 +275,17 @@ namespace Jackett.Common.Indexers
             }
 
             // handle or, and functions
-            Regex AndOrRegex = new Regex(@"(and|or)\s+\((\..+?)\)\s+\((\..+?)\)(\s+\((\..+?)\)){0,1}");
+            var AndOrRegex = new Regex(@"(and|or)\s+\((\..+?)\)\s+\((\..+?)\)(\s+\((\..+?)\)){0,1}");
             var AndOrRegexMatches = AndOrRegex.Match(template);
 
             while (AndOrRegexMatches.Success)
             {
-                string functionResult = "";
-                string all = AndOrRegexMatches.Groups[0].Value;
-                string op = AndOrRegexMatches.Groups[1].Value;
-                string first = AndOrRegexMatches.Groups[2].Value;
-                string second = AndOrRegexMatches.Groups[3].Value;
-                string third = "";
+                var functionResult = "";
+                var all = AndOrRegexMatches.Groups[0].Value;
+                var op = AndOrRegexMatches.Groups[1].Value;
+                var first = AndOrRegexMatches.Groups[2].Value;
+                var second = AndOrRegexMatches.Groups[3].Value;
+                var third = "";
                 if (AndOrRegexMatches.Groups.Count > 5)
                 {
                     third = AndOrRegexMatches.Groups[5].Value;
@@ -334,17 +334,17 @@ namespace Jackett.Common.Indexers
             }
 
             // handle if ... else ... expression
-            Regex IfElseRegex = new Regex(@"{{\s*if\s*(.+?)\s*}}(.*?){{\s*else\s*}}(.*?){{\s*end\s*}}");
+            var IfElseRegex = new Regex(@"{{\s*if\s*(.+?)\s*}}(.*?){{\s*else\s*}}(.*?){{\s*end\s*}}");
             var IfElseRegexMatches = IfElseRegex.Match(template);
 
             while (IfElseRegexMatches.Success)
             {
                 string conditionResult = null;
 
-                string all = IfElseRegexMatches.Groups[0].Value;
-                string condition = IfElseRegexMatches.Groups[1].Value;
-                string onTrue = IfElseRegexMatches.Groups[2].Value;
-                string onFalse = IfElseRegexMatches.Groups[3].Value;
+                var all = IfElseRegexMatches.Groups[0].Value;
+                var condition = IfElseRegexMatches.Groups[1].Value;
+                var onTrue = IfElseRegexMatches.Groups[2].Value;
+                var onFalse = IfElseRegexMatches.Groups[3].Value;
 
                 if (condition.StartsWith("."))
                 {
@@ -378,19 +378,19 @@ namespace Jackett.Common.Indexers
             }
 
             // handle range expression
-            Regex RangeRegex = new Regex(@"{{\s*range\s*(.+?)\s*}}(.*?){{\.}}(.*?){{end}}");
+            var RangeRegex = new Regex(@"{{\s*range\s*(.+?)\s*}}(.*?){{\.}}(.*?){{end}}");
             var RangeRegexMatches = RangeRegex.Match(template);
 
             while (RangeRegexMatches.Success)
             {
-                string expanded = string.Empty;
+                var expanded = string.Empty;
 
-                string all = RangeRegexMatches.Groups[0].Value;
-                string variable = RangeRegexMatches.Groups[1].Value;
-                string prefix = RangeRegexMatches.Groups[2].Value;
-                string postfix = RangeRegexMatches.Groups[3].Value;
+                var all = RangeRegexMatches.Groups[0].Value;
+                var variable = RangeRegexMatches.Groups[1].Value;
+                var prefix = RangeRegexMatches.Groups[2].Value;
+                var postfix = RangeRegexMatches.Groups[3].Value;
 
-                foreach (string value in (ICollection<string>)variables[variable])
+                foreach (var value in (ICollection<string>)variables[variable])
                 {
                     var newvalue = value;
                     if (modifier != null)
@@ -402,17 +402,17 @@ namespace Jackett.Common.Indexers
             }
 
             // handle simple variables
-            Regex VariablesRegEx = new Regex(@"{{\s*(\..+?)\s*}}");
+            var VariablesRegEx = new Regex(@"{{\s*(\..+?)\s*}}");
             var VariablesRegExMatches = VariablesRegEx.Match(template);
 
             while (VariablesRegExMatches.Success)
             {
-                string expanded = string.Empty;
+                var expanded = string.Empty;
 
-                string all = VariablesRegExMatches.Groups[0].Value;
-                string variable = VariablesRegExMatches.Groups[1].Value;
+                var all = VariablesRegExMatches.Groups[0].Value;
+                var variable = VariablesRegExMatches.Groups[1].Value;
 
-                string value = (string)variables[variable];
+                var value = (string)variables[variable];
                 if (modifier != null)
                     value = modifier(value);
                 template = template.Replace(all, value);
@@ -432,12 +432,12 @@ namespace Jackett.Common.Indexers
 
             var ResultParser = new HtmlParser();
             var ResultDocument = ResultParser.ParseDocument(loginResult.Content);
-            foreach (errorBlock error in errorBlocks)
+            foreach (var error in errorBlocks)
             {
                 var selection = ResultDocument.QuerySelector(error.Selector);
                 if (selection != null)
                 {
-                    string errorMessage = selection.TextContent;
+                    var errorMessage = selection.TextContent;
                     if (error.Message != null)
                     {
                         errorMessage = handleSelector(error.Message, ResultDocument.FirstElementChild);
@@ -858,7 +858,7 @@ namespace Jackett.Common.Indexers
 
             configData.CookieHeader.Value = null;
             if (Login.Cookies != null)
-                configData.CookieHeader.Value = String.Join("; ", Login.Cookies);
+                configData.CookieHeader.Value = string.Join("; ", Login.Cookies);
             landingResult = await RequestStringWithCookies(LoginUrl.AbsoluteUri, null, SiteLink);
 
             var htmlParser = new HtmlParser();
@@ -965,7 +965,7 @@ namespace Jackett.Common.Indexers
             if (Filters == null)
                 return Data;
 
-            foreach (filterBlock Filter in Filters)
+            foreach (var Filter in Filters)
             {
                 switch (Filter.Name)
                 {
@@ -996,7 +996,7 @@ namespace Jackett.Common.Indexers
                         var regexpreplace_pattern = (string)Filter.Args[0];
                         var regexpreplace_replacement = (string)Filter.Args[1];
                         regexpreplace_replacement = applyGoTemplateText(regexpreplace_replacement, variables);
-                        Regex regexpreplace_regex = new Regex(regexpreplace_pattern);
+                        var regexpreplace_regex = new Regex(regexpreplace_pattern);
                         Data = regexpreplace_regex.Replace(Data, regexpreplace_replacement);
                         break;
                     case "split":
@@ -1059,12 +1059,12 @@ namespace Jackett.Common.Indexers
                         {
                             // Should replace diacritics charcaters with their base character
                             // It's not perfect, e.g. "ŠĐĆŽ - šđčćž" becomes "SĐCZ-sđccz"
-                            string stFormD = Data.Normalize(NormalizationForm.FormD);
-                            int len = stFormD.Length;
-                            StringBuilder sb = new StringBuilder();
-                            for (int i = 0; i < len; i++)
+                            var stFormD = Data.Normalize(NormalizationForm.FormD);
+                            var len = stFormD.Length;
+                            var sb = new StringBuilder();
+                            for (var i = 0; i < len; i++)
                             {
-                                System.Globalization.UnicodeCategory uc = System.Globalization.CharUnicodeInfo.GetUnicodeCategory(stFormD[i]);
+                                var uc = System.Globalization.CharUnicodeInfo.GetUnicodeCategory(stFormD[i]);
                                 if (uc != System.Globalization.UnicodeCategory.NonSpacingMark)
                                 {
                                     sb.Append(stFormD[i]);
@@ -1121,7 +1121,7 @@ namespace Jackett.Common.Indexers
                 return applyFilters(applyGoTemplateText(Selector.Text, variables), Selector.Filters, variables);
             }
 
-            IElement selection = Dom;
+            var selection = Dom;
             string value = null;
 
             if (Selector.Selector != null)
@@ -1183,7 +1183,7 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
 
-            searchBlock Search = Definition.Search;
+            var Search = Definition.Search;
 
             // init template context
             var variables = getTemplateVariablesFromConfigData();
@@ -1216,7 +1216,7 @@ namespace Jackett.Common.Indexers
             var mappedCategories = MapTorznabCapsToTrackers(query);
             if (mappedCategories.Count == 0)
             {
-                mappedCategories = this.DefaultCategories;
+                mappedCategories = DefaultCategories;
             }
 
             variables[".Categories"] = mappedCategories;
@@ -1254,9 +1254,9 @@ namespace Jackett.Common.Indexers
                 // HttpUtility.UrlPathEncode seems to only encode spaces, we use UrlEncode and replace + with %20 as a workaround
                 var searchUrl = resolvePath(applyGoTemplateText(SearchPath.Path, variables, WebUtility.UrlEncode).Replace("+", "%20")).AbsoluteUri;
                 var queryCollection = new List<KeyValuePair<string, string>>();
-                RequestType method = RequestType.GET;
+                var method = RequestType.GET;
 
-                if (String.Equals(SearchPath.Method, "post", StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(SearchPath.Method, "post", StringComparison.OrdinalIgnoreCase))
                 {
                     method = RequestType.POST;
                 }
@@ -1275,7 +1275,7 @@ namespace Jackett.Common.Indexers
                             if (Input.Key == "$raw")
                             {
                                 var rawStr = applyGoTemplateText(Input.Value, variables, WebUtility.UrlEncode);
-                                foreach (string part in rawStr.Split('&'))
+                                foreach (var part in rawStr.Split('&'))
                                 {
                                     var parts = part.Split(new char[] { '=' }, 2);
                                     var key = parts[0];
@@ -1358,7 +1358,7 @@ namespace Jackett.Common.Indexers
 
                     var rowsSelector = applyGoTemplateText(Search.Rows.Selector, variables);
                     var RowsDom = SearchResultDocument.QuerySelectorAll(rowsSelector);
-                    List<IElement> Rows = new List<IElement>();
+                    var Rows = new List<IElement>();
                     foreach (var RowDom in RowsDom)
                     {
                         Rows.Add(RowDom);
@@ -1368,14 +1368,14 @@ namespace Jackett.Common.Indexers
                     var After = Definition.Search.Rows.After;
                     if (After > 0)
                     {
-                        for (int i = 0; i < Rows.Count; i += 1)
+                        for (var i = 0; i < Rows.Count; i += 1)
                         {
                             var CurrentRow = Rows[i];
-                            for (int j = 0; j < After; j += 1)
+                            for (var j = 0; j < After; j += 1)
                             {
                                 var MergeRowIndex = i + j + 1;
                                 var MergeRow = Rows[MergeRowIndex];
-                                List<INode> MergeNodes = new List<INode>();
+                                var MergeNodes = new List<INode>();
                                 foreach (var node in MergeRow.ChildNodes)
                                 {
                                     MergeNodes.Add(node);
@@ -1535,14 +1535,14 @@ namespace Jackett.Common.Indexers
                                             value = release.Imdb.ToString();
                                             break;
                                         case "rageid":
-                                            Regex RageIDRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
+                                            var RageIDRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
                                             var RageIDMatch = RageIDRegEx.Match(value);
                                             var RageID = RageIDMatch.Groups[1].Value;
                                             release.RageID = ParseUtil.CoerceLong(RageID);
                                             value = release.RageID.ToString();
                                             break;
                                         case "tvdbid":
-                                            Regex TVDBIdRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
+                                            var TVDBIdRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
                                             var TVDBIdMatch = TVDBIdRegEx.Match(value);
                                             var TVDBId = TVDBIdMatch.Groups[1].Value;
                                             release.TVDBId = ParseUtil.CoerceLong(TVDBId);
@@ -1575,12 +1575,12 @@ namespace Jackett.Common.Indexers
                             var SkipRelease = false;
                             if (Filters != null)
                             {
-                                foreach (filterBlock Filter in Filters)
+                                foreach (var Filter in Filters)
                                 {
                                     switch (Filter.Name)
                                     {
                                         case "andmatch":
-                                            int CharacterLimit = -1;
+                                            var CharacterLimit = -1;
                                             if (Filter.Args != null)
                                                 CharacterLimit = int.Parse(Filter.Args);
 
@@ -1672,8 +1672,8 @@ namespace Jackett.Common.Indexers
             Dictionary<string, string> pairs = null;
             var queryCollection = new NameValueCollection();
 
-            RequestType method = RequestType.GET;
-            if (String.Equals(request.Method, "post", StringComparison.OrdinalIgnoreCase))
+            var method = RequestType.GET;
+            if (string.Equals(request.Method, "post", StringComparison.OrdinalIgnoreCase))
             {
                 method = RequestType.POST;
                 pairs = new Dictionary<string, string>();
@@ -1711,7 +1711,7 @@ namespace Jackett.Common.Indexers
             variables[prefix + ".PathAndQuery"] = uri.PathAndQuery;
             variables[prefix + ".Query"] = uri.Query;
             var queryString = QueryHelpers.ParseQuery(uri.Query);
-            foreach (string key in queryString.Keys)
+            foreach (var key in queryString.Keys)
             {
                 //If we have supplied the same query string multiple time, just take the first.
                 variables[prefix + ".Query." + key] = queryString[key].First();

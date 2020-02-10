@@ -18,10 +18,10 @@ namespace Jackett.Server.Controllers
     [Route("bh/{indexerID}")]
     public class BlackholeController : Controller
     {
-        private Logger logger;
-        private IIndexerManagerService indexerService;
-        private ServerConfig serverConfig;
-        private IProtectionService protectionService;
+        private readonly Logger logger;
+        private readonly IIndexerManagerService indexerService;
+        private readonly ServerConfig serverConfig;
+        private readonly IProtectionService protectionService;
 
         public BlackholeController(IIndexerManagerService i, Logger l, ServerConfig sConfig, IProtectionService ps)
         {

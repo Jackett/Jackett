@@ -228,12 +228,12 @@ namespace Jackett.Common.Indexers
                             if (!string.IsNullOrWhiteSpace(EditionTitle))
                                 releaseInfo = WebUtility.HtmlDecode(EditionTitle);
 
-                            Regex SeasonRegEx = new Regex(@"Season (\d+)", RegexOptions.Compiled);
+                            var SeasonRegEx = new Regex(@"Season (\d+)", RegexOptions.Compiled);
                             var SeasonRegExMatch = SeasonRegEx.Match(releaseInfo);
                             if (SeasonRegExMatch.Success)
                                 season = ParseUtil.CoerceInt(SeasonRegExMatch.Groups[1].Value);
 
-                            Regex EpisodeRegEx = new Regex(@"Episode (\d+)", RegexOptions.Compiled);
+                            var EpisodeRegEx = new Regex(@"Episode (\d+)", RegexOptions.Compiled);
                             var EpisodeRegExMatch = EpisodeRegEx.Match(releaseInfo);
                             if (EpisodeRegExMatch.Success)
                                 episode = EpisodeRegExMatch.Groups[1].Value;
@@ -242,7 +242,7 @@ namespace Jackett.Common.Indexers
                             releaseInfo = releaseInfo.Replace("Season ", "S");
                             releaseInfo = releaseInfo.Trim();
 
-                            if (PadEpisode && int.TryParse(releaseInfo, out int test) && releaseInfo.Length == 1)
+                            if (PadEpisode && int.TryParse(releaseInfo, out var test) && releaseInfo.Length == 1)
                             {
                                 releaseInfo = "0" + releaseInfo;
                             }
@@ -322,7 +322,7 @@ namespace Jackett.Common.Indexers
 
                             // We dont actually have a release name >.> so try to create one
                             var releaseTags = Property.Split("|".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
-                            for (int i = releaseTags.Count - 1; i >= 0; i--)
+                            for (var i = releaseTags.Count - 1; i >= 0; i--)
                             {
                                 releaseTags[i] = releaseTags[i].Trim();
                                 if (string.IsNullOrWhiteSpace(releaseTags[i]))

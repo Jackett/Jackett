@@ -230,13 +230,13 @@ namespace Jackett.Common.Indexers
 
             try
             {
-                string RowsSelector = ".torrent_table > tbody > tr";
+                var RowsSelector = ".torrent_table > tbody > tr";
 
                 var SearchResultParser = new HtmlParser();
                 var SearchResultDocument = SearchResultParser.ParseDocument(results.Content);
                 var Rows = SearchResultDocument.QuerySelectorAll(RowsSelector);
 
-                bool stickyGroup = false;
+                var stickyGroup = false;
                 string CategoryStr;
                 ICollection<int> GroupCategory = null;
                 string GroupTitle = null;

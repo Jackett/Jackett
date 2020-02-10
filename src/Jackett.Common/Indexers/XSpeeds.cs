@@ -137,7 +137,7 @@ namespace Jackett.Common.Indexers
         {
             var loginPage = await RequestStringWithCookies(LandingUrl);
             CQ dom = loginPage.Content;
-            CQ qCaptchaImg = dom.Find("img#regimage").First();
+            var qCaptchaImg = dom.Find("img#regimage").First();
             if (qCaptchaImg.Length > 0)
             {
                 var CaptchaUrl = qCaptchaImg.Attr("src");

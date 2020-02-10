@@ -42,8 +42,8 @@ namespace Jackett.Common.Services
             return movie;
         }
 
-        private WebClient WebClient;
-        private string apiKey;
+        private readonly WebClient WebClient;
+        private readonly string apiKey;
         private string url;
     }
 }

@@ -22,12 +22,12 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
 
         public ConfigurationDataNCore(JToken json)
         {
-            ConfigurationDataNCore configData = new ConfigurationDataNCore();
+            var configData = new ConfigurationDataNCore();
 
             dynamic configArray = JsonConvert.DeserializeObject(json.ToString());
             foreach (var config in configArray)
             {
-                string propertyName = UppercaseFirst((string)config.id);
+                var propertyName = UppercaseFirst((string)config.id);
                 switch (propertyName)
                 {
                     case "Username":
@@ -51,7 +51,7 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
             }
         }
 
-        static string UppercaseFirst(string s)
+        private static string UppercaseFirst(string s)
         {
             if (string.IsNullOrEmpty(s))
                 return string.Empty;

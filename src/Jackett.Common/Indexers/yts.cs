@@ -27,7 +27,7 @@ namespace Jackett.Common.Indexers
 
         private new ConfigurationData configData
         {
-            get { return (ConfigurationData)base.configData; }
+            get { return base.configData; }
             set { base.configData = value; }
         }
 
@@ -108,14 +108,14 @@ namespace Jackett.Common.Indexers
 
                 var jsonContent = JObject.Parse(jsonContentStr);
 
-                string result = jsonContent.Value<string>("status");
+                var result = jsonContent.Value<string>("status");
                 if (result != "ok") // query was not successful
                 {
                     return releases.ToArray();
                 }
 
                 var data_items = jsonContent.Value<JToken>("data");
-                int movie_count = data_items.Value<int>("movie_count");
+                var movie_count = data_items.Value<int>("movie_count");
                 if (movie_count < 1) // no results found in query
                 {
                     return releases.ToArray();
@@ -151,7 +151,7 @@ namespace Jackett.Common.Indexers
                         release.Imdb = ParseUtil.GetImdbID(imdb);
 
                         // API does not provide magnet link, so, construct it
-                        string magnet_uri = "magnet:?xt=urn:btih:" + torrent_info.Value<string>("hash") +
+                        var magnet_uri = "magnet:?xt=urn:btih:" + torrent_info.Value<string>("hash") +
                         "&dn=" + movie_item.Value<string>("slug") +
                         "&tr=udp://open.demonii.com:1337/announce" +
                         "&tr=udp://tracker.openbittorrent.com:80" +

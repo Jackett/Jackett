@@ -11,7 +11,7 @@ using NLog;
 
 namespace Jackett.Test
 {
-    static class TestUtil
+    internal static class TestUtil
     {
         private static IContainer testContainer;
 
@@ -59,9 +59,9 @@ namespace Jackett.Test
             var assembly = Assembly.GetExecutingAssembly();
             var resourceName = "Jackett.Test." + item.Replace('/', '.');
 
-            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            using (var stream = assembly.GetManifestResourceStream(resourceName))
             {
-                using (StreamReader reader = new StreamReader(stream))
+                using (var reader = new StreamReader(stream))
                 {
                     return reader.ReadToEnd();
                 }

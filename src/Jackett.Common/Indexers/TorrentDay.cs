@@ -126,7 +126,7 @@ namespace Jackett.Common.Indexers
             if (loginPage.IsRedirect)
                 loginPage = await RequestStringWithCookies(loginPage.RedirectingTo, string.Empty);
             CQ cq = loginPage.Content;
-            var result = this.configData;
+            var result = configData;
 
             //result.CookieHeader.Value = loginPage.Cookies;
             UpdateCookieHeader(loginPage.Cookies); // update cookies instead of replacing them, see #3717

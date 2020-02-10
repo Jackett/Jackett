@@ -12,7 +12,7 @@ namespace Jackett.Common.Helpers
                 return string.Empty;
             }
 
-            byte[] bytes = encoding.GetBytes(searchString);
+            var bytes = encoding.GetBytes(searchString);
             return encoding.GetString(WebUtility.UrlEncodeToBytes(bytes, 0, bytes.Length));
         }
 

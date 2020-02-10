@@ -89,13 +89,13 @@ namespace Jackett.Common.Indexers
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            bool configGoldenPopcornOnly = configData.FilterString.Value.ToLowerInvariant().Contains("goldenpopcorn");
-            bool configSceneOnly = configData.FilterString.Value.ToLowerInvariant().Contains("scene");
-            bool configCheckedOnly = configData.FilterString.Value.ToLowerInvariant().Contains("checked");
-            bool configFreeOnly = configData.FilterString.Value.ToLowerInvariant().Contains("free");
+            var configGoldenPopcornOnly = configData.FilterString.Value.ToLowerInvariant().Contains("goldenpopcorn");
+            var configSceneOnly = configData.FilterString.Value.ToLowerInvariant().Contains("scene");
+            var configCheckedOnly = configData.FilterString.Value.ToLowerInvariant().Contains("checked");
+            var configFreeOnly = configData.FilterString.Value.ToLowerInvariant().Contains("free");
 
 
-            string movieListSearchUrl = SearchUrl;
+            var movieListSearchUrl = SearchUrl;
             var queryCollection = new NameValueCollection();
             queryCollection.Add("json", "noredirect");
 
@@ -130,11 +130,11 @@ namespace Jackett.Common.Indexers
             try
             {
                 //Iterate over the releases for each movie
-                JObject js_results = JObject.Parse(results.Content);
+                var js_results = JObject.Parse(results.Content);
                 foreach (var movie in js_results["Movies"])
                 {
-                    string movie_title = (string)movie["Title"];
-                    string Year = (string)movie["Year"];
+                    var movie_title = (string)movie["Title"];
+                    var Year = (string)movie["Year"];
                     var movie_imdbid_str = (string)movie["ImdbId"];
                     var coverStr = (string)movie["Cover"];
                     Uri coverUri = null;
@@ -143,11 +143,11 @@ namespace Jackett.Common.Indexers
                     long? movie_imdbid = null;
                     if (!string.IsNullOrEmpty(movie_imdbid_str))
                         movie_imdbid = long.Parse(movie_imdbid_str);
-                    string movie_groupid = (string)movie["GroupId"];
+                    var movie_groupid = (string)movie["GroupId"];
                     foreach (var torrent in movie["Torrents"])
                     {
                         var release = new ReleaseInfo();
-                        string release_name = (string)torrent["ReleaseName"];
+                        var release_name = (string)torrent["ReleaseName"];
                         release.Title = release_name;
                         release.Description = string.Format("Title: {0}", movie_title);
                         release.BannerUrl = coverUri;
@@ -168,10 +168,9 @@ namespace Jackett.Common.Indexers
                         release.UploadVolumeFactor = 1;
                         release.Category = new List<int> { 2000 };
 
-                        bool golden, scene, check;
-                        bool.TryParse((string)torrent["GoldenPopcorn"], out golden);
-                        bool.TryParse((string)torrent["Scene"], out scene);
-                        bool.TryParse((string)torrent["Checked"], out check);
+                        bool.TryParse((string)torrent["GoldenPopcorn"], out var golden);
+                        bool.TryParse((string)torrent["Scene"], out var scene);
+                        bool.TryParse((string)torrent["Checked"], out var check);
 
                         if (configGoldenPopcornOnly && !golden)
                         {
@@ -187,11 +186,11 @@ namespace Jackett.Common.Indexers
                         }
 
                         var titletags = new List<string>();
-                        string Quality = (string)torrent["Quality"];
-                        string Container = (string)torrent["Container"];
-                        string Codec = (string)torrent["Codec"];
-                        string Resolution = (string)torrent["Resolution"];
-                        string Source = (string)torrent["Source"];
+                        var Quality = (string)torrent["Quality"];
+                        var Container = (string)torrent["Container"];
+                        var Codec = (string)torrent["Codec"];
+                        var Resolution = (string)torrent["Resolution"];
+                        var Source = (string)torrent["Source"];
 
                         if (Year != null)
                         {
@@ -240,8 +239,7 @@ namespace Jackett.Common.Indexers
                         if (titletags.Count() > 0)
                             release.Title += " [" + string.Join(" / ", titletags) + "]";
 
-                        bool freeleech;
-                        bool.TryParse((string)torrent["FreeleechType"], out freeleech);
+                        bool.TryParse((string)torrent["FreeleechType"], out var freeleech);
                         if (freeleech)
                             release.DownloadVolumeFactor = 0;
 

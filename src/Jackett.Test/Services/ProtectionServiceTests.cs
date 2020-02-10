@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace Jackett.Test.Services
 {
     [TestFixture]
-    class ProtectionServiceTests : TestBase
+    internal class ProtectionServiceTests : TestBase
     {
 
         [Test]

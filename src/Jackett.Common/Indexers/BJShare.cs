@@ -118,7 +118,7 @@ namespace Jackett.Common.Indexers
         private string InternationalTitle(string title)
         {
             // Get international title if available, or use the full title if not
-            string cleanTitle = Regex.Replace(title, @".* \[(.*?)\](.*)", "$1$2");
+            var cleanTitle = Regex.Replace(title, @".* \[(.*?)\](.*)", "$1$2");
             cleanTitle = Regex.Replace(cleanTitle, @"(?:.*)\/(.*)", "$1");
 
             return cleanTitle.Trim();
@@ -494,15 +494,15 @@ namespace Jackett.Common.Indexers
                             // Adjust the description in order to can be read by Radarr and Sonarr
 
                             var cleanDescription = release.Description.Trim().TrimStart('[').TrimEnd(']');
-                            String[] titleElements;
+                            string[] titleElements;
 
                             //Formats the title so it can be parsed later
-                            string[] stringSeparators = new string[] { " / " };
+                            var stringSeparators = new string[] { " / " };
                             titleElements = cleanDescription.Split(stringSeparators, StringSplitOptions.None);
                             // release.Title += string.Join(" ", titleElements);
                             release.Title = release.Title.Trim();
 
-                            release.Title += " " + titleElements[5] + " " + titleElements[3] + " " + titleElements[1] + " " + titleElements[2] + " " + titleElements[4] + " " + String.Join(" ", titleElements.Skip(6).Take(titleElements.Length - 6).ToArray());
+                            release.Title += " " + titleElements[5] + " " + titleElements[3] + " " + titleElements[1] + " " + titleElements[2] + " " + titleElements[4] + " " + string.Join(" ", titleElements.Skip(6).Take(titleElements.Length - 6).ToArray());
 
                             // This tracker does not provide an publish date to search terms (only on last 24h page)
                             release.PublishDate = DateTime.Today;

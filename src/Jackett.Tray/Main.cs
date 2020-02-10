@@ -15,14 +15,14 @@ namespace Jackett.Tray
 {
     public partial class Main : Form
     {
-        private IProcessService processService;
-        private IServiceConfigService windowsService;
-        private ITrayLockService trayLockService;
-        private ISerializeService serializeService;
-        private IConfigurationService configurationService;
-        private ServerConfig serverConfig;
+        private readonly IProcessService processService;
+        private readonly IServiceConfigService windowsService;
+        private readonly ITrayLockService trayLockService;
+        private readonly ISerializeService serializeService;
+        private readonly IConfigurationService configurationService;
+        private readonly ServerConfig serverConfig;
         private Process consoleProcess;
-        private Logger logger;
+        private readonly Logger logger;
         private bool closeApplicationInitiated;
 
         public Main(string updatedVersion)
@@ -35,7 +35,7 @@ namespace Jackett.Tray
             WindowState = FormWindowState.Minimized;
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
 
-            RuntimeSettings runtimeSettings = new RuntimeSettings()
+            var runtimeSettings = new RuntimeSettings()
             {
                 CustomLogFileName = "TrayLog.txt"
             };
@@ -94,7 +94,7 @@ namespace Jackett.Tray
                 //We won't be able to start the tray app up again from the updater, as when running via a windows service there is no interaction with the desktop
                 //Fire off a console process that will start the tray 20 seconds later
 
-                string trayExePath = Assembly.GetEntryAssembly().Location;
+                var trayExePath = Assembly.GetEntryAssembly().Location;
 
                 var startInfo = new ProcessStartInfo()
                 {
@@ -114,7 +114,7 @@ namespace Jackett.Tray
 
         private void toolStripMenuItemWebUI_Click(object sender, EventArgs e)
         {
-            ProcessStartInfo psi = new ProcessStartInfo
+            var psi = new ProcessStartInfo
             {
                 FileName = "http://127.0.0.1:" + serverConfig.Port,
                 UseShellExecute = true
@@ -172,13 +172,13 @@ namespace Jackett.Tray
         {
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
             {
-                using (StreamWriter writer = new StreamWriter(ShortcutPath))
+                using (var writer = new StreamWriter(ShortcutPath))
                 {
                     var appPath = Process.GetCurrentProcess().MainModule.FileName;
                     writer.WriteLine("[InternetShortcut]");
                     writer.WriteLine("URL=file:///" + appPath);
                     writer.WriteLine("IconIndex=0");
-                    string icon = appPath.Replace('\\', '/');
+                    var icon = appPath.Replace('\\', '/');
                     writer.WriteLine("IconFile=" + icon);
                 }
             }
@@ -286,7 +286,7 @@ namespace Jackett.Tray
 
         private void StartConsoleApplication()
         {
-            string applicationFolder = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath);
+            var applicationFolder = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath);
 
             var exePath = Path.Combine(applicationFolder, "JackettConsole.exe");
 

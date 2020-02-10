@@ -98,7 +98,7 @@ namespace Jackett.Common.Indexers
                 { "user[password]", configData.Password.Value }
             };
 
-            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, String.Empty, false, null, null, true);
+            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, string.Empty, false, null, null, true);
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("/odjava"), () =>
             {
                 CQ dom = result.Content;
@@ -115,8 +115,8 @@ namespace Jackett.Common.Indexers
 
             WebClientStringResult results = null;
             var queryCollection = new NameValueCollection();
-            List<string> catList = MapTorznabCapsToTrackers(query);     // map categories from query to indexer specific
-            var categ = String.Join(",", catList);
+            var catList = MapTorznabCapsToTrackers(query);     // map categories from query to indexer specific
+            var categ = string.Join(",", catList);
 
             //create GET request - search URI
             queryCollection.Add("offset", "0");
@@ -153,7 +153,7 @@ namespace Jackett.Common.Indexers
             // parse results
             try
             {
-                string RowsSelector = "div.list > div[name=\"torrrow\"]";
+                var RowsSelector = "div.list > div[name=\"torrrow\"]";
 
                 var ResultParser = new HtmlParser();
                 var SearchResultDocument = ResultParser.ParseDocument(results.Content);
@@ -182,8 +182,8 @@ namespace Jackett.Common.Indexers
 
                         // Date of torrent creation
                         var liopis = Row.QuerySelector("div.listeklink div span.middle");
-                        int ind = liopis.TextContent.IndexOf("Naloženo:");
-                        String reldate = liopis.TextContent.Substring(ind + 10, 22);
+                        var ind = liopis.TextContent.IndexOf("Naloženo:");
+                        var reldate = liopis.TextContent.Substring(ind + 10, 22);
                         release.PublishDate = DateTime.ParseExact(reldate, "dd.MM.yyyy ob HH:mm:ss", CultureInfo.InvariantCulture);
 
                         // Is freeleech?

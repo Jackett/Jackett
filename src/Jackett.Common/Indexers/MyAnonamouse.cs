@@ -168,7 +168,7 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
 
-            NameValueCollection qParams = new NameValueCollection();
+            var qParams = new NameValueCollection();
             qParams.Add("tor[text]", query.GetQueryString());
             qParams.Add("tor[srchIn][title]", "true");
             qParams.Add("tor[srchIn][author]", "true");
@@ -184,11 +184,11 @@ namespace Jackett.Common.Indexers
             qParams.Add("description", "1"); // include the description
             //qParams.Add("bookmarks", "0"); // include if the item is bookmarked or not
 
-            List<string> catList = MapTorznabCapsToTrackers(query);
+            var catList = MapTorznabCapsToTrackers(query);
             if (catList.Any())
             {
-                int index = 0;
-                foreach (string cat in catList)
+                var index = 0;
+                foreach (var cat in catList)
                 {
                     qParams.Add("tor[cat][" + index + "]", cat);
                     index++;
@@ -199,7 +199,7 @@ namespace Jackett.Common.Indexers
                 qParams.Add("tor[cat][]", "0");
             }
 
-            string urlSearch = SearchUrl;
+            var urlSearch = SearchUrl;
             if (qParams.Count > 0)
             {
                 urlSearch += $"?{qParams.GetQueryString()}";

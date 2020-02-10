@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -31,8 +30,8 @@ namespace Jackett.Common.Indexers.Meta
             long? imdbId = null;
             try
             {
-                var normalizedImdbId = String.Concat(query.ImdbID.Where(c => char.IsDigit(c)));
-                imdbId = Int64.Parse(normalizedImdbId);
+                var normalizedImdbId = string.Concat(query.ImdbID.Where(c => char.IsDigit(c)));
+                imdbId = long.Parse(normalizedImdbId);
             }
             catch
             {
@@ -89,8 +88,8 @@ namespace Jackett.Common.Indexers.Meta
             return result;
         }
 
-        private IImdbResolver resolver;
-        private TorznabQuery query;
+        private readonly IImdbResolver resolver;
+        private readonly TorznabQuery query;
     }
 
     public class NoFilter : IResultFilter
@@ -126,6 +125,6 @@ namespace Jackett.Common.Indexers.Meta
             return filter.ToEnumerable();
         }
 
-        private IImdbResolver resolver;
+        private readonly IImdbResolver resolver;
     }
 }

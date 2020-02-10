@@ -8,7 +8,7 @@ namespace Jackett.Common.Utils
     {
         public static DateTime GetBuildDateTime()
         {
-            Assembly commonAssembly = Assembly.GetExecutingAssembly();
+            var commonAssembly = Assembly.GetExecutingAssembly();
             var attribute = commonAssembly.GetCustomAttribute<BuildDateAttribute>();
             return attribute?.DateTime ?? default(DateTime);
         }

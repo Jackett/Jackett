@@ -107,7 +107,7 @@ namespace Jackett.Common.Indexers
             var captcha = cq.Find(".g-recaptcha"); // invisible recaptcha
             if (captcha.Any())
             {
-                var result = this.configData;
+                var result = configData;
                 result.CookieHeader.Value = loginPage.Cookies;
                 result.Captcha.SiteKey = captcha.Attr("data-sitekey");
                 result.Captcha.Version = "2";
@@ -232,7 +232,7 @@ namespace Jackett.Common.Indexers
                 var rows = dom["tr.box_torrent"];
                 foreach (var row in rows)
                 {
-                    CQ qRow = row.Cq();
+                    var qRow = row.Cq();
 
                     var release = new ReleaseInfo();
                     var main_title_link = qRow.Find("div.main_title > a");
@@ -243,11 +243,10 @@ namespace Jackett.Common.Indexers
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800; // 48 hours
 
-                    int seeders, peers;
-                    if (ParseUtil.TryCoerceInt(qRow.Find("td:nth-child(7) > div").Text(), out seeders))
+                    if (ParseUtil.TryCoerceInt(qRow.Find("td:nth-child(7) > div").Text(), out var seeders))
                     {
                         release.Seeders = seeders;
-                        if (ParseUtil.TryCoerceInt(qRow.Find("td:nth-child(8) > div").Text(), out peers))
+                        if (ParseUtil.TryCoerceInt(qRow.Find("td:nth-child(8) > div").Text(), out var peers))
                         {
                             release.Peers = peers + release.Seeders;
                         }
@@ -255,7 +254,7 @@ namespace Jackett.Common.Indexers
                     release.Grabs = ParseUtil.CoerceLong(qRow.Find("td:nth-child(5)").Text().Replace(",", ""));
                     release.Seeders = ParseUtil.CoerceInt(qRow.Find("td:nth-child(6)").Text().Replace(",", ""));
                     release.Peers = ParseUtil.CoerceInt(qRow.Find("td:nth-child(7)").Text().Replace(",", "")) + release.Seeders;
-                    string fullSize = qRow.Find("td:nth-child(4)").Text();
+                    var fullSize = qRow.Find("td:nth-child(4)").Text();
                     release.Size = ReleaseInfo.GetBytes(fullSize);
 
                     release.Comments = new Uri(SiteLink + qRow.Find("a.threadlink[href]").Attr("href"));
@@ -272,10 +271,10 @@ namespace Jackett.Common.Indexers
 
                     var dateStringAll = qRow.Find("div.up_info2")[0].ChildNodes.Last().ToString();
                     var dateParts = dateStringAll.Split(' ');
-                    string dateString = dateParts[dateParts.Length - 2] + " " + dateParts[dateParts.Length - 1];
+                    var dateString = dateParts[dateParts.Length - 2] + " " + dateParts[dateParts.Length - 1];
                     release.PublishDate = DateTime.ParseExact(dateString, "dd/MM/yy HH:mm", CultureInfo.InvariantCulture);
 
-                    string categoryLink = qRow.Find("a[href^=\"/browse.php?cat=\"]").Attr("href");
+                    var categoryLink = qRow.Find("a[href^=\"/browse.php?cat=\"]").Attr("href");
                     var catid = ParseUtil.GetArgumentFromQueryString(categoryLink, "cat");
                     release.Category = MapTrackerCatToNewznab(catid);
 
@@ -313,7 +312,7 @@ namespace Jackett.Common.Indexers
 
             CQ dom = results.Content;
 
-            int rowCount = 0;
+            var rowCount = 0;
             var rows = dom["#listtable > tbody > tr"];
 
             foreach (var row in rows)
@@ -324,8 +323,8 @@ namespace Jackett.Common.Indexers
                     continue;
                 }
 
-                CQ qRow = row.Cq();
-                CQ link = qRow.Find("td:nth-child(1) > a");
+                var qRow = row.Cq();
+                var link = qRow.Find("td:nth-child(1) > a");
                 if (link.Text().Trim().ToLower() == searchTerm.Trim().ToLower())
                 {
                     var address = link.Attr("href");

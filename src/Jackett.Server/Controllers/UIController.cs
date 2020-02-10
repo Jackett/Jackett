@@ -17,10 +17,10 @@ namespace Jackett.Server.Controllers
     [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     public class WebUIController : Controller
     {
-        private IConfigurationService config;
-        private ServerConfig serverConfig;
-        private ISecuityService securityService;
-        private Logger logger;
+        private readonly IConfigurationService config;
+        private readonly ServerConfig serverConfig;
+        private readonly ISecuityService securityService;
+        private readonly Logger logger;
 
         public WebUIController(IConfigurationService config, ISecuityService ss, ServerConfig s, Logger l)
         {
@@ -71,8 +71,8 @@ namespace Jackett.Server.Controllers
         [HttpGet]
         public IActionResult Dashboard()
         {
-            bool logout = HttpContext.Request.Query.Where(x => String.Equals(x.Key, "logout", StringComparison.OrdinalIgnoreCase)
-                                                            && String.Equals(x.Value, "true", StringComparison.OrdinalIgnoreCase)).Any();
+            var logout = HttpContext.Request.Query.Where(x => string.Equals(x.Key, "logout", StringComparison.OrdinalIgnoreCase)
+                                                            && string.Equals(x.Value, "true", StringComparison.OrdinalIgnoreCase)).Any();
 
             if (logout)
             {

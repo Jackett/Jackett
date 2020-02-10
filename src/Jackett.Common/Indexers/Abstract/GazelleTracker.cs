@@ -27,7 +27,7 @@ namespace Jackett.Common.Indexers.Abstract
         protected bool supportsCategories = true; // set to false if the tracker doesn't include the categories in the API search results
         protected bool useTokens = false;
 
-        new ConfigurationDataBasicLogin configData
+        private new ConfigurationDataBasicLogin configData
         {
             get { return (ConfigurationDataBasicLogin)base.configData; }
             set { base.configData = value; }
@@ -115,7 +115,7 @@ namespace Jackett.Common.Indexers.Abstract
 
             if (!string.IsNullOrWhiteSpace(query.ImdbID))
             {
-                if (this.imdbInTags)
+                if (imdbInTags)
                     queryCollection.Add("taglist", query.ImdbID);
                 else
                     queryCollection.Add("cataloguenumber", query.ImdbID);
@@ -202,7 +202,7 @@ namespace Jackett.Common.Indexers.Abstract
                     {
                         foreach (JObject torrent in r["torrents"])
                         {
-                            ReleaseInfo release2 = (ReleaseInfo)release.Clone();
+                            var release2 = (ReleaseInfo)release.Clone();
                             FillReleaseInfoFromJson(release2, torrent);
                             if (ReleaseInfoPostParse(release2, torrent, r))
                                 releases.Add(release2);
@@ -230,7 +230,7 @@ namespace Jackett.Common.Indexers.Abstract
             return true;
         }
 
-        void FillReleaseInfoFromJson(ReleaseInfo release, JObject torrent)
+        private void FillReleaseInfoFromJson(ReleaseInfo release, JObject torrent)
         {
             var torrentId = torrent["torrentId"];
 

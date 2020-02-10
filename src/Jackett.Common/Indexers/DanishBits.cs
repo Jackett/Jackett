@@ -51,7 +51,7 @@ namespace Jackett.Common.Indexers
                 return "%";
             }
             var searchString = query.GetQueryString();
-            Regex ReplaceRegex = new Regex("[^a-zA-Z0-9]+");
+            var ReplaceRegex = new Regex("[^a-zA-Z0-9]+");
             searchString = ReplaceRegex.Replace(searchString, "%");
             return searchString;
         }

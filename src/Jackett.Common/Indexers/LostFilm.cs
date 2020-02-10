@@ -19,21 +19,25 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
-    class LostFilm : BaseWebIndexer
+    internal class LostFilm : BaseWebIndexer
     {
-        private static Regex parsePlayEpisodeRegex = new Regex("PlayEpisode\\('(?<id>\\d{1,3})(?<season>\\d{3})(?<episode>\\d{3})'\\)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-        private static Regex parseReleaseDetailsRegex = new Regex("Видео:\\ (?<quality>.+).\\ Размер:\\ (?<size>.+).\\ Перевод", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex parsePlayEpisodeRegex = new Regex("PlayEpisode\\('(?<id>\\d{1,3})(?<season>\\d{3})(?<episode>\\d{3})'\\)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex parseReleaseDetailsRegex = new Regex("Видео:\\ (?<quality>.+).\\ Размер:\\ (?<size>.+).\\ Перевод", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        string LoginUrl { get { return SiteLink + "login"; } }
+        private string LoginUrl { get { return SiteLink + "login"; } }
+
         // http://www.lostfilm.tv/login
-        string ApiUrl { get { return SiteLink + "ajaxik.php"; } }
+        private string ApiUrl { get { return SiteLink + "ajaxik.php"; } }
+
         // http://www.lostfilm.tv/new
-        string DiscoveryUrl { get { return SiteLink + "new"; } }
+        private string DiscoveryUrl { get { return SiteLink + "new"; } }
+
         // http://www.lostfilm.tv/search?q=breaking+bad
-        string SearchUrl { get { return SiteLink + "search"; } }
+        private string SearchUrl { get { return SiteLink + "search"; } }
+
         // PlayEpisode function produce urls like this:
         // https://www.lostfilm.tv/v_search.php?c=119&s=5&e=16
-        string ReleaseUrl { get { return SiteLink + "v_search.php"; } }
+        private string ReleaseUrl { get { return SiteLink + "v_search.php"; } }
 
 
         internal class TrackerUrlDetails
@@ -77,7 +81,7 @@ namespace Jackett.Common.Indexers
             }
         }
 
-        new ConfigurationDataCaptchaLogin configData
+        private new ConfigurationDataCaptchaLogin configData
         {
             get { return (ConfigurationDataCaptchaLogin)base.configData; }
             set { base.configData = value; }
@@ -104,7 +108,7 @@ namespace Jackett.Common.Indexers
             // looks like after some failed login attempts there's a captcha
             var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
             CQ dom = loginPage.Content;
-            CQ qCaptchaImg = dom.Find("img#captcha_pictcha").First();
+            var qCaptchaImg = dom.Find("img#captcha_pictcha").First();
             if (qCaptchaImg.Length == 1)
             {
                 var CaptchaUrl = SiteLink + qCaptchaImg.Attr("src");
@@ -161,7 +165,7 @@ namespace Jackett.Common.Indexers
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
-        private async Task<Boolean> Logout()
+        private async Task<bool> Logout()
         {
             logger.Info("Performing logout");
 

@@ -106,7 +106,7 @@ namespace Jackett.Server
             // Override port
             if (consoleOptions.Port != 0)
             {
-                Int32.TryParse(serverConfig.Port.ToString(), out Int32 configPort);
+                int.TryParse(serverConfig.Port.ToString(), out var configPort);
 
                 if (configPort != consoleOptions.Port)
                 {

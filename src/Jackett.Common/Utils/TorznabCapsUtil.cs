@@ -5,9 +5,8 @@ namespace Jackett.Common.Utils
 {
     public class TorznabUtil
     {
-        static Regex reduceSpacesRegex = new Regex("\\s{2,}", RegexOptions.Compiled);
-
-        static Regex findYearRegex = new Regex(@"(?<=\[|\(|\s)(\d{4})(?=\]|\)|\s)", RegexOptions.Compiled);
+        private static readonly Regex reduceSpacesRegex = new Regex("\\s{2,}", RegexOptions.Compiled);
+        private static readonly Regex findYearRegex = new Regex(@"(?<=\[|\(|\s)(\d{4})(?=\]|\)|\s)", RegexOptions.Compiled);
 
         public static TorznabCapabilities CreateDefaultTorznabTVCaps()
         {

@@ -106,7 +106,7 @@ namespace Jackett.Common.Indexers
             var searchString = query.GetQueryString();
 
             var cats = MapTorznabCapsToTrackers(query);
-            string cat = "0";
+            var cat = "0";
             if (cats.Count == 1)
             {
                 cat = cats[0];

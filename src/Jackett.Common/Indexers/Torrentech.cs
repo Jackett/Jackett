@@ -103,7 +103,7 @@ namespace Jackett.Common.Indexers
             }
             try
             {
-                string RowsSelector = "div.borderwrap:has(div.maintitle) > table > tbody > tr:has(a[href*=\"index.php?showtopic=\"])";
+                var RowsSelector = "div.borderwrap:has(div.maintitle) > table > tbody > tr:has(a[href*=\"index.php?showtopic=\"])";
 
                 var SearchResultParser = new HtmlParser();
                 var SearchResultDocument = SearchResultParser.ParseDocument(results.Content);

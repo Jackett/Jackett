@@ -87,7 +87,8 @@ namespace Jackett.Common.Indexers
                 {"29", "Spanish (LATAM)" },
                 {"30", "Persian"},
                 {"31", "Malaysian"}
-            }) { Name = "Language", Value = "1" };
+            })
+            { Name = "Language", Value = "1" };
             configData.AddDynamic("languageid", languageSelect);
 
             // Configure the sort selects
@@ -97,7 +98,8 @@ namespace Jackett.Common.Indexers
                 {"seeders", "seeders"},
                 {"size", "size"},
                 {"filename", "title"}
-            }) { Name = "Sort by", Value = "upload_timestamp" };
+            })
+            { Name = "Sort by", Value = "upload_timestamp" };
             configData.AddDynamic("sortrequestedfromsite", sortBySelect);
 
             var orderSelect = new SelectItem(new Dictionary<string, string>()

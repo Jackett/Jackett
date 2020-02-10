@@ -9,7 +9,7 @@ namespace Jackett.Common.Utils
         {
             get
             {
-                bool runningOnDotNetCore = false;
+                var runningOnDotNetCore = false;
 
                 try
                 {

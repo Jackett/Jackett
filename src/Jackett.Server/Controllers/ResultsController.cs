@@ -170,10 +170,10 @@ namespace Jackett.Server.Controllers
         public IIndexerManagerService IndexerService { get; private set; }
         public IIndexer CurrentIndexer { get; set; }
         public TorznabQuery CurrentQuery { get; set; }
-        private Logger logger;
-        private IServerService serverService;
-        private ICacheService cacheService;
-        private Common.Models.Config.ServerConfig serverConfig;
+        private readonly Logger logger;
+        private readonly IServerService serverService;
+        private readonly ICacheService cacheService;
+        private readonly Common.Models.Config.ServerConfig serverConfig;
 
         public ResultsController(IIndexerManagerService indexerManagerService, IServerService ss, ICacheService c, Logger logger, Common.Models.Config.ServerConfig sConfig)
         {
@@ -190,7 +190,7 @@ namespace Jackett.Server.Controllers
         {
             //TODO: Better way to parse querystring
 
-            ApiSearch request = new ApiSearch();
+            var request = new ApiSearch();
 
             foreach (var t in Request.Query)
             {
@@ -201,7 +201,7 @@ namespace Jackett.Server.Controllers
 
                 if (t.Key == "Category[]")
                 {
-                    request.Category = t.Value.ToString().Split(',').Select(Int32.Parse).ToArray();
+                    request.Category = t.Value.ToString().Split(',').Select(int.Parse).ToArray();
                     CurrentQuery.Categories = request.Category;
                 }
 
@@ -452,11 +452,11 @@ namespace Jackett.Server.Controllers
 
         public static IActionResult GetErrorActionResult(RouteData routeData, HttpStatusCode status, int torznabCode, string description)
         {
-            bool isTorznab = routeData.Values["action"].ToString().Equals("torznab", StringComparison.OrdinalIgnoreCase);
+            var isTorznab = routeData.Values["action"].ToString().Equals("torznab", StringComparison.OrdinalIgnoreCase);
 
             if (isTorznab)
             {
-                ContentResult contentResult = new ContentResult
+                var contentResult = new ContentResult
                 {
                     Content = CreateErrorXML(torznabCode, description),
                     ContentType = "application/xml",

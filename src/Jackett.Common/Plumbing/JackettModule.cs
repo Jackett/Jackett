@@ -12,7 +12,7 @@ namespace Jackett.Common.Plumbing
 {
     public class JackettModule : Autofac.Module
     {
-        private RuntimeSettings _runtimeSettings;
+        private readonly RuntimeSettings _runtimeSettings;
 
         public JackettModule(RuntimeSettings runtimeSettings)
         {
@@ -82,13 +82,13 @@ namespace Jackett.Common.Plumbing
 
         private static bool DetectMonoCompatabilityWithHttpClient()
         {
-            bool usehttpclient = false;
+            var usehttpclient = false;
             try
             {
-                Type monotype = Type.GetType("Mono.Runtime");
+                var monotype = Type.GetType("Mono.Runtime");
                 if (monotype != null)
                 {
-                    MethodInfo displayName = monotype.GetMethod("GetDisplayName", BindingFlags.NonPublic | BindingFlags.Static);
+                    var displayName = monotype.GetMethod("GetDisplayName", BindingFlags.NonPublic | BindingFlags.Static);
                     if (displayName != null)
                     {
                         var monoVersion = displayName.Invoke(null, null).ToString();
@@ -97,17 +97,17 @@ namespace Jackett.Common.Plumbing
                         {
                             // check if btls is supported
                             var monoSecurity = Assembly.Load("Mono.Security");
-                            Type monoTlsProviderFactory = monoSecurity.GetType("Mono.Security.Interface.MonoTlsProviderFactory");
+                            var monoTlsProviderFactory = monoSecurity.GetType("Mono.Security.Interface.MonoTlsProviderFactory");
                             if (monoTlsProviderFactory != null)
                             {
-                                MethodInfo isProviderSupported = monoTlsProviderFactory.GetMethod("IsProviderSupported");
+                                var isProviderSupported = monoTlsProviderFactory.GetMethod("IsProviderSupported");
                                 if (isProviderSupported != null)
                                 {
                                     var btlsSupported = (bool)isProviderSupported.Invoke(null, new string[] { "btls" });
                                     if (btlsSupported)
                                     {
                                         // initialize btls
-                                        MethodInfo initialize = monoTlsProviderFactory.GetMethod("Initialize", new[] { typeof(string) });
+                                        var initialize = monoTlsProviderFactory.GetMethod("Initialize", new[] { typeof(string) });
                                         if (initialize != null)
                                         {
                                             initialize.Invoke(null, new string[] { "btls" });

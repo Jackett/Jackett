@@ -84,16 +84,16 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            TimeZoneInfo.TransitionTime startTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 3, 0, 0), 3, 5, DayOfWeek.Sunday);
-            TimeZoneInfo.TransitionTime endTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 4, 0, 0), 10, 5, DayOfWeek.Sunday);
-            TimeSpan delta = new TimeSpan(1, 0, 0);
-            TimeZoneInfo.AdjustmentRule adjustment = TimeZoneInfo.AdjustmentRule.CreateAdjustmentRule(new DateTime(1999, 10, 1), DateTime.MaxValue.Date, delta, startTransition, endTransition);
+            var startTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 3, 0, 0), 3, 5, DayOfWeek.Sunday);
+            var endTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 4, 0, 0), 10, 5, DayOfWeek.Sunday);
+            var delta = new TimeSpan(1, 0, 0);
+            var adjustment = TimeZoneInfo.AdjustmentRule.CreateAdjustmentRule(new DateTime(1999, 10, 1), DateTime.MaxValue.Date, delta, startTransition, endTransition);
             TimeZoneInfo.AdjustmentRule[] adjustments = { adjustment };
-            TimeZoneInfo Tz = TimeZoneInfo.CreateCustomTimeZone("custom", new TimeSpan(1, 0, 0), "custom", "custom", "custom", adjustments);
+            var Tz = TimeZoneInfo.CreateCustomTimeZone("custom", new TimeSpan(1, 0, 0), "custom", "custom", "custom", adjustments);
 
             var releases = new List<ReleaseInfo>();
 
-            NameValueCollection qParams = new NameValueCollection();
+            var qParams = new NameValueCollection();
             qParams.Add("api", "");
             if (query.ImdbIDShort != null)
                 qParams.Add("imdb", query.ImdbIDShort);
@@ -105,7 +105,7 @@ namespace Jackett.Common.Indexers
                 qParams.Add("categories[" + cat + "]", "1");
             }
 
-            string urlSearch = SearchUrl;
+            var urlSearch = SearchUrl;
             urlSearch += "?" + qParams.GetQueryString();
 
             var response = await RequestStringWithCookiesAndRetry(urlSearch);

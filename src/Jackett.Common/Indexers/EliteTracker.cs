@@ -266,7 +266,7 @@ namespace Jackett.Common.Indexers
                     //issue #5064 replace multi keyword
                     if (!string.IsNullOrEmpty(ReplaceMulti))
                     {
-                        System.Text.RegularExpressions.Regex regex = new Regex("(?i)([\\.\\- ])MULTI([\\.\\- ])");
+                        var regex = new Regex("(?i)([\\.\\- ])MULTI([\\.\\- ])");
                         release.Title = regex.Replace(release.Title, "$1" + ReplaceMulti + "$2");
                     }
                     // issue #6855 Replace VOSTFR with ENGLISH

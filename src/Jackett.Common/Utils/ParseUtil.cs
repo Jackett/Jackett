@@ -91,7 +91,7 @@ namespace Jackett.Common.Utils
         {
             if (str == null)
                 return null;
-            Regex IdRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
+            var IdRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
             var IdMatch = IdRegEx.Match(str);
             if (!IdMatch.Success)
                 return null;
