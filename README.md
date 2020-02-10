@@ -295,6 +295,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HDCenter
  * HDChina (HDWing)
  * HDCity
+ * HDDisk (HDD)
  * HDHome (HDBigger)
  * HDME
  * HDRoute
