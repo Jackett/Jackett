@@ -136,7 +136,7 @@ namespace Jackett.Server
 
         public static void SetupLogging(ContainerBuilder builder)
         {
-            Logger logger = LogManager.GetCurrentClassLogger();
+            var logger = LogManager.GetCurrentClassLogger();
 
             if (builder != null)
             {

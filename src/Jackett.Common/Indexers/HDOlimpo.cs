@@ -131,7 +131,7 @@ namespace Jackett.Common.Indexers
                 response = await PostDataWithCookies(SearchUrl, pairs, configData.CookieHeader.Value, SiteLink, headers, body);
             }
 
-            List<ReleaseInfo> releases = ParseResponse(query, response, includePremium);
+            var releases = ParseResponse(query, response, includePremium);
 
             return releases;
         }
@@ -145,7 +145,7 @@ namespace Jackett.Common.Indexers
 
         private List<ReleaseInfo> ParseResponse(TorznabQuery query, WebClientStringResult response, bool includePremium)
         {
-            List<ReleaseInfo> releases = new List<ReleaseInfo>();
+            var releases = new List<ReleaseInfo>();
 
             var torrents = CheckResponse(response);
 

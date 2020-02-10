@@ -240,7 +240,7 @@ namespace Jackett.Common.Indexers
             }
             try
             {
-                string RowsSelector = "table.forumline > tbody > tr[class*=prow]";
+                var RowsSelector = "table.forumline > tbody > tr[class*=prow]";
 
                 var SearchResultParser = new HtmlParser();
                 var SearchResultDocument = SearchResultParser.ParseDocument(results.Content);

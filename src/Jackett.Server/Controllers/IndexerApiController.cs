@@ -59,9 +59,9 @@ namespace Jackett.Server.Controllers
     {
         public IIndexerManagerService IndexerService { get; private set; }
         public IIndexer CurrentIndexer { get; set; }
-        private Logger logger;
-        private IServerService serverService;
-        private ICacheService cacheService;
+        private readonly Logger logger;
+        private readonly IServerService serverService;
+        private readonly ICacheService cacheService;
 
         public IndexerApiController(IIndexerManagerService indexerManagerService, IServerService ss, ICacheService c, Logger logger)
         {

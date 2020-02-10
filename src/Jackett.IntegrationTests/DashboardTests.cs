@@ -11,21 +11,21 @@ namespace Jackett.IntegrationTests
         [TestMethod]
         public void CheckTitle()
         {
-            string pageTitle = _webDriver.Title;
+            var pageTitle = _webDriver.Title;
             Assert.AreEqual("Jackett", pageTitle);
         }
 
         [TestMethod]
         public void DefaultPortShown()
         {
-            string port = _webDriver.FindElement(By.CssSelector("#jackett-port")).GetAttribute("value");
+            var port = _webDriver.FindElement(By.CssSelector("#jackett-port")).GetAttribute("value");
             Assert.AreEqual("9117", port);
         }
 
         [TestMethod]
         public void IndexerTableIsPresent()
         {
-            IWebElement table = _webDriver.FindElement(By.CssSelector("#configured-indexer-datatable"));
+            var table = _webDriver.FindElement(By.CssSelector("#configured-indexer-datatable"));
             Assert.IsNotNull(table);
         }
 
@@ -34,7 +34,7 @@ namespace Jackett.IntegrationTests
         {
             _webDriver.FindElement(By.CssSelector("#jackett-add-indexer")).Click();
             WaitUntilModalIsDisplayed("#select-indexer-modal h4");
-            string modalHeading = _webDriver.FindElement(By.CssSelector("#select-indexer-modal h4")).Text;
+            var modalHeading = _webDriver.FindElement(By.CssSelector("#select-indexer-modal h4")).Text;
             Assert.AreEqual("Select an indexer to setup", modalHeading);
         }
 
@@ -43,7 +43,7 @@ namespace Jackett.IntegrationTests
         {
             _webDriver.FindElement(By.CssSelector("#jackett-add-indexer")).Click();
             WaitUntilModalIsDisplayed("#select-indexer-modal h4");
-            int indexerCount = _webDriver.FindElements(By.CssSelector("#unconfigured-indexer-datatable tbody tr")).Count;
+            var indexerCount = _webDriver.FindElements(By.CssSelector("#unconfigured-indexer-datatable tbody tr")).Count;
             Assert.IsTrue(indexerCount > 400);
         }
 
@@ -52,7 +52,7 @@ namespace Jackett.IntegrationTests
         {
             _webDriver.FindElement(By.CssSelector("#jackett-show-search")).Click();
             WaitUntilModalIsDisplayed("#select-indexer-modal div.modal-body p");
-            string modalDescription = _webDriver.FindElement(By.CssSelector("#select-indexer-modal div.modal-body p")).Text;
+            var modalDescription = _webDriver.FindElement(By.CssSelector("#select-indexer-modal div.modal-body p")).Text;
             Assert.AreEqual("You can search all configured indexers from this screen.", modalDescription);
         }
 
@@ -75,17 +75,17 @@ namespace Jackett.IntegrationTests
         [TestInitialize]
         public void LoadDashboard()
         {
-            string url = "http://localhost:9117/UI/Dashboard";
+            var url = "http://localhost:9117/UI/Dashboard";
             Console.WriteLine($"Url for test: {url}");
             _webDriver.Navigate().GoToUrl(url);
 
-            WebDriverWait wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(20));
-            IWebElement element = wait.Until(x => x.FindElement(By.CssSelector("#configured-indexer-datatable")));
+            var wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(20));
+            var element = wait.Until(x => x.FindElement(By.CssSelector("#configured-indexer-datatable")));
         }
 
         private bool WaitUntilModalIsDisplayed(string cssSelector)
         {
-            WebDriverWait wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(5));
+            var wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(5));
             var element = wait.Until(condition =>
             {
                 try

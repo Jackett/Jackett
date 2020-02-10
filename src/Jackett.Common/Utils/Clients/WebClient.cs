@@ -33,11 +33,11 @@ namespace Jackett.Common.Utils.Clients
             }
         }
 
-        virtual protected void OnConfigChange()
+        protected virtual void OnConfigChange()
         {
         }
 
-        virtual public void AddTrustedCertificate(string host, string hash)
+        public virtual void AddTrustedCertificate(string host, string hash)
         {
             // not implemented by default
         }
@@ -52,7 +52,7 @@ namespace Jackett.Common.Utils.Clients
             ServerConfigUnsubscriber = serverConfig.Subscribe(this);
         }
 
-        async protected Task DelayRequest(WebRequest request)
+        protected async Task DelayRequest(WebRequest request)
         {
             if (request.EmulateBrowser == null)
                 request.EmulateBrowser = EmulateBrowser;
@@ -69,7 +69,7 @@ namespace Jackett.Common.Utils.Clients
             }
         }
 
-        virtual protected void PrepareRequest(WebRequest request)
+        protected virtual void PrepareRequest(WebRequest request)
         {
             // add Accept/Accept-Language header if not set
             // some webservers won't accept requests without accept
@@ -97,7 +97,7 @@ namespace Jackett.Common.Utils.Clients
             return;
         }
 
-        virtual public async Task<WebClientByteResult> GetBytes(WebRequest request)
+        public virtual async Task<WebClientByteResult> GetBytes(WebRequest request)
         {
             logger.Debug(string.Format("WebClient({0}).GetBytes(Url:{1})", ClientType, request.Url));
             PrepareRequest(request);
@@ -109,7 +109,7 @@ namespace Jackett.Common.Utils.Clients
             return result;
         }
 
-        virtual public async Task<WebClientStringResult> GetString(WebRequest request)
+        public virtual async Task<WebClientStringResult> GetString(WebRequest request)
         {
             logger.Debug(string.Format("WebClient({0}).GetString(Url:{1})", ClientType, request.Url));
             PrepareRequest(request);
@@ -117,7 +117,7 @@ namespace Jackett.Common.Utils.Clients
             var result = await Run(request);
             lastRequest = DateTime.Now;
             result.Request = request;
-            WebClientStringResult stringResult = Mapper.Map<WebClientStringResult>(result);
+            var stringResult = Mapper.Map<WebClientStringResult>(result);
             Encoding encoding = null;
             if (request.Encoding != null)
             {
@@ -125,7 +125,7 @@ namespace Jackett.Common.Utils.Clients
             }
             else if (result.Headers.ContainsKey("content-type"))
             {
-                Regex CharsetRegex = new Regex(@"charset=([\w-]+)", RegexOptions.Compiled);
+                var CharsetRegex = new Regex(@"charset=([\w-]+)", RegexOptions.Compiled);
                 var CharsetRegexMatch = CharsetRegex.Match(result.Headers["content-type"][0]);
                 if (CharsetRegexMatch.Success)
                 {
@@ -158,8 +158,7 @@ namespace Jackett.Common.Utils.Clients
             stringResult.Content = decodedContent;
             logger.Debug(string.Format("WebClient({0}): Returning {1} => {2}", ClientType, result.Status, (result.IsRedirect ? result.RedirectingTo + " " : "") + (decodedContent == null ? "<NULL>" : decodedContent)));
 
-            string[] server;
-            if (stringResult.Headers.TryGetValue("server", out server))
+            if (stringResult.Headers.TryGetValue("server", out var server))
             {
                 if (server[0] == "cloudflare-nginx")
                     stringResult.Content = BrowserUtil.DecodeCloudFlareProtectedEmailFromHTML(stringResult.Content);
@@ -168,10 +167,10 @@ namespace Jackett.Common.Utils.Clients
         }
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-        virtual protected async Task<WebClientByteResult> Run(WebRequest webRequest) { throw new NotImplementedException(); }
+        protected virtual async Task<WebClientByteResult> Run(WebRequest webRequest) { throw new NotImplementedException(); }
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
 
-        abstract public void Init();
+        public abstract void Init();
 
         public virtual void OnCompleted()
         {
@@ -201,7 +200,7 @@ namespace Jackett.Common.Utils.Clients
 
             // other encodings
             var builder = new StringBuilder();
-            foreach (KeyValuePair<string, string> pair in nameValueCollection)
+            foreach (var pair in nameValueCollection)
             {
                 if (builder.Length > 0)
                     builder.Append('&');

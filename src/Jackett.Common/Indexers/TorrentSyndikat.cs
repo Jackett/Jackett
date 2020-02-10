@@ -22,7 +22,7 @@ namespace Jackett.Common.Indexers
         private string SearchUrl { get { return SiteLink + "browse.php"; } }
         private string LoginUrl { get { return SiteLink + "eing2.php"; } }
         private string CaptchaUrl { get { return SiteLink + "simpleCaptcha.php?numImages=1"; } }
-        private TimeZoneInfo germanyTz;
+        private readonly TimeZoneInfo germanyTz;
 
         private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
         {
@@ -47,8 +47,8 @@ namespace Jackett.Common.Indexers
 
             TorznabCaps.SupportsImdbMovieSearch = true;
 
-            this.configData.DisplayText.Value = "Only the results from the first search result page are shown, adjust your profile settings to show the maximum.";
-            this.configData.DisplayText.Name = "Notice";
+            configData.DisplayText.Value = "Only the results from the first search result page are shown, adjust your profile settings to show the maximum.";
+            configData.DisplayText.Name = "Notice";
 
             AddCategoryMapping(2, TorznabCatType.PC, "Apps / Windows");
             AddCategoryMapping(13, TorznabCatType.PC, "Apps / Linux");
@@ -95,10 +95,10 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(48, TorznabCatType.Other, "Englisch / Bildung");
             AddCategoryMapping(49, TorznabCatType.TVSport, "Englisch / Sport");
 
-            TimeZoneInfo.TransitionTime startTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 3, 0, 0), 3, 5, DayOfWeek.Sunday);
-            TimeZoneInfo.TransitionTime endTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 4, 0, 0), 10, 5, DayOfWeek.Sunday);
-            TimeSpan delta = new TimeSpan(1, 0, 0);
-            TimeZoneInfo.AdjustmentRule adjustment = TimeZoneInfo.AdjustmentRule.CreateAdjustmentRule(new DateTime(1999, 10, 1), DateTime.MaxValue.Date, delta, startTransition, endTransition);
+            var startTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 3, 0, 0), 3, 5, DayOfWeek.Sunday);
+            var endTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 4, 0, 0), 10, 5, DayOfWeek.Sunday);
+            var delta = new TimeSpan(1, 0, 0);
+            var adjustment = TimeZoneInfo.AdjustmentRule.CreateAdjustmentRule(new DateTime(1999, 10, 1), DateTime.MaxValue.Date, delta, startTransition, endTransition);
             TimeZoneInfo.AdjustmentRule[] adjustments = { adjustment };
             germanyTz = TimeZoneInfo.CreateCustomTimeZone("W. Europe Standard Time", new TimeSpan(1, 0, 0), "(GMT+01:00) W. Europe Standard Time", "W. Europe Standard Time", "W. Europe DST Time", adjustments);
         }
@@ -131,7 +131,7 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            List<ReleaseInfo> releases = new List<ReleaseInfo>();
+            var releases = new List<ReleaseInfo>();
 
             var searchString = query.GetQueryString();
             var searchUrl = SearchUrl;
@@ -154,7 +154,7 @@ namespace Jackett.Common.Indexers
                     // use AND+wildcard operator to avoid getting to many useless results
                     var searchStringArray = Regex.Split(searchString.Trim(), "[ _.-]+", RegexOptions.Compiled).ToList();
                     searchStringArray = searchStringArray.Select(x => "+" + x).ToList(); // add AND operators
-                    var searchStringFinal = String.Join(" ", searchStringArray);
+                    var searchStringFinal = string.Join(" ", searchStringArray);
                     queryCollection.Add("search", searchStringFinal);
                 }
 
@@ -199,7 +199,7 @@ namespace Jackett.Common.Indexers
                     var torrentTag = descCol.Cq().Find("span.torrent-tag");
                     var torrentTags = torrentTag.Elements.Select(x => x.InnerHTML).ToList();
                     release.Title = qCommentLink.Attr("title");
-                    release.Description = String.Join(", ", torrentTags);
+                    release.Description = string.Join(", ", torrentTags);
                     release.Comments = new Uri(SiteLink + qCommentLink.Attr("href").Replace("&hit=1", ""));
                     release.Guid = release.Comments;
 
@@ -214,7 +214,7 @@ namespace Jackett.Common.Indexers
                     else
                         dateGerman = DateTime.SpecifyKind(DateTime.ParseExact(dateStr, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture), DateTimeKind.Unspecified);
 
-                    DateTime pubDateUtc = TimeZoneInfo.ConvertTimeToUtc(dateGerman, germanyTz);
+                    var pubDateUtc = TimeZoneInfo.ConvertTimeToUtc(dateGerman, germanyTz);
                     release.PublishDate = pubDateUtc.ToLocalTime();
 
                     var imdbLink = descCol.Cq().Find("a[href*=\"&searchin=imdb\"]");

@@ -79,10 +79,10 @@ namespace Jackett.Server
                     });
 #endif
 
-            RuntimeSettings runtimeSettings = new RuntimeSettings();
+            var runtimeSettings = new RuntimeSettings();
             Configuration.GetSection("RuntimeSettings").Bind(runtimeSettings);
 
-            DirectoryInfo dataProtectionFolder = new DirectoryInfo(Path.Combine(runtimeSettings.DataFolder, "DataProtection"));
+            var dataProtectionFolder = new DirectoryInfo(Path.Combine(runtimeSettings.DataFolder, "DataProtection"));
 
             services.AddDataProtection()
                         .PersistKeysToFileSystem(dataProtectionFolder)
@@ -102,7 +102,7 @@ namespace Jackett.Server
             builder.RegisterType<ServiceConfigService>().As<IServiceConfigService>().SingleInstance();
             builder.RegisterType<FilePermissionService>().As<IFilePermissionService>().SingleInstance();
 
-            IContainer container = builder.Build();
+            var container = builder.Build();
             Helper.ApplicationContainer = container;
 
             Helper.Logger.Debug("Autofac container built");
@@ -124,7 +124,7 @@ namespace Jackett.Server
 
             app.UseCustomExceptionHandler();
 
-            string serverBasePath = Helper.ServerService.BasePath() ?? string.Empty;
+            var serverBasePath = Helper.ServerService.BasePath() ?? string.Empty;
 
             if (!string.IsNullOrEmpty(serverBasePath))
             {
@@ -163,7 +163,7 @@ namespace Jackett.Server
 
             app.UseCustomExceptionHandler();
 
-            string serverBasePath = Helper.ServerService.BasePath() ?? string.Empty;
+            var serverBasePath = Helper.ServerService.BasePath() ?? string.Empty;
 
             if (!string.IsNullOrEmpty(serverBasePath))
             {

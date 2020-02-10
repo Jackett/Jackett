@@ -21,8 +21,8 @@ namespace Jackett.Common.Indexers
         private string SearchUrl { get { return SiteLink + "torrentsutils.php"; } }
         private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
         private string CaptchaUrl { get { return SiteLink + "simpleCaptcha.php?numImages=1"; } }
-        private TimeZoneInfo germanyTz = TimeZoneInfo.CreateCustomTimeZone("W. Europe Standard Time", new TimeSpan(1, 0, 0), "W. Europe Standard Time", "W. Europe Standard Time");
-        private readonly List<String> categories = new List<string>() { "1080P", "720P", "BDRip", "BluRay", "BRRip", "DVDR", "DVDRip", "FLAC", "MP3", "MP4", "Packs", "R5", "Remux", "TVRip", "WebRip" };
+        private readonly TimeZoneInfo germanyTz = TimeZoneInfo.CreateCustomTimeZone("W. Europe Standard Time", new TimeSpan(1, 0, 0), "W. Europe Standard Time", "W. Europe Standard Time");
+        private readonly List<string> categories = new List<string>() { "1080P", "720P", "BDRip", "BluRay", "BRRip", "DVDR", "DVDRip", "FLAC", "MP3", "MP4", "Packs", "R5", "Remux", "TVRip", "WebRip" };
 
         private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
         {
@@ -45,8 +45,8 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "private";
 
-            this.configData.DisplayText.Value = "Only the results from the first search result page are shown, adjust your profile settings to show the maximum.";
-            this.configData.DisplayText.Name = "Notice";
+            configData.DisplayText.Value = "Only the results from the first search result page are shown, adjust your profile settings to show the maximum.";
+            configData.DisplayText.Name = "Notice";
 
             AddCategoryMapping("1080P", TorznabCatType.MoviesHD, "1080P");
             AddCategoryMapping("720P", TorznabCatType.MoviesHD, "720P");
@@ -92,7 +92,7 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            List<ReleaseInfo> releases = new List<ReleaseInfo>();
+            var releases = new List<ReleaseInfo>();
 
             var searchString = query.GetQueryString();
             var searchUrl = SearchUrl;
@@ -119,7 +119,7 @@ namespace Jackett.Common.Indexers
             }
 
             var cats = MapTorznabCapsToTrackers(query);
-            queryCollection.Add("hiddenqualities", String.Join(",", cats));
+            queryCollection.Add("hiddenqualities", string.Join(",", cats));
 
             searchUrl += "?" + queryCollection.GetQueryString();
 

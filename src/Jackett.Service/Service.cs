@@ -13,16 +13,16 @@ namespace Jackett.Service
 {
     public partial class Service : ServiceBase
     {
-        private IProcessService processService;
+        private readonly IProcessService processService;
         private Process consoleProcess;
-        private Logger logger;
+        private readonly Logger logger;
         private bool serviceStopInitiated;
 
         public Service()
         {
             InitializeComponent();
 
-            RuntimeSettings runtimeSettings = new RuntimeSettings()
+            var runtimeSettings = new RuntimeSettings()
             {
                 CustomLogFileName = "ServiceLog.txt"
             };
@@ -51,7 +51,7 @@ namespace Jackett.Service
 
         private void StartConsoleApplication()
         {
-            string applicationFolder = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath);
+            var applicationFolder = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath);
 
             var exePath = Path.Combine(applicationFolder, "JackettConsole.exe");
 

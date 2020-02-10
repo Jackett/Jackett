@@ -21,7 +21,7 @@ namespace Jackett.Common.Indexers
 
         private new ConfigurationData configData
         {
-            get { return (ConfigurationData)base.configData; }
+            get { return base.configData; }
             set { base.configData = value; }
         }
 
@@ -104,7 +104,7 @@ namespace Jackett.Common.Indexers
                     release.Title = torrent.Value<string>("name");
 
                     // construct magnet link from infohash with all public trackers known to man
-                    string magnet_uri = "magnet:?xt=urn:btih:" + torrent.Value<JToken>("infohash") +
+                    var magnet_uri = "magnet:?xt=urn:btih:" + torrent.Value<JToken>("infohash") +
                         "&tr=udp://tracker.coppersurfer.tk:6969/announce" +
                         "&tr=udp://tracker.leechers-paradise.org:6969/announce" +
                         "&tr=udp://tracker.internetwarriors.net:1337/announce" +
@@ -148,7 +148,7 @@ namespace Jackett.Common.Indexers
 
                     // convert unix timestamp to human readable date
                     double createdunix = torrent.Value<long>("created_unix");
-                    System.DateTime dateTime = new System.DateTime(1970, 1, 1, 0, 0, 0, 0);
+                    var dateTime = new System.DateTime(1970, 1, 1, 0, 0, 0, 0);
                     dateTime = dateTime.AddSeconds(createdunix);
                     release.PublishDate = dateTime;
                     release.Seeders = torrent.Value<int>("seeders");
@@ -164,7 +164,7 @@ namespace Jackett.Common.Indexers
                     release.UploadVolumeFactor = 1;
 
                     // dummy mappings for sonarr, radarr, etc
-                    string categories = string.Join(";", MapTorznabCapsToTrackers(query));
+                    var categories = string.Join(";", MapTorznabCapsToTrackers(query));
                     if (!string.IsNullOrEmpty(categories))
                     {
                         if (categories.Contains("1000"))

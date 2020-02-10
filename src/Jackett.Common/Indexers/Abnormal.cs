@@ -38,7 +38,7 @@ namespace Jackett.Common.Indexers
         private bool CacheMode { get { return ConfigData.HardDriveCache.Value; } }
         private static string Directory => Path.Combine(Path.GetTempPath(), Assembly.GetExecutingAssembly().GetName().Name.ToLower(), MethodBase.GetCurrentMethod().DeclaringType?.Name.ToLower());
 
-        private Dictionary<string, string> emulatedBrowserHeaders = new Dictionary<string, string>();
+        private readonly Dictionary<string, string> emulatedBrowserHeaders = new Dictionary<string, string>();
         private CQ fDom = null;
 
         private ConfigurationDataAbnormal ConfigData
@@ -171,10 +171,10 @@ namespace Jackett.Common.Indexers
             {
                 // Parse error page
                 CQ dom = response.Content;
-                string message = dom[".warning"].Text().Split('.').Reverse().Skip(1).First();
+                var message = dom[".warning"].Text().Split('.').Reverse().Skip(1).First();
 
                 // Try left
-                string left = dom[".info"].Text().Trim();
+                var left = dom[".info"].Text().Trim();
 
                 // Oops, unable to login
                 output("-> Login failed: \"" + message + "\" and " + left + " tries left before being banned for 6 hours !", "error");
@@ -193,19 +193,19 @@ namespace Jackett.Common.Indexers
         /// <returns>Releases</returns>
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            TimeZoneInfo.TransitionTime startTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 3, 0, 0), 3, 5, DayOfWeek.Sunday);
-            TimeZoneInfo.TransitionTime endTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 4, 0, 0), 10, 5, DayOfWeek.Sunday);
-            TimeSpan delta = new TimeSpan(1, 0, 0);
-            TimeZoneInfo.AdjustmentRule adjustment = TimeZoneInfo.AdjustmentRule.CreateAdjustmentRule(new DateTime(1999, 10, 1), DateTime.MaxValue.Date, delta, startTransition, endTransition);
+            var startTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 3, 0, 0), 3, 5, DayOfWeek.Sunday);
+            var endTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 4, 0, 0), 10, 5, DayOfWeek.Sunday);
+            var delta = new TimeSpan(1, 0, 0);
+            var adjustment = TimeZoneInfo.AdjustmentRule.CreateAdjustmentRule(new DateTime(1999, 10, 1), DateTime.MaxValue.Date, delta, startTransition, endTransition);
             TimeZoneInfo.AdjustmentRule[] adjustments = { adjustment };
-            TimeZoneInfo FranceTz = TimeZoneInfo.CreateCustomTimeZone("W. Europe Standard Time", new TimeSpan(1, 0, 0), "(GMT+01:00) W. Europe Standard Time", "W. Europe Standard Time", "W. Europe DST Time", adjustments);
+            var FranceTz = TimeZoneInfo.CreateCustomTimeZone("W. Europe Standard Time", new TimeSpan(1, 0, 0), "(GMT+01:00) W. Europe Standard Time", "W. Europe Standard Time", "W. Europe DST Time", adjustments);
 
             var releases = new List<ReleaseInfo>();
             var torrentRowList = new List<CQ>();
             var searchTerm = query.GetQueryString();
             var searchUrl = SearchUrl;
-            int nbResults = 0;
-            int pageLinkCount = 0;
+            var nbResults = 0;
+            var pageLinkCount = 0;
 
             // Check cache first so we don't query the server (if search term used or not in dev mode)
             if (!DevMode && !string.IsNullOrEmpty(searchTerm))
@@ -237,7 +237,7 @@ namespace Jackett.Common.Indexers
                 torrentRowList.AddRange(firstPageRows.Select(fRow => fRow.Cq()));
 
                 // Check if there are pagination links at bottom
-                Boolean pagination = (fDom[".linkbox > a"].Length != 0);
+                var pagination = (fDom[".linkbox > a"].Length != 0);
 
                 // If pagination available
                 if (pagination)
@@ -271,7 +271,7 @@ namespace Jackett.Common.Indexers
                 if (!string.IsNullOrWhiteSpace(query.GetQueryString()) && pageLinkCount > 1)
                 {
                     // Starting with page #2
-                    for (int i = 2; i <= Math.Min(Int32.Parse(ConfigData.Pages.Value), pageLinkCount); i++)
+                    for (var i = 2; i <= Math.Min(int.Parse(ConfigData.Pages.Value), pageLinkCount); i++)
                     {
                         output("\nProcessing page #" + i);
 
@@ -293,44 +293,44 @@ namespace Jackett.Common.Indexers
                 }
 
                 // Loop on results
-                foreach (CQ tRow in torrentRowList)
+                foreach (var tRow in torrentRowList)
                 {
                     output("\n=>> Torrent #" + (releases.Count + 1));
 
                     // ID
-                    int id = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(1) > a").Attr("href").ToString(), @"\d+").Value);
+                    var id = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(1) > a").Attr("href").ToString(), @"\d+").Value);
                     output("ID: " + id);
 
                     // Release Name
-                    string name = tRow.Find("td:eq(1) > a").Text();
+                    var name = tRow.Find("td:eq(1) > a").Text();
                     //issue #3847 replace multi keyword
                     if (!string.IsNullOrEmpty(ReplaceMulti))
                     {
-                        System.Text.RegularExpressions.Regex regex = new Regex("(?i)([\\.\\- ])MULTI([\\.\\- ])");
+                        var regex = new Regex("(?i)([\\.\\- ])MULTI([\\.\\- ])");
                         name = regex.Replace(name, "$1" + ReplaceMulti + "$2");
                     }
                     output("Release: " + name);
 
                     // Category
-                    string categoryID = tRow.Find("td:eq(0) > a").Attr("href").Replace("torrents.php?cat[]=", String.Empty);
+                    var categoryID = tRow.Find("td:eq(0) > a").Attr("href").Replace("torrents.php?cat[]=", string.Empty);
                     var newznab = MapTrackerCatToNewznab(categoryID);
                     output("Category: " + MapTrackerCatToNewznab(categoryID).First().ToString() + " (" + categoryID + ")");
 
                     // Seeders
-                    int seeders = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(5)").Text(), @"\d+").Value);
+                    var seeders = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(5)").Text(), @"\d+").Value);
                     output("Seeders: " + seeders);
 
                     // Leechers
-                    int leechers = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(6)").Text(), @"\d+").Value);
+                    var leechers = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(6)").Text(), @"\d+").Value);
                     output("Leechers: " + leechers);
 
                     // Completed
-                    int completed = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(5)").Text(), @"\d+").Value);
+                    var completed = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(5)").Text(), @"\d+").Value);
                     output("Completed: " + completed);
 
                     // Size
-                    string sizeStr = tRow.Find("td:eq(4)").Text().Replace("Go", "gb").Replace("Mo", "mb").Replace("Ko", "kb");
-                    long size = ReleaseInfo.GetBytes(sizeStr);
+                    var sizeStr = tRow.Find("td:eq(4)").Text().Replace("Go", "gb").Replace("Mo", "mb").Replace("Ko", "kb");
+                    var size = ReleaseInfo.GetBytes(sizeStr);
                     output("Size: " + sizeStr + " (" + size + " bytes)");
 
                     // Publish DateToString
@@ -340,17 +340,17 @@ namespace Jackett.Common.Indexers
                     output("Released on: " + date);
 
                     // Torrent Details URL
-                    Uri detailsLink = new Uri(TorrentDescriptionUrl + id);
+                    var detailsLink = new Uri(TorrentDescriptionUrl + id);
                     output("Details: " + detailsLink.AbsoluteUri);
 
                     // Torrent Comments URL
-                    Uri commentsLink = new Uri(TorrentCommentUrl + id);
+                    var commentsLink = new Uri(TorrentCommentUrl + id);
                     output("Comments Link: " + commentsLink.AbsoluteUri);
 
                     // Torrent Download URL
                     Uri downloadLink = null;
-                    string link = tRow.Find("td:eq(3) > a").Attr("href");
-                    if (!String.IsNullOrEmpty(link))
+                    var link = tRow.Find("td:eq(3) > a").Attr("href");
+                    if (!string.IsNullOrEmpty(link))
                     {
                         // Download link available
                         downloadLink = new Uri(SiteLink + link);
@@ -364,7 +364,7 @@ namespace Jackett.Common.Indexers
                     }
 
                     // Freeleech
-                    int downloadVolumeFactor = 1;
+                    var downloadVolumeFactor = 1;
                     if (tRow.Find("img[alt=\"Freeleech\"]").Length >= 1)
                     {
                         downloadVolumeFactor = 0;
@@ -411,7 +411,7 @@ namespace Jackett.Common.Indexers
         private string buildQuery(string term, TorznabQuery query, string url, int page = 0)
         {
             var parameters = new NameValueCollection();
-            List<string> categoriesList = MapTorznabCapsToTrackers(query);
+            var categoriesList = MapTorznabCapsToTrackers(query);
             string categories = null;
 
             // Check if we are processing a new page
@@ -422,7 +422,7 @@ namespace Jackett.Common.Indexers
             }
 
             // Loop on Categories needed
-            foreach (string category in categoriesList)
+            foreach (var category in categoriesList)
             {
                 // If last, build !
                 if (categoriesList.Last() == category)
@@ -464,9 +464,9 @@ namespace Jackett.Common.Indexers
         /// </summary>
         /// <param name="request">URL created by Query Builder</param>
         /// <returns>Results from query</returns>
-        private async Task<String> queryExec(string request)
+        private async Task<string> queryExec(string request)
         {
-            String results = null;
+            string results = null;
 
             // Switch in we are in DEV mode with Hard Drive Cache or not
             if (DevMode && CacheMode)
@@ -487,9 +487,9 @@ namespace Jackett.Common.Indexers
         /// </summary>
         /// <param name="request">URL created by Query Builder</param>
         /// <returns>Results from query</returns>
-        private async Task<String> queryCache(string request)
+        private async Task<string> queryCache(string request)
         {
-            String results;
+            string results;
 
             // Create Directory if not exist
             System.IO.Directory.CreateDirectory(Directory);
@@ -498,10 +498,10 @@ namespace Jackett.Common.Indexers
             cleanCacheStorage();
 
             // File Name
-            string fileName = StringUtil.HashSHA1(request) + ".json";
+            var fileName = StringUtil.HashSHA1(request) + ".json";
 
             // Create fingerprint for request
-            string file = Path.Combine(Directory, fileName);
+            var file = Path.Combine(Directory, fileName);
 
             // Checking modes states
             if (File.Exists(file))
@@ -510,10 +510,10 @@ namespace Jackett.Common.Indexers
                 output("Loading results from hard drive cache ..." + fileName);
                 try
                 {
-                    using (StreamReader fileReader = File.OpenText(file))
+                    using (var fileReader = File.OpenText(file))
                     {
-                        JsonSerializer serializer = new JsonSerializer();
-                        results = (String)serializer.Deserialize(fileReader, typeof(String));
+                        var serializer = new JsonSerializer();
+                        results = (string)serializer.Deserialize(fileReader, typeof(string));
                     }
                 }
                 catch (Exception e)
@@ -529,9 +529,9 @@ namespace Jackett.Common.Indexers
 
                 // Cached file didn't exist for our query, writing it right now !
                 output("Writing results to hard drive cache ..." + fileName);
-                using (StreamWriter fileWriter = File.CreateText(file))
+                using (var fileWriter = File.CreateText(file))
                 {
-                    JsonSerializer serializer = new JsonSerializer();
+                    var serializer = new JsonSerializer();
                     serializer.Serialize(fileWriter, results);
                 }
             }
@@ -543,7 +543,7 @@ namespace Jackett.Common.Indexers
         /// </summary>
         /// <param name="request">URL created by Query Builder</param>
         /// <returns>Results from query</returns>
-        private async Task<String> queryTracker(string request)
+        private async Task<string> queryTracker(string request)
         {
             WebClientStringResult results = null;
 
@@ -621,7 +621,7 @@ namespace Jackett.Common.Indexers
             {
                 // Generate a random value in our range
                 var random = new Random(DateTime.Now.Millisecond);
-                int waiting = random.Next(Convert.ToInt32(ConfigData.LatencyStart.Value), Convert.ToInt32(ConfigData.LatencyEnd.Value));
+                var waiting = random.Next(Convert.ToInt32(ConfigData.LatencyStart.Value), Convert.ToInt32(ConfigData.LatencyEnd.Value));
                 output("\nLatency Faker => Sleeping for " + waiting + " ms...");
 
                 // Sleep now...

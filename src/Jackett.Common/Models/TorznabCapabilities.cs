@@ -59,7 +59,7 @@ namespace Jackett.Common.Models
             MovieSearchAvailable = Categories.Any(i => TorznabCatType.Movies.Contains(i));
         }
 
-        string SupportedTVSearchParams
+        private string SupportedTVSearchParams
         {
             get
             {
@@ -72,7 +72,7 @@ namespace Jackett.Common.Models
             }
         }
 
-        string SupportedMovieSearchParams
+        private string SupportedMovieSearchParams
         {
             get
             {
@@ -83,7 +83,7 @@ namespace Jackett.Common.Models
             }
         }
 
-        string SupportedMusicSearchParams
+        private string SupportedMusicSearchParams
         {
             get
             {

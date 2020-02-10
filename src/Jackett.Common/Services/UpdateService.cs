@@ -25,17 +25,17 @@ namespace Jackett.Common.Services
 
     public class UpdateService : IUpdateService
     {
-        Logger logger;
-        WebClient client;
-        IConfigurationService configService;
-        ManualResetEvent locker = new ManualResetEvent(false);
-        ITrayLockService lockService;
-        IProcessService processService;
-        IServiceConfigService windowsService;
-        IFilePermissionService filePermissionService;
-        private ServerConfig serverConfig;
-        bool forceupdatecheck = false;
-        Variants.JackettVariant variant = Variants.JackettVariant.NotFound;
+        private readonly Logger logger;
+        private readonly WebClient client;
+        private readonly IConfigurationService configService;
+        private readonly ManualResetEvent locker = new ManualResetEvent(false);
+        private readonly ITrayLockService lockService;
+        private readonly IProcessService processService;
+        private readonly IServiceConfigService windowsService;
+        private readonly IFilePermissionService filePermissionService;
+        private readonly ServerConfig serverConfig;
+        private bool forceupdatecheck = false;
+        private Variants.JackettVariant variant = Variants.JackettVariant.NotFound;
 
         public UpdateService(Logger l, WebClient c, IConfigurationService cfg, ITrayLockService ls, IProcessService ps, IServiceConfigService ws, IFilePermissionService fps, ServerConfig sc)
         {
@@ -99,7 +99,7 @@ namespace Jackett.Common.Services
                 return;
             }
 
-            Variants variants = new Variants();
+            var variants = new Variants();
             variant = variants.GetVariant();
             logger.Info("Jackett variant: " + variant.ToString());
 
@@ -112,7 +112,7 @@ namespace Jackett.Common.Services
                 return;
             }
 
-            bool trayIsRunning = false;
+            var trayIsRunning = false;
             if (isWindows)
             {
                 trayIsRunning = Process.GetProcessesByName("JackettTray").Length > 0;
@@ -225,7 +225,7 @@ namespace Jackett.Common.Services
 
             try
             {
-                DirectoryInfo d = new DirectoryInfo(tempDir);
+                var d = new DirectoryInfo(tempDir);
                 foreach (var dir in d.GetDirectories("JackettUpdate-*"))
                 {
                     try
@@ -249,9 +249,9 @@ namespace Jackett.Common.Services
 
         private async Task<string> DownloadRelease(List<Asset> assets, bool isWindows, string version)
         {
-            Variants variants = new Variants();
-            string artifactFileName = variants.GetArtifactFileName(variant);
-            Asset targetAsset = assets.Where(a => a.Browser_download_url.EndsWith(artifactFileName, StringComparison.OrdinalIgnoreCase) && artifactFileName.Length > 0).FirstOrDefault();
+            var variants = new Variants();
+            var artifactFileName = variants.GetArtifactFileName(variant);
+            var targetAsset = assets.Where(a => a.Browser_download_url.EndsWith(artifactFileName, StringComparison.OrdinalIgnoreCase) && artifactFileName.Length > 0).FirstOrDefault();
 
             if (targetAsset == null)
             {
@@ -291,7 +291,7 @@ namespace Jackett.Common.Services
                 Stream inStream = File.OpenRead(gzPath);
                 Stream gzipStream = new GZipInputStream(inStream);
 
-                TarArchive tarArchive = TarArchive.CreateInputTarArchive(gzipStream);
+                var tarArchive = TarArchive.CreateInputTarArchive(gzipStream);
                 tarArchive.ExtractContents(tempDir);
                 tarArchive.Close();
                 gzipStream.Close();
@@ -306,28 +306,28 @@ namespace Jackett.Common.Services
 
                     // When the files get extracted, the execute permission for jackett and JackettUpdater don't get carried across
 
-                    string jackettPath = tempDir + "/Jackett/jackett";
+                    var jackettPath = tempDir + "/Jackett/jackett";
                     filePermissionService.MakeFileExecutable(jackettPath);
 
-                    string jackettUpdaterPath = tempDir + "/Jackett/JackettUpdater";
+                    var jackettUpdaterPath = tempDir + "/Jackett/JackettUpdater";
                     filePermissionService.MakeFileExecutable(jackettUpdaterPath);
 
                     if (variant == Variants.JackettVariant.CoreMacOs)
                     {
-                        string macosServicePath = tempDir + "/Jackett/install_service_macos";
+                        var macosServicePath = tempDir + "/Jackett/install_service_macos";
                         filePermissionService.MakeFileExecutable(macosServicePath);
                     }
                     else if (variant == Variants.JackettVariant.Mono)
                     {
-                        string systemdPath = tempDir + "/Jackett/install_service_systemd_mono.sh";
+                        var systemdPath = tempDir + "/Jackett/install_service_systemd_mono.sh";
                         filePermissionService.MakeFileExecutable(systemdPath);
                     }
                     else
                     {
-                        string systemdPath = tempDir + "/Jackett/install_service_systemd.sh";
+                        var systemdPath = tempDir + "/Jackett/install_service_systemd.sh";
                         filePermissionService.MakeFileExecutable(systemdPath);
 
-                        string launcherPath = tempDir + "/Jackett/jackett_launcher.sh";
+                        var launcherPath = tempDir + "/Jackett/jackett_launcher.sh";
                         filePermissionService.MakeFileExecutable(launcherPath);
                     }
                 }
@@ -338,7 +338,7 @@ namespace Jackett.Common.Services
 
         private void StartUpdate(string updaterExePath, string installLocation, bool isWindows, bool NoRestart, bool trayIsRunning)
         {
-            string appType = "Console";
+            var appType = "Console";
 
             if (isWindows && windowsService.ServiceExists() && windowsService.ServiceRunning())
             {

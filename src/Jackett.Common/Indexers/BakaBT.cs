@@ -18,7 +18,7 @@ namespace Jackett.Common.Indexers
     {
         private string SearchUrl => SiteLink + "browse.php?only=0&hentai=1&incomplete=1&lossless=1&hd=1&multiaudio=1&bonus=1&reorder=1&q=";
         private string LoginUrl => SiteLink + "login.php";
-        private string LogoutStr = "<a href=\"logout.php\">Logout</a>";
+        private readonly string LogoutStr = "<a href=\"logout.php\">Logout</a>";
 
         private new ConfigurationDataBasicLogin configData
         {

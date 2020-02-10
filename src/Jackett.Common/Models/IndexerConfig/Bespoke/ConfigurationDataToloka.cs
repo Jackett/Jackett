@@ -1,6 +1,6 @@
 namespace Jackett.Common.Models.IndexerConfig.Bespoke
 {
-    class ConfigurationDataToloka : ConfigurationDataBasicLogin
+    internal class ConfigurationDataToloka : ConfigurationDataBasicLogin
     {
         public BoolItem StripCyrillicLetters { get; private set; }
 

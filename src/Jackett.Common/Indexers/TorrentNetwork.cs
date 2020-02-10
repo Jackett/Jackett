@@ -20,7 +20,7 @@ namespace Jackett.Common.Indexers
         private string APIUrl { get { return SiteLink + "api/"; } }
         private string passkey;
 
-        private Dictionary<string, string> APIHeaders = new Dictionary<string, string>()
+        private readonly Dictionary<string, string> APIHeaders = new Dictionary<string, string>()
         {
             {"Content-Type", "application/json"},
         };

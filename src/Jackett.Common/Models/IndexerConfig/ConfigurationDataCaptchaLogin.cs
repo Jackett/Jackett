@@ -1,6 +1,6 @@
 namespace Jackett.Common.Models.IndexerConfig
 {
-    class ConfigurationDataCaptchaLogin : ConfigurationData
+    internal class ConfigurationDataCaptchaLogin : ConfigurationData
     {
         public StringItem Username { get; private set; }
 

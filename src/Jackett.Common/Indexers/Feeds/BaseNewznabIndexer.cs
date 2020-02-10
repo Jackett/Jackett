@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
@@ -36,12 +35,12 @@ namespace Jackett.Common.Indexers.Feeds
                 Link = item.FirstValue("link").ToUri(),
                 Comments = item.FirstValue("comments").ToUri(),
                 PublishDate = item.FirstValue("pubDate").ToDateTime(),
-                Category = new List<int> { Int32.Parse(attributes.First(e => e.Attribute("name").Value == "category").Attribute("value").Value) },
-                Size = ReadAttribute(attributes, "size").TryParse<Int64>(),
-                Files = ReadAttribute(attributes, "files").TryParse<Int64>(),
+                Category = new List<int> { int.Parse(attributes.First(e => e.Attribute("name").Value == "category").Attribute("value").Value) },
+                Size = ReadAttribute(attributes, "size").TryParse<long>(),
+                Files = ReadAttribute(attributes, "files").TryParse<long>(),
                 Description = item.FirstValue("description"),
-                Seeders = ReadAttribute(attributes, "seeders").TryParse<Int32>(),
-                Peers = ReadAttribute(attributes, "peers").TryParse<Int32>(),
+                Seeders = ReadAttribute(attributes, "seeders").TryParse<int>(),
+                Peers = ReadAttribute(attributes, "peers").TryParse<int>(),
                 InfoHash = attributes.First(e => e.Attribute("name").Value == "infohash").Attribute("value").Value,
                 MagnetUri = attributes.First(e => e.Attribute("name").Value == "magneturl").Attribute("value").Value.ToUri(),
             };

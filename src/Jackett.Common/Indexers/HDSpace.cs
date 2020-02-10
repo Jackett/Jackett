@@ -92,7 +92,7 @@ namespace Jackett.Common.Indexers
             {
                 var errorStr = "You have {0} remaining login attempts";
                 var remainingAttemptSpan = new Regex(string.Format(errorStr, "(.*?)")).Match(loginPage.Content).Groups[1].ToString();
-                var attempts = Regex.Replace(remainingAttemptSpan, "<.*?>", String.Empty);
+                var attempts = Regex.Replace(remainingAttemptSpan, "<.*?>", string.Empty);
                 var errorMessage = string.Format(errorStr, attempts);
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
@@ -131,7 +131,7 @@ namespace Jackett.Common.Indexers
                     if (prev == null || prev.NodeName.ToLowerInvariant() != "style")
                         continue;
 
-                    CQ qRow = row.Cq();
+                    var qRow = row.Cq();
                     var release = new ReleaseInfo();
 
                     release.MinimumRatio = 1;

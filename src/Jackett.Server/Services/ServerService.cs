@@ -22,16 +22,16 @@ namespace Jackett.Server.Services
 {
     public class ServerService : IServerService
     {
-        private IIndexerManagerService indexerService;
-        private IProcessService processService;
-        private ISerializeService serializeService;
-        private IConfigurationService configService;
-        private Logger logger;
-        private Common.Utils.Clients.WebClient client;
-        private IUpdateService updater;
-        private List<string> _notices = new List<string>();
-        private ServerConfig config;
-        private IProtectionService _protectionService;
+        private readonly IIndexerManagerService indexerService;
+        private readonly IProcessService processService;
+        private readonly ISerializeService serializeService;
+        private readonly IConfigurationService configService;
+        private readonly Logger logger;
+        private readonly Common.Utils.Clients.WebClient client;
+        private readonly IUpdateService updater;
+        private readonly List<string> _notices = new List<string>();
+        private readonly ServerConfig config;
+        private readonly IProtectionService _protectionService;
         private bool isDotNetCoreCapable;
 
         public ServerService(IIndexerManagerService i, IProcessService p, ISerializeService s, IConfigurationService c, Logger l, Common.Utils.Clients.WebClient w, IUpdateService u, IProtectionService protectionService, ServerConfig serverConfig)
@@ -62,7 +62,7 @@ namespace Jackett.Server.Services
 
             var encryptedLink = _protectionService.Protect(link.ToString());
             var encodedLink = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(encryptedLink));
-            string urlEncodedFile = WebUtility.UrlEncode(file);
+            var urlEncodedFile = WebUtility.UrlEncode(file);
             var proxyLink = string.Format("{0}{1}/{2}/?jackett_apikey={3}&path={4}&file={5}", serverUrl, action, indexerId, config.APIKey, encodedLink, urlEncodedFile);
             return new Uri(proxyLink);
         }
@@ -93,13 +93,13 @@ namespace Jackett.Server.Services
                 var runtimedir = RuntimeEnvironment.GetRuntimeDirectory();
                 logger.Info("Environment version: " + Environment.Version.ToString() + " (" + runtimedir + ")");
                 logger.Info("OS version: " + Environment.OSVersion.ToString() + (Environment.Is64BitOperatingSystem ? " (64bit OS)" : "") + (Environment.Is64BitProcess ? " (64bit process)" : ""));
-                Variants variants = new Variants();
-                Variants.JackettVariant variant = variants.GetVariant();
+                var variants = new Variants();
+                var variant = variants.GetVariant();
                 logger.Info("Jackett variant: " + variant.ToString());
 
                 try
                 {
-                    ThreadPool.GetMaxThreads(out int workerThreads, out int completionPortThreads);
+                    ThreadPool.GetMaxThreads(out var workerThreads, out var completionPortThreads);
                     logger.Info("ThreadPool MaxThreads: " + workerThreads + " workerThreads, " + completionPortThreads + " completionPortThreads");
                 }
                 catch (Exception e)
@@ -114,9 +114,9 @@ namespace Jackett.Server.Services
                     var issuefile = "/etc/issue";
                     if (File.Exists(issuefile))
                     {
-                        using (StreamReader reader = new StreamReader(issuefile))
+                        using (var reader = new StreamReader(issuefile))
                         {
-                            string firstLine = reader.ReadLine();
+                            var firstLine = reader.ReadLine();
                             if (firstLine != null)
                                 logger.Info("issue: " + firstLine);
                         }
@@ -127,10 +127,10 @@ namespace Jackett.Server.Services
                     logger.Error(e, "Error while reading the issue file");
                 }
 
-                Type monotype = Type.GetType("Mono.Runtime");
+                var monotype = Type.GetType("Mono.Runtime");
                 if (monotype != null && !DotNetCoreUtil.IsRunningOnDotNetCore)
                 {
-                    MethodInfo displayName = monotype.GetMethod("GetDisplayName", BindingFlags.NonPublic | BindingFlags.Static);
+                    var displayName = monotype.GetMethod("GetDisplayName", BindingFlags.NonPublic | BindingFlags.Static);
                     var monoVersion = "unknown";
                     if (displayName != null)
                         monoVersion = displayName.Invoke(null, null).ToString();
@@ -149,7 +149,7 @@ namespace Jackett.Server.Services
 
                     if (monoVersionO.Major < 5 || (monoVersionO.Major == 5 && monoVersionO.Minor < 8))
                     {
-                        string notice = "A minimum Mono version of 5.8 is required. Please update to the latest version from http://www.mono-project.com/download/";
+                        var notice = "A minimum Mono version of 5.8 is required. Please update to the latest version from http://www.mono-project.com/download/";
                         _notices.Add(notice);
                         logger.Error(notice);
                     }
@@ -202,7 +202,7 @@ namespace Jackett.Server.Services
                     try
                     {
                         var monoSecurity = Assembly.Load("Mono.Security");
-                        Type monoX509StoreManager = monoSecurity.GetType("Mono.Security.X509.X509StoreManager");
+                        var monoX509StoreManager = monoSecurity.GetType("Mono.Security.X509.X509StoreManager");
                         if (monoX509StoreManager != null)
                         {
                             var TrustedRootCertificatesProperty = monoX509StoreManager.GetProperty("TrustedRootCertificates");
@@ -233,7 +233,7 @@ namespace Jackett.Server.Services
                                 notice += logSpacer + "If you don't have root access or you're running MacOS, please run the following command as the jackett user (" + Environment.UserName + "):<br/>\n";
                                 notice += logSpacer + "<pre>" + CommandUser + "</pre>";
                                 _notices.Add(notice);
-                                logger.Error(Regex.Replace(notice, "<.*?>", String.Empty));
+                                logger.Error(Regex.Replace(notice, "<.*?>", string.Empty));
                             }
                         }
                     }
@@ -266,12 +266,12 @@ namespace Jackett.Server.Services
             //Warn user that they are using an old version of Jackett
             try
             {
-                DateTime compiledData = BuildDate.GetBuildDateTime();
+                var compiledData = BuildDate.GetBuildDateTime();
 
                 if (compiledData < DateTime.Now.AddMonths(-3))
                 {
-                    string version = configService.GetVersion();
-                    string notice = $"Your version of Jackett v{version} is very old. Multiple indexers are likely to fail when using an old version. Update to the latest version of Jackett.";
+                    var version = configService.GetVersion();
+                    var notice = $"Your version of Jackett v{version} is very old. Multiple indexers are likely to fail when using an old version. Update to the latest version of Jackett.";
                     _notices.Add(notice);
                     logger.Error(notice);
                 }
@@ -284,18 +284,18 @@ namespace Jackett.Server.Services
             //Alert user that they no longer need to use Mono
             try
             {
-                Variants variants = new Variants();
-                Variants.JackettVariant variant = variants.GetVariant();
+                var variants = new Variants();
+                var variant = variants.GetVariant();
 
                 if (variant == Variants.JackettVariant.Mono)
                 {
-                    Process process = new Process();
+                    var process = new Process();
                     process.StartInfo.FileName = "uname";
                     process.StartInfo.Arguments = "-m";
                     process.StartInfo.UseShellExecute = false;
                     process.StartInfo.RedirectStandardOutput = true;
                     process.Start();
-                    string output = process.StandardOutput.ReadToEnd();
+                    var output = process.StandardOutput.ReadToEnd();
                     process.WaitForExit();
                     logger.Debug($"uname output was: {output}");
 
@@ -348,7 +348,7 @@ namespace Jackett.Server.Services
 
         public string GetServerUrl(HttpRequest request)
         {
-            string serverUrl = "";
+            var serverUrl = "";
 
             var scheme = request.Scheme;
             var port = request.HttpContext.Request.Host.Port;

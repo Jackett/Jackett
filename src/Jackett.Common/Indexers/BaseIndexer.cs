@@ -54,7 +54,7 @@ namespace Jackett.Common.Indexers
             get { return configData.LastError.Value; }
             set
             {
-                bool SaveNeeded = configData.LastError.Value != value && IsConfigured;
+                var SaveNeeded = configData.LastError.Value != value && IsConfigured;
                 configData.LastError.Value = value;
                 if (SaveNeeded)
                     SaveConfig();
@@ -100,7 +100,7 @@ namespace Jackett.Common.Indexers
 
         protected void LoadLegacyCookieConfig(JToken jsonConfig)
         {
-            string legacyCookieHeader = (string)jsonConfig["cookie_header"];
+            var legacyCookieHeader = (string)jsonConfig["cookie_header"];
             if (!string.IsNullOrEmpty(legacyCookieHeader))
             {
                 CookieHeader = legacyCookieHeader;
@@ -113,7 +113,7 @@ namespace Jackett.Common.Indexers
                 {
                     var array = (JArray)jcookies;
                     legacyCookieHeader = string.Empty;
-                    for (int i = 0; i < array.Count; i++)
+                    for (var i = 0; i < array.Count; i++)
                     {
                         if (i != 0)
                             legacyCookieHeader += "; ";
@@ -128,7 +128,7 @@ namespace Jackett.Common.Indexers
             }
         }
 
-        virtual public void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)
+        public virtual void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)
         {
             IProtectionService ps = null;
             if (useProtectionService)
@@ -165,7 +165,7 @@ namespace Jackett.Common.Indexers
                 }
             }
             // read and upgrade old settings file format
-            else if (jsonConfig is Object)
+            else if (jsonConfig is object)
             {
                 LoadLegacyCookieConfig(jsonConfig);
                 SaveConfig();
@@ -176,7 +176,7 @@ namespace Jackett.Common.Indexers
         //TODO: Remove this section once users have moved off DPAPI
         private bool MigratedFromDPAPI(JToken jsonConfig)
         {
-            bool isWindows = Environment.OSVersion.Platform == PlatformID.Win32NT;
+            var isWindows = Environment.OSVersion.Platform == PlatformID.Win32NT;
 
             if (!isWindows && DotNetCoreUtil.IsRunningOnDotNetCore)
             {
@@ -187,7 +187,7 @@ namespace Jackett.Common.Indexers
             LoadValuesFromJson(jsonConfig, false);
 
             StringItem passwordPropertyValue = null;
-            string passwordValue = "";
+            var passwordValue = "";
 
             try
             {
@@ -233,7 +233,7 @@ namespace Jackett.Common.Indexers
 
                     try
                     {
-                        string unprotectedPassword = protectionService.LegacyUnProtect(passwordValue);
+                        var unprotectedPassword = protectionService.LegacyUnProtect(passwordValue);
                         //Password successfully unprotected using Windows/Mono DPAPI
 
                         passwordPropertyValue.Value = unprotectedPassword;
@@ -362,8 +362,8 @@ namespace Jackett.Common.Indexers
         protected BaseWebIndexer(string name, string link, string description, IIndexerConfigurationService configService, WebClient client, Logger logger, ConfigurationData configData, IProtectionService p, TorznabCapabilities caps = null, string downloadBase = null)
             : base(name, link, description, configService, logger, configData, p)
         {
-            this.webclient = client;
-            this.downloadUrlBase = downloadBase;
+            webclient = client;
+            downloadUrlBase = downloadBase;
 
             if (caps == null)
                 caps = TorznabUtil.CreateDefaultTorznabTVCaps();
@@ -374,10 +374,10 @@ namespace Jackett.Common.Indexers
         protected BaseWebIndexer(IIndexerConfigurationService configService, WebClient client, Logger logger, IProtectionService p)
             : base("", "/", "", configService, logger, null, p)
         {
-            this.webclient = client;
+            webclient = client;
         }
 
-        public async virtual Task<byte[]> Download(Uri link)
+        public virtual async Task<byte[]> Download(Uri link)
         {
             var uncleanLink = UncleanLink(link);
             return await Download(uncleanLink, RequestType.GET);
@@ -405,7 +405,7 @@ namespace Jackett.Common.Indexers
             }
             if (response.Status != System.Net.HttpStatusCode.OK && response.Status != System.Net.HttpStatusCode.Continue && response.Status != System.Net.HttpStatusCode.PartialContent)
             {
-                logger.Error("Failed download cookies: " + this.CookieHeader);
+                logger.Error("Failed download cookies: " + CookieHeader);
                 if (response.Content != null)
                     logger.Error("Failed download response:\n" + Encoding.UTF8.GetString(response.Content));
                 throw new Exception($"Remote server returned {response.Status.ToString()}" + (response.IsRedirect ? " => " + response.RedirectingTo : ""));
@@ -417,7 +417,7 @@ namespace Jackett.Common.Indexers
         protected async Task<WebClientByteResult> RequestBytesWithCookiesAndRetry(string url, string cookieOverride = null, RequestType method = RequestType.GET, string referer = null, IEnumerable<KeyValuePair<string, string>> data = null)
         {
             Exception lastException = null;
-            for (int i = 0; i < 3; i++)
+            for (var i = 0; i < 3; i++)
             {
                 try
                 {
@@ -448,7 +448,7 @@ namespace Jackett.Common.Indexers
 
             if (cookieOverride != null)
                 request.Cookies = cookieOverride;
-            WebClientStringResult result = await webclient.GetString(request);
+            var result = await webclient.GetString(request);
             CheckTrackerDown(result);
             UpdateCookieHeader(result.Cookies, cookieOverride);
             return result;
@@ -457,7 +457,7 @@ namespace Jackett.Common.Indexers
         protected async Task<WebClientStringResult> RequestStringWithCookiesAndRetry(string url, string cookieOverride = null, string referer = null, Dictionary<string, string> headers = null)
         {
             Exception lastException = null;
-            for (int i = 0; i < 3; i++)
+            for (var i = 0; i < 3; i++)
             {
                 try
                 {
@@ -510,7 +510,7 @@ namespace Jackett.Common.Indexers
 
             if (emulateBrowser.HasValue)
                 request.EmulateBrowser = emulateBrowser.Value;
-            WebClientStringResult result = await webclient.GetString(request);
+            var result = await webclient.GetString(request);
             CheckTrackerDown(result);
             UpdateCookieHeader(result.Cookies, cookieOverride);
             return result;
@@ -519,7 +519,7 @@ namespace Jackett.Common.Indexers
         protected async Task<WebClientStringResult> PostDataWithCookiesAndRetry(string url, IEnumerable<KeyValuePair<string, string>> data, string cookieOverride = null, string referer = null, Dictionary<string, string> headers = null, string rawbody = null, bool? emulateBrowser = null)
         {
             Exception lastException = null;
-            for (int i = 0; i < 3; i++)
+            for (var i = 0; i < 3; i++)
             {
                 try
                 {
@@ -599,7 +599,7 @@ namespace Jackett.Common.Indexers
         protected async Task FollowIfRedirect(WebClientByteResult response, string referrer = null, string overrideRedirectUrl = null, string overrideCookies = null, bool accumulateCookies = false)
         {
             // Follow up  to 5 redirects
-            for (int i = 0; i < 5; i++)
+            for (var i = 0; i < 5; i++)
             {
                 if (!response.IsRedirect)
                     break;
@@ -616,11 +616,11 @@ namespace Jackett.Common.Indexers
             }
         }
 
-        private String ResolveCookies(String incomingCookies = "")
+        private string ResolveCookies(string incomingCookies = "")
         {
             var redirRequestCookies = (CookieHeader != null && CookieHeader != "" ? CookieHeader + " " : "") + incomingCookies;
-            System.Text.RegularExpressions.Regex expression = new System.Text.RegularExpressions.Regex(@"([^\\,;\s]+)=([^=\\,;\s]*)");
-            Dictionary<string, string> cookieDIctionary = new Dictionary<string, string>();
+            var expression = new System.Text.RegularExpressions.Regex(@"([^\\,;\s]+)=([^=\\,;\s]*)");
+            var cookieDIctionary = new Dictionary<string, string>();
             var matches = expression.Match(redirRequestCookies);
             while (matches.Success)
             {
@@ -636,7 +636,7 @@ namespace Jackett.Common.Indexers
         // Update CookieHeader with new cookies and save the config if something changed (e.g. a new CloudFlare clearance cookie was issued)
         protected virtual void UpdateCookieHeader(string newCookies, string cookieOverride = null)
         {
-            string newCookieHeader = ResolveCookies((cookieOverride != null && cookieOverride != "" ? cookieOverride + " " : "") + newCookies);
+            var newCookieHeader = ResolveCookies((cookieOverride != null && cookieOverride != "" ? cookieOverride + " " : "") + newCookies);
             if (CookieHeader != newCookieHeader)
             {
                 logger.Debug(string.Format("updating Cookies {0} => {1}", CookieHeader, newCookieHeader));
@@ -851,7 +851,7 @@ namespace Jackett.Common.Indexers
 
         public override TorznabCapabilities TorznabCaps { get; protected set; }
 
-        private List<CategoryMapping> categoryMapping = new List<CategoryMapping>();
+        private readonly List<CategoryMapping> categoryMapping = new List<CategoryMapping>();
         protected WebClient webclient;
         protected readonly string downloadUrlBase = "";
     }

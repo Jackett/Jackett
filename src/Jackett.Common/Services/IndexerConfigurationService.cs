@@ -146,8 +146,8 @@ namespace Jackett.Common.Services
             return Path.Combine(configService.GetIndexerConfigDir(), indexer.ID + ".json");
         }
 
-        private IConfigurationService configService;
-        private Logger logger;
+        private readonly IConfigurationService configService;
+        private readonly Logger logger;
 
         private static readonly object configWriteLock = new object();
     }

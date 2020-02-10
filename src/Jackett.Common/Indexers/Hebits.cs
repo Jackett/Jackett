@@ -102,7 +102,7 @@ namespace Jackett.Common.Indexers
             {
                 CQ dom = response.Content;
 
-                CQ qRows = dom[".browse > div > div"];
+                var qRows = dom[".browse > div > div"];
 
                 foreach (var row in qRows)
                 {

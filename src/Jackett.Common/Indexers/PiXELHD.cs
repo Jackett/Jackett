@@ -142,7 +142,7 @@ namespace Jackett.Common.Indexers
                 results = await RequestStringWithCookies(searchUrl);
             }
 
-            Regex IMDBRegEx = new Regex(@"tt(\d+)", RegexOptions.Compiled);
+            var IMDBRegEx = new Regex(@"tt(\d+)", RegexOptions.Compiled);
             var hParser = new HtmlParser();
             var ResultDocument = hParser.ParseDocument(results.Content);
             try

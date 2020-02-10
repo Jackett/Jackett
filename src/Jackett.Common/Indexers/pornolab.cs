@@ -250,7 +250,7 @@ namespace Jackett.Common.Indexers
             }
             try
             {
-                string RowsSelector = "table#tor-tbl > tbody > tr";
+                var RowsSelector = "table#tor-tbl > tbody > tr";
 
                 var SearchResultParser = new HtmlParser();
                 var SearchResultDocument = SearchResultParser.ParseDocument(results.Content);
@@ -322,7 +322,7 @@ namespace Jackett.Common.Indexers
         // referer link support
         public override async Task<byte[]> Download(Uri link)
         {
-            Uri downloadlink = link;
+            var downloadlink = link;
             var response = await RequestStringWithCookies(link.ToString());
             var results = response.Content;
             var SearchResultParser = new HtmlParser();

@@ -1,6 +1,6 @@
 namespace Jackett.Common.Models.IndexerConfig.Bespoke
 {
-    class ConfigurationDataAbnormal : ConfigurationData
+    internal class ConfigurationDataAbnormal : ConfigurationData
     {
         public HiddenItem AuthKey { get; set; }
         public HiddenItem TorrentPass { get; set; }

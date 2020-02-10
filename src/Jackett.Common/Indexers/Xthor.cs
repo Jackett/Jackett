@@ -184,7 +184,7 @@ namespace Jackett.Common.Indexers
 
             if (EnhancedAnime && query.HasSpecifiedCategories && (query.Categories.Contains(TorznabCatType.TVAnime.ID) || query.Categories.Contains(100032) || query.Categories.Contains(100101) || query.Categories.Contains(100110)))
             {
-                System.Text.RegularExpressions.Regex regex = new Regex(" ([0-9]+)");
+                var regex = new Regex(" ([0-9]+)");
                 searchTerm = regex.Replace(searchTerm, " E$1");
             }
 
@@ -226,7 +226,7 @@ namespace Jackett.Common.Indexers
                         //issue #3847 replace multi keyword
                         if (!string.IsNullOrEmpty(ReplaceMulti))
                         {
-                            System.Text.RegularExpressions.Regex regex = new Regex("(?i)([\\.\\- ])MULTI([\\.\\- ])");
+                            var regex = new Regex("(?i)([\\.\\- ])MULTI([\\.\\- ])");
                             torrent.name = regex.Replace(torrent.name, "$1" + ReplaceMulti + "$2");
                         }
 
@@ -388,9 +388,9 @@ namespace Jackett.Common.Indexers
         /// </summary>
         /// <param name="request">URL created by Query Builder</param>
         /// <returns>Results from query</returns>
-        private async Task<String> QueryExec(string request)
+        private async Task<string> QueryExec(string request)
         {
-            String results;
+            string results;
 
             // Switch in we are in DEV mode with Hard Drive Cache or not
             if (DevMode && CacheMode)
@@ -411,9 +411,9 @@ namespace Jackett.Common.Indexers
         /// </summary>
         /// <param name="request">URL created by Query Builder</param>
         /// <returns>Results from query</returns>
-        private async Task<String> QueryCache(string request)
+        private async Task<string> QueryCache(string request)
         {
-            String results;
+            string results;
 
             // Create Directory if not exist
             System.IO.Directory.CreateDirectory(Directory);
@@ -422,10 +422,10 @@ namespace Jackett.Common.Indexers
             CleanCacheStorage();
 
             // File Name
-            string fileName = StringUtil.HashSHA1(request) + ".json";
+            var fileName = StringUtil.HashSHA1(request) + ".json";
 
             // Create fingerprint for request
-            string file = Path.Combine(Directory, fileName);
+            var file = Path.Combine(Directory, fileName);
 
             // Checking modes states
             if (File.Exists(file))
@@ -434,10 +434,10 @@ namespace Jackett.Common.Indexers
                 Output("Loading results from hard drive cache ..." + fileName);
                 try
                 {
-                    using (StreamReader fileReader = File.OpenText(file))
+                    using (var fileReader = File.OpenText(file))
                     {
-                        JsonSerializer serializer = new JsonSerializer();
-                        results = (String)serializer.Deserialize(fileReader, typeof(String));
+                        var serializer = new JsonSerializer();
+                        results = (string)serializer.Deserialize(fileReader, typeof(string));
                     }
                 }
                 catch (Exception e)
@@ -453,9 +453,9 @@ namespace Jackett.Common.Indexers
 
                 // Cached file didn't exist for our query, writing it right now !
                 Output("Writing results to hard drive cache ..." + fileName);
-                using (StreamWriter fileWriter = File.CreateText(file))
+                using (var fileWriter = File.CreateText(file))
                 {
-                    JsonSerializer serializer = new JsonSerializer();
+                    var serializer = new JsonSerializer();
                     serializer.Serialize(fileWriter, results);
                 }
             }
@@ -467,7 +467,7 @@ namespace Jackett.Common.Indexers
         /// </summary>
         /// <param name="request">URL created by Query Builder</param>
         /// <returns>Results from query</returns>
-        private async Task<String> QueryTracker(string request)
+        private async Task<string> QueryTracker(string request)
         {
             // Cache mode not enabled or cached file didn't exist for our query
             Output("\nQuerying tracker for results....");

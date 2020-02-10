@@ -9,7 +9,7 @@ namespace Jackett.Server.Middleware
     {
         public static void RedirectToDashboard(RewriteContext context)
         {
-            HttpRequest request = context.HttpContext.Request;
+            var request = context.HttpContext.Request;
 
             if (request.Path == null || string.IsNullOrWhiteSpace(request.Path.ToString()) || request.Path.ToString() == "/"
                 || request.Path.ToString().Equals("/index.html", StringComparison.OrdinalIgnoreCase))

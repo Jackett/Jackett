@@ -259,8 +259,7 @@ namespace Jackett.Common.Indexers
                     long? imdbID = null;
                     if (imdbMatch.Success)
                     {
-                        long l;
-                        if (long.TryParse(imdbMatch.Value, out l))
+                        if (long.TryParse(imdbMatch.Value, out var l))
                         {
                             imdbID = l;
                         }
@@ -321,7 +320,7 @@ namespace Jackett.Common.Indexers
                     CQ dom = results.Content;
 
                     //  table header is the first <tr> in table body, get all rows except this
-                    CQ qRows = dom["#torrents-table > tbody > tr:not(:first-child)"];
+                    var qRows = dom["#torrents-table > tbody > tr:not(:first-child)"];
 
                     foreach (var row in qRows)
                     {
@@ -334,7 +333,7 @@ namespace Jackett.Common.Indexers
                         release.MinimumRatio = 1;
                         release.MinimumSeedTime = 172800; // 48 hours
 
-                        CQ qLink = qRow.Find(".br_right > a").First();
+                        var qLink = qRow.Find(".br_right > a").First();
                         release.Guid = new Uri(SiteLink + qLink.Attr("href"));
                         release.Comments = new Uri(SiteLink + qLink.Attr("href"));
                         release.Title = qLink.Find("b").Text();

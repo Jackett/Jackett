@@ -133,22 +133,22 @@ namespace Jackett.Common.Indexers
                 CQ dom = results.Content;
                 ReleaseInfo release;
 
-                CQ userInfo = dom[".mainmenu > table > tbody > tr:has(td[title=\"Active-Torrents\"])"][0].Cq();
-                string rank = userInfo.Find("td:nth-child(2)").Text().Substring(6);
+                var userInfo = dom[".mainmenu > table > tbody > tr:has(td[title=\"Active-Torrents\"])"][0].Cq();
+                var rank = userInfo.Find("td:nth-child(2)").Text().Substring(6);
 
-                HashSet<string> freeleechRanks = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                var freeleechRanks = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
                 freeleechRanks.Add("VIP");
                 freeleechRanks.Add("Uploader");
                 freeleechRanks.Add("HD Internal");
                 freeleechRanks.Add("Moderator");
                 freeleechRanks.Add("Administrator");
                 freeleechRanks.Add("Owner");
-                bool hasFreeleech = freeleechRanks.Contains(rank);
+                var hasFreeleech = freeleechRanks.Contains(rank);
 
                 var rows = dom[".mainblockcontenttt > tbody > tr:has(a[href^=\"details.php?id=\"])"];
                 foreach (var row in rows)
                 {
-                    CQ qRow = row.Cq();
+                    var qRow = row.Cq();
 
                     release = new ReleaseInfo();
 
@@ -158,7 +158,7 @@ namespace Jackett.Common.Indexers
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800; // 48 hours
 
-                    int tdIndex = 0;
+                    var tdIndex = 0;
                     if (qRow.Find("td:nth-last-child(1)").Text() == "Edit")
                         tdIndex = 1;
                     // moderators get additional delete, recomend and like links
@@ -166,33 +166,33 @@ namespace Jackett.Common.Indexers
                         tdIndex = 4;
 
                     // Sometimes the uploader column is missing
-                    if (ParseUtil.TryCoerceInt(qRow.Find($"td:nth-last-child({tdIndex + 3})").Text(), out int seeders))
+                    if (ParseUtil.TryCoerceInt(qRow.Find($"td:nth-last-child({tdIndex + 3})").Text(), out var seeders))
                     {
                         release.Seeders = seeders;
-                        if (ParseUtil.TryCoerceInt(qRow.Find($"td:nth-last-child({tdIndex + 2})").Text(), out int peers))
+                        if (ParseUtil.TryCoerceInt(qRow.Find($"td:nth-last-child({tdIndex + 2})").Text(), out var peers))
                         {
                             release.Peers = peers + release.Seeders;
                         }
                     }
 
                     // Sometimes the grabs column is missing
-                    if (ParseUtil.TryCoerceLong(qRow.Find($"td:nth-last-child({tdIndex + 1})").Text(), out long grabs))
+                    if (ParseUtil.TryCoerceLong(qRow.Find($"td:nth-last-child({tdIndex + 1})").Text(), out var grabs))
                     {
                         release.Grabs = grabs;
                     }
 
-                    string fullSize = qRow.Find("td.mainblockcontent").Get(6).InnerText;
+                    var fullSize = qRow.Find("td.mainblockcontent").Get(6).InnerText;
                     release.Size = ReleaseInfo.GetBytes(fullSize);
 
                     release.Guid = new Uri(SiteLink + qRow.Find("td.mainblockcontent b a").Attr("href"));
                     release.Link = new Uri(SiteLink + qRow.Find("td.mainblockcontent").Get(3).FirstChild.GetAttribute("href"));
                     release.Comments = new Uri(SiteLink + qRow.Find("td.mainblockcontent b a").Attr("href"));
 
-                    string[] dateSplit = qRow.Find("td.mainblockcontent").Get(5).InnerHTML.Split(',');
-                    string dateString = dateSplit[1].Substring(0, dateSplit[1].IndexOf('>')).Trim();
+                    var dateSplit = qRow.Find("td.mainblockcontent").Get(5).InnerHTML.Split(',');
+                    var dateString = dateSplit[1].Substring(0, dateSplit[1].IndexOf('>')).Trim();
                     release.PublishDate = DateTime.ParseExact(dateString, "dd MMM yyyy HH:mm:ss zz00", CultureInfo.InvariantCulture).ToLocalTime();
 
-                    string category = qRow.Find("td:eq(0) a").Attr("href").Replace("torrents.php?category=", "");
+                    var category = qRow.Find("td:eq(0) a").Attr("href").Replace("torrents.php?category=", "");
                     release.Category = MapTrackerCatToNewznab(category);
 
                     release.UploadVolumeFactor = 1;

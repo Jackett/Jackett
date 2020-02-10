@@ -105,7 +105,7 @@ namespace Jackett.Common.Indexers
             var captcha = cq.Find(".g-recaptcha");
             if (captcha.Any())
             {
-                var result = this.configData;
+                var result = configData;
                 result.CookieHeader.Value = loginPage.Cookies;
                 result.Captcha.SiteKey = captcha.Attr("data-sitekey");
                 result.Captcha.Version = "2";

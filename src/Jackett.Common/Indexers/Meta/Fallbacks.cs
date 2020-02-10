@@ -38,7 +38,7 @@ namespace Jackett.Common.Indexers.Meta
         public ImdbFallbackStrategy(IImdbResolver resolver, TorznabQuery query)
         {
             this.resolver = resolver;
-            this.titles = null;
+            titles = null;
             this.query = query;
         }
 
@@ -49,9 +49,9 @@ namespace Jackett.Common.Indexers.Meta
             return titles.Select(t => query.CreateFallback(t));
         }
 
-        private IImdbResolver resolver;
+        private readonly IImdbResolver resolver;
         private IEnumerable<string> titles;
-        private TorznabQuery query;
+        private readonly TorznabQuery query;
     }
 
     public class ImdbFallbackStrategyProvider : IFallbackStrategyProvider
@@ -71,6 +71,6 @@ namespace Jackett.Common.Indexers.Meta
             return result;
         }
 
-        private IImdbResolver resolver;
+        private readonly IImdbResolver resolver;
     }
 }

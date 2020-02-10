@@ -31,7 +31,7 @@ namespace Jackett.Server
             var commandLineParser = new Parser(settings => settings.CaseSensitive = false);
             var optionsResult = commandLineParser.ParseArguments<ConsoleOptions>(args);
             var runtimeDictionary = new Dictionary<string, string>();
-            ConsoleOptions consoleOptions = new ConsoleOptions();
+            var consoleOptions = new ConsoleOptions();
 
             optionsResult.WithNotParsed(errors =>
             {
@@ -63,7 +63,7 @@ namespace Jackett.Server
             });
 
             LogManager.Configuration = LoggingSetup.GetLoggingConfiguration(Settings);
-            Logger logger = LogManager.GetCurrentClassLogger();
+            var logger = LogManager.GetCurrentClassLogger();
             logger.Info("Starting Jackett v" + EnvironmentUtil.JackettVersion);
 
             // create PID file early
@@ -89,11 +89,11 @@ namespace Jackett.Server
 
             if (consoleOptions.Install || consoleOptions.Uninstall || consoleOptions.StartService || consoleOptions.StopService || consoleOptions.ReserveUrls)
             {
-                bool isWindows = Environment.OSVersion.Platform == PlatformID.Win32NT;
+                var isWindows = Environment.OSVersion.Platform == PlatformID.Win32NT;
 
                 if (isWindows)
                 {
-                    ServerConfig serverConfig = configurationService.BuildServerConfig(Settings);
+                    var serverConfig = configurationService.BuildServerConfig(Settings);
                     Initialisation.ProcessWindowsSpecificArgs(consoleOptions, processService, serverConfig, logger);
                 }
                 else
@@ -115,21 +115,21 @@ namespace Jackett.Server
                 {
                     if (consoleOptions.Port != 0 || consoleOptions.ListenPublic || consoleOptions.ListenPrivate)
                     {
-                        ServerConfig serverConfiguration = configurationService.BuildServerConfig(Settings);
+                        var serverConfiguration = configurationService.BuildServerConfig(Settings);
                         Initialisation.ProcessConsoleOverrides(consoleOptions, processService, serverConfiguration, configurationService, logger);
                     }
                 }
 
-                ServerConfig serverConfig = configurationService.BuildServerConfig(Settings);
-                Int32.TryParse(serverConfig.Port.ToString(), out Int32 configPort);
-                string[] url = serverConfig.GetListenAddresses(serverConfig.AllowExternal);
+                var serverConfig = configurationService.BuildServerConfig(Settings);
+                int.TryParse(serverConfig.Port.ToString(), out var configPort);
+                var url = serverConfig.GetListenAddresses(serverConfig.AllowExternal);
 
                 isWebHostRestart = false;
 
                 try
                 {
                     logger.Debug("Creating web host...");
-                    string applicationFolder = Path.Combine(configurationService.ApplicationFolder(), "Content");
+                    var applicationFolder = Path.Combine(configurationService.ApplicationFolder(), "Content");
                     logger.Debug($"Content root path is: {applicationFolder}");
 
                     CreateWebHostBuilder(args, url, applicationFolder).Build().Run();

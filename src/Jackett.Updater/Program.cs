@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -29,7 +28,7 @@ namespace Jackett.Updater
 
         private void Run(string[] args)
         {
-            RuntimeSettings runtimeSettings = new RuntimeSettings()
+            var runtimeSettings = new RuntimeSettings()
             {
                 CustomLogFileName = "updater.txt"
             };
@@ -40,11 +39,11 @@ namespace Jackett.Updater
             logger.Info("Jackett Updater v" + GetCurrentVersion());
             logger.Info("Options \"" + string.Join("\" \"", args) + "\"");
 
-            Variants variants = new Variants();
+            var variants = new Variants();
             variant = variants.GetVariant();
             logger.Info("Jackett variant: " + variant.ToString());
 
-            bool isWindows = Environment.OSVersion.Platform == PlatformID.Win32NT;
+            var isWindows = Environment.OSVersion.Platform == PlatformID.Win32NT;
             if (isWindows)
             {
                 //The updater starts before Jackett closes
@@ -176,7 +175,7 @@ namespace Jackett.Updater
                 KillPids(pids);
             }
 
-            Variants variants = new Variants();
+            var variants = new Variants();
             if (variants.IsNonWindowsDotNetCoreVariant(variant))
             {
                 // On Linux you can't modify an executable while it is executing
@@ -185,12 +184,12 @@ namespace Jackett.Updater
                 // Delete the ./jackett executable
                 // pdb files are also problematic https://github.com/Jackett/Jackett/issues/5167#issuecomment-489301150
 
-                string jackettExecutable = options.Path.TrimEnd('/') + "/jackett";
-                List<string> pdbFiles = Directory.EnumerateFiles(options.Path, "*.pdb", SearchOption.AllDirectories).ToList();
-                List<string> removeList = pdbFiles;
+                var jackettExecutable = options.Path.TrimEnd('/') + "/jackett";
+                var pdbFiles = Directory.EnumerateFiles(options.Path, "*.pdb", SearchOption.AllDirectories).ToList();
+                var removeList = pdbFiles;
                 removeList.Add(jackettExecutable);
 
-                foreach (string fileForDelete in removeList)
+                foreach (var fileForDelete in removeList)
                 {
                     try
                     {
@@ -228,7 +227,7 @@ namespace Jackett.Updater
                         continue;
                     }
 
-                    bool fileCopySuccess = CopyUpdateFile(options.Path, file, updateLocation, false);
+                    var fileCopySuccess = CopyUpdateFile(options.Path, file, updateLocation, false);
 
                     if (!fileCopySuccess)
                     {
@@ -245,7 +244,7 @@ namespace Jackett.Updater
             logger.Info("File copying complete");
 
             // delete old dirs
-            string[] oldDirs = new string[] { "Content/logos" };
+            var oldDirs = new string[] { "Content/logos" };
 
             foreach (var oldDir in oldDirs)
             {
@@ -265,7 +264,7 @@ namespace Jackett.Updater
             }
 
             // delete old files
-            string[] oldFiles = new string[] {
+            var oldFiles = new string[] {
                 "appsettings.Development.json",
                 "Autofac.Integration.WebApi.dll",
                 "Content/congruent_outline.png",
@@ -491,7 +490,7 @@ namespace Jackett.Updater
 
         private bool CopyUpdateFile(string jackettDestinationDirectory, string fullSourceFilePath, string updateSourceDirectory, bool previousAttemptFailed)
         {
-            bool success = false;
+            var success = false;
 
             string fileName;
             string fullDestinationFilePath;
@@ -567,7 +566,7 @@ namespace Jackett.Updater
 
         private string GetJackettConsolePath(string directoryPath)
         {
-            Variants variants = new Variants();
+            var variants = new Variants();
             if (variants.IsNonWindowsDotNetCoreVariant(variant))
             {
                 return Path.Combine(directoryPath, "jackett");

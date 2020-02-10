@@ -16,8 +16,8 @@ namespace Jackett.Server.Services
         private const string DESCRIPTION = "API Support for your favorite torrent trackers";
         private const string SERVICEEXE = "JackettService.exe";
 
-        private IProcessService processService;
-        private Logger logger;
+        private readonly IProcessService processService;
+        private readonly Logger logger;
 
         public ServiceConfigService()
         {
@@ -53,7 +53,7 @@ namespace Jackett.Server.Services
 
         public ServiceController GetService(string serviceName)
         {
-            return ServiceController.GetServices().FirstOrDefault(c => String.Equals(c.ServiceName, serviceName, StringComparison.InvariantCultureIgnoreCase));
+            return ServiceController.GetServices().FirstOrDefault(c => string.Equals(c.ServiceName, serviceName, StringComparison.InvariantCultureIgnoreCase));
         }
 
         public void Install()
@@ -64,7 +64,7 @@ namespace Jackett.Server.Services
             }
             else
             {
-                string applicationFolder = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath);
+                var applicationFolder = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath);
 
                 var exePath = Path.Combine(applicationFolder, SERVICEEXE);
                 if (!File.Exists(exePath) && Debugger.IsAttached)
@@ -72,7 +72,7 @@ namespace Jackett.Server.Services
                     exePath = Path.Combine(applicationFolder, "..\\..\\..\\Jackett.Service\\bin\\Debug", SERVICEEXE);
                 }
 
-                string arg = $"create {NAME} start= auto binpath= \"{exePath}\" DisplayName= {NAME}";
+                var arg = $"create {NAME} start= auto binpath= \"{exePath}\" DisplayName= {NAME}";
 
                 processService.StartProcessAndLog("sc.exe", arg, true);
 

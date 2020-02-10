@@ -20,7 +20,7 @@ namespace Jackett.Common.Indexers
     {
         private string LoginUrl { get { return SiteLink + "login.php"; } }
         private string SearchUrl { get { return SiteLink + "torrents.php"; } }
-        private string[] LanguageCats = new string[] { "xvidser", "dvdser", "hdser", "xvid", "dvd", "dvd9", "hd", "mp3", "lossless", "ebook" };
+        private readonly string[] LanguageCats = new string[] { "xvidser", "dvdser", "hdser", "xvid", "dvd", "dvd9", "hd", "mp3", "lossless", "ebook" };
 
         private new ConfigurationDataNCore configData
         {
@@ -117,7 +117,7 @@ namespace Jackett.Common.Indexers
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
-        List<ReleaseInfo> parseTorrents(WebClientStringResult results, String seasonep, TorznabQuery query, int already_founded, int limit, int previously_parsed_on_page)
+        private List<ReleaseInfo> parseTorrents(WebClientStringResult results, string seasonep, TorznabQuery query, int already_founded, int limit, int previously_parsed_on_page)
         {
             var releases = new List<ReleaseInfo>();
             try
@@ -128,11 +128,11 @@ namespace Jackett.Common.Indexers
                 var rows = dom[".box_torrent_all"].Find(".box_torrent");
 
                 // Check torrents only till we reach the query Limit 
-                for (int i = previously_parsed_on_page; (i < rows.Length && ((already_founded + releases.Count) < limit)); i++)
+                for (var i = previously_parsed_on_page; (i < rows.Length && ((already_founded + releases.Count) < limit)); i++)
                 {
                     try
                     {
-                        CQ qRow = rows[i].Cq();
+                        var qRow = rows[i].Cq();
                         var key = dom["link[rel=alternate]"].First().Attr("href").Split('=').Last();
 
                         release = new ReleaseInfo();
@@ -146,8 +146,8 @@ namespace Jackett.Common.Indexers
                         release.DownloadVolumeFactor = 0;
                         release.UploadVolumeFactor = 1;
 
-                        string downloadLink = SiteLink + torrentTxt.GetAttribute("href");
-                        string downloadId = downloadLink.Substring(downloadLink.IndexOf("&id=") + 4);
+                        var downloadLink = SiteLink + torrentTxt.GetAttribute("href");
+                        var downloadId = downloadLink.Substring(downloadLink.IndexOf("&id=") + 4);
 
                         release.Link = new Uri(SiteLink.ToString() + "torrents.php?action=download&id=" + downloadId + "&key=" + key);
                         release.Comments = new Uri(SiteLink.ToString() + "torrents.php?action=details&id=" + downloadId);
@@ -160,16 +160,16 @@ namespace Jackett.Common.Indexers
                         var banner = qRow.Find("img.infobar_ico").Attr("onmouseover");
                         if (banner != null)
                         {
-                            Regex BannerRegEx = new Regex(@"mutat\('(.*?)', '", RegexOptions.Compiled);
+                            var BannerRegEx = new Regex(@"mutat\('(.*?)', '", RegexOptions.Compiled);
                             var BannerMatch = BannerRegEx.Match(banner);
                             var bannerurl = BannerMatch.Groups[1].Value;
                             release.BannerUrl = new Uri(bannerurl);
                         }
                         release.PublishDate = DateTime.Parse(qRow.Find(".box_feltoltve2").Get(0).InnerHTML.Replace("<br />", " "), CultureInfo.InvariantCulture);
-                        string[] sizeSplit = qRow.Find(".box_meret2").Get(0).InnerText.Split(' ');
+                        var sizeSplit = qRow.Find(".box_meret2").Get(0).InnerText.Split(' ');
                         release.Size = ReleaseInfo.GetBytes(sizeSplit[1].ToLower(), ParseUtil.CoerceFloat(sizeSplit[0]));
-                        string catlink = qRow.Find("a:has(img[class='categ_link'])").First().Attr("href");
-                        string cat = ParseUtil.GetArgumentFromQueryString(catlink, "tipus");
+                        var catlink = qRow.Find("a:has(img[class='categ_link'])").First().Attr("href");
+                        var cat = ParseUtil.GetArgumentFromQueryString(catlink, "tipus");
                         release.Category = MapTrackerCatToNewznab(cat);
 
                         /* if the release name not contains the language we add it because it is know from category */
@@ -187,14 +187,14 @@ namespace Jackett.Common.Indexers
                                 var temp = release.Title;
 
                                 // releasedata everithing after Name.S0Xe0X
-                                String releasedata = release.Title.Split(new[] { seasonep }, StringSplitOptions.None)[1].Trim();
+                                var releasedata = release.Title.Split(new[] { seasonep }, StringSplitOptions.None)[1].Trim();
 
                                 /* if the release name not contains the language we add it because it is know from category */
                                 if (cat.Contains("hun") && !releasedata.Contains("hun"))
                                     releasedata += ".hun";
 
                                 // release description contains [imdb: ****] but we only need the data before it for title
-                                String[] description = { release.Description, "" };
+                                string[] description = { release.Description, "" };
                                 if (release.Description.Contains("[imdb:"))
                                 {
                                     description = release.Description.Split('[');
@@ -204,7 +204,7 @@ namespace Jackett.Common.Indexers
                                 release.Title = (description[0].Trim() + "." + seasonep.Trim() + "." + releasedata.Trim('.')).Replace(' ', '.');
 
                                 // if search is done for S0X than we dont want to put . between S0X and E0X 
-                                Match match = Regex.Match(releasedata, @"^E\d\d?");
+                                var match = Regex.Match(releasedata, @"^E\d\d?");
                                 if (seasonep.Length == 3 && match.Success)
                                     release.Title = (description[0].Trim() + "." + seasonep.Trim() + releasedata.Trim('.')).Replace(' ', '.');
 
@@ -230,7 +230,7 @@ namespace Jackett.Common.Indexers
             return releases;
         }
 
-        protected async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query, String seasonep)
+        protected async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query, string seasonep)
         {
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();
@@ -271,14 +271,14 @@ namespace Jackett.Common.Indexers
 
 
             CQ dom = results.Content;
-            int numVal = 0;
+            var numVal = 0;
 
             // find number of torrents / page
-            int torrent_per_page = dom[".box_torrent_all"].Find(".box_torrent").Length;
+            var torrent_per_page = dom[".box_torrent_all"].Find(".box_torrent").Length;
             if (torrent_per_page == 0)
                 return releases;
-            int start_page = (query.Offset / torrent_per_page) + 1;
-            int previously_parsed_on_page = query.Offset - (start_page * torrent_per_page) + 1; //+1 because indexing start from 0
+            var start_page = (query.Offset / torrent_per_page) + 1;
+            var previously_parsed_on_page = query.Offset - (start_page * torrent_per_page) + 1; //+1 because indexing start from 0
             if (previously_parsed_on_page < 0)
                 previously_parsed_on_page = query.Offset;
 
@@ -287,13 +287,13 @@ namespace Jackett.Common.Indexers
             if (pagelinks.Length > 0)
             {
                 // If there are several pages find the link for the latest one
-                for (int i = pagelinks.Length - 1; i > 0; i--)
+                for (var i = pagelinks.Length - 1; i > 0; i--)
                 {
                     var last_page_link = (pagelinks[i].Cq().Attr("href")).Trim();
                     if (last_page_link.Contains("oldal"))
                     {
-                        Match match = Regex.Match(last_page_link, @"(?<=[\?,&]oldal=)(\d+)(?=&)");
-                        numVal = Int32.Parse(match.Value);
+                        var match = Regex.Match(last_page_link, @"(?<=[\?,&]oldal=)(\d+)(?=&)");
+                        numVal = int.Parse(match.Value);
                         break;
                     }
                 }
@@ -313,7 +313,7 @@ namespace Jackett.Common.Indexers
 
             // Check all the pages for the torrents.
             // The starting index is 2. (the first one is the original where we parse out the pages.)
-            for (int i = start_page; (i <= numVal && releases.Count < limit); i++)
+            for (var i = start_page; (i <= numVal && releases.Count < limit); i++)
             {
                 pairs.Add(new KeyValuePair<string, string>("oldal", i.ToString()));
                 results = await PostDataWithCookiesAndRetry(SearchUrl, pairs);

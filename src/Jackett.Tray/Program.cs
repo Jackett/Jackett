@@ -6,13 +6,13 @@ using CommandLine;
 
 namespace Jackett.Tray
 {
-    static class Program
+    internal static class Program
     {
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             var JacketTrayProcess = Process.GetCurrentProcess();
             var runningProcesses = Process.GetProcesses();
@@ -25,7 +25,7 @@ namespace Jackett.Tray
             }
             else
             {
-                string newVersion = "";
+                var newVersion = "";
                 var commandLineParser = new Parser(settings => settings.CaseSensitive = false);
 
                 try

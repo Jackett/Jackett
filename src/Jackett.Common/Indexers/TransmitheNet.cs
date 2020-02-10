@@ -88,18 +88,18 @@ namespace Jackett.Common.Indexers
             //    Url = SearchUrl;
             //else
             //{
-            string Url = $"{SearchUrl}&searchtext={WebUtility.UrlEncode(query.GetQueryString())}";
+            var Url = $"{SearchUrl}&searchtext={WebUtility.UrlEncode(query.GetQueryString())}";
             //}
 
             var response = await RequestStringWithCookiesAndRetry(Url);
-            List<ReleaseInfo> releases = ParseResponse(response.Content);
+            var releases = ParseResponse(response.Content);
 
             return releases;
         }
 
         public List<ReleaseInfo> ParseResponse(string htmlResponse)
         {
-            List<ReleaseInfo> releases = new List<ReleaseInfo>();
+            var releases = new List<ReleaseInfo>();
 
             try
             {
@@ -116,7 +116,7 @@ namespace Jackett.Common.Indexers
                 {
                     var release = new ReleaseInfo();
 
-                    string title = row.QuerySelector("a[data-src]").GetAttribute("data-src");
+                    var title = row.QuerySelector("a[data-src]").GetAttribute("data-src");
                     if (string.IsNullOrEmpty(title) || title == "0")
                     {
                         title = row.QuerySelector("a[data-src]").TextContent;

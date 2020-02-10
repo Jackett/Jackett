@@ -1,6 +1,6 @@
 namespace Jackett.Common.Models.IndexerConfig.Bespoke
 {
-    class ConfigurationDataPornolab : ConfigurationDataCaptchaLogin
+    internal class ConfigurationDataPornolab : ConfigurationDataCaptchaLogin
     {
         public BoolItem StripRussianLetters { get; private set; }
 

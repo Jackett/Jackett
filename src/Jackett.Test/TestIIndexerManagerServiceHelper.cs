@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Jackett.Test
 {
-    class TestIndexerManagerServiceHelper : IIndexerManagerService
+    internal class TestIndexerManagerServiceHelper : IIndexerManagerService
     {
         public JToken LastSavedConfig { get; set; }
 

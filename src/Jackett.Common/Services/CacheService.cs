@@ -53,7 +53,7 @@ namespace Jackett.Common.Services
         {
             lock (cache)
             {
-                int newItemCount = 0;
+                var newItemCount = 0;
                 var trackerCache = cache.Where(c => c.TrackerId == indexer.ID).FirstOrDefault();
                 if (trackerCache != null)
                 {

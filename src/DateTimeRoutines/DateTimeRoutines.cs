@@ -25,8 +25,8 @@ namespace DateTimeRoutines
         /// <returns>seconds</returns>
         public static uint GetSecondsSinceUnixEpoch(this DateTime date_time)
         {
-            TimeSpan t = date_time - new DateTime(1970, 1, 1);
-            int ss = (int)t.TotalSeconds;
+            var t = date_time - new DateTime(1970, 1, 1);
+            var ss = (int)t.TotalSeconds;
             if (ss < 0)
                 return 0;
             return (uint)ss;
@@ -44,39 +44,39 @@ namespace DateTimeRoutines
             /// <summary>
             /// Index of first char of a date substring found in the string
             /// </summary>
-            readonly public int IndexOfDate = -1;
+            public readonly int IndexOfDate = -1;
             /// <summary>
             /// Length a date substring found in the string
             /// </summary>
-            readonly public int LengthOfDate = -1;
+            public readonly int LengthOfDate = -1;
             /// <summary>
             /// Index of first char of a time substring found in the string
             /// </summary>
-            readonly public int IndexOfTime = -1;
+            public readonly int IndexOfTime = -1;
             /// <summary>
             /// Length of a time substring found in the string
             /// </summary>
-            readonly public int LengthOfTime = -1;
+            public readonly int LengthOfTime = -1;
             /// <summary>
             /// DateTime found in the string
             /// </summary>
-            readonly public DateTime DateTime;
+            public readonly DateTime DateTime;
             /// <summary>
             /// True if a date was found within the string
             /// </summary>
-            readonly public bool IsDateFound;
+            public readonly bool IsDateFound;
             /// <summary>
             /// True if a time was found within the string
             /// </summary>
-            readonly public bool IsTimeFound;
+            public readonly bool IsTimeFound;
             /// <summary>
             /// UTC offset if it was found within the string
             /// </summary>
-            readonly public TimeSpan UtcOffset;
+            public readonly TimeSpan UtcOffset;
             /// <summary>
             /// True if UTC offset was found in the string
             /// </summary>
-            readonly public bool IsUtcOffsetFound;
+            public readonly bool IsUtcOffsetFound;
             /// <summary>
             /// Utc gotten from DateTime if IsUtcOffsetFound is True
             /// </summary>
@@ -113,7 +113,7 @@ namespace DateTimeRoutines
                 {
                     if (index_of_date < 0)//to avoid negative date exception when date is undefined
                     {
-                        TimeSpan ts = date_time.TimeOfDay + utc_offset;
+                        var ts = date_time.TimeOfDay + utc_offset;
                         if (ts < new TimeSpan(0))
                             UtcDateTime = new DateTime(1, 1, 2) + ts;
                         else
@@ -146,7 +146,8 @@ namespace DateTimeRoutines
                     return _DefaultDate;
             }
         }
-        static DateTime _DefaultDate = DateTime.Now;
+
+        private static DateTime _DefaultDate = DateTime.Now;
 
         /// <summary>
         /// If true then DefaultDate property is ignored and DefaultDate is always DateTime.Now
@@ -183,10 +184,9 @@ namespace DateTimeRoutines
         /// <param name="default_format">format to be used preferably in ambivalent instances</param>
         /// <param name="date_time">parsed date-time output</param>
         /// <returns>true if both date and time were found, else false</returns>
-        static public bool TryParseDateTime(this string str, DateTimeFormat default_format, out DateTime date_time)
+        public static bool TryParseDateTime(this string str, DateTimeFormat default_format, out DateTime date_time)
         {
-            ParsedDateTime parsed_date_time;
-            if (!TryParseDateTime(str, default_format, out parsed_date_time))
+            if (!TryParseDateTime(str, default_format, out ParsedDateTime parsed_date_time))
             {
                 date_time = new DateTime(1, 1, 1);
                 return false;
@@ -204,10 +204,9 @@ namespace DateTimeRoutines
         /// <param name="default_format">format to be used preferably in ambivalent instances</param>
         /// <param name="date_time">parsed date-time output</param>
         /// <returns>true if date and/or time was found, else false</returns>
-        static public bool TryParseDateOrTime(this string str, DateTimeFormat default_format, out DateTime date_time)
+        public static bool TryParseDateOrTime(this string str, DateTimeFormat default_format, out DateTime date_time)
         {
-            ParsedDateTime parsed_date_time;
-            if (!TryParseDateOrTime(str, default_format, out parsed_date_time))
+            if (!TryParseDateOrTime(str, default_format, out ParsedDateTime parsed_date_time))
             {
                 date_time = new DateTime(1, 1, 1);
                 return false;
@@ -226,8 +225,7 @@ namespace DateTimeRoutines
         /// <returns>true if time was found, else false</returns>
         public static bool TryParseTime(this string str, DateTimeFormat default_format, out DateTime time)
         {
-            ParsedDateTime parsed_time;
-            if (!TryParseTime(str, default_format, out parsed_time, null))
+            if (!TryParseTime(str, default_format, out var parsed_time, null))
             {
                 time = new DateTime(1, 1, 1);
                 return false;
@@ -245,10 +243,9 @@ namespace DateTimeRoutines
         /// <param name="default_format">format to be used preferably in ambivalent instances</param>
         /// <param name="date">parsed date output</param>
         /// <returns>true if date was found, else false</returns>
-        static public bool TryParseDate(this string str, DateTimeFormat default_format, out DateTime date)
+        public static bool TryParseDate(this string str, DateTimeFormat default_format, out DateTime date)
         {
-            ParsedDateTime parsed_date;
-            if (!TryParseDate(str, default_format, out parsed_date))
+            if (!TryParseDate(str, default_format, out ParsedDateTime parsed_date))
             {
                 date = new DateTime(1, 1, 1);
                 return false;
@@ -268,7 +265,7 @@ namespace DateTimeRoutines
         /// <param name="default_format">format to be used preferably in ambivalent instances</param>
         /// <param name="parsed_date_time">parsed date-time output</param>
         /// <returns>true if both date and time were found, else false</returns>
-        static public bool TryParseDateTime(this string str, DateTimeFormat default_format, out ParsedDateTime parsed_date_time)
+        public static bool TryParseDateTime(this string str, DateTimeFormat default_format, out ParsedDateTime parsed_date_time)
         {
             if (DateTimeRoutines.TryParseDateOrTime(str, default_format, out parsed_date_time)
                 && parsed_date_time.IsDateFound
@@ -288,7 +285,7 @@ namespace DateTimeRoutines
         /// <param name="default_format">format to be used preferably in ambivalent instances</param>
         /// <param name="parsed_time">parsed date-time output</param>
         /// <returns>true if time was found, else false</returns>
-        static public bool TryParseTime(this string str, DateTimeFormat default_format, out ParsedDateTime parsed_time)
+        public static bool TryParseTime(this string str, DateTimeFormat default_format, out ParsedDateTime parsed_time)
         {
             return TryParseTime(str, default_format, out parsed_time, null);
         }
@@ -302,30 +299,30 @@ namespace DateTimeRoutines
         /// <param name="default_format">format to be used preferably in ambivalent instances</param>
         /// <param name="parsed_date_time">parsed date-time output</param>
         /// <returns>true if date or time was found, else false</returns>
-        static public bool TryParseDateOrTime(this string str, DateTimeFormat default_format, out ParsedDateTime parsed_date_time)
+        public static bool TryParseDateOrTime(this string str, DateTimeFormat default_format, out ParsedDateTime parsed_date_time)
         {
             parsed_date_time = null;
 
-            ParsedDateTime parsed_date;
             ParsedDateTime parsed_time;
-            if (!TryParseDate(str, default_format, out parsed_date))
+            if (!TryParseDate(str, default_format, out
+            ParsedDateTime parsed_date))
             {
                 if (!TryParseTime(str, default_format, out parsed_time, null))
                     return false;
 
-                DateTime date_time = new DateTime(DefaultDate.Year, DefaultDate.Month, DefaultDate.Day, parsed_time.DateTime.Hour, parsed_time.DateTime.Minute, parsed_time.DateTime.Second);
+                var date_time = new DateTime(DefaultDate.Year, DefaultDate.Month, DefaultDate.Day, parsed_time.DateTime.Hour, parsed_time.DateTime.Minute, parsed_time.DateTime.Second);
                 parsed_date_time = new ParsedDateTime(-1, -1, parsed_time.IndexOfTime, parsed_time.LengthOfTime, date_time, parsed_time.UtcOffset);
             }
             else
             {
                 if (!TryParseTime(str, default_format, out parsed_time, parsed_date))
                 {
-                    DateTime date_time = new DateTime(parsed_date.DateTime.Year, parsed_date.DateTime.Month, parsed_date.DateTime.Day, 0, 0, 0);
+                    var date_time = new DateTime(parsed_date.DateTime.Year, parsed_date.DateTime.Month, parsed_date.DateTime.Day, 0, 0, 0);
                     parsed_date_time = new ParsedDateTime(parsed_date.IndexOfDate, parsed_date.LengthOfDate, -1, -1, date_time);
                 }
                 else
                 {
-                    DateTime date_time = new DateTime(parsed_date.DateTime.Year, parsed_date.DateTime.Month, parsed_date.DateTime.Day, parsed_time.DateTime.Hour, parsed_time.DateTime.Minute, parsed_time.DateTime.Second);
+                    var date_time = new DateTime(parsed_date.DateTime.Year, parsed_date.DateTime.Month, parsed_date.DateTime.Day, parsed_time.DateTime.Hour, parsed_time.DateTime.Minute, parsed_time.DateTime.Second);
                     parsed_date_time = new ParsedDateTime(parsed_date.IndexOfDate, parsed_date.LengthOfDate, parsed_time.IndexOfTime, parsed_time.LengthOfTime, date_time, parsed_time.UtcOffset);
                 }
             }
@@ -385,15 +382,15 @@ namespace DateTimeRoutines
 
             //try
             //{
-            int hour = int.Parse(m.Groups["hour"].Value);
+            var hour = int.Parse(m.Groups["hour"].Value);
             if (hour < 0 || hour > 23)
                 return false;
 
-            int minute = int.Parse(m.Groups["minute"].Value);
+            var minute = int.Parse(m.Groups["minute"].Value);
             if (minute < 0 || minute > 59)
                 return false;
 
-            int second = 0;
+            var second = 0;
             if (!string.IsNullOrEmpty(m.Groups["second"].Value))
             {
                 second = int.Parse(m.Groups["second"].Value);
@@ -406,15 +403,15 @@ namespace DateTimeRoutines
             else if (string.Compare(m.Groups["ampm"].Value, "AM", true) == 0 && hour == 12)
                 hour -= 12;
 
-            DateTime date_time = new DateTime(1, 1, 1, hour, minute, second);
+            var date_time = new DateTime(1, 1, 1, hour, minute, second);
 
             if (m.Groups["offset_hh"].Success)
             {
-                int offset_hh = int.Parse(m.Groups["offset_hh"].Value);
-                int offset_mm = 0;
+                var offset_hh = int.Parse(m.Groups["offset_hh"].Value);
+                var offset_mm = 0;
                 if (m.Groups["offset_mm"].Success)
                     offset_mm = int.Parse(m.Groups["offset_mm"].Value);
-                TimeSpan utc_offset = new TimeSpan(offset_hh, offset_mm, 0);
+                var utc_offset = new TimeSpan(offset_hh, offset_mm, 0);
                 if (m.Groups["offset_sign"].Value == "-")
                     utc_offset = -utc_offset;
                 parsed_time = new ParsedDateTime(-1, -1, m.Index, m.Length, date_time, utc_offset);
@@ -461,7 +458,7 @@ namespace DateTimeRoutines
         /// <param name="default_format">format to be used preferably in ambivalent instances</param>
         /// <param name="parsed_date">parsed date output</param>
         /// <returns>true if date was found, else false</returns>
-        static public bool TryParseDate(this string str, DateTimeFormat default_format, out ParsedDateTime parsed_date)
+        public static bool TryParseDate(this string str, DateTimeFormat default_format, out ParsedDateTime parsed_date)
         {
             parsed_date = null;
 
@@ -469,7 +466,7 @@ namespace DateTimeRoutines
                 return false;
 
             //look for dd/mm/yy
-            Match m = Regex.Match(str, @"(?<=^|[^\d])(?'day'\d{1,2})\s*(?'separator'[\\/\.])+\s*(?'month'\d{1,2})\s*\'separator'+\s*(?'year'\d{2}|\d{4})(?=$|[^\d])", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            var m = Regex.Match(str, @"(?<=^|[^\d])(?'day'\d{1,2})\s*(?'separator'[\\/\.])+\s*(?'month'\d{1,2})\s*\'separator'+\s*(?'year'\d{2}|\d{4})(?=$|[^\d])", RegexOptions.Compiled | RegexOptions.IgnoreCase);
             if (m.Success)
             {
                 DateTime date;
@@ -491,8 +488,7 @@ namespace DateTimeRoutines
             m = Regex.Match(str, @"(?<=^|[^\d])(?'year'\d{2}|\d{4})\s*(?'separator'[\-])\s*(?'month'\d{1,2})\s*\'separator'+\s*(?'day'\d{1,2})(?=$|[^\d])", RegexOptions.Compiled | RegexOptions.IgnoreCase);
             if (m.Success)
             {
-                DateTime date;
-                if (!convert_to_date(int.Parse(m.Groups["year"].Value), int.Parse(m.Groups["month"].Value), int.Parse(m.Groups["day"].Value), out date))
+                if (!convert_to_date(int.Parse(m.Groups["year"].Value), int.Parse(m.Groups["month"].Value), int.Parse(m.Groups["day"].Value), out var date))
                     return false;
                 parsed_date = new ParsedDateTime(m.Index, m.Length, -1, -1, date);
                 return true;
@@ -514,9 +510,9 @@ namespace DateTimeRoutines
                 m = Regex.Match(str, @"(?:^|[^\d\w])(?'month'Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[uarychilestmbro]*\s+(?'day'\d{1,2})(?:-?st|-?th|-?rd|-?nd)?(?:\s*,?\s*(?'year'\d{4}))?(?=$|[^\d\w])", RegexOptions.Compiled | RegexOptions.IgnoreCase);
             if (m.Success)
             {
-                int month = -1;
-                int index_of_date = m.Index;
-                int length_of_date = m.Length;
+                var month = -1;
+                var index_of_date = m.Index;
+                var length_of_date = m.Length;
 
                 switch (m.Groups["month"].Value)
                 {
@@ -575,8 +571,7 @@ namespace DateTimeRoutines
                 else
                     year = DefaultDate.Year;
 
-                DateTime date;
-                if (!convert_to_date(year, month, int.Parse(m.Groups["day"].Value), out date))
+                if (!convert_to_date(year, month, int.Parse(m.Groups["day"].Value), out var date))
                     return false;
                 parsed_date = new ParsedDateTime(index_of_date, length_of_date, -1, -1, date);
                 return true;
@@ -585,7 +580,7 @@ namespace DateTimeRoutines
             return false;
         }
 
-        static bool convert_to_date(int year, int month, int day, out DateTime date)
+        private static bool convert_to_date(int year, int month, int day, out DateTime date)
         {
             if (year >= 100)
             {

@@ -29,7 +29,7 @@ namespace Jackett.Common.Indexers
 
         private ConfigurationData ConfigData
         {
-            get => (ConfigurationData)base.configData;
+            get => configData;
             set => base.configData = value;
         }
 

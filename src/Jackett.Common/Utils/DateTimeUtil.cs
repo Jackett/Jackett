@@ -10,15 +10,15 @@ namespace Jackett.Common.Utils
 
         public static DateTime UnixTimestampToDateTime(long unixTime)
         {
-            DateTime dt = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+            var dt = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
             dt = dt.AddSeconds(unixTime).ToLocalTime();
             return dt;
         }
 
         public static DateTime UnixTimestampToDateTime(double unixTime)
         {
-            DateTime unixStart = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
-            long unixTimeStampInTicks = (long)(unixTime * TimeSpan.TicksPerSecond);
+            var unixStart = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+            var unixTimeStampInTicks = (long)(unixTime * TimeSpan.TicksPerSecond);
             return new DateTime(unixStart.Ticks + unixTimeStampInTicks);
         }
 
@@ -43,13 +43,13 @@ namespace Jackett.Common.Utils
             str = str.Replace("ago", "");
             str = str.Replace("and", "");
 
-            TimeSpan timeAgo = TimeSpan.Zero;
-            Regex TimeagoRegex = new Regex(@"\s*?([\d\.]+)\s*?([^\d\s\.]+)\s*?");
+            var timeAgo = TimeSpan.Zero;
+            var TimeagoRegex = new Regex(@"\s*?([\d\.]+)\s*?([^\d\s\.]+)\s*?");
             var TimeagoMatches = TimeagoRegex.Match(str);
 
             while (TimeagoMatches.Success)
             {
-                string expanded = string.Empty;
+                var expanded = string.Empty;
 
                 var val = ParseUtil.CoerceFloat(TimeagoMatches.Groups[1].Value);
                 var unit = TimeagoMatches.Groups[2].Value;
@@ -83,7 +83,7 @@ namespace Jackett.Common.Utils
             if (string.IsNullOrWhiteSpace(time))
                 return TimeSpan.Zero;
 
-            TimeSpan offset = TimeSpan.Zero;
+            var offset = TimeSpan.Zero;
             if (time.EndsWith("AM"))
             {
                 time = time.Substring(0, time.Length - 2);
@@ -105,14 +105,14 @@ namespace Jackett.Common.Utils
         // http://www.codeproject.com/Articles/33298/C-Date-Time-Parser
         public static DateTime FromFuzzyTime(string str, string format = null)
         {
-            DateTimeRoutines.DateTimeRoutines.DateTimeFormat dt_format = DateTimeRoutines.DateTimeRoutines.DateTimeFormat.USA_DATE;
+            var dt_format = DateTimeRoutines.DateTimeRoutines.DateTimeFormat.USA_DATE;
             if (format == "UK")
             {
                 dt_format = DateTimeRoutines.DateTimeRoutines.DateTimeFormat.UK_DATE;
             }
 
-            DateTimeRoutines.DateTimeRoutines.ParsedDateTime dt;
-            if (DateTimeRoutines.DateTimeRoutines.TryParseDateOrTime(str, dt_format, out dt))
+            if (DateTimeRoutines.DateTimeRoutines.TryParseDateOrTime(str, dt_format, out
+            DateTimeRoutines.DateTimeRoutines.ParsedDateTime dt))
             {
                 return dt.DateTime;
             }
@@ -152,7 +152,7 @@ namespace Jackett.Common.Utils
                 if (match.Success)
                 {
                     var time = str.Replace(match.Groups[0].Value, "");
-                    DateTime dt = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified);
+                    var dt = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified);
                     dt += ParseTimeSpan(time);
                     return dt;
                 }
@@ -162,7 +162,7 @@ namespace Jackett.Common.Utils
                 if (match.Success)
                 {
                     var time = str.Replace(match.Groups[0].Value, "");
-                    DateTime dt = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified);
+                    var dt = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified);
                     dt += ParseTimeSpan(time);
                     dt -= TimeSpan.FromDays(1);
                     return dt;
@@ -173,7 +173,7 @@ namespace Jackett.Common.Utils
                 if (match.Success)
                 {
                     var time = str.Replace(match.Groups[0].Value, "");
-                    DateTime dt = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified);
+                    var dt = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified);
                     dt += ParseTimeSpan(time);
                     dt += TimeSpan.FromDays(1);
                     return dt;
@@ -184,7 +184,7 @@ namespace Jackett.Common.Utils
                 if (match.Success)
                 {
                     var time = str.Replace(match.Groups[0].Value, "");
-                    DateTime dt = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified);
+                    var dt = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified);
                     dt += ParseTimeSpan(time);
 
                     var dow = DayOfWeek.Monday;
@@ -225,7 +225,7 @@ namespace Jackett.Common.Utils
                 if (match.Success)
                 {
                     var date = match.Groups[1].Value;
-                    string newDate = DateTime.Now.Year.ToString() + "-" + date;
+                    var newDate = DateTime.Now.Year.ToString() + "-" + date;
                     str = str.Replace(date, newDate);
                 }
 

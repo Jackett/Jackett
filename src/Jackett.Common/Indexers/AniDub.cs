@@ -528,7 +528,7 @@ namespace Jackett.Common.Indexers
 
         private IEnumerable<int> ParseCategories(Uri showUri)
         {
-            Dictionary<string, string> categoriesMap = CategoriesMap;
+            var categoriesMap = CategoriesMap;
 
             var path = showUri.AbsolutePath.ToLowerInvariant();
 

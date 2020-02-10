@@ -15,10 +15,10 @@ namespace Jackett.Common.Services
 
     public class ConfigurationService : IConfigurationService
     {
-        private ISerializeService serializeService;
-        private Logger logger;
-        private IProcessService processService;
-        private RuntimeSettings runtimeSettings;
+        private readonly ISerializeService serializeService;
+        private readonly Logger logger;
+        private readonly IProcessService processService;
+        private readonly RuntimeSettings runtimeSettings;
 
         public ConfigurationService(ISerializeService s, IProcessService p, Logger l, RuntimeSettings settings)
         {
@@ -59,7 +59,7 @@ namespace Jackett.Common.Services
             {
                 try
                 {
-                    string oldDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Jackett");
+                    var oldDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Jackett");
                     if (Directory.Exists(oldDir))
                     {
 
@@ -175,7 +175,7 @@ namespace Jackett.Common.Services
         public string GetContentFolder()
         {
             // If we are debugging we can use the non copied content.
-            string dir = Path.Combine(ApplicationFolder(), "Content");
+            var dir = Path.Combine(ApplicationFolder(), "Content");
             ;
 
 #if DEBUG
@@ -191,7 +191,7 @@ namespace Jackett.Common.Services
 
         public List<string> GetCardigannDefinitionsFolders()
         {
-            List<string> dirs = new List<string>();
+            var dirs = new List<string>();
 
             if (System.Environment.OSVersion.Platform == PlatformID.Unix)
             {
@@ -205,7 +205,7 @@ namespace Jackett.Common.Services
             }
 
             // If we are debugging we can use the non copied definitions.
-            string dir = Path.Combine(ApplicationFolder(), "Definitions");
+            var dir = Path.Combine(ApplicationFolder(), "Definitions");
             ;
 
 #if DEBUG

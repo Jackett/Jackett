@@ -19,7 +19,7 @@ namespace Jackett.Common.Indexers
     {
         private string LoginUrl { get { return SiteLink + "login/index.php"; } }
         private string BrowseUrl { get { return SiteLink + "uebersicht.php"; } }
-        private TimeZoneInfo germanyTz = TimeZoneInfo.CreateCustomTimeZone("W. Europe Standard Time", new TimeSpan(1, 0, 0), "W. Europe Standard Time", "W. Europe Standard Time");
+        private readonly TimeZoneInfo germanyTz = TimeZoneInfo.CreateCustomTimeZone("W. Europe Standard Time", new TimeSpan(1, 0, 0), "W. Europe Standard Time", "W. Europe Standard Time");
 
         private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
         {
@@ -42,8 +42,8 @@ namespace Jackett.Common.Indexers
             Language = "de-de";
             Type = "private";
 
-            this.configData.DisplayText.Value = "Only the results from the first search result page are shown, adjust your profile settings to show a reasonable amount (it looks like there's no maximum).";
-            this.configData.DisplayText.Name = "Notice";
+            configData.DisplayText.Value = "Only the results from the first search result page are shown, adjust your profile settings to show a reasonable amount (it looks like there's no maximum).";
+            configData.DisplayText.Name = "Notice";
 
             AddCategoryMapping(1, TorznabCatType.Other); // Anderes
             AddCategoryMapping(2, TorznabCatType.TVAnime); // Anime
@@ -144,7 +144,7 @@ namespace Jackett.Common.Indexers
 
                     var qRow = row.Cq();
                     var flagImgs = qRow.Find("table tbody tr: eq(0) td > img");
-                    List<string> flags = new List<string>();
+                    var flags = new List<string>();
                     flagImgs.Each(flagImg =>
                     {
                         var flag = flagImg.GetAttribute("src").Replace("pic/torrent_", "").Replace(".gif", "").ToUpper();
@@ -163,12 +163,12 @@ namespace Jackett.Common.Indexers
                     if (!query.MatchQueryStringAND(release.Title))
                         continue;
 
-                    release.Description = String.Join(", ", flags);
+                    release.Description = string.Join(", ", flags);
                     release.Guid = release.Link;
 
                     var dateStr = qRow.Find("table tbody tr:eq(1) td:eq(4)").Html().Replace("&nbsp;", " ").Trim();
                     var dateGerman = DateTime.SpecifyKind(DateTime.ParseExact(dateStr, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture), DateTimeKind.Unspecified);
-                    DateTime pubDateUtc = TimeZoneInfo.ConvertTimeToUtc(dateGerman, germanyTz);
+                    var pubDateUtc = TimeZoneInfo.ConvertTimeToUtc(dateGerman, germanyTz);
                     release.PublishDate = pubDateUtc.ToLocalTime();
 
                     var sizeStr = qRow.Find("table tbody tr:eq(1) td b").First().Text().Trim();

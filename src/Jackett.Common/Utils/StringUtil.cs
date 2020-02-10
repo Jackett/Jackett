@@ -22,20 +22,20 @@ namespace Jackett.Common.Utils
 
         public static string StripRegex(string str, string regex, string replacement = "")
         {
-            Regex rgx = new Regex(regex);
+            var rgx = new Regex(regex);
             str = rgx.Replace(str, replacement);
             return str;
         }
 
         // replaces culture specific characters with the corresponding base characters (e.g. è becomes e).
-        public static String RemoveDiacritics(String s)
+        public static string RemoveDiacritics(string s)
         {
-            String normalizedString = s.Normalize(NormalizationForm.FormD);
-            StringBuilder stringBuilder = new StringBuilder();
+            var normalizedString = s.Normalize(NormalizationForm.FormD);
+            var stringBuilder = new StringBuilder();
 
-            for (int i = 0; i < normalizedString.Length; i++)
+            for (var i = 0; i < normalizedString.Length; i++)
             {
-                Char c = normalizedString[i];
+                var c = normalizedString[i];
                 if (CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)
                     stringBuilder.Append(c);
             }
@@ -56,7 +56,7 @@ namespace Jackett.Common.Utils
         public static string HexStringFromBytes(byte[] bytes)
         {
             var sb = new StringBuilder();
-            foreach (byte b in bytes)
+            foreach (var b in bytes)
             {
                 var hex = b.ToString("x2");
                 sb.Append(hex);
@@ -73,8 +73,8 @@ namespace Jackett.Common.Utils
         {
             var sha1 = SHA1.Create();
 
-            byte[] bytes = Encoding.UTF8.GetBytes(s);
-            byte[] hashBytes = sha1.ComputeHash(bytes);
+            var bytes = Encoding.UTF8.GetBytes(s);
+            var hashBytes = sha1.ComputeHash(bytes);
 
             return HexStringFromBytes(hashBytes);
         }
@@ -82,10 +82,10 @@ namespace Jackett.Common.Utils
         public static string Hash(string s)
         {
             // Use input string to calculate MD5 hash
-            MD5 md5 = System.Security.Cryptography.MD5.Create();
+            var md5 = System.Security.Cryptography.MD5.Create();
 
-            byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(s);
-            byte[] hashBytes = md5.ComputeHash(inputBytes);
+            var inputBytes = System.Text.Encoding.ASCII.GetBytes(s);
+            var hashBytes = md5.ComputeHash(inputBytes);
 
             return HexStringFromBytes(hashBytes);
         }
@@ -100,15 +100,15 @@ namespace Jackett.Common.Utils
                                  Name = property.Name,
                                  Value = property.GetValue(exception, null)
                              })
-                             .Select(x => String.Format(
+                             .Select(x => string.Format(
                                  "{0} = {1}",
                                  x.Name,
-                                 x.Value != null ? x.Value.ToString() : String.Empty
+                                 x.Value != null ? x.Value.ToString() : string.Empty
                              ));
-            return String.Join("\n", fields);
+            return string.Join("\n", fields);
         }
 
-        static char[] MakeValidFileName_invalids;
+        private static char[] MakeValidFileName_invalids;
 
         /// <summary>Replaces characters in <c>text</c> that are not allowed in 
         /// file names with the specified replacement character.</summary>
@@ -118,12 +118,12 @@ namespace Jackett.Common.Utils
         /// <returns>A string that can be used as a filename. If the output string would otherwise be empty, returns "_".</returns>
         public static string MakeValidFileName(string text, char? replacement = '_', bool fancy = true)
         {
-            StringBuilder sb = new StringBuilder(text.Length);
+            var sb = new StringBuilder(text.Length);
             var invalids = MakeValidFileName_invalids ?? (MakeValidFileName_invalids = Path.GetInvalidFileNameChars());
-            bool changed = false;
-            for (int i = 0; i < text.Length; i++)
+            var changed = false;
+            for (var i = 0; i < text.Length; i++)
             {
-                char c = text[i];
+                var c = text[i];
                 if (invalids.Contains(c))
                 {
                     changed = true;
@@ -172,8 +172,8 @@ namespace Jackett.Common.Utils
             if (element == null)
                 return "<NULL>";
 
-            StringBuilder sb = new StringBuilder();
-            StringWriter sw = new StringWriter(sb);
+            var sb = new StringBuilder();
+            var sw = new StringWriter(sb);
             var formatter = new PrettyMarkupFormatter();
             element.ToHtml(sw, formatter);
             return sb.ToString();
