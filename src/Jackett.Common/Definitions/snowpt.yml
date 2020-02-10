@@ -2,7 +2,7 @@
   site: snowpt
   name: SnowPT
   description: "SnowPT (SSPT) is a CHINESE Private Torrent Tracker for ANIME"
-  language: en
+  language: zh-cn
   type: private
   encoding: UTF-8
   links:
