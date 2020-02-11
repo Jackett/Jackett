@@ -54,8 +54,8 @@ If you are experiencing an issue with a tracker, then:
     (followed by clicking on the `Apply Server Settings` button).
 -   These enhanced logs are necessary for us to quickly track down your bug and get a fix implemented in code.
 -   Make sure you remove your username/password/cookies from the log files before submitting them with your issue.
--   The logfiles (log.txt/updater.txt) are stored in `%ProgramData%\Jackett` on Windows in `~/.config/Jackett/`
-    on Linux/macOS and in `/usr/local/jackett` on FreeBSD.
+-   The logfiles (log.txt/updater.txt) are stored on Windows in `%ProgramData%\Jackett`, on Linux/macOS in `~/.config/Jackett/`,
+     and on FreeBSD in `/usr/local/jackett`.
 
 ## Reporting a Bug
 
