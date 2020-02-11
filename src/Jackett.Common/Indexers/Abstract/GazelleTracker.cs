@@ -51,8 +51,14 @@ namespace Jackett.Common.Indexers.Abstract
 
             if (has2Fa)
             {
+                var cookieHint = new ConfigurationData.DisplayItem(
+                "<ol><li>(use this only if 2FA is enabled for your account)</li><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find 'cookie:' in the <b>Request Headers</b> section<li>Copy & paste the whole cookie string to here.</ol>")
+                {
+                    Name = "CookieHint"
+                };
+                configData.AddDynamic("cookieHint", cookieHint);
                 var cookieItem = new ConfigurationData.StringItem { Value = "" };
-                cookieItem.Name = "Cookie (use this if 2FA is enabled for your account, instructions to retrieve a cookie can be located on the wiki)";
+                cookieItem.Name = "Cookie";
                 configData.AddDynamic("cookie", cookieItem);
             }
 
