@@ -6,13 +6,15 @@ You've created an issue, but haven't provided any details to allow the community
 
 **OS**:
 
-**.Net Runtime**: [Mono/.Net-Core/.Net-Framework]
+**.Net Runtime**: [.Net-Core/.Net-Framework/Mono]
 
 **.Net Version**:
 
 **Jackett Version**:
 
 **Last Working Jackett Version**:
+
+**Are you using a proxy or VPN?** [yes/no]
 
 ### Description
 
