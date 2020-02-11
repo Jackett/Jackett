@@ -7,13 +7,15 @@ Please read our [Contributing Guidelines](https://github.com/Jackett/Jackett/blo
 
 **OS**:
 
-**.Net Runtime**: [Mono/.Net-Core/.Net-Framework]
+**.Net Runtime**: [.Net-Core/.Net-Framework/Mono]
 
 **.Net Version**:
 
 **Jackett Version**:
 
 **Last Working Jackett Version**:
+
+**Are you using a proxy or VPN?** [yes/no]
 
 ### Description
 
