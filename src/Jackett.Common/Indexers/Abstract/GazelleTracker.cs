@@ -26,6 +26,7 @@ namespace Jackett.Common.Indexers.Abstract
         protected bool imdbInTags;
         protected bool supportsCategories = true; // set to false if the tracker doesn't include the categories in the API search results
         protected bool useTokens = false;
+        protected string cookie = "";
 
         private new ConfigurationDataBasicLogin configData
         {
@@ -33,7 +34,7 @@ namespace Jackett.Common.Indexers.Abstract
             set { base.configData = value; }
         }
 
-        public GazelleTracker(IIndexerConfigurationService configService, Utils.Clients.WebClient webClient, Logger logger, IProtectionService protectionService, string name, string desc, string link, bool supportsFreeleechTokens, bool imdbInTags = false)
+        public GazelleTracker(IIndexerConfigurationService configService, Utils.Clients.WebClient webClient, Logger logger, IProtectionService protectionService, string name, string desc, string link, bool supportsFreeleechTokens, bool imdbInTags = false, bool has2Fa = false)
             : base(name: name,
                 description: desc,
                 link: link,
@@ -48,6 +49,13 @@ namespace Jackett.Common.Indexers.Abstract
             this.supportsFreeleechTokens = supportsFreeleechTokens;
             this.imdbInTags = imdbInTags;
 
+            if (has2Fa)
+            {
+                var cookieItem = new ConfigurationData.StringItem { Value = "" };
+                cookieItem.Name = "Cookie (use this if 2FA is enabled for your account, instructions to retrieve a cookie can be located on the wiki)";
+                configData.AddDynamic("cookie", cookieItem);
+            }
+
             if (supportsFreeleechTokens)
             {
                 var useTokenItem = new ConfigurationData.BoolItem { Value = false };
@@ -60,11 +68,18 @@ namespace Jackett.Common.Indexers.Abstract
         {
             base.LoadValuesFromJson(jsonConfig, useProtectionService);
 
+            var cookieItem = (ConfigurationData.StringItem)configData.GetDynamic("cookie");
+            if (cookieItem != null)
+            {
+                cookie = cookieItem.Value;
+            }
+
             var useTokenItem = (ConfigurationData.BoolItem)configData.GetDynamic("usetoken");
             if (useTokenItem != null)
             {
                 useTokens = useTokenItem.Value;
             }
+
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -76,6 +91,29 @@ namespace Jackett.Common.Indexers.Abstract
                 { "password", configData.Password.Value },
                 { "keeplogged", "1"},
             };
+
+            if (!string.IsNullOrWhiteSpace(cookie))
+            {
+                // Cookie was manually supplied
+                CookieHeader = cookie;
+                try
+                {
+                    var results = await PerformQuery(new TorznabQuery());
+                    if (!results.Any())
+                    {
+                        throw new Exception("Your cookie did not work");
+                    }
+
+                    IsConfigured = true;
+                    SaveConfig();
+                    return IndexerConfigurationStatus.Completed;
+                }
+                catch (Exception e)
+                {
+                    IsConfigured = false;
+                    throw new Exception("Your cookie did not work: " + e.Message);
+                }
+            }
 
             var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, string.Empty, true, SiteLink);
             await ConfigureIfOK(response.Cookies, response.Content != null && response.Content.Contains("logout.php"), () =>
