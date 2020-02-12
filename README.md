@@ -87,6 +87,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Nyaa-Pantsu
  * OxTorrent
  * PiratBit
+ * Pirateiro
  * ProStyleX
  * RARBG
  * Rus-media
