@@ -1539,42 +1539,42 @@ namespace Jackett.Common.Indexers
                 {
                     try
                     {
-                        var release = new ReleaseInfo();
-
-                        release.MinimumRatio = 1;
-                        release.MinimumSeedTime = 0;
-
                         var qDownloadLink = Row.QuerySelector("td.tor-size > a.tr-dl");
                         if (qDownloadLink == null) // Expects moderation
                             continue;
-
                         var qDetailsLink = Row.QuerySelector("td.t-title > div.t-title > a.tLink");
                         var qSize = Row.QuerySelector("td.tor-size");
-
-                        release.Title = qDetailsLink.TextContent;
-
-                        release.Comments = new Uri(SiteLink + "forum/" + qDetailsLink.GetAttribute("href"));
-                        release.Link = new Uri(SiteLink + "forum/" + qDownloadLink.GetAttribute("href"));
-                        release.Guid = release.Comments;
-                        release.Size = ReleaseInfo.GetBytes(qSize.GetAttribute("data-ts_text"));
-
-                        var seeders = Row.QuerySelector("td:nth-child(7) b").TextContent;
-                        if (string.IsNullOrWhiteSpace(seeders))
-                            seeders = "0";
-                        release.Seeders = ParseUtil.CoerceInt(seeders);
-                        release.Peers = ParseUtil.CoerceInt(Row.QuerySelector("td:nth-child(8)").TextContent) + release.Seeders;
-                        release.Grabs = ParseUtil.CoerceLong(Row.QuerySelector("td:nth-child(9)").TextContent);
-
+                        var releaseComments = new Uri(SiteLink + "forum/" + qDetailsLink.GetAttribute("href"));
+                        var seedersString = Row.QuerySelector("td:nth-child(7) b").TextContent;
+                        var seeders = string.IsNullOrWhiteSpace(seedersString) ? 0 : ParseUtil.CoerceInt(seedersString);
                         var timestr = Row.QuerySelector("td:nth-child(10)").GetAttribute("data-ts_text");
-                        release.PublishDate = DateTimeUtil.UnixTimestampToDateTime(long.Parse(timestr));
-
                         var forum = Row.QuerySelector("td.f-name > div.f-name > a");
                         var forumid = forum.GetAttribute("href").Split('=')[1];
-                        release.Category = MapTrackerCatToNewznab(forumid);
 
-                        release.DownloadVolumeFactor = 1;
-                        release.UploadVolumeFactor = 1;
+                        var release = new ReleaseInfo
+                        {
+                            MinimumRatio = 1,
+                            MinimumSeedTime = 0,
+                            Title = qDetailsLink.TextContent,
+                            Comments = releaseComments,
+                            Link = new Uri(SiteLink + "forum/" + qDownloadLink.GetAttribute("href")),
+                            Guid = releaseComments,
+                            Size = ReleaseInfo.GetBytes(qSize.GetAttribute("data-ts_text")),
+                            Seeders = seeders,
+                            Peers = ParseUtil.CoerceInt(Row.QuerySelector("td:nth-child(8)").TextContent) + seeders,
+                            Grabs = ParseUtil.CoerceLong(Row.QuerySelector("td:nth-child(9)").TextContent),
+                            PublishDate = DateTimeUtil.UnixTimestampToDateTime(long.Parse(timestr)),
+                            Category = MapTrackerCatToNewznab(forumid),
+                            DownloadVolumeFactor = 1,
+                            UploadVolumeFactor = 1
+                        };
 
+
+
+
+
+
+                        // TODO finish extracting release variables to simiplify release initialization
                         if (release.Category.Contains(TorznabCatType.TV.ID))
                         {
                             // extract season and episodes

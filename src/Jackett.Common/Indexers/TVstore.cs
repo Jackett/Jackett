@@ -231,15 +231,18 @@ namespace Jackett.Common.Indexers
                         {
                             var id = seriesknowbysite[i];
                             var serieselement = WebUtility.HtmlDecode(id).Split(';');
-                            var sd = new SeriesDetail();
-                            sd.HunName = serieselement[1].Split('=')[1].Trim('\'').ToLower();
-                            sd.EngName = serieselement[2].Split('=')[1].Trim('\'').ToLower();
-                            sd.id = serieselement[0].Split('=')[1].Trim('\'');
-                            sd.imdbid = serieselement[7].Split('=')[1].Trim('\'');
-                            series.Add(sd);
+                            series.Add(new SeriesDetail
+                            {
+	                            HunName = serieselement[1].Split('=')[1].Trim('\'').ToLower(),
+	                            EngName = serieselement[2].Split('=')[1].Trim('\'').ToLower(),
+	                            id = serieselement[0].Split('=')[1].Trim('\''),
+	                            imdbid = serieselement[7].Split('=')[1].Trim('\'')
+                            });
                         }
+                        // catch and rethrow without doing anything just remove?
                         catch (IndexOutOfRangeException e)
                         {
+                            // resets call stack normally not the intended result
                             throw (e);
                         }
                     }
@@ -250,6 +253,7 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
+            //TODO convert to initializer
             var releases = new List<ReleaseInfo>();
 
             /* If series from sites are indexed than we dont need to reindex them. */

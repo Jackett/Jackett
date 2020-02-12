@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -185,64 +186,51 @@ namespace Jackett.Common.Indexers
                 var globalFreeleech = dom.QuerySelector("legend:contains(\"Freeleech\")+ul > li > b:contains(\"Freeleech\")") != null;
                 foreach (var row in rows.Skip(1))
                 {
-                    var release = new ReleaseInfo();
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 96 * 60 * 60;
 
                     var catStr = row.Children[0].FirstElementChild.GetAttribute("href").Split('=')[1].Split('&')[0];
-                    release.Category = MapTrackerCatToNewznab(catStr);
 
                     var qLink = row.Children[2].FirstElementChild;
-                    release.Link = new Uri(SiteLink + qLink.GetAttribute("href"));
 
                     var descCol = row.Children[1];
                     var torrentTag = descCol.QuerySelectorAll("span.torrent-tag");
-                    if (torrentTag.Any())
-                        release.Description = string.Join(", ", torrentTag.Select(x => x.InnerHtml));
-
+                    //Empty list gives string.Empty in string.Join
+                    var releaseDescription = string.Join(", ", torrentTag.Select(x => x.InnerHtml));
                     var qCommentLink = descCol.QuerySelector("a[href*=\"details.php\"]");
-                    release.Title = qCommentLink.GetAttribute("title");
-                    release.Comments = new Uri(SiteLink + qCommentLink.GetAttribute("href").Replace("&hit=1", ""));
-                    release.Guid = release.Comments;
+                    var releaseComments = new Uri(SiteLink + qCommentLink.GetAttribute("href").Replace("&hit=1", ""));
 
                     var torrentDetails = descCol.QuerySelector(".torrent_details");
                     var rawDateStr = torrentDetails.ChildNodes[1].TextContent;
-                    var dateStr = rawDateStr.Trim().Replace("von", "").Trim();
-                    DateTime dateGerman;
-                    if (dateStr.StartsWith("Heute "))
-                        dateGerman = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified) + TimeSpan.Parse(dateStr.Split(' ')[1]);
-                    else if (dateStr.StartsWith("Gestern "))
-                        dateGerman = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified) + TimeSpan.Parse(dateStr.Split(' ')[1]) - TimeSpan.FromDays(1);
-                    else
-                        dateGerman = DateTime.SpecifyKind(DateTime.ParseExact(dateStr, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture), DateTimeKind.Unspecified);
-
+                    var dateStr = rawDateStr.Replace("von", "")
+                                            .Replace("Heute", "Today")
+                                            .Replace("Gestern", "Yesterday");
+                    var dateGerman =DateTimeUtil.FromUnknown(dateStr);
                     var pubDateUtc = TimeZoneInfo.ConvertTimeToUtc(dateGerman, germanyTz);
-                    release.PublishDate = pubDateUtc.ToLocalTime();
-
-                    var imdbLink = descCol.QuerySelector("a[href*=\"&searchin=imdb\"]");
-                    if (imdbLink != null)
-                        release.Imdb = ParseUtil.GetLongFromString(imdbLink.GetAttribute("href"));
-
+                    var longFromString = ParseUtil.GetLongFromString(descCol.QuerySelector("a[href*=\"&searchin=imdb\"]")?.GetAttribute("href"));
                     var sizeFileCountRowChilds = row.Children[5].Children;
-                    release.Size = ReleaseInfo.GetBytes(sizeFileCountRowChilds[0].TextContent);
-                    release.Files = ParseUtil.CoerceInt(sizeFileCountRowChilds[2].TextContent);
-
-                    release.Seeders = ParseUtil.CoerceInt(row.Children[7].TextContent);
-                    release.Peers = ParseUtil.CoerceInt(row.Children[8].TextContent) + release.Seeders;
-
                     var grabs = row.QuerySelector("td:nth-child(7)").TextContent;
-                    release.Grabs = ParseUtil.CoerceInt(grabs);
-
-                    if (globalFreeleech)
-                        release.DownloadVolumeFactor = 0;
-                    else if (row.QuerySelector("span.torrent-tag-free") != null)
-                        release.DownloadVolumeFactor = 0;
-                    else
-                        release.DownloadVolumeFactor = 1;
-
-                    release.UploadVolumeFactor = 1;
-
-                    releases.Add(release);
+                    var releaseSeeders = ParseUtil.CoerceInt(row.Children[7].TextContent);
+                    releases.Add(new ReleaseInfo
+                    {
+                        MinimumRatio = 1,
+                        MinimumSeedTime = 96 * 60 * 60,
+                        Category = MapTrackerCatToNewznab(catStr),
+                        Link = new Uri(SiteLink + qLink.GetAttribute("href")),
+                        Description = releaseDescription,
+                        Title = qCommentLink.GetAttribute("title"),
+                        Comments = releaseComments,
+                        Guid = releaseComments,
+                        PublishDate = pubDateUtc.ToLocalTime(),
+                        Imdb = longFromString,
+                        Size = ReleaseInfo.GetBytes(sizeFileCountRowChilds[0].TextContent),
+                        Files = ParseUtil.CoerceInt(sizeFileCountRowChilds[2].TextContent),
+                        Seeders = releaseSeeders,
+                        Peers = ParseUtil.CoerceInt(row.Children[8].TextContent) + releaseSeeders,
+                        Grabs = ParseUtil.CoerceInt(grabs),
+                        DownloadVolumeFactor = globalFreeleech || row.QuerySelector("span.torrent-tag-free") != null
+                            ? 0
+                            : 1,
+                        UploadVolumeFactor = 1
+                    });
                 }
             }
             catch (Exception ex)

@@ -123,9 +123,11 @@ namespace Jackett.Common.Indexers
         {
             if (!HasValidToken)
             {
-                var queryCollection = new NameValueCollection();
-                queryCollection.Add("get_token", "get_token");
-                queryCollection.Add("app_id", app_id);
+                var queryCollection = new NameValueCollection
+                {
+                    { "get_token", "get_token" },
+                    { "app_id", app_id }
+                };
 
                 var tokenUrl = ApiEndpoint + "?" + queryCollection.GetQueryString();
 
@@ -155,13 +157,15 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();
 
-            var queryCollection = new NameValueCollection();
-            queryCollection.Add("token", token);
-            queryCollection.Add("format", "json_extended");
-            queryCollection.Add("app_id", app_id);
-            queryCollection.Add("limit", "100");
-            queryCollection.Add("ranked", "0");
-            queryCollection.Add("sort", _sort);
+            var queryCollection = new NameValueCollection
+            {
+                { "token", token },
+                { "format", "json_extended" },
+                { "app_id", app_id },
+                { "limit", "100" },
+                { "ranked", "0" },
+                { "sort", _sort }
+            };
 
             if (query.ImdbID != null)
             {
@@ -235,41 +239,44 @@ namespace Jackett.Common.Indexers
 
                 foreach (var item in jsonContent.Value<JArray>("torrent_results"))
                 {
-                    var release = new ReleaseInfo();
-                    release.Title = WebUtility.HtmlDecode(item.Value<string>("title"));
-                    release.Category = MapTrackerCatDescToNewznab(item.Value<string>("category"));
+                    var magnetUri = new Uri(item.Value<string>("download"));
+                    var comments = new Uri(item.Value<string>("info_page") + "&app_id=" + app_id);
+                    // ex: 2015-08-16 21:25:08 +0000
+                    var dateStr = item.Value<string>("pubdate").Replace(" +0000", "");
+                    var dateTime = DateTime.ParseExact(dateStr, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                    var releaseSeeders = item.Value<int>("seeders");
 
-                    release.MagnetUri = new Uri(item.Value<string>("download"));
-                    release.InfoHash = release.MagnetUri.ToString().Split(':')[3].Split('&')[0];
-                    // append app_id to prevent api server returning 403 forbidden
-                    release.Comments = new Uri(item.Value<string>("info_page") + "&app_id=" + app_id);
-                    if (_provideTorrentLink)
-                        release.Link = release.Comments; // in case of a torrent download we grab the link from the details page in Download()
-                    release.Guid = release.MagnetUri;
+                    var release = new ReleaseInfo
+                    {
+                        Title = WebUtility.HtmlDecode(item.Value<string>("title")),
+                        Category = MapTrackerCatDescToNewznab(item.Value<string>("category")),
+                        MagnetUri = magnetUri,
+                        InfoHash = magnetUri.ToString().Split(':')[3].Split('&')[0],
+                        // append app_id to prevent api server returning 403 forbidden
+                        Comments = comments,
+                        // in case of a torrent download we grab the link from the details page in Download()
+                        Link = _provideTorrentLink ? comments : default,
+                        PublishDate = DateTime.SpecifyKind(dateTime, DateTimeKind.Utc).ToLocalTime(),
+                        Guid = magnetUri,
+                        Seeders = releaseSeeders,
+                        Peers = item.Value<int>("leechers") + releaseSeeders,
+                        Size = item.Value<long>("size"),
+                        MinimumRatio = 1,
+                        MinimumSeedTime = 172800, // 48 hours
+                        DownloadVolumeFactor = 0,
+                        UploadVolumeFactor = 1
+                    };
 
                     var episodeInfo = item.Value<JToken>("episode_info");
 
                     if (episodeInfo.HasValues)
                     {
-                        var imdb = episodeInfo.Value<string>("imdb");
-                        release.Imdb = ParseUtil.GetImdbID(imdb);
+                        release.Imdb = ParseUtil.GetImdbID(episodeInfo.Value<string>("imdb"));
                         release.TVDBId = episodeInfo.Value<long?>("tvdb");
                         release.RageID = episodeInfo.Value<long?>("tvrage");
                         release.TMDb = episodeInfo.Value<long?>("themoviedb");
                     }
 
-                    // ex: 2015-08-16 21:25:08 +0000
-                    var dateStr = item.Value<string>("pubdate").Replace(" +0000", "");
-                    var dateTime = DateTime.ParseExact(dateStr, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                    release.PublishDate = DateTime.SpecifyKind(dateTime, DateTimeKind.Utc).ToLocalTime();
-
-                    release.Seeders = item.Value<int>("seeders");
-                    release.Peers = item.Value<int>("leechers") + release.Seeders;
-                    release.Size = item.Value<long>("size");
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800; // 48 hours
-                    release.DownloadVolumeFactor = 0;
-                    release.UploadVolumeFactor = 1;
 
                     releases.Add(release);
                 }

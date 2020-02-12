@@ -247,48 +247,50 @@ namespace Jackett.Common.Indexers
                 {
                     try
                     {
-                        var release = new ReleaseInfo();
-
-                        release.MinimumRatio = 1;
-                        release.MinimumSeedTime = 0;
-
                         var qDownloadLink = Row.QuerySelector("td:nth-child(6) > a");
                         if (qDownloadLink == null) // Expects moderation
                             continue;
 
                         var qDetailsLink = Row.QuerySelector("td:nth-child(3) > a");
                         var qSize = Row.QuerySelector("td:nth-child(7)");
-
-                        release.Title = qDetailsLink.TextContent;
-
-                        release.Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
-                        release.Link = new Uri(SiteLink + qDownloadLink.GetAttribute("href"));
-                        release.Guid = release.Comments;
-                        release.Size = ReleaseInfo.GetBytes(qSize.TextContent);
-
-                        var seeders = Row.QuerySelector("td:nth-child(10) > b").TextContent;
-                        if (string.IsNullOrWhiteSpace(seeders))
-                            seeders = "0";
-                        release.Seeders = ParseUtil.CoerceInt(seeders);
-                        release.Peers = ParseUtil.CoerceInt(Row.QuerySelector("td:nth-child(11) > b").TextContent) + release.Seeders;
-                        release.Grabs = 0;//ParseUtil.CoerceLong(Row.QuerySelector("td:nth-child(9)").TextContent);
-
+                        var seedersStr = Row.QuerySelector("td:nth-child(10) > b").TextContent;
+                        var seeders = string.IsNullOrWhiteSpace(seedersStr) ? 0 : ParseUtil.CoerceInt(seedersStr);
                         var timestr = Row.QuerySelector("td:nth-child(13)").TextContent;
-                        release.PublishDate = DateTimeUtil.FromFuzzyTime(timestr);
-
                         var forum = Row.QuerySelector("td:nth-child(2) > a");
                         var forumid = forum.GetAttribute("href").Split('=')[1];
-                        release.Category = MapTrackerCatToNewznab(forumid);
+                        var releaseComments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
 
-                        release.DownloadVolumeFactor = 1;
-                        release.UploadVolumeFactor = 1;
+                        var release = new ReleaseInfo
+                        {
+                            MinimumRatio = 1,
+                            MinimumSeedTime = 0,
+                            Title = qDetailsLink.TextContent,
+                            Comments = releaseComments,
+                            Link = new Uri(SiteLink + qDownloadLink.GetAttribute("href")),
+                            Guid = releaseComments,
+                            Size = ReleaseInfo.GetBytes(qSize.TextContent),
+                            Seeders = seeders,
+                            Peers = ParseUtil.CoerceInt(Row.QuerySelector("td:nth-child(11) > b").TextContent) + seeders,
+                            Grabs = 0, //ParseUtil.CoerceLong(Row.QuerySelector("td:nth-child(9)").TextContent);
+                            PublishDate = DateTimeUtil.FromFuzzyTime(timestr),
+                            Category = MapTrackerCatToNewznab(forumid),
+                            DownloadVolumeFactor = 1,
+                            UploadVolumeFactor = 1
+                        };
 
+
+                        
+
+
+
+                        // TODO cleanup
                         if (release.Category.Contains(TorznabCatType.TV.ID))
                         {
                             // extract season and episodes
                             var regex = new Regex(".+\\/\\s([^а-яА-я\\/]+)\\s\\/.+Сезон\\s*[:]*\\s+(\\d+).+(?:Серії|Епізод)+\\s*[:]*\\s+(\\d+-*\\d*).+,\\s+(.+)\\]\\s(.+)");
 
-                            var title = regex.Replace(release.Title, "$1 - S$2E$3 - rus $4 $5");
+                            string title;
+                            title = regex.Replace(release.Title, "$1 - S$2E$3 - rus $4 $5");
                             title = Regex.Replace(title, "-Rip", "Rip", RegexOptions.IgnoreCase);
                             title = Regex.Replace(title, "WEB-DLRip", "WEBDL", RegexOptions.IgnoreCase);
                             title = Regex.Replace(title, "WEB-DL", "WEBDL", RegexOptions.IgnoreCase);

@@ -136,18 +136,13 @@ namespace Jackett.Common.Indexers
                 var rows = dom.QuerySelectorAll("table.main > tbody > tr");
                 foreach (var row in rows.Skip(1))
                 {
-                    var release = new ReleaseInfo();
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 72 * 60 * 60;
 
                     var qDetailsLink = row.QuerySelector("td:nth-of-type(2) > a:nth-of-type(1)"); // link to the movie, not the actual torrent
-                    release.Title = qDetailsLink.GetAttribute("alt");
 
                     var qCatIcon = row.QuerySelector("td:nth-of-type(1) > a > img");
                     var catStr = qCatIcon != null ?
                         qCatIcon.GetAttribute("src").Split('/').Last().Split('.').First() :
                         "packs";
-                    release.Category = MapTrackerCatToNewznab(catStr);
 
                     var qSeeders = row.QuerySelector("td:nth-of-type(9)");
                     var qLeechers = row.QuerySelector("td:nth-of-type(10)");
@@ -155,10 +150,7 @@ namespace Jackett.Common.Indexers
                     var qPudDate = row.QuerySelector("td:nth-of-type(6) > nobr");
                     var qSize = row.QuerySelector("td:nth-of-type(7)");
 
-                    release.Link = new Uri(SiteLink + qDownloadLink.GetAttribute("href").Substring(1));
-                    release.Title = qDetailsLink.GetAttribute("alt");
-                    release.Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
-                    release.Guid = release.Link;
+                    var link = new Uri(SiteLink + qDownloadLink.GetAttribute("href").Substring(1));
 
                     var dateStr = qPudDate.Text().Trim();
                     DateTime pubDateUtc;
@@ -170,24 +162,29 @@ namespace Jackett.Common.Indexers
                     else
                         pubDateUtc = DateTime.SpecifyKind(DateTime.ParseExact(dateStr, "MMM d yyyy hh:mm tt", CultureInfo.InvariantCulture), DateTimeKind.Unspecified);
 
-                    release.PublishDate = pubDateUtc.ToLocalTime();
-
                     var sizeStr = qSize.Text();
-                    release.Size = ReleaseInfo.GetBytes(sizeStr);
-
-                    release.Seeders = ParseUtil.CoerceInt(qSeeders.Text());
-                    release.Peers = ParseUtil.CoerceInt(qLeechers.Text()) + release.Seeders;
-
+                    var seeders = ParseUtil.CoerceInt(qSeeders.Text());
                     var files = row.QuerySelector("td:nth-child(4)").TextContent;
-                    release.Files = ParseUtil.CoerceInt(files);
-
                     var grabs = row.QuerySelector("td:nth-child(8)").TextContent;
-                    release.Grabs = ParseUtil.CoerceInt(grabs);
 
-                    release.DownloadVolumeFactor = 0; // ratioless
-                    release.UploadVolumeFactor = 1;
-
-                    releases.Add(release);
+                    releases.Add(new ReleaseInfo
+                    {
+                        MinimumRatio = 1,
+                        MinimumSeedTime = 72 * 60 * 60,
+                        Title = qDetailsLink.GetAttribute("alt"),
+                        Category = MapTrackerCatToNewznab(catStr),
+                        Link = link,
+                        Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href")),
+                        Guid = link,
+                        PublishDate = pubDateUtc.ToLocalTime(),
+                        Size = ReleaseInfo.GetBytes(sizeStr),
+                        Seeders = seeders,
+                        Peers = ParseUtil.CoerceInt(qLeechers.Text()) + seeders,
+                        Files = ParseUtil.CoerceInt(files),
+                        Grabs = ParseUtil.CoerceInt(grabs),
+                        DownloadVolumeFactor = 0, // ratioless
+                        UploadVolumeFactor = 1
+                    });
                 }
             }
             catch (Exception ex)

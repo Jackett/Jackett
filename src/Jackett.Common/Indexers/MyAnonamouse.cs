@@ -168,20 +168,22 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
 
-            var qParams = new NameValueCollection();
-            qParams.Add("tor[text]", query.GetQueryString());
-            qParams.Add("tor[srchIn][title]", "true");
-            qParams.Add("tor[srchIn][author]", "true");
-            qParams.Add("tor[searchType]", "all");
-            qParams.Add("tor[searchIn]", "torrents");
-            qParams.Add("tor[hash]", "");
-            qParams.Add("tor[sortType]", "default");
-            qParams.Add("tor[startNumber]", "0");
+            var qParams = new NameValueCollection
+            {
+                { "tor[text]", query.GetQueryString() },
+                { "tor[srchIn][title]", "true" },
+                { "tor[srchIn][author]", "true" },
+                { "tor[searchType]", "all" },
+                { "tor[searchIn]", "torrents" },
+                { "tor[hash]", "" },
+                { "tor[sortType]", "default" },
+                { "tor[startNumber]", "0" },
 
-            qParams.Add("thumbnails", "1"); // gives links for thumbnail sized versions of their posters
-            //qParams.Add("posterLink", "1"); // gives links for a full sized poster
-            //qParams.Add("dlLink", "1"); // include the url to download the torrent
-            qParams.Add("description", "1"); // include the description
+                { "thumbnails", "1" }, // gives links for thumbnail sized versions of their posters
+                                       //qParams.Add("posterLink", "1"); // gives links for a full sized poster
+                                       //qParams.Add("dlLink", "1"); // include the url to download the torrent
+                { "description", "1" } // include the description
+            };
             //qParams.Add("bookmarks", "0"); // include if the item is bookmarked or not
 
             var catList = MapTorznabCapsToTrackers(query);
@@ -225,6 +227,7 @@ namespace Jackett.Common.Indexers
 
                 foreach (var item in jsonContent.Value<JArray>("data"))
                 {
+                    //TODO shift to ReleaseInfo object initializer for consistency
                     var release = new ReleaseInfo();
 
                     var id = item.Value<long>("id");

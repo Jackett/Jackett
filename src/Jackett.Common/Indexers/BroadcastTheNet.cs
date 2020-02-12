@@ -99,11 +99,13 @@ namespace Jackett.Common.Indexers
                 searchString = Regex.Replace(searchString, @"[Ss]{1}\d{2}", $"Season {query.Season}");
             }
 
-            var parameters = new JArray();
-            parameters.Add(new JValue(configData.Key.Value));
-            parameters.Add(new JValue(searchString.Trim()));
-            parameters.Add(new JValue(btnResults));
-            parameters.Add(new JValue(btnOffset));
+            var parameters = new JArray
+            {
+                new JValue(configData.Key.Value),
+                new JValue(searchString.Trim()),
+                new JValue(btnResults),
+                new JValue(btnOffset)
+            };
             var response = await PostDataWithCookiesAndRetry(APIBASE, null, null, null, new Dictionary<string, string>()
             {
                 { "Accept", "application/json-rpc, application/json"},
@@ -114,35 +116,12 @@ namespace Jackett.Common.Indexers
             {
                 var btnResponse = JsonConvert.DeserializeObject<BTNRPCResponse>(response.Content);
 
-                if (btnResponse != null && btnResponse.Result != null && btnResponse.Result.Torrents != null)
+                if (btnResponse?.Result?.Torrents != null)
                 {
                     foreach (var itemKey in btnResponse.Result.Torrents)
                     {
-                        var descriptions = new List<string>();
                         var btnResult = itemKey.Value;
-                        var item = new ReleaseInfo();
-                        if (!string.IsNullOrEmpty(btnResult.SeriesBanner))
-                            item.BannerUrl = new Uri(btnResult.SeriesBanner);
-                        item.Category = MapTrackerCatToNewznab(btnResult.Resolution);
-                        if (item.Category.Count == 0) // default to TV
-                            item.Category.Add(TorznabCatType.TV.ID);
-                        item.Comments = new Uri($"{SiteLink}torrents.php?id={btnResult.GroupID}&torrentid={btnResult.TorrentID}");
-                        item.Guid = new Uri(btnResult.DownloadURL);
-                        if (!string.IsNullOrWhiteSpace(btnResult.ImdbID))
-                            item.Imdb = ParseUtil.CoerceLong(btnResult.ImdbID);
-                        item.Link = new Uri(btnResult.DownloadURL);
-                        item.MinimumRatio = 1;
-                        item.PublishDate = DateTimeUtil.UnixTimestampToDateTime(btnResult.Time);
-                        item.RageID = btnResult.TvrageID;
-                        item.Seeders = btnResult.Seeders;
-                        item.Peers = btnResult.Seeders + btnResult.Leechers;
-                        item.Size = btnResult.Size;
-                        item.TVDBId = btnResult.TvdbID;
-                        item.Title = btnResult.ReleaseName;
-                        item.UploadVolumeFactor = 1;
-                        item.DownloadVolumeFactor = 0; // ratioless
-                        item.Grabs = btnResult.Snatched;
-
+                        var descriptions = new List<string>();
                         if (!string.IsNullOrWhiteSpace(btnResult.Series))
                             descriptions.Add("Series: " + btnResult.Series);
                         if (!string.IsNullOrWhiteSpace(btnResult.GroupName))
@@ -160,7 +139,36 @@ namespace Jackett.Common.Indexers
                         if (!string.IsNullOrWhiteSpace(btnResult.Series))
                             descriptions.Add("Youtube Trailer: <a href=\"" + btnResult.YoutubeTrailer + "\">" + btnResult.YoutubeTrailer + "</a>");
 
-                        item.Description = string.Join("<br />\n", descriptions);
+                        var guid = new Uri(btnResult.DownloadURL);
+                        var item = new ReleaseInfo
+                        {
+                            Category = MapTrackerCatToNewznab(btnResult.Resolution),
+                            Comments =
+                                new Uri($"{SiteLink}torrents.php?id={btnResult.GroupID}&torrentid={btnResult.TorrentID}"),
+                            Guid = guid,
+                            Link = guid,
+                            MinimumRatio = 1,
+                            PublishDate = DateTimeUtil.UnixTimestampToDateTime(btnResult.Time),
+                            RageID = btnResult.TvrageID,
+                            Seeders = btnResult.Seeders,
+                            Peers = btnResult.Seeders + btnResult.Leechers,
+                            Size = btnResult.Size,
+                            TVDBId = btnResult.TvdbID,
+                            Title = btnResult.ReleaseName,
+                            UploadVolumeFactor = 1,
+                            DownloadVolumeFactor = 0, // ratioless
+                            Grabs = btnResult.Snatched,
+                            Description = string.Join("<br />\n", descriptions)
+                        };
+
+                        if (!string.IsNullOrEmpty(btnResult.SeriesBanner))
+                            item.BannerUrl = new Uri(btnResult.SeriesBanner);
+                        if (item.Category.Count == 0) // default to TV
+                            item.Category.Add(TorznabCatType.TV.ID);
+                        if (!string.IsNullOrWhiteSpace(btnResult.ImdbID))
+                            item.Imdb = ParseUtil.CoerceLong(btnResult.ImdbID);
+
+
 
                         releases.Add(item);
                     }

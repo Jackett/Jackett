@@ -105,10 +105,12 @@ namespace Jackett.Common.Models.IndexerConfig
             var jArray = new JArray();
             foreach (var item in items)
             {
-                var jObject = new JObject();
-                jObject["id"] = item.ID;
-                jObject["type"] = item.ItemType.ToString().ToLower();
-                jObject["name"] = item.Name;
+                var jObject = new JObject
+                {
+                    ["id"] = item.ID,
+                    ["type"] = item.ItemType.ToString().ToLower(),
+                    ["name"] = item.Name
+                };
                 switch (item.ItemType)
                 {
                     case ItemType.Recaptcha:

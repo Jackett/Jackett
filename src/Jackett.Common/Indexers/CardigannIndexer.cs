@@ -52,9 +52,11 @@ namespace Jackett.Common.Indexers
             // Add default data if necessary
             if (Definition.Settings == null)
             {
-                Definition.Settings = new List<settingsField>();
-                Definition.Settings.Add(new settingsField { Name = "username", Label = "Username", Type = "text" });
-                Definition.Settings.Add(new settingsField { Name = "password", Label = "Password", Type = "password" });
+                Definition.Settings = new List<settingsField>
+                {
+                    new settingsField { Name = "username", Label = "Username", Type = "text" },
+                    new settingsField { Name = "password", Label = "Password", Type = "password" }
+                };
             }
 
             if (Definition.Encoding == null)
@@ -71,10 +73,11 @@ namespace Jackett.Common.Indexers
             // convert definitions with a single search Path to a Paths entry
             if (Definition.Search.Path != null)
             {
-                var legacySearchPath = new searchPathBlock();
-                legacySearchPath.Path = Definition.Search.Path;
-                legacySearchPath.Inheritinputs = true;
-                Definition.Search.Paths.Add(legacySearchPath);
+                Definition.Search.Paths.Add(new searchPathBlock
+                {
+                    Path = Definition.Search.Path,
+                    Inheritinputs = true
+                });
             }
 
             // init missing mandatory attributes
@@ -90,9 +93,10 @@ namespace Jackett.Common.Indexers
                 DefaultSiteLink += "/";
             Language = Definition.Language;
             Type = Definition.Type;
-            TorznabCaps = new TorznabCapabilities();
-
-            TorznabCaps.SupportsImdbMovieSearch = Definition.Caps.Modes.Where(c => c.Key == "movie-search" && c.Value.Contains("imdbid")).Any();
+            TorznabCaps = new TorznabCapabilities
+            {
+                SupportsImdbMovieSearch = Definition.Caps.Modes.Any(c => c.Key == "movie-search" && c.Value.Contains("imdbid"))
+            };
             if (Definition.Caps.Modes.ContainsKey("music-search"))
                 TorznabCaps.SupportedMusicSearchParamsList = Definition.Caps.Modes["music-search"];
 
@@ -204,9 +208,10 @@ namespace Jackett.Common.Indexers
 
         protected Dictionary<string, object> getTemplateVariablesFromConfigData()
         {
-            var variables = new Dictionary<string, object>();
-
-            variables[".Config.sitelink"] = SiteLink;
+            var variables = new Dictionary<string, object>
+            {
+                [".Config.sitelink"] = SiteLink
+            };
             foreach (var Setting in Definition.Settings)
             {
                 var item = configData.GetDynamic(Setting.Name);
@@ -509,10 +514,12 @@ namespace Jackett.Common.Indexers
                     var CloudFlareCaptchaChallenge = landingResultDocument.QuerySelector("script[src=\"/cdn-cgi/scripts/cf.challenge.js\"]");
                     if (CloudFlareCaptchaChallenge != null)
                     {
-                        var CloudFlareQueryCollection = new NameValueCollection();
-                        CloudFlareQueryCollection["id"] = CloudFlareCaptchaChallenge.GetAttribute("data-ray");
+                        var CloudFlareQueryCollection = new NameValueCollection
+                        {
+                            ["id"] = CloudFlareCaptchaChallenge.GetAttribute("data-ray"),
 
-                        CloudFlareQueryCollection["g-recaptcha-response"] = CaptchaConfigItem.Value;
+                            ["g-recaptcha-response"] = CaptchaConfigItem.Value
+                        };
                         var ClearanceUrl = resolvePath("/cdn-cgi/l/chk_captcha?" + CloudFlareQueryCollection.GetQueryString());
 
                         var ClearanceResult = await RequestStringWithCookies(ClearanceUrl.ToString(), null, SiteLink);
@@ -890,12 +897,14 @@ namespace Jackett.Common.Indexers
             if (cloudFlareCaptchaScript != null && grecaptcha != null && cloudFlareCaptchaDisplay)
             {
                 hasCaptcha = true;
-                var CaptchaItem = new RecaptchaItem();
-                CaptchaItem.Name = "Captcha";
-                CaptchaItem.Version = "2";
-                CaptchaItem.SiteKey = grecaptcha.GetAttribute("data-sitekey");
-                if (CaptchaItem.SiteKey == null) // some sites don't store the sitekey in the .g-recaptcha div (e.g. cloudflare captcha challenge page)
-                    CaptchaItem.SiteKey = landingResultDocument.QuerySelector("[data-sitekey]").GetAttribute("data-sitekey");
+                var CaptchaItem = new RecaptchaItem
+                {
+                    Name = "Captcha",
+                    Version = "2",
+                    // some sites don't store the sitekey in the .g-recaptcha div (e.g. cloudflare captcha challenge page)
+                    SiteKey = grecaptcha.GetAttribute("data-sitekey") ??
+                              landingResultDocument.QuerySelector("[data-sitekey]").GetAttribute("data-sitekey")
+                };
 
                 configData.AddDynamic("Captcha", CaptchaItem);
             }
@@ -1400,9 +1409,11 @@ namespace Jackett.Common.Indexers
                     {
                         try
                         {
-                            var release = new ReleaseInfo();
-                            release.MinimumRatio = 1;
-                            release.MinimumSeedTime = 172800; // 48 hours
+                            var release = new ReleaseInfo
+                            {
+                                MinimumRatio = 1,
+                                MinimumSeedTime = 172800 // 48 hours
+                            };
 
                             // Parse fields
                             foreach (var Field in Search.Fields)

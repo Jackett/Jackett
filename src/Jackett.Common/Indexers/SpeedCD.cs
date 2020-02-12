@@ -168,27 +168,23 @@ namespace Jackett.Common.Indexers
                     var cat = row.QuerySelector("img[class^='Tcat']").ParentElement.GetAttribute("href").Trim().Remove(0, 5);
                     long.TryParse(cat, out var category);
 
-                    // This fixes the mixed initializer issue, so it's just inconsistent in the code base.
-                    // https://github.com/Jackett/Jackett/pull/7166#discussion_r376817517
-                    var release = new ReleaseInfo();
-
-                    release.Title = title;
-                    release.Guid = guid;
-                    release.Link = link;
-                    release.PublishDate = publishDate;
-                    release.Size = size;
-                    release.Grabs = grabs;
-                    release.Seeders = seeders;
-                    release.Peers = seeders + leechers;
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800; // 48 hours
-                    release.Category = MapTrackerCatToNewznab(category.ToString());
-                    release.Comments = comments;
-
-                    release.DownloadVolumeFactor = row.QuerySelector("span:contains(\"[Freeleech]\")") != null ? 0 : 1;
-                    release.UploadVolumeFactor = 1;
-
-                    releases.Add(release);
+                    releases.Add(new ReleaseInfo
+                    {
+                        Title = title,
+                        Guid = guid,
+                        Link = link,
+                        PublishDate = publishDate,
+                        Size = size,
+                        Grabs = grabs,
+                        Seeders = seeders,
+                        Peers = seeders + leechers,
+                        MinimumRatio = 1,
+                        MinimumSeedTime = 172800, // 48 hours
+                        Category = MapTrackerCatToNewznab(category.ToString()),
+                        Comments = comments,
+                        DownloadVolumeFactor = row.QuerySelector("span:contains(\"[Freeleech]\")") != null ? 0 : 1,
+                        UploadVolumeFactor = 1
+                    });
                 }
             }
             catch (Exception ex)

@@ -131,18 +131,19 @@ namespace Jackett.Common.Indexers
 
             var searchString = query.GetQueryString();
             var searchUrl = BrowseUrl;
-            var queryCollection = new NameValueCollection();
-            queryCollection.Add("showsearch", "1");
-            queryCollection.Add("incldead", "1");
-            queryCollection.Add("orderby", "added");
-            queryCollection.Add("sort", "desc");
+            var queryCollection = new NameValueCollection
+            {
+                {"showsearch", "1"},
+                {"incldead", "1"},
+                {"orderby", "added"},
+                {"sort", "desc"},
+                {"cat", MapTorznabCapsToTrackers(query).FirstIfSingleOrDefault("0")}
+            };
 
             if (!string.IsNullOrWhiteSpace(searchString))
             {
                 queryCollection.Add("search", searchString);
             }
-
-            queryCollection.Add("cat", MapTorznabCapsToTrackers(query).FirstIfSingleOrDefault("0"));
 
             searchUrl += "?" + queryCollection.GetQueryString();
 
@@ -162,15 +163,10 @@ namespace Jackett.Common.Indexers
 
                 foreach (var row in rows)
                 {
-                    var release = new ReleaseInfo();
-                    release.MinimumRatio = 0.75;
-                    release.MinimumSeedTime = 0;
-
 
                     var qDetailsLink = row.QuerySelector("a[href^=details.php?id=]");
-                    release.Title = qDetailsLink.Text();
 
-                    if (!query.MatchQueryStringAND(release.Title))
+                    if (!query.MatchQueryStringAND(qDetailsLink.Text()))
                         continue;
 
                     var qCatLink = row.QuerySelector("a[href^=\"browse.php?cat=\"]");
@@ -181,7 +177,6 @@ namespace Jackett.Common.Indexers
                     var qDownloadLink = row.QuerySelector("a[href*=\"download\"]");
 
                     var catStr = qCatLink.GetAttribute("href").Split('=')[1];
-                    release.Category = MapTrackerCatToNewznab(catStr);
 
                     var dlLink = qDownloadLink.GetAttribute("href");
                     if (dlLink.Contains("javascript")) // depending on the user agent the DL link is a javascript call
@@ -189,28 +184,30 @@ namespace Jackett.Common.Indexers
                         var dlLinkParts = dlLink.Split(new char[] { '\'', ',' });
                         dlLink = SiteLink + "download/" + dlLinkParts[3] + "/" + dlLinkParts[5];
                     }
-                    release.Link = new Uri(dlLink);
-                    release.Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
-                    release.Guid = release.Link;
-
-                    var sizeStr = qSize.TextContent;
-                    release.Size = ReleaseInfo.GetBytes(sizeStr.Replace(".", "").Replace(",", "."));
-
-                    release.Seeders = ParseUtil.CoerceInt(qSeeders.TextContent);
-                    release.Peers = ParseUtil.CoerceInt(qLeechers.TextContent) + release.Seeders;
-
+                    var link = new Uri(dlLink);
+                    var seeders = ParseUtil.CoerceInt(qSeeders.Text());
                     var dateStr = qDateStr.TextContent.Replace('\xA0', ' ');
                     var dateGerman = DateTime.SpecifyKind(DateTime.ParseExact(dateStr, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture), DateTimeKind.Unspecified);
                     var pubDateUtc = TimeZoneInfo.ConvertTimeToUtc(dateGerman, germanyTz);
-                    release.PublishDate = pubDateUtc;
-
                     var files = row.QuerySelector("td:contains(Datei) > strong ~ strong").TextContent;
-                    release.Files = ParseUtil.CoerceInt(files);
 
-                    release.DownloadVolumeFactor = row.QuerySelector("img[title=\"OnlyUpload\"]") != null ? 0 : 1;
-                    release.UploadVolumeFactor = 1;
-
-                    releases.Add(release);
+                    releases.Add(new ReleaseInfo
+                    {
+                        MinimumRatio = 0.75,
+                        MinimumSeedTime = 0,
+                        Title = qDetailsLink.TextContent,
+                        Category = MapTrackerCatToNewznab(catStr),
+                        Link = link,
+                        Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href")),
+                        Guid = link,
+                        Size = ReleaseInfo.GetBytes(qSize.TextContent.Replace(".", "").Replace(",", ".")),
+                        Seeders = seeders,
+                        Peers = ParseUtil.CoerceInt(qLeechers.Text()) + seeders,
+                        PublishDate = pubDateUtc,
+                        Files = ParseUtil.CoerceInt(files),
+                        DownloadVolumeFactor = row.QuerySelector("img[title=\"OnlyUpload\"]") != null ? 0 : 1,
+                        UploadVolumeFactor = 1
+                    });
                 }
             }
             catch (Exception ex)

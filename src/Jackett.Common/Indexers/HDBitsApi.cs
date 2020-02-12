@@ -123,14 +123,29 @@ namespace Jackett.Common.Indexers
 
             var response = await MakeApiRequest("torrents", requestData);
             var releases = new List<ReleaseInfo>();
-
             foreach (JObject r in response["data"])
             {
-                var release = new ReleaseInfo();
-                release.Title = (string)r["name"];
-                release.Comments = new Uri(SiteLink + "details.php?id=" + (string)r["id"]);
-                release.Link = new Uri(SiteLink + "download.php/" + (string)r["filename"] + "?id=" + (string)r["id"] + "&passkey=" + configData.Passkey.Value);
-                release.Guid = release.Link;
+                var guid = new Uri(
+                    SiteLink + "download.php/" + (string)r["filename"] + "?id=" + (string)r["id"] + "&passkey=" +
+                    configData.Passkey.Value);
+                var seeders = (int)r["seeders"];
+
+                var release = new ReleaseInfo
+                {
+                    Title = (string)r["name"],
+                    Comments = new Uri(SiteLink + "details.php?id=" + (string)r["id"]),
+                    Link = guid,
+                    Category = MapTrackerCatToNewznab((string)r["type_category"]),
+                    Size = (long)r["size"],
+                    Files = (long)r["numfiles"],
+                    Grabs = (long)r["times_completed"],
+                    Seeders = seeders,
+                    PublishDate = DateTimeUtil.UnixTimestampToDateTime((int)r["utadded"]),
+                    UploadVolumeFactor = GetUploadFactor(r),
+                    DownloadVolumeFactor = GetDownloadFactor(r),
+                    Guid = guid,
+                    Peers = seeders + (int)r["leechers"]
+                };
 
                 if (r.ContainsKey("imdb"))
                 {
@@ -142,47 +157,29 @@ namespace Jackett.Common.Indexers
                     release.TVDBId = (long)r["tvdb"]["id"];
                 }
 
-                release.UploadVolumeFactor = 1;
-                int[] mediumsFor50 = { 1, 5, 4 };
-
-                // 100% Neutral Leech: all XXX content.
-                if ((int)r["type_category"] == 7)
-                {
-                    release.DownloadVolumeFactor = 0;
-                    release.UploadVolumeFactor = 0;
-                }
-                // 100% Free Leech: all blue torrents.
-                else if ((string)r["freeleech"] == "yes")
-                {
-                    release.DownloadVolumeFactor = 0;
-                }
-                // 50% Free Leech: all full discs, remuxes, caps and all internal encodes.
-                else if (mediumsFor50.Contains((int)r["type_medium"]) || (int)r["type_origin"] == 1)
-                {
-                    release.DownloadVolumeFactor = 0.5;
-                }
-                // 25% Free Leech: all TV content that is not an internal encode.
-                else if ((int)r["type_category"] == 2 && (int)r["type_origin"] != 1)
-                {
-                    release.DownloadVolumeFactor = 0.75;
-                }
-                // 0% Free Leech: all the content not matching any of the above.
-                else
-                {
-                    release.DownloadVolumeFactor = 1;
-                }
-
-                release.Category = MapTrackerCatToNewznab((string)r["type_category"]);
-                release.Size = (long)r["size"];
-                release.Files = (long)r["numfiles"];
-                release.Grabs = (long)r["times_completed"];
-                release.Seeders = (int)r["seeders"];
-                release.Peers = release.Seeders + (int)r["leechers"];
-                release.PublishDate = DateTimeUtil.UnixTimestampToDateTime((int)r["utadded"]);
                 releases.Add(release);
             }
 
             return releases;
+        }
+
+        private static double GetUploadFactor(JObject r) => (int)r["type_category"] == 7 ? 0 : 1;
+
+        private static double GetDownloadFactor(JObject r)
+        {
+            var halfLeechMediums = new[] { 1, 5, 4 };
+            // 100% Neutral Leech: all XXX content.
+            if ((int)r["type_category"] == 7)
+                return 0;
+            // 100% Free Leech: all blue torrents.
+            if ((string)r["freeleech"] == "yes")
+                return 0;
+            // 50% Free Leech: all full discs, remuxes, caps and all internal encodes.
+            if (halfLeechMediums.Contains((int)r["type_medium"]) || (int)r["type_origin"] == 1)
+                return 0.5;
+            if ((int)r["type_category"] == 2 && (int)r["type_origin"] != 1)
+                return 0.75;
+            return 1;
         }
 
         private async Task<JObject> MakeApiRequest(string url, JObject requestData)

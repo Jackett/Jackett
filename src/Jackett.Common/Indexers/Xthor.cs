@@ -139,7 +139,7 @@ namespace Jackett.Common.Indexers
 
         // Warning 1998 is async method with no await calls inside
         // TODO: Remove pragma by wrapping return in Task.FromResult and removing async
-        
+
 #pragma warning disable 1998
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -255,6 +255,7 @@ namespace Jackett.Common.Indexers
                             TMDb = torrent.tmdb_id
                         };
 
+                        //TODO make consistent with other trackers
                         if (DevMode)
                         {
                             Output(release.ToString());

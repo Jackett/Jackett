@@ -138,37 +138,32 @@ namespace Jackett.Common.Indexers
             return releases;
         }
 
+        //TODO inline single use function
         private ReleaseInfo MakeRelease(JToken torrent)
         {
-            var release = new ReleaseInfo();
-
-            release.Title = (string)torrent["title"];
-
-            // https://solidtorrents.net/view/5e10885d651df640a70ee826
-            release.Comments = new Uri(SiteLink + "view/" + (string)torrent["_id"]);
-            release.Guid = release.Comments;
-
-            release.PublishDate = DateTime.Now;
-            if (torrent["imported"] != null)
-                release.PublishDate = DateTime.Parse((string)torrent["imported"]);
-
-            release.Category = MapTrackerCatToNewznab((string)torrent["category"]);
-            release.Size = (long)torrent["size"];
-
+            var comments = new Uri(SiteLink + "view/" + (string)torrent["_id"]);
             var swarm = torrent["swarm"];
-            release.Seeders = (int)swarm["seeders"];
-            release.Peers = release.Seeders + (int)swarm["leechers"];
-            release.Grabs = (long)swarm["downloads"];
+            var seeders = (int)swarm["seeders"];
+            return new ReleaseInfo
+            {
+                Title = (string)torrent["title"],
 
-            release.InfoHash = (string)torrent["infohash"];
-            release.MagnetUri = new Uri((string)torrent["magnet"]);
-
-            release.MinimumRatio = 1;
-            release.MinimumSeedTime = 172800; // 48 hours
-            release.DownloadVolumeFactor = 0;
-            release.UploadVolumeFactor = 1;
-
-            return release;
+                // https://solidtorrents.net/view/5e10885d651df640a70ee826
+                Comments = comments,
+                Guid = comments,
+                PublishDate = torrent["imported"] != null ? DateTime.Parse((string)torrent["imported"]) : DateTime.Now,
+                Category = MapTrackerCatToNewznab((string)torrent["category"]),
+                Size = (long)torrent["size"],
+                Seeders = seeders,
+                Peers = seeders + (int)swarm["leechers"],
+                Grabs = (long)swarm["downloads"],
+                InfoHash = (string)torrent["infohash"],
+                MagnetUri = new Uri((string)torrent["magnet"]),
+                MinimumRatio = 1,
+                MinimumSeedTime = 172800, // 48 hours
+                DownloadVolumeFactor = 0,
+                UploadVolumeFactor = 1
+            };
         }
     }
 }

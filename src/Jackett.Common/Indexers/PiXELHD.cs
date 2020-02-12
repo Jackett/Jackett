@@ -114,9 +114,11 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();
-            var queryCollection = new NameValueCollection();
-            queryCollection.Add("order_by", "time");
-            queryCollection.Add("order_way", "desc");
+            var queryCollection = new NameValueCollection
+            {
+                { "order_by", "time" },
+                { "order_way", "desc" }
+            };
 
             if (!string.IsNullOrWhiteSpace(query.ImdbID))
             {
@@ -126,7 +128,7 @@ namespace Jackett.Common.Indexers
             {
                 queryCollection.Add("groupname", searchString);
             }
-
+            //Add anyway after checking above?
             queryCollection.Add("groupname", searchString);
 
             var searchUrl = BrowseUrl + "?" + queryCollection.GetQueryString();
@@ -165,10 +167,6 @@ namespace Jackett.Common.Indexers
                     var Rows = Group.QuerySelectorAll("tr.group_torrent:has(a[href^=\"torrents.php?id=\"])");
                     foreach (var Row in Rows)
                     {
-                        var release = new ReleaseInfo();
-                        release.MinimumRatio = 1;
-                        release.MinimumSeedTime = 72 * 60 * 60;
-
                         var title = Row.QuerySelector("a[href^=\"torrents.php?id=\"]");
                         var link = Row.QuerySelector("a[href^=\"torrents.php?action=download\"]");
                         var added = Row.QuerySelector("td:nth-child(3)");
@@ -176,21 +174,26 @@ namespace Jackett.Common.Indexers
                         var Grabs = Row.QuerySelector("td:nth-child(6)");
                         var Seeders = Row.QuerySelector("td:nth-child(7)");
                         var Leechers = Row.QuerySelector("td:nth-child(8)");
+                        var releaseLink = new Uri(SiteLink + link.GetAttribute("href"));
+                        var releaseSeeders = ParseUtil.CoerceInt(Seeders.TextContent);
 
-                        release.Title = GroupTitle + " " + title.TextContent;
-                        release.Category = new List<int> { TorznabCatType.MoviesHD.ID };
-                        release.Link = new Uri(SiteLink + link.GetAttribute("href"));
-                        release.Comments = new Uri(SiteLink + title.GetAttribute("href"));
-                        release.Guid = release.Link;
-                        release.Size = ReleaseInfo.GetBytes(Size.TextContent);
-                        release.Seeders = ParseUtil.CoerceInt(Seeders.TextContent);
-                        release.Peers = ParseUtil.CoerceInt(Leechers.TextContent) + release.Seeders;
-                        release.Grabs = ParseUtil.CoerceLong(Grabs.TextContent);
-                        release.PublishDate = DateTimeUtil.FromTimeAgo(added.TextContent);
-                        release.BannerUrl = bannerURL;
-                        release.Imdb = IMDBId;
-
-                        releases.Add(release);
+                        releases.Add(new ReleaseInfo
+                        {
+                            MinimumRatio = 1,
+                            MinimumSeedTime = 72 * 60 * 60,
+                            Title = GroupTitle + " " + title.TextContent,
+                            Category = new List<int> {TorznabCatType.MoviesHD.ID},
+                            Link = releaseLink,
+                            Comments = new Uri(SiteLink + title.GetAttribute("href")),
+                            Guid = releaseLink,
+                            Size = ReleaseInfo.GetBytes(Size.TextContent),
+                            Seeders = releaseSeeders,
+                            Peers = ParseUtil.CoerceInt(Leechers.TextContent) + releaseSeeders,
+                            Grabs = ParseUtil.CoerceLong(Grabs.TextContent),
+                            PublishDate = DateTimeUtil.FromTimeAgo(added.TextContent),
+                            BannerUrl = bannerURL,
+                            Imdb = IMDBId
+                        });
                     }
                 }
             }

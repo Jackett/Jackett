@@ -67,42 +67,36 @@ namespace Jackett.Common.Indexers
             try
             {
                 xmlDoc.LoadXml(result.Content);
-                ReleaseInfo release;
-                string serie_title;
-
                 foreach (XmlNode node in xmlDoc.GetElementsByTagName("item"))
                 {
-                    release = new ReleaseInfo();
-
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800; // 48 hours
-
-                    serie_title = node.SelectSingleNode(".//*[local-name()='raw_title']").InnerText;
-                    release.Title = serie_title;
-
-                    if ((query.ImdbID == null || !TorznabCaps.SupportsImdbMovieSearch) && !query.MatchQueryStringAND(release.Title))
+                    var serie_title = node.SelectSingleNode(".//*[local-name()='raw_title']").InnerText;
+                    if ((query.ImdbID == null || !TorznabCaps.SupportsImdbMovieSearch) &&
+                        !query.MatchQueryStringAND(serie_title))
                         continue;
 
-                    release.Comments = new Uri(node.SelectSingleNode("link").InnerText);
-
                     // Try to guess the category... I'm not proud of myself...
-                    var category = 5030;
-                    if (serie_title.Contains("720p"))
-                        category = 5040;
-                    release.Category = new List<int> { category };
+                    var category = serie_title.Contains("720p") ? 5040 : 5030;
                     var test = node.SelectSingleNode("enclosure");
-                    release.Guid = new Uri(test.Attributes["url"].Value);
-                    release.PublishDate = DateTime.Parse(node.SelectSingleNode("pubDate").InnerText, CultureInfo.InvariantCulture);
-
-                    release.Description = node.SelectSingleNode("description").InnerText;
-                    release.InfoHash = node.SelectSingleNode("description").InnerText;
-                    release.Size = 0;
-                    release.Seeders = 1;
-                    release.Peers = 1;
-                    release.DownloadVolumeFactor = 0;
-                    release.UploadVolumeFactor = 1;
-                    release.MagnetUri = new Uri(node.SelectSingleNode("link").InnerText);
-                    releases.Add(release);
+                    releases.Add(new ReleaseInfo
+                    {
+                        MinimumRatio = 1,
+                        MinimumSeedTime = 172800, // 48 hours
+                        Title = serie_title,
+                        Comments = new Uri(node.SelectSingleNode("link").InnerText),
+                        Category = new List<int> {category},
+                        Guid = new Uri(test.Attributes["url"].Value),
+                        PublishDate =
+                            DateTime.Parse(node.SelectSingleNode("pubDate").InnerText, CultureInfo.InvariantCulture),
+                        Description = node.SelectSingleNode("description").InnerText,
+                        InfoHash = node.SelectSingleNode("description").InnerText,
+                        Size = 0,
+                        //TODO fix seeder/peer counts if available
+                        Seeders = 1,
+                        Peers = 1,
+                        DownloadVolumeFactor = 0,
+                        UploadVolumeFactor = 1,
+                        MagnetUri = new Uri(node.SelectSingleNode("link").InnerText)
+                    });
                 }
             }
             catch (Exception ex)

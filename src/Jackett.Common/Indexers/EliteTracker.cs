@@ -165,8 +165,8 @@ namespace Jackett.Common.Indexers
             var pairs = new Dictionary<string, string>
             {
                 {"do", "search"},
-                {"search_type", !string.IsNullOrWhiteSpace(query.ImdbID) ? "t_genre" : "t_name"},
-                {"keywords", !string.IsNullOrWhiteSpace(query.ImdbID) ? query.ImdbID : query.GetQueryString()},
+                {"search_type", query.IsImdbQuery ? "t_genre" : "t_name"},
+                {"keywords", query.IsImdbQuery ? query.ImdbID : query.GetQueryString()},
                 {"category", "0"} // multi cat search not supported
             };
 

@@ -128,19 +128,7 @@ namespace Jackett.Common.Indexers
                     var movieGroupId = (string)movie["GroupId"];
                     foreach (var torrent in movie["Torrents"])
                     {
-                        var release = new ReleaseInfo();
                         var releaseName = (string)torrent["ReleaseName"];
-                        release.Title = releaseName;
-                        release.Description = $"Title: {movieTitle}";
-                        release.BannerUrl = coverUri;
-                        release.Imdb = movieImdbId;
-                        release.Comments = new Uri($"{SearchUrl}?id={WebUtility.UrlEncode(movieGroupId)}");
-                        release.Size = long.Parse((string)torrent["Size"]);
-                        release.Grabs = long.Parse((string)torrent["Snatched"]);
-                        release.Seeders = int.Parse((string)torrent["Seeders"]);
-                        release.Peers = release.Seeders + int.Parse((string)torrent["Leechers"]);
-                        release.PublishDate = DateTime.ParseExact((string)torrent["UploadTime"], "yyyy-MM-dd HH:mm:ss",
-                                                CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
 
                         var releaseLinkQuery = new NameValueCollection
                         {
@@ -149,14 +137,7 @@ namespace Jackett.Common.Indexers
                             {"authkey", AuthKey},
                             {"torrent_pass", configData.Passkey.Value},
                         };
-                        release.Link = new UriBuilder(SearchUrl) {Query = releaseLinkQuery.GetQueryString()}.Uri;
-                        release.Guid = release.Link;
-                        release.MinimumRatio = 1;
-                        release.MinimumSeedTime = 345600;
                         var free = !(torrent["FreeleechType"] is null);
-                        release.DownloadVolumeFactor = free ? 0 : 1;
-                        release.UploadVolumeFactor = 1;
-                        release.Category = new List<int> { 2000 };
 
                         bool.TryParse((string)torrent["GoldenPopcorn"], out var golden);
                         bool.TryParse((string)torrent["Scene"], out var scene);
@@ -170,6 +151,31 @@ namespace Jackett.Common.Indexers
                             continue; //Skip release if user only wants Checked
                         if (configFreeOnly && !free)
                             continue;
+                        var link = new Uri($"{SearchUrl}?{releaseLinkQuery.GetQueryString()}");
+                        var seeders = int.Parse((string)torrent["Seeders"]);
+                        var release = new ReleaseInfo
+                        {
+                            Title = releaseName,
+                            Description = $"Title: {movieTitle}",
+                            BannerUrl = coverUri,
+                            Imdb = movieImdbId,
+                            Comments = new Uri($"{SearchUrl}?id={WebUtility.UrlEncode(movieGroupId)}"),
+                            Size = long.Parse((string)torrent["Size"]),
+                            Grabs = long.Parse((string)torrent["Snatched"]),
+                            Seeders = seeders,
+                            Peers = seeders + int.Parse((string)torrent["Leechers"]),
+                            PublishDate = DateTime.ParseExact((string)torrent["UploadTime"],
+                            "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal)
+                                .ToLocalTime(),
+                            Link = link,
+                            Guid = link,
+                            MinimumRatio = 1,
+                            MinimumSeedTime = 345600,
+                            DownloadVolumeFactor = 1,
+                            UploadVolumeFactor = 1,
+                            Category = new List<int> { 2000 }
+                        };
+
 
                         var titleTags = new List<string>();
                         var quality = (string)torrent["Quality"];

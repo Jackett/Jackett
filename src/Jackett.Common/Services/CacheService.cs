@@ -19,24 +19,17 @@ namespace Jackett.Common.Services
         {
             lock (cache)
             {
-                var trackerCache = cache.Where(c => c.TrackerId == indexer.ID).FirstOrDefault();
-                if (trackerCache == null)
-                {
-                    trackerCache = new TrackerCache();
-                    trackerCache.TrackerId = indexer.ID;
-                    trackerCache.TrackerName = indexer.DisplayName;
+                var trackerCache = cache.FirstOrDefault(c => c.TrackerId == indexer.ID) ??
+                                   new TrackerCache {TrackerId = indexer.ID, TrackerName = indexer.DisplayName};
                     cache.Add(trackerCache);
-                }
+                
 
                 foreach (var release in releases.OrderByDescending(i => i.PublishDate))
                 {
-                    var existingItem = trackerCache.Results.Where(i => i.Result.Guid == release.Guid).FirstOrDefault();
-                    if (existingItem == null)
-                    {
-                        existingItem = new CachedResult();
-                        existingItem.Created = DateTime.Now;
+                    var existingItem = trackerCache.Results.FirstOrDefault(i => i.Result.Guid == release.Guid) ??
+                                       new CachedResult {Created = DateTime.Now};
                         trackerCache.Results.Add(existingItem);
-                    }
+                    
 
                     existingItem.Result = release;
                 }
@@ -54,12 +47,12 @@ namespace Jackett.Common.Services
             lock (cache)
             {
                 var newItemCount = 0;
-                var trackerCache = cache.Where(c => c.TrackerId == indexer.ID).FirstOrDefault();
+                var trackerCache = cache.FirstOrDefault(c => c.TrackerId == indexer.ID);
                 if (trackerCache != null)
                 {
                     foreach (var release in releases)
                     {
-                        if (trackerCache.Results.Where(i => i.Result.Guid == release.Guid).Count() == 0)
+                        if (trackerCache.Results.Count(i => i.Result.Guid == release.Guid) == 0)
                         {
                             newItemCount++;
                         }

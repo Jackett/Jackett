@@ -284,46 +284,41 @@ namespace Jackett.Common.Indexers
                 var rows = dom.QuerySelectorAll("table > tbody > tr.browse");
                 foreach (var row in rows)
                 {
-                    var release = new ReleaseInfo();
-
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800; // 48 hours
-
                     var qLink = row.Children[1].QuerySelector("a");
-                    release.Title = qLink.GetAttribute("title");
-                    if (qLink.QuerySelectorAll("span").Length == 1 && release.Title.StartsWith("NEW! |"))
+                    var releaseTitle = qLink.GetAttribute("title");
+                    if (qLink.QuerySelectorAll("span").Length == 1 && releaseTitle.StartsWith("NEW! |"))
                     {
-                        release.Title = release.Title.Substring(6).Trim();
+                        releaseTitle = releaseTitle.Substring(6).Trim();
                     }
 
-                    release.Comments = new Uri(SiteLink + qLink.GetAttribute("href"));
-                    release.Guid = release.Comments;
-
+                    var releaseComments = new Uri(SiteLink + qLink.GetAttribute("href"));
                     var qDownload = row.Children[2].QuerySelector("a");
-                    release.Link = new Uri(SiteLink + qDownload.GetAttribute("href"));
-
                     var dateStr = Regex.Replace(row.Children[5].InnerHtml, @"\<br[\s]{0,1}[\/]{0,1}\>", " ");
-                    release.PublishDate = DateTimeUtil.FromTimeAgo(dateStr);
-
                     var sizeStr = row.Children[7].TextContent;
-                    release.Size = ReleaseInfo.GetBytes(sizeStr);
-
-                    release.Seeders = ParseUtil.CoerceInt(row.Children[9].TextContent);
-                    release.Peers = ParseUtil.CoerceInt(row.Children[10].TextContent) + release.Seeders;
-
+                    var releaseSeeders = ParseUtil.CoerceInt(row.Children[9].TextContent);
                     var cat = row.FirstElementChild.FirstElementChild.GetAttribute("href").Replace("browse.php?", string.Empty);
-                    release.Category = MapTrackerCatToNewznab(cat);
-
                     var files = row.QuerySelector("td:nth-child(4)").TextContent;
-                    release.Files = ParseUtil.CoerceInt(files);
-
                     var grabs = row.QuerySelector("td:nth-child(9)").TextContent;
-                    release.Grabs = ParseUtil.CoerceInt(grabs);
 
-                    release.DownloadVolumeFactor = 0; // ratioless
-                    release.UploadVolumeFactor = 1;
-
-                    releases.Add(release);
+                    releases.Add(new ReleaseInfo
+                    {
+                        MinimumRatio = 1,
+                        MinimumSeedTime = 172800, // 48 hours
+                        Title = releaseTitle,
+                        Comments = releaseComments,
+                        Guid = releaseComments,
+                        Link = new Uri(SiteLink + qDownload.GetAttribute("href")),
+                        PublishDate = DateTimeUtil.FromTimeAgo(dateStr),
+                        Size = ReleaseInfo.GetBytes(sizeStr),
+                        Seeders = releaseSeeders,
+                        Peers = ParseUtil.CoerceInt(row.Children[10].TextContent) + releaseSeeders,
+                        Category = MapTrackerCatToNewznab(cat),
+                        Files = ParseUtil.CoerceInt(files),
+                        Grabs = ParseUtil.CoerceInt(grabs),
+                        DownloadVolumeFactor = 0, // ratioless
+                        UploadVolumeFactor = 1
+                        
+                    });
                 }
             }
             catch (Exception ex)

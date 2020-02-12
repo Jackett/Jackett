@@ -146,12 +146,13 @@ namespace Jackett.Common.Indexers.Abstract
             var searchString = GetSearchTerm(query);
 
             var searchUrl = APIUrl;
-            var queryCollection = new NameValueCollection();
-
-            queryCollection.Add("action", "browse");
-            //queryCollection.Add("group_results", "0"); # results won't include all information
-            queryCollection.Add("order_by", "time");
-            queryCollection.Add("order_way", "desc");
+            var queryCollection = new NameValueCollection
+            {
+                { "action", "browse" },
+                //{"group_results", "0"}, # results won't include all information
+                { "order_by", "time" },
+                { "order_way", "desc" }
+            };
 
 
             if (!string.IsNullOrWhiteSpace(query.ImdbID))
@@ -204,30 +205,32 @@ namespace Jackett.Common.Indexers.Abstract
                     var groupTime = DateTimeUtil.UnixTimestampToDateTime(long.Parse((string)r["groupTime"]));
                     var groupName = WebUtility.HtmlDecode((string)r["groupName"]);
                     var artist = WebUtility.HtmlDecode((string)r["artist"]);
+                    if (!string.IsNullOrEmpty(artist))
+                        artist += " - ";
                     var cover = (string)r["cover"];
                     var tags = r["tags"].ToList();
                     var groupYear = (string)r["groupYear"];
+                    groupYear = !string.IsNullOrEmpty(groupYear) && groupYear != "0"
+                        ? $" [{groupYear}]"
+                        : string.Empty;
                     var releaseType = (string)r["releaseType"];
+                    releaseType = !string.IsNullOrEmpty(releaseType) && releaseType != "Unknown"
+                        ? $" [{releaseType}]"
+                        : string.Empty;
 
-                    var release = new ReleaseInfo();
+                    var description = !string.IsNullOrEmpty(tags?.FirstOrDefault()?.ToObject<string>())
+                        ? $"Tags: {string.Join(", ", tags)}\n"
+                        : string.Empty;
 
-                    release.PublishDate = groupTime;
+                    var release = new ReleaseInfo
+                    {
+                        PublishDate = groupTime,
+                        Title = $"{artist}{groupName}{groupYear}{releaseType}",
+                        Description = description,
+                    };
 
                     if (!string.IsNullOrEmpty(cover))
                         release.BannerUrl = new Uri(cover);
-
-                    release.Title = "";
-                    if (!string.IsNullOrEmpty(artist))
-                        release.Title += artist + " - ";
-                    release.Title += groupName;
-                    if (!string.IsNullOrEmpty(groupYear) && groupYear != "0")
-                        release.Title += " [" + groupYear + "]";
-                    if (!string.IsNullOrEmpty(releaseType) && releaseType != "Unknown")
-                        release.Title += " [" + releaseType + "]";
-
-                    release.Description = "";
-                    if (tags != null && tags.Count > 0 && (string)tags[0] != "")
-                        release.Description += "Tags: " + string.Join(", ", tags) + "\n";
 
                     if (imdbInTags)
                     {

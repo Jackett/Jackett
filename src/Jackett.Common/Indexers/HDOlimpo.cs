@@ -94,6 +94,7 @@ namespace Jackett.Common.Indexers
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var includePremium = ((BoolItem)configData.GetDynamic("IncludePremium")).Value;
+            var cats = MapTorznabCapsToTrackers(query);
 
             var pairs = new Dictionary<string, string>
             {
@@ -104,7 +105,7 @@ namespace Jackett.Common.Indexers
                 {"categoria", MapTorznabCapsToTrackers(query).FirstIfSingleOrDefault("0")}
             };
 
-            var boundary = "---------------------------" + (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds.ToString(CultureInfo.InvariantCulture).Replace(".", "");
+            var boundary = "---------------------------" + DateTimeUtil.DateTimeToUnixTimestamp(DateTime.UtcNow);
             var bodyParts = new List<string>();
 
             foreach (var pair in pairs)
@@ -157,49 +158,45 @@ namespace Jackett.Common.Indexers
             {
                 foreach (var torrent in torrents)
                 {
-                    var release = new ReleaseInfo();
-
-                    release.Title = (string)torrent["titulo"] + " " + (string)torrent["titulo_extra"];
-
+                    var title = (string)torrent["titulo"] + " " + (string)torrent["titulo_extra"];
                     // for downloading "premium" torrents you need special account
                     if ((string)torrent["premium"] == "si")
                     {
                         if (includePremium)
-                            release.Title += " [PREMIUM]";
+                            title += " [PREMIUM]";
                         else
                             continue;
                     }
 
-                    release.Comments = new Uri(CommentsUrl + (string)torrent["id"]);
-                    release.Guid = release.Comments;
-
-                    release.PublishDate = DateTime.Now;
+                    var guid = new Uri(CommentsUrl + (string)torrent["id"]);
+                    var publishDate = DateTime.Now;
                     if (torrent["created_at"] != null)
-                        release.PublishDate = DateTime.Parse((string)torrent["created_at"]);
-
+                        publishDate = DateTime.Parse((string)torrent["created_at"]);
+                    Uri bannerUrl;
                     if (torrent["portada"] != null)
-                        release.BannerUrl = new Uri(BannerUrl + (string)(torrent["portada"]["hash"]) + "." + (string)(torrent["portada"]["ext"]));
+	                    bannerUrl = new Uri(BannerUrl + (string)(torrent["portada"]["hash"]) + "." + (string)(torrent["portada"]["ext"]));
 
-                    release.Category = MapTrackerCatToNewznab((string)torrent["categoria"]);
-                    release.Size = (long)torrent["size"];
+                    var seeders = (int)torrent["seeders"];
 
-                    release.Seeders = (int)torrent["seeders"];
-                    release.Peers = release.Seeders + (int)torrent["leechers"];
-                    release.Grabs = (long)torrent["snatched"];
-
-                    release.InfoHash = (string)torrent["plain_info_hash"];
-                    release.Link = new Uri(DownloadUrl + (string)torrent["id"]);
-
-                    var files = (JArray)JsonConvert.DeserializeObject<dynamic>((string)torrent["files_list"]);
-                    release.Files = files.Count;
-
-                    release.DownloadVolumeFactor = (string)torrent["freetorrent"] == "0" ? 1 : 0;
-                    release.UploadVolumeFactor = (string)torrent["doubletorrent"] == "0" ? 1 : 2;
-
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800; // 48 hours
-
-                    releases.Add(release);
+                    releases.Add(new ReleaseInfo
+                    {
+                        Title = title,
+                        Category = MapTrackerCatToNewznab((string)torrent["categoria"]),
+                        Size = (long)torrent["size"],
+                        Grabs = (long)torrent["snatched"],
+                        InfoHash = (string)torrent["plain_info_hash"],
+                        Link = new Uri(DownloadUrl + (string)torrent["id"]),
+                        Files = ((JArray)JsonConvert.DeserializeObject<dynamic>((string)torrent["files_list"])).Count,
+                        DownloadVolumeFactor = (string)torrent["freetorrent"] == "0" ? 1 : 0,
+                        UploadVolumeFactor = (string)torrent["doubletorrent"] == "0" ? 1 : 2,
+                        MinimumRatio = 1,
+                        MinimumSeedTime = 172800, // 48 hours
+                        PublishDate = publishDate,
+                        Comments = guid,
+                        Guid = guid,
+                        Seeders = seeders,
+                        Peers = seeders + (int)torrent["leechers"]
+                    });
                 }
             }
             catch (Exception ex)

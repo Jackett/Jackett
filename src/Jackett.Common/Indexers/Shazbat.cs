@@ -114,6 +114,7 @@ namespace Jackett.Common.Indexers
                         dom.QuerySelector("span:contains(\"Freeleech until:\"):has(span.datetime)") != null;
                     foreach (var row in rows.Skip(1))
                     {
+                        // TODO switch to initializer
                         var release = new ReleaseInfo();
                         var titleRow = row.QuerySelector("td:nth-of-type(3)");
                         foreach (var child in titleRow.Children)

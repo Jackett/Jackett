@@ -221,34 +221,33 @@ namespace Jackett.Common.Indexers
 
                 foreach (var torrent in json)
                 {
-                    var release = new ReleaseInfo();
-
-                    release.Title = torrent.name;
-                    if ((query.ImdbID == null || !TorznabCaps.SupportsImdbMovieSearch) && !query.MatchQueryStringAND(release.Title))
+                    if ((query.ImdbID == null || !TorznabCaps.SupportsImdbMovieSearch) && !query.MatchQueryStringAND(torrent.name))
                         continue;
-
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800; // 48 hours
-                    release.Category = MapTrackerCatToNewznab(torrent.c.ToString());
-
-                    var torrentId = (long)torrent.t;
-                    release.Comments = new Uri(SiteLink + "details.php?id=" + torrentId);
-                    release.Guid = release.Comments;
-                    release.Link = new Uri(SiteLink + "download.php/" + torrentId + "/" + torrentId + ".torrent");
-                    release.PublishDate = DateTimeUtil.UnixTimestampToDateTime((long)torrent.ctime).ToLocalTime();
-
-                    release.Size = (long)torrent.size;
-                    release.Seeders = (int)torrent.seeders;
-                    release.Peers = release.Seeders + (int)torrent.leechers;
-                    release.Files = (long)torrent.files;
-                    release.Grabs = (long)torrent.completed;
+                    var torrentID = (long)torrent.t;
+                    var releaseComments = new Uri(SiteLink + "details.php?id=" + torrentID);
+                    var seeders = (int)torrent.seeders;
                     var imdbId = (string)torrent["imdb-id"];
-                    release.Imdb = ParseUtil.GetImdbID(imdbId);
                     var downloadMultiplier = (double?)torrent["download-multiplier"];
-                    release.DownloadVolumeFactor = downloadMultiplier ?? 1;
-                    release.UploadVolumeFactor = 1;
 
-                    releases.Add(release);
+                    releases.Add(new ReleaseInfo
+                    {
+                        Title = torrent.name,
+                        MinimumRatio = 1,
+                        MinimumSeedTime = 172800, // 48 hours
+                        Category = MapTrackerCatToNewznab(torrent.c.ToString()),
+                        Comments = releaseComments,
+                        Guid = releaseComments,
+                        Link = new Uri(SiteLink + "download.php/" + torrentID + "/" + torrentID + ".torrent"),
+                        PublishDate = DateTimeUtil.UnixTimestampToDateTime((long)torrent.ctime).ToLocalTime(),
+                        Size = (long)torrent.size,
+                        Seeders = seeders,
+                        Peers = seeders + (int)torrent.leechers,
+                        Files = (long)torrent.files,
+                        Grabs = (long)torrent.completed,
+                        Imdb = ParseUtil.GetImdbID(imdbId),
+                        DownloadVolumeFactor = downloadMultiplier ?? 1,
+                        UploadVolumeFactor = 1
+                    });
                 }
             }
             catch (Exception ex)
