@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -25,36 +25,19 @@ namespace Jackett.Server.Services
             processService = new ProcessService(logger);
         }
 
-        public bool ServiceExists()
-        {
-            return GetService(NAME) != null;
-        }
+        public bool ServiceExists() => GetService(NAME) != null;
 
-        public bool ServiceRunning()
-        {
-            var service = GetService(NAME);
-            if (service == null)
-                return false;
-            return service.Status == ServiceControllerStatus.Running;
-        }
+        public bool ServiceRunning() =>
+            GetService(NAME)?.Status == ServiceControllerStatus.Running;
 
-        public void Start()
-        {
+        public void Start() => GetService(NAME).Start();
 
-            var service = GetService(NAME);
-            service.Start();
-        }
+        public void Stop() => GetService(NAME).Stop();
 
-        public void Stop()
-        {
-            var service = GetService(NAME);
-            service.Stop();
-        }
-
-        public ServiceController GetService(string serviceName)
-        {
-            return ServiceController.GetServices().FirstOrDefault(c => string.Equals(c.ServiceName, serviceName, StringComparison.InvariantCultureIgnoreCase));
-        }
+        public ServiceController GetService(string serviceName) =>
+            ServiceController
+                .GetServices()
+                .FirstOrDefault(c => string.Equals(c.ServiceName, serviceName, StringComparison.InvariantCultureIgnoreCase));
 
         public void Install()
         {

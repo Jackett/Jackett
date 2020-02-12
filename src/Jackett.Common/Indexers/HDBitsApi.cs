@@ -15,12 +15,12 @@ namespace Jackett.Common.Indexers
 {
     public class HDBitsApi : BaseWebIndexer
     {
-        private string APIUrl { get { return SiteLink + "api/"; } }
+        private string APIUrl => SiteLink + "api/";
 
         private new ConfigurationDataHDBitsApi configData
         {
-            get { return (ConfigurationDataHDBitsApi)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataHDBitsApi)base.configData;
+            set => base.configData = value;
         }
 
         public HDBitsApi(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)

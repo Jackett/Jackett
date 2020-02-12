@@ -18,13 +18,13 @@ namespace Jackett.Common.Indexers
 {
     public class Superbits : BaseWebIndexer
     {
-        private string SearchUrl { get { return SiteLink + "api/v1/torrents"; } }
-        private string LoginUrl { get { return SiteLink + "api/v1/auth"; } }
+        private string SearchUrl => SiteLink + "api/v1/torrents";
+        private string LoginUrl => SiteLink + "api/v1/auth";
 
         private new ConfigurationDataCookie configData
         {
-            get { return (ConfigurationDataCookie)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataCookie)base.configData;
+            set => base.configData = value;
         }
 
         public Superbits(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
@@ -97,6 +97,8 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
+            // And this was option one from
+            // https://github.com/Jackett/Jackett/pull/7166#discussion_r376817517
             var releases = new List<ReleaseInfo>();
             var queryCollection = new NameValueCollection();
             var searchString = query.GetQueryString();

@@ -17,13 +17,13 @@ namespace Jackett.Common.Indexers
 {
     public class TVVault : BaseWebIndexer
     {
-        private string LoginUrl { get { return SiteLink + "login.php"; } }
-        private string BrowseUrl { get { return SiteLink + "torrents.php"; } }
+        private string LoginUrl => SiteLink + "login.php";
+        private string BrowseUrl => SiteLink + "torrents.php";
 
         private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
         {
-            get { return (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData;
+            set => base.configData = value;
         }
 
         public TVVault(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
@@ -59,10 +59,7 @@ namespace Jackett.Common.Indexers
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl, true);
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
-            {
-                var errorMessage = result.Content;
-                throw new ExceptionWithConfigData(errorMessage, configData);
-            });
+                                    throw new ExceptionWithConfigData(result.Content, configData));
             return IndexerConfigurationStatus.RequiresTesting;
         }
 

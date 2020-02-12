@@ -19,16 +19,16 @@ namespace Jackett.Common.Indexers
 {
     public class SceneTime : BaseWebIndexer
     {
-        private string StartPageUrl { get { return SiteLink + "login.php"; } }
-        private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
-        private string SearchUrl { get { return SiteLink + "browse.php"; } }
-        private string DownloadUrl { get { return SiteLink + "download.php/{0}/download.torrent"; } }
+        private string StartPageUrl => SiteLink + "login.php";
+        private string LoginUrl => SiteLink + "takelogin.php";
+        private string SearchUrl => SiteLink + "browse.php";
+        private string DownloadUrl => SiteLink + "download.php/{0}/download.torrent";
 
 
         private new ConfigurationDataSceneTime configData
         {
-            get { return (ConfigurationDataSceneTime)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataSceneTime)base.configData;
+            set => base.configData = value;
         }
 
         public SceneTime(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)

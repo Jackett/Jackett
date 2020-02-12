@@ -67,10 +67,7 @@ namespace Jackett.IntegrationTests
         }
 
         [ClassCleanup]
-        public static void StopBrowser()
-        {
-            _webDriver?.Quit();
-        }
+        public static void StopBrowser() => _webDriver?.Quit();
 
         [TestInitialize]
         public void LoadDashboard()

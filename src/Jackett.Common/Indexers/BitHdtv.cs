@@ -18,15 +18,15 @@ namespace Jackett.Common.Indexers
 {
     public class BitHdtv : BaseWebIndexer
     {
-        private string LoginUrl { get { return SiteLink + "login.php"; } }
-        private string TakeLoginUrl { get { return SiteLink + "takelogin.php"; } }
-        private string SearchUrl { get { return SiteLink + "torrents.php?"; } }
-        private string DownloadUrl { get { return SiteLink + "download.php?id={0}"; } }
+        private string LoginUrl => SiteLink + "login.php";
+        private string TakeLoginUrl => SiteLink + "takelogin.php";
+        private string SearchUrl => SiteLink + "torrents.php?";
+        private string DownloadUrl => SiteLink + "download.php?id={0}";
 
         private new ConfigurationDataRecaptchaLogin configData
         {
-            get { return (ConfigurationDataRecaptchaLogin)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataRecaptchaLogin)base.configData;
+            set => base.configData = value;
         }
 
         public BitHdtv(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)

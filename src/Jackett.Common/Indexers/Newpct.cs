@@ -49,10 +49,7 @@ namespace Jackett.Common.Indexers
                 Score = copyFrom.Score;
             }
 
-            public override object Clone()
-            {
-                return new NewpctRelease(this);
-            }
+            public override object Clone() => new NewpctRelease(this);
         }
 
         private class DownloadMatcher
@@ -156,10 +153,8 @@ namespace Jackett.Common.Indexers
             configData.LoadValuesFromJson(configJson);
             var releases = await PerformQuery(new TorznabQuery());
 
-            await ConfigureIfOK(string.Empty, releases.Count() > 0, () =>
-            {
-                throw new Exception("Could not find releases from this URL");
-            });
+            await ConfigureIfOK(string.Empty, releases.Any(), () =>
+                                    throw new Exception("Could not find releases from this URL"));
 
             return IndexerConfigurationStatus.Completed;
         }
@@ -837,13 +832,10 @@ namespace Jackett.Common.Indexers
             }
         }
 
-        private ReleaseType ReleaseTypeFromQuality(string quality)
-        {
-            if (quality.Trim().ToLower().StartsWith("hdtv"))
-                return ReleaseType.TV;
-            else
-                return ReleaseType.Movie;
-        }
+        private static ReleaseType ReleaseTypeFromQuality(string quality) =>
+            quality.Trim().ToLower().StartsWith("hdtv")
+                ? ReleaseType.TV
+                : ReleaseType.Movie;
 
         private NewpctRelease GetReleaseFromData(ReleaseType releaseType, string title, string detailsUrl, string quality, string language, long size, DateTime publishDate)
         {

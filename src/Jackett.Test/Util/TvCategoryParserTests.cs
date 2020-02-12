@@ -18,10 +18,7 @@ namespace Jackett.Test.Util
         [TestCase("The.Blacklist.S02E05", 5000)]
         [TestCase("The.IT.Crowd.S01.DVD.REMUX.DD2.0.MPEG2-DTG", 5030)]
 
-        public void should_parse_quality_from_title(string title, int quality)
-        {
-            Assert.That(TvCategoryParser.ParseTvShowQuality(title), Is.EqualTo(quality));
-        }
+        public void should_parse_quality_from_title(string title, int quality) => Assert.That(TvCategoryParser.ParseTvShowQuality(title), Is.EqualTo(quality));
     }
 }
 

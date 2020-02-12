@@ -8,13 +8,7 @@ namespace Jackett.Common.Indexers.Meta
 {
     public class AggregateIndexer : BaseMetaIndexer
     {
-        public override string ID
-        {
-            get
-            {
-                return "all";
-            }
-        }
+        public override string ID => "all";
         public AggregateIndexer(IFallbackStrategyProvider fallbackStrategyProvider, IResultFilterProvider resultFilterProvider, IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base("AggregateSearch", "This feed includes all configured trackers", fallbackStrategyProvider, resultFilterProvider, configService, wc, l, new ConfigurationData(), ps, x => true)
         {

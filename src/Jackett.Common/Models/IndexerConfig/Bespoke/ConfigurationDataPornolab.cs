@@ -5,9 +5,6 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
         public BoolItem StripRussianLetters { get; private set; }
 
         public ConfigurationDataPornolab()
-            : base()
-        {
-            StripRussianLetters = new BoolItem() { Name = "Strip Russian Letters", Value = false };
-        }
+            => StripRussianLetters = new BoolItem() { Name = "Strip Russian Letters", Value = false };
     }
 }

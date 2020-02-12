@@ -24,18 +24,10 @@ namespace Jackett.Common.Services
             logger = l;
         }
 
-        public bool ServiceExists()
-        {
-            return GetService(NAME) != null;
-        }
+        public bool ServiceExists() => GetService(NAME) != null;
 
-        public bool ServiceRunning()
-        {
-            var service = GetService(NAME);
-            if (service == null)
-                return false;
-            return service.Status == ServiceControllerStatus.Running;
-        }
+        public bool ServiceRunning() =>
+            GetService(NAME)?.Status == ServiceControllerStatus.Running;
 
         public void Start()
         {
@@ -49,10 +41,7 @@ namespace Jackett.Common.Services
             service.Stop();
         }
 
-        public ServiceController GetService(string serviceName)
-        {
-            return ServiceController.GetServices().FirstOrDefault(c => string.Equals(c.ServiceName, serviceName, StringComparison.InvariantCultureIgnoreCase));
-        }
+        public ServiceController GetService(string serviceName) => ServiceController.GetServices().FirstOrDefault(c => string.Equals(c.ServiceName, serviceName, StringComparison.InvariantCultureIgnoreCase));
 
         public void Install()
         {

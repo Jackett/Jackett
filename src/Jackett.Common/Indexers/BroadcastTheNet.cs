@@ -22,8 +22,8 @@ namespace Jackett.Common.Indexers
 
         private new ConfigurationDataAPIKey configData
         {
-            get { return (ConfigurationDataAPIKey)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataAPIKey)base.configData;
+            set => base.configData = value;
         }
 
         public BroadcastTheNet(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)

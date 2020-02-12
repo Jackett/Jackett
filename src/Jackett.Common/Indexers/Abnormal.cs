@@ -27,15 +27,15 @@ namespace Jackett.Common.Indexers
     /// </summary>
     public class Abnormal : BaseCachingWebIndexer
     {
-        private string LoginUrl { get { return SiteLink + "login.php"; } }
-        private string SearchUrl { get { return SiteLink + "torrents.php"; } }
-        private string TorrentCommentUrl { get { return TorrentDescriptionUrl; } }
-        private string TorrentDescriptionUrl { get { return SiteLink + "torrents.php?id="; } }
-        private string TorrentDownloadUrl { get { return SiteLink + "torrents.php?action=download&id={id}&authkey={auth_key}&torrent_pass={torrent_pass}"; } }
-        private string ReplaceMulti { get { return ConfigData.ReplaceMulti.Value; } }
-        private bool Latency { get { return ConfigData.Latency.Value; } }
-        private bool DevMode { get { return ConfigData.DevMode.Value; } }
-        private bool CacheMode { get { return ConfigData.HardDriveCache.Value; } }
+        private string LoginUrl => SiteLink + "login.php";
+        private string SearchUrl => SiteLink + "torrents.php";
+        private string TorrentCommentUrl => TorrentDescriptionUrl;
+        private string TorrentDescriptionUrl => SiteLink + "torrents.php?id=";
+        private string TorrentDownloadUrl => SiteLink + "torrents.php?action=download&id={id}&authkey={auth_key}&torrent_pass={torrent_pass}";
+        private string ReplaceMulti => ConfigData.ReplaceMulti.Value;
+        private bool Latency => ConfigData.Latency.Value;
+        private bool DevMode => ConfigData.DevMode.Value;
+        private bool CacheMode => ConfigData.HardDriveCache.Value;
         private static string Directory => Path.Combine(Path.GetTempPath(), Assembly.GetExecutingAssembly().GetName().Name.ToLower(), MethodBase.GetCurrentMethod().DeclaringType?.Name.ToLower());
 
         private readonly Dictionary<string, string> emulatedBrowserHeaders = new Dictionary<string, string>();
@@ -43,8 +43,8 @@ namespace Jackett.Common.Indexers
 
         private ConfigurationDataAbnormal ConfigData
         {
-            get { return (ConfigurationDataAbnormal)configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataAbnormal)configData;
+            set => base.configData = value;
         }
 
         public Abnormal(IIndexerConfigurationService configService, Utils.Clients.WebClient w, Logger l, IProtectionService ps)
@@ -633,12 +633,8 @@ namespace Jackett.Common.Indexers
         /// Find torrent rows in search pages
         /// </summary>
         /// <returns>JQuery Object</returns>
-        private CQ findTorrentRows()
-        {
-            // Return all occurencis of torrents found
-            return fDom[".torrent_table > tbody > tr"].Not(".colhead");
-        }
-
+        // Return all occurences of torrents found
+        private CQ findTorrentRows() => fDom[".torrent_table > tbody > tr"].Not(".colhead");
 
         /// <summary>
         /// Output message for logging or developpment (console)

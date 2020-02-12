@@ -17,14 +17,14 @@ namespace Jackett.Common.Indexers
 {
     public class BitCityReloaded : BaseWebIndexer
     {
-        private string LoginUrl { get { return SiteLink + "login/index.php"; } }
-        private string BrowseUrl { get { return SiteLink + "uebersicht.php"; } }
+        private string LoginUrl => SiteLink + "login/index.php";
+        private string BrowseUrl => SiteLink + "uebersicht.php";
         private readonly TimeZoneInfo germanyTz = TimeZoneInfo.CreateCustomTimeZone("W. Europe Standard Time", new TimeSpan(1, 0, 0), "W. Europe Standard Time", "W. Europe Standard Time");
 
         private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
         {
-            get { return (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData;
+            set => base.configData = value;
         }
 
         public BitCityReloaded(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)

@@ -83,10 +83,8 @@ namespace Jackett.Common.Utils
         [LayoutRenderer("simpledatetime")]
         public class SimpleDateTimeRenderer : LayoutRenderer
         {
-            protected override void Append(StringBuilder builder, LogEventInfo logEvent)
-            {
+            protected override void Append(StringBuilder builder, LogEventInfo logEvent) =>
                 builder.Append(DateTime.Now.ToString("MM-dd HH:mm:ss"));
-            }
         }
     }
 }

@@ -20,15 +20,15 @@ namespace Jackett.Common.Indexers
 
     public class BB : BaseWebIndexer
     {
-        private string BaseUrl { get { return StringUtil.FromBase64("aHR0cHM6Ly9iYWNvbmJpdHMub3JnLw=="); } }
-        private Uri BaseUri { get { return new Uri(BaseUrl); } }
-        private string LoginUrl { get { return BaseUri + "login.php"; } }
-        private string SearchUrl { get { return BaseUri + "torrents.php?searchtags=&tags_type=0&order_by=s3&order_way=desc&disablegrouping=1&"; } }
+        private string BaseUrl => StringUtil.FromBase64("aHR0cHM6Ly9iYWNvbmJpdHMub3JnLw==");
+        private Uri BaseUri => new Uri(BaseUrl);
+        private string LoginUrl => BaseUri + "login.php";
+        private string SearchUrl => BaseUri + "torrents.php?searchtags=&tags_type=0&order_by=s3&order_way=desc&disablegrouping=1&";
 
         private new ConfigurationDataBasicLogin configData
         {
-            get { return (ConfigurationDataBasicLogin)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataBasicLogin)base.configData;
+            set => base.configData = value;
         }
 
         public BB(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)

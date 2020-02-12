@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -162,16 +162,11 @@ namespace Jackett.Server.Services
             return Encoding.UTF8.GetString(unprotectedBytes);
         }
 
-        private string ProtectUsingKey(string plainText, string key)
-        {
-            return StringCipher.Encrypt(plainText, key);
-        }
+        private string ProtectUsingKey(string plainText, string key) => StringCipher.Encrypt(plainText, key);
 
-        private string UnProtectUsingKey(string plainText, string key)
-        {
-            return StringCipher.Decrypt(plainText, key);
-        }
+        private string UnProtectUsingKey(string plainText, string key) => StringCipher.Decrypt(plainText, key);
 
+        // Currently unused
         public void Protect<T>(T obj)
         {
             var type = obj.GetType();

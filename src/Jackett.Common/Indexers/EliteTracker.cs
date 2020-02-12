@@ -18,17 +18,15 @@ namespace Jackett.Common.Indexers
 {
     internal class EliteTracker : BaseWebIndexer
     {
-        private string LoginUrl
-        { get { return SiteLink + "takelogin.php"; } }
-        private string BrowseUrl
-        { get { return SiteLink + "browse.php"; } }
+        private string LoginUrl => SiteLink + "takelogin.php";
+        private string BrowseUrl => SiteLink + "browse.php";
         private bool TorrentHTTPSMode => configData.TorrentHTTPSMode.Value;
         private string ReplaceMulti => configData.ReplaceMulti.Value;
         private new ConfigurationDataEliteTracker configData
 
         {
-            get { return (ConfigurationDataEliteTracker)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataEliteTracker)base.configData;
+            set => base.configData = value;
         }
 
         public EliteTracker(IIndexerConfigurationService configService, WebClient webClient, Logger logger, IProtectionService protectionService)

@@ -17,16 +17,16 @@ namespace Jackett.Common.Indexers
 {
     public class PassThePopcorn : BaseWebIndexer
     {
-        private string LoginUrl { get { return "https://passthepopcorn.me/ajax.php?action=login"; } }
-        private string indexUrl { get { return "https://passthepopcorn.me/ajax.php?action=login"; } }
-        private string SearchUrl { get { return "https://passthepopcorn.me/torrents.php"; } }
-        private string DetailURL { get { return "https://passthepopcorn.me/torrents.php?torrentid="; } }
+        private string LoginUrl => "https://passthepopcorn.me/ajax.php?action=login";
+        private string indexUrl => "https://passthepopcorn.me/ajax.php?action=login";
+        private string SearchUrl => "https://passthepopcorn.me/torrents.php";
+        private string DetailURL => "https://passthepopcorn.me/torrents.php?torrentid=";
         private string AuthKey { get; set; }
 
         private new ConfigurationDataAPILoginWithUserAndPasskeyAndFilter configData
         {
-            get { return (ConfigurationDataAPILoginWithUserAndPasskeyAndFilter)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataAPILoginWithUserAndPasskeyAndFilter)base.configData;
+            set => base.configData = value;
         }
 
         public PassThePopcorn(IIndexerConfigurationService configService, Utils.Clients.WebClient c, Logger l, IProtectionService ps)

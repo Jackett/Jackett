@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
@@ -29,10 +29,7 @@ namespace Jackett.Server
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+        public Startup(IConfiguration configuration) => Configuration = configuration;
 
         public IConfiguration Configuration { get; }
 
@@ -54,29 +51,20 @@ namespace Jackett.Server
 
 
 #if NET461
-            services.AddMvc(config =>
-                    {
-                        var policy = new AuthorizationPolicyBuilder()
-                                            .RequireAuthenticatedUser()
-                                            .Build();
-                        config.Filters.Add(new AuthorizeFilter(policy));
-                    })
-                    .AddJsonOptions(options =>
-                    {
-                        options.SerializerSettings.ContractResolver = new DefaultContractResolver(); //Web app uses Pascal Case JSON
-                    });
+            services.AddMvc(
+                        config => config.Filters.Add(
+                            new AuthorizeFilter(
+                                new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build())))
+                    .AddJsonOptions(options => options.SerializerSettings.ContractResolver =
+                                        new DefaultContractResolver()); //Web app uses Pascal Case JSON);
 #else
-            services.AddControllers(config =>
-                    {
-                        var policy = new AuthorizationPolicyBuilder()
-                                            .RequireAuthenticatedUser()
-                                            .Build();
-                        config.Filters.Add(new AuthorizeFilter(policy));
-                    })
-                    .AddNewtonsoftJson(options =>
-                    {
-                        options.SerializerSettings.ContractResolver = new DefaultContractResolver(); //Web app uses Pascal Case JSON
-                    });
+
+            services.AddControllers(
+                        config => config.Filters.Add(
+                            new AuthorizeFilter(
+                                new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build())))
+                    .AddNewtonsoftJson(
+                        options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
 #endif
 
             var runtimeSettings = new RuntimeSettings();
@@ -193,10 +181,7 @@ namespace Jackett.Server
 
             app.UseRouting();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
         }
 #endif
 

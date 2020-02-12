@@ -18,10 +18,10 @@ namespace Jackett.Common.Indexers.Abstract
 {
     public abstract class GazelleTracker : BaseWebIndexer
     {
-        protected string LoginUrl { get { return SiteLink + "login.php"; } }
-        protected string APIUrl { get { return SiteLink + "ajax.php"; } }
-        protected string DownloadUrl { get { return SiteLink + "torrents.php?action=download&usetoken=" + (useTokens ? "1" : "0") + "&id="; } }
-        protected string DetailsUrl { get { return SiteLink + "torrents.php?torrentid="; } }
+        protected string LoginUrl => SiteLink + "login.php";
+        protected string APIUrl => SiteLink + "ajax.php";
+        protected string DownloadUrl => SiteLink + "torrents.php?action=download&usetoken=" + (useTokens ? "1" : "0") + "&id=";
+        protected string DetailsUrl => SiteLink + "torrents.php?torrentid=";
         protected bool supportsFreeleechTokens;
         protected bool imdbInTags;
         protected bool supportsCategories = true; // set to false if the tracker doesn't include the categories in the API search results
@@ -30,8 +30,8 @@ namespace Jackett.Common.Indexers.Abstract
 
         private new ConfigurationDataBasicLogin configData
         {
-            get { return (ConfigurationDataBasicLogin)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataBasicLogin)base.configData;
+            set => base.configData = value;
         }
 
         public GazelleTracker(IIndexerConfigurationService configService, Utils.Clients.WebClient webClient, Logger logger, IProtectionService protectionService, string name, string desc, string link, bool supportsFreeleechTokens, bool imdbInTags = false, bool has2Fa = false)
@@ -138,10 +138,7 @@ namespace Jackett.Common.Indexers.Abstract
         }
 
         // hook to adjust the search term
-        protected virtual string GetSearchTerm(TorznabQuery query)
-        {
-            return query.GetQueryString();
-        }
+        protected virtual string GetSearchTerm(TorznabQuery query) => query.GetQueryString();
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
@@ -269,10 +266,7 @@ namespace Jackett.Common.Indexers.Abstract
         }
 
         // hook to add/modify the parsed information, return false to exclude the torrent from the results
-        protected virtual bool ReleaseInfoPostParse(ReleaseInfo release, JObject torrent, JObject result)
-        {
-            return true;
-        }
+        protected virtual bool ReleaseInfoPostParse(ReleaseInfo release, JObject torrent, JObject result) => true;
 
         private void FillReleaseInfoFromJson(ReleaseInfo release, JObject torrent)
         {

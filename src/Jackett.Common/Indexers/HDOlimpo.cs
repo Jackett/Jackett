@@ -26,8 +26,8 @@ namespace Jackett.Common.Indexers
 
         private new ConfigurationDataBasicLoginWithEmail configData
         {
-            get { return (ConfigurationDataBasicLoginWithEmail)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataBasicLoginWithEmail)base.configData;
+            set => base.configData = value;
         }
 
         public HDOlimpo(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)

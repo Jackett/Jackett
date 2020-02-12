@@ -285,10 +285,7 @@ namespace DateTimeRoutines
         /// <param name="default_format">format to be used preferably in ambivalent instances</param>
         /// <param name="parsed_time">parsed date-time output</param>
         /// <returns>true if time was found, else false</returns>
-        public static bool TryParseTime(this string str, DateTimeFormat default_format, out ParsedDateTime parsed_time)
-        {
-            return TryParseTime(str, default_format, out parsed_time, null);
-        }
+        public static bool TryParseTime(this string str, DateTimeFormat default_format, out ParsedDateTime parsed_time) => TryParseTime(str, default_format, out parsed_time, null);
 
         /// <summary>
         /// Tries to find date and/or time within the passed string and return it as ParsedDateTime object. 

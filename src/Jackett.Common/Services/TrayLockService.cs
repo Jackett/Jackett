@@ -9,10 +9,7 @@ namespace Jackett.Common.Services
     {
         private readonly string EVENT_HANDLE_NAME = @"Global\JACKETT.TRAY";
 
-        private EventWaitHandle GetEventHandle()
-        {
-            return new EventWaitHandle(false, EventResetMode.ManualReset, EVENT_HANDLE_NAME);
-        }
+        private EventWaitHandle GetEventHandle() => new EventWaitHandle(false, EventResetMode.ManualReset, EVENT_HANDLE_NAME);
 
         public void WaitForSignal()
         {

@@ -31,10 +31,7 @@ namespace Jackett.Common.Indexers.Meta
             return base.CanHandleQuery(query);
         }
 
-        public override Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
-        {
-            return Task.FromResult(IndexerConfigurationStatus.Completed);
-        }
+        public override Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson) => Task.FromResult(IndexerConfigurationStatus.Completed);
 
         public override async Task<IndexerResult> ResultsForQuery(TorznabQuery query)
         {
@@ -102,32 +99,11 @@ namespace Jackett.Common.Indexers.Meta
             return result;
         }
 
-        public override TorznabCapabilities TorznabCaps
-        {
-            get
-            {
-                return validIndexers.Select(i => i.TorznabCaps).Aggregate(new TorznabCapabilities(), TorznabCapabilities.Concat);
-            }
-        }
+        public override TorznabCapabilities TorznabCaps => validIndexers.Select(i => i.TorznabCaps).Aggregate(new TorznabCapabilities(), TorznabCapabilities.Concat);
 
-        public override bool IsConfigured
-        {
-            get
-            {
-                return Indexers != null;
-            }
-        }
+        public override bool IsConfigured => Indexers != null;
 
-        private IEnumerable<IIndexer> validIndexers
-        {
-            get
-            {
-                if (Indexers == null)
-                    return null;
-
-                return Indexers.Where(i => i.IsConfigured && filterFunc(i));
-            }
-        }
+        private IEnumerable<IIndexer> validIndexers => Indexers?.Where(i => i.IsConfigured && filterFunc(i));
 
         public IEnumerable<IIndexer> Indexers;
 

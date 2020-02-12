@@ -55,9 +55,6 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(30, TorznabCatType.Other, "Misc");
         }
 
-        protected override string GetSearchTerm(TorznabQuery query)
-        {
-            return query.GetQueryString().Replace(".", " "); // Alpharatio can't handle dots in the searchstr
-        }
+        protected override string GetSearchTerm(TorznabQuery query) => query.GetQueryString().Replace(".", " "); // Alpharatio can't handle dots in the searchstr
     }
 }

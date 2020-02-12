@@ -39,9 +39,6 @@ namespace Jackett.Common.Services
             }
         }
 
-        protected override void Write(LogEventInfo logEvent)
-        {
-            AddLog(logEvent);
-        }
+        protected override void Write(LogEventInfo logEvent) => AddLog(logEvent);
     }
 }

@@ -8,6 +8,14 @@ namespace Jackett.Common.Models
 
         public static bool QueryContainsParentCategory(int[] queryCats, ICollection<int> releaseCats)
         {
+            //return (from releaseCat in releaseCats
+            //        select AllCats.FirstOrDefault(c => c.ID == releaseCat)
+            //        into cat
+            //        where cat != null && queryCats != null
+            //        select cat.SubCategories.Any(c => queryCats.Contains(c.ID)))
+            //    .FirstOrDefault();
+            // Is equal to:
+
             foreach (var releaseCat in releaseCats)
             {
                 var cat = AllCats.FirstOrDefault(c => c.ID == releaseCat);
@@ -20,32 +28,12 @@ namespace Jackett.Common.Models
             return false;
         }
 
-        public static string GetCatDesc(int newznabcat)
-        {
-            var cat = AllCats.FirstOrDefault(c => c.ID == newznabcat);
-            if (cat != null)
-            {
-                return cat.Name;
-            }
+        public static string GetCatDesc(int newznabcat) =>
+            AllCats.FirstOrDefault(c => c.ID == newznabcat)?.Name
+            ?? string.Empty;
 
-            return string.Empty;
-        }
+        public static string NormalizeCatName(string name) => name.Replace(" ", "").ToLower();
 
-        public static string NormalizeCatName(string name)
-        {
-            return name.Replace(" ", "").ToLower();
-        }
-
-        public static TorznabCategory GetCatByName(string name)
-        {
-            var cat = AllCats.FirstOrDefault(c => NormalizeCatName(c.Name) == NormalizeCatName(name));
-            if (cat != null)
-            {
-                return cat;
-            }
-
-            return null;
-        }
-
+        public static TorznabCategory GetCatByName(string name) => AllCats.FirstOrDefault(c => NormalizeCatName(c.Name) == NormalizeCatName(name));
     }
 }

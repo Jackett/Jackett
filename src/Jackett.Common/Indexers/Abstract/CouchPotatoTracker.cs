@@ -15,12 +15,12 @@ namespace Jackett.Common.Indexers.Abstract
     public abstract class CouchPotatoTracker : BaseWebIndexer
     {
         protected string endpoint;
-        protected string APIUrl { get { return SiteLink + endpoint; } }
+        protected string APIUrl => SiteLink + endpoint;
 
         private new ConfigurationDataUserPasskey configData
         {
-            get { return (ConfigurationDataUserPasskey)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataUserPasskey)base.configData;
+            set => base.configData = value;
         }
 
         public CouchPotatoTracker(IIndexerConfigurationService configService, WebClient client, Logger logger, IProtectionService p, ConfigurationDataUserPasskey configData, string name, string description, string link, string endpoint)
@@ -47,11 +47,8 @@ namespace Jackett.Common.Indexers.Abstract
             return await Task.FromResult(IndexerConfigurationStatus.RequiresTesting);
         }
 
-        protected virtual string GetSearchString(TorznabQuery query)
-        {
-            // can be overriden to alter the search string
-            return query.GetQueryString();
-        }
+        // can be overriden to alter the search string
+        protected virtual string GetSearchString(TorznabQuery query) => query.GetQueryString();
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
@@ -96,10 +93,12 @@ namespace Jackett.Common.Indexers.Abstract
             {
                 foreach (JObject r in json["results"])
                 {
-                    var release = new ReleaseInfo();
-                    release.Title = (string)r["release_name"];
-                    release.Comments = new Uri((string)r["details_url"]);
-                    release.Link = new Uri((string)r["download_url"]);
+                    var release = new ReleaseInfo
+                    {
+                        Title = (string)r["release_name"],
+                        Comments = new Uri((string)r["details_url"]),
+                        Link = new Uri((string)r["download_url"])
+                    };
                     release.Guid = release.Link;
                     release.Imdb = ParseUtil.GetImdbID((string)r["imdb_id"]);
                     var freeleech = (bool)r["freeleech"];

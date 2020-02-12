@@ -18,13 +18,13 @@ namespace Jackett.Common.Indexers
 {
     public class GazelleGames : BaseWebIndexer
     {
-        private string LoginUrl { get { return SiteLink + "login.php"; } }
-        private string BrowseUrl { get { return SiteLink + "torrents.php"; } }
+        private string LoginUrl => SiteLink + "login.php";
+        private string BrowseUrl => SiteLink + "torrents.php";
 
         private new ConfigurationDataCookie configData
         {
-            get { return (ConfigurationDataCookie)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataCookie)base.configData;
+            set => base.configData = value;
         }
 
         public GazelleGames(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)

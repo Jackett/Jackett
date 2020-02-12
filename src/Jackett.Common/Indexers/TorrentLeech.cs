@@ -23,13 +23,13 @@ namespace Jackett.Common.Indexers
             "https://v4.torrentleech.org/",
         };
 
-        private string LoginUrl { get { return SiteLink + "user/account/login/"; } }
-        private string SearchUrl { get { return SiteLink + "torrents/browse/list/"; } }
+        private string LoginUrl => SiteLink + "user/account/login/";
+        private string SearchUrl => SiteLink + "torrents/browse/list/";
 
         private new ConfigurationDataRecaptchaLogin configData
         {
-            get { return (ConfigurationDataRecaptchaLogin)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataRecaptchaLogin)base.configData;
+            set => base.configData = value;
         }
 
         public TorrentLeech(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)

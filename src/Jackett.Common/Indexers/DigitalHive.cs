@@ -17,14 +17,14 @@ namespace Jackett.Common.Indexers
 {
     public class DigitalHive : BaseWebIndexer
     {
-        private string SearchUrl { get { return SiteLink + "browse.php"; } }
-        private string LoginUrl { get { return SiteLink + "login.php?returnto=%2F"; } }
-        private string AjaxLoginUrl { get { return SiteLink + "takelogin.php"; } }
+        private string SearchUrl => SiteLink + "browse.php";
+        private string LoginUrl => SiteLink + "login.php?returnto=%2F";
+        private string AjaxLoginUrl => SiteLink + "takelogin.php";
 
         private new ConfigurationDataRecaptchaLogin configData
         {
-            get { return (ConfigurationDataRecaptchaLogin)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataRecaptchaLogin)base.configData;
+            set => base.configData = value;
         }
 
         public DigitalHive(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)

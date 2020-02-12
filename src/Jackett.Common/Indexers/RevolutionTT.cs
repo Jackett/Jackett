@@ -19,17 +19,17 @@ namespace Jackett.Common.Indexers
 {
     public class RevolutionTT : BaseWebIndexer
     {
-        private string LandingPageURL { get { return SiteLink + "login.php"; } }
-        private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
-        private string GetRSSKeyUrl { get { return SiteLink + "getrss.php"; } }
-        private string RSSUrl { get { return SiteLink + "rss.php?feed=dl&passkey="; } }
-        private string SearchUrl { get { return SiteLink + "browse.php"; } }
-        private string DetailsURL { get { return SiteLink + "details.php?id={0}&hit=1"; } }
+        private string LandingPageURL => SiteLink + "login.php";
+        private string LoginUrl => SiteLink + "takelogin.php";
+        private string GetRSSKeyUrl => SiteLink + "getrss.php";
+        private string RSSUrl => SiteLink + "rss.php?feed=dl&passkey=";
+        private string SearchUrl => SiteLink + "browse.php";
+        private string DetailsURL => SiteLink + "details.php?id={0}&hit=1";
 
         private new ConfigurationDataBasicLoginWithRSS configData
         {
-            get { return (ConfigurationDataBasicLoginWithRSS)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataBasicLoginWithRSS)base.configData;
+            set => base.configData = value;
         }
 
         public RevolutionTT(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)

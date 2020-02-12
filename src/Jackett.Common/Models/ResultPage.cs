@@ -29,10 +29,7 @@ namespace Jackett.Common.Models
             return f;
         }
 
-        private XElement getTorznabElement(string name, object value)
-        {
-            return value == null ? null : new XElement(torznabNs + "attr", new XAttribute("name", name), new XAttribute("value", value));
-        }
+        private XElement getTorznabElement(string name, object value) => value == null ? null : new XElement(torznabNs + "attr", new XAttribute("name", name), new XAttribute("value", value));
 
         public string ToXml(Uri selfAtom)
         {

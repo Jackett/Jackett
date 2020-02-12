@@ -20,13 +20,13 @@ namespace Jackett.Common.Indexers
 {
     public class Torrentech : BaseWebIndexer
     {
-        private string LoginUrl { get { return SiteLink + "index.php?act=Login&CODE=01&CookieDate=1"; } }
-        private string IndexUrl { get { return SiteLink + "index.php"; } }
+        private string LoginUrl => SiteLink + "index.php?act=Login&CODE=01&CookieDate=1";
+        private string IndexUrl => SiteLink + "index.php";
 
         private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
         {
-            get { return (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData;
+            set => base.configData = value;
         }
 
         public Torrentech(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)

@@ -17,16 +17,16 @@ namespace Jackett.Common.Indexers
 {
     public class Shazbat : BaseWebIndexer
     {
-        private string LoginUrl { get { return SiteLink + "login"; } }
-        private string SearchUrl { get { return SiteLink + "search"; } }
-        private string TorrentsUrl { get { return SiteLink + "torrents"; } }
-        private string ShowUrl { get { return SiteLink + "show?id="; } }
-        private string RSSProfile { get { return SiteLink + "rss_feeds"; } }
+        private string LoginUrl => SiteLink + "login";
+        private string SearchUrl => SiteLink + "search";
+        private string TorrentsUrl => SiteLink + "torrents";
+        private string ShowUrl => SiteLink + "show?id=";
+        private string RSSProfile => SiteLink + "rss_feeds";
 
         private new ConfigurationDataBasicLoginWithRSS configData
         {
-            get { return (ConfigurationDataBasicLoginWithRSS)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataBasicLoginWithRSS)base.configData;
+            set => base.configData = value;
         }
 
         public Shazbat(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps)
@@ -63,9 +63,7 @@ namespace Jackett.Common.Indexers
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl);
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("glyphicon-log-out"), () =>
-            {
-                throw new ExceptionWithConfigData("The username and password entered do not match.", configData);
-            });
+                                    throw new ExceptionWithConfigData("The username and password entered do not match.", configData));
 
             var rssProfile = await RequestStringWithCookiesAndRetry(RSSProfile);
             CQ rssDom = rssProfile.Content;

@@ -18,14 +18,14 @@ namespace Jackett.Common.Indexers
 {
     public class NCore : BaseWebIndexer
     {
-        private string LoginUrl { get { return SiteLink + "login.php"; } }
-        private string SearchUrl { get { return SiteLink + "torrents.php"; } }
+        private string LoginUrl => SiteLink + "login.php";
+        private string SearchUrl => SiteLink + "torrents.php";
         private readonly string[] LanguageCats = new string[] { "xvidser", "dvdser", "hdser", "xvid", "dvd", "dvd9", "hd", "mp3", "lossless", "ebook" };
 
         private new ConfigurationDataNCore configData
         {
-            get { return (ConfigurationDataNCore)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataNCore)base.configData;
+            set => base.configData = value;
         }
 
         public NCore(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)

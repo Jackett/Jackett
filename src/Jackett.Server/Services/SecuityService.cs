@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
@@ -12,10 +12,7 @@ namespace Jackett.Server.Services
         private const string COOKIENAME = "JACKETT";
         private readonly ServerConfig _serverConfig;
 
-        public SecuityService(ServerConfig sc)
-        {
-            _serverConfig = sc;
-        }
+        public SecuityService(ServerConfig sc) => _serverConfig = sc;
 
         public string HashPassword(string input)
         {
@@ -39,17 +36,9 @@ namespace Jackett.Server.Services
             return hex;
         }
 
-        public void Login(HttpResponseMessage response)
-        {
-            // Login
-            response.Headers.Add("Set-Cookie", COOKIENAME + "=" + _serverConfig.AdminPassword + "; path=/");
-        }
+        public void Login(HttpResponseMessage response) => response.Headers.Add("Set-Cookie", COOKIENAME + "=" + _serverConfig.AdminPassword + "; path=/");
 
-        public void Logout(HttpResponseMessage response)
-        {
-            // Logout
-            response.Headers.Add("Set-Cookie", COOKIENAME + "=; path=/");
-        }
+        public void Logout(HttpResponseMessage response) => response.Headers.Add("Set-Cookie", COOKIENAME + "=; path=/");
 
         public bool CheckAuthorised(HttpRequestMessage request)
         {

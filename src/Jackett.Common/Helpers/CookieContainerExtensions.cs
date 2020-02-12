@@ -44,14 +44,8 @@ namespace Jackett.Common.Helpers
             }
         }
 
-        public static void DumpToJson(this CookieContainer cookies, string uri, JToken json)
-        {
-            DumpToJson(cookies, new Uri(uri), json);
-        }
+        public static void DumpToJson(this CookieContainer cookies, string uri, JToken json) => DumpToJson(cookies, new Uri(uri), json);
 
-        public static void DumpToJson(this CookieContainer cookies, Uri uri, JToken json)
-        {
-            json["cookie_header"] = cookies.GetCookieHeader(uri);
-        }
+        public static void DumpToJson(this CookieContainer cookies, Uri uri, JToken json) => json["cookie_header"] = cookies.GetCookieHeader(uri);
     }
 }

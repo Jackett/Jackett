@@ -33,10 +33,7 @@ namespace Jackett.Common.Models.IndexerConfig
 
         }
 
-        public ConfigurationData(JToken json, IProtectionService ps)
-        {
-            LoadValuesFromJson(json, ps);
-        }
+        public ConfigurationData(JToken json, IProtectionService ps) => LoadValuesFromJson(json, ps);
 
         public void LoadValuesFromJson(JToken json, IProtectionService ps = null)
         {
@@ -188,11 +185,9 @@ namespace Jackett.Common.Models.IndexerConfig
             return properties.ToArray();
         }
 
-        public void AddDynamic(string ID, Item item)
-        {
-            dynamics[ID] = item;
-        }
+        public void AddDynamic(string ID, Item item) => dynamics[ID] = item;
 
+        // TODO Convert to TryGetValue to avoid throwing exception
         public Item GetDynamic(string ID)
         {
             try
@@ -206,15 +201,13 @@ namespace Jackett.Common.Models.IndexerConfig
         }
 
         public Item GetDynamicByName(string Name)
-        {
-            return dynamics.Values.Where(i => string.Equals(i.Name, Name, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault();
-        }
+            => dynamics.Values.FirstOrDefault(i => string.Equals(i.Name, Name, StringComparison.InvariantCultureIgnoreCase));
 
         public class Item
         {
             public ItemType ItemType { get; set; }
             public string Name { get; set; }
-            public string ID { get { return Name.Replace(" ", "").ToLower(); } }
+            public string ID => Name.Replace(" ", "").ToLower();
         }
 
         public class HiddenItem : StringItem
@@ -240,10 +233,7 @@ namespace Jackett.Common.Models.IndexerConfig
             public string SiteKey { get; set; }
             public string Value { get; set; }
             public string Cookie { get; set; }
-            public StringItem()
-            {
-                ItemType = ConfigurationData.ItemType.InputString;
-            }
+            public StringItem() => ItemType = ItemType.InputString;
         }
 
         public class RecaptchaItem : StringItem
@@ -253,26 +243,20 @@ namespace Jackett.Common.Models.IndexerConfig
             public RecaptchaItem()
             {
                 Version = "2";
-                ItemType = ConfigurationData.ItemType.Recaptcha;
+                ItemType = ItemType.Recaptcha;
             }
         }
 
         public class BoolItem : Item
         {
             public bool Value { get; set; }
-            public BoolItem()
-            {
-                ItemType = ConfigurationData.ItemType.InputBool;
-            }
+            public BoolItem() => ItemType = ItemType.InputBool;
         }
 
         public class ImageItem : Item
         {
             public byte[] Value { get; set; }
-            public ImageItem()
-            {
-                ItemType = ConfigurationData.ItemType.DisplayImage;
-            }
+            public ImageItem() => ItemType = ItemType.DisplayImage;
         }
 
         public class CheckboxItem : Item

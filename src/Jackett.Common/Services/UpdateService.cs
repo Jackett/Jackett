@@ -58,10 +58,7 @@ namespace Jackett.Common.Services
             return new FileInfo(location.LocalPath).FullName;
         }
 
-        public void StartUpdateChecker()
-        {
-            Task.Factory.StartNew(UpdateWorkerThread);
-        }
+        public void StartUpdateChecker() => Task.Factory.StartNew(UpdateWorkerThread);
 
         public void CheckForUpdatesNow()
         {
@@ -81,10 +78,7 @@ namespace Jackett.Common.Services
             }
         }
 
-        private bool AcceptCert(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
-        {
-            return true;
-        }
+        private bool AcceptCert(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) => true;
 
         private async Task CheckForUpdates()
         {
@@ -183,18 +177,11 @@ namespace Jackett.Common.Services
             }
         }
 
-        private string GetUpdaterPath(string tempDirectory)
-        {
-            if (variant == Variants.JackettVariant.CoreMacOs || variant == Variants.JackettVariant.CoreLinuxAmdx64 ||
-                variant == Variants.JackettVariant.CoreLinuxArm32 || variant == Variants.JackettVariant.CoreLinuxArm64)
-            {
-                return Path.Combine(tempDirectory, "Jackett", "JackettUpdater");
-            }
-            else
-            {
-                return Path.Combine(tempDirectory, "Jackett", "JackettUpdater.exe");
-            }
-        }
+        private string GetUpdaterPath(string tempDirectory) =>
+            variant == Variants.JackettVariant.CoreMacOs || variant == Variants.JackettVariant.CoreLinuxAmdx64 ||
+            variant == Variants.JackettVariant.CoreLinuxArm32 || variant == Variants.JackettVariant.CoreLinuxArm64
+                ? Path.Combine(tempDirectory, "Jackett", "JackettUpdater")
+                : Path.Combine(tempDirectory, "Jackett", "JackettUpdater.exe");
 
         private string GetCurrentVersion()
         {
@@ -251,7 +238,7 @@ namespace Jackett.Common.Services
         {
             var variants = new Variants();
             var artifactFileName = variants.GetArtifactFileName(variant);
-            var targetAsset = assets.Where(a => a.Browser_download_url.EndsWith(artifactFileName, StringComparison.OrdinalIgnoreCase) && artifactFileName.Length > 0).FirstOrDefault();
+            var targetAsset = assets.FirstOrDefault(a => a.Browser_download_url.EndsWith(artifactFileName, StringComparison.OrdinalIgnoreCase) && artifactFileName.Length > 0);
 
             if (targetAsset == null)
             {

@@ -23,13 +23,13 @@ namespace Jackett.Common.Indexers
             "https://torrentheaven.myfqdn.info/",
         };
 
-        private string IndexUrl { get { return SiteLink + "index.php"; } }
-        private string LoginCompleteUrl { get { return SiteLink + "index.php?strWebValue=account&strWebAction=login_complete&ancestry=verify"; } }
+        private string IndexUrl => SiteLink + "index.php";
+        private string LoginCompleteUrl => SiteLink + "index.php?strWebValue=account&strWebAction=login_complete&ancestry=verify";
 
         private new ConfigurationDataCaptchaLogin configData
         {
-            get { return (ConfigurationDataCaptchaLogin)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataCaptchaLogin)base.configData;
+            set => base.configData = value;
         }
 
         public TorrentHeaven(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)

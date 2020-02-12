@@ -19,15 +19,15 @@ namespace Jackett.Common.Indexers
 {
     public class TorrentSyndikat : BaseWebIndexer
     {
-        private string SearchUrl { get { return SiteLink + "browse.php"; } }
-        private string LoginUrl { get { return SiteLink + "eing2.php"; } }
-        private string CaptchaUrl { get { return SiteLink + "simpleCaptcha.php?numImages=1"; } }
+        private string SearchUrl => SiteLink + "browse.php";
+        private string LoginUrl => SiteLink + "eing2.php";
+        private string CaptchaUrl => SiteLink + "simpleCaptcha.php?numImages=1";
         private readonly TimeZoneInfo germanyTz;
 
         private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
         {
-            get { return (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData;
+            set => base.configData = value;
         }
 
         public TorrentSyndikat(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
@@ -121,11 +121,8 @@ namespace Jackett.Common.Indexers
 
             var result2 = await RequestLoginAndFollowRedirect(LoginUrl, pairs, result1.Cookies, true, null, null, true);
 
-            await ConfigureIfOK(result2.Cookies, result2.Content.Contains("/logout.php"), () =>
-            {
-                var errorMessage = result2.Content;
-                throw new ExceptionWithConfigData(errorMessage, configData);
-            });
+            await ConfigureIfOK(result2.Cookies, result2.Content.Contains("/logout.php"),
+                () => throw new ExceptionWithConfigData(result2.Content, configData));
             return IndexerConfigurationStatus.RequiresTesting;
         }
 

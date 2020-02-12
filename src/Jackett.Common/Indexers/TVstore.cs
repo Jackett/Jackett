@@ -19,18 +19,18 @@ namespace Jackett.Common.Indexers
     public class TVstore : BaseWebIndexer
     {
 
-        private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
-        private string LoginPageUrl { get { return SiteLink + "login.php?returnto=%2F"; } }
-        private string SearchUrl { get { return SiteLink + "torrent/br_process.php"; } }
-        private string DownloadUrl { get { return SiteLink + "torrent/download.php"; } }
-        private string BrowseUrl { get { return SiteLink + "torrent/browse.php"; } }
+        private string LoginUrl => SiteLink + "takelogin.php";
+        private string LoginPageUrl => SiteLink + "login.php?returnto=%2F";
+        private string SearchUrl => SiteLink + "torrent/br_process.php";
+        private string DownloadUrl => SiteLink + "torrent/download.php";
+        private string BrowseUrl => SiteLink + "torrent/browse.php";
         private readonly List<SeriesDetail> series = new List<SeriesDetail>();
         private readonly Regex _searchStringRegex = new Regex(@"(.+?)S0?(\d+)(E0?(\d+))?$", RegexOptions.IgnoreCase);
 
         private new ConfigurationDataTVstore configData
         {
-            get { return (ConfigurationDataTVstore)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataTVstore)base.configData;
+            set => base.configData = value;
         }
 
         public TVstore(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)
@@ -69,10 +69,8 @@ namespace Jackett.Common.Indexers
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, referer: SiteLink);
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("Főoldal"), () =>
-            {
-                throw new ExceptionWithConfigData("Error while trying to login with: Username: " + configData.Username.Value +
-                                                  " Password: " + configData.Password.Value, configData);
-            });
+                                    throw new ExceptionWithConfigData("Error while trying to login with: Username: " + configData.Username.Value +
+                                                                      " Password: " + configData.Password.Value, configData));
 
             return IndexerConfigurationStatus.RequiresTesting;
         }

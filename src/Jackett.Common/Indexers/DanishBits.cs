@@ -19,8 +19,8 @@ namespace Jackett.Common.Indexers
 
         private new ConfigurationDataUserPasskey configData
         {
-            get { return (ConfigurationDataUserPasskey)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataUserPasskey)base.configData;
+            set => base.configData = value;
         }
 
         public DanishBits(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps)

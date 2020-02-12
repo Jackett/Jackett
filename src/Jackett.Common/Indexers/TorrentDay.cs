@@ -18,9 +18,9 @@ namespace Jackett.Common.Indexers
 {
     public class TorrentDay : BaseWebIndexer
     {
-        private string StartPageUrl { get { return SiteLink + "login.php"; } }
-        private string LoginUrl { get { return SiteLink + "tak3login.php"; } }
-        private string SearchUrl { get { return SiteLink + "t.json"; } }
+        private string StartPageUrl => SiteLink + "login.php";
+        private string LoginUrl => SiteLink + "tak3login.php";
+        private string SearchUrl => SiteLink + "t.json";
 
         public override string[] LegacySiteLinks { get; protected set; } = new string[] {
             "https://torrentday.com/",
@@ -47,8 +47,8 @@ namespace Jackett.Common.Indexers
 
         private new ConfigurationDataRecaptchaLogin configData
         {
-            get { return (ConfigurationDataRecaptchaLogin)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataRecaptchaLogin)base.configData;
+            set => base.configData = value;
         }
 
         public TorrentDay(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)

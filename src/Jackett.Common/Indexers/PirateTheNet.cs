@@ -18,16 +18,16 @@ namespace Jackett.Common.Indexers
 {
     public class PirateTheNet : BaseWebIndexer
     {
-        private string SearchUrl { get { return SiteLink + "torrentsutils.php"; } }
-        private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
-        private string CaptchaUrl { get { return SiteLink + "simpleCaptcha.php?numImages=1"; } }
+        private string SearchUrl => SiteLink + "torrentsutils.php";
+        private string LoginUrl => SiteLink + "takelogin.php";
+        private string CaptchaUrl => SiteLink + "simpleCaptcha.php?numImages=1";
         private readonly TimeZoneInfo germanyTz = TimeZoneInfo.CreateCustomTimeZone("W. Europe Standard Time", new TimeSpan(1, 0, 0), "W. Europe Standard Time", "W. Europe Standard Time");
         private readonly List<string> categories = new List<string>() { "1080P", "720P", "BDRip", "BluRay", "BRRip", "DVDR", "DVDRip", "FLAC", "MP3", "MP4", "Packs", "R5", "Remux", "TVRip", "WebRip" };
 
         private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
         {
-            get { return (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData;
+            set => base.configData = value;
         }
 
         public PirateTheNet(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)

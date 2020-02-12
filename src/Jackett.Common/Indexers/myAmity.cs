@@ -17,13 +17,13 @@ namespace Jackett.Common.Indexers
 {
     public class myAmity : BaseWebIndexer
     {
-        private string LoginUrl { get { return SiteLink + "account-login.php"; } }
-        private string BrowseUrl { get { return SiteLink + "torrents-search.php"; } }
+        private string LoginUrl => SiteLink + "account-login.php";
+        private string BrowseUrl => SiteLink + "torrents-search.php";
 
         private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
         {
-            get { return (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData;
+            set => base.configData = value;
         }
 
         public myAmity(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)

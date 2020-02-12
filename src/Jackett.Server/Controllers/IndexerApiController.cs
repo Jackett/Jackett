@@ -146,10 +146,7 @@ namespace Jackett.Server.Controllers
         [HttpDelete]
         [TypeFilter(typeof(RequiresIndexer))]
         [Route("{indexerid}")]
-        public void Delete()
-        {
-            IndexerService.DeleteIndexer(CurrentIndexer.ID);
-        }
+        public void Delete() => IndexerService.DeleteIndexer(CurrentIndexer.ID);
 
         // TODO
         // This should go to ServerConfigurationController

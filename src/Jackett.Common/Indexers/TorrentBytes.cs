@@ -17,13 +17,13 @@ namespace Jackett.Common.Indexers
 {
     public class TorrentBytes : BaseWebIndexer
     {
-        private string BrowseUrl { get { return SiteLink + "browse.php"; } }
-        private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
+        private string BrowseUrl => SiteLink + "browse.php";
+        private string LoginUrl => SiteLink + "takelogin.php";
 
         private new ConfigurationDataBasicLogin configData
         {
-            get { return (ConfigurationDataBasicLogin)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataBasicLogin)base.configData;
+            set => base.configData = value;
         }
 
         public TorrentBytes(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
