@@ -144,6 +144,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HamsterStudio
  * HD Dolby
  * Kinozal
+ * Korsar
  * LostFilm.tv
  * Marine Tracker
  * Metal Tracker
