@@ -32,7 +32,15 @@ $(document).ready(function () {
 	        return opts.fn(this);
 	    else
 	        return opts.inverse(this);
-	});
+    });
+
+    Handlebars.registerHelper('if_in', function(elem, list, opts) {
+        if(list.indexOf(elem) > -1) {
+            return opts.fn(this);
+        }
+
+        return opts.inverse(this);
+    });
 
     var index = window.location.pathname.indexOf("/UI");
     var pathPrefix = window.location.pathname.substr(0, index);
@@ -608,6 +616,11 @@ function getConfigModalJson(configForm) {
             case "inputbool":
                 itemEntry.value = $el.find(".setup-item-inputbool input").is(":checked");
                 break;
+            case "inputcheckbox":
+                itemEntry.values = [];
+                $el.find(".setup-item-inputcheckbox input:checked").each(function () {
+                  itemEntry.values.push($(this).val());
+                });
             case "inputselect":
                 itemEntry.value = $el.find(".setup-item-inputselect select").val();
                 break;
@@ -877,7 +890,7 @@ function showSearch(selectedIndexer, query, category) {
         enableCaseInsensitiveFiltering: true,
         nonSelectedText: 'All'
     });
-    
+
 
     if (category !== undefined) {
         searchCategory.val(category.split(","));
@@ -1155,8 +1168,8 @@ function bindUIButtons() {
         var jackett_port = Number($("#jackett-port").val());
         var jackett_basepathoverride = $("#jackett-basepathoverride").val();
         var jackett_external = $("#jackett-allowext").is(':checked');
-        var jackett_update = $("#jackett-allowupdate").is(':checked'); 
-        var jackett_prerelease = $("#jackett-prerelease").is(':checked'); 
+        var jackett_update = $("#jackett-allowupdate").is(':checked');
+        var jackett_prerelease = $("#jackett-prerelease").is(':checked');
         var jackett_logging = $("#jackett-logging").is(':checked');
         var jackett_omdb_key = $("#jackett-omdbkey").val();
         var jackett_omdb_url = $("#jackett-omdburl").val();

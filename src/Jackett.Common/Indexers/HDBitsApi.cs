@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
-using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
@@ -17,9 +17,9 @@ namespace Jackett.Common.Indexers
     {
         private string APIUrl { get { return SiteLink + "api/"; } }
 
-        private new ConfigurationDataUserPasskey configData
+        private new ConfigurationDataHDBitsApi configData
         {
-            get { return (ConfigurationDataUserPasskey)base.configData; }
+            get { return (ConfigurationDataHDBitsApi)base.configData; }
             set { base.configData = value; }
         }
 
@@ -32,7 +32,7 @@ namespace Jackett.Common.Indexers
                 client: wc,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataUserPasskey())
+                configData: new ConfigurationDataHDBitsApi())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
@@ -96,6 +96,26 @@ namespace Jackett.Common.Indexers
                 foreach (var cat in categories)
                 {
                     requestData["category"].Add(new JValue(cat));
+                }
+            }
+
+            if (configData.Codecs.Values.Length > 0)
+            {
+                requestData["codec"] = new JArray();
+
+                foreach (var codec in configData.Codecs.Values)
+                {
+                    requestData["codec"].Add(new JValue(int.Parse(codec)));
+                }
+            }
+
+            if (configData.Mediums.Values.Length > 0)
+            {
+                requestData["medium"] = new JArray();
+
+                foreach (var medium in configData.Mediums.Values)
+                {
+                    requestData["medium"].Add(new JValue(int.Parse(medium)));
                 }
             }
 

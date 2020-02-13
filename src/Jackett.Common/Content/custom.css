@@ -55,6 +55,14 @@ body {
     max-width: 255px;
 }
 
+.setup-item-inputcheckbox label {
+    padding: 0 1.5em;
+}
+
+.setup-item-inputcheckbox input {
+    height: 20px;
+}
+
 .setup-item-inputbool input {
     max-width: 100px;
     height: 20px;
@@ -277,7 +285,7 @@ table td.fit{
 
 .tooltip-inner img {
     max-width: 250px;
-    height: auto;      
+    height: auto;
 }
 
 .type-public {

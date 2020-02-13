@@ -16,6 +16,7 @@ namespace Jackett.Common.Models.IndexerConfig
         {
             InputString,
             InputBool,
+            InputCheckbox,
             InputSelect,
             DisplayImage,
             DisplayInfo,
@@ -83,6 +84,11 @@ namespace Jackett.Common.Models.IndexerConfig
                     case ItemType.InputBool:
                         ((BoolItem)item).Value = arrItem.Value<bool>("value");
                         break;
+                    case ItemType.InputCheckbox:
+                        var values = arrItem.Value<JArray>("values");
+                        if (values != null)
+                            ((CheckboxItem)item).Values = values.Values<string>().ToArray();
+                        break;
                     case ItemType.InputSelect:
                         ((SelectItem)item).Value = arrItem.Value<string>("value");
                         break;
@@ -130,6 +136,15 @@ namespace Jackett.Common.Models.IndexerConfig
                     case ItemType.InputBool:
                         jObject["value"] = ((BoolItem)item).Value;
                         break;
+                    case ItemType.InputCheckbox:
+                        jObject["values"] = new JArray(((CheckboxItem)item).Values);
+                        jObject["options"] = new JObject();
+
+                        foreach (var option in ((CheckboxItem)item).Options)
+                        {
+                            jObject["options"][option.Key] = option.Value;
+                        }
+                        break;
                     case ItemType.InputSelect:
                         jObject["value"] = ((SelectItem)item).Value;
                         jObject["options"] = new JObject();
@@ -166,7 +181,7 @@ namespace Jackett.Common.Models.IndexerConfig
             if (!forDisplay)
             {
                 properties = properties
-                    .Where(p => p.ItemType == ItemType.HiddenData || p.ItemType == ItemType.InputBool || p.ItemType == ItemType.InputString || p.ItemType == ItemType.InputSelect || p.ItemType == ItemType.Recaptcha || p.ItemType == ItemType.DisplayInfo)
+                    .Where(p => p.ItemType == ItemType.HiddenData || p.ItemType == ItemType.InputBool || p.ItemType == ItemType.InputString || p.ItemType == ItemType.InputCheckbox || p.ItemType == ItemType.InputSelect || p.ItemType == ItemType.Recaptcha || p.ItemType == ItemType.DisplayInfo)
                     .ToList();
             }
 
@@ -257,6 +272,19 @@ namespace Jackett.Common.Models.IndexerConfig
             public ImageItem()
             {
                 ItemType = ConfigurationData.ItemType.DisplayImage;
+            }
+        }
+
+        public class CheckboxItem : Item
+        {
+            public string[] Values { get; set; }
+
+            public Dictionary<string, string> Options { get; }
+
+            public CheckboxItem(Dictionary<string, string> options)
+            {
+                ItemType = ItemType.InputCheckbox;
+                Options = options;
             }
         }
 
