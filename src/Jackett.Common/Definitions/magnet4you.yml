@@ -1,12 +1,12 @@
 ---
-  site: torrent4you
-  name: Torrent4You
-  description: "Torrent4You is a Public torrent storage cache"
+  site: magnet4you
+  name: Magnet4You
+  description: "Magnet4You is a Public magnet search engine"
   language: en-us
   type: public
   encoding: UTF-8
   links:
-    - http://torrent4you.me/
+    - http://magnet4you.me/
 
   caps:
     categories:
@@ -20,56 +20,50 @@
   settings:
     - name: info
       type: info
-      default: Torrent4You does not use categories. In your software Indexer settings, set the category to 100001.
+      default: Magnet4You does not use categories. In your software Indexer settings, set the category to 100001.
     - name: sort
       type: select
       label: Sort requested from site
-      default: "created"
+      default: "uploaded"
       options:
-        "created": "created"
+        "uploaded": "created"
         "seed": "seeders"
         "size": "size"
         "title": "name"
-
-  download:
-    selector: form[action^="../torrents/"]
-    attribute: action
 
   search:
     paths:
       - path: "{{ if .Keywords }}search.php?s={{ .Keywords }}&sort={{ .Config.sort }}{{else}}browse.php?sort={{ .Config.sort }}{{end}}"
 
     rows:
-      selector: table.tb4 > tbody > tr:has(form)
+      selector: table.tb4 > tbody > tr:has(a[href^="magnet:?xt="])
 
     fields:
       category:
         text: 1
       title:
-        selector: td:nth-child(1) a
+        selector: a[href^="magnet/"]
       details:
-        selector: td:nth-child(1) a
+        selector: a[href^="magnet/"]
         attribute: href
-      download:
-        selector: td:nth-child(1) a
+      magnet:
+        selector: a[href^="magnet:?xt="]
         attribute: href
       date:
-        selector: td:nth-child(3)
+        selector: td:nth-child(2)
         filters:
           - name: timeago
       size:
-        selector: td:nth-child(4)
+        selector: td:nth-child(3)
         filters:
           - name: replace
             args: ["Undefined", "0 B"]
-          - name: replace
-            args: ["s", ""]
       seeders:
-        selector: td:nth-child(6)
+        selector: td:nth-child(5)
       leechers:
-        selector: td:nth-child(7)
+        selector: td:nth-child(6)
       grabs:
-        selector: td:nth-child(8)
+        selector: td:nth-child(7)
         filters:
           - name: replace
             args: ["K", "000"]
