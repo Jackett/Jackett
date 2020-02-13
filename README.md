@@ -455,6 +455,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TV-Vault
  * TVstore
  * Twilight Torrents
+ * Twilights Zoom
  * u-torrents (SceneFZ)
  * UHDBits
  * UnionGang
