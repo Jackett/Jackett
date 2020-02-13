@@ -26,6 +26,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 <details> <summary> <b> Supported Public Trackers </b> </summary>
 
  * 1337x
+ * 7torrents
  * ACG.RIP
  * ACGsou
  * Anidex
