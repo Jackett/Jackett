@@ -355,6 +355,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Orpheus
  * Ourbits (HDPter)
  * P2PBG
+ * P2PElite
  * Partis
  * PassThePopcorn (PTP)
  * Peers.FM
