@@ -888,5 +888,5 @@
           img[src="styles/images/tor_silver.gif"]: 0.5
           "*": 1
       uploadvolumefactor:
-        case:
-          "*": 1
+        text: 1
+# TorrentPier

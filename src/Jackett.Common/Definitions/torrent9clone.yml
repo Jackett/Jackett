@@ -56,8 +56,10 @@
   search:
     paths:
       - path: "{{ if .Keywords }}/recherche/{{ .Keywords }}{{else}}/top{{end}}"
+
     rows:
       selector: div.table-responsive > table tbody tr
+
     fields:
       site_date:
         selector: td:nth-child(1) a
@@ -90,7 +92,7 @@
         selector: td:nth-child(1) a
         attribute: href
       date:
-        text: "now"
+        text: now
       size:
         selector: td:nth-child(2)
       seeders:
@@ -104,6 +106,7 @@
         selector: td:nth-child(4)
         optional: true
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
+# engine n/a

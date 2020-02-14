@@ -74,8 +74,10 @@
     # https://torrentparadise.org/recent
     paths:
       - path: "{{ if .Keywords }}search.php?f={{ .Keywords }}{{ else }}recent{{ end }}"
+
     rows:
       selector: table.table-bordered > tbody > tr.table-default
+
     fields:
       category:
         selector: td:nth-child(1) a
@@ -102,6 +104,7 @@
       leechers:
         selector: td:nth-child(6)
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
+# engine n/a
