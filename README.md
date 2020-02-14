@@ -33,6 +33,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Anime Tosho
  * AniRena
  * AudioBook Bay (ABB)
+ * Badass Torrents
  * BigFANGroup
  * BitRu
  * BitTorrent.AM
