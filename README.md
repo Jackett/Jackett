@@ -420,6 +420,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TenYardTorrents (TYT)
  * TheAudioScene
  * TheEmpire (TE)
+ * The Falling Angels (TFA)
  * The Geeks
  * The Horror Charnel (THC)
  * The New Retro
