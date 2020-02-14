@@ -46,7 +46,7 @@
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
     error:
-      - selector: table[border="0"][cellspacing="0"][cellpadding="10"] tr td font[color="orange"]
+      - selector: table.main:contains("Aanmelden mislukt")
     test:
       path: /
       selector: a[href="logout.php"]
