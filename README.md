@@ -260,6 +260,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * EbookParadijs
  * Ebooks-Shares
  * EfectoDoppler
+ * EggMeOn
  * Elite-Tracker
  * Empornium (EMP)
  * eShareNet
