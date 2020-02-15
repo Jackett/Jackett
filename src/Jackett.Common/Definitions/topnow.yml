@@ -6,6 +6,8 @@
   type: public
   encoding: UTF-8
   links:
+    - https://topnow.se/
+  legacylinks:
     - http://topnow.se/
 
   caps:

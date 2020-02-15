@@ -6,9 +6,10 @@
   type: semi-private
   encoding: windows-1250
   links:
-    - http://sktorrent.eu/
+    - https://sktorrent.eu/
   legacylinks:
     - http://sktorrent.eu/torrent/
+    - http://sktorrent.eu/
 
   caps:
     categorymappings:

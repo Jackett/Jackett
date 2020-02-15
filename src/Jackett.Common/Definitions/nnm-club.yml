@@ -6,10 +6,11 @@
   type: public
   encoding: windows-1251
   links:
-    - http://nnmclub.to/
+    - https://nnmclub.to/
   legacylinks:
     - https://nnm-club.name/
     - https://nnm-club.me/
+    - http://nnmclub.to/
 
   settings:
     - name: striprussian

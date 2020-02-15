@@ -6,6 +6,8 @@
   type: public
   encoding: UTF-8
   links:
+    - https://pirateiro.com/
+  legacylinks:
     - http://pirateiro.com/
 
   caps:

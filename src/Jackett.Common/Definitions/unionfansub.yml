@@ -6,6 +6,8 @@
   type: semi-private
   encoding: UTF-8
   links:
+    - https://torrent.unionfansub.com/
+  legacylinks:
     - http://torrent.unionfansub.com/
 
   caps:

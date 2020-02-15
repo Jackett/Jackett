@@ -6,6 +6,8 @@
   type: public
   encoding: UTF-8
   links:
+    - https://magnet4you.me/
+  legacylinks:
     - http://magnet4you.me/
 
   caps:
