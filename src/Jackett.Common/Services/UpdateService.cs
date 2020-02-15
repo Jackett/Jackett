@@ -106,11 +106,11 @@ namespace Jackett.Common.Services
             forceupdatecheck = true;
 
             var isWindows = System.Environment.OSVersion.Platform != PlatformID.Unix;
-            //if (Debugger.IsAttached)
-            //{
-            //    logger.Info($"Skipping checking for new releases as the debugger is attached.");
-            //    return;
-            //}
+            if (Debugger.IsAttached)
+            {
+                logger.Info($"Skipping checking for new releases as the debugger is attached.");
+                return;
+            }
 
             var trayIsRunning = false;
             if (isWindows)
@@ -144,9 +144,10 @@ namespace Jackett.Common.Services
                     var latestRelease = releases.OrderByDescending(o => o.Created_at).First();
                     var currentVersion = $"v{GetCurrentVersion()}";
 
-                    if (1==1)
+                    if (latestRelease.Name != currentVersion && currentVersion != "v0.0.0.0")
                     {
-
+                        logger.Info($"New release found. Current: {currentVersion} New: {latestRelease.Name}");
+                        logger.Info($"Downloading release {latestRelease.Name} It could take a while...");
                         try
                         {
                             var tempDir = await DownloadRelease(latestRelease.Assets, isWindows, latestRelease.Name);
@@ -258,7 +259,7 @@ namespace Jackett.Common.Services
                 return null;
             }
 
-            var url = @"https://github.com/junglebus/Jackett/releases/download/v0.13.100/Jackett.Binaries.Windows.zip";
+            var url = targetAsset.Browser_download_url;
 
             var data = await client.GetBytes(SetDownloadHeaders(new WebRequest() { Url = url, EmulateBrowser = true, Type = RequestType.GET }));
 
