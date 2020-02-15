@@ -53,14 +53,16 @@
       - path: torrents.php
     inputs:
       $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
-      title: "{{ .Query.Keywords }}"
+      title: "{{ .Keywords }}"
       order_by: time
       order_way: desc
       action: basic
       searchsubmit: 1
+
     rows:
       # exclude redbar torrents
       selector: table#torrent_table > tbody > tr[class^="torrent row"]
+
     fields:
       download:
         selector: a[href^="torrents.php?action=download&id="]
@@ -74,7 +76,7 @@
         attribute: href
         filters:
           - name: regexp
-            args: "\\[(\\d+?)\\]"
+            args: "(\\d+)]=1"
       details:
         selector: a[href^="torrents.php?id="]
         attribute: href
@@ -107,8 +109,8 @@
         selector: td:nth-child(9)
       downloadvolumefactor:
         case:
-          "img[alt=\"Freeleech\"]": "0"
-          "*": "1"
+          "img[alt=\"Freeleech\"]": 0
+          "*": 1
       uploadvolumefactor:
-        case:
-          "*": "1"
+        text: 1
+# luminance
