@@ -6,9 +6,10 @@
   type: private
   encoding: UTF-8
   links:
-    - http://hdtorrents.xyz/
+    - https://hdtorrents.xyz/
   legacylinks:
     - http://hdtorrents.it/
+    - http://hdtorrents.xyz/
 
   caps:
     categorymappings:
