@@ -22,7 +22,7 @@
       - {id: 15, cat: TV/SD, desc: "Folgen SD"}
       - {id: 16, cat: TV/HD, desc: "Folgen HD"}
       - {id: 17, cat: TV/SD, desc: "Staffeln SD"}
-      - {id: 18, cat: TV/HD, desc: "Staffeln SD"}
+      - {id: 18, cat: TV/HD, desc: "Staffeln HD"}
       - {id: 19, cat: Audio/Lossless, desc: "Flac"}
       - {id: 20, cat: Audio/MP3, "Packs Mp3"}
       - {id: 21, cat: Audio/MP3, desc: "Mixe Mp3"}
@@ -94,10 +94,9 @@
     paths:
       - path: index.php
     inputs:
-      #$raw: "&categories={{ range .Categories }}{{.}};{{end}}"
-      $raw: "&categories={{ join .Categories \";\"}}{{end}}"
-      search: "{{ .Query.Keywords }}"
       page: "torrents"
+      search: "{{ .Keywords }}"
+      category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{else}}0{{end}}"
       options: 0
       active: 0
     rows:
