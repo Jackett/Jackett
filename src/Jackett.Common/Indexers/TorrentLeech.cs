@@ -44,9 +44,11 @@ namespace Jackett.Common.Indexers
                 downloadBase: "https://www.torrentleech.org/download/",
                 configData: new ConfigurationDataRecaptchaLogin("For best results, change the 'Default Number of Torrents per Page' setting to the maximum in your profile on the TorrentLeech webpage."))
         {
-            Encoding = Encoding.GetEncoding("iso-8859-1");
+            Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
+            TorznabCaps.SupportsImdbMovieSearch = true;
+            TorznabCaps.SupportsImdbTVSearch = true;
 
             AddCategoryMapping(8, TorznabCatType.MoviesSD); // cam
             AddCategoryMapping(9, TorznabCatType.MoviesSD); //ts
@@ -180,8 +182,13 @@ namespace Jackett.Common.Indexers
             var searchString = query.GetQueryString();
             searchString = Regex.Replace(searchString, @"(^|\s)-", " "); // remove dashes at the beginning of keywords as they exclude search strings (see issue #3096)
             var searchUrl = SearchUrl;
+            var imdbId = ParseUtil.GetFullImdbID(query.ImdbID);
 
-            if (!string.IsNullOrWhiteSpace(searchString))
+            if (imdbId != null)
+            {
+                searchUrl += "imdbID/" + imdbId + "/";
+            }
+            else if (!string.IsNullOrWhiteSpace(searchString))
             {
                 searchUrl += "query/" + WebUtility.UrlEncode(searchString) + "/";
             }
