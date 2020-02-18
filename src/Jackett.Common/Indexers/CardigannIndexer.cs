@@ -118,6 +118,14 @@ namespace Jackett.Common.Indexers
                         case "text":
                             item = new StringItem { Value = Setting.Default };
                             break;
+                        case "multi-select":
+                            if (Setting.Options == null)
+                            {
+                                throw new Exception("Options must be given for the 'multi-select' type.");
+                            }
+
+                            item = new CheckboxItem(Setting.Options) { Values = Setting.Defaults };
+                            break;
                         case "select":
                             if (Setting.Options == null)
                             {
@@ -1235,7 +1243,7 @@ namespace Jackett.Common.Indexers
             variables[".Query.Keywords"] = string.Join(" ", KeywordTokens);
             variables[".Keywords"] = applyFilters((string)variables[".Query.Keywords"], Search.Keywordsfilters);
 
-            // TODO: prepare queries first and then send them parallel 
+            // TODO: prepare queries first and then send them parallel
             var SearchPaths = Search.Paths;
             foreach (var SearchPath in SearchPaths)
             {

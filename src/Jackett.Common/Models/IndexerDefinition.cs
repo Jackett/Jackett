@@ -83,6 +83,7 @@ namespace Jackett.Common.Models
         public string Type { get; set; }
         public string Label { get; set; }
         public string Default { get; set; }
+        public string[] Defaults { get; set; }
         public Dictionary<string, string> Options { get; set; }
     }
 
