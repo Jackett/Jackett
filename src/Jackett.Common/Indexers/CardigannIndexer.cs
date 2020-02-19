@@ -209,21 +209,30 @@ namespace Jackett.Common.Indexers
             variables[".Config.sitelink"] = SiteLink;
             foreach (var Setting in Definition.Settings)
             {
-                string value;
                 var item = configData.GetDynamic(Setting.Name);
-                if (item.GetType() == typeof(BoolItem))
+
+                // CheckBox item is an array of strings
+                if (item.GetType() == typeof(CheckboxItem))
                 {
-                    value = (((BoolItem)item).Value == true ? "true" : "");
-                }
-                else if (item.GetType() == typeof(SelectItem))
-                {
-                    value = ((SelectItem)item).Value;
+                    variables[".Config." + Setting.Name] = ((CheckboxItem)item).Values;
                 }
                 else
                 {
-                    value = ((StringItem)item).Value;
+                    string value;
+                    if (item.GetType() == typeof(BoolItem))
+                    {
+                        value = (((BoolItem)item).Value == true ? "true" : "");
+                    }
+                    else if (item.GetType() == typeof(SelectItem))
+                    {
+                        value = ((SelectItem)item).Value;
+                    }
+                    else
+                    {
+                        value = ((StringItem)item).Value;
+                    }
+                    variables[".Config." + Setting.Name] = value;
                 }
-                variables[".Config." + Setting.Name] = value;
             }
             return variables;
         }
