@@ -34,7 +34,7 @@
 
     <link rel="stylesheet" type="text/css" href="../bootstrap/bootstrap.min.css?changed=2017083001">
     <link rel="stylesheet" type="text/css" href="../animate.css?changed=2017083001">
-    <link rel="stylesheet" type="text/css" href="../custom.css?changed=20200102" media="only screen and (min-device-width: 480px)">
+    <link rel="stylesheet" type="text/css" href="../custom.css?changed=20200220" media="only screen and (min-device-width: 480px)">
     <link rel="stylesheet" type="text/css" href="../custom_mobile.css?changed=20200102" media="only screen and (max-device-width: 480px)">
     <link rel="stylesheet" type="text/css" href="../css/jquery.dataTables.min.css?changed=2017083001">
     <link rel="stylesheet" type="text/css" href="../css/bootstrap-multiselect.css?changed=2017083001" />
@@ -52,11 +52,11 @@
         </div>
         <hr />
 
-        <div id="can-upgrade-from-mono" hidden class="alert alert-info" role="alert"> 
+        <div id="can-upgrade-from-mono" hidden class="alert alert-info" role="alert">
             <strong>Standalone version of Jackett is now available - Mono not required</strong> <br>
-            To upgrade to the standalone version of Jackett, <a href="https://github.com/Jackett/Jackett#install-on-linux-amdx64" target="_blank" class="alert-link">click here</a> for install instructions. 
-            Upgrading is straight forward, simply install the standalone version and your indexers/configuration will carry over. 
-            Benefits include: increased performance, improved stability and no dependency on Mono. 
+            To upgrade to the standalone version of Jackett, <a href="https://github.com/Jackett/Jackett#install-on-linux-amdx64" target="_blank" class="alert-link">click here</a> for install instructions.
+            Upgrading is straight forward, simply install the standalone version and your indexers/configuration will carry over.
+            Benefits include: increased performance, improved stability and no dependency on Mono.
         </div>
 
         <div class="pull-right">
@@ -233,6 +233,19 @@
             {{else}}
             <input type="checkbox" data-id="{{id}}" class="form-control" />
             {{/if}}
+        </div>
+    </script>
+    <script id="setup-item-inputcheckbox" type="text/x-handlebars-template">
+        <div class="setup-item-inputcheckbox">
+            {{#each options}}
+            <div class="checkbox"><label>
+            {{#if_in @key ../values}}
+            <input type="checkbox" data-id="{{../../id}}" class="form-control" value="{{@key}}" checked />
+            {{else}}
+            <input type="checkbox" data-id="{{../../id}}" class="form-control" value="{{@key}}" />
+            {{/if_in}}
+            {{this}}</label></div>
+            {{/each}}
         </div>
     </script>
     <script id="setup-item-inputselect" type="text/x-handlebars-template">
@@ -678,6 +691,6 @@
     </script>
 
     <script type="text/javascript" src="../libs/api.js?changed=2017083001"></script>
-    <script type="text/javascript" src="../custom.js?changed=20200102"></script>
+    <script type="text/javascript" src="../custom.js?changed=20200220"></script>
 </body>
 </html>

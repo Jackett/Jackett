@@ -118,6 +118,14 @@ namespace Jackett.Common.Indexers
                         case "text":
                             item = new StringItem { Value = Setting.Default };
                             break;
+                        case "multi-select":
+                            if (Setting.Options == null)
+                            {
+                                throw new Exception("Options must be given for the 'multi-select' type.");
+                            }
+
+                            item = new CheckboxItem(Setting.Options) { Values = Setting.Defaults };
+                            break;
                         case "select":
                             if (Setting.Options == null)
                             {
@@ -201,21 +209,30 @@ namespace Jackett.Common.Indexers
             variables[".Config.sitelink"] = SiteLink;
             foreach (var Setting in Definition.Settings)
             {
-                string value;
                 var item = configData.GetDynamic(Setting.Name);
-                if (item.GetType() == typeof(BoolItem))
+
+                // CheckBox item is an array of strings
+                if (item.GetType() == typeof(CheckboxItem))
                 {
-                    value = (((BoolItem)item).Value == true ? "true" : "");
-                }
-                else if (item.GetType() == typeof(SelectItem))
-                {
-                    value = ((SelectItem)item).Value;
+                    variables[".Config." + Setting.Name] = ((CheckboxItem)item).Values;
                 }
                 else
                 {
-                    value = ((StringItem)item).Value;
+                    string value;
+                    if (item.GetType() == typeof(BoolItem))
+                    {
+                        value = (((BoolItem)item).Value == true ? "true" : "");
+                    }
+                    else if (item.GetType() == typeof(SelectItem))
+                    {
+                        value = ((SelectItem)item).Value;
+                    }
+                    else
+                    {
+                        value = ((StringItem)item).Value;
+                    }
+                    variables[".Config." + Setting.Name] = value;
                 }
-                variables[".Config." + Setting.Name] = value;
             }
             return variables;
         }
@@ -1235,7 +1252,7 @@ namespace Jackett.Common.Indexers
             variables[".Query.Keywords"] = string.Join(" ", KeywordTokens);
             variables[".Keywords"] = applyFilters((string)variables[".Query.Keywords"], Search.Keywordsfilters);
 
-            // TODO: prepare queries first and then send them parallel 
+            // TODO: prepare queries first and then send them parallel
             var SearchPaths = Search.Paths;
             foreach (var SearchPath in SearchPaths)
             {
