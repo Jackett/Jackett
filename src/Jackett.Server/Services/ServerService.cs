@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -198,48 +198,52 @@ namespace Jackett.Server.Services
                         Environment.Exit(2);
                     }
 
-                    // check if the certificate store was initialized using Mono.Security.X509.X509StoreManager.TrustedRootCertificates.Count
-                    try
+                    if (monoVersionO.Major < 6)
                     {
-                        var monoSecurity = Assembly.Load("Mono.Security");
-                        var monoX509StoreManager = monoSecurity.GetType("Mono.Security.X509.X509StoreManager");
-                        if (monoX509StoreManager != null)
+                        //We don't check on Mono 6 since Mono.Security was removed
+                        // check if the certificate store was initialized using Mono.Security.X509.X509StoreManager.TrustedRootCertificates.Count
+                        try
                         {
-                            var TrustedRootCertificatesProperty = monoX509StoreManager.GetProperty("TrustedRootCertificates");
-                            var TrustedRootCertificates = (ICollection)TrustedRootCertificatesProperty.GetValue(null);
-
-                            logger.Info("TrustedRootCertificates count: " + TrustedRootCertificates.Count);
-
-                            if (TrustedRootCertificates.Count == 0)
+                            var monoSecurity = Assembly.Load("Mono.Security");
+                            var monoX509StoreManager = monoSecurity.GetType("Mono.Security.X509.X509StoreManager");
+                            if (monoX509StoreManager != null)
                             {
-                                var CACertificatesFiles = new string[] {
+                                var TrustedRootCertificatesProperty = monoX509StoreManager.GetProperty("TrustedRootCertificates");
+                                var TrustedRootCertificates = (ICollection)TrustedRootCertificatesProperty.GetValue(null);
+
+                                logger.Info("TrustedRootCertificates count: " + TrustedRootCertificates.Count);
+
+                                if (TrustedRootCertificates.Count == 0)
+                                {
+                                    var CACertificatesFiles = new string[] {
                                     "/etc/ssl/certs/ca-certificates.crt", // Debian based
                                     "/etc/pki/tls/certs/ca-bundle.c", // RedHat based
                                     "/etc/ssl/ca-bundle.pem", // SUSE
                                     };
 
-                                var notice = "The mono certificate store is not initialized.<br/>\n";
-                                var logSpacer = "                     ";
-                                var CACertificatesFile = CACertificatesFiles.Where(f => File.Exists(f)).FirstOrDefault();
-                                var CommandRoot = "curl -sS https://curl.haxx.se/ca/cacert.pem | cert-sync /dev/stdin";
-                                var CommandUser = "curl -sS https://curl.haxx.se/ca/cacert.pem | cert-sync --user /dev/stdin";
-                                if (CACertificatesFile != null)
-                                {
-                                    CommandRoot = "cert-sync " + CACertificatesFile;
-                                    CommandUser = "cert-sync --user " + CACertificatesFile;
+                                    var notice = "The mono certificate store is not initialized.<br/>\n";
+                                    var logSpacer = "                     ";
+                                    var CACertificatesFile = CACertificatesFiles.Where(f => File.Exists(f)).FirstOrDefault();
+                                    var CommandRoot = "curl -sS https://curl.haxx.se/ca/cacert.pem | cert-sync /dev/stdin";
+                                    var CommandUser = "curl -sS https://curl.haxx.se/ca/cacert.pem | cert-sync --user /dev/stdin";
+                                    if (CACertificatesFile != null)
+                                    {
+                                        CommandRoot = "cert-sync " + CACertificatesFile;
+                                        CommandUser = "cert-sync --user " + CACertificatesFile;
+                                    }
+                                    notice += logSpacer + "Please run the following command as root:<br/>\n";
+                                    notice += logSpacer + "<pre>" + CommandRoot + "</pre><br/>\n";
+                                    notice += logSpacer + "If you don't have root access or you're running MacOS, please run the following command as the jackett user (" + Environment.UserName + "):<br/>\n";
+                                    notice += logSpacer + "<pre>" + CommandUser + "</pre>";
+                                    _notices.Add(notice);
+                                    logger.Error(Regex.Replace(notice, "<.*?>", string.Empty));
                                 }
-                                notice += logSpacer + "Please run the following command as root:<br/>\n";
-                                notice += logSpacer + "<pre>" + CommandRoot + "</pre><br/>\n";
-                                notice += logSpacer + "If you don't have root access or you're running MacOS, please run the following command as the jackett user (" + Environment.UserName + "):<br/>\n";
-                                notice += logSpacer + "<pre>" + CommandUser + "</pre>";
-                                _notices.Add(notice);
-                                logger.Error(Regex.Replace(notice, "<.*?>", string.Empty));
                             }
                         }
-                    }
-                    catch (Exception e)
-                    {
-                        logger.Error(e, "Error while chekcing the mono certificate store");
+                        catch (Exception e)
+                        {
+                            logger.Error(e, "Error while chekcing the mono certificate store");
+                        }
                     }
                 }
 
