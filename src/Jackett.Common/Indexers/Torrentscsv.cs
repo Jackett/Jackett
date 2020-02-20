@@ -78,7 +78,7 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();
             if (string.IsNullOrEmpty(searchString))
-                searchString = "%";
+                searchString = "2020";
 
             var queryCollection = new NameValueCollection();
 
