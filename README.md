@@ -144,7 +144,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * DXP (Deaf Experts)
  * EniaHD
  * ExtremlymTorrents
- * Film-Paleis
  * Gay-Torrents.net
  * Gay-Torrents.org
  * HamsterStudio
@@ -271,6 +270,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * FeedUrNeed (FuN)
  * Femdomcult
  * FileList (FL)
+ * Film-Paleis
  * FinVip
  * FocusX
  * FreeTorrent
