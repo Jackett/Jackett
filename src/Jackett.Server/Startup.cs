@@ -48,7 +48,6 @@ namespace Jackett.Server
                             options.AccessDeniedPath = new PathString("/UI/Login");
                             options.LogoutPath = new PathString("/UI/Logout");
                             options.Cookie.Name = "Jackett";
-                            options.Cookie.SameSite = SameSiteMode.None;
                         });
 
 
