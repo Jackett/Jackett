@@ -7,7 +7,7 @@
   encoding: UTF-8
   followredirect: true
   links:
-    - https://www.torrent9.so/
+    - https://www.torrent9.pl/
 
   legacylinks:
     - https://www.torrents9.pw/
@@ -31,6 +31,7 @@
     - https://www.t9.re/
     - https://www.t9.vc/
     - https://www.torrent9.ai/
+    - https://www.torrent9.so/
 
   caps:
     categorymappings:
