@@ -277,11 +277,10 @@ stages:
             buildDescription: Windows
             imageName: windows-latest
             artifactName: Jackett.Binaries.Windows.zip
-          # Enable once ChromeDriver is deployed to macOS image https://github.com/actions/virtual-environments/issues/7
-          # macOS:
-          #   buildDescription: macOS
-          #   imageName: macOS-latest
-          #   artifactName: Jackett.Binaries.macOS.tar.gz
+          macOS:
+            buildDescription: macOS
+            imageName: macOS-latest
+            artifactName: Jackett.Binaries.macOS.tar.gz
           LinuxAmdx64:
             buildDescription: Linux AMD x64
             imageName: ubuntu-latest
