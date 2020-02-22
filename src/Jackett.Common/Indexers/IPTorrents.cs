@@ -10,7 +10,6 @@ using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
-using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 
@@ -18,8 +17,6 @@ namespace Jackett.Common.Indexers
 {
     public class IPTorrents : BaseWebIndexer
     {
-        private string LoginUrl => SiteLink + "login.php";
-        private string TakeLoginUrl => SiteLink + "take_login.php";
         private string BrowseUrl => SiteLink + "t";
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
@@ -45,9 +42,9 @@ namespace Jackett.Common.Indexers
             "https://ipt.world/",
         };
 
-        private new ConfigurationDataRecaptchaLogin configData
+        private new ConfigurationDataCookie configData
         {
-            get => (ConfigurationDataRecaptchaLogin)base.configData;
+            get => (ConfigurationDataCookie)base.configData;
             set => base.configData = value;
         }
 
@@ -60,7 +57,7 @@ namespace Jackett.Common.Indexers
                 client: wc,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataRecaptchaLogin())
+                configData: new ConfigurationDataCookie())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
@@ -142,83 +139,26 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(84, TorznabCatType.XXXImageset, "XXX/Pics/Wallpapers");
         }
 
-        public override async Task<ConfigurationData> GetConfigurationForSetup()
-        {
-            var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
-            CQ cq = loginPage.Content;
-            var captcha = cq.Find(".g-recaptcha");
-            if (captcha.Any())
-            {
-                var result = configData;
-                result.CookieHeader.Value = loginPage.Cookies;
-                result.Captcha.SiteKey = captcha.Attr("data-sitekey");
-                result.Captcha.Version = "2";
-                return result;
-            }
-            else
-            {
-                var result = new ConfigurationDataBasicLogin
-                {
-                    SiteLink = { Value = configData.SiteLink.Value },
-                    Instructions = { Value = configData.Instructions.Value },
-                    Username = { Value = configData.Username.Value },
-                    Password = { Value = configData.Password.Value },
-                    CookieHeader = { Value = loginPage.Cookies }
-                };
-                return result;
-            }
-        }
-
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-            var pairs = new Dictionary<string, string> {
-                { "username", configData.Username.Value },
-                { "password", configData.Password.Value },
-                { "g-recaptcha-response", configData.Captcha.Value }
-            };
 
-            if (!string.IsNullOrWhiteSpace(configData.Captcha.Cookie))
+            CookieHeader = configData.Cookie.Value;
+            try
             {
-                CookieHeader = configData.Captcha.Cookie;
-                try
-                {
-                    var results = await PerformQuery(new TorznabQuery());
-                    if (!results.Any())
-                        throw new Exception("Your cookie did not work");
+                var results = await PerformQuery(new TorznabQuery());
+                if (!results.Any())
+                    throw new Exception("Your cookie did not work");
 
-                    IsConfigured = true;
-                    SaveConfig();
-                    return IndexerConfigurationStatus.Completed;
-                }
-                catch (Exception e)
-                {
-                    IsConfigured = false;
-                    throw new Exception("Your cookie did not work: " + e.Message);
-                }
+                IsConfigured = true;
+                SaveConfig();
+                return IndexerConfigurationStatus.Completed;
             }
-
-            var request = new Utils.Clients.WebRequest()
+            catch (Exception e)
             {
-                Url = TakeLoginUrl,
-                Type = RequestType.POST,
-                Referer = SiteLink,
-                Encoding = Encoding,
-                PostData = pairs
-            };
-            var response = await webclient.GetString(request);
-            var firstCallCookies = response.Cookies;
-            // Redirect to ? then to /t
-            await FollowIfRedirect(response, request.Url, null, firstCallCookies);
-
-            await ConfigureIfOK(firstCallCookies, response.Content.Contains("/lout.php"), () =>
-            {
-                CQ dom = response.Content;
-                var messageEl = dom["body > div"].First();
-                var errorMessage = messageEl.Any() ? messageEl.Text().Trim() : response.Content;
-                throw new ExceptionWithConfigData(errorMessage, configData);
-            });
-            return IndexerConfigurationStatus.RequiresTesting;
+                IsConfigured = false;
+                throw new Exception("Your cookie did not work: " + e.Message);
+            }
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
