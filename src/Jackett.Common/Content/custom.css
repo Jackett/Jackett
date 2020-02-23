@@ -183,6 +183,12 @@ hr {
     border-bottom:   1px solid #ddd;
 }
 
+.jackettlog-narrowcol {
+    width: 1px;
+    white-space: nowrap;
+    vertical-align: top;
+}
+
 .jackettlogWarn {
     background-color: #FFFF8E !important;
 }
@@ -210,11 +216,15 @@ pre {
     font-size: 13px;
     line-height: 1.42857143;
     color: #333;
-    word-break: break-all;
-    word-wrap: break-word;
     background-color: transparent;
     border: 0;
     border-radius: 0;
+    word-break: normal;
+    white-space: pre-wrap;       /* Since CSS 2.1 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
 }
 
 .modal-open .modal {
