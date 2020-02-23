@@ -240,9 +240,10 @@ function displayUnconfiguredIndexersList() {
 		                    doNotify("Configuration failed: " + data.error, "danger", "glyphicon glyphicon-alert");
 		                }
 			        }).fail(function (data) {
-                if(data.responseJSON.error !== undefined) {
-                  var indexEnd = 2048 - "https://github.com/Jackett/Jackett/issues/new?title=[".length - indexerId.length - "] ".length - " (Config)".length; // keep url <= 2k #5104
-                  doNotify("An error occurred while configuring this indexer<br /><b>" + data.responseJSON.error.substring(0, indexEnd) + "</b><br /><i><a href=\"https://github.com/Jackett/Jackett/issues/new?title=[" + indexerId + "] " + data.responseJSON.error.substring(0, indexEnd) + " (Config)\" target=\"_blank\">Click here to open an issue on GitHub for this indexer.</a><i>", "danger", "glyphicon glyphicon-alert", false);
+                if (data.responseJSON.error !== undefined) {
+                  var errTitle = "[" + indexerId + "] " + data.responseJSON.error + " (Config)";
+                  doNotify("An error occured while configuring " + indexerId + " indexer<br /><b>" + data.responseJSON.error + "</b><br />" +
+                    generateGitHubLink(errTitle, data.responseJSON.stacktrace), "danger", "glyphicon glyphicon-alert", false);
                 } else {
                   doNotify("An error occurred while configuring this indexer, is Jackett server running ?", "danger", "glyphicon glyphicon-alert");
                 }
@@ -447,29 +448,31 @@ function updateTestState(id, state, message, parent)
         dt.draw();
 }
 
-function testIndexer(id, notifyResult) {
+function testIndexer(indexerId, notifyResult) {
     var indexers = $('#indexers');
-    updateTestState(id, "inprogres", null, indexers);
+    updateTestState(indexerId, "inprogres", null, indexers);
 
     if (notifyResult)
-        doNotify("Test started for " + id, "info", "glyphicon glyphicon-transfer");
-    api.testIndexer(id, function (data) {
+        doNotify("Test started for " + indexerId, "info", "glyphicon glyphicon-transfer");
+    api.testIndexer(indexerId, function (data) {
         if (data == undefined) {
-            updateTestState(id, "success", "Test successful", indexers);
+            updateTestState(indexerId, "success", "Test successful", indexers);
             if (notifyResult)
-                doNotify("Test successful for " + id, "success", "glyphicon glyphicon-ok");
+                doNotify("Test successful for " + indexerId, "success", "glyphicon glyphicon-ok");
         } else if (data.result == "error") {
-            updateTestState(id, "error", data.error, indexers);
+            updateTestState(indexerId, "error", data.error, indexers);
             if (notifyResult)
-                doNotify("Test failed for " + id + ": \n" + data.error, "danger", "glyphicon glyphicon-alert");
+                doNotify("Test failed for " + indexerId + ": \n" + data.error, "danger", "glyphicon glyphicon-alert");
         }
     }).fail(function (data) {
-      updateTestState(id, "error", data.error, indexers);
-      if(data.responseJSON.error !== undefined && notifyResult) {
-        var indexEnd = 2048 - "https://github.com/Jackett/Jackett/issues/new?title=[".length - id.length - "] ".length - " (Test)".length; // keep url <= 2k #5104
-        doNotify("An error occurred while testing this indexer<br /><b>" + data.responseJSON.error.substring(0, indexEnd) + "</b><br /><i><a href=\"https://github.com/Jackett/Jackett/issues/new?title=[" + id + "] " + data.responseJSON.error.substring(0, indexEnd) + " (Test)\" target=\"_blank\">Click here to open an issue on GitHub for this indexer.</a><i>", "danger", "glyphicon glyphicon-alert", false);
+      updateTestState(indexerId, "error", data.error, indexers);
+      if (data.responseJSON.error !== undefined && notifyResult) {
+        var errTitle = "[" + indexerId + "] " + data.responseJSON.error + " (Test)";
+        doNotify("An error occured while testing " + indexerId + " indexer<br /><b>" + data.responseJSON.error + "</b><br />" +
+          generateGitHubLink(errTitle, data.responseJSON.stacktrace), "danger", "glyphicon glyphicon-alert", false);
       } else {
-        doNotify("An error occurred while testing indexers, please take a look at indexers with failed test for more informations.", "danger", "glyphicon glyphicon-alert");
+        doNotify("An error occured while testing indexers, please take a look at indexers with failed test for more informations.",
+          "danger", "glyphicon glyphicon-alert");
       }
     });
 }
@@ -677,9 +680,10 @@ function populateSetupForm(indexerId, name, config, caps, link, alternativesitel
                 doNotify("Configuration failed: " + data.error, "danger", "glyphicon glyphicon-alert");
             }
         }).fail(function (data) {
-          if(data.responseJSON.error !== undefined) {
-            var indexEnd = 2048 - "https://github.com/Jackett/Jackett/issues/new?title=[".length - indexerId.length - "] ".length - " (Config)".length; // keep url <= 2k #5104
-            doNotify("An error occurred while updating this indexer<br /><b>" + data.responseJSON.error.substring(0, indexEnd) + "</b><br /><i><a href=\"https://github.com/Jackett/Jackett/issues/new?title=[" + indexerId + "] " + data.responseJSON.error.substring(0, indexEnd) + " (Config)\" target=\"_blank\">Click here to open an issue on GitHub for this indexer.</a><i>", "danger", "glyphicon glyphicon-alert", false);
+          if (data.responseJSON.error !== undefined) {
+            var errTitle = "[" + indexerId + "] " + data.responseJSON.error + " (Config)";
+            doNotify("An error occured while updating " + indexerId + " indexer<br /><b>" + data.responseJSON.error + "</b><br />" +
+              generateGitHubLink(errTitle, data.responseJSON.stacktrace), "danger", "glyphicon glyphicon-alert", false);
           } else {
             doNotify("An error occurred while updating this indexer, request to Jackett server failed, is server running ?", "danger", "glyphicon glyphicon-alert");
           }
@@ -1297,4 +1301,33 @@ function proxyWarning(input) {
     {
         $('#proxy-warning').hide();
     }
+}
+
+function generateGitHubLink(errTitle, errBody) {
+    var link = "https://github.com/Jackett/Jackett/issues/new?title=" + encodeURIComponent(errTitle);
+    if (errBody) {
+      // total URL length must be < 32k (Chrome + Firefox) https://stackoverflow.com/a/417184
+      if (errBody.length > 30000) {
+        errBody = errBody.substring(0, 30000) + "\n ... truncated";
+      }
+      var body = "**Please use the search bar** at the top of the page and make sure you are not creating an already " +
+        "submitted issue. Check closed issues as well, because your issue may have already been fixed.\n\n" +
+        "Please read our [Contributing Guidelines](https://github.com/Jackett/Jackett/blob/master/CONTRIBUTING.md) before " +
+        "submitting your issue to ensure a prompt response to your bug.\n\n" +
+        "### Environment\n" +
+        "* **OS**:\n" +
+        "* **.Net Runtime**: [.Net-Core/.Net-Framework/Mono]\n" +
+        "* **.Net Version**:\n" +
+        "* **Jackett Version**:\n" +
+        "* **Last Working Jackett Version**:\n" +
+        "* **Are you using a proxy or VPN?** [yes/no]\n\n" +
+        "### Description\n" +
+        "[List steps to reproduce the error and details on what happens and what you expected to happen]\n\n" +
+        "### Logged Error Messages\n" +
+        "```\n" + errTitle + "\n" + errBody + "\n```\n\n" +
+        "### Screenshots\n" +
+        "[Place any screenshots of the issue here if needed]";
+      link += "&body=" + encodeURIComponent(body);
+    }
+    return "<i><a href=\"" + link + "\" target=\"_blank\">Click here to open an issue on GitHub</a><i>";
 }
