@@ -127,6 +127,8 @@ namespace Jackett.Server.Services
                     logger.Error(e, "Error while reading the issue file");
                 }
 
+                logger.Info("Using Proxy: " + (string.IsNullOrEmpty(config.ProxyUrl) ? "No" : config.ProxyType.ToString()));
+
                 var monotype = Type.GetType("Mono.Runtime");
                 if (monotype != null && !DotNetCoreUtil.IsRunningOnDotNetCore)
                 {
