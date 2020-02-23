@@ -51,7 +51,12 @@ $(document).ready(function () {
 });
 
 function openSearchIfNecessary() {
-    const hashArgs = location.hash.substring(1).split('&').reduce((prev, item) => Object.assign({ [item.split('=')[0]]: (item.split('=').length < 2 ? undefined : decodeURIComponent(item.split('=')[1])) }, prev), {});
+    const hashArgs = location.hash.substring(1).split('&').reduce((prev, item) =>
+      Object.assign({
+        [item.split('=')[0]]: (item.split('=').length < 2 ?
+          undefined :
+          decodeURIComponent(item.split('=')[1].replace(/\+/g,'%20')))
+      }, prev), {});
     if ("search" in hashArgs) {
         showSearch(hashArgs.tracker, hashArgs.search, hashArgs.category);
     }
@@ -775,7 +780,7 @@ function updateReleasesRow(row)
 }
 
 function showSearch(selectedIndexer, query, category) {
-    var selectedIndexers = []
+    var selectedIndexers = [];
     if (selectedIndexer)
         selectedIndexers = selectedIndexer.split(",");
     $('#select-indexer-modal').remove();
@@ -842,7 +847,11 @@ function showSearch(selectedIndexer, query, category) {
             Tracker: releaseDialog.find('#searchTracker').val()
         };
 
-        window.location.hash = $.param({ search: queryObj.Query, tracker: queryObj.Tracker.join(","), category: queryObj.Category.join(",") });
+        window.location.hash = Object.entries({
+          search: encodeURIComponent(queryObj.Query).replace(/%20/g,'+'),
+          tracker: queryObj.Tracker.join(","),
+          category: queryObj.Category.join(",")
+        }).map(([k, v], i) => k + '=' + v).join('&');
 
         $('#jackett-search-perform').html($('#spinner').html());
         $('#searchResults div.dataTables_filter input').val("");
