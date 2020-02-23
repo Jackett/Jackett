@@ -34,8 +34,8 @@
 
     <link rel="stylesheet" type="text/css" href="../bootstrap/bootstrap.min.css?changed=2017083001">
     <link rel="stylesheet" type="text/css" href="../animate.css?changed=2017083001">
-    <link rel="stylesheet" type="text/css" href="../custom.css?changed=20200220" media="only screen and (min-device-width: 480px)">
-    <link rel="stylesheet" type="text/css" href="../custom_mobile.css?changed=20200102" media="only screen and (max-device-width: 480px)">
+    <link rel="stylesheet" type="text/css" href="../custom.css?changed=20200223" media="only screen and (min-device-width: 480px)">
+    <link rel="stylesheet" type="text/css" href="../custom_mobile.css?changed=20200223" media="only screen and (max-device-width: 480px)">
     <link rel="stylesheet" type="text/css" href="../css/jquery.dataTables.min.css?changed=2017083001">
     <link rel="stylesheet" type="text/css" href="../css/bootstrap-multiselect.css?changed=2017083001" />
     <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css?changed=2017083001">
@@ -616,16 +616,16 @@
                         <table class="dataTable compact cell-border hover stripe">
                             <thead>
                                 <tr>
-                                    <th style="width: 200px">When</th>
-                                    <th style="width: 80px">Level</th>
+                                    <th>Date</th>
+                                    <th>Level</th>
                                     <th>Message</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {{#each logs}}
                                 <tr class="jackettlog{{Level}}">
-                                    <td>{{dateFormat When}}</td>
-                                    <td>{{Level}}</td>
+                                    <td class="jackettlog-narrowcol">{{dateFormat When}}</td>
+                                    <td class="jackettlog-narrowcol">{{Level}}</td>
                                     <td><pre>{{Message}}</pre></td>
                                 </tr>
                                 {{/each}}
