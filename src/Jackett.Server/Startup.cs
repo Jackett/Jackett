@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using Autofac;
@@ -115,7 +116,8 @@ namespace Jackett.Server
 #if NET461
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime applicationLifetime)
         {
-            applicationLifetime.ApplicationStopping.Register(OnShutdown);
+            applicationLifetime.ApplicationStarted.Register(OnStarted);
+            applicationLifetime.ApplicationStopped.Register(OnStopped);
             Helper.applicationLifetime = applicationLifetime;
             app.UseResponseCompression();
 
@@ -154,7 +156,8 @@ namespace Jackett.Server
 #else
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime applicationLifetime)
         {
-            applicationLifetime.ApplicationStopping.Register(OnShutdown);
+            applicationLifetime.ApplicationStarted.Register(OnStarted);
+            applicationLifetime.ApplicationStopped.Register(OnStopped);
             Helper.applicationLifetime = applicationLifetime;
             app.UseResponseCompression();
 
@@ -197,11 +200,12 @@ namespace Jackett.Server
         }
 #endif
 
-
-
-        private void OnShutdown()
+        private static void OnStarted()
         {
-            //this code is called when the application stops
+            var elapsed = (DateTime.Now - Process.GetCurrentProcess().StartTime).TotalSeconds;
+            Helper.Logger.Info($"Jackett startup finished in {elapsed:0.000} s");
         }
+
+        private static void OnStopped() => Helper.Logger.Info($"Jackett stopped");
     }
 }
