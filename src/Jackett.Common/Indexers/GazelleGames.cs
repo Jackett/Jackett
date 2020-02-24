@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -216,7 +216,7 @@ namespace Jackett.Common.Indexers
             var i = 0;
             foreach (var cat in MapTorznabCapsToTrackers(query))
             {
-                queryCollection.Add("artistcheck["+i+"]", cat);
+                queryCollection.Add("artistcheck[" + i + "]", cat);
                 i++;
             }
 
@@ -230,13 +230,13 @@ namespace Jackett.Common.Indexers
 
             try
             {
-                string RowsSelector = ".torrent_table > tbody > tr";
+                var RowsSelector = ".torrent_table > tbody > tr";
 
                 var SearchResultParser = new HtmlParser();
                 var SearchResultDocument = SearchResultParser.ParseDocument(results.Content);
                 var Rows = SearchResultDocument.QuerySelectorAll(RowsSelector);
 
-                bool stickyGroup = false;
+                var stickyGroup = false;
                 string CategoryStr;
                 ICollection<int> GroupCategory = null;
                 string GroupTitle = null;
@@ -278,14 +278,14 @@ namespace Jackett.Common.Indexers
                         var qDLLink = Row.QuerySelector("a[href^=\"torrents.php?action=download\"]");
                         var qTime = Row.QuerySelector("span.time");
                         // some users have an extra colum (8), we can't use nth-last-child
-                        var qSize = Row.QuerySelector("td:nth-child(4)"); 
+                        var qSize = Row.QuerySelector("td:nth-child(4)");
                         var qGrabs = Row.QuerySelector("td:nth-child(5)");
                         var qSeeders = Row.QuerySelector("td:nth-child(6)");
                         var qLeechers = Row.QuerySelector("td:nth-child(7)");
                         var qFreeLeech = Row.QuerySelector("strong.freeleech_label");
                         var qNeutralLeech = Row.QuerySelector("strong.neutralleech_label");
                         var RowTitle = Row.GetAttribute("title");
-                        
+
                         var Time = qTime.GetAttribute("title");
                         release.PublishDate = DateTime.SpecifyKind(DateTime.ParseExact(Time, "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture), DateTimeKind.Unspecified).ToLocalTime();
                         release.Category = GroupCategory;

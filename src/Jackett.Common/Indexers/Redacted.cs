@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Jackett.Common.Indexers.Abstract;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
@@ -17,7 +17,8 @@ namespace Jackett.Common.Indexers
                 logger: logger,
                 protectionService: protectionService,
                 webClient: webClient,
-                supportsFreeleechTokens: true
+                supportsFreeleechTokens: true,
+                has2Fa: true
                 )
         {
             Language = "en-us";

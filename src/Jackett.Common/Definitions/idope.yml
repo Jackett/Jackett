@@ -35,14 +35,28 @@
       type: info
       label: ITorrents Note
       default: Without the itorrents option only magnet links will be provided.
+    - name: sort
+      type: select
+      label: Sort requested from site (Applies only to search with Keywords)
+      default: "-3"
+      options:
+        "-3": "created desc"
+        "-1": "seeders desc"
+        "-2": "size desc"
+        "3": "created asc"
+        "1": "seeders asc"
+        "2": "size asc"
 
   search:
     paths:
       # present trending results if there are no search parms supplied
       # sort torrent-list by age in descending order
-      - path: "{{if .Keywords}}torrent-list/{{ .Keywords}}?&o=-3&c={{range .Categories }}{{.}}{{end}}{{else}}browse.html{{end}}"
+      - path: "{{ if .Keywords }}torrent-list/{{ .Keywords }}?o={{ .Config.sort }}&c={{ range .Categories }}{{.}}{{end}}{{else}}browse.html{{end}}"
+      - path: "{{ if .Keywords }}torrent-list/{{ .Keywords }}?p=2&o={{ .Config.sort }}&c={{ range .Categories }}{{.}}{{end}}{{else}}browse.html?&p=2{{end}}"
+
     rows:
       selector: div.resultdiv
+
     fields:
       title:
         selector: div.resultdivtop a div.resultdivtopname
@@ -96,10 +110,11 @@
       seeders:
         selector: div.resultdivbotton div.resultseed div.resultdivbottonseed
       leechers:
-        text: "0"
+        text: 0
       files:
         selector: div.resultdivbotton div.resultfile div.resultdivbottonfiles
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
+# engine n/a

@@ -43,6 +43,15 @@
       type: checkbox
       label: "Only include verifed content in results"
       default: false
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "latest"
+      options:
+        "latest": "created desc"
+        "oldest": "created asc"
+        "seeders": "seeders"
+        "size": "size"
     - name: info
       type: info
       label: A note about TP2
@@ -54,15 +63,23 @@
     filters:
       - name: replace
         args: ["https://mylink.me.uk/?url=" ,""]
+        args: ["https://mylink.cx/?url=" ,""]
       - name: urldecode
 
   search:
     paths:
-      - path: "?t={{if .Keywords}}{{.Keywords}}{{else}}test{{end}}&orderby=latest{{if .Config.filter-verified }}&safe=on{{else}}{{end}}"
+      - path: "?t={{ if .Keywords }}{{ .Keywords }}{{else}}test{{end}}&orderby={{ .Config.sort }}{{ if .Config.filter-verified }}&safe=on{{else}}{{end}}"
         followredirect: true
+
     rows:
       selector: "#similarfiles div:has(a[href^=\"/t0-\"])"
+
     fields:
+      category:
+        text: "Other"
+      category:
+        optional: true
+        selector: div > span:nth-child(1) > span
       title:
         selector: span > a
       details:
@@ -71,20 +88,22 @@
       download:
         selector: span > a
         attribute: href
-      category:
-        text: "Other"
-      category:
-        optional: true
-        selector: div > span:nth-child(1) > span
       date:
         selector: div > span:nth-child(4)
       size:
         selector: div > span:nth-child(5)
       seeders:
         selector: div > span:nth-child(2)
+        filters:
+          - name: replace
+            args: ["N/A", "0"]
       leechers:
         selector: div > span:nth-child(3)
+        filters:
+          - name: replace
+            args: ["N/A", "0"]
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
+# engine n/a

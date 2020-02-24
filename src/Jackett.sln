@@ -1,19 +1,18 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27004.2008
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29519.181
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BE7B0C8A-6144-47CD-821E-B09BA1B7BADE}"
 	ProjectSection(SolutionItems) = preProject
-		..\appveyor.yml = ..\appveyor.yml
-		..\build.cake = ..\build.cake
+		..\.editorconfig = ..\.editorconfig
 		..\Installer.iss = ..\Installer.iss
 		..\LICENSE = ..\LICENSE
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jackett.Service", "Jackett.Service\Jackett.Service.csproj", "{BF611F7B-4658-4CB8-AA9E-0736FADAA3BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jackett.Service", "Jackett.Service\Jackett.Service.csproj", "{BF611F7B-4658-4CB8-AA9E-0736FADAA3BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jackett.Tray", "Jackett.Tray\Jackett.Tray.csproj", "{FF9025B1-EC14-4AA9-8081-9F69C5E35B63}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jackett.Tray", "Jackett.Tray\Jackett.Tray.csproj", "{FF9025B1-EC14-4AA9-8081-9F69C5E35B63}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jackett.Updater", "Jackett.Updater\Jackett.Updater.csproj", "{A61E311A-6F8B-4497-B5E4-2EA8994C7BD8}"
 EndProject
@@ -24,6 +23,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jackett.Common", "Jackett.Common\Jackett.Common.csproj", "{6B854A1B-9A90-49C0-BC37-9A35C75BCA73}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jackett.Server", "Jackett.Server\Jackett.Server.csproj", "{84182782-EDBC-4342-ADA6-72B7694D0862}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jackett.IntegrationTests", "Jackett.IntegrationTests\Jackett.IntegrationTests.csproj", "{0250DEAA-ED2E-4F72-BE76-D92D80B40080}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,6 +60,10 @@ Global
 		{84182782-EDBC-4342-ADA6-72B7694D0862}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84182782-EDBC-4342-ADA6-72B7694D0862}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84182782-EDBC-4342-ADA6-72B7694D0862}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0250DEAA-ED2E-4F72-BE76-D92D80B40080}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0250DEAA-ED2E-4F72-BE76-D92D80B40080}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0250DEAA-ED2E-4F72-BE76-D92D80B40080}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0250DEAA-ED2E-4F72-BE76-D92D80B40080}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

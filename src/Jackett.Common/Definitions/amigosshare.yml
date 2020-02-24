@@ -21,96 +21,92 @@
       type: info
       label: "Search results"
       default: "Set <b>Exibição De Torrents</b> to <b>Lista</b> in your <b>Minhas Configurações</b>.<br />Using <b>Capas</b> is not supported and will return 0 results."
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "id"
+      options:
+        "id": "created"
+        "seeders": "seeders"
+        "size": "size"
+        "name": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
 
   caps:
     categorymappings:
       - {id: 107, cat: XXX, desc: "Adultos: Gay"}
+      - {id: 75, cat: XXX, desc: "Adultos: Hentai"}
       - {id: 108, cat: XXX, desc: "Adultos: Transex/Female"}
       - {id: 74, cat: XXX, desc: "Adultos: XXX"}
-      - {id: 75, cat: XXX, desc: "Adultos: Hentai"}
       - {id: 69, cat: TV/Anime, desc: "Anime: Anime"}
-      - {id: 118, cat: TV/Anime, desc: "Anime: Séries"}
       - {id: 116, cat: TV/Anime, desc: "Anime: Filmes"}
-      - {id: 21, cat: PC/0day, desc: "Aplicativos: Windows"}
-      - {id: 22, cat: PC/Mac, desc: "Aplicativos: Mac"}
+      - {id: 118, cat: TV/Anime, desc: "Anime: Séries"}
       - {id: 23, cat: PC/Phone-Android, desc: "Aplicativos: Android"}
-      - {id: 25, cat: PC, desc: "Aplicativos: Linux"}
-      - {id: 26, cat: PC/Phone-IOS, desc: "Aplicativos: iPhone"}
       - {id: 27, cat: PC/Phone-IOS, desc: "Aplicativos: iPad"}
+      - {id: 26, cat: PC/Phone-IOS, desc: "Aplicativos: iPhone"}
       - {id: 28, cat: PC/Phone-IOS, desc: "Aplicativos: iPod"}
-      - {id: 71, cat: Books, desc: "Apostila: Cursos"}
+      - {id: 25, cat: PC, desc: "Aplicativos: Linux"}
+      - {id: 22, cat: PC/Mac, desc: "Aplicativos: Mac"}
+      - {id: 21, cat: PC/0day, desc: "Aplicativos: Windows"}
       - {id: 72, cat: Books, desc: "Apostila: Apostila"}
+      - {id: 71, cat: Books, desc: "Apostila: Cursos"}
+      - {id: 121, cat: Audio/Audiobook, desc: "Ebook: Audio-book"}
+      - {id: 112, cat: Books, desc: "Ebook: HQs"}
       - {id: 67, cat: Books, desc: "Ebook: Livros"}
       - {id: 68, cat: Books, desc: "Ebook: Revistas"}
-      - {id: 112, cat: Books, desc: "Ebook: HQs"}
       - {id: 119, cat: Movies, desc: "Filmes:"}
       - {id: 70, cat: XXX, desc: "Fotos: XXX"}
-      - {id: 79, cat: Console/PS4, desc: "Jogos: Ps4"}
+      - {id: 57, cat: Console, desc: "Jogos: Android"}
+      - {id: 52, cat: Console, desc: "Jogos: Dreamcast"}
       - {id: 109, cat: Console, desc: "Jogos: Emulação"}
-      - {id: 47, cat: PC/Games, desc: "Jogos: Pc"}
       - {id: 61, cat: Console, desc: "Jogos: Emuladores e Roms"}
       - {id: 48, cat: PC/Mac, desc: "Jogos: Mac"}
+      - {id: 58, cat: Console/NDS, desc: "Jogos: Nintendo DS"}
+      - {id: 110, cat: Console, desc: "Jogos: Nintendo Switch"}
+      - {id: 47, cat: PC/Games, desc: "Jogos: Pc"}
       - {id: 49, cat: Console, desc: "Jogos: Ps1"}
       - {id: 50, cat: Console, desc: "Jogos: Ps2"}
       - {id: 51, cat: Console/PS3, desc: "Jogos: Ps3"}
-      - {id: 52, cat: Console, desc: "Jogos: Dreamcast"}
+      - {id: 79, cat: Console/PS4, desc: "Jogos: Ps4"}
+      - {id: 82, cat: Console/PSP, desc: "Jogos: PSP"}
+      - {id: 55, cat: Console/Wii, desc: "Jogos: Wii"}
       - {id: 54, cat: Console/Xbox 360, desc: "Jogos: Xbox360"}
       - {id: 56, cat: Console/Xbox, desc: "Jogos: Xbox"}
-      - {id: 55, cat: Console/Wii, desc: "Jogos: Wii"}
-      - {id: 58, cat: Console/NDS, desc: "Jogos: Nintendo DS"}
-      - {id: 110, cat: Console, desc: "Jogos: Nintendo Switch"}
-      - {id: 57, cat: Console, desc: "Jogos: Android"}
-      - {id: 82, cat: Console/PSP, desc: "Jogos: PSP"}
       - {id: 78, cat: Console/Xbox One, desc: "Jogos: Xbox One"}
       - {id: 29, cat: Audio, desc: "Musica: Axé"}
-      - {id: 31, cat: Audio, desc: "Musica: Funk"}
-      - {id: 32, cat: Audio, desc: "Musica: Pagode"}
-      - {id: 33, cat: Audio, desc: "Musica: Hip-Hop"}
-      - {id: 34, cat: Audio, desc: "Musica: Rap"}
-      - {id: 36, cat: Audio, desc: "Musica: Rock"}
-      - {id: 37, cat: Audio, desc: "Musica: Hard Rock"}
       - {id: 38, cat: Audio, desc: "Musica: Blues"}
       - {id: 39, cat: Audio, desc: "Musica: Dance"}
       - {id: 40, cat: Audio, desc: "Musica: Discografia"}
+      - {id: 43, cat: Audio, desc: "Musica: Dubstep"}
       - {id: 41, cat: Audio, desc: "Musica: Erudita"}
       - {id: 42, cat: Audio, desc: "Musica: Forró"}
-      - {id: 43, cat: Audio, desc: "Musica: Dubstep"}
-      - {id: 46, cat: Audio, desc: "Musica: Sertanejo"}
-      - {id: 45, cat: Audio, desc: "Musica: Samba"}
-      - {id: 77, cat: Audio, desc: "Musica: Outros"}
-      - {id: 76, cat: Audio, desc: "Musica: Reggae"}
-      - {id: 83, cat: Audio, desc: "Musica: Gospel"}
-      - {id: 115, cat: Audio, desc: "Musica: POP"}
-      - {id: 114, cat: Audio, desc: "Musica: MPB"}
+      - {id: 31, cat: Audio, desc: "Musica: Funk"}
       - {id: 84, cat: Audio, desc: "Musica: Game (OST)"}
-      - {id: 88, cat: TV, desc: "Series: Musical"}
-      - {id: 86, cat: TV, desc: "Series: Guerra"}
-      - {id: 105, cat: TV, desc: "Series: Biografia"}
-      - {id: 99, cat: TV/Sport, desc: "Series: Esportes"}
-      - {id: 103, cat: TV, desc: "Series: Ficção"}
-      - {id: 102, cat: TV, desc: "Series: Infantil"}
-      - {id: 89, cat: TV, desc: "Series: Nacionais"}
-      - {id: 100, cat: TV, desc: "Series: Policial"}
-      - {id: 98, cat: TV, desc: "Series: Religioso"}
-      - {id: 90, cat: TV, desc: "Series: Suspense"}
-      - {id: 91, cat: TV, desc: "Series: Western"}
-      - {id: 92, cat: TV, desc: "Series: Animação"}
-      - {id: 93, cat: TV, desc: "Series: Clássicos"}
-      - {id: 94, cat: TV, desc: "Series: Comédia"}
-      - {id: 95, cat: TV/Documentary, desc: "Series: Documentário"}
-      - {id: 96, cat: TV, desc: "Series: Drama"}
-      - {id: 97, cat: TV, desc: "Series: Romance"}
-      - {id: 101, cat: TV, desc: "Series: Terror"}
-      - {id: 104, cat: TV, desc: "Series: Ação"}
-      - {id: 24, cat: TV, desc: "Series: Cartoon"}
-      - {id: 19, cat: TV/HD, desc: "Series: HD"}
-      - {id: 20, cat: TV, desc: "Series: Seriados"}
-      - {id: 87, cat: TV, desc: "Series: Aventura"}
+      - {id: 83, cat: Audio, desc: "Musica: Gospel"}
+      - {id: 37, cat: Audio, desc: "Musica: Hard Rock"}
+      - {id: 33, cat: Audio, desc: "Musica: Hip-Hop"}
+      - {id: 114, cat: Audio, desc: "Musica: MPB"}
+      - {id: 77, cat: Audio, desc: "Musica: Outros"}
+      - {id: 32, cat: Audio, desc: "Musica: Pagode"}
+      - {id: 115, cat: Audio, desc: "Musica: POP"}
+      - {id: 34, cat: Audio, desc: "Musica: Rap"}
+      - {id: 76, cat: Audio, desc: "Musica: Reggae"}
+      - {id: 36, cat: Audio, desc: "Musica: Rock"}
+      - {id: 45, cat: Audio, desc: "Musica: Samba"}
+      - {id: 46, cat: Audio, desc: "Musica: Sertanejo"}
+      - {id: 120, cat: TV, desc: "Series:"}
       - {id: 65, cat: TV, desc: "Shows: Show"}
       - {id: 63, cat: TV, desc: "Tv: Aberta"}
       - {id: 62, cat: TV/Sport, desc: "Tv: Esportes"}
       - {id: 64, cat: TV, desc: "Tv: Fechada"}
       - {id: 73, cat: TV, desc: "Video Aula: Video Aula"}
+      - {id: 999, cat: Other, desc: "Error Cat not Found"}
 
     modes:
       search: [q]
@@ -123,7 +119,7 @@
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
-      remember: "yes"
+      remember: yes
     error:
       - selector: div.alert-error
     test:
@@ -152,13 +148,13 @@
         inputs:
           page: 4
     inputs:
-      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
       search: "{{ re_replace .Keywords \"[\\s]+\" \"%\" }}"
       incldead: 1
       freeleech: 0
       lang: 0
-      sort: "id"
-      order: "desc"
+      sort: "{{ .Config.sort }}"
+      order: "{{ .Config.type }}"
     keywordsfilters:
       - name: re_replace
         args: ["([12][0-9]{3})", ""]
@@ -239,7 +235,7 @@
          "[src$=\"/Axe.png\"]": "29"
          "[src$=\"/Funk.png\"]": "31"
          "[src$=\"/Pagode.png\"]": "32"
-         "[src$=\"/Hip_Hop.png\"]": "33"
+         "[src$=\"/HIP_HOP.png\"]": "33"
          "[src$=\"/Rap.png\"]": "34"
          "[src$=\"/Rock.png\"]": "36"
          "[src$=\"/Hard-Rock.png\"]": "37"
@@ -257,29 +253,7 @@
          "[src$=\"/POP.png\"]": "115"
          "[src$=\"/MPB.png\"]": "114"
          "[src$=\"/OST.png\"]": "84"
-         "[src$=\"/Musical.png\"]": "88"
-         "[src$=\"/Guerra.png\"]": "86"
-         "[src$=\"/Biografia.png\"]": "105"
-         "[src$=\"/Esportes.png\"]": "99"
-         "[src$=\"/Ficcao.png\"]": "103"
-         "[src$=\"/Infantil.png\"]": "102"
-         "[src$=\"/Nacionais.png\"]": "89"
-         "[src$=\"/Policial.png\"]": "100"
-         "[src$=\"/Religioso.png\"]": "98"
-         "[src$=\"/Suspense.png\"]": "90"
-         "[src$=\"/Western.png\"]": "91"
-         "[src$=\"/Animacao.png\"]": "92"
-         "[src$=\"/Classicos.png\"]": "93"
-         "[src$=\"/Comedia.png\"]": "94"
-         "[src$=\"/Documentario.png\"]": "95"
-         "[src$=\"/Drama.png\"]": "96"
-         "[src$=\"/Romance.png\"]": "97"
-         "[src$=\"/Terror.png\"]": "101"
-         "[src$=\"/Acao.png\"]": "104"
-         "[src$=\"/Cartoon.png\"]": "24"
-         "[src$=\"/Serieshd.png\"]": "19"
-         "[src$=\"/Seriado.png\"]": "20"
-         "[src$=\"/Aventura.png\"]": "87"
+         "[src$=\"/Seriados.png\"]": "120"
          "[src$=\"/Shows.png\"]": "65"
          "[src$=\"/Aberta.png\"]": "63"
          "[src$=\"/Esporte.png\"]": "62"
@@ -287,6 +261,16 @@
          "[src$=\"/Videoaula.png\"]": "73"
       date:
         text: now
+      date:
+        selector: p:contains("Lançado:")
+        optional: true
+        filters:
+          - name: regexp
+            args: "Lançado: (.+?)$"
+          - name: re_replace
+            args: [" (\\d:)", " 0$1"]
+          - name: dateparse
+            args: "02/01/06 15:04:05"
       size:
         selector: div.list-group-item-content p.m-0 span.badge-info
       seeders:
@@ -297,8 +281,8 @@
         selector: div.list-group-item-controls a:nth-child(3)
       downloadvolumefactor:
         case:
-          "span.badge-success:contains(\"FREE\")": "0"
-          "*": "1"
+          "span.badge-success:contains(\"FREE\")": 0
+          "*": 1
       uploadvolumefactor:
         case:
-          "*": "1"
+          "*": 1

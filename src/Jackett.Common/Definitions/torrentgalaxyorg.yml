@@ -6,7 +6,10 @@
   type: public
   encoding: UTF-8
   links:
+    - https://torrentgalaxy.to/
+  legacylinks:
     - https://torrentgalaxy.org/
+    - https://torrentgalaxy.pw/
 
   caps:
     categorymappings:
@@ -51,19 +54,53 @@
       tv-search: [q, season, ep]
       movie-search: [q]
 
-  settings: []
+  settings:
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "id"
+      options:
+        "id": "created"
+        "seeders": "seeders"
+        "size": "size"
+        "name": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
+
+  login:
+    # https://torrentgalaxy.to/galaxyfence.php?f&dropoff=%2Ftorrents.php%3Fsearch%3DHarry%2BPotter
+    path: galaxyfence.php?f
+    method: form
+    form: form[action="/galaxyfence.php"]
+    inputs:
+      dropoff: /torrents.php
+    captcha:
+      type: image
+      selector: img#captcha
+      input: captcha
+    error:
+      - selector: span:contains("Captcha incorrect")
+    test:
+      path: /
 
   search:
     # https://torrentgalaxy.org/torrents.php?c41=1&search=mercedes+s02e04&lang=0&sort=id&order=desc
     path: torrents.php
     inputs:
-      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-      search: "{{.Keywords}}"
-      lang: "0"
-      sort: "id"
-      order: "desc"
+      $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+      search: "{{ .Keywords }}"
+      lang: 0
+      sort: "{{ .Config.sort }}"
+      order: "{{ .Config.type }}"
+
     rows:
       selector: div[class="tgxtablerow"]
+
     fields:
       title:
         selector: div a[href^="/torrent/"]
@@ -100,6 +137,7 @@
           - name: dateparse 
             args: "02/01/06 15:04"
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
+# engine n/a

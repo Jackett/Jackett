@@ -10,39 +10,40 @@
 
   caps:
     categorymappings:
-      - {id: 201, cat: Movies/HD, desc: "Filme: HD 720P / 1080P"}
-      - {id: 103, cat: Movies/DVD, desc: "Filme: DVD"}
-      - {id: 104, cat: Movies/DVD, desc: "Filme: HD2DVD"}
-      - {id: 137, cat: Audio/Video, desc: "Musik: Video"}
-      - {id: 106, cat: Movies/SD, desc: "Filme: DVDRip"}
-      - {id: 107, cat: Movies/SD, desc: "Filme: BDRip "}
-      - {id: 108, cat: Movies/3D, desc: "Filme: 3D"}
-      - {id: 109, cat: Movies/BluRay, desc: "Filme: Blue Ray"}
-      - {id: 111, cat: Movies/SD, desc: "Filme:  SD"}
-      - {id: 112, cat: Movies/Other, desc: "Filme: TV/HDTV"}
-      - {id: 203, cat: XXX, desc: "Erotik: XXX PDF"}
-      - {id: 116, cat: Console, desc: "Spiele: Konsolen"}
-      - {id: 117, cat: PC/Games, desc: "Spiele: Windows / Mac"}
-      - {id: 126, cat: PC/0day, desc: "Software: Mac / Linux"}
-      - {id: 120, cat: Audio/Other, desc: "Musik: Alben/Sampler "}
-      - {id: 121, cat: TV/SD, desc: "Serien: SD"}
-      - {id: 123, cat: TV/Documentary, desc: "Doku: sonstige"}
-      - {id: 124, cat: Console/Other, desc: "Spiele: sonstige"}
-      - {id: 125, cat: PC/0day, desc: "Software: Windows"}
-      - {id: 129, cat: PC/Phone-Other, desc: "Software: Handy / Navi / Sonst"}
-      - {id: 131, cat: TV/HD, desc: "Serien: HD"}
-      - {id: 132, cat: TV, desc: "Serien: Packs"}
-      - {id: 135, cat: Audio, desc: "Musik: Discographie"}
-      - {id: 138, cat: TV/Documentary, desc: "Doku: HD"}
-      - {id: 139, cat: TV/Documentary, desc: "Doku: x264"}
-      - {id: 141, cat: Audio/Audiobook, desc: "A/Ebook: Hoerbook"}
-      - {id: 142, cat: Books, desc: "A/Ebook: EBooks"}
-      - {id: 143, cat: Books, desc: "sonstige:PDF"}
-      - {id: 144, cat: XXX, desc: "Erotik: XXX Pics"}
-      - {id: 202, cat: TV/Sport, desc: "Sport"}
-      - {id: 204, cat: XXX, desc: "XXX-Games"}
-      - {id: 205, cat: Movies/SD, desc: "International-SD"}
-      - {id: 206, cat: movies/HD, desc: "International-HD"}
+      - {id: 200, cat: Movies/UHD, desc: "Filme UHD"}
+      - {id: 201, cat: Movies, desc: "Filme Remux"}
+      - {id: 203, cat: Movies/HD, desc: "Filme HD"}
+      - {id: 204, cat: Movies/DVD, desc: "Filme DVD"}
+      - {id: 205, cat: Movies/3D, desc: "Filme 3D"}
+      - {id: 206, cat: Movies/SD, desc: "Filme SD"}
+      - {id: 290, cat: Movies/HD, desc: "Filme Int. HD"}
+      - {id: 291, cat: Movies/SD, desc: "Filme Int. SD"}
+      - {id: 121, cat: TV/SD, desc: "Serien SD"}
+      - {id: 131, cat: TV/HD, desc: "Serien HD"}
+      - {id: 132, cat: TV, desc: "Serien Packs"}
+      - {id: 211, cat: TV/HD, desc: "Serien Staffeln HD"}
+      - {id: 94201, cat: TV/SD, desc: "Serien Staffeln SD"}
+      - {id: 116, cat: Console, desc: "Spiele Konsolen"}
+      - {id: 117, cat: PC/Games, desc: "Spiele Windows"}
+      - {id: 124, cat: Console/Other, desc: "Spiele sonstige"}
+      - {id: 125, cat: PC/0day, desc: "Software Windows"}
+      - {id: 126, cat: PC/0day, desc: "Software Mac / Linux"}
+      - {id: 129, cat: PC/Phone-Other, desc: "Software Handy / Navi / Sonst"}
+      - {id: 210, cat: PC, desc: "Mac / Linux"}
+      - {id: 120, cat: Audio/Other, desc: "Musik Alben / Sampler "}
+      - {id: 135, cat: Audio, desc: "Musik Discographie"}
+      - {id: 137, cat: Audio/Video, desc: "Musik Video"}
+      - {id: 123, cat: TV/Documentary, desc: "Doku SD"}
+      - {id: 138, cat: TV/Documentary, desc: "Doku HD"}
+      - {id: 141, cat: Audio/Audiobook, desc: "A/Ebook Hoerbook"}
+      - {id: 142, cat: Books/Ebook, desc: "A/Ebook EBooks"}
+      - {id: 143, cat: Books/Other, desc: "sonstige PDF"}
+      - {id: 350, cat: TV/Sport, desc: "Sport"}
+      - {id: 208, cat: XXX, desc: "Erotik XXX Audiobook"}
+      - {id: 122, cat: XXX, desc: "Erotik XXX Film"}
+      - {id: 144, cat: XXX, desc: "Erotik XXX Pics"}
+      - {id: 603, cat: XXX, desc: "Erotik XXX PDF"}
+      - {id: 604, cat: XXX, desc: "Erotik XXX Games"}
 
     modes:
       search: [q]
@@ -68,7 +69,7 @@
       orderby: "added"
       sort: desc
     rows:
-      selector: table.tableinborder > tbody > tr > td > table.tableinborder > tbody > tr:has(a[href^="details.php"])
+      selector: table > tbody > tr > td > table.tableinborder > tbody > tr:has(a[href^="details.php"])
     fields:
       title:
         selector: a[href^="details.php"]

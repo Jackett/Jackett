@@ -3,7 +3,7 @@
   name: HamsterStudio
   description: "HamsterStudio is a RUSSIAN Semi-Private Torrent Tracker for TV"
   language: ru-ru
-  type: private
+  type: semi-private
   encoding: windows-1251
   links:
     - http://hamsterstudio.org/
@@ -265,6 +265,30 @@
       search: [q]
       tv-search: [q, season, ep]
 
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "4"
+      options:
+        "4": "created"
+        "7": "seeders"
+        "5": "size"
+        "1": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
+
   login:
     path: takelogin.php
     method: post
@@ -281,12 +305,16 @@
     paths:
       - path: browse.php
     inputs:
-      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
       search: "{{ .Keywords }}"
       # 0 active 1 incdead 2 onlydead 3 gold 4 seedfree
       incldead: "1"
+      sort: "{{ .Config.sort }}"
+      type: "{{ .Config.type }}"
+
     rows:
       selector: table.embedded > tbody > tr:has(a[href^="details.php?id="])
+
     fields:
       title:
         selector: a[href^="details.php?id="]
@@ -334,12 +362,13 @@
             args: ["|", 1]
       downloadvolumefactor:
         case:
-          img[src="pic/diamond.png"]: "0"
-          img[src="pic/freedownload.gif"]: "0"
-          img[src="pic/silver.gif"]: "0.5"
-          img[src="pic/bronze.gif"]: "0.75"
-          "*": "1"
+          img[src="pic/diamond.png"]: 0
+          img[src="pic/freedownload.gif"]: 0
+          img[src="pic/silver.gif"]: 0.5
+          img[src="pic/bronze.gif"]: 0.75
+          "*": 1
       uploadvolumefactor:
         case:
-          img[src="pic/diamond.png"]: "2"
-          "*": "1"
+          img[src="pic/diamond.png"]: 2
+          "*": 1
+# TBDev v2.1.12

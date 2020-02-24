@@ -14,12 +14,12 @@
     <link rel="apple-touch-icon" sizes="76x76" href="../apple-touch-icon-76x76.png" />
     <link rel="apple-touch-icon" sizes="114x114" href="../apple-touch-icon-114x114.png" />
     <link rel="apple-touch-icon" sizes="120x120" href="../apple-touch-icon-120x120.png" />
-    <link rel="apple-touch-icon" sizes="144x144" href="../apple-touch-icon-144x144" />
+    <link rel="apple-touch-icon" sizes="144x144" href="../apple-touch-icon-144x144.png" />
     <link rel="apple-touch-icon" sizes="152x152" href="../apple-touch-icon-152x152.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon-180x180.png" />
-    <link rel="mask-icon" href="jackett_medium.png" color="#35c5f4">
+    <link rel="mask-icon" href="../jackett_medium.png" color="#35c5f4">
     <link rel="icon" type="image/ico" href="../favicon.ico" />
-    <link rel='shortcut icon' type='image/x-icon' href='../favicon.ico?' />
+    <link rel='shortcut icon' type='image/x-icon' href='../favicon.ico' />
     <script type="text/javascript" src="../libs/filesize.min.js?changed=2017083001"></script>
     <script type="text/javascript" src="../libs/jquery.min.js?changed=2017083001"></script>
     <script type="text/javascript" src="../libs/jquery.dataTables.min.js?changed=2017083001" charset="utf8"></script>
@@ -34,8 +34,8 @@
 
     <link rel="stylesheet" type="text/css" href="../bootstrap/bootstrap.min.css?changed=2017083001">
     <link rel="stylesheet" type="text/css" href="../animate.css?changed=2017083001">
-    <link rel="stylesheet" type="text/css" href="../custom.css?changed=20190401" media="only screen and (min-device-width: 480px)">
-    <link rel="stylesheet" type="text/css" href="../custom_mobile.css?changed=20190401" media="only screen and (max-device-width: 480px)">
+    <link rel="stylesheet" type="text/css" href="../custom.css?changed=20200223" media="only screen and (min-device-width: 480px)">
+    <link rel="stylesheet" type="text/css" href="../custom_mobile.css?changed=20200223" media="only screen and (max-device-width: 480px)">
     <link rel="stylesheet" type="text/css" href="../css/jquery.dataTables.min.css?changed=2017083001">
     <link rel="stylesheet" type="text/css" href="../css/bootstrap-multiselect.css?changed=2017083001" />
     <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css?changed=2017083001">
@@ -52,11 +52,11 @@
         </div>
         <hr />
 
-        <div id="can-upgrade-from-mono" hidden class="alert alert-info" role="alert"> 
+        <div id="can-upgrade-from-mono" hidden class="alert alert-info" role="alert">
             <strong>Standalone version of Jackett is now available - Mono not required</strong> <br>
-            To upgrade to the standalone version of Jackett, <a href="https://github.com/Jackett/Jackett#install-on-linux-amdx64" target="_blank" class="alert-link">click here</a> for install instructions. 
-            Upgrading is straight forward, simply install the standalone version and your indexers/configuration will carry over. 
-            Benefits include: increased performance, improved stability and no dependency on Mono. 
+            To upgrade to the standalone version of Jackett, <a href="https://github.com/Jackett/Jackett#install-on-linux-amdx64" target="_blank" class="alert-link">click here</a> for install instructions.
+            Upgrading is straight forward, simply install the standalone version and your indexers/configuration will carry over.
+            Benefits include: increased performance, improved stability and no dependency on Mono.
         </div>
 
         <div class="pull-right">
@@ -233,6 +233,19 @@
             {{else}}
             <input type="checkbox" data-id="{{id}}" class="form-control" />
             {{/if}}
+        </div>
+    </script>
+    <script id="setup-item-inputcheckbox" type="text/x-handlebars-template">
+        <div class="setup-item-inputcheckbox">
+            {{#each options}}
+            <div class="checkbox"><label>
+            {{#if_in @key ../values}}
+            <input type="checkbox" data-id="{{../../id}}" class="form-control" value="{{@key}}" checked />
+            {{else}}
+            <input type="checkbox" data-id="{{../../id}}" class="form-control" value="{{@key}}" />
+            {{/if_in}}
+            {{this}}</label></div>
+            {{/each}}
         </div>
     </script>
     <script id="setup-item-inputselect" type="text/x-handlebars-template">
@@ -471,7 +484,7 @@
                     <div class="modal-body">
                         <p>You can search all configured indexers from this screen.</p>
                         <label for="text">Query</label>
-                        <input type="text" name="query" id="searchquery" />
+                        <input class="form-control" type="text" name="query" id="searchquery" />
                         <label for="tracker">Tracker</label>
                         <select name="tracker" id="searchTracker" multiple="multiple">
                             {{#each indexers}}
@@ -603,16 +616,16 @@
                         <table class="dataTable compact cell-border hover stripe">
                             <thead>
                                 <tr>
-                                    <th style="width: 200px">When</th>
-                                    <th style="width: 80px">Level</th>
+                                    <th>Date</th>
+                                    <th>Level</th>
                                     <th>Message</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {{#each logs}}
                                 <tr class="jackettlog{{Level}}">
-                                    <td>{{dateFormat When}}</td>
-                                    <td>{{Level}}</td>
+                                    <td class="jackettlog-narrowcol">{{dateFormat When}}</td>
+                                    <td class="jackettlog-narrowcol">{{Level}}</td>
                                     <td><pre>{{Message}}</pre></td>
                                 </tr>
                                 {{/each}}
@@ -678,6 +691,6 @@
     </script>
 
     <script type="text/javascript" src="../libs/api.js?changed=2017083001"></script>
-    <script type="text/javascript" src="../custom.js?changed=20190427"></script>
+    <script type="text/javascript" src="../custom.js?changed=20200222"></script>
 </body>
 </html>

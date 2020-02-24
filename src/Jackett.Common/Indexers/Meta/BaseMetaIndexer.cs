@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -131,8 +131,8 @@ namespace Jackett.Common.Indexers.Meta
 
         public IEnumerable<IIndexer> Indexers;
 
-        private Func<IIndexer, bool> filterFunc;
-        private IFallbackStrategyProvider fallbackStrategyProvider;
-        private IResultFilterProvider resultFilterProvider;
+        private readonly Func<IIndexer, bool> filterFunc;
+        private readonly IFallbackStrategyProvider fallbackStrategyProvider;
+        private readonly IResultFilterProvider resultFilterProvider;
     }
 }

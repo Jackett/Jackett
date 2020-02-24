@@ -1,0 +1,110 @@
+---
+  site: torrentparadise
+  name: TorrentParadise
+  description: "Torrent Paradise is a Public magnet indexer"
+  language: en-us
+  type: public
+  encoding: UTF-8
+  links:
+    - https://torrentparadise.cl/
+  legacylinks:
+    - https://torrentparadise.org/
+
+  caps:
+    categories:
+      "ADULT XXX": XXX
+      "ANIME": TV/Anime
+      "APPLICATIONS > MAC": PC/Mac
+      "APPLICATIONS > WINDOWS": PC/0day
+      "APPS": PC
+      "AUDIO > AUDIO BOOKS": Audio/Audiobook
+      "BOOKS": Books
+      "EBOOKS": Books/Ebook
+      "FLAC MUSIC": Audio/Lossless
+      "FLAC": Audio/Lossless
+      "GAMES": PC/Games
+      "GAMES > PC": PC/Games
+      "JUEGOS PS2": Console/PSP
+      "JUEGOS PS3": Console/PS3
+      "JUEGOS PS4": Console/PS4
+      "JUEGOS PSP": Console/PSP
+      "JUEGOS WII": Console/Wii
+      "JUEGOS WIIU": Console/WiiU
+      "JUEGOS XBOX": Console/Xbox
+      "JUEGOS XBOX360": Console/Xbox 360
+      "MOBILE": PC/Phone-Other
+      "MOVIES": Movies
+      "MP3 MUSIC": Audio/MP3
+      "MP3": Audio/MP3
+      "MUSIC > LOSSLESS": Audio/Lossless
+      "MUSIC > MP3": Audio/MP3
+      "MUSIC": Audio
+      "OTHER > E-BOOKS": Other
+      "OTHER": Other
+      "PORN > MOVIE CLIPS": XXX
+      "PORN > MOVIES": XXX
+      "PORN > PICTURES": XXX
+      "SOFTWARE > MAC": PC/Mac
+      "SOFTWARE > WINDOWS": PC/0day
+      "SOFTWARE": PC
+      "TV SHOWS": TV
+      "TV": TV
+      "VIDEO > HD - MOVIES": Movies/HD
+      "VIDEO > HD - TV SHOWS": TV/HD
+      "VIDEO > MOVIES": Movies
+      "VIDEO > SD - MOVIES": Movies/SD
+      "VIDEO > SD - TV SHOWS": TV/SD
+      "VIDEO > UHD - MOVIES": Movies/UHD
+      "VIDEO > UHD - TV SHOWS": TV/UHD
+      "XXX": XXX
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  settings: []
+
+  download:
+    selector: a[href^="magnet:?xt="]
+    attribute: href
+
+  search:
+    # https://torrentparadise.org/search.php?f=monday+night
+    # https://torrentparadise.org/recent
+    paths:
+      - path: "{{ if .Keywords }}search.php?f={{ .Keywords }}{{ else }}recent{{ end }}"
+
+    rows:
+      selector: table.table-bordered > tbody > tr.table-default
+
+    fields:
+      category:
+        selector: td:nth-child(1) a
+        filters:
+          - name: toupper
+      description:
+        selector: td:nth-child(1) a
+      title:
+        selector: td:nth-child(2) a
+      details:
+        selector: td:nth-child(2) a
+        attribute: href
+      download:
+        selector: td:nth-child(2) a
+        attribute: href
+      size:
+        selector: td:nth-child(3)
+      date:
+        selector: td:nth-child(4)
+        filters:
+          - name: timeago
+      seeders:
+        selector: td:nth-child(5)
+      leechers:
+        selector: td:nth-child(6)
+      downloadvolumefactor:
+        text: 0
+      uploadvolumefactor:
+        text: 1
+# engine n/a

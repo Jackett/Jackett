@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -19,9 +19,9 @@ namespace Jackett.Common.Indexers
 {
     public class TorrentHeaven : BaseWebIndexer
     {
-        public override string[] LegacySiteLinks { get; protected set; } = new string[] { 
-            "https://torrentheaven.myfqdn.info/", 
-        }; 
+        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
+            "https://torrentheaven.myfqdn.info/",
+        };
 
         private string IndexUrl { get { return SiteLink + "index.php"; } }
         private string LoginCompleteUrl { get { return SiteLink + "index.php?strWebValue=account&strWebAction=login_complete&ancestry=verify"; } }
@@ -102,7 +102,7 @@ namespace Jackett.Common.Indexers
         {
             var loginPage = await RequestStringWithCookies(IndexUrl, string.Empty);
             CQ dom = loginPage.Content;
-            CQ qCaptchaImg = dom.Find("td.tablea > img").First();
+            var qCaptchaImg = dom.Find("td.tablea > img").First();
             if (qCaptchaImg.Length == 1)
             {
                 var CaptchaUrl = SiteLink + qCaptchaImg.Attr("src");
@@ -157,12 +157,12 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            TimeZoneInfo.TransitionTime startTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 3, 0, 0), 3, 5, DayOfWeek.Sunday);
-            TimeZoneInfo.TransitionTime endTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 4, 0, 0), 10, 5, DayOfWeek.Sunday);
-            TimeSpan delta = new TimeSpan(1, 0, 0);
-            TimeZoneInfo.AdjustmentRule adjustment = TimeZoneInfo.AdjustmentRule.CreateAdjustmentRule(new DateTime(1999, 10, 1), DateTime.MaxValue.Date, delta, startTransition, endTransition);
+            var startTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 3, 0, 0), 3, 5, DayOfWeek.Sunday);
+            var endTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 4, 0, 0), 10, 5, DayOfWeek.Sunday);
+            var delta = new TimeSpan(1, 0, 0);
+            var adjustment = TimeZoneInfo.AdjustmentRule.CreateAdjustmentRule(new DateTime(1999, 10, 1), DateTime.MaxValue.Date, delta, startTransition, endTransition);
             TimeZoneInfo.AdjustmentRule[] adjustments = { adjustment };
-            TimeZoneInfo germanyTz = TimeZoneInfo.CreateCustomTimeZone("W. Europe Standard Time", new TimeSpan(1, 0, 0), "(GMT+01:00) W. Europe Standard Time", "W. Europe Standard Time", "W. Europe DST Time", adjustments);
+            var germanyTz = TimeZoneInfo.CreateCustomTimeZone("W. Europe Standard Time", new TimeSpan(1, 0, 0), "(GMT+01:00) W. Europe Standard Time", "W. Europe Standard Time", "W. Europe DST Time", adjustments);
 
             var releases = new List<ReleaseInfo>();
 
@@ -237,7 +237,7 @@ namespace Jackett.Common.Indexers
                     else
                         dateGerman = DateTime.SpecifyKind(DateTime.ParseExact(dateStrParts[0] + dateStrParts[1], "dd.MM.yyyyHH:mm", CultureInfo.InvariantCulture), DateTimeKind.Unspecified);
 
-                    DateTime pubDateUtc = TimeZoneInfo.ConvertTimeToUtc(dateGerman, germanyTz);
+                    var pubDateUtc = TimeZoneInfo.ConvertTimeToUtc(dateGerman, germanyTz);
                     release.PublishDate = pubDateUtc.ToLocalTime();
 
                     var grabs = qRow.Find("td:nth-child(7)").Text();

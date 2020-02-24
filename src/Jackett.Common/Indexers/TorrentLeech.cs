@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -44,9 +44,11 @@ namespace Jackett.Common.Indexers
                 downloadBase: "https://www.torrentleech.org/download/",
                 configData: new ConfigurationDataRecaptchaLogin("For best results, change the 'Default Number of Torrents per Page' setting to the maximum in your profile on the TorrentLeech webpage."))
         {
-            Encoding = Encoding.GetEncoding("iso-8859-1");
+            Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
+            TorznabCaps.SupportsImdbMovieSearch = true;
+            TorznabCaps.SupportsImdbTVSearch = true;
 
             AddCategoryMapping(8, TorznabCatType.MoviesSD); // cam
             AddCategoryMapping(9, TorznabCatType.MoviesSD); //ts
@@ -105,7 +107,7 @@ namespace Jackett.Common.Indexers
             var captcha = cq.Find(".g-recaptcha");
             if (captcha.Any())
             {
-                var result = this.configData;
+                var result = configData;
                 result.CookieHeader.Value = loginPage.Cookies;
                 result.Captcha.SiteKey = captcha.Attr("data-sitekey");
                 result.Captcha.Version = "2";
@@ -180,8 +182,13 @@ namespace Jackett.Common.Indexers
             var searchString = query.GetQueryString();
             searchString = Regex.Replace(searchString, @"(^|\s)-", " "); // remove dashes at the beginning of keywords as they exclude search strings (see issue #3096)
             var searchUrl = SearchUrl;
+            var imdbId = ParseUtil.GetFullImdbID(query.ImdbID);
 
-            if (!string.IsNullOrWhiteSpace(searchString))
+            if (imdbId != null)
+            {
+                searchUrl += "imdbID/" + imdbId + "/";
+            }
+            else if (!string.IsNullOrWhiteSpace(searchString))
             {
                 searchUrl += "query/" + WebUtility.UrlEncode(searchString) + "/";
             }
@@ -221,7 +228,7 @@ namespace Jackett.Common.Indexers
                     var release = new ReleaseInfo();
 
                     release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800;
+                    release.MinimumSeedTime = 172800; // 48 hours
 
                     release.Guid = new Uri(SiteLink + "torrent/" + torrent.fid);
                     release.Comments = release.Guid;
@@ -247,6 +254,10 @@ namespace Jackett.Common.Indexers
 
                     release.DownloadVolumeFactor = 1;
                     release.UploadVolumeFactor = 1;
+
+                    // freeleech #6579 #6624
+
+                    release.DownloadVolumeFactor = ParseUtil.CoerceInt(torrent.download_multiplier.ToString());
 
                     releases.Add(release);
                 }

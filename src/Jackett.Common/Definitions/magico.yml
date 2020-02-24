@@ -105,10 +105,10 @@
     form: form#loginbox_form
     submitpath: /ajax/login.php
     inputs:
-      action: "login"
+      action: login
       loginbox_membername: "{{ .Config.username }}"
       loginbox_password: "{{ .Config.password }}"
-      loginbox_remember: "true"
+      loginbox_remember: 1
     selectorinputs:
       securitytoken:
         selector: "script:contains(\"stKey: \")"
@@ -128,20 +128,22 @@
       - name: replace # use this as a workaround till #893 is implemented
         args: ["Greys Anatomy", "Grey's Anatomy"]
       - name: re_replace
-        args: ["[^a-zA-Z0-9]+", "%25"]
+        args: ["[^\\w\\d]+", "%25"]
     inputs:
-      p: "torrents"
-      pid: "32"
-      $raw: "{{range .Categories}}cid[]={{.}}&{{end}}"
+      p: torrents
+      pid: 32
+      $raw: "{{ range .Categories }}cid[]={{.}}&{{end}}"
       keywords: "{{ .Keywords }}"
-      search_type: "name"
-      searchin: "title"
+      search_type: name
+      searchin: title
     error:
       - selector: div#show_error font
+
     rows:
       selector: div#content > div.torrent-box[id^="torrent_"], tr:has(a[href*="?p=torrents"][href*="&action=details"])
       filters:
         - name: andmatch
+
     fields:
       title:
         selector: a[href*="?p=torrents"][href*="&action=details"]
@@ -162,7 +164,7 @@
         attribute: href
       imdb:
         optional: true
-        selector: a[href^="http://www.imdb.com/title/tt"]
+        selector: a[href*="www.imdb.com/title/tt"]
         attribute: href
       size:
         selector: a[rel="torrent_size"]
@@ -181,11 +183,11 @@
         selector: div.torrentDetails > div:has(span.floatright)
       downloadvolumefactor:
         case:
-          "img[title=\"No Record!\"]": "0"
-          "*": "1"
+          "img[title=\"No Record!\"]": 0
+          "*": 1
       uploadvolumefactor:
         case:
-          "*": "1"
+          "*": 1
       date:
         optional: true
         selector: div.torrentOwner > abbr.timeago
@@ -237,3 +239,4 @@
             args: ["at ", ""]
           - name: dateparse
             args: "02-01-2006 15:04"
+# TSUE 2.2

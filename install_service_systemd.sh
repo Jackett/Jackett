@@ -46,7 +46,7 @@ Type=simple
 User=${jackettuser}
 Group=${jackettuser}
 WorkingDirectory=${jackettdir}
-ExecStart=${jackettdir}/jackett --NoRestart
+ExecStart=${jackettdir}/jackett_launcher.sh
 TimeoutStopSec=20
 
 [Install]

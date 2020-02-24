@@ -6,6 +6,8 @@
   type: private
   encoding: windows-1252
   links:
+    - https://datascene.net/
+  legacylinks:
     - http://datascene.net/
 
   caps:
@@ -75,11 +77,13 @@
     paths:
       - path: browse.php
     inputs:
-      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
       search: "{{ .Keywords }}"
       incldead: 1
+
     rows:
       selector: div.ncls > table > tbody > tr:has(a.tname)
+
     fields:
       title:
         selector: a.tname
@@ -93,7 +97,7 @@
           - name: regexp
             args: src=([^\s]+)
       imdb:
-        selector: a[href^="http://www.imdb.com/title/"]
+        selector: a[href*="www.imdb.com/title/tt"]
         optional: true
         attribute: href
       category:
@@ -123,8 +127,8 @@
         selector: td:nth-last-child(2)
       downloadvolumefactor:
         case:
-          "a#free-btn": "0"
-          "*": "1"
+          "a#free-btn": 0
+          "*": 1
       uploadvolumefactor:
-        case:
-          "*": "1"
+        text: 1
+# engine n/a

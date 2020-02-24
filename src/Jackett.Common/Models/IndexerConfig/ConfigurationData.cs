@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Jackett.Common.Services.Interfaces;
@@ -9,13 +9,14 @@ namespace Jackett.Common.Models.IndexerConfig
 {
     public class ConfigurationData
     {
-        const string PASSWORD_REPLACEMENT = "|||%%PREVJACKPASSWD%%|||";
+        private const string PASSWORD_REPLACEMENT = "|||%%PREVJACKPASSWD%%|||";
         protected Dictionary<string, Item> dynamics = new Dictionary<string, Item>(); // list for dynamic items
 
         public enum ItemType
         {
             InputString,
             InputBool,
+            InputCheckbox,
             InputSelect,
             DisplayImage,
             DisplayInfo,
@@ -37,7 +38,7 @@ namespace Jackett.Common.Models.IndexerConfig
             LoadValuesFromJson(json, ps);
         }
 
-        public void LoadValuesFromJson(JToken json, IProtectionService ps= null)
+        public void LoadValuesFromJson(JToken json, IProtectionService ps = null)
         {
             if (json == null)
                 return;
@@ -82,6 +83,11 @@ namespace Jackett.Common.Models.IndexerConfig
                         break;
                     case ItemType.InputBool:
                         ((BoolItem)item).Value = arrItem.Value<bool>("value");
+                        break;
+                    case ItemType.InputCheckbox:
+                        var values = arrItem.Value<JArray>("values");
+                        if (values != null)
+                            ((CheckboxItem)item).Values = values.Values<string>().ToArray();
                         break;
                     case ItemType.InputSelect:
                         ((SelectItem)item).Value = arrItem.Value<string>("value");
@@ -130,6 +136,15 @@ namespace Jackett.Common.Models.IndexerConfig
                     case ItemType.InputBool:
                         jObject["value"] = ((BoolItem)item).Value;
                         break;
+                    case ItemType.InputCheckbox:
+                        jObject["values"] = new JArray(((CheckboxItem)item).Values);
+                        jObject["options"] = new JObject();
+
+                        foreach (var option in ((CheckboxItem)item).Options)
+                        {
+                            jObject["options"][option.Key] = option.Value;
+                        }
+                        break;
                     case ItemType.InputSelect:
                         jObject["value"] = ((SelectItem)item).Value;
                         jObject["options"] = new JObject();
@@ -140,7 +155,7 @@ namespace Jackett.Common.Models.IndexerConfig
                         }
                         break;
                     case ItemType.DisplayImage:
-                        string dataUri = DataUrlUtils.BytesToDataUrl(((ImageItem)item).Value, "image/jpeg");
+                        var dataUri = DataUrlUtils.BytesToDataUrl(((ImageItem)item).Value, "image/jpeg");
                         jObject["value"] = dataUri;
                         break;
                 }
@@ -149,9 +164,9 @@ namespace Jackett.Common.Models.IndexerConfig
             return jArray;
         }
 
-        Item[] GetItems(bool forDisplay)
+        private Item[] GetItems(bool forDisplay)
         {
-            List<Item> properties = GetType()
+            var properties = GetType()
                 .GetProperties()
                 .Where(p => p.CanRead)
                 .Where(p => p.PropertyType.IsSubclassOf(typeof(Item)))
@@ -166,7 +181,7 @@ namespace Jackett.Common.Models.IndexerConfig
             if (!forDisplay)
             {
                 properties = properties
-                    .Where(p => p.ItemType == ItemType.HiddenData || p.ItemType == ItemType.InputBool || p.ItemType == ItemType.InputString || p.ItemType == ItemType.InputSelect || p.ItemType == ItemType.Recaptcha || p.ItemType == ItemType.DisplayInfo)
+                    .Where(p => p.ItemType == ItemType.HiddenData || p.ItemType == ItemType.InputBool || p.ItemType == ItemType.InputString || p.ItemType == ItemType.InputCheckbox || p.ItemType == ItemType.InputSelect || p.ItemType == ItemType.Recaptcha || p.ItemType == ItemType.DisplayInfo)
                     .ToList();
             }
 
@@ -184,7 +199,7 @@ namespace Jackett.Common.Models.IndexerConfig
             {
                 return dynamics[ID];
             }
-            catch(KeyNotFoundException)
+            catch (KeyNotFoundException)
             {
                 return null;
             }
@@ -237,7 +252,7 @@ namespace Jackett.Common.Models.IndexerConfig
             public string Challenge { get; set; }
             public RecaptchaItem()
             {
-                this.Version = "2";
+                Version = "2";
                 ItemType = ConfigurationData.ItemType.Recaptcha;
             }
         }
@@ -257,6 +272,19 @@ namespace Jackett.Common.Models.IndexerConfig
             public ImageItem()
             {
                 ItemType = ConfigurationData.ItemType.DisplayImage;
+            }
+        }
+
+        public class CheckboxItem : Item
+        {
+            public string[] Values { get; set; }
+
+            public Dictionary<string, string> Options { get; }
+
+            public CheckboxItem(Dictionary<string, string> options)
+            {
+                ItemType = ItemType.InputCheckbox;
+                Options = options;
             }
         }
 

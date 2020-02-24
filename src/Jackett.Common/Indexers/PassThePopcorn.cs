@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -23,9 +23,9 @@ namespace Jackett.Common.Indexers
         private string DetailURL { get { return "https://passthepopcorn.me/torrents.php?torrentid="; } }
         private string AuthKey { get; set; }
 
-        private new ConfigurationDataBasicLoginWithFilterAndPasskey configData
+        private new ConfigurationDataAPILoginWithUserAndPasskeyAndFilter configData
         {
-            get { return (ConfigurationDataBasicLoginWithFilterAndPasskey)base.configData; }
+            get { return (ConfigurationDataAPILoginWithUserAndPasskeyAndFilter)base.configData; }
             set { base.configData = value; }
         }
 
@@ -38,7 +38,7 @@ namespace Jackett.Common.Indexers
                 client: c,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataBasicLoginWithFilterAndPasskey(@"Enter filter options below to restrict search results.
+                configData: new ConfigurationDataAPILoginWithUserAndPasskeyAndFilter(@"Enter filter options below to restrict search results.
                                                                         Separate options with a space if using more than one option.<br>Filter options available:
                                                                         <br><code>GoldenPopcorn</code><br><code>Scene</code><br><code>Checked</code><br><code>Free</code>"))
         {
@@ -69,41 +69,33 @@ namespace Jackett.Common.Indexers
         {
             LoadValuesFromJson(configJson);
 
-            await DoLogin();
-
-            return IndexerConfigurationStatus.RequiresTesting;
-        }
-
-        private async Task DoLogin()
-        {
-            var pairs = new Dictionary<string, string> {
-                { "username", configData.Username.Value },
-                { "password", configData.Password.Value },
-                { "passkey", configData.Passkey.Value },
-                { "keeplogged", "1" },
-                { "login", "Log In!" }
-            };
-
-            var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, indexUrl, SiteLink);
-            JObject js_response = JObject.Parse(response.Content);
-            await ConfigureIfOK(response.Cookies, response.Content != null && (string)js_response["Result"] != "Error", () =>
+            IsConfigured = false;
+            try
             {
-                // Landing page wil have "Result":"Error" if log in fails
-                string errorMessage = (string)js_response["Message"];
-                throw new ExceptionWithConfigData(errorMessage, configData);
-            });
+                var results = await PerformQuery(new TorznabQuery());
+                if (results.Count() == 0)
+                    throw new Exception("Testing returned no results!");
+                IsConfigured = true;
+                SaveConfig();
+            }
+            catch (Exception e)
+            {
+                throw new ExceptionWithConfigData(e.Message, configData);
+            }
+
+            return IndexerConfigurationStatus.Completed;
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            bool configGoldenPopcornOnly = configData.FilterString.Value.ToLowerInvariant().Contains("goldenpopcorn");
-            bool configSceneOnly = configData.FilterString.Value.ToLowerInvariant().Contains("scene");
-            bool configCheckedOnly = configData.FilterString.Value.ToLowerInvariant().Contains("checked");
-            bool configFreeOnly = configData.FilterString.Value.ToLowerInvariant().Contains("free");
+            var configGoldenPopcornOnly = configData.FilterString.Value.ToLowerInvariant().Contains("goldenpopcorn");
+            var configSceneOnly = configData.FilterString.Value.ToLowerInvariant().Contains("scene");
+            var configCheckedOnly = configData.FilterString.Value.ToLowerInvariant().Contains("checked");
+            var configFreeOnly = configData.FilterString.Value.ToLowerInvariant().Contains("free");
 
 
-            string movieListSearchUrl = SearchUrl;
+            var movieListSearchUrl = SearchUrl;
             var queryCollection = new NameValueCollection();
             queryCollection.Add("json", "noredirect");
 
@@ -116,7 +108,7 @@ namespace Jackett.Common.Indexers
                 queryCollection.Add("searchstr", query.GetQueryString());
             }
 
-            if(configFreeOnly)
+            if (configFreeOnly)
                 queryCollection.Add("freetorrent", "1");
 
             if (queryCollection.Count > 0)
@@ -124,21 +116,25 @@ namespace Jackett.Common.Indexers
                 movieListSearchUrl += "?" + queryCollection.GetQueryString();
             }
 
-            var results = await RequestStringWithCookiesAndRetry(movieListSearchUrl);
+            var authHeaders = new Dictionary<string, string>()
+            {
+                { "ApiUser", configData.User.Value },
+                { "ApiKey", configData.Key.Value }
+            };
+
+            var results = await RequestStringWithCookiesAndRetry(movieListSearchUrl, null, null, authHeaders);
             if (results.IsRedirect) // untested
             {
-                // re-login
-                await DoLogin();
-                results = await RequestStringWithCookiesAndRetry(movieListSearchUrl);
+                results = await RequestStringWithCookiesAndRetry(movieListSearchUrl, null, null, authHeaders);
             }
             try
             {
                 //Iterate over the releases for each movie
-                JObject js_results = JObject.Parse(results.Content);
+                var js_results = JObject.Parse(results.Content);
                 foreach (var movie in js_results["Movies"])
                 {
-                    string movie_title = (string)movie["Title"];
-                    string Year = (string)movie["Year"];
+                    var movie_title = (string)movie["Title"];
+                    var Year = (string)movie["Year"];
                     var movie_imdbid_str = (string)movie["ImdbId"];
                     var coverStr = (string)movie["Cover"];
                     Uri coverUri = null;
@@ -147,11 +143,11 @@ namespace Jackett.Common.Indexers
                     long? movie_imdbid = null;
                     if (!string.IsNullOrEmpty(movie_imdbid_str))
                         movie_imdbid = long.Parse(movie_imdbid_str);
-                    string movie_groupid = (string)movie["GroupId"];
+                    var movie_groupid = (string)movie["GroupId"];
                     foreach (var torrent in movie["Torrents"])
                     {
                         var release = new ReleaseInfo();
-                        string release_name = (string)torrent["ReleaseName"];
+                        var release_name = (string)torrent["ReleaseName"];
                         release.Title = release_name;
                         release.Description = string.Format("Title: {0}", movie_title);
                         release.BannerUrl = coverUri;
@@ -168,12 +164,13 @@ namespace Jackett.Common.Indexers
                         release.Guid = release.Link;
                         release.MinimumRatio = 1;
                         release.MinimumSeedTime = 345600;
+                        release.DownloadVolumeFactor = 1;
+                        release.UploadVolumeFactor = 1;
                         release.Category = new List<int> { 2000 };
 
-                        bool golden, scene, check;
-                        bool.TryParse((string)torrent["GoldenPopcorn"], out golden);
-                        bool.TryParse((string)torrent["Scene"], out scene);
-                        bool.TryParse((string)torrent["Checked"], out check);
+                        bool.TryParse((string)torrent["GoldenPopcorn"], out var golden);
+                        bool.TryParse((string)torrent["Scene"], out var scene);
+                        bool.TryParse((string)torrent["Checked"], out var check);
 
                         if (configGoldenPopcornOnly && !golden)
                         {
@@ -189,11 +186,11 @@ namespace Jackett.Common.Indexers
                         }
 
                         var titletags = new List<string>();
-                        string Quality = (string)torrent["Quality"];
-                        string Container = (string)torrent["Container"];
-                        string Codec = (string)torrent["Codec"];
-                        string Resolution = (string)torrent["Resolution"];
-                        string Source = (string)torrent["Source"];
+                        var Quality = (string)torrent["Quality"];
+                        var Container = (string)torrent["Container"];
+                        var Codec = (string)torrent["Codec"];
+                        var Resolution = (string)torrent["Resolution"];
+                        var Source = (string)torrent["Source"];
 
                         if (Year != null)
                         {
@@ -241,6 +238,10 @@ namespace Jackett.Common.Indexers
 
                         if (titletags.Count() > 0)
                             release.Title += " [" + string.Join(" / ", titletags) + "]";
+
+                        bool.TryParse((string)torrent["FreeleechType"], out var freeleech);
+                        if (freeleech)
+                            release.DownloadVolumeFactor = 0;
 
                         releases.Add(release);
                     }

@@ -43,11 +43,26 @@
       type: checkbox
       label: "Use SeedBox Download Link"
       default: false
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "4"
+      options:
+        "4": "created"
+        "7": "seeders"
+        "5": "size"
+        "1": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
 
   login:
-    path: login.php
-    method: form
-    form: form[action="takelogin.php"]
+    path: takelogin.php
+    method: post
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
@@ -55,6 +70,7 @@
       - selector: table.main:contains("Login failed!")
     test:
       path: my.php
+      selector: a[href="logout.php"]
 
   ratio:
     path: browse.php
@@ -68,13 +84,15 @@
       # https://pwtorrents.net/browse.php?c18=1&c16=1&c17=1&incldead=0
       - path: browse.php
     inputs:
-      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
       incldead: "1"
       search: "{{ .Keywords }}"
-      sort: "4" # date
-      type: "desc"
+      sort: "{{ .Config.sort }}"
+      type: "{{ .Config.type }}"
+
     rows:
       selector: table[border="1"][cellspacing="0"][cellpadding="5"] tr:has(a[href^="download.php?id="])
+
     fields:
       category:
         selector: a[href^="browse.php?cat="]
@@ -94,7 +112,7 @@
         selector: a[href^="seeddownload.php?id="]
         attribute: href
       download:
-        text: "{{if .Config.seedbox}}{{ .Result.download2 }}{{else}}{{ .Result.download1 }}{{end}}"
+        text: "{{ if .Config.seedbox }}{{ .Result.download2 }}{{else}}{{ .Result.download1 }}{{end}}"
       date:
         selector: td:nth-child(4)
         filters:
@@ -112,8 +130,7 @@
       leechers:
         selector: td:nth-child(10)
       downloadvolumefactor:
-        case:
-          "*": "1"
+        text: 1
       uploadvolumefactor:
-        case:
-          "*": "1"
+        text: 1
+# engine n/a

@@ -29,11 +29,13 @@
     paths:
       # https://shokweb.com/ (latest)
       # https://shokweb.com/search/supergirl%20s04e01 (search)
-      - path: "{{if .Keywords}}{{.Keywords}}{{else}}{{end}}"
+      - path: "{{ if .Keywords }}/search/{{ .Keywords }}{{else}}{{end}}"
+
     rows:
       selector: div:has(a[href^="magnet:?"])
       filters:
         - name: andmatch
+
     fields:
       title:
         selector: a[href^="/post/"]
@@ -65,10 +67,11 @@
           - name: replace
             args: ["前", " ago"]
       seeders:
-        text: "1"
+        text: 1
       leechers:
-        text: "1"
+        text: 1
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
+# engine n/a

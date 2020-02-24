@@ -10,46 +10,82 @@
 
   caps:
     categorymappings:
-      - {id: 1, cat: TV/Documentary, desc: "Doku HD"}
-      - {id: 2, cat: TV/Documentary, desc: "Doku Packs"}
-      - {id: 3, cat: TV/Documentary, desc: "Doku SD"}
-      - {id: 4, cat: Movies/FOREIGN, desc: "International"}
-      - {id: 5, cat: Movies/HD, desc: "Movies 1080p"}
-      - {id: 6, cat: Movies/3D, desc: "Movies 3D"}
-      - {id: 7, cat: Movies/HD, desc: "Movies 720p"}
-      - {id: 36, cat: Movies/BluRay, desc: "Movies BluRay"}
-      - {id: 8, cat: Movies/DVD, desc: "Movies DVD / HDVD"}
-      - {id: 37, cat: Movies/HD, desc: "Movies HD Pack"}
-      - {id: 9, cat: Movies/SD, desc: "Movies SD"}
-      - {id: 38, cat: Movies/SD, desc: "Movies SD Pack"}
-      - {id: 10, cat: Movies/UHD, desc: "Movies UHD"}
-      - {id: 11, cat: TV/HD, desc: "Serien HD"}
-      - {id: 12, cat: TV/OTHER, desc: "Serien Packs"}
-      - {id: 13, cat: TV/SD, desc: "Serien SD"}
-      - {id: 14, cat: TV/Sport, desc: "Sport"}
-      - {id: 15, cat: XXX/x264, desc: "XXX HD"}
-      - {id: 16, cat: XXX/XviD, desc: "XXX SD"}
-      - {id: 17, cat: Audio/Lossless, desc: "Musik FLAC"}
-      - {id: 18, cat: Audio/MP3, desc: "Musik MP3"}
-      - {id: 19, cat: Audio/Other, desc: "Musik Sonstiges"}
-      - {id: 20, cat: Audio/Video, desc: "Musik Videos"}
-      - {id: 23, cat: Console, desc: "Spiele Handy"}
-      - {id: 24, cat: Console, desc: "Spiele Linux"}
-      - {id: 21, cat: Console/NDS, desc: "Spiele Nintendo"}
-      - {id: 22, cat: Console/PSP, desc: "Spiele PlayStation"}
-      - {id: 25, cat: Console, desc: "Spiele Sonstige"}
-      - {id: 40, cat: Console, desc: "Spiele Wimmelbild"}
-      - {id: 26, cat: PC/Games, desc: "Spiele Windows"}
-      - {id: 27, cat: Console, desc: "XBOX 360/ONE"}
-      - {id: 28, cat: PC, desc: "Software Handy"}
-      - {id: 29, cat: PC, desc: "Software Linux"}
-      - {id: 30, cat: PC/Mac, desc: "Software Mac Os"}
-      - {id: 31, cat: PC, desc: "Software Sonstige"}
-      - {id: 32, cat: PC/0day, desc: "Software Windows"}
-      - {id: 33, cat: TV/Anime, desc: "Anime"}
-      - {id: 39, cat: Books/Ebook, desc: "eBook"}
-      - {id: 34, cat: Audio/Audiobook, desc: "Hörbücher/ -spiele"}
-      - {id: 35, cat: XXX/Other, desc: "XXX Sonstiges"}
+      - {id: 1010, cat: Movies/UHD, desc: "Movies 2160p"}
+      - {id: 1020, cat: Movies/HD, desc: "Movies 1080p"}
+      - {id: 1030, cat: Movies/HD, desc: "Movies 720p"}
+      - {id: 1040, cat: Movies/HD, desc: "Movies x264"}
+      - {id: 1050, cat: Movies/HD, desc: "Movies x265"}
+      - {id: 1060, cat: Movies/SD, desc: "Movies XviD"}
+      - {id: 1070, cat: Movies/3D, desc: "Movies 3D"}
+      - {id: 1080, cat: Movies/DVD, desc: "Movies DVD"}
+      - {id: 1090, cat: Movies/BluRay, desc: "Movies BluRay"}
+      - {id: 1100, cat: Movies/DVD, desc: "Movies HD2DVD"}
+      - {id: 1110, cat: Movies/Foreign, desc: "Movies International"}
+      - {id: 1120, cat: Movies/HD, desc: "Movies HD Packs"}
+      - {id: 1130, cat: Movies/SD, desc: "Movies SD Packs"}
+      - {id: 2010, cat: TV/UHD, desc: "TV 2160p"}
+      - {id: 2020, cat: TV/HD, desc: "TV 1080p"}
+      - {id: 2030, cat: TV/HD, desc: "TV 720p"}
+      - {id: 2040, cat: TV/HD, desc: "TV x264"}
+      - {id: 2050, cat: TV/HD, desc: "TV x265"}
+      - {id: 2060, cat: TV/SD, desc: "TV XviD"}
+      - {id: 2070, cat: TV/HD, desc: "TV HD Packs"}
+      - {id: 2080, cat: TV/SD, desc: "TV SD Packs"}
+      - {id: 2090, cat: TV/FOREIGN, desc: "TV International"}
+      - {id: 3010, cat: TV/Documentary, desc: "Docu 2160p"}
+      - {id: 3020, cat: TV/Documentary, desc: "Docu 1080p"}
+      - {id: 3030, cat: TV/Documentary, desc: "Docu 720p"}
+      - {id: 3040, cat: TV/Documentary, desc: "Docu x264"}
+      - {id: 3050, cat: TV/Documentary, desc: "Docu x265"}
+      - {id: 3060, cat: TV/Documentary, desc: "Docu XviD"}
+      - {id: 3070, cat: TV/Documentary, desc: "Docu HD Packs"}
+      - {id: 3080, cat: TV/Documentary, desc: "Docu SD Packs"}
+      - {id: 3090, cat: TV/Documentary, desc: "Docu International"}
+      - {id: 4010, cat: TV/Sport, desc: "Sport 2160p"}
+      - {id: 4020, cat: TV/Sport, desc: "Sport 1080p"}
+      - {id: 4030, cat: TV/Sport, desc: "Sport 720p"}
+      - {id: 4040, cat: TV/Sport, desc: "Sport SD Sport"}
+      - {id: 4050, cat: TV/Sport, desc: "Sport HD Packs"}
+      - {id: 4060, cat: TV/Sport, desc: "Sport SD Packs"}
+      - {id: 5010, cat: XXX, desc: "XXX 2160p"}
+      - {id: 5020, cat: XXX, desc: "XXX 1080p"}
+      - {id: 5030, cat: XXX, desc: "XXX 720p"}
+      - {id: 5040, cat: XXX, desc: "XXX x264"}
+      - {id: 5050, cat: XXX, desc: "XXX x265"}
+      - {id: 5060, cat: XXX, desc: "XXX XviD"}
+      - {id: 5070, cat: XXX, desc: "XXX HD Packs"}
+      - {id: 5080, cat: XXX, desc: "XXX SD Packs"}
+      - {id: 5090, cat: XXX, desc: "XXX Sonstiges"}
+      - {id: 6010, cat: PC/Games, desc: "Games Windows"}
+      - {id: 6020, cat: Console, desc: "Games Linux"}
+      - {id: 6030, cat: PC/Mac, desc: "Games MacOS"}
+      - {id: 6040, cat: PC/Phone-Android, desc: "Games Android"}
+      - {id: 6050, cat: Console/Xbox, desc: "Games Xbox"}
+      - {id: 6060, cat: Console/PSP, desc: "Games PlayStation"}
+      - {id: 6070, cat: Console/NDS, desc: "Games Nintendo"}
+      - {id: 6080, cat: Console, desc: "Games Sonstige"}
+      - {id: 7010, cat: PC/0day, desc: "Software Windows"}
+      - {id: 7020, cat: PC, desc: "Software Linux"}
+      - {id: 7030, cat: PC/Mac, desc: "Software MacOS"}
+      - {id: 7040, cat: PC/Phone-Android, desc: "Software Android"}
+      - {id: 8010, cat: Audio/MP3, desc: "Music MP3-Album"}
+      - {id: 8020, cat: Audio/MP3, desc: "Music MP3-Charts"}
+      - {id: 8030, cat: Audio/MP3, desc: "Music MP3-Sampler"}
+      - {id: 8040, cat: Audio/MP3, desc: "Music MP3-Single"}
+      - {id: 8050, cat: Audio/Lossless, desc: "Music FLAC-Album"}
+      - {id: 8060, cat: Audio/Lossless, desc: "Music FLAC-Charts"}
+      - {id: 8070, cat: Audio/Lossless, desc: "Music FLAC-Sampler"}
+      - {id: 8080, cat: Audio/Lossless, desc: "Music FLAC-Single"}
+      - {id: 8090, cat: Audio/Video, desc: "Music Video"}
+      - {id: 9010, cat: Audio/Audiobook, desc: "Books A-Book"}
+      - {id: 9020, cat: Books/Ebook, desc: "Books E-Book"}
+      - {id: 9030, cat: Books, desc: "Books E-Paper"}
+      - {id: 9040, cat: Books, desc: "Books E-Learning"}
+      - {id: 9050, cat: TV, desc: "TV Kids"}
+      - {id: 9060, cat: TV/Anime, desc: "Anime HD"}
+      - {id: 9070, cat: TV/Anime, desc: "Anime SD"}
+      - {id: 9080, cat: TV/Anime, desc: "Anime Pack"}
+      - {id: 9999, cat: Other, desc: "unsort"}
 
     modes:
       search: [q]
@@ -63,6 +99,22 @@
     - name: password
       type: password
       label: Password
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "1"
+      options:
+        "1": "created"
+        "8": "seeders"
+        "6": "size"
+        "2": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "1"
+      options:
+        "1": "desc"
+        "2": "asc"
 
   login:
     path: login.php
@@ -95,42 +147,46 @@
     paths:
       - path: browse.php
     inputs:
-      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-      search: "{{ .Keywords }}"
-      # seachin 0=name 1=descr 2=both
-      blah: 0
-      # include dead 0=active 1=all 2=dead
-      incldead: 1
-      orderby: "added"
-      sort: "desc"
-      showsearch: 0
+      suchfeld: 2
+      alleanzeigen: 1
+      $raw: "{{ range .Categories }}kategorie[]={{.}}&{{end}}"
+      suche: "{{ .Keywords }}"
+      # searchin 1 name 2 descr 3 both
+      durchsuche: 1
+      # includedead 1 active 2 all 3 dead 4 highlight 5 bookmark 6 onlyups 7 freeleech 8 multi2 9 multi5 10 multi10 11 25%dl 12 50%dl 13 75%dl
+      suchein: 2
+      # cat 1 all 1000 film 2000 tv 3000 docs 4000 sport 5000 xxx 6000 games 7000 apps 8000 music 9000 other
+      sucheaus: 1
+      sortierenach: "{{ .Config.sort }}"
+      sortierung: "{{ .Config.type }}"
+
     rows:
       selector: table.tableinborder[border="0"][cellspacing="0"][cellpadding="0"] tr
+
     fields:
       category:
-        selector: td.tableb a
+        selector: a.bt-cat
         attribute: href
         filters:
-          - name: querystring
-            args: cat
+          - name: regexp
+            args: (\d+)$
       title:
-        selector: div a.tor-name
+        selector: a.tor-name
       details:
-        selector: div a.tor-name
+        selector: a.tor-name
         attribute: href
       download:
-        selector: div a.tor-name
+        selector: div.tor-metadl a
         attribute: href
-        filters:
-          - name: replace
-            args: ["details.php?id=", "download.php?torrent="]
       banner:
         selector: div[id^="details-"] img
         attribute: src
       seeders:
-        selector: div.tor-sl b
+        selector: div.tor-seeder
       leechers:
-        selector: div.tor-sl b:last-of-type
+        selector: div.tor-leecher
+      grabs:
+        selector: div.tor-snatcher
         # 2 flavours of dates
       date:
         # Heute 13:30:04
@@ -143,12 +199,12 @@
           - name: replace
             args: ["Gestern", "Yesterday"]
       date:
-          # 30.02.2018&nbsp;23:12:50
+          # &nbsp;&nbsp;27.05.2019 <b>12:52:11</b>
         selector: div.tor-date:contains(".")
         optional: true
         filters:
           - name: replace
-            args: ["\u00a0", " "]
+            args: ["\u00a0", ""]
           - name: dateparse
             args: "02.01.2006 15:04:05"
       size:
@@ -158,15 +214,16 @@
             args: [".", ""]
           - name: replace
             args: [",", "."]
-      grabs:
-        selector: div.tor-take
-        filters:
-          - name: regexp
-            args: "(\\d+)"
       downloadvolumefactor:
         case:
-          img[src="pic/ou_new.png"]: "0"
-          "*": "1"
+          font.ou: 0 # only upload is counted
+          font.fl: 0 # freeleech neither dl or ul is counted
+          "*": 1
       uploadvolumefactor:
         case:
-          "*": "1"
+          "font.mu:contains(\"2x\")": 2
+          "font.mu:contains(\"5x\")": 5
+          "font.mu:contains(\"10x\")": 10
+          font.fl: 0  # freeleech neither dl or ul is counted
+          "*": 1
+# engine n/a

@@ -1,104 +1,57 @@
 ---
   site: torrentkitty
   name: TorrentKitty
-  description: "TorrentKitty is a CHINESE Public torrent search engine."
-  language: cn
+  description: "TorrentKitty is a Public torrent indexer"
+  language: en-us
   type: public
   encoding: UTF-8
   links:
-    - https://torrentkittyso.cc/
-  legacylinks:
-    - http://cntorrentkitty.com/
-    - http://cntorrentkitty.xyz/
-    - https://gotorrentkitty.cc/
-    - http://gotorrentkitty.cc/
-
-  settings:
-    - name: category
-      type: select
-      label: Category
-      default: "0"
-      options:
-        "0": "All"
-        "1": "Other"
-        "2": "Video"
-        "3": "Music"
-        "4": "Documents"
-        "5": "Software"
-        "6": "Compress"
-        "7": "Images"
-        "8": "Image"
+    - https://www.torrentkitty.tv/
+    - https://www.torrentkitty.se/
+    - https://www.torrentkitty.app/
 
   caps:
     categories:
-      "[其他]": Other # other
-      "[视频]": Movies # video
-      "[音乐]": Audio # music
-      "[文档]": Books # documents
-      "[软件]": PC/0day # software
-      "[压缩]": PC # compress
-      "[图片]": Other/Misc # images
-      "[映像]": Other/Misc # image
+      "other": Other
+
     modes:
       search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
 
-  download:
-    selector: a[href^="magnet:?"]
+  settings: []
 
   search:
     paths:
-    # http://cntorrentkitty.com/tk/what%20men%20want/1-0-0.html (10 hits)
-    # http://cntorrentkitty.com/newest/ (100 hits)
-    # try and fetch at least 50 keyword results
-      - path: "{{if .Keywords}}tk/{{.Keywords}}/1-0-{{.Config.category}}.html{{else}}newest/{{end}}"
-      - path: "{{if .Keywords}}tk/{{.Keywords}}/2-0-{{.Config.category}}.html{{else}}{{end}}"
-      - path: "{{if .Keywords}}tk/{{.Keywords}}/3-0-{{.Config.category}}.html{{else}}{{end}}"
-      - path: "{{if .Keywords}}tk/{{.Keywords}}/4-0-{{.Config.category}}.html{{else}}{{end}}"
-      - path: "{{if .Keywords}}tk/{{.Keywords}}/5-0-{{.Config.category}}.html{{else}}{{end}}"
+      - path: "search/{{ if .Keywords }}{{ .Keywords}}{{else}}2019{{end}}"
+
     rows:
-      selector: p.p1:not(p.filelist), p.p0:not(p.filelist)
-      after: 1
+      selector: table#archiveResult tbody tr:has(a[href^="magnet:?xt="])
+
     fields:
       category:
-        selector: span:nth-child(1)
+        text: other
       title:
-        selector: a[target="_blank"]
+        selector: td.name
       details:
-        selector: a[target="_blank"]
+        selector: td.action a
         attribute: href
       download:
-        selector: a[target="_blank"]
+        selector: a[href^="magnet:?xt="]
         attribute: href
-      size:
-        selector: b:contains(" GB"), b:contains(" MB"), b:contains(" KB")
       date:
-        text: "now"
-      date:
-        selector: b:contains("收录"):contains(":")
-        optional: true
+        selector: td.date
         filters:
-          - name: replace
-            args: ["收录",""]
-          - name: dateparse
-            args: "2006-01-02 15:04:05"
-      date:
-        selector: b:contains(收录):not(:contains(":"))
-        optional: true
-        filters:
-          - name: replace
-            args: ["收录",""]
           - name: dateparse
             args: "2006-01-02"
-      files:
-        selector: b:contains("个文件")
-        filters:
-          - name: replace
-            args: ["个文件",""]
+      size:
+        selector: td.size
       seeders:
-        text: "1"
+        text: 1
       leechers:
-        text: "1"
+        text: 1
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
+# engine n/a

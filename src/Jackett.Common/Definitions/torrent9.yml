@@ -7,9 +7,7 @@
   encoding: UTF-8
   followredirect: true
   links:
-    - https://ww1.torrent9.is/
-    - https://www.torrent09.uno/
-    - https://ww1.torrent9.to/
+    - https://www.oxtorrent.me/
 
   legacylinks:
     - http://www.torrent9.ec/
@@ -31,7 +29,11 @@
     - https://wvw.t9.pe/
     - https://www4.torrent9.to/
     - https://www.torrent9.cat/
+    - https://ww1.torrent9.is/
+    - https://ww1.torrent9.to/
     - https://www.torrent9.is/
+    - https://www4.torrent9.to/
+    - https://www.torrent09.uno/
 
   caps:
     categorymappings:
@@ -53,14 +55,16 @@
   download:
     selector: a[href^="magnet:?"]
     attribute: href
-      
+
   search:
     paths:
-      - path: "{{ if .Keywords }}/search_torrent/{{ re_replace .Keywords \"[']+\" \"\" }}/page-0{{else}}/top_torrent.php{{end}}"
+      - path: "{{ if .Keywords }}/search_torrent/{{ re_replace .Keywords \"[']+\" \"\" }}/page-0{{else}}/top_torrent.html{{end}}"
+
     rows:
       selector: div.table-responsive > table tbody tr
       filters:
         - name: andmatch
+
     fields:
       site_date:
         selector: td:nth-child(1) a
@@ -100,7 +104,7 @@
         selector: td:nth-child(1) a
         attribute: href
       date:
-          text: "now"
+        text: "now"
       size:
         selector: td:nth-child(2)
         filters:
@@ -136,6 +140,7 @@
         selector: td:nth-child(4)
         optional: true
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
+# engine n/a

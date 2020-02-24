@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace Jackett.Test.Util
 {
     [TestFixture]
-    class ServerUtilTests : TestBase
+    internal class ServerUtilTests : TestBase
     {
         [Test]
         public void ResureRedirectIsFullyQualified_makes_redicts_fully_qualified()

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -43,8 +43,8 @@ namespace Jackett.Common.Indexers
 
             AddCategoryMapping(39, TorznabCatType.TVAnime); // Anime: HD|1080p
             AddCategoryMapping(38, TorznabCatType.TVAnime); // Anime: HD|720p
-            AddCategoryMapping(1,  TorznabCatType.TVAnime); // Anime: SD
-            AddCategoryMapping(7,  TorznabCatType.PCPhoneOther); // Appz: Handy-PDA
+            AddCategoryMapping(1, TorznabCatType.TVAnime); // Anime: SD
+            AddCategoryMapping(7, TorznabCatType.PCPhoneOther); // Appz: Handy-PDA
             AddCategoryMapping(36, TorznabCatType.PCMac); // Appz: Mac
             AddCategoryMapping(18, TorznabCatType.PC); // Appz: Sonstiges
             AddCategoryMapping(17, TorznabCatType.PC); // Appz: Win
@@ -55,8 +55,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(22, TorznabCatType.AudioVideo); // Audio: Videoclip
             AddCategoryMapping(19, TorznabCatType.Other); // Diverses: Sonstiges
             AddCategoryMapping(43, TorznabCatType.TVDocumentary); // Dokus: HD
-            AddCategoryMapping(2,  TorznabCatType.TVDocumentary); // Dokus: SD
-            AddCategoryMapping(3,  TorznabCatType.Books); // Ebooks: Bücher
+            AddCategoryMapping(2, TorznabCatType.TVDocumentary); // Dokus: SD
+            AddCategoryMapping(3, TorznabCatType.Books); // Ebooks: Bücher
             AddCategoryMapping(52, TorznabCatType.BooksComics); // Ebooks: Comics
             AddCategoryMapping(53, TorznabCatType.BooksMagazines); // Ebooks: Magazine
             AddCategoryMapping(55, TorznabCatType.BooksOther); // Ebooks: XXX
@@ -64,10 +64,10 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(47, TorznabCatType.PCPhoneOther); // Games: Andere
             AddCategoryMapping(32, TorznabCatType.PCMac); // Games: Mac
             AddCategoryMapping(41, TorznabCatType.ConsoleNDS); // Games: NDS/3DS
-            AddCategoryMapping(4,  TorznabCatType.PCGames); // Games: PC
-            AddCategoryMapping(5,  TorznabCatType.ConsolePS3); // Games: PS2
-            AddCategoryMapping(9,  TorznabCatType.ConsolePS3); // Games: PS3
-            AddCategoryMapping(6,  TorznabCatType.ConsolePSP); // Games: PSP
+            AddCategoryMapping(4, TorznabCatType.PCGames); // Games: PC
+            AddCategoryMapping(5, TorznabCatType.ConsolePS3); // Games: PS2
+            AddCategoryMapping(9, TorznabCatType.ConsolePS3); // Games: PS3
+            AddCategoryMapping(6, TorznabCatType.ConsolePSP); // Games: PSP
             AddCategoryMapping(28, TorznabCatType.ConsoleWii); // Games: Wii
             AddCategoryMapping(31, TorznabCatType.ConsoleXbox); // Games: XboX
             AddCategoryMapping(51, TorznabCatType.Movies3D); // Movies: 3D
@@ -75,7 +75,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(25, TorznabCatType.MoviesHD); // Movies: HD|1080p
             AddCategoryMapping(29, TorznabCatType.MoviesHD); // Movies: HD|720p
             AddCategoryMapping(11, TorznabCatType.MoviesDVD); // Movies: SD|DVD-R
-            AddCategoryMapping(8,  TorznabCatType.MoviesSD); // Movies: SD|x264
+            AddCategoryMapping(8, TorznabCatType.MoviesSD); // Movies: SD|x264
             AddCategoryMapping(13, TorznabCatType.MoviesSD); // Movies: SD|XviD
             AddCategoryMapping(40, TorznabCatType.MoviesForeign); // Movies: US Movies
             AddCategoryMapping(33, TorznabCatType.TV); // Serien: DVD-R
@@ -118,12 +118,12 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            TimeZoneInfo.TransitionTime startTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 3, 0, 0), 3, 5, DayOfWeek.Sunday);
-            TimeZoneInfo.TransitionTime endTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 4, 0, 0), 10, 5, DayOfWeek.Sunday);
-            TimeSpan delta = new TimeSpan(1, 0, 0);
-            TimeZoneInfo.AdjustmentRule adjustment = TimeZoneInfo.AdjustmentRule.CreateAdjustmentRule(new DateTime(1999, 10, 1), DateTime.MaxValue.Date, delta, startTransition, endTransition);
+            var startTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 3, 0, 0), 3, 5, DayOfWeek.Sunday);
+            var endTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 4, 0, 0), 10, 5, DayOfWeek.Sunday);
+            var delta = new TimeSpan(1, 0, 0);
+            var adjustment = TimeZoneInfo.AdjustmentRule.CreateAdjustmentRule(new DateTime(1999, 10, 1), DateTime.MaxValue.Date, delta, startTransition, endTransition);
             TimeZoneInfo.AdjustmentRule[] adjustments = { adjustment };
-            TimeZoneInfo germanyTz = TimeZoneInfo.CreateCustomTimeZone("W. Europe Standard Time", new TimeSpan(1, 0, 0), "(GMT+01:00) W. Europe Standard Time", "W. Europe Standard Time", "W. Europe DST Time", adjustments);
+            var germanyTz = TimeZoneInfo.CreateCustomTimeZone("W. Europe Standard Time", new TimeSpan(1, 0, 0), "(GMT+01:00) W. Europe Standard Time", "W. Europe Standard Time", "W. Europe DST Time", adjustments);
 
             var releases = new List<ReleaseInfo>();
 
@@ -141,7 +141,7 @@ namespace Jackett.Common.Indexers
             }
 
             var cats = MapTorznabCapsToTrackers(query);
-            string cat = "0";
+            var cat = "0";
             if (cats.Count == 1)
             {
                 cat = cats[0];
@@ -178,10 +178,10 @@ namespace Jackett.Common.Indexers
                         continue;
 
                     var qCatLink = qRow.Find("a[href^=browse.php?cat=]").First();
-                    var qSeeders = qRow.Find("td > table.testtable > tbody > tr > td > strong:eq(3)");
-                    var qLeechers = qRow.Find("td > table.testtable > tbody > tr > td > strong:eq(4)");
-                    var qDateStr = qRow.Find("td > table.testtable > tbody > tr > td:eq(7)");
-                    var qSize = qRow.Find("td > table.testtable > tbody > tr > td > strong:eq(1)");
+                    var qSeeders = qRow.Find("td > table.testtable2 > tbody > tr > td > strong:eq(3)");
+                    var qLeechers = qRow.Find("td > table.testtable2 > tbody > tr > td > strong:eq(4)");
+                    var qDateStr = qRow.Find("td > table.testtable2 > tbody > tr > td:eq(7)");
+                    var qSize = qRow.Find("td > table.testtable2 > tbody > tr > td > strong:eq(1)");
                     var qDownloadLink = qRow.Find("a[href*=download]").First();
 
                     var catStr = qCatLink.Attr("href").Split('=')[1];
@@ -205,7 +205,7 @@ namespace Jackett.Common.Indexers
 
                     var dateStr = qDateStr.Text().Replace('\xA0', ' ');
                     var dateGerman = DateTime.SpecifyKind(DateTime.ParseExact(dateStr, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture), DateTimeKind.Unspecified);
-                    DateTime pubDateUtc = TimeZoneInfo.ConvertTimeToUtc(dateGerman, germanyTz);
+                    var pubDateUtc = TimeZoneInfo.ConvertTimeToUtc(dateGerman, germanyTz);
                     release.PublishDate = pubDateUtc;
 
                     var files = qRow.Find("td:contains(Datei) > strong ~ strong").Text();

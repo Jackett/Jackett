@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -22,7 +22,7 @@ namespace Jackett.Common.Indexers
         private string LoginReferer { get { return SiteLink + "index.php?cat=1"; } }
         private string SearchUrl { get { return SiteLink + "browse.php"; } }
 
-        private List<CategoryMapping> resultMapping = new List<CategoryMapping>();
+        private readonly List<CategoryMapping> resultMapping = new List<CategoryMapping>();
 
         private new ConfigurationDataPinNumber configData
         {
@@ -283,11 +283,11 @@ namespace Jackett.Common.Indexers
                 var rows = dom["table > tbody > tr.browse"];
                 foreach (var row in rows)
                 {
-                    CQ qRow = row.Cq();
+                    var qRow = row.Cq();
                     var release = new ReleaseInfo();
 
                     release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800;
+                    release.MinimumSeedTime = 172800; // 48 hours
 
                     var qLink = row.ChildElements.ElementAt(1).Cq().Find("a").First();
                     release.Title = qLink.Attr("title");

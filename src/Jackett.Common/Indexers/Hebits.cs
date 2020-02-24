@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
@@ -102,7 +102,7 @@ namespace Jackett.Common.Indexers
             {
                 CQ dom = response.Content;
 
-                CQ qRows = dom[".browse > div > div"];
+                var qRows = dom[".browse > div > div"];
 
                 foreach (var row in qRows)
                 {
@@ -113,15 +113,16 @@ namespace Jackett.Common.Indexers
                     var debug = qRow.Html();
 
                     release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800;
+                    release.MinimumSeedTime = 172800; // 48 hours
 
-                    var titleParts = qRow.Find(".bTitle").Text().Split('/');
+                    var qTitle = qRow.Find(".bTitle");
+                    var titleParts = qTitle.Text().Split('/');
                     if (titleParts.Length >= 2)
                         release.Title = titleParts[1].Trim();
                     else
                         release.Title = titleParts[0].Trim();
 
-                    var qDetailsLink = qRow.Find("a[title][href^=\"details.php\"]");
+                    var qDetailsLink = qTitle.Find("a[href^=\"details.php\"]");
                     release.Comments = new Uri(SiteLink + qDetailsLink.Attr("href"));
                     release.Link = new Uri(SiteLink + qRow.Find("a[href^=\"download.php\"]").Attr("href"));
                     release.Guid = release.Link;

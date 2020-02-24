@@ -25,17 +25,33 @@
       tv-search: [q, season, ep]
       movie-search: [q]
 
-  settings: []
+  settings:
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "dt"
+      options:
+        "dt": "created"
+        "ns": "seeders"
+        "sz": "size"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "d"
+      options:
+        "d": "desc"
+        "a": "asc"
 
   search:
-    # if keyword is specified sorted by descending seeders otherwise by time
     # includes only verified torrents
     paths:
-      - path: "search?{{if .Keywords}}s=ns&v=t&sd=d&q={{ .Keywords}}{{else}}s=dt&v=t&sd=d&q= *{{end}}{{if .Categories}} category:{{range .Categories}}{{.}},{{end}}{{else}}{{end}}"
+      - path: "search?{{ if .Keywords }}s={{ .Config.sort }}&v=t&sd={{ .Config.type }}&q={{ .Keywords }}{{else}}s={{ .Config.sort }}&v=t&sd={{ .Config.type }}&q= *{{end}}{{ if .Categories }} category:{{ range .Categories }}{{.}},{{end}}{{else}}{{end}}"
+      
     rows:
       selector: tr:has(td[class^="text-muted3"])
       filters:
         - name: andmatch
+
     fields:
       title:
         selector: td:nth-child(2) a
@@ -99,6 +115,7 @@
           - name: replace
             args: [",", ""]
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
+# engine n/a

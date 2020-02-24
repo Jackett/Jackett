@@ -7,8 +7,10 @@
   encoding: UTF-8
   links:
     - https://www.magnetdl.com/
+    - https://magnetdl.unblockninja.com/
   legacylinks:
     - http://www.magnetdl.com/
+    - https://www.magnetdl.me/ # fake
 
   caps:
     categories:
@@ -25,7 +27,22 @@
       tv-search: [q, season, ep]
       movie-search: [q]
 
-  settings: []
+  settings:
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "age"
+      options:
+        "age": "created"
+        "se": "seeders"
+        "size": "size"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
 
   search:
     headers:
@@ -39,9 +56,11 @@
     paths:
       # return movie results if there are no search parms supplied (for use with the TEST button)
       # http://www.magnetdl.com/m/midnight-texas-s01e10/
-      - path: "{{if .Keywords}}{{ re_replace .Keywords \"(.).*\" \"$1\" }}/{{ .Keywords }}/{{else}}download/movies/{{end}}"     
+      - path: "{{ if .Keywords }}{{ re_replace .Keywords \"(.).*\" \"$1\" }}/{{ .Keywords }}/{{else}}download/movies/{{end}}{{ .Config.sort }}/{{ .Config.type }}/"     
+
     rows:
       selector: tr:has(td.m)
+
     fields:
       title:
         selector: td.n a
@@ -68,6 +87,7 @@
       leechers:
         selector: td.l
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
+# engine n/a

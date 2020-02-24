@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
@@ -8,11 +7,10 @@ using Jackett.Common.Services.Interfaces;
 
 namespace Jackett.Server.Services
 {
-
-    class SecuityService : ISecuityService
+    internal class SecuityService : ISecuityService
     {
         private const string COOKIENAME = "JACKETT";
-        private ServerConfig _serverConfig;
+        private readonly ServerConfig _serverConfig;
 
         public SecuityService(ServerConfig sc)
         {
@@ -26,17 +24,17 @@ namespace Jackett.Server.Services
             // Append key as salt
             input += _serverConfig.APIKey;
 
-            UnicodeEncoding UE = new UnicodeEncoding();
+            var UE = new UnicodeEncoding();
             byte[] hashValue;
-            byte[] message = UE.GetBytes(input);
+            var message = UE.GetBytes(input);
 
-            SHA512Managed hashString = new SHA512Managed();
-            string hex = "";
+            var hashString = new SHA512Managed();
+            var hex = "";
 
             hashValue = hashString.ComputeHash(message);
-            foreach (byte x in hashValue)
+            foreach (var x in hashValue)
             {
-                hex += String.Format("{0:x2}", x);
+                hex += string.Format("{0:x2}", x);
             }
             return hex;
         }

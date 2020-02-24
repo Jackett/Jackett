@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Jackett.Common;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
 
@@ -14,7 +11,7 @@ namespace Jackett.Server.Middleware
     public class CustomExceptionHandler
     {
         private readonly RequestDelegate _next;
-        private Logger logger;
+        private readonly Logger logger;
 
         public CustomExceptionHandler(RequestDelegate next, Logger l)
         {
@@ -32,7 +29,7 @@ namespace Jackett.Server.Middleware
             {
                 try
                 {
-                    string msg = "";
+                    var msg = "";
                     var json = new JObject();
 
                     logger.Error(ex);

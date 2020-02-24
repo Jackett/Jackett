@@ -91,11 +91,13 @@
 
   search:
     paths:
-      - path: "{{ if .Keywords }}katsearch/page/1/{{ .Keywords }}{{ else }}category/latest/page/1{{ end }}"
+      - path: "{{ if .Keywords }}katsearch/page/1/{{ .Keywords }}{{else}}category/latest/page/1{{end}}"
+
     rows:
       selector: table.torrents_table > tbody > tr
       filters:
         - name: andmatch
+
     fields:
       title:
         selector: a.torrents_table__torrent_title b
@@ -185,7 +187,16 @@
       files:
         selector: td[data-title="Files"]
       date:
-        selector: td[data-title="Age"]
+        selector: td[data-title="Age"]:contains("-")
+        attribute: title
+        optional: true
+        filters:
+          - name: dateparse
+            args: "2006-01-02"
+      date:
+        selector: td[data-title="Age"]:not(:contains("-"))
+        attribute: title
+        optional: true
         filters:
           - name: dateparse
             args: "2006-01-02 15:04:05"
@@ -194,6 +205,7 @@
       leechers:
         selector: td[data-title="Leech"]
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
+# engine n/a

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
@@ -52,11 +52,13 @@ namespace Jackett.Common.Indexers.Feeds
             // add some default values if none returned by feed
             release.Seeders = release.Seeders > 0 ? release.Seeders : 0;
             release.Peers = release.Peers > 0 ? release.Peers : 0;
+            release.MinimumRatio = 1;
+            release.MinimumSeedTime = 172800; // 48 hours
             release.DownloadVolumeFactor = release.DownloadVolumeFactor > 0 ? release.DownloadVolumeFactor : 0;
             release.UploadVolumeFactor = release.UploadVolumeFactor > 0 ? release.UploadVolumeFactor : 1;
             return release;
         }
 
-        protected override Uri FeedUri => new Uri(SiteLink + "/feed/api");
+        protected override Uri FeedUri => new Uri(SiteLink + "feed/api");
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -19,16 +19,16 @@ namespace Jackett.Common.Services
 
     public class IndexerManagerService : IIndexerManagerService
     {
-        private ICacheService cacheService;
-        private IIndexerConfigurationService configService;
-        private IProtectionService protectionService;
-        private WebClient webClient;
-        private IProcessService processService;
-        private IConfigurationService globalConfigService;
-        private ServerConfig serverConfig;
-        private Logger logger;
+        private readonly ICacheService cacheService;
+        private readonly IIndexerConfigurationService configService;
+        private readonly IProtectionService protectionService;
+        private readonly WebClient webClient;
+        private readonly IProcessService processService;
+        private readonly IConfigurationService globalConfigService;
+        private readonly ServerConfig serverConfig;
+        private readonly Logger logger;
 
-        private Dictionary<string, IIndexer> indexers = new Dictionary<string, IIndexer>();
+        private readonly Dictionary<string, IIndexer> indexers = new Dictionary<string, IIndexer>();
         private AggregateIndexer aggregateIndexer;
 
         public IndexerManagerService(IIndexerConfigurationService config, IProtectionService protectionService, WebClient webClient, Logger l, ICacheService cache, IProcessService processService, IConfigurationService globalConfigService, ServerConfig serverConfig)
@@ -93,7 +93,7 @@ namespace Jackett.Common.Services
             logger.Info("Loading Cardigann definitions from: " + string.Join(", ", path));
 
             var deserializer = new DeserializerBuilder()
-                        .WithNamingConvention(new CamelCaseNamingConvention())
+                        .WithNamingConvention(CamelCaseNamingConvention.Instance)
                         .IgnoreUnmatchedProperties()
                         .Build();
 
@@ -104,10 +104,10 @@ namespace Jackett.Common.Services
                 var files = existingDirectories.SelectMany(d => d.GetFiles("*.yml"));
                 var definitions = files.Select(file =>
                 {
-                    logger.Info("Loading Cardigann definition " + file.FullName);
-
-                    try { 
-                        string DefinitionString = File.ReadAllText(file.FullName);
+                    logger.Debug("Loading Cardigann definition " + file.FullName);
+                    try
+                    {
+                        var DefinitionString = File.ReadAllText(file.FullName);
                         var definition = deserializer.Deserialize<IndexerDefinition>(DefinitionString);
                         return definition;
                     }
@@ -118,7 +118,7 @@ namespace Jackett.Common.Services
                     }
                 }).Where(definition => definition != null);
 
-                List<IIndexer> cardigannIndexers = definitions.Select(definition =>
+                var cardigannIndexers = definitions.Select(definition =>
                 {
                     try
                     {
@@ -146,6 +146,7 @@ namespace Jackett.Common.Services
 
                     indexers.Add(indexer.ID, indexer);
                 }
+                logger.Info("Cardigann definitions loaded: " + string.Join(", ", indexers.Keys));
             }
             catch (Exception ex)
             {

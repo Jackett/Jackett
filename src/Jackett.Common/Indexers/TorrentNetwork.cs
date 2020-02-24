@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Text;
@@ -20,7 +20,7 @@ namespace Jackett.Common.Indexers
         private string APIUrl { get { return SiteLink + "api/"; } }
         private string passkey;
 
-        private Dictionary<string, string> APIHeaders = new Dictionary<string, string>()
+        private readonly Dictionary<string, string> APIHeaders = new Dictionary<string, string>()
         {
             {"Content-Type", "application/json"},
         };
@@ -198,7 +198,7 @@ namespace Jackett.Common.Indexers
                 {
                     var release = new ReleaseInfo();
                     release.MinimumRatio = 0.8;
-                    release.MinimumSeedTime = 48 * 60 * 60;
+                    release.MinimumSeedTime = 172800; // 48 hours
 
                     release.Category = MapTrackerCatToNewznab(torrent[0].ToString());
                     release.Title = torrent[1].ToString();

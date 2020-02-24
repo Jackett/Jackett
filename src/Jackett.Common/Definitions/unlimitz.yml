@@ -60,7 +60,23 @@
       label: Password
     - name: staffpass
       type: text
-      label: Staff Pass    
+      label: Staff Pass
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "4"
+      options:
+        "4": "created"
+        "7": "seeders"
+        "5": "size"
+        "1": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
 
   login:
     path: login.php
@@ -78,11 +94,12 @@
       - selector: td.embedded:has(h2:contains("failed"))
       - selector: td.embedded:has(h2:contains("Error"))
     test:
-      path: browse.php
-      selector: a[href^="logout.php"]
+      path: index.php
+      selector: a[href="logout.php"]
 
   download:
     selector:  a[href^="d.php?keyalert1="]
+    attribute: href
     filters:
       - name: replace
         args: ["d.php?keyalert1=", "/dI.php/"]
@@ -93,13 +110,18 @@
     paths:
       - path: browse.php
     inputs:
-      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
       search: "{{ .Keywords }}"
       # 0 title 1 descr 2 both
       blah: 0
+      # 0 active 1 incldead 2 onlydead
       incldead: 1
+      sort: "{{ .Config.sort }}"
+      type: "{{ .Config.type }}"
+
     rows:
       selector: table[border="1"][cellspacing="0"][cellpadding="5"] > tbody > tr:has(a[href^="details.php?id="])
+
     fields:
       category:
         selector: a[href^="browse.php?cat="]
@@ -142,3 +164,4 @@
           img[src="icon/upl2.png"]: 2
           img[src="icon/upl3.png"]: 3
           "*": 1
+# Bitcomet 1.52

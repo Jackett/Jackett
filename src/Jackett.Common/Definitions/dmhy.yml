@@ -45,7 +45,7 @@
       order: date-desc
       team_id: 0
     rows:
-      selector: table tbody tr
+      selector: table tbody tr:has(a[href^="magnet:?"])
     fields:
       date:
         selector: td:nth-child(1) span
@@ -75,6 +75,7 @@
       grabs:
         selector: td:nth-child(8)
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
+# tedmind 1.8.1

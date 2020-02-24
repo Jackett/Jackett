@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -295,7 +294,7 @@ namespace Jackett.Common.Indexers
                 // Getting results & Store content
                 var response = await RequestStringWithCookiesAndRetry(request, ConfigData.CookieHeader.Value);
                 _fDom = response.Content;
- 
+
                 try
                 {
                     var firstPageRows = FindTorrentRows();
@@ -329,11 +328,11 @@ namespace Jackett.Common.Indexers
                     }
 
                     Output("\nFound " + nbResults + " result(s) (+/- " + firstPageRows.Length + ") in " + pageLinkCount + " page(s) for this query !");
-                    Output("\nThere are " + (firstPageRows.Length -2 ) + " results on the first page !");
+                    Output("\nThere are " + (firstPageRows.Length - 2) + " results on the first page !");
 
                     // Loop on results
 
-                    foreach (var tRow in torrentRowList.Skip(1).Take(torrentRowList.Count-2))
+                    foreach (var tRow in torrentRowList.Skip(1).Take(torrentRowList.Count - 2))
                     {
                         Output("Torrent #" + (releases.Count + 1));
 
@@ -346,25 +345,25 @@ namespace Jackett.Common.Indexers
                         var name = tRow.Find("td:eq(1) > a:eq(0)").Text();
 
                         // Category
-                        string categoryID = tRow.Find("td:eq(0) > a:eq(0)").Attr("href").Split('?').Last();
+                        var categoryID = tRow.Find("td:eq(0) > a:eq(0)").Attr("href").Split('?').Last();
                         var newznab = MapTrackerCatToNewznab(categoryID);
                         Output("Category: " + (newznab.Count > 0 ? newznab.First().ToString() : "unknown category") + " (" + categoryID + ")");
 
                         // Seeders
-                        int seeders = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(9)").Text(), @"\d+").Value);
+                        var seeders = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(9)").Text(), @"\d+").Value);
                         Output("Seeders: " + seeders);
 
                         // Leechers
-                        int leechers = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(10)").Text(), @"\d+").Value);
+                        var leechers = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(10)").Text(), @"\d+").Value);
                         Output("Leechers: " + leechers);
 
                         // Files
-                        int files = 1;
+                        var files = 1;
                         files = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(4)").Text(), @"\d+").Value);
                         Output("Files: " + files);
 
                         // Completed
-                        int completed = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(8)").Text(), @"\d+").Value);
+                        var completed = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(8)").Text(), @"\d+").Value);
                         Output("Completed: " + completed);
 
                         // Size
@@ -377,7 +376,7 @@ namespace Jackett.Common.Indexers
                         var datestr = Regex.Replace(dateTimeOrig, @"<[^>]+>|&nbsp;", "").Trim();
                         datestr = Regex.Replace(datestr, "Today", DateTime.Now.ToString("MMM dd yyyy"), RegexOptions.IgnoreCase);
                         datestr = Regex.Replace(datestr, "Yesterday", DateTime.Now.Date.AddDays(-1).ToString("MMM dd yyyy"), RegexOptions.IgnoreCase);
-                        DateTime date = DateTimeUtil.FromUnknown(datestr, "DK");
+                        var date = DateTimeUtil.FromUnknown(datestr, "DK");
                         Output("Released on: " + date);
 
                         // Torrent Details URL
@@ -391,7 +390,7 @@ namespace Jackett.Common.Indexers
                         // Torrent Download URL
                         var passkey = tRow.Find("td:eq(2) > a:eq(0)").Attr("href");
                         var key = Regex.Match(passkey, "(?<=torrent_pass\\=)([a-zA-z0-9]*)");
-                        Uri downloadLink = new Uri(TorrentDownloadUrl.Replace("{id}", id.ToString()).Replace("{passkey}", key.ToString()));
+                        var downloadLink = new Uri(TorrentDownloadUrl.Replace("{id}", id.ToString()).Replace("{passkey}", key.ToString()));
                         Output("Download Link: " + downloadLink.AbsoluteUri);
 
                         // Building release infos
@@ -401,19 +400,19 @@ namespace Jackett.Common.Indexers
                             Title = name,
                             Seeders = seeders,
                             Peers = seeders + leechers,
-                            MinimumRatio = 1,
-                            MinimumSeedTime = 172800,
                             PublishDate = date,
                             Size = size,
                             Files = files,
                             Grabs = completed,
                             Guid = detailsLink,
                             Comments = commentsLink,
-                            Link = downloadLink
+                            Link = downloadLink,
+                            MinimumRatio = 1,
+                            MinimumSeedTime = 172800 // 48 hours
                         };
 
                         // IMDB
-                        var imdbLink = tRow.Find("a[href*=\"http://imdb.com/title/\"]").First().Attr("href");
+                        var imdbLink = tRow.Find("a[href*=\"imdb.com/title/tt\"]").First().Attr("href");
                         release.Imdb = ParseUtil.GetLongFromString(imdbLink);
 
                         if (tRow.Find("img[title=\"Free Torrent\"]").Length >= 1)
@@ -451,7 +450,7 @@ namespace Jackett.Common.Indexers
         {
             var parameters = new NameValueCollection();
             var categoriesList = MapTorznabCapsToTrackers(query);
-            string searchterm = term;
+            var searchterm = term;
 
             // Building our tracker query
             parameters.Add("searchin", "title");
@@ -474,7 +473,7 @@ namespace Jackett.Common.Indexers
             }
 
             // Loop on categories and change the catagories for search purposes
-            for (int i = 0; i < categoriesList.Count; i++)
+            for (var i = 0; i < categoriesList.Count; i++)
             {
                 // APPS
                 if (new[] { "63", "17", "12", "62", "64" }.Any(c => categoriesList[i].Contains(categoriesList[i])))

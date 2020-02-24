@@ -1,13 +1,11 @@
-﻿using System;
-using System.Diagnostics;
-using System.Linq;
+using System;
 using System.Reflection;
 
 namespace Jackett.Common.Utils
 {
     public static class EnvironmentUtil
     {
-    
+
         public static string JackettVersion
         {
             get

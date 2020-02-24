@@ -1,7 +1,7 @@
 ---
   site: vizuk
   name: Vizuk
-  description: "Vizuk is a SPANISH site for HD content"
+  description: "Vizuk is a SPANISH private site for HD content"
   language: es-es
   type: private
   encoding: UTF-8
@@ -9,6 +9,9 @@
     - https://torrent.vizuk.li/
   legacylinks:	
     - http://torrent.vizuk.li/
+  certificates:
+    - ef305c114b583a155728ec7802f4e8c4bcd9a526 # expired 28 Dec 19
+
   caps:
     categorymappings:
       - {id: 1, cat: Movies, desc: "Películas"}
@@ -27,7 +30,6 @@
       - {id: 67, cat: Movies/3D, desc: "Películas 3D Remux"}
       - {id: 68, cat: Movies/3D, desc: "Películas 3D Rip (SBS/OU)"}
       - {id: 64, cat: Movies/HD, desc: "Películas Web-DL-2.0"}
-
       - {id: 49, cat: TV/HD, desc: "Series"}
       - {id: 59, cat: TV/HD, desc: "Series UHD F/R/Rip 4K"}
       - {id: 61, cat: TV/HD, desc: "Series Full/Remux 1080p"}
@@ -35,7 +37,8 @@
       - {id: 91, cat: TV/HD, desc: "Series BDRip 720p"}
       - {id: 92, cat: TV/HD, desc: "Series Web-DL-2.0"}
       - {id: 95, cat: TV/HD, desc: "Series HDTV"}
-
+      - {id: 96, cat: TV/HD, desc: "Series HDTV 1080p"}
+      - {id: 97, cat: TV/HD, desc: "Series HDTV 720p"}
       - {id: 47, cat: Movies, desc: "Animación"}
       - {id: 69, cat: Movies/UHD, desc: "Animación UHDFull 4K"}
       - {id: 72, cat: Movies/UHD, desc: "Animación UHDRemux 4K"}
@@ -44,6 +47,7 @@
       - {id: 73, cat: Movies/HD, desc: "Animación FullBR 1080p"}
       - {id: 74, cat: Movies/BluRay, desc: "Animación Remux 1080p"}
       - {id: 53, cat: Movies/HD, desc: "Animación BDRip 1080p"}
+      - {id: 99, cat: Movies/HD, desc: "Animación Rip 1080p x265"}
       - {id: 54, cat: Movies/HD, desc: "Animación BDRip 720p"}
       - {id: 55, cat: Movies/HD, desc: "Animación Micro 1080p"}
       - {id: 56, cat: Movies/HD, desc: "Animación Micro 720p"}
@@ -52,12 +56,10 @@
       - {id: 77, cat: Movies/3D, desc: "Animación 3D Remux"}
       - {id: 78, cat: Movies/3D, desc: "Animación 3D Rip (SBS/OU)"}
       - {id: 79, cat: Movies/HD, desc: "Animación Web-DL-2.0"}
-
       - {id: 50, cat: Other/Misc, desc: "Música , Conciertos, Teatro y Deportes"}
       - {id: 62, cat: Audio/MP3, desc: "Música"}
       - {id: 63, cat: TV/Sport, desc: "Deporte"}
       - {id: 21, cat: Movies/HD, desc: "Teatro"}
-
       - {id: 48, cat: Movies, desc: "Documentales"}
       - {id: 80, cat: Movies/UHD, desc: "Documentales UHDFull 4K"}
       - {id: 81, cat: Movies/UHD, desc: "Documentales UHDRemux 4K"}
@@ -71,8 +73,8 @@
       - {id: 87, cat: Movies/3D, desc: "Documentales 3D Remux"}
       - {id: 88, cat: Movies/3D, desc: "Documentales 3D Rip (SBS/OU)"}
       - {id: 89, cat: Movies/HD, desc: "Documentales Web-DL-2.0"}
-
       - {id: 93, cat: XXX, desc: "XXX"}
+
     modes:
       search: [q]
       tv-search: [q, season, ep]
@@ -85,22 +87,30 @@
     - name: password
       type: password
       label: Password
-    - name: info_language
-      type: info
-      label: "Languages"
-      default: "This Indexer only works if your Vizuk account is set for the <b>Spanish</b> language. Using another language will not return results."
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "added"
+      options:
+        "added": "created"
+        "seeders": "seeders"
+        "size": "size"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
 
   login:
     path: ajax/login.php
     method: post
-    headers:
-      user-agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.104 Safari/537.36"
-    form: form
     inputs:
       loginbox_membername: "{{ .Config.username }}"
       loginbox_password: "{{ .Config.password }}"
-      action: "login"
-      loginbox_remember: "true"
+      action: login
+      loginbox_remember: 1
     error:
       - selector: div.error
     test:
@@ -113,16 +123,26 @@
       - name: re_replace
         args: ["S0?(\\d{1,2})E(\\d{1,2})", "$1x$2"]
     inputs:
-      p: "torrents"
-      page: "1"
-      pid: "10"
-      $raw: "{{range .Categories}}&cid[]={{.}}{{end}}"
+      p: torrents
+      page: 1
+      pid: 10
+      $raw: "{{ range .Categories }}&cid[]={{.}}{{end}}"
       keywords: "{{ .Keywords }}"
-      search_type: "name"
-      searchin: "title"
+      # name description both uploader
+      search_type: name
+      "sortOptions[sortBy]": "{{ .Config.sort }}"
+      "sortOptions[sortOrder]": "{{ .Config.type }}"
+
     rows:
       selector: table#torrents_table_classic > tbody > tr:not(:first-child), .torrent-box[id^="torrent_"]
+
     fields:
+      category:
+        selector:  td.torrent_image div.category_image a, .categoryImage a
+        attribute: href
+        filters:
+          - name: querystring
+            args: cid
       title:
         selector: td.torrent_name > a, .newIndicator > a
         filters:
@@ -131,12 +151,6 @@
       details:
         selector: td.torrent_name > a, .newIndicator > a
         attribute: href
-      category:
-        selector:  td.torrent_image div.category_image a, .categoryImage a
-        attribute: href
-        filters:
-          - name: querystring
-            args: cid
       download:
         selector: .torrentImages > span:first-child a
         attribute: href
@@ -144,6 +158,68 @@
         optional: true
         selector: td.torrent_image div.relativeDiv div:not(.category_image) a, .previewImage a
         attribute: href
+      imdb:
+        optional: true
+        selector: .torrentFlags a[href*="www.imdb.com/title/tt"]
+        attribute: href
+      date:
+        selector: td.torrent_name:contains("Subido"):contains("-"), .torrentOwner:contains("Subido"):contains("-")
+        optional: true
+        filters:
+          - name: regexp
+            args: "(?<=Subido )(.*)(?= por)"
+          - name: replace
+            args: [": ", ":"]
+          - name: dateparse
+            args: "02-01-2006 15:04"
+      date:
+        selector: td.torrent_name:contains("Subido"):not(:contains("-")), .torrentOwner:contains("Subido"):not(:contains("-"))
+        optional: true
+        filters:
+          - name: regexp
+            args: "(?<=Subido )(.*)(?= por)"
+          - name: replace
+            args: [": ", ":"]
+          - name: replace
+            args: ["Ayer a las", "Yesterday"]
+          - name: replace
+            args: ["Hoy en", "Today"]
+          - name: replace
+            args: ["Lunes a", "Monday at"]
+          - name: replace
+            args: ["Martes a", "Tuesday at"]
+          - name: replace
+            args: ["Miércoles a", "Wednesday at"]
+          - name: replace
+            args: ["Jueves a", "Thursday at"]
+          - name: replace
+            args: ["Viernes a", "Friday at"]
+          - name: replace # WTF?
+            args: ["Friday a", "Friday at"]
+          - name: replace
+            args: ["Sábado a", "Saturday at"]
+          - name: replace
+            args: ["Domingo a", "Sunday at"]
+          - name: fuzzytime # eg: Yesterday 14:22 or Monday at 14:22
+      date:
+        selector: td.torrent_name:contains("Uploaded"):contains("-"), .torrentOwner:contains("Uploaded"):contains("-")
+        optional: true
+        filters:
+          - name: regexp
+            args: "(?<=Uploaded )(.*)(?= by)"
+          - name: dateparse
+            args: "02-01-2006 15:04"
+      date:
+        selector: td.torrent_name:contains("Uploaded"):not(:contains("-")), .torrentOwner:contains("Uploaded"):not(:contains("-"))
+        optional: true
+        filters:
+          - name: regexp
+            args: "(?<=Uploaded )(.*)(?= by)"
+          - name: replace
+            args: ["Yesterday at", "Yesterday"]
+          - name: replace
+            args: ["Today at", "Today"]
+          - name: fuzzytime # eg: Yesterday 14:22 or Monday at 14:22
       size:
         selector: td.size a, .torrentInfo a[rel="torrent_size"]
       grabs:
@@ -152,38 +228,18 @@
         selector: td.seeders a, .torrentInfo a[rel="torrent_seeders"]
       leechers:
         selector: td.leechers a, .torrentInfo a[rel="torrent_leechers"]
-      imdb:
-        optional: true
-        selector: .torrentFlags a[href^="http://www.imdb.com/title/"]
-        attribute: href
-      date:
-        selector: td.torrent_name, .torrentOwner
-        filters:
-          - name: regexp
-            args: "(?<=Subido )(.*)(?= por)"
-          - name: dateparse
-            args: "02-01-2006 15:04"
       downloadvolumefactor:
-        text: "1"
-      downloadvolumefactor:
-        optional: true
-        selector: img[src$="torrent_free.png"]
-        attribute: title
-        filters:
-          - name: replace
-            args: ["No cuenta la descarga", "0"]
-          - name: replace
-            args: ["Cuenta descarga: 0.5", "0.5"]
+        case:
+          img[src$="torrent_free.png"][title*="No cuenta"]: 0
+          img[src$="torrent_free.png"][title="Free!"]: 0
+          img[src$="torrent_free.png"][title*="0.5"]: 0.5
+          "*": 1
       uploadvolumefactor:
-        text: "1"
-      uploadvolumefactor:
-        optional: true
-        selector: img[src$="torrent_multiple_upload.png"]
-        attribute: title
-        filters:
-          - name: replace
-            args: ["Cuenta subida por: 2", 2]
+        case:
+          img[src$="torrent_multiple_upload.png"]: 2
+          "*": 1
       minimumratio:
-        text: "1.0"
+        text: 1.0
       minimumseedtime:
-        text: "345600" # 4 day (96h)
+        text: 345600 # 4 day (96h)
+# TSUE 2.2

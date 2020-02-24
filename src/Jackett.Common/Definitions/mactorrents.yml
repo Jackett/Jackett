@@ -14,7 +14,7 @@
   caps:
     categories:
       "mac-os-apps": PC/Mac
-      "mac-os-games": PC/Games
+      "mac-games": PC/Games
 
     modes:
       search: [q]
@@ -25,14 +25,14 @@
     paths:
       - path: /
     inputs:
-      s: "{{.Keywords}}"
+      s: "{{ .Keywords }}"
     rows:
-      selector: div.iso-item article
+      selector: div.iso-item article:has(a.download)
     fields:
       title:
         selector: div.blog-content h3 a
       category:
-        selector: a[href*="/mac-os-"]
+        selector: a[href*="/mac-os-apps/"], a[href*="/mac-games/"]
         attribute: href
         filters:
           - name: split
@@ -57,10 +57,11 @@
       size:
         text: "500 MB"
       seeders:
-        text: "1"
+        text: 1
       leechers:
-        text: "1"
+        text: 1
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
+# engine n/a

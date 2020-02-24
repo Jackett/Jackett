@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text.RegularExpressions;
 
 namespace Jackett.Common.Utils
@@ -7,7 +7,8 @@ namespace Jackett.Common.Utils
     {
         public static string ChromeUserAgent
         {
-            get {
+            get
+            {
                 // When updating these make sure they are not detected by the incapsula bot detection engine (e.g. kickasstorrent indexer)
                 if (System.Environment.OSVersion.Platform == PlatformID.Unix)
                 {
@@ -24,7 +25,7 @@ namespace Jackett.Common.Utils
         public static string DecodeCloudFlareProtectedEmail(string input)
         {
             var key = Convert.ToInt32(input.Substring(0, 2), 16);
-            string result = "";
+            var result = "";
             for (var i = 2; i < input.Length - 1; i += 2)
             {
                 var hexChar = input.Substring(i, 2);
@@ -38,13 +39,13 @@ namespace Jackett.Common.Utils
         // decode cloudflare protected emails in a HTML document
         public static string DecodeCloudFlareProtectedEmailFromHTML(string html)
         {
-            Regex CFEMailRegex = new Regex("<span class=\"__cf_email__\" data-cfemail=\"(\\w+)\">\\[email&#160;protected\\]<\\/span><script data-cfhash='[\\w]+' type=\"text\\/javascript\">.*?<\\/script>", RegexOptions.Compiled);
+            var CFEMailRegex = new Regex("<span class=\"__cf_email__\" data-cfemail=\"(\\w+)\">\\[email&#160;protected\\]<\\/span><script data-cfhash='[\\w]+' type=\"text\\/javascript\">.*?<\\/script>", RegexOptions.Compiled);
             var CFEMailRegexMatches = CFEMailRegex.Match(html);
 
             while (CFEMailRegexMatches.Success)
             {
-                string all = CFEMailRegexMatches.Groups[0].Value;
-                string cfemail = CFEMailRegexMatches.Groups[1].Value;
+                var all = CFEMailRegexMatches.Groups[0].Value;
+                var cfemail = CFEMailRegexMatches.Groups[1].Value;
                 var decoded = DecodeCloudFlareProtectedEmail(cfemail);
                 html = html.Replace(all, decoded);
                 CFEMailRegexMatches = CFEMailRegexMatches.NextMatch();

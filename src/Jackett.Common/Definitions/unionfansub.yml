@@ -6,6 +6,8 @@
   type: semi-private
   encoding: UTF-8
   links:
+    - https://torrent.unionfansub.com/
+  legacylinks:
     - http://torrent.unionfansub.com/
 
   caps:
@@ -31,16 +33,40 @@
     modes:
       search: [q]
 
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "4"
+      options:
+        "4": "created"
+        "7": "seeders"
+        "5": "size"
+        "1": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
+
   login:
     path: http://foro.unionfansub.com/member.php
     method: post
     inputs:
       quick_username: "{{ .Config.username }}"
       quick_password: "{{ .Config.password }}"
-      action: "do_login"
+      action: do_login
       url: "http://torrent.unionfansub.com/browse.php"
-      quick_login: "1"
-      quick_remember: "yes"
+      quick_login: 1
+      quick_remember: yes
     error:
       - selector: div.error
     test:
@@ -50,11 +76,16 @@
   search:
     path: browse.php
     inputs:
-      incldead: "0"
-      search: "{{ .Query.Keywords }}"
-      $raw: "{{range .Categories}}&c{{.}}=1{{end}}"
+      $raw: "{{ range .Categories }}&c{{.}}=1{{end}}"
+      # 0 active 1 incldead 2 onlydead
+      incldead: 1
+      sort: "{{ .Config.sort }}"
+      type: "{{ .Config.type }}"
+      search: "{{ .Keywords }}"
+
     rows:
       selector: .tlist tr:not(:first-child)
+
     fields:
       title:
         selector: td:nth-child(2) a
@@ -98,6 +129,7 @@
         filters:
           - name: timeago
       downloadvolumefactor:
-        text: "1"
+        text: 1
       uploadvolumefactor:
-        text: "1"
+        text: 1
+# engine n/a

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -97,7 +97,7 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            List<ReleaseInfo> releases = new List<ReleaseInfo>();
+            var releases = new List<ReleaseInfo>();
             var queryCollection = new NameValueCollection();
             var searchString = query.GetQueryString();
             var searchUrl = SearchUrl;
@@ -135,7 +135,7 @@ namespace Jackett.Common.Indexers
                     var tags = new List<string>();
 
                     release.MinimumRatio = 1.1;
-                    release.MinimumSeedTime = 48 * 60 * 60;
+                    release.MinimumSeedTime = 172800; // 48 hours
                     release.Title = row.name;
                     release.Category = MapTrackerCatToNewznab(row.category.ToString());
                     release.Size = row.size;

@@ -7,6 +7,7 @@
   encoding: UTF-8
   links:
     - https://www.torrentdownloads.me/
+    - https://www.torrentdownloads.info/
 
   caps:
     categorymappings:
@@ -23,7 +24,7 @@
       search: [q]
       tv-search: [q, season, ep]
       movie-search: [q]
-  
+
   settings:
     - name: downloadlink
       type: select
@@ -33,18 +34,20 @@
         "http://itorrents.org/" : "iTorrents.org"
         "magnet:": "magnet"
 
-  
   download:
     selector: a[href^="{{ .Config.downloadlink }}"]
-  
+    attribute: href
+
   search:
     paths:
       - path: "{{if .Keywords}}/search/{{else}}/today/{{end}}"
     inputs:
       $raw: "new=1&{{range .Categories}}s_cat={{.}}&{{end}}"
       search: "{{ .Keywords }}"
+
     rows:
       selector: div.inner_container > div:has(p:has(a[href^="/torrent/"]))
+
     fields:
       title:
         selector: p:nth-child(1) > a
@@ -69,6 +72,7 @@
           - name: regexp
             args: ([\d,]+)
       downloadvolumefactor:
-        text: "1"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
+# engine n/a

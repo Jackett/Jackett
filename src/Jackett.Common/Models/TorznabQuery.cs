@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -204,7 +204,7 @@ namespace Jackett.Common.Models
                         limit = queryString.Length;
                     queryString = queryString.Substring(0, (int)limit);
                 }
-                Regex SplitRegex = new Regex("[^a-zA-Z0-9]+");
+                var SplitRegex = new Regex("[^a-zA-Z0-9]+");
                 QueryStringParts = SplitRegex.Split(queryString);
             }
 
@@ -225,8 +225,7 @@ namespace Jackett.Common.Models
                 return string.Empty;
 
             string episodeString;
-            DateTime showDate;
-            if (DateTime.TryParseExact(string.Format("{0} {1}", Season, Episode), "yyyy MM/dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out showDate))
+            if (DateTime.TryParseExact(string.Format("{0} {1}", Season, Episode), "yyyy MM/dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var showDate))
                 episodeString = showDate.ToString("yyyy.MM.dd");
             else if (string.IsNullOrEmpty(Episode))
                 episodeString = string.Format("S{0:00}", Season);

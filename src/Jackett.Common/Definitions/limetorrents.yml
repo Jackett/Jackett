@@ -7,6 +7,11 @@
   encoding: UTF-8
   links:
     - https://www.limetorrents.info/
+    - https://www.limetorrents.asia/
+    - https://www.limetorrents.co/
+    - https://www.limetorrents.zone/
+    - https://limetor.com/
+    - https://www.limetor.pro/
   legacylinks:
     - https://www.limetorrents.io/
     - https://www.limetorrents.cc/
@@ -25,6 +30,7 @@
     modes:
       search: [q]
       tv-search: [q, season, ep]
+      movie-search: [q]
 
   settings:
     - name: downloadlink
@@ -34,19 +40,30 @@
       options:
         "http://itorrents.org/" : "iTorrents.org"
         "magnet:": "magnet"
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "date"
+      options:
+        "date": "created"
+        "seeds": "seeders"
+        "size": "size"
 
   download:
     # the .torrent url is on the on the details page 
     selector: a.csprite_dltorrent[href^="{{ .Config.downloadlink }}"]
+    attribute: href
 
   search:
     paths:
-      - path: "{{if .Keywords}}search/all/{{ .Keywords}}/date/1/{{else}}/index.php?page=latest100{{end}}"
+      - path: "{{ if .Keywords }}search/all/{{ .Keywords }}/{{ .Config.sort }}/1/{{else}}/latest100{{end}}"
     keywordsfilters:
       - name: re_replace
         args: ["S[0-9]{2}([^E]|$)", ""] #remove season tag without episode
+
     rows:
       selector: ".table2 > tbody > tr[bgcolor]"
+
     fields:
       title:
         selector: div.tt-name > a[href^="/"]
@@ -79,7 +96,10 @@
             args: ["-", 1]
           - name: replace
             args: [" in ", ""]
+          - name: replace
+            args: [".", ""]
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
+# engine n/a

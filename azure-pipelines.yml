@@ -1,0 +1,368 @@
+name: $(majorVersion).$(minorVersion).$(patchVersion)
+variables:
+  majorVersion: 0
+  minorVersion: 13
+  patchVersion: $[counter(variables['minorVersion'], 1)] #this will reset when we bump minor
+  jackettVersion: $(majorVersion).$(minorVersion).$(patchVersion)
+  buildConfiguration: Release
+  netCoreFramework: netcoreapp3.1
+  netCoreSdkVersion: 3.1.x
+
+stages:
+  - stage: BuildJackett
+    displayName: Create Binaries
+    jobs:
+    - job: Build
+      workspace:
+        clean: all
+      strategy:
+        matrix:
+          Mono:
+            buildDescription: Mono
+            imageName: ubuntu-latest
+            framework: net461
+            runtime: linux-x64
+            archiveType: tar
+            artifactName: Jackett.Binaries.Mono.tar.gz
+          Windows:
+            buildDescription: Windows
+            imageName: windows-latest
+            framework: $(netCoreFramework)
+            runtime: win-x86
+            archiveType: zip
+            artifactName: Jackett.Binaries.Windows.zip
+          macOS:
+            buildDescription: macOS
+            imageName: macOS-latest
+            framework: $(netCoreFramework)
+            runtime: osx-x64
+            archiveType: tar
+            artifactName: Jackett.Binaries.macOS.tar.gz
+          LinuxAmdx64:
+            buildDescription: Linux AMD x64
+            imageName: ubuntu-latest
+            framework: $(netCoreFramework)
+            runtime: linux-x64
+            archiveType: tar
+            artifactName: Jackett.Binaries.LinuxAMDx64.tar.gz
+          LinuxARM32:
+            buildDescription: Linux ARM32
+            imageName: ubuntu-latest
+            framework: $(netCoreFramework)
+            runtime: linux-arm
+            archiveType: tar
+            artifactName: Jackett.Binaries.LinuxARM32.tar.gz
+          LinuxARM64:
+            buildDescription: Linux ARM64
+            imageName: ubuntu-latest
+            framework: $(netCoreFramework)
+            runtime: linux-arm64
+            archiveType: tar
+            artifactName: Jackett.Binaries.LinuxARM64.tar.gz
+      pool:
+        vmImage: $(imageName)
+      displayName: ${{ variables.buildDescription }}
+      steps:
+      - checkout: self
+
+      - task: UseDotNet@2
+        displayName: Install .NET Core SDK
+        inputs:
+          packageType: sdk
+          version: $(netCoreSdkVersion)
+          installationPath: $(Agent.ToolsDirectory)/dotnet
+
+      - task: DotNetCoreCLI@2
+        displayName: Build Jackett Server
+        inputs:
+          command: publish
+          projects: 'src/Jackett.Server/Jackett.Server.csproj'
+          publishWebProjects: false
+          zipAfterPublish: false
+          arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework) --output $(Build.BinariesDirectory) /p:AssemblyVersion=$(jackettVersion) /p:FileVersion=$(jackettVersion) /p:InformationalVersion=$(jackettVersion) /p:Version=$(jackettVersion)'
+
+      - task: DotNetCoreCLI@2
+        displayName: Build Jackett Updater
+        inputs:
+          command: publish
+          projects: 'src/Jackett.Updater/Jackett.Updater.csproj'
+          publishWebProjects: false
+          zipAfterPublish: false
+          arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework) --output $(Build.BinariesDirectory) /p:AssemblyVersion=$(jackettVersion) /p:FileVersion=$(jackettVersion) /p:InformationalVersion=$(jackettVersion) /p:Version=$(jackettVersion)'
+
+      - task: DotNetCoreCLI@2
+        displayName: Build Jackett Tray (Windows only)
+        condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
+        inputs:
+          command: publish
+          projects: 'src/Jackett.Tray/Jackett.Tray.csproj'
+          publishWebProjects: false
+          zipAfterPublish: false
+          arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework) --output $(Build.BinariesDirectory) /p:AssemblyVersion=$(jackettVersion) /p:FileVersion=$(jackettVersion) /p:InformationalVersion=$(jackettVersion) /p:Version=$(jackettVersion)'
+
+      - task: DotNetCoreCLI@2
+        displayName: Build Jackett Service (Windows only)
+        condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
+        inputs:
+          command: publish
+          projects: 'src/Jackett.Service/Jackett.Service.csproj'
+          publishWebProjects: false
+          zipAfterPublish: false
+          arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework) --output $(Build.BinariesDirectory) /p:AssemblyVersion=$(jackettVersion) /p:FileVersion=$(jackettVersion) /p:InformationalVersion=$(jackettVersion) /p:Version=$(jackettVersion)'
+
+      - task: CopyFiles@2
+        displayName: Copy Jackett Server
+        inputs:
+          SourceFolder: $(Build.BinariesDirectory)/Jackett.Server
+          contents: '**'
+          targetFolder: $(Build.BinariesDirectory)/Jackett
+
+      - task: CopyFiles@2
+        displayName: Copy Jackett Updater
+        inputs:
+          SourceFolder: $(Build.BinariesDirectory)/Jackett.Updater
+          contents: JackettUpdater*
+          targetFolder: $(Build.BinariesDirectory)/Jackett
+
+      - task: CopyFiles@2
+        displayName: Copy Jackett Tray (Windows only)
+        condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
+        inputs:
+          SourceFolder: $(Build.BinariesDirectory)/Jackett.Tray
+          contents: |
+           System.Drawing.dll
+           System.Security.Cryptography.ProtectedData.dll
+           WindowsBase.dll
+          targetFolder: $(Build.BinariesDirectory)/Jackett
+          overWrite: true
+
+      - task: CopyFiles@2
+        displayName: Copy Jackett Tray Part 2 (Windows only)
+        condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
+        inputs:
+          SourceFolder: $(Build.BinariesDirectory)/Jackett.Tray
+          contents: '*'
+          targetFolder: $(Build.BinariesDirectory)/Jackett
+          overWrite: false
+
+      - task: CopyFiles@2
+        displayName: Copy Jackett Service (Windows only)
+        condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
+        inputs:
+          SourceFolder: $(Build.BinariesDirectory)/Jackett.Service
+          contents: JackettService*
+          targetFolder: $(Build.BinariesDirectory)/Jackett
+
+      - task: CopyFiles@2
+        displayName: Copy Mono Specific Scripts
+        condition: and(succeeded(), startsWith(variables['buildDescription'], 'Mono'))
+        inputs:
+          SourceFolder: $(Build.SourcesDirectory)
+          contents: |
+            install_service_systemd_mono.sh
+            Upstart.config
+          targetFolder: $(Build.BinariesDirectory)/Jackett
+
+      - task: CopyFiles@2
+        displayName: Copy macOS Specific Scripts
+        condition: and(succeeded(), startsWith(variables['buildDescription'], 'macOS'))
+        inputs:
+          SourceFolder: $(Build.SourcesDirectory)
+          contents: install_service_macos
+          targetFolder: $(Build.BinariesDirectory)/Jackett
+
+      - task: CopyFiles@2
+        displayName: Copy Linux Specific Scripts
+        condition: and(succeeded(), startsWith(variables['buildDescription'], 'Linux'))
+        inputs:
+          SourceFolder: $(Build.SourcesDirectory)
+          contents: |
+            install_service_systemd.sh
+            jackett_launcher.sh
+          targetFolder: $(Build.BinariesDirectory)/Jackett
+
+      #There is an issue with Mono 5.8 (fixed in Mono 5.12) where its expecting to use its own patched version of System.Net.Http.dll, instead of the version supplied in folder
+      #https://github.com/dotnet/corefx/issues/19914
+      #https://bugzilla.xamarin.com/show_bug.cgi?id=60315
+      #The workaround is to delete System.Net.Http.dll and patch the .exe.config file
+      #Mono on FreeBSD doesn't like the bundled System.Runtime.InteropServices.RuntimeInformation -> Delete it
+      #https://github.com/dotnet/corefx/issues/23989
+      #https://github.com/Jackett/Jackett/issues/3547
+      - task: PowerShell@2
+        displayName: Patch Mono Build (Mono only)
+        condition: and(succeeded(), startsWith(variables['buildDescription'], 'Mono'))
+        inputs:
+          workingDirectory: $(Build.BinariesDirectory)/Jackett
+          targetType: inline
+          script: |
+            $file = '$(Build.BinariesDirectory)/Jackett/JackettConsole.exe.config'
+            $xml = [xml] (Get-Content $file)
+            $newVersion = $xml.SelectSingleNode("configuration/runtime/*[name()='assemblyBinding']/*[name()='dependentAssembly']/*[name()='assemblyIdentity'][@name='System.Net.Http']/../*[name()='bindingRedirect']/@newVersion") 
+            $newVersion.Value = '4.0.0.0'
+            $xml.Save($file)
+            Remove-Item '$(Build.BinariesDirectory)/Jackett/System.Net.Http.dll'
+            Remove-Item '$(Build.BinariesDirectory)/Jackett/System.Runtime.InteropServices.RuntimeInformation.dll'
+
+      - task: Bash@3
+        displayName: Set Folder and File Permissions (Mono, Linux and macOS)
+        condition: and(succeeded(), not(startsWith(variables['runtime'], 'win')))
+        inputs:
+          workingDirectory: $(Build.BinariesDirectory)/Jackett
+          targetType: inline
+          script: |
+            chmod 755 $(find "$(Build.BinariesDirectory)"/Jackett -type d)
+            chmod 644 $(find "$(Build.BinariesDirectory)"/Jackett -type f)
+            chmod 755 jackett
+            chmod 755 JackettUpdater
+            if [ -f install_service_systemd_mono.sh ]; then chmod 755 install_service_systemd_mono.sh; fi
+            if [ -f install_service_macos ]; then chmod 755 install_service_macos; fi
+            if [ -f install_service_systemd.sh ]; then chmod 755 install_service_systemd.sh; fi
+            if [ -f jackett_launcher.sh ]; then chmod 755 jackett_launcher.sh; fi
+
+      - task: ArchiveFiles@2
+        displayName: Compress Binaries
+        inputs:
+          rootFolderOrFile: $(Build.BinariesDirectory)/Jackett
+          includeRootFolder: true 
+          archiveType: '$(archiveType)'
+          tarCompression: gz
+          archiveFile: '$(Build.ArtifactStagingDirectory)/$(artifactName)'
+
+      - task: CmdLine@2
+        displayName: Create Jackett Installer (Windows only)
+        condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
+        inputs:
+          script: >
+            iscc.exe $(Build.SourcesDirectory)/Installer.iss
+            /O"$(Build.ArtifactStagingDirectory)" 
+            /DMyFileForVersion=$(Build.BinariesDirectory)/Jackett/Jackett.Common.dll 
+            /DMySourceFolder=$(Build.BinariesDirectory)/Jackett 
+            /DMyOutputFilename=Jackett.Installer.Windows
+
+      - task: PublishBuildArtifacts@1
+        inputs:
+          pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+
+      - task: DotNetCoreCLI@2
+        displayName: Unit Tests (Windows only)
+        condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
+        inputs:
+          command: test
+          projects: '**/*.Test*/*.csproj'
+          arguments: '--configuration $(buildConfiguration) --framework $(framework)'
+
+      - task: DotNetCoreCLI@2
+        displayName: Unit Tests (Mono, Linux and macOS)
+        condition: and(succeeded(), not(startsWith(variables['runtime'], 'win')))
+        inputs:
+          command: test
+          projects: '**/*.Test*/*.csproj'
+          arguments: '--configuration $(buildConfiguration) --framework $(framework) --runtime $(runtime)'
+
+
+  - stage: Integration
+    displayName: Integration Tests
+    dependsOn: BuildJackett
+    jobs:
+    - job: Selenium
+      workspace:
+        clean: all
+      strategy:
+        matrix:
+          Mono:
+            buildDescription: Mono
+            imageName: ubuntu-latest
+            artifactName: Jackett.Binaries.Mono.tar.gz
+          Windows:
+            buildDescription: Windows
+            imageName: windows-latest
+            artifactName: Jackett.Binaries.Windows.zip
+          # Enable once ChromeDriver is deployed to macOS image https://github.com/actions/virtual-environments/issues/7
+          # macOS:
+          #   buildDescription: macOS
+          #   imageName: macOS-latest
+          #   artifactName: Jackett.Binaries.macOS.tar.gz
+          LinuxAmdx64:
+            buildDescription: Linux AMD x64
+            imageName: ubuntu-latest
+            artifactName: Jackett.Binaries.LinuxAMDx64.tar.gz
+      pool:
+        vmImage: $(imageName)
+      displayName: ${{ variables.buildDescription }}
+      steps:
+      - checkout: self
+
+      - task: DownloadPipelineArtifact@2
+        displayName: Download artifacts for integration tests
+        inputs:
+          patterns: '**/Jackett*'
+          path: $(Build.ArtifactStagingDirectory)
+
+      - task: PowerShell@2
+        displayName: Install Jackett (Windows only)
+        condition: and(succeeded(), eq(variables['buildDescription'], 'Windows'))
+        inputs:
+          workingDirectory: $(Build.ArtifactStagingDirectory)/drop
+          targetType: inline
+          script: |
+            Start-Process ./Jackett.Installer.Windows.exe /silent -NoNewWindow -Wait
+
+      - task: Bash@3
+        displayName: Install Jackett (Mono, Linux and macOS)
+        condition: and(succeeded(), ne(variables['buildDescription'], 'Windows'))
+        inputs:
+          workingDirectory: $(Build.ArtifactStagingDirectory)/drop
+          targetType: inline
+          script: |
+            tar xzf "$(artifactName)"
+            cd Jackett
+            if [[ "$(artifactName)" == *"Mono"* ]]; then mono --version; fi
+            if [[ "$(artifactName)" == *"Mono"* ]]; then sudo ./install_service_systemd_mono.sh; fi
+            if [[ "$(artifactName)" == *"macOS"* ]]; then sudo ./install_service_macos; fi
+            if [[ "$(artifactName)" == *"LinuxAMDx64"* ]]; then sudo ./install_service_systemd.sh; fi
+
+      - task: UseDotNet@2
+        displayName: Install .NET Core SDK
+        inputs:
+          packageType: sdk
+          version: $(netCoreSdkVersion)
+          installationPath: $(Agent.ToolsDirectory)/dotnet
+
+      - task: DotNetCoreCLI@2
+        displayName: Run Integration Tests
+        inputs:
+          command: test
+          projects: '**/*IntegrationTest*/*.csproj'
+
+
+  - stage: PublishGithub
+    displayName: Publish to Github
+    dependsOn: Integration
+    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    jobs:
+    - job: Publish
+      workspace:
+        clean: all
+      steps:
+      - checkout: self
+
+      - task: DownloadPipelineArtifact@2
+        displayName: Download Artifacts for Publish
+        inputs:
+          patterns: '**/Jackett*'
+          path: $(Build.ArtifactStagingDirectory)
+
+      - task: GitHubRelease@0
+        displayName: Create Github release
+        inputs:
+          gitHubConnection: github.com_jackett
+          repositoryName: '$(Build.Repository.Name)' 
+          action: create
+          target: $(Build.SourceVersion)
+          tagSource: manual
+          tag: v$(Build.BuildNumber)
+          title: v$(Build.BuildNumber)
+          assets: $(Build.ArtifactStagingDirectory)/drop/*
+          isDraft: true
+          addChangeLog: true
+          compareWith: lastNonDraftRelease

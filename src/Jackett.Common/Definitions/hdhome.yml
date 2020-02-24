@@ -6,6 +6,8 @@
   type: private
   encoding: UTF-8
   links:
+    - http://hdhome.org/
+  legacylinks:
     - https://hdhome.org/
 
   caps:
@@ -16,18 +18,21 @@
       - {id: 414, cat: Movies/HD, desc: "Movies 1080p"}
       - {id: 415, cat: Movies/HD, desc: "Movies REMUX"}
       - {id: 450, cat: Movies/BluRay, desc: "Movies Bluray"}
-      - {id: 416, cat: Movies/HD, desc: "Movies 2160p"}
+      - {id: 499, cat: Movies/BluRay, desc: "Movies UHD Blu-ray"}
+      - {id: 416, cat: Movies/UHD, desc: "Movies 2160p"}
       - {id: 417, cat: TV/Documentary, desc: "Doc SD"}
       - {id: 418, cat: TV/Documentary, desc: "Doc IPad"}
       - {id: 419, cat: TV/Documentary, desc: "Doc 720p"}
       - {id: 420, cat: TV/Documentary, desc: "Doc 1080p"}
       - {id: 421, cat: TV/Documentary, desc: "Doc REMUX"}
       - {id: 451, cat: TV/Documentary, desc: "Doc Bluray"}
+      - {id: 500, cat: TV/Documentary, desc: "Doc UHD Blu-ray"}
       - {id: 422, cat: TV/Documentary, desc: "Doc 2160p"}
       - {id: 423, cat: TV/HD, desc: "TVMusic 720p"}
       - {id: 424, cat: TV/HD, desc: "TVMusic 1080i"}
       - {id: 425, cat: TV/SD, desc: "TVShow SD"}
       - {id: 426, cat: TV/SD, desc: "TVShow IPad"}
+      - {id: 471, cat: TV/SD, desc: "TVShow IPad"}
       - {id: 427, cat: TV/HD, desc: "TVShow 720p"}
       - {id: 428, cat: TV/HD, desc: "TVShow 1080i"}
       - {id: 429, cat: TV/HD, desc: "TVShow 1080p"}
@@ -41,7 +46,8 @@
       - {id: 436, cat: TV/HD, desc: "TVSeries 1080p"}
       - {id: 437, cat: TV/HD, desc: "TVSeries REMUX"}
       - {id: 453, cat: TV/HD, desc: "TVSereis Bluray"}
-      - {id: 438, cat: TV/HD, desc: "TVSeries 2160p"}
+      - {id: 438, cat: TV/UHD, desc: "TVSeries 2160p"}
+      - {id: 502, cat: TV/UHD, desc: "TVSeries 4K Bluray"}
       - {id: 439, cat: Audio/Other, desc: "Musics APE"}
       - {id: 440, cat: Audio/Lossless, desc: "Musics FLAC"}
       - {id: 441, cat: Audio/Video, desc: "Musics MV"}
@@ -55,42 +61,44 @@
       - {id: 454, cat: TV/Anime, desc: "Anime Bluray"}
       - {id: 409, cat: Other, desc: "Misc"}
       - {id: 449, cat: TV/Anime, desc: "Anime 2160p"}
+      - {id: 501, cat: TV/Anime, desc: "Anime UHD Blu-ray"}
 
     modes:
       search: [q]
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
 
+  settings:
+    - name: cookie
+      type: text
+      label: Cookie
+    - name: info
+      type: info
+      label: How to get the Cookie
+      default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find 'cookie:' in the <b>Request Headers</b> section<li>Copy & paste the whole cookie string to here.</ol>"
+
   login:
-    path: login.php
-    method: form
-    form: form[action="takelogin.php"]
-    captcha:
-      type: image
-      selector: img[alt="CAPTCHA"]
-      input: imagestring
+    method: cookie
     inputs:
-      username: "{{ .Config.username }}"
-      password: "{{ .Config.password }}"
-    error:
-      - selector: td.embedded:has(h2:contains("姿势不正确"))
-      - selector: td.embedded:has(h2:contains("失败"))
+      cookie: "{{ .Config.cookie }}"
     test:
-      path: torrents.php
+      path: index.php
         
   search:
     paths:
       - path: torrents.php
     inputs:
-      $raw: "{{range .Categories}}cat{{.}}=1&{{end}}"
-      search: "{{if .Query.IMDBID}}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-      incldead: "1"
-      spstate: "0"
-      inclbookmarked: "0"
+      $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
+      search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+      incldead: 1
+      spstate: 0
+      inclbookmarked: 0
       search_area: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
-      search_mode: "0"
+      search_mode: 0
+
     rows:
       selector: table.torrents > tbody > tr:has(table.torrentname)
+
     fields:
       title:
         selector: a[title][href^="details.php?id="]
@@ -125,18 +133,19 @@
             args: "2006-01-02 15:04:05 -07:00"
       downloadvolumefactor:
         case:
-          img.pro_free: "0"
-          img.pro_free2up: "0"
-          img.pro_50pctdown: "0.5"
-          img.pro_50pctdown2up: "0.5"
-          img.pro_30pctdown: "0.3"
-          "*": "1"
+          img.pro_free: 0
+          img.pro_free2up: 0
+          img.pro_50pctdown: 0.5
+          img.pro_50pctdown2up: 0.5
+          img.pro_30pctdown: 0.3
+          "*": 1
       uploadvolumefactor:
         case:
-          img.pro_50pctdown2up: "2"
-          img.pro_free2up: "2"
-          img.pro_2up: "2"
-          "*": "1"
+          img.pro_50pctdown2up: 2
+          img.pro_free2up: 2
+          img.pro_2up: 2
+          "*": 1
       description:
         selector: td:nth-child(2)
         remove: a, img
+# NexusPHP Standard v1.5 Beta 4

@@ -1,4 +1,11 @@
-﻿using AngleSharp.Dom;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
@@ -8,13 +15,6 @@ using Jackett.Common.Utils.Clients;
 using Microsoft.AspNetCore.WebUtilities;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Jackett.Common.Indexers
 {
@@ -37,7 +37,7 @@ namespace Jackett.Common.Indexers
                            configData: new ConfigurationDataAniDub())
         {
             Encoding = Encoding.UTF8;
-            Language = "ru-RU";
+            Language = "ru-ru";
             Type = "semi-private";
 
             AddCategoryMapping(2, TorznabCatType.TVAnime, "Аниме TV");
@@ -342,12 +342,18 @@ namespace Jackett.Common.Indexers
             var quality = releaseNode.Id.Trim();
             switch (quality.ToLowerInvariant())
             {
-                case "tv720": return "HDTV 720p";
-                case "tv1080": return "HDTV 1080p";
-                case "bd720": return "BDRip 720p";
-                case "bd1080": return "BDRip 1080p";
-                case "hwp": return "SDTV";
-                default: return quality.ToUpperInvariant();
+                case "tv720":
+                    return "HDTV 720p";
+                case "tv1080":
+                    return "HDTV 1080p";
+                case "bd720":
+                    return "BDRip 720p";
+                case "bd1080":
+                    return "BDRip 1080p";
+                case "hwp":
+                    return "SDTV";
+                default:
+                    return quality.ToUpperInvariant();
             }
         }
 
@@ -522,7 +528,7 @@ namespace Jackett.Common.Indexers
 
         private IEnumerable<int> ParseCategories(Uri showUri)
         {
-            Dictionary<string, string> categoriesMap = CategoriesMap;
+            var categoriesMap = CategoriesMap;
 
             var path = showUri.AbsolutePath.ToLowerInvariant();
 

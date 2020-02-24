@@ -21,34 +21,29 @@
     - name: info
       type: info
       default: BTDigg does not use categories. In your software Indexer settings, set the category to 100001.
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "2"
+      options:
+        "2": "created"
+        "3": "size"
 
   search:
     # https://btdig.com/search?q=test&order=2
     # only 10 results per page
-    # https://btdig.com/search?q=test&p=1&order=2
     paths:
       - path: search
-      - path: search
-        inputs:
-            p: 1
-      - path: search
-        inputs:
-            p: 2
-      - path: search
-        inputs:
-            p: 3
-      - path: search
-        inputs:
-            p: 4
     inputs:
-      q: "{{if .Keywords }}{{.Keywords}}{{else}}test{{end}}"
-      order: 2
-    headers:
-      user-agent: ["Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36"]
+      q: "{{ if .Keywords }}{{ .Keywords }}{{else}}test{{end}}"
+      # 0 relevance 2 age 3 size 4 files
+      order: "{{ .Config.sort }}"
+
     rows:
       selector: div.one_result
       filters:
         - name: andmatch
+
     fields:
       title:
         selector: div.torrent_name a
@@ -77,6 +72,7 @@
       leechers:
         text: 1
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
+# dhtcrawler2
