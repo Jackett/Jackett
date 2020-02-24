@@ -1,7 +1,7 @@
 ---
   site: torrentview
-  name: TorrentView (토렌트뷰)
-  description: "Torrent View is a free Korean tracker for Korean media."
+  name: TorrentView
+  description: "Torrent View  (토렌트뷰) is a Public KOREAN tracker for Korean media."
   language: ko-KR
   type: public 
   encoding: UTF-8
@@ -23,56 +23,60 @@
 
     modes:
       search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
 
-  settings:
-    - name: downloadlink
-      type: select
-      label: Download link
-      default: "magnet:"
-      options:
-        "magnet:": "magnet"
+  settings: []
 
   download:
-    selector: a[href^="{{ .Config.downloadlink }}"]
+    selector: a[href^="magnet:?xt="]
     attribute: href
 
   search:
     paths:
+      # https://torrentview3.net/bbs/search.php?srows=10&gr_id=&sfl=wr_subject&stx=test&sop=and
       - path: "bbs/search.php"
-        inputs:
-          stx: "{{ if .Keywords }}{{ .Keywords }}{{else}}금요일 금요일{{end}}"
+    inputs:
+      # number of rows
+      srows: 100
+      # category: all
+      gr_id: ""
+      # search in: title
+      sfl: wr_subject
+      stx: "{{ if .Keywords }}{{ .Keywords }}{{else}}금요일{{end}}"
+      # search operand: or, and
+      sop: and
+
     rows:
       selector: div.search-media > div.media
+
     fields:
-      download:
-        selector: div.media-body > div.media-content > a[href^="./board.php"]
-        attribute: href
-      seeders:
-        text: 1
-      leechers:
-        text: 1
       category:
-        selector: div.media-body > div.media-content > a[href^="./board.php"]
+        selector: div.media-content > a[href^="./board.php"]
         attribute: href
         filters:
           - name: querystring
             args: bo_table
       title:
-        selector: div.media-body > div.media-content > a[href^="./board.php"] > span
+        selector: div.media-content > a[href^="./board.php"] > span
       details:
-        selector: div.media-body > div.media-content > a[href^="./board.php"]
+        selector: div.media-content > a[href^="./board.php"]
+        attribute: href
+      download:
+        selector: div.media-content > a[href^="./board.php"]
         attribute: href
       date:
-        selector: div.media-info.font-11.text-muted > span.hidden-xs > time
+        selector: time
         attribute: datetime
         filters:
           - name: dateparse
             args: "2006-01-02T15:04:05+09:00"
       size:
-        text: "0MB"
+        text: "512 MB"
+      seeders:
+        text: 1
+      leechers:
+        text: 1
       downloadvolumefactor:
         text: 0
       uploadvolumefactor:
         text: 1
+# engine n/a
