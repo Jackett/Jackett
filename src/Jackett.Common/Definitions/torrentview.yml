@@ -1,0 +1,78 @@
+---
+  site: torrentview
+  name: TorrentView (토렌트뷰)
+  description: "Torrent View is a free Korean tracker for Korean media."
+  language: ko-KR
+  type: public 
+  encoding: UTF-8
+  links: 
+    - https://torrentview3.net/
+  legacylinks:
+    - https://torrentview.net/
+
+  caps:
+    categorymappings:
+      - {id: "mov", cat: Movies, desc: "토렌트영화 (Movies)"}
+      - {id: "enter", cat: TV, desc: "예능 (TV Variety Shows)"}
+      - {id: "drama", cat: TV, desc: "드라마 (TV Dramas)"}
+      - {id: "tv", cat: TV/Documentary, desc: "시사 (Documentaries)"}
+      - {id: "netflix", cat: TV, desc: "넷플릭스 (Netflix, Disney+, etc.)"}
+      - {id: "util", cat: PC, desc: "토렌트유틸 (Utilities)"}
+      - {id: "ani", cat: TV/Anime, desc: "애니 (Anime)"}
+      - {id: "music", cat: Audio, desc: "음원 (Music)"}
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  settings:
+    - name: downloadlink
+      type: select
+      label: Download link
+      default: "magnet:"
+      options:
+        "magnet:": "magnet"
+
+  download:
+    selector: a[href^="{{ .Config.downloadlink }}"]
+    attribute: href
+
+  search:
+    paths:
+      - path: "bbs/search.php"
+        inputs:
+          stx: "{{ if .Keywords }}{{ .Keywords }}{{else}}금요일 금요일{{end}}"
+    rows:
+      selector: div.search-media > div.media
+    fields:
+      download:
+        selector: div.media-body > div.media-content > a[href^="./board.php"]
+        attribute: href
+      seeders:
+        text: 1
+      leechers:
+        text: 1
+      category:
+        selector: div.media-body > div.media-content > a[href^="./board.php"]
+        attribute: href
+        filters:
+          - name: querystring
+            args: bo_table
+      title:
+        selector: div.media-body > div.media-content > a[href^="./board.php"] > span
+      details:
+        selector: div.media-body > div.media-content > a[href^="./board.php"]
+        attribute: href
+      date:
+        selector: div.media-info.font-11.text-muted > span.hidden-xs > time
+        attribute: datetime
+        filters:
+          - name: dateparse
+            args: "2006-01-02T15:04:05+09:00"
+      size:
+        text: "0MB"
+      downloadvolumefactor:
+        text: 0
+      uploadvolumefactor:
+        text: 1
