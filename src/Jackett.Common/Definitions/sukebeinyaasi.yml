@@ -9,14 +9,6 @@
     - https://sukebei.nyaa.si/
     
   settings:
-    - name: filter-id
-      type: select
-      label: Filter
-      default: "0"
-      options:
-        0: No filter
-        1: No remakes
-        2: Trusted only
     - name: cat-id
       type: select
       label: Category
@@ -32,6 +24,21 @@
         2_0: "Real Life"
         2_1: "Real Life - Photobooks and Pictures"
         2_2: "Real Life - Videos"
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "id"
+      options:
+        "id": "created"
+        "seeders": "seeders"
+        "size": "size"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
 
   caps:
     categorymappings:
@@ -46,6 +53,7 @@
       - {id: 2_0,  cat: XXX, desc: "Adult Real Life"}
       - {id: 2_1,  cat: XXX, desc: "Adult Photobooks and Pictures"}
       - {id: 2_2,  cat: XXX, desc: "Adult Videos"}
+
     modes:
       search: [q]
       tv-search: [q]
@@ -54,11 +62,16 @@
     paths:
       - path: /
     inputs:
-      q: "{{ .Query.Keywords}}"
-      f: "{{ .Config.filter-id }}"
+      q: "{{ .Keywords }}"
+      # 0 no filter 1 no remakes 2 trusted only
+      f: 0
       c: "{{ .Config.cat-id }}"
+      s: "{{ .Config.sort }}"
+      o: "{{ .Config.type }}"
+
     rows:
       selector: tr.default,tr.danger,tr.success
+
     fields:
       category:
         selector: td:nth-child(1) a
@@ -73,9 +86,11 @@
         attribute: href
       download:
         selector: td:nth-child(3) a[href$=".torrent"]
+        optional: true
         attribute: href
       magnet:
         selector: td:nth-child(3) a[href^="magnet:?"]
+        optional: true
         attribute: href
       size:
         selector: td:nth-child(4)
@@ -93,6 +108,7 @@
       grabs:
         selector: td:nth-child(8)
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
+# engine n/a

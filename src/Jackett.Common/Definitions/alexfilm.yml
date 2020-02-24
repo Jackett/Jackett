@@ -6,7 +6,11 @@
   type: semi-private
   encoding: UTF-8
   links:
+    - https://alexfilm.org/
+  legacylinks:
     - https://alexfilm.cc/
+  certificates:
+    - 9200e15406272061df1f609a0f40d76282f54295 # expired 30 nov '19
 
   caps:
     categorymappings:
@@ -27,6 +31,22 @@
       type: checkbox
       label: Strip Russian Letters
       default: false
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "1"
+      options:
+        "1": "created"
+        "10": "seeders"
+        "7": "size"
+        "2": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "1"
+      options:
+        "2": "desc"
+        "1": "asc"
 
   login:
     path: login.php
@@ -62,9 +82,9 @@
       prev_ds: 0
       prev_tor_type: 0
       # sort by 1=registered 2=topicTitle 4=completed 10=seed 11=leech 12=up 13=down 5=replies 6=views 7=size 8=lastPost 9=seedLastSeen
-      o: 1
+      o: "{{ .Config.sort }}"
       # 1=asc 2=desc
-      s: 2
+      s: "{{ .Config.type }}"
       # show category
       dc: 0
       # show forum
@@ -87,6 +107,7 @@
 
     rows:
       selector: tr[id^="tor_"]
+
     fields:
       title:
         selector: td a.tLink
@@ -106,7 +127,7 @@
           - name: re_replace
             args: ["(.*)[CСcс]езон\\s+(\\d+)(.*)", "$1 S$2 rus $3"]
           - name: re_replace
-            args: ["(\\([А-Яа-я\\W]+\\))|(^[А-Яа-я\\W\\d]+\\/ )|([а-яА-Я \\-]+,+)|([а-яА-Я]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
+            args: ["(\\([А-Яа-яЁё\\W]+\\))|(^[А-Яа-яЁё\\W\\d]+\\/ )|([а-яА-ЯЁё \\-]+,+)|([а-яА-ЯЁё]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
       details:
         selector: td a.tLink
         attribute: href
@@ -127,9 +148,10 @@
         selector: td:nth-child(6) span:nth-last-child(1)
       downloadvolumefactor:
         case:
-          img[src="./styles/images/tor_gold.gif"]: "0"
-          img[src="./styles/images/tor_silver.gif"]: "0.5"
-          "*": "1"
+          img[src="./styles/images/tor_gold.gif"]: 0
+          img[src="./styles/images/tor_silver.gif"]: 0.5
+          "*": 1
       uploadvolumefactor:
         case:
-          "*": "1"
+          "*": 1
+# engine n/a

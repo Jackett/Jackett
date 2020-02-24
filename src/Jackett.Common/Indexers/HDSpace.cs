@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -92,7 +92,7 @@ namespace Jackett.Common.Indexers
             {
                 var errorStr = "You have {0} remaining login attempts";
                 var remainingAttemptSpan = new Regex(string.Format(errorStr, "(.*?)")).Match(loginPage.Content).Groups[1].ToString();
-                var attempts = Regex.Replace(remainingAttemptSpan, "<.*?>", String.Empty);
+                var attempts = Regex.Replace(remainingAttemptSpan, "<.*?>", string.Empty);
                 var errorMessage = string.Format(errorStr, attempts);
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
@@ -128,13 +128,14 @@ namespace Jackett.Common.Indexers
                 {
                     // this tracker has horrible markup, find the result rows by looking for the style tag before each one
                     var prev = row.PreviousElementSibling;
-                    if (prev == null || prev.NodeName.ToLowerInvariant() != "style") continue;
+                    if (prev == null || prev.NodeName.ToLowerInvariant() != "style")
+                        continue;
 
-                    CQ qRow = row.Cq();
+                    var qRow = row.Cq();
                     var release = new ReleaseInfo();
 
                     release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800;
+                    release.MinimumSeedTime = 172800; // 48 hours
 
                     var qLink = row.ChildElements.ElementAt(1).FirstElementChild.Cq();
                     release.Title = qLink.Text().Trim();

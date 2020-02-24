@@ -15,13 +15,13 @@ namespace Jackett.Test.Util
         {
             get
             {
-                var type = typeof(ParseUtilTests);                
+                var type = typeof(ParseUtilTests);
                 using (var resourceStream = type.Assembly.GetManifestResourceStream($"{type.Namespace}.Invalid-RSS.xml"))
                 using (var sr = new StreamReader(resourceStream))
                 {
                     return sr.ReadToEnd();
                 }
-                
+
             }
         }
 

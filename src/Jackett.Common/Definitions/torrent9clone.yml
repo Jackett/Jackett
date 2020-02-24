@@ -7,7 +7,7 @@
   encoding: UTF-8
   followredirect: true
   links:
-    - https://ww7.torrent9.lol/
+    - https://www.torrent9.pl/
 
   legacylinks:
     - https://www.torrents9.pw/
@@ -23,16 +23,25 @@
     - https://ww1.torrent9.lol/
     - https://ww5.torrent9.lol/
     - https://ww6.torrent9.lol/
+    - https://www.torrent9.tw/
+    - https://ww7.torrent9.lol/
+    - https://www.torrent9.dev/
+    - https://www.torrent9.sx/
+    - https://ww1.torrent9.sx/
+    - https://www.t9.re/
+    - https://www.t9.vc/
+    - https://www.torrent9.ai/
+    - https://www.torrent9.so/
 
   caps:
     categorymappings:
-      - {id: films, cat: Movies, desc: "Movies"}
-      - {id: series, cat: TV, desc: "TV"}
-      - {id: musique, cat: Audio, desc: "Music"}
-      - {id: ebook, cat: Books, desc: "Books"}
-      - {id: logiciels, cat: PC, desc: "Software"}
-      - {id: jeux-pc, cat: PC/Games, desc: "PC Games"}
-      - {id: jeux-consoles, cat: Console/Xbox360, desc: "Console Games"}
+      - {id: Films, cat: Movies, desc: "Movies"}
+      - {id: Séries, cat: TV, desc: "TV"}
+      - {id: Musique, cat: Audio, desc: "Music"}
+      - {id: Ebook, cat: Books, desc: "Books"}
+      - {id: Logiciels, cat: PC, desc: "Software"}
+      - {id: Jeux-PC, cat: PC/Games, desc: "PC Games"}
+      - {id: Jeux-Consoles, cat: Console/Xbox360, desc: "Console Games"}
 
     modes:
       search: [q]
@@ -48,8 +57,10 @@
   search:
     paths:
       - path: "{{ if .Keywords }}/recherche/{{ .Keywords }}{{else}}/top{{end}}"
+
     rows:
       selector: div.table-responsive > table tbody tr
+
     fields:
       site_date:
         selector: td:nth-child(1) a
@@ -77,18 +88,12 @@
         attribute: href
       category:
         selector: td:nth-child(1) i
-        case:
-          i[class="Films"]: films
-          i[class="Séries"]: series
-          i[class="Musique"]: musique
-          i[class="Jeux-PC"]: jeux-pc
-          i[class="Logiciels"]: logiciels
-          i[class="Ebook"]: ebook
+        attribute: class
       download:
         selector: td:nth-child(1) a
         attribute: href
       date:
-          text: "now"
+        text: now
       size:
         selector: td:nth-child(2)
       seeders:
@@ -102,6 +107,7 @@
         selector: td:nth-child(4)
         optional: true
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
+# engine n/a

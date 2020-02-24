@@ -81,14 +81,30 @@
       type: info
       label: Results Per Page
       default: For best results, change the <b>Torrents per page</b> setting to <b>100</b> on your <b>Torrent</b> tab from the <b>Pers Tools > UserCP</b> menu on the TorrentSeeds webpage.
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "added"
+      options:
+        "added": "created"
+        "seeders": "seeders"
+        "size": "size"
+        "name": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
 
   login:
-    path: login.php
-    method: form
-    form: form[action="takelogin.php"]
+    path: takelogin.php
+    method: post
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
+      remember: on
     error:
       - selector: h2:contains("Login failed!")
         message:
@@ -100,24 +116,18 @@
     paths:
       - path: browse_elastic.php      
     inputs:
-      $raw: "{{range .Categories}}cat[{{.}}]=1&{{end}}"
+      $raw: "{{ range .Categories }}cat[{{.}}]=1&{{end}}"
       query: "{{ .Keywords }}"
       # name, descr, genre, all
       search_in: name
       # all, any
       search_mode: all
-      # added, name, year, size, snatched, seeders, leechers, random
-      order_by: added
-      # desc, asc
-      order_way: desc
-      # advanced disabled
-      # scene: 1 yes 0 no
-      # freetorrent: 1 freeleech 2 neutral 3 either 0 normal
-      # uploader: 1 uploaded 0 member
-      # archived: 1 yes 0 no
+      order_by: "{{ .Config.sort }}"
+      order_way: "{{ .Config.type }}"
 
     rows:
       selector: table.torrent-table tr[class]
+
     fields:
       category:
         selector: a[href^="/browse_elastic.php?cat="]
@@ -149,7 +159,8 @@
         selector: td.torrent-table-leechers
       downloadvolumefactor:
         case:
-          span.freeleech: "0"
-          "*": "1"
+          span.freeleech: 0
+          "*": 1
       uploadvolumefactor:
-        text: "1"
+        text: 1
+# U-232 V5

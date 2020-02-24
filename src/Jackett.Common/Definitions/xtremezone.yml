@@ -30,6 +30,7 @@
       - {id: 2, cat: Movies/DVD, desc: "Movies-DVD-RO"}
       - {id: 8, cat: Movies/HD, desc: "Movies-HD"}
       - {id: 29, cat: Movies/HD, desc: "Movies-HD-RO"}
+      - {id: 57, cat: Movies/UHD, desc: "Movies-UHD-RO"}
       - {id: 38, cat: Movies, desc: "Movies-Packs"}
       - {id: 10, cat: Movies/SD, desc: "Movies-SD"}
       - {id: 35, cat: Movies/SD, desc: "Movies-SD-RO"}
@@ -46,73 +47,81 @@
       - {id: 49, cat: XXX/Imageset, desc: "XXX-IMGSet"}
       - {id: 50, cat: XXX, desc: "XXX-Packs"}
       - {id: 51, cat: XXX, desc: "XXX-SD"}
-      - {id: 60, cat: TV/HD, desc: "TV-RO"}
+      - {id: 60, cat: TV/FOREIGN, desc: "TV-RO"}
+      - {id: 66, cat: TV/FOREIGN, desc: "TV-Packs-RO"}
 
     modes:
       search: [q]
       tv-search: [q, season, ep]
+      movie-search: [q]
 
   login:
-    path: login.php
+    path: login
     method: form
-    form: form
+    form: form:has(input[name="_remember_me"])
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
+      _remember_me: on
     error:
       - selector: td.embedded:has(center > h2:contains(failed))
     test:
-      path: browse.php
-      
+      path: browse
+
   ratio:
-    path: browse.php
+    path: browse
     selector: font:contains("Ratio:")+font
 
   search:
     paths:
-      - path: browse.php
+      - path: browse
     inputs:
-      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-      search: "{{ .Query.Keywords }}"
-      incldead: 1
+      $raw: "{{range .Categories}}categories[]={{.}}&{{end}}"
+      search: "{{ .Keywords }}"
     rows:
-      selector: table.browser > tbody > tr.browse[style]
+      selector: div[class="kt-container  kt-grid__item"] > div:not(#top10-wrapper) div[class^="row mr-0"]
     fields:
       title:
-        selector: a[href^="details.php?id="]
+        selector: a[href^="/browse/"]
       details:
-        selector: a[href^="details.php?id="]
+        selector: a[href^="/browse/"]
         attribute: href
       category:
-        selector: a[href^="browse.php?cat="]
+        selector: a[href^="/browse?categories"]
         attribute: href
         filters:
-          - name: querystring
-            args: cat
+          - name: regexp
+            args: (\d+)$
       download:
-        selector: a[href^="dwn.php"]
+        selector: a[href^="/dwn.php"]
         attribute: href
       size:
-        selector: td:nth-child(7)
+        selector: div[data-toggle="kt-tooltip"] + div + div
       date:
-        selector: td:nth-child(6)
+        selector: div[data-toggle="kt-tooltip"]
+        attribute: title
         filters:
-          - name: append
-            args: " +00:00"
           - name: dateparse
-            args: "02-01-200615:04:05 -07:00"
+            args: "Jan 02, 2006, 03:04:05 PM"
       grabs:
-        selector: td:nth-child(8)
+        selector: div[data-toggle="kt-tooltip"] + div
         filters:
           - name: regexp
             args: ([\d\.]+)
       seeders:
-        selector: td:nth-child(9)
+        selector: div[data-toggle="kt-tooltip"] + div + div + div > div div:nth-child(1)
+        filters:
+          - name: regexp
+            args: ([\d\.]+)
       leechers:
-        selector: td:nth-child(10)
+        selector: div[data-toggle="kt-tooltip"] + div + div + div > div div:nth-child(2)
+        filters:
+          - name: regexp
+            args: ([\d\.]+)
       banner:
         selector: a[onmouseover][href^="details.php?id="]
         attribute: onmouseover
+        optional: true
         filters:
           - name: regexp
             args: src=([^\s]+)
@@ -125,6 +134,3 @@
         case:
           "img[title^=\"2xUP: \"]": "2"
           "*": "1"
-      description:
-        selector: td:nth-child(2)
-        remove: a, img

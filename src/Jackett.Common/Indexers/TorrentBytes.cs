@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -161,7 +161,7 @@ namespace Jackett.Common.Indexers
                     // There isn't a title attribute if the release name isn't truncated.
                     if (string.IsNullOrWhiteSpace(release.Title))
                     {
-                        release.Title = link.Get(0).FirstChild.ToString();
+                        release.Title = link.Get(0).FirstChild.ToString().Trim();
                     }
 
                     release.Description = release.Title;

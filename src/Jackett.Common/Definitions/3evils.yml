@@ -11,132 +11,144 @@
   caps:
     categorymappings:
       - {id: 65, cat: Books, desc: "Books"}
-      - {id: 27, cat: Console/NDS, desc: "Games/Nintendo-DS"}
-      - {id: 28, cat: Console/Other, desc: "Games/Switch"}
-      - {id: 42, cat: PC/Phone-Android, desc: "Mobile/Android"}
-      - {id: 44, cat: Movies/UHD, desc: "Movies/4K"}
-      - {id: 13, cat: Movies/BluRay, desc: "Movies/Bluray"}
-      - {id: 12, cat: Movies/DVD, desc: "Movies/DVD-R"}
+      - {id: 11, cat: Movies/UHD, desc: "Movies/Encodes 2160p"}
+      - {id: 12, cat: Movies/UHD, desc: "Movies/Remux 2160p"}
+      - {id: 13, cat: Movies/HD, desc: "Movies/Remux 1080p"}
       - {id: 14, cat: Movies, desc: "Movies/Packs"}
-      - {id: 67, cat: Movies/HD, desc: "Movies/x264"}
-      - {id: 55, cat: Movies/HD, desc: "Movies/X265"}
-      - {id: 45, cat: Movies, desc: "Movies/Remux"}
-      - {id: 62, cat: Audio, desc: "Music/Audio"}
+      - {id: 16, cat: Movies/HD, desc: "Movies/x264"}
+      - {id: 17, cat: Movies/HD, desc: "Movies/X265"}
+      - {id: 33, cat: Audio, desc: "Music/Audio"}
       - {id: 32, cat: Audio, desc: "Music/Packs"}
       - {id: 6, cat: TV, desc: "TV/Packs"}
       - {id: 3, cat: TV/HD, desc: "TV/x264"}
       - {id: 4, cat: TV/HD, desc: "TV/x265"}
       - {id: 8, cat: TV/SD, desc: "TV/Xvid"}
-      - {id: 63, cat: PC/0day, desc: "Windows/Applications"}
+      - {id: 43, cat: PC/0day, desc: "Appz/Windows"}
+      - {id: 42, cat: PC/Phone-Android, desc: "Appz/Android"}
 
     modes:
       search: [q]
       tv-search: [q, season, ep]
       movie-search: [q]
 
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "4"
+      options:
+        "4": "created"
+        "7": "seeders"
+        "5": "size"
+        "1": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
+
   login:
-    path: login.php
-    method: form
-    form: form[action="takelogin.php"]
+    path: takelogin.php
+    method: post
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
-      returnto: "/browse.php"
+      submitme: "X"
     error:
-      - selector: h2:contains("Login failed!")
-        message:
-          selector: table tr td.colhead2
+      - selector: div.callout:contains("Login failed!")
     test:
       path: /
-      selector: :has(a[href$="/logout.php?hash_please="])
+      selector: a[href*="/logout.php?hash_please="]
 
   search:
     paths:
-    # ttps://www.3evils.com/browse.php?search=black+lightning+s02e11&searchin=title&incldead=1
-    # https://www.3evils.com/browse.php?c3=1&c4=1&search=&searchin=title&incldead=0
+    # https://www.3evils.com/browse.php?search=black+lightning+s02e11&searchin=title&incldead=1
+    # https://www.3evils.com/browse.php?c3=1&c4=1&search=&searchin=title&incldead=1
       - path: browse.php
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{.Keywords}}"
-      searchin: "title"
+      # title descr genre all
+      searchin: title
+      # 0 active 1 incldead 2 onlydead
       incldead: 1
+      sort: "{{ .Config.sort }}"
+      type: "{{ .Config.type }}"
+
     rows:
-      selector: table.table-bordered tr:has(a[href^="browse.php?cat="])
+      selector: table.responsive-card-table tr:has(td[data-label])
       filters:
         - name: andmatch
+
     fields:
+      category:
+        selector: td[data-label="Type"] a
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
       title:
-        selector: a[href^="details.php?id="] b
-      title:
-        # if this is available it is the full length title, as the one above can be abbreviated with ...
-        optional: true
-        selector: a[href^="details.php?id="][onmouseover]
+        selector: td[data-label="Name"] a[onmouseover]
         attribute: onmouseover
         filters:
           - name: regexp
             args: "Tip\\('<b>(.*?)</b>"
       details:
-        selector: a[href^="details.php?id="]
+        selector: td[data-label="Name"] a
         attribute: href
-      category:
-        selector: a[href^="browse.php?cat="]
-        attribute: href
-        filters:
-          - name: querystring
-            args: cat
       download:
-        selector: a[href^="details.php?id="]
+        selector: td[data-label="Download"] a
         attribute: href
-        filters:
-          - name: replace
-            args: ["details.php?id=", "download.php?torrent="]
       banner:
-        selector: a[href^="details.php?id="][onmouseover]
+        selector: td[data-label="Name"] a[onmouseover]
         attribute: onmouseover
+        optional: true
         filters:
-            #  onmouseover="Tip('<b>blahblah /><img src=\'/imdb/images/0090293.jpg\' blahblah />');"
+            #  onmouseover="Tip('<b>blahblah /><img src=\'img.php/tvmaze/80.jpg\' blahblah />');"
+            # <img src=\'./pic/noposter.png\' 
           - name: regexp
-            args: "/imdb/(.*?).jpg"
-          - name: prepend
-            args: "/imdb/"
-          - name: append
-            args: ".jpg"
+            args: "src=\\\\\'(.+?)\\\\\'"
+          - name: replace
+            args: ["./pic/noposter.png", ""]
       size:
-        selector: td:nth-last-child(4)
+        selector: td[data-label="Size"]
       files:
-        selector: a[href^="filelist.php?id="]
+        selector: td[data-label="Files"]
       grabs:
-        selector: a[href^="snatches.php?id="]
+        selector: td[data-label="Snatched"]
         filters:
           - name: regexp
-            args: "(\\d+)"
+            args: (\d+)
       # 2 flavours of dates
       date:
-        # Today<br /> 10:20 AM
-        # Yesterday<br /> 08:03 PM
+        # Today<br> 10:20 AM
+        # Yesterday<br> 08:03 PM
         optional: true
-        selector: td:nth-last-child(5):contains("day")
+        selector: td[data-label="Added"]:contains("day")
       date:
-        # Feb 14 2019<br /> 10:20 AM
+        # Feb 14 2019<br> 10:20 AM
         optional: true
-        selector: td:nth-last-child(5):not(:contains("day"))
+        selector: td[data-label="Added"]:not(:contains("day"))
         filters:
           - name: dateparse
-            args: "Jan 2 2006 03:04 pm"
+            args: "Jan 2 2006 03:04 PM"
       seeders:
-        text: "0"
-      seeders:
-        optional: true
-        selector: a[href$="#seeders"]
+        selector: td[data-label="Seeders"]
       leechers:
-        text: "0"
-      leechers:
-        optional: true
-        selector: a[href$="#leechers"]
+        selector: td[data-label="Leechers"]
       downloadvolumefactor:
         case:
-          "b:contains(\"[FREE]\")": "0"
-          "*": "1"
+          img[src="./pic/freedownload.gif"]: 0
+          "*": 1
       uploadvolumefactor:
         case:
-          "*": "1"
+          "*": 1
+# U-232 V5

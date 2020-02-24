@@ -9,8 +9,10 @@
   links:
     - https://eztv.io/
   legacylinks:
-    - https://eztv.ag/
-    - https://eztv.re/
+    - https://eztv.ag/ # redirects to .io 
+    - https://eztv.re/ # redirects to .io 
+    - https://eztv.it/ # redirects to .io 
+    - https://eztv.ch/ # redirects to .io 
 
   caps:
     categories:
@@ -23,7 +25,7 @@
 
   search:
     paths:
-      - path: "{{if .Keywords}}search/{{ .Keywords}}{{else}}/{{end}}"
+      - path: "{{ if .Keywords }}search/{{ .Keywords }}{{else}}/{{end}}"
     keywordsfilters: 
       - name: re_replace
         args: ["S[0-9]{2}([^E]|$)", ""] # remove season tag without episode (search doesn't support it)
@@ -62,6 +64,7 @@
       seeders:
         selector: td:nth-child(6)
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
+# engine n/a

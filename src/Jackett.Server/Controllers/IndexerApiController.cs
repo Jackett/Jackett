@@ -1,4 +1,8 @@
-﻿using Jackett.Common.Indexers;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Jackett.Common.Indexers;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
@@ -7,10 +11,6 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Jackett.Server.Controllers
 {
@@ -59,9 +59,9 @@ namespace Jackett.Server.Controllers
     {
         public IIndexerManagerService IndexerService { get; private set; }
         public IIndexer CurrentIndexer { get; set; }
-        private Logger logger;
-        private IServerService serverService;
-        private ICacheService cacheService;
+        private readonly Logger logger;
+        private readonly IServerService serverService;
+        private readonly ICacheService cacheService;
 
         public IndexerApiController(IIndexerManagerService indexerManagerService, IServerService ss, ICacheService c, Logger logger)
         {
@@ -111,9 +111,10 @@ namespace Jackett.Server.Controllers
 
         [HttpGet]
         [Route("")]
-        public IEnumerable<Common.Models.DTO.Indexer> Indexers()
+        public IEnumerable<Common.Models.DTO.Indexer> Indexers([FromQuery(Name = "configured")] bool configured)
         {
             var dto = IndexerService.GetAllIndexers().Select(i => new Common.Models.DTO.Indexer(i));
+            dto = configured ? dto.Where(i => i.configured) : dto;
             return dto;
         }
 

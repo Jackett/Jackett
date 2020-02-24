@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Text;
@@ -44,12 +44,12 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(22, TorznabCatType.PC); // Applications
             AddCategoryMapping(43, TorznabCatType.AudioAudiobook); // Audio Books
             AddCategoryMapping(27, TorznabCatType.Books); // Ebook
-            AddCategoryMapping(4,  TorznabCatType.PCGames); // Games
+            AddCategoryMapping(4, TorznabCatType.PCGames); // Games
             AddCategoryMapping(40, TorznabCatType.OtherMisc); // Miscellaneous
             AddCategoryMapping(19, TorznabCatType.Movies); // Movies
-            AddCategoryMapping(6,  TorznabCatType.Audio); // Music
+            AddCategoryMapping(6, TorznabCatType.Audio); // Music
             AddCategoryMapping(31, TorznabCatType.PCPhoneOther); // Portable
-            AddCategoryMapping(7,  TorznabCatType.TV); // TV
+            AddCategoryMapping(7, TorznabCatType.TV); // TV
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -74,7 +74,7 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            List<ReleaseInfo> releases = new List<ReleaseInfo>();
+            var releases = new List<ReleaseInfo>();
 
             var searchString = query.GetQueryString();
             var searchUrl = SearchUrl;
@@ -88,7 +88,7 @@ namespace Jackett.Common.Indexers
             }
 
             var cats = MapTorznabCapsToTrackers(query);
-            string cat = "0";
+            var cat = "0";
             if (cats.Count == 1)
             {
                 cat = cats[0];
@@ -114,7 +114,7 @@ namespace Jackett.Common.Indexers
                 {
                     var release = new ReleaseInfo();
                     release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 48 * 60 * 60;
+                    release.MinimumSeedTime = 172800; // 48 hours
 
                     var qRow = row.Cq();
                     var qCatLink = qRow.Find("a[href^=browse.php?cat=]").First();

@@ -41,6 +41,7 @@
 
   download:
     selector: a[href^="magnet:?xt="]
+    attribute: href
 
   search:
     path: recherche
@@ -82,12 +83,12 @@
       size:
         selector: td:nth-child(5)
       seeders:
-        text: "0"
+        text: 0
       seeders:
         optional: true
         selector: td:nth-child(6)
       leechers:
-        text: "0"
+        text: 0
       leechers:
         optional: true
         selector: td:nth-child(7)
@@ -96,5 +97,5 @@
           "i.fa-star": "0"
           "*": "1"
       uploadvolumefactor:
-        case:
-          "*": "1"
+        text: 1
+# engine n/a

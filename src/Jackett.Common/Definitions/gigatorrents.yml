@@ -50,6 +50,34 @@
       tv-search: [q, season, ep]
       movie-search: [q]
 
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "3"
+      options:
+        "3": "created"
+        "5": "seeders"
+        "4": "size"
+        "2": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "2"
+      options:
+        "2": "desc"
+        "1": "asc"
+    - name: info
+      type: info
+      label: Results Per Page
+      default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+
   login:
     path: login.php
     method: form
@@ -66,14 +94,18 @@
     paths:
       - path: torrentek.php
     inputs:
-      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
       search: "{{ .Keywords }}"
-      incldead: "1"
-      blah: "0"
+      incldead: 1
+      blah: 0
+      order: "{{ .Config.sort }}"
+      by: "{{ .Config.type }}"
+
     rows:
       selector: table#torrenttable > tbody > tr:has()
     error:
       - selector: div.content:contains("Meg van vonva a letöltési jogod")
+
     fields:
       download:
         selector: a[href^="/details.php?id="]
@@ -142,4 +174,4 @@
       size:
         selector: td:nth-child(6)
         remove: span
-        
+# xbtitFM v2.2.09

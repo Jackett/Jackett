@@ -1,0 +1,86 @@
+---
+  site: torrentdownload
+  name: TorrentDownload
+  description: "TorrentDownload is a Public general torrent index"
+  language: en-us
+  type: public
+  encoding: UTF-8
+  links:
+    - https://www.torrentdownload.info/
+
+  caps:
+    categories:
+      "TVshows": TV
+      "Television": TV
+      "Anime": TV/Anime
+      "MoviesDocumentary": TV/Documentary
+      "Movies": Movies
+      "VideoMobile": Movies
+      "Music": Audio
+      "AudioBooks": Audio/Audiobook
+      "Games": Console
+      "Applications": PC/0day
+      "Other": Other/Misc
+      "OtherUnsorted": Other/Misc
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  settings:
+    - name: sort
+      type: select
+      label: Sort requested from site (Applies only to Search with Keywords)
+      default: "d"
+      options:
+        "d": "created"
+        "s": "seeders"
+        "_": "size"
+
+  download:
+    selector: a[href^="magnet:?xt="]
+    attribute: href
+
+  search:
+    paths:
+      - path: "{{ if .Keywords }}search{{ re_replace .Config.sort \"_\" \"\" }}?q={{ .Keywords }}{{else}}latest{{end}}"
+
+    rows:
+      selector: table.table2 > tbody > tr:has(span.smallish)
+
+    fields:
+      category:
+        selector: div.tt-name > span.smallish
+        optional: true
+        filters:
+          - name: re_replace
+            args: ["[^A-Za-z]+", ""] # strip everything but letters
+      title:
+        selector: div.tt-name > a[href^="/"]
+      details:
+        selector: div.tt-name > a[href^="/"]
+        attribute: href
+      download:
+        selector: div.tt-name > a[href^="/"]
+        attribute: href
+      date:
+        selector: td:nth-child(2)
+        filters:
+          - name: replace
+            args: ["right ", ""]
+          - name: replace
+            args: ["Last Month", "1 month ago"]
+          - name: replace
+            args: ["+", " ago"]
+      size:
+        selector: td:nth-child(3)
+      seeders:
+        selector: td.tdseed
+      leechers:
+        selector: td.tdleech
+      downloadvolumefactor:
+        text: 0
+      uploadvolumefactor:
+        text: 1
+# engine n/a

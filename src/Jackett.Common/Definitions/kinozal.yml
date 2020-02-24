@@ -70,28 +70,25 @@
     - name: password
       type: password
       label: Password
-    - name: filter
-      type: select
-      label: Search Filter
-      default: "0"
-      options:
-        "0" : "not selected"
-        "1" : "today"
-        "2" : "yesterday"
-        "3" : "last 3 days"
-        "4" : "per week"
-        "5" : "per month"
-        "6" : "less than 1.3GB"
-        "7" : "1.3GB - 2.2GB"
-        "8" : "2.2GB - 4.0GB"
-        "9" : "4.0GB - 9.5GB"
-        "10" : "9.5GB or higher"
-        "11": "Gold (FreeLeech)"
-        "12": "Silver (50%DL)"
     - name: striprussian
       type: checkbox
       label: Strip Russian Letters
       default: true
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "0"
+      options:
+        "0": "created"
+        "1": "seeders"
+        "3": "size"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "0"
+      options:
+        "0": "desc"
+        "1": "asc"
 
   login:
     path: takelogin.php
@@ -119,49 +116,22 @@
         args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "$1 $2"]
     inputs:
       # multi cat is not supported. so defaulting to ALL
-      c: "0"
+      c: 0
       s: "{{ .Keywords }}"
-      g: "0"
-       # g= where:
-       # 0 the title
-       # 1 person
-       # 2 genres
-       # 3 regular expression
-      v: "0"
-      # v= format:
-      # 0 all
-      # 1 DVD Rip and BD (HD) Rip
-      # 2 DVD-5 and DVD-9
-      # 3 HD Rip (1080p 720p)
-      # 4 HD Blu-Ray and Remux
-      # 5 TV Rip
-      # 6 3D
-      # 7 4K
-      # 51 Lossless
-      # 52 MP3 and AAC
-      # 61 PC
-      # 62 Consoles
-      # 63 Mobile Devices
-      # 64 Navigation Devices
-      d: "0"
-      # d= released: 0 all, 1900 - 2017
-      w: "{{ .Config.filter }}"
-      # w= filter, see settings
-      t: "0"
-      # t= sort by
-      # 0 Date
-      # 1 Seeders
-      # 2 Leechers
-      # 3 Size
-      # 4 Number Comments
-      # 5 Downloads
-      # 6 Latest comment datetime
-      f: "0"
-      # sort direction
-      # 0 desc
-      # 1 asc
+       # where 0 the title 1 person 2 genres 3 regular expression
+      g: 0
+      # format 0 all
+      v: 0
+      # released 0 all
+      d: 0
+      # filter 0 all
+      w: 0
+      t: "{{ .Config.sort }}"
+      f: "{{ .Config.type }}"
+
     rows:
       selector: table > tbody > tr:has(td.bt)
+
     fields:
       title:
         selector: td.nam a[href^="/details.php?id="]
@@ -178,7 +148,7 @@
           - name: re_replace
             args: ["\\((\\d+)\\s+[Сс]езон:\\s+(?:(\\d+-*\\d*)\\s+[Сс]ери[ия]\\s+.*\\d+)\\)(.*)\\s([12][0-9]{3})\\s(.*)", "$3 - S$1E$2 - rus $5"]
           - name: re_replace
-            args: ["(\\([А-Яа-я\\W]+\\))|(^[А-Яа-я\\W\\d]+\\/ )|([а-яА-Я \\-]+,+)|([а-яА-Я]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
+            args: ["(\\([А-Яа-яЁё\\W]+\\))|(^[А-Яа-яЁё\\W\\d]+\\/ )|([а-яА-ЯЁё \\-]+,+)|([а-яА-ЯЁё]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
           - name: re_replace
             args: ["\\((\\d+p)\\)", "$1"]
           - name: replace
@@ -246,10 +216,9 @@
             args: "02.01.2006 15:04"
       downloadvolumefactor:
         case:
-          # gold
-          a.r1: "0"
-          # silver
-          a.r2: "0.5"
-          "*": "1"
+          a.r1: 0 # gold
+          a.r2: 0.5 # silver
+          "*": 1
       uploadvolumefactor:
-          text: "1"
+        text: 1
+# engine n/a

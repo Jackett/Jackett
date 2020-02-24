@@ -7,6 +7,8 @@
   encoding: Windows-1252
   links:
     - https://ilcorsaronero.pizza/
+    - https://ilcorsaronero.fun/
+    - https://ilcorsaronero.pro/
   legacylinks:
     - https://ilcorsaronero.live/
     - https://ilcorsaronero.vip/
@@ -44,16 +46,16 @@
       - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=4{{else}}/browse/4{{end}}"
       - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=5{{else}}/browse/5{{end}}"
     keywordsfilters:
-      # - name: diacritics
-      #   args: replace
       - name: re_replace # S01 to 1
         args: ["(?i)\\bS0*(\\d+)\\b", "$1"]
       - name: re_replace # S01E01 to 1 1
         args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "$1 $2"]
+
     rows:
       selector: "tr.odd,tr.odd2"
       filters:
         - name: andmatch
+
     fields:
       title:
         selector: td:nth-child(2) a.tab
@@ -64,8 +66,6 @@
           - name: diacritics
             args: replace
           - name: urldecode
-          # - name: re_replace # replace special characters with " " (space)
-          #   args: ["[^a-zA-Z0-9\\s]|\\.", " "]
           - name: re_replace # replace special characters with " " (space)
             args: ["[\\[!\"#$%&'()*+,\\-.\\/:;<=>?@[\\]^_`{|}~]", " "]
           - name: re_replace # replace multiple spaces
@@ -132,6 +132,7 @@
           - name: replace
             args: ["n/a", "0"]
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
+# engine n/a

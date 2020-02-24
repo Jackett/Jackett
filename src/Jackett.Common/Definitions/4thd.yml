@@ -26,6 +26,7 @@
       - {id: 2, cat: TV/SD, "TV/SD MP4/mkv"}
       - {id: 31, cat: TV/SD, "TV/XviD"}
       - {id: 18, cat: PC/Games, "Games/PC"}
+      - {id: 44, cat: Audio, "Music/Pack"}
       - {id: 12, cat: Audio/Lossless, "Music/FLAC"}
       - {id: 15, cat: Audio/MP3, "Music/MP3"}
       - {id: 37, cat: Audio, "Radio"}
@@ -37,6 +38,29 @@
       search: [q]
       tv-search: [q, season, ep]
       movie-search: [q]
+
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "time"
+      options:
+        "time": "created"
+        "seeders": "seeders"
+        "size": "size"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
 
   login:
     path: login.php
@@ -57,24 +81,26 @@
       - path: torrents.php
     inputs:
     # https://4thd.xyz/torrents.php?order_by=time&order_way=desc&filter_freeleech=1&title=twilight+zone&search_type=1&taglist=&tags_type=0
-      $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
-      order_by: time
-      order_way: desc
+      $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
+      order_by: "{{ .Config.sort }}"
+      order_way: "{{ .Config.type }}"
       # 0 all 1 onlyfree
       filter_freeleech: 0
       title: "{{ .Keywords }}"
       search_type: 1
       taglist: ""
       tags_type: 0
+
     rows:
       selector: table#torrent_table > tbody > tr.torrent
+
     fields:
       category:
         selector: td.cats_col div a
         attribute: href
         filters:
           - name: regexp
-            args: "\\[(\\d+)\\]"
+            args: \[(\d+)\]
       title:
         selector: a[href^="torrents.php?id="]
       details:
@@ -97,6 +123,9 @@
         selector: td:nth-child(3)
       date:
         selector: td:nth-child(5)
+        filters:
+          - name: replace
+            args: ["Never", "99 years ago"]
       size:
         selector: td:nth-child(6)
       grabs:
@@ -112,3 +141,4 @@
       uploadvolumefactor:
         case:
           "*": 1
+# Engine n/a

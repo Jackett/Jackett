@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,7 +23,7 @@ namespace Jackett.Common.Indexers
         private string SearchUrl { get { return SiteLink + "t.json"; } }
 
         public override string[] LegacySiteLinks { get; protected set; } = new string[] {
-            "https://torrentday.com/"
+            "https://torrentday.com/",
         };
 
         public override string[] AlternativeSiteLinks { get; protected set; } = new string[] {
@@ -89,12 +89,12 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(48, TorznabCatType.Movies, "Movies/x265");
             AddCategoryMapping(1, TorznabCatType.MoviesSD, "Movies/XviD");
 
-            AddCategoryMapping(17, TorznabCatType.Audio, "Music/Audio");
+            AddCategoryMapping(17, TorznabCatType.AudioMP3, "Music/Audio");
             AddCategoryMapping(23, TorznabCatType.AudioForeign, "Music/Non-English");
             AddCategoryMapping(41, TorznabCatType.Audio, "Music/Packs");
             AddCategoryMapping(16, TorznabCatType.AudioVideo, "Music/Video");
             AddCategoryMapping(27, TorznabCatType.Audio, "Music/Flac");
-            
+
             AddCategoryMapping(45, TorznabCatType.AudioOther, "Podcast");
 
             AddCategoryMapping(4, TorznabCatType.PCGames, "PC/Games");
@@ -126,8 +126,8 @@ namespace Jackett.Common.Indexers
             if (loginPage.IsRedirect)
                 loginPage = await RequestStringWithCookies(loginPage.RedirectingTo, string.Empty);
             CQ cq = loginPage.Content;
-            var result = this.configData;
-            
+            var result = configData;
+
             //result.CookieHeader.Value = loginPage.Cookies;
             UpdateCookieHeader(loginPage.Cookies); // update cookies instead of replacing them, see #3717
             result.Captcha.SiteKey = cq.Find(".g-recaptcha").Attr("data-sitekey");
@@ -234,13 +234,13 @@ namespace Jackett.Common.Indexers
                         continue;
 
                     release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800;
+                    release.MinimumSeedTime = 172800; // 48 hours
                     release.Category = MapTrackerCatToNewznab(torrent.c.ToString());
-                    
+
                     var torrentID = (long)torrent.t;
                     release.Comments = new Uri(SiteLink + "details.php?id=" + torrentID);
                     release.Guid = release.Comments;
-                    release.Link = new Uri(SiteLink + "download.php/" + torrentID + "/"+ torrentID + ".torrent");
+                    release.Link = new Uri(SiteLink + "download.php/" + torrentID + "/" + torrentID + ".torrent");
                     release.PublishDate = DateTimeUtil.UnixTimestampToDateTime((long)torrent.ctime).ToLocalTime();
 
                     release.Size = (long)torrent.size;

@@ -53,9 +53,8 @@
       tv-search: [q, season, ep]
 
   login:
-    path: login.php
-    method: form
-    form: form[action="takelogin.php"]
+    path: takelogin.php
+    method: post
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
@@ -69,15 +68,17 @@
       - path: browse.php
         method: post
     inputs:
-      do: "search"
+      do: search
       keywords: "{{ .Keywords }}"
-      search_type: "t_name"
-      include_dead_torrents: "yes"
+      search_type: t_name
+      include_dead_torrents: yes
     keywordsfilters: 
       - name: re_replace
         args: ["[^a-zA-Z0-9]+", "%"]
+
     rows:
       selector: table#sortabletable > tbody > tr:has(a[href])
+
     fields:
       title:
         selector: td:nth-child(2) a
@@ -111,7 +112,7 @@
         selector: td:nth-child(2)
       downloadvolumefactor:
         case:
-          "*": "1"
+          "*": 1
       uploadvolumefactor:
         case:
-          "*": "1"
+          "*": 1

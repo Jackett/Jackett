@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Text;
@@ -142,7 +142,7 @@ namespace Jackett.Common.Indexers
                 results = await RequestStringWithCookies(searchUrl);
             }
 
-            Regex IMDBRegEx = new Regex(@"tt(\d+)", RegexOptions.Compiled);
+            var IMDBRegEx = new Regex(@"tt(\d+)", RegexOptions.Compiled);
             var hParser = new HtmlParser();
             var ResultDocument = hParser.ParseDocument(results.Content);
             try
@@ -155,7 +155,7 @@ namespace Jackett.Common.Indexers
                     var bannerURL = new Uri(SiteLink + groupPoster.GetAttribute("src"));
 
                     long? IMDBId = null;
-                    var imdbLink = Group.QuerySelector("a[href^=\"http://anonym.to/?http://www.imdb.com/title/tt\"]");
+                    var imdbLink = Group.QuerySelector("a[href*=\"www.imdb.com/title/tt\"]");
                     if (imdbLink != null)
                     {
                         var IMDBMatch = IMDBRegEx.Match(imdbLink.GetAttribute("href"));

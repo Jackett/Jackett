@@ -1,4 +1,8 @@
-﻿using Jackett.Common.Models.Config;
+﻿using System;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
+using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Microsoft.AspNetCore.Authorization;
@@ -6,10 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System;
-using System.IO;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Jackett.Server.Controllers
 {
@@ -18,16 +18,16 @@ namespace Jackett.Server.Controllers
     [Route("bh/{indexerID}")]
     public class BlackholeController : Controller
     {
-        private Logger logger;
-        private IIndexerManagerService indexerService;
+        private readonly Logger logger;
+        private readonly IIndexerManagerService indexerService;
         private readonly ServerConfig serverConfig;
-        private IProtectionService protectionService;
+        private readonly IProtectionService protectionService;
 
-        public BlackholeController(IIndexerManagerService i, Logger l, ServerConfig config, IProtectionService ps)
+        public BlackholeController(IIndexerManagerService i, Logger l, ServerConfig sConfig, IProtectionService ps)
         {
             logger = l;
             indexerService = i;
-            serverConfig = config;
+            serverConfig = sConfig;
             protectionService = ps;
         }
 
@@ -37,6 +37,9 @@ namespace Jackett.Server.Controllers
             var jsonReply = new JObject();
             try
             {
+                if (serverConfig.APIKey != jackett_apikey)
+                    return Unauthorized();
+
                 var indexer = indexerService.GetWebIndexer(indexerID);
                 if (!indexer.IsConfigured)
                 {
@@ -44,14 +47,16 @@ namespace Jackett.Server.Controllers
                     throw new Exception("This indexer is not configured.");
                 }
 
-                if (serverConfig.APIKey != jackett_apikey)
-                    throw new Exception("Incorrect API key");
-
                 path = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(path));
                 path = protectionService.UnProtect(path);
                 var remoteFile = new Uri(path, UriKind.RelativeOrAbsolute);
                 var fileExtension = ".torrent";
-                var downloadBytes = await indexer.Download(remoteFile);
+
+                byte[] downloadBytes;
+                if (remoteFile.OriginalString.StartsWith("magnet"))
+                    downloadBytes = Encoding.UTF8.GetBytes(remoteFile.OriginalString);
+                else
+                    downloadBytes = await indexer.Download(remoteFile);
 
                 // handle magnet URLs
                 if (downloadBytes.Length >= 7

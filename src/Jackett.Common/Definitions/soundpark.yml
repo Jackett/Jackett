@@ -2,7 +2,7 @@
   site: soundpark
   name: SoundPark
   description: "SoundPark Semi-Private RUSSIAN site dedicated to MUSIC."
-  language: ru-RU
+  language: ru-ru
   type: semi-private
   encoding: UTF-8
   links:
@@ -35,17 +35,19 @@
 
   download:
     selector: a[href^="/album/download-torrent/"]
+    attribute: href
 
   search:
     paths:
-      - path: "{{if .Keywords}}search{{else}}music{{end}}"
+      - path: "{{if or (.Query.Album) (.Query.Artist) (.Keywords) }}search{{else}}music{{end}}"
     inputs:
-      q: "{{if .Query.Artist}}{{ .Query.Artist }}{{else}}{{ .Keywords }}{{end}}"
+      q: "{{if or (.Query.Album) (.Query.Artist) }}{{ or (.Query.Album) (.Query.Artist) }}{{else}}{{ .Keywords }}{{end}}"
       num: 50
 
     rows:
     # first selector is for the music page (recent uploads) and the second selector is for the search page
       selector: div[itemscope] > table.browse_albums, div.div-rellist
+
     fields:
       title:
         selector: tr:nth-child(1) td:nth-child(1) h2 a, div h3 a
@@ -61,6 +63,9 @@
       download:
         selector: tr:nth-child(1) td:nth-child(1) h2 a, div h3 a
         attribute: href
+        filters:
+          - name: replace
+            args: ["/album/torrent-", "/album/download/torrent-"]
       # dates come in two flavours:
       # Russian, Spanish and English supported
       date:
@@ -130,3 +135,4 @@
         text: 1
       uploadvolumefactor:
         text: 1
+# engine n/a

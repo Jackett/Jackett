@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -9,8 +9,8 @@ namespace Jackett.Common.Models
 {
     public class ResultPage
     {
-        static XNamespace atomNs = "http://www.w3.org/2005/Atom";
-        static XNamespace torznabNs = "http://torznab.com/schemas/2015/feed";
+        private static readonly XNamespace atomNs = "http://www.w3.org/2005/Atom";
+        private static readonly XNamespace torznabNs = "http://torznab.com/schemas/2015/feed";
 
         public ChannelInfo ChannelInfo { get; private set; }
         public IEnumerable<ReleaseInfo> Releases { get; set; }
@@ -21,7 +21,7 @@ namespace Jackett.Common.Models
             Releases = new List<ReleaseInfo>();
         }
 
-        string xmlDateFormat(DateTime dt)
+        private string xmlDateFormat(DateTime dt)
         {
             Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
             //Sat, 14 Mar 2015 17:10:42 -0400
@@ -29,7 +29,7 @@ namespace Jackett.Common.Models
             return f;
         }
 
-        XElement getTorznabElement(string name, object value)
+        private XElement getTorznabElement(string name, object value)
         {
             return value == null ? null : new XElement(torznabNs + "attr", new XAttribute("name", name), new XAttribute("value", value));
         }

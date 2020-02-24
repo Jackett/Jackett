@@ -1,4 +1,12 @@
-﻿using Jackett.Common;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml.Linq;
+using Jackett.Common;
 using Jackett.Common.Indexers;
 using Jackett.Common.Indexers.Meta;
 using Jackett.Common.Models;
@@ -10,14 +18,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Routing;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace Jackett.Server.Controllers
 {
@@ -170,10 +170,10 @@ namespace Jackett.Server.Controllers
         public IIndexerManagerService IndexerService { get; private set; }
         public IIndexer CurrentIndexer { get; set; }
         public TorznabQuery CurrentQuery { get; set; }
-        private Logger logger;
-        private IServerService serverService;
-        private ICacheService cacheService;
-        private Common.Models.Config.ServerConfig serverConfig;
+        private readonly Logger logger;
+        private readonly IServerService serverService;
+        private readonly ICacheService cacheService;
+        private readonly Common.Models.Config.ServerConfig serverConfig;
 
         public ResultsController(IIndexerManagerService indexerManagerService, IServerService ss, ICacheService c, Logger logger, Common.Models.Config.ServerConfig sConfig)
         {
@@ -190,7 +190,7 @@ namespace Jackett.Server.Controllers
         {
             //TODO: Better way to parse querystring
 
-            ApiSearch request = new ApiSearch();
+            var request = new ApiSearch();
 
             foreach (var t in Request.Query)
             {
@@ -201,7 +201,7 @@ namespace Jackett.Server.Controllers
 
                 if (t.Key == "Category[]")
                 {
-                    request.Category = t.Value.ToString().Split(',').Select(Int32.Parse).ToArray();
+                    request.Category = t.Value.ToString().Split(',').Select(int.Parse).ToArray();
                     CurrentQuery.Categories = request.Category;
                 }
 
@@ -355,10 +355,16 @@ namespace Jackett.Server.Controllers
                     return GetErrorXML(201, "Incorrect parameter: invalid imdbid format");
                 }
 
-                if (!CurrentIndexer.TorznabCaps.SupportsImdbMovieSearch)
+                if (CurrentQuery.IsMovieSearch && !CurrentIndexer.TorznabCaps.SupportsImdbMovieSearch)
                 {
                     logger.Warn($"A search request with imdbid from {Request.HttpContext.Connection.RemoteIpAddress} was made but the indexer {CurrentIndexer.DisplayName} doesn't support it.");
-                    return GetErrorXML(203, "Function Not Available: imdbid is not supported by this indexer");
+                    return GetErrorXML(203, "Function Not Available: imdbid is not supported for movie search by this indexer");
+                }
+
+                if (CurrentQuery.IsTVSearch && !CurrentIndexer.TorznabCaps.SupportsImdbTVSearch)
+                {
+                    logger.Warn($"A search request with imdbid from {Request.HttpContext.Connection.RemoteIpAddress} was made but the indexer {CurrentIndexer.DisplayName} doesn't support it.");
+                    return GetErrorXML(203, "Function Not Available: imdbid is not supported for TV search by this indexer");
                 }
             }
 
@@ -446,11 +452,11 @@ namespace Jackett.Server.Controllers
 
         public static IActionResult GetErrorActionResult(RouteData routeData, HttpStatusCode status, int torznabCode, string description)
         {
-            bool isTorznab = routeData.Values["action"].ToString().Equals("torznab", StringComparison.OrdinalIgnoreCase);
+            var isTorznab = routeData.Values["action"].ToString().Equals("torznab", StringComparison.OrdinalIgnoreCase);
 
             if (isTorznab)
             {
-                ContentResult contentResult = new ContentResult
+                var contentResult = new ContentResult
                 {
                     Content = CreateErrorXML(torznabCode, description),
                     ContentType = "application/xml",

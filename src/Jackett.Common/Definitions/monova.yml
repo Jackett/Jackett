@@ -11,6 +11,7 @@
 
   caps:
     categories:
+      "venus-mars": XXX
       "video-camera": Movies
       "music": Audio
       "book": Books
@@ -29,22 +30,19 @@
 
   download:
     selector: a#download-file
+    attribute: href
 
   search:
     paths:
       # https://monova.to/search?term=vikings+s05e05
       # https://monova.to/video
-      # https://monova.org/video?page=2
-      - path: "{{if .Keywords}}search?term={{.Keywords}}?page=1{{else}}video?page=1{{end}}"
-      - path: "{{if .Keywords}}search?term={{.Keywords}}?page=2{{else}}video?page=2{{end}}"
-      - path: "{{if .Keywords}}search?term={{.Keywords}}?page=3{{else}}video?page=3{{end}}"
-      - path: "{{if .Keywords}}search?term={{.Keywords}}?page=4{{else}}video?page=4{{end}}"
-      - path: "{{if .Keywords}}search?term={{.Keywords}}?page=5{{else}}video?page=5{{end}}"
+      - path: "{{if .Keywords}}search?term={{.Keywords}}{{else}}video{{end}}"
+
     rows:
-      #selector: tr.desktop:not(tr.success)
-      selector: tr.desktop
+      selector: tr.desktop:has(a[href^="//"])
       filters:
         - name: andmatch
+
     fields:
       title:
         selector: td.torrent_name a
@@ -68,13 +66,13 @@
           - name: replace
             args: ["N/A","500 MB"]
       seeders:
-        text: "1"
+        text: 1
       leechers:
-        text: "1"
+        text: 1
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
       date:
         optional: true
         selector: td.torrent_name
@@ -87,3 +85,4 @@
           - name: replace
             args: ["min.","minutes"]
           - name: timeago
+# engine n/a

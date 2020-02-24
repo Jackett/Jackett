@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -91,15 +91,15 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            List<ReleaseInfo> releases = new List<ReleaseInfo>();
-            List<string> searchStrings = new List<string>(new string[] { query.GetQueryString() });
+            var releases = new List<ReleaseInfo>();
+            var searchStrings = new List<string>(new string[] { query.GetQueryString() });
 
             if (string.IsNullOrEmpty(query.Episode) && (query.Season > 0))
                 // Tracker naming rules: If query is for a whole season, "Season #" instead of "S##".
                 searchStrings.Add((query.SanitizedSearchTerm + " " + string.Format("\"Season {0}\"", query.Season)).Trim());
 
-            List<string> categories = MapTorznabCapsToTrackers(query);
-            List<string> request_urls = new List<string>();
+            var categories = MapTorznabCapsToTrackers(query);
+            var request_urls = new List<string>();
 
             foreach (var searchString in searchStrings)
             {
@@ -118,12 +118,12 @@ namespace Jackett.Common.Indexers
 
                 request_urls.Add(SearchUrl + queryCollection.GetQueryString());
             }
-            IEnumerable<Task<WebClientStringResult>> downloadTasksQuery =
+            var downloadTasksQuery =
                 from url in request_urls select RequestStringWithCookiesAndRetry(url);
 
-            WebClientStringResult[] responses = await Task.WhenAll(downloadTasksQuery.ToArray());
+            var responses = await Task.WhenAll(downloadTasksQuery.ToArray());
 
-            for (int i = 0; i < searchStrings.Count(); i++)
+            for (var i = 0; i < searchStrings.Count(); i++)
             {
                 var results = responses[i];
                 // Occasionally the cookies become invalid, login again if that happens
@@ -138,11 +138,11 @@ namespace Jackett.Common.Indexers
                     var rows = dom["#torrent_table > tbody > tr.torrent"];
                     foreach (var row in rows)
                     {
-                        CQ qRow = row.Cq();
+                        var qRow = row.Cq();
                         var release = new ReleaseInfo();
 
                         release.MinimumRatio = 1;
-                        release.MinimumSeedTime = 172800;
+                        release.MinimumSeedTime = 172800; // 48 hours
 
                         var catStr = row.ChildElements.ElementAt(0).FirstElementChild.GetAttribute("href").Split(new char[] { '[', ']' })[1];
                         release.Category = MapTrackerCatToNewznab(catStr);
@@ -183,7 +183,7 @@ namespace Jackett.Common.Indexers
 
                         if (catStr == "10") //change "Season #" to "S##" for TV shows
                             release.Title = Regex.Replace(release.Title, @"Season (\d+)",
-                                                          m => string.Format("S{0:00}", Int32.Parse(m.Groups[1].Value)));
+                                                          m => string.Format("S{0:00}", int.Parse(m.Groups[1].Value)));
 
                         releases.Add(release);
                     }

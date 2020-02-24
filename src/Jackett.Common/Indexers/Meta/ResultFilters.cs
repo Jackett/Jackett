@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -29,20 +28,26 @@ namespace Jackett.Common.Indexers.Meta
         public async Task<IEnumerable<ReleaseInfo>> FilterResults(IEnumerable<ReleaseInfo> results)
         {
             long? imdbId = null;
-            try {
-                var normalizedImdbId = String.Concat(query.ImdbID.Where(c => char.IsDigit(c)));
-                imdbId = Int64.Parse(normalizedImdbId);
-            } catch {
+            try
+            {
+                var normalizedImdbId = string.Concat(query.ImdbID.Where(c => char.IsDigit(c)));
+                imdbId = long.Parse(normalizedImdbId);
+            }
+            catch
+            {
             }
 
             IEnumerable<ReleaseInfo> perfectResults;
             IEnumerable<ReleaseInfo> wrongResults;
 
-            if (imdbId != null) {
+            if (imdbId != null)
+            {
                 var resultsWithImdbId = results.Where(r => r.Imdb != null);
                 wrongResults = resultsWithImdbId.Where(r => r.Imdb != imdbId);
                 perfectResults = resultsWithImdbId.Where(r => r.Imdb == imdbId);
-            } else {
+            }
+            else
+            {
                 wrongResults = new ReleaseInfo[] { };
                 perfectResults = new ReleaseInfo[] { };
             }
@@ -53,7 +58,8 @@ namespace Jackett.Common.Indexers.Meta
             var strippedTitles = titles.Select(t => RemoveSpecialChars(t));
             var normalizedTitles = strippedTitles.SelectMany(t => GenerateTitleVariants(t));
 
-            var titleFilteredResults = remainingResults.Where(r => {
+            var titleFilteredResults = remainingResults.Where(r =>
+            {
                 // TODO Make it possible to configure case insensitivity
                 var containsAnyTitle = normalizedTitles.Select(t => r.Title.ToLowerInvariant().Contains(t.ToLowerInvariant()));
                 var isProbablyValidResult = containsAnyTitle.Any(b => b);
@@ -82,8 +88,8 @@ namespace Jackett.Common.Indexers.Meta
             return result;
         }
 
-        private IImdbResolver resolver;
-        private TorznabQuery query;
+        private readonly IImdbResolver resolver;
+        private readonly TorznabQuery query;
     }
 
     public class NoFilter : IResultFilter
@@ -119,6 +125,6 @@ namespace Jackett.Common.Indexers.Meta
             return filter.ToEnumerable();
         }
 
-        private IImdbResolver resolver;
+        private readonly IImdbResolver resolver;
     }
 }

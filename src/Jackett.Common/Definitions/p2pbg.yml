@@ -56,7 +56,6 @@
       - {id: 53, cat: XXX, desc: "XXX Hentai"}
       - {id: 48, cat: XXX, desc: "XXX BG Amateurs"}
 
-
     modes:
       search: [q]
       tv-search: [q, season, ep]
@@ -72,7 +71,21 @@
     - name: info_results
       type: info
       label: "Search results"
-      default: "For best results, increase the torrents number in your profile to 100.<br />Default is 15."
+      default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "data"
+      options:
+        "data": "created"
+        "size": "size"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "DESC"
+      options:
+        "DESC": "desc"
+        "ASC": "asc"
 
   login:
     path: index.php?page=login
@@ -85,20 +98,24 @@
       - selector: td.lista span[style="color:#FF0000;"]
     test:
       path: index.php
-      selector: :has(a[href="logout.php"])
+      selector: a[href="logout.php"]
 
   search:
     paths:
       # http://p2pbg.com/index.php?page=torrents&search=%D0%9A%D0%B0%D1%82%D0%BE&category=0&active=0
       - path: index.php
     inputs:
-      page: "torrents"
-      category: "{{if .Categories }}{{range .Categories}}{{.}};{{end}}{{else}}0;{{end}}"
-      search: "{{if .Keywords }}{{.Keywords}}{{else}}{{end}}"
-      active: "1"
+      page: torrents
+      category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{else}}0;{{end}}"
+      search: "{{ if .Keywords }}{{ .Keywords }}{{else}}{{end}}"
+      # 0 all 1 active 2 dead
+      active: 0
+      order: "{{ .Config.sort }}"
+      by: "{{ .Config.type }}"
 
     rows:
       selector: table.lista tr td table.lista tr:has(a[href^="index.php?page=torrent-details"])
+
     fields:
       title:
         selector: td a[onclick]
@@ -164,6 +181,7 @@
       grabs:
         selector: td:nth-child(10)
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
+# xbtit customised

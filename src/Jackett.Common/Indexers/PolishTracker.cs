@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -40,7 +40,7 @@ namespace Jackett.Common.Indexers
                    p: ps,
                    configData: new ConfigurationDataBasicLoginWithEmail())
         {
-Encoding = Encoding.UTF8;
+            Encoding = Encoding.UTF8;
             Language = "pl-pl";
             Type = "private";
 

@@ -7,6 +7,7 @@
   encoding: UTF-8
   links:
     - https://www.torrentfunk.com/
+    - https://www.torrentfunk2.com/
 
   caps:
     categories:
@@ -26,51 +27,22 @@
       tv-search: [q, season, ep]
       movie-search: [q]
 
-  settings:
-    - name: category
-      type: select
-      label: Category
-      default: "all"
-      options:
-        "all": "All"
-        "movie": "Movies"
-        "music": "Music"
-        "television": "TV"
-        "game": "Games"
-        "software": "Software"
-        "anime": "Anime"
-        "ebook": "eBooks"
-        "adult": "Adult"
-    - name: verified
-      type: select
-      label: Verified
-      default: "_"
-      options:
-        "_": "Any"
-        "on": "Verified Only"
-    - name: sort
-      type: select
-      label: Sort Desc
-      default: "added"
-      options:
-        "added": "Date"
-        "seeds": "Seeders"
-        "peers": "Leechers"
-        "size": "Size"
-        "name": "Title"
-
-  download:
-    selector: a[href^="/tor/"]
+  settings: []
 
   search:
     paths:
-      # https://www.torrentfunk.com/all/torrents/vikings.html?v=&smi=&sma=&i=50&sort=added&o=desc
-      - path: "{{.Config.category}}/torrents/{{.Keywords}}.html?v={{re_replace .Config.verified \"_\" \"\"}}&smi=&sma=&i=50&sort={{.Config.sort}}&o=desc"
+      # https://www.torrentfunk.com/all/torrents/morty-402-castellano.html
+      - path: "all/torrents/{{ .Keywords }}.html"
+    keywordsfilters:
+      - name: re_replace
+        args: ["[\\s]+", "-"]
+      - name: tolower
 
     rows:
       selector: table.tmain tbody tr:has(a[href^="/torrent/"])
       filters:
         - name: andmatch
+
     fields:
       title:
         selector: div a[href^="/torrent/"]
@@ -79,30 +51,33 @@
         attribute: class
         filters:
           - name: regexp
-            args: "(\\d)"
+            args: (\d+)
       details:
         selector: div a[href^="/torrent/"]
         attribute: href
       download:
+        # /tor/25878251.torrent
         selector: div a[href^="/torrent/"]
         attribute: href
+        filters:
+          - name: split
+            args: ["/", 2]
+          - name: prepend
+            args: "/tor/"
+          - name: append
+            args: ".torrent"
         # two types of dates
       date:
         # Today
-        optional: true
-        selector: td:nth-child(2):contains("Today")
-        filters:
-          - name: fuzzytime
-      date:
         # Yesterday
+        selector: td:nth-child(2):contains("day")
         optional: true
-        selector: td:nth-child(2):contains("Yesterday")
         filters:
           - name: fuzzytime
       date:
         # 7 Jul
         # 25 Dec
-        selector: td:nth-child(2):contains(" ")
+        selector: td:nth-child(2):not(:contains("day"))
         optional: true
         filters:
           - name: dateparse
@@ -114,6 +89,7 @@
       leechers:
         selector: td:nth-child(5) 
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
+# engine n/a

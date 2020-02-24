@@ -39,7 +39,7 @@
       movie-search: [q]
 
   login:
-    path: takelogin__akcja.php
+    path: takelogin_action.php
     method: post
     inputs:
       username_dupa: "{{ .Config.username }}"
@@ -89,7 +89,7 @@
             args: "{{ .Result.description }}"
       imdb:
         optional: true
-        selector: a[href^="http://www.imdb.com/title/tt"]
+        selector: a[href*="www.imdb.com/title/tt"]
       date:
         selector: td:nth-child(5)
         filters:

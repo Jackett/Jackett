@@ -6,71 +6,63 @@
   type: private
   encoding: windows-1253
   links:
+    - https://www.greek-team.cc/
+  legacylinks:
     - http://www.greek-team.cc/
 
   caps:
     categorymappings:
       - {id: 59, cat: TV/Anime, desc: "Anime DVD/BR-rip Gr Sub - Emb"}
-      - {id: 27, cat: TV/Anime, desc: "Anime/Cartoon DVD-R"}
-      - {id: 35, cat: TV/Anime, desc: "Anime/Cartoon DVDRip/BR-rip"}
-      - {id: 10, cat: Books, desc: "Books/Magazines"}
+      - {id: 35, cat: TV/Anime, desc: "Anime DVDRip/BR-rip"}
+      - {id: 9, cat: TV/Anime, desc: "Anime HD"}
+      - {id: 63, cat: TV/Anime, desc: "Anime HDTV"}
+      - {id: 57, cat: TV/Anime, desc: "Anime TV"}
+      - {id: 10, cat: Books, desc: "Books Magazines"}
       - {id: 31, cat: Console/Other, desc: "Games Other"}
       - {id: 30, cat: Console/PS4, desc: "Games PSx"}
       - {id: 20, cat: PC/Games, desc: "Games Windows"}
       - {id: 29, cat: Console/Xbox, desc: "Games XBOX"}
-      - {id: 54, cat: TV/Sport, desc: "HDTV Sport"}
-      - {id: 9, cat: Movies/HD, desc: "HiDef Anime/Cartoon"}
-      - {id: 18, cat: Movies/BluRay, desc: "HiDef Bluray-BD25"}
-      - {id: 25, cat: Movies/HD, desc: "HiDef Documentaries"}
-      - {id: 49, cat: TV/HD, desc: "HiDef Greek Tv"}
-      - {id: 52, cat: Movies/HD, desc: "HiDef Movie Packages"}
-      - {id: 19, cat: Movies/HD, desc: "HiDef Movies"}
-      - {id: 36, cat: TV/HD, desc: "HiDef Series  "}
-      - {id: 62, cat: TV/HD, desc: "HiDef Series Packages"}
       - {id: 11, cat: Other, desc: "Misc"}
-      - {id: 47, cat: PC/Phone-Other, desc: "Mobile Stuff"}
-      - {id: 15, cat: Movies/DVD, desc: "Movies - DVD-r"}
-      - {id: 40, cat: Movies/SD, desc: "Movies - DVD-rip x264"}
-      - {id: 60, cat: Movies/SD, desc: "Movies - DVD-rip x264 Packages"}
-      - {id: 39, cat: Movies/SD, desc: "Movies - DVD/BR-rip "}
-      - {id: 41, cat: Movies/Other, desc: "Movies - Others"}
+      - {id: 47, cat: PC/Phone-Other, desc: "Mobile"}
+      - {id: 27, cat: Movies/DVD, desc: "Movies DVD-R"}
       - {id: 53, cat: Movies/3D, desc: "Movies 3D"}
+      - {id: 15, cat: Movies/UHD, desc: "Movies 4K"}
+      - {id: 18, cat: Movies/BluRay, desc: "Movies Bluray"}
+      - {id: 40, cat: Movies/HD, desc: "Movies DVD-rip x264"}
+      - {id: 60, cat: Movies/HD, desc: "Movies DVD-rip x264 Packages"}
+      - {id: 39, cat: Movies/SD, desc: "Movies DVD/BR-rip"}
       - {id: 14, cat: Movies/SD, desc: "Movies DVD/BR-rip Gr Sub - Emb"}
-      - {id: 13, cat: Movies/DVD, desc: "Movies Greek - DVD-r"}
-      - {id: 12, cat: Movies/SD, desc: "Movies Greek - DVD/BRrip"}
-      - {id: 43, cat: Movies/Other, desc: "Movies Greek - Others"}
-      - {id: 61, cat: Movies/SD, desc: "Movies-DVD/BR-rip XviD Package"}
-      - {id: 17, cat: XXX, desc: "Movies/others XXX"}
-      - {id: 48, cat: Audio, desc: "Music-DJs Stuff & Promos"}
-      - {id: 22, cat: Audio, desc: "Music-Foreign"}
-      - {id: 33, cat: Audio/Lossless, desc: "Music-Foreign Flac"}
-      - {id: 2, cat: Audio, desc: "Music-Foreign-All Discographie"}
-      - {id: 28, cat: Audio, desc: "Music-Greek DVD-r/DVDrip"}
-      - {id: 50, cat: Audio/Lossless, desc: "Music-Greek Flac"}
-      - {id: 21, cat: Audio, desc: "Music-Greek-All Discographies"}
-      - {id: 1, cat: Audio, desc: "Music-Greek-Old & Classic"}
-      - {id: 51, cat: Audio, desc: "Music-Greek-Recent(2005-)&New "}
-      - {id: 16, cat: Audio/Video, desc: "Music-Video clips"}
+      - {id: 61, cat: Movies/SD, desc: "Movies DVD/BR-rip XviD Packs"}
+      - {id: 12, cat: Movies/SD, desc: "Movies Greek DVD/BRrip"}
+      - {id: 19, cat: Movies/HD, desc: "Movies HD"}
+      - {id: 52, cat: Movies/HD, desc: "Movies HD Packages"}
+      - {id: 48, cat: Audio, desc: "Music DJ & Promos"}
+      - {id: 22, cat: Audio, desc: "Music Foreign"}
+      - {id: 2, cat: Audio, desc: "Music Foreign Discographies"}
+      - {id: 33, cat: Audio/Lossless, desc: "Music Foreign Flac"}
+      - {id: 1, cat: Audio, desc: "Music Greek"}
+      - {id: 21, cat: Audio, desc: "Music Greek Discographies"}
+      - {id: 50, cat: Audio/Lossless, desc: "Music Greek Flac"}
+      - {id: 16, cat: Audio/Video, desc: "Music Videos"}
       - {id: 46, cat: PC, desc: "Programs Linux"}
       - {id: 45, cat: PC, desc: "Programs MAC"}
-      - {id: 32, cat: PC, desc: "Programs Other"}
       - {id: 23, cat: PC, desc: "Programs Windows"}
-      - {id: 58, cat: PC, desc: "Tutorials"}
-      - {id: 55, cat: TV/SD, desc: "TV-Greek Movies"}
-      - {id: 56, cat: TV/SD, desc: "TV-Movies Gr Sub - Emb"}
-      - {id: 57, cat: TV/SD, desc: "TV-Shows Cartoon/Anime"}
-      - {id: 34, cat: TV/SD, desc: "TV-Shows Foreign"}
-      - {id: 8, cat: TV/SD, desc: "TV-Shows Foreign DVD-rip Emb"}
-      - {id: 7, cat: TV/SD, desc: "TV-Shows Foreign HDTV Emb"}
-      - {id: 42, cat: TV/SD, desc: "TV-Shows Foreign Packages"}
-      - {id: 5, cat: TV/SD, desc: "TV-Shows Greek Doc"}
-      - {id: 26, cat: TV/SD, desc: "TV-Shows Greek Other"}
-      - {id: 37, cat: TV/SD, desc: "TV-Shows Greek Packages"}
-      - {id: 44, cat: TV/SD, desc: "TV-Shows Greek Packages x264"}
-      - {id: 3, cat: TV/SD, desc: "TV-Shows Greek Series"}
-      - {id: 4, cat: TV/SD, desc: "TV-Shows Greek Shows"}
-      - {id: 6, cat: TV/SD, desc: "TV-Shows Greek Sport"}
-      - {id: 38, cat: TV/SD, desc: "TV-Shows Greek x264"}
+      - {id: 8, cat: TV/Documentary, desc: "Documentaries Foreign"}
+      - {id: 25, cat: TV/Documentary, desc: "Documentaries Foreign HD"}
+      - {id: 5, cat: TV/Documentary, desc: "Documentaries Greek"}
+      - {id: 6, cat: TV/Sport, desc: "TV Sports"}
+      - {id: 54, cat: TV/Sport, desc: "TV Sports HD"}
+      - {id: 34, cat: TV/SD, desc: "TV Foreign Series"}
+      - {id: 7, cat: TV/SD, desc: "TV Foreign Series Emb"}
+      - {id: 36, cat: TV/HD, desc: "TV Foreign Series HD"}
+      - {id: 62, cat: TV/HD, desc: "TV Foreign Series HD Packages"}
+      - {id: 42, cat: TV/SD, desc: "TV Foreign Series Packages"}
+      - {id: 55, cat: TV/SD, desc: "TV Greek Movies"}
+      - {id: 49, cat: TV/HD, desc: "TV Greek Movies HD"}
+      - {id: 26, cat: TV/SD, desc: "TV Greek Other"}
+      - {id: 3, cat: TV/SD, desc: "TV Greek Series"}
+      - {id: 44, cat: TV/SD, desc: "TV Greek Packages"}
+      - {id: 4, cat: TV/SD, desc: "TV Greek Shows"}
 
     modes:
       search: [q]

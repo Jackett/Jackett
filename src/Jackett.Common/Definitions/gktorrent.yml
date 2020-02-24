@@ -7,7 +7,7 @@
   encoding: UTF-8
   followredirect: true
   links:
-    - https://www.gktorrent.biz/
+    - https://www.gktorrent.io/
   legacylinks:
     - https://www.gktorrent.com/
     - http://www.gktorrent.com/
@@ -26,6 +26,7 @@
     - https://www.gktorrent.cx/
     - https://www.gktorrent.tv/
     - https://www.gktorrent.net/
+    - https://www.gktorrent.biz/
 
   caps:
     categorymappings:
@@ -36,23 +37,45 @@
       - {id: console-games, cat: Console, desc: "Console Games"}
       - {id: pc-games, cat: PC/Games, desc: "PC Games"}
       - {id: books, cat: Books, desc: "Books"}
+      - {id: xxx, cat: XXX, desc: "XXX"}
 
     modes:
       search: [q]
       tv-search: [q, season, ep]
       movie-search: [q]
 
-  settings: []
+  settings:
+    - name: downloadlink
+      type: select
+      label: Download link
+      default: "magnet:?xt="
+      options:
+        "/get_torrents/" : ".torrent"
+        "magnet:?xt=": "magnet"
 
   download:
-    selector: a[href^="/download/"]
+    selector: a[href*="{{ .Config.downloadlink }}"]
+    attribute: href
 
   search:
     paths:
       - path: "{{if .Keywords}}recherche/{{.Keywords}}{{else}}{{end}}"
+
     rows:
       selector: div.listing-torrent > table > tbody > tr:has(a)
+
     fields:
+      category:
+        selector: td:nth-child(1) > i
+        case:
+          .Films: "movies"
+          .Séries: "tvshows"
+          .Logiciels: "softwares"
+          .Musique: "music"
+          .Jeux-Consoles: "console-games"
+          .Jeux-PC: "pc-games"
+          .Ebook: "books"
+          .Porno: "xxx"
       site_date:
         selector: td:nth-child(1) a
         filters:
@@ -82,23 +105,14 @@
         attribute: href
       size:
         selector: td:nth-child(2)
+      date:
+        text: now
       seeders:
         selector: td:nth-child(3)
       leechers:
         selector: td:nth-child(4)
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
-      category:
-        selector: td:nth-child(1) > i
-        case:
-          .Films: "movies"
-          .Séries: "tvshows"
-          .Logiciels: "softwares"
-          .Musique: "music"
-          .Jeux-Consoles: "console-games"
-          .Jeux-PC: "pc-games"
-          .Ebook: "books"
-      date:
-        text: "now"
+        text: 1
+# engine n/a

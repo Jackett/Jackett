@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,7 +28,7 @@ namespace Jackett.Common.Utils
             return n.Value;
         }
 
-        private T Value;
+        private readonly T Value;
     }
 
     public static class GenericConversionExtensions
@@ -48,7 +48,7 @@ namespace Jackett.Common.Utils
     {
         public static string AsString(this IEnumerable<char> chars)
         {
-            return String.Concat(chars);
+            return string.Concat(chars);
         }
 
         public static bool IsEmpty<T>(this IEnumerable<T> collection)

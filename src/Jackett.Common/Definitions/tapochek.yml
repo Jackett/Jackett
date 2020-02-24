@@ -6,9 +6,9 @@
   type: private
   encoding: windows-1251
   links:
-    - http://tapochek.net/
-  legacylinks:
     - https://tapochek.net/
+  legacylinks:
+    - http://tapochek.net/
 
   settings:
     - name: username
@@ -21,11 +21,26 @@
       type: checkbox
       label: Strip Russian Letters
       default: false
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "1"
+      options:
+        "1": "created"
+        "10": "seeders"
+        "7": "size"
+        "2": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "2"
+      options:
+        "2": "desc"
+        "1": "asc"
 
   caps:
     categorymappings:
-      # PC Games
-      # Игры для PC
+      # PC Games      # Игры для PC
       - {id: 2, cat: PC/Games, desc: "Игры для PC (общее)"}
       - {id: 14, cat: PC/Games, desc: "Альфа-, Бета- и Демо-версии"}
       - {id: 314, cat: PC/Games, desc: "NoCD/ NoDVD"}
@@ -89,8 +104,7 @@
       - {id: 44, cat: PC/Games, desc: "Многопользовательские игры"}
       - {id: 45, cat: PC/Games, desc: "MMORPG"}
       - {id: 46, cat: PC/Games, desc: "Для самых маленьких"}
-      # Games for Consoles
-      # Игры для Консолей
+      # Games for Consoles      # Игры для Консолей
       - {id: 69, cat: Console/Xbox, desc: "Xbox"}
       - {id: 86, cat: Console/Xbox 360, desc: "XBox360 | Игры"}
       - {id: 646, cat: Console/Xbox 360, desc: "XBox360 | JTAG"}
@@ -131,8 +145,7 @@
       - {id: 351, cat: Console, desc: "Saturn | Игры"}
       - {id: 352, cat: Console, desc: "Игры для старых консолей"}
       - {id: 390, cat: Console, desc: "Коллекции (игры для разных платформ)"}
-      # Games for macOS and Linux
-      # Игры для macOS и Linux
+      # Games for macOS and Linux      # Игры для macOS и Linux
       - {id: 936, cat: PC/Games, desc: "Горячие новинки игр для macOS и Linux"}
       - {id: 129, cat: PC/Games, desc: "Игры для Linux от R.G. GOGFAN"}
       - {id: 874, cat: PC/Games, desc: "[Linux] Аркады от R.G. GOGFAN"}
@@ -148,8 +161,7 @@
       - {id: 877, cat: PC/Games, desc: "[macOS] Симуляторы от R.G. GOGFAN"}
       - {id: 878, cat: PC/Games, desc: "[macOS] Action от R.G. GOGFAN"}
       - {id: 933, cat: PC/Games, desc: "[macOS] RPG от R.G. GOGFAN"}
-      # Cinema
-      # Кинематограф
+      # Cinema      # Кинематограф
       - {id: 429, cat: Movies, desc: "Новинки кинематографа"}
       - {id: 886, cat: Movies/3D, desc: "Новинки (3D)"}
       - {id: 703, cat: Movies, desc: "Экранки и Low-рипы (CAMRip, TS, WEBRip)"}
@@ -185,8 +197,7 @@
       - {id: 321, cat: TV, desc: "Мультсериалы"}
       - {id: 162, cat: TV/Documentary, desc: "Документальные фильмы и телепередачи"}
       - {id: 392, cat: TV, desc: "Развлекательные телепередачи и шоу"}
-      # Anime
-      # Аниме
+      # Anime      # Аниме
       - {id: 693, cat: TV/Anime, desc: "Аниме (Основной)"}
       - {id: 684, cat: TV/Anime, desc: "Аниме (DVD)"}
       - {id: 677, cat: TV/Anime, desc: "Аниме DVD [Бутлег]"}
@@ -206,8 +217,7 @@
       - {id: 682, cat: TV/Anime, desc: "Аниме UnCensored"}
       - {id: 683, cat: TV/Anime, desc: "Аниме PtCensored"}
       - {id: 697, cat: TV/Anime, desc: "Аниме Манга, обои, артбуки и др."}
-      # Music and Music Video
-      # Музыка и Музыкальное видео
+      # Music and Music Video      # Музыка и Музыкальное видео
       - {id: 451, cat: Audio/Lossless, desc: "Классическая музыка (lossless)"}
       - {id: 452, cat: Audio/Lossless, desc: "Классическая музыка в современной обработке (lossless)"}
       - {id: 453, cat: Audio/MP3, desc: "Классическая музыка (mp3)"}
@@ -250,23 +260,23 @@
       - {id: 497, cat: Audio/Lossless, desc: "Flamenco, Акустическая гитара (lossless)"}
       - {id: 498, cat: Audio/MP3, desc: "NewAge, Meditative (mp3)"}
       - {id: 499, cat: Audio/MP3, desc: "Flamenco, Акустическая гитара (mp3)"}
-      - {id: 500, cat: Audio/Video, desc: "New Age, Relax, Meditative &amp; Flamenco (video)"}
+      - {id: 500, cat: Audio/Video, desc: "New Age, Relax, Meditative & Flamenco (video)"}
       - {id: 501, cat: Audio, desc: "Звуки природы"}
       - {id: 502, cat: Audio, desc: "Психоактивныe аудиопрограммы"}
-      - {id: 504, cat: Audio/Lossless, desc: "Зарубежный Rap, Hip-Hop, R&#039;n&#039;B (lossless)"}
-      - {id: 505, cat: Audio/Lossless, desc: "Отечественный Rap, Hip-Hop, R&#039;n&#039;B (lossless)"}
-      - {id: 506, cat: Audio/MP3, desc: "Зарубежный Rap, Hip-Hop, R&#039;n&#039;B (mp3)"}
-      - {id: 507, cat: Audio/MP3, desc: "Отечественный Rap, Hip-Hop, R&#039;n&#039;B (mp3)"}
-      - {id: 508, cat: Audio/Video, desc: "Rap, Hip-Hop, R&#039;n&#039;B (video)"}
+      - {id: 504, cat: Audio/Lossless, desc: "Зарубежный Rap, Hip-Hop, R'n'B (lossless)"}
+      - {id: 505, cat: Audio/Lossless, desc: "Отечественный Rap, Hip-Hop, R'n'B (lossless)"}
+      - {id: 506, cat: Audio/MP3, desc: "Зарубежный Rap, Hip-Hop, R'n'B (mp3)"}
+      - {id: 507, cat: Audio/MP3, desc: "Отечественный Rap, Hip-Hop, R'n'B (mp3)"}
+      - {id: 508, cat: Audio/Video, desc: "Rap, Hip-Hop, R'n'B (video)"}
       - {id: 510, cat: Audio/Lossless, desc: "Trance, Goa Trance, Psy-Trance, PsyChill, Ambient Dub (lossl.."}
       - {id: 511, cat: Audio/Lossless, desc: "House, Techno, Hardcore, Hardstyle, Jumpstyle (lossless)"}
-      - {id: 512, cat: Audio/Lossless, desc: "Drum &amp; Bass, Jungle, Breakbeat, Dubstep, IDM (lossless)"}
+      - {id: 512, cat: Audio/Lossless, desc: "Drum & Bass, Jungle, Breakbeat, Dubstep, IDM (lossless)"}
       - {id: 513, cat: Audio/Lossless, desc: "Chillout, Lounge, Downtempo, Trip-Hop (lossless)"}
       - {id: 514, cat: Audio/Lossless, desc: "Traditional Electronic, Ambient, Experimental (lossless)"}
       - {id: 515, cat: Audio, desc: "Industrial, Noise, EBM, Dark Electro, Aggrotech, Synthpop, N.."}
       - {id: 516, cat: Audio/MP3, desc: "Trance, Goa Trance, Psy-Trance, PsyChill, Ambient Dub (mp3)"}
       - {id: 517, cat: Audio/MP3, desc: "House, Techno, Hardcore, Hardstyle, Jumpstyle (mp3)"}
-      - {id: 518, cat: Audio/MP3, desc: "Drum &amp; Bass, Jungle, Breakbeat, Dubstep, IDM (mp3)"}
+      - {id: 518, cat: Audio/MP3, desc: "Drum & Bass, Jungle, Breakbeat, Dubstep, IDM (mp3)"}
       - {id: 519, cat: Audio/MP3, desc: "Chillout, Lounge, Downtempo, Trip-Hop (mp3)"}
       - {id: 520, cat: Audio/MP3, desc: "Traditional Electronic, Ambient, Experimental (mp3)"}
       - {id: 521, cat: Audio, desc: "Industrial, Noise, EBM, Dark Electro, Aggrotech, Synthpop, N.."}
@@ -299,8 +309,7 @@
       - {id: 545, cat: Audio, desc: "Многоканальная музыка"}
       - {id: 546, cat: Audio, desc: "Собственные оцифровки"}
       - {id: 547, cat: Audio, desc: "Hi-Res stereo"}
-      # Software
-      # Программное обеспечение
+      # Software      # Программное обеспечение
       - {id: 202, cat: PC/Mac, desc: "Mac OS (для Apple Macintosh)"}
       - {id: 203, cat: PC/Mac, desc: "Mac OS (для РС-Hackintosh)"}
       - {id: 204, cat: PC/Mac, desc: "Программы для просмотра и обработки видео Mac OS"}
@@ -401,8 +410,7 @@
       - {id: 639, cat: PC, desc: "Обучающие видеоматериалы"}
       - {id: 640, cat: PC, desc: "Мультимедийные материалы"}
       - {id: 642, cat: PC, desc: "Разное"}
-      # Library
-      # Библиотека
+      # Library      # Библиотека
       - {id: 717, cat: Books, desc: "Аудиокниги"}
       - {id: 740, cat: Books, desc: "Проект S.T.A.L.K.E.R."}
       - {id: 738, cat: Books, desc: "Детектив / боевик"}
@@ -433,14 +441,11 @@
       - {id: 714, cat: Books, desc: "Книги для малышей и их родителей"}
       - {id: 845, cat: Books, desc: "Комиксы"}
       - {id: 741, cat: Books, desc: "Разное"}
-      # Technical assistance
-      # Техническая помощь
+      # Technical assistance      # Техническая помощь
       - {id: 578, cat: Other, desc: "µTorrent и BitTorrent 4.x, 5.x, 6.x"}
-      # Release - groups
-      # Релиз - группы
+      # Release - groups      # Релиз - группы
       - {id: 378, cat: Other, desc: "Анонсы"}
-      # Miscellanea
-      # Разное
+      # Miscellanea      # Разное
       - {id: 644, cat: Other, desc: "Разное"}
 
     modes:
@@ -456,7 +461,7 @@
       login_username: "{{ .Config.username }}"
       login_password: "{{ .Config.password }}"
       autologin: 1
-      redirect: "index.php"
+      redirect: index.php
     error:
       - selector: h4:contains("Вы ввели")
     test:
@@ -469,15 +474,21 @@
     inputs:
       $raw: "{{ if .Categories }}{{ range .Categories }}f[]={{.}}&{{end}}{{else}}f[]=-1{{end}}"
       nm: "{{ .Keywords }}"
-      o: 1
-      s: 2
+      o: "{{ .Config.sort }}"
+      s: "{{ .Config.type }}"
       tm: -1
       sns: -1
 
     rows:
-      selector: tr[id^="tor_"]
+      selector: tr[id^="tor_"]:has(a[href^="./download.php?id="])
 
     fields:
+      category:
+        selector: td a.gen
+        attribute: href
+        filters:
+          - name: querystring
+            args: f
       title:
         selector: a.genmed
         filters:
@@ -490,7 +501,7 @@
           - name: re_replace
             args: ["((\\([12][0-9]{3}\\))(.+)\\([Сс]езон\\s+(\\d+).+[Сс]ери[ия]\\s+(?:(\\d+-*\\d*).*\\d+)*\\))", " - S$4E$5 - rus $3"]
           - name: re_replace
-            args: ["(\\([А-Яа-я\\W]+\\))|(^[А-Яа-я\\W\\d]+\\/ )|([а-яА-Я \\-]+,+)|([а-яА-Я]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
+            args: ["(\\([А-Яа-яЁё\\W]+\\))|(^[А-Яа-яЁё\\W\\d]+\\/ )|([а-яА-ЯЁё \\-]+,+)|([а-яА-ЯЁё]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
           - name: replace
             args: ["-Rip", "Rip"]
           - name: replace
@@ -503,15 +514,8 @@
         selector: a.genmed
         attribute: href
       download:
-        optional: true
         selector: a[href^="./download.php?id="]
         attribute: href
-      category:
-        selector: td a.gen
-        attribute: href
-        filters:
-          - name: querystring
-            args: f
       size:
         selector: td:nth-child(6) > u
       date:
@@ -522,8 +526,9 @@
         selector: td.leechmed > b
       downloadvolumefactor:
         case:
-          img[src="images/tor_gold.gif"]: "0"
-          img[src="images/tor_silver.gif"]: "0.5"
-          "*": "1"
+          img[src="images/tor_gold.gif"]: 0
+          img[src="images/tor_silver.gif"]: 0.5
+          "*": 1
       uploadvolumefactor:
-        text: "1"
+        text: 1
+# TorrentPier

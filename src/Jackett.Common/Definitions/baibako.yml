@@ -3,7 +3,7 @@
   name: BaibaKo
   description: "BaibaKo is a RUSSIAN Semi-Private Torrent Tracker for TV"
   language: ru-ru
-  type: private
+  type: semi-private
   encoding: windows-1251
   links:
     - http://baibako.tv/
@@ -27,6 +27,22 @@
       type: checkbox
       label: Strip Russian Letters
       default: false
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "4"
+      options:
+        "4": "created"
+        "7": "seeders"
+        "5": "size"
+        "1": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
 
   login:
     path: takelogin.php
@@ -46,12 +62,16 @@
     inputs:
       search: "{{.Keywords }}"
       # 0 active 1 incldead 2 onlydead 3 gold 4 seedfree
-      incldead: "1"
+      incldead: 1
+      sort: "{{ .Config.sort }}"
+      type: "{{ .Config.type }}"
     keywordsfilters:
       - name: re_replace
         args: ["[s|S](\\d+)[e|E][\\d]+", "/s$1"]
+
     rows:
       selector: table > tbody > tr:has(a[href^="details.php?id="])
+
     fields:
       title:
         selector: a[href^="details.php?id="]
@@ -77,7 +97,7 @@
           - name: replace
             args: ["HDR1080p", "HD 1080p"]
           - name: re_replace
-            args: ["(\\([А-Яа-я\\W]+\\))|(^[А-Яа-я\\W\\d]+\\/ )|([а-яА-Я \\-]+,+)|([а-яА-Я]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
+            args: ["(\\([А-Яа-яЁё\\W]+\\))|(^[А-Яа-яЁё\\W\\d]+\\/ )|([а-яА-ЯЁё \\-]+,+)|([а-яА-ЯЁё]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
           - name: append
             args: " - rus"
       details:
@@ -142,8 +162,9 @@
         selector: td:nth-last-child(1)
       downloadvolumefactor:
         case:
-          "a[href^=\"details.php?id=\"]:contains(\"(Золото)\")": "0"
-          "*": "1"
+          "a[href^=\"details.php?id=\"]:contains(\"(Золото)\")": 0
+          "*": 1
       uploadvolumefactor:
         case:
-          "*": "1"
+          "*": 1
+# engine n/a

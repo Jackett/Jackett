@@ -1,7 +1,7 @@
 ﻿---
   site: crazyscorner
   name: Crazy's Corner
-  description: "Crazy's Corner is a Private Torrent Tracker"
+  description: "Crazy's Corner is a Private Torrent Tracker for MUSIC"
   language: en-us
   type: private
   encoding: UTF-8
@@ -10,167 +10,155 @@
 
   caps:
     categorymappings:
-      - {id: 11, cat: Movies/DVD, desc: "VIP MOVIES DVD-R"}
-      - {id: 34, cat: Movies/3D, desc: "VIP MOVIES 3D-Movies"}
-      - {id: 46, cat: Movies, desc: "VIP MOVIES VENOM-Packs"}
-      - {id: 52, cat: Movies/HD, desc: "VIP MOVIES High Def Mkv/Mp4"}
-      - {id: 70, cat: Movies, desc: "VIP MOVIES Movies Animation"}
-      - {id: 78, cat: TV, desc: "MISC POD CASTS"}
-      - {id: 35, cat: Movies/BluRay, desc: "VIP MOVIES Blu-Ray Movies"}
-      - {id: 36, cat: Movies/DVD, desc: "VIP MOVIES DvD-Rips"}
-      - {id: 37, cat: Movies, desc: "VIP MOVIES Classic-Movies"}
-      - {id: 38, cat: Movies, desc: "VIP MOVIES Classic-Kids-Movies"}
-      - {id: 47, cat: Movies/WEBDL, desc: "VIP MOVIES Webrip/WEB-DL"}
-      - {id: 39, cat: Movies, desc: "VIP MOVIES Movie-Packs"}
-      - {id: 1, cat: Movies, desc: "VIP MOVIES Movies"}
-      - {id: 5, cat: Movies, desc: "VIP MOVIES Anime"}
-      - {id: 32, cat: XXX, desc: "VIP MOVIES Adult-Movies"}
-      - {id: 33, cat: Movies/UHD, desc: "VIP MOVIES 4K-Movies"}
-      - {id: 4, cat: Movies, desc: "VIP MOVIES Misc-Torrents"}
-      - {id: 79, cat: Audio/Audiobook, desc: "MISC AUDIO BOOKS"}
-      - {id: 81, cat: Audio/Other, desc: "MISC RADIO SHOWS"}
-      - {id: 43, cat: TV, desc: "VIP TV Kids-tv"}
-      - {id: 48, cat: TV/Sport, desc: "VIP SPORTS Sport-Misc"}
-      - {id: 97, cat: Movies, desc: "DISNEY Movies"}
-      - {id: 44, cat: PC/ISO, desc: "VIP GAMES Games-Pc-Iso"}
-      - {id: 45, cat: Console, desc: "VIP GAMES All Console Games"}
-      - {id: 41, cat: TV, desc: "VIP TV Tv Episodes"}
-      - {id: 91, cat: Movies, desc: "U.B.D Movies"}
-      - {id: 92, cat: Audio, desc: "U.B.D Music"}
-      - {id: 93, cat: TV, desc: "U.B.D MISC TV"}
-      - {id: 94, cat: Other, desc: "U.B.D MISC"}
-      - {id: 95, cat: Movies, desc: "U.B.D.Classic picks"}
-      - {id: 42, cat: TV, desc: "VIP TV Tv Packs"}
-      - {id: 84, cat: PC, desc: "VIP APPS MISC"}
-      - {id: 2, cat: Audio, desc: "VIP Music"}
-      - {id: 30, cat: Audio, desc: "VIP Music-Packs"}
-      - {id: 31, cat: Audio, desc: "VIP Music-Albums"}
-      - {id: 3, cat: PC/Games, desc: "VIP Misc Games"}
-      - {id: 40, cat: TV, desc: "VIP TV Tv  Single Seasons"}
-      - {id: 7, cat: PC/0day, desc: "VIP Apps Win"}
-      - {id: 8, cat: PC, desc: "VIP Apps Linux"}
-      - {id: 9, cat: PC/Mac, desc: "VIP Apps Mac"}
-      - {id: 15, cat: Books/Ebook, desc: "E Books Adventure"}
-      - {id: 55, cat: Books/Ebook, desc: "E Books Sci-Fi"}
-      - {id: 51, cat: Books/Ebook, desc: "E Books Food/Cook-Books"}
-      - {id: 56, cat: Books/Ebook, desc: "E Books Fantasy/Paranormal"}
-      - {id: 57, cat: Books/Ebook, desc: "E Books Science"}
-      - {id: 58, cat: Books/Ebook, desc: "E Books Wildlife & Pets"}
-      - {id: 59, cat: Books/Ebook, desc: "E Books Hobbies"}
-      - {id: 60, cat: Books/Ebook, desc: "E Books Arts & Crafts"}
-      - {id: 61, cat: Books/Ebook, desc: "E Books Reference/Manuals"}
-      - {id: 62, cat: Books/Ebook, desc: "E Books Outdoors/Gardening"}
-      - {id: 63, cat: Books/Ebook, desc: "E Books Romance"}
-      - {id: 64, cat: Books/Ebook, desc: "E Books Book Packs"}
-      - {id: 65, cat: Books/Ebook, desc: "E Books Thriller"}
-      - {id: 66, cat: Books/Ebook, desc: "E Books Travel"}
-      - {id: 71, cat: Books/Ebook, desc: "E Books Children's Books"}
-      - {id: 16, cat: Books/Ebook, desc: "E Books Biography"}
-      - {id: 17, cat: Books/Ebook, desc: "E Books Fiction & Literature"}
-      - {id: 18, cat: Books/Ebook, desc: "E Books Gay/Lesbian"}
-      - {id: 19, cat: Books/Ebook, desc: "E Books Ghost Stories"}
-      - {id: 20, cat: Books/Ebook, desc: "E Books Health"}
-      - {id: 21, cat: Books/Ebook, desc: "E Books History"}
-      - {id: 22, cat: Books/Ebook, desc: "E Books Horror"}
-      - {id: 23, cat: Books/Ebook, desc: "E Books Humor"}
-      - {id: 24, cat: Books/Ebook, desc: "E Books Nature"}
-      - {id: 26, cat: Books/Ebook, desc: "E Books Magazines"}
-      - {id: 27, cat: Books/Ebook, desc: "E Books War & Crime"}
-      - {id: 28, cat: Books/Ebook, desc: "E Books Comics"}
-      - {id: 29, cat: Books/Ebook, desc: "E Books Misc Books"}
-      - {id: 12, cat: Books/Ebook, desc: "E Books Adult"}
+      - {id: 1, cat: Audio, desc: "Alternative"}
+      - {id: 2, cat: Audio, desc: "  |-- "}
+      - {id: 3, cat: Audio, desc: "Blues"}
+      - {id: 35, cat: Audio, desc: "Christmas Music"}
+      - {id: 4, cat: Audio, desc: "Classic Rock"}
+      - {id: 6, cat: Audio, desc: "Country"}
+      - {id: 7, cat: Audio, desc: "Dance"}
+      - {id: 8, cat: Audio, desc: "Disco"}
+      - {id: 9, cat: Audio, desc: "Electronic"}
+      - {id: 10, cat: Audio, desc: "Folk"}
+      - {id: 11, cat: Audio, desc: "Gospel"}
+      - {id: 37, cat: Audio, desc: "HardCore"}
+      - {id: 12, cat: Audio, desc: "Heavy-Metal"}
+      - {id: 13, cat: Audio, desc: "Hip-Hop"}
+      - {id: 14, cat: Audio, desc: "Jazz"}
+      - {id: 15, cat: Audio, desc: "Karaoke"}
+      - {id: 16, cat: Audio, desc: "Metal"}
+      - {id: 34, cat: Audio, desc: "Misc Compilation Albums Packs"}
+      - {id: 17, cat: Audio, desc: "Music Apps"}
+      - {id: 18, cat: Audio, desc: "Music Video"}
+      - {id: 19, cat: Audio, desc: "Opera"}
+      - {id: 20, cat: Audio, desc: "Pop"}
+      - {id: 21, cat: Audio, desc: "Punk"}
+      - {id: 22, cat: Audio, desc: "Punk Pop"}
+      - {id: 24, cat: Audio, desc: "R & B"}
+      - {id: 23, cat: Audio, desc: "Rap"}
+      - {id: 25, cat: Audio, desc: "Reggae"}
+      - {id: 26, cat: Audio, desc: "Rock"}
+      - {id: 27, cat: Audio, desc: "Rock-70s"}
+      - {id: 28, cat: Audio, desc: "Rock-80s"}
+      - {id: 29, cat: Audio, desc: "Soul"}
+      - {id: 30, cat: Audio, desc: "Sound Tracks"}
+      - {id: 31, cat: Audio, desc: "Techno"}
+      - {id: 32, cat: Audio, desc: "Teen-Pop"}
+      - {id: 33, cat: Audio, desc: "Trance"}
 
     modes:
       search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
+      music-search: [q, album, artist, label, year]
+
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "added"
+      options:
+        "added": "created"
+        "seeders": "seeders"
+        "size": "size"
+        "name": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
 
   login:
-    path: index.php?page=login
+    path: takelogin.php
     method: post
     inputs:
-      uid: "{{ .Config.username }}"
-      pwd: "{{ .Config.password }}"
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+      submit: LOGIN
     error:
-      - selector: tr td span[style="color:#FF0000;"]
+      - selector: table:contains("ERROR")
     test:
       path: index.php
-      selector: a[href="logout.php"]
+      selector: a[href*="/logout.php?logouthash="]
+
+  download:
+    before:
+      path: takethanks.php
+      method: post
+      inputs:
+        torrentid: "{{ .DownloadUri.Query.id }}"
+    selector: a[href*="/download.php?id="]
+    attribute: href
 
   search:
     paths:
-    # http://crazys-corner.info/index.php?page=torrents&search=captain&category=0&uploader=0&options=0&active=0&gold=0
-      - path: index.php
+      - path: browse.php
+        method: post
     inputs:
-      search: "{{ .Keywords }}"
-      page: "torrents"
-      category: "{{range .Categories}}{{.}};{{end}}"
-      uploader: 0
-      # 0 filename 1 file&descr 2 descr
-      options: 0
-      # 0 all 1 active 2 deadonly
-      active: 0
-      # 0 all 1 classic 2 silver 3 gold 4 silver&gold
-      gold: 0
+      do: search
+      keywords: "{{if or (.Query.Album) (.Query.Artist) }}{{ or (.Query.Album) (.Query.Artist) }}{{else}}{{ .Keywords }}{{end}}"
+      category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{else}}0{{end}}"
+      # t_name t_description t_both t_uploader t_genre
+      search_type: t_name
+      include_dead_torrents: yes
+      sort: "{{ .Config.sort }}"
+      order: "{{ .Config.type }}"
+
     rows:
-      selector: table.lista tr:has(a[href^="index.php?page=torrent-details&id="])
+      selector: table.sortable tr:has(a[href*="/download.php?id="])
+
     fields:
       category:
-        selector: a[href^="index.php?page=torrents&category="]
+        selector: a[href*="/browse.php?category="]
         attribute: href
         filters:
           - name: querystring
             args: category
       title:
-        selector: a[title][href^="index.php?page=torrent-details&id="]
+      # abbreviated title
+        selector: a[href*="/details.php?id="]
+      title:
+        selector: div.tooltip-content > div
+        optional: true
       details:
-        selector: a[title][href^="index.php?page=torrent-details&id="]
+        selector: a[href*="/details.php?id="]
         attribute: href
       download:
-        selector: a[href^="download.php?id="]
+        selector: a[href*="/details.php?id="]
+        attribute: href
+      magnet:
+        selector: a[href^="magnet:?xt="]
         attribute: href
       banner:
-        selector: a[title][href^="index.php?page=torrent-details&id="]
-        attribute: onmouseover
-        filters:
-          - name: regexp
-            args: "src=(.+?)  width"
-      size:
-        selector: a[title][href^="index.php?page=torrent-details&id="]
-        attribute: onmouseover
-        filters:
-          - name: regexp
-            args: "Size: (.+?)<"
+        selector: img[src*="/torrents/images/"]
+        attribute: src
       date:
-        selector: a[title][href^="index.php?page=torrent-details&id="]
-        attribute: onmouseover
+        selector: td:nth-child(2)
         filters:
           - name: regexp
-            args: "Added:(.+?)<"
-          - name: timeago
-      seeders:
-        selector: a[title][href^="index.php?page=torrent-details&id="]
-        attribute: onmouseover
-        filters:
-          - name: regexp
-            args: "Seeders: (\\d+)<"
-      leechers:
-        selector: a[title][href^="index.php?page=torrent-details&id="]
-        attribute: onmouseover
-        filters:
-          - name: regexp
-            args: "Leechers: (\\d+)<"
+            args: "(\\d{2}-\\d{2}-\\d{4} \\d{2}:\\d{2})"
+          - name: dateparse
+            args: "02-01-2006 15:04"
+      size:
+        selector: td:nth-last-child(5)
       grabs:
-        selector: a[title][href^="index.php?page=torrent-details&id="]
-        attribute: onmouseover
-        filters:
-          - name: regexp
-            args: "Done: (\\d+)<"
+        selector: td:nth-last-child(4)
+      seeders:
+        selector: td:nth-last-child(3)
+      leechers:
+        selector: td:nth-last-child(2)
       downloadvolumefactor:
         case:
-          img[src="images/freeleech.gif"]: "0"
-          img[src="gold/gold.gif"]: "0"
-          "*": "1"
+          img[src$="_flags/freedownload.gif"]: 0
+          "*": 1
       uploadvolumefactor:
         case:
-          "*": "1"
+          img[src$="_flags/x2.gif"]: 2
+          "*": 1
+# TS Special Edition v.7.5

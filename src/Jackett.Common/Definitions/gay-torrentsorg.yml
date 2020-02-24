@@ -1,11 +1,9 @@
 ---
-  # By LA5T for https://gay-torrents.org (29.07.2018 22:55 UTC+2)
-  #
   site: gay-torrentsorg
   name: gay-torrents.org
   description: "Gay-Torrents.org is a Private Torrent Tracker for GAY XXX"
   language: en-us
-  type: semi-private
+  type: private
   encoding: UTF-8
   links:
     - https://gay-torrents.org/
@@ -149,3 +147,4 @@
       uploadvolumefactor:
         case:
           "*": 1
+# engine tbd

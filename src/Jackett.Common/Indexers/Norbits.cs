@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -342,7 +342,7 @@ namespace Jackett.Common.Indexers
                         Output("Leechers: " + leechers);
 
                         // Completed
-                        Regex regexObj = new Regex(@"[^\d]");
+                        var regexObj = new Regex(@"[^\d]");
                         var completed2 = tRow.Find("td:eq(7)").Text();
                         var completed = ParseUtil.CoerceLong(regexObj.Replace(completed2, ""));
                         Output("Completed: " + completed);
@@ -377,7 +377,7 @@ namespace Jackett.Common.Indexers
                         // Torrent Download URL
                         var passkey = tRow.Find("td:eq(1) > a:eq(1)").Attr("href");
                         var key = Regex.Match(passkey, "(?<=passkey\\=)([a-zA-z0-9]*)");
-                        Uri downloadLink = new Uri(TorrentDownloadUrl.Replace("{id}", id.ToString()).Replace("{passkey}", key.ToString()));
+                        var downloadLink = new Uri(TorrentDownloadUrl.Replace("{id}", id.ToString()).Replace("{passkey}", key.ToString()));
                         Output("Download Link: " + downloadLink.AbsoluteUri);
 
                         // Building release infos
@@ -387,15 +387,15 @@ namespace Jackett.Common.Indexers
                             Title = name,
                             Seeders = seeders,
                             Peers = seeders + leechers,
-                            MinimumRatio = 1,
-                            MinimumSeedTime = 172800,
                             PublishDate = date,
                             Size = size,
                             Files = files,
                             Grabs = completed,
                             Guid = detailsLink,
                             Comments = commentsLink,
-                            Link = downloadLink
+                            Link = downloadLink,
+                            MinimumRatio = 1,
+                            MinimumSeedTime = 172800 // 48 hours
                         };
 
                         var genres = tRow.Find("span.genres").Text();
@@ -403,7 +403,7 @@ namespace Jackett.Common.Indexers
                             release.Description = genres;
 
                         // IMDB
-                        var imdbLink = tRow.Find("a[href*=\"http://imdb.com/title/\"]").First().Attr("href");
+                        var imdbLink = tRow.Find("a[href*=\"imdb.com/title/tt\"]").First().Attr("href");
                         release.Imdb = ParseUtil.GetLongFromString(imdbLink);
 
                         if (tRow.Find("img[title=\"100% freeleech\"]").Length >= 1)
@@ -441,7 +441,7 @@ namespace Jackett.Common.Indexers
         {
             var parameters = new NameValueCollection();
             var categoriesList = MapTorznabCapsToTrackers(query);
-            string searchterm = term;
+            var searchterm = term;
 
             // Building our tracker query
             parameters.Add("incldead", "1");

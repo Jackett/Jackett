@@ -1,15 +1,15 @@
-﻿using Jackett.Common.Models.Config;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace Jackett.Server.Controllers
 {
@@ -17,10 +17,10 @@ namespace Jackett.Server.Controllers
     [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     public class WebUIController : Controller
     {
-        private IConfigurationService config;
-        private ServerConfig serverConfig;
-        private ISecuityService securityService;
-        private Logger logger;
+        private readonly IConfigurationService config;
+        private readonly ServerConfig serverConfig;
+        private readonly ISecuityService securityService;
+        private readonly Logger logger;
 
         public WebUIController(IConfigurationService config, ISecuityService ss, ServerConfig s, Logger l)
         {
@@ -44,7 +44,8 @@ namespace Jackett.Server.Controllers
                 return Redirect("Dashboard");
             }
 
-            return new PhysicalFileResult(config.GetContentFolder() + "/login.html", "text/html"); ;
+            return new PhysicalFileResult(config.GetContentFolder() + "/login.html", "text/html");
+            ;
         }
 
         [HttpGet]
@@ -70,8 +71,8 @@ namespace Jackett.Server.Controllers
         [HttpGet]
         public IActionResult Dashboard()
         {
-            bool logout = HttpContext.Request.Query.Where(x => String.Equals(x.Key, "logout", StringComparison.OrdinalIgnoreCase)
-                                                            && String.Equals(x.Value, "true", StringComparison.OrdinalIgnoreCase)).Any();
+            var logout = HttpContext.Request.Query.Where(x => string.Equals(x.Key, "logout", StringComparison.OrdinalIgnoreCase)
+                                                            && string.Equals(x.Value, "true", StringComparison.OrdinalIgnoreCase)).Any();
 
             if (logout)
             {

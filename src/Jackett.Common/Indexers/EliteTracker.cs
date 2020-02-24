@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -6,9 +6,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
-using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Models;
-using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
@@ -24,8 +23,9 @@ namespace Jackett.Common.Indexers
         private string BrowseUrl
         { get { return SiteLink + "browse.php"; } }
         private bool TorrentHTTPSMode => configData.TorrentHTTPSMode.Value;
-
+        private string ReplaceMulti => configData.ReplaceMulti.Value;
         private new ConfigurationDataEliteTracker configData
+
         {
             get { return (ConfigurationDataEliteTracker)base.configData; }
             set { base.configData = value; }
@@ -35,6 +35,7 @@ namespace Jackett.Common.Indexers
             : base(name: "Elite-Tracker",
                 description: "French Torrent Tracker",
                 link: "https://elite-tracker.net/",
+                caps: new TorznabCapabilities(),
                 configService: configService,
                 logger: logger,
                 p: protectionService,
@@ -45,6 +46,9 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "fr-fr";
             Type = "private";
+
+            // Clean capabilities
+            TorznabCaps.Categories.Clear();
 
             AddCategoryMapping(27, TorznabCatType.TVAnime, "Animation/Animes");
             AddCategoryMapping(63, TorznabCatType.TVAnime, "Animes DVD");
@@ -63,6 +67,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(4, TorznabCatType.PC0day, "WINDOWS");
 
             AddCategoryMapping(38, TorznabCatType.TVDocumentary, "DOCUMENTAIRES");
+            AddCategoryMapping(97, TorznabCatType.TVDocumentary, "DOCUMENTAIRES PACK");
 
             AddCategoryMapping(34, TorznabCatType.Books, "EBOOKS");
             AddCategoryMapping(86, TorznabCatType.Books, "ABOOKS");
@@ -206,8 +211,8 @@ namespace Jackett.Common.Indexers
                     var Seeders = Row.QuerySelector("td:nth-child(7)").QuerySelector("a");
                     var Leechers = Row.QuerySelector("td:nth-child(8)").QuerySelector("a");
 
-                    var categoryIdparts = category.GetAttribute("href").Split('-');
-                    var categoryId = categoryIdparts[categoryIdparts.Length - 1].Replace(".ts", "");
+                    var categoryId = category.GetAttribute("href").Split('=')[1];
+                    release.Category = MapTrackerCatToNewznab(categoryId);
 
                     release.Title = title.TextContent;
                     release.Category = MapTrackerCatToNewznab(categoryId);
@@ -258,12 +263,16 @@ namespace Jackett.Common.Indexers
                             release.Description = desc;
                     }
 
-                    // if even the tooltip title is shortened we use the URL
-                    if (release.Title.EndsWith("..."))
+                    //issue #5064 replace multi keyword
+                    if (!string.IsNullOrEmpty(ReplaceMulti))
                     {
-                        var tregex = new Regex(@"/([^/]+)-s-\d+\.ts");
-                        var tmatch = tregex.Match(release.Comments.ToString());
-                        release.Title = tmatch.Groups[1].Value;
+                        var regex = new Regex("(?i)([\\.\\- ])MULTI([\\.\\- ])");
+                        release.Title = regex.Replace(release.Title, "$1" + ReplaceMulti + "$2");
+                    }
+                    // issue #6855 Replace VOSTFR with ENGLISH
+                    if (configData.Vostfr.Value)
+                    {
+                        release.Title = release.Title.Replace("VOSTFR", "ENGLISH");
                     }
 
                     if (pretime != null)

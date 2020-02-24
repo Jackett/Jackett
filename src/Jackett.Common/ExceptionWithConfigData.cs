@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Jackett.Common.Models.IndexerConfig;
 
 namespace Jackett.Common

@@ -1,6 +1,6 @@
-﻿namespace Jackett.Common.Models.IndexerConfig
+namespace Jackett.Common.Models.IndexerConfig
 {
-    class ConfigurationDataPinNumber : ConfigurationDataBasicLogin
+    internal class ConfigurationDataPinNumber : ConfigurationDataBasicLogin
     {
         public StringItem Pin { get; private set; }
 

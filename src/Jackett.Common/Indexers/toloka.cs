@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Text;
@@ -6,7 +6,6 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
-using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
@@ -111,11 +110,11 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(137, TorznabCatType.MoviesDVD, "|-Мультфільми та мультсеріали в DVD");
             AddCategoryMapping(137, TorznabCatType.TV, "|-Мультфільми та мультсеріали в DVD");
             AddCategoryMapping(138, TorznabCatType.MoviesDVD, "|-Документальні фільми в DVD");
-            
+
             AddCategoryMapping(237, TorznabCatType.Movies, "Відео для мобільних (iOS, Android, Windows Phone)");
-            
+
             AddCategoryMapping(33, TorznabCatType.AudioVideo, "Звукові доріжки та субтитри");
-            
+
             AddCategoryMapping(8, TorznabCatType.Audio, "Українська музика (lossy)");
             AddCategoryMapping(23, TorznabCatType.Audio, "|-Поп, Естрада");
             AddCategoryMapping(24, TorznabCatType.Audio, "|-Джаз, Блюз");
@@ -125,7 +124,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(36, TorznabCatType.Audio, "|-Реп, Хіп-хоп, РнБ");
             AddCategoryMapping(38, TorznabCatType.Audio, "|-Електронна музика");
             AddCategoryMapping(56, TorznabCatType.Audio, "|-Невидане");
-            
+
             AddCategoryMapping(98, TorznabCatType.AudioLossless, "Українська музика (lossless)");
             AddCategoryMapping(100, TorznabCatType.AudioLossless, "|-Поп, Естрада");
             AddCategoryMapping(101, TorznabCatType.AudioLossless, "|-Джаз, Блюз");
@@ -134,7 +133,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(104, TorznabCatType.AudioLossless, "|-Рок, Метал, Альтернатива, Панк, СКА");
             AddCategoryMapping(105, TorznabCatType.AudioLossless, "|-Реп, Хіп-хоп, РнБ");
             AddCategoryMapping(106, TorznabCatType.AudioLossless, "|-Електронна музика");
-            
+
             AddCategoryMapping(11, TorznabCatType.Books, "Друкована література");
             AddCategoryMapping(134, TorznabCatType.Books, "|-Українська художня література (до 1991 р.)");
             AddCategoryMapping(177, TorznabCatType.Books, "|-Українська художня література (після 1991 р.)");
@@ -145,13 +144,13 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(181, TorznabCatType.BooksMagazines, "|-Періодика");
             AddCategoryMapping(182, TorznabCatType.Books, "|-Батькам та малятам");
             AddCategoryMapping(184, TorznabCatType.BooksComics, "|-Графіка (комікси, манґа, BD та інше)");
-            
+
             AddCategoryMapping(185, TorznabCatType.AudioAudiobook, "Аудіокниги українською");
             AddCategoryMapping(135, TorznabCatType.AudioAudiobook, "|-Українська художня література");
             AddCategoryMapping(186, TorznabCatType.AudioAudiobook, "|-Зарубіжна художня література");
             AddCategoryMapping(187, TorznabCatType.AudioAudiobook, "|-Історія, біографістика, спогади");
             AddCategoryMapping(189, TorznabCatType.AudioAudiobook, "|-Сирий матеріал");
-            
+
             AddCategoryMapping(9, TorznabCatType.PC, "Windows");
             AddCategoryMapping(25, TorznabCatType.PC, "|-Windows");
             AddCategoryMapping(199, TorznabCatType.PC, "|-Офіс");
@@ -165,7 +164,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(211, TorznabCatType.PCPhoneAndroid, "|-Android");
             AddCategoryMapping(122, TorznabCatType.PCPhoneIOS, "|-iOS");
             AddCategoryMapping(40, TorznabCatType.PCPhoneOther, "|-Інші мобільні платформи");
-            
+
             // AddCategoryMapping(241, TorznabCatType.Other, "Інше");
             // AddCategoryMapping(203, TorznabCatType.Other, "|-Інфодиски, електронні підручники, відеоуроки");
             // AddCategoryMapping(12, TorznabCatType.Other, "|-Шпалери, фотографії та зображення");
@@ -241,7 +240,7 @@ namespace Jackett.Common.Indexers
             }
             try
             {
-                string RowsSelector = "table.forumline > tbody > tr[class*=prow]";
+                var RowsSelector = "table.forumline > tbody > tr[class*=prow]";
 
                 var SearchResultParser = new HtmlParser();
                 var SearchResultDocument = SearchResultParser.ParseDocument(results.Content);
@@ -258,7 +257,7 @@ namespace Jackett.Common.Indexers
                         var qDownloadLink = Row.QuerySelector("td:nth-child(6) > a");
                         if (qDownloadLink == null) // Expects moderation
                             continue;
-                        
+
                         var qDetailsLink = Row.QuerySelector("td:nth-child(3) > a");
                         var qSize = Row.QuerySelector("td:nth-child(7)");
 

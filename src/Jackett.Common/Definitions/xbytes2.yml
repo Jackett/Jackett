@@ -31,6 +31,34 @@
       tv-search: [q, season, ep]
       movie-search: [q]
 
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "3"
+      options:
+        "3": "created"
+        "5": "seeders"
+        "4": "size"
+        "2": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "2"
+      options:
+        "2": "desc"
+        "1": "asc"
+    - name: info
+      type: info
+      label: Results Per Page
+      default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+
   login:
     path: index.php?page=login
     method: post
@@ -46,12 +74,16 @@
       - name: re_replace
         args: ["S(\\d{1,2})E(\\d{1,2})", "S$1/E$2"]
     inputs:
-      page: "torrents"
-      $raw: "&category={{range .Categories}}{{.}};{{end}}"
-      active: "1"
+      page: torrents
+      $raw: "&category={{ range .Categories }}{{.}};{{end}}"
+      active: 1
       search: "{{ .Keywords }}"
+      order: "{{ .Config.sort }}"
+      by: "{{ .Config.type }}"
+
     rows:
       selector: "#Mcol > div > div.block-content > div > div > div > table > tbody > tr:nth-child(3) > td > table tr:not(:first-child):not(:last-child)"
+
     fields:
       category:
         selector: td:nth-child(1) a
@@ -107,7 +139,10 @@
       leechers:
         selector: td:nth-child(8) a
       grabs:
+        text: 0
+      grabs:
         selector: td:nth-child(9) a
+        optional: true
       date:
         selector: td:nth-child(6)
         filters:
@@ -118,17 +153,18 @@
         attribute: href
       downloadvolumefactor:
         case:
-          img[src$="gold.png"]: "0"
-          img[src$="silver.png"]: "0.5"
-          "*": "1"
+          img[src$="gold.png"]: 0
+          img[src$="silver.png"]: 0.5
+          "*": 1
       uploadvolumefactor:
           case:
-            img[src$="2x.gif"]: "2"
-            img[src$="3x.gif"]: "3"
-            img[src$="4x.gif"]: "4"
-            img[src$="5x.gif"]: "5"
-            img[src$="6x.gif"]: "6"
-            img[src$="7x.gif"]: "7"
-            img[src$="8x.gif"]: "8"
-            img[src$="9x.gif"]: "9"
-            "*": "1"
+            img[src$="2x.gif"]: 2
+            img[src$="3x.gif"]: 3
+            img[src$="4x.gif"]: 4
+            img[src$="5x.gif"]: 5
+            img[src$="6x.gif"]: 6
+            img[src$="7x.gif"]: 7
+            img[src$="8x.gif"]: 8
+            img[src$="9x.gif"]: 9
+            "*": 1
+# xbtitFM 2.1.08

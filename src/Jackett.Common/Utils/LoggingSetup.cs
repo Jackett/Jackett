@@ -1,12 +1,12 @@
-﻿using Jackett.Common.Models.Config;
+using System;
+using System.IO;
+using System.Text;
+using Jackett.Common.Models.Config;
 using Jackett.Common.Services;
 using NLog;
 using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Targets;
-using System;
-using System.IO;
-using System.Text;
 
 namespace Jackett.Common.Utils
 {
@@ -25,7 +25,7 @@ namespace Jackett.Common.Utils
             logFile.Layout = "${longdate} ${level} ${message} ${exception:format=ToString}";
             logFile.FileName = Path.Combine(settings.DataFolder, logFileName);
             logFile.ArchiveFileName = Path.Combine(settings.DataFolder, logFileName + ".{#####}.txt");
-            logFile.ArchiveAboveSize = 500000;
+            logFile.ArchiveAboveSize = 2097152; // 2 MB
             logFile.MaxArchiveFiles = 5;
             logFile.KeepFileOpen = false;
             logFile.ArchiveNumbering = ArchiveNumberingMode.DateAndSequence;

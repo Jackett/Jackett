@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -56,6 +56,23 @@ namespace Jackett.Common.Indexers
             Type = "private";
 
             webclient.EmulateBrowser = false; // Animebytes doesn't like fake user agents (issue #1535)
+
+            AddCategoryMapping("anime[tv_series]", TorznabCatType.TVAnime, "TV Series");
+            AddCategoryMapping("anime[tv_special]", TorznabCatType.TVAnime, "TV Special");
+            AddCategoryMapping("anime[ova]", TorznabCatType.TVAnime, "OVA");
+            AddCategoryMapping("anime[ona]", TorznabCatType.TVAnime, "ONA");
+            AddCategoryMapping("anime[dvd_special]", TorznabCatType.TVAnime, "DVD Special");
+            AddCategoryMapping("anime[bd_special]", TorznabCatType.TVAnime, "BD Special");
+            AddCategoryMapping("anime[movie]", TorznabCatType.Movies, "Movie");
+            AddCategoryMapping("gamec[game]", TorznabCatType.PCGames, "Game");
+            AddCategoryMapping("gamec[visual_novel]", TorznabCatType.PCGames, "Visual Novel");
+            AddCategoryMapping("printedtype[manga]", TorznabCatType.BooksComics, "Manga");
+            AddCategoryMapping("printedtype[oneshot]", TorznabCatType.BooksComics, "Oneshot");
+            AddCategoryMapping("printedtype[anthology]", TorznabCatType.BooksComics, "Anthology");
+            AddCategoryMapping("printedtype[manhwa]", TorznabCatType.BooksComics, "Manhwa");
+            AddCategoryMapping("printedtype[light_novel]", TorznabCatType.BooksComics, "Light Novel");
+            AddCategoryMapping("printedtype[artbook]", TorznabCatType.BooksComics, "Artbook");
+
         }
 
         protected override IEnumerable<ReleaseInfo> FilterResults(TorznabQuery query, IEnumerable<ReleaseInfo> input)
@@ -87,6 +104,7 @@ namespace Jackett.Common.Indexers
             // Tracer does not support searching with episode number so strip it if we have one
             term = Regex.Replace(term, @"\W(\dx)?\d?\d$", string.Empty);
             term = Regex.Replace(term, @"\W(S\d\d?E)?\d?\d$", string.Empty);
+            term = Regex.Replace(term, @"\W\d+$", string.Empty);
             return term;
         }
 
@@ -132,11 +150,13 @@ namespace Jackett.Common.Indexers
 
             var queryCollection = new NameValueCollection();
 
-            var cat = "0";
             var queryCats = MapTorznabCapsToTrackers(query);
-            if (queryCats.Count == 1)
+            if (queryCats.Count > 0)
             {
-                cat = queryCats.First().ToString();
+                foreach (var cat in queryCats)
+                {
+                    queryCollection.Add(cat, "1");
+                }
             }
 
             queryCollection.Add("username", configData.Username.Value);
@@ -170,7 +190,7 @@ namespace Jackett.Common.Indexers
 
                 var Matches = (long)json["Matches"];
 
-                if(Matches > 0)
+                if (Matches > 0)
                 {
                     var groups = (JArray)json.Groups;
 
@@ -183,30 +203,15 @@ namespace Jackett.Common.Indexers
                         var Year = (int)group["Year"];
                         var GroupName = (string)group["GroupName"];
                         var SeriesName = (string)group["SeriesName"];
-                        var Artists = (string)group["Artists"];
-
                         var mainTitle = WebUtility.HtmlDecode((string)group["FullName"]);
                         if (SeriesName != null)
                             mainTitle = SeriesName;
 
                         synonyms.Add(mainTitle);
-
-                        // If the title contains a comma then we can't use the synonyms as they are comma seperated
-                        if (!mainTitle.Contains(",") && AddSynonyms)
+                        if (AddSynonyms)
                         {
-                            var symnomnNames = WebUtility.HtmlDecode((string)group["Synonymns"]);
-
-                            if (!string.IsNullOrWhiteSpace(symnomnNames))
-                            {
-                                foreach (var name in symnomnNames.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries))
-                                {
-                                    var theName = name.Trim();
-                                    if (!theName.Contains("&#") && !string.IsNullOrWhiteSpace(theName))
-                                    {
-                                        synonyms.Add(theName);
-                                    }
-                                }
-                            }
+                            foreach (string synonym in group["Synonymns"])
+                                synonyms.Add(synonym);
                         }
 
                         List<int> Category = null;
@@ -223,12 +228,12 @@ namespace Jackett.Common.Indexers
                             if (!string.IsNullOrWhiteSpace(EditionTitle))
                                 releaseInfo = WebUtility.HtmlDecode(EditionTitle);
 
-                            Regex SeasonRegEx = new Regex(@"Season (\d+)", RegexOptions.Compiled);
+                            var SeasonRegEx = new Regex(@"Season (\d+)", RegexOptions.Compiled);
                             var SeasonRegExMatch = SeasonRegEx.Match(releaseInfo);
                             if (SeasonRegExMatch.Success)
                                 season = ParseUtil.CoerceInt(SeasonRegExMatch.Groups[1].Value);
 
-                            Regex EpisodeRegEx = new Regex(@"Episode (\d+)", RegexOptions.Compiled);
+                            var EpisodeRegEx = new Regex(@"Episode (\d+)", RegexOptions.Compiled);
                             var EpisodeRegExMatch = EpisodeRegEx.Match(releaseInfo);
                             if (EpisodeRegExMatch.Success)
                                 episode = EpisodeRegExMatch.Groups[1].Value;
@@ -237,7 +242,7 @@ namespace Jackett.Common.Indexers
                             releaseInfo = releaseInfo.Replace("Season ", "S");
                             releaseInfo = releaseInfo.Trim();
 
-                            if (PadEpisode && int.TryParse(releaseInfo, out int test) && releaseInfo.Length == 1)
+                            if (PadEpisode && int.TryParse(releaseInfo, out var test) && releaseInfo.Length == 1)
                             {
                                 releaseInfo = "0" + releaseInfo;
                             }
@@ -275,7 +280,7 @@ namespace Jackett.Common.Indexers
 
                             if (searchType == "anime")
                             {
-                                if (GroupName == "TV Series")
+                                if (GroupName == "TV Series" || GroupName == "OVA")
                                     Category = new List<int> { TorznabCatType.TVAnime.ID };
 
                                 // Ignore these categories as they'll cause hell with the matcher
@@ -317,7 +322,7 @@ namespace Jackett.Common.Indexers
 
                             // We dont actually have a release name >.> so try to create one
                             var releaseTags = Property.Split("|".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
-                            for (int i = releaseTags.Count - 1; i >= 0; i--)
+                            for (var i = releaseTags.Count - 1; i >= 0; i--)
                             {
                                 releaseTags[i] = releaseTags[i].Trim();
                                 if (string.IsNullOrWhiteSpace(releaseTags[i]))
@@ -340,16 +345,10 @@ namespace Jackett.Common.Indexers
                             {
                                 releasegroup = string.Empty;
                             }
+                            if (!AllowRaws && releaseTags.Contains("raw", StringComparer.InvariantCultureIgnoreCase))
+                                continue;
 
-                            var infoString = "";
-
-                            for (int i = 0; i + 1 < releaseTags.Count(); i++)
-                            {
-                                if (releaseTags[i] == "Raw" && !AllowRaws)
-                                    continue;
-                                infoString += "[" + releaseTags[i] + "]";
-                            }
-
+                            var infoString = releaseTags.Aggregate("", (prev, cur) => prev + "[" + cur + "]");
                             var MinimumSeedTime = 259200;
                             //  Additional 5 hours per GB
                             MinimumSeedTime += (int)((Size / 1000000000) * 18000);

@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.WebUtilities;
@@ -11,7 +11,7 @@ namespace Jackett.Common.Utils
             new Regex(
                 @"(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x9F\uFEFF\uFFFE\uFFFF]",
                 RegexOptions.Compiled);
-        private static readonly Regex ImdbId = new Regex(@"^(?:tt)?(\d{1,7})$", RegexOptions.Compiled);
+        private static readonly Regex ImdbId = new Regex(@"^(?:tt)?(\d{1,8})$", RegexOptions.Compiled);
 
         public static string NormalizeSpace(string s)
         {
@@ -20,7 +20,8 @@ namespace Jackett.Common.Utils
 
         public static string NormalizeMultiSpaces(string s)
         {
-            return new Regex(@"\s+").Replace(NormalizeSpace(s), " "); ;
+            return new Regex(@"\s+").Replace(NormalizeSpace(s), " ");
+            ;
         }
 
         public static string NormalizeNumber(string s)
@@ -90,7 +91,7 @@ namespace Jackett.Common.Utils
         {
             if (str == null)
                 return null;
-            Regex IdRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
+            var IdRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
             var IdMatch = IdRegEx.Match(str);
             if (!IdMatch.Success)
                 return null;
@@ -114,7 +115,7 @@ namespace Jackett.Common.Utils
             var imdbid = GetImdbID(imdbstr);
             if (imdbid == null)
                 return null;
-         
+
             return "tt" + ((int)imdbid).ToString("D7");
         }
     }

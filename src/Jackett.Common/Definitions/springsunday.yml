@@ -1,0 +1,128 @@
+---
+  site: springsunday
+  name: SpringSunday
+  description: "SpringSunday (SSD) is a CHINESE Private Torrent Tracker for HD MOVIES / TV / GENERAL"
+  language: zh-cn
+  type: private
+  encoding: UTF-8
+  links:
+    - https://springsunday.net/
+
+  caps:
+    categorymappings:
+      - {id: 501, cat: Movies, desc: "Movies(电影)"}
+      - {id: 502, cat: TV, desc: "TV Series(剧集)"}
+      - {id: 503, cat: TV/Documentary, desc: "Docs(纪录)"}
+      - {id: 504, cat: TV/Anime, desc: "Animations(动画)"}
+      - {id: 505, cat: TV, desc: "TV Shows(综艺)"}
+      - {id: 506, cat: TV/Sport, desc: "Sports(体育)"}
+      - {id: 507, cat: Audio/Video, desc: "MV(音乐视频)"}
+      - {id: 508, cat: Audio, desc: "Music(音乐)"}
+      - {id: 509, cat: Other, desc: "Others(其他)"}
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep, imdbid]
+      movie-search: [q, imdbid]
+
+  login:
+    path: login.php
+    method: form
+    form: form#login-form
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+      keeplogin: yes
+    captcha:
+      type: image
+      selector: img[alt="image"]
+      input: imagestring
+    error:
+      - selector: span.error-message:contains("image") # Invalid image security code.
+      - selector: span.error-message:contains("图片验证码无效") # Invalid image security code.
+      - selector: span.error-message:contains("incorrect") # Your username or password incorrect. Account problem? Submit a ticket here.
+      - selector: span.error-message:contains("用户名或密码不正确") # The username or password is incorrect, or you have not been verified. Account issues click here to appeal
+    test:
+      path: index.php
+      selector: a[href="logout.php"]
+
+  ratio:
+    path: index.php
+    selector: span.medium:has(a[href^="userdetails.php"])
+    filters:
+      - name: replace
+        args: ["分享率：", "Ratio: "] # for simplified chinese language setting
+      - name: regexp
+        args: "Ratio: (\\d+)"
+
+  search:
+    paths:
+      - path: torrents.php
+    inputs:
+      $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
+      search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+      # 0=including dead 1=active 2=dead
+      incldead: 0
+      # show promotions: 0=all 1=normal 2=free 3=2x 4=2xFree 5=50% 6=2x50% 7=30%
+      spstate: 0
+      # 0=title 1=descr 3=uploader 4=imdb URL
+      search_area: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
+      # 0=AND 1=OR 2=Exact
+      search_mode: 0
+
+    rows:
+      selector: table.torrents > tbody > tr:has(table.torrentname)
+
+    fields:
+      title:
+        selector: a[href^="details.php?id="]
+      title:
+        optional: true
+        selector: a[title][href^="details.php?id="]
+        attribute: title
+      category:
+        selector: a[href^="?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      details:
+        selector: a[href^="details.php?id="]
+        attribute: href    
+      download:
+        selector: a[href^="download.php?id="]
+        attribute: href
+      date:
+        selector: td.rowfollow:nth-child(4) > span[title]
+        attribute: title
+        filters:
+          - name: append
+            args: " +08:00"
+          - name: dateparse
+            args: "2006-01-02 15:04:05 -07:00"
+      size:
+        selector: td.rowfollow:nth-child(5)
+      seeders:
+        selector: td.rowfollow:nth-child(6)
+      leechers:
+        selector: td.rowfollow:nth-child(7)
+      grabs:
+        selector: td.rowfollow:nth-child(8)
+      downloadvolumefactor:
+        case:
+          img.pro_free: 0
+          img.pro_free2up: 0
+          img.pro_50pctdown: 0.5
+          img.pro_50pctdown2up: 0.5
+          img.pro_30pctdown: 0.3
+          "*": 1
+      uploadvolumefactor:
+        case:
+          img.pro_50pctdown2up: 2
+          img.pro_free2up: 2
+          img.pro_2up: 2
+          "*": 1
+      description:
+        selector: td.rowfollow:nth-child(2)
+        remove: a, img
+# NexusPHP Standard v1.5 Beta 4

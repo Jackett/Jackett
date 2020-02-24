@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -60,8 +60,8 @@ namespace Jackett.Common.Indexers
         {
             var loginPage = await RequestStringWithCookies(LoginUrl, configData.CookieHeader.Value);
             CQ cq = loginPage.Content;
-            string recaptchaSiteKey = cq.Find(".g-recaptcha").Attr("data-sitekey");
-            var result = this.configData;
+            var recaptchaSiteKey = cq.Find(".g-recaptcha").Attr("data-sitekey");
+            var result = configData;
             result.CookieHeader.Value = loginPage.Cookies;
             result.Captcha.SiteKey = recaptchaSiteKey;
             result.Captcha.Version = "2";
@@ -147,7 +147,7 @@ namespace Jackett.Common.Indexers
                         var qLink = qRow.Children().ElementAt(2).Cq().Children("a").First();
 
                         release.MinimumRatio = 1;
-                        release.MinimumSeedTime = 172800;
+                        release.MinimumSeedTime = 172800; // 48 hours
                         release.Title = qLink.Attr("title");
                         if (!query.MatchQueryStringAND(release.Title))
                             continue;

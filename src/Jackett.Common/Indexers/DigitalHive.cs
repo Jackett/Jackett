@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -91,10 +91,10 @@ namespace Jackett.Common.Indexers
         {
             var loginPage = await RequestStringWithCookies(LoginUrl, configData.CookieHeader.Value);
             CQ cq = loginPage.Content;
-            string recaptchaSiteKey = cq.Find(".g-recaptcha").Attr("data-sitekey");
+            var recaptchaSiteKey = cq.Find(".g-recaptcha").Attr("data-sitekey");
             if (recaptchaSiteKey != null)
             {
-                var result = this.configData;
+                var result = configData;
                 result.CookieHeader.Value = loginPage.Cookies;
                 result.Captcha.SiteKey = recaptchaSiteKey;
                 result.Captcha.Version = "2";
@@ -158,7 +158,7 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            List<ReleaseInfo> releases = new List<ReleaseInfo>();
+            var releases = new List<ReleaseInfo>();
 
             var queryCollection = new NameValueCollection();
             var searchString = query.GetQueryString();
@@ -197,7 +197,7 @@ namespace Jackett.Common.Indexers
 
         private IEnumerable<ReleaseInfo> contentToReleaseInfos(TorznabQuery query, CQ dom)
         {
-            List<ReleaseInfo> releases = new List<ReleaseInfo>();
+            var releases = new List<ReleaseInfo>();
 
             // Doesn't handle pagination yet...
             var rows = dom["div.panel-body > table.table > tbody > tr"];

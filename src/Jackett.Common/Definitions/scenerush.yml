@@ -49,9 +49,36 @@
       - {id: 43, cat: Books, desc: "Ebook"}
       - {id: 44, cat: TV/Sport, desc: "Sports"}
       - {id: 46, cat: Movies/UHD, desc: "4K"}
+
     modes:
       search: [q]
-      tv-search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "4"
+      options:
+        "4": "created"
+        "7": "seeders"
+        "5": "size"
+        "1": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
+
   login:
     path: takelogin.php
     method: post
@@ -77,12 +104,16 @@
     paths:
       - path: browse.php
     inputs:
-      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-      search: "{{ .Query.Keywords }}"
-      incldead: "1"
-      blah: "0"
+      $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+      search: "{{ .Keywords }}"
+      incldead: 1
+      blah: 0
+      sort: "{{ .Config.sort }}"
+      type: "{{ .Config.type }}"
+
     rows:
       selector: table[cellpadding='5'][width='96%'] > tbody > tr:has(a[href*="details.php?id="])
+
     fields:
       title:
         selector: td:nth-child(2) > a > b
@@ -115,8 +146,8 @@
             args: "2006-01-02 15:04:05"
       downloadvolumefactor:
         case:
-          "i.fg-gold": "0"
-          "*": "1"
+          "i.fg-gold": 0
+          "*": 1
       uploadvolumefactor:
-        case:
-          "*": "1"
+        text: 1
+# engine n/a

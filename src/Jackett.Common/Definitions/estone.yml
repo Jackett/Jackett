@@ -36,6 +36,30 @@
     modes:
       search: [q]
       tv-search: [q, season, ep]
+      movie-search: [q]
+
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "feltoltve"
+      options:
+        "feltoltve": "created"
+        "feltoltok": "seeders"
+        "meret": "size"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "DESC"
+      options:
+        "DESC": "desc"
+        "ASC": "asc"
 
   login:
     path: login.php
@@ -60,10 +84,12 @@
       - path: letoltes.php
         method: get
     inputs:
-      $raw: "{{range .Categories}}kat[]={{.}}&{{end}}"
-      kereses_nev: "{{ .Query.Keywords }}"
+      $raw: "{{ range .Categories }}kat[]={{.}}&{{end}}{{ .Config.sort }}={{ .Config.type }}"
+      kereses_nev: "{{ .Keywords }}"
+
     rows:
       selector: body > div[id^="torrent_"]
+
     fields:
       title:
         selector: a[title]
@@ -110,12 +136,13 @@
             args: "2006-01-02 15:04:05 -07:00"
       downloadvolumefactor:
         case:
-          img[src="pic/free.png"]: "0"
-          "*": "1"
+          img[src="pic/free.png"]: 0
+          "*": 1
       uploadvolumefactor:
         case:
-          img[src="pic/dupla_up.png"]: "2"
-          "*": "1"
+          img[src="pic/dupla_up.png"]: 2
+          "*": 1
       description:
         selector: div:nth-child(2)
         remove: a
+# engine n/a

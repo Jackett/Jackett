@@ -1,9 +1,9 @@
-﻿---
+---
   site: tfile
   name: TFile
   description: "TFile is a RUSSIAN Public Torrent Tracker for MOVIES / TV / GENERAL"
   language: ru-ru
-  type: private
+  type: public
   encoding: windows-1251
   links:
     - http://search.tfile.me/
@@ -844,9 +844,17 @@
       type: checkbox
       label: Strip Russian Letters
       default: false
+    - name: downloadlink
+      type: select
+      label: Download link
+      default: "magnet:?xt"
+      options:
+        "download.php?id" : ".torrent"
+        "magnet:?xt": "magnet"
 
   download:
-    selector: a[href^="download.php?id="]
+    selector: a[href^="{{ .Config.downloadlink }}"]
+    attribute: href
 
   search:
     paths:
@@ -862,8 +870,10 @@
       $raw: "{{range .Categories}}f[]={{.}}&{{end}}"
       q: "{{ .Keywords }}"
       o: newest
+
     rows:
-      selector: table > tbody > tr.tor
+      selector: table > tbody > tr.tor:has(td:nth-child(4):contains("B"))
+
     fields:
       category:
         selector: td.f a[href*="?f="]
@@ -882,7 +892,7 @@
           - name: re_replace
             args: ["(.*)(\\d+)\\s+[CСcс]езон(.*)", "$1 S$2 rus $3"]
           - name: re_replace
-            args: ["(\\([А-Яа-я\\W]+\\))|(^[А-Яа-я\\W\\d]+\\/ )|([а-яА-Я \\-]+,+)|([а-яА-Я]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
+            args: ["(\\([А-Яа-яЁё\\W]+\\))|(^[А-Яа-яЁё\\W\\d]+\\/ )|([а-яА-ЯЁё \\-]+,+)|([а-яА-ЯЁё]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
           - name: replace
             args: ["WEB DL", "WEBDL"]
           - name: replace
@@ -895,16 +905,23 @@
         attribute: href
       size:
         selector: td:nth-child(4)
+      seeders: 
+        text: 0
       seeders:
         selector: b.sd
+        optional: true
+      leechers:
+        text: 0
       leechers:
         selector: b.lc
+        optional: true
       date:
         selector: td.ms
         filters:
           - name: dateparse
             args: "2006-01-02 15:04"
       downloadvolumefactor:
-          text: 0
+        text: 0
       uploadvolumefactor:
-          text: 1
+        text: 1
+# engine n/a

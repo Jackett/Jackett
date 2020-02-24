@@ -6,6 +6,8 @@
   type: public
   encoding: UTF-8
   links:
+    - https://movcr.to/
+  legacylinks:
     - https://movcr.tv/
 
   caps:
@@ -21,14 +23,17 @@
 
   download:
     selector: a[href^="/torrents/"]
+    attribute: href
 
   search:
     paths:
-      - path: "{{if .Keywords}}search/search.php?q={{ .Keywords}}{{else}}/{{end}}"
+      - path: "{{ if .Keywords }}search/search.php?q={{ .Keywords }}{{else}}/{{end}}"
+
     rows:
       selector: tr:has(td.name a[href^="/download-"])
       filters:
         - name: andmatch
+
     fields:
       category:
         text: other
@@ -52,7 +57,12 @@
         filters:
           - name: timeago
       size:
-        selector: td.leeches
+        selector: td.leeches:not(:contains("B"))
+        optional: true
+        text: "0 B"
+      size:
+        selector: td.leeches:contains("B")
+        optional: true
       seeders:
         selector: td:nth-child(2)
         filters:
@@ -64,6 +74,7 @@
           - name: split
             args: ["/", 1]
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
+# engine n/a

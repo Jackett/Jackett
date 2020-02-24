@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -110,7 +110,7 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
 
-            NameValueCollection qParams = new NameValueCollection();
+            var qParams = new NameValueCollection();
 
             if (!string.IsNullOrWhiteSpace(query.ImdbID))
             {
@@ -122,13 +122,13 @@ namespace Jackett.Common.Indexers
                 qParams.Add("search", query.GetQueryString());
             }
 
-            List<string> catList = MapTorznabCapsToTrackers(query);
-            foreach (string cat in catList)
+            var catList = MapTorznabCapsToTrackers(query);
+            foreach (var cat in catList)
             {
                 qParams.Add("c" + cat, "1");
             }
 
-            string urlSearch = SearchUrl;
+            var urlSearch = SearchUrl;
             if (qParams.Count > 0)
             {
                 urlSearch += $"?{qParams.GetQueryString()}";
@@ -147,26 +147,25 @@ namespace Jackett.Common.Indexers
                 CQ dom = response.Content;
                 var rows = dom["div[id='torrentTable'] > div[class^='box torrentBox'] > div[class='boxContent'] > table > tbody > tr"];
 
-                foreach (IDomObject row in rows)
+                foreach (var row in rows)
                 {
                     CQ torrentData = row.OuterHTML;
-                    CQ cells = row.Cq().Find("td");
+                    var cells = row.Cq().Find("td");
 
-                    string title = torrentData.Find("td[class='lft'] > div > a").First().Text().Trim();
-                    Uri link = new Uri(SiteLink + torrentData.Find("img[title='Download']").First().Parent().Attr("href").Trim());
-                    Uri guid = link;
-                    Uri comments = new Uri(SiteLink + torrentData.Find("td[class='lft'] > div > a").First().Attr("href").Trim().Remove(0, 1));
-                    long size = ReleaseInfo.GetBytes(cells.Elements.ElementAt(4).Cq().Text());
-                    int grabs = ParseUtil.CoerceInt(cells.Elements.ElementAt(5).Cq().Text());
-                    int seeders = ParseUtil.CoerceInt(cells.Elements.ElementAt(6).Cq().Text());
-                    int leechers = ParseUtil.CoerceInt(cells.Elements.ElementAt(7).Cq().Text());
+                    var title = torrentData.Find("td[class='lft'] > div > a").First().Text().Trim();
+                    var link = new Uri(SiteLink + torrentData.Find("img[title='Download']").First().Parent().Attr("href").Trim());
+                    var guid = link;
+                    var comments = new Uri(SiteLink + torrentData.Find("td[class='lft'] > div > a").First().Attr("href").Trim().Remove(0, 1));
+                    var size = ReleaseInfo.GetBytes(cells.Elements.ElementAt(4).Cq().Text());
+                    var grabs = ParseUtil.CoerceInt(cells.Elements.ElementAt(5).Cq().Text());
+                    var seeders = ParseUtil.CoerceInt(cells.Elements.ElementAt(6).Cq().Text());
+                    var leechers = ParseUtil.CoerceInt(cells.Elements.ElementAt(7).Cq().Text());
 
-                    string pubDateStr = torrentData.Find("span[class^='elapsedDate']").First().Attr("title").Trim().Replace(" at", "");
-                    DateTime publishDate = DateTime.ParseExact(pubDateStr, "dddd, MMMM d, yyyy h:mmtt", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
+                    var pubDateStr = torrentData.Find("span[class^='elapsedDate']").First().Attr("title").Trim().Replace(" at", "");
+                    var publishDate = DateTime.ParseExact(pubDateStr, "dddd, MMMM d, yyyy h:mmtt", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
 
-                    long category = 0;
-                    string cat = torrentData.Find("img[class^='Tcat']").First().Parent().Attr("href").Trim().Remove(0, 5);
-                    long.TryParse(cat, out category);
+                    var cat = torrentData.Find("img[class^='Tcat']").First().Parent().Attr("href").Trim().Remove(0, 5);
+                    long.TryParse(cat, out var category);
 
                     var release = new ReleaseInfo();
 
@@ -179,7 +178,7 @@ namespace Jackett.Common.Indexers
                     release.Seeders = seeders;
                     release.Peers = seeders + leechers;
                     release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800;
+                    release.MinimumSeedTime = 172800; // 48 hours
                     release.Category = MapTrackerCatToNewznab(category.ToString());
                     release.Comments = comments;
 

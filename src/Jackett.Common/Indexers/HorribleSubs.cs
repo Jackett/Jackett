@@ -1,10 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -12,12 +14,10 @@ using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System.Text.RegularExpressions;
-using AngleSharp.Html.Parser;
 
 namespace Jackett.Common.Indexers
 {
-    class HorribleSubs : BaseWebIndexer
+    internal class HorribleSubs : BaseWebIndexer
     {
         private string ApiEndpoint { get { return SiteLink + "api.php"; } }
 
@@ -153,13 +153,13 @@ namespace Jackett.Common.Indexers
                 var showPageResponse = await RequestStringWithCookiesAndRetry(ResultURL, string.Empty);
                 await FollowIfRedirect(showPageResponse);
 
-                Match match = Regex.Match(showPageResponse.Content, "(var hs_showid = )([0-9]*)(;)", RegexOptions.IgnoreCase);
+                var match = Regex.Match(showPageResponse.Content, "(var hs_showid = )([0-9]*)(;)", RegexOptions.IgnoreCase);
                 if (match.Success == false)
                 {
                     return releases;
                 }
 
-                int ShowID = int.Parse(match.Groups[2].Value);
+                var ShowID = int.Parse(match.Groups[2].Value);
 
                 var apiUrls = new string[] {
                     ApiEndpoint + "?method=getshows&type=batch&showid=" + ShowID, //https://horriblesubs.info/api.php?method=getshows&type=batch&showid=1194
@@ -167,10 +167,10 @@ namespace Jackett.Common.Indexers
                 };
 
                 var releaserows = new List<AngleSharp.Dom.IElement>();
-                foreach (string apiUrl in apiUrls)
+                foreach (var apiUrl in apiUrls)
                 {
-                    int nextId = 0;
-                    while(true)
+                    var nextId = 0;
+                    while (true)
                     {
                         var showAPIResponse = await RequestStringWithCookiesAndRetry(apiUrl + "&nextid=" + nextId, string.Empty);
                         var showAPIdom = ResultParser.ParseDocument(showAPIResponse.Content);
@@ -178,7 +178,8 @@ namespace Jackett.Common.Indexers
                         releaserows.AddRange(releaseRowResults);
                         nextId++;
 
-                        if (releaseRowResults.Length == 0 || latestOnly) {
+                        if (releaseRowResults.Length == 0 || latestOnly)
+                        {
                             break;
                         }
                     }
@@ -186,8 +187,8 @@ namespace Jackett.Common.Indexers
 
                 foreach (var releaserow in releaserows)
                 {
-                    string dateStr = releaserow.QuerySelector(".rls-date").TextContent.Trim();
-                    string title = releaserow.FirstChild.TextContent;
+                    var dateStr = releaserow.QuerySelector(".rls-date").TextContent.Trim();
+                    var title = releaserow.FirstChild.TextContent;
                     title = title.Replace("SD720p1080p", "");
                     title = title.Replace(dateStr, "");
 
@@ -229,6 +230,8 @@ namespace Jackett.Common.Indexers
                             Size = 524288000,
                             Seeders = 1,
                             Peers = 2,
+                            MinimumRatio = 1,
+                            MinimumSeedTime = 172800, // 48 hours
                             DownloadVolumeFactor = 0,
                             UploadVolumeFactor = 1
                         };
@@ -259,6 +262,8 @@ namespace Jackett.Common.Indexers
                             Size = 524288000,
                             Seeders = 1,
                             Peers = 2,
+                            MinimumRatio = 1,
+                            MinimumSeedTime = 172800, // 48 hours
                             DownloadVolumeFactor = 0,
                             UploadVolumeFactor = 1
                         };
@@ -289,6 +294,8 @@ namespace Jackett.Common.Indexers
                             Size = 524288000,
                             Seeders = 1,
                             Peers = 2,
+                            MinimumRatio = 1,
+                            MinimumSeedTime = 172800, // 48 hours
                             DownloadVolumeFactor = 0,
                             UploadVolumeFactor = 1
                         };

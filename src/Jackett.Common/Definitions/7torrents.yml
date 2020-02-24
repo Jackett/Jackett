@@ -1,0 +1,77 @@
+---
+  site: 7torrents
+  name: 7torrents
+  description: "7torrents is a Public BitTorrent DHT search engine."
+  language: en-us
+  type: public
+  encoding: UTF-8
+  links:
+    -  https://www.7torrents.cc/
+
+  caps:
+    categories:
+      1: Other
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  settings:
+    - name: info
+      type: info
+      default: 7torrents does not use categories. In your software Indexer settings, set the category to 100001.
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "created"
+      options:
+        "created": "created"
+        "length": "size"
+        "seeders": "seeders"
+
+  search:
+    # https://www.7torrents.cc/search?query=2020&sort=created
+    paths:
+      - path: search
+    inputs:
+      query: "{{ if .Keywords }}{{ .Keywords }}{{else}}2020{{end}}"
+      sort: "{{ .Config.sort }}"
+
+    rows:
+      selector: div.media
+
+    fields:
+      category:
+        text: 1
+      title:
+        selector: div.media
+        attribute: data-name
+      details:
+        selector: div.media h5 a
+        attribute: href
+      download:
+        selector: div.media-right a[href*="/torrent/"]
+        attribute: href
+      magnet:
+        selector: a[href^="magnet:?xt="]
+        attribute: href
+      date:
+        selector: div.media
+        attribute: data-added
+        filters:
+          - name: timeago
+      size:
+        selector: div.media
+        attribute: data-size
+      seeders:
+        selector: div.media
+        attribute: data-seeders
+      leechers:
+        selector: div.media
+        attribute: data-leechers
+      downloadvolumefactor:
+        text: 0
+      uploadvolumefactor:
+        text: 1
+# engine n/a

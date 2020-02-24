@@ -17,7 +17,7 @@ namespace Jackett.Common.Indexers.Abstract
         protected string endpoint;
         protected string APIUrl { get { return SiteLink + endpoint; } }
 
-        new ConfigurationDataUserPasskey configData
+        private new ConfigurationDataUserPasskey configData
         {
             get { return (ConfigurationDataUserPasskey)base.configData; }
             set { base.configData = value; }
@@ -60,9 +60,9 @@ namespace Jackett.Common.Indexers.Abstract
 
             var searchUrl = APIUrl;
             var queryCollection = new NameValueCollection();
-            
+
             if (!string.IsNullOrEmpty(query.ImdbID))
-            { 
+            {
                 queryCollection.Add("imdbid", query.ImdbID);
             }
             if (searchString != null)

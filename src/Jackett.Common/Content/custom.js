@@ -32,7 +32,15 @@ $(document).ready(function () {
 	        return opts.fn(this);
 	    else
 	        return opts.inverse(this);
-	});
+    });
+
+    Handlebars.registerHelper('if_in', function(elem, list, opts) {
+        if(list.indexOf(elem) > -1) {
+            return opts.fn(this);
+        }
+
+        return opts.inverse(this);
+    });
 
     var index = window.location.pathname.indexOf("/UI");
     var pathPrefix = window.location.pathname.substr(0, index);
@@ -43,7 +51,12 @@ $(document).ready(function () {
 });
 
 function openSearchIfNecessary() {
-    const hashArgs = location.hash.substring(1).split('&').reduce((prev, item) => Object.assign({ [item.split('=')[0]]: (item.split('=').length < 2 ? undefined : decodeURIComponent(item.split('=')[1])) }, prev), {});
+    const hashArgs = location.hash.substring(1).split('&').reduce((prev, item) =>
+      Object.assign({
+        [item.split('=')[0]]: (item.split('=').length < 2 ?
+          undefined :
+          decodeURIComponent(item.split('=')[1].replace(/\+/g,'%20')))
+      }, prev), {});
     if ("search" in hashArgs) {
         showSearch(hashArgs.tracker, hashArgs.search, hashArgs.category);
     }
@@ -333,6 +346,7 @@ function copyToClipboard(text) {
     var succeed;
     try {
         succeed = document.execCommand("copy");
+        doNotify("Copied to clipboard!", "success", "glyphicon glyphicon-ok");
     } catch (e) {
         succeed = false;
     }
@@ -607,6 +621,11 @@ function getConfigModalJson(configForm) {
             case "inputbool":
                 itemEntry.value = $el.find(".setup-item-inputbool input").is(":checked");
                 break;
+            case "inputcheckbox":
+                itemEntry.values = [];
+                $el.find(".setup-item-inputcheckbox input:checked").each(function () {
+                  itemEntry.values.push($(this).val());
+                });
             case "inputselect":
                 itemEntry.value = $el.find(".setup-item-inputselect select").val();
                 break;
@@ -738,7 +757,7 @@ function updateReleasesRow(row)
     labels.empty();
 
     if (IMDBId) {
-        labels.append('\n<a href="http://www.imdb.com/title/tt' + ("000000" + IMDBId).slice(-7) + '/" class="label label-imdb" alt="IMDB" title="IMDB">IMDB</a>');
+        labels.append('\n<a href="http://www.imdb.com/title/tt' + ("0000000" + IMDBId).slice(-8) + '/" class="label label-imdb" alt="IMDB" title="IMDB">IMDB</a>');
     }
 
     if (!isNaN(DownloadVolumeFactor)) {
@@ -761,7 +780,7 @@ function updateReleasesRow(row)
 }
 
 function showSearch(selectedIndexer, query, category) {
-    var selectedIndexers = []
+    var selectedIndexers = [];
     if (selectedIndexer)
         selectedIndexers = selectedIndexer.split(",");
     $('#select-indexer-modal').remove();
@@ -828,7 +847,11 @@ function showSearch(selectedIndexer, query, category) {
             Tracker: releaseDialog.find('#searchTracker').val()
         };
 
-        window.location.hash = $.param({ search: queryObj.Query, tracker: queryObj.Tracker.join(","), category: queryObj.Category.join(",") });
+        window.location.hash = Object.entries({
+          search: encodeURIComponent(queryObj.Query).replace(/%20/g,'+'),
+          tracker: queryObj.Tracker.join(","),
+          category: queryObj.Category.join(",")
+        }).map(([k, v], i) => k + '=' + v).join('&');
 
         $('#jackett-search-perform').html($('#spinner').html());
         $('#searchResults div.dataTables_filter input').val("");
@@ -876,7 +899,7 @@ function showSearch(selectedIndexer, query, category) {
         enableCaseInsensitiveFiltering: true,
         nonSelectedText: 'All'
     });
-    
+
 
     if (category !== undefined) {
         searchCategory.val(category.split(","));
@@ -955,22 +978,22 @@ function updateSearchResultTable(element, results) {
                     "searchable": false,
                     "type": 'num'
                 },
-                    {
-                        "targets": 5,
-                        "visible": true,
-                        "searchable": false,
-                        "iDataSort": 4
-                    }
+                {
+                    "targets": 5,
+                    "visible": true,
+                    "searchable": false,
+                    "iDataSort": 4
+                }
             ],
             fnPreDrawCallback: function () {
                 var table = this;
                 var deadfilterdiv = element.find(".dataTables_deadfilter");
                 var deadfiltercheckbox = deadfilterdiv.find("input");
                 if (!deadfiltercheckbox.length) {
-                    deadfilterlabel = $('<label><input type="checkbox" id="jackett-search-results-datatable_deadfilter_checkbox" value="1">Show dead torrents</label>'
+                    deadfilterlabel = $('<label><input type="checkbox" id="jackett-search-results-datatable_deadfilter_checkbox" value="1"> Show dead torrents</label>'
                         );
                     deadfilterdiv.append(deadfilterlabel);
-                    deadfiltercheckbox = deadfilterlabel.find("input")
+                    deadfiltercheckbox = deadfilterlabel.find("input");
                     deadfiltercheckbox.on("change", function () {
                         settings.deadfilter = this.checked;
                         table.api().draw();
@@ -1154,8 +1177,8 @@ function bindUIButtons() {
         var jackett_port = Number($("#jackett-port").val());
         var jackett_basepathoverride = $("#jackett-basepathoverride").val();
         var jackett_external = $("#jackett-allowext").is(':checked');
-        var jackett_update = $("#jackett-allowupdate").is(':checked'); 
-        var jackett_prerelease = $("#jackett-prerelease").is(':checked'); 
+        var jackett_update = $("#jackett-allowupdate").is(':checked');
+        var jackett_prerelease = $("#jackett-prerelease").is(':checked');
         var jackett_logging = $("#jackett-logging").is(':checked');
         var jackett_omdb_key = $("#jackett-omdbkey").val();
         var jackett_omdb_url = $("#jackett-omdburl").val();

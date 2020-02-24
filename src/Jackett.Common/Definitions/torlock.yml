@@ -6,8 +6,9 @@
   type: public
   encoding: UTF-8
   links:
-    - https://www.torlock2.com/
     - https://www.torlock.com/
+    - https://www.torlock2.com/
+  legacylinks:
     - https://torlock.com/
 
   caps:
@@ -27,68 +28,39 @@
     modes:
       search: [q]
       tv-search: [q, season, ep]
+      movie-search: [q]
   
-  settings: []
+  settings:
+    - name: sort
+      type: select
+      label: Sort requested from site (only works for search with keywords)
+      default: "added"
+      options:
+        "added": "created"
+        "seeds": "seeders"
+        "size": "size"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
   
   search:
     paths:
-      - path: "{{if .Keywords}}/television/torrents/{{ .Keywords }}.html{{else}}/television/1/added/desc.html{{end}}"
-        categorymappings: [TELEVISION]
-      - path: "{{if .Keywords}}/movies/torrents/{{ .Keywords }}.html{{else}}/movies/1/added/desc.html{{end}}"
-        categorymappings: [MOVIES]
-      - path: "{{if .Keywords}}/music/torrents/{{ .Keywords }}.html{{else}}/music/1/added/desc.html{{end}}"
-        categorymappings: [MUSIC]
-      - path: "{{if .Keywords}}/games/torrents/{{ .Keywords }}.html{{else}}/games/1/added/desc.html{{end}}"
-        categorymappings: [GAMES]
-      - path: "{{if .Keywords}}/software/torrents/{{ .Keywords }}.html{{else}}/software/1/added/desc.html{{end}}"
-        categorymappings: [SOFTWARE]
-      - path: "{{if .Keywords}}/anime/torrents/{{ .Keywords }}.html{{else}}/anime/1/added/desc.html{{end}}"
-        categorymappings: [ANIME]
-      - path: "{{if .Keywords}}/ebooks/torrents/{{ .Keywords }}.html{{else}}/ebooks/1/added/desc.html{{end}}"
-        categorymappings: [EBOOKS]
-      - path: "{{if .Keywords}}/unknown/torrents/{{ .Keywords }}.html{{else}}/unknown.html{{end}}" # sorting is broken for unknown
-        categorymappings: [OTHER]
-      - path: "{{if .Keywords}}/adult/torrents/{{ .Keywords }}.html{{else}}/adult/1/added/desc.html{{end}}"
-        categorymappings: [ADULT]
-      - path: "{{if .Keywords}}/audiobooks/torrents/{{ .Keywords }}.html{{else}}/audiobooks/1/added/desc.html{{end}}"
-        categorymappings: [AUDIOBOOK]
-      - path: "{{if .Keywords}}/images/torrents/{{ .Keywords }}.html{{else}}/images/1/added/desc.html{{end}}"
-        categorymappings: [IMAGES]
+      - path: "{{if .Keywords}}/all/torrents/{{ .Keywords }}.html?sort={{ .Config.sort }}&order={{ .Config.type }}{{else}}/fresh.html{{end}}"
     keywordsfilters:
       - name: tolower
       - name: re_replace
         args: ["[^a-zA-Z0-9]+", "-"]
+
     rows:
       selector: table > tbody > tr:has(td:has(div:has(a[href^="/torrent/"])))
       filters:
         - name: andmatch
+
     fields:
-      title:
-        selector: td:nth-child(1) > div > a
-      details:
-        selector: td:nth-child(1) > div > a[href^="/torrent/"]
-        attribute: href
-      download:
-        selector: td:nth-child(1) > div > a[href^="/torrent/"]
-        attribute: href
-        filters:
-        - name: replace
-          args: ["/torrent/", "/tor/"]
-        - name: regexp
-          args: (^/tor/\d*)
-        - name: append
-          args: ".torrent"
-      date:
-        selector: td:nth-child(2)
-        filters: 
-          - name: re_replace
-            args: ["(day|hour|min)s?$", "$0s ago"] # add ago to relative dates (fresh torrents page)
-      size:
-        selector: td:nth-child(3)
-      seeders:
-        selector: td:nth-child(4)
-      leechers:
-        selector: td:nth-child(5)
       category:
         selector: span[class^="tv"]
         attribute: class
@@ -105,7 +77,47 @@
           span.tv9: IMAGES
           span.tv12: AUDIOBOOK
           "*": "" # some torrents have invalid categories
+      title:
+        selector: td:nth-child(1) > div > a
+      details:
+        selector: td:nth-child(1) > div > a[href^="/torrent/"]
+        attribute: href
+      download:
+        selector: td:nth-child(1) > div > a[href^="/torrent/"]
+        attribute: href
+        filters:
+        - name: replace
+          args: ["/torrent/", "/tor/"]
+        - name: regexp
+          args: (^/tor/\d*)
+        - name: append
+          args: ".torrent"
+      date:
+        selector: td:nth-child(2):contains("/")
+        optional: true
+        filters: 
+          - name: dateparse
+            args: "1/2/2006"
+      date:
+        selector: td:nth-child(2):contains("Today"), td:nth-child(2):contains("Yesterday")
+        optional: true
+        filters: 
+          - name: fuzzytime
+      date:
+        selector: td:nth-child(2):not(:contains("Today")):not(:contains("Yesterday")):not(:contains("/"))
+        optional: true
+        filters: 
+          - name: re_replace
+            args: ["(min|mins)", "minutes"]
+          - name: timeago
+      size:
+        selector: td:nth-child(3)
+      seeders:
+        selector: td:nth-child(4)
+      leechers:
+        selector: td:nth-child(5)
       downloadvolumefactor:
-        text: "1"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
+# Engine n/a

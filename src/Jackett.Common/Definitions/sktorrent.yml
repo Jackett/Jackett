@@ -6,9 +6,10 @@
   type: semi-private
   encoding: windows-1250
   links:
-    - http://sktorrent.eu/
+    - https://sktorrent.eu/
   legacylinks:
     - http://sktorrent.eu/torrent/
+    - http://sktorrent.eu/
 
   caps:
     categorymappings:
@@ -32,8 +33,9 @@
       - {id: 18, cat: PC/Games, desc: "Hry na Windows"}
       - {id: 30, cat: PC/Games, desc: "Hry na Konzole"}
       - {id: 37, cat: PC/Games, desc: "Hry na Linux"}
+      - {id: 59, cat: PC/Games, desc: "Hry na Mac"}
       - {id: 2, cat: Audio, desc: "Hudba"}
-      - {id: 55, cat:  Other, desc: "Neschválené"}
+      - {id: 58, cat:  Other, desc: "Neschválené"}
       - {id: 23, cat: Books, desc: "Knihy a Časopisy"}
       - {id: 24, cat: Audio, desc: "Mluvené slovo"}
       - {id: 27, cat: PC/Phone-Other, desc: "Mobil, PDA"}
@@ -64,13 +66,15 @@
       - path: torrent/torrents.php
     inputs:
       search: "{{ .Keywords }}"
-      category: "{{range .Categories}}{{.}};{{end}}"
-      active: "1"
+      category: "{{ range .Categories }}{{.}};{{end}}"
+      active: 1
     keywordsfilters:
       - name: diacritics
         args: replace
+
     rows:
       selector: table.lista > tbody > tr > td > table.lista > tbody > tr:has(a[href^="details.php?id="])
+
     fields:
       title:
         selector: td.lista a[href^="details.php?id="]
@@ -128,8 +132,7 @@
           - name: replace
             args: ["---", "0"]
       downloadvolumefactor:
-        case:
-          "*": "1"
+        text: 1
       uploadvolumefactor:
-        case:
-          "*": "1"
+        text: 1
+# BtiTracker 1.4.8

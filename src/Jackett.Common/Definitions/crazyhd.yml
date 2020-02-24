@@ -85,6 +85,30 @@
       movie-search: [q]
       music-search: [q]
 
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "3"
+      options:
+        "3": "created"
+        "5": "seeders"
+        "4": "size"
+        "2": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "2"
+      options:
+        "2": "desc"
+        "1": "asc"
+
   login:
     path: index.php?page=login
     method: form
@@ -112,19 +136,20 @@
     inputs:
       page: searchlist
       pages: 1
-      order: 3
-      by: 2
+      order: "{{ .Config.sort }}"
+      by: "{{ .Config.type }}"
       # 0=mixed 1=no free 2=50%free 3=100%free 4=50%&100%free
       gold: 0
       # 0=filename 1=file&descr 2=descr 3=uploader
       options: 0
       # 0=all 1=onlyactive 2=onlydead
       active: 0
-      category: "{{if .Categories}}{{range .Categories}}{{.}};{{end}}{{else}}0{{end}}"
+      category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{else}}0{{end}}"
       search: "{{ .Keywords }}"
 
     rows:
       selector: div.inf-table-row
+
     fields:
       title:
         selector: div.list-name a.tlink
@@ -170,8 +195,9 @@
         selector: div.torrent-completed
       downloadvolumefactor:
         case:
-          img[src="gold/gold.gif"]: "0"
-          img[src="gold/silver.gif"]: "0.5"
-          "*": "1"
+          img[src="gold/gold.gif"]: 0
+          img[src="gold/silver.gif"]: 0.5
+          "*": 1
       uploadvolumefactor:
-        text: "1"
+        text: 1
+# engine n/a

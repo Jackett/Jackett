@@ -62,6 +62,34 @@
     modes:
       search: [q]
 
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "3"
+      options:
+        "3": "created"
+        "5": "seeders"
+        "4": "size"
+        "2": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "2"
+      options:
+        "2": "desc"
+        "1": "asc"
+    - name: info
+      type: info
+      label: Results Per Page
+      default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+
   login:
     path: ?page=login
     method: form
@@ -78,13 +106,17 @@
     paths:
       - path: index.php
     inputs:
-      $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
-      search: "{{ .Query.Keywords }}"
+      $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
+      search: "{{ .Keywords }}"
       page: torrents
       category: 0
       active: 1
+      order: "{{ .Config.sort }}"
+      by: "{{ .Config.type }}"
+
     rows:
       selector: table[cellspacing!="1"].lista > tbody > tr:has(a[href^="index.php?page=torrents&category="])
+
     fields:
       category:
         selector: a[href^="index.php?page=torrents&category="]
@@ -100,7 +132,6 @@
           - name: re_replace
             args: ["( \\| )+", " "]
       download:
- # download.php?id=fb27625a0543ed731f7b3505beebf4c8d530f8f9&f=IIHF+2019-05-26+%7C+Gold+Medal+%7C+Canada+vs+Finland+%7C+1080p+EN.torrent
         selector: a[href^="download.php?id="]
         attribute: href
         filters:
@@ -125,7 +156,8 @@
             args: "02/01/2006"
       downloadvolumefactor:
         case:
-          "*": "1"
+          "*": 1
       uploadvolumefactor:
         case:
-          "*": "1"
+          "*": 1
+# xbtit 2.3.0

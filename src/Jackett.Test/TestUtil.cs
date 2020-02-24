@@ -1,17 +1,17 @@
-﻿using Autofac;
-using NLog;
-using System;
+﻿using System;
 using System.IO;
 using System.Reflection;
-using Jackett.Common.Plumbing;
+using Autofac;
 using Jackett.Common.Models.Config;
+using Jackett.Common.Plumbing;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
 using Microsoft.AspNetCore.DataProtection;
+using NLog;
 
 namespace Jackett.Test
 {
-    static class TestUtil
+    internal static class TestUtil
     {
         private static IContainer testContainer;
 
@@ -19,7 +19,7 @@ namespace Jackett.Test
         {
             IDataProtectionProvider dataProtectionProvider = new EphemeralDataProtectionProvider();
 
-            var builder = new ContainerBuilder();            
+            var builder = new ContainerBuilder();
             builder.RegisterModule(new JackettModule(new RuntimeSettings()));
             builder.RegisterType<Jackett.Server.Services.ProtectionService>().As<IProtectionService>();
             builder.RegisterType<TestWebClient>().As<WebClient>().SingleInstance();
@@ -39,7 +39,7 @@ namespace Jackett.Test
 
         public static IContainer Container
         {
-            get { return testContainer;  }
+            get { return testContainer; }
         }
 
         public static void RegisterByteCall(WebRequest r, Func<WebRequest, WebClientByteResult> f)
@@ -57,11 +57,11 @@ namespace Jackett.Test
         public static string GetResource(string item)
         {
             var assembly = Assembly.GetExecutingAssembly();
-            var resourceName = "Jackett.Test." + item.Replace('/','.');
+            var resourceName = "Jackett.Test." + item.Replace('/', '.');
 
-            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            using (var stream = assembly.GetManifestResourceStream(resourceName))
             {
-                using (StreamReader reader = new StreamReader(stream))
+                using (var reader = new StreamReader(stream))
                 {
                     return reader.ReadToEnd();
                 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
@@ -120,20 +120,20 @@ namespace Jackett.Common.Models.Config
 
         private class UnSubscriber : IDisposable
         {
-            private List<IObserver<ServerConfig>> lstObservers;
-            private IObserver<ServerConfig> observer;
+            private readonly List<IObserver<ServerConfig>> lstObservers;
+            private readonly IObserver<ServerConfig> observer;
 
             public UnSubscriber(List<IObserver<ServerConfig>> ObserversCollection, IObserver<ServerConfig> observer)
             {
-                this.lstObservers = ObserversCollection;
+                lstObservers = ObserversCollection;
                 this.observer = observer;
             }
 
             public void Dispose()
             {
-                if (this.observer != null)
+                if (observer != null)
                 {
-                    lstObservers.Remove(this.observer);
+                    lstObservers.Remove(observer);
                 }
             }
         }

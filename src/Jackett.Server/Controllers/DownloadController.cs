@@ -1,30 +1,33 @@
-﻿using BencodeNET.Parsing;
+﻿using System;
+using System.Text;
+using System.Threading.Tasks;
+using BencodeNET.Objects;
+using BencodeNET.Parsing;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+using Jackett.Server.ActionFilters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using NLog;
-using System;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Jackett.Server.Controllers
 {
     [AllowAnonymous]
+    [DownloadActionFilter]
     [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     [Route("dl/{indexerID}")]
     public class DownloadController : Controller
     {
-        private ServerConfig config;
-        private Logger logger;
-        private IIndexerManagerService indexerService;
-        private IProtectionService protectionService;
+        private readonly ServerConfig serverConfig;
+        private readonly Logger logger;
+        private readonly IIndexerManagerService indexerService;
+        private readonly IProtectionService protectionService;
 
-        public DownloadController(IIndexerManagerService i, Logger l, IProtectionService ps, ServerConfig serverConfig)
+        public DownloadController(IIndexerManagerService i, Logger l, IProtectionService ps, ServerConfig sConfig)
         {
-            config = serverConfig;
+            serverConfig = sConfig;
             logger = l;
             indexerService = i;
             protectionService = ps;
@@ -35,6 +38,9 @@ namespace Jackett.Server.Controllers
         {
             try
             {
+                if (serverConfig.APIKey != jackett_apikey)
+                    return Unauthorized();
+
                 var indexer = indexerService.GetWebIndexer(indexerID);
 
                 if (!indexer.IsConfigured)
@@ -45,9 +51,6 @@ namespace Jackett.Server.Controllers
 
                 path = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(path));
                 path = protectionService.UnProtect(path);
-
-                if (config.APIKey != jackett_apikey)
-                    return Unauthorized();
 
                 var target = new Uri(path, UriKind.RelativeOrAbsolute);
                 var downloadBytes = await indexer.Download(target);
@@ -63,8 +66,12 @@ namespace Jackett.Server.Controllers
                     && downloadBytes[6] == 0x3a // :
                     )
                 {
-                    var magneturi = Encoding.UTF8.GetString(downloadBytes);
-                    return Redirect(new Uri(magneturi).ToString());
+                    // some sites provide magnet links with non-ascii characters, the only way to be sure the url
+                    // is well encoded is to unscape and escape again
+                    // https://github.com/Jackett/Jackett/issues/5372
+                    // https://github.com/Jackett/Jackett/issues/4761
+                    var magneturi = Uri.EscapeUriString(Uri.UnescapeDataString(Encoding.UTF8.GetString(downloadBytes)));
+                    return Redirect(magneturi);
                 }
 
                 // This will fix torrents where the keys are not sorted, and thereby not supported by Sonarr.
@@ -82,7 +89,7 @@ namespace Jackett.Server.Controllers
                     throw new Exception("BencodeParser failed", e);
                 }
 
-                string fileName = StringUtil.MakeValidFileName(file, '_', false) + ".torrent"; // call MakeValidFileName again to avoid any kind of injection attack
+                var fileName = StringUtil.MakeValidFileName(file, '_', false) + ".torrent"; // call MakeValidFileName again to avoid any kind of injection attack
 
                 return File(sortedDownloadBytes, "application/x-bittorrent", fileName);
             }

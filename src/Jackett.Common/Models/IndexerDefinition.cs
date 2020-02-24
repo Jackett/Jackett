@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Jackett.Common.Models
@@ -83,6 +83,7 @@ namespace Jackett.Common.Models
         public string Type { get; set; }
         public string Label { get; set; }
         public string Default { get; set; }
+        public string[] Defaults { get; set; }
         public Dictionary<string, string> Options { get; set; }
     }
 
@@ -197,6 +198,7 @@ namespace Jackett.Common.Models
     public class downloadBlock
     {
         public string Selector { get; set; }
+        public string Attribute { get; set; }
         public List<filterBlock> Filters { get; set; }
         public string Method { get; set; }
         public requestBlock Before { get; set; }
