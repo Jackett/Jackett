@@ -118,13 +118,6 @@
         filters:
           - name: replace
             args: ["https://via.placeholder.com/600x900", ""]
-      description:
-        # add a little extra to the banner
-        selector: a[href*="/categories/"] div i
-        attribute: data-original-title
-        filters:
-          - name: replace
-            args: [" torrent", ""]
       comments:
         selector: a[href*="#comments"]
         attribute: href
@@ -193,4 +186,4 @@
           i[class*="fa-globe text-green"]: 2 # Global Double Upload
           i[class*="fa-certificate text-pink"]: 2 # Featured Torrent
           "*": 1
-# UNIT3D 2.2.6
+# UNIT3D 2.2.7
