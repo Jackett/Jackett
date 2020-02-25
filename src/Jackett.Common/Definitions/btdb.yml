@@ -55,7 +55,7 @@
         selector: a[href^="/torrent/"]
         attribute: href
       download:
-        selector: a[href*=".torrent"]
+        selector: a[href$=".torrent"]
         attribute: href
       magnet:
         selector: a[href^="magnet:?xt="]
