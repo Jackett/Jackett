@@ -8,7 +8,6 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
-using CsQuery;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -108,12 +107,13 @@ namespace Jackett.Common.Indexers
         {
             // looks like after some failed login attempts there's a captcha
             var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
-            CQ dom = loginPage.Content;
-            var qCaptchaImg = dom.Find("img#captcha_pictcha").First();
-            if (qCaptchaImg.Length == 1)
+            var parser = new HtmlParser();
+            var document = parser.ParseDocument(loginPage.Content);
+            var qCaptchaImg = document.QuerySelector("img#captcha_pictcha");
+            if (qCaptchaImg != null)
             {
-                var CaptchaUrl = SiteLink + qCaptchaImg.Attr("src");
-                var captchaImage = await RequestBytesWithCookies(CaptchaUrl, loginPage.Cookies);
+                var captchaUrl = SiteLink + qCaptchaImg.GetAttribute("src");
+                var captchaImage = await RequestBytesWithCookies(captchaUrl, loginPage.Cookies);
                 configData.CaptchaImage.Value = captchaImage.Content;
             }
             else
@@ -719,6 +719,14 @@ namespace Jackett.Common.Indexers
                         sizeString = sizeString.Replace("МБ", "MB");
                         sizeString = sizeString.Replace("КБ", "KB"); // untested
                         release.Size = ReleaseInfo.GetBytes(sizeString);
+
+                        // add missing torznab fields not available from results
+                        release.Seeders = 1;
+                        release.Peers = 2;
+                        release.DownloadVolumeFactor = 0;
+                        release.UploadVolumeFactor = 1;
+                        release.MinimumRatio = 1;
+                        release.MinimumSeedTime = 172800; // 48 hours
 
                         logger.Debug("> Add: " + release.Title);
                         releases.Add(release);
