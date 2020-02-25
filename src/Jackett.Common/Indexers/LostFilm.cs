@@ -720,6 +720,14 @@ namespace Jackett.Common.Indexers
                         sizeString = sizeString.Replace("КБ", "KB"); // untested
                         release.Size = ReleaseInfo.GetBytes(sizeString);
 
+                        // add missing torznab fields not available from results
+                        release.Seeders = 1;
+                        release.Peers = 2;
+                        release.DownloadVolumeFactor = 0;
+                        release.UploadVolumeFactor = 1;
+                        release.MinimumRatio = 1;
+                        release.MinimumSeedTime = 172800; // 48 hours
+
                         logger.Debug("> Add: " + release.Title);
                         releases.Add(release);
                     }
