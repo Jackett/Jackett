@@ -58,8 +58,8 @@ namespace Jackett.Common.Indexers
             };
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl, true);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
-                                    throw new ExceptionWithConfigData(result.Content, configData));
+            await ConfigureIfOK(result.Cookies, result.Content?.Contains("logout.php") == true,
+                                () => throw new ExceptionWithConfigData(result.Content, configData));
             return IndexerConfigurationStatus.RequiresTesting;
         }
 

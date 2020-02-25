@@ -62,8 +62,8 @@ namespace Jackett.Common.Indexers
             var firstRequest = await RequestStringWithCookiesAndRetry(LoginUrl);
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("glyphicon-log-out"), () =>
-                                    throw new ExceptionWithConfigData("The username and password entered do not match.", configData));
+            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("glyphicon-log-out"),
+                () => throw new ExceptionWithConfigData("The username and password entered do not match.", configData));
 
             var rssProfile = await RequestStringWithCookiesAndRetry(RSSProfile);
             CQ rssDom = rssProfile.Content;

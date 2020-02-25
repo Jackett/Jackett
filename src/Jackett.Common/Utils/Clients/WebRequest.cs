@@ -82,9 +82,6 @@ namespace Jackett.Common.Utils.Clients
                 return false;
             }
         }
-
-        // Calling base.GetHashCode() is redundant. Remove?
-        public override int GetHashCode() => base.GetHashCode();
     }
 
     public enum RequestType

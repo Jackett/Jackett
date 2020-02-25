@@ -139,17 +139,12 @@ namespace Jackett.Common.Utils
         }
 
         public static string GetQueryString(this NameValueCollection collection, Encoding encoding = null) =>
-            string
-                .Join(
-                    "&",
-                    collection.AllKeys.Select(
-                        a => a + "=" + WebUtilityHelpers.UrlEncode(collection[a], encoding ?? Encoding.UTF8)));
+            string.Join("&", collection.AllKeys.Select(a =>
+                $"{a}={WebUtilityHelpers.UrlEncode(collection[a], encoding ?? Encoding.UTF8)}"));
 
         public static string GetQueryString(this ICollection<KeyValuePair<string, string>> collection, Encoding encoding = null) =>
-            string
-                .Join(
-                    "&",
-                    collection.Select(a => a.Key + "=" + WebUtilityHelpers.UrlEncode(a.Value, encoding ?? Encoding.UTF8)));
+            string.Join("&", collection.Select(a =>
+                $"{a.Key}={WebUtilityHelpers.UrlEncode(a.Value, encoding ?? Encoding.UTF8)}"));
 
         public static void Add(this ICollection<KeyValuePair<string, string>> collection, string key, string value) => collection.Add(new KeyValuePair<string, string>(key, value));
 

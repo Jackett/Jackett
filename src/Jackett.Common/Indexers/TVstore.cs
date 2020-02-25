@@ -68,9 +68,8 @@ namespace Jackett.Common.Indexers
             };
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, referer: SiteLink);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("Főoldal"), () =>
-                                    throw new ExceptionWithConfigData("Error while trying to login with: Username: " + configData.Username.Value +
-                                                                      " Password: " + configData.Password.Value, configData));
+            await ConfigureIfOK(result.Cookies, result.Content?.Contains("Főoldal") == true, () => throw new ExceptionWithConfigData(
+                $"Error while trying to login with: Username: {configData.Username.Value} Password: {configData.Password.Value}", configData));
 
             return IndexerConfigurationStatus.RequiresTesting;
         }

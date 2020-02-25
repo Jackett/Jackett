@@ -11,8 +11,7 @@ namespace Jackett.Server.Services
     {
         private readonly Logger logger;
 
-        public FilePermissionService(Logger l) =>
-            logger = l;
+        public FilePermissionService(Logger l) => logger = l;
 
         public void MakeFileExecutable(string path)
         {
