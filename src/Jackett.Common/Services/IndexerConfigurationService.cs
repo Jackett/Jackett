@@ -141,10 +141,7 @@ namespace Jackett.Common.Services
             }
         }
 
-        private string GetIndexerConfigFilePath(IIndexer indexer)
-        {
-            return Path.Combine(configService.GetIndexerConfigDir(), indexer.ID + ".json");
-        }
+        private string GetIndexerConfigFilePath(IIndexer indexer) => Path.Combine(configService.GetIndexerConfigDir(), indexer.ID + ".json");
 
         private readonly IConfigurationService configService;
         private readonly Logger logger;

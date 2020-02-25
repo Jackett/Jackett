@@ -11,14 +11,8 @@ namespace Jackett.Common.Models.IndexerConfig
 
         public DateTime LastTokenFetchDateTime
         {
-            get
-            {
-                return DateTimeUtil.UnixTimestampToDateTime(ParseUtil.CoerceDouble(LastTokenFetchDate.Value));
-            }
-            set
-            {
-                LastTokenFetchDate.Value = DateTimeUtil.DateTimeToUnixTimestamp(value).ToString(CultureInfo.InvariantCulture);
-            }
+            get => DateTimeUtil.UnixTimestampToDateTime(ParseUtil.CoerceDouble(LastTokenFetchDate.Value));
+            set => LastTokenFetchDate.Value = DateTimeUtil.DateTimeToUnixTimestamp(value).ToString(CultureInfo.InvariantCulture);
         }
 
         public ConfigurationDataLoginTokin() : base()

@@ -23,14 +23,14 @@ namespace Jackett.Common.Indexers
             "https://fuzer.me/",
         };
 
-        private string SearchUrl { get { return SiteLink + "browse.php"; } }
-        private string LoginUrl { get { return SiteLink + "login.php"; } }
+        private string SearchUrl => SiteLink + "browse.php";
+        private string LoginUrl => SiteLink + "login.php";
         private const int MAXPAGES = 3;
 
         private new ConfigurationDataRecaptchaLogin configData
         {
-            get { return (ConfigurationDataRecaptchaLogin)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataRecaptchaLogin)base.configData;
+            set => base.configData = value;
         }
 
         public Fuzer(IIndexerConfigurationService configService, Utils.Clients.WebClient w, Logger l, IProtectionService ps)

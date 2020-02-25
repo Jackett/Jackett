@@ -42,22 +42,12 @@ namespace Jackett.Common.Models.Config
         public string ProxyUsername { get; set; }
         public string ProxyPassword { get; set; }
 
-        public bool ProxyIsAnonymous
-        {
-            get
-            {
-                return string.IsNullOrWhiteSpace(ProxyUsername) || string.IsNullOrWhiteSpace(ProxyPassword);
-            }
-        }
+        public bool ProxyIsAnonymous => string.IsNullOrWhiteSpace(ProxyUsername) || string.IsNullOrWhiteSpace(ProxyPassword);
 
-        public string GetProxyAuthString()
-        {
-            if (!ProxyIsAnonymous)
-            {
-                return $"{ProxyUsername}:{ProxyPassword}";
-            }
-            return null;
-        }
+        public string GetProxyAuthString() =>
+            !ProxyIsAnonymous
+                ? $"{ProxyUsername}:{ProxyPassword}"
+                : null;
 
         public string GetProxyUrl(bool withCreds = false)
         {
@@ -138,12 +128,7 @@ namespace Jackett.Common.Models.Config
             }
         }
 
-        public void ConfigChanged()
-        {
-            foreach (var obs in observers)
-            {
-                obs.OnNext(this);
-            }
-        }
+        public void ConfigChanged() =>
+            observers.ForEach(obs=>obs.OnNext(this));
     }
 }

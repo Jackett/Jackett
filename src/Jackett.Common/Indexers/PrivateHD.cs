@@ -16,8 +16,6 @@ namespace Jackett.Common.Indexers
                 protectionService: protectionService,
                 webClient: webClient
                 )
-        {
-            Type = "private";
-        }
+            => Type = "private";
     }
 }

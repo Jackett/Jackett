@@ -19,13 +19,13 @@ namespace Jackett.Common.Indexers
 {
     public class HDSpace : BaseWebIndexer
     {
-        private string LoginUrl { get { return SiteLink + "index.php?page=login"; } }
-        private string SearchUrl { get { return SiteLink + "index.php?page=torrents&"; } }
+        private string LoginUrl => SiteLink + "index.php?page=login";
+        private string SearchUrl => SiteLink + "index.php?page=torrents&";
 
         private new ConfigurationDataBasicLogin configData
         {
-            get { return (ConfigurationDataBasicLogin)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataBasicLogin)base.configData;
+            set => base.configData = value;
         }
 
         public HDSpace(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)

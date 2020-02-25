@@ -17,15 +17,15 @@ namespace Jackett.Common.Indexers
 {
     public class HDTorrents : BaseWebIndexer
     {
-        private string SearchUrl { get { return SiteLink + "torrents.php?"; } }
-        private string LoginUrl { get { return SiteLink + "login.php"; } }
+        private string SearchUrl => SiteLink + "torrents.php?";
+        private string LoginUrl => SiteLink + "login.php";
         private const int MAXPAGES = 3;
         public override string[] AlternativeSiteLinks { get; protected set; } = new string[] { "https://hdts.ru/", "https://hd-torrents.org/", "https://hd-torrents.net/", "https://hd-torrents.me/" };
 
         private new ConfigurationDataBasicLogin configData
         {
-            get { return (ConfigurationDataBasicLogin)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataBasicLogin)base.configData;
+            set => base.configData = value;
         }
 
         public HDTorrents(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
@@ -92,11 +92,9 @@ namespace Jackett.Common.Indexers
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, null, LoginUrl);
 
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("If your browser doesn't have javascript enabled"), () =>
-            {
-                var errorMessage = "Couldn't login";
-                throw new ExceptionWithConfigData(errorMessage, configData);
-            });
+            await ConfigureIfOK(
+                result.Cookies, result.Content?.Contains("If your browser doesn't have javascript enabled") == true,
+                () => throw new ExceptionWithConfigData("Couldn't login", configData));
             return IndexerConfigurationStatus.RequiresTesting;
         }
 

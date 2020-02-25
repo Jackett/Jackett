@@ -73,9 +73,6 @@ namespace Jackett.Server.Middleware
     // Extension method used to add the middleware to the HTTP request pipeline.
     public static class CustomExceptionHandlerExtensions
     {
-        public static IApplicationBuilder UseCustomExceptionHandler(this IApplicationBuilder builder)
-        {
-            return builder.UseMiddleware<CustomExceptionHandler>();
-        }
+        public static IApplicationBuilder UseCustomExceptionHandler(this IApplicationBuilder builder) => builder.UseMiddleware<CustomExceptionHandler>();
     }
 }

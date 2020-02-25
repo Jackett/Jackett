@@ -36,14 +36,9 @@ namespace Jackett.Common.Models
         [JsonIgnore] // don't export the Origin to the manul search API, otherwise each result line contains a full recursive indexer JSON structure
         public IIndexer Origin;
 
-        public double? Gain
-        {
-            get
-            {
-                var sizeInGB = Size / 1024.0 / 1024.0 / 1024.0;
-                return Seeders * sizeInGB;
-            }
-        }
+
+        private static double? GigabytesFromBytes(double? size) => size / 1024.0 / 1024.0 / 1024.0; 
+        public double? Gain => Seeders * GigabytesFromBytes(Size);
 
         public ReleaseInfo()
         {
@@ -75,10 +70,7 @@ namespace Jackett.Common.Models
             UploadVolumeFactor = copyFrom.UploadVolumeFactor;
         }
 
-        public virtual object Clone()
-        {
-            return new ReleaseInfo(this);
-        }
+        public virtual object Clone() => new ReleaseInfo(this);
 
         // ex: " 3.5  gb   "
         public static long GetBytes(string str)
@@ -103,29 +95,15 @@ namespace Jackett.Common.Models
             return (long)value;
         }
 
-        public static long BytesFromTB(float tb)
-        {
-            return BytesFromGB(tb * 1024f);
-        }
+        public static long BytesFromTB(float tb) => BytesFromGB(tb * 1024f);
 
-        public static long BytesFromGB(float gb)
-        {
-            return BytesFromMB(gb * 1024f);
-        }
+        public static long BytesFromGB(float gb) => BytesFromMB(gb * 1024f);
 
-        public static long BytesFromMB(float mb)
-        {
-            return BytesFromKB(mb * 1024f);
-        }
+        public static long BytesFromMB(float mb) => BytesFromKB(mb * 1024f);
 
-        public static long BytesFromKB(float kb)
-        {
-            return (long)(kb * 1024f);
-        }
+        public static long BytesFromKB(float kb) => (long)(kb * 1024f);
 
-        public override string ToString()
-        {
-            return string.Format("[ReleaseInfo: Title={0}, Guid={1}, Link={2}, Comments={3}, PublishDate={4}, Category={5}, Size={6}, Files={7}, Grabs={8}, Description={9}, RageID={10}, TVDBId={11}, Imdb={12}, TMDb={13}, Seeders={14}, Peers={15}, BannerUrl={16}, InfoHash={17}, MagnetUri={18}, MinimumRatio={19}, MinimumSeedTime={20}, DownloadVolumeFactor={21}, UploadVolumeFactor={22}, Gain={23}]", Title, Guid, Link, Comments, PublishDate, Category, Size, Files, Grabs, Description, RageID, TVDBId, Imdb, TMDb, Seeders, Peers, BannerUrl, InfoHash, MagnetUri, MinimumRatio, MinimumSeedTime, DownloadVolumeFactor, UploadVolumeFactor, Gain);
-        }
+        public override string ToString() =>
+            $"[ReleaseInfo: Title={Title}, Guid={Guid}, Link={Link}, Comments={Comments}, PublishDate={PublishDate}, Category={Category}, Size={Size}, Files={Files}, Grabs={Grabs}, Description={Description}, RageID={RageID}, TVDBId={TVDBId}, Imdb={Imdb}, TMDb={TMDb}, Seeders={Seeders}, Peers={Peers}, BannerUrl={BannerUrl}, InfoHash={InfoHash}, MagnetUri={MagnetUri}, MinimumRatio={MinimumRatio}, MinimumSeedTime={MinimumSeedTime}, DownloadVolumeFactor={DownloadVolumeFactor}, UploadVolumeFactor={UploadVolumeFactor}, Gain={Gain}]";
     }
 }

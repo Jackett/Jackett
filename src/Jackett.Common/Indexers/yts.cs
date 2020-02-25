@@ -23,12 +23,12 @@ namespace Jackett.Common.Indexers
             "https://yts.lt/",
         };
 
-        private string ApiEndpoint { get { return SiteLink + "api/v2/list_movies.json"; } }
+        private string ApiEndpoint => SiteLink + "api/v2/list_movies.json";
 
         private new ConfigurationData configData
         {
-            get { return base.configData; }
-            set { base.configData = value; }
+            get => base.configData;
+            set => base.configData = value;
         }
 
         public Yts(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
@@ -63,18 +63,13 @@ namespace Jackett.Common.Indexers
             configData.LoadValuesFromJson(configJson);
             var releases = await PerformQuery(new TorznabQuery());
 
-            await ConfigureIfOK(string.Empty, releases.Count() > 0, () =>
-            {
-                throw new Exception("Could not find releases from this URL");
-            });
+            await ConfigureIfOK(string.Empty, releases.Count() > 0,
+                                () => throw new Exception("Could not find releases from this URL"));
 
             return IndexerConfigurationStatus.Completed;
         }
 
-        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
-        {
-            return await PerformQuery(query, 0);
-        }
+        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query) => await PerformQuery(query, 0);
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query, int attempts)
         {

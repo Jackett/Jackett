@@ -16,13 +16,13 @@ namespace Jackett.Common.Indexers
 {
     public class FunFile : BaseWebIndexer
     {
-        private string SearchUrl { get { return SiteLink + "browse.php"; } }
-        private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
+        private string SearchUrl => SiteLink + "browse.php";
+        private string LoginUrl => SiteLink + "takelogin.php";
 
         private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
         {
-            get { return (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData;
+            set => base.configData = value;
         }
 
         public FunFile(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)

@@ -17,9 +17,9 @@ namespace Jackett.Common.Indexers
 {
     public class ImmortalSeed : BaseWebIndexer
     {
-        private string BrowsePage { get { return SiteLink + "browse.php"; } }
-        private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
-        private string QueryString { get { return "?do=search&keywords={0}&search_type=t_name&category=0&include_dead_torrents=no"; } }
+        private string BrowsePage => SiteLink + "browse.php";
+        private string LoginUrl => SiteLink + "takelogin.php";
+        private string QueryString => "?do=search&keywords={0}&search_type=t_name&category=0&include_dead_torrents=no";
 
         public override string[] LegacySiteLinks { get; protected set; } = new string[] {
             "http://immortalseed.me/",
@@ -27,8 +27,8 @@ namespace Jackett.Common.Indexers
 
         private new ConfigurationDataBasicLogin configData
         {
-            get { return (ConfigurationDataBasicLogin)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataBasicLogin)base.configData;
+            set => base.configData = value;
         }
 
         public ImmortalSeed(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)

@@ -25,10 +25,7 @@ namespace Jackett.Server.Controllers
     {
         public IServerService serverService;
 
-        public RequiresApiKey(IServerService ss)
-        {
-            serverService = ss;
-        }
+        public RequiresApiKey(IServerService ss) => serverService = ss;
 
         public void OnActionExecuting(ActionExecutingContext context)
         {
@@ -433,10 +430,7 @@ namespace Jackett.Server.Controllers
         }
 
         [Route("[action]/{ignored?}")]
-        public IActionResult GetErrorXML(int code, string description)
-        {
-            return Content(CreateErrorXML(code, description), "application/xml", Encoding.UTF8);
-        }
+        public IActionResult GetErrorXML(int code, string description) => Content(CreateErrorXML(code, description), "application/xml", Encoding.UTF8);
 
         public static string CreateErrorXML(int code, string description)
         {

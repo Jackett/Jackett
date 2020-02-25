@@ -29,10 +29,7 @@ namespace Jackett.Common.Services
             CreateOrMigrateSettings();
         }
 
-        public string GetAppDataFolder()
-        {
-            return runtimeSettings.DataFolder;
-        }
+        public string GetAppDataFolder() => runtimeSettings.DataFolder;
 
         public void CreateOrMigrateSettings()
         {
@@ -146,7 +143,7 @@ namespace Jackett.Common.Services
             catch (Exception e)
             {
                 logger.Error(e, "Error reading config file " + fullPath);
-                return default(T);
+                return default;
             }
         }
 
@@ -167,16 +164,12 @@ namespace Jackett.Common.Services
             }
         }
 
-        public string ApplicationFolder()
-        {
-            return Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath);
-        }
+        public string ApplicationFolder() => Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath);
 
         public string GetContentFolder()
         {
             // If we are debugging we can use the non copied content.
             var dir = Path.Combine(ApplicationFolder(), "Content");
-            ;
 
 #if DEBUG
             // When we are running in debug use the source files
@@ -206,7 +199,6 @@ namespace Jackett.Common.Services
 
             // If we are debugging we can use the non copied definitions.
             var dir = Path.Combine(ApplicationFolder(), "Definitions");
-            ;
 
 #if DEBUG
             // When we are running in debug use the source files
@@ -222,25 +214,13 @@ namespace Jackett.Common.Services
 
 
 
-        public string GetIndexerConfigDir()
-        {
-            return Path.Combine(GetAppDataFolder(), "Indexers");
-        }
+        public string GetIndexerConfigDir() => Path.Combine(GetAppDataFolder(), "Indexers");
 
-        public string GetConfigFile()
-        {
-            return Path.Combine(GetAppDataFolder(), "config.json");
-        }
+        public string GetConfigFile() => Path.Combine(GetAppDataFolder(), "config.json");
 
-        public string GetSonarrConfigFile()
-        {
-            return Path.Combine(GetAppDataFolder(), "sonarr_api.json");
-        }
+        public string GetSonarrConfigFile() => Path.Combine(GetAppDataFolder(), "sonarr_api.json");
 
-        public string GetVersion()
-        {
-            return EnvironmentUtil.JackettVersion;
-        }
+        public string GetVersion() => EnvironmentUtil.JackettVersion;
 
         public ServerConfig BuildServerConfig(RuntimeSettings runtimeSettings)
         {
@@ -269,11 +249,9 @@ namespace Jackett.Common.Services
                 // Check for legacy settings
 
                 var path = Path.Combine(GetAppDataFolder(), "config.json");
-                ;
-                var jsonReply = new JObject();
                 if (File.Exists(path))
                 {
-                    jsonReply = JObject.Parse(File.ReadAllText(path));
+                    var jsonReply = JObject.Parse(File.ReadAllText(path));
                     config.Port = (int)jsonReply["port"];
                     config.AllowExternal = (bool)jsonReply["public"];
                 }

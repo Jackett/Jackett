@@ -18,13 +18,13 @@ namespace Jackett.Common.Indexers
 {
     public class SpeedCD : BaseWebIndexer
     {
-        private string LoginUrl { get { return SiteLink + "take_login.php"; } }
-        private string SearchUrl { get { return SiteLink + "browse.php"; } }
+        private string LoginUrl => SiteLink + "take_login.php";
+        private string SearchUrl => SiteLink + "browse.php";
 
         private new ConfigurationDataBasicLogin configData
         {
-            get { return (ConfigurationDataBasicLogin)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataBasicLogin)base.configData;
+            set => base.configData = value;
         }
 
         public SpeedCD(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
@@ -167,6 +167,8 @@ namespace Jackett.Common.Indexers
                     var cat = torrentData.Find("img[class^='Tcat']").First().Parent().Attr("href").Trim().Remove(0, 5);
                     long.TryParse(cat, out var category);
 
+                    // This fixes the mixed initializer issue, so it's just inconsistent in the code base.
+                    // https://github.com/Jackett/Jackett/pull/7166#discussion_r376817517
                     var release = new ReleaseInfo();
 
                     release.Title = title;

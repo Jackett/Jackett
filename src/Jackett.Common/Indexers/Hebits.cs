@@ -17,14 +17,14 @@ namespace Jackett.Common.Indexers
 {
     public class Hebits : BaseWebIndexer
     {
-        private string LoginUrl { get { return SiteLink + "login.php"; } }
-        private string LoginPostUrl { get { return SiteLink + "takeloginAjax.php"; } }
-        private string SearchUrl { get { return SiteLink + "browse.php?sort=4&type=desc"; } }
+        private string LoginUrl => SiteLink + "login.php";
+        private string LoginPostUrl => SiteLink + "takeloginAjax.php";
+        private string SearchUrl => SiteLink + "browse.php?sort=4&type=desc";
 
         private new ConfigurationDataBasicLogin configData
         {
-            get { return (ConfigurationDataBasicLogin)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataBasicLogin)base.configData;
+            set => base.configData = value;
         }
 
         public Hebits(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)

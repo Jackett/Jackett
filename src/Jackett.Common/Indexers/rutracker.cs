@@ -18,18 +18,16 @@ namespace Jackett.Common.Indexers
 {
     public class RuTracker : BaseWebIndexer
     {
-        private string LoginUrl
-        { get { return SiteLink + "forum/login.php"; } }
-        private string SearchUrl
-        { get { return SiteLink + "forum/tracker.php"; } }
+        private string LoginUrl => SiteLink + "forum/login.php";
+        private string SearchUrl => SiteLink + "forum/tracker.php";
 
         protected string cap_sid = null;
         protected string cap_code_field = null;
 
         private new ConfigurationDataRutracker configData
         {
-            get { return (ConfigurationDataRutracker)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataRutracker)base.configData;
+            set => base.configData = value;
         }
 
         public RuTracker(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)

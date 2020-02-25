@@ -13,69 +13,33 @@ namespace Jackett.Common.Utils
                 RegexOptions.Compiled);
         private static readonly Regex ImdbId = new Regex(@"^(?:tt)?(\d{1,8})$", RegexOptions.Compiled);
 
-        public static string NormalizeSpace(string s)
-        {
-            return s.Trim();
-        }
+        public static string NormalizeSpace(string s) => s.Trim();
 
-        public static string NormalizeMultiSpaces(string s)
-        {
-            return new Regex(@"\s+").Replace(NormalizeSpace(s), " ");
-            ;
-        }
+        public static string NormalizeMultiSpaces(string s) =>
+            new Regex(@"\s+").Replace(NormalizeSpace(s), " ");
 
-        public static string NormalizeNumber(string s)
-        {
-            var normalized = NormalizeSpace(s);
-            normalized = normalized.Replace("-", "0");
-            normalized = normalized.Replace(",", "");
-            return normalized;
-        }
+        public static string NormalizeNumber(string s) =>
+            NormalizeSpace(s)
+                .Replace("-", "0")
+                .Replace(",", "");
 
-        public static string RemoveInvalidXmlChars(string text)
-        {
-            return string.IsNullOrEmpty(text) ? "" : InvalidXmlChars.Replace(text, "");
-        }
+        public static string RemoveInvalidXmlChars(string text) => string.IsNullOrEmpty(text) ? "" : InvalidXmlChars.Replace(text, "");
 
-        public static double CoerceDouble(string str)
-        {
-            return double.Parse(NormalizeNumber(str), NumberStyles.Any, CultureInfo.InvariantCulture);
-        }
+        public static double CoerceDouble(string str) => double.Parse(NormalizeNumber(str), NumberStyles.Any, CultureInfo.InvariantCulture);
 
-        public static float CoerceFloat(string str)
-        {
-            return float.Parse(NormalizeNumber(str), NumberStyles.Any, CultureInfo.InvariantCulture);
-        }
+        public static float CoerceFloat(string str) => float.Parse(NormalizeNumber(str), NumberStyles.Any, CultureInfo.InvariantCulture);
 
-        public static int CoerceInt(string str)
-        {
-            return int.Parse(NormalizeNumber(str), NumberStyles.Any, CultureInfo.InvariantCulture);
-        }
+        public static int CoerceInt(string str) => int.Parse(NormalizeNumber(str), NumberStyles.Any, CultureInfo.InvariantCulture);
 
-        public static long CoerceLong(string str)
-        {
-            return long.Parse(NormalizeNumber(str), NumberStyles.Any, CultureInfo.InvariantCulture);
-        }
+        public static long CoerceLong(string str) => long.Parse(NormalizeNumber(str), NumberStyles.Any, CultureInfo.InvariantCulture);
 
-        public static bool TryCoerceDouble(string str, out double result)
-        {
-            return double.TryParse(NormalizeNumber(str), NumberStyles.Any, CultureInfo.InvariantCulture, out result);
-        }
+        public static bool TryCoerceDouble(string str, out double result) => double.TryParse(NormalizeNumber(str), NumberStyles.Any, CultureInfo.InvariantCulture, out result);
 
-        public static bool TryCoerceFloat(string str, out float result)
-        {
-            return float.TryParse(NormalizeNumber(str), NumberStyles.Any, CultureInfo.InvariantCulture, out result);
-        }
+        public static bool TryCoerceFloat(string str, out float result) => float.TryParse(NormalizeNumber(str), NumberStyles.Any, CultureInfo.InvariantCulture, out result);
 
-        public static bool TryCoerceInt(string str, out int result)
-        {
-            return int.TryParse(NormalizeNumber(str), NumberStyles.Any, CultureInfo.InvariantCulture, out result);
-        }
+        public static bool TryCoerceInt(string str, out int result) => int.TryParse(NormalizeNumber(str), NumberStyles.Any, CultureInfo.InvariantCulture, out result);
 
-        public static bool TryCoerceLong(string str, out long result)
-        {
-            return long.TryParse(NormalizeNumber(str), NumberStyles.Any, CultureInfo.InvariantCulture, out result);
-        }
+        public static bool TryCoerceLong(string str, out long result) => long.TryParse(NormalizeNumber(str), NumberStyles.Any, CultureInfo.InvariantCulture, out result);
 
         public static string GetArgumentFromQueryString(string url, string argument)
         {

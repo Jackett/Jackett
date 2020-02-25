@@ -18,13 +18,13 @@ namespace Jackett.Common.Indexers
 {
     public class Myanonamouse : BaseWebIndexer
     {
-        private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
-        private string SearchUrl { get { return SiteLink + "tor/js/loadSearchJSONbasic.php"; } }
+        private string LoginUrl => SiteLink + "takelogin.php";
+        private string SearchUrl => SiteLink + "tor/js/loadSearchJSONbasic.php";
 
         private new ConfigurationDataMyAnonamouse configData
         {
-            get { return (ConfigurationDataMyAnonamouse)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataMyAnonamouse)base.configData;
+            set => base.configData = value;
         }
 
         public Myanonamouse(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps)

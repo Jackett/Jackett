@@ -126,30 +126,15 @@ namespace Jackett.Tray
             Process.Start(psi);
         }
 
-        private void toolStripMenuItemShutdown_Click(object sender, EventArgs e)
-        {
-            CloseTrayApplication();
-        }
+        private void toolStripMenuItemShutdown_Click(object sender, EventArgs e) => CloseTrayApplication();
 
-        private void toolStripMenuItemAutoStart_CheckedChanged(object sender, EventArgs e)
-        {
-            AutoStart = toolStripMenuItemAutoStart.Checked;
-        }
+        private void toolStripMenuItemAutoStart_CheckedChanged(object sender, EventArgs e) => AutoStart = toolStripMenuItemAutoStart.Checked;
 
-        private string ProgramTitle
-        {
-            get
-            {
-                return Assembly.GetExecutingAssembly().GetName().Name;
-            }
-        }
+        private string ProgramTitle => Assembly.GetExecutingAssembly().GetName().Name;
 
         private bool AutoStart
         {
-            get
-            {
-                return File.Exists(ShortcutPath);
-            }
+            get => File.Exists(ShortcutPath);
             set
             {
                 if (value && !AutoStart)
@@ -163,13 +148,7 @@ namespace Jackett.Tray
             }
         }
 
-        public string ShortcutPath
-        {
-            get
-            {
-                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Startup), "Jackett.lnk");
-            }
-        }
+        public string ShortcutPath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Startup), "Jackett.lnk");
 
         private void CreateShortcut()
         {
@@ -302,10 +281,7 @@ namespace Jackett.Tray
             consoleProcess.ErrorDataReceived += ProcessErrorDataReceived;
         }
 
-        private void ProcessErrorDataReceived(object sender, DataReceivedEventArgs e)
-        {
-            logger.Error(e.Data);
-        }
+        private void ProcessErrorDataReceived(object sender, DataReceivedEventArgs e) => logger.Error(e.Data);
 
         private void ProcessExited(object sender, EventArgs e)
         {

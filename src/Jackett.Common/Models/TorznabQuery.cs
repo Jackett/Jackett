@@ -31,65 +31,23 @@ namespace Jackett.Common.Models
 
         public bool IsTest { get; set; }
 
-        public string ImdbIDShort { get { return (ImdbID != null ? ImdbID.TrimStart('t') : null); } }
+        public string ImdbIDShort => ImdbID?.TrimStart('t');
 
-        protected string[] QueryStringParts = null;
+        protected string[] QueryStringParts;
 
-        public bool IsSearch
-        {
-            get
-            {
-                return QueryType == "search";
-            }
-        }
+        public bool IsSearch => QueryType == "search";
 
-        public bool IsTVSearch
-        {
-            get
-            {
-                return QueryType == "tvsearch";
-            }
-        }
+        public bool IsTVSearch => QueryType == "tvsearch";
 
-        public bool IsMovieSearch
-        {
-            get
-            {
-                return QueryType == "movie" || (QueryType == "TorrentPotato" && !string.IsNullOrWhiteSpace(SearchTerm));
-            }
-        }
+        public bool IsMovieSearch => QueryType == "movie" || (QueryType == "TorrentPotato" && !string.IsNullOrWhiteSpace(SearchTerm));
 
-        public bool IsMusicSearch
-        {
-            get
-            {
-                return QueryType == "music";
-            }
-        }
+        public bool IsMusicSearch => QueryType == "music";
 
-        public bool IsTVRageSearch
-        {
-            get
-            {
-                return RageID != null;
-            }
-        }
+        public bool IsTVRageSearch => RageID != null;
 
-        public bool IsImdbQuery
-        {
-            get
-            {
-                return ImdbID != null;
-            }
-        }
+        public bool IsImdbQuery => ImdbID != null;
 
-        public bool HasSpecifiedCategories
-        {
-            get
-            {
-                return (Categories != null && Categories.Length > 0);
-            }
-        }
+        public bool HasSpecifiedCategories => (Categories != null && Categories.Length > 0);
 
         public string SanitizedSearchTerm
         {
@@ -99,20 +57,20 @@ namespace Jackett.Common.Models
                 if (SearchTerm == null)
                     term = "";
                 var safetitle = term.Where(c => (char.IsLetterOrDigit(c)
-                                                  || char.IsWhiteSpace(c)
-                                                  || c == '-'
-                                                  || c == '.'
-                                                  || c == '_'
-                                                  || c == '('
-                                                  || c == ')'
-                                                  || c == '@'
-                                                  || c == '/'
-                                                  || c == '\''
-                                                  || c == '['
-                                                  || c == ']'
-                                                  || c == '+'
-                                                  || c == '%'
-                                      )).AsString();
+                                                 || char.IsWhiteSpace(c)
+                                                 || c == '-'
+                                                 || c == '.'
+                                                 || c == '_'
+                                                 || c == '('
+                                                 || c == ')'
+                                                 || c == '@'
+                                                 || c == '/'
+                                                 || c == '\''
+                                                 || c == '['
+                                                 || c == ']'
+                                                 || c == '+'
+                                                 || c == '%'
+                                               )).AsString();
                 return safetitle;
             }
         }
@@ -169,6 +127,7 @@ namespace Jackett.Common.Models
             ret.Year = Year;
             if (Genre != null)
             {
+                // Make a copied list and then don't use it?
                 Genre.Select(item => item.Clone()).ToList();
             }
             if (QueryStringParts != null && QueryStringParts.Length > 0)
@@ -182,10 +141,7 @@ namespace Jackett.Common.Models
             return ret;
         }
 
-        public string GetQueryString()
-        {
-            return (SanitizedSearchTerm + " " + GetEpisodeSearchString()).Trim();
-        }
+        public string GetQueryString() => (SanitizedSearchTerm + " " + GetEpisodeSearchString()).Trim();
 
         // Some trackers don't support AND logic for search terms resulting in unwanted results.
         // Using this method we can AND filter it within jackett.

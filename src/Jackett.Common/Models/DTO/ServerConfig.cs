@@ -47,10 +47,7 @@ namespace Jackett.Common.Models.DTO
         [DataMember]
         public string proxy_password { get; set; }
 
-        public ServerConfig()
-        {
-            notices = new string[0];
-        }
+        public ServerConfig() => notices = new string[0];
 
         public ServerConfig(IEnumerable<string> notices, Models.Config.ServerConfig config, string version, bool canRunNetCore)
         {

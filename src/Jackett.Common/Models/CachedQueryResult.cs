@@ -6,29 +6,18 @@ namespace Jackett.Common.Models
     public class CachedQueryResult
     {
         private readonly List<ReleaseInfo> results;
-        private readonly DateTime created;
-        private readonly string query;
 
         public CachedQueryResult(string query, List<ReleaseInfo> results)
         {
             this.results = results;
-            created = DateTime.Now;
-            this.query = query;
+            Created = DateTime.Now;
+            Query = query;
         }
 
-        public IReadOnlyList<ReleaseInfo> Results
-        {
-            get { return results.AsReadOnly(); }
-        }
+        public IReadOnlyList<ReleaseInfo> Results => results.AsReadOnly();
 
-        public DateTime Created
-        {
-            get { return created; }
-        }
+        public DateTime Created { get; }
 
-        public string Query
-        {
-            get { return query; }
-        }
+        public string Query { get; }
     }
 }

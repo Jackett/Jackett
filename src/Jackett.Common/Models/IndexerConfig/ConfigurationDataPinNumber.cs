@@ -4,9 +4,6 @@ namespace Jackett.Common.Models.IndexerConfig
     {
         public StringItem Pin { get; private set; }
 
-        public ConfigurationDataPinNumber() : base()
-        {
-            Pin = new StringItem { Name = "Login Pin Number" };
-        }
+        public ConfigurationDataPinNumber() => Pin = new StringItem { Name = "Login Pin Number" };
     }
 }

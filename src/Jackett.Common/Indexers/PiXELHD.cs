@@ -17,15 +17,13 @@ namespace Jackett.Common.Indexers
 {
     public class PiXELHD : BaseWebIndexer
     {
-        private string LoginUrl
-        { get { return SiteLink + "login.php"; } }
-        private string BrowseUrl
-        { get { return SiteLink + "torrents.php"; } }
+        private string LoginUrl => SiteLink + "login.php";
+        private string BrowseUrl => SiteLink + "torrents.php";
 
         private new ConfigurationDataCaptchaLogin configData
         {
-            get { return (ConfigurationDataCaptchaLogin)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataCaptchaLogin)base.configData;
+            set => base.configData = value;
         }
 
         private string input_captcha = null;

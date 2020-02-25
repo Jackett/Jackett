@@ -24,16 +24,16 @@ namespace Jackett.Common.Indexers
 
         private Uri BaseUri
         {
-            get { return new Uri(configData.Url.Value); }
-            set { configData.Url.Value = value.ToString(); }
+            get => new Uri(configData.Url.Value);
+            set => configData.Url.Value = value.ToString();
         }
 
-        private string ApiEndpoint { get { return BaseUri + "pubapi_v2.php"; } }
+        private string ApiEndpoint => BaseUri + "pubapi_v2.php";
 
         private new ConfigurationDataUrl configData
         {
-            get { return (ConfigurationDataUrl)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataUrl)base.configData;
+            set => base.configData = value;
         }
 
         private DateTime lastTokenFetch;
@@ -44,7 +44,7 @@ namespace Jackett.Common.Indexers
 
         private readonly TimeSpan TOKEN_DURATION = TimeSpan.FromMinutes(10);
 
-        private bool HasValidToken { get { return !string.IsNullOrEmpty(token) && lastTokenFetch > DateTime.Now - TOKEN_DURATION; } }
+        private bool HasValidToken => !string.IsNullOrEmpty(token) && lastTokenFetch > DateTime.Now - TOKEN_DURATION;
 
         public Rarbg(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)
             : base(name: "RARBG",
@@ -145,10 +145,7 @@ namespace Jackett.Common.Indexers
             return IndexerConfigurationStatus.Completed;
         }
 
-        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
-        {
-            return await PerformQuery(query, 0);
-        }
+        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query) => await PerformQuery(query, 0);
 
         private async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query, int attempts)
         {

@@ -23,13 +23,13 @@ namespace Jackett.Common.Indexers
             "http://filelist.ro/",
         };
 
-        private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
-        private string BrowseUrl { get { return SiteLink + "browse.php"; } }
+        private string LoginUrl => SiteLink + "takelogin.php";
+        private string BrowseUrl => SiteLink + "browse.php";
 
         private new ConfigurationDataFileList configData
         {
-            get { return (ConfigurationDataFileList)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataFileList)base.configData;
+            set => base.configData = value;
         }
 
         public FileList(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)

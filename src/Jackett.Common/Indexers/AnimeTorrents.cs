@@ -19,14 +19,14 @@ namespace Jackett.Common.Indexers
 {
     public class AnimeTorrents : BaseWebIndexer
     {
-        private string LoginUrl { get { return SiteLink + "login.php"; } }
-        private string SearchUrl { get { return SiteLink + "ajax/torrents_data.php"; } }
-        private string SearchUrlReferer { get { return SiteLink + "torrents.php?cat=0&searchin=filename&search="; } }
+        private string LoginUrl => SiteLink + "login.php";
+        private string SearchUrl => SiteLink + "ajax/torrents_data.php";
+        private string SearchUrlReferer => SiteLink + "torrents.php?cat=0&searchin=filename&search=";
 
         private new ConfigurationDataBasicLogin configData
         {
-            get { return (ConfigurationDataBasicLogin)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataBasicLogin)base.configData;
+            set => base.configData = value;
         }
 
         public AnimeTorrents(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps)

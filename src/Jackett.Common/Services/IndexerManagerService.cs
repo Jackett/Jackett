@@ -208,10 +208,7 @@ namespace Jackett.Common.Services
             throw new Exception("Unknown indexer: " + name);
         }
 
-        public IEnumerable<IIndexer> GetAllIndexers()
-        {
-            return indexers.Values.OrderBy(_ => _.DisplayName);
-        }
+        public IEnumerable<IIndexer> GetAllIndexers() => indexers.Values.OrderBy(_ => _.DisplayName);
 
         public async Task TestIndexer(string name)
         {

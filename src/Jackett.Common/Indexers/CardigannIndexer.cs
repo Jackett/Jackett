@@ -26,7 +26,7 @@ namespace Jackett.Common.Indexers
     public class CardigannIndexer : BaseWebIndexer
     {
         protected IndexerDefinition Definition;
-        public override string ID { get { return (Definition != null ? Definition.Site : GetIndexerID(GetType())); } }
+        public override string ID => (Definition != null ? Definition.Site : GetIndexerID(GetType()));
 
         protected WebClientStringResult landingResult;
         protected IHtmlDocument landingResultDocument;
@@ -35,8 +35,8 @@ namespace Jackett.Common.Indexers
 
         private new ConfigurationData configData
         {
-            get { return base.configData; }
-            set { base.configData = value; }
+            get => base.configData;
+            set => base.configData = value;
         }
 
         protected readonly string[] OptionalFileds = new string[] { "imdb", "rageid", "tvdbid", "banner" };
@@ -764,15 +764,9 @@ namespace Jackett.Common.Indexers
             return null;
         }
 
-        protected string getRedirectDomainHint(WebClientByteResult result)
-        {
-            return getRedirectDomainHint(result.Request.Url, result.RedirectingTo);
-        }
+        protected string getRedirectDomainHint(WebClientByteResult result) => getRedirectDomainHint(result.Request.Url, result.RedirectingTo);
 
-        protected string getRedirectDomainHint(WebClientStringResult result)
-        {
-            return getRedirectDomainHint(result.Request.Url, result.RedirectingTo);
-        }
+        protected string getRedirectDomainHint(WebClientStringResult result) => getRedirectDomainHint(result.Request.Url, result.RedirectingTo);
 
         protected async Task<bool> TestLogin()
         {
@@ -1188,13 +1182,7 @@ namespace Jackett.Common.Indexers
             return applyFilters(ParseUtil.NormalizeSpace(value), Selector.Filters, variables);
         }
 
-        protected Uri resolvePath(string path, Uri currentUrl = null)
-        {
-            if (currentUrl == null)
-                currentUrl = new Uri(SiteLink);
-
-            return new Uri(currentUrl, path);
-        }
+        protected Uri resolvePath(string path, Uri currentUrl = null) => new Uri(currentUrl ?? new Uri(SiteLink), path);
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {

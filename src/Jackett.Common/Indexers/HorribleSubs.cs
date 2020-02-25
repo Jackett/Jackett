@@ -19,7 +19,7 @@ namespace Jackett.Common.Indexers
 {
     internal class HorribleSubs : BaseWebIndexer
     {
-        private string ApiEndpoint { get { return SiteLink + "api.php"; } }
+        private string ApiEndpoint => SiteLink + "api.php";
 
         public override string[] LegacySiteLinks { get; protected set; } = new string[] {
             "http://horriblesubs.info/"

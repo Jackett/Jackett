@@ -26,11 +26,8 @@ namespace Jackett.Common.Utils.Clients
         public bool EmulateBrowser = true;
         public double requestDelay
         {
-            get { return requestDelayTimeSpan.TotalSeconds; }
-            set
-            {
-                requestDelayTimeSpan = TimeSpan.FromSeconds(value);
-            }
+            get => requestDelayTimeSpan.TotalSeconds;
+            set => requestDelayTimeSpan = TimeSpan.FromSeconds(value);
         }
 
         protected virtual void OnConfigChange()
@@ -167,20 +164,14 @@ namespace Jackett.Common.Utils.Clients
         }
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-        protected virtual async Task<WebClientByteResult> Run(WebRequest webRequest) { throw new NotImplementedException(); }
+        protected virtual async Task<WebClientByteResult> Run(WebRequest webRequest) => throw new NotImplementedException();
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
 
         public abstract void Init();
 
-        public virtual void OnCompleted()
-        {
-            throw new NotImplementedException();
-        }
+        public virtual void OnCompleted() => throw new NotImplementedException();
 
-        public virtual void OnError(Exception error)
-        {
-            throw new NotImplementedException();
-        }
+        public virtual void OnError(Exception error) => throw new NotImplementedException();
 
         public virtual void OnNext(ServerConfig value)
         {

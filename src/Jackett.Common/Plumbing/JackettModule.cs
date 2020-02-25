@@ -14,10 +14,7 @@ namespace Jackett.Common.Plumbing
     {
         private readonly RuntimeSettings _runtimeSettings;
 
-        public JackettModule(RuntimeSettings runtimeSettings)
-        {
-            _runtimeSettings = runtimeSettings;
-        }
+        public JackettModule(RuntimeSettings runtimeSettings) => _runtimeSettings = runtimeSettings;
 
         protected override void Load(ContainerBuilder builder)
         {
@@ -41,10 +38,7 @@ namespace Jackett.Common.Plumbing
 
 
             builder.RegisterInstance(_runtimeSettings);
-            builder.Register(ctx =>
-            {
-                return BuildServerConfig(ctx);
-            }).As<ServerConfig>().SingleInstance();
+            builder.Register(BuildServerConfig).As<ServerConfig>().SingleInstance();
             builder.RegisterType<HttpWebClient>();
 
             // Register the best web client for the platform or the override
@@ -69,10 +63,7 @@ namespace Jackett.Common.Plumbing
             }
         }
 
-        private void RegisterWebClient<WebClientType>(ContainerBuilder builder)
-        {
-            builder.RegisterType<WebClientType>().As<WebClient>();
-        }
+        private void RegisterWebClient<WebClientType>(ContainerBuilder builder) => builder.RegisterType<WebClientType>().As<WebClient>();
 
         private ServerConfig BuildServerConfig(IComponentContext ctx)
         {

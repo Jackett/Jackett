@@ -29,18 +29,9 @@ namespace Jackett.Test
             testContainer = builder.Build();
         }
 
-        public static TestIndexerManagerServiceHelper IndexManager
-        {
-            get
-            {
-                return testContainer.Resolve<IIndexerManagerService>() as TestIndexerManagerServiceHelper;
-            }
-        }
+        public static TestIndexerManagerServiceHelper IndexManager => testContainer.Resolve<IIndexerManagerService>() as TestIndexerManagerServiceHelper;
 
-        public static IContainer Container
-        {
-            get { return testContainer; }
-        }
+        public static IContainer Container => testContainer;
 
         public static void RegisterByteCall(WebRequest r, Func<WebRequest, WebClientByteResult> f)
         {

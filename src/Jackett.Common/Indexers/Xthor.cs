@@ -136,6 +136,10 @@ namespace Jackett.Common.Indexers
         /// </summary>
         /// <param name="configJson">Our params in Json</param>
         /// <returns>Configuration state</returns>
+
+        // Warning 1998 is async method with no await calls inside
+        // TODO: Remove pragma by wrapping return in Task.FromResult and removing async
+        
 #pragma warning disable 1998
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -322,10 +326,7 @@ namespace Jackett.Common.Indexers
             public string download_link { get; set; }
             public int tmdb_id { get; set; }
 
-            public override string ToString()
-            {
-                return string.Format("[XthorTorrent: id={0}, category={1}, seeders={2}, leechers={3}, name={4}, times_completed={5}, size={6}, added={7}, freeleech={8}, numfiles={9}, release_group={10}, download_link={11}, tmdb_id={12}]", id, category, seeders, leechers, name, times_completed, size, added, freeleech, numfiles, release_group, download_link, tmdb_id);
-            }
+            public override string ToString() => string.Format("[XthorTorrent: id={0}, category={1}, seeders={2}, leechers={3}, name={4}, times_completed={5}, size={6}, added={7}, freeleech={8}, numfiles={9}, release_group={10}, download_link={11}, tmdb_id={12}]", id, category, seeders, leechers, name, times_completed, size, added, freeleech, numfiles, release_group, download_link, tmdb_id);
         }
 
         /// <summary>

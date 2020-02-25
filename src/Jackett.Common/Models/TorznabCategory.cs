@@ -10,10 +10,7 @@ namespace Jackett.Common.Models
 
         public List<TorznabCategory> SubCategories { get; private set; }
 
-        public TorznabCategory()
-        {
-            SubCategories = new List<TorznabCategory>();
-        }
+        public TorznabCategory() => SubCategories = new List<TorznabCategory>();
 
         public TorznabCategory(int id, string name)
         {
@@ -22,36 +19,20 @@ namespace Jackett.Common.Models
             SubCategories = new List<TorznabCategory>();
         }
 
-        public bool Contains(TorznabCategory cat)
-        {
-            if (this == cat)
-                return true;
+        public bool Contains(TorznabCategory cat) =>
+            Equals(this, cat) || SubCategories.Contains(cat);
 
-            if (SubCategories.Contains(cat))
-                return true;
+        public JToken ToJson() =>
+            new JObject
+            {
+                ["ID"] = ID,
+                ["Name"] = Name
+            };
 
-            return false;
-        }
+        public override bool Equals(object obj) => (obj as TorznabCategory)?.ID == ID;
 
-        public JToken ToJson()
-        {
-            var t = new JObject();
-            t["ID"] = ID;
-            t["Name"] = Name;
-            return t;
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (obj == null || GetType() != obj.GetType())
-                return false;
-
-            return ID == ((TorznabCategory)obj).ID;
-        }
-
-        public override int GetHashCode()
-        {
-            return ID;
-        }
+        // Get Hash code should be calculated off read only properties.
+        // ID is not readonly
+        public override int GetHashCode() => ID;
     }
 }

@@ -17,18 +17,16 @@ namespace Jackett.Common.Indexers
 {
     public class Toloka : BaseWebIndexer
     {
-        private string LoginUrl
-        { get { return SiteLink + "/login.php"; } }
-        private string SearchUrl
-        { get { return SiteLink + "/tracker.php"; } }
+        private string LoginUrl => SiteLink + "/login.php";
+        private string SearchUrl => SiteLink + "/tracker.php";
 
         protected string cap_sid = null;
         protected string cap_code_field = null;
 
         private new ConfigurationDataToloka configData
         {
-            get { return (ConfigurationDataToloka)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataToloka)base.configData;
+            set => base.configData = value;
         }
 
         public Toloka(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)

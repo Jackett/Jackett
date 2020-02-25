@@ -17,12 +17,12 @@ namespace Jackett.Common.Indexers
 {
     public class SceneHD : BaseWebIndexer
     {
-        private string SearchUrl { get { return SiteLink + "browse.php"; } }
+        private string SearchUrl => SiteLink + "browse.php";
 
         private new ConfigurationDataCookie configData
         {
-            get { return (ConfigurationDataCookie)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataCookie)base.configData;
+            set => base.configData = value;
         }
 
         public SceneHD(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps)

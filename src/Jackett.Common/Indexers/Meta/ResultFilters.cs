@@ -30,7 +30,8 @@ namespace Jackett.Common.Indexers.Meta
             long? imdbId = null;
             try
             {
-                var normalizedImdbId = string.Concat(query.ImdbID.Where(c => char.IsDigit(c)));
+                // Convert from try/catch to long.TryParse since we're not handling the failure
+                var normalizedImdbId = string.Concat(query.ImdbID.Where(char.IsDigit));
                 imdbId = long.Parse(normalizedImdbId);
             }
             catch
@@ -70,11 +71,8 @@ namespace Jackett.Common.Indexers.Meta
             return filteredResults;
         }
 
-        private static string RemoveSpecialChars(string title)
-        {
-            // TODO improve character replacement with invalid chars
-            return title.Replace(":", "");
-        }
+        // TODO improve character replacement with invalid chars
+        private static string RemoveSpecialChars(string title) => title.Replace(":", "");
 
         private static IEnumerable<string> GenerateTitleVariants(string title)
         {
@@ -94,26 +92,17 @@ namespace Jackett.Common.Indexers.Meta
 
     public class NoFilter : IResultFilter
     {
-        public Task<IEnumerable<ReleaseInfo>> FilterResults(IEnumerable<ReleaseInfo> results)
-        {
-            return Task.FromResult(results);
-        }
+        public Task<IEnumerable<ReleaseInfo>> FilterResults(IEnumerable<ReleaseInfo> results) => Task.FromResult(results);
     }
 
     public class NoResultFilterProvider : IResultFilterProvider
     {
-        public IEnumerable<IResultFilter> FiltersForQuery(TorznabQuery query)
-        {
-            return (new NoFilter()).ToEnumerable();
-        }
+        public IEnumerable<IResultFilter> FiltersForQuery(TorznabQuery query) => (new NoFilter()).ToEnumerable();
     }
 
     public class ImdbTitleResultFilterProvider : IResultFilterProvider
     {
-        public ImdbTitleResultFilterProvider(IImdbResolver resolver)
-        {
-            this.resolver = resolver;
-        }
+        public ImdbTitleResultFilterProvider(IImdbResolver resolver) => this.resolver = resolver;
 
         public IEnumerable<IResultFilter> FiltersForQuery(TorznabQuery query)
         {

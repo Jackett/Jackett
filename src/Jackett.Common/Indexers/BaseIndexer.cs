@@ -18,10 +18,7 @@ namespace Jackett.Common.Indexers
 {
     public abstract class BaseIndexer : IIndexer
     {
-        public static string GetIndexerID(Type type)
-        {
-            return type.Name.ToLowerInvariant().StripNonAlphaNumeric();
-        }
+        public static string GetIndexerID(Type type) => type.Name.ToLowerInvariant().StripNonAlphaNumeric();
 
         public string SiteLink { get; protected set; }
         public virtual string[] LegacySiteLinks { get; protected set; }
@@ -31,7 +28,7 @@ namespace Jackett.Common.Indexers
         public string DisplayName { get; protected set; }
         public string Language { get; protected set; }
         public string Type { get; protected set; }
-        public virtual string ID { get { return GetIndexerID(GetType()); } }
+        public virtual string ID => GetIndexerID(GetType());
 
         [JsonConverter(typeof(EncodingJsonConverter))]
         public Encoding Encoding { get; protected set; }
@@ -45,13 +42,13 @@ namespace Jackett.Common.Indexers
 
         protected string CookieHeader
         {
-            get { return configData.CookieHeader.Value; }
-            set { configData.CookieHeader.Value = value; }
+            get => configData.CookieHeader.Value;
+            set => configData.CookieHeader.Value = value;
         }
 
         public string LastError
         {
-            get { return configData.LastError.Value; }
+            get => configData.LastError.Value;
             set
             {
                 var SaveNeeded = configData.LastError.Value != value && IsConfigured;
@@ -82,10 +79,7 @@ namespace Jackett.Common.Indexers
                 LoadValuesFromJson(null);
         }
 
-        public virtual Task<ConfigurationData> GetConfigurationForSetup()
-        {
-            return Task.FromResult<ConfigurationData>(configData);
-        }
+        public virtual Task<ConfigurationData> GetConfigurationForSetup() => Task.FromResult<ConfigurationData>(configData);
 
         public virtual void ResetBaseConfig()
         {
@@ -93,10 +87,7 @@ namespace Jackett.Common.Indexers
             IsConfigured = false;
         }
 
-        public virtual void SaveConfig()
-        {
-            configurationService.Save(this as IIndexer, configData.ToJson(protectionService, forDisplay: false));
-        }
+        public virtual void SaveConfig() => configurationService.Save(this as IIndexer, configData.ToJson(protectionService, forDisplay: false));
 
         protected void LoadLegacyCookieConfig(JToken jsonConfig)
         {
@@ -273,10 +264,9 @@ namespace Jackett.Common.Indexers
             if (query.Categories.Length == 0)
                 return results;
 
-            var filteredResults = results.Where(result =>
-            {
-                return result.Category.IsEmptyOrNull() || query.Categories.Intersect(result.Category).Any() || TorznabCatType.QueryContainsParentCategory(query.Categories, result.Category);
-            });
+            var filteredResults = results.Where(
+                result => result.Category.IsEmptyOrNull() || query.Categories.Intersect(result.Category).Any() ||
+                          TorznabCatType.QueryContainsParentCategory(query.Categories, result.Category));
 
             return filteredResults;
         }
@@ -372,10 +362,7 @@ namespace Jackett.Common.Indexers
 
         // minimal constructor used by e.g. cardigann generic indexer
         protected BaseWebIndexer(IIndexerConfigurationService configService, WebClient client, Logger logger, IProtectionService p)
-            : base("", "/", "", configService, logger, null, p)
-        {
-            webclient = client;
-        }
+            : base("", "/", "", configService, logger, null, p) => webclient = client;
 
         public virtual async Task<byte[]> Download(Uri link)
         {
@@ -671,10 +658,7 @@ namespace Jackett.Common.Indexers
             }
         }
 
-        protected List<string> GetAllTrackerCategories()
-        {
-            return categoryMapping.Select(x => x.TrackerCategory).ToList();
-        }
+        protected List<string> GetAllTrackerCategories() => categoryMapping.Select(x => x.TrackerCategory).ToList();
 
         protected void AddCategoryMapping(string trackerCategory, TorznabCategory newznabCategory, string trackerCategoryDesc = null)
         {
@@ -703,10 +687,7 @@ namespace Jackett.Common.Indexers
             }
         }
 
-        protected void AddCategoryMapping(int trackerCategory, TorznabCategory newznabCategory, string trackerCategoryDesc = null)
-        {
-            AddCategoryMapping(trackerCategory.ToString(), newznabCategory, trackerCategoryDesc);
-        }
+        protected void AddCategoryMapping(int trackerCategory, TorznabCategory newznabCategory, string trackerCategoryDesc = null) => AddCategoryMapping(trackerCategory.ToString(), newznabCategory, trackerCategoryDesc);
 
         protected void AddMultiCategoryMapping(TorznabCategory newznabCategory, params int[] trackerCategories)
         {

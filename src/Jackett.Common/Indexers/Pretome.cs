@@ -18,16 +18,16 @@ namespace Jackett.Common.Indexers
 {
     public class Pretome : BaseWebIndexer
     {
-        private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
-        private string LoginReferer { get { return SiteLink + "index.php?cat=1"; } }
-        private string SearchUrl { get { return SiteLink + "browse.php"; } }
+        private string LoginUrl => SiteLink + "takelogin.php";
+        private string LoginReferer => SiteLink + "index.php?cat=1";
+        private string SearchUrl => SiteLink + "browse.php";
 
         private readonly List<CategoryMapping> resultMapping = new List<CategoryMapping>();
 
         private new ConfigurationDataPinNumber configData
         {
-            get { return (ConfigurationDataPinNumber)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataPinNumber)base.configData;
+            set => base.configData = value;
         }
 
         public Pretome(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)

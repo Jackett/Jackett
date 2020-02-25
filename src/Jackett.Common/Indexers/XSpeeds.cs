@@ -29,8 +29,8 @@ namespace Jackett.Common.Indexers
 
         private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
         {
-            get { return (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData;
+            set => base.configData = value;
         }
 
         public XSpeeds(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)

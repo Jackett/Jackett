@@ -18,13 +18,13 @@ namespace Jackett.Common.Indexers
 {
     public class Digitalcore : BaseWebIndexer
     {
-        private string SearchUrl { get { return SiteLink + "api/v1/torrents"; } }
-        private string LoginUrl { get { return SiteLink + "api/v1/auth"; } }
+        private string SearchUrl => SiteLink + "api/v1/torrents";
+        private string LoginUrl => SiteLink + "api/v1/auth";
 
         private new ConfigurationDataCookie configData
         {
-            get { return (ConfigurationDataCookie)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataCookie)base.configData;
+            set => base.configData = value;
         }
 
 

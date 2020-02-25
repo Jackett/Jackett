@@ -70,10 +70,7 @@ namespace Jackett.Service
             consoleProcess.ErrorDataReceived += ProcessErrorDataReceived;
         }
 
-        private void ProcessErrorDataReceived(object sender, DataReceivedEventArgs e)
-        {
-            logger.Error(e.Data);
-        }
+        private void ProcessErrorDataReceived(object sender, DataReceivedEventArgs e) => logger.Error(e.Data);
 
         private void ProcessExited(object sender, EventArgs e)
         {
