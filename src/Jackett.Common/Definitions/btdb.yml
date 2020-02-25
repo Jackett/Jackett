@@ -38,6 +38,10 @@
   search:
     paths:
       - path: "{{ if .Keywords }}search/{{ .Keywords }}/{{else}}recent{{end}}?sort={{ .Config.sort }}"
+      - path: "{{ if .Keywords }}search/{{ .Keywords }}/{{else}}recent{{end}}?sort={{ .Config.sort }}&page=2"
+      - path: "{{ if .Keywords }}search/{{ .Keywords }}/{{else}}recent{{end}}?sort={{ .Config.sort }}&page=3"
+      - path: "{{ if .Keywords }}search/{{ .Keywords }}/{{else}}recent{{end}}?sort={{ .Config.sort }}&page=4"
+      - path: "{{ if .Keywords }}search/{{ .Keywords }}/{{else}}recent{{end}}?sort={{ .Config.sort }}&page=5"
 
     rows:
       selector: div.media
@@ -51,7 +55,7 @@
         selector: a[href^="/torrent/"]
         attribute: href
       download:
-        selector: a[href*="/dl/"]
+        selector: a[href$=".torrent"]
         attribute: href
       magnet:
         selector: a[href^="magnet:?xt="]
