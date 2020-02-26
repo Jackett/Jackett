@@ -64,8 +64,11 @@ namespace Jackett.Common.Utils
         // IEnumerable class above already does this. All ICollection are IEnumerable, so favor IEnumerable?
         public static bool IsEmpty<T>(this ICollection<T> obj) => obj.Count == 0;
 
-
-        public static bool IsEmptyOrNull<T>(this ICollection<T> obj) => obj?.IsEmpty() == true;
+        // obj == null || obj.IsEmpty() causes VS to suggest merging sequential checks
+        // the result is obj?.IsEmpty() == true which returns false when null
+        // Other options are obj?.IsEmpty() == true || obj == null Or (obj?.IsEmpty()).GetValueOrDefault(true)
+        // All three options remove the suggestion and give the intended result of this function
+        public static bool IsEmptyOrNull<T>(this ICollection<T> obj) => obj?.IsEmpty() ?? true;
     }
 
     public static class XElementExtension
