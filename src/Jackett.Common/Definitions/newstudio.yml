@@ -55,9 +55,13 @@
         selector: a[href^="./viewtopic.php?t="] > b
         filters:
           - name: re_replace
-            args: ["\\b(\\d)\\b", "0$1"]
-          - name: re_replace
             args: [".+Сезон\\s+(\\d+)(?:.+Серия\\s+(\\d+))*[\\s\\S]*\\/\\s+(.+)\\s+\\(\\d+\\)\\s+(\\S*)\\s*(\\w*\\d*).*", "$3 - S$1E$2 - rus $5 $4 newstudio"]
+          - name: re_replace
+            args: ["\\bS(\\d{1})\\b", "S0$1"]
+          - name: re_replace
+            args: ["\\bS(\\d{1})", "S0$1"]
+          - name: re_replace
+            args: ["\\bS(\\d+)E(\\d{1})\\b", "S$1E0$2"]
           - name: replace
             args: ["WEBDLRip","WEBDL"]
           - name: replace
