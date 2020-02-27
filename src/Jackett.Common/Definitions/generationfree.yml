@@ -162,10 +162,10 @@
     path: account-login.php
     method: post
     inputs:
-      username: "{{ .Config.username }}"
+      namelogin: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
     error:
-    - selector: td.tboxhead
+    - selector: td#msgError
     test:
       path: index.php
       selector: a[href="account-logout.php"]
