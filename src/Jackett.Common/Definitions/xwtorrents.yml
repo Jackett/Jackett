@@ -94,11 +94,12 @@
         "asc": "asc"
 
   login:
-    path: tlogin.php
+    path: takelogin.php
     method: post
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
+      returnto: "/"
     error:
       - selector: table.main:contains("Login failed!")
         message:
