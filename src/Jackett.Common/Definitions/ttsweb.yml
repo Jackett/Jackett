@@ -1,0 +1,191 @@
+﻿---
+  site: ttsweb
+  name: TTsWeb
+  description: "TTsWeb is a Private Torrent Tracker for MOVIES / TV / GENERAL"
+  language: en
+  type: private
+  encoding: UTF-8
+  links:
+    - https://ttsweb.org/
+
+  caps:
+    categorymappings:
+      - {id: 10, cat: PC/0day, desc: "Apps 0day"}
+      - {id: 26, cat: PC, desc: "Apps Linux"}
+      - {id: 30, cat: PC/Mac, desc: "Apps Mac"}
+      - {id: 39, cat: PC/Phone-Other, desc: "Apps Mobile"}
+      - {id: 9, cat: PC, desc: "Apps PC"}
+      - {id: 56, cat: Console/PSP, desc: "Games PSP"}
+      - {id: 52, cat: Console/NDS, desc: "Games DS"}
+      - {id: 27, cat: PC/Games, desc: "Games Linux"}
+      - {id: 28, cat: PC/Games, desc: "Games Mac"}
+      - {id: 40, cat: Console/Other, desc: "Games Mobile"}
+      - {id: 34, cat: PC/Games, desc: "Games PC"}
+      - {id: 14, cat: Console/PS3, desc: "Games PS3"}
+      - {id: 12, cat: Console/Wii, desc: "Games Wii"}
+      - {id: 13, cat: Console/Xbox 360, desc: "Games Xbox360"}
+      - {id: 41, cat: Audio/Audiobook, desc: "Books AudioBooks"}
+      - {id: 11, cat: Books/Ebook, desc: "Books EBooks"}
+      - {id: 74, cat: Books/Other, desc: "Books Misc"}
+      - {id: 64, cat: Movies/3D, desc: "Movies 3D Bluray"}
+      - {id: 29, cat: Movies/BluRay, desc: "Movies Bluray"}
+      - {id: 33, cat: Movies, desc: "Movies CAM TS"}
+      - {id: 18, cat: Movies/DVD, desc: "Movies DVDR"}
+      - {id: 70, cat: Movies/HD, desc: "Movies HD"}
+      - {id: 38, cat: Movies/HD, desc: "Movies HD H265"}
+      - {id: 75, cat: Movies, desc: "Movies Old"}
+      - {id: 71, cat: Movies, desc: "Movies Packs"}
+      - {id: 73, cat: Movies, desc: "Movies Remux"}
+      - {id: 15, cat: Movies/SD, desc: "Movies SD"}
+      - {id: 65, cat: Movies/WEBDL, desc: "Movies WEB-DL"}
+      - {id: 77, cat: TV, desc: "TV Movies"}
+      - {id: 19, cat: Audio/Lossless, desc: "Music FLAC"}
+      - {id: 72, cat: Audio/Lossless, desc: "Music FLAC Packs"}
+      - {id: 20, cat: Audio/MP3, desc: "Music MP3"}
+      - {id: 63, cat: Audio/MP3, desc: "Music MP3 Packs"}
+      - {id: 36, cat: Audio/Other, desc: "Music Misc"}
+      - {id: 22, cat: Audio/Video, desc: "Music MVID"}
+      - {id: 81, cat: TV/Sport, desc: "TV Sport HD"}
+      - {id: 83, cat: TV/Sport, desc: "TV Sport Packs"}
+      - {id: 82, cat: TV/Sport, desc: "TV Sport SD"}
+      - {id: 16, cat: TV/Anime, desc: "TV Anime"}
+      - {id: 32, cat: TV/HD, desc: "TV Bluray"}
+      - {id: 23, cat: TV/Documentary, desc: "TV Docs"}
+      - {id: 35, cat: TV/HD, desc: "TV HD X264"}
+      - {id: 37, cat: TV/HD, desc: "TV HD H265"}
+      - {id: 47, cat: TV, desc: "TV Packs"}
+      - {id: 31, cat: TV, desc: "TV Rips"}
+      - {id: 24, cat: TV/SD, desc: "TV SD X264"}
+      - {id: 66, cat: TV/WEB-DL, desc: "TV WEB-DL"}
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "4"
+      options:
+        "4": "created"
+        "7": "seeders"
+        "5": "size"
+        "1": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
+
+  login:
+    path: takelogin.php
+    method: post
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+      use_ssl: 1
+      submitme: "X"
+    error:
+      - selector: table.main:contains("Login failed!")
+    test:
+      path: /
+      selector: a[href^="logout.php?hash_please="]
+
+  search:
+    paths:
+    # uses cats1[]=10 or cats3[]=20 which cannot be supported
+      - path: browse.php
+    inputs:
+      search: "{{.Keywords}}"
+      # title descr genre all
+      searchin: title
+      # 0 active 1 incldead 2 onlydead
+      incldead: 1
+      sort: "{{ .Config.sort }}"
+      type: "{{ .Config.type }}"
+
+    rows:
+      selector: table[border="1"][cellspacing="0"][cellpadding="5"] tr:has(a[href^="details.php?id="]):has(a[href^="browse.php?cat="])
+      filters:
+        - name: andmatch
+
+    fields:
+      category:
+        selector: a[href^="browse.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      title:
+        selector: a[href^="details.php?id="]
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: "<b>(.*?)</b>"
+      details:
+        selector: a[href^="details.php?id="]
+        attribute: href
+      download:
+        selector: a[href^="download.php?torrent="]
+        attribute: href
+      banner:
+        selector: a[href^="details.php?id="]
+        attribute: onmouseover
+        optional: true
+        filters:
+          - name: regexp
+            args: "src=\\\\\'(.+?)\\\\\'"
+          - name: replace
+            args: ["./pic/noposter.png", ""]
+      imdb:
+        selector: a[href*="imdb.com/title/tt"]
+        attribute: href
+        optional: true
+      files:
+        selector: td:nth-last-child(8)
+      # 2 flavours of dates
+      date:
+        # Today<br> 10:20 AM
+        # Yesterday<br> 08:03 PM
+        optional: true
+        selector: td:nth-last-child(6):contains("day")
+        filters:
+          - name: fuzzytime
+      date:
+        # Feb 4 2019<br> 10:20 AM
+        optional: true
+        selector: td:nth-last-child(6):not(:contains("day"))
+        filters:
+          - name: dateparse
+            args: "Jan 2 2006 03:04 PM"
+      size:
+        selector: td:nth-last-child(5)
+      grabs:
+        selector: td:nth-last-child(4)
+        filters:
+          - name: regexp
+            args: (\d+)
+      seeders:
+        selector: td:nth-last-child(3)
+      leechers:
+        selector: td:nth-last-child(2)
+      downloadvolumefactor:
+        case:
+          img[src="./pic/icons2/free.gif"]: 0
+          img[src="./pic/icons2/silver.gif"]: 0.5
+          "*": 1
+      uploadvolumefactor:
+        case:
+          img[src="./pic/icons2/doubleseed.gif"]: 2
+          "*": 1
+# U-232 V3.5

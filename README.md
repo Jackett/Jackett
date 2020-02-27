@@ -460,6 +460,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * ToTheGlory
  * TranceTraffic
  * Trezzor
+ * TTsWEB
  * TurkTorrent (TT)
  * TV Chaos UK (TVCUK)
  * TV-Vault
