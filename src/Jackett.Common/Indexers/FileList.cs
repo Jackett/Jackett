@@ -6,7 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using CsQuery;
+using AngleSharp.Dom;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
@@ -81,8 +82,9 @@ namespace Jackett.Common.Indexers
         {
             LoadValuesFromJson(configJson);
             var responseFirstPage = await RequestStringWithCookiesAndRetry(SiteLink + "login.php?returnto=%2F", "", null);
-            CQ domFirstPage = responseFirstPage.Content;
-            var validator = domFirstPage.Find("input[name =\"validator\"]").Attr("value");
+            var parser = new HtmlParser();
+            var domFirstPage = parser.ParseDocument(responseFirstPage.Content);
+            var validator = domFirstPage.QuerySelector("input[name =\"validator\"]").GetAttribute("value");
             var pairs = new Dictionary<string, string> {
                 { "validator", validator},
                 { "username", configData.Username.Value },
@@ -92,8 +94,8 @@ namespace Jackett.Common.Indexers
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, responseFirstPage.Cookies, true, null, LoginUrl);
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
             {
-                CQ dom = result.Content;
-                var errorMessage = dom[".main"].Text().Trim();
+                var dom = parser.ParseDocument(result.Content);
+                var errorMessage = dom.QuerySelector(".main").TextContent.Trim();
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
             return IndexerConfigurationStatus.RequiresTesting;
@@ -141,25 +143,26 @@ namespace Jackett.Common.Indexers
             var results = response.Content;
             try
             {
-                CQ dom = results;
-                var globalFreeLeech = dom.Find("div.globalFreeLeech").Any();
-                var rows = dom[".torrentrow"];
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(results);
+                var globalFreeLeech = dom.QuerySelectorAll("div.globalFreeLeech").Any();
+                var rows = dom.QuerySelectorAll(".torrentrow");
                 foreach (var row in rows)
                 {
                     var release = new ReleaseInfo();
-                    var qRow = row.Cq();
-                    var qTitleLink = qRow.Find(".torrenttable:eq(1) a").First();
-                    release.Title = qRow.Find(".torrenttable:eq(1) b").Text();
-                    var longtitle = qRow.Find(".torrenttable:eq(1) a[title]").Attr("title");
+                    
+                    var qTitleLink = row.QuerySelector(".torrenttable:nth-of-type(2) a");
+                    release.Title = row.QuerySelector(".torrenttable:nth-of-type(2) b").TextContent;
+                    var longtitle = row.QuerySelector(".torrenttable:nth-of-type(2) a[title]").GetAttribute("title");
                     if (!string.IsNullOrEmpty(longtitle) && !longtitle.Contains("<")) // releases with cover image have no full title
                         release.Title = longtitle;
 
                     if (query.ImdbID == null && !query.MatchQueryStringAND(release.Title))
                         continue;
 
-                    release.Description = qRow.Find(".torrenttable:eq(1) > span > font.small").First().Text();
+                    release.Description = row.QuerySelector(".torrenttable:nth-of-type(2) > span > font.small").TextContent;
 
-                    var tooltip = qTitleLink.Attr("title");
+                    var tooltip = qTitleLink.GetAttribute("title");
                     if (!string.IsNullOrEmpty(tooltip))
                     {
                         var ImgRegexp = new Regex("src='(.*?)'");
@@ -168,29 +171,29 @@ namespace Jackett.Common.Indexers
                             release.BannerUrl = new Uri(ImgRegexpMatch.Groups[1].Value);
                     }
 
-                    release.Guid = new Uri(SiteLink + qTitleLink.Attr("href"));
+                    release.Guid = new Uri(SiteLink + qTitleLink.GetAttribute("href"));
                     release.Comments = release.Guid;
 
                     //22:05:3716/02/2013
-                    var dateStr = qRow.Find(".torrenttable:eq(5)").Text().Trim() + " +0200";
+                    var dateStr = row.QuerySelector(".torrenttable:nth-of-type(6)").TextContent.Trim() + " +0200";
                     release.PublishDate = DateTime.ParseExact(dateStr, "H:mm:ssdd/MM/yyyy zzz", CultureInfo.InvariantCulture);
 
-                    var qLink = qRow.Find("a[href^=\"download.php?id=\"]").First();
-                    release.Link = new Uri(SiteLink + qLink.Attr("href").Replace("&usetoken=1", ""));
+                    var qLink = row.QuerySelector("a[href^=\"download.php?id=\"]");
+                    release.Link = new Uri(SiteLink + qLink.GetAttribute("href").Replace("&usetoken=1", ""));
 
-                    var sizeStr = qRow.Find(".torrenttable:eq(6)").Text().Trim();
+                    var sizeStr = row.QuerySelector(".torrenttable:nth-of-type(7)").TextContent.Trim();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
 
-                    release.Seeders = ParseUtil.CoerceInt(qRow.Find(".torrenttable:eq(8)").Text().Trim());
-                    release.Peers = ParseUtil.CoerceInt(qRow.Find(".torrenttable:eq(9)").Text().Trim()) + release.Seeders;
+                    release.Seeders = ParseUtil.CoerceInt(row.QuerySelector(".torrenttable:nth-of-type(9)").TextContent.Trim());
+                    release.Peers = ParseUtil.CoerceInt(row.QuerySelector(".torrenttable:nth-of-type(10)").TextContent.Trim()) + release.Seeders;
 
-                    var catId = qRow.Find(".torrenttable:eq(0) a").First().Attr("href").Substring(15);
+                    var catId = row.QuerySelector(".torrenttable:nth-of-type(1) a").GetAttribute("href").Substring(15);
                     release.Category = MapTrackerCatToNewznab(catId);
 
-                    var grabs = qRow.Find(".torrenttable:eq(7)").First().Get(0).FirstChild;
+                    var grabs = row.QuerySelector(".torrenttable:nth-of-type(8)").FirstChild.FirstChild;
                     release.Grabs = ParseUtil.CoerceLong(catId);
 
-                    if (globalFreeLeech || row.Cq().Find("img[alt=\"FreeLeech\"]").Any())
+                    if (globalFreeLeech || row.QuerySelectorAll("img[alt=\"FreeLeech\"]").Any())
                         release.DownloadVolumeFactor = 0;
                     else
                         release.DownloadVolumeFactor = 1;
