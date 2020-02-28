@@ -162,7 +162,7 @@
     path: account-login.php
     method: post
     inputs:
-      name_login: "{{ .Config.username }}"
+      login_name: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
     error:
     - selector: td#msgError
