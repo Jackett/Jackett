@@ -113,7 +113,7 @@ namespace Jackett.Common.Indexers
                     messageEl.RemoveChild(child);
                 foreach (var child in messageEl.QuerySelectorAll("style"))
                     messageEl.RemoveChild(child);
-                var errorMessage = messageEl.Text().Trim();
+                var errorMessage = messageEl.TextContent.Trim();
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
             return IndexerConfigurationStatus.RequiresTesting;
@@ -153,20 +153,20 @@ namespace Jackett.Common.Indexers
                         var release = new ReleaseInfo();
 
                         
-                        var qLink = row.Children.ElementAt(2).QuerySelectorAll("a").First();
+                        var qLink = row.Children[2].QuerySelectorAll("a").First();
 
                         release.MinimumRatio = 1;
                         release.MinimumSeedTime = 172800; // 48 hours
                         release.Title = qLink.GetAttribute("title");
                         if (!query.MatchQueryStringAND(release.Title))
                             continue;
-                        release.Files = ParseUtil.CoerceLong(row.QuerySelector("td:nth-child(4)").Text());
-                        release.Grabs = ParseUtil.CoerceLong(row.QuerySelector("td:nth-child(8)").Text());
+                        release.Files = ParseUtil.CoerceLong(row.QuerySelector("td:nth-child(4)").TextContent);
+                        release.Grabs = ParseUtil.CoerceLong(row.QuerySelector("td:nth-child(8)").TextContent);
                         release.Guid = new Uri(qLink.GetAttribute("href"));
                         release.Comments = release.Guid;
                         release.Link = new Uri(string.Format(DownloadUrl, qLink.GetAttribute("href").Split('=')[1]));
 
-                        var catUrl = row.Children.ElementAt(1).FirstElementChild.GetAttribute("href");
+                        var catUrl = row.Children[1].FirstElementChild.GetAttribute("href");
                         var catNum = catUrl.Split(new char[] { '=', '&' })[1];
                         release.Category = MapTrackerCatToNewznab(catNum);
 
@@ -174,15 +174,15 @@ namespace Jackett.Common.Indexers
                         if (trackerCats.Count > 0 && !trackerCats.Contains(catNum))
                             continue;
 
-                        var dateString = row.Children.ElementAt(5).Text().Trim();
+                        var dateString = row.Children[5].TextContent.Trim();
                         var pubDate = DateTime.ParseExact(dateString, "yyyy-MM-ddHH:mm:ss", CultureInfo.InvariantCulture);
                         release.PublishDate = DateTime.SpecifyKind(pubDate, DateTimeKind.Local);
 
-                        var sizeStr = row.Children.ElementAt(6).Text();
+                        var sizeStr = row.Children[6].TextContent;
                         release.Size = ReleaseInfo.GetBytes(sizeStr);
 
-                        release.Seeders = ParseUtil.CoerceInt(row.Children.ElementAt(8).Text().Trim());
-                        release.Peers = ParseUtil.CoerceInt(row.Children.ElementAt(9).Text().Trim()) + release.Seeders;
+                        release.Seeders = ParseUtil.CoerceInt(row.Children[8].TextContent.Trim());
+                        release.Peers = ParseUtil.CoerceInt(row.Children[9].TextContent.Trim()) + release.Seeders;
 
                         var bgcolor = row.GetAttribute("bgcolor");
                         if (bgcolor == "#DDDDDD")
