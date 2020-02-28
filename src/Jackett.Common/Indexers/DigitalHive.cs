@@ -213,30 +213,30 @@ namespace Jackett.Common.Indexers
                 release.MinimumSeedTime = 259200;
 
 
-                release.Title = row.QuerySelectorAll("td:nth-child(2) > a").First().Text().Trim();
+                release.Title = row.QuerySelector("td:nth-child(2) > a").TextContent.Trim();
 
                 if ((query.ImdbID == null || !TorznabCaps.SupportsImdbMovieSearch) && !query.MatchQueryStringAND(release.Title))
                     continue;
 
-                release.Guid = new Uri(SiteLink + row.QuerySelectorAll("td:nth-child(2) > a").First().GetAttribute("href"));
+                release.Guid = new Uri(SiteLink + row.QuerySelector("td:nth-child(2) > a").GetAttribute("href"));
                 release.Comments = release.Guid;
-                release.Link = new Uri(SiteLink + row.QuerySelectorAll("td:nth-child(3) > a").First().GetAttribute("href"));
-                var pubDateElement = row.QuerySelectorAll("td:nth-child(2) > span").First();
+                release.Link = new Uri(SiteLink + row.QuerySelector("td:nth-child(3) > a").GetAttribute("href"));
+                var pubDateElement = row.QuerySelector("td:nth-child(2) > span");
                 pubDateElement.QuerySelector("a").Remove(); // remove snatchinfo links (added after completing a torrent)
-                var pubDate = pubDateElement.Text().Trim().Replace("Added: ", "");
+                var pubDate = pubDateElement.TextContent.Trim().Replace("Added: ", "");
                 release.PublishDate = DateTime.Parse(pubDate).ToLocalTime();
-                release.Category = MapTrackerCatToNewznab(row.QuerySelectorAll("td:nth-child(1) > a").First().GetAttribute("href").Split('=')[1]);
-                release.Size = ReleaseInfo.GetBytes(row.QuerySelectorAll("td:nth-child(7)").First().Text());
-                release.Seeders = ParseUtil.CoerceInt(row.QuerySelectorAll("td:nth-child(9)").First().Text());
-                release.Peers = ParseUtil.CoerceInt(row.QuerySelectorAll("td:nth-child(10)").First().Text()) + release.Seeders;
+                release.Category = MapTrackerCatToNewznab(row.QuerySelector("td:nth-child(1) > a").GetAttribute("href").Split('=')[1]);
+                release.Size = ReleaseInfo.GetBytes(row.QuerySelector("td:nth-child(7)").TextContent);
+                release.Seeders = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(9)").TextContent);
+                release.Peers = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(10)").TextContent) + release.Seeders;
 
-                var files = row.QuerySelector("td:nth-child(5)").Text();
+                var files = row.QuerySelector("td:nth-child(5)").TextContent;
                 release.Files = ParseUtil.CoerceInt(files);
 
-                var grabs = row.QuerySelector("td:nth-child(8)").Text();
+                var grabs = row.QuerySelector("td:nth-child(8)").TextContent;
                 release.Grabs = ParseUtil.CoerceInt(grabs);
 
-                if (row.QuerySelectorAll("i.fa-star").Any())
+                if (row.QuerySelector("i.fa-star") != null)
                     release.DownloadVolumeFactor = 0;
                 else
                     release.DownloadVolumeFactor = 1;
