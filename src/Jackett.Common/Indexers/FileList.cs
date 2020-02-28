@@ -95,7 +95,7 @@ namespace Jackett.Common.Indexers
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
             {
                 var dom = parser.ParseDocument(result.Content);
-                var errorMessage = dom.QuerySelector(".main").Text().Trim();
+                var errorMessage = dom.QuerySelector(".main").TextContent.Trim();
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
             return IndexerConfigurationStatus.RequiresTesting;
@@ -151,16 +151,16 @@ namespace Jackett.Common.Indexers
                 {
                     var release = new ReleaseInfo();
                     
-                    var qTitleLink = row.QuerySelectorAll(".torrenttable:eq(1) a").First();
-                    release.Title = row.QuerySelector(".torrenttable:eq(1) b").Text();
-                    var longtitle = row.QuerySelector(".torrenttable:eq(1) a[title]").GetAttribute("title");
+                    var qTitleLink = row.QuerySelector(".torrenttable:nth-of-type(2) a");
+                    release.Title = row.QuerySelector(".torrenttable:nth-of-type(2) b").TextContent;
+                    var longtitle = row.QuerySelector(".torrenttable:nth-of-type(2) a[title]").GetAttribute("title");
                     if (!string.IsNullOrEmpty(longtitle) && !longtitle.Contains("<")) // releases with cover image have no full title
                         release.Title = longtitle;
 
                     if (query.ImdbID == null && !query.MatchQueryStringAND(release.Title))
                         continue;
 
-                    release.Description = row.QuerySelectorAll(".torrenttable:eq(1) > span > font.small").First().Text();
+                    release.Description = row.QuerySelector(".torrenttable:nth-of-type(2) > span > font.small").TextContent;
 
                     var tooltip = qTitleLink.GetAttribute("title");
                     if (!string.IsNullOrEmpty(tooltip))
@@ -175,22 +175,22 @@ namespace Jackett.Common.Indexers
                     release.Comments = release.Guid;
 
                     //22:05:3716/02/2013
-                    var dateStr = row.QuerySelector(".torrenttable:eq(5)").Text().Trim() + " +0200";
+                    var dateStr = row.QuerySelector(".torrenttable:nth-of-type(6)").TextContent.Trim() + " +0200";
                     release.PublishDate = DateTime.ParseExact(dateStr, "H:mm:ssdd/MM/yyyy zzz", CultureInfo.InvariantCulture);
 
-                    var qLink = row.QuerySelectorAll("a[href^=\"download.php?id=\"]").First();
+                    var qLink = row.QuerySelector("a[href^=\"download.php?id=\"]");
                     release.Link = new Uri(SiteLink + qLink.GetAttribute("href").Replace("&usetoken=1", ""));
 
-                    var sizeStr = row.QuerySelector(".torrenttable:eq(6)").Text().Trim();
+                    var sizeStr = row.QuerySelector(".torrenttable:nth-of-type(7)").TextContent.Trim();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
 
-                    release.Seeders = ParseUtil.CoerceInt(row.QuerySelector(".torrenttable:eq(8)").Text().Trim());
-                    release.Peers = ParseUtil.CoerceInt(row.QuerySelector(".torrenttable:eq(9)").Text().Trim()) + release.Seeders;
+                    release.Seeders = ParseUtil.CoerceInt(row.QuerySelector(".torrenttable:nth-of-type(9)").TextContent.Trim());
+                    release.Peers = ParseUtil.CoerceInt(row.QuerySelector(".torrenttable:nth-of-type(10)").TextContent.Trim()) + release.Seeders;
 
-                    var catId = row.QuerySelectorAll(".torrenttable:eq(0) a").First().GetAttribute("href").Substring(15);
+                    var catId = row.QuerySelector(".torrenttable:nth-of-type(1) a").GetAttribute("href").Substring(15);
                     release.Category = MapTrackerCatToNewznab(catId);
 
-                    var grabs = row.QuerySelectorAll(".torrenttable:eq(7)").First().FirstChild.FirstChild;
+                    var grabs = row.QuerySelector(".torrenttable:nth-of-type(8)").FirstChild.FirstChild;
                     release.Grabs = ParseUtil.CoerceLong(catId);
 
                     if (globalFreeLeech || row.QuerySelectorAll("img[alt=\"FreeLeech\"]").Any())
