@@ -106,8 +106,8 @@ namespace Jackett.Common.Indexers
 
                 foreach (var row in rows)
                 {
-                    var qTitleLink = row.QuerySelectorAll("a.title, a.alt_title").First();
-                    var title = qTitleLink.Text().Trim();
+                    var qTitleLink = row.QuerySelector("a.title, a.alt_title");
+                    var title = qTitleLink.TextContent.Trim();
 
                     // Insert before the release info
                     var taidx = title.IndexOf('(');
@@ -146,11 +146,11 @@ namespace Jackett.Common.Indexers
                         }
 
                         release.Category = new List<int>() { TorznabCatType.TVAnime.ID };
-                        release.Description = row.QuerySelector("span.tags").Text();
+                        release.Description = row.QuerySelector("span.tags").TextContent;
                         release.Guid = new Uri(SiteLink + qTitleLink.GetAttribute("href"));
                         release.Comments = release.Guid;
 
-                        release.Link = new Uri(SiteLink + row.QuerySelectorAll(".peers a").First().GetAttribute("href"));
+                        release.Link = new Uri(SiteLink + row.QuerySelector(".peers a").GetAttribute("href"));
 
                         var grabs = row.QuerySelectorAll(".peers")[0].FirstChild.NodeValue.TrimEnd().TrimEnd('/').TrimEnd();
                         grabs = grabs.Replace("k", "000");
@@ -161,11 +161,11 @@ namespace Jackett.Common.Indexers
                         release.MinimumRatio = 1;
                         release.MinimumSeedTime = 172800; // 48 hours
 
-                        var size = row.QuerySelectorAll(".size").First().Text();
+                        var size = row.QuerySelector(".size").TextContent;
                         release.Size = ReleaseInfo.GetBytes(size);
 
                         //22 Jul 15
-                        var dateStr = row.QuerySelectorAll(".added").First().Text().Replace("'", string.Empty);
+                        var dateStr = row.QuerySelector(".added").TextContent.Replace("'", string.Empty);
                         if (dateStr.Split(' ')[0].Length == 1)
                             dateStr = "0" + dateStr;
 
@@ -182,7 +182,7 @@ namespace Jackett.Common.Indexers
                             release.PublishDate = DateTime.ParseExact(dateStr, "dd MMM yy", CultureInfo.InvariantCulture);
                         }
 
-                        release.DownloadVolumeFactor = row.QuerySelectorAll("span.freeleech").Length > 0 ? 0 : 1;
+                        release.DownloadVolumeFactor = row.QuerySelector("span.freeleech") != null ? 0 : 1;
                         release.UploadVolumeFactor = 1;
 
                         releases.Add(release);
