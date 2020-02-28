@@ -121,16 +121,16 @@ namespace Jackett.Common.Indexers.Abstract
                     var qDownload = row.QuerySelector("a.torrent-download-icon");
                     release.Link = new Uri(qDownload.GetAttribute("href"));
 
-                    var dateStr = row.QuerySelector("td:eq(3) > span").Text().Trim();
+                    var dateStr = row.QuerySelector("td:nth-of-type(4) > span").Text().Trim();
                     release.PublishDate = DateTimeUtil.FromTimeAgo(dateStr);
 
-                    var sizeStr = row.QuerySelector("td:eq(5) > span").Text().Trim();
+                    var sizeStr = row.QuerySelector("td:nth-of-type(6) > span").Text().Trim();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
 
-                    release.Seeders = ParseUtil.CoerceInt(row.QuerySelector("td:eq(6)").Text().Trim());
-                    release.Peers = ParseUtil.CoerceInt(row.QuerySelector("td:eq(7)").Text().Trim()) + release.Seeders;
+                    release.Seeders = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(7)").Text().Trim());
+                    release.Peers = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(8)").Text().Trim()) + release.Seeders;
 
-                    var cat = row.QuerySelectorAll("td:eq(0) i").First().GetAttribute("class")
+                    var cat = row.QuerySelectorAll("td:nth-of-type(1) i").First().GetAttribute("class")
                                             .Replace("torrent-icon", string.Empty)
                                             .Replace("fa fa-", string.Empty)
                                             .Replace("film", "1")
