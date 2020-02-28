@@ -127,34 +127,28 @@ namespace Jackett.Common.Indexers
                     release.MinimumSeedTime = 172800; // 48 hours
 
                     var qLink = row.Children[1].FirstElementChild;
-                    release.Title = qLink.Text().Trim();
+                    release.Title = qLink.TextContent.Trim();
                     release.Comments = new Uri(SiteLink + qLink.GetAttribute("href"));
                     release.Guid = release.Comments;
 
                     var qDownload = row.Children[3].FirstElementChild;
                     release.Link = new Uri(SiteLink + qDownload.GetAttribute("href"));
 
-                    //"July 11, 2015, 13:34:09", "Today at 20:04:23"
-                    var dateStr = row.Children[4].Text().Trim();
-                    //if (dateStr.StartsWith("Today"))
-                    //    release.PublishDate = DateTime.Today + TimeSpan.ParseExact(dateStr.Replace("Today at ", ""), "hh\\:mm\\:ss", CultureInfo.InvariantCulture);
-                    //else if (dateStr.StartsWith("Yesterday"))
-                    //    release.PublishDate = DateTime.Today - TimeSpan.FromDays(1) + TimeSpan.ParseExact(dateStr.Replace("Yesterday at ", ""), "hh\\:mm\\:ss", CultureInfo.InvariantCulture);
-                    //else
-                    //    release.PublishDate = DateTime.SpecifyKind(DateTime.ParseExact(dateStr, "MMMM dd, yyyy, HH:mm:ss", CultureInfo.InvariantCulture), DateTimeKind.Local);
+                    var dateStr = row.Children[4].TextContent.Trim();
+                    //"July 11, 2015, 13:34:09", "Today|Yesterday at 20:04:23"
                     release.PublishDate = DateTimeUtil.FromUnknown(dateStr.Replace("at", string.Empty));
-                    var sizeStr = row.Children[5].Text();
+                    var sizeStr = row.Children[5].TextContent;
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
-                    release.Seeders = ParseUtil.CoerceInt(row.Children[7].Text());
-                    release.Peers = ParseUtil.CoerceInt(row.Children[8].Text()) + release.Seeders;
-                    var grabs = row.QuerySelector("td:nth-child(10)").Text();
+                    release.Seeders = ParseUtil.CoerceInt(row.Children[7].TextContent);
+                    release.Peers = ParseUtil.CoerceInt(row.Children[8].TextContent) + release.Seeders;
+                    var grabs = row.QuerySelector("td:nth-child(10)").TextContent;
                     grabs = grabs.Replace("---", "0");
                     release.Grabs = ParseUtil.CoerceInt(grabs);
-                    if (row.QuerySelectorAll("img[title=\"FreeLeech\"]").Length >= 1)
+                    if (row.QuerySelector("img[title=\"FreeLeech\"]") != null)
                         release.DownloadVolumeFactor = 0;
-                    else if (row.QuerySelectorAll("img[src=\"images/sf.png\"]").Length >= 1) // side freeleech
+                    else if (row.QuerySelector("img[src=\"images/sf.png\"]") != null) // side freeleech
                         release.DownloadVolumeFactor = 0;
-                    else if (row.QuerySelectorAll("img[title=\"Half FreeLeech\"]").Length >= 1)
+                    else if (row.QuerySelector("img[title=\"Half FreeLeech\"]") != null)
                         release.DownloadVolumeFactor = 0.5;
                     else
                         release.DownloadVolumeFactor = 1;
