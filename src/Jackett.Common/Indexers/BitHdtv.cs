@@ -5,7 +5,8 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CsQuery;
+using AngleSharp.Dom;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -59,8 +60,9 @@ namespace Jackett.Common.Indexers
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
             var loginPage = await RequestStringWithCookies(LoginUrl, configData.CookieHeader.Value);
-            CQ cq = loginPage.Content;
-            var recaptchaSiteKey = cq.Find(".g-recaptcha").Attr("data-sitekey");
+            var parser = new HtmlParser();
+            var cq = parser.ParseDocument(loginPage.Content);
+            var recaptchaSiteKey = cq.QuerySelector(".g-recaptcha").GetAttribute("data-sitekey");
             var result = configData;
             result.CookieHeader.Value = loginPage.Cookies;
             result.Captcha.SiteKey = recaptchaSiteKey;
@@ -104,11 +106,14 @@ namespace Jackett.Common.Indexers
             var response = await RequestLoginAndFollowRedirect(TakeLoginUrl, pairs, null, true, null, SiteLink);
             await ConfigureIfOK(response.Cookies, response.Content != null && response.Content.Contains("logout.php"), () =>
             {
-                CQ dom = response.Content;
-                var messageEl = dom["table.detail td.text"].Last();
-                messageEl.Children("a").Remove();
-                messageEl.Children("style").Remove();
-                var errorMessage = messageEl.Text().Trim();
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(response.Content);
+                var messageEl = dom.QuerySelectorAll("table.detail td.text").Last();
+                foreach (var child in messageEl.QuerySelectorAll("a"))
+                    child.Remove();
+                foreach (var child in messageEl.QuerySelectorAll("style"))
+                    child.Remove();
+                var errorMessage = messageEl.TextContent.Trim();
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
             return IndexerConfigurationStatus.RequiresTesting;
@@ -134,30 +139,32 @@ namespace Jackett.Common.Indexers
             var results = await RequestStringWithCookiesAndRetry(searchUrl);
             try
             {
-                CQ dom = results.Content;
-                dom["#needseed"].Remove();
-                foreach (var table in dom["table[align=center] + br + table > tbody"])
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(results.Content);
+                foreach (var child in dom.QuerySelectorAll("#needseed"))
+                    child.Remove();
+                foreach (var table in dom.QuerySelectorAll("table[align=center] + br + table > tbody"))
                 {
-                    var rows = table.Cq().Children();
+                    var rows = table.Children;
                     foreach (var row in rows.Skip(1))
                     {
                         var release = new ReleaseInfo();
 
-                        var qRow = row.Cq();
-                        var qLink = qRow.Children().ElementAt(2).Cq().Children("a").First();
+                        
+                        var qLink = row.Children[2].QuerySelector("a");
 
                         release.MinimumRatio = 1;
                         release.MinimumSeedTime = 172800; // 48 hours
-                        release.Title = qLink.Attr("title");
+                        release.Title = qLink.GetAttribute("title");
                         if (!query.MatchQueryStringAND(release.Title))
                             continue;
-                        release.Files = ParseUtil.CoerceLong(qRow.Find("td:nth-child(4)").Text());
-                        release.Grabs = ParseUtil.CoerceLong(qRow.Find("td:nth-child(8)").Text());
-                        release.Guid = new Uri(qLink.Attr("href"));
+                        release.Files = ParseUtil.CoerceLong(row.QuerySelector("td:nth-child(4)").TextContent);
+                        release.Grabs = ParseUtil.CoerceLong(row.QuerySelector("td:nth-child(8)").TextContent);
+                        release.Guid = new Uri(qLink.GetAttribute("href"));
                         release.Comments = release.Guid;
-                        release.Link = new Uri(string.Format(DownloadUrl, qLink.Attr("href").Split('=')[1]));
+                        release.Link = new Uri(string.Format(DownloadUrl, qLink.GetAttribute("href").Split('=')[1]));
 
-                        var catUrl = qRow.Children().ElementAt(1).FirstElementChild.Cq().Attr("href");
+                        var catUrl = row.Children[1].FirstElementChild.GetAttribute("href");
                         var catNum = catUrl.Split(new char[] { '=', '&' })[1];
                         release.Category = MapTrackerCatToNewznab(catNum);
 
@@ -165,17 +172,17 @@ namespace Jackett.Common.Indexers
                         if (trackerCats.Count > 0 && !trackerCats.Contains(catNum))
                             continue;
 
-                        var dateString = qRow.Children().ElementAt(5).Cq().Text().Trim();
+                        var dateString = row.Children[5].TextContent.Trim();
                         var pubDate = DateTime.ParseExact(dateString, "yyyy-MM-ddHH:mm:ss", CultureInfo.InvariantCulture);
                         release.PublishDate = DateTime.SpecifyKind(pubDate, DateTimeKind.Local);
 
-                        var sizeStr = qRow.Children().ElementAt(6).Cq().Text();
+                        var sizeStr = row.Children[6].TextContent;
                         release.Size = ReleaseInfo.GetBytes(sizeStr);
 
-                        release.Seeders = ParseUtil.CoerceInt(qRow.Children().ElementAt(8).Cq().Text().Trim());
-                        release.Peers = ParseUtil.CoerceInt(qRow.Children().ElementAt(9).Cq().Text().Trim()) + release.Seeders;
+                        release.Seeders = ParseUtil.CoerceInt(row.Children[8].TextContent.Trim());
+                        release.Peers = ParseUtil.CoerceInt(row.Children[9].TextContent.Trim()) + release.Seeders;
 
-                        var bgcolor = qRow.Attr("bgcolor");
+                        var bgcolor = row.GetAttribute("bgcolor");
                         if (bgcolor == "#DDDDDD")
                         {
                             release.DownloadVolumeFactor = 1;
