@@ -111,11 +111,8 @@ namespace Jackett.Common.Indexers
 
             try
             {
-                //TODO remove csQuery -> AngleSharp hints when all trackers are converted
-                //CQ dom = results;
                 var resultParser = new HtmlParser();
                 var searchResultDocument = resultParser.ParseDocument(response.Content);
-                //var rows = dom["table.lista > tbody > tr"];
                 var rows = searchResultDocument.QuerySelectorAll("table.lista > tbody > tr");
 
                 foreach (var row in rows)
@@ -129,18 +126,15 @@ namespace Jackett.Common.Indexers
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800; // 48 hours
 
-                    //var qLink = row.ChildElements.ElementAt(1).FirstElementChild.Cq();
                     var qLink = row.Children[1].FirstElementChild;
                     release.Title = qLink.Text().Trim();
                     release.Comments = new Uri(SiteLink + qLink.GetAttribute("href"));
                     release.Guid = release.Comments;
 
-                    //var qDownload = row.ChildElements.ElementAt(3).FirstElementChild.Cq();
                     var qDownload = row.Children[3].FirstElementChild;
                     release.Link = new Uri(SiteLink + qDownload.GetAttribute("href"));
 
                     //"July 11, 2015, 13:34:09", "Today at 20:04:23"
-                    //var dateStr = row.ChildElements.ElementAt(4).Cq().Text().Trim();
                     var dateStr = row.Children[4].Text().Trim();
                     //if (dateStr.StartsWith("Today"))
                     //    release.PublishDate = DateTime.Today + TimeSpan.ParseExact(dateStr.Replace("Today at ", ""), "hh\\:mm\\:ss", CultureInfo.InvariantCulture);
@@ -149,30 +143,23 @@ namespace Jackett.Common.Indexers
                     //else
                     //    release.PublishDate = DateTime.SpecifyKind(DateTime.ParseExact(dateStr, "MMMM dd, yyyy, HH:mm:ss", CultureInfo.InvariantCulture), DateTimeKind.Local);
                     release.PublishDate = DateTimeUtil.FromUnknown(dateStr.Replace("at", string.Empty));
-                    //var sizeStr = row.ChildElements.ElementAt(5).Cq().Text();
                     var sizeStr = row.Children[5].Text();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
                     release.Seeders = ParseUtil.CoerceInt(row.Children[7].Text());
                     release.Peers = ParseUtil.CoerceInt(row.Children[8].Text()) + release.Seeders;
-                    //var grabs = qRow.Find("td:nth-child(10)").Text();
                     var grabs = row.QuerySelector("td:nth-child(10)").Text();
                     grabs = grabs.Replace("---", "0");
                     release.Grabs = ParseUtil.CoerceInt(grabs);
-                    //if (qRow.Find("img[title=\"FreeLeech\"]").Length >= 1)
                     if (row.QuerySelectorAll("img[title=\"FreeLeech\"]").Length >= 1)
                         release.DownloadVolumeFactor = 0;
-                    //else if (qRow.Find("img[src=\"images/sf.png\"]").Length >= 1) // side freeleech
                     else if (row.QuerySelectorAll("img[src=\"images/sf.png\"]").Length >= 1) // side freeleech
                         release.DownloadVolumeFactor = 0;
-                    //else if (qRow.Find("img[title=\"Half FreeLeech\"]").Length >= 1)
                     else if (row.QuerySelectorAll("img[title=\"Half FreeLeech\"]").Length >= 1)
                         release.DownloadVolumeFactor = 0.5;
                     else
                         release.DownloadVolumeFactor = 1;
                     release.UploadVolumeFactor = 1;
-                    //var qCat = qRow.Find("a[href^=\"index.php?page=torrents&category=\"]");
                     var qCat = row.QuerySelector("a[href^=\"index.php?page=torrents&category=\"]");
-                    //var cat = qCat.Attr("href").Split('=')[2];
                     var cat = qCat.GetAttribute("href").Split('=')[2];
                     release.Category = MapTrackerCatToNewznab(cat);
                     releases.Add(release);
