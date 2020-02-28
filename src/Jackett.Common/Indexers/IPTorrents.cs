@@ -5,7 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using CsQuery;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -190,53 +190,53 @@ namespace Jackett.Common.Indexers
 
             try
             {
-                CQ dom = results;
+                var htmlParser = new HtmlParser();
+                var dom = htmlParser.ParseDocument(results);
 
-                var rows = dom["table[id='torrents'] > tbody > tr"];
+                var rows = dom.QuerySelectorAll("table[id='torrents'] > tbody > tr");
                 foreach (var row in rows.Skip(1))
                 {
                     var release = new ReleaseInfo();
-                    var qRow = row.Cq();
-                    var qTitleLink = qRow.Find("a[href^=\"/details.php?id=\"]").First();
+                    var qTitleLink = row.QuerySelector("a[href^=\"/details.php?id=\"]");
                     // drop invalid char that seems to have cropped up in some titles. #6582
-                    release.Title = qTitleLink.Text().Trim().Replace("\u000f", "");
+                    release.Title = qTitleLink.TextContent.Trim().Replace("\u000f", "");
 
                     // If we search an get no results, we still get a table just with no info.
                     if (string.IsNullOrWhiteSpace(release.Title))
                         break;
 
-                    release.Guid = new Uri(SiteLink + qTitleLink.Attr("href").Substring(1));
+                    release.Guid = new Uri(SiteLink + qTitleLink.GetAttribute("href").Substring(1));
                     release.Comments = release.Guid;
 
-                    var descString = qRow.Find(".t_ctime").Text();
+                    var descString = row.QuerySelector(".t_ctime").TextContent;
                     var dateString = descString.Split('|').Last().Trim();
                     dateString = dateString.Split(new[] { " by " }, StringSplitOptions.None)[0];
                     release.PublishDate = DateTimeUtil.FromTimeAgo(dateString);
 
-                    var qLink = row.ChildElements.ElementAt(3).Cq().Children("a");
-                    release.Link = new Uri(SiteLink + WebUtility.UrlEncode(qLink.Attr("href").TrimStart('/')));
+                    var qLink = row.QuerySelector("a[href^=\"/download.php/\"]");
+                    release.Link = new Uri(SiteLink + WebUtility.UrlEncode(qLink.GetAttribute("href").TrimStart('/')));
 
-                    var sizeStr = row.ChildElements.ElementAt(5).Cq().Text();
+                    var sizeStr = row.Children[5].TextContent;
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
 
-                    release.Seeders = ParseUtil.CoerceInt(qRow.Find(".t_seeders").Text().Trim());
-                    release.Peers = ParseUtil.CoerceInt(qRow.Find(".t_leechers").Text().Trim()) + release.Seeders;
+                    release.Seeders = ParseUtil.CoerceInt(row.QuerySelector(".t_seeders").TextContent.Trim());
+                    release.Peers = ParseUtil.CoerceInt(row.QuerySelector(".t_leechers").TextContent.Trim()) + release.Seeders;
 
-                    var catIcon = row.Cq().Find("td:eq(0) a");
-                    if (catIcon.Length >= 1) // Torrents - Category column == Icons
-                        release.Category = MapTrackerCatToNewznab(catIcon.First().Attr("href").Substring(1));
+                    var catIcon = row.QuerySelector("td:nth-of-type(1) a");
+                    if (catIcon != null) // Torrents - Category column == Icons
+                        release.Category = MapTrackerCatToNewznab(catIcon.GetAttribute("href").Substring(1));
                     else // Torrents - Category column == Text or Code
                         //release.Category = MapTrackerCatDescToNewznab(row.Cq().Find("td:eq(0)").Text()); // Works for "Text" but only contains the parent category
                         throw new Exception("Please go to " + SiteLink + "settings.php and change the \"Torrents - Category column\" option to \"Icons\". Wait a minute (cache) and then try again.");
 
-                    var filesElement = row.Cq().Find("a[href*=\"/files\"]"); // optional
-                    if (filesElement.Length == 1)
-                        release.Files = ParseUtil.CoerceLong(filesElement.Text());
+                    var filesElement = row.QuerySelector("a[href*=\"/files\"]"); // optional
+                    if (filesElement != null)
+                        release.Files = ParseUtil.CoerceLong(filesElement.TextContent);
 
-                    var grabs = row.Cq().Find("td:nth-last-child(3)").Text();
+                    var grabs = row.QuerySelector("td:nth-last-child(3)").TextContent;
                     release.Grabs = ParseUtil.CoerceInt(grabs);
 
-                    release.DownloadVolumeFactor = row.Cq().Find("span.t_tag_free_leech").Any() ? 0 : 1;
+                    release.DownloadVolumeFactor = row.QuerySelector("span.t_tag_free_leech") != null ? 0 : 1;
                     release.UploadVolumeFactor = 1;
 
                     releases.Add(release);
