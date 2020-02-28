@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using CsQuery;
+using AngleSharp.Dom;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -67,8 +69,9 @@ namespace Jackett.Common.Indexers
             var responseContent = response.Content;
             await ConfigureIfOK(response.Cookies, responseContent.Contains(LogoutStr), () =>
             {
-                CQ dom = responseContent;
-                var messageEl = dom[".error"].First();
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(responseContent);
+                var messageEl = dom.QuerySelectorAll(".error").First();
                 var errorMessage = messageEl.Text().Trim();
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
@@ -97,14 +100,14 @@ namespace Jackett.Common.Indexers
 
             try
             {
-                CQ dom = response.Content;
-                var rows = dom[".torrents tr.torrent, .torrents tr.torrent_alt"];
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(response.Content);
+                var rows = dom.QuerySelectorAll(".torrents tr.torrent, .torrents tr.torrent_alt");
 
                 foreach (var row in rows)
                 {
-                    var qRow = row.Cq();
-                    var qTitleLink = qRow.Find("a.title, a.alt_title").First();
-                    var title = qTitleLink.Text().Trim();
+                    var qTitleLink = row.QuerySelector("a.title, a.alt_title");
+                    var title = qTitleLink.TextContent.Trim();
 
                     // Insert before the release info
                     var taidx = title.IndexOf('(');
@@ -143,26 +146,26 @@ namespace Jackett.Common.Indexers
                         }
 
                         release.Category = new List<int>() { TorznabCatType.TVAnime.ID };
-                        release.Description = qRow.Find("span.tags").Text();
-                        release.Guid = new Uri(SiteLink + qTitleLink.Attr("href"));
+                        release.Description = row.QuerySelector("span.tags").TextContent;
+                        release.Guid = new Uri(SiteLink + qTitleLink.GetAttribute("href"));
                         release.Comments = release.Guid;
 
-                        release.Link = new Uri(SiteLink + qRow.Find(".peers a").First().Attr("href"));
+                        release.Link = new Uri(SiteLink + row.QuerySelector(".peers a").GetAttribute("href"));
 
-                        var grabs = qRow.Find(".peers").Get(0).FirstChild.NodeValue.TrimEnd().TrimEnd('/').TrimEnd();
+                        var grabs = row.QuerySelectorAll(".peers")[0].FirstChild.NodeValue.TrimEnd().TrimEnd('/').TrimEnd();
                         grabs = grabs.Replace("k", "000");
                         release.Grabs = int.Parse(grabs);
-                        release.Seeders = int.Parse(qRow.Find(".peers a").Get(0).InnerText);
-                        release.Peers = release.Seeders + int.Parse(qRow.Find(".peers a").Get(1).InnerText);
+                        release.Seeders = int.Parse(row.QuerySelectorAll(".peers a")[0].TextContent);
+                        release.Peers = release.Seeders + int.Parse(row.QuerySelectorAll(".peers a")[1].TextContent);
 
                         release.MinimumRatio = 1;
                         release.MinimumSeedTime = 172800; // 48 hours
 
-                        var size = qRow.Find(".size").First().Text();
+                        var size = row.QuerySelector(".size").TextContent;
                         release.Size = ReleaseInfo.GetBytes(size);
 
                         //22 Jul 15
-                        var dateStr = qRow.Find(".added").First().Text().Replace("'", string.Empty);
+                        var dateStr = row.QuerySelector(".added").TextContent.Replace("'", string.Empty);
                         if (dateStr.Split(' ')[0].Length == 1)
                             dateStr = "0" + dateStr;
 
@@ -179,7 +182,7 @@ namespace Jackett.Common.Indexers
                             release.PublishDate = DateTime.ParseExact(dateStr, "dd MMM yy", CultureInfo.InvariantCulture);
                         }
 
-                        release.DownloadVolumeFactor = qRow.Find("span.freeleech").Length > 0 ? 0 : 1;
+                        release.DownloadVolumeFactor = row.QuerySelector("span.freeleech") != null ? 0 : 1;
                         release.UploadVolumeFactor = 1;
 
                         releases.Add(release);
@@ -197,8 +200,9 @@ namespace Jackett.Common.Indexers
         public override async Task<byte[]> Download(Uri link)
         {
             var downloadPage = await RequestStringWithCookies(link.ToString());
-            CQ dom = downloadPage.Content;
-            var downloadLink = dom.Find(".download_link").First().Attr("href");
+            var parser = new HtmlParser();
+            var dom = parser.ParseDocument(downloadPage.Content);
+            var downloadLink = dom.QuerySelectorAll(".download_link").First().GetAttribute("href");
 
             if (string.IsNullOrWhiteSpace(downloadLink))
             {
