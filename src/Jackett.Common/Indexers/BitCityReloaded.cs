@@ -146,7 +146,7 @@ namespace Jackett.Common.Indexers
                     release.DownloadVolumeFactor = 1;
                     release.UploadVolumeFactor = 1;
 
-                    var flagImgs = row.QuerySelectorAll("table tbody tr: eq(0) td > img");
+                    var flagImgs = row.QuerySelectorAll("table tbody tr:nth-of-type(1) td > img");
                     var flags = new List<string>();
                     foreach (var flagImg in flagImgs)
                     {
@@ -157,11 +157,11 @@ namespace Jackett.Common.Indexers
                             flags.Add(flag);
                     }
 
-                    var titleLink = row.QuerySelectorAll("table tbody tr:eq(0) td a:has(b)").First();
-                    var DLLink = row.QuerySelectorAll("td.tableb > a:has(img[title=\"Torrent herunterladen\"])").First();
+                    var titleLink = row.QuerySelector("table tbody tr:nth-of-type(1) td a:has(b)");
+                    var DLLink = row.QuerySelector("td.tableb > a:has(img[title=\"Torrent herunterladen\"])");
                     release.Comments = new Uri(SiteLink + titleLink.GetAttribute("href").Replace("&hit=1", ""));
                     release.Link = new Uri(SiteLink + DLLink.GetAttribute("href"));
-                    release.Title = titleLink.Text().Trim();
+                    release.Title = titleLink.TextContent.Trim();
 
                     if (!query.MatchQueryStringAND(release.Title))
                         continue;
@@ -169,24 +169,24 @@ namespace Jackett.Common.Indexers
                     release.Description = string.Join(", ", flags);
                     release.Guid = release.Link;
 
-                    var dateStr = row.QuerySelector("table tbody tr:eq(1) td:eq(4)").Html().Replace("&nbsp;", " ").Trim();
+                    var dateStr = row.QuerySelector("table tbody tr:nth-of-type(2) td:nth-of-type(5)").Html().Replace("&nbsp;", " ").Trim();
                     var dateGerman = DateTime.SpecifyKind(DateTime.ParseExact(dateStr, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture), DateTimeKind.Unspecified);
                     var pubDateUtc = TimeZoneInfo.ConvertTimeToUtc(dateGerman, germanyTz);
                     release.PublishDate = pubDateUtc.ToLocalTime();
 
-                    var sizeStr = row.QuerySelectorAll("table tbody tr:eq(1) td b").First().Text().Trim();
+                    var sizeStr = row.QuerySelector("table tbody tr:nth-of-type(2) td b").TextContent.Trim();
                     release.Size = ReleaseInfo.GetBytes(sizeStr.Replace(",", "."));
 
-                    release.Seeders = ParseUtil.CoerceInt(row.QuerySelector("table tbody tr:eq(1) td:eq(1) b:eq(0) font").Text().Trim());
-                    release.Peers = ParseUtil.CoerceInt(row.QuerySelector("table tbody tr:eq(1) td:eq(1) b:eq(1) font").Text().Trim()) + release.Seeders;
+                    release.Seeders = ParseUtil.CoerceInt(row.QuerySelector("table tbody tr:nth-of-type(2) td:nth-of-type(2) b:nth-of-type(1) font").TextContent.Trim());
+                    release.Peers = ParseUtil.CoerceInt(row.QuerySelector("table tbody tr:nth-of-type(2) td:nth-of-type(2) b:nth-of-type(2) font").TextContent.Trim()) + release.Seeders;
 
-                    var catId = row.QuerySelectorAll("td:eq(0) a").First().GetAttribute("href").Split('=')[1];
+                    var catId = row.QuerySelector("td:nth-of-type(1) a").GetAttribute("href").Split('=')[1];
                     release.Category = MapTrackerCatToNewznab(catId);
 
-                    var files = row.QuerySelector("td:has(a[href*=\"&filelist=1\"])> b:nth-child(2)").Text();
+                    var files = row.QuerySelector("td:has(a[href*=\"&filelist=1\"])> b:nth-child(2)").TextContent;
                     release.Files = ParseUtil.CoerceInt(files);
 
-                    var grabs = row.QuerySelector("td:has(a[href*=\"&tosnatchers=1\"])> b:nth-child(1)").Text();
+                    var grabs = row.QuerySelector("td:has(a[href*=\"&tosnatchers=1\"])> b:nth-child(1)").TextContent;
                     release.Grabs = ParseUtil.CoerceInt(grabs);
 
                     releases.Add(release);
