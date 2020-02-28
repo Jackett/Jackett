@@ -5,7 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using CsQuery;
+using AngleSharp.Dom;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -74,13 +75,14 @@ namespace Jackett.Common.Indexers
             var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, SiteLink);
             await ConfigureIfOK(response.Cookies, response.Content != null && response.Content.Contains("logout.php"), () =>
             {
-                CQ dom = response.Content;
-                var messageEl = dom["#loginform"];
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(response.Content);
+                var messageEl = dom.QuerySelectorAll("#loginform");
                 var messages = new List<string>();
                 for (var i = 0; i < 13; i++)
                 {
                     var child = messageEl[0].ChildNodes[i];
-                    messages.Add(child.Cq().Text().Trim());
+                    messages.Add(child.Text().Trim());
                 }
                 var message = string.Join(" ", messages);
                 throw new ExceptionWithConfigData(message, configData);
@@ -134,50 +136,50 @@ namespace Jackett.Common.Indexers
                 }
                 try
                 {
-                    CQ dom = results.Content;
-                    var rows = dom["#torrent_table > tbody > tr.torrent"];
+                    var parser = new HtmlParser();
+                    var dom = parser.ParseDocument(results.Content);
+                    var rows = dom.QuerySelectorAll("#torrent_table > tbody > tr.torrent");
                     foreach (var row in rows)
                     {
-                        var qRow = row.Cq();
                         var release = new ReleaseInfo();
 
                         release.MinimumRatio = 1;
                         release.MinimumSeedTime = 172800; // 48 hours
 
-                        var catStr = row.ChildElements.ElementAt(0).FirstElementChild.GetAttribute("href").Split(new char[] { '[', ']' })[1];
+                        var catStr = row.Children.ElementAt(0).FirstElementChild.GetAttribute("href").Split(new char[] { '[', ']' })[1];
                         release.Category = MapTrackerCatToNewznab(catStr);
 
-                        var qLink = row.ChildElements.ElementAt(1).Cq().Children("a")[0].Cq();
-                        var linkStr = qLink.Attr("href");
+                        var qLink = row.Children.ElementAt(1).QuerySelectorAll("a")[0];
+                        var linkStr = qLink.GetAttribute("href");
                         release.Comments = new Uri(BaseUrl + "/" + linkStr);
                         release.Guid = release.Comments;
 
-                        var qDownload = row.ChildElements.ElementAt(1).Cq().Find("a[title='Download']")[0].Cq();
-                        release.Link = new Uri(BaseUrl + "/" + qDownload.Attr("href"));
+                        var qDownload = row.Children.ElementAt(1).QuerySelectorAll("a[title='Download']")[0];
+                        release.Link = new Uri(BaseUrl + "/" + qDownload.GetAttribute("href"));
 
-                        var dateStr = row.ChildElements.ElementAt(3).Cq().Text().Trim().Replace(" and", "");
+                        var dateStr = row.Children.ElementAt(3).Text().Trim().Replace(" and", "");
                         release.PublishDate = DateTimeUtil.FromTimeAgo(dateStr);
 
-                        var sizeStr = row.ChildElements.ElementAt(4).Cq().Text();
+                        var sizeStr = row.Children.ElementAt(4).Text();
                         release.Size = ReleaseInfo.GetBytes(sizeStr);
 
-                        release.Files = ParseUtil.CoerceInt(row.ChildElements.ElementAt(2).Cq().Text().Trim());
-                        release.Grabs = ParseUtil.CoerceInt(row.ChildElements.ElementAt(6).Cq().Text().Trim());
-                        release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(7).Cq().Text().Trim());
-                        release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(8).Cq().Text().Trim()) + release.Seeders;
+                        release.Files = ParseUtil.CoerceInt(row.Children.ElementAt(2).Text().Trim());
+                        release.Grabs = ParseUtil.CoerceInt(row.Children.ElementAt(6).Text().Trim());
+                        release.Seeders = ParseUtil.CoerceInt(row.Children.ElementAt(7).Text().Trim());
+                        release.Peers = ParseUtil.CoerceInt(row.Children.ElementAt(8).Text().Trim()) + release.Seeders;
 
-                        var grabs = qRow.Find("td:nth-child(6)").Text();
+                        var grabs = row.QuerySelector("td:nth-child(6)").Text();
                         release.Grabs = ParseUtil.CoerceInt(grabs);
 
-                        if (qRow.Find("strong:contains(\"Freeleech!\")").Length >= 1)
+                        if (row.QuerySelectorAll("strong:contains(\"Freeleech!\")").Length >= 1)
                             release.DownloadVolumeFactor = 0;
                         else
                             release.DownloadVolumeFactor = 1;
 
                         release.UploadVolumeFactor = 1;
 
-                        var title = qRow.Find("td:nth-child(2)");
-                        title.Find("span, strong, div, br").Remove();
+                        var title = row.QuerySelector("td:nth-child(2)");
+                        title.QuerySelector("span, strong, div, br").Remove();
 
                         release.Title = ParseUtil.NormalizeMultiSpaces(title.Text().Replace(" - ]", "]"));
 
