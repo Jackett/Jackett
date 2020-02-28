@@ -179,7 +179,8 @@ namespace Jackett.Common.Indexers
                         release.UploadVolumeFactor = 1;
 
                         var title = row.QuerySelector("td:nth-child(2)");
-                        title.QuerySelector("span, strong, div, br").Remove();
+                        foreach (var element in title.QuerySelectorAll("span, strong, div, br"))
+                            element.Remove();
 
                         release.Title = ParseUtil.NormalizeMultiSpaces(title.TextContent.Replace(" - ]", "]"));
 
