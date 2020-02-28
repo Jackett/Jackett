@@ -5,7 +5,8 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using CsQuery;
+using AngleSharp.Dom;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -66,8 +67,9 @@ namespace Jackett.Common.Indexers.Abstract
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, null, LoginUrl);
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("auth/logout"), () =>
             {
-                CQ dom = result.Content;
-                var messageEl = dom[".form-error"];
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(result.Content);
+                var messageEl = dom.QuerySelector(".form-error");
                 var errorMessage = messageEl.Text().Trim();
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
@@ -99,37 +101,36 @@ namespace Jackett.Common.Indexers.Abstract
 
             try
             {
-                CQ dom = response.Content;
-                var rows = dom["table:has(thead) > tbody > tr"];
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(response.Content);
+                var rows = dom.QuerySelectorAll("table:has(thead) > tbody > tr");
                 foreach (var row in rows)
                 {
-                    var qRow = row.Cq();
+                    
                     var release = new ReleaseInfo
                     {
                         MinimumRatio = 1,
                         MinimumSeedTime = 172800 // 48 hours
                     };
 
-                    var qLink = qRow.Find("a.torrent-filename");
-                    ;
+                    var qLink = row.QuerySelector("a.torrent-filename");
                     release.Title = qLink.Text().Trim();
-                    release.Comments = new Uri(qLink.Attr("href"));
+                    release.Comments = new Uri(qLink.GetAttribute("href"));
                     release.Guid = release.Comments;
 
-                    var qDownload = qRow.Find("a.torrent-download-icon");
-                    ;
-                    release.Link = new Uri(qDownload.Attr("href"));
+                    var qDownload = row.QuerySelector("a.torrent-download-icon");
+                    release.Link = new Uri(qDownload.GetAttribute("href"));
 
-                    var dateStr = qRow.Find("td:eq(3) > span").Text().Trim();
+                    var dateStr = row.QuerySelector("td:nth-of-type(4) > span").Text().Trim();
                     release.PublishDate = DateTimeUtil.FromTimeAgo(dateStr);
 
-                    var sizeStr = qRow.Find("td:eq(5) > span").Text().Trim();
+                    var sizeStr = row.QuerySelector("td:nth-of-type(6) > span").Text().Trim();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
 
-                    release.Seeders = ParseUtil.CoerceInt(qRow.Find("td:eq(6)").Text().Trim());
-                    release.Peers = ParseUtil.CoerceInt(qRow.Find("td:eq(7)").Text().Trim()) + release.Seeders;
+                    release.Seeders = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(7)").Text().Trim());
+                    release.Peers = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(8)").Text().Trim()) + release.Seeders;
 
-                    var cat = row.Cq().Find("td:eq(0) i").First().Attr("class")
+                    var cat = row.QuerySelectorAll("td:nth-of-type(1) i").First().GetAttribute("class")
                                             .Replace("torrent-icon", string.Empty)
                                             .Replace("fa fa-", string.Empty)
                                             .Replace("film", "1")
@@ -138,17 +139,17 @@ namespace Jackett.Common.Indexers.Abstract
                                             .Replace("text-pink", string.Empty);
                     release.Category = MapTrackerCatToNewznab(cat.Trim());
 
-                    var grabs = row.Cq().Find("td:nth-child(9)").Text();
+                    var grabs =row.QuerySelector("td:nth-child(9)").Text();
                     release.Grabs = ParseUtil.CoerceInt(grabs);
 
-                    if (row.Cq().Find("i.fa-star").Any())
+                    if (row.QuerySelectorAll("i.fa-star").Any())
                         release.DownloadVolumeFactor = 0;
-                    else if (row.Cq().Find("i.fa-star-half-o").Any())
+                    else if (row.QuerySelectorAll("i.fa-star-half-o").Any())
                         release.DownloadVolumeFactor = 0.5;
                     else
                         release.DownloadVolumeFactor = 1;
 
-                    if (row.Cq().Find("i.fa-diamond").Any())
+                    if (row.QuerySelectorAll("i.fa-diamond").Any())
                         release.UploadVolumeFactor = 2;
                     else
                         release.UploadVolumeFactor = 1;
