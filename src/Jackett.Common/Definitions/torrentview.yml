@@ -6,9 +6,10 @@
   type: public 
   encoding: UTF-8
   links: 
-    - https://torrentview3.net/
+    - https://torrentview4.net/
   legacylinks:
     - https://torrentview.net/
+    - https://torrentview3.net/
 
   caps:
     categorymappings:
