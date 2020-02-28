@@ -222,7 +222,9 @@ namespace Jackett.Common.Indexers
                 release.Comments = release.Guid;
                 release.Link = new Uri(SiteLink + row.QuerySelector("td:nth-child(3) > a").GetAttribute("href"));
                 var pubDateElement = row.QuerySelector("td:nth-child(2) > span");
-                pubDateElement.QuerySelector("a").Remove(); // remove snatchinfo links (added after completing a torrent)
+                // remove snatchinfo links (added after completing a torrent)
+                foreach (var element in pubDateElement.QuerySelectorAll("a"))
+                    element.Remove();
                 var pubDate = pubDateElement.TextContent.Trim().Replace("Added: ", "");
                 release.PublishDate = DateTime.Parse(pubDate).ToLocalTime();
                 release.Category = MapTrackerCatToNewznab(row.QuerySelector("td:nth-child(1) > a").GetAttribute("href").Split('=')[1]);
