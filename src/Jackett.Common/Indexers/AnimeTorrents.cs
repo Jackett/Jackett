@@ -134,8 +134,8 @@ namespace Jackett.Common.Indexers
                 foreach (var row in rows.Skip(1))
                 {
                     var release = new ReleaseInfo();
-                    var qTitleLink = row.QuerySelectorAll("td:eq(1) a:eq(0)").First();
-                    release.Title = qTitleLink.Text().Trim();
+                    var qTitleLink = row.QuerySelector("td:nth-of-type(2) a:nth-of-type(1)");
+                    release.Title = qTitleLink.TextContent.Trim();
 
                     // If we search an get no results, we still get a table just with no info.
                     if (string.IsNullOrWhiteSpace(release.Title))
@@ -146,10 +146,10 @@ namespace Jackett.Common.Indexers
                     release.Guid = new Uri(qTitleLink.GetAttribute("href"));
                     release.Comments = release.Guid;
 
-                    var dateString = row.QuerySelector("td:eq(4)").Text();
+                    var dateString = row.QuerySelector("td:nth-of-type(5)").TextContent;
                     release.PublishDate = DateTime.ParseExact(dateString, "dd MMM yy", CultureInfo.InvariantCulture);
 
-                    var qLink = row.QuerySelector("td:eq(2) a");
+                    var qLink = row.QuerySelector("td:nth-of-type(3) a");
                     if (qLink != null) // newbie users don't see DL links
                     {
                         release.Link = new Uri(qLink.GetAttribute("href"));
@@ -162,16 +162,16 @@ namespace Jackett.Common.Indexers
                         release.Link = release.Comments;
                     }
 
-                    var sizeStr = row.QuerySelector("td:eq(5)").Text();
+                    var sizeStr = row.QuerySelector("td:nth-of-type(6)").TextContent;
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
 
-                    var connections = row.QuerySelector("td:eq(7)").Text().Trim().Split("/".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                    var connections = row.QuerySelector("td:nth-of-type(8)").TextContent.Trim().Split("/".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
 
                     release.Seeders = ParseUtil.CoerceInt(connections[0].Trim());
                     release.Peers = ParseUtil.CoerceInt(connections[1].Trim()) + release.Seeders;
                     release.Grabs = ParseUtil.CoerceLong(connections[2].Trim());
 
-                    var rCat = row.QuerySelectorAll("td:eq(0) a").First().GetAttribute("href");
+                    var rCat = row.QuerySelector("td:nth-of-type(1) a").GetAttribute("href");
                     var rCatIdx = rCat.IndexOf("cat=");
                     if (rCatIdx > -1)
                     {
@@ -180,9 +180,9 @@ namespace Jackett.Common.Indexers
 
                     release.Category = MapTrackerCatToNewznab(rCat);
 
-                    if (row.QuerySelectorAll("img[alt=\"Gold Torrent\"]").Length >= 1)
+                    if (row.QuerySelector("img[alt=\"Gold Torrent\"]") != null)
                         release.DownloadVolumeFactor = 0;
-                    else if (row.QuerySelectorAll("img[alt=\"Silver Torrent\"]").Length >= 1)
+                    else if (row.QuerySelector("img[alt=\"Silver Torrent\"]") != null)
                         release.DownloadVolumeFactor = 0.5;
                     else
                         release.DownloadVolumeFactor = 1;
@@ -198,7 +198,7 @@ namespace Jackett.Common.Indexers
                     }
 
                     qTitleLink.Remove();
-                    release.Description = row.QuerySelector("td:eq(1)").Text();
+                    release.Description = row.QuerySelector("td:nth-of-type(2)").TextContent;
 
                     releases.Add(release);
                 }
