@@ -110,9 +110,9 @@ namespace Jackett.Common.Indexers
                 var dom = parser.ParseDocument(response.Content);
                 var messageEl = dom.QuerySelectorAll("table.detail td.text").Last();
                 foreach (var child in messageEl.QuerySelectorAll("a"))
-                    messageEl.RemoveChild(child);
+                    child.Remove();
                 foreach (var child in messageEl.QuerySelectorAll("style"))
-                    messageEl.RemoveChild(child);
+                    child.Remove();
                 var errorMessage = messageEl.TextContent.Trim();
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
@@ -142,9 +142,7 @@ namespace Jackett.Common.Indexers
                 var parser = new HtmlParser();
                 var dom = parser.ParseDocument(results.Content);
                 foreach (var child in dom.QuerySelectorAll("#needseed"))
-                {
-                    dom.RemoveChild(child);
-                }
+                    child.Remove();
                 foreach (var table in dom.QuerySelectorAll("table[align=center] + br + table > tbody"))
                 {
                     var rows = table.Children;
@@ -153,7 +151,7 @@ namespace Jackett.Common.Indexers
                         var release = new ReleaseInfo();
 
                         
-                        var qLink = row.Children[2].QuerySelectorAll("a").First();
+                        var qLink = row.Children[2].QuerySelector("a");
 
                         release.MinimumRatio = 1;
                         release.MinimumSeedTime = 172800; // 48 hours
