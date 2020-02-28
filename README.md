@@ -146,6 +146,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * DXP (Deaf Experts)
  * EniaHD
  * Erzsebet
+ * ExKinoRay
  * ExtremlymTorrents
  * FilmsClub
  * Gay-Torrents.net
