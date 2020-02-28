@@ -146,32 +146,32 @@ namespace Jackett.Common.Indexers
                         release.MinimumRatio = 1;
                         release.MinimumSeedTime = 172800; // 48 hours
 
-                        var catStr = row.Children.ElementAt(0).FirstElementChild.GetAttribute("href").Split(new char[] { '[', ']' })[1];
+                        var catStr = row.Children[0].FirstElementChild.GetAttribute("href").Split(new char[] { '[', ']' })[1];
                         release.Category = MapTrackerCatToNewznab(catStr);
 
-                        var qLink = row.Children.ElementAt(1).QuerySelectorAll("a")[0];
+                        var qLink = row.Children[1].QuerySelector("a");
                         var linkStr = qLink.GetAttribute("href");
                         release.Comments = new Uri(BaseUrl + "/" + linkStr);
                         release.Guid = release.Comments;
 
-                        var qDownload = row.Children.ElementAt(1).QuerySelectorAll("a[title='Download']")[0];
+                        var qDownload = row.Children[1].QuerySelector("a[title='Download']");
                         release.Link = new Uri(BaseUrl + "/" + qDownload.GetAttribute("href"));
 
-                        var dateStr = row.Children.ElementAt(3).Text().Trim().Replace(" and", "");
+                        var dateStr = row.Children[3].TextContent.Trim().Replace(" and", "");
                         release.PublishDate = DateTimeUtil.FromTimeAgo(dateStr);
 
-                        var sizeStr = row.Children.ElementAt(4).Text();
+                        var sizeStr = row.Children[4].TextContent;
                         release.Size = ReleaseInfo.GetBytes(sizeStr);
 
-                        release.Files = ParseUtil.CoerceInt(row.Children.ElementAt(2).Text().Trim());
-                        release.Grabs = ParseUtil.CoerceInt(row.Children.ElementAt(6).Text().Trim());
-                        release.Seeders = ParseUtil.CoerceInt(row.Children.ElementAt(7).Text().Trim());
-                        release.Peers = ParseUtil.CoerceInt(row.Children.ElementAt(8).Text().Trim()) + release.Seeders;
+                        release.Files = ParseUtil.CoerceInt(row.Children[2].TextContent.Trim());
+                        release.Grabs = ParseUtil.CoerceInt(row.Children[6].TextContent.Trim());
+                        release.Seeders = ParseUtil.CoerceInt(row.Children[7].TextContent.Trim());
+                        release.Peers = ParseUtil.CoerceInt(row.Children[8].TextContent.Trim()) + release.Seeders;
 
-                        var grabs = row.QuerySelector("td:nth-child(6)").Text();
+                        var grabs = row.QuerySelector("td:nth-child(6)").TextContent;
                         release.Grabs = ParseUtil.CoerceInt(grabs);
 
-                        if (row.QuerySelectorAll("strong:contains(\"Freeleech!\")").Length >= 1)
+                        if (row.QuerySelector("strong:contains(\"Freeleech!\")") != null)
                             release.DownloadVolumeFactor = 0;
                         else
                             release.DownloadVolumeFactor = 1;
@@ -181,7 +181,7 @@ namespace Jackett.Common.Indexers
                         var title = row.QuerySelector("td:nth-child(2)");
                         title.QuerySelector("span, strong, div, br").Remove();
 
-                        release.Title = ParseUtil.NormalizeMultiSpaces(title.Text().Replace(" - ]", "]"));
+                        release.Title = ParseUtil.NormalizeMultiSpaces(title.TextContent.Replace(" - ]", "]"));
 
                         if (catStr == "10") //change "Season #" to "S##" for TV shows
                             release.Title = Regex.Replace(release.Title, @"Season (\d+)",
