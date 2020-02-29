@@ -6,7 +6,7 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using CsQuery;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -19,7 +19,7 @@ namespace Jackett.Common.Indexers
 {
     public class TorrentLeech : BaseWebIndexer
     {
-        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
+        public override string[] LegacySiteLinks { get; protected set; } = {
             "https://v4.torrentleech.org/",
         };
 
@@ -103,13 +103,14 @@ namespace Jackett.Common.Indexers
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
             var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
-            CQ cq = loginPage.Content;
-            var captcha = cq.Find(".g-recaptcha");
-            if (captcha.Any())
+            var parser = new HtmlParser();
+            var dom = parser.ParseDocument(loginPage.Content);
+            var captcha = dom.QuerySelector(".g-recaptcha");
+            if (captcha != null)
             {
                 var result = configData;
                 result.CookieHeader.Value = loginPage.Cookies;
-                result.Captcha.SiteKey = captcha.Attr("data-sitekey");
+                result.Captcha.SiteKey = captcha.GetAttribute("data-sitekey");
                 result.Captcha.Version = "2";
                 return result;
             }
@@ -128,11 +129,6 @@ namespace Jackett.Common.Indexers
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-            var pairs = new Dictionary<string, string> {
-                { "username", configData.Username.Value },
-                { "password", configData.Password.Value },
-                { "g-recaptcha-response", configData.Captcha.Value }
-            };
 
             if (!string.IsNullOrWhiteSpace(configData.Captcha.Cookie))
             {
@@ -140,10 +136,8 @@ namespace Jackett.Common.Indexers
                 try
                 {
                     var results = await PerformQuery(new TorznabQuery());
-                    if (results.Count() == 0)
-                    {
+                    if (!results.Any())
                         throw new Exception("Your cookie did not work");
-                    }
 
                     IsConfigured = true;
                     SaveConfig();
@@ -170,8 +164,9 @@ namespace Jackett.Common.Indexers
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl);
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("/user/account/logout"), () =>
             {
-                CQ dom = result.Content;
-                var errorMessage = dom["p.text-danger:contains(\"Error:\")"].Text().Trim();
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(result.Content);
+                var errorMessage = dom.QuerySelector("p.text-danger:contains(\"Error:\")").TextContent.Trim();
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
         }
