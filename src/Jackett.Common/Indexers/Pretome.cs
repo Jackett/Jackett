@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using CsQuery;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -279,45 +279,45 @@ namespace Jackett.Common.Indexers
 
             try
             {
-                CQ dom = response.Content;
-                var rows = dom["table > tbody > tr.browse"];
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(response.Content);
+                var rows = dom.QuerySelectorAll("table > tbody > tr.browse");
                 foreach (var row in rows)
                 {
-                    var qRow = row.Cq();
                     var release = new ReleaseInfo();
 
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800; // 48 hours
 
-                    var qLink = row.ChildElements.ElementAt(1).Cq().Find("a").First();
-                    release.Title = qLink.Attr("title");
-                    if (qLink.Find("span").Count() == 1 && release.Title.StartsWith("NEW! |"))
+                    var qLink = row.Children[1].QuerySelector("a");
+                    release.Title = qLink.GetAttribute("title");
+                    if (qLink.QuerySelectorAll("span").Count() == 1 && release.Title.StartsWith("NEW! |"))
                     {
                         release.Title = release.Title.Substring(6).Trim();
                     }
 
-                    release.Comments = new Uri(SiteLink + qLink.Attr("href"));
+                    release.Comments = new Uri(SiteLink + qLink.GetAttribute("href"));
                     release.Guid = release.Comments;
 
-                    var qDownload = row.ChildElements.ElementAt(2).Cq().Find("a").First();
-                    release.Link = new Uri(SiteLink + qDownload.Attr("href"));
+                    var qDownload = row.Children[2].QuerySelector("a");
+                    release.Link = new Uri(SiteLink + qDownload.GetAttribute("href"));
 
-                    var dateStr = Regex.Replace(row.ChildElements.ElementAt(5).InnerHTML, @"\<br[\s]{0,1}[\/]{0,1}\>", " ");
+                    var dateStr = Regex.Replace(row.Children[5].InnerHtml, @"\<br[\s]{0,1}[\/]{0,1}\>", " ");
                     release.PublishDate = DateTimeUtil.FromTimeAgo(dateStr);
 
-                    var sizeStr = row.ChildElements.ElementAt(7).Cq().Text();
+                    var sizeStr = row.Children[7].TextContent;
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
 
-                    release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(9).InnerText);
-                    release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(10).InnerText) + release.Seeders;
+                    release.Seeders = ParseUtil.CoerceInt(row.Children[9].TextContent);
+                    release.Peers = ParseUtil.CoerceInt(row.Children[10].TextContent) + release.Seeders;
 
-                    var cat = row.ChildElements.ElementAt(0).ChildElements.ElementAt(0).GetAttribute("href").Replace("browse.php?", string.Empty);
+                    var cat = row.FirstElementChild.FirstElementChild.GetAttribute("href").Replace("browse.php?", string.Empty);
                     release.Category = MapTrackerCatToNewznab(cat);
 
-                    var files = qRow.Find("td:nth-child(4)").Text();
+                    var files = row.QuerySelector("td:nth-child(4)").TextContent;
                     release.Files = ParseUtil.CoerceInt(files);
 
-                    var grabs = qRow.Find("td:nth-child(9)").Text();
+                    var grabs = row.QuerySelector("td:nth-child(9)").TextContent;
                     release.Grabs = ParseUtil.CoerceInt(grabs);
 
                     release.DownloadVolumeFactor = 0; // ratioless
