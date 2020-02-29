@@ -82,9 +82,9 @@ namespace Jackett.Common.Indexers
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, null, LoginUrl);
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains(LogoutUrl), () =>
             {
-                var parser = new HtmlParser(); var dom = parser.ParseDocument(result.Content);
-                var messageEl = dom.QuerySelector(".error");
-                var errorMessage = messageEl.TextContent.Trim();
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(result.Content);
+                var errorMessage = dom.QuerySelector(".error").TextContent.Trim();
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
         }
