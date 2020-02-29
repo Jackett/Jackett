@@ -5,7 +5,8 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using CsQuery;
+using AngleSharp.Dom;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -101,7 +102,6 @@ namespace Jackett.Common.Indexers
             };
 
             var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl);
-            CQ resultDom = response.Content;
 
             await ConfigureIfOK(response.Cookies, response.Content.Contains("You have successfully logged in"), () =>
             {
@@ -133,42 +133,39 @@ namespace Jackett.Common.Indexers
 
             try
             {
-                CQ dom = results.Content;
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(results.Content);
 
-                var rows = dom["#sortabletable tr:has(a[href*=\"details.php?id=\"])"];
+                var rows = dom.QuerySelectorAll("#sortabletable tr:has(a[href*=\"details.php?id=\"])");
                 foreach (var row in rows)
                 {
                     var release = new ReleaseInfo();
-                    var qRow = row.Cq();
 
-                    var qDetails = qRow.Find("div > a[href*=\"details.php?id=\"]"); // details link, release name get's shortened if it's to long
-                    var qTitle = qRow.Find(".tooltip-content > div:eq(0)"); // use Title from tooltip
-                    if (!qTitle.Any()) // fallback to Details link if there's no tooltip
-                    {
-                        qTitle = qDetails;
-                    }
-                    release.Title = qTitle.Text();
+                    var qDetails = row.QuerySelector("div > a[href*=\"details.php?id=\"]"); // details link, release name get's shortened if it's to long
+                    // use Title from tooltip or fallback to Details link if there's no tooltip
+                    var qTitle = row.QuerySelector(".tooltip-content > div:nth-of-type(1)") ?? qDetails;
+                    release.Title = qTitle.TextContent;
 
-                    var qDesciption = qRow.Find(".tooltip-content > div");
+                    var qDesciption = row.QuerySelectorAll(".tooltip-content > div");
                     if (qDesciption.Any())
-                        release.Description = qDesciption.Get(1).InnerText.Trim();
+                        release.Description = qDesciption[1].TextContent.Trim();
 
-                    var qLink = row.Cq().Find("a[href*=\"download.php\"]");
-                    release.Link = new Uri(qLink.Attr("href"));
+                    var qLink = row.QuerySelector("a[href*=\"download.php\"]");
+                    release.Link = new Uri(qLink.GetAttribute("href"));
                     release.Guid = release.Link;
-                    release.Comments = new Uri(qDetails.Attr("href"));
+                    release.Comments = new Uri(qDetails.GetAttribute("href"));
 
                     // 07-22-2015 11:08 AM
-                    var dateString = qRow.Find("td:eq(1) div").Last().Get(0).LastChild.ToString().Trim();
+                    var dateString = row.QuerySelectorAll("td:nth-of-type(2) div").Last().FirstElementChild.LastChild.TextContent.Trim();
                     release.PublishDate = DateTime.ParseExact(dateString, "MM-dd-yyyy hh:mm tt", CultureInfo.InvariantCulture);
 
-                    var sizeStr = qRow.Find("td:eq(4)").Text().Trim();
+                    var sizeStr = row.QuerySelector("td:nth-of-type(5)").TextContent.Trim();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
 
-                    release.Seeders = ParseUtil.CoerceInt(qRow.Find("td:eq(6)").Text().Trim());
-                    release.Peers = ParseUtil.CoerceInt(qRow.Find("td:eq(7)").Text().Trim()) + release.Seeders;
+                    release.Seeders = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(7)").TextContent.Trim());
+                    release.Peers = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(8)").TextContent.Trim()) + release.Seeders;
 
-                    var catLink = row.Cq().Find("td:eq(0) a").First().Attr("href");
+                    var catLink = row.QuerySelector("td:nth-of-type(1) a").GetAttribute("href");
                     var catSplit = catLink.IndexOf("category=");
                     if (catSplit > -1)
                     {
@@ -177,18 +174,18 @@ namespace Jackett.Common.Indexers
 
                     release.Category = MapTrackerCatToNewznab(catLink);
 
-                    var grabs = qRow.Find("td:nth-child(6)").Text();
+                    var grabs = row.QuerySelector("td:nth-child(6)").TextContent;
                     release.Grabs = ParseUtil.CoerceInt(grabs);
 
-                    if (qRow.Find("img[title^=\"Free Torrent\"]").Length >= 1)
+                    if (row.QuerySelector("img[title^=\"Free Torrent\"]") != null)
                         release.DownloadVolumeFactor = 0;
-                    else if (qRow.Find("img[title^=\"Silver Torrent\"]").Length >= 1)
+                    else if (row.QuerySelector("img[title^=\"Silver Torrent\"]") != null)
                         release.DownloadVolumeFactor = 0.5;
                     else
                         release.DownloadVolumeFactor = 1;
 
 
-                    if (qRow.Find("img[title^=\"x2 Torrent\"]").Length >= 1)
+                    if (row.QuerySelector("img[title^=\"x2 Torrent\"]") != null)
                         release.UploadVolumeFactor = 2;
                     else
                         release.UploadVolumeFactor = 1;
