@@ -252,12 +252,12 @@ namespace Jackett.Common.Indexers
 
                     release.Imdb = ParseUtil.GetImdbID(torrent.imdbID.ToString());
 
-                    release.DownloadVolumeFactor = 1;
                     release.UploadVolumeFactor = 1;
 
-                    // freeleech #6579 #6624
-
-                    release.DownloadVolumeFactor = ParseUtil.CoerceInt(torrent.download_multiplier.ToString());
+                    // freeleech #6579 #6624 #7367
+                    release.DownloadVolumeFactor = string.IsNullOrEmpty(torrent.download_multiplier.ToString()) ?
+                        1 :
+                        ParseUtil.CoerceInt(torrent.download_multiplier.ToString());
 
                     releases.Add(release);
                 }
