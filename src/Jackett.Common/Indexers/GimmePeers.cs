@@ -5,7 +5,8 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CsQuery;
+using AngleSharp.Dom;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -90,9 +91,10 @@ namespace Jackett.Common.Indexers
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, SiteLink, SiteLink);
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
             {
-                CQ dom = result.Content;
-                var messageEl = dom["body > div"].First();
-                var errorMessage = messageEl.Text().Trim();
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(result.Content);
+                var messageEl = dom.QuerySelector("body > div");
+                var errorMessage = messageEl.TextContent.Trim();
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
             return IndexerConfigurationStatus.RequiresTesting;
@@ -141,17 +143,17 @@ namespace Jackett.Common.Indexers
             var results = response.Content;
             try
             {
-                CQ dom = results;
+                var parser = new HtmlParser(); var dom = parser.ParseDocument(results);
 
-                var rows = dom[".browsetable:last tr"]; //the class for the table changed
+                var rows = dom.QuerySelectorAll(".browsetable:last tr"); //the class for the table changed
                 foreach (var row in rows.Skip(1))
                 {
                     var release = new ReleaseInfo();
 
-                    var link = row.Cq().Find("td:eq(1) a:eq(0)").First();
-                    release.Guid = new Uri(SiteLink + link.Attr("href"));
+                    var link = row.QuerySelector("td:nth-of-type(2) a:nth-of-type(1)");
+                    release.Guid = new Uri(SiteLink + link.GetAttribute("href"));
                     release.Comments = release.Guid;
-                    release.Title = link.Text().Trim();
+                    release.Title = link.TextContent.Trim();
                     release.Description = release.Title;
 
                     // If we search an get no results, we still get a table just with no info.
@@ -161,26 +163,26 @@ namespace Jackett.Common.Indexers
                     }
 
                     // Check if the release has been assigned a category
-                    if (row.Cq().Find("td:eq(0) a").Length > 0)
+                    if (row.QuerySelector("td:nth-of-type(1) a") != null)
                     {
-                        var cat = row.Cq().Find("td:eq(0) a").First().Attr("href").Substring(15);
+                        var cat = row.QuerySelector("td:nth-of-type(1) a").GetAttribute("href").Substring(15);
                         release.Category = MapTrackerCatToNewznab(cat);
                     }
 
-                    var qLink = row.Cq().Find("td:eq(2) a").First();
-                    release.Link = new Uri(SiteLink + qLink.Attr("href"));
+                    var qLink = row.QuerySelector("td:nth-of-type(3) a");
+                    release.Link = new Uri(SiteLink + qLink.GetAttribute("href"));
 
-                    var added = row.Cq().Find("td:eq(6)").First().Text().Trim(); //column changed from 7 to 6
+                    var added = row.QuerySelector("td:nth-of-type(7)").TextContent.Trim(); //column changed from 7 to 6
                     var date = added.Substring(0, 10);
                     var time = added.Substring(11, 8); //date layout wasn't quite right
                     var dateTime = date + time;
                     release.PublishDate = DateTime.ParseExact(dateTime, "yyyy-MM-ddHH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
 
-                    var sizeStr = row.Cq().Find("td:eq(5)").First().Text().Trim(); //size column moved from 8 to 5
+                    var sizeStr = row.QuerySelector("td:nth-of-type(6)").TextContent.Trim(); //size column moved from 8 to 5
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
 
-                    release.Seeders = ParseUtil.CoerceInt(row.Cq().Find("td:eq(10)").First().Text().Trim());
-                    release.Peers = ParseUtil.CoerceInt(row.Cq().Find("td:eq(11)").First().Text().Trim()) + release.Seeders;
+                    release.Seeders = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(11)").TextContent.Trim());
+                    release.Peers = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(12)").TextContent.Trim()) + release.Seeders;
 
                     releases.Add(release);
                 }
