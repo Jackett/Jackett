@@ -143,7 +143,8 @@ namespace Jackett.Common.Indexers
             var results = response.Content;
             try
             {
-                var parser = new HtmlParser(); var dom = parser.ParseDocument(results);
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(results);
 
                 var rows = dom.QuerySelectorAll(".browsetable:last tr"); //the class for the table changed
                 foreach (var row in rows.Skip(1))
@@ -163,9 +164,10 @@ namespace Jackett.Common.Indexers
                     }
 
                     // Check if the release has been assigned a category
-                    if (row.QuerySelector("td:nth-of-type(1) a") != null)
+                    var category = row.QuerySelector("td:nth-of-type(1) a");
+                    if (category != null)
                     {
-                        var cat = row.QuerySelector("td:nth-of-type(1) a").GetAttribute("href").Substring(15);
+                        var cat = category.GetAttribute("href").Substring(15);
                         release.Category = MapTrackerCatToNewznab(cat);
                     }
 
