@@ -681,14 +681,14 @@ namespace Jackett.Common.Indexers
             }
 
             // template 7 contains a reference to template 2 (logout button), so check for oldV2 first
-            if (oldV2.Any(dom.QuerySelector("body").InnerHtml.Contains))
+            if (oldV2.Any(dom.Body.InnerHtml.Contains))
             {
                 // Return all occurencis of torrents found
                 // $('#base_content > table.mainouter > tbody > tr > td.outer > div.article > table > tbody > tr:not(:first)')
                 return dom.QuerySelectorAll("# base_content > table.mainouter > tbody > tr > td.outer > div.article > table > tbody > tr:not(:first)");
             }
 
-            if (defaultTheme.Any(dom.QuerySelector("body").InnerHtml.Contains))
+            if (defaultTheme.Any(dom.Body.InnerHtml.Contains))
             {
                 // Return all occurencis of torrents found
                 // $('#base_content2 > div.article > table > tbody:not(:first) > tr')
