@@ -173,7 +173,7 @@ namespace Jackett.Common.Indexers
                 // Parse error page
                 var parser = new HtmlParser();
                 var dom = parser.ParseDocument(response.Content);
-                var message = dom.QuerySelector(".warning").TextContent.Split('.').Reverse().Skip(1).First();
+                var message = dom.QuerySelector(".warning").TextContent.Split('.')[^2];
 
                 // Try left
                 var left = dom.QuerySelector(".info").TextContent.Trim();
