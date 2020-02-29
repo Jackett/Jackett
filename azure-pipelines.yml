@@ -367,3 +367,24 @@ stages:
           isDraft: true
           addChangeLog: true
           compareWith: lastNonDraftRelease
+
+      - task: PowerShell@2
+        displayName: Ensure all artifacts are uploaded to Github
+        inputs:
+          targetType: inline
+          script: |
+            $json = Invoke-WebRequest 'https://dev.azure.com/jackett-project/jackett/_apis/build/builds/$(Build.BuildId)/logs?api-version=5.0' | ConvertFrom-Json
+            $lastTwoLogUrls = $json.value[-1..-2].url
+            foreach($logUrl in $lastTwoLogUrls)
+            {
+              Write-Host $logUrl
+              $logText = Invoke-WebRequest $logUrl
+              if ($logText -like '*: GitHub Release*') 
+              {
+                $successCount = (Select-String "Uploaded file successfully:" -InputObject $logText -AllMatches).Matches.Count
+                $failureCount = (Select-String "Duplicate asset found:" -InputObject $logText -AllMatches).Matches.Count
+                Write-Host "Success count is: $successCount and failure count is: $failureCount"
+                if (($successCount -ne 7) -or ($failureCount -ne 0)) { Write-Host "##vso[task.complete result=Failed;]DONE" } 
+              }
+            }
+
