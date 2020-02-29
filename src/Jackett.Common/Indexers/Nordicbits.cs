@@ -7,7 +7,9 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using CsQuery;
+using AngleSharp.Dom;
+using AngleSharp.Html.Dom;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Helpers;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
@@ -37,7 +39,7 @@ namespace Jackett.Common.Indexers
         private static string Directory => Path.Combine(Path.GetTempPath(), "Jackett", MethodBase.GetCurrentMethod().DeclaringType?.Name);
 
         private readonly Dictionary<string, string> _emulatedBrowserHeaders = new Dictionary<string, string>();
-        private CQ _fDom;
+
         private ConfigurationDataNordicbits ConfigData => (ConfigurationDataNordicbits)configData;
 
         public Nordicbits(IIndexerConfigurationService configService, Utils.Clients.WebClient w, Logger l, IProtectionService ps)
@@ -257,7 +259,6 @@ namespace Jackett.Common.Indexers
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var torrentRowList = new List<CQ>();
             var exactSearchTerm = query.GetQueryString();
             var searchUrl = SearchUrl;
 
@@ -293,38 +294,29 @@ namespace Jackett.Common.Indexers
 
                 // Getting results & Store content
                 var response = await RequestStringWithCookiesAndRetry(request, ConfigData.CookieHeader.Value);
-                _fDom = response.Content;
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(response.Content);
 
                 try
                 {
-                    var firstPageRows = FindTorrentRows();
-
-                    // Add them to torrents list
-                    torrentRowList.AddRange(firstPageRows.Select(fRow => fRow.Cq()));
+                    var firstPageRows = FindTorrentRows(dom);
 
                     // If pagination available
                     int nbResults;
                     int pageLinkCount;
-                    nbResults = 1;
                     pageLinkCount = 1;
 
                     // Check if we have a minimum of one result
-                    if (firstPageRows.Length > 1)
+                    if (firstPageRows != null && firstPageRows.Length > 1)
                     {
                         // Retrieve total count on our alone page
                         nbResults = firstPageRows.Count();
                     }
                     else
                     {
-                        // Check if no result
-                        if (torrentRowList.Count == 0)
-                        {
-                            // No results found
-                            Output("\nNo result found for your query, please try another search term or change the theme you're currently using on the site as this is an unsupported solution...\n", "info");
-
-                            // No result found for this query
-                            break;
-                        }
+                        // No result found for this query
+                        Output("\nNo result found for your query, please try another search term or change the theme you're currently using on the site as this is an unsupported solution...\n", "info");
+                        break;
                     }
 
                     Output("\nFound " + nbResults + " result(s) (+/- " + firstPageRows.Length + ") in " + pageLinkCount + " page(s) for this query !");
@@ -332,47 +324,47 @@ namespace Jackett.Common.Indexers
 
                     // Loop on results
 
-                    foreach (var tRow in torrentRowList.Skip(1).Take(torrentRowList.Count - 2))
+                    foreach (var row in firstPageRows.Skip(1).Take(firstPageRows.Length - 2))
                     {
                         Output("Torrent #" + (releases.Count + 1));
 
                         // ID
-                        var idOrig = tRow.Find("td:eq(1) > a:eq(0)").Attr("href").Split('=')[1];
+                        var idOrig = row.QuerySelector("td:nth-of-type(2) > a:nth-of-type(1)").GetAttribute("href").Split('=')[1];
                         var id = idOrig.Substring(0, idOrig.Length - 4);
                         Output("ID: " + id);
 
                         // Release Name
-                        var name = tRow.Find("td:eq(1) > a:eq(0)").Text();
+                        var name = row.QuerySelector("td:nth-of-type(2) > a:nth-of-type(1)").TextContent;
 
                         // Category
-                        var categoryID = tRow.Find("td:eq(0) > a:eq(0)").Attr("href").Split('?').Last();
-                        var newznab = MapTrackerCatToNewznab(categoryID);
-                        Output("Category: " + (newznab.Count > 0 ? newznab.First().ToString() : "unknown category") + " (" + categoryID + ")");
+                        var categoryId = row.QuerySelector("td:nth-of-type(1) > a:nth-of-type(1)").GetAttribute("href").Split('?').Last();
+                        var newznab = MapTrackerCatToNewznab(categoryId);
+                        Output("Category: " + (newznab.Count > 0 ? newznab.First().ToString() : "unknown category") + " (" + categoryId + ")");
 
                         // Seeders
-                        var seeders = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(9)").Text(), @"\d+").Value);
+                        var seeders = ParseUtil.CoerceInt(Regex.Match(row.QuerySelector("td:nth-of-type(10)").TextContent, @"\d+").Value);
                         Output("Seeders: " + seeders);
 
                         // Leechers
-                        var leechers = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(10)").Text(), @"\d+").Value);
+                        var leechers = ParseUtil.CoerceInt(Regex.Match(row.QuerySelector("td:nth-of-type(11)").TextContent, @"\d+").Value);
                         Output("Leechers: " + leechers);
 
                         // Files
                         var files = 1;
-                        files = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(4)").Text(), @"\d+").Value);
+                        files = ParseUtil.CoerceInt(Regex.Match(row.QuerySelector("td:nth-of-type(5)").TextContent, @"\d+").Value);
                         Output("Files: " + files);
 
                         // Completed
-                        var completed = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(8)").Text(), @"\d+").Value);
+                        var completed = ParseUtil.CoerceInt(Regex.Match(row.QuerySelector("td:nth-of-type(9)").TextContent, @"\d+").Value);
                         Output("Completed: " + completed);
 
                         // Size
-                        var humanSize = tRow.Find("td:eq(7)").Text().ToLowerInvariant();
+                        var humanSize = row.QuerySelector("td:nth-of-type(8)").TextContent.ToLowerInvariant();
                         var size = ReleaseInfo.GetBytes(humanSize);
                         Output("Size: " + humanSize + " (" + size + " bytes)");
 
                         // Publish DateToString
-                        var dateTimeOrig = tRow.Find("td:eq(6)").Text();
+                        var dateTimeOrig = row.QuerySelector("td:nth-of-type(7)").TextContent;
                         var datestr = Regex.Replace(dateTimeOrig, @"<[^>]+>|&nbsp;", "").Trim();
                         datestr = Regex.Replace(datestr, "Today", DateTime.Now.ToString("MMM dd yyyy"), RegexOptions.IgnoreCase);
                         datestr = Regex.Replace(datestr, "Yesterday", DateTime.Now.Date.AddDays(-1).ToString("MMM dd yyyy"), RegexOptions.IgnoreCase);
@@ -388,7 +380,7 @@ namespace Jackett.Common.Indexers
                         Output("Comments Link: " + commentsLink.AbsoluteUri);
 
                         // Torrent Download URL
-                        var passkey = tRow.Find("td:eq(2) > a:eq(0)").Attr("href");
+                        var passkey = row.QuerySelector("td:nth-of-type(3) > a:nth-of-type(1)").GetAttribute("href");
                         var key = Regex.Match(passkey, "(?<=torrent_pass\\=)([a-zA-z0-9]*)");
                         var downloadLink = new Uri(TorrentDownloadUrl.Replace("{id}", id.ToString()).Replace("{passkey}", key.ToString()));
                         Output("Download Link: " + downloadLink.AbsoluteUri);
@@ -412,14 +404,14 @@ namespace Jackett.Common.Indexers
                         };
 
                         // IMDB
-                        var imdbLink = tRow.Find("a[href*=\"imdb.com/title/tt\"]").First().Attr("href");
+                        var imdbLink = row.QuerySelector("a[href*=\"imdb.com/title/tt\"]").GetAttribute("href");
                         release.Imdb = ParseUtil.GetLongFromString(imdbLink);
 
-                        if (tRow.Find("img[title=\"Free Torrent\"]").Length >= 1)
+                        if (row.QuerySelector("img[title=\"Free Torrent\"]") != null)
                             release.DownloadVolumeFactor = 0;
-                        else if (tRow.Find("img[title=\"Halfleech\"]").Length >= 1)
+                        else if (row.QuerySelector("img[title=\"Halfleech\"]") != null)
                             release.DownloadVolumeFactor = 0.5;
-                        else if (tRow.Find("img[title=\"90% Freeleech\"]").Length >= 1)
+                        else if (row.QuerySelector("img[title=\"90% Freeleech\"]") != null)
                             release.DownloadVolumeFactor = 0.1;
                         else
                             release.DownloadVolumeFactor = 1;
@@ -674,35 +666,35 @@ namespace Jackett.Common.Indexers
         /// <summary>
         /// Find torrent rows in search pages
         /// </summary>
-        /// <returns>JQuery Object</returns>
-        private CQ FindTorrentRows()
+        /// <returns>List of rows</returns>
+        private IHtmlCollection<IElement> FindTorrentRows(IHtmlDocument dom)
         {
             var defaultTheme = new[] { "/templates/1/", "/templates/2/", "/templates/3/", "/templates/4/", "/templates/5/", "/templates/6/", "/templates/11/", "/templates/12/" };
             var oldV2 = new[] { "/templates/7/", "/templates/8/", "/templates/9/", "/templates/10/" };
             var xmas = new[] { "/templates/14/" };
 
-            if (xmas.Any(_fDom.Document.Body.InnerHTML.Contains))
+            if (xmas.Any(dom.QuerySelector("body").InnerHtml.Contains))
             {
                 // Return all occurencis of torrents found
                 // $('#base_around > table.mainouter > tbody > tr > td.outer > div.article > table  > tbody:not(:first) > tr')
-                return _fDom["#base_around > table.mainouter > tbody > tr > td.outer > div.article > table  > tbody:not(:first) > tr"];
+                return dom.QuerySelectorAll("#base_around > table.mainouter > tbody > tr > td.outer > div.article > table  > tbody:not(:first) > tr");
             }
 
             // template 7 contains a reference to template 2 (logout button), so check for oldV2 first
-            if (oldV2.Any(_fDom.Document.Body.InnerHTML.Contains))
+            if (oldV2.Any(dom.QuerySelector("body").InnerHtml.Contains))
             {
                 // Return all occurencis of torrents found
                 // $('#base_content > table.mainouter > tbody > tr > td.outer > div.article > table > tbody > tr:not(:first)')
-                return _fDom["# base_content > table.mainouter > tbody > tr > td.outer > div.article > table > tbody > tr:not(:first)"];
+                return dom.QuerySelectorAll("# base_content > table.mainouter > tbody > tr > td.outer > div.article > table > tbody > tr:not(:first)");
             }
 
-            if (defaultTheme.Any(_fDom.Document.Body.InnerHTML.Contains))
+            if (defaultTheme.Any(dom.QuerySelector("body").InnerHtml.Contains))
             {
                 // Return all occurencis of torrents found
                 // $('#base_content2 > div.article > table > tbody:not(:first) > tr')
-                return _fDom["# base_content2 > div.article > table > tbody:not(:first) > tr"];
+                return dom.QuerySelectorAll("# base_content2 > div.article > table > tbody:not(:first) > tr");
             }
-            return _fDom;
+            return null;
         }
 
         /// <summary>
