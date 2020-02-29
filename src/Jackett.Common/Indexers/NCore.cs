@@ -123,7 +123,8 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
             try
             {
-                var parser = new HtmlParser(); var dom = parser.ParseDocument(results.Content);
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(results.Content);
 
                 ReleaseInfo release;
                 var rows = dom.QuerySelector(".box_torrent_all").QuerySelectorAll(".box_torrent");
@@ -167,7 +168,7 @@ namespace Jackett.Common.Indexers
                             release.BannerUrl = new Uri(bannerurl);
                         }
                         release.PublishDate = DateTime.Parse(row.QuerySelector(".box_feltoltve2").InnerHtml.Replace("<br />", " "), CultureInfo.InvariantCulture);
-                        var sizeSplit = row.QuerySelectorAll(".box_meret2")[0].TextContent.Split(' ');
+                        var sizeSplit = row.QuerySelector(".box_meret2").TextContent.Split(' ');
                         release.Size = ReleaseInfo.GetBytes(sizeSplit[1].ToLower(), ParseUtil.CoerceFloat(sizeSplit[0]));
                         var catlink = row.QuerySelector("a:has(img[class='categ_link'])").GetAttribute("href");
                         var cat = ParseUtil.GetArgumentFromQueryString(catlink, "tipus");
