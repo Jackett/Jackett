@@ -4,7 +4,8 @@ using System.Collections.Specialized;
 using System.Globalization;
 using System.Text;
 using System.Threading.Tasks;
-using CsQuery;
+using AngleSharp.Dom;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -78,8 +79,9 @@ namespace Jackett.Common.Indexers
 
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Cookies.Contains("pass=") && !result.Cookies.Contains("deleted"), () =>
             {
-                CQ dom = result.Content;
-                var errorMessage = dom["div.myFrame-content"].Html();
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(result.Content);
+                var errorMessage = dom.QuerySelector("div.myFrame-content").InnerHtml;
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
             return IndexerConfigurationStatus.RequiresTesting;
@@ -126,8 +128,9 @@ namespace Jackett.Common.Indexers
             var results = response.Content;
             try
             {
-                CQ dom = results;
-                var rows = dom["table.ttable_headinner > tbody > tr.t-row"];
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(results);
+                var rows = dom.QuerySelectorAll("table.ttable_headinner > tbody > tr.t-row");
 
                 foreach (var row in rows)
                 {
@@ -135,45 +138,43 @@ namespace Jackett.Common.Indexers
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 90 * 60;
 
-                    var qRow = row.Cq();
-
-                    var qDetailsLink = qRow.Find("a[href^=torrents-details.php?id=]").First();
-                    var qDetailsTitle = qRow.Find("td:has(a[href^=\"torrents-details.php?id=\"]) b"); // #7100
-                    release.Title = qDetailsTitle.Text();
+                    var qDetailsLink = row.QuerySelector("a[href^=torrents-details.php?id=]");
+                    var qDetailsTitle = row.QuerySelector("td:has(a[href^=\"torrents-details.php?id=\"]) b"); // #7100
+                    release.Title = qDetailsTitle.TextContent;
 
                     if (!query.MatchQueryStringAND(release.Title))
                         continue;
 
-                    var qCatLink = qRow.Find("a[href^=torrents.php?cat=]").First();
-                    var qDLLink = qRow.Find("a[href^=download.php]").First();
-                    var qSeeders = qRow.Find("td:eq(6)");
-                    var qLeechers = qRow.Find("td:eq(7)");
-                    var qDateStr = qRow.Find("td:eq(9)").First();
-                    var qSize = qRow.Find("td:eq(4)").First();
+                    var qCatLink = row.QuerySelector("a[href^=torrents.php?cat=]");
+                    var qDLLink = row.QuerySelector("a[href^=download.php]");
+                    var qSeeders = row.QuerySelector("td:nth-of-type(7)");
+                    var qLeechers = row.QuerySelector("td:nth-of-type(8)");
+                    var qDateStr = row.QuerySelector("td:nth-of-type(10)");
+                    var qSize = row.QuerySelector("td:nth-of-type(5)");
 
-                    var catStr = qCatLink.Attr("href").Split('=')[1];
+                    var catStr = qCatLink.GetAttribute("href").Split('=')[1];
                     release.Category = MapTrackerCatToNewznab(catStr);
 
-                    release.Link = new Uri(SiteLink + qDLLink.Attr("href"));
-                    release.Comments = new Uri(SiteLink + qDetailsLink.Attr("href"));
+                    release.Link = new Uri(SiteLink + qDLLink.GetAttribute("href"));
+                    release.Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
                     release.Guid = release.Link;
 
-                    var sizeStr = qSize.Text();
+                    var sizeStr = qSize.TextContent;
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
 
-                    release.Seeders = ParseUtil.CoerceInt(qSeeders.Text());
-                    release.Peers = ParseUtil.CoerceInt(qLeechers.Text()) + release.Seeders;
+                    release.Seeders = ParseUtil.CoerceInt(qSeeders.TextContent);
+                    release.Peers = ParseUtil.CoerceInt(qLeechers.TextContent) + release.Seeders;
 
-                    var dateStr = qDateStr.Text().Trim();
+                    var dateStr = qDateStr.TextContent.Trim();
                     var dateGerman = DateTime.SpecifyKind(DateTime.ParseExact(dateStr, "dd.MM.yy HH:mm:ss", CultureInfo.InvariantCulture), DateTimeKind.Unspecified);
 
                     var pubDateUtc = TimeZoneInfo.ConvertTimeToUtc(dateGerman, germanyTz);
                     release.PublishDate = pubDateUtc.ToLocalTime();
 
-                    var grabs = qRow.Find("td:nth-child(6)").Text();
+                    var grabs = row.QuerySelector("td:nth-child(6)").TextContent;
                     release.Grabs = ParseUtil.CoerceInt(grabs);
 
-                    if (qRow.Find("img[src=\"images/free.gif\"]").Length >= 1)
+                    if (row.QuerySelector("img[src=\"images/free.gif\"]") != null)
                         release.DownloadVolumeFactor = 0;
                     else
                         release.DownloadVolumeFactor = 1;
