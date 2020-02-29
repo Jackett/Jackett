@@ -608,11 +608,8 @@ namespace Jackett.Common.Indexers
         /// Find torrent rows in search pages
         /// </summary>
         /// <returns>List of rows</returns>
-        private IHtmlCollection<IElement> FindTorrentRows(IHtmlDocument dom)
-        {
-            // Return all occurencis of torrents found
-            return dom.QuerySelectorAll("#torrentTable > tbody > tr:not(:first)");
-        }
+        private IHtmlCollection<IElement> FindTorrentRows(IHtmlDocument dom) =>
+            dom.QuerySelectorAll("#torrentTable > tbody > tr:not(:first)");
 
         /// <summary>
         /// Download torrent file from tracker
