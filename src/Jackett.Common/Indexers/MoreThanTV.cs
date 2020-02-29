@@ -8,7 +8,6 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
-using CsQuery;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -62,9 +61,11 @@ namespace Jackett.Common.Indexers
                 if (result.Content.Contains("Your IP address has been banned."))
                     throw new ExceptionWithConfigData("Your IP address has been banned.", ConfigData);
 
-                CQ dom = result.Content;
-                dom["#loginform > table"].Remove();
-                var errorMessage = dom["#loginform"].Text().Trim().Replace("\n\t", " ");
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(result.Content);
+                foreach (var element in dom.QuerySelectorAll("#loginform > table"))
+                    element.Remove();
+                var errorMessage = dom.QuerySelector("#loginform").TextContent.Trim().Replace("\n\t", " ");
                 throw new ExceptionWithConfigData(errorMessage, ConfigData);
             });
 
