@@ -270,7 +270,7 @@ namespace Jackett.Common.Indexers
                         // do nothing, some releases have invalid banner URLs, ignore the banners in this case
                     }
 
-                    var dateStringAll = row.QuerySelectorAll("div.up_info2")[0].ChildNodes.Last().ToString();
+                    var dateStringAll = row.QuerySelector("div.up_info2").ChildNodes.Last().ToString();
                     var dateParts = dateStringAll.Split(' ');
                     var dateString = dateParts[dateParts.Length - 2] + " " + dateParts[dateParts.Length - 1];
                     release.PublishDate = DateTime.ParseExact(dateString, "dd/MM/yy HH:mm", CultureInfo.InvariantCulture);
@@ -289,7 +289,8 @@ namespace Jackett.Common.Indexers
                     var sub_title = row.QuerySelector("div.sub_title");
                     var imdb_link = sub_title.QuerySelector("span.imdb-inline > a");
                     release.Imdb = ParseUtil.GetLongFromString(imdb_link.GetAttribute("href"));
-                    sub_title.QuerySelector("span.imdb-inline").Remove();
+                    foreach(var element in sub_title.QuerySelectorAll("span.imdb-inline"))
+                        element.Remove();
                     release.Description = sub_title.TextContent;
 
                     releases.Add(release);
