@@ -5,7 +5,8 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CsQuery;
+using AngleSharp.Dom;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -21,8 +22,6 @@ namespace Jackett.Common.Indexers
         private string SearchUrl => SiteLink + "torrentsutils.php";
         private string LoginUrl => SiteLink + "takelogin.php";
         private string CaptchaUrl => SiteLink + "simpleCaptcha.php?numImages=1";
-        private readonly TimeZoneInfo germanyTz = TimeZoneInfo.CreateCustomTimeZone("W. Europe Standard Time", new TimeSpan(1, 0, 0), "W. Europe Standard Time", "W. Europe Standard Time");
-        private readonly List<string> categories = new List<string>() { "1080P", "720P", "BDRip", "BluRay", "BRRip", "DVDR", "DVDRip", "FLAC", "MP3", "MP4", "Packs", "R5", "Remux", "TVRip", "WebRip" };
 
         private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
         {
@@ -133,68 +132,40 @@ namespace Jackett.Common.Indexers
 
             try
             {
-                CQ dom = results.Content;
-                /*
-                // parse logic for viewtype=1, unfortunately it's missing the release time so we can't use it
-                var movieBlocks = dom["table.main"];
-                foreach (var movieBlock in movieBlocks)
-                {
-                    var qMovieBlock = movieBlock.Cq();
-
-                    var movieLink = qMovieBlock.Find("tr > td[class=colhead] > a").First();
-                    var movieName = movieLink.Text();
-
-                    var qDetailsBlock = qMovieBlock.Find("tr > td.torrentstd > table > tbody > tr");
-                    var qDetailsHeader = qDetailsBlock.ElementAt(0);
-                    var qDetailsTags = qDetailsBlock.ElementAt(1);
-                    var qTorrents = qDetailsBlock.Find("td.moviestorrentstd > table > tbody > tr:eq(0)");
-
-                    foreach (var torrent in qTorrents)
-                    {
-                        var qTorrent = torrent.Cq();
-                        var qCatIcon = qTorrent.Find("td:eq(0) > img");
-                        var qDetailsLink = qTorrent.Find("td:eq(1) > a:eq(0)");
-                        var qSeeders = qTorrent.Find("td:eq(1) > b > a[alt=\"Number of Seeders\"]");
-                        var qLeechers = qTorrent.Find("td:eq(1) > span[alt=\"Number of Leechers\"]");
-                        var qDownloadLink = qTorrent.Find("td:eq(1) > a:has(img[alt=\"Download Torrent\"])");
-                    }
-                }
-                */
-
-                var rows = dom["table.main > tbody > tr"];
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(results.Content);
+                var rows = dom.QuerySelectorAll("table.main > tbody > tr");
                 foreach (var row in rows.Skip(1))
                 {
                     var release = new ReleaseInfo();
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 72 * 60 * 60;
 
-                    var qRow = row.Cq();
+                    var qDetailsLink = row.QuerySelector("td:nth-of-type(2) > a:nth-of-type(1)"); // link to the movie, not the actual torrent
+                    release.Title = qDetailsLink.GetAttribute("alt");
 
-                    var qDetailsLink = qRow.Find("td:eq(1) > a:eq(0)"); // link to the movie, not the actual torrent
-                    release.Title = qDetailsLink.Attr("alt");
+                    // TODO: categories are not working
+                    //var qCatIcon = row.QuerySelector("td:nth-of-type(1) > img");
+                    var qSeeders = row.QuerySelector("td:nth-of-type(9)");
+                    var qLeechers = row.QuerySelector("td:nth-of-type(10)");
+                    var qDownloadLink = row.QuerySelector("td > a:has(img[alt=\"Download Torrent\"])");
+                    var qPudDate = row.QuerySelector("td:nth-of-type(6) > nobr");
+                    var qSize = row.QuerySelector("td:nth-of-type(7)");
 
-                    var qCatIcon = qRow.Find("td:eq(0) > img");
-                    var qSeeders = qRow.Find("td:eq(8)");
-                    var qLeechers = qRow.Find("td:eq(9)");
-                    var qDownloadLink = qRow.Find("td > a:has(img[alt=\"Download Torrent\"])");
-                    var qPudDate = qRow.Find("td:eq(5) > nobr");
-                    var qSize = qRow.Find("td:eq(6)");
-
-                    var catStr = qCatIcon.Attr("alt");
-                    release.Category = MapTrackerCatToNewznab(catStr);
-                    release.Link = new Uri(SiteLink + qDownloadLink.Attr("href").Substring(1));
-                    release.Title = qDetailsLink.Attr("alt");
-                    release.Comments = new Uri(SiteLink + qDetailsLink.Attr("href"));
+                    //var catStr = qCatIcon.GetAttribute("alt");
+                    //release.Category = MapTrackerCatToNewznab(catStr);
+                    release.Link = new Uri(SiteLink + qDownloadLink.GetAttribute("href").Substring(1));
+                    release.Title = qDetailsLink.GetAttribute("alt");
+                    release.Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
                     release.Guid = release.Link;
 
                     var dateStr = qPudDate.Text().Trim();
                     DateTime pubDateUtc;
-                    var Timeparts = dateStr.Split(new char[] { ' ' }, 2)[1];
                     if (dateStr.StartsWith("Today "))
-                        pubDateUtc = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified) + DateTime.ParseExact(dateStr.Split(new char[] { ' ' }, 2)[1], "hh:mm tt", System.Globalization.CultureInfo.InvariantCulture).TimeOfDay;
+                        pubDateUtc = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified) + DateTime.ParseExact(dateStr.Split(new [] { ' ' }, 2)[1], "hh:mm tt", CultureInfo.InvariantCulture).TimeOfDay;
                     else if (dateStr.StartsWith("Yesterday "))
                         pubDateUtc = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified) +
-                            DateTime.ParseExact(dateStr.Split(new char[] { ' ' }, 2)[1], "hh:mm tt", System.Globalization.CultureInfo.InvariantCulture).TimeOfDay - TimeSpan.FromDays(1);
+                            DateTime.ParseExact(dateStr.Split(new [] { ' ' }, 2)[1], "hh:mm tt", CultureInfo.InvariantCulture).TimeOfDay - TimeSpan.FromDays(1);
                     else
                         pubDateUtc = DateTime.SpecifyKind(DateTime.ParseExact(dateStr, "MMM d yyyy hh:mm tt", CultureInfo.InvariantCulture), DateTimeKind.Unspecified);
 
@@ -206,10 +177,10 @@ namespace Jackett.Common.Indexers
                     release.Seeders = ParseUtil.CoerceInt(qSeeders.Text());
                     release.Peers = ParseUtil.CoerceInt(qLeechers.Text()) + release.Seeders;
 
-                    var files = qRow.Find("td:nth-child(4)").Text();
+                    var files = row.QuerySelector("td:nth-child(4)").TextContent;
                     release.Files = ParseUtil.CoerceInt(files);
 
-                    var grabs = qRow.Find("td:nth-child(8)").Text();
+                    var grabs = row.QuerySelector("td:nth-child(8)").TextContent;
                     release.Grabs = ParseUtil.CoerceInt(grabs);
 
                     release.DownloadVolumeFactor = 0; // ratioless
