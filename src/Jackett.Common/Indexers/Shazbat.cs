@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using CsQuery;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -66,8 +66,9 @@ namespace Jackett.Common.Indexers
                 () => throw new ExceptionWithConfigData("The username and password entered do not match.", configData));
 
             var rssProfile = await RequestStringWithCookiesAndRetry(RSSProfile);
-            CQ rssDom = rssProfile.Content;
-            configData.RSSKey.Value = rssDom.Find(".col-sm-9:eq(0)").Text().Trim();
+            var parser = new HtmlParser();
+            var rssDom = parser.ParseDocument(rssProfile.Content);
+            configData.RSSKey.Value = rssDom.QuerySelector(".col-sm-9:nth-of-type(1)").TextContent.Trim();
             if (string.IsNullOrWhiteSpace(configData.RSSKey.Value))
             {
                 throw new ExceptionWithConfigData("Failed to find RSS key.", configData);
@@ -105,8 +106,9 @@ namespace Jackett.Common.Indexers
 
                 results = await PostDataWithCookiesAndRetry(SearchUrl, pairs, null, TorrentsUrl);
                 results = await ReloginIfNecessary(results);
-                CQ dom = results.Content;
-                var shows = dom.Find("div.show[data-id]");
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(results.Content);
+                var shows = dom.QuerySelectorAll("div.show[data-id]");
                 foreach (var show in shows)
                 {
                     var showUrl = ShowUrl + show.GetAttribute("data-id");
@@ -125,44 +127,42 @@ namespace Jackett.Common.Indexers
                     results = await RequestStringWithCookies(searchUrl);
                     results = await ReloginIfNecessary(results);
 
-                    CQ dom = results.Content;
-                    var rows = dom["#torrent-table tr"];
+                    var parser = new HtmlParser();
+                    var dom = parser.ParseDocument(results.Content);
+                    var rows = dom.QuerySelectorAll(
+                        string.IsNullOrWhiteSpace(queryString) ? "table tr" : "#torrent-table tr");
 
-                    if (!string.IsNullOrWhiteSpace(queryString))
-                    {
-                        rows = dom["table tr"];
-                    }
-
-                    var globalFreeleech = dom.Find("span:contains(\"Freeleech until:\"):has(span.datetime)").Any();
+                    var globalFreeleech =
+                        dom.QuerySelector("span:contains(\"Freeleech until:\"):has(span.datetime)") != null;
 
                     foreach (var row in rows.Skip(1))
                     {
                         var release = new ReleaseInfo();
-                        var qRow = row.Cq();
-                        var titleRow = qRow.Find("td:eq(2)").First();
-                        titleRow.Children().Remove();
-                        release.Title = titleRow.Text().Trim();
+                        var titleRow = row.QuerySelector("td:nth-of-type(3)");
+                        foreach (var child in titleRow.Children)
+                            child.Remove();
+                        release.Title = titleRow.TextContent.Trim();
                         if ((query.ImdbID == null || !TorznabCaps.SupportsImdbMovieSearch) && !query.MatchQueryStringAND(release.Title))
                             continue;
 
-                        var qBanner = qRow.Find("div[style^=\"cursor: pointer; background-image:url\"]");
-                        var qBannerStyle = qBanner.Attr("style");
+                        var qBanner = row.QuerySelector("div[style^=\"cursor: pointer; background-image:url\"]");
+                        var qBannerStyle = qBanner.GetAttribute("style");
                         if (!string.IsNullOrEmpty(qBannerStyle))
                         {
                             var bannerImg = Regex.Match(qBannerStyle, @"url\('(.*?)'\);").Groups[1].Value;
                             release.BannerUrl = new Uri(SiteLink + bannerImg);
                         }
 
-                        var qLink = row.Cq().Find("td:eq(4) a:eq(0)");
-                        release.Link = new Uri(SiteLink + qLink.Attr("href"));
+                        var qLink = row.QuerySelector("td:nth-of-type(5) a:nth-of-type(1)");
+                        release.Link = new Uri(SiteLink + qLink.GetAttribute("href"));
                         release.Guid = release.Link;
-                        var qLinkComm = row.Cq().Find("td:eq(4) a:eq(1)");
-                        release.Comments = new Uri(SiteLink + qLinkComm.Attr("href"));
+                        var qLinkComm = row.QuerySelector("td:nth-of-type(5) a:nth-of-type(2)");
+                        release.Comments = new Uri(SiteLink + qLinkComm.GetAttribute("href"));
 
-                        var dateString = qRow.Find(".datetime").Attr("data-timestamp");
+                        var dateString = row.QuerySelector(".datetime").GetAttribute("data-timestamp");
                         if (dateString != null)
                             release.PublishDate = DateTimeUtil.UnixTimestampToDateTime(ParseUtil.CoerceDouble(dateString)).ToLocalTime();
-                        var infoString = row.Cq().Find("td:eq(3)").Text();
+                        var infoString = row.QuerySelector("td:nth-of-type(4)").TextContent;
 
                         release.Size = ParseUtil.CoerceLong(Regex.Match(infoString, "\\((\\d+)\\)").Value.Replace("(", "").Replace(")", ""));
 
@@ -177,7 +177,7 @@ namespace Jackett.Common.Indexers
 
                         release.UploadVolumeFactor = 1;
 
-                        // var tags = row.Cq().Find(".label-tag").Text(); These don't see to parse - bad tags?
+                        // var tags = row.QuerySelector(".label-tag").TextContent; These don't see to parse - bad tags?
 
                         releases.Add(release);
                     }
