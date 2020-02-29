@@ -307,7 +307,7 @@ namespace Jackett.Common.Indexers
                     pageLinkCount = 1;
 
                     // Check if we have a minimum of one result
-                    if (firstPageRows != null && firstPageRows.Length > 1)
+                    if (firstPageRows?.Length > 1)
                     {
                         // Retrieve total count on our alone page
                         nbResults = firstPageRows.Count();
