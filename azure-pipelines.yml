@@ -375,7 +375,7 @@ stages:
           workingDirectory: /
           targetType: inline
           script: |
-            Get-Childitem –Path / -Recurse
+            Get-Childitem –Path /home -Recurse
 
       - task: Bash@3
         displayName: Try and Find Logs 3
@@ -384,4 +384,4 @@ stages:
           workingDirectory: /
           targetType: inline
           script: |
-            ls -LR /_diag
+            ls -LR /home
