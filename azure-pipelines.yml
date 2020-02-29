@@ -375,13 +375,10 @@ stages:
           workingDirectory: /
           targetType: inline
           script: |
-            Get-Childitem –Path /home -Recurse
+            Get-Content -Path /home/vsts/agents/**/_diag/Agent_*.log
+            Get-Content -Path /home/vsts/agents/**/_diag/Worker_*.log
 
-      - task: Bash@3
-        displayName: Try and Find Logs 3
+      - task: PublishBuildArtifacts@1
         condition: always()
         inputs:
-          workingDirectory: /
-          targetType: inline
-          script: |
-            ls -LR /home
+          pathtoPublish: /home/vsts/agents/**/_diag/
