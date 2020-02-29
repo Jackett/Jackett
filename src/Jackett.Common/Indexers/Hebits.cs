@@ -102,7 +102,8 @@ namespace Jackett.Common.Indexers
             var response = await RequestStringWithCookies(searchUrl);
             try
             {
-                var parser = new HtmlParser(); var dom = parser.ParseDocument(response.Content);
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(response.Content);
 
                 var rows = dom.QuerySelectorAll(".browse > div > div");
 
@@ -110,7 +111,7 @@ namespace Jackett.Common.Indexers
                 {
                     var release = new ReleaseInfo();
 
-                    var debug = row.Html();
+                    var debug = row.InnerHtml;
 
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800; // 48 hours
