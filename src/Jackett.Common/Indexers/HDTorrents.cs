@@ -148,72 +148,70 @@ namespace Jackett.Common.Indexers
                 var rows = dom.QuerySelectorAll(".mainblockcontenttt > tbody > tr:has(a[href^=\"details.php?id=\"])");
                 foreach (var row in rows)
                 {
-                    var qRow = row;
-
                     release = new ReleaseInfo();
 
-                    release.Title = qRow.QuerySelector("td.mainblockcontent b a").TextContent;
-                    release.Description = qRow.QuerySelector("td:nth-child(3) > span").TextContent;
+                    release.Title = row.QuerySelector("td.mainblockcontent b a").TextContent;
+                    release.Description = row.QuerySelector("td:nth-child(3) > span").TextContent;
 
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800; // 48 hours
 
                     var tdIndex = 0;
-                    if (qRow.QuerySelector("td:nth-last-child(1)").TextContent == "Edit")
+                    if (row.QuerySelector("td:nth-last-child(1)").TextContent == "Edit")
                         tdIndex = 1;
                     // moderators get additional delete, recomend and like links
-                    if (qRow.QuerySelector("td:nth-last-child(4)").TextContent == "Edit")
+                    if (row.QuerySelector("td:nth-last-child(4)").TextContent == "Edit")
                         tdIndex = 4;
 
                     // Sometimes the uploader column is missing
-                    if (ParseUtil.TryCoerceInt(qRow.QuerySelector($"td:nth-last-child({tdIndex + 3})").TextContent, out var seeders))
+                    if (ParseUtil.TryCoerceInt(row.QuerySelector($"td:nth-last-child({tdIndex + 3})").TextContent, out var seeders))
                     {
                         release.Seeders = seeders;
-                        if (ParseUtil.TryCoerceInt(qRow.QuerySelector($"td:nth-last-child({tdIndex + 2})").TextContent, out var peers))
+                        if (ParseUtil.TryCoerceInt(row.QuerySelector($"td:nth-last-child({tdIndex + 2})").TextContent, out var peers))
                         {
                             release.Peers = peers + release.Seeders;
                         }
                     }
 
                     // Sometimes the grabs column is missing
-                    if (ParseUtil.TryCoerceLong(qRow.QuerySelector($"td:nth-last-child({tdIndex + 1})").TextContent, out var grabs))
+                    if (ParseUtil.TryCoerceLong(row.QuerySelector($"td:nth-last-child({tdIndex + 1})").TextContent, out var grabs))
                     {
                         release.Grabs = grabs;
                     }
 
-                    var fullSize = qRow.QuerySelectorAll("td.mainblockcontent")[6].TextContent;
+                    var fullSize = row.QuerySelectorAll("td.mainblockcontent")[6].TextContent;
                     release.Size = ReleaseInfo.GetBytes(fullSize);
 
-                    release.Guid = new Uri(SiteLink + qRow.QuerySelector("td.mainblockcontent b a").GetAttribute("href"));
-                    release.Link = new Uri(SiteLink + qRow.QuerySelectorAll("td.mainblockcontent")[3].FirstElementChild.GetAttribute("href"));
-                    release.Comments = new Uri(SiteLink + qRow.QuerySelector("td.mainblockcontent b a").GetAttribute("href"));
+                    release.Guid = new Uri(SiteLink + row.QuerySelector("td.mainblockcontent b a").GetAttribute("href"));
+                    release.Link = new Uri(SiteLink + row.QuerySelectorAll("td.mainblockcontent")[3].FirstElementChild.GetAttribute("href"));
+                    release.Comments = new Uri(SiteLink + row.QuerySelector("td.mainblockcontent b a").GetAttribute("href"));
 
-                    var dateSplit = qRow.QuerySelectorAll("td.mainblockcontent")[5].InnerHtml.Split(',');
+                    var dateSplit = row.QuerySelectorAll("td.mainblockcontent")[5].InnerHtml.Split(',');
                     var dateString = dateSplit[1].Substring(0, dateSplit[1].IndexOf('>')).Trim();
                     release.PublishDate = DateTime.ParseExact(dateString, "dd MMM yyyy HH:mm:ss zz00", CultureInfo.InvariantCulture).ToLocalTime();
 
-                    var category = qRow.QuerySelector("td:nth-of-type(1) a").GetAttribute("href").Replace("torrents.php?category=", "");
+                    var category = row.QuerySelector("td:nth-of-type(1) a").GetAttribute("href").Replace("torrents.php?category=", "");
                     release.Category = MapTrackerCatToNewznab(category);
 
                     release.UploadVolumeFactor = 1;
 
-                    if (qRow.QuerySelector("img[alt=\"Free Torrent\"]") != null)
+                    if (row.QuerySelector("img[alt=\"Free Torrent\"]") != null)
                     {
                         release.DownloadVolumeFactor = 0;
                         release.UploadVolumeFactor = 0;
                     }
                     else if (hasFreeleech)
                         release.DownloadVolumeFactor = 0;
-                    else if (qRow.QuerySelector("img[alt=\"Silver Torrent\"]") != null)
+                    else if (row.QuerySelector("img[alt=\"Silver Torrent\"]") != null)
                         release.DownloadVolumeFactor = 0.5;
-                    else if (qRow.QuerySelector("img[alt=\"Bronze Torrent\"]") != null)
+                    else if (row.QuerySelector("img[alt=\"Bronze Torrent\"]") != null)
                         release.DownloadVolumeFactor = 0.75;
-                    else if (qRow.QuerySelector("img[alt=\"Blue Torrent\"]") != null)
+                    else if (row.QuerySelector("img[alt=\"Blue Torrent\"]") != null)
                         release.DownloadVolumeFactor = 0.25;
                     else
                         release.DownloadVolumeFactor = 1;
 
-                    var imdblink = qRow.QuerySelector("a[href*=\"www.imdb.com/title/\"]").GetAttribute("href");
+                    var imdblink = row.QuerySelector("a[href*=\"www.imdb.com/title/\"]").GetAttribute("href");
                     release.Imdb = ParseUtil.GetLongFromString(imdblink);
 
                     releases.Add(release);
