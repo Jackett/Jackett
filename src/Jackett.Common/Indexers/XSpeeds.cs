@@ -325,8 +325,9 @@ namespace Jackett.Common.Indexers
                     var release = new ReleaseInfo();
 
                     var qDetails = row.QuerySelector("div > a[href*=\"details.php?id=\"]"); // details link, release name get's shortened if it's to long
-                    var qTitle = row.QuerySelector("td:nth-of-type(2) .tooltip-content div:nth-of-type(1)"); // use Title from tooltip
-                    qTitle ??= qDetails;
+                    var qTitle =
+                        row.QuerySelector("td:nth-of-type(2) .tooltip-content div:nth-of-type(1)") // use Title from tooltip
+                        ?? qDetails; // fallback to Details link if there's no tooltip
 
                     release.Title = qTitle.TextContent;
 
