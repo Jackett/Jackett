@@ -4,7 +4,8 @@ using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using CsQuery;
+using AngleSharp.Dom;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Helpers;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -68,8 +69,9 @@ namespace Jackett.Common.Indexers
             var result = await RequestLoginAndFollowRedirect(LoginPostUrl, pairs, CookieHeader, true, null, SiteLink);
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("OK"), () =>
             {
-                CQ dom = result.Content;
-                var errorMessage = dom.Text().Trim();
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(result.Content);
+                var errorMessage = dom.TextContent.Trim();
                 errorMessage += " attempts left. Please check your credentials.";
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
@@ -100,34 +102,32 @@ namespace Jackett.Common.Indexers
             var response = await RequestStringWithCookies(searchUrl);
             try
             {
-                CQ dom = response.Content;
+                var parser = new HtmlParser(); var dom = parser.ParseDocument(response.Content);
 
-                var qRows = dom[".browse > div > div"];
+                var rows = dom.QuerySelectorAll(".browse > div > div");
 
-                foreach (var row in qRows)
+                foreach (var row in rows)
                 {
                     var release = new ReleaseInfo();
 
-                    var qRow = row.Cq();
-
-                    var debug = qRow.Html();
+                    var debug = row.Html();
 
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800; // 48 hours
 
-                    var qTitle = qRow.Find(".bTitle");
-                    var titleParts = qTitle.Text().Split('/');
+                    var qTitle = row.QuerySelector(".bTitle");
+                    var titleParts = qTitle.TextContent.Split('/');
                     if (titleParts.Length >= 2)
                         release.Title = titleParts[1].Trim();
                     else
                         release.Title = titleParts[0].Trim();
 
-                    var qDetailsLink = qTitle.Find("a[href^=\"details.php\"]");
-                    release.Comments = new Uri(SiteLink + qDetailsLink.Attr("href"));
-                    release.Link = new Uri(SiteLink + qRow.Find("a[href^=\"download.php\"]").Attr("href"));
+                    var qDetailsLink = qTitle.QuerySelector("a[href^=\"details.php\"]");
+                    release.Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
+                    release.Link = new Uri(SiteLink + row.QuerySelector("a[href^=\"download.php\"]").GetAttribute("href"));
                     release.Guid = release.Link;
 
-                    var dateString = qRow.Find("div:last-child").Text().Trim();
+                    var dateString = row.QuerySelector("div:last-child").TextContent.Trim();
                     var pattern = "\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}";
                     var match = Regex.Match(dateString, pattern);
                     if (match.Success)
@@ -135,25 +135,25 @@ namespace Jackett.Common.Indexers
                         release.PublishDate = DateTime.ParseExact(match.Value, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
                     }
 
-                    var sizeStr = qRow.Find(".bSize").Text();
+                    var sizeStr = row.QuerySelector(".bSize").TextContent;
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
-                    release.Seeders = ParseUtil.CoerceInt(qRow.Find(".bUping").Text().Trim());
-                    release.Peers = release.Seeders + ParseUtil.CoerceInt(qRow.Find(".bDowning").Text().Trim());
+                    release.Seeders = ParseUtil.CoerceInt(row.QuerySelector(".bUping").TextContent.Trim());
+                    release.Peers = release.Seeders + ParseUtil.CoerceInt(row.QuerySelector(".bDowning").TextContent.Trim());
 
-                    var files = qRow.Find("div.bFiles").Get(0).LastChild.ToString();
+                    var files = row.QuerySelector("div.bFiles").LastChild.ToString();
                     release.Files = ParseUtil.CoerceInt(files);
 
-                    var grabs = qRow.Find("div.bFinish").Get(0).LastChild.ToString();
+                    var grabs = row.QuerySelector("div.bFinish").LastChild.ToString();
                     release.Grabs = ParseUtil.CoerceInt(grabs);
 
-                    if (qRow.Find("img[src=\"/pic/free.jpg\"]").Length >= 1)
+                    if (row.QuerySelector("img[src=\"/pic/free.jpg\"]") != null)
                         release.DownloadVolumeFactor = 0;
                     else
                         release.DownloadVolumeFactor = 1;
 
-                    if (qRow.Find("img[src=\"/pic/triple.jpg\"]").Length >= 1)
+                    if (row.QuerySelector("img[src=\"/pic/triple.jpg\"]") != null)
                         release.UploadVolumeFactor = 3;
-                    else if (qRow.Find("img[src=\"/pic/double.jpg\"]").Length >= 1)
+                    else if (row.QuerySelector("img[src=\"/pic/double.jpg\"]") != null)
                         release.UploadVolumeFactor = 2;
                     else
                         release.UploadVolumeFactor = 1;
