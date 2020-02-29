@@ -4,7 +4,8 @@ using System.Collections.Specialized;
 using System.Globalization;
 using System.Text;
 using System.Threading.Tasks;
-using CsQuery;
+using AngleSharp.Dom;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -128,11 +129,12 @@ namespace Jackett.Common.Indexers
             var results = await RequestStringWithCookiesAndRetry(searchUrl);
             try
             {
-                CQ dom = results.Content;
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(results.Content);
                 ReleaseInfo release;
 
-                var userInfo = dom[".mainmenu > table > tbody > tr:has(td[title=\"Active-Torrents\"])"][0].Cq();
-                var rank = userInfo.Find("td:nth-child(2)").Text().Substring(6);
+                var userInfo = dom.QuerySelector(".mainmenu > table > tbody > tr:has(td[title=\"Active-Torrents\"])");
+                var rank = userInfo.QuerySelector("td:nth-child(2)").TextContent.Substring(6);
 
                 var freeleechRanks = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
                 freeleechRanks.Add("VIP");
@@ -143,75 +145,75 @@ namespace Jackett.Common.Indexers
                 freeleechRanks.Add("Owner");
                 var hasFreeleech = freeleechRanks.Contains(rank);
 
-                var rows = dom[".mainblockcontenttt > tbody > tr:has(a[href^=\"details.php?id=\"])"];
+                var rows = dom.QuerySelectorAll(".mainblockcontenttt > tbody > tr:has(a[href^=\"details.php?id=\"])");
                 foreach (var row in rows)
                 {
-                    var qRow = row.Cq();
+                    var qRow = row;
 
                     release = new ReleaseInfo();
 
-                    release.Title = qRow.Find("td.mainblockcontent b a").Text();
-                    release.Description = qRow.Find("td:nth-child(3) > span").Text();
+                    release.Title = qRow.QuerySelector("td.mainblockcontent b a").TextContent;
+                    release.Description = qRow.QuerySelector("td:nth-child(3) > span").TextContent;
 
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800; // 48 hours
 
                     var tdIndex = 0;
-                    if (qRow.Find("td:nth-last-child(1)").Text() == "Edit")
+                    if (qRow.QuerySelector("td:nth-last-child(1)").TextContent == "Edit")
                         tdIndex = 1;
                     // moderators get additional delete, recomend and like links
-                    if (qRow.Find("td:nth-last-child(4)").Text() == "Edit")
+                    if (qRow.QuerySelector("td:nth-last-child(4)").TextContent == "Edit")
                         tdIndex = 4;
 
                     // Sometimes the uploader column is missing
-                    if (ParseUtil.TryCoerceInt(qRow.Find($"td:nth-last-child({tdIndex + 3})").Text(), out var seeders))
+                    if (ParseUtil.TryCoerceInt(qRow.QuerySelector($"td:nth-last-child({tdIndex + 3})").TextContent, out var seeders))
                     {
                         release.Seeders = seeders;
-                        if (ParseUtil.TryCoerceInt(qRow.Find($"td:nth-last-child({tdIndex + 2})").Text(), out var peers))
+                        if (ParseUtil.TryCoerceInt(qRow.QuerySelector($"td:nth-last-child({tdIndex + 2})").TextContent, out var peers))
                         {
                             release.Peers = peers + release.Seeders;
                         }
                     }
 
                     // Sometimes the grabs column is missing
-                    if (ParseUtil.TryCoerceLong(qRow.Find($"td:nth-last-child({tdIndex + 1})").Text(), out var grabs))
+                    if (ParseUtil.TryCoerceLong(qRow.QuerySelector($"td:nth-last-child({tdIndex + 1})").TextContent, out var grabs))
                     {
                         release.Grabs = grabs;
                     }
 
-                    var fullSize = qRow.Find("td.mainblockcontent").Get(6).InnerText;
+                    var fullSize = qRow.QuerySelectorAll("td.mainblockcontent")[6].TextContent;
                     release.Size = ReleaseInfo.GetBytes(fullSize);
 
-                    release.Guid = new Uri(SiteLink + qRow.Find("td.mainblockcontent b a").Attr("href"));
-                    release.Link = new Uri(SiteLink + qRow.Find("td.mainblockcontent").Get(3).FirstChild.GetAttribute("href"));
-                    release.Comments = new Uri(SiteLink + qRow.Find("td.mainblockcontent b a").Attr("href"));
+                    release.Guid = new Uri(SiteLink + qRow.QuerySelector("td.mainblockcontent b a").GetAttribute("href"));
+                    release.Link = new Uri(SiteLink + qRow.QuerySelectorAll("td.mainblockcontent")[3].FirstElementChild.GetAttribute("href"));
+                    release.Comments = new Uri(SiteLink + qRow.QuerySelector("td.mainblockcontent b a").GetAttribute("href"));
 
-                    var dateSplit = qRow.Find("td.mainblockcontent").Get(5).InnerHTML.Split(',');
+                    var dateSplit = qRow.QuerySelectorAll("td.mainblockcontent")[5].InnerHtml.Split(',');
                     var dateString = dateSplit[1].Substring(0, dateSplit[1].IndexOf('>')).Trim();
                     release.PublishDate = DateTime.ParseExact(dateString, "dd MMM yyyy HH:mm:ss zz00", CultureInfo.InvariantCulture).ToLocalTime();
 
-                    var category = qRow.Find("td:eq(0) a").Attr("href").Replace("torrents.php?category=", "");
+                    var category = qRow.QuerySelector("td:eq(0) a").GetAttribute("href").Replace("torrents.php?category=", "");
                     release.Category = MapTrackerCatToNewznab(category);
 
                     release.UploadVolumeFactor = 1;
 
-                    if (qRow.Find("img[alt=\"Free Torrent\"]").Length >= 1)
+                    if (qRow.QuerySelector("img[alt=\"Free Torrent\"]") != null)
                     {
                         release.DownloadVolumeFactor = 0;
                         release.UploadVolumeFactor = 0;
                     }
                     else if (hasFreeleech)
                         release.DownloadVolumeFactor = 0;
-                    else if (qRow.Find("img[alt=\"Silver Torrent\"]").Length >= 1)
+                    else if (qRow.QuerySelector("img[alt=\"Silver Torrent\"]") != null)
                         release.DownloadVolumeFactor = 0.5;
-                    else if (qRow.Find("img[alt=\"Bronze Torrent\"]").Length >= 1)
+                    else if (qRow.QuerySelector("img[alt=\"Bronze Torrent\"]") != null)
                         release.DownloadVolumeFactor = 0.75;
-                    else if (qRow.Find("img[alt=\"Blue Torrent\"]").Length >= 1)
+                    else if (qRow.QuerySelector("img[alt=\"Blue Torrent\"]") != null)
                         release.DownloadVolumeFactor = 0.25;
                     else
                         release.DownloadVolumeFactor = 1;
 
-                    var imdblink = qRow.Find("a[href*=\"www.imdb.com/title/\"]").Attr("href");
+                    var imdblink = qRow.QuerySelector("a[href*=\"www.imdb.com/title/\"]").GetAttribute("href");
                     release.Imdb = ParseUtil.GetLongFromString(imdblink);
 
                     releases.Add(release);
