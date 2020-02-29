@@ -4,7 +4,8 @@ using System.Collections.Specialized;
 using System.Globalization;
 using System.Text;
 using System.Threading.Tasks;
-using CsQuery;
+using AngleSharp.Dom;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -109,8 +110,9 @@ namespace Jackett.Common.Indexers
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl, true);
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
                 {
-                    CQ dom = result.Content;
-                    var errorMessage = dom["table.tableinborder"].Html();
+                    var parser = new HtmlParser();
+                    var dom = parser.ParseDocument(result.Content);
+                    var errorMessage = dom.QuerySelector("table.tableinborder").InnerHtml;
                     throw new ExceptionWithConfigData(errorMessage, configData);
                 });
             return IndexerConfigurationStatus.RequiresTesting;
@@ -158,64 +160,60 @@ namespace Jackett.Common.Indexers
                 response = await RequestStringWithCookies(searchUrl);
             }
 
-            var results = response.Content;
             try
             {
-                CQ dom = results;
-                var rows = dom["table.testtable> tbody > tr:has(td.tableb)"];
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(response.Content);
+                var rows = dom.QuerySelectorAll("table.testtable> tbody > tr:has(td.tableb)");
 
                 foreach (var row in rows)
                 {
                     var release = new ReleaseInfo();
                     release.MinimumRatio = 0.75;
                     release.MinimumSeedTime = 0;
-                    var qRow = row.Cq();
 
-                    var qDetailsLink = qRow.Find("a[href^=details.php?id=]").First();
+
+                    var qDetailsLink = row.QuerySelector("a[href^=details.php?id=]");
                     release.Title = qDetailsLink.Text();
 
                     if (!query.MatchQueryStringAND(release.Title))
                         continue;
 
-                    var qCatLink = qRow.Find("a[href^=browse.php?cat=]").First();
-                    var qSeeders = qRow.Find("td > table.testtable2 > tbody > tr > td > strong:eq(3)");
-                    var qLeechers = qRow.Find("td > table.testtable2 > tbody > tr > td > strong:eq(4)");
-                    var qDateStr = qRow.Find("td > table.testtable2 > tbody > tr > td:eq(7)");
-                    var qSize = qRow.Find("td > table.testtable2 > tbody > tr > td > strong:eq(1)");
-                    var qDownloadLink = qRow.Find("a[href*=download]").First();
+                    var qCatLink = row.QuerySelector("a[href^=browse.php?cat=]");
+                    var qSeeders = row.QuerySelector("td > table.testtable2 > tbody > tr > td > strong:nth-of-type(4)");
+                    var qLeechers = row.QuerySelector("td > table.testtable2 > tbody > tr > td > strong:nth-of-type(5)");
+                    var qDateStr = row.QuerySelector("td > table.testtable2 > tbody > tr > td:nth-of-type(8)");
+                    var qSize = row.QuerySelector("td > table.testtable2 > tbody > tr > td > strong:nth-of-type(2)");
+                    var qDownloadLink = row.QuerySelector("a[href*=download]");
 
-                    var catStr = qCatLink.Attr("href").Split('=')[1];
+                    var catStr = qCatLink.GetAttribute("href").Split('=')[1];
                     release.Category = MapTrackerCatToNewznab(catStr);
 
-                    var dlLink = qDownloadLink.Attr("href");
+                    var dlLink = qDownloadLink.GetAttribute("href");
                     if (dlLink.Contains("javascript")) // depending on the user agent the DL link is a javascript call
                     {
                         var dlLinkParts = dlLink.Split(new char[] { '\'', ',' });
                         dlLink = SiteLink + "download/" + dlLinkParts[3] + "/" + dlLinkParts[5];
                     }
                     release.Link = new Uri(dlLink);
-                    release.Comments = new Uri(SiteLink + qDetailsLink.Attr("href"));
+                    release.Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
                     release.Guid = release.Link;
 
-                    var sizeStr = qSize.Text();
+                    var sizeStr = qSize.TextContent;
                     release.Size = ReleaseInfo.GetBytes(sizeStr.Replace(".", "").Replace(",", "."));
 
-                    release.Seeders = ParseUtil.CoerceInt(qSeeders.Text());
-                    release.Peers = ParseUtil.CoerceInt(qLeechers.Text()) + release.Seeders;
+                    release.Seeders = ParseUtil.CoerceInt(qSeeders.TextContent);
+                    release.Peers = ParseUtil.CoerceInt(qLeechers.TextContent) + release.Seeders;
 
-                    var dateStr = qDateStr.Text().Replace('\xA0', ' ');
+                    var dateStr = qDateStr.TextContent.Replace('\xA0', ' ');
                     var dateGerman = DateTime.SpecifyKind(DateTime.ParseExact(dateStr, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture), DateTimeKind.Unspecified);
                     var pubDateUtc = TimeZoneInfo.ConvertTimeToUtc(dateGerman, germanyTz);
                     release.PublishDate = pubDateUtc;
 
-                    var files = qRow.Find("td:contains(Datei) > strong ~ strong").Text();
+                    var files = row.QuerySelector("td:contains(Datei) > strong ~ strong").TextContent;
                     release.Files = ParseUtil.CoerceInt(files);
 
-                    if (qRow.Find("img[title=\"OnlyUpload\"]").Length >= 1)
-                        release.DownloadVolumeFactor = 0;
-                    else
-                        release.DownloadVolumeFactor = 1;
-
+                    release.DownloadVolumeFactor = row.QuerySelector("img[title=\"OnlyUpload\"]") != null ? 0 : 1;
                     release.UploadVolumeFactor = 1;
 
                     releases.Add(release);
@@ -223,7 +221,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results, ex);
+                OnParseError(response.Content, ex);
             }
 
             return releases;
