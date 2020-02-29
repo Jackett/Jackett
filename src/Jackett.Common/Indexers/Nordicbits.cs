@@ -673,7 +673,7 @@ namespace Jackett.Common.Indexers
             var oldV2 = new[] { "/templates/7/", "/templates/8/", "/templates/9/", "/templates/10/" };
             var xmas = new[] { "/templates/14/" };
 
-            if (xmas.Any(dom.QuerySelector("body").InnerHtml.Contains))
+            if (xmas.Any(dom.Body.InnerHtml.Contains))
             {
                 // Return all occurencis of torrents found
                 // $('#base_around > table.mainouter > tbody > tr > td.outer > div.article > table  > tbody:not(:first) > tr')
