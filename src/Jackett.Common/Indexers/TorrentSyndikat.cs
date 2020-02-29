@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using CsQuery;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -173,35 +173,38 @@ namespace Jackett.Common.Indexers
 
             try
             {
-                CQ dom = results.Content;
-                var rows = dom["table.torrent_table > tbody > tr"];
-                var globalFreeleech = dom.Find("legend:contains(\"Freeleech\")+ul > li > b:contains(\"Freeleech\")").Any();
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(results.Content);
+                var rows = dom.QuerySelectorAll("table.torrent_table > tbody > tr");
+                var globalFreeleech = dom.QuerySelector("legend:contains(\"Freeleech\")+ul > li > b:contains(\"Freeleech\")") != null;
                 foreach (var row in rows.Skip(1))
                 {
                     var release = new ReleaseInfo();
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 96 * 60 * 60;
 
-                    var qRow = row.Cq();
-
-                    var catStr = row.ChildElements.ElementAt(0).FirstElementChild.GetAttribute("href").Split('=')[1].Split('&')[0];
+                    var catStr = row.Children[0].FirstElementChild.GetAttribute("href").Split('=')[1].Split('&')[0];
                     release.Category = MapTrackerCatToNewznab(catStr);
 
-                    var qLink = row.ChildElements.ElementAt(2).FirstElementChild.Cq();
-                    release.Link = new Uri(SiteLink + qLink.Attr("href"));
-                    var torrentId = qLink.Attr("href").Split('=').Last();
+                    var qLink = row.Children[2].FirstElementChild;
+                    release.Link = new Uri(SiteLink + qLink.GetAttribute("href"));
+                    var torrentId = qLink.GetAttribute("href").Split('=').Last();
 
-                    var descCol = row.ChildElements.ElementAt(1);
-                    var qCommentLink = descCol.FirstElementChild.Cq();
-                    var torrentTag = descCol.Cq().Find("span.torrent-tag");
-                    var torrentTags = torrentTag.Elements.Select(x => x.InnerHTML).ToList();
-                    release.Title = qCommentLink.Attr("title");
-                    release.Description = string.Join(", ", torrentTags);
-                    release.Comments = new Uri(SiteLink + qCommentLink.Attr("href").Replace("&hit=1", ""));
+                    var descCol = row.Children[1];
+                    var torrentTag = descCol.QuerySelectorAll("span.torrent-tag");
+                    if (torrentTag.Any())
+                    {
+                        var torrentTags = torrentTag.Select(x => x.InnerHtml).ToList();
+                        release.Description = string.Join(", ", torrentTags);
+                    }
+
+                    var qCommentLink = descCol.FirstElementChild;
+                    release.Title = qCommentLink.GetAttribute("title");
+                    release.Comments = new Uri(SiteLink + qCommentLink.GetAttribute("href").Replace("&hit=1", ""));
                     release.Guid = release.Comments;
 
-                    var torrent_details = descCol.Cq().Find(".torrent_details").Get(0);
-                    var rawDateStr = torrent_details.ChildNodes.ElementAt(torrent_details.ChildNodes.Length - 3).Cq().Text();
+                    var torrentDetails = descCol.QuerySelector(".torrent_details");
+                    var rawDateStr = torrentDetails.ChildNodes.ElementAt(torrentDetails.ChildNodes.Length - 3).TextContent;
                     var dateStr = rawDateStr.Trim().Replace("von", "").Trim();
                     DateTime dateGerman;
                     if (dateStr.StartsWith("Heute "))
@@ -214,23 +217,23 @@ namespace Jackett.Common.Indexers
                     var pubDateUtc = TimeZoneInfo.ConvertTimeToUtc(dateGerman, germanyTz);
                     release.PublishDate = pubDateUtc.ToLocalTime();
 
-                    var imdbLink = descCol.Cq().Find("a[href*=\"&searchin=imdb\"]");
-                    if (imdbLink.Any())
-                        release.Imdb = ParseUtil.GetLongFromString(imdbLink.Attr("href"));
+                    var imdbLink = descCol.QuerySelector("a[href*=\"&searchin=imdb\"]");
+                    if (imdbLink != null)
+                        release.Imdb = ParseUtil.GetLongFromString(imdbLink.GetAttribute("href"));
 
-                    var sizeFileCountRowChilds = row.ChildElements.ElementAt(5).ChildElements;
-                    release.Size = ReleaseInfo.GetBytes(sizeFileCountRowChilds.ElementAt(0).Cq().Text());
-                    release.Files = ParseUtil.CoerceInt(sizeFileCountRowChilds.ElementAt(2).Cq().Text());
+                    var sizeFileCountRowChilds = row.Children[5].Children;
+                    release.Size = ReleaseInfo.GetBytes(sizeFileCountRowChilds[0].TextContent);
+                    release.Files = ParseUtil.CoerceInt(sizeFileCountRowChilds[2].TextContent);
 
-                    release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(7).Cq().Text());
-                    release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(8).Cq().Text()) + release.Seeders;
+                    release.Seeders = ParseUtil.CoerceInt(row.Children[7].TextContent);
+                    release.Peers = ParseUtil.CoerceInt(row.Children[8].TextContent) + release.Seeders;
 
-                    var grabs = qRow.Find("td:nth-child(7)").Text();
+                    var grabs = row.QuerySelector("td:nth-child(7)").TextContent;
                     release.Grabs = ParseUtil.CoerceInt(grabs);
 
                     if (globalFreeleech)
                         release.DownloadVolumeFactor = 0;
-                    else if (qRow.Find("span.torrent-tag-free").Length >= 1)
+                    else if (row.QuerySelector("span.torrent-tag-free") != null)
                         release.DownloadVolumeFactor = 0;
                     else
                         release.DownloadVolumeFactor = 1;
