@@ -367,3 +367,19 @@ stages:
           isDraft: true
           addChangeLog: true
           compareWith: lastNonDraftRelease
+
+      - task: PowerShell@2
+        displayName: Try and Find Logs
+        inputs:
+          workingDirectory: /
+          targetType: inline
+          script: |
+            Get-Childitem –Path /_diag -Recurse
+
+      - task: PowerShell@2
+        displayName: Try and Find Logs 2
+        inputs:
+          workingDirectory: /
+          targetType: inline
+          script: |
+            Get-Childitem –Path / -Recurse
