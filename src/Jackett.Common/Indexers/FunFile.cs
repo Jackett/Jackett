@@ -121,11 +121,11 @@ namespace Jackett.Common.Indexers
 
                     var qCatLink = row.QuerySelector("a[href^=browse.php?cat=]");
                     var qDetailsLink = row.QuerySelector("a[href^=details.php?id=]");
-                    var qSeeders = row.QuerySelector("td:eq(9)");
-                    var qLeechers = row.QuerySelector("td:eq(10)");
+                    var qSeeders = row.QuerySelector("td:nth-of-type(10)");
+                    var qLeechers = row.QuerySelector("td:nth-of-type(11)");
                     var qDownloadLink = row.QuerySelector("a[href^=download.php]");
-                    var qTimeAgo = row.QuerySelector("td:eq(5)");
-                    var qSize = row.QuerySelector("td:eq(7)");
+                    var qTimeAgo = row.QuerySelector("td:nth-of-type(6)");
+                    var qSize = row.QuerySelector("td:nth-of-type(8)");
 
                     var catStr = qCatLink.GetAttribute("href").Split('=')[1].Split('&')[0];
                     release.Category = MapTrackerCatToNewznab(catStr);
