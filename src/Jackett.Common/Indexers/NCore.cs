@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using CsQuery;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
@@ -107,10 +107,11 @@ namespace Jackett.Common.Indexers
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, referer: SiteLink);
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("profile.php"), () =>
             {
-                CQ dom = result.Content;
-                var messageEl = dom["#hibauzenet table tbody tr"];
-                var msgContainer = messageEl.Get(0).ChildElements.ElementAt(1);
-                var errorMessage = msgContainer != null ? msgContainer.InnerText : "Error while trying to login.";
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(result.Content);
+                var messageEl = dom.QuerySelector("#hibauzenet table tbody tr");
+                var msgContainer = messageEl.Children[1];
+                var errorMessage = msgContainer != null ? msgContainer.TextContent : "Error while trying to login.";
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
 
@@ -122,24 +123,25 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
             try
             {
-                CQ dom = results.Content;
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(results.Content);
 
                 ReleaseInfo release;
-                var rows = dom[".box_torrent_all"].Find(".box_torrent");
+                var rows = dom.QuerySelector(".box_torrent_all").QuerySelectorAll(".box_torrent");
 
                 // Check torrents only till we reach the query Limit 
                 for (var i = previously_parsed_on_page; (i < rows.Length && ((already_founded + releases.Count) < limit)); i++)
                 {
                     try
                     {
-                        var qRow = rows[i].Cq();
-                        var key = dom["link[rel=alternate]"].First().Attr("href").Split('=').Last();
+                        var row = rows[i];
+                        var key = dom.QuerySelector("link[rel=alternate]").GetAttribute("href").Split('=').Last();
 
                         release = new ReleaseInfo();
-                        var torrentTxt = qRow.Find(".torrent_txt, .torrent_txt2").Find("a").Get(0);
+                        var torrentTxt = row.QuerySelector(".torrent_txt, .torrent_txt2").QuerySelector("a");
                         //if (torrentTxt == null) continue;
                         release.Title = torrentTxt.GetAttribute("title");
-                        release.Description = qRow.Find("span").Get(0).GetAttribute("title") + " " + qRow.Find("a.infolink").Text();
+                        release.Description = row.QuerySelector("span").GetAttribute("title") + " " + row.QuerySelector("a.infolink").TextContent;
 
                         release.MinimumRatio = 1;
                         release.MinimumSeedTime = 172800; // 48 hours
@@ -153,11 +155,11 @@ namespace Jackett.Common.Indexers
                         release.Comments = new Uri(SiteLink.ToString() + "torrents.php?action=details&id=" + downloadId);
                         release.Guid = new Uri(release.Comments.ToString() + "#comments");
                         ;
-                        release.Seeders = ParseUtil.CoerceInt(qRow.Find(".box_s2").Find("a").First().Text());
-                        release.Peers = ParseUtil.CoerceInt(qRow.Find(".box_l2").Find("a").First().Text()) + release.Seeders;
-                        var imdblink = qRow.Find("a[href*=\".imdb.com/title\"]").Attr("href");
+                        release.Seeders = ParseUtil.CoerceInt(row.QuerySelector(".box_s2").QuerySelector("a").TextContent);
+                        release.Peers = ParseUtil.CoerceInt(row.QuerySelector(".box_l2").QuerySelector("a").TextContent) + release.Seeders;
+                        var imdblink = row.QuerySelector("a[href*=\".imdb.com/title\"]").GetAttribute("href");
                         release.Imdb = ParseUtil.GetLongFromString(imdblink);
-                        var banner = qRow.Find("img.infobar_ico").Attr("onmouseover");
+                        var banner = row.QuerySelector("img.infobar_ico").GetAttribute("onmouseover");
                         if (banner != null)
                         {
                             var BannerRegEx = new Regex(@"mutat\('(.*?)', '", RegexOptions.Compiled);
@@ -165,10 +167,10 @@ namespace Jackett.Common.Indexers
                             var bannerurl = BannerMatch.Groups[1].Value;
                             release.BannerUrl = new Uri(bannerurl);
                         }
-                        release.PublishDate = DateTime.Parse(qRow.Find(".box_feltoltve2").Get(0).InnerHTML.Replace("<br />", " "), CultureInfo.InvariantCulture);
-                        var sizeSplit = qRow.Find(".box_meret2").Get(0).InnerText.Split(' ');
+                        release.PublishDate = DateTime.Parse(row.QuerySelector(".box_feltoltve2").InnerHtml.Replace("<br />", " "), CultureInfo.InvariantCulture);
+                        var sizeSplit = row.QuerySelector(".box_meret2").TextContent.Split(' ');
                         release.Size = ReleaseInfo.GetBytes(sizeSplit[1].ToLower(), ParseUtil.CoerceFloat(sizeSplit[0]));
-                        var catlink = qRow.Find("a:has(img[class='categ_link'])").First().Attr("href");
+                        var catlink = row.QuerySelector("a:has(img[class='categ_link'])").GetAttribute("href");
                         var cat = ParseUtil.GetArgumentFromQueryString(catlink, "tipus");
                         release.Category = MapTrackerCatToNewznab(cat);
 
@@ -217,7 +219,7 @@ namespace Jackett.Common.Indexers
                     }
                     catch (FormatException ex)
                     {
-                        logger.Error("Problem of parsing Torrent:" + rows[i].InnerHTML);
+                        logger.Error("Problem of parsing Torrent:" + rows[i].InnerHtml);
                         logger.Error("Exception was the following:" + ex);
                     }
                 }
@@ -270,11 +272,12 @@ namespace Jackett.Common.Indexers
             var results = await PostDataWithCookiesAndRetry(SearchUrl, pairs);
 
 
-            CQ dom = results.Content;
+            var parser = new HtmlParser();
+            var dom = parser.ParseDocument(results.Content);
             var numVal = 0;
 
             // find number of torrents / page
-            var torrent_per_page = dom[".box_torrent_all"].Find(".box_torrent").Length;
+            var torrent_per_page = dom.QuerySelector(".box_torrent_all").QuerySelectorAll(".box_torrent").Length;
             if (torrent_per_page == 0)
                 return releases;
             var start_page = (query.Offset / torrent_per_page) + 1;
@@ -283,13 +286,13 @@ namespace Jackett.Common.Indexers
                 previously_parsed_on_page = query.Offset;
 
             // find pagelinks in the bottom
-            var pagelinks = dom["div[id=pager_bottom]"].Find("a");
+            var pagelinks = dom.QuerySelector("div[id=pager_bottom]").QuerySelectorAll("a");
             if (pagelinks.Length > 0)
             {
                 // If there are several pages find the link for the latest one
                 for (var i = pagelinks.Length - 1; i > 0; i--)
                 {
-                    var last_page_link = (pagelinks[i].Cq().Attr("href")).Trim();
+                    var last_page_link = (pagelinks[i].GetAttribute("href")).Trim();
                     if (last_page_link.Contains("oldal"))
                     {
                         var match = Regex.Match(last_page_link, @"(?<=[\?,&]oldal=)(\d+)(?=&)");
