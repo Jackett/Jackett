@@ -1,23 +1,23 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  
+
   <PropertyGroup>
     <TargetFrameworks>netcoreapp3.1;net461</TargetFrameworks>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <Compile Remove="Indexers\**" />
     <EmbeddedResource Remove="Indexers\**" />
     <None Remove="Indexers\**" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <None Remove="Util\Invalid-RSS.xml" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <EmbeddedResource Include="Util\Invalid-RSS.xml" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <PackageReference Include="Autofac" Version="5.1.2" />
     <PackageReference Include="FluentAssertions" Version="5.10.2" />
@@ -30,11 +30,11 @@
     <PackageReference Include="NUnit3TestAdapter" Version="3.16.1" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="4.7.0" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\Jackett.Common\Jackett.Common.csproj" />
     <ProjectReference Include="..\Jackett.Server\Jackett.Server.csproj" />

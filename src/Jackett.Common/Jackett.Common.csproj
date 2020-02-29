@@ -14,7 +14,6 @@
     <PackageReference Include="BencodeNET" Version="3.1.0" />
     <PackageReference Include="CloudflareSolverRe" Version="1.0.6" />
     <PackageReference Include="CommandLineParser" Version="2.7.82" />
-    <PackageReference Include="CsQuery.NETStandard" Version="1.3.6.1" />
     <PackageReference Include="DotNet4.SocksProxy" Version="1.4.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
     <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
@@ -25,7 +24,7 @@
     <PackageReference Include="SharpZipLib" Version="1.2.0" />
     <PackageReference Include="System.IO.FileSystem.AccessControl" Version="4.7.0" />
     <PackageReference Include="System.ServiceProcess.ServiceController" Version="4.7.0" />
-    <PackageReference Include="YamlDotNet" Version="8.1.0" />    
+    <PackageReference Include="YamlDotNet" Version="8.1.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -216,7 +215,7 @@
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <EmbeddedResource Update="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -230,5 +229,5 @@
       <_Parameter1>$([System.DateTime]::UtcNow.ToString("yyyyMMddHHmmss"))</_Parameter1>
     </AssemblyAttribute>
   </ItemGroup>
-  
+
 </Project>
