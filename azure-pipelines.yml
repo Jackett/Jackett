@@ -363,7 +363,6 @@ stages:
           tag: v$(Build.BuildNumber)
           title: v$(Build.BuildNumber)
           assets: $(Build.ArtifactStagingDirectory)/drop/*
-          assetUploadMode: delete
           isDraft: true
           addChangeLog: true
           compareWith: lastNonDraftRelease
