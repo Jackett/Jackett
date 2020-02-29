@@ -291,7 +291,7 @@ namespace Jackett.Common.Indexers
 
                     var qLink = row.Children[1].QuerySelector("a");
                     release.Title = qLink.GetAttribute("title");
-                    if (qLink.QuerySelectorAll("span").Count() == 1 && release.Title.StartsWith("NEW! |"))
+                    if (qLink.QuerySelectorAll("span").Length == 1 && release.Title.StartsWith("NEW! |"))
                     {
                         release.Title = release.Title.Substring(6).Trim();
                     }
