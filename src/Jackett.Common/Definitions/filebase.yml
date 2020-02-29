@@ -6,7 +6,7 @@
   type: public
   encoding: UTF-8
   links:
-    - http://www.filebase.ws/
+    - http://www.filebase.ws/ # https is not supported
 
   caps:
     categorymappings:
@@ -173,8 +173,6 @@
         attribute: href
       download:
         text: "{{ .Config.sitelink }}download.php?id={{ .Result.torrent_id }}"
-        filters:
-          - name: strdump
       date:
         selector: td:nth-child(4)
         filters:
