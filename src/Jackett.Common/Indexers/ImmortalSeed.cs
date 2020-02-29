@@ -143,7 +143,7 @@ namespace Jackett.Common.Indexers
 
                     var qDetails = row.QuerySelector("div > a[href*=\"details.php?id=\"]"); // details link, release name get's shortened if it's to long
                     // use Title from tooltip or fallback to Details link if there's no tooltip
-                    var qTitle = row.QuerySelector(".tooltip-content > div:eq(0)") ?? qDetails;
+                    var qTitle = row.QuerySelector(".tooltip-content > div:nth-of-type(1)") ?? qDetails;
                     release.Title = qTitle.TextContent;
 
                     var qDesciption = row.QuerySelectorAll(".tooltip-content > div");
@@ -156,16 +156,16 @@ namespace Jackett.Common.Indexers
                     release.Comments = new Uri(qDetails.GetAttribute("href"));
 
                     // 07-22-2015 11:08 AM
-                    var dateString = row.QuerySelectorAll("td:eq(1) div").Last().FirstElementChild.LastChild.TextContent.Trim();
+                    var dateString = row.QuerySelectorAll("td:nth-of-type(2) div").Last().FirstElementChild.LastChild.TextContent.Trim();
                     release.PublishDate = DateTime.ParseExact(dateString, "MM-dd-yyyy hh:mm tt", CultureInfo.InvariantCulture);
 
-                    var sizeStr = row.QuerySelector("td:eq(4)").TextContent.Trim();
+                    var sizeStr = row.QuerySelector("td:nth-of-type(5)").TextContent.Trim();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
 
-                    release.Seeders = ParseUtil.CoerceInt(row.QuerySelector("td:eq(6)").TextContent.Trim());
-                    release.Peers = ParseUtil.CoerceInt(row.QuerySelector("td:eq(7)").TextContent.Trim()) + release.Seeders;
+                    release.Seeders = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(7)").TextContent.Trim());
+                    release.Peers = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(8)").TextContent.Trim()) + release.Seeders;
 
-                    var catLink = row.QuerySelector("td:eq(0) a").GetAttribute("href");
+                    var catLink = row.QuerySelector("td:nth-of-type(1) a").GetAttribute("href");
                     var catSplit = catLink.IndexOf("category=");
                     if (catSplit > -1)
                     {
