@@ -369,17 +369,19 @@ stages:
           compareWith: lastNonDraftRelease
 
       - task: PowerShell@2
-        displayName: Try and Find Logs
-        inputs:
-          workingDirectory: /
-          targetType: inline
-          script: |
-            Get-Childitem –Path /_diag -Recurse
-
-      - task: PowerShell@2
         displayName: Try and Find Logs 2
+        condition: always()
         inputs:
           workingDirectory: /
           targetType: inline
           script: |
             Get-Childitem –Path / -Recurse
+
+      - task: Bash@3
+        displayName: Try and Find Logs 3
+        condition: always()
+        inputs:
+          workingDirectory: /
+          targetType: inline
+          script: |
+            ls -LR /_diag
