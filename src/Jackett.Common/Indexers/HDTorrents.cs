@@ -192,7 +192,7 @@ namespace Jackett.Common.Indexers
                     var dateString = dateSplit[1].Substring(0, dateSplit[1].IndexOf('>')).Trim();
                     release.PublishDate = DateTime.ParseExact(dateString, "dd MMM yyyy HH:mm:ss zz00", CultureInfo.InvariantCulture).ToLocalTime();
 
-                    var category = qRow.QuerySelector("td:eq(0) a").GetAttribute("href").Replace("torrents.php?category=", "");
+                    var category = qRow.QuerySelector("td:nth-of-type(1) a").GetAttribute("href").Replace("torrents.php?category=", "");
                     release.Category = MapTrackerCatToNewznab(category);
 
                     release.UploadVolumeFactor = 1;
