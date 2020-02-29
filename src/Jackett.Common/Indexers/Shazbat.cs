@@ -130,7 +130,7 @@ namespace Jackett.Common.Indexers
                     var parser = new HtmlParser();
                     var dom = parser.ParseDocument(results.Content);
                     var rows = dom.QuerySelectorAll(
-                        string.IsNullOrWhiteSpace(queryString) ? "table tr" : "#torrent-table tr");
+                        string.IsNullOrWhiteSpace(queryString) ? "#torrent-table tr" : "table tr");
 
                     var globalFreeleech =
                         dom.QuerySelector("span:contains(\"Freeleech until:\"):has(span.datetime)") != null;
