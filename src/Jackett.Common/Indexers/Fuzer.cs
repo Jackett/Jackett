@@ -6,7 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using CsQuery;
+using AngleSharp.Dom;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Helpers;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -103,13 +104,14 @@ namespace Jackett.Common.Indexers
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
             var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
-            CQ cq = loginPage.Content;
-            var captcha = cq.Find(".g-recaptcha"); // invisible recaptcha
-            if (captcha.Any())
+            var parser = new HtmlParser();
+            var cq = parser.ParseDocument(loginPage.Content);
+            var captcha = cq.QuerySelector(".g-recaptcha"); // invisible recaptcha
+            if (captcha != null)
             {
                 var result = configData;
                 result.CookieHeader.Value = loginPage.Cookies;
-                result.Captcha.SiteKey = captcha.Attr("data-sitekey");
+                result.Captcha.SiteKey = captcha.GetAttribute("data-sitekey");
                 result.Captcha.Version = "2";
                 return result;
             }
@@ -228,68 +230,68 @@ namespace Jackett.Common.Indexers
             var data = await RequestStringWithCookiesAndRetry(searchUrl);
             try
             {
-                CQ dom = data.Content;
-                var rows = dom["tr.box_torrent"];
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(data.Content);
+                var rows = dom.QuerySelectorAll("tr.box_torrent");
                 foreach (var row in rows)
                 {
-                    var qRow = row.Cq();
-
                     var release = new ReleaseInfo();
-                    var main_title_link = qRow.Find("div.main_title > a");
-                    release.Title = main_title_link.Attr("longtitle");
+                    var main_title_link = row.QuerySelector("div.main_title > a");
+                    release.Title = main_title_link.GetAttribute("longtitle");
                     if (release.Title.IsNullOrEmptyOrWhitespace())
-                        release.Title = main_title_link.Text();
+                        release.Title = main_title_link.TextContent;
 
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800; // 48 hours
 
-                    if (ParseUtil.TryCoerceInt(qRow.Find("td:nth-child(7) > div").Text(), out var seeders))
+                    if (ParseUtil.TryCoerceInt(row.QuerySelector("td:nth-child(7) > div").TextContent, out var seeders))
                     {
                         release.Seeders = seeders;
-                        if (ParseUtil.TryCoerceInt(qRow.Find("td:nth-child(8) > div").Text(), out var peers))
+                        if (ParseUtil.TryCoerceInt(row.QuerySelector("td:nth-child(8) > div").TextContent, out var peers))
                         {
                             release.Peers = peers + release.Seeders;
                         }
                     }
-                    release.Grabs = ParseUtil.CoerceLong(qRow.Find("td:nth-child(5)").Text().Replace(",", ""));
-                    release.Seeders = ParseUtil.CoerceInt(qRow.Find("td:nth-child(6)").Text().Replace(",", ""));
-                    release.Peers = ParseUtil.CoerceInt(qRow.Find("td:nth-child(7)").Text().Replace(",", "")) + release.Seeders;
-                    var fullSize = qRow.Find("td:nth-child(4)").Text();
+                    release.Grabs = ParseUtil.CoerceLong(row.QuerySelector("td:nth-child(5)").TextContent.Replace(",", ""));
+                    release.Seeders = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(6)").TextContent.Replace(",", ""));
+                    release.Peers = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(7)").TextContent.Replace(",", "")) + release.Seeders;
+                    var fullSize = row.QuerySelector("td:nth-child(4)").TextContent;
                     release.Size = ReleaseInfo.GetBytes(fullSize);
 
-                    release.Comments = new Uri(SiteLink + qRow.Find("a.threadlink[href]").Attr("href"));
-                    release.Link = new Uri(SiteLink + qRow.Find("a:has(div.dlimg)").Attr("href"));
+                    release.Comments = new Uri(SiteLink + row.QuerySelector("a.threadlink[href]").GetAttribute("href"));
+                    release.Link = new Uri(SiteLink + row.QuerySelector("a:has(div.dlimg)").GetAttribute("href"));
                     release.Guid = release.Comments;
                     try
                     {
-                        release.BannerUrl = new Uri(qRow.Find("a[imgsrc]").Attr("imgsrc"));
+                        release.BannerUrl = new Uri(row.QuerySelector("a[imgsrc]").GetAttribute("imgsrc"));
                     }
                     catch (Exception)
                     {
                         // do nothing, some releases have invalid banner URLs, ignore the banners in this case
                     }
 
-                    var dateStringAll = qRow.Find("div.up_info2")[0].ChildNodes.Last().ToString();
+                    var dateStringAll = row.QuerySelector("div.up_info2").ChildNodes.Last().ToString();
                     var dateParts = dateStringAll.Split(' ');
                     var dateString = dateParts[dateParts.Length - 2] + " " + dateParts[dateParts.Length - 1];
                     release.PublishDate = DateTime.ParseExact(dateString, "dd/MM/yy HH:mm", CultureInfo.InvariantCulture);
 
-                    var categoryLink = qRow.Find("a[href^=\"/browse.php?cat=\"]").Attr("href");
+                    var categoryLink = row.QuerySelector("a[href^=\"/browse.php?cat=\"]").GetAttribute("href");
                     var catid = ParseUtil.GetArgumentFromQueryString(categoryLink, "cat");
                     release.Category = MapTrackerCatToNewznab(catid);
 
-                    if (qRow.Find("a[href^=\"?freeleech=1\"]").Length >= 1)
+                    if (row.QuerySelector("a[href^=\"?freeleech=1\"]") != null)
                         release.DownloadVolumeFactor = 0;
                     else
                         release.DownloadVolumeFactor = 1;
 
                     release.UploadVolumeFactor = 1;
 
-                    var sub_title = qRow.Find("div.sub_title");
-                    var imdb_link = sub_title.Find("span.imdb-inline > a");
-                    release.Imdb = ParseUtil.GetLongFromString(imdb_link.Attr("href"));
-                    sub_title.Find("span.imdb-inline").Remove();
-                    release.Description = sub_title.Text();
+                    var sub_title = row.QuerySelector("div.sub_title");
+                    var imdb_link = sub_title.QuerySelector("span.imdb-inline > a");
+                    release.Imdb = ParseUtil.GetLongFromString(imdb_link.GetAttribute("href"));
+                    foreach(var element in sub_title.QuerySelectorAll("span.imdb-inline"))
+                        element.Remove();
+                    release.Description = sub_title.TextContent;
 
                     releases.Add(release);
                 }
@@ -310,10 +312,11 @@ namespace Jackett.Common.Indexers
 
             var results = await RequestStringWithCookies(url);
 
-            CQ dom = results.Content;
+            var parser = new HtmlParser();
+            var dom = parser.ParseDocument(results.Content);
 
             var rowCount = 0;
-            var rows = dom["#listtable > tbody > tr"];
+            var rows = dom.QuerySelectorAll("#listtable > tbody > tr");
 
             foreach (var row in rows)
             {
@@ -323,19 +326,17 @@ namespace Jackett.Common.Indexers
                     continue;
                 }
 
-                var qRow = row.Cq();
-                var link = qRow.Find("td:nth-child(1) > a");
-                if (link.Text().Trim().ToLower() == searchTerm.Trim().ToLower())
+                var link = row.QuerySelector("td:nth-child(1) > a");
+                if (link.TextContent.Trim().ToLower() == searchTerm.Trim().ToLower())
                 {
-                    var address = link.Attr("href");
+                    var address = link.GetAttribute("href");
                     if (string.IsNullOrEmpty(address))
                     { continue; }
 
                     var realAddress = site + address.Replace("lid=7", "lid=24");
                     var realData = await RequestStringWithCookies(realAddress);
-
-                    CQ realDom = realData.Content;
-                    return realDom["#content:nth-child(1) > h1"].Text();
+                    var realDom = parser.ParseDocument(results.Content);
+                    return realDom.QuerySelector("#content:nth-child(1) > h1").TextContent;
                 }
             }
 
