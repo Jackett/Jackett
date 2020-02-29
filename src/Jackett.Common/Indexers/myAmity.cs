@@ -81,7 +81,7 @@ namespace Jackett.Common.Indexers
             {
                 var parser = new HtmlParser();
                 var dom = parser.ParseDocument(result.Content);
-                var errorMessage = dom.QuerySelector("div.myFrame-content").Html();
+                var errorMessage = dom.QuerySelector("div.myFrame-content").InnerHtml;
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
             return IndexerConfigurationStatus.RequiresTesting;
