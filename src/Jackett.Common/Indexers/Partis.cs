@@ -5,7 +5,6 @@ using System.Globalization;
 using System.Text;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
-using CsQuery;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -101,8 +100,9 @@ namespace Jackett.Common.Indexers
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, string.Empty, false, null, null, true);
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("/odjava"), () =>
             {
-                CQ dom = result.Content;
-                var errorMessage = dom["div.obvet > span.najvecji"].Text().Trim(); // Prijava ni uspela! obvestilo
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(result.Content);
+                var errorMessage = dom.QuerySelector("div.obvet > span.najvecji").TextContent.Trim(); // Prijava ni uspela! obvestilo
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
             return IndexerConfigurationStatus.RequiresTesting;
