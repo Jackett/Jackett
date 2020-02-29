@@ -194,8 +194,7 @@ namespace Jackett.Common.Indexers
                     var torrentTag = descCol.QuerySelectorAll("span.torrent-tag");
                     if (torrentTag.Any())
                     {
-                        var torrentTags = torrentTag.Select(x => x.InnerHtml).ToList();
-                        release.Description = string.Join(", ", torrentTags);
+                        release.Description = string.Join(", ", torrentTag.Select(x => x.InnerHtml));
                     }
 
                     var qCommentLink = descCol.FirstElementChild;
