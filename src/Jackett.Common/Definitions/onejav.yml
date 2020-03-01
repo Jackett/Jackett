@@ -1,0 +1,76 @@
+---
+  site: onejav
+  name: OneJAV
+  description: "OneJAV is a Public tracker for Asian 3X (JAV)"
+  language: en
+  type: public
+  encoding: UTF-8
+  links:
+    - https://onejav.com/
+
+  caps:
+    categories:
+      XXX: XXX
+
+    modes:
+      search: [q]
+
+  settings: []
+
+  search:
+    paths:
+      - path: "{{ if .Keywords }}search/{{ .Keywords }}{{else}}new{{end}}"
+      - path: "{{ if .Keywords }}search/{{ .Keywords }}{{else}}new{{end}}?page=2"
+      
+    rows:
+      selector: div.mb-3
+
+    fields:
+      category:
+        text: XXX
+      title:
+        selector: a[href^="/torrent/"]
+      details:
+        selector: a[href^="/torrent/"]
+        attribute: href
+      download:
+        selector: a[href*="/download/"]
+        attribute: href
+      banner:
+        selector: img
+        attribute: src
+      actress:
+        text: ""
+      actress:
+        selector: a[href^="/actress/"]
+        optional: true
+        filters:
+          - name: prepend
+            args: "Actress: "
+      tags:
+        selector: div.tags
+        filters:
+          - name: prepend
+            args: "Tags: "
+      description:
+        selector: p.level
+        filters:
+          - name: append
+            args: "</br>{{ .Result.actress }}</br>{{ .Result.tags }}"
+      date:
+        selector: p.is-6 > a
+        attribute: href
+        filters:
+          - name: dateparse
+            args: "/2006/01/02"
+      size:
+        selector: span.is-size-6
+      seeders:
+        text: 1
+      leechers:
+        text: 1
+      downloadvolumefactor:
+        text: 0
+      uploadvolumefactor:
+        text: 1
+# engine n/a
