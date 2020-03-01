@@ -307,7 +307,7 @@ namespace Jackett.Common.Indexers
                     pageLinkCount = 1;
 
                     // Check if we have a minimum of one result
-                    if (firstPageRows?.Length > 1)
+                    if (firstPageRows?.Count() > 1)
                     {
                         // Retrieve total count on our alone page
                         nbResults = firstPageRows.Count();
@@ -319,12 +319,12 @@ namespace Jackett.Common.Indexers
                         break;
                     }
 
-                    Output("\nFound " + nbResults + " result(s) (+/- " + firstPageRows.Length + ") in " + pageLinkCount + " page(s) for this query !");
-                    Output("\nThere are " + (firstPageRows.Length - 2) + " results on the first page !");
+                    Output("\nFound " + nbResults + " result(s) (+/- " + firstPageRows.Count() + ") in " + pageLinkCount + " page(s) for this query !");
+                    Output("\nThere are " + (firstPageRows.Count() - 2) + " results on the first page !");
 
                     // Loop on results
 
-                    foreach (var row in firstPageRows.Skip(1).Take(firstPageRows.Length - 2))
+                    foreach (var row in firstPageRows.Skip(1).Take(firstPageRows.Count() - 2))
                     {
                         Output("Torrent #" + (releases.Count + 1));
 
@@ -677,7 +677,7 @@ namespace Jackett.Common.Indexers
             {
                 // Return all occurencis of torrents found
                 // $('#base_around > table.mainouter > tbody > tr > td.outer > div.article > table  > tbody:not(:first) > tr')
-                return dom.QuerySelectorAll("#base_around > table.mainouter > tbody > tr > td.outer > div.article > table  > tbody:not(:first) > tr");
+                return dom.QuerySelectorAll("#base_around > table.mainouter > tbody > tr > td.outer > div.article > table  > tbody")[1].QuerySelectorAll("tr");
             }
 
             // template 7 contains a reference to template 2 (logout button), so check for oldV2 first
@@ -685,14 +685,14 @@ namespace Jackett.Common.Indexers
             {
                 // Return all occurencis of torrents found
                 // $('#base_content > table.mainouter > tbody > tr > td.outer > div.article > table > tbody > tr:not(:first)')
-                return dom.QuerySelectorAll("# base_content > table.mainouter > tbody > tr > td.outer > div.article > table > tbody > tr:not(:first)");
+                return dom.QuerySelectorAll("# base_content > table.mainouter > tbody > tr > td.outer > div.article > table > tbody > tr").Skip(1).ToCollection();
             }
 
             if (defaultTheme.Any(dom.Body.InnerHtml.Contains))
             {
                 // Return all occurencis of torrents found
                 // $('#base_content2 > div.article > table > tbody:not(:first) > tr')
-                return dom.QuerySelectorAll("# base_content2 > div.article > table > tbody:not(:first) > tr");
+                return dom.QuerySelectorAll("# base_content2 > div.article > table > tbody")[1].QuerySelectorAll("tr");
             }
             return null;
         }
