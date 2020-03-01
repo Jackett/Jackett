@@ -434,7 +434,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * The New Retro
  * The Occult
  * The Place
- * The Resurrection
  * The Shinning (TsH)
  * The Show
  * The-Madhouse
