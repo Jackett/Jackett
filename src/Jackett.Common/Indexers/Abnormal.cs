@@ -9,7 +9,9 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using CsQuery;
+using AngleSharp.Dom;
+using AngleSharp.Html.Dom;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
@@ -39,7 +41,6 @@ namespace Jackett.Common.Indexers
         private static string Directory => Path.Combine(Path.GetTempPath(), Assembly.GetExecutingAssembly().GetName().Name.ToLower(), MethodBase.GetCurrentMethod().DeclaringType?.Name.ToLower());
 
         private readonly Dictionary<string, string> emulatedBrowserHeaders = new Dictionary<string, string>();
-        private CQ fDom = null;
 
         private ConfigurationDataAbnormal ConfigData
         {
@@ -170,11 +171,12 @@ namespace Jackett.Common.Indexers
             await ConfigureIfOK(response.Cookies, response.Cookies.Contains("session="), () =>
             {
                 // Parse error page
-                CQ dom = response.Content;
-                var message = dom[".warning"].Text().Split('.').Reverse().Skip(1).First();
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(response.Content);
+                var message = dom.QuerySelector(".warning").TextContent.Split('.').Reverse().Skip(1).First();
 
                 // Try left
-                var left = dom[".info"].Text().Trim();
+                var left = dom.QuerySelector(".info").TextContent.Trim();
 
                 // Oops, unable to login
                 output("-> Login failed: \"" + message + "\" and " + left + " tries left before being banned for 6 hours !", "error");
@@ -201,7 +203,7 @@ namespace Jackett.Common.Indexers
             var FranceTz = TimeZoneInfo.CreateCustomTimeZone("W. Europe Standard Time", new TimeSpan(1, 0, 0), "(GMT+01:00) W. Europe Standard Time", "W. Europe Standard Time", "W. Europe DST Time", adjustments);
 
             var releases = new List<ReleaseInfo>();
-            var torrentRowList = new List<CQ>();
+            var qRowList = new List<IElement>();
             var searchTerm = query.GetQueryString();
             var searchUrl = SearchUrl;
             var nbResults = 0;
@@ -226,27 +228,26 @@ namespace Jackett.Common.Indexers
             var request = buildQuery(searchTerm, query, searchUrl);
 
             // Getting results & Store content
-            fDom = await queryExec(request);
+            var parser = new HtmlParser();
+            var dom = parser.ParseDocument(await queryExec(request));
 
             try
             {
                 // Find torrent rows
-                var firstPageRows = findTorrentRows();
+                var firstPageRows = findTorrentRows(dom);
 
                 // Add them to torrents list
-                torrentRowList.AddRange(firstPageRows.Select(fRow => fRow.Cq()));
+                qRowList.AddRange(firstPageRows);
 
                 // Check if there are pagination links at bottom
-                var pagination = (fDom[".linkbox > a"].Length != 0);
-
-                // If pagination available
-                if (pagination)
+                var qPagination = dom.QuerySelectorAll(".linkbox > a");
+                if (qPagination.Length > 0)
                 {
                     // Calculate numbers of pages available for this search query (Based on number results and number of torrents on first page)
-                    pageLinkCount = ParseUtil.CoerceInt(Regex.Match(fDom[".linkbox > a"].Last().Attr("href").ToString(), @"\d+").Value);
+                    pageLinkCount = ParseUtil.CoerceInt(Regex.Match(qPagination.Last().GetAttribute("href").ToString(), @"\d+").Value);
 
                     // Calculate average number of results (based on torrents rows lenght on first page)
-                    nbResults = firstPageRows.Count() * pageLinkCount;
+                    nbResults = firstPageRows.Length * pageLinkCount;
                 }
                 else
                 {
@@ -254,7 +255,7 @@ namespace Jackett.Common.Indexers
                     if (firstPageRows.Length >= 1)
                     {
                         // Retrieve total count on our alone page
-                        nbResults = firstPageRows.Count();
+                        nbResults = firstPageRows.Length;
                         pageLinkCount = 1;
                     }
                     else
@@ -282,27 +283,28 @@ namespace Jackett.Common.Indexers
                         var pageRequest = buildQuery(searchTerm, query, searchUrl, i);
 
                         // Getting results & Store content
-                        fDom = await queryExec(pageRequest);
+                        parser = new HtmlParser();
+                        dom = parser.ParseDocument(await queryExec(pageRequest));
 
                         // Process page results
-                        var additionalPageRows = findTorrentRows();
+                        var additionalPageRows = findTorrentRows(dom);
 
                         // Add them to torrents list
-                        torrentRowList.AddRange(additionalPageRows.Select(fRow => fRow.Cq()));
+                        qRowList.AddRange(additionalPageRows);
                     }
                 }
 
                 // Loop on results
-                foreach (var tRow in torrentRowList)
+                foreach (var row in qRowList)
                 {
                     output("\n=>> Torrent #" + (releases.Count + 1));
 
                     // ID
-                    var id = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(1) > a").Attr("href").ToString(), @"\d+").Value);
+                    var id = ParseUtil.CoerceInt(Regex.Match(row.QuerySelector("td:nth-of-type(2) > a").GetAttribute("href"), @"\d+").Value);
                     output("ID: " + id);
 
                     // Release Name
-                    var name = tRow.Find("td:eq(1) > a").Text();
+                    var name = row.QuerySelector("td:nth-of-type(2) > a").TextContent;
                     //issue #3847 replace multi keyword
                     if (!string.IsNullOrEmpty(ReplaceMulti))
                     {
@@ -312,29 +314,29 @@ namespace Jackett.Common.Indexers
                     output("Release: " + name);
 
                     // Category
-                    var categoryID = tRow.Find("td:eq(0) > a").Attr("href").Replace("torrents.php?cat[]=", string.Empty);
-                    var newznab = MapTrackerCatToNewznab(categoryID);
-                    output("Category: " + MapTrackerCatToNewznab(categoryID).First().ToString() + " (" + categoryID + ")");
+                    var categoryId = row.QuerySelector("td:nth-of-type(1) > a").GetAttribute("href").Replace("torrents.php?cat[]=", string.Empty);
+                    var newznab = MapTrackerCatToNewznab(categoryId);
+                    output("Category: " + MapTrackerCatToNewznab(categoryId).First().ToString() + " (" + categoryId + ")");
 
                     // Seeders
-                    var seeders = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(5)").Text(), @"\d+").Value);
+                    var seeders = ParseUtil.CoerceInt(Regex.Match(row.QuerySelector("td:nth-of-type(6)").TextContent, @"\d+").Value);
                     output("Seeders: " + seeders);
 
                     // Leechers
-                    var leechers = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(6)").Text(), @"\d+").Value);
+                    var leechers = ParseUtil.CoerceInt(Regex.Match(row.QuerySelector("td:nth-of-type(7)").TextContent, @"\d+").Value);
                     output("Leechers: " + leechers);
 
                     // Completed
-                    var completed = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(5)").Text(), @"\d+").Value);
+                    var completed = ParseUtil.CoerceInt(Regex.Match(row.QuerySelector("td:nth-of-type(6)").TextContent, @"\d+").Value);
                     output("Completed: " + completed);
 
                     // Size
-                    var sizeStr = tRow.Find("td:eq(4)").Text().Replace("Go", "gb").Replace("Mo", "mb").Replace("Ko", "kb");
+                    var sizeStr = row.QuerySelector("td:nth-of-type(5)").TextContent.Replace("Go", "gb").Replace("Mo", "mb").Replace("Ko", "kb");
                     var size = ReleaseInfo.GetBytes(sizeStr);
                     output("Size: " + sizeStr + " (" + size + " bytes)");
 
                     // Publish DateToString
-                    var datestr = tRow.Find("span.time").Attr("title");
+                    var datestr = row.QuerySelector("span.time").GetAttribute("title");
                     var dateLocal = DateTime.SpecifyKind(DateTime.ParseExact(datestr, "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture), DateTimeKind.Unspecified);
                     var date = TimeZoneInfo.ConvertTimeToUtc(dateLocal, FranceTz);
                     output("Released on: " + date);
@@ -349,7 +351,7 @@ namespace Jackett.Common.Indexers
 
                     // Torrent Download URL
                     Uri downloadLink = null;
-                    var link = tRow.Find("td:eq(3) > a").Attr("href");
+                    var link = row.QuerySelector("td:nth-of-type(4) > a").GetAttribute("href");
                     if (!string.IsNullOrEmpty(link))
                     {
                         // Download link available
@@ -365,16 +367,16 @@ namespace Jackett.Common.Indexers
 
                     // Freeleech
                     var downloadVolumeFactor = 1;
-                    if (tRow.Find("img[alt=\"Freeleech\"]").Length >= 1)
+                    if (row.QuerySelector("img[alt=\"Freeleech\"]") != null)
                     {
                         downloadVolumeFactor = 0;
                         output("FreeLeech =)");
                     }
 
                     // Building release infos
-                    var release = new ReleaseInfo()
+                    var release = new ReleaseInfo
                     {
-                        Category = MapTrackerCatToNewznab(categoryID.ToString()),
+                        Category = MapTrackerCatToNewznab(categoryId),
                         Title = name,
                         Seeders = seeders,
                         Peers = seeders + leechers,
@@ -632,9 +634,9 @@ namespace Jackett.Common.Indexers
         /// <summary>
         /// Find torrent rows in search pages
         /// </summary>
-        /// <returns>JQuery Object</returns>
-        // Return all occurences of torrents found
-        private CQ findTorrentRows() => fDom[".torrent_table > tbody > tr"].Not(".colhead");
+        /// <returns>List of rows</returns>
+        private IHtmlCollection<IElement> findTorrentRows(IHtmlDocument dom) =>
+            dom.QuerySelectorAll(".torrent_table > tbody > tr:not(.colhead)");
 
         /// <summary>
         /// Output message for logging or developpment (console)
