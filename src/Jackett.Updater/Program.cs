@@ -271,11 +271,12 @@ namespace Jackett.Updater
                 "Content/crissXcross.png",
                 "Content/css/jquery.dataTables.css",
                 "Content/css/jquery.dataTables_themeroller.css",
+                "CsQuery.dll",
                 "CurlSharp.dll",
                 "CurlSharp.pdb",
                 "Definitions/420files.yml",
-                "Definitions/aox.yml",
                 "Definitions/anidex.yml", // migrated to C#
+                "Definitions/aox.yml",
                 "Definitions/apollo.yml", // migrated to C# gazelle base tracker
                 "Definitions/archetorrent.yml",
                 "Definitions/asiandvdclub.yml",
@@ -383,9 +384,11 @@ namespace Jackett.Updater
                 "Microsoft.Owin.Hosting.dll",
                 "Microsoft.Owin.StaticFiles.dll",
                 "Owin.dll",
+                "System.ServiceModel.dll",
                 "System.Web.Http.dll",
                 "System.Web.Http.Owin.dll",
                 "System.Web.Http.Tracing.dll",
+                "System.Xml.XPath.XmlDocument.dll"
             };
 
             foreach (var oldFile in oldFiles)
