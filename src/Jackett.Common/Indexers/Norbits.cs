@@ -8,7 +8,9 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using CsQuery;
+using AngleSharp.Dom;
+using AngleSharp.Html.Dom;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Helpers;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
@@ -38,7 +40,7 @@ namespace Jackett.Common.Indexers
         private static string Directory => Path.Combine(Path.GetTempPath(), "Jackett", MethodBase.GetCurrentMethod().DeclaringType?.Name);
 
         private readonly Dictionary<string, string> _emulatedBrowserHeaders = new Dictionary<string, string>();
-        private CQ _fDom;
+
         private ConfigurationDataNorbits ConfigData => (ConfigurationDataNorbits)configData;
 
         public Norbits(IIndexerConfigurationService configService, Utils.Clients.WebClient w, Logger l, IProtectionService ps)
@@ -225,7 +227,6 @@ namespace Jackett.Common.Indexers
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var torrentRowList = new List<CQ>();
             var exactSearchTerm = query.GetQueryString();
             var searchUrl = SearchUrl;
 
@@ -261,38 +262,28 @@ namespace Jackett.Common.Indexers
 
                 // Getting results & Store content
                 var response = await RequestStringWithCookiesAndRetry(request, ConfigData.CookieHeader.Value);
-                _fDom = response.Content;
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(response.Content);
 
                 try
                 {
-                    var firstPageRows = FindTorrentRows();
-
-                    // Add them to torrents list
-                    torrentRowList.AddRange(firstPageRows.Select(fRow => fRow.Cq()));
+                    var firstPageRows = FindTorrentRows(dom);
 
                     // If pagination available
                     int nbResults;
-                    int pageLinkCount;
-                    nbResults = 1;
-                    pageLinkCount = 1;
+                    var pageLinkCount = 1;
 
                     // Check if we have a minimum of one result
-                    if (firstPageRows.Length > 1)
+                    if (firstPageRows?.Length > 1)
                     {
                         // Retrieve total count on our alone page
                         nbResults = firstPageRows.Count();
                     }
                     else
                     {
-                        // Check if no result
-                        if (torrentRowList.Count == 0)
-                        {
-                            // No results found
-                            Output("\nNo result found for your query, please try another search term ...\n", "info");
-
-                            // No result found for this query
-                            break;
-                        }
+                        // No result found for this query
+                        Output("\nNo result found for your query, please try another search term ...\n", "info");
+                        break;
                     }
 
                     Output("\nFound " + nbResults + " result(s) (+/- " + firstPageRows.Length + ") in " + pageLinkCount + " page(s) for this query !");
@@ -300,68 +291,54 @@ namespace Jackett.Common.Indexers
 
                     // Loop on results
 
-                    foreach (var tRow in torrentRowList)
+                    foreach (var row in firstPageRows)
                     {
                         Output("Torrent #" + (releases.Count + 1));
 
                         // ID
-                        var id = tRow.Find("td:eq(1) > a:eq(0)").Attr("href").Split('=').Last();
+                        var id = row.QuerySelector("td:nth-of-type(2) > a:nth-of-type(1)").GetAttribute("href").Split('=').Last();
                         Output("ID: " + id);
 
                         // Release Name
-                        var name = tRow.Find("td:eq(1) > a:eq(0)").Attr("title");
+                        var name = row.QuerySelector("td:nth-of-type(2) > a:nth-of-type(1)").GetAttribute("title");
 
                         // Category
-                        var categoryId = tRow.Find("td:eq(0) > div > a:eq(0)").Attr("href").Split('?').Last();
-                        var categoryName = tRow.Find("td:eq(0) > div > a:eq(0)").Attr("title");
+                        var categoryName = row.QuerySelector("td:nth-of-type(1) > div > a:nth-of-type(1)").GetAttribute("title");
+                        var mainCat = row.QuerySelector("td:nth-of-type(1) > div > a:nth-of-type(1)").GetAttribute("href").Split('?').Last();
+                        var qSubCat2 = row.QuerySelector("td:nth-of-type(1) > div > a[href^=\"/browse.php?sub2_cat[]=\"]");
 
-                        var MainCat = tRow.Find("td:eq(0) > div > a:eq(0)").Attr("href").Split('?').Last();
-                        var SubCat1 = "none";
-                        var SubCat2 = "none";
+                        var cat = mainCat;
+                        if (qSubCat2 != null)
+                            cat += '&' + qSubCat2.GetAttribute("href").Split('?').Last();
 
-                        var testcat = MainCat;
-
-                        if (tRow.Find("td:eq(0) > div > a:eq(1)").Length == 1)
-                        {
-                            SubCat1 = tRow.Find("td:eq(0) > div > a:eq(1)").Attr("href").Split('?').Last();
-                        }
-                        if (tRow.Find("td:eq(0) > div > a[href^=\"/browse.php?sub2_cat[]=\"]").Length == 1)
-                        {
-                            SubCat2 = tRow.Find("td:eq(0) > div > a[href^=\"/browse.php?sub2_cat[]=\"]").Attr("href").Split('?').Last();
-                            testcat = MainCat + '&' + SubCat2;
-                        }
-
-                        Output("Category: " + testcat + " - " + categoryName);
+                        Output("Category: " + cat + " - " + categoryName);
 
                         // Seeders
-                        var seeders = ParseUtil.CoerceInt(tRow.Find("td:eq(8)").Text());
+                        var seeders = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(9)").TextContent);
                         Output("Seeders: " + seeders);
 
                         // Leechers
-                        var leechers = ParseUtil.CoerceInt(tRow.Find("td:eq(9)").Text());
+                        var leechers = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(10)").TextContent);
                         Output("Leechers: " + leechers);
 
                         // Completed
                         var regexObj = new Regex(@"[^\d]");
-                        var completed2 = tRow.Find("td:eq(7)").Text();
+                        var completed2 = row.QuerySelector("td:nth-of-type(8)").TextContent;
                         var completed = ParseUtil.CoerceLong(regexObj.Replace(completed2, ""));
                         Output("Completed: " + completed);
 
                         // Files
-                        var files = 1;
-                        if (tRow.Find("td:eq(2) > a").Length == 1)
-                        {
-                            files = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(2) > a").Text(), @"\d+").Value);
-                        }
+                        var qFiles = row.QuerySelector("td:nth-of-type(3) > a");
+                        var files = qFiles != null ? ParseUtil.CoerceInt(Regex.Match(qFiles.TextContent, @"\d+").Value) : 1;
                         Output("Files: " + files);
 
                         // Size
-                        var humanSize = tRow.Find("td:eq(6)").Text().ToLowerInvariant();
+                        var humanSize = row.QuerySelector("td:nth-of-type(7)").TextContent.ToLowerInvariant();
                         var size = ReleaseInfo.GetBytes(humanSize);
                         Output("Size: " + humanSize + " (" + size + " bytes)");
 
                         // --> Date
-                        var dateTimeOrig = tRow.Find("td:eq(4)").Text();
+                        var dateTimeOrig = row.QuerySelector("td:nth-of-type(5)").TextContent;
                         var dateTime = Regex.Replace(dateTimeOrig, @"<[^>]+>|&nbsp;", "").Trim();
                         var date = DateTime.ParseExact(dateTime, "yyyy-MM-ddHH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
                         Output("Released on: " + date);
@@ -375,7 +352,7 @@ namespace Jackett.Common.Indexers
                         Output("Comments Link: " + commentsLink.AbsoluteUri);
 
                         // Torrent Download URL
-                        var passkey = tRow.Find("td:eq(1) > a:eq(1)").Attr("href");
+                        var passkey = row.QuerySelector("td:nth-of-type(2) > a:nth-of-type(2)").GetAttribute("href");
                         var key = Regex.Match(passkey, "(?<=passkey\\=)([a-zA-z0-9]*)");
                         var downloadLink = new Uri(TorrentDownloadUrl.Replace("{id}", id.ToString()).Replace("{passkey}", key.ToString()));
                         Output("Download Link: " + downloadLink.AbsoluteUri);
@@ -383,7 +360,7 @@ namespace Jackett.Common.Indexers
                         // Building release infos
                         var release = new ReleaseInfo
                         {
-                            Category = MapTrackerCatToNewznab(testcat.ToString()),
+                            Category = MapTrackerCatToNewznab(cat),
                             Title = name,
                             Seeders = seeders,
                             Peers = seeders + leechers,
@@ -398,19 +375,19 @@ namespace Jackett.Common.Indexers
                             MinimumSeedTime = 172800 // 48 hours
                         };
 
-                        var genres = tRow.Find("span.genres").Text();
+                        var genres = row.QuerySelector("span.genres")?.TextContent;
                         if (!string.IsNullOrEmpty(genres))
                             release.Description = genres;
 
                         // IMDB
-                        var imdbLink = tRow.Find("a[href*=\"imdb.com/title/tt\"]").First().Attr("href");
+                        var imdbLink = row.QuerySelector("a[href*=\"imdb.com/title/tt\"]")?.GetAttribute("href");
                         release.Imdb = ParseUtil.GetLongFromString(imdbLink);
 
-                        if (tRow.Find("img[title=\"100% freeleech\"]").Length >= 1)
+                        if (row.QuerySelector("img[title=\"100% freeleech\"]") != null)
                             release.DownloadVolumeFactor = 0;
-                        else if (tRow.Find("img[title=\"Halfleech\"]").Length >= 1)
+                        else if (row.QuerySelector("img[title=\"Halfleech\"]") != null)
                             release.DownloadVolumeFactor = 0.5;
-                        else if (tRow.Find("img[title=\"90% Freeleech\"]").Length >= 1)
+                        else if (row.QuerySelector("img[title=\"90% Freeleech\"]") != null)
                             release.DownloadVolumeFactor = 0.1;
                         else
                             release.DownloadVolumeFactor = 1;
@@ -630,13 +607,9 @@ namespace Jackett.Common.Indexers
         /// <summary>
         /// Find torrent rows in search pages
         /// </summary>
-        /// <returns>JQuery Object</returns>
-        private CQ FindTorrentRows()
-        {
-            // Return all occurencis of torrents found
-            //return _fDom["#content > table > tr"];
-            return _fDom["# torrentTable > tbody > tr:not(:first)"];
-        }
+        /// <returns>List of rows</returns>
+        private IHtmlCollection<IElement> FindTorrentRows(IHtmlDocument dom) =>
+           dom.QuerySelectorAll("#torrentTable > tbody > tr").Skip(1).ToCollection();
 
         /// <summary>
         /// Download torrent file from tracker
