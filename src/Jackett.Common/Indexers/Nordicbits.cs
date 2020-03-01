@@ -70,6 +70,7 @@ namespace Jackett.Common.Indexers
             // Books
             AddCategoryMapping("cat=54", TorznabCatType.AudioAudiobook, "Books - Audiobooks");
             AddCategoryMapping("cat=9", TorznabCatType.BooksEbook, "Books - E-Books");
+            AddCategoryMapping("cat=84", TorznabCatType.BooksEbook, "Books - Education");
 
             // Games
             AddCategoryMapping("cat=24", TorznabCatType.PCGames, "Games - PC");
@@ -93,6 +94,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("cat=10", TorznabCatType.MoviesSD, "Movies - SD");
             AddCategoryMapping("cat=23", TorznabCatType.MoviesSD, "Movies - MP4 Tablet");
             AddCategoryMapping("cat=65", TorznabCatType.XXX, "Movies - Porn");
+            AddCategoryMapping("cat=90", TorznabCatType.MoviesHD, "Movies - No Nordic Subs");
 
             // Music
             AddCategoryMapping("cat=28", TorznabCatType.AudioLossless, "Music - FLAC");
@@ -106,6 +108,27 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("cat=48", TorznabCatType.TVUHD, "TV - HD-4K/2160p");
             AddCategoryMapping("cat=57", TorznabCatType.TVUHD, "TV - HD-4K/2160p Boxset");
             AddCategoryMapping("cat=11", TorznabCatType.TVSD, "TV - Boxset");
+            AddCategoryMapping("cat=80", TorznabCatType.TVSD, "TV - Danish Boxset");
+            AddCategoryMapping("cat=71", TorznabCatType.TVHD, "TV - Danish HD-1080p");
+            AddCategoryMapping("cat=72", TorznabCatType.TVHD, "TV - Danish HD-720p");
+            AddCategoryMapping("cat=73", TorznabCatType.TVSD, "TV - Danish SD");
+            AddCategoryMapping("cat=83", TorznabCatType.TVSD, "TV - Finnish Boxset");
+            AddCategoryMapping("cat=77", TorznabCatType.TVHD, "TV - Finnish HD-1080p");
+            AddCategoryMapping("cat=78", TorznabCatType.TVHD, "TV - Finnish HD-720p");
+            AddCategoryMapping("cat=79", TorznabCatType.TVSD, "TV - Finnish SD");
+            AddCategoryMapping("cat=89", TorznabCatType.TVSD, "TV - Nordic Boxset");
+            AddCategoryMapping("cat=86", TorznabCatType.TVHD, "TV - Nordic HD-1080p");
+            AddCategoryMapping("cat=87", TorznabCatType.TVHD, "TV - Nordic HD-720p");
+            AddCategoryMapping("cat=88", TorznabCatType.TVSD, "TV - Nordic SD");
+            AddCategoryMapping("cat=82", TorznabCatType.TVSD, "TV - Norwegian Boxset");
+            AddCategoryMapping("cat=74", TorznabCatType.TVHD, "TV - Norwegian HD-1080p");
+            AddCategoryMapping("cat=75", TorznabCatType.TVHD, "TV - Norwegian HD-720p");
+            AddCategoryMapping("cat=76", TorznabCatType.TVSD, "TV - Norwegian SD");
+            AddCategoryMapping("cat=81", TorznabCatType.TVSD, "TV - Swedish Boxset");
+            AddCategoryMapping("cat=68", TorznabCatType.TVHD, "TV - Swedish HD-1080p");
+            AddCategoryMapping("cat=69", TorznabCatType.TVHD, "TV - Swedish HD-720p");
+            AddCategoryMapping("cat=70", TorznabCatType.TVSD, "TV - Swedish SD");
+            AddCategoryMapping("cat=91", TorznabCatType.TVHD, "TV - No Nordic Subs");
             AddCategoryMapping("cat=7", TorznabCatType.TVHD, "TV - HD-1080p");
             AddCategoryMapping("cat=31", TorznabCatType.TVHD, "TV - HD-1080p Boxset");
             AddCategoryMapping("cat=30", TorznabCatType.TVHD, "TV - HD-720p");
@@ -404,7 +427,7 @@ namespace Jackett.Common.Indexers
                         };
 
                         // IMDB
-                        var imdbLink = row.QuerySelector("a[href*=\"imdb.com/title/tt\"]").GetAttribute("href");
+                        var imdbLink = row.QuerySelector("a[href*=\"imdb.com/title/tt\"]")?.GetAttribute("href");
                         release.Imdb = ParseUtil.GetLongFromString(imdbLink);
 
                         if (row.QuerySelector("img[title=\"Free Torrent\"]") != null)
@@ -473,7 +496,7 @@ namespace Jackett.Common.Indexers
                     categoriesList[i] = categoriesList[i].Replace("cat=", "cats5[]=");
                 }
                 // Books
-                if (new[] { "54", "9" }.Any(c => categoriesList[i].Contains(categoriesList[i])))
+                if (new[] { "54", "9", "84" }.Any(c => categoriesList[i].Contains(categoriesList[i])))
                 {
                     categoriesList[i] = categoriesList[i].Replace("cat=", "cats6[]=");
                 }
@@ -483,7 +506,7 @@ namespace Jackett.Common.Indexers
                     categoriesList[i] = categoriesList[i].Replace("cat=", "cats3[]=");
                 }
                 // Movies
-                if (new[] { "35", "42", "47", "15", "58", "16", "6", "21", "19", "22", "20", "25", "10", "23", "65" }.Any(c => categoriesList[i].Contains(categoriesList[i])))
+                if (new[] { "35", "42", "47", "15", "58", "16", "6", "21", "19", "22", "20", "25", "10", "23", "65", "90" }.Any(c => categoriesList[i].Contains(categoriesList[i])))
                 {
                     categoriesList[i] = categoriesList[i].Replace("cat=", "cats1[]=");
                 }
@@ -493,7 +516,7 @@ namespace Jackett.Common.Indexers
                     categoriesList[i] = categoriesList[i].Replace("cat=", "cats4[]=");
                 }
                 // Series
-                if (new[] { "48", "57", "11", "7", "31", "30", "32", "5", "66" }.Any(c => categoriesList[i].Contains(categoriesList[i])))
+                if (new[] { "48", "57", "11", "80", "71", "72", "73", "83", "77", "78", "79", "89", "86", "87", "88", "82", "74", "75", "76", "81", "68", "69", "70", "91", "7", "31", "30", "32", "5", "66" }.Any(c => categoriesList[i].Contains(categoriesList[i])))
                 {
                     categoriesList[i] = categoriesList[i].Replace("cat=", "cats2[]=");
                 }
@@ -675,24 +698,21 @@ namespace Jackett.Common.Indexers
 
             if (xmas.Any(dom.Body.InnerHtml.Contains))
             {
-                // Return all occurencis of torrents found
-                // $('#base_around > table.mainouter > tbody > tr > td.outer > div.article > table  > tbody:not(:first) > tr')
+                // Return all occurrences of torrents found
                 return dom.QuerySelectorAll("#base_around > table.mainouter > tbody > tr > td.outer > div.article > table  > tbody")[1].QuerySelectorAll("tr");
             }
 
             // template 7 contains a reference to template 2 (logout button), so check for oldV2 first
             if (oldV2.Any(dom.Body.InnerHtml.Contains))
             {
-                // Return all occurencis of torrents found
-                // $('#base_content > table.mainouter > tbody > tr > td.outer > div.article > table > tbody > tr:not(:first)')
-                return dom.QuerySelectorAll("# base_content > table.mainouter > tbody > tr > td.outer > div.article > table > tbody > tr").Skip(1).ToCollection();
+                // Return all occurrences of torrents found
+                return dom.QuerySelectorAll("#base_content > table.mainouter > tbody > tr > td.outer > div.article > table > tbody > tr").Skip(1).ToCollection();
             }
 
             if (defaultTheme.Any(dom.Body.InnerHtml.Contains))
             {
-                // Return all occurencis of torrents found
-                // $('#base_content2 > div.article > table > tbody:not(:first) > tr')
-                return dom.QuerySelectorAll("# base_content2 > div.article > table > tbody")[1].QuerySelectorAll("tr");
+                // Return all occurrences of torrents found
+                return dom.QuerySelectorAll("#base_content2 > div.article > table > tbody")[1].QuerySelectorAll("tr");
             }
             return null;
         }
