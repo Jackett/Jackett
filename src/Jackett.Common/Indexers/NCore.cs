@@ -129,7 +129,7 @@ namespace Jackett.Common.Indexers
                 ReleaseInfo release;
                 var rows = dom.QuerySelector(".box_torrent_all").QuerySelectorAll(".box_torrent");
 
-                // Check torrents only till we reach the query Limit 
+                // Check torrents only till we reach the query Limit
                 for (var i = previously_parsed_on_page; (i < rows.Length && ((already_founded + releases.Count) < limit)); i++)
                 {
                     try
@@ -205,7 +205,7 @@ namespace Jackett.Common.Indexers
 
                                 release.Title = (description[0].Trim() + "." + seasonep.Trim() + "." + releasedata.Trim('.')).Replace(' ', '.');
 
-                                // if search is done for S0X than we dont want to put . between S0X and E0X 
+                                // if search is done for S0X than we dont want to put . between S0X and E0X
                                 var match = Regex.Match(releasedata, @"^E\d\d?");
                                 if (seasonep.Length == 3 && match.Success)
                                     release.Title = (description[0].Trim() + "." + seasonep.Trim() + releasedata.Trim('.')).Replace(' ', '.');
@@ -277,25 +277,25 @@ namespace Jackett.Common.Indexers
             var numVal = 0;
 
             // find number of torrents / page
-            var torrent_per_page = dom.QuerySelector(".box_torrent_all").QuerySelectorAll(".box_torrent").Length;
-            if (torrent_per_page == 0)
+            var torrentPerPage = dom.QuerySelector(".box_torrent_all")?.QuerySelectorAll(".box_torrent").Length ?? 0;
+            if (torrentPerPage == 0)
                 return releases;
-            var start_page = (query.Offset / torrent_per_page) + 1;
-            var previously_parsed_on_page = query.Offset - (start_page * torrent_per_page) + 1; //+1 because indexing start from 0
-            if (previously_parsed_on_page < 0)
-                previously_parsed_on_page = query.Offset;
+            var startPage = (query.Offset / torrentPerPage) + 1;
+            var previouslyParsedOnPage = query.Offset - (startPage * torrentPerPage) + 1; //+1 because indexing start from 0
+            if (previouslyParsedOnPage < 0)
+                previouslyParsedOnPage = query.Offset;
 
             // find pagelinks in the bottom
-            var pagelinks = dom.QuerySelector("div[id=pager_bottom]").QuerySelectorAll("a");
-            if (pagelinks.Length > 0)
+            var pageLinks = dom.QuerySelector("div[id=pager_bottom]")?.QuerySelectorAll("a");
+            if (pageLinks?.Length > 0)
             {
                 // If there are several pages find the link for the latest one
-                for (var i = pagelinks.Length - 1; i > 0; i--)
+                for (var i = pageLinks.Length - 1; i > 0; i--)
                 {
-                    var last_page_link = (pagelinks[i].GetAttribute("href")).Trim();
-                    if (last_page_link.Contains("oldal"))
+                    var lastPageLink = (pageLinks[i].GetAttribute("href")).Trim();
+                    if (lastPageLink.Contains("oldal"))
                     {
-                        var match = Regex.Match(last_page_link, @"(?<=[\?,&]oldal=)(\d+)(?=&)");
+                        var match = Regex.Match(lastPageLink, @"(?<=[\?,&]oldal=)(\d+)(?=&)");
                         numVal = int.Parse(match.Value);
                         break;
                     }
@@ -306,22 +306,22 @@ namespace Jackett.Common.Indexers
             if (limit == 0)
                 limit = 100;
 
-            if (start_page == 1)
+            if (startPage == 1)
             {
-                releases = parseTorrents(results, seasonep, query, releases.Count, limit, previously_parsed_on_page);
-                previously_parsed_on_page = 0;
-                start_page++;
+                releases = parseTorrents(results, seasonep, query, releases.Count, limit, previouslyParsedOnPage);
+                previouslyParsedOnPage = 0;
+                startPage++;
             }
 
 
             // Check all the pages for the torrents.
             // The starting index is 2. (the first one is the original where we parse out the pages.)
-            for (var i = start_page; (i <= numVal && releases.Count < limit); i++)
+            for (var i = startPage; (i <= numVal && releases.Count < limit); i++)
             {
                 pairs.Add(new KeyValuePair<string, string>("oldal", i.ToString()));
                 results = await PostDataWithCookiesAndRetry(SearchUrl, pairs);
-                releases.AddRange(parseTorrents(results, seasonep, query, releases.Count, limit, previously_parsed_on_page));
-                previously_parsed_on_page = 0;
+                releases.AddRange(parseTorrents(results, seasonep, query, releases.Count, limit, previouslyParsedOnPage));
+                previouslyParsedOnPage = 0;
                 pairs.Remove(new KeyValuePair<string, string>("oldal", i.ToString()));
             }
 
