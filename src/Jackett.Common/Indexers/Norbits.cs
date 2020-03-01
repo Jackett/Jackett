@@ -375,7 +375,7 @@ namespace Jackett.Common.Indexers
                             MinimumSeedTime = 172800 // 48 hours
                         };
 
-                        var genres = row.QuerySelector("span.genres").TextContent;
+                        var genres = row.QuerySelector("span.genres")?.TextContent;
                         if (!string.IsNullOrEmpty(genres))
                             release.Description = genres;
 
