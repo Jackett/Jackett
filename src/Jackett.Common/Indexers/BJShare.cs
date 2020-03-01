@@ -89,7 +89,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(13, TorznabCatType.TV, "Stand Up Comedy");
             AddCategoryMapping(11, TorznabCatType.Other, "Video-Aula");
             AddCategoryMapping(6, TorznabCatType.TV, "Vídeos de TV");
-            AddCategoryMapping(4, TorznabCatType.Other, "Jogos");
+            AddCategoryMapping(4, TorznabCatType.PCGames, "Jogos");
             AddCategoryMapping(199, TorznabCatType.XXX, "Filmes Adultos");
             AddCategoryMapping(200, TorznabCatType.XXX, "Jogos Adultos");
             AddCategoryMapping(201, TorznabCatType.XXXImageset, "Fotos Adultas");
@@ -222,6 +222,7 @@ namespace Jackett.Common.Indexers
 
                             var year = "";
                             release.Description = "";
+                            var extra_info = "";
                             foreach (var child in qBJinfoBox.ChildNodes)
                             {
                                 var type = child.NodeType;
@@ -245,16 +246,28 @@ namespace Jackett.Common.Indexers
                                 else if (line.StartsWith("Ano:"))
                                 {
                                     year = line.Substring("Ano: ".Length);
-                                    ;
 
                                 }
                                 else
                                 {
                                     release.Description += line + "\n";
+                                    if (line.Contains(":"))
+                                    {
+                                        if(!(line.StartsWith("Lançado") || line.StartsWith("Resolução") || line.StartsWith("Idioma") || line.StartsWith("Autor")))
+                                        {
+                                            var info = line.Substring(line.IndexOf(": ") + 2);
+                                            if (info == "Dual Áudio")
+                                            {
+                                                info = "Dual";
+                                            }
+                                            extra_info +=  info + " ";
+                                        }
+                                    }
                                 }
                             }
+                            extra_info.Trim();
 
-                            var catStr = qCatLink.GetAttribute("href").Split('=')[1];
+                            var catStr = qCatLink.GetAttribute("href").Split('=')[1].Split('&')[0];
                             release.Title = FixAbsoluteNumbering(release.Title);
 
                             if (year != "")
@@ -268,6 +281,9 @@ namespace Jackett.Common.Indexers
 
                                 switch (quality)
                                 {
+                                    case "4K":
+                                        release.Title += " 2160p";
+                                        break;
                                     case "Full HD":
                                         release.Title += " 1080p";
                                         break;
@@ -279,6 +295,8 @@ namespace Jackett.Common.Indexers
                                         break;
                                 }
                             }
+
+                            release.Title += " " + extra_info;
 
                             release.Category = MapTrackerCatToNewznab(catStr);
                             release.Link = new Uri(SiteLink + qDlLink.GetAttribute("href"));
