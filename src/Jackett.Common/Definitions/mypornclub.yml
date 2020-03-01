@@ -44,6 +44,11 @@
         attribute: href
       date:
         selector: div.torrent_element_info span:nth-child(2)
+        filters:
+          - name: replace
+            args: ["Last year", "1 year ago"]
+          - name: replace
+            args: ["Last month", "1 month ago"]
       size:
         selector: div.torrent_element_info span:nth-child(4)
       grabs:
