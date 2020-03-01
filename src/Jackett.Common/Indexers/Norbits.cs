@@ -609,7 +609,7 @@ namespace Jackett.Common.Indexers
         /// </summary>
         /// <returns>List of rows</returns>
         private IHtmlCollection<IElement> FindTorrentRows(IHtmlDocument dom) =>
-            dom.QuerySelectorAll("#torrentTable > tbody > tr:not(:first)");
+            (IHtmlCollection<IElement>)dom.QuerySelectorAll("#torrentTable > tbody > tr").Skip(1);
 
         /// <summary>
         /// Download torrent file from tracker
