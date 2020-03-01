@@ -307,10 +307,10 @@ namespace Jackett.Common.Indexers
                     pageLinkCount = 1;
 
                     // Check if we have a minimum of one result
-                    if (firstPageRows?.Count() > 1)
+                    if (firstPageRows?.Length > 1)
                     {
                         // Retrieve total count on our alone page
-                        nbResults = firstPageRows.Count();
+                        nbResults = firstPageRows.Length;
                     }
                     else
                     {
@@ -319,12 +319,12 @@ namespace Jackett.Common.Indexers
                         break;
                     }
 
-                    Output("\nFound " + nbResults + " result(s) (+/- " + firstPageRows.Count() + ") in " + pageLinkCount + " page(s) for this query !");
-                    Output("\nThere are " + (firstPageRows.Count() - 2) + " results on the first page !");
+                    Output("\nFound " + nbResults + " result(s) (+/- " + firstPageRows.Length + ") in " + pageLinkCount + " page(s) for this query !");
+                    Output("\nThere are " + (firstPageRows.Length - 2) + " results on the first page !");
 
                     // Loop on results
 
-                    foreach (var row in firstPageRows.Skip(1).Take(firstPageRows.Count() - 2))
+                    foreach (var row in firstPageRows.Skip(1).Take(firstPageRows.Length - 2))
                     {
                         Output("Torrent #" + (releases.Count + 1));
 
