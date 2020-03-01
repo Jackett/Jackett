@@ -111,7 +111,7 @@
 #      ord: "{{ .Config.type }}"
 
     rows:
-      selector: table.table-striped > tbody > tr:has(a[href^="details.php?id="])
+      selector: table.table-striped > tbody > tr:has(a[href^="/details.php?id="])
 
     fields:
       category:
@@ -121,9 +121,9 @@
           - name: querystring
             args: cat
       title:
-        selector: a[href^="details.php?id="]
+        selector: a[href^="/details.php?id="]
       details:
-        selector: a[href^="details.php?id="]
+        selector: a[href^="/details.php?id="]
         attribute: href
       banner:
         attribute: rel
@@ -132,7 +132,7 @@
         optional: true
         attribute: href
       download:
-        selector: a[href^="download.php"]
+        selector: a[href^="/download.php"]
         attribute: href
       files:
         selector: a[href$="#filelist"]
