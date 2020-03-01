@@ -107,6 +107,9 @@ namespace Jackett.Common.Indexers
                 foreach (var row in rows)
                 {
                     var qTitleLink = row.QuerySelector("a.title, a.alt_title");
+                    if (qTitleLink == null)
+                        continue;
+
                     var title = qTitleLink.TextContent.Trim();
 
                     // Insert before the release info
