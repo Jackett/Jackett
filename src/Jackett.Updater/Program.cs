@@ -357,6 +357,7 @@ namespace Jackett.Updater
                 "Definitions/tbplus.yml",
                 "Definitions/tehconnection.yml",
                 "Definitions/themoviecave.yml",
+                "Definitions/theresurrection.yml",
                 "Definitions/thetorrents.yml",
                 "Definitions/tigers-dl.yml",
                 "Definitions/tntvillage.yml",
