@@ -121,7 +121,14 @@ namespace Jackett.Common.Indexers
                             continue;
                         }
 
-                        await ParseRelease(releases, row, query, matchWords);
+                        try
+                        {
+                            await ParseRelease(releases, row, query, matchWords);
+                        }
+                        catch (Exception ex)
+                        {
+                            logger.Error($"CardigannIndexer ({ID}): Error while parsing row '{row.ToHtmlPretty()}':\n\n{ex}");
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -151,7 +158,7 @@ namespace Jackett.Common.Indexers
                 var searchResultParser = new HtmlParser();
                 var doc = searchResultParser.ParseDocument(result.Content);
 
-                var onclick = doc.QuerySelector("a[onclick*=\"/download/torrent.php\"]")
+                var onclick = doc.QuerySelector("a[onclick*=\"/download/torrent\"]")
                     .GetAttribute("onclick");
                 downloadUrl = OnclickToDownloadLink(onclick);
             }
