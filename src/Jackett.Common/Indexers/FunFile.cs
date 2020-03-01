@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Text;
 using System.Threading.Tasks;
-using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -119,11 +118,11 @@ namespace Jackett.Common.Indexers
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800; // 48 hours
 
-                    var qCatLink = row.QuerySelector("a[href^=browse.php?cat=]");
-                    var qDetailsLink = row.QuerySelector("a[href^=details.php?id=]");
+                    var qCatLink = row.QuerySelector("a[href^=\"browse.php?cat=\"]");
+                    var qDetailsLink = row.QuerySelector("a[href^=\"details.php?id=\"]");
                     var qSeeders = row.QuerySelector("td:nth-of-type(10)");
                     var qLeechers = row.QuerySelector("td:nth-of-type(11)");
-                    var qDownloadLink = row.QuerySelector("a[href^=download.php]");
+                    var qDownloadLink = row.QuerySelector("a[href^=\"download.php\"]");
                     var qTimeAgo = row.QuerySelector("td:nth-of-type(6)");
                     var qSize = row.QuerySelector("td:nth-of-type(8)");
 
@@ -151,10 +150,10 @@ namespace Jackett.Common.Indexers
                     release.Grabs = ParseUtil.CoerceInt(grabs);
 
                     var ka = row.NextElementSibling;
-                    var DLFactor = ka.QuerySelector("table > tbody > tr:nth-child(3) > td:nth-child(2)").TextContent.Replace("X", "");
-                    var ULFactor = ka.QuerySelector("table > tbody > tr:nth-child(3) > td:nth-child(1)").TextContent.Replace("X", "");
-                    release.DownloadVolumeFactor = ParseUtil.CoerceDouble(DLFactor);
-                    release.UploadVolumeFactor = ParseUtil.CoerceDouble(ULFactor);
+                    var dlFactor = ka.QuerySelector("table > tbody > tr:nth-child(3) > td:nth-child(2)").TextContent.Replace("X", "");
+                    var ulFactor = ka.QuerySelector("table > tbody > tr:nth-child(3) > td:nth-child(1)").TextContent.Replace("X", "");
+                    release.DownloadVolumeFactor = ParseUtil.CoerceDouble(dlFactor);
+                    release.UploadVolumeFactor = ParseUtil.CoerceDouble(ulFactor);
 
                     releases.Add(release);
                 }
