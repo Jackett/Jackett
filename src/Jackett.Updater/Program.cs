@@ -323,7 +323,6 @@ namespace Jackett.Updater
                 "Definitions/katcrs.yml",
                 "Definitions/kikibt.yml",
                 "Definitions/lapausetorrents.yml",
-                "Definitions/lechaudron.yml",
                 "Definitions/lemencili.yml",
                 "Definitions/leparadisdunet.yml",
                 "Definitions/maniatorrent.yml",

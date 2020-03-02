@@ -26,35 +26,32 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 
  * 1337x
  * 7torrents
- * AcademicTorrents
  * ACG.RIP
  * ACGsou
+ * AcademicTorrents
+ * AniRena
  * Anidex
  * Anime Tosho
- * AniRena
  * AudioBook Bay (ABB)
+ * BT.etree
+ * BTDB
+ * BTDIGG
+ * BTSOW
+ * BTeye
  * Badass Torrents
  * BigFANGroup
  * BitRu
  * BitTorrent.AM
- * BTDB
- * BTDIGG
- * BTeye
- * BT.etree
- * BTSOW
  * Cili180
  * ConCen
  * Corsaro.red
- * cpasbien
- * cpasbienClone
  * Demonoid
- * dmhy
  * ETTV
+ * EXT Torrents
+ * EZTV
  * EliteTorrent.biz
  * EstrenosDTL
  * ExtraTorrent.cd
- * EXT Torrents
- * EZTV
  * Filebase
  * FireBit
  * Frozen Layer
@@ -65,15 +62,14 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Horrible Subs
  * IBit
  * Idope
- * Il Corsaro Nero <!-- maintained by bonny1992 -->
  * Il Corsaro Blu
+ * Il Corsaro Nero <!-- maintained by bonny1992 -->
  * Internet Archive (archive.org)
  * Isohunt2
- * iTorrent
  * KickAssTorrent (KATcr)
  * KickAssTorrent (kat.li)
- * Legit Torrents
  * LePorno
+ * Legit Torrents
  * LimeTorrents
  * MacTorrents
  * Magnet4You
@@ -83,13 +79,13 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * MovCr
  * MoviesDVDR
  * MyPornClub
+ * NNTT
  * Newpct (aka: tvsinpagar, descargas2020, torrentlocura, torrentrapid, tumejortorrent, pctnew, etc)
  * Newstudio
  * Nitro
- * NNTT
  * NoName Club (NNM-Club)
- * Nyaa.si
  * Nyaa-Pantsu
+ * Nyaa.si
  * OneJAV
  * OxTorrent
  * PiratBit
@@ -97,21 +93,18 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * PornLeech
  * ProStyleX
  * RARBG
- * Rus-media
  * RuTor
+ * Rus-media
  * Seedpeer
- * shokweb
  * ShowRSS
  * SkyTorrentsClone
  * SolidTorrents
- * sukebei.Nyaa.si
- * sukebei-Pantsu
  * TFile
+ * TOROS
  * The Pirate Bay (TPB)
  * Tokyo Tosho
  * TopNow
  * Torlock
- * TOROS
  * Torrent Downloads (TD)
  * Torrent4You
  * Torrent9
@@ -123,14 +116,21 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TorrentParadise
  * TorrentProject2
  * TorrentQuest
- * Torrents.csv
  * TorrentView
  * TorrentWal
+ * Torrents.csv
  * Torrentz2
  * Underverse
- * YourBittorrent
  * YTS.ag
+ * YourBittorrent
  * Zooqle
+ * cpasbien
+ * cpasbienClone
+ * dmhy
+ * iTorrent
+ * shokweb
+ * sukebei-Pantsu
+ * sukebei.Nyaa.si
 </details>
 
 <details> <summary> <b> Supported Semi-Private Trackers </b> </summary>
@@ -144,8 +144,8 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * CasStudioTV
  * Crazy's Corner
  * CzTorrent
- * Deildu
  * DXP (Deaf Experts)
+ * Deildu
  * EniaHD
  * Erzsebet
  * ExKinoRay
@@ -153,22 +153,22 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * FilmsClub
  * Gay-Torrents.net
  * Gay-Torrents.org
- * HamsterStudio
  * HD Dolby
+ * HamsterStudio
  * Kinozal
  * Korsar
  * LostFilm.tv
+ * MVGroup Forum
+ * MVGroup Main
  * Marine Tracker
  * Metal Tracker
  * MuziekFrabriek
- * MVGroup Forum
- * MVGroup Main
  * NetHD (VietTorrent)
  * Pornolab
  * RiperAM
  * RockBox
- * Rustorka
  * RuTracker
+ * Rustorka
  * Sharewood
  * SkTorrent
  * SoundPark
@@ -190,6 +190,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * 4thD (4th Dimension)
  * 52PT
  * 720pier
+ * AST4u
  * Abnormal
  * Acid Lounge (A-L)
  * Aftershock
@@ -201,55 +202,55 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Araba Fenice (Phoenix)
  * Asgaard (AG)
  * AsianCinema
- * AST4u
- * Audiobook Torrents (ABT)
  * AudioNews (AN)
- * Awesome-HD (AHD)
+ * Audiobook Torrents (ABT)
  * Avistaz (AsiaTorrents)
+ * Awesome-HD (AHD)
+ * BIGTorrent
+ * BIT-HDTV
+ * BJ-Share (BJ)
+ * BRObits
+ * BTGigs (TG)
+ * BTNext (BTNT)
+ * BTSCHOOL
  * Back-ups
- * BakaBT
  * BaconBits (bB)
+ * BakaBT
  * BeiTai
  * BeyondHD (BHD)
+ * BiT-TiTAN
  * Bibliotik
- * BIGTorrent
  * BigTower
  * Bit-City Reloaded
- * BIT-HDTV
- * BiT-TiTAN
- * Bithorlo (BHO)
  * BitHUmen
- * Bitspyder
  * BitTorrentFiles
  * BitTurk
- * BJ-Share (BJ)
+ * Bithorlo (BHO)
+ * Bitspyder
  * BlueBird
  * Blutopia (BLU)
  * Boxing Torrents
  * Brasil Tracker
- * BroadcastTheNet (BTN)
  * BroadCity
- * BRObits
+ * BroadcastTheNet (BTN)
  * BrokenStones
- * BTGigs (TG)
- * BTNext (BTNT)
- * BTSCHOOL
- * Carpathians
- * CartoonChaos (CC)
- * CasaTorrent
  * CCFBits
  * CGPeers
  * CHDBits
+ * Carpathians
+ * CartoonChaos (CC)
+ * CasaTorrent
  * ChannelX
- * Cinemageddon
  * CinemaMovies
- * Cinematik
  * CinemaZ (EuTorrents)
+ * Cinemageddon
+ * Cinematik
  * Classix
  * Concertos
  * CrazyHD
  * CrazySpirits
  * CrnaBerza
+ * DXDHD
  * DanishBits (DB)
  * Das Unerwartete
  * DataScene (DS)
@@ -263,16 +264,14 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * DocumentaryTorrents (DT)
  * Downloadville
  * Dragonworld Reloaded
- * DXDHD
  * EbookParadijs
  * Ebooks-Shares
  * EfectoDoppler
  * EggMeOn
  * Elite-Tracker
  * Empornium (EMP)
- * eShareNet
- * eStone (XiDER, BeLoad)
  * Ethor.net (Thor's Land)
+ * ExoticaZ (YourExotic)
  * ExtremeTorrents
  * FANO.IN
  * Fantastic Heaven
@@ -287,24 +286,23 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * FunFile (FF)
  * FunkyTorrents (FT)
  * Fuzer (FZ)
- * Galeriens (LaPauseTorrents)
  * GAYtorrent.ru
+ * GFXPeers
+ * Galeriens (LaPauseTorrents)
  * GazelleGames (GGn)
  * Generation-Free
- * GFXPeers
  * GigaTorrents
  * GimmePeers (formerly ILT) <!-- maintained by jamesb2147 -->
  * GiroTorrent
  * Greek Legends
  * Greek Team
- * HacheDe
+ * HD-Bits.com
  * HD-Forever (HDF)
  * HD-Olimpo
  * HD-Only (HDO)
  * HD-Space (HDS)
  * HD-Spain
  * HD-Torrents (HDT)
- * HD-Bits.com
  * HD4FANS
  * HDArea (HDA)
  * HDBits
@@ -321,23 +319,24 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HDTurk
  * HDU
  * HDZone
+ * HQSource (HQS)
+ * HacheDe
  * Hebits
  * Hon3y HD
- * HQSource (HQS)
  * HuSh
  * ICE Torrent
+ * IPTorrents (IPT)
  * ImmortalSeed (iS)
  * Immortuos
- * inPeril
  * Insane Tracker
- * IPTorrents (IPT)
  * JPopsuki
  * Kapaki
  * Karagarga
- * LegacyHD (HD4Free)
  * Le Saloon
+ * LeChaudron
  * LeagueHD
  * LearnFlakes
+ * LegacyHD (HD4Free)
  * LibraNet (LN)
  * LinkoManija
  * LosslessClub
@@ -349,7 +348,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Mononoké-BT
  * MoreThanTV (MTV)
  * MyAnonamouse (MAM)
- * myAmity
  * MySpleen
  * NBTorrents
  * NCore
@@ -360,54 +358,53 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Norbits
  * NordicBits (NB)
  * Nostalgic (The Archive)
- * notwhat.cd
  * OnlineSelfEducation
  * Orpheus
  * Ourbits (HDPter)
  * P2PBG
  * P2PElite
+ * PT99
+ * PTFiles (PTF)
+ * PThome
+ * PWTorrents (PWT)
  * Partis
  * PassThePopcorn (PTP)
  * Peers.FM
+ * PiXELHD (PxHD)
  * PirateTheNet (PTN)
  * PixelCove (Ultimate Gamer)
- * PiXELHD (PxHD)
  * Pleasuredome
  * PolishSource (PS)
  * PolishTracker
- * Pornbay
  * PornBits (PB)
+ * Pornbay
  * Pretome
  * PrivateHD (PHD)
  * ProAudioTorrents (PAT)
  * Psytorrents
- * PT99
- * PTFiles (PTF)
- * PThome
  * PuntoTorrent
- * PWTorrents (PWT)
  * R3V WTF!
+ * RPTorrents
  * Racing4Everyone (R4E)
  * RacingForMe (RFM)
  * RainbowNation Sharing (RNS)
- * Redacted (PassTheHeadphones)
  * Red Star Torrent (RST)
+ * Redacted (PassTheHeadphones)
  * RetroFlix
  * RevolutionTT
  * RoDVD (Cinefiles)
  * Romanian Metal Torrent (RMT)
- * RPTorrents
+ * SDBits
  * SceneFZ
  * SceneHD
  * ScenePalace (SP)
  * SceneRush
  * SceneTime
- * SDBits
  * Secret Cinema
  * SeedFile (SF)
- * Shareisland
  * ShareSpaceDB
  * ShareUniversity
+ * Shareisland
  * Shazbat
  * Shellife (SL)
  * SiamBIT
@@ -419,16 +416,20 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * SportsCult
  * SpringSunday
  * SuperBits (SBS)
+ * TEKNO3D
+ * TLFBits
+ * TOrrent-tuRK (TORK)
+ * TTsWEB
+ * TV Chaos UK (TVCUK)
+ * TV-Vault
+ * TVstore
  * TakeaByte
  * Tapochek
  * Tasmanit
  * TeamHD
  * TeamOS
- * TEKNO3D
  * TellyTorrent
  * TenYardTorrents (TYT)
- * TheAudioScene
- * TheEmpire (TE)
  * The Falling Angels (TFA)
  * The Geeks
  * The Horror Charnel (THC)
@@ -437,39 +438,34 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * The Place
  * The Shinning (TsH)
  * The Show
- * The-Madhouse
  * The Vault
- * TLFBits
+ * The-Madhouse
+ * TheAudioScene
+ * TheEmpire (TE)
+ * ToTheGlory
  * Torrent Network (TN)
  * Torrent Sector Crew (TSC)
+ * Torrent-Syndikat
  * Torrent.LT
  * TorrentBD
  * TorrentBytes (TBy)
  * TorrentCCF (TCCF)
  * TorrentDay (TD)
- * Torrentech (TTH)
  * TorrentFactory
- * TorrentHeaven
  * TorrentHR
- * Torrenting (TT)
- * Torrentland
+ * TorrentHeaven
  * TorrentLeech (TL)
  * TorrentLeech.pl
  * TorrentSeeds (TS)
- * Torrent-Syndikat
- * TOrrent-tuRK (TORK)
+ * Torrentech (TTH)
+ * Torrenting (TT)
+ * Torrentland
  * TotallyKids (TK)
- * ToTheGlory
  * TranceTraffic
  * Trezzor
- * TTsWEB
  * TurkTorrent (TT)
- * TV Chaos UK (TVCUK)
- * TV-Vault
- * TVstore
  * Twilight Torrents
  * Twilights Zoom
- * u-torrents (SceneFZ)
  * U2 (U2分享園@動漫花園)
  * UHDBits
  * UnionGang
@@ -478,17 +474,22 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * WDT (Wrestling Desires Torrents / Ultimate Wrestling Torrents)
  * World-In-HD
  * World-of-Tomorrow
- * x-ite.me (XM)
- * xBytesV2
  * XSpeeds (XS)
- * XWTorrents (XWT)
  * XWT-Classics
+ * XWTorrents (XWT)
  * Xthor
- * XtremeFile
  * XtreMeZone (MYXZ)
- * ExoticaZ (YourExotic)
+ * XtremeFile
  * Zamunda.net
  * Zelka.org
+ * eShareNet
+ * eStone (XiDER, BeLoad)
+ * inPeril
+ * myAmity
+ * notwhat.cd
+ * u-torrents (SceneFZ)
+ * x-ite.me (XM)
+ * xBytesV2
 </details>
 
 Trackers marked with  [![(invite needed)][inviteneeded]](#) have no active maintainer and are missing features or are broken. If you have an invite for them please send it to garfieldsixtynine -at- gmail.com to get them fixed/improved.
