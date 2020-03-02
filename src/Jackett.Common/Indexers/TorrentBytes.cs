@@ -193,7 +193,7 @@ namespace Jackett.Common.Indexers
                     if (grabs != "----")
                         release.Grabs = ParseUtil.CoerceInt(grabs);
 
-                    release.DownloadVolumeFactor = row.QuerySelector("font[color=\"green\"]:contains(F):contains(L)") != null ? 0 : 1;
+                    release.DownloadVolumeFactor = row.QuerySelector("font[color=\"green\"]:contains(\"F\"):contains(\"L\")") != null ? 0 : 1;
                     release.UploadVolumeFactor = 1;
 
                     releases.Add(release);
