@@ -150,8 +150,8 @@ namespace Jackett.Common.Indexers
                     release.Grabs = ParseUtil.CoerceInt(grabs);
 
                     var ka = row.NextElementSibling;
-                    var dlFactor = ka.QuerySelector("table > tbody > tr:nth-child(3) > td:nth-child(2)").TextContent.Replace("X", "");
-                    var ulFactor = ka.QuerySelector("table > tbody > tr:nth-child(3) > td:nth-child(1)").TextContent.Replace("X", "");
+                    var dlFactor = ka.QuerySelector("table > tbody > tr:nth-child(3)").QuerySelector("td:nth-child(2)").TextContent.Replace("X", "");
+                    var ulFactor = ka.QuerySelector("table > tbody > tr:nth-child(3)").QuerySelector("td:nth-child(1)").TextContent.Replace("X", "");
                     release.DownloadVolumeFactor = ParseUtil.CoerceDouble(dlFactor);
                     release.UploadVolumeFactor = ParseUtil.CoerceDouble(ulFactor);
 
