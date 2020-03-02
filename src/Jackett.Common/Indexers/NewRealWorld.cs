@@ -179,12 +179,12 @@ namespace Jackett.Common.Indexers
                     if (!query.MatchQueryStringAND(release.Title))
                         continue;
 
-                    var qCatLink = row.QuerySelector("a[href^=browse.php?cat=]");
+                    var qCatLink = row.QuerySelector("a[href^=\"browse.php?cat=\"]");
                     var qSeeders = row.QuerySelector("td > table.testtable2 > tbody > tr > td > strong:nth-of-type(4)");
                     var qLeechers = row.QuerySelector("td > table.testtable2 > tbody > tr > td > strong:nth-of-type(5)");
                     var qDateStr = row.QuerySelector("td > table.testtable2 > tbody > tr > td:nth-of-type(8)");
                     var qSize = row.QuerySelector("td > table.testtable2 > tbody > tr > td > strong:nth-of-type(2)");
-                    var qDownloadLink = row.QuerySelector("a[href*=download]");
+                    var qDownloadLink = row.QuerySelector("a[href*=\"download\"]");
 
                     var catStr = qCatLink.GetAttribute("href").Split('=')[1];
                     release.Category = MapTrackerCatToNewznab(catStr);
