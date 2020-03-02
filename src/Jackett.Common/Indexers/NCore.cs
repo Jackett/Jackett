@@ -141,7 +141,8 @@ namespace Jackett.Common.Indexers
                         var torrentTxt = row.QuerySelector(".torrent_txt, .torrent_txt2").QuerySelector("a");
                         //if (torrentTxt == null) continue;
                         release.Title = torrentTxt.GetAttribute("title");
-                        release.Description = row.QuerySelector("span").GetAttribute("title") + " " + row.QuerySelector("a.infolink").TextContent;
+                        var descr = row.QuerySelector("span")?.GetAttribute("title") + " " + row.QuerySelector("a.infolink")?.TextContent;
+                        release.Description = descr.Trim();
 
                         release.MinimumRatio = 1;
                         release.MinimumSeedTime = 172800; // 48 hours
@@ -154,11 +155,12 @@ namespace Jackett.Common.Indexers
                         release.Link = new Uri(SiteLink.ToString() + "torrents.php?action=download&id=" + downloadId + "&key=" + key);
                         release.Comments = new Uri(SiteLink.ToString() + "torrents.php?action=details&id=" + downloadId);
                         release.Guid = new Uri(release.Comments.ToString() + "#comments");
-                        ;
+
                         release.Seeders = ParseUtil.CoerceInt(row.QuerySelector(".box_s2").QuerySelector("a").TextContent);
                         release.Peers = ParseUtil.CoerceInt(row.QuerySelector(".box_l2").QuerySelector("a").TextContent) + release.Seeders;
-                        var imdblink = row.QuerySelector("a[href*=\".imdb.com/title\"]").GetAttribute("href");
-                        release.Imdb = ParseUtil.GetLongFromString(imdblink);
+                        var imdblink = row.QuerySelector("a[href*=\".imdb.com/title\"]")?.GetAttribute("href");
+                        if (!string.IsNullOrWhiteSpace(imdblink))
+                            release.Imdb = ParseUtil.GetLongFromString(imdblink);
                         var banner = row.QuerySelector("img.infobar_ico").GetAttribute("onmouseover");
                         if (banner != null)
                         {
