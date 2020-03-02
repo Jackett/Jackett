@@ -275,6 +275,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Ethor.net (Thor's Land)
  * ExtremeTorrents
  * FANO.IN
+ * Fantastic Heaven
  * FeedUrNeed (FuN)
  * Femdomcult
  * FileList (FL)
