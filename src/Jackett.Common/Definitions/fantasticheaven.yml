@@ -10,85 +10,85 @@
 
   caps:
     categorymappings:
-      - {id: 54, cat: Movies/SD, desc: "SD x264/x265"} # Kino
-      - {id: 56, cat: Movies/HD, desc: "720p"} # Kino
-      - {id: 57, cat: Movies/HD, desc: "1080p"} # Kino
-      - {id: 100, cat: Movies/3D, desc: "3D"} # Kino
-      - {id: 58, cat: Movies/SD, desc: "SD x264/x265"} # Filme
-      - {id: 59, cat: Movies/HD, desc: "720p"} # Filme
-      - {id: 60, cat: Movies/HD, desc: "1080p"} # Filme
-      - {id: 61, cat: Movies/HD, desc: "2160p"} # Filme
-      - {id: 62, cat: Movies/3D, desc: "3D"} # Filme
-      - {id: 101, cat: Movies/DVD, desc: "DVD"} # Filme
-      - {id: 63, cat: Movies/HD, desc: "Remux"} # Filme
-      - {id: 129, cat: Movies/SD, desc: "SD x264/265"} # Filme Packs
-      - {id: 130, cat: Movies/HD, desc: "720p"} # Filme Packs
-      - {id: 131, cat: Movies/HD, desc: "1080p"} # Filme Packs
-      - {id: 64, cat: TV/SD, desc: "SD x264/x265"} # Serien
-      - {id: 65, cat: TV/HD, desc: "720p"} # Serien
-      - {id: 66, cat: TV/HD, desc: "1080p"} # Serien
-      - {id: 68, cat: TV/HD, desc: "2160p"} # Serien
-      - {id: 69, cat: TV/FOREIGN, desc: "Ger-Subbed"} # Serien
-      - {id: 70, cat: TV/FOREIGN, desc: "International"} # Serien
-      - {id: 76, cat: TV/SD, desc: "SD x264/x265"} # Serienpacks
-      - {id: 77, cat: TV/HD, desc: "720p"} # Serienpacks
-      - {id: 78, cat: TV/HD, desc: "1080p"} # Serienpacks
-      - {id: 81, cat: TV/HD, desc: "2160p"} # Serienpacks
-      - {id: 79, cat: TV/FOREIGN, desc: "Ger-Subbed"} # Serienpacks
-      - {id: 80, cat: TV/FOREIGN, desc: "International"} # Serienpacks
-      - {id: 115, cat: Movies/SD, desc: "SD x264/x265"} # Kids-Filme
-      - {id: 116, cat: Movies/HD, desc: "720p"} # Kids-Filme
-      - {id: 117, cat: Movies/HD, desc: "1080p"} # Kids-Filme
-      - {id: 109, cat: TV/SD, desc: "SD x264/x265"} # Kids-Serien
-      - {id: 110, cat: TV/HD, desc: "720p"} # Kids-Serien
-      - {id: 111, cat: TV/HD, desc: "1080p"} # Kids-Serien
-      - {id: 112, cat: TV/SD, desc: "Packs SD"} # Kids-Serien
-      - {id: 113, cat: TV/HD, desc: "Packs 720p"} # Kids-Serien
-      - {id: 114, cat: TV/HD, desc: "Packs 1080p"} # Kids-Serien
-      - {id: 127, cat: TV/FOREIGN, desc: "International"} # Kids-Serien
-      - {id: 98, cat: TV/SD, desc: "SD x264/x265"} # Tatort
-      - {id: 99, cat: TV/HD, desc: "720p"} # Tatort
-      - {id: 105, cat: TV/SD, desc: "SD x264/x265"} # Daily Soaps
-      - {id: 103, cat: TV/HD, desc: "720p"} # Daily Soaps
-      - {id: 104, cat: TV/HD, desc: "1080p"} # Daily Soaps
-      - {id: 106, cat: TV/Documentary, desc: "SD x264/x265"} # Dokus
-      - {id: 107, cat: TV/Documentary, desc: "720p"} # Dokus
-      - {id: 108, cat: TV/Documentary, desc: "1080p"} # Dokus
-      - {id: 83, cat: Movies/SD, desc: "SD x264/x265"} # TV-Filme
-      - {id: 84, cat: Movies/HD, desc: "720p"} # TV-Filme
-      - {id: 85, cat: Movies/HD, desc: "1080p"} # TV-Filme
-      - {id: 86, cat: TV/SD, desc: "SD x264/x265"} # TV-Shows
-      - {id: 87, cat: TV/HD, desc: "720p"} # TV-Shows
-      - {id: 88, cat: TV/HD, desc: "1080p"} # TV-Shows
-      - {id: 118, cat: TV/Sport, desc: "SD x264/x265"} # Sport
-      - {id: 119, cat: TV/Sport, desc: "720p"} # Sport
-      - {id: 120, cat: TV/Sport, desc: "1080p"} # Sport
-      - {id: 122, cat: TV/Sport, desc: "2160p"} # Sport
-      - {id: 121, cat: TV/Sport, desc: "International"} # Sport
-      - {id: 82, cat: Audio/Audiobook, desc: "Audiobooks"} # Audio
-      - {id: 71, cat: Audio/MP3, desc: "MP3"} # Audio
-      - {id: 72, cat: Audio/Lossless, desc: "Flac"} # Audio
-      - {id: 135, cat: Audio/Lossless, desc: "WAV"} # Audio
-      - {id: 73, cat: Audio/MP3, desc: "MP3 Packs"} # Audio
-      - {id: 74, cat: Audio/Lossless, desc: "Flac Packs"} # Audio
-      - {id: 128, cat: Audio, desc: "Kids"} # Audio
-      - {id: 75, cat: Audio/Video, desc: "Musikvideo"} # Audio
-      - {id: 123, cat: PC, desc: "Windows"} # Software
-      - {id: 124, cat: PC, desc: "Linux"} # Software
-      - {id: 125, cat: PC/Phone-Android, desc: "Android"} # Software
-      - {id: 126, cat: PC/Mac, desc: "MacOS"} # Software
-      - {id: 132, cat: PC/Games, desc: "Windows"} # Spiele
-      - {id: 133, cat: PC/Mac, desc: "MacOS"} # Spiele
-      - {id: 134, cat: Console, desc: "Nintendo"} # Spiele
-      - {id: 90, cat: Books/Magazines, desc: "Zeitschriften"} # Diverses
-      - {id: 89, cat: Books/Ebook, desc: "E-Books"} # Diverses
-      - {id: 91, cat: XXX/x264, desc: "SD x264/x265"} # XXX
-      - {id: 92, cat: XXX/x264, desc: "720p"} # XXX
-      - {id: 93, cat: XXX/x264, desc: "1080p"} # XXX
-      - {id: 95, cat: XXX/Packs, desc: "Packs SD"} # XXX
-      - {id: 96, cat: XXX/Packs, desc: "Packs HD"} # XXX
-      - {id: 94, cat: XXX/Imageset, desc: "Magazine"} # XXX
-      - {id: 97, cat: XXX/Imageset, desc: "Pics"} # XXX
+      - {id: 54, cat: Movies/SD, desc: "kino SD x264/x265"}
+      - {id: 56, cat: Movies/HD, desc: "kino 720p"}
+      - {id: 57, cat: Movies/HD, desc: "kino 1080p"}
+      - {id: 100, cat: Movies/3D, desc: "kino 3D"}
+      - {id: 58, cat: Movies/SD, desc: "Filme SD x264/x265"}
+      - {id: 59, cat: Movies/HD, desc: "Filme 720p"}
+      - {id: 60, cat: Movies/HD, desc: "Filme 1080p"}
+      - {id: 61, cat: Movies/UHD, desc: "Filme 2160p"}
+      - {id: 62, cat: Movies/3D, desc: "Filme 3D"}
+      - {id: 101, cat: Movies/DVD, desc: "Filme DVD"}
+      - {id: 63, cat: Movies/HD, desc: "Filme Remux"}
+      - {id: 129, cat: Movies/SD, desc: "Filme Packs SD x264/265"}
+      - {id: 130, cat: Movies/HD, desc: "Filme Packs 720p"}
+      - {id: 131, cat: Movies/HD, desc: "Filme Packs 1080p"}
+      - {id: 64, cat: TV/SD, desc: "Serien SD x264/x265"} 
+      - {id: 65, cat: TV/HD, desc: "Serien 720p"}
+      - {id: 66, cat: TV/HD, desc: "Serien 1080p"}
+      - {id: 68, cat: TV/UHD, desc: "Serien 2160p"}
+      - {id: 69, cat: TV/FOREIGN, desc: "Serien Ger-Subbed"}
+      - {id: 70, cat: TV/FOREIGN, desc: "Serien International"}
+      - {id: 76, cat: TV/SD, desc: "Serienpacks SD x264/x265"}
+      - {id: 77, cat: TV/HD, desc: "Serienpacks 720p"}
+      - {id: 78, cat: TV/HD, desc: "Serienpacks 1080p"}
+      - {id: 81, cat: TV/UHD, desc: "Serienpacks 2160p"}
+      - {id: 79, cat: TV/FOREIGN, desc: "Serienpacks Ger-Subbed"}
+      - {id: 80, cat: TV/FOREIGN, desc: "Serienpacks International"}
+      - {id: 115, cat: Movies/SD, desc: "Kids-Filme SD x264/x265"}
+      - {id: 116, cat: Movies/HD, desc: "Kids-Filme 720p"}
+      - {id: 117, cat: Movies/HD, desc: "Kids-Filme 1080p"}
+      - {id: 109, cat: TV/SD, desc: "Kids-Serien SD x264/x265"}
+      - {id: 110, cat: TV/HD, desc: "Kids-Serien 720p"}
+      - {id: 111, cat: TV/HD, desc: "Kids-Serien 1080p"}
+      - {id: 112, cat: TV/SD, desc: "Kids-Serien Packs SD"}
+      - {id: 113, cat: TV/HD, desc: "Kids-Serien Packs 720p"}
+      - {id: 114, cat: TV/HD, desc: "Kids-Serien Packs 1080p"}
+      - {id: 127, cat: TV/FOREIGN, desc: "Kids-Serien International"}
+      - {id: 98, cat: TV/SD, desc: "Tatort SD x264/x265"}
+      - {id: 99, cat: TV/HD, desc: "Tatort 720p"}
+      - {id: 105, cat: TV/SD, desc: "Daily Soaps SD x264/x265"} 
+      - {id: 103, cat: TV/HD, desc: "Daily Soaps 720p"}
+      - {id: 104, cat: TV/HD, desc: "Daily Soaps 1080p"}
+      - {id: 106, cat: TV/Documentary, desc: "Dokus SD x264/x265"} 
+      - {id: 107, cat: TV/Documentary, desc: "Dokus 720p"}
+      - {id: 108, cat: TV/Documentary, desc: "Dokus 1080p"}
+      - {id: 83, cat: Movies/SD, desc: "TV-Filme SD x264/x265"} 
+      - {id: 84, cat: Movies/HD, desc: "TV-Filme 720p"}
+      - {id: 85, cat: Movies/HD, desc: "TV-Filme 1080p"}
+      - {id: 86, cat: TV/SD, desc: "TV-Shows SD x264/x265"} 
+      - {id: 87, cat: TV/HD, desc: "TV-Shows 720p"}
+      - {id: 88, cat: TV/HD, desc: "TV-Shows 1080p"}
+      - {id: 118, cat: TV/Sport, desc: "SportSD x264/x265"}
+      - {id: 119, cat: TV/Sport, desc: "Sport720p"} 
+      - {id: 120, cat: TV/Sport, desc: "Sport1080p"}
+      - {id: 122, cat: TV/Sport, desc: "Sport2160p"}
+      - {id: 121, cat: TV/Sport, desc: "SportInternational"}
+      - {id: 82, cat: Audio/Audiobook, desc: "Audio Audiobooks"}
+      - {id: 71, cat: Audio/MP3, desc: "Audio MP3"}
+      - {id: 72, cat: Audio/Lossless, desc: "Audio Flac"}
+      - {id: 135, cat: Audio/Lossless, desc: "Audio WAV"}
+      - {id: 73, cat: Audio/MP3, desc: "Audio MP3 Packs"}
+      - {id: 74, cat: Audio/Lossless, desc: "Audio Flac Packs"}
+      - {id: 128, cat: Audio, desc: "Audio Kids"}
+      - {id: 75, cat: Audio/Video, desc: "Audio Musikvideo"}
+      - {id: 123, cat: PC, desc: "Software Windows"} 
+      - {id: 124, cat: PC, desc: "Software Linux"}
+      - {id: 125, cat: PC/Phone-Android, desc: "Software Android"}
+      - {id: 126, cat: PC/Mac, desc: "Software MacOS"}
+      - {id: 132, cat: PC/Games, desc: "Spiele Windows"} 
+      - {id: 133, cat: PC/Mac, desc: "Spiele MacOS"}
+      - {id: 134, cat: Console, desc: "Spiele Nintendo"}
+      - {id: 90, cat: Books/Magazines, desc: "Diverses Zeitschriften"} 
+      - {id: 89, cat: Books/Ebook, desc: "Diverses E-Books"}
+      - {id: 91, cat: XXX/x264, desc: "XXX SD x264/x265"} 
+      - {id: 92, cat: XXX/x264, desc: "XXX 720p"}
+      - {id: 93, cat: XXX/x264, desc: "XXX 1080p"}
+      - {id: 95, cat: XXX/Packs, desc: "XXX Packs SD"}
+      - {id: 96, cat: XXX/Packs, desc: "XXX Packs HD"}
+      - {id: 94, cat: XXX/Imageset, desc: "XXX Magazine"}
+      - {id: 97, cat: XXX/Imageset, desc: "XXX Pics"}
 
     modes:
       search: [q]
@@ -111,7 +111,6 @@
         "seeds": "seeders"
         "size": "size"
         "name": "title"
-        "type": "category"
     - name: type
       type: select
       label: Order requested from site
@@ -138,13 +137,15 @@
     paths:
       - path: selection.php
     inputs:
-      $raw: "{{ if .Categories }}{{range .Categories}}scat[]={{.}}&{{end}}{{else}}{{end}}"
+      $raw: "{{ if .Categories }}{{ range .Categories }}scat[]={{.}}&{{end}}{{else}}{{end}}"
       search: "{{ .Keywords }}"
-      blah: "0"
+      blah: 0
       orderby: "{{ .Config.sort }}"
       sort: "{{ .Config.type }}"
+
     rows:
       selector: div.content_wrap > div.selection_wrap:has(a[href^="details.php?id="])
+
     fields:
       title:
         selector: a[href^="details.php?id="]
@@ -186,8 +187,7 @@
           - name: dateparse
             args: "02.01.2006 15:04:05 -07:00"
       downloadvolumefactor:
-        case:
-          "*": 1
+        text: 1
       uploadvolumefactor:
-        case:
-          "*": 1
+        text: 1
+# engine n/a
