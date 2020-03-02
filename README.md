@@ -26,6 +26,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 
  * 1337x
  * 7torrents
+ * AcademicTorrents
  * ACG.RIP
  * ACGsou
  * Anidex
