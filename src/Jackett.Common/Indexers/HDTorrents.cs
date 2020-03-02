@@ -4,7 +4,6 @@ using System.Collections.Specialized;
 using System.Globalization;
 using System.Text;
 using System.Threading.Tasks;
-using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -20,8 +19,14 @@ namespace Jackett.Common.Indexers
     {
         private string SearchUrl => SiteLink + "torrents.php?";
         private string LoginUrl => SiteLink + "login.php";
-        private const int MAXPAGES = 3;
-        public override string[] AlternativeSiteLinks { get; protected set; } = new string[] { "https://hdts.ru/", "https://hd-torrents.org/", "https://hd-torrents.net/", "https://hd-torrents.me/" };
+
+        public override string[] AlternativeSiteLinks { get; protected set; } =
+        {
+            "https://hdts.ru/",
+            "https://hd-torrents.org/",
+            "https://hd-torrents.net/",
+            "https://hd-torrents.me/"
+        };
 
         private new ConfigurationDataBasicLogin configData
         {
@@ -102,24 +107,17 @@ namespace Jackett.Common.Indexers
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var searchurls = new List<string>();
             var searchUrl = SearchUrl;// string.Format(SearchUrl, HttpUtility.UrlEncode()));
             var queryCollection = new NameValueCollection();
             var searchString = query.GetQueryString();
 
             foreach (var cat in MapTorznabCapsToTrackers(query))
-            {
                 searchUrl += "category%5B%5D=" + cat + "&";
-            }
 
             if (query.ImdbID != null)
-            {
                 queryCollection.Add("search", query.ImdbID);
-            }
             else if (!string.IsNullOrWhiteSpace(searchString))
-            {
                 queryCollection.Add("search", searchString);
-            }
 
             queryCollection.Add("active", "0");
             queryCollection.Add("options", "0");
@@ -131,24 +129,25 @@ namespace Jackett.Common.Indexers
             {
                 var parser = new HtmlParser();
                 var dom = parser.ParseDocument(results.Content);
-                ReleaseInfo release;
 
                 var userInfo = dom.QuerySelector(".mainmenu > table > tbody > tr:has(td[title=\"Active-Torrents\"])");
                 var rank = userInfo.QuerySelector("td:nth-child(2)").TextContent.Substring(6);
 
-                var freeleechRanks = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-                freeleechRanks.Add("VIP");
-                freeleechRanks.Add("Uploader");
-                freeleechRanks.Add("HD Internal");
-                freeleechRanks.Add("Moderator");
-                freeleechRanks.Add("Administrator");
-                freeleechRanks.Add("Owner");
+                var freeleechRanks = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+                {
+                    "VIP",
+                    "Uploader",
+                    "HD Internal",
+                    "Moderator",
+                    "Administrator",
+                    "Owner"
+                };
                 var hasFreeleech = freeleechRanks.Contains(rank);
 
                 var rows = dom.QuerySelectorAll(".mainblockcontenttt > tbody > tr:has(a[href^=\"details.php?id=\"])");
                 foreach (var row in rows)
                 {
-                    release = new ReleaseInfo();
+                    var release = new ReleaseInfo();
 
                     release.Title = row.QuerySelector("td.mainblockcontent b a").TextContent;
                     release.Description = row.QuerySelector("td:nth-child(3) > span").TextContent;
@@ -168,16 +167,12 @@ namespace Jackett.Common.Indexers
                     {
                         release.Seeders = seeders;
                         if (ParseUtil.TryCoerceInt(row.QuerySelector($"td:nth-last-child({tdIndex + 2})").TextContent, out var peers))
-                        {
                             release.Peers = peers + release.Seeders;
-                        }
                     }
 
                     // Sometimes the grabs column is missing
                     if (ParseUtil.TryCoerceLong(row.QuerySelector($"td:nth-last-child({tdIndex + 1})").TextContent, out var grabs))
-                    {
                         release.Grabs = grabs;
-                    }
 
                     var fullSize = row.QuerySelectorAll("td.mainblockcontent")[6].TextContent;
                     release.Size = ReleaseInfo.GetBytes(fullSize);
@@ -187,7 +182,7 @@ namespace Jackett.Common.Indexers
                     release.Comments = new Uri(SiteLink + row.QuerySelector("td.mainblockcontent b a").GetAttribute("href"));
 
                     var dateSplit = row.QuerySelectorAll("td.mainblockcontent")[5].InnerHtml.Split(',');
-                    var dateString = dateSplit[1].Substring(0, dateSplit[1].IndexOf('>')).Trim();
+                    var dateString = dateSplit[1].Substring(0, dateSplit[1].IndexOf('>')).Replace("=\"\"", "").Trim();
                     release.PublishDate = DateTime.ParseExact(dateString, "dd MMM yyyy HH:mm:ss zz00", CultureInfo.InvariantCulture).ToLocalTime();
 
                     var category = row.QuerySelector("td:nth-of-type(1) a").GetAttribute("href").Replace("torrents.php?category=", "");
