@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
@@ -120,14 +119,11 @@ namespace Jackett.Common.Indexers
             queryCollection.Add("sort", "desc");
 
             if (!string.IsNullOrWhiteSpace(searchString))
-            {
                 queryCollection.Add("search", searchString);
-            }
 
             foreach (var cat in MapTorznabCapsToTrackers(query))
-            {
                 queryCollection.Add("c" + cat, "1");
-            }
+
             searchUrl += "?" + queryCollection.GetQueryString();
 
             var response = await RequestStringWithCookiesAndRetry(searchUrl, null, BrowseUrl);
@@ -158,9 +154,9 @@ namespace Jackett.Common.Indexers
                     }
 
                     var titleLink = row.QuerySelector("table tbody tr:nth-of-type(1) td a:has(b)");
-                    var DLLink = row.QuerySelector("td.tableb > a:has(img[title=\"Torrent herunterladen\"])");
+                    var dlLink = row.QuerySelector("td.tableb > a:has(img[title=\"Torrent herunterladen\"])");
                     release.Comments = new Uri(SiteLink + titleLink.GetAttribute("href").Replace("&hit=1", ""));
-                    release.Link = new Uri(SiteLink + DLLink.GetAttribute("href"));
+                    release.Link = new Uri(SiteLink + dlLink.GetAttribute("href"));
                     release.Title = titleLink.TextContent.Trim();
 
                     if (!query.MatchQueryStringAND(release.Title))
@@ -174,7 +170,7 @@ namespace Jackett.Common.Indexers
                     var pubDateUtc = TimeZoneInfo.ConvertTimeToUtc(dateGerman, germanyTz);
                     release.PublishDate = pubDateUtc.ToLocalTime();
 
-                    var sizeStr = row.QuerySelector("table tbody tr:nth-of-type(2) td b").TextContent.Trim();
+                    var sizeStr = row.QuerySelector("table tbody tr:nth-of-type(2)").QuerySelector("td b").TextContent.Trim();
                     release.Size = ReleaseInfo.GetBytes(sizeStr.Replace(",", "."));
 
                     release.Seeders = ParseUtil.CoerceInt(row.QuerySelector("table tbody tr:nth-of-type(2) td:nth-of-type(2) b:nth-of-type(1) font").TextContent.Trim());
