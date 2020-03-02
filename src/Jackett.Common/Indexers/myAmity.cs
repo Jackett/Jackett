@@ -138,15 +138,15 @@ namespace Jackett.Common.Indexers
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 90 * 60;
 
-                    var qDetailsLink = row.QuerySelector("a[href^=torrents-details.php?id=]");
+                    var qDetailsLink = row.QuerySelector("a[href^=\"torrents-details.php?id=\"]");
                     var qDetailsTitle = row.QuerySelector("td:has(a[href^=\"torrents-details.php?id=\"]) b"); // #7100
                     release.Title = qDetailsTitle.TextContent;
 
                     if (!query.MatchQueryStringAND(release.Title))
                         continue;
 
-                    var qCatLink = row.QuerySelector("a[href^=torrents.php?cat=]");
-                    var qDLLink = row.QuerySelector("a[href^=download.php]");
+                    var qCatLink = row.QuerySelector("a[href^=\"torrents.php?cat=\"]");
+                    var qDLLink = row.QuerySelector("a[href^=\"download.php\"]");
                     var qSeeders = row.QuerySelector("td:nth-of-type(7)");
                     var qLeechers = row.QuerySelector("td:nth-of-type(8)");
                     var qDateStr = row.QuerySelector("td:nth-of-type(10)");
