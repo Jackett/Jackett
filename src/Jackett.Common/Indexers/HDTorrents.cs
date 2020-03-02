@@ -211,8 +211,9 @@ namespace Jackett.Common.Indexers
                     else
                         release.DownloadVolumeFactor = 1;
 
-                    var imdblink = row.QuerySelector("a[href*=\"www.imdb.com/title/\"]").GetAttribute("href");
-                    release.Imdb = ParseUtil.GetLongFromString(imdblink);
+                    var imdblink = row.QuerySelector("a[href*=\"www.imdb.com/title/\"]")?.GetAttribute("href");
+                    if (!string.IsNullOrWhiteSpace(imdblink))
+                        release.Imdb = ParseUtil.GetLongFromString(imdblink);
 
                     releases.Add(release);
                 }
