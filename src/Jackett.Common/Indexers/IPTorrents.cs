@@ -199,7 +199,7 @@ namespace Jackett.Common.Indexers
                     var release = new ReleaseInfo();
                     var qTitleLink = row.QuerySelector("a[href^=\"/details.php?id=\"]");
                     // drop invalid char that seems to have cropped up in some titles. #6582
-                    release.Title = qTitleLink.TextContent.Trim().Replace("\u000f", "");
+                    release.Title = qTitleLink?.TextContent.Trim().Replace("\u000f", "");
 
                     // If we search an get no results, we still get a table just with no info.
                     if (string.IsNullOrWhiteSpace(release.Title))
