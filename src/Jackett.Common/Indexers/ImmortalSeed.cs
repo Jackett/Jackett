@@ -5,7 +5,6 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -118,9 +117,7 @@ namespace Jackett.Common.Indexers
             var searchUrl = BrowsePage;
 
             if (!string.IsNullOrWhiteSpace(query.GetQueryString()))
-            {
                 searchUrl += string.Format(QueryString, WebUtility.UrlEncode(query.GetQueryString()));
-            }
 
             var results = await RequestStringWithCookiesAndRetry(searchUrl);
 
@@ -156,7 +153,7 @@ namespace Jackett.Common.Indexers
                     release.Comments = new Uri(qDetails.GetAttribute("href"));
 
                     // 07-22-2015 11:08 AM
-                    var dateString = row.QuerySelectorAll("td:nth-of-type(2) div").Last().FirstElementChild.LastChild.TextContent.Trim();
+                    var dateString = row.QuerySelectorAll("td:nth-of-type(2) div").Last().LastChild.TextContent.Trim();
                     release.PublishDate = DateTime.ParseExact(dateString, "MM-dd-yyyy hh:mm tt", CultureInfo.InvariantCulture);
 
                     var sizeStr = row.QuerySelector("td:nth-of-type(5)").TextContent.Trim();
@@ -168,9 +165,7 @@ namespace Jackett.Common.Indexers
                     var catLink = row.QuerySelector("td:nth-of-type(1) a").GetAttribute("href");
                     var catSplit = catLink.IndexOf("category=");
                     if (catSplit > -1)
-                    {
                         catLink = catLink.Substring(catSplit + 9);
-                    }
 
                     release.Category = MapTrackerCatToNewznab(catLink);
 
