@@ -206,11 +206,11 @@ namespace Jackett.Common.Indexers
                     release.MinimumSeedTime = 0;
 
 
-                    var qDetailsLink = row.QuerySelector("a[href^=index.php?strWebValue=torrent&strWebAction=details]");
+                    var qDetailsLink = row.QuerySelector("a[href^=\"index.php?strWebValue=torrent&strWebAction=details\"]");
                     release.Title = TitleRegexp.Match(qDetailsLink.GetAttribute("onmouseover")).Groups[1].Value;
 
-                    var qCatLink = row.QuerySelector("a[href^=index.php?strWebValue=torrent&strWebAction=search&dir=]");
-                    var qDlLink = row.QuerySelector("a[href^=index.php?strWebValue=torrent&strWebAction=download&id=]");
+                    var qCatLink = row.QuerySelector("a[href^=\"index.php?strWebValue=torrent&strWebAction=search&dir=\"]");
+                    var qDlLink = row.QuerySelector("a[href^=\"index.php?strWebValue=torrent&strWebAction=download&id=\"]");
                     var qSeeders = row.QuerySelector("td.column1:nth-of-type(4)");
                     var qLeechers = row.QuerySelector("td.column2:nth-of-type(4)");
                     var qDateStr = row.QuerySelector("font:has(a)");
