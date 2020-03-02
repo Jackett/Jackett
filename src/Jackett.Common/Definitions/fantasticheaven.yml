@@ -1,0 +1,193 @@
+---
+  site: fantasticheaven
+  name: Fantastic Heaven
+  description: "Fantastic Heaven is a German Time based tracker"
+  language: de-de
+  type: private
+  encoding: UTF-8
+  links:
+    - https://fantastic-heaven.eu/
+
+  caps:
+    categorymappings:
+      - {id: 54, cat: Movies/SD, desc: "SD x264/x265"} # Kino
+      - {id: 56, cat: Movies/HD, desc: "720p"} # Kino
+      - {id: 57, cat: Movies/HD, desc: "1080p"} # Kino
+      - {id: 100, cat: Movies/3D, desc: "3D"} # Kino
+      - {id: 58, cat: Movies/SD, desc: "SD x264/x265"} # Filme
+      - {id: 59, cat: Movies/HD, desc: "720p"} # Filme
+      - {id: 60, cat: Movies/HD, desc: "1080p"} # Filme
+      - {id: 61, cat: Movies/HD, desc: "2160p"} # Filme
+      - {id: 62, cat: Movies/3D, desc: "3D"} # Filme
+      - {id: 101, cat: Movies/DVD, desc: "DVD"} # Filme
+      - {id: 63, cat: Movies/HD, desc: "Remux"} # Filme
+      - {id: 129, cat: Movies/SD, desc: "SD x264/265"} # Filme Packs
+      - {id: 130, cat: Movies/HD, desc: "720p"} # Filme Packs
+      - {id: 131, cat: Movies/HD, desc: "1080p"} # Filme Packs
+      - {id: 64, cat: TV/SD, desc: "SD x264/x265"} # Serien
+      - {id: 65, cat: TV/HD, desc: "720p"} # Serien
+      - {id: 66, cat: TV/HD, desc: "1080p"} # Serien
+      - {id: 68, cat: TV/HD, desc: "2160p"} # Serien
+      - {id: 69, cat: TV/FOREIGN, desc: "Ger-Subbed"} # Serien
+      - {id: 70, cat: TV/FOREIGN, desc: "International"} # Serien
+      - {id: 76, cat: TV/SD, desc: "SD x264/x265"} # Serienpacks
+      - {id: 77, cat: TV/HD, desc: "720p"} # Serienpacks
+      - {id: 78, cat: TV/HD, desc: "1080p"} # Serienpacks
+      - {id: 81, cat: TV/HD, desc: "2160p"} # Serienpacks
+      - {id: 79, cat: TV/FOREIGN, desc: "Ger-Subbed"} # Serienpacks
+      - {id: 80, cat: TV/FOREIGN, desc: "International"} # Serienpacks
+      - {id: 115, cat: Movies/SD, desc: "SD x264/x265"} # Kids-Filme
+      - {id: 116, cat: Movies/HD, desc: "720p"} # Kids-Filme
+      - {id: 117, cat: Movies/HD, desc: "1080p"} # Kids-Filme
+      - {id: 109, cat: TV/SD, desc: "SD x264/x265"} # Kids-Serien
+      - {id: 110, cat: TV/HD, desc: "720p"} # Kids-Serien
+      - {id: 111, cat: TV/HD, desc: "1080p"} # Kids-Serien
+      - {id: 112, cat: TV/SD, desc: "Packs SD"} # Kids-Serien
+      - {id: 113, cat: TV/HD, desc: "Packs 720p"} # Kids-Serien
+      - {id: 114, cat: TV/HD, desc: "Packs 1080p"} # Kids-Serien
+      - {id: 127, cat: TV/FOREIGN, desc: "International"} # Kids-Serien
+      - {id: 98, cat: TV/SD, desc: "SD x264/x265"} # Tatort
+      - {id: 99, cat: TV/HD, desc: "720p"} # Tatort
+      - {id: 105, cat: TV/SD, desc: "SD x264/x265"} # Daily Soaps
+      - {id: 103, cat: TV/HD, desc: "720p"} # Daily Soaps
+      - {id: 104, cat: TV/HD, desc: "1080p"} # Daily Soaps
+      - {id: 106, cat: TV/Documentary, desc: "SD x264/x265"} # Dokus
+      - {id: 107, cat: TV/Documentary, desc: "720p"} # Dokus
+      - {id: 108, cat: TV/Documentary, desc: "1080p"} # Dokus
+      - {id: 83, cat: Movies/SD, desc: "SD x264/x265"} # TV-Filme
+      - {id: 84, cat: Movies/HD, desc: "720p"} # TV-Filme
+      - {id: 85, cat: Movies/HD, desc: "1080p"} # TV-Filme
+      - {id: 86, cat: TV/SD, desc: "SD x264/x265"} # TV-Shows
+      - {id: 87, cat: TV/HD, desc: "720p"} # TV-Shows
+      - {id: 88, cat: TV/HD, desc: "1080p"} # TV-Shows
+      - {id: 118, cat: TV/Sport, desc: "SD x264/x265"} # Sport
+      - {id: 119, cat: TV/Sport, desc: "720p"} # Sport
+      - {id: 120, cat: TV/Sport, desc: "1080p"} # Sport
+      - {id: 122, cat: TV/Sport, desc: "2160p"} # Sport
+      - {id: 121, cat: TV/Sport, desc: "International"} # Sport
+      - {id: 82, cat: Audio/Audiobook, desc: "Audiobooks"} # Audio
+      - {id: 71, cat: Audio/MP3, desc: "MP3"} # Audio
+      - {id: 72, cat: Audio/Lossless, desc: "Flac"} # Audio
+      - {id: 135, cat: Audio/Lossless, desc: "WAV"} # Audio
+      - {id: 73, cat: Audio/MP3, desc: "MP3 Packs"} # Audio
+      - {id: 74, cat: Audio/Lossless, desc: "Flac Packs"} # Audio
+      - {id: 128, cat: Audio, desc: "Kids"} # Audio
+      - {id: 75, cat: Audio/Video, desc: "Musikvideo"} # Audio
+      - {id: 123, cat: PC, desc: "Windows"} # Software
+      - {id: 124, cat: PC, desc: "Linux"} # Software
+      - {id: 125, cat: PC/Phone-Android, desc: "Android"} # Software
+      - {id: 126, cat: PC/Mac, desc: "MacOS"} # Software
+      - {id: 132, cat: PC/Games, desc: "Windows"} # Spiele
+      - {id: 133, cat: PC/Mac, desc: "MacOS"} # Spiele
+      - {id: 134, cat: Console, desc: "Nintendo"} # Spiele
+      - {id: 90, cat: Books/Magazines, desc: "Zeitschriften"} # Diverses
+      - {id: 89, cat: Books/Ebook, desc: "E-Books"} # Diverses
+      - {id: 91, cat: XXX/x264, desc: "SD x264/x265"} # XXX
+      - {id: 92, cat: XXX/x264, desc: "720p"} # XXX
+      - {id: 93, cat: XXX/x264, desc: "1080p"} # XXX
+      - {id: 95, cat: XXX/Packs, desc: "Packs SD"} # XXX
+      - {id: 96, cat: XXX/Packs, desc: "Packs HD"} # XXX
+      - {id: 94, cat: XXX/Imageset, desc: "Magazine"} # XXX
+      - {id: 97, cat: XXX/Imageset, desc: "Pics"} # XXX
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "added"
+      options:
+        "added": "created"
+        "seeds": "seeders"
+        "size": "size"
+        "name": "title"
+        "type": "category"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
+
+  login:
+    path: login.php
+    method: form
+    form: form[action="/login.php"]
+    cookies: ["JAVA=OK"] # avoid jscheck redirect
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+      loggiin: "einloggen"
+      
+    test:
+      path: index.php
+      selector: a[href="logout.php"]
+
+  search:
+    paths:
+      - path: selection.php
+    inputs:
+      $raw: "{{ if .Categories }}{{range .Categories}}scat[]={{.}}&{{end}}{{else}}{{end}}"
+      search: "{{ .Keywords }}"
+      blah: "0"
+      orderby: "{{ .Config.sort }}"
+      sort: "{{ .Config.type }}"
+    rows:
+      selector: div.content_wrap > div.selection_wrap:has(a[href^="details.php?id="])
+    fields:
+      title:
+        selector: a[href^="details.php?id="]
+      category:
+        selector: a[href^="selection.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+          - name: replace
+            args: ["#2", ""]
+      details:
+        selector: a[href^="details.php?id="]
+        attribute: href
+      download:
+        selector: a[href^="download.php?torrent="]
+        attribute: href
+      grabs:
+        selector: div.selection_unter_ae
+        filters:
+          - name: replace
+            args: [" x", ""]
+      size:
+        selector: div.selection_unter_ad
+        filters:
+          - name: replace
+            args: [",", "."]
+      seeders:
+        selector: div.selection_unter_aa > b
+      leechers:
+        selector: div.selection_unter_aaa > b
+      date:
+        selector: div.selection_unter_ab
+        filters:
+          - name: append
+            args: " +01:00"
+          - name: replace
+            args: ["um ", ""]
+          - name: dateparse
+            args: "02.01.2006 15:04:05 -07:00"
+      downloadvolumefactor:
+        case:
+          "*": 1
+      uploadvolumefactor:
+        case:
+          "*": 1
