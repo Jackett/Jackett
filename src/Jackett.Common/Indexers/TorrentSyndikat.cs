@@ -157,9 +157,7 @@ namespace Jackett.Common.Indexers
 
             }
             foreach (var cat in MapTorznabCapsToTrackers(query))
-            {
                 queryCollection.Add("c" + cat, "1");
-            }
 
             searchUrl += "?" + queryCollection.GetQueryString();
 
@@ -188,22 +186,19 @@ namespace Jackett.Common.Indexers
 
                     var qLink = row.Children[2].FirstElementChild;
                     release.Link = new Uri(SiteLink + qLink.GetAttribute("href"));
-                    var torrentId = qLink.GetAttribute("href").Split('=').Last();
 
                     var descCol = row.Children[1];
                     var torrentTag = descCol.QuerySelectorAll("span.torrent-tag");
                     if (torrentTag.Any())
-                    {
                         release.Description = string.Join(", ", torrentTag.Select(x => x.InnerHtml));
-                    }
 
-                    var qCommentLink = descCol.FirstElementChild;
+                    var qCommentLink = descCol.QuerySelector("a[href*=\"details.php\"]");
                     release.Title = qCommentLink.GetAttribute("title");
                     release.Comments = new Uri(SiteLink + qCommentLink.GetAttribute("href").Replace("&hit=1", ""));
                     release.Guid = release.Comments;
 
                     var torrentDetails = descCol.QuerySelector(".torrent_details");
-                    var rawDateStr = torrentDetails.ChildNodes.ElementAt(torrentDetails.ChildNodes.Length - 3).TextContent;
+                    var rawDateStr = torrentDetails.ChildNodes[1].TextContent;
                     var dateStr = rawDateStr.Trim().Replace("von", "").Trim();
                     DateTime dateGerman;
                     if (dateStr.StartsWith("Heute "))
