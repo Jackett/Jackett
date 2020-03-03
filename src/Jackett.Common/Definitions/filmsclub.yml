@@ -1,4 +1,4 @@
----
+﻿---
   site: filmsclub
   name: FilmsClub
   description: "FilmsClub is a RUSSIAN Semi-Private Torrent Tracker for MOVIES / TV"
@@ -32,6 +32,10 @@
     - name: striprussian
       type: checkbox
       label: Strip Russian Letters
+      default: false
+    - name: stripyear
+      type: checkbox
+      label: Strip the Year from the Title
       default: false
     - name: info_search
       type: info
@@ -85,7 +89,7 @@
           "div:contains(\"Аниме\")": 5
           "div:contains(\"Мультфильмы\")": 6
 
-      title:
+      title_with_year:
         selector: a[href^="/torrent/"]
         filters:
           # normalize to SXXEYY format
@@ -105,6 +109,10 @@
             args: ["WEBDLRip", "WEBDL"]
           - name: replace
             args: ["HDTVRip", "HDTV"]
+      title_without_year:
+        text: "{{ re_replace .Result.title_with_year \"\\([1|2][0-9]{3}\\)\" \"\" }}"
+      title:
+        text: "{{ if .Config.stripyear }}{{ .Result.title_without_year }}{{else}}{{ .Result.title_with_year }}{{end}}"
       details:
         selector: a[href^="/torrent/"]
         attribute: href
