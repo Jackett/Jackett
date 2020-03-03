@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
