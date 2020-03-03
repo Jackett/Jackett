@@ -1,4 +1,4 @@
-﻿using Jackett.Common.Utils;
+using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using NUnit.Framework;
 
