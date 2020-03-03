@@ -120,11 +120,13 @@ namespace Jackett.Common.Indexers
             }
             else
             {
-                var stdResult = new ConfigurationDataBasicLogin();
-                stdResult.SiteLink.Value = configData.SiteLink.Value;
-                stdResult.Username.Value = configData.Username.Value;
-                stdResult.Password.Value = configData.Password.Value;
-                stdResult.CookieHeader.Value = loginPage.Cookies;
+                var stdResult = new ConfigurationDataBasicLogin
+                {
+                    SiteLink = {Value = configData.SiteLink.Value},
+                    Username = {Value = configData.Username.Value},
+                    Password = {Value = configData.Password.Value},
+                    CookieHeader = {Value = loginPage.Cookies}
+                };
                 return stdResult;
             }
         }
@@ -172,9 +174,11 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            var qParams = new NameValueCollection();
-            qParams.Add("cata", "yes");
-            qParams.Add("sec", "jax");
+            var qParams = new NameValueCollection
+            {
+                {"cata", "yes"},
+                {"sec", "jax"}
+            };
 
             var catList = MapTorznabCapsToTrackers(query);
             foreach (var cat in catList)
@@ -185,9 +189,8 @@ namespace Jackett.Common.Indexers
 
             // If Only Freeleech Enabled
             if (configData.Freeleech.Value)
-            {
                 qParams.Add("freeleech", "on");
-            }
+
             var searchUrl = SearchUrl + "?" + qParams.GetQueryString();
 
             var results = await RequestStringWithCookies(searchUrl);
@@ -196,7 +199,7 @@ namespace Jackett.Common.Indexers
             return releases;
         }
 
-        public List<ReleaseInfo> ParseResponse(TorznabQuery query, string htmlResponse)
+        private List<ReleaseInfo> ParseResponse(TorznabQuery query, string htmlResponse)
         {
             var releases = new List<ReleaseInfo>();
 
@@ -205,9 +208,12 @@ namespace Jackett.Common.Indexers
                 var parser = new HtmlParser();
                 var dom = parser.ParseDocument(htmlResponse);
 
-                var headerColumns = dom.QuerySelector("table.movehere")
-                                       .QuerySelectorAll("tbody > tr > td.cat_Head")
-                                       .Select(x => x.TextContent).ToList();
+                var table = dom.QuerySelector("table.movehere");
+                if (table == null)
+                    return releases; // no results
+
+                var headerColumns = table.QuerySelectorAll("tbody > tr > td.cat_Head")
+                                         .Select(x => x.TextContent).ToList();
                 var categoryIndex = headerColumns.FindIndex(x => x.Equals("Type"));
                 var nameIndex = headerColumns.FindIndex(x => x.Equals("Name"));
                 var sizeIndex = headerColumns.FindIndex(x => x.Equals("Size"));
@@ -236,6 +242,7 @@ namespace Jackett.Common.Indexers
 
                     release.Comments = new Uri(SiteLink + "/" + qLink.GetAttribute("href"));
                     release.Guid = release.Comments;
+
                     var torrentId = qLink.GetAttribute("href").Split('=')[1];
                     release.Link = new Uri(string.Format(DownloadUrl, torrentId));
 
