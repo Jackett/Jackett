@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
@@ -20,7 +19,7 @@ namespace Jackett.Common.Indexers
 {
     public class FileList : BaseWebIndexer
     {
-        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
+        public override string[] LegacySiteLinks { get; protected set; } = {
             "http://filelist.ro/",
         };
 
@@ -81,7 +80,7 @@ namespace Jackett.Common.Indexers
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-            var responseFirstPage = await RequestStringWithCookiesAndRetry(SiteLink + "login.php?returnto=%2F", "", null);
+            var responseFirstPage = await RequestStringWithCookiesAndRetry(SiteLink + "login.php?returnto=%2F", "");
             var parser = new HtmlParser();
             var domFirstPage = parser.ParseDocument(responseFirstPage.Content);
             var validator = domFirstPage.QuerySelector("input[name =\"validator\"]").GetAttribute("value");
@@ -110,20 +109,14 @@ namespace Jackett.Common.Indexers
             var cats = MapTorznabCapsToTrackers(query);
             var cat = "0";
             if (cats.Count == 1)
-            {
                 cat = cats[0];
-            }
 
             var queryCollection = new NameValueCollection();
 
             if (query.ImdbID != null)
-            {
                 queryCollection.Add("search", query.ImdbID);
-            }
             else if (!string.IsNullOrWhiteSpace(searchString))
-            {
                 queryCollection.Add("search", searchString);
-            }
 
             queryCollection.Add("cat", cat);
             queryCollection.Add("searchin", "1");
@@ -150,7 +143,7 @@ namespace Jackett.Common.Indexers
                 foreach (var row in rows)
                 {
                     var release = new ReleaseInfo();
-                    
+
                     var qTitleLink = row.QuerySelector(".torrenttable:nth-of-type(2) a");
                     release.Title = row.QuerySelector(".torrenttable:nth-of-type(2) b").TextContent;
                     var longtitle = row.QuerySelector(".torrenttable:nth-of-type(2) a[title]").GetAttribute("title");
@@ -160,15 +153,15 @@ namespace Jackett.Common.Indexers
                     if (query.ImdbID == null && !query.MatchQueryStringAND(release.Title))
                         continue;
 
-                    release.Description = row.QuerySelector(".torrenttable:nth-of-type(2) > span > font.small").TextContent;
+                    release.Description = row.QuerySelector(".torrenttable:nth-of-type(2) > span > font.small")?.TextContent;
 
                     var tooltip = qTitleLink.GetAttribute("title");
                     if (!string.IsNullOrEmpty(tooltip))
                     {
-                        var ImgRegexp = new Regex("src='(.*?)'");
-                        var ImgRegexpMatch = ImgRegexp.Match(tooltip);
-                        if (ImgRegexpMatch.Success)
-                            release.BannerUrl = new Uri(ImgRegexpMatch.Groups[1].Value);
+                        var imgRegexp = new Regex("src='(.*?)'");
+                        var imgRegexpMatch = imgRegexp.Match(tooltip);
+                        if (imgRegexpMatch.Success)
+                            release.BannerUrl = new Uri(imgRegexpMatch.Groups[1].Value);
                     }
 
                     release.Guid = new Uri(SiteLink + qTitleLink.GetAttribute("href"));
@@ -184,14 +177,14 @@ namespace Jackett.Common.Indexers
                     var sizeStr = row.QuerySelector(".torrenttable:nth-of-type(7)").TextContent.Trim();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
 
+                    var grabs = row.QuerySelector(".torrenttable:nth-of-type(8)").TextContent.Replace("times", "").Trim();
+                    release.Grabs = ParseUtil.CoerceLong(grabs);
+
                     release.Seeders = ParseUtil.CoerceInt(row.QuerySelector(".torrenttable:nth-of-type(9)").TextContent.Trim());
                     release.Peers = ParseUtil.CoerceInt(row.QuerySelector(".torrenttable:nth-of-type(10)").TextContent.Trim()) + release.Seeders;
 
                     var catId = row.QuerySelector(".torrenttable:nth-of-type(1) a").GetAttribute("href").Substring(15);
                     release.Category = MapTrackerCatToNewznab(catId);
-
-                    var grabs = row.QuerySelector(".torrenttable:nth-of-type(8)").FirstChild.FirstChild;
-                    release.Grabs = ParseUtil.CoerceLong(catId);
 
                     if (globalFreeLeech || row.QuerySelectorAll("img[alt=\"FreeLeech\"]").Any())
                         release.DownloadVolumeFactor = 0;
