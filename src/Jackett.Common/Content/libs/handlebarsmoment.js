@@ -1,4 +1,4 @@
-﻿
+
 Handlebars.registerHelper('dateFormat', function (context, block) {
     if (window.moment) {
         var f = block.hash.format || "YYYY-MM-DD HH:mm:ss";
