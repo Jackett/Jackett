@@ -6,7 +6,7 @@
   type: public
   encoding: UTF-8
   links:
-    - https://www.elitetorrent.bz/
+    - https://www.elitetorrent.nl/
   legacylinks:
     - https://www.elitetorrent.biz/
     - https://www.elitetorrent.io/
@@ -15,6 +15,7 @@
     - https://www.elitetorrent.nu/
     - https://www.elitetorrent.tv/
     - https://www.elitetorrent.li/
+    - https://www.elitetorrent.bz/
 
   caps:
     categories:
