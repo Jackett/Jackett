@@ -71,6 +71,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * LePorno
  * Legit Torrents
  * LimeTorrents
+ * LinuxTracker
  * MacTorrents
  * Magnet4You
  * MagnetDL
