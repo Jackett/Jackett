@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Helpers;
 using Jackett.Common.Models;
@@ -18,7 +17,6 @@ namespace Jackett.Common.Indexers
 {
     public class Hebits : BaseWebIndexer
     {
-        private string LoginUrl => SiteLink + "login.php";
         private string LoginPostUrl => SiteLink + "takeloginAjax.php";
         private string SearchUrl => SiteLink + "browse.php?sort=4&type=desc";
 
@@ -85,19 +83,12 @@ namespace Jackett.Common.Indexers
             var searchUrl = SearchUrl;
 
             if (!string.IsNullOrWhiteSpace(searchString))
-            {
                 searchUrl += "&search=" + WebUtilityHelpers.UrlEncode(searchString, Encoding);
-            }
-            string.Format(SearchUrl, WebUtilityHelpers.UrlEncode(searchString, Encoding));
 
             var cats = MapTorznabCapsToTrackers(query);
             if (cats.Count > 0)
-            {
                 foreach (var cat in cats)
-                {
                     searchUrl += "&c" + cat + "=1";
-                }
-            }
 
             var response = await RequestStringWithCookies(searchUrl);
             try
@@ -111,17 +102,12 @@ namespace Jackett.Common.Indexers
                 {
                     var release = new ReleaseInfo();
 
-                    var debug = row.InnerHtml;
-
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800; // 48 hours
 
                     var qTitle = row.QuerySelector(".bTitle");
                     var titleParts = qTitle.TextContent.Split('/');
-                    if (titleParts.Length >= 2)
-                        release.Title = titleParts[1].Trim();
-                    else
-                        release.Title = titleParts[0].Trim();
+                    release.Title = titleParts.Length >= 2 ? titleParts[1].Trim() : titleParts[0].Trim();
 
                     var qDetailsLink = qTitle.QuerySelector("a[href^=\"details.php\"]");
                     release.Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
@@ -132,25 +118,20 @@ namespace Jackett.Common.Indexers
                     var pattern = "\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}";
                     var match = Regex.Match(dateString, pattern);
                     if (match.Success)
-                    {
                         release.PublishDate = DateTime.ParseExact(match.Value, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                    }
 
-                    var sizeStr = row.QuerySelector(".bSize").TextContent;
+                    var sizeStr = row.QuerySelector(".bSize").TextContent.Trim();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
                     release.Seeders = ParseUtil.CoerceInt(row.QuerySelector(".bUping").TextContent.Trim());
                     release.Peers = release.Seeders + ParseUtil.CoerceInt(row.QuerySelector(".bDowning").TextContent.Trim());
 
-                    var files = row.QuerySelector("div.bFiles").LastChild.ToString();
+                    var files = row.QuerySelector("div.bFiles").LastChild.TextContent.Trim();
                     release.Files = ParseUtil.CoerceInt(files);
 
-                    var grabs = row.QuerySelector("div.bFinish").LastChild.ToString();
+                    var grabs = row.QuerySelector("div.bFinish").LastChild.TextContent.Trim();
                     release.Grabs = ParseUtil.CoerceInt(grabs);
 
-                    if (row.QuerySelector("img[src=\"/pic/free.jpg\"]") != null)
-                        release.DownloadVolumeFactor = 0;
-                    else
-                        release.DownloadVolumeFactor = 1;
+                    release.DownloadVolumeFactor = row.QuerySelector("img[src=\"/pic/free.jpg\"]") != null ? 0 : 1;
 
                     if (row.QuerySelector("img[src=\"/pic/triple.jpg\"]") != null)
                         release.UploadVolumeFactor = 3;
