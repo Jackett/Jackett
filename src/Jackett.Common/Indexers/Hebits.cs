@@ -109,7 +109,7 @@ namespace Jackett.Common.Indexers
                     var match = Regex.Match(dateString, @"\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}");
                     if (match.Success)
                         release.PublishDate = DateTime.ParseExact(match.Value, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                    var sizeStr = row.QuerySelector(".bSize").Text Content.Trim();
+                    var sizeStr = row.QuerySelector(".bSize").TextContent.Trim();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
                     release.Seeders = ParseUtil.CoerceInt(row.QuerySelector(".bUping").TextContent.Trim());
                     release.Peers = release.Seeders + ParseUtil.CoerceInt(row.QuerySelector(".bDowning").TextContent.Trim());
