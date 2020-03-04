@@ -133,6 +133,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * shokweb
  * sukebei-Pantsu
  * sukebei.Nyaa.si
+ * xxxtor
 </details>
 
 <details> <summary> <b> Supported Semi-Private Trackers </b> </summary>
