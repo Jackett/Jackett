@@ -27,8 +27,6 @@ namespace Jackett.Common.Indexers
 
         private string SearchUrl => SiteLink + "browse.php";
         private string LoginUrl => SiteLink + "login.php";
-        //Unused flagging for removal
-        private const int MAXPAGES = 3;
 
         private new ConfigurationDataRecaptchaLogin configData
         {
