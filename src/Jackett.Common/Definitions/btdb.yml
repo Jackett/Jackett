@@ -55,8 +55,10 @@
         selector: a[href*="/torrent/"]
         attribute: href
       download:
+         # download can be missing despite icon being present. Fortunately the magnet is always there
         selector: a[href$=".torrent"]
         attribute: href
+        optional: true
       magnet:
         selector: a[href^="magnet:?xt="]
         attribute: href
