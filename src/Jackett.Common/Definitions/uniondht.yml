@@ -94,7 +94,7 @@
       - {id: 103, cat: Console/NDS, desc: "Nintendo "}
       - {id: 113, cat: Console/NDS, desc: " |- NDS | Игры"}
       - {id: 112, cat: Console/Wii, desc: " |- Wii | Игры"}
-      - {id: 111, cat: Console//Wiiware/VC, desc: " |- WiiWare | Игры"}
+      - {id: 111, cat: Console/Wiiware/VC, desc: " |- WiiWare | Игры"}
       - {id: 110, cat: Console, desc: " |- GameCube | Игры"}
       - {id: 104, cat: Console, desc: "Sega "}
       - {id: 108, cat: Console, desc: " |- Dreamcast | Игры"}
