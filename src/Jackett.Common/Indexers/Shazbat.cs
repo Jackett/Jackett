@@ -158,6 +158,8 @@ namespace Jackett.Common.Indexers
                         release.Peers = release.Seeders + ParseUtil.CoerceInt(infosplit[2]);
                         release.DownloadVolumeFactor = globalFreeleech ? 0 : 1;
                         release.UploadVolumeFactor = 1;
+                        release.MinimumRatio = 1;
+                        release.MinimumSeedTime = 172800; // 48 hours
 
                         // var tags = row.QuerySelector(".label-tag").TextContent; These don't see to parse - bad tags?
                         releases.Add(release);
