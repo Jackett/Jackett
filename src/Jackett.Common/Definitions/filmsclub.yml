@@ -63,9 +63,9 @@
       - path: torrent/list/
     keywordsfilters:
       # the site does not support season/episode searching in the title, they are not part of title. searching description for them does not work either.
-      - name: re_replace # strip S01 
+      - name: re_replace # strip S01
         args: ["(?i)\\bS0*(\\d+)\\b", ""]
-      - name: re_replace # strip S01E01 
+      - name: re_replace # strip S01E01
         args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", ""]
     inputs:
       $raw: "{{ if .Categories }}{{ range .Categories }}category={{.}}&{{end}}{{else}}{{end}}"
@@ -92,21 +92,28 @@
       title_with_year:
         selector: a[href^="/torrent/"]
         filters:
+          # try to reorder TV title for Sonarr: name year source quality season/episode -> name year season/episode source quality
+          - name: re_replace
+            args: ["[\\:\\-\\/\\|,\\s]", " "]
+          - name: re_replace
+            args: ["(.*)(\\([1|2][0-9]{3}\\))(.*)([CСcс]езон.*)", "$1$2$4$3"]
           # normalize to SXXEYY format
           - name: re_replace
-            args: ["[\\:\\-\\/\\|]", " "]
+            args: ["(.*)[CСcс]езон +(\\d+).+[CСcс]ери[ия] +(\\d+) +(\\d+) +из +\\d+(.*)", "$1 S$2E$3-$4 rus $5"]
           - name: re_replace
-            args: ["(.*)[CСcс]езон\\s+(\\d+).+[CСcс]ери[ия]\\s+(\\d+)\\s+(\\d+).+(.*)", "$1 S$2E$3-$4 rus $5"]
-          - name: re_replace
-            args: ["(.*)[CСcс]езон\\s+(\\d+)(.*)", "$1 S$2 rus $3"]
+            args: ["(.*)[CСcс]езон +(\\d+)(.*)", "$1 S$2 rus $3"]
           - name: re_replace
             args: ["(\\([А-Яа-яЁё\\W]+\\))|(^[А-Яа-яЁё\\W\\d]+\\/ )|([а-яА-ЯЁё \\-]+,+)|([а-яА-ЯЁё]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
           - name: replace
             args: [" Rip", "Rip"]
           - name: replace
+            args: ["Blu Ray", "Bluray"]
+          - name: replace
             args: ["WEB DL", "WEBDL"]
           - name: replace
             args: ["WEBDLRip", "WEBDL"]
+          - name: replace
+            args: ["WEBRip", "WEBDL"]
           - name: replace
             args: ["HDTVRip", "HDTV"]
       title_without_year:
@@ -135,7 +142,7 @@
           - name: replace
             args: [",", "."]
           - name: replace
-            args: ["ТБ", "TB"] 
+            args: ["ТБ", "TB"]
           - name: replace
             args: ["ГБ", "GB"]
           - name: replace
