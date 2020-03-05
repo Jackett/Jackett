@@ -6,6 +6,9 @@
     <UseWindowsForms>true</UseWindowsForms>
     <AssemblyName>JackettTray</AssemblyName>
     <ApplicationIcon>jackett.ico</ApplicationIcon>
+    <NoWarn />
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningsAsErrors />
   </PropertyGroup>
 
   <ItemGroup>
