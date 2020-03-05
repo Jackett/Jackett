@@ -6,8 +6,9 @@
   type: public
   encoding: UTF-8
   links:
-    - https://www.torrentdownloads.me/
     - https://www.torrentdownloads.info/
+  legacylinks:
+    - https://www.torrentdownloads.me/ # ERR_NAME_RESOLUTION_FAILED
 
   caps:
     categorymappings:
