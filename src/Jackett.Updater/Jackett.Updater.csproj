@@ -7,6 +7,9 @@
     <OutputType>Exe</OutputType>
     <Version>0.0.0</Version>
     <ServerGarbageCollection>false</ServerGarbageCollection>
+    <NoWarn />
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningsAsErrors />
   </PropertyGroup>
 
   <!-- Conditionally obtain references for the .NET461 target -->
