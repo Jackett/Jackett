@@ -57,8 +57,8 @@
       - {id: 51, cat: XXX, desc: "XXX-SD"}
 
     modes:
-      search: [q]
-      tv-search: [q, season, ep]
+      search: [q, imdbid]
+      tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
 
   settings:
