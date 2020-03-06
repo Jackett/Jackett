@@ -110,7 +110,7 @@ namespace Jackett.Common.Indexers
                 { "ApiKey", configData.Key.Value }
             };
 
-            var results = await RequestStringWithCookiesAndRetry(movieListSearchUrl, null, null, authHeaders);
+            var results = await RequestStringWithCookiesAndRetry(movieListSearchUrl, headers: authHeaders);
             if (results.IsRedirect) // untested
                 results = await RequestStringWithCookiesAndRetry(movieListSearchUrl, headers: authHeaders);
             try
