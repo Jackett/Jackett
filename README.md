@@ -65,7 +65,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Horrible Subs
  * IBit
  * Idope
- * Il Corsaro Blu
+ * Il CorSaRo Blu
  * Il Corsaro Nero <!-- maintained by bonny1992 -->
  * Internet Archive (archive.org)
  * Isohunt2

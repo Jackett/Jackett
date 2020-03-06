@@ -1,9 +1,9 @@
 ---
   site: ilcorsaroblu
   name: Il Corsaro Blu
-  description: "Il Corsaro Blu is an ITALIAN Public site for TV / MOVIES / GENERAL"
+  description: "il CorSaRo Blu is an ITALIAN Semi-Private site for TV / MOVIES / GENERAL"
   language: it-it
-  type: public
+  type: semi-private
   encoding: UTF-8
   links:
     - https://www.ilcorsaroblu.org/
@@ -71,7 +71,46 @@
       tv-search: [q, season, ep]
       movie-search: [q]
 
-  settings: []
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "3"
+      options:
+        "3": "created"
+        "5": "seeders"
+        "4": "size"
+        "2": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "2"
+      options:
+        "2": "desc"
+        "1": "asc"
+    - name: info
+      type: info
+      label: Results Per Page
+      default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+
+  login:
+    path: index.php?page=login&returnto=index.php
+    method: form
+    form: form[name="login"]
+    inputs:
+      uid: "{{ .Config.username }}"
+      pwd: "{{ .Config.password }}"
+    error:
+      - selector: span[style="color:#FF0000;"]
+    test:
+      path: index.php
+      selector: a[href="logout.php"]
 
   search:
     paths:
@@ -83,11 +122,17 @@
         args: ["(?i)\\bS0*(\\d+)\\b", "$1"]
       - name: re_replace # S01E01 to 1 1
         args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "$1 $2"]
+    #  https://www.ilcorsaroblu.org/index.php?page=torrents&search=&category=0&options=0&active=0
     inputs:
-      search: "{{ .Keywords }}"
-      category: "{{ range .Categories }}{{.}};{{end}}"
       page: torrents
+      search: "{{ .Keywords }}"
+      category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{else}}0{{end}}"
+      # 0 title 1 title & descr 2 descr 3 uploaders 5 gold 6 silver 7 bronze
+      options: 0
+      # 0 all 1 activeonly 2 deadonly
       active: 0
+      order: "{{ .Config.sort }}"
+      by: "{{ .Config.type }}"
 
     rows:
       selector: div.b-content > table > tbody > tr > td > table.lista > tbody > tr:has(a[href^="index.php?page=torrents&category="])
@@ -150,7 +195,7 @@
           - name: append
             args: "&dn={{ .Result._magnetfilename }}.torrent"
           - name: append
-            args: "&tr=udp://tracker.openbittorrent.com:80/announce&tr=udp://tracker.opentrackr.org:1337/announce" 
+            args: "&tr=udp://tracker.openbittorrent.com:80/announce&tr=udp://tracker.opentrackr.org:1337/announce"
       magnet:
         optional: true
         selector: a[href^="magnet:?xt="]
@@ -187,7 +232,11 @@
       leechers:
         selector: td:nth-last-child(5)
       downloadvolumefactor:
-        text: 0
+        case:
+          img[src="images/gold.gif"]: 0
+          img[src="images/silver.gif"]: 0.5
+          img[src="images/bronze.gif"]: 0.75
+          "*": 1
       uploadvolumefactor:
         text: 1
-# engine n/a
+# xbtit
