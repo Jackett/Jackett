@@ -20,7 +20,15 @@ namespace Jackett.Common.Indexers
     {
         public static string GetIndexerID(Type type) => type.Name.ToLowerInvariant().StripNonAlphaNumeric();
 
-        public string SiteLink { get; protected set; }
+        public Uri SiteUri { get; protected set; }
+        // For full backward compatibility while migrating
+        // https://docs.microsoft.com/en-us/dotnet/api/system.uri.originalstring?view=netframework-4.8
+        public string SiteLink
+        {
+            get => SiteUri.OriginalString;
+            protected set => SiteUri = new Uri(value, UriKind.Absolute);
+        }
+
         public virtual string[] LegacySiteLinks { get; protected set; }
         public string DefaultSiteLink { get; protected set; }
         public virtual string[] AlternativeSiteLinks { get; protected set; } = new string[] { };
@@ -141,8 +149,10 @@ namespace Jackett.Common.Indexers
             }
 
             // check whether the site link is well-formatted
-            var siteUri = new Uri(configData.SiteLink.Value);
-            SiteLink = configData.SiteLink.Value;
+            // Avoid throwing exception on improper format?
+            //if (Uri.TryCreate(configData.SiteLink.Value, UriKind.Absolute, out var siteUri))
+            //    SiteUri = siteUri;
+            SiteUri= new Uri(configData.SiteLink.Value);
         }
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)

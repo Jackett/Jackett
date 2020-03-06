@@ -10,6 +10,8 @@ namespace Jackett.Common.Indexers
 {
     public class IndexerResult
     {
+        // Is never set outside class constructor.
+        // Should be made readonly to prevent changing results source?
         public IIndexer Indexer { get; set; }
         public IEnumerable<ReleaseInfo> Releases { get; set; }
 
@@ -22,6 +24,7 @@ namespace Jackett.Common.Indexers
 
     public interface IIndexer
     {
+        Uri SiteUri { get; }
         string SiteLink { get; }
         string[] AlternativeSiteLinks { get; }
 
