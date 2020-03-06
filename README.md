@@ -26,32 +26,35 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 
  * 1337x
  * 7torrents
+ * AcademicTorrents
  * ACG.RIP
  * ACGsou
- * AcademicTorrents
- * AniRena
  * Anidex
  * Anime Tosho
+ * AniRena
  * AudioBook Bay (ABB)
- * BT.etree
- * BTDB
- * BTDIGG
- * BTSOW
- * BTeye
  * Badass Torrents
  * BigFANGroup
  * BitRu
  * BitTorrent.AM
+ * BT.etree
+ * BTDB
+ * BTDIGG
+ * BTeye
+ * BTSOW
  * Cili180
  * ConCen
  * Corsaro.red
+ * cpasbien
+ * cpasbienClone
  * Demonoid
- * ETTV
- * EXT Torrents
- * EZTV
+ * dmhy
  * EliteTorrent.biz
  * EstrenosDTL
+ * ETTV
+ * EXT Torrents
  * ExtraTorrent.cd
+ * EZTV
  * Filebase
  * FireBit
  * Frozen Layer
@@ -66,10 +69,11 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Il Corsaro Nero <!-- maintained by bonny1992 -->
  * Internet Archive (archive.org)
  * Isohunt2
- * KickAssTorrent (KATcr)
+ * iTorrent
  * KickAssTorrent (kat.li)
- * LePorno
+ * KickAssTorrent (KATcr)
  * Legit Torrents
+ * LePorno
  * LimeTorrents
  * LinuxTracker
  * MacTorrents
@@ -80,10 +84,10 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * MovCr
  * MoviesDVDR
  * MyPornClub
- * NNTT
  * Newpct (aka: tvsinpagar, descargas2020, torrentlocura, torrentrapid, tumejortorrent, pctnew, etc)
  * Newstudio
  * Nitro
+ * NNTT
  * NoName Club (NNM-Club)
  * Nyaa-Pantsu
  * Nyaa.si
@@ -94,18 +98,21 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * PornLeech
  * ProStyleX
  * RARBG
- * RuTor
  * Rus-media
+ * RuTor
  * Seedpeer
+ * shokweb
  * ShowRSS
  * SkyTorrentsClone
  * SolidTorrents
+ * sukebei-Pantsu
+ * sukebei.Nyaa.si
  * TFile
- * TOROS
  * The Pirate Bay (TPB)
  * Tokyo Tosho
  * TopNow
  * Torlock
+ * TOROS
  * Torrent Downloads (TD)
  * Torrent4You
  * Torrent9
@@ -117,23 +124,16 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TorrentParadise
  * TorrentProject2
  * TorrentQuest
+ * Torrents.csv
  * TorrentView
  * TorrentWal
- * Torrents.csv
  * Torrentz2
  * Underverse
  * UnionDHT
- * YTS.ag
- * YourBittorrent
- * Zooqle
- * cpasbien
- * cpasbienClone
- * dmhy
- * iTorrent
- * shokweb
- * sukebei-Pantsu
- * sukebei.Nyaa.si
  * xxxtor
+ * YourBittorrent
+ * YTS.ag
+ * Zooqle
 </details>
 
 <details> <summary> <b> Supported Semi-Private Trackers </b> </summary>
@@ -296,7 +296,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * GazelleGames (GGn)
  * Generation-Free
  * GigaTorrents
- * GimmePeers (formerly ILT) <!-- maintained by jamesb2147 -->
+ * GimmePeers (formerly ILT)
  * GiroTorrent
  * Greek Legends
  * Greek Team
