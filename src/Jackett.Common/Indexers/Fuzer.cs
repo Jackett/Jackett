@@ -160,9 +160,8 @@ namespace Jackett.Common.Indexers
                 {"cookieuser", "1"}
             };
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, null, LoginUrl);
-            await ConfigureIfOK(
-                result.Cookies, result.Content?.Contains("images/loading.gif") == true,
-                () => throw new ExceptionWithConfigData("Couldn't login", configData));
+            await ConfigureIfOK(result.Cookies, result.Content?.Contains("images/loading.gif") == true,
+                                () => throw new ExceptionWithConfigData("Couldn't login", configData));
             Thread.Sleep(2);
             return IndexerConfigurationStatus.RequiresTesting;
         }
@@ -225,7 +224,8 @@ namespace Jackett.Common.Indexers
                     release.Link = new Uri(SiteLink + row.QuerySelector("a:has(div.dlimg)").GetAttribute("href"));
                     release.Guid = release.Comments;
                     //some releases have invalid banner URLs, ignore the banners in this case
-                    if (Uri.TryCreate(row.QuerySelector("a[imgsrc]").GetAttribute("imgsrc"), UriKind.Absolute, out var banner))
+                    if (Uri.TryCreate(row.QuerySelector("a[imgsrc]").GetAttribute("imgsrc"),
+                                      UriKind.Absolute, out var banner))
                         release.BannerUrl = banner;
                     var dateStringAll = row.QuerySelector("div.up_info2").ChildNodes.Last().TextContent;
                     var dateParts = dateStringAll.Split(' ');
@@ -262,7 +262,7 @@ namespace Jackett.Common.Indexers
                 {"searchseriesid", ""},
                 {"tab", "listseries"},
                 {"function", "Search"},
-                {"string", searchTerm} // eretz + nehedert
+                {"string", searchTerm}, // eretz + nehedert
             };
             var site = new UriBuilder
             {
