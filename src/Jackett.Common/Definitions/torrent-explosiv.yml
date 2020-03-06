@@ -143,6 +143,11 @@
             args: ["details.php?id=", "download.php?torrent="]
       title:
         selector: a.selection_a
+        filters:
+          - name: re_replace
+            args: ["^\\[[\\w ]*\\]\\s?", ""]
+          - name: re_replace
+            args: ["^\\[[\\w ]*\\]\\s?", ""]
       details:
         selector: a.selection_a
         attribute: href
