@@ -12,7 +12,6 @@ using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
-using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 
@@ -161,8 +160,9 @@ namespace Jackett.Common.Indexers
                 {"cookieuser", "1"}
             };
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, null, LoginUrl);
-            await ConfigureIfOK(result.Cookies, result.Content?.Contains("images/loading.gif") == true,
-                                () => throw new ExceptionWithConfigData("Couldn't login", configData));
+            await ConfigureIfOK(
+                result.Cookies, result.Content?.Contains("images/loading.gif") == true,
+                () => throw new ExceptionWithConfigData("Couldn't login", configData));
             Thread.Sleep(2);
             return IndexerConfigurationStatus.RequiresTesting;
         }
@@ -215,7 +215,6 @@ namespace Jackett.Common.Indexers
                         release.Title = mainTitleLink.TextContent;
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800; // 48 hours
-
                     release.Grabs = ParseUtil.CoerceLong(row.QuerySelector("td:nth-child(5)").TextContent.Replace(",", ""));
                     release.Seeders = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(6)").TextContent.Replace(",", ""));
                     release.Peers = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(7)").TextContent.Replace(",", "")) +
@@ -226,10 +225,9 @@ namespace Jackett.Common.Indexers
                     release.Link = new Uri(SiteLink + row.QuerySelector("a:has(div.dlimg)").GetAttribute("href"));
                     release.Guid = release.Comments;
                     //some releases have invalid banner URLs, ignore the banners in this case
-                    if (Uri.TryCreate(row.QuerySelector("a[imgsrc]").GetAttribute("imgsrc"),
-                                      UriKind.Absolute, out var banner))
+                    if (Uri.TryCreate(row.QuerySelector("a[imgsrc]").GetAttribute("imgsrc"), UriKind.Absolute, out var banner))
                         release.BannerUrl = banner;
-                    var dateStringAll = row.QuerySelector("div.up_info2").ChildNodes.Last().ToString();
+                    var dateStringAll = row.QuerySelector("div.up_info2").ChildNodes.Last().TextContent;
                     var dateParts = dateStringAll.Split(' ');
                     var dateString = dateParts[dateParts.Length - 2] + " " + dateParts[dateParts.Length - 1];
                     release.PublishDate = DateTime.ParseExact(dateString, "dd/MM/yy HH:mm", CultureInfo.InvariantCulture);
@@ -262,9 +260,9 @@ namespace Jackett.Common.Indexers
             var queryString = new NameValueCollection
             {
                 {"searchseriesid", ""},
-                {"tab", "listseries" },
-                { "function", "Search"},
-                {"string", searchTerm }, // eretz + nehedert
+                {"tab", "listseries"},
+                {"function", "Search"},
+                {"string", searchTerm} // eretz + nehedert
             };
             var site = new UriBuilder
             {
@@ -279,7 +277,6 @@ namespace Jackett.Common.Indexers
             var rows = dom.QuerySelectorAll("#listtable > tbody > tr");
             foreach (var row in rows.Skip(1))
             {
-
                 var link = row.QuerySelector("td:nth-child(1) > a");
                 if (string.Equals(link.TextContent.Trim(), searchTerm.Trim(), StringComparison.CurrentCultureIgnoreCase))
                 {
