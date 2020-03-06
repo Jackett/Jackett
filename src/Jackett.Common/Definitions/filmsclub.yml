@@ -37,6 +37,10 @@
       type: checkbox
       label: Strip the Year from the Title
       default: false
+    - name: addtvshows
+      type: checkbox
+      label: Add (TVShows) to TV titles
+      default: false
     - name: info_search
       type: info
       label: "Searching with Season / Episode (S01E01)"
@@ -99,7 +103,7 @@
             args: ["(.*)(\\([1|2][0-9]{3}\\))(.*)([CСcс]езон.*)", "$1$2$4$3"]
           # normalize to SXXEYY format
           - name: re_replace
-            args: ["(.*)[CСcс]езон +(\\d+).+[CСcс]ери[ия] +(\\d+) +(\\d+) +из +\\d+(.*)", "$1 S$2E$3-$4 rus $5"]
+            args: ["(.*)[CСcс]езон +(\\d+).+[CСcс]ери[ия] +(\\d+) +(\\d+) +из +\\d+(.*)", "$1 S$2E$3-$4 rus {{ if .Config.addtvshows }}(TVShows) {{else}}{{end}}$5"]
           - name: re_replace
             args: ["(.*)[CСcс]езон +(\\d+)(.*)", "$1 S$2 rus $3"]
           - name: re_replace
