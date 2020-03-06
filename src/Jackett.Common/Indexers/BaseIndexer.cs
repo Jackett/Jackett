@@ -25,8 +25,8 @@ namespace Jackett.Common.Indexers
         // https://docs.microsoft.com/en-us/dotnet/api/system.uri.originalstring?view=netframework-4.8
         public string SiteLink
         {
-            get => SiteUri.OriginalString;
-            protected set => SiteUri = new Uri(value, UriKind.Absolute);
+            get => SiteUri?.OriginalString ?? "/";
+            protected set => SiteUri = value == "/" ? null : new Uri(value, UriKind.Absolute);
         }
 
         public virtual string[] LegacySiteLinks { get; protected set; }
