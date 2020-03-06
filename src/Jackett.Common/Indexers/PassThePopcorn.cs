@@ -17,10 +17,7 @@ namespace Jackett.Common.Indexers
 {
     public class PassThePopcorn : BaseWebIndexer
     {
-        private string LoginUrl => "https://passthepopcorn.me/ajax.php?action=login";
-        private string indexUrl => "https://passthepopcorn.me/ajax.php?action=login";
-        private string SearchUrl => "https://passthepopcorn.me/torrents.php";
-        private string DetailURL => "https://passthepopcorn.me/torrents.php?torrentid=";
+        private static string SearchUrl => "https://passthepopcorn.me/torrents.php";
         private string AuthKey { get; set; }
 
         private new ConfigurationDataAPILoginWithUserAndPasskeyAndFilter configData
@@ -73,7 +70,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var results = await PerformQuery(new TorznabQuery());
-                if (results.Count() == 0)
+                if (!results.Any())
                     throw new Exception("Testing returned no results!");
                 IsConfigured = true;
                 SaveConfig();
@@ -96,25 +93,16 @@ namespace Jackett.Common.Indexers
 
 
             var movieListSearchUrl = SearchUrl;
-            var queryCollection = new NameValueCollection();
-            queryCollection.Add("json", "noredirect");
+            var queryCollection = new NameValueCollection {{"json", "noredirect"}};
 
             if (!string.IsNullOrEmpty(query.ImdbID))
-            {
                 queryCollection.Add("searchstr", query.ImdbID);
-            }
             else if (!string.IsNullOrEmpty(query.GetQueryString()))
-            {
                 queryCollection.Add("searchstr", query.GetQueryString());
-            }
-
             if (configFreeOnly)
                 queryCollection.Add("freetorrent", "1");
 
-            if (queryCollection.Count > 0)
-            {
-                movieListSearchUrl += "?" + queryCollection.GetQueryString();
-            }
+            movieListSearchUrl += "?" + queryCollection.GetQueryString();
 
             var authHeaders = new Dictionary<string, string>()
             {
@@ -122,49 +110,51 @@ namespace Jackett.Common.Indexers
                 { "ApiKey", configData.Key.Value }
             };
 
-            var results = await RequestStringWithCookiesAndRetry(movieListSearchUrl, null, null, authHeaders);
+            var results = await RequestStringWithCookiesAndRetry(movieListSearchUrl, headers: authHeaders);
             if (results.IsRedirect) // untested
-            {
-                results = await RequestStringWithCookiesAndRetry(movieListSearchUrl, null, null, authHeaders);
-            }
+                results = await RequestStringWithCookiesAndRetry(movieListSearchUrl, headers: authHeaders);
             try
             {
                 //Iterate over the releases for each movie
-                var js_results = JObject.Parse(results.Content);
-                foreach (var movie in js_results["Movies"])
+                var jsResults = JObject.Parse(results.Content);
+                foreach (var movie in jsResults["Movies"])
                 {
-                    var movie_title = (string)movie["Title"];
-                    var Year = (string)movie["Year"];
-                    var movie_imdbid_str = (string)movie["ImdbId"];
+                    var movieTitle = (string)movie["Title"];
+                    var year = (string)movie["Year"];
+                    var movieImdbIdStr = (string)movie["ImdbId"];
                     var coverStr = (string)movie["Cover"];
-                    Uri coverUri = null;
-                    if (!string.IsNullOrEmpty(coverStr))
-                        coverUri = new Uri(coverStr);
-                    long? movie_imdbid = null;
-                    if (!string.IsNullOrEmpty(movie_imdbid_str))
-                        movie_imdbid = long.Parse(movie_imdbid_str);
-                    var movie_groupid = (string)movie["GroupId"];
+                    var coverUri = !string.IsNullOrEmpty(coverStr) ? new Uri(coverStr) : null;
+                    var movieImdbId = !string.IsNullOrEmpty(movieImdbIdStr) ? (long?)long.Parse(movieImdbIdStr) : null;
+                    var movieGroupId = (string)movie["GroupId"];
                     foreach (var torrent in movie["Torrents"])
                     {
                         var release = new ReleaseInfo();
-                        var release_name = (string)torrent["ReleaseName"];
-                        release.Title = release_name;
-                        release.Description = string.Format("Title: {0}", movie_title);
+                        var releaseName = (string)torrent["ReleaseName"];
+                        release.Title = releaseName;
+                        release.Description = $"Title: {movieTitle}";
                         release.BannerUrl = coverUri;
-                        release.Imdb = movie_imdbid;
-                        release.Comments = new Uri(string.Format("{0}?id={1}", SearchUrl, WebUtility.UrlEncode(movie_groupid)));
+                        release.Imdb = movieImdbId;
+                        release.Comments = new Uri($"{SearchUrl}?id={WebUtility.UrlEncode(movieGroupId)}");
                         release.Size = long.Parse((string)torrent["Size"]);
                         release.Grabs = long.Parse((string)torrent["Snatched"]);
                         release.Seeders = int.Parse((string)torrent["Seeders"]);
                         release.Peers = release.Seeders + int.Parse((string)torrent["Leechers"]);
                         release.PublishDate = DateTime.ParseExact((string)torrent["UploadTime"], "yyyy-MM-dd HH:mm:ss",
                                                 CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
-                        release.Link = new Uri(string.Format("{0}?action=download&id={1}&authkey={2}&torrent_pass={3}",
-                                                SearchUrl, WebUtility.UrlEncode((string)torrent["Id"]), WebUtility.UrlEncode(AuthKey), WebUtility.UrlEncode(configData.Passkey.Value)));
+
+                        var releaseLinkQuery = new NameValueCollection
+                        {
+                            {"action", "download"},
+                            {"id", (string)torrent["Id"]},
+                            {"authkey", AuthKey},
+                            {"torrent_pass", configData.Passkey.Value},
+                        };
+                        release.Link = new UriBuilder(SearchUrl) {Query = releaseLinkQuery.GetQueryString()}.Uri;
                         release.Guid = release.Link;
                         release.MinimumRatio = 1;
                         release.MinimumSeedTime = 345600;
-                        release.DownloadVolumeFactor = 1;
+                        var free = !(torrent["FreeleechType"] is null);
+                        release.DownloadVolumeFactor = free ? 0 : 1;
                         release.UploadVolumeFactor = 1;
                         release.Category = new List<int> { 2000 };
 
@@ -173,75 +163,63 @@ namespace Jackett.Common.Indexers
                         bool.TryParse((string)torrent["Checked"], out var check);
 
                         if (configGoldenPopcornOnly && !golden)
-                        {
                             continue; //Skip release if user only wants GoldenPopcorn
-                        }
                         if (configSceneOnly && !scene)
-                        {
                             continue; //Skip release if user only wants Scene
-                        }
                         if (configCheckedOnly && !check)
-                        {
                             continue; //Skip release if user only wants Checked
-                        }
+                        if (configFreeOnly && !free)
+                            continue;
 
-                        var titletags = new List<string>();
-                        var Quality = (string)torrent["Quality"];
-                        var Container = (string)torrent["Container"];
-                        var Codec = (string)torrent["Codec"];
-                        var Resolution = (string)torrent["Resolution"];
-                        var Source = (string)torrent["Source"];
+                        var titleTags = new List<string>();
+                        var quality = (string)torrent["Quality"];
+                        var container = (string)torrent["Container"];
+                        var codec = (string)torrent["Codec"];
+                        var resolution = (string)torrent["Resolution"];
+                        var source = (string)torrent["Source"];
 
-                        if (Year != null)
+                        if (year != null)
+                            release.Description += $"<br>\nYear: {year}";
+                        if (quality != null)
+                            release.Description += $"<br>\nQuality: {quality}";
+                        if (resolution != null)
                         {
-                            release.Description += string.Format("<br>\nYear: {0}", Year);
+                            titleTags.Add(resolution);
+                            release.Description += $"<br>\nResolution: {resolution}";
                         }
-                        if (Quality != null)
+                        if (source != null)
                         {
-                            release.Description += string.Format("<br>\nQuality: {0}", Quality);
+                            titleTags.Add(source);
+                            release.Description += $"<br>\nSource: {source}";
                         }
-                        if (Resolution != null)
+                        if (codec != null)
                         {
-                            titletags.Add(Resolution);
-                            release.Description += string.Format("<br>\nResolution: {0}", Resolution);
+                            titleTags.Add(codec);
+                            release.Description += $"<br>\nCodec: {codec}";
                         }
-                        if (Source != null)
+                        if (container != null)
                         {
-                            titletags.Add(Source);
-                            release.Description += string.Format("<br>\nSource: {0}", Source);
-                        }
-                        if (Codec != null)
-                        {
-                            titletags.Add(Codec);
-                            release.Description += string.Format("<br>\nCodec: {0}", Codec);
-                        }
-                        if (Container != null)
-                        {
-                            titletags.Add(Container);
-                            release.Description += string.Format("<br>\nContainer: {0}", Container);
+                            titleTags.Add(container);
+                            release.Description += $"<br>\nContainer: {container}";
                         }
                         if (scene)
                         {
-                            titletags.Add("Scene");
+                            titleTags.Add("Scene");
                             release.Description += "<br>\nScene";
                         }
                         if (check)
                         {
-                            titletags.Add("Checked");
+                            titleTags.Add("Checked");
                             release.Description += "<br>\nChecked";
                         }
                         if (golden)
                         {
-                            titletags.Add("Golden Popcorn");
+                            titleTags.Add("Golden Popcorn");
                             release.Description += "<br>\nGolden Popcorn";
                         }
 
-                        if (titletags.Count() > 0)
-                            release.Title += " [" + string.Join(" / ", titletags) + "]";
-
-                        bool.TryParse((string)torrent["FreeleechType"], out var freeleech);
-                        if (freeleech)
-                            release.DownloadVolumeFactor = 0;
+                        if (titleTags.Any())
+                            release.Title += " [" + string.Join(" / ", titleTags) + "]";
 
                         releases.Add(release);
                     }
