@@ -80,6 +80,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Magnet4You
  * MagnetDL
  * MejorTorrent <!-- maintained by ivandelabeldad -->
+ * MMA-Torrents
  * Monova
  * MovCr
  * MoviesDVDR
