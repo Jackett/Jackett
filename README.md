@@ -96,6 +96,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * PiratBit
  * Pirateiro
  * PornLeech
+ * PornoTor
  * ProStyleX
  * RARBG
  * Rus-media
