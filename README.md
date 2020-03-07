@@ -364,7 +364,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * New Real World
  * Norbits
  * NordicBits (NB)
- * Nostalgic (The Archive)
+ * Nostalgic (The Archive / VHSTAPES)
  * OnlineSelfEducation
  * Orpheus
  * Ourbits (HDPter)
