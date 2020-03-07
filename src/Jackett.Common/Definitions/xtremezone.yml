@@ -129,6 +129,10 @@
       download:
         selector: a[href^="/torrents/"]
         attribute: href
+      imdb:
+        optional: true
+        selector: a[href*="www.imdb.com/title/tt"]
+        attribute: href
       date:
         selector: div[data-toggle="kt-tooltip"]
         attribute: title
