@@ -6,6 +6,8 @@
   type: private
   encoding: UTF-8
   links:
+    - https://www.bigtorrent.eu/
+  legacylinks:
     - http://www.bigtorrent.eu/
 
   caps:

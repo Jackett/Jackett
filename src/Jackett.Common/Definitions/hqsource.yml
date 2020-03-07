@@ -6,6 +6,8 @@
   type: private
   encoding: ISO-8859-2
   links:
+    - https://hqsource.org/
+  legacylinks:
     - http://hqsource.org/
 
   caps:
@@ -30,7 +32,7 @@
       search: [q]
       tv-search: [q, season, ep]
       movie-search: [q]
-       
+
   settings:
     - name: username
       type: text
@@ -40,7 +42,7 @@
       label: Password
     - name: pin
       type: text
-      label: Pin     
+      label: Pin
 
   login:
     path: takelogin.php
@@ -56,7 +58,7 @@
     test:
       selector: a[href^="logout.php"]
       path: browse.php
-        
+
   search:
     paths:
       - path: browse.php
