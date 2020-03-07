@@ -7,6 +7,7 @@ variables:
   buildConfiguration: Release
   netCoreFramework: netcoreapp3.1
   netCoreSdkVersion: 3.1.x
+  system.debug: true
 
 stages:
   - stage: BuildJackett
@@ -376,7 +377,7 @@ stages:
             $lastTwoLogUrls = $json.value[-1..-2].url
             foreach($logUrl in $lastTwoLogUrls)
             {
-              Write-Host $logUrl
+              Write-Output $logUrl
               $logText = Invoke-WebRequest $logUrl
               if ($logText -like '*: GitHub Release*') 
               {
