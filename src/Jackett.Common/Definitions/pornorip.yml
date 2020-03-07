@@ -112,6 +112,8 @@
 
     rows:
       selector: div.forumbg > div.inner > ul.topiclist > li.row > dl.icon:has(a[href^="./download/file.php?id="])
+      filters:
+        - name: andmatch
 
     fields:
       title:
