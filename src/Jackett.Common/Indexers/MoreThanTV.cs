@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
-using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -28,10 +28,12 @@ namespace Jackett.Common.Indexers
 
         public MoreThanTV(IIndexerConfigurationService configService, Utils.Clients.WebClient c, Logger l, IProtectionService ps)
             : base(name: "MoreThanTV",
-                description: "ROMANIAN Private Torrent Tracker for TV / MOVIES, and the internal tracker for the release group DRACULA.",
+                description: "Private torrent tracker for TV / MOVIES, and the internal tracker for the release group DRACULA.",
                 link: "https://www.morethan.tv/",
-                caps: new TorznabCapabilities(TorznabCatType.TV,
-                                              TorznabCatType.Movies),
+                caps: new TorznabCapabilities(
+                    TorznabCatType.Movies,
+                    TorznabCatType.TV,
+                    TorznabCatType.Other),
                 configService: configService,
                 client: c,
                 logger: l,
@@ -41,6 +43,8 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
+
+            TorznabCaps.SupportsImdbMovieSearch = true;
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -74,42 +78,59 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            var isTv = TorznabCatType.QueryContainsParentCategory(query.Categories, new List<int> { TorznabCatType.TV.ID });
             var releases = new List<ReleaseInfo>();
-            var searchQuery = query.GetQueryString();
-            searchQuery = searchQuery.Replace("Marvels", "Marvel"); // strip 's for better results
-            var searchQuerySingleEpisodes = Regex.Replace(searchQuery, @"(S\d{2})$", "$1*"); // If we're just seaching for a season (no episode) append an * to include all episodes of that season.
 
-            await GetReleases(releases, query, searchQuerySingleEpisodes);
-
-            // Always search for torrent groups (complete seasons) too
-            var seasonMatch = new Regex(@".*\s[Ss]{1}\d{2}([Ee]{1}\d{2,3})?$").Match(searchQuery);
-            if (seasonMatch.Success)
+            if (!string.IsNullOrWhiteSpace(query.ImdbID))
+                await GetReleases(releases, query, query.GetQueryString());
+            else
             {
-                var newSearchQuery = Regex.Replace(searchQuery, @"[Ss]{1}\d{2}([Ee]{1}\d{2,3})?", $"Season {query.Season}");
-
+                var searchQuery = query.GetQueryString();
+                searchQuery = searchQuery.Replace("Marvels", "Marvel"); // strip 's for better results
+                var newSearchQuery = Regex.Replace(searchQuery, @"(S\d{2})$", "$1*"); // If we're just seaching for a season (no episode) append an * to include all episodes of that season.
                 await GetReleases(releases, query, newSearchQuery);
+
+                // Always search for torrent groups (complete seasons) too
+                var seasonMatch = new Regex(@".*\s[Ss]{1}\d{2}([Ee]{1}\d{2,3})?$").Match(searchQuery);
+                if (seasonMatch.Success)
+                {
+                    newSearchQuery = Regex.Replace(searchQuery, @"[Ss]{1}\d{2}([Ee]{1}\d{2,3})?", $"Season {query.Season}");
+                    await GetReleases(releases, query, newSearchQuery);
+                }
             }
 
             return releases;
         }
 
-        private string GetTorrentSearchUrl(int[] categories, string searchQuery)
+        private string GetTorrentSearchUrl(TorznabQuery query, string searchQuery)
         {
-            var extra = "";
+            var qc = new NameValueCollection
+            {
+                { "tags_type", "1" },
+                { "order_by", "time" },
+                { "order_way", "desc" },
+                { "group_results", "1" },
+                { "action", "basic" },
+                { "searchsubmit", "1" }
+            };
 
-            if (Array.IndexOf(categories, TorznabCatType.Movies.ID) > -1)
-                extra += "&filter_cat%5B1%5D=1";
+            if (!string.IsNullOrWhiteSpace(query.ImdbID))
+                qc.Add("description", query.ImdbID);
+            else
+                qc.Add("searchstr", searchQuery);
 
-            if (Array.IndexOf(categories, TorznabCatType.TV.ID) > -1)
-                extra += "&filter_cat%5B2%5D=1";
+            if (query.Categories.Contains(TorznabCatType.Movies.ID))
+                qc.Add("filter_cat[1]", "1");
+            if (query.Categories.Contains(TorznabCatType.TV.ID))
+                qc.Add("filter_cat[2]", "1");
+            if (query.Categories.Contains(TorznabCatType.Other.ID))
+                qc.Add("filter_cat[3]", "1");
 
-            return SiteLink + $"torrents.php?searchstr={WebUtility.UrlEncode(searchQuery)}&tags_type=1&order_by=time&order_way=desc&group_results=1{extra}&action=basic&searchsubmit=1";
+            return SiteLink + "torrents.php?" + qc.GetQueryString();
         }
 
         private async Task GetReleases(ICollection<ReleaseInfo> releases, TorznabQuery query, string searchQuery)
         {
-            var searchUrl = GetTorrentSearchUrl(query.Categories, searchQuery);
+            var searchUrl = GetTorrentSearchUrl(query, searchQuery);
             var response = await RequestStringWithCookiesAndRetry(searchUrl);
             if (response.IsRedirect)
             {
@@ -151,9 +172,7 @@ namespace Jackett.Common.Indexers
 
                         // Found a new edition
                         if (groupItem.ClassList[2].Equals("edition"))
-                        {
                             qualityEdition = groupItem.QuerySelector(".edition_info strong").TextContent.Split('/')[1].Trim();
-                        }
                         else if (groupItem.ClassList[2].StartsWith("edition_"))
                         {
                             if (qualityEdition.Equals(string.Empty))
@@ -174,8 +193,6 @@ namespace Jackett.Common.Indexers
                                     Array.Resize(ref qualityData, 2);
                                     qualityData[1] = " ";
                                     break;
-                                default:
-                                    break;
                             }
 
                             // Replace 4K quality tag with 2160p, so Sonarr etc. can properly parse it
@@ -194,9 +211,7 @@ namespace Jackett.Common.Indexers
                             releases.Add(GetReleaseInfo(groupItem, downloadAnchor, title, TorznabCatType.TV.ID));
                         }
                         else
-                        {
                             break;
-                        }
 
                         previousElement = groupItem;
                     }
@@ -212,21 +227,13 @@ namespace Jackett.Common.Indexers
                     int category;
                     var categories = torrent.QuerySelector(".cats_col div").ClassList;
                     if (categories.Contains("cats_tv"))
-                    {
                         category = TorznabCatType.TV.ID;
-                    }
                     else if (categories.Contains("cats_movies"))
-                    {
                         category = TorznabCatType.Movies.ID;
-                    }
                     else if (categories.Contains("cats_other"))
-                    {
                         category = TorznabCatType.Other.ID;
-                    }
                     else
-                    {
                         throw new Exception("Couldn't find category.");
-                    }
 
                     releases.Add(GetReleaseInfo(torrent, downloadAnchor, title, category));
                 }
@@ -283,9 +290,7 @@ namespace Jackett.Common.Indexers
         {
             var seasonMatch = new Regex(@"Season (?<seasonNumber>\d{1,2})").Match(season);
             if (seasonMatch.Success)
-            {
                 return int.Parse(seasonMatch.Groups["seasonNumber"].Value);
-            }
 
             return null;
         }
