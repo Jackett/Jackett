@@ -6,7 +6,7 @@
   type: public
   encoding: windows-1251
   links:
-    - http://pornotor.org/ # site does not support https
+    - http://pornotor.org/ # site does not support https ERR_CONNECTION_REFUSED
 
   caps:
     categorymappings:

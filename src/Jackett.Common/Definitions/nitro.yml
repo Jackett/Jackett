@@ -6,7 +6,7 @@
   type: public
   encoding: UTF-8
   links:
-    - http://nitro.to/
+    - http://nitro.to/ # does not support https NET::ERR_CERT_AUTHORITY_INVALID
 
   caps:
     categorymappings:

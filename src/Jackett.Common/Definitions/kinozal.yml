@@ -6,7 +6,7 @@
   type: semi-private
   encoding: windows-1251
   links:
-    - http://kinozal.tv/
+    - http://kinozal.tv/ # site forces http, https is not supported
 
   caps:
     categorymappings:
@@ -178,7 +178,7 @@
         selector: td:nth-child(4)
         filters:
           - name: replace
-            args: ["ТБ", "TB"] 
+            args: ["ТБ", "TB"]
           - name: replace
             args: ["ГБ", "GB"]
           - name: replace

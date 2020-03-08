@@ -6,7 +6,7 @@
   type: public
   encoding: UTF-8
   links:
-    - http://rus-media.org/
+    - http://rus-media.org/ # site does not support https ERR_CONNECTION_REFUSED
 
   caps:
     categorymappings:
@@ -310,7 +310,7 @@
       sk: "{{ .Config.sort }}"
       sd: "{{ .Config.type }}"
       $raw: "{{range .Categories}}&fid[]={{.}}{{end}}"
-      
+
     rows:
       selector: table.tablebg tr.col_line
 
@@ -336,7 +336,7 @@
         optional: true
         filters:
           - name: replace
-            args: ["ТБ", "TB"] 
+            args: ["ТБ", "TB"]
           - name: replace
             args: ["ГБ", "GB"]
           - name: replace

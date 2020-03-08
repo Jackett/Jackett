@@ -6,7 +6,7 @@
   type: semi-private
   encoding: UTF-8
   links:
-    - http://kinonavse100.com/ # https is not supported
+    - http://kinonavse100.com/ # https is not supported self signed ca is untrusted
 
   caps:
     categorymappings:

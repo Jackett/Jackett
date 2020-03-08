@@ -6,7 +6,7 @@
   type: semi-private
   encoding: windows-1251
   links:
-    - http://hamsterstudio.org/
+    - http://hamsterstudio.org/ # site does not support https ERR_CONNECTION_TIMED_OUT
 
   caps:
     categorymappings:

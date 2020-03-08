@@ -6,7 +6,7 @@
   type: semi-private
   encoding: windows-1251
   links:
-    - http://rustorka.com/ # site does not support https
+    - http://rustorka.com/ # site forces http, does not support https
 
   caps:
     categorymappings:

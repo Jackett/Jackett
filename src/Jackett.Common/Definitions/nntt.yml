@@ -6,13 +6,13 @@
   type: public
   encoding: UTF-8
   links:
-    - http://www.nntt.org/
+    - http://www.nntt.org/ # site does not support https ERR_CONNECTION_REFUSED
 
   caps:
     categorymappings:
       - {id: 1, cat: Movies, desc: "Кино, Видео и ТВ"}
       - {id: 154, cat: Movies/HD, desc: "Зарубежное кино (HD Video)"}
-      - {id: 153, cat: Movies/DVD, desc: "Зарубежное кино (DVD Video)"} 
+      - {id: 153, cat: Movies/DVD, desc: "Зарубежное кино (DVD Video)"}
       - {id: 157, cat: Movies/3D, desc: "Кино в 3D"}
       - {id: 5, cat: Movies/SD, desc: "Зарубежное кино (DVDRip, HQRip)"}
       - {id: 6, cat: Movies/Foreign, desc: "Наше кино (DVDRip, HQRip)"}
@@ -675,7 +675,7 @@
       sd: "{{ .Config.type }}"
       keywords: "{{ if .Keywords }}{{ .Keywords }}{{else}}2019{{end}}"
       $raw: "{{ range .Categories }}&fid[]={{.}}{{end}}"
-      
+
     rows:
       selector: table.tablebg tr.col_line
 
@@ -698,7 +698,7 @@
         selector: td:nth-of-type(5) p
         filters:
           - name: replace
-            args: ["ТБ", "TB"] 
+            args: ["ТБ", "TB"]
           - name: replace
             args: ["ГБ", "GB"]
           - name: replace

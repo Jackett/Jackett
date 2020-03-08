@@ -6,7 +6,7 @@
   type: public
   encoding: UTF-8
   links:
-    - http://audiobookbay.nl/
+    - http://audiobookbay.nl/ # site forces http, does not support https
   legacylinks:
     - https://audiobookbay.la/
 

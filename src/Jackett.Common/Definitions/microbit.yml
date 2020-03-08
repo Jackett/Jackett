@@ -6,7 +6,7 @@
   type: private
   encoding: UTF-8
   links:
-    - http://microbit.eu/
+    - http://microbit.eu/ # site does not support https ERR_CONNECTION_REFUSED
 
   caps:
     categorymappings:

@@ -6,7 +6,7 @@
   type: public
   encoding: UTF-8
   links:
-    - http://bitru.org/
+    - http://bitru.org/ # site forces http, https is not supported
 
   caps:
     categories:
@@ -84,8 +84,8 @@
           - name: regexp
             args: "src=(.*?) "
       date:
-        # Сегодня в 09:09 от 
-        # Вчера в 22:47 от 
+        # Сегодня в 09:09 от
+        # Вчера в 22:47 от
         selector: td:nth-child(2) div.b-info div span:nth-child(2):contains("Сегодня"),  td:nth-child(2) div.b-info div span:nth-child(2):contains("Вчера")
         optional: true
         filters:
@@ -96,7 +96,7 @@
           - name: replace
             args: ["Вчера в", "Yesterday"]
       date:
-        # 08 ноября 2019 в 23:53 от 
+        # 08 ноября 2019 в 23:53 от
         selector: td:nth-child(2) div.b-info div span:nth-child(2):not(:contains("Сегодня")):not(:contains("Вчера"))
         optional: true
         filters:
@@ -134,7 +134,7 @@
         selector: td:nth-child(3)
         filters:
           - name: replace
-            args: ["ТБ", "TB"] 
+            args: ["ТБ", "TB"]
           - name: replace
             args: ["ГБ", "GB"]
           - name: replace
@@ -145,12 +145,12 @@
         selector: td:nth-child(4)
         filters:
           - name: replace
-            args: ["?", "1"] 
+            args: ["?", "1"]
       leechers:
-        selector: td:nth-child(5) 
+        selector: td:nth-child(5)
         filters:
           - name: replace
-            args: ["?", "0"] 
+            args: ["?", "0"]
       downloadvolumefactor:
         text: 0
       uploadvolumefactor:
