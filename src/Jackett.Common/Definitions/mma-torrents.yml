@@ -1,7 +1,7 @@
 ---
   site: mma-torrents
   name: MMA-torrents
-  description: "MMA-Torrents is a Private Torrent Tracker for MMA"
+  description: "MMA-Torrents is a Private Torrent Tracker for MMA (Mixed Martial Arts)"
   language: en-us
   type: private
   encoding: UTF-8
@@ -75,11 +75,11 @@
     - name: sort
       type: select
       label: Sort requested from site
-      default: "seed"
+      default: "seeders"
       options:
-        "name": "name"
+        "name": "title"
         "size": "size"
-        "seed": "seeders"
+        "seeders": "seeders"
     - name: type
       type: select
       label: Order requested from site
@@ -109,9 +109,12 @@
     inputs:
       $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
       incldead: 1
+      lang: 0
+      # 0 all 1 notfree 2 onlyfree
+      freeleech: 0
       search: "{{ .Keywords }}"
       sort: "{{ .Config.sort }}"
-      type: "{{ .Config.type }}"
+      order: "{{ .Config.type }}"
 
     rows:
       selector: table[class="ttable_headinner"] tr:has(a[href^="download.php?id="])
@@ -135,26 +138,24 @@
       download:
         selector: a[href^="download.php?id="]
         attribute: href
-      size:
-        selector: td:nth-child(6)
-        filters:
-          - name: trim
-      grabs:
-        optional: true
+      date:
         selector: td:nth-child(2)
         filters:
           - name: regexp
-            args: (\d+)(?!.*\d+)
-      seeders:
-        selector: td:nth-last-child(4)
-      leechers:
-        selector: td:nth-last-child(3)
-      date:
-        selector: td:nth-child(2)
-        optional: true
-        filters:
+            args: "(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2})"
           - name: dateparse
-            args: "2020-01-24 20:32:13"
+            args: "2006-01-02 15:04:05"
+      grabs:
+        selector: td:nth-child(2)
+        filters:
+          - name: regexp
+            args: "Completed.*(\\d+)"
+      size:
+        selector: td:nth-child(6)
+      seeders:
+        selector: td:nth-child(7)
+      leechers:
+        selector: td:nth-child(8)
       downloadvolumefactor:
         case:
           img[src="img/freeleech_star.gif"]: 0
