@@ -275,6 +275,7 @@ namespace Jackett.Updater
                 "CurlSharp.dll",
                 "CurlSharp.pdb",
                 "Definitions/420files.yml",
+                "Definitions/alein.yml",
                 "Definitions/anidex.yml", // migrated to C#
                 "Definitions/aox.yml",
                 "Definitions/apollo.yml", // migrated to C# gazelle base tracker

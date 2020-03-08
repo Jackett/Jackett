@@ -141,7 +141,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 
 <details> <summary> <b> Supported Semi-Private Trackers </b> </summary>
 
- * Alein
  * AlexFilm
  * AniDUB
  * ArenaBG
