@@ -6,11 +6,7 @@
   type: private
   encoding: UTF-8
   links:
-    - https://www.cartoonchaos.org/
-  links:
-    - http://www.cartoonchaos.org/
-  certificates:
-    - 6fdf9681699fa50e057707d29f31ac1818fdcb85 # self signed and exp 1 Apr 2014
+    - http://www.cartoonchaos.org/ # site does not support https
 
   settings:
     - name: username
