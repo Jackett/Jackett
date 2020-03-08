@@ -309,6 +309,7 @@ namespace Jackett.Updater
                 "Definitions/gfxnews.yml",
                 "Definitions/gods.yml",
                 "Definitions/gormogon.yml",
+                "Definitions/greeklegends.yml",
                 "Definitions/hachede-c.yml",
                 "Definitions/hd4free.yml",
                 "Definitions/hdbc.yml", // renamed to hdbitscom
