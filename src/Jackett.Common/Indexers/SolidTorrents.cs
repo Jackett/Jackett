@@ -30,7 +30,7 @@ namespace Jackett.Common.Indexers
         private ConfigurationData ConfigData
         {
             get => configData;
-            set => base.configData = value;
+            set => configData = value;
         }
 
         public SolidTorrents(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
@@ -68,9 +68,7 @@ namespace Jackett.Common.Indexers
             var releases = await PerformQuery(new TorznabQuery());
 
             await ConfigureIfOK(string.Empty, releases.Any(), () =>
-            {
-                throw new Exception("Could not find release from this URL.");
-            });
+                                    throw new Exception("Could not find release from this URL."));
 
             return IndexerConfigurationStatus.Completed;
         }
@@ -93,14 +91,16 @@ namespace Jackett.Common.Indexers
 
         private async Task<JArray> SendSearchRequest(string searchString, string category, int page)
         {
-            var queryCollection = new NameValueCollection();
-            queryCollection.Add("q", searchString);
-            queryCollection.Add("category", category);
-            queryCollection.Add("skip", (page * MAX_RESULTS_PER_PAGE).ToString());
-            queryCollection.Add("sort", "date");
-            queryCollection.Add("fuv", "no");
+            var queryCollection = new NameValueCollection
+            {
+                {"q", searchString},
+                {"category", category},
+                {"skip", (page * MAX_RESULTS_PER_PAGE).ToString()},
+                {"sort", "date"},
+                {"fuv", "no"}
+            };
             var fullSearchUrl = SearchUrl + "?" + queryCollection.GetQueryString();
-            var result = await RequestStringWithCookiesAndRetry(fullSearchUrl, null, null, APIHeaders);
+            var result = await RequestStringWithCookies(fullSearchUrl, null, null, APIHeaders);
             return CheckResponse(result);
         }
 
@@ -123,9 +123,7 @@ namespace Jackett.Common.Indexers
                 try
                 {
                     foreach (var torrent in result)
-                    {
                         releases.Add(MakeRelease(torrent));
-                    }
                 }
                 catch (Exception ex)
                 {
