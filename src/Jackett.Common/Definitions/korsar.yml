@@ -6,9 +6,10 @@
   type: semi-private
   encoding: UTF-8
   links:
-    - http://korsar.info/
+    - https://korsar.info/
   legacylinks:
     - http://korsar.tv/
+    - http://korsar.info/
 
   caps:
     categorymappings:
@@ -482,7 +483,7 @@
           - name: regexp
             args: "Размер: (.+?),"
           - name: replace
-            args: ["ТБ", "TB"] 
+            args: ["ТБ", "TB"]
           - name: replace
             args: ["ГБ", "GB"]
           - name: replace
