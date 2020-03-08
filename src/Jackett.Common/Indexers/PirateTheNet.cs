@@ -44,21 +44,24 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "private";
 
+            TorznabCaps.SupportsImdbMovieSearch = true;
+
             configData.DisplayText.Value = "Only the results from the first search result page are shown, adjust your profile settings to show the maximum.";
             configData.DisplayText.Name = "Notice";
 
             AddCategoryMapping("1080P", TorznabCatType.MoviesHD, "1080P");
+            AddCategoryMapping("2160P", TorznabCatType.MoviesHD, "2160P");
             AddCategoryMapping("720P", TorznabCatType.MoviesHD, "720P");
             AddCategoryMapping("BDRip", TorznabCatType.MoviesSD, "BDRip");
             AddCategoryMapping("BluRay", TorznabCatType.MoviesBluRay, "BluRay");
             AddCategoryMapping("BRRip", TorznabCatType.MoviesSD, "BRRip");
             AddCategoryMapping("DVDR", TorznabCatType.MoviesDVD, "DVDR");
             AddCategoryMapping("DVDRip", TorznabCatType.MoviesSD, "DVDRip");
-            AddCategoryMapping("FLAC", TorznabCatType.AudioLossless, "FLAC");
-            AddCategoryMapping("MP3", TorznabCatType.AudioMP3, "MP3");
+            AddCategoryMapping("FLAC", TorznabCatType.AudioLossless, "FLAC OST");
+            AddCategoryMapping("MP3", TorznabCatType.AudioMP3, "MP3 OST");
             AddCategoryMapping("MP4", TorznabCatType.MoviesOther, "MP4");
             AddCategoryMapping("Packs", TorznabCatType.MoviesOther, "Packs");
-            AddCategoryMapping("R5", TorznabCatType.MoviesDVD, "R5");
+            AddCategoryMapping("R5", TorznabCatType.MoviesDVD, "R5 / SCR");
             AddCategoryMapping("Remux", TorznabCatType.MoviesOther, "Remux");
             AddCategoryMapping("TVRip", TorznabCatType.MoviesOther, "TVRip");
             AddCategoryMapping("WebRip", TorznabCatType.MoviesWEBDL, "WebRip");
@@ -82,10 +85,7 @@ namespace Jackett.Common.Indexers
             var result2 = await RequestLoginAndFollowRedirect(LoginUrl, pairs, result1.Cookies, true, null, null, true);
 
             await ConfigureIfOK(result2.Cookies, result2.Content.Contains("logout.php"), () =>
-            {
-                var errorMessage = "Login Failed";
-                throw new ExceptionWithConfigData(errorMessage, configData);
-            });
+                                    throw new ExceptionWithConfigData("Login Failed", configData));
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
@@ -93,34 +93,33 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
 
-            var searchString = query.GetQueryString();
-            var searchUrl = SearchUrl;
-            var queryCollection = new NameValueCollection();
-            queryCollection.Add("action", "torrentstable");
-            queryCollection.Add("viewtype", "0");
-            queryCollection.Add("visiblecategories", "Action,Adventure,Animation,Biography,Comedy,Crime,Documentary,Drama,Eastern,Family,Fantasy,History,Holiday,Horror,Kids,Musical,Mystery,Romance,Sci-Fi,Short,Sports,Thriller,War,Western");
-            queryCollection.Add("page", "1");
-            queryCollection.Add("visibility", "showall");
-            queryCollection.Add("compression", "showall");
-            queryCollection.Add("sort", "added");
-            queryCollection.Add("order", "DESC");
-            queryCollection.Add("titleonly", "true");
-            queryCollection.Add("packs", "showall");
-            queryCollection.Add("bookmarks", "showall");
-            queryCollection.Add("subscriptions", "showall");
-            queryCollection.Add("skw", "showall");
-            queryCollection.Add("advancedsearchparameters", "");
-
-            if (!string.IsNullOrWhiteSpace(searchString))
+            var qc = new NameValueCollection
             {
+                {"action", "torrentstable"},
+                {"viewtype", "0"},
+                {"visiblecategories", "Action,Adventure,Animation,Biography,Comedy,Crime,Documentary,Drama,Family,Fantasy,History,Horror,Kids,Music,Mystery,Packs,Romance,Sci-Fi,Short,Sports,Thriller,War,Western"},
+                {"page", "1"},
+                {"visibility", "showall"},
+                {"compression", "showall"},
+                {"sort", "added"},
+                {"order", "DESC"},
+                {"titleonly", "true"},
+                {"packs", "showall"},
+                {"bookmarks", "showall"},
+                {"subscriptions", "showall"},
+                {"skw", "showall"}
+            };
+
+            if (!string.IsNullOrWhiteSpace(query.ImdbID))
+                qc.Add("advancedsearchparameters", $"[imdb={query.ImdbID}]");
+            else if (!string.IsNullOrWhiteSpace(query.GetQueryString()))
                 // search keywords use OR by default and it seems like there's no way to change it, expect unwanted results
-                queryCollection.Add("searchstring", searchString);
-            }
+                qc.Add("searchstring", query.GetQueryString());
 
             var cats = MapTorznabCapsToTrackers(query);
-            queryCollection.Add("hiddenqualities", string.Join(",", cats));
+            qc.Add("hiddenqualities", string.Join(",", cats));
 
-            searchUrl += "?" + queryCollection.GetQueryString();
+            var searchUrl = SearchUrl + "?" + qc.GetQueryString();
 
             var results = await RequestStringWithCookiesAndRetry(searchUrl);
             if (results.IsRedirect)
@@ -144,16 +143,18 @@ namespace Jackett.Common.Indexers
                     var qDetailsLink = row.QuerySelector("td:nth-of-type(2) > a:nth-of-type(1)"); // link to the movie, not the actual torrent
                     release.Title = qDetailsLink.GetAttribute("alt");
 
-                    // TODO: categories are not working
-                    //var qCatIcon = row.QuerySelector("td:nth-of-type(1) > img");
+                    var qCatIcon = row.QuerySelector("td:nth-of-type(1) > a > img");
+                    var catStr = qCatIcon != null ?
+                        qCatIcon.GetAttribute("src").Split('/').Last().Split('.').First() :
+                        "packs";
+                    release.Category = MapTrackerCatToNewznab(catStr);
+
                     var qSeeders = row.QuerySelector("td:nth-of-type(9)");
                     var qLeechers = row.QuerySelector("td:nth-of-type(10)");
                     var qDownloadLink = row.QuerySelector("td > a:has(img[alt=\"Download Torrent\"])");
                     var qPudDate = row.QuerySelector("td:nth-of-type(6) > nobr");
                     var qSize = row.QuerySelector("td:nth-of-type(7)");
 
-                    //var catStr = qCatIcon.GetAttribute("alt");
-                    //release.Category = MapTrackerCatToNewznab(catStr);
                     release.Link = new Uri(SiteLink + qDownloadLink.GetAttribute("href").Substring(1));
                     release.Title = qDetailsLink.GetAttribute("alt");
                     release.Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
