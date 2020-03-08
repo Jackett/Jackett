@@ -148,8 +148,8 @@ namespace Jackett.Common.Indexers
                             release.Title = release.Title.Substring(0, insertPoint) + "Season 1 " + release.Title.Substring(insertPoint);
                         }
 
-                        release.Category = new List<int>() { TorznabCatType.TVAnime.ID };
-                        release.Description = row.QuerySelector("span.tags").TextContent;
+                        release.Category = new List<int> { TorznabCatType.TVAnime.ID };
+                        release.Description = row.QuerySelector("span.tags")?.TextContent;
                         release.Guid = new Uri(SiteLink + qTitleLink.GetAttribute("href"));
                         release.Comments = release.Guid;
 
@@ -173,17 +173,11 @@ namespace Jackett.Common.Indexers
                             dateStr = "0" + dateStr;
 
                         if (string.Equals(dateStr, "yesterday", StringComparison.InvariantCultureIgnoreCase))
-                        {
                             release.PublishDate = DateTime.Now.AddDays(-1);
-                        }
                         else if (string.Equals(dateStr, "today", StringComparison.InvariantCultureIgnoreCase))
-                        {
                             release.PublishDate = DateTime.Now;
-                        }
                         else
-                        {
                             release.PublishDate = DateTime.ParseExact(dateStr, "dd MMM yy", CultureInfo.InvariantCulture);
-                        }
 
                         release.DownloadVolumeFactor = row.QuerySelector("span.freeleech") != null ? 0 : 1;
                         release.UploadVolumeFactor = 1;
@@ -208,9 +202,7 @@ namespace Jackett.Common.Indexers
             var downloadLink = dom.QuerySelectorAll(".download_link").First().GetAttribute("href");
 
             if (string.IsNullOrWhiteSpace(downloadLink))
-            {
                 throw new Exception("Unable to find download link.");
-            }
 
             var response = await RequestBytesWithCookies(SiteLink + downloadLink);
             return response.Content;
