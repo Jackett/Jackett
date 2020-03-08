@@ -6,7 +6,7 @@
   type: private
   encoding: UTF-8
   links:
-    - https://mma-torrents.com//
+    - https://mma-torrents.com/
 
   caps:
     categorymappings:
@@ -64,8 +64,6 @@
     modes:
       search: [q]
       tv-search: [q, season, ep]
-      movie-search: [q]
-      music-search: [q]
 
   settings:
     - name: username
@@ -74,20 +72,14 @@
     - name: password
       type: password
       label: Password
-    - name: seedbox
-      type: checkbox
-      label: "Use SeedBox Download Link"
-      default: false
     - name: sort
       type: select
       label: Sort requested from site
       default: "seed"
       options:
         "name": "name"
-        "comments": "comments"
         "size": "size"
         "seed": "seeders"
-        "leech": "leechers"
     - name: type
       type: select
       label: Order requested from site
@@ -111,13 +103,8 @@
       path: torrents.php
       selector: a[href="account-logout.php"]
 
-  ratio:
-    path: browse.php
-    selector: div#fram-content b:nth-child(2)
-
   search:
     paths:
-      # http://xtremewrestlingtorrents.net/browse.php?search=halftime+heat&c46=1&c51=1&c31=1&c11=1&incldead=1
       - path: torrents.php
     inputs:
       $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
@@ -139,12 +126,6 @@
       title:
         selector: a[href^="torrents-details.php?id="]
         attribute: title
-      category:
-        selector: a[href^="torrents.php?cat="]
-        attribute: href
-        filters:
-          - name: querystring
-            args: cat
       details:
         selector: a[href^="torrents-details.php?id="]
         attribute: href
@@ -180,4 +161,4 @@
           "*": 1
       uploadvolumefactor:
         text: 1
-# engine n/a
+# TorrentTrader 2.03
