@@ -85,6 +85,7 @@ namespace Jackett.Common.Indexers
         private readonly Regex _titleListRegex = new Regex(@"Serie( *Descargar)?(.+?)(Temporada(.+?)(\d+)(.+?))?Capitulos?(.+?)(\d+)((.+?)(\d+))?(.+?)-(.+?)Calidad(.*)", RegexOptions.IgnoreCase);
         private readonly Regex _titleClassicRegex = new Regex(@"(\[[^\]]*\])?\[Cap\.(\d{1,2})(\d{2})([_-](\d{1,2})(\d{2}))?\]", RegexOptions.IgnoreCase);
         private readonly Regex _titleClassicTvQualityRegex = new Regex(@"\[([^\]]*HDTV[^\]]*)", RegexOptions.IgnoreCase);
+        private readonly Regex _titleYearRegex = new Regex(@"[\[\(] *(\d{4}) *[\]\)]");
         private readonly DownloadMatcher[] _downloadMatchers = new DownloadMatcher[]
         {
             new DownloadMatcher()
@@ -103,10 +104,13 @@ namespace Jackett.Common.Indexers
         private readonly int _maxEpisodesListPages = 100;
         private readonly int[] _allTvCategories = (new TorznabCategory[] { TorznabCatType.TV }).Concat(TorznabCatType.TV.SubCategories).Select(c => c.ID).ToArray();
         private readonly int[] _allMoviesCategories = (new TorznabCategory[] { TorznabCatType.Movies }).Concat(TorznabCatType.Movies.SubCategories).Select(c => c.ID).ToArray();
+        private readonly int _firstYearAllowed = 1885;
+        private readonly int _lastYearAllowedFromNow = 3;
 
         private bool _includeVo;
         private bool _filterMovies;
         private bool _removeMovieAccents;
+        private bool _removeMovieYear;
         private DateTime _dailyNow;
         private int _dailyResultIdx;
 
@@ -146,6 +150,9 @@ namespace Jackett.Common.Indexers
 
             var removeMovieAccentsItem = new BoolItem() { Name = "Remove accents in movie searchs", Value = true };
             configData.AddDynamic("RemoveMovieAccents", removeMovieAccentsItem);
+
+            var removeMovieYearItem = new BoolItem() { Name = "Remove year from movie results", Value = false };
+            configData.AddDynamic("RemoveMovieYear", removeMovieYearItem);
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -257,6 +264,7 @@ namespace Jackett.Common.Indexers
             _includeVo = ((BoolItem)configData.GetDynamic("IncludeVo")).Value;
             _filterMovies = ((BoolItem)configData.GetDynamic("FilterMovies")).Value;
             _removeMovieAccents = ((BoolItem)configData.GetDynamic("RemoveMovieAccents")).Value;
+            _removeMovieYear = ((BoolItem)configData.GetDynamic("RemoveMovieYear")).Value;
             _dailyNow = DateTime.Now;
             _dailyResultIdx = 0;
             var rssMode = string.IsNullOrEmpty(query.SanitizedSearchTerm);
@@ -956,6 +964,20 @@ namespace Jackett.Common.Indexers
             }
 
             var result = string.Join(".", titleParts);
+
+            if (release.NewpctReleaseType == ReleaseType.Movie)
+            {
+                if (_removeMovieYear)
+                {
+                    Match match = _titleYearRegex.Match(result);
+                    if (match.Success)
+                    {
+                        int year = int.Parse(match.Groups[1].Value);
+                        if (year >= _firstYearAllowed && year <= DateTime.Now.Year + _lastYearAllowedFromNow)
+                            result = result.Replace(match.Groups[0].Value, "");
+                    }
+                }
+            }
 
             result = Regex.Replace(result, @"[\[\]]+", ".");
             result = Regex.Replace(result, @"\.[ \.]*\.", ".");
