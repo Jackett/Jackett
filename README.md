@@ -161,6 +161,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Gay-Torrents.org
  * HD Dolby
  * HamsterStudio
+ * IV-Torrents
  * KinoNaVse100
  * Kinozal
  * Korsar
