@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.Text;
 using System.Threading.Tasks;
-using CsQuery;
+using AngleSharp.Dom;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -17,13 +18,13 @@ namespace Jackett.Common.Indexers
 {
     public class myAmity : BaseWebIndexer
     {
-        private string LoginUrl { get { return SiteLink + "account-login.php"; } }
-        private string BrowseUrl { get { return SiteLink + "torrents-search.php"; } }
+        private string LoginUrl => SiteLink + "account-login.php";
+        private string BrowseUrl => SiteLink + "torrents-search.php";
 
         private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
         {
-            get { return (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData;
+            set => base.configData = value;
         }
 
         public myAmity(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
@@ -46,19 +47,22 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(22, TorznabCatType.Audio); // Audio - Musik
             AddCategoryMapping(52, TorznabCatType.Movies3D); // Filme - 3D
             AddCategoryMapping(51, TorznabCatType.MoviesBluRay); // Filme - BluRay Complete
-            AddCategoryMapping(1,  TorznabCatType.MoviesDVD); // Filme - DVD
+            AddCategoryMapping(1, TorznabCatType.MoviesDVD); // Filme - DVD
+            AddCategoryMapping(56, TorznabCatType.MoviesUHD); // Filme - UHD/4K
             AddCategoryMapping(54, TorznabCatType.MoviesHD); // Filme - HD/1080p
-            AddCategoryMapping(3,  TorznabCatType.MoviesHD); // Filme - HD/720p
+            AddCategoryMapping(3, TorznabCatType.MoviesHD); // Filme - HD/720p
             AddCategoryMapping(48, TorznabCatType.XXX); // Filme - Heimatfilme.XXX
             AddCategoryMapping(50, TorznabCatType.Movies); // Filme - x264/H.264
-            AddCategoryMapping(2,  TorznabCatType.MoviesSD); // Filme - XViD
+            AddCategoryMapping(2, TorznabCatType.MoviesSD); // Filme - XViD
             AddCategoryMapping(11, TorznabCatType.Console); // Games - Konsolen
             AddCategoryMapping(10, TorznabCatType.PCGames); // Games - PC
             AddCategoryMapping(53, TorznabCatType.Other); // International - Complete
             AddCategoryMapping(36, TorznabCatType.Books); // Sonstige - E-Books
             AddCategoryMapping(38, TorznabCatType.Other); // Sonstige - Handy
-            AddCategoryMapping(7,  TorznabCatType.TVDocumentary); // TV/HDTV - Dokus
-            AddCategoryMapping(8,  TorznabCatType.TV); // TV/HDTV - Serien
+            AddCategoryMapping(59, TorznabCatType.TVAnime); // Sonstige - Anime
+            AddCategoryMapping(7, TorznabCatType.TVDocumentary); // TV/HDTV - Dokus
+            AddCategoryMapping(8, TorznabCatType.TV); // TV/HDTV - Serien
+            AddCategoryMapping(57, TorznabCatType.TVSport); // Sport - Allgemein
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -75,8 +79,9 @@ namespace Jackett.Common.Indexers
 
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Cookies.Contains("pass=") && !result.Cookies.Contains("deleted"), () =>
             {
-                CQ dom = result.Content;
-                var errorMessage = dom["div.myFrame-content"].Html();
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(result.Content);
+                var errorMessage = dom.QuerySelector("div.myFrame-content").InnerHtml;
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
             return IndexerConfigurationStatus.RequiresTesting;
@@ -84,12 +89,12 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            TimeZoneInfo.TransitionTime startTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 3, 0, 0), 3, 5, DayOfWeek.Sunday);
-            TimeZoneInfo.TransitionTime endTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 4, 0, 0), 10, 5, DayOfWeek.Sunday);
-            TimeSpan delta = new TimeSpan(1, 0, 0);
-            TimeZoneInfo.AdjustmentRule adjustment = TimeZoneInfo.AdjustmentRule.CreateAdjustmentRule(new DateTime(1999, 10, 1), DateTime.MaxValue.Date, delta, startTransition, endTransition);
+            var startTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 3, 0, 0), 3, 5, DayOfWeek.Sunday);
+            var endTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 4, 0, 0), 10, 5, DayOfWeek.Sunday);
+            var delta = new TimeSpan(1, 0, 0);
+            var adjustment = TimeZoneInfo.AdjustmentRule.CreateAdjustmentRule(new DateTime(1999, 10, 1), DateTime.MaxValue.Date, delta, startTransition, endTransition);
             TimeZoneInfo.AdjustmentRule[] adjustments = { adjustment };
-            TimeZoneInfo germanyTz = TimeZoneInfo.CreateCustomTimeZone("W. Europe Standard Time", new TimeSpan(1, 0, 0), "(GMT+01:00) W. Europe Standard Time", "W. Europe Standard Time", "W. Europe DST Time", adjustments);
+            var germanyTz = TimeZoneInfo.CreateCustomTimeZone("W. Europe Standard Time", new TimeSpan(1, 0, 0), "(GMT+01:00) W. Europe Standard Time", "W. Europe Standard Time", "W. Europe DST Time", adjustments);
 
             var releases = new List<ReleaseInfo>();
 
@@ -123,8 +128,9 @@ namespace Jackett.Common.Indexers
             var results = response.Content;
             try
             {
-                CQ dom = results;
-                var rows = dom["table.ttable_headinner > tbody > tr.t-row"];
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(results);
+                var rows = dom.QuerySelectorAll("table.ttable_headinner > tbody > tr.t-row");
 
                 foreach (var row in rows)
                 {
@@ -132,44 +138,43 @@ namespace Jackett.Common.Indexers
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 90 * 60;
 
-                    var qRow = row.Cq();
-
-                    var qDetailsLink = qRow.Find("a[href^=torrents-details.php?id=]").First();
-                    release.Title = qDetailsLink.Attr("title");
+                    var qDetailsLink = row.QuerySelector("a[href^=\"torrents-details.php?id=\"]");
+                    var qDetailsTitle = row.QuerySelector("td:has(a[href^=\"torrents-details.php?id=\"]) b"); // #7100
+                    release.Title = qDetailsTitle.TextContent;
 
                     if (!query.MatchQueryStringAND(release.Title))
                         continue;
 
-                    var qCatLink = qRow.Find("a[href^=torrents.php?cat=]").First();
-                    var qDLLink = qRow.Find("a[href^=download.php]").First();
-                    var qSeeders = qRow.Find("td:eq(6)");
-                    var qLeechers = qRow.Find("td:eq(7)");
-                    var qDateStr = qRow.Find("td:eq(9)").First();
-                    var qSize = qRow.Find("td:eq(4)").First();
+                    var qCatLink = row.QuerySelector("a[href^=\"torrents.php?cat=\"]");
+                    var qDLLink = row.QuerySelector("a[href^=\"download.php\"]");
+                    var qSeeders = row.QuerySelector("td:nth-of-type(7)");
+                    var qLeechers = row.QuerySelector("td:nth-of-type(8)");
+                    var qDateStr = row.QuerySelector("td:nth-of-type(10)");
+                    var qSize = row.QuerySelector("td:nth-of-type(5)");
 
-                    var catStr = qCatLink.Attr("href").Split('=')[1];
+                    var catStr = qCatLink.GetAttribute("href").Split('=')[1];
                     release.Category = MapTrackerCatToNewznab(catStr);
 
-                    release.Link = new Uri(SiteLink + qDLLink.Attr("href"));
-                    release.Comments = new Uri(SiteLink + qDetailsLink.Attr("href"));
+                    release.Link = new Uri(SiteLink + qDLLink.GetAttribute("href"));
+                    release.Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
                     release.Guid = release.Link;
 
-                    var sizeStr = qSize.Text();
+                    var sizeStr = qSize.TextContent;
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
 
-                    release.Seeders = ParseUtil.CoerceInt(qSeeders.Text());
-                    release.Peers = ParseUtil.CoerceInt(qLeechers.Text()) + release.Seeders;
+                    release.Seeders = ParseUtil.CoerceInt(qSeeders.TextContent);
+                    release.Peers = ParseUtil.CoerceInt(qLeechers.TextContent) + release.Seeders;
 
-                    var dateStr = qDateStr.Text().Trim();
-                    DateTime dateGerman = DateTime.SpecifyKind(DateTime.ParseExact(dateStr, "dd.MM.yy HH:mm:ss", CultureInfo.InvariantCulture), DateTimeKind.Unspecified);
+                    var dateStr = qDateStr.TextContent.Trim();
+                    var dateGerman = DateTime.SpecifyKind(DateTime.ParseExact(dateStr, "dd.MM.yy HH:mm:ss", CultureInfo.InvariantCulture), DateTimeKind.Unspecified);
 
-                    DateTime pubDateUtc = TimeZoneInfo.ConvertTimeToUtc(dateGerman, germanyTz);
+                    var pubDateUtc = TimeZoneInfo.ConvertTimeToUtc(dateGerman, germanyTz);
                     release.PublishDate = pubDateUtc.ToLocalTime();
 
-                    var grabs = qRow.Find("td:nth-child(6)").Text();
+                    var grabs = row.QuerySelector("td:nth-child(6)").TextContent;
                     release.Grabs = ParseUtil.CoerceInt(grabs);
 
-                    if (qRow.Find("img[src=\"images/free.gif\"]").Length >= 1)
+                    if (row.QuerySelector("img[src=\"images/free.gif\"]") != null)
                         release.DownloadVolumeFactor = 0;
                     else
                         release.DownloadVolumeFactor = 1;

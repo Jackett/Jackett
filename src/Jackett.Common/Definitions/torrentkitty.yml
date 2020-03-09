@@ -24,6 +24,7 @@
   search:
     paths:
       - path: "search/{{ if .Keywords }}{{ .Keywords}}{{else}}2019{{end}}"
+
     rows:
       selector: table#archiveResult tbody tr:has(a[href^="magnet:?xt="])
 
@@ -53,3 +54,4 @@
         text: 0
       uploadvolumefactor:
         text: 1
+# engine n/a

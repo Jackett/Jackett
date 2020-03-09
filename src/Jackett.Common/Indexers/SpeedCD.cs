@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CsQuery;
+using AngleSharp.Dom;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -18,13 +18,13 @@ namespace Jackett.Common.Indexers
 {
     public class SpeedCD : BaseWebIndexer
     {
-        private string LoginUrl { get { return SiteLink + "take_login.php"; } }
-        private string SearchUrl { get { return SiteLink + "browse.php"; } }
+        private string LoginUrl => SiteLink + "take_login.php";
+        private string SearchUrl => SiteLink + "browse.php";
 
         private new ConfigurationDataBasicLogin configData
         {
-            get { return (ConfigurationDataBasicLogin)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataBasicLogin)base.configData;
+            set => base.configData = value;
         }
 
         public SpeedCD(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
@@ -98,7 +98,8 @@ namespace Jackett.Common.Indexers
 
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("/browse.php"), () =>
             {
-                CQ dom = result.Content;
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(result.Content);
                 var errorMessage = dom.Text();
                 if (errorMessage.Contains("Wrong Captcha!"))
                     errorMessage = "Captcha requiered due to a failed login attempt. Login via a browser to whitelist your IP and then reconfigure jackett.";
@@ -110,7 +111,7 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
 
-            NameValueCollection qParams = new NameValueCollection();
+            var qParams = new NameValueCollection();
 
             if (!string.IsNullOrWhiteSpace(query.ImdbID))
             {
@@ -122,13 +123,13 @@ namespace Jackett.Common.Indexers
                 qParams.Add("search", query.GetQueryString());
             }
 
-            List<string> catList = MapTorznabCapsToTrackers(query);
-            foreach (string cat in catList)
+            var catList = MapTorznabCapsToTrackers(query);
+            foreach (var cat in catList)
             {
                 qParams.Add("c" + cat, "1");
             }
 
-            string urlSearch = SearchUrl;
+            var urlSearch = SearchUrl;
             if (qParams.Count > 0)
             {
                 urlSearch += $"?{qParams.GetQueryString()}";
@@ -144,30 +145,31 @@ namespace Jackett.Common.Indexers
 
             try
             {
-                CQ dom = response.Content;
-                var rows = dom["div[id='torrentTable'] > div[class^='box torrentBox'] > div[class='boxContent'] > table > tbody > tr"];
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(response.Content);
+                var rows = dom.QuerySelectorAll("div[id='torrentTable'] > div[class^='box torrentBox'] > div[class='boxContent'] > table > tbody > tr");
 
-                foreach (IDomObject row in rows)
+                foreach (var row in rows)
                 {
-                    CQ torrentData = row.OuterHTML;
-                    CQ cells = row.Cq().Find("td");
+                    var cells = row.QuerySelectorAll("td");
 
-                    string title = torrentData.Find("td[class='lft'] > div > a").First().Text().Trim();
-                    Uri link = new Uri(SiteLink + torrentData.Find("img[title='Download']").First().Parent().Attr("href").Trim());
-                    Uri guid = link;
-                    Uri comments = new Uri(SiteLink + torrentData.Find("td[class='lft'] > div > a").First().Attr("href").Trim().Remove(0, 1));
-                    long size = ReleaseInfo.GetBytes(cells.Elements.ElementAt(4).Cq().Text());
-                    int grabs = ParseUtil.CoerceInt(cells.Elements.ElementAt(5).Cq().Text());
-                    int seeders = ParseUtil.CoerceInt(cells.Elements.ElementAt(6).Cq().Text());
-                    int leechers = ParseUtil.CoerceInt(cells.Elements.ElementAt(7).Cq().Text());
+                    var title = row.QuerySelector("td[class='lft'] > div > a").TextContent.Trim();
+                    var link = new Uri(SiteLink + row.QuerySelector("img[title='Download']").ParentElement.GetAttribute("href").Trim());
+                    var guid = link;
+                    var comments = new Uri(SiteLink + row.QuerySelector("td[class='lft'] > div > a").GetAttribute("href").Trim().Remove(0, 1));
+                    var size = ReleaseInfo.GetBytes(cells[4].TextContent);
+                    var grabs = ParseUtil.CoerceInt(cells[5].TextContent);
+                    var seeders = ParseUtil.CoerceInt(cells[6].TextContent);
+                    var leechers = ParseUtil.CoerceInt(cells[7].TextContent);
 
-                    string pubDateStr = torrentData.Find("span[class^='elapsedDate']").First().Attr("title").Trim().Replace(" at", "");
-                    DateTime publishDate = DateTime.ParseExact(pubDateStr, "dddd, MMMM d, yyyy h:mmtt", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
+                    var pubDateStr = row.QuerySelector("span[class^='elapsedDate']").GetAttribute("title").Trim().Replace(" at", "");
+                    var publishDate = DateTime.ParseExact(pubDateStr, "dddd, MMMM d, yyyy h:mmtt", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
 
-                    long category = 0;
-                    string cat = torrentData.Find("img[class^='Tcat']").First().Parent().Attr("href").Trim().Remove(0, 5);
-                    long.TryParse(cat, out category);
+                    var cat = row.QuerySelector("img[class^='Tcat']").ParentElement.GetAttribute("href").Trim().Remove(0, 5);
+                    long.TryParse(cat, out var category);
 
+                    // This fixes the mixed initializer issue, so it's just inconsistent in the code base.
+                    // https://github.com/Jackett/Jackett/pull/7166#discussion_r376817517
                     var release = new ReleaseInfo();
 
                     release.Title = title;
@@ -183,11 +185,7 @@ namespace Jackett.Common.Indexers
                     release.Category = MapTrackerCatToNewznab(category.ToString());
                     release.Comments = comments;
 
-                    if (torrentData.Find("span:contains(\"[Freeleech]\")").Any())
-                        release.DownloadVolumeFactor = 0;
-                    else
-                        release.DownloadVolumeFactor = 1;
-
+                    release.DownloadVolumeFactor = row.QuerySelector("span:contains(\"[Freeleech]\")") != null ? 0 : 1;
                     release.UploadVolumeFactor = 1;
 
                     releases.Add(release);

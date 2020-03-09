@@ -54,8 +54,10 @@
         args: ["(S3)", "tercera temporada"]
       - name: re_replace #remove S/EXX from search string
         args: ["E([0-9]+)", "$1"]
+
     rows:
       selector: table#descargas > tbody > tr:has(td:has(a[href^="magnet:?"]))
+
     fields:
       title:
         selector: td.tit a
@@ -120,6 +122,7 @@
       leechers:
         selector:  td:nth-child(8)
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
+# engine n/a

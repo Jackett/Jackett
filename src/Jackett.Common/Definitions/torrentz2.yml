@@ -47,7 +47,7 @@
       "adult tattoo": XXX
       "other": Other
       "images": Other
-      
+
 
     modes:
       search: [q]
@@ -72,13 +72,14 @@
       label: Sort requested from site
       default: "A"
       options:
+        "_": "peers"
+        "N": "rating"
         "A": "created"
-        "P": "seeders"
         "S": "size"
 
   search:
     paths:
-      - path: "{{if .Config.filter-verified }}verified{{else}}search{{end}}{{ .Config.sort }}"
+      - path: "{{if .Config.filter-verified }}verified{{else}}search{{end}}{{ re_replace .Config.sort \"_\" \"\" }}"
     inputs:
        f: "{{ if .Keywords }}title: {{ .Keywords }}{{else}}{{end}}"
        safe: "{{ if .Config.filter-safe }}1{{else}}0{{end}}"
@@ -142,3 +143,4 @@
         text: 0
       uploadvolumefactor:
         text: 1
+# engine n/a

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Jackett.Common.Models
@@ -8,52 +8,22 @@ namespace Jackett.Common.Models
     {
         public selectorBlock this[string key]
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get => throw new NotImplementedException();
 
-            set
-            {
-                base.Add(new KeyValuePair<string, selectorBlock>(key, value));
-            }
+            set => Add(new KeyValuePair<string, selectorBlock>(key, value));
         }
 
-        public ICollection<string> Keys
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public ICollection<string> Keys => throw new NotImplementedException();
 
-        public ICollection<selectorBlock> Values
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public ICollection<selectorBlock> Values => throw new NotImplementedException();
 
-        public void Add(string key, selectorBlock value)
-        {
-            base.Add(new KeyValuePair<string, selectorBlock>(key, value));
-        }
+        public void Add(string key, selectorBlock value) => Add(new KeyValuePair<string, selectorBlock>(key, value));
 
-        public bool ContainsKey(string key)
-        {
-            throw new NotImplementedException();
-        }
+        public bool ContainsKey(string key) => throw new NotImplementedException();
 
-        public bool Remove(string key)
-        {
-            throw new NotImplementedException();
-        }
+        public bool Remove(string key) => throw new NotImplementedException();
 
-        public bool TryGetValue(string key, out selectorBlock value)
-        {
-            throw new NotImplementedException();
-        }
+        public bool TryGetValue(string key, out selectorBlock value) => throw new NotImplementedException();
     }
 
     // Cardigann yaml classes
@@ -83,6 +53,7 @@ namespace Jackett.Common.Models
         public string Type { get; set; }
         public string Label { get; set; }
         public string Default { get; set; }
+        public string[] Defaults { get; set; }
         public Dictionary<string, string> Options { get; set; }
     }
 
@@ -105,7 +76,7 @@ namespace Jackett.Common.Models
     {
         public string Type { get; set; }
         public string Selector { get; set; }
-        public string Image { get { throw new Exception("Deprecated, please use Login.Captcha.Selector instead"); } set { throw new Exception("Deprecated, please use login/captcha/selector instead of image"); } }
+        public string Image { get => throw new Exception("Deprecated, please use Login.Captcha.Selector instead"); set => throw new Exception("Deprecated, please use login/captcha/selector instead of image"); }
         public string Input { get; set; }
     }
 

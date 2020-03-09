@@ -1,4 +1,4 @@
-﻿---
+---
   site: totallykids
   name: TotallyKids
   description: "TotallyKids (TK) is a Private Torrent Tracker for CHILDRENS MOVIES / TV / GENERAL"
@@ -6,7 +6,7 @@
   type: private
   encoding: UTF-8
   links:
-    - http://www.totallykids.tv/
+    - http://www.totallykids.tv/ # site does not support https NET::ERR_CERT_AUTHORITY_INVALID
 
   settings:
     - name: username

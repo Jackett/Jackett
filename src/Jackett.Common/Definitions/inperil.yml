@@ -1,4 +1,4 @@
-﻿---
+---
   site: inperil
   name: inPeril
   description: "InPeril is a LATVIAN Private Torrent Tracker for 0DAY / GENERAL"
@@ -7,6 +7,8 @@
   type: private
   encoding: UTF-8
   links:
+    - https://www.inperil.net/
+  legacylinks:
     - http://www.inperil.net/
 
   caps:
@@ -44,7 +46,7 @@
       - selector: font.logintext
     test:
       path: browse.php
-      
+
   search:
     paths:
       - path: browse.php

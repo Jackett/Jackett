@@ -14,6 +14,7 @@
       - {id: 75, cat: Movies/UHD, desc: "Peliculas - 4K"}
       - {id: 83, cat: Movies/UHD, desc: "Peliculas - 4K CUSTOM"}
       - {id: 81, cat: Movies/UHD, desc: "Peliculas - 4K Remux"}
+      - {id: 87, cat: Movies/UHD, desc: "Peliculas - 4K Web"}
       - {id: 23, cat: Movies/BluRay, desc: "Peliculas - Full BluRay"}
       - {id: 82, cat: Movies/BluRay, desc: "Peliculas - CUSTOM FULLBR"}
       - {id: 72, cat: Movies/3D, desc: "Peliculas - 3D"}
@@ -39,6 +40,7 @@
       - {id: 79, cat: Movies/BluRay, desc: "EML HDTeam - CUSTOM BR"}
       #Series
       - {id: 50, cat: TV/HD, desc: "Series - Full BluRay"}
+      - {id: 86, cat: TV/UHD, desc: "Series - 4K"}
       - {id: 49, cat: TV/HD, desc: "Series - H264"}
       - {id: 84, cat: TV/HD, desc: "Series - H265"}
       - {id: 22, cat: TV/SD, desc: "Series - DVD"}
@@ -59,7 +61,7 @@
       - {id: 60, cat: TV/Sport, desc: "Deportes - SD"}
 
       - {id: 85, cat: Books, desc: "Manuales"}
-      
+
     modes:
       search: [q]
       tv-search: [q, season, ep]
@@ -114,7 +116,7 @@
       page: torrents
       $raw: "category={{ range .Categories }}{{.}};{{end}}"
       # 0 filename 1 file&dsc 2 descr 5 gold 6 silver 7 bronze
-      options: 0      
+      options: 0
       # 0 all 1 active 2 dead
       active: 0
       search: "{{ .Keywords }}"
@@ -132,10 +134,21 @@
           - name: querystring
             args: category
       title:
-        selector: td:nth-child(2) a
+        selector: td:nth-child(2) a:contains("VOSE")
+        optional: true
         filters:
           - name: re_replace
             args: ["(?i)\\bT(\\d+)", "S$1"]
+          - name: append
+            args: " [English]"
+      title:
+        selector: td:nth-child(2) a:not(:contains("VOSE"))
+        optional: true
+        filters:
+          - name: re_replace
+            args: ["(?i)\\bT(\\d+)", "S$1"]
+          - name: append
+            args: " [Spanish]"
       banner:
         optional: true
         selector: td:nth-child(2) a
@@ -181,7 +194,7 @@
             args: ["a9a9a9", "0.5"]
           - name: replace
             args: ["f6c8a6", "0.75"]
-      uploadvolumefactor: 
+      uploadvolumefactor:
           case:
             img[src$="2x.gif"]: 2
             img[src$="3x.gif"]: 3

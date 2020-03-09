@@ -6,7 +6,7 @@
   type: private
   encoding: UTF-8
   links:
-    - http://girotorrent.org/
+    - http://girotorrent.org/ # site does not support https ERR_CONNECTION_REFUSED
 
   caps:
     categorymappings:
@@ -212,22 +212,22 @@
         filters:
           - name: regexp
             args: "src=(.+?) "
-      size:
-        selector: td:nth-last-child(3)
       date:
         selector: td:nth-last-child(8)
         filters:
           - name: dateparse
             args: "02/01/2006"
+      seeders:
+        selector: td:nth-last-child(7)
+      leechers:
+        selector: td:nth-last-child(6)
       grabs:
         selector: td:nth-last-child(5)
         filters:
           - name: replace
             args: ["---", "0"]
-      seeders:
-        selector: td:nth-last-child(7)
-      leechers:
-        selector: td:nth-last-child(6)
+      size:
+        selector: td:nth-last-child(3)
       downloadvolumefactor:
         case:
           img[alt="Free Leech"]: 0
@@ -244,3 +244,4 @@
         filters:
           - name: replace
             args: ["x Upload Multiplier", ""]
+# xbtitFM 3.0.00

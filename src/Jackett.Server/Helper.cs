@@ -1,4 +1,6 @@
-﻿using Autofac;
+using System.Linq;
+using System.Text;
+using Autofac;
 using AutoMapper;
 using Jackett.Common.Models;
 using Jackett.Common.Models.Config;
@@ -6,8 +8,6 @@ using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
 using Microsoft.AspNetCore.Hosting;
 using NLog;
-using System.Linq;
-using System.Text;
 #if !NET461
 using Microsoft.Extensions.Hosting;
 #endif
@@ -57,45 +57,15 @@ namespace Jackett.Server
             applicationLifetime.StopApplication();
         }
 
-        public static IConfigurationService ConfigService
-        {
-            get
-            {
-                return ApplicationContainer.Resolve<IConfigurationService>();
-            }
-        }
+        public static IConfigurationService ConfigService => ApplicationContainer.Resolve<IConfigurationService>();
 
-        public static IServerService ServerService
-        {
-            get
-            {
-                return ApplicationContainer.Resolve<IServerService>();
-            }
-        }
+        public static IServerService ServerService => ApplicationContainer.Resolve<IServerService>();
 
-        public static IServiceConfigService ServiceConfigService
-        {
-            get
-            {
-                return ApplicationContainer.Resolve<IServiceConfigService>();
-            }
-        }
+        public static IServiceConfigService ServiceConfigService => ApplicationContainer.Resolve<IServiceConfigService>();
 
-        public static ServerConfig ServerConfiguration
-        {
-            get
-            {
-                return ApplicationContainer.Resolve<ServerConfig>();
-            }
-        }
+        public static ServerConfig ServerConfiguration => ApplicationContainer.Resolve<ServerConfig>();
 
-        public static Logger Logger
-        {
-            get
-            {
-                return ApplicationContainer.Resolve<Logger>();
-            }
-        }
+        public static Logger Logger => ApplicationContainer.Resolve<Logger>();
 
         private static void InitAutomapper()
         {
@@ -134,15 +104,8 @@ namespace Jackett.Server
             });
         }
 
-        public static void SetupLogging(ContainerBuilder builder)
-        {
-            Logger logger = LogManager.GetCurrentClassLogger();
-
-            if (builder != null)
-            {
-                builder.RegisterInstance(logger).SingleInstance();
-            }
-        }
+        public static void SetupLogging(ContainerBuilder builder) =>
+            builder?.RegisterInstance(LogManager.GetCurrentClassLogger()).SingleInstance();
 
         public static void SetLogLevel(LogLevel level)
         {

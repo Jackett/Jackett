@@ -1,4 +1,4 @@
-﻿---
+---
   site: lesaloon
   name: LeSaloon
   description: "Le Saloon is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
@@ -6,6 +6,8 @@
   type: private
   encoding: UTF-8
   links:
+    - https://lesaloonv2-0.net/
+  legacylinks:
     - http://lesaloonv2-0.net/
 
   caps:

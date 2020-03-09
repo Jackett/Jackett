@@ -19,8 +19,8 @@ namespace Jackett.Common.Indexers
 
         private new ConfigurationDataUserPasskey configData
         {
-            get { return (ConfigurationDataUserPasskey)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataUserPasskey)base.configData;
+            set => base.configData = value;
         }
 
         public DanishBits(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps)
@@ -51,7 +51,7 @@ namespace Jackett.Common.Indexers
                 return "%";
             }
             var searchString = query.GetQueryString();
-            Regex ReplaceRegex = new Regex("[^a-zA-Z0-9]+");
+            var ReplaceRegex = new Regex("[^a-zA-Z0-9]+");
             searchString = ReplaceRegex.Replace(searchString, "%");
             return searchString;
         }

@@ -1,4 +1,4 @@
-﻿---
+---
   site: pleasuredome
   name: PleasureDome
   description: "PleasureDome is a private site for Arcade / Console / PC Games"
@@ -6,7 +6,11 @@
   type: private
   encoding: UTF-8
   links:
+    - https://www.pleasuredome.org.uk/
+  legacylinks:
     - http://www.pleasuredome.org.uk/
+  certificates:
+    - eb27d56880fa073cd9ddd040d9a7f101d4868f53 # self signed
 
   caps:
     categorymappings:
@@ -117,6 +121,12 @@
       selector: table[width="100%"] > tbody tr:has(a[href^="download.php?id="])
 
     fields:
+      category:
+        selector: a[href^="torrents.php?category="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: category
       title:
         selector: a[href^="javascript:popdetails"]
         filters:
@@ -129,13 +139,7 @@
           - name: replace
             args: ["javascript:popdetails('", ""]
           - name: replace
-            args: [");'", ""]
-      category:
-        selector: a[href^="torrents.php?category="]
-        attribute: href
-        filters:
-          - name: querystring
-            args: category
+            args: ["');", ""]
       download:
         selector: a[href^="download.php?id="]
         attribute: href
@@ -161,3 +165,4 @@
         case:
           img[src="images/2x.gif"]: 2
           "*": 1
+# BTI Tracker (customised)

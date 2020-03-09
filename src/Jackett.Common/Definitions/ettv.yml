@@ -1,4 +1,4 @@
-﻿---
+---
   site: ettv
   name: ETTV
   description: "ETTV is a Public torrent site for TV / MOVIES, home of the  ETTV, ETHD and DTOne groups."
@@ -132,6 +132,13 @@
           - name: re_replace
             args: ["( torrent)$", ""]
       category:
+        optional: true
+        selector: td:nth-child(1):contains("-")
+        filters:
+          - name: replace #7110 provide default for missing category
+            args: ["-", "78"]
+      category:
+        optional: true
         selector: a[href^="/torrents.php?cat="]
         attribute: href
         filters:
@@ -144,6 +151,9 @@
         selector: td:nth-child(3)
       size:
         selector: td:nth-child(4)
+        filters:
+          - name: replace
+            args: ["N/A", "0 B"]
       seeders:
         selector: td:nth-child(6)
       leechers:
@@ -152,3 +162,4 @@
         text: 0
       uploadvolumefactor:
         text: 1
+# engine n/a

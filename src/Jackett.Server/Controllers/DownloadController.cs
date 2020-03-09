@@ -1,16 +1,16 @@
-﻿using BencodeNET.Objects;
+using System;
+using System.Text;
+using System.Threading.Tasks;
+using BencodeNET.Objects;
 using BencodeNET.Parsing;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+using Jackett.Server.ActionFilters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using NLog;
-using System;
-using System.Text;
-using System.Threading.Tasks;
-using Jackett.Server.ActionFilters;
 
 namespace Jackett.Server.Controllers
 {
@@ -20,10 +20,10 @@ namespace Jackett.Server.Controllers
     [Route("dl/{indexerID}")]
     public class DownloadController : Controller
     {
-        private ServerConfig serverConfig;
-        private Logger logger;
-        private IIndexerManagerService indexerService;
-        private IProtectionService protectionService;
+        private readonly ServerConfig serverConfig;
+        private readonly Logger logger;
+        private readonly IIndexerManagerService indexerService;
+        private readonly IProtectionService protectionService;
 
         public DownloadController(IIndexerManagerService i, Logger l, IProtectionService ps, ServerConfig sConfig)
         {
@@ -89,7 +89,7 @@ namespace Jackett.Server.Controllers
                     throw new Exception("BencodeParser failed", e);
                 }
 
-                string fileName = StringUtil.MakeValidFileName(file, '_', false) + ".torrent"; // call MakeValidFileName again to avoid any kind of injection attack
+                var fileName = StringUtil.MakeValidFileName(file, '_', false) + ".torrent"; // call MakeValidFileName again to avoid any kind of injection attack
 
                 return File(sortedDownloadBytes, "application/x-bittorrent", fileName);
             }

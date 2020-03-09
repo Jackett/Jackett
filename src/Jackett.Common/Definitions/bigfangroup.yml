@@ -1,4 +1,4 @@
-﻿---
+---
   site: bigfangroup
   name: BigFANGroup
   description: "BigFANGroup is a RUSSIAN Public Torrent Tracker for MOVIES / TV"
@@ -62,8 +62,6 @@
 
     modes:
       search: [q]
-# seems that site does not support season/episode searching      
-#      tv-search: [q, season, ep]
       movie-search: [q]
 
   settings:
@@ -93,17 +91,7 @@
     # 
     paths:
       - path: browse.php
-# cant get season/episode search working on this site
-#    keywordsfilters:
-#      - name: diacritics
-#        args: replace
-#      - name: re_replace # S01 to Сезон 1
-#        args: ["(?i)\\bS0*(\\d+)\\b", ", Сезон $1"]
-#      - name: re_replace # S01E01 to Сезон 1 Серия 1
-#        args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", ", Сезон $1,  Серия $2"]
     inputs:
-# multi category filters not supported
-#      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Keywords }}"
       cat: 0
       # 0 active 1 incldead 2 onlydead 3 gold 4 noseed 5 silver 7 BFG
@@ -202,3 +190,4 @@
           "*": 1
       uploadvolumefactor:
         text: 1
+# engine n/a

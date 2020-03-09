@@ -1,4 +1,4 @@
-﻿---
+---
   site: rutor
   name: RuTor
   description: "RuTor is a RUSSIAN Public site for MOVIES / TV / GENERAL"
@@ -6,9 +6,10 @@
   type: public
   encoding: UTF-8
   links:
-    - http://rutor.info/
+    - http://rutor.info/ # site does not support https ERR_CONNECTION_REFUSED
     - http://new-rutor.org/
-    - http://live-rutor.org/
+  legacylinks:
+    - http://live-rutor.org/ # domain expired 9 Feb 2020
 
   caps:
     # unfortunately RuTor does not display categories anywhere in its search results page :-(
@@ -129,3 +130,4 @@
         text: 0
       uploadvolumefactor:
         text: 1
+# engine n/a

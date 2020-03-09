@@ -1,4 +1,4 @@
-﻿---
+---
   site: zelkaorg
   name: Zelka.org
   description: "Zelka (Zamunda) is a BULGARIAN Private Torrent Tracker for 0DAY / GENERAL"
@@ -6,8 +6,8 @@
   type: private
   encoding: windows-1251
   links:
-    - http://zelka.org/
-    - http://zamunda.se/
+    - http://zelka.org/ # Bulgarian IP address filtering
+    - http://zamunda.se/ # Bulgarian IP address filtering
 
   caps:
     categories:
@@ -59,6 +59,18 @@
       tv-search: [q, season, ep]
       movie-search: [q]
 
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: ip_filtering
+      type: info
+      label: "IP Filtering"
+      default: "Zelka (Zamunda) allows only Bulgarian IP addressess. The <b>connection attempt failed</b> error means your IP was not accepted."
+
   login:
     path: takelogin.php
     method: post
@@ -96,12 +108,12 @@
         attribute: href
       magnet:
         selector: a:has(img[src^="http://img.zamunda.se/pic/magnet-icon-12w-12h.gif"])
-        attribute: href	  
+        attribute: href
       grabs:
         selector: td:nth-child(7)
         filters:
           - name: regexp
-            args: (\d+)			
+            args: (\d+)
       size:
         selector: td:nth-child(6)
       date:

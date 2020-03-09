@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -6,9 +6,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
-using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Models;
-using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
@@ -19,17 +18,15 @@ namespace Jackett.Common.Indexers
 {
     internal class EliteTracker : BaseWebIndexer
     {
-        private string LoginUrl
-        { get { return SiteLink + "takelogin.php"; } }
-        private string BrowseUrl
-        { get { return SiteLink + "browse.php"; } }
+        private string LoginUrl => SiteLink + "takelogin.php";
+        private string BrowseUrl => SiteLink + "browse.php";
         private bool TorrentHTTPSMode => configData.TorrentHTTPSMode.Value;
         private string ReplaceMulti => configData.ReplaceMulti.Value;
         private new ConfigurationDataEliteTracker configData
 
         {
-            get { return (ConfigurationDataEliteTracker)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataEliteTracker)base.configData;
+            set => base.configData = value;
         }
 
         public EliteTracker(IIndexerConfigurationService configService, WebClient webClient, Logger logger, IProtectionService protectionService)
@@ -267,7 +264,7 @@ namespace Jackett.Common.Indexers
                     //issue #5064 replace multi keyword
                     if (!string.IsNullOrEmpty(ReplaceMulti))
                     {
-                        System.Text.RegularExpressions.Regex regex = new Regex("(?i)([\\.\\- ])MULTI([\\.\\- ])");
+                        var regex = new Regex("(?i)([\\.\\- ])MULTI([\\.\\- ])");
                         release.Title = regex.Replace(release.Title, "$1" + ReplaceMulti + "$2");
                     }
                     // issue #6855 Replace VOSTFR with ENGLISH

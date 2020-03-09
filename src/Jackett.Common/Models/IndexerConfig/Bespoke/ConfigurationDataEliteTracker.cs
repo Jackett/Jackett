@@ -1,6 +1,6 @@
-﻿namespace Jackett.Common.Models.IndexerConfig.Bespoke
+namespace Jackett.Common.Models.IndexerConfig.Bespoke
 {
-    class ConfigurationDataEliteTracker : ConfigurationDataBasicLogin
+    internal class ConfigurationDataEliteTracker : ConfigurationDataBasicLogin
     {
         public BoolItem TorrentHTTPSMode { get; private set; }
         public DisplayItem PagesWarning { get; private set; }

@@ -37,10 +37,12 @@
       # https://monova.to/search?term=vikings+s05e05
       # https://monova.to/video
       - path: "{{if .Keywords}}search?term={{.Keywords}}{{else}}video{{end}}"
+
     rows:
       selector: tr.desktop:has(a[href^="//"])
       filters:
         - name: andmatch
+
     fields:
       title:
         selector: td.torrent_name a
@@ -83,3 +85,4 @@
           - name: replace
             args: ["min.","minutes"]
           - name: timeago
+# engine n/a

@@ -6,6 +6,8 @@
   type: public
   encoding: UTF-8
   links:
+    - https://www.moviesdvdr.co/
+  legacylinks:
     - https://www.moviesdvdr.me/
 
   caps:
@@ -61,3 +63,4 @@
         text: 0
       uploadvolumefactor:
         text: 1
+# engine n/a

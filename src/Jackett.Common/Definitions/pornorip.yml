@@ -1,0 +1,218 @@
+﻿---
+  site: pornorip
+  name: PornoRip
+  description: "PornoRip is a RUSSIAN Public Torrent Tracker for 3X"
+  language: ru-ru
+  type: public
+  encoding: UTF-8
+  links:
+    - https://www.pornorip.biz/
+
+  caps:
+    categorymappings:
+      - {id: 1, cat: XXX, desc: "Порно Трекер / XXX Torrent Tracker"}
+      - {id: 2, cat: XXX, desc: "Зарубежные порнофильмы / Pornofilms"}
+      - {id: 29, cat: XXX, desc: "Зарубежные порнофильмы / Pornofilms Гонзо-фильмы / Gonzo & All Sex"}
+      - {id: 30, cat: XXX, desc: "Зарубежные порнофильмы / Pornofilms Фильмы с сюжетом / Feature"}
+      - {id: 31, cat: XXX, desc: "Зарубежные порнофильмы / Pornofilms Лесбо-фильмы / Lesbo"}
+      - {id: 32, cat: XXX, desc: "Зарубежные порнофильмы / Pornofilms Этнические фильмы / Ethnic"}
+      - {id: 35, cat: XXX, desc: "Зарубежные порнофильмы / Pornofilms Эротические фильмы / Erotic & Documentary"}
+      - {id: 70, cat: XXX, desc: "Зарубежные порнофильмы / Pornofilms Классика / Classic Porn"}
+      - {id: 33, cat: XXX, desc: "Зарубежные порнофильмы / Pornofilms HD порнофильмы / HD Porn Movies"}
+      - {id: 10, cat: XXX, desc: "Порноролики / Porn Clips"}
+      - {id: 42, cat: XXX, desc: "Порноролики / Porn Clips Сайтрипы / SiteRip's"}
+      - {id: 43, cat: XXX, desc: "Порноролики / Porn Clips Сайтрипы HD / SiteRip's HD Video"}
+      - {id: 73, cat: XXX, desc: "Порноролики / Porn Clips Сайтрипы UHD / 4K UHD (2160p) Porn Video"}
+      - {id: 78, cat: XXX, desc: "Порноролики / Porn Clips 3D & Virtual Reality Porn Videos (VR)"}
+      - {id: 44, cat: XXX, desc: "Порноролики / Porn Clips Сцены из фильмов / Movie Scenes"}
+      - {id: 45, cat: XXX, desc: "Порноролики / Porn Clips Порноролики Разное / Various Clips"}
+      - {id: 40, cat: XXX, desc: "Порноролики / Porn Clips Паки сайтрипов / SiteRip's Packs"}
+      - {id: 41, cat: XXX, desc: "Порноролики / Porn Clips Паки по актрисам / Actresses Clips Packs"}
+      - {id: 3, cat: XXX, desc: "Японское порно / Japan Porn"}
+      - {id: 18, cat: XXX, desc: "Русское порно / Russian Porn"}
+      - {id: 36, cat: XXX, desc: "Русское порно / Russian Porn Русские порнофильмы / Russian Porn Films"}
+      - {id: 37, cat: XXX, desc: "Русское порно / Russian Porn Паки русских порнороликов / Russian Clips Packs"}
+      - {id: 39, cat: XXX, desc: "Русское порно / Russian Porn Русское любительское порно видео / Russian Amateur Porn Video"}
+      - {id: 4, cat: XXX, desc: "Эротические студии и Фотосеты, Комиксы, Журналы / Erotic, Pictures, Magazines & Comix"}
+      - {id: 46, cat: XXX, desc: "Эротические студии и Фотосеты, Комиксы, Журналы / Erotic, Pictures, Magazines & Comix Эротические студии видео / Erotic Video Library"}
+      - {id: 47, cat: XXX, desc: "Эротические студии и Фотосеты, Комиксы, Журналы / Erotic, Pictures, Magazines & Comix Эротические студии Фото / Erotic Picture Gallery"}
+      - {id: 48, cat: XXX, desc: "Эротические студии и Фотосеты, Комиксы, Журналы / Erotic, Pictures, Magazines & Comix Паки сайтрипов эротических студий / Erotic Picture SiteRip's"}
+      - {id: 49, cat: XXX, desc: "Эротические студии и Фотосеты, Комиксы, Журналы / Erotic, Pictures, Magazines & Comix Любительское фото / Amateur Picture"}
+      - {id: 50, cat: XXX, desc: "Эротические студии и Фотосеты, Комиксы, Журналы / Erotic, Pictures, Magazines & Comix Подборки по актрисам / Actresses Picture Packs"}
+      - {id: 51, cat: XXX, desc: "Эротические студии и Фотосеты, Комиксы, Журналы / Erotic, Pictures, Magazines & Comix Подборки сайтрипов / SiteRip's Picture Packs"}
+      - {id: 52, cat: XXX, desc: "Эротические студии и Фотосеты, Комиксы, Журналы / Erotic, Pictures, Magazines & Comix Подборки сетов / Picture Sets"}
+      - {id: 53, cat: XXX, desc: "Эротические студии и Фотосеты, Комиксы, Журналы / Erotic, Pictures, Magazines & Comix Нетрадиционное порно фото"}
+      - {id: 76, cat: XXX, desc: "Эротические студии и Фотосеты, Комиксы, Журналы / Erotic, Pictures, Magazines & Comix Комиксы и рисунки, Журналы / Magazines & Comix"}
+      - {id: 6, cat: XXX, desc: "Нетрадиционное порно / Special Interest Porn"}
+      - {id: 56, cat: XXX, desc: "Нетрадиционное порно / Special Interest Porn Бисексуалы / Bisexual"}
+      - {id: 57, cat: XXX, desc: "Нетрадиционное порно / Special Interest Porn Транссексуалы / Shemale Transsexual"}
+      - {id: 58, cat: XXX, desc: "Нетрадиционное порно / Special Interest Porn БДСМ / BDSM"}
+      - {id: 59, cat: XXX, desc: "Нетрадиционное порно / Special Interest Porn Женское доминирование и страпон / Femdom & Strapon"}
+      - {id: 60, cat: XXX, desc: "Нетрадиционное порно / Special Interest Porn Подглядывание / Voyeur"}
+      - {id: 61, cat: XXX, desc: "Нетрадиционное порно / Special Interest Porn Фистинг и дилдо / Fisting & Dildo"}
+      - {id: 62, cat: XXX, desc: "Нетрадиционное порно / Special Interest Porn Беременные / Pregnant Preggo"}
+      - {id: 63, cat: XXX, desc: "Нетрадиционное порно / Special Interest Porn Буккаке / Bukkake"}
+      - {id: 64, cat: XXX, desc: "Нетрадиционное порно / Special Interest Porn Мочеиспускание / Peeing"}
+      - {id: 65, cat: XXX, desc: "Нетрадиционное порно / Special Interest Porn Фетиш / Fetish"}
+      - {id: 66, cat: XXX, desc: "Нетрадиционное порно / Special Interest Porn Копро / Scat"}
+      - {id: 5, cat: XXX, desc: "Мультфильмы, Хентай и игры / Сartoons, Hentai & Games"}
+      - {id: 54, cat: XXX, desc: "Мультфильмы, Хентай и игры / Сartoons, Hentai & Games Хентай"}
+      - {id: 55, cat: XXX, desc: "Мультфильмы, Хентай и игры / Сartoons, Hentai & Games Игры"}
+      - {id: 74, cat: XXX, desc: "Мультфильмы, Хентай и игры / Сartoons, Hentai & GamesПорно Мультики"}
+      - {id: 7, cat: XXX, desc: "Гей-порно / Gay porn"}
+      - {id: 67, cat: XXX, desc: "Гей-порно / Gay porn Полнометражные гей-фильмы / Full Length Gay Movies"}
+      - {id: 68, cat: XXX, desc: "Гей-порно / Gay porn Ролики, SiteRip'ы и сцены из гей-фильмов / Gay Clips & Movie Scenes"}
+      - {id: 16, cat: XXX, desc: "Форум PornoRip.biz"}
+      - {id: 17, cat: XXX, desc: "Форум PornoRip.biz Новости Порно Индустрии"}
+      - {id: 69, cat: XXX, desc: "Форум PornoRip.biz Правила, инструкции, FAQ"}
+      - {id: 71, cat: XXX, desc: "Форум PornoRip.biz Новости трекера!"}
+      - {id: 72, cat: XXX, desc: "Форум PornoRip.biz Общение"}
+      - {id: 77, cat: XXX, desc: "Форум PornoRip.biz ОбщениеАрхив"}
+
+    modes:
+      search: [q]
+
+  settings:
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "t"
+      options:
+        "t": "created"
+        "ts": "seeders"
+        "sz": "size"
+        "i": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "d"
+      options:
+        "d": "desc"
+        "a": "asc"
+
+  search:
+    paths:
+    #https://www.pornorip.biz/search.php?tracker_search=torrent&keywords=slut&terms=all&fp=1&author=&sc=1&sf=titleonly&sr=topics&sk=t&sd=d&st=0&ch=300&t=0&submit=Search
+      - path: search.php
+    inputs:
+      tracker_search: torrent
+      keywords: "{{ if .Keywords }}{{ .Keywords }}{{else}}2020{{end}}"
+      terms: all
+      author: ""
+      sc: 1
+      sf: titleonly
+      sr: topics
+      sk: "{{ .Config.sort }}"
+      sd: "{{ .Config.type }}"
+      st: 0
+      ch: 300
+      t: 0
+      submit: Search
+      $raw: "{{range .Categories}}&fid[]={{.}}{{end}}"
+
+    rows:
+      selector: div.forumbg > div.inner > ul.topiclist > li.row > dl.icon:has(a[href^="./download/file.php?id="])
+      filters:
+        - name: andmatch
+
+    fields:
+      title:
+        selector: a.topictitle
+        filters:
+          - name: re_replace
+            args: ["^\\[[\\w ]*\\]\\s?", ""]
+      details:
+        selector: a.topictitle
+        attribute: href
+      category:
+        selector: dt a:last-of-type
+        attribute: href
+        filters:
+          - name: regexp
+            args: "-f(\\d+).html$"
+      download:
+        selector: a[href^="./download/file.php?id="]
+        attribute: href
+      size:
+        selector: dt b:nth-of-type(2)
+        filters:
+          - name: replace
+            args: ["ТБ", "TB"]
+          - name: replace
+            args: ["ГБ", "GB"]
+          - name: replace
+            args: ["МБ", "MB"]
+          - name: replace
+            args: ["КБ", "KB"]
+      seeders:
+        selector: span.seed
+      leechers:
+        selector: span.leech
+      grabs:
+        selector: span.complet
+      date:
+        # Сегодня, 12:35
+        selector: dt:contains("Сегодня"), dt:contains("Вчера")
+        optional: true
+        filters:
+          - name: regexp
+            args: "»\\s+(.+?)\\s+в"
+          - name: replace
+            args: ["Сегодня", "Today"]
+          - name: replace
+            args: ["Вчера", "Yesterday"]
+          - name: fuzzytime
+      date:
+        # 46 минут назад
+        selector: dt:contains("назад")
+        optional: true
+        filters:
+          - name: regexp
+            args: "»\\s+(.+?)\\s+в"
+          - name: replace
+            args: ["назад", "ago"]
+          - name: replace
+            args: ["секунд", "seconds"]
+          - name: replace
+            args: ["минут", "minutes"]
+          - name: replace
+            args: ["часов", "hours"]
+          - name: timeago
+      date:
+        # 12 янв 2019, 11:26
+        selector: dt:not(:contains("Сегодня")):not(:contains("Вчера")):not(:contains("назад"))
+        optional: true
+        filters:
+          - name: regexp
+            args: "»\\s+(.+?)\\s+в"
+          - name: replace
+            args: ["янв", "Jan"]
+          - name: replace
+            args: ["фев", "Feb"]
+          - name: replace
+            args: ["мар", "Mar"]
+          - name: replace
+            args: ["апр", "Apr"]
+          - name: replace
+            args: ["май", "May"]
+          - name: replace
+            args: ["июн", "Jun"]
+          - name: replace
+            args: ["июл", "Jul"]
+          - name: replace
+            args: ["авг", "Aug"]
+          - name: replace
+            args: ["сен", "Sep"]
+          - name: replace
+            args: ["окт", "Oct"]
+          - name: replace
+            args: ["ноя", "Nov"]
+          - name: replace
+            args: ["дек", "Dec"]
+          - name: dateparse
+            args: "02 Jan 2006, 15:04"
+      downloadvolumefactor:
+        text: 1
+      uploadvolumefactor:
+        text: 1
+# phpBB

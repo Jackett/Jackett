@@ -6,6 +6,8 @@
   type: private
   encoding: UTF-8
   links:
+    - https://immortuos.life/
+  legacylinks:
     - https://www.immortuos.life/
 
   caps:

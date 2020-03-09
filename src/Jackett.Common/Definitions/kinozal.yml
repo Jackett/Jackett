@@ -1,4 +1,4 @@
-﻿---
+---
   site: kinozal
   name: Kinozal
   description: "Kinozal is a RUSSIAN Semi-Private Torrent Tracker for MOVIES / TV / MUSIC"
@@ -6,7 +6,7 @@
   type: semi-private
   encoding: windows-1251
   links:
-    - http://kinozal.tv/
+    - http://kinozal.tv/ # site forces http, https is not supported
 
   caps:
     categorymappings:
@@ -178,7 +178,7 @@
         selector: td:nth-child(4)
         filters:
           - name: replace
-            args: ["ТБ", "TB"] 
+            args: ["ТБ", "TB"]
           - name: replace
             args: ["ГБ", "GB"]
           - name: replace
@@ -221,3 +221,4 @@
           "*": 1
       uploadvolumefactor:
         text: 1
+# engine n/a

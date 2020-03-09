@@ -6,6 +6,8 @@
   type: private
   encoding: windows-1253
   links:
+    - https://www.greek-team.cc/
+  legacylinks:
     - http://www.greek-team.cc/
 
   caps:

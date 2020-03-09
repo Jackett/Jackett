@@ -1,14 +1,14 @@
-﻿using Jackett.Common.Models;
-using Jackett.Common.Models.Config;
-using Jackett.Common.Services.Interfaces;
-using Jackett.Common.Utils;
-using Microsoft.AspNetCore.Mvc;
-using NLog;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using Jackett.Common.Models;
+using Jackett.Common.Models.Config;
+using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
+using Microsoft.AspNetCore.Mvc;
+using NLog;
 
 namespace Jackett.Server.Controllers
 {
@@ -17,14 +17,14 @@ namespace Jackett.Server.Controllers
     public class ServerConfigurationController : Controller
     {
         private readonly IConfigurationService configService;
-        private ServerConfig serverConfig;
-        private IServerService serverService;
-        private IProcessService processService;
-        private IIndexerManagerService indexerService;
-        private ISecuityService securityService;
-        private IUpdateService updater;
-        private ILogCacheService logCache;
-        private Logger logger;
+        private readonly ServerConfig serverConfig;
+        private readonly IServerService serverService;
+        private readonly IProcessService processService;
+        private readonly IIndexerManagerService indexerService;
+        private readonly ISecuityService securityService;
+        private readonly IUpdateService updater;
+        private readonly ILogCacheService logCache;
+        private readonly Logger logger;
 
         public ServerConfigurationController(IConfigurationService c, IServerService s, IProcessService p, IIndexerManagerService i, ISecuityService ss, IUpdateService u, ILogCacheService lc, Logger l, ServerConfig sc)
         {
@@ -56,10 +56,7 @@ namespace Jackett.Server.Controllers
         }
 
         [HttpPost]
-        public void Update()
-        {
-            updater.CheckForUpdatesNow();
-        }
+        public void Update() => updater.CheckForUpdatesNow();
 
         [HttpGet]
         public Common.Models.DTO.ServerConfig Config()
@@ -72,17 +69,17 @@ namespace Jackett.Server.Controllers
         [HttpPost]
         public IActionResult UpdateConfig([FromBody]Common.Models.DTO.ServerConfig config)
         {
-            bool webHostRestartNeeded = false;
+            var webHostRestartNeeded = false;
 
             var originalPort = serverConfig.Port;
             var originalAllowExternal = serverConfig.AllowExternal;
-            int port = config.port;
-            bool external = config.external;
-            string saveDir = config.blackholedir;
-            bool updateDisabled = config.updatedisabled;
-            bool preRelease = config.prerelease;
-            bool logging = config.logging;
-            string basePathOverride = config.basepathoverride;
+            var port = config.port;
+            var external = config.external;
+            var saveDir = config.blackholedir;
+            var updateDisabled = config.updatedisabled;
+            var preRelease = config.prerelease;
+            var logging = config.logging;
+            var basePathOverride = config.basepathoverride;
             if (basePathOverride != null)
             {
                 basePathOverride = basePathOverride.TrimEnd('/');
@@ -90,8 +87,8 @@ namespace Jackett.Server.Controllers
                     throw new Exception("The Base Path Override must start with a /");
             }
 
-            string omdbApiKey = config.omdbkey;
-            string omdbApiUrl = config.omdburl;
+            var omdbApiKey = config.omdbkey;
+            var omdbApiUrl = config.omdburl;
 
             if (config.basepathoverride != serverConfig.BasePathOverride)
             {
@@ -202,9 +199,6 @@ namespace Jackett.Server.Controllers
         }
 
         [HttpGet]
-        public List<CachedLog> Logs()
-        {
-            return logCache.Logs;
-        }
+        public List<CachedLog> Logs() => logCache.Logs;
     }
 }

@@ -1,0 +1,394 @@
+---
+  site: linuxtracker
+  name: LinuxTracker
+  description: "LinuxTracker is a Public Linux ISO Torrent Repository"
+  language: en-us
+  type: public
+  encoding: UTF-8
+  links:
+    - https://linuxtracker.org/
+
+  caps:
+    categorymappings:
+      - {id: 2002, cat: PC/ISO, desc: "4MLinux"}
+      - {id: 2004, cat: PC/ISO, desc: "ALT Linux"}
+      - {id: 2289, cat: PC/ISO, desc: "APODIO"}
+      - {id: 2012, cat: PC/ISO, desc: "AV Linux"}
+      - {id: 13, cat: PC/ISO, desc: "Absolute"}
+      - {id: 2003, cat: PC/ISO, desc: "Alpine Linux"}
+      - {id: 2005, cat: PC/ISO, desc: "Android x86"}
+      - {id: 2006, cat: PC/ISO, desc: "Antergos"}
+      - {id: 2007, cat: PC/ISO, desc: "AntiX"}
+      - {id: 2263, cat: PC/ISO, desc: "Antivirus Live CD"}
+      - {id: 39, cat: PC/ISO, desc: "Arch Linux"}
+      - {id: 2212, cat: PC/ISO, desc: "ArchLabs"}
+      - {id: 2009, cat: PC/ISO, desc: "Archbang"}
+      - {id: 2183, cat: PC/ISO, desc: "Archman"}
+      - {id: 2196, cat: PC/ISO, desc: "ArcoLinux"}
+      - {id: 2216, cat: PC/ISO, desc: "Artix Linux"}
+      - {id: 2227, cat: PC/ISO, desc: "AryaLinux"}
+      - {id: 2288, cat: PC/ISO, desc: "Audiophile Linux"}
+      - {id: 56, cat: PC/ISO, desc: "Austrumi"}
+      - {id: 2252, cat: PC/ISO, desc: "BBQLinux"}
+      - {id: 2260, cat: PC/ISO, desc: "BSD Router Project"}
+      - {id: 2219, cat: PC/ISO, desc: "BackSlash Linux"}
+      - {id: 1231, cat: PC/ISO, desc: "Backbox"}
+      - {id: 2237, cat: PC/ISO, desc: "Batocera Linux"}
+      - {id: 2272, cat: PC/ISO, desc: "BeeFree OS"}
+      - {id: 2017, cat: PC/ISO, desc: "Berry Linux"}
+      - {id: 2243, cat: PC/ISO, desc: "BicomSystems PBXware"}
+      - {id: 2275, cat: PC/ISO, desc: "BigLinux"}
+      - {id: 2286, cat: PC/ISO, desc: "BitKey"}
+      - {id: 2020, cat: PC/ISO, desc: "BlackArch"}
+      - {id: 1238, cat: PC/ISO, desc: "BlackPanther OS"}
+      - {id: 2262, cat: PC/ISO, desc: "BlackWeb"}
+      - {id: 2283, cat: PC/ISO, desc: "Blackhat-Global OS"}
+      - {id: 2021, cat: PC/ISO, desc: "Blacklab"}
+      - {id: 2022, cat: PC/ISO, desc: "Blag"}
+      - {id: 79, cat: PC/ISO, desc: "BlankOn"}
+      - {id: 2182, cat: PC/ISO, desc: "Bluestar Linux"}
+      - {id: 2023, cat: PC/ISO, desc: "Bodhi"}
+      - {id: 2205, cat: PC/ISO, desc: "BunsenLabs"}
+      - {id: 2026, cat: PC/ISO, desc: "Cae"}
+      - {id: 1220, cat: PC/ISO, desc: "Caine"}
+      - {id: 2028, cat: PC/ISO, desc: "Calculate Linux"}
+      - {id: 102, cat: PC/ISO, desc: "CentOS"}
+      - {id: 1216, cat: PC/ISO, desc: "Chakra"}
+      - {id: 2033, cat: PC/ISO, desc: "Chapeau"}
+      - {id: 2253, cat: PC/ISO, desc: "Clear Linux"}
+      - {id: 2264, cat: PC/ISO, desc: "ClearOS"}
+      - {id: 2248, cat: PC/ISO, desc: "ClonOS"}
+      - {id: 107, cat: PC/ISO, desc: "Clonezilla"}
+      - {id: 2257, cat: PC/ISO, desc: "Condres OS"}
+      - {id: 2036, cat: PC/ISO, desc: "Connochaet"}
+      - {id: 2037, cat: PC/ISO, desc: "Container Linux"}
+      - {id: 121, cat: PC/ISO, desc: "Crunchbang"}
+      - {id: 122, cat: PC/ISO, desc: "Crux"}
+      - {id: 2273, cat: PC/ISO, desc: "Cryptocurrency OS"}
+      - {id: 2245, cat: PC/ISO, desc: "Cucumber Linux"}
+      - {id: 2285, cat: PC/ISO, desc: "DRBL Live"}
+      - {id: 123, cat: PC/ISO, desc: "Damnsmall"}
+      - {id: 128, cat: PC/ISO, desc: "Debian"}
+      - {id: 131, cat: PC/ISO, desc: "Deepin"}
+      - {id: 2038, cat: PC/ISO, desc: "Deft"}
+      - {id: 2192, cat: PC/ISO, desc: "Devuan"}
+      - {id: 2287, cat: PC/ISO, desc: "Doge Linux"}
+      - {id: 144, cat: PC/ISO, desc: "DragonFly BSD"}
+      - {id: 2215, cat: PC/ISO, desc: "Dragora GNU/Linux"}
+      - {id: 2226, cat: PC/ISO, desc: "DuZeru OS"}
+      - {id: 148, cat: PC/ISO, desc: "Dynebolic"}
+      - {id: 2261, cat: PC/ISO, desc: "Eagle Mode"}
+      - {id: 2265, cat: PC/ISO, desc: "EasyNAS"}
+      - {id: 2259, cat: PC/ISO, desc: "EasyOS"}
+      - {id: 155, cat: PC/ISO, desc: "Edubuntu"}
+      - {id: 2040, cat: PC/ISO, desc: "Elastix"}
+      - {id: 2041, cat: PC/ISO, desc: "Elementary OS"}
+      - {id: 161, cat: PC/ISO, desc: "Elive"}
+      - {id: 2042, cat: PC/ISO, desc: "Emmabuntus"}
+      - {id: 2231, cat: PC/ISO, desc: "Emmi OS"}
+      - {id: 2278, cat: PC/ISO, desc: "EndeavourOS"}
+      - {id: 164, cat: PC/ISO, desc: "Endian"}
+      - {id: 2179, cat: PC/ISO, desc: "Endless OS"}
+      - {id: 2223, cat: PC/ISO, desc: "Enso OS"}
+      - {id: 2043, cat: PC/ISO, desc: "Exe GNU/Linux"}
+      - {id: 2045, cat: PC/ISO, desc: "Extix"}
+      - {id: 2220, cat: PC/ISO, desc: "Fatdog64 Linux"}
+      - {id: 178, cat: PC/ISO, desc: "Fedora"}
+      - {id: 2194, cat: PC/ISO, desc: "Feren OS"}
+      - {id: 181, cat: PC/ISO, desc: "Finnix"}
+      - {id: 2266, cat: PC/ISO, desc: "Forensic Hard Copy"}
+      - {id: 190, cat: PC/ISO, desc: "FreeBSD"}
+      - {id: 194, cat: PC/ISO, desc: "FreeNAS"}
+      - {id: 197, cat: PC/ISO, desc: "Freespire"}
+      - {id: 1210, cat: PC/ISO, desc: "Fuduntu"}
+      - {id: 2046, cat: PC/ISO, desc: "FuguIta"}
+      - {id: 2256, cat: PC/ISO, desc: "G4L"}
+      - {id: 2235, cat: PC/ISO, desc: "GALPon MiniNo"}
+      - {id: 1212, cat: PC/ISO, desc: "GParted"}
+      - {id: 2214, cat: PC/ISO, desc: "GeckoLinux"}
+      - {id: 203, cat: PC/ISO, desc: "GeeXboX"}
+      - {id: 206, cat: PC/ISO, desc: "Gentoo"}
+      - {id: 2048, cat: PC/ISO, desc: "GhostBSD"}
+      - {id: 210, cat: PC/ISO, desc: "Gnewsense"}
+      - {id: 216, cat: PC/ISO, desc: "GoboLinux"}
+      - {id: 220, cat: PC/ISO, desc: "Greenie Linux"}
+      - {id: 221, cat: PC/ISO, desc: "Grml"}
+      - {id: 2280, cat: PC/ISO, desc: "GroovyArcade"}
+      - {id: 2228, cat: PC/ISO, desc: "Guix System"}
+      - {id: 2049, cat: PC/ISO, desc: "Haiku"}
+      - {id: 2050, cat: PC/ISO, desc: "Handy"}
+      - {id: 2276, cat: PC/ISO, desc: "Hanthana Linux"}
+      - {id: 2186, cat: PC/ISO, desc: "HardenedBSD"}
+      - {id: 2200, cat: PC/ISO, desc: "Heads"}
+      - {id: 2166, cat: PC/ISO, desc: "Huayra Linux"}
+      - {id: 2244, cat: PC/ISO, desc: "Hyperbola GNU"}
+      - {id: 252, cat: PC/ISO, desc: "IPFire"}
+      - {id: 2181, cat: PC/ISO, desc: "KDE Neon"}
+      - {id: 2052, cat: PC/ISO, desc: "KaOS"}
+      - {id: 2051, cat: PC/ISO, desc: "Kali"}
+      - {id: 2053, cat: PC/ISO, desc: "Karoshi"}
+      - {id: 277, cat: PC/ISO, desc: "Knoppix"}
+      - {id: 2054, cat: PC/ISO, desc: "Kolibri"}
+      - {id: 287, cat: PC/ISO, desc: "Kubuntu"}
+      - {id: 2057, cat: PC/ISO, desc: "Kwort Linux"}
+      - {id: 2058, cat: PC/ISO, desc: "Kxstudio"}
+      - {id: 2068, cat: PC/ISO, desc: "LXLE"}
+      - {id: 2258, cat: PC/ISO, desc: "Lakka"}
+      - {id: 2176, cat: PC/ISO, desc: "LibreELEC"}
+      - {id: 2061, cat: PC/ISO, desc: "LinHES"}
+      - {id: 2242, cat: PC/ISO, desc: "Linspire"}
+      - {id: 311, cat: PC/ISO, desc: "Linux"}
+      - {id: 2239, cat: PC/ISO, desc: "Linux Kodachi"}
+      - {id: 1234, cat: PC/ISO, desc: "Linux Lite"}
+      - {id: 347, cat: PC/ISO, desc: "Linux Mint"}
+      - {id: 304, cat: PC/ISO, desc: "LinuxConsole"}
+      - {id: 2063, cat: PC/ISO, desc: "Linuxfx"}
+      - {id: 2064, cat: PC/ISO, desc: "Liquid Lemur"}
+      - {id: 2191, cat: PC/ISO, desc: "Live Raizo"}
+      - {id: 316, cat: PC/ISO, desc: "Livecd"}
+      - {id: 1218, cat: PC/ISO, desc: "Lubuntu"}
+      - {id: 2163, cat: PC/ISO, desc: "MOFO Linux"}
+      - {id: 2177, cat: PC/ISO, desc: "MX Linux"}
+      - {id: 1228, cat: PC/ISO, desc: "Mageia"}
+      - {id: 2071, cat: PC/ISO, desc: "MakuluLinux"}
+      - {id: 2073, cat: PC/ISO, desc: "Manjaro"}
+      - {id: 343, cat: PC/ISO, desc: "MidnightBSD"}
+      - {id: 2075, cat: PC/ISO, desc: "Minino"}
+      - {id: 2076, cat: PC/ISO, desc: "Minix"}
+      - {id: 2241, cat: PC/ISO, desc: "MorpheusArch Linux"}
+      - {id: 369, cat: PC/ISO, desc: "Musix"}
+      - {id: 373, cat: PC/ISO, desc: "Mythbuntu"}
+      - {id: 2078, cat: PC/ISO, desc: "NAS4Free"}
+      - {id: 2217, cat: PC/ISO, desc: "Namib GNU/Linux"}
+      - {id: 2079, cat: PC/ISO, desc: "Neptune"}
+      - {id: 380, cat: PC/ISO, desc: "NetBSD"}
+      - {id: 2080, cat: PC/ISO, desc: "Nethserver"}
+      - {id: 2081, cat: PC/ISO, desc: "Netrunner"}
+      - {id: 2190, cat: PC/ISO, desc: "Nitrux"}
+      - {id: 2084, cat: PC/ISO, desc: "NixOS"}
+      - {id: 2254, cat: PC/ISO, desc: "NomadBSD"}
+      - {id: 391, cat: PC/ISO, desc: "Nst"}
+      - {id: 2086, cat: PC/ISO, desc: "Nutyx"}
+      - {id: 2203, cat: PC/ISO, desc: "OPNsense"}
+      - {id: 2234, cat: PC/ISO, desc: "OSGeoLive"}
+      - {id: 2096, cat: PC/ISO, desc: "OSMC"}
+      - {id: 2240, cat: PC/ISO, desc: "Obarun"}
+      - {id: 2211, cat: PC/ISO, desc: "Omarine"}
+      - {id: 401, cat: PC/ISO, desc: "OpenBSD"}
+      - {id: 2090, cat: PC/ISO, desc: "OpenIndiana"}
+      - {id: 2091, cat: PC/ISO, desc: "OpenMandriva Lx"}
+      - {id: 2089, cat: PC/ISO, desc: "Openelec"}
+      - {id: 2092, cat: PC/ISO, desc: "Openmediavault"}
+      - {id: 2093, cat: PC/ISO, desc: "Opensuse"}
+      - {id: 1237, cat: PC/ISO, desc: "Oracle Linux"}
+      - {id: 4, cat: PC/ISO, desc: "Other distros"}
+      - {id: 2218, cat: PC/ISO, desc: "OviOS Linux"}
+      - {id: 423, cat: PC/ISO, desc: "PCLinuxOS"}
+      - {id: 2233, cat: PC/ISO, desc: "PI MusicBox"}
+      - {id: 416, cat: PC/ISO, desc: "Paldo"}
+      - {id: 2098, cat: PC/ISO, desc: "Parabola GNU/Linux"}
+      - {id: 419, cat: PC/ISO, desc: "Pardus"}
+      - {id: 2162, cat: PC/ISO, desc: "Parrot"}
+      - {id: 420, cat: PC/ISO, desc: "Parsix"}
+      - {id: 421, cat: PC/ISO, desc: "Partedmagic"}
+      - {id: 422, cat: PC/ISO, desc: "Pcbsd"}
+      - {id: 429, cat: PC/ISO, desc: "Pentoo"}
+      - {id: 430, cat: PC/ISO, desc: "Peppermint"}
+      - {id: 432, cat: PC/ISO, desc: "Pfsense"}
+      - {id: 2101, cat: PC/ISO, desc: "Pinguy OS"}
+      - {id: 2102, cat: PC/ISO, desc: "Pisi Linux"}
+      - {id: 441, cat: PC/ISO, desc: "Plamo Linux"}
+      - {id: 2103, cat: PC/ISO, desc: "Plop"}
+      - {id: 1235, cat: PC/ISO, desc: "Point Linux"}
+      - {id: 2207, cat: PC/ISO, desc: "Pop!_OS"}
+      - {id: 2106, cat: PC/ISO, desc: "Porteus"}
+      - {id: 2107, cat: PC/ISO, desc: "Porteus Kiosk"}
+      - {id: 2209, cat: PC/ISO, desc: "PrimTux"}
+      - {id: 2247, cat: PC/ISO, desc: "Project Trident"}
+      - {id: 1230, cat: PC/ISO, desc: "Proxmox"}
+      - {id: 452, cat: PC/ISO, desc: "Puppy"}
+      - {id: 2221, cat: PC/ISO, desc: "PureOS"}
+      - {id: 2108, cat: PC/ISO, desc: "Q4OS"}
+      - {id: 2109, cat: PC/ISO, desc: "Qubes"}
+      - {id: 455, cat: PC/ISO, desc: "Quirky"}
+      - {id: 2180, cat: PC/ISO, desc: "RancherOS"}
+      - {id: 2201, cat: PC/ISO, desc: "Raspberry Digital"}
+      - {id: 2199, cat: PC/ISO, desc: "Raspberry Slideshow"}
+      - {id: 2110, cat: PC/ISO, desc: "Raspbian"}
+      - {id: 2111, cat: PC/ISO, desc: "Reactos"}
+      - {id: 2232, cat: PC/ISO, desc: "RebeccaBlackOS"}
+      - {id: 2112, cat: PC/ISO, desc: "Rebellin"}
+      - {id: 2236, cat: PC/ISO, desc: "Reborn OS"}
+      - {id: 2274, cat: PC/ISO, desc: "Redcore Linux"}
+      - {id: 458, cat: PC/ISO, desc: "Redhat"}
+      - {id: 2202, cat: PC/ISO, desc: "Refracta"}
+      - {id: 2114, cat: PC/ISO, desc: "Rescatux"}
+      - {id: 2270, cat: PC/ISO, desc: "Resilient Linux"}
+      - {id: 2116, cat: PC/ISO, desc: "Robolinux"}
+      - {id: 1223, cat: PC/ISO, desc: "Rosa"}
+      - {id: 2117, cat: PC/ISO, desc: "Runtu"}
+      - {id: 2119, cat: PC/ISO, desc: "SELKS"}
+      - {id: 14, cat: PC/ISO, desc: "Sabayon"}
+      - {id: 2118, cat: PC/ISO, desc: "Salentos"}
+      - {id: 477, cat: PC/ISO, desc: "Salix"}
+      - {id: 482, cat: PC/ISO, desc: "Scientific Linux"}
+      - {id: 2250, cat: PC/ISO, desc: "Septor"}
+      - {id: 489, cat: PC/ISO, desc: "SharkLinux"}
+      - {id: 2121, cat: PC/ISO, desc: "Siduction"}
+      - {id: 2122, cat: PC/ISO, desc: "Simplicity Linux"}
+      - {id: 2164, cat: PC/ISO, desc: "Skywave Linux"}
+      - {id: 493, cat: PC/ISO, desc: "Slackel"}
+      - {id: 495, cat: PC/ISO, desc: "Slackware"}
+      - {id: 499, cat: PC/ISO, desc: "Slax"}
+      - {id: 2124, cat: PC/ISO, desc: "SmartOS"}
+      - {id: 2125, cat: PC/ISO, desc: "Smeserver"}
+      - {id: 505, cat: PC/ISO, desc: "Smoothwall Express"}
+      - {id: 506, cat: PC/ISO, desc: "Sms"}
+      - {id: 2126, cat: PC/ISO, desc: "Solus"}
+      - {id: 2127, cat: PC/ISO, desc: "Solydxk"}
+      - {id: 1236, cat: PC/ISO, desc: "SparkyLinux"}
+      - {id: 2225, cat: PC/ISO, desc: "Star"}
+      - {id: 2132, cat: PC/ISO, desc: "Steamos"}
+      - {id: 2174, cat: PC/ISO, desc: "Super Grub2 Disk"}
+      - {id: 2134, cat: PC/ISO, desc: "SuperX"}
+      - {id: 2189, cat: PC/ISO, desc: "SwagArch"}
+      - {id: 2267, cat: PC/ISO, desc: "Symphony OS"}
+      - {id: 2135, cat: PC/ISO, desc: "SystemRescueCD"}
+      - {id: 2188, cat: PC/ISO, desc: "TENS"}
+      - {id: 2136, cat: PC/ISO, desc: "Tails"}
+      - {id: 2170, cat: PC/ISO, desc: "TalkingArch"}
+      - {id: 542, cat: PC/ISO, desc: "Thinstation"}
+      - {id: 2279, cat: PC/ISO, desc: "TinyPaw Linux"}
+      - {id: 2138, cat: PC/ISO, desc: "Tinycore"}
+      - {id: 550, cat: PC/ISO, desc: "Trisquel"}
+      - {id: 2195, cat: PC/ISO, desc: "TrueOS"}
+      - {id: 2271, cat: PC/ISO, desc: "Tsurugi Linux"}
+      - {id: 2140, cat: PC/ISO, desc: "TurnKey"}
+      - {id: 2206, cat: PC/ISO, desc: "UBOS"}
+      - {id: 563, cat: PC/ISO, desc: "Ubuntu"}
+      - {id: 2198, cat: PC/ISO, desc: "Ubuntu Budgie"}
+      - {id: 2284, cat: PC/ISO, desc: "Ubuntu Cinnamon Rem"}
+      - {id: 2249, cat: PC/ISO, desc: "Ubuntu DesktopPack"}
+      - {id: 2143, cat: PC/ISO, desc: "Ubuntu Gnome"}
+      - {id: 2144, cat: PC/ISO, desc: "Ubuntu Kylin"}
+      - {id: 2145, cat: PC/ISO, desc: "Ubuntu Mate"}
+      - {id: 564, cat: PC/ISO, desc: "Ubuntu Studio"}
+      - {id: 2277, cat: PC/ISO, desc: "Ultimate Boot CD"}
+      - {id: 569, cat: PC/ISO, desc: "Ultimate Edition"}
+      - {id: 2222, cat: PC/ISO, desc: "Univention Corporate"}
+      - {id: 2149, cat: PC/ISO, desc: "Untangle NG Firewall"}
+      - {id: 2173, cat: PC/ISO, desc: "Uruk GNU/Linux"}
+      - {id: 579, cat: PC/ISO, desc: "Vector"}
+      - {id: 2282, cat: PC/ISO, desc: "Virage"}
+      - {id: 2151, cat: PC/ISO, desc: "Void Linux"}
+      - {id: 2152, cat: PC/ISO, desc: "Volumio"}
+      - {id: 2153, cat: PC/ISO, desc: "Voyager Live"}
+      - {id: 2154, cat: PC/ISO, desc: "VyOS"}
+      - {id: 2281, cat: PC/ISO, desc: "Web Security Dojo"}
+      - {id: 2246, cat: PC/ISO, desc: "Whonix"}
+      - {id: 2155, cat: PC/ISO, desc: "Wifislax"}
+      - {id: 2229, cat: PC/ISO, desc: "XiVa Studio"}
+      - {id: 2251, cat: PC/ISO, desc: "XigmaNAS"}
+      - {id: 607, cat: PC/ISO, desc: "Xubuntu"}
+      - {id: 612, cat: PC/ISO, desc: "Zen"}
+      - {id: 2159, cat: PC/ISO, desc: "Zentyal"}
+      - {id: 346, cat: PC/ISO, desc: "Zenwalk Linux"}
+      - {id: 2160, cat: PC/ISO, desc: "Zeroshell"}
+      - {id: 2193, cat: PC/ISO, desc: "Zevenet"}
+      - {id: 1233, cat: PC/ISO, desc: "Zorin"}
+
+    modes:
+      search: [q]
+
+  settings:
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "3"
+      options:
+        "3": "created"
+        "5": "seeders"
+        "4": "size"
+        "2": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "2"
+      options:
+        "2": "desc"
+        "1": "asc"
+
+  search:
+    paths:
+      # https://linuxtracker.org/index.php?page=torrents&search=&category=0&active=0
+      - path: index.php
+      - path: index.php
+        inputs:
+          pages: 2
+    inputs:
+      $raw: "category={{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{else}}0{{end}}&"
+      search: "{{ .Keywords }}"
+      page: torrents
+      active: 1
+      order: "{{ .Config.sort }}"
+      by: "{{ .Config.type }}"
+
+    rows:
+      selector: table.lista[width="100%"] > tbody > tr:has(a[href^="magnet:?xt="]):has(a[href^="index.php?page=torrents&category="])
+
+    fields:
+      category:
+        selector: a[href^="index.php?page=torrents&category="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: category
+      title:
+        selector: a[href^="index.php?page=torrent-details&id="][title]
+      details:
+        selector: a[href^="index.php?page=torrent-details&id="][title]
+        attribute: href
+      magnet-hash:
+        selector: a[href^="index.php?page=torrent-details&id="][title]
+        attribute: href
+        filters:
+          - name: querystring
+            args: id
+      magnet-name:
+        selector: a[href^="index.php?page=torrent-details&id="][title]
+        attribute: title
+        filters:
+          - name: replace
+            args: ["View details: ", ""]
+          - name: validfilename
+      download:
+        text: "magnet:?xt=urn:btih:{{ .Result.magnet-hash}}&dn={{ .Result.magnet-name}}&tr=udp://tracker.coppersurfer.tk:6969/announce&tr=udp://tracker.leechers-paradise.org:6969/announce&tr=udp://open.stealth.si:80/announce&tr=udp://exodus.desync.com:6969&tr=udp://p4p.arenabg.com:1337/announce&tr=udp://explodie.org:6969/announce&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://tracker.tiny-vps.com:6969/announce&tr=udp://open.demonii.si:1337/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.pirateparty.gr:6969/announce&tr=udp://ipv4.tracker.harry.lu:80/announce&tr=udp://tracker.cyberia.is:6969/announce&tr=udp://9.rarbg.to:2710/announce&tr=udp://denis.stalker.upeer.me:6969/announce"
+      banner:
+        selector: img[src*="/images/categories/"]
+        attribute: src
+      date:
+        selector: td:nth-child(2) > table > tbody > tr > td
+        remove: strong
+        filters:
+          - name: dateparse
+            args: "02/01/2006"
+      size:
+        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td
+        remove: strong
+      seeders:
+        selector: td:nth-child(2) > table > tbody > tr:nth-child(3) > td
+        remove: strong
+      leechers:
+        selector: td:nth-child(2) > table > tbody > tr:nth-child(4) > td
+        remove: strong
+      grabs:
+        selector: td:nth-child(2) > table > tbody > tr:nth-child(5) > td
+        remove: strong
+      description:
+         selector: td:nth-child(2)
+         remove: table
+      downloadvolumefactor:
+        text: 1
+      uploadvolumefactor:
+        text: 1
+# xbtit 2.3.0

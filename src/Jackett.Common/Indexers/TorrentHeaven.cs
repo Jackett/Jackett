@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -6,7 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using CsQuery;
+using AngleSharp.Dom;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -19,17 +20,17 @@ namespace Jackett.Common.Indexers
 {
     public class TorrentHeaven : BaseWebIndexer
     {
-        public override string[] LegacySiteLinks { get; protected set; } = new string[] { 
-            "https://torrentheaven.myfqdn.info/", 
-        }; 
+        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
+            "https://torrentheaven.myfqdn.info/",
+        };
 
-        private string IndexUrl { get { return SiteLink + "index.php"; } }
-        private string LoginCompleteUrl { get { return SiteLink + "index.php?strWebValue=account&strWebAction=login_complete&ancestry=verify"; } }
+        private string IndexUrl => SiteLink + "index.php";
+        private string LoginCompleteUrl => SiteLink + "index.php?strWebValue=account&strWebAction=login_complete&ancestry=verify";
 
         private new ConfigurationDataCaptchaLogin configData
         {
-            get { return (ConfigurationDataCaptchaLogin)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataCaptchaLogin)base.configData;
+            set => base.configData = value;
         }
 
         public TorrentHeaven(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
@@ -101,12 +102,13 @@ namespace Jackett.Common.Indexers
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
             var loginPage = await RequestStringWithCookies(IndexUrl, string.Empty);
-            CQ dom = loginPage.Content;
-            CQ qCaptchaImg = dom.Find("td.tablea > img").First();
-            if (qCaptchaImg.Length == 1)
+            var parser = new HtmlParser();
+            var dom = parser.ParseDocument(loginPage.Content);
+            var qCaptchaImg = dom.QuerySelector("td.tablea > img");
+            if (qCaptchaImg != null)
             {
-                var CaptchaUrl = SiteLink + qCaptchaImg.Attr("src");
-                var captchaImage = await RequestBytesWithCookies(CaptchaUrl, loginPage.Cookies);
+                var captchaUrl = SiteLink + qCaptchaImg.GetAttribute("src");
+                var captchaImage = await RequestBytesWithCookies(captchaUrl, loginPage.Cookies);
                 configData.CaptchaImage.Value = captchaImage.Content;
             }
             else
@@ -139,10 +141,10 @@ namespace Jackett.Common.Indexers
             var result = await RequestLoginAndFollowRedirect(IndexUrl, pairs, configData.CaptchaCookie.Value, true, null, IndexUrl, true);
             if (result.Content == null || (!result.Content.Contains("login_complete") && !result.Content.Contains("index.php?strWebValue=account&strWebAction=logout")))
             {
-                CQ dom = result.Content;
-                var errorMessage = dom["table > tbody > tr > td[valign=top][width=100%]"].Html();
-                if (errorMessage.Length == 0)
-                    errorMessage = result.Content;
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(result.Content);
+                var errorMessageEl = dom.QuerySelector("table > tbody > tr > td[valign=top][width=100%]");
+                var errorMessage = errorMessageEl != null ? errorMessageEl.InnerHtml : result.Content;
                 throw new ExceptionWithConfigData(errorMessage, configData);
             }
 
@@ -157,12 +159,12 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            TimeZoneInfo.TransitionTime startTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 3, 0, 0), 3, 5, DayOfWeek.Sunday);
-            TimeZoneInfo.TransitionTime endTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 4, 0, 0), 10, 5, DayOfWeek.Sunday);
-            TimeSpan delta = new TimeSpan(1, 0, 0);
-            TimeZoneInfo.AdjustmentRule adjustment = TimeZoneInfo.AdjustmentRule.CreateAdjustmentRule(new DateTime(1999, 10, 1), DateTime.MaxValue.Date, delta, startTransition, endTransition);
+            var startTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 3, 0, 0), 3, 5, DayOfWeek.Sunday);
+            var endTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 4, 0, 0), 10, 5, DayOfWeek.Sunday);
+            var delta = new TimeSpan(1, 0, 0);
+            var adjustment = TimeZoneInfo.AdjustmentRule.CreateAdjustmentRule(new DateTime(1999, 10, 1), DateTime.MaxValue.Date, delta, startTransition, endTransition);
             TimeZoneInfo.AdjustmentRule[] adjustments = { adjustment };
-            TimeZoneInfo germanyTz = TimeZoneInfo.CreateCustomTimeZone("W. Europe Standard Time", new TimeSpan(1, 0, 0), "(GMT+01:00) W. Europe Standard Time", "W. Europe Standard Time", "W. Europe DST Time", adjustments);
+            var germanyTz = TimeZoneInfo.CreateCustomTimeZone("W. Europe Standard Time", new TimeSpan(1, 0, 0), "(GMT+01:00) W. Europe Standard Time", "W. Europe Standard Time", "W. Europe DST Time", adjustments);
 
             var releases = new List<ReleaseInfo>();
 
@@ -190,42 +192,42 @@ namespace Jackett.Common.Indexers
             searchUrl += "?" + queryCollection.GetQueryString();
 
             var response = await RequestStringWithCookies(searchUrl);
-            var results = response.Content;
             var TitleRegexp = new Regex(@"^return buildTable\('(.*?)',\s+");
             try
             {
-                CQ dom = results;
-                var rows = dom["table.torrenttable > tbody > tr"];
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(response.Content);
+                var rows = dom.QuerySelectorAll("table.torrenttable > tbody > tr");
 
                 foreach (var row in rows.Skip(1))
                 {
                     var release = new ReleaseInfo();
                     release.MinimumRatio = 0.8;
                     release.MinimumSeedTime = 0;
-                    var qRow = row.Cq();
 
-                    var qDetailsLink = qRow.Find("a[href^=index.php?strWebValue=torrent&strWebAction=details]").First();
-                    release.Title = TitleRegexp.Match(qDetailsLink.Attr("onmouseover")).Groups[1].Value;
 
-                    var qCatLink = qRow.Find("a[href^=index.php?strWebValue=torrent&strWebAction=search&dir=]").First();
-                    var qDLLink = qRow.Find("a[href^=index.php?strWebValue=torrent&strWebAction=download&id=]").First();
-                    var qSeeders = qRow.Find("td.column1:eq(3)");
-                    var qLeechers = qRow.Find("td.column2:eq(3)");
-                    var qDateStr = qRow.Find("font:has(a)").First();
-                    var qSize = qRow.Find("td.column2[align=center]").First();
+                    var qDetailsLink = row.QuerySelector("a[href^=\"index.php?strWebValue=torrent&strWebAction=details\"]");
+                    release.Title = TitleRegexp.Match(qDetailsLink.GetAttribute("onmouseover")).Groups[1].Value;
 
-                    var catStr = qCatLink.Attr("href").Split('=')[3].Split('#')[0];
+                    var qCatLink = row.QuerySelector("a[href^=\"index.php?strWebValue=torrent&strWebAction=search&dir=\"]");
+                    var qDlLink = row.QuerySelector("a[href^=\"index.php?strWebValue=torrent&strWebAction=download&id=\"]");
+                    var qSeeders = row.QuerySelector("td.column1:nth-of-type(4)");
+                    var qLeechers = row.QuerySelector("td.column2:nth-of-type(4)");
+                    var qDateStr = row.QuerySelector("font:has(a)");
+                    var qSize = row.QuerySelector("td.column2[align=center]");
+
+                    var catStr = qCatLink.GetAttribute("href").Split('=')[3].Split('#')[0];
                     release.Category = MapTrackerCatToNewznab(catStr);
 
-                    release.Link = new Uri(SiteLink + qDLLink.Attr("href"));
-                    release.Comments = new Uri(SiteLink + qDetailsLink.Attr("href"));
+                    release.Link = new Uri(SiteLink + qDlLink.GetAttribute("href"));
+                    release.Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
                     release.Guid = release.Link;
 
                     var sizeStr = qSize.Text();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
 
-                    release.Seeders = ParseUtil.CoerceInt(qSeeders.Text());
-                    release.Peers = ParseUtil.CoerceInt(qLeechers.Text()) + release.Seeders;
+                    release.Seeders = ParseUtil.CoerceInt(qSeeders.TextContent);
+                    release.Peers = ParseUtil.CoerceInt(qLeechers.TextContent) + release.Seeders;
 
                     var dateStr = qDateStr.Text().Trim();
                     var dateStrParts = dateStr.Split();
@@ -237,15 +239,15 @@ namespace Jackett.Common.Indexers
                     else
                         dateGerman = DateTime.SpecifyKind(DateTime.ParseExact(dateStrParts[0] + dateStrParts[1], "dd.MM.yyyyHH:mm", CultureInfo.InvariantCulture), DateTimeKind.Unspecified);
 
-                    DateTime pubDateUtc = TimeZoneInfo.ConvertTimeToUtc(dateGerman, germanyTz);
+                    var pubDateUtc = TimeZoneInfo.ConvertTimeToUtc(dateGerman, germanyTz);
                     release.PublishDate = pubDateUtc.ToLocalTime();
 
-                    var grabs = qRow.Find("td:nth-child(7)").Text();
+                    var grabs = row.QuerySelector("td:nth-child(7)").TextContent;
                     release.Grabs = ParseUtil.CoerceInt(grabs);
 
-                    if (qRow.Find("img[src=\"themes/images/freeleech.png\"]").Length >= 1)
+                    if (row.QuerySelector("img[src=\"themes/images/freeleech.png\"]") != null)
                         release.DownloadVolumeFactor = 0;
-                    else if (qRow.Find("img[src=\"themes/images/DL50.png\"]").Length >= 1)
+                    else if (row.QuerySelector("img[src=\"themes/images/DL50.png\"]") != null)
                         release.DownloadVolumeFactor = 0.5;
                     else
                         release.DownloadVolumeFactor = 1;
@@ -257,7 +259,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results, ex);
+                OnParseError(response.Content, ex);
             }
 
             return releases;

@@ -44,15 +44,27 @@
     modes:
       search: [q]
 
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: info_results
+      type: info
+      label: Search results
+      default: "If you are getting the error <b>Login Failed, got redirected</b> then access the site with your browser and <b>mark as read</b> all PMs."
+
   login:
     path: takelogin.php
     method: post
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
-      use_ssl: "1"
-      perm_ssl: "1"
-      submitme: "X"
+      use_ssl: 1
+      perm_ssl: 1
+      submitme: X
     error:
       - selector: td.embedded:has(h2:contains("Oops"))
       - selector: td.embedded:has(h2:contains("failed"))
@@ -65,58 +77,38 @@
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Keywords }}"
-      searchin: "title"
-      incldead: "1"
+      searchin: title
+      incldead: 1
+
     rows:
       selector: tr.browse_color, tr.freeleech_color, tr[id^="kdescr"]
       after: 1
+
     fields: # some users (rank specific?) have an extra column (td:nth-child(4)) with bookmark features
-      banner:
-        selector: a[href^="details.php?id="][onmouseover]
-        attribute: onmouseover
-        filters:
-          - name: regexp
-            args: src=\'(.*?)\'
-      title:
-        selector: a[href^="details.php?id="][onmouseover]
-        attribute: onmouseover
-        filters:
-          - name: regexp
-            args: Tip\('<b>(.*?)</b>
       category:
         selector: a[href^="browse.php?cat="]
         attribute: href
         filters:
           - name: querystring
             args: cat
+      title:
+        selector: a[href^="details.php?id="][onmouseover]
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: Tip\('<b>(.*?)</b>
       details:
         selector: a[href^="details.php?id="][onmouseover]
         attribute: href
       download:
         selector: a[href^="download.php"]
         attribute: href
-      files:
-        selector: a[href^="filelist.php"]
-      size:
-        selector: td:nth-last-child(6)
-      grabs:
-        selector: td:nth-last-child(5)
+      banner:
+        selector: a[href^="details.php?id="][onmouseover]
+        attribute: onmouseover
         filters:
           - name: regexp
-            args: ([\d,]+)
-      seeders:
-        selector: td:nth-last-child(4)
-      leechers:
-        selector: td:nth-last-child(3)
-      date:
-        selector: td:nth-last-child(7)
-      downloadvolumefactor:
-        case:
-          "a.info > b:contains(\"[FREE]\")": "0"
-          "*": "1"
-      uploadvolumefactor:
-        case:
-          "*": "1"
+            args: src=\'(.*?)\'
       description:
         selector: a[href^="details.php?id="][onmouseover]
         attribute: onmouseover
@@ -130,7 +122,29 @@
           - name: prepend
             args: "{{ .Result.description }}<br>\n"
       description:
-        selector: td[colspan=13]
+        selector: td[colspan="13"]
         filters:
           - name: prepend
             args: "{{ .Result.description }}<br>\n"
+      files:
+        selector: td:nth-last-child(9)
+      date:
+        selector: td:nth-last-child(7)
+      size:
+        selector: td:nth-last-child(6)
+      grabs:
+        selector: td:nth-last-child(5)
+        filters:
+          - name: regexp
+            args: (\d+)
+      seeders:
+        selector: td:nth-last-child(4)
+      leechers:
+        selector: td:nth-last-child(3)
+      downloadvolumefactor:
+        case:
+          "a.info > b:contains(\"[FREE]\")": 0
+          "*": 1
+      uploadvolumefactor:
+        text: 1
+# U-232 V4

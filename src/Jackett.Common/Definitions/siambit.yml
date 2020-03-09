@@ -1,4 +1,4 @@
-﻿---
+---
   site: siambit
   name: SiamBIT
   description: "SiamBIT is a THAI Private Torrent Tracker for GENERAL"
@@ -191,3 +191,4 @@
           "td:nth-child(4):contains(\"x8\")": 8
           "td:nth-child(4):contains(\"x9\")": 9
           "*": 1
+# engine n/a

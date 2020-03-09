@@ -1,4 +1,4 @@
-﻿---
+---
   site: cartoonchaos
   name: CartoonChaos
   description: "CartoonChaos (CC) is a Private Torrent Tracker for ANIMATED MOVIES / TV"
@@ -6,7 +6,7 @@
   type: private
   encoding: UTF-8
   links:
-    - http://www.cartoonchaos.org/
+    - http://www.cartoonchaos.org/ # site does not support https NET::ERR_CERT_AUTHORITY_INVALID
 
   settings:
     - name: username

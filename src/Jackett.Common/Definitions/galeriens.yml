@@ -1,4 +1,4 @@
-﻿---
+---
   site: galeriens
   name: Galeriens
   description: "Galeriens is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
@@ -182,12 +182,19 @@
       movie-search: [q]
 
   settings:
-    - name: username
+#    - name: username
+#      type: text
+#      label: Username
+#    - name: password
+#      type: password
+#      label: Password
+    - name: cookie
       type: text
-      label: Username
-    - name: password
-      type: password
-      label: Password
+      label: Cookie
+    - name: info
+      type: info
+      label: How to get the Cookie
+      default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
     - name: torrentlanguage
       type: select
       label: Torrent Language
@@ -220,13 +227,16 @@
         "23": "Ukrainien"
 
   login:
-    path: TTV3/Connexion
-    method: post
+#    path: TTV3/Connexion
+#    method: post
+#    inputs:
+#      username: "{{ .Config.username }}"
+#      password: "{{ .Config.password }}"
+#    error:
+#      - selector: font[color="red"]
+    method: cookie
     inputs:
-      username: "{{ .Config.username }}"
-      password: "{{ .Config.password }}"
-    error:
-      - selector: font[color="red"]
+      cookie: "{{ .Config.cookie }}"
     test:
       path: TTV3/Bienvenue
       selector: a[href$="/TTV3/Deconnexion"]
@@ -246,7 +256,7 @@
       type: "tout"
       # searchin  nomtorrent (name) or desctorrent (descr)
       endroit: "nomtorrent"
-      # language 11 french 17 multi 
+      # language 11 french 17 multi
       langue: "{{ .Config.torrentlanguage }}"
       # freeleech oui (yes) non (no) peuimporte (ignore)
       tl: "peuimporte"
@@ -257,7 +267,7 @@
       category:
         selector: a[href*="/SousCategories/"]
         attribute: href
-        filters:        
+        filters:
           - name: regexp
             args: (\d+)$
       title:

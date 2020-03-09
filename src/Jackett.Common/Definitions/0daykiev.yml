@@ -1,4 +1,4 @@
-﻿---
+---
   site: 0daykiev
   name: 0day.kiev
   description: "0day.kiev.ua is a RUSSIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
@@ -66,7 +66,6 @@
       options:
         "desc": "desc"
         "asc": "asc"
-
 
   login:
     path: takelogin.php
@@ -183,3 +182,4 @@
           "*": 1
       uploadvolumefactor:
         text: 1
+# engine n/a

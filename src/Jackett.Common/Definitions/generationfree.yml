@@ -1,4 +1,4 @@
-﻿---
+---
   site: generationfree
   name: Generation-Free
   description: "Generation-Free is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
@@ -162,10 +162,10 @@
     path: account-login.php
     method: post
     inputs:
-      username: "{{ .Config.username }}"
+      login_name: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
     error:
-    - selector: td.tboxhead
+    - selector: td#msgError
     test:
       path: index.php
       selector: a[href="account-logout.php"]
@@ -241,3 +241,4 @@
       uploadvolumefactor:
         case:
           "*": 1
+# engine n/a

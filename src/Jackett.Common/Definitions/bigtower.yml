@@ -6,14 +6,18 @@
   type: private
   encoding: UTF-8
   links:
+    - https://bigtower.info/
+  legacylinks:
     - http://bigtower.info/
+  certificates:
+    - b486d17b6386dfe1778ea371d661f37554254cc6 # expired 19 Dec 2019
 
   caps:
     categorymappings:
 
       # Movies
       - {id: 11, cat: Movies/HD, desc: "DSS"}
-      - {id: 1, cat: Movies, desc: "Screener"}     
+      - {id: 1, cat: Movies, desc: "Screener"}
       - {id: 2, cat: Movies, desc: "DVDRip & BDRip"}
       - {id: 3, cat: Movies/BluRay, desc: "Bluray 1080p & 720p"}
       - {id: 5, cat: Movies/UHD, desc: "Ultra HD 4K"}
@@ -25,10 +29,10 @@
 
       # MUSIC
       - {id: 8, cat: Audio, desc: "Musica"}
-    
+
       # SOFTWARE
       - {id: 9, cat: PC/0day, desc: "Software"}
-    
+
       # PHONE
       - {id: 12, cat: PC/Phone-Other, desc: "Applicazioni"}
 

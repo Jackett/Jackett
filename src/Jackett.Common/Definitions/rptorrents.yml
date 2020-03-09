@@ -1,4 +1,4 @@
-﻿---
+---
   site: rptorrents
   name: RPTorrents
   description: "RPTorrents is a Private tracker for MOVIES / TV / GENERAL"
@@ -141,3 +141,4 @@
         case:
           img[src="images/t_extern.png"]: 0
           "*": 1
+# TorrentTrader-Ro 3.0

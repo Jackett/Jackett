@@ -18,12 +18,12 @@ namespace Jackett.Common.Indexers
     public class BroadcastTheNet : BaseWebIndexer
     {
         // Docs at http://apidocs.broadcasthe.net/docs.php
-        private string APIBASE = "https://api.broadcasthe.net";
+        private readonly string APIBASE = "https://api.broadcasthe.net";
 
         private new ConfigurationDataAPIKey configData
         {
-            get { return (ConfigurationDataAPIKey)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataAPIKey)base.configData;
+            set => base.configData = value;
         }
 
         public BroadcastTheNet(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)

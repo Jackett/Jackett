@@ -1,4 +1,4 @@
-﻿  site: cztorrent
+  site: cztorrent
   name: CzTorrent
   description: "CzTorrent is a Czech Semi-Private site for TV / MOVIES / GENERAL"
   language: cs-cz
@@ -155,8 +155,7 @@
       leechers:
         selector: td:nth-child(8) span
       downloadvolumefactor:
-        case:
-          "*": "1"
+        text: 1
       uploadvolumefactor:
-        case:
-          "*": "1"
+        text: 1
+# engine n/a

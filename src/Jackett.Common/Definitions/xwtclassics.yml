@@ -131,5 +131,5 @@
           img[src="pic/freeleech.png"]: 0
           "*": 1
       uploadvolumefactor:
-        case:
-          "*": 1
+        text: 1
+# engine n/a

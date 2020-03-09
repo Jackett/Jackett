@@ -1,4 +1,4 @@
-﻿---
+---
   site: thehorrorcharnel
   name: The Horror Charnel
   description: "The Horror Charnel (THC) is a Private Torrent Tracker for HORROR / CULT / SLEAZE / SCI FI MOVIES"
@@ -213,5 +213,5 @@
           img[src="free.gif"]: 0
           "*": 1
       uploadvolumefactor:
-        case:
-          "*": 1
+        text: 1
+# Btdev,U232

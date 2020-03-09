@@ -1,4 +1,4 @@
-﻿---
+---
   site: glodls
   name: GloDLS
   description: "GloDLS is a Public Torrent Tracker for MOVIES / TV / GENERAL"
@@ -75,8 +75,16 @@
     rows:
       selector: table.ttable_headinner tr.t-row
       after: 1
+
     fields:
       category:
+        optional: true
+        selector: td:nth-child(1):contains("-")
+        filters:
+          - name: replace #7113 provide default for missing category
+            args: ["-", "33"]
+      category:
+        optional: true
         selector: a[href^="/search.php?cat="]
         attribute: href
         filters:
@@ -106,3 +114,4 @@
         text: 0
       uploadvolumefactor:
         text: 1
+# engine n/a

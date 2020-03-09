@@ -1,4 +1,4 @@
-﻿---
+---
   site: torrent-explosiv
   name: Torrent-Explosiv
   description: "Torrent-Explosiv is a German Private site for TV / MOVIES / GENERAL"
@@ -143,6 +143,11 @@
             args: ["details.php?id=", "download.php?torrent="]
       title:
         selector: a.selection_a
+        filters:
+          - name: re_replace
+            args: ["^\\[[\\w ]*\\]\\s?", ""]
+          - name: re_replace
+            args: ["^\\[[\\w ]*\\]\\s?", ""]
       details:
         selector: a.selection_a
         attribute: href
@@ -266,3 +271,4 @@
       uploadvolumefactor:
         case:
           "*": 1
+# engine n/a

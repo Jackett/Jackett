@@ -1,4 +1,4 @@
-﻿---
+---
   site: ztracker
   name: Ztracker
   description: "Ztracker is a HUNGARIAN Private Torrent Tracker for 0DAY / GENERAL"
@@ -6,7 +6,7 @@
   type: semi-private
   encoding: ISO-8859-2
   links:
-    - http://ztracker.org/
+    - http://ztracker.org/ # site does not support https ERR_CONNECTION_REFUSED
 
   caps:
     categorymappings:
@@ -168,3 +168,4 @@
             args: ["Tegnap", "Yesterday"]
           - name: re_replace
             args: ["12:(\\d\\d) PM", "00:$1 PM"]
+# engine n/a

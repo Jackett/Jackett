@@ -1,28 +1,31 @@
-﻿using Jackett.Common.Models.Config;
-using Jackett.Common.Services;
-using Jackett.Common.Services.Interfaces;
-using Jackett.Common.Utils;
-using NLog;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.ComTypes;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Jackett.Common.Models.Config;
+using Jackett.Common.Services;
+using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
+using NLog;
 
 namespace Jackett.Tray
 {
     public partial class Main : Form
     {
-        private IProcessService processService;
-        private IServiceConfigService windowsService;
-        private ITrayLockService trayLockService;
-        private ISerializeService serializeService;
-        private IConfigurationService configurationService;
-        private ServerConfig serverConfig;
+        private readonly IProcessService processService;
+        private readonly IServiceConfigService windowsService;
+        private readonly ITrayLockService trayLockService;
+        private readonly ISerializeService serializeService;
+        private readonly IConfigurationService configurationService;
+        private readonly ServerConfig serverConfig;
         private Process consoleProcess;
-        private Logger logger;
+        private readonly Logger logger;
         private bool closeApplicationInitiated;
 
         public Main(string updatedVersion)
@@ -35,7 +38,7 @@ namespace Jackett.Tray
             WindowState = FormWindowState.Minimized;
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
 
-            RuntimeSettings runtimeSettings = new RuntimeSettings()
+            var runtimeSettings = new RuntimeSettings()
             {
                 CustomLogFileName = "TrayLog.txt"
             };
@@ -94,7 +97,7 @@ namespace Jackett.Tray
                 //We won't be able to start the tray app up again from the updater, as when running via a windows service there is no interaction with the desktop
                 //Fire off a console process that will start the tray 20 seconds later
 
-                string trayExePath = Assembly.GetEntryAssembly().Location;
+                var trayExePath = Assembly.GetEntryAssembly().Location;
 
                 var startInfo = new ProcessStartInfo()
                 {
@@ -114,33 +117,24 @@ namespace Jackett.Tray
 
         private void toolStripMenuItemWebUI_Click(object sender, EventArgs e)
         {
-            Process.Start("http://127.0.0.1:" + serverConfig.Port);
-        }
-
-        private void toolStripMenuItemShutdown_Click(object sender, EventArgs e)
-        {
-            CloseTrayApplication();
-        }
-
-        private void toolStripMenuItemAutoStart_CheckedChanged(object sender, EventArgs e)
-        {
-            AutoStart = toolStripMenuItemAutoStart.Checked;
-        }
-
-        private string ProgramTitle
-        {
-            get
+            var psi = new ProcessStartInfo
             {
-                return Assembly.GetExecutingAssembly().GetName().Name;
-            }
+                FileName = "http://127.0.0.1:" + serverConfig.Port,
+                UseShellExecute = true
+            };
+
+            Process.Start(psi);
         }
+
+        private void toolStripMenuItemShutdown_Click(object sender, EventArgs e) => CloseTrayApplication();
+
+        private void toolStripMenuItemAutoStart_CheckedChanged(object sender, EventArgs e) => AutoStart = toolStripMenuItemAutoStart.Checked;
+
+        private string ProgramTitle => Assembly.GetExecutingAssembly().GetName().Name;
 
         private bool AutoStart
         {
-            get
-            {
-                return File.Exists(ShortcutPath);
-            }
+            get => File.Exists(ShortcutPath);
             set
             {
                 if (value && !AutoStart)
@@ -154,25 +148,16 @@ namespace Jackett.Tray
             }
         }
 
-        public string ShortcutPath
-        {
-            get
-            {
-                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Startup), "Jackett.lnk");
-            }
-        }
+        public string ShortcutPath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Startup), "Jackett.lnk");
 
         private void CreateShortcut()
         {
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
-            {
-                var appPath = Assembly.GetExecutingAssembly().Location;
-                var shell = new IWshRuntimeLibrary.WshShell();
-                var shortcut = (IWshRuntimeLibrary.IWshShortcut)shell.CreateShortcut(ShortcutPath);
-                shortcut.Description = Assembly.GetExecutingAssembly().GetName().Name;
-                shortcut.TargetPath = appPath;
-                shortcut.Save();
-            }
+            var shellLink = (IShellLink)new ShellLink();
+            shellLink.SetDescription("Jackett");
+            shellLink.SetPath(Process.GetCurrentProcess().MainModule.FileName);
+            shellLink.SetWorkingDirectory(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName));
+            var persistFile = (IPersistFile)shellLink;
+            persistFile.Save(ShortcutPath, false);
         }
 
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
@@ -277,7 +262,7 @@ namespace Jackett.Tray
 
         private void StartConsoleApplication()
         {
-            string applicationFolder = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath);
+            var applicationFolder = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath);
 
             var exePath = Path.Combine(applicationFolder, "JackettConsole.exe");
 
@@ -296,10 +281,7 @@ namespace Jackett.Tray
             consoleProcess.ErrorDataReceived += ProcessErrorDataReceived;
         }
 
-        private void ProcessErrorDataReceived(object sender, DataReceivedEventArgs e)
-        {
-            logger.Error(e.Data);
-        }
+        private void ProcessErrorDataReceived(object sender, DataReceivedEventArgs e) => logger.Error(e.Data);
 
         private void ProcessExited(object sender, EventArgs e)
         {
@@ -308,6 +290,38 @@ namespace Jackett.Tray
                 logger.Info("Tray icon not responsible for process exit");
                 CloseTrayApplication();
             }
+        }
+
+        //Used for creating the Windows startup shortcut
+        [ComImport]
+        [Guid("00021401-0000-0000-C000-000000000046")]
+        internal class ShellLink
+        {
+        }
+
+        [ComImport]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        [Guid("000214F9-0000-0000-C000-000000000046")]
+        internal interface IShellLink
+        {
+            void GetPath([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszFile, int cchMaxPath, out IntPtr pfd, int fFlags);
+            void GetIDList(out IntPtr ppidl);
+            void SetIDList(IntPtr pidl);
+            void GetDescription([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszName, int cchMaxName);
+            void SetDescription([MarshalAs(UnmanagedType.LPWStr)] string pszName);
+            void GetWorkingDirectory([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszDir, int cchMaxPath);
+            void SetWorkingDirectory([MarshalAs(UnmanagedType.LPWStr)] string pszDir);
+            void GetArguments([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszArgs, int cchMaxPath);
+            void SetArguments([MarshalAs(UnmanagedType.LPWStr)] string pszArgs);
+            void GetHotkey(out short pwHotkey);
+            void SetHotkey(short wHotkey);
+            void GetShowCmd(out int piShowCmd);
+            void SetShowCmd(int iShowCmd);
+            void GetIconLocation([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszIconPath, int cchIconPath, out int piIcon);
+            void SetIconLocation([MarshalAs(UnmanagedType.LPWStr)] string pszIconPath, int iIcon);
+            void SetRelativePath([MarshalAs(UnmanagedType.LPWStr)] string pszPathRel, int dwReserved);
+            void Resolve(IntPtr hwnd, int fFlags);
+            void SetPath([MarshalAs(UnmanagedType.LPWStr)] string pszFile);
         }
     }
 }

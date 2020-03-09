@@ -1,4 +1,4 @@
-﻿---
+---
   site: btnext
   name: BTNext
   description: "BTNext (BTNT) is a PORTUGUESE Private Torrent Tracker for 0DAY / GENERAL"
@@ -6,7 +6,7 @@
   type: private
   encoding: UTF-8
   links:
-    - http://tracker.btnext.com/
+    - http://tracker.btnext.com/ # site forces http, https is not supported
 
   caps:
     categorymappings:
@@ -15,67 +15,76 @@
       - {id: 89, cat: Console, desc: "Games"}
       - {id: 87, cat: TV, desc: "Series"}
       - {id: 93, cat: Audio, desc: "Musica"}
+      - {id: 108, cat: Movies, desc: "ViP"}
       - {id: 1, cat: Movies, desc: "Movies"}
-      - {id: 70, cat: Movies/3D, desc: "3D"}
-      - {id: 71, cat: Movies/Sd, desc: "480p"}
-      - {id: 72, cat: Movies/BluRay, desc: "BD-R"}
-      - {id: 31, cat: Movies/HD, desc: "BDRIP/BRRip"}
-      - {id: 16, cat: Movies/SD, desc: "CAM"}
-      - {id: 74, cat: Movies/DVD, desc: "DvD-R"}
-      - {id: 17, cat: Movies/HD, desc: "HD"}
-      - {id: 91, cat: Movies/Other, desc: "Kids"}
-      - {id: 76, cat: Movies, desc: "Packs"}
-      - {id: 77, cat: Movies/WEBDL, desc: "WEB-DL"}
-      - {id: 14, cat: Movies/SD, desc: "DVDRip/XViD"}
-      - {id: 85, cat: Movies/DVD, desc: "Custom-DVDR"}
-      - {id: 96, cat: Movies/HD, desc: "4K"}
-      - {id: 6, cat: PC, desc: "Applications"}
-      - {id: 18, cat: PC/ISO, desc: "PC Applications"}
-      - {id: 19, cat: PC/Mac, desc: "Macintosh Applications"}
-      - {id: 34, cat: PC/ISO, desc: "Linux Applications"}
-      - {id: 7, cat: Audio, desc: "Music"}
-      - {id: 20, cat: Audio/Video, desc: "MVideo"}
-      - {id: 21, cat: Audio/MP3, desc: "Mp3"}
-      - {id: 33, cat: Audio/Other, desc: "Mp4"}
-      - {id: 32, cat: Audio/Lossless, desc: "FLAC"}
-      - {id: 2, cat: Console, desc: "Games"}
-      - {id: 78, cat: PC/Games, desc: "Linux"}
-      - {id: 79, cat: PC/Mac, desc: "MacOSX"}
-      - {id: 28, cat: Console/NDS, desc: "Nintendo DS"}
-      - {id: 27, cat: PC/Games, desc: "PC/Windows"}
-      - {id: 80, cat: Console/PS3, desc: "PS2"}
-      - {id: 81, cat: Console/PS3, desc: "PS3"}
-      - {id: 82, cat: Console/PS4, desc: "PS4"}
-      - {id: 83, cat: Console/PSP, desc: "PSP"}
-      - {id: 95, cat: Console/PSVita, desc: "PSVITA"}
-      - {id: 4, cat: Console/Wii, desc: "Wii"}
-      - {id: 26, cat: Console/Xbox360, desc: "XBOX360"}
-      - {id: 84, cat: Console/Xbox, desc: "XONE"}
+      - {id: 70, cat: Movies/3D, desc: "Movies 3D"}
+      - {id: 71, cat: Movies/SD, desc: "Movies 480p"}
+      - {id: 72, cat: Movies/BluRay, desc: "Movies BD-R"}
+      - {id: 31, cat: Movies/HD, desc: "Movies BDRIP/BRRip"}
+      - {id: 16, cat: Movies/SD, desc: "Movies CAM"}
+      - {id: 74, cat: Movies/DVD, desc: "Movies DvD-R"}
+      - {id: 76, cat: Movies, desc: "Movies Packs"}
+      - {id: 91, cat: Movies/Other, desc: "Movies Kids"}
+      - {id: 77, cat: Movies/WEBDL, desc: "Movies WEB-DL"}
+      - {id: 85, cat: Movies/DVD, desc: "Movies Custom-DVDR"}
+      - {id: 14, cat: Movies/SD, desc: "Movies DVDRip/XViD"}
+      - {id: 98, cat: Movies/Other, desc: "Movies Juvenil"}
+      - {id: 104, cat: Movies/UHD, desc: "Movies Bluray-UHD"}
+      - {id: 102, cat: Movies/HD, desc: "Movies HD-720p"}
+      - {id: 101, cat: Movies/HD, desc: "Movies HD-1080p"}
+      - {id: 103, cat: Movies/UHD, desc: "Movies HD-2160p"}
       - {id: 42, cat: TV, desc: "TV Series"}
       - {id: 45, cat: TV/Documentary, desc: "Documentaries"}
       - {id: 46, cat: TV/Sport, desc: "Sports"}
-      - {id: 47, cat: TV/HD, desc: "TV-Bluray"}
-      - {id: 48, cat: TV/SD, desc: "TV-Dvd-R"}
-      - {id: 49, cat: TV/SD, desc: "TV-DVDRiP"}
-      - {id: 50, cat: TV, desc: "TV-Packs"}
-      - {id: 92, cat: TV/Anime, desc: "TV-Kids"}
-      - {id: 52, cat: TV/SD, desc: "TV-SDx264"}
-      - {id: 53, cat: TV/WEB-DL, desc: "TV-WEB-DL"}
-      - {id: 55, cat: TV/HD, desc: "TV-X264"}
+      - {id: 47, cat: TV/HD, desc: "TV Bluray"}
+      - {id: 48, cat: TV/SD, desc: "TV Dvd-R"}
+      - {id: 49, cat: TV/SD, desc: "TV DVDRiP"}
+      - {id: 50, cat: TV, desc: "TV Packs"}
+      - {id: 92, cat: TV, desc: "TV Kids"}
+      - {id: 112, cat: TV, desc: "TV Juvenil"}
+      - {id: 52, cat: TV/SD, desc: "TV SDx264"}
+      - {id: 53, cat: TV/WEB-DL, desc: "TV WEB-DL"}
+      - {id: 55, cat: TV/HD, desc: "TV X264"}
       - {id: 56, cat: TV/SD, desc: "TV-XViD"}
-      - {id: 44, cat: TV, desc: "Miscellaneous"}
-      - {id: 51, cat: TV/Anime, desc: "Anime"}
-      - {id: 54, cat: Audio/Audiobook, desc: "Audiobook"}
-      - {id: 57, cat: Books, desc: "E-Books"}
-      - {id: 58, cat: Books/Comics, desc: "Comics"}
-      - {id: 59, cat: Books, desc: "Educational"}
-      - {id: 60, cat: Books, desc: "Magazines/Journals"}
+      - {id: 7, cat: Audio, desc: "Music"}
+      - {id: 20, cat: Audio/Video, desc: "Music MVideo"}
+      - {id: 21, cat: Audio/MP3, desc: "Music MP3"}
+      - {id: 33, cat: Audio/Other, desc: "Music MP4"}
+      - {id: 32, cat: Audio/Lossless, desc: "Music FLAC"}
+      - {id: 2, cat: Console, desc: "Games"}
+      - {id: 78, cat: PC/Games, desc: "Games Linux"}
+      - {id: 79, cat: PC/Mac, desc: "Games MacOSX"}
+      - {id: 28, cat: Console/NDS, desc: "Games Nintendo DS"}
+      - {id: 27, cat: PC/Games, desc: "Games PC/Windows"}
+      - {id: 80, cat: Console/PS3, desc: "Games PS2"}
+      - {id: 81, cat: Console/PS3, desc: "Games PS3"}
+      - {id: 82, cat: Console/PS4, desc: "Games PS4"}
+      - {id: 83, cat: Console/PSP, desc: "Games PSP"}
+      - {id: 95, cat: Console/PSVita, desc: "Games PSVITA"}
+      - {id: 4, cat: Console/Wii, desc: "Games Wii"}
+      - {id: 26, cat: Console/Xbox360, desc: "Games XBOX360"}
+      - {id: 84, cat: Console/Xbox, desc: "Games XONE"}
+      - {id: 6, cat: PC, desc: "Applications"}
+      - {id: 18, cat: PC/ISO, desc: "Applications PC"}
+      - {id: 19, cat: PC/Mac, desc: "Applications Macintosh"}
+      - {id: 34, cat: PC/ISO, desc: "Applications Linux"}
+      - {id: 44, cat: Other, desc: "Miscellaneous"}
+      - {id: 54, cat: Audio/Audiobook, desc: "Books Audiobook"}
+      - {id: 57, cat: Books, desc: "Books E-Books"}
+      - {id: 58, cat: Books/Comics, desc: "Books Comics"}
+      - {id: 59, cat: Books, desc: "Books Educational"}
+      - {id: 60, cat: Books, desc: "Books Magazines/Journals"}
       - {id: 61, cat: Other, desc: "Pics/Wallpapers"}
       - {id: 62, cat: PC/Phone-Android, desc: "Android"}
       - {id: 63, cat: PC/Phone-IOS, desc: "iOS"}
       - {id: 66, cat: PC/Phone-Other, desc: "WindowsPhone"}
       - {id: 90, cat: Other, desc: "GPS"}
       - {id: 68, cat: Other, desc: "Others"}
+      - {id: 100, cat: Other, desc: "Revistas"}
+      - {id: 109, cat: TV/Anime, desc: "Anime"}
+      - {id: 51, cat: TV/Anime, desc: "Anime Filmes"}
+      - {id: 99, cat: TV/Anime, desc: "Anime Hentai"}
+      - {id: 110, cat: TV/Anime, desc: "Anime TV Séries"}
       - {id: 41, cat: XXX, desc: "XXX"}
       - {id: 64, cat: XXX, desc: "XXX-Magazines"}
       - {id: 65, cat: XXX, desc: "XXX-Movies"}
@@ -85,6 +94,34 @@
     modes:
       search: [q]
       tv-search: [q, season, ep]
+      movie-search: [q]
+
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: info
+      type: info
+      label: Layout
+      default: "<ol><li>Only the English Classic profile is supported.<li>Make sure to set the <b>Torrent Listing (Lista de Torrents)</b> option in your profile to <b>Classic (Clássico)</b><li>Using the <i>Moderna</i> theme will prevent results.</ol>"
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "added"
+      options:
+        "added": "created"
+        "seeders": "seeders"
+        "size": "size"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
 
   login:
     path: ?p=home&pid=1
@@ -92,7 +129,7 @@
     form: form#loginbox_form
     submitpath: /ajax/login.php
     inputs:
-      action: "login"
+      action: login
       loginbox_membername: "{{ .Config.username }}"
       loginbox_password: "{{ .Config.password }}"
       loginbox_remember: 1
@@ -111,7 +148,7 @@
   search:
     paths:
       - path: /
-    keywordsfilters: 
+    keywordsfilters:
       - name: re_replace
         args: ["[^a-zA-Z0-9]+", "%25"]
     inputs:
@@ -121,6 +158,8 @@
       keywords: "{{ .Keywords }}"
       search_type: name
       searchin: title
+      "sortOptions[sortBy]": "{{ .Config.sort }}"
+      "sortOptions[sortOrder]": "{{ .Config.type }}"
     error:
       - selector: div.error:not(:contains("Não existem resultados encontrados.")):not(:contains("There are no results found."))
 

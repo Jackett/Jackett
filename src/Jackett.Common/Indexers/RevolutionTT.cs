@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using CsQuery;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -19,17 +19,17 @@ namespace Jackett.Common.Indexers
 {
     public class RevolutionTT : BaseWebIndexer
     {
-        private string LandingPageURL { get { return SiteLink + "login.php"; } }
-        private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
-        private string GetRSSKeyUrl { get { return SiteLink + "getrss.php"; } }
-        private string RSSUrl { get { return SiteLink + "rss.php?feed=dl&passkey="; } }
-        private string SearchUrl { get { return SiteLink + "browse.php"; } }
-        private string DetailsURL { get { return SiteLink + "details.php?id={0}&hit=1"; } }
+        private string LandingPageURL => SiteLink + "login.php";
+        private string LoginUrl => SiteLink + "takelogin.php";
+        private string GetRSSKeyUrl => SiteLink + "getrss.php";
+        private string RSSUrl => SiteLink + "rss.php?feed=dl&passkey=";
+        private string SearchUrl => SiteLink + "browse.php";
+        private string DetailsURL => SiteLink + "details.php?id={0}&hit=1";
 
         private new ConfigurationDataBasicLoginWithRSS configData
         {
-            get { return (ConfigurationDataBasicLoginWithRSS)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataBasicLoginWithRSS)base.configData;
+            set => base.configData = value;
         }
 
         public RevolutionTT(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)
@@ -197,9 +197,9 @@ namespace Jackett.Common.Indexers
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, homePageLoad.Cookies, true, null, LandingPageURL);
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("/logout.php"), () =>
             {
-                CQ dom = result.Content;
-                var messageEl = dom[".error"];
-                var errorMessage = messageEl.Text().Trim();
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(result.Content);
+                var errorMessage = dom.QuerySelector(".error").TextContent.Trim();
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
 
@@ -259,8 +259,7 @@ namespace Jackett.Common.Indexers
                     long? imdbID = null;
                     if (imdbMatch.Success)
                     {
-                        long l;
-                        if (long.TryParse(imdbMatch.Value, out l))
+                        if (long.TryParse(imdbMatch.Value, out var l))
                         {
                             imdbID = l;
                         }
@@ -318,51 +317,47 @@ namespace Jackett.Common.Indexers
 
                 try
                 {
-                    CQ dom = results.Content;
+                    var parser = new HtmlParser();
+                    var dom = parser.ParseDocument(results.Content);
+                    var rows = dom.QuerySelectorAll("#torrents-table > tbody > tr");
 
-                    //  table header is the first <tr> in table body, get all rows except this
-                    CQ qRows = dom["#torrents-table > tbody > tr:not(:first-child)"];
-
-                    foreach (var row in qRows)
+                    foreach (var row in rows.Skip(1))
                     {
                         var release = new ReleaseInfo();
-
-                        var qRow = row.Cq();
-
-                        var debug = qRow.Html();
 
                         release.MinimumRatio = 1;
                         release.MinimumSeedTime = 172800; // 48 hours
 
-                        CQ qLink = qRow.Find(".br_right > a").First();
-                        release.Guid = new Uri(SiteLink + qLink.Attr("href"));
-                        release.Comments = new Uri(SiteLink + qLink.Attr("href"));
-                        release.Title = qLink.Find("b").Text();
+                        var qLink = row.QuerySelector(".br_right > a");
+                        release.Guid = new Uri(SiteLink + qLink.GetAttribute("href"));
+                        release.Comments = new Uri(SiteLink + qLink.GetAttribute("href"));
+                        release.Title = qLink.QuerySelector("b").TextContent;
                         release.Description = release.Title;
 
-                        var releaseLinkURI = qRow.Find("td:nth-child(4) > a").Attr("href");
-                        release.Link = new Uri(SiteLink + releaseLinkURI);
-                        if (releaseLinkURI != null)
+                        var releaseLink = row.QuerySelector("td:nth-child(4) > a");
+                        if (releaseLink != null)
                         {
-                            var dateString = qRow.Find("td:nth-child(6) nobr")[0].TextContent.Trim();
+                            release.Link = new Uri(SiteLink + releaseLink.GetAttribute("href"));
+
+                            var dateString = row.QuerySelector("td:nth-child(6) nobr").TextContent.Trim();
                             //"2015-04-25 23:38:12"
                             //"yyyy-MMM-dd hh:mm:ss"
                             release.PublishDate = DateTime.ParseExact(dateString, "yyyy-MM-ddHH:mm:ss", CultureInfo.InvariantCulture);
 
-                            var sizeStr = qRow.Children().ElementAt(6).InnerHTML.Trim();
+                            var sizeStr = row.Children[6].InnerHtml.Trim();
                             sizeStr = sizeStr.Substring(0, sizeStr.IndexOf('<'));
                             release.Size = ReleaseInfo.GetBytes(sizeStr);
 
-                            release.Seeders = ParseUtil.CoerceInt(qRow.Find("td:nth-child(9)").Text());
-                            release.Peers = release.Seeders + ParseUtil.CoerceInt(qRow.Find("td:nth-child(10)").Text());
+                            release.Seeders = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(9)").TextContent);
+                            release.Peers = release.Seeders + ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(10)").TextContent);
 
-                            var grabsStr = qRow.Find("td:nth-child(8)").Text();
+                            var grabsStr = row.QuerySelector("td:nth-child(8)").TextContent;
                             release.Grabs = ParseUtil.GetLongFromString(grabsStr);
 
-                            var filesStr = qRow.Find("td:nth-child(7) > a").Text();
+                            var filesStr = row.QuerySelector("td:nth-child(7) > a").TextContent;
                             release.Files = ParseUtil.GetLongFromString(filesStr);
 
-                            var category = qRow.Find(".br_type > a").Attr("href").Replace("browse.php?cat=", string.Empty);
+                            var category = row.QuerySelector(".br_type > a").GetAttribute("href").Replace("browse.php?cat=", string.Empty);
                             release.Category = MapTrackerCatToNewznab(category);
                         }
                         releases.Add(release);

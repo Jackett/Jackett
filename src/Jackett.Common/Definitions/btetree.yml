@@ -6,6 +6,8 @@
   type: public
   encoding: UTF-8
   links:
+    - https://bt.etree.org/
+  legacylinks:
     - http://bt.etree.org/
 
   caps:
@@ -76,3 +78,4 @@
         text: 0
       uploadvolumefactor:
         text: 1
+# engine n/a

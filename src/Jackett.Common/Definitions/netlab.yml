@@ -1,4 +1,4 @@
-﻿---
+---
   site: netlab
   name: NetLab
   description: "NetLab is a RUSSIAN Private Torrent Tracker"
@@ -61,8 +61,10 @@
       search: "{{if .Query.Artist}}{{ .Query.Artist }}{{else}}{{ .Keywords }}{{end}}"
       # 0 active 1 incldead 2 onlydead
       incldead: 1
+
     rows:
       selector: table[border="1"][cellspacing="0"][cellpadding="5"] > tbody > tr:has(a[href^="details.php?id="])
+
     fields:
       category:
         selector: a[href^="browse.php?cat="]
@@ -109,3 +111,4 @@
           text: 1
       uploadvolumefactor:
           text: 1
+# engine n/a

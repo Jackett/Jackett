@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
@@ -59,6 +59,6 @@ namespace Jackett.Common.Indexers.Feeds
             return release;
         }
 
-        protected override Uri FeedUri => new Uri(SiteLink + "feed/api");
+        protected override Uri FeedUri => new Uri(SiteLink.Replace("://", "://feed.") + "api");
     }
 }

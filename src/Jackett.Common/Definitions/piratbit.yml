@@ -1,4 +1,4 @@
-﻿---
+---
   site: piratbit
   name: PiratBit
   description: "PirateBit is a RUSSIAN Public Torrent Tracker for MOVIES / TV / GENERAL"
@@ -6,7 +6,7 @@
   type: public
   encoding: UTF-8
   links:
-    - http://piratbit.top/
+    - http://piratbit.top/ # site forces http, https is not supported
   legacylinks:
     - https://pb.wtf/
     - https://piratbit.pw/
@@ -669,7 +669,7 @@
           - name: querystring
             args: f
       title:
-        selector: td a.genmed b
+        selector: td a.genmed
       details:
         selector: td a.genmed
         attribute: href
@@ -704,3 +704,4 @@
         text: 0
       uploadvolumefactor:
         text: 1
+# engine n/a

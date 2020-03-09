@@ -1,16 +1,19 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-  
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.1;net461</TargetFrameworks>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <OutputType>WinExe</OutputType>
     <AssemblyName>JackettService</AssemblyName>
     <ApplicationIcon>jackett.ico</ApplicationIcon>
+    <NoWarn />
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningsAsErrors />
   </PropertyGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\Jackett.Common\Jackett.Common.csproj" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <Content Include="jackett.ico" />
   </ItemGroup>

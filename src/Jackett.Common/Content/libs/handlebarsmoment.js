@@ -1,11 +1,11 @@
-﻿
+
 Handlebars.registerHelper('dateFormat', function (context, block) {
     if (window.moment) {
-        var f = block.hash.format || "MMM DD, YYYY hh:mm:ss A";
+        var f = block.hash.format || "YYYY-MM-DD HH:mm:ss";
         return moment(context).format(f); //had to remove Date(context)
     } else {
         return context;   //  moment plugin not available. return data as is.
-    };
+    }
 });
 
 Handlebars.registerHelper('jacketTimespan', function (context, block) {
@@ -22,7 +22,7 @@ Handlebars.registerHelper('jacketTimespan', function (context, block) {
     if (hours < 48) {
         return Math.round(hours) + 'h ago';
     }
-    
+
     var days = timeSpan.asDays();
     if (days < 365) {
         return Math.round(days) + 'd ago';

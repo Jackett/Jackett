@@ -1,4 +1,4 @@
-﻿---
+---
   site: estone
   name: eStone
   description: "eStone (XiDER, BeLoad) is a HUNGARIAN Private Torrent Tracker for 0DAY / GENERAL"
@@ -6,7 +6,7 @@
   type: private
   encoding: UTF-8
   links:
-    - http://estone.cc/
+    - http://estone.cc/ # site does not support https ERR_CONNECTION_REFUSED
 
   caps:
     categorymappings:
@@ -145,3 +145,4 @@
       description:
         selector: div:nth-child(2)
         remove: a
+# engine n/a

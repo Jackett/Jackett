@@ -1,4 +1,4 @@
-﻿---
+---
   site: leporno
   name: LePorno
   description: "LePorno is a Public Tracker for 3X"
@@ -6,7 +6,7 @@
   type: public
   encoding: UTF-8
   links:
-    - http://leporno.org/
+    - http://leporno.org/ # site does not support https ERR_SSL_VERSION_OR_CIPHER_MISMATCH
 
   caps:
     categorymappings:
@@ -102,3 +102,4 @@
         text: 0
       uploadvolumefactor:
         text: 1
+# engine n/a

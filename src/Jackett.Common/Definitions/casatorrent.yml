@@ -1,4 +1,4 @@
-﻿---
+---
   site: casatorrent
   name: Casa-Torrent
   description: "Casa-Torrent is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
@@ -120,9 +120,13 @@
       lang: 0
       sort: "{{ .Config.sort }}"
       order: "{{ .Config.type }}"
+    keywordsfilters:
+      - name: re_replace
+        args: ["(\\w+)", " +$1"] # prepend + to each word
 
     rows:
       selector: table.ttable_headinner > tbody > tr.t-row
+
     fields:
       title:
         selector: a[href^="torrents-details.php?id="] b
@@ -168,3 +172,4 @@
       uploadvolumefactor:
         case:
           "*": 1
+# engine n/a

@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using CsQuery;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
@@ -19,16 +19,16 @@ namespace Jackett.Common.Indexers
 {
     public class SceneTime : BaseWebIndexer
     {
-        private string StartPageUrl { get { return SiteLink + "login.php"; } }
-        private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
-        private string SearchUrl { get { return SiteLink + "browse.php"; } }
-        private string DownloadUrl { get { return SiteLink + "download.php/{0}/download.torrent"; } }
+        private string StartPageUrl => SiteLink + "login.php";
+        private string LoginUrl => SiteLink + "takelogin.php";
+        private string SearchUrl => SiteLink + "browse.php";
+        private string DownloadUrl => SiteLink + "download.php/{0}/download.torrent";
 
 
         private new ConfigurationDataSceneTime configData
         {
-            get { return (ConfigurationDataSceneTime)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataSceneTime)base.configData;
+            set => base.configData = value;
         }
 
         public SceneTime(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
@@ -107,23 +107,26 @@ namespace Jackett.Common.Indexers
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
             var loginPage = await RequestStringWithCookies(StartPageUrl, string.Empty);
-            CQ cq = loginPage.Content;
-            var result = this.configData;
-            result.Captcha.Version = "2";
-            CQ recaptcha = cq.Find(".g-recaptcha").Attr("data-sitekey");
-            if (recaptcha.Length != 0)
+            var parser = new HtmlParser();
+            var dom = parser.ParseDocument(loginPage.Content);
+            var recaptcha = dom.QuerySelector(".g-recaptcha");
+            if (recaptcha != null)
             {
+                var result = configData;
+                result.Captcha.Version = "2";
                 result.CookieHeader.Value = loginPage.Cookies;
-                result.Captcha.SiteKey = cq.Find(".g-recaptcha").Attr("data-sitekey");
+                result.Captcha.SiteKey = recaptcha.GetAttribute("data-sitekey");
                 return result;
             }
             else
             {
-                var stdResult = new ConfigurationDataBasicLogin();
-                stdResult.SiteLink.Value = configData.SiteLink.Value;
-                stdResult.Username.Value = configData.Username.Value;
-                stdResult.Password.Value = configData.Password.Value;
-                stdResult.CookieHeader.Value = loginPage.Cookies;
+                var stdResult = new ConfigurationDataBasicLogin
+                {
+                    SiteLink = {Value = configData.SiteLink.Value},
+                    Username = {Value = configData.Username.Value},
+                    Password = {Value = configData.Password.Value},
+                    CookieHeader = {Value = loginPage.Cookies}
+                };
                 return stdResult;
             }
         }
@@ -143,10 +146,8 @@ namespace Jackett.Common.Indexers
                 try
                 {
                     var results = await PerformQuery(new TorznabQuery());
-                    if (results.Count() == 0)
-                    {
+                    if (!results.Any())
                         throw new Exception("Your cookie did not work");
-                    }
 
                     IsConfigured = true;
                     SaveConfig();
@@ -162,8 +163,9 @@ namespace Jackett.Common.Indexers
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl);
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
             {
-                CQ dom = result.Content;
-                var errorMessage = dom["td.text"].Text().Trim();
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(result.Content);
+                var errorMessage = dom.QuerySelector("td.text").TextContent.Trim();
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
 
@@ -172,89 +174,87 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            var qParams = new NameValueCollection();
-            qParams.Add("cata", "yes");
-            qParams.Add("sec", "jax");
-
-            List<string> catList = MapTorznabCapsToTrackers(query);
-            foreach (string cat in catList)
+            var qParams = new NameValueCollection
             {
+                {"cata", "yes"},
+                {"sec", "jax"}
+            };
+
+            var catList = MapTorznabCapsToTrackers(query);
+            foreach (var cat in catList)
                 qParams.Add("c" + cat, "1");
-            }
 
             if (!string.IsNullOrEmpty(query.SanitizedSearchTerm))
-            {
                 qParams.Add("search", query.GetQueryString());
-            }
 
             // If Only Freeleech Enabled
             if (configData.Freeleech.Value)
-            {
                 qParams.Add("freeleech", "on");
-            }
+
             var searchUrl = SearchUrl + "?" + qParams.GetQueryString();
 
             var results = await RequestStringWithCookies(searchUrl);
-            List<ReleaseInfo> releases = ParseResponse(query, results.Content);
+            var releases = ParseResponse(query, results.Content);
 
             return releases;
         }
 
-        public List<ReleaseInfo> ParseResponse(TorznabQuery query, string htmlResponse)
+        private List<ReleaseInfo> ParseResponse(TorznabQuery query, string htmlResponse)
         {
-            List<ReleaseInfo> releases = new List<ReleaseInfo>();
+            var releases = new List<ReleaseInfo>();
 
             try
             {
-                CQ dom = htmlResponse;
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(htmlResponse);
 
-                List<string> headerColumns = dom["table[class*='movehere']"].First().Find("tbody > tr > td[class='cat_Head']").Select(x => x.Cq().Text()).ToList();
-                int categoryIndex = headerColumns.FindIndex(x => x.Equals("Type"));
-                int nameIndex = headerColumns.FindIndex(x => x.Equals("Name"));
-                int sizeIndex = headerColumns.FindIndex(x => x.Equals("Size"));
-                int seedersIndex = headerColumns.FindIndex(x => x.Equals("Seeders"));
-                int leechersIndex = headerColumns.FindIndex(x => x.Equals("Leechers"));
+                var table = dom.QuerySelector("table.movehere");
+                if (table == null)
+                    return releases; // no results
 
-                var rows = dom["tr.browse"];
+                var headerColumns = table.QuerySelectorAll("tbody > tr > td.cat_Head")
+                                         .Select(x => x.TextContent).ToList();
+                var categoryIndex = headerColumns.FindIndex(x => x.Equals("Type"));
+                var nameIndex = headerColumns.FindIndex(x => x.Equals("Name"));
+                var sizeIndex = headerColumns.FindIndex(x => x.Equals("Size"));
+                var seedersIndex = headerColumns.FindIndex(x => x.Equals("Seeders"));
+                var leechersIndex = headerColumns.FindIndex(x => x.Equals("Leechers"));
+
+                var rows = dom.QuerySelectorAll("tr.browse");
                 foreach (var row in rows)
                 {
                     var release = new ReleaseInfo();
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800; // 48 hours
 
-                    var categoryCol = row.ChildElements.ElementAt(categoryIndex);
-                    string catLink = categoryCol.Cq().Find("a").Attr("href");
-                    if (catLink != null)
+                    var qCatLink = row.Children[categoryIndex].QuerySelector("a");
+                    if (qCatLink != null)
                     {
-                        string catId = new Regex(@"\?cat=(\d*)").Match(catLink).Groups[1].ToString().Trim();
+                        var catId = new Regex(@"\?cat=(\d*)").Match(qCatLink.GetAttribute("href")).Groups[1].ToString().Trim();
                         release.Category = MapTrackerCatToNewznab(catId);
                     }
 
-                    var descCol = row.ChildElements.ElementAt(nameIndex);
-                    var qDescCol = descCol.Cq();
-                    var qLink = qDescCol.Find("a");
-                    release.Title = qLink.Text();
+                    var qDescCol = row.Children[nameIndex];
+                    var qLink = qDescCol.QuerySelector("a");
+                    release.Title = qLink.TextContent;
                     if (!query.MatchQueryStringAND(release.Title))
                         continue;
 
-                    release.Comments = new Uri(SiteLink + "/" + qLink.Attr("href"));
+                    release.Comments = new Uri(SiteLink + "/" + qLink.GetAttribute("href"));
                     release.Guid = release.Comments;
-                    var torrentId = qLink.Attr("href").Split('=')[1];
+
+                    var torrentId = qLink.GetAttribute("href").Split('=')[1];
                     release.Link = new Uri(string.Format(DownloadUrl, torrentId));
 
-                    release.PublishDate = DateTimeUtil.FromTimeAgo(descCol.ChildNodes.Last().InnerText);
+                    release.PublishDate = DateTimeUtil.FromTimeAgo(qDescCol.ChildNodes.Last().TextContent);
 
-                    var sizeStr = row.ChildElements.ElementAt(sizeIndex).Cq().Text();
+                    var sizeStr = row.Children[sizeIndex].TextContent;
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
 
-                    release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(seedersIndex).Cq().Text().Trim());
-                    release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(leechersIndex).Cq().Text().Trim()) + release.Seeders;
+                    release.Seeders = ParseUtil.CoerceInt(row.Children[seedersIndex].TextContent.Trim());
+                    release.Peers = ParseUtil.CoerceInt(row.Children[leechersIndex].TextContent.Trim()) + release.Seeders;
 
-                    if (row.Cq().Find("font > b:contains(Freeleech)").Length >= 1)
-                        release.DownloadVolumeFactor = 0;
-                    else
-                        release.DownloadVolumeFactor = 1;
-
+                    release.DownloadVolumeFactor = row.QuerySelector("font > b:contains(Freeleech)") != null ? 0 : 1;
                     release.UploadVolumeFactor = 1;
 
                     releases.Add(release);

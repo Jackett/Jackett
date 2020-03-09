@@ -1,0 +1,250 @@
+---
+  site: lechaudron
+  name: LeChaudron
+  description: "Le Chaudron is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
+  language: fr-fr
+  type: private
+  encoding: UTF-8
+  links:
+    - https://lechaudron.nl/
+
+  caps:
+    categorymappings:
+      - {id: 1, cat: XXX, desc: "Adultes - BD Erotique"}
+      - {id: 4, cat: XXX, desc: "Adultes - Doujin (Manga X)"}
+      - {id: 2, cat: XXX, desc: "Adultes - eBook XXX"}
+      - {id: 3, cat: XXX, desc: "Adultes - Film XXX"}
+      - {id: 5, cat: XXX, desc: "Adultes - Hentai"}
+      - {id: 6, cat: TV/Anime, desc: "Animations - 3D"}
+      - {id: 7, cat: TV/Anime, desc: "Animations - 4K Light"}
+      - {id: 8, cat: TV/Anime, desc: "Animations - 4K UHD"}
+      - {id: 9, cat: TV/Anime, desc: "Animations - BDRIP-BRRIP"}
+      - {id: 10, cat: TV/Anime, desc: "Animations - BluRay-R"}
+      - {id: 11, cat: TV/Anime, desc: "Animations - DVD-R"}
+      - {id: 12, cat: TV/Anime, desc: "Animations - DVDRIP"}
+      - {id: 13, cat: TV/Anime, desc: "Animations - Film Jap-Anim"}
+      - {id: 14, cat: TV/Anime, desc: "Animations - HD 1080P"}
+      - {id: 15, cat: TV/Anime, desc: "Animations - HD 720p"}
+      - {id: 16, cat: TV/Anime, desc: "Animations - HDRIP"}
+      - {id: 17, cat: TV/Anime, desc: "Animations - HDTV"}
+      - {id: 18, cat: TV/Anime, desc: "Animations - HDTV 1080p"}
+      - {id: 19, cat: TV/Anime, desc: "Animations - HDTV 720p"}
+      - {id: 20, cat: TV/Anime, desc: "Animations - MHD 1080p"}
+      - {id: 21, cat: TV/Anime, desc: "Animations - MHD 720p"}
+      - {id: 22, cat: TV/Anime, desc: "Animations - REMUX"}
+      - {id: 23, cat: TV/Anime, desc: "Animations - Serie Animee"}
+      - {id: 24, cat: TV/Anime, desc: "Animations - Serie Jap-Anim"}
+      - {id: 25, cat: TV/Anime, desc: "Animations - TVRIP"}
+      - {id: 26, cat: TV/Anime, desc: "Animations - WEB-DL"}
+      - {id: 27, cat: TV/Anime, desc: "Animations - WEB-DL 1080p"}
+      - {id: 28, cat: TV/Anime, desc: "Animations - WEB-DL 720p"}
+      - {id: 29, cat: TV/Anime, desc: "Animations - WEBRIP"}
+      - {id: 31, cat: TV/Documentary, desc: "Documentaires - Emission TV"}
+      - {id: 32, cat: TV/Documentary, desc: "Documentaires - Film Documentaire"}
+      - {id: 33, cat: TV/Documentary, desc: "Documentaires - Spectacle"}
+      - {id: 34, cat: TV/Documentary, desc: "Documentaires - Sport"}
+      - {id: 41, cat: Movies/3D, desc: "Films - 3D"}
+      - {id: 42, cat: Movies/UHD, desc: "Films - 4K Light"}
+      - {id: 43, cat: Movies/UHD, desc: "Films - 4K UHD"}
+      - {id: 44, cat: Movies/BluRay, desc: "Films - BDRIP-BRRIP"}
+      - {id: 45, cat: Movies/BluRay, desc: "Films - BluRay-R"}
+      - {id: 46, cat: Movies, desc: "Films - Coffret"}
+      - {id: 47, cat: Movies/DVD, desc: "Films - DVD-R"}
+      - {id: 48, cat: Movies/DVD, desc: "Films - DVDRIP"}
+      - {id: 49, cat: Movies/HD, desc: "Films - HD 1080P"}
+      - {id: 50, cat: Movies/HD, desc: "Films - HD 720p"}
+      - {id: 51, cat: Movies/HD, desc: "Films - HDRIP"}
+      - {id: 52, cat: Movies/HD, desc: "Films - HDTV"}
+      - {id: 53, cat: Movies/HD, desc: "Films - HDTV 1080p"}
+      - {id: 54, cat: Movies/HD, desc: "Films - HDTV 720p"}
+      - {id: 55, cat: Movies/HD, desc: "Films - MHD 1080p"}
+      - {id: 56, cat: Movies/HD, desc: "Films - MHD 720p"}
+      - {id: 57, cat: Movies, desc: "Films - REMUX"}
+      - {id: 58, cat: Movies, desc: "Films - TVRIP"}
+      - {id: 59, cat: Movies/WEBDL, desc: "Films - WEB-DL"}
+      - {id: 60, cat: Movies/WEBDL, desc: "Films - WEB-DL 1080p"}
+      - {id: 61, cat: Movies/WEBDL, desc: "Films - WEB-DL 720p"}
+      - {id: 62, cat: Movies/WEBDL, desc: "Films - WEBRIP"}
+      - {id: 64, cat: Console/3DS, desc: "Jeux - 3DS-DS"}
+      - {id: 65, cat: PC/Phone-IOS, desc: "Jeux - IOS-OSX"}
+      - {id: 66, cat: PC/Games, desc: "Jeux - PC"}
+      - {id: 67, cat: Console/PSP, desc: "Jeux - PS-PSP-X"}
+      - {id: 68, cat: Console/Wii, desc: "Jeux - Wii - Wii-U"}
+      - {id: 69, cat: Console/Xbox, desc: "Jeux - XBOX"}
+      - {id: 35, cat: Audio/Audiobook, desc: "Livres - Audio-Book"}
+      - {id: 36, cat: Books, desc: "Livres - BD"}
+      - {id: 37, cat: Books/Magazines, desc: "Livres - Magazine"}
+      - {id: 38, cat: Books/Comics, desc: "Livres - MANGAS"}
+      - {id: 39, cat: Books, desc: "Livres - Presse"}
+      - {id: 40, cat: Books/Ebook, desc: "Livres - Roman"}
+      - {id: 70, cat: PC/Phone-Android, desc: "Logiciels - ANDROID"}
+      - {id: 71, cat: PC/Mac, desc: "Logiciels - APPLE"}
+      - {id: 72, cat: PC/Phone-IOS, desc: "Logiciels - IPHONE"}
+      - {id: 73, cat: PC, desc: "Logiciels - LINUX"}
+      - {id: 74, cat: PC/0day, desc: "Logiciels - WINDOWS"}
+      - {id: 75, cat: TV, desc: "Pack - 3D"}
+      - {id: 76, cat: TV/UHD, desc: "Pack - 4K Light"}
+      - {id: 77, cat: TV/UHD, desc: "Pack - 4KUHD"}
+      - {id: 78, cat: TV/HD, desc: "Pack - BDRIP-BRRIP"}
+      - {id: 79, cat: TV/HD, desc: "Pack - BluRay-R"}
+      - {id: 80, cat: TV/SD, desc: "Pack - DVD-R"}
+      - {id: 81, cat: TV/SD, desc: "Pack - DVDRIP"}
+      - {id: 82, cat: TV/HD, desc: "Pack - HD 1080P"}
+      - {id: 83, cat: TV/HD, desc: "Pack - HD 720p"}
+      - {id: 84, cat: TV/HD, desc: "Pack - HDRIP"}
+      - {id: 85, cat: TV/HD, desc: "Pack - HDTV"}
+      - {id: 86, cat: TV/HD, desc: "Pack - HDTV 1080p"}
+      - {id: 87, cat: TV/HD, desc: "Pack - HDTV 720p"}
+      - {id: 88, cat: TV/HD, desc: "Pack - MHD 1080p"}
+      - {id: 89, cat: TV/HD, desc: "Pack - MHD 720p"}
+      - {id: 90, cat: TV, desc: "Pack - REMUX"}
+      - {id: 91, cat: TV, desc: "Pack - TVRIP"}
+      - {id: 92, cat: TV/WEB-DL, desc: "Pack - WEB-DL"}
+      - {id: 93, cat: TV/WEB-DL, desc: "Pack - WEB-DL 1080p"}
+      - {id: 94, cat: TV/WEB-DL, desc: "Pack - WEB-DL 720p"}
+      - {id: 95, cat: TV/WEB-DL, desc: "Pack - WEBRIP"}
+      - {id: 97, cat: TV, desc: "Series - 3D"}
+      - {id: 98, cat: TV/UHD, desc: "Series - 4K Light"}
+      - {id: 99, cat: TV/UHD, desc: "Series - 4KUHD"}
+      - {id: 100, cat: TV/HD, desc: "Series - BDRIP-BRRIP"}
+      - {id: 101, cat: TV/HD, desc: "Series - BluRay-R"}
+      - {id: 102, cat: TV/SD, desc: "Series - DVD-R"}
+      - {id: 103, cat: TV/SD, desc: "Series - DVDRIP"}
+      - {id: 104, cat: TV/HD, desc: "Series - HD 1080P"}
+      - {id: 105, cat: TV/HD, desc: "Series - HD 720p"}
+      - {id: 106, cat: TV/HD, desc: "Series - HDRIP"}
+      - {id: 107, cat: TV/HD, desc: "Series - HDTV"}
+      - {id: 108, cat: TV/HD, desc: "Series - HDTV 1080p"}
+      - {id: 109, cat: TV/HD, desc: "Series - HDTV 720p"}
+      - {id: 110, cat: TV/HD, desc: "Series - MHD 1080p"}
+      - {id: 111, cat: TV/HD, desc: "Series - MHD 720p"}
+      - {id: 112, cat: TV, desc: "Series - REMUX"}
+      - {id: 113, cat: TV, desc: "Series - TVRIP"}
+      - {id: 114, cat: TV/WEB-DL, desc: "Series - WEB-DL"}
+      - {id: 115, cat: TV/WEB-DL, desc: "Series - WEB-DL 1080p"}
+      - {id: 116, cat: TV/WEB-DL, desc: "Series - WEB-DL 720p"}
+      - {id: 117, cat: TV/WEB-DL, desc: "Series - WEBRIP"}
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+#  login:
+#    path: TTV3/Connexion
+#    method: post
+#    inputs:
+#      username: "{{ .Config.username }}"
+#      password: "{{ .Config.password }}"
+#    error:
+#      - selector: font[color="red"]
+#    test:
+#      path: TTV3/Bienvenue
+#      selector: a[href$="/TTV3/Deconnexion"]
+
+  settings:
+    - name: cookie
+      type: text
+      label: Cookie
+    - name: info
+      type: info
+      label: How to get the Cookie
+      default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find 'cookie:' in the <b>Request Headers</b> section<li>Copy & paste the whole cookie string to here.</ol>"
+
+  login:
+    method: cookie
+    inputs:
+      cookie: "{{ .Config.cookie }}"
+    test:
+      path: TTV3/Bienvenue
+      selector: a[href$="/TTV3/Deconnexion"]
+
+  download:
+    selector: a[href*="/Telechargement/"]
+    attribute: href
+
+  search:
+    paths:
+    # https://lechaudron.nl/TTV3/Torrents/Recherche?recherche=viva+maria&type=exacte&endroit=nomtorrent&langue=0&tl=peuimporte
+    # categories for searching are unsupported
+      - path: TTV3/Torrents/Recherche
+    inputs:
+      recherche: "{{ .Keywords }}"
+      # searchtype un (one word) tout (all words) exacte (exact expression)
+      type: tout
+      # searchin  nomtorrent (name) or desctorrent (descr)
+      endroit: nomtorrent
+      # language 0 all 2 english 
+      langue: 0
+      # freeleech oui (yes) non (no) peuimporte (ignore)
+      tl: peuimporte
+
+    rows:
+      selector: tr:has(a[onmouseover])
+
+    fields:
+      category:
+        selector: a[href*="/SousCategories/"]
+        attribute: href
+        filters:        
+          - name: regexp
+            args: (\d+)$
+      title:
+        selector: a[href*="/SousCategories/"]
+        attribute: alt
+        filters:
+          - name: regexp
+            args: "^..(.+)"
+      details:
+        selector: a[onmouseover]
+        attribute: href
+      download:
+        selector: a[onmouseover]
+        attribute: href
+      banner:
+        selector: a[onmouseover]
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: "src= (.*?)><"
+      date:
+        selector: a[onmouseover] font[color="#F2F2F2"]
+        filters:
+          - name: regexp
+            args: "Il y a (.*?)\\s-" 
+          - name: replace
+            args: ["heures", "hours"]
+          - name: replace
+            args: ["heure", "hour"]
+          - name: replace
+            args: ["Jours", "days"]
+          - name: replace
+            args: ["Jour", "day"]
+          - name: replace
+            args: ["Semaines", "weeks"]
+          - name: replace
+            args: ["Semaine", "week"]
+          - name: replace
+            args: ["Mois", "months"]
+          - name: replace
+            args: ["Ans", "years"]
+          - name: replace
+            args: ["An", "year"]
+          - name: append
+            args: " ago"
+      size:
+        selector: td:nth-last-child(5)
+      grabs:
+        selector: td:nth-last-child(4)
+      seeders:
+        selector: td:nth-last-child(3)
+      leechers:
+        selector: td:nth-last-child(2)
+      downloadvolumefactor:
+        case:
+          img[src$="/images/Torrents/TLibre.png"]: 0
+          img[src$="/images/Torrents/freeleech.png"]: 0
+          "*": 1
+      uploadvolumefactor:
+        text: 1
+# TT3.00 FRENCH

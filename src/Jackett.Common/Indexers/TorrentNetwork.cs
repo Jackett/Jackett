@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Text;
@@ -17,18 +17,18 @@ namespace Jackett.Common.Indexers
 {
     public class TorrentNetwork : BaseWebIndexer
     {
-        private string APIUrl { get { return SiteLink + "api/"; } }
+        private string APIUrl => SiteLink + "api/";
         private string passkey;
 
-        private Dictionary<string, string> APIHeaders = new Dictionary<string, string>()
+        private readonly Dictionary<string, string> APIHeaders = new Dictionary<string, string>()
         {
             {"Content-Type", "application/json"},
         };
 
         private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
         {
-            get { return (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData;
+            set => base.configData = value;
         }
 
         public TorrentNetwork(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)

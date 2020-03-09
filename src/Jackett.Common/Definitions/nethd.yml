@@ -6,7 +6,7 @@
   type: semi-private
   encoding: UTF-8
   links:
-    - http://nethd.org/
+    - http://nethd.org/ # site does not support https NET::ERR_CERT_AUTHORITY_INVALID
 
   caps:
     categorymappings:
@@ -129,3 +129,4 @@
         case:
           "span.label:contains(\"2X\")": 2
           "*": 1
+# engine n/a

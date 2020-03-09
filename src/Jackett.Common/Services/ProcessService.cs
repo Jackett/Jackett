@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Text;
 using Jackett.Common.Services.Interfaces;
 using NLog;
@@ -8,12 +8,9 @@ namespace Jackett.Common.Services
 
     public class ProcessService : IProcessService
     {
-        private Logger logger;
+        private readonly Logger logger;
 
-        public ProcessService(Logger l)
-        {
-            logger = l;
-        }
+        public ProcessService(Logger l) => logger = l;
 
         private void Run(string exe, string args, bool asAdmin, DataReceivedEventHandler d, DataReceivedEventHandler r)
         {
@@ -57,13 +54,15 @@ namespace Jackett.Common.Services
         public string StartProcessAndGetOutput(string exe, string args, bool keepnewlines = false, bool asAdmin = false)
         {
             var sb = new StringBuilder();
-            DataReceivedEventHandler rxData = (a, e) => {
+            DataReceivedEventHandler rxData = (a, e) =>
+            {
                 if (keepnewlines || !string.IsNullOrWhiteSpace(e.Data))
                 {
                     sb.AppendLine(e.Data);
                 }
             };
-            DataReceivedEventHandler rxError = (s, e) => {
+            DataReceivedEventHandler rxError = (s, e) =>
+            {
                 if (keepnewlines || !string.IsNullOrWhiteSpace(e.Data))
                 {
                     sb.AppendLine(e.Data);

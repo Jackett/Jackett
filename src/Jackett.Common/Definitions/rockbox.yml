@@ -59,7 +59,7 @@
     paths:
       - path: torrents.php
     inputs:
-      search: "{{ if .Query.Artist }}{{ .Query.Artist }}{{else}}{{ .Keywords }}{{end}}"
+      search: "{{ if or (.Query.Artist) (.Query.Album) }}{{ or (.Query.Artist) (.Query.Album) }}{{else}}{{ .Keywords }}{{end}}"
       # 0 all 1 active 2 dead 3 seedwanted
       active: 0
       # 0 title 1 title+descr 2 title+subgen
@@ -110,3 +110,4 @@
         text: 1
       uploadvolumefactor:
         text: 1
+# BtitTracker (customised)

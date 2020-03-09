@@ -1,4 +1,4 @@
-﻿---
+---
   site: icetorrent
   name: ICE Torrent
   description: "ICE Torrent is a ratioless ROMANIAN Private Torrent Tracker for 0DAY / GENERAL"
@@ -16,12 +16,12 @@
       - {id: 23, cat: Books, desc: "Cartoons"}
       - {id: 73, cat: Audio/Video, desc: "Concert/Videoclip"}
       - {id: 75, cat: Other, desc: "Diverse"}
-      - {id: 69, cat: Books, desc: "Documentare"}
-      - {id: 51, cat: TV/Documentary, desc: "Documentaries"}
+      - {id: 69, cat: TV/Documentary, desc: "Docs RO"}
+      - {id: 51, cat: TV/Documentary, desc: "Docs"}
       - {id: 43, cat: Books, desc: "eBooks"}
       - {id: 63, cat: Movies/DVD, desc: "Filme DVD"}
       - {id: 65, cat: Movies/HD, desc: "Filme HD"}
-      - {id: 64, cat: Movies/SD, desc: "Filme Xvid"}
+      - {id: 64, cat: Movies/SD, desc: "Filme SD"}
       - {id: 40, cat: Console, desc: "Games/Console"}
       - {id: 26, cat: PC/Games, desc: "Games/PC"}
       - {id: 38, cat: PC/Phone-Other, desc: "Mobile"}
@@ -45,24 +45,52 @@
       - {id: 87, cat: Other, desc: "TUTS"}
       - {id: 33, cat: TV/SD, desc: "TV Episodes"}
       - {id: 34, cat: TV/HD, desc: "TVHD Episodes"}
-      - {id: 9, cat: XXX, desc: "XXX"}
+      - {id: 9, cat: XXX, desc: "XXX Video"}
+      - {id: 11, cat: XXX, desc: "XXX Magazine"}
+      - {id: 58, cat: XXX, desc: "XXX Pictures"}
 
     modes:
       search: [q]
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
 
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+      # causes server 500 errors
+#    - name: sort
+#      type: select
+#      label: Sort requested from site
+#      default: "date"
+#      options:
+#        "date": "created"
+#        "seeders": "seeders"
+#        "size": "size"
+#    - name: type
+#      type: select
+#      label: Order requested from site
+#      default: "DESC"
+#      options:
+#        "DESC": "desc"
+#        "ASC": "asc"
+
   login:
-    path: login.php
+    path: login
     method: form
     form: form
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
+      _remember_me: on
     error:
       - selector: div.alert:contains("failed")
     test:
-      path: browse.php
+      path: /
+      selector: a[href^="/logout?_csrf_token="]
       
   ratio:
     text: -1
@@ -70,44 +98,49 @@
   search:
     paths:
     - path: browse.php
-      categorymappings: ["!", 9]
+      categorymappings: ["!", 9, 11, 58]
     - path: browseadult.php
-      categorymappings: [9]
+      categorymappings: [9, 11, 58]
     inputs:
-      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-      search: "{{if .Query.IMDBID}}{{ .Query.IMDBIDShort }}{{else}}{{ .Keywords }}{{end}}"
+      $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+      search: "{{ if .Query.IMDBID }}{{ .Query.IMDBIDShort }}{{else}}{{ .Keywords }}{{end}}"
+      # 0 onlyalive 3 rosubbed 4 requested
       incldead: 1
       search_by: "{{ if .Query.IMDBID }}imdb{{else}}name{{end}}"
+#      by: "{{ .Config.sort }}"
+#      ord: "{{ .Config.type }}"
+
     rows:
-      selector: table.table-striped > tbody > tr:has(a[href^="details.php?id="])
+      selector: table.table-striped > tbody > tr:has(a[href^="/details.php?id="])
+
     fields:
-      title:
-        selector: a[href^="details.php?id="]
-      details:
-        selector: a[href^="details.php?id="]
-        attribute: href
       category:
         selector: a[href^="?cat="]
         attribute: href
         filters:
           - name: querystring
             args: cat
+      title:
+        selector: a[href^="/details.php?id="]
+      details:
+        selector: a[href^="/details.php?id="]
+        attribute: href
       banner:
         attribute: rel
       imdb:
-        selector: a[href*="www.imdb.com/title/"]
+        selector: a[href*="www.imdb.com"]
         optional: true
         attribute: href
       download:
-        selector: a[href^="download.php"]
+        selector: a[href^="/download.php"]
         attribute: href
       files:
-        selector: a[href$="filelist=1#filelist"]
+        selector: a[href$="#filelist"]
         filters:
           - name: regexp
             args: (\d+)
       size: # some users's have an extra column after the size/files and before the seeders column (Issue #2243)
-        selector: td:has(a[href$="filelist=1#filelist"])
+        selector: td:has(a[href$="#filelist"])
         remove: a
       date:
         selector: td > small:has(i.fa-clock), td > span.small:has(i.fa-clock)
@@ -136,3 +169,4 @@
         text: 0
       uploadvolumefactor:
         text: 1
+# engine n/a

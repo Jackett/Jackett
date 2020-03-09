@@ -1,4 +1,4 @@
-﻿---
+---
   site: the-madhouse
   name: The-Madhouse
   description: "The-Madhouse is a Private Torrent Tracker"
@@ -6,7 +6,7 @@
   type: private
   encoding: UTF-8
   links:
-    - http://the-madhouse.info/
+    - http://the-madhouse.info/ # site does not support https ERR_CONNECTION_REFUSED
 
   caps:
     categorymappings:

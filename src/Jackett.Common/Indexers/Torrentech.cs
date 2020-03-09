@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -20,13 +20,13 @@ namespace Jackett.Common.Indexers
 {
     public class Torrentech : BaseWebIndexer
     {
-        private string LoginUrl { get { return SiteLink + "index.php?act=Login&CODE=01&CookieDate=1"; } }
-        private string IndexUrl { get { return SiteLink + "index.php"; } }
+        private string LoginUrl => SiteLink + "index.php?act=Login&CODE=01&CookieDate=1";
+        private string IndexUrl => SiteLink + "index.php";
 
         private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
         {
-            get { return (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData;
+            set => base.configData = value;
         }
 
         public Torrentech(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)
@@ -103,7 +103,7 @@ namespace Jackett.Common.Indexers
             }
             try
             {
-                string RowsSelector = "div.borderwrap:has(div.maintitle) > table > tbody > tr:has(a[href*=\"index.php?showtopic=\"])";
+                var RowsSelector = "div.borderwrap:has(div.maintitle) > table > tbody > tr:has(a[href*=\"index.php?showtopic=\"])";
 
                 var SearchResultParser = new HtmlParser();
                 var SearchResultDocument = SearchResultParser.ParseDocument(results.Content);

@@ -1,4 +1,4 @@
-﻿using Jackett.Common.Indexers.Abstract;
+using Jackett.Common.Indexers.Abstract;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
 using NLog;
@@ -16,8 +16,6 @@ namespace Jackett.Common.Indexers
                 protectionService: protectionService,
                 webClient: webClient
                 )
-        {
-            Type = "private";
-        }
+            => Type = "private";
     }
 }

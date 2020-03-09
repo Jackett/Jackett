@@ -1,4 +1,4 @@
-﻿---
+---
   site: asgaard
   name: Asgaard
   description: "Asgaard (AG) is a NORDIC Private Torrent Tracker for MOVIES / TV / GENERAL"
@@ -133,6 +133,7 @@
       selector: table.table-striped > tbody > tr:has(a[href*="details.php?id="])
       filters:
         - name: andmatch
+
     fields:
       title:
         selector: div.torrent-name
@@ -179,3 +180,4 @@
       uploadvolumefactor:
         case:
           "*": 1
+# Midgaard

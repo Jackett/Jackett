@@ -18,18 +18,16 @@ namespace Jackett.Common.Indexers
 {
     public class Pornolab : BaseWebIndexer
     {
-        private string LoginUrl
-        { get { return SiteLink + "forum/login.php"; } }
-        private string SearchUrl
-        { get { return SiteLink + "forum/tracker.php"; } }
+        private string LoginUrl => SiteLink + "forum/login.php";
+        private string SearchUrl => SiteLink + "forum/tracker.php";
 
         protected string cap_sid = null;
         protected string cap_code_field = null;
 
         private new ConfigurationDataPornolab configData
         {
-            get { return (ConfigurationDataPornolab)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataPornolab)base.configData;
+            set => base.configData = value;
         }
 
         public Pornolab(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
@@ -159,6 +157,27 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(1691, TorznabCatType.XXX, "Ролики, SiteRip'ы и сцены из гей-фильмов / Clips & Movie Scenes (Gay)");
             AddCategoryMapping(1692, TorznabCatType.XXXImageset, "Гей-журналы, фото, разное / Magazines, Photo, Rest (Gay)");
 
+            AddCategoryMapping(1817, TorznabCatType.XXX, "Обход блокировки");
+            AddCategoryMapping(1670, TorznabCatType.XXX, "Эротическое видео / Erotic&Softcore");
+            AddCategoryMapping(1672, TorznabCatType.XXX, "Зарубежные порнофильмы / Full Length Movies");
+            AddCategoryMapping(1717, TorznabCatType.XXX, "Зарубежные фильмы в высоком качестве (DVD&HD) / Full Length ..");
+            AddCategoryMapping(1674, TorznabCatType.XXX, "Русское порно / Russian Video");
+            AddCategoryMapping(1677, TorznabCatType.XXX, "Зарубежные порноролики / Clips");
+            AddCategoryMapping(1842, TorznabCatType.XXX, "Сайтрипы 2020 (HD Video) / SiteRip's 2020 (HD Video)");
+            AddCategoryMapping(1843, TorznabCatType.XXX, "Сайтрипы 2020 / SiteRip's 2020");
+            AddCategoryMapping(1800, TorznabCatType.XXX, "Японское порно / Japanese Adult Video (JAV)");
+            AddCategoryMapping(1815, TorznabCatType.XXX, "Архив (Японское порно)");
+            AddCategoryMapping(1723, TorznabCatType.XXX, "Эротические студии, фото и журналы / Erotic Picture Gallery ..");
+            AddCategoryMapping(1802, TorznabCatType.XXX, "Архив (Фото)");
+            AddCategoryMapping(1745, TorznabCatType.XXX, "Хентай и Манга, Мультфильмы и Комиксы, Рисунки / Hentai&Ma..");
+            AddCategoryMapping(1838, TorznabCatType.XXX, "Игры / Games");
+            AddCategoryMapping(1829, TorznabCatType.XXX, "Обсуждение игр / Games Discussion");
+            AddCategoryMapping(11, TorznabCatType.XXX, "Нетрадиционное порно / Special Interest Movies&Clips");
+            AddCategoryMapping(1681, TorznabCatType.XXX, "Дефекация / Scat");
+            AddCategoryMapping(1683, TorznabCatType.XXX, "Архив (общий)");
+            AddCategoryMapping(1688, TorznabCatType.XXX, "Гей-порно / Gay Forum");
+            AddCategoryMapping(1720, TorznabCatType.XXX, "Архив (Гей-порно)");
+
         }
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
@@ -250,7 +269,7 @@ namespace Jackett.Common.Indexers
             }
             try
             {
-                string RowsSelector = "table#tor-tbl > tbody > tr";
+                var RowsSelector = "table#tor-tbl > tbody > tr";
 
                 var SearchResultParser = new HtmlParser();
                 var SearchResultDocument = SearchResultParser.ParseDocument(results.Content);
@@ -322,7 +341,7 @@ namespace Jackett.Common.Indexers
         // referer link support
         public override async Task<byte[]> Download(Uri link)
         {
-            Uri downloadlink = link;
+            var downloadlink = link;
             var response = await RequestStringWithCookies(link.ToString());
             var results = response.Content;
             var SearchResultParser = new HtmlParser();
@@ -333,8 +352,8 @@ namespace Jackett.Common.Indexers
             {
                 logger.Debug(string.Format("{0}: Download selector {1} matched:{2}", ID, downloadSelector, DlUri.OuterHtml));
                 var href = DlUri.GetAttribute("href");
-                downloadlink = new Uri(SiteLink + "forum/" +href);
-                
+                downloadlink = new Uri(SiteLink + "forum/" + href);
+
             }
             else
             {

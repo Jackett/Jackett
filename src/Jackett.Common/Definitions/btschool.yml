@@ -1,4 +1,4 @@
-﻿---
+---
   site: btschool
   name: BTSCHOOL
   description: "BTSCHOOL is a CHINESE Private Torrent Tracker for MOVIES / TV / GENERAL"
@@ -27,30 +27,29 @@
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
 
+  settings:
+    - name: cookie
+      type: text
+      label: Cookie
+    - name: info
+      type: info
+      label: How to get the Cookie
+      default: "<ol><li>Login to this tracker in your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find 'cookie:' in the <b>Request Headers</b> section<li>Copy & paste the whole cookie string to here</ol>"
+
   login:
-    path: login.php
-    method: form
-    form: form[action="takelogin.php"]
-    captcha:
-      type: image
-      selector: img[alt="CAPTCHA"]
-      input: imagestring
+    method: cookie
     inputs:
-      username: "{{ .Config.username }}"
-      password: "{{ .Config.password }}"
-    error:
-      - selector: td.embedded:has(h2:contains("登錄失敗"))
-      - selector: td.embedded:has(h2:contains("失败"))
+      cookie: "{{ .Config.cookie }}"
     test:
       path: index.php
       selector: a[href="logout.php"]
-        
+
   search:
     paths:
       - path: torrents.php
     inputs:
-      $raw: "{{range .Categories}}cat{{.}}=1&{{end}}"
-      search: "{{if .Query.IMDBID}}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+      $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
+      search: "{{if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
       # 0 incldead 1 active 2 justdead
       incldead: 0
       # promotion: 0 all 1 normal 2 free 3 2x 4 2xfree 5 50% 6 2x 50% 7 30%
@@ -63,8 +62,10 @@
       search_mode: 0
       sort: 4
       type: desc
+
     rows:
       selector: table.torrents > tbody > tr:has(table.torrentname)
+
     fields:
       category:
         selector: a[href^="?cat="]
@@ -99,19 +100,19 @@
         selector: td.rowfollow:nth-child(8)
       downloadvolumefactor:
         case:
-          img.pro_free: "0"
-          img.pro_free2up: "0"
-          img.pro_50pctdown: "0.5"
-          img.pro_50pctdown2up: "0.5"
-          img.pro_30pctdown: "0.3"
-          "*": "1"
+          img.pro_free: 0
+          img.pro_free2up: 0
+          img.pro_50pctdown: 0.5
+          img.pro_50pctdown2up: 0.5
+          img.pro_30pctdown: 0.3
+          "*": 1
       uploadvolumefactor:
         case:
-          img.pro_50pctdown2up: "2"
-          img.pro_free2up: "2"
-          img.pro_2up: "2"
-          "*": "1"
+          img.pro_50pctdown2up: 2
+          img.pro_free2up: 2
+          img.pro_2up: 2
+          "*": 1
       description:
         selector: td:nth-child(2)
         remove: a, img
-# NexusPHP
+# NexusPHP Standard v1.5 Beta 4

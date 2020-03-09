@@ -1,4 +1,4 @@
-﻿---
+---
   site: legittorrents
   name: Legit Torrents
   description: "Legit Torrents is a Public site for free and legal torrents"
@@ -6,7 +6,7 @@
   type: public
   encoding: UTF-8
   links:
-    - http://www.legittorrents.info/
+    - http://www.legittorrents.info/ # site does not support https ERR_CONNECTION_REFUSED
 
   caps:
     categorymappings:
@@ -33,6 +33,7 @@
       options:
         "3": "created"
         "5": "seeders"
+        "4": "size"
         "2": "title"
     - name: type
       type: select
@@ -41,7 +42,6 @@
       options:
         "2": "desc"
         "1": "asc"
-
 
   search:
     paths:
@@ -53,6 +53,8 @@
       category: "{{ range .Categories }}{{.}};{{end}}"
       # 0 all 1 active 2 deadonly
       active: 1
+      order: "{{ .Config.sort }}"
+      by: "{{ .Config.type }}"
 
     rows:
       selector: table table table.lista > tbody > tr:has(a[href^="download.php?id="])

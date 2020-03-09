@@ -1,12 +1,12 @@
-﻿using NLog;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.ServiceProcess;
-using Jackett.Common.Services.Interfaces;
 using System.Reflection;
+using System.ServiceProcess;
 using Jackett.Common.Services;
+using Jackett.Common.Services.Interfaces;
+using NLog;
 
 namespace Jackett.Server.Services
 {
@@ -16,8 +16,8 @@ namespace Jackett.Server.Services
         private const string DESCRIPTION = "API Support for your favorite torrent trackers";
         private const string SERVICEEXE = "JackettService.exe";
 
-        private IProcessService processService;
-        private Logger logger;
+        private readonly IProcessService processService;
+        private readonly Logger logger;
 
         public ServiceConfigService()
         {
@@ -25,36 +25,19 @@ namespace Jackett.Server.Services
             processService = new ProcessService(logger);
         }
 
-        public bool ServiceExists()
-        {
-            return GetService(NAME) != null;
-        }
+        public bool ServiceExists() => GetService(NAME) != null;
 
-        public bool ServiceRunning()
-        {
-            var service = GetService(NAME);
-            if (service == null)
-                return false;
-            return service.Status == ServiceControllerStatus.Running;
-        }
+        public bool ServiceRunning() =>
+            GetService(NAME)?.Status == ServiceControllerStatus.Running;
 
-        public void Start()
-        {
+        public void Start() => GetService(NAME).Start();
 
-            var service = GetService(NAME);
-            service.Start();
-        }
+        public void Stop() => GetService(NAME).Stop();
 
-        public void Stop()
-        {
-            var service = GetService(NAME);
-            service.Stop();
-        }
-
-        public ServiceController GetService(string serviceName)
-        {
-            return ServiceController.GetServices().FirstOrDefault(c => String.Equals(c.ServiceName, serviceName, StringComparison.InvariantCultureIgnoreCase));
-        }
+        public ServiceController GetService(string serviceName) =>
+            ServiceController
+                .GetServices()
+                .FirstOrDefault(c => string.Equals(c.ServiceName, serviceName, StringComparison.InvariantCultureIgnoreCase));
 
         public void Install()
         {
@@ -64,7 +47,7 @@ namespace Jackett.Server.Services
             }
             else
             {
-                string applicationFolder = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath);
+                var applicationFolder = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath);
 
                 var exePath = Path.Combine(applicationFolder, SERVICEEXE);
                 if (!File.Exists(exePath) && Debugger.IsAttached)
@@ -72,7 +55,7 @@ namespace Jackett.Server.Services
                     exePath = Path.Combine(applicationFolder, "..\\..\\..\\Jackett.Service\\bin\\Debug", SERVICEEXE);
                 }
 
-                string arg = $"create {NAME} start= auto binpath= \"{exePath}\" DisplayName= {NAME}";
+                var arg = $"create {NAME} start= auto binpath= \"{exePath}\" DisplayName= {NAME}";
 
                 processService.StartProcessAndLog("sc.exe", arg, true);
 
@@ -92,7 +75,7 @@ namespace Jackett.Server.Services
         public void RemoveService()
         {
             var service = GetService(NAME);
-            if(service == null)
+            if (service == null)
             {
                 logger.Warn("The service is already uninstalled");
                 return;

@@ -33,38 +33,61 @@
       options:
         "time": "created"
         "length": "size"
-        "popular": "seeders"
+        "seeders": "seeders"
 
   search:
     paths:
-      - path: "{{ if .Keywords }}?s={{ .Keywords }}&sort={{ .Config.sort }}{{else}}recent?sort={{ .Config.sort }}{{end}}"
+      - path: "{{ if .Keywords }}search/{{ .Keywords }}/{{else}}recent{{end}}?sort={{ .Config.sort }}"
+      - path: "{{ if .Keywords }}search/{{ .Keywords }}/{{else}}recent{{end}}?sort={{ .Config.sort }}&page=2"
+      - path: "{{ if .Keywords }}search/{{ .Keywords }}/{{else}}recent{{end}}?sort={{ .Config.sort }}&page=3"
+      - path: "{{ if .Keywords }}search/{{ .Keywords }}/{{else}}recent{{end}}?sort={{ .Config.sort }}&page=4"
+      - path: "{{ if .Keywords }}search/{{ .Keywords }}/{{else}}recent{{end}}?sort={{ .Config.sort }}&page=5"
+
     rows:
-      selector: li[class$="item"]
+      selector: div.media
+
     fields:
-      title:
-        selector: h2[class$="title"] a[href*="/torrent/"]
-        attribute: title
       category:
         text: 1
+      title:
+        selector: a[href*="/torrent/"]
       details:
-        selector: h2[class$="title"] a[href*="/torrent/"]
+        selector: a[href*="/torrent/"]
         attribute: href
+      download:
+         # download can be missing despite icon being present. Fortunately the magnet is always there
+        selector: a[href$=".torrent"]
+        attribute: href
+        optional: true
       magnet:
-        selector: div[class$="info"] a[href^="magnet:?xt="]
+        selector: a[href^="magnet:?xt="]
         attribute: href
+      banner:
+        selector: a.img-thumbnail img
+        attribute: src
+        filters:
+          - name: replace
+            args: ["https://btdb.io/assets/img/placeholder.png", ""]
       size:
-        selector: div[class$="info"] span:nth-of-type(1)
+        selector: small:nth-of-type(1) strong
       files:
-        selector: div[class$="info"] span:nth-of-type(2)
+        selector: small:nth-of-type(2) strong
+      seeders:
+        selector: small:nth-of-type(3) strong
+        filters:
+          - name: replace
+            args: [",", ""]
+      leechers:
+        selector: small:nth-of-type(4) strong
+        filters:
+          - name: replace
+            args: [",", ""]
       date:
-        selector: div[class$="info"] span:nth-of-type(3)
+        selector: small:nth-of-type(5) strong
         filters:
           - name: timeago
-      seeders:
-        selector: div[class$="info"] span:nth-of-type(4)
-      leechers:
-        selector: div[class$="info"] span:nth-of-type(5)
       downloadvolumefactor:
         text: 0
       uploadvolumefactor:
         text: 1
+# engine n/a

@@ -1,4 +1,4 @@
-﻿---
+---
   site: pt99
   name: PT99
   description: "PT99 is a CHINESE Private Torrent Tracker for 0DAY / GENERAL"
@@ -147,3 +147,4 @@
           img.pro_free2up: 2
           img.pro_2up: 2
           "*": 1
+# NexusPHP Standard v1.5 Beta 4

@@ -1,4 +1,4 @@
-﻿---
+---
   site: arenabg
   name: ArenaBG
   description: "ArenaBG is a BULGARIAN Semi-Private Torrent Tracker for 0DAY / GENERAL"
@@ -119,6 +119,7 @@
 
     rows:
       selector: tr:has(td.category)
+
     fields:
       title:
         # use the second div for full title
@@ -178,3 +179,4 @@
         text: 0
       uploadvolumefactor:
         text: 1
+# engine n/a

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -17,15 +17,15 @@ namespace Jackett.Common.Indexers
 {
     public class ShowRSS : BaseWebIndexer
     {
-        private string SearchAllUrl { get { return SiteLink + "other/all.rss"; } }
+        private string SearchAllUrl => SiteLink + "other/all.rss";
         public override string[] LegacySiteLinks { get; protected set; } = new string[] {
             "http://showrss.info/",
         };
 
         private new ConfigurationData configData
         {
-            get { return (ConfigurationData)base.configData; }
-            set { base.configData = value; }
+            get => base.configData;
+            set => base.configData = value;
         }
 
         public ShowRSS(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
@@ -49,18 +49,13 @@ namespace Jackett.Common.Indexers
             configData.LoadValuesFromJson(configJson);
             var releases = await PerformQuery(new TorznabQuery());
 
-            await ConfigureIfOK(string.Empty, releases.Count() > 0, () =>
-            {
-                throw new Exception("Could not find releases from this URL");
-            });
+            await ConfigureIfOK(string.Empty, releases.Any(),
+                                () => throw new Exception("Could not find releases from this URL"));
 
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
-        public override Task<byte[]> Download(Uri link)
-        {
-            throw new NotImplementedException();
-        }
+        public override Task<byte[]> Download(Uri link) => throw new NotImplementedException();
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
@@ -91,7 +86,7 @@ namespace Jackett.Common.Indexers
                     release.Comments = new Uri(node.SelectSingleNode("link").InnerText);
 
                     // Try to guess the category... I'm not proud of myself...
-                    int category = 5030;
+                    var category = 5030;
                     if (serie_title.Contains("720p"))
                         category = 5040;
                     release.Category = new List<int> { category };

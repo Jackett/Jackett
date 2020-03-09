@@ -18,18 +18,16 @@ namespace Jackett.Common.Indexers
 {
     public class RuTracker : BaseWebIndexer
     {
-        private string LoginUrl
-        { get { return SiteLink + "forum/login.php"; } }
-        private string SearchUrl
-        { get { return SiteLink + "forum/tracker.php"; } }
+        private string LoginUrl => SiteLink + "forum/login.php";
+        private string SearchUrl => SiteLink + "forum/tracker.php";
 
         protected string cap_sid = null;
         protected string cap_code_field = null;
 
         private new ConfigurationDataRutracker configData
         {
-            get { return (ConfigurationDataRutracker)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataRutracker)base.configData;
+            set => base.configData = value;
         }
 
         public RuTracker(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
@@ -1532,7 +1530,7 @@ namespace Jackett.Common.Indexers
             }
             try
             {
-                string RowsSelector = "table#tor-tbl > tbody > tr";
+                var RowsSelector = "table#tor-tbl > tbody > tr";
 
                 var SearchResultParser = new HtmlParser();
                 var SearchResultDocument = SearchResultParser.ParseDocument(results.Content);
@@ -1594,9 +1592,9 @@ namespace Jackett.Common.Indexers
                         }
                         else if (configData.StripRussianLetters.Value)
                         {
-                            if (release.Category.Contains(TorznabCatType.Movies.ID) || 
-                                release.Category.Contains(TorznabCatType.MoviesHD.ID) || 
-                                release.Category.Contains(TorznabCatType.Movies3D.ID) || 
+                            if (release.Category.Contains(TorznabCatType.Movies.ID) ||
+                                release.Category.Contains(TorznabCatType.MoviesHD.ID) ||
+                                release.Category.Contains(TorznabCatType.Movies3D.ID) ||
                                 release.Category.Contains(TorznabCatType.MoviesForeign.ID))
                             {
                                 // remove director's name from title
@@ -1605,7 +1603,7 @@ namespace Jackett.Common.Indexers
                                 // this part should be removed: (Мартин Скорсезе / Martin Scorsese)
                                 var director = new Regex(@"(\([А-Яа-яЁё\W]+)\s/\s(.+?)\)");
                                 release.Title = director.Replace(release.Title, "");
-                                
+
                                 // Bluray quality fix: radarr parse Blu-ray Disc as Bluray-1080p but should be BR-DISK
                                 release.Title = Regex.Replace(release.Title, "Blu-ray Disc", "BR-DISK", RegexOptions.IgnoreCase);
                                 // language fix: all rutracker releases contains russian track

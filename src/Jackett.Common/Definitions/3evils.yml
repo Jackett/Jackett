@@ -1,4 +1,4 @@
-﻿---
+---
   site: 3evils
   name: 3evils
   description: "3evils is a Private Torrent Tracker for MOVIES / TV / GENERAL"
@@ -87,6 +87,7 @@
       selector: table.responsive-card-table tr:has(td[data-label])
       filters:
         - name: andmatch
+
     fields:
       category:
         selector: td[data-label="Type"] a
@@ -150,3 +151,4 @@
       uploadvolumefactor:
         case:
           "*": 1
+# U-232 V5

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,9 +15,9 @@ namespace Jackett.Common.Indexers
 {
     public class PolishTracker : BaseWebIndexer
     {
-        private string LoginUrl { get { return SiteLink + "login"; } }
-        private string TorrentApiUrl { get { return SiteLink + "apitorrents"; } }
-        private string CDNUrl { get { return "https://cdn.pte.nu/"; } }
+        private string LoginUrl => SiteLink + "login";
+        private string TorrentApiUrl => SiteLink + "apitorrents";
+        private string CDNUrl => "https://cdn.pte.nu/";
 
         public override string[] LegacySiteLinks { get; protected set; } = new string[] {
             "https://polishtracker.net/",
@@ -25,8 +25,8 @@ namespace Jackett.Common.Indexers
 
         private new ConfigurationDataBasicLoginWithEmail configData
         {
-            get { return (ConfigurationDataBasicLoginWithEmail)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataBasicLoginWithEmail)base.configData;
+            set => base.configData = value;
         }
 
         public PolishTracker(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
@@ -40,7 +40,7 @@ namespace Jackett.Common.Indexers
                    p: ps,
                    configData: new ConfigurationDataBasicLoginWithEmail())
         {
-Encoding = Encoding.UTF8;
+            Encoding = Encoding.UTF8;
             Language = "pl-pl";
             Type = "private";
 
