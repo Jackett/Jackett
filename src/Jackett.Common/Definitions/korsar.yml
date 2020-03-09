@@ -507,7 +507,6 @@
         filters:
           - name: prepend
             args: "({{ .Result.description_category }}) "
-          - name: strdump
       date:
         # Сегодня, 15:10 (today)
         # Вчера, 23:28 (yesterday)
