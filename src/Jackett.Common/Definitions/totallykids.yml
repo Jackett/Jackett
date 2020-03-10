@@ -117,6 +117,8 @@
         filters:
           - name: regexp
             args: "src=(.+?) width"
+          - name: replace
+            args: ["torrentimg/nocover.jpg", ""]
       size:
         selector: td:nth-child(10)
       # two flavours of dates
