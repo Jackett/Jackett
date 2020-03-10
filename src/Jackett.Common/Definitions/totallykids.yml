@@ -111,6 +111,12 @@
             args: [" http://anonym.to?javascript:popdetails('", ""]
           - name: replace
             args: ["');", ""]
+      banner:
+        selector: td a[href^="index.php?page=torrent-details"]
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: "src=(.+?) width"
       size:
         selector: td:nth-child(10)
       # two flavours of dates
