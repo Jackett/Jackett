@@ -81,7 +81,7 @@
       - {id: 131, cat: Books/Comics, desc: "eBooks - Cómics"}
       - {id: 134, cat: Books, desc: "eBooks - Manga"}
       - {id: 132, cat: Books/Magazines, desc: "eBooks - Revistas"}
-      - {id: 7, cat: Books/Other, desc: "eBooks - Otros"}
+      - {id: 72, cat: Books/Other, desc: "eBooks - Otros"}
       - {id: 133, cat: Books, desc: "eBooks - Adulto (+18)"}    
       - {id: 92, cat: Other, desc: "Otros formatos - Animación"}
       - {id: 93, cat: Other, desc: "Otros formatos - Deportes"}
