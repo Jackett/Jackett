@@ -23,7 +23,7 @@
       - {id: 9, cat: Movies, desc: "Kino"}
 
     modes:
-      search: [q]
+      search: [q, imdbid]
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
 
@@ -61,8 +61,8 @@
       tvdb: ""
       tmdb: ""
       mal: ""
-      sort: "created_at"
-      direction: "desc"
+      sort: created_at
+      direction: desc
       qty: 100
     rows:
       selector: table > tbody > tr

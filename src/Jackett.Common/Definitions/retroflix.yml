@@ -21,9 +21,10 @@
       - {id: 407, cat: TV/Sport, desc: "Sports"}
       - {id: 409, cat: Other, desc: "Misc"}
       - {id: 408, cat: Audio, desc: "HQ Audio"}
+
     modes:
-      search: [q]
-      tv-search: [q, season, ep]
+      search: [q, imdbid]
+      tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
 
   settings:
@@ -47,12 +48,14 @@
       - path: torrents.php
         method: get
     inputs:
-      search: "{{if .Query.IMDBID}}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+      search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
       incldead: 1
       search_area: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
       search_mode: 0
+
     rows:
       selector: table.torrents > tbody > tr:has(table.torrentname)
+
     fields:
       release_year:
         selector: a[href^="/torrents.php?processing="]
@@ -96,15 +99,16 @@
             args: "02-01-2006 15:04:05"
       downloadvolumefactor:
         case:
-          img.pro_free: "0"
-          img.pro_free2up: "0"
-          img.pro_50pctdown: "0.5"
-          img.pro_50pctdown2up: "0.5"
-          img.pro_30pctdown: "0.3"
-          "*": "1"
+          img.pro_free: 0
+          img.pro_free2up: 0
+          img.pro_50pctdown: 0.5
+          img.pro_50pctdown2up: 0.5
+          img.pro_30pctdown: 0.3
+          "*": 1
       uploadvolumefactor:
         case:
-          img.pro_50pctdown2up: "2"
-          img.pro_free2up: "2"
-          img.pro_2up: "2"
+          img.pro_50pctdown2up: 2
+          img.pro_free2up: 2
+          img.pro_2up: 2
           "*": "1"
+# NexusPHP

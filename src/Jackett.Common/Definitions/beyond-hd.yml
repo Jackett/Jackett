@@ -14,7 +14,7 @@
       - {id: 2, cat: TV, desc: "TV"}
 
     modes:
-      search: [q]
+      search: [q, imdbid]
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
 
@@ -126,6 +126,5 @@
           i[data-original-title="75% Promo"]: 0.25
           "*": 1
       uploadvolumefactor:
-        case:
-          "*": 1
+        text: 1
 # UNIT3D

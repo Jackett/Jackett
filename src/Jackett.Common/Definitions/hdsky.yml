@@ -22,7 +22,7 @@
       - {id: 409, cat: Other, desc: "Misc/其他"}
 
     modes:
-      search: [q]
+      search: [q, imdbid]
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
 
@@ -48,7 +48,7 @@
     filters:
       - name: regexp
         args: "Ratio:\\s(.*?)\\s\\s"
-        
+
   download:
     method: post
 
@@ -86,7 +86,7 @@
             args: cat
       details:
         selector: a[title][href^="details.php?id="]
-        attribute: href    
+        attribute: href
       download:
         selector: form[action^="download.php?id="]
         attribute: action

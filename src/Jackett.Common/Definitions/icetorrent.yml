@@ -50,7 +50,7 @@
       - {id: 58, cat: XXX, desc: "XXX Pictures"}
 
     modes:
-      search: [q]
+      search: [q, imdbid]
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
 
@@ -91,7 +91,7 @@
     test:
       path: /
       selector: a[href^="/logout?_csrf_token="]
-      
+
   ratio:
     text: -1
 
@@ -152,7 +152,7 @@
           - name: replace
             args: ["nd ", " "]
           - name: replace
-            args: ["rd ", " "]  
+            args: ["rd ", " "]
           - name: replace
             args: ["th ", " "]
           - name: regexp

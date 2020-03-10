@@ -91,7 +91,7 @@
       - {id: 48, cat: Movies, desc: "Zombie"}
 
     modes:
-      search: [q]
+      search: [q, imdbid]
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
 
@@ -133,7 +133,7 @@
       - selector: "div#base_content > table.mainouter > tbody > tr > td.outer > table.main > tbody > tr > td:has(h2)"
     test:
       path: usercp.php
-      
+
   ratio:
     path: my.php
     selector: td.navi_top:contains("Deine Ratio:")

@@ -25,7 +25,7 @@
       - {id: 37, cat: Other, desc: "Tutte le saghe"}
 
     modes:
-      search: [q]
+      search: [q, imdbid]
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
 

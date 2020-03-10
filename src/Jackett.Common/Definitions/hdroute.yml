@@ -20,7 +20,7 @@
       - {id: 8, cat: Audio/Lossless, desc: "无损音乐 (Lossless)"}
       - {id: 9, cat: Other, desc: "其他 (Other)"}
     modes:
-      search: [q]
+      search: [q, imdbid]
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
 
@@ -103,4 +103,4 @@
       uploadvolumefactor:
         case:
           "*": 1
-# engine tbc
+# engine tbd

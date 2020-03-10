@@ -62,7 +62,7 @@
       - {id: 501, cat: TV/Anime, desc: "Anime UHD Blu-ray"}
 
     modes:
-      search: [q]
+      search: [q, imdbid]
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
 
@@ -90,7 +90,7 @@
       options:
         "desc": "desc"
         "asc": "asc"
-          
+
   login:
     method: cookie
     inputs:
@@ -136,7 +136,7 @@
         attribute: title
       details:
         selector: a[href^="details.php?id="]
-        attribute: href    
+        attribute: href
       download:
         selector: a[href^="download.php?id="]
         attribute: href

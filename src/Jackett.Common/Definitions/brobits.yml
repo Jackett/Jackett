@@ -15,7 +15,7 @@
       - {id: 410, cat: TV, desc: "TV Series/剧集"}
 
     modes:
-      search: [q]
+      search: [q, imdbid]
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
 
@@ -43,7 +43,7 @@
       options:
         "desc": "desc"
         "asc": "asc"
-          
+
   login:
     method: cookie
     inputs:
@@ -86,7 +86,7 @@
             args: cat
       details:
         selector: a[href^="details.php?id="]
-        attribute: href    
+        attribute: href
       download:
         selector: a[href^="download.php?id="]
         attribute: href
