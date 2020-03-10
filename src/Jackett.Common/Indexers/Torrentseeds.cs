@@ -146,7 +146,7 @@ namespace Jackett.Common.Indexers
             searchUrl += "?" + queryCollection.GetQueryString();
             var response = await RequestStringWithCookiesAndRetry(searchUrl);
             var results = response.Content;
-            if (results.Contains("takelogin.php") || response.Cookies?.Contains("pass=deleted;") == true)
+            if (results.Contains("takelogin.php") || response.Cookies?.Contains("pass=-1") == true || response.IsRedirect && response.RedirectingTo.Contains("login.php"))
             {
                 await ApplyConfiguration(null);
                 response = await RequestStringWithCookiesAndRetry(searchUrl);
@@ -220,7 +220,7 @@ namespace Jackett.Common.Indexers
                     release.Category = MapTrackerCatToNewznab(catStr);
                     var qDetailsLink = row.QuerySelector("a[href^=\"/details.php?id=\"]");
                     var qDetailsTitle = row.QuerySelector("td:has(a[href^=\"/details.php?id=\"]) b");
-                    release.Title = qDetailsTitle.TextContent;
+                    release.Title = qDetailsTitle.TextContent.Trim();
                     var qDlLink = row.QuerySelector("a[href^=\"/download.php?torrent=\"]");
                     var qSeeders = row.QuerySelector("td.torrent-table-seeders");
                     var qLeechers = row.QuerySelector("td.torrent-table-leechers");
