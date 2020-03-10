@@ -40,7 +40,7 @@
       - {id: 412, cat: TV, desc: "Food"}
 
     modes:
-      search: [q]
+      search: [q, imdbid]
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
 
@@ -52,7 +52,7 @@
       type: info
       label: How to get the Cookie
       default: "<ol><li>Login to this tracker in your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find 'cookie:' in the <b>Request Headers</b> section<li>Copy & paste the whole cookie string to here</ol>"
-          
+
   login:
     method: cookie
     inputs:
@@ -86,7 +86,7 @@
             args: cat
       details:
         selector: a[href^="details.php?id="]
-        attribute: href    
+        attribute: href
       download:
         selector: a[href^="download.php?hash="]
         attribute: href
@@ -127,4 +127,4 @@
           img.pro_free2up: 2
           img.pro_2up: 2
           "*": 1
-# NexusPHP tbc
+# NexusPHP tbd

@@ -5,7 +5,6 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -32,18 +31,20 @@ namespace Jackett.Common.Indexers
 
         public BitHdtv(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
             : base(name: "BIT-HDTV",
-                description: "Home of high definition invites",
+                description: "BIT-HDTV - Home of High Definition",
                 link: "https://www.bit-hdtv.com/",
                 caps: new TorznabCapabilities(),
                 configService: configService,
                 client: w,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataRecaptchaLogin())
+                configData: new ConfigurationDataRecaptchaLogin("For best results, change the 'Torrents per page' setting to 100 in your profile."))
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "en-us";
             Type = "private";
+
+            TorznabCaps.SupportsImdbMovieSearch = true;
 
             AddCategoryMapping(1, TorznabCatType.TVAnime); // Anime
             AddCategoryMapping(2, TorznabCatType.MoviesBluRay); // Blu-ray
@@ -59,11 +60,13 @@ namespace Jackett.Common.Indexers
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
+            var result = configData;
             var loginPage = await RequestStringWithCookies(LoginUrl, configData.CookieHeader.Value);
+            if (loginPage.IsRedirect)
+                return result; // already logged in
             var parser = new HtmlParser();
             var cq = parser.ParseDocument(loginPage.Content);
-            var recaptchaSiteKey = cq.QuerySelector(".g-recaptcha").GetAttribute("data-sitekey");
-            var result = configData;
+            var recaptchaSiteKey = cq.QuerySelector(".g-recaptcha")?.GetAttribute("data-sitekey");
             result.CookieHeader.Value = loginPage.Cookies;
             result.Captcha.SiteKey = recaptchaSiteKey;
             result.Captcha.Version = "2";
@@ -88,9 +91,7 @@ namespace Jackett.Common.Indexers
                 {
                     var results = await PerformQuery(new TorznabQuery());
                     if (!results.Any())
-                    {
                         throw new Exception("Your cookie did not work");
-                    }
 
                     IsConfigured = true;
                     SaveConfig();
@@ -122,17 +123,19 @@ namespace Jackett.Common.Indexers
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var searchString = query.GetQueryString();
-            var queryCollection = new NameValueCollection();
 
-            if (!string.IsNullOrWhiteSpace(searchString))
+            var qc = new NameValueCollection();
+            if (!string.IsNullOrWhiteSpace(query.ImdbID))
             {
-                queryCollection.Add("search", searchString);
+                qc.Add("search", query.ImdbID);
+                qc.Add("options", "4");
             }
-
-            queryCollection.Add("incldead", "1");
-
-            var searchUrl = SearchUrl + queryCollection.GetQueryString();
+            else if (!string.IsNullOrWhiteSpace(query.GetQueryString()))
+            {
+                qc.Add("search", query.GetQueryString());
+                qc.Add("options", "0");
+            }
+            var searchUrl = SearchUrl + qc.GetQueryString();
 
             var trackerCats = MapTorznabCapsToTrackers(query, mapChildrenCatsToParent: true);
 
@@ -149,8 +152,6 @@ namespace Jackett.Common.Indexers
                     foreach (var row in rows.Skip(1))
                     {
                         var release = new ReleaseInfo();
-
-                        
                         var qLink = row.Children[2].QuerySelector("a");
 
                         release.MinimumRatio = 1;
@@ -165,7 +166,7 @@ namespace Jackett.Common.Indexers
                         release.Link = new Uri(string.Format(DownloadUrl, qLink.GetAttribute("href").Split('=')[1]));
 
                         var catUrl = row.Children[1].FirstElementChild.GetAttribute("href");
-                        var catNum = catUrl.Split(new char[] { '=', '&' })[1];
+                        var catNum = catUrl.Split('=', '&')[1];
                         release.Category = MapTrackerCatToNewznab(catNum);
 
                         // This tracker cannot search multiple cats at a time, so search all cats then filter out results from different cats

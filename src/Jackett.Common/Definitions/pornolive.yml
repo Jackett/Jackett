@@ -1,12 +1,12 @@
 ---
-  site: pornotor
-  name: Pornotor
-  description: "Pornotor is a RUSSIAN Public Torrent Tracker for 3X"
+  site: pornolive
+  name: PornoLive
+  description: "PornoLive is a RUSSIAN Public Torrent Tracker for 3X"
   language: ru-ru
   type: public
   encoding: windows-1251
   links:
-    - http://pornotor.org/ # site does not support https ERR_CONNECTION_REFUSED
+    - http://pornolive.org/ # site does not support https ERR_CONNECTION_REFUSED
 
   caps:
     categorymappings:
@@ -63,19 +63,17 @@
       date:
         selector: font.mnav
         filters:
-          - name: replace
-            args: ["Добавлен: ", ""]
           - name: dateparse
             args: "2006-01-02 15:04:05"
       size:
-        selector: td:nth-child(4)
+        selector: td:nth-child(3)
       seeders:
-        selector: td:nth-child(5)
+        selector: td:nth-child(4)
         filters:
           - name: split
             args: ["/", 0]
       leechers:
-        selector: td:nth-child(5)
+        selector: td:nth-child(4)
         filters:
           - name: split
             args: ["/", 1]

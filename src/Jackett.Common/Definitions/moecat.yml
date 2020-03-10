@@ -29,7 +29,7 @@
       - {id: 428, cat: TV/Anime, desc: "Animations/官方-动漫"}
 
     modes:
-      search: [q]
+      search: [q, imdbid]
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
 
@@ -112,7 +112,7 @@
             args: cat
       details:
         selector: a[href^="details.php?id="]
-        attribute: href    
+        attribute: href
       download:
         selector: a[href^="download.php?id="]
         attribute: href

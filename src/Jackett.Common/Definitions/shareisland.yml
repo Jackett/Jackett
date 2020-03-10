@@ -8,7 +8,7 @@
   links:
     - https://shareisland.org/
   legacylinks:
-    - http://shareisland.org/  
+    - http://shareisland.org/
     - http://www.shareisland.org/
 
   caps:
@@ -47,7 +47,7 @@
        - {id: 24, cat: PC/Mac, desc: "Applicazioni Mac"}
 
     modes:
-      search: [q]
+      search: [q, imdbid]
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
 

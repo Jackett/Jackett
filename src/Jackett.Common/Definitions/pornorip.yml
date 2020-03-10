@@ -183,7 +183,6 @@
         selector: dt:not(:contains("Сегодня")):not(:contains("Вчера")):not(:contains("назад"))
         optional: true
         filters:
-          - name: strdump
           - name: regexp
             args: "»\\s+(.+?)\\s+в"
           - name: replace
@@ -212,7 +211,6 @@
             args: ["дек", "Dec"]
           - name: dateparse
             args: "02 Jan 2006, 15:04"
-          - name: strdump
       downloadvolumefactor:
         text: 1
       uploadvolumefactor:

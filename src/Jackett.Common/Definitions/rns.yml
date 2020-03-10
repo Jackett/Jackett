@@ -111,6 +111,10 @@
       options:
         "desc": "desc"
         "asc": "asc"
+    - name: info_results
+      type: info
+      label: Search results
+      default: "If you are getting the error <b>Login Failed, got redirected</b> then access the site with your browser and <b>mark as read</b> all PMs."
 
   login:
     path: login.php
@@ -132,7 +136,7 @@
   search:
   # https://rainbownationsharing.net/browse.php?search=%2Bbloom%2Bcounty&searchin=title&incldead=0&vip=0
     paths:
-      - path: browse.php      
+      - path: browse.php
     inputs:
       $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
       search: "{{ .Keywords }}"

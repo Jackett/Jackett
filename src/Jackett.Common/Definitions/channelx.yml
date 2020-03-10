@@ -18,7 +18,7 @@
       - {id: 4, cat: TV/Sport, desc: "Sports"}
 
     modes:
-      search: [q]
+      search: [q, imdbid]
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
 
@@ -85,8 +85,10 @@
       sort: "{{ .Config.sort }}"
       direction: "{{ .Config.type }}"
       qty: 100
+
     rows:
       selector: table > tbody > tr
+
     fields:
       category:
         selector: a[href*="/categories/"]

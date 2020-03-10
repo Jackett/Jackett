@@ -6,8 +6,7 @@
   type: private
   encoding: UTF-8
   links:
-    - http://tracker.btnext.com/
-    # note: the site forces http, https is not supported
+    - http://tracker.btnext.com/ # site forces http, https is not supported
 
   caps:
     categorymappings:
@@ -149,7 +148,7 @@
   search:
     paths:
       - path: /
-    keywordsfilters: 
+    keywordsfilters:
       - name: re_replace
         args: ["[^a-zA-Z0-9]+", "%25"]
     inputs:

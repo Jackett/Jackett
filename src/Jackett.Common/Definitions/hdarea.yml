@@ -30,9 +30,9 @@
       - {id: 408, cat: Audio, desc: "HQ Audio"}
 
     modes:
-      search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
+      search: [q, imdbid]
+      tv-search: [q, season, ep, imdbid]
+      movie-search: [q, imdbid]
 
   settings:
     - name: username
@@ -84,7 +84,7 @@
     method: post
     inputs:
       $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
-      search: "{{ if .Query.IMDBID }}{{ .Query.IMDBIDShort }}{{else}}{{ .Keywords }}{{end}}"
+      search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
       # 0 incldead 1 active 2 onlydead
       incldead: 1
       # 0 all 1 normal 2 free 2 2x 4 2xFree 5 50% 6 2x50% 7 30%
@@ -114,7 +114,7 @@
         attribute: title
       details:
         selector: a[href^="details.php?id="]
-        attribute: href    
+        attribute: href
       download:
         selector: a[href^="download.php?id="]
         attribute: href

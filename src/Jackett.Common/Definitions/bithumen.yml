@@ -42,8 +42,8 @@
       - {id: 27, cat: Other, desc: "Klipek"}
 
     modes:
-      search: [q]
-      tv-search: [q, season, ep]
+      search: [q, imdbid]
+      tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
 
   login:
@@ -61,13 +61,15 @@
     paths:
       - path: browse.php
     inputs:
-      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-      search: "{{if .Query.IMDBID}}{{ .Query.IMDBID }}{{else}}{{ .Query.Keywords }}{{end}}"
+      $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+      search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
       incldead: 1
+
     rows:
       selector: table#torrenttable > tbody > tr:has(a[href^="details.php?id="])
       filters:
         - name: andmatch
+
     fields:
 # download button can be disbled in the profile, use details link instead
 #      download:
@@ -156,3 +158,4 @@
             args: ["tegnap", "yesterday"]
       description:
         selector: td:nth-child(2) > div
+# engine tbd

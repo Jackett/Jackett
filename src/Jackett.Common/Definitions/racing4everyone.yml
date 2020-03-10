@@ -47,7 +47,7 @@
       - {id: 80, cat: TV/Sport, desc: "Touring Cars"}
 
     modes:
-      search: [q]
+      search: [q, imdbid]
       tv-search: [q, season, ep, imdbid]
 
   settings:

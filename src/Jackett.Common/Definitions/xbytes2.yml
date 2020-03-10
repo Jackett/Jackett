@@ -6,26 +6,40 @@
   type: private
   encoding: ISO-8859-1
   links:
-    - http://xbytesv2.li/
+    - http://xbytesv2.li/ # site does not support https ERR_CONNECTION_CLOSED
 
   caps:
     categorymappings:
-      - {id: 18 , cat: Movies/HD, desc: "Peliculas - BluRay Rip 1080p"}
-      - {id: 16 , cat: Movies/HD, desc: "Peliculas - MicroHD 1080p"}
-      - {id: 23 , cat: Movies/3D, desc: "Peliculas - 3D"}
-      - {id: 17 , cat: Movies/HD, desc: "Peliculas - FullBluray/BDRemux"}
-      - {id: 29 , cat: Movies/HD, desc: "Peliculas - 1080p x265"}
-      - {id: 21 , cat: Movies/UHD, desc: "Peliculas - 4K"}
-      - {id: 30 , cat: Movies/HD, desc: "Peliculas - MicroHD x265"}
-      - {id: 35 , cat: TV/UHD, desc: "TV/Series - 4K"}
-      - {id: 31 , cat: TV/HD, desc: "TV/Series - x265"}
-      - {id: 25 , cat: TV/HD, desc: "TV/Series - HDTV & WEB-DL 1080p"}
-      - {id: 37 , cat: TV/Documentary, desc: "Documentales"}
-      - {id: 41 , cat: TV/Sport, desc: "Deportes"}
-      - {id: 5  , cat: TV/Anime, desc: "Anime"}
-      - {id: 34 , cat: TV/HD, desc: "Dibujos animados"}
-      - {id: 14 , cat: Audio/MP3, desc: "Música - MP3"}
-      - {id: 39 , cat: Audio/Lossless, desc: "Música - FLAC"}
+      - {id: 17, cat: Movies/BluRay, desc: "Video - FullBluray/BDRemux"}
+      - {id: 23, cat: Movies/3D, desc: "Video - 3D"}
+      - {id: 18, cat: Movies/HD, desc: "Video - 1080p"}
+      - {id: 30, cat: Movies/HD, desc: "Video - MicroHD x265"}
+      - {id: 29, cat: Movies/HD, desc: "Video - 1080p x265"}
+      - {id: 16, cat: Movies/HD, desc: "Video - MicroHD"}
+      - {id: 61, cat: Movies, desc: "Video - Custom"}
+      - {id: 42, cat: Movies/DVD, desc: "Video - DVD"}
+      - {id: 21, cat: Movies/UHD, desc: "Video - FullBluray/BDRem"}
+      - {id: 45, cat: Movies/UHD, desc: "Video - UHD BDRip"}
+      - {id: 46, cat: Movies/UHD, desc: "Video - MicroUHD"}
+      - {id: 62, cat: Movies/UHD, desc: "Video - Custom 4K"}
+      - {id: 25, cat: TV/HD, desc: "TV/Series - complet"}
+      - {id: 31, cat: TV/HD, desc: "TV/Series - x265"}
+      - {id: 35, cat: TV/UHD, desc: "TV/Series - 4K"}
+      - {id: 41, cat: TV/Sport, desc: "Deportes"}
+      - {id: 37, cat: TV/Documentary, desc: "Documentales"}
+      - {id: 34, cat: TV/HD, desc: "Dibujos animados"}
+      - {id: 5, cat: TV/Anime, desc: "Anime"}
+      - {id: 14, cat: Audio/MP3, desc: "Musica - MP3"}
+      - {id: 39, cat: Audio/Lossless, desc: "Musica - FLAC"}
+      - {id: 38, cat: Audio/Other, desc: "Musica - otros formato"}
+      - {id: 27, cat: PC/Games, desc: "Juegos"}
+      - {id: 65, cat: Console, desc: "Juegos Retro"}
+      - {id: 33, cat: Books, desc: "Libros"}
+      - {id: 7, cat: PC/0day, desc: "Software"}
+      - {id: 40, cat: PC/Phone-Other, desc: "Telefonos y tablets"}
+      - {id: 12, cat: XXX, desc: "Adult"}
+      - {id: 32, cat: Other, desc: "Otros"}
+
     modes:
       search: [q]
       tv-search: [q, season, ep]

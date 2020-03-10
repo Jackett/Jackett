@@ -28,7 +28,7 @@
       - {id: 15, cat: PC/Phone-Android, desc: "Apps APK"}
 
     modes:
-      search: [q]
+      search: [q, imdbid]
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
 
@@ -70,7 +70,7 @@
     test:
       path: /
       selector: a[href$="/logout"]
-      
+
   ratio:
     path: /
     selector: li:has(i.fa-sync-alt)

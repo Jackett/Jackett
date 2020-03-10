@@ -6,7 +6,7 @@
   type: semi-private
   encoding: UTF-8
   links:
-    - http://nethd.org/
+    - http://nethd.org/ # site does not support https NET::ERR_CERT_AUTHORITY_INVALID
 
   caps:
     categorymappings:
@@ -18,7 +18,7 @@
       - {id: 406, cat: Books, desc: "Book"}
 
     modes:
-      search: [q]
+      search: [q, imdbid]
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
 
@@ -129,4 +129,4 @@
         case:
           "span.label:contains(\"2X\")": 2
           "*": 1
-# engine n/a
+# NexusPHP

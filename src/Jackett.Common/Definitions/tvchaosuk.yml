@@ -27,7 +27,7 @@
       - {id: 42, cat: TV/Sport, desc: "Sport"}
 
     modes:
-      search: [q]
+      search: [q, imdbid]
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
 
@@ -69,7 +69,7 @@
     test:
       path: /
       selector: a[href$="/logout"]
-      
+
   ratio:
     path: /
     selector: li:has(i.fa-sync-alt)
@@ -94,8 +94,10 @@
       sort: "{{ .Config.sort }}"
       direction: "{{ .Config.type }}"
       qty: 100
+
     rows:
       selector: table > tbody > tr
+
     fields:
       category:
         selector: a[href*="/categories/"]

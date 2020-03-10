@@ -51,9 +51,9 @@
       - {id: 177, cat: Other, desc: "Sonstiges Alles andere"}
 
     modes:
-      search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
+      search: [q, imdbid]
+      tv-search: [q, season, ep, imdbid]
+      movie-search: [q, imdbid]
 
   settings:
     - name: username

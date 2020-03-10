@@ -6,6 +6,8 @@
   type: private
   encoding: UTF-8
   links:
+    - https://sdbits.org/
+  legacylinks:
     - http://sdbits.org/
 
   caps:
@@ -63,7 +65,7 @@
             args: cat
       details:
         selector: td:nth-child(3) > b > a
-        attribute: href      
+        attribute: href
       download:
         selector: a[href^="download.php?id="]
         attribute: href

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
-using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -11,6 +11,7 @@ using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
 
@@ -19,7 +20,8 @@ namespace Jackett.Common.Indexers.Abstract
     public abstract class AvistazTracker : BaseWebIndexer
     {
         private string LoginUrl => SiteLink + "auth/login";
-        private string SearchUrl => SiteLink + "torrents?in=1&type={0}&search={1}";
+        private string SearchUrl => SiteLink + "torrents?";
+        private string IMDBSearch => SiteLink + "ajax/movies/3?term=";
 
         private new ConfigurationDataBasicLogin configData
         {
@@ -43,6 +45,8 @@ namespace Jackett.Common.Indexers.Abstract
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
+
+            TorznabCaps.SupportsImdbMovieSearch = true;
 
             AddCategoryMapping(1, TorznabCatType.Movies);
             AddCategoryMapping(1, TorznabCatType.MoviesForeign);
@@ -81,16 +85,25 @@ namespace Jackett.Common.Indexers.Abstract
         {
             var releases = new List<ReleaseInfo>();
 
-            var categoryMapping = MapTorznabCapsToTrackers(query).Distinct();
-            var category = "0"; // Aka all
-            if (categoryMapping.Count() == 1)
+            var categoryMapping = MapTorznabCapsToTrackers(query).Distinct().ToList();
+            var qc = new NameValueCollection
             {
-                category = categoryMapping.First();
+                {"in", "1"},
+                {"type", categoryMapping.Any() ? categoryMapping.First() : "0"} // type=0 => all categories
+            };
+
+            // imdb search
+            if (!string.IsNullOrWhiteSpace(query.ImdbID))
+            {
+                var movieId = await GetMovieId(query.ImdbID);
+                if (movieId == null)
+                    return releases; // movie not found or service broken => return 0 results
+                qc.Add("movie_id", movieId);
             }
+            else
+                qc.Add("search", GetSearchTerm(query));
 
-
-            var episodeSearchUrl = string.Format(SearchUrl, category, WebUtility.UrlEncode(GetSearchTerm(query)));
-
+            var episodeSearchUrl = SearchUrl + qc.GetQueryString();
             var response = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
             if (response.IsRedirect)
             {
@@ -106,7 +119,6 @@ namespace Jackett.Common.Indexers.Abstract
                 var rows = dom.QuerySelectorAll("table:has(thead) > tbody > tr");
                 foreach (var row in rows)
                 {
-                    
                     var release = new ReleaseInfo
                     {
                         MinimumRatio = 1,
@@ -120,6 +132,10 @@ namespace Jackett.Common.Indexers.Abstract
 
                     var qDownload = row.QuerySelector("a.torrent-download-icon");
                     release.Link = new Uri(qDownload.GetAttribute("href"));
+
+                    var qBanner = row.QuerySelector("img.img-tor-poster")?.GetAttribute("data-poster-mid");
+                    if (qBanner != null)
+                        release.BannerUrl = new Uri(qBanner);
 
                     var dateStr = row.QuerySelector("td:nth-of-type(4) > span").Text().Trim();
                     release.PublishDate = DateTimeUtil.FromTimeAgo(dateStr);
@@ -162,6 +178,28 @@ namespace Jackett.Common.Indexers.Abstract
                 OnParseError(response.Content, ex);
             }
             return releases;
+        }
+
+        private async Task<string> GetMovieId(string imdbId)
+        {
+            try
+            {
+                var imdbUrl = IMDBSearch + imdbId;
+                var imdbHeaders = new Dictionary<string, string> { {"X-Requested-With", "XMLHttpRequest"} };
+                var imdbResponse = await RequestStringWithCookiesAndRetry(imdbUrl, null, null, imdbHeaders);
+                if (imdbResponse.IsRedirect)
+                {
+                    // re-login
+                    await ApplyConfiguration(null);
+                    imdbResponse = await RequestStringWithCookiesAndRetry(imdbUrl, null, null, imdbHeaders);
+                }
+                var json = JsonConvert.DeserializeObject<dynamic>(imdbResponse.Content);
+                return (string)((JArray)json["data"])[0]["id"];
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
     }
 }

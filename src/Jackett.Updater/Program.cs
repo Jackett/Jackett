@@ -275,6 +275,7 @@ namespace Jackett.Updater
                 "CurlSharp.dll",
                 "CurlSharp.pdb",
                 "Definitions/420files.yml",
+                "Definitions/alein.yml",
                 "Definitions/anidex.yml", // migrated to C#
                 "Definitions/aox.yml",
                 "Definitions/apollo.yml", // migrated to C# gazelle base tracker
@@ -296,6 +297,7 @@ namespace Jackett.Updater
                 "Definitions/digbt.yml",
                 "Definitions/dragonworld.yml",
                 "Definitions/dreamteam.yml",
+                "Definitions/eggmeon.yml",
                 "Definitions/elitehd.yml",
                 "Definitions/elittracker.yml",
                 "Definitions/eotforum.yml",
@@ -308,6 +310,7 @@ namespace Jackett.Updater
                 "Definitions/gfxnews.yml",
                 "Definitions/gods.yml",
                 "Definitions/gormogon.yml",
+                "Definitions/greeklegends.yml",
                 "Definitions/hachede-c.yml",
                 "Definitions/hd4free.yml",
                 "Definitions/hdbc.yml", // renamed to hdbitscom
@@ -366,6 +369,7 @@ namespace Jackett.Updater
                 "Definitions/torrentcouch.yml",
                 "Definitions/torrentkim.yml",
                 "Definitions/torrentproject.yml",
+                "Definitions/torrentseeds.yml", // migrated to c#
                 "Definitions/torrentsmd.yml",
                 "Definitions/torrentvault.yml",
                 "Definitions/torrentwtf.yml",

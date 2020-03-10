@@ -6,6 +6,8 @@
   type: private
   encoding: UTF-8
   links:
+    - https://broadcity.in/
+  legacylinks:
     - http://broadcity.in/
 
   caps:

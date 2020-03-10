@@ -6,7 +6,7 @@
   type: public
   encoding: UTF-8
   links:
-    - http://www.filebase.ws/ # https is not supported
+    - http://www.filebase.ws/ # https is not supported ERR_CONNECTION_REFUSED
 
   caps:
     categorymappings:
@@ -182,7 +182,7 @@
         selector: td:nth-child(5)
         filters:
           - name: replace
-            args: ["ТБ", "TB"] 
+            args: ["ТБ", "TB"]
           - name: replace
             args: ["ГБ", "GB"]
           - name: replace

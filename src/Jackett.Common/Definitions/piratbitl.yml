@@ -6,7 +6,7 @@
   type: semi-private
   encoding: UTF-8
   links:
-    - http://piratbit.top/
+    - http://piratbit.top/ # site forces http, https is not supported
   legacylinks:
     - https://pb.wtf/
     - https://piratbit.pw/

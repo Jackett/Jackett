@@ -93,15 +93,18 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Nyaa.si
  * OneJAV
  * OxTorrent
+ * ParnuXi
  * PiratBit
  * Pirateiro
  * PornLeech
+ * PornoLive
  * PornoRip
  * PornoTor
  * ProStyleX
  * RARBG
  * Rus-media
  * RuTor
+ * RuTracker.RU
  * Seedpeer
  * shokweb
  * ShowRSS
@@ -141,7 +144,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 
 <details> <summary> <b> Supported Semi-Private Trackers </b> </summary>
 
- * Alein
  * AlexFilm
  * AniDUB
  * ArenaBG
@@ -161,6 +163,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Gay-Torrents.org
  * HD Dolby
  * HamsterStudio
+ * IV-Torrents
  * KinoNaVse100
  * Kinozal
  * Korsar
@@ -274,7 +277,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * EbookParadijs
  * Ebooks-Shares
  * EfectoDoppler
- * EggMeOn
  * Elite-Tracker
  * Empornium (EMP)
  * Ethor.net (Thor's Land)
@@ -301,7 +303,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * GigaTorrents
  * GimmePeers (formerly ILT)
  * GiroTorrent
- * Greek Legends
  * Greek Team
  * HD-Bits.com
  * HD-Forever (HDF)
@@ -351,6 +352,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Magico (Trellas)
  * Majomparádé (TurkDepo)
  * MicroBit (µBit)
+ * MMA-Torrents
  * MoeCat
  * Mononoké-BT
  * MoreThanTV (MTV)
