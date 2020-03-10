@@ -369,6 +369,7 @@ namespace Jackett.Updater
                 "Definitions/torrentcouch.yml",
                 "Definitions/torrentkim.yml",
                 "Definitions/torrentproject.yml",
+                "Definitions/torrentseeds.yml", // migrated to c#
                 "Definitions/torrentsmd.yml",
                 "Definitions/torrentvault.yml",
                 "Definitions/torrentwtf.yml",
