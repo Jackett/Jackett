@@ -47,14 +47,16 @@
         selector: a
         attribute: href
       banner:
-        selector: img
+        selector: img.attachment-post-thumbnail
         attribute: src
       date:
         text: now
       description:
         selector: span
+      files:
+        text: 1
       size:
-        text: "500 MB"
+        text: "4.5 GB"
       seeders:
         text: 1
       leechers:
