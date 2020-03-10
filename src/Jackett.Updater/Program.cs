@@ -297,6 +297,7 @@ namespace Jackett.Updater
                 "Definitions/digbt.yml",
                 "Definitions/dragonworld.yml",
                 "Definitions/dreamteam.yml",
+                "Definitions/eggmeon.yml",
                 "Definitions/elitehd.yml",
                 "Definitions/elittracker.yml",
                 "Definitions/eotforum.yml",
