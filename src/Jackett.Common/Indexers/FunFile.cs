@@ -77,27 +77,17 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
 
-            var searchString = query.GetQueryString();
-            var searchUrl = SearchUrl;
-            var queryCollection = new NameValueCollection();
-            queryCollection.Add("incldead", "1");
-            queryCollection.Add("showspam", "1");
-
-            if (!string.IsNullOrWhiteSpace(searchString))
-            {
-                queryCollection.Add("search", searchString);
-            }
-
             var cats = MapTorznabCapsToTrackers(query);
-            var cat = "0";
-            if (cats.Count == 1)
+            var qc = new NameValueCollection
             {
-                cat = cats[0];
-            }
-            queryCollection.Add("cat", cat);
+                {"incldead", "1"},
+                {"showspam", "1"},
+                {"cat", cats.Count > 0 ? cats[0] : "0"}
+            };
+            if (!string.IsNullOrWhiteSpace(query.GetQueryString()))
+                qc.Add("search", query.GetQueryString());
 
-            searchUrl += "?" + queryCollection.GetQueryString();
-
+            var searchUrl = SearchUrl + "?" + qc.GetQueryString();
             var results = await RequestStringWithCookiesAndRetry(searchUrl);
 
             // Occasionally the cookies become invalid, login again if that happens
@@ -126,13 +116,16 @@ namespace Jackett.Common.Indexers
                     var qTimeAgo = row.QuerySelector("td:nth-of-type(6)");
                     var qSize = row.QuerySelector("td:nth-of-type(8)");
 
-                    var catStr = qCatLink.GetAttribute("href").Split('=')[1].Split('&')[0];
-                    release.Category = MapTrackerCatToNewznab(catStr);
+                    if (qDownloadLink == null)
+                        throw new Exception("Download link not found. Make sure you can download from the website.");
 
                     release.Link = new Uri(SiteLink + qDownloadLink.GetAttribute("href"));
                     release.Title = qDetailsLink.GetAttribute("title").Trim();
                     release.Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
                     release.Guid = release.Link;
+
+                    var catStr = qCatLink.GetAttribute("href").Split('=')[1].Split('&')[0];
+                    release.Category = MapTrackerCatToNewznab(catStr);
 
                     var sizeStr = qSize.TextContent;
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
