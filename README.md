@@ -101,6 +101,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * PornoRip
  * PornoTor
  * ProStyleX
+ * Rapidzona
  * RARBG
  * Rus-media
  * RuTor
