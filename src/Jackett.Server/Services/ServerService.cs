@@ -96,6 +96,33 @@ namespace Jackett.Server.Services
 
                 try
                 {
+                    var issueFile = "/etc/issue";
+                    if (File.Exists(issueFile))
+                        using (var reader = new StreamReader(issueFile))
+                        {
+                            var firstLine = reader.ReadLine();
+                            if (firstLine != null)
+                                logger.Info( $"File {issueFile}: {firstLine}");
+                        }
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e, "Error while reading the issue file");
+                }
+
+                try
+                {
+                    var cgroupFile = "/proc/1/cgroup";
+                    if (File.Exists(cgroupFile))
+                        logger.Info("Running in Docker: " + (File.ReadAllText(cgroupFile).Contains("/docker/") ? "Yes" : "No"));
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e, "Error while reading the Docker cgroup file");
+                }
+
+                try
+                {
                     ThreadPool.GetMaxThreads(out var workerThreads, out var completionPortThreads);
                     logger.Info(
                         "ThreadPool MaxThreads: " + workerThreads + " workerThreads, " + completionPortThreads +
@@ -108,24 +135,6 @@ namespace Jackett.Server.Services
 
                 logger.Info("App config/log directory: " + configService.GetAppDataFolder());
 
-                try
-                {
-                    var issuefile = "/etc/issue";
-                    if (File.Exists(issuefile))
-                    {
-                        using (var reader = new StreamReader(issuefile))
-                        {
-                            var firstLine = reader.ReadLine();
-                            if (firstLine != null)
-                                logger.Info("issue: " + firstLine);
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    logger.Error(e, "Error while reading the issue file");
-                }
-
                 logger.Info("Using Proxy: " + (string.IsNullOrEmpty(config.ProxyUrl) ? "No" : config.ProxyType.ToString()));
 
                 var monotype = Type.GetType("Mono.Runtime");
@@ -135,7 +144,7 @@ namespace Jackett.Server.Services
                     var monoVersion = "unknown";
                     if (displayName != null)
                         monoVersion = displayName.Invoke(null, null).ToString();
-                    logger.Info("mono version: " + monoVersion);
+                    logger.Info("Mono version: " + monoVersion);
 
                     var monoVersionO = new Version(monoVersion.Split(' ')[0]);
 
@@ -143,16 +152,14 @@ namespace Jackett.Server.Services
                     {
                         //Hard minimum of 5.8
                         //5.4 throws a SIGABRT, looks related to this which was fixed in 5.8 https://bugzilla.xamarin.com/show_bug.cgi?id=60625
-
                         logger.Error(
-                            "Your mono version is too old. Please update to the latest version from http://www.mono-project.com/download/");
+                            "Your Mono version is too old. Please update to the latest version from http://www.mono-project.com/download/");
                         Environment.Exit(2);
                     }
 
                     if (monoVersionO.Major < 5 || (monoVersionO.Major == 5 && monoVersionO.Minor < 8))
                     {
-                        var notice =
-                            "A minimum Mono version of 5.8 is required. Please update to the latest version from http://www.mono-project.com/download/";
+                        var notice = "A minimum Mono version of 5.8 is required. Please update to the latest version from http://www.mono-project.com/download/";
                         notices.Add(notice);
                         logger.Error(notice);
                     }
