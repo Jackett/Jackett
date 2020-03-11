@@ -40,6 +40,10 @@
       options:
         "desc": "desc"
         "asc": "asc"
+    - name: info_login
+      type: info
+      label: "Password Changes"
+      default: "This site forces you to change your <b>Password</b> every <b>90 days</b>.<br/>If you get a <b>Login Failed, got redirected</b> error, then access the site with your browser and check if you need to change your password. Logout after saving, and update this config to login."
 
   login:
     path: login.php
@@ -65,7 +69,7 @@
       order_way: "{{ .Config.type }}"
 
     rows:
-      selector: table#torrent_table > tbody > tr.group, tr.torrent, tr.group_torrent:not(.edition_info) 
+      selector: table#torrent_table > tbody > tr.group, tr.torrent, tr.group_torrent:not(.edition_info)
 
     fields:
       download:

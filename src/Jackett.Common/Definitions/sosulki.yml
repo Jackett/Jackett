@@ -1,0 +1,79 @@
+---
+  site: sosulki
+  name: sosulki
+  description: "sosulki is a RUSSIAN Public Torrent Tracker for 3X"
+  language: ru-ru
+  type: public
+  encoding: UTF-8
+  links:
+    - http://sosulki.net/ # site does not support https NET::ERR_CERT_COMMON_NAME_INVALID
+
+  caps:
+    categorymappings:
+     - {id: 12, cat: XXX, desc: "Порно категории"}
+     - {id: 77, cat: XXX, desc: "Порно фильмы русские"}
+     - {id: 78, cat: XXX, desc: "Транссексуалы (Transsexual)"}
+     - {id: 79, cat: XXX, desc: "Бисексуалы (Bisexual)"}
+     - {id: 80, cat: XXX, desc: "Большие Члены (Big Cocks)"}
+     - {id: 81, cat: XXX, desc: "Секс Машины (Fucking Machines)"}
+     - {id: 75, cat: XXX, desc: "Порно фильмы зарубежные"}
+     - {id: 456, cat: XXX, desc: "Порно фильмы зарубежные"}
+     - {id: 76, cat: XXX, desc: "Геи (Gay)"}
+     - {id: 70, cat: XXX, desc: "БДСМ (BDSM)"}
+     - {id: 67, cat: XXX, desc: "Анал (Anal)"}
+     - {id: 68, cat: XXX, desc: "Большие попки (Big Ass)"}
+     - {id: 69, cat: XXX, desc: "Большие сиськи (Big Tits)"}
+     - {id: 73, cat: XXX, desc: "Групповой секс (Group Sex)"}
+     - {id: 65, cat: XXX, desc: "Порноролики зарубежные "}
+     - {id: 66, cat: XXX, desc: "Русское Порно Любительское (Amateur Russian)"}
+     - {id: 71, cat: XXX, desc: "Лесбиянки (Lesbians)"}
+     - {id: 74, cat: XXX, desc: "Любительское порно фото (Amateur Picture Gallery)"}
+
+    modes:
+      search: [q]
+
+  settings: []
+
+  download:
+    selector: a[href^="magnet:?xt="]
+    attribute: href
+
+  search:
+    paths:
+      - path: "{{ if .Keywords }}?do=search&subaction=search&search_start=0&full_search=1&result_from=1&story={{ .Keywords }}&titleonly=3catlist[]=0&searchdate=0&resorder=desc{{else}}lastnews/{{end}}"
+
+    rows:
+      selector: tr.fr_viewn_in:not(td.frs:empty)
+
+    fields:
+      category:
+        selector: img[src^="/templates/freewhite/img/"]
+        attribute: src
+        filters:
+          - name: regexp
+            args: (\d+)
+      title:
+        selector: td.titlelast a
+        attribute: title
+      details:
+        selector: td.titlelast a
+        attribute: href
+      download:
+        selector: td.titlelast a
+        attribute: href
+      date:
+        selector: i
+        filters:
+          - name: dateparse
+            args: "02-01-2006 15:04:05"
+      size:
+        selector: td.frs
+      seeders:
+        selector: td.frsl_s
+      leechers:
+        selector: td.frsl_p
+      downloadvolumefactor:
+        text: 0
+      uploadvolumefactor:
+        text: 1
+# DataLife
