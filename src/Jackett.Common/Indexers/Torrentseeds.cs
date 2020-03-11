@@ -187,21 +187,12 @@ namespace Jackett.Common.Indexers
                     var rawDateStr = content.QuerySelector("tr:has(td:contains(\"Added\"))").Children[1].TextContent;
                     var dateUpped = DateTimeUtil.FromUnknown(rawDateStr.Replace(",", string.Empty));
 
-                    var qInfo = content.QuerySelector("tr:has(th)");
                     var ImdbRegexp = new Regex(@"(https:\/\/[w]{0,3}\.?imdb.com\/\S*\/\S*)");
+                    var qInfo = content.QuerySelector("tr:has(th)")?.Children[1].TextContent
+                        ?? content.QuerySelector("tr > td > pre")?.TextContent;
                     if (qInfo != null)
                     {
-                        var infoBlock = qInfo.Children[1].TextContent;
-                        release.Imdb = ParseUtil.GetImdbID(ImdbRegexp.Match(infoBlock).Groups[1].Value.Split('/').Last());
-                    }
-                    else
-                    {
-                        qInfo = content.QuerySelector("tr > td > pre");
-                        if (qInfo != null)
-                        {
-                            var preBlock = qInfo.TextContent;
-                            release.Imdb = ParseUtil.GetImdbID(ImdbRegexp.Match(preBlock).Groups[1].Value.Split('/').Last());
-                        }
+                        release.Imdb = ParseUtil.GetImdbID(ImdbRegexp.Match(qInfo).Groups[1].Value.Split('/').Last());
                     }
 
                     // Mar 4 2020, 05:47 AM
@@ -265,7 +256,7 @@ namespace Jackett.Common.Indexers
                         var deRefUrl = qImdb.GetAttribute("href");
                         release.Imdb = ParseUtil.GetImdbID(WebUtility.UrlDecode(deRefUrl).Split('/').Last());
                     }
-                    
+
                     release.DownloadVolumeFactor = row.GetAttribute("class").Contains("freeleech") ? 0 : 1;
                     release.UploadVolumeFactor = 1;
                     releases.Add(release);
