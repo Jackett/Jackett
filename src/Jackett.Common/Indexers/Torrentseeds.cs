@@ -187,12 +187,12 @@ namespace Jackett.Common.Indexers
                     var rawDateStr = content.QuerySelector("tr:has(td:contains(\"Added\"))").Children[1].TextContent;
                     var dateUpped = DateTimeUtil.FromUnknown(rawDateStr.Replace(",", string.Empty));
 
-                    var ImdbRegexp = new Regex(@"(https:\/\/[w]{0,3}\.?imdb.com\/\S*\/\S*)");
+                    var imdbRegexp = new Regex(@"(https:\/\/[w]{0,3}\.?imdb.com\/\S*\/\S*)");
                     var qInfo = content.QuerySelector("tr:has(th)")?.Children[1].TextContent
                         ?? content.QuerySelector("tr > td > pre")?.TextContent;
                     if (qInfo != null)
                     {
-                        release.Imdb = ParseUtil.GetImdbID(ImdbRegexp.Match(qInfo).Groups[1].Value.Split('/').Last());
+                        release.Imdb = ParseUtil.GetImdbID(imdbRegexp.Match(qInfo).Groups[1].Value.Split('/').Last());
                     }
 
                     // Mar 4 2020, 05:47 AM
