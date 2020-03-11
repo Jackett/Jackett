@@ -227,7 +227,8 @@ namespace Jackett.Common.Indexers
                     release.PublishDate = TimeZoneInfo.ConvertTime(dateGerman, germanyTz, TimeZoneInfo.Local);
                     var grabs = row.QuerySelector("td:nth-child(7)").TextContent;
                     release.Grabs = ParseUtil.CoerceInt(grabs);
-                    if (row.QuerySelector("img[src=\"themes/images/onlyup.png\"]") != null)
+                    if (row.QuerySelector("img[src=\"themes/images/freeleech.png\"]") != null
+                        || row.QuerySelector("img[src=\"themes/images/onlyup.png\"]") != null)
                         release.DownloadVolumeFactor = 0;
                     else if (row.QuerySelector("img[src=\"themes/images/DL50.png\"]") != null)
                         release.DownloadVolumeFactor = 0.5;
