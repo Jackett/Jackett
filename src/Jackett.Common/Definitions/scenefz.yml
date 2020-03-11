@@ -1,16 +1,16 @@
 ---
   site: scenefz
-  name: SceneFZ / u-torrents
+  name: SceneFZ
   description: "SceneFZ is a ratioless ROMANIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
   language: ro-ro
   type: private
   encoding: UTF-8
   links:
+    - https://scenefz.me/
+  legacylinks:
     - https://www.scenefz.me/
     - https://www.u-torrents.ro/
-  legacylinks:
-    - https://scenefz.me/
-    
+
   caps:
     categorymappings:
       - {id: 1, cat: TV/Anime, desc: "Anime / Hentai"}
