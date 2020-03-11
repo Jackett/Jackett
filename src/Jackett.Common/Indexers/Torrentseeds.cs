@@ -116,7 +116,7 @@ namespace Jackett.Common.Indexers
             };
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, accumulateCookies: true);
             await ConfigureIfOK(
-                result.Cookies, result.Content?.Contains("https://torrentseeds.org/logout.php") == true && !result.Content.Contains("Login failed!"),
+                result.Cookies, result.Content.Contains("/logout.php?"),
                 () =>
                 {
                     var errorDom = parser.ParseDocument(result.Content);
@@ -146,7 +146,7 @@ namespace Jackett.Common.Indexers
             searchUrl += "?" + queryCollection.GetQueryString();
             var response = await RequestStringWithCookiesAndRetry(searchUrl);
             var results = response.Content;
-            if (results.Contains("takelogin.php") || response.Cookies?.Contains("pass=-1") == true || response.IsRedirect && response.RedirectingTo.Contains("login.php"))
+            if (!results.Contains("/logout.php?"))
             {
                 await ApplyConfiguration(null);
                 response = await RequestStringWithCookiesAndRetry(searchUrl);
@@ -171,7 +171,7 @@ namespace Jackett.Common.Indexers
                     var qLink = content.QuerySelector("tr:has(td:contains(\"Download\"))")
                                        .QuerySelector("a[href*=\"download.php?torrent=\"]");
                     release.Link = new Uri(SiteLink + qLink.GetAttribute("href"));
-                    release.Title = qLink.QuerySelector("u").TextContent;
+                    release.Title = qLink.QuerySelector("u").TextContent.Replace(".torrent", "").Trim();
                     release.Comments = qCommentLink;
                     release.Guid = release.Comments;
                     var qSize = content.QuerySelector("tr:has(td.heading:contains(\"Size\"))").Children[1].TextContent
