@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
@@ -77,12 +78,11 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
 
-            var cats = MapTorznabCapsToTrackers(query);
             var qc = new NameValueCollection
             {
                 {"incldead", "1"},
                 {"showspam", "1"},
-                {"cat", cats.Count > 0 ? cats[0] : "0"}
+                {"cat", MapTorznabCapsToTrackers(query).FirstOrDefault() ?? "0"}
             };
             if (!string.IsNullOrWhiteSpace(query.GetQueryString()))
                 qc.Add("search", query.GetQueryString());
@@ -117,7 +117,7 @@ namespace Jackett.Common.Indexers
                     var qSize = row.QuerySelector("td:nth-of-type(8)");
 
                     if (qDownloadLink == null)
-                        throw new Exception("Download link not found. Make sure you can download from the website.");
+                        throw new Exception("Download links not found. Make sure you can download from the website.");
 
                     release.Link = new Uri(SiteLink + qDownloadLink.GetAttribute("href"));
                     release.Title = qDetailsLink.GetAttribute("title").Trim();
