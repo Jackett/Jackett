@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -28,7 +29,7 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        public TorrentSeeds(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps) :
+        public TorrentSeeds(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps) :
             base(
                 name: "TorrentSeeds",
                 description: "TorrentSeeds is a Private site for MOVIES / TV / GENERAL",
@@ -186,6 +187,23 @@ namespace Jackett.Common.Indexers
                     var rawDateStr = content.QuerySelector("tr:has(td:contains(\"Added\"))").Children[1].TextContent;
                     var dateUpped = DateTimeUtil.FromUnknown(rawDateStr.Replace(",", string.Empty));
 
+                    var qInfo = content.QuerySelector("tr:has(th)");
+                    var ImdbRegexp = new Regex(@"(https:\/\/[w]{0,3}\.?imdb.com\/\S*\/\S*)");
+                    if (qInfo != null)
+                    {
+                        var infoBlock = qInfo.Children[1].TextContent;
+                        release.Imdb = ParseUtil.GetImdbID(ImdbRegexp.Match(infoBlock).Groups[1].Value.Split('/').Last());
+                    }
+                    else
+                    {
+                        qInfo = content.QuerySelector("tr > td > pre");
+                        if (qInfo != null)
+                        {
+                            var preBlock = qInfo.TextContent;
+                            release.Imdb = ParseUtil.GetImdbID(ImdbRegexp.Match(preBlock).Groups[1].Value.Split('/').Last());
+                        }
+                    }
+
                     // Mar 4 2020, 05:47 AM
                     release.PublishDate = dateUpped.ToLocalTime();
                     var qGrabs = content.QuerySelector("tr:has(td:contains(\"Snatched\"))").Children[1];
@@ -240,6 +258,14 @@ namespace Jackett.Common.Indexers
                     release.PublishDate = parsedDateTime;
                     release.Grabs = ParseUtil.CoerceInt(qGrabs.TextContent);
                     release.Files = ParseUtil.CoerceInt(qFiles.TextContent);
+
+                    var qImdb = row.QuerySelector("td.torrent-table-name > div > p.float-down > span.label-warning > a");
+                    if (qImdb != null)
+                    {
+                        var deRefUrl = qImdb.GetAttribute("href");
+                        release.Imdb = ParseUtil.GetImdbID(WebUtility.UrlDecode(deRefUrl).Split('/').Last());
+                    }
+                    
                     release.DownloadVolumeFactor = row.GetAttribute("class").Contains("freeleech") ? 0 : 1;
                     release.UploadVolumeFactor = 1;
                     releases.Add(release);
