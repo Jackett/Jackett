@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -28,7 +29,7 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        public TorrentSeeds(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps) :
+        public TorrentSeeds(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps) :
             base(
                 name: "TorrentSeeds",
                 description: "TorrentSeeds is a Private site for MOVIES / TV / GENERAL",
@@ -116,7 +117,7 @@ namespace Jackett.Common.Indexers
             };
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, accumulateCookies: true);
             await ConfigureIfOK(
-                result.Cookies, result.Content?.Contains("https://torrentseeds.org/logout.php") == true && !result.Content.Contains("Login failed!"),
+                result.Cookies, result.Content.Contains("/logout.php?"),
                 () =>
                 {
                     var errorDom = parser.ParseDocument(result.Content);
@@ -146,7 +147,7 @@ namespace Jackett.Common.Indexers
             searchUrl += "?" + queryCollection.GetQueryString();
             var response = await RequestStringWithCookiesAndRetry(searchUrl);
             var results = response.Content;
-            if (results.Contains("takelogin.php") || response.Cookies?.Contains("pass=deleted;") == true)
+            if (!results.Contains("/logout.php?"))
             {
                 await ApplyConfiguration(null);
                 response = await RequestStringWithCookiesAndRetry(searchUrl);
@@ -171,7 +172,7 @@ namespace Jackett.Common.Indexers
                     var qLink = content.QuerySelector("tr:has(td:contains(\"Download\"))")
                                        .QuerySelector("a[href*=\"download.php?torrent=\"]");
                     release.Link = new Uri(SiteLink + qLink.GetAttribute("href"));
-                    release.Title = qLink.QuerySelector("u").TextContent;
+                    release.Title = qLink.QuerySelector("u").TextContent.Replace(".torrent", "").Trim();
                     release.Comments = qCommentLink;
                     release.Guid = release.Comments;
                     var qSize = content.QuerySelector("tr:has(td.heading:contains(\"Size\"))").Children[1].TextContent
@@ -185,6 +186,14 @@ namespace Jackett.Common.Indexers
                     release.Peers = ParseUtil.CoerceInt(qLeechers) + release.Seeders;
                     var rawDateStr = content.QuerySelector("tr:has(td:contains(\"Added\"))").Children[1].TextContent;
                     var dateUpped = DateTimeUtil.FromUnknown(rawDateStr.Replace(",", string.Empty));
+
+                    var imdbRegexp = new Regex(@"(https:\/\/[w]{0,3}\.?imdb.com\/\S*\/\S*)");
+                    var qInfo = content.QuerySelector("tr:has(th)")?.Children[1].TextContent
+                        ?? content.QuerySelector("tr > td > pre")?.TextContent;
+                    if (qInfo != null)
+                    {
+                        release.Imdb = ParseUtil.GetImdbID(imdbRegexp.Match(qInfo).Groups[1].Value.Split('/').Last());
+                    }
 
                     // Mar 4 2020, 05:47 AM
                     release.PublishDate = dateUpped.ToLocalTime();
@@ -220,7 +229,7 @@ namespace Jackett.Common.Indexers
                     release.Category = MapTrackerCatToNewznab(catStr);
                     var qDetailsLink = row.QuerySelector("a[href^=\"/details.php?id=\"]");
                     var qDetailsTitle = row.QuerySelector("td:has(a[href^=\"/details.php?id=\"]) b");
-                    release.Title = qDetailsTitle.TextContent;
+                    release.Title = qDetailsTitle.TextContent.Trim();
                     var qDlLink = row.QuerySelector("a[href^=\"/download.php?torrent=\"]");
                     var qSeeders = row.QuerySelector("td.torrent-table-seeders");
                     var qLeechers = row.QuerySelector("td.torrent-table-leechers");
@@ -240,6 +249,14 @@ namespace Jackett.Common.Indexers
                     release.PublishDate = parsedDateTime;
                     release.Grabs = ParseUtil.CoerceInt(qGrabs.TextContent);
                     release.Files = ParseUtil.CoerceInt(qFiles.TextContent);
+
+                    var qImdb = row.QuerySelector("td.torrent-table-name > div > p.float-down > span.label-warning > a");
+                    if (qImdb != null)
+                    {
+                        var deRefUrl = qImdb.GetAttribute("href");
+                        release.Imdb = ParseUtil.GetImdbID(WebUtility.UrlDecode(deRefUrl).Split('/').Last());
+                    }
+
                     release.DownloadVolumeFactor = row.GetAttribute("class").Contains("freeleech") ? 0 : 1;
                     release.UploadVolumeFactor = 1;
                     releases.Add(release);
