@@ -134,6 +134,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TorrentRex
  * TorrentQuest
  * Torrents.csv
+ * Torrentv
  * TorrentView
  * TorrentWal
  * Torrentz2
