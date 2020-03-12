@@ -36,8 +36,31 @@
     fields:
       category:
         text: 1
+      site_date:
+        selector: a[href^="/torrent/"]
+        filters:
+          # date is at the end of the title, so we get it and name it site_date
+          - name: regexp
+            args: "(\\d{4})$"
       title:
         selector: a[href^="/torrent/"]
+        attribute: title
+        filters:
+          - name: replace
+            args: [" en Torrent", ""]
+          - name: replace
+            args: [" FRENCH", " {{ .Result.site_date }} FRENCH"]
+          - name: replace
+            args: ["MULTI", "{{ .Result.site_date }} MULTI"]
+          - name: replace
+            args: ["TRUEFRENCH", "{{ .Result.site_date }} TRUEFRENCH"]
+          - name: replace
+            args: ["VOSTFR", "{{ .Result.site_date }} VOSTFR"]
+          # and we delete the year at the end
+          - name: re_replace
+            args: ["(\\w+)$", ""]
+          - name: replace
+            args: ["WEBRIP", "WEBDL"]
       details:
         selector: a[href^="/torrent/"]
         attribute: href
