@@ -143,6 +143,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * xxxtor
  * YourBittorrent
  * YTS.ag
+ * zetorrents
  * Zooqle
 </details>
 
