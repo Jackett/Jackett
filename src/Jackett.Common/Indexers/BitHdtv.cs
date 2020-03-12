@@ -161,7 +161,7 @@ namespace Jackett.Common.Indexers
                         release.Grabs = ParseUtil.CoerceLong(row.Children[7].TextContent);
                         release.Guid = detailsLink;
                         release.Comments = release.Guid;
-                        release.Link = new Uri(SiteLink + row.QuerySelector("a[href^=\"download.php\"]"));
+                        release.Link = new Uri(SiteLink + row.QuerySelector("a[href^=\"download.php\"]").GetAttribute("href"));
                         var catUrl = new Uri(SiteLink + row.Children[1].FirstElementChild.GetAttribute("href"));
                         var catQuery = HttpUtility.ParseQueryString(catUrl.Query);
                         var catNum = catQuery["cat"];
