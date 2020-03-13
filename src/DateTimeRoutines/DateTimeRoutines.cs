@@ -139,19 +139,13 @@ namespace DateTimeRoutines
         {
             set
             {
-                s_DefaultDate = value;
+                DefaultDateNow = value;
                 DefaultDateIsNow = false;
             }
-            get
-            {
-                if (DefaultDateIsNow)
-                    return DateTime.Now;
-                else
-                    return s_DefaultDate;
-            }
+            get => DefaultDateIsNow ? DateTime.Now : DefaultDateNow;
         }
 
-        private static DateTime s_DefaultDate = DateTime.Now;
+        private static DateTime DefaultDateNow = DateTime.Now;
 
         /// <summary>
         /// If true then DefaultDate property is ignored and DefaultDate is always DateTime.Now

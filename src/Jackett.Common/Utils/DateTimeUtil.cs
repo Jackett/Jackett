@@ -8,13 +8,13 @@ namespace Jackett.Common.Utils
     {
         public const string Rfc1123ZPattern = "ddd, dd MMM yyyy HH':'mm':'ss z";
 
-        private static readonly Regex s_TimeAgoRegexp = new Regex(@"(?i)\bago", RegexOptions.Compiled);
-        private static readonly Regex s_TodayRegexp = new Regex(@"(?i)\btoday([\s,]*|$)", RegexOptions.Compiled);
-        private static readonly Regex s_TomorrowRegexp = new Regex(@"(?i)\btomorrow([\s,]*|$)", RegexOptions.Compiled);
-        private static readonly Regex s_YesterdayRegexp = new Regex(@"(?i)\byesterday([\s,]*|$)", RegexOptions.Compiled);
-        private static readonly Regex s_DaysOfWeekRegexp = new Regex(@"(?i)\b(monday|tuesday|wednesday|thursday|friday|saturday|sunday)\s+at\s+", RegexOptions.Compiled);
-        private static readonly Regex s_MissingYearRegexp = new Regex(@"^(\d{1,2}-\d{1,2})(\s|$)", RegexOptions.Compiled);
-        private static readonly Regex s_MissingYearRegexp2 = new Regex(@"^(\d{1,2}\s+\w{3})\s+(\d{1,2}\:\d{1,2}.*)$", RegexOptions.Compiled); // 1 Jan 10:30
+        private static readonly Regex TimeAgoRegexp = new Regex(@"(?i)\bago", RegexOptions.Compiled);
+        private static readonly Regex TodayRegexp = new Regex(@"(?i)\btoday([\s,]*|$)", RegexOptions.Compiled);
+        private static readonly Regex TomorrowRegexp = new Regex(@"(?i)\btomorrow([\s,]*|$)", RegexOptions.Compiled);
+        private static readonly Regex YesterdayRegexp = new Regex(@"(?i)\byesterday([\s,]*|$)", RegexOptions.Compiled);
+        private static readonly Regex DaysOfWeekRegexp = new Regex(@"(?i)\b(monday|tuesday|wednesday|thursday|friday|saturday|sunday)\s+at\s+", RegexOptions.Compiled);
+        private static readonly Regex MissingYearRegexp = new Regex(@"^(\d{1,2}-\d{1,2})(\s|$)", RegexOptions.Compiled);
+        private static readonly Regex MissingYearRegexp2 = new Regex(@"^(\d{1,2}\s+\w{3})\s+(\d{1,2}\:\d{1,2}.*)$", RegexOptions.Compiled); // 1 Jan 10:30
 
         public static DateTime UnixTimestampToDateTime(long unixTime)
         {
@@ -104,7 +104,7 @@ namespace Jackett.Common.Utils
                     return DateTime.UtcNow;
 
                 // ... ago
-                var match = s_TimeAgoRegexp.Match(str);
+                var match = TimeAgoRegexp.Match(str);
                 if (match.Success)
                 {
                     var timeago = str;
@@ -112,7 +112,7 @@ namespace Jackett.Common.Utils
                 }
 
                 // Today ...
-                match = s_TodayRegexp.Match(str);
+                match = TodayRegexp.Match(str);
                 if (match.Success)
                 {
                     var time = str.Replace(match.Groups[0].Value, "");
@@ -122,7 +122,7 @@ namespace Jackett.Common.Utils
                 }
 
                 // Yesterday ...
-                match = s_YesterdayRegexp.Match(str);
+                match = YesterdayRegexp.Match(str);
                 if (match.Success)
                 {
                     var time = str.Replace(match.Groups[0].Value, "");
@@ -133,7 +133,7 @@ namespace Jackett.Common.Utils
                 }
 
                 // Tomorrow ...
-                match = s_TomorrowRegexp.Match(str);
+                match = TomorrowRegexp.Match(str);
                 if (match.Success)
                 {
                     var time = str.Replace(match.Groups[0].Value, "");
@@ -144,7 +144,7 @@ namespace Jackett.Common.Utils
                 }
 
                 // [day of the week] at ... (eg: Saturday at 14:22)
-                match = s_DaysOfWeekRegexp.Match(str);
+                match = DaysOfWeekRegexp.Match(str);
                 if (match.Success)
                 {
                     var time = str.Replace(match.Groups[0].Value, "");
@@ -185,7 +185,7 @@ namespace Jackett.Common.Utils
                 }
 
                 // add missing year
-                match = s_MissingYearRegexp.Match(str);
+                match = MissingYearRegexp.Match(str);
                 if (match.Success)
                 {
                     var date = match.Groups[1].Value;
@@ -194,7 +194,7 @@ namespace Jackett.Common.Utils
                 }
 
                 // add missing year 2
-                match = s_MissingYearRegexp2.Match(str);
+                match = MissingYearRegexp2.Match(str);
                 if (match.Success)
                 {
                     var date = match.Groups[1].Value;
