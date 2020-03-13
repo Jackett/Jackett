@@ -82,7 +82,7 @@ namespace Jackett.Common.Indexers
             {
                 {"incldead", "1"},
                 {"showspam", "1"},
-                {"cat", MapTorznabCapsToTrackers(query).FirstOrDefault() ?? "0"}
+                {"cat", MapTorznabCapsToTrackers(query).DefaultIfEmpty("0").First()}
             };
             if (!string.IsNullOrWhiteSpace(query.GetQueryString()))
                 qc.Add("search", query.GetQueryString());
