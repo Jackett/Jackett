@@ -121,6 +121,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Torlock
  * TOROS
  * Torrent Downloads (TD)
+ * Torrent Oyun indir
  * torrent-pirat
  * Torrent4You
  * Torrent9
