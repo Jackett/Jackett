@@ -393,12 +393,12 @@ namespace Jackett.Common.Indexers
             if (response.Status != System.Net.HttpStatusCode.OK && response.Status != System.Net.HttpStatusCode.Continue && response.Status != System.Net.HttpStatusCode.PartialContent)
             {
                 logger.Error("Failed download cookies: " + CookieHeader);
-                if (response.Content != null)
-                    logger.Error("Failed download response:\n" + Encoding.UTF8.GetString(response.Content));
+                if (response.ContentBytes != null)
+                    logger.Error("Failed download response:\n" + Encoding.UTF8.GetString(response.ContentBytes));
                 throw new Exception($"Remote server returned {response.Status.ToString()}" + (response.IsRedirect ? " => " + response.RedirectingTo : ""));
             }
 
-            return response.Content;
+            return response.ContentBytes;
         }
 
         protected async Task<WebClientByteResult> RequestBytesWithCookiesAndRetry(string url, string cookieOverride = null, RequestType method = RequestType.GET, string referer = null, IEnumerable<KeyValuePair<string, string>> data = null)

@@ -74,15 +74,15 @@ namespace Jackett.Server
                 cfg.CreateMap<WebClientByteResult, WebClientStringResult>().ForMember(x => x.ContentString, opt => opt.Ignore()).AfterMap((be, str) =>
                 {
                     var encoding = be.Request.Encoding ?? Encoding.UTF8;
-                    str.ContentString = encoding.GetString(be.Content);
+                    str.ContentString = encoding.GetString(be.ContentBytes);
                 });
 
-                cfg.CreateMap<WebClientStringResult, WebClientByteResult>().ForMember(x => x.Content, opt => opt.Ignore()).AfterMap((str, be) =>
+                cfg.CreateMap<WebClientStringResult, WebClientByteResult>().ForMember(x => x.ContentBytes, opt => opt.Ignore()).AfterMap((str, be) =>
                 {
                     if (!string.IsNullOrEmpty(str.ContentString))
                     {
                         var encoding = str.Request.Encoding ?? Encoding.UTF8;
-                        be.Content = encoding.GetBytes(str.ContentString);
+                        be.ContentBytes = encoding.GetBytes(str.ContentString);
                     }
                 });
 
