@@ -103,7 +103,7 @@ namespace Jackett.Common.Indexers
             };
             var result = await RequestLoginAndFollowRedirect(LoginUrl1, pairs, null, true, null, SiteLink);
             var tokenRegex = new Regex(@"name=\\""a\\"" value=\\""([^""]+)\\""");
-            var matches = tokenRegex.Match(result.Content);
+            var matches = tokenRegex.Match(result.ContentString);
             if (!matches.Success)
                 throw new Exception("Error parsing the login form");
             var token = matches.Groups[1].Value;
@@ -115,12 +115,12 @@ namespace Jackett.Common.Indexers
             };
             result = await RequestLoginAndFollowRedirect(LoginUrl2, pairs, result.Cookies, true, null, SiteLink);
 
-            await ConfigureIfOK(result.Cookies, result.Content?.Contains("/browse.php") == true, () =>
+            await ConfigureIfOK(result.Cookies, result.ContentString?.Contains("/browse.php") == true, () =>
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(result.Content);
+                var dom = parser.ParseDocument(result.ContentString);
                 var errorMessage = dom.QuerySelector("h5")?.TextContent;
-                if (result.Content.Contains("Wrong Captcha!"))
+                if (result.ContentString.Contains("Wrong Captcha!"))
                     errorMessage = "Captcha required due to a failed login attempt. Login via a browser to whitelist your IP and then reconfigure Jackett.";
                 throw new Exception(errorMessage);
             });
@@ -151,7 +151,7 @@ namespace Jackett.Common.Indexers
 
             var searchUrl = SearchUrl + string.Join("/", qc);
             var response = await RequestStringWithCookiesAndRetry(searchUrl);
-            if (!response.Content.Contains("/logout.php")) // re-login
+            if (!response.ContentString.Contains("/logout.php")) // re-login
             {
                 await DoLogin();
                 response = await RequestStringWithCookiesAndRetry(searchUrl);
@@ -160,7 +160,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(response.Content);
+                var dom = parser.ParseDocument(response.ContentString);
                 var rows = dom.QuerySelectorAll("div.boxContent > table > tbody > tr");
 
                 foreach (var row in rows)
@@ -204,7 +204,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
             return releases;
         }

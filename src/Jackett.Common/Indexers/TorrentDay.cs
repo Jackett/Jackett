@@ -130,7 +130,7 @@ namespace Jackett.Common.Indexers
                 loginPage = await RequestStringWithCookies(loginPage.RedirectingTo, string.Empty);
 
             var parser = new HtmlParser();
-            var dom = parser.ParseDocument(loginPage.Content);
+            var dom = parser.ParseDocument(loginPage.ContentString);
             var result = configData;
 
             //result.CookieHeader.Value = loginPage.Cookies;
@@ -171,12 +171,12 @@ namespace Jackett.Common.Indexers
             }
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, configData.CookieHeader.Value, true, null, LoginUrl);
-            await ConfigureIfOK(result.Cookies, result.Content?.Contains("logout.php") == true, () =>
+            await ConfigureIfOK(result.Cookies, result.ContentString?.Contains("logout.php") == true, () =>
             {
-                var errorMessage = result.Content;
+                var errorMessage = result.ContentString;
 
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(result.Content);
+                var dom = parser.ParseDocument(result.ContentString);
                 var messageEl = dom.QuerySelector("#login");
                 if (messageEl != null)
                 {
@@ -219,7 +219,7 @@ namespace Jackett.Common.Indexers
 
             try
             {
-                var rows = JsonConvert.DeserializeObject<dynamic>(results.Content);
+                var rows = JsonConvert.DeserializeObject<dynamic>(results.ContentString);
 
                 foreach (var row in rows)
                 {
@@ -260,7 +260,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
             return releases;
         }

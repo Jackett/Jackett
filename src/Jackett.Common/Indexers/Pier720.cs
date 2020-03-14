@@ -116,14 +116,14 @@ namespace Jackett.Common.Indexers
                 { "autologin", "on" }
             };
             var htmlParser = new HtmlParser();
-            var loginDocument = htmlParser.ParseDocument((await RequestStringWithCookies(LoginUrl)).Content);
+            var loginDocument = htmlParser.ParseDocument((await RequestStringWithCookies(LoginUrl)).ContentString);
             pairs["creation_time"] = loginDocument.GetElementsByName("creation_time")[0].GetAttribute("value");
             pairs["form_token"] = loginDocument.GetElementsByName("form_token")[0].GetAttribute("value");
             pairs["sid"] = loginDocument.GetElementsByName("sid")[0].GetAttribute("value");
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl, true);
             await ConfigureIfOK(
-                result.Cookies, result.Content?.Contains("ucp.php?mode=logout&") == true,
-                () => throw new ExceptionWithConfigData(result.Content, configData));
+                result.Cookies, result.ContentString?.Contains("ucp.php?mode=logout&") == true,
+                () => throw new ExceptionWithConfigData(result.ContentString, configData));
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
@@ -146,7 +146,7 @@ namespace Jackett.Common.Indexers
                 };
             var searchUrl = SearchUrl + "?" + queryCollection.GetQueryString();
             var results = await RequestStringWithCookies(searchUrl);
-            if (!results.Content.Contains("ucp.php?mode=logout"))
+            if (!results.ContentString.Contains("ucp.php?mode=logout"))
             {
                 await ApplyConfiguration(null);
                 results = await RequestStringWithCookies(searchUrl);
@@ -155,7 +155,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var resultParser = new HtmlParser();
-                var searchResultDocument = resultParser.ParseDocument(results.Content);
+                var searchResultDocument = resultParser.ParseDocument(results.ContentString);
                 var rowSelector = keywordSearch
                     ? "div.search div.postbody > h3 > a"
                     : "ul.topics > li.row:has(i.fa-paperclip) a.topictitle"; // Torrent lines have paperclip icon. Chat topics don't
@@ -164,7 +164,7 @@ namespace Jackett.Common.Indexers
                 {
                     var detailLink = SiteLink + rowLink.GetAttribute("href");
                     var detailsResult = await RequestStringWithCookies(detailLink);
-                    var detailsDocument = resultParser.ParseDocument(detailsResult.Content);
+                    var detailsDocument = resultParser.ParseDocument(detailsResult.ContentString);
                     var detailRow = detailsDocument.QuerySelector("table.table2 > tbody > tr");
                     if (detailRow == null)
                         continue; //No torrents in result
@@ -202,7 +202,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return releases;

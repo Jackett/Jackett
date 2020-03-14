@@ -109,7 +109,7 @@ namespace Jackett.Common.Indexers
         {
             var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
             var parser = new HtmlParser();
-            var dom = parser.ParseDocument(loginPage.Content);
+            var dom = parser.ParseDocument(loginPage.ContentString);
             var captcha = dom.QuerySelector(".g-recaptcha");
             if (captcha != null)
             {
@@ -169,10 +169,10 @@ namespace Jackett.Common.Indexers
             };
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("/user/account/logout"), () =>
+            await ConfigureIfOK(result.Cookies, result.ContentString != null && result.ContentString.Contains("/user/account/logout"), () =>
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(result.Content);
+                var dom = parser.ParseDocument(result.ContentString);
                 var errorMessage = dom.QuerySelector("p.text-danger:contains(\"Error:\")").TextContent.Trim();
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
@@ -200,7 +200,7 @@ namespace Jackett.Common.Indexers
 
             var results = await RequestStringWithCookiesAndRetry(searchUrl);
 
-            if (results.Content.Contains("/user/account/login")) // re-login
+            if (results.ContentString.Contains("/user/account/login")) // re-login
             {
                 await DoLogin();
                 results = await RequestStringWithCookiesAndRetry(searchUrl);
@@ -208,7 +208,7 @@ namespace Jackett.Common.Indexers
 
             try
             {
-                var rows = (JArray)((JObject)JsonConvert.DeserializeObject(results.Content))["torrentList"];
+                var rows = (JArray)((JObject)JsonConvert.DeserializeObject(results.ContentString))["torrentList"];
                 foreach (var row in rows)
                 {
                     var title = row["name"].ToString();
@@ -249,7 +249,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return releases;
