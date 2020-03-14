@@ -139,13 +139,13 @@ namespace DateTimeRoutines
         {
             set
             {
-                DefaultDateNow = value;
+                _DefaultDate = value;
                 DefaultDateIsNow = false;
             }
-            get => DefaultDateIsNow ? DateTime.Now : DefaultDateNow;
+            get => DefaultDateIsNow ? DateTime.Now : _DefaultDate;
         }
 
-        private static DateTime DefaultDateNow = DateTime.Now;
+        private static DateTime _DefaultDate = DateTime.Now;
 
         /// <summary>
         /// If true then DefaultDate property is ignored and DefaultDate is always DateTime.Now
@@ -392,9 +392,9 @@ namespace DateTimeRoutines
                     return false;
             }
 
-            if (string.Compare(m.Groups["ampm"].Value, "PM", StringComparison.OrdinalIgnoreCase) == 0 && hour < 12)
+            if ("PM".Equals(m.Groups["ampm"].Value, StringComparison.OrdinalIgnoreCase) && hour < 12)
                 hour += 12;
-            else if (string.Compare(m.Groups["ampm"].Value, "AM", StringComparison.OrdinalIgnoreCase) == 0 && hour == 12)
+            else if ("AM".Equals(m.Groups["ampm"].Value, StringComparison.OrdinalIgnoreCase) && hour == 12)
                 hour -= 12;
 
             var dateTime = new DateTime(1, 1, 1, hour, minute, second);
