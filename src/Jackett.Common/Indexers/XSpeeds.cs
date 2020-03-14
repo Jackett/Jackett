@@ -147,7 +147,7 @@ namespace Jackett.Common.Indexers
                 var CaptchaImage = new ImageItem { Name = "Captcha Image" };
                 var CaptchaText = new StringItem { Name = "Captcha Text" };
 
-                CaptchaImage.Value = captchaImage.Content;
+                CaptchaImage.Value = captchaImage.ContentBytes;
 
                 configData.AddDynamic("CaptchaImage", CaptchaImage);
                 configData.AddDynamic("CaptchaText", CaptchaText);
