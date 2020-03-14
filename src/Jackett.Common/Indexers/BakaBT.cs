@@ -210,7 +210,7 @@ namespace Jackett.Common.Indexers
                 throw new Exception("Unable to find download link.");
 
             var response = await RequestBytesWithCookies(SiteLink + downloadLink);
-            return response.Content;
+            return response.ContentBytes;
         }
     }
 }
