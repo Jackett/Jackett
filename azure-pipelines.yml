@@ -1,7 +1,7 @@
 name: $(majorVersion).$(minorVersion).$(patchVersion)
 variables:
   majorVersion: 0
-  minorVersion: 13
+  minorVersion: 14
   patchVersion: $[counter(variables['minorVersion'], 1)] #this will reset when we bump minor
   jackettVersion: $(majorVersion).$(minorVersion).$(patchVersion)
   buildConfiguration: Release
@@ -353,7 +353,7 @@ stages:
           patterns: '**/Jackett*'
           path: $(Build.ArtifactStagingDirectory)
 
-      - task: GitHubRelease@0
+      - task: GitHubRelease@1
         displayName: Create Github release
         inputs:
           gitHubConnection: github.com_jackett
@@ -364,6 +364,7 @@ stages:
           tag: v$(Build.BuildNumber)
           title: v$(Build.BuildNumber)
           assets: $(Build.ArtifactStagingDirectory)/drop/*
+          assetUploadMode: replace
           isDraft: true
           addChangeLog: true
           compareWith: lastNonDraftRelease
@@ -373,7 +374,7 @@ stages:
         inputs:
           targetType: inline
           script: |
-            $json = Invoke-WebRequest 'https://dev.azure.com/jackett-project/jackett/_apis/build/builds/$(Build.BuildId)/logs?api-version=5.0' | ConvertFrom-Json
+            $json = Invoke-WebRequest 'https://dev.azure.com/jackett/jackett/_apis/build/builds/$(Build.BuildId)/logs?api-version=5.0' | ConvertFrom-Json
             $lastTwoLogUrls = $json.value[-1..-2].url
             foreach($logUrl in $lastTwoLogUrls)
             {
