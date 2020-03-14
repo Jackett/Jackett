@@ -128,7 +128,7 @@ namespace Jackett.Common.Indexers
                 var tokenUrl = ApiEndpoint + "?" + queryCollection.GetQueryString();
 
                 var result = await RequestStringWithCookiesAndRetry(tokenUrl);
-                var json = JObject.Parse(result.Content);
+                var json = JObject.Parse(result.ContentString);
                 token = json.Value<string>("token");
                 lastTokenFetch = DateTime.Now;
             }
@@ -199,7 +199,7 @@ namespace Jackett.Common.Indexers
 
             try
             {
-                var jsonContent = JObject.Parse(response.Content);
+                var jsonContent = JObject.Parse(response.ContentString);
 
                 var errorCode = jsonContent.Value<int>("error_code");
                 if (errorCode == 20) // no results found
@@ -274,7 +274,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
 
             return releases;
@@ -285,7 +285,7 @@ namespace Jackett.Common.Indexers
             // build download link from info redirect link
             var slink = link.ToString();
             var response = await RequestStringWithCookies(slink);
-            if (!response.IsRedirect && response.Content.Contains("Invalid token."))
+            if (!response.IsRedirect && response.ContentString.Contains("Invalid token."))
             {
                 // get new token
                 token = null;

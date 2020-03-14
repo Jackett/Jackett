@@ -83,11 +83,11 @@ namespace Jackett.Common.Indexers
             // Send Post
             var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, referer: LoginUrl);
 
-            await ConfigureIfOK(response.Cookies, response.Content?.Contains("logout.php") == true, () =>
+            await ConfigureIfOK(response.Cookies, response.ContentString?.Contains("logout.php") == true, () =>
             {
                 var errorStr = "You have {0} remaining login attempts";
                 var remainingAttemptSpan = new Regex(string.Format(errorStr, "(.*?)"))
-                                           .Match(loginPage.Content).Groups[1].ToString();
+                                           .Match(loginPage.ContentString).Groups[1].ToString();
                 var attempts = Regex.Replace(remainingAttemptSpan, "<.*?>", string.Empty);
                 var errorMessage = string.Format(errorStr, attempts);
                 throw new ExceptionWithConfigData(errorMessage, configData);
@@ -120,7 +120,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var resultParser = new HtmlParser();
-                var searchResultDocument = resultParser.ParseDocument(response.Content);
+                var searchResultDocument = resultParser.ParseDocument(response.ContentString);
                 var rows = searchResultDocument.QuerySelectorAll("table.lista > tbody > tr");
 
                 foreach (var row in rows)
@@ -173,7 +173,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
 
             return releases;

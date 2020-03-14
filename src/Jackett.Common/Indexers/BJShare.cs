@@ -107,9 +107,9 @@ namespace Jackett.Common.Indexers
             };
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl, true);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
+            await ConfigureIfOK(result.Cookies, result.ContentString != null && result.ContentString.Contains("logout.php"), () =>
             {
-                var errorMessage = result.Content;
+                var errorMessage = result.ContentString;
                 throw new ExceptionWithConfigData(errorMessage, ConfigData);
             });
             return IndexerConfigurationStatus.RequiresTesting;
@@ -196,7 +196,7 @@ namespace Jackett.Common.Indexers
                     const string rowsSelector = "table.torrent_table > tbody > tr:not(tr.colhead)";
 
                     var searchResultParser = new HtmlParser();
-                    var searchResultDocument = searchResultParser.ParseDocument(results.Content);
+                    var searchResultDocument = searchResultParser.ParseDocument(results.ContentString);
                     var rows = searchResultDocument.QuerySelectorAll(rowsSelector);
                     foreach (var row in rows)
                     {
@@ -317,7 +317,7 @@ namespace Jackett.Common.Indexers
                 }
                 catch (Exception ex)
                 {
-                    OnParseError(results.Content, ex);
+                    OnParseError(results.ContentString, ex);
                 }
             }
             else // use search
@@ -368,7 +368,7 @@ namespace Jackett.Common.Indexers
                     const string rowsSelector = "table.torrent_table > tbody > tr:not(tr.colhead)";
 
                     var searchResultParser = new HtmlParser();
-                    var searchResultDocument = searchResultParser.ParseDocument(results.Content);
+                    var searchResultDocument = searchResultParser.ParseDocument(results.ContentString);
                     var rows = searchResultDocument.QuerySelectorAll(rowsSelector);
 
                     ICollection<int> groupCategory = null;
@@ -550,7 +550,7 @@ namespace Jackett.Common.Indexers
                 }
                 catch (Exception ex)
                 {
-                    OnParseError(results.Content, ex);
+                    OnParseError(results.ContentString, ex);
                 }
             }
 

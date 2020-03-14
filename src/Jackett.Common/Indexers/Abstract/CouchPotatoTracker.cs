@@ -76,11 +76,11 @@ namespace Jackett.Common.Indexers.Abstract
             JObject json = null;
             try
             {
-                json = JObject.Parse(response.Content);
+                json = JObject.Parse(response.ContentString);
             }
             catch (Exception ex)
             {
-                throw new Exception("Error while parsing json: " + response.Content, ex);
+                throw new Exception("Error while parsing json: " + response.ContentString, ex);
             }
             var error = (string)json["error"];
             if (error != null)
@@ -118,7 +118,7 @@ namespace Jackett.Common.Indexers.Abstract
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
 
             return releases;

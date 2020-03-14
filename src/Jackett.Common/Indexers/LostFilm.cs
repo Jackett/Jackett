@@ -108,7 +108,7 @@ namespace Jackett.Common.Indexers
             // looks like after some failed login attempts there's a captcha
             var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
             var parser = new HtmlParser();
-            var document = parser.ParseDocument(loginPage.Content);
+            var document = parser.ParseDocument(loginPage.ContentString);
             var qCaptchaImg = document.QuerySelector("img#captcha_pictcha");
             if (qCaptchaImg != null)
             {
@@ -153,9 +153,9 @@ namespace Jackett.Common.Indexers
             }
 
             var result = await RequestLoginAndFollowRedirect(ApiUrl, data, CookieHeader, true, SiteLink, ApiUrl, true);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("\"success\":true"), () =>
+            await ConfigureIfOK(result.Cookies, result.ContentString != null && result.ContentString.Contains("\"success\":true"), () =>
             {
-                var errorMessage = result.Content;
+                var errorMessage = result.ContentString;
                 if (errorMessage.Contains("\"error\":2"))
                     errorMessage = "Captcha is incorrect";
                 if (errorMessage.Contains("\"error\":3"))
@@ -177,12 +177,12 @@ namespace Jackett.Common.Indexers
             };
 
             var response = await PostDataWithCookies(url: ApiUrl, data: data);
-            logger.Debug("Logout result: " + response.Content);
+            logger.Debug("Logout result: " + response.ContentString);
 
             var isOK = response.Status == System.Net.HttpStatusCode.OK;
             if (!isOK)
             {
-                logger.Error("Logout failed with response: " + response.Content);
+                logger.Error("Logout failed with response: " + response.ContentString);
             }
 
             return isOK;
@@ -208,11 +208,11 @@ namespace Jackett.Common.Indexers
         private async Task<WebClientStringResult> RequestStringAndRelogin(string url)
         {
             var results = await RequestStringWithCookies(url);
-            if (results.Content.Contains("503 Service"))
+            if (results.ContentString.Contains("503 Service"))
             {
-                throw new ExceptionWithConfigData(results.Content, configData);
+                throw new ExceptionWithConfigData(results.ContentString, configData);
             }
-            else if (results.Content.Contains("href=\"/login\""))
+            else if (results.ContentString.Contains("href=\"/login\""))
             {
                 // Re-login
                 await ApplyConfiguration(null);
@@ -281,7 +281,7 @@ namespace Jackett.Common.Indexers
                 };
                 logger.Debug("> Searching: " + searchString);
                 var response = await PostDataWithCookies(url: ApiUrl, data: data);
-                if (response.Content == null)
+                if (response.ContentString == null)
                 {
                     logger.Debug("> Empty series response for query: " + searchString);
                     continue;
@@ -289,7 +289,7 @@ namespace Jackett.Common.Indexers
 
                 try
                 {
-                    var json = JToken.Parse(response.Content);
+                    var json = JToken.Parse(response.ContentString);
                     if (json == null || json.Type == JTokenType.Array)
                     {
                         logger.Debug("> Invalid response for query: " + searchString);
@@ -371,7 +371,7 @@ namespace Jackett.Common.Indexers
                 }
                 catch (Exception ex)
                 {
-                    OnParseError(response.Content, ex);
+                    OnParseError(response.ContentString, ex);
                 }
             }
             while (--searchKeywords > 0);
@@ -392,7 +392,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var document = parser.ParseDocument(results.Content);
+                var document = parser.ParseDocument(results.ContentString);
                 var rows = document.QuerySelectorAll("div.row");
 
                 foreach (var row in rows)
@@ -406,7 +406,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return releases;
@@ -421,7 +421,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var document = parser.ParseDocument(results.Content);
+                var document = parser.ParseDocument(results.ContentString);
 
                 var playButton = document.QuerySelector("div.external-btn");
                 if (playButton != null && !playButton.ClassList.Contains("inactive"))
@@ -453,7 +453,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return releases;
@@ -469,7 +469,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var document = parser.ParseDocument(results.Content);
+                var document = parser.ParseDocument(results.ContentString);
                 var seasons = document.QuerySelectorAll("div.serie-block");
                 var rowSelector = "table.movie-parts-list > tbody > tr";
 
@@ -597,7 +597,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return releases;
@@ -618,19 +618,19 @@ namespace Jackett.Common.Indexers
 
             // Get redirection page with generated link on it. This link can't be constructed manually as it contains Hash field and hashing algo is unknown.
             var results = await RequestStringWithCookies(url);
-            if (results.Content == null)
+            if (results.ContentString == null)
             {
                 throw new ExceptionWithConfigData("Empty response from " + url, configData);
             }
-            if (results.Content == "log in first")
+            if (results.ContentString == "log in first")
             {
-                throw new ExceptionWithConfigData(results.Content, configData);
+                throw new ExceptionWithConfigData(results.ContentString, configData);
             }
 
             try
             {
                 var parser = new HtmlParser();
-                var document = parser.ParseDocument(results.Content);
+                var document = parser.ParseDocument(results.ContentString);
                 var meta = document.QuerySelector("meta");
                 var metaContent = meta.GetAttribute("content");
 
@@ -640,7 +640,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             // Failure path
@@ -656,7 +656,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var document = parser.ParseDocument(results.Content);
+                var document = parser.ParseDocument(results.ContentString);
                 var rows = document.QuerySelectorAll("div.inner-box--item");
 
                 logger.Debug("> Parsing " + rows.Count().ToString() + " releases");
@@ -739,7 +739,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return releases;

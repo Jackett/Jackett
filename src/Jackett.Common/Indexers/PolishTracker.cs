@@ -71,7 +71,7 @@ namespace Jackett.Common.Indexers
 
             await ConfigureIfOK(result.Cookies, result.Cookies != null && result.Cookies.Contains("id="), () =>
             {
-                var errorMessage = result.Content;
+                var errorMessage = result.ContentString;
                 if (errorMessage.Contains("Error!"))
                     errorMessage = "E-mail or password is incorrect";
                 throw new ExceptionWithConfigData(errorMessage, configData);
@@ -106,9 +106,9 @@ namespace Jackett.Common.Indexers
                 result = await RequestStringWithCookiesAndRetry(searchUrl, null, TorrentApiUrl);
             }
 
-            if (!result.Content.StartsWith("{")) // not JSON => error
-                throw new ExceptionWithConfigData(result.Content, configData);
-            dynamic json = JsonConvert.DeserializeObject<dynamic>(result.Content);
+            if (!result.ContentString.StartsWith("{")) // not JSON => error
+                throw new ExceptionWithConfigData(result.ContentString, configData);
+            dynamic json = JsonConvert.DeserializeObject<dynamic>(result.ContentString);
             try
             {
                 dynamic torrents = json["torrents"]; // latest torrents

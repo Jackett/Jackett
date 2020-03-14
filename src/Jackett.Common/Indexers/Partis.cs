@@ -98,10 +98,10 @@ namespace Jackett.Common.Indexers
             };
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, string.Empty, false, null, null, true);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("/odjava"), () =>
+            await ConfigureIfOK(result.Cookies, result.ContentString != null && result.ContentString.Contains("/odjava"), () =>
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(result.Content);
+                var dom = parser.ParseDocument(result.ContentString);
                 var errorMessage = dom.QuerySelector("div.obvet > span.najvecji").TextContent.Trim(); // Prijava ni uspela! obvestilo
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
@@ -142,7 +142,7 @@ namespace Jackett.Common.Indexers
             await FollowIfRedirect(results, null, null, null, true);
 
             // are we logged in?
-            if (!results.Content.Contains("/odjava"))
+            if (!results.ContentString.Contains("/odjava"))
             {
                 await ApplyConfiguration(null);
             }
@@ -156,7 +156,7 @@ namespace Jackett.Common.Indexers
                 var RowsSelector = "div.list > div[name=\"torrrow\"]";
 
                 var ResultParser = new HtmlParser();
-                var SearchResultDocument = ResultParser.ParseDocument(results.Content);
+                var SearchResultDocument = ResultParser.ParseDocument(results.ContentString);
                 var Rows = SearchResultDocument.QuerySelectorAll(RowsSelector);
                 foreach (var Row in Rows)
                 {
@@ -217,7 +217,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return releases;

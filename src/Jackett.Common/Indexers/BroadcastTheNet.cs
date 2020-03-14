@@ -112,7 +112,7 @@ namespace Jackett.Common.Indexers
 
             try
             {
-                var btnResponse = JsonConvert.DeserializeObject<BTNRPCResponse>(response.Content);
+                var btnResponse = JsonConvert.DeserializeObject<BTNRPCResponse>(response.ContentString);
 
                 if (btnResponse != null && btnResponse.Result != null && btnResponse.Result.Torrents != null)
                 {
@@ -168,7 +168,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
             return releases;
         }

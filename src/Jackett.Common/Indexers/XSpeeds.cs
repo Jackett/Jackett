@@ -137,7 +137,7 @@ namespace Jackett.Common.Indexers
         {
             var loginPage = await RequestStringWithCookies(LandingUrl);
             var parser = new HtmlParser();
-            var dom = parser.ParseDocument(loginPage.Content);
+            var dom = parser.ParseDocument(loginPage.ContentString);
             var qCaptchaImg = dom.QuerySelector("img#regimage");
             if (qCaptchaImg != null)
             {
@@ -178,11 +178,11 @@ namespace Jackett.Common.Indexers
 
             //var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, SiteLink, true);
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, SearchUrl, LandingUrl, true);
-            await ConfigureIfOK(result.Cookies, result.Content?.Contains("logout.php") == true,
+            await ConfigureIfOK(result.Cookies, result.ContentString?.Contains("logout.php") == true,
                 () =>
                 {
                     var parser = new HtmlParser();
-                    var dom = parser.ParseDocument(result.Content);
+                    var dom = parser.ParseDocument(result.ContentString);
                     var errorMessage = dom.QuerySelector(".left_side table:nth-of-type(1) tr:nth-of-type(2)")?.TextContent.Trim().Replace("\n\t", " ");
                     if (string.IsNullOrWhiteSpace(errorMessage))
                         errorMessage = dom.QuerySelector("div.notification-body").TextContent.Trim().Replace("\n\t", " ");
@@ -199,7 +199,7 @@ namespace Jackett.Common.Indexers
                                     {"showrows", "50"}
                                 };
                 var rssPage = await PostDataWithCookies(GetRSSKeyUrl, rssParams, result.Cookies);
-                var match = Regex.Match(rssPage.Content, "(?<=secret_key\\=)([a-zA-z0-9]*)");
+                var match = Regex.Match(rssPage.ContentString, "(?<=secret_key\\=)([a-zA-z0-9]*)");
                 configData.RSSKey.Value = match.Success ? match.Value : string.Empty;
                 if (string.IsNullOrWhiteSpace(configData.RSSKey.Value))
                     throw new Exception("Failed to get RSS Key");
@@ -229,12 +229,12 @@ namespace Jackett.Common.Indexers
                 var rssPage = await RequestStringWithCookiesAndRetry(string.Format(RSSUrl, configData.RSSKey.Value));
                 try
                 {
-                    if (rssPage.Content.EndsWith("\0"))
+                    if (rssPage.ContentString.EndsWith("\0"))
                     {
-                        rssPage.Content = rssPage.Content.Substring(0, rssPage.Content.Length - 1);
+                        rssPage.ContentString = rssPage.ContentString.Substring(0, rssPage.ContentString.Length - 1);
                     }
-                    rssPage.Content = RemoveInvalidXmlChars(rssPage.Content);
-                    var rssDoc = XDocument.Parse(rssPage.Content);
+                    rssPage.ContentString = RemoveInvalidXmlChars(rssPage.ContentString);
+                    var rssDoc = XDocument.Parse(rssPage.ContentString);
 
                     foreach (var item in rssDoc.Descendants("item"))
                     {
@@ -274,7 +274,7 @@ namespace Jackett.Common.Indexers
                 catch (Exception ex)
                 {
                     logger.Error("XSpeeds: Error while parsing the RSS feed:");
-                    logger.Error(rssPage.Content);
+                    logger.Error(rssPage.ContentString);
                     throw ex;
                 }
             }
@@ -318,7 +318,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(searchPage.Content);
+                var dom = parser.ParseDocument(searchPage.ContentString);
                 var rows = dom.QuerySelectorAll("table#sortabletable > tbody > tr:has(div > a[href*=\"details.php?id=\"])");
                 foreach (var row in rows)
                 {
@@ -372,7 +372,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(searchPage.Content, ex);
+                OnParseError(searchPage.ContentString, ex);
             }
             if (!CookieHeader.Trim().Equals(prevCook.Trim()))
             {

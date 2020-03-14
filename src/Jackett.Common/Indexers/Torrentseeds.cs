@@ -104,7 +104,7 @@ namespace Jackett.Common.Indexers
             LoadValuesFromJson(configJson);
             var loginPage = await RequestStringWithCookies(TokenUrl);
             var parser = new HtmlParser();
-            var dom = parser.ParseDocument(loginPage.Content);
+            var dom = parser.ParseDocument(loginPage.ContentString);
             var token = dom.QuerySelector("form.form-horizontal > span");
             var csrf = token.Children[1].GetAttribute("value");
             var pairs = new Dictionary<string, string>
@@ -117,10 +117,10 @@ namespace Jackett.Common.Indexers
             };
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, accumulateCookies: true);
             await ConfigureIfOK(
-                result.Cookies, result.Content.Contains("/logout.php?"),
+                result.Cookies, result.ContentString.Contains("/logout.php?"),
                 () =>
                 {
-                    var errorDom = parser.ParseDocument(result.Content);
+                    var errorDom = parser.ParseDocument(result.ContentString);
                     var errorMessage = errorDom.QuerySelector("td.colhead2").InnerHtml;
                     throw new ExceptionWithConfigData(errorMessage, configData);
                 });
@@ -146,7 +146,7 @@ namespace Jackett.Common.Indexers
                 queryCollection.Add("cat[" + cat + "]", "1");
             searchUrl += "?" + queryCollection.GetQueryString();
             var response = await RequestStringWithCookiesAndRetry(searchUrl);
-            var results = response.Content;
+            var results = response.ContentString;
             if (!results.Contains("/logout.php?"))
             {
                 await ApplyConfiguration(null);
@@ -158,7 +158,7 @@ namespace Jackett.Common.Indexers
                 // handle single entries
                 var qCommentLink = new Uri(response.RedirectingTo);
                 await FollowIfRedirect(response, accumulateCookies: true);
-                results = response.Content;
+                results = response.ContentString;
                 try
                 {
                     var parser = new HtmlParser();
