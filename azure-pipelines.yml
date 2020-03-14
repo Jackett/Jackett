@@ -360,7 +360,7 @@ stages:
           repositoryName: '$(Build.Repository.Name)' 
           action: create
           target: $(Build.SourceVersion)
-          tagSource: manual
+          tagSource: userSpecifiedTag
           tag: v$(Build.BuildNumber)
           title: v$(Build.BuildNumber)
           assets: $(Build.ArtifactStagingDirectory)/drop/*
