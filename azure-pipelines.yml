@@ -390,7 +390,7 @@ stages:
               {
                 $successCount = (Select-String "Uploaded file successfully:" -InputObject $logText -AllMatches).Matches.Count
                 $failureCount = (Select-String "Duplicate asset found:" -InputObject $logText -AllMatches).Matches.Count
-                Write-Host "Success count is: $successCount and failure count is: $failureCount"
+                Write-Output "Success count is: $successCount and failure count is: $failureCount"
                 if (($successCount -ne 7) -or ($failureCount -ne 0)) { Write-Host "##vso[task.complete result=Failed;]DONE" } 
               }
             }
