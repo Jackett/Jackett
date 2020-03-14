@@ -386,11 +386,11 @@ stages:
             {
               Write-Output $logUrl
               $logText = Invoke-WebRequest $logUrl
-              if ($logText -like '*: GitHub Release*') 
+              if ($logText -like '*Creating a release for tag:*') 
               {
-                $logInspect = ($logText -split "Creating a release for tag:")[1]
-                $successCount = (Select-String "Uploaded file successfully:" -InputObject $logText -AllMatches).Matches.Count
-                $failureCount = (Select-String "Duplicate asset found:" -InputObject $logText -AllMatches).Matches.Count
+                $logInspect = ($logText -split "Creating a release for tag:")[2]
+                $successCount = (Select-String "Uploaded file successfully:" -InputObject $logInspect -AllMatches).Matches.Count
+                $failureCount = (Select-String "Duplicate asset found:" -InputObject $logInspect -AllMatches).Matches.Count
                 Write-Output "Success count is: $successCount and failure count is: $failureCount"
                 if (($successCount -ne 7) -or ($failureCount -ne 0)) { Write-Host "##vso[task.complete result=Failed;]DONE" } 
               }
