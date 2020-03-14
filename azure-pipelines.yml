@@ -9,6 +9,12 @@ variables:
   netCoreSdkVersion: 3.1.x
   system.debug: true
 
+pr:
+  autoCancel: true
+  
+trigger:
+  batch: true
+
 stages:
   - stage: BuildJackett
     displayName: Create Binaries
