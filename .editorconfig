@@ -123,7 +123,7 @@ dotnet_style_prefer_compound_assignment=true:suggestion
 ###############################
 # Style Definitions
 dotnet_naming_style.pascal_case_style.capitalization=pascal_case
-# Use PascalCase for constant fields  
+# Use PascalCase for constant fields
 dotnet_naming_rule.constant_fields_should_be_pascal_case.severity=warning
 dotnet_naming_rule.constant_fields_should_be_pascal_case.symbols=constant_fields
 dotnet_naming_rule.constant_fields_should_be_pascal_case.style=pascal_case_style
@@ -161,11 +161,11 @@ dotnet_naming_rule.asyncmethods_should_be_ends_with_async.style = ends_with_asyn
 
 dotnet_naming_symbols.interface.applicable_kinds = interface
 dotnet_naming_symbols.interface.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
-dotnet_naming_symbols.interface.required_modifiers = 
+dotnet_naming_symbols.interface.required_modifiers =
 
 dotnet_naming_symbols.private_or_internal_field.applicable_kinds = field
 dotnet_naming_symbols.private_or_internal_field.applicable_accessibilities = internal, private, private_protected
-dotnet_naming_symbols.private_or_internal_field.required_modifiers = 
+dotnet_naming_symbols.private_or_internal_field.required_modifiers =
 
 dotnet_naming_symbols.private_or_internal_static_field.applicable_kinds = field
 dotnet_naming_symbols.private_or_internal_static_field.applicable_accessibilities = internal, private, private_protected
@@ -173,11 +173,11 @@ dotnet_naming_symbols.private_or_internal_static_field.required_modifiers = stat
 
 dotnet_naming_symbols.types.applicable_kinds = class, struct, interface, enum
 dotnet_naming_symbols.types.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
-dotnet_naming_symbols.types.required_modifiers = 
+dotnet_naming_symbols.types.required_modifiers =
 
 dotnet_naming_symbols.non_field_members.applicable_kinds = property, event, method
 dotnet_naming_symbols.non_field_members.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
-dotnet_naming_symbols.non_field_members.required_modifiers = 
+dotnet_naming_symbols.non_field_members.required_modifiers =
 
 dotnet_naming_symbols.asyncmethods.applicable_kinds = delegate, method, local_function
 dotnet_naming_symbols.asyncmethods.applicable_accessibilities = *
@@ -185,29 +185,29 @@ dotnet_naming_symbols.asyncmethods.required_modifiers = async
 
 # Naming styles
 
-dotnet_naming_style.pascal_case.required_prefix = 
-dotnet_naming_style.pascal_case.required_suffix = 
-dotnet_naming_style.pascal_case.word_separator = 
+dotnet_naming_style.pascal_case.required_prefix =
+dotnet_naming_style.pascal_case.required_suffix =
+dotnet_naming_style.pascal_case.word_separator =
 dotnet_naming_style.pascal_case.capitalization = pascal_case
 
 dotnet_naming_style.begins_with_i.required_prefix = I
-dotnet_naming_style.begins_with_i.required_suffix = 
-dotnet_naming_style.begins_with_i.word_separator = 
+dotnet_naming_style.begins_with_i.required_suffix =
+dotnet_naming_style.begins_with_i.word_separator =
 dotnet_naming_style.begins_with_i.capitalization = pascal_case
 
-dotnet_naming_style.private_or_internal_static_with_prefix.required_prefix = s_
-dotnet_naming_style.private_or_internal_static_with_prefix.required_suffix = 
-dotnet_naming_style.private_or_internal_static_with_prefix.word_separator = 
+dotnet_naming_style.private_or_internal_static_with_prefix.required_prefix = _
+dotnet_naming_style.private_or_internal_static_with_prefix.required_suffix =
+dotnet_naming_style.private_or_internal_static_with_prefix.word_separator =
 dotnet_naming_style.private_or_internal_static_with_prefix.capitalization = pascal_case
 
 dotnet_naming_style.private_prefix.required_prefix = _
-dotnet_naming_style.private_prefix.required_suffix = 
-dotnet_naming_style.private_prefix.word_separator = 
+dotnet_naming_style.private_prefix.required_suffix =
+dotnet_naming_style.private_prefix.word_separator =
 dotnet_naming_style.private_prefix.capitalization = camel_case
 
-dotnet_naming_style.ends_with_async.required_prefix = 
+dotnet_naming_style.ends_with_async.required_prefix =
 dotnet_naming_style.ends_with_async.required_suffix = Async
-dotnet_naming_style.ends_with_async.word_separator = 
+dotnet_naming_style.ends_with_async.word_separator =
 dotnet_naming_style.ends_with_async.capitalization = pascal_case
 
 ###############################
