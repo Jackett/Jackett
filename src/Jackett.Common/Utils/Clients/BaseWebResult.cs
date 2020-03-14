@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using System.Net;
+using System.Text;
 
 namespace Jackett.Common.Utils.Clients
 {
     public abstract class BaseWebResult
     {
+        public Encoding Encoding { get; set; }
         public HttpStatusCode Status { get; set; }
         public string Cookies { get; set; }
         public string RedirectingTo { get; set; }
