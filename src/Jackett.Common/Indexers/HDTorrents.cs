@@ -99,7 +99,7 @@ namespace Jackett.Common.Indexers
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, null, LoginUrl);
 
             await ConfigureIfOK(
-                result.Cookies, result.Content?.Contains("If your browser doesn't have javascript enabled") == true,
+                result.Cookies, result.ContentString?.Contains("If your browser doesn't have javascript enabled") == true,
                 () => throw new ExceptionWithConfigData("Couldn't login", configData));
             return IndexerConfigurationStatus.RequiresTesting;
         }
@@ -128,7 +128,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(results.Content);
+                var dom = parser.ParseDocument(results.ContentString);
 
                 var userInfo = dom.QuerySelector(".mainmenu > table > tbody > tr:has(td[title=\"Active-Torrents\"])");
                 var rank = userInfo.QuerySelector("td:nth-child(2)").TextContent.Substring(6);
@@ -215,7 +215,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return releases;

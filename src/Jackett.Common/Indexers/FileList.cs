@@ -82,7 +82,7 @@ namespace Jackett.Common.Indexers
             LoadValuesFromJson(configJson);
             var responseFirstPage = await RequestStringWithCookiesAndRetry(SiteLink + "login.php?returnto=%2F", "");
             var parser = new HtmlParser();
-            var domFirstPage = parser.ParseDocument(responseFirstPage.Content);
+            var domFirstPage = parser.ParseDocument(responseFirstPage.ContentString);
             var validator = domFirstPage.QuerySelector("input[name =\"validator\"]").GetAttribute("value");
             var pairs = new Dictionary<string, string> {
                 { "validator", validator},
@@ -91,9 +91,9 @@ namespace Jackett.Common.Indexers
             };
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, responseFirstPage.Cookies, true, null, LoginUrl);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
+            await ConfigureIfOK(result.Cookies, result.ContentString != null && result.ContentString.Contains("logout.php"), () =>
             {
-                var dom = parser.ParseDocument(result.Content);
+                var dom = parser.ParseDocument(result.ContentString);
                 var errorMessage = dom.QuerySelector(".main").TextContent.Trim();
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
@@ -133,7 +133,7 @@ namespace Jackett.Common.Indexers
                 response = await RequestStringWithCookiesAndRetry(searchUrl, null, BrowseUrl);
             }
 
-            var results = response.Content;
+            var results = response.ContentString;
             try
             {
                 var parser = new HtmlParser();

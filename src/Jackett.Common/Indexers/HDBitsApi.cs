@@ -201,11 +201,11 @@ namespace Jackett.Common.Indexers
 
             try
             {
-                json = JObject.Parse(response.Content);
+                json = JObject.Parse(response.ContentString);
             }
             catch (Exception ex)
             {
-                throw new Exception("Error while parsing json: " + response.Content, ex);
+                throw new Exception("Error while parsing json: " + response.ContentString, ex);
             }
 
             if ((int)json["status"] != 0)

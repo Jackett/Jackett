@@ -60,13 +60,13 @@ namespace Jackett.Common.Indexers
             var preRequest = await RequestStringWithCookiesAndRetry(LoginUrl, string.Empty);
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, preRequest.Cookies, true, SearchUrl, SiteLink);
 
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("status\":\"success\""), () =>
+            await ConfigureIfOK(result.Cookies, result.ContentString != null && result.ContentString.Contains("status\":\"success\""), () =>
             {
-                if (result.Content.Contains("Your IP address has been banned."))
+                if (result.ContentString.Contains("Your IP address has been banned."))
                     throw new ExceptionWithConfigData("Your IP address has been banned.", ConfigData);
 
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(result.Content);
+                var dom = parser.ParseDocument(result.ContentString);
                 foreach (var element in dom.QuerySelectorAll("#loginform > table"))
                     element.Remove();
                 var errorMessage = dom.QuerySelector("#loginform").TextContent.Trim().Replace("\n\t", " ");
@@ -142,7 +142,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var document = parser.ParseDocument(response.Content);
+                var document = parser.ParseDocument(response.ContentString);
                 var groups = document.QuerySelectorAll(".torrent_table > tbody > tr.group");
                 var torrents = document.QuerySelectorAll(".torrent_table > tbody > tr.torrent");
 
@@ -240,7 +240,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
         }
 

@@ -109,7 +109,7 @@ namespace Jackett.Common.Indexers
             CookieHeader = "";
 
             var result1 = await RequestStringWithCookies(CaptchaUrl);
-            var json1 = JObject.Parse(result1.Content);
+            var json1 = JObject.Parse(result1.ContentString);
             var captchaSelection = json1["images"][0]["hash"];
 
             var pairs = new Dictionary<string, string> {
@@ -121,8 +121,8 @@ namespace Jackett.Common.Indexers
 
             var result2 = await RequestLoginAndFollowRedirect(LoginUrl, pairs, result1.Cookies, true, null, null, true);
 
-            await ConfigureIfOK(result2.Cookies, result2.Content.Contains("/logout.php"),
-                () => throw new ExceptionWithConfigData(result2.Content, configData));
+            await ConfigureIfOK(result2.Cookies, result2.ContentString.Contains("/logout.php"),
+                () => throw new ExceptionWithConfigData(result2.ContentString, configData));
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
@@ -172,7 +172,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(results.Content);
+                var dom = parser.ParseDocument(results.ContentString);
                 var rows = dom.QuerySelectorAll("table.torrent_table > tbody > tr");
                 var globalFreeleech = dom.QuerySelector("legend:contains(\"Freeleech\")+ul > li > b:contains(\"Freeleech\")") != null;
                 foreach (var row in rows.Skip(1))
@@ -239,7 +239,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return releases;

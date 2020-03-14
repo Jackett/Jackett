@@ -58,8 +58,8 @@ namespace Jackett.Common.Indexers
             };
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl, true);
-            await ConfigureIfOK(result.Cookies, result.Content?.Contains("logout.php") == true,
-                                () => throw new ExceptionWithConfigData(result.Content, configData));
+            await ConfigureIfOK(result.Cookies, result.ContentString?.Contains("logout.php") == true,
+                                () => throw new ExceptionWithConfigData(result.ContentString, configData));
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
@@ -92,7 +92,7 @@ namespace Jackett.Common.Indexers
                 var RowsSelector = "table.torrent_table > tbody > tr.torrent";
 
                 var SearchResultParser = new HtmlParser();
-                var SearchResultDocument = SearchResultParser.ParseDocument(results.Content);
+                var SearchResultDocument = SearchResultParser.ParseDocument(results.ContentString);
                 var Rows = SearchResultDocument.QuerySelectorAll(RowsSelector);
                 foreach (var Row in Rows)
                 {
@@ -142,7 +142,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return releases;

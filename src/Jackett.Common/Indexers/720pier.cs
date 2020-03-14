@@ -120,15 +120,15 @@ namespace Jackett.Common.Indexers
                 {"autologin", "on"}
             };
             var htmlParser = new HtmlParser();
-            var loginDocument = htmlParser.ParseDocument((await RequestStringWithCookies(LoginUrl)).Content);
+            var loginDocument = htmlParser.ParseDocument((await RequestStringWithCookies(LoginUrl)).ContentString);
             pairs["creation_time"] = loginDocument.GetElementsByName("creation_time")[0].GetAttribute("value");
             pairs["form_token"] = loginDocument.GetElementsByName("form_token")[0].GetAttribute("value");
             pairs["sid"] = loginDocument.GetElementsByName("sid")[0].GetAttribute("value");
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl, true);
-            await ConfigureIfOK(result.Cookies, result.Content?.Contains("ucp.php?mode=logout&") == true, () =>
+            await ConfigureIfOK(result.Cookies, result.ContentString?.Contains("ucp.php?mode=logout&") == true, () =>
             {
-                var errorMessage = result.Content;
+                var errorMessage = result.ContentString;
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
             return IndexerConfigurationStatus.RequiresTesting;
@@ -170,7 +170,7 @@ namespace Jackett.Common.Indexers
 
             var searchUrl = SearchUrl + "?" + queryCollection.GetQueryString();
             var results = await RequestStringWithCookies(searchUrl);
-            if (!results.Content.Contains("ucp.php?mode=logout"))
+            if (!results.ContentString.Contains("ucp.php?mode=logout"))
             {
                 await ApplyConfiguration(null);
                 results = await RequestStringWithCookies(searchUrl);
@@ -180,7 +180,7 @@ namespace Jackett.Common.Indexers
                 const string rowsSelector = "ul.topics > li.row";
 
                 var resultParser = new HtmlParser();
-                var searchResultDocument = resultParser.ParseDocument(results.Content);
+                var searchResultDocument = resultParser.ParseDocument(results.ContentString);
                 var rows = searchResultDocument.QuerySelectorAll(rowsSelector);
                 foreach (var row in rows)
                 {
@@ -204,7 +204,7 @@ namespace Jackett.Common.Indexers
                         release.Guid = release.Comments;
 
                         var detailsResult = await RequestStringWithCookies(SiteLink + qDetailsLink.GetAttribute("href"));
-                        var detailsResultDocument = resultParser.ParseDocument(detailsResult.Content);
+                        var detailsResultDocument = resultParser.ParseDocument(detailsResult.ContentString);
                         var qDownloadLink = detailsResultDocument.QuerySelector("table.table2 > tbody > tr > td > a[href^=\"/download/torrent\"]");
 
                         release.Link = new Uri(SiteLink + qDownloadLink.GetAttribute("href").TrimStart('/'));
@@ -244,7 +244,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return releases;

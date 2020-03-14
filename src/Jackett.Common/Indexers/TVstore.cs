@@ -68,7 +68,7 @@ namespace Jackett.Common.Indexers
             };
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, referer: SiteLink);
-            await ConfigureIfOK(result.Cookies, result.Content?.Contains("Főoldal") == true, () => throw new ExceptionWithConfigData(
+            await ConfigureIfOK(result.Cookies, result.ContentString?.Contains("Főoldal") == true, () => throw new ExceptionWithConfigData(
                 $"Error while trying to login with: Username: {configData.Username.Value} Password: {configData.Password.Value}", configData));
 
             return IndexerConfigurationStatus.RequiresTesting;
@@ -118,7 +118,7 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
             try
             {
-                var content = results.Content;
+                var content = results.ContentString;
                 /* Content Looks like this
                  * 2\15\2\1\1727\207244\1x08 \[WebDL-720p - Eng - AJP69]\gb\2018-03-09 08:11:53\akció, kaland, sci-fi \0\0\1\191170047\1\0\Anonymous\50\0\0\\0\4\0\174\0\
                  * 1\ 0\0\1\1727\207243\1x08 \[WebDL-1080p - Eng - AJP69]\gb\2018-03-09 08:11:49\akció, kaland, sci-fi \0\0\1\305729738\1\0\Anonymous\50\0\0\\0\8\0\102\0\0\0\0\1\\\
@@ -155,7 +155,7 @@ namespace Jackett.Common.Indexers
                     var unixTimestamp = (int)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
 
                     var fileinfoURL = SearchUrl + "?func=getToggle&id=" + parameters[torrent_id] + "&w=F&pg=0&now=" + unixTimestamp;
-                    var fileinfo = (await RequestStringWithCookiesAndRetry(fileinfoURL)).Content;
+                    var fileinfo = (await RequestStringWithCookiesAndRetry(fileinfoURL)).ContentString;
                     release.Link = new Uri(DownloadUrl + "?id=" + parameters[torrent_id]);
                     release.Guid = release.Link;
                     release.Comments = release.Link;
@@ -194,7 +194,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return releases;
@@ -218,7 +218,7 @@ namespace Jackett.Common.Indexers
             var result = await RequestStringWithCookiesAndRetry(BrowseUrl);
 
             var parser = new HtmlParser();
-            var dom = parser.ParseDocument(result.Content);
+            var dom = parser.ParseDocument(result.ContentString);
             var scripts = dom.QuerySelectorAll("script");
             foreach (var script in scripts)
             {
@@ -329,7 +329,7 @@ namespace Jackett.Common.Indexers
             results = await RequestStringWithCookiesAndRetry(exactSearchURL);
 
             /* Parse page Information from result */
-            var content = results.Content;
+            var content = results.ContentString;
             var splits = content.Split('\\');
             var max_found = int.Parse(splits[0]);
             var torrent_per_page = int.Parse(splits[1]);

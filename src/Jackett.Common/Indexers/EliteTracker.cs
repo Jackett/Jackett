@@ -154,7 +154,7 @@ namespace Jackett.Common.Indexers
 
             await ConfigureIfOK(result.Cookies, result.Cookies != null, () =>
            {
-               var errorMessage = result.Content;
+               var errorMessage = result.ContentString;
                throw new ExceptionWithConfigData(errorMessage, configData);
            });
 
@@ -184,7 +184,7 @@ namespace Jackett.Common.Indexers
             {
                 var RowsSelector = "table[id='sortabletable'] > tbody > tr";
                 var SearchResultParser = new HtmlParser();
-                var SearchResultDocument = SearchResultParser.ParseDocument(results.Content);
+                var SearchResultDocument = SearchResultParser.ParseDocument(results.ContentString);
                 var Rows = SearchResultDocument.QuerySelectorAll(RowsSelector);
                 var lastDate = DateTime.Now;
 
@@ -292,7 +292,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return releases;

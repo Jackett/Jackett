@@ -60,7 +60,7 @@ namespace Jackett.Common.Indexers.Abstract
         {
             LoadValuesFromJson(configJson);
             var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
-            var token = new Regex("<meta name=\"_token\" content=\"(.*?)\">").Match(loginPage.Content).Groups[1].ToString();
+            var token = new Regex("<meta name=\"_token\" content=\"(.*?)\">").Match(loginPage.ContentString).Groups[1].ToString();
             var pairs = new Dictionary<string, string> {
                 { "_token", token },
                 { "email_username", configData.Username.Value },
@@ -69,10 +69,10 @@ namespace Jackett.Common.Indexers.Abstract
             };
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, null, LoginUrl);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("auth/logout"), () =>
+            await ConfigureIfOK(result.Cookies, result.ContentString != null && result.ContentString.Contains("auth/logout"), () =>
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(result.Content);
+                var dom = parser.ParseDocument(result.ContentString);
                 var messageEl = dom.QuerySelector(".form-error");
                 var errorMessage = messageEl.Text().Trim();
                 throw new ExceptionWithConfigData(errorMessage, configData);
@@ -115,7 +115,7 @@ namespace Jackett.Common.Indexers.Abstract
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(response.Content);
+                var dom = parser.ParseDocument(response.ContentString);
                 var rows = dom.QuerySelectorAll("table:has(thead) > tbody > tr");
                 foreach (var row in rows)
                 {
@@ -175,7 +175,7 @@ namespace Jackett.Common.Indexers.Abstract
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
             return releases;
         }
@@ -193,7 +193,7 @@ namespace Jackett.Common.Indexers.Abstract
                     await ApplyConfiguration(null);
                     imdbResponse = await RequestStringWithCookiesAndRetry(imdbUrl, null, null, imdbHeaders);
                 }
-                var json = JsonConvert.DeserializeObject<dynamic>(imdbResponse.Content);
+                var json = JsonConvert.DeserializeObject<dynamic>(imdbResponse.ContentString);
                 return (string)((JArray)json["data"])[0]["id"];
             }
             catch (Exception)

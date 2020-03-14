@@ -79,11 +79,11 @@ namespace Jackett.Common.Indexers
 
             try
             {
-                if (response.Content.Contains("Nothing was found"))
+                if (response.ContentString.Contains("Nothing was found"))
                 {
                     return releases.ToArray();
                 }
-                var dom = ResultParser.ParseDocument(response.Content);
+                var dom = ResultParser.ParseDocument(response.ContentString);
                 var resultLinks = dom.QuerySelectorAll("ul > li > a");
                 var uniqueShowLinks = new HashSet<string>();
                 foreach (var resultLink in resultLinks)
@@ -100,7 +100,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
 
             return releases;
@@ -120,12 +120,12 @@ namespace Jackett.Common.Indexers
 
             try
             {
-                if (response.Content.Contains("Nothing was found"))
+                if (response.ContentString.Contains("Nothing was found"))
                 {
                     return releases.ToArray();
                 }
 
-                var dom = ResultParser.ParseDocument(response.Content);
+                var dom = ResultParser.ParseDocument(response.ContentString);
                 var latestresults = dom.QuerySelectorAll("ul > li > a");
                 foreach (var resultLink in latestresults)
                 {
@@ -138,7 +138,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
 
             return releases;
@@ -153,7 +153,7 @@ namespace Jackett.Common.Indexers
                 var showPageResponse = await RequestStringWithCookiesAndRetry(ResultURL, string.Empty);
                 await FollowIfRedirect(showPageResponse);
 
-                var match = Regex.Match(showPageResponse.Content, "(var hs_showid = )([0-9]*)(;)", RegexOptions.IgnoreCase);
+                var match = Regex.Match(showPageResponse.ContentString, "(var hs_showid = )([0-9]*)(;)", RegexOptions.IgnoreCase);
                 if (match.Success == false)
                 {
                     return releases;
@@ -173,7 +173,7 @@ namespace Jackett.Common.Indexers
                     while (true)
                     {
                         var showAPIResponse = await RequestStringWithCookiesAndRetry(apiUrl + "&nextid=" + nextId, string.Empty);
-                        var showAPIdom = ResultParser.ParseDocument(showAPIResponse.Content);
+                        var showAPIdom = ResultParser.ParseDocument(showAPIResponse.ContentString);
                         var releaseRowResults = showAPIdom.QuerySelectorAll("div.rls-info-container");
                         releaserows.AddRange(releaseRowResults);
                         nextId++;

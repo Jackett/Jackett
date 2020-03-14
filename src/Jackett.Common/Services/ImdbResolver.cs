@@ -37,7 +37,7 @@ namespace Jackett.Common.Services
             var request = new WebRequest(url + "/?apikey=" + apiKey + "&i=" + imdbId);
             request.Encoding = Encoding.UTF8;
             var result = await WebClient.GetString(request);
-            var movie = JsonConvert.DeserializeObject<Movie>(result.Content);
+            var movie = JsonConvert.DeserializeObject<Movie>(result.ContentString);
 
             return movie;
         }

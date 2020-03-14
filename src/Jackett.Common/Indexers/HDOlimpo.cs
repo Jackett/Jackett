@@ -72,7 +72,7 @@ namespace Jackett.Common.Indexers
         private async Task DoLogin()
         {
             var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
-            var token = new Regex("name=\"_token\" value=\"(.*?)\">").Match(loginPage.Content).Groups[1].ToString();
+            var token = new Regex("name=\"_token\" value=\"(.*?)\">").Match(loginPage.ContentString).Groups[1].ToString();
             var pairs = new Dictionary<string, string> {
                 { "_token", token },
                 { "email", configData.Email.Value },
@@ -81,10 +81,10 @@ namespace Jackett.Common.Indexers
             };
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, null, LoginUrl);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains(LogoutUrl), () =>
+            await ConfigureIfOK(result.Cookies, result.ContentString != null && result.ContentString.Contains(LogoutUrl), () =>
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(result.Content);
+                var dom = parser.ParseDocument(result.ContentString);
                 var errorMessage = dom.QuerySelector(".error").TextContent.Trim();
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
@@ -128,7 +128,7 @@ namespace Jackett.Common.Indexers
             AddXsrfTokenHeader(headers, configData.CookieHeader.Value);
 
             var response = await PostDataWithCookies(SearchUrl, pairs, configData.CookieHeader.Value, SiteLink, headers, body);
-            if (response.Content.StartsWith("<!doctype html>"))
+            if (response.ContentString.StartsWith("<!doctype html>"))
             {
                 //Cookie appears to expire after a period of time or logging in to the site via browser
                 await DoLogin();
@@ -206,7 +206,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
 
             return releases;
@@ -216,7 +216,7 @@ namespace Jackett.Common.Indexers
         {
             try
             {
-                var json = JsonConvert.DeserializeObject<dynamic>(response.Content);
+                var json = JsonConvert.DeserializeObject<dynamic>(response.ContentString);
                 if (!(json is JObject) || json["torrents"] == null || !(json["torrents"]["data"] is JArray) || json["torrents"]["data"] == null)
                     throw new Exception("Server error");
                 return (JArray)json["torrents"]["data"];
@@ -224,7 +224,7 @@ namespace Jackett.Common.Indexers
             catch (Exception e)
             {
                 logger.Error("CheckResponse() Error: ", e.Message);
-                throw new Exception(response.Content);
+                throw new Exception(response.ContentString);
             }
         }
     }

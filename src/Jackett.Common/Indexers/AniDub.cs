@@ -116,7 +116,7 @@ namespace Jackett.Common.Indexers
             );
 
             var parser = new HtmlParser();
-            var document = await parser.ParseDocumentAsync(result.Content);
+            var document = await parser.ParseDocumentAsync(result.ContentString);
 
             await ConfigureIfOK(result.Cookies, IsAuthorized(result), () =>
             {
@@ -160,7 +160,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var document = await parser.ParseDocumentAsync(result.Content);
+                var document = await parser.ParseDocumentAsync(result.ContentString);
 
                 foreach (var linkNode in document.QuerySelectorAll(ReleaseLinksSelector))
                 {
@@ -170,7 +170,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(result.Content, ex);
+                OnParseError(result.ContentString, ex);
             }
 
             return releases;
@@ -197,7 +197,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var document = await parser.ParseDocumentAsync(result.Content);
+                var document = await parser.ParseDocumentAsync(result.ContentString);
                 var content = document.GetElementById(ContentId);
 
                 var date = GetDateFromShowPage(url, content);
@@ -245,7 +245,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(result.Content, ex);
+                OnParseError(result.ContentString, ex);
             }
 
             return releases;
@@ -508,7 +508,7 @@ namespace Jackett.Common.Indexers
         }
 
         private bool IsAuthorized(WebClientStringResult result) =>
-            result.Content.Contains("index.php?action=logout");
+            result.ContentString.Contains("index.php?action=logout");
 
         private IEnumerable<int> ParseCategories(Uri showUri)
         {
@@ -533,7 +533,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var document = await parser.ParseDocumentAsync(response.Content);
+                var document = await parser.ParseDocumentAsync(response.ContentString);
 
                 foreach (var linkNode in document.QuerySelectorAll(searchLinkSelector))
                 {
@@ -543,7 +543,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
 
             return releases;

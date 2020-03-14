@@ -167,7 +167,7 @@ namespace Jackett.Common.Indexers
                 throw new IOException($"Anidex search returned unexpected result. Expected 200 OK but got {response.Status.ToString()}.");
 
             // Search seems to have been a success so parse it
-            return ParseResult(response.Content);
+            return ParseResult(response.ContentString);
         }
 
         private IEnumerable<ReleaseInfo> ParseResult(string response)
@@ -244,13 +244,13 @@ namespace Jackett.Common.Indexers
 
                 if (!result.IsRedirect)
                     // Success returns a redirect. For anything else, assume a failure.
-                    throw new IOException($"Unexpected result from DDOS Guard while attempting to bypass: {result.Content}");
+                    throw new IOException($"Unexpected result from DDOS Guard while attempting to bypass: {result.ContentString}");
 
                 // Call the redirect URL to retrieve the cookie
                 result = await RequestStringWithCookiesAndRetry(result.RedirectingTo);
                 if (!result.IsRedirect)
                     // Success is another redirect. For anything else, assume a failure.
-                    throw new IOException($"Unexpected result when returning from DDOS Guard bypass: {result.Content}");
+                    throw new IOException($"Unexpected result when returning from DDOS Guard bypass: {result.ContentString}");
 
                 // If we got to this point, the bypass should have succeeded and we have stored the necessary cookies to access the site normally.
             }

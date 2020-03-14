@@ -114,7 +114,7 @@ namespace Jackett.Common.Indexers
 
             try
             {
-                var jsonContent = JArray.Parse(response.Content);
+                var jsonContent = JArray.Parse(response.ContentString);
                 var sitelink = new Uri(SiteLink);
 
                 foreach (var item in jsonContent)
@@ -159,7 +159,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
 
             return releases;
