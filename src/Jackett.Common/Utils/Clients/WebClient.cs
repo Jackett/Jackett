@@ -115,42 +115,10 @@ namespace Jackett.Common.Utils.Clients
             lastRequest = DateTime.Now;
             result.Request = request;
             var stringResult = Mapper.Map<WebClientStringResult>(result);
-            Encoding encoding = null;
-            if (request.Encoding != null)
-            {
-                encoding = request.Encoding;
-            }
-            else if (result.Headers.ContainsKey("content-type"))
-            {
-                var CharsetRegex = new Regex(@"charset=([\w-]+)", RegexOptions.Compiled);
-                var CharsetRegexMatch = CharsetRegex.Match(result.Headers["content-type"][0]);
-                if (CharsetRegexMatch.Success)
-                {
-                    var charset = CharsetRegexMatch.Groups[1].Value;
-                    try
-                    {
-                        encoding = Encoding.GetEncoding(charset);
-                    }
-                    catch (Exception ex)
-                    {
-                        logger.Error(string.Format("WebClient({0}).GetString(Url:{1}): Error loading encoding {2} based on header {3}: {4}", ClientType, request.Url, charset, result.Headers["content-type"][0], ex));
-                    }
-                }
-                else
-                {
-                    logger.Error(string.Format("WebClient({0}).GetString(Url:{1}): Got header without charset: {2}", ClientType, request.Url, result.Headers["content-type"][0]));
-                }
-            }
-
-            if (encoding == null)
-            {
-                logger.Error(string.Format("WebClient({0}).GetString(Url:{1}): No encoding detected, defaulting to UTF-8", ClientType, request.Url));
-                encoding = Encoding.UTF8;
-            }
 
             string decodedContent = null;
             if (result.Content != null)
-                decodedContent = encoding.GetString(result.Content);
+                decodedContent = result.Encoding.GetString(result.Content);
 
             stringResult.Content = decodedContent;
             logger.Debug(string.Format("WebClient({0}): Returning {1} => {2}", ClientType, result.Status, (result.IsRedirect ? result.RedirectingTo + " " : "") + (decodedContent == null ? "<NULL>" : decodedContent)));

@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using CloudflareSolverRe;
 using com.LandonKey.SocksWebProxy;
@@ -326,6 +327,40 @@ namespace Jackett.Common.Utils.Clients
                 result.Cookies = cookieBuilder.ToString().Trim();
             }
             ServerUtil.ResureRedirectIsFullyQualified(webRequest, result);
+            Encoding encoding = null;
+            if (webRequest.Encoding != null)
+            {
+                encoding = webRequest.Encoding;
+            }
+            else if (result.Headers.ContainsKey("content-type"))
+            {
+                var CharsetRegex = new Regex(@"charset=([\w-]+)", RegexOptions.Compiled);
+                var CharsetRegexMatch = CharsetRegex.Match(result.Headers["content-type"][0]);
+                if (CharsetRegexMatch.Success)
+                {
+                    var charset = CharsetRegexMatch.Groups[1].Value;
+                    try
+                    {
+                        encoding = Encoding.GetEncoding(charset);
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.Error(string.Format("WebClient({0}).GetString(Url:{1}): Error loading encoding {2} based on header {3}: {4}", ClientType, webRequest.Url, charset, result.Headers["content-type"][0], ex));
+                    }
+                }
+                else
+                {
+                    logger.Error(string.Format("WebClient({0}).GetString(Url:{1}): Got header without charset: {2}", ClientType, webRequest.Url, result.Headers["content-type"][0]));
+                }
+            }
+
+            if (encoding == null)
+            {
+                logger.Error(string.Format("WebClient({0}).GetString(Url:{1}): No encoding detected, defaulting to UTF-8", ClientType, webRequest.Url));
+                encoding = Encoding.UTF8;
+            }
+
+            result.Encoding = encoding;
             return result;
         }
 
