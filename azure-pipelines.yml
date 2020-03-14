@@ -388,6 +388,7 @@ stages:
               $logText = Invoke-WebRequest $logUrl
               if ($logText -like '*: GitHub Release*') 
               {
+                $logInspect = ($logText -split "Creating a release for tag:")[1]
                 $successCount = (Select-String "Uploaded file successfully:" -InputObject $logText -AllMatches).Matches.Count
                 $failureCount = (Select-String "Duplicate asset found:" -InputObject $logText -AllMatches).Matches.Count
                 Write-Output "Success count is: $successCount and failure count is: $failureCount"
