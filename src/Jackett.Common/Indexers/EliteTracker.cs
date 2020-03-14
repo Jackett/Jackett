@@ -179,26 +179,27 @@ namespace Jackett.Common.Indexers
 
             try
             {
-                var searchResultParser = new HtmlParser();
-                var searchResultDocument = searchResultParser.ParseDocument(results.Content);
-                var rows = searchResultDocument.QuerySelectorAll("table[id='sortabletable'] > tbody > tr");
                 var lastDate = DateTime.Now;
+
+                var parser = new HtmlParser();
+                var doc = parser.ParseDocument(results.Content);
+                var rows = doc.QuerySelectorAll("table[id='sortabletable'] > tbody > tr");
 
                 foreach (var row in rows.Skip(1))
                 {
-                    var qTags = row.QuerySelector("td:nth-child(2) > div:has(span[style=\"float: right;\"])");
+                    var qTags = row.Children[1].QuerySelector("div:has(span[style=\"float: right;\"])");
                     if (qTags == null)
                         continue; // not a torrent line
 
-                    var cat = row.QuerySelector("td:nth-child(1) > a").GetAttribute("href").Split('=')[1];
-                    var title = row.QuerySelector("td:nth-child(2) a").TextContent;
-                    var qLinks = row.QuerySelector("td:nth-child(3)").QuerySelectorAll("a");
+                    var cat = row.Children[0].QuerySelector("a").GetAttribute("href").Split('=')[1];
+                    var title = row.Children[1].QuerySelector("a").TextContent;
+                    var qLinks = row.Children[2].QuerySelectorAll("a");
                     var link = configData.TorrentHTTPSMode.Value ? qLinks[1].GetAttribute("href") : qLinks[0].GetAttribute("href");
-                    var comments = row.QuerySelector("td:nth-child(2)").QuerySelector("a").GetAttribute("href");
-                    var size = row.QuerySelector("td:nth-child(5)").TextContent;
-                    var grabs = row.QuerySelector("td:nth-child(6)").QuerySelector("a").TextContent;
-                    var seeders = row.QuerySelector("td:nth-child(7)").QuerySelector("a").TextContent;
-                    var leechers = row.QuerySelector("td:nth-child(8)").QuerySelector("a").TextContent;
+                    var comments = row.Children[1].QuerySelector("a").GetAttribute("href");
+                    var size = row.Children[4].TextContent;
+                    var grabs = row.Children[5].QuerySelector("a").TextContent;
+                    var seeders = row.Children[6].QuerySelector("a").TextContent;
+                    var leechers = row.Children[7].QuerySelector("a").TextContent;
 
                     var dlVolumeFactor = 1.0;
                     if (qTags.QuerySelector("img[alt^=\"TORRENT GRATUIT\"]") != null)
@@ -225,7 +226,7 @@ namespace Jackett.Common.Indexers
                     release.Peers = ParseUtil.CoerceInt(leechers) + release.Seeders;
                     release.Guid = release.Link;
 
-                    var qTooltip = row.QuerySelector("td:nth-child(2) > div.tooltip-content");
+                    var qTooltip = row.Children[1].QuerySelector("div.tooltip-content");
                     if (qTooltip != null)
                     {
                         var banner = qTooltip.QuerySelector("img");
