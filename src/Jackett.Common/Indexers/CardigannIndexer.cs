@@ -782,9 +782,7 @@ namespace Jackett.Common.Indexers
             return null;
         }
 
-        protected string getRedirectDomainHint(WebClientByteResult result) => getRedirectDomainHint(result.Request.Url, result.RedirectingTo);
-
-        protected string getRedirectDomainHint(WebClientStringResult result) => getRedirectDomainHint(result.Request.Url, result.RedirectingTo);
+        protected string getRedirectDomainHint(BaseWebResult result) => getRedirectDomainHint(result.Request.Url, result.RedirectingTo);
 
         protected async Task<bool> TestLogin()
         {
@@ -828,7 +826,7 @@ namespace Jackett.Common.Indexers
             return true;
         }
 
-        protected bool CheckIfLoginIsNeeded(WebClientStringResult Result, IHtmlDocument document)
+        protected bool CheckIfLoginIsNeeded(BaseWebResult Result, IHtmlDocument document)
         {
             if (Result.IsRedirect)
             {
