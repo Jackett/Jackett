@@ -1,7 +1,7 @@
 ---
   site: torrentlt
   name: Torrent.LT
-  description: "Torrent.LT is Private site for TV / MOVIES / GENERAL"
+  description: "Torrent.LT is a LITHUANIAN Private Torrent Tracker for 0DAY / GENERAL"
   language: lt-lt
   type: private
   encoding: UTF-8
@@ -10,12 +10,14 @@
   legacylinks:
     - http://www.torrent.ai/
     - https://torrent.ai/
+
   caps:
     categorymappings:
       - {id: 27, cat: TV, desc: "Animacija"}
+      - {id: 76, cat: TV, desc: "Animacija / LT"}
       - {id: 35, cat: TV/Anime, desc: "Anime"}
       - {id: 31, cat: Movies/DVD, desc: "Filmai / DVD"}
-      - {id: 33, cat: Movies, desc: "Filmai / LTU"}
+      - {id: 33, cat: Movies, desc: "Filmai / LT"}
       - {id: 43, cat: Movies, desc: "Filmai / LT-Subs"}
       - {id: 34, cat: Movies, desc: "Filmai / Eng"}
       - {id: 32, cat: Movies, desc: "Filmai / Rus"}
@@ -60,12 +62,12 @@
       - {id: 71, cat: XXX/Packs, desc: "pr0n / pack"}
       - {id: 30, cat: Other, desc: "Kita"}
       - {id: 41, cat: Books, desc: "E-Books"}
-      - {id: 76, cat: TV, desc: "Animacija / LT"}
       - {id: 77, cat: Other, desc: "Educational"}
 
     modes:
       search: [q]
       tv-search: [q, season, ep]
+      movie-search: [q]
 
   settings:
     - name: cookie
@@ -75,6 +77,21 @@
       type: info
       label: How to get the Cookie
       default: "<ol><li>Login to this tracker in your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find 'cookie:' in the <b>Request Headers</b> section<li>Copy & paste the whole cookie string to here</ol>"
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "0"
+      options:
+        "0": "created"
+        "6": "seeders"
+        "4": "size"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
 
   login:
     method: cookie
@@ -87,16 +104,20 @@
     paths:
       - path: lt/torrents.php
     inputs:
-      $raw: "{{range .Categories}}cats[]={{.}}&{{end}}"
+      $raw: "{{ range .Categories }}cats[]={{.}}&{{end}}"
       search: "{{ .Keywords }}"
+      sort: "{{ .Config.sort }}"
+      type: "{{ .Config.type }}"
     keywordsfilters:
       - name: replace
         args: [".", " "] # issue #3296
+
     rows:
       selector: table> tbody > tr[class^="torrents_table_row_"]
       filters:
         - name: andmatch
           args: 50
+
     fields:
       title:
         selector: td[class$="torrent_info"] a
@@ -122,7 +143,9 @@
       size:
         selector: td a.torrent_size
       downloadvolumefactor:
-        text: 1
+        case:
+          img[src$="/freedownload.gif"]: 0
+          "*": 1
       uploadvolumefactor:
         text: 1
       date:
@@ -131,4 +154,4 @@
         filters:
           - name: dateparse
             args: "2006-01-02 15:04"
-# engine tbd
+# engine n/a
