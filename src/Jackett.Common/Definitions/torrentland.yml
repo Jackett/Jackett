@@ -195,12 +195,12 @@
           - name: replace
             args: ["f6c8a6", "0.75"]
       uploadvolumefactor:
-          case:
-            img[src$="2x.gif"]: 2
-            img[src$="3x.gif"]: 3
-            img[src$="4x.gif"]: 4
-            img[src$="5x.gif"]: 5
-            img[src$="6x.gif"]: 6
-            img[src$="7x.gif"]: 7
-            "*": 1
+        case:
+          img[src$="2x.gif"]: 2
+          img[src$="3x.gif"]: 3
+          img[src$="4x.gif"]: 4
+          img[src$="5x.gif"]: 5
+          img[src$="6x.gif"]: 6
+          img[src$="7x.gif"]: 7
+          "*": 1
 # xbtit customised
