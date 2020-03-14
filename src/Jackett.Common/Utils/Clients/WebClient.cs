@@ -102,7 +102,7 @@ namespace Jackett.Common.Utils.Clients
             var result = await Run(request);
             lastRequest = DateTime.Now;
             result.Request = request;
-            logger.Debug(string.Format("WebClient({0}): Returning {1} => {2} bytes", ClientType, result.Status, (result.IsRedirect ? result.RedirectingTo + " " : "") + (result.Content == null ? "<NULL>" : result.Content.Length.ToString())));
+            logger.Debug(string.Format("WebClient({0}): Returning {1} => {2} bytes", ClientType, result.Status, (result.IsRedirect ? result.RedirectingTo + " " : "") + (result.ContentBytes == null ? "<NULL>" : result.ContentBytes.Length.ToString())));
             return result;
         }
 
@@ -117,8 +117,8 @@ namespace Jackett.Common.Utils.Clients
             var stringResult = Mapper.Map<WebClientStringResult>(result);
 
             string decodedContent = null;
-            if (result.Content != null)
-                decodedContent = result.Encoding.GetString(result.Content);
+            if (result.ContentBytes != null)
+                decodedContent = result.Encoding.GetString(result.ContentBytes);
 
             stringResult.ContentString = decodedContent;
             logger.Debug(string.Format("WebClient({0}): Returning {1} => {2}", ClientType, result.Status, (result.IsRedirect ? result.RedirectingTo + " " : "") + (decodedContent == null ? "<NULL>" : decodedContent)));
