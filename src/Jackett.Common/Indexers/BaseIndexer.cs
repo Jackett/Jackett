@@ -573,17 +573,7 @@ namespace Jackett.Common.Indexers
             }
         }
 
-        protected async Task FollowIfRedirect(WebClientStringResult response, string referrer = null, string overrideRedirectUrl = null, string overrideCookies = null, bool accumulateCookies = false)
-        {
-            var byteResult = new WebClientByteResult();
-            // Map to byte
-            Mapper.Map(response, byteResult);
-            await FollowIfRedirect(byteResult, referrer, overrideRedirectUrl, overrideCookies, accumulateCookies);
-            // Map to string
-            Mapper.Map(byteResult, response);
-        }
-
-        protected async Task FollowIfRedirect(WebClientByteResult response, string referrer = null, string overrideRedirectUrl = null, string overrideCookies = null, bool accumulateCookies = false)
+        protected async Task FollowIfRedirect(BaseWebResult response, string referrer = null, string overrideRedirectUrl = null, string overrideCookies = null, bool accumulateCookies = false)
         {
             // Follow up  to 5 redirects
             for (var i = 0; i < 5; i++)
@@ -633,7 +623,7 @@ namespace Jackett.Common.Indexers
             }
         }
 
-        private async Task DoFollowIfRedirect(WebClientByteResult incomingResponse, string referrer = null, string overrideRedirectUrl = null, string overrideCookies = null, bool accumulateCookies = false)
+        private async Task DoFollowIfRedirect(BaseWebResult incomingResponse, string referrer = null, string overrideRedirectUrl = null, string overrideCookies = null, bool accumulateCookies = false)
         {
             if (incomingResponse.IsRedirect)
             {
