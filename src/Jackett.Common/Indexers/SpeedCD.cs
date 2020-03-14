@@ -96,10 +96,10 @@ namespace Jackett.Common.Indexers
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, SiteLink);
 
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("/browse.php"), () =>
+            await ConfigureIfOK(result.Cookies, result.ContentString != null && result.ContentString.Contains("/browse.php"), () =>
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(result.Content);
+                var dom = parser.ParseDocument(result.ContentString);
                 var errorMessage = dom.Text();
                 if (errorMessage.Contains("Wrong Captcha!"))
                     errorMessage = "Captcha requiered due to a failed login attempt. Login via a browser to whitelist your IP and then reconfigure jackett.";
@@ -136,7 +136,7 @@ namespace Jackett.Common.Indexers
             }
 
             var response = await RequestStringWithCookiesAndRetry(urlSearch);
-            if (!response.Content.Contains("/logout.php"))
+            if (!response.ContentString.Contains("/logout.php"))
             {
                 //Cookie appears to expire after a period of time or logging in to the site via browser
                 await DoLogin();
@@ -146,7 +146,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(response.Content);
+                var dom = parser.ParseDocument(response.ContentString);
                 var rows = dom.QuerySelectorAll("div[id='torrentTable'] > div[class^='box torrentBox'] > div[class='boxContent'] > table > tbody > tr");
 
                 foreach (var row in rows)
@@ -193,7 +193,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
             return releases;
         }

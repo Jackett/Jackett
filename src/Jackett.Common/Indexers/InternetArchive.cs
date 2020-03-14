@@ -154,7 +154,7 @@ namespace Jackett.Common.Indexers
             {
                 if (result.Status != HttpStatusCode.OK)
                     throw new Exception("Response code error. HTTP code: " + result.Status);
-                var json = JsonConvert.DeserializeObject<dynamic>(result.Content);
+                var json = JsonConvert.DeserializeObject<dynamic>(result.ContentString);
                 if (!(json is JObject) || !(json["response"] is JObject) || !(json["response"]["docs"] is JArray))
                     throw new Exception("Response format error");
                 return (JArray)json["response"]["docs"];
@@ -162,7 +162,7 @@ namespace Jackett.Common.Indexers
             catch (Exception e)
             {
                 logger.Error("ParseResponse Error: ", e.Message);
-                throw new ExceptionWithConfigData(result.Content, ConfigData);
+                throw new ExceptionWithConfigData(result.ContentString, ConfigData);
             }
         }
 

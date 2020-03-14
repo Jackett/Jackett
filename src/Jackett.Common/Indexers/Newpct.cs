@@ -190,7 +190,7 @@ namespace Jackett.Common.Indexers
                 {
                     var results = await RequestStringWithCookiesAndRetry(uri.AbsoluteUri);
                     await FollowIfRedirect(results);
-                    var content = results.Content;
+                    var content = results.ContentString;
 
                     if (content != null)
                     {
@@ -282,20 +282,20 @@ namespace Jackett.Common.Indexers
                     {
                         var uri = new Uri(validUri, string.Format(_dailyUrl, pg));
                         results = await RequestStringWithCookiesAndRetry(uri.AbsoluteUri);
-                        if (results == null || string.IsNullOrEmpty(results.Content))
+                        if (results == null || string.IsNullOrEmpty(results.ContentString))
                             break;
                         await FollowIfRedirect(results);
-                        items = ParseDailyContent(results.Content);
+                        items = ParseDailyContent(results.ContentString);
                     }
                     else
                     {
                         foreach (var uri in GetLinkUris(new Uri(siteLink, string.Format(_dailyUrl, pg))))
                         {
                             results = await RequestStringWithCookiesAndRetry(uri.AbsoluteUri);
-                            if (results != null && !string.IsNullOrEmpty(results.Content))
+                            if (results != null && !string.IsNullOrEmpty(results.ContentString))
                             {
                                 await FollowIfRedirect(results);
-                                items = ParseDailyContent(results.Content);
+                                items = ParseDailyContent(results.ContentString);
                                 if (items != null && items.Any())
                                 {
                                     validUri = uri;
@@ -431,7 +431,7 @@ namespace Jackett.Common.Indexers
             await FollowIfRedirect(results);
 
             //Episodes list
-            var seriesEpisodesUrl = ParseSeriesListContent(results.Content, seriesName);
+            var seriesEpisodesUrl = ParseSeriesListContent(results.ContentString, seriesName);
             if (!string.IsNullOrEmpty(seriesEpisodesUrl))
             {
                 var pg = 1;
@@ -441,7 +441,7 @@ namespace Jackett.Common.Indexers
                     results = await RequestStringWithCookiesAndRetry(episodesListUrl.AbsoluteUri);
                     await FollowIfRedirect(results);
 
-                    var items = ParseEpisodesListContent(results.Content);
+                    var items = ParseEpisodesListContent(results.ContentString);
                     if (items == null || !items.Any())
                         break;
 
@@ -610,17 +610,17 @@ namespace Jackett.Common.Indexers
                     {
                         var uri = new Uri(validUri, _searchJsonUrl);
                         results = await PostDataWithCookies(uri.AbsoluteUri, queryCollection);
-                        if (results == null || string.IsNullOrEmpty(results.Content))
+                        if (results == null || string.IsNullOrEmpty(results.ContentString))
                             break;
-                        items = ParseSearchJsonContent(uri, results.Content);
+                        items = ParseSearchJsonContent(uri, results.ContentString);
                     }
                     else
                     {
                         var uri = new Uri(validUri, _searchUrl);
                         results = await PostDataWithCookies(uri.AbsoluteUri, queryCollection);
-                        if (results == null || string.IsNullOrEmpty(results.Content))
+                        if (results == null || string.IsNullOrEmpty(results.ContentString))
                             break;
-                        items = ParseSearchContent(results.Content);
+                        items = ParseSearchContent(results.ContentString);
                     }
                 }
                 else
@@ -651,12 +651,12 @@ namespace Jackett.Common.Indexers
                                         results = null;
                                     }
 
-                                    if (results != null && !string.IsNullOrEmpty(results.Content))
+                                    if (results != null && !string.IsNullOrEmpty(results.ContentString))
                                     {
                                         if (usingJson)
-                                            items = ParseSearchJsonContent(uri, results.Content);
+                                            items = ParseSearchJsonContent(uri, results.ContentString);
                                         else
-                                            items = ParseSearchContent(results.Content);
+                                            items = ParseSearchContent(results.ContentString);
 
                                         if (items != null)
                                         {

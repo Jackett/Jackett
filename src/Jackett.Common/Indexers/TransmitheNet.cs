@@ -61,12 +61,12 @@ namespace Jackett.Common.Indexers
             CookieHeader = string.Empty;
             var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, CookieHeader, true, null, LoginUrl);
 
-            await ConfigureIfOK(response.Cookies, response.Content != null && response.Content.Contains("logout.php"), () =>
+            await ConfigureIfOK(response.Cookies, response.ContentString != null && response.ContentString.Contains("logout.php"), () =>
             {
                 var parser = new HtmlParser();
-                var document = parser.ParseDocument(response.Content);
+                var document = parser.ParseDocument(response.ContentString);
                 var messageEl = document.QuerySelector("form > span[class='warning']");
-                var errorMessage = response.Content;
+                var errorMessage = response.ContentString;
                 if (messageEl != null)
                     errorMessage = messageEl.TextContent.Trim();
                 throw new ExceptionWithConfigData(errorMessage, configData);
@@ -76,7 +76,7 @@ namespace Jackett.Common.Indexers
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var loggedInCheck = await RequestStringWithCookies(SearchUrl);
-            if (!loggedInCheck.Content.Contains("logout.php"))
+            if (!loggedInCheck.ContentString.Contains("logout.php"))
             {
                 //Cookie appears to expire after a period of time or logging in to the site via browser
                 await DoLogin();
@@ -92,7 +92,7 @@ namespace Jackett.Common.Indexers
             //}
 
             var response = await RequestStringWithCookiesAndRetry(Url);
-            var releases = ParseResponse(response.Content);
+            var releases = ParseResponse(response.ContentString);
 
             return releases;
         }

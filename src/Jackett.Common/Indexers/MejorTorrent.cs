@@ -98,17 +98,17 @@ namespace Jackett.Common.Indexers
             // Eg http://www.mejortorrentt.org/peli-descargar-torrent-11995-Harry-Potter-y-la-piedra-filosofal.html
             var result = await RequestStringWithCookies(downloadUrl);
             if (result.Status != HttpStatusCode.OK)
-                throw new ExceptionWithConfigData(result.Content, configData);
+                throw new ExceptionWithConfigData(result.ContentString, configData);
             var searchResultParser = new HtmlParser();
-            var html = searchResultParser.ParseDocument(result.Content);
+            var html = searchResultParser.ParseDocument(result.ContentString);
             downloadUrl = SiteLink + html.QuerySelector("a[href*=\"sec=descargas\"]").GetAttribute("href");
 
             // Eg http://www.mejortorrentt.org/secciones.php?sec=descargas&ap=contar&tabla=peliculas&id=11995&link_bajar=1
             result = await RequestStringWithCookies(downloadUrl);
             if (result.Status != HttpStatusCode.OK)
-                throw new ExceptionWithConfigData(result.Content, configData);
+                throw new ExceptionWithConfigData(result.ContentString, configData);
             searchResultParser = new HtmlParser();
-            html = searchResultParser.ParseDocument(result.Content);
+            html = searchResultParser.ParseDocument(result.ContentString);
             var onclick = html.QuerySelector("a[onclick*=\"/uploads/\"]").GetAttribute("onclick");
             var table = onclick.Split(new[] { "table: '" }, StringSplitOptions.None)[1].Split(new[] { "'" }, StringSplitOptions.None)[0];
             var name = onclick.Split(new[] { "name: '" }, StringSplitOptions.None)[1].Split(new[] { "'" }, StringSplitOptions.None)[0];
@@ -125,11 +125,11 @@ namespace Jackett.Common.Indexers
             var url = SiteLink + NewTorrentsUrl;
             var result = await RequestStringWithCookies(url);
             if (result.Status != HttpStatusCode.OK)
-                throw new ExceptionWithConfigData(result.Content, configData);
+                throw new ExceptionWithConfigData(result.ContentString, configData);
             try
             {
                 var searchResultParser = new HtmlParser();
-                var doc = searchResultParser.ParseDocument(result.Content);
+                var doc = searchResultParser.ParseDocument(result.ContentString);
 
                 var container = doc.QuerySelector("#main_table_center_center1 table div");
                 var parsedCommentsLink = new List<string>();
@@ -174,7 +174,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(result.Content, ex);
+                OnParseError(result.ContentString, ex);
             }
 
             return releases;
@@ -189,12 +189,12 @@ namespace Jackett.Common.Indexers
             var url = SiteLink + SearchUrl + "?" + qc.GetQueryString();
             var result = await RequestStringWithCookies(url);
             if (result.Status != HttpStatusCode.OK)
-                throw new ExceptionWithConfigData(result.Content, configData);
+                throw new ExceptionWithConfigData(result.ContentString, configData);
 
             try
             {
                 var searchResultParser = new HtmlParser();
-                var doc = searchResultParser.ParseDocument(result.Content);
+                var doc = searchResultParser.ParseDocument(result.ContentString);
 
                 var table = doc.QuerySelector("#main_table_center_center2 table table");
                 // check the search term is valid
@@ -223,7 +223,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(result.Content, ex);
+                OnParseError(result.ContentString, ex);
             }
 
             return releases;
@@ -271,10 +271,10 @@ namespace Jackett.Common.Indexers
         {
             var result = await RequestStringWithCookies(commentsLink);
             if (result.Status != HttpStatusCode.OK)
-                throw new ExceptionWithConfigData(result.Content, configData);
+                throw new ExceptionWithConfigData(result.ContentString, configData);
 
             var searchResultParser = new HtmlParser();
-            var doc = searchResultParser.ParseDocument(result.Content);
+            var doc = searchResultParser.ParseDocument(result.ContentString);
 
             var rows = doc.QuerySelectorAll("#main_table_center_center1 table table table tr");
             foreach (var row in rows)

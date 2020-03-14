@@ -65,7 +65,7 @@ namespace Jackett.Common.Indexers
             if (loginPage.IsRedirect)
                 return result; // already logged in
             var parser = new HtmlParser();
-            var cq = parser.ParseDocument(loginPage.Content);
+            var cq = parser.ParseDocument(loginPage.ContentString);
             var recaptchaSiteKey = cq.QuerySelector(".g-recaptcha")?.GetAttribute("data-sitekey");
             result.CookieHeader.Value = loginPage.Cookies;
             result.Captcha.SiteKey = recaptchaSiteKey;
@@ -105,10 +105,10 @@ namespace Jackett.Common.Indexers
             }
 
             var response = await RequestLoginAndFollowRedirect(TakeLoginUrl, pairs, null, true, null, SiteLink);
-            await ConfigureIfOK(response.Cookies, response.Content != null && response.Content.Contains("logout.php"), () =>
+            await ConfigureIfOK(response.Cookies, response.ContentString != null && response.ContentString.Contains("logout.php"), () =>
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(response.Content);
+                var dom = parser.ParseDocument(response.ContentString);
                 var messageEl = dom.QuerySelectorAll("table.detail td.text").Last();
                 foreach (var child in messageEl.QuerySelectorAll("a"))
                     child.Remove();
@@ -143,7 +143,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(results.Content);
+                var dom = parser.ParseDocument(results.ContentString);
                 foreach (var child in dom.QuerySelectorAll("#needseed"))
                     child.Remove();
                 foreach (var table in dom.QuerySelectorAll("table[align=center] + br + table > tbody"))
@@ -210,7 +210,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return releases;

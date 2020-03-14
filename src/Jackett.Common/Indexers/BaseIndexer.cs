@@ -567,7 +567,7 @@ namespace Jackett.Common.Indexers
                 throw new Exception("Request to " + response.Request.Url + " failed (Error " + response.Status + ") - The tracker seems to be down.");
             }
 
-            if (response.Status == System.Net.HttpStatusCode.Forbidden && response.Content.Contains("<span data-translate=\"complete_sec_check\">Please complete the security check to access</span>"))
+            if (response.Status == System.Net.HttpStatusCode.Forbidden && response.ContentString.Contains("<span data-translate=\"complete_sec_check\">Please complete the security check to access</span>"))
             {
                 throw new Exception("Request to " + response.Request.Url + " failed (Error " + response.Status + ") - The page is protected by an Cloudflare reCaptcha. The page is in aggressive DDoS mitigation mode or your IP might be blacklisted (e.g. in case of shared VPN IPs). There's no easy way of making it usable with Jackett.");
             }

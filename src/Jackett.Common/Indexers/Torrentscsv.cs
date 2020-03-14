@@ -88,7 +88,7 @@ namespace Jackett.Common.Indexers
 
             try
             {
-                var jsonStart = response.Content;
+                var jsonStart = response.ContentString;
                 var jsonContent = JArray.Parse(jsonStart);
 
                 foreach (var torrent in jsonContent)
@@ -207,7 +207,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
             return releases;
         }

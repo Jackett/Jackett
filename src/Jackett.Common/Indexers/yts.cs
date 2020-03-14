@@ -98,8 +98,8 @@ namespace Jackett.Common.Indexers
             try
             {
                 // returned content might start with an html error message, remove it first
-                var jsonStart = response.Content.IndexOf('{');
-                var jsonContentStr = response.Content.Remove(0, jsonStart);
+                var jsonStart = response.ContentString.IndexOf('{');
+                var jsonContentStr = response.ContentString.Remove(0, jsonStart);
 
                 var jsonContent = JObject.Parse(jsonContentStr);
 
@@ -202,7 +202,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
 
             return releases;

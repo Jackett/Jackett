@@ -108,7 +108,7 @@ namespace Jackett.Common.Indexers
         {
             var loginPage = await RequestStringWithCookies(StartPageUrl, string.Empty);
             var parser = new HtmlParser();
-            var dom = parser.ParseDocument(loginPage.Content);
+            var dom = parser.ParseDocument(loginPage.ContentString);
             var recaptcha = dom.QuerySelector(".g-recaptcha");
             if (recaptcha != null)
             {
@@ -161,10 +161,10 @@ namespace Jackett.Common.Indexers
             }
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
+            await ConfigureIfOK(result.Cookies, result.ContentString != null && result.ContentString.Contains("logout.php"), () =>
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(result.Content);
+                var dom = parser.ParseDocument(result.ContentString);
                 var errorMessage = dom.QuerySelector("td.text").TextContent.Trim();
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
@@ -194,7 +194,7 @@ namespace Jackett.Common.Indexers
             var searchUrl = SearchUrl + "?" + qParams.GetQueryString();
 
             var results = await RequestStringWithCookies(searchUrl);
-            var releases = ParseResponse(query, results.Content);
+            var releases = ParseResponse(query, results.ContentString);
 
             return releases;
         }

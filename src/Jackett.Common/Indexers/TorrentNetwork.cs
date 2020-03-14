@@ -122,9 +122,9 @@ namespace Jackett.Common.Indexers
         {
             var jsonData = JsonConvert.SerializeObject(data);
             var result = await PostDataWithCookies(APIUrl + endpoint, null, null, SiteLink, APIHeaders, jsonData);
-            if (!result.Content.StartsWith("{")) // not JSON => error
-                throw new ExceptionWithConfigData(result.Content, configData);
-            dynamic json = JsonConvert.DeserializeObject<dynamic>(result.Content);
+            if (!result.ContentString.StartsWith("{")) // not JSON => error
+                throw new ExceptionWithConfigData(result.ContentString, configData);
+            dynamic json = JsonConvert.DeserializeObject<dynamic>(result.ContentString);
             return json;
         }
 

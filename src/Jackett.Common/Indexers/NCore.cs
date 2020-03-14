@@ -103,10 +103,10 @@ namespace Jackett.Common.Indexers
                 pairs.Add("2factor", configData.TwoFactor.Value);
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, referer: SiteLink);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("profile.php"), () =>
+            await ConfigureIfOK(result.Cookies, result.ContentString != null && result.ContentString.Contains("profile.php"), () =>
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(result.Content);
+                var dom = parser.ParseDocument(result.ContentString);
                 var messageEl = dom.QuerySelector("#hibauzenet table tbody tr");
                 var msgContainer = messageEl.Children[1];
                 var errorMessage = msgContainer != null ? msgContainer.TextContent : "Error while trying to login.";
@@ -163,7 +163,7 @@ namespace Jackett.Common.Indexers
 
 
             var parser = new HtmlParser();
-            var dom = parser.ParseDocument(results.Content);
+            var dom = parser.ParseDocument(results.ContentString);
             var numVal = 0;
 
             // find number of torrents / page
@@ -225,7 +225,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(results.Content);
+                var dom = parser.ParseDocument(results.ContentString);
 
                 var rows = dom.QuerySelector(".box_torrent_all").QuerySelectorAll(".box_torrent");
 
@@ -328,7 +328,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return releases;
