@@ -78,11 +78,12 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
 
+            var cats = MapTorznabCapsToTrackers(query);
             var qc = new NameValueCollection
             {
                 {"incldead", "1"},
                 {"showspam", "1"},
-                {"cat", MapTorznabCapsToTrackers(query).FirstOrDefault() ?? "0"}
+                {"cat", cats.Count == 1 ? cats[0] : "0"}
             };
             if (!string.IsNullOrWhiteSpace(query.GetQueryString()))
                 qc.Add("search", query.GetQueryString());
