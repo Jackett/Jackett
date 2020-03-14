@@ -1,9 +1,9 @@
 ---
   site: baibako
   name: BaibaKo
-  description: "BaibaKo is a RUSSIAN Semi-Private Torrent Tracker for TV"
+  description: "BaibaKo is a RUSSIAN Private Torrent Tracker for TV"
   language: ru-ru
-  type: semi-private
+  type: private
   encoding: windows-1251
   links:
     - http://baibako.tv/ # site does not support https NET::ERR_CERT_AUTHORITY_INVALID

@@ -990,7 +990,7 @@ namespace Jackett.Common.Indexers
                         try
                         {
                             var Date = DateTimeUtil.ParseDateTimeGoLang(Data, layout);
-                            Data = Date.ToString(DateTimeUtil.RFC1123ZPattern);
+                            Data = Date.ToString(DateTimeUtil.Rfc1123ZPattern);
                         }
                         catch (FormatException ex)
                         {
@@ -1056,10 +1056,10 @@ namespace Jackett.Common.Indexers
                         break;
                     case "timeago":
                     case "reltime":
-                        Data = DateTimeUtil.FromTimeAgo(Data).ToString(DateTimeUtil.RFC1123ZPattern);
+                        Data = DateTimeUtil.FromTimeAgo(Data).ToString(DateTimeUtil.Rfc1123ZPattern);
                         break;
                     case "fuzzytime":
-                        Data = DateTimeUtil.FromUnknown(Data).ToString(DateTimeUtil.RFC1123ZPattern);
+                        Data = DateTimeUtil.FromUnknown(Data).ToString(DateTimeUtil.Rfc1123ZPattern);
                         break;
                     case "validfilename":
                         Data = StringUtil.MakeValidFileName(Data, '_', false);
@@ -1509,7 +1509,7 @@ namespace Jackett.Common.Indexers
                                             break;
                                         case "date":
                                             release.PublishDate = DateTimeUtil.FromUnknown(value);
-                                            value = release.PublishDate.ToString(DateTimeUtil.RFC1123ZPattern);
+                                            value = release.PublishDate.ToString(DateTimeUtil.Rfc1123ZPattern);
                                             break;
                                         case "files":
                                             release.Files = ParseUtil.CoerceLong(value);

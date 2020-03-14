@@ -2,7 +2,7 @@
 
 [![GitHub issues](https://img.shields.io/github/issues/Jackett/Jackett.svg?maxAge=60&style=flat-square)](https://github.com/Jackett/Jackett/issues)
 [![GitHub pull requests](https://img.shields.io/github/issues-pr/Jackett/Jackett.svg?maxAge=60&style=flat-square)](https://github.com/Jackett/Jackett/pulls)
-[![Build Status](https://dev.azure.com/Jackett-project/Jackett/_apis/build/status/Jackett.Jackett?branchName=master)](https://dev.azure.com/Jackett-project/Jackett/_build/latest?definitionId=1&branchName=master)
+[![Build Status](https://dev.azure.com/Jackett-project/Jackett/_apis/build/status/Jackett.Jackett?branchName=master)](https://dev.azure.com/jackett/jackett/_build/latest?definitionId=1&branchName=master)
 [![GitHub Releases](https://img.shields.io/github/downloads/Jackett/Jackett/total.svg?maxAge=60&style=flat-square)](https://github.com/Jackett/Jackett/releases/latest)
 [![Docker Pulls](https://img.shields.io/docker/pulls/linuxserver/jackett.svg?maxAge=60&style=flat-square)](https://hub.docker.com/r/linuxserver/jackett/)
 [![Discord](https://img.shields.io/badge/discord-chat-7289DA.svg?maxAge=60&style=flat-square)](https://discord.gg/J865QuA)
@@ -18,7 +18,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 
 
 #### Supported Systems
-* Windows 7SP1 or greater using .NET 4.6.1 or above [Download here](https://www.microsoft.com/net/framework/versions/net461)
+* Windows 7SP1 or greater using .NET 4.6.1 or above [Download here](https://dotnet.microsoft.com/download/dotnet-framework/net461)
 * Linux [supported operating systems here](https://github.com/dotnet/core/blob/master/release-notes/2.1/2.1-supported-os.md#linux)
 * macOS 10.13 or greater
 
@@ -101,6 +101,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * PornoRip
  * PornoTor
  * ProStyleX
+ * Rapidzona
  * RARBG
  * Rus-media
  * RuTor
@@ -110,6 +111,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * ShowRSS
  * SkyTorrentsClone
  * SolidTorrents
+ * sosulki
  * sukebei-Pantsu
  * sukebei.Nyaa.si
  * TFile
@@ -119,6 +121,8 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Torlock
  * TOROS
  * Torrent Downloads (TD)
+ * Torrent Oyun indir
+ * torrent-pirat
  * Torrent4You
  * Torrent9
  * Torrent9Clone
@@ -131,6 +135,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TorrentRex
  * TorrentQuest
  * Torrents.csv
+ * Torrentv
  * TorrentView
  * TorrentWal
  * Torrentz2
@@ -139,6 +144,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * xxxtor
  * YourBittorrent
  * YTS.ag
+ * zetorrents
  * Zooqle
 </details>
 
@@ -147,7 +153,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * AlexFilm
  * AniDUB
  * ArenaBG
- * BaibaKo
  * BookTracker
  * CasStudioTV
  * Crazy's Corner
@@ -216,6 +221,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Audiobook Torrents (ABT)
  * Avistaz (AsiaTorrents)
  * Awesome-HD (AHD)
+ * BaibaKo
  * BIGTorrent
  * BIT-HDTV
  * BJ-Share (BJ)
@@ -340,6 +346,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * JPopsuki
  * Kapaki
  * Karagarga
+ * LastFiles
  * Le Saloon
  * LeChaudron
  * LeagueHD
@@ -476,6 +483,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TurkTorrent (TT)
  * Twilight Torrents
  * Twilights Zoom
+ * U-Torrents
  * U2 (U2分享園@動漫花園)
  * UHDBits
  * UnionGang

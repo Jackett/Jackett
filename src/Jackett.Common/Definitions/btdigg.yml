@@ -20,7 +20,7 @@
   settings:
     - name: info
       type: info
-      default: BTDigg does not use categories. In your software Indexer settings, set the category to 100001.
+      default: BTDigg does not use categories. In your software Indexer settings, set the category to 7000.
     - name: sort
       type: select
       label: Sort requested from site
