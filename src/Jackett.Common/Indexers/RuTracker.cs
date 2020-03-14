@@ -1517,7 +1517,7 @@ namespace Jackett.Common.Indexers
                 if (captchaimg != null)
                 {
                     var captchaImage = await RequestBytesWithCookies(captchaimg.GetAttribute("src"));
-                    configData.CaptchaImage.Value = captchaImage.Content;
+                    configData.CaptchaImage.Value = captchaImage.ContentBytes;
 
                     var codefield = doc.QuerySelector("input[name^=\"cap_code_\"]");
                     _capCodeField = codefield.GetAttribute("name");
