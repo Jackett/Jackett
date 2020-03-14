@@ -14,6 +14,7 @@ using System.Threading;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+using Jackett.Server.Controllers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.WebUtilities;
 using NLog;
@@ -335,6 +336,11 @@ namespace Jackett.Server.Services
             CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
             // Load indexers
             indexerService.InitIndexers(configService.GetCardigannDefinitionsFolders());
+
+            var controller = new ProxyTestController(indexerService);
+            // Start proxy controller
+            controller.StartProxy();
+
             client.Init();
             updater.CleanupTempDir();
         }

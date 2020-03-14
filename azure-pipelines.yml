@@ -122,6 +122,13 @@ stages:
           arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework) --output $(Build.BinariesDirectory) /p:AssemblyVersion=$(jackettVersion) /p:FileVersion=$(jackettVersion) /p:InformationalVersion=$(jackettVersion) /p:Version=$(jackettVersion)'
 
       - task: CopyFiles@2
+        displayName: Copy Jackett CA
+        inputs:
+          SourceFolder: .
+          contents: 'jackettCA.*'
+          targetFolder: $(Build.BinariesDirectory)/Jackett
+
+      - task: CopyFiles@2
         displayName: Copy Jackett Server
         inputs:
           SourceFolder: $(Build.BinariesDirectory)/Jackett.Server
@@ -208,7 +215,7 @@ stages:
           script: |
             $file = '$(Build.BinariesDirectory)/Jackett/JackettConsole.exe.config'
             $xml = [xml] (Get-Content $file)
-            $newVersion = $xml.SelectSingleNode("configuration/runtime/*[name()='assemblyBinding']/*[name()='dependentAssembly']/*[name()='assemblyIdentity'][@name='System.Net.Http']/../*[name()='bindingRedirect']/@newVersion") 
+            $newVersion = $xml.SelectSingleNode("configuration/runtime/*[name()='assemblyBinding']/*[name()='dependentAssembly']/*[name()='assemblyIdentity'][@name='System.Net.Http']/../*[name()='bindingRedirect']/@newVersion")
             $newVersion.Value = '4.0.0.0'
             $xml.Save($file)
             Remove-Item '$(Build.BinariesDirectory)/Jackett/System.Net.Http.dll'
@@ -234,7 +241,7 @@ stages:
         displayName: Compress Binaries
         inputs:
           rootFolderOrFile: $(Build.BinariesDirectory)/Jackett
-          includeRootFolder: true 
+          includeRootFolder: true
           archiveType: '$(archiveType)'
           tarCompression: gz
           archiveFile: '$(Build.ArtifactStagingDirectory)/$(artifactName)'
@@ -245,9 +252,9 @@ stages:
         inputs:
           script: >
             iscc.exe $(Build.SourcesDirectory)/Installer.iss
-            /O"$(Build.ArtifactStagingDirectory)" 
-            /DMyFileForVersion=$(Build.BinariesDirectory)/Jackett/Jackett.Common.dll 
-            /DMySourceFolder=$(Build.BinariesDirectory)/Jackett 
+            /O"$(Build.ArtifactStagingDirectory)"
+            /DMyFileForVersion=$(Build.BinariesDirectory)/Jackett/Jackett.Common.dll
+            /DMySourceFolder=$(Build.BinariesDirectory)/Jackett
             /DMyOutputFilename=Jackett.Installer.Windows
 
       - task: PublishBuildArtifacts@1
@@ -495,7 +502,7 @@ stages:
         displayName: Create Github release
         inputs:
           gitHubConnection: JackettPublish
-          repositoryName: '$(Build.Repository.Name)' 
+          repositoryName: '$(Build.Repository.Name)'
           action: create
           target: $(Build.SourceVersion)
           tagSource: userSpecifiedTag
