@@ -284,6 +284,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * EfectoDoppler
  * Elite-Tracker
  * Empornium (EMP)
+ * EpubLibre
  * Ethor.net (Thor's Land)
  * ExoticaZ (YourExotic)
  * ExtremeTorrents
