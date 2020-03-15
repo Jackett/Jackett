@@ -115,7 +115,11 @@ namespace Jackett.Common.Indexers
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var qc = new NameValueCollection();
+            var cats = MapTorznabCapsToTrackers(query, true);
+            var qc = new NameValueCollection
+            {
+                {"cat", cats.Count == 1 ? cats[0] : "0"}
+            };
             var results = new List<WebClientStringResult>();
             var search = new UriBuilder(SearchUrl);
             if (query.IsImdbQuery)
@@ -167,10 +171,6 @@ namespace Jackett.Common.Indexers
                         var catNum = catQuery["cat"];
                         release.Category = MapTrackerCatToNewznab(catNum);
 
-                        // This tracker cannot search multiple cats at a time
-                        // so search all cats then filter out results from different cats
-                        if (trackerCats.Any() && !trackerCats.Contains(catNum))
-                            continue;
                         var dateString = row.Children[5].TextContent.Trim();
                         var pubDate = DateTime.ParseExact(dateString, "yyyy-MM-ddHH:mm:ss", CultureInfo.InvariantCulture);
                         release.PublishDate = DateTime.SpecifyKind(pubDate, DateTimeKind.Local);
