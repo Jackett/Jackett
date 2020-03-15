@@ -134,7 +134,7 @@ namespace Jackett.Common.Indexers
                 var parser = new HtmlParser();
                 var dom = parser.ParseDocument(results);
 
-                var rows = dom.QuerySelectorAll(".browsetable")?.Last().QuerySelectorAll("tr");
+                var rows = dom.QuerySelectorAll(".browsetable").LastOrDefault()?.QuerySelectorAll("tr");
                 if (rows == null)
                     return releases;
                 foreach (var row in rows.Skip(1))
