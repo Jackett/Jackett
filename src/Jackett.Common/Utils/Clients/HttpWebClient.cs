@@ -26,19 +26,15 @@ namespace Jackett.Common.Utils.Clients
         protected static IWebProxy webProxy;
 
         [DebuggerNonUserCode] // avoid "Exception User-Unhandled" Visual Studio messages
-        public static bool ValidateCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+        public static bool ValidateCertificate(HttpRequestMessage request, X509Certificate2 certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
         {
-            if (sender.GetType() != typeof(HttpWebRequest))
-                return sslPolicyErrors == SslPolicyErrors.None;
-
-            var request = (HttpWebRequest)sender;
             var hash = certificate.GetCertHashString();
 
 
             trustedCertificates.TryGetValue(hash, out var hosts);
             if (hosts != null)
             {
-                if (hosts.Contains(request.Host))
+                if (hosts.Contains(request.RequestUri.Host))
                     return true;
             }
 
@@ -128,8 +124,6 @@ namespace Jackett.Common.Utils.Clients
                 ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => { return true; };
             }
 
-            // custom handler for our own internal certificates
-            ServicePointManager.ServerCertificateValidationCallback += ValidateCertificate;
         }
 
         protected override async Task<WebClientByteResult> Run(WebRequest webRequest)
@@ -169,6 +163,8 @@ namespace Jackett.Common.Utils.Clients
                     AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
                 })
                 {
+                    // custom certificate validation handler (netcore version)
+                    clientHandlr.ServerCertificateCustomValidationCallback = ValidateCertificate;
                     clearanceHandlr.InnerHandler = clientHandlr;
                     using (var client = new HttpClient(clearanceHandlr))
                     {
