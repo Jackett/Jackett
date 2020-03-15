@@ -17,6 +17,7 @@ namespace Jackett.Common.Indexers
 {
     // ReSharper disable once UnusedType.Global
     // ReSharper disable once UnusedMember.Global
+
     public class EpubLibre : BaseWebIndexer
     {
         private string SearchUrl => SiteLink + "catalogo/index/{0}/nuevo/todos/sin/todos/{1}/ajax";
