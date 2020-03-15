@@ -54,12 +54,9 @@ namespace Jackett.Common.Utils.Clients
         public static void InitProxy(ServerConfig serverConfig)
         {
             // dispose old SocksWebProxy
-            if (webProxy != null && webProxy is SocksWebProxy)
-            {
-                ((SocksWebProxy)webProxy).Dispose();
-                webProxy = null;
-            }
-
+            if (webProxy is SocksWebProxy proxy)
+                proxy.Dispose();
+            webProxy = null;
             webProxyUrl = serverConfig.GetProxyUrl();
             if (!string.IsNullOrWhiteSpace(webProxyUrl))
             {
