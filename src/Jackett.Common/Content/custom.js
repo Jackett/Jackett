@@ -182,6 +182,7 @@ function displayConfiguredIndexersList(indexers) {
     indexersTable.find("table").dataTable(
          {
              "stateSave": true,
+             "stateDuration": 0,
              "pageLength": -1,
              "lengthMenu": [[10, 20, 50, 100, 250, 500, -1], [10, 20, 50, 100, 250, 500, "All"]],
              "order": [[0, "asc"]],
@@ -253,6 +254,7 @@ function displayUnconfiguredIndexersList() {
     indexersTable.find("table").DataTable(
         {
             "stateSave": true,
+            "stateDuration": 0,
             "fnStateSaveParams": function (oSettings, sValue) {
                 sValue.search.search = ""; // don't save the search filter content
                 return sValue;
@@ -955,6 +957,7 @@ function updateSearchResultTable(element, results) {
 
             "dom": "lfr<\"dataTables_deadfilter\">tip",
             "stateSave": true,
+            "stateDuration": 0,
             "bAutoWidth": false,
             "pageLength": 20,
             "lengthMenu": [[10, 20, 50, 100, 250, 500, -1], [10, 20, 50, 100, 250, 500, "All"]],
@@ -1082,6 +1085,7 @@ function bindUIButtons() {
             table.DataTable(
                  {
                      "stateSave": true,
+                     "stateDuration": 0,
                      "bAutoWidth": false,
                      "pageLength": 20,
                      "lengthMenu": [[10, 20, 50, -1], [10, 20, 50, "All"]],
