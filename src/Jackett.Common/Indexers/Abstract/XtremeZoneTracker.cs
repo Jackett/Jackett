@@ -174,8 +174,8 @@ namespace Jackett.Common.Indexers.Abstract
                 response = await RequestBytesWithCookies(link.ToString(), headers: GetSearchHeaders());
             }
             else if (response.Status != HttpStatusCode.OK)
-                throw new Exception($"Unknown error in download: {response.Content}");
-            return response.Content;
+                throw new Exception($"Unknown error in download: {response.ContentBytes}");
+            return response.ContentBytes;
         }
 
         private Dictionary<string, string> GetSearchHeaders() => new Dictionary<string, string>

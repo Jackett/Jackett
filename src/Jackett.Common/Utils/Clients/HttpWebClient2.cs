@@ -233,15 +233,11 @@ namespace Jackett.Common.Utils.Clients
 
             response = await client.SendAsync(request);
 
-<<<<<<< HEAD
+
             var result = new WebClientByteResult
             {
-                Content = await response.Content.ReadAsByteArrayAsync()
+                ContentBytes = await response.Content.ReadAsByteArrayAsync()
             };
-=======
-            var result = new WebClientByteResult();
-            result.ContentBytes = await response.Content.ReadAsByteArrayAsync();
->>>>>>> core: change byte result name to ContentBytes in preparation for merge (#7653)
 
             foreach (var header in response.Headers)
             {
