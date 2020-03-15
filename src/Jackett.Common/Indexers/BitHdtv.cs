@@ -102,7 +102,7 @@ namespace Jackett.Common.Indexers
             }
 
             var response = await RequestLoginAndFollowRedirect(TakeLoginUrl, pairs, null, true, null, SiteLink);
-            await ConfigureIfOK(response.Cookies, response.ContentString?.Contains("logout.php"), () =>
+            await ConfigureIfOK(response.Cookies, response.ContentString?.Contains("logout.php") == true, () =>
             {
                 var parser = new HtmlParser();
                 var dom = parser.ParseDocument(response.ContentString);
