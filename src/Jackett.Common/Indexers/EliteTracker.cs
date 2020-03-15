@@ -40,6 +40,7 @@ namespace Jackett.Common.Indexers
             Type = "private";
 
             TorznabCaps.SupportsImdbMovieSearch = true;
+            TorznabCaps.SupportsImdbTVSearch = true;
 
             AddCategoryMapping(27, TorznabCatType.TVAnime, "Animation/Animes");
             AddCategoryMapping(90, TorznabCatType.TVAnime, "Animes - 3D");
@@ -187,8 +188,7 @@ namespace Jackett.Common.Indexers
 
                 foreach (var row in rows.Skip(1))
                 {
-                    var qTags = row.Children[1].QuerySelector("div:has(span[style=\"float: right;\"])");
-                    if (qTags == null)
+                    if (row.Children.Length != 9)
                         continue; // not a torrent line
 
                     var cat = row.Children[0].QuerySelector("a").GetAttribute("href").Split('=')[1];
@@ -201,6 +201,7 @@ namespace Jackett.Common.Indexers
                     var seeders = row.Children[6].QuerySelector("a").TextContent;
                     var leechers = row.Children[7].QuerySelector("a").TextContent;
 
+                    var qTags = row.Children[1].QuerySelector("div:has(span[style=\"float: right;\"])");
                     var dlVolumeFactor = 1.0;
                     if (qTags.QuerySelector("img[alt^=\"TORRENT GRATUIT\"]") != null)
                         dlVolumeFactor = 0.0;
