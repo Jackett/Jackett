@@ -45,6 +45,7 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "private";
             TorznabCaps.SupportsImdbMovieSearch = true;
+            TorznabCaps.SupportsImdbTVSearch = true;
             AddCategoryMapping(1, TorznabCatType.TVAnime); // Anime
             AddCategoryMapping(2, TorznabCatType.MoviesBluRay); // Blu-ray
             AddCategoryMapping(4, TorznabCatType.TVDocumentary); // Documentaries
@@ -141,7 +142,6 @@ namespace Jackett.Common.Indexers
                 results.Add(await RequestStringWithCookiesAndRetry(search.ToString()));
             }
 
-            var trackerCats = MapTorznabCapsToTrackers(query, true);
             var parser = new HtmlParser();
             foreach (var result in results)
                 try
@@ -150,6 +150,8 @@ namespace Jackett.Common.Indexers
                     foreach (var child in dom.QuerySelectorAll("#needseed"))
                         child.Remove();
                     var table = dom.QuerySelector("table[align=center] + br + table > tbody");
+                    if (table == null) // No results, so skip this search
+                        continue;
                     foreach (var row in table.Children.Skip(1))
                     {
                         var release = new ReleaseInfo();
