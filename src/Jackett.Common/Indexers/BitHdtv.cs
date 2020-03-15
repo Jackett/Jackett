@@ -45,6 +45,7 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "private";
             TorznabCaps.SupportsImdbMovieSearch = true;
+            TorznabCaps.SupportsImdbTVSearch = true;
             AddCategoryMapping(1, TorznabCatType.TVAnime); // Anime
             AddCategoryMapping(2, TorznabCatType.MoviesBluRay); // Blu-ray
             AddCategoryMapping(4, TorznabCatType.TVDocumentary); // Documentaries
@@ -115,7 +116,11 @@ namespace Jackett.Common.Indexers
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var qc = new NameValueCollection();
+            var cats = MapTorznabCapsToTrackers(query, true);
+            var qc = new NameValueCollection
+            {
+                {"cat", cats.Count == 1 ? cats[0] : "0"}
+            };
             var results = new List<WebClientStringResult>();
             var search = new UriBuilder(SearchUrl);
             if (query.IsImdbQuery)
@@ -137,7 +142,6 @@ namespace Jackett.Common.Indexers
                 results.Add(await RequestStringWithCookiesAndRetry(search.ToString()));
             }
 
-            var trackerCats = MapTorznabCapsToTrackers(query, true);
             var parser = new HtmlParser();
             foreach (var result in results)
                 try
@@ -146,6 +150,8 @@ namespace Jackett.Common.Indexers
                     foreach (var child in dom.QuerySelectorAll("#needseed"))
                         child.Remove();
                     var table = dom.QuerySelector("table[align=center] + br + table > tbody");
+                    if (table == null) // No results, so skip this search
+                        continue;
                     foreach (var row in table.Children.Skip(1))
                     {
                         var release = new ReleaseInfo();
@@ -167,10 +173,6 @@ namespace Jackett.Common.Indexers
                         var catNum = catQuery["cat"];
                         release.Category = MapTrackerCatToNewznab(catNum);
 
-                        // This tracker cannot search multiple cats at a time
-                        // so search all cats then filter out results from different cats
-                        if (trackerCats.Any() && !trackerCats.Contains(catNum))
-                            continue;
                         var dateString = row.Children[5].TextContent.Trim();
                         var pubDate = DateTime.ParseExact(dateString, "yyyy-MM-ddHH:mm:ss", CultureInfo.InvariantCulture);
                         release.PublishDate = DateTime.SpecifyKind(pubDate, DateTimeKind.Local);
