@@ -112,7 +112,7 @@ namespace Jackett.Common.Indexers
             else
             {
                 queryCollection.Add("options", "0");
-                queryCollection.Add("search", query.GetQueryString().Trim());
+                queryCollection.Add("search", query.GetQueryString());
             }
 
             var response = await RequestStringWithCookiesAndRetry(SearchUrl + queryCollection.GetQueryString());
