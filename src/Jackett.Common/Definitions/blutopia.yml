@@ -13,6 +13,8 @@
       - {id: 1, cat: Movies, desc: "Movies"}
       - {id: 2, cat: TV, desc: "TV"}
       - {id: 3, cat: Movies, desc: "FANRES"}
+      - {id: 6, cat: TV/Anime, desc: "Anime"}
+      - {id: 7, cat: Movies/Other, desc: "Trailer"}
 
     modes:
       search: [q, imdbid]
