@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -41,6 +41,8 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
+            TorznabCaps.SupportsImdbMovieSearch = true;
+            TorznabCaps.SupportsImdbTVSearch = true;
 
             AddCategoryMapping(15, TorznabCatType.MoviesBluRay); // Movie / Blu-ray
             AddMultiCategoryMapping(TorznabCatType.MoviesHD,
@@ -79,7 +81,7 @@ namespace Jackett.Common.Indexers
             };
 
             // Send Post
-            var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, null, LoginUrl);
+            var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, referer: LoginUrl);
 
             await ConfigureIfOK(response.Cookies, response.Content?.Contains("logout.php") == true, () =>
             {
@@ -99,13 +101,19 @@ namespace Jackett.Common.Indexers
             var queryCollection = new NameValueCollection
             {
                 {"active", "0"},
-                {"options", "0"},
                 {"category", string.Join(";", MapTorznabCapsToTrackers(query))}
             };
 
-            var searchString = query.GetQueryString();
-            if (!string.IsNullOrWhiteSpace(searchString))
-                queryCollection.Add("search", searchString);
+            if (query.IsImdbQuery)
+            {
+                queryCollection.Add("options", "2");
+                queryCollection.Add("search", query.ImdbIDShort);
+            }
+            else
+            {
+                queryCollection.Add("options", "0");
+                queryCollection.Add("search", query.GetQueryString());
+            }
 
             var response = await RequestStringWithCookiesAndRetry(SearchUrl + queryCollection.GetQueryString());
 
@@ -119,7 +127,7 @@ namespace Jackett.Common.Indexers
                 {
                     // this tracker has horrible markup, find the result rows by looking for the style tag before each one
                     var prev = row.PreviousElementSibling;
-                    if (prev == null || prev.NodeName.ToLowerInvariant() != "style")
+                    if (prev == null || !string.Equals(prev.NodeName, "style", StringComparison.OrdinalIgnoreCase))
                         continue;
 
                     var release = new ReleaseInfo();
@@ -131,12 +139,16 @@ namespace Jackett.Common.Indexers
                     release.Comments = new Uri(SiteLink + qLink.GetAttribute("href"));
                     release.Guid = release.Comments;
 
+                    var imdbLink = row.Children[1].QuerySelector("a[href*=imdb]");
+                    if(imdbLink != null)
+                        release.Imdb = ParseUtil.GetImdbID(imdbLink.GetAttribute("href").Split('/').Last());
+                    
                     var qDownload = row.Children[3].FirstElementChild;
                     release.Link = new Uri(SiteLink + qDownload.GetAttribute("href"));
 
                     var dateStr = row.Children[4].TextContent.Trim();
                     //"July 11, 2015, 13:34:09", "Today|Yesterday at 20:04:23"
-                    release.PublishDate = DateTimeUtil.FromUnknown(dateStr.Replace("at", string.Empty));
+                    release.PublishDate = DateTimeUtil.FromUnknown(dateStr);
                     var sizeStr = row.Children[5].TextContent;
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
                     release.Seeders = ParseUtil.CoerceInt(row.Children[7].TextContent);
