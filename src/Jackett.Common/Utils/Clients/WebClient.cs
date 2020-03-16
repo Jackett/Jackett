@@ -1,12 +1,18 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using AutoMapper;
+using com.LandonKey.SocksWebProxy;
+using com.LandonKey.SocksWebProxy.Proxy;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
 using NLog;
@@ -24,6 +30,82 @@ namespace Jackett.Common.Utils.Clients
         protected TimeSpan requestDelayTimeSpan;
         protected string ClientType;
         public bool EmulateBrowser = true;
+
+        protected static Dictionary<string, ICollection<string>> trustedCertificates = new Dictionary<string, ICollection<string>>();
+        protected static string webProxyUrl;
+        protected static IWebProxy webProxy;
+
+
+        [DebuggerNonUserCode] // avoid "Exception User-Unhandled" Visual Studio messages
+        public static bool ValidateCertificate(HttpRequestMessage request, X509Certificate2 certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+        {
+            {
+                var hash = certificate.GetCertHashString();
+
+
+                trustedCertificates.TryGetValue(hash, out var hosts);
+                if (hosts != null)
+                {
+                    if (hosts.Contains(request.RequestUri.Host))
+                        return true;
+                }
+
+                if (sslPolicyErrors != SslPolicyErrors.None)
+                {
+                    // Throw exception with certificate details, this will cause a "Exception User-Unhandled" when running it in the Visual Studio debugger.
+                    // The certificate is only available inside this function, so we can't catch it at the calling method.
+                    throw new Exception("certificate validation failed: " + certificate.ToString());
+                }
+
+                return sslPolicyErrors == SslPolicyErrors.None;
+            }
+        }
+        public static void InitProxy(ServerConfig serverConfig)
+        {
+            // dispose old SocksWebProxy
+            if (webProxy is SocksWebProxy proxy)
+                proxy.Dispose();
+            webProxy = null;
+            webProxyUrl = serverConfig.GetProxyUrl();
+            if (!string.IsNullOrWhiteSpace(webProxyUrl))
+            {
+                if (serverConfig.ProxyType != ProxyType.Http)
+                {
+                    var addresses = Dns.GetHostAddressesAsync(serverConfig.ProxyUrl).Result;
+                    var socksConfig = new ProxyConfig
+                    {
+                        SocksAddress = addresses.FirstOrDefault(),
+                        Username = serverConfig.ProxyUsername,
+                        Password = serverConfig.ProxyPassword,
+                        Version = serverConfig.ProxyType == ProxyType.Socks4 ?
+                            ProxyConfig.SocksVersion.Four :
+                            ProxyConfig.SocksVersion.Five
+                    };
+                    if (serverConfig.ProxyPort.HasValue)
+                    {
+                        socksConfig.SocksPort = serverConfig.ProxyPort.Value;
+                    }
+                    webProxy = new SocksWebProxy(socksConfig, false);
+                }
+                else
+                {
+                    NetworkCredential creds = null;
+                    if (!serverConfig.ProxyIsAnonymous)
+                    {
+                        var username = serverConfig.ProxyUsername;
+                        var password = serverConfig.ProxyPassword;
+                        creds = new NetworkCredential(username, password);
+                    }
+                    webProxy = new WebProxy(webProxyUrl)
+                    {
+                        BypassProxyOnLocal = false,
+                        Credentials = creds
+                    };
+                }
+            }
+        }
+
+
         public double requestDelay
         {
             get => requestDelayTimeSpan.TotalSeconds;
@@ -36,7 +118,14 @@ namespace Jackett.Common.Utils.Clients
 
         public virtual void AddTrustedCertificate(string host, string hash)
         {
-            // not implemented by default
+            hash = hash.ToUpper();
+            trustedCertificates.TryGetValue(hash.ToUpper(), out var hosts);
+            if (hosts == null)
+            {
+                hosts = new HashSet<string>();
+                trustedCertificates[hash] = hosts;
+            }
+            hosts.Add(host);
         }
 
         public WebClient(IProcessService p, Logger l, IConfigurationService c, ServerConfig sc)
@@ -47,6 +136,9 @@ namespace Jackett.Common.Utils.Clients
             serverConfig = sc;
             ClientType = GetType().Name;
             ServerConfigUnsubscriber = serverConfig.Subscribe(this);
+
+            if (webProxyUrl == null)
+                InitProxy(sc);
         }
 
         protected async Task DelayRequest(WebRequest request)
@@ -135,7 +227,15 @@ namespace Jackett.Common.Utils.Clients
         protected virtual async Task<WebClientByteResult> Run(WebRequest webRequest) => throw new NotImplementedException();
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
 
-        public abstract void Init();
+        public virtual void Init()
+        {
+            if (serverConfig.RuntimeSettings.IgnoreSslErrors == true)
+            {
+                logger.Info(string.Format("HttpWebClient2: Disabling certificate validation"));
+                ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => { return true; };
+            }
+        }
+
 
         public virtual void OnCompleted() => throw new NotImplementedException();
 
@@ -143,7 +243,9 @@ namespace Jackett.Common.Utils.Clients
 
         public virtual void OnNext(ServerConfig value)
         {
-            // nothing by default
+            var newProxyUrl = serverConfig.GetProxyUrl();
+            if (webProxyUrl != newProxyUrl) // if proxy URL changed
+                InitProxy(serverConfig);
         }
 
         /**
