@@ -20,6 +20,7 @@ namespace Jackett.Common.Indexers
     public class EpubLibre : BaseWebIndexer
     {
         private string SearchUrl => SiteLink + "catalogo/index/{0}/nuevo/todos/sin/todos/{1}/ajax";
+        private string SobrecargaUrl => SiteLink + "inicio/sobrecarga";
         private const int MaxItemsPerPage = 18;
         private const int MaxSearchPageLimit = 6; // 18 items per page * 6 pages = 108
         private readonly Dictionary<string, string> _apiHeaders = new Dictionary<string, string>
@@ -149,6 +150,8 @@ namespace Jackett.Common.Indexers
         public override async Task<byte[]> Download(Uri link)
         {
             var result = await RequestStringWithCookies(link.AbsoluteUri);
+            if (SobrecargaUrl.Equals(result.RedirectingTo))
+                throw new Exception("El servidor se encuentra sobrecargado en estos momentos. / The server is currently overloaded.");
             try {
                 var parser = new HtmlParser();
                 var doc = parser.ParseDocument(result.Content);
