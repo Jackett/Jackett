@@ -1,22 +1,58 @@
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Jackett.Common.Utils.Clients
 {
     public abstract class BaseWebResult
     {
-        public Encoding Encoding { get; set; }
+        private Encoding _encoding;
+
+        public Encoding Encoding
+        {
+            get
+            {
+                if (_encoding != null)
+                    return _encoding;
+                if (Request.Encoding != null)
+                    _encoding = Request.Encoding;
+                else if (Headers.ContainsKey("content-type"))
+                {
+                    var charsetRegexMatch = Regex.Match(Headers["content-type"][0], @"charset=([\w-]+)", RegexOptions.Compiled);
+                    if (charsetRegexMatch.Success)
+                    {
+                        var charset = charsetRegexMatch.Groups[1].Value;
+                        try
+                        {
+                            _encoding = Encoding.GetEncoding(charset);
+                        }
+                        catch (ArgumentException)
+                        {
+                            // Encoding not found or not enabled on current machine.
+                        }
+                    }
+                }
+
+                _encoding ??= Encoding.UTF8;
+
+                return _encoding;
+            }
+            set => _encoding = value;
+        }
+
         public HttpStatusCode Status { get; set; }
         public string Cookies { get; set; }
         public string RedirectingTo { get; set; }
         public WebRequest Request { get; set; }
-        public Dictionary<string, string[]> Headers = new Dictionary<string, string[]>();
+        public Dictionary<string, string[]> Headers { get; protected set; } =
+            new Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase);
 
-        public bool IsRedirect => Status == System.Net.HttpStatusCode.Redirect ||
-                        Status == System.Net.HttpStatusCode.RedirectKeepVerb ||
-                        Status == System.Net.HttpStatusCode.RedirectMethod ||
-                        Status == System.Net.HttpStatusCode.Found ||
-                        Status == System.Net.HttpStatusCode.MovedPermanently;
+        public bool IsRedirect => Status == HttpStatusCode.Redirect ||
+                                  Status == HttpStatusCode.RedirectKeepVerb ||
+                                  Status == HttpStatusCode.RedirectMethod ||
+                                  Status == HttpStatusCode.Found ||
+                                  Status == HttpStatusCode.MovedPermanently;
     }
 }
