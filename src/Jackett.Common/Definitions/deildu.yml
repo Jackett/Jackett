@@ -26,9 +26,9 @@
       - {id: 8, cat: TV, desc: "TV shows"}
 
     modes:
-      search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
+      search: [q, imdbid]
+      tv-search: [q, season, ep, imdbid]
+      movie-search: [q, imdbid]
 
   settings:
     - name: username
@@ -69,10 +69,14 @@
       - path: browse.php
     inputs:
       $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-      search: "{{ .Keywords }}"
+      search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+      # active 1 incldead 2 onlydead
       incldead: 1
+      # 1 = look in description
+      Lysing: "{{ if .Query.IMDBID }}1{{else}}{{end}}"
       sort: "{{ .Config.sort }}"
       type: "{{ .Config.type }}"
+      # does not return imdb links
 
     rows:
       selector: table[class="torrentlist"] > tbody > tr:has(a[href*="details.php?id="])
