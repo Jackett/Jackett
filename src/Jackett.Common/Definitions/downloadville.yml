@@ -198,11 +198,13 @@
       page: torrents
       search: "{{ .Keywords }}"
       category: "{{ range .Categories }}{{.}};{{end}}"
+      # 0 title 1 title&descr 2 descr
       options: 0
       active: "{{ .Config.active }}"
       gold: "{{ .Config.gold }}"
       order: "{{ .Config.sort }}"
       by: "{{ .Config.type }}"
+      # does not support imdbid search and does not ruturn imdb link in results
 
     rows:
       selector: table > tbody > tr > td > table.lista > tbody > tr:has(td[onmouseover="this.className='post'"])
