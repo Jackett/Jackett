@@ -74,7 +74,8 @@
 
     modes:
       search: [q]
-      tv-search: [q, season, ep]
+      tv-search: [q]
+      movie-search: [q]
 
   settings:
     - name: username
@@ -125,11 +126,15 @@
       $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
       search: "{{ .Keywords }}"
       cat: 0
+      # 0 active 1 incldead 2 onlydead
       incldead: 1
+      # 0 all 1 notfree 2 onlyfree
       freeleech: 0
+      # 0 all 1 english 2 french etc
       lang: 0
       sort: "{{ .Config.sort }}"
       order: "{{ .Config.type }}"
+      # does not support imdbid search and does not return imdb link in results
 
     rows:
       selector: table.ttable_headinner tr.t-row
