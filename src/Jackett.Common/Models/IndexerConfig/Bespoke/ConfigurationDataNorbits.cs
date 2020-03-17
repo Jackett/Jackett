@@ -7,6 +7,7 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
         public StringItem Password { get; private set; }
         public DisplayItem PagesWarning { get; private set; }
         public StringItem Pages { get; private set; }
+        public BoolItem UseFullSearch { get; private set; }
         public DisplayItem SecurityWarning { get; private set; }
         public BoolItem Latency { get; private set; }
         public BoolItem Browser { get; private set; }
@@ -31,6 +32,7 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
             Password = new StringItem { Name = "Password", Value = "" };
             PagesWarning = new DisplayItem("<b>Preferences Configuration</b> (<i>Tweak your search settings</i>),<br /><br /> <ul><li><b>Max Pages to Process</b> let you specify how many page (max) Jackett can process when doing a search. Setting a value <b>higher than 4 is dangerous</b> for you account ! (<b>Result of too many requests to tracker...that <u>will be suspect</u></b>).</li></ul>") { Name = "Preferences" };
             Pages = new StringItem { Name = "Max Pages to Process (Required)", Value = "4" };
+            UseFullSearch = new BoolItem { Name = "Enable search in description.", Value = false };
             SecurityWarning = new DisplayItem("<b>Security Configuration</b> (<i>Read this area carefully !</i>),<br /><br /> <ul><li><b>Latency Simulation</b> will simulate human browsing with Jacket by pausing Jacket for an random time between each request, to fake a real content browsing.</li><li><b>Browser Simulation</b> will simulate a real human browser by injecting additionals headers when doing requests to tracker.<b>You must enable it to use this provider!</b></li></ul>") { Name = "Security" };
             Latency = new BoolItem() { Name = "Latency Simulation (Optional)", Value = false };
             Browser = new BoolItem() { Name = "Browser Simulation (Forced)", Value = true };

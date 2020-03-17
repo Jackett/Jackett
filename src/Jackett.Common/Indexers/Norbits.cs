@@ -422,7 +422,7 @@ namespace Jackett.Common.Indexers
 
             // Building our tracker query
             parameters.Add("incldead", "1");
-            parameters.Add("fullsearch", "0");
+            parameters.Add("fullsearch", ConfigData.UseFullSearch.Value ? "1" : "0");
             parameters.Add("scenerelease", "0");
 
             // If search term provided
