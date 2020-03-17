@@ -6,7 +6,7 @@ namespace Jackett.Common.Utils.Clients
 
         public static implicit operator WebClientStringResult(WebClientByteResult br) => new WebClientStringResult()
         {
-            ContentString = br.Encoding.GetString(br.ContentBytes),
+            ContentString = br.ContentBytes == null ? null : br.Encoding.GetString(br.ContentBytes),
             Cookies = br.Cookies,
             Encoding = br.Encoding,
             Headers = br.Headers,
