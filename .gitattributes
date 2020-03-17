@@ -2,13 +2,12 @@
 * text=auto
 * text eol=lf
 
-# Explicitly declare text files you want to always be normalized and converted
-# to native line endings on checkout.
-
-# Declare files that will always have LF line endings on checkout.
-
-# Declare files that will always have CRLF line endings on checkout.
-
 # Denote all files that are truly binary and should not be modified.
-*.png binary
+*.eot binary
+*.ico binary
 *.jpg binary
+*.otf binary
+*.png binary
+*.ttf binary
+*.woff binary
+*.woff2 binary

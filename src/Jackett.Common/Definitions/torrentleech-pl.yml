@@ -38,9 +38,9 @@
       - {id: 56, cat: XXX, desc: "XXX"}
 
     modes:
-      search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
+      search: [q, imdbid]
+      tv-search: [q, season, ep, imdbid]
+      movie-search: [q, imdbid]
 
   settings:
     - name: cookie
@@ -81,11 +81,11 @@
       - path: browse.php
     inputs:
       $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-      search: "{{ .Keywords }}"
+      search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
       # 0 onlyactive 1 all 2 onlydead 3 free
       incldead: 1
       # 0 title 1 descr 2 both
-      titlesearch: 0
+      titlesearch: "{{ if .Query.IMDBID }}1{{else}}0{{end}}"
       # 0 all 1 polish 2 not polish
       polish: 0
       cat_film: ""
@@ -113,6 +113,10 @@
         attribute: href
       download:
         selector: a[href^="download.php/"]
+        attribute: href
+      imdb:
+        optional: true
+        selector: a[href*="www.imdb.com/title/tt"]
         attribute: href
       description:
         text: ""
