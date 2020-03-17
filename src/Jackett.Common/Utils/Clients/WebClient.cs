@@ -226,7 +226,7 @@ namespace Jackett.Common.Utils.Clients
         {
             if (serverConfig.RuntimeSettings.IgnoreSslErrors == true)
             {
-                logger.Info(string.Format("HttpWebClient2: Disabling certificate validation"));
+                logger.Info($"WebClient({ClientType}): Disabling certificate validation");
                 ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => { return true; };
             }
         }
