@@ -10,7 +10,7 @@
   legacylinks:
     - https://torrent-turk.org/
     - https://torrent-turk.co/
-  
+
   caps:
     categorymappings:
       - {id: 149, cat: Movies, desc: "Movies/Turkish"}
@@ -27,7 +27,7 @@
       - {id: 161, cat: Movies/DVD, desc: "Movies/Foreign/DVD5-DVD9"}
       - {id: 162, cat: Movies/WEBDL, desc: "Movies/Foreign/BRRip-HDRip-DVDRip-WebDL"}
       - {id: 163, cat: Movies/Other, desc: "Movies/Foreign/Boxset"}
-      
+
       - {id: 164, cat: TV, desc: "TV"}
       - {id: 165, cat: TV, desc: "TV/Turkish"}
       - {id: 166, cat: TV, desc: "TV/Foreign"}
@@ -35,7 +35,7 @@
       - {id: 185, cat: TV/Documentary, desc: "TV/Documentary"}
       - {id: 168, cat: TV/Other, desc: "TV/Other"}
       - {id: 169, cat: TV/Other, desc: "TV/Boxset"}
-      
+
       - {id: 191, cat: TV, desc: "TV/BluTv"}
       - {id: 192, cat: TV, desc: "TV/BluTv Series"}
       - {id: 193, cat: Movies, desc: "TV/BluTv Film"}
@@ -57,12 +57,12 @@
       - {id: 179, cat: PC, desc: "OS"}
       - {id: 180, cat: PC/Games, desc: "PC/Games"}
       - {id: 181, cat: Console, desc: "Playstation"}
-    
+
     modes:
       search: [q]
       tv-search: [q, season, ep]
       movie-search: [q]
-      
+
   settings:
     - name: username
       type: text
@@ -89,7 +89,11 @@
       options:
         "desc": "desc"
         "asc": "asc"
-      
+    - name: info_results
+      type: info
+      label: Search results
+      default: "If you are getting the error: <b>An error has occured!You can't view this page unless you read all your unread messages</b>, then access the site with your browser and <b>mark as read</b> all PMs."
+
   login:
     path: ?p=home&pid=1
     method: form
@@ -111,11 +115,11 @@
     test:
       path: ?p=torrents&type=bookmarks&pid=508
       selector: a#logout
-      
+
   search:
     paths:
       - path: /
-    keywordsfilters: 
+    keywordsfilters:
       - name: re_replace
         args: ["[^a-zA-Z0-9]+", "%25"]
     inputs:
@@ -129,6 +133,7 @@
       "sortOptions[sortOrder]": "{{ .Config.type }}"
     error:
       - selector: div.error:not(:contains("Hiçbir sonuç bulunamadı."))
+      # does not support imdbid search and does not return imdb link in results.
 
     rows:
       selector: table#torrents_table_classic > tbody > tr:has(td.torrent_name)
@@ -150,7 +155,7 @@
         attribute: href
       date:
         optional: true
-         # Uploaded 30-01-2019 15:02 by 
+         # Uploaded 30-01-2019 15:02 by
         selector: td.torrent_name:not(:contains(" at "))
         filters:
           - name: regexp
