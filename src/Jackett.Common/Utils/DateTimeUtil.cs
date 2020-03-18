@@ -9,9 +9,9 @@ namespace Jackett.Common.Utils
         public const string Rfc1123ZPattern = "ddd, dd MMM yyyy HH':'mm':'ss z";
 
         private static readonly Regex _TimeAgoRegexp = new Regex(@"(?i)\bago", RegexOptions.Compiled);
-        private static readonly Regex _TodayRegexp = new Regex(@"(?i)\btoday([\s,]*|$)", RegexOptions.Compiled);
-        private static readonly Regex _TomorrowRegexp = new Regex(@"(?i)\btomorrow([\s,]*|$)", RegexOptions.Compiled);
-        private static readonly Regex _YesterdayRegexp = new Regex(@"(?i)\byesterday([\s,]*|$)", RegexOptions.Compiled);
+        private static readonly Regex _TodayRegexp = new Regex(@"(?i)\btoday(?:[\s,]+(?:at){0,1}\s*|[\s,]*|$)", RegexOptions.Compiled);
+        private static readonly Regex _TomorrowRegexp = new Regex(@"(?i)\btomorrow(?:[\s,]+(?:at){0,1}\s*|[\s,]*|$)", RegexOptions.Compiled);
+        private static readonly Regex _YesterdayRegexp = new Regex(@"(?i)\byesterday(?:[\s,]+(?:at){0,1}\s*|[\s,]*|$)", RegexOptions.Compiled);
         private static readonly Regex _DaysOfWeekRegexp = new Regex(@"(?i)\b(monday|tuesday|wednesday|thursday|friday|saturday|sunday)\s+at\s+", RegexOptions.Compiled);
         private static readonly Regex _MissingYearRegexp = new Regex(@"^(\d{1,2}-\d{1,2})(\s|$)", RegexOptions.Compiled);
         private static readonly Regex _MissingYearRegexp2 = new Regex(@"^(\d{1,2}\s+\w{3})\s+(\d{1,2}\:\d{1,2}.*)$", RegexOptions.Compiled); // 1 Jan 10:30
@@ -287,28 +287,9 @@ namespace Jackett.Common.Utils
             }
         }
 
-        private static TimeSpan ParseTimeSpan(string time)
-        {
-            if (string.IsNullOrWhiteSpace(time))
-                return TimeSpan.Zero;
-
-            var offset = TimeSpan.Zero;
-            if (time.EndsWith("AM"))
-            {
-                time = time.Substring(0, time.Length - 2);
-                if (time.StartsWith("12")) // 12:15 AM becomes 00:15
-                    time = "00" + time.Substring(2);
-            }
-            else if (time.EndsWith("PM"))
-            {
-                time = time.Substring(0, time.Length - 2);
-                offset = TimeSpan.FromHours(12);
-            }
-
-            var ts = TimeSpan.Parse(time);
-            ts += offset;
-            return ts;
-        }
-
+        private static TimeSpan ParseTimeSpan(string time) =>
+            string.IsNullOrWhiteSpace(time)
+                ? TimeSpan.Zero
+                : DateTime.Parse(time).TimeOfDay;
     }
 }
