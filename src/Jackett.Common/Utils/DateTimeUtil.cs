@@ -287,28 +287,9 @@ namespace Jackett.Common.Utils
             }
         }
 
-        private static TimeSpan ParseTimeSpan(string time)
-        {
-            if (string.IsNullOrWhiteSpace(time))
-                return TimeSpan.Zero;
-
-            var offset = TimeSpan.Zero;
-            if (time.EndsWith("AM"))
-            {
-                time = time.Substring(0, time.Length - 2);
-                if (time.StartsWith("12")) // 12:15 AM becomes 00:15
-                    time = "00" + time.Substring(2);
-            }
-            else if (time.EndsWith("PM"))
-            {
-                time = time.Substring(0, time.Length - 2);
-                offset = TimeSpan.FromHours(12);
-            }
-
-            var ts = TimeSpan.Parse(time);
-            ts += offset;
-            return ts;
-        }
-
+        private static TimeSpan ParseTimeSpan(string time) =>
+            string.IsNullOrWhiteSpace(time)
+                ? TimeSpan.Zero
+                : DateTime.Parse(time).TimeOfDay;
     }
 }
