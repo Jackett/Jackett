@@ -71,23 +71,6 @@ namespace Jackett.Server
         {
             Mapper.Initialize(cfg =>
             {
-                cfg.CreateMap<WebClientByteResult, WebClientStringResult>().ForMember(x => x.ContentString, opt => opt.Ignore()).AfterMap((be, str) =>
-                {
-                    var encoding = be.Request.Encoding ?? Encoding.UTF8;
-                    str.ContentString = encoding.GetString(be.ContentBytes);
-                });
-
-                cfg.CreateMap<WebClientStringResult, WebClientByteResult>().ForMember(x => x.ContentBytes, opt => opt.Ignore()).AfterMap((str, be) =>
-                {
-                    if (!string.IsNullOrEmpty(str.ContentString))
-                    {
-                        var encoding = str.Request.Encoding ?? Encoding.UTF8;
-                        be.ContentBytes = encoding.GetBytes(str.ContentString);
-                    }
-                });
-
-                cfg.CreateMap<WebClientStringResult, WebClientStringResult>();
-                cfg.CreateMap<WebClientByteResult, WebClientByteResult>();
                 cfg.CreateMap<ReleaseInfo, ReleaseInfo>();
 
                 cfg.CreateMap<ReleaseInfo, TrackerCacheResult>().AfterMap((r, t) =>
