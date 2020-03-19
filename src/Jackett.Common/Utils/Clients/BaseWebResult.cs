@@ -8,6 +8,7 @@ namespace Jackett.Common.Utils.Clients
 {
     public abstract class BaseWebResult
     {
+        private string _contentString;
         private Encoding _encoding;
 
         public Encoding Encoding
@@ -20,7 +21,8 @@ namespace Jackett.Common.Utils.Clients
                     _encoding = Request.Encoding;
                 else if (Headers.ContainsKey("content-type"))
                 {
-                    var charsetRegexMatch = Regex.Match(Headers["content-type"][0], @"charset=([\w-]+)", RegexOptions.Compiled);
+                    var charsetRegexMatch = Regex.Match(
+                        Headers["content-type"][0], @"charset=([\w-]+)", RegexOptions.Compiled);
                     if (charsetRegexMatch.Success)
                     {
                         var charset = charsetRegexMatch.Groups[1].Value;
@@ -36,18 +38,33 @@ namespace Jackett.Common.Utils.Clients
                 }
 
                 _encoding ??= Encoding.UTF8;
-
                 return _encoding;
             }
             set => _encoding = value;
         }
 
+        public byte[] ContentBytes { get; set; }
         public HttpStatusCode Status { get; set; }
         public string Cookies { get; set; }
         public string RedirectingTo { get; set; }
         public WebRequest Request { get; set; }
+
         public Dictionary<string, string[]> Headers { get; protected set; } =
             new Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase);
+
+        public string ContentString
+        {
+            get
+            {
+                if (_contentString != null)
+                    return _contentString;
+                if (ContentBytes == null)
+                    return null;
+                _contentString = Encoding.GetString(ContentBytes);
+                return _contentString;
+            }
+            set => _contentString = value;
+        }
 
         public bool IsRedirect => Status == HttpStatusCode.Redirect ||
                                   Status == HttpStatusCode.RedirectKeepVerb ||
