@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using CloudflareSolverRe;
 using Jackett.Common.Helpers;
@@ -67,6 +66,8 @@ namespace Jackett.Common.Utils.Clients
 
         public override void Init()
         {
+            ServicePointManager.DefaultConnectionLimit = 1000;
+
             base.Init();
 
             ServicePointManager.SecurityProtocol = (SecurityProtocolType)192 | (SecurityProtocolType)768 | (SecurityProtocolType)3072;
