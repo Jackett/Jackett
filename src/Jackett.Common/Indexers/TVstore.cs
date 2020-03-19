@@ -113,7 +113,7 @@ namespace Jackett.Common.Indexers
         /// <param name="query">Query.</param>
         /// <param name="already_found">Number of the already found torrents.(used for limit)</param>
         /// <param name="limit">The limit to the number of torrents to download </param>
-        private async Task<List<ReleaseInfo>> ParseTorrents(WebClientStringResult results, TorznabQuery query, int already_found, int limit, int previously_parsed_on_page)
+        private async Task<List<ReleaseInfo>> ParseTorrents(BaseWebResult results, TorznabQuery query, int already_found, int limit, int previously_parsed_on_page)
         {
             var releases = new List<ReleaseInfo>();
             try
@@ -260,7 +260,7 @@ namespace Jackett.Common.Indexers
 
             var unixTimestamp = (int)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
 
-            WebClientStringResult results;
+            BaseWebResult results;
 
             var searchString = "";
             var exactSearchURL = "";

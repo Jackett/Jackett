@@ -149,7 +149,7 @@ namespace Jackett.Common.Indexers
             headers["X-XSRF-TOKEN"] = xsrfToken;
         }
 
-        private List<ReleaseInfo> ParseResponse(WebClientStringResult response, bool includePremium)
+        private List<ReleaseInfo> ParseResponse(BaseWebResult response, bool includePremium)
         {
             var releases = new List<ReleaseInfo>();
 
@@ -212,7 +212,7 @@ namespace Jackett.Common.Indexers
             return releases;
         }
 
-        private JArray CheckResponse(WebClientStringResult response)
+        private JArray CheckResponse(BaseWebResult response)
         {
             try
             {

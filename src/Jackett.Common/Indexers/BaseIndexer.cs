@@ -401,7 +401,7 @@ namespace Jackett.Common.Indexers
             return response.ContentBytes;
         }
 
-        protected async Task<WebClientByteResult> RequestBytesWithCookiesAndRetry(string url, string cookieOverride = null, RequestType method = RequestType.GET, string referer = null, IEnumerable<KeyValuePair<string, string>> data = null)
+        protected async Task<BaseWebResult> RequestBytesWithCookiesAndRetry(string url, string cookieOverride = null, RequestType method = RequestType.GET, string referer = null, IEnumerable<KeyValuePair<string, string>> data = null)
         {
             Exception lastException = null;
             for (var i = 0; i < 3; i++)
@@ -421,7 +421,7 @@ namespace Jackett.Common.Indexers
             throw lastException;
         }
 
-        protected async Task<WebClientStringResult> RequestStringWithCookies(string url, string cookieOverride = null, string referer = null, Dictionary<string, string> headers = null)
+        protected async Task<BaseWebResult> RequestStringWithCookies(string url, string cookieOverride = null, string referer = null, Dictionary<string, string> headers = null)
         {
             var request = new Utils.Clients.WebRequest()
             {
@@ -441,7 +441,7 @@ namespace Jackett.Common.Indexers
             return result;
         }
 
-        protected async Task<WebClientStringResult> RequestStringWithCookiesAndRetry(string url, string cookieOverride = null, string referer = null, Dictionary<string, string> headers = null)
+        protected async Task<BaseWebResult> RequestStringWithCookiesAndRetry(string url, string cookieOverride = null, string referer = null, Dictionary<string, string> headers = null)
         {
             Exception lastException = null;
             for (var i = 0; i < 3; i++)
@@ -461,7 +461,7 @@ namespace Jackett.Common.Indexers
             throw lastException;
         }
 
-        protected virtual async Task<WebClientByteResult> RequestBytesWithCookies(string url, string cookieOverride = null, RequestType method = RequestType.GET, string referer = null, IEnumerable<KeyValuePair<string, string>> data = null, Dictionary<string, string> headers = null)
+        protected virtual async Task<BaseWebResult> RequestBytesWithCookies(string url, string cookieOverride = null, RequestType method = RequestType.GET, string referer = null, IEnumerable<KeyValuePair<string, string>> data = null, Dictionary<string, string> headers = null)
         {
             var request = new Utils.Clients.WebRequest()
             {
@@ -481,7 +481,7 @@ namespace Jackett.Common.Indexers
             return result;
         }
 
-        protected async Task<WebClientStringResult> PostDataWithCookies(string url, IEnumerable<KeyValuePair<string, string>> data, string cookieOverride = null, string referer = null, Dictionary<string, string> headers = null, string rawbody = null, bool? emulateBrowser = null)
+        protected async Task<BaseWebResult> PostDataWithCookies(string url, IEnumerable<KeyValuePair<string, string>> data, string cookieOverride = null, string referer = null, Dictionary<string, string> headers = null, string rawbody = null, bool? emulateBrowser = null)
         {
             var request = new Utils.Clients.WebRequest()
             {
@@ -503,7 +503,7 @@ namespace Jackett.Common.Indexers
             return result;
         }
 
-        protected async Task<WebClientStringResult> PostDataWithCookiesAndRetry(string url, IEnumerable<KeyValuePair<string, string>> data, string cookieOverride = null, string referer = null, Dictionary<string, string> headers = null, string rawbody = null, bool? emulateBrowser = null)
+        protected async Task<BaseWebResult> PostDataWithCookiesAndRetry(string url, IEnumerable<KeyValuePair<string, string>> data, string cookieOverride = null, string referer = null, Dictionary<string, string> headers = null, string rawbody = null, bool? emulateBrowser = null)
         {
             Exception lastException = null;
             for (var i = 0; i < 3; i++)
@@ -523,7 +523,7 @@ namespace Jackett.Common.Indexers
             throw lastException;
         }
 
-        protected async Task<WebClientStringResult> RequestLoginAndFollowRedirect(string url, IEnumerable<KeyValuePair<string, string>> data, string cookies, bool returnCookiesFromFirstCall, string redirectUrlOverride = null, string referer = null, bool accumulateCookies = false)
+        protected async Task<BaseWebResult> RequestLoginAndFollowRedirect(string url, IEnumerable<KeyValuePair<string, string>> data, string cookies, bool returnCookiesFromFirstCall, string redirectUrlOverride = null, string referer = null, bool accumulateCookies = false)
         {
             var request = new Utils.Clients.WebRequest()
             {
@@ -555,7 +555,7 @@ namespace Jackett.Common.Indexers
             return response;
         }
 
-        protected void CheckTrackerDown(WebClientStringResult response)
+        protected void CheckTrackerDown(BaseWebResult response)
         {
             if (response.Status == System.Net.HttpStatusCode.BadGateway
                 || response.Status == System.Net.HttpStatusCode.GatewayTimeout

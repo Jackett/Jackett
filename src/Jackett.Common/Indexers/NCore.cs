@@ -218,7 +218,7 @@ namespace Jackett.Common.Indexers
             return releases;
         }
 
-        private List<ReleaseInfo> parseTorrents(WebClientStringResult results, string seasonep, TorznabQuery query,
+        private List<ReleaseInfo> parseTorrents(BaseWebResult results, string seasonep, TorznabQuery query,
                                                 int alreadyFounded, int limit, int previouslyParsedOnPage)
         {
             var releases = new List<ReleaseInfo>();

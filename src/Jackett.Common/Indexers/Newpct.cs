@@ -276,7 +276,7 @@ namespace Jackett.Common.Indexers
                 while (pg <= _maxDailyPages)
                 {
                     IEnumerable<NewpctRelease> items = null;
-                    WebClientStringResult results = null;
+                    BaseWebResult results = null;
 
                     if (validUri != null)
                     {
@@ -601,7 +601,7 @@ namespace Jackett.Common.Indexers
                 queryCollection.Add("s", searchStr);
                 queryCollection.Add("pg", pg.ToString());
 
-                WebClientStringResult results = null;
+                BaseWebResult results = null;
                 IEnumerable<NewpctRelease> items = null;
 
                 if (validUri != null)

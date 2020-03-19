@@ -73,7 +73,7 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();
 
-            WebClientStringResult results = null;
+            BaseWebResult results = null;
             var queryCollection = new NameValueCollection();
 
             queryCollection.Add("act", "search");
