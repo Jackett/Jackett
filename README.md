@@ -152,6 +152,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * AlexFilm
  * AniDUB
  * ArenaBG
+ * BaibaKo
  * BookTracker
  * CasStudioTV
  * Crazy's Corner
@@ -220,7 +221,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Audiobook Torrents (ABT)
  * Avistaz (AsiaTorrents)
  * Awesome-HD (AHD)
- * BaibaKo
  * BIGTorrent
  * BIT-HDTV
  * BJ-Share (BJ)
