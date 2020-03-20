@@ -337,6 +337,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HacheDe
  * Hebits
  * Hon3y HD
+ * Horror Site
  * HuSh
  * ICE Torrent
  * IPTorrents (IPT)
