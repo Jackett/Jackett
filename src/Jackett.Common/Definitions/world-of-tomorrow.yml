@@ -18,7 +18,7 @@
       - {id: 11, cat: Movies/SD, desc: "DVD-R"}
       - {id: 60, cat: Movies/HD, desc: "HDTV"}
       - {id: 62, cat: Movies/SD, desc: "SD"}
-      - {id: 89, cat: Movies/HD, desc: "UHD"}
+      - {id: 89, cat: Movies/UHD, desc: "UHD"}
       - {id: 91, cat: Movies, desc: "Packs"}
 
       # Serien
