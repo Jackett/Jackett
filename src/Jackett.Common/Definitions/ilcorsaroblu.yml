@@ -133,6 +133,7 @@
       active: 0
       order: "{{ .Config.sort }}"
       by: "{{ .Config.type }}"
+      # does not support imdbid searches and does not return imdb link in results
 
     rows:
       selector: div.b-content > table > tbody > tr > td > table.lista > tbody > tr:has(a[href^="index.php?page=torrents&category="])
