@@ -121,7 +121,7 @@ namespace Jackett.Common.Indexers
             {
                 {"cat", cats.Count == 1 ? cats[0] : "0"}
             };
-            var results = new List<WebClientStringResult>();
+            var results = new List<BaseWebResult>();
             var search = new UriBuilder(SearchUrl);
             if (query.IsImdbQuery)
             {

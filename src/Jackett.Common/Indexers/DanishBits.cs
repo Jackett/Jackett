@@ -56,7 +56,7 @@ namespace Jackett.Common.Indexers
             return searchString;
         }
 
-        protected override async Task<WebClientByteResult> RequestBytesWithCookies(string url, string cookieOverride = null, RequestType method = RequestType.GET, string referer = null, IEnumerable<KeyValuePair<string, string>> data = null, Dictionary<string, string> headers = null)
+        protected override async Task<BaseWebResult> RequestBytesWithCookies(string url, string cookieOverride = null, RequestType method = RequestType.GET, string referer = null, IEnumerable<KeyValuePair<string, string>> data = null, Dictionary<string, string> headers = null)
         {
             CookieHeader = null; // Download fill fail with cookies set
             return await base.RequestBytesWithCookies(url, cookieOverride, method, referer, data, headers);

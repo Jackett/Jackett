@@ -78,7 +78,7 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
             var queryString = query.GetQueryString();
-            WebClientStringResult results = null;
+            BaseWebResult results = null;
             var searchUrls = new List<string>();
             if (!string.IsNullOrWhiteSpace(query.SanitizedSearchTerm))
             {
@@ -166,7 +166,7 @@ namespace Jackett.Common.Indexers
             return releases;
         }
 
-        private async Task<WebClientStringResult> ReloginIfNecessary(WebClientStringResult response)
+        private async Task<BaseWebResult> ReloginIfNecessary(BaseWebResult response)
         {
             if (response.ContentString.Contains("onclick=\"document.location='logout'\""))
                 return response;

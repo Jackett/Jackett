@@ -205,7 +205,7 @@ namespace Jackett.Common.Indexers
             }
         }
 
-        private async Task<WebClientStringResult> RequestStringAndRelogin(string url)
+        private async Task<BaseWebResult> RequestStringAndRelogin(string url)
         {
             var results = await RequestStringWithCookies(url);
             if (results.ContentString.Contains("503 Service"))

@@ -547,7 +547,7 @@ namespace Jackett.Common.Indexers
         /// <returns>Results from query</returns>
         private async Task<string> queryTracker(string request)
         {
-            WebClientStringResult results = null;
+            BaseWebResult results = null;
 
             // Cache mode not enabled or cached file didn't exist for our query
             output("\nQuerying tracker for results....");
