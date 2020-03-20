@@ -63,8 +63,8 @@
       - {id: 71, cat: Movies/WEBDL, desc: "Films: WEB-DL"}
       - {id: 69, cat: Movies/3D, desc: "Films: Film 3D"}
       - {id: 65, cat: Movies, desc: "Films: VO"}
-      - {id: 1, cat: Movies/HD, desc: "Films: Remux Bluray 4K"}
-      - {id: 130, cat: Movies/UHD, desc: "Films: HD720P"}
+      - {id: 1, cat: Movies/UHD, desc: "Films: Remux Bluray 4K"}
+      - {id: 130, cat: Movies/HD, desc: "Films: HD720P"}
       - {id: 102, cat: Movies/WEBDL, desc: "Films: WEB-DL 720P"}
       - {id: 103, cat: Movies/HD, desc: "Films: Film-HDRIP"}
       - {id: 111, cat: Movies/WEBDL, desc: "Films: WEBRip-720P"}
