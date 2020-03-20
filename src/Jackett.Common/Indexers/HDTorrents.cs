@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -110,8 +111,8 @@ namespace Jackett.Common.Indexers
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var searchUrl = SearchUrl;// string.Format(SearchUrl, HttpUtility.UrlEncode()));
-            searchUrl += string.Join(string.Empty, MapTorznabCapsToTrackers(query).Select(cat => $"category[]={cat}&"));
+            var searchUrl = SearchUrl + string.Join(
+                string.Empty, MapTorznabCapsToTrackers(query).Select(cat => $"category[]={cat}&"));
             var queryCollection = new NameValueCollection
             {
                 {"search", query.ImdbID ?? query.GetQueryString()},
@@ -142,42 +143,38 @@ namespace Jackett.Common.Indexers
                 };
                 var hasFreeleech = freeleechRanks.Contains(rank);
 
-                var rows = dom.QuerySelectorAll("table.mainblockcontenttt tr:has(td.mainblockcontent)").Skip(1);
-                foreach (var row in rows)
+                var rows = dom.QuerySelectorAll("table.mainblockcontenttt tr:has(td.mainblockcontent)");
+                foreach (var row in rows.Skip(1))
                 {
                     var release = new ReleaseInfo();
 
                     var mainLink = row.Children[2].QuerySelector("a");
 
-                    release.Title = row.Children[2].QuerySelector("a").TextContent;
+                    release.Title = mainLink.TextContent;
                     release.Description = row.Children[2].QuerySelector("span").TextContent;
 
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800; // 48 hours
 
-                    var tdIndex = 0;
+                    // Sometimes the uploader column is missing, so seeders, leechers, and grabs may be at a different index.
+                    // There's room for improvement, but this works for now.
+                    var endIndex = row.Children.Length;
 
-                    //Maybe replace with something like this in the future? Can't test this
-                    //var editRow = row.Children.FirstOrDefault(node => string.Equals(
-                    //                                              node.TextContent, "Edit",
-                    //                                              StringComparison.OrdinalIgnoreCase));
-                    //var index = row.Children.Index(editRow);
-                    if (row.QuerySelector("td:nth-last-child(1)").TextContent == "Edit")
-                        tdIndex = 1;
+                    //Maybe use row.Children.Index(Node) after searching for an element instead?
+                    if (row.Children[endIndex - 1].TextContent == "Edit")
+                        endIndex -= 1;
                     // moderators get additional delete, recommend and like links
-                    if (row.QuerySelector("td:nth-last-child(4)").TextContent == "Edit")
-                        tdIndex = 4;
+                    else if (row.Children[endIndex - 4].TextContent == "Edit")
+                        endIndex -= 4;
 
-                    // Sometimes the uploader column is missing
-                    if (ParseUtil.TryCoerceInt(row.QuerySelector($"td:nth-last-child({tdIndex + 3})").TextContent, out var seeders))
+                    if (ParseUtil.TryCoerceInt(row.Children[endIndex - 3].TextContent, out var seeders))
                     {
                         release.Seeders = seeders;
-                        if (ParseUtil.TryCoerceInt(row.QuerySelector($"td:nth-last-child({tdIndex + 2})").TextContent, out var peers))
+                        if (ParseUtil.TryCoerceInt(row.Children[endIndex - 2].TextContent, out var peers))
                             release.Peers = peers + release.Seeders;
                     }
 
-                    // Sometimes the grabs column is missing
-                    if (ParseUtil.TryCoerceLong(row.QuerySelector($"td:nth-last-child({tdIndex + 1})").TextContent, out var grabs))
+                    if (ParseUtil.TryCoerceLong(row.Children[endIndex - 1].TextContent, out var grabs))
                         release.Grabs = grabs;
 
                     var fullSize = row.Children[7].TextContent;
@@ -191,9 +188,6 @@ namespace Jackett.Common.Indexers
                     var dateString = string.Join(" ", dateTag.Attributes.Select(attr => attr.Name));
                     release.PublishDate = DateTime.ParseExact(dateString, "dd MMM yyyy HH:mm:ss zz00", CultureInfo.InvariantCulture).ToLocalTime();
 
-                    //var catLink = new Uri(row.Children[0].FirstElementChild.GetAttribute("href"));
-                    //var catQuery = HttpUtility.ParseQueryString(catLink.Query);
-                    //release.Category = MapTrackerCatToNewznab(catQuery["category"]);
                     var category = row.FirstElementChild.FirstElementChild.GetAttribute("href").Split('=')[1];
                     release.Category = MapTrackerCatToNewznab(category);
 
