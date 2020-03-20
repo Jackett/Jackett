@@ -44,12 +44,12 @@
       - {id: 3, cat: Movies, desc: "Movies/SVCD/VCD"}
       - {id: 4, cat: Movies/Foreign, desc: "Movies/Dubs/Dual Audio"}
       - {id: 42, cat: Movies/HD, desc: "Movies/HD"}
-      - {id: 54, cat: Movies, desc: "Movies/h.264/x264"}
+      - {id: 54, cat: Movies/HD, desc: "Movies/h.264/x264"}
       - {id: 55, cat: Movies, desc: "Movies/Mp4"}
       - {id: 66, cat: Movies/3D, desc: "Movies/3D"}
-      - {id: 70, cat: Movies, desc: "Movies/HEVC/x265"}
+      - {id: 70, cat: Movies/HD, desc: "Movies/HEVC/x265"}
       - {id: 73, cat: Movies, desc: "Movies/Bollywood"}
-      - {id: 76, cat: Movies, desc: "Movies/UHD"}
+      - {id: 76, cat: Movies/UHD, desc: "Movies/UHD"}
 
       #TV
       - {id: 5, cat: TV, desc: "TV/DVD"}
@@ -138,7 +138,7 @@
         "asc": "asc"
 
   download:
-    # the .torrent url is on the on the details page 
+    # the .torrent url is on the on the details page
     selector: ul li a[href^="{{ .Config.downloadlink }}"]
     attribute: href
 
@@ -148,7 +148,7 @@
       - path: "{{if or (.Query.Album) (.Query.Artist) (.Keywords) }}sort-search{{else}}cat/Movies{{end}}{{if or (.Query.Album) (.Query.Artist) }}/{{ or (.Query.Album) (.Query.Artist) }}{{else}}/{{ .Keywords }}{{end}}{{if or (.Query.Album) (.Query.Artist) (.Keywords) }}/{{else}}{{end}}{{ .Config.sort }}/{{ .Config.type }}/1/"
       - path: "{{if or (.Query.Album) (.Query.Artist) (.Keywords) }}sort-search{{else}}cat/TV{{end}}{{if or (.Query.Album) (.Query.Artist) }}/{{ or (.Query.Album) (.Query.Artist) }}{{else}}/{{ .Keywords }}{{end}}{{if or (.Query.Album) (.Query.Artist) (.Keywords) }}/{{else}}{{end}}{{ .Config.sort }}/{{ .Config.type }}/{{if or (.Query.Album) (.Query.Artist) (.Keywords) }}2{{else}}1{{end}}/"
       - path: "{{if or (.Query.Album) (.Query.Artist) (.Keywords) }}sort-search{{else}}cat/Music{{end}}{{if or (.Query.Album) (.Query.Artist) }}/{{ or (.Query.Album) (.Query.Artist) }}{{else}}/{{ .Keywords }}{{end}}{{if or (.Query.Album) (.Query.Artist) (.Keywords) }}/{{else}}{{end}}{{ .Config.sort }}/{{ .Config.type }}/{{if or (.Query.Album) (.Query.Artist) (.Keywords) }}3{{else}}1{{end}}/"
-    keywordsfilters: 
+    keywordsfilters:
       - name: replace # use this as a workaround till #893 is implemented
         args: ["Greys Anatomy", "Grey's Anatomy"]
 
