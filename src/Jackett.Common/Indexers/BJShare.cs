@@ -219,7 +219,7 @@ namespace Jackett.Common.Indexers
             return title;
         }
 
-        private bool IsSessionIsClosed(WebClientStringResult result)
+        private bool IsSessionIsClosed(BaseWebResult result)
         {
             return result.IsRedirect && result.RedirectingTo.Contains("login.php");
         }

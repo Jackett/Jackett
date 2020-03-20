@@ -186,7 +186,7 @@ namespace Jackett.Common.Utils.Clients
             return;
         }
 
-        public virtual async Task<WebClientByteResult> GetBytes(WebRequest request)
+        public virtual async Task<BaseWebResult> GetBytes(WebRequest request)
         {
             logger.Debug(string.Format("WebClient({0}).GetBytes(Url:{1})", ClientType, request.Url));
             PrepareRequest(request);
@@ -198,7 +198,7 @@ namespace Jackett.Common.Utils.Clients
             return result;
         }
 
-        public virtual async Task<WebClientStringResult> GetString(WebRequest request)
+        public virtual async Task<BaseWebResult> GetString(WebRequest request)
         {
             logger.Debug(string.Format("WebClient({0}).GetString(Url:{1})", ClientType, request.Url));
             PrepareRequest(request);
@@ -206,7 +206,7 @@ namespace Jackett.Common.Utils.Clients
             var result = await Run(request);
             lastRequest = DateTime.Now;
             result.Request = request;
-            WebClientStringResult stringResult = result;
+            BaseWebResult stringResult = result;
 
             logger.Debug(string.Format("WebClient({0}): Returning {1} => {2}", ClientType, result.Status, (result.IsRedirect ? result.RedirectingTo + " " : "") + (stringResult.ContentString ?? "<NULL>")));
 
