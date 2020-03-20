@@ -459,9 +459,9 @@ namespace Jackett.Common.Indexers
         /// </summary>
         /// <param name="request">URL created by Query Builder</param>
         /// <returns>Results from query</returns>
-        private async Task<WebClientStringResult> QueryExec(string request)
+        private async Task<BaseWebResult> QueryExec(string request)
         {
-            WebClientStringResult results;
+            BaseWebResult results;
 
             // Switch in we are in DEV mode with Hard Drive Cache or not
             if (DevMode && CacheMode)
@@ -482,9 +482,9 @@ namespace Jackett.Common.Indexers
         /// </summary>
         /// <param name="request">URL created by Query Builder</param>
         /// <returns>Results from query</returns>
-        private async Task<WebClientStringResult> QueryCache(string request)
+        private async Task<BaseWebResult> QueryCache(string request)
         {
-            WebClientStringResult results;
+            BaseWebResult results;
 
             // Create Directory if not exist
             System.IO.Directory.CreateDirectory(Directory);
@@ -519,7 +519,7 @@ namespace Jackett.Common.Indexers
         /// </summary>
         /// <param name="request">URL created by Query Builder</param>
         /// <returns>Results from query</returns>
-        private async Task<WebClientStringResult> QueryTracker(string request)
+        private async Task<BaseWebResult> QueryTracker(string request)
         {
             // Cache mode not enabled or cached file didn't exist for our query
             Output("\nQuerying tracker for results....");

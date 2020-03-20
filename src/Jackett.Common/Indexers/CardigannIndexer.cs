@@ -26,7 +26,7 @@ namespace Jackett.Common.Indexers
     public class CardigannIndexer : BaseWebIndexer
     {
         protected IndexerDefinition Definition;
-        protected WebClientStringResult landingResult;
+        protected BaseWebResult landingResult;
         protected IHtmlDocument landingResultDocument;
 
         protected List<string> DefaultCategories = new List<string>();
@@ -450,7 +450,7 @@ namespace Jackett.Common.Indexers
             return template;
         }
 
-        protected bool checkForError(WebClientStringResult loginResult, IList<errorBlock> errorBlocks)
+        protected bool checkForError(BaseWebResult loginResult, IList<errorBlock> errorBlocks)
         {
             if (loginResult.Status == HttpStatusCode.Unauthorized) // e.g. used by YGGtorrent
                 throw new ExceptionWithConfigData("401 Unauthorized, check your credentials", configData);
@@ -697,7 +697,7 @@ namespace Jackett.Common.Indexers
                 landingResult = null;
                 landingResultDocument = null;
 
-                WebClientStringResult loginResult = null;
+                BaseWebResult loginResult = null;
                 var enctype = form.GetAttribute("enctype");
                 if (enctype == "multipart/form-data")
                 {
@@ -1324,7 +1324,7 @@ namespace Jackett.Common.Indexers
                 var searchUrlUri = new Uri(searchUrl);
 
                 // send HTTP request
-                WebClientStringResult response = null;
+                BaseWebResult response = null;
                 Dictionary<string, string> headers = null;
                 if (Search.Headers != null)
                 {
@@ -1687,7 +1687,7 @@ namespace Jackett.Common.Indexers
             return releases;
         }
 
-        protected async Task<WebClientByteResult> handleRequest(requestBlock request, Dictionary<string, object> variables = null, string referer = null)
+        protected async Task<BaseWebResult> handleRequest(requestBlock request, Dictionary<string, object> variables = null, string referer = null)
         {
             var requestLinkStr = resolvePath(applyGoTemplateText(request.Path, variables)).ToString();
 

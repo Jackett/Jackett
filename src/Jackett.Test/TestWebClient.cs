@@ -11,8 +11,8 @@ namespace Jackett.Test
 {
     public class TestWebClient : WebClient
     {
-        private readonly Dictionary<WebRequest, Func<WebRequest, WebClientByteResult>> byteCallbacks = new Dictionary<WebRequest, Func<WebRequest, WebClientByteResult>>();
-        private readonly Dictionary<WebRequest, Func<WebRequest, WebClientStringResult>> stringCallbacks = new Dictionary<WebRequest, Func<WebRequest, WebClientStringResult>>();
+        private readonly Dictionary<WebRequest, Func<WebRequest, BaseWebResult>> byteCallbacks = new Dictionary<WebRequest, Func<WebRequest, BaseWebResult>>();
+        private readonly Dictionary<WebRequest, Func<WebRequest, BaseWebResult>> stringCallbacks = new Dictionary<WebRequest, Func<WebRequest, BaseWebResult>>();
 
         public TestWebClient(IProcessService p, Logger l, IConfigurationService c, ServerConfig sc)
             : base(p: p,
@@ -26,9 +26,9 @@ namespace Jackett.Test
 
         public void RegisterStringCall(WebRequest req, Func<WebRequest, WebClientStringResult> f) => stringCallbacks.Add(req, f);
 
-        public override Task<WebClientByteResult> GetBytes(WebRequest request) => Task.FromResult<WebClientByteResult>(byteCallbacks.Where(r => r.Key.Equals(request)).First().Value.Invoke(request));
+        public override Task<BaseWebResult> GetBytes(WebRequest request) => Task.FromResult(byteCallbacks.Where(r => r.Key.Equals(request)).First().Value.Invoke(request));
 
-        public override Task<WebClientStringResult> GetString(WebRequest request) => Task.FromResult<WebClientStringResult>(stringCallbacks.Where(r => r.Key.Equals(request)).First().Value.Invoke(request));
+        public override Task<BaseWebResult> GetString(WebRequest request) => Task.FromResult(stringCallbacks.Where(r => r.Key.Equals(request)).First().Value.Invoke(request));
 
         public override void Init()
         {

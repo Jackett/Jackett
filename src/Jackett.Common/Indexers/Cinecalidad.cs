@@ -142,7 +142,7 @@ namespace Jackett.Common.Indexers
             return null;
         }
 
-        private List<ReleaseInfo> ParseReleases(WebClientStringResult response, TorznabQuery query)
+        private List<ReleaseInfo> ParseReleases(BaseWebResult response, TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
 
