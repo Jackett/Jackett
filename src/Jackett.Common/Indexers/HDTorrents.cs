@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -49,6 +51,7 @@ namespace Jackett.Common.Indexers
             Type = "private";
 
             TorznabCaps.SupportsImdbMovieSearch = true;
+            TorznabCaps.SupportsImdbTVSearch = true;
 
             TorznabCaps.Categories.Clear();
 
@@ -108,21 +111,15 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
             var searchUrl = SearchUrl;// string.Format(SearchUrl, HttpUtility.UrlEncode()));
-            var queryCollection = new NameValueCollection();
-            var searchString = query.GetQueryString();
+            searchUrl += string.Join(string.Empty, MapTorznabCapsToTrackers(query).Select(cat => $"category[]={cat}&"));
+            var queryCollection = new NameValueCollection
+            {
+                {"search", query.ImdbID ?? query.GetQueryString()},
+                {"active", "0"},
+                {"options", "0"}
+            };
 
-            foreach (var cat in MapTorznabCapsToTrackers(query))
-                searchUrl += "category%5B%5D=" + cat + "&";
-
-            if (query.ImdbID != null)
-                queryCollection.Add("search", query.ImdbID);
-            else if (!string.IsNullOrWhiteSpace(searchString))
-                queryCollection.Add("search", searchString);
-
-            queryCollection.Add("active", "0");
-            queryCollection.Add("options", "0");
-
-            searchUrl += queryCollection.GetQueryString().Replace("(", "%28").Replace(")", "%29"); // maually url encode brackets to prevent "hacking" detection
+            searchUrl += queryCollection.GetQueryString().Replace("(", "%28").Replace(")", "%29"); // manually url encode brackets to prevent "hacking" detection
 
             var results = await RequestStringWithCookiesAndRetry(searchUrl);
             try
@@ -130,8 +127,8 @@ namespace Jackett.Common.Indexers
                 var parser = new HtmlParser();
                 var dom = parser.ParseDocument(results.Content);
 
-                var userInfo = dom.QuerySelector(".mainmenu > table > tbody > tr:has(td[title=\"Active-Torrents\"])");
-                var rank = userInfo.QuerySelector("td:nth-child(2)").TextContent.Substring(6);
+                var userInfo = dom.QuerySelector("table.navus tr");
+                var rank = userInfo.Children[1].TextContent.Replace("Rank:", string.Empty).Trim();
 
                 var freeleechRanks = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
                 {
@@ -144,21 +141,29 @@ namespace Jackett.Common.Indexers
                 };
                 var hasFreeleech = freeleechRanks.Contains(rank);
 
-                var rows = dom.QuerySelectorAll(".mainblockcontenttt > tbody > tr:has(a[href^=\"details.php?id=\"])");
+                var rows = dom.QuerySelectorAll("table.mainblockcontenttt tr:has(td.mainblockcontent)").Skip(1);
                 foreach (var row in rows)
                 {
                     var release = new ReleaseInfo();
 
-                    release.Title = row.QuerySelector("td.mainblockcontent b a").TextContent;
-                    release.Description = row.QuerySelector("td:nth-child(3) > span").TextContent;
+                    var mainLink = row.Children[2].QuerySelector("a");
+
+                    release.Title = row.Children[2].QuerySelector("a").TextContent;
+                    release.Description = row.Children[2].QuerySelector("span").TextContent;
 
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800; // 48 hours
 
                     var tdIndex = 0;
+
+                    //Maybe replace with something like this in the future? Can't test this
+                    //var editRow = row.Children.FirstOrDefault(node => string.Equals(
+                    //                                              node.TextContent, "Edit",
+                    //                                              StringComparison.OrdinalIgnoreCase));
+                    //var index = row.Children.Index(editRow);
                     if (row.QuerySelector("td:nth-last-child(1)").TextContent == "Edit")
                         tdIndex = 1;
-                    // moderators get additional delete, recomend and like links
+                    // moderators get additional delete, recommend and like links
                     if (row.QuerySelector("td:nth-last-child(4)").TextContent == "Edit")
                         tdIndex = 4;
 
@@ -174,18 +179,21 @@ namespace Jackett.Common.Indexers
                     if (ParseUtil.TryCoerceLong(row.QuerySelector($"td:nth-last-child({tdIndex + 1})").TextContent, out var grabs))
                         release.Grabs = grabs;
 
-                    var fullSize = row.QuerySelectorAll("td.mainblockcontent")[6].TextContent;
+                    var fullSize = row.Children[7].TextContent;
                     release.Size = ReleaseInfo.GetBytes(fullSize);
 
-                    release.Guid = new Uri(SiteLink + row.QuerySelector("td.mainblockcontent b a").GetAttribute("href"));
-                    release.Link = new Uri(SiteLink + row.QuerySelectorAll("td.mainblockcontent")[3].FirstElementChild.GetAttribute("href"));
-                    release.Comments = new Uri(SiteLink + row.QuerySelector("td.mainblockcontent b a").GetAttribute("href"));
+                    release.Guid = new Uri(SiteLink + mainLink.GetAttribute("href"));
+                    release.Link = new Uri(SiteLink + row.Children[4].FirstElementChild.GetAttribute("href"));
+                    release.Comments = new Uri(SiteLink + mainLink.GetAttribute("href"));
 
-                    var dateSplit = row.QuerySelectorAll("td.mainblockcontent")[5].InnerHtml.Split(',');
-                    var dateString = dateSplit[1].Substring(0, dateSplit[1].IndexOf('>')).Replace("=\"\"", "").Trim();
+                    var dateTag = row.Children[6].FirstElementChild;
+                    var dateString = string.Join(" ", dateTag.Attributes.Select(attr => attr.Name));
                     release.PublishDate = DateTime.ParseExact(dateString, "dd MMM yyyy HH:mm:ss zz00", CultureInfo.InvariantCulture).ToLocalTime();
 
-                    var category = row.QuerySelector("td:nth-of-type(1) a").GetAttribute("href").Replace("torrents.php?category=", "");
+                    //var catLink = new Uri(row.Children[0].FirstElementChild.GetAttribute("href"));
+                    //var catQuery = HttpUtility.ParseQueryString(catLink.Query);
+                    //release.Category = MapTrackerCatToNewznab(catQuery["category"]);
+                    var category = row.FirstElementChild.FirstElementChild.GetAttribute("href").Split('=')[1];
                     release.Category = MapTrackerCatToNewznab(category);
 
                     release.UploadVolumeFactor = 1;
@@ -195,7 +203,7 @@ namespace Jackett.Common.Indexers
                         release.DownloadVolumeFactor = 0;
                         release.UploadVolumeFactor = 0;
                     }
-                    else if (hasFreeleech)
+                    else if (hasFreeleech || row.QuerySelector("img[alt=\"Golden Torrent\"]") != null)
                         release.DownloadVolumeFactor = 0;
                     else if (row.QuerySelector("img[alt=\"Silver Torrent\"]") != null)
                         release.DownloadVolumeFactor = 0.5;
@@ -206,9 +214,9 @@ namespace Jackett.Common.Indexers
                     else
                         release.DownloadVolumeFactor = 1;
 
-                    var imdblink = row.QuerySelector("a[href*=\"www.imdb.com/title/\"]")?.GetAttribute("href");
-                    if (!string.IsNullOrWhiteSpace(imdblink))
-                        release.Imdb = ParseUtil.GetLongFromString(imdblink);
+                    var imdbLink = row.QuerySelector("a[href*=\"www.imdb.com/title/\"]")?.GetAttribute("href");
+                    if (!string.IsNullOrWhiteSpace(imdbLink))
+                        release.Imdb = ParseUtil.GetLongFromString(imdbLink);
 
                     releases.Add(release);
                 }
