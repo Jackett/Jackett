@@ -10,33 +10,33 @@
 
   caps:
     categorymappings:
-      - {id: 24, cat: TV/Anime      , desc: "Anime"}
-      - {id: 25, cat: PC/0day       , desc: "Appz"}
-      - {id: 47, cat: Movies/HD     , desc: "AVCHD"}
+      - {id: 24, cat: TV/Anime, desc: "Anime"}
+      - {id: 25, cat: PC/0day, desc: "Appz"}
+      - {id: 47, cat: Movies/HD, desc: "AVCHD"}
       - {id: 26, cat: Movies/BluRay , desc: "Bluray"}
-      - {id: 54, cat: Movies/HD     , desc: "dbREMUX"}
-      - {id: 41, cat: Movies/HD     , desc: "Documentaries"}
-      - {id: 50, cat: Movies/HD     , desc: "FourGHD"}
-      - {id: 44, cat: Movies/HD     , desc: "HDME"}
+      - {id: 54, cat: Movies/HD, desc: "dbREMUX"}
+      - {id: 41, cat: Movies/HD, desc: "Documentaries"}
+      - {id: 50, cat: Movies/HD, desc: "FourGHD"}
+      - {id: 44, cat: Movies/HD, desc: "HDME"}
       - {id: 28, cat: Audio/Lossless, desc: "HQ Music"}
-      - {id: 48, cat: Movies/HD     , desc: "iCandy"}
-      - {id: 45, cat: Movies/HD     , desc: "INtL"}
-      - {id: 29, cat: Other         , desc: "Misc"}
+      - {id: 48, cat: Movies/HD, desc: "iCandy"}
+      - {id: 45, cat: Movies/HD, desc: "INtL"}
+      - {id: 29, cat: Other, desc: "Misc"}
       - {id: 49, cat: PC/Phone-Other, desc: "Mobile"}
-      - {id: 30, cat: Movies/HD     , desc: "Movie 1080i"}
-      - {id: 31, cat: Movies/HD     , desc: "Movie 1080p"}
-      - {id: 32, cat: Movies/HD     , desc: "Movie 720p"}
-      - {id: 33, cat: Audio/Video   , desc: "Music Videos"}
-      - {id: 34, cat: TV            , desc: "Packs"}
-      - {id: 53, cat: Movies/HD     , desc: "Remux"}
-      - {id: 56, cat: Movies/HD     , desc: "RUXi"}
-      - {id: 55, cat: Movies/HD     , desc: "SiNiSteR"}
-      - {id: 36, cat: TV/Sport      , desc: "Sports"}
-      - {id: 37, cat: TV/HD         , desc: "TV Series 1080i"}
-      - {id: 38, cat: TV/HD         , desc: "TV Series 1080p"}
-      - {id: 39, cat: TV/HD         , desc: "TV Series 720p"}
-      - {id: 57, cat: Movies        , desc: "UHD 2160p"}
-      - {id: 40, cat: XXX           , desc: "XXX"}
+      - {id: 30, cat: Movies/HD, desc: "Movie 1080i"}
+      - {id: 31, cat: Movies/HD, desc: "Movie 1080p"}
+      - {id: 32, cat: Movies/HD, desc: "Movie 720p"}
+      - {id: 33, cat: Audio/Video, desc: "Music Videos"}
+      - {id: 34, cat: TV, desc: "Packs"}
+      - {id: 53, cat: Movies/HD, desc: "Remux"}
+      - {id: 56, cat: Movies/HD, desc: "RUXi"}
+      - {id: 55, cat: Movies/HD, desc: "SiNiSteR"}
+      - {id: 36, cat: TV/Sport, desc: "Sports"}
+      - {id: 37, cat: TV/HD, desc: "TV Series 1080i"}
+      - {id: 38, cat: TV/HD, desc: "TV Series 1080p"}
+      - {id: 39, cat: TV/HD, desc: "TV Series 720p"}
+      - {id: 57, cat: Movies/UHD, desc: "UHD 2160p"}
+      - {id: 40, cat: XXX, desc: "XXX"}
 
     modes:
       search: [q]
