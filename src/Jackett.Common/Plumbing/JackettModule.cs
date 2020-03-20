@@ -1,5 +1,3 @@
-using System;
-using System.Reflection;
 using Autofac;
 using Jackett.Common.Indexers;
 using Jackett.Common.Indexers.Meta;
@@ -45,19 +43,14 @@ namespace Jackett.Common.Plumbing
             switch (_runtimeSettings.ClientOverride)
             {
                 case "httpclientnetcore":
-                    RegisterWebClient<HttpWebClientNetCore>(builder);
-                    break;
-                case "httpclient2netcore":
-                    RegisterWebClient<HttpWebClient2NetCore>(builder);
-                    break;
                 case "httpclient":
                     RegisterWebClient<HttpWebClient>(builder);
                     break;
+                case "httpclient2netcore":
                 case "httpclient2":
                     RegisterWebClient<HttpWebClient2>(builder);
                     break;
                 default:
-                    var usehttpclient = DetectMonoCompatabilityWithHttpClient();
                     RegisterWebClient<HttpWebClient>(builder);
                     break;
             }
@@ -70,55 +63,5 @@ namespace Jackett.Common.Plumbing
             var configService = ctx.Resolve<IConfigurationService>();
             return configService.BuildServerConfig(_runtimeSettings);
         }
-
-        private static bool DetectMonoCompatabilityWithHttpClient()
-        {
-            var usehttpclient = false;
-            try
-            {
-                var monotype = Type.GetType("Mono.Runtime");
-                if (monotype != null)
-                {
-                    var displayName = monotype.GetMethod("GetDisplayName", BindingFlags.NonPublic | BindingFlags.Static);
-                    if (displayName != null)
-                    {
-                        var monoVersion = displayName.Invoke(null, null).ToString();
-                        var monoVersionO = new Version(monoVersion.Split(' ')[0]);
-                        if ((monoVersionO.Major >= 4 && monoVersionO.Minor >= 8) || monoVersionO.Major >= 5)
-                        {
-                            // check if btls is supported
-                            var monoSecurity = Assembly.Load("Mono.Security");
-                            var monoTlsProviderFactory = monoSecurity.GetType("Mono.Security.Interface.MonoTlsProviderFactory");
-                            if (monoTlsProviderFactory != null)
-                            {
-                                var isProviderSupported = monoTlsProviderFactory.GetMethod("IsProviderSupported");
-                                if (isProviderSupported != null)
-                                {
-                                    var btlsSupported = (bool)isProviderSupported.Invoke(null, new string[] { "btls" });
-                                    if (btlsSupported)
-                                    {
-                                        // initialize btls
-                                        var initialize = monoTlsProviderFactory.GetMethod("Initialize", new[] { typeof(string) });
-                                        if (initialize != null)
-                                        {
-                                            initialize.Invoke(null, new string[] { "btls" });
-                                            usehttpclient = true;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                Console.Out.WriteLine("Error while deciding which HttpWebClient to use: " + e);
-            }
-
-            return usehttpclient;
-        }
-
-
     }
 }
