@@ -28,6 +28,7 @@
       - {id: 117, cat: PC, desc: "Applications: Appli-autre"}
       - {id: 67, cat: TV/OTHER, desc: "Autres: Emission TV"}
       - {id: 141, cat: TV/OTHER, desc: "Autres: Noel"}
+      - {id: 142, cat: TV/Sport, desc: "Autres: Emission sport"}
       - {id: 90, cat: Books/Ebook, desc: "BD: Livres"}
       - {id: 132, cat: TV/Documentary, desc: "Documentaires: BluRay"}
       - {id: 133, cat: TV/Documentary, desc: "Documentaires: 4k"}
@@ -35,7 +36,6 @@
       - {id: 15, cat: TV/Documentary, desc: "Documentaires: HD"}
       - {id: 14, cat: TV/Documentary, desc: "Documentaires: DivX"}
       - {id: 76, cat: TV/Documentary, desc: "Documentaires: TVRip/HDTV"}
-      - {id: 118, cat: TV/Documentary, desc: "Documentaires: Sport"}
       - {id: 139, cat: TV/Documentary, desc: "Documentaires: Noel"}
       - {id: 138, cat: Books/Ebook, desc: "E-Books: Noel"}
       - {id: 53, cat: Books/Ebook, desc: "E-Books: Livre Anglais"}
@@ -172,11 +172,10 @@
 
   download:
     before:
-      path: "list_thanks.php"
-      method: "get"
+      path: list_thanks.php
       inputs:
         id: "{{ .DownloadUri.Query.id }}"
-        to: "give"
+        to: give
         torrent: "{{ .DownloadUri.Query.id }}"
     selector: a[href^="download.php?id="]
     attribute: href
@@ -192,12 +191,15 @@
 #      multi cats unsupported, defaulting to all
       cat: 0
       search: "{{ .Keywords }}"
+      # 0 active 1 incldead 2 onlydead
       incldead: 1
+      # 0 all 1 notfree 2 freeonly
       freeleech: 0
-      inclexternal: 0
+      # 0 all 1 French 2 English 3 etc
       lang: 0
       sort: "{{ .Config.sort }}"
       order: "{{ .Config.type }}"
+      # does not support imdbid search and does not return imdb link in results
 
     rows:
       selector: table.ttable_headinner > tbody > tr.t-row
@@ -239,6 +241,5 @@
           img[src="images/fl.gif"]: 0
           "*": 1
       uploadvolumefactor:
-        case:
-          "*": 1
+        text: 1
 # engine n/a
