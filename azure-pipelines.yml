@@ -22,6 +22,7 @@ pr:
 stages:
   - stage: BuildJackett
     displayName: Create Binaries
+    dependsOn: UnitTestJackett
     jobs:
     - job: Build
       workspace:
