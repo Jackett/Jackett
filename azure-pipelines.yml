@@ -257,6 +257,7 @@ stages:
 
   - stage: UnitTestJackett
     displayName: Unit Tests
+    dependsOn: []
     jobs:
     - job: UnitTests
       workspace:
