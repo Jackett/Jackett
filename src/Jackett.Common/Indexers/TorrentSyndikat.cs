@@ -149,24 +149,20 @@ namespace Jackett.Common.Indexers
                 if (!string.IsNullOrWhiteSpace(searchString))
                 {
                     // use AND+wildcard operator to avoid getting to many useless results
-                    var searchStringArray = Regex.Split(searchString.Trim(), "[ _.-]+", RegexOptions.Compiled).ToList();
-                    searchStringArray = searchStringArray.Select(x => "+" + x).ToList(); // add AND operators
+                    var searchStringArray = Regex.Split(
+                        query.SanitizedSearchTerm, "[ _.-]+",
+                        RegexOptions.Compiled).Select(term => $"+{term}");
 
-                    //Check if search string ends with S01/S02/S03 and so on. Adds wildcard to the end of search string in order to find all episodes to a season
-
-                    var combindedString = string.Join(" ", searchStringArray);
-                    var regex = new Regex("s[0-9]{2}$", RegexOptions.IgnoreCase);
-                    var match = regex.Match(combindedString);
-
-                    if (match.Success)
+                    // If only season search add * wildcard to get all episodes
+                    if (query.IsTVSearch)
                     {
-                        var item = searchStringArray[searchStringArray.Count - 1];
-                        searchStringArray[searchStringArray.FindIndex(ind => ind.Equals(item))] = item + "*";
-
+                        var tvEpisode = query.GetEpisodeSearchString();
+                        if (!string.IsNullOrWhiteSpace(tvEpisode) && tvEpisode.StartsWith("S") && !tvEpisode.Contains("E"))
+                            tvEpisode += "*";
+                        searchStringArray = searchStringArray.Append($"+{tvEpisode}");
                     }
 
-                    var searchStringFinal = string.Join(" ", searchStringArray);
-                    queryCollection.Add("search", searchStringFinal);
+                    queryCollection.Add("search", string.Join(" ", searchStringArray));
                 }
 
             }
