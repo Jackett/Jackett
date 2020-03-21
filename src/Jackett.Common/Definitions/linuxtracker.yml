@@ -388,7 +388,7 @@
          selector: td:nth-child(2)
          remove: table
       downloadvolumefactor:
-        text: 1
+        text: 0
       uploadvolumefactor:
         text: 1
 # xbtit 2.3.0

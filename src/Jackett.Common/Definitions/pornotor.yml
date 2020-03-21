@@ -80,7 +80,7 @@
           - name: split
             args: ["/", 1]
       downloadvolumefactor:
-        text: 1
+        text: 0
       uploadvolumefactor:
         text: 1
 # TBDev
