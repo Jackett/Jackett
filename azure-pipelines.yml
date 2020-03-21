@@ -320,6 +320,7 @@ stages:
           command: test
           projects: '**/*.Test*/*.csproj'
           arguments: '--configuration $(buildConfiguration) --framework $(framework)'
+          testRunTitle: 'Unit - $(buildDescription) - $(Build.BuildId)'
 
       - task: DotNetCoreCLI@2
         displayName: Unit Tests (Mono, Linux and macOS)
@@ -328,6 +329,7 @@ stages:
           command: test
           projects: '**/*.Test*/*.csproj'
           arguments: '--configuration $(buildConfiguration) --framework $(framework) --runtime $(runtime)'
+          testRunTitle: 'Unit - $(buildDescription) - $(Build.BuildId)'
 
 
   - stage: Integration
@@ -403,6 +405,7 @@ stages:
         inputs:
           command: test
           projects: '**/*IntegrationTest*/*.csproj'
+          testRunTitle: 'Integration - $(buildDescription) - $(Build.BuildId)'
 
 
   - stage: PublishGithub
