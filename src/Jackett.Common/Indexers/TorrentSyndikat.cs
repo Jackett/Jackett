@@ -129,13 +129,11 @@ namespace Jackett.Common.Indexers
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-
-            var searchString = query.GetQueryString();
-            var searchUrl = SearchUrl;
-            var queryCollection = new NameValueCollection();
-
-            queryCollection.Add("incldead", "1");
-            queryCollection.Add("rel_type", "0"); // Alle
+            var queryCollection = new NameValueCollection
+            {
+                {"incldead", "1"},
+                {"rel_type", "0"} // Alle
+            };
 
             if (query.ImdbID != null)
             {
@@ -146,7 +144,7 @@ namespace Jackett.Common.Indexers
             {
                 queryCollection.Add("searchin", "title");
 
-                if (!string.IsNullOrWhiteSpace(searchString))
+                if (!string.IsNullOrWhiteSpace(query.GetQueryString()))
                 {
                     // use AND+wildcard operator to avoid getting to many useless results
                     var searchStringArray = Regex.Split(
@@ -169,7 +167,7 @@ namespace Jackett.Common.Indexers
             foreach (var cat in MapTorznabCapsToTrackers(query))
                 queryCollection.Add("c" + cat, "1");
 
-            searchUrl += "?" + queryCollection.GetQueryString();
+            var searchUrl = SearchUrl + "?" + queryCollection.GetQueryString();
 
             var results = await RequestStringWithCookiesAndRetry(searchUrl);
 
