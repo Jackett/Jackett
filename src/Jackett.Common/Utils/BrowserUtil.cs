@@ -5,21 +5,10 @@ namespace Jackett.Common.Utils
 {
     public static class BrowserUtil
     {
-        public static string ChromeUserAgent
-        {
-            get
-            {
-                // When updating these make sure they are not detected by the incapsula bot detection engine (e.g. kickasstorrent indexer)
-                if (System.Environment.OSVersion.Platform == PlatformID.Unix)
-                {
-                    return "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36";
-                }
-                else
-                {
-                    return "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36";
-                }
-            }
-        }
+        // When updating these make sure they are not detected by the incapsula bot detection engine (e.g. kickasstorrent indexer)
+        public static string ChromeUserAgent => Environment.OSVersion.Platform == PlatformID.Unix ?
+            "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36" :
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36";
 
         // This can be used to decode e-mail addresses protected by cloudflare
         public static string DecodeCloudFlareProtectedEmail(string input)
