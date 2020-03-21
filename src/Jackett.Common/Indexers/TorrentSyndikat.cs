@@ -153,7 +153,7 @@ namespace Jackett.Common.Indexers
 
                     // If only season search add * wildcard to get all episodes
                     var tvEpisode = query.GetEpisodeSearchString();
-                    if (!string.IsNullOrWhiteSpace(tvEpisode)
+                    if (!string.IsNullOrWhiteSpace(tvEpisode))
                     {
                         if(tvEpisode.StartsWith("S") && !tvEpisode.Contains("E"))
                             tvEpisode += "*";
