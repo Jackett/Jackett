@@ -80,28 +80,29 @@ namespace Jackett.Common.Indexers
 
             AddCategoryMapping(4, TorznabCatType.XXX, "XXX (18+)");
             AddCategoryMapping(14, TorznabCatType.MoviesSD, "Movies/XVID");
-            AddCategoryMapping(48, TorznabCatType.MoviesHD, "Movies/XVID/720");
             AddCategoryMapping(17, TorznabCatType.MoviesSD, "Movies/x264");
-            AddCategoryMapping(44, TorznabCatType.MoviesHD, "Movies/x264/1080");
-            AddCategoryMapping(45, TorznabCatType.MoviesHD, "Movies/x264/720");
-            AddCategoryMapping(47, TorznabCatType.Movies3D, "Movies/x264/3D");
-            AddCategoryMapping(50, TorznabCatType.MoviesHD, "Movies/x264/4k");
-            AddCategoryMapping(51, TorznabCatType.MoviesHD, "Movies/x265/4k");
-            AddCategoryMapping(52, TorznabCatType.MoviesHD, "Movs/x265/4k/HDR");
-            AddCategoryMapping(42, TorznabCatType.MoviesBluRay, "Movies/Full BD");
-            AddCategoryMapping(46, TorznabCatType.MoviesBluRay, "Movies/BD Remux");
             AddCategoryMapping(18, TorznabCatType.TVSD, "TV Episodes");
-            AddCategoryMapping(41, TorznabCatType.TVHD, "TV HD Episodes");
-            AddCategoryMapping(49, TorznabCatType.TVHD, "TV UHD Episodes");        // torrentapi.org returns "Movies/TV-UHD-episodes" for some reason
-            AddCategoryMapping(49, TorznabCatType.TVHD, "Movies/TV-UHD-episodes"); // possibly because thats what the category is called on the /top100.php page
             AddCategoryMapping(23, TorznabCatType.AudioMP3, "Music/MP3");
             AddCategoryMapping(25, TorznabCatType.AudioLossless, "Music/FLAC");
             AddCategoryMapping(27, TorznabCatType.PCGames, "Games/PC ISO");
             AddCategoryMapping(28, TorznabCatType.PCGames, "Games/PC RIP");
-            AddCategoryMapping(40, TorznabCatType.ConsolePS3, "Games/PS3");
             AddCategoryMapping(32, TorznabCatType.ConsoleXbox360, "Games/XBOX-360");
             AddCategoryMapping(33, TorznabCatType.PCISO, "Software/PC ISO");
             AddCategoryMapping(35, TorznabCatType.BooksEbook, "e-Books");
+            AddCategoryMapping(40, TorznabCatType.ConsolePS3, "Games/PS3");
+            AddCategoryMapping(41, TorznabCatType.TVHD, "TV HD Episodes");
+            AddCategoryMapping(42, TorznabCatType.MoviesBluRay, "Movies/Full BD");
+            AddCategoryMapping(44, TorznabCatType.MoviesHD, "Movies/x264/1080");
+            AddCategoryMapping(45, TorznabCatType.MoviesHD, "Movies/x264/720");
+            AddCategoryMapping(46, TorznabCatType.MoviesBluRay, "Movies/BD Remux");
+            AddCategoryMapping(47, TorznabCatType.Movies3D, "Movies/x264/3D");
+            AddCategoryMapping(48, TorznabCatType.MoviesHD, "Movies/XVID/720");
+            AddCategoryMapping(49, TorznabCatType.TVUHD, "TV UHD Episodes");        // torrentapi.org returns "Movies/TV-UHD-episodes" for some reason
+            AddCategoryMapping(50, TorznabCatType.MoviesUHD, "Movies/x264/4k");
+            AddCategoryMapping(51, TorznabCatType.MoviesUHD, "Movies/x265/4k");
+            AddCategoryMapping(52, TorznabCatType.MoviesUHD, "Movs/x265/4k/HDR");
+            AddCategoryMapping(53, TorznabCatType.ConsolePS4, "Games/PS4");
+            AddCategoryMapping(54, TorznabCatType.MoviesHD, "Movies/x265/1080");
 
             app_id = "jackett_v" + EnvironmentUtil.JackettVersion;
         }

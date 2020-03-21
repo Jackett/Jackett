@@ -673,6 +673,7 @@ namespace Jackett.Common.Indexers
             // add 1:1 categories
             if (trackerCategoryDesc != null && trackerCategory != null)
             {
+                //TODO convert to int.TryParse() to avoid using throw as flow control
                 try
                 {
                     var trackerCategoryInt = int.Parse(trackerCategory);
