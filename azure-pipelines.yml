@@ -258,7 +258,7 @@ stages:
   - stage: UnitTestJackett
     displayName: Unit Tests
     jobs:
-    - job: UnitTests
+    - job: UnitTest
       workspace:
         clean: all
       strategy:
