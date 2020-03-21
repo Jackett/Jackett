@@ -152,10 +152,10 @@ namespace Jackett.Common.Indexers
                         RegexOptions.Compiled).Select(term => $"+{term}");
 
                     // If only season search add * wildcard to get all episodes
-                    if (query.IsTVSearch)
+                    var tvEpisode = query.GetEpisodeSearchString();
+                    if (!string.IsNullOrWhiteSpace(tvEpisode)
                     {
-                        var tvEpisode = query.GetEpisodeSearchString();
-                        if (!string.IsNullOrWhiteSpace(tvEpisode) && tvEpisode.StartsWith("S") && !tvEpisode.Contains("E"))
+                        if(tvEpisode.StartsWith("S") && !tvEpisode.Contains("E"))
                             tvEpisode += "*";
                         searchStringArray = searchStringArray.Append($"+{tvEpisode}");
                     }
