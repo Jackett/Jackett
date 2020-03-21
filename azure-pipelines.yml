@@ -22,7 +22,6 @@ pr:
 stages:
   - stage: BuildJackett
     displayName: Create Binaries
-    dependsOn: UnitTestJackett
     jobs:
     - job: Build
       workspace:
@@ -258,7 +257,6 @@ stages:
 
   - stage: UnitTestJackett
     displayName: Unit Tests
-    dependsOn: []
     jobs:
     - job: UnitTests
       workspace:
@@ -309,10 +307,10 @@ stages:
           installationPath: $(Agent.ToolsDirectory)/dotnet
 
       - task: DotNetCoreCLI@2
-        displayName: Build Jackett Server
+        displayName: Build Test Project
         inputs:
           command: build
-          projects: 'src/Jackett.Server/Jackett.Server.csproj'
+          projects: '**/*.Test*/*.csproj'
           arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework)'
 
       - task: DotNetCoreCLI@2
