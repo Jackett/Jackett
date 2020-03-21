@@ -309,9 +309,9 @@ stages:
           installationPath: $(Agent.ToolsDirectory)/dotnet
 
       - task: DotNetCoreCLI@2
-        displayName: Restore Packages
+        displayName: Build Jackett Server
         inputs:
-          command: restore
+          command: build
           projects: 'src/Jackett.Server/Jackett.Server.csproj'
           arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework)'
 
