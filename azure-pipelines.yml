@@ -313,6 +313,7 @@ stages:
         inputs:
           command: restore
           projects: '**/*/*.csproj'
+          arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework)'
 
       - task: DotNetCoreCLI@2
         displayName: Unit Tests (Windows only)
