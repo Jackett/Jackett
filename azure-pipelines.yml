@@ -309,6 +309,15 @@ stages:
           installationPath: $(Agent.ToolsDirectory)/dotnet
 
       - task: DotNetCoreCLI@2
+        displayName: Build Jackett Server
+        inputs:
+          command: build
+          projects: 'src/Jackett.Server/Jackett.Server.csproj'
+          publishWebProjects: false
+          zipAfterPublish: false
+          arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework) --output $(Build.BinariesDirectory) /p:AssemblyVersion=$(jackettVersion) /p:FileVersion=$(jackettVersion) /p:InformationalVersion=$(jackettVersion) /p:Version=$(jackettVersion)'
+
+      - task: DotNetCoreCLI@2
         displayName: Unit Tests (Windows only)
         condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
         inputs:
