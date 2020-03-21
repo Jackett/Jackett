@@ -151,6 +151,20 @@ namespace Jackett.Common.Indexers
                     // use AND+wildcard operator to avoid getting to many useless results
                     var searchStringArray = Regex.Split(searchString.Trim(), "[ _.-]+", RegexOptions.Compiled).ToList();
                     searchStringArray = searchStringArray.Select(x => "+" + x).ToList(); // add AND operators
+
+                    //Check if search string ends with S01/S02/S03 and so on. Adds wildcard to the end of search string in order to find all episodes to a season
+
+                    string combindedString = string.Join(" ", searchStringArray);
+                    Regex regex = new Regex("s[0-9]{2}$");
+                    Match match = regex.Match(combindedString);
+
+                    if (match.Success)
+                    {
+                        var item = searchStringArray[searchStringArray.Count - 1];
+                        searchStringArray[searchStringArray.FindIndex(ind => ind.Equals(item))] = item + "*";
+
+                    }
+
                     var searchStringFinal = string.Join(" ", searchStringArray);
                     queryCollection.Add("search", searchStringFinal);
                 }
