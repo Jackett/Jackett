@@ -312,7 +312,7 @@ stages:
         displayName: Restore Packages
         inputs:
           command: restore
-          projects: '**/*/*.csproj'
+          projects: 'src/Jackett.Server/Jackett.Server.csproj'
           arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework)'
 
       - task: DotNetCoreCLI@2
