@@ -6,6 +6,8 @@
   type: public
   encoding: UTF-8
   links:
+    - https://torrentproject.cc/
+  legacylinks:
     - https://torrentproject2.se/
 
   caps:
@@ -68,11 +70,11 @@
 
   search:
     paths:
-      - path: "?t={{ if .Keywords }}{{ .Keywords }}{{else}}test{{end}}&orderby={{ .Config.sort }}{{ if .Config.filter-verified }}&safe=on{{else}}{{end}}"
+      - path: "?t={{ if .Keywords }}{{ re_replace .Keywords \" \" \"+\" }}{{else}}test{{end}}&orderby={{ .Config.sort }}{{ if .Config.filter-verified }}&safe=on{{else}}{{end}}"
         followredirect: true
 
     rows:
-      selector: "#similarfiles div:has(a[href^=\"/t0-\"])"
+      selector: "#similarfiles div:has(a[href^=\"/t\"])"
 
     fields:
       category:
