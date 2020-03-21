@@ -172,7 +172,7 @@ namespace Jackett.Common.Indexers
                     var publishDate = DateTime.Now;
                     if (torrent["created_at"] != null)
                         publishDate = DateTime.Parse((string)torrent["created_at"]);
-                    Uri bannerUrl;
+                    Uri bannerUrl = null;
                     if (torrent["portada"] != null)
 	                    bannerUrl = new Uri(BannerUrl + (string)(torrent["portada"]["hash"]) + "." + (string)(torrent["portada"]["ext"]));
 
@@ -195,7 +195,8 @@ namespace Jackett.Common.Indexers
                         Comments = guid,
                         Guid = guid,
                         Seeders = seeders,
-                        Peers = seeders + (int)torrent["leechers"]
+                        Peers = seeders + (int)torrent["leechers"],
+                        BannerUrl = bannerUrl
                     });
                 }
             }
