@@ -98,7 +98,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(47, TorznabCatType.Movies3D, "Movies/x264/3D");
             AddCategoryMapping(48, TorznabCatType.MoviesHD, "Movies/XVID/720");
             AddCategoryMapping(49, TorznabCatType.TVUHD, "TV UHD Episodes");        // torrentapi.org returns "Movies/TV-UHD-episodes" for some reason
-            AddCategoryMapping(49, TorznabCatType.TVHD, "Movies/TV-UHD-episodes"); // possibly because thats what the category is called on the /top100.php page
+            AddCategoryMapping(49, TorznabCatType.TVUHD, "Movies/TV-UHD-episodes"); // possibly because thats what the category is called on the /top100.php page
             AddCategoryMapping(50, TorznabCatType.MoviesUHD, "Movies/x264/4k");
             AddCategoryMapping(51, TorznabCatType.MoviesUHD, "Movies/x265/4k");
             AddCategoryMapping(52, TorznabCatType.MoviesUHD, "Movs/x265/4k/HDR");
