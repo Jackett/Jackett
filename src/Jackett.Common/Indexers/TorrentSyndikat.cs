@@ -154,9 +154,9 @@ namespace Jackett.Common.Indexers
 
                     //Check if search string ends with S01/S02/S03 and so on. Adds wildcard to the end of search string in order to find all episodes to a season
 
-                    string combindedString = string.Join(" ", searchStringArray);
-                    Regex regex = new Regex("s[0-9]{2}$");
-                    Match match = regex.Match(combindedString);
+                    var combindedString = string.Join(" ", searchStringArray);
+                    var regex = new Regex("s[0-9]{2}$");
+                    var match = regex.Match(combindedString);
 
                     if (match.Success)
                     {
