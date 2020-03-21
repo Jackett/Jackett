@@ -12,46 +12,46 @@
   caps:
     categories:
     categorymappings:
-      - {id: 42, cat: Movies/BluRay, desc: "Movies Blu-ray"}
-      - {id: 25, cat: TV/Anime, desc: "TV Animation/Anime"}
-      - {id: 35, cat: Movies/HD, desc: "Movies HD"}
-      - {id: 46, cat: Movies/3D, desc: "Movies 3D"}
-      - {id: 20, cat: Movies/DVD, desc: "Movies DVD-R"}
-      - {id: 19, cat: Movies/SD, desc: "Movies SD"}
-      - {id: 5, cat: Movies/HD, desc: "Movies HD"}
-      - {id: 24, cat: Movies, desc: "Movies BG"}
-      - {id: 31, cat: Movies, desc: "Movies Science"}
-      - {id: 28, cat: Movies, desc: "Movies Russia"}
-      - {id: 7, cat: TV/SD, desc: "TV SD"}
-      - {id: 33, cat: TV/HD, desc: "TV HD"}
-      - {id: 39, cat: PC/Mac, desc: "Games Mac"}
-      - {id: 4, cat: PC/ISO, desc: "Games ISO"}
-      - {id: 21, cat: PC/Games, desc: "Games PC Rip"}
-      - {id: 17, cat: Console/PS3, desc: "Games PS"}
-      - {id: 40, cat: Console/Xbox, desc: "Games Xbox"}
-      - {id: 12, cat: Console, desc: "Games Console"}
-      - {id: 54, cat: PC, desc: "Games Linux"}
-      - {id: 17, cat: Console/PS3, desc: "Games PS"}
-      - {id: 6, cat: Audio, desc: "Music"}
-      - {id: 30, cat: Audio/Other, desc: "Music DTS"}
-      - {id: 29, cat: Audio/Other, desc: "Music DVD-R"}
-      - {id: 51, cat: Audio/Other, desc: "Music Hi-Res/Vinyl"}
-      - {id: 34, cat: Audio/Lossless, desc: "Music Lossless"}
-      - {id: 38, cat: PC/Mac, desc: "Programs Mac"}
-      - {id: 1, cat: PC/ISO, desc: "Programs PC ISO"}
-      - {id: 22, cat: PC/Phone-Other, desc: "Programs Other"}
-      - {id: 43, cat: TV/Sport, desc: "Sport HD"}
-      - {id: 41, cat: TV/Sport, desc: "Sport SD"}
-      - {id: 36, cat: PC/Phone-Other, desc: "Programs Mobile/GSM"}
-      - {id: 52, cat: PC/Phone-Android, desc: "Android/Games"}
-      - {id: 53, cat: PC/Phone-Android, desc: "Android/Apps"}
-      - {id: 26, cat: Other, desc: "Other"}
-      - {id: 23, cat: Other, desc: "Clips"}
-      - {id: 32, cat: Books/Comics, desc: "Books Comics"}
-      - {id: 37, cat: Books/Technical, desc: "Books Dox"}
-      - {id: 9, cat: XXX, desc: "XXX"}
-      - {id: 48, cat: XXX, desc: "XXX 3D"}
-      - {id: 49, cat: XXX, desc: "XXX HD"}
+      - {id: 42, cat: Movies/BluRay, desc: "Blu-ray"}
+      - {id: 36, cat: PC/Phone-Other, desc: "Mobile/GSM"}
+      - {id: 50, cat: TV, desc: "TV"}
+      - {id: 9,  cat: XXX, desc: "XXX"}
+      - {id: 48, cat: XXX, desc: "XXX/3D"}
+      - {id: 49, cat: XXX/x264, desc: "XXX/HD"}
+      - {id: 25, cat: Movies/SD, desc: "Cartoons"}
+      - {id: 51, cat: Movies/HD, desc: "Cartoons/HD"}
+      - {id: 26, cat: Other, desc: "Others"}
+      - {id: 39, cat: PC/Mac, desc: "Games/Mac"}
+      - {id: 4,  cat: PC/Games, desc: "Games/PC ISO"}
+      - {id: 21, cat: PC/Games, desc: "Games/PC Rip"}
+      - {id: 17, cat: Console/PS3, desc: "Games/PS"}
+      - {id: 40, cat: Console/Xbox, desc: "Games/Xbox"}
+      - {id: 12, cat: Console/Other, desc: "Games/Console"}
+      - {id: 23, cat: Audio/Video, desc: "Clips/Concerts"}
+      - {id: 32, cat: Books/Comics, desc: "Books/Comics"}
+      - {id: 6,  cat: Audio/MP3, desc: "Music"}
+      - {id: 29, cat: Movies/DVD, desc: "Music/DVD"}
+      - {id: 30, cat: Audio/Lossless, desc: "Music/Hi-Res Audio"}
+      - {id: 34, cat: Audio/Lossless, desc: "Music/Lossless"}
+      - {id: 52, cat: Audio/Other, desc: "Music/Vinyl HQRip"}
+      - {id: 22, cat: PC, desc: "Software"}
+      - {id: 38, cat: PC/Mac, desc: "Software/Mac"}
+      - {id: 1,  cat: PC/ISO, desc: "Software/PC ISO"}
+      - {id: 7,  cat: TV/SD, desc: "Series"}
+      - {id: 33, cat: TV/HD, desc: "Series/HD"}
+      - {id: 37, cat: PC, desc: "Warehouse"}
+      - {id: 41, cat: TV/Sport, desc: "Sport"}
+      - {id: 43, cat: TV/Sport, desc: "Sport/HD"}
+      - {id: 53, cat: Movies/HD, desc: "Movies/1080"}
+      - {id: 46, cat: Movies/3D, desc: "Movies/3D"}
+      - {id: 5,  cat: Movies/HD, desc: "Movies/720"}
+      - {id: 20, cat: Movies/DVD, desc: "Movies/DVD"}
+      - {id: 54, cat: Movies/Other, desc: "Movies/VHS Rip"}
+      - {id: 35, cat: Movies/HD, desc: "Movies/x264"}
+      - {id: 19, cat: Movies/SD, desc: "Movies/XviD"}
+      - {id: 24, cat: Movies/Foreign, desc: "Movies/Bulgarian"}
+      - {id: 31, cat: TV/Documentary, desc: "Movies/Science"}
+      - {id: 28, cat: Movies/Foreign, desc: "Movies/Russian"}
       - {id: 27, cat: TV/Anime, desc: "Hentai"}
 
     modes:
@@ -93,7 +93,7 @@
       selector: .test > tbody > tr:has(a[href^="browse.php"])
     fields:
       title:
-        selector: a:has(img[src^="http://img.zamunda.se/pic/download.gif"])
+        selector: a:has(img[src$="/pic/download.gif"])
         attribute: href
         filters:
           - name: urldecode
@@ -109,10 +109,10 @@
           - name: querystring
             args: cat
       download:
-        selector: a:has(img[src^="http://img.zamunda.se/pic/download.gif"])
+        selector: a:has(img[src$="/pic/download.gif"])
         attribute: href
       magnet:
-        selector: a:has(img[src^="http://img.zamunda.se/pic/magnet-icon-12w-12h.gif"])
+        selector: a:has(img[src$="/pic/magnet-icon-12w-12h.gif"])
         attribute: href
       grabs:
         selector: td:nth-child(7)
@@ -137,6 +137,8 @@
           - name: regexp
             args: src=([^\s]+)
       downloadvolumefactor:
-        text: "0"
+        case:
+          "a[style=\"color: #b9a100;\"][href^=\"details.php?\"]": "0"
+          "*": "1"
       uploadvolumefactor:
         text: "1"
