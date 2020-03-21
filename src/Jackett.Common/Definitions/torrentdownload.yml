@@ -5,8 +5,10 @@
   language: en-us
   type: public
   encoding: UTF-8
+  followredirect: true
   links:
     - https://www.torrentdownload.info/
+    - https://torrentdownload.unblockit.pro/
 
   caps:
     categories:

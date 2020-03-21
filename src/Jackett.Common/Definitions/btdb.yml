@@ -5,12 +5,14 @@
   language: en-us
   type: public
   encoding: UTF-8
+  followredirect: true
   links:
     -  https://btdb.io/
   legacylinks:
     -  https://btdb.to/
     -  https://btdb.unblocked.app/
     -  https://btdb.eu/
+    - https://btdb.unblockit.pro/
 
   caps:
     categorymappings:

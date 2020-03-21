@@ -5,8 +5,10 @@
   language: en-us
   type: public
   encoding: UTF-8
+  followredirect: true
   links:
     - https://torrentgalaxy.to/
+    - https://torrentgalaxy.unblockit.pro/
   legacylinks:
     - https://torrentgalaxy.org/
     - https://torrentgalaxy.pw/
@@ -134,7 +136,7 @@
         optional: true
         selector: div.tgxtablecell:last-of-type small:contains(":")
         filters:
-          - name: dateparse 
+          - name: dateparse
             args: "02/01/06 15:04"
       downloadvolumefactor:
         text: 0
