@@ -6,6 +6,8 @@
   type: public
   encoding: UTF-8
   links:
+    - https://www.bittorrent.am/
+  legacylinks:
     - http://www.bittorrent.am/
 
   caps:
