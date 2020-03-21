@@ -5,9 +5,11 @@
   language: en-us
   type: public
   encoding: UTF-8
+  followredirect: true
   links:
     - https://monova.org/
     - https://monova.to/
+    - https://monova.unblockit.pro/
 
   caps:
     categories:
@@ -39,7 +41,7 @@
       - path: "{{if .Keywords}}search?term={{.Keywords}}{{else}}video{{end}}"
 
     rows:
-      selector: tr.desktop:has(a[href^="//"])
+      selector: tr.desktop:not(tr[class="desktop  success"])
       filters:
         - name: andmatch
 
