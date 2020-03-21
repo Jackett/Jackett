@@ -14,70 +14,70 @@
     categorymappings:
         # Films
       - {id: 1, cat: Movies, desc: "Films"}
-      - {id: 13, cat: Movies, desc: "Films BD-Rip / BRRip"}
-      - {id: 15, cat: Movies, desc: "Films DVD-Rip"}
-      - {id: 18, cat: Movies, desc: "Films HD 720p"}
-      - {id: 19, cat: Movies, desc: "Films WEB-DL / WEB-Rip"}
-      - {id: 20, cat: Movies, desc: "Films HD 1080p"}
-      - {id: 26, cat: Movies, desc: "Films mHD 720p"}
-      - {id: 27, cat: Movies, desc: "Films mHD 1080p"}
-      - {id: 28, cat: Movies, desc: "Films x265"}
-      - {id: 30, cat: Movies, desc: "Films Blu-Ray (complet)"}
-      - {id: 31, cat: Movies, desc: "Films 3D"}
-      - {id: 32, cat: Movies, desc: "Films 4K UHD"}
-      - {id: 33, cat: Movies, desc: "Films Québécois SD"}
-      - {id: 34, cat: Movies, desc: "Films Québécois HD"}
-      - {id: 35, cat: Movies, desc: "Films Québécois DVD-R"}
-      - {id: 37, cat: Movies, desc: "Films DVD-R"}
-      - {id: 38, cat: Movies, desc: "Films V.O.S.T. SD"}
-      - {id: 39, cat: Movies, desc: "Films V.O.S.T. HD"}
-      - {id: 40, cat: Movies, desc: "Films V.O. SD"}
-      - {id: 41, cat: Movies, desc: "Films V.O. HD"}
+      - {id: 13, cat: Movies/BluRay, desc: "Films BD-Rip / BRRip"}
+      - {id: 15, cat: Movies/DVD, desc: "Films DVD-Rip"}
+      - {id: 18, cat: Movies/HD, desc: "Films HD 720p"}
+      - {id: 19, cat: Movies/WEBDL, desc: "Films WEB-DL / WEB-Rip"}
+      - {id: 20, cat: Movies/HD, desc: "Films HD 1080p"}
+      - {id: 26, cat: Movies/HD, desc: "Films mHD 720p"}
+      - {id: 27, cat: Movies/HD, desc: "Films mHD 1080p"}
+      - {id: 28, cat: Movies/HD, desc: "Films x265"}
+      - {id: 30, cat: Movies/BluRay, desc: "Films Blu-Ray (complet)"}
+      - {id: 31, cat: Movies/3D, desc: "Films 3D"}
+      - {id: 32, cat: Movies/UHD, desc: "Films 4K UHD"}
+      - {id: 33, cat: Movies/SD, desc: "Films Québécois SD"}
+      - {id: 34, cat: Movies/HD, desc: "Films Québécois HD"}
+      - {id: 35, cat: Movies/DVD, desc: "Films Québécois DVD-R"}
+      - {id: 37, cat: Movies/DVD, desc: "Films DVD-R"}
+      - {id: 38, cat: Movies/SD, desc: "Films V.O.S.T. SD"}
+      - {id: 39, cat: MovieS/HD, desc: "Films V.O.S.T. HD"}
+      - {id: 40, cat: Movies/SD, desc: "Films V.O. SD"}
+      - {id: 41, cat: Movies/HD, desc: "Films V.O. HD"}
       - {id: 42, cat: Movies, desc: "Films TV-Rip"}
         # 4K LIGHT
       - {id: 95, cat: Movies, desc: "4K LIGHT"}
         # Séries-Télé
       - {id: 16, cat: TV, desc: "Séries-Télé"}
-      - {id: 17, cat: TV, desc: "Séries-Télé TV Pack SD"}
-      - {id: 21, cat: TV, desc: "Séries-Télé SD"}
-      - {id: 22, cat: TV, desc: "Séries-Télé HD"}
-      - {id: 23, cat: TV, desc: "Séries-Télé TV Pack HD"}
-      - {id: 45, cat: TV, desc: "Séries-Télé Québécois SD"}
-      - {id: 46, cat: TV, desc: "Séries-Télé Québécois HD"}
-      - {id: 47, cat: TV, desc: "Séries-Télé V.O.S.T. SD"}
-      - {id: 48, cat: TV, desc: "Séries-TéléV.O.S.T. HD"}
-      - {id: 49, cat: TV, desc: "Séries-Télé Émissions TV SD"}
-      - {id: 50, cat: TV, desc: "Séries-Télé Émissions TV HD"}
+      - {id: 17, cat: TV/SD, desc: "Séries-Télé TV Pack SD"}
+      - {id: 21, cat: TV/SD, desc: "Séries-Télé SD"}
+      - {id: 22, cat: TV/HD, desc: "Séries-Télé HD"}
+      - {id: 23, cat: TV/HD, desc: "Séries-Télé TV Pack HD"}
+      - {id: 45, cat: TV/SD, desc: "Séries-Télé Québécois SD"}
+      - {id: 46, cat: TV/HD, desc: "Séries-Télé Québécois HD"}
+      - {id: 47, cat: TV/SD, desc: "Séries-Télé V.O.S.T. SD"}
+      - {id: 48, cat: TV/HD, desc: "Séries-TéléV.O.S.T. HD"}
+      - {id: 49, cat: TV/SD, desc: "Séries-Télé Émissions TV SD"}
+      - {id: 50, cat: TV/HD, desc: "Séries-Télé Émissions TV HD"}
       - {id: 51, cat: TV, desc: "Séries-Télé Blu-Ray"}
       - {id: 52, cat: TV, desc: "Séries-Télé DVD-R"}
-      - {id: 94, cat: TV, desc: "Séries-Télé x265 - TV"}
+      - {id: 94, cat: TV/HD, desc: "Séries-Télé x265 - TV"}
         # Musique
       - {id: 2, cat: Audio, desc: "Musique"}
-      - {id: 54, cat: Audio, desc: "Musique MP3"}
-      - {id: 55, cat: Audio, desc: "Musique FLAC"}
+      - {id: 54, cat: Audio/MP3, desc: "Musique MP3"}
+      - {id: 55, cat: Audio/Lossless, desc: "Musique FLAC"}
       - {id: 56, cat: Audio, desc: "Musique DSD"}
       - {id: 57, cat: Audio, desc: "Musique Karaoke"}
       - {id: 58, cat: Audio, desc: "Musique Autres"}
         # Jeux
       - {id: 3, cat: PC/Games, desc: "Jeux"}
       - {id: 59, cat: PC/Games, desc: "Jeux PC"}
-      - {id: 60, cat: PC/Games, desc: "Jeux Consoles"}
+      - {id: 60, cat: Console, desc: "Jeux Consoles"}
       - {id: 84, cat: PC/Games, desc: "Jeux Android"}
         # Livres
       - {id: 6, cat: Books, desc: "Livres"}
-      - {id: 61, cat: Books, desc: "Livres epub"}
+      - {id: 61, cat: Books/Ebook, desc: "Livres epub"}
       - {id: 62, cat: Books, desc: "Livres pdf"}
       - {id: 63, cat: Books, desc: "Livres Journaux"}
-      - {id: 64, cat: Books, desc: "Livres Magazines"}
+      - {id: 64, cat: Books/Magazines, desc: "Livres Magazines"}
       - {id: 65, cat: Books, desc: "Livres Bandes Dessinées"}
       - {id: 66, cat: Books, desc: "Livres Multi-Format"}
-      - {id: 85, cat: Books, desc: "Livres Audio"}
+      - {id: 85, cat: Audio/Audiobook, desc: "Livres Audio"}
         # Logiciels
       - {id: 67, cat: PC, desc: "Logiciels"}
-      - {id: 68, cat: PC, desc: "Logiciels Windows"}
-      - {id: 69, cat: PC, desc: "Logiciels Mac"}
+      - {id: 68, cat: PC/0day, desc: "Logiciels Windows"}
+      - {id: 69, cat: PC/Mac, desc: "Logiciels Mac"}
       - {id: 86, cat: PC, desc: "Logiciels Linux"}
-      - {id: 87, cat: PC, desc: "Logiciels Android"}
+      - {id: 87, cat: PC/Phone-Android, desc: "Logiciels Android"}
         # Spectacles
       - {id: 70, cat: TV/Other, desc: "Spectacles"}
       - {id: 71, cat: TV/Other, desc: "Spectacles Humour"}

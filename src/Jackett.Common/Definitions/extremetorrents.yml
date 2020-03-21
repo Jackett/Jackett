@@ -10,24 +10,25 @@
 
   caps:
     categorymappings:
-      - {id: 10, cat: Movies/DVD, desc: "Dvd rip"}
-      - {id: 111, cat: Movies/DVD, desc: "DVD Promo"}
-      - {id: 118, cat: Movies, desc: "Kids"}
-      - {id: 113, cat: XXX, desc: "DVD xxx"}
-      - {id: 129, cat: Movies/HD, desc: "Hd DVD"}
-      - {id: 130, cat: Movies/UHD, desc: "4K Films"}
-      - {id: 143, cat: Movies/HD, desc: "Divx 720P"}
-      - {id: 114, cat: Audio, desc: "Muziek"}
+      - {id: 10, cat: Movies/DVD, desc: "Film DVD"}
+      - {id: 111, cat: Movies/DVD, desc: "DVD Promo/R5"}
+      - {id: 118, cat: Movies/DVD, desc: "Kids DVD"}
+      - {id: 113, cat: XXX, desc: "DVD XXX"}
+      - {id: 108, cat: XXX, desc: "Xvid XXX"}
+      - {id: 129, cat: Movies/HD, desc: "HD DVD"}
+      - {id: 130, cat: Movies/UHD, desc: "Films 4K"}
+      - {id: 143, cat: Movies/HD, desc: "DivX 720P"}
+      - {id: 114, cat: Audio/MP3, desc: "Muziek MP3"}
       - {id: 140, cat: Books, desc: "E-Book"}
       - {id: 105, cat: TV/Documentary, desc: "Documentaire"}
-      - {id: 115, cat: PC, desc: "pc apps"}
-      - {id: 120, cat: PC/Games, desc: "Pc Games"}
+      - {id: 115, cat: PC, desc: "PC apps"}
+      - {id: 120, cat: PC/Games, desc: "PC Games"}
       - {id: 106, cat: Other, desc: "Overig"}
       - {id: 131, cat: Console/NDS, desc: "Nintendo Ds"}
       - {id: 132, cat: TV/HD, desc: "HD Serie"}
-      - {id: 116, cat: PC/Mac, desc: "Mac"}
-      - {id: 125, cat: Movies, desc: "Xvid rip"}
-      - {id: 123, cat: Movies, desc: "Xvid Tc"}
+      - {id: 116, cat: PC/Mac, desc: "Mac Software"}
+      - {id: 125, cat: Movies, desc: "DiVX Rip"}
+      - {id: 123, cat: Movies/SD, desc: "DiVX Cam"}
       - {id: 108, cat: XXX, desc: "18+"}
       - {id: 142, cat: XXX, desc: "HD XXX"}
       - {id: 139, cat: TV, desc: "TV Series"}
@@ -85,6 +86,7 @@
       $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
       search: "{{ .Keywords }}"
       incldead: 1
+      # does not support imdbid search and does not return imdb link in results
 
     rows:
       selector: table.mainouter
@@ -108,7 +110,7 @@
         attribute: href
       banner:
         selector: div[id^="Style"] img
-        attribute: src        
+        attribute: src
       size:
         selector: a[href^="details_bestanden.php?torrent_id="]
         filters:

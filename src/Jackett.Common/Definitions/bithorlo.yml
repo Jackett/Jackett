@@ -56,6 +56,10 @@
       movie-search: [q]
 
   settings:
+    - name: info_alert
+      type: info
+      label: Alert about Cookie
+      default: "If during your cookie save you get the following error:</br><b>The 'Value'='xzlogin,xzrecover,xzsignup' part of the cookie is invalid.</b></br>Then remove <b>acopendivids=xzlogin,xzrecover,xzsignup; </b> from the cookie string before proceeding to save."
     - name: cookie
       type: text
       label: Cookie

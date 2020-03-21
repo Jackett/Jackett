@@ -98,7 +98,7 @@
       - {id: 130, cat: Movies/3D, desc: "H265 3D"}
       - {id: 128, cat: Movies/HD, desc: "H265 Animación"}
       - {id: 129, cat: Movies/HD, desc: "H265 Documentales"}
-      - {id: 125, cat: Movies, desc: "UHD"}
+      - {id: 125, cat: Movies/UHD, desc: "UHD"}
       - {id: 131, cat: Movies/UHD, desc: "UHD Películas"}
       - {id: 132, cat: TV/UHD, desc: "UHD Series"}
 

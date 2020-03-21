@@ -8,11 +8,12 @@
   followredirect: true
   links:
     - https://eztv.io/
+    - https://eztv.unblockit.pro/
   legacylinks:
-    - https://eztv.ag/ # redirects to .io 
-    - https://eztv.re/ # redirects to .io 
-    - https://eztv.it/ # redirects to .io 
-    - https://eztv.ch/ # redirects to .io 
+    - https://eztv.ag/ # redirects to .io
+    - https://eztv.re/ # redirects to .io
+    - https://eztv.it/ # redirects to .io
+    - https://eztv.ch/ # redirects to .io
 
   caps:
     categories:
@@ -26,7 +27,7 @@
   search:
     paths:
       - path: "{{ if .Keywords }}search/{{ .Keywords }}{{else}}/{{end}}"
-    keywordsfilters: 
+    keywordsfilters:
       - name: re_replace
         args: ["S[0-9]{2}([^E]|$)", ""] # remove season tag without episode (search doesn't support it)
     rows:

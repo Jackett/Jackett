@@ -260,6 +260,7 @@
       langue: "{{ .Config.torrentlanguage }}"
       # freeleech oui (yes) non (no) peuimporte (ignore)
       tl: "peuimporte"
+      # does bot support imdbid search and does not return imdb link in results.
 
     rows:
       selector: table.sortable tbody tr
@@ -322,6 +323,5 @@
           img[src$="/images/Torrents/TLibre.png"]: "0"
           "*": "1"
       uploadvolumefactor:
-        case:
-          "*": "1"
+        text: 1
 # TT3.00 FRENCH

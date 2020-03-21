@@ -19,7 +19,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 
 #### Supported Systems
 * Windows 7SP1 or greater
-* Linux [supported operating systems here](https://github.com/dotnet/core/blob/master/release-notes/2.1/2.1-supported-os.md#linux)
+* Linux [supported operating systems here](https://github.com/dotnet/core/blob/master/release-notes/3.1/3.1-supported-os.md#linux)
 * macOS 10.13 or greater
 
 <details> <summary> <b> Supported Public Trackers </b> </summary>
@@ -152,6 +152,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * AlexFilm
  * AniDUB
  * ArenaBG
+ * BaibaKo
  * BookTracker
  * CasStudioTV
  * Crazy's Corner
@@ -220,7 +221,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Audiobook Torrents (ABT)
  * Avistaz (AsiaTorrents)
  * Awesome-HD (AHD)
- * BaibaKo
  * BIGTorrent
  * BIT-HDTV
  * BJ-Share (BJ)
@@ -337,6 +337,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HacheDe
  * Hebits
  * Hon3y HD
+ * Horror Site
  * HuSh
  * ICE Torrent
  * IPTorrents (IPT)
