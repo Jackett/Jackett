@@ -5,8 +5,10 @@
   language: en-us
   type: public
   encoding: UTF-8
+  followredirect: true
   links:
     - https://www.ettv.to/
+    - https://ettv.unblockit.pro/
   legacylinks:
     - https://www.ettv.tv/
 
@@ -93,7 +95,7 @@
       options:
         "desc": "desc"
         "asc": "asc"
-  
+
   download:
     selector: a[href^="{{ .Config.downloadlink }}"]
     attribute: href

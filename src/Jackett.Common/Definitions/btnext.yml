@@ -24,7 +24,10 @@
       - {id: 16, cat: Movies/SD, desc: "Movies CAM"}
       - {id: 74, cat: Movies/DVD, desc: "Movies DvD-R"}
       - {id: 76, cat: Movies, desc: "Movies Packs"}
-      - {id: 91, cat: Movies/Other, desc: "Movies Kids"}
+      - {id: 115, cat: Movies/Other, desc: "Movies Kids"}
+      - {id: 91, cat: Movies/Other, desc: "Movies Kids Inglês"}
+      - {id: 113, cat: Movies/Other, desc: "Movies Kids PT-BR"}
+      - {id: 114, cat: Movies/Other, desc: "Movies Kids PT-PT"}
       - {id: 77, cat: Movies/WEBDL, desc: "Movies WEB-DL"}
       - {id: 85, cat: Movies/DVD, desc: "Movies Custom-DVDR"}
       - {id: 14, cat: Movies/SD, desc: "Movies DVDRip/XViD"}
@@ -49,13 +52,14 @@
       - {id: 7, cat: Audio, desc: "Music"}
       - {id: 20, cat: Audio/Video, desc: "Music MVideo"}
       - {id: 21, cat: Audio/MP3, desc: "Music MP3"}
-      - {id: 33, cat: Audio/Other, desc: "Music MP4"}
+      - {id: 33, cat: Audio/Video, desc: "Music MP4"}
       - {id: 32, cat: Audio/Lossless, desc: "Music FLAC"}
       - {id: 2, cat: Console, desc: "Games"}
       - {id: 78, cat: PC/Games, desc: "Games Linux"}
       - {id: 79, cat: PC/Mac, desc: "Games MacOSX"}
       - {id: 28, cat: Console/NDS, desc: "Games Nintendo DS"}
       - {id: 27, cat: PC/Games, desc: "Games PC/Windows"}
+      - {id: 111, cat: Console, desc: "Games Nintendo Sw"}
       - {id: 80, cat: Console/PS3, desc: "Games PS2"}
       - {id: 81, cat: Console/PS3, desc: "Games PS3"}
       - {id: 82, cat: Console/PS4, desc: "Games PS4"}
@@ -70,10 +74,10 @@
       - {id: 34, cat: PC/ISO, desc: "Applications Linux"}
       - {id: 44, cat: Other, desc: "Miscellaneous"}
       - {id: 54, cat: Audio/Audiobook, desc: "Books Audiobook"}
-      - {id: 57, cat: Books, desc: "Books E-Books"}
+      - {id: 57, cat: Books/Ebook, desc: "Books E-Books"}
       - {id: 58, cat: Books/Comics, desc: "Books Comics"}
       - {id: 59, cat: Books, desc: "Books Educational"}
-      - {id: 60, cat: Books, desc: "Books Magazines/Journals"}
+      - {id: 60, cat: Books/Magazines, desc: "Books Magazines/Journals"}
       - {id: 61, cat: Other, desc: "Pics/Wallpapers"}
       - {id: 62, cat: PC/Phone-Android, desc: "Android"}
       - {id: 63, cat: PC/Phone-IOS, desc: "iOS"}
@@ -92,9 +96,9 @@
       - {id: 69, cat: XXX/Imageset, desc: "XXX-Pics/Wallpapers"}
 
     modes:
-      search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
+      search: [q, imdbid]
+      tv-search: [q, season, ep, imdbid]
+      movie-search: [q, imdbid]
 
   settings:
     - name: username
@@ -122,6 +126,10 @@
       options:
         "desc": "desc"
         "asc": "asc"
+    - name: info_results
+      type: info
+      label: Search results
+      default: "If you get 0 results check the log for error: <b>An error has occured!You can't view this page unless you read all your unread messages</b>, then access the site with your browser and <b>mark as read</b> all PMs."
 
   login:
     path: ?p=home&pid=1
@@ -155,9 +163,9 @@
       p: torrents
       pid: 32
       $raw: "{{ range .Categories }}cid[]={{.}}&{{end}}"
-      keywords: "{{ .Keywords }}"
-      search_type: name
-      searchin: title
+      keywords: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+      # name , description , both , uploader
+      search_type: "{{ if .Query.IMDBID }}description{{else}}name{{end}}"
       "sortOptions[sortBy]": "{{ .Config.sort }}"
       "sortOptions[sortOrder]": "{{ .Config.type }}"
     error:
@@ -193,28 +201,62 @@
         selector: a[rel="fancybox"]
         optional: true
         attribute: href
+      imdb:
+      # a href="http://tracker.btnext.com/data/torrents/imdb/tt0249677.jpg"
+        optional: true
+        selector: a[href*="/imdb/tt"]
+        attribute: href
+        filters:
+          - name: regexp
+            args: "imdb/(.+?).jpg"
+          - name: prepend
+            args: "https://www.imdb.com/title/"
       downloadvolumefactor:
         case:
           "img[title=\"FREE!\"]": 0
           "*": 1
       uploadvolumefactor:
-        case:
-          "*": 1
+        text: 1
       date:
         selector: td.torrent_name > abbr.timeago
         optional: true
         attribute: data-time
       date:
-        selector: td.torrent_name:not(:has(abbr.timeago))
+        selector: td.torrent_name:not(:has(abbr.timeago)):not(:contains("day")):not(:contains("Domingo")):not(:contains("Sábado")):not(:contains("Sexta")):not(:contains("Quinta")):not(:contains("Quarta")):not(:contains("Terça")):not(:contains("Segunda")):not(:contains("ontem")):not(:contains("Hoje"))
         optional: true
         remove: span, a, br
         filters:
           - name: replace
             args: ["Enviado ", ""] # Uploaded
           - name: replace
+            args: ["Uploaded ", ""]
+          - name: replace
             args: [" por", ""] # by
           - name: replace
+            args: [" by", ""]
+          - name: replace
             args: ["às ", ""] # at
+          - name: replace
+            args: ["at ", ""]
+          - name: dateparse
+            args: "02-01-2006 15:04"
+      date:
+        selector: td.torrent_name:not(:has(abbr.timeago)):contains("day"), td.torrent_name:not(:has(abbr.timeago)):contains("Domingo"), td.torrent_name:not(:has(abbr.timeago)):contains("Sábado"), td.torrent_name:not(:has(abbr.timeago)):contains("Quinta"), td.torrent_name:not(:has(abbr.timeago)):contains("Sexta"), td.torrent_name:not(:has(abbr.timeago)):contains("Quarta"), td.torrent_name:not(:has(abbr.timeago)):contains("Terça"), td.torrent_name:not(:has(abbr.timeago)):contains("Segunda"), td.torrent_name:not(:has(abbr.timeago)):contains("ontem"), td.torrent_name:not(:has(abbr.timeago)):contains("Hoje")
+        optional: true
+        remove: span, a, br
+        filters:
+          - name: replace
+            args: ["Enviado ", ""] # Uploaded
+          - name: replace
+            args: ["Uploaded ", ""]
+          - name: replace
+            args: [" por", ""] # by
+          - name: replace
+            args: [" by", ""]
+          - name: replace
+            args: ["às ", ""] # at
+          - name: replace
+            args: ["at ", ""]
           - name: replace
             args: ["Hoje", "Today"]
           - name: replace
@@ -233,6 +275,5 @@
             args: ["Sábado", "Saturday"]
           - name: replace
             args: ["Domingo", "Sunday"]
-          - name: dateparse
-            args: "02-01-2006 15:04"
+          - name: fuzzytime
 # TSUE 2.2

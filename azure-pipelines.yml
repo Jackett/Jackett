@@ -9,11 +9,15 @@ variables:
   netCoreSdkVersion: 3.1.x
   system.debug: true
 
-pr:
-  autoCancel: true
-  
 trigger:
-  batch: true
+  branches:
+    include:
+    - '*'
+
+pr:
+  branches:
+    include:
+    - '*'
 
 stages:
   - stage: BuildJackett
@@ -250,6 +254,65 @@ stages:
         inputs:
           pathtoPublish: '$(Build.ArtifactStagingDirectory)'
 
+
+  - stage: UnitTestJackett
+    displayName: Unit Tests
+    jobs:
+    - job: UnitTest
+      workspace:
+        clean: all
+      strategy:
+        matrix:
+          Mono:
+            buildDescription: Mono
+            imageName: ubuntu-latest
+            framework: net461
+            runtime: linux-x64
+          Windows:
+            buildDescription: Windows
+            imageName: windows-latest
+            framework: $(netCoreFramework)
+            runtime: win-x86
+          macOS:
+            buildDescription: macOS
+            imageName: macOS-latest
+            framework: $(netCoreFramework)
+            runtime: osx-x64
+          LinuxAmdx64:
+            buildDescription: Linux AMD x64
+            imageName: ubuntu-latest
+            framework: $(netCoreFramework)
+            runtime: linux-x64
+          LinuxARM32:
+            buildDescription: Linux ARM32
+            imageName: ubuntu-latest
+            framework: $(netCoreFramework)
+            runtime: linux-arm
+          LinuxARM64:
+            buildDescription: Linux ARM64
+            imageName: ubuntu-latest
+            framework: $(netCoreFramework)
+            runtime: linux-arm64
+      pool:
+        vmImage: $(imageName)
+      displayName: ${{ variables.buildDescription }}
+      steps:
+      - checkout: self
+
+      - task: UseDotNet@2
+        displayName: Install .NET Core SDK
+        inputs:
+          packageType: sdk
+          version: $(netCoreSdkVersion)
+          installationPath: $(Agent.ToolsDirectory)/dotnet
+
+      - task: DotNetCoreCLI@2
+        displayName: Build Test Project
+        inputs:
+          command: build
+          projects: '**/*.Test*/*.csproj'
+          arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework)'
+
       - task: DotNetCoreCLI@2
         displayName: Unit Tests (Windows only)
         condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
@@ -257,6 +320,7 @@ stages:
           command: test
           projects: '**/*.Test*/*.csproj'
           arguments: '--configuration $(buildConfiguration) --framework $(framework)'
+          testRunTitle: 'Unit - $(buildDescription) - $(Build.BuildId)'
 
       - task: DotNetCoreCLI@2
         displayName: Unit Tests (Mono, Linux and macOS)
@@ -265,6 +329,7 @@ stages:
           command: test
           projects: '**/*.Test*/*.csproj'
           arguments: '--configuration $(buildConfiguration) --framework $(framework) --runtime $(runtime)'
+          testRunTitle: 'Unit - $(buildDescription) - $(Build.BuildId)'
 
 
   - stage: Integration
@@ -340,11 +405,14 @@ stages:
         inputs:
           command: test
           projects: '**/*IntegrationTest*/*.csproj'
+          testRunTitle: 'Integration - $(buildDescription) - $(Build.BuildId)'
 
 
   - stage: PublishGithub
     displayName: Publish to Github
-    dependsOn: Integration
+    dependsOn:
+      - UnitTestJackett
+      - Integration
     condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     jobs:
     - job: Publish

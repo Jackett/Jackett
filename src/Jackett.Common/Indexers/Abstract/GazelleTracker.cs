@@ -189,8 +189,7 @@ namespace Jackett.Common.Indexers.Abstract
             searchUrl += "?" + queryCollection.GetQueryString();
 
             var response = await RequestStringWithCookiesAndRetry(searchUrl);
-
-            if (response.IsRedirect || query.IsTest)
+            if (response.IsRedirect)
             {
                 // re-login
                 await ApplyConfiguration(null);

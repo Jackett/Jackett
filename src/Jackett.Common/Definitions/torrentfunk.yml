@@ -5,9 +5,11 @@
   language: en-us
   type: public
   encoding: UTF-8
+  followredirect: true
   links:
     - https://www.torrentfunk.com/
     - https://www.torrentfunk2.com/
+    - https://torrentfunk.unblockit.pro/
 
   caps:
     categories:
@@ -87,7 +89,7 @@
       seeders:
         selector: td:nth-child(4)
       leechers:
-        selector: td:nth-child(5) 
+        selector: td:nth-child(5)
       downloadvolumefactor:
         text: 0
       uploadvolumefactor:

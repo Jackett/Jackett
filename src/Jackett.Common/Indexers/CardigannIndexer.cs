@@ -1102,7 +1102,12 @@ namespace Jackett.Common.Indexers
                     case "strdump":
                         // for debugging
                         var DebugData = Data.Replace("\r", "\\r").Replace("\n", "\\n").Replace("\xA0", "\\xA0");
-                        logger.Debug(string.Format("CardigannIndexer ({0}): strdump: {1}", ID, DebugData));
+                        var strTag = (string)Filter.Args;
+                        if (strTag != null)
+                            strTag = string.Format("({0}):", strTag);
+                        else
+                            strTag = ":";
+                        logger.Debug(string.Format("CardigannIndexer ({0}): strdump{1} {2}", ID, strTag, DebugData));
                         break;
                     default:
                         break;
