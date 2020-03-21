@@ -20,7 +20,7 @@
       - {id: 19, cat: Movies/WEBDL, desc: "Films WEB-DL / WEB-Rip"}
       - {id: 20, cat: Movies/HD, desc: "Films HD 1080p"}
       - {id: 26, cat: Movies/HD, desc: "Films mHD 720p"}
-      - {id: 27, cat: Movie/HD, desc: "Films mHD 1080p"}
+      - {id: 27, cat: Movies/HD, desc: "Films mHD 1080p"}
       - {id: 28, cat: Movies/HD, desc: "Films x265"}
       - {id: 30, cat: Movies/BluRay, desc: "Films Blu-Ray (complet)"}
       - {id: 31, cat: Movies/3D, desc: "Films 3D"}

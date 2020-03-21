@@ -93,7 +93,7 @@ namespace Jackett.Common.Indexers
             var loginPage = await RequestStringWithCookies(LoginUrl, configData.CookieHeader.Value);
             var parser = new HtmlParser();
             var cq = parser.ParseDocument(loginPage.Content);
-            var recaptchaSiteKey = cq.QuerySelector(".g-recaptcha").GetAttribute("data-sitekey");
+            var recaptchaSiteKey = cq.QuerySelector(".g-recaptcha")?.GetAttribute("data-sitekey");
             if (recaptchaSiteKey != null)
             {
                 var result = configData;

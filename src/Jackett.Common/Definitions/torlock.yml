@@ -5,9 +5,11 @@
   language: en-us
   type: public
   encoding: UTF-8
+  followredirect: true
   links:
     - https://www.torlock.com/
     - https://www.torlock2.com/
+    - https://torlock.unblockit.pro/
   legacylinks:
     - https://torlock.com/
 
@@ -24,12 +26,12 @@
       - {id: ADULT, cat: XXX, desc: "Adult"}
       - {id: AUDIOBOOK, cat: Audio/Audiobook, desc: "Audiobook"}
       - {id: IMAGES, cat: Other/Misc, desc: "Images"}
-      
+
     modes:
       search: [q]
       tv-search: [q, season, ep]
       movie-search: [q]
-  
+
   settings:
     - name: sort
       type: select
@@ -46,7 +48,7 @@
       options:
         "desc": "desc"
         "asc": "asc"
-  
+
   search:
     paths:
       - path: "{{if .Keywords}}/all/torrents/{{ .Keywords }}.html?sort={{ .Config.sort }}&order={{ .Config.type }}{{else}}/fresh.html{{end}}"
@@ -95,18 +97,18 @@
       date:
         selector: td:nth-child(2):contains("/")
         optional: true
-        filters: 
+        filters:
           - name: dateparse
             args: "1/2/2006"
       date:
         selector: td:nth-child(2):contains("Today"), td:nth-child(2):contains("Yesterday")
         optional: true
-        filters: 
+        filters:
           - name: fuzzytime
       date:
         selector: td:nth-child(2):not(:contains("Today")):not(:contains("Yesterday")):not(:contains("/"))
         optional: true
-        filters: 
+        filters:
           - name: re_replace
             args: ["(min|mins)", "minutes"]
           - name: timeago

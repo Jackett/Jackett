@@ -39,9 +39,9 @@
       - {id: 10, cat: Audio/MP3, desc: "Zene/MP3"}
 
     modes:
-      search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
+      search: [q, imdbid]
+      tv-search: [q, season, ep, imdbid]
+      movie-search: [q, imdbid]
 
   settings:
     - name: username
@@ -87,14 +87,15 @@
       - path: browse.php
     inputs:
       $raw: "{{ range .Categories }}cat[]={{.}}&{{end}}"
-      search: "{{ if .Keywords }}{{ .Keywords }}{{else}}{{end}}"
+      search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
       searchOpened: 1
       # 0 title 1 descr 2 uploader
-      searchWhat: 0
+      searchWhat: "{{ if .Query.IMDBID }}1{{else}}0{{end}}"
       # 0 active 1 active&dead 2 dead 3 dl multiplier 4 ul multiplier 5 dl&ul multiplier 6 bad torrent 7 unverified torrent 8 my torrent
       filterOptions: 1
       orderby: "{{ .Config.sort }}"
       ordertype: "{{ .Config.type }}"
+      # does not return imdb link in results
 
     rows:
       selector: table.torrentList > tbody > tr:has(a[href^="download.php?id="]), table.torrentList > tbody > tr:has(td[onclick^="window.location='download.php?id="])
@@ -151,4 +152,4 @@
         filters:
           - name: regexp
             args: (\d+)
-# engine n/a
+# custom 3.0
