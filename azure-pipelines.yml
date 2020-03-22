@@ -371,11 +371,10 @@ stages:
             buildDescription: Windows
             imageName: windows-latest
             artifactName: Jackett.Binaries.Windows.zip
-          # Enable once ChromeDriver is deployed to macOS image https://github.com/actions/virtual-environments/issues/7
-          # macOS:
-          #   buildDescription: macOS
-          #   imageName: macOS-latest
-          #   artifactName: Jackett.Binaries.macOS.tar.gz
+          macOS:
+            buildDescription: macOS
+            imageName: macOS-latest
+            artifactName: Jackett.Binaries.macOS.tar.gz
           LinuxAmdx64:
             buildDescription: Linux AMD x64
             imageName: ubuntu-latest
@@ -412,7 +411,7 @@ stages:
             cd Jackett
             if [[ "$(artifactName)" == *"Mono"* ]]; then mono --version; fi
             if [[ "$(artifactName)" == *"Mono"* ]]; then sudo ./install_service_systemd_mono.sh; fi
-            if [[ "$(artifactName)" == *"macOS"* ]]; then sudo ./install_service_macos; fi
+            if [[ "$(artifactName)" == *"macOS"* ]]; then ./install_service_macos; fi
             if [[ "$(artifactName)" == *"LinuxAMDx64"* ]]; then sudo ./install_service_systemd.sh; fi
 
       - task: UseDotNet@2
