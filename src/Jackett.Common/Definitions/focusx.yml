@@ -18,6 +18,9 @@
       - {id: 200, cat: Movies, desc: "Основные принципы ухода"}
       - {id: 201, cat: Movies, desc: "Быстрая, как ветер"}
       - {id: 202, cat: Movies, desc: "Визит инспектора"}
+      - {id: 206, cat: Movies, desc: "Брачная история"}
+      - {id: 207, cat: Movies, desc: "Кафе Голубая сойка"}
+      - {id: 208, cat: Movies, desc: "Наши души по ночам"}
       - {id: 10, cat: Movies, desc: "Мёд в голове"}
       - {id: 16, cat: Movies, desc: "Малыш"}
       - {id: 18, cat: Movies, desc: "Копенгаген"}
@@ -51,7 +54,6 @@
       - {id: 100, cat: TV, desc: "Смертельное оружие"}
       - {id: 101, cat: TV, desc: "Гавайи 5-0"}
       - {id: 102, cat: TV, desc: "Черный Список"}
-      - {id: 103, cat: TV, desc: "Нелюди"}
       - {id: 106, cat: TV, desc: "Одаренные"}
       - {id: 107, cat: TV, desc: "Теория большого взрыва"}
       - {id: 108, cat: TV, desc: "Ходячие мертвецы"}
@@ -100,7 +102,6 @@
       - {id: 175, cat: TV, desc: "Каратель"}
       - {id: 176, cat: TV, desc: "Матрёшка"}
       - {id: 177, cat: TV, desc: "Берлинская резидентура"}
-      - {id: 178, cat: TV, desc: "Настоящий Детектив"}
       - {id: 179, cat: TV, desc: "Половое Просвещение"}
       - {id: 180, cat: TV, desc: "АКАДЕМИЯ АМБРЕЛЛА"}
       - {id: 181, cat: TV, desc: "Сорвиголова"}
@@ -111,8 +112,12 @@
       - {id: 186, cat: TV, desc: "Изгнание"}
       - {id: 187, cat: TV, desc: "Крупный Город"}
       - {id: 190, cat: TV, desc: "Кобра Кай"}
+      - {id: 191, cat: TV, desc: "Студия 60 на Сансет Стрип"}
       - {id: 197, cat: TV, desc: "Западное крыло"}
       - {id: 199, cat: TV, desc: "Семь миров, одна планета"}
+      - {id: 203, cat: TV, desc: "Книга Рабов"}
+      - {id: 204, cat: TV, desc: "Ведьмак"}
+      - {id: 205, cat: TV, desc: "Из Ларк Райз в Кэндлфорд"}
       - {id: 9, cat: TV, desc: "Иерихон"}
       - {id: 11, cat: TV, desc: "11-22-63"}
       - {id: 12, cat: TV, desc: "Апокалипсис: Первая мировая война"}
@@ -246,11 +251,11 @@
         selector: div.size
         filters:
           - name: replace
-            args: [".", ""] 
+            args: [".", ""]
           - name: replace
-            args: [",", "."] 
+            args: [",", "."]
           - name: replace
-            args: ["ТБ", "TB"] 
+            args: ["ТБ", "TB"]
           - name: replace
             args: ["ГБ", "GB"]
           - name: replace

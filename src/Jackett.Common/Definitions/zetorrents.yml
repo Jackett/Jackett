@@ -31,7 +31,7 @@
       - path: "{{ if .Keywords }}recherche/{{ .Keywords }}{{else}}{{end}}"
 
     rows:
-      selector: table.table > tbody > tr
+      selector: table.table > tbody > tr:has(a[href^="/torrent/"])
 
     fields:
       category:

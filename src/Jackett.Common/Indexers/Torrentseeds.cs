@@ -44,11 +44,11 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
-            AddCategoryMapping(23, TorznabCatType.PC0day, "Apps/0DAY");
+            AddCategoryMapping(13, TorznabCatType.PC0day, "Apps/0DAY");
             AddCategoryMapping(37, TorznabCatType.TVAnime, "Anime/HD");
             AddCategoryMapping(9, TorznabCatType.TVAnime, "Anime/SD");
             AddCategoryMapping(1, TorznabCatType.PC0day, "Apps");
-            AddCategoryMapping(27, TorznabCatType.Books, "Bookware");
+            AddCategoryMapping(27, TorznabCatType.Books, "APPS/TUTORIALS");
             AddCategoryMapping(32, TorznabCatType.BooksEbook, "EBooks");
             AddCategoryMapping(47, TorznabCatType.ConsoleOther, "Games/NSW");
             AddCategoryMapping(60, TorznabCatType.ConsoleOther, "Games/ATARI");
@@ -97,6 +97,11 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(26, TorznabCatType.TVHD, "TV/X264");
             AddCategoryMapping(61, TorznabCatType.TVUHD, "TV/2160P");
             AddCategoryMapping(64, TorznabCatType.TVFOREIGN, "TV/X264-FOREIGN");
+            AddCategoryMapping(66, TorznabCatType.ConsoleOther, "ARCHIVE/NSW");
+            AddCategoryMapping(68, TorznabCatType.Audio, "Music/Packs");
+            AddCategoryMapping(67, TorznabCatType.TVHD, "TV-HD/Pack");
+            AddCategoryMapping(65, TorznabCatType.TVSD, "TV-SD/Pack");
+            AddCategoryMapping(12, TorznabCatType.PCGames, "Games/PC Rips");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

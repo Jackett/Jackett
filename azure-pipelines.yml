@@ -314,15 +314,6 @@ stages:
           arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework)'
 
       - task: DotNetCoreCLI@2
-        displayName: Unit Tests (Windows only)
-        condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
-        inputs:
-          command: test
-          projects: '**/*.Test*/*.csproj'
-          arguments: '--configuration $(buildConfiguration) --framework $(framework)'
-          testRunTitle: 'Unit - $(buildDescription) - $(Build.BuildId)'
-
-      - task: DotNetCoreCLI@2
         displayName: Unit Tests (Mono, Linux and macOS)
         condition: and(succeeded(), not(startsWith(variables['runtime'], 'win')))
         inputs:
@@ -331,6 +322,37 @@ stages:
           arguments: '--configuration $(buildConfiguration) --framework $(framework) --runtime $(runtime)'
           testRunTitle: 'Unit - $(buildDescription) - $(Build.BuildId)'
 
+      - task: DotNetCoreCLI@2
+        displayName: Unit Tests & Code Coverage (Windows only)
+        condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
+        inputs:
+          command: test
+          projects: '**/*.Test*/*.csproj'
+          arguments: '--configuration $(buildConfiguration) --framework $(framework) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura'
+          testRunTitle: 'Unit - $(buildDescription) - $(Build.BuildId)'
+
+      - task: DotNetCoreCLI@2
+        displayName: Install Coverage ReportGenerator Tool (Windows only)
+        condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
+        inputs:
+          command: custom
+          custom: tool
+          arguments: install --tool-path . dotnet-reportgenerator-globaltool
+
+      - task: PowerShell@2
+        displayName: Generate Coverage Report (Windows only)
+        condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
+        inputs:
+          targetType: inline
+          script: ./reportgenerator -reports:$(Build.SourcesDirectory)/src/*.Test*/coverage.*.cobertura.xml -targetdir:$(Build.SourcesDirectory)/coverlet/reports -reporttypes:"Cobertura"
+
+      - task: PublishCodeCoverageResults@1
+        displayName: Publish Code Coverage (Windows only)
+        condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
+        inputs:
+          codeCoverageTool: Cobertura
+          summaryFileLocation: $(Build.SourcesDirectory)/coverlet/reports/Cobertura.xml
+        
 
   - stage: Integration
     displayName: Integration Tests
@@ -349,11 +371,10 @@ stages:
             buildDescription: Windows
             imageName: windows-latest
             artifactName: Jackett.Binaries.Windows.zip
-          # Enable once ChromeDriver is deployed to macOS image https://github.com/actions/virtual-environments/issues/7
-          # macOS:
-          #   buildDescription: macOS
-          #   imageName: macOS-latest
-          #   artifactName: Jackett.Binaries.macOS.tar.gz
+          macOS:
+            buildDescription: macOS
+            imageName: macOS-latest
+            artifactName: Jackett.Binaries.macOS.tar.gz
           LinuxAmdx64:
             buildDescription: Linux AMD x64
             imageName: ubuntu-latest
@@ -390,7 +411,7 @@ stages:
             cd Jackett
             if [[ "$(artifactName)" == *"Mono"* ]]; then mono --version; fi
             if [[ "$(artifactName)" == *"Mono"* ]]; then sudo ./install_service_systemd_mono.sh; fi
-            if [[ "$(artifactName)" == *"macOS"* ]]; then sudo ./install_service_macos; fi
+            if [[ "$(artifactName)" == *"macOS"* ]]; then ./install_service_macos; fi
             if [[ "$(artifactName)" == *"LinuxAMDx64"* ]]; then sudo ./install_service_systemd.sh; fi
 
       - task: UseDotNet@2
