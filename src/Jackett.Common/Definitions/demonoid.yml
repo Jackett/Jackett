@@ -14,6 +14,7 @@
 
   caps:
     categorymappings:
+    # fetch these from https://www.demonoid.is/cached/torrent_categories_script.js?v5
       # Applications
       - {id: 1, cat: PC/Phone-Android, desc: "Applications Android"}
       - {id: 2, cat: PC/Phone-IOS, desc: "Applications Iphone / Ipod touch"}
@@ -131,6 +132,7 @@
       - {id: 108, cat: TV/Anime, desc: "Anime Horror"}
       - {id: 109, cat: TV/Anime, desc: "Anime Other"}
       - {id: 157, cat: TV/Anime, desc: "Anime Romance"}
+      - {id: 158, cat: TV/Anime, desc: "Anime Sci-Fi"}
       # Movies
       - {id: 151, cat: Movies, desc: "Movies Action"}
       - {id: 110, cat: Movies, desc: "Movies Adventure"}
@@ -260,14 +262,21 @@
       - {id: 233, cat: TV, desc: "TV Trailers"}
       - {id: 234, cat: TV, desc: "TV War"}
       - {id: 235, cat: TV, desc: "TV Western"}
-      # cat misc has no subcats
+      # cat 7 misc has no subcats
 
     modes:
-      search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
+      search: [q, imdbid]
+      tv-search: [q, season, ep, imdbid]
+      movie-search: [q, imdbid]
 
   settings:
+    - name: cookie
+      type: text
+      label: Cookie
+    - name: info
+      type: info
+      label: How to get the Cookie
+      default: "<ol><li>Access this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
     - name: sort
       type: select
       label: Sort requested from site
@@ -284,14 +293,19 @@
         "desc": "desc"
         "asc": "asc"
 
+  login:
+    method: cookie
+    test:
+      path: files/
+
   download:
     selector: a[href^="magnet:?xt="]
     attribute: href
 
   search:
     paths:
-      # https://www.demonoid.is/files/?c154&language=0&quality=0&seeded=2&query=world&to=on&sort=
-      # https://www.demonoid.is/files/?seeded=2&language=0&quality=0&to=on&query=world
+      # https://www.demonoid.is/files/?c154&language=0&quality=0&seeded=2&query=world&to=1&sort=
+      # https://www.demonoid.is/files/?seeded=2&language=0&quality=0&to=1&query=world
       - path: files/
     inputs:
       $raw: "{{ range .Categories }}c{{.}}&{{end}}"
@@ -302,10 +316,11 @@
       # 0 all
       quality: 0
       # search in titles only
-      to: on
-      query: "{{ .Keywords }}"
+      to: "{{ if .Query.IMDBID }}{{else}}1{{end}}"
+      query: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
       sort: "{{ .Config.sort }}"
       order: "{{ .Config.type }}"
+      # does not return imdb link in results
 
     rows:
       selector: table.font_12px tr:has(td[class^="tone_1"])
@@ -326,7 +341,7 @@
         optional: true
         attribute: title
       category:
-        selector:  a[href*="&subcategory="]
+        selector:  span > a[href*="&subcategory="]
         attribute: href
         optional: true
         filters:
