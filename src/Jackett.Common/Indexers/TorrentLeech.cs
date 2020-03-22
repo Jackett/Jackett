@@ -51,6 +51,7 @@ namespace Jackett.Common.Indexers
             TorznabCaps.SupportsImdbMovieSearch = true;
             TorznabCaps.SupportsImdbTVSearch = true;
 
+            AddCategoryMapping(1, TorznabCatType.Movies, "Movies");
             AddCategoryMapping(8, TorznabCatType.MoviesSD, "Movies Cam");
             AddCategoryMapping(9, TorznabCatType.MoviesSD, "Movies TS/TC");
             AddCategoryMapping(11, TorznabCatType.MoviesSD, "Movies DVDRip/DVDScreener");
@@ -64,11 +65,13 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(37, TorznabCatType.MoviesWEBDL, "Movies WEBRip");
             AddCategoryMapping(43, TorznabCatType.MoviesHD, "Movies HDRip");
 
+            AddCategoryMapping(2, TorznabCatType.TV, "TV");
             AddCategoryMapping(26, TorznabCatType.TVSD, "TV Episodes");
             AddCategoryMapping(27, TorznabCatType.TV, "TV Boxsets");
             AddCategoryMapping(32, TorznabCatType.TVHD, "TV Episodes HD");
             AddCategoryMapping(44, TorznabCatType.TVFOREIGN, "TV Foreign");
 
+            AddCategoryMapping(3, TorznabCatType.PCGames, "Games");
             AddCategoryMapping(17, TorznabCatType.PCGames, "Games PC");
             AddCategoryMapping(18, TorznabCatType.ConsoleXbox, "Games XBOX");
             AddCategoryMapping(19, TorznabCatType.ConsoleXbox360, "Games XBOX360");
@@ -82,19 +85,24 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(42, TorznabCatType.PCMac, "Games Mac");
             AddCategoryMapping(48, TorznabCatType.ConsoleOther, "Games Nintendo Switch");
 
+            AddCategoryMapping(4, TorznabCatType.Audio, "Music");
             AddCategoryMapping(16, TorznabCatType.AudioVideo, "Music videos");
             AddCategoryMapping(31, TorznabCatType.Audio, "Audio");
 
+            AddCategoryMapping(7, TorznabCatType.TV, "Animation");
             AddCategoryMapping(34, TorznabCatType.TVAnime, "TV Anime");
             AddCategoryMapping(35, TorznabCatType.TV, "TV Cartoons");
 
+            AddCategoryMapping(5, TorznabCatType.Books, "Books");
             AddCategoryMapping(45, TorznabCatType.BooksEbook, "Books EBooks");
             AddCategoryMapping(46, TorznabCatType.BooksComics, "Books Comics");
 
+            AddCategoryMapping(6, TorznabCatType.PC, "Apps");
             AddCategoryMapping(23, TorznabCatType.PCISO, "PC ISO");
             AddCategoryMapping(24, TorznabCatType.PCMac, "PC Mac");
             AddCategoryMapping(25, TorznabCatType.PCPhoneOther, "PC Mobile");
             AddCategoryMapping(33, TorznabCatType.PC0day, "PC 0-day");
+            AddCategoryMapping(38, TorznabCatType.Other, "Education");
         }
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
@@ -239,6 +247,7 @@ namespace Jackett.Common.Indexers
                     release.Peers = release.Seeders + ParseUtil.CoerceInt(torrent.leechers.ToString());
 
                     release.Category = MapTrackerCatToNewznab(torrent.categoryID.ToString());
+                    release.Description = torrent.categoryID.ToString();
 
                     release.Grabs = ParseUtil.CoerceInt(torrent.completed.ToString());
 
