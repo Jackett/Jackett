@@ -22,6 +22,7 @@ pr:
 stages:
   - stage: BuildJackett
     displayName: Create Binaries
+    dependsOn: UnitTestJackett
     jobs:
     - job: Build
       workspace:
@@ -257,6 +258,7 @@ stages:
 
   - stage: UnitTestJackett
     displayName: Unit Tests
+    dependsOn: []
     jobs:
     - job: UnitTest
       workspace:
@@ -314,15 +316,6 @@ stages:
           arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework)'
 
       - task: DotNetCoreCLI@2
-        displayName: Unit Tests (Windows only)
-        condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
-        inputs:
-          command: test
-          projects: '**/*.Test*/*.csproj'
-          arguments: '--configuration $(buildConfiguration) --framework $(framework)'
-          testRunTitle: 'Unit - $(buildDescription) - $(Build.BuildId)'
-
-      - task: DotNetCoreCLI@2
         displayName: Unit Tests (Mono, Linux and macOS)
         condition: and(succeeded(), not(startsWith(variables['runtime'], 'win')))
         inputs:
@@ -331,6 +324,33 @@ stages:
           arguments: '--configuration $(buildConfiguration) --framework $(framework) --runtime $(runtime)'
           testRunTitle: 'Unit - $(buildDescription) - $(Build.BuildId)'
 
+      - task: DotNetCoreCLI@2
+        displayName: Unit Tests & Code Coverage (Windows only)
+        condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
+        inputs:
+          command: test
+          projects: '**/*.Test*/*.csproj'
+          arguments: '--configuration $(buildConfiguration) --framework $(framework) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura'
+          testRunTitle: 'Unit - $(buildDescription) - $(Build.BuildId)'
+
+      - task: DotNetCoreCLI@2
+        displayName: Install Coverage ReportGenerator Tool
+        condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
+        inputs:
+          command: custom
+          custom: tool
+          arguments: install --tool-path . dotnet-reportgenerator-globaltool
+      
+      - script: ./reportgenerator -reports:$(Build.SourcesDirectory)/src/*.Test*/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/coverlet/reports -reporttypes:"Cobertura"
+        displayName: Create reports
+
+      - task: PublishCodeCoverageResults@1
+        displayName: Publish Code Coverage
+        condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
+        inputs:
+          codeCoverageTool: Cobertura
+          summaryFileLocation: $(Build.SourcesDirectory)/coverlet/reports/Cobertura.xml
+        
 
   - stage: Integration
     displayName: Integration Tests
