@@ -352,6 +352,7 @@ namespace Jackett.Updater
                 "Definitions/scenereactor.yml",
                 "Definitions/scenexpress.yml",
                 "Definitions/secretcinema.yml", // migrated to C# gazelle base tracker
+                "Definitions/seedpeer.yml",
                 "Definitions/sharingue.yml",
                 "Definitions/skytorrents.yml",
                 "Definitions/solidtorrents.yml", // migrated to C#
