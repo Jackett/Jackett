@@ -389,8 +389,8 @@ stages:
             cd Jackett
             if [[ "$(artifactName)" == *"Mono"* ]]; then mono --version; fi
             if [[ "$(artifactName)" == *"Mono"* ]]; then sudo ./install_service_systemd_mono.sh; fi
-            if [[ "$(artifactName)" == *"macOS"* ]]; then sudo xattr -r -d com.apple.quarantine $(Build.ArtifactStagingDirectory)/drop/Jackett; fi
-            if [[ "$(artifactName)" == *"macOS"* ]]; then sudo ./install_service_macos; fi
+            if [[ "$(artifactName)" == *"macOS"* ]]; then xattr -r -d com.apple.quarantine $(Build.ArtifactStagingDirectory)/drop/Jackett; fi
+            if [[ "$(artifactName)" == *"macOS"* ]]; then ./install_service_macos; fi
             if [[ "$(artifactName)" == *"macOS"* ]]; then ls -laR $(Build.ArtifactStagingDirectory)/drop/Jackett; fi
             if [[ "$(artifactName)" == *"LinuxAMDx64"* ]]; then sudo ./install_service_systemd.sh; fi
 
