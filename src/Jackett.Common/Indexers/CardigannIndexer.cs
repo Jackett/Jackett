@@ -1478,17 +1478,14 @@ namespace Jackett.Common.Indexers
                                             break;
                                         case "category":
                                             var cats = MapTrackerCatToNewznab(value);
-                                            if (release.Category == null)
+                                            if (cats.Any())
                                             {
-                                                release.Category = cats;
-                                            }
-                                            else
-                                            {
-                                                foreach (var cat in cats)
-                                                {
-                                                    if (!release.Category.Contains(cat))
-                                                        release.Category.Add(cat);
-                                                }
+                                                if (release.Category == null || FieldModifiers.Contains("noappend"))
+                                                    release.Category = cats;
+                                                else
+                                                    foreach (var cat in cats)
+                                                        if (!release.Category.Contains(cat))
+                                                            release.Category.Add(cat);
                                             }
                                             value = release.Category.ToString();
                                             break;
