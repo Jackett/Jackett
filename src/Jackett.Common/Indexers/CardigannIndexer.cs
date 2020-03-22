@@ -1483,9 +1483,7 @@ namespace Jackett.Common.Indexers
                                                 if (release.Category == null || FieldModifiers.Contains("noappend"))
                                                     release.Category = cats;
                                                 else
-                                                    foreach (var cat in cats)
-                                                        if (!release.Category.Contains(cat))
-                                                            release.Category.Add(cat);
+                                                    release.Category = release.Category.Union(cats).ToList();
                                             }
                                             value = release.Category.ToString();
                                             break;
