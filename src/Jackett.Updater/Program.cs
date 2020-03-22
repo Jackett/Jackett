@@ -362,6 +362,7 @@ namespace Jackett.Updater
                 "Definitions/tazmaniaden.yml",
                 "Definitions/tbplus.yml",
                 "Definitions/tehconnection.yml",
+                "Definitions/tfile.yml",
                 "Definitions/themoviecave.yml",
                 "Definitions/theresurrection.yml",
                 "Definitions/thetorrents.yml",
