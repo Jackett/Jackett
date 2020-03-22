@@ -33,7 +33,6 @@
       "Applications": PC
       "Images": Other
       "Other": Other
-      
 
     modes:
       search: [q]
@@ -94,6 +93,9 @@
         selector: div > span:nth-child(4)
       size:
         selector: div > span:nth-child(5)
+        filters:
+          - name: re_replace # 1.014.2 MB => 1014.2 MB
+            args: ["\\.([0-9]{3})", "$1"]
       seeders:
         selector: div > span:nth-child(2)
         filters:
