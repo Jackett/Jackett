@@ -334,18 +334,22 @@ stages:
           testRunTitle: 'Unit - $(buildDescription) - $(Build.BuildId)'
 
       - task: DotNetCoreCLI@2
-        displayName: Install Coverage ReportGenerator Tool
+        displayName: Install Coverage ReportGenerator Tool (Windows only)
         condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
         inputs:
           command: custom
           custom: tool
           arguments: install --tool-path . dotnet-reportgenerator-globaltool
-      
-      - script: ./reportgenerator -reports:$(Build.SourcesDirectory)/src/*.Test*/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/coverlet/reports -reporttypes:"Cobertura"
-        displayName: Create reports
+
+      - task: PowerShell@2
+        displayName: Generate Coverage Report (Windows only)
+        condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
+        inputs:
+          targetType: inline
+          script: ./reportgenerator -reports:$(Build.SourcesDirectory)/src/*.Test*/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/coverlet/reports -reporttypes:"Cobertura"
 
       - task: PublishCodeCoverageResults@1
-        displayName: Publish Code Coverage
+        displayName: Publish Code Coverage (Windows only)
         condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
         inputs:
           codeCoverageTool: Cobertura
