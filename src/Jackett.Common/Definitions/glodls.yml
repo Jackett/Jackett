@@ -6,7 +6,9 @@
   type: public
   encoding: UTF-8
   links:
+    - https://gtdb.to/
     - https://glodls.to/
+  legacylinks:
     - https://glodls.rocks/
 
   caps:
