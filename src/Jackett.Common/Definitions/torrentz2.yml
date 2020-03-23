@@ -9,6 +9,8 @@
   links:
     - https://torrentz2.eu/
     - https://torrentz.unblockit.pro/
+  legacylinks:
+    - https://torrentz2.unblockninja.com/ # proxy fails at DDoS protection
 
   caps:
     categories:
