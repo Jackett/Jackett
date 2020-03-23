@@ -59,8 +59,11 @@
 
   search:
     paths:
-    # https://vww.cpasbien-fr.fr/index.php?do=search&subaction=search&story=dickinson%20s01e10
-      - path: "{{ if .Keywords }}index.php?do=search&subaction=search&story={{ .Keywords }}{{else}}{{end}}"
+      - path: "{{ if .Keywords }}index.php?do=search&subaction=search{{else}}{{end}}"
+        method: post
+    inputs:
+      story: "{{ if .Keywords }}{{ .Keywords }}{{else}}{{end}}"
+    # does not support imdbid search and does not return imdb link in results.
 
     rows:
       selector: div#gauche > table > tbody > tr:has(a)
