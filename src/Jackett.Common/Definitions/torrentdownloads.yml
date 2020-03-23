@@ -5,10 +5,11 @@
   language: en-us
   type: public
   encoding: UTF-8
+  followredirect: true
   links:
     - https://www.torrentdownloads.info/
-  legacylinks:
-    - https://www.torrentdownloads.me/ # ERR_NAME_RESOLUTION_FAILED
+    - https://www.torrentdownloads.me/
+    - https://torrentdownloads.unblockit.pro/
 
   caps:
     categorymappings:
