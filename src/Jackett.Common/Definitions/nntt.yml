@@ -7,6 +7,11 @@
   encoding: UTF-8
   links:
     - http://www.nntt.org/ # site does not support https ERR_CONNECTION_REFUSED
+    - https://nntt.black-mirror.xyz/
+    - https://nntt.unblocked.casa/
+    - https://nntt.proxyportal.fun/
+    - https://nntt.uk-unblock.xyz/
+    - https://nntt.ind-unblock.xyz/
 
   caps:
     categorymappings:

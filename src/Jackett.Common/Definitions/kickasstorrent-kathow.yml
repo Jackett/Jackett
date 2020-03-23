@@ -5,8 +5,10 @@
   language: en-us
   type: public
   encoding: UTF-8
+  followredirect: true
   links:
     - https://kickass.ws/
+    - https://kickass.unblockit.pro/
   legacylinks:
     - https://kickass.gg/
     - https://katcr.io/
@@ -14,6 +16,7 @@
     - https://thekat.se/
     - https://kat.how/
     - https://kat.li/
+    - https://kickasstorrents.unblockninja.com/ # currently not responding
 
   caps:
     categories:
