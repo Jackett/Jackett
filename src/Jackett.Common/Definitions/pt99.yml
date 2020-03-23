@@ -85,8 +85,8 @@
       # 0 all 1 bookmrk 2 not
       inclbookmarked: 0
       search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-      # 0 title 1 descr 3 uploader 4 imdb
-      search_area: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
+      # 0 title 1 descr 3 uploader 4 imdburl (searching imdburl does not work with tt1234567, but descr is good)
+      search_area: "{{ if .Query.IMDBID }}1{{else}}0{{end}}"
       # 0 AND 1 OR 2 exact
       search_mode: 0
       sort: "{{ .Config.sort }}"
