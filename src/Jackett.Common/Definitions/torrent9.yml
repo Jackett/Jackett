@@ -8,6 +8,7 @@
   followredirect: true
   links:
     - https://www.oxtorrent.me/
+    - https://www.torrent9.pl/
 
   legacylinks:
     - http://www.torrent9.ec/
@@ -34,6 +35,7 @@
     - https://www.torrent9.is/
     - https://www4.torrent9.to/
     - https://www.torrent09.uno/
+    - https://torrent9.unblockninja.com/ # .torrent file download currently broken
 
   caps:
     categorymappings:
