@@ -282,6 +282,7 @@ namespace Jackett.Updater
                 "Definitions/archetorrent.yml",
                 "Definitions/asiandvdclub.yml",
                 "Definitions/avg.yml",
+                "Definitions/awesomehd.yml", // migrated to C#
                 "Definitions/b2s-share.yml",
                 "Definitions/bithq.yml",
                 "Definitions/bitme.yml",
