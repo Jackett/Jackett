@@ -91,6 +91,8 @@
         selector: div.tt-name > a[href^="/"]
         attribute: href
       category:
+        text: Other
+      category|noappend:
         optional: true
         selector: td:nth-child(2)
         filters:
