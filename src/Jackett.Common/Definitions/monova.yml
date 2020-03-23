@@ -10,6 +10,8 @@
     - https://monova.org/
     - https://monova.to/
     - https://monova.unblockit.pro/
+  legacylinks:
+    - https://monova.unblockninja.com/ # currently redirects to https://monova.org/
 
   caps:
     categories:
