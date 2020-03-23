@@ -5,9 +5,11 @@
   language: en-us
   type: public
   encoding: UTF-8
+  followredirect: true
   links:
     - https://gtdb.to/
     - https://glodls.to/
+    - https://glotorrents.unblockit.pro/
   legacylinks:
     - https://glodls.rocks/
 
