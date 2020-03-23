@@ -125,6 +125,8 @@
           - name: append
             args: "&dn={{ .Result.magfile }}.torrent&tr=udp://tracker.coppersurfer.tk:6969&tr=udp://tracker.leechers-paradise.org:6969&tr=udp://tracker.opentrackr.org:1337"
       category:
+        text: other
+      category|noappend:
         optional: true
         selector: dt
         remove: a
