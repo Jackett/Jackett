@@ -12,6 +12,7 @@
 
   caps:
     categories:
+      "other": Other
       # category=
       "album": Audio
       "ebook": Books
@@ -53,13 +54,15 @@
       title:
         selector: td a
       category:
+        text: other
+      category|noappend:
         # try category=
-        optional: true
         selector: a.label[href*="category="]
-      category:
-        # try type=
         optional: true
+      category|noappend:
+        # try type=
         selector: a.label[href*="type="]
+        optional: true
       details:
         selector: td a
         attribute: href
