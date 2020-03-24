@@ -138,17 +138,18 @@ namespace Jackett.Common.Indexers
                             descriptions.Add("Origin: " + btnResult.Origin);
                         if (!string.IsNullOrWhiteSpace(btnResult.Series))
                             descriptions.Add("Youtube Trailer: <a href=\"" + btnResult.YoutubeTrailer + "\">" + btnResult.YoutubeTrailer + "</a>");
-
+                        var imdb = ParseUtil.GetImdbID(btnResult.ImdbID);
                         var guid = new Uri(btnResult.DownloadURL);
+                        var comments = new Uri($"{SiteLink}torrents.php?id={btnResult.GroupID}&torrentid={btnResult.TorrentID}");
+                        var publishDate = DateTimeUtil.UnixTimestampToDateTime(btnResult.Time);
                         var item = new ReleaseInfo
                         {
                             Category = MapTrackerCatToNewznab(btnResult.Resolution),
-                            Comments =
-                                new Uri($"{SiteLink}torrents.php?id={btnResult.GroupID}&torrentid={btnResult.TorrentID}"),
+                            Comments = comments,
                             Guid = guid,
                             Link = guid,
                             MinimumRatio = 1,
-                            PublishDate = DateTimeUtil.UnixTimestampToDateTime(btnResult.Time),
+                            PublishDate = publishDate,
                             RageID = btnResult.TvrageID,
                             Seeders = btnResult.Seeders,
                             Peers = btnResult.Seeders + btnResult.Leechers,
@@ -158,17 +159,13 @@ namespace Jackett.Common.Indexers
                             UploadVolumeFactor = 1,
                             DownloadVolumeFactor = 0, // ratioless
                             Grabs = btnResult.Snatched,
-                            Description = string.Join("<br />\n", descriptions)
+                            Description = string.Join("<br />\n", descriptions),
+                            Imdb = imdb
                         };
-
                         if (!string.IsNullOrEmpty(btnResult.SeriesBanner))
                             item.BannerUrl = new Uri(btnResult.SeriesBanner);
-                        if (item.Category.Count == 0) // default to TV
+                        if (!item.Category.Any()) // default to TV
                             item.Category.Add(TorznabCatType.TV.ID);
-                        if (!string.IsNullOrWhiteSpace(btnResult.ImdbID))
-                            item.Imdb = ParseUtil.CoerceLong(btnResult.ImdbID);
-
-
 
                         releases.Add(item);
                     }

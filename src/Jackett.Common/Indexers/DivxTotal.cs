@@ -294,14 +294,14 @@ namespace Jackett.Common.Indexers
         private void GenerateRelease(ICollection<ReleaseInfo> releases, string title, string commentsLink,
             string downloadLink, string cat, DateTime publishDate, long size)
         {
-            var guid = new Uri(downloadLink);
-
+            var link = new Uri(downloadLink);
+            var comments = new Uri(commentsLink);
             releases.Add(new ReleaseInfo
             {
                 Title = title,
-                Comments = new Uri(commentsLink),
-                Link = guid,
-                Guid = guid,
+                Comments = comments,
+                Link = link,
+                Guid = link,
                 Category = MapTrackerCatToNewznab(cat),
                 PublishDate = publishDate,
                 Size = size,

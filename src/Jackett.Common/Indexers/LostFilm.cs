@@ -718,7 +718,7 @@ namespace Jackett.Common.Indexers
                         sizeString = sizeString.Replace("ГБ", "GB");
                         sizeString = sizeString.Replace("МБ", "MB");
                         sizeString = sizeString.Replace("КБ", "KB"); // untested
-                        var guid = new Uri(downloadLink.GetAttribute("href"));
+                        var link = new Uri(downloadLink.GetAttribute("href"));
 
                         // TODO this feels sparse compared to other trackers. Expand later
                         var release = new ReleaseInfo
@@ -728,8 +728,8 @@ namespace Jackett.Common.Indexers
                                 TorznabCatType.TV.ID
                             },
                             Title = string.Join(" - ", titleComponents.Where(s => !string.IsNullOrEmpty(s))),
-                            Link = guid,
-                            Guid = guid,
+                            Link = link,
+                            Guid = link,
                             Size = ReleaseInfo.GetBytes(sizeString),
                             // add missing torznab fields not available from results
                             Seeders = 1,

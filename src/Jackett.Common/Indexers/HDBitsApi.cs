@@ -125,25 +125,25 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
             foreach (JObject r in response["data"])
             {
-                var guid = new Uri(
+                var link = new Uri(
                     SiteLink + "download.php/" + (string)r["filename"] + "?id=" + (string)r["id"] + "&passkey=" +
                     configData.Passkey.Value);
                 var seeders = (int)r["seeders"];
-
+                var publishDate = DateTimeUtil.UnixTimestampToDateTime((int)r["utadded"]);
                 var release = new ReleaseInfo
                 {
                     Title = (string)r["name"],
                     Comments = new Uri(SiteLink + "details.php?id=" + (string)r["id"]),
-                    Link = guid,
+                    Link = link,
                     Category = MapTrackerCatToNewznab((string)r["type_category"]),
                     Size = (long)r["size"],
                     Files = (long)r["numfiles"],
                     Grabs = (long)r["times_completed"],
                     Seeders = seeders,
-                    PublishDate = DateTimeUtil.UnixTimestampToDateTime((int)r["utadded"]),
+                    PublishDate = publishDate,
                     UploadVolumeFactor = GetUploadFactor(r),
                     DownloadVolumeFactor = GetDownloadFactor(r),
-                    Guid = guid,
+                    Guid = link,
                     Peers = seeders + (int)r["leechers"]
                 };
 

@@ -288,23 +288,26 @@ namespace Jackett.Common.Indexers
                         var Time = qTime.GetAttribute("title");
                         var guid = new Uri(SiteLink + qDLLink.GetAttribute("href"));
                         var seeders = ParseUtil.CoerceInt(qSeeders.TextContent);
-
+                        var publishDate = DateTime.SpecifyKind(
+                            DateTime.ParseExact(Time, "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture),
+                            DateTimeKind.Unspecified).ToLocalTime();
+                        var comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
+                        var grabs = ParseUtil.CoerceLong(qGrabs.TextContent);
+                        var leechers = ParseUtil.CoerceInt(qLeechers.TextContent);
                         releases.Add(new ReleaseInfo
                         {
                             MinimumRatio = 1,
-                            MinimumSeedTime = 80 * 3600,
+                            MinimumSeedTime = 288000, //80 hours
                             Category = GroupCategory,
                             PublishDate =
-                                DateTime.SpecifyKind(
-                                    DateTime.ParseExact(Time, "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture),
-                                    DateTimeKind.Unspecified).ToLocalTime(),
+                                publishDate,
                             Size = ReleaseInfo.GetBytes(Size),
-                            Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href")),
+                            Comments = comments,
                             Link = guid,
                             Guid = guid,
-                            Grabs = ParseUtil.CoerceLong(qGrabs.TextContent),
+                            Grabs = grabs,
                             Seeders = seeders,
-                            Peers = ParseUtil.CoerceInt(qLeechers.TextContent) + seeders,
+                            Peers = leechers + seeders,
                             Title = title,
                             Description = qDescription?.TextContent,
                             UploadVolumeFactor = qNeutralLeech is null ? 1 : 0,

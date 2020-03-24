@@ -205,27 +205,25 @@ namespace Jackett.Common.Indexers.Abstract
                     var groupTime = DateTimeUtil.UnixTimestampToDateTime(long.Parse((string)r["groupTime"]));
                     var groupName = WebUtility.HtmlDecode((string)r["groupName"]);
                     var artist = WebUtility.HtmlDecode((string)r["artist"]);
-                    if (!string.IsNullOrEmpty(artist))
-                        artist += " - ";
                     var cover = (string)r["cover"];
                     var tags = r["tags"].ToList();
                     var groupYear = (string)r["groupYear"];
-                    groupYear = !string.IsNullOrEmpty(groupYear) && groupYear != "0"
-                        ? $" [{groupYear}]"
-                        : string.Empty;
                     var releaseType = (string)r["releaseType"];
-                    releaseType = !string.IsNullOrEmpty(releaseType) && releaseType != "Unknown"
-                        ? $" [{releaseType}]"
-                        : string.Empty;
-
-                    var description = !string.IsNullOrEmpty(tags?.FirstOrDefault()?.ToObject<string>())
-                        ? $"Tags: {string.Join(", ", tags)}\n"
-                        : string.Empty;
-
+                    var title = new StringBuilder();
+                    if (!string.IsNullOrEmpty(artist))
+                        title.Append(artist + " - ");
+                    title.Append(groupName);
+                    if (!string.IsNullOrEmpty(groupYear) && groupYear != "0")
+                        title.Append(" [" + groupYear + "]");
+                    if (!string.IsNullOrEmpty(releaseType) && releaseType != "Unknown")
+                        title.Append(" [" + releaseType + "]");
+                    var description = tags?.Any() == true && !string.IsNullOrEmpty(tags[0].ToString())
+                        ? "Tags: " + string.Join(", ", tags) + "\n"
+                        : null;
                     var release = new ReleaseInfo
                     {
                         PublishDate = groupTime,
-                        Title = $"{artist}{groupName}{groupYear}{releaseType}",
+                        Title = title.ToString(),
                         Description = description,
                     };
 

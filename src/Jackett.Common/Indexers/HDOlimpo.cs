@@ -177,7 +177,8 @@ namespace Jackett.Common.Indexers
 	                    bannerUrl = new Uri(BannerUrl + (string)(torrent["portada"]["hash"]) + "." + (string)(torrent["portada"]["ext"]));
 
                     var seeders = (int)torrent["seeders"];
-
+                    var link = new Uri(DownloadUrl + (string)torrent["id"]);
+                    var fileCount = ((JArray)JsonConvert.DeserializeObject<dynamic>((string)torrent["files_list"])).Count;
                     releases.Add(new ReleaseInfo
                     {
                         Title = title,
@@ -185,8 +186,8 @@ namespace Jackett.Common.Indexers
                         Size = (long)torrent["size"],
                         Grabs = (long)torrent["snatched"],
                         InfoHash = (string)torrent["plain_info_hash"],
-                        Link = new Uri(DownloadUrl + (string)torrent["id"]),
-                        Files = ((JArray)JsonConvert.DeserializeObject<dynamic>((string)torrent["files_list"])).Count,
+                        Link = link,
+                        Files = fileCount,
                         DownloadVolumeFactor = (string)torrent["freetorrent"] == "0" ? 1 : 0,
                         UploadVolumeFactor = (string)torrent["doubletorrent"] == "0" ? 1 : 2,
                         MinimumRatio = 1,
