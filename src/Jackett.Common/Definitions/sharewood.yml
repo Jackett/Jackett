@@ -79,6 +79,7 @@
   login:
     path: login
     method: form
+    form: form[action*="/login"]
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
@@ -88,10 +89,7 @@
         selector: meta[name="csrf-token"]
         attribute: content
     error:
-      - selector: form[action$="/login"] .text-red
-    test:
-      path: /
-      selector: a[href$="/logout"]
+      - selector: div#ERROR_COPY
 
   ratio:
     path: /
