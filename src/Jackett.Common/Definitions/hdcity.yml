@@ -179,7 +179,7 @@
         optional: true
         filters:
           - name: append
-            args: " [Spanish]"
+            args: " [Spanish] [English]"
           - name: re_replace
             args: ["(?i)T[\\s-_]?(\\d{1,2})\\b", " S$1 "]
           - name: re_replace
