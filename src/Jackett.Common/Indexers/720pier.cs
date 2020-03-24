@@ -211,7 +211,7 @@ namespace Jackett.Common.Indexers
 
                         var author = row.QuerySelector("dd.lastpost > span");
                         var timestr = author.TextContent.Split('\n')
-                            .Where(str => !str.IsNullOrEmptyOrWhitespace()) //Filter blank lines
+                            .Where(str => !string.IsNullOrWhiteSpace(str)) //Filter blank lines
                             .Skip(1) //Skip author name
                             .FirstOrDefault()
                             .Trim();

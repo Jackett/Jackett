@@ -47,7 +47,7 @@ namespace Jackett.Common.Indexers.Feeds
             if (enclosures.Any())
             {
                 var enclosure = enclosures.First().Attribute("url").Value;
-                release.Link = enclosure.ToUri();
+                release.Link = new Uri(enclosure);
             }
             // add some default values if none returned by feed
             release.Seeders = release.Seeders > 0 ? release.Seeders : 0;

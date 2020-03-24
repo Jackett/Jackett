@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
@@ -31,10 +32,10 @@ namespace Jackett.Common.Indexers.Feeds
             var release = new ReleaseInfo
             {
                 Title = item.FirstValue("title"),
-                Guid = item.FirstValue("guid").ToUri(),
-                Link = item.FirstValue("link").ToUri(),
-                Comments = item.FirstValue("comments").ToUri(),
-                PublishDate = item.FirstValue("pubDate").ToDateTime(),
+                Guid = new Uri(item.FirstValue("guid")),
+                Link = new Uri(item.FirstValue("link")),
+                Comments = new Uri(item.FirstValue("comments")),
+                PublishDate = DateTime.Parse(item.FirstValue("pubDate")),
                 Category = new List<int> { int.Parse(attributes.First(e => e.Attribute("name").Value == "category").Attribute("value").Value) },
                 Size = ReadAttribute(attributes, "size").TryParse<long>(),
                 Files = ReadAttribute(attributes, "files").TryParse<long>(),
@@ -42,7 +43,7 @@ namespace Jackett.Common.Indexers.Feeds
                 Seeders = ReadAttribute(attributes, "seeders").TryParse<int>(),
                 Peers = ReadAttribute(attributes, "peers").TryParse<int>(),
                 InfoHash = attributes.First(e => e.Attribute("name").Value == "infohash").Attribute("value").Value,
-                MagnetUri = attributes.First(e => e.Attribute("name").Value == "magneturl").Attribute("value").Value.ToUri(),
+                MagnetUri = new Uri(attributes.First(e => e.Attribute("name").Value == "magneturl").Attribute("value").Value),
             };
             return release;
         }

@@ -71,7 +71,7 @@ namespace Jackett.Server.Controllers
             }
 
             var indexerId = parameters["indexerId"] as string;
-            if (indexerId.IsNullOrEmptyOrWhitespace())
+            if (string.IsNullOrWhiteSpace(indexerId))
             {
                 indexerController.CurrentIndexer = null;
                 context.Result = ResultsController.GetErrorActionResult(context.RouteData, HttpStatusCode.NotFound, 201, "Indexer is not specified (empty value)");

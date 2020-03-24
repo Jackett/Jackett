@@ -183,7 +183,7 @@ namespace Jackett.Common.Indexers
 
             searchUrl += "?" + queryCollection.GetQueryString();
 
-            if (passkey.IsNullOrEmptyOrWhitespace())
+            if (string.IsNullOrWhiteSpace(passkey))
                 await ApplyConfiguration(null);
 
             var result = await SendAPIRequest(searchUrl, null);
