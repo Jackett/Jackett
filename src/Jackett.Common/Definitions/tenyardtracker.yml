@@ -5,6 +5,8 @@
   language: en-us
   type: private
   encoding: UTF-8
+  certificates:
+    - C77A88F4AC9798E3E5B18C4AA6CE2ABF32ECF025 # NET::ERR_CERT_COMMON_NAME_INVALID
   links:
     - https://tenyardtracker.com/
   legacylinks:
@@ -32,7 +34,7 @@
     test:
       path: my.php
       #selector: a[href="members.php?action=logout"]
-      
+
   ratio:
     path: browse.php
     selector: #status_bar
