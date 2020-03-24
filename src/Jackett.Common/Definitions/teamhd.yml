@@ -38,7 +38,7 @@
 #    test:
 #      path: index.php
 #      selector: a[href="/logout.php"]
-      
+
   settings:
     - name: cookie
       type: text
@@ -58,20 +58,23 @@
       cookie: "{{ .Config.cookie }}"
     test:
       path: index.php
-      selector: a[href="/logout.php"]
+      selector: a[href*="/logout.php"]
 
   search:
     paths:
       - path: browse
     inputs:
-      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
       search: "{{ .Keywords }}"
-      incldead: 0
+      # 0 active 1 incldead 2 onlydead 3 noseeders
+      incldead: 1
+      # 0 all 1 gold 2 silver 3 normal
       free: 0
       year: ""
 
     rows:
       selector: table.browse > tbody > tr
+
     fields:
       download:
         selector: a[href^="download.php?id="]
@@ -115,9 +118,9 @@
         remove: strong
       downloadvolumefactor:
         case:
-          a[href^="/details/id"][style="color:#f2b101"]: "0"
-          a[href^="/details/id"][style="color:#828b8b"]: "0.5"
-          "*": "1"
+          a[href^="/details/id"][style="color:#f2b101"]: 0
+          a[href^="/details/id"][style="color:#828b8b"]: 0.5
+          "*": 1
       uploadvolumefactor:
-        case:
-          "*": "1"
+        text: 1
+# engine n/a
