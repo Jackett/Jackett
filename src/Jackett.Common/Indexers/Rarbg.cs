@@ -245,22 +245,26 @@ namespace Jackett.Common.Indexers
                     var dateStr = item.Value<string>("pubdate").Replace(" +0000", "");
                     var dateTime = DateTime.ParseExact(dateStr, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
                     var releaseSeeders = item.Value<int>("seeders");
-
+                    var title = WebUtility.HtmlDecode(item.Value<string>("title"));
+                    var infoHash = magnetUri.ToString().Split(':')[3].Split('&')[0];
+                    var publishDate = DateTime.SpecifyKind(dateTime, DateTimeKind.Utc).ToLocalTime();
+                    var leechers = item.Value<int>("leechers");
+                    var size = item.Value<long>("size");
                     var release = new ReleaseInfo
                     {
-                        Title = WebUtility.HtmlDecode(item.Value<string>("title")),
+                        Title = title,
                         Category = MapTrackerCatDescToNewznab(item.Value<string>("category")),
                         MagnetUri = magnetUri,
-                        InfoHash = magnetUri.ToString().Split(':')[3].Split('&')[0],
+                        InfoHash = infoHash,
                         // append app_id to prevent api server returning 403 forbidden
                         Comments = comments,
                         // in case of a torrent download we grab the link from the details page in Download()
                         Link = _provideTorrentLink ? comments : default,
-                        PublishDate = DateTime.SpecifyKind(dateTime, DateTimeKind.Utc).ToLocalTime(),
+                        PublishDate = publishDate,
                         Guid = magnetUri,
                         Seeders = releaseSeeders,
-                        Peers = item.Value<int>("leechers") + releaseSeeders,
-                        Size = item.Value<long>("size"),
+                        Peers = leechers + releaseSeeders,
+                        Size = size,
                         MinimumRatio = 1,
                         MinimumSeedTime = 172800, // 48 hours
                         DownloadVolumeFactor = 0,

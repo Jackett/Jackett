@@ -155,7 +155,6 @@ namespace Jackett.Common.Indexers
 
                     var title = row.QuerySelector("td[class='lft'] > div > a").TextContent.Trim();
                     var link = new Uri(SiteLink + row.QuerySelector("img[title='Download']").ParentElement.GetAttribute("href").Trim());
-                    var guid = link;
                     var comments = new Uri(SiteLink + row.QuerySelector("td[class='lft'] > div > a").GetAttribute("href").Trim().Remove(0, 1));
                     var size = ReleaseInfo.GetBytes(cells[4].TextContent);
                     var grabs = ParseUtil.CoerceInt(cells[5].TextContent);
@@ -171,7 +170,7 @@ namespace Jackett.Common.Indexers
                     releases.Add(new ReleaseInfo
                     {
                         Title = title,
-                        Guid = guid,
+                        Guid = link,
                         Link = link,
                         PublishDate = publishDate,
                         Size = size,

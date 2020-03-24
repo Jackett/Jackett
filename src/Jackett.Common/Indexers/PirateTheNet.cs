@@ -164,9 +164,11 @@ namespace Jackett.Common.Indexers
 
                     var sizeStr = qSize.Text();
                     var seeders = ParseUtil.CoerceInt(qSeeders.Text());
-                    var files = row.QuerySelector("td:nth-child(4)").TextContent;
-                    var grabs = row.QuerySelector("td:nth-child(8)").TextContent;
-
+                    var files = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(4)").TextContent);
+                    var grabs = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(8)").TextContent);
+                    var comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
+                    var size = ReleaseInfo.GetBytes(sizeStr);
+                    var leechers = ParseUtil.CoerceInt(qLeechers.Text());
                     releases.Add(new ReleaseInfo
                     {
                         MinimumRatio = 1,
@@ -174,14 +176,14 @@ namespace Jackett.Common.Indexers
                         Title = qDetailsLink.GetAttribute("alt"),
                         Category = MapTrackerCatToNewznab(catStr),
                         Link = link,
-                        Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href")),
+                        Comments = comments,
                         Guid = link,
                         PublishDate = pubDateUtc.ToLocalTime(),
-                        Size = ReleaseInfo.GetBytes(sizeStr),
+                        Size = size,
                         Seeders = seeders,
-                        Peers = ParseUtil.CoerceInt(qLeechers.Text()) + seeders,
-                        Files = ParseUtil.CoerceInt(files),
-                        Grabs = ParseUtil.CoerceInt(grabs),
+                        Peers = leechers + seeders,
+                        Files = files,
+                        Grabs = grabs,
                         DownloadVolumeFactor = 0, // ratioless
                         UploadVolumeFactor = 1
                     });

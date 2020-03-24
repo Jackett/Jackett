@@ -139,15 +139,15 @@ namespace Jackett.Common.Indexers
                         if (!string.IsNullOrWhiteSpace(btnResult.Series))
                             descriptions.Add("Youtube Trailer: <a href=\"" + btnResult.YoutubeTrailer + "\">" + btnResult.YoutubeTrailer + "</a>");
                         var imdb = ParseUtil.GetImdbID(btnResult.ImdbID);
-                        var guid = new Uri(btnResult.DownloadURL);
+                        var link = new Uri(btnResult.DownloadURL);
                         var comments = new Uri($"{SiteLink}torrents.php?id={btnResult.GroupID}&torrentid={btnResult.TorrentID}");
                         var publishDate = DateTimeUtil.UnixTimestampToDateTime(btnResult.Time);
                         var item = new ReleaseInfo
                         {
                             Category = MapTrackerCatToNewznab(btnResult.Resolution),
                             Comments = comments,
-                            Guid = guid,
-                            Link = guid,
+                            Guid = link,
+                            Link = link,
                             MinimumRatio = 1,
                             PublishDate = publishDate,
                             RageID = btnResult.TvrageID,

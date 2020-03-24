@@ -113,8 +113,7 @@ namespace Jackett.Common.Indexers
 
                         // publish date is not available in the torrent list, but we add a relative date so we can sort
                         lastPublishDate = lastPublishDate.AddMinutes(-1);
-
-                        var release = new ReleaseInfo
+                        releases.Add(new ReleaseInfo
                         {
                             Title = title,
                             Comments = comments,
@@ -131,8 +130,7 @@ namespace Jackett.Common.Indexers
                             MinimumSeedTime = 172800, // 48 hours
                             DownloadVolumeFactor = 0,
                             UploadVolumeFactor = 1
-                        };
-                        releases.Add(release);
+                        });
                     }
 
                     if (rows.Length < MaxItemsPerPage)

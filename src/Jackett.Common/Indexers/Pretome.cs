@@ -296,10 +296,13 @@ namespace Jackett.Common.Indexers
                     var dateStr = Regex.Replace(row.Children[5].InnerHtml, @"\<br[\s]{0,1}[\/]{0,1}\>", " ");
                     var sizeStr = row.Children[7].TextContent;
                     var releaseSeeders = ParseUtil.CoerceInt(row.Children[9].TextContent);
+                    var files = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(4)").TextContent);
                     var cat = row.FirstElementChild.FirstElementChild.GetAttribute("href").Replace("browse.php?", string.Empty);
-                    var files = row.QuerySelector("td:nth-child(4)").TextContent;
-                    var grabs = row.QuerySelector("td:nth-child(9)").TextContent;
-
+                    var link = new Uri(SiteLink + qDownload.GetAttribute("href"));
+                    var publishDate = DateTimeUtil.FromTimeAgo(dateStr);
+                    var size = ReleaseInfo.GetBytes(sizeStr);
+                    var leechers = ParseUtil.CoerceInt(row.Children[10].TextContent);
+                    var grabs = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(9)").TextContent);
                     releases.Add(new ReleaseInfo
                     {
                         MinimumRatio = 1,
@@ -307,14 +310,14 @@ namespace Jackett.Common.Indexers
                         Title = releaseTitle,
                         Comments = releaseComments,
                         Guid = releaseComments,
-                        Link = new Uri(SiteLink + qDownload.GetAttribute("href")),
-                        PublishDate = DateTimeUtil.FromTimeAgo(dateStr),
-                        Size = ReleaseInfo.GetBytes(sizeStr),
+                        Link = link,
+                        PublishDate = publishDate,
+                        Size = size,
                         Seeders = releaseSeeders,
-                        Peers = ParseUtil.CoerceInt(row.Children[10].TextContent) + releaseSeeders,
+                        Peers = leechers + releaseSeeders,
                         Category = MapTrackerCatToNewznab(cat),
-                        Files = ParseUtil.CoerceInt(files),
-                        Grabs = ParseUtil.CoerceInt(grabs),
+                        Files = files,
+                        Grabs = grabs,
                         DownloadVolumeFactor = 0, // ratioless
                         UploadVolumeFactor = 1
                         

@@ -153,27 +153,32 @@ namespace Jackett.Common.Indexers
                             continue;
                         var link = new Uri($"{SearchUrl}?{releaseLinkQuery.GetQueryString()}");
                         var seeders = int.Parse((string)torrent["Seeders"]);
+                        var comments = new Uri($"{SearchUrl}?id={WebUtility.UrlEncode(movieGroupId)}");
+                        var size = long.Parse((string)torrent["Size"]);
+                        var grabs = long.Parse((string)torrent["Snatched"]);
+                        var publishDate = DateTime.ParseExact((string)torrent["UploadTime"],
+                                                              "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal)
+                                                  .ToLocalTime();
+                        var leechers = int.Parse((string)torrent["Leechers"]);
                         var release = new ReleaseInfo
                         {
                             Title = releaseName,
                             Description = $"Title: {movieTitle}",
                             BannerUrl = coverUri,
                             Imdb = movieImdbId,
-                            Comments = new Uri($"{SearchUrl}?id={WebUtility.UrlEncode(movieGroupId)}"),
-                            Size = long.Parse((string)torrent["Size"]),
-                            Grabs = long.Parse((string)torrent["Snatched"]),
+                            Comments = comments,
+                            Size = size,
+                            Grabs = grabs,
                             Seeders = seeders,
-                            Peers = seeders + int.Parse((string)torrent["Leechers"]),
-                            PublishDate = DateTime.ParseExact((string)torrent["UploadTime"],
-                            "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal)
-                                .ToLocalTime(),
+                            Peers = seeders + leechers,
+                            PublishDate = publishDate,
                             Link = link,
                             Guid = link,
                             MinimumRatio = 1,
                             MinimumSeedTime = 345600,
                             DownloadVolumeFactor = 1,
                             UploadVolumeFactor = 1,
-                            Category = new List<int> { 2000 }
+                            Category = new List<int> { TorznabCatType.Movies.ID }
                         };
 
 

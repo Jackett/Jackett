@@ -207,8 +207,6 @@ namespace Jackett.Common.Indexers
                     var dateStr = qDateStr.TextContent.Trim().Replace("Heute", "Today").Replace("Gestern", "Yesterday");
 
                     var dateGerman = DateTimeUtil.FromUnknown(dateStr);
-
-                    var grabs = row.QuerySelector("td:nth-child(7)").TextContent;
                     double downloadFactor;
                     if (row.QuerySelector("img[src=\"themes/images/freeleech.png\"]") != null
                         || row.QuerySelector("img[src=\"themes/images/onlyup.png\"]") != null)
@@ -217,20 +215,25 @@ namespace Jackett.Common.Indexers
                         downloadFactor = 0.5;
                     else
                         downloadFactor = 1;
+                    var title = titleRegexp.Match(qDetailsLink.GetAttribute("onmouseover")).Groups[1].Value;
+                    var comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
+                    var leechers = ParseUtil.CoerceInt(qLeechers.TextContent);
+                    var publishDate = TimeZoneInfo.ConvertTime(dateGerman, germanyTz, TimeZoneInfo.Local);
+                    var grabs = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(7)").TextContent);
                     releases.Add(new ReleaseInfo
                     {
                         MinimumRatio = 0.8,
                         MinimumSeedTime = 0,
-                        Title = titleRegexp.Match(qDetailsLink.GetAttribute("onmouseover")).Groups[1].Value,
+                        Title = title,
                         Category = MapTrackerCatToNewznab(catStr),
-                        Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href")),
+                        Comments = comments,
                         Link = link,
                         Guid = link,
                         Size = ReleaseInfo.GetBytes(sizeStr),
                         Seeders =  releaseSeeders,
-                        Peers = ParseUtil.CoerceInt(qLeechers.TextContent) + releaseSeeders,
-                        PublishDate = TimeZoneInfo.ConvertTime(dateGerman, germanyTz, TimeZoneInfo.Local),
-                        Grabs = ParseUtil.CoerceInt(grabs),
+                        Peers = leechers + releaseSeeders,
+                        PublishDate = publishDate,
+                        Grabs = grabs,
                         DownloadVolumeFactor = downloadFactor,
                         UploadVolumeFactor = 1
                     });

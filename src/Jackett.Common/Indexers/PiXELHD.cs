@@ -176,7 +176,11 @@ namespace Jackett.Common.Indexers
                         var Leechers = Row.QuerySelector("td:nth-child(8)");
                         var releaseLink = new Uri(SiteLink + link.GetAttribute("href"));
                         var releaseSeeders = ParseUtil.CoerceInt(Seeders.TextContent);
-
+                        var comments = new Uri(SiteLink + title.GetAttribute("href"));
+                        var size = ReleaseInfo.GetBytes(Size.TextContent);
+                        var leechers = ParseUtil.CoerceInt(Leechers.TextContent);
+                        var grabs = ParseUtil.CoerceLong(Grabs.TextContent);
+                        var publishDate = DateTimeUtil.FromTimeAgo(added.TextContent);
                         releases.Add(new ReleaseInfo
                         {
                             MinimumRatio = 1,
@@ -184,13 +188,13 @@ namespace Jackett.Common.Indexers
                             Title = GroupTitle + " " + title.TextContent,
                             Category = new List<int> {TorznabCatType.MoviesHD.ID},
                             Link = releaseLink,
-                            Comments = new Uri(SiteLink + title.GetAttribute("href")),
+                            Comments = comments,
                             Guid = releaseLink,
-                            Size = ReleaseInfo.GetBytes(Size.TextContent),
+                            Size = size,
                             Seeders = releaseSeeders,
-                            Peers = ParseUtil.CoerceInt(Leechers.TextContent) + releaseSeeders,
-                            Grabs = ParseUtil.CoerceLong(Grabs.TextContent),
-                            PublishDate = DateTimeUtil.FromTimeAgo(added.TextContent),
+                            Peers = leechers + releaseSeeders,
+                            Grabs = grabs,
+                            PublishDate = publishDate,
                             BannerUrl = bannerURL,
                             Imdb = IMDBId
                         });

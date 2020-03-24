@@ -168,7 +168,7 @@ namespace Jackett.Common.Indexers
                             continue;
                     }
 
-                    var guid = new Uri(CommentsUrl + (string)torrent["id"]);
+                    var comments = new Uri(CommentsUrl + (string)torrent["id"]);
                     var publishDate = DateTime.Now;
                     if (torrent["created_at"] != null)
                         publishDate = DateTime.Parse((string)torrent["created_at"]);
@@ -193,8 +193,8 @@ namespace Jackett.Common.Indexers
                         MinimumRatio = 1,
                         MinimumSeedTime = 172800, // 48 hours
                         PublishDate = publishDate,
-                        Comments = guid,
-                        Guid = guid,
+                        Comments = comments,
+                        Guid = comments,
                         Seeders = seeders,
                         Peers = seeders + (int)torrent["leechers"],
                         BannerUrl = bannerUrl

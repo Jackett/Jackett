@@ -189,8 +189,10 @@ namespace Jackett.Common.Indexers
                     var dateStr = qDateStr.TextContent.Replace('\xA0', ' ');
                     var dateGerman = DateTime.SpecifyKind(DateTime.ParseExact(dateStr, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture), DateTimeKind.Unspecified);
                     var pubDateUtc = TimeZoneInfo.ConvertTimeToUtc(dateGerman, germanyTz);
-                    var files = row.QuerySelector("td:contains(Datei) > strong ~ strong").TextContent;
-
+                    var files = ParseUtil.CoerceInt(row.QuerySelector("td:contains(Datei) > strong ~ strong").TextContent);
+                    var comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
+                    var leechers = ParseUtil.CoerceInt(qLeechers.Text());
+                    var bytes = ReleaseInfo.GetBytes(qSize.TextContent.Replace(".", "").Replace(",", "."));
                     releases.Add(new ReleaseInfo
                     {
                         MinimumRatio = 0.75,
@@ -198,13 +200,13 @@ namespace Jackett.Common.Indexers
                         Title = qDetailsLink.TextContent,
                         Category = MapTrackerCatToNewznab(catStr),
                         Link = link,
-                        Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href")),
+                        Comments = comments,
                         Guid = link,
-                        Size = ReleaseInfo.GetBytes(qSize.TextContent.Replace(".", "").Replace(",", ".")),
+                        Size = bytes,
                         Seeders = seeders,
-                        Peers = ParseUtil.CoerceInt(qLeechers.Text()) + seeders,
+                        Peers = leechers + seeders,
                         PublishDate = pubDateUtc,
-                        Files = ParseUtil.CoerceInt(files),
+                        Files = files,
                         DownloadVolumeFactor = row.QuerySelector("img[title=\"OnlyUpload\"]") != null ? 0 : 1,
                         UploadVolumeFactor = 1
                     });

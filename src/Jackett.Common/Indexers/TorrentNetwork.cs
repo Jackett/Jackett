@@ -210,7 +210,17 @@ namespace Jackett.Common.Indexers
                     //var row12 = (long)torrent[12];
                     //var row13 = (string)torrent[13];
                     //var row14 = (long)torrent[14];
-
+                    var link = new Uri(SiteLink + "sdownload/" + torrentID + "/" + passkey);
+                    var publishDate = DateTimeUtil.UnixTimestampToDateTime((double)torrent[3]).ToLocalTime();
+                    var downloadVolumeFactor = (long)torrent[10] switch
+                    {
+                        // Only Up
+                        2 => 0,
+                        // 50 % Down
+                        1 => 0.5,
+                        // All others 100% down
+                        _ => 1,
+                    };
                     releases.Add(new ReleaseInfo
                     {
                         MinimumRatio = 0.8,
@@ -219,22 +229,14 @@ namespace Jackett.Common.Indexers
                         Title = torrent[1].ToString(),
                         Comments = comments,
                         Guid = comments,
-                        Link = new Uri(SiteLink + "sdownload/" + torrentID + "/" + passkey),
-                        PublishDate = DateTimeUtil.UnixTimestampToDateTime((double)torrent[3]).ToLocalTime(),
+                        Link = link,
+                        PublishDate = publishDate,
                         Size = (long)torrent[5],
                         Seeders = releaseSeeders,
                         Peers = releaseSeeders + (int)torrent[7],
                         Description = genres,
                         UploadVolumeFactor = 1,
-                        DownloadVolumeFactor = (long)torrent[10] switch
-                        {
-                            // Only Up
-                            2 => 0,
-                            // 50 % Down
-                            1 => 0.5,
-                            // All others 100% down
-                            _ => 1,
-                        },
+                        DownloadVolumeFactor = downloadVolumeFactor,
                         Grabs = (long)torrent[11]
                     });
                 }

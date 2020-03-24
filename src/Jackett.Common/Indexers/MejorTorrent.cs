@@ -369,10 +369,11 @@ namespace Jackett.Common.Indexers
             string downloadLink, string cat, DateTime publishDate, long size)
         {
             var link = new Uri(downloadLink);
+            var comments = new Uri(commentsLink);
             releases.Add(new ReleaseInfo
             {
                 Title = title,
-                Comments = new Uri(commentsLink),
+                Comments = comments,
                 Link = link,
                 Guid = link,
                 Category = MapTrackerCatToNewznab(cat),

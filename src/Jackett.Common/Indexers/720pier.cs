@@ -186,29 +186,12 @@ namespace Jackett.Common.Indexers
                 {
                     try
                     {
-                        var release = new ReleaseInfo
-                        {
-                            MinimumRatio = 1,
-                            MinimumSeedTime = 0,
-                            DownloadVolumeFactor = 1,
-                            UploadVolumeFactor = 1,
-                            Seeders = ParseUtil.CoerceInt(row.QuerySelector("span.seed").TextContent),
-                            Grabs = ParseUtil.CoerceLong(row.QuerySelector("span.complet").TextContent),
-                        };
-                        release.Peers = ParseUtil.CoerceInt(row.QuerySelector("span.leech").TextContent) + release.Seeders;
-
+                        var seeders = ParseUtil.CoerceInt(row.QuerySelector("span.seed").TextContent);
+                        var grabs = ParseUtil.CoerceLong(row.QuerySelector("span.complet").TextContent);
                         var qDetailsLink = row.QuerySelector("a.topictitle");
-
-                        release.Title = qDetailsLink.TextContent;
-                        release.Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
-                        release.Guid = release.Comments;
-
                         var detailsResult = await RequestStringWithCookies(SiteLink + qDetailsLink.GetAttribute("href"));
                         var detailsResultDocument = resultParser.ParseDocument(detailsResult.Content);
                         var qDownloadLink = detailsResultDocument.QuerySelector("table.table2 > tbody > tr > td > a[href^=\"/download/torrent\"]");
-
-                        release.Link = new Uri(SiteLink + qDownloadLink.GetAttribute("href").TrimStart('/'));
-
                         var author = row.QuerySelector("dd.lastpost > span");
                         var timestr = author.TextContent.Split('\n')
                             .Where(str => !string.IsNullOrWhiteSpace(str)) //Filter blank lines
@@ -216,13 +199,8 @@ namespace Jackett.Common.Indexers
                             .FirstOrDefault()
                             .Trim();
 
-                        release.PublishDate = DateTimeUtil.FromUnknown(timestr, "UK");
-
                         var forum = row.QuerySelector("a[href^=\"./viewforum.php?f=\"]");
                         var forumid = forum.GetAttribute("href").Split('=')[1];
-
-                        release.Category = MapTrackerCatToNewznab(forumid);
-
                         var size = row.QuerySelector("dl.row-item > dt > div.list-inner > div[style^=\"float:right\"]").TextContent;
                         size = size.Replace("GiB", "GB");
                         size = size.Replace("MiB", "MB");
@@ -231,10 +209,28 @@ namespace Jackett.Common.Indexers
                         size = size.Replace("ГБ", "GB");
                         size = size.Replace("МБ", "MB");
                         size = size.Replace("КБ", "KB");
+                        var comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
+                        var leechers = ParseUtil.CoerceInt(row.QuerySelector("span.leech").TextContent);
+                        var link = new Uri(SiteLink + qDownloadLink.GetAttribute("href").TrimStart('/'));
+                        var publishDate = DateTimeUtil.FromUnknown(timestr, "UK");
 
-                        release.Size = ReleaseInfo.GetBytes(size);
-
-                        releases.Add(release);
+                        releases.Add(new ReleaseInfo
+                        {
+                            MinimumRatio = 1,
+                            MinimumSeedTime = 0,
+                            DownloadVolumeFactor = 1,
+                            UploadVolumeFactor = 1,
+                            Seeders = seeders,
+                            Grabs = grabs,
+                            Peers = leechers + seeders,
+                            Title = qDetailsLink.TextContent,
+                            Comments = comments,
+                            Guid = comments,
+                            Link = link,
+                            PublishDate = publishDate,
+                            Category = MapTrackerCatToNewznab(forumid),
+                            Size = ReleaseInfo.GetBytes(size),
+                        });
                     }
                     catch (Exception ex)
                     {

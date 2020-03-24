@@ -259,29 +259,27 @@ namespace Jackett.Common.Indexers
                         var forum = Row.QuerySelector("td:nth-child(2) > a");
                         var forumid = forum.GetAttribute("href").Split('=')[1];
                         var releaseComments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
-
+                        var link = new Uri(SiteLink + qDownloadLink.GetAttribute("href"));
+                        var size = ReleaseInfo.GetBytes(qSize.TextContent);
+                        var leechers = ParseUtil.CoerceInt(Row.QuerySelector("td:nth-child(11) > b").TextContent);
+                        var publishDate = DateTimeUtil.FromFuzzyTime(timestr);
                         var release = new ReleaseInfo
                         {
                             MinimumRatio = 1,
                             MinimumSeedTime = 0,
                             Title = qDetailsLink.TextContent,
                             Comments = releaseComments,
-                            Link = new Uri(SiteLink + qDownloadLink.GetAttribute("href")),
+                            Link = link,
                             Guid = releaseComments,
-                            Size = ReleaseInfo.GetBytes(qSize.TextContent),
+                            Size = size,
                             Seeders = seeders,
-                            Peers = ParseUtil.CoerceInt(Row.QuerySelector("td:nth-child(11) > b").TextContent) + seeders,
+                            Peers = leechers + seeders,
                             Grabs = 0, //ParseUtil.CoerceLong(Row.QuerySelector("td:nth-child(9)").TextContent);
-                            PublishDate = DateTimeUtil.FromFuzzyTime(timestr),
+                            PublishDate = publishDate,
                             Category = MapTrackerCatToNewznab(forumid),
                             DownloadVolumeFactor = 1,
                             UploadVolumeFactor = 1
                         };
-
-
-                        
-
-
 
                         // TODO cleanup
                         if (release.Category.Contains(TorznabCatType.TV.ID))

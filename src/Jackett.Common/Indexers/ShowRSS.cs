@@ -75,27 +75,30 @@ namespace Jackett.Common.Indexers
                         continue;
 
                     // Try to guess the category... I'm not proud of myself...
-                    var category = serie_title.Contains("720p") ? 5040 : 5030;
+                    var category = serie_title.Contains("720p") ? TorznabCatType.TVHD.ID : TorznabCatType.TVSD.ID;
                     var test = node.SelectSingleNode("enclosure");
+                    var magnetUri = new Uri(node.SelectSingleNode("link").InnerText);
+                    var publishDate = DateTime.Parse(node.SelectSingleNode("pubDate").InnerText, CultureInfo.InvariantCulture);
+                    var infoHash = node.SelectSingleNode("description").InnerText;
+                    var guid = new Uri(test.Attributes["url"].Value);
                     releases.Add(new ReleaseInfo
                     {
                         MinimumRatio = 1,
                         MinimumSeedTime = 172800, // 48 hours
                         Title = serie_title,
-                        Comments = new Uri(node.SelectSingleNode("link").InnerText),
+                        Comments = magnetUri,
                         Category = new List<int> {category},
-                        Guid = new Uri(test.Attributes["url"].Value),
-                        PublishDate =
-                            DateTime.Parse(node.SelectSingleNode("pubDate").InnerText, CultureInfo.InvariantCulture),
-                        Description = node.SelectSingleNode("description").InnerText,
-                        InfoHash = node.SelectSingleNode("description").InnerText,
+                        Guid = guid,
+                        PublishDate = publishDate,
+                        Description = infoHash,
+                        InfoHash = infoHash,
                         Size = 0,
                         //TODO fix seeder/peer counts if available
                         Seeders = 1,
                         Peers = 1,
                         DownloadVolumeFactor = 0,
                         UploadVolumeFactor = 1,
-                        MagnetUri = new Uri(node.SelectSingleNode("link").InnerText)
+                        MagnetUri = magnetUri
                     });
                 }
             }

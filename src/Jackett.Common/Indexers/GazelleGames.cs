@@ -286,7 +286,7 @@ namespace Jackett.Common.Indexers
                         var qFreeLeech = Row.QuerySelector("strong.freeleech_label");
                         var qNeutralLeech = Row.QuerySelector("strong.neutralleech_label");
                         var Time = qTime.GetAttribute("title");
-                        var guid = new Uri(SiteLink + qDLLink.GetAttribute("href"));
+                        var link = new Uri(SiteLink + qDLLink.GetAttribute("href"));
                         var seeders = ParseUtil.CoerceInt(qSeeders.TextContent);
                         var publishDate = DateTime.SpecifyKind(
                             DateTime.ParseExact(Time, "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture),
@@ -299,12 +299,11 @@ namespace Jackett.Common.Indexers
                             MinimumRatio = 1,
                             MinimumSeedTime = 288000, //80 hours
                             Category = GroupCategory,
-                            PublishDate =
-                                publishDate,
+                            PublishDate = publishDate,
                             Size = ReleaseInfo.GetBytes(Size),
                             Comments = comments,
-                            Link = guid,
-                            Guid = guid,
+                            Link = link,
+                            Guid = link,
                             Grabs = grabs,
                             Seeders = seeders,
                             Peers = leechers + seeders,

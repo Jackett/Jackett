@@ -207,14 +207,19 @@ namespace Jackett.Common.Indexers
                     var pubDateUtc = TimeZoneInfo.ConvertTimeToUtc(dateGerman, germanyTz);
                     var longFromString = ParseUtil.GetLongFromString(descCol.QuerySelector("a[href*=\"&searchin=imdb\"]")?.GetAttribute("href"));
                     var sizeFileCountRowChilds = row.Children[5].Children;
-                    var grabs = row.QuerySelector("td:nth-child(7)").TextContent;
                     var releaseSeeders = ParseUtil.CoerceInt(row.Children[7].TextContent);
+                    var link = new Uri(SiteLink + qLink.GetAttribute("href"));
+                    var files = ParseUtil.CoerceInt(sizeFileCountRowChilds[2].TextContent);
+                    var leechers = ParseUtil.CoerceInt(row.Children[8].TextContent);
+                    var grabs = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(7)").TextContent);
+                    var downloadVolumeFactor = globalFreeleech || row.QuerySelector("span.torrent-tag-free") != null
+                        ? 0 : 1;
                     releases.Add(new ReleaseInfo
                     {
                         MinimumRatio = 1,
-                        MinimumSeedTime = 96 * 60 * 60,
+                        MinimumSeedTime = 345600, //8 days
                         Category = MapTrackerCatToNewznab(catStr),
-                        Link = new Uri(SiteLink + qLink.GetAttribute("href")),
+                        Link = link,
                         Description = releaseDescription,
                         Title = qCommentLink.GetAttribute("title"),
                         Comments = releaseComments,
@@ -222,13 +227,11 @@ namespace Jackett.Common.Indexers
                         PublishDate = pubDateUtc.ToLocalTime(),
                         Imdb = longFromString,
                         Size = ReleaseInfo.GetBytes(sizeFileCountRowChilds[0].TextContent),
-                        Files = ParseUtil.CoerceInt(sizeFileCountRowChilds[2].TextContent),
+                        Files = files,
                         Seeders = releaseSeeders,
-                        Peers = ParseUtil.CoerceInt(row.Children[8].TextContent) + releaseSeeders,
-                        Grabs = ParseUtil.CoerceInt(grabs),
-                        DownloadVolumeFactor = globalFreeleech || row.QuerySelector("span.torrent-tag-free") != null
-                            ? 0
-                            : 1,
+                        Peers = leechers + releaseSeeders,
+                        Grabs = grabs,
+                        DownloadVolumeFactor = downloadVolumeFactor,
                         UploadVolumeFactor = 1
                     });
                 }

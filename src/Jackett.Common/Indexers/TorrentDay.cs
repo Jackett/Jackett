@@ -228,7 +228,9 @@ namespace Jackett.Common.Indexers
                     var seeders = (int)torrent.seeders;
                     var imdbId = (string)torrent["imdb-id"];
                     var downloadMultiplier = (double?)torrent["download-multiplier"];
-
+                    var link = new Uri(SiteLink + "download.php/" + torrentID + "/" + torrentID + ".torrent");
+                    var publishDate = DateTimeUtil.UnixTimestampToDateTime((long)torrent.ctime).ToLocalTime();
+                    var imdb = ParseUtil.GetImdbID(imdbId);
                     releases.Add(new ReleaseInfo
                     {
                         Title = torrent.name,
@@ -237,14 +239,14 @@ namespace Jackett.Common.Indexers
                         Category = MapTrackerCatToNewznab(torrent.c.ToString()),
                         Comments = releaseComments,
                         Guid = releaseComments,
-                        Link = new Uri(SiteLink + "download.php/" + torrentID + "/" + torrentID + ".torrent"),
-                        PublishDate = DateTimeUtil.UnixTimestampToDateTime((long)torrent.ctime).ToLocalTime(),
+                        Link = link,
+                        PublishDate = publishDate,
                         Size = (long)torrent.size,
                         Seeders = seeders,
                         Peers = seeders + (int)torrent.leechers,
                         Files = (long)torrent.files,
                         Grabs = (long)torrent.completed,
-                        Imdb = ParseUtil.GetImdbID(imdbId),
+                        Imdb = imdb,
                         DownloadVolumeFactor = downloadMultiplier ?? 1,
                         UploadVolumeFactor = 1
                     });

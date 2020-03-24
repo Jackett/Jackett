@@ -1550,20 +1550,24 @@ namespace Jackett.Common.Indexers
                         var timestr = Row.QuerySelector("td:nth-child(10)").GetAttribute("data-ts_text");
                         var forum = Row.QuerySelector("td.f-name > div.f-name > a");
                         var forumid = forum.GetAttribute("href").Split('=')[1];
-
+                        var link = new Uri(SiteLink + "forum/" + qDownloadLink.GetAttribute("href"));
+                        var size = ReleaseInfo.GetBytes(qSize.GetAttribute("data-ts_text"));
+                        var leechers = ParseUtil.CoerceInt(Row.QuerySelector("td:nth-child(8)").TextContent);
+                        var grabs = ParseUtil.CoerceLong(Row.QuerySelector("td:nth-child(9)").TextContent);
+                        var publishDate = DateTimeUtil.UnixTimestampToDateTime(long.Parse(timestr));
                         var release = new ReleaseInfo
                         {
                             MinimumRatio = 1,
                             MinimumSeedTime = 0,
                             Title = qDetailsLink.TextContent,
                             Comments = releaseComments,
-                            Link = new Uri(SiteLink + "forum/" + qDownloadLink.GetAttribute("href")),
+                            Link = link,
                             Guid = releaseComments,
-                            Size = ReleaseInfo.GetBytes(qSize.GetAttribute("data-ts_text")),
+                            Size = size,
                             Seeders = seeders,
-                            Peers = ParseUtil.CoerceInt(Row.QuerySelector("td:nth-child(8)").TextContent) + seeders,
-                            Grabs = ParseUtil.CoerceLong(Row.QuerySelector("td:nth-child(9)").TextContent),
-                            PublishDate = DateTimeUtil.UnixTimestampToDateTime(long.Parse(timestr)),
+                            Peers = leechers + seeders,
+                            Grabs = grabs,
+                            PublishDate = publishDate,
                             Category = MapTrackerCatToNewznab(forumid),
                             DownloadVolumeFactor = 1,
                             UploadVolumeFactor = 1

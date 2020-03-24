@@ -138,9 +138,8 @@ namespace Jackett.Common.Indexers
                     double createdunix = torrent.Value<long>("created_unix");
                     var dateTime = new System.DateTime(1970, 1, 1, 0, 0, 0, 0);
                     dateTime = dateTime.AddSeconds(createdunix);
-                    var grabs = torrent.Value<string>("completed") ?? "0";
                     var releaseSeeders = torrent.Value<int>("seeders");
-
+                    var grabs = ParseUtil.CoerceInt(torrent.Value<string>("completed") ?? "0");
                     var release = new ReleaseInfo
                     {
                         Title = torrent.Value<string>("name"),
@@ -154,7 +153,7 @@ namespace Jackett.Common.Indexers
                         Seeders = releaseSeeders,
                         Peers = torrent.Value<int>("leechers") + releaseSeeders,
                         Size = torrent.Value<long>("size_bytes"),
-                        Grabs = ParseUtil.CoerceInt(grabs),
+                        Grabs = grabs,
                         MinimumRatio = 1,
                         MinimumSeedTime = 172800, // 48 hours
                         DownloadVolumeFactor = 0,

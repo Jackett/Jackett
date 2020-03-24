@@ -114,23 +114,28 @@ namespace Jackett.Common.Indexers
                     var releaseLink = new Uri(SiteLink + DLLink);
                     var releaseSeeders = ParseUtil.CoerceInt(Seeders.TextContent);
                     var releaseDescription = DescStr.TextContent.Trim();
-
+                    var publishDate = DateTimeUtil.FromTimeAgo(Added.TextContent);
+                    var comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
+                    var leechers = ParseUtil.CoerceInt(Leechers.TextContent);
+                    var size = ReleaseInfo.GetBytes(Size.TextContent);
+                    var grabs = ParseUtil.CoerceLong(Grabs.TextContent);
+                    var files = ParseUtil.CoerceLong(Files.TextContent);
                     releases.Add(new ReleaseInfo
                     {
                         MinimumRatio = 1,
                         MinimumSeedTime = 0,
                         Description = releaseDescription,
                         Title = qDetailsLink.TextContent + " " + releaseDescription,
-                        PublishDate = DateTimeUtil.FromTimeAgo(Added.TextContent),
+                        PublishDate = publishDate,
                         Category = new List<int> {TvCategoryParser.ParseTvShowQuality(releaseDescription)},
                         Link = releaseLink,
-                        Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href")),
+                        Comments = comments,
                         Guid = releaseLink,
                         Seeders = releaseSeeders,
-                        Peers = ParseUtil.CoerceInt(Leechers.TextContent) + releaseSeeders,
-                        Size = ReleaseInfo.GetBytes(Size.TextContent),
-                        Grabs = ReleaseInfo.GetBytes(Grabs.TextContent),
-                        Files = ReleaseInfo.GetBytes(Files.TextContent),
+                        Peers = leechers + releaseSeeders,
+                        Size = size,
+                        Grabs = grabs,
+                        Files = files,
                         DownloadVolumeFactor = FreeLeech != null ? 0 : 1,
                         UploadVolumeFactor = 1
                     });

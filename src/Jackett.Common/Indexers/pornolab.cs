@@ -293,24 +293,28 @@ namespace Jackett.Common.Indexers
                         var timestr = Row.QuerySelector("td:nth-child(10) u").TextContent;
                         var forum = qForumLink;
                         var forumid = forum.GetAttribute("href").Split('=')[1];
-
+                        var title = configData.StripRussianLetters.Value
+                            ? s_StripRussianRegex.Replace(qDetailsLink.TextContent, "")
+                            : qDetailsLink.TextContent;
+                        var size = ReleaseInfo.GetBytes(qSize.TextContent);
+                        var leechers = ParseUtil.CoerceInt(Row.QuerySelector("td:nth-child(8)").TextContent);
+                        var grabs = ParseUtil.CoerceLong(Row.QuerySelector("td:nth-child(9)").TextContent);
+                        var publishDate = DateTimeUtil.UnixTimestampToDateTime(long.Parse(timestr));
                         releases.Add(new ReleaseInfo
                         {
                             MinimumRatio = 1,
                             MinimumSeedTime = 0,
                             Title =
-                                configData.StripRussianLetters.Value
-                                    ? s_StripRussianRegex.Replace(qDetailsLink.TextContent, "")
-                                    : qDetailsLink.TextContent,
+                                title,
                             Comments = link,
                             Description = qForumLink.TextContent,
                             Link = link,
                             Guid = link,
-                            Size = ReleaseInfo.GetBytes(qSize.TextContent),
+                            Size = size,
                             Seeders = seeders,
-                            Peers = ParseUtil.CoerceInt(Row.QuerySelector("td:nth-child(8)").TextContent) + seeders,
-                            Grabs = ParseUtil.CoerceLong(Row.QuerySelector("td:nth-child(9)").TextContent),
-                            PublishDate = DateTimeUtil.UnixTimestampToDateTime(long.Parse(timestr)),
+                            Peers = leechers + seeders,
+                            Grabs = grabs,
+                            PublishDate = publishDate,
                             Category = MapTrackerCatToNewznab(forumid),
                             DownloadVolumeFactor = 1,
                             UploadVolumeFactor = 1

@@ -194,13 +194,12 @@ namespace Jackett.Common.Indexers
                     var cat = row.Children[0].QuerySelector("a").GetAttribute("href").Split('=')[1];
                     var title = row.Children[1].QuerySelector("a").TextContent;
                     var qLinks = row.Children[2].QuerySelectorAll("a");
-                    var link = configData.TorrentHTTPSMode.Value ? qLinks[1].GetAttribute("href") : qLinks[0].GetAttribute("href");
-                    var comments = row.Children[1].QuerySelector("a").GetAttribute("href");
+                    var link = new Uri(configData.TorrentHTTPSMode.Value ? qLinks[1].GetAttribute("href") : qLinks[0].GetAttribute("href"));
+                    var comments = new Uri(row.Children[1].QuerySelector("a").GetAttribute("href"));
                     var size = row.Children[4].TextContent;
                     var grabs = row.Children[5].QuerySelector("a").TextContent;
-                    var seeders = row.Children[6].QuerySelector("a").TextContent;
-                    var leechers = row.Children[7].QuerySelector("a").TextContent;
-
+                    var seeders = ParseUtil.CoerceInt(row.Children[6].QuerySelector("a").TextContent);
+                    var leechers = ParseUtil.CoerceInt(row.Children[7].QuerySelector("a").TextContent);
                     var qTags = row.Children[1].QuerySelector("div:has(span[style=\"float: right;\"])");
                     var dlVolumeFactor = 1.0;
                     if (qTags.QuerySelector("img[alt^=\"TORRENT GRATUIT\"]") != null)
@@ -209,23 +208,22 @@ namespace Jackett.Common.Indexers
                         dlVolumeFactor = 0.5;
 
                     var upVolumeFactor = qTags.QuerySelector("img[alt^=\"TORRENT X2\"]") != null ? 2.0 : 1.0;
-
                     var release = new ReleaseInfo
                     {
                         MinimumRatio = 1,
                         MinimumSeedTime = 0,
                         Category = MapTrackerCatToNewznab(cat),
                         Title = title,
-                        Link = new Uri(link),
-                        Comments = new Uri(comments),
+                        Link = link,
+                        Comments = comments,
                         Size = ReleaseInfo.GetBytes(size),
-                        Seeders = ParseUtil.CoerceInt(seeders),
+                        Seeders = seeders,
                         Grabs = ParseUtil.CoerceLong(grabs),
                         DownloadVolumeFactor = dlVolumeFactor,
-                        UploadVolumeFactor = upVolumeFactor
+                        UploadVolumeFactor = upVolumeFactor,
+                        Peers = leechers + seeders,
+                        Guid = link
                     };
-                    release.Peers = ParseUtil.CoerceInt(leechers) + release.Seeders;
-                    release.Guid = release.Link;
 
                     var qTooltip = row.Children[1].QuerySelector("div.tooltip-content");
                     if (qTooltip != null)

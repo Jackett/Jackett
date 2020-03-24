@@ -141,24 +141,25 @@ namespace Jackett.Common.Indexers
         //TODO inline single use function
         private ReleaseInfo MakeRelease(JToken torrent)
         {
+            // https://solidtorrents.net/view/5e10885d651df640a70ee826
             var comments = new Uri(SiteLink + "view/" + (string)torrent["_id"]);
             var swarm = torrent["swarm"];
             var seeders = (int)swarm["seeders"];
+            var publishDate = torrent["imported"] != null ? DateTime.Parse((string)torrent["imported"]) : DateTime.Now;
+            var magnetUri = new Uri((string)torrent["magnet"]);
             return new ReleaseInfo
             {
                 Title = (string)torrent["title"],
-
-                // https://solidtorrents.net/view/5e10885d651df640a70ee826
                 Comments = comments,
                 Guid = comments,
-                PublishDate = torrent["imported"] != null ? DateTime.Parse((string)torrent["imported"]) : DateTime.Now,
+                PublishDate = publishDate,
                 Category = MapTrackerCatToNewznab((string)torrent["category"]),
                 Size = (long)torrent["size"],
                 Seeders = seeders,
                 Peers = seeders + (int)swarm["leechers"],
                 Grabs = (long)swarm["downloads"],
                 InfoHash = (string)torrent["infohash"],
-                MagnetUri = new Uri((string)torrent["magnet"]),
+                MagnetUri = magnetUri,
                 MinimumRatio = 1,
                 MinimumSeedTime = 172800, // 48 hours
                 DownloadVolumeFactor = 0,

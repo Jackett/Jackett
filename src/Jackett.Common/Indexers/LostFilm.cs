@@ -723,10 +723,7 @@ namespace Jackett.Common.Indexers
                         // TODO this feels sparse compared to other trackers. Expand later
                         var release = new ReleaseInfo
                         {
-                            Category = new[]
-                            {
-                                TorznabCatType.TV.ID
-                            },
+                            Category = new[] {TorznabCatType.TV.ID},
                             Title = string.Join(" - ", titleComponents.Where(s => !string.IsNullOrEmpty(s))),
                             Link = link,
                             Guid = link,
