@@ -22,13 +22,12 @@
       movie-search: [q, imdbid]
 
   settings:
-    - name: cookie
+    - name: username
       type: text
-      label: Cookie
-    - name: info
-      type: info
-      label: How to get the Cookie
-      default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
+      label: Username
+    - name: password
+      type: password
+      label: Password
     - name: sort
       type: select
       label: Sort requested from site
@@ -47,12 +46,19 @@
         "asc": "asc"
 
   login:
-    method: cookie
+    path: login
+    method: form
+    form: form[action*="/login"]
     inputs:
-      cookie: "{{ .Config.cookie }}"
-    test:
-      path: /
-      selector: a[href$="/logout"]
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+      remember: 1
+    selectorinputs:
+      _token:
+        selector: input[name="_token"]
+        attribute: value
+    error:
+      - selector: div#ERROR_COPY
 
   ratio:
     path: /
