@@ -142,9 +142,7 @@ namespace Jackett.Common.Indexers
                 queryCollection.Add("search", searchString);
             }
 
-            var cats = MapTorznabCapsToTrackers(query);
-            var cat = cats.FirstIfSingleOrDefault("0");
-            queryCollection.Add("cat", cat);
+            queryCollection.Add("cat", MapTorznabCapsToTrackers(query).FirstIfSingleOrDefault("0"));
 
             searchUrl += "?" + queryCollection.GetQueryString();
 

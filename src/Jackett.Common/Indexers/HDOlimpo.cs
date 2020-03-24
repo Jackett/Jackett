@@ -100,12 +100,9 @@ namespace Jackett.Common.Indexers
                 {"freetorrent", "false"},
                 {"ordenar_por", "created_at"},
                 {"orden", "desc"},
-                {"titulo", query.GetQueryString()}
+                {"titulo", query.GetQueryString()},
+                {"categoria", MapTorznabCapsToTrackers(query).FirstIfSingleOrDefault("0")}
             };
-
-            var cats = MapTorznabCapsToTrackers(query);
-            var category = cats.FirstIfSingleOrDefault("0");
-            pairs.Add("categoria", category);
 
             var boundary = "---------------------------" + (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds.ToString(CultureInfo.InvariantCulture).Replace(".", "");
             var bodyParts = new List<string>();

@@ -116,10 +116,9 @@ namespace Jackett.Common.Indexers
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var cats = MapTorznabCapsToTrackers(query, true);
             var qc = new NameValueCollection
             {
-                {"cat", cats.FirstIfSingleOrDefault("0")}
+                {"cat", MapTorznabCapsToTrackers(query, true).FirstIfSingleOrDefault("0")}
             };
             var results = new List<WebClientStringResult>();
             var search = new UriBuilder(SearchUrl);
