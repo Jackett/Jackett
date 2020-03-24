@@ -16,8 +16,8 @@ namespace Jackett.Common.Indexers
 {
     public class AwesomeHD : BaseWebIndexer
     {
-        private static string SearchUrl => "searchapi.php";
-        private static string TorrentUrl => "torrents.php";
+        private string SearchUrl => SiteLink + "searchapi.php";
+        private string TorrentUrl => SiteLink + "torrents.php";
         private new ConfigurationDataPasskey configData => (ConfigurationDataPasskey)base.configData;
 
         public AwesomeHD(IIndexerConfigurationService configService, Utils.Clients.WebClient c, Logger l, IProtectionService ps)
@@ -29,7 +29,7 @@ namespace Jackett.Common.Indexers
                 client: c,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataPasskey())
+                configData: new ConfigurationDataPasskey("Note: You can find the Passkey in your profile, next to Personal information."))
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
@@ -77,9 +77,14 @@ namespace Jackett.Common.Indexers
                 qc.Add("title", query.SearchTerm); // not use query.GetQueryString(), see the season code below
             }
             else
+            {
                 qc.Add("action", "latestmovies");
+                // the endpoint 'latestmovies' only returns movies, this hack overwrites categories to get movies even if
+                // you are searching for tv series. this allows to configure the tracker in Sonarr
+                query.Categories = new int[] {};
+            }
 
-            var searchUrl = SiteLink + SearchUrl + "?" + qc.GetQueryString();
+            var searchUrl = SearchUrl + "?" + qc.GetQueryString();
             var results = await RequestStringWithCookies(searchUrl);
             if (string.IsNullOrWhiteSpace(results.Content))
                 throw new Exception("Empty response. Please, check the Passkey.");
@@ -88,12 +93,14 @@ namespace Jackett.Common.Indexers
             {
                 var doc = XDocument.Parse(results.Content);
 
-                var torrents = doc.Descendants("torrent").ToList();
-                if (!torrents.Any())
+                var errorMsg = doc.Descendants("error").FirstOrDefault()?.Value;
+                if (errorMsg?.Contains("No Results") == true)
                     return releases; // no results
+                if (errorMsg != null)
+                    throw new Exception(errorMsg);
 
                 var authkey = doc.Descendants("authkey").First().Value;
-
+                var torrents = doc.Descendants("torrent");
                 foreach (var torrent in torrents)
                 {
                     var torrentName = torrent.FirstValue("name").Trim();
@@ -115,7 +122,7 @@ namespace Jackett.Common.Indexers
                     var title = new StringBuilder(torrentName);
                     if (!isSerie && torrent.Element("year") != null) // only for movies
                         title.Append($" {torrent.FirstValue("year")}");
-                    if (torrent.Element("internal") != null && torrent.FirstValue("internal") == "1")
+                    if (torrent.Element("internal")?.Value == "1")
                         title.Append(" iNTERNAL");
                     if (torrent.Element("resolution") != null)
                         title.Append($" {torrent.FirstValue("resolution")}");
@@ -130,8 +137,8 @@ namespace Jackett.Common.Indexers
 
                     var torrentId = torrent.FirstValue("id");
                     var groupId = torrent.FirstValue("groupid");
-                    var comments = new Uri($"{SiteLink}{TorrentUrl}?id={groupId}&torrentid={torrentId}");
-                    var link = new Uri($"{SiteLink}{TorrentUrl}?action=download&id={torrentId}&authkey={authkey}&torrent_pass={passkey}");
+                    var comments = new Uri($"{TorrentUrl}?id={groupId}&torrentid={torrentId}");
+                    var link = new Uri($"{TorrentUrl}?action=download&id={torrentId}&authkey={authkey}&torrent_pass={passkey}");
 
                     var publishDate = DateTime.Parse(torrent.FirstValue("time"));
                     var size = long.Parse(torrent.FirstValue("size"));
@@ -141,17 +148,16 @@ namespace Jackett.Common.Indexers
                     var freeleech = double.Parse(torrent.FirstValue("freeleech"));
 
                     Uri banner = null;
-                    if (!isSerie && torrent.Element("smallcover") != null &&
-                        !string.IsNullOrWhiteSpace(torrent.FirstValue("smallcover"))) // small cover only for movies
+                    // small cover only for movies
+                    if (!isSerie && !string.IsNullOrWhiteSpace(torrent.Element("smallcover")?.Value))
                         banner = new Uri(torrent.FirstValue("smallcover"));
-                    else if (torrent.Element("cover") != null && !string.IsNullOrWhiteSpace(torrent.FirstValue("cover")))
+                    else if (!string.IsNullOrWhiteSpace(torrent.Element("cover")?.Value))
                         banner = new Uri(torrent.FirstValue("cover"));
 
                     var description = torrent.Element("encodestatus") != null ?
                         $"Encode status: {torrent.FirstValue("encodestatus")}" : null;
 
-                    var imdb = torrent.Element("imdb") != null ?
-                        ParseUtil.GetImdbID(torrent.FirstValue("imdb")) : null;
+                    var imdb = ParseUtil.GetImdbID(torrent.Element("imdb")?.Value);
 
                     var release = new ReleaseInfo
                     {
