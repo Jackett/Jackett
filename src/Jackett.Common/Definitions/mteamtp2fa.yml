@@ -123,7 +123,7 @@
 
     fields:
       title: # shortened for long release names
-        selector: a[href^="details.php?id="]
+        selector: a[href^="details.php?id="] > b
       title:
         optional: true # not available if IMDB tooltips are turned on
         selector: a[title][href^="details.php?id="]
