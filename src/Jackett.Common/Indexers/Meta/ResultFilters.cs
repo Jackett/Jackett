@@ -56,7 +56,9 @@ namespace Jackett.Common.Indexers.Meta
 
             var remainingResults = results.Except(wrongResults).Except(perfectResults);
 
-            var title = (await resolver.MovieForId(query.ImdbID.ToNonNull())).Title;
+            if (string.IsNullOrEmpty(query.ImdbID))
+                return perfectResults;
+            var title = (await resolver.MovieForId(query.ImdbID)).Title;
             if (title == null)
                 return perfectResults;
 

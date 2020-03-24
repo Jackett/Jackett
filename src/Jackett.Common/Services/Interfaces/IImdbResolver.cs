@@ -5,6 +5,6 @@ namespace Jackett.Common.Services.Interfaces
 {
     public interface IImdbResolver
     {
-        Task<Movie> MovieForId(NonNull<string> imdbId);
+        Task<Movie> MovieForId(string imdbId);
     }
 }

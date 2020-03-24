@@ -6,35 +6,6 @@ using System.Xml.Linq;
 
 namespace Jackett.Common.Utils
 {
-    // Prefer built in NullReferenceException || ArgumentNullException || NoNullAllowedException
-    public class NonNullException : Exception
-    {
-        public NonNullException() : base("Parameter cannot be null")
-        {
-        }
-    }
-
-    public class NonNull<T> where T : class
-    {
-        public NonNull(T val)
-        {
-            // doesn't throw Exception?
-            if (val == null)
-                new NonNullException();
-
-            Value = val;
-        }
-
-        public static implicit operator T(NonNull<T> n) => n.Value;
-
-        private readonly T Value;
-    }
-
-    public static class GenericConversionExtensions
-    {
-        public static NonNull<T> ToNonNull<T>(this T obj) where T : class => new NonNull<T>(obj);
-    }
-
     public static class EnumerableExtension
     {
         public static T FirstIfSingleOrDefault<T>(this IEnumerable<T> source, T replace = default)
