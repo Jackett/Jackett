@@ -83,7 +83,7 @@ namespace Jackett.Common.Indexers
             {
                 {"incldead", "1"},
                 {"showspam", "1"},
-                {"cat", cats.Count == 1 ? cats[0] : "0"}
+                {"cat", cats.FirstIfSingleOrDefault("0")}
             };
             if (!string.IsNullOrWhiteSpace(query.GetQueryString()))
                 qc.Add("search", query.GetQueryString());

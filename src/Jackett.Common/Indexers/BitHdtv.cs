@@ -119,7 +119,7 @@ namespace Jackett.Common.Indexers
             var cats = MapTorznabCapsToTrackers(query, true);
             var qc = new NameValueCollection
             {
-                {"cat", cats.Count == 1 ? cats[0] : "0"}
+                {"cat", cats.FirstIfSingleOrDefault("0")}
             };
             var results = new List<WebClientStringResult>();
             var search = new UriBuilder(SearchUrl);

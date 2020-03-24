@@ -104,12 +104,7 @@ namespace Jackett.Common.Indexers
 
             queryCollection.Add("total", "146"); // Not sure what this is about but its required!
 
-            var cat = "0";
-            var queryCats = MapTorznabCapsToTrackers(query);
-            if (queryCats.Count == 1)
-            {
-                cat = queryCats.First().ToString();
-            }
+            var cat = MapTorznabCapsToTrackers(query).FirstIfSingleOrDefault("0");
 
             queryCollection.Add("cat", cat);
             queryCollection.Add("searchin", "filename");
