@@ -165,8 +165,8 @@ namespace Jackett.Common.Indexers
                 {
 
                     var qDetailsLink = row.QuerySelector("a[href^=details.php?id=]");
-
-                    if (!query.MatchQueryStringAND(qDetailsLink.Text()))
+                    var title = qDetailsLink.TextContent;
+                    if (!query.MatchQueryStringAND(title))
                         continue;
 
                     var qCatLink = row.QuerySelector("a[href^=\"browse.php?cat=\"]");
@@ -198,7 +198,7 @@ namespace Jackett.Common.Indexers
                     {
                         MinimumRatio = 0.75,
                         MinimumSeedTime = 0,
-                        Title = qDetailsLink.TextContent,
+                        Title = title,
                         Category = MapTrackerCatToNewznab(catStr),
                         Link = link,
                         Comments = comments,

@@ -294,13 +294,14 @@ namespace Jackett.Common.Indexers
                         var comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
                         var grabs = ParseUtil.CoerceLong(qGrabs.TextContent);
                         var leechers = ParseUtil.CoerceInt(qLeechers.TextContent);
+                        var bytes = ReleaseInfo.GetBytes(size);
                         var release = new ReleaseInfo
                         {
                             MinimumRatio = 1,
                             MinimumSeedTime = 288000, //80 hours
                             Category = GroupCategory,
                             PublishDate = publishDate,
-                            Size = ReleaseInfo.GetBytes(size),
+                            Size = bytes,
                             Comments = comments,
                             Link = link,
                             Guid = link,

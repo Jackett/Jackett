@@ -245,7 +245,7 @@ namespace Jackett.Common.Indexers
                     // ex: 2015-08-16 21:25:08 +0000
                     var dateStr = item.Value<string>("pubdate").Replace(" +0000", "");
                     var dateTime = DateTime.ParseExact(dateStr, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                    var releaseSeeders = item.Value<int>("seeders");
+                    var seeders = item.Value<int>("seeders");
                     var title = WebUtility.HtmlDecode(item.Value<string>("title"));
                     var infoHash = magnetUri.ToString().Split(':')[3].Split('&')[0];
                     var publishDate = DateTime.SpecifyKind(dateTime, DateTimeKind.Utc).ToLocalTime();
@@ -263,8 +263,8 @@ namespace Jackett.Common.Indexers
                         Link = link,
                         PublishDate = publishDate,
                         Guid = magnetUri,
-                        Seeders = releaseSeeders,
-                        Peers = leechers + releaseSeeders,
+                        Seeders = seeders,
+                        Peers = leechers + seeders,
                         Size = size,
                         MinimumRatio = 1,
                         MinimumSeedTime = 172800, // 48 hours

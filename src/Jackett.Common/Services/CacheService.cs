@@ -32,10 +32,16 @@ namespace Jackett.Common.Services
 
                 foreach (var release in releases.OrderByDescending(i => i.PublishDate))
                 {
-                    var existingItem = trackerCache.Results.FirstOrDefault(i => i.Result.Guid == release.Guid) ??
-                                       new CachedResult {Created = DateTime.Now};
+                    var existingItem = trackerCache.Results.FirstOrDefault(i => i.Result.Guid == release.Guid);
+                    if (existingItem == null)
+                    {
+                        existingItem = new CachedResult
+                        {
+                            Created = DateTime.Now
+                        };
                         trackerCache.Results.Add(existingItem);
-                        existingItem.Result = release;
+                    }
+
                 }
 
                 // Prune cache

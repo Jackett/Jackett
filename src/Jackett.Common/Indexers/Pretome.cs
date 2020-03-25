@@ -303,7 +303,7 @@ namespace Jackett.Common.Indexers
                     var size = ReleaseInfo.GetBytes(sizeStr);
                     var leechers = ParseUtil.CoerceInt(row.Children[10].TextContent);
                     var grabs = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(9)").TextContent);
-                    releases.Add(new ReleaseInfo
+                    var release = new ReleaseInfo
                     {
                         MinimumRatio = 1,
                         MinimumSeedTime = 172800, // 48 hours
@@ -320,8 +320,8 @@ namespace Jackett.Common.Indexers
                         Grabs = grabs,
                         DownloadVolumeFactor = 0, // ratioless
                         UploadVolumeFactor = 1
-                        
-                    });
+                    };
+                    releases.Add(release);
                 }
             }
             catch (Exception ex)

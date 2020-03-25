@@ -214,7 +214,7 @@ namespace Jackett.Common.Indexers
                         var link = new Uri(SiteLink + qDownloadLink.GetAttribute("href").TrimStart('/'));
                         var publishDate = DateTimeUtil.FromUnknown(timestr, "UK");
                         var size = ReleaseInfo.GetBytes(sizeString);
-                        releases.Add(new ReleaseInfo
+                        var release = new ReleaseInfo
                         {
                             MinimumRatio = 1,
                             MinimumSeedTime = 0,
@@ -230,7 +230,8 @@ namespace Jackett.Common.Indexers
                             PublishDate = publishDate,
                             Category = MapTrackerCatToNewznab(forumid),
                             Size = size,
-                        });
+                        };
+                        releases.Add(release);
                     }
                     catch (Exception ex)
                     {
