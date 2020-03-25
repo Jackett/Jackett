@@ -129,6 +129,7 @@
       details:
         selector: a[href*="/details.php?id="]
         attribute: href
+      # rows have download but site requires thanks so we use dl from details
       download:
         selector: a[href*="/details.php?id="]
         attribute: href
@@ -153,6 +154,7 @@
       downloadvolumefactor:
         case:
           img[src$="_flags/freedownload.gif"]: 0
+          img[src$="_flags/silverdownload.gif"]: 0.5
           "*": 1
       uploadvolumefactor:
         case:
