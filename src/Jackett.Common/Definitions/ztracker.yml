@@ -105,6 +105,7 @@
       search_type: "{{ if .Query.IMDBID }}t_description{{else}}t_name{{end}}"
       sort: "{{ .Config.sort }}"
       type: "{{ .Config.type }}"
+      # does not return imdb link in results
 
     rows:
       selector: table[border="1"] > tbody > tr:has(a[href*="details.php?id="])
@@ -174,4 +175,4 @@
             args: ["Tegnap", "Yesterday"]
           - name: re_replace
             args: ["12:(\\d\\d) PM", "00:$1 PM"]
-# engine n/a
+# TS Special Edition
