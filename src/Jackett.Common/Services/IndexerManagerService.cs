@@ -159,7 +159,7 @@ namespace Jackett.Common.Services
             var omdbApiKey = serverConfig.OmdbApiKey;
             IFallbackStrategyProvider fallbackStrategyProvider = null;
             IResultFilterProvider resultFilterProvider = null;
-            if (!omdbApiKey.IsNullOrEmptyOrWhitespace())
+            if (!string.IsNullOrWhiteSpace(omdbApiKey))
             {
                 var imdbResolver = new OmdbResolver(webClient, omdbApiKey.ToNonNull(), serverConfig.OmdbApiUrl);
                 fallbackStrategyProvider = new ImdbFallbackStrategyProvider(imdbResolver);

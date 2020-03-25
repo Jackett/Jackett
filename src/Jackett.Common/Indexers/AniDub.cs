@@ -136,7 +136,7 @@ namespace Jackett.Common.Indexers
 
         // If the search string is empty use the latest releases
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
-            => query.IsTest || query.SearchTerm.IsNullOrEmptyOrWhitespace()
+            => query.IsTest || string.IsNullOrWhiteSpace(query.SearchTerm)
             ? await FetchNewReleases()
             : await PerformSearch(query);
 
@@ -313,7 +313,7 @@ namespace Jackett.Common.Indexers
             var releaseNode = tabNode.ParentElement;
             var quality = GetQuality(releaseNode);
 
-            if (!quality.IsNullOrEmptyOrWhitespace())
+            if (!string.IsNullOrWhiteSpace(quality))
             {
                 return $"{baseTitle} [{quality}]";
             }
@@ -324,7 +324,7 @@ namespace Jackett.Common.Indexers
         private static string GetQuality(IElement releaseNode)
         {
             // For some releases there's no block with quality
-            if (releaseNode.Id.IsNullOrEmptyOrWhitespace())
+            if (string.IsNullOrWhiteSpace(releaseNode.Id))
             {
                 return null;
             }

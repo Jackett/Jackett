@@ -32,7 +32,7 @@ namespace Jackett.Common.Indexers.Feeds
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var requestUri = FeedUri.ToString();
-            if (!query.SearchTerm.IsNullOrEmptyOrWhitespace())
+            if (!string.IsNullOrWhiteSpace(query.SearchTerm))
                 requestUri = requestUri + "?q=" + query.SearchTerm;
             var request = new WebRequest
             {

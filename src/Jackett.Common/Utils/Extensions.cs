@@ -48,17 +48,6 @@ namespace Jackett.Common.Utils
         public static IEnumerable<T> Flatten<T>(this IEnumerable<IEnumerable<T>> list) => list.SelectMany(x => x);
     }
 
-    // TODO This class should be removed in favor of explicit conversions
-    public static class StringExtension
-    {
-        // string.IsNullOrWhitespace already checks string.IsNullOrEmpty should remove this?
-        public static bool IsNullOrEmptyOrWhitespace(this string str) => string.IsNullOrEmpty(str) || string.IsNullOrWhiteSpace(str);
-
-        public static DateTime ToDateTime(this string str) => DateTime.Parse(str);
-
-        public static Uri ToUri(this string str) => new Uri(str);
-    }
-
     public static class CollectionExtension
     {
         // IEnumerable class above already does this. All ICollection are IEnumerable, so favor IEnumerable?
