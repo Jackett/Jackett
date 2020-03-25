@@ -83,29 +83,6 @@ namespace Jackett.Common.Utils
         public static IDictionary<Key, Value> ToDictionary<Key, Value>(this IEnumerable<KeyValuePair<Key, Value>> pairs) => pairs.ToDictionary(x => x.Key, x => x.Value);
     }
 
-    public static class ParseExtension
-    {
-        public static T? TryParse<T>(this string value) where T : struct, IConvertible
-        {
-            if (string.IsNullOrWhiteSpace(value))
-                return null;
-            try
-            {
-                var val = Convert.ChangeType(value, typeof(T));
-                return (T)val;
-            }
-            catch(Exception e) when
-                (e is InvalidCastException // Conversion not supported
-                 || e is FormatException) // Conversion failed
-            {
-                return null;
-            }
-            //Other exceptions include
-            //OverflowException value > T.MaxValue
-            //ArgumentNullException when typeof(T) == null
-        }
-    }
-
     public static class TaskExtensions
     {
         public static Task<IEnumerable<TResult>> Until<TResult>(this IEnumerable<Task<TResult>> tasks, TimeSpan timeout)
