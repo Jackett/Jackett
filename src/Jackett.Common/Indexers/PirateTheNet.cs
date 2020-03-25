@@ -169,11 +169,12 @@ namespace Jackett.Common.Indexers
                     var comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
                     var size = ReleaseInfo.GetBytes(sizeStr);
                     var leechers = ParseUtil.CoerceInt(qLeechers.Text());
+                    var title = qDetailsLink.GetAttribute("alt");
                     releases.Add(new ReleaseInfo
                     {
                         MinimumRatio = 1,
                         MinimumSeedTime = 72 * 60 * 60,
-                        Title = qDetailsLink.GetAttribute("alt"),
+                        Title = title,
                         Category = MapTrackerCatToNewznab(catStr),
                         Link = link,
                         Comments = comments,

@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -269,9 +270,8 @@ namespace Jackett.Common.Indexers
                             continue;
 
                         // some users have an extra colum (8), we can't use nth-last-child
-                        var qSize = Row.QuerySelector("td:nth-child(4)");
-                        var Size = qSize.TextContent;
-                        if (string.IsNullOrEmpty(Size)) // external links, example BlazBlue: Calamity Trigger Manual - Guide [GameDOX - External Link]
+                        var size = Row.QuerySelector("td:nth-child(4)").TextContent;
+                        if (string.IsNullOrEmpty(size)) // external links, example BlazBlue: Calamity Trigger Manual - Guide [GameDOX - External Link]
                             continue;
                         var qDetailsLink = Row.QuerySelector("a[href^=\"torrents.php?id=\"]");
                         var title = qDetailsLink.TextContent.Replace(", Freeleech!", "").Replace(", Neutral Leech!", "");
@@ -294,13 +294,13 @@ namespace Jackett.Common.Indexers
                         var comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
                         var grabs = ParseUtil.CoerceLong(qGrabs.TextContent);
                         var leechers = ParseUtil.CoerceInt(qLeechers.TextContent);
-                        releases.Add(new ReleaseInfo
+                        var release = new ReleaseInfo
                         {
                             MinimumRatio = 1,
                             MinimumSeedTime = 288000, //80 hours
                             Category = GroupCategory,
                             PublishDate = publishDate,
-                            Size = ReleaseInfo.GetBytes(Size),
+                            Size = ReleaseInfo.GetBytes(size),
                             Comments = comments,
                             Link = link,
                             Guid = link,
@@ -311,7 +311,8 @@ namespace Jackett.Common.Indexers
                             Description = qDescription?.TextContent,
                             UploadVolumeFactor = qNeutralLeech is null ? 1 : 0,
                             DownloadVolumeFactor = qFreeLeech != null || qNeutralLeech != null ? 0 : 1,
-                        });
+                        };
+                        releases.Add(release);
                     }
                 }
             }

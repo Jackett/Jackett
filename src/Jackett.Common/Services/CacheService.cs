@@ -19,19 +19,23 @@ namespace Jackett.Common.Services
         {
             lock (cache)
             {
-                var trackerCache = cache.FirstOrDefault(c => c.TrackerId == indexer.ID) ??
-                                   new TrackerCache {TrackerId = indexer.ID, TrackerName = indexer.DisplayName};
+                var trackerCache = cache.FirstOrDefault(c => c.TrackerId == indexer.ID);
+                if (trackerCache == null)
+                {
+                    trackerCache = new TrackerCache
+                    {
+                        TrackerId = indexer.ID,
+                        TrackerName = indexer.DisplayName
+                    };
                     cache.Add(trackerCache);
-                
+                }
 
                 foreach (var release in releases.OrderByDescending(i => i.PublishDate))
                 {
                     var existingItem = trackerCache.Results.FirstOrDefault(i => i.Result.Guid == release.Guid) ??
                                        new CachedResult {Created = DateTime.Now};
                         trackerCache.Results.Add(existingItem);
-                    
-
-                    existingItem.Result = release;
+                        existingItem.Result = release;
                 }
 
                 // Prune cache

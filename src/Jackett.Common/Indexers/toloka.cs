@@ -258,7 +258,7 @@ namespace Jackett.Common.Indexers
                         var timestr = Row.QuerySelector("td:nth-child(13)").TextContent;
                         var forum = Row.QuerySelector("td:nth-child(2) > a");
                         var forumid = forum.GetAttribute("href").Split('=')[1];
-                        var releaseComments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
+                        var comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
                         var link = new Uri(SiteLink + qDownloadLink.GetAttribute("href"));
                         var size = ReleaseInfo.GetBytes(qSize.TextContent);
                         var leechers = ParseUtil.CoerceInt(Row.QuerySelector("td:nth-child(11) > b").TextContent);
@@ -268,9 +268,9 @@ namespace Jackett.Common.Indexers
                             MinimumRatio = 1,
                             MinimumSeedTime = 0,
                             Title = qDetailsLink.TextContent,
-                            Comments = releaseComments,
+                            Comments = comments,
                             Link = link,
-                            Guid = releaseComments,
+                            Guid = comments,
                             Size = size,
                             Seeders = seeders,
                             Peers = leechers + seeders,
@@ -286,9 +286,7 @@ namespace Jackett.Common.Indexers
                         {
                             // extract season and episodes
                             var regex = new Regex(".+\\/\\s([^а-яА-я\\/]+)\\s\\/.+Сезон\\s*[:]*\\s+(\\d+).+(?:Серії|Епізод)+\\s*[:]*\\s+(\\d+-*\\d*).+,\\s+(.+)\\]\\s(.+)");
-
-                            string title;
-                            title = regex.Replace(release.Title, "$1 - S$2E$3 - rus $4 $5");
+                            var title = regex.Replace(release.Title, "$1 - S$2E$3 - rus $4 $5");
                             title = Regex.Replace(title, "-Rip", "Rip", RegexOptions.IgnoreCase);
                             title = Regex.Replace(title, "WEB-DLRip", "WEBDL", RegexOptions.IgnoreCase);
                             title = Regex.Replace(title, "WEB-DL", "WEBDL", RegexOptions.IgnoreCase);

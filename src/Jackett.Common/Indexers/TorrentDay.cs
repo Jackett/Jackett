@@ -221,10 +221,10 @@ namespace Jackett.Common.Indexers
 
                 foreach (var torrent in json)
                 {
-                    if ((query.ImdbID == null || !TorznabCaps.SupportsImdbMovieSearch) && !query.MatchQueryStringAND(torrent.name))
+                    if ((!query.IsImdbQuery || !TorznabCaps.SupportsImdbMovieSearch) && !query.MatchQueryStringAND(torrent.name))
                         continue;
                     var torrentID = (long)torrent.t;
-                    var releaseComments = new Uri(SiteLink + "details.php?id=" + torrentID);
+                    var comments = new Uri(SiteLink + "details.php?id=" + torrentID);
                     var seeders = (int)torrent.seeders;
                     var imdbId = (string)torrent["imdb-id"];
                     var downloadMultiplier = (double?)torrent["download-multiplier"];
@@ -237,8 +237,8 @@ namespace Jackett.Common.Indexers
                         MinimumRatio = 1,
                         MinimumSeedTime = 172800, // 48 hours
                         Category = MapTrackerCatToNewznab(torrent.c.ToString()),
-                        Comments = releaseComments,
-                        Guid = releaseComments,
+                        Comments = comments,
+                        Guid = comments,
                         Link = link,
                         PublishDate = publishDate,
                         Size = (long)torrent.size,

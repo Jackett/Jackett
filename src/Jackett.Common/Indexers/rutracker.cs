@@ -1544,7 +1544,7 @@ namespace Jackett.Common.Indexers
                             continue;
                         var qDetailsLink = Row.QuerySelector("td.t-title > div.t-title > a.tLink");
                         var qSize = Row.QuerySelector("td.tor-size");
-                        var releaseComments = new Uri(SiteLink + "forum/" + qDetailsLink.GetAttribute("href"));
+                        var comments = new Uri(SiteLink + "forum/" + qDetailsLink.GetAttribute("href"));
                         var seedersString = Row.QuerySelector("td:nth-child(7) b").TextContent;
                         var seeders = string.IsNullOrWhiteSpace(seedersString) ? 0 : ParseUtil.CoerceInt(seedersString);
                         var timestr = Row.QuerySelector("td:nth-child(10)").GetAttribute("data-ts_text");
@@ -1560,9 +1560,9 @@ namespace Jackett.Common.Indexers
                             MinimumRatio = 1,
                             MinimumSeedTime = 0,
                             Title = qDetailsLink.TextContent,
-                            Comments = releaseComments,
+                            Comments = comments,
                             Link = link,
-                            Guid = releaseComments,
+                            Guid = comments,
                             Size = size,
                             Seeders = seeders,
                             Peers = leechers + seeders,

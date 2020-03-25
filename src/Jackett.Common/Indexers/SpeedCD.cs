@@ -166,7 +166,7 @@ namespace Jackett.Common.Indexers
 
                     var cat = row.QuerySelector("img[class^='Tcat']").ParentElement.GetAttribute("href").Trim().Remove(0, 5);
                     long.TryParse(cat, out var category);
-
+                    var downloadVolumeFactor = row.QuerySelector("span:contains(\"[Freeleech]\")") != null ? 0 : 1;
                     releases.Add(new ReleaseInfo
                     {
                         Title = title,
@@ -181,7 +181,7 @@ namespace Jackett.Common.Indexers
                         MinimumSeedTime = 172800, // 48 hours
                         Category = MapTrackerCatToNewznab(category.ToString()),
                         Comments = comments,
-                        DownloadVolumeFactor = row.QuerySelector("span:contains(\"[Freeleech]\")") != null ? 0 : 1,
+                        DownloadVolumeFactor = downloadVolumeFactor,
                         UploadVolumeFactor = 1
                     });
                 }

@@ -224,27 +224,19 @@ namespace Jackett.Common.Indexers
             {
                 if (script.TextContent.Contains("catsh=Array"))
                 {
-                    var seriesknowbysite = Regex.Split(script.TextContent, "catl");
-                    for (var i = 1; i < seriesknowbysite.Length; i++)
+                    var seriesKnowBySite = Regex.Split(script.TextContent, "catl");
+                    for (var i = 1; i < seriesKnowBySite.Length; i++)
                     {
-                        try
-                        {
-                            var id = seriesknowbysite[i];
-                            var serieselement = WebUtility.HtmlDecode(id).Split(';');
-                            series.Add(new SeriesDetail
+                        var id = seriesKnowBySite[i];
+                        var seriesElement = WebUtility.HtmlDecode(id).Split(';');
+                        series.Add(
+                            new SeriesDetail
                             {
-	                            HunName = serieselement[1].Split('=')[1].Trim('\'').ToLower(),
-	                            EngName = serieselement[2].Split('=')[1].Trim('\'').ToLower(),
-	                            id = serieselement[0].Split('=')[1].Trim('\''),
-	                            imdbid = serieselement[7].Split('=')[1].Trim('\'')
+                                HunName = seriesElement[1].Split('=')[1].Trim('\'').ToLower(),
+                                EngName = seriesElement[2].Split('=')[1].Trim('\'').ToLower(),
+                                id = seriesElement[0].Split('=')[1].Trim('\''),
+                                imdbid = seriesElement[7].Split('=')[1].Trim('\'')
                             });
-                        }
-                        // catch and rethrow without doing anything just remove?
-                        catch (IndexOutOfRangeException e)
-                        {
-                            // resets call stack normally not the intended result
-                            throw (e);
-                        }
                     }
                 }
             }

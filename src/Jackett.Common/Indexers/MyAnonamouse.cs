@@ -170,21 +170,20 @@ namespace Jackett.Common.Indexers
 
             var qParams = new NameValueCollection
             {
-                { "tor[text]", query.GetQueryString() },
-                { "tor[srchIn][title]", "true" },
-                { "tor[srchIn][author]", "true" },
-                { "tor[searchType]", "all" },
-                { "tor[searchIn]", "torrents" },
-                { "tor[hash]", "" },
-                { "tor[sortType]", "default" },
-                { "tor[startNumber]", "0" },
-
-                { "thumbnails", "1" }, // gives links for thumbnail sized versions of their posters
-                                       //qParams.Add("posterLink", "1"); // gives links for a full sized poster
-                                       //qParams.Add("dlLink", "1"); // include the url to download the torrent
-                { "description", "1" } // include the description
+                {"tor[text]", query.GetQueryString()},
+                {"tor[srchIn][title]", "true"},
+                {"tor[srchIn][author]", "true"},
+                {"tor[searchType]", "all"},
+                {"tor[searchIn]", "torrents"},
+                {"tor[hash]", ""},
+                {"tor[sortType]", "default"},
+                {"tor[startNumber]", "0"},
+                {"thumbnails", "1"}, // gives links for thumbnail sized versions of their posters
+                //{ "posterLink", "1"}, // gives links for a full sized poster
+                //{ "dlLink", "1"}, // include the url to download the torrent
+                {"description", "1"}, // include the description
+                //{"bookmarks", "0"} // include if the item is bookmarked or not
             };
-            //qParams.Add("bookmarks", "0"); // include if the item is bookmarked or not
 
             var catList = MapTorznabCapsToTrackers(query);
             if (catList.Any())

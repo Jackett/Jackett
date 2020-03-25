@@ -194,9 +194,9 @@ namespace Jackett.Common.Indexers
                     var descCol = row.Children[1];
                     var torrentTag = descCol.QuerySelectorAll("span.torrent-tag");
                     //Empty list gives string.Empty in string.Join
-                    var releaseDescription = string.Join(", ", torrentTag.Select(x => x.InnerHtml));
+                    var description = string.Join(", ", torrentTag.Select(x => x.InnerHtml));
                     var qCommentLink = descCol.QuerySelector("a[href*=\"details.php\"]");
-                    var releaseComments = new Uri(SiteLink + qCommentLink.GetAttribute("href").Replace("&hit=1", ""));
+                    var comments = new Uri(SiteLink + qCommentLink.GetAttribute("href").Replace("&hit=1", ""));
 
                     var torrentDetails = descCol.QuerySelector(".torrent_details");
                     var rawDateStr = torrentDetails.ChildNodes[1].TextContent;
@@ -207,29 +207,30 @@ namespace Jackett.Common.Indexers
                     var pubDateUtc = TimeZoneInfo.ConvertTimeToUtc(dateGerman, germanyTz);
                     var longFromString = ParseUtil.GetLongFromString(descCol.QuerySelector("a[href*=\"&searchin=imdb\"]")?.GetAttribute("href"));
                     var sizeFileCountRowChilds = row.Children[5].Children;
-                    var releaseSeeders = ParseUtil.CoerceInt(row.Children[7].TextContent);
+                    var seeders = ParseUtil.CoerceInt(row.Children[7].TextContent);
                     var link = new Uri(SiteLink + qLink.GetAttribute("href"));
                     var files = ParseUtil.CoerceInt(sizeFileCountRowChilds[2].TextContent);
                     var leechers = ParseUtil.CoerceInt(row.Children[8].TextContent);
                     var grabs = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(7)").TextContent);
                     var downloadVolumeFactor = globalFreeleech || row.QuerySelector("span.torrent-tag-free") != null
                         ? 0 : 1;
+                    var size = ReleaseInfo.GetBytes(sizeFileCountRowChilds[0].TextContent);
                     releases.Add(new ReleaseInfo
                     {
                         MinimumRatio = 1,
                         MinimumSeedTime = 345600, //8 days
                         Category = MapTrackerCatToNewznab(catStr),
                         Link = link,
-                        Description = releaseDescription,
+                        Description = description,
                         Title = qCommentLink.GetAttribute("title"),
-                        Comments = releaseComments,
-                        Guid = releaseComments,
+                        Comments = comments,
+                        Guid = comments,
                         PublishDate = pubDateUtc.ToLocalTime(),
                         Imdb = longFromString,
-                        Size = ReleaseInfo.GetBytes(sizeFileCountRowChilds[0].TextContent),
+                        Size = size,
                         Files = files,
-                        Seeders = releaseSeeders,
-                        Peers = leechers + releaseSeeders,
+                        Seeders = seeders,
+                        Peers = leechers + seeders,
                         Grabs = grabs,
                         DownloadVolumeFactor = downloadVolumeFactor,
                         UploadVolumeFactor = 1

@@ -69,23 +69,24 @@ namespace Jackett.Common.Indexers
                 xmlDoc.LoadXml(result.Content);
                 foreach (XmlNode node in xmlDoc.GetElementsByTagName("item"))
                 {
-                    var serie_title = node.SelectSingleNode(".//*[local-name()='raw_title']").InnerText;
-                    if ((query.ImdbID == null || !TorznabCaps.SupportsImdbMovieSearch) &&
-                        !query.MatchQueryStringAND(serie_title))
+                    var title = node.SelectSingleNode(".//*[local-name()='raw_title']").InnerText;
+                    if ((!query.IsImdbQuery || !TorznabCaps.SupportsImdbMovieSearch) &&
+                        !query.MatchQueryStringAND(title))
                         continue;
 
                     // Try to guess the category... I'm not proud of myself...
-                    var category = serie_title.Contains("720p") ? TorznabCatType.TVHD.ID : TorznabCatType.TVSD.ID;
+                    var category = title.Contains("720p") ? TorznabCatType.TVHD.ID : TorznabCatType.TVSD.ID;
                     var test = node.SelectSingleNode("enclosure");
                     var magnetUri = new Uri(node.SelectSingleNode("link").InnerText);
                     var publishDate = DateTime.Parse(node.SelectSingleNode("pubDate").InnerText, CultureInfo.InvariantCulture);
                     var infoHash = node.SelectSingleNode("description").InnerText;
+                    //TODO Maybe use magnetUri instead? https://github.com/Jackett/Jackett/pull/7342#discussion_r397552678
                     var guid = new Uri(test.Attributes["url"].Value);
                     releases.Add(new ReleaseInfo
                     {
                         MinimumRatio = 1,
                         MinimumSeedTime = 172800, // 48 hours
-                        Title = serie_title,
+                        Title = title,
                         Comments = magnetUri,
                         Category = new List<int> {category},
                         Guid = guid,

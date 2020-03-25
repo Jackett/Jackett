@@ -235,6 +235,7 @@ namespace Jackett.Common.Indexers
                         }
 
                         var publishDate = DateTimeUtil.UnixTimestampToDateTime(torrent.added);
+                        //TODO replace with download link?
                         var guid = new Uri(TorrentDescriptionUrl.Replace("{id}", torrent.id.ToString()));
                         var comments = new Uri(TorrentCommentUrl.Replace("{id}", torrent.id.ToString()));
                         var link = new Uri(torrent.download_link);

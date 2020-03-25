@@ -99,7 +99,11 @@ namespace Jackett.Common.Indexers
                         throw new Exception("Error: No data returned!");
 
                     // construct magnet link from infohash with all public trackers known to man
-                    var magnet_uri = new Uri( "magnet:?xt=urn:btih:" + torrent.Value<JToken>("infohash") +
+                    // TODO move trackers to List for reuse elsewhere
+                    // TODO dynamically generate list periodically from online tracker repositories like
+                    // https://torrents.io/tracker-list/
+                    // https://github.com/ngosang/trackerslist
+                    var magnet = new Uri( "magnet:?xt=urn:btih:" + torrent.Value<JToken>("infohash") +
                         "&tr=udp://tracker.coppersurfer.tk:6969/announce" +
                         "&tr=udp://tracker.leechers-paradise.org:6969/announce" +
                         "&tr=udp://tracker.internetwarriors.net:1337/announce" +
@@ -138,20 +142,20 @@ namespace Jackett.Common.Indexers
                     double createdunix = torrent.Value<long>("created_unix");
                     var dateTime = new System.DateTime(1970, 1, 1, 0, 0, 0, 0);
                     dateTime = dateTime.AddSeconds(createdunix);
-                    var releaseSeeders = torrent.Value<int>("seeders");
+                    var seeders = torrent.Value<int>("seeders");
                     var grabs = ParseUtil.CoerceInt(torrent.Value<string>("completed") ?? "0");
                     var release = new ReleaseInfo
                     {
                         Title = torrent.Value<string>("name"),
-                        MagnetUri = magnet_uri,
+                        MagnetUri = magnet,
                         // there is no comments or details link so we point to the web site instead
                         Comments = new Uri(SiteLink),
-                        Guid = magnet_uri,
-                        Link = magnet_uri,
+                        Guid = magnet,
+                        Link = magnet,
                         InfoHash = torrent.Value<JToken>("infohash").ToString(),
                         PublishDate = dateTime,
-                        Seeders = releaseSeeders,
-                        Peers = torrent.Value<int>("leechers") + releaseSeeders,
+                        Seeders = seeders,
+                        Peers = torrent.Value<int>("leechers") + seeders,
                         Size = torrent.Value<long>("size_bytes"),
                         Grabs = grabs,
                         MinimumRatio = 1,

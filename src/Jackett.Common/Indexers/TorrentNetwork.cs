@@ -201,7 +201,7 @@ namespace Jackett.Common.Indexers
                     var torrentID = (long)torrent[2];
                     var comments = new Uri(SiteLink + "torrent/" + torrentID);
                     //var preDelaySeconds = (long)torrent[4];
-                    var releaseSeeders = (int)torrent[6];
+                    var seeders = (int)torrent[6];
                     //var imdbRating = (double)torrent[8] / 10;
                     var genres = (string)torrent[9];
                     if (!string.IsNullOrWhiteSpace(genres))
@@ -232,8 +232,8 @@ namespace Jackett.Common.Indexers
                         Link = link,
                         PublishDate = publishDate,
                         Size = (long)torrent[5],
-                        Seeders = releaseSeeders,
-                        Peers = releaseSeeders + (int)torrent[7],
+                        Seeders = seeders,
+                        Peers = seeders + (int)torrent[7],
                         Description = genres,
                         UploadVolumeFactor = 1,
                         DownloadVolumeFactor = downloadVolumeFactor,

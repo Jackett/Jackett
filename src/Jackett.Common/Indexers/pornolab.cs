@@ -300,12 +300,11 @@ namespace Jackett.Common.Indexers
                         var leechers = ParseUtil.CoerceInt(Row.QuerySelector("td:nth-child(8)").TextContent);
                         var grabs = ParseUtil.CoerceLong(Row.QuerySelector("td:nth-child(9)").TextContent);
                         var publishDate = DateTimeUtil.UnixTimestampToDateTime(long.Parse(timestr));
-                        releases.Add(new ReleaseInfo
+                        var release = new ReleaseInfo
                         {
                             MinimumRatio = 1,
                             MinimumSeedTime = 0,
-                            Title =
-                                title,
+                            Title = title,
                             Comments = link,
                             Description = qForumLink.TextContent,
                             Link = link,
@@ -318,7 +317,8 @@ namespace Jackett.Common.Indexers
                             Category = MapTrackerCatToNewznab(forumid),
                             DownloadVolumeFactor = 1,
                             UploadVolumeFactor = 1
-                        });
+                        };
+                        releases.Add(release);
                     }
                     catch (Exception ex)
                     {

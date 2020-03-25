@@ -111,28 +111,29 @@ namespace Jackett.Common.Indexers
                     var TorrentIdParts = qDetailsLink.GetAttribute("href").Split('=');
                     var TorrentId = TorrentIdParts[TorrentIdParts.Length - 1];
                     var DLLink = "torrents.php?action=download&id=" + TorrentId.ToString();
-                    var releaseLink = new Uri(SiteLink + DLLink);
-                    var releaseSeeders = ParseUtil.CoerceInt(Seeders.TextContent);
-                    var releaseDescription = DescStr.TextContent.Trim();
+                    var link = new Uri(SiteLink + DLLink);
+                    var seeders = ParseUtil.CoerceInt(Seeders.TextContent);
+                    var description = DescStr.TextContent.Trim();
                     var publishDate = DateTimeUtil.FromTimeAgo(Added.TextContent);
                     var comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
                     var leechers = ParseUtil.CoerceInt(Leechers.TextContent);
                     var size = ReleaseInfo.GetBytes(Size.TextContent);
                     var grabs = ParseUtil.CoerceLong(Grabs.TextContent);
                     var files = ParseUtil.CoerceLong(Files.TextContent);
+                    var category = new List<int> {TvCategoryParser.ParseTvShowQuality(description)};
                     releases.Add(new ReleaseInfo
                     {
                         MinimumRatio = 1,
                         MinimumSeedTime = 0,
-                        Description = releaseDescription,
-                        Title = qDetailsLink.TextContent + " " + releaseDescription,
+                        Description = description,
+                        Title = qDetailsLink.TextContent + " " + description,
                         PublishDate = publishDate,
-                        Category = new List<int> {TvCategoryParser.ParseTvShowQuality(releaseDescription)},
-                        Link = releaseLink,
+                        Category = category,
+                        Link = link,
                         Comments = comments,
-                        Guid = releaseLink,
-                        Seeders = releaseSeeders,
-                        Peers = leechers + releaseSeeders,
+                        Guid = link,
+                        Seeders = seeders,
+                        Peers = leechers + seeders,
                         Size = size,
                         Grabs = grabs,
                         Files = files,

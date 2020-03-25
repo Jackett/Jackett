@@ -285,17 +285,17 @@ namespace Jackett.Common.Indexers
                 foreach (var row in rows)
                 {
                     var qLink = row.Children[1].QuerySelector("a");
-                    var releaseTitle = qLink.GetAttribute("title");
-                    if (qLink.QuerySelectorAll("span").Length == 1 && releaseTitle.StartsWith("NEW! |"))
+                    var title = qLink.GetAttribute("title");
+                    if (qLink.QuerySelectorAll("span").Length == 1 && title.StartsWith("NEW! |"))
                     {
-                        releaseTitle = releaseTitle.Substring(6).Trim();
+                        title = title.Substring(6).Trim();
                     }
 
-                    var releaseComments = new Uri(SiteLink + qLink.GetAttribute("href"));
+                    var comments = new Uri(SiteLink + qLink.GetAttribute("href"));
                     var qDownload = row.Children[2].QuerySelector("a");
                     var dateStr = Regex.Replace(row.Children[5].InnerHtml, @"\<br[\s]{0,1}[\/]{0,1}\>", " ");
                     var sizeStr = row.Children[7].TextContent;
-                    var releaseSeeders = ParseUtil.CoerceInt(row.Children[9].TextContent);
+                    var seeders = ParseUtil.CoerceInt(row.Children[9].TextContent);
                     var files = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(4)").TextContent);
                     var cat = row.FirstElementChild.FirstElementChild.GetAttribute("href").Replace("browse.php?", string.Empty);
                     var link = new Uri(SiteLink + qDownload.GetAttribute("href"));
@@ -307,14 +307,14 @@ namespace Jackett.Common.Indexers
                     {
                         MinimumRatio = 1,
                         MinimumSeedTime = 172800, // 48 hours
-                        Title = releaseTitle,
-                        Comments = releaseComments,
-                        Guid = releaseComments,
+                        Title = title,
+                        Comments = comments,
+                        Guid = comments,
                         Link = link,
                         PublishDate = publishDate,
                         Size = size,
-                        Seeders = releaseSeeders,
-                        Peers = leechers + releaseSeeders,
+                        Seeders = seeders,
+                        Peers = leechers + seeders,
                         Category = MapTrackerCatToNewznab(cat),
                         Files = files,
                         Grabs = grabs,

@@ -203,7 +203,6 @@ namespace Jackett.Common.Indexers
                     var catStr = qCatLink.GetAttribute("href").Split('=')[3].Split('#')[0];
                     var link = new Uri(SiteLink + qDlLink.GetAttribute("href"));
                     var sizeStr = qSize.TextContent;
-                    var releaseSeeders = ParseUtil.CoerceInt(qSeeders.TextContent);
                     var dateStr = qDateStr.TextContent.Trim().Replace("Heute", "Today").Replace("Gestern", "Yesterday");
 
                     var dateGerman = DateTimeUtil.FromUnknown(dateStr);
@@ -217,9 +216,10 @@ namespace Jackett.Common.Indexers
                         downloadFactor = 1;
                     var title = titleRegexp.Match(qDetailsLink.GetAttribute("onmouseover")).Groups[1].Value;
                     var comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
+                    var seeders = ParseUtil.CoerceInt(qSeeders.TextContent);
                     var leechers = ParseUtil.CoerceInt(qLeechers.TextContent);
-                    var publishDate = TimeZoneInfo.ConvertTime(dateGerman, germanyTz, TimeZoneInfo.Local);
                     var grabs = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(7)").TextContent);
+                    var publishDate = TimeZoneInfo.ConvertTime(dateGerman, germanyTz, TimeZoneInfo.Local);
                     releases.Add(new ReleaseInfo
                     {
                         MinimumRatio = 0.8,
@@ -230,8 +230,8 @@ namespace Jackett.Common.Indexers
                         Link = link,
                         Guid = link,
                         Size = ReleaseInfo.GetBytes(sizeStr),
-                        Seeders =  releaseSeeders,
-                        Peers = leechers + releaseSeeders,
+                        Seeders =  seeders,
+                        Peers = leechers + seeders,
                         PublishDate = publishDate,
                         Grabs = grabs,
                         DownloadVolumeFactor = downloadFactor,

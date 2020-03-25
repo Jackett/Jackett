@@ -240,6 +240,7 @@ namespace Jackett.Common.Indexers
                 foreach (var item in jsonContent.Value<JArray>("torrent_results"))
                 {
                     var magnetUri = new Uri(item.Value<string>("download"));
+                    // append app_id to prevent api server returning 403 forbidden
                     var comments = new Uri(item.Value<string>("info_page") + "&app_id=" + app_id);
                     // ex: 2015-08-16 21:25:08 +0000
                     var dateStr = item.Value<string>("pubdate").Replace(" +0000", "");
@@ -250,16 +251,16 @@ namespace Jackett.Common.Indexers
                     var publishDate = DateTime.SpecifyKind(dateTime, DateTimeKind.Utc).ToLocalTime();
                     var leechers = item.Value<int>("leechers");
                     var size = item.Value<long>("size");
+                    // in case of a torrent download we grab the link from the details page in Download()
+                    var link = _provideTorrentLink ? comments : default;
                     var release = new ReleaseInfo
                     {
                         Title = title,
                         Category = MapTrackerCatDescToNewznab(item.Value<string>("category")),
                         MagnetUri = magnetUri,
                         InfoHash = infoHash,
-                        // append app_id to prevent api server returning 403 forbidden
                         Comments = comments,
-                        // in case of a torrent download we grab the link from the details page in Download()
-                        Link = _provideTorrentLink ? comments : default,
+                        Link = link,
                         PublishDate = publishDate,
                         Guid = magnetUri,
                         Seeders = releaseSeeders,

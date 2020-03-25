@@ -201,19 +201,19 @@ namespace Jackett.Common.Indexers
 
                         var forum = row.QuerySelector("a[href^=\"./viewforum.php?f=\"]");
                         var forumid = forum.GetAttribute("href").Split('=')[1];
-                        var size = row.QuerySelector("dl.row-item > dt > div.list-inner > div[style^=\"float:right\"]").TextContent;
-                        size = size.Replace("GiB", "GB");
-                        size = size.Replace("MiB", "MB");
-                        size = size.Replace("KiB", "KB");
-
-                        size = size.Replace("ГБ", "GB");
-                        size = size.Replace("МБ", "MB");
-                        size = size.Replace("КБ", "KB");
+                        var sizeString = row.QuerySelector("dl.row-item > dt > div.list-inner > div[style^=\"float:right\"]")
+                                            .TextContent
+                                            .Replace("GiB", "GB")
+                                            .Replace("MiB", "MB")
+                                            .Replace("KiB", "KB")
+                                            .Replace("ГБ", "GB")
+                                            .Replace("МБ", "MB")
+                                            .Replace("КБ", "KB");
                         var comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
                         var leechers = ParseUtil.CoerceInt(row.QuerySelector("span.leech").TextContent);
                         var link = new Uri(SiteLink + qDownloadLink.GetAttribute("href").TrimStart('/'));
                         var publishDate = DateTimeUtil.FromUnknown(timestr, "UK");
-
+                        var size = ReleaseInfo.GetBytes(sizeString);
                         releases.Add(new ReleaseInfo
                         {
                             MinimumRatio = 1,
@@ -229,7 +229,7 @@ namespace Jackett.Common.Indexers
                             Link = link,
                             PublishDate = publishDate,
                             Category = MapTrackerCatToNewznab(forumid),
-                            Size = ReleaseInfo.GetBytes(size),
+                            Size = size,
                         });
                     }
                     catch (Exception ex)

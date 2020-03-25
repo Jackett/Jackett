@@ -142,7 +142,7 @@ namespace Jackett.Common.Indexers
                         var link = new Uri(btnResult.DownloadURL);
                         var comments = new Uri($"{SiteLink}torrents.php?id={btnResult.GroupID}&torrentid={btnResult.TorrentID}");
                         var publishDate = DateTimeUtil.UnixTimestampToDateTime(btnResult.Time);
-                        var item = new ReleaseInfo
+                        var release = new ReleaseInfo
                         {
                             Category = MapTrackerCatToNewznab(btnResult.Resolution),
                             Comments = comments,
@@ -163,11 +163,11 @@ namespace Jackett.Common.Indexers
                             Imdb = imdb
                         };
                         if (!string.IsNullOrEmpty(btnResult.SeriesBanner))
-                            item.BannerUrl = new Uri(btnResult.SeriesBanner);
-                        if (!item.Category.Any()) // default to TV
-                            item.Category.Add(TorznabCatType.TV.ID);
+                            release.BannerUrl = new Uri(btnResult.SeriesBanner);
+                        if (!release.Category.Any()) // default to TV
+                            release.Category.Add(TorznabCatType.TV.ID);
 
-                        releases.Add(item);
+                        releases.Add(release);
                     }
                 }
             }

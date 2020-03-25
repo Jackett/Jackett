@@ -192,7 +192,8 @@ namespace Jackett.Common.Indexers
                     var files = ParseUtil.CoerceInt(row.QuerySelector("td:contains(Datei) > strong ~ strong").TextContent);
                     var comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
                     var leechers = ParseUtil.CoerceInt(qLeechers.Text());
-                    var bytes = ReleaseInfo.GetBytes(qSize.TextContent.Replace(".", "").Replace(",", "."));
+                    var size = ReleaseInfo.GetBytes(qSize.TextContent.Replace(".", "").Replace(",", "."));
+                    var downloadVolumeFactor = row.QuerySelector("img[title=\"OnlyUpload\"]") != null ? 0 : 1;
                     releases.Add(new ReleaseInfo
                     {
                         MinimumRatio = 0.75,
@@ -202,12 +203,12 @@ namespace Jackett.Common.Indexers
                         Link = link,
                         Comments = comments,
                         Guid = link,
-                        Size = bytes,
+                        Size = size,
                         Seeders = seeders,
                         Peers = leechers + seeders,
                         PublishDate = pubDateUtc,
                         Files = files,
-                        DownloadVolumeFactor = row.QuerySelector("img[title=\"OnlyUpload\"]") != null ? 0 : 1,
+                        DownloadVolumeFactor = downloadVolumeFactor,
                         UploadVolumeFactor = 1
                     });
                 }

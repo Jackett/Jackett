@@ -220,15 +220,17 @@ namespace Jackett.Common.Indexers.Abstract
                     var description = tags?.Any() == true && !string.IsNullOrEmpty(tags[0].ToString())
                         ? "Tags: " + string.Join(", ", tags) + "\n"
                         : null;
+                    Uri banner = null;
+                    if (!string.IsNullOrEmpty(cover))
+                        banner = new Uri(cover);
                     var release = new ReleaseInfo
                     {
                         PublishDate = groupTime,
                         Title = title.ToString(),
                         Description = description,
+                        BannerUrl = banner
                     };
 
-                    if (!string.IsNullOrEmpty(cover))
-                        release.BannerUrl = new Uri(cover);
 
                     if (imdbInTags)
                     {
