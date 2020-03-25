@@ -231,7 +231,7 @@ namespace Jackett.Common.Indexers
                     var link = new Uri(SiteLink + "download.php/" + torrentID + "/" + torrentID + ".torrent");
                     var publishDate = DateTimeUtil.UnixTimestampToDateTime((long)torrent.ctime).ToLocalTime();
                     var imdb = ParseUtil.GetImdbID(imdbId);
-                    releases.Add(new ReleaseInfo
+                    var release = new ReleaseInfo
                     {
                         Title = torrent.name,
                         MinimumRatio = 1,
@@ -249,7 +249,8 @@ namespace Jackett.Common.Indexers
                         Imdb = imdb,
                         DownloadVolumeFactor = downloadMultiplier ?? 1,
                         UploadVolumeFactor = 1
-                    });
+                    };
+                    releases.Add(release);
                 }
             }
             catch (Exception ex)

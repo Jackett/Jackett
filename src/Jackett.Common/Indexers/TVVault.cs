@@ -121,7 +121,7 @@ namespace Jackett.Common.Indexers
                     var grabs = ParseUtil.CoerceLong(Grabs.TextContent);
                     var files = ParseUtil.CoerceLong(Files.TextContent);
                     var category = new List<int> {TvCategoryParser.ParseTvShowQuality(description)};
-                    releases.Add(new ReleaseInfo
+                    var release = new ReleaseInfo
                     {
                         MinimumRatio = 1,
                         MinimumSeedTime = 0,
@@ -139,7 +139,8 @@ namespace Jackett.Common.Indexers
                         Files = files,
                         DownloadVolumeFactor = FreeLeech != null ? 0 : 1,
                         UploadVolumeFactor = 1
-                    });
+                    };
+                    releases.Add(release);
                 }
             }
             catch (Exception ex)

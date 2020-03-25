@@ -296,7 +296,7 @@ namespace Jackett.Common.Indexers
         {
             var link = new Uri(downloadLink);
             var comments = new Uri(commentsLink);
-            releases.Add(new ReleaseInfo
+            var release = new ReleaseInfo
             {
                 Title = title,
                 Comments = comments,
@@ -309,10 +309,11 @@ namespace Jackett.Common.Indexers
                 Seeders = 1,
                 Peers = 2,
                 MinimumRatio = 1,
-                MinimumSeedTime = 172800,// 48 hours
+                MinimumSeedTime = 172800, // 48 hours
                 DownloadVolumeFactor = 0,
                 UploadVolumeFactor = 1,
-            });
+            };
+            releases.Add(release);
         }
 
         private static string OnclickToDownloadLink(string onclick)

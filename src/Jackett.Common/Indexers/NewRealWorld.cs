@@ -194,7 +194,7 @@ namespace Jackett.Common.Indexers
                     var leechers = ParseUtil.CoerceInt(qLeechers.Text());
                     var size = ReleaseInfo.GetBytes(qSize.TextContent.Replace(".", "").Replace(",", "."));
                     var downloadVolumeFactor = row.QuerySelector("img[title=\"OnlyUpload\"]") != null ? 0 : 1;
-                    releases.Add(new ReleaseInfo
+                    var release = new ReleaseInfo
                     {
                         MinimumRatio = 0.75,
                         MinimumSeedTime = 0,
@@ -210,7 +210,8 @@ namespace Jackett.Common.Indexers
                         Files = files,
                         DownloadVolumeFactor = downloadVolumeFactor,
                         UploadVolumeFactor = 1
-                    });
+                    };
+                    releases.Add(release);
                 }
             }
             catch (Exception ex)

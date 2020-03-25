@@ -181,7 +181,7 @@ namespace Jackett.Common.Indexers
                         var leechers = ParseUtil.CoerceInt(Leechers.TextContent);
                         var grabs = ParseUtil.CoerceLong(Grabs.TextContent);
                         var publishDate = DateTimeUtil.FromTimeAgo(added.TextContent);
-                        releases.Add(new ReleaseInfo
+                        var release = new ReleaseInfo
                         {
                             MinimumRatio = 1,
                             MinimumSeedTime = 72 * 60 * 60,
@@ -197,7 +197,8 @@ namespace Jackett.Common.Indexers
                             PublishDate = publishDate,
                             BannerUrl = bannerURL,
                             Imdb = IMDBId
-                        });
+                        };
+                        releases.Add(release);
                     }
                 }
             }

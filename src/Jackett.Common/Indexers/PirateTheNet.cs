@@ -170,7 +170,7 @@ namespace Jackett.Common.Indexers
                     var size = ReleaseInfo.GetBytes(sizeStr);
                     var leechers = ParseUtil.CoerceInt(qLeechers.Text());
                     var title = qDetailsLink.GetAttribute("alt");
-                    releases.Add(new ReleaseInfo
+                    var release = new ReleaseInfo
                     {
                         MinimumRatio = 1,
                         MinimumSeedTime = 72 * 60 * 60,
@@ -187,7 +187,8 @@ namespace Jackett.Common.Indexers
                         Grabs = grabs,
                         DownloadVolumeFactor = 0, // ratioless
                         UploadVolumeFactor = 1
-                    });
+                    };
+                    releases.Add(release);
                 }
             }
             catch (Exception ex)

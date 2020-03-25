@@ -179,7 +179,7 @@ namespace Jackett.Common.Indexers
                     var seeders = (int)torrent["seeders"];
                     var link = new Uri(DownloadUrl + (string)torrent["id"]);
                     var fileCount = ((JArray)JsonConvert.DeserializeObject<dynamic>((string)torrent["files_list"])).Count;
-                    releases.Add(new ReleaseInfo
+                    var release = new ReleaseInfo
                     {
                         Title = title,
                         Category = MapTrackerCatToNewznab((string)torrent["categoria"]),
@@ -198,7 +198,8 @@ namespace Jackett.Common.Indexers
                         Seeders = seeders,
                         Peers = seeders + (int)torrent["leechers"],
                         BannerUrl = bannerUrl
-                    });
+                    };
+                    releases.Add(release);
                 }
             }
             catch (Exception ex)

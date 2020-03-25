@@ -221,7 +221,7 @@ namespace Jackett.Common.Indexers
                         // All others 100% down
                         _ => 1,
                     };
-                    releases.Add(new ReleaseInfo
+                    var release = new ReleaseInfo
                     {
                         MinimumRatio = 0.8,
                         MinimumSeedTime = 172800, // 48 hours
@@ -238,7 +238,8 @@ namespace Jackett.Common.Indexers
                         UploadVolumeFactor = 1,
                         DownloadVolumeFactor = downloadVolumeFactor,
                         Grabs = (long)torrent[11]
-                    });
+                    };
+                    releases.Add(release);
                 }
             }
             catch (Exception ex)

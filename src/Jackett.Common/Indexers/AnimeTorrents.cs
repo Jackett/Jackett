@@ -99,9 +99,6 @@ namespace Jackett.Common.Indexers
             var ReplaceRegex = new Regex("[^a-zA-Z0-9]+");
             searchString = ReplaceRegex.Replace(searchString, "%");
             var searchUrl = SearchUrl;
-            var queryCollection = new NameValueCollection();
-
-
             var queryCollection = new NameValueCollection
             {
                 {"total", "146"}, // Not sure what this is about but its required!

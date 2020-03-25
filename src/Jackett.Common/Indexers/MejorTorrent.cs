@@ -370,7 +370,7 @@ namespace Jackett.Common.Indexers
         {
             var link = new Uri(downloadLink);
             var comments = new Uri(commentsLink);
-            releases.Add(new ReleaseInfo
+            var release = new ReleaseInfo
             {
                 Title = title,
                 Comments = comments,
@@ -386,7 +386,8 @@ namespace Jackett.Common.Indexers
                 MinimumSeedTime = 172800,// 48 hours
                 DownloadVolumeFactor = 0,
                 UploadVolumeFactor = 1
-            });
+            };
+            releases.Add(release);
         }
 
         private static bool CheckTitleMatchWords(string queryStr, string title)

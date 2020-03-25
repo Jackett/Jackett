@@ -167,7 +167,7 @@ namespace Jackett.Common.Indexers
                     var cat = row.QuerySelector("img[class^='Tcat']").ParentElement.GetAttribute("href").Trim().Remove(0, 5);
                     long.TryParse(cat, out var category);
                     var downloadVolumeFactor = row.QuerySelector("span:contains(\"[Freeleech]\")") != null ? 0 : 1;
-                    releases.Add(new ReleaseInfo
+                    var release = new ReleaseInfo
                     {
                         Title = title,
                         Guid = link,
@@ -183,7 +183,8 @@ namespace Jackett.Common.Indexers
                         Comments = comments,
                         DownloadVolumeFactor = downloadVolumeFactor,
                         UploadVolumeFactor = 1
-                    });
+                    };
+                    releases.Add(release);
                 }
             }
             catch (Exception ex)

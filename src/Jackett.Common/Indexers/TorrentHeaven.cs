@@ -220,7 +220,7 @@ namespace Jackett.Common.Indexers
                     var leechers = ParseUtil.CoerceInt(qLeechers.TextContent);
                     var grabs = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(7)").TextContent);
                     var publishDate = TimeZoneInfo.ConvertTime(dateGerman, germanyTz, TimeZoneInfo.Local);
-                    releases.Add(new ReleaseInfo
+                    var release = new ReleaseInfo
                     {
                         MinimumRatio = 0.8,
                         MinimumSeedTime = 0,
@@ -236,7 +236,8 @@ namespace Jackett.Common.Indexers
                         Grabs = grabs,
                         DownloadVolumeFactor = downloadFactor,
                         UploadVolumeFactor = 1
-                    });
+                    };
+                    releases.Add(release);
                 }
             }
             catch (Exception ex)

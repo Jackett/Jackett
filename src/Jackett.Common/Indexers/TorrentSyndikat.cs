@@ -215,7 +215,7 @@ namespace Jackett.Common.Indexers
                     var downloadVolumeFactor = globalFreeleech || row.QuerySelector("span.torrent-tag-free") != null
                         ? 0 : 1;
                     var size = ReleaseInfo.GetBytes(sizeFileCountRowChilds[0].TextContent);
-                    releases.Add(new ReleaseInfo
+                    var release = new ReleaseInfo
                     {
                         MinimumRatio = 1,
                         MinimumSeedTime = 345600, //8 days
@@ -234,7 +234,8 @@ namespace Jackett.Common.Indexers
                         Grabs = grabs,
                         DownloadVolumeFactor = downloadVolumeFactor,
                         UploadVolumeFactor = 1
-                    });
+                    };
+                    releases.Add(release);
                 }
             }
             catch (Exception ex)

@@ -83,7 +83,7 @@ namespace Jackett.Common.Indexers
                     var infoHash = node.SelectSingleNode("description").InnerText;
                     //TODO Maybe use magnetUri instead? https://github.com/Jackett/Jackett/pull/7342#discussion_r397552678
                     var guid = new Uri(test.Attributes["url"].Value);
-                    releases.Add(new ReleaseInfo
+                    var release = new ReleaseInfo
                     {
                         MinimumRatio = 1,
                         MinimumSeedTime = 172800, // 48 hours
@@ -101,7 +101,8 @@ namespace Jackett.Common.Indexers
                         DownloadVolumeFactor = 0,
                         UploadVolumeFactor = 1,
                         MagnetUri = magnetUri
-                    });
+                    };
+                    releases.Add(release);
                 }
             }
             catch (Exception ex)
