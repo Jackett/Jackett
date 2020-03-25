@@ -85,29 +85,24 @@ namespace Jackett.Common.Utils
 
     public static class ParseExtension
     {
-        public static T? TryParse<T>(this string value) where T : struct
+        public static T? TryParse<T>(this string value) where T : struct, IConvertible
         {
-            var type = typeof(T);
-            var parseMethods = type.GetMethods(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static).Where(m => m.Name == "Parse");
-            var parseMethod = parseMethods.Where(m =>
-            {
-                var parameters = m.GetParameters();
-                var hasOnlyOneParameter = parameters.Count() == 1;
-                var firstParameterIsString = parameters.First().ParameterType == typeof(string);
-
-                return hasOnlyOneParameter && firstParameterIsString;
-            }).First();
-            if (parseMethod == null)
+            if (string.IsNullOrWhiteSpace(value))
                 return null;
             try
             {
-                var val = parseMethod.Invoke(null, new object[] { value });
+                var val = Convert.ChangeType(value, typeof(T));
                 return (T)val;
             }
-            catch
+            catch(Exception e) when
+                (e is InvalidCastException // Conversion not supported
+                 || e is FormatException) // Conversion failed
             {
                 return null;
             }
+            //Other exceptions include
+            //OverflowException value > T.MaxValue
+            //ArgumentNullException when typeof(T) == null
         }
     }
 
