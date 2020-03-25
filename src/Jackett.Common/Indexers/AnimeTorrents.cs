@@ -103,15 +103,7 @@ namespace Jackett.Common.Indexers
             var queryCollection = new NameValueCollection();
 
             queryCollection.Add("total", "146"); // Not sure what this is about but its required!
-
-            var cat = "0";
-            var queryCats = MapTorznabCapsToTrackers(query);
-            if (queryCats.Count == 1)
-            {
-                cat = queryCats.First().ToString();
-            }
-
-            queryCollection.Add("cat", cat);
+            queryCollection.Add("cat", MapTorznabCapsToTrackers(query).FirstIfSingleOrDefault("0"));
             queryCollection.Add("searchin", "filename");
             queryCollection.Add("search", searchString);
             queryCollection.Add("page", "1");

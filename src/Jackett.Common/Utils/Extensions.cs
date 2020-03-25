@@ -41,9 +41,13 @@ namespace Jackett.Common.Utils
     {
         public static string AsString(this IEnumerable<char> chars) => string.Concat(chars);
 
-        // Should be collection.Any()
-        // Remove in favor of existing built in function?
-        public static bool IsEmpty<T>(this IEnumerable<T> collection) => collection.Count() > 0;
+        public static T FirstIfSingleOrDefault<T>(this IEnumerable<T> enumerable, T replace = default)
+        {
+            //Avoid enumerating the whole array.
+            //If enumerable.Count() < 2, takes whole array.
+            var test = enumerable.Take(2).ToList();
+            return test.Count == 1 ? test[0] : replace;
+        }
 
         public static IEnumerable<T> Flatten<T>(this IEnumerable<IEnumerable<T>> list) => list.SelectMany(x => x);
     }

@@ -231,11 +231,9 @@ namespace Jackett.Common.Indexers.Abstract
 
                     if (imdbInTags)
                     {
-                        var imdbTags = tags
-                            .Select(tag => ParseUtil.GetImdbID((string)tag))
-                            .Where(tag => tag != null);
-                        if (imdbTags.Count() == 1)
-                            release.Imdb = imdbTags.First();
+                        release.Imdb = tags
+                                       .Select(tag => ParseUtil.GetImdbID((string)tag))
+                                       .Where(tag => tag != null).FirstIfSingleOrDefault();
                     }
 
                     if (r["torrents"] is JArray)

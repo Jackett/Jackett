@@ -9,6 +9,7 @@ using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -99,12 +100,9 @@ namespace Jackett.Common.Indexers
                 {"freetorrent", "false"},
                 {"ordenar_por", "created_at"},
                 {"orden", "desc"},
-                {"titulo", query.GetQueryString()}
+                {"titulo", query.GetQueryString()},
+                {"categoria", MapTorznabCapsToTrackers(query).FirstIfSingleOrDefault("0")}
             };
-
-            var cats = MapTorznabCapsToTrackers(query);
-            var category = cats.Count == 1 ? cats.First() : "0";
-            pairs.Add("categoria", category);
 
             var boundary = "---------------------------" + (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds.ToString(CultureInfo.InvariantCulture).Replace(".", "");
             var bodyParts = new List<string>();

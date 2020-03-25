@@ -105,11 +105,7 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
             var searchUrl = BrowseUrl;
             var searchString = query.GetQueryString();
-
-            var cats = MapTorznabCapsToTrackers(query);
-            var cat = "0";
-            if (cats.Count == 1)
-                cat = cats[0];
+            var cat = MapTorznabCapsToTrackers(query).FirstIfSingleOrDefault("0");
 
             var queryCollection = new NameValueCollection();
 
