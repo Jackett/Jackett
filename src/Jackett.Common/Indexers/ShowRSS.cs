@@ -69,6 +69,7 @@ namespace Jackett.Common.Indexers
                 xmlDoc.LoadXml(result.Content);
                 foreach (XmlNode node in xmlDoc.GetElementsByTagName("item"))
                 {
+                    //TODO revisit for refactoring
                     var title = node.SelectSingleNode(".//*[local-name()='raw_title']").InnerText;
                     if ((!query.IsImdbQuery || !TorznabCaps.SupportsImdbMovieSearch) &&
                         !query.MatchQueryStringAND(title))

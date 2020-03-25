@@ -270,8 +270,8 @@ namespace Jackett.Common.Indexers
                             continue;
 
                         // some users have an extra colum (8), we can't use nth-last-child
-                        var size = Row.QuerySelector("td:nth-child(4)").TextContent;
-                        if (string.IsNullOrEmpty(size)) // external links, example BlazBlue: Calamity Trigger Manual - Guide [GameDOX - External Link]
+                        var sizeString = Row.QuerySelector("td:nth-child(4)").TextContent;
+                        if (string.IsNullOrEmpty(sizeString)) // external links, example BlazBlue: Calamity Trigger Manual - Guide [GameDOX - External Link]
                             continue;
                         var qDetailsLink = Row.QuerySelector("a[href^=\"torrents.php?id=\"]");
                         var title = qDetailsLink.TextContent.Replace(", Freeleech!", "").Replace(", Neutral Leech!", "");
@@ -294,14 +294,14 @@ namespace Jackett.Common.Indexers
                         var comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
                         var grabs = ParseUtil.CoerceLong(qGrabs.TextContent);
                         var leechers = ParseUtil.CoerceInt(qLeechers.TextContent);
-                        var bytes = ReleaseInfo.GetBytes(size);
+                        var size = ReleaseInfo.GetBytes(sizeString);
                         var release = new ReleaseInfo
                         {
                             MinimumRatio = 1,
                             MinimumSeedTime = 288000, //80 hours
                             Category = GroupCategory,
                             PublishDate = publishDate,
-                            Size = bytes,
+                            Size = size,
                             Comments = comments,
                             Link = link,
                             Guid = link,

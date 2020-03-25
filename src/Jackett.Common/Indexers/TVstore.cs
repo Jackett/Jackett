@@ -220,23 +220,19 @@ namespace Jackett.Common.Indexers
             var parser = new HtmlParser();
             var dom = parser.ParseDocument(result.Content);
             var scripts = dom.QuerySelectorAll("script");
+            //TODO Linq
             foreach (var script in scripts)
             {
                 if (script.TextContent.Contains("catsh=Array"))
                 {
+                    //TODO no regex in pattern, investigate using string.Split instead?
                     var seriesKnowBySite = Regex.Split(script.TextContent, "catl");
+                    //TODO consider converting to foreach
                     for (var i = 1; i < seriesKnowBySite.Length; i++)
                     {
                         var id = seriesKnowBySite[i];
                         var seriesElement = WebUtility.HtmlDecode(id).Split(';');
-                        series.Add(
-                            new SeriesDetail
-                            {
-                                HunName = seriesElement[1].Split('=')[1].Trim('\'').ToLower(),
-                                EngName = seriesElement[2].Split('=')[1].Trim('\'').ToLower(),
-                                id = seriesElement[0].Split('=')[1].Trim('\''),
-                                imdbid = seriesElement[7].Split('=')[1].Trim('\'')
-                            });
+                        series.Add(new SeriesDetail(seriesElement));
                     }
                 }
             }
@@ -370,7 +366,13 @@ namespace Jackett.Common.Indexers
         public string HunName;
         public string EngName;
         public string imdbid;
-
+        public SeriesDetail(string[] seriesElement)
+        {
+            HunName = seriesElement[1].Split('=')[1].Trim('\'').ToLower();
+            EngName = seriesElement[2].Split('=')[1].Trim('\'').ToLower();
+            id = seriesElement[0].Split('=')[1].Trim('\'');
+            imdbid = seriesElement[7].Split('=')[1].Trim('\'');
+        }
     }
 
 }
