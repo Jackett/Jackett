@@ -480,6 +480,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TotallyKids (TK)
  * TranceTraffic
  * Trezzor
+ * TurkSeed
  * TurkTorrent (TT)
  * Twilight Torrents
  * Twilights Zoom
