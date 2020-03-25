@@ -49,17 +49,20 @@
   login:
     path: login
     method: form
+    form: form[action$="/login"]
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
       remember: on
+    selectorinputs:
+      _token:
+        selector: input[name="_token"]
+        attribute: value
     error:
-      - selector: script[nonce]:contains("Error")
-        message:
-          selector: script[nonce]:contains("Error")
-    test:
-      path: /
-      selector: a[href$="/logout"]
+      - selector: div#ERROR_COPY
+#    test:
+#      path: /
+#      selector: a[href$="/logout"]
 
   ratio:
     path: /
@@ -179,4 +182,4 @@
           i[class*="fa-globe text-green"]: 2 # Global Double Upload
           i[class*="fa-certificate text-pink"]: 2 # Featured Torrent
           "*": 1
-# UNIT3D 2.2.5
+# UNIT3D 2.2.7

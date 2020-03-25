@@ -45,6 +45,7 @@
   login:
     path: login
     method: form
+    form: form[action$="/login"]
     captcha:
       type: text
       selector: div[style*="#999999;"]
@@ -53,10 +54,17 @@
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
       remember: on
+    selectorinputs:
+      _token:
+        selector: input[name="_token"]
+        attribute: value
     error:
-      - selector: div.has-error
-    test:
-      path: torrents
+      - selector: form[action$="/login"] .text-red
+      - selector: script:contains("toastr.error")
+        message:
+          selector: script:contains("toastr.error")
+#    test:
+#      path: torrents
 
   search:
     paths:
