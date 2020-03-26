@@ -400,6 +400,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * PrivateHD (PHD)
  * ProAudioTorrents (PAT)
  * Psytorrents
+ * PTSBAO
  * PuntoTorrent
  * Purovicio
  * R3V WTF!
