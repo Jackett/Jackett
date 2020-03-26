@@ -72,6 +72,8 @@
 
     modes:
       search: [q]
+      tv-search: [q]
+      movie-search: [q]
 
   settings:
     - name: username
@@ -180,7 +182,7 @@
         attribute: href
       magnet:
         optional: true
-        selector: a[href^="magnet:?xt="]      
+        selector: a[href^="magnet:?xt="]
         attribute: href
       size:
         selector: td:nth-child(6) > u
