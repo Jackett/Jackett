@@ -220,28 +220,30 @@ namespace Jackett.Common.Indexers
             var parser = new HtmlParser();
             var dom = parser.ParseDocument(result.Content);
             var scripts = dom.QuerySelectorAll("script");
+            //TODO Linq
             foreach (var script in scripts)
             {
                 if (script.TextContent.Contains("catsh=Array"))
                 {
-                    var seriesknowbysite = Regex.Split(script.TextContent, "catl");
-                    for (var i = 1; i < seriesknowbysite.Length; i++)
+                    //TODO no regex in pattern, investigate using string.Split instead?
+                    var seriesKnowBySite = Regex.Split(script.TextContent, "catl");
+                    //TODO consider converting to foreach
+                    for (var i = 1; i < seriesKnowBySite.Length; i++)
                     {
-                        try
+                        var id = seriesKnowBySite[i];
+                        var seriesElement = WebUtility.HtmlDecode(id).Split(';');
+                        var hungarianName = seriesElement[1].Split('=')[1].Trim('\'').ToLower();
+                        var englishName = seriesElement[2].Split('=')[1].Trim('\'').ToLower();
+                        var seriesId = seriesElement[0].Split('=')[1].Trim('\'');
+                        var imdbId = seriesElement[7].Split('=')[-1].Trim('\'');
+                        var seriesDetail = new SeriesDetail
                         {
-                            var id = seriesknowbysite[i];
-                            var serieselement = WebUtility.HtmlDecode(id).Split(';');
-                            var sd = new SeriesDetail();
-                            sd.HunName = serieselement[1].Split('=')[1].Trim('\'').ToLower();
-                            sd.EngName = serieselement[2].Split('=')[1].Trim('\'').ToLower();
-                            sd.id = serieselement[0].Split('=')[1].Trim('\'');
-                            sd.imdbid = serieselement[7].Split('=')[1].Trim('\'');
-                            series.Add(sd);
-                        }
-                        catch (IndexOutOfRangeException e)
-                        {
-                            throw (e);
-                        }
+                            HunName = hungarianName,
+                            EngName = englishName,
+                            id = seriesId,
+                            imdbid = imdbId
+                        };
+                        series.Add(seriesDetail);
                     }
                 }
             }
@@ -250,6 +252,7 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
+            //TODO convert to initializer
             var releases = new List<ReleaseInfo>();
 
             /* If series from sites are indexed than we dont need to reindex them. */
@@ -374,7 +377,6 @@ namespace Jackett.Common.Indexers
         public string HunName;
         public string EngName;
         public string imdbid;
-
     }
 
 }

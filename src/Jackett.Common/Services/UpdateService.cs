@@ -335,9 +335,11 @@ namespace Jackett.Common.Services
             var exe = Path.GetFileName(ExePath());
             var args = string.Join(" ", Environment.GetCommandLineArgs().Skip(1).Select(a => a.Contains(" ") ? "\"" + a + "\"" : a)).Replace("\"", "\\\"");
 
-            var startInfo = new ProcessStartInfo();
-            startInfo.UseShellExecute = false;
-            startInfo.CreateNoWindow = true;
+            var startInfo = new ProcessStartInfo
+            {
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
 
             // Note: add a leading space to the --Args argument to avoid parsing as arguments
             if (variant == Variants.JackettVariant.Mono)

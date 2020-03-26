@@ -220,12 +220,11 @@ namespace Jackett.Common.Indexers
                     }
 
                     var seeders = GetReleaseSeeders(tabNode);
-
-
+                    var guid = new Uri(GetReleaseGuid(url, tabNode));
                     var release = new ReleaseInfo
                     {
                         Title = BuildReleaseTitle(baseTitle, tabNode),
-                        Guid = new Uri(GetReleaseGuid(url, tabNode)),
+                        Guid = guid,
                         Comments = uri,
                         Link = GetReleaseLink(tabNode),
                         PublishDate = date,

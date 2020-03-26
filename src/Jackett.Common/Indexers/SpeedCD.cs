@@ -155,7 +155,6 @@ namespace Jackett.Common.Indexers
 
                     var title = row.QuerySelector("td[class='lft'] > div > a").TextContent.Trim();
                     var link = new Uri(SiteLink + row.QuerySelector("img[title='Download']").ParentElement.GetAttribute("href").Trim());
-                    var guid = link;
                     var comments = new Uri(SiteLink + row.QuerySelector("td[class='lft'] > div > a").GetAttribute("href").Trim().Remove(0, 1));
                     var size = ReleaseInfo.GetBytes(cells[4].TextContent);
                     var grabs = ParseUtil.CoerceInt(cells[5].TextContent);
@@ -167,27 +166,24 @@ namespace Jackett.Common.Indexers
 
                     var cat = row.QuerySelector("img[class^='Tcat']").ParentElement.GetAttribute("href").Trim().Remove(0, 5);
                     long.TryParse(cat, out var category);
-
-                    // This fixes the mixed initializer issue, so it's just inconsistent in the code base.
-                    // https://github.com/Jackett/Jackett/pull/7166#discussion_r376817517
-                    var release = new ReleaseInfo();
-
-                    release.Title = title;
-                    release.Guid = guid;
-                    release.Link = link;
-                    release.PublishDate = publishDate;
-                    release.Size = size;
-                    release.Grabs = grabs;
-                    release.Seeders = seeders;
-                    release.Peers = seeders + leechers;
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800; // 48 hours
-                    release.Category = MapTrackerCatToNewznab(category.ToString());
-                    release.Comments = comments;
-
-                    release.DownloadVolumeFactor = row.QuerySelector("span:contains(\"[Freeleech]\")") != null ? 0 : 1;
-                    release.UploadVolumeFactor = 1;
-
+                    var downloadVolumeFactor = row.QuerySelector("span:contains(\"[Freeleech]\")") != null ? 0 : 1;
+                    var release = new ReleaseInfo
+                    {
+                        Title = title,
+                        Guid = link,
+                        Link = link,
+                        PublishDate = publishDate,
+                        Size = size,
+                        Grabs = grabs,
+                        Seeders = seeders,
+                        Peers = seeders + leechers,
+                        MinimumRatio = 1,
+                        MinimumSeedTime = 172800, // 48 hours
+                        Category = MapTrackerCatToNewznab(category.ToString()),
+                        Comments = comments,
+                        DownloadVolumeFactor = downloadVolumeFactor,
+                        UploadVolumeFactor = 1
+                    };
                     releases.Add(release);
                 }
             }

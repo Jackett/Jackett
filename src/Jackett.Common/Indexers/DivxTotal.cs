@@ -294,28 +294,25 @@ namespace Jackett.Common.Indexers
         private void GenerateRelease(ICollection<ReleaseInfo> releases, string title, string commentsLink,
             string downloadLink, string cat, DateTime publishDate, long size)
         {
-            // ReSharper disable once UseObjectOrCollectionInitializer
-            var release = new ReleaseInfo();
-
-            release.Title = title;
-            release.Comments = new Uri(commentsLink);
-            release.Link = new Uri(downloadLink);
-            release.Guid = release.Link;
-
-            release.Category = MapTrackerCatToNewznab(cat);
-            release.PublishDate = publishDate;
-            release.Size = size;
-
-            release.Files = 1;
-
-            release.Seeders = 1;
-            release.Peers = 2;
-
-            release.MinimumRatio = 1;
-            release.MinimumSeedTime = 172800; // 48 hours
-            release.DownloadVolumeFactor = 0;
-            release.UploadVolumeFactor = 1;
-
+            var link = new Uri(downloadLink);
+            var comments = new Uri(commentsLink);
+            var release = new ReleaseInfo
+            {
+                Title = title,
+                Comments = comments,
+                Link = link,
+                Guid = link,
+                Category = MapTrackerCatToNewznab(cat),
+                PublishDate = publishDate,
+                Size = size,
+                Files = 1,
+                Seeders = 1,
+                Peers = 2,
+                MinimumRatio = 1,
+                MinimumSeedTime = 172800, // 48 hours
+                DownloadVolumeFactor = 0,
+                UploadVolumeFactor = 1,
+            };
             releases.Add(release);
         }
 

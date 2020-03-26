@@ -363,13 +363,14 @@ namespace Jackett.Common.Indexers
                                     releaseTitle = string.Format("{0}{1} {2} {3}", releasegroup, title, releaseInfo, infoString);
                                 }
 
+                                var guid = new Uri(CommentsLinkUri + "&nh=" + StringUtil.Hash(title));
                                 var release = new ReleaseInfo
                                 {
                                     MinimumRatio = 1,
                                     MinimumSeedTime = MinimumSeedTime,
                                     Title = releaseTitle,
                                     Comments = CommentsLinkUri,
-                                    Guid = new Uri(CommentsLinkUri + "&nh=" + StringUtil.Hash(title)), // Sonarr should dedupe on this url - allow a url per name.
+                                    Guid = guid, // Sonarr should dedupe on this url - allow a url per name.
                                     Link = LinkUri,
                                     BannerUrl = ImageUrl,
                                     PublishDate = PublushDate,

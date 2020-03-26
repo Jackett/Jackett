@@ -74,13 +74,14 @@ namespace Jackett.Common.Indexers
             var searchString = query.GetQueryString();
 
             WebClientStringResult results = null;
-            var queryCollection = new NameValueCollection();
-
-            queryCollection.Add("act", "search");
-            queryCollection.Add("forums", "all");
-            queryCollection.Add("torrents", "1");
-            queryCollection.Add("search_in", "titles");
-            queryCollection.Add("result_type", "topics");
+            var queryCollection = new NameValueCollection
+            {
+                { "act", "search" },
+                { "forums", "all" },
+                { "torrents", "1" },
+                { "search_in", "titles" },
+                { "result_type", "topics" }
+            };
 
             // if the search string is empty use the getnew view
             if (string.IsNullOrWhiteSpace(searchString))
@@ -112,6 +113,7 @@ namespace Jackett.Common.Indexers
                 {
                     try
                     {
+                        //TODO refactor to initializer
                         var release = new ReleaseInfo();
 
                         var StatsElements = Row.QuerySelector("td:nth-child(5)");

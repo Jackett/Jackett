@@ -149,6 +149,7 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
+            // TODO verify this code is necessary for TZ data or if builtin exist
             var startTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(
                 new DateTime(1, 1, 1, 3, 0, 0), 3, 5, DayOfWeek.Sunday);
             var endTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(
@@ -192,11 +193,7 @@ namespace Jackett.Common.Indexers
                 var rows = dom.QuerySelectorAll("table.torrenttable > tbody > tr");
                 foreach (var row in rows.Skip(1))
                 {
-                    var release = new ReleaseInfo();
-                    release.MinimumRatio = 0.8;
-                    release.MinimumSeedTime = 0;
                     var qDetailsLink = row.QuerySelector("a[href^=\"index.php?strWebValue=torrent&strWebAction=details\"]");
-                    release.Title = titleRegexp.Match(qDetailsLink.GetAttribute("onmouseover")).Groups[1].Value;
                     var qCatLink = row.QuerySelector("a[href^=\"index.php?strWebValue=torrent&strWebAction=search&dir=\"]");
                     var qDlLink = row.QuerySelector("a[href^=\"index.php?strWebValue=torrent&strWebAction=download&id=\"]");
                     var qSeeders = row.QuerySelectorAll("td.column1")[3];
@@ -204,37 +201,42 @@ namespace Jackett.Common.Indexers
                     var qDateStr = row.QuerySelector("font:has(a)");
                     var qSize = row.QuerySelector("td.column2[align=center]");
                     var catStr = qCatLink.GetAttribute("href").Split('=')[3].Split('#')[0];
-                    release.Category = MapTrackerCatToNewznab(catStr);
-                    release.Link = new Uri(SiteLink + qDlLink.GetAttribute("href"));
-                    release.Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
-                    release.Guid = release.Link;
+                    var link = new Uri(SiteLink + qDlLink.GetAttribute("href"));
                     var sizeStr = qSize.TextContent;
-                    release.Size = ReleaseInfo.GetBytes(sizeStr);
-                    release.Seeders = ParseUtil.CoerceInt(qSeeders.TextContent);
-                    release.Peers = ParseUtil.CoerceInt(qLeechers.TextContent) + release.Seeders;
-                    var dateStr = qDateStr.TextContent.Trim();
-                    var dateStrParts = dateStr.Split();
-                    var dateGerman = dateStrParts[0] switch
-                    {
-                        "Heute" => (DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified) + TimeSpan.Parse(dateStrParts[1])),
-                        "Gestern" => (DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified) + TimeSpan.Parse(dateStrParts[1])
-                                      - TimeSpan.FromDays(1)),
-                        _ => DateTime.SpecifyKind(                            DateTime.ParseExact(
-                                dateStrParts[0] + dateStrParts[1], "dd.MM.yyyyHH:mm", CultureInfo.InvariantCulture),
-                            DateTimeKind.Unspecified)
-                    };
+                    var dateStr = qDateStr.TextContent.Trim().Replace("Heute", "Today").Replace("Gestern", "Yesterday");
 
-                    release.PublishDate = TimeZoneInfo.ConvertTime(dateGerman, germanyTz, TimeZoneInfo.Local);
-                    var grabs = row.QuerySelector("td:nth-child(7)").TextContent;
-                    release.Grabs = ParseUtil.CoerceInt(grabs);
+                    var dateGerman = DateTimeUtil.FromUnknown(dateStr);
+                    double downloadFactor;
                     if (row.QuerySelector("img[src=\"themes/images/freeleech.png\"]") != null
                         || row.QuerySelector("img[src=\"themes/images/onlyup.png\"]") != null)
-                        release.DownloadVolumeFactor = 0;
+                        downloadFactor = 0;
                     else if (row.QuerySelector("img[src=\"themes/images/DL50.png\"]") != null)
-                        release.DownloadVolumeFactor = 0.5;
+                        downloadFactor = 0.5;
                     else
-                        release.DownloadVolumeFactor = 1;
-                    release.UploadVolumeFactor = 1;
+                        downloadFactor = 1;
+                    var title = titleRegexp.Match(qDetailsLink.GetAttribute("onmouseover")).Groups[1].Value;
+                    var comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
+                    var seeders = ParseUtil.CoerceInt(qSeeders.TextContent);
+                    var leechers = ParseUtil.CoerceInt(qLeechers.TextContent);
+                    var grabs = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(7)").TextContent);
+                    var publishDate = TimeZoneInfo.ConvertTime(dateGerman, germanyTz, TimeZoneInfo.Local);
+                    var release = new ReleaseInfo
+                    {
+                        MinimumRatio = 0.8,
+                        MinimumSeedTime = 0,
+                        Title = title,
+                        Category = MapTrackerCatToNewznab(catStr),
+                        Comments = comments,
+                        Link = link,
+                        Guid = link,
+                        Size = ReleaseInfo.GetBytes(sizeStr),
+                        Seeders =  seeders,
+                        Peers = leechers + seeders,
+                        PublishDate = publishDate,
+                        Grabs = grabs,
+                        DownloadVolumeFactor = downloadFactor,
+                        UploadVolumeFactor = 1
+                    };
                     releases.Add(release);
                 }
             }

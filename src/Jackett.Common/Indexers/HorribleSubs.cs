@@ -111,9 +111,10 @@ namespace Jackett.Common.Indexers
             var ResultParser = new HtmlParser();
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();
-            var queryCollection = new NameValueCollection();
-
-            queryCollection.Add("method", "getlatest");
+            var queryCollection = new NameValueCollection
+            {
+                { "method", "getlatest" }
+            };
 
             var searchUrl = ApiEndpoint + "?" + queryCollection.GetQueryString();
             var response = await RequestStringWithCookiesAndRetry(searchUrl, string.Empty);
