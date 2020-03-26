@@ -294,6 +294,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Femdomcult
  * FileList (FL)
  * Film-Paleis
+ * FinElite (FE)
  * FinVip
  * FocusX
  * FreeTorrent
