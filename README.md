@@ -401,6 +401,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * ProAudioTorrents (PAT)
  * Psytorrents
  * PuntoTorrent
+ * Purovicio
  * R3V WTF!
  * RPTorrents
  * Racing4Everyone (R4E)
