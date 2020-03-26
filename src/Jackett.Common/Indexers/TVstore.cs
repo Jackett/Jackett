@@ -232,7 +232,18 @@ namespace Jackett.Common.Indexers
                     {
                         var id = seriesKnowBySite[i];
                         var seriesElement = WebUtility.HtmlDecode(id).Split(';');
-                        series.Add(new SeriesDetail(seriesElement));
+                        var hungarianName = seriesElement[1].Split('=')[1].Trim('\'').ToLower();
+                        var englishName = seriesElement[2].Split('=')[1].Trim('\'').ToLower();
+                        var seriesId = seriesElement[0].Split('=')[1].Trim('\'');
+                        var imdbId = seriesElement[7].Split('=')[-1].Trim('\'');
+                        var seriesDetail = new SeriesDetail
+                        {
+                            HunName = hungarianName,
+                            EngName = englishName,
+                            id = seriesId,
+                            imdbid = imdbId
+                        };
+                        series.Add(seriesDetail);
                     }
                 }
             }
@@ -366,13 +377,6 @@ namespace Jackett.Common.Indexers
         public string HunName;
         public string EngName;
         public string imdbid;
-        public SeriesDetail(string[] seriesElement)
-        {
-            HunName = seriesElement[1].Split('=')[1].Trim('\'').ToLower();
-            EngName = seriesElement[2].Split('=')[1].Trim('\'').ToLower();
-            id = seriesElement[0].Split('=')[1].Trim('\'');
-            imdbid = seriesElement[7].Split('=')[1].Trim('\'');
-        }
     }
 
 }

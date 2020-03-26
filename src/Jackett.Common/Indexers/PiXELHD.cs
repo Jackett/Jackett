@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -162,20 +163,19 @@ namespace Jackett.Common.Indexers
                         IMDBId = ParseUtil.CoerceLong(IMDBMatch.Groups[1].Value);
                     }
 
-                    var GroupTitle = Group.QuerySelector("strong:has(a[title=\"View Torrent\"])").TextContent.Replace(" ]", "]");
+                    var group = Group.QuerySelector("strong:has(a[title=\"View Torrent\"])").TextContent.Replace(" ]", "]");
 
                     var Rows = Group.QuerySelectorAll("tr.group_torrent:has(a[href^=\"torrents.php?id=\"])");
                     foreach (var Row in Rows)
                     {
                         var title = Row.QuerySelector("a[href^=\"torrents.php?id=\"]");
-                        var link = Row.QuerySelector("a[href^=\"torrents.php?action=download\"]");
                         var added = Row.QuerySelector("td:nth-child(3)");
                         var Size = Row.QuerySelector("td:nth-child(4)");
                         var Grabs = Row.QuerySelector("td:nth-child(6)");
                         var Seeders = Row.QuerySelector("td:nth-child(7)");
                         var Leechers = Row.QuerySelector("td:nth-child(8)");
-                        var releaseLink = new Uri(SiteLink + link.GetAttribute("href"));
-                        var releaseSeeders = ParseUtil.CoerceInt(Seeders.TextContent);
+                        var link = new Uri(SiteLink + Row.QuerySelector("a[href^=\"torrents.php?action=download\"]").GetAttribute("href"));
+                        var seeders = ParseUtil.CoerceInt(Seeders.TextContent);
                         var comments = new Uri(SiteLink + title.GetAttribute("href"));
                         var size = ReleaseInfo.GetBytes(Size.TextContent);
                         var leechers = ParseUtil.CoerceInt(Leechers.TextContent);
@@ -185,14 +185,14 @@ namespace Jackett.Common.Indexers
                         {
                             MinimumRatio = 1,
                             MinimumSeedTime = 72 * 60 * 60,
-                            Title = GroupTitle + " " + title.TextContent,
+                            Title = group + " " + title.TextContent,
                             Category = new List<int> {TorznabCatType.MoviesHD.ID},
-                            Link = releaseLink,
+                            Link = link,
                             Comments = comments,
-                            Guid = releaseLink,
+                            Guid = link,
                             Size = size,
-                            Seeders = releaseSeeders,
-                            Peers = leechers + releaseSeeders,
+                            Seeders = seeders,
+                            Peers = leechers + seeders,
                             Grabs = grabs,
                             PublishDate = publishDate,
                             BannerUrl = bannerURL,
