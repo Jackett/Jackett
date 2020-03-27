@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -255,12 +256,9 @@ namespace Jackett.Common.Indexers
             //TODO convert to initializer
             var releases = new List<ReleaseInfo>();
 
-            /* If series from sites are indexed than we dont need to reindex them. */
-            if (series == null || series.IsEmpty())
-            {
+            // If series from sites are indexed then we don't need to reindex them.
+            if (series?.Any() != true)
                 await GetSeriesInfo();
-            }
-
             var unixTimestamp = (int)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
 
             WebClientStringResult results;

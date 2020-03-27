@@ -56,7 +56,7 @@ namespace Jackett.Common.Models
                 var term = SearchTerm;
                 if (SearchTerm == null)
                     term = "";
-                var safetitle = term.Where(c => (char.IsLetterOrDigit(c)
+                var safeTitle = term.Where(c => (char.IsLetterOrDigit(c)
                                                  || char.IsWhiteSpace(c)
                                                  || c == '-'
                                                  || c == '.'
@@ -70,8 +70,8 @@ namespace Jackett.Common.Models
                                                  || c == ']'
                                                  || c == '+'
                                                  || c == '%'
-                                               )).AsString();
-                return safetitle;
+                                               ));
+                return string.Concat(safeTitle);
             }
         }
 
