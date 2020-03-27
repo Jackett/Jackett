@@ -1,8 +1,8 @@
 ---
   site: purovicio
-  name: Purovicio
-  description: "Purovicio is a SPANISH Private Torrent Tracker for MOVIES / TV / GENERAL"
-  language: es-es
+  name: PuroVicio
+  description: "PuroVicio is a Latin American Private Torrent Tracker for MOVIES / TV / GENERAL"
+  language: es-419
   type: private
   encoding: UTF-8
   links:

@@ -402,7 +402,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Psytorrents
  * PTSBAO
  * PuntoTorrent
- * Purovicio
+ * PuroVicio
  * R3V WTF!
  * RPTorrents
  * Racing4Everyone (R4E)
