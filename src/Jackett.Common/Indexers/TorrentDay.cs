@@ -221,7 +221,8 @@ namespace Jackett.Common.Indexers
 
                 foreach (var torrent in json)
                 {
-                    if ((!query.IsImdbQuery || !TorznabCaps.SupportsImdbMovieSearch) && !query.MatchQueryStringAND(torrent.name))
+                    var title = (string)torrent.name;
+                    if ((!query.IsImdbQuery || !TorznabCaps.SupportsImdbMovieSearch) && !query.MatchQueryStringAND(title))
                         continue;
                     var torrentID = (long)torrent.t;
                     var comments = new Uri(SiteLink + "details.php?id=" + torrentID);
@@ -233,7 +234,7 @@ namespace Jackett.Common.Indexers
                     var imdb = ParseUtil.GetImdbID(imdbId);
                     var release = new ReleaseInfo
                     {
-                        Title = torrent.name,
+                        Title = title,
                         MinimumRatio = 1,
                         MinimumSeedTime = 172800, // 48 hours
                         Category = MapTrackerCatToNewznab(torrent.c.ToString()),
