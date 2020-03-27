@@ -1,0 +1,71 @@
+---
+  site: torrenthane
+  name: TorrentHane
+  description: "TorrentHane is a TURKISH Public site for MOVIES / TV"
+  language: tr
+  type: public
+  encoding: UTF-8
+  links:
+    - https://torrenthane.com/
+
+  caps:
+    categories:
+      1: Movies
+      2: TV
+      3: Other
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  settings: []
+
+  download:
+    selector: a[href*="/download/"]
+    attribute: href
+
+  search:
+    paths:
+      - path: "{{ if .Keywords }}?s={{ .Keywords }}{{else}}kategori/torrent-filmler/{{end}}"
+      - path: "{{ if .Keywords }}{{else}}kategori/torrent-diziler/{{end}}"
+      # does not support imdbid and does not return imdb link in results
+
+    rows:
+      selector: div.moviefilm
+      filters:
+        - name: andmatch
+
+    fields:
+      category:
+        selector: div.moviefilm a
+        attribute: href
+        case:
+          a[href*="-film-"]: 1 # movie
+          a[href*="-dizi-"]: 2 # series
+          a[href*="-bolum-"]: 2 # episode
+          "*": 3
+      title:
+        selector: div.movief a
+      details:
+        selector: div.movief a
+        attribute: href
+      download:
+        selector: div.movief a
+        attribute: href
+      banner:
+        selector: img
+        attribute: src
+      date:
+        text: now
+      size:
+        text: "512 MB"
+      seeders:
+        text: 1
+      leechers:
+        text: 1
+      downloadvolumefactor:
+        text: 0
+      uploadvolumefactor:
+        text: 1
+# engine n/a
