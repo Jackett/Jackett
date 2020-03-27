@@ -42,6 +42,7 @@ namespace Jackett.Common.Services
                         trackerCache.Results.Add(existingItem);
                     }
 
+                    existingItem.Result = release;
                 }
 
                 // Prune cache
