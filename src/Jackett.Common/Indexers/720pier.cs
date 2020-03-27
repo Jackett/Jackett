@@ -20,6 +20,10 @@ namespace Jackett.Common.Indexers
         private string LoginUrl => SiteLink + "ucp.php?mode=login";
         private string SearchUrl => SiteLink + "search.php";
 
+        public override string[] LegacySiteLinks { get; protected set; } = {
+            "http://720pier.ru/",
+        };
+
         private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
         {
             get => (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData;
@@ -29,7 +33,7 @@ namespace Jackett.Common.Indexers
         public Pier720(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base(name: "720pier",
                    description: "720pier is a RUSSIAN Private Torrent Tracker for HD SPORTS",
-                   link: "http://720pier.ru/",
+                   link: "https://720pier.ru/",
                    caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                    configService: configService,
                    client: wc,
