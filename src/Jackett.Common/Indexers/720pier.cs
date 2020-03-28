@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -19,34 +17,21 @@ namespace Jackett.Common.Indexers
 {
     public class Pier720 : BaseWebIndexer
     {
-        private string LoginUrl => SiteLink + "ucp.php?mode=login";
-        private string SearchUrl => SiteLink + "search.php";
-
-        public override string[] LegacySiteLinks { get; protected set; } = {
-            "http://720pier.ru/",
-        };
-
-        private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
-        {
-            get => (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData;
-            set => base.configData = value;
-        }
-
-        public Pier720(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "720pier",
-                   description: "720pier is a RUSSIAN Private Torrent Tracker for HD SPORTS",
-                   link: "https://720pier.ru/",
-                   caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                   configService: configService,
-                   client: wc,
-                   logger: l,
-                   p: ps,
-                   configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
+        public Pier720(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps) :
+            base(
+            "720pier",
+            description: "720pier is a RUSSIAN Private Torrent Tracker for HD SPORTS",
+            link: "https://720pier.ru/",
+            caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+            configService: configService,
+            client: wc,
+            logger: l,
+            p: ps,
+            configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
             Encoding = Encoding.UTF8;
             Language = "ru-ru";
             Type = "private";
-
             AddCategoryMapping(32, TorznabCatType.TVSport, "Basketball");
             AddCategoryMapping(34, TorznabCatType.TVSport, "Basketball - NBA");
             AddCategoryMapping(87, TorznabCatType.TVSport, "Basketball - NBA Playoffs");
@@ -60,7 +45,6 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(51, TorznabCatType.TVSport, "Basketball - Reviews and highlights");
             AddCategoryMapping(41, TorznabCatType.TVSport, "Basketball - Other");
             AddCategoryMapping(38, TorznabCatType.TVSport, "Basketball - Olympic Games");
-
             AddCategoryMapping(42, TorznabCatType.TVSport, "Football");
             AddCategoryMapping(43, TorznabCatType.TVSport, "Football - NFL");
             AddCategoryMapping(66, TorznabCatType.TVSport, "Football - Super Bowls");
@@ -70,7 +54,6 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(54, TorznabCatType.TVSport, "Football - Reviews and highlights");
             AddCategoryMapping(97, TorznabCatType.TVSport, "Football - Documentaries");
             AddCategoryMapping(44, TorznabCatType.TVSport, "Football - Other");
-
             AddCategoryMapping(46, TorznabCatType.TVSport, "Hockey");
             AddCategoryMapping(48, TorznabCatType.TVSport, "Hockey - NHL");
             AddCategoryMapping(88, TorznabCatType.TVSport, "Hockey - NHL Playoffs");
@@ -84,12 +67,10 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(68, TorznabCatType.TVSport, "Hockey - Documentaries");
             AddCategoryMapping(64, TorznabCatType.TVSport, "Hockey - Reviews and highlights");
             AddCategoryMapping(50, TorznabCatType.TVSport, "Hockey - Other");
-
             AddCategoryMapping(55, TorznabCatType.TVSport, "Baseball");
             AddCategoryMapping(71, TorznabCatType.TVSport, "Baseball - MLB");
             AddCategoryMapping(72, TorznabCatType.TVSport, "Baseball - Other");
             AddCategoryMapping(85, TorznabCatType.TVSport, "Baseball - Reviews, highlights, documentaries");
-
             AddCategoryMapping(59, TorznabCatType.TVSport, "Soccer");
             AddCategoryMapping(61, TorznabCatType.TVSport, "Soccer - English soccer");
             AddCategoryMapping(86, TorznabCatType.TVSport, "Soccer - UEFA");
@@ -97,7 +78,6 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(62, TorznabCatType.TVSport, "Soccer - Other tournaments, championships");
             AddCategoryMapping(63, TorznabCatType.TVSport, "Soccer - World Championships");
             AddCategoryMapping(98, TorznabCatType.TVSport, "Soccer - FIFA World Cup");
-
             AddCategoryMapping(45, TorznabCatType.TVSport, "Other sports");
             AddCategoryMapping(79, TorznabCatType.TVSport, "Other sports - Rugby");
             AddCategoryMapping(78, TorznabCatType.TVSport, "Other sports - Lacrosse");
@@ -108,36 +88,44 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(73, TorznabCatType.TVSport, "Other sports - Auto, moto racing");
             AddCategoryMapping(91, TorznabCatType.TVSport, "Other sports - Olympic Games");
             AddCategoryMapping(94, TorznabCatType.TVSport, "Other sports - Misc");
-
             AddCategoryMapping(56, TorznabCatType.TVSport, "Sports on tv");
             AddCategoryMapping(30, TorznabCatType.TVSport, "Sports");
         }
 
+        private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
+        {
+            get => (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData;
+            set => base.configData = value;
+        }
+
+        public override string[] LegacySiteLinks { get; protected set; } =
+        {
+            "http://720pier.ru/"
+        };
+
+        private string LoginUrl => SiteLink + "ucp.php?mode=login";
+        private string SearchUrl => SiteLink + "search.php";
+
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-
             var pairs = new Dictionary<string, string>
             {
-                {"username", configData.Username.Value},
-                {"password", configData.Password.Value},
-                {"redirect", "/"},
-                {"login", "Login"},
-                {"autologin", "on"}
+                { "username", configData.Username.Value },
+                { "password", configData.Password.Value },
+                { "redirect", "/" },
+                { "login", "Login" },
+                { "autologin", "on" }
             };
             var htmlParser = new HtmlParser();
             var loginDocument = htmlParser.ParseDocument((await RequestStringWithCookies(LoginUrl)).Content);
             pairs["creation_time"] = loginDocument.GetElementsByName("creation_time")[0].GetAttribute("value");
             pairs["form_token"] = loginDocument.GetElementsByName("form_token")[0].GetAttribute("value");
             pairs["sid"] = loginDocument.GetElementsByName("sid")[0].GetAttribute("value");
-
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl, true);
             await ConfigureIfOK(
-                result.Cookies, result.Content?.Contains("ucp.php?mode=logout&") == true, () =>
-            {
-                var errorMessage = result.Content;
-                throw new ExceptionWithConfigData(errorMessage, configData);
-            });
+                result.Cookies, result.Content?.Contains("ucp.php?mode=logout&") == true,
+                () => throw new ExceptionWithConfigData(result.Content, configData));
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
@@ -183,7 +171,8 @@ namespace Jackett.Common.Indexers
                     var link = new Uri(SiteLink + qDownloadLink.GetAttribute("href").TrimStart('/'));
                     var timestr = detailRow.Children[0].QuerySelector("span.my_tt").TextContent;
                     var publishDate = DateTimeUtil.FromUnknown(timestr, "UK");
-                    var forumId = detailsDocument.QuerySelector("li.breadcrumbs").LastElementChild.GetAttribute("data-forum-id");
+                    var forumId = detailsDocument.QuerySelector("li.breadcrumbs").LastElementChild
+                                                 .GetAttribute("data-forum-id");
                     var sizeString = detailRow.Children[4].QuerySelector("span.my_tt").GetAttribute("title");
                     var size = ParseUtil.CoerceLong(Regex.Replace(sizeString, @"[^0-9]", string.Empty));
                     var comments = new Uri(detailLink);
