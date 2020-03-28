@@ -294,7 +294,6 @@ namespace Jackett.Updater
                 "Definitions/btxpress.yml",
                 "Definitions/cinefilhd.yml",
                 "Definitions/czteam.yml",
-                "Definitions/dark-shadow.yml",
                 "Definitions/digbt.yml",
                 "Definitions/dragonworld.yml",
                 "Definitions/dreamteam.yml",
