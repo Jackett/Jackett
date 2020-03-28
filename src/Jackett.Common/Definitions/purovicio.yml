@@ -1,31 +1,23 @@
 ---
-  site:  freetorrent
-  name:  FreeTorrent
-  description: "FreeTorrent is a Private Torrent Tracker for HD MOVIES / TV"
-  language: en-us
+  site: purovicio
+  name: PuroVicio
+  description: "PuroVicio is a Latin American Private Torrent Tracker for MOVIES / TV / GENERAL"
+  language: es-419
   type: private
   encoding: UTF-8
   links:
-    -  https://freetorrent.tk/
-  legacylinks:
-    -  https://FreeTorrent.net/ # redirects to .tk
-    -  https://FreeTorrent.xyz/ # redirects to .tk
+    - https://purovicio.pw/
 
   caps:
     categorymappings:
       - {id: 1, cat: Movies, desc: "Movies"}
       - {id: 2, cat: TV, desc: "TV"}
       - {id: 3, cat: Audio, desc: "Music"}
-      - {id: 4, cat: PC/0day, desc: "Software"}
-      - {id: 5, cat: Books, desc: "Ebook"}
-      - {id: 6, cat: PC/Games, desc: "Games"}
-      - {id: 7, cat: TV, desc: "Animations"}
-      - {id: 8, cat: PC, desc: "Linux"}
-      - {id: 9, cat: PC/Mac, desc: "MacOS"}
-      - {id: 12, cat: TV/Documentary, desc: "Documentaries"}
-      - {id: 13, cat: TV, desc: "Shows"}
-      - {id: 14, cat: Audio/Video, desc: "Music clips"}
-      - {id: 15, cat: PC/Phone-Android, desc: "Apps APK"}
+      - {id: 4, cat: PC/Mac, desc: "Mac"}
+      - {id: 5, cat: Console, desc: "Game"}
+      - {id: 6, cat: PC/0day, desc: "Soft"}
+      - {id: 7, cat: Other, desc: "Various"}
+      - {id: 8, cat: XXX, desc: "XXX"}
 
     modes:
       search: [q, imdbid]
@@ -33,12 +25,17 @@
       movie-search: [q, imdbid]
 
   settings:
-    - name: username
+    - name: cookie
       type: text
-      label: Username
-    - name: password
-      type: password
-      label: Password
+      label: Cookie
+    - name: info_login
+      type: info
+      label: Purovicio Login
+      default: "Purovicio is using a <b>ReCaptcha</b> challenge during <b>login</b> which Jackett cannot solve.</br>So Jackett is using the <b>cookie</b> method to allow Jackett access to the site.</br>However, for this to work you need to <b>remain logged in</b> at the Purovicio website, otherwise the cookie will become invalidated. (You can close the Browser Tab, just don't <b>Logout</b>).</br>If you get no results, then <b>refresh</b> your cookie."
+    - name: info_cookie
+      type: info
+      label: How to get the Cookie
+      default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
     - name: sort
       type: select
       label: Sort requested from site
@@ -57,33 +54,22 @@
         "asc": "asc"
 
   login:
-    path: login
-    method: form
-    form: form[action$="/login"]
+    method: cookie
     inputs:
-      username: "{{ .Config.username }}"
-      password: "{{ .Config.password }}"
-      remember: on
-    selectorinputs:
-      _token:
-        selector: input[name="_token"]
-        attribute: value
-    error:
-      - selector: div#ERROR_COPY
-#    test:
-#      path: /
-#      selector: a[href$="/logout"]
+      cookie: "{{ .Config.cookie }}"
+    test:
+      path: /
 
   ratio:
     path: /
-    selector: li:has(i.fa-sync-alt)
+    selector: span:has(i.fa-sync-alt)
     filters:
       - name: regexp
         args: "Ratio : (\\d+)"
 
   search:
     paths:
-      - path: torrents/filter
+      - path: filterTorrents
     inputs:
       $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
       search: "{{ if .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
@@ -93,7 +79,6 @@
       tvdb: ""
       tmdb: ""
       mal: ""
-      igdb: ""
       sorting: "{{ .Config.sort }}"
       sort: "{{ .Config.sort }}"
       direction: "{{ .Config.type }}"
@@ -108,7 +93,7 @@
         attribute: href
         filters:
           - name: regexp
-            args: "/categories/(\\d+)"
+            args: "/categories/.*?\\.(\\d+)"
       title:
         selector: a.view-torrent
       download:
@@ -127,21 +112,22 @@
       comments:
         selector: a[href*="#comments"]
         attribute: href
-      size:
-        selector: td:nth-last-child(4)
-      seeders:
-        selector: td:nth-last-child(3)
-      leechers:
-        selector: td:nth-last-child(2)
-      grabs:
-        selector: td:nth-last-child(1)
-        filters:
-          - name: regexp
-            args: (\d+)
+        optional: true
       imdb:
         optional: true
         selector: a[href*="www.imdb.com/title/tt"]
         attribute: href
+      size:
+        selector: td:nth-last-child(4)
+      grabs:
+        selector: td:nth-last-child(3)
+        filters:
+          - name: regexp
+            args: (\d+)
+      seeders:
+        selector: td:nth-last-child(2)
+      leechers:
+        selector: td:nth-last-child(1)
       date:
         selector: time
         filters:
@@ -192,4 +178,4 @@
           i[class*="fa-globe text-green"]: 2 # Global Double Upload
           i[class*="fa-certificate text-pink"]: 2 # Featured Torrent
           "*": 1
-# UNIT3D 2.2.5
+# UNIT3D 1.9.4

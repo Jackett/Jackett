@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -268,68 +269,50 @@ namespace Jackett.Common.Indexers
                         if (Row.QuerySelector("td.edition_info") != null) // ignore edition rows
                             continue;
 
-                        var release = new ReleaseInfo();
-
-                        release.MinimumRatio = 1;
-                        release.MinimumSeedTime = 80 * 3600;
-
+                        // some users have an extra colum (8), we can't use nth-last-child
+                        var sizeString = Row.QuerySelector("td:nth-child(4)").TextContent;
+                        if (string.IsNullOrEmpty(sizeString)) // external links, example BlazBlue: Calamity Trigger Manual - Guide [GameDOX - External Link]
+                            continue;
                         var qDetailsLink = Row.QuerySelector("a[href^=\"torrents.php?id=\"]");
+                        var title = qDetailsLink.TextContent.Replace(", Freeleech!", "").Replace(", Neutral Leech!", "");
+                        if (stickyGroup && (query.ImdbID == null || !TorznabCaps.SupportsImdbMovieSearch) && !query.MatchQueryStringAND(title)) // AND match for sticky releases
+                            continue;
                         var qDescription = qDetailsLink.QuerySelector("span.torrent_info_tags");
                         var qDLLink = Row.QuerySelector("a[href^=\"torrents.php?action=download\"]");
                         var qTime = Row.QuerySelector("span.time");
-                        // some users have an extra colum (8), we can't use nth-last-child
-                        var qSize = Row.QuerySelector("td:nth-child(4)");
                         var qGrabs = Row.QuerySelector("td:nth-child(5)");
                         var qSeeders = Row.QuerySelector("td:nth-child(6)");
                         var qLeechers = Row.QuerySelector("td:nth-child(7)");
                         var qFreeLeech = Row.QuerySelector("strong.freeleech_label");
                         var qNeutralLeech = Row.QuerySelector("strong.neutralleech_label");
-                        var RowTitle = Row.GetAttribute("title");
-
                         var Time = qTime.GetAttribute("title");
-                        release.PublishDate = DateTime.SpecifyKind(DateTime.ParseExact(Time, "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture), DateTimeKind.Unspecified).ToLocalTime();
-                        release.Category = GroupCategory;
-
-                        if (qDescription != null)
-                            release.Description = qDescription.TextContent;
-
-                        release.Title = qDetailsLink.TextContent;
-                        release.Title = release.Title.Replace(", Freeleech!", "");
-                        release.Title = release.Title.Replace(", Neutral Leech!", "");
-
-                        if (stickyGroup) // AND match for sticky releases
-                            if ((query.ImdbID == null || !TorznabCaps.SupportsImdbMovieSearch) && !query.MatchQueryStringAND(release.Title))
-                                continue;
-
-                        var Size = qSize.TextContent;
-                        if (string.IsNullOrEmpty(Size)) // external links, example BlazBlue: Calamity Trigger Manual - Guide [GameDOX - External Link]
-                            continue;
-                        release.Size = ReleaseInfo.GetBytes(Size);
-
-                        release.Link = new Uri(SiteLink + qDLLink.GetAttribute("href"));
-                        release.Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
-                        release.Guid = release.Link;
-
-                        release.Grabs = ParseUtil.CoerceLong(qGrabs.TextContent);
-                        release.Seeders = ParseUtil.CoerceInt(qSeeders.TextContent);
-                        release.Peers = ParseUtil.CoerceInt(qLeechers.TextContent) + release.Seeders;
-
-                        if (qFreeLeech != null)
+                        var link = new Uri(SiteLink + qDLLink.GetAttribute("href"));
+                        var seeders = ParseUtil.CoerceInt(qSeeders.TextContent);
+                        var publishDate = DateTime.SpecifyKind(
+                            DateTime.ParseExact(Time, "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture),
+                            DateTimeKind.Unspecified).ToLocalTime();
+                        var comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
+                        var grabs = ParseUtil.CoerceLong(qGrabs.TextContent);
+                        var leechers = ParseUtil.CoerceInt(qLeechers.TextContent);
+                        var size = ReleaseInfo.GetBytes(sizeString);
+                        var release = new ReleaseInfo
                         {
-                            release.UploadVolumeFactor = 1;
-                            release.DownloadVolumeFactor = 0;
-                        }
-                        else if (qNeutralLeech != null)
-                        {
-                            release.UploadVolumeFactor = 0;
-                            release.DownloadVolumeFactor = 0;
-                        }
-                        else
-                        {
-                            release.UploadVolumeFactor = 1;
-                            release.DownloadVolumeFactor = 1;
-                        }
-
+                            MinimumRatio = 1,
+                            MinimumSeedTime = 288000, //80 hours
+                            Category = GroupCategory,
+                            PublishDate = publishDate,
+                            Size = size,
+                            Comments = comments,
+                            Link = link,
+                            Guid = link,
+                            Grabs = grabs,
+                            Seeders = seeders,
+                            Peers = leechers + seeders,
+                            Title = title,
+                            Description = qDescription?.TextContent,
+                            UploadVolumeFactor = qNeutralLeech is null ? 1 : 0,
+                            DownloadVolumeFactor = qFreeLeech != null || qNeutralLeech != null ? 0 : 1,
+                        };
                         releases.Add(release);
                     }
                 }

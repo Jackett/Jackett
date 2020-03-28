@@ -334,10 +334,10 @@ namespace Jackett.Common.Indexers
                         release.Title = qLink.QuerySelector("b").TextContent;
                         release.Description = release.Title;
 
-                        var releaseLink = row.QuerySelector("td:nth-child(4) > a");
-                        if (releaseLink != null)
+                        var link = row.QuerySelector("td:nth-child(4) > a");
+                        if (link != null)
                         {
-                            release.Link = new Uri(SiteLink + releaseLink.GetAttribute("href"));
+                            release.Link = new Uri(SiteLink + link.GetAttribute("href"));
 
                             var dateString = row.QuerySelector("td:nth-child(6) nobr").TextContent.Trim();
                             //"2015-04-25 23:38:12"

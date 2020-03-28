@@ -56,7 +56,7 @@ namespace Jackett.Common.Models
                 var term = SearchTerm;
                 if (SearchTerm == null)
                     term = "";
-                var safetitle = term.Where(c => (char.IsLetterOrDigit(c)
+                var safeTitle = term.Where(c => (char.IsLetterOrDigit(c)
                                                  || char.IsWhiteSpace(c)
                                                  || c == '-'
                                                  || c == '.'
@@ -70,8 +70,8 @@ namespace Jackett.Common.Models
                                                  || c == ']'
                                                  || c == '+'
                                                  || c == '%'
-                                               )).AsString();
-                return safetitle;
+                                               ));
+                return string.Concat(safeTitle);
             }
         }
 
@@ -105,38 +105,35 @@ namespace Jackett.Common.Models
 
         public TorznabQuery Clone()
         {
-            var ret = new TorznabQuery();
-            ret.QueryType = QueryType;
-            if (Categories != null && Categories.Length > 0)
+            var ret = new TorznabQuery
+            {
+                QueryType = QueryType,
+                Extended = Extended,
+                ApiKey = ApiKey,
+                Limit = Limit,
+                Offset = Offset,
+                Season = Season,
+                Episode = Episode,
+                SearchTerm = SearchTerm,
+                IsTest = IsTest,
+                Album = Album,
+                Artist = Artist,
+                Label = Label,
+                Track = Track,
+                Year = Year,
+                RageID = RageID,
+                ImdbID = ImdbID
+            };
+            if (Categories?.Length > 0)
             {
                 ret.Categories = new int[Categories.Length];
                 Array.Copy(Categories, ret.Categories, Categories.Length);
             }
-            ret.Extended = Extended;
-            ret.ApiKey = ApiKey;
-            ret.Limit = Limit;
-            ret.Offset = Offset;
-            ret.Season = Season;
-            ret.Episode = Episode;
-            ret.SearchTerm = SearchTerm;
-            ret.IsTest = IsTest;
-            ret.Album = Album;
-            ret.Artist = Artist;
-            ret.Label = Label;
-            ret.Track = Track;
-            ret.Year = Year;
-            if (Genre != null)
-            {
-                // Make a copied list and then don't use it?
-                Genre.Select(item => item.Clone()).ToList();
-            }
-            if (QueryStringParts != null && QueryStringParts.Length > 0)
+            if (QueryStringParts?.Length > 0)
             {
                 ret.QueryStringParts = new string[QueryStringParts.Length];
                 Array.Copy(QueryStringParts, ret.QueryStringParts, QueryStringParts.Length);
             }
-            ret.RageID = RageID;
-            ret.ImdbID = ImdbID;
 
             return ret;
         }

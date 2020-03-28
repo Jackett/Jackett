@@ -34,8 +34,10 @@ namespace Jackett.Common.Services
             if (string.IsNullOrWhiteSpace(url))
                 url = "http://omdbapi.com";
 
-            var request = new WebRequest(url + "/?apikey=" + apiKey + "&i=" + imdbId);
-            request.Encoding = Encoding.UTF8;
+            var request = new WebRequest(url + "/?apikey=" + apiKey + "&i=" + imdbId)
+            {
+                Encoding = Encoding.UTF8
+            };
             var result = await WebClient.GetString(request);
             var movie = JsonConvert.DeserializeObject<Movie>(result.Content);
 

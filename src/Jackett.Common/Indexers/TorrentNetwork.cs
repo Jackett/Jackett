@@ -168,11 +168,13 @@ namespace Jackett.Common.Indexers
 
             var searchUrl = "browse";
             var searchString = query.GetQueryString();
-            var queryCollection = new NameValueCollection();
-            queryCollection.Add("orderC", "4");
-            queryCollection.Add("orderD", "desc");
-            queryCollection.Add("start", "0");
-            queryCollection.Add("length", "100");
+            var queryCollection = new NameValueCollection
+            {
+                { "orderC", "4" },
+                { "orderD", "desc" },
+                { "start", "0" },
+                { "length", "100" }
+            };
 
             if (!string.IsNullOrWhiteSpace(searchString))
                 queryCollection.Add("search", searchString);
@@ -183,7 +185,7 @@ namespace Jackett.Common.Indexers
 
             searchUrl += "?" + queryCollection.GetQueryString();
 
-            if (passkey.IsNullOrEmptyOrWhitespace())
+            if (string.IsNullOrWhiteSpace(passkey))
                 await ApplyConfiguration(null);
 
             var result = await SendAPIRequest(searchUrl, null);
@@ -196,42 +198,47 @@ namespace Jackett.Common.Indexers
 
                 foreach (JArray torrent in data)
                 {
-                    var release = new ReleaseInfo();
-                    release.MinimumRatio = 0.8;
-                    release.MinimumSeedTime = 172800; // 48 hours
-
-                    release.Category = MapTrackerCatToNewznab(torrent[0].ToString());
-                    release.Title = torrent[1].ToString();
                     var torrentID = (long)torrent[2];
-                    release.Comments = new Uri(SiteLink + "torrent/" + torrentID);
-                    release.Guid = release.Comments;
-                    release.Link = new Uri(SiteLink + "sdownload/" + torrentID + "/" + passkey);
-                    release.PublishDate = DateTimeUtil.UnixTimestampToDateTime((double)torrent[3]).ToLocalTime();
+                    var comments = new Uri(SiteLink + "torrent/" + torrentID);
                     //var preDelaySeconds = (long)torrent[4];
-                    release.Size = (long)torrent[5];
-                    release.Seeders = (int)torrent[6];
-                    release.Peers = release.Seeders + (int)torrent[7];
+                    var seeders = (int)torrent[6];
                     //var imdbRating = (double)torrent[8] / 10;
                     var genres = (string)torrent[9];
                     if (!string.IsNullOrWhiteSpace(genres))
-                        release.Description = "Genres: " + genres;
-
-                    var DownloadVolumeFlag = (long)torrent[10];
-                    release.UploadVolumeFactor = 1;
-                    if (DownloadVolumeFlag == 2) // Only Up
-                        release.DownloadVolumeFactor = 0;
-                    else if (DownloadVolumeFlag == 1) // 50 % Down
-                        release.DownloadVolumeFactor = 0.5;
-                    else if (DownloadVolumeFlag == 0)
-                        release.DownloadVolumeFactor = 1;
-
-                    release.Grabs = (long)torrent[11];
-
+                        genres = "Genres: " + genres;
                     // 12/13/14 unknown, probably IDs/name of the uploader
                     //var row12 = (long)torrent[12];
                     //var row13 = (string)torrent[13];
                     //var row14 = (long)torrent[14];
-
+                    var link = new Uri(SiteLink + "sdownload/" + torrentID + "/" + passkey);
+                    var publishDate = DateTimeUtil.UnixTimestampToDateTime((double)torrent[3]).ToLocalTime();
+                    var downloadVolumeFactor = (long)torrent[10] switch
+                    {
+                        // Only Up
+                        2 => 0,
+                        // 50 % Down
+                        1 => 0.5,
+                        // All others 100% down
+                        _ => 1,
+                    };
+                    var release = new ReleaseInfo
+                    {
+                        MinimumRatio = 0.8,
+                        MinimumSeedTime = 172800, // 48 hours
+                        Category = MapTrackerCatToNewznab(torrent[0].ToString()),
+                        Title = torrent[1].ToString(),
+                        Comments = comments,
+                        Guid = comments,
+                        Link = link,
+                        PublishDate = publishDate,
+                        Size = (long)torrent[5],
+                        Seeders = seeders,
+                        Peers = seeders + (int)torrent[7],
+                        Description = genres,
+                        UploadVolumeFactor = 1,
+                        DownloadVolumeFactor = downloadVolumeFactor,
+                        Grabs = (long)torrent[11]
+                    };
                     releases.Add(release);
                 }
             }

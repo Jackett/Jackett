@@ -219,35 +219,33 @@ namespace Jackett.Common.Indexers
         private ReleaseInfo MakeRelease(JToken torrent)
         {
             //https://corsaro.red/details/E5BB62E2E58C654F4450325046723A3F013CD7A4
-            var release = new ReleaseInfo
+            var magnetUri = new Uri((string)torrent["magnet"]);
+            var comments = new Uri($"{SiteLink}details/{(string)torrent["hash"]}");
+            var seeders = (int)torrent["seeders"];
+            var publishDate = torrent["last_updated"] != null
+                ? DateTime.Parse((string)torrent["last_updated"])
+                : DateTime.Now;
+            var cat = (int)torrent["category"];
+            var size = torrent["size"]?.ToObject<long>();
+            return new ReleaseInfo
             {
                 Title = (string)torrent["title"],
                 Grabs = (long)torrent["completed"],
                 Description = $"{(string)torrent["category"]} {(string)torrent["description"]}",
-                Seeders = (int)torrent["seeders"],
+                Seeders = seeders,
                 InfoHash = (string)torrent["hash"],
-                MagnetUri = new Uri((string)torrent["magnet"]),
-                Comments = new Uri($"{SiteLink}details/{(string)torrent["hash"]}"),
+                MagnetUri = magnetUri,
+                Comments = comments,
                 MinimumRatio = 1,
                 MinimumSeedTime = 172800, // 48 hours
                 DownloadVolumeFactor = 0,
-                UploadVolumeFactor = 1
+                UploadVolumeFactor = 1,
+                Guid = comments,
+                Peers = seeders + (int)torrent["leechers"],
+                PublishDate = publishDate,
+                Category = MapTrackerCatToNewznab(cat.ToString()),
+                Size = size
             };
-
-            release.Guid = release.Comments;
-            release.Peers = release.Seeders + (int)torrent["leechers"];
-
-            release.PublishDate = DateTime.Now;
-            if (torrent["last_updated"] != null)
-                release.PublishDate = DateTime.Parse((string)torrent["last_updated"]);
-
-            var cat = (int)torrent["category"];
-            release.Category = MapTrackerCatToNewznab(cat.ToString());
-
-            if (torrent["size"] != null)
-                release.Size = (long)torrent["size"];
-
-            return release;
         }
     }
 }

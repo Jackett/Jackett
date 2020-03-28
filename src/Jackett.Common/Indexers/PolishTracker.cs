@@ -85,9 +85,10 @@ namespace Jackett.Common.Indexers
 
             var searchUrl = TorrentApiUrl;
             var searchString = query.GetQueryString();
-            var queryCollection = new List<KeyValuePair<string, string>>();
-
-            queryCollection.Add("tpage", "1");
+            var queryCollection = new List<KeyValuePair<string, string>>
+            {
+                { "tpage", "1" }
+            };
             foreach (var cat in MapTorznabCapsToTrackers(query))
             {
                 queryCollection.Add("cat[]", cat);
@@ -137,6 +138,7 @@ namespace Jackett.Common.Indexers
 
                 foreach (var torrent in torrents)
                 {
+                    // TODO convert to ReleaseInfo Initializer
                     var release = new ReleaseInfo();
                     var descriptions = new List<string>();
                     release.MinimumRatio = 1;

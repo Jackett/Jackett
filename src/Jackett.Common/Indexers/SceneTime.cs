@@ -223,6 +223,7 @@ namespace Jackett.Common.Indexers
                 var rows = dom.QuerySelectorAll("tr.browse");
                 foreach (var row in rows)
                 {
+                    // TODO convert to initializer
                     var release = new ReleaseInfo();
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800; // 48 hours

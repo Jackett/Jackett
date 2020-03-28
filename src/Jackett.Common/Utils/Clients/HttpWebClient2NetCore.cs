@@ -114,8 +114,10 @@ namespace Jackett.Common.Utils.Clients
 
         public void CreateClient()
         {
-            clearanceHandlr = new ClearanceHandler(BrowserUtil.ChromeUserAgent);
-            clearanceHandlr.MaxTries = 30;
+            clearanceHandlr = new ClearanceHandler(BrowserUtil.ChromeUserAgent)
+            {
+                MaxTries = 30
+            };
             clientHandlr = new HttpClientHandler
             {
                 CookieContainer = cookies,
@@ -236,8 +238,10 @@ namespace Jackett.Common.Utils.Clients
 
             response = await client.SendAsync(request);
 
-            var result = new WebClientByteResult();
-            result.Content = await response.Content.ReadAsByteArrayAsync();
+            var result = new WebClientByteResult
+            {
+                Content = await response.Content.ReadAsByteArrayAsync()
+            };
 
             foreach (var header in response.Headers)
             {

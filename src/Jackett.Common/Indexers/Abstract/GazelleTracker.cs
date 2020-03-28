@@ -146,12 +146,13 @@ namespace Jackett.Common.Indexers.Abstract
             var searchString = GetSearchTerm(query);
 
             var searchUrl = APIUrl;
-            var queryCollection = new NameValueCollection();
-
-            queryCollection.Add("action", "browse");
-            //queryCollection.Add("group_results", "0"); # results won't include all information
-            queryCollection.Add("order_by", "time");
-            queryCollection.Add("order_way", "desc");
+            var queryCollection = new NameValueCollection
+            {
+                { "action", "browse" },
+                //{"group_results", "0"}, # results won't include all information
+                { "order_by", "time" },
+                { "order_way", "desc" }
+            };
 
 
             if (!string.IsNullOrWhiteSpace(query.ImdbID))
@@ -208,34 +209,34 @@ namespace Jackett.Common.Indexers.Abstract
                     var tags = r["tags"].ToList();
                     var groupYear = (string)r["groupYear"];
                     var releaseType = (string)r["releaseType"];
-
-                    var release = new ReleaseInfo();
-
-                    release.PublishDate = groupTime;
-
-                    if (!string.IsNullOrEmpty(cover))
-                        release.BannerUrl = new Uri(cover);
-
-                    release.Title = "";
+                    var title = new StringBuilder();
                     if (!string.IsNullOrEmpty(artist))
-                        release.Title += artist + " - ";
-                    release.Title += groupName;
+                        title.Append(artist + " - ");
+                    title.Append(groupName);
                     if (!string.IsNullOrEmpty(groupYear) && groupYear != "0")
-                        release.Title += " [" + groupYear + "]";
+                        title.Append(" [" + groupYear + "]");
                     if (!string.IsNullOrEmpty(releaseType) && releaseType != "Unknown")
-                        release.Title += " [" + releaseType + "]";
+                        title.Append(" [" + releaseType + "]");
+                    var description = tags?.Any() == true && !string.IsNullOrEmpty(tags[0].ToString())
+                        ? "Tags: " + string.Join(", ", tags) + "\n"
+                        : null;
+                    Uri banner = null;
+                    if (!string.IsNullOrEmpty(cover))
+                        banner = new Uri(cover);
+                    var release = new ReleaseInfo
+                    {
+                        PublishDate = groupTime,
+                        Title = title.ToString(),
+                        Description = description,
+                        BannerUrl = banner
+                    };
 
-                    release.Description = "";
-                    if (tags != null && tags.Count > 0 && (string)tags[0] != "")
-                        release.Description += "Tags: " + string.Join(", ", tags) + "\n";
 
                     if (imdbInTags)
                     {
-                        var imdbTags = tags
-                            .Select(tag => ParseUtil.GetImdbID((string)tag))
-                            .Where(tag => tag != null);
-                        if (imdbTags.Count() == 1)
-                            release.Imdb = imdbTags.First();
+                        release.Imdb = tags
+                                       .Select(tag => ParseUtil.GetImdbID((string)tag))
+                                       .Where(tag => tag != null).FirstIfSingleOrDefault();
                     }
 
                     if (r["torrents"] is JArray)

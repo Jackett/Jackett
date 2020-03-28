@@ -1,31 +1,26 @@
 ---
-  site:  freetorrent
-  name:  FreeTorrent
-  description: "FreeTorrent is a Private Torrent Tracker for HD MOVIES / TV"
-  language: en-us
+  site: chilebt
+  name: ChileBT
+  description: "ChileBT is a CHILEAN Private Torrent Tracker for MOVIES / TV / GENERAL"
+  language: es-es
   type: private
   encoding: UTF-8
   links:
-    -  https://freetorrent.tk/
-  legacylinks:
-    -  https://FreeTorrent.net/ # redirects to .tk
-    -  https://FreeTorrent.xyz/ # redirects to .tk
+    - https://chilebt.com/
 
   caps:
     categorymappings:
-      - {id: 1, cat: Movies, desc: "Movies"}
-      - {id: 2, cat: TV, desc: "TV"}
-      - {id: 3, cat: Audio, desc: "Music"}
-      - {id: 4, cat: PC/0day, desc: "Software"}
-      - {id: 5, cat: Books, desc: "Ebook"}
-      - {id: 6, cat: PC/Games, desc: "Games"}
-      - {id: 7, cat: TV, desc: "Animations"}
-      - {id: 8, cat: PC, desc: "Linux"}
-      - {id: 9, cat: PC/Mac, desc: "MacOS"}
-      - {id: 12, cat: TV/Documentary, desc: "Documentaries"}
-      - {id: 13, cat: TV, desc: "Shows"}
-      - {id: 14, cat: Audio/Video, desc: "Music clips"}
-      - {id: 15, cat: PC/Phone-Android, desc: "Apps APK"}
+      - {id: 10, cat: Movies, desc: "Movies"}
+      - {id: 11, cat: TV, desc: "TV"}
+      - {id: 9, cat: Audio, desc: "Music"}
+      - {id: 7, cat: Other, desc: "Cultura / Educativos"}
+      - {id: 8, cat: PC/Games, desc: "Juegos"}
+      - {id: 6, cat: Books, desc: "EBook"}
+      - {id: 4, cat: TV/Anime, desc: "Anime"}
+      - {id: 5, cat: PC/0day, desc: "Aplicaciones / Programas"}
+      - {id: 14, cat: Movies, desc: "Infantil"}
+      - {id: 12, cat: Other/Misc, desc: "VIP"}
+      - {id: 13, cat: XXX, desc: "XXX"}
 
     modes:
       search: [q, imdbid]
@@ -69,7 +64,9 @@
         selector: input[name="_token"]
         attribute: value
     error:
-      - selector: div#ERROR_COPY
+      - selector: script[nonce]:contains("Error")
+        message:
+          selector: script[nonce]:contains("Error")
 #    test:
 #      path: /
 #      selector: a[href$="/logout"]
@@ -83,7 +80,7 @@
 
   search:
     paths:
-      - path: torrents/filter
+      - path: filterTorrents
     inputs:
       $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
       search: "{{ if .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
@@ -93,7 +90,6 @@
       tvdb: ""
       tmdb: ""
       mal: ""
-      igdb: ""
       sorting: "{{ .Config.sort }}"
       sort: "{{ .Config.sort }}"
       direction: "{{ .Config.type }}"
@@ -108,7 +104,7 @@
         attribute: href
         filters:
           - name: regexp
-            args: "/categories/(\\d+)"
+            args: "/categories/.*?\\.(\\d+)"
       title:
         selector: a.view-torrent
       download:
@@ -192,4 +188,4 @@
           i[class*="fa-globe text-green"]: 2 # Global Double Upload
           i[class*="fa-certificate text-pink"]: 2 # Featured Torrent
           "*": 1
-# UNIT3D 2.2.5
+# UNIT3D 1.9.3

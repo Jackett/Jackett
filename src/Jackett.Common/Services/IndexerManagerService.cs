@@ -159,7 +159,7 @@ namespace Jackett.Common.Services
             var omdbApiKey = serverConfig.OmdbApiKey;
             IFallbackStrategyProvider fallbackStrategyProvider = null;
             IResultFilterProvider resultFilterProvider = null;
-            if (!omdbApiKey.IsNullOrEmptyOrWhitespace())
+            if (!string.IsNullOrWhiteSpace(omdbApiKey))
             {
                 var imdbResolver = new OmdbResolver(webClient, omdbApiKey.ToNonNull(), serverConfig.OmdbApiUrl);
                 fallbackStrategyProvider = new ImdbFallbackStrategyProvider(imdbResolver);
@@ -172,8 +172,10 @@ namespace Jackett.Common.Services
             }
 
             logger.Info("Adding aggregate indexer");
-            aggregateIndexer = new AggregateIndexer(fallbackStrategyProvider, resultFilterProvider, configService, webClient, logger, protectionService);
-            aggregateIndexer.Indexers = indexers.Values;
+            aggregateIndexer = new AggregateIndexer(fallbackStrategyProvider, resultFilterProvider, configService, webClient, logger, protectionService)
+            {
+                Indexers = indexers.Values
+            };
         }
 
         public IIndexer GetIndexer(string name)
@@ -213,10 +215,12 @@ namespace Jackett.Common.Services
         public async Task TestIndexer(string name)
         {
             var indexer = GetIndexer(name);
-            var browseQuery = new TorznabQuery();
-            browseQuery.QueryType = "search";
-            browseQuery.SearchTerm = "";
-            browseQuery.IsTest = true;
+            var browseQuery = new TorznabQuery
+            {
+                QueryType = "search",
+                SearchTerm = "",
+                IsTest = true
+            };
             var result = await indexer.ResultsForQuery(browseQuery);
             logger.Info(string.Format("Found {0} releases from {1}", result.Releases.Count(), indexer.DisplayName));
             if (result.Releases.Count() == 0)
