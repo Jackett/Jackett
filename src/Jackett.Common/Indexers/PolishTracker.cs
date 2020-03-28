@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
@@ -16,21 +18,17 @@ namespace Jackett.Common.Indexers
     public class PolishTracker : BaseWebIndexer
     {
         private string LoginUrl => SiteLink + "login";
-        private string TorrentApiUrl => SiteLink + "apitorrents";
-        private string CDNUrl => "https://cdn.pte.nu/";
+        private string SearchUrl => SiteLink + "apitorrents";
+        private static string CdnUrl => "https://cdn.pte.nu/";
 
-        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
+        public override string[] LegacySiteLinks { get; protected set; } = {
             "https://polishtracker.net/",
-            };
+        };
 
-        private new ConfigurationDataBasicLoginWithEmail configData
-        {
-            get => (ConfigurationDataBasicLoginWithEmail)base.configData;
-            set => base.configData = value;
-        }
+        private new ConfigurationDataBasicLoginWithEmail configData => (ConfigurationDataBasicLoginWithEmail)base.configData;
 
         public PolishTracker(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "PolishTracker",
+            : base("PolishTracker",
                    description: "Polish Tracker is a POLISH Private site for 0DAY / MOVIES / GENERAL",
                    link: "https://pte.nu/",
                    caps: new TorznabCapabilities(),
@@ -43,6 +41,9 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "pl-pl";
             Type = "private";
+
+            TorznabCaps.SupportsImdbMovieSearch = true;
+            TorznabCaps.SupportsImdbTVSearch = true;
 
             AddCategoryMapping(1, TorznabCatType.PC0day, "0-Day");
             AddCategoryMapping(3, TorznabCatType.PC0day, "Apps");
@@ -69,7 +70,7 @@ namespace Jackett.Common.Indexers
             };
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, SiteLink);
 
-            await ConfigureIfOK(result.Cookies, result.Cookies != null && result.Cookies.Contains("id="), () =>
+            await ConfigureIfOK(result.Cookies, result.Cookies?.Contains("id=") == true, () =>
             {
                 var errorMessage = result.Content;
                 if (errorMessage.Contains("Error!"))
@@ -83,105 +84,87 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
 
-            var searchUrl = TorrentApiUrl;
-            var searchString = query.GetQueryString();
-            var queryCollection = new List<KeyValuePair<string, string>>
+            var qc = new NameValueCollection
             {
                 { "tpage", "1" }
             };
-            foreach (var cat in MapTorznabCapsToTrackers(query))
+
+            if (query.IsImdbQuery)
             {
-                queryCollection.Add("cat[]", cat);
+                qc.Add("search", query.ImdbID);
+                qc.Add("nfo", "true");
             }
+            else if (!string.IsNullOrWhiteSpace(query.GetQueryString()))
+                qc.Add("search", query.GetQueryString());
 
-            if (!string.IsNullOrWhiteSpace(searchString))
-                queryCollection.Add("search", searchString);
+            foreach (var cat in MapTorznabCapsToTrackers(query))
+                qc.Add("cat[]", cat);
 
-            searchUrl += "?" + queryCollection.GetQueryString();
-
-            var result = await RequestStringWithCookiesAndRetry(searchUrl, null, TorrentApiUrl);
+            var searchUrl = SearchUrl + "?" + qc.GetQueryString();
+            var result = await RequestStringWithCookiesAndRetry(searchUrl, null, SearchUrl);
             if (result.IsRedirect)
             {
                 // re-login
                 await ApplyConfiguration(null);
-                result = await RequestStringWithCookiesAndRetry(searchUrl, null, TorrentApiUrl);
+                result = await RequestStringWithCookiesAndRetry(searchUrl, null, SearchUrl);
             }
 
             if (!result.Content.StartsWith("{")) // not JSON => error
                 throw new ExceptionWithConfigData(result.Content, configData);
-            dynamic json = JsonConvert.DeserializeObject<dynamic>(result.Content);
+
+            var json = JsonConvert.DeserializeObject<dynamic>(result.Content);
             try
             {
-                dynamic torrents = json["torrents"]; // latest torrents
-
+                var torrents = json["torrents"]; // latest torrents
                 if (json["hits"] != null) // is search result
                     torrents = json.SelectTokens("$.hits[?(@._type == 'torrent')]._source");
-                /*
-                {
-                    "id":426868,
-                    "name":"Realease-nameE",
-                    "size":"2885494332",
-                    "category":11,
-                    "added":"2017-09-11T11:36:26.936Z",
-                    "comments":0,
-                    "leechers":0,
-                    "seeders":1,
-                    "completed":0,
-                    "poster":true,
-                    "imdb_id":"3743822",
-                    "cdu_id":null,
-                    "steam_id":null,
-                    "subs":null,
-                    "language":"en"
-                },
-                */
-
                 foreach (var torrent in torrents)
                 {
-                    // TODO convert to ReleaseInfo Initializer
-                    var release = new ReleaseInfo();
-                    var descriptions = new List<string>();
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 0;
+                    var torrentId = (long)torrent.id;
+                    var comments = new Uri(SiteLink + "torrents/" + torrentId);
+                    var link = new Uri(SiteLink + "download/" + torrentId);
+                    var publishDate = DateTime.Parse(torrent.added.ToString());
+                    var imdbId = ParseUtil.GetImdbID(torrent.imdb_id.ToString());
 
-                    release.Category = MapTrackerCatToNewznab(torrent.category.ToString());
-                    release.Title = torrent.name.ToString();
-                    var torrentID = (long)torrent.id;
-                    release.Comments = new Uri(SiteLink + "torrents/" + torrentID);
-                    release.Guid = release.Comments;
-                    release.Link = new Uri(SiteLink + "download/" + torrentID);
-                    var date = (DateTime)torrent.added;
-                    release.PublishDate = date;
-                    release.Size = ParseUtil.CoerceLong(torrent.size.ToString());
-                    release.Seeders = (int)torrent.seeders;
-                    release.Peers = release.Seeders + (int)torrent.leechers;
-                    var imdbid = torrent.imdb_id.ToString();
-                    if (!string.IsNullOrEmpty(imdbid))
-                        release.Imdb = ParseUtil.CoerceLong(imdbid);
-
-                    if ((bool)torrent.poster == true)
+                    Uri banner = null;
+                    if ((bool)torrent.poster)
                     {
-                        if (release.Imdb != null)
-                            release.BannerUrl = new Uri(CDNUrl + "images/torrents/poster/imd/l/" + imdbid + ".jpg");
+                        if (torrent["imdb_id"] != null)
+                            banner = new Uri(CdnUrl + "images/torrents/poster/imd/l/" + torrent["imdb_id"] + ".jpg");
                         else if (torrent["cdu_id"] != null)
-                            release.BannerUrl = new Uri(CDNUrl + "images/torrents/poster/cdu/b/" + torrent["cdu_id"] + "_front.jpg");
+                            banner = new Uri(CdnUrl + "images/torrents/poster/cdu/b/" + torrent["cdu_id"] + "_front.jpg");
                         else if (torrent["steam_id"] != null)
-                            release.BannerUrl = new Uri(CDNUrl + "images/torrents/poster/ste/l/" + torrent["steam_id"] + ".jpg");
+                            banner = new Uri(CdnUrl + "images/torrents/poster/ste/l/" + torrent["steam_id"] + ".jpg");
                     }
 
-                    release.UploadVolumeFactor = 1;
-                    release.DownloadVolumeFactor = 1;
-
-                    release.Grabs = (long)torrent.completed;
-
+                    var descriptions = new List<string>();
                     var language = (string)torrent.language;
                     if (!string.IsNullOrEmpty(language))
                         descriptions.Add("Language: " + language);
                     else if ((bool?)torrent.polish == true)
                         descriptions.Add("Language: pl");
+                    var description = descriptions.Any() ? string.Join("<br />\n", descriptions) : null;
 
-                    if (descriptions.Count > 0)
-                        release.Description = string.Join("<br />\n", descriptions);
+                    var release = new ReleaseInfo
+                    {
+                        Title = torrent.name.ToString(),
+                        Comments = comments,
+                        Guid = comments,
+                        Link = link,
+                        PublishDate = publishDate,
+                        Category = MapTrackerCatToNewznab(torrent.category.ToString()),
+                        Size = (long)torrent.size,
+                        Grabs = (long)torrent.completed,
+                        Seeders = (int)torrent.seeders,
+                        Peers = (int)torrent.seeders + (int)torrent.leechers,
+                        Imdb = imdbId,
+                        BannerUrl = banner,
+                        Description = description,
+                        MinimumRatio = 1,
+                        MinimumSeedTime = 259200, // 72 hours (I can't verify this, but this is a safe value in most trackers)
+                        UploadVolumeFactor = 1,
+                        DownloadVolumeFactor = 1
+                    };
 
                     releases.Add(release);
                 }
