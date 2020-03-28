@@ -6,7 +6,9 @@
   type: public
   encoding: UTF-8
   links:
-    - https://pornleech.io/
+    - http://pornleech.io/
+  legacylinks:
+    - https://pornleech.io/ # site is forcing redirect to http
 
   caps:
     categorymappings:
