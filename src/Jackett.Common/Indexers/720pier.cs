@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
@@ -130,7 +132,8 @@ namespace Jackett.Common.Indexers
             pairs["sid"] = loginDocument.GetElementsByName("sid")[0].GetAttribute("value");
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl, true);
-            await ConfigureIfOK(result.Cookies, result.Content?.Contains("ucp.php?mode=logout&") == true, () =>
+            await ConfigureIfOK(
+                result.Cookies, result.Content?.Contains("ucp.php?mode=logout&") == true, () =>
             {
                 var errorMessage = result.Content;
                 throw new ExceptionWithConfigData(errorMessage, configData);
@@ -140,38 +143,18 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();
-
-            var queryCollection = new NameValueCollection
-            {
-                {"st", "0"},
-                {"sd", "d"},
-                {"sk", "t"},
-                {"tracker_search", "torrent"},
-                {"t", "0"},
-                {"submit", "Search"},
-                {"sr", "topics"},
-                {"ot", "1" }
-            };
-
-            //queryCollection.Add("sr", "posts");
-            //queryCollection.Add("ch", "99999");
-
-            // if the search string is empty use the getnew view
-            if (string.IsNullOrWhiteSpace(searchString))
-            {
-                queryCollection.Add("search_id", "active_topics");
-            }
-            else // use the normal search
-            {
-                searchString = searchString.Replace("-", " ");
-                queryCollection.Add("keywords", searchString);
-                queryCollection.Add("sf", "titleonly");
-                queryCollection.Add("sr", "topics");
-                queryCollection.Add("pt", "t");
-            }
-
+            var keywordSearch = !string.IsNullOrWhiteSpace(searchString);
+            var releases = new List<ReleaseInfo>();
+            var queryCollection = !keywordSearch
+                ? new NameValueCollection { { "search_id", "active_topics" } }
+                : new NameValueCollection
+                {
+                    { "sr", "posts" }, //Search all posts
+                    { "ot", "1" }, //Search only in forums trackers (checked)
+                    { "keywords", searchString },
+                    { "sf", "titleonly" }
+                };
             var searchUrl = SearchUrl + "?" + queryCollection.GetQueryString();
             var results = await RequestStringWithCookies(searchUrl);
             if (!results.Content.Contains("ucp.php?mode=logout"))
@@ -179,68 +162,52 @@ namespace Jackett.Common.Indexers
                 await ApplyConfiguration(null);
                 results = await RequestStringWithCookies(searchUrl);
             }
+
             try
             {
-                const string rowsSelector = "ul.topics > li.row";
-
                 var resultParser = new HtmlParser();
                 var searchResultDocument = resultParser.ParseDocument(results.Content);
-                var rows = searchResultDocument.QuerySelectorAll(rowsSelector);
-                foreach (var row in rows)
+                var rowSelector = keywordSearch
+                    ? "div.search div.postbody > h3 > a"
+                    : "ul.topics > li.row:has(i.fa-paperclip) a.topictitle"; // Torrent lines have paperclip icon. Chat topics don't
+                var rows = searchResultDocument.QuerySelectorAll(rowSelector);
+                foreach (var rowLink in rows)
                 {
-                    try
+                    var detailLink = SiteLink + rowLink.GetAttribute("href");
+                    var detailsResult = await RequestStringWithCookies(detailLink);
+                    var detailsDocument = resultParser.ParseDocument(detailsResult.Content);
+                    var detailRow = detailsDocument.QuerySelector("table.table2 > tbody > tr");
+                    if (detailRow == null)
+                        continue; //No torrents in result
+                    var qDownloadLink = detailRow.QuerySelector("a[href^=\"/download/torrent\"]");
+                    var link = new Uri(SiteLink + qDownloadLink.GetAttribute("href").TrimStart('/'));
+                    var timestr = detailRow.Children[0].QuerySelector("span.my_tt").TextContent;
+                    var publishDate = DateTimeUtil.FromUnknown(timestr, "UK");
+                    var forumId = detailsDocument.QuerySelector("li.breadcrumbs").LastElementChild.GetAttribute("data-forum-id");
+                    var sizeString = detailRow.Children[4].QuerySelector("span.my_tt").GetAttribute("title");
+                    var size = ParseUtil.CoerceLong(Regex.Replace(sizeString, @"[^0-9]", string.Empty));
+                    var comments = new Uri(detailLink);
+                    var grabs = ParseUtil.CoerceInt(detailRow.Children[0].QuerySelector("span.complet").TextContent);
+                    var seeders = ParseUtil.CoerceInt(detailRow.Children[2].QuerySelector("span.seed").TextContent);
+                    var leechers = ParseUtil.CoerceInt(detailRow.Children[3].QuerySelector("span.leech").TextContent);
+                    var release = new ReleaseInfo
                     {
-                        var seeders = ParseUtil.CoerceInt(row.QuerySelector("span.seed").TextContent);
-                        var grabs = ParseUtil.CoerceLong(row.QuerySelector("span.complet").TextContent);
-                        var qDetailsLink = row.QuerySelector("a.topictitle");
-                        var detailsResult = await RequestStringWithCookies(SiteLink + qDetailsLink.GetAttribute("href"));
-                        var detailsResultDocument = resultParser.ParseDocument(detailsResult.Content);
-                        var qDownloadLink = detailsResultDocument.QuerySelector("table.table2 > tbody > tr > td > a[href^=\"/download/torrent\"]");
-                        var author = row.QuerySelector("dd.lastpost > span");
-                        var timestr = author.TextContent.Split('\n')
-                            .Where(str => !string.IsNullOrWhiteSpace(str)) //Filter blank lines
-                            .Skip(1) //Skip author name
-                            .FirstOrDefault()
-                            .Trim();
-
-                        var forum = row.QuerySelector("a[href^=\"./viewforum.php?f=\"]");
-                        var forumid = forum.GetAttribute("href").Split('=')[1];
-                        var sizeString = row.QuerySelector("dl.row-item > dt > div.list-inner > div[style^=\"float:right\"]")
-                                            .TextContent
-                                            .Replace("GiB", "GB")
-                                            .Replace("MiB", "MB")
-                                            .Replace("KiB", "KB")
-                                            .Replace("ГБ", "GB")
-                                            .Replace("МБ", "MB")
-                                            .Replace("КБ", "KB");
-                        var comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
-                        var leechers = ParseUtil.CoerceInt(row.QuerySelector("span.leech").TextContent);
-                        var link = new Uri(SiteLink + qDownloadLink.GetAttribute("href").TrimStart('/'));
-                        var publishDate = DateTimeUtil.FromUnknown(timestr, "UK");
-                        var size = ReleaseInfo.GetBytes(sizeString);
-                        var release = new ReleaseInfo
-                        {
-                            MinimumRatio = 1,
-                            MinimumSeedTime = 0,
-                            DownloadVolumeFactor = 1,
-                            UploadVolumeFactor = 1,
-                            Seeders = seeders,
-                            Grabs = grabs,
-                            Peers = leechers + seeders,
-                            Title = qDetailsLink.TextContent,
-                            Comments = comments,
-                            Guid = comments,
-                            Link = link,
-                            PublishDate = publishDate,
-                            Category = MapTrackerCatToNewznab(forumid),
-                            Size = size,
-                        };
-                        releases.Add(release);
-                    }
-                    catch (Exception ex)
-                    {
-                        logger.Error($"{ID}: Error while parsing row '{row.OuterHtml}':\n\n{ex}");
-                    }
+                        MinimumRatio = 1,
+                        MinimumSeedTime = 0,
+                        DownloadVolumeFactor = 1,
+                        UploadVolumeFactor = 1,
+                        Seeders = seeders,
+                        Grabs = grabs,
+                        Peers = leechers + seeders,
+                        Title = rowLink.TextContent,
+                        Comments = comments,
+                        Guid = comments,
+                        Link = link,
+                        PublishDate = publishDate,
+                        Category = MapTrackerCatToNewznab(forumId),
+                        Size = size,
+                    };
+                    releases.Add(release);
                 }
             }
             catch (Exception ex)
