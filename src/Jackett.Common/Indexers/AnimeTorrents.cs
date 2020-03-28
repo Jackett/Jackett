@@ -98,23 +98,15 @@ namespace Jackett.Common.Indexers
             //  replace any space, special char, etc. with % (wildcard)
             var ReplaceRegex = new Regex("[^a-zA-Z0-9]+");
             searchString = ReplaceRegex.Replace(searchString, "%");
-
             var searchUrl = SearchUrl;
-            var queryCollection = new NameValueCollection();
-
-            queryCollection.Add("total", "146"); // Not sure what this is about but its required!
-
-            var cat = "0";
-            var queryCats = MapTorznabCapsToTrackers(query);
-            if (queryCats.Count == 1)
+            var queryCollection = new NameValueCollection
             {
-                cat = queryCats.First().ToString();
-            }
-
-            queryCollection.Add("cat", cat);
-            queryCollection.Add("searchin", "filename");
-            queryCollection.Add("search", searchString);
-            queryCollection.Add("page", "1");
+                {"total", "146"}, // Not sure what this is about but its required!
+                {"cat", MapTorznabCapsToTrackers(query).FirstIfSingleOrDefault("0")},
+                {"page", "1"},
+                {"searchin", "filename"},
+                {"search", searchString}
+            };
             searchUrl += "?" + queryCollection.GetQueryString();
 
             var extraHeaders = new Dictionary<string, string>()

@@ -233,28 +233,20 @@ namespace Jackett.Common.Indexers
             return null;
         }
 
-        private IEnumerable<Uri> GetLinkUris(Uri referenceLink)
+        private static IEnumerable<Uri> GetLinkUris(Uri referenceLink)
         {
-            var uris = new List<Uri>();
-            uris.Add(referenceLink);
+            var uris = new List<Uri>()
+            {
+                referenceLink
+            };
             if (DefaultSiteLinkUri.Scheme != referenceLink.Scheme && DefaultSiteLinkUri.Host != referenceLink.Host)
                 uris.Add(DefaultSiteLinkUri);
 
-            uris = uris.Concat(ExtraSiteLinkUris.
-                Where(u =>
-                    (u.Scheme != referenceLink.Scheme || u.Host != referenceLink.Host) &&
-                    (u.Scheme != DefaultSiteLinkUri.Scheme || u.Host != DefaultSiteLinkUri.Host))).ToList();
+            uris.AddRange(ExtraSiteLinkUris.Where(u
+                => (u.Scheme != referenceLink.Scheme || u.Host != referenceLink.Host) &&
+                   (u.Scheme != DefaultSiteLinkUri.Scheme || u.Host != DefaultSiteLinkUri.Host)));
 
-            var result = new List<Uri>();
-
-            foreach (var uri in uris)
-            {
-                var ub = new UriBuilder(uri);
-                ub.Path = referenceLink.LocalPath;
-                result.Add(ub.Uri);
-            }
-
-            return result;
+            return uris.Select(uri => new UriBuilder(uri) { Path = referenceLink.LocalPath }.Uri);
         }
 
         private async Task<IEnumerable<ReleaseInfo>> PerformQuery(Uri siteLink, TorznabQuery query, int attempts)
@@ -596,10 +588,12 @@ namespace Jackett.Common.Indexers
             var pg = 1;
             while (pg <= _maxMoviesPages)
             {
-                var queryCollection = new Dictionary<string, string>();
-                queryCollection.Add("q", searchStr);
-                queryCollection.Add("s", searchStr);
-                queryCollection.Add("pg", pg.ToString());
+                var queryCollection = new Dictionary<string, string>
+                {
+                    { "q", searchStr },
+                    { "s", searchStr },
+                    { "pg", pg.ToString() }
+                };
 
                 WebClientStringResult results = null;
                 IEnumerable<NewpctRelease> items = null;
@@ -610,7 +604,7 @@ namespace Jackett.Common.Indexers
                     {
                         var uri = new Uri(validUri, _searchJsonUrl);
                         results = await PostDataWithCookies(uri.AbsoluteUri, queryCollection);
-                        if (results == null || string.IsNullOrEmpty(results.Content))
+                        if (string.IsNullOrEmpty(results?.Content))
                             break;
                         items = ParseSearchJsonContent(uri, results.Content);
                     }
@@ -754,9 +748,10 @@ namespace Jackett.Common.Indexers
             var releases = new List<NewpctRelease>();
 
             //Remove path from uri
-            var ub = new UriBuilder(uri);
-            ub.Path = string.Empty;
-            uri = ub.Uri;
+            uri = new UriBuilder(uri)
+            {
+                Path = string.Empty
+            }.Uri;
 
             try
             {
@@ -847,8 +842,10 @@ namespace Jackett.Common.Indexers
 
         private NewpctRelease GetReleaseFromData(ReleaseType releaseType, string title, string detailsUrl, string quality, string language, long size, DateTime publishDate)
         {
-            var result = new NewpctRelease();
-            result.NewpctReleaseType = releaseType;
+            var result = new NewpctRelease
+            {
+                NewpctReleaseType = releaseType
+            };
 
             //Sanitize
             title = title.Replace("\t", "").Replace("\x2013", "-");
@@ -927,9 +924,10 @@ namespace Jackett.Common.Indexers
                     release.SeriesName = release.Title.Substring(0, release.SeriesName.IndexOf('-') - 1);
             }
 
-            var titleParts = new List<string>();
-
-            titleParts.Add(release.SeriesName);
+            var titleParts = new List<string>
+            {
+                release.SeriesName
+            };
 
             if (release.NewpctReleaseType == ReleaseType.TV)
             {
@@ -988,6 +986,12 @@ namespace Jackett.Common.Indexers
         private string RemoveDiacritics(string text)
         {
             var normalizedString = text.Normalize(NormalizationForm.FormD);
+
+            // https://stackoverflow.com/a/14812065/9719178
+            // TODO Better performance version in .Net-Core:
+            // return string.Concat(normalizedString.Where(c => CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark))
+            //              .Normalize(NormalizationForm.FormC);
+
             var stringBuilder = new StringBuilder();
 
             foreach (var c in normalizedString)

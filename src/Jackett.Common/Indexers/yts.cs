@@ -76,11 +76,13 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();
 
-            var queryCollection = new NameValueCollection();
+            var queryCollection = new NameValueCollection
+            {
 
-            // without this the API sometimes returns nothing
-            queryCollection.Add("sort", "date_added");
-            queryCollection.Add("limit", "50");
+                // without this the API sometimes returns nothing
+                { "sort", "date_added" },
+                { "limit", "50" }
+            };
 
             if (query.ImdbID != null)
             {
@@ -127,6 +129,7 @@ namespace Jackett.Common.Indexers
                         continue;
                     foreach (var torrent_info in torrents)
                     {
+                        //TODO change to initializer
                         var release = new ReleaseInfo();
 
                         // append type: BRRip or WEBRip, resolves #3558 via #4577

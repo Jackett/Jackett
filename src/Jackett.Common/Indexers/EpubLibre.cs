@@ -113,7 +113,6 @@ namespace Jackett.Common.Indexers
 
                         // publish date is not available in the torrent list, but we add a relative date so we can sort
                         lastPublishDate = lastPublishDate.AddMinutes(-1);
-
                         var release = new ReleaseInfo
                         {
                             Title = title,

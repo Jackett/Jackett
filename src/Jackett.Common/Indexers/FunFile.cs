@@ -77,13 +77,11 @@ namespace Jackett.Common.Indexers
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-
-            var cats = MapTorznabCapsToTrackers(query);
             var qc = new NameValueCollection
             {
                 {"incldead", "1"},
                 {"showspam", "1"},
-                {"cat", cats.Count == 1 ? cats[0] : "0"}
+                {"cat", MapTorznabCapsToTrackers(query).FirstIfSingleOrDefault("0")}
             };
             if (!string.IsNullOrWhiteSpace(query.GetQueryString()))
                 qc.Add("search", query.GetQueryString());

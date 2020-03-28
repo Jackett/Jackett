@@ -29,6 +29,10 @@ namespace Jackett.Common.Indexers.Feeds
         protected virtual ReleaseInfo ResultFromFeedItem(XElement item)
         {
             var attributes = item.Descendants().Where(e => e.Name.LocalName == "attr");
+            var size = long.TryParse(ReadAttribute(attributes, "size"), out var longVal ) ? (long?)longVal : null;
+            var files = long.TryParse(ReadAttribute(attributes, "files"), out longVal) ? (long?)longVal : null;
+            var seeders = int.TryParse(ReadAttribute(attributes, "seeders"), out var intVal) ? (int?)intVal : null;
+            var peers = int.TryParse(ReadAttribute(attributes, "peers"), out intVal) ? (int?)intVal : null;
             var release = new ReleaseInfo
             {
                 Title = item.FirstValue("title"),
@@ -37,11 +41,11 @@ namespace Jackett.Common.Indexers.Feeds
                 Comments = new Uri(item.FirstValue("comments")),
                 PublishDate = DateTime.Parse(item.FirstValue("pubDate")),
                 Category = new List<int> { int.Parse(attributes.First(e => e.Attribute("name").Value == "category").Attribute("value").Value) },
-                Size = ReadAttribute(attributes, "size").TryParse<long>(),
-                Files = ReadAttribute(attributes, "files").TryParse<long>(),
+                Size = size,
+                Files = files,
                 Description = item.FirstValue("description"),
-                Seeders = ReadAttribute(attributes, "seeders").TryParse<int>(),
-                Peers = ReadAttribute(attributes, "peers").TryParse<int>(),
+                Seeders = seeders,
+                Peers = peers,
                 InfoHash = attributes.First(e => e.Attribute("name").Value == "infohash").Attribute("value").Value,
                 MagnetUri = new Uri(attributes.First(e => e.Attribute("name").Value == "magneturl").Attribute("value").Value),
             };

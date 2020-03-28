@@ -13,7 +13,7 @@ namespace Jackett.Common.Utils
         public JsonContent(object value, Encoding encoding)
             : base(
                 JsonConvert.SerializeObject(
-                    value, Formatting.Indented, new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore}),
+                    value, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }),
                 encoding, "application/json")
         {
         }

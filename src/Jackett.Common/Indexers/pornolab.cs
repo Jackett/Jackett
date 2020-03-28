@@ -23,6 +23,7 @@ namespace Jackett.Common.Indexers
 
         protected string cap_sid = null;
         protected string cap_code_field = null;
+        private static readonly Regex s_StripRussianRegex = new Regex(@"(\([А-Яа-яЁё\W]+\))|(^[А-Яа-яЁё\W\d]+\/ )|([а-яА-ЯЁё \-]+,+)|([а-яА-ЯЁё]+)");
 
         private new ConfigurationDataPornolab configData
         {
@@ -278,11 +279,6 @@ namespace Jackett.Common.Indexers
                 {
                     try
                     {
-                        var release = new ReleaseInfo();
-
-                        release.MinimumRatio = 1;
-                        release.MinimumSeedTime = 0;
-
                         var qDownloadLink = Row.QuerySelector("a.tr-dl");
                         if (qDownloadLink == null) // Expects moderation
                             continue;
@@ -290,38 +286,38 @@ namespace Jackett.Common.Indexers
                         var qForumLink = Row.QuerySelector("a.f");
                         var qDetailsLink = Row.QuerySelector("a.tLink");
                         var qSize = Row.QuerySelector("td:nth-child(6) u");
-
-                        release.Title = qDetailsLink.TextContent;
-
-                        release.Comments = new Uri(SiteLink + "forum/" + qDetailsLink.GetAttribute("href"));
-                        release.Description = qForumLink.TextContent;
-                        release.Link = release.Comments;
-                        release.Guid = release.Link;
-                        release.Size = ReleaseInfo.GetBytes(qSize.TextContent);
-
-                        var seeders = Row.QuerySelector("td:nth-child(7) b").TextContent;
-                        if (string.IsNullOrWhiteSpace(seeders))
-                            seeders = "0";
-                        release.Seeders = ParseUtil.CoerceInt(seeders);
-                        release.Peers = ParseUtil.CoerceInt(Row.QuerySelector("td:nth-child(8)").TextContent) + release.Seeders;
-                        release.Grabs = ParseUtil.CoerceLong(Row.QuerySelector("td:nth-child(9)").TextContent);
+                        var link = new Uri(SiteLink + "forum/" + qDetailsLink.GetAttribute("href"));
+                        var seederString = Row.QuerySelector("td:nth-child(7) b").TextContent;
+                        var seeders = string.IsNullOrWhiteSpace(seederString) ? 0 : ParseUtil.CoerceInt(seederString);
 
                         var timestr = Row.QuerySelector("td:nth-child(10) u").TextContent;
-                        release.PublishDate = DateTimeUtil.UnixTimestampToDateTime(long.Parse(timestr));
-
                         var forum = qForumLink;
                         var forumid = forum.GetAttribute("href").Split('=')[1];
-                        release.Category = MapTrackerCatToNewznab(forumid);
-
-                        release.DownloadVolumeFactor = 1;
-                        release.UploadVolumeFactor = 1;
-
-                        if (configData.StripRussianLetters.Value)
+                        var title = configData.StripRussianLetters.Value
+                            ? s_StripRussianRegex.Replace(qDetailsLink.TextContent, "")
+                            : qDetailsLink.TextContent;
+                        var size = ReleaseInfo.GetBytes(qSize.TextContent);
+                        var leechers = ParseUtil.CoerceInt(Row.QuerySelector("td:nth-child(8)").TextContent);
+                        var grabs = ParseUtil.CoerceLong(Row.QuerySelector("td:nth-child(9)").TextContent);
+                        var publishDate = DateTimeUtil.UnixTimestampToDateTime(long.Parse(timestr));
+                        var release = new ReleaseInfo
                         {
-                            var regex = new Regex(@"(\([А-Яа-яЁё\W]+\))|(^[А-Яа-яЁё\W\d]+\/ )|([а-яА-ЯЁё \-]+,+)|([а-яА-ЯЁё]+)");
-                            release.Title = regex.Replace(release.Title, "");
-                        }
-
+                            MinimumRatio = 1,
+                            MinimumSeedTime = 0,
+                            Title = title,
+                            Comments = link,
+                            Description = qForumLink.TextContent,
+                            Link = link,
+                            Guid = link,
+                            Size = size,
+                            Seeders = seeders,
+                            Peers = leechers + seeders,
+                            Grabs = grabs,
+                            PublishDate = publishDate,
+                            Category = MapTrackerCatToNewznab(forumid),
+                            DownloadVolumeFactor = 1,
+                            UploadVolumeFactor = 1
+                        };
                         releases.Add(release);
                     }
                     catch (Exception ex)

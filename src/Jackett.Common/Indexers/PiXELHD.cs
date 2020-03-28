@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -114,9 +115,11 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();
-            var queryCollection = new NameValueCollection();
-            queryCollection.Add("order_by", "time");
-            queryCollection.Add("order_way", "desc");
+            var queryCollection = new NameValueCollection
+            {
+                { "order_by", "time" },
+                { "order_way", "desc" }
+            };
 
             if (!string.IsNullOrWhiteSpace(query.ImdbID))
             {
@@ -126,7 +129,7 @@ namespace Jackett.Common.Indexers
             {
                 queryCollection.Add("groupname", searchString);
             }
-
+            //Add anyway after checking above?
             queryCollection.Add("groupname", searchString);
 
             var searchUrl = BrowseUrl + "?" + queryCollection.GetQueryString();
@@ -160,36 +163,41 @@ namespace Jackett.Common.Indexers
                         IMDBId = ParseUtil.CoerceLong(IMDBMatch.Groups[1].Value);
                     }
 
-                    var GroupTitle = Group.QuerySelector("strong:has(a[title=\"View Torrent\"])").TextContent.Replace(" ]", "]");
+                    var group = Group.QuerySelector("strong:has(a[title=\"View Torrent\"])").TextContent.Replace(" ]", "]");
 
                     var Rows = Group.QuerySelectorAll("tr.group_torrent:has(a[href^=\"torrents.php?id=\"])");
                     foreach (var Row in Rows)
                     {
-                        var release = new ReleaseInfo();
-                        release.MinimumRatio = 1;
-                        release.MinimumSeedTime = 72 * 60 * 60;
-
                         var title = Row.QuerySelector("a[href^=\"torrents.php?id=\"]");
-                        var link = Row.QuerySelector("a[href^=\"torrents.php?action=download\"]");
                         var added = Row.QuerySelector("td:nth-child(3)");
                         var Size = Row.QuerySelector("td:nth-child(4)");
                         var Grabs = Row.QuerySelector("td:nth-child(6)");
                         var Seeders = Row.QuerySelector("td:nth-child(7)");
                         var Leechers = Row.QuerySelector("td:nth-child(8)");
-
-                        release.Title = GroupTitle + " " + title.TextContent;
-                        release.Category = new List<int> { TorznabCatType.MoviesHD.ID };
-                        release.Link = new Uri(SiteLink + link.GetAttribute("href"));
-                        release.Comments = new Uri(SiteLink + title.GetAttribute("href"));
-                        release.Guid = release.Link;
-                        release.Size = ReleaseInfo.GetBytes(Size.TextContent);
-                        release.Seeders = ParseUtil.CoerceInt(Seeders.TextContent);
-                        release.Peers = ParseUtil.CoerceInt(Leechers.TextContent) + release.Seeders;
-                        release.Grabs = ParseUtil.CoerceLong(Grabs.TextContent);
-                        release.PublishDate = DateTimeUtil.FromTimeAgo(added.TextContent);
-                        release.BannerUrl = bannerURL;
-                        release.Imdb = IMDBId;
-
+                        var link = new Uri(SiteLink + Row.QuerySelector("a[href^=\"torrents.php?action=download\"]").GetAttribute("href"));
+                        var seeders = ParseUtil.CoerceInt(Seeders.TextContent);
+                        var comments = new Uri(SiteLink + title.GetAttribute("href"));
+                        var size = ReleaseInfo.GetBytes(Size.TextContent);
+                        var leechers = ParseUtil.CoerceInt(Leechers.TextContent);
+                        var grabs = ParseUtil.CoerceLong(Grabs.TextContent);
+                        var publishDate = DateTimeUtil.FromTimeAgo(added.TextContent);
+                        var release = new ReleaseInfo
+                        {
+                            MinimumRatio = 1,
+                            MinimumSeedTime = 72 * 60 * 60,
+                            Title = group + " " + title.TextContent,
+                            Category = new List<int> {TorznabCatType.MoviesHD.ID},
+                            Link = link,
+                            Comments = comments,
+                            Guid = link,
+                            Size = size,
+                            Seeders = seeders,
+                            Peers = leechers + seeders,
+                            Grabs = grabs,
+                            PublishDate = publishDate,
+                            BannerUrl = bannerURL,
+                            Imdb = IMDBId
+                        };
                         releases.Add(release);
                     }
                 }

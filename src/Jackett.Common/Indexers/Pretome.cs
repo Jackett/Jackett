@@ -284,45 +284,43 @@ namespace Jackett.Common.Indexers
                 var rows = dom.QuerySelectorAll("table > tbody > tr.browse");
                 foreach (var row in rows)
                 {
-                    var release = new ReleaseInfo();
-
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800; // 48 hours
-
                     var qLink = row.Children[1].QuerySelector("a");
-                    release.Title = qLink.GetAttribute("title");
-                    if (qLink.QuerySelectorAll("span").Length == 1 && release.Title.StartsWith("NEW! |"))
+                    var title = qLink.GetAttribute("title");
+                    if (qLink.QuerySelectorAll("span").Length == 1 && title.StartsWith("NEW! |"))
                     {
-                        release.Title = release.Title.Substring(6).Trim();
+                        title = title.Substring(6).Trim();
                     }
 
-                    release.Comments = new Uri(SiteLink + qLink.GetAttribute("href"));
-                    release.Guid = release.Comments;
-
+                    var comments = new Uri(SiteLink + qLink.GetAttribute("href"));
                     var qDownload = row.Children[2].QuerySelector("a");
-                    release.Link = new Uri(SiteLink + qDownload.GetAttribute("href"));
-
                     var dateStr = Regex.Replace(row.Children[5].InnerHtml, @"\<br[\s]{0,1}[\/]{0,1}\>", " ");
-                    release.PublishDate = DateTimeUtil.FromTimeAgo(dateStr);
-
                     var sizeStr = row.Children[7].TextContent;
-                    release.Size = ReleaseInfo.GetBytes(sizeStr);
-
-                    release.Seeders = ParseUtil.CoerceInt(row.Children[9].TextContent);
-                    release.Peers = ParseUtil.CoerceInt(row.Children[10].TextContent) + release.Seeders;
-
+                    var seeders = ParseUtil.CoerceInt(row.Children[9].TextContent);
+                    var files = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(4)").TextContent);
                     var cat = row.FirstElementChild.FirstElementChild.GetAttribute("href").Replace("browse.php?", string.Empty);
-                    release.Category = MapTrackerCatToNewznab(cat);
-
-                    var files = row.QuerySelector("td:nth-child(4)").TextContent;
-                    release.Files = ParseUtil.CoerceInt(files);
-
-                    var grabs = row.QuerySelector("td:nth-child(9)").TextContent;
-                    release.Grabs = ParseUtil.CoerceInt(grabs);
-
-                    release.DownloadVolumeFactor = 0; // ratioless
-                    release.UploadVolumeFactor = 1;
-
+                    var link = new Uri(SiteLink + qDownload.GetAttribute("href"));
+                    var publishDate = DateTimeUtil.FromTimeAgo(dateStr);
+                    var size = ReleaseInfo.GetBytes(sizeStr);
+                    var leechers = ParseUtil.CoerceInt(row.Children[10].TextContent);
+                    var grabs = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(9)").TextContent);
+                    var release = new ReleaseInfo
+                    {
+                        MinimumRatio = 1,
+                        MinimumSeedTime = 172800, // 48 hours
+                        Title = title,
+                        Comments = comments,
+                        Guid = comments,
+                        Link = link,
+                        PublishDate = publishDate,
+                        Size = size,
+                        Seeders = seeders,
+                        Peers = leechers + seeders,
+                        Category = MapTrackerCatToNewznab(cat),
+                        Files = files,
+                        Grabs = grabs,
+                        DownloadVolumeFactor = 0, // ratioless
+                        UploadVolumeFactor = 1
+                    };
                     releases.Add(release);
                 }
             }

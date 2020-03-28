@@ -93,8 +93,10 @@ namespace Jackett.Common.Indexers
 
             var releases = new List<ReleaseInfo>();
 
-            var qParams = new NameValueCollection();
-            qParams.Add("api", "");
+            var qParams = new NameValueCollection
+            {
+                { "api", "" }
+            };
             if (query.ImdbIDShort != null)
                 qParams.Add("imdb", query.ImdbIDShort);
             else
@@ -119,6 +121,7 @@ namespace Jackett.Common.Indexers
 
                 foreach (var item in jsonContent)
                 {
+                    //TODO convert to initializer
                     var release = new ReleaseInfo();
 
                     var id = item.Value<long>("id");

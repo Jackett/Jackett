@@ -103,6 +103,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * ProStyleX
  * Rapidzona
  * RARBG
+ * RinTor
  * Rus-media
  * RuTor
  * RuTracker.RU
@@ -127,6 +128,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TorrentDownload
  * TorrentFunk
  * TorrentGalaxy (TGx)
+ * TorrentHane
  * TorrentKitty
  * TorrentParadise
  * TorrentProject2
@@ -254,6 +256,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * CartoonChaos (CC)
  * CasaTorrent
  * ChannelX
+ * ChileBT
  * CinemaMovies
  * CinemaZ (EuTorrents)
  * Cinemageddon
@@ -293,6 +296,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Femdomcult
  * FileList (FL)
  * Film-Paleis
+ * FinElite (FE)
  * FinVip
  * FocusX
  * FreeTorrent
@@ -398,7 +402,9 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * PrivateHD (PHD)
  * ProAudioTorrents (PAT)
  * Psytorrents
+ * PTSBAO
  * PuntoTorrent
+ * PuroVicio
  * R3V WTF!
  * RPTorrents
  * Racing4Everyone (R4E)

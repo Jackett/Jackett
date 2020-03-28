@@ -265,7 +265,7 @@ namespace Jackett.Common.Indexers
                 return results;
 
             var filteredResults = results.Where(
-                result => result.Category.IsEmptyOrNull() || query.Categories.Intersect(result.Category).Any() ||
+                result => result.Category?.Any() != true || query.Categories.Intersect(result.Category).Any() ||
                           TorznabCatType.QueryContainsParentCategory(query.Categories, result.Category));
 
             return filteredResults;

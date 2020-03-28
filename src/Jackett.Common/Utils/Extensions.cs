@@ -32,32 +32,18 @@ namespace Jackett.Common.Utils
 
     public static class GenericConversionExtensions
     {
-        public static IEnumerable<T> ToEnumerable<T>(this T obj) => new T[] { obj };
-
         public static NonNull<T> ToNonNull<T>(this T obj) where T : class => new NonNull<T>(obj);
     }
 
     public static class EnumerableExtension
     {
-        public static string AsString(this IEnumerable<char> chars) => string.Concat(chars);
-
-        // Should be collection.Any()
-        // Remove in favor of existing built in function?
-        public static bool IsEmpty<T>(this IEnumerable<T> collection) => collection.Count() > 0;
-
-        public static IEnumerable<T> Flatten<T>(this IEnumerable<IEnumerable<T>> list) => list.SelectMany(x => x);
-    }
-
-    public static class CollectionExtension
-    {
-        // IEnumerable class above already does this. All ICollection are IEnumerable, so favor IEnumerable?
-        public static bool IsEmpty<T>(this ICollection<T> obj) => obj.Count == 0;
-
-        // obj == null || obj.IsEmpty() causes VS to suggest merging sequential checks
-        // the result is obj?.IsEmpty() == true which returns false when null
-        // Other options are obj?.IsEmpty() == true || obj == null Or (obj?.IsEmpty()).GetValueOrDefault(true)
-        // All three options remove the suggestion and give the intended result of this function
-        public static bool IsEmptyOrNull<T>(this ICollection<T> obj) => obj?.IsEmpty() ?? true;
+        public static T FirstIfSingleOrDefault<T>(this IEnumerable<T> source, T replace = default)
+        {
+            if (source is ICollection<T> collection)
+                return collection.Count == 1 ? collection.First() : replace;
+            var test = source.Take(2).ToList();
+            return test.Count == 1 ? test[0] : replace;
+        }
     }
 
     public static class XElementExtension
@@ -65,39 +51,6 @@ namespace Jackett.Common.Utils
         public static XElement First(this XElement element, string name) => element.Descendants(name).First();
 
         public static string FirstValue(this XElement element, string name) => element.First(name).Value;
-    }
-
-    public static class KeyValuePairsExtension
-    {
-        public static IDictionary<Key, Value> ToDictionary<Key, Value>(this IEnumerable<KeyValuePair<Key, Value>> pairs) => pairs.ToDictionary(x => x.Key, x => x.Value);
-    }
-
-    public static class ParseExtension
-    {
-        public static T? TryParse<T>(this string value) where T : struct
-        {
-            var type = typeof(T);
-            var parseMethods = type.GetMethods(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static).Where(m => m.Name == "Parse");
-            var parseMethod = parseMethods.Where(m =>
-            {
-                var parameters = m.GetParameters();
-                var hasOnlyOneParameter = parameters.Count() == 1;
-                var firstParameterIsString = parameters.First().ParameterType == typeof(string);
-
-                return hasOnlyOneParameter && firstParameterIsString;
-            }).First();
-            if (parseMethod == null)
-                return null;
-            try
-            {
-                var val = parseMethod.Invoke(null, new object[] { value });
-                return (T)val;
-            }
-            catch
-            {
-                return null;
-            }
-        }
     }
 
     public static class TaskExtensions
