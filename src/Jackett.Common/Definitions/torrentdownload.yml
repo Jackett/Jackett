@@ -17,6 +17,7 @@
 
   caps:
     categories:
+      "TV": TV
       "TVshows": TV
       "Television": TV
       "Anime": TV/Anime
