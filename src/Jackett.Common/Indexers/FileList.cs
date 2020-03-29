@@ -153,7 +153,7 @@ namespace Jackett.Common.Indexers
             Thread.Sleep(50);
 
             //Process the rest of the pages
-            if (pageCount > 0)
+            if (pageCount > 0 && query.GetQueryString() != "")
             {
                 for (int i = 1; i < pageCount; i++)
                 {
