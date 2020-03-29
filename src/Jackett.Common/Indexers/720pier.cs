@@ -18,16 +18,15 @@ namespace Jackett.Common.Indexers
     public class Pier720 : BaseWebIndexer
     {
         public Pier720(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps) :
-            base(
-            "720pier",
-            description: "720pier is a RUSSIAN Private Torrent Tracker for HD SPORTS",
-            link: "https://720pier.ru/",
-            caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-            configService: configService,
-            client: wc,
-            logger: l,
-            p: ps,
-            configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
+            base("720pier",
+                 description: "720pier is a RUSSIAN Private Torrent Tracker for HD SPORTS",
+                 link: "https://720pier.ru/",
+                 caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                 configService: configService,
+                 client: wc,
+                 logger: l,
+                 p: ps,
+                 configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
             Encoding = Encoding.UTF8;
             Language = "ru-ru";
@@ -92,11 +91,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(30, TorznabCatType.TVSport, "Sports");
         }
 
-        private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
-        {
-            get => (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData;
-            set => base.configData = value;
-        }
+        private new ConfigurationDataBasicLoginWithRSSAndDisplay configData => (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData;
 
         public override string[] LegacySiteLinks { get; protected set; } =
         {
@@ -135,7 +130,10 @@ namespace Jackett.Common.Indexers
             var keywordSearch = !string.IsNullOrWhiteSpace(searchString);
             var releases = new List<ReleaseInfo>();
             var queryCollection = !keywordSearch
-                ? new NameValueCollection { { "search_id", "active_topics" } }
+                ? new NameValueCollection
+                {
+                    { "search_id", "active_topics" }
+                }
                 : new NameValueCollection
                 {
                     { "sr", "posts" }, //Search all posts
@@ -169,7 +167,7 @@ namespace Jackett.Common.Indexers
                         continue; //No torrents in result
                     var qDownloadLink = detailRow.QuerySelector("a[href^=\"/download/torrent\"]");
                     var link = new Uri(SiteLink + qDownloadLink.GetAttribute("href").TrimStart('/'));
-                    var timestr = detailRow.Children[0].QuerySelector("span.my_tt").TextContent;
+                    var timestr = detailRow.Children[0].QuerySelector("ul.dropdown-contents span.my_tt").TextContent;
                     var publishDate = DateTimeUtil.FromUnknown(timestr, "UK");
                     var forumId = detailsDocument.QuerySelector("li.breadcrumbs").LastElementChild
                                                  .GetAttribute("data-forum-id");
