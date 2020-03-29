@@ -149,19 +149,8 @@ namespace Jackett.Common.Utils
         /// <param name="separator">The string used to separate each query value</param>
         /// <returns>A web encoded string of key=value parameters separated by the separator</returns>
         public static string GetQueryString(this NameValueCollection collection, Encoding encoding = null,
-                                            bool splitMultiValues = false, string separator = "&")
-        {
-            if (splitMultiValues)
-                return collection.AllKeys.SelectMany(
-                                     key => collection[key]
-                                            .Split(',')
-                                            .Select(value => new KeyValuePair<string, string>(key, value)))
-                                 .GetQueryString(encoding, separator);
-            return string.Join(
-                separator,
-                collection.AllKeys.Select(
-                    a => $"{a}={WebUtilityHelpers.UrlEncode(collection[a], encoding ?? Encoding.UTF8)}"));
-        }
+                                            bool splitMultiValues = false, string separator = "&") =>
+            collection.ToEnumerable(splitMultiValues).GetQueryString(encoding, separator);
 
         public static string GetQueryString(this IEnumerable<KeyValuePair<string, string>> collection,
                                             Encoding encoding = null, string separator = "&") =>
@@ -169,6 +158,20 @@ namespace Jackett.Common.Utils
                         collection.Select(a => $"{a.Key}={WebUtilityHelpers.UrlEncode(a.Value, encoding ?? Encoding.UTF8)}"));
 
         public static void Add(this ICollection<KeyValuePair<string, string>> collection, string key, string value) => collection.Add(new KeyValuePair<string, string>(key, value));
+
+        public static IEnumerable<KeyValuePair<string, string>> ToEnumerable(
+            this NameValueCollection collection, bool duplicateKeysIfMulti = false)
+        {
+            foreach (string key in collection.Keys)
+            {
+                var value = collection[key];
+                if (duplicateKeysIfMulti && value.Contains(","))
+                    foreach (var val in value.Split(','))
+                        yield return new KeyValuePair<string, string>(key, val);
+                else
+                    yield return new KeyValuePair<string, string>(key, value);
+            }
+        }
 
         public static string ToHtmlPretty(this IElement element)
         {
