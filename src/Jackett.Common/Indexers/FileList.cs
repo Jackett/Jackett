@@ -177,9 +177,9 @@ namespace Jackett.Common.Indexers
                 var pageCount = dom.QuerySelectorAll(".pager > span > a > font").Last().InnerHtml;
                 return Int16.Parse(pageCount);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                OnParseError(html, ex);
+                logger.Info("Only one page found.");
             }
             return 0;
         }
