@@ -30,7 +30,7 @@ namespace Jackett.Common.Indexers
                 configService: configService,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataPinNumber())
+                configData: new ConfigurationDataPinNumber("For best results, change the 'Torrents per page' setting to 100 in 'Profile => Torrent browse settings'."))
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "en-us";
@@ -140,7 +140,7 @@ namespace Jackett.Common.Indexers
             await FollowIfRedirect(result, LoginUrl, null, loginCookies);
 
             await ConfigureIfOK(loginCookies, result.Content?.Contains("logout.php") == true,
-                                () => throw new ExceptionWithConfigData("Failed", configData));
+                                () => throw new ExceptionWithConfigData("Login failed", configData));
 
             return IndexerConfigurationStatus.RequiresTesting;
         }
