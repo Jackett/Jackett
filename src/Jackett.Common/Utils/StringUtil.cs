@@ -147,7 +147,7 @@ namespace Jackett.Common.Utils
         /// <param name="encoding">The Encoding to use in url encoding Value</param>
         /// <param name="splitMultiValues">Whether the Value should be Key=Value or split into Key=Val1&Key=Val2</param>
         /// <param name="separator">The string used to separate each query value</param>
-        /// <returns></returns>
+        /// <returns>A web encoded string of key=value parameters separated by the separator</returns>
         public static string GetQueryString(this NameValueCollection collection, Encoding encoding = null,
                                             bool splitMultiValues = false, string separator = "&")
         {
