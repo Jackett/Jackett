@@ -138,13 +138,35 @@ namespace Jackett.Common.Utils
             return changed ? sb.ToString() : text;
         }
 
-        public static string GetQueryString(this NameValueCollection collection, Encoding encoding = null) =>
-            string.Join("&", collection.AllKeys.Select(a =>
-                $"{a}={WebUtilityHelpers.UrlEncode(collection[a], encoding ?? Encoding.UTF8)}"));
+        /// <summary>
+        /// Converts a NameValueCollection to an appropriately formatted query string.
+        /// Duplicate keys are allowed in a NameValueCollection, but are stored as a csv string in Value.
+        /// This function handles leaving the values together in the csv string or splitting the value into separate keys
+        /// </summary>
+        /// <param name="collection">The NameValueCollection being converted</param>
+        /// <param name="encoding">The Encoding to use in url encoding Value</param>
+        /// <param name="splitMultiValues">Whether the Value should be Key=Value or split into Key=Val1&Key=Val2</param>
+        /// <param name="separator">The string used to separate each query value</param>
+        /// <returns></returns>
+        public static string GetQueryString(this NameValueCollection collection, Encoding encoding = null,
+                                            bool splitMultiValues = false, string separator = "&")
+        {
+            if (splitMultiValues)
+                return collection.AllKeys.SelectMany(
+                                     key => collection[key]
+                                            .Split(',')
+                                            .Select(value => new KeyValuePair<string, string>(key, value)))
+                                 .GetQueryString(encoding);
+            return string.Join(
+                separator,
+                collection.AllKeys.Select(
+                    a => $"{a}={WebUtilityHelpers.UrlEncode(collection[a], encoding ?? Encoding.UTF8)}"));
+        }
 
-        public static string GetQueryString(this ICollection<KeyValuePair<string, string>> collection, Encoding encoding = null) =>
-            string.Join("&", collection.Select(a =>
-                $"{a.Key}={WebUtilityHelpers.UrlEncode(a.Value, encoding ?? Encoding.UTF8)}"));
+        public static string GetQueryString(this IEnumerable<KeyValuePair<string, string>> collection,
+                                            Encoding encoding = null, string separator = "&") =>
+            string.Join(separator,
+                        collection.Select(a => $"{a.Key}={WebUtilityHelpers.UrlEncode(a.Value, encoding ?? Encoding.UTF8)}"));
 
         public static void Add(this ICollection<KeyValuePair<string, string>> collection, string key, string value) => collection.Add(new KeyValuePair<string, string>(key, value));
 
