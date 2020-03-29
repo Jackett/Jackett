@@ -100,7 +100,35 @@ namespace Jackett.Common.Indexers
             });
             return IndexerConfigurationStatus.RequiresTesting;
         }
-        private NameValueCollection getQueryCollection(String imdbID, String searchString, String cat, int page)
+        
+        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        {
+            var releases = new List<ReleaseInfo>();
+            var pageCount = 0;
+            var firstResponse = await CallProviderAsync(query, 0);
+
+            pageCount = GetPageCount(firstResponse);
+            releases.AddRange(TransformProviderRequest(query, firstResponse));
+            //Wait
+            Thread.Sleep(250);
+
+            //Process the rest of the pages
+            if (pageCount > 0 && query.GetQueryString() != "")
+            {
+                for (int i = 1; i < pageCount; i++)
+                {
+                    var resp = await CallProviderAsync(query, i);
+                    releases.AddRange(TransformProviderRequest(query, resp));
+                    //Wait between requests
+                    Thread.Sleep(250);
+                }
+
+            }
+
+            return releases;
+        }
+
+        private NameValueCollection GetQueryCollection(string imdbID, string searchString, string cat, int page)
         {
             var queryCollection = new NameValueCollection();
 
@@ -121,14 +149,14 @@ namespace Jackett.Common.Indexers
             return queryCollection;
         }
 
-        private async Task<string> callProviderAsync(TorznabQuery query, int page)
+        private async Task<string> CallProviderAsync(TorznabQuery query, int page)
         {
             var searchUrl = BrowseUrl;
             var searchString = query.GetQueryString();
 
             var cat = MapTorznabCapsToTrackers(query).FirstIfSingleOrDefault("0");
 
-            searchUrl += "?" + getQueryCollection(query.ImdbID, searchString, cat, page).GetQueryString();
+            searchUrl += "?" + GetQueryCollection(query.ImdbID, searchString, cat, page).GetQueryString();
 
             var response = await RequestStringWithCookiesAndRetry(searchUrl, null, BrowseUrl);
             // Occasionally the cookies become invalid, login again if that happens
@@ -141,65 +169,39 @@ namespace Jackett.Common.Indexers
             return response.Content;
         }
 
-        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        private int GetPageCount(string html)
         {
-            var releases = new List<ReleaseInfo>();
-            var pageCount = 0;
-            var firstResponse = await callProviderAsync(query, 0);
 
-            pageCount = getPageCount(firstResponse);
-            transformProviderRequest(query, firstResponse, releases);
-            //Wait
-            Thread.Sleep(50);
-
-            //Process the rest of the pages
-            if (pageCount > 0 && query.GetQueryString() != "")
-            {
-                for (int i = 1; i < pageCount; i++)
-                {
-                    var resp = await callProviderAsync(query, i);
-                    transformProviderRequest(query, resp, releases);
-                    //Wait between requests
-                    Thread.Sleep(50);
-                }
-
-            }
-
-            return releases;
-        }
-
-        private Int16 getPageCount(String html)
-        {
-            try
-            {
-                var parser = new HtmlParser();
-                var dom = parser.ParseDocument(html);
-                var pageCount = dom.QuerySelectorAll(".pager > span > a > font").Last().InnerHtml;
-                return Int16.Parse(pageCount);
-            }
-            catch (Exception)
+            var parser = new HtmlParser();
+            var dom = parser.ParseDocument(html);
+            var pageCountSelector = dom.QuerySelectorAll(".pager > span > a > font");
+            if (!pageCountSelector.Any())
             {
                 logger.Info("Only one page found.");
+                return 0;
             }
-            return 0;
+            var pageCount = int.Parse(pageCountSelector.Last().TextContent);
+            return pageCount > 5 ? 5 : pageCount;
         }
 
-        private void transformProviderRequest(TorznabQuery query, String results, List<ReleaseInfo> releases)
+        private List<ReleaseInfo> TransformProviderRequest(TorznabQuery query, string results)
         {
             try
             {
                 var parser = new HtmlParser();
                 var dom = parser.ParseDocument(results);
-                parseResults(dom, query, releases);
+                return ParseResults(dom, query);
             }
             catch (Exception ex)
             {
                 OnParseError(results, ex);
             }
+            return null;
         }
 
-        private void parseResults(AngleSharp.Html.Dom.IHtmlDocument dom, TorznabQuery query, List<ReleaseInfo> releases)
+        private List<ReleaseInfo> ParseResults(AngleSharp.Html.Dom.IHtmlDocument dom, TorznabQuery query)
         {
+            var releases = new List<ReleaseInfo>();
             var globalFreeLeech = dom.QuerySelectorAll("div.globalFreeLeech").Any();
             var rows = dom.QuerySelectorAll(".torrentrow");
             foreach (var row in rows)
@@ -261,6 +263,7 @@ namespace Jackett.Common.Indexers
 
                 releases.Add(release);
             }
+            return releases;
         }
     }
 
