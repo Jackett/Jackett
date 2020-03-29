@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -19,19 +18,12 @@ namespace Jackett.Common.Indexers
     public class Pretome : BaseWebIndexer
     {
         private string LoginUrl => SiteLink + "takelogin.php";
-        private string LoginReferer => SiteLink + "index.php?cat=1";
         private string SearchUrl => SiteLink + "browse.php";
-
         private readonly List<CategoryMapping> resultMapping = new List<CategoryMapping>();
-
-        private new ConfigurationDataPinNumber configData
-        {
-            get => (ConfigurationDataPinNumber)base.configData;
-            set => base.configData = value;
-        }
+        private new ConfigurationDataPinNumber configData => (ConfigurationDataPinNumber)base.configData;
 
         public Pretome(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "PreToMe",
+            : base("PreToMe",
                 description: "BitTorrent site for High Quality, High Definition (HD) movies and TV Shows",
                 link: "https://pretome.info/",
                 caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
@@ -45,12 +37,19 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "private";
 
+            TorznabCaps.SupportsImdbMovieSearch = true;
+            TorznabCaps.SupportsImdbTVSearch = true;
+
+            // Applications
             AddCategoryMapping("cat[]=22&tags=Windows", TorznabCatType.PC0day);
             AddCategoryMapping("cat[]=22&tags=MAC", TorznabCatType.PCMac);
             AddCategoryMapping("cat[]=22&tags=Linux", TorznabCatType.PC);
+            AddCategoryMapping("cat[]=22", TorznabCatType.PC);
 
+            // Ebooks
             AddCategoryMapping("cat[]=27", TorznabCatType.BooksEbook);
 
+            // Games
             AddCategoryMapping("cat[]=4&tags=PC", TorznabCatType.PCGames);
             AddCategoryMapping("cat[]=4&tags=RIP", TorznabCatType.PCGames);
             AddCategoryMapping("cat[]=4&tags=ISO", TorznabCatType.PCGames);
@@ -61,10 +60,14 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("cat[]=4&tags=NSD", TorznabCatType.ConsoleNDS);
             AddCategoryMapping("cat[]=4&tags=XBox", TorznabCatType.ConsoleXbox);
             AddCategoryMapping("cat[]=4&tags=PS2", TorznabCatType.ConsoleOther);
+            AddCategoryMapping("cat[]=4", TorznabCatType.PCGames);
 
+            // Miscellaneous
             AddCategoryMapping("cat[]=31&tags=Ebook", TorznabCatType.BooksEbook);
             AddCategoryMapping("cat[]=31&tags=RARFiX", TorznabCatType.Other);
+            AddCategoryMapping("cat[]=31", TorznabCatType.Other);
 
+            // Movies
             AddCategoryMapping("cat[]=19&tags=x264", TorznabCatType.Movies);
             AddCategoryMapping("cat[]=19&tags=720p", TorznabCatType.MoviesHD);
             AddCategoryMapping("cat[]=19&tags=XviD", TorznabCatType.MoviesSD);
@@ -75,12 +78,16 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("cat[]=19&tags=DVDR", TorznabCatType.MoviesSD);
             AddCategoryMapping("cat[]=19&tags=WMV", TorznabCatType.Movies);
             AddCategoryMapping("cat[]=19&tags=CAM", TorznabCatType.Movies);
+            AddCategoryMapping("cat[]=19", TorznabCatType.Movies);
 
+            // Music
             AddCategoryMapping("cat[]=6&tags=MP3", TorznabCatType.AudioMP3);
             AddCategoryMapping("cat[]=6&tags=V2", TorznabCatType.AudioMP3);
             AddCategoryMapping("cat[]=6&tags=FLAC", TorznabCatType.AudioLossless);
             AddCategoryMapping("cat[]=6&tags=320kbps", TorznabCatType.AudioMP3);
+            AddCategoryMapping("cat[]=6", TorznabCatType.Audio);
 
+            // TV
             AddCategoryMapping("cat[]=7&tags=x264", TorznabCatType.TVHD);
             AddCategoryMapping("cat[]=7&tags=720p", TorznabCatType.TVHD);
             AddCategoryMapping("cat[]=7&tags=HDTV", TorznabCatType.TVHD);
@@ -91,10 +98,13 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("cat[]=7&tags=Documentary", TorznabCatType.TVDocumentary);
             AddCategoryMapping("cat[]=7&tags=PDTV", TorznabCatType.TVSD);
             AddCategoryMapping("cat[]=7&tags=HD-DVD", TorznabCatType.TVSD);
+            AddCategoryMapping("cat[]=7", TorznabCatType.TV);
 
+            // XXX
             AddCategoryMapping("cat[]=51&tags=XviD", TorznabCatType.XXXXviD);
             AddCategoryMapping("cat[]=51&tags=DVDRiP", TorznabCatType.XXXDVD);
-
+            AddCategoryMapping("cat[]=51", TorznabCatType.XXX);
+/*
             // Unfortunately they are tags not categories so return the results
             // as the parent category so do not get results removed with the filtering.
 
@@ -161,16 +171,16 @@ namespace Jackett.Common.Indexers
             AddResultCategoryMapping("cat[]=51&tags=XviD", TorznabCatType.XXX);
             AddResultCategoryMapping("cat[]=51&tags=DVDRiP", TorznabCatType.XXX);
             AddResultCategoryMapping("cat[]=51&tags=All", TorznabCatType.XXX);
-            AddResultCategoryMapping("cat[]=51", TorznabCatType.XXX);
+            AddResultCategoryMapping("cat[]=51", TorznabCatType.XXX);*/
         }
-
+/*
         protected void AddResultCategoryMapping(string trackerCategory, TorznabCategory newznabCategory)
         {
-            resultMapping.Add(new CategoryMapping(trackerCategory.ToString(), null, newznabCategory.ID));
+            resultMapping.Add(new CategoryMapping(trackerCategory, null, newznabCategory.ID));
             if (!TorznabCaps.Categories.Contains(newznabCategory))
                 TorznabCaps.Categories.Add(newznabCategory);
         }
-
+*/
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
@@ -188,18 +198,14 @@ namespace Jackett.Common.Indexers
             // Send Post
             var result = await PostDataWithCookies(LoginUrl, pairs, loginPage.Cookies);
             if (result.RedirectingTo == null)
-            {
                 throw new ExceptionWithConfigData("Login failed. Did you use the PIN number that pretome emailed you?", configData);
-            }
-            var loginCookies = result.Cookies;
+
             // Get result from redirect
+            var loginCookies = result.Cookies;
             await FollowIfRedirect(result, LoginUrl, null, loginCookies);
 
-            await ConfigureIfOK(loginCookies, result.Content != null && result.Content.Contains("logout.php"), () =>
-            {
-                CookieHeader = string.Empty;
-                throw new ExceptionWithConfigData("Failed", configData);
-            });
+            await ConfigureIfOK(loginCookies, result.Content?.Contains("logout.php") == true,
+                                () => throw new ExceptionWithConfigData("Failed", configData));
 
             return IndexerConfigurationStatus.RequiresTesting;
         }
@@ -207,74 +213,63 @@ namespace Jackett.Common.Indexers
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var queryUrl = SearchUrl;
-            var queryCollection = new NameValueCollection();
-            var cats = MapTorznabCapsToTrackers(query);
-            var tags = string.Empty;
+
+            var qc = new List<KeyValuePair<string, string>>(); // NameValueCollection don't support cat[]=19&cat[]=6
+            if (query.IsImdbQuery)
+            {
+                qc.Add("search", query.ImdbID);
+                qc.Add("st", "1");
+                qc.Add("sd", "1");
+            }
+            else if (!string.IsNullOrWhiteSpace(query.GetQueryString()))
+            {
+                qc.Add("search", query.GetQueryString());
+                qc.Add("st", "1");
+            }
+
+            // parse categories and tags
             var catGroups = new List<string>();
+            var tagGroups = new List<string>();
+            var cats = MapTorznabCapsToTrackers(query);
             foreach (var cat in cats)
             {
-                //"cat[]=7&tags=x264"
+                // "cat[]=7&tags=x264"
                 var cSplit = cat.Split('&');
-                if (cSplit.Length > 0)
-                {
-                    var gsplit = cSplit[0].Split('=');
-                    if (gsplit.Length > 1)
-                    {
-                        catGroups.Add(gsplit[1]);
-                    }
-                }
+
+                var gSplit = cSplit[0].Split('=');
+                if (gSplit.Length > 1)
+                    catGroups.Add(gSplit[1]); // category = 7
 
                 if (cSplit.Length > 1)
                 {
-                    var gsplit = cSplit[1].Split('=');
-                    if (gsplit.Length > 1)
-                    {
-                        if (tags != string.Empty)
-                            tags += ",";
-                        tags += gsplit[1];
-                    }
+                    var tSplit = cSplit[1].Split('=');
+                    if (tSplit.Length > 1)
+                        tagGroups.Add(tSplit[1]); // tag = x264
                 }
             }
+            catGroups = catGroups.Distinct().ToList();
+            tagGroups = tagGroups.Distinct().ToList();
 
-            if (catGroups.Distinct().Count() == 1)
+            // add categories
+            foreach (var cat in catGroups)
+                qc.Add("cat[]", cat);
+
+            // do not include too many tags as it'll mess with their servers
+            if (tagGroups.Count < 7)
             {
-                queryCollection.Add("cat[]", catGroups.First());
+                qc.Add("tags", string.Join(",", tagGroups));
+                // if tags are specified match any
+                // if no tags are specified match all, with any we get random results
+                qc.Add("tf", tagGroups.Any() ? "any" : "all");
             }
 
-            if (!string.IsNullOrWhiteSpace(query.GetQueryString()))
-            {
-                queryCollection.Add("st", "1");
-                queryCollection.Add("search", query.GetQueryString());
-            }
+            var searchUrl = SearchUrl + "?" + qc.GetQueryString();
+            var response = await RequestStringWithCookiesAndRetry(searchUrl);
 
-            // Do not include too many tags as it'll mess with their servers.
-            if (tags.Split(',').Length < 7)
-            {
-                queryCollection.Add("tags", tags);
-                if (!string.IsNullOrWhiteSpace(tags))
-                {
-                    // if tags are specified match any
-                    queryCollection.Add("tf", "any");
-                }
-                else
-                {
-                    // if no tags are specified match all, with any we get random results
-                    queryCollection.Add("tf", "all");
-                }
-            }
-
-            if (queryCollection.Count > 0)
-            {
-                queryUrl += "?" + queryCollection.GetQueryString();
-            }
-
-            var response = await RequestStringWithCookiesAndRetry(queryUrl);
-
-            if (response.IsRedirect)
+            if (response.IsRedirect) // re-login
             {
                 await ApplyConfiguration(null);
-                response = await RequestStringWithCookiesAndRetry(queryUrl);
+                response = await RequestStringWithCookiesAndRetry(searchUrl);
             }
 
             try
@@ -287,40 +282,38 @@ namespace Jackett.Common.Indexers
                     var qLink = row.Children[1].QuerySelector("a");
                     var title = qLink.GetAttribute("title");
                     if (qLink.QuerySelectorAll("span").Length == 1 && title.StartsWith("NEW! |"))
-                    {
                         title = title.Substring(6).Trim();
-                    }
 
                     var comments = new Uri(SiteLink + qLink.GetAttribute("href"));
-                    var qDownload = row.Children[2].QuerySelector("a");
+                    var link = new Uri(SiteLink + row.Children[2].QuerySelector("a").GetAttribute("href"));
                     var dateStr = Regex.Replace(row.Children[5].InnerHtml, @"\<br[\s]{0,1}[\/]{0,1}\>", " ");
-                    var sizeStr = row.Children[7].TextContent;
-                    var seeders = ParseUtil.CoerceInt(row.Children[9].TextContent);
-                    var files = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(4)").TextContent);
-                    var cat = row.FirstElementChild.FirstElementChild.GetAttribute("href").Replace("browse.php?", string.Empty);
-                    var link = new Uri(SiteLink + qDownload.GetAttribute("href"));
                     var publishDate = DateTimeUtil.FromTimeAgo(dateStr);
-                    var size = ReleaseInfo.GetBytes(sizeStr);
+                    var files = ParseUtil.CoerceInt(row.Children[3].TextContent);
+                    var size = ReleaseInfo.GetBytes(row.Children[7].TextContent);
+                    var grabs = ParseUtil.CoerceInt(row.Children[8].TextContent);
+                    var seeders = ParseUtil.CoerceInt(row.Children[9].TextContent);
                     var leechers = ParseUtil.CoerceInt(row.Children[10].TextContent);
-                    var grabs = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(9)").TextContent);
+                    var cat = row.FirstElementChild.FirstElementChild.GetAttribute("href").Replace("browse.php?", string.Empty);
+
                     var release = new ReleaseInfo
                     {
-                        MinimumRatio = 1,
-                        MinimumSeedTime = 172800, // 48 hours
                         Title = title,
                         Comments = comments,
                         Guid = comments,
                         Link = link,
                         PublishDate = publishDate,
                         Size = size,
-                        Seeders = seeders,
-                        Peers = leechers + seeders,
                         Category = MapTrackerCatToNewznab(cat),
                         Files = files,
                         Grabs = grabs,
+                        Seeders = seeders,
+                        Peers = leechers + seeders,
+                        MinimumRatio = 1,
+                        MinimumSeedTime = 172800, // 48 hours
                         DownloadVolumeFactor = 0, // ratioless
                         UploadVolumeFactor = 1
                     };
+
                     releases.Add(release);
                 }
             }
