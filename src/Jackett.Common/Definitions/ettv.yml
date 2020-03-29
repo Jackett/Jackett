@@ -80,13 +80,6 @@
       movie-search: [q]
 
   settings:
-    - name: downloadlink
-      type: select
-      label: Download link
-      default: "magnet:"
-      options:
-        "https://etorrent.click/" : "eTorrent.click"
-        "magnet:": "magnet"
     - name: sort
       type: select
       label: Sort requested from site
@@ -105,7 +98,7 @@
         "asc": "asc"
 
   download:
-    selector: a[href^="{{ .Config.downloadlink }}"]
+    selector: a[href^="magnet:?xt="]
     attribute: href
 
   search:
