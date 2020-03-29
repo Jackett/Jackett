@@ -83,12 +83,13 @@ namespace Jackett.Common.Indexers
                 {"showspam", "1"},
                 {"cat", MapTorznabCapsToTrackers(query).FirstIfSingleOrDefault("0")}
             };
+
             if (query.IsImdbQuery)
             {
                 qc.Add("search", query.ImdbID);
                 qc.Add("s_desc", "1");
             }
-            else if (!string.IsNullOrWhiteSpace(query.GetQueryString()))
+            else
                 qc.Add("search", query.GetQueryString());
 
             var searchUrl = SearchUrl + "?" + qc.GetQueryString();
