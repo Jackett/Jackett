@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -84,7 +83,7 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
 
-            var qc = new NameValueCollection
+            var qc = new List<KeyValuePair<string, string>> // NameValueCollection don't support cat[]=19&cat[]=6
             {
                 { "tpage", "1" }
             };
