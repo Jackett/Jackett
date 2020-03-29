@@ -57,15 +57,15 @@
         selector: a[href*="/torrent/"]
         attribute: href
       date:
-        selector: td:nth-child(3)
+        selector: td:nth-child(4)
         filters:
           - name: timeago
       size:
-        selector: td:nth-child(4)
-      seeders:
         selector: td:nth-child(5)
-      leechers:
+      seeders:
         selector: td:nth-child(6)
+      leechers:
+        selector: td:nth-child(7)
       downloadvolumefactor:
         text: 0
       uploadvolumefactor:
