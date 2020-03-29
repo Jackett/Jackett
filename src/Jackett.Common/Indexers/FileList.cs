@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
@@ -99,29 +100,37 @@ namespace Jackett.Common.Indexers
             });
             return IndexerConfigurationStatus.RequiresTesting;
         }
-
-        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        private NameValueCollection getQueryCollection(String imdbID, String searchString, String cat, int page)
         {
-            var releases = new List<ReleaseInfo>();
-            var searchUrl = BrowseUrl;
-            var searchString = query.GetQueryString();
-            var cat = MapTorznabCapsToTrackers(query).FirstIfSingleOrDefault("0");
-
             var queryCollection = new NameValueCollection();
 
-            if (query.ImdbID != null)
-                queryCollection.Add("search", query.ImdbID);
+            if (imdbID != null)
+            {
+                queryCollection.Add("search", imdbID);
+            }
             else if (!string.IsNullOrWhiteSpace(searchString))
+            {
                 queryCollection.Add("search", searchString);
+            }
 
             queryCollection.Add("cat", cat);
             queryCollection.Add("searchin", "1");
             queryCollection.Add("sort", "2");
+            queryCollection.Add("page", page.ToString());
 
-            searchUrl += "?" + queryCollection.GetQueryString();
+            return queryCollection;
+        }
+
+        private async Task<string> callProviderAsync(TorznabQuery query, int page)
+        {
+            var searchUrl = BrowseUrl;
+            var searchString = query.GetQueryString();
+
+            var cat = MapTorznabCapsToTrackers(query).FirstIfSingleOrDefault("0");
+
+            searchUrl += "?" + getQueryCollection(query.ImdbID, searchString, cat, page).GetQueryString();
 
             var response = await RequestStringWithCookiesAndRetry(searchUrl, null, BrowseUrl);
-
             // Occasionally the cookies become invalid, login again if that happens
             if (response.IsRedirect)
             {
@@ -129,79 +138,131 @@ namespace Jackett.Common.Indexers
                 response = await RequestStringWithCookiesAndRetry(searchUrl, null, BrowseUrl);
             }
 
-            var results = response.Content;
+            return response.Content;
+        }
+
+        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        {
+            var releases = new List<ReleaseInfo>();
+            var pageCount = 0;
+            var firstResponse = await callProviderAsync(query, 0);
+
+            pageCount = getPageCount(firstResponse);
+            transformProviderRequest(query, firstResponse, releases);
+            //Wait
+            Thread.Sleep(50);
+
+            //Process the rest of the pages
+            if (pageCount > 0)
+            {
+                for (int i = 1; i < pageCount; i++)
+                {
+                    var resp = await callProviderAsync(query, i);
+                    transformProviderRequest(query, resp, releases);
+                    //Wait between requests
+                    Thread.Sleep(50);
+                }
+
+            }
+
+            return releases;
+        }
+
+        private Int16 getPageCount(String html)
+        {
+            try
+            {
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(html);
+                var pageCount = dom.QuerySelectorAll(".pager > span > a > font").Last().InnerHtml;
+                return Int16.Parse(pageCount);
+            }
+            catch (Exception ex)
+            {
+                OnParseError(html, ex);
+            }
+            return 0;
+        }
+
+        private void transformProviderRequest(TorznabQuery query, String results, List<ReleaseInfo> releases)
+        {
             try
             {
                 var parser = new HtmlParser();
                 var dom = parser.ParseDocument(results);
-                var globalFreeLeech = dom.QuerySelectorAll("div.globalFreeLeech").Any();
-                var rows = dom.QuerySelectorAll(".torrentrow");
-                foreach (var row in rows)
-                {
-                    var release = new ReleaseInfo();
-
-                    var qTitleLink = row.QuerySelector(".torrenttable:nth-of-type(2) a");
-                    release.Title = row.QuerySelector(".torrenttable:nth-of-type(2) b").TextContent;
-                    var longtitle = row.QuerySelector(".torrenttable:nth-of-type(2) a[title]").GetAttribute("title");
-                    if (!string.IsNullOrEmpty(longtitle) && !longtitle.Contains("<")) // releases with cover image have no full title
-                        release.Title = longtitle;
-
-                    if (query.ImdbID == null && !query.MatchQueryStringAND(release.Title))
-                        continue;
-
-                    release.Description = row.QuerySelector(".torrenttable:nth-of-type(2) > span > font.small")?.TextContent;
-
-                    var tooltip = qTitleLink.GetAttribute("title");
-                    if (!string.IsNullOrEmpty(tooltip))
-                    {
-                        var imgRegexp = new Regex("src='(.*?)'");
-                        var imgRegexpMatch = imgRegexp.Match(tooltip);
-                        if (imgRegexpMatch.Success)
-                            release.BannerUrl = new Uri(imgRegexpMatch.Groups[1].Value);
-                    }
-
-                    release.Guid = new Uri(SiteLink + qTitleLink.GetAttribute("href"));
-                    release.Comments = release.Guid;
-
-                    //22:05:3716/02/2013
-                    var dateStr = row.QuerySelector(".torrenttable:nth-of-type(6)").TextContent.Trim() + " +0200";
-                    release.PublishDate = DateTime.ParseExact(dateStr, "H:mm:ssdd/MM/yyyy zzz", CultureInfo.InvariantCulture);
-
-                    var qLink = row.QuerySelector("a[href^=\"download.php?id=\"]");
-                    release.Link = new Uri(SiteLink + qLink.GetAttribute("href").Replace("&usetoken=1", ""));
-
-                    var sizeStr = row.QuerySelector(".torrenttable:nth-of-type(7)").TextContent.Trim();
-                    release.Size = ReleaseInfo.GetBytes(sizeStr);
-
-                    var grabs = row.QuerySelector(".torrenttable:nth-of-type(8)").TextContent.Replace("times", "").Trim();
-                    release.Grabs = ParseUtil.CoerceLong(grabs);
-
-                    release.Seeders = ParseUtil.CoerceInt(row.QuerySelector(".torrenttable:nth-of-type(9)").TextContent.Trim());
-                    release.Peers = ParseUtil.CoerceInt(row.QuerySelector(".torrenttable:nth-of-type(10)").TextContent.Trim()) + release.Seeders;
-
-                    var catId = row.QuerySelector(".torrenttable:nth-of-type(1) a").GetAttribute("href").Substring(15);
-                    release.Category = MapTrackerCatToNewznab(catId);
-
-                    if (globalFreeLeech || row.QuerySelectorAll("img[alt=\"FreeLeech\"]").Any())
-                        release.DownloadVolumeFactor = 0;
-                    else
-                        release.DownloadVolumeFactor = 1;
-
-                    release.UploadVolumeFactor = 1;
-
-                    // Skip Romanian releases
-                    if (release.Category.Contains(TorznabCatType.MoviesForeign.ID) && !configData.IncludeRomanianReleases.Value)
-                        continue;
-
-                    releases.Add(release);
-                }
+                parseResults(dom, query, releases);
             }
             catch (Exception ex)
             {
                 OnParseError(results, ex);
             }
+        }
 
-            return releases;
+        private void parseResults(AngleSharp.Html.Dom.IHtmlDocument dom, TorznabQuery query, List<ReleaseInfo> releases)
+        {
+            var globalFreeLeech = dom.QuerySelectorAll("div.globalFreeLeech").Any();
+            var rows = dom.QuerySelectorAll(".torrentrow");
+            foreach (var row in rows)
+            {
+                var release = new ReleaseInfo();
+
+                var qTitleLink = row.QuerySelector(".torrenttable:nth-of-type(2) a");
+                release.Title = row.QuerySelector(".torrenttable:nth-of-type(2) b").TextContent;
+                var longtitle = row.QuerySelector(".torrenttable:nth-of-type(2) a[title]").GetAttribute("title");
+                if (!string.IsNullOrEmpty(longtitle) && !longtitle.Contains("<")) // releases with cover image have no full title
+                    release.Title = longtitle;
+
+                if (query.ImdbID == null && !query.MatchQueryStringAND(release.Title))
+                    continue;
+
+                release.Description = row.QuerySelector(".torrenttable:nth-of-type(2) > span > font.small")?.TextContent;
+
+                var tooltip = qTitleLink.GetAttribute("title");
+                if (!string.IsNullOrEmpty(tooltip))
+                {
+                    var imgRegexp = new Regex("src='(.*?)'");
+                    var imgRegexpMatch = imgRegexp.Match(tooltip);
+                    if (imgRegexpMatch.Success)
+                        release.BannerUrl = new Uri(imgRegexpMatch.Groups[1].Value);
+                }
+
+                release.Guid = new Uri(SiteLink + qTitleLink.GetAttribute("href"));
+                release.Comments = release.Guid;
+
+                //22:05:3716/02/2013
+                var dateStr = row.QuerySelector(".torrenttable:nth-of-type(6)").TextContent.Trim() + " +0200";
+                release.PublishDate = DateTime.ParseExact(dateStr, "H:mm:ssdd/MM/yyyy zzz", CultureInfo.InvariantCulture);
+
+                var qLink = row.QuerySelector("a[href^=\"download.php?id=\"]");
+                release.Link = new Uri(SiteLink + qLink.GetAttribute("href").Replace("&usetoken=1", ""));
+
+                var sizeStr = row.QuerySelector(".torrenttable:nth-of-type(7)").TextContent.Trim();
+                release.Size = ReleaseInfo.GetBytes(sizeStr);
+
+                var grabs = row.QuerySelector(".torrenttable:nth-of-type(8)").TextContent.Replace("times", "").Trim();
+                release.Grabs = ParseUtil.CoerceLong(grabs);
+
+                release.Seeders = ParseUtil.CoerceInt(row.QuerySelector(".torrenttable:nth-of-type(9)").TextContent.Trim());
+                release.Peers = ParseUtil.CoerceInt(row.QuerySelector(".torrenttable:nth-of-type(10)").TextContent.Trim()) + release.Seeders;
+
+                var catId = row.QuerySelector(".torrenttable:nth-of-type(1) a").GetAttribute("href").Substring(15);
+                release.Category = MapTrackerCatToNewznab(catId);
+
+                if (globalFreeLeech || row.QuerySelectorAll("img[alt=\"FreeLeech\"]").Any())
+                    release.DownloadVolumeFactor = 0;
+                else
+                    release.DownloadVolumeFactor = 1;
+
+                release.UploadVolumeFactor = 1;
+
+                // Skip Romanian releases
+                if (release.Category.Contains(TorznabCatType.MoviesForeign.ID) && !configData.IncludeRomanianReleases.Value)
+                    continue;
+
+                releases.Add(release);
+            }
         }
     }
+
 }
+
