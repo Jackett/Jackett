@@ -145,7 +145,7 @@ namespace Jackett.Common.Utils
         /// </summary>
         /// <param name="collection">The NameValueCollection being converted</param>
         /// <param name="encoding">The Encoding to use in url encoding Value</param>
-        /// <param name="splitMultiValues">Duplicate keys if true => {"Key=Val1", "Key=Val2} or false => {"Key=Val1,Val2"}</param>
+        /// <param name="splitMultiValues">Duplicate keys are handled as true => {"Key=Val1", "Key=Val2} or false => {"Key=Val1,Val2"}</param>
         /// <param name="separator">The string used to separate each query value</param>
         /// <returns>A web encoded string of key=value parameters separated by the separator</returns>
         public static string GetQueryString(this NameValueCollection collection, Encoding encoding = null,
@@ -156,7 +156,7 @@ namespace Jackett.Common.Utils
                                      key => collection[key]
                                             .Split(',')
                                             .Select(value => new KeyValuePair<string, string>(key, value)))
-                                 .GetQueryString(encoding);
+                                 .GetQueryString(encoding, separator);
             return string.Join(
                 separator,
                 collection.AllKeys.Select(
