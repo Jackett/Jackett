@@ -20,9 +20,9 @@ namespace Jackett.Common.Utils.Tests
             const string splitTemplate = "q=test{0}st=troy{0}st=duplicate{0}makin=thisup";
             Assert.AreEqual(string.Format(combinedTemplate, "&"), testCase.GetQueryString());
             Assert.AreEqual(string.Format(combinedTemplate, ";"), testCase.GetQueryString(separator: ";"));
-            Assert.AreEqual(string.Format(splitTemplate, "&"), testCase.GetQueryString(splitMultiValues: true));
+            Assert.AreEqual(string.Format(splitTemplate, "&"), testCase.GetQueryString(duplicateKeysIfMulti: true));
             Assert.AreEqual(
-                string.Format(splitTemplate, ";"), testCase.GetQueryString(splitMultiValues: true, separator: ";"));
+                string.Format(splitTemplate, ";"), testCase.GetQueryString(duplicateKeysIfMulti: true, separator: ";"));
         }
     }
 }

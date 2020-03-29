@@ -149,8 +149,8 @@ namespace Jackett.Common.Utils
         /// <param name="separator">The string used to separate each query value</param>
         /// <returns>A web encoded string of key=value parameters separated by the separator</returns>
         public static string GetQueryString(this NameValueCollection collection, Encoding encoding = null,
-                                            bool splitMultiValues = false, string separator = "&") =>
-            collection.ToEnumerable(splitMultiValues).GetQueryString(encoding, separator);
+                                            bool duplicateKeysIfMulti = false, string separator = "&") =>
+            collection.ToEnumerable(duplicateKeysIfMulti).GetQueryString(encoding, separator);
 
         public static string GetQueryString(this IEnumerable<KeyValuePair<string, string>> collection,
                                             Encoding encoding = null, string separator = "&") =>
@@ -165,7 +165,7 @@ namespace Jackett.Common.Utils
             foreach (string key in collection.Keys)
             {
                 var value = collection[key];
-                if (duplicateKeysIfMulti && value.Contains(","))
+                if (duplicateKeysIfMulti)
                     foreach (var val in value.Split(','))
                         yield return new KeyValuePair<string, string>(key, val);
                 else
