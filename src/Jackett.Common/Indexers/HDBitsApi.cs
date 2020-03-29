@@ -119,6 +119,16 @@ namespace Jackett.Common.Indexers
                 }
             }
 
+            if (configData.Origins.Values.Length > 0)
+            {
+                requestData["origin"] = new JArray();
+
+                foreach (var origin in configData.Origins.Values)
+                {
+                    requestData["origin"].Add(new JValue(int.Parse(origin)));
+                }
+            }
+
             requestData["limit"] = 100;
 
             var response = await MakeApiRequest("torrents", requestData);
@@ -178,6 +188,7 @@ namespace Jackett.Common.Indexers
             // 50% Free Leech: all full discs, remuxes, caps and all internal encodes.
             if (halfLeechMediums.Contains((int)r["type_medium"]) || (int)r["type_origin"] == 1)
                 return 0.5;
+            // 25% Free Leech: all TV content that is not an internal encode.
             if ((int)r["type_category"] == 2 && (int)r["type_origin"] != 1)
                 return 0.75;
             return 1;
