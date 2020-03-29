@@ -163,8 +163,8 @@ namespace Jackett.Common.Indexers
             }
 
             // parse categories and tags
-            var catGroups = new List<string>();
-            var tagGroups = new List<string>();
+            var catGroups = new HashSet<string>(); // HashSet instead of List to avoid duplicates
+            var tagGroups = new HashSet<string>();
             var cats = MapTorznabCapsToTrackers(query);
             foreach (var cat in cats)
             {
@@ -182,8 +182,6 @@ namespace Jackett.Common.Indexers
                         tagGroups.Add(tSplit[1]); // tag = x264
                 }
             }
-            catGroups = catGroups.Distinct().ToList();
-            tagGroups = tagGroups.Distinct().ToList();
 
             // add categories
             foreach (var cat in catGroups)
