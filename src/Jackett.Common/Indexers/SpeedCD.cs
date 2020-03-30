@@ -16,6 +16,7 @@ namespace Jackett.Common.Indexers
 {
     public class SpeedCD : BaseWebIndexer
     {
+        private string LoginUrl => SiteLink + "take_login.php";
         private string SearchUrl => SiteLink + "browse.php";
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
@@ -23,7 +24,7 @@ namespace Jackett.Common.Indexers
             "https://speed.click/"
         };
 
-        private new ConfigurationDataCookie configData => (ConfigurationDataCookie)base.configData;
+        private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
 
         public SpeedCD(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base("Speed.cd",
@@ -34,7 +35,10 @@ namespace Jackett.Common.Indexers
                 client: wc,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataCookie("For best results, change the 'Torrents per page' setting to 100 in 'Profile Settings > Torrents'."))
+                configData: new ConfigurationDataBasicLogin(
+                    @"Speed.Cd have increased their security. If you are having problems please check the security tab
+                    in your Speed.Cd profile. Eg. Geo Locking, your seedbox may be in a different country to the one where you login via your
+                    web browser.<br><br>For best results, change the 'Torrents per page' setting to 100 in 'Profile Settings > Torrents'."))
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
@@ -79,21 +83,28 @@ namespace Jackett.Common.Indexers
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
+            await DoLogin();
+            return IndexerConfigurationStatus.RequiresTesting;
+        }
 
-            CookieHeader = configData.Cookie.Value;
-            try
-            {
-                await PerformQuery(new TorznabQuery());
-            }
-            catch (Exception)
-            {
-                IsConfigured = false;
-                throw new Exception("Your cookie did not work");
-            }
+        private async Task DoLogin()
+        {
+            var pairs = new Dictionary<string, string> {
+                { "username", configData.Username.Value },
+                { "password", configData.Password.Value },
+            };
 
-            IsConfigured = true;
-            SaveConfig();
-            return IndexerConfigurationStatus.Completed;
+            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, SiteLink);
+
+            await ConfigureIfOK(result.Cookies, result.Content?.Contains("/browse.php") == true, () =>
+            {
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(result.Content);
+                var errorMessage = dom.QuerySelector("h5")?.TextContent;
+                if (result.Content.Contains("Wrong Captcha!"))
+                    errorMessage = "Captcha requiered due to a failed login attempt. Login via a browser to whitelist your IP and then reconfigure jackett.";
+                throw new ExceptionWithConfigData(errorMessage, configData);
+            });
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
@@ -115,8 +126,11 @@ namespace Jackett.Common.Indexers
 
             var searchUrl = SearchUrl + "?" + qc.GetQueryString();
             var response = await RequestStringWithCookiesAndRetry(searchUrl);
-            if (response.Content == null || !response.Content.Contains("/logout.php"))
-                throw new Exception("The user is not logged in. It is possible that the cookie has expired or you made a mistake when copying it. Please check the settings.");
+            if (!response.Content.Contains("/logout.php")) // re-login
+            {
+                await DoLogin();
+                response = await RequestStringWithCookiesAndRetry(searchUrl);
+            }
 
             try
             {
