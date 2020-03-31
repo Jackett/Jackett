@@ -89,45 +89,17 @@ namespace Jackett.Common.Indexers
 
             var categories = MapTorznabCapsToTrackers(query);
 
-            if (categories.Count > 0)
-            {
-                requestData["category"] = new JArray();
+            if(categories.Any())
+                requestData.Add("category", JToken.FromObject(categories.Select(int.Parse)));
 
-                foreach (var cat in categories)
-                {
-                    requestData["category"].Add(new JValue(cat));
-                }
-            }
+            if(configData.Codecs.Values.Any())
+                requestData.Add("codec", JToken.FromObject(configData.Codecs.Values.Select(int.Parse)));
 
-            if (configData.Codecs.Values.Length > 0)
-            {
-                requestData["codec"] = new JArray();
+            if(configData.Mediums.Values.Any())
+                requestData.Add("medium", JToken.FromObject(configData.Mediums.Values.Select(int.Parse)));
 
-                foreach (var codec in configData.Codecs.Values)
-                {
-                    requestData["codec"].Add(new JValue(int.Parse(codec)));
-                }
-            }
-
-            if (configData.Mediums.Values.Length > 0)
-            {
-                requestData["medium"] = new JArray();
-
-                foreach (var medium in configData.Mediums.Values)
-                {
-                    requestData["medium"].Add(new JValue(int.Parse(medium)));
-                }
-            }
-
-            if (configData.Origins.Values.Length > 0)
-            {
-                requestData["origin"] = new JArray();
-
-                foreach (var origin in configData.Origins.Values)
-                {
-                    requestData["origin"].Add(new JValue(int.Parse(origin)));
-                }
-            }
+            if(configData.Origins.Values.Any())
+                requestData.Add("origin", JToken.FromObject(configData.Origins.Values.Select(int.Parse)));
 
             requestData["limit"] = 100;
 
