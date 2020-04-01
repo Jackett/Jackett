@@ -10,30 +10,31 @@
 
   caps:
     categories:
-      "1080p": Movies/HD
-      "720p": Movies/HD
+      "1080P": Movies/HD
+      "720P": Movies/HD
       "BR-RIP": Movies/BluRay
       "BR-SCREENER": Movies/Other
-      "DVDRip": Movies/DVD
-      "DVDScreener": Movies/Other
-      "HC HDRip": Movies/HD
+      "DVDRIP": Movies/DVD
+      "DVDSCREENER": Movies/Other
+      "HC HDRIP": Movies/HD
       "HD-RIP": Movies/HD
       "HD-TC": Movies/HD
       "HD-TS": Movies/HD
-      "HDRip": Movies/HD
+      "HDRIP": Movies/HD
       "HDTC-SCREENER": Movies/Other
       "HDTV-SCREENER": Movies/Other
       "HQ-TC": Movies
       "MKV": Movies
-      "TeleCine": Movies
+      "TELECINE": Movies
       "TS-HQ": Movies
-      "TS-Screener": Movies/Other
-      "V.O. Subtituladas": Movies
-      "VHS-Screener": Movies/Other
+      "TS-SCREENER": Movies/Other
+      "V.O. SUBTITULADAS": Movies
+      "VHS-SCREENER": Movies/Other
       "Web DL": Movies/WEBDL
       "WEB-RIP": Movies/WEBDL
-      "WEB-Screener": Movies/Other
+      "WEB-SCREENER": Movies/Other
       "WEB-SCREENER HC": Movies/Other
+      "NOCAT": Movies/Other
 
     modes:
       search: [q]
@@ -65,8 +66,12 @@
         selector: div.nombre_big1 a
         attribute: href
       category:
+        text: NOCAT
+      category|noappend:
         selector: div.nombre_big1 p b
         optional: true
+        filters:
+          - name: toupper
       download:
         selector: div.nombre_big1 a
         attribute: href
