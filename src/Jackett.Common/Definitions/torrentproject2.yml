@@ -78,8 +78,8 @@
 
     fields:
       category:
-        text: "Other"
-      category:
+        text: Other
+      category|noappend:
         optional: true
         selector: div > span:nth-child(1) > span
       title:

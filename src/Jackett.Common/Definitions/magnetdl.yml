@@ -68,6 +68,8 @@
         selector: td.n a
         attribute: title
       category:
+        text: Other
+      category|noappend:
         optional: true
         selector:  td[class^="t"]
       details:
