@@ -73,7 +73,7 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            dynamic requestData = new JObject();
+            var requestData = new JObject();
             var queryString = query.GetQueryString();
             var imdbId = ParseUtil.GetImdbID(query.ImdbID);
 
