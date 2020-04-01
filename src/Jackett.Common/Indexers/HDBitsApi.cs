@@ -90,7 +90,7 @@ namespace Jackett.Common.Indexers
             var categories = MapTorznabCapsToTrackers(query);
 
             if(categories.Any())
-                requestData.Add("category", JToken.FromObject(categories.Select(int.Parse)));
+                requestData.Add("category", JToken.FromObject(categories));
 
             if(configData.Codecs.Values.Any())
                 requestData.Add("codec", JToken.FromObject(configData.Codecs.Values.Select(int.Parse)));
@@ -198,4 +198,3 @@ namespace Jackett.Common.Indexers
         }
     }
 }
-
