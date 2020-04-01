@@ -12,7 +12,7 @@
   legacylinks:
     - https://kickass.gg/
     - https://katcr.io/
-    - https://thekat.nz/  
+    - https://thekat.nz/
     - https://thekat.se/
     - https://kat.how/
     - https://kat.li/
@@ -24,7 +24,7 @@
       tv: TV
       music: Audio
       books: Books
-      Games: Console
+      games: Console
       applications: PC
       xxx: XXX
       other: Other
@@ -61,10 +61,13 @@
 
     fields:
       category:
+        text: other
+      category|noappend:
         optional: true
         selector: span[id^="cat_"] > strong > a
         attribute: href
         filters:
+          - name: tolower
           - name: trim
             args: /
       title:
