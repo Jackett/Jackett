@@ -40,6 +40,7 @@ namespace Jackett.Common.Indexers
 
             AddCategoryMapping(1, TorznabCatType.MoviesHD);
             AddCategoryMapping(2, TorznabCatType.TVHD);
+            AddCategoryMapping(3, TorznabCatType.Audio);
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -66,15 +67,19 @@ namespace Jackett.Common.Indexers
                 {"passkey", passkey}
             };
 
-            if (!string.IsNullOrWhiteSpace(query.ImdbID))
+            if (query.IsImdbQuery)
             {
                 qc.Add("action", "imdbsearch");
                 qc.Add("imdb", query.ImdbID);
             }
             else if (!string.IsNullOrWhiteSpace(query.GetQueryString()))
             {
+                var searchTerm = query.SearchTerm; // not use query.GetQueryString(), because it includes the season
+                if (query.Season > 0) // search for tv series
+                    searchTerm += $": Season {query.Season:D2}";
+
                 qc.Add("action", "titlesearch");
-                qc.Add("title", query.SearchTerm); // not use query.GetQueryString(), see the season code below
+                qc.Add("title", searchTerm);
             }
             else
             {
@@ -110,13 +115,17 @@ namespace Jackett.Common.Indexers
                     if (isSerie)
                         torrentName = torrentName.Replace(": Season ", " S");
 
-                    // if the category is not in the search categories, skip
-                    var cat = new List<int> {isSerie ? TorznabCatType.TVHD.ID : TorznabCatType.MoviesHD.ID};
-                    if (query.Categories.Any() && !query.Categories.Intersect(cat).Any())
-                        continue;
+                    // we have to guess if it's an audio track too
+                    var isAudio = string.IsNullOrWhiteSpace((string)torrent.Element("resolution"));
+                    var cat = new List<int>
+                    {
+                        isSerie ? TorznabCatType.TVHD.ID :
+                        isAudio ? TorznabCatType.Audio.ID :
+                        TorznabCatType.MoviesHD.ID
+                    };
 
-                    // if it's a tv series season search, skip movies and other seasons
-                    if (query.Season > 0 && (!isSerie || !torrentName.EndsWith($" S{query.Season:D2}")))
+                    // if the category is not in the search categories, skip
+                    if (query.Categories.Any() && !query.Categories.Intersect(cat).Any())
                         continue;
 
                     var title = new StringBuilder(torrentName);
@@ -148,14 +157,18 @@ namespace Jackett.Common.Indexers
                     var freeleech = double.Parse(torrent.FirstValue("freeleech"));
 
                     Uri banner = null;
-                    // small cover only for movies
-                    if (!isSerie && !string.IsNullOrWhiteSpace(torrent.Element("smallcover")?.Value))
-                        banner = new Uri(torrent.FirstValue("smallcover"));
-                    else if (!string.IsNullOrWhiteSpace(torrent.Element("cover")?.Value))
-                        banner = new Uri(torrent.FirstValue("cover"));
+                    string description = null;
+                    if (!isAudio) // audio tracks don't have banner either description
+                    {
+                        // small cover only for movies
+                        if (!isSerie && !string.IsNullOrWhiteSpace(torrent.Element("smallcover")?.Value))
+                            banner = new Uri(torrent.FirstValue("smallcover"));
+                        else if (!string.IsNullOrWhiteSpace(torrent.Element("cover")?.Value))
+                            banner = new Uri(torrent.FirstValue("cover"));
 
-                    var description = torrent.Element("encodestatus") != null ?
-                        $"Encode status: {torrent.FirstValue("encodestatus")}" : null;
+                        description = torrent.Element("encodestatus") != null ?
+                            $"Encode status: {torrent.FirstValue("encodestatus")}" : null;
+                    }
 
                     var imdb = ParseUtil.GetImdbID(torrent.Element("imdb")?.Value);
 

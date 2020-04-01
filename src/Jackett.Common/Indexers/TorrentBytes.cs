@@ -17,29 +17,29 @@ namespace Jackett.Common.Indexers
 {
     public class TorrentBytes : BaseWebIndexer
     {
-        private string BrowseUrl => SiteLink + "browse.php";
         private string LoginUrl => SiteLink + "takelogin.php";
+        private string SearchUrl => SiteLink + "browse.php";
 
-        private new ConfigurationDataBasicLogin configData
-        {
-            get => (ConfigurationDataBasicLogin)base.configData;
-            set => base.configData = value;
-        }
+        private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
 
         public TorrentBytes(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "TorrentBytes",
-                   description: "A decade of torrentbytes",
+            : base("TorrentBytes",
+                   description: "A decade of TorrentBytes",
                    link: "https://www.torrentbytes.net/",
                    caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                    configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
-                   configData: new ConfigurationDataBasicLogin("For best results, change the 'Torrents per page' setting to 30 or greater (100 recommended) in your profile on the TorrentBytes webpage."))
+                   configData: new ConfigurationDataBasicLogin("For best results, change the 'Torrents per page' setting to 100 in your profile on the TorrentBytes webpage."))
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "en-us";
             Type = "private";
+
+            TorznabCaps.SupportsImdbMovieSearch = true;
+            TorznabCaps.SupportsImdbTVSearch = true;
+
             AddCategoryMapping(23, TorznabCatType.TVAnime, "Anime");
             AddCategoryMapping(52, TorznabCatType.PCMac, "Apple/All");
             AddCategoryMapping(22, TorznabCatType.PC, "Apps/misc");
@@ -103,31 +103,33 @@ namespace Jackett.Common.Indexers
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var searchString = query.GetQueryString();
-            var searchUrl = BrowseUrl;
-            var queryCollection = new NameValueCollection();
 
-            // Tracker can only search OR return things in categories
-            if (!string.IsNullOrWhiteSpace(searchString))
+            var qc = new NameValueCollection
             {
-                queryCollection.Add("search", searchString);
-                queryCollection.Add("cat", "0");
-                queryCollection.Add("sc", "1");
+                {"incldead", "1"}
+            };
+
+            if (query.IsImdbQuery)
+            {
+                qc.Add("search", query.ImdbID);
+                qc.Add("sc", "2"); // search in description
             }
             else
             {
-                foreach (var cat in MapTorznabCapsToTrackers(query))
-                    queryCollection.Add("c" + cat, "1");
-                queryCollection.Add("incldead", "0");
+                qc.Add("search", query.GetQueryString());
+                qc.Add("sc", "1"); // search in title
             }
 
-            searchUrl += "?" + queryCollection.GetQueryString();
-            var response = await RequestStringWithCookiesAndRetry(searchUrl, referer: BrowseUrl);
-            // On IP change the cookies become invalid, login again and retry
-            if (response.IsRedirect)
+            foreach (var cat in MapTorznabCapsToTrackers(query))
+                qc.Add("c" + cat, "1");
+
+            var searchUrl = SearchUrl + "?" + qc.GetQueryString();
+            var response = await RequestStringWithCookiesAndRetry(searchUrl, referer: SearchUrl);
+
+            if (response.IsRedirect) // re-login
             {
                 await ApplyConfiguration(null);
-                response = await RequestStringWithCookiesAndRetry(searchUrl, null, BrowseUrl);
+                response = await RequestStringWithCookiesAndRetry(searchUrl, null, SearchUrl);
             }
 
             try

@@ -80,13 +80,6 @@
       movie-search: [q]
 
   settings:
-    - name: downloadlink
-      type: select
-      label: Download link
-      default: "magnet:"
-      options:
-        "https://etorrent.click/" : "eTorrent.click"
-        "magnet:": "magnet"
     - name: sort
       type: select
       label: Sort requested from site
@@ -105,7 +98,7 @@
         "asc": "asc"
 
   download:
-    selector: a[href^="{{ .Config.downloadlink }}"]
+    selector: a[href^="magnet:?xt="]
     attribute: href
 
   search:
@@ -142,12 +135,8 @@
           - name: re_replace
             args: ["( torrent)$", ""]
       category:
-        optional: true
-        selector: td:nth-child(1):contains("-")
-        filters:
-          - name: replace #7110 provide default for missing category
-            args: ["-", "78"]
-      category:
+        text: 78 #7110
+      category|noappend:
         optional: true
         selector: a[href^="/torrents.php?cat="]
         attribute: href

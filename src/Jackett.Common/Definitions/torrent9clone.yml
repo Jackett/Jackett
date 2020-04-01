@@ -42,6 +42,7 @@
       - {id: Logiciels, cat: PC, desc: "Software"}
       - {id: Jeux-PC, cat: PC/Games, desc: "PC Games"}
       - {id: Jeux-Consoles, cat: Console/Xbox360, desc: "Console Games"}
+      - {id: Porno, cat: XXX, desc: "XXX"}
 
     modes:
       search: [q]
@@ -79,7 +80,7 @@
           - name: replace
             args: ["TRUEFRENCH", "{{ .Result.site_date }} TRUEFRENCH"]
           - name: replace
-            args: ["VOSTFR", "{{ .Result.site_date }} VOSTFR"] 
+            args: ["VOSTFR", "{{ .Result.site_date }} VOSTFR"]
           # and we delete it at the end
           - name: re_replace
             args: ["(\\w+)$", ""]

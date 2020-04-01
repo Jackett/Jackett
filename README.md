@@ -94,6 +94,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * OneJAV
  * OxTorrent
  * ParnuXi
+ * PC-torrent
  * PiratBit
  * Pirateiro
  * PornLeech
@@ -403,6 +404,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * PrivateHD (PHD)
  * ProAudioTorrents (PAT)
  * Psytorrents
+ * PTerClub
  * PTSBAO
  * PuntoTorrent
  * PuroVicio

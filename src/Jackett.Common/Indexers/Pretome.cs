@@ -30,7 +30,7 @@ namespace Jackett.Common.Indexers
                 configService: configService,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataPinNumber())
+                configData: new ConfigurationDataPinNumber("For best results, change the 'Torrents per page' setting to 100 in 'Profile => Torrent browse settings'."))
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "en-us";
@@ -140,7 +140,7 @@ namespace Jackett.Common.Indexers
             await FollowIfRedirect(result, LoginUrl, null, loginCookies);
 
             await ConfigureIfOK(loginCookies, result.Content?.Contains("logout.php") == true,
-                                () => throw new ExceptionWithConfigData("Failed", configData));
+                                () => throw new ExceptionWithConfigData("Login failed", configData));
 
             return IndexerConfigurationStatus.RequiresTesting;
         }
@@ -149,18 +149,18 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
 
-            var qc = new List<KeyValuePair<string, string>>(); // NameValueCollection don't support cat[]=19&cat[]=6
+            var qc = new List<KeyValuePair<string, string>> // NameValueCollection don't support cat[]=19&cat[]=6
+            {
+                {"st", "1"} // search in title
+            };
+
             if (query.IsImdbQuery)
             {
                 qc.Add("search", query.ImdbID);
-                qc.Add("st", "1");
-                qc.Add("sd", "1");
+                qc.Add("sd", "1"); // search in description
             }
-            else if (!string.IsNullOrWhiteSpace(query.GetQueryString()))
-            {
+            else
                 qc.Add("search", query.GetQueryString());
-                qc.Add("st", "1");
-            }
 
             // parse categories and tags
             var catGroups = new HashSet<string>(); // HashSet instead of List to avoid duplicates

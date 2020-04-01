@@ -28,7 +28,7 @@
       "Игры": PC/Games
       "Фильмы": Movies
       "Видео": Movies
-      "Музыка": Audio 
+      "Музыка": Audio
       "Другие категории": Other
       "Сериалы": TV
 
@@ -56,7 +56,7 @@
 
     fields:
       category:
-        selector: td:nth-child(1), div.article-indent div b a
+        selector: td:nth-child(1) a, div.article-indent div b a
         filters:
           - name: replace
             args: ["Новинки", ""]

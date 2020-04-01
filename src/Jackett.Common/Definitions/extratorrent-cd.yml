@@ -948,11 +948,11 @@
 
     fields:
       category:
-        selector:  a[href*="/category/"], a[href="#"]
+        text: 9 #7108
+      category|noappend:
+        selector:  a[href*="/category/"]
         attribute: href
         filters:
-          - name: replace #7108 provide default for missing category
-            args: ["#", "/category/9/"]
           - name: regexp
             args: "/category/(\\d+)/"
       title:

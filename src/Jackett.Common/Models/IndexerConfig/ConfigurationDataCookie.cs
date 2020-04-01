@@ -5,8 +5,9 @@ namespace Jackett.Common.Models.IndexerConfig
     {
         public StringItem Cookie { get; private set; }
         public DisplayItem CookieInstructions { get; private set; }
+        public DisplayItem Instructions { get; private set; }
 
-        public ConfigurationDataCookie()
+        public ConfigurationDataCookie(string instructionMessageOptional = null)
         {
             Cookie = new StringItem { Name = "Cookie" };
             CookieInstructions = new DisplayItem(
@@ -15,6 +16,7 @@ namespace Jackett.Common.Models.IndexerConfig
             {
                 Name = "Cookie Instructions"
             };
+            Instructions = new DisplayItem(instructionMessageOptional) { Name = "" };
         }
     }
 
