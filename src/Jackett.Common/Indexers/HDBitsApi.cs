@@ -38,6 +38,7 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "private";
             TorznabCaps.SupportsImdbMovieSearch = true;
+            TorznabCaps.SupportsImdbTVSearch = true;
 
             AddCategoryMapping(6, TorznabCatType.Audio, "Audio Track");
             AddCategoryMapping(3, TorznabCatType.TVDocumentary, "Documentary");
