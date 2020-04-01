@@ -97,6 +97,8 @@
         filters:
           - name: regexp
             args: Tip\('<b>(.*?)</b>
+          - name: replace
+            args: ["\\", ""]
       details:
         selector: a[href^="details.php?id="][onmouseover]
         attribute: href
