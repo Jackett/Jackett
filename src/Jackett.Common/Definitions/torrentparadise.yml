@@ -12,10 +12,14 @@
 
   caps:
     categories:
+      "ADULT MILF": XXX
       "ADULT XXX": XXX
       "ANIME": TV/Anime
       "APPLICATIONS > MAC": PC/Mac
       "APPLICATIONS > WINDOWS": PC/0day
+      "APPLICATIONS > ANDROID": PC
+      "APPLICATIONS > HANDHELD": PC/Phone-Other
+      "APPLICATIONS > OTHER OS": PC
       "APPS": PC
       "AUDIO > AUDIO BOOKS": Audio/Audiobook
       "BOOKS": Books
@@ -24,6 +28,7 @@
       "FLAC": Audio/Lossless
       "GAMES": PC/Games
       "GAMES > PC": PC/Games
+      "GAMES > WINDOWS": PC/Games
       "JUEGOS PS2": Console/PSP
       "JUEGOS PS3": Console/PS3
       "JUEGOS PS4": Console/PS4
@@ -34,6 +39,7 @@
       "JUEGOS XBOX360": Console/Xbox 360
       "MOBILE": PC/Phone-Other
       "MOVIES": Movies
+      "MOVIES > ENGLISH (SPANISH SUBT)": Movies
       "MP3 MUSIC": Audio/MP3
       "MP3": Audio/MP3
       "MUSIC > LOSSLESS": Audio/Lossless
@@ -41,21 +47,30 @@
       "MUSIC": Audio
       "OTHER > E-BOOKS": Other
       "OTHER": Other
+      "OTHER > OTHER": Other
+      "PORN > GAMES": XXX
       "PORN > MOVIE CLIPS": XXX
       "PORN > MOVIES": XXX
+      "PORN > OTHER": XXX
       "PORN > PICTURES": XXX
       "SOFTWARE > MAC": PC/Mac
       "SOFTWARE > WINDOWS": PC/0day
       "SOFTWARE": PC
+      "TUTORIALS": Other
       "TV SHOWS": TV
       "TV": TV
+      "DOCUMENTARIES": TV/Documentary
+      "VIDEO HDRIP": Movies
       "VIDEO > HD - MOVIES": Movies/HD
       "VIDEO > HD - TV SHOWS": TV/HD
       "VIDEO > MOVIES": Movies
+      "VIDEO > MUSIC VIDEOS": Audio/Video
+      "VIDEO > OTHER": Movies
       "VIDEO > SD - MOVIES": Movies/SD
       "VIDEO > SD - TV SHOWS": TV/SD
       "VIDEO > UHD - MOVIES": Movies/UHD
       "VIDEO > UHD - TV SHOWS": TV/UHD
+      "VIDEO > TV SHOWS": TV
       "XXX": XXX
 
     modes:
