@@ -294,7 +294,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * ExtremeTorrents
  * FANO.IN
  * Fantastic Heaven
- * FeedUrNeed (FuN)
  * Femdomcult
  * FileList (FL)
  * Film-Paleis

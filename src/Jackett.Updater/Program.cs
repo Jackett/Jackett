@@ -304,6 +304,7 @@ namespace Jackett.Updater
                 "Definitions/evolutionpalace.yml",
                 "Definitions/extratorrent-ag.yml",
                 "Definitions/extratorrentclone.yml",
+                "Definitions/feedurneed.yml",
                 "Definitions/freakstrackingsystem.yml",
                 "Definitions/freedomhd.yml",
                 "Definitions/gdf76.yml",
