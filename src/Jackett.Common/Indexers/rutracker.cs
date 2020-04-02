@@ -241,6 +241,11 @@ namespace Jackett.Common.Indexers
              AddCategoryMapping(1939, TorznabCatType.TVFOREIGN, "|- Японские сериалы с озвучкой");
              AddCategoryMapping(2102, TorznabCatType.TVFOREIGN, "|- VMV и др. ролики");
              AddCategoryMapping(2103, TorznabCatType.Audio, "|- OST Азиатские сериалы (lossy и lossless)");
+             AddCategoryMapping(670, TorznabCatType.TVDocumentary, "Вера и религия");
+             AddCategoryMapping(1475, TorznabCatType.TVDocumentary, "|- [Видео Религия] Христианство");
+             AddCategoryMapping(2107, TorznabCatType.TVDocumentary, "|- [Видео Религия] Ислам");
+             AddCategoryMapping(294, TorznabCatType.TVDocumentary, "|- [Видео Религия] Религии Индии, Тибета и Восточной Азии");
+             AddCategoryMapping(1453, TorznabCatType.TVDocumentary, "|- [Видео Религия] Культы и новые религиозные движения");
              AddCategoryMapping(46, TorznabCatType.TVDocumentary, "Документальные фильмы и телепередачи");
              AddCategoryMapping(103, TorznabCatType.TVDocumentary, "|- Документальные (DVD)");
              AddCategoryMapping(671, TorznabCatType.TVDocumentary, "|- [Док] Биографии. Личности и кумиры");
