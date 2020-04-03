@@ -20,6 +20,7 @@ namespace Jackett.Common.Indexers
         private static string SearchUrl => "https://passthepopcorn.me/torrents.php";
         private string AuthKey { get; set; }
 
+        // TODO: merge ConfigurationDataAPILoginWithUserAndPasskeyAndFilter class with with ConfigurationDataUserPasskey
         private new ConfigurationDataAPILoginWithUserAndPasskeyAndFilter configData
         {
             get => (ConfigurationDataAPILoginWithUserAndPasskeyAndFilter)base.configData;
