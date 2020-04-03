@@ -1603,11 +1603,30 @@ namespace Jackett.Common.Indexers
                                             if (query.ImdbID != null && TorznabCaps.SupportsImdbMovieSearch)
                                                 break; // skip andmatch filter for imdb searches
 
-                                            if (!query.MatchQueryStringAND(release.Title, CharacterLimit))
+                                            var queryKeywords = (string)variables[".Keywords"];
+
+                                            if (CharacterLimit > 0)
                                             {
-                                                logger.Debug(string.Format("CardigannIndexer ({0}): skipping {1} (andmatch filter)", ID, release.Title));
-                                                SkipRelease = true;
+                                                if (CharacterLimit > queryKeywords.Length)
+                                                    CharacterLimit = queryKeywords.Length;
+
+                                                queryKeywords = queryKeywords.Substring(0, CharacterLimit);
                                             }
+
+                                            var SplitRegex = new Regex("[^a-zA-Z0-9]+");
+                                            var queryKeywordsParts = SplitRegex.Split(queryKeywords);
+
+                                            // Check if each keyword is in the given title.
+                                            foreach (var queryKeywordPart in queryKeywordsParts)
+                                            {
+                                                if (release.Title.IndexOf(queryKeywordPart, StringComparison.OrdinalIgnoreCase) < 0)
+                                                {
+                                                    logger.Debug(string.Format("CardigannIndexer ({0}): skipping {1} (andmatch filter)", ID, release.Title));
+                                                    SkipRelease = true;
+                                                    break;
+                                                }
+                                            }
+
                                             break;
                                         case "strdump":
                                             // for debugging
