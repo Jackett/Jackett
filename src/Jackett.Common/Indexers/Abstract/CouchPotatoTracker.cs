@@ -27,7 +27,10 @@ namespace Jackett.Common.Indexers.Abstract
             : base(name: name,
                 description: description,
                 link: link,
-                caps: new TorznabCapabilities(),
+                caps: new TorznabCapabilities
+                {
+                    SupportsImdbMovieSearch = true
+                },
                 configService: configService,
                 client: client,
                 logger: logger,
@@ -36,7 +39,6 @@ namespace Jackett.Common.Indexers.Abstract
             )
         {
             this.endpoint = endpoint;
-            TorznabCaps.SupportsImdbMovieSearch = true;
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

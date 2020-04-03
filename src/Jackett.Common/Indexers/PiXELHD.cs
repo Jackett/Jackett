@@ -35,7 +35,10 @@ namespace Jackett.Common.Indexers
             : base(name: "PiXELHD",
                 description: "PixelHD (PxHD) is a Private Torrent Tracker for HD .MP4 MOVIES / TV",
                 link: "https://pixelhd.me/",
-                caps: new TorznabCapabilities(),
+                caps: new TorznabCapabilities
+                {
+                    SupportsImdbMovieSearch = true
+                },
                 configService: configService,
                 logger: logger,
                 p: protectionService,
@@ -46,8 +49,6 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
-
-            TorznabCaps.SupportsImdbMovieSearch = true;
 
             AddCategoryMapping(1, TorznabCatType.MoviesHD);
         }

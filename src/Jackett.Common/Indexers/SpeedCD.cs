@@ -30,7 +30,11 @@ namespace Jackett.Common.Indexers
             : base("Speed.cd",
                 description: "Your home now!",
                 link: "https://speed.cd/",
-                caps: new TorznabCapabilities(),
+                caps: new TorznabCapabilities
+                {
+                    SupportsImdbMovieSearch = true,
+                    SupportsImdbTVSearch = true
+                },
                 configService: configService,
                 client: wc,
                 logger: l,
@@ -43,9 +47,6 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
-
-            TorznabCaps.SupportsImdbMovieSearch = true;
-            TorznabCaps.SupportsImdbTVSearch = true;
 
             AddCategoryMapping(1, TorznabCatType.MoviesOther, "Movies/XviD");
             AddCategoryMapping(42, TorznabCatType.Movies, "Movies/Packs");
