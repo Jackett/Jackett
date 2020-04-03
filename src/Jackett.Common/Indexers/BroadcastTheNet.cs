@@ -20,6 +20,7 @@ namespace Jackett.Common.Indexers
         // Docs at http://apidocs.broadcasthe.net/docs.php
         private readonly string APIBASE = "https://api.broadcasthe.net";
 
+        // TODO: remove ConfigurationDataAPIKey class and use ConfigurationDataPasskey instead
         private new ConfigurationDataAPIKey configData
         {
             get => (ConfigurationDataAPIKey)base.configData;
