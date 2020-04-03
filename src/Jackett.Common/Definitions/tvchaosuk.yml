@@ -10,7 +10,7 @@
 
   caps:
     categorymappings:
-      - {id: 4, cat: TV, desc: "Holding Bin"}
+      - {id: 53, cat: Other, desc: "None"}
       - {id: 29, cat: TV, desc: "Comedy"}
       - {id: 5, cat: TV/Documentary, desc: "Documentary"}
       - {id: 11, cat: TV, desc: "Drama"}
@@ -25,6 +25,7 @@
       - {id: 30, cat: TV, desc: "Soaps"}
       - {id: 33, cat: TV, desc: "Sci-Fi"}
       - {id: 42, cat: TV/Sport, desc: "Sport"}
+      - {id: 4, cat: TV, desc: "Holding Bin"}
 
     modes:
       search: [q, imdbid]
