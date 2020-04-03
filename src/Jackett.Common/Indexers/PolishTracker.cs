@@ -30,7 +30,11 @@ namespace Jackett.Common.Indexers
             : base("PolishTracker",
                    description: "Polish Tracker is a POLISH Private site for 0DAY / MOVIES / GENERAL",
                    link: "https://pte.nu/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities
+                   {
+                       SupportsImdbMovieSearch = true,
+                       SupportsImdbTVSearch = true,
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,
@@ -40,9 +44,6 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "pl-pl";
             Type = "private";
-
-            TorznabCaps.SupportsImdbMovieSearch = true;
-            TorznabCaps.SupportsImdbTVSearch = true;
 
             AddCategoryMapping(1, TorznabCatType.PC0day, "0-Day");
             AddCategoryMapping(3, TorznabCatType.PC0day, "Apps");

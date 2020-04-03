@@ -52,7 +52,10 @@ namespace Jackett.Common.Indexers
             : base(name: "IPTorrents",
                 description: "Always a step ahead.",
                 link: "https://iptorrents.com/",
-                caps: new TorznabCapabilities(),
+                caps: new TorznabCapabilities
+                {
+                    SupportsImdbMovieSearch = true
+                },
                 configService: configService,
                 client: wc,
                 logger: l,
@@ -62,8 +65,6 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
-
-            TorznabCaps.SupportsImdbMovieSearch = true;
 
             AddCategoryMapping(72, TorznabCatType.Movies, "Movies");
             AddCategoryMapping(87, TorznabCatType.Movies3D, "Movie/3D");

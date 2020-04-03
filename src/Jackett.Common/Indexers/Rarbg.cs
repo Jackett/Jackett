@@ -50,7 +50,10 @@ namespace Jackett.Common.Indexers
             : base(name: "RARBG",
                 description: "RARBG is a Public torrent site for MOVIES / TV / GENERAL",
                 link: "https://rarbg.to/",
-                caps: new TorznabCapabilities(),
+                caps: new TorznabCapabilities
+                {
+                    SupportsImdbMovieSearch = true
+                },
                 configService: configService,
                 client: wc,
                 logger: l,
@@ -73,8 +76,6 @@ namespace Jackett.Common.Indexers
             var provideTorrentLinkItem = new BoolItem { Value = false };
             provideTorrentLinkItem.Name = "Generate torrent download link additionally to magnet (not recommended due to DDoS protection).";
             configData.AddDynamic("providetorrentlink", provideTorrentLinkItem);
-
-            TorznabCaps.SupportsImdbMovieSearch = true;
 
             webclient.requestDelay = 2.1; // The api has a 1req/2s limit.
 

@@ -39,6 +39,11 @@ namespace Jackett.Common.Indexers
             : base(name: "HD-Torrents",
                 description: "HD-Torrents is a private torrent website with HD torrents and strict rules on their content.",
                 link: "https://hdts.ru/",// Of the accessible domains the .ru seems the most reliable.  https://hdts.ru | https://hd-torrents.org | https://hd-torrents.net | https://hd-torrents.me
+                caps: new TorznabCapabilities
+                {
+                    SupportsImdbMovieSearch = true,
+                    SupportsImdbTVSearch = true
+                },
                 configService: configService,
                 client: w,
                 logger: l,
@@ -48,11 +53,6 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
-
-            TorznabCaps.SupportsImdbMovieSearch = true;
-            TorznabCaps.SupportsImdbTVSearch = true;
-
-            TorznabCaps.Categories.Clear();
 
             // Movie
             AddCategoryMapping("70", TorznabCatType.MoviesUHD, "Movie/UHD/Blu-Ray");

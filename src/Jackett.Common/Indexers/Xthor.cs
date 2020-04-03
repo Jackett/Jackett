@@ -58,9 +58,6 @@ namespace Jackett.Common.Indexers
             Language = "fr-fr";
             Type = "private";
 
-            // Clean capabilities
-            TorznabCaps.Categories.Clear();
-
             // Movies
             AddCategoryMapping(118, TorznabCatType.MoviesBluRay, "UHD FULL BLURAY");
             AddCategoryMapping(119, TorznabCatType.MoviesBluRay, "UHD BLURAY REMUX");
