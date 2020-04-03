@@ -24,7 +24,11 @@ namespace Jackett.Common.Indexers
             : base("Awesome-HD",
                 description: "An HD tracker",
                 link: "https://awesome-hd.me/",
-                caps: new TorznabCapabilities(),
+                caps: new TorznabCapabilities
+                {
+                    SupportsImdbMovieSearch = true,
+                    SupportsImdbTVSearch = true
+                },
                 configService: configService,
                 client: c,
                 logger: l,
@@ -34,9 +38,6 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
-
-            TorznabCaps.SupportsImdbMovieSearch = true;
-            TorznabCaps.SupportsImdbTVSearch = true;
 
             AddCategoryMapping(1, TorznabCatType.MoviesHD);
             AddCategoryMapping(2, TorznabCatType.TVHD);

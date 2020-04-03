@@ -47,7 +47,10 @@ namespace Jackett.Common.Indexers
                 name: "Nordicbits",
                 description: "Nordicbits is a Danish Private site for MOVIES / TV / GENERAL",
                 link: "https://nordicb.org/",
-                caps: new TorznabCapabilities(),
+                caps: new TorznabCapabilities
+                {
+                    SupportsImdbMovieSearch = true
+                },
                 configService: configService,
                 client: w,
                 logger: l,
@@ -57,8 +60,6 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "da-dk";
             Type = "private";
-
-            TorznabCaps.SupportsImdbMovieSearch = false;
 
             // Apps
             AddCategoryMapping("cat=63", TorznabCatType.PCPhoneAndroid, "APPS - Android");

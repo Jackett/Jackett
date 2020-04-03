@@ -29,7 +29,10 @@ namespace Jackett.Common.Indexers
             name: "Torrents.csv",
             description: "Torrents.csv is a self-hostable, open source torrent search engine and database",
             link: "https://torrents-csv.ml/",
-            caps: new TorznabCapabilities(),
+            caps: new TorznabCapabilities
+            {
+                SupportsImdbMovieSearch = true
+            },
             configService: configService,
             client: wc,
             logger: l,
@@ -49,10 +52,6 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(6000, TorznabCatType.XXX);
             AddCategoryMapping(7000, TorznabCatType.Other);
             AddCategoryMapping(8000, TorznabCatType.Books);
-
-            TorznabCaps.SupportsImdbMovieSearch = false;
-
-            webclient.requestDelay = 0;
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

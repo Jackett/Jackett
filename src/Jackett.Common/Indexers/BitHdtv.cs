@@ -34,7 +34,11 @@ namespace Jackett.Common.Indexers
                 name: "BIT-HDTV",
                 description: "BIT-HDTV - Home of High Definition",
                 link: "https://www.bit-hdtv.com/",
-                caps: new TorznabCapabilities(),
+                caps: new TorznabCapabilities
+                {
+                    SupportsImdbMovieSearch = true,
+                    SupportsImdbTVSearch = true
+                },
                 configService: configService,
                 client: w,
                 logger: l,
@@ -44,8 +48,7 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "en-us";
             Type = "private";
-            TorznabCaps.SupportsImdbMovieSearch = true;
-            TorznabCaps.SupportsImdbTVSearch = true;
+
             AddCategoryMapping(1, TorznabCatType.TVAnime); // Anime
             AddCategoryMapping(2, TorznabCatType.MoviesBluRay); // Blu-ray
             AddCategoryMapping(4, TorznabCatType.TVDocumentary); // Documentaries

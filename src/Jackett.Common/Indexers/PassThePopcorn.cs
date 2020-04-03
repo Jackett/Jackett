@@ -30,7 +30,10 @@ namespace Jackett.Common.Indexers
             : base(name: "PassThePopcorn",
                 description: "PassThePopcorn is a Private site for MOVIES / TV",
                 link: "https://passthepopcorn.me/",
-                caps: new TorznabCapabilities(),
+                caps: new TorznabCapabilities
+                {
+                    SupportsImdbMovieSearch = true
+                },
                 configService: configService,
                 client: c,
                 logger: l,
@@ -42,8 +45,6 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
-
-            TorznabCaps.SupportsImdbMovieSearch = true;
 
             webclient.requestDelay = 2; // 0.5 requests per second
 

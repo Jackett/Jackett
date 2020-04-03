@@ -35,7 +35,10 @@ namespace Jackett.Common.Indexers
             : base(name: "Torrent-Syndikat",
                 description: "A German general tracker",
                 link: "https://torrent-syndikat.org/",
-                caps: new TorznabCapabilities(),
+                caps: new TorznabCapabilities
+                {
+                    SupportsImdbMovieSearch = true
+                },
                 configService: configService,
                 client: w,
                 logger: l,
@@ -45,8 +48,6 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "de-de";
             Type = "private";
-
-            TorznabCaps.SupportsImdbMovieSearch = true;
 
             configData.DisplayText.Value = "Only the results from the first search result page are shown, adjust your profile settings to show the maximum.";
             configData.DisplayText.Name = "Notice";

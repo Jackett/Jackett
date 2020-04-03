@@ -33,7 +33,10 @@ namespace Jackett.Common.Indexers
             : base(name: "PirateTheNet",
                 description: "A movie tracker",
                 link: "http://piratethenet.org/",
-                caps: new TorznabCapabilities(),
+                caps: new TorznabCapabilities
+                {
+                    SupportsImdbMovieSearch = true
+                },
                 configService: configService,
                 client: w,
                 logger: l,
@@ -43,8 +46,6 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
-
-            TorznabCaps.SupportsImdbMovieSearch = true;
 
             configData.DisplayText.Value = "Only the results from the first search result page are shown, adjust your profile settings to show the maximum.";
             configData.DisplayText.Name = "Notice";

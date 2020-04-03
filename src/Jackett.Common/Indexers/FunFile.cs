@@ -25,7 +25,11 @@ namespace Jackett.Common.Indexers
             : base("FunFile",
                 description: "A general tracker",
                 link: "https://www.funfile.org/",
-                caps: new TorznabCapabilities(),
+                caps: new TorznabCapabilities
+                {
+                    SupportsImdbMovieSearch = true,
+                    SupportsImdbTVSearch = true
+                },
                 configService: configService,
                 client: w,
                 logger: l,
@@ -35,9 +39,6 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "en-us";
             Type = "private";
-
-            TorznabCaps.SupportsImdbMovieSearch = true;
-            TorznabCaps.SupportsImdbTVSearch = true;
 
             AddCategoryMapping(44, TorznabCatType.TVAnime); // Anime
             AddCategoryMapping(22, TorznabCatType.PC); // Applications

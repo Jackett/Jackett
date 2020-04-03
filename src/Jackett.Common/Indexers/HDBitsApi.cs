@@ -27,7 +27,10 @@ namespace Jackett.Common.Indexers
             : base(name: "HDBits (API)",
                 description: "The HighDefinition Bittorrent Community",
                 link: "https://hdbits.org/",
-                caps: new TorznabCapabilities(),
+                caps: new TorznabCapabilities
+                {
+                    SupportsImdbMovieSearch = true
+                },
                 configService: configService,
                 client: wc,
                 logger: l,
@@ -37,7 +40,6 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
-            TorznabCaps.SupportsImdbMovieSearch = true;
 
             AddCategoryMapping(6, TorznabCatType.Audio, "Audio Track");
             AddCategoryMapping(3, TorznabCatType.TVDocumentary, "Documentary");
