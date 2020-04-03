@@ -371,16 +371,45 @@ namespace Jackett.Common.Indexers
                 if (condition.StartsWith("."))
                 {
                     var conditionResultState = false;
-                    var value = variables[condition];
 
-                    if (value == null)
-                        conditionResultState = false;
-                    else if (value is string)
-                        conditionResultState = !string.IsNullOrWhiteSpace((string)value);
-                    else if (value is ICollection)
-                        conditionResultState = ((ICollection)value).Count > 0;
+                    var equalityRegex = new Regex(@"(.+)+\s+(eq|ne)\s+(.+)");
+                    var equalityMatches = equalityRegex.Match(condition);
+                    if (equalityMatches.Success)
+                    {
+                        var leftOpVal = equalityMatches.Groups[1].Value;
+                        var eqOpVal = equalityMatches.Groups[2].Value;
+                        var rightOpVal = equalityMatches.Groups[3].Value;
+                        var value = variables[leftOpVal];
+                        switch (eqOpVal)
+                        {
+                            case "eq" when value is string str:
+                                conditionResultState = string
+                                    .Compare(str, rightOpVal,
+                                        StringComparison.InvariantCultureIgnoreCase) == 0;
+                                break;
+                            case "ne" when value is string str:
+                                conditionResultState = string
+                                    .Compare(str, rightOpVal,
+                                        StringComparison.InvariantCultureIgnoreCase) != 0;
+                                break;
+                            default:
+                                throw new Exception(string.Format("Unexpected operator '{0}' or value type {1}", eqOpVal,
+                                    value.GetType()));
+                        }
+                    }
                     else
-                        throw new Exception(string.Format("Unexpceted type for variable {0}: {1}", condition, value.GetType()));
+                    {
+                        var value = variables[condition];
+                        if (value == null)
+                            conditionResultState = false;
+                        else if (value is string)
+                            conditionResultState = !string.IsNullOrWhiteSpace((string) value);
+                        else if (value is ICollection)
+                            conditionResultState = ((ICollection) value).Count > 0;
+                        else
+                            throw new Exception(string.Format("Unexpceted type for variable {0}: {1}", condition,
+                                value.GetType()));
+                    }
 
                     if (conditionResultState)
                     {
