@@ -116,6 +116,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * sukebei-Pantsu
  * sukebei.Nyaa.si
  * The Pirate Bay (TPB)
+ * TNTVillage
  * Tokyo Tosho
  * TopNow
  * Torlock
