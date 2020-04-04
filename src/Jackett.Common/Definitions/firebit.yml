@@ -29,6 +29,8 @@
       "Фильмы": Movies
       "Видео": Movies
       "Музыка": Audio
+      "Фильмы Музыка Видео": Audio/Video
+      "Музыка Видео": Audio/Video
       "Другие категории": Other
       "Сериалы": TV
 
@@ -46,8 +48,8 @@
     # http://firebit.net/%D1%84%D0%B8%D0%BB%D1%8C%D0%BC/  # movies
     # http://firebit.net/%D1%81%D0%B5%D1%80%D0%B8%D0%B0%D0%BB/ # tv
     paths:
-      - path: "{{ if .Keywords }}index.php?do=search&type=simple&q={{ .Keywords }}{{ else }}%D1%84%D0%B8%D0%BB%D1%8C%D0%BC/{{ end }}"
-      - path: "{{ if .Keywords }}{{ else }}%D1%81%D0%B5%D1%80%D0%B8%D0%B0%D0%BB/{{ end }}"
+      - path: "{{ if .Keywords }}index.php?do=search&type=simple&q={{ .Keywords }}{{else}}%D1%84%D0%B8%D0%BB%D1%8C%D0%BC/{{end}}"
+      - path: "{{ if .Keywords }}index.php?do=search&type=simple&q=abcd1234{{else}}%D1%81%D0%B5%D1%80%D0%B8%D0%B0%D0%BB/{{end}}"
 
     rows:
       selector: "{{ if .Keywords }}table.torrents tbody tr{{ else }}div[id^=\"post-id-\"]{{ end }}"
@@ -56,11 +58,11 @@
 
     fields:
       category:
-        selector: td:nth-child(1) a, div.article-indent div b a
+        selector: td:nth-child(1), div.article-indent div b
         filters:
           - name: replace
             args: ["Новинки", ""]
-          - name: replace
+          - name: re_replace
             args: [",", ""]
           - name: trim
       title:
