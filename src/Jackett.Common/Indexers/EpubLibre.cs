@@ -148,7 +148,7 @@ namespace Jackett.Common.Indexers
 
         public override async Task<byte[]> Download(Uri link)
         {
-            var result = await RequestStringWithCookies(link.AbsoluteUri);
+            var result = await RequestStringWithCookiesAndRetry(link.AbsoluteUri);
             if (SobrecargaUrl.Equals(result.RedirectingTo))
                 throw new Exception("El servidor se encuentra sobrecargado en estos momentos. / The server is currently overloaded.");
             try {
