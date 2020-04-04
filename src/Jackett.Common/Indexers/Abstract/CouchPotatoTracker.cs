@@ -23,20 +23,18 @@ namespace Jackett.Common.Indexers.Abstract
             set => base.configData = value;
         }
 
-        public CouchPotatoTracker(IIndexerConfigurationService configService, WebClient client, Logger logger, IProtectionService p, ConfigurationDataUserPasskey configData, string name, string description, string link, string endpoint)
-            : base(name: name,
-                description: description,
-                link: link,
-                caps: new TorznabCapabilities
-                {
-                    SupportsImdbMovieSearch = true
-                },
-                configService: configService,
-                client: client,
-                logger: logger,
-                p: p,
-                configData: configData
-            )
+        protected CouchPotatoTracker(string name, string link, string description, IIndexerConfigurationService configService,
+                                     WebClient client, Logger logger, IProtectionService p, TorznabCapabilities caps,
+                                     ConfigurationData configData, string endpoint)
+            : base(name,
+                   description: description,
+                   link: link,
+                   caps: caps,
+                   configService: configService,
+                   client: client,
+                   logger: logger,
+                   p: p,
+                   configData: configData)
         {
             this.endpoint = endpoint;
         }

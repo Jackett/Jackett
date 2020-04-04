@@ -11,6 +11,7 @@ using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -32,21 +33,20 @@ namespace Jackett.Common.Indexers.Abstract
         // hook to adjust the search term
         protected string GetSearchTerm(TorznabQuery query) => $"{query.SearchTerm} {query.GetEpisodeSearchString()}";
 
-        public AvistazTracker(IIndexerConfigurationService configService, Utils.Clients.WebClient webClient, Logger logger, IProtectionService protectionService, string name, string desc, string link)
-            : base(name: name,
-                description: desc,
-                link: link,
-                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                configService: configService,
-                client: webClient,
-                logger: logger,
-                p: protectionService,
-                configData: new ConfigurationDataBasicLogin())
+        protected AvistazTracker(string name, string link, string description, IIndexerConfigurationService configService,
+                                 WebClient client, Logger logger, IProtectionService p, TorznabCapabilities caps)
+            : base(name,
+                   description: description,
+                   link: link,
+                   caps: caps,
+                   configService: configService,
+                   client: client,
+                   logger: logger,
+                   p: p,
+                   configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
-
-            TorznabCaps.SupportsImdbMovieSearch = true;
 
             AddCategoryMapping(1, TorznabCatType.Movies);
             AddCategoryMapping(1, TorznabCatType.MoviesForeign);

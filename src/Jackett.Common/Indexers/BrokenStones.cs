@@ -8,16 +8,16 @@ namespace Jackett.Common.Indexers
 {
     public class BrokenStones : GazelleTracker
     {
-        public BrokenStones(IIndexerConfigurationService configService, WebClient webClient, Logger logger, IProtectionService protectionService)
-            : base(name: "BrokenStones",
-                desc: "Broken Stones is a Private site for MacOS and iOS APPS / GAMES",
-                link: "https://brokenstones.club/",
-                configService: configService,
-                logger: logger,
-                protectionService: protectionService,
-                webClient: webClient,
-                supportsFreeleechTokens: true
-                )
+        public BrokenStones(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+            : base("BrokenStones",
+                   description: "Broken Stones is a Private site for MacOS and iOS APPS / GAMES",
+                   link: "https://brokenstones.club/",
+                   caps: new TorznabCapabilities(),
+                   configService: configService,
+                   client: wc,
+                   logger: l,
+                   p: ps,
+                   supportsFreeleechTokens: true)
         {
             Language = "en-us";
             Type = "private";
