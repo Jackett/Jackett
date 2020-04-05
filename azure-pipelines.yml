@@ -27,7 +27,7 @@ stages:
       pool:
         vmImage: 'ubuntu-latest'
       steps:
-        bash: |
+      - bash: |
           dotnet tool install -g dotnet-format
           dotnet-format --dry-run --check
         failOnStderr: true
