@@ -89,7 +89,7 @@ namespace Jackett.Common.Indexers
                         MinimumSeedTime = 172800, // 48 hours
                         Title = title,
                         Comments = magnetUri,
-                        Category = new List<int> {category},
+                        Category = new List<int> { category },
                         Guid = guid,
                         PublishDate = publishDate,
                         Description = infoHash,

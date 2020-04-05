@@ -129,8 +129,8 @@ namespace Jackett.Common.Indexers
                     var leechers = ParseUtil.CoerceInt(row.Children[10].TextContent);
 
                     var ka = row.NextElementSibling.QuerySelector("table > tbody > tr:nth-child(3)");
-                    var ulFactor =  ParseUtil.CoerceDouble(ka.Children[0].TextContent.Replace("X", ""));
-                    var dlFactor =  ParseUtil.CoerceDouble(ka.Children[1].TextContent.Replace("X", ""));
+                    var ulFactor = ParseUtil.CoerceDouble(ka.Children[0].TextContent.Replace("X", ""));
+                    var dlFactor = ParseUtil.CoerceDouble(ka.Children[1].TextContent.Replace("X", ""));
 
                     var release = new ReleaseInfo
                     {

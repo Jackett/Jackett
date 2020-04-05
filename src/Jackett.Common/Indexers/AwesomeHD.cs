@@ -87,7 +87,7 @@ namespace Jackett.Common.Indexers
                 qc.Add("action", "latestmovies");
                 // the endpoint 'latestmovies' only returns movies, this hack overwrites categories to get movies even if
                 // you are searching for tv series. this allows to configure the tracker in Sonarr
-                query.Categories = new int[] {};
+                query.Categories = new int[] { };
             }
 
             var searchUrl = SearchUrl + "?" + qc.GetQueryString();

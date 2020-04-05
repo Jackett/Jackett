@@ -155,7 +155,7 @@ namespace Jackett.Common.Indexers
                     var tvEpisode = query.GetEpisodeSearchString();
                     if (!string.IsNullOrWhiteSpace(tvEpisode))
                     {
-                        if(tvEpisode.StartsWith("S") && !tvEpisode.Contains("E"))
+                        if (tvEpisode.StartsWith("S") && !tvEpisode.Contains("E"))
                             tvEpisode += "*";
                         searchStringArray = searchStringArray.Append($"+{tvEpisode}");
                     }
@@ -202,7 +202,7 @@ namespace Jackett.Common.Indexers
                     var dateStr = rawDateStr.Replace("von", "")
                                             .Replace("Heute", "Today")
                                             .Replace("Gestern", "Yesterday");
-                    var dateGerman =DateTimeUtil.FromUnknown(dateStr);
+                    var dateGerman = DateTimeUtil.FromUnknown(dateStr);
                     var pubDateUtc = TimeZoneInfo.ConvertTimeToUtc(dateGerman, germanyTz);
                     var longFromString = ParseUtil.GetLongFromString(descCol.QuerySelector("a[href*=\"&searchin=imdb\"]")?.GetAttribute("href"));
                     var sizeFileCountRowChilds = row.Children[5].Children;

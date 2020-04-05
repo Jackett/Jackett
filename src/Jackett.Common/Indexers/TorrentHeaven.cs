@@ -229,7 +229,7 @@ namespace Jackett.Common.Indexers
                         Link = link,
                         Guid = link,
                         Size = ReleaseInfo.GetBytes(sizeStr),
-                        Seeders =  seeders,
+                        Seeders = seeders,
                         Peers = leechers + seeders,
                         PublishDate = publishDate,
                         Grabs = grabs,

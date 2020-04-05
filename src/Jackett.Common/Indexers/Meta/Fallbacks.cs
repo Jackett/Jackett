@@ -36,11 +36,11 @@ namespace Jackett.Common.Indexers.Meta
 
         public async Task<IEnumerable<TorznabQuery>> FallbackQueries()
         {
-	        if(string.IsNullOrEmpty(query.ImdbID))
-				return Enumerable.Empty<TorznabQuery>();
-	        var title = (await resolver.MovieForId(query.ImdbID)).Title;
-            return title != null ? new[] {query.CreateFallback(title)} : Enumerable.Empty<TorznabQuery>();
-	    }
+            if (string.IsNullOrEmpty(query.ImdbID))
+                return Enumerable.Empty<TorznabQuery>();
+            var title = (await resolver.MovieForId(query.ImdbID)).Title;
+            return title != null ? new[] { query.CreateFallback(title) } : Enumerable.Empty<TorznabQuery>();
+        }
 
         private readonly IImdbResolver resolver;
         private readonly TorznabQuery query;

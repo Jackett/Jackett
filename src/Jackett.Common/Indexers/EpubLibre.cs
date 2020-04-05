@@ -122,7 +122,7 @@ namespace Jackett.Common.Indexers
                             PublishDate = lastPublishDate,
                             BannerUrl = banner,
                             Description = description,
-                            Category = new List<int> {TorznabCatType.BooksEbook.ID},
+                            Category = new List<int> { TorznabCatType.BooksEbook.ID },
                             Size = 5242880, // 5 MB
                             Seeders = 1,
                             Peers = 2,
@@ -151,7 +151,8 @@ namespace Jackett.Common.Indexers
             var result = await RequestStringWithCookiesAndRetry(link.AbsoluteUri);
             if (SobrecargaUrl.Equals(result.RedirectingTo))
                 throw new Exception("El servidor se encuentra sobrecargado en estos momentos. / The server is currently overloaded.");
-            try {
+            try
+            {
                 var parser = new HtmlParser();
                 var doc = parser.ParseDocument(result.Content);
                 var magnetLink = doc.QuerySelector("a[id=en_desc]").GetAttribute("href");

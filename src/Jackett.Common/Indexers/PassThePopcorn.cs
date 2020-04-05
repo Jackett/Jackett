@@ -95,7 +95,7 @@ namespace Jackett.Common.Indexers
 
 
             var movieListSearchUrl = SearchUrl;
-            var queryCollection = new NameValueCollection {{"json", "noredirect"}};
+            var queryCollection = new NameValueCollection { { "json", "noredirect" } };
 
             if (!string.IsNullOrEmpty(query.ImdbID))
                 queryCollection.Add("searchstr", query.ImdbID);

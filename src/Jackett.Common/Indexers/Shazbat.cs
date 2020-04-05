@@ -162,8 +162,8 @@ namespace Jackett.Common.Indexers
             }
             foreach (var release in releases)
                 release.Category = release.Title.Contains("1080p") || release.Title.Contains("720p")
-                    ? new List<int> {TorznabCatType.TVHD.ID}
-                    : new List<int> {TorznabCatType.TVSD.ID};
+                    ? new List<int> { TorznabCatType.TVHD.ID }
+                    : new List<int> { TorznabCatType.TVSD.ID };
             return releases;
         }
 

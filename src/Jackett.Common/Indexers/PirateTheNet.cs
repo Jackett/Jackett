@@ -156,10 +156,10 @@ namespace Jackett.Common.Indexers
                     var dateStr = qPudDate.Text().Trim();
                     DateTime pubDateUtc;
                     if (dateStr.StartsWith("Today "))
-                        pubDateUtc = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified) + DateTime.ParseExact(dateStr.Split(new [] { ' ' }, 2)[1], "hh:mm tt", CultureInfo.InvariantCulture).TimeOfDay;
+                        pubDateUtc = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified) + DateTime.ParseExact(dateStr.Split(new[] { ' ' }, 2)[1], "hh:mm tt", CultureInfo.InvariantCulture).TimeOfDay;
                     else if (dateStr.StartsWith("Yesterday "))
                         pubDateUtc = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified) +
-                            DateTime.ParseExact(dateStr.Split(new [] { ' ' }, 2)[1], "hh:mm tt", CultureInfo.InvariantCulture).TimeOfDay - TimeSpan.FromDays(1);
+                            DateTime.ParseExact(dateStr.Split(new[] { ' ' }, 2)[1], "hh:mm tt", CultureInfo.InvariantCulture).TimeOfDay - TimeSpan.FromDays(1);
                     else
                         pubDateUtc = DateTime.SpecifyKind(DateTime.ParseExact(dateStr, "MMM d yyyy hh:mm tt", CultureInfo.InvariantCulture), DateTimeKind.Unspecified);
 

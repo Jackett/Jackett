@@ -102,7 +102,7 @@ namespace Jackett.Server.Services
                         {
                             var firstLine = reader.ReadLine();
                             if (firstLine != null)
-                                logger.Info( $"File {issueFile}: {firstLine}");
+                                logger.Info($"File {issueFile}: {firstLine}");
                         }
                 }
                 catch (Exception e)

@@ -155,7 +155,7 @@ namespace Jackett.Common.Indexers.Abstract
                                             .Replace("text-pink", string.Empty);
                     release.Category = MapTrackerCatToNewznab(cat.Trim());
 
-                    var grabs =row.QuerySelector("td:nth-child(9)").Text();
+                    var grabs = row.QuerySelector("td:nth-child(9)").Text();
                     release.Grabs = ParseUtil.CoerceInt(grabs);
 
                     if (row.QuerySelectorAll("i.fa-star").Any())
@@ -185,7 +185,7 @@ namespace Jackett.Common.Indexers.Abstract
             try
             {
                 var imdbUrl = IMDBSearch + imdbId;
-                var imdbHeaders = new Dictionary<string, string> { {"X-Requested-With", "XMLHttpRequest"} };
+                var imdbHeaders = new Dictionary<string, string> { { "X-Requested-With", "XMLHttpRequest" } };
                 var imdbResponse = await RequestStringWithCookiesAndRetry(imdbUrl, null, null, imdbHeaders);
                 if (imdbResponse.IsRedirect)
                 {

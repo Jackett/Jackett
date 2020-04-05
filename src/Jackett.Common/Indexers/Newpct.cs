@@ -313,7 +313,7 @@ namespace Jackett.Common.Indexers
                 results = await RequestStringWithCookiesAndRetry(seriesEpisodesUrl);
                 var items = ParseEpisodesListContent(results.Content);
                 if (items != null && items.Any())
-                     releases.AddRange(items);
+                    releases.AddRange(items);
             }
             return releases;
         }
