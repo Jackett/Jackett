@@ -30,7 +30,7 @@ stages:
         bash: |
           dotnet tool install -g dotnet-format
           dotnet-format --dry-run --check
-      failOnStderr: true
+        failOnStderr: true
 
   - stage: BuildJackett
     displayName: Create Binaries
