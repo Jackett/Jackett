@@ -870,7 +870,7 @@ function showSearch(selectedIndexer, query, category) {
             $('#jackett-search-perform').html($('#search-button-ready').html());
             var searchResults = $('#searchResults');
             searchResults.empty();
-            var datatable = updateSearchResultTable(searchResults, data).search('').columns().search('').draw();
+            updateSearchResultTable(searchResults, data).search('').columns().search('').draw();
             searchResults.find('div.dataTables_filter input').focusWithoutScrolling();
         }).fail(function () {
             $('#jackett-search-perform').html($('#search-button-ready').html());
@@ -879,7 +879,7 @@ function showSearch(selectedIndexer, query, category) {
     });
 
     var searchTracker = releaseDialog.find("#searchTracker");
-    var searchCategory = releaseDialog.find('#searchCategory')
+    var searchCategory = releaseDialog.find('#searchCategory');
     searchCategory.multiselect({
         maxHeight: 400,
         enableFiltering: true,
@@ -927,7 +927,7 @@ $.fn.dataTable.ext.search = [
     function (settings, data, dataIndex) {
         if (settings.sInstance != "jackett-search-results-datatable")
             return true;
-        var deadfiltercheckbox = $(settings.nTableWrapper).find(".dataTables_deadfilter input")
+        var deadfiltercheckbox = $(settings.nTableWrapper).find(".dataTables_deadfilter input");
         if (!deadfiltercheckbox.length) {
             return true;
         }
@@ -936,7 +936,7 @@ $.fn.dataTable.ext.search = [
             return false;
         return true;
     }
-]
+];
 
 function updateSearchResultTable(element, results) {
     var resultsTemplate = Handlebars.compile($("#jackett-search-results").html());
@@ -990,6 +990,34 @@ function updateSearchResultTable(element, results) {
             ],
             fnPreDrawCallback: function () {
                 var table = this;
+
+                var inputSearch = element.find("input[type=search]");
+                if (!inputSearch.attr("custom")) {
+                  var newInputSearch = inputSearch.clone();
+                  newInputSearch.attr("custom", "true");
+                  newInputSearch.attr("data-toggle", "tooltip");
+                  newInputSearch.attr("title", "Search query consists of several keywords.\nKeyword starting with \"-\" is considered a negative match.");
+                  newInputSearch.on("input", function () {
+                    var newKeywords = [];
+                    var filterTextKeywords = $(this).val().split(" ");
+                    $.each(filterTextKeywords, function(index, keyword) {
+                      if (keyword === "" || keyword === "+" || keyword === "-")
+                        return;
+                      var newKeyword;
+                      if (keyword.startsWith("+"))
+                        newKeyword = $.fn.dataTable.util.escapeRegex(keyword.substring(1));
+                      else if (keyword.startsWith("-"))
+                        newKeyword = "^((?!" + $.fn.dataTable.util.escapeRegex(keyword.substring(1)) + ").)*$";
+                      else
+                        newKeyword = $.fn.dataTable.util.escapeRegex(keyword);
+                      newKeywords.push(newKeyword);
+                    });
+                    var filterText = newKeywords.join(" ");
+                    table.api().search(filterText, true, true).draw();
+                  });
+                  inputSearch.replaceWith(newInputSearch);
+                }
+
                 var deadfilterdiv = element.find(".dataTables_deadfilter");
                 var deadfiltercheckbox = deadfilterdiv.find("input");
                 if (!deadfiltercheckbox.length) {
