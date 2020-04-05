@@ -28,8 +28,8 @@ stages:
         vmImage: 'ubuntu-latest'
       steps:
       - bash: |
-        dotnet tool install -g dotnet-format
-        dotnet-format --dry-run --check
+       dotnet tool install -g dotnet-format
+       dotnet-format --dry-run --check
       failOnStderr: true
 
   - stage: BuildJackett
