@@ -30,6 +30,7 @@
       - {id: 26, cat: Other, desc: "Rozne"}
       - {id: 30, cat: TV/Sport, desc: "Sport"}
       - {id: 6, cat: TV, desc: "TV/Seriale"}
+      - {id: 37, cat: TV/UHD, desc: "TV/UHD"}
       - {id: 29, cat: PC, desc: "Witaminki"}
       - {id: 9, cat: XXX, desc: "XXX"}
 
