@@ -34,7 +34,7 @@
      - {id: 27, cat: Other, desc: "Immagini sfondi"}
      - {id: 28, cat: Console, desc: "Altri Giochi"}
      - {id: 29, cat: TV, desc: "Serie TV"}
-     - {id: 30, cat: Book/Comics, desc: "Fumetteria"}
+     - {id: 30, cat: Books/Comics, desc: "Fumetteria"}
      - {id: 31, cat: Other, desc: "Trash"}
      - {id: 32, cat: Console/NDS, desc: "Nintendo"}
      - {id: 34, cat: Audio/Audiobook, desc: "A Book"}
