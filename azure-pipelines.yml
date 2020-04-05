@@ -29,7 +29,7 @@ stages:
       steps:
       - bash: |
           dotnet tool install -g dotnet-format
-          dotnet-format --dry-run --check
+          dotnet format --dry-run --check
         failOnStderr: true
 
   - stage: BuildJackett
