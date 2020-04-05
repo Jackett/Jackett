@@ -1,7 +1,7 @@
 ---
   site: pterclub
   name: PTerClub
-  description: "PTerClub is a CHINESE Private Torrent Tracker for HD MOVIES / TV"
+  description: "PTerClub is a CHINESE Private Torrent Tracker for HD MUSIC VIDEOS, MOVIES, TV & ANIME"
   language: zh-cn
   type: private
   encoding: UTF-8
