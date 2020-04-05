@@ -23,6 +23,7 @@ namespace Jackett.Common.Indexers.Abstract
         private string LoginUrl => SiteLink + "auth/login";
         private string SearchUrl => SiteLink + "torrents?";
         private string IMDBSearch => SiteLink + "ajax/movies/3?term=";
+        private readonly Regex CatRegex = new Regex(@"\s+fa\-([a-z]+)\s+", RegexOptions.IgnoreCase);
 
         private new ConfigurationDataBasicLogin configData
         {
@@ -49,10 +50,13 @@ namespace Jackett.Common.Indexers.Abstract
             Language = "en-us";
 
             AddCategoryMapping(1, TorznabCatType.Movies);
-            AddCategoryMapping(1, TorznabCatType.MoviesForeign);
+            AddCategoryMapping(1, TorznabCatType.MoviesUHD);
             AddCategoryMapping(1, TorznabCatType.MoviesHD);
             AddCategoryMapping(1, TorznabCatType.MoviesSD);
             AddCategoryMapping(2, TorznabCatType.TV);
+            AddCategoryMapping(2, TorznabCatType.TVUHD);
+            AddCategoryMapping(2, TorznabCatType.TVHD);
+            AddCategoryMapping(2, TorznabCatType.TVSD);
             AddCategoryMapping(3, TorznabCatType.Audio);
         }
 
@@ -146,14 +150,42 @@ namespace Jackett.Common.Indexers.Abstract
                     release.Seeders = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(7)").Text().Trim());
                     release.Peers = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(8)").Text().Trim()) + release.Seeders;
 
-                    var cat = row.QuerySelectorAll("td:nth-of-type(1) i").First().GetAttribute("class")
-                                            .Replace("torrent-icon", string.Empty)
-                                            .Replace("fa fa-", string.Empty)
-                                            .Replace("film", "1")
-                                            .Replace("tv", "2")
-                                            .Replace("music", "3")
-                                            .Replace("text-pink", string.Empty);
-                    release.Category = MapTrackerCatToNewznab(cat.Trim());
+                    var resolution = row.QuerySelector("span.badge-extra")?.TextContent.Trim();
+                    var catMatch = CatRegex.Match(row.QuerySelectorAll("td:nth-of-type(1) i").First().GetAttribute("class"));
+                    var cats = new List<int>();
+                    switch(catMatch.Groups[1].Value)
+                    {
+                        case "film":
+                            if (query.Categories.Contains(TorznabCatType.Movies.ID))
+                                cats.Add(TorznabCatType.Movies.ID);
+                            cats.Add(resolution switch
+                            {
+                                "2160p" => TorznabCatType.MoviesUHD.ID,
+                                "1080p" => TorznabCatType.MoviesHD.ID,
+                                "1080i" => TorznabCatType.MoviesHD.ID,
+                                "720p" => TorznabCatType.MoviesHD.ID,
+                                _ => TorznabCatType.MoviesSD.ID
+                            });
+                            break;
+                        case "tv":
+                            if (query.Categories.Contains(TorznabCatType.TV.ID))
+                                cats.Add(TorznabCatType.TV.ID);
+                            cats.Add(resolution switch
+                            {
+                                "2160p" => TorznabCatType.TVUHD.ID,
+                                "1080p" => TorznabCatType.TVHD.ID,
+                                "1080i" => TorznabCatType.TVHD.ID,
+                                "720p" => TorznabCatType.TVHD.ID,
+                                _ => TorznabCatType.TVSD.ID
+                            });
+                            break;
+                        case "music":
+                            cats.Add(TorznabCatType.Audio.ID);
+                            break;
+                        default:
+                            throw new Exception("Error parsing category!");
+                    }
+                    release.Category = cats;
 
                     var grabs = row.QuerySelector("td:nth-child(9)").Text();
                     release.Grabs = ParseUtil.CoerceInt(grabs);
