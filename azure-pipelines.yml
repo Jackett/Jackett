@@ -280,16 +280,19 @@ stages:
           custom: tool
           arguments: update -g dotnet-format
 
-      - task: DotNetCoreCLI@2
+      - task: Bash@3
         displayName: Lint Dotnet
         inputs:
-          command: custom
-          custom: format
-          arguments: --dry-run --check --verbosity diagnostic
+          workingDirectory: $(Build.SourcesDirectory)
+          targetType: inline
+          failOnStderr: true
+          script: |
+            dotnet-format --dry-run --check --verbosity diagnostic
 
 
   - stage: UnitTestJackett
     displayName: Unit Tests
+    dependsOn: CodeStyle
     jobs:
     - job: UnitTest
       workspace:
