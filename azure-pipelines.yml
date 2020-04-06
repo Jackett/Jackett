@@ -283,10 +283,11 @@ stages:
       - task: Bash@3
         displayName: Lint Dotnet
         inputs:
-          workingDirectory: $(Build.SourcesDirectory)
+          workingDirectory: $(Build.SourcesDirectory)/src
           targetType: inline
           failOnStderr: true
           script: |
+            cp $(Build.SourcesDirectory)/.editorconfig $(Build.SourcesDirectory)/src
             dotnet-format --dry-run --check --verbosity diagnostic
 
 
