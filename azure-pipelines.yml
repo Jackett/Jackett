@@ -258,7 +258,7 @@ stages:
     displayName: Code Style Compliance
     dependsOn: []
     jobs:
-    - job:
+    - job: Linting
       pool:
         vmImage: ubuntu-latest
       workspace:
@@ -283,12 +283,11 @@ stages:
       - task: Bash@3
         displayName: Lint Dotnet
         inputs:
-          workingDirectory: $(Build.SourcesDirectory)/src
+          workingDirectory: $(Build.SourcesDirectory)
           targetType: inline
           failOnStderr: true
           script: |
-            cp $(Build.SourcesDirectory)/.editorconfig $(Build.SourcesDirectory)/src
-            dotnet-format --dry-run --check --verbosity diagnostic
+            dotnet-format --dry-run --check --verbosity diagnostic --folder ./src/DateTimeRoutines
 
 
   - stage: UnitTestJackett
