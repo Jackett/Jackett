@@ -20,18 +20,6 @@ pr:
     - '*'
 
 stages:
-  - stage: CodeStyle
-    displayName: Code Style Compliance
-    jobs:
-    - job:
-      pool:
-        vmImage: 'ubuntu-latest'
-      steps:
-      - bash: |
-          dotnet tool install -g dotnet-format
-          dotnet format --dry-run --check
-        failOnStderr: true
-
   - stage: BuildJackett
     displayName: Create Binaries
     jobs:
@@ -265,6 +253,39 @@ stages:
       - task: PublishBuildArtifacts@1
         inputs:
           pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+
+  - stage: CodeStyle
+    displayName: Code Style Compliance
+    dependsOn: []
+    jobs:
+    - job:
+      pool:
+        vmImage: ubuntu-latest
+      workspace:
+        clean: all
+      steps:
+      - checkout: self
+
+      - task: UseDotNet@2
+        displayName: Install .NET Core SDK
+        inputs:
+          packageType: sdk
+          version: $(netCoreSdkVersion)
+          installationPath: $(Agent.ToolsDirectory)/dotnet
+
+      - task: DotNetCoreCLI@2
+        displayName: Install Dotnet Format
+        inputs:
+          command: custom
+          custom: tool
+          arguments: update -g dotnet-format
+
+      - task: DotNetCoreCLI@2
+        displayName: Lint Dotnet
+        inputs:
+          command: custom
+          custom: format
+          arguments: --dry-run --check --verbosity diagnostic
 
 
   - stage: UnitTestJackett
