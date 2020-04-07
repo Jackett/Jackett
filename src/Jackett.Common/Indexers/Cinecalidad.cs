@@ -62,7 +62,7 @@ namespace Jackett.Common.Indexers
         {
             base.LoadValuesFromJson(jsonConfig, useProtectionService);
             var language = (SelectItem)configData.GetDynamic("language");
-            _language = language != null ? language.Value : "castellano";
+            _language = language?.Value ?? "castellano";
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
