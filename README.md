@@ -260,6 +260,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * CasaTorrent
  * ChannelX
  * ChileBT
+ * Cinecalidad
  * CinemaMovies
  * CinemaZ (EuTorrents)
  * Cinemageddon
