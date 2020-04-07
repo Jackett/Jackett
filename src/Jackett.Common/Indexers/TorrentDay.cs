@@ -132,7 +132,7 @@ namespace Jackett.Common.Indexers
 
             //result.CookieHeader.Value = loginPage.Cookies;
             UpdateCookieHeader(loginPage.Cookies); // update cookies instead of replacing them, see #3717
-            result.Captcha.SiteKey = dom.QuerySelector(".g-recaptcha").GetAttribute("data-sitekey");
+            result.Captcha.SiteKey = dom.QuerySelector(".g-recaptcha")?.GetAttribute("data-sitekey");
             result.Captcha.Version = "2";
             return result;
         }
@@ -168,17 +168,19 @@ namespace Jackett.Common.Indexers
             }
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, configData.CookieHeader.Value, true, null, LoginUrl);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
+            await ConfigureIfOK(result.Cookies, result.Content?.Contains("logout.php") == true, () =>
             {
+                var errorMessage = result.Content;
+
                 var parser = new HtmlParser();
                 var dom = parser.ParseDocument(result.Content);
                 var messageEl = dom.QuerySelector("#login");
-                foreach (var child in messageEl.QuerySelectorAll("form"))
-                    child.Remove();
-                var errorMessage = messageEl.TextContent.Trim();
-
-                if (string.IsNullOrWhiteSpace(errorMessage))
-                    errorMessage = dom.TextContent;
+                if (messageEl != null)
+                {
+                    foreach (var child in messageEl.QuerySelectorAll("form"))
+                        child.Remove();
+                    errorMessage = messageEl.TextContent.Trim();
+                }
 
                 if (string.IsNullOrWhiteSpace(errorMessage) && result.IsRedirect)
                     errorMessage = $"Got a redirect to {result.RedirectingTo}, please adjust your the alternative link";
