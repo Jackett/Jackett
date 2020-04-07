@@ -24,6 +24,7 @@ namespace Jackett.Common.Indexers.Abstract
         private string SearchUrl => SiteLink + "torrents?";
         private string IMDBSearch => SiteLink + "ajax/movies/3?term=";
         private readonly Regex CatRegex = new Regex(@"\s+fa\-([a-z]+)\s+", RegexOptions.IgnoreCase);
+        private readonly HashSet<string> HdResolutions = new HashSet<string> { "1080p", "1080i", "720p" };
 
         private new ConfigurationDataBasicLogin configData
         {
@@ -160,10 +161,8 @@ namespace Jackett.Common.Indexers.Abstract
                                 cats.Add(TorznabCatType.Movies.ID);
                             cats.Add(resolution switch
                             {
+                                var res when HdResolutions.Contains(res) => TorznabCatType.MoviesHD.ID,
                                 "2160p" => TorznabCatType.MoviesUHD.ID,
-                                "1080p" => TorznabCatType.MoviesHD.ID,
-                                "1080i" => TorznabCatType.MoviesHD.ID,
-                                "720p" => TorznabCatType.MoviesHD.ID,
                                 _ => TorznabCatType.MoviesSD.ID
                             });
                             break;
@@ -172,10 +171,8 @@ namespace Jackett.Common.Indexers.Abstract
                                 cats.Add(TorznabCatType.TV.ID);
                             cats.Add(resolution switch
                             {
+                                var res when HdResolutions.Contains(res) => TorznabCatType.TVHD.ID,
                                 "2160p" => TorznabCatType.TVUHD.ID,
-                                "1080p" => TorznabCatType.TVHD.ID,
-                                "1080i" => TorznabCatType.TVHD.ID,
-                                "720p" => TorznabCatType.TVHD.ID,
                                 _ => TorznabCatType.TVSD.ID
                             });
                             break;
@@ -197,10 +194,7 @@ namespace Jackett.Common.Indexers.Abstract
                     else
                         release.DownloadVolumeFactor = 1;
 
-                    if (row.QuerySelectorAll("i.fa-diamond").Any())
-                        release.UploadVolumeFactor = 2;
-                    else
-                        release.UploadVolumeFactor = 1;
+                    release.UploadVolumeFactor = row.QuerySelectorAll("i.fa-diamond").Any() ? 2 : 1;
 
                     releases.Add(release);
                 }
