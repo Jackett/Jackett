@@ -55,6 +55,8 @@
   search:
     paths:
       - path: browse.php
+    error:
+      - selector: a.altlink
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Query.Keywords }}"
