@@ -91,16 +91,16 @@ namespace Jackett.Common.Indexers
 
             var categories = MapTorznabCapsToTrackers(query);
 
-            if(categories.Any())
+            if (categories.Any())
                 requestData.Add("category", JToken.FromObject(categories));
 
-            if(configData.Codecs.Values.Any())
+            if (configData.Codecs.Values.Any())
                 requestData.Add("codec", JToken.FromObject(configData.Codecs.Values.Select(int.Parse)));
 
-            if(configData.Mediums.Values.Any())
+            if (configData.Mediums.Values.Any())
                 requestData.Add("medium", JToken.FromObject(configData.Mediums.Values.Select(int.Parse)));
 
-            if(configData.Origins.Values.Any())
+            if (configData.Origins.Values.Any())
                 requestData.Add("origin", JToken.FromObject(configData.Origins.Values.Select(int.Parse)));
 
             requestData["limit"] = 100;

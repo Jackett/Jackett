@@ -140,9 +140,9 @@ namespace Jackett.Common.Indexers
                     release.Guid = release.Comments;
 
                     var imdbLink = row.Children[1].QuerySelector("a[href*=imdb]");
-                    if(imdbLink != null)
+                    if (imdbLink != null)
                         release.Imdb = ParseUtil.GetImdbID(imdbLink.GetAttribute("href").Split('/').Last());
-                    
+
                     var qDownload = row.Children[3].FirstElementChild;
                     release.Link = new Uri(SiteLink + qDownload.GetAttribute("href"));
 

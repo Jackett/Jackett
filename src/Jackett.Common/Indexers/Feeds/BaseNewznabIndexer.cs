@@ -29,7 +29,7 @@ namespace Jackett.Common.Indexers.Feeds
         protected virtual ReleaseInfo ResultFromFeedItem(XElement item)
         {
             var attributes = item.Descendants().Where(e => e.Name.LocalName == "attr");
-            var size = long.TryParse(ReadAttribute(attributes, "size"), out var longVal ) ? (long?)longVal : null;
+            var size = long.TryParse(ReadAttribute(attributes, "size"), out var longVal) ? (long?)longVal : null;
             var files = long.TryParse(ReadAttribute(attributes, "files"), out longVal) ? (long?)longVal : null;
             var seeders = int.TryParse(ReadAttribute(attributes, "seeders"), out var intVal) ? (int?)intVal : null;
             var peers = int.TryParse(ReadAttribute(attributes, "peers"), out intVal) ? (int?)intVal : null;

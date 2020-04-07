@@ -186,7 +186,7 @@ namespace Jackett.Common.Indexers
                             MinimumRatio = 1,
                             MinimumSeedTime = 72 * 60 * 60,
                             Title = group + " " + title.TextContent,
-                            Category = new List<int> {TorznabCatType.MoviesHD.ID},
+                            Category = new List<int> { TorznabCatType.MoviesHD.ID },
                             Link = link,
                             Comments = comments,
                             Guid = link,

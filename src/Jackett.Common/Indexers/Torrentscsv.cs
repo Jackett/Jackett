@@ -102,7 +102,7 @@ namespace Jackett.Common.Indexers
                     // TODO dynamically generate list periodically from online tracker repositories like
                     // https://torrents.io/tracker-list/
                     // https://github.com/ngosang/trackerslist
-                    var magnet = new Uri( "magnet:?xt=urn:btih:" + torrent.Value<JToken>("infohash") +
+                    var magnet = new Uri("magnet:?xt=urn:btih:" + torrent.Value<JToken>("infohash") +
                         "&tr=udp://tracker.coppersurfer.tk:6969/announce" +
                         "&tr=udp://tracker.leechers-paradise.org:6969/announce" +
                         "&tr=udp://tracker.internetwarriors.net:1337/announce" +

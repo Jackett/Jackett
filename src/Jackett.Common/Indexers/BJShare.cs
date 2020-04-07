@@ -253,14 +253,14 @@ namespace Jackett.Common.Indexers
                                     release.Description += line + "\n";
                                     if (line.Contains(":"))
                                     {
-                                        if(!(line.StartsWith("Lançado") || line.StartsWith("Resolução") || line.StartsWith("Idioma") || line.StartsWith("Autor")))
+                                        if (!(line.StartsWith("Lançado") || line.StartsWith("Resolução") || line.StartsWith("Idioma") || line.StartsWith("Autor")))
                                         {
                                             var info = line.Substring(line.IndexOf(": ") + 2);
                                             if (info == "Dual Áudio")
                                             {
                                                 info = "Dual";
                                             }
-                                            extra_info +=  info + " ";
+                                            extra_info += info + " ";
                                         }
                                     }
                                 }

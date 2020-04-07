@@ -120,7 +120,7 @@ namespace Jackett.Common.Indexers
                     var size = ReleaseInfo.GetBytes(Size.TextContent);
                     var grabs = ParseUtil.CoerceLong(Grabs.TextContent);
                     var files = ParseUtil.CoerceLong(Files.TextContent);
-                    var category = new List<int> {TvCategoryParser.ParseTvShowQuality(description)};
+                    var category = new List<int> { TvCategoryParser.ParseTvShowQuality(description) };
                     var release = new ReleaseInfo
                     {
                         MinimumRatio = 1,

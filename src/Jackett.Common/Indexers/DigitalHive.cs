@@ -105,11 +105,11 @@ namespace Jackett.Common.Indexers
 
             return new ConfigurationDataBasicLogin
             {
-                SiteLink = {Value = configData.SiteLink.Value},
-                Instructions = {Value = configData.Instructions.Value},
-                Username = {Value = configData.Username.Value},
-                Password = {Value = configData.Password.Value},
-                CookieHeader = {Value = loginPage.Cookies}
+                SiteLink = { Value = configData.SiteLink.Value },
+                Instructions = { Value = configData.Instructions.Value },
+                Username = { Value = configData.Username.Value },
+                Password = { Value = configData.Password.Value },
+                CookieHeader = { Value = loginPage.Cookies }
             };
         }
 

@@ -141,7 +141,7 @@ namespace Jackett.Common.Indexers
                                      .Select((str, index) => (index, str)) //Index each string for grouping
                                      .GroupBy(n => n.index / 27) // each torrent is divided into 27 parts
                                      .Skip(previouslyParsedOnPage).Take(maxTorrents)// only parse the rows we want
-                                     //Convert above query into a List<string>(27) in prep for parsing
+                                                                                    //Convert above query into a List<string>(27) in prep for parsing
                                      .Select(entry => entry.Select(item => item.str).ToList());
                 foreach (var row in rows)
                 {
