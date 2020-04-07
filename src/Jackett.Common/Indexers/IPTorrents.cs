@@ -191,6 +191,9 @@ namespace Jackett.Common.Indexers
                 foreach (var row in rows.Skip(1))
                 {
                     var qTitleLink = row.QuerySelector("a[href^=\"/details.php?id=\"]");
+                    if (qTitleLink == null) // no results
+                        continue;
+
                     // drop invalid char that seems to have cropped up in some titles. #6582
                     var title = qTitleLink.TextContent.Trim().Replace("\u000f", "");
                     var comments = new Uri(SiteLink + qTitleLink.GetAttribute("href").TrimStart('/'));
