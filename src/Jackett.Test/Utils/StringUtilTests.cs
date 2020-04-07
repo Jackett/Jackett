@@ -32,7 +32,15 @@ namespace Jackett.Common.Utils.Tests
                 "españa",
                 "Ру́сский",
                 "Harry Potter",
-                "dark&night"
+                "dark&night",
+                "test;two"
+            };
+            var separators = new[]
+            {
+                "&",
+                ";",
+                ",",
+                " "
             };
             var testCase = new NameValueCollection
             {
@@ -48,6 +56,10 @@ namespace Jackett.Common.Utils.Tests
                     testCase["q"] = query;
                     var parsedEncoding = encoding ?? Encoding.UTF8;
                     var parsedQuery = HttpUtility.UrlEncode(query, parsedEncoding);
+
+                    //Ensure parsed query doesn't contain separators
+                    foreach (var separator in separators)
+                        StringAssert.DoesNotContain(separator, parsedQuery);
 
                     //Combined keys
                     StringAssert.AreEqualIgnoringCase(
