@@ -40,8 +40,12 @@
       label: Download link
       default: "magnet:?xt="
       options:
-        "/get_torrents/" : ".torrent"
+        "/telecharger/" : ".torrent"
         "magnet:?xt=": "magnet"
+    - name: info_downloadlink
+      type: info
+      label: "About the Download Link"
+      default: "Note that only <b>www.oxtorrent.com</b> supports the use of the <b>.torrent</b> download link.<br />All sites support <b>magnet</b> links."
 
   download:
     selector: a[href*="{{ .Config.downloadlink }}"]
@@ -52,7 +56,9 @@
       - path: "{{ if .Keywords }}recherche/{{ .Keywords }}{{else}}{{end}}"
 
     rows:
-      selector: div.listing-torrent > table > tbody > tr:has(a[href^="torrent/"]), div.listing-torrent > table > tbody > tr:has(a[href^="/torrent/"])
+      selector: table.table-hover > tbody > tr:has(a[href*="torrent/"])
+      filters:
+        - name: andmatch
 
     fields:
       category:
@@ -69,9 +75,9 @@
       site_date:
         selector: td:nth-child(1) a
         filters:
-          # date is at the end of the title, so we get it and name it site_date
+          # year is at the end of the title, so we get it and name it site_date
           - name: regexp
-            args: "(\\w+)$"
+            args: "(\\d{4})$"
       title:
         selector: td:nth-child(1) a
         filters:
@@ -86,7 +92,7 @@
             args: ["VOSTFR", "{{ .Result.site_date }} VOSTFR"]
           # and we delete it at the end
           - name: re_replace
-            args: ["(\\w+)$", ""]
+            args: ["(\\d{4})$", ""]
       details:
         selector: td:nth-child(1) a
         attribute: href
