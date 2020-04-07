@@ -1,4 +1,6 @@
+using Jackett.Common.Utils;
 using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Text;
 using System.Web;
@@ -68,15 +70,42 @@ namespace Jackett.Common.Utils.Tests
                         string.Format(duplicateKeysTempalate, ";", parsedQuery),
                         testCase.GetQueryString(encoding, true, ";"));
                     StringAssert.AreEqualIgnoringCase(
-                        string.Format(combinedTemplate, null, parsedQuery),
-                        testCase.GetQueryString(encoding, separator: string.Empty));
+                        string.Format(duplicateKeysTempalate, null, parsedQuery),
+                        testCase.GetQueryString(encoding, separator: string.Empty, duplicateKeysIfMulti: true));
                     StringAssert.AreEqualIgnoringCase(
-                        string.Format(combinedTemplate, null, parsedQuery),
-                        testCase.GetQueryString(encoding, separator: null));
+                        string.Format(duplicateKeysTempalate, null, parsedQuery),
+                        testCase.GetQueryString(encoding, separator: null, duplicateKeysIfMulti: true));
                 }
 
             Assert.Throws<NullReferenceException>(() => ((NameValueCollection)null).GetQueryString());
             Assert.AreEqual(string.Empty, new NameValueCollection().GetQueryString());
+        }
+
+        [Test]
+        public void ToEnumerableTest()
+        {
+            var original = new NameValueCollection
+            {
+                {"first", "firstVal"},
+                {"second", "secondVal"},
+                {"third", "thirdVal"},
+                {"second", "anotherVal"}
+            };
+            var combined = new[]
+            {
+                new KeyValuePair<string, string>("first", "firstVal"),
+                new KeyValuePair<string, string>("second", "secondVal,anotherVal"),
+                new KeyValuePair<string, string>("third", "thirdVal")
+            };
+            var duplicateKeys = new[]
+            {
+                new KeyValuePair<string, string>("first", "firstVal"),
+                new KeyValuePair<string, string>("second", "secondVal"),
+                new KeyValuePair<string, string>("second", "anotherVal"),
+                new KeyValuePair<string, string>("third", "thirdVal")
+            };
+            CollectionAssert.AreEqual(combined, original.ToEnumerable());
+            CollectionAssert.AreEqual(duplicateKeys, original.ToEnumerable(true));
         }
     }
 }
