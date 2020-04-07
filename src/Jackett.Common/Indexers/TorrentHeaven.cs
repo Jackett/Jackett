@@ -18,33 +18,16 @@ namespace Jackett.Common.Indexers
 {
     public class TorrentHeaven : BaseWebIndexer
     {
-        public override string[] LegacySiteLinks { get; protected set; } =
-        {
-            "https://torrentheaven.myfqdn.info/"
-        };
-
-        private string IndexUrl => SiteLink + "index.php";
-
-        private string LoginCompleteUrl =>
-            SiteLink + "index.php?strWebValue=account&strWebAction=login_complete&ancestry=verify";
-
-        private new ConfigurationDataCaptchaLogin configData
-        {
-            get => (ConfigurationDataCaptchaLogin)base.configData;
-            set => base.configData = value;
-        }
-
         public TorrentHeaven(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps) :
-            base(
-                name: "TorrentHeaven",
-                description: "A German general tracker.",
-                link: "https://newheaven.nl/",
-                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                configService: configService,
-                client: wc,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataCaptchaLogin())
+            base("TorrentHeaven",
+                 description: "A German general tracker.",
+                 link: "https://newheaven.nl/",
+                 caps: new TorznabCapabilities(),
+                 configService: configService,
+                 client: wc,
+                 logger: l,
+                 p: ps,
+                 configData: new ConfigurationDataCaptchaLogin())
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "de-de";
@@ -95,6 +78,51 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(71, TorznabCatType.PCMac, "APPLICATIONS/Mac");
         }
 
+        private new ConfigurationDataCaptchaLogin configData => (ConfigurationDataCaptchaLogin)base.configData;
+
+        private string IndexUrl => SiteLink + "index.php";
+
+        public override string[] LegacySiteLinks { get; protected set; } =
+        {
+            "https://torrentheaven.myfqdn.info/"
+        };
+
+        private string LoginCompleteUrl =>
+            SiteLink + "index.php?strWebValue=account&strWebAction=login_complete&ancestry=verify";
+
+        public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
+        {
+            LoadValuesFromJson(configJson);
+            var pairs = new Dictionary<string, string>
+            {
+                {"strWebAction", "login"},
+                {"strWebValue", "account"},
+                {"jsenabled", "1"},
+                {"screenwidth", "2560"},
+                {"username", configData.Username.Value},
+                {"password", configData.Password.Value}
+            };
+            if (!string.IsNullOrWhiteSpace(configData.CaptchaText.Value))
+                pairs.Add("proofcode", configData.CaptchaText.Value);
+            var result = await RequestLoginAndFollowRedirect(
+                IndexUrl, pairs, configData.CaptchaCookie.Value, true, referer: IndexUrl, accumulateCookies: true);
+            if (result.Content == null || (!result.Content.Contains("login_complete") &&
+                                           !result.Content.Contains("index.php?strWebValue=account&strWebAction=logout")))
+            {
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(result.Content);
+                var errorMessageEl = dom.QuerySelector("table > tbody > tr > td[valign=top][width=100%]");
+                var errorMessage = errorMessageEl != null ? errorMessageEl.InnerHtml : result.Content;
+                throw new ExceptionWithConfigData(errorMessage, configData);
+            }
+
+            var result2 = await RequestStringWithCookies(LoginCompleteUrl, result.Cookies);
+            await ConfigureIfOK(
+                result2.Cookies, result2.Cookies?.Contains("pass") == true,
+                () => throw new ExceptionWithConfigData("Didn't get a user/pass cookie", configData));
+            return IndexerConfigurationStatus.RequiresTesting;
+        }
+
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
             var loginPage = await RequestStringWithCookies(IndexUrl, string.Empty);
@@ -112,38 +140,6 @@ namespace Jackett.Common.Indexers
 
             configData.CaptchaCookie.Value = loginPage.Cookies;
             return configData;
-        }
-
-        public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
-        {
-            LoadValuesFromJson(configJson);
-            var pairs = new Dictionary<string, string>
-            {
-                {"strWebAction", "login"},
-                {"strWebValue", "account"},
-                {"jsenabled", "1"},
-                {"screenwidth", "2560"},
-                {"username", configData.Username.Value},
-                {"password", configData.Password.Value}
-            };
-            if (!string.IsNullOrWhiteSpace(configData.CaptchaText.Value))
-                pairs.Add("proofcode", configData.CaptchaText.Value);
-            var result = await RequestLoginAndFollowRedirect(IndexUrl, pairs, configData.CaptchaCookie.Value, true, referer: IndexUrl, accumulateCookies: true);
-            if (result.Content == null || (!result.Content.Contains("login_complete") &&
-                                           !result.Content.Contains("index.php?strWebValue=account&strWebAction=logout")))
-            {
-                var parser = new HtmlParser();
-                var dom = parser.ParseDocument(result.Content);
-                var errorMessageEl = dom.QuerySelector("table > tbody > tr > td[valign=top][width=100%]");
-                var errorMessage = errorMessageEl != null ? errorMessageEl.InnerHtml : result.Content;
-                throw new ExceptionWithConfigData(errorMessage, configData);
-            }
-
-            var result2 = await RequestStringWithCookies(LoginCompleteUrl, result.Cookies);
-            await ConfigureIfOK(
-                result2.Cookies, result2.Cookies?.Contains("pass") == true,
-                () => throw new ExceptionWithConfigData("Didn't get a user/pass cookie", configData));
-            return IndexerConfigurationStatus.RequiresTesting;
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
@@ -202,12 +198,14 @@ namespace Jackett.Common.Indexers
                     var catStr = qCatLink.GetAttribute("href").Split('=')[3].Split('#')[0];
                     var link = new Uri(SiteLink + qDlLink.GetAttribute("href"));
                     var sizeStr = qSize.TextContent;
-                    var dateStr = qDateStr.TextContent.Trim().Replace("Heute", "Today").Replace("Gestern", "Yesterday");
-
+                    var dateStr = qDateStr.TextContent;
+                    var split = dateStr.IndexOf("Uploader", StringComparison.OrdinalIgnoreCase);
+                    dateStr = dateStr.Substring(0, split > 0 ? split : dateStr.Length).Trim().Replace("Heute", "Today")
+                                     .Replace("Gestern", "Yesterday");
                     var dateGerman = DateTimeUtil.FromUnknown(dateStr);
                     double downloadFactor;
-                    if (row.QuerySelector("img[src=\"themes/images/freeleech.png\"]") != null
-                        || row.QuerySelector("img[src=\"themes/images/onlyup.png\"]") != null)
+                    if (row.QuerySelector("img[src=\"themes/images/freeleech.png\"]") != null ||
+                        row.QuerySelector("img[src=\"themes/images/onlyup.png\"]") != null)
                         downloadFactor = 0;
                     else if (row.QuerySelector("img[src=\"themes/images/DL50.png\"]") != null)
                         downloadFactor = 0.5;
@@ -229,7 +227,7 @@ namespace Jackett.Common.Indexers
                         Link = link,
                         Guid = link,
                         Size = ReleaseInfo.GetBytes(sizeStr),
-                        Seeders =  seeders,
+                        Seeders = seeders,
                         Peers = leechers + seeders,
                         PublishDate = publishDate,
                         Grabs = grabs,
