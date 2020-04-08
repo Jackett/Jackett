@@ -30,19 +30,19 @@
     # http://topnow.se/search.php?dayq=mandalorian
       - path: search.php
     inputs:
-      dayq: "{{.Keywords}}" 
+      dayq: "{{.Keywords}}"
     rows:
       selector: table.topic_table
     fields:
       category:
         text: other
       title:
-        selector: a[href^="goto-"]
+        selector: td.topic_head
       details:
-        selector: a[href^="goto-"]
+        selector: td.topic_content a
         attribute: href
       download:
-        selector: a[href^="goto-"]
+        selector: td.topic_content a
         attribute: href
       banner:
         selector: img
