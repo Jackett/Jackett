@@ -41,8 +41,8 @@ namespace Jackett.Common.Indexers
                 link: "https://hdts.ru/",// Of the accessible domains the .ru seems the most reliable.  https://hdts.ru | https://hd-torrents.org | https://hd-torrents.net | https://hd-torrents.me
                 caps: new TorznabCapabilities
                 {
-                    SupportsImdbMovieSearch = true,
-                    SupportsImdbTVSearch = true
+                    SupportsImdbMovieSearch = true
+                    // SupportsImdbTVSearch = true (supported by the site but disabled due to #8107)
                 },
                 configService: configService,
                 client: w,
