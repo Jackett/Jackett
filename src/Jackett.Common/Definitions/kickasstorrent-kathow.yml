@@ -16,7 +16,9 @@
     - https://thekat.se/
     - https://kat.how/
     - https://kat.li/
-    - https://kickasstorrents.unblockninja.com/ # currently not responding
+    - https://kickasstorrents.unblockninja.com/ # kickasstorrent proxy, not kickasstorrent-kathow
+    - https://katcr.to/ # possible 3rd kickasstorrent site/clone?
+    - https://kickasstorrent.cr/ # possible 3rd kickasstorrent site/clone?
 
   caps:
     categories:
