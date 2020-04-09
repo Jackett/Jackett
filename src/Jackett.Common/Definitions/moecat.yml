@@ -34,19 +34,13 @@
       movie-search: [q, imdbid]
 
   settings:
-    - name: username
+    - name: cookie
       type: text
-      label: Username
-    - name: password
-      type: password
-      label: Password
-    - name: 2facode
-      type: text
-      label: 2FA code
-    - name: info_2fa
+      label: Cookie
+    - name: info
       type: info
-      label: "About 2FA code"
-      default: "Only fill in the <b>2FA code</b> box if you have enabled <b>2FA</b> on the MoeCat Web Site. Otherwise just leave it empty."
+      label: How to get the Cookie
+      default: "<ol><li>Access to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
     - name: sort
       type: select
       label: Sort requested from site
@@ -65,22 +59,11 @@
         "asc": "asc"
 
   login:
-    path: login.php
-    method: form
-    form: form[action="takelogin.php"]
+    method: cookie
     inputs:
-      logintype: username
-      username: "{{ .Config.username }}"
-      password: "{{ .Config.password }}"
-      scode: "{{ .Config.2facode }}"
-      thispagewidth: yes
-      logout: 720
-    error:
-      - selector: td.embedded:has(h2:contains("姿势不正确"))
-      - selector: td.embedded:has(h2:contains("登录失败"))
+      cookie: "{{ .Config.cookie }}"
     test:
       path: index.php
-      selector: a[href="logout.php"]
 
   search:
     paths:
