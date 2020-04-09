@@ -23,17 +23,13 @@ namespace Jackett.Common.Indexers.Abstract
         private string LoginUrl => SiteLink + "auth/login";
         private string SearchUrl => SiteLink + "torrents?";
         private string IMDBSearch => SiteLink + "ajax/movies/3?term=";
-        private readonly Regex CatRegex = new Regex(@"\s+fa\-([a-z]+)\s+", RegexOptions.IgnoreCase);
-        private readonly HashSet<string> HdResolutions = new HashSet<string> { "1080p", "1080i", "720p" };
+        private readonly Regex _catRegex = new Regex(@"\s+fa\-([a-z]+)\s+", RegexOptions.IgnoreCase);
+        private readonly HashSet<string> _hdResolutions = new HashSet<string> { "1080p", "1080i", "720p" };
 
-        private new ConfigurationDataBasicLogin configData
-        {
-            get => (ConfigurationDataBasicLogin)base.configData;
-            set => base.configData = value;
-        }
+        private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
 
         // hook to adjust the search term
-        protected string GetSearchTerm(TorznabQuery query) => $"{query.SearchTerm} {query.GetEpisodeSearchString()}";
+        protected virtual string GetSearchTerm(TorznabQuery query) => $"{query.SearchTerm} {query.GetEpisodeSearchString()}";
 
         protected AvistazTracker(string name, string link, string description, IIndexerConfigurationService configService,
                                  WebClient client, Logger logger, IProtectionService p, TorznabCapabilities caps)
@@ -98,7 +94,7 @@ namespace Jackett.Common.Indexers.Abstract
             };
 
             // imdb search
-            if (!string.IsNullOrWhiteSpace(query.ImdbID))
+            if (query.IsImdbQuery)
             {
                 var movieId = await GetMovieId(query.ImdbID);
                 if (movieId == null)
@@ -106,7 +102,7 @@ namespace Jackett.Common.Indexers.Abstract
                 qc.Add("movie_id", movieId);
             }
             else
-                qc.Add("search", GetSearchTerm(query));
+                qc.Add("search", GetSearchTerm(query).Trim());
 
             var episodeSearchUrl = SearchUrl + qc.GetQueryString();
             var response = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
@@ -152,7 +148,7 @@ namespace Jackett.Common.Indexers.Abstract
                     release.Peers = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(8)").Text().Trim()) + release.Seeders;
 
                     var resolution = row.QuerySelector("span.badge-extra")?.TextContent.Trim();
-                    var catMatch = CatRegex.Match(row.QuerySelectorAll("td:nth-of-type(1) i").First().GetAttribute("class"));
+                    var catMatch = _catRegex.Match(row.QuerySelectorAll("td:nth-of-type(1) i").First().GetAttribute("class"));
                     var cats = new List<int>();
                     switch(catMatch.Groups[1].Value)
                     {
@@ -161,7 +157,7 @@ namespace Jackett.Common.Indexers.Abstract
                                 cats.Add(TorznabCatType.Movies.ID);
                             cats.Add(resolution switch
                             {
-                                var res when HdResolutions.Contains(res) => TorznabCatType.MoviesHD.ID,
+                                var res when _hdResolutions.Contains(res) => TorznabCatType.MoviesHD.ID,
                                 "2160p" => TorznabCatType.MoviesUHD.ID,
                                 _ => TorznabCatType.MoviesSD.ID
                             });
@@ -171,7 +167,7 @@ namespace Jackett.Common.Indexers.Abstract
                                 cats.Add(TorznabCatType.TV.ID);
                             cats.Add(resolution switch
                             {
-                                var res when HdResolutions.Contains(res) => TorznabCatType.TVHD.ID,
+                                var res when _hdResolutions.Contains(res) => TorznabCatType.TVHD.ID,
                                 "2160p" => TorznabCatType.TVUHD.ID,
                                 _ => TorznabCatType.TVSD.ID
                             });
