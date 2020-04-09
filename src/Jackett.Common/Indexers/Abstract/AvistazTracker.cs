@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -87,11 +86,27 @@ namespace Jackett.Common.Indexers.Abstract
             var releases = new List<ReleaseInfo>();
 
             var categoryMapping = MapTorznabCapsToTrackers(query).Distinct().ToList();
-            var qc = new NameValueCollection
+            var qc = new List<KeyValuePair<string, string>> // NameValueCollection don't support cat[]=19&cat[]=6
             {
                 {"in", "1"},
                 {"type", categoryMapping.Any() ? categoryMapping.First() : "0"} // type=0 => all categories
             };
+
+            // resolution filter to improve the search
+            if (!query.Categories.Contains(TorznabCatType.Movies.ID) && !query.Categories.Contains(TorznabCatType.TV.ID) &&
+                !query.Categories.Contains(TorznabCatType.Audio.ID))
+            {
+                if (query.Categories.Contains(TorznabCatType.MoviesUHD.ID) || query.Categories.Contains(TorznabCatType.TVUHD.ID))
+                    qc.Add("video_quality[]", "6"); // 2160p
+                if (query.Categories.Contains(TorznabCatType.MoviesHD.ID) || query.Categories.Contains(TorznabCatType.TVHD.ID))
+                {
+                    qc.Add("video_quality[]", "2"); // 720p
+                    qc.Add("video_quality[]", "7"); // 1080i
+                    qc.Add("video_quality[]", "3"); // 1080p
+                }
+                if (query.Categories.Contains(TorznabCatType.MoviesSD.ID) || query.Categories.Contains(TorznabCatType.TVSD.ID))
+                    qc.Add("video_quality[]", "1"); // SD
+            }
 
             // imdb search
             if (query.IsImdbQuery)
