@@ -42,7 +42,7 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "private";
             TorznabCaps.SupportsImdbMovieSearch = true;
-            TorznabCaps.SupportsImdbTVSearch = true;
+            // TorznabCaps.SupportsImdbTVSearch = true; (supported by the site but disabled due to #8107)
 
             AddCategoryMapping(15, TorznabCatType.MoviesBluRay); // Movie / Blu-ray
             AddMultiCategoryMapping(TorznabCatType.MoviesHD,

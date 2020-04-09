@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -23,15 +22,13 @@ namespace Jackett.Common.Indexers.Abstract
         private string LoginUrl => SiteLink + "auth/login";
         private string SearchUrl => SiteLink + "torrents?";
         private string IMDBSearch => SiteLink + "ajax/movies/3?term=";
+        private readonly Regex _catRegex = new Regex(@"\s+fa\-([a-z]+)\s+", RegexOptions.IgnoreCase);
+        private readonly HashSet<string> _hdResolutions = new HashSet<string> { "1080p", "1080i", "720p" };
 
-        private new ConfigurationDataBasicLogin configData
-        {
-            get => (ConfigurationDataBasicLogin)base.configData;
-            set => base.configData = value;
-        }
+        private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
 
         // hook to adjust the search term
-        protected string GetSearchTerm(TorznabQuery query) => $"{query.SearchTerm} {query.GetEpisodeSearchString()}";
+        protected virtual string GetSearchTerm(TorznabQuery query) => $"{query.SearchTerm} {query.GetEpisodeSearchString()}";
 
         protected AvistazTracker(string name, string link, string description, IIndexerConfigurationService configService,
                                  WebClient client, Logger logger, IProtectionService p, TorznabCapabilities caps)
@@ -49,10 +46,13 @@ namespace Jackett.Common.Indexers.Abstract
             Language = "en-us";
 
             AddCategoryMapping(1, TorznabCatType.Movies);
-            AddCategoryMapping(1, TorznabCatType.MoviesForeign);
+            AddCategoryMapping(1, TorznabCatType.MoviesUHD);
             AddCategoryMapping(1, TorznabCatType.MoviesHD);
             AddCategoryMapping(1, TorznabCatType.MoviesSD);
             AddCategoryMapping(2, TorznabCatType.TV);
+            AddCategoryMapping(2, TorznabCatType.TVUHD);
+            AddCategoryMapping(2, TorznabCatType.TVHD);
+            AddCategoryMapping(2, TorznabCatType.TVSD);
             AddCategoryMapping(3, TorznabCatType.Audio);
         }
 
@@ -86,14 +86,30 @@ namespace Jackett.Common.Indexers.Abstract
             var releases = new List<ReleaseInfo>();
 
             var categoryMapping = MapTorznabCapsToTrackers(query).Distinct().ToList();
-            var qc = new NameValueCollection
+            var qc = new List<KeyValuePair<string, string>> // NameValueCollection don't support cat[]=19&cat[]=6
             {
                 {"in", "1"},
                 {"type", categoryMapping.Any() ? categoryMapping.First() : "0"} // type=0 => all categories
             };
 
+            // resolution filter to improve the search
+            if (!query.Categories.Contains(TorznabCatType.Movies.ID) && !query.Categories.Contains(TorznabCatType.TV.ID) &&
+                !query.Categories.Contains(TorznabCatType.Audio.ID))
+            {
+                if (query.Categories.Contains(TorznabCatType.MoviesUHD.ID) || query.Categories.Contains(TorznabCatType.TVUHD.ID))
+                    qc.Add("video_quality[]", "6"); // 2160p
+                if (query.Categories.Contains(TorznabCatType.MoviesHD.ID) || query.Categories.Contains(TorznabCatType.TVHD.ID))
+                {
+                    qc.Add("video_quality[]", "2"); // 720p
+                    qc.Add("video_quality[]", "7"); // 1080i
+                    qc.Add("video_quality[]", "3"); // 1080p
+                }
+                if (query.Categories.Contains(TorznabCatType.MoviesSD.ID) || query.Categories.Contains(TorznabCatType.TVSD.ID))
+                    qc.Add("video_quality[]", "1"); // SD
+            }
+
             // imdb search
-            if (!string.IsNullOrWhiteSpace(query.ImdbID))
+            if (query.IsImdbQuery)
             {
                 var movieId = await GetMovieId(query.ImdbID);
                 if (movieId == null)
@@ -101,7 +117,7 @@ namespace Jackett.Common.Indexers.Abstract
                 qc.Add("movie_id", movieId);
             }
             else
-                qc.Add("search", GetSearchTerm(query));
+                qc.Add("search", GetSearchTerm(query).Trim());
 
             var episodeSearchUrl = SearchUrl + qc.GetQueryString();
             var response = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
@@ -146,14 +162,38 @@ namespace Jackett.Common.Indexers.Abstract
                     release.Seeders = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(7)").Text().Trim());
                     release.Peers = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(8)").Text().Trim()) + release.Seeders;
 
-                    var cat = row.QuerySelectorAll("td:nth-of-type(1) i").First().GetAttribute("class")
-                                            .Replace("torrent-icon", string.Empty)
-                                            .Replace("fa fa-", string.Empty)
-                                            .Replace("film", "1")
-                                            .Replace("tv", "2")
-                                            .Replace("music", "3")
-                                            .Replace("text-pink", string.Empty);
-                    release.Category = MapTrackerCatToNewznab(cat.Trim());
+                    var resolution = row.QuerySelector("span.badge-extra")?.TextContent.Trim();
+                    var catMatch = _catRegex.Match(row.QuerySelectorAll("td:nth-of-type(1) i").First().GetAttribute("class"));
+                    var cats = new List<int>();
+                    switch(catMatch.Groups[1].Value)
+                    {
+                        case "film":
+                            if (query.Categories.Contains(TorznabCatType.Movies.ID))
+                                cats.Add(TorznabCatType.Movies.ID);
+                            cats.Add(resolution switch
+                            {
+                                var res when _hdResolutions.Contains(res) => TorznabCatType.MoviesHD.ID,
+                                "2160p" => TorznabCatType.MoviesUHD.ID,
+                                _ => TorznabCatType.MoviesSD.ID
+                            });
+                            break;
+                        case "tv":
+                            if (query.Categories.Contains(TorznabCatType.TV.ID))
+                                cats.Add(TorznabCatType.TV.ID);
+                            cats.Add(resolution switch
+                            {
+                                var res when _hdResolutions.Contains(res) => TorznabCatType.TVHD.ID,
+                                "2160p" => TorznabCatType.TVUHD.ID,
+                                _ => TorznabCatType.TVSD.ID
+                            });
+                            break;
+                        case "music":
+                            cats.Add(TorznabCatType.Audio.ID);
+                            break;
+                        default:
+                            throw new Exception("Error parsing category!");
+                    }
+                    release.Category = cats;
 
                     var grabs = row.QuerySelector("td:nth-child(9)").Text();
                     release.Grabs = ParseUtil.CoerceInt(grabs);
@@ -165,10 +205,7 @@ namespace Jackett.Common.Indexers.Abstract
                     else
                         release.DownloadVolumeFactor = 1;
 
-                    if (row.QuerySelectorAll("i.fa-diamond").Any())
-                        release.UploadVolumeFactor = 2;
-                    else
-                        release.UploadVolumeFactor = 1;
+                    release.UploadVolumeFactor = row.QuerySelectorAll("i.fa-diamond").Any() ? 2 : 1;
 
                     releases.Add(release);
                 }

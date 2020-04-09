@@ -37,7 +37,7 @@ namespace Jackett.Common.Indexers
             Type = "private";
 
             TorznabCaps.SupportsImdbMovieSearch = true;
-            TorznabCaps.SupportsImdbTVSearch = true;
+            // TorznabCaps.SupportsImdbTVSearch = true; (supported by the site but disabled due to #8107)
 
             // Unfortunately most of them are tags not categories and they return the parent category
             // we have to re-add the tags with the parent category so the results are not removed with the filtering

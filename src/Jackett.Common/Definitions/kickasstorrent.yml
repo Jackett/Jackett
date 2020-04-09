@@ -8,16 +8,17 @@
   followredirect: true
   links:
     - https://katcr.co/
-    - https://katcr.to/
-    - https://kat.unblockit.pro/
     - https://kat.root.yt/
+    - https://kickasstorrents.unblockninja.com/
     - https://katcr.black-mirror.xyz/
     - https://katcr.unblocked.casa/
     - https://katcr.proxyportal.fun/
     - https://katcr.uk-unblock.xyz/
     - https://katcr.ind-unblock.xyz/
   legacylinks:
-    - https://kickasstorrent.cr/ # https://kickasstorrent.cr/category/latest/page/1 is fake torrent page
+    - https://kickasstorrent.cr/ # possible 3rd kickasstorrent site/clone?
+    - https://katcr.to/ # possible 3rd kickasstorrent site/clone?
+    - https://kat.unblockit.pro/ # kickasstorrent-kathow proxy, not kickasstorrent
 
   caps:
     categorymappings:
