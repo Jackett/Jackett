@@ -32,8 +32,8 @@ namespace Jackett.Common.Indexers
                 link: "https://speed.cd/",
                 caps: new TorznabCapabilities
                 {
-                    SupportsImdbMovieSearch = true,
-                    SupportsImdbTVSearch = true
+                    SupportsImdbMovieSearch = true
+                    // SupportsImdbTVSearch = true (supported by the site but disabled due to #8107)
                 },
                 configService: configService,
                 client: wc,

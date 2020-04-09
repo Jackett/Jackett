@@ -53,8 +53,8 @@ namespace Jackett.Common.Indexers
                    link: "https://tday.love/",
                    caps: new TorznabCapabilities
                    {
-                       SupportsImdbMovieSearch = true,
-                       SupportsImdbTVSearch = true
+                       SupportsImdbMovieSearch = true
+                       // SupportsImdbTVSearch = true (supported by the site but disabled due to #8107)
                    },
                    configService: configService,
                    client: wc,

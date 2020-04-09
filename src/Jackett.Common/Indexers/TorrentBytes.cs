@@ -38,7 +38,7 @@ namespace Jackett.Common.Indexers
             Type = "private";
 
             TorznabCaps.SupportsImdbMovieSearch = true;
-            TorznabCaps.SupportsImdbTVSearch = true;
+            // TorznabCaps.SupportsImdbTVSearch = true; (supported by the site but disabled due to #8107)
 
             AddCategoryMapping(23, TorznabCatType.TVAnime, "Anime");
             AddCategoryMapping(52, TorznabCatType.PCMac, "Apple/All");
