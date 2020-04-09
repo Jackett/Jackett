@@ -21,15 +21,15 @@ namespace Jackett.Common.Indexers
     public class Anidex : BaseWebIndexer
     {
         public Anidex(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "Anidex",
-                description: "Anidex is a Public torrent tracker and indexer, primarily for English fansub groups of anime",
-                link: "https://anidex.info/",
-                caps: new TorznabCapabilities(),
-                configService: configService,
-                client: wc,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationData())
+            : base("Anidex",
+                   description: "Anidex is a Public torrent tracker and indexer, primarily for English fansub groups of anime",
+                   link: "https://anidex.info/",
+                   caps: new TorznabCapabilities(),
+                   configService: configService,
+                   client: wc,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationData())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
@@ -130,15 +130,6 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            try
-            {
-                await ConfigureDDoSGuardCookie();
-            }
-            catch (Exception ex)
-            {
-                logger.Log(LogLevel.Warn, ex, $"Exception while configuring DDoS Guard cookie. Attempting search without. (Exception: {ex})");
-            }
-
             // Get specified categories. If none were specified, use all available.
             var searchCategories = MapTorznabCapsToTrackers(query);
             if (searchCategories.Count == 0)
@@ -159,9 +150,12 @@ namespace Jackett.Common.Indexers
             var searchUri = GetAbsoluteUrl("?" + queryParameters.GetQueryString());
             var response = await RequestStringWithCookiesAndRetry(searchUri.AbsoluteUri);
 
-            // Check for DDOS Guard or other error
+            // Check for DDOS Guard
             if (response.Status == System.Net.HttpStatusCode.Forbidden)
-                throw new IOException("Anidex search was forbidden. This was likely caused by DDOS protection.");
+            {
+                await ConfigureDDoSGuardCookie();
+                response = await RequestStringWithCookiesAndRetry(searchUri.AbsoluteUri);
+            }
 
             if (response.Status != System.Net.HttpStatusCode.OK)
                 throw new IOException($"Anidex search returned unexpected result. Expected 200 OK but got {response.Status.ToString()}.");
@@ -219,55 +213,14 @@ namespace Jackett.Common.Indexers
 
         private async Task ConfigureDDoSGuardCookie()
         {
-            const string pathAndQueryBase64Encoded = "Lw=="; // "/"
-            const string baseUriBase64Encoded = "aHR0cHM6Ly9hbmlkZXguaW5mbw=="; // "http://anidex.info"
-            const string ddosPostUrl = "https://ddgu.ddos-guard.net/ddgu/";
-
-            try
-            {
-                // Check if the cookie already exists, if so exit without doing anything
-                if (IsCookiePresent("__ddgu") && IsCookiePresent("__ddg1"))
-                {
-                    logger.Debug("DDOS Guard cookies are already present. Skipping bypass.");
-                    return;
-                }
-
-                // Make a request to DDoS Guard to get the redirect URL
-                var ddosPostData = new List<KeyValuePair<string, string>>
-                {
-                    { "u", pathAndQueryBase64Encoded },
-                    { "h", baseUriBase64Encoded },
-                    { "p", string.Empty }
-                };
-
-                var result = await PostDataWithCookiesAndRetry(ddosPostUrl, ddosPostData);
-
-                if (!result.IsRedirect)
-                    // Success returns a redirect. For anything else, assume a failure.
-                    throw new IOException($"Unexpected result from DDOS Guard while attempting to bypass: {result.Content}");
-
-                // Call the redirect URL to retrieve the cookie
-                result = await RequestStringWithCookiesAndRetry(result.RedirectingTo);
-                if (!result.IsRedirect)
-                    // Success is another redirect. For anything else, assume a failure.
-                    throw new IOException($"Unexpected result when returning from DDOS Guard bypass: {result.Content}");
-
-                // If we got to this point, the bypass should have succeeded and we have stored the necessary cookies to access the site normally.
-            }
-            catch (Exception ex)
-            {
-                throw new IOException($"Error while configuring DDoS Guard cookie: {ex}");
-            }
-        }
-
-        private bool IsCookiePresent(string name)
-        {
-            var rawCookies = CookieHeader.Split(';');
-            IDictionary<string, string> cookies = rawCookies
-                .Where(e => e.Contains('='))
-                .ToDictionary((e) => e.Split('=')[0].Trim(), (e) => e.Split('=')[1].Trim());
-
-            return cookies.ContainsKey(name);
+            const string ddosPostUrl = "https://check.ddos-guard.net/check.js";
+            var response = await RequestStringWithCookies(ddosPostUrl, string.Empty);
+            if (response.Status != System.Net.HttpStatusCode.OK)
+                throw new Exception($"Unexpected DDOS Guard response: Status: {response.Status.ToString()}");
+            if (response.IsRedirect)
+                throw new Exception($"Unexpected DDOS Guard response: Redirect: {response.RedirectingTo}");
+            if (string.IsNullOrWhiteSpace(response.Cookies))
+                throw new Exception("Unexpected DDOS Guard response: Empty cookie");
         }
 
         private static TResult ParseValueFromRow<TResult>(IElement row, string propertyName, string selector,
