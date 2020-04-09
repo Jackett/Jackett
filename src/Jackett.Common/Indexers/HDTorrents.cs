@@ -21,8 +21,8 @@ namespace Jackett.Common.Indexers
     {
         private string SearchUrl => SiteLink + "torrents.php?";
         private string LoginUrl => SiteLink + "login.php";
-        private readonly Regex BannerRegex = new Regex(@"src=\\'./([^']+)\\'", RegexOptions.IgnoreCase);
-        private readonly HashSet<string> FreeleechRanks = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        private readonly Regex _bannerRegex = new Regex(@"src=\\'./([^']+)\\'", RegexOptions.IgnoreCase);
+        private readonly HashSet<string> _freeleechRanks = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
             "VIP",
             "Uploader",
@@ -139,7 +139,7 @@ namespace Jackett.Common.Indexers
 
                 var userInfo = dom.QuerySelector("table.navus tr");
                 var userRank = userInfo.Children[1].TextContent.Replace("Rank:", string.Empty).Trim();
-                var hasFreeleech = FreeleechRanks.Contains(userRank);
+                var hasFreeleech = _freeleechRanks.Contains(userRank);
 
                 var rows = dom.QuerySelectorAll("table.mainblockcontenttt tr:has(td.mainblockcontent)");
                 foreach (var row in rows.Skip(1))
@@ -148,7 +148,7 @@ namespace Jackett.Common.Indexers
                     var title = mainLink.TextContent;
                     var comments = new Uri(SiteLink + mainLink.GetAttribute("href"));
 
-                    var bannerMatch = BannerRegex.Match(mainLink.GetAttribute("onmouseover"));
+                    var bannerMatch = _bannerRegex.Match(mainLink.GetAttribute("onmouseover"));
                     var banner = bannerMatch.Success ? new Uri(SiteLink + bannerMatch.Groups[1].Value.Replace("\\", "/")) : null;
 
                     var link = new Uri(SiteLink + row.Children[4].FirstElementChild.GetAttribute("href"));
@@ -182,9 +182,9 @@ namespace Jackett.Common.Indexers
                             peers = rLeechers + rSeeders;
                     }
 
-                    long? grabs = null;
-                    if (ParseUtil.TryCoerceLong(row.Children[endIndex - 1].TextContent, out var rGrabs))
-                        grabs = rGrabs;
+                    var grabs = ParseUtil.TryCoerceLong(row.Children[endIndex - 1].TextContent, out var rGrabs)
+                        ? (long?)rGrabs
+                        : null;
 
                     var dlVolumeFactor = 1.0;
                     var upVolumeFactor = 1.0;
