@@ -1,9 +1,7 @@
-using Jackett.Common.Utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Text;
-using System.Web;
 using NUnit.Framework;
 
 namespace Jackett.Common.Utils.Tests
@@ -14,83 +12,79 @@ namespace Jackett.Common.Utils.Tests
         [Test]
         public void GetQueryStringTests()
         {
-            //Initial Setup
+#region Encoding Tests
+
+            //Add windows-1251 to Encoding list if not present
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-            var encodings = new[]
+            var win1251 = Encoding.GetEncoding("windows-1251");
+            const string encodingTestValue = "Ру́сский";
+            var encodingNvc = new NameValueCollection
             {
-                Encoding.UTF8,
-                Encoding.ASCII,
-                Encoding.GetEncoding("iso-8859-1"),
-                Encoding.GetEncoding("windows-1255"),
-                Encoding.GetEncoding("windows-1252"),
-                Encoding.GetEncoding("windows-1251"),
-                null
+                {"query", encodingTestValue}
             };
-            var queries = new[]
+            // WebUtilityHelpers.UrlEncode(encodingTestValue, Encoding.UTF8);
+            const string utf8Encoded = "%D0%A0%D1%83%CC%81%D1%81%D1%81%D0%BA%D0%B8%D0%B9";
+            // WebUtilityHelpers.UrlEncode(encodingTestValue, win1251);
+            const string win1251Encoded = "%D0%F3%3F%F1%F1%EA%E8%E9";
+
+            //Default encoding is UTF-8
+            StringAssert.Contains(utf8Encoded, encodingNvc.GetQueryString());
+
+            //Null encoding reverts to default encoding (UTF-8)
+            StringAssert.Contains(utf8Encoded, encodingNvc.GetQueryString(encoding: null));
+
+            //Ensure non-default encoding is utilized
+            StringAssert.Contains(win1251Encoded, encodingNvc.GetQueryString(encoding: win1251));
+
+#endregion
+
+#region Separator Tests
+
+            var separatorNvc = new NameValueCollection
             {
-                "test",
-                "españa",
-                "Ру́сский",
-                "Harry Potter",
-                "dark&night",
-                "test;two"
+                {"one", "value"},
+                {"two", "value2"}
             };
-            var separators = new[]
+
+            //Ensure default value is "&"
+            Assert.AreEqual("one=value&two=value2", separatorNvc.GetQueryString());
+
+            //Ensure separator is overridden
+            Assert.AreEqual("one=value;two=value2", separatorNvc.GetQueryString(separator: ";"));
+
+#endregion
+
+#region Split Keys Tests
+
+            var duplicateKeysNvc = new NameValueCollection
             {
-                "&",
-                ";",
-                ",",
-                " "
+                {"key1", "value"},
+                {"key2", "value2"},
+                {"key1", "duplicate"}
             };
-            var testCase = new NameValueCollection
-            {
-                {"st", "troy"},
-                {"makin", "thisup"},
-                {"st", "duplicate"}
-            };
-            const string combinedTemplate = "st=troy%2cduplicate{0}makin=thisup{0}q={1}";
-            const string duplicateKeysTempalate = "st=troy{0}st=duplicate{0}makin=thisup{0}q={1}";
-            foreach (var encoding in encodings)
-                foreach (var query in queries)
-                {
-                    testCase["q"] = query;
-                    var parsedEncoding = encoding ?? Encoding.UTF8;
-                    var parsedQuery = HttpUtility.UrlEncode(query, parsedEncoding);
 
-                    //Ensure parsed query doesn't contain separators
-                    foreach (var separator in separators)
-                        StringAssert.DoesNotContain(separator, parsedQuery);
+            //Default should keep duplicated keys combined
+            Assert.AreEqual("key1=value%2Cduplicate&key2=value2", duplicateKeysNvc.GetQueryString());
 
-                    //Combined keys
-                    StringAssert.AreEqualIgnoringCase(
-                        string.Format(combinedTemplate, "&", parsedQuery), testCase.GetQueryString(encoding));
-                    StringAssert.AreEqualIgnoringCase(
-                        string.Format(combinedTemplate, ";", parsedQuery),
-                        testCase.GetQueryString(encoding, separator: ";"));
-                    StringAssert.AreEqualIgnoringCase(
-                        string.Format(combinedTemplate, null, parsedQuery),
-                        testCase.GetQueryString(encoding, separator: string.Empty));
-                    StringAssert.AreEqualIgnoringCase(
-                        string.Format(combinedTemplate, null, parsedQuery),
-                        testCase.GetQueryString(encoding, separator: null));
+            //Ensure keys are combined when requested
+            Assert.AreEqual(
+                "key1=value%2Cduplicate&key2=value2", duplicateKeysNvc.GetQueryString(duplicateKeysIfMulti: false));
 
-                    //Separated keys
-                    StringAssert.AreEqualIgnoringCase(
-                        string.Format(duplicateKeysTempalate, "&", parsedQuery),
-                        testCase.GetQueryString(encoding, true));
-                    StringAssert.AreEqualIgnoringCase(
-                        string.Format(duplicateKeysTempalate, ";", parsedQuery),
-                        testCase.GetQueryString(encoding, true, ";"));
-                    StringAssert.AreEqualIgnoringCase(
-                        string.Format(duplicateKeysTempalate, null, parsedQuery),
-                        testCase.GetQueryString(encoding, separator: string.Empty, duplicateKeysIfMulti: true));
-                    StringAssert.AreEqualIgnoringCase(
-                        string.Format(duplicateKeysTempalate, null, parsedQuery),
-                        testCase.GetQueryString(encoding, separator: null, duplicateKeysIfMulti: true));
-                }
+            //Ensure keys are separated when requested
+            Assert.AreEqual(
+                "key1=value&key1=duplicate&key2=value2", duplicateKeysNvc.GetQueryString(duplicateKeysIfMulti: true));
 
+#endregion
+
+#region Edge Case Tests
+
+            //Throws NullReferenceException if the NameValueCollection is null in all cases
             Assert.Throws<NullReferenceException>(() => ((NameValueCollection)null).GetQueryString());
+
+            //Returns empty string on empty collection in all cases
             Assert.AreEqual(string.Empty, new NameValueCollection().GetQueryString());
+
+#endregion
         }
 
         [Test]
