@@ -21,5 +21,11 @@ namespace Jackett.Common.Indexers
                    logger: l,
                    p: ps)
             => Type = "private";
+
+        // Avistaz has episodes without season. eg Running Man E323
+        protected override string GetSearchTerm(TorznabQuery query) =>
+            !string.IsNullOrWhiteSpace(query.Episode) && query.Season == 0 ?
+            $"{query.SearchTerm} E{query.Episode}" :
+            $"{query.SearchTerm} {query.GetEpisodeSearchString()}";
     }
 }
