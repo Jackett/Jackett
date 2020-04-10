@@ -10,7 +10,6 @@
     - https://ilcorsaronero.xyz/
     - https://ilcorsaronero.fun/
     - https://ilcorsaronero.pro/
-    - https://ilcorsaronero.unblockit.one/
   legacylinks:
     - https://ilcorsaronero.live/
     - https://ilcorsaronero.vip/
@@ -20,6 +19,7 @@
     - https://ilcorsaronero.pizza/
     - https://ilcorsaronero.pw/
     - https://ilcorsaronero.unblockit.pro/
+    - https://ilcorsaronero.unblockit.one/ # test and empty search fails, redirects to ilcorsaronero.fun
 
   caps:
     categorymappings:
