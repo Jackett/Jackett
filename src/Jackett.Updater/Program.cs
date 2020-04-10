@@ -286,6 +286,7 @@ namespace Jackett.Updater
                 "Definitions/b2s-share.yml",
                 "Definitions/bithq.yml",
                 "Definitions/bitme.yml",
+                "Definitions/bittorrentam.yml",
                 "Definitions/blubits.yml",
                 "Definitions/bt-scene.yml",
                 "Definitions/btbit.yml",
