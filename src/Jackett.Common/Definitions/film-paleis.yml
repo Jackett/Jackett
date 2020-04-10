@@ -31,7 +31,7 @@
       - {id: 24, cat: Books/Ebook, desc: " E-Books"}
       - {id: 26, cat: Audio/Other, desc: " Cabaret"}
       - {id: 27, cat: TV/Documentary, desc: " Documentaire"}
-      - {id: 31, cat: Movies/HD, desc: " HD 265"}
+      - {id: 31, cat: Movies/HD, desc: " FP-release"}
       - {id: 32, cat: Audio/Audiobook, desc: " Luister Boeken"}
 
     modes:
@@ -95,6 +95,13 @@
     fields:
       title:
         selector: a[href^="details.php?id="]
+        filters:
+          - name: re_replace
+            args: ["([Ss]eizoen|[Ss]eizoen )(\\d{1,2})", "S$2"]
+          - name: re_replace
+            args: ["([Aa]fl.|[Aa]fl. | [Aa]fl. |[Aa]flevering|[Aa]flevering | [Aa]flevering )(\\d{1,2})", "E$2"]
+          - name: re_replace
+            args: ["[Cc]ompleet", "Complete"]
       details:
         selector: a[href^="details.php?id="]
         attribute: href
