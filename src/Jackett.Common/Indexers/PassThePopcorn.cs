@@ -178,7 +178,7 @@ namespace Jackett.Common.Indexers
                             Guid = link,
                             MinimumRatio = 1,
                             MinimumSeedTime = 345600,
-                            DownloadVolumeFactor = 1,
+                            DownloadVolumeFactor = free ? 0 : 1,
                             UploadVolumeFactor = 1,
                             Category = new List<int> { TorznabCatType.Movies.ID }
                         };
