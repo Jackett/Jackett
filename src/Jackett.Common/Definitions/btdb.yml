@@ -8,7 +8,7 @@
   followredirect: true
   links:
     - https://btdb.io/
-    - https://btdb.unblockit.one/
+    - https://btdb.unblockit.one/ # redirects to btdb.io in browser but appears to have no issue in Jackett
     - https://btdb.black-mirror.xyz/
     - https://btdb.unblocked.casa/
     - https://btdb.proxyportal.fun/
