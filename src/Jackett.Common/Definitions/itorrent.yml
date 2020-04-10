@@ -8,6 +8,8 @@
   followredirect: true
   links:
     - https://itorrent.ws/
+    - https://itorrent.unblockit.one/
+  legacylinks:
     - https://itorrent.unblockit.pro/
 
   caps:

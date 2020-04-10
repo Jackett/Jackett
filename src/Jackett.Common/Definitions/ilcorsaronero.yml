@@ -18,7 +18,8 @@
     - https://ilcorsaronero.cc/
     - https://ilcorsaronero.pizza/
     - https://ilcorsaronero.pw/
-    - https://ilcorsaronero.unblockit.pro/ # currently fails due to new domain
+    - https://ilcorsaronero.unblockit.pro/
+    - https://ilcorsaronero.unblockit.one/ # test and empty search fails, redirects to ilcorsaronero.fun
 
   caps:
     categorymappings:
