@@ -36,7 +36,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Badass Torrents
  * BigFANGroup
  * BitRu
- * BitTorrent.AM
  * BT.etree
  * BTDB
  * BTDIGG
@@ -121,6 +120,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TopNow
  * Torlock
  * TOROS
+ * Torrent Bomb (토렌트봄)
  * Torrent Downloads (TD)
  * Torrent Oyun indir
  * torrent-pirat
@@ -138,7 +138,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TorrentQuest
  * Torrents.csv
  * Torrentv
- * TorrentView
+ * TorrentView (토렌트뷰)
  * Torrentz2
  * Underverse
  * UnionDHT
@@ -260,6 +260,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * CasaTorrent
  * ChannelX
  * ChileBT
+ * Cinecalidad
  * CinemaMovies
  * CinemaZ (EuTorrents)
  * Cinemageddon

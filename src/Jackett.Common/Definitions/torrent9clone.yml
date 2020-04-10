@@ -8,6 +8,12 @@
   followredirect: true
   links:
     - https://www.torrent9.pl/
+    - https://torrent9.black-mirror.xyz/
+    - https://torrent9.unblocked.casa/
+    - https://torrent9.proxyportal.fun/
+    - https://torrent9.uk-unblock.xyz/
+    - https://torrent9.ind-unblock.xyz/
+    - https://torrent9.unblockninja.com/
 
   legacylinks:
     - https://www.torrents9.pw/
@@ -60,15 +66,15 @@
       - path: "{{ if .Keywords }}/recherche/{{ .Keywords }}{{else}}/top{{end}}"
 
     rows:
-      selector: div.table-responsive > table tbody tr
+      selector: table.table-striped > tbody > tr
 
     fields:
       site_date:
         selector: td:nth-child(1) a
         filters:
-          # date is at the end of the title, so we get it and name it site_date
+          # year is at the end of the title, so we get it and name it site_date
           - name: regexp
-            args: "(\\w+)$"
+            args: "(\\d{4})$"
       title:
         selector: td:nth-child(1) a
         filters:
@@ -83,7 +89,7 @@
             args: ["VOSTFR", "{{ .Result.site_date }} VOSTFR"]
           # and we delete it at the end
           - name: re_replace
-            args: ["(\\w+)$", ""]
+            args: ["(\\d{4})$", ""]
       details:
         selector: td:nth-child(1) a
         attribute: href
@@ -100,7 +106,7 @@
       seeders:
         text: 0
       seeders:
-        selector: td:nth-child(3) span.seed_ok
+        selector: td:nth-child(3)
         optional: true
       leechers:
         text: 0

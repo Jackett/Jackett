@@ -8,10 +8,14 @@ namespace Jackett.Common.Indexers
 {
     public class CGPeers : GazelleTracker
     {
+        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
+            "https://www.cgpeers.com/",
+        };
+
         public CGPeers(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base("CGPeers",
                    description: "CGPeers is a Private Torrent Tracker for GRAPHICS SOFTWARE / TUTORIALS / ETC",
-                   link: "https://www.cgpeers.com/",
+                   link: "https://cgpeers.to/",
                    caps: new TorznabCapabilities(),
                    configService: configService,
                    client: wc,
