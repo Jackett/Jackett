@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
@@ -158,7 +159,7 @@ namespace Jackett.Common.Indexers
             }
 
             if (response.Status != System.Net.HttpStatusCode.OK)
-                throw new IOException($"Anidex search returned unexpected result. Expected 200 OK but got {response.Status.ToString()}.");
+                throw new WebException($"Anidex search returned unexpected result. Expected 200 OK but got {response.Status.ToString()}.");
 
             // Search seems to have been a success so parse it
             return ParseResult(response.Content);
@@ -216,11 +217,11 @@ namespace Jackett.Common.Indexers
             const string ddosPostUrl = "https://check.ddos-guard.net/check.js";
             var response = await RequestStringWithCookies(ddosPostUrl, string.Empty);
             if (response.Status != System.Net.HttpStatusCode.OK)
-                throw new Exception($"Unexpected DDOS Guard response: Status: {response.Status.ToString()}");
+                throw new WebException($"Unexpected DDOS Guard response: Status: {response.Status.ToString()}");
             if (response.IsRedirect)
-                throw new Exception($"Unexpected DDOS Guard response: Redirect: {response.RedirectingTo}");
+                throw new WebException($"Unexpected DDOS Guard response: Redirect: {response.RedirectingTo}");
             if (string.IsNullOrWhiteSpace(response.Cookies))
-                throw new Exception("Unexpected DDOS Guard response: Empty cookie");
+                throw new WebException("Unexpected DDOS Guard response: Empty cookie");
         }
 
         private static TResult ParseValueFromRow<TResult>(IElement row, string propertyName, string selector,
