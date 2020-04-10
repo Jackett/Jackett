@@ -20,7 +20,8 @@ namespace Jackett.Common.Utils.Tests
             const string encodingTestValue = "Ру́сский";
             var encodingNvc = new NameValueCollection
             {
-                {"query", encodingTestValue}
+                {"query", encodingTestValue},
+                {"space key", "space value"}
             };
             // WebUtilityHelpers.UrlEncode(encodingTestValue, Encoding.UTF8);
             const string utf8Encoded = "%D0%A0%D1%83%CC%81%D1%81%D1%81%D0%BA%D0%B8%D0%B9";
@@ -35,6 +36,9 @@ namespace Jackett.Common.Utils.Tests
 
             //Ensure non-default encoding is utilized
             StringAssert.Contains(win1251Encoded, encodingNvc.GetQueryString(encoding: win1251));
+
+            //Encoding should make values websafe, but not keys
+            StringAssert.Contains("space key=space+value", encodingNvc.GetQueryString());
 
 #endregion
 
@@ -51,6 +55,11 @@ namespace Jackett.Common.Utils.Tests
 
             //Ensure separator is overridden
             Assert.AreEqual("one=value;two=value2", separatorNvc.GetQueryString(separator: ";"));
+
+            //Ensure behavior when string.IsNullOrEmpty(separator)
+            const string noSeparator = "one=valuetwo=value2";
+            Assert.AreEqual(noSeparator, separatorNvc.GetQueryString(separator: null));
+            Assert.AreEqual(noSeparator, separatorNvc.GetQueryString(separator: string.Empty));
 
 #endregion
 
