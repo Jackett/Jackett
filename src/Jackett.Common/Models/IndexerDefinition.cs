@@ -163,6 +163,7 @@ namespace Jackett.Common.Models
         public string Path { get; set; }
         public string Method { get; set; }
         public Dictionary<string, string> Inputs { get; set; }
+        public String QuerySeparator { get; set; } = "&";
     }
 
     public class downloadBlock
