@@ -494,7 +494,7 @@ stages:
       - task: GitHubRelease@1
         displayName: Create Github release
         inputs:
-          gitHubConnection: github.com_jackett
+          gitHubConnection: JackettPublish
           repositoryName: '$(Build.Repository.Name)' 
           action: create
           target: $(Build.SourceVersion)
