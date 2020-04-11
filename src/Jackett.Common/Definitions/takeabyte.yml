@@ -1,4 +1,4 @@
-﻿---
+---
   site: takeabyte
   name: TakeaByte
   description: "TakeaByte is a NORDIC Private Torrent Tracker for 0DAY / GENERAL"
@@ -170,3 +170,4 @@
         case:
           "b:contains(\"[Free and Double]\")": 2
           "*": 1
+# U-232 V4

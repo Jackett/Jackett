@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,7 +8,6 @@ using Jackett.Common.Indexers.Meta;
 using Jackett.Common.Models;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
-using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using NLog;
 using YamlDotNet.Serialization;
@@ -19,16 +18,16 @@ namespace Jackett.Common.Services
 
     public class IndexerManagerService : IIndexerManagerService
     {
-        private ICacheService cacheService;
-        private IIndexerConfigurationService configService;
-        private IProtectionService protectionService;
-        private WebClient webClient;
-        private IProcessService processService;
-        private IConfigurationService globalConfigService;
-        private ServerConfig serverConfig;
-        private Logger logger;
+        private readonly ICacheService cacheService;
+        private readonly IIndexerConfigurationService configService;
+        private readonly IProtectionService protectionService;
+        private readonly WebClient webClient;
+        private readonly IProcessService processService;
+        private readonly IConfigurationService globalConfigService;
+        private readonly ServerConfig serverConfig;
+        private readonly Logger logger;
 
-        private Dictionary<string, IIndexer> indexers = new Dictionary<string, IIndexer>();
+        private readonly Dictionary<string, IIndexer> indexers = new Dictionary<string, IIndexer>();
         private AggregateIndexer aggregateIndexer;
 
         public IndexerManagerService(IIndexerConfigurationService config, IProtectionService protectionService, WebClient webClient, Logger l, ICacheService cache, IProcessService processService, IConfigurationService globalConfigService, ServerConfig serverConfig)
@@ -104,10 +103,10 @@ namespace Jackett.Common.Services
                 var files = existingDirectories.SelectMany(d => d.GetFiles("*.yml"));
                 var definitions = files.Select(file =>
                 {
-                    logger.Info("Loading Cardigann definition " + file.FullName);
-
-                    try { 
-                        string DefinitionString = File.ReadAllText(file.FullName);
+                    logger.Debug("Loading Cardigann definition " + file.FullName);
+                    try
+                    {
+                        var DefinitionString = File.ReadAllText(file.FullName);
                         var definition = deserializer.Deserialize<IndexerDefinition>(DefinitionString);
                         return definition;
                     }
@@ -118,7 +117,7 @@ namespace Jackett.Common.Services
                     }
                 }).Where(definition => definition != null);
 
-                List<IIndexer> cardigannIndexers = definitions.Select(definition =>
+                var cardigannIndexers = definitions.Select(definition =>
                 {
                     try
                     {
@@ -146,6 +145,7 @@ namespace Jackett.Common.Services
 
                     indexers.Add(indexer.ID, indexer);
                 }
+                logger.Info("Cardigann definitions loaded: " + string.Join(", ", indexers.Keys));
             }
             catch (Exception ex)
             {
@@ -158,9 +158,9 @@ namespace Jackett.Common.Services
             var omdbApiKey = serverConfig.OmdbApiKey;
             IFallbackStrategyProvider fallbackStrategyProvider = null;
             IResultFilterProvider resultFilterProvider = null;
-            if (!omdbApiKey.IsNullOrEmptyOrWhitespace())
+            if (!string.IsNullOrWhiteSpace(omdbApiKey))
             {
-                var imdbResolver = new OmdbResolver(webClient, omdbApiKey.ToNonNull(), serverConfig.OmdbApiUrl);
+                var imdbResolver = new OmdbResolver(webClient, omdbApiKey, serverConfig.OmdbApiUrl);
                 fallbackStrategyProvider = new ImdbFallbackStrategyProvider(imdbResolver);
                 resultFilterProvider = new ImdbTitleResultFilterProvider(imdbResolver);
             }
@@ -171,8 +171,10 @@ namespace Jackett.Common.Services
             }
 
             logger.Info("Adding aggregate indexer");
-            aggregateIndexer = new AggregateIndexer(fallbackStrategyProvider, resultFilterProvider, configService, webClient, logger, protectionService);
-            aggregateIndexer.Indexers = indexers.Values;
+            aggregateIndexer = new AggregateIndexer(fallbackStrategyProvider, resultFilterProvider, configService, webClient, logger, protectionService)
+            {
+                Indexers = indexers.Values
+            };
         }
 
         public IIndexer GetIndexer(string name)
@@ -207,18 +209,17 @@ namespace Jackett.Common.Services
             throw new Exception("Unknown indexer: " + name);
         }
 
-        public IEnumerable<IIndexer> GetAllIndexers()
-        {
-            return indexers.Values.OrderBy(_ => _.DisplayName);
-        }
+        public IEnumerable<IIndexer> GetAllIndexers() => indexers.Values.OrderBy(_ => _.DisplayName);
 
         public async Task TestIndexer(string name)
         {
             var indexer = GetIndexer(name);
-            var browseQuery = new TorznabQuery();
-            browseQuery.QueryType = "search";
-            browseQuery.SearchTerm = "";
-            browseQuery.IsTest = true;
+            var browseQuery = new TorznabQuery
+            {
+                QueryType = "search",
+                SearchTerm = "",
+                IsTest = true
+            };
             var result = await indexer.ResultsForQuery(browseQuery);
             logger.Info(string.Format("Found {0} releases from {1}", result.Releases.Count(), indexer.DisplayName));
             if (result.Releases.Count() == 0)

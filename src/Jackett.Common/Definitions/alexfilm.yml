@@ -1,4 +1,4 @@
-﻿---
+---
   site: alexfilm
   name: AlexFilm
   description: "AlexFilm is a RUSSIAN Semi-Private Torrent Tracker for TV"
@@ -152,6 +152,5 @@
           img[src="./styles/images/tor_silver.gif"]: 0.5
           "*": 1
       uploadvolumefactor:
-        case:
-          "*": 1
+        text: 1
 # engine n/a

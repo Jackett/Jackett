@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CsQuery;
+using AngleSharp.Dom;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -17,14 +18,14 @@ namespace Jackett.Common.Indexers
 {
     public class DigitalHive : BaseWebIndexer
     {
-        private string SearchUrl { get { return SiteLink + "browse.php"; } }
-        private string LoginUrl { get { return SiteLink + "login.php?returnto=%2F"; } }
-        private string AjaxLoginUrl { get { return SiteLink + "takelogin.php"; } }
+        private string SearchUrl => SiteLink + "browse.php";
+        private string LoginUrl => SiteLink + "login.php?returnto=%2F";
+        private string AjaxLoginUrl => SiteLink + "takelogin.php";
 
         private new ConfigurationDataRecaptchaLogin configData
         {
-            get { return (ConfigurationDataRecaptchaLogin)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataRecaptchaLogin)base.configData;
+            set => base.configData = value;
         }
 
         public DigitalHive(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
@@ -90,26 +91,26 @@ namespace Jackett.Common.Indexers
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
             var loginPage = await RequestStringWithCookies(LoginUrl, configData.CookieHeader.Value);
-            CQ cq = loginPage.Content;
-            string recaptchaSiteKey = cq.Find(".g-recaptcha").Attr("data-sitekey");
+            var parser = new HtmlParser();
+            var cq = parser.ParseDocument(loginPage.Content);
+            var recaptchaSiteKey = cq.QuerySelector(".g-recaptcha")?.GetAttribute("data-sitekey");
             if (recaptchaSiteKey != null)
             {
-                var result = this.configData;
+                var result = configData;
                 result.CookieHeader.Value = loginPage.Cookies;
                 result.Captcha.SiteKey = recaptchaSiteKey;
                 result.Captcha.Version = "2";
                 return result;
             }
-            else
+
+            return new ConfigurationDataBasicLogin
             {
-                var result = new ConfigurationDataBasicLogin();
-                result.SiteLink.Value = configData.SiteLink.Value;
-                result.Instructions.Value = configData.Instructions.Value;
-                result.Username.Value = configData.Username.Value;
-                result.Password.Value = configData.Password.Value;
-                result.CookieHeader.Value = loginPage.Cookies;
-                return result;
-            }
+                SiteLink = { Value = configData.SiteLink.Value },
+                Instructions = { Value = configData.Instructions.Value },
+                Username = { Value = configData.Username.Value },
+                Password = { Value = configData.Password.Value },
+                CookieHeader = { Value = loginPage.Cookies }
+            };
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -149,7 +150,8 @@ namespace Jackett.Common.Indexers
 
             await ConfigureIfOK(result.Cookies, result.Content.Contains("logout.php"), () =>
             {
-                CQ errorMessage = result.Content;
+                var parser = new HtmlParser();
+                var errorMessage = parser.ParseDocument(result.Content);
                 throw new ExceptionWithConfigData(errorMessage.Text(), configData);
             });
 
@@ -158,7 +160,7 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            List<ReleaseInfo> releases = new List<ReleaseInfo>();
+            var releases = new List<ReleaseInfo>();
 
             var queryCollection = new NameValueCollection();
             var searchString = query.GetQueryString();
@@ -195,43 +197,47 @@ namespace Jackett.Common.Indexers
             return releases;
         }
 
-        private IEnumerable<ReleaseInfo> contentToReleaseInfos(TorznabQuery query, CQ dom)
+        private IEnumerable<ReleaseInfo> contentToReleaseInfos(TorznabQuery query, string content)
         {
-            List<ReleaseInfo> releases = new List<ReleaseInfo>();
+            var parser = new HtmlParser();
+            var dom = parser.ParseDocument(content);
+            var releases = new List<ReleaseInfo>();
 
             // Doesn't handle pagination yet...
-            var rows = dom["div.panel-body > table.table > tbody > tr"];
+            var rows = dom.QuerySelectorAll("div.panel-body > table.table > tbody > tr");
             foreach (var row in rows)
             {
                 var release = new ReleaseInfo();
                 release.MinimumRatio = 1;
                 release.MinimumSeedTime = 259200;
 
-                var qRow = row.Cq();
-                release.Title = qRow.Find("td:nth-child(2) > a").First().Text().Trim();
+
+                release.Title = row.QuerySelector("td:nth-child(2) > a").TextContent.Trim();
 
                 if ((query.ImdbID == null || !TorznabCaps.SupportsImdbMovieSearch) && !query.MatchQueryStringAND(release.Title))
                     continue;
 
-                release.Guid = new Uri(SiteLink + qRow.Find("td:nth-child(2) > a").First().Attr("href"));
+                release.Guid = new Uri(SiteLink + row.QuerySelector("td:nth-child(2) > a").GetAttribute("href"));
                 release.Comments = release.Guid;
-                release.Link = new Uri(SiteLink + qRow.Find("td:nth-child(3) > a").First().Attr("href"));
-                var pubDateElement = qRow.Find("td:nth-child(2) > span").First();
-                pubDateElement.Find("a").Remove(); // remove snatchinfo links (added after completing a torrent)
-                var pubDate = pubDateElement.Text().Trim().Replace("Added: ", "");
+                release.Link = new Uri(SiteLink + row.QuerySelector("td:nth-child(3) > a").GetAttribute("href"));
+                var pubDateElement = row.QuerySelector("td:nth-child(2) > span");
+                // remove snatchinfo links (added after completing a torrent)
+                foreach (var element in pubDateElement.QuerySelectorAll("a"))
+                    element.Remove();
+                var pubDate = pubDateElement.TextContent.Trim().Replace("Added: ", "");
                 release.PublishDate = DateTime.Parse(pubDate).ToLocalTime();
-                release.Category = MapTrackerCatToNewznab(qRow.Find("td:nth-child(1) > a").First().Attr("href").Split('=')[1]);
-                release.Size = ReleaseInfo.GetBytes(qRow.Find("td:nth-child(7)").First().Text());
-                release.Seeders = ParseUtil.CoerceInt(qRow.Find("td:nth-child(9)").First().Text());
-                release.Peers = ParseUtil.CoerceInt(qRow.Find("td:nth-child(10)").First().Text()) + release.Seeders;
+                release.Category = MapTrackerCatToNewznab(row.QuerySelector("td:nth-child(1) > a").GetAttribute("href").Split('=')[1]);
+                release.Size = ReleaseInfo.GetBytes(row.QuerySelector("td:nth-child(7)").TextContent);
+                release.Seeders = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(9)").TextContent);
+                release.Peers = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(10)").TextContent) + release.Seeders;
 
-                var files = row.Cq().Find("td:nth-child(5)").Text();
+                var files = row.QuerySelector("td:nth-child(5)").TextContent;
                 release.Files = ParseUtil.CoerceInt(files);
 
-                var grabs = row.Cq().Find("td:nth-child(8)").Text();
+                var grabs = row.QuerySelector("td:nth-child(8)").TextContent;
                 release.Grabs = ParseUtil.CoerceInt(grabs);
 
-                if (row.Cq().Find("i.fa-star").Any())
+                if (row.QuerySelector("i.fa-star") != null)
                     release.DownloadVolumeFactor = 0;
                 else
                     release.DownloadVolumeFactor = 1;

@@ -1,4 +1,4 @@
-﻿---
+---
   site: p2pbg
   name: P2PBG
   description: "P2PBG is a BULGARIAN Private Torrent Tracker for 0DAY / GENERAL"
@@ -6,7 +6,7 @@
   type: private
   encoding: UTF-8
   links:
-    - http://p2pbg.com/
+    - http://p2pbg.com/ # site does not support https ERR_CONNECTION_REFUSED
 
   caps:
     categorymappings:

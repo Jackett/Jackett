@@ -1,10 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -16,27 +15,25 @@ namespace Jackett.Common.Utils
 {
     public static class StringUtil
     {
-        public static string StripNonAlphaNumeric(this string str, string replacement = "")
-        {
-            return StripRegex(str, "[^a-zA-Z0-9 -]", replacement);
-        }
+        public static string StripNonAlphaNumeric(this string str, string replacement = "") =>
+            StripRegex(str, "[^a-zA-Z0-9 -]", replacement);
 
         public static string StripRegex(string str, string regex, string replacement = "")
         {
-            Regex rgx = new Regex(regex);
+            var rgx = new Regex(regex);
             str = rgx.Replace(str, replacement);
             return str;
         }
 
         // replaces culture specific characters with the corresponding base characters (e.g. è becomes e).
-        public static String RemoveDiacritics(String s)
+        public static string RemoveDiacritics(string s)
         {
-            String normalizedString = s.Normalize(NormalizationForm.FormD);
-            StringBuilder stringBuilder = new StringBuilder();
+            var normalizedString = s.Normalize(NormalizationForm.FormD);
+            var stringBuilder = new StringBuilder();
 
-            for (int i = 0; i < normalizedString.Length; i++)
+            for (var i = 0; i < normalizedString.Length; i++)
             {
-                Char c = normalizedString[i];
+                var c = normalizedString[i];
                 if (CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)
                     stringBuilder.Append(c);
             }
@@ -44,31 +41,16 @@ namespace Jackett.Common.Utils
             return stringBuilder.ToString();
         }
 
-        public static string FromBase64(string str)
-        {
-            return Encoding.UTF8.GetString(Convert.FromBase64String(str));
-        }
-
-        public static string PostDataFromDict(IEnumerable<KeyValuePair<string, string>> dict)
-        {
-            return new FormUrlEncodedContent(dict).ReadAsStringAsync().Result;
-        }
+        public static string FromBase64(string str) =>
+            Encoding.UTF8.GetString(Convert.FromBase64String(str));
 
         /// <summary>
         /// Convert an array of bytes to a string of hex digits
         /// </summary>
         /// <param name="bytes">array of bytes</param>
         /// <returns>String of hex digits</returns>
-        public static string HexStringFromBytes(byte[] bytes)
-        {
-            var sb = new StringBuilder();
-            foreach (byte b in bytes)
-            {
-                var hex = b.ToString("x2");
-                sb.Append(hex);
-            }
-            return sb.ToString();
-        }
+        public static string HexStringFromBytes(byte[] bytes) =>
+            string.Join("", bytes.Select(b => b.ToString("X2")));
 
         /// <summary>
         /// Compute hash for string encoded as UTF8
@@ -79,8 +61,8 @@ namespace Jackett.Common.Utils
         {
             var sha1 = SHA1.Create();
 
-            byte[] bytes = Encoding.UTF8.GetBytes(s);
-            byte[] hashBytes = sha1.ComputeHash(bytes);
+            var bytes = Encoding.UTF8.GetBytes(s);
+            var hashBytes = sha1.ComputeHash(bytes);
 
             return HexStringFromBytes(hashBytes);
         }
@@ -88,14 +70,16 @@ namespace Jackett.Common.Utils
         public static string Hash(string s)
         {
             // Use input string to calculate MD5 hash
-            MD5 md5 = System.Security.Cryptography.MD5.Create();
+            var md5 = System.Security.Cryptography.MD5.Create();
 
-            byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(s);
-            byte[] hashBytes = md5.ComputeHash(inputBytes);
+            var inputBytes = System.Text.Encoding.ASCII.GetBytes(s);
+            var hashBytes = md5.ComputeHash(inputBytes);
 
             return HexStringFromBytes(hashBytes);
         }
 
+        // Is never used
+        // remove in favor of Exception.ToString() ?
         public static string GetExceptionDetails(this Exception exception)
         {
             var properties = exception.GetType()
@@ -106,15 +90,15 @@ namespace Jackett.Common.Utils
                                  Name = property.Name,
                                  Value = property.GetValue(exception, null)
                              })
-                             .Select(x => String.Format(
+                             .Select(x => string.Format(
                                  "{0} = {1}",
                                  x.Name,
-                                 x.Value != null ? x.Value.ToString() : String.Empty
+                                 x.Value != null ? x.Value.ToString() : string.Empty
                              ));
-            return String.Join("\n", fields);
+            return string.Join("\n", fields);
         }
 
-        static char[] MakeValidFileName_invalids;
+        private static char[] MakeValidFileName_invalids;
 
         /// <summary>Replaces characters in <c>text</c> that are not allowed in 
         /// file names with the specified replacement character.</summary>
@@ -124,21 +108,24 @@ namespace Jackett.Common.Utils
         /// <returns>A string that can be used as a filename. If the output string would otherwise be empty, returns "_".</returns>
         public static string MakeValidFileName(string text, char? replacement = '_', bool fancy = true)
         {
-            StringBuilder sb = new StringBuilder(text.Length);
+            var sb = new StringBuilder(text.Length);
             var invalids = MakeValidFileName_invalids ?? (MakeValidFileName_invalids = Path.GetInvalidFileNameChars());
-            bool changed = false;
-            for (int i = 0; i < text.Length; i++)
+            var changed = false;
+            for (var i = 0; i < text.Length; i++)
             {
-                char c = text[i];
+                var c = text[i];
                 if (invalids.Contains(c))
                 {
                     changed = true;
                     var repl = replacement ?? '\0';
                     if (fancy)
                     {
-                        if (c == '"') repl = '”'; // U+201D right double quotation mark
-                        else if (c == '\'') repl = '’'; // U+2019 right single quotation mark
-                        else if (c == '/') repl = '⁄'; // U+2044 fraction slash
+                        if (c == '"')
+                            repl = '”'; // U+201D right double quotation mark
+                        else if (c == '\'')
+                            repl = '’'; // U+2019 right single quotation mark
+                        else if (c == '/')
+                            repl = '⁄'; // U+2044 fraction slash
                     }
                     if (repl != '\0')
                         sb.Append(repl);
@@ -151,23 +138,39 @@ namespace Jackett.Common.Utils
             return changed ? sb.ToString() : text;
         }
 
-        public static string GetQueryString(this NameValueCollection collection, Encoding encoding = null)
-        {
-            if (encoding == null)
-                encoding = Encoding.UTF8;
-            return string.Join("&", collection.AllKeys.Select(a => a + "=" + WebUtilityHelpers.UrlEncode(collection[a], encoding)));
-        }
+        /// <summary>
+        /// Converts a NameValueCollection to an appropriately formatted query string.
+        /// Duplicate keys are allowed in a NameValueCollection, but are stored as a csv string in Value.
+        /// This function handles leaving the values together in the csv string or splitting the value into separate keys
+        /// </summary>
+        /// <param name="collection">The NameValueCollection being converted</param>
+        /// <param name="encoding">The Encoding to use in url encoding Value</param>
+        /// <param name="duplicateKeysIfMulti">Duplicate keys are handled as true => {"Key=Val1", "Key=Val2} or false => {"Key=Val1,Val2"}</param>
+        /// <param name="separator">The string used to separate each query value</param>
+        /// <returns>A web encoded string of key=value parameters separated by the separator</returns>
+        public static string GetQueryString(this NameValueCollection collection, Encoding encoding = null,
+                                            bool duplicateKeysIfMulti = false, string separator = "&") =>
+            collection.ToEnumerable(duplicateKeysIfMulti).GetQueryString(encoding, separator);
 
-        public static string GetQueryString(this ICollection<KeyValuePair<string, string>> collection, Encoding encoding = null)
-        {
-            if (encoding == null)
-                encoding = Encoding.UTF8;
-            return string.Join("&", collection.Select(a => a.Key + "=" + WebUtilityHelpers.UrlEncode(a.Value, encoding)));
-        }
+        public static string GetQueryString(this IEnumerable<KeyValuePair<string, string>> collection,
+                                            Encoding encoding = null, string separator = "&") =>
+            string.Join(separator,
+                        collection.Select(a => $"{a.Key}={WebUtilityHelpers.UrlEncode(a.Value, encoding ?? Encoding.UTF8)}"));
 
-        public static void Add(this ICollection<KeyValuePair<string, string>> collection, string key, string value)
+        public static void Add(this ICollection<KeyValuePair<string, string>> collection, string key, string value) => collection.Add(new KeyValuePair<string, string>(key, value));
+
+        public static IEnumerable<KeyValuePair<string, string>> ToEnumerable(
+            this NameValueCollection collection, bool duplicateKeysIfMulti = false)
         {
-            collection.Add(new KeyValuePair<string, string>(key, value));
+            foreach (string key in collection.Keys)
+            {
+                var value = collection[key];
+                if (duplicateKeysIfMulti)
+                    foreach (var val in value.Split(','))
+                        yield return new KeyValuePair<string, string>(key, val);
+                else
+                    yield return new KeyValuePair<string, string>(key, value);
+            }
         }
 
         public static string ToHtmlPretty(this IElement element)
@@ -175,8 +178,8 @@ namespace Jackett.Common.Utils
             if (element == null)
                 return "<NULL>";
 
-            StringBuilder sb = new StringBuilder();
-            StringWriter sw = new StringWriter(sb);
+            var sb = new StringBuilder();
+            var sw = new StringWriter(sb);
             var formatter = new PrettyMarkupFormatter();
             element.ToHtml(sw, formatter);
             return sb.ToString();

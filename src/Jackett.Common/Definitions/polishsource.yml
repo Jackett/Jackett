@@ -23,9 +23,9 @@
       - {id: 13, cat: XXX, desc: "XXX"}
 
     modes:
-      search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
+      search: [q, imdbid]
+      tv-search: [q, season, ep, imdbid]
+      movie-search: [q, imdbid]
 
   settings:
     - name: username
@@ -69,13 +69,14 @@
     test:
       path: browse.php
       selector: a[href^="logout.php"]
-        
+
   search:
     paths:
+    # https://polishsource.cz/browse.php?search=tt1598778&incldead=1&scene=0&pl=0&sub=&search_in=nfo
       - path: browse.php
     inputs:
       $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-      search: "{{ .Keywords }}"
+      search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
       # 0 onlyactive 1 all 2 onlydead
       incldead: 1
       # 0 all 1 scene 2 notscene 3 internal
@@ -85,7 +86,7 @@
       # subcat blank=all
       sub: ""
       # title both nfo
-      search_in: title
+      search_in: "{{ if .Query.IMDBID }}nfo{{else}}title{{end}}"
       sort: "{{ .Config.sort }}"
       type: "{{ .Config.type }}"
 
@@ -156,3 +157,4 @@
         text: 0
       uploadvolumefactor:
         text: 1
+# engine n/a

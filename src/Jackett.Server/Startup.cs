@@ -1,4 +1,8 @@
-﻿using Autofac;
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Text;
+using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Plumbing;
@@ -12,15 +16,11 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
-using System;
-using System.IO;
-using System.Text;
 #if !NET461
 using Microsoft.Extensions.Hosting;
 #endif
@@ -29,10 +29,7 @@ namespace Jackett.Server
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+        public Startup(IConfiguration configuration) => Configuration = configuration;
 
         public IConfiguration Configuration { get; }
 
@@ -49,41 +46,31 @@ namespace Jackett.Server
                             options.AccessDeniedPath = new PathString("/UI/Login");
                             options.LogoutPath = new PathString("/UI/Logout");
                             options.Cookie.Name = "Jackett";
-                            options.Cookie.SameSite = SameSiteMode.None;
                         });
 
 
 
 #if NET461
-            services.AddMvc(config =>
-                    {
-                        var policy = new AuthorizationPolicyBuilder()
-                                            .RequireAuthenticatedUser()
-                                            .Build();
-                        config.Filters.Add(new AuthorizeFilter(policy));
-                    })
-                    .AddJsonOptions(options =>
-                    {
-                        options.SerializerSettings.ContractResolver = new DefaultContractResolver(); //Web app uses Pascal Case JSON
-                    });
+            services.AddMvc(
+                        config => config.Filters.Add(
+                            new AuthorizeFilter(
+                                new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build())))
+                    .AddJsonOptions(options => options.SerializerSettings.ContractResolver =
+                                        new DefaultContractResolver()); //Web app uses Pascal Case JSON);
 #else
-            services.AddControllers(config =>
-                    {
-                        var policy = new AuthorizationPolicyBuilder()
-                                            .RequireAuthenticatedUser()
-                                            .Build();
-                        config.Filters.Add(new AuthorizeFilter(policy));
-                    })
-                    .AddNewtonsoftJson(options =>
-                    {
-                        options.SerializerSettings.ContractResolver = new DefaultContractResolver(); //Web app uses Pascal Case JSON
-                    });
+
+            services.AddControllers(
+                        config => config.Filters.Add(
+                            new AuthorizeFilter(
+                                new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build())))
+                    .AddNewtonsoftJson(
+                        options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
 #endif
 
-            RuntimeSettings runtimeSettings = new RuntimeSettings();
+            var runtimeSettings = new RuntimeSettings();
             Configuration.GetSection("RuntimeSettings").Bind(runtimeSettings);
 
-            DirectoryInfo dataProtectionFolder = new DirectoryInfo(Path.Combine(runtimeSettings.DataFolder, "DataProtection"));
+            var dataProtectionFolder = new DirectoryInfo(Path.Combine(runtimeSettings.DataFolder, "DataProtection"));
 
             services.AddDataProtection()
                         .PersistKeysToFileSystem(dataProtectionFolder)
@@ -103,7 +90,7 @@ namespace Jackett.Server
             builder.RegisterType<ServiceConfigService>().As<IServiceConfigService>().SingleInstance();
             builder.RegisterType<FilePermissionService>().As<IFilePermissionService>().SingleInstance();
 
-            IContainer container = builder.Build();
+            var container = builder.Build();
             Helper.ApplicationContainer = container;
 
             Helper.Logger.Debug("Autofac container built");
@@ -117,7 +104,8 @@ namespace Jackett.Server
 #if NET461
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime applicationLifetime)
         {
-            applicationLifetime.ApplicationStopping.Register(OnShutdown);
+            applicationLifetime.ApplicationStarted.Register(OnStarted);
+            applicationLifetime.ApplicationStopped.Register(OnStopped);
             Helper.applicationLifetime = applicationLifetime;
             app.UseResponseCompression();
 
@@ -125,7 +113,7 @@ namespace Jackett.Server
 
             app.UseCustomExceptionHandler();
 
-            string serverBasePath = Helper.ServerService.BasePath() ?? string.Empty;
+            var serverBasePath = Helper.ServerService.BasePath() ?? string.Empty;
 
             if (!string.IsNullOrEmpty(serverBasePath))
             {
@@ -156,7 +144,8 @@ namespace Jackett.Server
 #else
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime applicationLifetime)
         {
-            applicationLifetime.ApplicationStopping.Register(OnShutdown);
+            applicationLifetime.ApplicationStarted.Register(OnStarted);
+            applicationLifetime.ApplicationStopped.Register(OnStopped);
             Helper.applicationLifetime = applicationLifetime;
             app.UseResponseCompression();
 
@@ -164,7 +153,7 @@ namespace Jackett.Server
 
             app.UseCustomExceptionHandler();
 
-            string serverBasePath = Helper.ServerService.BasePath() ?? string.Empty;
+            var serverBasePath = Helper.ServerService.BasePath() ?? string.Empty;
 
             if (!string.IsNullOrEmpty(serverBasePath))
             {
@@ -192,18 +181,16 @@ namespace Jackett.Server
 
             app.UseRouting();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
         }
 #endif
 
-
-
-        private void OnShutdown()
+        private static void OnStarted()
         {
-            //this code is called when the application stops
+            var elapsed = (DateTime.Now - Process.GetCurrentProcess().StartTime).TotalSeconds;
+            Helper.Logger.Info($"Jackett startup finished in {elapsed:0.000} s");
         }
+
+        private static void OnStopped() => Helper.Logger.Info($"Jackett stopped");
     }
 }

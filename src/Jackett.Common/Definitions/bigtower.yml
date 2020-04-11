@@ -6,14 +6,16 @@
   type: private
   encoding: UTF-8
   links:
-    - http://bigtower.info/
+    - http://bigtower.info/ # site does not support https NET::ERR_CERT_DATE_INVALID
+  legacylinks:
+    - https://bigtower.info/
 
   caps:
     categorymappings:
 
       # Movies
       - {id: 11, cat: Movies/HD, desc: "DSS"}
-      - {id: 1, cat: Movies, desc: "Screener"}     
+      - {id: 1, cat: Movies, desc: "Screener"}
       - {id: 2, cat: Movies, desc: "DVDRip & BDRip"}
       - {id: 3, cat: Movies/BluRay, desc: "Bluray 1080p & 720p"}
       - {id: 5, cat: Movies/UHD, desc: "Ultra HD 4K"}
@@ -25,10 +27,10 @@
 
       # MUSIC
       - {id: 8, cat: Audio, desc: "Musica"}
-    
+
       # SOFTWARE
       - {id: 9, cat: PC/0day, desc: "Software"}
-    
+
       # PHONE
       - {id: 12, cat: PC/Phone-Other, desc: "Applicazioni"}
 

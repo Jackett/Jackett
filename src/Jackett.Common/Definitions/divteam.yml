@@ -1,4 +1,4 @@
-﻿---
+---
   site: divteam
   name: DivTeam
   description: "DivTeam is a SPANISH Private Torrent Tracker for MOVIES / GENERAL"
@@ -12,7 +12,7 @@
     categorymappings:
       - {id: 60, cat: Movies/HD, desc: "MicroHD 720p"}
       - {id: 77, cat: Movies/HD, desc: "MicroHD 1080p"}
-      - {id: 78, cat: Movies/HD, desc: "MicroHD 4k"}
+      - {id: 78, cat: Movies/HD, desc: "MicroHD 4K"}
       - {id: 64, cat: TV/HD, desc: "Pack Series"}
       - {id: 65, cat: TV/HD, desc: "Pack Series VOSE"}
       - {id: 80, cat: Movies/BluRay, desc: "BDRip X265 1080p"}
@@ -43,13 +43,13 @@
       - {id: 48, cat: Movies/BluRay, desc: "BR-Rip/HD-Rip"}
       - {id: 17, cat: Movies/BluRay, desc: "BD-Rip"}
       - {id: 5, cat: TV/Anime, desc: "Anime"}
-      - {id: 34, cat: PC/Games, desc: "Juegos Pc"}
-      - {id: 7, cat: PC/0day, desc: "Software Pc"}
+      - {id: 34, cat: PC/Games, desc: "Juegos PC"}
+      - {id: 7, cat: PC/0day, desc: "Software PC"}
       - {id: 35, cat: Console, desc: "Juegos Sony"}
       - {id: 36, cat: PC/Games, desc: "Juegos Microsoft"}
       - {id: 37, cat: Console/NDS, desc: "Juegos Nintendo"}
       - {id: 45, cat: Audio/MP3, desc: "Music MP3"}
-      - {id: 44, cat: Audio/Lossless, desc: "Music flac"}
+      - {id: 44, cat: Audio/Lossless, desc: "Music FLAC"}
 
     modes:
       search: [q]
@@ -63,7 +63,7 @@
     - name: info
       type: info
       label: How to get the Cookie
-      default: "<ol><li>Login to this tracker in your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find 'cookie:' in the <b>Request Headers</b> section<li>Copy & paste the whole cookie string to here</ol>"
+      default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
     - name: sort
       type: select
       label: Sort requested from site
@@ -84,7 +84,7 @@
       type: info
       label: Results Per Page
       default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
-          
+
   login:
     method: cookie
     inputs:
@@ -99,11 +99,14 @@
     inputs:
       page: "torrents"
       category: "{{ range .Categories }}{{.}};{{end}}"
-      search: "{{ if .Keywords }}{{ .Keywords }}{{else}}{{end}}"
+      search: "{{ .Keywords }}"
+      # 0 all 1 activeonly 2 deadonly
       active: 0
+      # 0 title 1 title&desc 2 descr 3 uploaders 5 gold 6 silver 9 2x 10 3x 11 4x
       options: 0
       order: "{{ .Config.sort }}"
       by: "{{ .Config.type }}"
+      # does not support imdbid search and does not supply imdb link in results.
 
     rows:
       selector: table.table.table-bordered > tbody > tr:has(a[href^="download.php?id="])

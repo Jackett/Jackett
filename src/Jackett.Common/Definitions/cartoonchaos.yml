@@ -1,4 +1,4 @@
-﻿---
+---
   site: cartoonchaos
   name: CartoonChaos
   description: "CartoonChaos (CC) is a Private Torrent Tracker for ANIMATED MOVIES / TV"
@@ -6,7 +6,7 @@
   type: private
   encoding: UTF-8
   links:
-    - http://www.cartoonchaos.org/
+    - http://www.cartoonchaos.org/ # site does not support https NET::ERR_CERT_AUTHORITY_INVALID
 
   settings:
     - name: username
@@ -59,6 +59,7 @@
       search: [q, imdbid]
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
+      music-search: [q]
 
   login:
     path: index.php?page=login
@@ -81,8 +82,9 @@
       page: torrents
       search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
       category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{else}}0{{end}}"
-      # options: 0=title, 1=title&descr, 2=descr
-      options: "{{ if .Query.IMDBID }}1{{else}}0{{end}}"
+      # 0=title, 1=title&descr, 2=descr
+      options: "{{ if .Query.IMDBID }}2{{else}}0{{end}}"
+      # 0 all 1 activeonly 2 deadonly
       active: 0
       order: "{{ .Config.sort }}"
       by: "{{ .Config.type }}"
@@ -115,6 +117,14 @@
             args: [" http://anonym.to?javascript:popdetails('", ""]
           - name: replace
             args: ["');", ""]
+      banner:
+        selector: td a[href^="index.php?page=torrent-details"]
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: "src=(.+?) width"
+          - name: replace
+            args: ["torrentimg/nocover.jpg", ""]
       size:
         selector: td:nth-child(10)
         # two flavours of dates

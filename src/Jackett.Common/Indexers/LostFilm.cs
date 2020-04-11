@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -8,7 +8,6 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
-using CsQuery;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -19,21 +18,25 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
-    class LostFilm : BaseWebIndexer
+    internal class LostFilm : BaseWebIndexer
     {
-        private static Regex parsePlayEpisodeRegex = new Regex("PlayEpisode\\('(?<id>\\d{1,3})(?<season>\\d{3})(?<episode>\\d{3})'\\)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-        private static Regex parseReleaseDetailsRegex = new Regex("Видео:\\ (?<quality>.+).\\ Размер:\\ (?<size>.+).\\ Перевод", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex parsePlayEpisodeRegex = new Regex("PlayEpisode\\('(?<id>\\d{1,3})(?<season>\\d{3})(?<episode>\\d{3})'\\)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex parseReleaseDetailsRegex = new Regex("Видео:\\ (?<quality>.+).\\ Размер:\\ (?<size>.+).\\ Перевод", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        string LoginUrl { get { return SiteLink + "login"; } }
+        private string LoginUrl => SiteLink + "login";
+
         // http://www.lostfilm.tv/login
-        string ApiUrl { get { return SiteLink + "ajaxik.php"; } }
+        private string ApiUrl => SiteLink + "ajaxik.php";
+
         // http://www.lostfilm.tv/new
-        string DiscoveryUrl { get { return SiteLink + "new"; } }
+        private string DiscoveryUrl => SiteLink + "new";
+
         // http://www.lostfilm.tv/search?q=breaking+bad
-        string SearchUrl { get { return SiteLink + "search"; } }
+        private string SearchUrl => SiteLink + "search";
+
         // PlayEpisode function produce urls like this:
         // https://www.lostfilm.tv/v_search.php?c=119&s=5&e=16
-        string ReleaseUrl { get { return SiteLink + "v_search.php"; } }
+        private string ReleaseUrl => SiteLink + "v_search.php";
 
 
         internal class TrackerUrlDetails
@@ -59,6 +62,7 @@ namespace Jackett.Common.Indexers
                 episode = match.Groups["episode"].Value.TrimStart('0');
             }
 
+            // TODO: see if query.GetEpisodeString() is sufficient
             internal string GetEpisodeString()
             {
                 var result = string.Empty;
@@ -77,10 +81,10 @@ namespace Jackett.Common.Indexers
             }
         }
 
-        new ConfigurationDataCaptchaLogin configData
+        private new ConfigurationDataCaptchaLogin configData
         {
-            get { return (ConfigurationDataCaptchaLogin)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataCaptchaLogin)base.configData;
+            set => base.configData = value;
         }
 
         public LostFilm(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
@@ -92,7 +96,6 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
-                   // TODO: Provide optional instructions
                    configData: new ConfigurationDataCaptchaLogin())
         {
             Encoding = Encoding.UTF8;
@@ -104,12 +107,13 @@ namespace Jackett.Common.Indexers
         {
             // looks like after some failed login attempts there's a captcha
             var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
-            CQ dom = loginPage.Content;
-            CQ qCaptchaImg = dom.Find("img#captcha_pictcha").First();
-            if (qCaptchaImg.Length == 1)
+            var parser = new HtmlParser();
+            var document = parser.ParseDocument(loginPage.Content);
+            var qCaptchaImg = document.QuerySelector("img#captcha_pictcha");
+            if (qCaptchaImg != null)
             {
-                var CaptchaUrl = SiteLink + qCaptchaImg.Attr("src");
-                var captchaImage = await RequestBytesWithCookies(CaptchaUrl, loginPage.Cookies);
+                var captchaUrl = SiteLink + qCaptchaImg.GetAttribute("src");
+                var captchaImage = await RequestBytesWithCookies(captchaUrl, loginPage.Cookies);
                 configData.CaptchaImage.Value = captchaImage.Content;
             }
             else
@@ -152,7 +156,9 @@ namespace Jackett.Common.Indexers
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("\"success\":true"), () =>
             {
                 var errorMessage = result.Content;
-                if (errorMessage.StartsWith("\"error\":3,"))
+                if (errorMessage.Contains("\"error\":2"))
+                    errorMessage = "Captcha is incorrect";
+                if (errorMessage.Contains("\"error\":3"))
                     errorMessage = "E-mail or password is incorrect";
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
@@ -160,7 +166,7 @@ namespace Jackett.Common.Indexers
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
-        private async Task<Boolean> Logout()
+        private async Task<bool> Logout()
         {
             logger.Info("Performing logout");
 
@@ -226,6 +232,8 @@ namespace Jackett.Common.Indexers
             /*
             Torznab query for some series could contains sanitized title. E.g. "Star Wars: The Clone Wars" will become "Star Wars The Clone Wars".
             Search API on LostFilm.tv doesn't return anything on such search query so the query should be "morphed" even for "tvsearch" queries.
+            Also the queries to Specials is a union of Series and Episode titles. E.g.: "Breaking Bad - El Camino: A Breaking Bad Movie".
+
             The algorythm works in the following way:
                 1. Search with the full SearchTerm. Just for example, let's search for episode by it's name
                     - {Star Wars The Clone Wars To Catch a Jedi}
@@ -242,7 +250,16 @@ namespace Jackett.Common.Indexers
                         .filterBy(The Clone Wars To Catch) / a Jedi
                         ...
                         .filterBy(The Clone Wars) / To Catch a Jedi
-                5. Fetch series detail page for "Star Wars The Clone Wars" with a "To Catch a Jedi" filterTerm to find required episode
+                5. [loop] Now we know that series we're looking for is called "Star Wars The Clone Wars". Fetch series detail page for it and try to apply remaining words as episode filter, reducing filter by 1 word each time we get no results:
+                    - .episodes().filteredBy(To Catch a Jedi)
+                    - .episodes().filteredBy(To Catch a) / Jedi
+                    - ...
+                    - .episodes() / To Catch a Jedi
+
+            Test queries:
+                - "Star Wars The Clone Wars To Catch a Jedi"    -> S05E19
+                - "Breaking Bad El Camino A Breaking Bad Movie" -> Special
+                - "The Magicians (2015)"                        -> Year should be ignored
             */
 
             // Search query words. Consists of Series keywords that will be used for series search request, and Episode keywords that will be used for episode filtering.
@@ -264,10 +281,20 @@ namespace Jackett.Common.Indexers
                 };
                 logger.Debug("> Searching: " + searchString);
                 var response = await PostDataWithCookies(url: ApiUrl, data: data);
+                if (response.Content == null)
+                {
+                    logger.Debug("> Empty series response for query: " + searchString);
+                    continue;
+                }
 
                 try
                 {
                     var json = JToken.Parse(response.Content);
+                    if (json == null || json.Type == JTokenType.Array)
+                    {
+                        logger.Debug("> Invalid response for query: " + searchString);
+                        continue; // Search loop
+                    }
 
                     // Protect from {"data":false,"result":"ok"}
                     var jsonData = json["data"];
@@ -318,11 +345,25 @@ namespace Jackett.Common.Indexers
                         }
                         else // Fetch the whole series OR episode with filter applied
                         {
-                            var filterKeywords = keywords.Skip(searchKeywords + serieFilterKeywords);
-                            var filter = string.Join(" ", filterKeywords);
+                            var episodeKeywords = keywords.Skip(searchKeywords + serieFilterKeywords);
+                            var episodeFilterKeywords = episodeKeywords.Count();
 
-                            var taskReleases = await FetchSeriesReleases(url, query, filter);
-                            releases.AddRange(taskReleases);
+                            // Search for episodes dropping 1 filter word each time when no results has found.
+                            // Last search will be performed with empty filter
+                            do
+                            {
+                                var filter = string.Join(" ", episodeKeywords.Take(episodeFilterKeywords));
+                                logger.Debug("> Searching episodes with filter [" + filter + "]");
+                                var taskReleases = await FetchSeriesReleases(url, query, filter);
+
+                                if (taskReleases.Count() > 0)
+                                {
+                                    logger.Debug("> Found " + taskReleases.Count().ToString() + " episodes");
+                                    releases.AddRange(taskReleases);
+                                    break; // Episodes Filter loop
+                                }
+                            }
+                            while (--episodeFilterKeywords >= 0);
                         }
                     }
 
@@ -567,16 +608,22 @@ namespace Jackett.Common.Indexers
 
         private async Task<List<ReleaseInfo>> FetchTrackerReleases(TrackerUrlDetails details)
         {
-            var queryCollection = new NameValueCollection();
-            queryCollection.Add("c", details.seriesId);
-            queryCollection.Add("s", details.season);
-            queryCollection.Add("e", string.IsNullOrEmpty(details.episode) ? "999" : details.episode); // 999 is a synonym for the whole serie
+            var queryCollection = new NameValueCollection
+            {
+                { "c", details.seriesId },
+                { "s", details.season },
+                { "e", string.IsNullOrEmpty(details.episode) ? "999" : details.episode } // 999 is a synonym for the whole serie
+            };
             var url = ReleaseUrl + "?" + queryCollection.GetQueryString();
 
             logger.Debug("FetchTrackerReleases: " + url);
 
             // Get redirection page with generated link on it. This link can't be constructed manually as it contains Hash field and hashing algo is unknown.
             var results = await RequestStringWithCookies(url);
+            if (results.Content == null)
+            {
+                throw new ExceptionWithConfigData("Empty response from " + url, configData);
+            }
             if (results.Content == "log in first")
             {
                 throw new ExceptionWithConfigData(results.Content, configData);
@@ -626,12 +673,12 @@ namespace Jackett.Common.Indexers
                 {
                     try
                     {
-                        var release = new ReleaseInfo();
-
-                        release.Category = new int[] { TorznabCatType.TV.ID };
 
                         var detailsInfo = row.QuerySelector("div.inner-box--desc").TextContent;
                         var releaseDetails = parseReleaseDetailsRegex.Match(detailsInfo);
+
+                        // ReSharper states "Expression is always false"
+                        // TODO Refactor to get the intended operation
                         if (releaseDetails == null)
                         {
                             throw new FormatException("Failed to map release details string: " + detailsInfo);
@@ -652,8 +699,11 @@ namespace Jackett.Common.Indexers
                         quality = Regex.Replace(quality, "1080 ", "1080p ", RegexOptions.IgnoreCase);
                         quality = Regex.Replace(quality, "720 ", "720p ", RegexOptions.IgnoreCase);
 
-                        var techComponents = new string[] {
-                            "rus", quality, "(LostFilm)"
+                        var techComponents = new[]
+                        {
+                            "rus",
+                            quality,
+                            "(LostFilm)"
                         };
                         var techInfo = string.Join(" ", techComponents.Where(s => !string.IsNullOrEmpty(s)));
 
@@ -662,19 +712,32 @@ namespace Jackett.Common.Indexers
                         var titleComponents = new string[] {
                             serieTitle, details.GetEpisodeString(), episodeName, techInfo
                         };
-                        release.Title = string.Join(" - ", titleComponents.Where(s => !string.IsNullOrEmpty(s)));
-
                         var downloadLink = row.QuerySelector("div.inner-box--link > a");
-                        release.Link = new Uri(downloadLink.GetAttribute("href"));
-                        release.Guid = release.Link;
-
                         var sizeString = releaseDetails.Groups["size"].Value.ToUpper();
                         sizeString = sizeString.Replace("ТБ", "TB"); // untested
                         sizeString = sizeString.Replace("ГБ", "GB");
                         sizeString = sizeString.Replace("МБ", "MB");
                         sizeString = sizeString.Replace("КБ", "KB"); // untested
-                        release.Size = ReleaseInfo.GetBytes(sizeString);
+                        var link = new Uri(downloadLink.GetAttribute("href"));
 
+                        // TODO this feels sparse compared to other trackers. Expand later
+                        var release = new ReleaseInfo
+                        {
+                            Category = new[] { TorznabCatType.TV.ID },
+                            Title = string.Join(" - ", titleComponents.Where(s => !string.IsNullOrEmpty(s))),
+                            Link = link,
+                            Guid = link,
+                            Size = ReleaseInfo.GetBytes(sizeString),
+                            // add missing torznab fields not available from results
+                            Seeders = 1,
+                            Peers = 2,
+                            DownloadVolumeFactor = 0,
+                            UploadVolumeFactor = 1,
+                            MinimumRatio = 1,
+                            MinimumSeedTime = 172800 // 48 hours
+                        };
+
+                        // TODO Other trackers don't have this log line. Remove or add to other trackers?
                         logger.Debug("> Add: " + release.Title);
                         releases.Add(release);
                     }

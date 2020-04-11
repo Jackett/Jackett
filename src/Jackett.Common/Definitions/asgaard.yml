@@ -1,4 +1,4 @@
-﻿---
+---
   site: asgaard
   name: Asgaard
   description: "Asgaard (AG) is a NORDIC Private Torrent Tracker for MOVIES / TV / GENERAL"
@@ -57,7 +57,7 @@
       - {id: 43, cat: Books/Technical, desc: "Books Education"}
 
     modes:
-      search: [q]
+      search: [q, imdbid]
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
 
@@ -104,7 +104,7 @@
     test:
       path: /
       selector: a[href$="/logout.php"]
-      
+
   search:
     paths:
     # https://asgrd.org/browse.php?sns=&sna=&spf=&sr=&sg=&sys=&sye=&srs=&sre=&si=tt2401090&ss=&incldead=0&only_free=0&sort=4&type=desc
@@ -178,6 +178,5 @@
           img[src="./images/gold.png"]: 0
           "*": 1
       uploadvolumefactor:
-        case:
-          "*": 1
+        text: 1
 # Midgaard

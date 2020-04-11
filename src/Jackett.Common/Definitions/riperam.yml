@@ -1,4 +1,4 @@
-﻿---
+---
   site: riperam
   name: RiperAM
   description: "RiperAM is a RUSSIAN Semi-Private Torrent Tracker for MOVIES / TV"
@@ -6,7 +6,7 @@
   type: semi-private
   encoding: UTF-8
   links:
-    - http://riperam.org/
+    - http://riperam.org/ # site does not support https ERR_CONNECTION_TIMED_OUT
 
   caps:
     categorymappings:
@@ -1489,7 +1489,7 @@
           ":contains(\"Прочее\")": 1214
           ":contains(\"Новости игровой индустрии(Игромания)\")": 1229
           ":contains(\"Игромания\")": 1352
-          ":contains(\"Шаблоны оформления раздач\")": 1292 
+          ":contains(\"Шаблоны оформления раздач\")": 1292
           ":contains(\"Шаблон xatab\")": 1310
           ":contains(\"Шаблон оформления общий\")": 1300
           ":contains(\"Шаблон оформления VickNet\")": 1298
@@ -1663,7 +1663,7 @@
           - name: regexp
             args: "Размер: (.+?),"
           - name: replace
-            args: ["ТБ", "TB"] 
+            args: ["ТБ", "TB"]
           - name: replace
             args: ["ГБ", "GB"]
           - name: replace
@@ -1714,3 +1714,4 @@
         text: 0
       uploadvolumefactor:
         text: 1
+# phpBB

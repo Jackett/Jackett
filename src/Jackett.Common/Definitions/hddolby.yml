@@ -1,9 +1,9 @@
 ---
   site: hddolby
   name: HDDolby
-  description: "HD Dolby is a CHINESE Semi-Private Torrent Tracker for HD MOVIES / TV / GENERAL"
+  description: "HD Dolby is a CHINESE Private Torrent Tracker for HD MOVIES / TV / GENERAL"
   language: zh-cn
-  type: semi-private
+  type: private
   encoding: UTF-8
   links:
     - https://www.hddolby.com/
@@ -23,7 +23,7 @@
       - {id: 411, cat: Books, desc: "Study学习"}
 
     modes:
-      search: [q]
+      search: [q, imdbid]
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
 
@@ -83,7 +83,7 @@
             args: cat
       details:
         selector: a[href^="details.php?id="]
-        attribute: href    
+        attribute: href
       download:
         selector: a[href^="download.php?id="]
         attribute: href

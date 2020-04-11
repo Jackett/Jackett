@@ -29,8 +29,8 @@ namespace Jackett.Common.Indexers
 
         private ConfigurationData ConfigData
         {
-            get => (ConfigurationData)base.configData;
-            set => base.configData = value;
+            get => configData;
+            set => configData = value;
         }
 
         public SolidTorrents(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
@@ -68,9 +68,7 @@ namespace Jackett.Common.Indexers
             var releases = await PerformQuery(new TorznabQuery());
 
             await ConfigureIfOK(string.Empty, releases.Any(), () =>
-            {
-                throw new Exception("Could not find release from this URL.");
-            });
+                                    throw new Exception("Could not find release from this URL."));
 
             return IndexerConfigurationStatus.Completed;
         }
@@ -93,14 +91,16 @@ namespace Jackett.Common.Indexers
 
         private async Task<JArray> SendSearchRequest(string searchString, string category, int page)
         {
-            var queryCollection = new NameValueCollection();
-            queryCollection.Add("q", searchString);
-            queryCollection.Add("category", category);
-            queryCollection.Add("skip", (page * MAX_RESULTS_PER_PAGE).ToString());
-            queryCollection.Add("sort", "date");
-            queryCollection.Add("fuv", "no");
+            var queryCollection = new NameValueCollection
+            {
+                {"q", searchString},
+                {"category", category},
+                {"skip", (page * MAX_RESULTS_PER_PAGE).ToString()},
+                {"sort", "date"},
+                {"fuv", "no"}
+            };
             var fullSearchUrl = SearchUrl + "?" + queryCollection.GetQueryString();
-            var result = await RequestStringWithCookiesAndRetry(fullSearchUrl, null, null, APIHeaders);
+            var result = await RequestStringWithCookies(fullSearchUrl, null, null, APIHeaders);
             return CheckResponse(result);
         }
 
@@ -123,9 +123,7 @@ namespace Jackett.Common.Indexers
                 try
                 {
                     foreach (var torrent in result)
-                    {
                         releases.Add(MakeRelease(torrent));
-                    }
                 }
                 catch (Exception ex)
                 {
@@ -140,37 +138,33 @@ namespace Jackett.Common.Indexers
             return releases;
         }
 
+        //TODO inline single use function
         private ReleaseInfo MakeRelease(JToken torrent)
         {
-            var release = new ReleaseInfo();
-
-            release.Title = (string)torrent["title"];
-
             // https://solidtorrents.net/view/5e10885d651df640a70ee826
-            release.Comments = new Uri(SiteLink + "view/" + (string)torrent["_id"]);
-            release.Guid = release.Comments;
-
-            release.PublishDate = DateTime.Now;
-            if (torrent["imported"] != null)
-                release.PublishDate = DateTime.Parse((string)torrent["imported"]);
-
-            release.Category = MapTrackerCatToNewznab((string)torrent["category"]);
-            release.Size = (long)torrent["size"];
-
+            var comments = new Uri(SiteLink + "view/" + (string)torrent["_id"]);
             var swarm = torrent["swarm"];
-            release.Seeders = (int)swarm["seeders"];
-            release.Peers = release.Seeders + (int)swarm["leechers"];
-            release.Grabs = (long)swarm["downloads"];
-
-            release.InfoHash = (string)torrent["infohash"];
-            release.MagnetUri = new Uri((string)torrent["magnet"]);
-
-            release.MinimumRatio = 1;
-            release.MinimumSeedTime = 172800; // 48 hours
-            release.DownloadVolumeFactor = 0;
-            release.UploadVolumeFactor = 1;
-
-            return release;
+            var seeders = (int)swarm["seeders"];
+            var publishDate = torrent["imported"] != null ? DateTime.Parse((string)torrent["imported"]) : DateTime.Now;
+            var magnetUri = new Uri((string)torrent["magnet"]);
+            return new ReleaseInfo
+            {
+                Title = (string)torrent["title"],
+                Comments = comments,
+                Guid = comments,
+                PublishDate = publishDate,
+                Category = MapTrackerCatToNewznab((string)torrent["category"]),
+                Size = (long)torrent["size"],
+                Seeders = seeders,
+                Peers = seeders + (int)swarm["leechers"],
+                Grabs = (long)swarm["downloads"],
+                InfoHash = (string)torrent["infohash"],
+                MagnetUri = magnetUri,
+                MinimumRatio = 1,
+                MinimumSeedTime = 172800, // 48 hours
+                DownloadVolumeFactor = 0,
+                UploadVolumeFactor = 1
+            };
         }
     }
 }

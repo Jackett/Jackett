@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -20,21 +20,25 @@ namespace Jackett.Common.Indexers
         public override string[] LegacySiteLinks { get; protected set; } = new string[] {
             "https://yts.ag/",
             "https://yts.am/",
+            "https://yts.lt/",
         };
 
-        private string ApiEndpoint { get { return SiteLink + "api/v2/list_movies.json"; } }
+        private string ApiEndpoint => SiteLink + "api/v2/list_movies.json";
 
         private new ConfigurationData configData
         {
-            get { return (ConfigurationData)base.configData; }
-            set { base.configData = value; }
+            get => base.configData;
+            set => base.configData = value;
         }
 
         public Yts(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base(name: "YTS",
                 description: "YTS is a Public torrent site specialising in HD movies of small size",
-                link: "https://yts.lt/",
-                caps: new TorznabCapabilities(),
+                link: "https://yts.mx/",
+                caps: new TorznabCapabilities
+                {
+                    SupportsImdbMovieSearch = true
+                },
                 configService: configService,
                 client: wc,
                 logger: l,
@@ -45,12 +49,13 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "public";
 
-            TorznabCaps.SupportsImdbMovieSearch = true;
-
             webclient.requestDelay = 2.5; // 0.5 requests per second (2 causes problems)
 
-            AddCategoryMapping(45, TorznabCatType.MoviesHD, "Movies/x264/720");
-            AddCategoryMapping(44, TorznabCatType.MoviesHD, "Movies/x264/1080");
+            // note: the API does not support searching with categories, so these are dummy ones for torznab compatibility
+            // we map these newznab cats with the returned quality value in the releases routine.
+            AddCategoryMapping(45, TorznabCatType.MoviesHD, "Movies/x264/720p");
+            AddCategoryMapping(44, TorznabCatType.MoviesHD, "Movies/x264/1080p");
+            AddCategoryMapping(46, TorznabCatType.MoviesUHD, "Movies/x264/2160p"); // added for #7010
             AddCategoryMapping(47, TorznabCatType.Movies3D, "Movies/x264/3D");
         }
 
@@ -59,29 +64,26 @@ namespace Jackett.Common.Indexers
             configData.LoadValuesFromJson(configJson);
             var releases = await PerformQuery(new TorznabQuery());
 
-            await ConfigureIfOK(string.Empty, releases.Count() > 0, () =>
-            {
-                throw new Exception("Could not find releases from this URL");
-            });
+            await ConfigureIfOK(string.Empty, releases.Count() > 0,
+                                () => throw new Exception("Could not find releases from this URL"));
 
             return IndexerConfigurationStatus.Completed;
         }
 
-        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
-        {
-            return await PerformQuery(query, 0);
-        }
+        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query) => await PerformQuery(query, 0);
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query, int attempts)
         {
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();
 
-            var queryCollection = new NameValueCollection();
+            var queryCollection = new NameValueCollection
+            {
 
-            // without this the API sometimes returns nothing
-            queryCollection.Add("sort", "date_added");
-            queryCollection.Add("limit", "50");
+                // without this the API sometimes returns nothing
+                { "sort", "date_added" },
+                { "limit", "50" }
+            };
 
             if (query.ImdbID != null)
             {
@@ -92,25 +94,6 @@ namespace Jackett.Common.Indexers
                 searchString = searchString.Replace("'", ""); // ignore ' (e.g. search for america's Next Top Model)
                 queryCollection.Add("query_term", searchString);
             }
-
-            // This API does not seem to be working for quality=720p or quality=1080p
-            // Only quality=3D seems to return a proper result?
-            //var cats = string.Join(";", MapTorznabCapsToTrackers(query));
-            //if (!string.IsNullOrEmpty(cats))
-            //{
-            //    if (cats == "45")
-            //    {
-            //        queryCollection.Add("quality", "720p");
-            //    }
-            //    if (cats == "44")
-            //    {
-            //        queryCollection.Add("quality", "1080p");
-            //    }
-            //    if (cats == "2050")
-            //    {
-            //        queryCollection.Add("quality", "3D");
-            //    }
-            //}
 
             var searchUrl = ApiEndpoint + "?" + queryCollection.GetQueryString();
             var response = await RequestStringWithCookiesAndRetry(searchUrl, string.Empty);
@@ -123,14 +106,14 @@ namespace Jackett.Common.Indexers
 
                 var jsonContent = JObject.Parse(jsonContentStr);
 
-                string result = jsonContent.Value<string>("status");
+                var result = jsonContent.Value<string>("status");
                 if (result != "ok") // query was not successful
                 {
                     return releases.ToArray();
                 }
 
                 var data_items = jsonContent.Value<JToken>("data");
-                int movie_count = data_items.Value<int>("movie_count");
+                var movie_count = data_items.Value<int>("movie_count");
                 if (movie_count < 1) // no results found in query
                 {
                     return releases.ToArray();
@@ -147,26 +130,27 @@ namespace Jackett.Common.Indexers
                         continue;
                     foreach (var torrent_info in torrents)
                     {
+                        //TODO change to initializer
                         var release = new ReleaseInfo();
 
-                        // Append the quality to the title because thats how radarr seems to be determining the quality?
                         // append type: BRRip or WEBRip, resolves #3558 via #4577
                         var type = torrent_info.Value<string>("type");
                         switch (type)
                         {
-                             case "web":
+                            case "web":
                                 type = " WEBRip";
                                 break;
                             default:
                                 type = " BRRip";
                                 break;
                         }
-                        release.Title = "[YTS] " + movie_item.Value<string>("title_long") + " " + torrent_info.Value<string>("quality") + type;
+                        var quality = torrent_info.Value<string>("quality");
+                        release.Title = "[YTS] " + movie_item.Value<string>("title_long") + " " + quality + type;
                         var imdb = movie_item.Value<string>("imdb_code");
                         release.Imdb = ParseUtil.GetImdbID(imdb);
 
                         // API does not provide magnet link, so, construct it
-                        string magnet_uri = "magnet:?xt=urn:btih:" + torrent_info.Value<string>("hash") +
+                        var magnet_uri = "magnet:?xt=urn:btih:" + torrent_info.Value<string>("hash") +
                         "&dn=" + movie_item.Value<string>("slug") +
                         "&tr=udp://open.demonii.com:1337/announce" +
                         "&tr=udp://tracker.openbittorrent.com:80" +
@@ -184,7 +168,7 @@ namespace Jackett.Common.Indexers
                         var dateStr = torrent_info.Value<string>("date_uploaded");
                         var dateTime = DateTime.ParseExact(dateStr, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
                         release.PublishDate = DateTime.SpecifyKind(dateTime, DateTimeKind.Utc).ToLocalTime();
-                        release.Link = new Uri(torrent_info.Value<string>("url"));                  
+                        release.Link = new Uri(torrent_info.Value<string>("url"));
                         release.Seeders = torrent_info.Value<int>("seeds");
                         release.Peers = torrent_info.Value<int>("peers") + release.Seeders;
                         release.Size = torrent_info.Value<long>("size_bytes");
@@ -197,41 +181,26 @@ namespace Jackett.Common.Indexers
                         release.BannerUrl = new Uri(movie_item.Value<string>("large_cover_image"));
                         release.Guid = release.Link;
 
-                        // Hack to prevent adding non-specified catogery, since API doesn't seem to be working
-                        string categories = string.Join(";", MapTorznabCapsToTrackers(query));
-
-                        if (!string.IsNullOrEmpty(categories))
+                        // map the quality to a newznab category for torznab compatibility (for Radarr, etc)
+                        switch (quality)
                         {
-                            if (categories.Contains("45") || categories.Contains("2040"))
-                            {
-                                if (torrent_info.Value<string>("quality") == "720p")
-                                {
-                                    release.Category = MapTrackerCatToNewznab("45");
-                                    releases.Add(release);
-                                }
-                            }
-                            if (categories.Contains("44") || categories.Contains("2040"))
-                            {
-                                if (torrent_info.Value<string>("quality") == "1080p")
-                                {
-                                    release.Category = MapTrackerCatToNewznab("44");
-                                    releases.Add(release);
-                                }
-                            }
-                            if (categories.Contains("47"))
-                            {
-                                if (torrent_info.Value<string>("quality") == "3D")
-                                {
-                                    release.Category = MapTrackerCatToNewznab("47");
-                                    releases.Add(release);
-                                }
-                            }
+                            case "720p":
+                                release.Category = MapTrackerCatToNewznab("45");
+                                break;
+                            case "1080p":
+                                release.Category = MapTrackerCatToNewznab("44");
+                                break;
+                            case "2160p":
+                                release.Category = MapTrackerCatToNewznab("46");
+                                break;
+                            case "3D":
+                                release.Category = MapTrackerCatToNewznab("47");
+                                break;
+                            default:
+                                release.Category = MapTrackerCatToNewznab("45");
+                                break;
                         }
-                        else
-                        {
-                            release.Category = MapTrackerCatToNewznab("45");
-                            releases.Add(release);
-                        }
+                        releases.Add(release);
                     }
                 }
             }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using Jackett.Common.Indexers;
 using Jackett.Common.Services.Interfaces;
@@ -141,13 +141,10 @@ namespace Jackett.Common.Services
             }
         }
 
-        private string GetIndexerConfigFilePath(IIndexer indexer)
-        {
-            return Path.Combine(configService.GetIndexerConfigDir(), indexer.ID + ".json");
-        }
+        private string GetIndexerConfigFilePath(IIndexer indexer) => Path.Combine(configService.GetIndexerConfigDir(), indexer.ID + ".json");
 
-        private IConfigurationService configService;
-        private Logger logger;
+        private readonly IConfigurationService configService;
+        private readonly Logger logger;
 
         private static readonly object configWriteLock = new object();
     }

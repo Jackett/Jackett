@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Jackett.Common.Indexers.Abstract;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
@@ -9,20 +9,22 @@ namespace Jackett.Common.Indexers
 {
     public class notwhatcd : GazelleTracker
     {
-        public notwhatcd(IIndexerConfigurationService configService, WebClient webClient, Logger logger, IProtectionService protectionService)
-            : base(name: "notwhat.cd",
-                desc: "A music tracker",
-                link: "https://notwhat.cd/",
-                configService: configService,
-                logger: logger,
-                protectionService: protectionService,
-                webClient: webClient,
-                supportsFreeleechTokens: true
-                )
+        public notwhatcd(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+            : base("notwhat.cd",
+                   description: "A music tracker",
+                   link: "https://notwhat.cd/",
+                   caps: new TorznabCapabilities
+                   {
+                       SupportedMusicSearchParamsList = new List<string> { "q", "album", "artist", "label", "year" }
+                   },
+                   configService: configService,
+                   client: wc,
+                   logger: l,
+                   p: ps,
+                   supportsFreeleechTokens: true)
         {
             Language = "en-us";
             Type = "private";
-            TorznabCaps.SupportedMusicSearchParamsList = new List<string>() { "q", "album", "artist", "label", "year" };
 
             AddCategoryMapping(1, TorznabCatType.Audio, "Music");
             AddCategoryMapping(2, TorznabCatType.PC, "Applications");

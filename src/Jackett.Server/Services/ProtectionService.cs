@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -15,11 +15,11 @@ namespace Jackett.Server.Services
 
     public class ProtectionService : IProtectionService
     {
-        DataProtectionScope PROTECTION_SCOPE = DataProtectionScope.LocalMachine;
+        private readonly DataProtectionScope PROTECTION_SCOPE = DataProtectionScope.LocalMachine;
         private const string JACKETT_KEY = "JACKETT_KEY";
-        const string APPLICATION_KEY = "Dvz66r3n8vhTGip2/quiw5ISyM37f7L2iOdupzdKmzkvXGhAgQiWK+6F+4qpxjPVNks1qO7LdWuVqRlzgLzeW8mChC6JnBMUS1Fin4N2nS9lh4XPuCZ1che75xO92Nk2vyXUo9KSFG1hvEszAuLfG2Mcg1r0sVyVXd2gQDU/TbY=";
-        private byte[] _instanceKey;
-        IDataProtector _protector = null;
+        private const string APPLICATION_KEY = "Dvz66r3n8vhTGip2/quiw5ISyM37f7L2iOdupzdKmzkvXGhAgQiWK+6F+4qpxjPVNks1qO7LdWuVqRlzgLzeW8mChC6JnBMUS1Fin4N2nS9lh4XPuCZ1che75xO92Nk2vyXUo9KSFG1hvEszAuLfG2Mcg1r0sVyVXd2gQDU/TbY=";
+        private readonly byte[] _instanceKey;
+        private readonly IDataProtector _protector = null;
 
         public ProtectionService(ServerConfig config, IDataProtectionProvider provider = null)
         {
@@ -33,11 +33,11 @@ namespace Jackett.Server.Services
             if (provider != null)
             {
                 var jackettKey = Environment.GetEnvironmentVariable(JACKETT_KEY);
-                string purpose = string.IsNullOrEmpty(jackettKey) ? APPLICATION_KEY : jackettKey.ToString();
+                var purpose = string.IsNullOrEmpty(jackettKey) ? APPLICATION_KEY : jackettKey.ToString();
 
                 _protector = provider.CreateProtector(purpose);
             }
-            
+
         }
 
         public string Protect(string plainText)
@@ -98,9 +98,9 @@ namespace Jackett.Server.Services
 
             var protectedBytes = ProtectedData.Protect(plainBytes, entropy, PROTECTION_SCOPE);
 
-            using (MemoryStream ms = new MemoryStream())
+            using (var ms = new MemoryStream())
             {
-                using (RijndaelManaged AES = new RijndaelManaged())
+                using (var AES = new RijndaelManaged())
                 {
                     AES.KeySize = 256;
                     AES.BlockSize = 128;
@@ -131,9 +131,9 @@ namespace Jackett.Server.Services
             var protectedBytes = Convert.FromBase64String(plainText);
             var instanceKey = _instanceKey;
 
-            using (MemoryStream ms = new MemoryStream())
+            using (var ms = new MemoryStream())
             {
-                using (RijndaelManaged AES = new RijndaelManaged())
+                using (var AES = new RijndaelManaged())
                 {
                     AES.KeySize = 256;
                     AES.BlockSize = 128;
@@ -162,16 +162,11 @@ namespace Jackett.Server.Services
             return Encoding.UTF8.GetString(unprotectedBytes);
         }
 
-        private string ProtectUsingKey(string plainText, string key)
-        {
-            return StringCipher.Encrypt(plainText, key);
-        }
+        private string ProtectUsingKey(string plainText, string key) => StringCipher.Encrypt(plainText, key);
 
-        private string UnProtectUsingKey(string plainText, string key)
-        {
-            return StringCipher.Decrypt(plainText, key);
-        }
+        private string UnProtectUsingKey(string plainText, string key) => StringCipher.Decrypt(plainText, key);
 
+        // Currently unused
         public void Protect<T>(T obj)
         {
             var type = obj.GetType();

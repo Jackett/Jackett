@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -13,6 +13,7 @@ using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
+using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
 {
@@ -23,32 +24,36 @@ namespace Jackett.Common.Indexers
 
         private Uri BaseUri
         {
-            get { return new Uri(configData.Url.Value); }
-            set { configData.Url.Value = value.ToString(); }
+            get => new Uri(configData.Url.Value);
+            set => configData.Url.Value = value.ToString();
         }
 
-        private string ApiEndpoint { get { return BaseUri + "pubapi_v2.php"; } }
+        private string ApiEndpoint => BaseUri + "pubapi_v2.php";
 
         private new ConfigurationDataUrl configData
         {
-            get { return (ConfigurationDataUrl)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataUrl)base.configData;
+            set => base.configData = value;
         }
 
         private DateTime lastTokenFetch;
         private string token;
-        private string app_id;
-        private bool provideTorrentLink = false;
+        private readonly string app_id;
+        private bool _provideTorrentLink;
+        private string _sort;
 
         private readonly TimeSpan TOKEN_DURATION = TimeSpan.FromMinutes(10);
 
-        private bool HasValidToken { get { return !string.IsNullOrEmpty(token) && lastTokenFetch > DateTime.Now - TOKEN_DURATION; } }
+        private bool HasValidToken => !string.IsNullOrEmpty(token) && lastTokenFetch > DateTime.Now - TOKEN_DURATION;
 
         public Rarbg(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)
             : base(name: "RARBG",
                 description: "RARBG is a Public torrent site for MOVIES / TV / GENERAL",
                 link: "https://rarbg.to/",
-                caps: new TorznabCapabilities(),
+                caps: new TorznabCapabilities
+                {
+                    SupportsImdbMovieSearch = true
+                },
                 configService: configService,
                 client: wc,
                 logger: l,
@@ -59,38 +64,47 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "public";
 
-            var provideTorrentLinkItem = new ConfigurationData.BoolItem { Value = false };
+            var sort = new SelectItem(new Dictionary<string, string>
+            {
+                {"last", "created"},
+                {"seeders", "seeders"},
+                {"leechers", "leechers"}
+            })
+            { Name = "Sort requested from site", Value = "last" };
+            configData.AddDynamic("sort", sort);
+
+            var provideTorrentLinkItem = new BoolItem { Value = false };
             provideTorrentLinkItem.Name = "Generate torrent download link additionally to magnet (not recommended due to DDoS protection).";
             configData.AddDynamic("providetorrentlink", provideTorrentLinkItem);
-
-            TorznabCaps.SupportsImdbMovieSearch = true;
 
             webclient.requestDelay = 2.1; // The api has a 1req/2s limit.
 
             AddCategoryMapping(4, TorznabCatType.XXX, "XXX (18+)");
             AddCategoryMapping(14, TorznabCatType.MoviesSD, "Movies/XVID");
-            AddCategoryMapping(48, TorznabCatType.MoviesHD, "Movies/XVID/720");
             AddCategoryMapping(17, TorznabCatType.MoviesSD, "Movies/x264");
-            AddCategoryMapping(44, TorznabCatType.MoviesHD, "Movies/x264/1080");
-            AddCategoryMapping(45, TorznabCatType.MoviesHD, "Movies/x264/720");
-            AddCategoryMapping(47, TorznabCatType.Movies3D, "Movies/x264/3D");
-            AddCategoryMapping(50, TorznabCatType.MoviesHD, "Movies/x264/4k");
-            AddCategoryMapping(51, TorznabCatType.MoviesHD, "Movies/x265/4k");
-            AddCategoryMapping(52, TorznabCatType.MoviesHD, "Movs/x265/4k/HDR");
-            AddCategoryMapping(42, TorznabCatType.MoviesBluRay, "Movies/Full BD");
-            AddCategoryMapping(46, TorznabCatType.MoviesBluRay, "Movies/BD Remux");
             AddCategoryMapping(18, TorznabCatType.TVSD, "TV Episodes");
-            AddCategoryMapping(41, TorznabCatType.TVHD, "TV HD Episodes");
-            AddCategoryMapping(49, TorznabCatType.TVHD, "TV UHD Episodes");        // torrentapi.org returns "Movies/TV-UHD-episodes" for some reason
-            AddCategoryMapping(49, TorznabCatType.TVHD, "Movies/TV-UHD-episodes"); // possibly because thats what the category is called on the /top100.php page
             AddCategoryMapping(23, TorznabCatType.AudioMP3, "Music/MP3");
             AddCategoryMapping(25, TorznabCatType.AudioLossless, "Music/FLAC");
             AddCategoryMapping(27, TorznabCatType.PCGames, "Games/PC ISO");
             AddCategoryMapping(28, TorznabCatType.PCGames, "Games/PC RIP");
-            AddCategoryMapping(40, TorznabCatType.ConsolePS3, "Games/PS3");
             AddCategoryMapping(32, TorznabCatType.ConsoleXbox360, "Games/XBOX-360");
             AddCategoryMapping(33, TorznabCatType.PCISO, "Software/PC ISO");
             AddCategoryMapping(35, TorznabCatType.BooksEbook, "e-Books");
+            AddCategoryMapping(40, TorznabCatType.ConsolePS3, "Games/PS3");
+            AddCategoryMapping(41, TorznabCatType.TVHD, "TV HD Episodes");
+            AddCategoryMapping(42, TorznabCatType.MoviesBluRay, "Movies/Full BD");
+            AddCategoryMapping(44, TorznabCatType.MoviesHD, "Movies/x264/1080");
+            AddCategoryMapping(45, TorznabCatType.MoviesHD, "Movies/x264/720");
+            AddCategoryMapping(46, TorznabCatType.MoviesBluRay, "Movies/BD Remux");
+            AddCategoryMapping(47, TorznabCatType.Movies3D, "Movies/x264/3D");
+            AddCategoryMapping(48, TorznabCatType.MoviesHD, "Movies/XVID/720");
+            AddCategoryMapping(49, TorznabCatType.TVUHD, "TV UHD Episodes");        // torrentapi.org returns "Movies/TV-UHD-episodes" for some reason
+            AddCategoryMapping(49, TorznabCatType.TVUHD, "Movies/TV-UHD-episodes"); // possibly because thats what the category is called on the /top100.php page
+            AddCategoryMapping(50, TorznabCatType.MoviesUHD, "Movies/x264/4k");
+            AddCategoryMapping(51, TorznabCatType.MoviesUHD, "Movies/x265/4k");
+            AddCategoryMapping(52, TorznabCatType.MoviesUHD, "Movs/x265/4k/HDR");
+            AddCategoryMapping(53, TorznabCatType.ConsolePS4, "Games/PS4");
+            AddCategoryMapping(54, TorznabCatType.MoviesHD, "Movies/x265/1080");
 
             app_id = "jackett_v" + EnvironmentUtil.JackettVersion;
         }
@@ -99,21 +113,22 @@ namespace Jackett.Common.Indexers
         {
             base.LoadValuesFromJson(jsonConfig, useProtectionService);
 
-            var provideTorrentLinkItem = (ConfigurationData.BoolItem)configData.GetDynamic("providetorrentlink");
-            if (provideTorrentLinkItem != null)
-            {
-                provideTorrentLink = provideTorrentLinkItem.Value;
-            }
+            var sort = (SelectItem)configData.GetDynamic("sort");
+            _sort = sort != null ? sort.Value : "last";
+
+            var provideTorrentLinkItem = (BoolItem)configData.GetDynamic("providetorrentlink");
+            _provideTorrentLink = provideTorrentLinkItem != null && provideTorrentLinkItem.Value;
         }
 
         private async Task CheckToken()
         {
             if (!HasValidToken)
             {
-                var queryCollection = new NameValueCollection();
-                queryCollection.Add("get_token", "get_token");
-                queryCollection.Add("app_id", app_id);
-                
+                var queryCollection = new NameValueCollection
+                {
+                    { "get_token", "get_token" },
+                    { "app_id", app_id }
+                };
 
                 var tokenUrl = ApiEndpoint + "?" + queryCollection.GetQueryString();
 
@@ -129,31 +144,29 @@ namespace Jackett.Common.Indexers
             LoadValuesFromJson(configJson);
             var releases = await PerformQuery(new TorznabQuery());
 
-            await ConfigureIfOK(string.Empty, releases.Count() > 0, () =>
-            {
-                throw new Exception("Could not find releases from this URL");
-            });
+            await ConfigureIfOK(string.Empty, releases.Any(), () =>
+                throw new Exception("Could not find releases from this URL"));
 
             return IndexerConfigurationStatus.Completed;
         }
 
-        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
-        {
-            return await PerformQuery(query, 0);
-        }
+        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query) => await PerformQuery(query, 0);
 
-        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query, int attempts)
+        private async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query, int attempts)
         {
             await CheckToken();
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();
 
-            var queryCollection = new NameValueCollection();
-            queryCollection.Add("token", token);
-            queryCollection.Add("format", "json_extended");
-            queryCollection.Add("app_id", app_id);
-            queryCollection.Add("limit", "100");
-            queryCollection.Add("ranked", "0");
+            var queryCollection = new NameValueCollection
+            {
+                { "token", token },
+                { "format", "json_extended" },
+                { "app_id", app_id },
+                { "limit", "100" },
+                { "ranked", "0" },
+                { "sort", _sort }
+            };
 
             if (query.ImdbID != null)
             {
@@ -179,6 +192,7 @@ namespace Jackett.Common.Indexers
             else
             {
                 queryCollection.Add("mode", "list");
+                queryCollection.Remove("sort");
             }
 
             var querycats = MapTorznabCapsToTrackers(query);
@@ -194,7 +208,7 @@ namespace Jackett.Common.Indexers
             {
                 var jsonContent = JObject.Parse(response.Content);
 
-                int errorCode = jsonContent.Value<int>("error_code");
+                var errorCode = jsonContent.Value<int>("error_code");
                 if (errorCode == 20) // no results found
                 {
                     return releases.ToArray();
@@ -226,41 +240,49 @@ namespace Jackett.Common.Indexers
 
                 foreach (var item in jsonContent.Value<JArray>("torrent_results"))
                 {
-                    var release = new ReleaseInfo();
-                    release.Title = WebUtility.HtmlDecode(item.Value<string>("title"));
-                    release.Category = MapTrackerCatDescToNewznab(item.Value<string>("category"));
-
-                    release.MagnetUri = new Uri(item.Value<string>("download"));
-                    release.InfoHash = release.MagnetUri.ToString().Split(':')[3].Split('&')[0];
+                    var magnetUri = new Uri(item.Value<string>("download"));
                     // append app_id to prevent api server returning 403 forbidden
-                    release.Comments = new Uri(item.Value<string>("info_page") + "&app_id=" + app_id);
-                    if (provideTorrentLink)
-                        release.Link = release.Comments; // in case of a torrent download we grab the link from the details page in Download()
-                    release.Guid = release.MagnetUri;
-
-                    var episode_info = item.Value<JToken>("episode_info");
-
-                    if (episode_info.HasValues)
-                    {
-                        var imdb = episode_info.Value<string>("imdb");
-                        release.Imdb = ParseUtil.GetImdbID(imdb);
-                        release.TVDBId = episode_info.Value<long?>("tvdb");
-                        release.RageID = episode_info.Value<long?>("tvrage");
-                        release.TMDb = episode_info.Value<long?>("themoviedb");
-                    }
-
+                    var comments = new Uri(item.Value<string>("info_page") + "&app_id=" + app_id);
                     // ex: 2015-08-16 21:25:08 +0000
                     var dateStr = item.Value<string>("pubdate").Replace(" +0000", "");
                     var dateTime = DateTime.ParseExact(dateStr, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                    release.PublishDate = DateTime.SpecifyKind(dateTime, DateTimeKind.Utc).ToLocalTime();
+                    var seeders = item.Value<int>("seeders");
+                    var title = WebUtility.HtmlDecode(item.Value<string>("title"));
+                    var infoHash = magnetUri.ToString().Split(':')[3].Split('&')[0];
+                    var publishDate = DateTime.SpecifyKind(dateTime, DateTimeKind.Utc).ToLocalTime();
+                    var leechers = item.Value<int>("leechers");
+                    var size = item.Value<long>("size");
+                    // in case of a torrent download we grab the link from the details page in Download()
+                    var link = _provideTorrentLink ? comments : default;
+                    var release = new ReleaseInfo
+                    {
+                        Title = title,
+                        Category = MapTrackerCatDescToNewznab(item.Value<string>("category")),
+                        MagnetUri = magnetUri,
+                        InfoHash = infoHash,
+                        Comments = comments,
+                        Link = link,
+                        PublishDate = publishDate,
+                        Guid = magnetUri,
+                        Seeders = seeders,
+                        Peers = leechers + seeders,
+                        Size = size,
+                        MinimumRatio = 1,
+                        MinimumSeedTime = 172800, // 48 hours
+                        DownloadVolumeFactor = 0,
+                        UploadVolumeFactor = 1
+                    };
 
-                    release.Seeders = item.Value<int>("seeders");
-                    release.Peers = item.Value<int>("leechers") + release.Seeders;
-                    release.Size = item.Value<long>("size");
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800; // 48 hours
-                    release.DownloadVolumeFactor = 0;
-                    release.UploadVolumeFactor = 1;
+                    var episodeInfo = item.Value<JToken>("episode_info");
+
+                    if (episodeInfo.HasValues)
+                    {
+                        release.Imdb = ParseUtil.GetImdbID(episodeInfo.Value<string>("imdb"));
+                        release.TVDBId = episodeInfo.Value<long?>("tvdb");
+                        release.RageID = episodeInfo.Value<long?>("tvrage");
+                        release.TMDb = episodeInfo.Value<long?>("themoviedb");
+                    }
+
 
                     releases.Add(release);
                 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Text;
@@ -6,7 +6,6 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
-using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
@@ -18,18 +17,16 @@ namespace Jackett.Common.Indexers
 {
     public class Toloka : BaseWebIndexer
     {
-        private string LoginUrl
-        { get { return SiteLink + "/login.php"; } }
-        private string SearchUrl
-        { get { return SiteLink + "/tracker.php"; } }
+        private string LoginUrl => SiteLink + "/login.php";
+        private string SearchUrl => SiteLink + "/tracker.php";
 
         protected string cap_sid = null;
         protected string cap_code_field = null;
 
         private new ConfigurationDataToloka configData
         {
-            get { return (ConfigurationDataToloka)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataToloka)base.configData;
+            set => base.configData = value;
         }
 
         public Toloka(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
@@ -111,11 +108,11 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(137, TorznabCatType.MoviesDVD, "|-Мультфільми та мультсеріали в DVD");
             AddCategoryMapping(137, TorznabCatType.TV, "|-Мультфільми та мультсеріали в DVD");
             AddCategoryMapping(138, TorznabCatType.MoviesDVD, "|-Документальні фільми в DVD");
-            
+
             AddCategoryMapping(237, TorznabCatType.Movies, "Відео для мобільних (iOS, Android, Windows Phone)");
-            
+
             AddCategoryMapping(33, TorznabCatType.AudioVideo, "Звукові доріжки та субтитри");
-            
+
             AddCategoryMapping(8, TorznabCatType.Audio, "Українська музика (lossy)");
             AddCategoryMapping(23, TorznabCatType.Audio, "|-Поп, Естрада");
             AddCategoryMapping(24, TorznabCatType.Audio, "|-Джаз, Блюз");
@@ -125,7 +122,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(36, TorznabCatType.Audio, "|-Реп, Хіп-хоп, РнБ");
             AddCategoryMapping(38, TorznabCatType.Audio, "|-Електронна музика");
             AddCategoryMapping(56, TorznabCatType.Audio, "|-Невидане");
-            
+
             AddCategoryMapping(98, TorznabCatType.AudioLossless, "Українська музика (lossless)");
             AddCategoryMapping(100, TorznabCatType.AudioLossless, "|-Поп, Естрада");
             AddCategoryMapping(101, TorznabCatType.AudioLossless, "|-Джаз, Блюз");
@@ -134,7 +131,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(104, TorznabCatType.AudioLossless, "|-Рок, Метал, Альтернатива, Панк, СКА");
             AddCategoryMapping(105, TorznabCatType.AudioLossless, "|-Реп, Хіп-хоп, РнБ");
             AddCategoryMapping(106, TorznabCatType.AudioLossless, "|-Електронна музика");
-            
+
             AddCategoryMapping(11, TorznabCatType.Books, "Друкована література");
             AddCategoryMapping(134, TorznabCatType.Books, "|-Українська художня література (до 1991 р.)");
             AddCategoryMapping(177, TorznabCatType.Books, "|-Українська художня література (після 1991 р.)");
@@ -145,13 +142,13 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(181, TorznabCatType.BooksMagazines, "|-Періодика");
             AddCategoryMapping(182, TorznabCatType.Books, "|-Батькам та малятам");
             AddCategoryMapping(184, TorznabCatType.BooksComics, "|-Графіка (комікси, манґа, BD та інше)");
-            
+
             AddCategoryMapping(185, TorznabCatType.AudioAudiobook, "Аудіокниги українською");
             AddCategoryMapping(135, TorznabCatType.AudioAudiobook, "|-Українська художня література");
             AddCategoryMapping(186, TorznabCatType.AudioAudiobook, "|-Зарубіжна художня література");
             AddCategoryMapping(187, TorznabCatType.AudioAudiobook, "|-Історія, біографістика, спогади");
             AddCategoryMapping(189, TorznabCatType.AudioAudiobook, "|-Сирий матеріал");
-            
+
             AddCategoryMapping(9, TorznabCatType.PC, "Windows");
             AddCategoryMapping(25, TorznabCatType.PC, "|-Windows");
             AddCategoryMapping(199, TorznabCatType.PC, "|-Офіс");
@@ -165,7 +162,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(211, TorznabCatType.PCPhoneAndroid, "|-Android");
             AddCategoryMapping(122, TorznabCatType.PCPhoneIOS, "|-iOS");
             AddCategoryMapping(40, TorznabCatType.PCPhoneOther, "|-Інші мобільні платформи");
-            
+
             // AddCategoryMapping(241, TorznabCatType.Other, "Інше");
             // AddCategoryMapping(203, TorznabCatType.Other, "|-Інфодиски, електронні підручники, відеоуроки");
             // AddCategoryMapping(12, TorznabCatType.Other, "|-Шпалери, фотографії та зображення");
@@ -241,7 +238,7 @@ namespace Jackett.Common.Indexers
             }
             try
             {
-                string RowsSelector = "table.forumline > tbody > tr[class*=prow]";
+                var RowsSelector = "table.forumline > tbody > tr[class*=prow]";
 
                 var SearchResultParser = new HtmlParser();
                 var SearchResultDocument = SearchResultParser.ParseDocument(results.Content);
@@ -250,47 +247,45 @@ namespace Jackett.Common.Indexers
                 {
                     try
                     {
-                        var release = new ReleaseInfo();
-
-                        release.MinimumRatio = 1;
-                        release.MinimumSeedTime = 0;
-
                         var qDownloadLink = Row.QuerySelector("td:nth-child(6) > a");
                         if (qDownloadLink == null) // Expects moderation
                             continue;
-                        
+
                         var qDetailsLink = Row.QuerySelector("td:nth-child(3) > a");
                         var qSize = Row.QuerySelector("td:nth-child(7)");
-
-                        release.Title = qDetailsLink.TextContent;
-
-                        release.Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
-                        release.Link = new Uri(SiteLink + qDownloadLink.GetAttribute("href"));
-                        release.Guid = release.Comments;
-                        release.Size = ReleaseInfo.GetBytes(qSize.TextContent);
-
-                        var seeders = Row.QuerySelector("td:nth-child(10) > b").TextContent;
-                        if (string.IsNullOrWhiteSpace(seeders))
-                            seeders = "0";
-                        release.Seeders = ParseUtil.CoerceInt(seeders);
-                        release.Peers = ParseUtil.CoerceInt(Row.QuerySelector("td:nth-child(11) > b").TextContent) + release.Seeders;
-                        release.Grabs = 0;//ParseUtil.CoerceLong(Row.QuerySelector("td:nth-child(9)").TextContent);
-
+                        var seedersStr = Row.QuerySelector("td:nth-child(10) > b").TextContent;
+                        var seeders = string.IsNullOrWhiteSpace(seedersStr) ? 0 : ParseUtil.CoerceInt(seedersStr);
                         var timestr = Row.QuerySelector("td:nth-child(13)").TextContent;
-                        release.PublishDate = DateTimeUtil.FromFuzzyTime(timestr);
-
                         var forum = Row.QuerySelector("td:nth-child(2) > a");
                         var forumid = forum.GetAttribute("href").Split('=')[1];
-                        release.Category = MapTrackerCatToNewznab(forumid);
+                        var comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
+                        var link = new Uri(SiteLink + qDownloadLink.GetAttribute("href"));
+                        var size = ReleaseInfo.GetBytes(qSize.TextContent);
+                        var leechers = ParseUtil.CoerceInt(Row.QuerySelector("td:nth-child(11) > b").TextContent);
+                        var publishDate = DateTimeUtil.FromFuzzyTime(timestr);
+                        var release = new ReleaseInfo
+                        {
+                            MinimumRatio = 1,
+                            MinimumSeedTime = 0,
+                            Title = qDetailsLink.TextContent,
+                            Comments = comments,
+                            Link = link,
+                            Guid = comments,
+                            Size = size,
+                            Seeders = seeders,
+                            Peers = leechers + seeders,
+                            Grabs = 0, //ParseUtil.CoerceLong(Row.QuerySelector("td:nth-child(9)").TextContent);
+                            PublishDate = publishDate,
+                            Category = MapTrackerCatToNewznab(forumid),
+                            DownloadVolumeFactor = 1,
+                            UploadVolumeFactor = 1
+                        };
 
-                        release.DownloadVolumeFactor = 1;
-                        release.UploadVolumeFactor = 1;
-
+                        // TODO cleanup
                         if (release.Category.Contains(TorznabCatType.TV.ID))
                         {
                             // extract season and episodes
                             var regex = new Regex(".+\\/\\s([^а-яА-я\\/]+)\\s\\/.+Сезон\\s*[:]*\\s+(\\d+).+(?:Серії|Епізод)+\\s*[:]*\\s+(\\d+-*\\d*).+,\\s+(.+)\\]\\s(.+)");
-
                             var title = regex.Replace(release.Title, "$1 - S$2E$3 - rus $4 $5");
                             title = Regex.Replace(title, "-Rip", "Rip", RegexOptions.IgnoreCase);
                             title = Regex.Replace(title, "WEB-DLRip", "WEBDL", RegexOptions.IgnoreCase);

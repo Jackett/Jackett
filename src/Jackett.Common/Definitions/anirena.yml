@@ -65,7 +65,7 @@
         case:
           "[src=\"./styles/tracker/imageset/cat_raw_small.png\"]": 1
           "[src=\"./styles/tracker/imageset/cat_anime_small.png\"]": 2
-          "[src=\"./styles/tracker/imageset/cat_hentai_small.png\"]": "
+          "[src=\"./styles/tracker/imageset/cat_hentai_small.png\"]": 3
           "[src=\"./styles/tracker/imageset/cat_drama_small.png\"]": 4
           "[src=\"./styles/tracker/imageset/cat_dvd_small.png\"]": 5
           "[src=\"./styles/tracker/imageset/cat_hgame2_small.png\"]": 6

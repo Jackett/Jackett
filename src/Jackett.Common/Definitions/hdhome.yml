@@ -1,4 +1,4 @@
-﻿---
+---
   site: hdhome
   name: HDHome
   description: "HDHome (HDBiger) is a CHINESE Private Torrent Tracker for HD MOVIES / TV"
@@ -6,7 +6,7 @@
   type: private
   encoding: UTF-8
   links:
-    - http://hdhome.org/
+    - http://hdhome.org/ # site does not support https #6460
   legacylinks:
     - https://hdhome.org/
 
@@ -64,7 +64,7 @@
       - {id: 501, cat: TV/Anime, desc: "Anime UHD Blu-ray"}
 
     modes:
-      search: [q]
+      search: [q, imdbid]
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
 
@@ -75,7 +75,7 @@
     - name: info
       type: info
       label: How to get the Cookie
-      default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find 'cookie:' in the <b>Request Headers</b> section<li>Copy & paste the whole cookie string to here.</ol>"
+      default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
 
   login:
     method: cookie
@@ -83,7 +83,7 @@
       cookie: "{{ .Config.cookie }}"
     test:
       path: index.php
-        
+
   search:
     paths:
       - path: torrents.php
@@ -111,7 +111,7 @@
             args: cat
       details:
         selector: a[title][href^="details.php?id="]
-        attribute: href    
+        attribute: href
       download:
         selector: a[href^="download.php?id="]
         attribute: href

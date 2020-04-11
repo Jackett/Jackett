@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -18,20 +18,23 @@ namespace Jackett.Common.Indexers
 {
     public class Superbits : BaseWebIndexer
     {
-        private string SearchUrl { get { return SiteLink + "api/v1/torrents"; } }
-        private string LoginUrl { get { return SiteLink + "api/v1/auth"; } }
+        private string SearchUrl => SiteLink + "api/v1/torrents";
+        private string LoginUrl => SiteLink + "api/v1/auth";
 
         private new ConfigurationDataCookie configData
         {
-            get { return (ConfigurationDataCookie)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataCookie)base.configData;
+            set => base.configData = value;
         }
 
         public Superbits(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
             : base(name: "Superbits",
                 description: "SuperBits is a SWEDISH Private Torrent Tracker for MOVIES / TV / GENERAL",
                 link: "https://superbits.org/",
-                caps: new TorznabCapabilities(),
+                caps: new TorznabCapabilities
+                {
+                    SupportsImdbMovieSearch = true
+                },
                 configService: configService,
                 client: w,
                 logger: l,
@@ -41,8 +44,6 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "sv-sw";
             Type = "private";
-
-            TorznabCaps.SupportsImdbMovieSearch = true;
 
             AddCategoryMapping(1, TorznabCatType.MoviesDVD, "DVD-R Swesub");
             AddCategoryMapping(2, TorznabCatType.TV, "DVD-R TV");
@@ -97,7 +98,9 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            List<ReleaseInfo> releases = new List<ReleaseInfo>();
+            // And this was option one from
+            // https://github.com/Jackett/Jackett/pull/7166#discussion_r376817517
+            var releases = new List<ReleaseInfo>();
             var queryCollection = new NameValueCollection();
             var searchString = query.GetQueryString();
             var searchUrl = SearchUrl;

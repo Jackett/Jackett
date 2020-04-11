@@ -7,6 +7,11 @@
   encoding: UTF-8
   links:
     - https://www.tokyotosho.info/
+    - https://tokyotosho.black-mirror.xyz/
+    - https://tokyotosho.unblocked.casa/
+    - https://tokyotosho.proxyportal.fun/
+    - https://tokyotosho.uk-unblock.xyz/
+    - https://tokyotosho.ind-unblock.xyz/
 
   settings:
     - name: type-id
@@ -36,7 +41,7 @@
 
   search:
     paths:
-      - path: "{{if .Keywords }}search.php{{else}}index.php{{end}}"
+      - path: "{{ if .Keywords }}search.php{{else}}index.php{{end}}"
     inputs:
       terms: "{{ .Keywords }}"
       type: "{{ .Config.type-id }}"
@@ -45,6 +50,7 @@
     rows:
       selector: "table.listing tr.category_0"
       after: 1
+
     fields:
       category:
         selector: a[href*="?cat="]
@@ -90,3 +96,4 @@
         text: 0
       uploadvolumefactor:
         text: 1
+# Engine n/a

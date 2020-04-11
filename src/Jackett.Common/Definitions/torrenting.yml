@@ -1,4 +1,4 @@
-﻿---
+---
   site: torrenting
   name: Torrenting
   description: "Torrenting (TT) is a Private site for MOVIES / TV / GENERAL"
@@ -29,14 +29,14 @@
       - {id: 49, cat: Movies/HD, desc: "x265 (HEVC)"}
 
     modes:
-      search: [q]
+      search: [q, imdbid]
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
 
   login:
     path: login.php
     method: form
-    form: form[action="secure.php"]
+    form: form[action="do-login.php"]
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
@@ -49,8 +49,8 @@
     paths:
       - path: t
     inputs:
-      $raw: "{{range .Categories}}{{.}}=&{{end}}"
-      q: "{{if .Query.IMDBID}}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+      $raw: "{{ range .Categories }}{{.}}=&{{end}}"
+      q: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
       incldead: 1
     rows:
       selector: table#torrentsTable > tbody > tr:has(td.torrentNameInfo)
@@ -83,13 +83,11 @@
       size:
         selector: td:nth-last-child(3)
       downloadvolumefactor:
-        text: "1"
+        text: 1
       downloadvolumefactor:
         case:
-          "span:contains(\"FreeLeech\")": "0"
-          "*": "1"
+          "span:contains(\"FreeLeech\")": 0
+          "*": 1
       uploadvolumefactor:
-        case:
-          "*": "1"
-
-        
+        text: 1
+# engine tbd

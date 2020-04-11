@@ -1,4 +1,4 @@
-﻿---
+---
   site: twilight
   name: Twilight Torrents
   description: "Twilight Torrents is a Private Torrent Tracker for MOVIES / TV / GENERAL"
@@ -137,6 +137,8 @@
       downloadvolumefactor:
         case:
           img[src="free.gif"]: 0
+          img[src="./pic/fre.gif"]: 0 #7116 freeleech with expiry date
           "*": 1
       uploadvolumefactor:
         text: 1
+# customised from TBDEV,U232,and Btdev

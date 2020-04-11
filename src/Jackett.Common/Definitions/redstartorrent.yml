@@ -1,12 +1,12 @@
 ---
-  site: rstorrent   
+  site: rstorrent
   name: RedStarTorrent
   description: "Red Star Torrent (RST) is a POLISH Private Torrent Tracker for TV"
   language: pl-pl
   type: private
   encoding: ISO-8859-2
   links:
-    - http://rstorrent.org.pl/
+    - http://rstorrent.org.pl/ # site does not support https NET::ERR_CERT_AUTHORITY_INVALID
 
   caps:
     categorymappings:
@@ -51,7 +51,7 @@
     test:
       selector: a[href^="logout.php"]
       path: browse.php
-        
+
   search:
     paths:
       - path: browse.php
@@ -78,7 +78,7 @@
             args: cat
       download:
         selector: a[href^="/download.php/"]
-        attribute: href    
+        attribute: href
       description:
         optional: true
         selector: img[src="/pic/pl.gif"]

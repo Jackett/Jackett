@@ -22,6 +22,7 @@
       - {id: 34, cat: Movies/UHD, desc: "Películas FullBR 1080p"}
       - {id: 94, cat: Movies/BluRay, desc: "Películas Remux 1080p"}
       - {id: 36, cat: Movies/HD, desc: "Películas BDRip 1080p"}
+      - {id: 98, cat: Movies/HD, desc: "Películas BDRip 1080p x265"}
       - {id: 42, cat: Movies/HD, desc: "Películas BDRip 720p"}
       - {id: 37, cat: Movies/HD, desc: "Películas Micro 1080p"}
       - {id: 45, cat: Movies/HD, desc: "Películas Micro 720p"}

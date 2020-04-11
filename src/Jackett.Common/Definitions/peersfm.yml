@@ -1,4 +1,4 @@
-﻿---
+---
   site: peersfm
   name: Peers.FM
   description: "Peers.FM is a RUSSIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
@@ -151,5 +151,5 @@
           img[src="pic/free_25.png"]: 0.75
           "*": 1
       uploadvolumefactor:
-        case:
-          "*": 1
+        text: 1
+# engine n/a

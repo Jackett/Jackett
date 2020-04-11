@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using CsQuery;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -14,7 +14,6 @@ using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
-using static Jackett.Common.Utils.ParseUtil;
 
 namespace Jackett.Common.Indexers
 {
@@ -30,8 +29,8 @@ namespace Jackett.Common.Indexers
 
         private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
         {
-            get { return (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData;
+            set => base.configData = value;
         }
 
         public XSpeeds(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
@@ -137,11 +136,12 @@ namespace Jackett.Common.Indexers
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
             var loginPage = await RequestStringWithCookies(LandingUrl);
-            CQ dom = loginPage.Content;
-            CQ qCaptchaImg = dom.Find("img#regimage").First();
-            if (qCaptchaImg.Length > 0)
+            var parser = new HtmlParser();
+            var dom = parser.ParseDocument(loginPage.Content);
+            var qCaptchaImg = dom.QuerySelector("img#regimage");
+            if (qCaptchaImg != null)
             {
-                var CaptchaUrl = qCaptchaImg.Attr("src");
+                var CaptchaUrl = qCaptchaImg.GetAttribute("src");
                 var captchaImage = await RequestBytesWithCookies(CaptchaUrl, loginPage.Cookies, RequestType.GET, LandingUrl);
 
                 var CaptchaImage = new ImageItem { Name = "Captcha Image" };
@@ -178,13 +178,14 @@ namespace Jackett.Common.Indexers
 
             //var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, SiteLink, true);
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, SearchUrl, LandingUrl, true);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"),
+            await ConfigureIfOK(result.Cookies, result.Content?.Contains("logout.php") == true,
                 () =>
                 {
-                    CQ dom = result.Content;
-                    var errorMessage = dom[".left_side table:eq(0) tr:eq(1)"].Text().Trim().Replace("\n\t", " ");
+                    var parser = new HtmlParser();
+                    var dom = parser.ParseDocument(result.Content);
+                    var errorMessage = dom.QuerySelector(".left_side table:nth-of-type(1) tr:nth-of-type(2)")?.TextContent.Trim().Replace("\n\t", " ");
                     if (string.IsNullOrWhiteSpace(errorMessage))
-                        errorMessage = dom["div.notification-body"].Text().Trim().Replace("\n\t", " ");
+                        errorMessage = dom.QuerySelector("div.notification-body").TextContent.Trim().Replace("\n\t", " ");
                     throw new ExceptionWithConfigData(errorMessage, configData);
                 });
 
@@ -316,50 +317,50 @@ namespace Jackett.Common.Indexers
 
             try
             {
-                CQ dom = searchPage.Content;
-                var rows = dom["table#sortabletable > tbody > tr:has(div > a[href*=\"details.php?id=\"])"];
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(searchPage.Content);
+                var rows = dom.QuerySelectorAll("table#sortabletable > tbody > tr:has(div > a[href*=\"details.php?id=\"])");
                 foreach (var row in rows)
                 {
                     var release = new ReleaseInfo();
-                    var qRow = row.Cq();
 
-                    var qDetails = qRow.Find("div > a[href*=\"details.php?id=\"]"); // details link, release name get's shortened if it's to long
-                    var qTitle = qRow.Find("td:eq(1) .tooltip-content div:eq(0)"); // use Title from tooltip
-                    if (!qTitle.Any()) // fallback to Details link if there's no tooltip
-                    {
-                        qTitle = qDetails;
-                    }
-                    release.Title = qTitle.Text();
+                    var qDetails = row.QuerySelector("div > a[href*=\"details.php?id=\"]");
+                    var qTitle = qDetails; // #7975
 
-                    release.Guid = new Uri(qRow.Find("td:eq(2) a").Attr("href"));
+                    release.Title = qTitle.TextContent;
+
+                    release.Guid = new Uri(row.QuerySelector("td:nth-of-type(3) a").GetAttribute("href"));
                     release.Link = release.Guid;
-                    release.Comments = new Uri(qDetails.Attr("href"));
-                    release.PublishDate = DateTime.ParseExact(qRow.Find("td:eq(1) div").Last().Text().Trim(), "dd-MM-yyyy H:mm", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal); //08-08-2015 12:51
-                    release.Seeders = ParseUtil.CoerceInt(qRow.Find("td:eq(6)").Text());
-                    release.Peers = release.Seeders + ParseUtil.CoerceInt(qRow.Find("td:eq(7)").Text().Trim());
-                    release.Size = ReleaseInfo.GetBytes(qRow.Find("td:eq(4)").Text().Trim());
+                    release.Comments = new Uri(qDetails.GetAttribute("href"));
+                    //08-08-2015 12:51
+                    release.PublishDate = DateTime.ParseExact(
+                        row.QuerySelectorAll("td:nth-of-type(2) div").Last().TextContent.Trim(), "dd-MM-yyyy H:mm",
+                        CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
+                    release.Seeders = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(7)").TextContent);
+                    release.Peers = release.Seeders + ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(8)").TextContent.Trim());
+                    release.Size = ReleaseInfo.GetBytes(row.QuerySelector("td:nth-of-type(5)").TextContent.Trim());
 
-                    var qBanner = qRow.Find("td:eq(1) .tooltip-content img").First();
-                    if (qBanner.Length > 0)
-                        release.BannerUrl = new Uri(qBanner.Attr("src"));
+                    var qBanner = row.QuerySelector("td:nth-of-type(2) .tooltip-content img");
+                    if (qBanner != null)
+                        release.BannerUrl = new Uri(qBanner.GetAttribute("src"));
 
-                    var cat = row.Cq().Find("td:eq(0) a").First().Attr("href");
+                    var cat = row.QuerySelector("td:nth-of-type(1) a").GetAttribute("href");
                     var catSplit = cat.LastIndexOf('=');
                     if (catSplit > -1)
                         cat = cat.Substring(catSplit + 1);
                     release.Category = MapTrackerCatToNewznab(cat);
 
-                    var grabs = qRow.Find("td:nth-child(6)").Text();
+                    var grabs = row.QuerySelector("td:nth-child(6)").TextContent;
                     release.Grabs = ParseUtil.CoerceInt(grabs);
 
-                    if (qRow.Find("img[alt^=\"Free Torrent\"]").Length >= 1)
+                    if (row.QuerySelector("img[alt^=\"Free Torrent\"]") != null)
                         release.DownloadVolumeFactor = 0;
-                    else if (qRow.Find("img[alt^=\"Silver Torrent\"]").Length >= 1)
+                    else if (row.QuerySelector("img[alt^=\"Silver Torrent\"]") != null)
                         release.DownloadVolumeFactor = 0.5;
                     else
                         release.DownloadVolumeFactor = 1;
 
-                    if (qRow.Find("img[alt^=\"x2 Torrent\"]").Length >= 1)
+                    if (row.QuerySelector("img[alt^=\"x2 Torrent\"]") != null)
                         release.UploadVolumeFactor = 2;
                     else
                         release.UploadVolumeFactor = 1;

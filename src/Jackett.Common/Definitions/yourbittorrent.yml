@@ -8,24 +8,21 @@
   links:
     - https://yourbittorrent.com/
     - https://yourbittorrent2.com/
-  legacylinks:
     - https://yourbittorrent.host/
 
   caps:
     categories:
-      "Anime": TV/Anime
-      "Software": PC
-      "Apps": PC
-      "eBooks": Books
-      "XXX": XXX
-      "Adult": XXX
-      "Games": PC/Games
-      "Movies": Movies
-      "Music": Audio
-      "Television": TV
-      "Series": TV
-      "Other": Other
-      "Pictures": Other
+      anime: TV/Anime
+      software: PC
+      ebooks: Books
+      adult: XXX
+      games: PC/Games
+      movies: Movies
+      music: Audio
+      television: TV
+      other: Other
+      photos: Other
+      pictures: Other
 
     modes:
       search: [q]
@@ -51,8 +48,11 @@
         - name: andmatch
     fields:
       category:
-        selector: td:nth-child(1) a
-        attribute: title
+        selector: td:nth-child(1)
+        attribute: onclick
+        filters:
+          - name: regexp
+            args: "href='/(.+?).html"
       title:
         selector: td:nth-child(2) a
       details:
@@ -61,7 +61,8 @@
       download:
         selector: td:nth-child(2) a
         attribute: href
-        # /down/22019747.torrent
+        # turn /torrent/25778710/have-i-got-news-for-you-s59e02-720p-britishb00bseztv.html
+        # into /down/25778710.torrent
         filters:
           - name: split
             args: ["/", 2]
@@ -94,3 +95,4 @@
         text: 0
       uploadvolumefactor:
         text: 1
+# engine n/a

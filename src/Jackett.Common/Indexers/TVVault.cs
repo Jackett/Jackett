@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Text;
@@ -17,13 +17,13 @@ namespace Jackett.Common.Indexers
 {
     public class TVVault : BaseWebIndexer
     {
-        private string LoginUrl { get { return SiteLink + "login.php"; } }
-        private string BrowseUrl { get { return SiteLink + "torrents.php"; } }
+        private string LoginUrl => SiteLink + "login.php";
+        private string BrowseUrl => SiteLink + "torrents.php";
 
         private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
         {
-            get { return (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData;
+            set => base.configData = value;
         }
 
         public TVVault(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
@@ -58,11 +58,8 @@ namespace Jackett.Common.Indexers
             };
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl, true);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
-            {
-                var errorMessage = result.Content;
-                throw new ExceptionWithConfigData(errorMessage, configData);
-            });
+            await ConfigureIfOK(result.Cookies, result.Content?.Contains("logout.php") == true,
+                                () => throw new ExceptionWithConfigData(result.Content, configData));
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
@@ -81,29 +78,26 @@ namespace Jackett.Common.Indexers
             var searchString = query.GetQueryString();
             var searchUrl = BrowseUrl;
 
-            var queryCollection = new NameValueCollection();
-            queryCollection.Add("searchstr", StripSearchString(searchString));
-            queryCollection.Add("order_by", "s3");
-            queryCollection.Add("order_way", "desc");
-            queryCollection.Add("disablegrouping", "1");
+            var queryCollection = new NameValueCollection
+            {
+                { "searchstr", StripSearchString(searchString) },
+                { "order_by", "s3" },
+                { "order_way", "desc" },
+                { "disablegrouping", "1" }
+            };
 
             searchUrl += "?" + queryCollection.GetQueryString();
 
             var results = await RequestStringWithCookies(searchUrl);
             try
             {
-                string RowsSelector = "table.torrent_table > tbody > tr.torrent";
+                var RowsSelector = "table.torrent_table > tbody > tr.torrent";
 
                 var SearchResultParser = new HtmlParser();
                 var SearchResultDocument = SearchResultParser.ParseDocument(results.Content);
                 var Rows = SearchResultDocument.QuerySelectorAll(RowsSelector);
                 foreach (var Row in Rows)
                 {
-                    var release = new ReleaseInfo();
-
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 0;
-
                     var qDetailsLink = Row.QuerySelector("a[href^=\"torrents.php?id=\"]");
                     var DescStr = qDetailsLink.NextSibling;
                     var Files = Row.QuerySelector("td:nth-child(3)");
@@ -117,29 +111,35 @@ namespace Jackett.Common.Indexers
                     var TorrentIdParts = qDetailsLink.GetAttribute("href").Split('=');
                     var TorrentId = TorrentIdParts[TorrentIdParts.Length - 1];
                     var DLLink = "torrents.php?action=download&id=" + TorrentId.ToString();
-
-                    release.Description = DescStr.TextContent.Trim();
-                    release.Title = qDetailsLink.TextContent + " " + release.Description;
-                    release.PublishDate = DateTimeUtil.FromTimeAgo(Added.TextContent);
-                    release.Category = new List<int> { TvCategoryParser.ParseTvShowQuality(release.Description) };
-
-                    release.Link = new Uri(SiteLink + DLLink);
-                    release.Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
-                    release.Guid = release.Link;
-
-                    release.Seeders = ParseUtil.CoerceInt(Seeders.TextContent);
-                    release.Peers = ParseUtil.CoerceInt(Leechers.TextContent) + release.Seeders;
-                    release.Size = ReleaseInfo.GetBytes(Size.TextContent);
-                    release.Grabs = ReleaseInfo.GetBytes(Grabs.TextContent);
-                    release.Files = ReleaseInfo.GetBytes(Files.TextContent);
-
-                    if (FreeLeech != null)
-                        release.DownloadVolumeFactor = 0;
-                    else
-                        release.DownloadVolumeFactor = 1;
-
-                    release.UploadVolumeFactor = 1;
-
+                    var link = new Uri(SiteLink + DLLink);
+                    var seeders = ParseUtil.CoerceInt(Seeders.TextContent);
+                    var description = DescStr.TextContent.Trim();
+                    var publishDate = DateTimeUtil.FromTimeAgo(Added.TextContent);
+                    var comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
+                    var leechers = ParseUtil.CoerceInt(Leechers.TextContent);
+                    var size = ReleaseInfo.GetBytes(Size.TextContent);
+                    var grabs = ParseUtil.CoerceLong(Grabs.TextContent);
+                    var files = ParseUtil.CoerceLong(Files.TextContent);
+                    var category = new List<int> { TvCategoryParser.ParseTvShowQuality(description) };
+                    var release = new ReleaseInfo
+                    {
+                        MinimumRatio = 1,
+                        MinimumSeedTime = 0,
+                        Description = description,
+                        Title = qDetailsLink.TextContent + " " + description,
+                        PublishDate = publishDate,
+                        Category = category,
+                        Link = link,
+                        Comments = comments,
+                        Guid = link,
+                        Seeders = seeders,
+                        Peers = leechers + seeders,
+                        Size = size,
+                        Grabs = grabs,
+                        Files = files,
+                        DownloadVolumeFactor = FreeLeech != null ? 0 : 1,
+                        UploadVolumeFactor = 1
+                    };
                     releases.Add(release);
                 }
             }

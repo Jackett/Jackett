@@ -1,7 +1,7 @@
 ---
   site: nostalgic
   name: Nostalgic
-  description: "Nostalgic Torrents (The Archive) is a Private Torrent Tracker for MOVIES / TV / GENERAL NOSTALGIA"
+  description: "Nostalgic Torrents (The Archive / VHSTAPES) is a Private Torrent Tracker for MOVIES / TV / GENERAL NOSTALGIA"
   language: en-us
   type: private
   encoding: UTF-8
@@ -36,10 +36,11 @@
       - {id: 34, cat: Movies, desc: "Laserdiscs"}
       - {id: 35, cat: XXX, desc: "NSFW"}
       - {id: 36, cat: TV, desc: "Youtube Archives"}
+      - {id: 5, cat: Other, desc: "Other"}
 
     modes:
       search: [q]
-      tv-search: [q, season, ep]
+      tv-search: [q]
       movie-search: [q]
 
   settings:
@@ -74,7 +75,7 @@
       password: "{{ .Config.password }}"
       cinfo: "1536|864|24|-780"
       iplocked: 0
-      submit: "login"
+      submit: login
     selectorinputs:
       token:
         selector: input[name="token"]
@@ -82,13 +83,8 @@
     error:
       - selector: table#maincontent tr td div div#messagebarA
 
-  ratio:
-    path: /
-    selector: td:has(a[href="/articles.php?topic=ratio"])  > td
-
   search:
     paths:
-    #https://nostalgic.to/torrents.php?filter_cat%5B32%5D=1&filter_cat%5B27%5D=1&order_by=time&order_way=desc&searchtext=&action=advanced&title=terminator&sizeall=&sizetype=gb&sizerange=0.01&filelist=&taglist=&autocomplete_toggle=1
       - path: torrents.php
     inputs:
       $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
@@ -108,20 +104,31 @@
       selector: table#torrent_table tr:has(a[href^="torrents.php?action=download"])
 
     fields:
-      title:
-        selector: a[href^="/torrents.php?id="]
       category:
-        selector: td.cats_col div a
+        selector: a[href^="/torrents.php?filter_cat"]
         attribute: href
         filters:
           - name: regexp
             args: "(\\d+)]=1"
+      title:
+        selector: a[href^="/torrents.php?id="]
       details:
         selector: a[href^="/torrents.php?id="]
         attribute: href
       download:
         selector: a[href^="torrents.php?action=download"]
         attribute: href
+      description:
+        selector: div.tags
+      banner:
+        selector: td:nth-child(2) > script
+        filters:
+          - name: regexp
+            args: "src=\\\\\"(.*?)\\\\\">"
+          - name: re_replace
+            args: ["\\\\(.)", "$1"]
+          - name: replace
+            args: ["/static/common/noartwork/noimage.png", ""]
       files:
         selector: td:nth-last-child(8)
       date:
@@ -141,5 +148,5 @@
           "img[alt=\"Freeleech\"]": 0
           "*": 1
       uploadvolumefactor:
-        case:
-          "*": 1
+        text: 1
+# luminance

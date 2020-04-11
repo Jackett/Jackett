@@ -5,9 +5,18 @@
   language: en-us
   type: public
   encoding: UTF-8
+  followredirect: true
   links:
-    - https://www.torrentdownloads.me/
     - https://www.torrentdownloads.info/
+    - https://www.torrentdownloads.me/
+    - https://torrentdownloads.unblockit.one/
+    - https://torrentdownloads.black-mirror.xyz/
+    - https://torrentdownloads.unblocked.casa/
+    - https://torrentdownloads.proxyportal.fun/
+    - https://torrentdownloads.uk-unblock.xyz/
+    - https://torrentdownloads.ind-unblock.xyz/
+  legacylinks:
+    - https://torrentdownloads.unblockit.pro/
 
   caps:
     categorymappings:
@@ -42,7 +51,7 @@
     paths:
       - path: "{{if .Keywords}}/search/{{else}}/today/{{end}}"
     inputs:
-      $raw: "new=1&{{range .Categories}}s_cat={{.}}&{{end}}"
+      $raw: "{{range .Categories}}s_cat={{.}}&{{end}}"
       search: "{{ .Keywords }}"
 
     rows:
@@ -75,3 +84,4 @@
         text: 0
       uploadvolumefactor:
         text: 1
+# engine n/a

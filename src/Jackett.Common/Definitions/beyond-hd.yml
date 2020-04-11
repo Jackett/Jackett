@@ -14,7 +14,7 @@
       - {id: 2, cat: TV, desc: "TV"}
 
     modes:
-      search: [q]
+      search: [q, imdbid]
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
 
@@ -45,6 +45,7 @@
   login:
     path: login
     method: form
+    form: form[action$="/login"]
     captcha:
       type: text
       selector: div[style*="#999999;"]
@@ -53,10 +54,17 @@
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
       remember: on
+    selectorinputs:
+      _token:
+        selector: input[name="_token"]
+        attribute: value
     error:
-      - selector: div.has-error
-    test:
-      path: torrents
+      - selector: form[action$="/login"] .text-red
+      - selector: script:contains("toastr.error")
+        message:
+          selector: script:contains("toastr.error")
+#    test:
+#      path: torrents
 
   search:
     paths:
@@ -126,6 +134,5 @@
           i[data-original-title="75% Promo"]: 0.25
           "*": 1
       uploadvolumefactor:
-        case:
-          "*": 1
+        text: 1
 # UNIT3D

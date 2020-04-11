@@ -1,4 +1,4 @@
-﻿  site: cztorrent
+  site: cztorrent
   name: CzTorrent
   description: "CzTorrent is a Czech Semi-Private site for TV / MOVIES / GENERAL"
   language: cs-cz
@@ -22,7 +22,7 @@
       - {id: 38, cat: Movies/HD, desc: "HD-LQ"}
       - {id: 3, cat: PC/Games, desc: "Hry"}
       - {id: 2, cat: Audio, desc: "Hudba"}
-      - {id: 34, cat:  Audio/Video, desc: "Hudba DVD/HD"}
+      - {id: 34, cat:  Audio/Video, desc: "Hudební video"}
       - {id: 6, cat: Books, desc: "Knihy"}
       - {id: 13, cat: Console, desc: "Konzole"}
       - {id: 32, cat: Audio, desc: "Mluvené slovo"}
@@ -30,7 +30,6 @@
       - {id: 4, cat: Other, desc: "Ostatní"}
       - {id: 25, cat: TV, desc: "Seriály"}
       - {id: 29, cat: Audio, desc: "Soundtrack"}
-      - {id: 19, cat:  Audio/Video, desc: "Videoklipy"}
       - {id: 24, cat: XXX, desc: "xXx"}
 
     modes:
@@ -74,11 +73,17 @@
     inputs:
       $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
       s: "{{ .Keywords }}"
+      # 0 approved 1 all 2 not approved
       t: 1
       o: "{{ .Config.sort }}"
+      # does not support imdbid search and does not return imdb links
 
     rows:
       selector: tr.torr_hover
+
+    keywordsfilters:
+      - name: re_replace
+        args: ["S[0-9]{2}([^E]|$)", ""] # remove season tag without episode (search doesn't support it)
 
     fields:
       title:
@@ -89,17 +94,17 @@
           - name: diacritics
             args: replace
           - name: replace
-            args: ["1080i", "1080p"] 
+            args: ["1080i", "1080p"]
           - name: replace
-            args: ["720i", "720p"] 
+            args: ["720i", "720p"]
           - name: replace
-            args: ["pLQ", "p"] 
+            args: ["pLQ", "p"]
           - name: replace
-            args: ["pHD", "p"] 
+            args: ["pHD", "p"]
           - name: replace
-            args: ["serie", ""] 
+            args: ["serie", ""]
           - name: replace
-            args: ["Serie", ""] 
+            args: ["Serie", ""]
           - name: re_replace
             args: ["(\\d{2})\\.", "S$1"]
           - name: re_replace
@@ -148,7 +153,7 @@
             args: [ "|", 2 ]
           - name: append
             args: " +02:00"
-          - name: dateparse 
+          - name: dateparse
             args: "2.1.2006 15:04  -07:00"
       seeders:
         selector: td:nth-child(7) span

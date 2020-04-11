@@ -7,12 +7,12 @@
 JACKETT_DIR="$(dirname "$(readlink -f "$0")")"
 
 # Launch Jackett
-${JACKETT_DIR}/jackett --NoRestart
+"${JACKETT_DIR}/jackett" --NoRestart
 
 # Get user running the service
 JACKETT_USER=$(whoami)
 
 # Wait until the updater ends
-while pgrep -u ${JACKETT_USER} JackettUpdater > /dev/null; do
+while pgrep -u "${JACKETT_USER}" JackettUpdater > /dev/null; do
      sleep 1
 done

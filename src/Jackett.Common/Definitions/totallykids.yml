@@ -1,4 +1,4 @@
-﻿---
+---
   site: totallykids
   name: TotallyKids
   description: "TotallyKids (TK) is a Private Torrent Tracker for CHILDRENS MOVIES / TV / GENERAL"
@@ -6,7 +6,7 @@
   type: private
   encoding: UTF-8
   links:
-    - http://www.totallykids.tv/
+    - http://www.totallykids.tv/ # site does not support https NET::ERR_CERT_AUTHORITY_INVALID
 
   settings:
     - name: username
@@ -50,9 +50,9 @@
       - {id: 24, cat: TV, desc: "Teens"}
 
     modes:
-      search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
+      search: [q, imdbid]
+      tv-search: [q, season, ep, imdbid]
+      movie-search: [q, imdbid]
       music-search: [q]
 
   login:
@@ -74,10 +74,10 @@
       - path: index.php
     inputs:
       page: torrents
-      search: "{{ if .Keywords }}{{ .Keywords }}{{else}}{{end}}"
+      search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
       category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{else}}0{{end}}"
-      # 0 filename 1 file&descr 2 descr
-      options: 0
+      # 0=title, 1=title&descr, 2=descr
+      options: "{{ if .Query.IMDBID }}2{{else}}0{{end}}"
       # 0 all 1 activeonly 2 deadonly
       active: 0
       order: "{{ .Config.sort }}"
@@ -111,6 +111,14 @@
             args: [" http://anonym.to?javascript:popdetails('", ""]
           - name: replace
             args: ["');", ""]
+      banner:
+        selector: td a[href^="index.php?page=torrent-details"]
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: "src=(.+?) width"
+          - name: replace
+            args: ["torrentimg/nocover.jpg", ""]
       size:
         selector: td:nth-child(10)
       # two flavours of dates

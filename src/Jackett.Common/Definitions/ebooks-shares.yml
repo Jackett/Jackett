@@ -283,6 +283,10 @@
       options:
         "desc": "desc"
         "asc": "asc"
+    - name: info_results
+      type: info
+      label: Search results
+      default: "If you are not getting results, then access the site with your browser and mark as read all PMs."
 
   login:
     path: account-login.php

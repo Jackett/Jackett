@@ -1,11 +1,11 @@
-﻿using Jackett.Common.Services.Interfaces;
-using NLog;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.ServiceProcess;
+using Jackett.Common.Services.Interfaces;
+using NLog;
 
 namespace Jackett.Common.Services
 {
@@ -15,8 +15,8 @@ namespace Jackett.Common.Services
         private const string DESCRIPTION = "API Support for your favorite torrent trackers";
         private const string SERVICEEXE = "JackettService.exe";
 
-        private IProcessService processService;
-        private Logger logger;
+        private readonly IProcessService processService;
+        private readonly Logger logger;
 
         public WindowsServiceConfigService(IProcessService p, Logger l)
         {
@@ -24,18 +24,10 @@ namespace Jackett.Common.Services
             logger = l;
         }
 
-        public bool ServiceExists()
-        {
-            return GetService(NAME) != null;
-        }
+        public bool ServiceExists() => GetService(NAME) != null;
 
-        public bool ServiceRunning()
-        {
-            var service = GetService(NAME);
-            if (service == null)
-                return false;
-            return service.Status == ServiceControllerStatus.Running;
-        }
+        public bool ServiceRunning() =>
+            GetService(NAME)?.Status == ServiceControllerStatus.Running;
 
         public void Start()
         {
@@ -49,10 +41,7 @@ namespace Jackett.Common.Services
             service.Stop();
         }
 
-        public ServiceController GetService(string serviceName)
-        {
-            return ServiceController.GetServices().FirstOrDefault(c => String.Equals(c.ServiceName, serviceName, StringComparison.InvariantCultureIgnoreCase));
-        }
+        public ServiceController GetService(string serviceName) => ServiceController.GetServices().FirstOrDefault(c => string.Equals(c.ServiceName, serviceName, StringComparison.InvariantCultureIgnoreCase));
 
         public void Install()
         {
@@ -62,7 +51,7 @@ namespace Jackett.Common.Services
             }
             else
             {
-                string applicationFolder = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath);
+                var applicationFolder = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath);
 
                 var exePath = Path.Combine(applicationFolder, SERVICEEXE);
                 if (!File.Exists(exePath) && Debugger.IsAttached)
@@ -70,7 +59,7 @@ namespace Jackett.Common.Services
                     exePath = Path.Combine(applicationFolder, "..\\..\\..\\Jackett.Service\\bin\\Debug", SERVICEEXE);
                 }
 
-                string arg = $"create {NAME} start= auto binpath= \"{exePath}\" DisplayName= {NAME}";
+                var arg = $"create {NAME} start= auto binpath= \"{exePath}\" DisplayName= {NAME}";
 
                 processService.StartProcessAndLog("sc.exe", arg, true);
 

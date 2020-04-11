@@ -1,4 +1,4 @@
-﻿---
+---
   site: the-madhouse
   name: The-Madhouse
   description: "The-Madhouse is a Private Torrent Tracker"
@@ -6,7 +6,7 @@
   type: private
   encoding: UTF-8
   links:
-    - http://the-madhouse.info/
+    - http://the-madhouse.info/ # site does not support https ERR_CONNECTION_REFUSED
 
   caps:
     categorymappings:
@@ -53,9 +53,9 @@
       - {id: 37, cat: TV/Sport, desc: "TV Sports"}
 
     modes:
-      search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
+      search: [q, imdbid]
+      tv-search: [q, season, ep, imdbid]
+      movie-search: [q, imdbid]
 
   settings:
     - name: username
@@ -110,13 +110,14 @@
       - path: browse.php
     inputs:
       do: search
-      keywords: "{{ .Keywords }}"
-      # t_name T_description t_both t_uploader t_genre
-      search_type: t_name
+      keywords: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+      # t_name t_description t_both t_uploader t_genre
+      search_type: "{{ if .Query.IMDBID }}t_description{{else}}t_name{{end}}"
       category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{else}}0{{end}}"
       include_dead_torrents: yes
       sort: "{{ .Config.sort }}"
       order: "{{ .Config.type }}"
+      # does not return imdb link in results
 
     rows:
       selector: table.sortable tr:has(a[href*="/download.php?id="])
@@ -137,6 +138,7 @@
       details:
         selector: a[href*="/details.php?id="]
         attribute: href
+      # rows have download but site requires thanks so we use dl from details
       download:
         selector: a[href*="/details.php?id="]
         attribute: href
@@ -164,6 +166,7 @@
       downloadvolumefactor:
         case:
           img[src$="_flags/freedownload.gif"]: 0
+          img[src$="_flags/silverdownload.gif"]: 0.5
           "*": 1
       uploadvolumefactor:
         case:

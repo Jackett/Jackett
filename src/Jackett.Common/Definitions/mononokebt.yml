@@ -1,4 +1,4 @@
-﻿---
+---
   site: mononokebt
   name: Mononoké-BT
   description: "Mononoke-BT is a FRENCH Private Torrent Tracker for ANIME"
@@ -6,7 +6,7 @@
   type: private
   encoding: iso-8859-15
   links:
-    - http://mononoke-bt.org/
+    - http://mononoke-bt.org/ # site does not support https NET::ERR_CERT_DATE_INVALID expired 10 Dec 2018
 
   caps:
     categories:
@@ -79,4 +79,4 @@
           - name: dateparse
             args: "2006-01-0215:04:05 -07:00"
 
-        
+

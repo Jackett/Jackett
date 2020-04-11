@@ -5,8 +5,18 @@
   language: en-us
   type: public
   encoding: UTF-8
+  followredirect: true
   links:
     - https://torrentz2.eu/
+    - https://torrentz.unblockit.one/
+    - https://torrentz2.black-mirror.xyz/
+    - https://torrentz2.unblocked.casa/
+    - https://torrentz2.proxyportal.fun/
+    - https://torrentz2.uk-unblock.xyz/
+    - https://torrentz2.ind-unblock.xyz/
+  legacylinks:
+    - https://torrentz2.unblockninja.com/ # proxy fails at DDoS protection
+    - https://torrentz.unblockit.pro/
 
   caps:
     categories:
@@ -47,7 +57,7 @@
       "adult tattoo": XXX
       "other": Other
       "images": Other
-      
+
 
     modes:
       search: [q]
@@ -72,13 +82,14 @@
       label: Sort requested from site
       default: "A"
       options:
+        "_": "peers"
+        "N": "rating"
         "A": "created"
-        "P": "seeders"
         "S": "size"
 
   search:
     paths:
-      - path: "{{if .Config.filter-verified }}verified{{else}}search{{end}}{{ .Config.sort }}"
+      - path: "{{if .Config.filter-verified }}verified{{else}}search{{end}}{{ re_replace .Config.sort \"_\" \"\" }}"
     inputs:
        f: "{{ if .Keywords }}title: {{ .Keywords }}{{else}}{{end}}"
        safe: "{{ if .Config.filter-safe }}1{{else}}0{{end}}"
@@ -122,6 +133,8 @@
           - name: append
             args: "&dn={{ .Result.magfile }}.torrent&tr=udp://tracker.coppersurfer.tk:6969&tr=udp://tracker.leechers-paradise.org:6969&tr=udp://tracker.opentrackr.org:1337"
       category:
+        text: other
+      category|noappend:
         optional: true
         selector: dt
         remove: a
@@ -142,3 +155,4 @@
         text: 0
       uploadvolumefactor:
         text: 1
+# engine n/a

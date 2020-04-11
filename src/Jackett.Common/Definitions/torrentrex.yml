@@ -1,0 +1,88 @@
+---
+  site: torrentrex
+  name: TorrentRex
+  description: "TorrentRex is a Public search engine."
+  language: en-us
+  type: public
+  encoding: UTF-8
+  links:
+    - https://torrentrex.com/
+
+  caps:
+    categories:
+      "anime": TV/Anime
+      "applications": PC
+      "ebooks": Books
+      "adult": XXX
+      "games": PC/Games
+      "movies": Movies
+      "music": Audio
+      "others": Other
+      "tv-series": TV
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  settings: []
+
+  search:
+    paths:
+      - path: search.php
+    inputs:
+      q: "{{ if .Keywords }}{{ .Keywords }}{{else}}2020{{end}}"
+
+    rows:
+      selector: div.r_wr
+
+    fields:
+      category:
+        selector: a.rslt_h2_a
+        attribute: href
+        filters:
+          - name: split
+            args: ["/", 1]
+      title:
+        selector: a.rslt_h2_a
+      details:
+        selector: a.rslt_h2_a
+        attribute: href
+      download:
+        selector: a[href*="/torrent/"]
+        attribute: href
+      magfile:
+        text: "{{ .Result.title }}"
+        filters:
+          - name: validfilename
+      magnet:
+        selector: a[href*="/torrent/"]
+        attribute: href
+        filters:
+          - name: split
+            args: ["/", 4]
+          - name: replace
+            args: [".torrent", ""]
+          - name: prepend
+            args: "magnet:?xt=urn:btih:"
+          - name: append
+            args: "&dn={{ .Result.magfile }}.torrent&tr=udp://tracker.coppersurfer.tk:6969&tr=udp://tracker.leechers-paradise.org:6969&tr=udp://tracker.opentrackr.org:1337"
+      date:
+        text: now
+      size:
+        text: "500 MB"
+      seeders:
+        selector: span:nth-of-type(2)
+        filters:
+          - name: regexp
+            args: (\d+)
+      leechers:
+        selector: span:nth-of-type(3)
+        filters:
+          - name: regexp
+            args: (\d+)
+      downloadvolumefactor:
+        text: 0
+      uploadvolumefactor:
+        text: 1
+# engine n/a

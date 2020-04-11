@@ -6,6 +6,8 @@
   type: private
   encoding: UTF-8
   links:
+    - https://theoccult.click/
+  legacylinks:
     - http://theoccult.click/
 
   caps:
@@ -80,7 +82,7 @@
       - selector: table:contains("Login failed!")
     test:
       path: main.php
-        
+
   search:
     paths:
       - path: browse.php

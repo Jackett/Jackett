@@ -1,4 +1,4 @@
-﻿---
+---
   site: crnaberza
   name: CrnaBerza
   description: "Crna Berza is a BALKAN Private Torrent Tracker for MOVIES / TV / GENERAL"
@@ -100,15 +100,17 @@
   search:
     paths:
     # http://www.crnaberza.com/browse.php?c52=1&c20=1&c34=1&incldead=1&search=star+trek
-      - path: browse.php      
+      - path: browse.php
     inputs:
       $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
       search: "{{ .Keywords }}"
-      searchin: title
+      # 0 title 1 descr 2 both
+      blah: 0
       # 0 active 1 incldead 2 onlydead
       incldead: 1
       sort: "{{ .Config.sort }}"
       type: "{{ .Config.type }}"
+      # does not support searching imdbid and does not return imdb links
 
     rows:
       selector: tr:has(td.trowtorrent)

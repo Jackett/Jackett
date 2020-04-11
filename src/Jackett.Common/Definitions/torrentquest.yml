@@ -53,8 +53,8 @@
       # return movie and tv results if there are no search parms supplied (for use with the TEST button)
       # https://torrentquest.com/download/movies/se/desc/
       # https://torrentquest.com/m/mandalorian-s01e07/age/desc/
-      - path: "{{ if .Keywords }}{{ re_replace .Keywords \"(.).*\" \"$1\" }}/{{ .Keywords }}{{else}}download/movies{{end}}/{{ .Config.sort }}/{{ .Config.type }}/"     
-      - path: "{{ if .Keywords }}{{else}}download/tv/{{ .Config.sort }}/{{ .Config.type }}/{{end}}"     
+      - path: "{{ if .Keywords }}{{ re_replace .Keywords \"(.).*\" \"$1\" }}/{{ .Keywords }}{{else}}download/movies{{end}}/{{ .Config.sort }}/{{ .Config.type }}/"
+      - path: "{{ if .Keywords }}{{else}}download/tv/{{ .Config.sort }}/{{ .Config.type }}/{{end}}"
 
     rows:
       selector: tr:has(td.m)
@@ -64,6 +64,8 @@
         selector: td.n a
         attribute: title
       category:
+        text: Other
+      category|noappend:
         optional: true
         selector:  td[class^="t"]
       details:
@@ -88,3 +90,4 @@
         text: 0
       uploadvolumefactor:
         text: 1
+# engine n/a

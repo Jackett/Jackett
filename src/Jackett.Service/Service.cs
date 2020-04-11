@@ -1,28 +1,28 @@
-﻿using Jackett.Common.Models.Config;
-using Jackett.Common.Services;
-using Jackett.Common.Services.Interfaces;
-using Jackett.Common.Utils;
-using NLog;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.ServiceProcess;
+using Jackett.Common.Models.Config;
+using Jackett.Common.Services;
+using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
+using NLog;
 
 namespace Jackett.Service
 {
     public partial class Service : ServiceBase
     {
-        private IProcessService processService;
+        private readonly IProcessService processService;
         private Process consoleProcess;
-        private Logger logger;
+        private readonly Logger logger;
         private bool serviceStopInitiated;
 
         public Service()
         {
             InitializeComponent();
 
-            RuntimeSettings runtimeSettings = new RuntimeSettings()
+            var runtimeSettings = new RuntimeSettings()
             {
                 CustomLogFileName = "ServiceLog.txt"
             };
@@ -51,7 +51,7 @@ namespace Jackett.Service
 
         private void StartConsoleApplication()
         {
-            string applicationFolder = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath);
+            var applicationFolder = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath);
 
             var exePath = Path.Combine(applicationFolder, "JackettConsole.exe");
 
@@ -70,10 +70,7 @@ namespace Jackett.Service
             consoleProcess.ErrorDataReceived += ProcessErrorDataReceived;
         }
 
-        private void ProcessErrorDataReceived(object sender, DataReceivedEventArgs e)
-        {
-            logger.Error(e.Data);
-        }
+        private void ProcessErrorDataReceived(object sender, DataReceivedEventArgs e) => logger.Error(e.Data);
 
         private void ProcessExited(object sender, EventArgs e)
         {

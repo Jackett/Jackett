@@ -1,4 +1,4 @@
-﻿---
+---
   site: piratbit
   name: PiratBit
   description: "PirateBit is a RUSSIAN Public Torrent Tracker for MOVIES / TV / GENERAL"
@@ -6,7 +6,7 @@
   type: public
   encoding: UTF-8
   links:
-    - http://piratbit.top/
+    - http://piratbit.top/ # site forces http, https is not supported
   legacylinks:
     - https://pb.wtf/
     - https://piratbit.pw/
@@ -65,7 +65,7 @@
       - {id: 138, cat: Movies, desc: "Индийское кино"}
       - {id: 1766, cat: Movies, desc: "Кино, видео, мультфильмы (48-60 fps)"}
       - {id: 1769, cat: Movies/BluRay, desc: " |- Фильмы (BDRip, HDrip-AVC) (48-60 fps)"}
-      - {id: Movies, cat: Movies/HD, desc: " |- Фильмы (HD 720p, 1080p) (48-60 fps)"}
+      - {id: 1717, cat: Movies/HD, desc: " |- Фильмы (HD 720p, 1080p) (48-60 fps)"}
       - {id: 1740, cat: Movies, desc: " |- Мультфильмы (48-60 fps)"}
       - {id: 1767, cat: Movies, desc: " |- Сборники  и Сиквелы  (48-60 fps)"}
       - {id: 1741, cat: Movies/3D, desc: " |- 3D Видео (48-60 fps)"}
@@ -669,7 +669,7 @@
           - name: querystring
             args: f
       title:
-        selector: td a.genmed b
+        selector: td a.genmed
       details:
         selector: td a.genmed
         attribute: href
@@ -704,3 +704,4 @@
         text: 0
       uploadvolumefactor:
         text: 1
+# engine n/a

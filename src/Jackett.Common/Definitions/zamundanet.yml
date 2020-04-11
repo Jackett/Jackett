@@ -1,4 +1,4 @@
-﻿---
+---
   site: zamundanet
   name: Zamunda.net
   description: "Zumunda is a BULGARIAN Private Torrent Tracker for 0DAY / GENERAL"
@@ -156,6 +156,9 @@
           - name: regexp
             args: src=\\'([^\s\\]+)
       downloadvolumefactor:
-        text: 0
+        case:
+          "a[style=\"color: #b9a100;\"][href^=\"banan?\"]": "0"
+          "*": "1"
       uploadvolumefactor:
         text: 1
+# engine n/a

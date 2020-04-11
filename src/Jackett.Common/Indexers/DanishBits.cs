@@ -19,21 +19,27 @@ namespace Jackett.Common.Indexers
 
         private new ConfigurationDataUserPasskey configData
         {
-            get { return (ConfigurationDataUserPasskey)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataUserPasskey)base.configData;
+            set => base.configData = value;
         }
 
-        public DanishBits(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps)
-            : base(name: "DanishBits",
-                description: "A danish closed torrent tracker",
-                link: "https://danishbits.org/",
-                endpoint: "couchpotato.php",
-                configService: configService,
-                client: c,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataUserPasskey("Note about Passkey: This is not your login Password. Find the Passkey by logging into DanishBits with your Browser, and under your account page you'll see your passkey under the 'Personal' section on the left side.")
-            )
+        public DanishBits(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+            : base("DanishBits",
+                   description: "A danish closed torrent tracker",
+                   link: "https://danishbits.org/",
+                   caps: new TorznabCapabilities
+                   {
+                       SupportsImdbMovieSearch = true
+                   },
+                   configService: configService,
+                   client: wc,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataUserPasskey(
+                       @"Note about Passkey: This is not your login Password. Find the Passkey by logging into
+                       DanishBits with your Browser, and under your account page you'll see your passkey under the 'Personal'
+                       section on the left side."),
+                   endpoint: "couchpotato.php")
         {
             Encoding = Encoding.UTF8;
             Language = "da-dk";
@@ -51,7 +57,7 @@ namespace Jackett.Common.Indexers
                 return "%";
             }
             var searchString = query.GetQueryString();
-            Regex ReplaceRegex = new Regex("[^a-zA-Z0-9]+");
+            var ReplaceRegex = new Regex("[^a-zA-Z0-9]+");
             searchString = ReplaceRegex.Replace(searchString, "%");
             return searchString;
         }

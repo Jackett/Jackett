@@ -158,8 +158,10 @@
     keywordsfilters:
       - name: re_replace
         args: ["([12][0-9]{3})", ""]
+
     rows:
       selector: div#fancy-list-group ul.list-group li.list-group-item
+
     fields:
       _quality:
         selector: div.list-group-item-content p.m-0 span.badge-primary:contains("1080p"), div.list-group-item-content p.m-0 span.badge-primary:contains("720p"), div.list-group-item-content p.m-0 span.badge-primary:contains("4k")
@@ -196,69 +198,70 @@
         attribute: src
         case:
         # unfortunately the site does not have category numbers on the results page, just a .png which can apply to both movies and tv.
-        # therefore I've order the list to favour movies, 
+        # therefore I've order the list to favour movies,
         # also, not all .png have been verified as the site has many empty categories. their image names have been extrapolated from the cat desc.
-         "[src$=\"/XXXZ.png\"]": "74"
-         "[src$=\"/Hentai.png\"]": "75"
-         "[src$=\"/Anime.png\"]": "69"
-         "[src$=\"/Windows.png\"]": "21"
-         "[src$=\"/Mac.png\"]": "22"
-         "[src$=\"/Android.png\"]": "23"
-         "[src$=\"/Linux.png\"]": "25"
-         "[src$=\"/iPhone.png\"]": "26"
-         "[src$=\"/iPad.png\"]": "27"
-         "[src$=\"/iPod.png\"]": "28"
-         "[src$=\"/Cursos.png\"]": "71"
-         "[src$=\"/Apostila.png\"]": "72"
-         "[src$=\"/E-books.png\"]": "67"
-         "[src$=\"/Revista.png\"]": "68"
-         "[src$=\"/HQ.png\"]": "112"
-         "[src$=\"/Filmes.png\"]": "119"
-         "[src$=\"/Revistas-XXX.png\"]": "70"
-         "[src$=\"/PS4.png\"]": "79"
-         "[src$=\"/Jogos-PC.png\"]": "47"
-         "[src$=\"/Emulador.png\"]": "61"
-         "[src$=\"/Emulacao.png\"]": "109"
-         "[src$=\"/Jogos-Mac.png\"]": "48"
-         "[src$=\"/Jogos-PS1.png\"]": "49"
-         "[src$=\"/Jogos-PS2.png\"]": "50"
-         "[src$=\"/Jogos-PS3.png\"]": "51"
-         "[src$=\"/Jogos-Dreamcast.png\"]": "52"
-         "[src$=\"/Jogos-Xbox360.png\"]": "54"
-         "[src$=\"/Jogos-Xbox.png\"]": "56"
-         "[src$=\"/Jogos-Wii.png\"]": "55"
-         "[src$=\"/Jogos-DS.png\"]": "58"
-         "[src$=\"/jogosandroid.png\"]": "57"
-         "[src$=\"/Jogos-PSP.png\"]": "82"
-         "[src$=\"/Jogos-NS.png\"]": "110"
-         "[src$=\"/Jogos-XboxOne.png\"]": "78"
-         "[src$=\"/Axe.png\"]": "29"
-         "[src$=\"/Funk.png\"]": "31"
-         "[src$=\"/Pagode.png\"]": "32"
-         "[src$=\"/HIP_HOP.png\"]": "33"
-         "[src$=\"/Rap.png\"]": "34"
-         "[src$=\"/Rock.png\"]": "36"
-         "[src$=\"/Hard-Rock.png\"]": "37"
-         "[src$=\"/Blues.png\"]": "38"
-         "[src$=\"/Dance.png\"]": "39"
-         "[src$=\"/Discografia.png\"]": "40"
-         "[src$=\"/Erudita.png\"]": "41"
-         "[src$=\"/Forro.png\"]": "42"
-         "[src$=\"/Dubstep.png\"]": "43"
-         "[src$=\"/Sertanejo.png\"]": "46"
-         "[src$=\"/Samba.png\"]": "45"
-         "[src$=\"/Musica-Outros.png\"]": "77"
-         "[src$=\"/Reggae.png\"]": "76"
-         "[src$=\"/Gospel.png\"]": "83"
-         "[src$=\"/POP.png\"]": "115"
-         "[src$=\"/MPB.png\"]": "114"
-         "[src$=\"/OST.png\"]": "84"
-         "[src$=\"/Seriados.png\"]": "120"
-         "[src$=\"/Shows.png\"]": "65"
-         "[src$=\"/Aberta.png\"]": "63"
-         "[src$=\"/Esporte.png\"]": "62"
-         "[src$=\"/Fechada.png\"]": "64"
-         "[src$=\"/Videoaula.png\"]": "73"
+         "[src$=\"/XXXZ.png\"]": 74
+         "[src$=\"/Hentai.png\"]": 75
+         "[src$=\"/Anime.png\"]": 69
+         "[src$=\"/Windows.png\"]": 21
+         "[src$=\"/Mac.png\"]": 22
+         "[src$=\"/Android.png\"]": 23
+         "[src$=\"/Linux.png\"]": 25
+         "[src$=\"/iPhone.png\"]": 26
+         "[src$=\"/iPad.png\"]": 27
+         "[src$=\"/iPod.png\"]": 28
+         "[src$=\"/Cursos.png\"]": 71
+         "[src$=\"/Apostila.png\"]": 72
+         "[src$=\"/E-books.png\"]": 67
+         "[src$=\"/Revista.png\"]": 68
+         "[src$=\"/HQ.png\"]": 112
+         "[src$=\"/Filmes.png\"]": 119
+         "[src$=\"/Revistas-XXX.png\"]": 70
+         "[src$=\"/PS4.png\"]": 79
+         "[src$=\"/Jogos-PC.png\"]": 47
+         "[src$=\"/Emulador.png\"]": 61
+         "[src$=\"/Emulacao.png\"]": 109
+         "[src$=\"/Jogos-Mac.png\"]": 48
+         "[src$=\"/Jogos-PS1.png\"]": 49
+         "[src$=\"/Jogos-PS2.png\"]": 50
+         "[src$=\"/Jogos-PS3.png\"]": 51
+         "[src$=\"/Jogos-Dreamcast.png\"]": 52
+         "[src$=\"/Jogos-Xbox360.png\"]": 54
+         "[src$=\"/Jogos-Xbox.png\"]": 56
+         "[src$=\"/Jogos-Wii.png\"]": 55
+         "[src$=\"/Jogos-DS.png\"]": 58
+         "[src$=\"/jogosandroid.png\"]": 57
+         "[src$=\"/Jogos-PSP.png\"]": 82
+         "[src$=\"/Jogos-NS.png\"]": 110
+         "[src$=\"/Jogos-XboxOne.png\"]": 78
+         "[src$=\"/Axe.png\"]": 29
+         "[src$=\"/Funk.png\"]": 31
+         "[src$=\"/Pagode.png\"]": 32
+         "[src$=\"/HIP_HOP.png\"]": 33
+         "[src$=\"/Rap.png\"]": 34
+         "[src$=\"/Rock.png\"]": 36
+         "[src$=\"/Hard-Rock.png\"]": 37
+         "[src$=\"/Blues.png\"]": 38
+         "[src$=\"/Dance.png\"]": 39
+         "[src$=\"/Discografia.png\"]": 40
+         "[src$=\"/Erudita.png\"]": 41
+         "[src$=\"/Forro.png\"]": 42
+         "[src$=\"/Dubstep.png\"]": 43
+         "[src$=\"/Sertanejo.png\"]": 46
+         "[src$=\"/Samba.png\"]": 45
+         "[src$=\"/Musica-Outros.png\"]": 77
+         "[src$=\"/Reggae.png\"]": 76
+         "[src$=\"/Gospel.png\"]": 83
+         "[src$=\"/POP.png\"]": 115
+         "[src$=\"/MPB.png\"]": 114
+         "[src$=\"/OST.png\"]": 84
+         "[src$=\"/Seriados.png\"]": 120
+         "[src$=\"/Shows.png\"]": 65
+         "[src$=\"/Aberta.png\"]": 63
+         "[src$=\"/Esporte.png\"]": 62
+         "[src$=\"/Fechada.png\"]": 64
+         "[src$=\"/Videoaula.png\"]": 73
+         "*": 999
       date:
         text: now
       date:
@@ -284,5 +287,5 @@
           "span.badge-success:contains(\"FREE\")": 0
           "*": 1
       uploadvolumefactor:
-        case:
-          "*": 1
+        text: 1
+# engine n/a

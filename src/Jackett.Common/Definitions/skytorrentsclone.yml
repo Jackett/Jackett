@@ -7,11 +7,17 @@
   encoding: UTF-8
   links:
     - https://www.skytorrents.lol/
+    - https://skytorrents.black-mirror.xyz/
+    - https://skytorrents.unblocked.casa/
+    - https://skytorrents.proxyportal.fun/
+    - https://skytorrents.uk-unblock.xyz/
+    - https://skytorrents.ind-unblock.xyz/
   legacylinks:
     - https://www.skytorrents.to/
 
   caps:
     categories:
+      "other": Other
       # category=
       "album": Audio
       "ebook": Books
@@ -53,13 +59,15 @@
       title:
         selector: td a
       category:
+        text: other
+      category|noappend:
         # try category=
-        optional: true
         selector: a.label[href*="category="]
-      category:
-        # try type=
         optional: true
+      category|noappend:
+        # try type=
         selector: a.label[href*="type="]
+        optional: true
       details:
         selector: td a
         attribute: href
@@ -83,3 +91,4 @@
         text: 0
       uploadvolumefactor:
         text: 1
+# engine n/a

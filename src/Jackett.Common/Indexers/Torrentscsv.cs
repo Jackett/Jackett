@@ -1,7 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,88 +12,97 @@ using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 
-namespace Jackett.Common.Indexers {
-    public class Torrentscsv : BaseWebIndexer {
+namespace Jackett.Common.Indexers
+{
+    public class Torrentscsv : BaseWebIndexer
+    {
 
-        private string ApiEndpoint { get { return SiteLink + "service/search"; } }
+        private string ApiEndpoint => SiteLink + "service/search";
 
-        private new ConfigurationData configData {
-            get { return (ConfigurationData) base.configData; }
-            set { base.configData = value; }
+        private new ConfigurationData configData
+        {
+            get => base.configData;
+            set => base.configData = value;
         }
 
-        public Torrentscsv (IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps) : base (
+        public Torrentscsv(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps) : base(
             name: "Torrents.csv",
             description: "Torrents.csv is a self-hostable, open source torrent search engine and database",
             link: "https://torrents-csv.ml/",
-            caps : new TorznabCapabilities (),
-            configService : configService,
-            client : wc,
-            logger : l,
-            p : ps,
-            configData : new ConfigurationData ()) {
+            caps: new TorznabCapabilities
+            {
+                SupportsImdbMovieSearch = true
+            },
+            configService: configService,
+            client: wc,
+            logger: l,
+            p: ps,
+            configData: new ConfigurationData())
+        {
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "public";
 
             // dummy mappings for sonarr, radarr, etc since torrents.csv doesnt return categories
-            AddCategoryMapping (1000, TorznabCatType.Console);
-            AddCategoryMapping (2000, TorznabCatType.Movies);
-            AddCategoryMapping (3000, TorznabCatType.Audio);
-            AddCategoryMapping (4000, TorznabCatType.PC);
-            AddCategoryMapping (5000, TorznabCatType.TV);
-            AddCategoryMapping (6000, TorznabCatType.XXX);
-            AddCategoryMapping (7000, TorznabCatType.Other);
-            AddCategoryMapping (8000, TorznabCatType.Books);
-
-            TorznabCaps.SupportsImdbMovieSearch = false;
-
-            webclient.requestDelay = 0;
+            AddCategoryMapping(1000, TorznabCatType.Console);
+            AddCategoryMapping(2000, TorznabCatType.Movies);
+            AddCategoryMapping(3000, TorznabCatType.Audio);
+            AddCategoryMapping(4000, TorznabCatType.PC);
+            AddCategoryMapping(5000, TorznabCatType.TV);
+            AddCategoryMapping(6000, TorznabCatType.XXX);
+            AddCategoryMapping(7000, TorznabCatType.Other);
+            AddCategoryMapping(8000, TorznabCatType.Books);
         }
 
-        public override async Task<IndexerConfigurationStatus> ApplyConfiguration (JToken configJson) {
-            configData.LoadValuesFromJson (configJson);
-            var releases = await PerformQuery (new TorznabQuery ());
+        public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
+        {
+            configData.LoadValuesFromJson(configJson);
+            var releases = await PerformQuery(new TorznabQuery());
 
-            await ConfigureIfOK (string.Empty, releases.Count () > 0, () => {
-                throw new Exception ("Error: No data returned!");
+            await ConfigureIfOK(string.Empty, releases.Count() > 0, () =>
+            {
+                throw new Exception("Error: No data returned!");
             });
 
             return IndexerConfigurationStatus.Completed;
         }
 
-        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery (TorznabQuery query) {
-            return await PerformQuery (query, 0);
-        }
+        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query) => await PerformQuery(query, 0);
 
-        public async Task<IEnumerable<ReleaseInfo>> PerformQuery (TorznabQuery query, int attempts) {
-            var releases = new List<ReleaseInfo> ();
-            var searchString = query.GetQueryString ();
-            if (string.IsNullOrEmpty(searchString)) searchString = "%";
+        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query, int attempts)
+        {
+            var releases = new List<ReleaseInfo>();
+            var searchString = query.GetQueryString();
+            if (string.IsNullOrEmpty(searchString))
+                searchString = "2020";
 
-            var queryCollection = new NameValueCollection ();
+            var queryCollection = new NameValueCollection
+            {
+                { "q", searchString },
+                { "size", "500" },
+                { "type_", "torrent" }
+            };
 
-            queryCollection.Add ("q", searchString);
-            queryCollection.Add ("size", "500");
-            queryCollection.Add ("type_", "torrent");
+            var searchUrl = ApiEndpoint + "?" + queryCollection.GetQueryString();
+            var response = await RequestStringWithCookiesAndRetry(searchUrl, string.Empty);
 
-            var searchUrl = ApiEndpoint + "?" + queryCollection.GetQueryString ();
-            var response = await RequestStringWithCookiesAndRetry (searchUrl, string.Empty);
-
-            try {
+            try
+            {
                 var jsonStart = response.Content;
-                var jsonContent = JArray.Parse (jsonStart);
+                var jsonContent = JArray.Parse(jsonStart);
 
-                foreach (var torrent in jsonContent) {
-		    
-		    if (torrent == null)
-                        throw new Exception ("Error: No data returned!");
+                foreach (var torrent in jsonContent)
+                {
 
-                    var release = new ReleaseInfo ();
-                    release.Title = torrent.Value<string> ("name");
+                    if (torrent == null)
+                        throw new Exception("Error: No data returned!");
 
                     // construct magnet link from infohash with all public trackers known to man
-                    string magnet_uri = "magnet:?xt=urn:btih:" + torrent.Value<JToken> ("infohash") +
+                    // TODO move trackers to List for reuse elsewhere
+                    // TODO dynamically generate list periodically from online tracker repositories like
+                    // https://torrents.io/tracker-list/
+                    // https://github.com/ngosang/trackerslist
+                    var magnet = new Uri("magnet:?xt=urn:btih:" + torrent.Value<JToken>("infohash") +
                         "&tr=udp://tracker.coppersurfer.tk:6969/announce" +
                         "&tr=udp://tracker.leechers-paradise.org:6969/announce" +
                         "&tr=udp://tracker.internetwarriors.net:1337/announce" +
@@ -127,67 +135,83 @@ namespace Jackett.Common.Indexers {
                         "&tr=udp://torrentclub.tech:6969/announce" +
                         "&tr=udp://tracker.tvunderground.org.ru:3218/announce" +
                         "&tr=udp://tracker.open-tracker.org:1337/announce" +
-                        "&tr=udp://tracker.justseed.it:1337/announce"; 
-
-                    release.MagnetUri = new Uri (magnet_uri);
-                    // there is no comments or details link so we point to the web site instead
-                    release.Comments = new Uri (SiteLink);
-                    release.Guid = release.MagnetUri;
-                    release.Link = release.MagnetUri;
-                    release.InfoHash = torrent.Value<JToken> ("infohash").ToString ();
+                        "&tr=udp://tracker.justseed.it:1337/announce");
 
                     // convert unix timestamp to human readable date
-                    double createdunix = torrent.Value<long> ("created_unix");
-                    System.DateTime dateTime = new System.DateTime (1970, 1, 1, 0, 0, 0, 0);
-                    dateTime = dateTime.AddSeconds (createdunix);
-                    release.PublishDate = dateTime;
-                    release.Seeders = torrent.Value<int> ("seeders");
-                    release.Peers = torrent.Value<int> ("leechers") + release.Seeders;
-                    release.Size = torrent.Value<long> ("size_bytes");
-                    var grabs = torrent.Value<string>("completed");
-                    if (grabs == null) grabs = "0";
-                    release.Grabs = ParseUtil.CoerceInt(grabs);
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800; // 48 hours
-                    release.DownloadVolumeFactor = 0;
-                    release.UploadVolumeFactor = 1;
+                    double createdunix = torrent.Value<long>("created_unix");
+                    var dateTime = new System.DateTime(1970, 1, 1, 0, 0, 0, 0);
+                    dateTime = dateTime.AddSeconds(createdunix);
+                    var seeders = torrent.Value<int>("seeders");
+                    var grabs = ParseUtil.CoerceInt(torrent.Value<string>("completed") ?? "0");
+                    var release = new ReleaseInfo
+                    {
+                        Title = torrent.Value<string>("name"),
+                        MagnetUri = magnet,
+                        // there is no comments or details link so we point to the web site instead
+                        Comments = new Uri(SiteLink),
+                        Guid = magnet,
+                        Link = magnet,
+                        InfoHash = torrent.Value<JToken>("infohash").ToString(),
+                        PublishDate = dateTime,
+                        Seeders = seeders,
+                        Peers = torrent.Value<int>("leechers") + seeders,
+                        Size = torrent.Value<long>("size_bytes"),
+                        Grabs = grabs,
+                        MinimumRatio = 1,
+                        MinimumSeedTime = 172800, // 48 hours
+                        DownloadVolumeFactor = 0,
+                        UploadVolumeFactor = 1
+                    };
 
-		    // dummy mappings for sonarr, radarr, etc
-                    string categories = string.Join (";", MapTorznabCapsToTrackers (query));
-                    if (!string.IsNullOrEmpty (categories)) {
-                        if (categories.Contains ("1000")) {
+                    //TODO isn't there already a function for this?
+                    // dummy mappings for sonarr, radarr, etc
+                    var categories = string.Join(";", MapTorznabCapsToTrackers(query));
+                    if (!string.IsNullOrEmpty(categories))
+                    {
+                        if (categories.Contains("1000"))
+                        {
                             release.Category = new List<int> { TorznabCatType.Console.ID };
                         }
-                        if (categories.Contains ("2000")) {
+                        if (categories.Contains("2000"))
+                        {
                             release.Category = new List<int> { TorznabCatType.Movies.ID };
                         }
-                        if (categories.Contains ("3000")) {
+                        if (categories.Contains("3000"))
+                        {
                             release.Category = new List<int> { TorznabCatType.Audio.ID };
                         }
-                        if (categories.Contains ("4000")) {
+                        if (categories.Contains("4000"))
+                        {
                             release.Category = new List<int> { TorznabCatType.PC.ID };
                         }
-                        if (categories.Contains ("5000")) {
+                        if (categories.Contains("5000"))
+                        {
                             release.Category = new List<int> { TorznabCatType.TV.ID };
                         }
-                        if (categories.Contains ("6000")) {
+                        if (categories.Contains("6000"))
+                        {
                             release.Category = new List<int> { TorznabCatType.XXX.ID };
                         }
-                        if (categories.Contains ("7000")) {
+                        if (categories.Contains("7000"))
+                        {
                             release.Category = new List<int> { TorznabCatType.Other.ID };
                         }
-                        if (categories.Contains ("8000")) {
+                        if (categories.Contains("8000"))
+                        {
                             release.Category = new List<int> { TorznabCatType.Books.ID };
                         }
                     }
                     // for null category
-                    if (string.IsNullOrEmpty (categories)) {
+                    else
+                    {
                         release.Category = new List<int> { TorznabCatType.Other.ID };
                     }
-                    releases.Add (release);
+                    releases.Add(release);
                 }
-            } catch (Exception ex) {
-                OnParseError (response.Content, ex);
+            }
+            catch (Exception ex)
+            {
+                OnParseError(response.Content, ex);
             }
             return releases;
         }

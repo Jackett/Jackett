@@ -1,4 +1,4 @@
-﻿---
+---
   site: siambit
   name: SiamBIT
   description: "SiamBIT is a THAI Private Torrent Tracker for GENERAL"
@@ -58,7 +58,7 @@
       - {id: 908, cat: XXX, desc: "XXX-Gay"}
       - {id: 910, cat: XXX, desc: "XXX-clip"}
       - {id: 911, cat: XXX, desc: "XXX-pictures"}
-      - {id: 912, cat: XXX, desc: "XXX-magazine"}      
+      - {id: 912, cat: XXX, desc: "XXX-magazine"}
 
     modes:
       search: [q]
@@ -82,6 +82,10 @@
         "5": "size"
         "1": "title desc"
         "14": "title asc"
+    - name: info_results
+      type: info
+      label: Search results
+      default: "If you are getting the error <b>Found no results while trying to browse this tracker</b> then the most likely reason is that you have <b>Important news from the team</b> on the Web Site that must be read before you can proceed to the torrent search page."
 
   login:
     path: takelogin.php
@@ -191,3 +195,4 @@
           "td:nth-child(4):contains(\"x8\")": 8
           "td:nth-child(4):contains(\"x9\")": 9
           "*": 1
+# engine n/a

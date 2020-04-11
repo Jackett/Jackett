@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -18,13 +18,13 @@ namespace Jackett.Common.Indexers
 {
     public class Myanonamouse : BaseWebIndexer
     {
-        private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
-        private string SearchUrl { get { return SiteLink + "tor/js/loadSearchJSONbasic.php"; } }
+        private string LoginUrl => SiteLink + "takelogin.php";
+        private string SearchUrl => SiteLink + "tor/js/loadSearchJSONbasic.php";
 
         private new ConfigurationDataMyAnonamouse configData
         {
-            get { return (ConfigurationDataMyAnonamouse)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataMyAnonamouse)base.configData;
+            set => base.configData = value;
         }
 
         public Myanonamouse(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps)
@@ -168,29 +168,30 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
 
-            NameValueCollection qParams = new NameValueCollection();
-            qParams.Add("tor[text]", query.GetQueryString());
-            qParams.Add("tor[srchIn][title]", "true");
-            qParams.Add("tor[srchIn][author]", "true");
-            qParams.Add("tor[searchType]", "all");
-            qParams.Add("tor[searchIn]", "torrents");
-            qParams.Add("tor[hash]", "");
-            qParams.Add("tor[sortType]", "default");
-            qParams.Add("tor[startNumber]", "0");
+            var qParams = new NameValueCollection
+            {
+                {"tor[text]", query.GetQueryString()},
+                {"tor[srchIn][title]", "true"},
+                {"tor[srchIn][author]", "true"},
+                {"tor[searchType]", "all"},
+                {"tor[searchIn]", "torrents"},
+                {"tor[hash]", ""},
+                {"tor[sortType]", "default"},
+                {"tor[startNumber]", "0"},
+                {"thumbnails", "1"}, // gives links for thumbnail sized versions of their posters
+                //{ "posterLink", "1"}, // gives links for a full sized poster
+                //{ "dlLink", "1"}, // include the url to download the torrent
+                {"description", "1"}, // include the description
+                //{"bookmarks", "0"} // include if the item is bookmarked or not
+            };
 
-            qParams.Add("thumbnails", "1"); // gives links for thumbnail sized versions of their posters
-            //qParams.Add("posterLink", "1"); // gives links for a full sized poster
-            //qParams.Add("dlLink", "1"); // include the url to download the torrent
-            qParams.Add("description", "1"); // include the description
-            //qParams.Add("bookmarks", "0"); // include if the item is bookmarked or not
-
-            List<string> catList = MapTorznabCapsToTrackers(query);
+            var catList = MapTorznabCapsToTrackers(query);
             if (catList.Any())
             {
-                int index = 0;
-                foreach (string cat in catList)
+                var index = 0;
+                foreach (var cat in catList)
                 {
-                    qParams.Add("tor[cat]["+index+"]", cat);
+                    qParams.Add("tor[cat][" + index + "]", cat);
                     index++;
                 }
             }
@@ -199,7 +200,7 @@ namespace Jackett.Common.Indexers
                 qParams.Add("tor[cat][]", "0");
             }
 
-            string urlSearch = SearchUrl;
+            var urlSearch = SearchUrl;
             if (qParams.Count > 0)
             {
                 urlSearch += $"?{qParams.GetQueryString()}";
@@ -217,7 +218,7 @@ namespace Jackett.Common.Indexers
                 var sitelink = new Uri(SiteLink);
 
                 var error = jsonContent.Value<string>("error");
-                if(error != null)
+                if (error != null)
                 {
                     if (error == "Nothing returned, out of 0")
                         return releases;
@@ -225,8 +226,9 @@ namespace Jackett.Common.Indexers
 
                 foreach (var item in jsonContent.Value<JArray>("data"))
                 {
+                    //TODO shift to ReleaseInfo object initializer for consistency
                     var release = new ReleaseInfo();
-                        
+
                     var id = item.Value<long>("id");
                     release.Title = item.Value<string>("title");
 
@@ -274,7 +276,7 @@ namespace Jackett.Common.Indexers
                     var size = item.Value<string>("size");
                     release.Size = ReleaseInfo.GetBytes(size);
                     var free = item.Value<int>("free");
-                    
+
                     if (free == 1)
                         release.DownloadVolumeFactor = 0;
                     else

@@ -1,4 +1,4 @@
-﻿---
+---
   site: bigfangroup
   name: BigFANGroup
   description: "BigFANGroup is a RUSSIAN Public Torrent Tracker for MOVIES / TV"
@@ -88,7 +88,7 @@
 
   search:
     # https://bigfangroup.org/browse.php?search=black+lightning&cat=0&incldead=0&year=0&format=0
-    # 
+    #
     paths:
       - path: browse.php
     inputs:
@@ -184,10 +184,7 @@
           - name: dateparse
             args: "2 January 2006 15:04:05"
       downloadvolumefactor:
-        case:
-          img[src="pic/freedownload.gif"]: 0
-          img[src="pic/silverdown.gif"]: 0
-          "*": 1
+        text: 0
       uploadvolumefactor:
         text: 1
 # engine n/a

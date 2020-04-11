@@ -1,4 +1,4 @@
-﻿---
+---
   site: mteamtp2fa
   name: MTeamTP2FA
   description: "this indexer uses a cookie login for MTeamTP for those that want to use 2FA"
@@ -23,14 +23,15 @@
       - {id: 438, cat: TV/HD, desc: "TV Series(影劇/綜藝)/BD"}
       - {id: 404, cat: TV/Documentary, desc: "紀錄教育"}
       - {id: 405, cat: TV/Anime, desc: "Anime(動畫)"}
-      - {id: 406, cat: Audio/Video, desc: "MV(演唱)"}
-      - {id: 408, cat: Audio/Other, desc: "Music(AAC/ALAC)"}
-      - {id: 434, cat: Audio, desc: "Music(無損)"}
       - {id: 407, cat: TV/Sport, desc: "Sports(運動)"}
       - {id: 422, cat: PC/0day, desc: "Software(軟體)"}
       - {id: 423, cat: PC/Games, desc: "PCGame(PC遊戲)"}
       - {id: 427, cat: Books, desc: "eBook(電子書)"}
       - {id: 409, cat: Other, desc: "Misc(其他)"}
+      # music
+      - {id: 406, cat: Audio/Video, desc: "MV(演唱)"}
+      - {id: 408, cat: Audio/Other, desc: "Music(AAC/ALAC)"}
+      - {id: 434, cat: Audio, desc: "Music(無損)"}
       # adult
       - {id: 410, cat: XXX, desc: "AV(有碼)/HD Censored"}
       - {id: 429, cat: XXX, desc: "AV(無碼)/HD Uncensored"}
@@ -48,7 +49,7 @@
       - {id: 413, cat: XXX, desc: "H-Comic(漫畫)"}
 
     modes:
-      search: [q]
+      search: [q, imdbid]
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
 
@@ -59,18 +60,34 @@
     - name: infocookie
       type: info
       label: How to get the Cookie
-      default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find 'cookie:' in the <b>Request Headers</b> section<li>Copy & paste the whole cookie string to here.</ol>"
+      default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
     - name: infotitle
       type: info
       label: About Titles
       default: For best results disable the torrent name tooltip (User CP/Tracker Settings/Torrents Page). Otherwise long release names will be cut off.
-
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "4"
+      options:
+        "4": "created"
+        "7": "seeders"
+        "5": "size"
+        "1": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
   login:
     method: cookie
     inputs:
       cookie: "{{ .Config.cookie }}"
     test:
-      path: torrents.php
+      path: index.php
+      selector: a[href="logout.php"]
 
   ratio:
     path: torrents.php
@@ -82,20 +99,28 @@
   search:
     paths:
       - path: torrents.php
-        categorymappings: ["!", 410, 429, 424, 430, 426, 437, 431, 432, 436, 425, 433, 411, 412, 413]
+        categorymappings: ["!", 410, 429, 424, 430, 426, 437, 431, 432, 436, 425, 433, 411, 412, 413, 406, 408, 434]
       - path: adult.php
         categorymappings: [410, 429, 424, 430, 426, 437, 431, 432, 436, 425, 433, 411, 412, 413]
-    method: post
+      - path: music.php
+        categorymappings: [406, 408, 434]
     inputs:
       $raw: "{{range .Categories}}cat{{.}}=1&{{end}}"
       search: "{{if .Query.IMDBID}}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-      incldead: 1
+      # 0 incldead 1 active 2 dead
+      incldead: 0
+      # 0 all 1 normal 2 free 3 2x 4 2xfree 5 50% 6 2x50% 7 30%
       spstate: 0
-      inclbookmarked: 0
+      # 0 title 1 descr 3 uploaded 4 imdb url
       search_area: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
+      # 0 and 1 or 2 exact
       search_mode: 0
+      sort: "{{ .Config.sort }}"
+      type: "{{ .Config.type }}"
+
     rows:
       selector: table.torrents > tbody > tr:has(table.torrentname)
+
     fields:
       title: # shortened for long release names
         selector: a[href^="details.php?id="] > b
@@ -111,7 +136,7 @@
             args: cat
       details:
         selector: a[href^="details.php?id="]
-        attribute: href    
+        attribute: href
       download:
         selector: a[href^="download.php?id="]
         attribute: href
@@ -121,6 +146,10 @@
         filters:
           - name: replace
             args: ["pic/nopic.jpg", ""]
+      imdb:
+        optional: true
+        selector: a[href*="www.imdb.com/title/tt"]
+        attribute: href
       size:
         selector: td.rowfollow:nth-last-child(6)
       grabs:
@@ -148,18 +177,19 @@
             args: "2006-01-02 15:04:05 -07:00"
       downloadvolumefactor:
         case:
-          img.pro_free: "0"
-          img.pro_free2up: "0"
-          img.pro_50pctdown: "0.5"
-          img.pro_50pctdown2up: "0.5"
-          img.pro_30pctdown: "0.3"
-          "*": "1"
+          img.pro_free: 0
+          img.pro_free2up: 0
+          img.pro_50pctdown: 0.5
+          img.pro_50pctdown2up: 0.5
+          img.pro_30pctdown: 0.3
+          "*": 1
       uploadvolumefactor:
         case:
-          img.pro_50pctdown2up: "2"
-          img.pro_free2up: "2"
-          img.pro_2up: "2"
-          "*": "1"
+          img.pro_50pctdown2up: 2
+          img.pro_free2up: 2
+          img.pro_2up: 2
+          "*": 1
       description:
         selector: td:nth-child(2)
         remove: a, img
+# NexusPHP Standard v1.5 Beta 4

@@ -1,4 +1,4 @@
-﻿---
+---
   site: estone
   name: eStone
   description: "eStone (XiDER, BeLoad) is a HUNGARIAN Private Torrent Tracker for 0DAY / GENERAL"
@@ -6,7 +6,7 @@
   type: private
   encoding: UTF-8
   links:
-    - http://estone.cc/
+    - http://estone.cc/ # site does not support https ERR_CONNECTION_REFUSED
 
   caps:
     categorymappings:
@@ -81,11 +81,16 @@
 
   search:
     paths:
+    # http://estone.cc/letoltes.php?kereses_nev=wide&miben=0&cimke=&cat=0&submit.x=40&submit.y=9
       - path: letoltes.php
-        method: get
     inputs:
       $raw: "{{ range .Categories }}kat[]={{.}}&{{end}}{{ .Config.sort }}={{ .Config.type }}"
       kereses_nev: "{{ .Keywords }}"
+      # 0 name 1 performer 2 director
+      miben: 0
+      # genre
+      cimke: ""
+      # does not support imdbid search and does not return imdb link in results
 
     rows:
       selector: body > div[id^="torrent_"]
@@ -145,3 +150,4 @@
       description:
         selector: div:nth-child(2)
         remove: a
+# engine n/a

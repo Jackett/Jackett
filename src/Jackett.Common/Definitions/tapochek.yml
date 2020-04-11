@@ -1,4 +1,4 @@
-﻿---
+---
   site: tapochek
   name: Tapochek
   description: "Tapochek is a RUSSIAN Private Torrent Tracker for 0DAY / GENERAL"
@@ -6,9 +6,9 @@
   type: private
   encoding: windows-1251
   links:
-    - http://tapochek.net/
-  legacylinks:
     - https://tapochek.net/
+  legacylinks:
+    - http://tapochek.net/
 
   settings:
     - name: username
@@ -531,3 +531,4 @@
           "*": 1
       uploadvolumefactor:
         text: 1
+# TorrentPier

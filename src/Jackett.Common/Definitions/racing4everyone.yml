@@ -16,6 +16,7 @@
       - {id: 2, cat: TV/Sport, desc: "Documentaries TV"}
       - {id: 3, cat: TV/Sport, desc: "DTM"}
       - {id: 22, cat: TV/Sport, desc: "Formula 2"}
+      - {id: 23, cat: TV/Sport, desc: "Formula E"}
       - {id: 24, cat: TV/Sport, desc: "Misc"}
       - {id: 25, cat: TV/Sport, desc: "Other Bikes"}
       - {id: 26, cat: TV/Sport, desc: "MotoGP 2-3-E"}
@@ -42,9 +43,11 @@
       - {id: 76, cat: TV/Sport, desc: "ARCA"}
       - {id: 77, cat: TV/Sport, desc: "Blancpain GT"}
       - {id: 78, cat: TV/Sport, desc: "Porsche Supercup"}
+      - {id: 79, cat: TV/Sport, desc: "TV Series"}
+      - {id: 80, cat: TV/Sport, desc: "Touring Cars"}
 
     modes:
-      search: [q]
+      search: [q, imdbid]
       tv-search: [q, season, ep, imdbid]
 
   settings:
@@ -74,17 +77,20 @@
   login:
     path: login
     method: form
+    form: form[action$="/login"]
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
       remember: on
+    selectorinputs:
+      _token:
+        selector: input[name="_token"]
+        attribute: value
     error:
-      - selector: script[nonce]:contains("Error")
-        message:
-          selector: script[nonce]:contains("Error")
-    test:
-      path: /
-      selector: a[href$="/logout"]
+      - selector: div#ERROR_COPY
+#    test:
+#      path: /
+#      selector: a[href$="/logout"]
 
   ratio:
     path: /
@@ -95,7 +101,7 @@
 
   search:
     paths:
-      - path: filterTorrents
+      - path: torrents/filter
     inputs:
       $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
       search: "{{ if .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
@@ -118,7 +124,7 @@
         attribute: href
         filters:
           - name: regexp
-            args: "/categories/.*?\\.(\\d+)"
+            args: "/categories/(\\d+)"
       title:
         selector: a.view-torrent
       download:
@@ -127,6 +133,13 @@
       details:
         selector: a.view-torrent
         attribute: href
+      banner:
+        optional: true
+        selector: div.torrent-poster img
+        attribute: src
+        filters:
+          - name: replace
+            args: ["https://via.placeholder.com/600x900", ""]
       comments:
         selector: a[href*="#comments"]
         attribute: href
@@ -150,7 +163,7 @@
         filters:
             # translations for Turkish|Estonian|Danish|Italian|Polish|Norwegian|Portuguese|Czech|Russian|Romanian|Spanish|French|German|Bulgarian|Dutch|Chinese
           - name: re_replace
-            args: ["(?i)(önce|tagasi|geleden|fa|temu|siden|atrás|nazpět|назад|acum|în urmă|hace|il y a|vor|преди|前)", " ago"]
+            args: ["(?i)(önce|tagasi|geleden|fa|temu|siden|há|atrás|nazpět|назад|acum|în urmă|hace|il y a|vor|преди|前)", " ago"]
           - name: re_replace
             args: ["(?i)(minutit|minutter|minuti|minuty|minutos|минуты|минут|Minuten|минути|minuten)", "minutes"]
           - name: re_replace
@@ -195,4 +208,4 @@
           i[class*="fa-globe text-green"]: 2 # Global Double Upload
           i[class*="fa-certificate text-pink"]: 2 # Featured Torrent
           "*": 1
-# UNIT3D 1.9.4
+# UNIT3D 2.2.7

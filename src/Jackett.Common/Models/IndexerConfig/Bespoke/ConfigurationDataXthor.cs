@@ -1,6 +1,6 @@
-﻿namespace Jackett.Common.Models.IndexerConfig.Bespoke
+namespace Jackett.Common.Models.IndexerConfig.Bespoke
 {
-    class ConfigurationDataXthor : ConfigurationData
+    internal class ConfigurationDataXthor : ConfigurationData
     {
         public DisplayItem CredentialsWarning { get; private set; }
         public StringItem PassKey { get; set; }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
@@ -19,22 +19,26 @@ namespace Jackett.Common.Services
         {
             lock (cache)
             {
-                var trackerCache = cache.Where(c => c.TrackerId == indexer.ID).FirstOrDefault();
+                var trackerCache = cache.FirstOrDefault(c => c.TrackerId == indexer.ID);
                 if (trackerCache == null)
                 {
-                    trackerCache = new TrackerCache();
-                    trackerCache.TrackerId = indexer.ID;
-                    trackerCache.TrackerName = indexer.DisplayName;
+                    trackerCache = new TrackerCache
+                    {
+                        TrackerId = indexer.ID,
+                        TrackerName = indexer.DisplayName
+                    };
                     cache.Add(trackerCache);
                 }
 
-                foreach(var release in releases.OrderByDescending(i=>i.PublishDate))
+                foreach (var release in releases.OrderByDescending(i => i.PublishDate))
                 {
-                    var existingItem = trackerCache.Results.Where(i => i.Result.Guid == release.Guid).FirstOrDefault();
+                    var existingItem = trackerCache.Results.FirstOrDefault(i => i.Result.Guid == release.Guid);
                     if (existingItem == null)
                     {
-                        existingItem = new CachedResult();
-                        existingItem.Created = DateTime.Now;
+                        existingItem = new CachedResult
+                        {
+                            Created = DateTime.Now
+                        };
                         trackerCache.Results.Add(existingItem);
                     }
 
@@ -42,7 +46,7 @@ namespace Jackett.Common.Services
                 }
 
                 // Prune cache
-                foreach(var tracker in cache)
+                foreach (var tracker in cache)
                 {
                     tracker.Results = tracker.Results.Where(x => x.Created > DateTime.Now.Subtract(AGE_LIMIT)).OrderByDescending(i => i.Created).Take(MAX_RESULTS_PER_TRACKER).ToList();
                 }
@@ -53,19 +57,20 @@ namespace Jackett.Common.Services
         {
             lock (cache)
             {
-                int newItemCount = 0;
-                var trackerCache = cache.Where(c => c.TrackerId == indexer.ID).FirstOrDefault();
+                var newItemCount = 0;
+                var trackerCache = cache.FirstOrDefault(c => c.TrackerId == indexer.ID);
                 if (trackerCache != null)
                 {
                     foreach (var release in releases)
                     {
-                        if (trackerCache.Results.Where(i => i.Result.Guid == release.Guid).Count() == 0)
+                        if (trackerCache.Results.Count(i => i.Result.Guid == release.Guid) == 0)
                         {
                             newItemCount++;
                         }
                     }
                 }
-                else {
+                else
+                {
                     newItemCount++;
                 }
 
@@ -79,9 +84,9 @@ namespace Jackett.Common.Services
             {
                 var results = new List<TrackerCacheResult>();
 
-                foreach(var tracker in cache)
+                foreach (var tracker in cache)
                 {
-                    foreach(var release in tracker.Results.OrderByDescending(i => i.Result.PublishDate).Take(300))
+                    foreach (var release in tracker.Results.OrderByDescending(i => i.Result.PublishDate).Take(300))
                     {
                         var item = Mapper.Map<TrackerCacheResult>(release.Result);
                         item.FirstSeen = release.Created;
@@ -92,7 +97,7 @@ namespace Jackett.Common.Services
                     }
                 }
 
-                return results.Take(3000).OrderByDescending(i=>i.PublishDate).ToList();
+                return results.Take(3000).OrderByDescending(i => i.PublishDate).ToList();
             }
         }
     }

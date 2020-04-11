@@ -6,8 +6,8 @@
   type: private
   encoding: UTF-8
   links:
-    - http://www.bitturk.net/
-  
+    - http://www.bitturk.net/ # site does not support https ERR_CONNECTION_REFUSED
+
   caps:
     categorymappings:
       - {id: 69, cat: Movies, desc: "BiTTuRK Altın"}
@@ -20,6 +20,7 @@
       - {id: 67, cat: XXX, desc: "XxX"}
       - {id: 68, cat: Movies, desc: "Dual (TR-~)"}
       - {id: 58, cat: Movies, desc: "Film"}
+      - {id: 72, cat: Movies, desc: "Belgesel"}
       - {id: 60, cat: Movies/3D, desc: "3D"}
       - {id: 45, cat: Movies, desc: "Eğitim / Prog "}
       - {id: 1, cat: Movies, desc: "Filmler"}
@@ -52,12 +53,12 @@
       - {id: 50, cat: TV, desc: "Yab@ncı Dizi"}
       - {id: 51, cat: TV, desc: "Yerli Dizi"}
       - {id: 44, cat: Books, desc: "E-BooK"}
-      
+
     modes:
       search: [q]
       tv-search: [q, season, ep]
       movie-search: [q]
-      
+
   settings:
     - name: username
       type: text
@@ -84,7 +85,7 @@
       options:
         "desc": "desc"
         "asc": "asc"
-      
+
   login:
     path: ?p=home&pid=1
     method: form
@@ -106,11 +107,11 @@
     test:
       path: ?p=home&pid=1
       selector: a[href*="/?p=logout&"]
-      
+
   search:
     paths:
       - path: /
-    keywordsfilters: 
+    keywordsfilters:
       - name: re_replace
         args: ["[^a-zA-Z0-9]+", "%25"]
     inputs:
@@ -145,7 +146,7 @@
         attribute: href
       date:
         optional: true
-         # Uploaded 30-01-2019 15:02 by 
+         # Uploaded 30-01-2019 15:02 by
         selector: td.torrent_name:not(:contains(" at "))
         filters:
           - name: regexp

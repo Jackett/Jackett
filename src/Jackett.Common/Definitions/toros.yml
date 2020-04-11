@@ -18,6 +18,7 @@
       6: TV/Anime
       7: XXX
       8: Books
+      9: TV/Anime
       10: Other
 
     modes:
@@ -98,8 +99,9 @@
       seeders:
         selector: td:nth-child(4)
       leechers:
-        selector: td:nth-child(5) 
+        selector: td:nth-child(5)
       downloadvolumefactor:
         text: 0
       uploadvolumefactor:
         text: 1
+# engine n/a

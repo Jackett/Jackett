@@ -1,4 +1,8 @@
-﻿using Jackett.Common.Models.Config;
+using System;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
+using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Microsoft.AspNetCore.Authorization;
@@ -6,10 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System;
-using System.IO;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Jackett.Server.Controllers
 {
@@ -18,10 +18,10 @@ namespace Jackett.Server.Controllers
     [Route("bh/{indexerID}")]
     public class BlackholeController : Controller
     {
-        private Logger logger;
-        private IIndexerManagerService indexerService;
-        private ServerConfig serverConfig;
-        private IProtectionService protectionService;
+        private readonly Logger logger;
+        private readonly IIndexerManagerService indexerService;
+        private readonly ServerConfig serverConfig;
+        private readonly IProtectionService protectionService;
 
         public BlackholeController(IIndexerManagerService i, Logger l, ServerConfig sConfig, IProtectionService ps)
         {
@@ -53,7 +53,7 @@ namespace Jackett.Server.Controllers
                 var fileExtension = ".torrent";
 
                 byte[] downloadBytes;
-                if (remoteFile.Scheme == "magnet")
+                if (remoteFile.OriginalString.StartsWith("magnet"))
                     downloadBytes = Encoding.UTF8.GetBytes(remoteFile.OriginalString);
                 else
                     downloadBytes = await indexer.Download(remoteFile);

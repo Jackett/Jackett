@@ -18,13 +18,13 @@ namespace Jackett.Common.Indexers
 {
     public class Digitalcore : BaseWebIndexer
     {
-        private string SearchUrl { get { return SiteLink + "api/v1/torrents"; } }
-        private string LoginUrl { get { return SiteLink + "api/v1/auth"; } }
+        private string SearchUrl => SiteLink + "api/v1/torrents";
+        private string LoginUrl => SiteLink + "api/v1/auth";
 
         private new ConfigurationDataCookie configData
         {
-            get { return (ConfigurationDataCookie)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataCookie)base.configData;
+            set => base.configData = value;
         }
 
 
@@ -32,7 +32,10 @@ namespace Jackett.Common.Indexers
             : base(name: "DigitalCore",
                 description: "DigitalCore is a Private Torrent Tracker for MOVIES / TV / GENERAL",
                 link: "https://digitalcore.club/",
-                caps: new TorznabCapabilities(),
+                caps: new TorznabCapabilities
+                {
+                    SupportsImdbMovieSearch = true
+                },
                 configService: configService,
                 client: w,
                 logger: l,
@@ -42,8 +45,6 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
-
-            TorznabCaps.SupportsImdbMovieSearch = true;
 
             AddCategoryMapping(1, TorznabCatType.MoviesDVD, "Movies/DVDR");
             AddCategoryMapping(2, TorznabCatType.MoviesSD, "Movies/SD");
@@ -73,7 +74,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(25, TorznabCatType.PCGames, "Games/PC");
             AddCategoryMapping(26, TorznabCatType.Console, "Games/NSW");
             AddCategoryMapping(27, TorznabCatType.PCMac, "Games/Mac");
-            
+
             AddCategoryMapping(28, TorznabCatType.Books, "Ebooks");
 
             AddCategoryMapping(30, TorznabCatType.XXX, "XXX/SD");
@@ -109,7 +110,7 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            List<ReleaseInfo> releases = new List<ReleaseInfo>();
+            var releases = new List<ReleaseInfo>();
             var queryCollection = new NameValueCollection();
             var searchString = query.GetQueryString();
             var searchUrl = SearchUrl;
@@ -205,7 +206,7 @@ namespace Jackett.Common.Indexers
 
                     release.Description = string.Join("<br>\n", descriptions);
 
-                    releases.Add(release);                    
+                    releases.Add(release);
 
                 }
             }

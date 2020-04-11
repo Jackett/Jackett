@@ -1,0 +1,87 @@
+---
+  site: magnet4you
+  name: Magnet4You
+  description: "Magnet4You is a Public magnet search engine"
+  language: en-us
+  type: public
+  encoding: UTF-8
+  links:
+    - https://magnet4you.me/
+    - https://magnet4you.black-mirror.xyz/
+    - https://magnet4you.unblocked.casa/
+    - https://magnet4you.proxyportal.fun/
+    - https://magnet4you.uk-unblock.xyz/
+    - https://magnet4you.ind-unblock.xyz/
+  legacylinks:
+    - http://magnet4you.me/
+
+  caps:
+    categories:
+      1 : Other
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  settings:
+    - name: info
+      type: info
+      default: Magnet4You does not use categories. In your software Indexer settings, set the category to 7000.
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "uploaded"
+      options:
+        "uploaded": "created"
+        "seed": "seeders"
+        "size": "size"
+        "title": "name"
+
+  search:
+    paths:
+      - path: "{{ if .Keywords }}search.php?s={{ .Keywords }}&sort={{ .Config.sort }}{{else}}browse.php?sort={{ .Config.sort }}{{end}}"
+
+    rows:
+      selector: table.tb4 > tbody > tr:has(a[href^="magnet:?xt="])
+
+    fields:
+      category:
+        text: 1
+      title:
+        selector: a[href^="magnet/"]
+      details:
+        selector: a[href^="magnet/"]
+        attribute: href
+      magnet:
+        selector: a[href^="magnet:?xt="]
+        attribute: href
+      date:
+        selector: td:nth-child(2)
+        filters:
+          - name: timeago
+      size:
+        selector: td:nth-child(3)
+        filters:
+          - name: replace
+            args: ["Undefined", "0 B"]
+      seeders:
+        selector: td:nth-child(5)
+        filters:
+          - name: replace
+            args: ["K", "000"]
+      leechers:
+        selector: td:nth-child(6)
+        filters:
+          - name: replace
+            args: ["K", "000"]
+      grabs:
+        selector: td:nth-child(7)
+        filters:
+          - name: replace
+            args: ["K", "000"]
+      downloadvolumefactor:
+        text: 0
+      uploadvolumefactor:
+        text: 1
+# engine n/a

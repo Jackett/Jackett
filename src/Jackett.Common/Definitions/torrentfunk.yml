@@ -5,9 +5,13 @@
   language: en-us
   type: public
   encoding: UTF-8
+  followredirect: true
   links:
     - https://www.torrentfunk.com/
     - https://www.torrentfunk2.com/
+    - https://torrentfunk.unblockit.one/
+  legacylinks:
+    - https://torrentfunk.unblockit.pro/
 
   caps:
     categories:
@@ -37,10 +41,12 @@
       - name: re_replace
         args: ["[\\s]+", "-"]
       - name: tolower
+
     rows:
       selector: table.tmain tbody tr:has(a[href^="/torrent/"])
       filters:
         - name: andmatch
+
     fields:
       title:
         selector: div a[href^="/torrent/"]
@@ -49,7 +55,7 @@
         attribute: class
         filters:
           - name: regexp
-            args: "(\\d)"
+            args: (\d+)
       details:
         selector: div a[href^="/torrent/"]
         attribute: href
@@ -67,20 +73,15 @@
         # two types of dates
       date:
         # Today
-        optional: true
-        selector: td:nth-child(2):contains("Today")
-        filters:
-          - name: fuzzytime
-      date:
         # Yesterday
+        selector: td:nth-child(2):contains("day")
         optional: true
-        selector: td:nth-child(2):contains("Yesterday")
         filters:
           - name: fuzzytime
       date:
         # 7 Jul
         # 25 Dec
-        selector: td:nth-child(2):contains(" ")
+        selector: td:nth-child(2):not(:contains("day"))
         optional: true
         filters:
           - name: dateparse
@@ -90,8 +91,9 @@
       seeders:
         selector: td:nth-child(4)
       leechers:
-        selector: td:nth-child(5) 
+        selector: td:nth-child(5)
       downloadvolumefactor:
         text: 0
       uploadvolumefactor:
         text: 1
+# engine n/a

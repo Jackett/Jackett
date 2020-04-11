@@ -7,7 +7,7 @@
   encoding: UTF-8
   followredirect: true
   links:
-    - https://www.gktorrent.biz/
+    - https://www.gktorrent.io/
   legacylinks:
     - https://www.gktorrent.com/
     - http://www.gktorrent.com/
@@ -26,6 +26,7 @@
     - https://www.gktorrent.cx/
     - https://www.gktorrent.tv/
     - https://www.gktorrent.net/
+    - https://www.gktorrent.biz/
 
   caps:
     categorymappings:
@@ -49,7 +50,7 @@
       label: Download link
       default: "magnet:?xt="
       options:
-        "/get_torrents/" : ".torrent"
+        "/telecharger/" : ".torrent"
         "magnet:?xt=": "magnet"
 
   download:
@@ -61,7 +62,7 @@
       - path: "{{if .Keywords}}recherche/{{.Keywords}}{{else}}{{end}}"
 
     rows:
-      selector: div.listing-torrent > table > tbody > tr:has(a)
+      selector: table.table-hover > tbody > tr:has(a)
 
     fields:
       category:
@@ -78,9 +79,9 @@
       site_date:
         selector: td:nth-child(1) a
         filters:
-          # date is at the end of the title, so we get it and name it site_date
+          # year is at the end of the title, so we get it and name it site_date
           - name: regexp
-            args: "(\\w+)$"
+            args: "(\\d{4})$"
       title:
         selector: td:nth-child(1) a
         filters:
@@ -95,7 +96,7 @@
             args: ["VOSTFR", "{{ .Result.site_date }} VOSTFR"]
           # and we delete it at the end
           - name: re_replace
-            args: ["(\\w+)$", ""]
+            args: ["(\\d{4})$", ""]
       details:
         selector: td:nth-child(1) a
         attribute: href
@@ -114,3 +115,4 @@
         text: 0
       uploadvolumefactor:
         text: 1
+# engine n/a

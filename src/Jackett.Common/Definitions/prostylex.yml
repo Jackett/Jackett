@@ -1,12 +1,17 @@
 ---
   site: prostylex
   name: ProStyleX
-  description: "ProStyleX is a Public torrent site for 0Day and General"
+  description: "ProStyleX is a Semi-Private torrent site for 0Day and General"
   language: en-us
-  type: public
+  type: semi-private
   encoding: UTF-8
   links:
     - https://prostylex.org/
+    - https://prostylex.black-mirror.xyz/
+    - https://prostylex.unblocked.casa/
+    - https://prostylex.proxyportal.fun/
+    - https://prostylex.uk-unblock.xyz/
+    - https://prostylex.ind-unblock.xyz/
   legacylinks:
     - http://prostylex.com/
 
@@ -72,6 +77,12 @@
       movie-search: [q]
 
   settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
     - name: sort
       type: select
       label: Sort requested from site
@@ -88,6 +99,18 @@
       options:
         "desc": "desc"
         "asc": "asc"
+
+  login:
+    path: account-login.php
+    method: post
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+      remember: yes
+    error:
+      - selector: div.myFrame:contains("Access Denied")
+    test:
+      path: torrents-search.php
 
   download:
     selector: a[href^="magnet:?"]
@@ -138,3 +161,4 @@
         text: 0
       uploadvolumefactor:
         text: 1
+# TorrentTrader

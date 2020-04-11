@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -17,12 +17,12 @@ namespace Jackett.Common.Indexers
 {
     public class SceneHD : BaseWebIndexer
     {
-        private string SearchUrl { get { return SiteLink + "browse.php"; } }
+        private string SearchUrl => SiteLink + "browse.php";
 
         private new ConfigurationDataCookie configData
         {
-            get { return (ConfigurationDataCookie)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataCookie)base.configData;
+            set => base.configData = value;
         }
 
         public SceneHD(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps)
@@ -30,7 +30,10 @@ namespace Jackett.Common.Indexers
                 description: "SceneHD is Private site for HD TV / MOVIES",
                 link: "https://scenehd.org/",
                 configService: configService,
-                caps: new TorznabCapabilities(),
+                caps: new TorznabCapabilities
+                {
+                    SupportsImdbMovieSearch = true
+                },
                 client: c,
                 logger: l,
                 p: ps,
@@ -39,7 +42,7 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
-            TorznabCaps.SupportsImdbMovieSearch = true;
+
             webclient.EmulateBrowser = false;
             webclient.AddTrustedCertificate(new Uri(SiteLink).Host, "D948487DD52462F2D1E62B990D608051E3DE5AA6");
 
@@ -84,28 +87,30 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            TimeZoneInfo.TransitionTime startTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 3, 0, 0), 3, 5, DayOfWeek.Sunday);
-            TimeZoneInfo.TransitionTime endTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 4, 0, 0), 10, 5, DayOfWeek.Sunday);
-            TimeSpan delta = new TimeSpan(1, 0, 0);
-            TimeZoneInfo.AdjustmentRule adjustment = TimeZoneInfo.AdjustmentRule.CreateAdjustmentRule(new DateTime(1999, 10, 1), DateTime.MaxValue.Date, delta, startTransition, endTransition);
+            var startTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 3, 0, 0), 3, 5, DayOfWeek.Sunday);
+            var endTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 4, 0, 0), 10, 5, DayOfWeek.Sunday);
+            var delta = new TimeSpan(1, 0, 0);
+            var adjustment = TimeZoneInfo.AdjustmentRule.CreateAdjustmentRule(new DateTime(1999, 10, 1), DateTime.MaxValue.Date, delta, startTransition, endTransition);
             TimeZoneInfo.AdjustmentRule[] adjustments = { adjustment };
-            TimeZoneInfo Tz = TimeZoneInfo.CreateCustomTimeZone("custom", new TimeSpan(1, 0, 0), "custom", "custom", "custom", adjustments);
+            var Tz = TimeZoneInfo.CreateCustomTimeZone("custom", new TimeSpan(1, 0, 0), "custom", "custom", "custom", adjustments);
 
             var releases = new List<ReleaseInfo>();
 
-            NameValueCollection qParams = new NameValueCollection();
-            qParams.Add("api", "");
-            if(query.ImdbIDShort != null)
+            var qParams = new NameValueCollection
+            {
+                { "api", "" }
+            };
+            if (query.ImdbIDShort != null)
                 qParams.Add("imdb", query.ImdbIDShort);
             else
                 qParams.Add("search", query.SearchTerm);
 
             foreach (var cat in MapTorznabCapsToTrackers(query))
             {
-                qParams.Add("categories["+cat+"]", "1");
+                qParams.Add("categories[" + cat + "]", "1");
             }
 
-            string urlSearch = SearchUrl;
+            var urlSearch = SearchUrl;
             urlSearch += "?" + qParams.GetQueryString();
 
             var response = await RequestStringWithCookiesAndRetry(urlSearch);
@@ -119,6 +124,7 @@ namespace Jackett.Common.Indexers
 
                 foreach (var item in jsonContent)
                 {
+                    //TODO convert to initializer
                     var release = new ReleaseInfo();
 
                     var id = item.Value<long>("id");
@@ -147,7 +153,7 @@ namespace Jackett.Common.Indexers
                     var size = item.Value<string>("size");
                     release.Size = ReleaseInfo.GetBytes(size);
                     var is_freeleech = item.Value<int>("is_freeleech");
-                    
+
                     if (is_freeleech == 1)
                         release.DownloadVolumeFactor = 0;
                     else

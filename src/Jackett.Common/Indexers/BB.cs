@@ -1,11 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using CsQuery;
+using AngleSharp.Dom;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -20,15 +21,15 @@ namespace Jackett.Common.Indexers
 
     public class BB : BaseWebIndexer
     {
-        private string BaseUrl { get { return StringUtil.FromBase64("aHR0cHM6Ly9iYWNvbmJpdHMub3JnLw=="); } }
-        private Uri BaseUri { get { return new Uri(BaseUrl); } }
-        private string LoginUrl { get { return BaseUri + "login.php"; } }
-        private string SearchUrl { get { return BaseUri + "torrents.php?searchtags=&tags_type=0&order_by=s3&order_way=desc&disablegrouping=1&"; } }
+        private string BaseUrl => StringUtil.FromBase64("aHR0cHM6Ly9iYWNvbmJpdHMub3JnLw==");
+        private Uri BaseUri => new Uri(BaseUrl);
+        private string LoginUrl => BaseUri + "login.php";
+        private string SearchUrl => BaseUri + "torrents.php?searchtags=&tags_type=0&order_by=s3&order_way=desc&disablegrouping=1&";
 
         private new ConfigurationDataBasicLogin configData
         {
-            get { return (ConfigurationDataBasicLogin)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataBasicLogin)base.configData;
+            set => base.configData = value;
         }
 
         public BB(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
@@ -74,13 +75,14 @@ namespace Jackett.Common.Indexers
             var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, SiteLink);
             await ConfigureIfOK(response.Cookies, response.Content != null && response.Content.Contains("logout.php"), () =>
             {
-                CQ dom = response.Content;
-                var messageEl = dom["#loginform"];
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(response.Content);
+                var messageEl = dom.QuerySelectorAll("#loginform");
                 var messages = new List<string>();
                 for (var i = 0; i < 13; i++)
                 {
                     var child = messageEl[0].ChildNodes[i];
-                    messages.Add(child.Cq().Text().Trim());
+                    messages.Add(child.Text().Trim());
                 }
                 var message = string.Join(" ", messages);
                 throw new ExceptionWithConfigData(message, configData);
@@ -91,15 +93,15 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            List<ReleaseInfo> releases = new List<ReleaseInfo>();
-            List<string> searchStrings = new List<string>(new string[] { query.GetQueryString() });
+            var releases = new List<ReleaseInfo>();
+            var searchStrings = new List<string>(new string[] { query.GetQueryString() });
 
             if (string.IsNullOrEmpty(query.Episode) && (query.Season > 0))
                 // Tracker naming rules: If query is for a whole season, "Season #" instead of "S##".
                 searchStrings.Add((query.SanitizedSearchTerm + " " + string.Format("\"Season {0}\"", query.Season)).Trim());
 
-            List<string> categories = MapTorznabCapsToTrackers(query);
-            List<string> request_urls = new List<string>();
+            var categories = MapTorznabCapsToTrackers(query);
+            var request_urls = new List<string>();
 
             foreach (var searchString in searchStrings)
             {
@@ -118,12 +120,12 @@ namespace Jackett.Common.Indexers
 
                 request_urls.Add(SearchUrl + queryCollection.GetQueryString());
             }
-            IEnumerable<Task<WebClientStringResult>> downloadTasksQuery =
+            var downloadTasksQuery =
                 from url in request_urls select RequestStringWithCookiesAndRetry(url);
 
-            WebClientStringResult[] responses = await Task.WhenAll(downloadTasksQuery.ToArray());
+            var responses = await Task.WhenAll(downloadTasksQuery.ToArray());
 
-            for (int i = 0; i < searchStrings.Count(); i++)
+            for (var i = 0; i < searchStrings.Count(); i++)
             {
                 var results = responses[i];
                 // Occasionally the cookies become invalid, login again if that happens
@@ -134,56 +136,57 @@ namespace Jackett.Common.Indexers
                 }
                 try
                 {
-                    CQ dom = results.Content;
-                    var rows = dom["#torrent_table > tbody > tr.torrent"];
+                    var parser = new HtmlParser();
+                    var dom = parser.ParseDocument(results.Content);
+                    var rows = dom.QuerySelectorAll("#torrent_table > tbody > tr.torrent");
                     foreach (var row in rows)
                     {
-                        CQ qRow = row.Cq();
                         var release = new ReleaseInfo();
 
                         release.MinimumRatio = 1;
                         release.MinimumSeedTime = 172800; // 48 hours
 
-                        var catStr = row.ChildElements.ElementAt(0).FirstElementChild.GetAttribute("href").Split(new char[] { '[', ']' })[1];
+                        var catStr = row.Children[0].FirstElementChild.GetAttribute("href").Split(new char[] { '[', ']' })[1];
                         release.Category = MapTrackerCatToNewznab(catStr);
 
-                        var qLink = row.ChildElements.ElementAt(1).Cq().Children("a")[0].Cq();
-                        var linkStr = qLink.Attr("href");
+                        var qLink = row.Children[1].QuerySelector("a");
+                        var linkStr = qLink.GetAttribute("href");
                         release.Comments = new Uri(BaseUrl + "/" + linkStr);
                         release.Guid = release.Comments;
 
-                        var qDownload = row.ChildElements.ElementAt(1).Cq().Find("a[title='Download']")[0].Cq();
-                        release.Link = new Uri(BaseUrl + "/" + qDownload.Attr("href"));
+                        var qDownload = row.Children[1].QuerySelector("a[title='Download']");
+                        release.Link = new Uri(BaseUrl + "/" + qDownload.GetAttribute("href"));
 
-                        var dateStr = row.ChildElements.ElementAt(3).Cq().Text().Trim().Replace(" and", "");
+                        var dateStr = row.Children[3].TextContent.Trim().Replace(" and", "");
                         release.PublishDate = DateTimeUtil.FromTimeAgo(dateStr);
 
-                        var sizeStr = row.ChildElements.ElementAt(4).Cq().Text();
+                        var sizeStr = row.Children[4].TextContent;
                         release.Size = ReleaseInfo.GetBytes(sizeStr);
 
-                        release.Files = ParseUtil.CoerceInt(row.ChildElements.ElementAt(2).Cq().Text().Trim());
-                        release.Grabs = ParseUtil.CoerceInt(row.ChildElements.ElementAt(6).Cq().Text().Trim());
-                        release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(7).Cq().Text().Trim());
-                        release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(8).Cq().Text().Trim()) + release.Seeders;
+                        release.Files = ParseUtil.CoerceInt(row.Children[2].TextContent.Trim());
+                        release.Grabs = ParseUtil.CoerceInt(row.Children[6].TextContent.Trim());
+                        release.Seeders = ParseUtil.CoerceInt(row.Children[7].TextContent.Trim());
+                        release.Peers = ParseUtil.CoerceInt(row.Children[8].TextContent.Trim()) + release.Seeders;
 
-                        var grabs = qRow.Find("td:nth-child(6)").Text();
+                        var grabs = row.QuerySelector("td:nth-child(6)").TextContent;
                         release.Grabs = ParseUtil.CoerceInt(grabs);
 
-                        if (qRow.Find("strong:contains(\"Freeleech!\")").Length >= 1)
+                        if (row.QuerySelector("strong:contains(\"Freeleech!\")") != null)
                             release.DownloadVolumeFactor = 0;
                         else
                             release.DownloadVolumeFactor = 1;
 
                         release.UploadVolumeFactor = 1;
 
-                        var title = qRow.Find("td:nth-child(2)");
-                        title.Find("span, strong, div, br").Remove();
+                        var title = row.QuerySelector("td:nth-child(2)");
+                        foreach (var element in title.QuerySelectorAll("span, strong, div, br"))
+                            element.Remove();
 
-                        release.Title = ParseUtil.NormalizeMultiSpaces(title.Text().Replace(" - ]", "]"));
+                        release.Title = ParseUtil.NormalizeMultiSpaces(title.TextContent.Replace(" - ]", "]"));
 
                         if (catStr == "10") //change "Season #" to "S##" for TV shows
                             release.Title = Regex.Replace(release.Title, @"Season (\d+)",
-                                                          m => string.Format("S{0:00}", Int32.Parse(m.Groups[1].Value)));
+                                                          m => string.Format("S{0:00}", int.Parse(m.Groups[1].Value)));
 
                         releases.Add(release);
                     }

@@ -36,8 +36,8 @@
       - {id: 9, cat: XXX, desc: "XXX"}
 
     modes:
-      search: [q]
-      tv-search: [q, season, ep]
+      search: [q, imdbid]
+      tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
 
   settings:
@@ -57,9 +57,9 @@
       default: MULTI.FRENCH
       options:
         FRENCH : "FRENCH"
-        MULTI.FRENCH : "MULTI.FRENCH" 
+        MULTI.FRENCH : "MULTI.FRENCH"
         ENGLISH: "ENGLISH"
-      
+
   login:
     path: login3.php
     method: form
@@ -85,15 +85,17 @@
     paths:
       - path: browse.php
     inputs:
-      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-      search: "{{if .Query.IMDBID}}{{ .Query.IMDBID }}{{else}}{{ .Query.Keywords }}{{end}}"
-      advcat: "0"
-      incldead: "1"
-      stype: "b"
-      dp: "0"
-      isUserClick: "0"
+      $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+      search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+      advcat: 0
+      incldead: 1
+      stype: b
+      dp: 0
+      isUserClick: 0
+
     rows:
       selector: p + table > tbody > tr:has(a[href^="/details.php"])
+
     fields:
       download:
         selector: a[href^="/details.php"]:has(b)
@@ -154,9 +156,9 @@
             args: "2006-01-0215:04:05 -07:00"
       downloadvolumefactor:
         case:
-          "img[title^=\"Freeleech: \"]": "0"
-          "img[title^=\"Half Freeleech: \"]": "0.5"
-          "*": "1"
+          "img[title^=\"Freeleech: \"]": 0
+          "img[title^=\"Half Freeleech: \"]": 0.5
+          "*": 1
       uploadvolumefactor:
-        case:
-          "*": "1"
+        text: 1
+# engine tbd

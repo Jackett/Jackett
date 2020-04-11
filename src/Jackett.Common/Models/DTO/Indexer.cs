@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using Jackett.Common.Indexers;
@@ -60,10 +60,10 @@ namespace Jackett.Common.Models.DTO
                 .Select(g => g.First())
                 .OrderBy(c => c.ID < 100000 ? "z" + c.ID.ToString() : c.Name)
                 .Select(c => new Capability
-            {
-                ID = c.ID.ToString(),
-                Name = c.Name
-            });
+                {
+                    ID = c.ID.ToString(),
+                    Name = c.Name
+                });
         }
     }
 }

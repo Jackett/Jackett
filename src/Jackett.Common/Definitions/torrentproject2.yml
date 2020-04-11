@@ -6,6 +6,9 @@
   type: public
   encoding: UTF-8
   links:
+    - https://torrentproject.cc/
+    - https://torrentproject2.org/
+  legacylinks:
     - https://torrentproject2.se/
 
   caps:
@@ -31,7 +34,6 @@
       "Applications": PC
       "Images": Other
       "Other": Other
-      
 
     modes:
       search: [q]
@@ -68,16 +70,16 @@
 
   search:
     paths:
-      - path: "?t={{ if .Keywords }}{{ .Keywords }}{{else}}test{{end}}&orderby={{ .Config.sort }}{{ if .Config.filter-verified }}&safe=on{{else}}{{end}}"
+      - path: "?t={{ if .Keywords }}{{ re_replace .Keywords \" \" \"+\" }}{{else}}test{{end}}&orderby={{ .Config.sort }}{{ if .Config.filter-verified }}&safe=on{{else}}{{end}}"
         followredirect: true
 
     rows:
-      selector: "#similarfiles div:has(a[href^=\"/t0-\"])"
+      selector: "#similarfiles div:has(a[href^=\"/t\"])"
 
     fields:
       category:
-        text: "Other"
-      category:
+        text: Other
+      category|noappend:
         optional: true
         selector: div > span:nth-child(1) > span
       title:
@@ -92,11 +94,21 @@
         selector: div > span:nth-child(4)
       size:
         selector: div > span:nth-child(5)
+        filters:
+          - name: re_replace # 1.014.2 MB => 1014.2 MB
+            args: ["\\.([0-9]{3})", "$1"]
       seeders:
         selector: div > span:nth-child(2)
+        filters:
+          - name: replace
+            args: ["N/A", "0"]
       leechers:
         selector: div > span:nth-child(3)
+        filters:
+          - name: replace
+            args: ["N/A", "0"]
       downloadvolumefactor:
         text: 0
       uploadvolumefactor:
         text: 1
+# engine n/a

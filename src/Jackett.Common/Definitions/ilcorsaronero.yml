@@ -5,25 +5,40 @@
   language: it-it
   type: public
   encoding: Windows-1252
+  followredirect: true
   links:
-    - https://ilcorsaronero.pizza/
+    - https://ilcorsaronero.xyz/
+    - https://ilcorsaronero.fun/
+    - https://ilcorsaronero.pro/
   legacylinks:
     - https://ilcorsaronero.live/
     - https://ilcorsaronero.vip/
     - https://ilcorsaronero.info/
     - https://ilcorsaronero.ch/
     - https://ilcorsaronero.cc/
+    - https://ilcorsaronero.pizza/
+    - https://ilcorsaronero.pw/
+    - https://ilcorsaronero.unblockit.pro/
+    - https://ilcorsaronero.unblockit.one/ # test and empty search fails, redirects to ilcorsaronero.fun
 
   caps:
     categorymappings:
-      - {id: 1, cat: Movies/HD, desc: "BDRiP", default: true}
+      - {id: 1, cat: Movies/HD, desc: "Movies BDRiP", default: true}
       - {id: 2, cat: Audio, desc: "Music", default: true}
-      - {id: 2, cat: PC/Games, desc: "Games", default: true}
+      - {id: 3, cat: PC/Games, desc: "Games PC", default: true}
+      - {id: 4, cat: Other, desc: "Other", default: true}
       - {id: 5, cat: TV/Anime, desc: "Anime", default: true}
-      - {id: 7, cat: PC/0day, desc: "App", default: true}
+      - {id: 6, cat: Books/Ebook, desc: "Ebooks", default: true}
+      - {id: 7, cat: PC/0day, desc: "App Windows", default: true}
+      - {id: 8, cat: PC, desc: "App Linux", default: true}
+      - {id: 9, cat: PC/Mac, desc: "App Mac", default: true}
+      - {id: 13, cat: Console/PSP, desc: "Games Playstation", default: true}
+      - {id: 14, cat: Console/Xbox, desc: "Games Xbox", default: true}
       - {id: 15, cat: TV, desc: "TV Series", default: true}
-      - {id: 19, cat: Movies/SD, desc: "Screener", default: true}
-      - {id: 20, cat: Movies/SD, desc: "Full DVD", default: true}
+      - {id: 16, cat: Other, desc: "Other", default: true}
+      - {id: 18, cat: Audio/Audiobook, desc: "Audio Book", default: true}
+      - {id: 19, cat: Movies/SD, desc: "Movies Screener", default: true}
+      - {id: 20, cat: Movies/DVD, desc: "Movies DVD", default: true}
 
     modes:
       search: [q]
@@ -44,16 +59,16 @@
       - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=4{{else}}/browse/4{{end}}"
       - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=5{{else}}/browse/5{{end}}"
     keywordsfilters:
-      # - name: diacritics
-      #   args: replace
       - name: re_replace # S01 to 1
         args: ["(?i)\\bS0*(\\d+)\\b", "$1"]
       - name: re_replace # S01E01 to 1 1
         args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "$1 $2"]
+
     rows:
       selector: "tr.odd,tr.odd2"
       filters:
         - name: andmatch
+
     fields:
       title:
         selector: td:nth-child(2) a.tab
@@ -64,8 +79,6 @@
           - name: diacritics
             args: replace
           - name: urldecode
-          # - name: re_replace # replace special characters with " " (space)
-          #   args: ["[^a-zA-Z0-9\\s]|\\.", " "]
           - name: re_replace # replace special characters with " " (space)
             args: ["[\\[!\"#$%&'()*+,\\-.\\/:;<=>?@[\\]^_`{|}~]", " "]
           - name: re_replace # replace multiple spaces
@@ -93,6 +106,14 @@
         filters:
           - name: split
             args: [ "/", -1 ]
+      description:
+        selector: td:nth-child(1) a
+        attribute: href
+        filters:
+          - name: split
+            args: [ "/", -1 ]
+          - name: prepend
+            args: "cat="
       details:
         selector: td:nth-child(4) a
         attribute: href
@@ -132,6 +153,7 @@
           - name: replace
             args: ["n/a", "0"]
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
+# engine n/a

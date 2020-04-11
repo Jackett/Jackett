@@ -1,4 +1,4 @@
-﻿---
+---
   site: nnm-club
   name: NoName Club
   description: "NoName Club (NNM-Club) is a RUSSIAN Public Tracker for TV / MOVIES / MUSIC"
@@ -6,10 +6,11 @@
   type: public
   encoding: windows-1251
   links:
-    - http://nnmclub.to/
+    - https://nnmclub.to/
   legacylinks:
     - https://nnm-club.name/
     - https://nnm-club.me/
+    - http://nnmclub.to/
 
   settings:
     - name: striprussian
@@ -808,11 +809,7 @@
       leechers:
         selector: td.leechmed > b
       downloadvolumefactor:
-        case:
-          img[src$="/images/gold.gif"]: 0
-          img[src$="/images/platinum.gif"]: 0
-          img[src$="/images/bronze.gif"]: 0.75
-          img[src$="/images/silver.gif"]: 0.5
-          "*": 1
+        text: 0
       uploadvolumefactor:
         text: 1
+# engine n/a

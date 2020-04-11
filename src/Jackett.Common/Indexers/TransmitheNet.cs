@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Net;
@@ -17,13 +17,13 @@ namespace Jackett.Common.Indexers
 {
     public class TransmitheNet : BaseWebIndexer
     {
-        private string LoginUrl { get { return SiteLink + "login.php"; } }
-        private string SearchUrl { get { return SiteLink + "torrents.php?action=basic&order_by=time&order_way=desc&search_type=0&taglist=&tags_type=0"; } }
+        private string LoginUrl => SiteLink + "login.php";
+        private string SearchUrl => SiteLink + "torrents.php?action=basic&order_by=time&order_way=desc&search_type=0&taglist=&tags_type=0";
 
         private new ConfigurationDataBasicLogin configData
         {
-            get { return (ConfigurationDataBasicLogin)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataBasicLogin)base.configData;
+            set => base.configData = value;
         }
 
         public TransmitheNet(IIndexerConfigurationService configService, Utils.Clients.WebClient c, Logger l, IProtectionService ps)
@@ -88,18 +88,18 @@ namespace Jackett.Common.Indexers
             //    Url = SearchUrl;
             //else
             //{
-            string Url = $"{SearchUrl}&searchtext={WebUtility.UrlEncode(query.GetQueryString())}";
+            var Url = $"{SearchUrl}&searchtext={WebUtility.UrlEncode(query.GetQueryString())}";
             //}
 
             var response = await RequestStringWithCookiesAndRetry(Url);
-            List<ReleaseInfo> releases = ParseResponse(response.Content);
+            var releases = ParseResponse(response.Content);
 
             return releases;
         }
 
         public List<ReleaseInfo> ParseResponse(string htmlResponse)
         {
-            List<ReleaseInfo> releases = new List<ReleaseInfo>();
+            var releases = new List<ReleaseInfo>();
 
             try
             {
@@ -116,7 +116,7 @@ namespace Jackett.Common.Indexers
                 {
                     var release = new ReleaseInfo();
 
-                    string title = row.QuerySelector("a[data-src]").GetAttribute("data-src");
+                    var title = row.QuerySelector("a[data-src]").GetAttribute("data-src");
                     if (string.IsNullOrEmpty(title) || title == "0")
                     {
                         title = row.QuerySelector("a[data-src]").TextContent;

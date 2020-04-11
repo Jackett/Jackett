@@ -1,11 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CsQuery;
+using System.Web;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -18,27 +19,31 @@ namespace Jackett.Common.Indexers
 {
     public class BitHdtv : BaseWebIndexer
     {
-        private string LoginUrl { get { return SiteLink + "login.php"; } }
-        private string TakeLoginUrl { get { return SiteLink + "takelogin.php"; } }
-        private string SearchUrl { get { return SiteLink + "torrents.php?"; } }
-        private string DownloadUrl { get { return SiteLink + "download.php?id={0}"; } }
+        private string LoginUrl => SiteLink + "login.php";
+        private string TakeLoginUrl => SiteLink + "takelogin.php";
+        private string SearchUrl => SiteLink + "torrents.php";
 
         private new ConfigurationDataRecaptchaLogin configData
         {
-            get { return (ConfigurationDataRecaptchaLogin)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataRecaptchaLogin)base.configData;
+            set => base.configData = value;
         }
 
-        public BitHdtv(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
-            : base(name: "BIT-HDTV",
-                description: "Home of high definition invites",
+        public BitHdtv(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps) :
+            base(
+                name: "BIT-HDTV",
+                description: "BIT-HDTV - Home of High Definition",
                 link: "https://www.bit-hdtv.com/",
-                caps: new TorznabCapabilities(),
+                caps: new TorznabCapabilities
+                {
+                    SupportsImdbMovieSearch = true
+                    // SupportsImdbTVSearch = true (supported by the site but disabled due to #8107)
+                },
                 configService: configService,
                 client: w,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataRecaptchaLogin())
+                configData: new ConfigurationDataRecaptchaLogin("For best results, change the 'Torrents per page' setting to 100 in your profile."))
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "en-us";
@@ -58,10 +63,13 @@ namespace Jackett.Common.Indexers
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
+            var result = configData;
             var loginPage = await RequestStringWithCookies(LoginUrl, configData.CookieHeader.Value);
-            CQ cq = loginPage.Content;
-            string recaptchaSiteKey = cq.Find(".g-recaptcha").Attr("data-sitekey");
-            var result = this.configData;
+            if (loginPage.IsRedirect)
+                return result; // already logged in
+            var parser = new HtmlParser();
+            var cq = parser.ParseDocument(loginPage.Content);
+            var recaptchaSiteKey = cq.QuerySelector(".g-recaptcha")?.GetAttribute("data-sitekey");
             result.CookieHeader.Value = loginPage.Cookies;
             result.Captcha.SiteKey = recaptchaSiteKey;
             result.Captcha.Version = "2";
@@ -71,13 +79,12 @@ namespace Jackett.Common.Indexers
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-
-            var pairs = new Dictionary<string, string> {
-                { "username", configData.Username.Value },
-                { "password", configData.Password.Value },
-                { "g-recaptcha-response", configData.Captcha.Value },
+            var pairs = new Dictionary<string, string>
+            {
+                {"username", configData.Username.Value},
+                {"password", configData.Password.Value},
+                {"g-recaptcha-response", configData.Captcha.Value}
             };
-
             if (!string.IsNullOrWhiteSpace(configData.Captcha.Cookie))
             {
                 // Cookie was manually supplied
@@ -86,10 +93,7 @@ namespace Jackett.Common.Indexers
                 {
                     var results = await PerformQuery(new TorznabQuery());
                     if (!results.Any())
-                    {
                         throw new Exception("Your cookie did not work");
-                    }
-
                     IsConfigured = true;
                     SaveConfig();
                     return IndexerConfigurationStatus.Completed;
@@ -101,14 +105,12 @@ namespace Jackett.Common.Indexers
                 }
             }
 
-            var response = await RequestLoginAndFollowRedirect(TakeLoginUrl, pairs, null, true, null, SiteLink);
-            await ConfigureIfOK(response.Cookies, response.Content != null && response.Content.Contains("logout.php"), () =>
+            var response = await RequestLoginAndFollowRedirect(TakeLoginUrl, pairs, null, true, referer: SiteLink);
+            await ConfigureIfOK(response.Cookies, response.Content?.Contains("logout.php") == true, () =>
             {
-                CQ dom = response.Content;
-                var messageEl = dom["table.detail td.text"].Last();
-                messageEl.Children("a").Remove();
-                messageEl.Children("style").Remove();
-                var errorMessage = messageEl.Text().Trim();
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(response.Content);
+                var errorMessage = dom.QuerySelector("table.detail td.text").FirstChild.TextContent.Trim();
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
             return IndexerConfigurationStatus.RequiresTesting;
@@ -117,93 +119,96 @@ namespace Jackett.Common.Indexers
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var searchString = query.GetQueryString();
-            var queryCollection = new NameValueCollection();
-
-            if (!string.IsNullOrWhiteSpace(searchString))
+            var qc = new NameValueCollection
             {
-                queryCollection.Add("search", searchString);
+                {"cat", MapTorznabCapsToTrackers(query, true).FirstIfSingleOrDefault("0")}
+            };
+            var results = new List<WebClientStringResult>();
+            var search = new UriBuilder(SearchUrl);
+            if (query.IsImdbQuery)
+            {
+                qc.Add("search", query.ImdbID);
+                qc.Add("options", "4"); //Search URL field for IMDB link
+                search.Query = qc.GetQueryString();
+                results.Add(await RequestStringWithCookiesAndRetry(search.ToString()));
+                qc["Options"] = "1"; //Search Title and Description
+                search.Query = qc.GetQueryString();
+                results.Add(await RequestStringWithCookiesAndRetry(search.ToString()));
+            }
+            else
+            {
+                //Site handles empty string on search param. No need to check for IsNullOrEmpty()
+                qc.Add("search", query.GetQueryString());
+                qc.Add("options", "0"); //Search Title Only
+                search.Query = qc.GetQueryString();
+                results.Add(await RequestStringWithCookiesAndRetry(search.ToString()));
             }
 
-            queryCollection.Add("incldead", "1");
-
-            var searchUrl = SearchUrl + queryCollection.GetQueryString();
-
-            var trackerCats = MapTorznabCapsToTrackers(query, mapChildrenCatsToParent: true);
-
-            var results = await RequestStringWithCookiesAndRetry(searchUrl);
-            try
-            {
-                CQ dom = results.Content;
-                dom["#needseed"].Remove();
-                foreach (var table in dom["table[align=center] + br + table > tbody"])
+            var parser = new HtmlParser();
+            foreach (var result in results)
+                try
                 {
-                    var rows = table.Cq().Children();
-                    foreach (var row in rows.Skip(1))
+                    var dom = parser.ParseDocument(result.Content);
+                    foreach (var child in dom.QuerySelectorAll("#needseed"))
+                        child.Remove();
+                    var table = dom.QuerySelector("table[align=center] + br + table > tbody");
+                    if (table == null) // No results, so skip this search
+                        continue;
+                    foreach (var row in table.Children.Skip(1))
                     {
                         var release = new ReleaseInfo();
-
-                        var qRow = row.Cq();
-                        var qLink = qRow.Children().ElementAt(2).Cq().Children("a").First();
-
+                        var qLink = row.Children[2].QuerySelector("a");
                         release.MinimumRatio = 1;
                         release.MinimumSeedTime = 172800; // 48 hours
-                        release.Title = qLink.Attr("title");
-                        if (!query.MatchQueryStringAND(release.Title))
+                        release.Title = qLink.GetAttribute("title");
+                        var detailsLink = new Uri(qLink.GetAttribute("href"));
+                        //Skip irrelevant and duplicate entries
+                        if (!query.MatchQueryStringAND(release.Title) || releases.Any(r => r.Guid == detailsLink))
                             continue;
-                        release.Files = ParseUtil.CoerceLong(qRow.Find("td:nth-child(4)").Text());
-                        release.Grabs = ParseUtil.CoerceLong(qRow.Find("td:nth-child(8)").Text());
-                        release.Guid = new Uri(qLink.Attr("href"));
+                        release.Files = ParseUtil.CoerceLong(row.Children[3].TextContent);
+                        release.Grabs = ParseUtil.CoerceLong(row.Children[7].TextContent);
+                        release.Guid = detailsLink;
                         release.Comments = release.Guid;
-                        release.Link = new Uri(string.Format(DownloadUrl, qLink.Attr("href").Split('=')[1]));
-
-                        var catUrl = qRow.Children().ElementAt(1).FirstElementChild.Cq().Attr("href");
-                        var catNum = catUrl.Split(new char[] { '=', '&' })[1];
+                        release.Link = new Uri(SiteLink + row.QuerySelector("a[href^=\"download.php\"]").GetAttribute("href"));
+                        var catUrl = new Uri(SiteLink + row.Children[1].FirstElementChild.GetAttribute("href"));
+                        var catQuery = HttpUtility.ParseQueryString(catUrl.Query);
+                        var catNum = catQuery["cat"];
                         release.Category = MapTrackerCatToNewznab(catNum);
 
-                        // This tracker cannot search multiple cats at a time, so search all cats then filter out results from different cats
-                        if (trackerCats.Count > 0 && !trackerCats.Contains(catNum))
-                            continue;
-
-                        var dateString = qRow.Children().ElementAt(5).Cq().Text().Trim();
+                        var dateString = row.Children[5].TextContent.Trim();
                         var pubDate = DateTime.ParseExact(dateString, "yyyy-MM-ddHH:mm:ss", CultureInfo.InvariantCulture);
                         release.PublishDate = DateTime.SpecifyKind(pubDate, DateTimeKind.Local);
-
-                        var sizeStr = qRow.Children().ElementAt(6).Cq().Text();
+                        var sizeStr = row.Children[6].TextContent;
                         release.Size = ReleaseInfo.GetBytes(sizeStr);
+                        release.Seeders = ParseUtil.CoerceInt(row.Children[8].TextContent.Trim());
+                        release.Peers = ParseUtil.CoerceInt(row.Children[9].TextContent.Trim()) + release.Seeders;
+                        switch (row.GetAttribute("bgcolor"))
+                        {
+                            case "#DDDDDD":
+                                release.DownloadVolumeFactor = 1;
+                                release.UploadVolumeFactor = 2;
+                                break;
+                            case "#FFFF99":
+                                release.DownloadVolumeFactor = 0;
+                                release.UploadVolumeFactor = 1;
+                                break;
+                            case "#CCFF99":
+                                release.DownloadVolumeFactor = 0;
+                                release.UploadVolumeFactor = 2;
+                                break;
+                            default:
+                                release.DownloadVolumeFactor = 1;
+                                release.UploadVolumeFactor = 1;
+                                break;
+                        }
 
-                        release.Seeders = ParseUtil.CoerceInt(qRow.Children().ElementAt(8).Cq().Text().Trim());
-                        release.Peers = ParseUtil.CoerceInt(qRow.Children().ElementAt(9).Cq().Text().Trim()) + release.Seeders;
-
-                        var bgcolor = qRow.Attr("bgcolor");
-                        if (bgcolor == "#DDDDDD")
-                        {
-                            release.DownloadVolumeFactor = 1;
-                            release.UploadVolumeFactor = 2;
-                        }
-                        else if (bgcolor == "#FFFF99")
-                        {
-                            release.DownloadVolumeFactor = 0;
-                            release.UploadVolumeFactor = 1;
-                        }
-                        else if (bgcolor == "#CCFF99")
-                        {
-                            release.DownloadVolumeFactor = 0;
-                            release.UploadVolumeFactor = 2;
-                        }
-                        else
-                        {
-                            release.DownloadVolumeFactor = 1;
-                            release.UploadVolumeFactor = 1;
-                        }
                         releases.Add(release);
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                OnParseError(results.Content, ex);
-            }
+                catch (Exception ex)
+                {
+                    OnParseError(result.Content, ex);
+                }
 
             return releases;
         }

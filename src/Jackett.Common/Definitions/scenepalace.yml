@@ -104,14 +104,18 @@
         attribute: onmouseover
         filters:
           - name: regexp
-            args: "src=\\\'(.+?)\\\'"
+            args: "src=\\\\\'(.+?)\\\\\'"
+          - name: replace
+            args: ["./pic/noposter.png", ""]
       files:
         selector: td:nth-last-child(8)
       date:
-        selector: td:nth-last-child(6)
+        selector: td:nth-last-child(6):contains("day")
+        optional: true
+      date:
+        selector: td:nth-last-child(6):not(:contains("day"))
+        optional: true
         filters:
-          - name: replace
-            args: ["<br />", ""]
           - name: dateparse
             args: "Jan 2 2006 03:04 PM"
       size:
@@ -131,3 +135,4 @@
           "*": 1
       uploadvolumefactor:
         text: 1
+# TBDEV,U232,and Btdev (customised)

@@ -1,4 +1,4 @@
-﻿---
+---
   site: arenabg
   name: ArenaBG
   description: "ArenaBG is a BULGARIAN Semi-Private Torrent Tracker for 0DAY / GENERAL"
@@ -6,6 +6,8 @@
   type: semi-private
   encoding: UTF-8
   links:
+    - https://arenabg.ch/
+  legacylinks:
     - https://arenabg.com/
 
   caps:

@@ -1,10 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -12,14 +14,12 @@ using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System.Text.RegularExpressions;
-using AngleSharp.Html.Parser;
 
 namespace Jackett.Common.Indexers
 {
-    class HorribleSubs : BaseWebIndexer
+    internal class HorribleSubs : BaseWebIndexer
     {
-        private string ApiEndpoint { get { return SiteLink + "api.php"; } }
+        private string ApiEndpoint => SiteLink + "api.php";
 
         public override string[] LegacySiteLinks { get; protected set; } = new string[] {
             "http://horriblesubs.info/"
@@ -111,9 +111,10 @@ namespace Jackett.Common.Indexers
             var ResultParser = new HtmlParser();
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();
-            var queryCollection = new NameValueCollection();
-
-            queryCollection.Add("method", "getlatest");
+            var queryCollection = new NameValueCollection
+            {
+                { "method", "getlatest" }
+            };
 
             var searchUrl = ApiEndpoint + "?" + queryCollection.GetQueryString();
             var response = await RequestStringWithCookiesAndRetry(searchUrl, string.Empty);
@@ -153,13 +154,13 @@ namespace Jackett.Common.Indexers
                 var showPageResponse = await RequestStringWithCookiesAndRetry(ResultURL, string.Empty);
                 await FollowIfRedirect(showPageResponse);
 
-                Match match = Regex.Match(showPageResponse.Content, "(var hs_showid = )([0-9]*)(;)", RegexOptions.IgnoreCase);
+                var match = Regex.Match(showPageResponse.Content, "(var hs_showid = )([0-9]*)(;)", RegexOptions.IgnoreCase);
                 if (match.Success == false)
                 {
                     return releases;
                 }
 
-                int ShowID = int.Parse(match.Groups[2].Value);
+                var ShowID = int.Parse(match.Groups[2].Value);
 
                 var apiUrls = new string[] {
                     ApiEndpoint + "?method=getshows&type=batch&showid=" + ShowID, //https://horriblesubs.info/api.php?method=getshows&type=batch&showid=1194
@@ -167,10 +168,10 @@ namespace Jackett.Common.Indexers
                 };
 
                 var releaserows = new List<AngleSharp.Dom.IElement>();
-                foreach (string apiUrl in apiUrls)
+                foreach (var apiUrl in apiUrls)
                 {
-                    int nextId = 0;
-                    while(true)
+                    var nextId = 0;
+                    while (true)
                     {
                         var showAPIResponse = await RequestStringWithCookiesAndRetry(apiUrl + "&nextid=" + nextId, string.Empty);
                         var showAPIdom = ResultParser.ParseDocument(showAPIResponse.Content);
@@ -178,7 +179,8 @@ namespace Jackett.Common.Indexers
                         releaserows.AddRange(releaseRowResults);
                         nextId++;
 
-                        if (releaseRowResults.Length == 0 || latestOnly) {
+                        if (releaseRowResults.Length == 0 || latestOnly)
+                        {
                             break;
                         }
                     }
@@ -186,8 +188,8 @@ namespace Jackett.Common.Indexers
 
                 foreach (var releaserow in releaserows)
                 {
-                    string dateStr = releaserow.QuerySelector(".rls-date").TextContent.Trim();
-                    string title = releaserow.FirstChild.TextContent;
+                    var dateStr = releaserow.QuerySelector(".rls-date").TextContent.Trim();
+                    var title = releaserow.FirstChild.TextContent;
                     title = title.Replace("SD720p1080p", "");
                     title = title.Replace(dateStr, "");
 

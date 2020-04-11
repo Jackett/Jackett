@@ -1,4 +1,4 @@
-﻿---
+---
   site: seedfile
   name: SeedFile
   description: "SeedFile (SF) is a ROMANIAN Private Torrent Tracker for 0DAY / GENERAL"
@@ -59,12 +59,14 @@
     paths:
       - path: download-torrents
     inputs:
-      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
       search: "{{ .Keywords }}"
       # 0 active 1 incldead 2 onlydead 3 freeleech
       incldead: 1
+
     rows:
       selector: tr.browse
+
     fields:
       category:
         selector: a[href^="torrents.php?cat="]
@@ -86,6 +88,8 @@
         selector: td:nth-last-child(5)
         filters:
             # translations for Turkish|Estonian|Danish|Italian|Polish|Norwegian|Portuguese|Czech|Russian|Romanian|Spanish|French|German|Bulgarian|Dutch|Chinese
+          - name: re_replace
+            args: ["(?i)(önce|tagasi|geleden|fa|temu|siden|há|atrás|nazpět|назад|acum|în urmă|hace|il y a|vor|преди|前)", " ago"]
           - name: re_replace
             args: ["(?i)(minutit|minutter|minuti|minuty|minutos|минуты|минут|Minuten|минути|minuten)", "minutes"]
           - name: re_replace
@@ -127,5 +131,5 @@
           "img[src=\"./pic/freeleech.png\"]": 0
           "*": "1"
       uploadvolumefactor:
-        case:
-          "*": "1"
+        text: 1
+# engine n/a

@@ -1,17 +1,15 @@
-﻿using CommandLine;
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using CommandLine;
 using CommandLine.Text;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Reflection;
 
 namespace Jackett.Updater
 {
@@ -30,7 +28,7 @@ namespace Jackett.Updater
 
         private void Run(string[] args)
         {
-            RuntimeSettings runtimeSettings = new RuntimeSettings()
+            var runtimeSettings = new RuntimeSettings()
             {
                 CustomLogFileName = "updater.txt"
             };
@@ -41,11 +39,11 @@ namespace Jackett.Updater
             logger.Info("Jackett Updater v" + GetCurrentVersion());
             logger.Info("Options \"" + string.Join("\" \"", args) + "\"");
 
-            Variants variants = new Variants();
+            var variants = new Variants();
             variant = variants.GetVariant();
             logger.Info("Jackett variant: " + variant.ToString());
 
-            bool isWindows = Environment.OSVersion.Platform == PlatformID.Win32NT;
+            var isWindows = Environment.OSVersion.Platform == PlatformID.Win32NT;
             if (isWindows)
             {
                 //The updater starts before Jackett closes
@@ -177,7 +175,7 @@ namespace Jackett.Updater
                 KillPids(pids);
             }
 
-            Variants variants = new Variants();
+            var variants = new Variants();
             if (variants.IsNonWindowsDotNetCoreVariant(variant))
             {
                 // On Linux you can't modify an executable while it is executing
@@ -186,12 +184,12 @@ namespace Jackett.Updater
                 // Delete the ./jackett executable
                 // pdb files are also problematic https://github.com/Jackett/Jackett/issues/5167#issuecomment-489301150
 
-                string jackettExecutable = options.Path.TrimEnd('/') + "/jackett";
-                List<string> pdbFiles = Directory.EnumerateFiles(options.Path, "*.pdb", SearchOption.AllDirectories).ToList();
-                List<string> removeList = pdbFiles;
+                var jackettExecutable = options.Path.TrimEnd('/') + "/jackett";
+                var pdbFiles = Directory.EnumerateFiles(options.Path, "*.pdb", SearchOption.AllDirectories).ToList();
+                var removeList = pdbFiles;
                 removeList.Add(jackettExecutable);
 
-                foreach (string fileForDelete in removeList)
+                foreach (var fileForDelete in removeList)
                 {
                     try
                     {
@@ -229,7 +227,7 @@ namespace Jackett.Updater
                         continue;
                     }
 
-                    bool fileCopySuccess = CopyUpdateFile(options.Path, file, updateLocation, false);
+                    var fileCopySuccess = CopyUpdateFile(options.Path, file, updateLocation, false);
 
                     if (!fileCopySuccess)
                     {
@@ -246,7 +244,7 @@ namespace Jackett.Updater
             logger.Info("File copying complete");
 
             // delete old dirs
-            string[] oldDirs = new string[] { "Content/logos" };
+            var oldDirs = new string[] { "Content/logos" };
 
             foreach (var oldDir in oldDirs)
             {
@@ -266,125 +264,141 @@ namespace Jackett.Updater
             }
 
             // delete old files
-            string[] oldFiles = new string[] {
+            var oldFiles = new string[] {
+                "appsettings.Development.json",
+                "Autofac.Integration.WebApi.dll",
+                "Content/congruent_outline.png",
+                "Content/crissXcross.png",
                 "Content/css/jquery.dataTables.css",
                 "Content/css/jquery.dataTables_themeroller.css",
-                "Definitions/tspate.yml",
-                "Definitions/freakstrackingsystem.yml",
-                "Definitions/rarbg.yml",
-                "Definitions/t411.yml",
-                "Definitions/hdbc.yml", // renamed to hdbitscom
-                "Definitions/maniatorrent.yml",
-                "Definitions/nyaa.yml",
-                "Definitions/nachtwerk.yml",
-                "Definitions/leparadisdunet.yml",
-                "Definitions/qctorrent.yml",
-                "Definitions/dragonworld.yml",
-                "Definitions/hdclub.yml",
-                "Definitions/polishtracker.yml",
-                "Definitions/zetorrents.yml",
-                "Definitions/rapidetracker.yml",
-                "Definitions/isohunt.yml",
-                "Definitions/t411v2.yml",
-                "Definitions/bithq.yml",
-                "Definitions/blubits.yml",
-                "Definitions/torrentproject.yml",
-                "Definitions/torrentvault.yml",
-                "Definitions/apollo.yml", // migrated to C# gazelle base tracker
-                "Definitions/secretcinema.yml", // migrated to C# gazelle base tracker
-                "Definitions/utorrents.yml", // same as SzeneFZ now
-                "Definitions/ultrahdclub.yml",
-                "Definitions/infinityt.yml",
-                "Definitions/hachede-c.yml",
-                "Definitions/skytorrents.yml",
-                "Definitions/gormogon.yml",
-                "Definitions/czteam.yml",
-                "Definitions/rockhardlossless.yml",
-                "Definitions/tehconnection.yml",
-                "Definitions/torrentwtf.yml",
-                "Definitions/eotforum.yml",
-                "Definitions/nexttorrent.yml",
-                "Definitions/torrentsmd.yml",
-                "Definitions/scenehd.yml", // migrated to C# (use JSON API)
-                "appsettings.Development.json",
+                "CsQuery.dll",
                 "CurlSharp.dll",
                 "CurlSharp.pdb",
-                "Autofac.Integration.WebApi.dll",
+                "Definitions/420files.yml",
+                "Definitions/alein.yml",
+                "Definitions/anidex.yml", // migrated to C#
+                "Definitions/aox.yml",
+                "Definitions/apollo.yml", // migrated to C# gazelle base tracker
+                "Definitions/archetorrent.yml",
+                "Definitions/asiandvdclub.yml",
+                "Definitions/avg.yml",
+                "Definitions/awesomehd.yml", // migrated to C#
+                "Definitions/b2s-share.yml",
+                "Definitions/bithq.yml",
+                "Definitions/bitme.yml",
+                "Definitions/bittorrentam.yml",
+                "Definitions/blubits.yml",
+                "Definitions/bt-scene.yml",
+                "Definitions/btbit.yml",
+                "Definitions/btkitty.yml",
+                "Definitions/btstornet.yml",
+                "Definitions/btxpress.yml",
+                "Definitions/cinefilhd.yml",
+                "Definitions/czteam.yml",
+                "Definitions/digbt.yml",
+                "Definitions/dragonworld.yml",
+                "Definitions/dreamteam.yml",
+                "Definitions/eggmeon.yml",
+                "Definitions/elitehd.yml",
+                "Definitions/elittracker.yml",
+                "Definitions/eotforum.yml",
+                "Definitions/evolutionpalace.yml",
+                "Definitions/extratorrent-ag.yml",
+                "Definitions/extratorrentclone.yml",
+                "Definitions/feedurneed.yml",
+                "Definitions/freakstrackingsystem.yml",
+                "Definitions/freedomhd.yml",
+                "Definitions/gdf76.yml",
+                "Definitions/gfxnews.yml",
+                "Definitions/gods.yml",
+                "Definitions/gormogon.yml",
+                "Definitions/greeklegends.yml",
+                "Definitions/hachede-c.yml",
+                "Definitions/hd4free.yml",
+                "Definitions/hdbc.yml", // renamed to hdbitscom
+                "Definitions/hdclub.yml",
+                "Definitions/hdplus.yml",
+                "Definitions/hon3yhd-net.yml",
+                "Definitions/horriblesubs.yml",
+                "Definitions/hyperay.yml",
+                "Definitions/idopeclone.yml",
+                "Definitions/iloveclassics.yml",
+                "Definitions/infinityt.yml",
+                "Definitions/isohunt.yml",
+                "Definitions/katcrs.yml",
+                "Definitions/kikibt.yml",
+                "Definitions/lapausetorrents.yml",
+                "Definitions/lemencili.yml",
+                "Definitions/leparadisdunet.yml",
+                "Definitions/maniatorrent.yml",
+                "Definitions/manicomioshare.yml",
+                "Definitions/megabliz.yml",
+                "Definitions/mkvcage.yml",
+                "Definitions/music-master.yml",
+                "Definitions/nachtwerk.yml",
+                "Definitions/nexttorrent.yml",
+                "Definitions/nordichd.yml",
+                "Definitions/nyaa.yml",
+                "Definitions/nyoo.yml",
+                "Definitions/passionetorrent.yml",
+                "Definitions/polishtracker.yml",
+                "Definitions/qctorrent.yml",
+                "Definitions/qxr.yml",
+                "Definitions/rapidetracker.yml",
+                "Definitions/rarbg.yml",
+                "Definitions/redtopia.yml",
+                "Definitions/rgu.yml",
+                "Definitions/rockethd.yml",
+                "Definitions/rockhardlossless.yml",
+                "Definitions/scenehd.yml", // migrated to C# (use JSON API)
+                "Definitions/scenereactor.yml",
+                "Definitions/scenexpress.yml",
+                "Definitions/secretcinema.yml", // migrated to C# gazelle base tracker
+                "Definitions/seedpeer.yml",
+                "Definitions/sharingue.yml",
+                "Definitions/skytorrents.yml",
+                "Definitions/solidtorrents.yml", // migrated to C#
+                "Definitions/speed-share.yml",
+                "Definitions/t411.yml",
+                "Definitions/t411v2.yml",
+                "Definitions/tazmaniaden.yml",
+                "Definitions/tbplus.yml",
+                "Definitions/tehconnection.yml",
+                "Definitions/tfile.yml",
+                "Definitions/themoviecave.yml",
+                "Definitions/theresurrection.yml",
+                "Definitions/thetorrents.yml",
+                "Definitions/tigers-dl.yml",
+                "Definitions/torrentcouch.yml",
+                "Definitions/torrentkim.yml",
+                "Definitions/torrentproject.yml",
+                "Definitions/torrentseeds.yml", // migrated to c#
+                "Definitions/torrentsmd.yml",
+                "Definitions/torrentvault.yml",
+                "Definitions/torrentwal.yml",
+                "Definitions/torrentwtf.yml",
+                "Definitions/torrof.yml",
+                "Definitions/torviet.yml",
+                "Definitions/tspate.yml",
+                "Definitions/ultimategamerclub.yml",
+                "Definitions/ultrahdclub.yml",
+                "Definitions/utorrents.yml", // same as SzeneFZ now
+                "Definitions/waffles.yml",
+                "Definitions/worldofp2p.yml",
+                "Definitions/worldwidetorrents.yml",
+                "Definitions/xktorrent.yml",
+                "Definitions/zetorrents.yml",
                 "Microsoft.Owin.dll",
                 "Microsoft.Owin.FileSystems.dll",
                 "Microsoft.Owin.Host.HttpListener.dll",
                 "Microsoft.Owin.Hosting.dll",
                 "Microsoft.Owin.StaticFiles.dll",
                 "Owin.dll",
+                "System.ServiceModel.dll",
                 "System.Web.Http.dll",
                 "System.Web.Http.Owin.dll",
                 "System.Web.Http.Tracing.dll",
-                "Definitions/torrentkim.yml",
-                "Definitions/horriblesubs.yml",
-                "Definitions/bt-scene.yml",
-                "Definitions/extratorrentclone.yml",
-                "Definitions/torrentcouch.yml",
-                "Definitions/idopeclone.yml",
-                "Definitions/torrof.yml",
-                "Definitions/archetorrent.yml",
-                "Definitions/420files.yml",
-                "Definitions/redtopia.yml",
-                "Definitions/btxpress.yml",
-                "Definitions/btstornet.yml",
-                "Definitions/hdplus.yml",
-                "Definitions/gods.yml",
-                "Definitions/freedomhd.yml",
-                "Definitions/sharingue.yml",
-                "Definitions/cinefilhd.yml",
-                "Definitions/tbplus.yml",
-                "Definitions/manicomioshare.yml",
-                "Definitions/speed-share.yml",
-                "Definitions/b2s-share.yml",
-                "Definitions/nyoo.yml",
-                "Definitions/ultimategamerclub.yml",
-                "Definitions/evolutionpalace.yml",
-                "Definitions/qxr.yml",
-                "Definitions/gfxnews.yml",
-                "Definitions/megabliz.yml",
-                "Definitions/tigers-dl.yml",
-                "Definitions/worldwidetorrents.yml",
-                "Definitions/tntvillage.yml",
-                "Definitions/xktorrent.yml",
-                "Definitions/btkitty.yml",
-                "Definitions/kikibt.yml",
-                "Definitions/rockethd.yml",
-                "Definitions/worldofp2p.yml",
-                "Definitions/avg.yml",
-                "Definitions/aox.yml",
-                "Definitions/dreamteam.yml",
-                "Definitions/elitehd.yml",
-                "Definitions/gdf76.yml",
-                "Definitions/hyperay.yml",
-                "Definitions/scenereactor.yml",
-                "Definitions/lapausetorrents.yml",
-                "Definitions/lechaudron.yml",
-                "Definitions/katcrs.yml",
-                "Definitions/iloveclassics.yml",
-                "Definitions/hd4free.yml",
-                "Definitions/lemencili.yml",
-                "Definitions/btbit.yml",
-                "Definitions/digbt.yml",
-                "Definitions/mkvcage.yml",
-                "Content/congruent_outline.png",
-                "Content/crissXcross.png",
-                "Definitions/dark-shadow.yml",
-                "Definitions/bitme.yml",
-                "Definitions/asiandvdclub.yml",
-                "Definitions/music-master.yml",
-                "Definitions/torviet.yml",
-                "Definitions/waffles.yml",
-                "Definitions/rgu.yml",
-                "Definitions/elittracker.yml",
-                "Definitions/hon3yhd-net.yml",
-                "Definitions/solidtorrents.yml",
-                "Definitions/extratorrent-ag.yml",
-                "Definitions/passionetorrent.yml",
-                "Definitions/thetorrents.yml",
+                "System.Xml.XPath.XmlDocument.dll"
             };
 
             foreach (var oldFile in oldFiles)
@@ -489,7 +503,7 @@ namespace Jackett.Updater
 
         private bool CopyUpdateFile(string jackettDestinationDirectory, string fullSourceFilePath, string updateSourceDirectory, bool previousAttemptFailed)
         {
-            bool success = false;
+            var success = false;
 
             string fileName;
             string fullDestinationFilePath;
@@ -535,7 +549,7 @@ namespace Jackett.Updater
             }
 
             try
-            {               
+            {
                 if (!Directory.Exists(fileDestinationDirectory))
                 {
                     logger.Info("Creating directory " + fileDestinationDirectory);
@@ -556,8 +570,8 @@ namespace Jackett.Updater
 
         private string GetUpdateLocation()
         {
-	        // Use EscapedCodeBase to avoid Uri reserved characters from causing bugs
-	        // https://stackoverflow.com/questions/896572
+            // Use EscapedCodeBase to avoid Uri reserved characters from causing bugs
+            // https://stackoverflow.com/questions/896572
             var location = new Uri(Assembly.GetEntryAssembly().GetName().EscapedCodeBase);
             // Use LocalPath instead of AbsolutePath to avoid needing to unescape Uri format.
             return new FileInfo(location.LocalPath).DirectoryName;
@@ -565,7 +579,7 @@ namespace Jackett.Updater
 
         private string GetJackettConsolePath(string directoryPath)
         {
-            Variants variants = new Variants();
+            var variants = new Variants();
             if (variants.IsNonWindowsDotNetCoreVariant(variant))
             {
                 return Path.Combine(directoryPath, "jackett");

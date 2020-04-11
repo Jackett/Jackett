@@ -1,4 +1,4 @@
-﻿---
+---
   site: metaltracker
   name: Metal Tracker
   description: "Metal Tracker is a Semi-Private site dedicated to HEAVY METAL MUSIC. This definition is for the English site."
@@ -12,9 +12,9 @@
 
   caps:
     categories:
-      "Books": Audio/Audiobook
-      "Video": Audio/Video
-      "Music": Audio/MP3
+      Books: Audio/Audiobook
+      Video: Audio/Video
+      Music: Audio/MP3
 
     modes:
       search: [q]
@@ -64,12 +64,14 @@
       - path: torrents/search.html
         method: post
     inputs:
-      "SearchTorrentsForm[nameTorrent]": "{{ if .Query.Artist }}{{ .Query.Artist }}{{else}}{{ .Keywords }}{{end}}"
+      "SearchTorrentsForm[nameTorrent]": "{{ if or (.Query.Artist) (.Query.Album) }}{{ or (.Query.Artist) (.Query.Album) }}{{else}}{{ .Keywords }}{{end}}"
       "SearchTorrentsForm[sort]": "{{ .Config.sort }}"
       "SearchTorrentsForm[sortType]": "{{ .Config.type }}"
       go-search: Search
+
     rows:
       selector: .smallalbum
+
     fields:
       title:
         selector: a h3
@@ -96,11 +98,12 @@
         selector: .smallalbum
         remove: div.thumb, div.center, a
         case:
-          ":contains(\"Type: Music\")": "Music"
-          ":contains(\"Type: Video\")": "Video"
-          ":contains(\"Type: Books\")": "Books"
+          ":contains(\"Type: Music\")": Music
+          ":contains(\"Type: Video\")": Video
+          ":contains(\"Type: Books\")": Books
       size:
         selector: .smallalbum
         filters:
           - name: regexp
             args: "Size:\\s+([\\w\\d\\.,]+ \\w\\w)"
+# engine n/a

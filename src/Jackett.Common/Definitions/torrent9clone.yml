@@ -1,4 +1,4 @@
-﻿---
+---
   site: torrent9clone
   name: Torrent9 clone (torrent9.ch)
   description: "Torrent9 is a FRENCH Public site for TV / MOVIES / GENERAL"
@@ -7,7 +7,13 @@
   encoding: UTF-8
   followredirect: true
   links:
-    - https://www.torrent9.so/
+    - https://www.torrent9.pl/
+    - https://torrent9.black-mirror.xyz/
+    - https://torrent9.unblocked.casa/
+    - https://torrent9.proxyportal.fun/
+    - https://torrent9.uk-unblock.xyz/
+    - https://torrent9.ind-unblock.xyz/
+    - https://torrent9.unblockninja.com/
 
   legacylinks:
     - https://www.torrents9.pw/
@@ -31,6 +37,7 @@
     - https://www.t9.re/
     - https://www.t9.vc/
     - https://www.torrent9.ai/
+    - https://www.torrent9.so/
 
   caps:
     categorymappings:
@@ -41,6 +48,7 @@
       - {id: Logiciels, cat: PC, desc: "Software"}
       - {id: Jeux-PC, cat: PC/Games, desc: "PC Games"}
       - {id: Jeux-Consoles, cat: Console/Xbox360, desc: "Console Games"}
+      - {id: Porno, cat: XXX, desc: "XXX"}
 
     modes:
       search: [q]
@@ -56,15 +64,17 @@
   search:
     paths:
       - path: "{{ if .Keywords }}/recherche/{{ .Keywords }}{{else}}/top{{end}}"
+
     rows:
-      selector: div.table-responsive > table tbody tr
+      selector: table.table-striped > tbody > tr
+
     fields:
       site_date:
         selector: td:nth-child(1) a
         filters:
-          # date is at the end of the title, so we get it and name it site_date
+          # year is at the end of the title, so we get it and name it site_date
           - name: regexp
-            args: "(\\w+)$"
+            args: "(\\d{4})$"
       title:
         selector: td:nth-child(1) a
         filters:
@@ -76,10 +86,10 @@
           - name: replace
             args: ["TRUEFRENCH", "{{ .Result.site_date }} TRUEFRENCH"]
           - name: replace
-            args: ["VOSTFR", "{{ .Result.site_date }} VOSTFR"] 
+            args: ["VOSTFR", "{{ .Result.site_date }} VOSTFR"]
           # and we delete it at the end
           - name: re_replace
-            args: ["(\\w+)$", ""]
+            args: ["(\\d{4})$", ""]
       details:
         selector: td:nth-child(1) a
         attribute: href
@@ -90,13 +100,13 @@
         selector: td:nth-child(1) a
         attribute: href
       date:
-        text: "now"
+        text: now
       size:
         selector: td:nth-child(2)
       seeders:
         text: 0
       seeders:
-        selector: td:nth-child(3) span.seed_ok
+        selector: td:nth-child(3)
         optional: true
       leechers:
         text: 0
@@ -104,6 +114,7 @@
         selector: td:nth-child(4)
         optional: true
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
+# engine n/a

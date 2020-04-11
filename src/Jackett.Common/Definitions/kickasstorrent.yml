@@ -5,8 +5,20 @@
   language: en-us
   type: public
   encoding: UTF-8
+  followredirect: true
   links:
     - https://katcr.co/
+    - https://kat.root.yt/
+    - https://kat.unblockit.one/ # searching redirects to katcr.co in browser but appears to have no issue in Jackett
+    - https://kickasstorrents.unblockninja.com/
+    - https://katcr.black-mirror.xyz/
+    - https://katcr.unblocked.casa/
+    - https://katcr.proxyportal.fun/
+    - https://katcr.uk-unblock.xyz/
+    - https://katcr.ind-unblock.xyz/
+  legacylinks:
+    - https://kickasstorrent.cr/ # possible 3rd kickasstorrent site/clone?
+    - https://katcr.to/ # possible 3rd kickasstorrent site/clone?
 
   caps:
     categorymappings:
@@ -91,11 +103,13 @@
 
   search:
     paths:
-      - path: "{{ if .Keywords }}katsearch/page/1/{{ .Keywords }}{{ else }}category/latest/page/1{{ end }}"
+      - path: "{{ if .Keywords }}katsearch/page/1/{{ .Keywords }}{{else}}category/latest/page/1{{end}}"
+
     rows:
       selector: table.torrents_table > tbody > tr
       filters:
         - name: andmatch
+
     fields:
       title:
         selector: a.torrents_table__torrent_title b
@@ -203,6 +217,7 @@
       leechers:
         selector: td[data-title="Leech"]
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
+# engine n/a

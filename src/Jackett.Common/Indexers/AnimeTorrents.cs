@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -6,7 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using CsQuery;
+using AngleSharp.Dom;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -19,14 +20,14 @@ namespace Jackett.Common.Indexers
 {
     public class AnimeTorrents : BaseWebIndexer
     {
-        private string LoginUrl { get { return SiteLink + "login.php"; } }
-        private string SearchUrl { get { return SiteLink + "ajax/torrents_data.php"; } }
-        private string SearchUrlReferer { get { return SiteLink + "torrents.php?cat=0&searchin=filename&search="; } }
+        private string LoginUrl => SiteLink + "login.php";
+        private string SearchUrl => SiteLink + "ajax/torrents_data.php";
+        private string SearchUrlReferer => SiteLink + "torrents.php?cat=0&searchin=filename&search=";
 
         private new ConfigurationDataBasicLogin configData
         {
-            get { return (ConfigurationDataBasicLogin)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataBasicLogin)base.configData;
+            set => base.configData = value;
         }
 
         public AnimeTorrents(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps)
@@ -80,8 +81,9 @@ namespace Jackett.Common.Indexers
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true);
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
             {
-                CQ dom = result.Content;
-                var errorMessage = dom[".ui-state-error"].Text().Trim();
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(result.Content);
+                var errorMessage = dom.QuerySelector(".ui-state-error").Text().Trim();
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
 
@@ -94,25 +96,17 @@ namespace Jackett.Common.Indexers
             var searchString = query.GetQueryString();
 
             //  replace any space, special char, etc. with % (wildcard)
-            Regex ReplaceRegex = new Regex("[^a-zA-Z0-9]+");
+            var ReplaceRegex = new Regex("[^a-zA-Z0-9]+");
             searchString = ReplaceRegex.Replace(searchString, "%");
-
             var searchUrl = SearchUrl;
-            var queryCollection = new NameValueCollection();
-
-            queryCollection.Add("total", "146"); // Not sure what this is about but its required!
-
-            var cat = "0";
-            var queryCats = MapTorznabCapsToTrackers(query);
-            if (queryCats.Count == 1)
+            var queryCollection = new NameValueCollection
             {
-                cat = queryCats.First().ToString();
-            }
-
-            queryCollection.Add("cat", cat);
-            queryCollection.Add("searchin", "filename");
-            queryCollection.Add("search", searchString);
-            queryCollection.Add("page", "1");
+                {"total", "146"}, // Not sure what this is about but its required!
+                {"cat", MapTorznabCapsToTrackers(query).FirstIfSingleOrDefault("0")},
+                {"page", "1"},
+                {"searchin", "filename"},
+                {"search", searchString}
+            };
             searchUrl += "?" + queryCollection.GetQueryString();
 
             var extraHeaders = new Dictionary<string, string>()
@@ -125,15 +119,15 @@ namespace Jackett.Common.Indexers
             var results = response.Content;
             try
             {
-                CQ dom = results;
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(results);
 
-                var rows = dom["tr"];
+                var rows = dom.QuerySelectorAll("tr");
                 foreach (var row in rows.Skip(1))
                 {
                     var release = new ReleaseInfo();
-                    var qRow = row.Cq();
-                    var qTitleLink = qRow.Find("td:eq(1) a:eq(0)").First();
-                    release.Title = qTitleLink.Text().Trim();
+                    var qTitleLink = row.QuerySelector("td:nth-of-type(2) a:nth-of-type(1)");
+                    release.Title = qTitleLink.TextContent.Trim();
 
                     // If we search an get no results, we still get a table just with no info.
                     if (string.IsNullOrWhiteSpace(release.Title))
@@ -141,16 +135,16 @@ namespace Jackett.Common.Indexers
                         break;
                     }
 
-                    release.Guid = new Uri(qTitleLink.Attr("href"));
+                    release.Guid = new Uri(qTitleLink.GetAttribute("href"));
                     release.Comments = release.Guid;
 
-                    var dateString = qRow.Find("td:eq(4)").Text();
+                    var dateString = row.QuerySelector("td:nth-of-type(5)").TextContent;
                     release.PublishDate = DateTime.ParseExact(dateString, "dd MMM yy", CultureInfo.InvariantCulture);
 
-                    var qLink = qRow.Find("td:eq(2) a");
-                    if (qLink.Length != 0) // newbie users don't see DL links
+                    var qLink = row.QuerySelector("td:nth-of-type(3) a");
+                    if (qLink != null) // newbie users don't see DL links
                     {
-                        release.Link = new Uri(qLink.Attr("href"));
+                        release.Link = new Uri(qLink.GetAttribute("href"));
                     }
                     else
                     {
@@ -160,16 +154,16 @@ namespace Jackett.Common.Indexers
                         release.Link = release.Comments;
                     }
 
-                    var sizeStr = qRow.Find("td:eq(5)").Text();
+                    var sizeStr = row.QuerySelector("td:nth-of-type(6)").TextContent;
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
 
-                    var connections = qRow.Find("td:eq(7)").Text().Trim().Split("/".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                    var connections = row.QuerySelector("td:nth-of-type(8)").TextContent.Trim().Split("/".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
 
                     release.Seeders = ParseUtil.CoerceInt(connections[0].Trim());
                     release.Peers = ParseUtil.CoerceInt(connections[1].Trim()) + release.Seeders;
                     release.Grabs = ParseUtil.CoerceLong(connections[2].Trim());
 
-                    var rCat = row.Cq().Find("td:eq(0) a").First().Attr("href");
+                    var rCat = row.QuerySelector("td:nth-of-type(1) a").GetAttribute("href");
                     var rCatIdx = rCat.IndexOf("cat=");
                     if (rCatIdx > -1)
                     {
@@ -178,17 +172,17 @@ namespace Jackett.Common.Indexers
 
                     release.Category = MapTrackerCatToNewznab(rCat);
 
-                    if (qRow.Find("img[alt=\"Gold Torrent\"]").Length >= 1)
+                    if (row.QuerySelector("img[alt=\"Gold Torrent\"]") != null)
                         release.DownloadVolumeFactor = 0;
-                    else if (qRow.Find("img[alt=\"Silver Torrent\"]").Length >= 1)
+                    else if (row.QuerySelector("img[alt=\"Silver Torrent\"]") != null)
                         release.DownloadVolumeFactor = 0.5;
                     else
                         release.DownloadVolumeFactor = 1;
 
-                    var ULFactorImg = qRow.Find("img[alt*=\"x Multiplier Torrent\"]");
-                    if (ULFactorImg.Length >= 1)
+                    var ULFactorImg = row.QuerySelector("img[alt*=\"x Multiplier Torrent\"]");
+                    if (ULFactorImg != null)
                     {
-                        release.UploadVolumeFactor = ParseUtil.CoerceDouble(ULFactorImg.Attr("alt").Split('x')[0]);
+                        release.UploadVolumeFactor = ParseUtil.CoerceDouble(ULFactorImg.GetAttribute("alt").Split('x')[0]);
                     }
                     else
                     {
@@ -196,7 +190,7 @@ namespace Jackett.Common.Indexers
                     }
 
                     qTitleLink.Remove();
-                    release.Description = qRow.Find("td:eq(1)").Text();
+                    release.Description = row.QuerySelector("td:nth-of-type(2)").TextContent;
 
                     releases.Add(release);
                 }

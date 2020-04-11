@@ -1,4 +1,4 @@
-﻿---
+---
   site: torrent-explosiv
   name: Torrent-Explosiv
   description: "Torrent-Explosiv is a German Private site for TV / MOVIES / GENERAL"
@@ -10,59 +10,59 @@
 
   caps:
     categorymappings:
-      # App						
-      - {id: 12, cat: PC/0day, desc: "App Win"}						
-      - {id: 10, cat: PC/Mac, desc: "App Mac"}						
+      # App
+      - {id: 12, cat: PC/0day, desc: "App Win"}
+      - {id: 10, cat: PC/Mac, desc: "App Mac"}
       - {id: 127, cat: PC/Phone-Android, desc: "App Android"}
-      # Doku						
-      - {id: 177, cat: TV/Documentary, desc: "Doku HD "}						
+      # Doku
+      - {id: 177, cat: TV/Documentary, desc: "Doku HD "}
       - {id: 178, cat: TV/Documentary, desc: "Doku SD "}
-      # Game						
-      - {id: 263, cat: Console/Other, desc: "Game Sonstiege"}						
-      - {id: 264, cat: Console, desc: "Game PDA / Handy"}						
-      - {id: 265, cat: Console/PSP, desc: "Game PlayStation"}						
-      - {id: 299, cat: Console, desc: "Game Wimmelbild"}						
+      # Game
+      - {id: 263, cat: Console/Other, desc: "Game Sonstiege"}
+      - {id: 264, cat: Console, desc: "Game PDA / Handy"}
+      - {id: 265, cat: Console/PSP, desc: "Game PlayStation"}
+      - {id: 299, cat: Console, desc: "Game Wimmelbild"}
       - {id: 17, cat: PC/Games, desc: "Game PC"}
-      # Movie						
-      - {id: 277, cat: Movies, desc: "Movie Pack"}						
-      - {id: 300, cat: Movies/3D, desc: "Movie 3D"}						
-      - {id: 258, cat: Movies/Uhd, desc: "Movie UHD "}						
-      - {id: 262, cat: Movies/DVD, desc: "Movie DVD-R"}						
-      - {id: 301, cat: Movies/BluRay, desc: "Movie Bluray"}						
-      - {id: 28, cat: Movies/SD, desc: "Movie SD "}						
+      # Movie
+      - {id: 277, cat: Movies, desc: "Movie Pack"}
+      - {id: 300, cat: Movies/3D, desc: "Movie 3D"}
+      - {id: 258, cat: Movies/UHD, desc: "Movie UHD "}
+      - {id: 262, cat: Movies/DVD, desc: "Movie DVD-R"}
+      - {id: 301, cat: Movies/BluRay, desc: "Movie Bluray"}
+      - {id: 28, cat: Movies/SD, desc: "Movie SD "}
       - {id: 32, cat: Movies/HD, desc: "Movie HD "}
-      # Music						
-      - {id: 48, cat: Audio, desc: "Music Album"}						
-      - {id: 288, cat: Audio, desc: "Music Discographie"}						
-      - {id: 201, cat: Audio/Lossless, desc: "Music FLAC"}						
-      - {id: 121, cat: Audio/MP3, desc: "Music MP3"}						
-      - {id: 124, cat: Audio, desc: "Music Mixe"}						
-      - {id: 55, cat: Audio/Video, desc: "Music Video SD"}						
-      - {id: 53, cat: Audio, desc: "Music Sampler"}						
-      - {id: 52, cat: Audio, desc: "Music Pack"}						
-      - {id: 49, cat: Audio, desc: "Music Charts/Single"}						
+      # Music
+      - {id: 48, cat: Audio, desc: "Music Album"}
+      - {id: 288, cat: Audio, desc: "Music Discographie"}
+      - {id: 201, cat: Audio/Lossless, desc: "Music FLAC"}
+      - {id: 121, cat: Audio/MP3, desc: "Music MP3"}
+      - {id: 124, cat: Audio, desc: "Music Mixe"}
+      - {id: 55, cat: Audio/Video, desc: "Music Video SD"}
+      - {id: 53, cat: Audio, desc: "Music Sampler"}
+      - {id: 52, cat: Audio, desc: "Music Pack"}
+      - {id: 49, cat: Audio, desc: "Music Charts/Single"}
       - {id: 303, cat: Audio, desc: "Music Soundtrack"}
-      # Tv Serien						
-      - {id: 286, cat: TV/Anime, desc: "Tv Serien Anime HD"}						
-      - {id: 226, cat: TV/SD, desc: "Tv Serien SD"}						
-      - {id: 209, cat: TV/HD, desc: "Tv Serien HD "}						
-      - {id: 287, cat: TV/Anime, desc: "Tv Serien Anime SD"}						
+      # Tv Serien
+      - {id: 286, cat: TV/Anime, desc: "Tv Serien Anime HD"}
+      - {id: 226, cat: TV/SD, desc: "Tv Serien SD"}
+      - {id: 209, cat: TV/HD, desc: "Tv Serien HD "}
+      - {id: 287, cat: TV/Anime, desc: "Tv Serien Anime SD"}
       - {id: 273, cat: TV, desc: "Tv Serien Pack"}
-      # Sport						
-      - {id: 62, cat: TV/Sport, desc: "Sport SD "}						
+      # Sport
+      - {id: 62, cat: TV/Sport, desc: "Sport SD "}
       - {id: 282, cat: TV/Sport, desc: "Sport HD"}
-      # Sonstiges						
-      - {id: 216, cat: Books, desc: "Sonstiges Pdf"}						
-      - {id: 202, cat: Books/Magazines, desc: "Sonstiges Magazine"}						
-      - {id: 217, cat: Books, desc: "Sonstiges EPaper"}						
-      - {id: 269, cat: Books, desc: "Sonstiges Hörspiel"}						
-      - {id: 63, cat: Audio/Audiobook, desc: "Sonstiges A-Book"}						
+      # Sonstiges
+      - {id: 216, cat: Books, desc: "Sonstiges Pdf"}
+      - {id: 202, cat: Books/Magazines, desc: "Sonstiges Magazine"}
+      - {id: 217, cat: Books, desc: "Sonstiges EPaper"}
+      - {id: 269, cat: Books, desc: "Sonstiges Hörspiel"}
+      - {id: 63, cat: Audio/Audiobook, desc: "Sonstiges A-Book"}
       - {id: 96, cat: Books/Ebook, desc: "Sonstiges E-Book"}
-      # XXX						
-      - {id: 73, cat: XXX, desc: "XXX HD "}						
-      - {id: 75, cat: XXX, desc: "XXX Pack"}						
-      - {id: 76, cat: XXX, desc: "XXX SD "}						
-      - {id: 147, cat: XXX, desc: "XXX Bilder//Clips"}						
+      # XXX
+      - {id: 73, cat: XXX, desc: "XXX HD "}
+      - {id: 75, cat: XXX, desc: "XXX Pack"}
+      - {id: 76, cat: XXX, desc: "XXX SD "}
+      - {id: 147, cat: XXX, desc: "XXX Bilder//Clips"}
       - {id: 302, cat: XXX, desc: "XXX DVD-R"}
 
     modes:
@@ -143,6 +143,11 @@
             args: ["details.php?id=", "download.php?torrent="]
       title:
         selector: a.selection_a
+        filters:
+          - name: re_replace
+            args: ["^\\[[\\w ]*\\]\\s?", ""]
+          - name: re_replace
+            args: ["^\\[[\\w ]*\\]\\s?", ""]
       details:
         selector: a.selection_a
         attribute: href
@@ -266,3 +271,4 @@
       uploadvolumefactor:
         case:
           "*": 1
+# engine n/a

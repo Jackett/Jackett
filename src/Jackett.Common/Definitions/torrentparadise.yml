@@ -12,18 +12,45 @@
 
   caps:
     categories:
+      "ADULT LATINA": XXX
+      "ADULT MILF": XXX
       "ADULT XXX": XXX
+      "ADULT": XXX
       "ANIME": TV/Anime
+      "APPLICATIONS > ANDROID": PC
+      "APPLICATIONS > HANDHELD": PC/Phone-Other
       "APPLICATIONS > MAC": PC/Mac
+      "APPLICATIONS > OTHER OS": PC
       "APPLICATIONS > WINDOWS": PC/0day
+      "APPLICATIONS": PC
+      "APPS > ANDROID": PC
+      "APPS > HANDHELD": PC/Phone-Other
+      "APPS > MAC": PC/Mac
+      "APPS > OTHER OS": PC
+      "APPS > WINDOWS": PC/0day
+      "APPS > PC": PC
       "APPS": PC
       "AUDIO > AUDIO BOOKS": Audio/Audiobook
+      "AUDIO": Audio
       "BOOKS": Books
+      "DOCUMENTARIES": TV/Documentary
       "EBOOKS": Books/Ebook
+      "ESTRENOS": XXX
       "FLAC MUSIC": Audio/Lossless
       "FLAC": Audio/Lossless
-      "GAMES": PC/Games
+      "GAMES > HANDHELD": Console
+      "GAMES > OTHER": Console
       "GAMES > PC": PC/Games
+      "GAMES > PS2": Console/PSP
+      "GAMES > PS3": Console/PS3
+      "GAMES > PS4": Console/PS4
+      "GAMES > PSP": Console/PSP
+      "GAMES > WII": Console/Wii
+      "GAMES > WIIU": Console/WiiU
+      "GAMES > XBOX": Console/Xbox
+      "GAMES > XBOX360": Console/Xbox 360
+      "GAMES > WINDOWS": PC/Games
+      "GAMES": PC/Games
       "JUEGOS PS2": Console/PSP
       "JUEGOS PS3": Console/PS3
       "JUEGOS PS4": Console/PS4
@@ -32,30 +59,44 @@
       "JUEGOS WIIU": Console/WiiU
       "JUEGOS XBOX": Console/Xbox
       "JUEGOS XBOX360": Console/Xbox 360
+      "JUEGOS": Console
       "MOBILE": PC/Phone-Other
+      "MOVIES > ENGLISH (SPANISH SUBT)": Movies
       "MOVIES": Movies
       "MP3 MUSIC": Audio/MP3
       "MP3": Audio/MP3
       "MUSIC > LOSSLESS": Audio/Lossless
       "MUSIC > MP3": Audio/MP3
       "MUSIC": Audio
+      "OTHER > COVERS": Other
       "OTHER > E-BOOKS": Other
+      "OTHER > OTHER": Other
       "OTHER": Other
+      "PORN > GAMES": XXX
       "PORN > MOVIE CLIPS": XXX
       "PORN > MOVIES": XXX
+      "PORN > OTHER": XXX
       "PORN > PICTURES": XXX
+      "PORN": XXX
       "SOFTWARE > MAC": PC/Mac
       "SOFTWARE > WINDOWS": PC/0day
       "SOFTWARE": PC
+      "TUTORIALS": Other
       "TV SHOWS": TV
       "TV": TV
       "VIDEO > HD - MOVIES": Movies/HD
       "VIDEO > HD - TV SHOWS": TV/HD
+      "VIDEO > MOVIE CLIPS": Movies
       "VIDEO > MOVIES": Movies
+      "VIDEO > MUSIC VIDEOS": Audio/Video
+      "VIDEO > OTHER": Movies
       "VIDEO > SD - MOVIES": Movies/SD
       "VIDEO > SD - TV SHOWS": TV/SD
+      "VIDEO > TV SHOWS": TV
       "VIDEO > UHD - MOVIES": Movies/UHD
       "VIDEO > UHD - TV SHOWS": TV/UHD
+      "VIDEO HDRIP": Movies
+      "VIDEO": Movies
       "XXX": XXX
 
     modes:
@@ -74,8 +115,10 @@
     # https://torrentparadise.org/recent
     paths:
       - path: "{{ if .Keywords }}search.php?f={{ .Keywords }}{{ else }}recent{{ end }}"
+
     rows:
       selector: table.table-bordered > tbody > tr.table-default
+
     fields:
       category:
         selector: td:nth-child(1) a
@@ -102,6 +145,7 @@
       leechers:
         selector: td:nth-child(6)
       downloadvolumefactor:
-        text: "0"
+        text: 0
       uploadvolumefactor:
-        text: "1"
+        text: 1
+# engine n/a

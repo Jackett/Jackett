@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Jackett.Common.Utils;
 
 namespace Jackett.Common.Models.DTO
@@ -34,11 +34,11 @@ namespace Jackett.Common.Models.DTO
             };
             if (request.t != null)
                 query.QueryType = request.t;
-            if (!request.extended.IsNullOrEmptyOrWhitespace())
+            if (!string.IsNullOrWhiteSpace(request.extended))
                 query.Extended = ParseUtil.CoerceInt(request.extended);
-            if (!request.limit.IsNullOrEmptyOrWhitespace())
+            if (!string.IsNullOrWhiteSpace(request.limit))
                 query.Limit = ParseUtil.CoerceInt(request.limit);
-            if (!request.offset.IsNullOrEmptyOrWhitespace())
+            if (!string.IsNullOrWhiteSpace(request.offset))
                 query.Offset = ParseUtil.CoerceInt(request.offset);
 
             if (request.cat != null)
@@ -53,23 +53,23 @@ namespace Jackett.Common.Models.DTO
                     query.Categories = new int[0];
             }
 
-            if (!request.rid.IsNullOrEmptyOrWhitespace())
+            if (!string.IsNullOrWhiteSpace(request.rid))
                 query.RageID = int.Parse(request.rid);
 
-            if (!request.season.IsNullOrEmptyOrWhitespace())
+            if (!string.IsNullOrWhiteSpace(request.season))
                 query.Season = int.Parse(request.season);
 
-            if (!request.album.IsNullOrEmptyOrWhitespace())
+            if (!string.IsNullOrWhiteSpace(request.album))
                 query.Album = request.album;
-            if (!request.artist.IsNullOrEmptyOrWhitespace())
+            if (!string.IsNullOrWhiteSpace(request.artist))
                 query.Artist = request.artist;
-            if (!request.label.IsNullOrEmptyOrWhitespace())
+            if (!string.IsNullOrWhiteSpace(request.label))
                 query.Label = request.label;
-            if (!request.track.IsNullOrEmptyOrWhitespace())
+            if (!string.IsNullOrWhiteSpace(request.track))
                 query.Track = request.track;
-            if (!request.year.IsNullOrEmptyOrWhitespace())
+            if (!string.IsNullOrWhiteSpace(request.year))
                 query.Year = int.Parse(request.year);
-            if (!request.genre.IsNullOrEmptyOrWhitespace())
+            if (!string.IsNullOrWhiteSpace(request.genre))
                 query.Genre = request.genre.Split(',');
 
             query.ExpandCatsToSubCats();

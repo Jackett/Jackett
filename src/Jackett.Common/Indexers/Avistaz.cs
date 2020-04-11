@@ -1,4 +1,4 @@
-﻿using Jackett.Common.Indexers.Abstract;
+using Jackett.Common.Indexers.Abstract;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
@@ -8,23 +8,24 @@ namespace Jackett.Common.Indexers
 {
     public class Avistaz : AvistazTracker
     {
-        public Avistaz(IIndexerConfigurationService configService, WebClient webClient, Logger logger, IProtectionService protectionService)
-            : base(name: "Avistaz",
-                desc: "Aka AsiaTorrents",
-                link: "https://avistaz.to/",
-                configService: configService,
-                logger: logger,
-                protectionService: protectionService,
-                webClient: webClient
-                )
-        {
-            Type = "private";
-        }
+        public Avistaz(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+            : base("Avistaz",
+                   description: "Aka AsiaTorrents",
+                   link: "https://avistaz.to/",
+                   caps: new TorznabCapabilities
+                   {
+                       SupportsImdbMovieSearch = true
+                   },
+                   configService: configService,
+                   client: wc,
+                   logger: l,
+                   p: ps)
+            => Type = "private";
 
-        // hook to adjust the search term
-        protected override string GetSearchTerm(TorznabQuery query)
-        {
-            return query.SanitizedSearchTerm;
-        }
+        // Avistaz has episodes without season. eg Running Man E323
+        protected override string GetSearchTerm(TorznabQuery query) =>
+            !string.IsNullOrWhiteSpace(query.Episode) && query.Season == 0 ?
+            $"{query.SearchTerm} E{query.Episode}" :
+            $"{query.SearchTerm} {query.GetEpisodeSearchString()}";
     }
 }

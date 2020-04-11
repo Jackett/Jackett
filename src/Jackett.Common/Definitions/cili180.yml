@@ -5,9 +5,11 @@
   language: en-us
   type: public
   encoding: UTF-8
-    -  http://www.cilijj.xyz/
+  links:
+    -  https://www.cilijj.xyz/
   legacylinks:
     -  http://www.cili180.com/
+    -  http://www.cilijj.xyz/
 
   caps:
     categories:

@@ -1,4 +1,4 @@
-﻿---
+---
   site: carpathians
   name: Carpathians
   description: "Carpathians is a HUNGARIAN Private Torrent Tracker for 0DAY / GENERAL"
@@ -38,9 +38,33 @@
       - {id: 110, cat: XXX, desc: "XXX"}
 
     modes:
-      search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
+      search: [q, imdbid]
+      tv-search: [q, season, ep, imdbid]
+      movie-search: [q, imdbid]
+
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "5"
+      options:
+        "5": "created"
+        "8": "seeders"
+        "6": "size"
+        "2": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
 
   login:
     path: takelogin.php
@@ -55,13 +79,18 @@
     paths:
       - path: browse.php
     inputs:
-      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-      search: "{{ .Keywords }}"
+      $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+      search: "{{ if .Query.IMDBID }}https://www.imdb.com/title/{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+      # 0 both 1 only active 2 only dead
       incldead: 0
       onlyname: 1
       onlyname2: true
+      sort: "{{ .Config.sort }}"
+      type: "{{ .Config.type }}"
+
     rows:
       selector: table[id!="torrent_ajanlo"] > tbody > tr[id]
+
     fields:
       download:
         selector: a[href^="download.php/"]
@@ -84,7 +113,7 @@
         selector: a[id][href^="details.php?"]
         attribute: href
       imdb:
-        selector: a[href*="https://www.imdb.com/title/"]
+        selector: a[href*="www.imdb.com/title/tt"]
         optional: true
         attribute: href
       banner:
@@ -99,7 +128,7 @@
         selector: td:nth-child(7)
         filters:
           - name: regexp
-            args: ([\d\.]+)
+            args: (\d+)
       seeders:
         selector: td:nth-child(8)
       leechers:
@@ -123,9 +152,10 @@
             args: ["hete", "week"]
           - name: timeago
       downloadvolumefactor:
-        case:
-          "*": "1"
+        text: 1
       uploadvolumefactor:
         case:
-          img[src="pic/double.png"]: "2"
-          "*": "1"
+          img[src="pic/double.png"]: 2
+          img[src="pic/doubledouble2.png"]: 4
+          "*": 1
+# TBDev & XBTT

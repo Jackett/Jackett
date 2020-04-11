@@ -6,7 +6,7 @@
   type: private
   encoding: UTF-8
   links:
-    - http://classix-unlimited.co.uk/
+    - http://classix-unlimited.co.uk/ # site does not support https ERR_CONNECTION_CLOSED
 
   caps:
     categorymappings:

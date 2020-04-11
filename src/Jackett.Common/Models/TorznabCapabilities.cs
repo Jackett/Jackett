@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
@@ -7,8 +7,8 @@ namespace Jackett.Common.Models
 {
     public class TorznabCapabilities
     {
-        public int? LimitsMax { get; set; } = null;
-        public int? LimitsDefault { get; set; } = null;
+        public int? LimitsMax { get; set; }
+        public int? LimitsDefault { get; set; }
 
         public bool SearchAvailable { get; set; }
 
@@ -22,13 +22,7 @@ namespace Jackett.Common.Models
 
         public bool SupportsImdbTVSearch { get; set; }
 
-        public bool MusicSearchAvailable
-        {
-            get
-            {
-                return (SupportedMusicSearchParamsList.Count > 0);
-            }
-        }
+        public bool MusicSearchAvailable => (SupportedMusicSearchParamsList.Count > 0);
 
         public List<string> SupportedMusicSearchParamsList;
 
@@ -59,7 +53,7 @@ namespace Jackett.Common.Models
             MovieSearchAvailable = Categories.Any(i => TorznabCatType.Movies.Contains(i));
         }
 
-        string SupportedTVSearchParams
+        private string SupportedTVSearchParams
         {
             get
             {
@@ -72,7 +66,7 @@ namespace Jackett.Common.Models
             }
         }
 
-        string SupportedMovieSearchParams
+        private string SupportedMovieSearchParams
         {
             get
             {
@@ -83,13 +77,7 @@ namespace Jackett.Common.Models
             }
         }
 
-        string SupportedMusicSearchParams
-        {
-            get
-            {
-                return string.Join(",", SupportedMusicSearchParamsList);
-            }
-        }
+        private string SupportedMusicSearchParams => string.Join(",", SupportedMusicSearchParamsList);
 
         public bool SupportsCategories(int[] categories)
         {
@@ -153,12 +141,9 @@ namespace Jackett.Common.Models
             return xdoc;
         }
 
-        public string ToXml()
-        {
-            var xdoc = GetXDocument();
+        public string ToXml() =>
+            GetXDocument().Declaration + Environment.NewLine + GetXDocument();
 
-            return xdoc.Declaration.ToString() + Environment.NewLine + xdoc.ToString();
-        }
         public static TorznabCapabilities Concat(TorznabCapabilities lhs, TorznabCapabilities rhs)
         {
             lhs.SearchAvailable = lhs.SearchAvailable || rhs.SearchAvailable;

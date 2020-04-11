@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -31,65 +31,23 @@ namespace Jackett.Common.Models
 
         public bool IsTest { get; set; }
 
-        public string ImdbIDShort { get { return (ImdbID != null ? ImdbID.TrimStart('t') : null); } }
+        public string ImdbIDShort => ImdbID?.TrimStart('t');
 
-        protected string[] QueryStringParts = null;
+        protected string[] QueryStringParts;
 
-        public bool IsSearch
-        {
-            get
-            {
-                return QueryType == "search";
-            }
-        }
+        public bool IsSearch => QueryType == "search";
 
-        public bool IsTVSearch
-        {
-            get
-            {
-                return QueryType == "tvsearch";
-            }
-        }
+        public bool IsTVSearch => QueryType == "tvsearch";
 
-        public bool IsMovieSearch
-        {
-            get
-            {
-                return QueryType == "movie" || (QueryType == "TorrentPotato" && !string.IsNullOrWhiteSpace(SearchTerm));
-            }
-        }
+        public bool IsMovieSearch => QueryType == "movie" || (QueryType == "TorrentPotato" && !string.IsNullOrWhiteSpace(SearchTerm));
 
-        public bool IsMusicSearch
-        {
-            get
-            {
-                return QueryType == "music";
-            }
-        }
+        public bool IsMusicSearch => QueryType == "music";
 
-        public bool IsTVRageSearch
-        {
-            get
-            {
-                return RageID != null;
-            }
-        }
+        public bool IsTVRageSearch => RageID != null;
 
-        public bool IsImdbQuery
-        {
-            get
-            {
-                return ImdbID != null;
-            }
-        }
+        public bool IsImdbQuery => ImdbID != null;
 
-        public bool HasSpecifiedCategories
-        {
-            get
-            {
-                return (Categories != null && Categories.Length > 0);
-            }
-        }
+        public bool HasSpecifiedCategories => (Categories != null && Categories.Length > 0);
 
         public string SanitizedSearchTerm
         {
@@ -98,22 +56,22 @@ namespace Jackett.Common.Models
                 var term = SearchTerm;
                 if (SearchTerm == null)
                     term = "";
-                var safetitle = term.Where(c => (char.IsLetterOrDigit(c)
-                                                  || char.IsWhiteSpace(c)
-                                                  || c == '-'
-                                                  || c == '.'
-                                                  || c == '_'
-                                                  || c == '('
-                                                  || c == ')'
-                                                  || c == '@'
-                                                  || c == '/'
-                                                  || c == '\''
-                                                  || c == '['
-                                                  || c == ']'
-                                                  || c == '+'
-                                                  || c == '%'
-                                      )).AsString();
-                return safetitle;
+                var safeTitle = term.Where(c => (char.IsLetterOrDigit(c)
+                                                 || char.IsWhiteSpace(c)
+                                                 || c == '-'
+                                                 || c == '.'
+                                                 || c == '_'
+                                                 || c == '('
+                                                 || c == ')'
+                                                 || c == '@'
+                                                 || c == '/'
+                                                 || c == '\''
+                                                 || c == '['
+                                                 || c == ']'
+                                                 || c == '+'
+                                                 || c == '%'
+                                               ));
+                return string.Concat(safeTitle);
             }
         }
 
@@ -147,45 +105,40 @@ namespace Jackett.Common.Models
 
         public TorznabQuery Clone()
         {
-            var ret = new TorznabQuery();
-            ret.QueryType = QueryType;
-            if (Categories != null && Categories.Length > 0)
+            var ret = new TorznabQuery
+            {
+                QueryType = QueryType,
+                Extended = Extended,
+                ApiKey = ApiKey,
+                Limit = Limit,
+                Offset = Offset,
+                Season = Season,
+                Episode = Episode,
+                SearchTerm = SearchTerm,
+                IsTest = IsTest,
+                Album = Album,
+                Artist = Artist,
+                Label = Label,
+                Track = Track,
+                Year = Year,
+                RageID = RageID,
+                ImdbID = ImdbID
+            };
+            if (Categories?.Length > 0)
             {
                 ret.Categories = new int[Categories.Length];
                 Array.Copy(Categories, ret.Categories, Categories.Length);
             }
-            ret.Extended = Extended;
-            ret.ApiKey = ApiKey;
-            ret.Limit = Limit;
-            ret.Offset = Offset;
-            ret.Season = Season;
-            ret.Episode = Episode;
-            ret.SearchTerm = SearchTerm;
-            ret.IsTest = IsTest;
-            ret.Album = Album;
-            ret.Artist = Artist;
-            ret.Label = Label;
-            ret.Track = Track;
-            ret.Year = Year;
-            if (Genre != null)
-            {
-                Genre.Select(item => item.Clone()).ToList();
-            }
-            if (QueryStringParts != null && QueryStringParts.Length > 0)
+            if (QueryStringParts?.Length > 0)
             {
                 ret.QueryStringParts = new string[QueryStringParts.Length];
                 Array.Copy(QueryStringParts, ret.QueryStringParts, QueryStringParts.Length);
             }
-            ret.RageID = RageID;
-            ret.ImdbID = ImdbID;
 
             return ret;
         }
 
-        public string GetQueryString()
-        {
-            return (SanitizedSearchTerm + " " + GetEpisodeSearchString()).Trim();
-        }
+        public string GetQueryString() => (SanitizedSearchTerm + " " + GetEpisodeSearchString()).Trim();
 
         // Some trackers don't support AND logic for search terms resulting in unwanted results.
         // Using this method we can AND filter it within jackett.
@@ -204,7 +157,7 @@ namespace Jackett.Common.Models
                         limit = queryString.Length;
                     queryString = queryString.Substring(0, (int)limit);
                 }
-                Regex SplitRegex = new Regex("[^a-zA-Z0-9]+");
+                var SplitRegex = new Regex("[^a-zA-Z0-9]+");
                 QueryStringParts = SplitRegex.Split(queryString);
             }
 
@@ -225,8 +178,7 @@ namespace Jackett.Common.Models
                 return string.Empty;
 
             string episodeString;
-            DateTime showDate;
-            if (DateTime.TryParseExact(string.Format("{0} {1}", Season, Episode), "yyyy MM/dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out showDate))
+            if (DateTime.TryParseExact(string.Format("{0} {1}", Season, Episode), "yyyy MM/dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var showDate))
                 episodeString = showDate.ToString("yyyy.MM.dd");
             else if (string.IsNullOrEmpty(Episode))
                 episodeString = string.Format("S{0:00}", Season);

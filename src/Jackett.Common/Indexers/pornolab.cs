@@ -18,18 +18,17 @@ namespace Jackett.Common.Indexers
 {
     public class Pornolab : BaseWebIndexer
     {
-        private string LoginUrl
-        { get { return SiteLink + "forum/login.php"; } }
-        private string SearchUrl
-        { get { return SiteLink + "forum/tracker.php"; } }
+        private string LoginUrl => SiteLink + "forum/login.php";
+        private string SearchUrl => SiteLink + "forum/tracker.php";
 
         protected string cap_sid = null;
         protected string cap_code_field = null;
+        private static readonly Regex s_StripRussianRegex = new Regex(@"(\([А-Яа-яЁё\W]+\))|(^[А-Яа-яЁё\W\d]+\/ )|([а-яА-ЯЁё \-]+,+)|([а-яА-ЯЁё]+)");
 
         private new ConfigurationDataPornolab configData
         {
-            get { return (ConfigurationDataPornolab)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataPornolab)base.configData;
+            set => base.configData = value;
         }
 
         public Pornolab(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
@@ -46,9 +45,6 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.GetEncoding("windows-1251");
             Language = "ru-ru";
             Type = "semi-private";
-
-            // Clean capabilities
-            TorznabCaps.Categories.Clear();
 
             AddCategoryMapping(1768, TorznabCatType.XXX, "Эротические фильмы / Erotic Movies");
             AddCategoryMapping(60, TorznabCatType.XXX, "Документальные фильмы / Documentary & Reality");
@@ -159,6 +155,26 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(1691, TorznabCatType.XXX, "Ролики, SiteRip'ы и сцены из гей-фильмов / Clips & Movie Scenes (Gay)");
             AddCategoryMapping(1692, TorznabCatType.XXXImageset, "Гей-журналы, фото, разное / Magazines, Photo, Rest (Gay)");
 
+            AddCategoryMapping(1817, TorznabCatType.XXX, "Обход блокировки");
+            AddCategoryMapping(1670, TorznabCatType.XXX, "Эротическое видео / Erotic&Softcore");
+            AddCategoryMapping(1672, TorznabCatType.XXX, "Зарубежные порнофильмы / Full Length Movies");
+            AddCategoryMapping(1717, TorznabCatType.XXX, "Зарубежные фильмы в высоком качестве (DVD&HD) / Full Length ..");
+            AddCategoryMapping(1674, TorznabCatType.XXX, "Русское порно / Russian Video");
+            AddCategoryMapping(1677, TorznabCatType.XXX, "Зарубежные порноролики / Clips");
+            AddCategoryMapping(1842, TorznabCatType.XXX, "Сайтрипы 2020 (HD Video) / SiteRip's 2020 (HD Video)");
+            AddCategoryMapping(1843, TorznabCatType.XXX, "Сайтрипы 2020 / SiteRip's 2020");
+            AddCategoryMapping(1800, TorznabCatType.XXX, "Японское порно / Japanese Adult Video (JAV)");
+            AddCategoryMapping(1815, TorznabCatType.XXX, "Архив (Японское порно)");
+            AddCategoryMapping(1723, TorznabCatType.XXX, "Эротические студии, фото и журналы / Erotic Picture Gallery ..");
+            AddCategoryMapping(1802, TorznabCatType.XXX, "Архив (Фото)");
+            AddCategoryMapping(1745, TorznabCatType.XXX, "Хентай и Манга, Мультфильмы и Комиксы, Рисунки / Hentai&Ma..");
+            AddCategoryMapping(1838, TorznabCatType.XXX, "Игры / Games");
+            AddCategoryMapping(1829, TorznabCatType.XXX, "Обсуждение игр / Games Discussion");
+            AddCategoryMapping(11, TorznabCatType.XXX, "Нетрадиционное порно / Special Interest Movies&Clips");
+            AddCategoryMapping(1681, TorznabCatType.XXX, "Дефекация / Scat");
+            AddCategoryMapping(1683, TorznabCatType.XXX, "Архив (общий)");
+            AddCategoryMapping(1688, TorznabCatType.XXX, "Гей-порно / Gay Forum");
+            AddCategoryMapping(1720, TorznabCatType.XXX, "Архив (Гей-порно)");
         }
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
@@ -250,7 +266,7 @@ namespace Jackett.Common.Indexers
             }
             try
             {
-                string RowsSelector = "table#tor-tbl > tbody > tr";
+                var RowsSelector = "table#tor-tbl > tbody > tr";
 
                 var SearchResultParser = new HtmlParser();
                 var SearchResultDocument = SearchResultParser.ParseDocument(results.Content);
@@ -259,11 +275,6 @@ namespace Jackett.Common.Indexers
                 {
                     try
                     {
-                        var release = new ReleaseInfo();
-
-                        release.MinimumRatio = 1;
-                        release.MinimumSeedTime = 0;
-
                         var qDownloadLink = Row.QuerySelector("a.tr-dl");
                         if (qDownloadLink == null) // Expects moderation
                             continue;
@@ -271,38 +282,38 @@ namespace Jackett.Common.Indexers
                         var qForumLink = Row.QuerySelector("a.f");
                         var qDetailsLink = Row.QuerySelector("a.tLink");
                         var qSize = Row.QuerySelector("td:nth-child(6) u");
-
-                        release.Title = qDetailsLink.TextContent;
-
-                        release.Comments = new Uri(SiteLink + "forum/" + qDetailsLink.GetAttribute("href"));
-                        release.Description = qForumLink.TextContent;
-                        release.Link = release.Comments;
-                        release.Guid = release.Link;
-                        release.Size = ReleaseInfo.GetBytes(qSize.TextContent);
-
-                        var seeders = Row.QuerySelector("td:nth-child(7) b").TextContent;
-                        if (string.IsNullOrWhiteSpace(seeders))
-                            seeders = "0";
-                        release.Seeders = ParseUtil.CoerceInt(seeders);
-                        release.Peers = ParseUtil.CoerceInt(Row.QuerySelector("td:nth-child(8)").TextContent) + release.Seeders;
-                        release.Grabs = ParseUtil.CoerceLong(Row.QuerySelector("td:nth-child(9)").TextContent);
+                        var link = new Uri(SiteLink + "forum/" + qDetailsLink.GetAttribute("href"));
+                        var seederString = Row.QuerySelector("td:nth-child(7) b").TextContent;
+                        var seeders = string.IsNullOrWhiteSpace(seederString) ? 0 : ParseUtil.CoerceInt(seederString);
 
                         var timestr = Row.QuerySelector("td:nth-child(10) u").TextContent;
-                        release.PublishDate = DateTimeUtil.UnixTimestampToDateTime(long.Parse(timestr));
-
                         var forum = qForumLink;
                         var forumid = forum.GetAttribute("href").Split('=')[1];
-                        release.Category = MapTrackerCatToNewznab(forumid);
-
-                        release.DownloadVolumeFactor = 1;
-                        release.UploadVolumeFactor = 1;
-
-                        if (configData.StripRussianLetters.Value)
+                        var title = configData.StripRussianLetters.Value
+                            ? s_StripRussianRegex.Replace(qDetailsLink.TextContent, "")
+                            : qDetailsLink.TextContent;
+                        var size = ReleaseInfo.GetBytes(qSize.TextContent);
+                        var leechers = ParseUtil.CoerceInt(Row.QuerySelector("td:nth-child(8)").TextContent);
+                        var grabs = ParseUtil.CoerceLong(Row.QuerySelector("td:nth-child(9)").TextContent);
+                        var publishDate = DateTimeUtil.UnixTimestampToDateTime(long.Parse(timestr));
+                        var release = new ReleaseInfo
                         {
-                            var regex = new Regex(@"(\([А-Яа-яЁё\W]+\))|(^[А-Яа-яЁё\W\d]+\/ )|([а-яА-ЯЁё \-]+,+)|([а-яА-ЯЁё]+)");
-                            release.Title = regex.Replace(release.Title, "");
-                        }
-
+                            MinimumRatio = 1,
+                            MinimumSeedTime = 0,
+                            Title = title,
+                            Comments = link,
+                            Description = qForumLink.TextContent,
+                            Link = link,
+                            Guid = link,
+                            Size = size,
+                            Seeders = seeders,
+                            Peers = leechers + seeders,
+                            Grabs = grabs,
+                            PublishDate = publishDate,
+                            Category = MapTrackerCatToNewznab(forumid),
+                            DownloadVolumeFactor = 1,
+                            UploadVolumeFactor = 1
+                        };
                         releases.Add(release);
                     }
                     catch (Exception ex)
@@ -322,7 +333,7 @@ namespace Jackett.Common.Indexers
         // referer link support
         public override async Task<byte[]> Download(Uri link)
         {
-            Uri downloadlink = link;
+            var downloadlink = link;
             var response = await RequestStringWithCookies(link.ToString());
             var results = response.Content;
             var SearchResultParser = new HtmlParser();
@@ -333,8 +344,8 @@ namespace Jackett.Common.Indexers
             {
                 logger.Debug(string.Format("{0}: Download selector {1} matched:{2}", ID, downloadSelector, DlUri.OuterHtml));
                 var href = DlUri.GetAttribute("href");
-                downloadlink = new Uri(SiteLink + "forum/" +href);
-                
+                downloadlink = new Uri(SiteLink + "forum/" + href);
+
             }
             else
             {

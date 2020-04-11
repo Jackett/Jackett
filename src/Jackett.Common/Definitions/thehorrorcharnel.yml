@@ -1,4 +1,4 @@
-﻿---
+---
   site: thehorrorcharnel
   name: The Horror Charnel
   description: "The Horror Charnel (THC) is a Private Torrent Tracker for HORROR / CULT / SLEAZE / SCI FI MOVIES"
@@ -91,7 +91,7 @@
       - {id: 48, cat: Movies, desc: "Zombie"}
 
     modes:
-      search: [q]
+      search: [q, imdbid]
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
 
@@ -133,7 +133,7 @@
       - selector: "div#base_content > table.mainouter > tbody > tr > td.outer > table.main > tbody > tr > td:has(h2)"
     test:
       path: usercp.php
-      
+
   ratio:
     path: my.php
     selector: td.navi_top:contains("Deine Ratio:")
@@ -213,5 +213,5 @@
           img[src="free.gif"]: 0
           "*": 1
       uploadvolumefactor:
-        case:
-          "*": 1
+        text: 1
+# Btdev,U232

@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -7,25 +8,24 @@ using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using CloudflareSolverRe;
 using com.LandonKey.SocksWebProxy;
 using com.LandonKey.SocksWebProxy.Proxy;
-using CloudflareSolverRe;
+using Jackett.Common.Helpers;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
 using NLog;
-using Jackett.Common.Helpers;
-using System.Diagnostics;
 
 namespace Jackett.Common.Utils.Clients
 {
     public class HttpWebClient : WebClient
     {
-        static protected Dictionary<string, ICollection<string>> trustedCertificates = new Dictionary<string, ICollection<string>>();
-        static protected string webProxyUrl;
-        static protected IWebProxy webProxy;
+        protected static Dictionary<string, ICollection<string>> trustedCertificates = new Dictionary<string, ICollection<string>>();
+        protected static string webProxyUrl;
+        protected static IWebProxy webProxy;
 
         [DebuggerNonUserCode] // avoid "Exception User-Unhandled" Visual Studio messages
-        static public bool ValidateCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+        public static bool ValidateCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
         {
             if (sender.GetType() != typeof(HttpWebRequest))
                 return sslPolicyErrors == SslPolicyErrors.None;
@@ -33,9 +33,8 @@ namespace Jackett.Common.Utils.Clients
             var request = (HttpWebRequest)sender;
             var hash = certificate.GetCertHashString();
 
-            ICollection<string> hosts;
 
-            trustedCertificates.TryGetValue(hash, out hosts);
+            trustedCertificates.TryGetValue(hash, out var hosts);
             if (hosts != null)
             {
                 if (hosts.Contains(request.Host))
@@ -52,15 +51,12 @@ namespace Jackett.Common.Utils.Clients
             return sslPolicyErrors == SslPolicyErrors.None;
         }
 
-        static public void InitProxy(ServerConfig serverConfig)
+        public static void InitProxy(ServerConfig serverConfig)
         {
             // dispose old SocksWebProxy
-            if (webProxy != null && webProxy is SocksWebProxy)
-            {
-                ((SocksWebProxy)webProxy).Dispose();
-                webProxy = null;
-            }
-
+            if (webProxy is SocksWebProxy proxy)
+                proxy.Dispose();
+            webProxy = null;
             webProxyUrl = serverConfig.GetProxyUrl();
             if (!string.IsNullOrWhiteSpace(webProxyUrl))
             {
@@ -118,7 +114,7 @@ namespace Jackett.Common.Utils.Clients
                 InitProxy(serverConfig);
         }
 
-        override public void Init()
+        public override void Init()
         {
             ServicePointManager.DefaultConnectionLimit = 1000;
 
@@ -132,7 +128,7 @@ namespace Jackett.Common.Utils.Clients
             ServicePointManager.ServerCertificateValidationCallback += ValidateCertificate;
         }
 
-        override protected async Task<WebClientByteResult> Run(WebRequest webRequest)
+        protected override async Task<WebClientByteResult> Run(WebRequest webRequest)
         {
             ServicePointManager.SecurityProtocol = (SecurityProtocolType)192 | (SecurityProtocolType)768 | (SecurityProtocolType)3072;
 
@@ -154,12 +150,12 @@ namespace Jackett.Common.Utils.Clients
                 }
             }
 
-            string userAgent = webRequest.EmulateBrowser.Value ? BrowserUtil.ChromeUserAgent : "Jackett/" + configService.GetVersion();
+            var userAgent = webRequest.EmulateBrowser.Value ? BrowserUtil.ChromeUserAgent : "Jackett/" + configService.GetVersion();
 
-            using (ClearanceHandler clearanceHandlr = new ClearanceHandler(userAgent))
+            using (var clearanceHandlr = new ClearanceHandler(userAgent))
             {
                 clearanceHandlr.MaxTries = 30;
-                using (HttpClientHandler clientHandlr = new HttpClientHandler
+                using (var clientHandlr = new HttpClientHandler
                 {
                     CookieContainer = cookies,
                     AllowAutoRedirect = false, // Do not use this - Bugs ahoy! Lost cookies and more.
@@ -214,7 +210,7 @@ namespace Jackett.Common.Utils.Clients
                             else if (webRequest.Type == RequestType.POST)
                             {
                                 if (webRequest.PostData != null)
-                                    request.Content = new FormUrlEncodedContent(webRequest.PostData);
+                                    request.Content = FormUrlEncodedContentWithEncoding(webRequest.PostData, webRequest.Encoding);
                                 request.Method = HttpMethod.Post;
                             }
                             else
@@ -231,7 +227,7 @@ namespace Jackett.Common.Utils.Clients
 
                                 foreach (var header in response.Headers)
                                 {
-                                    IEnumerable<string> value = header.Value;
+                                    var value = header.Value;
                                     result.Headers[header.Key.ToLowerInvariant()] = value.ToArray();
                                 }
 
@@ -257,7 +253,7 @@ namespace Jackett.Common.Utils.Clients
                                                 // of this cloudflare approach..don't want to alter BaseWebResult.IsRedirect because normally
                                                 // it shoudln't include service unavailable..only if we have this redirect header.
                                                 response.StatusCode = System.Net.HttpStatusCode.Redirect;
-                                                redirtime = Int32.Parse(value.Substring(0, end));
+                                                redirtime = int.Parse(value.Substring(0, end));
                                                 System.Threading.Thread.Sleep(redirtime * 1000);
                                             }
                                         }
@@ -287,10 +283,9 @@ namespace Jackett.Common.Utils.Clients
                                 // Compatiblity issue between the cookie format and httpclient
                                 // Pull it out manually ignoring the expiry date then set it manually
                                 // http://stackoverflow.com/questions/14681144/httpclient-not-storing-cookies-in-cookiecontainer
-                                IEnumerable<string> cookieHeaders;
                                 var responseCookies = new List<Tuple<string, string>>();
 
-                                if (response.Headers.TryGetValues("set-cookie", out cookieHeaders))
+                                if (response.Headers.TryGetValues("set-cookie", out var cookieHeaders))
                                 {
                                     foreach (var value in cookieHeaders)
                                     {
@@ -317,11 +312,10 @@ namespace Jackett.Common.Utils.Clients
             }
         }
 
-        override public void AddTrustedCertificate(string host, string hash)
+        public override void AddTrustedCertificate(string host, string hash)
         {
             hash = hash.ToUpper();
-            ICollection<string> hosts;
-            trustedCertificates.TryGetValue(hash.ToUpper(), out hosts);
+            trustedCertificates.TryGetValue(hash.ToUpper(), out var hosts);
             if (hosts == null)
             {
                 hosts = new HashSet<string>();

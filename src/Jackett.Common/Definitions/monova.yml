@@ -5,9 +5,19 @@
   language: en-us
   type: public
   encoding: UTF-8
+  followredirect: true
   links:
     - https://monova.org/
     - https://monova.to/
+    - https://monova.unblockit.one/
+    - https://monova.black-mirror.xyz/
+    - https://monova.unblocked.casa/
+    - https://monova.proxyportal.fun/
+    - https://monova.uk-unblock.xyz/
+    - https://monova.ind-unblock.xyz/
+  legacylinks:
+    - https://monova.unblockninja.com/ # currently redirects to https://monova.org/
+    - https://monova.unblockit.pro/
 
   caps:
     categories:
@@ -37,10 +47,12 @@
       # https://monova.to/search?term=vikings+s05e05
       # https://monova.to/video
       - path: "{{if .Keywords}}search?term={{.Keywords}}{{else}}video{{end}}"
+
     rows:
-      selector: tr.desktop:has(a[href^="//"])
+      selector: tr.desktop:not(tr[class="desktop  success"])
       filters:
         - name: andmatch
+
     fields:
       title:
         selector: td.torrent_name a
@@ -83,3 +95,4 @@
           - name: replace
             args: ["min.","minutes"]
           - name: timeago
+# engine n/a

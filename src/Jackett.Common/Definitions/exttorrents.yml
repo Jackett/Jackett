@@ -7,6 +7,9 @@
   encoding: UTF-8
   links:
     - https://ext.to/
+    - https://t.extto.com/
+  legacylinks:
+    - https://ext.unblockninja.com/ # currently redirects to https://ext.to/
 
   caps:
     categories:
@@ -79,3 +82,4 @@
         text: 0
       uploadvolumefactor:
         text: 1
+# engine n/a

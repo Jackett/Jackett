@@ -1,4 +1,4 @@
-﻿---
+---
   site: icetorrent
   name: ICE Torrent
   description: "ICE Torrent is a ratioless ROMANIAN Private Torrent Tracker for 0DAY / GENERAL"
@@ -6,133 +6,180 @@
   type: private
   encoding: UTF-8
   links:
+    - https://icetorrent.org/
+  legacylinks:
     - https://www.icetorrent.org/
 
   caps:
     categorymappings:
-      - {id: 1, cat: PC/0day , desc: "Appz"}
-      - {id: 85, cat: Audio/Audiobook, desc: "AudioBooks"}
-      - {id: 68, cat: Books, desc: "Carti/Reviste"}
-      - {id: 23, cat: Books, desc: "Cartoons"}
-      - {id: 73, cat: Audio/Video, desc: "Concert/Videoclip"}
-      - {id: 75, cat: Other, desc: "Diverse"}
-      - {id: 69, cat: Books, desc: "Documentare"}
-      - {id: 51, cat: TV/Documentary, desc: "Documentaries"}
-      - {id: 43, cat: Books, desc: "eBooks"}
-      - {id: 63, cat: Movies/DVD, desc: "Filme DVD"}
-      - {id: 65, cat: Movies/HD, desc: "Filme HD"}
-      - {id: 64, cat: Movies/SD, desc: "Filme Xvid"}
-      - {id: 40, cat: Console, desc: "Games/Console"}
-      - {id: 26, cat: PC/Games, desc: "Games/PC"}
-      - {id: 38, cat: PC/Phone-Other, desc: "Mobile"}
-      - {id: 59, cat: Movies/3D, desc: "Movies/3D"}
-      - {id: 92, cat: Movies/UHD, desc: "Movies/4K-UHD"}
-      - {id: 32, cat: Movies/BluRay, desc: "Movies/Blu-Ray"}
-      - {id: 28, cat: Movies/DVD, desc: "Movies/DVD"}
-      - {id: 42, cat: Movies/HD, desc: "Movies/HD-x264"}
-      - {id: 91, cat: Movies/HD, desc: "Movies/HEVC-x265"}
-      - {id: 79, cat: Movies/HD, desc: "Movies/microHD"}
-      - {id: 29, cat: Movies/SD, desc: "Movies/SD"}
-      - {id: 72, cat: Audio/Lossless, desc: "Music/FLAC"}
-      - {id: 6, cat: Audio/MP3, desc: "Music/MP3"}
-      - {id: 37, cat: Audio/Video, desc: "Music/Video"}
-      - {id: 70, cat: Audio/Lossless, desc: "Muzica FLAC"}
-      - {id: 71, cat: Audio/MP3, desc: "Muzica MP3"}
-      - {id: 74, cat: Other, desc: "Other"}
-      - {id: 41, cat: Other, desc: "Pictures"}
-      - {id: 67, cat: TV, desc: "Seriale TV"}
-      - {id: 48, cat: TV/Sport, desc: "Sports"}
-      - {id: 87, cat: Other, desc: "TUTS"}
-      - {id: 33, cat: TV/SD, desc: "TV Episodes"}
-      - {id: 34, cat: TV/HD, desc: "TVHD Episodes"}
-      - {id: 9, cat: XXX, desc: "XXX"}
+     - {id: 38, cat: Movies, desc: "Movie Packs"}
+     - {id: 10, cat: Movies/SD, desc: "Movies: SD"}
+     - {id: 35, cat: Movies/SD, desc: "Movies: SD Ro"}
+     - {id: 8, cat: Movies/HD, desc: "Movies: HD"}
+     - {id: 29, cat: Movies/HD, desc: "Movies: HD Ro"}
+     - {id: 7, cat: Movies/DVD, desc: "Movies: DVD"}
+     - {id: 2, cat: Movies/DVD, desc: "Movies: DVD Ro"}
+     - {id: 17, cat: Movies/BluRay, desc: "Movies: BluRay"}
+     - {id: 24, cat: Movies/BluRay, desc: "Movies: BluRay Ro"}
+     - {id: 59, cat: Movies, desc: "Movies: Ro"}
+     - {id: 57, cat: Movies/UHD, desc: "Movies: 4K (2160p) Ro"}
+     - {id: 61, cat: Movies/UHD, desc: "Movies: 4K (2160p)"}
+     - {id: 41, cat: TV, desc: "TV Packs"}
+     - {id: 66, cat: TV, desc: "TV Packs Ro"}
+     - {id: 45, cat: TV, desc: "TV Episodes"}
+     - {id: 46, cat: TV, desc: "TV Episodes Ro"}
+     - {id: 43, cat: TV/HD, desc: "TV Episodes HD"}
+     - {id: 44, cat: TV/HD, desc: "TV Episodes HD Ro"}
+     - {id: 60, cat: TV, desc: "TV Ro"}
+     - {id: 11, cat: PC/Games, desc: "Games: PC-ISO"}
+     - {id: 52, cat: Console, desc: "Games: Console"}
+     - {id: 1, cat: PC/0day, desc: "Applications"}
+     - {id: 14, cat: PC, desc: "Applications: Linux"}
+     - {id: 37, cat: PC/Mac, desc: "Applications: Mac"}
+     - {id: 19, cat: PC/Phone-Other, desc: "Applications: Mobile"}
+     - {id: 62, cat: TV, desc: "TV Cartoons"}
+     - {id: 3, cat: TV/Anime, desc: "TV Anime / Hentai"}
+     - {id: 6, cat: Books/Ebook, desc: "E-books"}
+     - {id: 5, cat: Audio, desc: "Music"}
+     - {id: 64, cat: Audio/Video, desc: "Music Video"}
+     - {id: 18, cat: Other, desc: "Images"}
+     - {id: 22, cat: TV/Sport, desc: "TV Sports"}
+     - {id: 58, cat: TV/Sport, desc: "TV Sports Ro"}
+     - {id: 9, cat: TV/Documentary, desc: "TV Documentary"}
+     - {id: 63, cat: TV/Documentary, desc: "TV Documentary Ro"}
+     - {id: 65, cat: Other, desc: "Tutorial"}
+     - {id: 67, cat: Other, desc: "Miscellaneous"}
+     - {id: 15, cat: XXX, desc: "XXX Movies"}
+     - {id: 47, cat: XXX, desc: "XXX DVD"}
+     - {id: 48, cat: XXX, desc: "XXX HD"}
+     - {id: 49, cat: XXX, desc: "XXX Images"}
+     - {id: 50, cat: XXX, desc: "XXX Packs"}
+     - {id: 51, cat: XXX, desc: "XXX SD"}
 
     modes:
-      search: [q]
+      search: [q, imdbid]
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
 
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "refreshAt"
+      options:
+        "refreshAt": "created"
+        "seeders": "seeders"
+        "size": "size"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
+    - name: browseadult
+      type: checkbox
+      label: Use the Adult search engine
+      default: false
+    - name: info_browseadult
+      type: info
+      label: "About the Adult search engine"
+      default: "The <b>Adult</b> search engine only returns <i>Adult category</i> results.</br>And Vice Versa."
+    - name: info_Search
+      type: info
+      label: "About Search results"
+      default: "This indexer supports only the <b>English</b> language. Choosing <i>non-English languages</i> will cause incorrect dates to be returned.</br>For best results edit your profile and set your <b>Torrents per page</b> to <b>100</b>. The Default is <i>50</i>."
+
   login:
-    path: login.php
+    path: login
     method: form
     form: form
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
+      _remember_me: on
+    selectorinputs:
+      _csrf_token:
+        selector: input[name="_csrf_token"]
+        attribute: value
     error:
+      - selector: span:contains("Error")
       - selector: div.alert:contains("failed")
     test:
-      path: browse.php
-      
+      path: /
+      selector: a[href*="/logout?_csrf_token="]
+
   ratio:
     text: -1
 
   search:
     paths:
-    - path: browse.php
-      categorymappings: ["!", 9]
-    - path: browseadult.php
-      categorymappings: [9]
+      # https://icetorrent.org/browse?search=&submit=&sort=torrent.size&direction=desc&page=1
+    - path: "{{ if .Config.browseadult }}adult{{else}}browse{{end}}"
     inputs:
-      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-      search: "{{if .Query.IMDBID}}{{ .Query.IMDBIDShort }}{{else}}{{ .Keywords }}{{end}}"
-      incldead: 1
-      search_by: "{{ if .Query.IMDBID }}imdb{{else}}name{{end}}"
+      $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
+      search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+      sort: "torrent.{{ .Config.sort }}"
+      direction: "{{ .Config.type }}"
+
     rows:
-      selector: table.table-striped > tbody > tr:has(a[href^="details.php?id="])
+      selector: div.kt-portlet--mobile > div.kt-portlet__body--fit > div.mr-0
+
     fields:
-      title:
-        selector: a[href^="details.php?id="]
-      details:
-        selector: a[href^="details.php?id="]
-        attribute: href
       category:
-        selector: a[href^="?cat="]
+        selector: a[href^="/browse?categories"]
         attribute: href
         filters:
-          - name: querystring
-            args: cat
-      banner:
-        attribute: rel
-      imdb:
-        selector: a[href*="www.imdb.com/title/"]
-        optional: true
+          - name: regexp
+            args: (\d+)$
+      title:
+        selector: a[href^="/browse/"]
+      details:
+        selector: a[href^="/browse/"]
         attribute: href
       download:
-        selector: a[href^="download.php"]
+        selector: a[href^="/torrents/"]
         attribute: href
-      files:
-        selector: a[href$="filelist=1#filelist"]
+      imdb:
+        optional: true
+        selector: a[href*="www.imdb.com/title/tt"]
+        attribute: href
+      date:
+        selector: div[data-toggle="kt-tooltip"]
+        attribute: title
+        filters:
+          - name: dateparse
+            args: "Jan 2, 2006, 3:04:05 PM"
+      size:
+        selector: div[data-toggle="kt-tooltip"] + div + div
+      grabs:
+        selector: div[data-toggle="kt-tooltip"] + div
         filters:
           - name: regexp
             args: (\d+)
-      size: # some users's have an extra column after the size/files and before the seeders column (Issue #2243)
-        selector: td:has(a[href$="filelist=1#filelist"])
-        remove: a
-      date:
-        selector: td > small:has(i.fa-clock), td > span.small:has(i.fa-clock)
-        filters:
-          - name: replace
-            args: ["\xA0", " "]
-          - name: replace
-            args: ["st ", " "]
-          - name: replace
-            args: ["nd ", " "]
-          - name: replace
-            args: ["rd ", " "]  
-          - name: replace
-            args: ["th ", " "]
-          - name: regexp
-            args: "(.+?) by"
-          - name: append
-            args: " +02:00"
-          - name: dateparse
-            args: "2 Jan 2006 15:04:05 -07:00"
       seeders:
-        selector: td:nth-last-child(2)
+        selector: div[data-toggle="kt-tooltip"] + div + div + div > div div:nth-child(1)
+        filters:
+          - name: regexp
+            args: (\d+)
       leechers:
-        selector: td:nth-last-child(1)
+        selector: div[data-toggle="kt-tooltip"] + div + div + div > div div:nth-child(2)
+        filters:
+          - name: regexp
+            args: (\d+)
       downloadvolumefactor:
-        text: 0
+        case:
+          "span.kt-badge--success:contains(\"free\")": 0
+          "span.kt-badge--dark:contains(\"half\")": 0.5
+          "*": 1
       uploadvolumefactor:
-        text: 1
+        case:
+          "span.kt-badge--info:contains(\"double\")": 2
+          "*": 1
+# engine n/a

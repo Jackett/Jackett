@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.WebUtilities;
 
 namespace Jackett.Server.ActionFilters
 {
-    public class DownloadActionFilter: ActionFilterAttribute
+    public class DownloadActionFilter : ActionFilterAttribute
     {
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {

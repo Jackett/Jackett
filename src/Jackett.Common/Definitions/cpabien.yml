@@ -1,4 +1,4 @@
-﻿---
+---
   site: cpasbien
   name: cpasbien
   description: "cpasbien is a FRENCH Public site for TV / MOVIES / GENERAL"
@@ -7,7 +7,7 @@
   encoding: UTF-8
   followredirect: true
   links:
-    - https://vww.cpasbien-fr.fr/
+    - https://wvw.cpasbien-fr.fr/
   legacylinks:
     - http://www.cpasbiens.cc/
     - http://www.cpabien.cm/
@@ -38,6 +38,7 @@
     - https://www.cpasbien.vg/
     - https://www.cpasbien.lol/
     - https://www.gktorrent.biz/
+    - https://vww.cpasbien-fr.fr/
 
   caps:
     categorymappings:
@@ -50,7 +51,28 @@
       tv-search: [q, season, ep]
       movie-search: [q]
 
-  settings: []
+  settings:
+    - name: cookie
+      type: text
+      label: Cookie
+    - name: info_cookie
+      type: info
+      label: How to get the Cookie
+      default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
+    - name: useragent
+      type: text
+      label: User-Agent
+      label: User-Agent
+    - name: info_useragent
+      type: info
+      label: How to get the User-Agent
+      default: "<ol><li>From the same place you fetched the cookie,<li>Find <b>'user-agent:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole user-agent string <i>(everything after 'user-agent: ')</i> and <b>Paste</b> here.</ol>"
+
+  login:
+    method: cookie
+    inputs:
+      cookie: "{{ .Config.cookie }}"
+      user-agent: "[ .Config.useragent ]"
 
   download:
     selector: a[href^="magnet:?xt="]
@@ -58,8 +80,11 @@
 
   search:
     paths:
-    # https://vww.cpasbien-fr.fr/index.php?do=search&subaction=search&story=dickinson%20s01e10
-      - path: "{{ if .Keywords }}index.php?do=search&subaction=search&story={{ .Keywords }}{{else}}{{end}}"
+      - path: "{{ if .Keywords }}index.php?do=search&subaction=search{{else}}{{end}}"
+        method: post
+    inputs:
+      story: "{{ if .Keywords }}{{ .Keywords }}{{else}}{{end}}"
+    # does not support imdbid search and does not return imdb link in results.
 
     rows:
       selector: div#gauche > table > tbody > tr:has(a)

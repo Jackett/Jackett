@@ -1,4 +1,4 @@
-﻿---
+---
   site: sktorrent
   name: SkTorrent
   description: "SkTorrent is a CZECH/SLOVAK Semi-Private Torrent Tracker for MOVIES / TV / GENERAL"
@@ -6,9 +6,10 @@
   type: semi-private
   encoding: windows-1250
   links:
-    - http://sktorrent.eu/
+    - https://sktorrent.eu/
   legacylinks:
     - http://sktorrent.eu/torrent/
+    - http://sktorrent.eu/
 
   caps:
     categorymappings:
@@ -27,7 +28,7 @@
       - {id: 5, cat: Movies, desc: "Filmy Kreslené"}
       - {id: 19, cat: Movies/HD, desc: "HD Filmy"}
       - {id: 29, cat: Movies/3D, desc: "3D Blu-ray"}
-      - {id: 43, cat: Movies/HD, desc: "UHD Filmy"}
+      - {id: 43, cat: Movies/UHD, desc: "UHD Filmy"}
       - {id: 28, cat: Movies/BluRay, desc: "Blu-ray"}
       - {id: 18, cat: PC/Games, desc: "Hry na Windows"}
       - {id: 30, cat: PC/Games, desc: "Hry na Konzole"}
@@ -65,13 +66,15 @@
       - path: torrent/torrents.php
     inputs:
       search: "{{ .Keywords }}"
-      category: "{{range .Categories}}{{.}};{{end}}"
-      active: "1"
+      category: "{{ range .Categories }}{{.}};{{end}}"
+      active: 1
     keywordsfilters:
       - name: diacritics
         args: replace
+
     rows:
       selector: table.lista > tbody > tr > td > table.lista > tbody > tr:has(a[href^="details.php?id="])
+
     fields:
       title:
         selector: td.lista a[href^="details.php?id="]
@@ -82,9 +85,9 @@
           - name: diacritics
             args: replace
           - name: replace
-            args: ["serie", ""] 
+            args: ["serie", ""]
           - name: replace
-            args: ["Serie", ""] 
+            args: ["Serie", ""]
           - name: re_replace
             args: ["(\\d{2})\\.", "S$1"]
           - name: re_replace
@@ -129,8 +132,7 @@
           - name: replace
             args: ["---", "0"]
       downloadvolumefactor:
-        case:
-          "*": "1"
+        text: 1
       uploadvolumefactor:
-        case:
-          "*": "1"
+        text: 1
+# BtiTracker 1.4.8
