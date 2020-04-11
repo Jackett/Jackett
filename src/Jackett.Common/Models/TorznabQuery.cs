@@ -148,9 +148,8 @@ namespace Jackett.Common.Models
             // We cache the regex split results so we have to do it only once for each query.
             if (QueryStringParts == null)
             {
-                var queryString = GetQueryString();
-                if (queryStringOverride != null)
-                    queryString = queryStringOverride;
+                var queryString = !string.IsNullOrWhiteSpace(queryStringOverride) ? queryStringOverride : GetQueryString();
+
                 if (limit != null && limit > 0)
                 {
                     if (limit > queryString.Length)
