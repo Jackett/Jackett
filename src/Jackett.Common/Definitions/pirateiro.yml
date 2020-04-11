@@ -8,9 +8,10 @@
   followredirect: true
   links:
     - https://pirateiro.com/
-    - https://pirateiro.unblockit.pro/
   legacylinks:
     - http://pirateiro.com/
+    - https://pirateiro.unblockit.pro/
+    - https://pirateiro.unblockit.one/ # currently down
 
   caps:
     categories:

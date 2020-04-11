@@ -8,6 +8,8 @@
   followredirect: true
   links:
     - https://extratorrent.si/
+    - https://extratorrent.unblockit.one/
+  legacylinks:
     - https://extratorrent.unblockit.pro/
 
   caps:
