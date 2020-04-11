@@ -370,55 +370,37 @@ namespace Jackett.Common.Indexers
 
                 if (condition.StartsWith("."))
                 {
-                    var conditionResultState = false;
+                    bool conditionResultState;
 
-                    var equalityRegex = new Regex(@"(.+)+\s+(eq|ne)\s+(.+)");
-                    var equalityMatches = equalityRegex.Match(condition);
+                    var equalityMatches = Regex.Match(condition,@"(.+?)\s+(eq|ne)\s+(.+)");
                     if (equalityMatches.Success)
                     {
                         var leftOpVal = equalityMatches.Groups[1].Value;
-                        var eqOpVal = equalityMatches.Groups[2].Value;
+                        var eqOpVal = equalityMatches.Groups[2].Value == "eq";
                         var rightOpVal = equalityMatches.Groups[3].Value;
                         var value = variables[leftOpVal];
-                        switch (eqOpVal)
+
+                        conditionResultState = value switch
                         {
-                            case "eq" when value is string str:
-                                conditionResultState = string
-                                    .Compare(str, rightOpVal,
-                                        StringComparison.InvariantCultureIgnoreCase) == 0;
-                                break;
-                            case "ne" when value is string str:
-                                conditionResultState = string
-                                    .Compare(str, rightOpVal,
-                                        StringComparison.InvariantCultureIgnoreCase) != 0;
-                                break;
-                            default:
-                                throw new Exception(string.Format("Unexpected operator '{0}' or value type {1}", eqOpVal,
-                                    value.GetType()));
-                        }
+                            null => false,
+                            string strToCompare => string.Equals(strToCompare, rightOpVal,
+                                                            StringComparison.InvariantCultureIgnoreCase) == eqOpVal,
+                            _ => throw new Exception($"Unexpected type for variable {value.GetType()}")
+                        };
                     }
                     else
                     {
                         var value = variables[condition];
-                        if (value == null)
-                            conditionResultState = false;
-                        else if (value is string)
-                            conditionResultState = !string.IsNullOrWhiteSpace((string) value);
-                        else if (value is ICollection)
-                            conditionResultState = ((ICollection) value).Count > 0;
-                        else
-                            throw new Exception(string.Format("Unexpceted type for variable {0}: {1}", condition,
-                                value.GetType()));
+                        conditionResultState = value switch
+                        {
+                            null => false,
+                            string s => !string.IsNullOrWhiteSpace(s),
+                            ICollection collection => collection.Count > 0,
+                            _ => throw new Exception($"Unexpected type for variable {condition}: {value.GetType()}")
+                        };
                     }
 
-                    if (conditionResultState)
-                    {
-                        conditionResult = onTrue;
-                    }
-                    else
-                    {
-                        conditionResult = onFalse;
-                    }
+                    conditionResult = conditionResultState ? onTrue : onFalse;
                 }
                 else
                 {
