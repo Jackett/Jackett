@@ -7,7 +7,6 @@
   encoding: UTF-8
   followredirect: true
   links:
-    - https://thepiratebay.org/
     - https://tpb.bike/
     - https://pirateproxy.page/
     - https://tpb14.ukpass.co/
@@ -34,6 +33,7 @@
   legacylinks:
     - https://thepiratesbay.pw/
     - https://tproxy.pro/
+    - https://thepiratebay.org/ # ERR_CONNECTION_REFUSED
 
   caps:
     categorymappings:
