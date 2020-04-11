@@ -221,7 +221,7 @@ namespace Jackett.Common.Indexers
             if (response.IsRedirect)
                 throw new WebException($"Unexpected DDOS Guard response: Redirect: {response.RedirectingTo}");
             if (string.IsNullOrWhiteSpace(response.Cookies))
-                throw new WebException("Unexpected DDOS Guard response: Empty cookie");
+                throw new WebException("Unexpected DDOS Guard response: Empty cookie", WebExceptionStatus.ReceiveFaiure);
         }
 
         private static TResult ParseValueFromRow<TResult>(IElement row, string propertyName, string selector,
