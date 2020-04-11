@@ -219,7 +219,7 @@ namespace Jackett.Common.Indexers
             if (response.Status != System.Net.HttpStatusCode.OK)
                 throw new WebException($"Unexpected DDOS Guard response: Status: {response.Status.ToString()}", WebExceptionStatus.ProtocolError);
             if (response.IsRedirect)
-                throw new WebException($"Unexpected DDOS Guard response: Redirect: {response.RedirectingTo}");
+                throw new WebException($"Unexpected DDOS Guard response: Redirect: {response.RedirectingTo}", WebExceptionStatus.UnknownError);
             if (string.IsNullOrWhiteSpace(response.Cookies))
                 throw new WebException("Unexpected DDOS Guard response: Empty cookie", WebExceptionStatus.ReceiveFaiure);
         }
