@@ -159,7 +159,7 @@ namespace Jackett.Common.Indexers
             }
 
             if (response.Status != System.Net.HttpStatusCode.OK)
-                throw new WebException($"Anidex search returned unexpected result. Expected 200 OK but got {response.Status.ToString()}.");
+                throw new WebException($"Anidex search returned unexpected result. Expected 200 OK but got {response.Status.ToString()}.", WebExceptionStatus.ProtocolError);
 
             // Search seems to have been a success so parse it
             return ParseResult(response.Content);
