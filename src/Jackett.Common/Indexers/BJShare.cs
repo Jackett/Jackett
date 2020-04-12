@@ -196,141 +196,18 @@ namespace Jackett.Common.Indexers
         {
             query = query.Clone(); // avoid modifing the original query
 
-            var releases = new List<ReleaseInfo>();
-
             // if the search string is empty use the "last 24h torrents" view
-            if (string.IsNullOrWhiteSpace(query.SearchTerm) && !query.IsImdbQuery)
-            {
-                var results = await RequestStringWithCookies(TodayUrl);
-                if (results.IsRedirect)
-                {
-                    // re-login
-                    await ApplyConfiguration(null);
-                    results = await RequestStringWithCookies(TodayUrl);
-                }
-                try
-                {
-                    const string rowsSelector = "table.torrent_table > tbody > tr:not(tr.colhead)";
+            var releases = (string.IsNullOrWhiteSpace(query.SearchTerm) && !query.IsImdbQuery)
+                ? await ParseLast24hours()
+                : await ParseUserSearch(query);
 
-                    var searchResultParser = new HtmlParser();
-                    var searchResultDocument = searchResultParser.ParseDocument(results.Content);
-                    var rows = searchResultDocument.QuerySelectorAll(rowsSelector);
-                    foreach (var row in rows)
-                    {
-                        try
-                        {
-                            var release = new ReleaseInfo
-                            {
-                                MinimumRatio = 1,
-                                MinimumSeedTime = 0
-                            };
+            return releases;
+        }
 
-                            var qDetailsLink = row.QuerySelector("a.BJinfoBox");
-                            var qBJinfoBox = qDetailsLink.QuerySelector("span");
-                            var qCatLink = row.QuerySelector("a[href^=\"/torrents.php?filter_cat\"]");
-                            var qDlLink = row.QuerySelector("a[href^=\"torrents.php?action=download\"]");
-                            var qSeeders = row.QuerySelector("td:nth-child(4)");
-                            var qLeechers = row.QuerySelector("td:nth-child(5)");
-                            var qQuality = row.QuerySelector("font[color=\"red\"]");
-                            var qFreeLeech = row.QuerySelector("font[color=\"green\"]:contains(Free)");
-                            var qTitle = qDetailsLink.QuerySelector("font");
-                            // Get international title if available, or use the full title if not
-                            release.Title = Regex.Replace(qTitle.TextContent, @".* \[(.*?)\](.*)", "$1$2");
-
-                            var year = "";
-                            release.Description = "";
-                            var extra_info = "";
-                            foreach (var child in qBJinfoBox.ChildNodes)
-                            {
-                                var type = child.NodeType;
-                                if (type != NodeType.Text)
-                                    continue;
-
-                                var line = child.TextContent;
-                                if (line.StartsWith("Tamanho:"))
-                                {
-                                    var size = line.Substring("Tamanho: ".Length);
-                                    release.Size = ReleaseInfo.GetBytes(size);
-                                }
-                                else if (line.StartsWith("Lançado em: "))
-                                {
-                                    var publishDateStr = line.Substring("Lançado em: ".Length).Replace("às ", "");
-                                    publishDateStr += " +0";
-                                    var publishDate = DateTime.SpecifyKind(DateTime.ParseExact(publishDateStr, "dd/MM/yyyy HH:mm z", CultureInfo.InvariantCulture), DateTimeKind.Unspecified);
-                                    release.PublishDate = publishDate.ToLocalTime();
-                                }
-                                else if (line.StartsWith("Ano:"))
-                                    year = line.Substring("Ano: ".Length);
-                                else
-                                {
-                                    release.Description += line + "\n";
-                                    if (line.Contains(":"))
-                                    {
-                                        if (!(line.StartsWith("Lançado") || line.StartsWith("Resolução") || line.StartsWith("Idioma") || line.StartsWith("Autor")))
-                                        {
-                                            var info = line.Substring(line.IndexOf(": ") + 2);
-                                            if (info == "Dual Áudio")
-                                                info = "Dual";
-                                            extra_info += info + " ";
-                                        }
-                                    }
-                                }
-                            }
-
-                            var catStr = qCatLink.GetAttribute("href").Split('=')[1].Split('&')[0];
-                            release.Title = FixAbsoluteNumbering(release.Title);
-
-                            if (year != "")
-                                release.Title += " " + year;
-
-                            if (qQuality != null)
-                            {
-                                var quality = qQuality.TextContent;
-
-                                switch (quality)
-                                {
-                                    case "4K":
-                                        release.Title += " 2160p";
-                                        break;
-                                    case "Full HD":
-                                        release.Title += " 1080p";
-                                        break;
-                                    case "HD":
-                                        release.Title += " 720p";
-                                        break;
-                                    default:
-                                        release.Title += " 480p";
-                                        break;
-                                }
-                            }
-
-                            release.Title += " " + extra_info.TrimEnd();
-
-                            release.Category = MapTrackerCatToNewznab(catStr);
-                            release.Link = new Uri(SiteLink + qDlLink.GetAttribute("href"));
-                            release.Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
-                            release.Guid = release.Link;
-                            release.Seeders = ParseUtil.CoerceInt(qSeeders.TextContent);
-                            release.Peers = ParseUtil.CoerceInt(qLeechers.TextContent) + release.Seeders;
-                            release.DownloadVolumeFactor = qFreeLeech != null ? 0 : 1;
-                            release.UploadVolumeFactor = 1;
-
-                            releases.Add(release);
-                        }
-                        catch (Exception ex)
-                        {
-                            logger.Error($"{ID}: Error while parsing row '{row.OuterHtml}': {ex.Message}");
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    OnParseError(results.Content, ex);
-                }
-            }
-            else // use search
-            {
-                var searchUrl = BrowseUrl;
+        private async Task<List<ReleaseInfo>> ParseUserSearch(TorznabQuery query)
+        {
+            var releases = new List<ReleaseInfo>();
+            var searchUrl = BrowseUrl;
                 var isSearchAnime = query.Categories.Any(s => s == TorznabCatType.TVAnime.ID);
 
                 if (!query.IsImdbQuery)
@@ -508,6 +385,138 @@ namespace Jackett.Common.Indexers
                 {
                     OnParseError(results.Content, ex);
                 }
+
+                return releases;
+        }
+
+        private async Task<List<ReleaseInfo>> ParseLast24hours()
+        {
+            var releases = new List<ReleaseInfo>();
+            var results = await RequestStringWithCookies(TodayUrl);
+            if (results.IsRedirect)
+            {
+                // re-login
+                await ApplyConfiguration(null);
+                results = await RequestStringWithCookies(TodayUrl);
+            }
+            try
+            {
+                const string rowsSelector = "table.torrent_table > tbody > tr:not(tr.colhead)";
+
+                var searchResultParser = new HtmlParser();
+                var searchResultDocument = searchResultParser.ParseDocument(results.Content);
+                var rows = searchResultDocument.QuerySelectorAll(rowsSelector);
+                foreach (var row in rows)
+                {
+                    try
+                    {
+                        var release = new ReleaseInfo
+                        {
+                            MinimumRatio = 1,
+                            MinimumSeedTime = 0
+                        };
+
+                        var qDetailsLink = row.QuerySelector("a.BJinfoBox");
+                        var qBJinfoBox = qDetailsLink.QuerySelector("span");
+                        var qCatLink = row.QuerySelector("a[href^=\"/torrents.php?filter_cat\"]");
+                        var qDlLink = row.QuerySelector("a[href^=\"torrents.php?action=download\"]");
+                        var qSeeders = row.QuerySelector("td:nth-child(4)");
+                        var qLeechers = row.QuerySelector("td:nth-child(5)");
+                        var qQuality = row.QuerySelector("font[color=\"red\"]");
+                        var qFreeLeech = row.QuerySelector("font[color=\"green\"]:contains(Free)");
+                        var qTitle = qDetailsLink.QuerySelector("font");
+                        // Get international title if available, or use the full title if not
+                        release.Title = Regex.Replace(qTitle.TextContent, @".* \[(.*?)\](.*)", "$1$2");
+
+                        var year = "";
+                        release.Description = "";
+                        var extra_info = "";
+                        foreach (var child in qBJinfoBox.ChildNodes)
+                        {
+                            var type = child.NodeType;
+                            if (type != NodeType.Text)
+                                continue;
+
+                            var line = child.TextContent;
+                            if (line.StartsWith("Tamanho:"))
+                            {
+                                var size = line.Substring("Tamanho: ".Length);
+                                release.Size = ReleaseInfo.GetBytes(size);
+                            }
+                            else if (line.StartsWith("Lançado em: "))
+                            {
+                                var publishDateStr = line.Substring("Lançado em: ".Length).Replace("às ", "");
+                                publishDateStr += " +0";
+                                var publishDate = DateTime.SpecifyKind(DateTime.ParseExact(publishDateStr, "dd/MM/yyyy HH:mm z", CultureInfo.InvariantCulture), DateTimeKind.Unspecified);
+                                release.PublishDate = publishDate.ToLocalTime();
+                            }
+                            else if (line.StartsWith("Ano:"))
+                                year = line.Substring("Ano: ".Length);
+                            else
+                            {
+                                release.Description += line + "\n";
+                                if (line.Contains(":"))
+                                {
+                                    if (!(line.StartsWith("Lançado") || line.StartsWith("Resolução") || line.StartsWith("Idioma") || line.StartsWith("Autor")))
+                                    {
+                                        var info = line.Substring(line.IndexOf(": ") + 2);
+                                        if (info == "Dual Áudio")
+                                            info = "Dual";
+                                        extra_info += info + " ";
+                                    }
+                                }
+                            }
+                        }
+
+                        var catStr = qCatLink.GetAttribute("href").Split('=')[1].Split('&')[0];
+                        release.Title = FixAbsoluteNumbering(release.Title);
+
+                        if (year != "")
+                            release.Title += " " + year;
+
+                        if (qQuality != null)
+                        {
+                            var quality = qQuality.TextContent;
+
+                            switch (quality)
+                            {
+                                case "4K":
+                                    release.Title += " 2160p";
+                                    break;
+                                case "Full HD":
+                                    release.Title += " 1080p";
+                                    break;
+                                case "HD":
+                                    release.Title += " 720p";
+                                    break;
+                                default:
+                                    release.Title += " 480p";
+                                    break;
+                            }
+                        }
+
+                        release.Title += " " + extra_info.TrimEnd();
+
+                        release.Category = MapTrackerCatToNewznab(catStr);
+                        release.Link = new Uri(SiteLink + qDlLink.GetAttribute("href"));
+                        release.Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
+                        release.Guid = release.Link;
+                        release.Seeders = ParseUtil.CoerceInt(qSeeders.TextContent);
+                        release.Peers = ParseUtil.CoerceInt(qLeechers.TextContent) + release.Seeders;
+                        release.DownloadVolumeFactor = qFreeLeech != null ? 0 : 1;
+                        release.UploadVolumeFactor = 1;
+
+                        releases.Add(release);
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.Error($"{ID}: Error while parsing row '{row.OuterHtml}': {ex.Message}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                OnParseError(results.Content, ex);
             }
 
             return releases;
