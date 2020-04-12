@@ -116,7 +116,17 @@
         selector: a[href^="download.php?id="]
         attribute: href
       title:
-        selector: a[href^="index.php?page=torrent-details"]
+        selector: a[href^="index.php?page=torrent-details"]:contains("VOSE")
+        optional: true
+        filters:
+          - name: append
+            args: " [English]"
+      title:
+        selector: a[href^="index.php?page=torrent-details"]:not(:contains("VOSE"))
+        optional: true
+        filters:
+          - name: append
+            args: " [Spanish] [English]"
       banner:
         selector: a[onmouseover][href^="index.php?page=torrent-details"]
         attribute: onmouseover
