@@ -23,7 +23,7 @@ namespace Jackett.Common.Indexers
         private string LoginUrl => SiteLink + "login.php";
         private string BrowseUrl => SiteLink + "torrents.php";
         private string TodayUrl => SiteLink + "torrents.php?action=today";
-        private readonly char[] _digits = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+        private static readonly Regex _EpisodeRegex = new Regex(@"(?:[SsEe]\d{2,4}){1,2}");
         private readonly Dictionary<string, string> _commonSearchTerms = new Dictionary<string, string>
         {
             { "agents of shield", "Agents of S.H.I.E.L.D."},
@@ -117,24 +117,40 @@ namespace Jackett.Common.Indexers
 
         private string InternationalTitle(string title)
         {
-            // Get international title if available, or use the full title if not
-            var cleanTitle = Regex.Replace(title, @".* \[(.*?)\](.*)", "$1$2");
-            cleanTitle = Regex.Replace(cleanTitle, @"(?:.*)\/(.*)", "$1");
-
-            return cleanTitle.Trim();
+            var match = Regex.Match(title, @".* \[(.*?)\]$");
+            return match.Success ? match.Groups[1].Value : title;
         }
         private string StripSearchString(string term, bool isAnime)
         {
             // Search does not support searching with episode numbers so strip it if we have one
             // Ww AND filter the result later to archive the proper result
-            term = Regex.Replace(term, @"[S|E]\d\d", string.Empty, RegexOptions.IgnoreCase).Trim();
-            return isAnime ? term.TrimEnd(_digits) : term;
+            term = _EpisodeRegex.Replace(term, string.Empty);
+            term = isAnime ? Regex.Replace(term, @"\d*$", string.Empty) : term;
+            return term.TrimEnd();
         }
 
-        private string CleanTitle(string title)
+        private string parseTitle(string title, string seasonEp, string year, string categoryStr, bool isAnime)
         {
-            return Regex.Replace(title, @"((S\d{2})?(E\d{2,4})?)$", "", RegexOptions.IgnoreCase)
-                        .Trim().TrimEnd('-').TrimEnd();
+            var cleanTitle = _EpisodeRegex.Replace(title, string.Empty);
+            cleanTitle = Regex.Replace(cleanTitle, @"^\s*|[\s-]*$", string.Empty);
+
+            // Get international title if available, or use the full title if not
+            cleanTitle = InternationalTitle(cleanTitle);
+
+            foreach (var resultTerm in _commonResultTerms)
+            {
+                var newTitle = cleanTitle.ToLower().Replace(resultTerm.Key.ToLower(), resultTerm.Value);
+                if (!string.Equals(newTitle, cleanTitle, StringComparison.CurrentCultureIgnoreCase))
+                    cleanTitle = newTitle;
+            }
+
+            // do not include year to animes
+            if (categoryStr == "14")
+                cleanTitle += " " + seasonEp;
+            else
+                cleanTitle += " " + year + " " + seasonEp;
+
+            return FixAbsoluteNumbering(cleanTitle);
         }
 
         private bool IsAbsoluteNumbering(string title)
@@ -142,9 +158,7 @@ namespace Jackett.Common.Indexers
             foreach (var absoluteTitle in _absoluteNumbering)
             {
                 if (title.ToLower().Contains(absoluteTitle.ToLower()))
-                {
                     return true;
-                }
             }
             return false;
         }
@@ -168,17 +182,14 @@ namespace Jackett.Common.Indexers
                 title = Regex.Replace(title, @"(Ep[\.]?[ ]?)|([S]\d\d[Ee])", "");
                 return title;
             }
-            else if (title.Contains("[Novela]"))
+            if (title.Contains("[Novela]"))
             {
                 title = Regex.Replace(title, @"(Cap[\.]?[ ]?)", "S01E");
                 title = Regex.Replace(title, @"(\[Novela\]\ )", "");
                 title = Regex.Replace(title, @"(\ \-\s*Completo)", " - S01");
                 return title;
             }
-            else
-            {
-                return title;
-            }
+            return title;
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
@@ -239,7 +250,6 @@ namespace Jackett.Common.Indexers
                                 if (line.StartsWith("Tamanho:"))
                                 {
                                     var size = line.Substring("Tamanho: ".Length);
-                                    ;
                                     release.Size = ReleaseInfo.GetBytes(size);
                                 }
                                 else if (line.StartsWith("Lançado em: "))
@@ -250,10 +260,7 @@ namespace Jackett.Common.Indexers
                                     release.PublishDate = publishDate.ToLocalTime();
                                 }
                                 else if (line.StartsWith("Ano:"))
-                                {
                                     year = line.Substring("Ano: ".Length);
-
-                                }
                                 else
                                 {
                                     release.Description += line + "\n";
@@ -263,23 +270,18 @@ namespace Jackett.Common.Indexers
                                         {
                                             var info = line.Substring(line.IndexOf(": ") + 2);
                                             if (info == "Dual Áudio")
-                                            {
                                                 info = "Dual";
-                                            }
                                             extra_info += info + " ";
                                         }
                                     }
                                 }
                             }
-                            extra_info.Trim();
 
                             var catStr = qCatLink.GetAttribute("href").Split('=')[1].Split('&')[0];
                             release.Title = FixAbsoluteNumbering(release.Title);
 
                             if (year != "")
-                            {
                                 release.Title += " " + year;
-                            }
 
                             if (qQuality != null)
                             {
@@ -302,7 +304,7 @@ namespace Jackett.Common.Indexers
                                 }
                             }
 
-                            release.Title += " " + extra_info;
+                            release.Title += " " + extra_info.TrimEnd();
 
                             release.Category = MapTrackerCatToNewznab(catStr);
                             release.Link = new Uri(SiteLink + qDlLink.GetAttribute("href"));
@@ -341,9 +343,7 @@ namespace Jackett.Common.Indexers
 
                 var searchString = query.GetQueryString();
                 if (query.IsImdbQuery)
-                {
                     searchString = query.ImdbID;
-                }
 
                 var queryCollection = new NameValueCollection
                 {
@@ -392,7 +392,8 @@ namespace Jackett.Common.Indexers
                                 continue;
                             }
                             var qDetailsLink = row.QuerySelector("a[href^=\"torrents.php?id=\"]");
-                            var title = qDetailsLink.TextContent;
+                            var title = StripSearchString(qDetailsLink.TextContent, false);
+                            var seasonEp = _EpisodeRegex.Match(qDetailsLink.TextContent).Value;
                             ICollection<int> category = null;
                             string yearStr = null;
 
@@ -404,8 +405,6 @@ namespace Jackett.Common.Indexers
                                 category = MapTrackerCatToNewznab(categoryStr);
 
                                 yearStr = qDetailsLink.NextSibling.TextContent.Trim().TrimStart('[').TrimEnd(']');
-
-                                title = FixAbsoluteNumbering(title);
 
                                 if (row.ClassList.Contains("group")) // group headers
                                 {
@@ -431,78 +430,14 @@ namespace Jackett.Common.Indexers
 
                             if (row.ClassList.Contains("group_torrent")) // torrents belonging to a group
                             {
-                                var description = Regex.Replace(qDetailsLink.TextContent.Trim(), @"\s+", " ");
-                                description = Regex.Replace(description, @"((S\d{2})(E\d{2,4})?) (.*)", "$4");
-                                release.Description = description;
-
-                                var cleanTitle = CleanTitle(groupTitle);
-                                // Get international title if available, or use the full title if not
-                                cleanTitle = InternationalTitle(cleanTitle);
-
-                                foreach (var resultTerm in _commonResultTerms)
-                                {
-                                    var newTitle = cleanTitle.ToLower().Replace(resultTerm.Key.ToLower(), resultTerm.Value);
-                                    if (!string.Equals(newTitle, cleanTitle, StringComparison.CurrentCultureIgnoreCase))
-                                    {
-                                        cleanTitle = newTitle;
-                                    }
-                                }
-
-                                title = Regex.Replace(title.Trim(), @"\s+", " ");
-                                var seasonEp = Regex.Replace(title, @"((S\d{2})?(E\d{2,4})?) .*", "$1");
-                                if (seasonEp[0] == '[')
-                                    seasonEp = "";
-
-                                // do not include year to animes
-                                if (categoryStr == "14")
-                                {
-                                    release.Title = cleanTitle + " " + seasonEp;
-                                }
-                                else
-                                {
-                                    release.Title = cleanTitle + " " + groupYearStr + " " + seasonEp;
-                                }
+                                release.Description = Regex.Match(qDetailsLink.TextContent, @"\[.*?\]").Value;
+                                release.Title = parseTitle(groupTitle, seasonEp, groupYearStr, categoryStr, isSearchAnime);
                                 release.Category = groupCategory;
                             }
                             else if (row.ClassList.Contains("torrent")) // standalone/un grouped torrents
                             {
-                                var qDescription = row.QuerySelector("div.torrent_info");
-                                release.Description = qDescription.TextContent;
-                                title = FixAbsoluteNumbering(title);
-
-                                var cleanTitle = CleanTitle(title);
-                                // Get international title if available, or use the full title if not
-                                cleanTitle = InternationalTitle(cleanTitle);
-
-                                foreach (var resultTerm in _commonResultTerms)
-                                {
-                                    var newTitle = cleanTitle.ToLower().Replace(resultTerm.Key.ToLower(), resultTerm.Value);
-                                    if (!string.Equals(newTitle, cleanTitle, StringComparison.CurrentCultureIgnoreCase))
-                                    {
-                                        cleanTitle = newTitle;
-                                    }
-                                }
-
-                                var seasonEp = Regex.Replace(title, @"^(.*?) - ((S\d{2})?(E\d{2,4})?)", "$2");
-                                if (seasonEp[0] == '[')
-                                    seasonEp = "";
-
-                                // do not include year to animes
-                                if (categoryStr == "14")
-                                {
-                                    release.Title = cleanTitle + " " + seasonEp;
-                                }
-                                // the seasonEp RegEx is getting all when done with movies, and then cleaning again when getting international name,
-                                // so it was cutting of the year of movies and getting clonflict in Radarr
-                                else if (categoryStr == "2" || categoryStr == "6")
-                                {
-                                    release.Title = cleanTitle + " " + yearStr + " " + seasonEp;
-                                }
-                                else
-                                {
-                                    release.Title = cleanTitle + " " + yearStr;
-                                }
-
+                                release.Description = row.QuerySelector("div.torrent_info").TextContent;
+                                release.Title = parseTitle(title, seasonEp, yearStr, categoryStr, isSearchAnime);
                                 release.Category = category;
                             }
 
