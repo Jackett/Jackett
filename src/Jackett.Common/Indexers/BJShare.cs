@@ -134,7 +134,7 @@ namespace Jackett.Common.Indexers
         private string CleanTitle(string title)
         {
             return Regex.Replace(title, @"((S\d{2})?(E\d{2,4})?)$", "")
-                        .Trim().TrimEnd('-').Trim();
+                        .Trim().TrimEnd('-').TrimEnd();
         }
 
         private bool IsAbsoluteNumbering(string title)
@@ -534,13 +534,13 @@ namespace Jackett.Common.Indexers
                             if (titleElements.Length < 6)
                             {
                                 // Usually non movies / series could have less than 6 elements, eg: Books.
-                                release.Title += " " + string.Join(" ", titleElements.Take(titleElements.Length).ToArray());
+                                release.Title += " " + string.Join(" ", titleElements);
                             }
                             else
                             {
                                 release.Title += " " + titleElements[5] + " " + titleElements[3] + " " + titleElements[1] +
                                                  " " + titleElements[2] + " " + titleElements[4] + " " + string.Join(
-                                                     " ", titleElements.Skip(6).Take(titleElements.Length - 6).ToArray());
+                                                     " ", titleElements.Skip(6));
                             }
 
                             // This tracker does not provide an publish date to search terms (only on last 24h page)
