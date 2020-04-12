@@ -183,7 +183,6 @@
       user-agent: "[ .Config.useragent ]"
 
   search:
-    followredirect: true
     keywordsfilters:
       # Hack For anime Search ! example : replace sonarr search of
       # One Punch Man S2 10 OR One Punch Man S2 2
@@ -207,7 +206,9 @@
       - name: trim
     paths:
       - path: "https://{{ .Config.searchanddlurl }}/{{ if .Config.betasearchengine }}new_search{{else}}engine{{end}}/search?category={{ .Config.category }}&name={{ if .Config.betasearchengine }}{{ .Keywords }}{{else}}{{ re_replace .Keywords \"\\b[^\\s]+\\b\"  \"\"$&\"\"}}{{end}}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}"
+        followredirect: true
       - path: "https://{{ .Config.searchanddlurl }}/{{ if .Config.betasearchengine }}new_search{{else}}engine{{end}}/search?category={{ .Config.category }}&name={{ if .Config.betasearchengine }}{{ .Keywords }}{{else}}{{ re_replace .Keywords \"\\b[^\\s]+\\b\"  \"\"$&\"\"}}{{end}}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}&page=50"
+        followredirect: true
 
     rows:
       selector: table.table > tbody > tr

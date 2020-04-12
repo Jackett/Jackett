@@ -176,7 +176,7 @@
           selector: form[action="index.php?page=login&returnto=index.php"] table tr:nth-of-type(2) td span
     test:
       path: tracker/index.php
-      select: a[href="logout.php"]
+      selector: a[href="logout.php"]
 
   download:
     before:
