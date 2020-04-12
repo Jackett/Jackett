@@ -127,13 +127,13 @@ namespace Jackett.Common.Indexers
         {
             // Search does not support searching with episode numbers so strip it if we have one
             // Ww AND filter the result later to archive the proper result
-            term = Regex.Replace(term, @"[S|E]\d\d", string.Empty).Trim();
+            term = Regex.Replace(term, @"[S|E]\d\d", string.Empty, RegexOptions.IgnoreCase).Trim();
             return isAnime ? term.TrimEnd(_digits) : term;
         }
 
         private string CleanTitle(string title)
         {
-            return Regex.Replace(title, @"((S\d{2})?(E\d{2,4})?)$", "")
+            return Regex.Replace(title, @"((S\d{2})?(E\d{2,4})?)$", "", RegexOptions.IgnoreCase)
                         .Trim().TrimEnd('-').TrimEnd();
         }
 
