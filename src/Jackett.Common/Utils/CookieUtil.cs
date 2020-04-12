@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -30,10 +31,10 @@ namespace Jackett.Common.Utils
         {
             if (cookieDictionary == null)
                 return "";
-            return string.Join(
-                "; ", cookieDictionary
-                      .Where(kv => kv.Key.IndexOfAny(InvalidKeyChars) < 0 && kv.Value.IndexOfAny(InvalidValueChars) < 0 )
-                      .Select(kv => kv.Key + "=" + kv.Value));
+            foreach (var kv in cookieDictionary)
+                if (kv.Key.IndexOfAny(InvalidKeyChars) > -1 || kv.Value.IndexOfAny(InvalidValueChars) > -1)
+                    throw new FormatException($"The cookie '{kv.Key}={kv.Value}' is malformed.");
+            return string.Join("; ", cookieDictionary.Select(kv => kv.Key + "=" + kv.Value));
         }
     }
 }
