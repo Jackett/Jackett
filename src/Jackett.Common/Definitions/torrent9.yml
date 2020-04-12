@@ -8,6 +8,8 @@
   followredirect: true
   links:
     - https://www.oxtorrent.me/
+    - https://ww1.torrent9.is/
+    - https://ww1.torrent9.to/
 
   legacylinks:
     - http://www.torrent9.ec/
@@ -29,10 +31,7 @@
     - https://wvw.t9.pe/
     - https://www4.torrent9.to/
     - https://www.torrent9.cat/
-    - https://ww1.torrent9.is/
-    - https://ww1.torrent9.to/
     - https://www.torrent9.is/
-    - https://www4.torrent9.to/
     - https://www.torrent09.uno/
     - https://torrent9.unblockninja.com/ # this is a proxy for torrent9clone
     - https://www.torrent9.pl/ # this is a proxy for torrent9clone
@@ -65,7 +64,7 @@
 
   search:
     paths:
-      - path: "{{ if .Keywords }}/search_torrent/{{ .Keywords }}{{else}}{{end}}"
+      - path: "{{ if .Keywords }}/search_torrent/{{ .Keywords }}{{else}}/top_torrent/{{end}}"
 
     rows:
       selector: table.table-striped > tbody > tr

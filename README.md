@@ -161,6 +161,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * CzTorrent
  * DXP (Deaf Experts)
  * Deildu
+ * DimeADozen (EzTorrent)
  * EniaHD
  * Erzsebet
  * ExKinoRay
