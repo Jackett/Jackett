@@ -131,6 +131,12 @@ namespace Jackett.Common.Indexers
             return isAnime ? term.TrimEnd(_digits) : term;
         }
 
+        private string CleanTitle(string title)
+        {
+            return Regex.Replace(title, @"((S\d{2})?(E\d{2,4})?)$", "")
+                        .Trim().TrimEnd('-').Trim();
+        }
+
         private bool IsAbsoluteNumbering(string title)
         {
             foreach (var absoluteTitle in _absoluteNumbering)
@@ -380,6 +386,11 @@ namespace Jackett.Common.Indexers
                     {
                         try
                         {
+                            // ignore sub groups info row, it's just an row with an info about the next section, something like "Dual Áudio" or "Legendado"
+                            if (row.QuerySelector(".edition_info") != null)
+                            {
+                                continue;
+                            }
                             var qDetailsLink = row.QuerySelector("a[href^=\"torrents.php?id=\"]");
                             var title = qDetailsLink.TextContent;
                             ICollection<int> category = null;
@@ -424,7 +435,7 @@ namespace Jackett.Common.Indexers
                                 description = Regex.Replace(description, @"((S\d{2})(E\d{2,4})?) (.*)", "$4");
                                 release.Description = description;
 
-                                var cleanTitle = Regex.Replace(groupTitle, @" - ((S(\d{2}))?E(\d{1,4}))", "");
+                                var cleanTitle = CleanTitle(groupTitle);
                                 // Get international title if available, or use the full title if not
                                 cleanTitle = InternationalTitle(cleanTitle);
 
@@ -459,7 +470,7 @@ namespace Jackett.Common.Indexers
                                 release.Description = qDescription.TextContent;
                                 title = FixAbsoluteNumbering(title);
 
-                                var cleanTitle = Regex.Replace(title, @" - ((S\d{2})?(E\d{2,4})?)", "");
+                                var cleanTitle = CleanTitle(title);
                                 // Get international title if available, or use the full title if not
                                 cleanTitle = InternationalTitle(cleanTitle);
 
@@ -520,7 +531,17 @@ namespace Jackett.Common.Indexers
                             // release.Title += string.Join(" ", titleElements);
                             release.Title = release.Title.Trim();
 
-                            release.Title += " " + titleElements[5] + " " + titleElements[3] + " " + titleElements[1] + " " + titleElements[2] + " " + titleElements[4] + " " + string.Join(" ", titleElements.Skip(6).Take(titleElements.Length - 6).ToArray());
+                            if (titleElements.Length < 6)
+                            {
+                                // Usually non movies / series could have less than 6 elements, eg: Books.
+                                release.Title += " " + string.Join(" ", titleElements.Take(titleElements.Length).ToArray());
+                            }
+                            else
+                            {
+                                release.Title += " " + titleElements[5] + " " + titleElements[3] + " " + titleElements[1] +
+                                                 " " + titleElements[2] + " " + titleElements[4] + " " + string.Join(
+                                                     " ", titleElements.Skip(6).Take(titleElements.Length - 6).ToArray());
+                            }
 
                             // This tracker does not provide an publish date to search terms (only on last 24h page)
                             release.PublishDate = DateTime.Today;
