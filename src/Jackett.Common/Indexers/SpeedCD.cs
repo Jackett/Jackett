@@ -116,7 +116,7 @@ namespace Jackett.Common.Indexers
                 var dom = parser.ParseDocument(result.Content);
                 var errorMessage = dom.QuerySelector("h5")?.TextContent;
                 if (result.Content.Contains("Wrong Captcha!"))
-                    errorMessage = "Captcha requiered due to a failed login attempt. Login via a browser to whitelist your IP and then reconfigure Jackett.";
+                    errorMessage = "Captcha required due to a failed login attempt. Login via a browser to whitelist your IP and then reconfigure Jackett.";
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
         }
