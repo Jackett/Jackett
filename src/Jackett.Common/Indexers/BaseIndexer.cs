@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AutoMapper;
 using Jackett.Common.Models;
@@ -350,9 +349,6 @@ namespace Jackett.Common.Indexers
 
     public abstract class BaseWebIndexer : BaseIndexer, IWebIndexer
     {
-        // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie
-        private readonly Regex _cookieRegex = new Regex(@"([^\(\)<>@,;:\\""/\[\]\?=\{\}\s]+)=([^,;\\""\s]+)");
-
         protected BaseWebIndexer(string name, string link, string description, IIndexerConfigurationService configService, WebClient client, Logger logger, ConfigurationData configData, IProtectionService p, TorznabCapabilities caps = null, string downloadBase = null)
             : base(name, link, description, configService, logger, configData, p)
         {
@@ -610,17 +606,13 @@ namespace Jackett.Common.Indexers
         private string ResolveCookies(string incomingCookies = "")
         {
             var redirRequestCookies = string.IsNullOrWhiteSpace(CookieHeader) ? incomingCookies : CookieHeader + " " + incomingCookies;
-            var cookieDictionary = new Dictionary<string, string>();
-            var matches = _cookieRegex.Match(redirRequestCookies);
-            while (matches.Success)
-            {
-                if (matches.Groups.Count > 2)
-                    cookieDictionary[matches.Groups[1].Value] = matches.Groups[2].Value;
-                matches = matches.NextMatch();
-            }
-            return string.Join("; ", cookieDictionary
-                .Where(kv => kv.Key != "cf_use_ob" && kv.Key != "cf_ob_info") // These cookies are causing BadGateway errors, so we drop them, see issue #2306
-                .Select(kv => kv.Key.ToString() + "=" + kv.Value.ToString()).ToArray());
+            var cookieDictionary = CookieUtil.CookieHeaderToDictionary(redirRequestCookies);
+
+            // These cookies are causing BadGateway errors, so we drop them, see issue #2306
+            cookieDictionary.Remove("cf_use_ob");
+            cookieDictionary.Remove("cf_ob_info");
+
+            return CookieUtil.CookieDictionaryToHeader(cookieDictionary);
         }
 
         // Update CookieHeader with new cookies and save the config if something changed (e.g. a new CloudFlare clearance cookie was issued)
