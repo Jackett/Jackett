@@ -192,10 +192,18 @@ namespace Jackett.Common.Indexers
             return title;
         }
 
+        private string FixSearchTerm(TorznabQuery query, bool isAnime)
+        {
+            if (query.IsImdbQuery)
+                return query.ImdbID;
+
+            return _commonSearchTerms.Aggregate(
+                StripSearchString(query.SanitizedSearchTerm, isAnime), (current, searchTerm) =>
+                    current.ToLower().Replace(searchTerm.Key.ToLower(), searchTerm.Value));
+        }
+
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            query = query.Clone(); // avoid modifing the original query
-
             // if the search string is empty use the "last 24h torrents" view
             return (string.IsNullOrWhiteSpace(query.SearchTerm) && !query.IsImdbQuery)
                 ? await ParseLast24hours()
@@ -207,22 +215,11 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
             var searchUrl = BrowseUrl;
                 var isSearchAnime = query.Categories.Any(s => s == TorznabCatType.TVAnime.ID);
-
-                if (!query.IsImdbQuery)
-                {
-                    foreach (var searchTerm in _commonSearchTerms)
-                    {
-                        query.SearchTerm = query.SearchTerm.ToLower().Replace(searchTerm.Key.ToLower(), searchTerm.Value);
-                    }
-                }
-
-                var searchString = query.GetQueryString();
-                if (query.IsImdbQuery)
-                    searchString = query.ImdbID;
-
+                var searchTerm = FixSearchTerm(query, isSearchAnime);
+                var queryString = (searchTerm + " " + query.GetEpisodeSearchString()).Trim();
                 var queryCollection = new NameValueCollection
                 {
-                    {"searchstr", StripSearchString(searchString, isSearchAnime)},
+                    {"searchstr", searchTerm},
                     {"order_by", "time"},
                     {"order_way", "desc"},
                     {"group_results", "1"},
@@ -357,7 +354,7 @@ namespace Jackett.Common.Indexers
                             release.PublishDate = DateTime.Today;
 
                             // check for previously stripped search terms
-                            if (!query.IsImdbQuery && !query.MatchQueryStringAND(release.Title))
+                            if (!query.IsImdbQuery && !query.MatchQueryStringAND(release.Title, null, queryString))
                                 continue;
 
                             var size = qSize.TextContent;
