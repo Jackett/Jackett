@@ -11,7 +11,6 @@
     - https://pirateproxy.page/
     - https://tpb14.ukpass.co/
     - https://thepiratebay.vip/
-    - https://tpb.root.yt/?ckattempt=1/
     - https://thepiratebay0.org/
     - https://thepiratebay10.org/
     - https://pirateproxy.live/
@@ -34,6 +33,7 @@
     - https://thepiratesbay.pw/
     - https://tproxy.pro/
     - https://thepiratebay.org/ # ERR_CONNECTION_REFUSED
+    - https://tpb.root.yt/?ckattempt=1/ # currently down
 
   caps:
     categorymappings:
