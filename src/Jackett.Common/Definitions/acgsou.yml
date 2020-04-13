@@ -7,6 +7,8 @@
   followredirect: true
   encoding: UTF-8
   links:
+    - https://www.36dm.club/
+  legacylinks:
     - https://www.acgsou.com/
 
   caps:

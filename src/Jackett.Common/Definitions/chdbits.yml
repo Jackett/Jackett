@@ -45,7 +45,6 @@
   search:
     paths:
       - path: torrents.php
-    method: post
     inputs:
       $raw: "{{range .Categories}}cat{{.}}=1&{{end}}"
       search: "{{ .Query.Keywords }}"
@@ -67,7 +66,7 @@
             args: cat
       details:
         selector: a[href^="details.php?id="]
-        attribute: href    
+        attribute: href
       download:
         selector: a[href^="download.php?id="]
         attribute: href

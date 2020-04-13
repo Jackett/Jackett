@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
@@ -16,7 +17,8 @@ namespace Jackett.Common.Indexers
 {
     public class SpeedCD : BaseWebIndexer
     {
-        private string LoginUrl => SiteLink + "take_login.php";
+        private string LoginUrl1 => SiteLink + "checkpoint/API";
+        private string LoginUrl2 => SiteLink + "checkpoint/";
         private string SearchUrl => SiteLink + "browse.php";
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
@@ -90,12 +92,23 @@ namespace Jackett.Common.Indexers
 
         private async Task DoLogin()
         {
+            // first request with username
             var pairs = new Dictionary<string, string> {
-                { "username", configData.Username.Value },
-                { "password", configData.Password.Value },
+                { "username", configData.Username.Value }
             };
+            var result = await RequestLoginAndFollowRedirect(LoginUrl1, pairs, null, true, null, SiteLink);
+            var tokenRegex = new Regex(@"name=\\""a\\"" value=\\""([^""]+)\\""");
+            var matches = tokenRegex.Match(result.Content);
+            if (!matches.Success)
+                throw new ExceptionWithConfigData("Error parsing the login form", configData);
+            var token = matches.Groups[1].Value;
 
-            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, SiteLink);
+            // second request with token and password
+            pairs = new Dictionary<string, string> {
+                { "a", token },
+                { "b", configData.Password.Value },
+            };
+            result = await RequestLoginAndFollowRedirect(LoginUrl2, pairs, result.Cookies, true, null, SiteLink);
 
             await ConfigureIfOK(result.Cookies, result.Content?.Contains("/browse.php") == true, () =>
             {
@@ -103,7 +116,7 @@ namespace Jackett.Common.Indexers
                 var dom = parser.ParseDocument(result.Content);
                 var errorMessage = dom.QuerySelector("h5")?.TextContent;
                 if (result.Content.Contains("Wrong Captcha!"))
-                    errorMessage = "Captcha requiered due to a failed login attempt. Login via a browser to whitelist your IP and then reconfigure jackett.";
+                    errorMessage = "Captcha required due to a failed login attempt. Login via a browser to whitelist your IP and then reconfigure Jackett.";
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
         }

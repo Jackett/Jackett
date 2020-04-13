@@ -21,6 +21,9 @@ namespace Jackett.Common.Indexers
     {
         public override string[] LegacySiteLinks { get; protected set; } = {
             "http://filelist.ro/",
+            "https://filelist.ro/",
+            "https://flro.org/",
+            "http://flro.org/",
         };
 
         private string LoginUrl => SiteLink + "takelogin.php";
@@ -35,7 +38,7 @@ namespace Jackett.Common.Indexers
         public FileList(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base(name: "FileList",
                 description: "The best Romanian site.",
-                link: "https://filelist.ro/",
+                link: "https://filelist.io/",
                 caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 configService: configService,
                 client: wc,

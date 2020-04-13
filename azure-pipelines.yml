@@ -1,7 +1,7 @@
 name: $(majorVersion).$(minorVersion).$(patchVersion)
 variables:
   majorVersion: 0
-  minorVersion: 14
+  minorVersion: 15
   patchVersion: $[counter(variables['minorVersion'], 1)] #this will reset when we bump minor
   jackettVersion: $(majorVersion).$(minorVersion).$(patchVersion)
   buildConfiguration: Release
@@ -494,7 +494,7 @@ stages:
       - task: GitHubRelease@1
         displayName: Create Github release
         inputs:
-          gitHubConnection: github.com_jackett
+          gitHubConnection: JackettPublish
           repositoryName: '$(Build.Repository.Name)' 
           action: create
           target: $(Build.SourceVersion)
@@ -512,7 +512,7 @@ stages:
         inputs:
           targetType: inline
           script: |
-            $json = Invoke-WebRequest 'https://dev.azure.com/jackett/jackett/_apis/build/builds/$(Build.BuildId)/logs?api-version=5.0' | ConvertFrom-Json
+            $json = Invoke-WebRequest 'https://dev.azure.com/Jackett-project/jackett/_apis/build/builds/$(Build.BuildId)/logs?api-version=5.0' | ConvertFrom-Json
             $lastTwoLogUrls = $json.value[-1..-2].url
             foreach($logUrl in $lastTwoLogUrls)
             {
@@ -527,4 +527,3 @@ stages:
                 if (($successCount -ne 7) -or ($failureCount -ne 0)) { Write-Host "##vso[task.complete result=Failed;]DONE" } 
               }
             }
-

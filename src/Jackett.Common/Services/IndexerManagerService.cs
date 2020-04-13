@@ -93,7 +93,7 @@ namespace Jackett.Common.Services
 
             var deserializer = new DeserializerBuilder()
                         .WithNamingConvention(CamelCaseNamingConvention.Instance)
-                        .IgnoreUnmatchedProperties()
+//                        .IgnoreUnmatchedProperties()
                         .Build();
 
             try
