@@ -197,11 +197,9 @@ namespace Jackett.Common.Indexers
             query = query.Clone(); // avoid modifing the original query
 
             // if the search string is empty use the "last 24h torrents" view
-            var releases = (string.IsNullOrWhiteSpace(query.SearchTerm) && !query.IsImdbQuery)
+            return (string.IsNullOrWhiteSpace(query.SearchTerm) && !query.IsImdbQuery)
                 ? await ParseLast24hours()
                 : await ParseUserSearch(query);
-
-            return releases;
         }
 
         private async Task<List<ReleaseInfo>> ParseUserSearch(TorznabQuery query)
