@@ -214,174 +214,174 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
             var searchUrl = BrowseUrl;
-                var isSearchAnime = query.Categories.Any(s => s == TorznabCatType.TVAnime.ID);
-                var searchTerm = FixSearchTerm(query, isSearchAnime);
-                var queryString = (searchTerm + " " + query.GetEpisodeSearchString()).Trim();
-                var queryCollection = new NameValueCollection
+            var isSearchAnime = query.Categories.Any(s => s == TorznabCatType.TVAnime.ID);
+            var searchTerm = FixSearchTerm(query, isSearchAnime);
+            var queryString = (searchTerm + " " + query.GetEpisodeSearchString()).Trim();
+            var queryCollection = new NameValueCollection
+            {
+                {"searchstr", searchTerm},
+                {"order_by", "time"},
+                {"order_way", "desc"},
+                {"group_results", "1"},
+                {"action", "basic"},
+                {"searchsubmit", "1"}
+            };
+
+            foreach (var cat in MapTorznabCapsToTrackers(query))
+            {
+                queryCollection.Add("filter_cat[" + cat + "]", "1");
+            }
+
+            searchUrl += "?" + queryCollection.GetQueryString();
+
+            var results = await RequestStringWithCookies(searchUrl);
+            if (results.IsRedirect)
+            {
+                // re-login
+                await ApplyConfiguration(null);
+                results = await RequestStringWithCookies(searchUrl);
+            }
+            try
+            {
+                const string rowsSelector = "table.torrent_table > tbody > tr:not(tr.colhead)";
+
+                var searchResultParser = new HtmlParser();
+                var searchResultDocument = searchResultParser.ParseDocument(results.Content);
+                var rows = searchResultDocument.QuerySelectorAll(rowsSelector);
+
+                ICollection<int> groupCategory = null;
+                string groupTitle = null;
+                string groupYearStr = null;
+                var categoryStr = "";
+
+                foreach (var row in rows)
                 {
-                    {"searchstr", searchTerm},
-                    {"order_by", "time"},
-                    {"order_way", "desc"},
-                    {"group_results", "1"},
-                    {"action", "basic"},
-                    {"searchsubmit", "1"}
-                };
-
-                foreach (var cat in MapTorznabCapsToTrackers(query))
-                {
-                    queryCollection.Add("filter_cat[" + cat + "]", "1");
-                }
-
-                searchUrl += "?" + queryCollection.GetQueryString();
-
-                var results = await RequestStringWithCookies(searchUrl);
-                if (results.IsRedirect)
-                {
-                    // re-login
-                    await ApplyConfiguration(null);
-                    results = await RequestStringWithCookies(searchUrl);
-                }
-                try
-                {
-                    const string rowsSelector = "table.torrent_table > tbody > tr:not(tr.colhead)";
-
-                    var searchResultParser = new HtmlParser();
-                    var searchResultDocument = searchResultParser.ParseDocument(results.Content);
-                    var rows = searchResultDocument.QuerySelectorAll(rowsSelector);
-
-                    ICollection<int> groupCategory = null;
-                    string groupTitle = null;
-                    string groupYearStr = null;
-                    var categoryStr = "";
-
-                    foreach (var row in rows)
+                    try
                     {
-                        try
+                        // ignore sub groups info row, it's just an row with an info about the next section, something like "Dual Áudio" or "Legendado"
+                        if (row.QuerySelector(".edition_info") != null)
                         {
-                            // ignore sub groups info row, it's just an row with an info about the next section, something like "Dual Áudio" or "Legendado"
-                            if (row.QuerySelector(".edition_info") != null)
+                            continue;
+                        }
+                        var qDetailsLink = row.QuerySelector("a[href^=\"torrents.php?id=\"]");
+                        var title = StripSearchString(qDetailsLink.TextContent, false);
+                        var seasonEp = _EpisodeRegex.Match(qDetailsLink.TextContent).Value;
+                        ICollection<int> category = null;
+                        string yearStr = null;
+
+
+                        if (row.ClassList.Contains("group") || row.ClassList.Contains("torrent")) // group/ungrouped headers
+                        {
+                            var qCatLink = row.QuerySelector("a[href^=\"/torrents.php?filter_cat\"]");
+                            categoryStr = qCatLink.GetAttribute("href").Split('=')[1].Split('&')[0];
+                            category = MapTrackerCatToNewznab(categoryStr);
+
+                            yearStr = qDetailsLink.NextSibling.TextContent.Trim().TrimStart('[').TrimEnd(']');
+
+                            if (row.ClassList.Contains("group")) // group headers
                             {
+                                groupCategory = category;
+                                groupTitle = title;
+                                groupYearStr = yearStr;
                                 continue;
                             }
-                            var qDetailsLink = row.QuerySelector("a[href^=\"torrents.php?id=\"]");
-                            var title = StripSearchString(qDetailsLink.TextContent, false);
-                            var seasonEp = _EpisodeRegex.Match(qDetailsLink.TextContent).Value;
-                            ICollection<int> category = null;
-                            string yearStr = null;
-
-
-                            if (row.ClassList.Contains("group") || row.ClassList.Contains("torrent")) // group/ungrouped headers
-                            {
-                                var qCatLink = row.QuerySelector("a[href^=\"/torrents.php?filter_cat\"]");
-                                categoryStr = qCatLink.GetAttribute("href").Split('=')[1].Split('&')[0];
-                                category = MapTrackerCatToNewznab(categoryStr);
-
-                                yearStr = qDetailsLink.NextSibling.TextContent.Trim().TrimStart('[').TrimEnd(']');
-
-                                if (row.ClassList.Contains("group")) // group headers
-                                {
-                                    groupCategory = category;
-                                    groupTitle = title;
-                                    groupYearStr = yearStr;
-                                    continue;
-                                }
-                            }
-
-                            var release = new ReleaseInfo
-                            {
-                                MinimumRatio = 1,
-                                MinimumSeedTime = 0
-                            };
-
-                            var qDlLink = row.QuerySelector("a[href^=\"torrents.php?action=download\"]");
-                            var qSize = row.QuerySelector("td:nth-last-child(4)");
-                            var qGrabs = row.QuerySelector("td:nth-last-child(3)");
-                            var qSeeders = row.QuerySelector("td:nth-last-child(2)");
-                            var qLeechers = row.QuerySelector("td:nth-last-child(1)");
-                            var qFreeLeech = row.QuerySelector("strong[title=\"Free\"]");
-
-                            if (row.ClassList.Contains("group_torrent")) // torrents belonging to a group
-                            {
-                                release.Description = Regex.Match(qDetailsLink.TextContent, @"\[.*?\]").Value;
-                                release.Title = parseTitle(groupTitle, seasonEp, groupYearStr, categoryStr, isSearchAnime);
-                                release.Category = groupCategory;
-                            }
-                            else if (row.ClassList.Contains("torrent")) // standalone/un grouped torrents
-                            {
-                                release.Description = row.QuerySelector("div.torrent_info").TextContent;
-                                release.Title = parseTitle(title, seasonEp, yearStr, categoryStr, isSearchAnime);
-                                release.Category = category;
-                            }
-
-                            release.Description = release.Description.Replace(" / Free", ""); // Remove Free Tag
-                            release.Description = release.Description.Replace("Full HD", "1080p");
-                            // Handles HDR conflict
-                            release.Description = release.Description.Replace("/ HD /", "/ 720p /");
-                            release.Description = release.Description.Replace("/ HD]", "/ 720p]");
-                            release.Description = release.Description.Replace("4K", "2160p");
-                            release.Description = release.Description.Replace("SD", "480p");
-                            release.Description = release.Description.Replace("Dual Áudio", "Dual");
-                            // If it ain't nacional there will be the type of the audio / original audio
-                            if (release.Description.IndexOf("Nacional") == -1)
-                            {
-                                release.Description = Regex.Replace(release.Description, @"(Dual|Legendado|Dublado) \/ (.*?) \/", "$1 /");
-                            }
-
-                            // Adjust the description in order to can be read by Radarr and Sonarr
-
-                            var cleanDescription = release.Description.Trim().TrimStart('[').TrimEnd(']');
-                            string[] titleElements;
-
-                            //Formats the title so it can be parsed later
-                            var stringSeparators = new string[] { " / " };
-                            titleElements = cleanDescription.Split(stringSeparators, StringSplitOptions.None);
-                            // release.Title += string.Join(" ", titleElements);
-                            release.Title = release.Title.Trim();
-
-                            if (titleElements.Length < 6)
-                            {
-                                // Usually non movies / series could have less than 6 elements, eg: Books.
-                                release.Title += " " + string.Join(" ", titleElements);
-                            }
-                            else
-                            {
-                                release.Title += " " + titleElements[5] + " " + titleElements[3] + " " + titleElements[1] +
-                                                 " " + titleElements[2] + " " + titleElements[4] + " " + string.Join(
-                                                     " ", titleElements.Skip(6));
-                            }
-
-                            // This tracker does not provide an publish date to search terms (only on last 24h page)
-                            release.PublishDate = DateTime.Today;
-
-                            // check for previously stripped search terms
-                            if (!query.IsImdbQuery && !query.MatchQueryStringAND(release.Title, null, queryString))
-                                continue;
-
-                            var size = qSize.TextContent;
-                            release.Size = ReleaseInfo.GetBytes(size);
-                            release.Link = new Uri(SiteLink + qDlLink.GetAttribute("href"));
-                            release.Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
-                            release.Guid = release.Link;
-                            release.Grabs = ParseUtil.CoerceLong(qGrabs.TextContent);
-                            release.Seeders = ParseUtil.CoerceInt(qSeeders.TextContent);
-                            release.Peers = ParseUtil.CoerceInt(qLeechers.TextContent) + release.Seeders;
-                            release.DownloadVolumeFactor = qFreeLeech != null ? 0 : 1;
-                            release.UploadVolumeFactor = 1;
-
-                            releases.Add(release);
                         }
-                        catch (Exception ex)
+
+                        var release = new ReleaseInfo
                         {
-                            logger.Error($"{ID}: Error while parsing row '{row.OuterHtml}': {ex.Message}");
+                            MinimumRatio = 1,
+                            MinimumSeedTime = 0
+                        };
+
+                        var qDlLink = row.QuerySelector("a[href^=\"torrents.php?action=download\"]");
+                        var qSize = row.QuerySelector("td:nth-last-child(4)");
+                        var qGrabs = row.QuerySelector("td:nth-last-child(3)");
+                        var qSeeders = row.QuerySelector("td:nth-last-child(2)");
+                        var qLeechers = row.QuerySelector("td:nth-last-child(1)");
+                        var qFreeLeech = row.QuerySelector("strong[title=\"Free\"]");
+
+                        if (row.ClassList.Contains("group_torrent")) // torrents belonging to a group
+                        {
+                            release.Description = Regex.Match(qDetailsLink.TextContent, @"\[.*?\]").Value;
+                            release.Title = parseTitle(groupTitle, seasonEp, groupYearStr, categoryStr, isSearchAnime);
+                            release.Category = groupCategory;
                         }
+                        else if (row.ClassList.Contains("torrent")) // standalone/un grouped torrents
+                        {
+                            release.Description = row.QuerySelector("div.torrent_info").TextContent;
+                            release.Title = parseTitle(title, seasonEp, yearStr, categoryStr, isSearchAnime);
+                            release.Category = category;
+                        }
+
+                        release.Description = release.Description.Replace(" / Free", ""); // Remove Free Tag
+                        release.Description = release.Description.Replace("Full HD", "1080p");
+                        // Handles HDR conflict
+                        release.Description = release.Description.Replace("/ HD /", "/ 720p /");
+                        release.Description = release.Description.Replace("/ HD]", "/ 720p]");
+                        release.Description = release.Description.Replace("4K", "2160p");
+                        release.Description = release.Description.Replace("SD", "480p");
+                        release.Description = release.Description.Replace("Dual Áudio", "Dual");
+                        // If it ain't nacional there will be the type of the audio / original audio
+                        if (release.Description.IndexOf("Nacional") == -1)
+                        {
+                            release.Description = Regex.Replace(release.Description, @"(Dual|Legendado|Dublado) \/ (.*?) \/", "$1 /");
+                        }
+
+                        // Adjust the description in order to can be read by Radarr and Sonarr
+
+                        var cleanDescription = release.Description.Trim().TrimStart('[').TrimEnd(']');
+                        string[] titleElements;
+
+                        //Formats the title so it can be parsed later
+                        var stringSeparators = new string[] { " / " };
+                        titleElements = cleanDescription.Split(stringSeparators, StringSplitOptions.None);
+                        // release.Title += string.Join(" ", titleElements);
+                        release.Title = release.Title.Trim();
+
+                        if (titleElements.Length < 6)
+                        {
+                            // Usually non movies / series could have less than 6 elements, eg: Books.
+                            release.Title += " " + string.Join(" ", titleElements);
+                        }
+                        else
+                        {
+                            release.Title += " " + titleElements[5] + " " + titleElements[3] + " " + titleElements[1] +
+                                             " " + titleElements[2] + " " + titleElements[4] + " " + string.Join(
+                                                 " ", titleElements.Skip(6));
+                        }
+
+                        // This tracker does not provide an publish date to search terms (only on last 24h page)
+                        release.PublishDate = DateTime.Today;
+
+                        // check for previously stripped search terms
+                        if (!query.IsImdbQuery && !query.MatchQueryStringAND(release.Title, null, queryString))
+                            continue;
+
+                        var size = qSize.TextContent;
+                        release.Size = ReleaseInfo.GetBytes(size);
+                        release.Link = new Uri(SiteLink + qDlLink.GetAttribute("href"));
+                        release.Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
+                        release.Guid = release.Link;
+                        release.Grabs = ParseUtil.CoerceLong(qGrabs.TextContent);
+                        release.Seeders = ParseUtil.CoerceInt(qSeeders.TextContent);
+                        release.Peers = ParseUtil.CoerceInt(qLeechers.TextContent) + release.Seeders;
+                        release.DownloadVolumeFactor = qFreeLeech != null ? 0 : 1;
+                        release.UploadVolumeFactor = 1;
+
+                        releases.Add(release);
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.Error($"{ID}: Error while parsing row '{row.OuterHtml}': {ex.Message}");
                     }
                 }
-                catch (Exception ex)
-                {
-                    OnParseError(results.Content, ex);
-                }
+            }
+            catch (Exception ex)
+            {
+                OnParseError(results.Content, ex);
+            }
 
-                return releases;
+            return releases;
         }
 
         private async Task<List<ReleaseInfo>> ParseLast24hours()
