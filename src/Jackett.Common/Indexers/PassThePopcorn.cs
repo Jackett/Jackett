@@ -190,6 +190,7 @@ namespace Jackett.Common.Indexers
                         var codec = (string)torrent["Codec"];
                         var resolution = (string)torrent["Resolution"];
                         var source = (string)torrent["Source"];
+                        var otherTags = (string)torrent["RemasterTitle"];
 
                         if (year != null)
                             release.Description += $"<br>\nYear: {year}";
@@ -230,6 +231,9 @@ namespace Jackett.Common.Indexers
                             titleTags.Add("Golden Popcorn");
                             release.Description += "<br>\nGolden Popcorn";
                         }
+
+                        if (otherTags != null)
+                            titleTags.Add(otherTags);
 
                         if (titleTags.Any())
                             release.Title += " [" + string.Join(" / ", titleTags) + "]";
