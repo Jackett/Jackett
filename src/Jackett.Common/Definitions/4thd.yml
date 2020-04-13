@@ -10,7 +10,7 @@
 
   caps:
     categorymappings:
-      - {id: 38, cat: Movies, desc: "Movie Pack"}
+      - {id: 38, cat: Movies, dec: "Movie Pack"}
       - {id: 36, cat: Movies, desc: "Movies/Classic Films"}
       - {id: 13, cat: Movies, desc: "Movies/Documentary"}
       - {id: 21, cat: Movies/Foreign, desc: "Movies/Foreign"}
