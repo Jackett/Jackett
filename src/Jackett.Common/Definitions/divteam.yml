@@ -122,7 +122,7 @@
           - name: append
             args: " [English]"
       title:
-        selector: a[href^="index.php?page=torrent-details"]:not(:contains("VOSE"))
+        selector: a[href^="index.php?page=torrent-details"][onmouseover]:not(:contains("VOSE"))
         optional: true
         filters:
           - name: append
