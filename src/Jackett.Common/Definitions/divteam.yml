@@ -116,7 +116,7 @@
         selector: a[href^="download.php?id="]
         attribute: href
       title:
-        selector: a[href^="index.php?page=torrent-details"]:contains("VOSE")
+        selector: a[href^="index.php?page=torrent-details"][onmouseover]:contains("VOSE")
         optional: true
         filters:
           - name: append
