@@ -73,16 +73,12 @@ namespace Jackett.Test.Utils
         public void CookieDictionaryToHeaderMalformed1()
         {
             // malformed key
-            var cookieDictionary = new Dictionary<string, string> {{"__cf_=bm", "34234234"}};
-            try
+            var cookieDictionary = new Dictionary<string, string>
             {
-                CookieUtil.CookieDictionaryToHeader(cookieDictionary);
-                Assert.Fail("Malformed cookie must fail");
-            }
-            catch (FormatException e)
-            {
-                Assert.AreEqual("The cookie '__cf_=bm=34234234' is malformed.", e.Message);
-            }
+                {"__cf_=bm", "34234234"}
+            };
+            var ex = Assert.Throws<FormatException>(() => CookieUtil.CookieDictionaryToHeader(cookieDictionary));
+            Assert.AreEqual( "The cookie '__cf_=bm=34234234' is malformed.", ex.Message);
         }
 
         [Test]
@@ -93,15 +89,8 @@ namespace Jackett.Test.Utils
             {
                 {"__cf_bm", "34234 234"}
             };
-            try
-            {
-                CookieUtil.CookieDictionaryToHeader(cookieDictionary);
-                Assert.Fail("Malformed cookie must fail");
-            }
-            catch (FormatException e)
-            {
-                Assert.AreEqual("The cookie '__cf_bm=34234 234' is malformed.", e.Message);
-            }
+            var ex = Assert.Throws<FormatException>(() => CookieUtil.CookieDictionaryToHeader(cookieDictionary));
+            Assert.AreEqual( "The cookie '__cf_bm=34234 234' is malformed.", ex.Message);
         }
 
         [Test]

@@ -8,6 +8,7 @@ namespace Jackett.Common.Utils
     public static class CookieUtil
     {
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie
+        // NOTE: we are not checking non-ascii characters and we should
         private static readonly Regex _CookieRegex = new Regex(@"([^\(\)<>@,;:\\""/\[\]\?=\{\}\s]+)=([^,;\\""\s]+)");
         private static readonly char[] InvalidKeyChars = {'(', ')', '<', '>', '@', ',', ';', ':', '\\', '"', '/', '[', ']', '?', '=', '{', '}', ' ', '\t', '\n'};
         private static readonly char[] InvalidValueChars = {'"', ',', ';', '\\', ' ', '\t', '\n'};
