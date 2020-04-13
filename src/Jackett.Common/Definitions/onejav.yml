@@ -39,6 +39,7 @@
       banner:
         selector: img
         attribute: src
+        optional: true
       actress:
         text: ""
       actress:
@@ -48,10 +49,15 @@
           - name: prepend
             args: "Actress: "
       tags:
+        text: ""
+      tags:
         selector: div.tags
+        optional: true
         filters:
           - name: prepend
             args: "Tags: "
+      descr:
+        text: ""
       descr:
         selector: p.level
         optional: true
