@@ -1,16 +1,13 @@
 ---
-  site: extratorrent-cd
-  name: ExtraTorrent.cd
-  description: "ExtraTorrent.cd is a Public tracker, a  popular alternative to the original ET site, providing Movie / TV / General magnets"
+  site: extratorrent-ag
+  name: ExtraTorrent.ag
+  description: "ExtraTorrent.ag is a Public tracker, a  popular alternative to the original ET site, providing Movie / TV / General magnets"
   language: en-us
   type: public
   encoding: UTF-8
-  followredirect: true
   links:
-    - https://extratorrent.si/
-  legacylinks:
-    - https://extratorrent.unblockit.pro/
-    - https://extratorrent.unblockit.one/ # for .ag
+    - https://extratorrent.ag/
+    - https://extratorrent.unblockit.one/
 
   caps:
     categorymappings:
@@ -943,69 +940,42 @@
 
   search:
     paths:
-      - path: "search/?search={{ .Keywords }}"
+      - path: "{{ if .Keywords }}search/?search={{ .Keywords }}{{else}}{{end}}"
 
     rows:
       selector: tr[class^="tl"]
 
     fields:
-      category:
-        text: 9 #7108
-      category|noappend:
-        selector:  a[href*="/category/"]
-        attribute: href
-        filters:
-          - name: regexp
-            args: "/category/(\\d+)/"
       title:
-        selector: a[href*="/torrent/"][title^="view"]
+        selector: td.tli a
+      category:
+        selector:  td a[href^="/category/"]
+        attribute: href
+        filters:
+          - name: split
+            args: ["/", 2]
       details:
-        selector: a[href*="/torrent/"]
+        selector: td.tli a
         attribute: href
-        filters:
-          - name: replace
-            args: ["///", "//"]
       download:
-        selector: a[href^="magnet:?xt="]
+        selector: td a[href^="magnet:?xt="]
         attribute: href
       date:
-        selector: td:nth-last-of-type(5):contains("Y-day-"), td:nth-last-of-type(5):contains("Today-")
-        optional: true
+        selector: td:nth-last-of-type(5)
         filters:
-          - name: replace
-            args: ["\xA0", " "]
-          - name: re_replace
-            args: ["(Today-.*)", "Today"]
-          - name: re_replace
-            args: ["(Y-day-.*)", "Yesterday"]
-          - name: fuzzytime
-      date:
-        selector: td:nth-last-of-type(5):contains(":"):not(:contains("Y-day-")):not(:contains("Today-"))
-        optional: true
-        filters:
-          - name: replace
-            args: ["\xA0", " "]
-          - name: fuzzytime
-      date:
-        selector: td:nth-last-of-type(5):not(:contains(":")):not(:contains("Y-day-")):not(:contains("Today-"))
-        optional: true
-        filters:
-          - name: replace
-            args: ["\xA0", "-"]
-          - name: dateparse
-            args: "01-02-2006"
+          - name: timeago
       size:
         selector: td:nth-last-of-type(4)
       seeders:
         text: 0
-      seeders:
-        optional: true
-        selector: td.sy, td.sn
       leechers:
         text: 0
+      seeders:
+        optional: true
+        selector: td.sy
       leechers:
         optional: true
-        selector: td.ly, td.ln
+        selector: td.ly
       downloadvolumefactor:
         text: 0
       uploadvolumefactor:
