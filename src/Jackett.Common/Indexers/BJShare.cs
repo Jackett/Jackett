@@ -305,7 +305,7 @@ namespace Jackett.Common.Indexers
                         release.Description = release.Description.Replace("SD", "480p");
                         release.Description = release.Description.Replace("Dual Áudio", "Dual");
                         // If it ain't nacional there will be the type of the audio / original audio
-                        if (release.Description.Contains("Nacional"))
+                        if (!release.Description.Contains("Nacional"))
                             release.Description = Regex.Replace(
                                 release.Description, @"(Dual|Legendado|Dublado) \/ (.*?) \/", "$1 /");
 
