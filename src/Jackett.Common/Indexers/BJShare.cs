@@ -24,52 +24,57 @@ namespace Jackett.Common.Indexers
         private string BrowseUrl => SiteLink + "torrents.php";
         private string TodayUrl => SiteLink + "torrents.php?action=today";
         private static readonly Regex _EpisodeRegex = new Regex(@"(?:[SsEe]\d{2,4}){1,2}");
-        private readonly Dictionary<string, string> _commonSearchTerms = new Dictionary<string, string>
+
+        public override string[] LegacySiteLinks { get; protected set; } =
         {
-            { "agents of shield", "Agents of S.H.I.E.L.D."},
-            { "tell me a story us", "Tell Me a Story"},
-            { "greys anatomy", "grey's anatomy"}
+            "https://bj-share.me/"
+        };
+
+        private ConfigurationDataBasicLoginWithRSSAndDisplay ConfigData => (ConfigurationDataBasicLoginWithRSSAndDisplay)configData;
+
+
+
+        private readonly List<string> _absoluteNumbering = new List<string>
+        {
+            "One Piece",
+            "Boruto",
+            "Black Clover",
+            "Fairy Tail",
+            "Super Dragon Ball Heroes"
         };
 
         private readonly Dictionary<string, string> _commonResultTerms = new Dictionary<string, string>
         {
-            { "tell me a story", "Tell Me a Story US"},
-            { "fairy tail: final season", "Fairy Tail: Final Series"},
-            { "agents of s.h.i.e.l.d.", "Marvels Agents of SHIELD"},
-            { "legends of tomorrow", "DCs Legends of Tomorrow"}
+            {"tell me a story", "Tell Me a Story US"},
+            {"fairy tail: final season", "Fairy Tail: Final Series"},
+            {"agents of s.h.i.e.l.d.", "Marvels Agents of SHIELD"},
+            {"legends of tomorrow", "DCs Legends of Tomorrow"}
         };
 
-        private readonly List<string> _absoluteNumbering = new List<string>
+        private readonly Dictionary<string, string> _commonSearchTerms = new Dictionary<string, string>
         {
-            "One Piece", "Boruto", "Black Clover", "Fairy Tail", "Super Dragon Ball Heroes"
+            {"agents of shield", "Agents of S.H.I.E.L.D."},
+            {"tell me a story us", "Tell Me a Story"},
+            {"greys anatomy", "grey's anatomy"}
         };
 
-        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
-            "https://bj-share.me/"
-        };
-
-        private ConfigurationDataBasicLoginWithRSSAndDisplay ConfigData
-        {
-            get => (ConfigurationDataBasicLoginWithRSSAndDisplay)configData;
-            set => configData = value;
-        }
-
-        public BJShare(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base("BJ-Share",
-                   description: "A brazilian tracker.",
-                   link: "https://bj-share.info/",
-                   caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                   configService: configService,
-                   client: wc,
-                   logger: l,
-                   p: ps,
-                   configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
+        public BJShare(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps) :
+            base("BJ-Share",
+                 description: "A brazilian tracker.",
+                 link: "https://bj-share.info/",
+                 caps: new TorznabCapabilities
+                 {
+                     SupportsImdbMovieSearch = true
+                 },
+                 configService: configService,
+                 client: wc,
+                 logger: l,
+                 p: ps,
+                 configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
             Encoding = Encoding.UTF8;
             Language = "pt-br";
             Type = "private";
-
-            TorznabCaps.SupportsImdbMovieSearch = true;
 
             AddCategoryMapping(14, TorznabCatType.TVAnime, "Anime");
             AddCategoryMapping(3, TorznabCatType.PC0day, "Aplicativos");
@@ -98,29 +103,29 @@ namespace Jackett.Common.Indexers
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-
             var pairs = new Dictionary<string, string>
             {
-                { "username", ConfigData.Username.Value },
-                { "password", ConfigData.Password.Value },
-                { "keeplogged", "1" }
+                {"username", ConfigData.Username.Value},
+                {"password", ConfigData.Password.Value},
+                {"keeplogged", "1"}
             };
-
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl, true);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
-            {
-                var errorMessage = result.Content;
-                throw new ExceptionWithConfigData(errorMessage, ConfigData);
-            });
+            await ConfigureIfOK(
+                result.Cookies, result.Content?.Contains("logout.php") == true, () =>
+                {
+                    var errorMessage = result.Content;
+                    throw new ExceptionWithConfigData(errorMessage, ConfigData);
+                });
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
-        private string InternationalTitle(string title)
+        private static string InternationalTitle(string title)
         {
             var match = Regex.Match(title, @".* \[(.*?)\]$");
             return match.Success ? match.Groups[1].Value : title;
         }
-        private string StripSearchString(string term, bool isAnime)
+
+        private static string StripSearchString(string term, bool isAnime)
         {
             // Search does not support searching with episode numbers so strip it if we have one
             // Ww AND filter the result later to archive the proper result
@@ -129,14 +134,13 @@ namespace Jackett.Common.Indexers
             return term.TrimEnd();
         }
 
-        private string parseTitle(string title, string seasonEp, string year, string categoryStr, bool isAnime)
+        private string ParseTitle(string title, string seasonEp, string year, string categoryStr)
         {
             var cleanTitle = _EpisodeRegex.Replace(title, string.Empty);
             cleanTitle = Regex.Replace(cleanTitle, @"^\s*|[\s-]*$", string.Empty);
 
             // Get international title if available, or use the full title if not
             cleanTitle = InternationalTitle(cleanTitle);
-
             foreach (var resultTerm in _commonResultTerms)
             {
                 var newTitle = cleanTitle.ToLower().Replace(resultTerm.Key.ToLower(), resultTerm.Value);
@@ -149,17 +153,14 @@ namespace Jackett.Common.Indexers
                 cleanTitle += " " + seasonEp;
             else
                 cleanTitle += " " + year + " " + seasonEp;
-
             return FixAbsoluteNumbering(cleanTitle);
         }
 
         private bool IsAbsoluteNumbering(string title)
         {
             foreach (var absoluteTitle in _absoluteNumbering)
-            {
                 if (title.ToLower().Contains(absoluteTitle.ToLower()))
                     return true;
-            }
             return false;
         }
 
@@ -176,12 +177,12 @@ namespace Jackett.Common.Indexers
             //
             // In this indexer, it looks that it is added "automatically", so all current and new releases will be broken
             // until they or the source from where they get that info fix it...
-
             if (IsAbsoluteNumbering(title))
             {
                 title = Regex.Replace(title, @"(Ep[\.]?[ ]?)|([S]\d\d[Ee])", "");
                 return title;
             }
+
             if (title.Contains("[Novela]"))
             {
                 title = Regex.Replace(title, @"(Cap[\.]?[ ]?)", "S01E");
@@ -189,6 +190,7 @@ namespace Jackett.Common.Indexers
                 title = Regex.Replace(title, @"(\ \-\s*Completo)", " - S01");
                 return title;
             }
+
             return title;
         }
 
@@ -196,21 +198,18 @@ namespace Jackett.Common.Indexers
         {
             if (query.IsImdbQuery)
                 return query.ImdbID;
-
             return _commonSearchTerms.Aggregate(
-                StripSearchString(query.SanitizedSearchTerm, isAnime), (current, searchTerm) =>
-                    current.ToLower().Replace(searchTerm.Key.ToLower(), searchTerm.Value));
+                StripSearchString(query.SanitizedSearchTerm, isAnime),
+                (current, searchTerm) => current.ToLower().Replace(searchTerm.Key.ToLower(), searchTerm.Value));
         }
 
-        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
-        {
-            // if the search string is empty use the "last 24h torrents" view
-            return (string.IsNullOrWhiteSpace(query.SearchTerm) && !query.IsImdbQuery)
-                ? await ParseLast24hours()
-                : await ParseUserSearch(query);
-        }
+        // if the search string is empty use the "last 24h torrents" view
+        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query) =>
+            (string.IsNullOrWhiteSpace(query.SearchTerm) && !query.IsImdbQuery)
+                ? await ParseLast24HoursAsync()
+                : await ParseUserSearchAsync(query);
 
-        private async Task<List<ReleaseInfo>> ParseUserSearch(TorznabQuery query)
+        private async Task<List<ReleaseInfo>> ParseUserSearchAsync(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
             var searchUrl = BrowseUrl;
@@ -226,14 +225,9 @@ namespace Jackett.Common.Indexers
                 {"action", "basic"},
                 {"searchsubmit", "1"}
             };
-
             foreach (var cat in MapTorznabCapsToTrackers(query))
-            {
                 queryCollection.Add("filter_cat[" + cat + "]", "1");
-            }
-
             searchUrl += "?" + queryCollection.GetQueryString();
-
             var results = await RequestStringWithCookies(searchUrl);
             if (results.IsRedirect)
             {
@@ -241,43 +235,34 @@ namespace Jackett.Common.Indexers
                 await ApplyConfiguration(null);
                 results = await RequestStringWithCookies(searchUrl);
             }
+
             try
             {
                 const string rowsSelector = "table.torrent_table > tbody > tr:not(tr.colhead)";
-
                 var searchResultParser = new HtmlParser();
                 var searchResultDocument = searchResultParser.ParseDocument(results.Content);
                 var rows = searchResultDocument.QuerySelectorAll(rowsSelector);
-
                 ICollection<int> groupCategory = null;
                 string groupTitle = null;
                 string groupYearStr = null;
                 var categoryStr = "";
-
                 foreach (var row in rows)
-                {
                     try
                     {
                         // ignore sub groups info row, it's just an row with an info about the next section, something like "Dual Áudio" or "Legendado"
                         if (row.QuerySelector(".edition_info") != null)
-                        {
                             continue;
-                        }
                         var qDetailsLink = row.QuerySelector("a[href^=\"torrents.php?id=\"]");
                         var title = StripSearchString(qDetailsLink.TextContent, false);
                         var seasonEp = _EpisodeRegex.Match(qDetailsLink.TextContent).Value;
                         ICollection<int> category = null;
                         string yearStr = null;
-
-
                         if (row.ClassList.Contains("group") || row.ClassList.Contains("torrent")) // group/ungrouped headers
                         {
                             var qCatLink = row.QuerySelector("a[href^=\"/torrents.php?filter_cat\"]");
                             categoryStr = qCatLink.GetAttribute("href").Split('=')[1].Split('&')[0];
                             category = MapTrackerCatToNewznab(categoryStr);
-
                             yearStr = qDetailsLink.NextSibling.TextContent.Trim().TrimStart('[').TrimEnd(']');
-
                             if (row.ClassList.Contains("group")) // group headers
                             {
                                 groupCategory = category;
@@ -292,24 +277,22 @@ namespace Jackett.Common.Indexers
                             MinimumRatio = 1,
                             MinimumSeedTime = 0
                         };
-
                         var qDlLink = row.QuerySelector("a[href^=\"torrents.php?action=download\"]");
                         var qSize = row.QuerySelector("td:nth-last-child(4)");
                         var qGrabs = row.QuerySelector("td:nth-last-child(3)");
                         var qSeeders = row.QuerySelector("td:nth-last-child(2)");
                         var qLeechers = row.QuerySelector("td:nth-last-child(1)");
                         var qFreeLeech = row.QuerySelector("strong[title=\"Free\"]");
-
                         if (row.ClassList.Contains("group_torrent")) // torrents belonging to a group
                         {
                             release.Description = Regex.Match(qDetailsLink.TextContent, @"\[.*?\]").Value;
-                            release.Title = parseTitle(groupTitle, seasonEp, groupYearStr, categoryStr, isSearchAnime);
+                            release.Title = ParseTitle(groupTitle, seasonEp, groupYearStr, categoryStr);
                             release.Category = groupCategory;
                         }
                         else if (row.ClassList.Contains("torrent")) // standalone/un grouped torrents
                         {
                             release.Description = row.QuerySelector("div.torrent_info").TextContent;
-                            release.Title = parseTitle(title, seasonEp, yearStr, categoryStr, isSearchAnime);
+                            release.Title = ParseTitle(title, seasonEp, yearStr, categoryStr);
                             release.Category = category;
                         }
 
@@ -322,33 +305,29 @@ namespace Jackett.Common.Indexers
                         release.Description = release.Description.Replace("SD", "480p");
                         release.Description = release.Description.Replace("Dual Áudio", "Dual");
                         // If it ain't nacional there will be the type of the audio / original audio
-                        if (release.Description.IndexOf("Nacional") == -1)
-                        {
-                            release.Description = Regex.Replace(release.Description, @"(Dual|Legendado|Dublado) \/ (.*?) \/", "$1 /");
-                        }
+                        if (release.Description.Contains("Nacional"))
+                            release.Description = Regex.Replace(
+                                release.Description, @"(Dual|Legendado|Dublado) \/ (.*?) \/", "$1 /");
 
                         // Adjust the description in order to can be read by Radarr and Sonarr
-
                         var cleanDescription = release.Description.Trim().TrimStart('[').TrimEnd(']');
                         string[] titleElements;
 
                         //Formats the title so it can be parsed later
-                        var stringSeparators = new string[] { " / " };
+                        var stringSeparators = new[]
+                        {
+                            " / "
+                        };
                         titleElements = cleanDescription.Split(stringSeparators, StringSplitOptions.None);
                         // release.Title += string.Join(" ", titleElements);
                         release.Title = release.Title.Trim();
-
                         if (titleElements.Length < 6)
-                        {
                             // Usually non movies / series could have less than 6 elements, eg: Books.
                             release.Title += " " + string.Join(" ", titleElements);
-                        }
                         else
-                        {
-                            release.Title += " " + titleElements[5] + " " + titleElements[3] + " " + titleElements[1] +
-                                             " " + titleElements[2] + " " + titleElements[4] + " " + string.Join(
+                            release.Title += " " + titleElements[5] + " " + titleElements[3] + " " + titleElements[1] + " " +
+                                             titleElements[2] + " " + titleElements[4] + " " + string.Join(
                                                  " ", titleElements.Skip(6));
-                        }
 
                         // This tracker does not provide an publish date to search terms (only on last 24h page)
                         release.PublishDate = DateTime.Today;
@@ -356,7 +335,6 @@ namespace Jackett.Common.Indexers
                         // check for previously stripped search terms
                         if (!query.IsImdbQuery && !query.MatchQueryStringAND(release.Title, null, queryString))
                             continue;
-
                         var size = qSize.TextContent;
                         release.Size = ReleaseInfo.GetBytes(size);
                         release.Link = new Uri(SiteLink + qDlLink.GetAttribute("href"));
@@ -367,14 +345,12 @@ namespace Jackett.Common.Indexers
                         release.Peers = ParseUtil.CoerceInt(qLeechers.TextContent) + release.Seeders;
                         release.DownloadVolumeFactor = qFreeLeech != null ? 0 : 1;
                         release.UploadVolumeFactor = 1;
-
                         releases.Add(release);
                     }
                     catch (Exception ex)
                     {
                         logger.Error($"{ID}: Error while parsing row '{row.OuterHtml}': {ex.Message}");
                     }
-                }
             }
             catch (Exception ex)
             {
@@ -384,7 +360,7 @@ namespace Jackett.Common.Indexers
             return releases;
         }
 
-        private async Task<List<ReleaseInfo>> ParseLast24hours()
+        private async Task<List<ReleaseInfo>> ParseLast24HoursAsync()
         {
             var releases = new List<ReleaseInfo>();
             var results = await RequestStringWithCookies(TodayUrl);
@@ -394,15 +370,14 @@ namespace Jackett.Common.Indexers
                 await ApplyConfiguration(null);
                 results = await RequestStringWithCookies(TodayUrl);
             }
+
             try
             {
                 const string rowsSelector = "table.torrent_table > tbody > tr:not(tr.colhead)";
-
                 var searchResultParser = new HtmlParser();
                 var searchResultDocument = searchResultParser.ParseDocument(results.Content);
                 var rows = searchResultDocument.QuerySelectorAll(rowsSelector);
                 foreach (var row in rows)
-                {
                     try
                     {
                         var release = new ReleaseInfo
@@ -410,7 +385,6 @@ namespace Jackett.Common.Indexers
                             MinimumRatio = 1,
                             MinimumSeedTime = 0
                         };
-
                         var qDetailsLink = row.QuerySelector("a.BJinfoBox");
                         var qBJinfoBox = qDetailsLink.QuerySelector("span");
                         var qCatLink = row.QuerySelector("a[href^=\"/torrents.php?filter_cat\"]");
@@ -422,16 +396,14 @@ namespace Jackett.Common.Indexers
                         var qTitle = qDetailsLink.QuerySelector("font");
                         // Get international title if available, or use the full title if not
                         release.Title = Regex.Replace(qTitle.TextContent, @".* \[(.*?)\](.*)", "$1$2");
-
                         var year = "";
                         release.Description = "";
-                        var extra_info = "";
+                        var extraInfo = "";
                         foreach (var child in qBJinfoBox.ChildNodes)
                         {
                             var type = child.NodeType;
                             if (type != NodeType.Text)
                                 continue;
-
                             var line = child.TextContent;
                             if (line.StartsWith("Tamanho:"))
                             {
@@ -442,7 +414,9 @@ namespace Jackett.Common.Indexers
                             {
                                 var publishDateStr = line.Substring("Lançado em: ".Length).Replace("às ", "");
                                 publishDateStr += " +0";
-                                var publishDate = DateTime.SpecifyKind(DateTime.ParseExact(publishDateStr, "dd/MM/yyyy HH:mm z", CultureInfo.InvariantCulture), DateTimeKind.Unspecified);
+                                var publishDate = DateTime.SpecifyKind(
+                                    DateTime.ParseExact(publishDateStr, "dd/MM/yyyy HH:mm z", CultureInfo.InvariantCulture),
+                                    DateTimeKind.Unspecified);
                                 release.PublishDate = publishDate.ToLocalTime();
                             }
                             else if (line.StartsWith("Ano:"))
@@ -451,47 +425,34 @@ namespace Jackett.Common.Indexers
                             {
                                 release.Description += line + "\n";
                                 if (line.Contains(":"))
-                                {
-                                    if (!(line.StartsWith("Lançado") || line.StartsWith("Resolução") || line.StartsWith("Idioma") || line.StartsWith("Autor")))
+                                    if (!(line.StartsWith("Lançado") || line.StartsWith("Resolução") ||
+                                          line.StartsWith("Idioma") || line.StartsWith("Autor")))
                                     {
-                                        var info = line.Substring(line.IndexOf(": ") + 2);
+                                        var info = line.Substring(line.IndexOf(": ", StringComparison.Ordinal) + 2);
                                         if (info == "Dual Áudio")
                                             info = "Dual";
-                                        extra_info += info + " ";
+                                        extraInfo += info + " ";
                                     }
-                                }
                             }
                         }
 
                         var catStr = qCatLink.GetAttribute("href").Split('=')[1].Split('&')[0];
                         release.Title = FixAbsoluteNumbering(release.Title);
-
-                        if (year != "")
+                        if (!string.IsNullOrEmpty(year))
                             release.Title += " " + year;
-
                         if (qQuality != null)
                         {
                             var quality = qQuality.TextContent;
-
-                            switch (quality)
+                            release.Title += quality switch
                             {
-                                case "4K":
-                                    release.Title += " 2160p";
-                                    break;
-                                case "Full HD":
-                                    release.Title += " 1080p";
-                                    break;
-                                case "HD":
-                                    release.Title += " 720p";
-                                    break;
-                                default:
-                                    release.Title += " 480p";
-                                    break;
-                            }
+                                "4K" => " 2160p",
+                                "Full HD" => " 1080p",
+                                "HD" => " 720p",
+                                _ => " 480p"
+                            };
                         }
 
-                        release.Title += " " + extra_info.TrimEnd();
-
+                        release.Title += " " + extraInfo.TrimEnd();
                         release.Category = MapTrackerCatToNewznab(catStr);
                         release.Link = new Uri(SiteLink + qDlLink.GetAttribute("href"));
                         release.Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
@@ -500,14 +461,12 @@ namespace Jackett.Common.Indexers
                         release.Peers = ParseUtil.CoerceInt(qLeechers.TextContent) + release.Seeders;
                         release.DownloadVolumeFactor = qFreeLeech != null ? 0 : 1;
                         release.UploadVolumeFactor = 1;
-
                         releases.Add(release);
                     }
                     catch (Exception ex)
                     {
                         logger.Error($"{ID}: Error while parsing row '{row.OuterHtml}': {ex.Message}");
                     }
-                }
             }
             catch (Exception ex)
             {
