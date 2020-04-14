@@ -7,9 +7,6 @@
   encoding: UTF-8
   followredirect: true
   links:
-    - https://tpb.bike/
-    - https://pirateproxy.page/
-    - https://tpb14.ukpass.co/
     - https://thepiratebay.vip/
     - https://thepiratebay0.org/
     - https://thepiratebay10.org/
@@ -33,7 +30,10 @@
     - https://thepiratesbay.pw/
     - https://tproxy.pro/
     - https://thepiratebay.org/ # ERR_CONNECTION_REFUSED
-    - https://tpb.root.yt/?ckattempt=1/ # currently down
+    - https://tpb.root.yt/?ckattempt=1/ # using new html and has broken search
+    - https://tpb.bike/ # broken search
+    - https://pirateproxy.page/ # using new html
+    - https://tpb14.ukpass.co/ # using new html and has broken search
 
   caps:
     categorymappings:
@@ -120,9 +120,6 @@
     paths:
       - path: "{{ if .Keywords }}/search/{{ .Keywords }}/0/{{ .Config.order }}/{{ join .Categories \",\"}}{{else}}/recent{{end}}"
     keywordsfilters:
-      # replace simplified chinese as this confuses TPB search engine #7291
-      - name: re_replace
-        args: ["([\\p{IsCJKUnifiedIdeographs}\\W]+)", "#"]
         # currently, the only uploader for General Hospital puts a space between season and episode
         # this filter searches both formats, so "General Hospital S01E02" becomes "General Hospital S01E02 | (S01 E02)"
       - name: re_replace

@@ -124,11 +124,11 @@
   search:
     paths:
       - path: /
-    keywordsfilters: 
+    keywordsfilters:
       - name: replace # use this as a workaround till #893 is implemented
         args: ["Greys Anatomy", "Grey's Anatomy"]
       - name: re_replace
-        args: ["[^\\w\\d]+", "%25"]
+        args: ["[^\\w\\d]+", "%"]
     inputs:
       p: torrents
       pid: 32
