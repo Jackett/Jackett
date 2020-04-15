@@ -194,12 +194,12 @@ namespace Jackett.Common.Indexers
             return title;
         }
 
-        private string FixSearchTerm(TorznabQuery query, bool isAnime)
+        private string FixSearchTerm(TorznabQuery query)
         {
             if (query.IsImdbQuery)
                 return query.ImdbID;
             return _commonSearchTerms.Aggregate(
-                StripSearchString(query.SanitizedSearchTerm, isAnime),
+                query.GetQueryString(),
                 (current, searchTerm) => current.ToLower().Replace(searchTerm.Key.ToLower(), searchTerm.Value));
         }
 
@@ -214,11 +214,10 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
             var searchUrl = BrowseUrl;
             var isSearchAnime = query.Categories.Any(s => s == TorznabCatType.TVAnime.ID);
-            var searchTerm = FixSearchTerm(query, isSearchAnime);
-            var queryString = (searchTerm + " " + query.GetEpisodeSearchString()).Trim();
+            var searchTerm = FixSearchTerm(query);
             var queryCollection = new NameValueCollection
             {
-                {"searchstr", searchTerm},
+                {"searchstr", StripSearchString(searchTerm, isSearchAnime)},
                 {"order_by", "time"},
                 {"order_way", "desc"},
                 {"group_results", "1"},
@@ -333,7 +332,7 @@ namespace Jackett.Common.Indexers
                         release.PublishDate = DateTime.Today;
 
                         // check for previously stripped search terms
-                        if (!query.IsImdbQuery && !query.MatchQueryStringAND(release.Title, null, queryString))
+                        if (!query.IsImdbQuery && !query.MatchQueryStringAND(release.Title, null, searchTerm))
                             continue;
                         var size = qSize.TextContent;
                         release.Size = ReleaseInfo.GetBytes(size);
