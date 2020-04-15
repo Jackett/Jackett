@@ -19,30 +19,40 @@
       tv-search: [q, season, ep]
       movie-search: [q]
 
-  settings: []
+  settings:
+    - name: downloadlink
+      type: select
+      label: Download link
+      default: "/torrent/"
+      options:
+        "/torrent/" : ".torrent"
+        "magnet:?xt=": "magnet"
+    - name: ""
+      type: info
+      default: magnet links are not available for all results.
 
   download:
-    selector: a#torrent
+    selector: a[href*="{{ .Config.downloadlink }}"]
     attribute: href
 
   search:
     paths:
-    # http://topnow.se/search.php?dayq=mandalorian
-      - path: search.php
+    # http://topnow.se/index.php?search=mandalorian
+      - path: index.php
     inputs:
-      dayq: "{{.Keywords}}"
+      search: "{{.Keywords}}"
     rows:
-      selector: table.topic_table
+      selector: table.each_card_table
     fields:
       category:
         text: other
       title:
-        selector: td.topic_head
+        selector: td:nth-child(1)
       details:
-        selector: td.topic_content a
+        selector: td.card_content a
         attribute: href
       download:
-        selector: td.topic_content a
+        selector: td.card_content a
         attribute: href
       banner:
         selector: img
