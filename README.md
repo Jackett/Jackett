@@ -52,6 +52,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * EstrenosDTL
  * ETTV
  * EXT Torrents
+ * ExtraTorrent.ag
  * ExtraTorrent.cd
  * EZTV
  * Filebase
@@ -174,6 +175,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * IV-Torrents
  * KinoNaVse100
  * Kaztorka
+ * Kinorun
  * Kinozal
  * Korsar
  * LostFilm.tv
