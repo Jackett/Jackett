@@ -485,6 +485,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TorrentBytes (TBy)
  * TorrentCCF (TCCF)
  * TorrentDay (TD)
+ * TorrentDB
  * TorrentFactory
  * TorrentHR
  * TorrentHeaven
