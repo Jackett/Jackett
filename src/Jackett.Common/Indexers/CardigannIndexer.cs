@@ -352,7 +352,7 @@ namespace Jackett.Common.Indexers
                         var wantEqual = functionName == "eq";
                         // eq/ne take exactly 2 params. Update the length to match
                         // This removes the whitespace between params 2 and 3.
-                        // It shouldn't matter because we add spaces back in around the result
+                        // It shouldn't matter because the match starts at a word boundary
                         if (parameters.Count > 2)
                             functionLength = logicMatch.Groups[2].Captures[2].Index - functionStartIndex;
 
@@ -368,7 +368,7 @@ namespace Jackett.Common.Indexers
                 }
 
                 template = template.Remove(functionStartIndex, functionLength)
-                                   .Insert(functionStartIndex, " " + functionResult + " ");
+                                   .Insert(functionStartIndex, functionResult);
                 // Rerunning match instead of using nextMatch allows us to support nested functions
                 // like {{if and eq (.Var1) "string1" eq (.Var2) "string2"}}
                 // No performance is lost because Match/NextMatch are lazy evaluated and pause execution after first match
