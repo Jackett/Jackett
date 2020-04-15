@@ -188,18 +188,18 @@ namespace Jackett.Common.Indexers
 
                     var dlVolumeFactor = 1.0;
                     var upVolumeFactor = 1.0;
-                    if (row.QuerySelector("img[alt=\"Free Torrent\"]") != null)
+                    if (row.QuerySelector("img[src$=\"no_ratio.png\"]") != null)
                     {
                         dlVolumeFactor = 0;
                         upVolumeFactor = 0;
                     }
-                    else if (hasFreeleech || row.QuerySelector("img[alt=\"Golden Torrent\"]") != null)
+                    else if (hasFreeleech || row.QuerySelector("img[src$=\"free.png\"]") != null)
                         dlVolumeFactor = 0;
-                    else if (row.QuerySelector("img[alt=\"Silver Torrent\"]") != null)
+                    else if (row.QuerySelector("img[src$=\"50.png\"]") != null)
                         dlVolumeFactor = 0.5;
-                    else if (row.QuerySelector("img[alt=\"Bronze Torrent\"]") != null)
+                    else if (row.QuerySelector("img[src$=\"25.png\"]") != null)
                         dlVolumeFactor = 0.75;
-                    else if (row.QuerySelector("img[alt=\"Blue Torrent\"]") != null)
+                    else if (row.QuerySelector("img[src$=\"75.png\"]") != null)
                         dlVolumeFactor = 0.25;
 
                     var imdbLink = row.QuerySelector("a[href*=\"www.imdb.com/title/\"]")?.GetAttribute("href");
