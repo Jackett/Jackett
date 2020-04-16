@@ -1603,7 +1603,9 @@ namespace Jackett.Common.Indexers
                                             if (query.ImdbID != null && TorznabCaps.SupportsImdbMovieSearch)
                                                 break; // skip andmatch filter for imdb searches
 
-                                            if (!query.MatchQueryStringAND(release.Title, CharacterLimit))
+                                            var queryKeywords = variables[".Keywords"] as string;
+
+                                            if (!query.MatchQueryStringAND(release.Title, CharacterLimit, queryKeywords))
                                             {
                                                 logger.Debug(string.Format("CardigannIndexer ({0}): skipping {1} (andmatch filter)", ID, release.Title));
                                                 SkipRelease = true;
@@ -1707,9 +1709,9 @@ namespace Jackett.Common.Indexers
             if (queryCollection.Count > 0)
             {
                 if (!requestLinkStr.Contains("?"))
-                    requestLinkStr += "?" + queryCollection.GetQueryString(Encoding).Substring(1);
+                    requestLinkStr += "?" + queryCollection.GetQueryString(Encoding, separator: request.Queryseparator).Substring(1);
                 else
-                    requestLinkStr += queryCollection.GetQueryString(Encoding);
+                    requestLinkStr += queryCollection.GetQueryString(Encoding, separator: request.Queryseparator);
             }
 
             var response = await RequestBytesWithCookiesAndRetry(requestLinkStr, null, method, referer, pairs);

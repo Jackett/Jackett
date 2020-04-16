@@ -122,10 +122,10 @@ namespace Jackett.Common.Indexers
             {
                 var stdResult = new ConfigurationDataBasicLogin
                 {
-                    SiteLink = {Value = configData.SiteLink.Value},
-                    Username = {Value = configData.Username.Value},
-                    Password = {Value = configData.Password.Value},
-                    CookieHeader = {Value = loginPage.Cookies}
+                    SiteLink = { Value = configData.SiteLink.Value },
+                    Username = { Value = configData.Username.Value },
+                    Password = { Value = configData.Password.Value },
+                    CookieHeader = { Value = loginPage.Cookies }
                 };
                 return stdResult;
             }

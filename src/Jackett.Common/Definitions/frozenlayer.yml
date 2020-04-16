@@ -93,12 +93,12 @@
         attribute: href
       category:
         text: Anime
-      category:
+      category|noappend:
         optional: true
         selector: td.tit span
       date:
         # 1d
-        # 2d 
+        # 2d
         # 1d 3h
         # 3 dias
         # 3h 14m

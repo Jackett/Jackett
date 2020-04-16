@@ -20,6 +20,7 @@ namespace Jackett.Common.Indexers
         private static string SearchUrl => "https://passthepopcorn.me/torrents.php";
         private string AuthKey { get; set; }
 
+        // TODO: merge ConfigurationDataAPILoginWithUserAndPasskeyAndFilter class with with ConfigurationDataUserPasskey
         private new ConfigurationDataAPILoginWithUserAndPasskeyAndFilter configData
         {
             get => (ConfigurationDataAPILoginWithUserAndPasskeyAndFilter)base.configData;
@@ -30,7 +31,10 @@ namespace Jackett.Common.Indexers
             : base(name: "PassThePopcorn",
                 description: "PassThePopcorn is a Private site for MOVIES / TV",
                 link: "https://passthepopcorn.me/",
-                caps: new TorznabCapabilities(),
+                caps: new TorznabCapabilities
+                {
+                    SupportsImdbMovieSearch = true
+                },
                 configService: configService,
                 client: c,
                 logger: l,
@@ -42,8 +46,6 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
-
-            TorznabCaps.SupportsImdbMovieSearch = true;
 
             webclient.requestDelay = 2; // 0.5 requests per second
 
@@ -93,7 +95,7 @@ namespace Jackett.Common.Indexers
 
 
             var movieListSearchUrl = SearchUrl;
-            var queryCollection = new NameValueCollection {{"json", "noredirect"}};
+            var queryCollection = new NameValueCollection { { "json", "noredirect" } };
 
             if (!string.IsNullOrEmpty(query.ImdbID))
                 queryCollection.Add("searchstr", query.ImdbID);
@@ -176,7 +178,7 @@ namespace Jackett.Common.Indexers
                             Guid = link,
                             MinimumRatio = 1,
                             MinimumSeedTime = 345600,
-                            DownloadVolumeFactor = 1,
+                            DownloadVolumeFactor = free ? 0 : 1,
                             UploadVolumeFactor = 1,
                             Category = new List<int> { TorznabCatType.Movies.ID }
                         };
@@ -188,6 +190,7 @@ namespace Jackett.Common.Indexers
                         var codec = (string)torrent["Codec"];
                         var resolution = (string)torrent["Resolution"];
                         var source = (string)torrent["Source"];
+                        var otherTags = (string)torrent["RemasterTitle"];
 
                         if (year != null)
                             release.Description += $"<br>\nYear: {year}";
@@ -228,6 +231,9 @@ namespace Jackett.Common.Indexers
                             titleTags.Add("Golden Popcorn");
                             release.Description += "<br>\nGolden Popcorn";
                         }
+
+                        if (otherTags != null)
+                            titleTags.Add(otherTags);
 
                         if (titleTags.Any())
                             release.Title += " [" + string.Join(" / ", titleTags) + "]";

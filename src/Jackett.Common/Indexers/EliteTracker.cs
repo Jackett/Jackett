@@ -27,7 +27,11 @@ namespace Jackett.Common.Indexers
             : base("Elite-Tracker",
                 description: "French Torrent Tracker",
                 link: "https://elite-tracker.net/",
-                caps: new TorznabCapabilities(),
+                caps: new TorznabCapabilities
+                {
+                    SupportsImdbMovieSearch = true
+                    // SupportsImdbTVSearch = true (supported by the site but disabled due to #8107)
+                },
                 configService: configService,
                 logger: logger,
                 p: protectionService,
@@ -38,9 +42,6 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "fr-fr";
             Type = "private";
-
-            TorznabCaps.SupportsImdbMovieSearch = true;
-            TorznabCaps.SupportsImdbTVSearch = true;
 
             AddCategoryMapping(27, TorznabCatType.TVAnime, "Animation/Animes");
             AddCategoryMapping(90, TorznabCatType.TVAnime, "Animes - 3D");

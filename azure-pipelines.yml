@@ -1,7 +1,7 @@
 name: $(majorVersion).$(minorVersion).$(patchVersion)
 variables:
   majorVersion: 0
-  minorVersion: 14
+  minorVersion: 16
   patchVersion: $[counter(variables['minorVersion'], 1)] #this will reset when we bump minor
   jackettVersion: $(majorVersion).$(minorVersion).$(patchVersion)
   buildConfiguration: Release
@@ -254,9 +254,52 @@ stages:
         inputs:
           pathtoPublish: '$(Build.ArtifactStagingDirectory)'
 
+  - stage: CodeStyle
+    displayName: Code Style Compliance
+    dependsOn: []
+    jobs:
+    - job: Linting
+      pool:
+        vmImage: ubuntu-latest
+      workspace:
+        clean: all
+      steps:
+      - checkout: self
+
+      - task: UseDotNet@2
+        displayName: Install .NET Core SDK
+        inputs:
+          packageType: sdk
+          version: $(netCoreSdkVersion)
+          installationPath: $(Agent.ToolsDirectory)/dotnet
+
+      - task: DotNetCoreCLI@2
+        displayName: Install Dotnet Format
+        inputs:
+          command: custom
+          custom: tool
+          arguments: update -g dotnet-format
+
+      - task: Bash@3
+        displayName: Lint Dotnet
+        inputs:
+          workingDirectory: $(Build.SourcesDirectory)
+          targetType: inline
+          failOnStderr: true
+          script: |
+            dotnet-format --dry-run --check --verbosity diagnostic --folder ./src/DateTimeRoutines
+            dotnet-format --dry-run --check --verbosity diagnostic --folder ./src/Jackett.Common
+            dotnet-format --dry-run --check --verbosity diagnostic --folder ./src/Jackett.IntegrationTests
+            dotnet-format --dry-run --check --verbosity diagnostic --folder ./src/Jackett.Server
+            dotnet-format --dry-run --check --verbosity diagnostic --folder ./src/Jackett.Service
+            dotnet-format --dry-run --check --verbosity diagnostic --folder ./src/Jackett.Test
+            dotnet-format --dry-run --check --verbosity diagnostic --folder ./src/Jackett.Tray
+            dotnet-format --dry-run --check --verbosity diagnostic --folder ./src/Jackett.Updater
+
 
   - stage: UnitTestJackett
     displayName: Unit Tests
+    dependsOn: CodeStyle
     jobs:
     - job: UnitTest
       workspace:
@@ -451,7 +494,7 @@ stages:
       - task: GitHubRelease@1
         displayName: Create Github release
         inputs:
-          gitHubConnection: github.com_jackett
+          gitHubConnection: JackettPublish
           repositoryName: '$(Build.Repository.Name)' 
           action: create
           target: $(Build.SourceVersion)
@@ -469,7 +512,7 @@ stages:
         inputs:
           targetType: inline
           script: |
-            $json = Invoke-WebRequest 'https://dev.azure.com/jackett/jackett/_apis/build/builds/$(Build.BuildId)/logs?api-version=5.0' | ConvertFrom-Json
+            $json = Invoke-WebRequest 'https://dev.azure.com/Jackett/Jackett/_apis/build/builds/$(Build.BuildId)/logs?api-version=5.0' | ConvertFrom-Json
             $lastTwoLogUrls = $json.value[-1..-2].url
             foreach($logUrl in $lastTwoLogUrls)
             {
@@ -484,4 +527,3 @@ stages:
                 if (($successCount -ne 7) -or ($failureCount -ne 0)) { Write-Host "##vso[task.complete result=Failed;]DONE" } 
               }
             }
-

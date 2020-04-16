@@ -164,16 +164,16 @@ namespace Jackett.Common.Indexers
                 foreach (var row in rows)
                 {
 
-                    var qDetailsLink = row.QuerySelector("a[href^=details.php?id=]");
+                    var qDetailsLink = row.QuerySelector("a[href^=\"details.php?id=\"]");
                     var title = qDetailsLink.TextContent;
                     if (!query.MatchQueryStringAND(title))
                         continue;
 
                     var qCatLink = row.QuerySelector("a[href^=\"browse.php?cat=\"]");
-                    var qSeeders = row.QuerySelector("td > table.testtable2 > tbody > tr > td > strong:nth-of-type(4)");
-                    var qLeechers = row.QuerySelector("td > table.testtable2 > tbody > tr > td > strong:nth-of-type(5)");
-                    var qDateStr = row.QuerySelector("td > table.testtable2 > tbody > tr > td:nth-of-type(8)");
-                    var qSize = row.QuerySelector("td > table.testtable2 > tbody > tr > td > strong:nth-of-type(2)");
+                    var qSeeders = row.QuerySelector("td > table.testtable2 > tbody > tr > td:nth-of-type(2) > strong:nth-of-type(1)");
+                    var qLeechers = row.QuerySelector("td > table.testtable2 > tbody > tr > td:nth-of-type(2) > strong:nth-of-type(2)");
+                    var qDateStr = row.QuerySelector("td > table.testtable2 > tbody > tr > td:nth-of-type(5)");
+                    var qSize = row.QuerySelector("td > table.testtable2 > tbody > tr > td:nth-of-type(1) > strong:nth-of-type(1)");
                     var qDownloadLink = row.QuerySelector("a[href*=\"download\"]");
 
                     var catStr = qCatLink.GetAttribute("href").Split('=')[1];

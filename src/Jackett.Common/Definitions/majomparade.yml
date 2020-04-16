@@ -72,15 +72,15 @@
   search:
     paths:
       - path: letoltes.php
-        categorymappings: ["!", 70, 39, 57]
+        categories: ["!", 70, 39, 57]
         inputs:
           tipus: 1
       - path: letoltes.php
-        categorymappings: ["!", 70, 39, 57]
+        categories: ["!", 70, 39, 57]
         inputs:
           tipus: 2
       - path: xxx.php
-        categorymappings: [70, 39, 57]
+        categories: [70, 39, 57]
     inputs:
       $raw: "{{ range .Categories }}category[]={{.}}&{{end}}"
       name: "{{ if .Query.IMDBID }}http://www.imdb.com/title/{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"

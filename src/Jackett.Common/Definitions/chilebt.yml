@@ -2,7 +2,7 @@
   site: chilebt
   name: ChileBT
   description: "ChileBT is a CHILEAN Private Torrent Tracker for MOVIES / TV / GENERAL"
-  language: es-es
+  language: es-419
   type: private
   encoding: UTF-8
   links:
@@ -143,7 +143,7 @@
         filters:
             # translations for Turkish|Estonian|Danish|Italian|Polish|Norwegian|Portuguese|Czech|Russian|Romanian|Spanish|French|German|Bulgarian|Dutch|Chinese
           - name: re_replace
-            args: ["(?i)(önce|tagasi|geleden|fa|temu|siden|atrás|nazpět|назад|acum|în urmă|hace|il y a|vor|преди|前)", " ago"]
+            args: ["(?i)(önce|tagasi|geleden|fa|temu|siden|há|atrás|nazpět|назад|acum|în urmă|hace|il y a|vor|преди|前)", " ago"]
           - name: re_replace
             args: ["(?i)(minutit|minutter|minuti|minuty|minutos|минуты|минут|Minuten|минути|minuten)", "minutes"]
           - name: re_replace

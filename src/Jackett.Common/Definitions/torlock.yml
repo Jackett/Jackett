@@ -10,9 +10,10 @@
     - https://www.torlock.com/
     - https://www.torlock2.com/
     - https://www.torlock.icu/
-    - https://torlock.unblockit.pro/
+    - https://torlock.unblockit.one/
   legacylinks:
     - https://torlock.com/
+    - https://torlock.unblockit.pro/
 
   caps:
     categorymappings:
@@ -78,8 +79,9 @@
           span.tv7: ADULT
           span.tv8: EBOOKS
           span.tv9: IMAGES
+          span.tv10: EBOOKS
           span.tv12: AUDIOBOOK
-          "*": "" # some torrents have invalid categories
+          "*": "OTHER" # some torrents have invalid categories
       title:
         selector: td:nth-child(1) > div > a
       details:

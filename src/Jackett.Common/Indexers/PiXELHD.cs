@@ -4,7 +4,6 @@ using System.Collections.Specialized;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -35,7 +34,10 @@ namespace Jackett.Common.Indexers
             : base(name: "PiXELHD",
                 description: "PixelHD (PxHD) is a Private Torrent Tracker for HD .MP4 MOVIES / TV",
                 link: "https://pixelhd.me/",
-                caps: new TorznabCapabilities(),
+                caps: new TorznabCapabilities
+                {
+                    SupportsImdbMovieSearch = true
+                },
                 configService: configService,
                 logger: logger,
                 p: protectionService,
@@ -46,8 +48,6 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
-
-            TorznabCaps.SupportsImdbMovieSearch = true;
 
             AddCategoryMapping(1, TorznabCatType.MoviesHD);
         }
@@ -186,7 +186,7 @@ namespace Jackett.Common.Indexers
                             MinimumRatio = 1,
                             MinimumSeedTime = 72 * 60 * 60,
                             Title = group + " " + title.TextContent,
-                            Category = new List<int> {TorznabCatType.MoviesHD.ID},
+                            Category = new List<int> { TorznabCatType.MoviesHD.ID },
                             Link = link,
                             Comments = comments,
                             Guid = link,

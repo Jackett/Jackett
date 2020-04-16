@@ -33,7 +33,10 @@ namespace Jackett.Common.Indexers
             : base(name: "PirateTheNet",
                 description: "A movie tracker",
                 link: "http://piratethenet.org/",
-                caps: new TorznabCapabilities(),
+                caps: new TorznabCapabilities
+                {
+                    SupportsImdbMovieSearch = true
+                },
                 configService: configService,
                 client: w,
                 logger: l,
@@ -43,8 +46,6 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
-
-            TorznabCaps.SupportsImdbMovieSearch = true;
 
             configData.DisplayText.Value = "Only the results from the first search result page are shown, adjust your profile settings to show the maximum.";
             configData.DisplayText.Name = "Notice";
@@ -155,10 +156,10 @@ namespace Jackett.Common.Indexers
                     var dateStr = qPudDate.Text().Trim();
                     DateTime pubDateUtc;
                     if (dateStr.StartsWith("Today "))
-                        pubDateUtc = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified) + DateTime.ParseExact(dateStr.Split(new [] { ' ' }, 2)[1], "hh:mm tt", CultureInfo.InvariantCulture).TimeOfDay;
+                        pubDateUtc = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified) + DateTime.ParseExact(dateStr.Split(new[] { ' ' }, 2)[1], "hh:mm tt", CultureInfo.InvariantCulture).TimeOfDay;
                     else if (dateStr.StartsWith("Yesterday "))
                         pubDateUtc = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified) +
-                            DateTime.ParseExact(dateStr.Split(new [] { ' ' }, 2)[1], "hh:mm tt", CultureInfo.InvariantCulture).TimeOfDay - TimeSpan.FromDays(1);
+                            DateTime.ParseExact(dateStr.Split(new[] { ' ' }, 2)[1], "hh:mm tt", CultureInfo.InvariantCulture).TimeOfDay - TimeSpan.FromDays(1);
                     else
                         pubDateUtc = DateTime.SpecifyKind(DateTime.ParseExact(dateStr, "MMM d yyyy hh:mm tt", CultureInfo.InvariantCulture), DateTimeKind.Unspecified);
 

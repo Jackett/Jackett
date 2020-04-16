@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
-using Jackett.Common.Utils;
 
 namespace Jackett.Common.Indexers.Meta
 {
@@ -37,8 +36,10 @@ namespace Jackett.Common.Indexers.Meta
 
         public async Task<IEnumerable<TorznabQuery>> FallbackQueries()
         {
-            var title = (await resolver.MovieForId(query.ImdbID.ToNonNull())).Title;
-            return title != null ? new[] {query.CreateFallback(title)} : Enumerable.Empty<TorznabQuery>();
+            if (string.IsNullOrEmpty(query.ImdbID))
+                return Enumerable.Empty<TorznabQuery>();
+            var title = (await resolver.MovieForId(query.ImdbID)).Title;
+            return title != null ? new[] { query.CreateFallback(title) } : Enumerable.Empty<TorznabQuery>();
         }
 
         private readonly IImdbResolver resolver;

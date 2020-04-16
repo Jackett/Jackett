@@ -58,7 +58,7 @@
       - {id: 908, cat: XXX, desc: "XXX-Gay"}
       - {id: 910, cat: XXX, desc: "XXX-clip"}
       - {id: 911, cat: XXX, desc: "XXX-pictures"}
-      - {id: 912, cat: XXX, desc: "XXX-magazine"}      
+      - {id: 912, cat: XXX, desc: "XXX-magazine"}
 
     modes:
       search: [q]
@@ -82,6 +82,10 @@
         "5": "size"
         "1": "title desc"
         "14": "title asc"
+    - name: info_results
+      type: info
+      label: Search results
+      default: "If you are getting the error <b>Found no results while trying to browse this tracker</b> then the most likely reason is that you have <b>Important news from the team</b> on the Web Site that must be read before you can proceed to the torrent search page."
 
   login:
     path: takelogin.php
@@ -108,9 +112,9 @@
   search:
     paths:
       - path: viewno18.php
-        categorymappings: ["!", 901, 902, 903, 904, 905, 906, 907, 908, 910, 911, 912]
+        categories: ["!", 901, 902, 903, 904, 905, 906, 907, 908, 910, 911, 912]
       - path: viewbr.php
-        categorymappings: [901, 902, 903, 904, 905, 906, 907, 908, 910, 911, 912]
+        categories: [901, 902, 903, 904, 905, 906, 907, 908, 910, 911, 912]
     inputs:
       $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
       search: "{{ .Keywords }}"

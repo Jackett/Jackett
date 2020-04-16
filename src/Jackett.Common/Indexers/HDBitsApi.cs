@@ -27,7 +27,10 @@ namespace Jackett.Common.Indexers
             : base(name: "HDBits (API)",
                 description: "The HighDefinition Bittorrent Community",
                 link: "https://hdbits.org/",
-                caps: new TorznabCapabilities(),
+                caps: new TorznabCapabilities
+                {
+                    SupportsImdbMovieSearch = true
+                },
                 configService: configService,
                 client: wc,
                 logger: l,
@@ -37,7 +40,6 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
-            TorznabCaps.SupportsImdbMovieSearch = true;
 
             AddCategoryMapping(6, TorznabCatType.Audio, "Audio Track");
             AddCategoryMapping(3, TorznabCatType.TVDocumentary, "Documentary");
@@ -73,7 +75,7 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            dynamic requestData = new JObject();
+            var requestData = new JObject();
             var queryString = query.GetQueryString();
             var imdbId = ParseUtil.GetImdbID(query.ImdbID);
 
@@ -89,35 +91,17 @@ namespace Jackett.Common.Indexers
 
             var categories = MapTorznabCapsToTrackers(query);
 
-            if (categories.Count > 0)
-            {
-                requestData["category"] = new JArray();
+            if (categories.Any())
+                requestData.Add("category", JToken.FromObject(categories));
 
-                foreach (var cat in categories)
-                {
-                    requestData["category"].Add(new JValue(cat));
-                }
-            }
+            if (configData.Codecs.Values.Any())
+                requestData.Add("codec", JToken.FromObject(configData.Codecs.Values.Select(int.Parse)));
 
-            if (configData.Codecs.Values.Length > 0)
-            {
-                requestData["codec"] = new JArray();
+            if (configData.Mediums.Values.Any())
+                requestData.Add("medium", JToken.FromObject(configData.Mediums.Values.Select(int.Parse)));
 
-                foreach (var codec in configData.Codecs.Values)
-                {
-                    requestData["codec"].Add(new JValue(int.Parse(codec)));
-                }
-            }
-
-            if (configData.Mediums.Values.Length > 0)
-            {
-                requestData["medium"] = new JArray();
-
-                foreach (var medium in configData.Mediums.Values)
-                {
-                    requestData["medium"].Add(new JValue(int.Parse(medium)));
-                }
-            }
+            if (configData.Origins.Values.Any())
+                requestData.Add("origin", JToken.FromObject(configData.Origins.Values.Select(int.Parse)));
 
             requestData["limit"] = 100;
 
@@ -178,6 +162,7 @@ namespace Jackett.Common.Indexers
             // 50% Free Leech: all full discs, remuxes, caps and all internal encodes.
             if (halfLeechMediums.Contains((int)r["type_medium"]) || (int)r["type_origin"] == 1)
                 return 0.5;
+            // 25% Free Leech: all TV content that is not an internal encode.
             if ((int)r["type_category"] == 2 && (int)r["type_origin"] != 1)
                 return 0.75;
             return 1;
@@ -215,4 +200,3 @@ namespace Jackett.Common.Indexers
         }
     }
 }
-

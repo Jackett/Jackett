@@ -48,7 +48,10 @@ namespace Jackett.Common.Indexers
                 name: "Norbits",
                 description: "Norbits is a Norwegian Private site for MOVIES / TV / GENERAL",
                 link: "https://norbits.net/",
-                caps: new TorznabCapabilities(),
+                caps: new TorznabCapabilities
+                {
+                    SupportsImdbMovieSearch = true
+                },
                 configService: configService,
                 client: w,
                 logger: l,
@@ -58,8 +61,6 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "nb-no";
             Type = "private";
-
-            TorznabCaps.SupportsImdbMovieSearch = true;
 
             AddCategoryMapping("main_cat[]=1&sub2_cat[]=19", TorznabCatType.MoviesHD, "Filmer - HD-1080p/i");
             AddCategoryMapping("main_cat[]=1&sub2_cat[]=20", TorznabCatType.MoviesHD, "Filmer - HD-720p");

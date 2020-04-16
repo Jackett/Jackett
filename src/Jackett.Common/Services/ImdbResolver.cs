@@ -2,7 +2,6 @@ using System;
 using System.Text;
 using System.Threading.Tasks;
 using Jackett.Common.Services.Interfaces;
-using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json;
 
@@ -17,16 +16,16 @@ namespace Jackett.Common.Services
 
     public class OmdbResolver : IImdbResolver
     {
-        public OmdbResolver(WebClient webClient, NonNull<string> omdbApiKey, string omdbApiUrl)
+        public OmdbResolver(WebClient webClient, string omdbApiKey, string omdbApiUrl)
         {
             WebClient = webClient;
-            apiKey = omdbApiKey;
+            apiKey = omdbApiKey ?? throw new ArgumentNullException($"{nameof(omdbApiKey)} cannot be null");
             url = omdbApiUrl;
         }
 
-        public async Task<Movie> MovieForId(NonNull<string> id)
+        public async Task<Movie> MovieForId(string id)
         {
-            string imdbId = id;
+            var imdbId = id ?? throw new ArgumentNullException($"{nameof(id)} cannot be null");
 
             if (!imdbId.StartsWith("tt", StringComparison.Ordinal))
                 imdbId = "tt" + imdbId;

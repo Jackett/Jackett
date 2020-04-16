@@ -8,7 +8,6 @@ using Jackett.Common.Indexers.Meta;
 using Jackett.Common.Models;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
-using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using NLog;
 using YamlDotNet.Serialization;
@@ -94,7 +93,7 @@ namespace Jackett.Common.Services
 
             var deserializer = new DeserializerBuilder()
                         .WithNamingConvention(CamelCaseNamingConvention.Instance)
-                        .IgnoreUnmatchedProperties()
+//                        .IgnoreUnmatchedProperties()
                         .Build();
 
             try
@@ -161,7 +160,7 @@ namespace Jackett.Common.Services
             IResultFilterProvider resultFilterProvider = null;
             if (!string.IsNullOrWhiteSpace(omdbApiKey))
             {
-                var imdbResolver = new OmdbResolver(webClient, omdbApiKey.ToNonNull(), serverConfig.OmdbApiUrl);
+                var imdbResolver = new OmdbResolver(webClient, omdbApiKey, serverConfig.OmdbApiUrl);
                 fallbackStrategyProvider = new ImdbFallbackStrategyProvider(imdbResolver);
                 resultFilterProvider = new ImdbTitleResultFilterProvider(imdbResolver);
             }

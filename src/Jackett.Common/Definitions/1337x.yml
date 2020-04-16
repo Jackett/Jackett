@@ -14,7 +14,7 @@
     - https://x1337x.ws/
     - https://x1337x.eu/
     - https://x1337x.se/
-    - https://1337x.unblockit.pro/
+    - https://1337x.unblockit.one/
     - https://1337.root.yt/
     - https://1337x.unblockninja.com/
     - https://1337x.black-mirror.xyz/
@@ -24,6 +24,7 @@
     - https://1337x.ind-unblock.xyz/
   legacylinks:
     - https://1337x.unblocked.earth/
+    - https://1337x.unblockit.pro/
 
   caps:
     categorymappings:
@@ -167,13 +168,21 @@
 
     fields:
       title:
+        # the movies, tv and music pages abbreviate the title so we process the href instead. #8137
         selector: td[class^="coll-1"] a[href^="/torrent/"]
+        attribute: href
         filters:
+          - name: split
+            args: ["/", 3]
+          - name: re_replace
+            args: ["(-+)", " "]
           - name: replace
             args: ["Grey's Anatomy", "Greys Anatomy"]
           - name: replace
             args: ["\u000f", ""] # get rid of unwanted character
       category:
+        text: 40
+      category|noappend:
         optional: true
         selector:  td[class^="coll-1"] a[href^="/sub/"]
         attribute: href

@@ -65,7 +65,7 @@
       - {id: 138, cat: Movies, desc: "Индийское кино"}
       - {id: 1766, cat: Movies, desc: "Кино, видео, мультфильмы (48-60 fps)"}
       - {id: 1769, cat: Movies/BluRay, desc: " |- Фильмы (BDRip, HDrip-AVC) (48-60 fps)"}
-      - {id: Movies, cat: Movies/HD, desc: " |- Фильмы (HD 720p, 1080p) (48-60 fps)"}
+      - {id: 1717, cat: Movies/HD, desc: " |- Фильмы (HD 720p, 1080p) (48-60 fps)"}
       - {id: 1740, cat: Movies, desc: " |- Мультфильмы (48-60 fps)"}
       - {id: 1767, cat: Movies, desc: " |- Сборники  и Сиквелы  (48-60 fps)"}
       - {id: 1741, cat: Movies/3D, desc: " |- 3D Видео (48-60 fps)"}
@@ -605,6 +605,8 @@
 
     modes:
       search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
 
   settings:
     - name: sort
@@ -622,6 +624,10 @@
       options:
         "2": "desc"
         "1": "asc"
+    - name: striprussian
+      type: checkbox
+      label: Strip Russian Letters
+      default: true
 
 
   download:
@@ -632,6 +638,13 @@
     paths:
       - path: tracker.php
         method: post
+    keywordsfilters:
+      - name: diacritics
+        args: replace
+      - name: re_replace # S01 to Cезон 1
+        args: ["(?i)\\bS0*(\\d+)\\b", "Сезон $1"]
+      - name: re_replace # S01E01 to Сезон 1 Серии 1
+        args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "Сезон $1 Серии $2"]
     inputs:
       $raw: "{{ if .Categories }}{{ range .Categories }}f[]={{.}}&{{end}}{{else}}f[]=-1{{end}}"
       prev_a: 0
@@ -670,6 +683,16 @@
             args: f
       title:
         selector: td a.genmed
+        filters:
+          # normalize to SXXEYY format
+          - name: re_replace
+            args: ["[\\:\\-\\/\\|]", " "]
+          - name: re_replace
+            args: ["(.+)\\s+[CСcс]езон\\s+(\\d+)\\s+[CСcс]ерии\\s+(\\d+)\\s+(\\d+)\\s+из\\s+\\d+(.+)", "$1 S$2E$3-$4 rus $5"]
+          - name: re_replace
+            args: ["(.+)\\s+[CСcс]езон\\s+(\\d+)\\s+[CСcс]ери[ия]\\s+(\\d+)\\s+из\\s+\\d+(.+)", "$1 S$2E$3 rus $4"]
+          - name: re_replace
+            args: ["(\\([А-Яа-яЁё\\W]+\\))|(^[А-Яа-яЁё\\W\\d]+\\/ )|([а-яА-ЯЁё \\-]+,+)|([а-яА-ЯЁё]+)", "{{ if .Config.striprussian }}{{ else }}$0{{ end }}"]
       details:
         selector: td a.genmed
         attribute: href

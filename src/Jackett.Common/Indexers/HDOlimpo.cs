@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -174,7 +172,7 @@ namespace Jackett.Common.Indexers
                         publishDate = DateTime.Parse((string)torrent["created_at"]);
                     Uri bannerUrl = null;
                     if (torrent["portada"] != null)
-	                    bannerUrl = new Uri(BannerUrl + (string)(torrent["portada"]["hash"]) + "." + (string)(torrent["portada"]["ext"]));
+                        bannerUrl = new Uri(BannerUrl + (string)(torrent["portada"]["hash"]) + "." + (string)(torrent["portada"]["ext"]));
 
                     var seeders = (int)torrent["seeders"];
                     var link = new Uri(DownloadUrl + (string)torrent["id"]);

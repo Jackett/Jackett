@@ -46,14 +46,16 @@
   search:
     paths:
       - path: browse.php
-    method: post
+        method: post
     inputs:
-      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-      search: "{{ .Query.Keywords }}"
-      incldead: "1"
-      descriptions: "0"
+      $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+      search: "{{ .Keywords }}"
+      incldead: 1
+      descriptions: 0
+
     rows:
       selector: table#torrent-list > tbody > tr[id]
+
     fields:
       title:
         selector: td:nth-child(3) > b > a
@@ -75,7 +77,7 @@
         selector: td:nth-child(7)
         filters:
         - name: regexp
-          args: "(\\d+)"
+          args: (\d+)
       seeders:
         selector: td:nth-child(8)
       leechers:
@@ -90,8 +92,8 @@
         attribute: href
       downloadvolumefactor:
         case:
-          "a[style=\"color:#000099\"][href^=\"details.php?\"]": "0"
-          "*": "1"
+          "a[style=\"color:#000099\"][href^=\"details.php?\"]": 0
+          "*": 1
       uploadvolumefactor:
-        case:
-          "*": "1"
+        text: 1
+# engine tbd

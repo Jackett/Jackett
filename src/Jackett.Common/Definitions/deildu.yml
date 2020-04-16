@@ -61,7 +61,7 @@
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
       keeplogged: 1
-  test:
+    test:
       path: my.php
 
   search:

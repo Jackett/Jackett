@@ -7,12 +7,7 @@
   encoding: UTF-8
   followredirect: true
   links:
-    - https://thepiratebay.org/
-    - https://tpb.bike/
-    - https://pirateproxy.page/
-    - https://tpb14.ukpass.co/
     - https://thepiratebay.vip/
-    - https://tpb.root.yt/?ckattempt=1/
     - https://thepiratebay0.org/
     - https://thepiratebay10.org/
     - https://pirateproxy.live/
@@ -34,6 +29,11 @@
   legacylinks:
     - https://thepiratesbay.pw/
     - https://tproxy.pro/
+    - https://thepiratebay.org/ # ERR_CONNECTION_REFUSED
+    - https://tpb.root.yt/?ckattempt=1/ # using new html and has broken search
+    - https://tpb.bike/ # broken search
+    - https://pirateproxy.page/ # using new html
+    - https://tpb14.ukpass.co/ # using new html and has broken search
 
   caps:
     categorymappings:
@@ -103,6 +103,10 @@
       tv-search: [q, season, ep]
 
   settings:
+    - name: info
+      type: info
+      label: Proxies
+      default: Yes, <b>The Pirate Bay</b> is currently only reachable via <b>TOR</b>.</br>But you can try to use any of the unofficial proxies above.</br>To check on the status of the official TPB Web Site access the <a href="https://pirates-forum.org/misc.php?page=tpbstatus" target="_blank">tpbstatus</a> page. When the <i>https</i> column has green dots then the site is online.
     - name: order
       type: select
       label: Order results
@@ -111,15 +115,14 @@
         "99": "Default"
         "8": "Seeders"
         "3": "Time"
-    - name: info
-      type: info
-      label: Proxies
-      default: The Pirate Bay is currently only reachable via TOR. But you can try to use an unofficial proxy from <a href="https://piratebayproxy.info/" target="_blank">piratebayproxy.info</a>.
 
   search:
     paths:
       - path: "{{ if .Keywords }}/search/{{ .Keywords }}/0/{{ .Config.order }}/{{ join .Categories \",\"}}{{else}}/recent{{end}}"
     keywordsfilters:
+      # replace simplified chinese as this confuses TPB search engine #7291
+      - name: re_replace
+        args: ["([\\p{IsCJKUnifiedIdeographs}\\W]+)", "."]
         # currently, the only uploader for General Hospital puts a space between season and episode
         # this filter searches both formats, so "General Hospital S01E02" becomes "General Hospital S01E02 | (S01 E02)"
       - name: re_replace

@@ -723,7 +723,7 @@ namespace Jackett.Common.Indexers
                         // TODO this feels sparse compared to other trackers. Expand later
                         var release = new ReleaseInfo
                         {
-                            Category = new[] {TorznabCatType.TV.ID},
+                            Category = new[] { TorznabCatType.TV.ID },
                             Title = string.Join(" - ", titleComponents.Where(s => !string.IsNullOrEmpty(s))),
                             Link = link,
                             Guid = link,
@@ -736,7 +736,7 @@ namespace Jackett.Common.Indexers
                             MinimumRatio = 1,
                             MinimumSeedTime = 172800 // 48 hours
                         };
-                        
+
                         // TODO Other trackers don't have this log line. Remove or add to other trackers?
                         logger.Debug("> Add: " + release.Title);
                         releases.Add(release);

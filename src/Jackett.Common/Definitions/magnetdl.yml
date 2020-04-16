@@ -9,10 +9,11 @@
   links:
     - https://www.magnetdl.com/
     - https://magnetdl.unblockninja.com/
-    - https://magnetdl.unblockit.pro/
+    - https://magnetdl.unblockit.one/
   legacylinks:
     - http://www.magnetdl.com/
     - https://www.magnetdl.me/ # fake
+    - https://magnetdl.unblockit.pro/
 
   caps:
     categories:
@@ -68,6 +69,8 @@
         selector: td.n a
         attribute: title
       category:
+        text: Other
+      category|noappend:
         optional: true
         selector:  td[class^="t"]
       details:

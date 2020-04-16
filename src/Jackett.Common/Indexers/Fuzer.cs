@@ -37,6 +37,10 @@ namespace Jackett.Common.Indexers
             : base(name: "Fuzer",
                    description: "Fuzer is a private torrent website with israeli torrents.",
                    link: "https://www.fuzer.me/",
+                   caps: new TorznabCapabilities
+                   {
+                       SupportsImdbMovieSearch = true
+                   },
                    configService: configService,
                    client: w,
                    logger: l,
@@ -46,8 +50,6 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.GetEncoding("windows-1255");
             Language = "he-il";
             Type = "private";
-            TorznabCaps.SupportsImdbMovieSearch = true;
-            TorznabCaps.Categories.Clear();
 
             // סרטים
             AddCategoryMapping(7, TorznabCatType.MoviesSD, "סרטים");

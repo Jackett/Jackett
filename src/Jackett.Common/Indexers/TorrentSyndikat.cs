@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -35,7 +33,10 @@ namespace Jackett.Common.Indexers
             : base(name: "Torrent-Syndikat",
                 description: "A German general tracker",
                 link: "https://torrent-syndikat.org/",
-                caps: new TorznabCapabilities(),
+                caps: new TorznabCapabilities
+                {
+                    SupportsImdbMovieSearch = true
+                },
                 configService: configService,
                 client: w,
                 logger: l,
@@ -45,8 +46,6 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "de-de";
             Type = "private";
-
-            TorznabCaps.SupportsImdbMovieSearch = true;
 
             configData.DisplayText.Value = "Only the results from the first search result page are shown, adjust your profile settings to show the maximum.";
             configData.DisplayText.Name = "Notice";
@@ -156,7 +155,7 @@ namespace Jackett.Common.Indexers
                     var tvEpisode = query.GetEpisodeSearchString();
                     if (!string.IsNullOrWhiteSpace(tvEpisode))
                     {
-                        if(tvEpisode.StartsWith("S") && !tvEpisode.Contains("E"))
+                        if (tvEpisode.StartsWith("S") && !tvEpisode.Contains("E"))
                             tvEpisode += "*";
                         searchStringArray = searchStringArray.Append($"+{tvEpisode}");
                     }
@@ -203,7 +202,7 @@ namespace Jackett.Common.Indexers
                     var dateStr = rawDateStr.Replace("von", "")
                                             .Replace("Heute", "Today")
                                             .Replace("Gestern", "Yesterday");
-                    var dateGerman =DateTimeUtil.FromUnknown(dateStr);
+                    var dateGerman = DateTimeUtil.FromUnknown(dateStr);
                     var pubDateUtc = TimeZoneInfo.ConvertTimeToUtc(dateGerman, germanyTz);
                     var longFromString = ParseUtil.GetLongFromString(descCol.QuerySelector("a[href*=\"&searchin=imdb\"]")?.GetAttribute("href"));
                     var sizeFileCountRowChilds = row.Children[5].Children;

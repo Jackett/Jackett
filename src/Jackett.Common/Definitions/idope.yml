@@ -66,6 +66,8 @@
       title:
         selector: div.resultdivtop a div.resultdivtopname
       category:
+        text: 0
+      category|noappend:
         optional: true
         selector:  div.resultdivbotton div.resultdivbottoncategory
         case:

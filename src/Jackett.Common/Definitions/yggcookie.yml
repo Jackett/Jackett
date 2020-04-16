@@ -98,10 +98,18 @@
     - name: cookie
       type: text
       label: Cookie
-    - name: info
+    - name: info_cookie
       type: info
       label: How to get the Cookie
       default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
+    - name: useragent
+      type: text
+      label: User-Agent
+      label: User-Agent
+    - name: info_useragent
+      type: info
+      label: How to get the User-Agent
+      default: "<ol><li>From the same place you fetched the cookie,<li>Find <b>'user-agent:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole user-agent string <i>(everything after 'user-agent: ')</i> and <b>Paste</b> here.</ol>"
     - name: searchanddlurl
       label: Search and download URL
       type: text
@@ -172,14 +180,11 @@
     method: cookie
     inputs:
       cookie: "{{ .Config.cookie }}"
-    test:
-      path: /
-      selector: div#top_panel:contains("Déconnexion")
+      user-agent: "[ .Config.useragent ]"
 
   search:
-    followredirect: true
     keywordsfilters:
-      # Hack For anime Search ! example : replace sonarr search of 
+      # Hack For anime Search ! example : replace sonarr search of
       # One Punch Man S2 10 OR One Punch Man S2 2
       # BY
       # One Punch Man S02E10 OR One Punch Man S02E02
@@ -201,7 +206,9 @@
       - name: trim
     paths:
       - path: "https://{{ .Config.searchanddlurl }}/{{ if .Config.betasearchengine }}new_search{{else}}engine{{end}}/search?category={{ .Config.category }}&name={{ if .Config.betasearchengine }}{{ .Keywords }}{{else}}{{ re_replace .Keywords \"\\b[^\\s]+\\b\"  \"\"$&\"\"}}{{end}}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}"
+        followredirect: true
       - path: "https://{{ .Config.searchanddlurl }}/{{ if .Config.betasearchengine }}new_search{{else}}engine{{end}}/search?category={{ .Config.category }}&name={{ if .Config.betasearchengine }}{{ .Keywords }}{{else}}{{ re_replace .Keywords \"\\b[^\\s]+\\b\"  \"\"$&\"\"}}{{end}}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}&page=50"
+        followredirect: true
 
     rows:
       selector: table.table > tbody > tr
@@ -269,7 +276,6 @@
       category:
       # changed the catid into and hidden div as of last tracker problem
         selector: ":nth-child(1) > div.hidden"
-        
       comments:
         optional: true
         selector: td:nth-child(1) > a[href$="#comments"]

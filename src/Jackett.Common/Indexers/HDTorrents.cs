@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
@@ -20,6 +21,16 @@ namespace Jackett.Common.Indexers
     {
         private string SearchUrl => SiteLink + "torrents.php?";
         private string LoginUrl => SiteLink + "login.php";
+        private readonly Regex _bannerRegex = new Regex(@"src=\\'./([^']+)\\'", RegexOptions.IgnoreCase);
+        private readonly HashSet<string> _freeleechRanks = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "VIP",
+            "Uploader",
+            "HD Internal",
+            "Moderator",
+            "Administrator",
+            "Owner"
+        };
 
         public override string[] AlternativeSiteLinks { get; protected set; } =
         {
@@ -29,30 +40,27 @@ namespace Jackett.Common.Indexers
             "https://hd-torrents.me/"
         };
 
-        private new ConfigurationDataBasicLogin configData
-        {
-            get => (ConfigurationDataBasicLogin)base.configData;
-            set => base.configData = value;
-        }
+        private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
 
         public HDTorrents(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
-            : base(name: "HD-Torrents",
-                description: "HD-Torrents is a private torrent website with HD torrents and strict rules on their content.",
-                link: "https://hdts.ru/",// Of the accessible domains the .ru seems the most reliable.  https://hdts.ru | https://hd-torrents.org | https://hd-torrents.net | https://hd-torrents.me
-                configService: configService,
-                client: w,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataBasicLogin())
+            : base("HD-Torrents",
+                   description: "HD-Torrents is a private torrent website with HD torrents and strict rules on their content.",
+                   link: "https://hdts.ru/", // Domain https://hdts.ru/ seems more reliable
+                   caps: new TorznabCapabilities
+                   {
+                       SupportsImdbMovieSearch = true
+                       // SupportsImdbTVSearch = true (supported by the site but disabled due to #8107)
+                   },
+                   configService: configService,
+                   client: w,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataBasicLogin(
+                       "For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile."))
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
-
-            TorznabCaps.SupportsImdbMovieSearch = true;
-            TorznabCaps.SupportsImdbTVSearch = true;
-
-            TorznabCaps.Categories.Clear();
 
             // Movie
             AddCategoryMapping("70", TorznabCatType.MoviesUHD, "Movie/UHD/Blu-Ray");
@@ -63,8 +71,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("3", TorznabCatType.MoviesHD, "Movie/720p");
             AddCategoryMapping("64", TorznabCatType.MoviesUHD, "Movie/2160p");
             AddCategoryMapping("63", TorznabCatType.Audio, "Movie/Audio Track");
-            // TV Show
 
+            // TV Show
             AddCategoryMapping("72", TorznabCatType.TVUHD, "TV Show/UHD/Blu-ray");
             AddCategoryMapping("59", TorznabCatType.TVHD, "TV Show/Blu-ray");
             AddCategoryMapping("73", TorznabCatType.TVUHD, "TV Show/UHD/Remux");
@@ -72,6 +80,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("30", TorznabCatType.TVHD, "TV Show/1080p/i");
             AddCategoryMapping("38", TorznabCatType.TVHD, "TV Show/720p");
             AddCategoryMapping("65", TorznabCatType.TVUHD, "TV Show/2160p");
+
             // Music
             AddCategoryMapping("44", TorznabCatType.Audio, "Music/Album");
             AddCategoryMapping("61", TorznabCatType.AudioVideo, "Music/Blu-Ray");
@@ -79,6 +88,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("57", TorznabCatType.AudioVideo, "Music/1080p/i");
             AddCategoryMapping("45", TorznabCatType.AudioVideo, "Music/720p");
             AddCategoryMapping("66", TorznabCatType.AudioVideo, "Music/2160p");
+
             // XXX
             AddCategoryMapping("58", TorznabCatType.XXX, "XXX/Blu-ray");
             AddCategoryMapping("74", TorznabCatType.XXX, "XXX/UHD/Blu-ray");
@@ -128,31 +138,29 @@ namespace Jackett.Common.Indexers
                 var dom = parser.ParseDocument(results.Content);
 
                 var userInfo = dom.QuerySelector("table.navus tr");
-                var rank = userInfo.Children[1].TextContent.Replace("Rank:", string.Empty).Trim();
-
-                var freeleechRanks = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-                {
-                    "VIP",
-                    "Uploader",
-                    "HD Internal",
-                    "Moderator",
-                    "Administrator",
-                    "Owner"
-                };
-                var hasFreeleech = freeleechRanks.Contains(rank);
+                var userRank = userInfo.Children[1].TextContent.Replace("Rank:", string.Empty).Trim();
+                var hasFreeleech = _freeleechRanks.Contains(userRank);
 
                 var rows = dom.QuerySelectorAll("table.mainblockcontenttt tr:has(td.mainblockcontent)");
                 foreach (var row in rows.Skip(1))
                 {
-                    var release = new ReleaseInfo();
-
                     var mainLink = row.Children[2].QuerySelector("a");
+                    var title = mainLink.TextContent;
+                    var comments = new Uri(SiteLink + mainLink.GetAttribute("href"));
 
-                    release.Title = mainLink.TextContent;
-                    release.Description = row.Children[2].QuerySelector("span").TextContent;
+                    var bannerMatch = _bannerRegex.Match(mainLink.GetAttribute("onmouseover"));
+                    var banner = bannerMatch.Success ? new Uri(SiteLink + bannerMatch.Groups[1].Value.Replace("\\", "/")) : null;
 
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800; // 48 hours
+                    var link = new Uri(SiteLink + row.Children[4].FirstElementChild.GetAttribute("href"));
+                    var description = row.Children[2].QuerySelector("span").TextContent;
+                    var size = ReleaseInfo.GetBytes(row.Children[7].TextContent);
+
+                    var dateTag = row.Children[6].FirstElementChild;
+                    var dateString = string.Join(" ", dateTag.Attributes.Select(attr => attr.Name));
+                    var publishDate = DateTime.ParseExact(dateString, "dd MMM yyyy HH:mm:ss zz00", CultureInfo.InvariantCulture).ToLocalTime();
+
+                    var catStr = row.FirstElementChild.FirstElementChild.GetAttribute("href").Split('=')[1];
+                    var cat = MapTrackerCatToNewznab(catStr);
 
                     // Sometimes the uploader column is missing, so seeders, leechers, and grabs may be at a different index.
                     // There's room for improvement, but this works for now.
@@ -165,51 +173,58 @@ namespace Jackett.Common.Indexers
                     else if (row.Children[endIndex - 4].TextContent == "Edit")
                         endIndex -= 4;
 
-                    if (ParseUtil.TryCoerceInt(row.Children[endIndex - 3].TextContent, out var seeders))
+                    int? seeders = null;
+                    int? peers = null;
+                    if (ParseUtil.TryCoerceInt(row.Children[endIndex - 3].TextContent, out var rSeeders))
                     {
-                        release.Seeders = seeders;
-                        if (ParseUtil.TryCoerceInt(row.Children[endIndex - 2].TextContent, out var peers))
-                            release.Peers = peers + release.Seeders;
+                        seeders = rSeeders;
+                        if (ParseUtil.TryCoerceInt(row.Children[endIndex - 2].TextContent, out var rLeechers))
+                            peers = rLeechers + rSeeders;
                     }
 
-                    if (ParseUtil.TryCoerceLong(row.Children[endIndex - 1].TextContent, out var grabs))
-                        release.Grabs = grabs;
+                    var grabs = ParseUtil.TryCoerceLong(row.Children[endIndex - 1].TextContent, out var rGrabs)
+                        ? (long?)rGrabs
+                        : null;
 
-                    var fullSize = row.Children[7].TextContent;
-                    release.Size = ReleaseInfo.GetBytes(fullSize);
-
-                    release.Guid = new Uri(SiteLink + mainLink.GetAttribute("href"));
-                    release.Link = new Uri(SiteLink + row.Children[4].FirstElementChild.GetAttribute("href"));
-                    release.Comments = new Uri(SiteLink + mainLink.GetAttribute("href"));
-
-                    var dateTag = row.Children[6].FirstElementChild;
-                    var dateString = string.Join(" ", dateTag.Attributes.Select(attr => attr.Name));
-                    release.PublishDate = DateTime.ParseExact(dateString, "dd MMM yyyy HH:mm:ss zz00", CultureInfo.InvariantCulture).ToLocalTime();
-
-                    var category = row.FirstElementChild.FirstElementChild.GetAttribute("href").Split('=')[1];
-                    release.Category = MapTrackerCatToNewznab(category);
-
-                    release.UploadVolumeFactor = 1;
-
-                    if (row.QuerySelector("img[alt=\"Free Torrent\"]") != null)
+                    var dlVolumeFactor = 1.0;
+                    var upVolumeFactor = 1.0;
+                    if (row.QuerySelector("img[src$=\"no_ratio.png\"]") != null)
                     {
-                        release.DownloadVolumeFactor = 0;
-                        release.UploadVolumeFactor = 0;
+                        dlVolumeFactor = 0;
+                        upVolumeFactor = 0;
                     }
-                    else if (hasFreeleech || row.QuerySelector("img[alt=\"Golden Torrent\"]") != null)
-                        release.DownloadVolumeFactor = 0;
-                    else if (row.QuerySelector("img[alt=\"Silver Torrent\"]") != null)
-                        release.DownloadVolumeFactor = 0.5;
-                    else if (row.QuerySelector("img[alt=\"Bronze Torrent\"]") != null)
-                        release.DownloadVolumeFactor = 0.75;
-                    else if (row.QuerySelector("img[alt=\"Blue Torrent\"]") != null)
-                        release.DownloadVolumeFactor = 0.25;
-                    else
-                        release.DownloadVolumeFactor = 1;
+                    else if (hasFreeleech || row.QuerySelector("img[src$=\"free.png\"]") != null)
+                        dlVolumeFactor = 0;
+                    else if (row.QuerySelector("img[src$=\"50.png\"]") != null)
+                        dlVolumeFactor = 0.5;
+                    else if (row.QuerySelector("img[src$=\"25.png\"]") != null)
+                        dlVolumeFactor = 0.75;
+                    else if (row.QuerySelector("img[src$=\"75.png\"]") != null)
+                        dlVolumeFactor = 0.25;
 
                     var imdbLink = row.QuerySelector("a[href*=\"www.imdb.com/title/\"]")?.GetAttribute("href");
-                    if (!string.IsNullOrWhiteSpace(imdbLink))
-                        release.Imdb = ParseUtil.GetLongFromString(imdbLink);
+                    var imdb = !string.IsNullOrWhiteSpace(imdbLink) ? ParseUtil.GetLongFromString(imdbLink) : null;
+
+                    var release = new ReleaseInfo
+                    {
+                        Title = title,
+                        Comments = comments,
+                        Guid = comments,
+                        Link = link,
+                        PublishDate = publishDate,
+                        Category = cat,
+                        Description = description,
+                        BannerUrl = banner,
+                        Imdb = imdb,
+                        Size = size,
+                        Grabs = grabs,
+                        Seeders = seeders,
+                        Peers = peers,
+                        DownloadVolumeFactor = dlVolumeFactor,
+                        UploadVolumeFactor = upVolumeFactor,
+                        MinimumRatio = 1,
+                        MinimumSeedTime = 172800 // 48 hours
+                    };
 
                     releases.Add(release);
                 }

@@ -35,7 +35,10 @@ namespace Jackett.Common.Indexers
             : base(name: "YTS",
                 description: "YTS is a Public torrent site specialising in HD movies of small size",
                 link: "https://yts.mx/",
-                caps: new TorznabCapabilities(),
+                caps: new TorznabCapabilities
+                {
+                    SupportsImdbMovieSearch = true
+                },
                 configService: configService,
                 client: wc,
                 logger: l,
@@ -46,12 +49,10 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "public";
 
-            TorznabCaps.SupportsImdbMovieSearch = true;
-
             webclient.requestDelay = 2.5; // 0.5 requests per second (2 causes problems)
 
             // note: the API does not support searching with categories, so these are dummy ones for torznab compatibility
-            // we map these newznab cats with the returned quality value in the releases routine. 
+            // we map these newznab cats with the returned quality value in the releases routine.
             AddCategoryMapping(45, TorznabCatType.MoviesHD, "Movies/x264/720p");
             AddCategoryMapping(44, TorznabCatType.MoviesHD, "Movies/x264/1080p");
             AddCategoryMapping(46, TorznabCatType.MoviesUHD, "Movies/x264/2160p"); // added for #7010

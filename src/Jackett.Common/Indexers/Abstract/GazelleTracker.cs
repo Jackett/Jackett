@@ -13,6 +13,7 @@ using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Newtonsoft.Json.Linq;
 using NLog;
+using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
 namespace Jackett.Common.Indexers.Abstract
 {
@@ -34,15 +35,17 @@ namespace Jackett.Common.Indexers.Abstract
             set => base.configData = value;
         }
 
-        public GazelleTracker(IIndexerConfigurationService configService, Utils.Clients.WebClient webClient, Logger logger, IProtectionService protectionService, string name, string desc, string link, bool supportsFreeleechTokens, bool imdbInTags = false, bool has2Fa = false)
-            : base(name: name,
-                description: desc,
+        protected GazelleTracker(string name, string link, string description, IIndexerConfigurationService configService,
+                                 WebClient client, Logger logger, IProtectionService p, TorznabCapabilities caps,
+                                 bool supportsFreeleechTokens, bool imdbInTags = false, bool has2Fa = false)
+            : base(name,
+                description: description,
                 link: link,
-                caps: new TorznabCapabilities(),
+                caps: caps,
                 configService: configService,
-                client: webClient,
+                client: client,
                 logger: logger,
-                p: protectionService,
+                p: p,
                 configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.UTF8;
