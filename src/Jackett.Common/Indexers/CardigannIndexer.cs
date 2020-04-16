@@ -41,6 +41,24 @@ namespace Jackett.Common.Indexers
 
         protected readonly string[] OptionalFileds = new string[] { "imdb", "rageid", "tvdbid", "banner" };
 
+        private static readonly string[] _SupportedLogicFunctions =
+        {
+            "and",
+            "or",
+            "eq",
+            "ne"
+        };
+
+        private static readonly string[] _LogicFunctionsUsingStringLiterals =
+        {
+            "eq",
+            "ne"
+        };
+
+        // Matches a logic function above and 2 or more of (.varname) or .varname or "string literal" in any combination
+        private static readonly Regex _LogicFunctionRegex = new Regex(
+            @$"\b({string.Join("|", _SupportedLogicFunctions.Select(Regex.Escape))})(?:\s+(\(?\.[^\)\s]+\)?|""[^""]+"")){{2,}}");
+
         public CardigannIndexer(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps, IndexerDefinition Definition)
             : base(configService: configService,
                    client: wc,
@@ -298,24 +316,7 @@ namespace Jackett.Common.Indexers
                 JoinMatches = JoinMatches.NextMatch();
             }
 
-
-            var supportedLogicFunctions = new[]
-            {
-                "and",
-                "or",
-                "eq",
-                "ne"
-            };
-            var acceptsStringLiterals = new[]
-            {
-                "eq",
-                "ne"
-            };
-            var logicStr = string.Join("|", supportedLogicFunctions.Select(Regex.Escape));
-
-            // Matches a logic function above and 2 or more of (.varname) or .varname or "string literal" in any combination
-            var logicRegex = new Regex(@$"\b({logicStr})(?:\s+(\(?\.[^\)\s]+\)?|""[^""]+"")){{2,}}");
-            var logicMatch = logicRegex.Match(template);
+            var logicMatch = _LogicFunctionRegex.Match(template);
 
             while (logicMatch.Success)
             {
@@ -328,7 +329,7 @@ namespace Jackett.Common.Indexers
                 var functionResult = "";
 
                 // If the function can't use string literals, fail silently by removing the literals.
-                if (!acceptsStringLiterals.Contains(functionName))
+                if (!_LogicFunctionsUsingStringLiterals.Contains(functionName))
                     parameters.RemoveAll(param => param.StartsWith("\""));
 
                 switch (functionName)
@@ -372,7 +373,7 @@ namespace Jackett.Common.Indexers
                 // Rerunning match instead of using nextMatch allows us to support nested functions
                 // like {{if and eq (.Var1) "string1" eq (.Var2) "string2"}}
                 // No performance is lost because Match/NextMatch are lazy evaluated and pause execution after first match
-                logicMatch = logicRegex.Match(template);
+                logicMatch = _LogicFunctionRegex.Match(template);
             }
 
             // handle if ... else ... expression
