@@ -37,7 +37,7 @@
         inputs:
           page: 2
     inputs:
-      q: "{{ if .Keywords }}{{ .Keywords }}{{else}}2020{{end}}"
+      q: "{{ if .Keywords }}{{ .Keywords }}{{else}}:latest:{{end}}"
       category: all
       x: 0
       y: 0
@@ -75,11 +75,11 @@
         selector: td:nth-child(5)
         filters:
           - name: replace
-            args: ["sec", " second"]
+            args: ["sec", "seconds"]
           - name: replace
-            args: ["min", " minute"]
+            args: ["min", "minutes"]
           - name: replace
-            args: ["hr", "hour"]
+            args: ["hr", "hours"]
           - name: append
             args:  " ago"
           - name: timeago
