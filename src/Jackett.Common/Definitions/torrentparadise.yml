@@ -31,7 +31,9 @@
       "APPS > PC": PC
       "APPS": PC
       "AUDIO > AUDIO BOOKS": Audio/Audiobook
+      "AUDIO > FLAC": Audio/Lossless
       "AUDIO > MUSIC": Audio
+      "AUDIO > SOUND CLIPS": Audio
       "AUDIO": Audio
       "BOOKS": Books
       "DOCUMENTARIES": TV/Documentary
@@ -61,6 +63,7 @@
       "JUEGOS XBOX": Console/Xbox
       "JUEGOS XBOX360": Console/Xbox 360
       "JUEGOS": Console
+      "MISCELLANEOUS": Other
       "MOBILE": PC/Phone-Other
       "MOVIES > ENGLISH (SPANISH SUBT)": Movies
       "MOVIES": Movies
@@ -72,7 +75,9 @@
       "OTHER > COVERS": Other
       "OTHER > E-BOOKS": Other
       "OTHER > OTHER": Other
+      "OTHER > PICTURES": Other
       "OTHER": Other
+      "PICTURES": Other
       "PORN > GAMES": XXX
       "PORN > MOVIE CLIPS": XXX
       "PORN > MOVIES": XXX
@@ -83,6 +88,7 @@
       "SOFTWARE > WINDOWS": PC/0day
       "SOFTWARE": PC
       "TUTORIALS": Other
+      "TV > HEVC/X265": TV
       "TV SHOWS": TV
       "TV": TV
       "VIDEO > HD - MOVIES": Movies/HD
@@ -98,6 +104,7 @@
       "VIDEO > UHD - TV SHOWS": TV/UHD
       "VIDEO HDRIP": Movies
       "VIDEO": Movies
+      "WINDOWS": PC/0day
       "XXX": XXX
 
     modes:
