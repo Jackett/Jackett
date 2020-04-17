@@ -15,9 +15,10 @@ namespace Jackett.Common.Indexers
 {
     public class FileList : BaseWebIndexer
     {
-        public override string[] LegacySiteLinks { get; protected set; } = {
+        public override string[] LegacySiteLinks { get; protected set; } =
+        {
             "http://filelist.ro/",
-            "https://filelist.io/",
+            "https://filelist.ro/",
             "https://flro.org/",
             "http://flro.org/",
         };
@@ -30,7 +31,7 @@ namespace Jackett.Common.Indexers
         public FileList(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base("FileList",
                 description: "The best Romanian site.",
-                link: "https://filelist.ro/",
+                link: "https://filelist.io/",
                 caps: new TorznabCapabilities
                 {
                     SupportsImdbMovieSearch = true
