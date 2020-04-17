@@ -22,7 +22,7 @@ namespace Jackett.Common.Indexers
         private string LoginUrl => SiteLink + "login.php";
         private string SearchUrl => SiteLink + "ajax.php?action=browse&searchstr=";
         private string DownloadUrl => SiteLink + "torrents.php?action=download&id=";
-        private string GuidUrl => SiteLink + "torrents.php?torrentid=";
+        private string CommentsUrl => SiteLink + "torrents.php?torrentid=";
 
         private ConfigurationDataBasicLogin ConfigData => (ConfigurationDataBasicLogin)configData;
 
@@ -246,40 +246,44 @@ namespace Jackett.Common.Indexers
 
         private ReleaseInfo GetReleaseInfo(IElement row, IElement downloadAnchor, string title, int category)
         {
-            // Parse required data
             var downloadAnchorHref = downloadAnchor.Attributes["href"].Value;
             var torrentId = downloadAnchorHref.Substring(downloadAnchorHref.LastIndexOf('=') + 1);
-            var qFiles = row.QuerySelector("td:nth-last-child(6)");
-            var files = ParseUtil.CoerceLong(qFiles.TextContent);
-            var publishDate = DateTime.ParseExact(row.QuerySelector(".time.tooltip").Attributes["title"].Value, "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
-            var torrentData = row.QuerySelectorAll(".number_column"); // Size (xx.xx GB[ (Max)]) Snatches (xx) Seeders (xx) Leechers (xx)
-
-            if (torrentData.Length != 4)
-                throw new Exception($"We expected 4 torrent datas, instead we have {torrentData.Length}.");
-
             if (torrentId.Contains('#'))
                 torrentId = torrentId.Split('#')[0];
+
+            var qFiles = row.QuerySelector("td:nth-last-child(6)");
+            var files = ParseUtil.CoerceLong(qFiles.TextContent);
+            var qPublishDate = row.QuerySelector(".time.tooltip").Attributes["title"].Value;
+            var publishDate = DateTime.ParseExact(qPublishDate, "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
+            var qBanner = row.QuerySelector("div.tp-banner img")?.GetAttribute("src");
+            var banner = (qBanner != null && !qBanner.Contains("/static/styles/")) ? new Uri(qBanner) : null;
+            var description = row.QuerySelector("div.tags")?.TextContent.Trim();
+
+            var torrentData = row.QuerySelectorAll(".number_column");
+            if (torrentData.Length != 4) // Size (xx.xx GB[ (Max)]) Snatches (xx) Seeders (xx) Leechers (xx)
+                throw new Exception($"We expected 4 torrent datas, instead we have {torrentData.Length}.");
 
             var size = ReleaseInfo.GetBytes(torrentData[0].TextContent);
             var grabs = int.Parse(torrentData[1].TextContent, NumberStyles.AllowThousands, CultureInfo.InvariantCulture);
             var seeders = int.Parse(torrentData[2].TextContent, NumberStyles.AllowThousands, CultureInfo.InvariantCulture);
             var leechers = int.Parse(torrentData[3].TextContent, NumberStyles.AllowThousands, CultureInfo.InvariantCulture);
-            var guid = new Uri(GuidUrl + torrentId);
-
-            // Build releaseinfo
+            var comments = new Uri(CommentsUrl + torrentId);
+            var link = new Uri(DownloadUrl + torrentId);
             return new ReleaseInfo
             {
                 Title = title,
                 Category = new List<int> { category }, // Who seasons movies right
-                Link = new Uri(DownloadUrl + torrentId),
+                Link = link,
                 PublishDate = publishDate,
+                BannerUrl = banner,
+                Description = description,
                 Seeders = seeders,
                 Peers = seeders + leechers,
                 Files = files,
                 Size = size,
                 Grabs = grabs,
-                Guid = guid,
-                Comments = guid,
+                Guid = comments,
+                Comments = comments,
                 DownloadVolumeFactor = 0, // ratioless tracker
                 UploadVolumeFactor = 1
             };

@@ -5,7 +5,6 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -89,7 +88,7 @@ namespace Jackett.Common.Indexers
             var loginPage = await RequestStringWithCookies(SiteLink, string.Empty);
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, SiteLink, SiteLink);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
+            await ConfigureIfOK(result.Cookies, result.Content?.Contains("logout.php") == true, () =>
             {
                 var parser = new HtmlParser();
                 var dom = parser.ParseDocument(result.Content);
@@ -105,7 +104,6 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();
             var searchUrl = BrowseUrl;
-            var trackerCats = MapTorznabCapsToTrackers(query);
             var queryCollection = new NameValueCollection();
 
             // Tracker can only search OR return things in categories
@@ -117,21 +115,11 @@ namespace Jackett.Common.Indexers
             else
             {
                 foreach (var cat in MapTorznabCapsToTrackers(query))
-                {
                     queryCollection.Add("c" + cat, "1");
-                }
-
                 queryCollection.Add("incldead", "0");
             }
 
             searchUrl += "?" + queryCollection.GetQueryString();
-
-            await ProcessPage(releases, searchUrl);
-            return releases;
-        }
-
-        private async Task ProcessPage(List<ReleaseInfo> releases, string searchUrl)
-        {
             var response = await RequestStringWithCookiesAndRetry(searchUrl, null, BrowseUrl);
             if (response.IsRedirect)
             {
@@ -146,7 +134,9 @@ namespace Jackett.Common.Indexers
                 var parser = new HtmlParser();
                 var dom = parser.ParseDocument(results);
 
-                var rows = dom.QuerySelectorAll(".browsetable").Last().QuerySelectorAll("tr"); //the class for the table changed
+                var rows = dom.QuerySelectorAll(".browsetable").LastOrDefault()?.QuerySelectorAll("tr");
+                if (rows == null)
+                    return releases;
                 foreach (var row in rows.Skip(1))
                 {
                     var release = new ReleaseInfo();
@@ -159,9 +149,7 @@ namespace Jackett.Common.Indexers
 
                     // If we search an get no results, we still get a table just with no info.
                     if (string.IsNullOrWhiteSpace(release.Title))
-                    {
                         break;
-                    }
 
                     // Check if the release has been assigned a category
                     var category = row.QuerySelector("td:nth-of-type(1) a");
@@ -193,6 +181,8 @@ namespace Jackett.Common.Indexers
             {
                 OnParseError(results, ex);
             }
+
+            return releases;
         }
     }
 }

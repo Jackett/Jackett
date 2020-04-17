@@ -5,7 +5,6 @@ using System.Xml.Linq;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
-using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using NLog;
 
@@ -47,7 +46,7 @@ namespace Jackett.Common.Indexers.Feeds
             if (enclosures.Any())
             {
                 var enclosure = enclosures.First().Attribute("url").Value;
-                release.Link = enclosure.ToUri();
+                release.Link = new Uri(enclosure);
             }
             // add some default values if none returned by feed
             release.Seeders = release.Seeders > 0 ? release.Seeders : 0;

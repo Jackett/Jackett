@@ -33,9 +33,10 @@ namespace Jackett.Common.Indexers
             : base(name: "Shazbat",
                    description: "Modern indexer",
                    link: "https://www.shazbat.tv/",
-                   caps: new TorznabCapabilities(TorznabCatType.TV,
-                                                 TorznabCatType.TVHD,
-                                                 TorznabCatType.TVSD),
+                   caps: new TorznabCapabilities(
+                       TorznabCatType.TV,
+                       TorznabCatType.TVHD,
+                       TorznabCatType.TVSD),
                    configService: configService,
                    client: c,
                    logger: l,
@@ -60,7 +61,6 @@ namespace Jackett.Common.Indexers
             };
 
             // Get cookie
-            var firstRequest = await RequestStringWithCookiesAndRetry(LoginUrl);
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl);
             await ConfigureIfOK(result.Cookies, result.Content?.Contains("glyphicon-log-out") == true,
                                 () => throw new ExceptionWithConfigData("The username and password entered do not match.", configData));
@@ -74,29 +74,18 @@ namespace Jackett.Common.Indexers
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
-        protected async Task<WebClientStringResult> ReloginIfNecessary(WebClientStringResult response)
-        {
-            if (!response.Content.Contains("onclick=\"document.location='logout'\""))
-            {
-                await ApplyConfiguration(null);
-                response.Request.Cookies = CookieHeader;
-                return await webclient.GetString(response.Request);
-            }
-
-            return response;
-        }
-
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
             var queryString = query.GetQueryString();
-            var url = TorrentsUrl;
             WebClientStringResult results = null;
             var searchUrls = new List<string>();
             if (!string.IsNullOrWhiteSpace(query.SanitizedSearchTerm))
             {
-                var pairs = new Dictionary<string, string>();
-                pairs.Add("search", query.SanitizedSearchTerm);
+                var pairs = new Dictionary<string, string>
+                {
+                    {"search", query.SanitizedSearchTerm}
+                };
                 results = await PostDataWithCookiesAndRetry(SearchUrl, pairs, null, TorrentsUrl);
                 results = await ReloginIfNecessary(results);
                 var parser = new HtmlParser();
@@ -125,6 +114,7 @@ namespace Jackett.Common.Indexers
                         dom.QuerySelector("span:contains(\"Freeleech until:\"):has(span.datetime)") != null;
                     foreach (var row in rows.Skip(1))
                     {
+                        // TODO switch to initializer
                         var release = new ReleaseInfo();
                         var titleRow = row.QuerySelector("td:nth-of-type(3)");
                         foreach (var child in titleRow.Children)
@@ -141,10 +131,10 @@ namespace Jackett.Common.Indexers
                             release.BannerUrl = new Uri(SiteLink + bannerImg);
                         }
 
-                        var qLink = row.QuerySelector("td:nth-of-type(5) a:nth-of-type(1)");
+                        var qLink = row.QuerySelector("td:nth-of-type(5) a");
                         release.Link = new Uri(SiteLink + qLink.GetAttribute("href"));
                         release.Guid = release.Link;
-                        var qLinkComm = row.QuerySelector("td:nth-of-type(5) a:nth-of-type(2)");
+                        var qLinkComm = row.QuerySelector("td:nth-of-type(5) a.internal");
                         release.Comments = new Uri(SiteLink + qLinkComm.GetAttribute("href"));
                         var dateString = row.QuerySelector(".datetime")?.GetAttribute("data-timestamp");
                         if (dateString != null)
@@ -172,9 +162,19 @@ namespace Jackett.Common.Indexers
             }
             foreach (var release in releases)
                 release.Category = release.Title.Contains("1080p") || release.Title.Contains("720p")
-                    ? new List<int> {TorznabCatType.TVHD.ID}
-                    : new List<int> {TorznabCatType.TVSD.ID};
+                    ? new List<int> { TorznabCatType.TVHD.ID }
+                    : new List<int> { TorznabCatType.TVSD.ID };
             return releases;
+        }
+
+        private async Task<WebClientStringResult> ReloginIfNecessary(WebClientStringResult response)
+        {
+            if (response.Content.Contains("onclick=\"document.location='logout'\""))
+                return response;
+
+            await ApplyConfiguration(null);
+            response.Request.Cookies = CookieHeader;
+            return await webclient.GetString(response.Request);
         }
     }
 }

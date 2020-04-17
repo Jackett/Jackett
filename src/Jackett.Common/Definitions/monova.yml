@@ -5,9 +5,19 @@
   language: en-us
   type: public
   encoding: UTF-8
+  followredirect: true
   links:
     - https://monova.org/
     - https://monova.to/
+    - https://monova.unblockit.one/
+    - https://monova.black-mirror.xyz/
+    - https://monova.unblocked.casa/
+    - https://monova.proxyportal.fun/
+    - https://monova.uk-unblock.xyz/
+    - https://monova.ind-unblock.xyz/
+  legacylinks:
+    - https://monova.unblockninja.com/ # currently redirects to https://monova.org/
+    - https://monova.unblockit.pro/
 
   caps:
     categories:
@@ -37,9 +47,16 @@
       # https://monova.to/search?term=vikings+s05e05
       # https://monova.to/video
       - path: "{{if .Keywords}}search?term={{.Keywords}}{{else}}video{{end}}"
+      - path: "{{if .Keywords}}search?term={{.Keywords}}{{else}}video{{end}}&page=2"
+      - path: "{{if .Keywords}}search?term={{.Keywords}}{{else}}video{{end}}&page=3"
+      - path: "{{if .Keywords}}search?term={{.Keywords}}{{else}}video{{end}}&page=4"
+
+    keywordsfilters:
+      - name: re_replace
+        args: ["(?:^|\\s)[_\\+\\/\\.\\-\\(\\)]*[\\S]{0,3}[_\\+\\/\\.\\-\\(\\)]*(?:\\s|$)", " "]
 
     rows:
-      selector: tr.desktop:has(a[href^="//"])
+      selector: tr.desktop:not(tr[class="desktop  success"])
       filters:
         - name: andmatch
 

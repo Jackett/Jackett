@@ -71,7 +71,7 @@ namespace Jackett.Server.Controllers
             }
 
             var indexerId = parameters["indexerId"] as string;
-            if (indexerId.IsNullOrEmptyOrWhitespace())
+            if (string.IsNullOrWhiteSpace(indexerId))
             {
                 indexerController.CurrentIndexer = null;
                 context.Result = ResultsController.GetErrorActionResult(context.RouteData, HttpStatusCode.NotFound, 201, "Indexer is not specified (empty value)");
@@ -499,12 +499,14 @@ namespace Jackett.Server.Controllers
             {
                 var release = AutoMapper.Mapper.Map<ReleaseInfo>(r);
                 release.Link = serverService.ConvertToProxyLink(release.Link, serverUrl, CurrentIndexer.ID, "dl", release.Title);
+                // IMPORTANT: We can't use Uri.ToString(), because it generates URLs without URL encode (links with unicode
+                // characters are broken). We must use Uri.AbsoluteUri instead that handles encoding correctly
                 var item = new TorrentPotatoResponseItem()
                 {
                     release_name = release.Title + "[" + CurrentIndexer.DisplayName + "]", // Suffix the indexer so we can see which tracker we are using in CPS as it just says torrentpotato >.>
-                    torrent_id = release.Guid.ToString(),
-                    details_url = release.Comments.ToString(),
-                    download_url = (release.Link != null ? release.Link.ToString() : release.MagnetUri.ToString()),
+                    torrent_id = release.Guid.AbsoluteUri, // GUID and (Link or Magnet) are mandatory
+                    details_url = release.Comments?.AbsoluteUri,
+                    download_url = (release.Link != null ? release.Link.AbsoluteUri : release.MagnetUri.AbsoluteUri),
                     imdb_id = release.Imdb.HasValue ? ParseUtil.GetFullImdbID("tt" + release.Imdb) : null,
                     freeleech = (release.DownloadVolumeFactor == 0 ? true : false),
                     type = "movie",

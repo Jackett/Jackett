@@ -15,7 +15,7 @@
       - {id: 3, cat: Audio, desc: "Music"}
 
     modes:
-      search: [q]
+      search: [q, imdbid]
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
 
@@ -46,17 +46,20 @@
   login:
     path: login
     method: form
+    form: form[action$="/login"]
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
       remember: on
+    selectorinputs:
+      _token:
+        selector: input[name="_token"]
+        attribute: value
     error:
-      - selector: script[nonce]:contains("Error")
-        message:
-          selector: script[nonce]:contains("Error")
-    test:
-      path: /
-      selector: a[href$="/logout"]
+      - selector: div#ERROR_COPY
+#    test:
+#      path: /
+#      selector: a[href$="/logout"]
 
   ratio:
     path: /
@@ -65,13 +68,9 @@
       - name: regexp
         args: "Ratio : (\\d+)"
 
-  download:
-    selector: a[href*="/download/"]
-    attribute: href
-
   search:
     paths:
-      - path: filterTorrents
+      - path: torrents/filter
     inputs:
       $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
       search: "{{ if .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
@@ -81,6 +80,7 @@
       tvdb: ""
       tmdb: ""
       mal: ""
+      igdb: ""
       sorting: "{{ .Config.sort }}"
       sort: "{{ .Config.sort }}"
       direction: "{{ .Config.type }}"
@@ -95,11 +95,11 @@
         attribute: href
         filters:
           - name: regexp
-            args: "/categories/.*?\\.(\\d+)"
+            args: "/categories/(\\d+)"
       title:
         selector: a.view-torrent
       download:
-        selector: a[href*="/download_check/"]
+        selector: a[href*="/download/"]
         attribute: href
       details:
         selector: a.view-torrent
@@ -134,7 +134,7 @@
         filters:
             # translations for Turkish|Estonian|Danish|Italian|Polish|Norwegian|Portuguese|Czech|Russian|Romanian|Spanish|French|German|Bulgarian|Dutch|Chinese
           - name: re_replace
-            args: ["(?i)(önce|tagasi|geleden|fa|temu|siden|atrás|nazpět|назад|acum|în urmă|hace|il y a|vor|преди|前)", " ago"]
+            args: ["(?i)(önce|tagasi|geleden|fa|temu|siden|há|atrás|nazpět|назад|acum|în urmă|hace|il y a|vor|преди|前)", " ago"]
           - name: re_replace
             args: ["(?i)(minutit|minutter|minuti|minuty|minutos|минуты|минут|Minuten|минути|minuten)", "minutes"]
           - name: re_replace
@@ -179,4 +179,4 @@
           i[class*="fa-globe text-green"]: 2 # Global Double Upload
           i[class*="fa-certificate text-pink"]: 2 # Featured Torrent
           "*": 1
-# UNIT3D 1.9.3
+# UNIT3D 2.2.7

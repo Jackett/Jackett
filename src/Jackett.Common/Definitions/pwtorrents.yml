@@ -6,7 +6,9 @@
   type: private
   encoding: UTF-8
   links:
-    - https://pwtorrents.net/
+    - http://pwtorrents.net/
+  links:
+    - https://pwtorrents.net/ # site is forcing to http
 
   caps:
     categorymappings:

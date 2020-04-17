@@ -9,16 +9,16 @@ namespace Jackett.Common.Indexers
 {
     public class Psytorrents : GazelleTracker
     {
-        public Psytorrents(IIndexerConfigurationService configService, WebClient webClient, Logger logger, IProtectionService protectionService)
-            : base(name: "Psytorrents",
-                desc: "Psytorrents (PSY) is a Private Torrent Tracker for ELECTRONIC MUSIC",
-                link: "https://psytorrents.info/",
-                configService: configService,
-                logger: logger,
-                protectionService: protectionService,
-                webClient: webClient,
-                supportsFreeleechTokens: true
-                )
+        public Psytorrents(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+            : base("Psytorrents",
+                   description: "Psytorrents (PSY) is a Private Torrent Tracker for ELECTRONIC MUSIC",
+                   link: "https://psytorrents.info/",
+                   caps: new TorznabCapabilities(),
+                   configService: configService,
+                   client: wc,
+                   logger: l,
+                   p: ps,
+                   supportsFreeleechTokens: true)
         {
             Language = "en-us";
             Type = "private";

@@ -1,9 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
-using Jackett.Common.Utils;
 
 namespace Jackett.Common.Indexers.Meta
 {
@@ -55,20 +55,18 @@ namespace Jackett.Common.Indexers.Meta
 
             var remainingResults = results.Except(wrongResults).Except(perfectResults);
 
-            var titles = (await resolver.MovieForId(query.ImdbID.ToNonNull())).Title?.ToEnumerable() ?? Enumerable.Empty<string>();
-            var strippedTitles = titles.Select(t => RemoveSpecialChars(t));
-            var normalizedTitles = strippedTitles.SelectMany(t => GenerateTitleVariants(t));
+            if (string.IsNullOrEmpty(query.ImdbID))
+                return perfectResults;
+            var title = (await resolver.MovieForId(query.ImdbID)).Title;
+            if (title == null)
+                return perfectResults;
 
-            var titleFilteredResults = remainingResults.Where(r =>
-            {
-                // TODO Make it possible to configure case insensitivity
-                var containsAnyTitle = normalizedTitles.Select(t => r.Title.ToLowerInvariant().Contains(t.ToLowerInvariant()));
-                var isProbablyValidResult = containsAnyTitle.Any(b => b);
-                return isProbablyValidResult;
-            });
+            var normalizedTitles = GenerateTitleVariants(RemoveSpecialChars(title));
 
-            var filteredResults = perfectResults.Concat(titleFilteredResults).Distinct();
-            return filteredResults;
+            // TODO Make it possible to configure case insensitivity
+            var titleFilteredResults = remainingResults.Where(
+                r => normalizedTitles.Any(t => r.Title.IndexOf(t, StringComparison.InvariantCultureIgnoreCase) >= 0));
+            return perfectResults.Union(titleFilteredResults);
         }
 
         // TODO improve character replacement with invalid chars
@@ -97,7 +95,7 @@ namespace Jackett.Common.Indexers.Meta
 
     public class NoResultFilterProvider : IResultFilterProvider
     {
-        public IEnumerable<IResultFilter> FiltersForQuery(TorznabQuery query) => (new NoFilter()).ToEnumerable();
+        public IEnumerable<IResultFilter> FiltersForQuery(TorznabQuery query) { yield return new NoFilter(); }
     }
 
     public class ImdbTitleResultFilterProvider : IResultFilterProvider
@@ -106,12 +104,7 @@ namespace Jackett.Common.Indexers.Meta
 
         public IEnumerable<IResultFilter> FiltersForQuery(TorznabQuery query)
         {
-            IResultFilter filter = null;
-            if (!query.IsImdbQuery)
-                filter = new NoFilter();
-            else
-                filter = new ImdbTitleResultFilter(resolver, query);
-            return filter.ToEnumerable();
+            yield return !query.IsImdbQuery ? (IResultFilter)new NoFilter() : new ImdbTitleResultFilter(resolver, query);
         }
 
         private readonly IImdbResolver resolver;

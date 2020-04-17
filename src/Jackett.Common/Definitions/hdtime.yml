@@ -25,7 +25,7 @@
       - {id: 409, cat: Other, desc: "Misc/其他"}
 
     modes:
-      search: [q]
+      search: [q, imdbid]
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
 
@@ -79,8 +79,8 @@
       incldead: 0
       # 0 all 1 normal 2 free 3 2x 4 2xfree 5 50% 6 2x50% 7 30%
       spstate: 0
-      # 0 title 1 descr 3 uploaded 4 imdburl
-      search_area: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
+      # 0 title 1 descr 3 uploaded 4 imdburl (searching imdburl does not work with tt1234567, but descr is good)
+      search_area: "{{ if .Query.IMDBID }}1{{else}}0{{end}}"
       # 0 AND 1 OR 2 exact
       search_mode: 0
       sort: "{{ .Config.sort }}"
@@ -104,7 +104,7 @@
         attribute: title
       details:
         selector: a[href^="details.php?id="]
-        attribute: href    
+        attribute: href
       download:
         selector: a[href^="download.php?id="]
         attribute: href

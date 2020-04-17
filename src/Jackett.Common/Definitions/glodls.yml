@@ -5,9 +5,19 @@
   language: en-us
   type: public
   encoding: UTF-8
+  followredirect: true
   links:
+    - https://gtdb.to/
     - https://glodls.to/
+    - https://glotorrents.unblockit.one/
+    - https://glodls.black-mirror.xyz/
+    - https://glodls.unblocked.casa/
+    - https://glodls.proxyportal.fun/
+    - https://glodls.uk-unblock.xyz/
+    - https://glodls.ind-unblock.xyz/
+  legacylinks:
     - https://glodls.rocks/
+    - https://glotorrents.unblockit.pro/
 
   caps:
     categorymappings:
@@ -78,12 +88,8 @@
 
     fields:
       category:
-        optional: true
-        selector: td:nth-child(1):contains("-")
-        filters:
-          - name: replace #7113 provide default for missing category
-            args: ["-", "33"]
-      category:
+        text: 33 #7113
+      category|noappend:
         optional: true
         selector: a[href^="/search.php?cat="]
         attribute: href

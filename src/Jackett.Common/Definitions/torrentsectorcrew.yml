@@ -42,8 +42,8 @@
       - {id: 20, cat: Movies/DVD, desc: "Filme DVDR"}
       - {id: 120, cat: Movies/Foreign, desc: "Filme Int."}
       - {id: 119, cat: Movies, desc: "Filme Remux"}
-      - {id: 121, cat: Movies/HD, desc: "Filme UHD"}
-      - {id: 124, cat: Movies/HD, desc: "Filme UHD Remux"}
+      - {id: 121, cat: Movies/UHD, desc: "Filme UHD"}
+      - {id: 124, cat: Movies/UHD, desc: "Filme UHD Remux"}
       - {id: 36, cat: Movies/HD, desc: "Filme SD"}
       # Serien
       - {id: 112, cat: TV/Anime, desc: "Serien Anime"}
@@ -115,7 +115,7 @@
       - selector: "#login_box_desc"
     test:
       path: my.php
-      
+
   ratio:
     path: my.php
     selector: td.navi_top:contains("Deine Ratio:")

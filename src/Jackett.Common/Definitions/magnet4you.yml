@@ -7,6 +7,11 @@
   encoding: UTF-8
   links:
     - https://magnet4you.me/
+    - https://magnet4you.black-mirror.xyz/
+    - https://magnet4you.unblocked.casa/
+    - https://magnet4you.proxyportal.fun/
+    - https://magnet4you.uk-unblock.xyz/
+    - https://magnet4you.ind-unblock.xyz/
   legacylinks:
     - http://magnet4you.me/
 
@@ -22,7 +27,7 @@
   settings:
     - name: info
       type: info
-      default: Magnet4You does not use categories. In your software Indexer settings, set the category to 100001.
+      default: Magnet4You does not use categories. In your software Indexer settings, set the category to 7000.
     - name: sort
       type: select
       label: Sort requested from site

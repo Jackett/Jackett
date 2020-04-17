@@ -53,12 +53,9 @@ namespace Jackett.Common.Utils.Clients
         public static void InitProxy(ServerConfig serverConfig)
         {
             // dispose old SocksWebProxy
-            if (webProxy != null && webProxy is SocksWebProxy)
-            {
-                ((SocksWebProxy)webProxy).Dispose();
-                webProxy = null;
-            }
-
+            if (webProxy is SocksWebProxy proxy)
+                proxy.Dispose();
+            webProxy = null;
             webProxyUrl = serverConfig.GetProxyUrl();
             if (!string.IsNullOrWhiteSpace(webProxyUrl))
             {
@@ -132,21 +129,14 @@ namespace Jackett.Common.Utils.Clients
             ServicePointManager.SecurityProtocol = (SecurityProtocolType)192 | (SecurityProtocolType)768 | (SecurityProtocolType)3072;
 
             var cookies = new CookieContainer();
-            if (!string.IsNullOrEmpty(webRequest.Cookies))
+            if (!string.IsNullOrWhiteSpace(webRequest.Cookies))
             {
-                var uri = new Uri(webRequest.Url);
-                var cookieUrl = new Uri(uri.Scheme + "://" + uri.Host); // don't include the path, Scheme is needed for mono compatibility
-                foreach (var c in webRequest.Cookies.Split(';'))
-                {
-                    try
-                    {
-                        cookies.SetCookies(cookieUrl, c.Trim());
-                    }
-                    catch (CookieException ex)
-                    {
-                        logger.Info("(Non-critical) Problem loading cookie {0}, {1}, {2}", uri, c, ex.Message);
-                    }
-                }
+                // don't include the path, Scheme is needed for mono compatibility
+                var requestUri = new Uri(webRequest.Url);
+                var cookieUrl = new Uri(requestUri.Scheme + "://" + requestUri.Host);
+                var cookieDictionary = CookieUtil.CookieHeaderToDictionary(webRequest.Cookies);
+                foreach (var kv in cookieDictionary)
+                    cookies.Add(cookieUrl, new Cookie(kv.Key, kv.Value));
             }
 
             var userAgent = webRequest.EmulateBrowser.Value ? BrowserUtil.ChromeUserAgent : "Jackett/" + configService.GetVersion();
@@ -234,7 +224,7 @@ namespace Jackett.Common.Utils.Clients
                                 }
 
                                 // some cloudflare clients are using a refresh header
-                                // Pull it out manually 
+                                // Pull it out manually
                                 if (response.StatusCode == HttpStatusCode.ServiceUnavailable && response.Headers.Contains("Refresh"))
                                 {
                                     var refreshHeaders = response.Headers.GetValues("Refresh");

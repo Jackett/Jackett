@@ -78,11 +78,13 @@ namespace Jackett.Common.Indexers
             var searchString = query.GetQueryString();
             var searchUrl = BrowseUrl;
 
-            var queryCollection = new NameValueCollection();
-            queryCollection.Add("searchstr", StripSearchString(searchString));
-            queryCollection.Add("order_by", "s3");
-            queryCollection.Add("order_way", "desc");
-            queryCollection.Add("disablegrouping", "1");
+            var queryCollection = new NameValueCollection
+            {
+                { "searchstr", StripSearchString(searchString) },
+                { "order_by", "s3" },
+                { "order_way", "desc" },
+                { "disablegrouping", "1" }
+            };
 
             searchUrl += "?" + queryCollection.GetQueryString();
 
@@ -96,11 +98,6 @@ namespace Jackett.Common.Indexers
                 var Rows = SearchResultDocument.QuerySelectorAll(RowsSelector);
                 foreach (var Row in Rows)
                 {
-                    var release = new ReleaseInfo();
-
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 0;
-
                     var qDetailsLink = Row.QuerySelector("a[href^=\"torrents.php?id=\"]");
                     var DescStr = qDetailsLink.NextSibling;
                     var Files = Row.QuerySelector("td:nth-child(3)");
@@ -114,29 +111,35 @@ namespace Jackett.Common.Indexers
                     var TorrentIdParts = qDetailsLink.GetAttribute("href").Split('=');
                     var TorrentId = TorrentIdParts[TorrentIdParts.Length - 1];
                     var DLLink = "torrents.php?action=download&id=" + TorrentId.ToString();
-
-                    release.Description = DescStr.TextContent.Trim();
-                    release.Title = qDetailsLink.TextContent + " " + release.Description;
-                    release.PublishDate = DateTimeUtil.FromTimeAgo(Added.TextContent);
-                    release.Category = new List<int> { TvCategoryParser.ParseTvShowQuality(release.Description) };
-
-                    release.Link = new Uri(SiteLink + DLLink);
-                    release.Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
-                    release.Guid = release.Link;
-
-                    release.Seeders = ParseUtil.CoerceInt(Seeders.TextContent);
-                    release.Peers = ParseUtil.CoerceInt(Leechers.TextContent) + release.Seeders;
-                    release.Size = ReleaseInfo.GetBytes(Size.TextContent);
-                    release.Grabs = ReleaseInfo.GetBytes(Grabs.TextContent);
-                    release.Files = ReleaseInfo.GetBytes(Files.TextContent);
-
-                    if (FreeLeech != null)
-                        release.DownloadVolumeFactor = 0;
-                    else
-                        release.DownloadVolumeFactor = 1;
-
-                    release.UploadVolumeFactor = 1;
-
+                    var link = new Uri(SiteLink + DLLink);
+                    var seeders = ParseUtil.CoerceInt(Seeders.TextContent);
+                    var description = DescStr.TextContent.Trim();
+                    var publishDate = DateTimeUtil.FromTimeAgo(Added.TextContent);
+                    var comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
+                    var leechers = ParseUtil.CoerceInt(Leechers.TextContent);
+                    var size = ReleaseInfo.GetBytes(Size.TextContent);
+                    var grabs = ParseUtil.CoerceLong(Grabs.TextContent);
+                    var files = ParseUtil.CoerceLong(Files.TextContent);
+                    var category = new List<int> { TvCategoryParser.ParseTvShowQuality(description) };
+                    var release = new ReleaseInfo
+                    {
+                        MinimumRatio = 1,
+                        MinimumSeedTime = 0,
+                        Description = description,
+                        Title = qDetailsLink.TextContent + " " + description,
+                        PublishDate = publishDate,
+                        Category = category,
+                        Link = link,
+                        Comments = comments,
+                        Guid = link,
+                        Seeders = seeders,
+                        Peers = leechers + seeders,
+                        Size = size,
+                        Grabs = grabs,
+                        Files = files,
+                        DownloadVolumeFactor = FreeLeech != null ? 0 : 1,
+                        UploadVolumeFactor = 1
+                    };
                     releases.Add(release);
                 }
             }

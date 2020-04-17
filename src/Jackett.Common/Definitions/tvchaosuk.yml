@@ -10,7 +10,7 @@
 
   caps:
     categorymappings:
-      - {id: 4, cat: TV, desc: "Holding Bin"}
+      - {id: 53, cat: Other, desc: "None"}
       - {id: 29, cat: TV, desc: "Comedy"}
       - {id: 5, cat: TV/Documentary, desc: "Documentary"}
       - {id: 11, cat: TV, desc: "Drama"}
@@ -25,9 +25,10 @@
       - {id: 30, cat: TV, desc: "Soaps"}
       - {id: 33, cat: TV, desc: "Sci-Fi"}
       - {id: 42, cat: TV/Sport, desc: "Sport"}
+      - {id: 4, cat: TV, desc: "Holding Bin"}
 
     modes:
-      search: [q]
+      search: [q, imdbid]
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
 
@@ -58,18 +59,21 @@
   login:
     path: login
     method: form
+    form: form[action$="/login"]
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
       remember: on
+    selectorinputs:
+      _token:
+        selector: input[name="_token"]
+        attribute: value
     error:
-      - selector: script[nonce]:contains("Error")
-        message:
-          selector: script[nonce]:contains("Error")
-    test:
-      path: /
-      selector: a[href$="/logout"]
-      
+      - selector: div#ERROR_COPY
+#    test:
+#      path: /
+#      selector: a[href$="/logout"]
+
   ratio:
     path: /
     selector: li:has(i.fa-sync-alt)
@@ -94,8 +98,10 @@
       sort: "{{ .Config.sort }}"
       direction: "{{ .Config.type }}"
       qty: 100
+
     rows:
       selector: table > tbody > tr
+
     fields:
       category:
         selector: a[href*="/categories/"]
@@ -141,7 +147,7 @@
         filters:
             # translations for Turkish|Estonian|Danish|Italian|Polish|Norwegian|Portuguese|Czech|Russian|Romanian|Spanish|French|German|Bulgarian|Dutch|Chinese
           - name: re_replace
-            args: ["(?i)(önce|tagasi|geleden|fa|temu|siden|atrás|nazpět|назад|acum|în urmă|hace|il y a|vor|преди|前)", " ago"]
+            args: ["(?i)(önce|tagasi|geleden|fa|temu|siden|há|atrás|nazpět|назад|acum|în urmă|hace|il y a|vor|преди|前)", " ago"]
           - name: re_replace
             args: ["(?i)(minutit|minutter|minuti|minuty|minutos|минуты|минут|Minuten|минути|minuten)", "minutes"]
           - name: re_replace

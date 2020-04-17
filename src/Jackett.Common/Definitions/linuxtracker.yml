@@ -10,6 +10,7 @@
 
   caps:
     categorymappings:
+      - {id: 0, cat: Other, desc: "Other"}
       - {id: 2002, cat: PC/ISO, desc: "4MLinux"}
       - {id: 2004, cat: PC/ISO, desc: "ALT Linux"}
       - {id: 2289, cat: PC/ISO, desc: "APODIO"}
@@ -102,6 +103,7 @@
       - {id: 197, cat: PC/ISO, desc: "Freespire"}
       - {id: 1210, cat: PC/ISO, desc: "Fuduntu"}
       - {id: 2046, cat: PC/ISO, desc: "FuguIta"}
+      - {id: 2290, cat: PC/ISO, desc: "FuryBSD"}
       - {id: 2256, cat: PC/ISO, desc: "G4L"}
       - {id: 2235, cat: PC/ISO, desc: "GALPon MiniNo"}
       - {id: 1212, cat: PC/ISO, desc: "GParted"}
@@ -388,7 +390,7 @@
          selector: td:nth-child(2)
          remove: table
       downloadvolumefactor:
-        text: 1
+        text: 0
       uploadvolumefactor:
         text: 1
 # xbtit 2.3.0

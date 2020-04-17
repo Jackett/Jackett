@@ -324,10 +324,8 @@ namespace Jackett.Common.Indexers
                 {
                     var release = new ReleaseInfo();
 
-                    var qDetails = row.QuerySelector("div > a[href*=\"details.php?id=\"]"); // details link, release name get's shortened if it's to long
-                    var qTitle =
-                        row.QuerySelector("td:nth-of-type(2) .tooltip-content div:nth-of-type(1)") // use Title from tooltip
-                        ?? qDetails; // fallback to Details link if there's no tooltip
+                    var qDetails = row.QuerySelector("div > a[href*=\"details.php?id=\"]");
+                    var qTitle = qDetails; // #7975
 
                     release.Title = qTitle.TextContent;
 
@@ -337,7 +335,7 @@ namespace Jackett.Common.Indexers
                     //08-08-2015 12:51
                     release.PublishDate = DateTime.ParseExact(
                         row.QuerySelectorAll("td:nth-of-type(2) div").Last().TextContent.Trim(), "dd-MM-yyyy H:mm",
-                        CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal); 
+                        CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
                     release.Seeders = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(7)").TextContent);
                     release.Peers = release.Seeders + ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(8)").TextContent.Trim());
                     release.Size = ReleaseInfo.GetBytes(row.QuerySelector("td:nth-of-type(5)").TextContent.Trim());

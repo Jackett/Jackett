@@ -98,7 +98,7 @@
       - {id: 130, cat: Movies/3D, desc: "H265 3D"}
       - {id: 128, cat: Movies/HD, desc: "H265 Animación"}
       - {id: 129, cat: Movies/HD, desc: "H265 Documentales"}
-      - {id: 125, cat: Movies, desc: "UHD"}
+      - {id: 125, cat: Movies/UHD, desc: "UHD"}
       - {id: 131, cat: Movies/UHD, desc: "UHD Películas"}
       - {id: 132, cat: TV/UHD, desc: "UHD Series"}
 
@@ -114,7 +114,7 @@
     - name: info
       type: info
       label: How to get the Cookie
-      default: "<ol><li>Login to this tracker in your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find 'cookie:' in the <b>Request Headers</b> section<li>Copy & paste the whole cookie string to here</ol>"
+      default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
     - name: sort
       type: select
       label: Sort requested from site

@@ -14,7 +14,7 @@
   caps:
     categorymappings:
       - {id: 2001, cat: Movies/HD, desc: "Кино HD"}
-      - {id: 5006, cat: Movies/HD, desc: "Кино 4K"}
+      - {id: 5006, cat: Movies/UHD, desc: "Кино 4K"}
       - {id: 2007, cat: Movies/Other, desc: "Анимация"}
       - {id: 2006, cat: TV/HD, desc: "Сериалы"}
       - {id: 5005, cat: TV/Sport, desc: "Спорт"}
@@ -141,4 +141,4 @@
         text: 0
       uploadvolumefactor:
         text: 1
-# engine n/a
+# DataLife

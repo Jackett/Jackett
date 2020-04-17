@@ -21,32 +21,36 @@
 
   settings: []
 
-  download:
-    selector: a#torrent
-    attribute: href
-
   search:
     paths:
-    # http://topnow.se/search.php?dayq=mandalorian
-      - path: search.php
+      # https://topnow.se/index.php?search=
+      - path: index.php
     inputs:
-      dayq: "{{.Keywords}}" 
+      search: "{{ .Keywords }}"
+    keywordsfilters:
+      # the site uses % for wildcard
+      - name: re_replace
+        args: ["[^a-zA-Z0-9]+", "%"]
+
     rows:
-      selector: table.topic_table
+      # old cards do not have a download link
+      selector: table.each_card_table:has(a[href^="/download/"])
+
     fields:
       category:
         text: other
       title:
-        selector: a[href^="goto-"]
+        selector: h2.titles
       details:
-        selector: a[href^="goto-"]
-        attribute: href
+        # new cards do not have details page links
+        text: /
       download:
-        selector: a[href^="goto-"]
+        selector: a[href^="/download/"]
         attribute: href
       banner:
         selector: img
         attribute: src
+        optional: true
       description:
         selector: pre.imgDescription
         filters:

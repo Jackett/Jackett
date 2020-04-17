@@ -57,12 +57,9 @@ namespace Jackett.Common.Utils.Clients
         public static void InitProxy(ServerConfig serverConfig)
         {
             // dispose old SocksWebProxy
-            if (webProxy != null && webProxy is SocksWebProxy)
-            {
-                ((SocksWebProxy)webProxy).Dispose();
-                webProxy = null;
-            }
-
+            if (webProxy is SocksWebProxy proxy)
+                proxy.Dispose();
+            webProxy = null;
             webProxyUrl = serverConfig.GetProxyUrl();
             if (!string.IsNullOrWhiteSpace(webProxyUrl))
             {
@@ -117,8 +114,10 @@ namespace Jackett.Common.Utils.Clients
 
         public void CreateClient()
         {
-            clearanceHandlr = new ClearanceHandler(BrowserUtil.ChromeUserAgent);
-            clearanceHandlr.MaxTries = 30;
+            clearanceHandlr = new ClearanceHandler(BrowserUtil.ChromeUserAgent)
+            {
+                MaxTries = 30
+            };
             clientHandlr = new HttpClientHandler
             {
                 CookieContainer = cookies,
@@ -176,26 +175,16 @@ namespace Jackett.Common.Utils.Clients
             // clear cookies from cookiecontainer
             var oldCookies = cookies.GetCookies(request.RequestUri);
             foreach (Cookie oldCookie in oldCookies)
-            {
                 oldCookie.Expired = true;
-            }
 
-            if (!string.IsNullOrEmpty(webRequest.Cookies))
+            // add cookies to cookiecontainer
+            if (!string.IsNullOrWhiteSpace(webRequest.Cookies))
             {
-                // add cookies to cookiecontainer
-                var cookieUrl = new Uri(request.RequestUri.Scheme + "://" + request.RequestUri.Host); // don't include the path, Scheme is needed for mono compatibility
-                foreach (var ccookiestr in webRequest.Cookies.Split(';'))
-                {
-                    var cookiestrparts = ccookiestr.Split('=');
-                    var name = cookiestrparts[0].Trim();
-                    if (string.IsNullOrWhiteSpace(name))
-                        continue;
-                    var value = "";
-                    if (cookiestrparts.Length >= 2)
-                        value = cookiestrparts[1].Trim();
-                    var cookie = new Cookie(name, value);
-                    cookies.Add(cookieUrl, cookie);
-                }
+                // don't include the path, Scheme is needed for mono compatibility
+                var cookieUrl = new Uri(request.RequestUri.Scheme + "://" + request.RequestUri.Host);
+                var cookieDictionary = CookieUtil.CookieHeaderToDictionary(webRequest.Cookies);
+                foreach (var kv in cookieDictionary)
+                    cookies.Add(cookieUrl, new Cookie(kv.Key, kv.Value));
             }
 
             if (webRequest.Headers != null)
@@ -239,8 +228,10 @@ namespace Jackett.Common.Utils.Clients
 
             response = await client.SendAsync(request);
 
-            var result = new WebClientByteResult();
-            result.Content = await response.Content.ReadAsByteArrayAsync();
+            var result = new WebClientByteResult
+            {
+                Content = await response.Content.ReadAsByteArrayAsync()
+            };
 
             foreach (var header in response.Headers)
             {

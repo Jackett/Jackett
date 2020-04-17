@@ -6,9 +6,9 @@
   type: private
   encoding: UTF-8
   links:
-    - https://lesaloonv2-0.net/
+    - http://lesaloonv2-0.net/ # site does not support https
   legacylinks:
-    - http://lesaloonv2-0.net/
+    - https://lesaloonv2-0.net/
 
   caps:
     categorymappings:

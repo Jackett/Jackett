@@ -25,7 +25,7 @@
       - {id: 10, cat: Tv/Documentary, desc: "Doku"}
 
     modes:
-      search: [q]
+      search: [q, imdbid]
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
 
@@ -56,19 +56,20 @@
   login:
     path: login
     method: form
+    form: form[action$="/login"]
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
       remember: on
     selectorinputs:
       _token:
-        selector: meta[name="csrf-token"]
-        attribute: content
+        selector: input[name="_token"]
+        attribute: value
     error:
       - selector: form[action$="/login"] .text-red
-    test:
-      path: /
-      selector: a[href$="/logout"]
+#    test:
+#      path: /
+#      selector: a[href$="/logout"]
 
   ratio:
     path: /
@@ -159,4 +160,4 @@
           i[class*="fa-globe text-green"]: 2 # Global Double Upload
           i[class*="fa-certificate text-pink"]: 2 # Featured Torrent
           "*": 1
-# UNIT3D 1.9
+# UNIT3D 1.9.4.5

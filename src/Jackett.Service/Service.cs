@@ -51,7 +51,9 @@ namespace Jackett.Service
 
         private void StartConsoleApplication()
         {
-            var applicationFolder = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath);
+            // Use EscapedCodeBase to avoid Uri reserved characters from causing bugs
+            // https://stackoverflow.com/questions/896572
+            var applicationFolder = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().EscapedCodeBase).LocalPath);
 
             var exePath = Path.Combine(applicationFolder, "JackettConsole.exe");
 

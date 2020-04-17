@@ -11,24 +11,24 @@
 
   caps:
     categorymappings:
-      - {id: 401, cat: Movies, desc: "Movies(电影)"} 
-      - {id: 404, cat: TV/Documentary, desc: "Documentaries(记录片)"} 
-      - {id: 405, cat: TV/Anime, desc: "Animations(动漫)"} 
-      - {id: 402, cat: TV, desc: "TV Series(电视剧)"} 
-      - {id: 403, cat: TV/OTHER, desc: "TV Shows(电视节目)"} 
-      - {id: 406, cat: Audio/Video, desc: "Music Videos(音乐视频)"} 
-      - {id: 407, cat: TV/Sport, desc: "Sports(体育节目)"} 
+      - {id: 401, cat: Movies, desc: "Movies(电影)"}
+      - {id: 404, cat: TV/Documentary, desc: "Documentaries(记录片)"}
+      - {id: 405, cat: TV/Anime, desc: "Animations(动漫)"}
+      - {id: 402, cat: TV, desc: "TV Series(电视剧)"}
+      - {id: 403, cat: TV/OTHER, desc: "TV Shows(电视节目)"}
+      - {id: 406, cat: Audio/Video, desc: "Music Videos(音乐视频)"}
+      - {id: 407, cat: TV/Sport, desc: "Sports(体育节目)"}
       - {id: 408, cat: Audio/Lossless, desc: "HQ Audio(高品质音频)"}
       - {id: 410, cat: Audio, desc: "Music(音乐)"}
       - {id: 411, cat: PC, desc: "Software(软件)"}
       - {id: 412, cat: Books, desc: "Document(文档)"}
       - {id: 413, cat: PC/Games, desc: "PC_Game(PC游戏)"}
       - {id: 414, cat: Console, desc: "Other_Game(其他游戏)"}
-      - {id: 409, cat: Other, desc: "Misc(其他)"} 
+      - {id: 409, cat: Other, desc: "Misc(其他)"}
 
 
     modes:
-      search: [q]
+      search: [q, imdbid]
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
 
@@ -39,7 +39,7 @@
     - name: info
       type: info
       label: How to get the Cookie
-      default: "<ol><li>Login to this tracker in your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find 'cookie:' in the <b>Request Headers</b> section<li>Copy & paste the whole cookie string to here</ol>"
+      default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
     - name: sort
       type: select
       label: Sort requested from site
@@ -56,7 +56,7 @@
       options:
         "desc": "desc"
         "asc": "asc"
-          
+
   login:
     method: cookie
     inputs:
@@ -85,8 +85,8 @@
       # 0 all 1 bookmrk 2 not
       inclbookmarked: 0
       search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-      # 0 title 1 descr 3 uploader 4 imdb
-      search_area: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
+      # 0 title 1 descr 3 uploader 4 imdburl (searching imdburl does not work with tt1234567, but descr is good)
+      search_area: "{{ if .Query.IMDBID }}1{{else}}0{{end}}"
       # 0 AND 1 OR 2 exact
       search_mode: 0
       sort: "{{ .Config.sort }}"
@@ -109,7 +109,7 @@
             args: cat
       details:
         selector: a[href^="details.php?id="]
-        attribute: href    
+        attribute: href
       download:
         selector: a[href^="details.php?id="]
         attribute: href

@@ -10,29 +10,29 @@
 
   caps:
     categorymappings:
-      - {id: 38, cat: Movies, "Movie Pack"}
-      - {id: 36, cat: Movies, "Movies/Classic Films"}
-      - {id: 13, cat: Movies, "Movies/Documentary"}
-      - {id: 21, cat: Movies/Foreign, "Movies/Foreign"}
-      - {id: 27, cat: Movies/HD, "MoviesHD"}
-      - {id: 29, cat: Movies/SD, "Movies/SD"}
-      - {id: 26, cat: Movies/SD, "Movies/XviD"}
-      - {id: 41, cat: TV/FOREIGN, "Foreign tv"}
-      - {id: 40, cat: TV, "Mini-Series"}
-      - {id: 43, cat: TV/HD, "TV H265"}
-      - {id: 42, cat: TV, "TV Movie"}
-      - {id: 4, cat: TV/HD, "TV/HD-x720"}
-      - {id: 14, cat: TV, "TV/Packs"}
-      - {id: 2, cat: TV/SD, "TV/SD MP4/mkv"}
-      - {id: 31, cat: TV/SD, "TV/XviD"}
-      - {id: 18, cat: PC/Games, "Games/PC"}
-      - {id: 44, cat: Audio, "Music/Pack"}
-      - {id: 12, cat: Audio/Lossless, "Music/FLAC"}
-      - {id: 15, cat: Audio/MP3, "Music/MP3"}
-      - {id: 37, cat: Audio, "Radio"}
-      - {id: 9, cat: PC/0day, "Apps/PC"}
-      - {id: 34, cat: Audio/Audiobook, "Audiobooks"}
-      - {id: 25, cat: Books/Ebook, "eBooks"}
+      - {id: 38, cat: Movies, desc: "Movie Pack"}
+      - {id: 36, cat: Movies, desc: "Movies/Classic Films"}
+      - {id: 13, cat: Movies, desc: "Movies/Documentary"}
+      - {id: 21, cat: Movies/Foreign, desc: "Movies/Foreign"}
+      - {id: 27, cat: Movies/HD, desc: "MoviesHD"}
+      - {id: 29, cat: Movies/SD, desc: "Movies/SD"}
+      - {id: 26, cat: Movies/SD, desc: "Movies/XviD"}
+      - {id: 41, cat: TV/FOREIGN, desc: "Foreign tv"}
+      - {id: 40, cat: TV, desc: "Mini-Series"}
+      - {id: 43, cat: TV/HD, desc: "TV H265"}
+      - {id: 42, cat: TV, desc: "TV Movie"}
+      - {id: 4, cat: TV/HD, desc: "TV/HD-x720"}
+      - {id: 14, cat: TV, desc: "TV/Packs"}
+      - {id: 2, cat: TV/SD, desc: "TV/SD MP4/mkv"}
+      - {id: 31, cat: TV/SD, desc: "TV/XviD"}
+      - {id: 18, cat: PC/Games, desc: "Games/PC"}
+      - {id: 44, cat: Audio, desc: "Music/Pack"}
+      - {id: 12, cat: Audio/Lossless, desc: "Music/FLAC"}
+      - {id: 15, cat: Audio/MP3, desc: "Music/MP3"}
+      - {id: 37, cat: Audio, desc: "Radio"}
+      - {id: 9, cat: PC/0day, desc: "Apps/PC"}
+      - {id: 34, cat: Audio/Audiobook, desc: "Audiobooks"}
+      - {id: 25, cat: Books/Ebook, desc: "eBooks"}
 
     modes:
       search: [q]
@@ -92,7 +92,7 @@
       tags_type: 0
 
     rows:
-      selector: table#torrent_table > tbody > tr.torrent
+      selector: table#torrent_table > tbody > tr.torrent:has(a[href^="torrents.php?action=download&id="])
 
     fields:
       category:

@@ -49,6 +49,7 @@
       #Documentales
       - {id: 53, cat: TV/Documentary, desc: "Documentales - HD"}
       - {id: 52, cat: TV/Documentary, desc: "Documentales - SD"}
+      - {id: 85, cat: Books, desc: "Manuales"}
       #Adultos
       - {id: 55, cat: XXX/x264, desc: "Adultos - HD"}
       - {id: 54, cat: XXX/XviD, desc: "Adultos - SD"}
@@ -59,13 +60,24 @@
       #Deportes
       - {id: 61, cat: TV/Sport, desc: "Deportes - HD"}
       - {id: 60, cat: TV/Sport, desc: "Deportes - SD"}
-
-      - {id: 85, cat: Books, desc: "Manuales"}
+      # internal cats not provided in search category dropdown !?!
+      # found by fishing
+      - {id: 37, cat: Books/Ebook, desc: "Ebook"}
+      - {id: 47, cat: Audio/Lossless, desc: "Music Lossless"}
+      - {id: 31, cat: Audio/Video, desc: "Music Video"}
+      - {id: 19, cat: Audio/MP3, desc: "Music MP3"}
+      - {id: 29, cat: PC/Games, desc: "PC Game"}
+      - {id: 26, cat: Console/Wii, desc: "Console Wii / WiiU"}
+      - {id: 27, cat: Console/Xbox 360, desc: "Console Xbox360"}
+      - {id: 28, cat: Console/PSP, desc: "Console PSP / PS3"}
+      - {id: 42, cat: PC/ISO, desc: "PC ISO"}
+      - {id: 44, cat: PC, desc: "PC"}
+      - {id: 39, cat: Books/Other, desc: "Books Other"}
 
     modes:
-      search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
+      search: [q, imdbid]
+      tv-search: [q, season, ep, imdbid]
+      movie-search: [q, imdbid]
 
   settings:
     - name: username
@@ -116,12 +128,13 @@
       page: torrents
       $raw: "category={{ range .Categories }}{{.}};{{end}}"
       # 0 filename 1 file&dsc 2 descr 5 gold 6 silver 7 bronze
-      options: 0
+      options: "{{ if .Query.IMDBID }}2{{else}}0{{end}}"
       # 0 all 1 active 2 dead
       active: 0
-      search: "{{ .Keywords }}"
+      search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
       order: "{{ .Config.sort }}"
       by: "{{ .Config.type }}"
+      # does not return imdb link in results
 
     rows:
       selector: "#Mcol table.table-inverse ~ table.table-inverse > tbody > tr:has(a[href^=\"index.php?page=torrent-details\"])"
@@ -157,6 +170,8 @@
           - name: regexp
             args: src=(.+?)width
           - name: trim
+          - name: replace
+            args: ["torrentimg/nocover.jpg", ""]
       details:
         selector: td:nth-child(2) a
         attribute: href
@@ -189,18 +204,20 @@
           - name: regexp
             args: "background: #(.*)"
           - name: replace
-            args: ["f9e5a5", "0"]
+            args: ["f9bdbd", "0"] # freeleech
           - name: replace
-            args: ["a9a9a9", "0.5"]
+            args: ["f9e5a5", "0"] # gold
           - name: replace
-            args: ["f6c8a6", "0.75"]
+            args: ["a9a9a9", "0.5"] # silver
+          - name: replace
+            args: ["f6c8a6", "0.75"] # bronze
       uploadvolumefactor:
-          case:
-            img[src$="2x.gif"]: 2
-            img[src$="3x.gif"]: 3
-            img[src$="4x.gif"]: 4
-            img[src$="5x.gif"]: 5
-            img[src$="6x.gif"]: 6
-            img[src$="7x.gif"]: 7
-            "*": 1
+        case:
+          img[src$="2x.gif"]: 2
+          img[src$="3x.gif"]: 3
+          img[src$="4x.gif"]: 4
+          img[src$="5x.gif"]: 5
+          img[src$="6x.gif"]: 6
+          img[src$="7x.gif"]: 7
+          "*": 1
 # xbtit customised

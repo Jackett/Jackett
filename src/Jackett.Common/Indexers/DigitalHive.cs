@@ -93,7 +93,7 @@ namespace Jackett.Common.Indexers
             var loginPage = await RequestStringWithCookies(LoginUrl, configData.CookieHeader.Value);
             var parser = new HtmlParser();
             var cq = parser.ParseDocument(loginPage.Content);
-            var recaptchaSiteKey = cq.QuerySelector(".g-recaptcha").GetAttribute("data-sitekey");
+            var recaptchaSiteKey = cq.QuerySelector(".g-recaptcha")?.GetAttribute("data-sitekey");
             if (recaptchaSiteKey != null)
             {
                 var result = configData;
@@ -102,16 +102,15 @@ namespace Jackett.Common.Indexers
                 result.Captcha.Version = "2";
                 return result;
             }
-            else
+
+            return new ConfigurationDataBasicLogin
             {
-                var result = new ConfigurationDataBasicLogin();
-                result.SiteLink.Value = configData.SiteLink.Value;
-                result.Instructions.Value = configData.Instructions.Value;
-                result.Username.Value = configData.Username.Value;
-                result.Password.Value = configData.Password.Value;
-                result.CookieHeader.Value = loginPage.Cookies;
-                return result;
-            }
+                SiteLink = { Value = configData.SiteLink.Value },
+                Instructions = { Value = configData.Instructions.Value },
+                Username = { Value = configData.Username.Value },
+                Password = { Value = configData.Password.Value },
+                CookieHeader = { Value = loginPage.Cookies }
+            };
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

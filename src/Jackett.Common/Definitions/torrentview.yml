@@ -7,11 +7,14 @@
   encoding: UTF-8
   followredirect: true
   links:
-    - https://torrentview5.net/
+    - https://torrentview8.net/
   legacylinks:
     - https://torrentview.net/
     - https://torrentview3.net/
     - https://torrentview4.net/
+    - https://torrentview5.net/
+    - https://torrentview6.net/
+    - https://torrentview7.net/
 
   caps:
     categorymappings:
@@ -72,8 +75,14 @@
         filters:
           - name: dateparse
             args: "2006-01-02T15:04:05+09:00"
+      cat:
+        selector: div.media-content > a[href^="./board.php"]
+        attribute: href
+        filters:
+          - name: querystring
+            args: bo_table
       size:
-        text: "512 MB"
+        text: "{{ if ne .Result.cat \"mov\" }}512 MB{{else}}2 GB{{end}}"
       seeders:
         text: 1
       leechers:

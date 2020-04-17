@@ -28,7 +28,7 @@
       - {id: 16, cat: Audio/Video, desc: "Live"}
 
     modes:
-      search: [q]
+      search: [q, imdbid]
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
 
@@ -48,8 +48,8 @@
     paths:
       - path: torrents.php
     inputs:
-      $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
-      searchstr: "{{if .Query.IMDBID}}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+      $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
+      searchstr: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
     rows:
       selector: table#torrent_table > tbody > tr.torrent
     fields:
@@ -97,9 +97,9 @@
         selector: td.leecher_col
       downloadvolumefactor:
         case:
-          "span.freeleech_slot": "0" # 24h freeelech slot
-          "span.freeleech": "0"
-          "*": "1"
+          "span.freeleech_slot": 0 # 24h freeelech slot
+          "span.freeleech": 0
+          "*": 1
       uploadvolumefactor:
-        case:
-          "*": "1"
+        text: 1
+# engine tbd

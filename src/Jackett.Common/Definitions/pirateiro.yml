@@ -5,10 +5,13 @@
   language: en-us
   type: public
   encoding: UTF-8
+  followredirect: true
   links:
     - https://pirateiro.com/
   legacylinks:
     - http://pirateiro.com/
+    - https://pirateiro.unblockit.pro/
+    - https://pirateiro.unblockit.one/ # currently down
 
   caps:
     categories:
@@ -60,7 +63,7 @@
         selector: td:nth-child(1) a:nth-child(2)
         attribute: href
       download:
-        # .torrent urls can be missing 
+        # .torrent urls can be missing
         optional: true
         selector: a[href$="/download"]
         attribute: href

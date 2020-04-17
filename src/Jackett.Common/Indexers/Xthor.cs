@@ -58,9 +58,6 @@ namespace Jackett.Common.Indexers
             Language = "fr-fr";
             Type = "private";
 
-            // Clean capabilities
-            TorznabCaps.Categories.Clear();
-
             // Movies
             AddCategoryMapping(118, TorznabCatType.MoviesBluRay, "UHD FULL BLURAY");
             AddCategoryMapping(119, TorznabCatType.MoviesBluRay, "UHD BLURAY REMUX");
@@ -139,7 +136,7 @@ namespace Jackett.Common.Indexers
 
         // Warning 1998 is async method with no await calls inside
         // TODO: Remove pragma by wrapping return in Task.FromResult and removing async
-        
+
 #pragma warning disable 1998
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -234,6 +231,11 @@ namespace Jackett.Common.Indexers
                             torrent.name = regex.Replace(torrent.name, "$1" + ReplaceMulti + "$2");
                         }
 
+                        var publishDate = DateTimeUtil.UnixTimestampToDateTime(torrent.added);
+                        //TODO replace with download link?
+                        var guid = new Uri(TorrentDescriptionUrl.Replace("{id}", torrent.id.ToString()));
+                        var comments = new Uri(TorrentCommentUrl.Replace("{id}", torrent.id.ToString()));
+                        var link = new Uri(torrent.download_link);
                         var release = new ReleaseInfo
                         {
                             // Mapping data
@@ -243,18 +245,19 @@ namespace Jackett.Common.Indexers
                             Peers = torrent.seeders + torrent.leechers,
                             MinimumRatio = 1,
                             MinimumSeedTime = 345600,
-                            PublishDate = DateTimeUtil.UnixTimestampToDateTime(torrent.added),
+                            PublishDate = publishDate,
                             Size = torrent.size,
                             Grabs = torrent.times_completed,
                             Files = torrent.numfiles,
                             UploadVolumeFactor = 1,
                             DownloadVolumeFactor = (torrent.freeleech == 1 ? 0 : 1),
-                            Guid = new Uri(TorrentDescriptionUrl.Replace("{id}", torrent.id.ToString())),
-                            Comments = new Uri(TorrentCommentUrl.Replace("{id}", torrent.id.ToString())),
-                            Link = new Uri(torrent.download_link),
+                            Guid = guid,
+                            Comments = comments,
+                            Link = link,
                             TMDb = torrent.tmdb_id
                         };
 
+                        //TODO make consistent with other trackers
                         if (DevMode)
                         {
                             Output(release.ToString());

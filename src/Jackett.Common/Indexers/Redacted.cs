@@ -9,21 +9,23 @@ namespace Jackett.Common.Indexers
 {
     public class PassTheHeadphones : GazelleTracker
     {
-        public PassTheHeadphones(IIndexerConfigurationService configService, WebClient webClient, Logger logger, IProtectionService protectionService)
-            : base(name: "Redacted",
-                desc: "A music tracker",
-                link: "https://redacted.ch/",
-                configService: configService,
-                logger: logger,
-                protectionService: protectionService,
-                webClient: webClient,
-                supportsFreeleechTokens: true,
-                has2Fa: true
-                )
+        public PassTheHeadphones(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+            : base("Redacted",
+                   description: "A music tracker",
+                   link: "https://redacted.ch/",
+                   caps: new TorznabCapabilities
+                   {
+                       SupportedMusicSearchParamsList = new List<string> { "q", "album", "artist", "label", "year" }
+                   },
+                   configService: configService,
+                   client: wc,
+                   logger: l,
+                   p: ps,
+                   supportsFreeleechTokens: true,
+                   has2Fa: true)
         {
             Language = "en-us";
             Type = "private";
-            TorznabCaps.SupportedMusicSearchParamsList = new List<string>() { "q", "album", "artist", "label", "year" };
 
             AddCategoryMapping(1, TorznabCatType.Audio, "Music");
             AddCategoryMapping(2, TorznabCatType.PC, "Applications");

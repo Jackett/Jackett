@@ -1,0 +1,151 @@
+---
+  site: u-torrents
+  name: U-Torrents
+  description: "U-Torrents.ro (UTT) is a ROMANIAN Private Torrent Tracker for 0DAY / GENERAL"
+  language: ro-ro
+  type: private
+  encoding: UTF-8
+  links:
+    - https://www.u-torrents.ro/
+
+  caps:
+    categorymappings:
+      - {id: 300, cat: TV, desc: "Cartoons"}
+      - {id: 401, cat: PC/0day, desc: "Appz"}
+      - {id: 42, cat: TV/Documentary, desc: "Documentary"}
+      - {id: 6, cat: Books, desc: "eBooks"}
+      - {id: 11, cat: PC/Games, desc: "Games-PC"}
+      - {id: 19, cat: PC/Phone-Other, desc: "Mobile"}
+      - {id: 1, cat: Movies, desc: "Movies"}
+      - {id: 43, cat: Movies/BluRay, desc: "Movies-BluRay"}
+      - {id: 49, cat: Movies/BluRay, desc: "Movies-BluRay-RO"}
+      - {id: 7, cat: Movies/DVD, desc: "Movies-DVD"}
+      - {id: 200, cat: Movies/DVD, desc: "Movies-DVD-RO"}
+      - {id: 17, cat: Movies/HD, desc: "Movies-HD"}
+      - {id: 45, cat: Movies/HD, desc: "Movies-HD-RO"}
+      - {id: 48, cat: Movies/3D, desc: "Movies-3D"}
+      - {id: 38, cat: Movies, desc: "Movies-Packs"}
+      - {id: 10, cat: Movies/SD, desc: "Movies-XviD"}
+      - {id: 44, cat: Movies/SD, desc: "Movies-XviD-RO"}
+      - {id: 5, cat: Audio/MP3, desc: "Music MP3"}
+      - {id: 23, cat: Audio/Video, desc: "Music Videos"}
+      - {id: 22, cat: TV/Sport, desc: "Sport"}
+      - {id: 20, cat: TV, desc: "TV Episodes"}
+      - {id: 2, cat: TV/HD, desc: "TV Episodes HD"}
+      - {id: 403, cat: TV/HD, desc: "TV Episodes RO"}
+      - {id: 402, cat: TV/HD, desc: "TV Episodes HD-RO"}
+      - {id: 41, cat: TV, desc: "TV-Packs"}
+      - {id: 68, cat: XXX, desc: "XXX"}
+      - {id: 46, cat: XXX/Imageset, desc: "XXX-IMGSet"}
+      - {id: 18, cat: Other, desc: "Pictures"}
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "4"
+      options:
+        "4": "created"
+        "7": "seeders"
+        "5": "size"
+        "1": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
+
+  login:
+    path: takelogin.php
+    method: post
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+      submitme: X
+    error:
+      - selector: div.card-body:contains("incorrect")
+    test:
+      path: index.php
+      selector:  a[href^="logout.php?id="]
+
+  search:
+    paths:
+      - path: browse
+    inputs:
+      $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+      search: "{{ .Keywords }}"
+      sort: "{{ .Config.sort }}"
+      type: "{{ .Config.type }}"
+
+    rows:
+      selector: table.table > tbody > tr.browse
+
+    fields:
+      category:
+        selector: a[href^="browse.php?cat="]
+        attribute: href
+        filters:
+          - name: regexp
+            args: (\d+)$
+      title_alternate:
+        selector: a[href^="download.php/"]
+        attribute: href
+        filters:
+          - name: re_replace
+            args: ["download.php/\\d+/", ""]
+          - name: replace
+            args: [".torrent", ""]
+          - name: urldecode
+      title:
+        selector: a[href^="details.php?id="]
+        filters:
+          - name: re_replace
+            args: ["\\[email\\sprotected\\]", "{{ .Result.title_alternate }}"]
+      details:
+        selector: a[href^="details.php?id="]
+        attribute: href
+      download:
+        selector: a[href^="download.php/"]
+        attribute: href
+      banner:
+        selector: a[href^="details.php?id="]
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: "src=(.+?) "
+      date:
+        selector: td:nth-child(4)
+        filters:
+          - name: dateparse
+            args: "02-01-200615:04:05"
+      size:
+        selector: td:nth-child(5)
+      grabs:
+        selector: td:nth-child(6)
+        filters:
+          - name: regexp
+            args: (\d+)
+      seeders:
+        selector: td:nth-child(7)
+      leechers:
+        selector: td:nth-child(8)
+      downloadvolumefactor:
+        case:
+          img[src="imagini/YNTdm1Jn_o.png"]: 0
+          "*": 1
+      uploadvolumefactor:
+        text: 1
+# engine n/a

@@ -31,7 +31,10 @@ namespace Jackett.Common.Indexers
             : base(name: "Superbits",
                 description: "SuperBits is a SWEDISH Private Torrent Tracker for MOVIES / TV / GENERAL",
                 link: "https://superbits.org/",
-                caps: new TorznabCapabilities(),
+                caps: new TorznabCapabilities
+                {
+                    SupportsImdbMovieSearch = true
+                },
                 configService: configService,
                 client: w,
                 logger: l,
@@ -41,8 +44,6 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "sv-sw";
             Type = "private";
-
-            TorznabCaps.SupportsImdbMovieSearch = true;
 
             AddCategoryMapping(1, TorznabCatType.MoviesDVD, "DVD-R Swesub");
             AddCategoryMapping(2, TorznabCatType.TV, "DVD-R TV");

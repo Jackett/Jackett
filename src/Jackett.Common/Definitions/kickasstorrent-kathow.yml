@@ -5,15 +5,21 @@
   language: en-us
   type: public
   encoding: UTF-8
+  followredirect: true
   links:
     - https://kickass.ws/
+    - https://kickass.unblockit.one/
   legacylinks:
     - https://kickass.gg/
     - https://katcr.io/
-    - https://thekat.nz/  
+    - https://thekat.nz/
     - https://thekat.se/
     - https://kat.how/
     - https://kat.li/
+    - https://kickasstorrents.unblockninja.com/ # kickasstorrent proxy, not kickasstorrent-kathow
+    - https://katcr.to/ # possible 3rd kickasstorrent site/clone?
+    - https://kickasstorrent.cr/ # possible 3rd kickasstorrent site/clone?
+    - https://kickass.unblockit.pro/
 
   caps:
     categories:
@@ -21,10 +27,14 @@
       tv: TV
       music: Audio
       books: Books
-      Games: Console
+      games: Console
       applications: PC
       xxx: XXX
       other: Other
+      # additional from proxy
+      video: TV # ,Movies
+      porn: XXX
+      audio: Audio
 
     modes:
       search: [q]
@@ -58,23 +68,40 @@
 
     fields:
       category:
+        text: other
+      category|noappend:
         optional: true
         selector: span[id^="cat_"] > strong > a
         attribute: href
         filters:
+          - name: tolower
           - name: trim
             args: /
+       # proxy uses Video for both TV and Movies
+      category:
+        optional: true
+        selector: span[id^="cat_"] > strong > a:contains("Video")
+        filters:
+          - name: replace
+            args: ["Video", "movies"]
       title:
         selector: td:nth-child(1) > div > div > a[class="cellMainLink"]
       details:
         selector: td:nth-child(1) > div > div > a[class="cellMainLink"]
         attribute: href
       download:
+        optional: true
+        # the official site delivers mylink so we skip to the magnet URI
         selector: td:nth-child(1) > div > a[data-download=""]
         attribute: href
         filters:
           - name: querystring
             args: url
+      download:
+        optional: true
+        # the proxy delivers magnet URI
+        selector: a[href^="magnet:?xt="]
+        attribute: href
       size:
         selector: td:nth-child(2)
         filters:
@@ -90,6 +117,10 @@
           - name: replace
             args: ["N/A", "0"]
       leechers:
+        # default for proxy which has an empty leechers selector
+        text: 0
+      leechers:
+        optional: true
         selector: td:nth-child(5)
         filters:
           - name: replace

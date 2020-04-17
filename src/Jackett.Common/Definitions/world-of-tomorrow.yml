@@ -18,7 +18,7 @@
       - {id: 11, cat: Movies/SD, desc: "DVD-R"}
       - {id: 60, cat: Movies/HD, desc: "HDTV"}
       - {id: 62, cat: Movies/SD, desc: "SD"}
-      - {id: 89, cat: Movies/HD, desc: "UHD"}
+      - {id: 89, cat: Movies/UHD, desc: "UHD"}
       - {id: 91, cat: Movies, desc: "Packs"}
 
       # Serien
@@ -27,7 +27,7 @@
       - {id: 77, cat: TV/SD, desc: "Serien-SD"}
       - {id: 78, cat: TV/HD, desc: "Serien-720p"}
       - {id: 79, cat: TV/HD, desc: "Serien-1080p"}
-      - {id: 95, cat: TV/HD, desc: "Serien-2160p"}
+      - {id: 95, cat: TV/UHD, desc: "Serien-2160p"}
 
       # Games
       - {id: 4, cat: PC/Games, desc: "Windows"}

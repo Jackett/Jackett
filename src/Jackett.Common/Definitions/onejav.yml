@@ -21,7 +21,7 @@
     paths:
       - path: "{{ if .Keywords }}search/{{ .Keywords }}{{else}}new{{end}}"
       - path: "{{ if .Keywords }}search/{{ .Keywords }}{{else}}new{{end}}?page=2"
-      
+
     rows:
       selector: div.mb-3
 
@@ -39,6 +39,7 @@
       banner:
         selector: img
         attribute: src
+        optional: true
       actress:
         text: ""
       actress:
@@ -48,15 +49,20 @@
           - name: prepend
             args: "Actress: "
       tags:
+        text: ""
+      tags:
         selector: div.tags
+        optional: true
         filters:
           - name: prepend
             args: "Tags: "
-      description:
+      descr:
+        text: ""
+      descr:
         selector: p.level
-        filters:
-          - name: append
-            args: "</br>{{ .Result.actress }}</br>{{ .Result.tags }}"
+        optional: true
+      description:
+        text: "{{ .Result.descr }}</br>{{ .Result.actress }}</br>{{ .Result.tags }}"
       date:
         selector: p.is-6 > a
         attribute: href

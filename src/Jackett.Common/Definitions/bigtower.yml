@@ -6,11 +6,9 @@
   type: private
   encoding: UTF-8
   links:
-    - https://bigtower.info/
+    - http://bigtower.info/ # site does not support https NET::ERR_CERT_DATE_INVALID
   legacylinks:
-    - http://bigtower.info/
-  certificates:
-    - b486d17b6386dfe1778ea371d661f37554254cc6 # expired 19 Dec 2019
+    - https://bigtower.info/
 
   caps:
     categorymappings:

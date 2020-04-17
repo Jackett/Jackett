@@ -6,10 +6,11 @@
   type: private
   encoding: UTF-8
   links:
-    - https://teamctgame.xyz/
+    - https://tctg.in/
   legacylinks:
     - https://teamctgame.co/
     - http://teamctgame.xyz/
+    - https://teamctgame.xyz/
 
   caps:
     categorymappings:
@@ -162,7 +163,7 @@
         attribute: onmouseover
         filters:
           - name: regexp
-            args: "le: </b>(.*?)<br" 
+            args: "le: </b>(.*?)<br"
           - name: dateparse
             args: "02-01-2006"
       downloadvolumefactor:

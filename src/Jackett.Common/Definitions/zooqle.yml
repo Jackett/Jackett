@@ -5,8 +5,17 @@
   language: en-us
   type: public
   encoding: UTF-8
+  followredirect: true
   links:
     - https://zooqle.com/
+    - https://zooqle.unblockit.one/
+    - https://zooqle.black-mirror.xyz/
+    - https://zooqle.unblocked.casa/
+    - https://zooqle.proxyportal.fun/
+    - https://zooqle.uk-unblock.xyz/
+    - https://zooqle.ind-unblock.xyz/
+  legacylinks:
+    - https://zooqle.unblockit.pro/
 
   caps:
     categories:
@@ -46,7 +55,7 @@
     # includes only verified torrents
     paths:
       - path: "search?{{ if .Keywords }}s={{ .Config.sort }}&v=t&sd={{ .Config.type }}&q={{ .Keywords }}{{else}}s={{ .Config.sort }}&v=t&sd={{ .Config.type }}&q= *{{end}}{{ if .Categories }} category:{{ range .Categories }}{{.}},{{end}}{{else}}{{end}}"
-      
+
     rows:
       selector: tr:has(td[class^="text-muted3"])
       filters:
@@ -69,7 +78,7 @@
         selector: td:nth-child(2) a
         attribute: href
       download:
-        # .torrent urls can be missing 
+        # .torrent urls can be missing
         optional: true
         selector: a[title^="Generate .torrent"]
         attribute: href
@@ -107,7 +116,7 @@
       leechers:
         # leechers can be missing
         optional: true
-        selector: td:nth-child(6) div 
+        selector: td:nth-child(6) div
         attribute: title
         filters:
           - name: split

@@ -2,7 +2,7 @@
 
 [![GitHub issues](https://img.shields.io/github/issues/Jackett/Jackett.svg?maxAge=60&style=flat-square)](https://github.com/Jackett/Jackett/issues)
 [![GitHub pull requests](https://img.shields.io/github/issues-pr/Jackett/Jackett.svg?maxAge=60&style=flat-square)](https://github.com/Jackett/Jackett/pulls)
-[![Build Status](https://dev.azure.com/Jackett-project/Jackett/_apis/build/status/Jackett.Jackett?branchName=master)](https://dev.azure.com/Jackett-project/Jackett/_build/latest?definitionId=1&branchName=master)
+[![Build Status](https://dev.azure.com/Jackett-project/Jackett/_apis/build/status/Jackett.Jackett?branchName=master)](https://dev.azure.com/jackett/jackett/_build/latest?definitionId=1&branchName=master)
 [![GitHub Releases](https://img.shields.io/github/downloads/Jackett/Jackett/total.svg?maxAge=60&style=flat-square)](https://github.com/Jackett/Jackett/releases/latest)
 [![Docker Pulls](https://img.shields.io/docker/pulls/linuxserver/jackett.svg?maxAge=60&style=flat-square)](https://hub.docker.com/r/linuxserver/jackett/)
 [![Discord](https://img.shields.io/badge/discord-chat-7289DA.svg?maxAge=60&style=flat-square)](https://discord.gg/J865QuA)
@@ -18,8 +18,8 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 
 
 #### Supported Systems
-* Windows 7SP1 or greater using .NET 4.6.1 or above [Download here](https://www.microsoft.com/net/framework/versions/net461)
-* Linux [supported operating systems here](https://github.com/dotnet/core/blob/master/release-notes/2.1/2.1-supported-os.md#linux)
+* Windows 7SP1 or greater
+* Linux [supported operating systems here](https://github.com/dotnet/core/blob/master/release-notes/3.1/3.1-supported-os.md#linux)
 * macOS 10.13 or greater
 
 <details> <summary> <b> Supported Public Trackers </b> </summary>
@@ -36,7 +36,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Badass Torrents
  * BigFANGroup
  * BitRu
- * BitTorrent.AM
  * BT.etree
  * BTDB
  * BTDIGG
@@ -50,9 +49,11 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Demonoid
  * dmhy
  * EliteTorrent.biz
+ * Epizod
  * EstrenosDTL
  * ETTV
  * EXT Torrents
+ * ExtraTorrent.ag
  * ExtraTorrent.cd
  * EZTV
  * Filebase
@@ -94,6 +95,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * OneJAV
  * OxTorrent
  * ParnuXi
+ * PC-torrent
  * PiratBit
  * Pirateiro
  * PornLeech
@@ -101,44 +103,51 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * PornoRip
  * PornoTor
  * ProStyleX
+ * Rapidzona
  * RARBG
+ * RinTor
  * Rus-media
  * RuTor
  * RuTracker.RU
- * Seedpeer
  * shokweb
  * ShowRSS
  * SkyTorrentsClone
  * SolidTorrents
+ * sosulki
  * sukebei-Pantsu
  * sukebei.Nyaa.si
- * TFile
  * The Pirate Bay (TPB)
+ * TNTVillage
  * Tokyo Tosho
  * TopNow
  * Torlock
  * TOROS
+ * Torrent Bomb (토렌트봄)
  * Torrent Downloads (TD)
+ * Torrent Oyun indir
+ * torrent-pirat
  * Torrent4You
  * Torrent9
  * Torrent9Clone
  * TorrentDownload
  * TorrentFunk
  * TorrentGalaxy (TGx)
+ * TorrentHane
  * TorrentKitty
  * TorrentParadise
  * TorrentProject2
  * TorrentRex
  * TorrentQuest
  * Torrents.csv
- * TorrentView
- * TorrentWal
+ * Torrentv
+ * TorrentView (토렌트뷰)
  * Torrentz2
  * Underverse
  * UnionDHT
  * xxxtor
  * YourBittorrent
  * YTS.ag
+ * zetorrents
  * Zooqle
 </details>
 
@@ -154,6 +163,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * CzTorrent
  * DXP (Deaf Experts)
  * Deildu
+ * DimeADozen (EzTorrent)
  * EniaHD
  * Erzsebet
  * ExKinoRay
@@ -165,6 +175,8 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HamsterStudio
  * IV-Torrents
  * KinoNaVse100
+ * Kaztorka
+ * Kinorun
  * Kinozal
  * Korsar
  * LostFilm.tv
@@ -175,6 +187,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * MuziekFrabriek
  * NetHD (VietTorrent)
  * Pornolab
+ * PussyTorrents
  * RiperAM
  * RockBox
  * RuTracker
@@ -195,6 +208,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 
  * 0day.kiev
  * 2 Fast 4 You
+ * 3ChangTrai (3CT)
  * 3D Torrents (3DT)
  * 3evils
  * 4thD (4th Dimension)
@@ -251,6 +265,8 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * CartoonChaos (CC)
  * CasaTorrent
  * ChannelX
+ * ChileBT
+ * Cinecalidad
  * CinemaMovies
  * CinemaZ (EuTorrents)
  * Cinemageddon
@@ -262,8 +278,10 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * CrnaBerza
  * DXDHD
  * DanishBits (DB)
+ * Dark-Shadow
  * Das Unerwartete
  * DataScene (DS)
+ * Demon-Site
  * DesiReleasers
  * DesiTorrents
  * Diablo Torrent
@@ -277,18 +295,18 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * EbookParadijs
  * Ebooks-Shares
  * EfectoDoppler
- * EggMeOn
  * Elite-Tracker
  * Empornium (EMP)
+ * EpubLibre
  * Ethor.net (Thor's Land)
  * ExoticaZ (YourExotic)
  * ExtremeTorrents
  * FANO.IN
  * Fantastic Heaven
- * FeedUrNeed (FuN)
  * Femdomcult
  * FileList (FL)
  * Film-Paleis
+ * FinElite (FE)
  * FinVip
  * FocusX
  * FreeTorrent
@@ -332,6 +350,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HacheDe
  * Hebits
  * Hon3y HD
+ * Horror Site
  * HuSh
  * ICE Torrent
  * IPTorrents (IPT)
@@ -341,6 +360,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * JPopsuki
  * Kapaki
  * Karagarga
+ * LastFiles
  * Le Saloon
  * LeChaudron
  * LeagueHD
@@ -392,7 +412,10 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * PrivateHD (PHD)
  * ProAudioTorrents (PAT)
  * Psytorrents
+ * PTerClub
+ * PTSBAO
  * PuntoTorrent
+ * PuroVicio
  * R3V WTF!
  * RPTorrents
  * Racing4Everyone (R4E)
@@ -421,6 +444,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * SnowPT (SSPT)
  * SpaceTorrent
  * SpeedCD
+ * Speedmaster HD
  * SpeedTorrent Reloaded
  * Spirit of Revolution
  * SportHD
@@ -462,6 +486,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TorrentBytes (TBy)
  * TorrentCCF (TCCF)
  * TorrentDay (TD)
+ * TorrentDB
  * TorrentFactory
  * TorrentHR
  * TorrentHeaven
@@ -474,9 +499,11 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TotallyKids (TK)
  * TranceTraffic
  * Trezzor
+ * TurkSeed
  * TurkTorrent (TT)
  * Twilight Torrents
  * Twilights Zoom
+ * U-Torrents
  * U2 (U2分享園@動漫花園)
  * UHDBits
  * UnionGang

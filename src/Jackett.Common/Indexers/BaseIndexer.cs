@@ -265,7 +265,7 @@ namespace Jackett.Common.Indexers
                 return results;
 
             var filteredResults = results.Where(
-                result => result.Category.IsEmptyOrNull() || query.Categories.Intersect(result.Category).Any() ||
+                result => result.Category?.Any() != true || query.Categories.Intersect(result.Category).Any() ||
                           TorznabCatType.QueryContainsParentCategory(query.Categories, result.Category));
 
             return filteredResults;
@@ -605,19 +605,14 @@ namespace Jackett.Common.Indexers
 
         private string ResolveCookies(string incomingCookies = "")
         {
-            var redirRequestCookies = (CookieHeader != null && CookieHeader != "" ? CookieHeader + " " : "") + incomingCookies;
-            var expression = new System.Text.RegularExpressions.Regex(@"([^\\,;\s]+)=([^=\\,;\s]*)");
-            var cookieDIctionary = new Dictionary<string, string>();
-            var matches = expression.Match(redirRequestCookies);
-            while (matches.Success)
-            {
-                if (matches.Groups.Count > 2)
-                    cookieDIctionary[matches.Groups[1].Value] = matches.Groups[2].Value;
-                matches = matches.NextMatch();
-            }
-            return string.Join("; ", cookieDIctionary
-                .Where(kv => kv.Key != "cf_use_ob" && kv.Key != "cf_ob_info") // These cookies are causing BadGateway errors, so we drop them, see issue #2306
-                .Select(kv => kv.Key.ToString() + "=" + kv.Value.ToString()).ToArray());
+            var redirRequestCookies = string.IsNullOrWhiteSpace(CookieHeader) ? incomingCookies : CookieHeader + " " + incomingCookies;
+            var cookieDictionary = CookieUtil.CookieHeaderToDictionary(redirRequestCookies);
+
+            // These cookies are causing BadGateway errors, so we drop them, see issue #2306
+            cookieDictionary.Remove("cf_use_ob");
+            cookieDictionary.Remove("cf_ob_info");
+
+            return CookieUtil.CookieDictionaryToHeader(cookieDictionary);
         }
 
         // Update CookieHeader with new cookies and save the config if something changed (e.g. a new CloudFlare clearance cookie was issued)
@@ -673,6 +668,7 @@ namespace Jackett.Common.Indexers
             // add 1:1 categories
             if (trackerCategoryDesc != null && trackerCategory != null)
             {
+                //TODO convert to int.TryParse() to avoid using throw as flow control
                 try
                 {
                     var trackerCategoryInt = int.Parse(trackerCategory);

@@ -5,10 +5,21 @@
   language: en-us
   type: public
   encoding: UTF-8
+  followredirect: true
   links:
-    - https://www.ettv.to/
+    - https://www.ettvdl.com/
+    - https://ettv.unblockit.one/
+    - https://ettv.unblockninja.com/
+    - https://ettv.root.yt/
+    - https://ettv.black-mirror.xyz/
+    - https://ettv.unblocked.casa/
+    - https://ettv.proxyportal.fun/
+    - https://ettv.uk-unblock.xyz/
+    - https://ettv.ind-unblock.xyz/
   legacylinks:
     - https://www.ettv.tv/
+    - https://www.ettv.to/
+    - https://ettv.unblockit.pro/
 
   caps:
     categorymappings:
@@ -70,13 +81,6 @@
       movie-search: [q]
 
   settings:
-    - name: downloadlink
-      type: select
-      label: Download link
-      default: "magnet:"
-      options:
-        "https://etorrent.click/" : "eTorrent.click"
-        "magnet:": "magnet"
     - name: sort
       type: select
       label: Sort requested from site
@@ -93,9 +97,9 @@
       options:
         "desc": "desc"
         "asc": "asc"
-  
+
   download:
-    selector: a[href^="{{ .Config.downloadlink }}"]
+    selector: a[href^="magnet:?xt="]
     attribute: href
 
   search:
@@ -132,12 +136,8 @@
           - name: re_replace
             args: ["( torrent)$", ""]
       category:
-        optional: true
-        selector: td:nth-child(1):contains("-")
-        filters:
-          - name: replace #7110 provide default for missing category
-            args: ["-", "78"]
-      category:
+        text: 78 #7110
+      category|noappend:
         optional: true
         selector: a[href^="/torrents.php?cat="]
         attribute: href

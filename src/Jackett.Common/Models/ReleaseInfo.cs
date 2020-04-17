@@ -37,7 +37,7 @@ namespace Jackett.Common.Models
         public IIndexer Origin;
 
 
-        private static double? GigabytesFromBytes(double? size) => size / 1024.0 / 1024.0 / 1024.0; 
+        private static double? GigabytesFromBytes(double? size) => size / 1024.0 / 1024.0 / 1024.0;
         public double? Gain => Seeders * GigabytesFromBytes(Size);
 
         public ReleaseInfo()

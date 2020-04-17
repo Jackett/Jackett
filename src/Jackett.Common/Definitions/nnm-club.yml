@@ -809,12 +809,7 @@
       leechers:
         selector: td.leechmed > b
       downloadvolumefactor:
-        case:
-          img[src$="/images/gold.gif"]: 0
-          img[src$="/images/platinum.gif"]: 0
-          img[src$="/images/bronze.gif"]: 0.75
-          img[src$="/images/silver.gif"]: 0.5
-          "*": 1
+        text: 0
       uploadvolumefactor:
         text: 1
 # engine n/a

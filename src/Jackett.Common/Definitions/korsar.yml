@@ -266,7 +266,7 @@
       - {id: 559, cat: Audio/MP3, desc: "Музыка - Сборники отечественного шансона (Lossy)"}
       - {id: 555, cat: Audio/Lossless, desc: "Музыка - Саундтреки к зарубежным фильмам (Lossless)"}
       - {id: 560, cat: Audio/Lossless, desc: "Музыка - Зарубежная музыка других жанров (Lossless)"}
-      - {id: 561, cat: Audio,/MP3 desc: "Музыка - Зарубежная музыка других жанров (Lossy)"}
+      - {id: 561, cat: Audio/MP3, desc: "Музыка - Зарубежная музыка других жанров (Lossy)"}
       - {id: 562, cat: Audio/MP3, desc: "Музыка - Сборники песен для детей (Lossy)"}
       - {id: 564, cat: Audio/Lossless, desc: "Музыка - Военная песня (Lossless)"}
       - {id: 565, cat: Audio/Lossless, desc: "Музыка - Авторская песня (Lossless)"}

@@ -5,11 +5,20 @@
   language: en-us
   type: public
   encoding: UTF-8
+  followredirect: true
   links:
     - https://torrentgalaxy.to/
+    - https://torrentgalaxy.unblockit.one/
+    - https://torrentgalaxy.unblockninja.com/
+    - https://tgx.black-mirror.xyz/
+    - https://tgx.unblocked.casa/
+    - https://tgx.proxyportal.fun/
+    - https://tgx.uk-unblock.xyz/
+    - https://tgx.ind-unblock.xyz/
   legacylinks:
     - https://torrentgalaxy.org/
     - https://torrentgalaxy.pw/
+    - https://torrentgalaxy.unblockit.pro/
 
   caps:
     categorymappings:
@@ -134,7 +143,7 @@
         optional: true
         selector: div.tgxtablecell:last-of-type small:contains(":")
         filters:
-          - name: dateparse 
+          - name: dateparse
             args: "02/01/06 15:04"
       downloadvolumefactor:
         text: 0

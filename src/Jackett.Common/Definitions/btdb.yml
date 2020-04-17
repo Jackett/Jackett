@@ -5,12 +5,20 @@
   language: en-us
   type: public
   encoding: UTF-8
+  followredirect: true
   links:
-    -  https://btdb.io/
+    - https://btdb.io/
+    - https://btdb.unblockit.one/ # redirects to btdb.io in browser but appears to have no issue in Jackett
+    - https://btdb.black-mirror.xyz/
+    - https://btdb.unblocked.casa/
+    - https://btdb.proxyportal.fun/
+    - https://btdb.uk-unblock.xyz/
+    - https://btdb.ind-unblock.xyz/
   legacylinks:
-    -  https://btdb.to/
-    -  https://btdb.unblocked.app/
-    -  https://btdb.eu/
+    - https://btdb.to/
+    - https://btdb.unblocked.app/
+    - https://btdb.eu/
+    - https://btdb.unblockit.pro/
 
   caps:
     categorymappings:

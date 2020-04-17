@@ -33,7 +33,10 @@ namespace Jackett.Common.Indexers
             : base(name: "PirateTheNet",
                 description: "A movie tracker",
                 link: "http://piratethenet.org/",
-                caps: new TorznabCapabilities(),
+                caps: new TorznabCapabilities
+                {
+                    SupportsImdbMovieSearch = true
+                },
                 configService: configService,
                 client: w,
                 logger: l,
@@ -43,8 +46,6 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
-
-            TorznabCaps.SupportsImdbMovieSearch = true;
 
             configData.DisplayText.Value = "Only the results from the first search result page are shown, adjust your profile settings to show the maximum.";
             configData.DisplayText.Name = "Notice";
@@ -136,18 +137,13 @@ namespace Jackett.Common.Indexers
                 var rows = dom.QuerySelectorAll("table.main > tbody > tr");
                 foreach (var row in rows.Skip(1))
                 {
-                    var release = new ReleaseInfo();
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 72 * 60 * 60;
 
                     var qDetailsLink = row.QuerySelector("td:nth-of-type(2) > a:nth-of-type(1)"); // link to the movie, not the actual torrent
-                    release.Title = qDetailsLink.GetAttribute("alt");
 
                     var qCatIcon = row.QuerySelector("td:nth-of-type(1) > a > img");
                     var catStr = qCatIcon != null ?
                         qCatIcon.GetAttribute("src").Split('/').Last().Split('.').First() :
                         "packs";
-                    release.Category = MapTrackerCatToNewznab(catStr);
 
                     var qSeeders = row.QuerySelector("td:nth-of-type(9)");
                     var qLeechers = row.QuerySelector("td:nth-of-type(10)");
@@ -155,38 +151,44 @@ namespace Jackett.Common.Indexers
                     var qPudDate = row.QuerySelector("td:nth-of-type(6) > nobr");
                     var qSize = row.QuerySelector("td:nth-of-type(7)");
 
-                    release.Link = new Uri(SiteLink + qDownloadLink.GetAttribute("href").Substring(1));
-                    release.Title = qDetailsLink.GetAttribute("alt");
-                    release.Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
-                    release.Guid = release.Link;
+                    var link = new Uri(SiteLink + qDownloadLink.GetAttribute("href").Substring(1));
 
                     var dateStr = qPudDate.Text().Trim();
                     DateTime pubDateUtc;
                     if (dateStr.StartsWith("Today "))
-                        pubDateUtc = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified) + DateTime.ParseExact(dateStr.Split(new [] { ' ' }, 2)[1], "hh:mm tt", CultureInfo.InvariantCulture).TimeOfDay;
+                        pubDateUtc = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified) + DateTime.ParseExact(dateStr.Split(new[] { ' ' }, 2)[1], "hh:mm tt", CultureInfo.InvariantCulture).TimeOfDay;
                     else if (dateStr.StartsWith("Yesterday "))
                         pubDateUtc = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified) +
-                            DateTime.ParseExact(dateStr.Split(new [] { ' ' }, 2)[1], "hh:mm tt", CultureInfo.InvariantCulture).TimeOfDay - TimeSpan.FromDays(1);
+                            DateTime.ParseExact(dateStr.Split(new[] { ' ' }, 2)[1], "hh:mm tt", CultureInfo.InvariantCulture).TimeOfDay - TimeSpan.FromDays(1);
                     else
                         pubDateUtc = DateTime.SpecifyKind(DateTime.ParseExact(dateStr, "MMM d yyyy hh:mm tt", CultureInfo.InvariantCulture), DateTimeKind.Unspecified);
 
-                    release.PublishDate = pubDateUtc.ToLocalTime();
-
                     var sizeStr = qSize.Text();
-                    release.Size = ReleaseInfo.GetBytes(sizeStr);
-
-                    release.Seeders = ParseUtil.CoerceInt(qSeeders.Text());
-                    release.Peers = ParseUtil.CoerceInt(qLeechers.Text()) + release.Seeders;
-
-                    var files = row.QuerySelector("td:nth-child(4)").TextContent;
-                    release.Files = ParseUtil.CoerceInt(files);
-
-                    var grabs = row.QuerySelector("td:nth-child(8)").TextContent;
-                    release.Grabs = ParseUtil.CoerceInt(grabs);
-
-                    release.DownloadVolumeFactor = 0; // ratioless
-                    release.UploadVolumeFactor = 1;
-
+                    var seeders = ParseUtil.CoerceInt(qSeeders.Text());
+                    var files = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(4)").TextContent);
+                    var grabs = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(8)").TextContent);
+                    var comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
+                    var size = ReleaseInfo.GetBytes(sizeStr);
+                    var leechers = ParseUtil.CoerceInt(qLeechers.Text());
+                    var title = qDetailsLink.GetAttribute("alt");
+                    var release = new ReleaseInfo
+                    {
+                        MinimumRatio = 1,
+                        MinimumSeedTime = 72 * 60 * 60,
+                        Title = title,
+                        Category = MapTrackerCatToNewznab(catStr),
+                        Link = link,
+                        Comments = comments,
+                        Guid = link,
+                        PublishDate = pubDateUtc.ToLocalTime(),
+                        Size = size,
+                        Seeders = seeders,
+                        Peers = leechers + seeders,
+                        Files = files,
+                        Grabs = grabs,
+                        DownloadVolumeFactor = 0, // ratioless
+                        UploadVolumeFactor = 1
+                    };
                     releases.Add(release);
                 }
             }

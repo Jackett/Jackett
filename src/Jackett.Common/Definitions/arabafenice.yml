@@ -14,7 +14,7 @@
     categorymappings:
       # HRS
       - {id: 34, cat: Movies/HD, desc: "1080p HRS x264"}
-      - {id: 47, cat: Movies/HD, desc: "2160p 4k UltraHD HRS"}
+      - {id: 47, cat: Movies/UHD, desc: "2160p 4k UltraHD HRS"}
       - {id: 35, cat: TV, desc: "Serie TV HRS"}
       - {id: 36, cat: Movies/SD, desc: "DVDRip HRS"}
       - {id: 41, cat: Movies/SD, desc: "BDRip 576p HRS"}
@@ -38,7 +38,7 @@
       - {id: 42, cat: TV, desc: "Serie Tv Sub Ita"}
       - {id: 15, cat: TV/Documentary, desc: "documentaries"}
       - {id: 33, cat: TV, desc: "mp4"}
-      - {id: 40, cat: TV/HD, desc: "2160p 4K UltraHD"}
+      - {id: 40, cat: TV/UHD, desc: "2160p 4K UltraHD"}
       - {id: 38, cat: XXX, desc: "xXx"}
       - {id: 43, cat: Other, desc: "Arabic for social"}
 
@@ -65,7 +65,7 @@
       - {id: 32, cat: PC/Phone-Android, desc: "Android APP"}
 
     modes:
-      search: [q]
+      search: [q, imdbid]
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
 

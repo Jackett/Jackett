@@ -65,9 +65,6 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Type = "private";
 
-            // Clean capabilities
-            TorznabCaps.Categories.Clear();
-
             // Movies
             AddCategoryMapping("MOVIE|DVDR", TorznabCatType.MoviesDVD);             // DVDR
             AddCategoryMapping("MOVIE|DVDRIP", TorznabCatType.MoviesSD);            // DVDRIP

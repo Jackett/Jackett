@@ -48,7 +48,10 @@ namespace Jackett.Common.Indexers
                 name: "Norbits",
                 description: "Norbits is a Norwegian Private site for MOVIES / TV / GENERAL",
                 link: "https://norbits.net/",
-                caps: new TorznabCapabilities(),
+                caps: new TorznabCapabilities
+                {
+                    SupportsImdbMovieSearch = true
+                },
                 configService: configService,
                 client: w,
                 logger: l,
@@ -58,8 +61,6 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "nb-no";
             Type = "private";
-
-            TorznabCaps.SupportsImdbMovieSearch = true;
 
             AddCategoryMapping("main_cat[]=1&sub2_cat[]=19", TorznabCatType.MoviesHD, "Filmer - HD-1080p/i");
             AddCategoryMapping("main_cat[]=1&sub2_cat[]=20", TorznabCatType.MoviesHD, "Filmer - HD-720p");
@@ -274,7 +275,7 @@ namespace Jackett.Common.Indexers
                     var pageLinkCount = 1;
 
                     // Check if we have a minimum of one result
-                    if (firstPageRows?.Length > 1)
+                    if (firstPageRows?.Length >= 1)
                     {
                         // Retrieve total count on our alone page
                         nbResults = firstPageRows.Count();
@@ -422,7 +423,7 @@ namespace Jackett.Common.Indexers
 
             // Building our tracker query
             parameters.Add("incldead", "1");
-            parameters.Add("fullsearch", "0");
+            parameters.Add("fullsearch", ConfigData.UseFullSearch.Value ? "1" : "0");
             parameters.Add("scenerelease", "0");
 
             // If search term provided

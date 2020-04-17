@@ -1,13 +1,23 @@
 name: $(majorVersion).$(minorVersion).$(patchVersion)
 variables:
   majorVersion: 0
-  minorVersion: 13
+  minorVersion: 16
   patchVersion: $[counter(variables['minorVersion'], 1)] #this will reset when we bump minor
   jackettVersion: $(majorVersion).$(minorVersion).$(patchVersion)
   buildConfiguration: Release
   netCoreFramework: netcoreapp3.1
   netCoreSdkVersion: 3.1.x
   system.debug: true
+
+trigger:
+  branches:
+    include:
+    - '*'
+
+pr:
+  branches:
+    include:
+    - '*'
 
 stages:
   - stage: BuildJackett
@@ -244,13 +254,107 @@ stages:
         inputs:
           pathtoPublish: '$(Build.ArtifactStagingDirectory)'
 
-      - task: DotNetCoreCLI@2
-        displayName: Unit Tests (Windows only)
-        condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
+  - stage: CodeStyle
+    displayName: Code Style Compliance
+    dependsOn: []
+    jobs:
+    - job: Linting
+      pool:
+        vmImage: ubuntu-latest
+      workspace:
+        clean: all
+      steps:
+      - checkout: self
+
+      - task: UseDotNet@2
+        displayName: Install .NET Core SDK
         inputs:
-          command: test
+          packageType: sdk
+          version: $(netCoreSdkVersion)
+          installationPath: $(Agent.ToolsDirectory)/dotnet
+
+      - task: DotNetCoreCLI@2
+        displayName: Install Dotnet Format
+        inputs:
+          command: custom
+          custom: tool
+          arguments: update -g dotnet-format
+
+      - task: Bash@3
+        displayName: Lint Dotnet
+        inputs:
+          workingDirectory: $(Build.SourcesDirectory)
+          targetType: inline
+          failOnStderr: true
+          script: |
+            dotnet-format --dry-run --check --verbosity diagnostic --folder ./src/DateTimeRoutines
+            dotnet-format --dry-run --check --verbosity diagnostic --folder ./src/Jackett.Common
+            dotnet-format --dry-run --check --verbosity diagnostic --folder ./src/Jackett.IntegrationTests
+            dotnet-format --dry-run --check --verbosity diagnostic --folder ./src/Jackett.Server
+            dotnet-format --dry-run --check --verbosity diagnostic --folder ./src/Jackett.Service
+            dotnet-format --dry-run --check --verbosity diagnostic --folder ./src/Jackett.Test
+            dotnet-format --dry-run --check --verbosity diagnostic --folder ./src/Jackett.Tray
+            dotnet-format --dry-run --check --verbosity diagnostic --folder ./src/Jackett.Updater
+
+
+  - stage: UnitTestJackett
+    displayName: Unit Tests
+    dependsOn: CodeStyle
+    jobs:
+    - job: UnitTest
+      workspace:
+        clean: all
+      strategy:
+        matrix:
+          Mono:
+            buildDescription: Mono
+            imageName: ubuntu-latest
+            framework: net461
+            runtime: linux-x64
+          Windows:
+            buildDescription: Windows
+            imageName: windows-latest
+            framework: $(netCoreFramework)
+            runtime: win-x86
+          macOS:
+            buildDescription: macOS
+            imageName: macOS-latest
+            framework: $(netCoreFramework)
+            runtime: osx-x64
+          LinuxAmdx64:
+            buildDescription: Linux AMD x64
+            imageName: ubuntu-latest
+            framework: $(netCoreFramework)
+            runtime: linux-x64
+          LinuxARM32:
+            buildDescription: Linux ARM32
+            imageName: ubuntu-latest
+            framework: $(netCoreFramework)
+            runtime: linux-arm
+          LinuxARM64:
+            buildDescription: Linux ARM64
+            imageName: ubuntu-latest
+            framework: $(netCoreFramework)
+            runtime: linux-arm64
+      pool:
+        vmImage: $(imageName)
+      displayName: ${{ variables.buildDescription }}
+      steps:
+      - checkout: self
+
+      - task: UseDotNet@2
+        displayName: Install .NET Core SDK
+        inputs:
+          packageType: sdk
+          version: $(netCoreSdkVersion)
+          installationPath: $(Agent.ToolsDirectory)/dotnet
+
+      - task: DotNetCoreCLI@2
+        displayName: Build Test Project
+        inputs:
+          command: build
           projects: '**/*.Test*/*.csproj'
-          arguments: '--configuration $(buildConfiguration) --framework $(framework)'
+          arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework)'
 
       - task: DotNetCoreCLI@2
         displayName: Unit Tests (Mono, Linux and macOS)
@@ -259,7 +363,39 @@ stages:
           command: test
           projects: '**/*.Test*/*.csproj'
           arguments: '--configuration $(buildConfiguration) --framework $(framework) --runtime $(runtime)'
+          testRunTitle: 'Unit - $(buildDescription) - $(Build.BuildId)'
 
+      - task: DotNetCoreCLI@2
+        displayName: Unit Tests & Code Coverage (Windows only)
+        condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
+        inputs:
+          command: test
+          projects: '**/*.Test*/*.csproj'
+          arguments: '--configuration $(buildConfiguration) --framework $(framework) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura'
+          testRunTitle: 'Unit - $(buildDescription) - $(Build.BuildId)'
+
+      - task: DotNetCoreCLI@2
+        displayName: Install Coverage ReportGenerator Tool (Windows only)
+        condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
+        inputs:
+          command: custom
+          custom: tool
+          arguments: install --tool-path . dotnet-reportgenerator-globaltool
+
+      - task: PowerShell@2
+        displayName: Generate Coverage Report (Windows only)
+        condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
+        inputs:
+          targetType: inline
+          script: ./reportgenerator -reports:$(Build.SourcesDirectory)/src/*.Test*/coverage.*.cobertura.xml -targetdir:$(Build.SourcesDirectory)/coverlet/reports -reporttypes:"Cobertura"
+
+      - task: PublishCodeCoverageResults@1
+        displayName: Publish Code Coverage (Windows only)
+        condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
+        inputs:
+          codeCoverageTool: Cobertura
+          summaryFileLocation: $(Build.SourcesDirectory)/coverlet/reports/Cobertura.xml
+        
 
   - stage: Integration
     displayName: Integration Tests
@@ -278,11 +414,10 @@ stages:
             buildDescription: Windows
             imageName: windows-latest
             artifactName: Jackett.Binaries.Windows.zip
-          # Enable once ChromeDriver is deployed to macOS image https://github.com/actions/virtual-environments/issues/7
-          # macOS:
-          #   buildDescription: macOS
-          #   imageName: macOS-latest
-          #   artifactName: Jackett.Binaries.macOS.tar.gz
+          macOS:
+            buildDescription: macOS
+            imageName: macOS-latest
+            artifactName: Jackett.Binaries.macOS.tar.gz
           LinuxAmdx64:
             buildDescription: Linux AMD x64
             imageName: ubuntu-latest
@@ -319,7 +454,7 @@ stages:
             cd Jackett
             if [[ "$(artifactName)" == *"Mono"* ]]; then mono --version; fi
             if [[ "$(artifactName)" == *"Mono"* ]]; then sudo ./install_service_systemd_mono.sh; fi
-            if [[ "$(artifactName)" == *"macOS"* ]]; then sudo ./install_service_macos; fi
+            if [[ "$(artifactName)" == *"macOS"* ]]; then ./install_service_macos; fi
             if [[ "$(artifactName)" == *"LinuxAMDx64"* ]]; then sudo ./install_service_systemd.sh; fi
 
       - task: UseDotNet@2
@@ -334,11 +469,14 @@ stages:
         inputs:
           command: test
           projects: '**/*IntegrationTest*/*.csproj'
+          testRunTitle: 'Integration - $(buildDescription) - $(Build.BuildId)'
 
 
   - stage: PublishGithub
     displayName: Publish to Github
-    dependsOn: Integration
+    dependsOn:
+      - UnitTestJackett
+      - Integration
     condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     jobs:
     - job: Publish
@@ -353,17 +491,18 @@ stages:
           patterns: '**/Jackett*'
           path: $(Build.ArtifactStagingDirectory)
 
-      - task: GitHubRelease@0
+      - task: GitHubRelease@1
         displayName: Create Github release
         inputs:
-          gitHubConnection: github.com_jackett
+          gitHubConnection: JackettPublish
           repositoryName: '$(Build.Repository.Name)' 
           action: create
           target: $(Build.SourceVersion)
-          tagSource: manual
+          tagSource: userSpecifiedTag
           tag: v$(Build.BuildNumber)
           title: v$(Build.BuildNumber)
           assets: $(Build.ArtifactStagingDirectory)/drop/*
+          assetUploadMode: replace
           isDraft: true
           addChangeLog: true
           compareWith: lastNonDraftRelease
@@ -373,18 +512,18 @@ stages:
         inputs:
           targetType: inline
           script: |
-            $json = Invoke-WebRequest 'https://dev.azure.com/jackett-project/jackett/_apis/build/builds/$(Build.BuildId)/logs?api-version=5.0' | ConvertFrom-Json
+            $json = Invoke-WebRequest 'https://dev.azure.com/Jackett/Jackett/_apis/build/builds/$(Build.BuildId)/logs?api-version=5.0' | ConvertFrom-Json
             $lastTwoLogUrls = $json.value[-1..-2].url
             foreach($logUrl in $lastTwoLogUrls)
             {
               Write-Output $logUrl
               $logText = Invoke-WebRequest $logUrl
-              if ($logText -like '*: GitHub Release*') 
+              if ($logText -like '*Creating a release for tag:*') 
               {
-                $successCount = (Select-String "Uploaded file successfully:" -InputObject $logText -AllMatches).Matches.Count
-                $failureCount = (Select-String "Duplicate asset found:" -InputObject $logText -AllMatches).Matches.Count
-                Write-Host "Success count is: $successCount and failure count is: $failureCount"
+                $logInspect = ($logText -split "Creating a release for tag:")[-1]
+                $successCount = (Select-String "Uploaded file successfully:" -InputObject $logInspect -AllMatches).Matches.Count
+                $failureCount = (Select-String "Duplicate asset found:" -InputObject $logInspect -AllMatches).Matches.Count
+                Write-Output "Success count is: $successCount and failure count is: $failureCount"
                 if (($successCount -ne 7) -or ($failureCount -ne 0)) { Write-Host "##vso[task.complete result=Failed;]DONE" } 
               }
             }
-

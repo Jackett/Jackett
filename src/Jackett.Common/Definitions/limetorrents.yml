@@ -5,17 +5,26 @@
   language: en-us
   type: public
   encoding: UTF-8
+  followredirect: true
   links:
     - https://www.limetorrents.info/
     - https://www.limetorrents.asia/
     - https://www.limetorrents.co/
     - https://limetor.com/
     - https://www.limetor.pro/
+    - https://limetorrents.unblockit.one/
+    - https://limetorrents.unblockninja.com/
+    - https://limetorrents.black-mirror.xyz/
+    - https://limetorrents.unblocked.casa/
+    - https://limetorrents.proxyportal.fun/
+    - https://limetorrents.uk-unblock.xyz/
+    - https://limetorrents.ind-unblock.xyz/
   legacylinks:
     - https://www.limetorrents.io/
     - https://www.limetorrents.cc/
     - https://www.limetorrents.me/
     - https://www.limetorrents.zone/ # redirects to .info
+    - https://limetorrents.unblockit.pro/
 
   caps:
     categories:
@@ -89,6 +98,8 @@
         selector: div.tt-name > a[href^="/"]
         attribute: href
       category:
+        text: Other
+      category|noappend:
         optional: true
         selector: td:nth-child(2)
         filters:

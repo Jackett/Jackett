@@ -49,10 +49,36 @@
       - {id: 23, cat: TV/Sport, desc: "TV/Sport"}
       - {id: 51, cat: Console, desc: "Games/Misc"}
       - {id: 1, cat: PC/0day, desc: "Appz/PC ISO"}
+      - {id: 55, cat: Movies/UHD, desc: "Movies/4K"}
 
     modes:
-      search: [q]
-      tv-search: [q, season, ep]
+      search: [q, imdbid]
+      tv-search: [q, season, ep, imdbid]
+      movie-search: [q, imdbid]
+
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "4"
+      options:
+        "4": "created"
+        "7": "seeders"
+        "5": "size"
+        "1": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
 
   login:
     path: takelogin.php
@@ -64,7 +90,7 @@
       - selector: td.embedded:has(h2:contains("failed"))
     test:
       path: browse_old.php
-      
+
   ratio:
     path: browse_old.php
     selector: img[title="Reitings:"]+font
@@ -73,13 +99,16 @@
     paths:
       - path: browse_old.php
     inputs:
-      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-      search: "{{ .Query.Keywords }}"
+      $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+      search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+      # 0 active 1 incldead 2 onlydead
       incldead: 1
+      sort: "{{ .Config.sort }}"
+      type: "{{ .Config.type }}"
+
     rows:
       selector: tr.browse_actions
-      filters:
-        - name: andmatch
+
     fields:
       title:
         selector: a[href^="details.php?id="]
@@ -113,7 +142,7 @@
           - name: regexp
             args: (\d+)
       date:
-        selector: td:nth-child(2) > small:nth-last-child(2)
+        selector: td:nth-child(2) > small:nth-last-child(2), td:nth-child(2) > small
         filters:
           - name: replace
             args: ["Šodien", "Today"]
@@ -121,12 +150,13 @@
             args: ["Vakar", "Yesterday"]
       downloadvolumefactor:
         case:
-          img[alt="Free"]: "0"
-          "*": "1"
+          img[alt="Free"]: 0
+          "*": 1
       uploadvolumefactor:
         case:
-          img[alt="x2"]: "2"
-          "*": "1"
+          img[alt="x2"]: 2
+          "*": 1
       description:
         selector: td:nth-child(2) > small:nth-last-child(1)
         remove: a[href^="details.php?id="]
+# engine n/a

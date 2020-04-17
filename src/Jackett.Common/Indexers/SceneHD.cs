@@ -30,7 +30,10 @@ namespace Jackett.Common.Indexers
                 description: "SceneHD is Private site for HD TV / MOVIES",
                 link: "https://scenehd.org/",
                 configService: configService,
-                caps: new TorznabCapabilities(),
+                caps: new TorznabCapabilities
+                {
+                    SupportsImdbMovieSearch = true
+                },
                 client: c,
                 logger: l,
                 p: ps,
@@ -39,7 +42,7 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
-            TorznabCaps.SupportsImdbMovieSearch = true;
+
             webclient.EmulateBrowser = false;
             webclient.AddTrustedCertificate(new Uri(SiteLink).Host, "D948487DD52462F2D1E62B990D608051E3DE5AA6");
 
@@ -93,8 +96,10 @@ namespace Jackett.Common.Indexers
 
             var releases = new List<ReleaseInfo>();
 
-            var qParams = new NameValueCollection();
-            qParams.Add("api", "");
+            var qParams = new NameValueCollection
+            {
+                { "api", "" }
+            };
             if (query.ImdbIDShort != null)
                 qParams.Add("imdb", query.ImdbIDShort);
             else
@@ -119,6 +124,7 @@ namespace Jackett.Common.Indexers
 
                 foreach (var item in jsonContent)
                 {
+                    //TODO convert to initializer
                     var release = new ReleaseInfo();
 
                     var id = item.Value<long>("id");
