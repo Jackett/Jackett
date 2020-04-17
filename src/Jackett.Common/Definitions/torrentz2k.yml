@@ -1,0 +1,96 @@
+---
+  site: torrentz2k
+  name: Torrentz2k
+  description: "Torrentz2k is a Public torrent indexer"
+  language: en-us
+  type: public
+  encoding: UTF-8
+  links:
+    - https://torrentz2k.xyz/
+
+  caps:
+    categories:
+      book: Books
+      film: Movies
+      gamepad: Console
+      list: Other
+      male: XXX
+      music: Audio
+      smile-o: TV/Anime
+      television: TV
+      wrench: PC
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  settings: []
+
+  search:
+    # https://torrentz2k.xyz/search/
+    paths:
+      - path: search/
+        method: post
+      - path: search/
+        method: post
+        inputs:
+          page: 2
+    inputs:
+      q: "{{ if .Keywords }}{{ .Keywords }}{{else}}2020{{end}}"
+      category: all
+      x: 0
+      y: 0
+    keywordsfilters:
+      # the site uses % for wildcard
+      - name: re_replace
+        args: ["[^a-zA-Z0-9]+", "%"]
+
+    rows:
+      selector: table.table-striped > tbody > tr
+      filters:
+        - name: andmatch
+
+    fields:
+      category:
+        selector: i
+        attribute: class
+        filters:
+          # extract the second class
+          - name: split
+            args: [" ", 1]
+          # remove fa- prefix
+          - name: replace
+            args: ["fa-", ""]
+      title:
+        selector: button
+        attribute: title
+      details:
+        # details page is only accessible via  form and post which Cardigann does not support.
+        text: /
+      download:
+        selector: a[href^="magnet:?xt="]
+        attribute: href
+      date:
+        selector: td:nth-child(5)
+        filters:
+          - name: replace
+            args: ["sec", " second"]
+          - name: replace
+            args: ["min", " minute"]
+          - name: replace
+            args: ["hr", "hour"]
+          - name: append
+            args:  " ago"
+          - name: timeago
+      size:
+        selector: td:nth-child(6)
+      seeders:
+        selector: td:nth-child(3)
+      leechers:
+        selector: td:nth-child(4)
+      downloadvolumefactor:
+        text: 0
+      uploadvolumefactor:
+        text: 1
+# engine n/a

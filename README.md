@@ -142,6 +142,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Torrentv
  * TorrentView (토렌트뷰)
  * Torrentz2
+ * Torrentz2k
  * Underverse
  * UnionDHT
  * xxxtor
