@@ -24,6 +24,7 @@ namespace Jackett.Common.Indexers
         private string SearchUrl => SiteLink + "torrents.php";
 
         private new ConfigurationDataNCore configData => (ConfigurationDataNCore)base.configData;
+
         private readonly string[] _languageCats =
         {
             "xvidser",
@@ -45,7 +46,8 @@ namespace Jackett.Common.Indexers
                  caps: new TorznabCapabilities
                  {
                      SupportsImdbMovieSearch = true,
-                     SupportsImdbTVSearch = true
+                     // supported by the site but disabled due to #8107
+                     // SupportsImdbTVSearch = true
                  },
                  configService: configService,
                  client: wc,
@@ -89,7 +91,6 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("ebook", TorznabCatType.Books, "Könyv eBook/EN");
         }
 
-
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
@@ -113,10 +114,8 @@ namespace Jackett.Common.Indexers
                 {
                     var parser = new HtmlParser();
                     var dom = parser.ParseDocument(result.Content);
-                    var messageEl = dom.QuerySelector("#hibauzenet table tbody tr");
-                    var msgContainer = messageEl.Children[1];
-                    var errorMessage = msgContainer != null ? msgContainer.TextContent : "Error while trying to login.";
-                    throw new ExceptionWithConfigData(errorMessage, configData);
+                    var msgContainer = dom.QuerySelector("#hibauzenet table tbody tr")?.Children[1];
+                    throw new ExceptionWithConfigData(msgContainer?.TextContent ?? "Error while trying to login.", configData);
                 });
             return IndexerConfigurationStatus.RequiresTesting;
         }
@@ -163,27 +162,24 @@ namespace Jackett.Common.Indexers
             if (!configData.English.Value)
                 cats = cats.Except(_languageCats).ToList();
 
-
             pairs.Add("kivalasztott_tipus[]", string.Join(",", cats));
             var results = await PostDataWithCookiesAndRetry(SearchUrl, pairs.ToEnumerable(true));
             var parser = new HtmlParser();
             var dom = parser.ParseDocument(results.Content);
 
             // find number of torrents / page
-            var torrentPerPage = dom.QuerySelector(".box_torrent_all")?.QuerySelectorAll(".box_torrent").Length ?? 0;
+            var torrentPerPage = dom.QuerySelectorAll(".box_torrent").Length;
             if (torrentPerPage == 0)
                 return releases;
             var startPage = (query.Offset / torrentPerPage) + 1;
             var previouslyParsedOnPage = query.Offset % torrentPerPage;
 
             // find page links in the bottom
-            var lastPageLink = dom.QuerySelector("div[id=pager_bottom]")?.QuerySelectorAll("a")
-                               .Select(elem => elem.GetAttribute("href")).LastOrDefault(href => href.Contains("odal"));
-            var pages = int.TryParse(ParseUtil.GetArgumentFromQueryString(lastPageLink, "odal"), out var lastPage)
+            var lastPageLink = dom.QuerySelectorAll("div[id=pager_bottom] a[href*=oldal]")
+                                  .LastOrDefault()?.GetAttribute("href");
+            var pages = int.TryParse(ParseUtil.GetArgumentFromQueryString(lastPageLink, "oldal"), out var lastPage)
                 ? lastPage
                 : 1;
-
-
 
             var limit = query.Limit;
             if (limit == 0)
@@ -239,8 +235,8 @@ namespace Jackett.Common.Indexers
                         var guidUri = new Uri(baseLink + "#comments");
                         var linkUri = new Uri(QueryHelpers.AddQueryString(baseLink, "key", key));
 
-                        var seeders = ParseUtil.CoerceInt(row.QuerySelector(".box_s2").QuerySelector("a").TextContent);
-                        var leechers = ParseUtil.CoerceInt(row.QuerySelector(".box_l2").QuerySelector("a").TextContent);
+                        var seeders = ParseUtil.CoerceInt(row.QuerySelector(".box_s2 a").TextContent);
+                        var leechers = ParseUtil.CoerceInt(row.QuerySelector(".box_l2 a").TextContent);
                         var publishDate = DateTime.Parse(
                             row.QuerySelector(".box_feltoltve2").InnerHtml.Replace("<br>", " "),
                             CultureInfo.InvariantCulture);
@@ -300,7 +296,7 @@ namespace Jackett.Common.Indexers
                             var releaseData = tempTitle.Substring(releaseIndex).Trim();
 
                             // release description contains [imdb: ****] but we only need the data before it for title
-                            var description = new []
+                            var description = new[]
                             {
                                 release.Description,
                                 ""
