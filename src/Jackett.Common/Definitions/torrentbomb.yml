@@ -74,8 +74,14 @@
         filters:
           - name: dateparse
             args: "2006-01-02 15:04:05"
+      cat:
+        selector: a[href^="bbs/./board.php?"]
+        attribute: href
+        filters:
+          - name: querystring
+            args: bo_table
       size:
-        text: "512 MB"
+        text: "{{ if or eq .Result.cat \"torrent_movie\" (or eq .Result.cat \"torrent_movie_etc\" eq .Result.cat \"torrent_movie_eng\") }}2 GB{{else}}512 MB{{end}}"
       seeders:
         text: 1
       leechers:

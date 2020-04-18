@@ -58,8 +58,16 @@
         attribute: src
       date:
         text: now
+      cat:
+        selector: div.moviefilm a
+        attribute: href
+        case:
+          a[href*="-film-"]: 1 # movie
+          a[href*="-dizi-"]: 2 # series
+          a[href*="-bolum-"]: 2 # episode
+          "*": 3
       size:
-        text: "512 MB"
+        text: "{{ if eq .Result.cat \"1\" }}2 GB{{else}}512 MB{{end}}"
       seeders:
         text: 1
       leechers:

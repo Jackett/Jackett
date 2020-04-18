@@ -2,7 +2,7 @@
 
 [![GitHub issues](https://img.shields.io/github/issues/Jackett/Jackett.svg?maxAge=60&style=flat-square)](https://github.com/Jackett/Jackett/issues)
 [![GitHub pull requests](https://img.shields.io/github/issues-pr/Jackett/Jackett.svg?maxAge=60&style=flat-square)](https://github.com/Jackett/Jackett/pulls)
-[![Build Status](https://dev.azure.com/Jackett-project/Jackett/_apis/build/status/Jackett.Jackett?branchName=master)](https://dev.azure.com/jackett/jackett/_build/latest?definitionId=1&branchName=master)
+[![Build Status](https://dev.azure.com/Jackett/Jackett/_apis/build/status/Jackett.Jackett?branchName=master)](https://dev.azure.com/jackett/jackett/_build/latest?definitionId=1&branchName=master)
 [![GitHub Releases](https://img.shields.io/github/downloads/Jackett/Jackett/total.svg?maxAge=60&style=flat-square)](https://github.com/Jackett/Jackett/releases/latest)
 [![Docker Pulls](https://img.shields.io/docker/pulls/linuxserver/jackett.svg?maxAge=60&style=flat-square)](https://hub.docker.com/r/linuxserver/jackett/)
 [![Discord](https://img.shields.io/badge/discord-chat-7289DA.svg?maxAge=60&style=flat-square)](https://discord.gg/J865QuA)
@@ -142,6 +142,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Torrentv
  * TorrentView (토렌트뷰)
  * Torrentz2
+ * Torrentz2k
  * Underverse
  * UnionDHT
  * xxxtor
@@ -227,7 +228,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Asgaard (AG)
  * AsianCinema
  * AudioNews (AN)
- * Audiobook Torrents (ABT)
+ * Audiobook Torrents (ABT + RNS)
  * Avistaz (AsiaTorrents)
  * Awesome-HD (AHD)
  * BIGTorrent
@@ -279,6 +280,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * DXDHD
  * DanishBits (DB)
  * Dark-Shadow
+ * Dark Tracker
  * Das Unerwartete
  * DataScene (DS)
  * Demon-Site
@@ -420,7 +422,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * RPTorrents
  * Racing4Everyone (R4E)
  * RacingForMe (RFM)
- * RainbowNation Sharing (RNS)
  * Red Star Torrent (RST)
  * Redacted (PassTheHeadphones)
  * RetroFlix

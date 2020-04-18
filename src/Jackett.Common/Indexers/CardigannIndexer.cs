@@ -41,6 +41,24 @@ namespace Jackett.Common.Indexers
 
         protected readonly string[] OptionalFileds = new string[] { "imdb", "rageid", "tvdbid", "banner" };
 
+        private static readonly string[] _SupportedLogicFunctions =
+        {
+            "and",
+            "or",
+            "eq",
+            "ne"
+        };
+
+        private static readonly string[] _LogicFunctionsUsingStringLiterals =
+        {
+            "eq",
+            "ne"
+        };
+
+        // Matches a logic function above and 2 or more of (.varname) or .varname or "string literal" in any combination
+        private static readonly Regex _LogicFunctionRegex = new Regex(
+            @$"\b({string.Join("|", _SupportedLogicFunctions.Select(Regex.Escape))})(?:\s+(\(?\.[^\)\s]+\)?|""[^""]+"")){{2,}}");
+
         public CardigannIndexer(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps, IndexerDefinition Definition)
             : base(configService: configService,
                    client: wc,
@@ -210,7 +228,9 @@ namespace Jackett.Common.Indexers
         {
             var variables = new Dictionary<string, object>
             {
-                [".Config.sitelink"] = SiteLink
+                [".Config.sitelink"] = SiteLink,
+                [".True"] = "True",
+                [".False"] = null
             };
             foreach (var Setting in Definition.Settings)
             {
@@ -296,63 +316,64 @@ namespace Jackett.Common.Indexers
                 JoinMatches = JoinMatches.NextMatch();
             }
 
-            // handle or, and functions
-            var AndOrRegex = new Regex(@"(and|or)\s+\((\..+?)\)\s+\((\..+?)\)(\s+\((\..+?)\)){0,1}");
-            var AndOrRegexMatches = AndOrRegex.Match(template);
+            var logicMatch = _LogicFunctionRegex.Match(template);
 
-            while (AndOrRegexMatches.Success)
+            while (logicMatch.Success)
             {
+                var functionStartIndex = logicMatch.Groups[0].Index;
+                var functionLength = logicMatch.Groups[0].Length;
+                var functionName = logicMatch.Groups[1].Value;
+                // Use Group.Captures to get each matching string in a repeating Match.Group
+                // Strip () around variable names here, as they are optional. Use quotes to differentiate variables and literals
+                var parameters = logicMatch.Groups[2].Captures.Cast<Capture>().Select(c => c.Value.Trim('(', ')')).ToList();
                 var functionResult = "";
-                var all = AndOrRegexMatches.Groups[0].Value;
-                var op = AndOrRegexMatches.Groups[1].Value;
-                var first = AndOrRegexMatches.Groups[2].Value;
-                var second = AndOrRegexMatches.Groups[3].Value;
-                var third = "";
-                if (AndOrRegexMatches.Groups.Count > 5)
+
+                // If the function can't use string literals, fail silently by removing the literals.
+                if (!_LogicFunctionsUsingStringLiterals.Contains(functionName))
+                    parameters.RemoveAll(param => param.StartsWith("\""));
+
+                switch (functionName)
                 {
-                    third = AndOrRegexMatches.Groups[5].Value;
+                    case "and": // returns first null or empty, else last variable
+                    case "or": // returns first not null or empty, else last variable
+                        var isAnd = functionName == "and";
+                        foreach (var parameter in parameters)
+                        {
+                            functionResult = parameter;
+                            // (null as string) == null
+                            // (if null or empty) break if and, continue if or
+                            // (if neither null nor empty) continue if and, break if or
+                            if (string.IsNullOrWhiteSpace(variables[parameter] as string) == isAnd)
+                                break;
+                        }
+                        break;
+                    case "eq": // Returns .True if equal
+                    case "ne": // Returns .False if equal
+                    {
+                        var wantEqual = functionName == "eq";
+                        // eq/ne take exactly 2 params. Update the length to match
+                        // This removes the whitespace between params 2 and 3.
+                        // It shouldn't matter because the match starts at a word boundary
+                        if (parameters.Count > 2)
+                            functionLength = logicMatch.Groups[2].Captures[2].Index - functionStartIndex;
+
+                        // Take first two parameters, convert vars to values and strip quotes on string literals
+                        // Counting distinct gives us 1 if equal and 2 if not.
+                        var isEqual =
+                            parameters.Take(2).Select(param => param.StartsWith("\"") ? param.Trim('"') : variables[param] as string)
+                                      .Distinct().Count() == 1;
+
+                        functionResult = isEqual == wantEqual ? ".True" : ".False";
+                        break;
+                    }
                 }
 
-                var value = variables[first];
-                if (op == "and")
-                {
-                    functionResult = second;
-                    if (value == null || (value is string && string.IsNullOrWhiteSpace((string)value)))
-                    {
-                        functionResult = first;
-                    }
-                    else
-                    {
-                        if (!string.IsNullOrWhiteSpace(third))
-                        {
-                            functionResult = third;
-                            value = variables[second];
-                            if (value == null || (value is string && string.IsNullOrWhiteSpace((string)value)))
-                            {
-                                functionResult = second;
-                            }
-                        }
-                    }
-                }
-                if (op == "or")
-                {
-                    functionResult = first;
-                    if (value == null || (value is string && string.IsNullOrWhiteSpace((string)value)))
-                    {
-                        functionResult = second;
-                        if (!string.IsNullOrWhiteSpace(third))
-                        {
-                            value = variables[second];
-                            if (value == null || (value is string && string.IsNullOrWhiteSpace((string)value)))
-                            {
-                                functionResult = third;
-                            }
-                        }
-                    }
-
-                }
-                template = template.Replace(all, functionResult);
-                AndOrRegexMatches = AndOrRegexMatches.NextMatch();
+                template = template.Remove(functionStartIndex, functionLength)
+                                   .Insert(functionStartIndex, functionResult);
+                // Rerunning match instead of using nextMatch allows us to support nested functions
+                // like {{if and eq (.Var1) "string1" eq (.Var2) "string2"}}
+                // No performance is lost because Match/NextMatch are lazy evaluated and pause execution after first match
+                logicMatch = _LogicFunctionRegex.Match(template);
             }
 
             // handle if ... else ... expression

@@ -75,7 +75,6 @@
           - name: split
             args: ["/", 4]
       size:
-#        text: "512 MB"
         text: "{{ if eq .Result.cat \"series\" }}512 MB{{else}}2 GB{{end}}"
       seeders:
         text: 1
