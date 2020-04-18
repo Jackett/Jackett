@@ -112,7 +112,7 @@
           - name: replace
             args: ["WEB DL", "WEBDL"]
           - name: replace
-            args: ["WEB DLRip", "WEBDL"]
+            args: ["WEBDLRip", "WEBDL"]
           - name: replace
             args: ["HDTVRip", "HDTV"]
       details:
