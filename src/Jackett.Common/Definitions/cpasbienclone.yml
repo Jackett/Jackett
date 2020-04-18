@@ -52,7 +52,7 @@
 
   search:
     paths:
-      - path: "{{ if .Keywords }}search_torrent/{{ .Keywords }}{{ .Config.sort }}home/{{else}}{{end}}"
+      - path: "{{ if .Keywords }}search_torrent/{{ .Keywords }}{{ .Config.sort }}{{else}}home/{{end}}"
 
     rows:
       selector: table.table-corps > tbody > tr:has(a)
