@@ -228,7 +228,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Asgaard (AG)
  * AsianCinema
  * AudioNews (AN)
- * Audiobook Torrents (ABT)
+ * Audiobook Torrents (ABT + RNS)
  * Avistaz (AsiaTorrents)
  * Awesome-HD (AHD)
  * BIGTorrent
@@ -421,7 +421,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * RPTorrents
  * Racing4Everyone (R4E)
  * RacingForMe (RFM)
- * RainbowNation Sharing (RNS)
  * Red Star Torrent (RST)
  * Redacted (PassTheHeadphones)
  * RetroFlix

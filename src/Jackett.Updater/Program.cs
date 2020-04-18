@@ -347,6 +347,7 @@ namespace Jackett.Updater
                 "Definitions/rarbg.yml",
                 "Definitions/redtopia.yml",
                 "Definitions/rgu.yml",
+                "Definitions/rns.yml", // site merged with audiobooktorrents
                 "Definitions/rockethd.yml",
                 "Definitions/rockhardlossless.yml",
                 "Definitions/scenehd.yml", // migrated to C# (use JSON API)
