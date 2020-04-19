@@ -224,41 +224,26 @@ namespace Jackett.Common.Indexers
             }
         }
 
-        protected Dictionary<string, object> getTemplateVariablesFromConfigData()
+        protected Dictionary<string, object> GetBaseTemplateVariables()
         {
             var variables = new Dictionary<string, object>
             {
                 [".Config.sitelink"] = SiteLink,
                 [".True"] = "True",
-                [".False"] = null
+                [".False"] = null,
+                [".Today.Year"] = DateTime.Today.Year.ToString()
             };
-            foreach (var Setting in Definition.Settings)
-            {
-                var item = configData.GetDynamic(Setting.Name);
-
-                // CheckBox item is an array of strings
-                if (item.GetType() == typeof(CheckboxItem))
+            foreach (var setting in Definition.Settings)
+                variables[".Config" + setting.Name] = configData.GetDynamic(setting.Name) switch
                 {
-                    variables[".Config." + Setting.Name] = ((CheckboxItem)item).Values;
-                }
-                else
-                {
-                    string value;
-                    if (item.GetType() == typeof(BoolItem))
-                    {
-                        value = (((BoolItem)item).Value == true ? "true" : "");
-                    }
-                    else if (item.GetType() == typeof(SelectItem))
-                    {
-                        value = ((SelectItem)item).Value;
-                    }
-                    else
-                    {
-                        value = ((StringItem)item).Value;
-                    }
-                    variables[".Config." + Setting.Name] = value;
-                }
-            }
+                    CheckboxItem checkbox => checkbox.Values,
+                    BoolItem boolItem => variables[boolItem.Value ? ".True" : ".False"],
+                    SelectItem selectItem => selectItem.Value,
+                    StringItem stringItem => stringItem.Value,
+                    // Throw exception here to match original functionality.
+                    // Currently this will only throw for ImageItem.
+                    _ => throw new NotSupportedException()
+                };
             return variables;
         }
 
@@ -269,7 +254,7 @@ namespace Jackett.Common.Indexers
         {
             if (variables == null)
             {
-                variables = getTemplateVariablesFromConfigData();
+                variables = GetBaseTemplateVariables();
             }
 
             // handle re_replace expression
@@ -1226,7 +1211,7 @@ namespace Jackett.Common.Indexers
             var Search = Definition.Search;
 
             // init template context
-            var variables = getTemplateVariablesFromConfigData();
+            var variables = GetBaseTemplateVariables();
 
             variables[".Query.Type"] = query.QueryType;
             variables[".Query.Q"] = query.SearchTerm;
@@ -1764,7 +1749,7 @@ namespace Jackett.Common.Indexers
             if (Definition.Download != null)
             {
                 var Download = Definition.Download;
-                var variables = getTemplateVariablesFromConfigData();
+                var variables = GetBaseTemplateVariables();
                 AddTemplateVariablesFromUri(variables, link, ".DownloadUri");
                 if (Download.Before != null)
                 {
