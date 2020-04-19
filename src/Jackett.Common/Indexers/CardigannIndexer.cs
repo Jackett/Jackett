@@ -234,7 +234,7 @@ namespace Jackett.Common.Indexers
                 [".Today.Year"] = DateTime.Today.Year.ToString()
             };
             foreach (var setting in Definition.Settings)
-                variables[".Config" + setting.Name] = configData.GetDynamic(setting.Name) switch
+                variables[".Config." + setting.Name] = configData.GetDynamic(setting.Name) switch
                 {
                     CheckboxItem checkbox => checkbox.Values,
                     BoolItem boolItem => variables[boolItem.Value ? ".True" : ".False"],
