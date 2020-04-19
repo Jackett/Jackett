@@ -6,9 +6,9 @@
   type: private
   encoding: UTF-8
   links:
-    - http://lesaloonv2-0.net/ # site does not support https
-  legacylinks:
     - https://lesaloonv2-0.net/
+  legacylinks:
+    - http://lesaloonv2-0.net/ # site forces https
 
   caps:
     categorymappings:
@@ -82,12 +82,14 @@
       movie-search: [q]
 
   login:
-    path: index.php?page=login
+  # https://lesaloonv2-0.net/yupy_login.php
+    path: yupy_login.php
     method: form
     form: form[action^="index.php?page=login"]
     inputs:
       uid: "{{ .Config.username }}"
       pwd: "{{ .Config.password }}"
+      rememberme: forever
     captcha:
       type: image
       selector: img[src^="access_code/"]
