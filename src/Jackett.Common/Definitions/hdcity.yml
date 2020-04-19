@@ -217,6 +217,7 @@
         attribute: href
       downloadvolumefactor: 
         case:
+          img[src$="freeleech.gif"]: "0"
           img[src$="gold.gif"]: "0"
           img[src$="silver.gif"]: "0.5"
           "*": "1"
