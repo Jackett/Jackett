@@ -25,7 +25,7 @@
     paths:
       - path: b.php
     inputs:
-      search: "{{ if .Keywords }}{{ .Keywords }}{{ else }}2019{{ end }}"
+      search: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
 
     rows:
       selector: table > tbody > tr.gai

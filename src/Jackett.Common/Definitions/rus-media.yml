@@ -298,7 +298,7 @@
     attribute: href
 
   search:
-    # http://rus-media.org/search.php?tracker_search=torrent&sr=topics&keywords=2019&fid[]=54
+    # http://rus-media.org/search.php?tracker_search=torrent&sr=topics&keywords=2020&fid[]=54
     paths:
       - path: search.php
     inputs:
@@ -306,10 +306,10 @@
       sf: titleonly
       fp: 1
       tracker_search: torrent
-      keywords: "{{if .Keywords }}{{.Keywords}}{{else}}2019{{end}}"
+      keywords: "{{ if .Keywords }}{{ .Keywords }}{{else}}{{ .Today.Year }}{{end}}"
       sk: "{{ .Config.sort }}"
       sd: "{{ .Config.type }}"
-      $raw: "{{range .Categories}}&fid[]={{.}}{{end}}"
+      $raw: "{{ range .Categories }}&fid[]={{.}}{{end}}"
 
     rows:
       selector: table.tablebg tr.col_line

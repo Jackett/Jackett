@@ -59,8 +59,8 @@
 
   search:
     paths:
-      # https://ibit.to/torrent-search/2019/all/uploaded_at:desc/1/
-      - path: "torrent-search/{{ if .Keywords }}{{ .Keywords }}{{else}}2019{{end}}/all/{{ .Config.sortby }}:{{ .Config.order }}/1/"
+      # https://ibit.to/torrent-search/2020/all/uploaded_at:desc/1/
+      - path: "torrent-search/{{ if .Keywords }}{{ .Keywords }}{{else}}{{ .Today.Year }}{{end}}/all/{{ .Config.sortby }}:{{ .Config.order }}/1/"
 
     rows:
       selector: table.striped > tbody > tr

@@ -844,7 +844,7 @@
     inputs:
       $raw: "{{ range .Categories }}&fid[]={{.}}{{end}}"
       tracker_search: torrent
-      keywords: "{{ if .Keywords }}{{ .Keywords }}{{else}}2019{{end}}"
+      keywords: "{{ if .Keywords }}{{ .Keywords }}{{else}}{{ .Today.Year }}{{end}}"
       terms: all
       fp: 1
       author: ""
