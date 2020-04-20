@@ -9,36 +9,52 @@ namespace Jackett.Common.Models.IndexerConfig
 {
     public class ConfigurationData
     {
-        private const string PASSWORD_REPLACEMENT = "|||%%PREVJACKPASSWD%%|||";
-        protected Dictionary<string, Item> dynamics = new Dictionary<string, Item>(); // list for dynamic items
-
-        public HiddenItem CookieHeader { get; private set; } = new HiddenItem { Name = "CookieHeader" };
-        public HiddenItem LastError { get; private set; } = new HiddenItem { Name = "LastError" };
-        public StringItem SiteLink { get; private set; } = new StringItem { Name = "Site Link" };
+        private const string PasswordReplacement = "|||%%PREVJACKPASSWD%%|||";
+        protected readonly Dictionary<string, Item> dynamics = new Dictionary<string, Item>(); // list for dynamic items
         public ConfigurationData() {}
 
         public ConfigurationData(JToken json, IProtectionService ps) => LoadValuesFromJson(json, ps);
+
+        public HiddenItem CookieHeader { get; } = new HiddenItem {Name = "CookieHeader"};
+        public HiddenItem LastError { get; } = new HiddenItem {Name = "LastError"};
+        public StringItem SiteLink { get; } = new StringItem {Name = "Site Link"};
+
+        public void AddDynamic(string id, Item item) => dynamics[id] = item;
+
+        public Item GetDynamic(string id)
+        {
+            dynamics.TryGetValue(id, out var item);
+            return item;
+        }
+
+        public Item GetDynamicByName(string name) =>
+            dynamics.Values.FirstOrDefault(i => string.Equals(i.Name, name, StringComparison.InvariantCultureIgnoreCase));
+
+        private Item[] GetItems(bool forDisplay)
+        {
+            var properties = GetType().GetProperties().Where(p => p.CanRead)
+                                      .Where(p => p.PropertyType.IsSubclassOf(typeof(Item)))
+                                      .Select(p => (Item)p.GetValue(this)).ToList();
+
+            // remove/insert Site Link manualy to make sure it shows up first
+            properties.Remove(SiteLink);
+            properties.Insert(0, SiteLink);
+            properties.AddRange(dynamics.Values);
+            if (!forDisplay)
+                properties.RemoveAll(property => property is ImageItem);
+            return properties.ToArray();
+        }
 
         public void LoadValuesFromJson(JToken json, IProtectionService ps = null)
         {
             if (json == null)
                 return;
-
             var arr = (JArray)json;
-
-            // transistion from alternatelink to sitelink
-            var alternatelinkItem = arr.FirstOrDefault(f => f.Value<string>("id") == "alternatelink");
-            if (alternatelinkItem != null && !string.IsNullOrEmpty(alternatelinkItem.Value<string>("value")))
-            {
-                //SiteLink.Value = alternatelinkItem.Value<string>("value");
-            }
-
-            foreach (var item in GetItems(forDisplay: false))
+            foreach (var item in GetItems(false))
             {
                 var arrItem = arr.FirstOrDefault(f => f.Value<string>("id") == item.ID);
                 if (arrItem == null)
                     continue;
-
                 switch (item)
                 {
                     case HiddenItem hiddenItem:
@@ -65,7 +81,7 @@ namespace Jackett.Common.Models.IndexerConfig
                         var newValue = arrItem.Value<string>("value");
                         if (string.Equals(item.Name, "password", StringComparison.InvariantCultureIgnoreCase))
                         {
-                            if (newValue != PASSWORD_REPLACEMENT)
+                            if (newValue != PasswordReplacement)
                             {
                                 sItem.Value = newValue;
                                 if (ps != null)
@@ -105,7 +121,7 @@ namespace Jackett.Common.Models.IndexerConfig
                             if (string.IsNullOrEmpty(value))
                                 value = string.Empty;
                             else if (forDisplay)
-                                value = PASSWORD_REPLACEMENT;
+                                value = PasswordReplacement;
                             else if (ps != null)
                                 value = ps.Protect(value);
                         }
@@ -132,70 +148,11 @@ namespace Jackett.Common.Models.IndexerConfig
                         jObject["value"] = dataUri;
                         break;
                 }
+
                 jArray.Add(jObject);
             }
+
             return jArray;
-        }
-
-        private Item[] GetItems(bool forDisplay)
-        {
-            var properties = GetType().GetProperties().Where(p => p.CanRead)
-                                      .Where(p => p.PropertyType.IsSubclassOf(typeof(Item)))
-                                      .Select(p => (Item)p.GetValue(this)).ToList();
-
-            // remove/insert Site Link manualy to make sure it shows up first
-            properties.Remove(SiteLink);
-            properties.Insert(0, SiteLink);
-
-            properties.AddRange(dynamics.Values);
-
-            if (!forDisplay)
-                properties.RemoveAll(property => property is ImageItem);
-            return properties.ToArray();
-        }
-
-        public void AddDynamic(string ID, Item item) => dynamics[ID] = item;
-
-        public Item GetDynamic(string ID)
-        {
-            dynamics.TryGetValue(ID, out var item);
-            return item;
-        }
-
-        public Item GetDynamicByName(string Name) =>
-            dynamics.Values.FirstOrDefault(i => string.Equals(i.Name, Name, StringComparison.InvariantCultureIgnoreCase));
-
-        public class Item
-        {
-            public string Name { get; set; }
-            public string ID => Name.Replace(" ", "").ToLower();
-        }
-
-        public class HiddenItem : StringItem
-        {
-            public HiddenItem(string value = "")
-            {
-                Value = value;
-            }
-        }
-
-        public class DisplayItem : StringItem
-        {
-            public DisplayItem(string value) => Value = value;
-        }
-
-        public class StringItem : Item
-        {
-            public string SiteKey { get; set; }
-            public string Value { get; set; }
-            public string Cookie { get; set; }
-        }
-
-        public class RecaptchaItem : StringItem
-        {
-            public string Version { get; set; }
-            public string Challenge { get; set; }
-            public RecaptchaItem() => Version = "2";
         }
 
         public class BoolItem : Item
@@ -203,27 +160,55 @@ namespace Jackett.Common.Models.IndexerConfig
             public bool Value { get; set; }
         }
 
+        public class CheckboxItem : Item
+        {
+            public CheckboxItem(Dictionary<string, string> options) => Options = options;
+
+            public Dictionary<string, string> Options { get; }
+            public string[] Values { get; set; }
+        }
+
+        public class DisplayItem : StringItem
+        {
+            public DisplayItem(string value) => Value = value;
+        }
+
+        public class HiddenItem : StringItem
+        {
+            public HiddenItem(string value = "") => Value = value;
+        }
+
         public class ImageItem : Item
         {
             public byte[] Value { get; set; }
         }
 
-        public class CheckboxItem : Item
+        public class Item
         {
-            public string[] Values { get; set; }
+            public string ID => Name.Replace(" ", "").ToLower();
+            public string Name { get; set; }
+        }
 
-            public Dictionary<string, string> Options { get; }
-
-            public CheckboxItem(Dictionary<string, string> options) => Options = options;
+        public class RecaptchaItem : StringItem
+        {
+            public RecaptchaItem() => Version = "2";
+            public string Challenge { get; set; }
+            public string Version { get; set; }
         }
 
         public class SelectItem : Item
         {
-            public string Value { get; set; }
+            public SelectItem(Dictionary<string, string> options) => Options = options;
 
             public Dictionary<string, string> Options { get; }
+            public string Value { get; set; }
+        }
 
-            public SelectItem(Dictionary<string, string> options) => Options = options;
+        public class StringItem : Item
+        {
+            public string Cookie { get; set; }
+            public string SiteKey { get; set; }
+            public string Value { get; set; }
         }
     }
 }
