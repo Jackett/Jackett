@@ -17,8 +17,7 @@ namespace Jackett.Common.Indexers
 {
     public class Milkie : BaseWebIndexer
     {
-        private readonly string APIBase = "https://milkie.cc/api/v1";
-        private string TorrentsEndpoint => APIBase + "/torrents";
+        private string TorrentsEndpoint => SiteLink + "api/v1/torrents";
 
         private new ConfigurationDataAPIKey configData
         {
@@ -91,13 +90,14 @@ namespace Jackett.Common.Indexers
                 queryParams.Add("query", query.SearchTerm);
             }
 
+            if (query.HasSpecifiedCategories)
+            {
+                queryParams.Add("categories", string.Join(",", MapTorznabCapsToTrackers(query)));
+            }
+
             var endpoint = TorrentsEndpoint + "?" + queryParams.GetQueryString();
-            var jsonResponse = await RequestStringWithCookies(
-                endpoint,
-                null,
-                null,
-                new Dictionary<string, string>() { { "x-milkie-auth", configData.Key.Value } }
-            );
+            var headers = new Dictionary<string, string>() { { "x-milkie-auth", configData.Key.Value } };
+            var jsonResponse = await RequestStringWithCookies(endpoint, null, null, headers);
 
             var releases = new List<ReleaseInfo>();
 
@@ -112,12 +112,15 @@ namespace Jackett.Common.Indexers
 
                 foreach (var torrent in response.Torrents)
                 {
+                    var link = new Uri($"{TorrentsEndpoint}/{torrent.Id}/torrent?{dlQueryParams.GetQueryString()}");
+                    var comments = new Uri($"{SiteLink}browse/{torrent.Id}");
+
                     var release = new ReleaseInfo()
                     {
                         Title = torrent.ReleaseName,
-                        Link = new Uri($"{TorrentsEndpoint}/{torrent.Id}/torrent?{dlQueryParams.GetQueryString()}"),
-                        Comments = new Uri($"{SiteLink}browse/{torrent.Id}"),
-                        Guid = new Uri($"{SiteLink}browse/{torrent.Id}"),
+                        Link = link,
+                        Comments = comments,
+                        Guid = comments,
                         Size = torrent.Size,
                         Category = MapTrackerCatToNewznab(torrent.Category.ToString()),
                         Seeders = torrent.Seeders,
