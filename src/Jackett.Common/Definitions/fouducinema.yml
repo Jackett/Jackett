@@ -1,0 +1,165 @@
+---
+  site: fouducinema
+  name: Fou-Du-Cinema
+  description: "Fou-Du-Cinema is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
+  language: fr-fr
+  type: private
+  encoding: UTF-8
+  links:
+    - https://fou-du-cinema.net/
+
+  caps:
+    categorymappings:
+      - {id: 1, cat: TV/Documentary, desc: "Documentaires - Films"}
+      - {id: 42, cat: Movies/3D, desc: "Films - 3D"}
+      - {id: 43, cat: Movies/UHD, desc: "Films - 4K"}
+      - {id: 2, cat: TV/Anime, desc: "Films - Animation"}
+      - {id: 45, cat: Movies/WEBDL, desc: "Films - BDRiP/BRRiP"}
+      - {id: 3, cat: Movies/BluRay, desc: "Films - Bluray 1080p"}
+      - {id: 4, cat: Movies/BluRay, desc: "Films - BluRay 720p"}
+      - {id: 6, cat: Movies/DVD, desc: "Films - DVD-R"}
+      - {id: 7, cat: Movies/WEBDL, desc: "Films - DVDRIP"}
+      - {id: 8, cat: Movies/SD, desc: "Films - F-SCR"}
+      - {id: 5, cat: Movies/BluRay, desc: "Films - Full BluRay"}
+      - {id: 9, cat: TV/HD, desc: "Films - HDTV"}
+      - {id: 47, cat: TV/HD, desc: "Films - HDTV-1080P"}
+      - {id: 46, cat: TV/HD, desc: "Films - HDTV-720P"}
+      - {id: 10, cat: TV/HD, desc: "Films - M-HD"}
+      - {id: 11, cat: Movies, desc: "Films - PACK"}
+      - {id: 12, cat: TV/WEB-DL, desc: "Films - TVRIP"}
+      - {id: 48, cat: Movies/SD, desc: "Films - VHS"}
+      - {id: 14, cat: Movies/WEBDL, desc: "Films - WEBRIP-DL"}
+      - {id: 44, cat: XXX, desc: "Films - XXX"}
+      - {id: 15, cat: Console/3DS, desc: "Jeux - 3DS-DS"}
+      - {id: 16, cat: Console, desc: "Jeux - ANDROID"}
+      - {id: 17, cat: Console, desc: "Jeux - IOS-OSX"}
+      - {id: 18, cat: PC/Games, desc: "Jeux - PC"}
+      - {id: 19, cat: Console/PS3, desc: "Jeux - PSP-PSX"}
+      - {id: 20, cat: Console/Wii, desc: "Jeux - WII"}
+      - {id: 21, cat: Console/WiiU, desc: "Jeux - WII-U"}
+      - {id: 22, cat: Console/Xbox 360, desc: "Jeux - XBOX 360/720"}
+      - {id: 23, cat: Books, desc: "Livres - BD"}
+      - {id: 24, cat: Books, desc: "Livres - Press-Mag"}
+      - {id: 25, cat: Books, desc: "Livres - Romans"}
+      - {id: 26, cat: PC/Mac, desc: "lLogiciels - APPLE"}
+      - {id: 27, cat: PC, desc: "Logiciels - LINUX"}
+      - {id: 28, cat: PC/Phone-Other, desc: "Logiciels - SMARTPHONE"}
+      - {id: 29, cat: PC/0day, desc: "Logiciels - WINDOWS"}
+      - {id: 30, cat: TV/Anime, desc: "Series - Animation"}
+      - {id: 33, cat: TV/HD, desc: "Series - Blu-Ray"}
+      - {id: 34, cat: TV/SD, desc: "Series - DVD-R"}
+      - {id: 35, cat: TV/WEB-DL, desc: "Series - DVDRIP"}
+      - {id: 31, cat: TV/HD, desc: "Series - HD 1080p"}
+      - {id: 32, cat: TV/HD, desc: "Series - HD 720p"}
+      - {id: 36, cat: TV/HD, desc: "Series - HDTV"}
+      - {id: 37, cat: TV, desc: "Series - M-HD"}
+      - {id: 38, cat: TV, desc: "Series - Pack"}
+      - {id: 39, cat: TV, desc: "Series - TVRIP"}
+      - {id: 41, cat: TV, desc: "Series - WEBRIP-DL"}
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  login:
+    path: TTV3/Connexion
+    method: post
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: font[color="red"]
+    test:
+      path: TTV3/Bienvenue
+      selector: a[href$="/TTV3/Deconnexion"]
+
+
+  download:
+    before:
+      # <form action='https://fou-du-cinema.net/TTV3/Torrents/Thank' name='thanksform' method='post'>
+      # <input type=hidden name=torrent value=329>
+      path: TTV3/Torrents/Thank
+      method: post
+      inputs:
+        torrent: "{{ re_replace .DownloadUri.PathAndQuery \"^(.+?)(\\d+)$\" \"$2\" }}"
+    selector: a[href*="/Telechargement/"]
+    attribute: href
+
+  search:
+    paths:
+    # https://fou-du-cinema.net/TTV3/Torrents/Recherche?search=mortal+legends&cat=0&incldead=1&freeleech=0&lang=0
+    # categories for searching are unsupported
+      - path: TTV3/Torrents/Recherche
+    inputs:
+      search: "{{ .Keywords }}"
+      # 0 active 1 incldead 2 onlydead
+      incldead: 1
+      # 0 not important 1 no 2 yes
+      freeleech: 0
+      # 0 all 1 German etc...
+      lang: 0
+
+    rows:
+      selector: tr:has(a[onmouseover])
+
+    fields:
+      category:
+        selector: a[href*="/SousCategories/"]
+        attribute: href
+        filters:
+          - name: regexp
+            args: (\d+)$
+      title:
+        selector: a[href*="/SousCategories/"]
+        attribute: alt
+        filters:
+          - name: regexp
+            args: "^..(.+)"
+          - name: re_replace
+            args: ["\\.", " "]
+      details:
+        selector: a[onmouseover]
+        attribute: href
+      download:
+        selector: a[onmouseover]
+        attribute: href
+      banner:
+        selector: a[onmouseover]
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: "src= (.*?)><"
+      date:
+        selector: font[color="#F2F2F2"]
+        filters:
+          - name: regexp
+            args: "Il\\s*y\\s*a\\s*(\\d+\\s*\\w+)\\s*"
+          - name: replace
+            args: ["heure", "hour"]
+          - name: replace
+            args: ["Jour", "day"]
+          - name: replace
+            args: ["Semaine", "week"]
+          - name: replace
+            args: ["Mois", "months"]
+          - name: replace
+            args: ["An", "year"]
+          - name: append
+            args: " ago"
+      size:
+        selector: td:nth-last-child(5)
+      grabs:
+        selector: td:nth-last-child(4)
+      seeders:
+        selector: td:nth-last-child(3)
+      leechers:
+        selector: td:nth-last-child(2)
+      downloadvolumefactor:
+        case:
+          img[src$="/images/Torrents/TLibre.png"]: 0
+          img[src$="/images/Torrents/freeleech.png"]: 0
+          "*": 1
+      uploadvolumefactor:
+        text: 1
+# TT3.00 FRENCH

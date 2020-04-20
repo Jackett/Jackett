@@ -312,6 +312,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * FinElite (FE)
  * FinVip
  * FocusX
+ * Fou-Du-Cinema
  * FreeTorrent
  * FullMixMusic
  * FunFile (FF)
