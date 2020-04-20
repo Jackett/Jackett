@@ -8,6 +8,8 @@
   followredirect: true
   links:
     - https://torrentgalaxy.to/
+    - https://torrentgalaxy.org/
+    - https://torrentgalaxy.pw/
     - https://torrentgalaxy.unblockit.one/
     - https://torrentgalaxy.unblockninja.com/
     - https://tgx.black-mirror.xyz/
@@ -16,8 +18,6 @@
     - https://tgx.uk-unblock.xyz/
     - https://tgx.ind-unblock.xyz/
   legacylinks:
-    - https://torrentgalaxy.org/
-    - https://torrentgalaxy.pw/
     - https://torrentgalaxy.unblockit.pro/
 
   caps:
