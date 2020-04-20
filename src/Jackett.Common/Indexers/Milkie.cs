@@ -128,8 +128,8 @@ namespace Jackett.Common.Indexers
                         Grabs = torrent.Downloaded,
                         UploadVolumeFactor = 1,
                         DownloadVolumeFactor = 0,
-                        MinimumRatio = 0,
-                        MinimumSeedTime = 0,
+                        MinimumRatio = 1,
+                        MinimumSeedTime = 172800,
                         PublishDate = DateTimeUtil.FromUnknown(torrent.CreatedAt)
                     };
 
