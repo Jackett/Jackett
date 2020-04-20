@@ -9,8 +9,8 @@ namespace Jackett.Common.Models.IndexerConfig
 {
     public class ConfigurationData
     {
-        private const string PasswordReplacement = "|||%%PREVJACKPASSWD%%|||";
-        protected readonly Dictionary<string, Item> dynamics = new Dictionary<string, Item>(); // list for dynamic items
+        private const string _PasswordReplacement = "|||%%PREVJACKPASSWD%%|||";
+        protected readonly Dictionary<string, Item> _dynamics = new Dictionary<string, Item>(); // list for dynamic items
         public ConfigurationData() {}
 
         public ConfigurationData(JToken json, IProtectionService ps) => LoadValuesFromJson(json, ps);
@@ -19,16 +19,16 @@ namespace Jackett.Common.Models.IndexerConfig
         public HiddenItem LastError { get; } = new HiddenItem {Name = "LastError"};
         public StringItem SiteLink { get; } = new StringItem {Name = "Site Link"};
 
-        public void AddDynamic(string id, Item item) => dynamics[id] = item;
+        public void AddDynamic(string id, Item item) => _dynamics[id] = item;
 
         public Item GetDynamic(string id)
         {
-            dynamics.TryGetValue(id, out var item);
+            _dynamics.TryGetValue(id, out var item);
             return item;
         }
 
         public Item GetDynamicByName(string name) =>
-            dynamics.Values.FirstOrDefault(i => string.Equals(i.Name, name, StringComparison.InvariantCultureIgnoreCase));
+            _dynamics.Values.FirstOrDefault(i => string.Equals(i.Name, name, StringComparison.InvariantCultureIgnoreCase));
 
         private Item[] GetItems(bool forDisplay)
         {
@@ -39,7 +39,7 @@ namespace Jackett.Common.Models.IndexerConfig
             // remove/insert Site Link manualy to make sure it shows up first
             properties.Remove(SiteLink);
             properties.Insert(0, SiteLink);
-            properties.AddRange(dynamics.Values);
+            properties.AddRange(_dynamics.Values);
             if (!forDisplay)
                 properties.RemoveAll(property => property is ImageItem);
             return properties.ToArray();
@@ -81,7 +81,7 @@ namespace Jackett.Common.Models.IndexerConfig
                         var newValue = arrItem.Value<string>("value");
                         if (string.Equals(item.Name, "password", StringComparison.InvariantCultureIgnoreCase))
                         {
-                            if (newValue != PasswordReplacement)
+                            if (newValue != _PasswordReplacement)
                             {
                                 sItem.Value = newValue;
                                 if (ps != null)
@@ -121,7 +121,7 @@ namespace Jackett.Common.Models.IndexerConfig
                             if (string.IsNullOrEmpty(value))
                                 value = string.Empty;
                             else if (forDisplay)
-                                value = PasswordReplacement;
+                                value = _PasswordReplacement;
                             else if (ps != null)
                                 value = ps.Protect(value);
                         }
