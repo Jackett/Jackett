@@ -350,6 +350,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HDTurk
  * HDU
  * HDZone
+ * HaiDan
  * HQSource (HQS)
  * HacheDe
  * Hebits
