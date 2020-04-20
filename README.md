@@ -378,6 +378,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Magico (Trellas)
  * Majomparádé (TurkDepo)
  * MicroBit (µBit)
+ * Milkie
  * MMA-Torrents
  * MoeCat
  * Mononoké-BT
