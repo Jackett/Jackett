@@ -10,7 +10,7 @@
   legacylinks:
     - https://nyaa.pantsu.cat/
     - https://nyaa.pt/
-    
+
   settings:
     - name: cat-id
       type: select
@@ -94,6 +94,7 @@
     modes:
       search: [q]
       tv-search: [q]
+      music-search: [q]
 
   search:
     paths:

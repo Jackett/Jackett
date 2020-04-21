@@ -21,6 +21,9 @@
 
     modes:
       search: [q]
+      tv-search: [q]
+      movie-search: [q]
+      music-search: [q]
 
   login:
     path: login
@@ -33,7 +36,7 @@
       - selector: table.main:contains("Login Failed!")
     test:
       path: my.php
-        
+
   search:
     paths:
       - path: browse.php

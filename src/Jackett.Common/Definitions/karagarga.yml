@@ -77,6 +77,8 @@
 
     modes:
       search: [q]
+      movie-search: [q]
+      music-search: [q]
 
   login:
     path: takelogin.php
@@ -92,7 +94,7 @@
       - selector: table:contains("Login failed!")
     test:
       path: index.php
-        
+
   search:
     paths:
       - path: browse.php

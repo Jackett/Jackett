@@ -100,7 +100,10 @@
       - {id: 699, cat: Books/Other, desc: "Other Other", default: true}
 
     modes:
+      search: [q]
       tv-search: [q, season, ep]
+      movie-search: [q]
+      music-search: [q]
 
   settings:
     - name: info

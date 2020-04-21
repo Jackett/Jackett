@@ -39,6 +39,8 @@
     modes:
       search: [q]
       tv-search: [q, season, ep]
+      movie-search: [q]
+      music-search: [q]
 
   login:
     path: takelogin.php
@@ -51,7 +53,7 @@
       - selector: div.glavni:has(div.glavni_naslov:contains("Greška"))
     test:
       path: browse.php
-      
+
   search:
     paths:
       - path: browse.php

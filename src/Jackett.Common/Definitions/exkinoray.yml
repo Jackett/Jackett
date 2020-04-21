@@ -59,6 +59,7 @@
       search: [q]
       tv-search: [q, season, ep]
       movie-search: [q]
+      music-search: [q]
 
   settings:
     - name: username
@@ -111,9 +112,9 @@
       - path: browse.php
     keywordsfilters:
       # the site does not support season/episode searching in the title.
-      - name: re_replace # strip S01 
+      - name: re_replace # strip S01
         args: ["(?i)\\bS0*(\\d+)\\b", ""]
-      - name: re_replace # strip S01E01 
+      - name: re_replace # strip S01E01
         args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", ""]
     inputs:
       $raw: "{{ if .Categories }}{{ range .Categories }}c{{.}}=1&{{end}}{{else}}cat=0{{end}}"
@@ -138,7 +139,7 @@
         filters:
           # Женские секреты (1 сезон: 1-4 серии из 12) Жіночі секрети | 2020 | HDTVRip (720p)
           # Мандалорец (1 сезон: 1-8 серии из 8) | The Mandalorian | 2019 | WEB-DL (720p)
-          # Война семей (1-14 серии из 20) | 2019 | WEB-DLRip (AVC) 
+          # Война семей (1-14 серии из 20) | 2019 | WEB-DLRip (AVC)
           # normalize to SXXEYY format
           - name: replace
             args: [" | ", " "]

@@ -10,7 +10,7 @@
 
   caps:
     categorymappings:
-# 1080p
+      # 1080p
       - {id: 131, cat: Movies/HD, desc: "Movies 1080p"}
       - {id: 133, cat: Movies/HD, desc: "Movie Pack 1080p"}
       - {id: 29, cat: TV/HD, desc: "Serien 1080p"}
@@ -18,7 +18,7 @@
       - {id: 18, cat: XXX, desc: "XXX 1080p"}
       - {id: 95, cat: TV/HD, desc: "Serien Packs 1080p"}
       - {id: 138, cat: Movies/HD, desc: "x265 1080p"}
-# 720p
+      # 720p
       - {id: 60, cat: Movies/HD, desc: "Movies 720p"}
       - {id: 132, cat: Movies/HD, desc: "Movie Pack 720p"}
       - {id: 30, cat: TV/HD, desc: "Serien 720p"}
@@ -26,7 +26,7 @@
       - {id: 22, cat: XXX, desc: "XXX 720p"}
       - {id: 96, cat: TV/HD, desc: "Serien Packs 720p"}
       - {id: 139, cat: Movies/HD, desc: "x265 720p"}
-# 4K/2k
+      # 4K/2k
       - {id: 129, cat: Movies/UHD, desc: "Remux 4K/2k"}
       - {id: 130, cat: Movies/UHD, desc: "Untouched 4K/2k"}
       - {id: 134, cat: Movies/UHD, desc: "UHD/2160p 4K/2k"}
@@ -34,45 +34,46 @@
       - {id: 121, cat: TV/UHD, desc: "Serien 4K/2k"}
       - {id: 122, cat: TV/Documentary, desc: "Doku 4K/2k"}
       - {id: 123, cat: XXX, desc: "XXX 4K/2k"}
-# 3D
+      # 3D
       - {id: 90, cat: Movies/3D, desc: "Untouched 3D"}
       - {id: 87, cat: Movies/3D, desc: "1080p 3D"}
       - {id: 92, cat: Movies/3D, desc: "720p 3D"}
       - {id: 118, cat: TV/Documentary, desc: "Doku 3D"}
       - {id: 97, cat: XXX, desc: "XXX 3D"}
-# Audio
+      # Audio
       - {id: 135, cat: Audio/Audiobook, desc: "Audio A-Book/FLAC"}
       - {id: 136, cat: Audio/Audiobook, desc: "Audio A-Book/MP3"}
       - {id: 33, cat: Audio/Lossless, desc: "Audio Lossless"}
       - {id: 124, cat: Audio/MP3, desc: "Audio Lossy"}
       - {id: 125, cat: Audio, desc: "Audio Tonspur"}
-# MusikVideo
+      # MusikVideo
       - {id: 42, cat: Audio/Video, desc: "MusikVideo Untouched"}
       - {id: 101, cat: Audio/Video, desc: "MusikVideo Remux"}
       - {id: 43, cat: Audio/Video, desc: "MusikVideo 1080p"}
       - {id: 44, cat: Audio/Video, desc: "MusikVideo 720p"}
-# Untouched
+      # Untouched
       - {id: 51, cat: Movies, desc: "Movies Untouched"}
       - {id: 100, cat: TV, desc: "Serien Untouched"}
       - {id: 99, cat: TV/Documentary, desc: "Doku Untouched"}
       - {id: 102, cat: XXX, desc: "XXX Untouched"}
-# Remux
+      # Remux
       - {id: 12, cat: Movies, desc: "Movies Remux"}
       - {id: 126, cat: TV, desc: "Serien Remux"}
       - {id: 11, cat: TV/Documentary, desc: "Doku Remux"}
       - {id: 10, cat: XXX, desc: "XXX Remux"}
-# Sonstiges
+      # Sonstiges
       - {id: 49, cat: Other, desc: "Sonstiges RarFix"}
       - {id: 93, cat: Other, desc: "Sonstiges HD-Pics"}
       - {id: 94, cat: Other, desc: "Sonstiges HD-XXX Pics"}
       - {id: 98, cat: Other, desc: "Sonstiges to sort"}
-# E-Book
+      # E-Book
       - {id: 103, cat: Books/Ebook, desc: "E-Book Mixed"}
 
     modes:
       search: [q, imdbid]
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
+      music-search: [q]
 
   settings:
     - name: username

@@ -24,6 +24,8 @@
 
     modes:
       search: [q]
+      movie-search: [q]
+      music-search: [q]
 
   search:
     paths:
@@ -43,7 +45,7 @@
         selector: p:has(img) span:nth-last-child(4)
       details:
         selector: a[href^="/post/"]
-        attribute: href    
+        attribute: href
       download:
         selector: a[href^="magnet:?"]
         attribute: href
