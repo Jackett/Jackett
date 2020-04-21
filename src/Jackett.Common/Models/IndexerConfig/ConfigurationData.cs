@@ -9,79 +9,61 @@ namespace Jackett.Common.Models.IndexerConfig
 {
     public class ConfigurationData
     {
-        private const string _PasswordReplacement = "|||%%PREVJACKPASSWD%%|||";
-        protected readonly Dictionary<string, Item> _dynamics = new Dictionary<string, Item>(); // list for dynamic items
-        public ConfigurationData() {}
+        private const string PASSWORD_REPLACEMENT = "|||%%PREVJACKPASSWD%%|||";
+        protected Dictionary<string, Item> dynamics = new Dictionary<string, Item>(); // list for dynamic items
+
+        public enum ItemType
+        {
+            InputString,
+            InputBool,
+            InputCheckbox,
+            InputSelect,
+            DisplayImage,
+            DisplayInfo,
+            HiddenData,
+            Recaptcha
+        }
+
+        public HiddenItem CookieHeader { get; private set; } = new HiddenItem { Name = "CookieHeader" };
+        public HiddenItem LastError { get; private set; } = new HiddenItem { Name = "LastError" };
+        public StringItem SiteLink { get; private set; } = new StringItem { Name = "Site Link" };
+
+        public ConfigurationData()
+        {
+
+        }
 
         public ConfigurationData(JToken json, IProtectionService ps) => LoadValuesFromJson(json, ps);
-
-        public HiddenItem CookieHeader { get; } = new HiddenItem {Name = "CookieHeader"};
-        public HiddenItem LastError { get; } = new HiddenItem {Name = "LastError"};
-        public StringItem SiteLink { get; } = new StringItem {Name = "Site Link"};
-
-        public void AddDynamic(string id, Item item) => _dynamics[id] = item;
-
-        public Item GetDynamic(string id)
-        {
-            _dynamics.TryGetValue(id, out var item);
-            return item;
-        }
-
-        public Item GetDynamicByName(string name) =>
-            _dynamics.Values.FirstOrDefault(i => string.Equals(i.Name, name, StringComparison.InvariantCultureIgnoreCase));
-
-        private Item[] GetItems(bool forDisplay)
-        {
-            var properties = GetType().GetProperties().Where(p => p.CanRead)
-                                      .Where(p => p.PropertyType.IsSubclassOf(typeof(Item)))
-                                      .Select(p => (Item)p.GetValue(this)).ToList();
-
-            // remove/insert Site Link manualy to make sure it shows up first
-            properties.Remove(SiteLink);
-            properties.Insert(0, SiteLink);
-            properties.AddRange(_dynamics.Values);
-            if (!forDisplay)
-                properties.RemoveAll(property => property is ImageItem);
-            return properties.ToArray();
-        }
 
         public void LoadValuesFromJson(JToken json, IProtectionService ps = null)
         {
             if (json == null)
                 return;
+
             var arr = (JArray)json;
-            foreach (var item in GetItems(false))
+
+            // transistion from alternatelink to sitelink
+            var alternatelinkItem = arr.FirstOrDefault(f => f.Value<string>("id") == "alternatelink");
+            if (alternatelinkItem != null && !string.IsNullOrEmpty(alternatelinkItem.Value<string>("value")))
+            {
+                //SiteLink.Value = alternatelinkItem.Value<string>("value");
+            }
+
+            foreach (var item in GetItems(forDisplay: false))
             {
                 var arrItem = arr.FirstOrDefault(f => f.Value<string>("id") == item.ID);
                 if (arrItem == null)
                     continue;
-                switch (item)
+
+                switch (item.ItemType)
                 {
-                    case HiddenItem hiddenItem:
-                        hiddenItem.Value = arrItem.Value<string>("value");
-                        break;
-                    case BoolItem boolItem:
-                        boolItem.Value = arrItem.Value<bool>("value");
-                        break;
-                    case CheckboxItem checkboxItem:
-                        var values = arrItem.Value<JArray>("values");
-                        if (values != null)
-                            checkboxItem.Values = values.Values<string>().ToArray();
-                        break;
-                    case SelectItem selectItem:
-                        selectItem.Value = arrItem.Value<string>("value");
-                        break;
-                    case RecaptchaItem recaptcha:
-                        recaptcha.Value = arrItem.Value<string>("value");
-                        recaptcha.Cookie = arrItem.Value<string>("cookie");
-                        recaptcha.Version = arrItem.Value<string>("version");
-                        recaptcha.Challenge = arrItem.Value<string>("challenge");
-                        break;
-                    case StringItem sItem:
+                    case ItemType.InputString:
+                        var sItem = (StringItem)item;
                         var newValue = arrItem.Value<string>("value");
+
                         if (string.Equals(item.Name, "password", StringComparison.InvariantCultureIgnoreCase))
                         {
-                            if (newValue != _PasswordReplacement)
+                            if (newValue != PASSWORD_REPLACEMENT)
                             {
                                 sItem.Value = newValue;
                                 if (ps != null)
@@ -89,8 +71,29 @@ namespace Jackett.Common.Models.IndexerConfig
                             }
                         }
                         else
+                        {
                             sItem.Value = newValue;
-
+                        }
+                        break;
+                    case ItemType.HiddenData:
+                        ((HiddenItem)item).Value = arrItem.Value<string>("value");
+                        break;
+                    case ItemType.InputBool:
+                        ((BoolItem)item).Value = arrItem.Value<bool>("value");
+                        break;
+                    case ItemType.InputCheckbox:
+                        var values = arrItem.Value<JArray>("values");
+                        if (values != null)
+                            ((CheckboxItem)item).Values = values.Values<string>().ToArray();
+                        break;
+                    case ItemType.InputSelect:
+                        ((SelectItem)item).Value = arrItem.Value<string>("value");
+                        break;
+                    case ItemType.Recaptcha:
+                        ((RecaptchaItem)item).Value = arrItem.Value<string>("value");
+                        ((RecaptchaItem)item).Cookie = arrItem.Value<string>("cookie");
+                        ((RecaptchaItem)item).Version = arrItem.Value<string>("version");
+                        ((RecaptchaItem)item).Challenge = arrItem.Value<string>("challenge");
                         break;
                 }
             }
@@ -105,110 +108,185 @@ namespace Jackett.Common.Models.IndexerConfig
                 var jObject = new JObject
                 {
                     ["id"] = item.ID,
+                    ["type"] = item.ItemType.ToString().ToLower(),
                     ["name"] = item.Name
                 };
-                switch (item)
+                switch (item.ItemType)
                 {
-                    case RecaptchaItem recaptcha:
-                        jObject["sitekey"] = recaptcha.SiteKey;
-                        jObject["version"] = recaptcha.Version;
+                    case ItemType.Recaptcha:
+                        jObject["sitekey"] = ((RecaptchaItem)item).SiteKey;
+                        jObject["version"] = ((RecaptchaItem)item).Version;
                         break;
-                    case StringItem stringItem:
-                        var value = stringItem.Value;
-                        // if we change this logic we've to change the MigratedFromDPAPI() logic too, #2114 is realted
-                        if (string.Equals(stringItem.Name, "password", StringComparison.InvariantCultureIgnoreCase))
+                    case ItemType.InputString:
+                    case ItemType.HiddenData:
+                    case ItemType.DisplayInfo:
+                        var value = ((StringItem)item).Value;
+                        if (string.Equals(item.Name, "password", StringComparison.InvariantCultureIgnoreCase)) // if we chagne this logic we've to change the MigratedFromDPAPI() logic too, #2114 is realted
                         {
                             if (string.IsNullOrEmpty(value))
                                 value = string.Empty;
                             else if (forDisplay)
-                                value = _PasswordReplacement;
+                                value = PASSWORD_REPLACEMENT;
                             else if (ps != null)
                                 value = ps.Protect(value);
                         }
-
                         jObject["value"] = value;
                         break;
-                    case BoolItem boolItem:
-                        jObject["value"] = boolItem.Value;
+                    case ItemType.InputBool:
+                        jObject["value"] = ((BoolItem)item).Value;
                         break;
-                    case CheckboxItem checkboxItem:
-                        jObject["values"] = new JArray(checkboxItem.Values);
+                    case ItemType.InputCheckbox:
+                        jObject["values"] = new JArray(((CheckboxItem)item).Values);
                         jObject["options"] = new JObject();
-                        foreach (var option in checkboxItem.Options)
+
+                        foreach (var option in ((CheckboxItem)item).Options)
+                        {
                             jObject["options"][option.Key] = option.Value;
+                        }
                         break;
-                    case SelectItem selectItem:
-                        jObject["value"] = selectItem.Value;
+                    case ItemType.InputSelect:
+                        jObject["value"] = ((SelectItem)item).Value;
                         jObject["options"] = new JObject();
-                        foreach (var option in selectItem.Options)
+
+                        foreach (var option in ((SelectItem)item).Options)
+                        {
                             jObject["options"][option.Key] = option.Value;
+                        }
                         break;
-                    case ImageItem imageItem:
-                        var dataUri = DataUrlUtils.BytesToDataUrl(imageItem.Value, "image/jpeg");
+                    case ItemType.DisplayImage:
+                        var dataUri = DataUrlUtils.BytesToDataUrl(((ImageItem)item).Value, "image/jpeg");
                         jObject["value"] = dataUri;
                         break;
                 }
-
                 jArray.Add(jObject);
             }
-
             return jArray;
+        }
+
+        private Item[] GetItems(bool forDisplay)
+        {
+            var properties = GetType()
+                .GetProperties()
+                .Where(p => p.CanRead)
+                .Where(p => p.PropertyType.IsSubclassOf(typeof(Item)))
+                .Select(p => (Item)p.GetValue(this)).ToList();
+
+            // remove/insert Site Link manualy to make sure it shows up first
+            properties.Remove(SiteLink);
+            properties.Insert(0, SiteLink);
+
+            properties.AddRange(dynamics.Values);
+
+            if (!forDisplay)
+            {
+                properties = properties
+                    .Where(p => p.ItemType == ItemType.HiddenData || p.ItemType == ItemType.InputBool || p.ItemType == ItemType.InputString || p.ItemType == ItemType.InputCheckbox || p.ItemType == ItemType.InputSelect || p.ItemType == ItemType.Recaptcha || p.ItemType == ItemType.DisplayInfo)
+                    .ToList();
+            }
+
+            return properties.ToArray();
+        }
+
+        public void AddDynamic(string ID, Item item) => dynamics[ID] = item;
+
+        // TODO Convert to TryGetValue to avoid throwing exception
+        public Item GetDynamic(string ID)
+        {
+            try
+            {
+                return dynamics[ID];
+            }
+            catch (KeyNotFoundException)
+            {
+                return null;
+            }
+        }
+
+        public Item GetDynamicByName(string Name)
+            => dynamics.Values.FirstOrDefault(i => string.Equals(i.Name, Name, StringComparison.InvariantCultureIgnoreCase));
+
+        public class Item
+        {
+            public ItemType ItemType { get; set; }
+            public string Name { get; set; }
+            public string ID => Name.Replace(" ", "").ToLower();
+        }
+
+        public class HiddenItem : StringItem
+        {
+            public HiddenItem(string value = "")
+            {
+                Value = value;
+                ItemType = ItemType.HiddenData;
+            }
+        }
+
+        public class DisplayItem : StringItem
+        {
+            public DisplayItem(string value)
+            {
+                Value = value;
+                ItemType = ItemType.DisplayInfo;
+            }
+        }
+
+        public class StringItem : Item
+        {
+            public string SiteKey { get; set; }
+            public string Value { get; set; }
+            public string Cookie { get; set; }
+            public StringItem() => ItemType = ItemType.InputString;
+        }
+
+        public class RecaptchaItem : StringItem
+        {
+            public string Version { get; set; }
+            public string Challenge { get; set; }
+            public RecaptchaItem()
+            {
+                Version = "2";
+                ItemType = ItemType.Recaptcha;
+            }
         }
 
         public class BoolItem : Item
         {
             public bool Value { get; set; }
-        }
-
-        public class CheckboxItem : Item
-        {
-            public CheckboxItem(Dictionary<string, string> options) => Options = options;
-
-            public Dictionary<string, string> Options { get; }
-            public string[] Values { get; set; }
-        }
-
-        public class DisplayItem : StringItem
-        {
-            public DisplayItem(string value) => Value = value;
-        }
-
-        public class HiddenItem : StringItem
-        {
-            public HiddenItem(string value = "") => Value = value;
+            public BoolItem() => ItemType = ItemType.InputBool;
         }
 
         public class ImageItem : Item
         {
             public byte[] Value { get; set; }
+            public ImageItem() => ItemType = ItemType.DisplayImage;
         }
 
-        public class Item
+        public class CheckboxItem : Item
         {
-            public string ID => Name.Replace(" ", "").ToLower();
-            public string Name { get; set; }
-        }
+            public string[] Values { get; set; }
 
-        public class RecaptchaItem : StringItem
-        {
-            public RecaptchaItem() => Version = "2";
-            public string Challenge { get; set; }
-            public string Version { get; set; }
+            public Dictionary<string, string> Options { get; }
+
+            public CheckboxItem(Dictionary<string, string> options)
+            {
+                ItemType = ItemType.InputCheckbox;
+                Options = options;
+            }
         }
 
         public class SelectItem : Item
         {
-            public SelectItem(Dictionary<string, string> options) => Options = options;
+            public string Value { get; set; }
 
             public Dictionary<string, string> Options { get; }
-            public string Value { get; set; }
+
+            public SelectItem(Dictionary<string, string> options)
+            {
+                ItemType = ItemType.InputSelect;
+                Options = options;
+            }
         }
 
-        public class StringItem : Item
-        {
-            public string Cookie { get; set; }
-            public string SiteKey { get; set; }
-            public string Value { get; set; }
-        }
+        //public abstract Item[] GetItems();
     }
 }
