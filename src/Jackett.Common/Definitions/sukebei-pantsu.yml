@@ -26,6 +26,7 @@
         2_: "Real Life"
         2_1: "Real Life - Photobooks and Pictures"
         2_2: "Real Life - Videos"
+        2_7: "Unknown"
     - name: sort
       type: select
       label: Sort requested from site
@@ -56,6 +57,8 @@
       - {id: 2_,  cat: XXX, desc: "Adult Real Life"}
       - {id: 2_1,  cat: XXX, desc: "Adult Photobooks and Pictures"}
       - {id: 2_2,  cat: XXX, desc: "Adult Videos"}
+      # Unknown
+      - {id: 2_7,  cat: XXX, desc: "Unknown"}
 
     modes:
       search: [q]
