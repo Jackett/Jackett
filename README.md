@@ -225,6 +225,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * AnimeTorrents (AnT)
  * Anthelion
  * Araba Fenice (Phoenix)
+ * ArabP2P
  * Asgaard (AG)
  * AsianCinema
  * AudioNews (AN)
