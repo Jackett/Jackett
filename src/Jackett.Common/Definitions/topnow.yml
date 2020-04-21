@@ -34,7 +34,7 @@
 
     rows:
       # old cards do not have a download link
-      selector: table.each_card_table:has(a[href^="/download/"])
+      selector: table.each_card_table:has(a[href^="/download.php?torrent="])
 
     fields:
       category:
@@ -45,7 +45,7 @@
         # new cards do not have details page links
         text: /
       download:
-        selector: a[href^="/download/"]
+        selector: a[href^="/download.php?torrent="]
         attribute: href
       banner:
         selector: img

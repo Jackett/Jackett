@@ -94,8 +94,12 @@
       - {id: 1430, cat: Movies, desc: "Movies - Musical"}
       - {id: 1510, cat: Movies, desc: "Movies - Sci-Fi"}
       - {id: 1610, cat: Movies, desc: "Movies - War"}
+
     modes:
       search: [q]
+      tv-search: [q]
+      movie-search: [q]
+
 
   login:
     method: post

@@ -30,8 +30,12 @@
       - {id: 17, cat: Books, desc: "Novelas"}
       - {id: 12, cat: TV/OTHER, desc: "Otros"}
       - {id: 11, cat: TV, desc: "Programas"}
+
     modes:
       search: [q]
+      tv-search: [q]
+      movie-search: [q]
+      music-search: [q]
 
   settings:
     - name: username
@@ -72,7 +76,7 @@
     test:
       path: /
       selector: div#statusbar
-      
+
   search:
     path: browse.php
     inputs:

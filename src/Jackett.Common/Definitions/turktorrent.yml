@@ -68,6 +68,7 @@
       search: [q]
       tv-search: [q, season, ep]
       movie-search: [q]
+      music-search: [q]
 
   settings:
     - name: username
@@ -154,7 +155,7 @@
         attribute: data-time
       date:
         optional: true
-         # Uploaded 30-01-2019 15:02 by 
+         # Uploaded 30-01-2019 15:02 by
         selector: td.torrent_name:not(:contains(" at "))
         filters:
           - name: regexp

@@ -14,6 +14,7 @@
 
     modes:
       search: [q]
+      movie-search: [q]
 
   login:
     path: account-login.php

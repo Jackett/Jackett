@@ -78,7 +78,6 @@ namespace Jackett.Common.Indexers
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-            logger.Info("Testing provider filelist...");
             var pingResponse = await CallProviderAsync(new TorznabQuery());
 
             try
@@ -117,8 +116,10 @@ namespace Jackett.Common.Indexers
                     var peers = seeders + (int)row["leechers"];
                     var publishDate = DateTimeUtil.FromFuzzyTime((string)row["upload_date"] + " +0200");
                     var downloadVolumeFactor = (int)row["freeleech"] == 1 ? 0 : 1;
+                    var uploadVolumeFactor = (int)row["doubleup"] == 1 ? 2 : 1;
                     var imdbId = ((JObject)row).ContainsKey("imdb") ? ParseUtil.GetImdbID((string)row["imdb"]) : null;
                     var link = new Uri((string)row["download_link"]);
+
                     var release = new ReleaseInfo
                     {
                         Title = (string)row["name"],
@@ -133,11 +134,12 @@ namespace Jackett.Common.Indexers
                         MinimumRatio = 1,
                         MinimumSeedTime = 172800, //48 hours
                         PublishDate = publishDate,
-                        UploadVolumeFactor = 1,
                         DownloadVolumeFactor = downloadVolumeFactor,
+                        UploadVolumeFactor = uploadVolumeFactor,
                         Guid = detailsUri,
                         Imdb = imdbId
                     };
+
                     releases.Add(release);
                 }
 
@@ -194,4 +196,3 @@ namespace Jackett.Common.Indexers
         }
     }
 }
-

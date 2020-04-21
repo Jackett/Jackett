@@ -114,6 +114,9 @@
       - {id: 109, cat: TV/HD, desc: "Series Animación - HDTV WEB-DL 4K"}
     modes:
       search: [q]
+      tv-search: [q]
+      movie-search: [q]
+      music-search: [q]
 
   settings:
     - name: username
@@ -215,13 +218,13 @@
       download:
         selector: a[href^="download.php"]
         attribute: href
-      downloadvolumefactor: 
+      downloadvolumefactor:
         case:
           img[src$="freeleech.gif"]: "0"
           img[src$="gold.gif"]: "0"
           img[src$="silver.gif"]: "0.5"
           "*": "1"
-      uploadvolumefactor: 
+      uploadvolumefactor:
           case:
             img[src$="2x.gif"]: "2"
             img[src$="3x.gif"]: "3"

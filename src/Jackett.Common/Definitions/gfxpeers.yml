@@ -20,7 +20,6 @@
 
     modes:
       search: [q]
-      tv-search: [q, season, ep]
 
   login:
     path: login.php

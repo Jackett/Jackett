@@ -108,6 +108,7 @@
     modes:
       search: [q]
       tv-search: [q]
+      movie-search: [q]
 
   search:
     paths:

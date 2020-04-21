@@ -38,6 +38,7 @@
 
     modes:
       search: [q]
+      movie-search: [q]
 
   settings: []
 

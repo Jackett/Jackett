@@ -145,6 +145,7 @@
 
     modes:
       search: [q]
+      tv-search: [q]
 
   settings:
     - name: username

@@ -136,7 +136,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TorrentKitty
  * TorrentParadise
  * TorrentProject2
- * TorrentRex
  * TorrentQuest
  * Torrents.csv
  * Torrentv
@@ -226,6 +225,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * AnimeTorrents (AnT)
  * Anthelion
  * Araba Fenice (Phoenix)
+ * ArabP2P
  * Asgaard (AG)
  * AsianCinema
  * AudioNews (AN)
@@ -378,6 +378,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Magico (Trellas)
  * Majomparádé (TurkDepo)
  * MicroBit (µBit)
+ * Milkie
  * MMA-Torrents
  * MoeCat
  * Mononoké-BT
