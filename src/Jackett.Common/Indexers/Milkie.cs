@@ -19,22 +19,18 @@ namespace Jackett.Common.Indexers
     {
         private string TorrentsEndpoint => SiteLink + "api/v1/torrents";
 
-        private new ConfigurationDataAPIKey configData
-        {
-            get => (ConfigurationDataAPIKey)base.configData;
-            set => base.configData = value;
-        }
+        private new ConfigurationDataAPIKey configData => (ConfigurationDataAPIKey)base.configData;
 
         public Milkie(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "Milkie",
-                description: "Milkie.cc (ME) is private torrent tracker for 0day / general",
-                link: "https://milkie.cc/",
-                caps: new TorznabCapabilities(),
-                configService: configService,
-                client: wc,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataAPIKey())
+            : base("Milkie",
+                   description: "Milkie.cc (ME) is private torrent tracker for 0day / general",
+                   link: "https://milkie.cc/",
+                   caps: new TorznabCapabilities(),
+                   configService: configService,
+                   client: wc,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataAPIKey())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
@@ -63,8 +59,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var results = await PerformQuery(new TorznabQuery());
-
-                if (results.Count() == 0)
+                if (!results.Any())
                     throw new Exception("Testing returned no results!");
 
                 IsConfigured = true;
@@ -80,24 +75,23 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            var queryParams = new NameValueCollection
+            var qc = new NameValueCollection
             {
                 { "ps", "100" }
             };
 
             if (!string.IsNullOrWhiteSpace(query.SearchTerm))
-            {
-                queryParams.Add("query", query.SearchTerm);
-            }
+                qc.Add("query", query.SearchTerm);
 
             if (query.HasSpecifiedCategories)
-            {
-                queryParams.Add("categories", string.Join(",", MapTorznabCapsToTrackers(query)));
-            }
+                qc.Add("categories", string.Join(",", MapTorznabCapsToTrackers(query)));
 
-            var endpoint = TorrentsEndpoint + "?" + queryParams.GetQueryString();
-            var headers = new Dictionary<string, string>() { { "x-milkie-auth", configData.Key.Value } };
-            var jsonResponse = await RequestStringWithCookies(endpoint, null, null, headers);
+            var endpoint = TorrentsEndpoint + "?" + qc.GetQueryString();
+            var headers = new Dictionary<string, string>
+            {
+                { "x-milkie-auth", configData.Key.Value }
+            };
+            var jsonResponse = await RequestStringWithCookies(endpoint, headers: headers);
 
             var releases = new List<ReleaseInfo>();
 
@@ -114,6 +108,7 @@ namespace Jackett.Common.Indexers
                 {
                     var link = new Uri($"{TorrentsEndpoint}/{torrent.Id}/torrent?{dlQueryParams.GetQueryString()}");
                     var comments = new Uri($"{SiteLink}browse/{torrent.Id}");
+                    var publishDate = DateTimeUtil.FromUnknown(torrent.CreatedAt);
 
                     var release = new ReleaseInfo()
                     {
@@ -121,16 +116,16 @@ namespace Jackett.Common.Indexers
                         Link = link,
                         Comments = comments,
                         Guid = comments,
-                        Size = torrent.Size,
+                        PublishDate = publishDate,
                         Category = MapTrackerCatToNewznab(torrent.Category.ToString()),
+                        Size = torrent.Size,
                         Seeders = torrent.Seeders,
                         Peers = torrent.Seeders + torrent.PartialSeeders + torrent.Leechers,
                         Grabs = torrent.Downloaded,
                         UploadVolumeFactor = 1,
                         DownloadVolumeFactor = 0,
                         MinimumRatio = 1,
-                        MinimumSeedTime = 172800,
-                        PublishDate = DateTimeUtil.FromUnknown(torrent.CreatedAt)
+                        MinimumSeedTime = 172800 // 48 hours
                     };
 
                     releases.Add(release);
