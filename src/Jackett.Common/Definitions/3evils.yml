@@ -30,6 +30,7 @@
       search: [q]
       tv-search: [q, season, ep]
       movie-search: [q]
+      music-search: [q]
 
   settings:
     - name: username
@@ -113,7 +114,7 @@
         optional: true
         filters:
             #  onmouseover="Tip('<b>blahblah /><img src=\'img.php/tvmaze/80.jpg\' blahblah />');"
-            # <img src=\'./pic/noposter.png\' 
+            # <img src=\'./pic/noposter.png\'
           - name: regexp
             args: "src=\\\\\'(.+?)\\\\\'"
           - name: replace

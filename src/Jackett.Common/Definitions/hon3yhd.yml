@@ -49,6 +49,8 @@
     modes:
       search: [q]
       tv-search: [q, season, ep]
+      movie-search: [q]
+      music-search: [q]
 
   login:
     path: login.php
@@ -90,7 +92,7 @@
             args: cat
       details:
         selector: a[href^="details.php?id="]
-        attribute: href    
+        attribute: href
       download:
         selector: a[href^="download.php?torrent="]
         attribute: href

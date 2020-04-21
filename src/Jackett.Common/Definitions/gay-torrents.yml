@@ -55,6 +55,7 @@
      - {id: nonporn/Softcore , cat: Movies , desc: "Softcore"}
      - {id: nonporn/Thriller , cat: Movies , desc: "Thriller"}
      - {id: nonporn/TV-Episode , cat: TV , desc: "TV-Episode"}
+
     modes:
       search: [q]
 

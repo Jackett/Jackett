@@ -26,6 +26,7 @@
     modes:
       search: [q]
       tv-search: [q, season, ep]
+      movie-search: [q]
       music-search: [q, album, artist, label, year]
 
   login:
@@ -71,7 +72,7 @@
           - name: replace
             args: [" ()", ""]
           - name: replace
-            args: ["\t", ""]            
+            args: ["\t", ""]
           - name: replace
             args: [" / Freeleech!", ""]
       category:

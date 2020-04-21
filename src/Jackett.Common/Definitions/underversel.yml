@@ -638,6 +638,7 @@
       search: [q]
       tv-search: [q, season, ep]
       movie-search: [q]
+      music-search: [q]
 
   settings:
     - name: username
@@ -715,7 +716,7 @@
       o: "{{ .Config.sort }}"
       # 1=asc 2=desc
       s: "{{ .Config.type }}"
-      # filter by status 1 all 
+      # filter by status 1 all
       status: 1
       # show category
       dc: 0
@@ -766,7 +767,7 @@
         selector: a[href^="./download.php?id="]
         attribute: href
       magnet:
-        selector: a[href^="magnet:?xt="]      
+        selector: a[href^="magnet:?xt="]
         attribute: href
       category:
         selector: a.gen

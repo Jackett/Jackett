@@ -31,6 +31,9 @@
       7: Movies
     modes:
       search: [q]
+      tv-search: [q]
+      movie-search: [q]
+      music-search: [q]
 
   login:
     path: login.php
@@ -71,7 +74,7 @@
           - name: append
             args: "&usetoken=1"
       download:
-        text: "{{if .Config.usetoken}}{{ .Result.download-usetoken }}{{else}}{{ .Result.download-regular }}{{end}}" 
+        text: "{{if .Config.usetoken}}{{ .Result.download-usetoken }}{{else}}{{ .Result.download-regular }}{{end}}"
       title:
         selector: div.group_info
         remove: span:nth-child(1), div.tags
@@ -148,19 +151,19 @@
           - name: replace
             args: [".VO.VF?.StFr", ".MULTI"]
           - name: replace
-            args: [".VFF.VO.StFr", ".MULTI.VFF"]  
+            args: [".VFF.VO.StFr", ".MULTI.VFF"]
           - name: replace
-            args: [".VOF.StFr", ".FRENCH"] 
+            args: [".VOF.StFr", ".FRENCH"]
           - name: replace
-            args: [".VFQ.StFr", ".FRENCH"] 
+            args: [".VFQ.StFr", ".FRENCH"]
           - name: replace
-            args: [".VFF.StFr.MULTI", ".MULTI.VFF"] 
+            args: [".VFF.StFr.MULTI", ".MULTI.VFF"]
           - name: replace
             args: [".VFF.StFr", ".FRENCH"]
           - name: replace
             args: [".VFI.MULTI", ".MULTI"]
           - name: replace
-            args: [".VO.StFr", ".VOSTFR"] 
+            args: [".VO.StFr", ".VOSTFR"]
           - name: replace
             args: [".VFQ.VO", ".MULTI.VFQ"]
           - name: replace
@@ -174,7 +177,7 @@
           - name: replace
             args: [".VOF", ".FRENCH"]
           - name: replace
-            args: [".VFQ.MULTI", ".MULTI.VFQ"]            
+            args: [".VFQ.MULTI", ".MULTI.VFQ"]
       description:
         selector: div.group_info
       details:

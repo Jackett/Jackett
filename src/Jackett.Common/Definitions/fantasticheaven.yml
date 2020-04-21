@@ -24,7 +24,7 @@
       - {id: 129, cat: Movies/SD, desc: "Filme Packs SD x264/265"}
       - {id: 130, cat: Movies/HD, desc: "Filme Packs 720p"}
       - {id: 131, cat: Movies/HD, desc: "Filme Packs 1080p"}
-      - {id: 64, cat: TV/SD, desc: "Serien SD x264/x265"} 
+      - {id: 64, cat: TV/SD, desc: "Serien SD x264/x265"}
       - {id: 65, cat: TV/HD, desc: "Serien 720p"}
       - {id: 66, cat: TV/HD, desc: "Serien 1080p"}
       - {id: 68, cat: TV/UHD, desc: "Serien 2160p"}
@@ -48,20 +48,20 @@
       - {id: 127, cat: TV/FOREIGN, desc: "Kids-Serien International"}
       - {id: 98, cat: TV/SD, desc: "Tatort SD x264/x265"}
       - {id: 99, cat: TV/HD, desc: "Tatort 720p"}
-      - {id: 105, cat: TV/SD, desc: "Daily Soaps SD x264/x265"} 
+      - {id: 105, cat: TV/SD, desc: "Daily Soaps SD x264/x265"}
       - {id: 103, cat: TV/HD, desc: "Daily Soaps 720p"}
       - {id: 104, cat: TV/HD, desc: "Daily Soaps 1080p"}
-      - {id: 106, cat: TV/Documentary, desc: "Dokus SD x264/x265"} 
+      - {id: 106, cat: TV/Documentary, desc: "Dokus SD x264/x265"}
       - {id: 107, cat: TV/Documentary, desc: "Dokus 720p"}
       - {id: 108, cat: TV/Documentary, desc: "Dokus 1080p"}
-      - {id: 83, cat: Movies/SD, desc: "TV-Filme SD x264/x265"} 
+      - {id: 83, cat: Movies/SD, desc: "TV-Filme SD x264/x265"}
       - {id: 84, cat: Movies/HD, desc: "TV-Filme 720p"}
       - {id: 85, cat: Movies/HD, desc: "TV-Filme 1080p"}
-      - {id: 86, cat: TV/SD, desc: "TV-Shows SD x264/x265"} 
+      - {id: 86, cat: TV/SD, desc: "TV-Shows SD x264/x265"}
       - {id: 87, cat: TV/HD, desc: "TV-Shows 720p"}
       - {id: 88, cat: TV/HD, desc: "TV-Shows 1080p"}
       - {id: 118, cat: TV/Sport, desc: "SportSD x264/x265"}
-      - {id: 119, cat: TV/Sport, desc: "Sport720p"} 
+      - {id: 119, cat: TV/Sport, desc: "Sport720p"}
       - {id: 120, cat: TV/Sport, desc: "Sport1080p"}
       - {id: 122, cat: TV/Sport, desc: "Sport2160p"}
       - {id: 121, cat: TV/Sport, desc: "SportInternational"}
@@ -73,16 +73,16 @@
       - {id: 74, cat: Audio/Lossless, desc: "Audio Flac Packs"}
       - {id: 128, cat: Audio, desc: "Audio Kids"}
       - {id: 75, cat: Audio/Video, desc: "Audio Musikvideo"}
-      - {id: 123, cat: PC, desc: "Software Windows"} 
+      - {id: 123, cat: PC, desc: "Software Windows"}
       - {id: 124, cat: PC, desc: "Software Linux"}
       - {id: 125, cat: PC/Phone-Android, desc: "Software Android"}
       - {id: 126, cat: PC/Mac, desc: "Software MacOS"}
-      - {id: 132, cat: PC/Games, desc: "Spiele Windows"} 
+      - {id: 132, cat: PC/Games, desc: "Spiele Windows"}
       - {id: 133, cat: PC/Mac, desc: "Spiele MacOS"}
       - {id: 134, cat: Console, desc: "Spiele Nintendo"}
-      - {id: 90, cat: Books/Magazines, desc: "Diverses Zeitschriften"} 
+      - {id: 90, cat: Books/Magazines, desc: "Diverses Zeitschriften"}
       - {id: 89, cat: Books/Ebook, desc: "Diverses E-Books"}
-      - {id: 91, cat: XXX/x264, desc: "XXX SD x264/x265"} 
+      - {id: 91, cat: XXX/x264, desc: "XXX SD x264/x265"}
       - {id: 92, cat: XXX/x264, desc: "XXX 720p"}
       - {id: 93, cat: XXX/x264, desc: "XXX 1080p"}
       - {id: 95, cat: XXX/Packs, desc: "XXX Packs SD"}
@@ -94,6 +94,7 @@
       search: [q]
       tv-search: [q, season, ep]
       movie-search: [q]
+      music-search: [q]
 
   settings:
     - name: username
@@ -128,7 +129,7 @@
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
       loggiin: "einloggen"
-      
+
     test:
       path: index.php
       selector: a[href="logout.php"]

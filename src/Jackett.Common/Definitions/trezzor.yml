@@ -41,11 +41,12 @@
       - {id: 9, cat: XXX/XviD, desc: "XXX CZ/SK dabing"}
       - {id: 32, cat: XXX/x264, desc: "XXX HD CZ/SK dabing"}
       - {id: 27, cat: Other, desc: "TreZzoR rls"}
-      
+
     modes:
       search: [q]
       tv-search: [q, season, ep]
       movie-search: [q]
+      music-search: [q]
 
   login:
     path: prihlasenie.php
@@ -62,7 +63,7 @@
   search:
     paths:
       - path: torrents.php
-    keywordsfilters: 
+    keywordsfilters:
       - name: re_replace
         args: ["S(\\d{2})E(\\d{2})", "$1 $2"]
     inputs:
@@ -101,7 +102,7 @@
         filters:
           - name: append
             args: " +02:00"
-          - name: dateparse 
+          - name: dateparse
             args: "2/1/2006 15:04 -07:00"
       seeders:
         selector: td:nth-child(8) a

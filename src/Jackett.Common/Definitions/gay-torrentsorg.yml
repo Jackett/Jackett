@@ -70,6 +70,7 @@
       - {id: 41, cat: Movies, desc: "Non-Porn"}
       - {id: 41, cat: TV, desc: "Non-Porn"}
       - {id: 41, cat: Other, desc: "Non-Porn"}
+
     modes:
       search: [q]
 
@@ -109,7 +110,7 @@
       banner:
         optional: true
         selector: a.screenshot
-        attribute: rel  
+        attribute: rel
       grabs:
         selector: div.downloadTimes
         filters:

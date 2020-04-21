@@ -23,6 +23,8 @@
 
     modes:
       search: [q]
+      movie-search: [q]
+      music-search: [q]
 
   login:
     path: takelogin.php
@@ -74,10 +76,10 @@
           - name: replace
             args: ["&hit=1", ""]
       description:
-        selector: img[width="60"]   
+        selector: img[width="60"]
         attribute: title
       banner:
-        selector: a[onmouseover]  
+        selector: a[onmouseover]
         optional: true
         attribute: onmouseover
         filters:

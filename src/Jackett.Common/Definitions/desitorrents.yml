@@ -7,7 +7,7 @@
   encoding: UTF-8
   links:
     - https://desitorrents.tv/
-  
+
   caps:
     categorymappings:
       # movies
@@ -71,7 +71,8 @@
 
     modes:
       search: [q]
-      
+      music-search: [q]
+
   settings:
     - name: username
       type: text
@@ -79,7 +80,7 @@
     - name: password
       type: password
       label: Password
-      
+
   login:
     path: login.php?from=index1
     method: post
@@ -91,7 +92,7 @@
       - selector: ":contains(\"-WARNING-\")"
     test:
       path: ajax.php
-      
+
   search:
     paths:
       - path: ajax.php?action=search_torrent_cats
@@ -131,7 +132,7 @@
         attribute: href
         filters:
           - name: prepend
-            args: "{{ .Config.sitelink }}" 
+            args: "{{ .Config.sitelink }}"
       grabs:
         selector: th:nth-child(11)
       size:

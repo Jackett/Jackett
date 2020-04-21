@@ -20,12 +20,12 @@
       - {id: 45, cat: Movies, desc: "Cartoon Movie"}
       - {id: 46, cat: TV, desc: "Cartoon Serie"}
       - {id: 47, cat:  TV, desc: "TV-Serie"}
-      - {id: 49, cat:  TV/Documentary, desc: "Sonstiges Doku"}      
-      - {id: 50, cat:  Audio, desc: "Sonstiges Soundtrack"}      
+      - {id: 49, cat:  TV/Documentary, desc: "Sonstiges Doku"}
+      - {id: 50, cat:  Audio, desc: "Sonstiges Soundtrack"}
       - {id: 52, cat:  Movies/HD, desc: "Movie HD"}
-      - {id: 53, cat:  Other, desc: "Sonstiges"}      
-      - {id: 55, cat: Movies/Foreign, desc: "Movie Asia & MartialArts"}      
-      - {id: 56, cat: TV/Anime, desc: "Anime OVA"}      
+      - {id: 53, cat:  Other, desc: "Sonstiges"}
+      - {id: 55, cat: Movies/Foreign, desc: "Movie Asia & MartialArts"}
+      - {id: 56, cat: TV/Anime, desc: "Anime OVA"}
       - {id: 58, cat: Movies, desc: "Movie"}
       - {id: 59, cat:  Audio/Audiobook, desc: "Sonstiges Hoerspiele"}
       - {id: 62, cat:  Console, desc: "Sonstiges Game"}
@@ -40,7 +40,8 @@
       search: [q]
       tv-search: [q, season, ep]
       movie-search: [q]
-      
+      music-search: [q]
+
   settings:
     - name: username
       type: text

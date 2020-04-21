@@ -22,6 +22,9 @@
       - {id: 10, cat: XXX/x264, desc: "XXX"}
     modes:
       search: [q]
+      tv-search: [q]
+      movie-search: [q]
+      music-search: [q]
 
   login:
     path: index.php
@@ -135,14 +138,14 @@
           - name: replace
             args: ["Diciembre", "December"]
           - name: dateparse
-            args: "Monday 2 January 2006, 15:04"          
+            args: "Monday 2 January 2006, 15:04"
       download:
         selector: td.descargar a
         attribute: href
 
-      downloadvolumefactor: 
+      downloadvolumefactor:
         text: "1"
-      downloadvolumefactor: 
+      downloadvolumefactor:
         optional: true
         selector: td.descargar a b strong
         filters:
@@ -151,9 +154,9 @@
           - name: replace
             args: ["Freeleech", "0"]
 
-      uploadvolumefactor: 
+      uploadvolumefactor:
         text: "1"
-      uploadvolumefactor: 
+      uploadvolumefactor:
         optional: true
         selector: td.descargar a b strong
         filters:

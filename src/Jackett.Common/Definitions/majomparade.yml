@@ -23,7 +23,7 @@
       - {id: 42, cat: Movies/HD, desc: "Film/HD/Külföldi"}
       - {id: 51, cat: Movies/HD, desc: "Film/HD/Magyar"}
       - {id: 38, cat: Movies/SD, desc: "Film/XviD/Külföldi"}
-      - {id: 24, cat: Movies/Sd, desc: "Film/XviD/Magyar"}
+      - {id: 24, cat: Movies/SD, desc: "Film/XviD/Magyar"}
       - {id: 85, cat: TV/Sport, desc: "Sport/Külföldi"}
       - {id: 87, cat: TV/Sport, desc: "Sport/Magyar"}
       - {id: 47, cat: TV/SD, desc: "Sorozat/Külföldi"}
@@ -43,16 +43,15 @@
       - {id: 34, cat: PC/Phone-Other, desc: "Mobil"}
       - {id: 35, cat: PC/ISO, desc: "Programok/ISO"}
       - {id: 46, cat: PC/0day, desc: "Programok/RIP"}
-
       - {id: 70, cat: XXX/DVD, desc: "XXX/DVD"}
       - {id: 39, cat: XXX/Xvid, desc: "XXX/XviD"}
       - {id: 57, cat: XXX, desc: "XXX/HD"}
-
 
     modes:
       search: [q, imdbid]
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
+      music-search: [q]
 
   login:
     path: kezdolap.php

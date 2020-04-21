@@ -57,6 +57,7 @@
       search: [q]
       tv-search: [q, season, ep]
       movie-search: [q]
+      music-search: [q]
 
   login:
     path: login
@@ -122,7 +123,7 @@
         attribute: title
         filters:
           - name: regexp
-            args: src='(.*?)' 
+            args: src='(.*?)'
       imdb:
         optional: true
         selector: a[href*="www.imdb.com/title/tt"]

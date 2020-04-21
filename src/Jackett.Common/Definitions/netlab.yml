@@ -24,6 +24,7 @@
 
     modes:
       search: [q]
+      tv-search: [q]
       movie-search: [q]
       music-search: [q, album, artist, label, year]
 
@@ -88,7 +89,7 @@
       magnet:
         selector: a[href^="magnet:?xt="]
         optional: true
-        attribute: href      
+        attribute: href
       files:
         selector: td:nth-child(3)
       date:
@@ -102,7 +103,7 @@
         selector: td:nth-child(6)
         filters:
           - name: regexp
-            args: (\d+) 
+            args: (\d+)
       seeders:
         selector: td:nth-child(7)
       leechers:
