@@ -256,7 +256,7 @@ namespace Jackett.Common.Indexers
 
                     // issue #6855 Replace VOSTFR with ENGLISH
                     if (configData.Vostfr.Value)
-                        release.Title = release.Title.Replace("VOSTFR", "ENGLISH");
+                        release.Title = release.Title.Replace("VOSTFR", "ENGLISH").Replace("SUBFRENCH", "ENGLISH");
 
                     var qPretime = qTags.QuerySelector("font.mkprettytime");
                     if (qPretime != null)
