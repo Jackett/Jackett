@@ -1,4 +1,3 @@
-using System;
 using Jackett.Common.Indexers.Abstract;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
@@ -62,13 +61,12 @@ namespace Jackett.Common.Indexers
         protected override string GetSearchTerm(TorznabQuery query)
         {
             // Ignore season search without episode. Alpharatio doesn't support it.
-            if (String.IsNullOrEmpty(query.Episode))
-            {
-                query.Season = 0;
-            }
+            var searchTerm = string.IsNullOrWhiteSpace(query.Episode)
+                ? query.SanitizedSearchTerm
+                : query.GetQueryString();
 
             // Alpharatio can't handle dots in the searchstr
-            return query.GetQueryString().Replace(".", " ");
+            return searchTerm.Replace(".", " ");
         }
     }
 }
