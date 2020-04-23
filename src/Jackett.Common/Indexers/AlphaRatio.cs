@@ -58,7 +58,15 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(30, TorznabCatType.Other, "Misc");
         }
 
-        // Alpharatio can't handle dots in the searchstr
-        protected override string GetSearchTerm(TorznabQuery query) => query.GetQueryString().Replace(".", " ");
+        protected override string GetSearchTerm(TorznabQuery query)
+        {
+            // Ignore season search without episode. Alpharatio doesn't support it.
+            var searchTerm = string.IsNullOrWhiteSpace(query.Episode)
+                ? query.SanitizedSearchTerm
+                : query.GetQueryString();
+
+            // Alpharatio can't handle dots in the searchstr
+            return searchTerm.Replace(".", " ");
+        }
     }
 }
