@@ -358,7 +358,7 @@ namespace Jackett.Common.Indexers
                         Output("ID: " + id);
 
                         // Release Name
-                        var name = row.QuerySelector("td:nth-of-type(2) > a:nth-of-type(1)").TextContent;
+                        var name = row.QuerySelector("td:nth-of-type(2) > a:nth-of-type(1)").TextContent.Trim();
 
                         // Category
                         var categoryId = row.QuerySelector("td:nth-of-type(1) > a:nth-of-type(1)").GetAttribute("href").Split('?').Last();
@@ -462,30 +462,22 @@ namespace Jackett.Common.Indexers
         /// <param name="url">Search url for provider</param>
         /// <param name="page">Page number to request</param>
         /// <returns>URL to query for parsing and processing results</returns>
-        private string BuildQuery(string term, TorznabQuery query, string url, int page = 0)
+        private string BuildQuery(string searchTerm, TorznabQuery query, string url, int page = 0)
         {
-            var parameters = new NameValueCollection();
+            var qc = new NameValueCollection();
             var categoriesList = MapTorznabCapsToTrackers(query);
-            var searchterm = term;
 
             // Building our tracker query
-            parameters.Add("searchin", "title");
-            parameters.Add("incldead", "0");
-
-            // If search term provided
-            if (!string.IsNullOrWhiteSpace(query.ImdbID))
+            qc.Add("incldead", "1");
+            if (query.IsImdbQuery)
             {
-                searchterm = "imdbsearch=" + query.ImdbID;
-            }
-            else if (!string.IsNullOrWhiteSpace(term))
-            {
-                searchterm = "search=" + WebUtilityHelpers.UrlEncode(term, Encoding.GetEncoding(28591));
+                qc.Add("searchin", "imdb");
+                qc.Add("search", query.ImdbID);
             }
             else
             {
-                // Showing all torrents (just for output function)
-                searchterm = "search=";
-                term = "all";
+                qc.Add("searchin", "title");
+                qc.Add("search", searchTerm);
             }
 
             // Loop on categories and change the catagories for search purposes
@@ -523,15 +515,10 @@ namespace Jackett.Common.Indexers
                 }
             }
 
-            // Build category search string
-            var CatQryStr = "";
-            foreach (var cat in categoriesList)
-                CatQryStr += cat + "&";
-
             // Building our query
-            url += "?" + CatQryStr + searchterm + "&" + parameters.GetQueryString();
+            url += "?" + qc.GetQueryString() + "&" + string.Join("&", categoriesList);
 
-            Output("\nBuilded query for \"" + term + "\"... " + url);
+            Output("\nBuilded query for \"" + searchTerm + "\"... " + url);
 
             // Return our search url
             return url;
