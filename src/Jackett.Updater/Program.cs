@@ -336,7 +336,6 @@ namespace Jackett.Updater
                 "Definitions/music-master.yml",
                 "Definitions/nachtwerk.yml",
                 "Definitions/nexttorrent.yml",
-                "Definitions/nordichd.yml",
                 "Definitions/nyaa.yml",
                 "Definitions/nyoo.yml",
                 "Definitions/passionetorrent.yml",

@@ -301,6 +301,8 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Elite-Tracker
  * Empornium (EMP)
  * EpubLibre
+ * eShareNet
+ * eStone (XiDER, BeLoad)
  * Ethor.net (Thor's Land)
  * ExoticaZ (YourExotic)
  * ExtremeTorrents
@@ -361,6 +363,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * IPTorrents (IPT)
  * ImmortalSeed (iS)
  * Immortuos
+ * inPeril
  * Insane Tracker
  * JPopsuki
  * Kapaki
@@ -384,6 +387,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Mononoké-BT
  * MoreThanTV (MTV)
  * MyAnonamouse (MAM)
+ * myAmity
  * MySpleen
  * NBTorrents
  * NCore
@@ -393,7 +397,9 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * New Real World
  * Norbits
  * NordicBits (NB)
+ * NORDiCHD
  * Nostalgic (The Archive / VHSTAPES)
+ * notwhat.cd
  * OnlineSelfEducation
  * Orpheus
  * Ourbits (HDPter)
@@ -509,6 +515,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Twilight Torrents
  * Twilights Zoom
  * U-Torrents
+ * u-torrents (SceneFZ)
  * U2 (U2分享園@動漫花園)
  * UHDBits
  * UnionGang
@@ -517,6 +524,8 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * WDT (Wrestling Desires Torrents / Ultimate Wrestling Torrents)
  * World-In-HD
  * World-of-Tomorrow
+ * x-ite.me (XM)
+ * xBytesV2
  * XSpeeds (XS)
  * XWT-Classics
  * XWTorrents (XWT)
@@ -525,14 +534,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * XtremeFile
  * Zamunda.net
  * Zelka.org
- * eShareNet
- * eStone (XiDER, BeLoad)
- * inPeril
- * myAmity
- * notwhat.cd
- * u-torrents (SceneFZ)
- * x-ite.me (XM)
- * xBytesV2
 </details>
 
 Trackers marked with  [![(invite needed)][inviteneeded]](#) have no active maintainer and are missing features or are broken. If you have an invite for them please send it to garfieldsixtynine -at- gmail.com to get them fixed/improved.
