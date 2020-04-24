@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -191,7 +192,7 @@ namespace Jackett.Common.Indexers
                     var qDetailsLink = row.QuerySelector("a[href^=\"index.php?strWebValue=torrent&strWebAction=details\"]");
                     var qCatLink = row.QuerySelector("a[href^=\"index.php?strWebValue=torrent&strWebAction=search&dir=\"]");
                     var qDlLink = row.QuerySelector("a[href^=\"index.php?strWebValue=torrent&strWebAction=download&id=\"]");
-                    var qSeeders = row.QuerySelectorAll("td.column1")[3];
+                    var qSeeders = row.QuerySelectorAll("td.column1")[2];
                     var qLeechers = row.QuerySelectorAll("td.column2")[3];
                     var qDateStr = row.QuerySelector("font:has(a)");
                     var qSize = row.QuerySelector("td.column2[align=center]");
