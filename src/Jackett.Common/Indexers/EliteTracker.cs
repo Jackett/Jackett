@@ -129,6 +129,7 @@ namespace Jackett.Common.Indexers
 
             AddCategoryMapping(47, TorznabCatType.TV, "SPECTACLES/EMISSIONS");
             AddCategoryMapping(71, TorznabCatType.TV, "SPECTACLES/EMISSIONS - Emissions");
+            AddCategoryMapping(103, TorznabCatType.TV, "SPECTACLES/EMISSIONS - Emissions Pack");
             AddCategoryMapping(72, TorznabCatType.TV, "SPECTACLES/EMISSIONS - Spectacles");
 
             AddCategoryMapping(35, TorznabCatType.TVSport, "SPORT");
