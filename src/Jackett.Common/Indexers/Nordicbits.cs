@@ -457,18 +457,20 @@ namespace Jackett.Common.Indexers
         /// <summary>
         /// Build query to process
         /// </summary>
-        /// <param name="term">Term to search</param>
+        /// <param name="searchTerm">Term to search</param>
         /// <param name="query">Torznab Query for categories mapping</param>
         /// <param name="url">Search url for provider</param>
         /// <param name="page">Page number to request</param>
         /// <returns>URL to query for parsing and processing results</returns>
         private string BuildQuery(string searchTerm, TorznabQuery query, string url, int page = 0)
         {
-            var qc = new NameValueCollection();
             var categoriesList = MapTorznabCapsToTrackers(query);
 
             // Building our tracker query
-            qc.Add("incldead", "1");
+            var qc = new NameValueCollection
+            {
+                {"incldead", "1"}
+            };
             if (query.IsImdbQuery)
             {
                 qc.Add("searchin", "imdb");
@@ -518,7 +520,7 @@ namespace Jackett.Common.Indexers
             // Building our query
             url += "?" + qc.GetQueryString() + "&" + string.Join("&", categoriesList);
 
-            Output("\nBuilded query for \"" + searchTerm + "\"... " + url);
+            Output("\nBuilt query for \"" + searchTerm + "\"... " + url);
 
             // Return our search url
             return url;
