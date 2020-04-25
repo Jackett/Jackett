@@ -209,6 +209,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 
  * 0day.kiev
  * 2 Fast 4 You
+ * 32Pages (32P)
  * 3ChangTrai (3CT)
  * 3D Torrents (3DT)
  * 3evils
