@@ -155,7 +155,9 @@
       size:
         selector: td:nth-child(7)
       downloadvolumefactor:
-        text: 1
+        case:
+          span.free: 0
+          "*": 1
       uploadvolumefactor:
         text: 1
       minimumratio:
