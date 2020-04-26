@@ -154,7 +154,7 @@ namespace Jackett.Common.Indexers
                 {
                     var results = await PerformQuery(new TorznabQuery());
                     if (!results.Any())
-                        throw new Exception("no results found, please report this bug");
+                        throw new Exception("Found 0 results in the tracker");
 
                     IsConfigured = true;
                     SaveConfig();
