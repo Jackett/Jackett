@@ -33,7 +33,6 @@
       - {id: 40, cat: Console/Xbox, desc: "Games Xbox"}
       - {id: 12, cat: Console, desc: "Games Console"}
       - {id: 54, cat: PC, desc: "Games Linux"}
-      - {id: 17, cat: Console/PS3, desc: "Games PS"}
       - {id: 6, cat: Audio, desc: "Music"}
       - {id: 30, cat: Audio/Other, desc: "Music DTS"}
       - {id: 29, cat: Audio/Other, desc: "Music DVD-R"}

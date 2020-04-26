@@ -264,7 +264,6 @@
       - {id: 557, cat: Audio/Lossless, desc: "Музыка - Отечественный (Lossless)"}
       - {id: 558, cat: Audio/Lossless, desc: "Музыка - Отечественный шансон (Lossless)"}
       - {id: 559, cat: Audio/MP3, desc: "Музыка - Сборники отечественного шансона (Lossy)"}
-      - {id: 555, cat: Audio/Lossless, desc: "Музыка - Саундтреки к зарубежным фильмам (Lossless)"}
       - {id: 560, cat: Audio/Lossless, desc: "Музыка - Зарубежная музыка других жанров (Lossless)"}
       - {id: 561, cat: Audio/MP3, desc: "Музыка - Зарубежная музыка других жанров (Lossy)"}
       - {id: 562, cat: Audio/MP3, desc: "Музыка - Сборники песен для детей (Lossy)"}
@@ -350,7 +349,6 @@
       - {id: 767, cat: Other, desc: "Компьютеры, периферия, интернет, гаджеты"}
       - {id: 768, cat: Audio/Video, desc: "Всё, что касается аудио и видео"}
       - {id: 769, cat: Other, desc: "Ваши фотоработы"}
-      - {id: 771, cat: Audio, desc: "Музыка - Psychedelic Trance"}
       - {id: 772, cat: Audio/Lossless, desc: "Музыка - Psychedelic Trance (Lossless)"}
       - {id: 773, cat: Audio/MP3, desc: "Музыка - Psychedelic Trance (Lossy)"}
       - {id: 774, cat: Other, desc: "Все Графика, Арт, Разное"}
