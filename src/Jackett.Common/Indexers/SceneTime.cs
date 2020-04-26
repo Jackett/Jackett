@@ -24,23 +24,18 @@ namespace Jackett.Common.Indexers
         private string SearchUrl => SiteLink + "browse.php";
         private string DownloadUrl => SiteLink + "download.php/{0}/download.torrent";
 
-
-        private new ConfigurationDataSceneTime configData
-        {
-            get => (ConfigurationDataSceneTime)base.configData;
-            set => base.configData = value;
-        }
+        private new ConfigurationDataSceneTime configData => (ConfigurationDataSceneTime)base.configData;
 
         public SceneTime(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
-            : base(name: "SceneTime",
-                description: "Always on time",
-                link: "https://www.scenetime.com/",
-                caps: new TorznabCapabilities(),
-                configService: configService,
-                client: w,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataSceneTime())
+            : base("SceneTime",
+                   description: "Always on time",
+                   link: "https://www.scenetime.com/",
+                   caps: new TorznabCapabilities(),
+                   configService: configService,
+                   client: w,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataSceneTime())
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "en-us";
@@ -118,17 +113,15 @@ namespace Jackett.Common.Indexers
                 result.Captcha.SiteKey = recaptcha.GetAttribute("data-sitekey");
                 return result;
             }
-            else
+
+            var stdResult = new ConfigurationDataBasicLogin
             {
-                var stdResult = new ConfigurationDataBasicLogin
-                {
-                    SiteLink = { Value = configData.SiteLink.Value },
-                    Username = { Value = configData.Username.Value },
-                    Password = { Value = configData.Password.Value },
-                    CookieHeader = { Value = loginPage.Cookies }
-                };
-                return stdResult;
-            }
+                SiteLink = { Value = configData.SiteLink.Value },
+                Username = { Value = configData.Username.Value },
+                Password = { Value = configData.Password.Value },
+                CookieHeader = { Value = loginPage.Cookies }
+            };
+            return stdResult;
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -147,7 +140,7 @@ namespace Jackett.Common.Indexers
                 {
                     var results = await PerformQuery(new TorznabQuery());
                     if (!results.Any())
-                        throw new Exception("Your cookie did not work");
+                        throw new Exception("Found 0 results in the tracker");
 
                     IsConfigured = true;
                     SaveConfig();
@@ -194,6 +187,10 @@ namespace Jackett.Common.Indexers
             var searchUrl = SearchUrl + "?" + qParams.GetQueryString();
 
             var results = await RequestStringWithCookies(searchUrl);
+            if (results.Content == null || !results.Content.Contains("/logout.php"))
+                throw new Exception("The user is not logged in. It is possible that the cookie has expired or you " +
+                                    "made a mistake when copying it. Please check the settings.");
+
             var releases = ParseResponse(query, results.Content);
 
             return releases;
