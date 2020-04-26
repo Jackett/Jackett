@@ -110,7 +110,7 @@ namespace Jackett.Common.Indexers.Abstract
                     var results = await PerformQuery(new TorznabQuery());
                     if (!results.Any())
                     {
-                        throw new Exception("Your cookie did not work");
+                        throw new Exception("Found 0 results in the tracker");
                     }
 
                     IsConfigured = true;
