@@ -39,16 +39,9 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("1", TorznabCatType.Movies, "Movies");
             AddCategoryMapping("2", TorznabCatType.TV, "TV");
             AddCategoryMapping("3", TorznabCatType.Audio, "Music");
-            AddCategoryMapping("4", TorznabCatType.PCGames, "Game");
-            AddCategoryMapping("4", TorznabCatType.Console, "Game");
+            AddCategoryMapping("4", TorznabCatType.PCGames, "Games");
             AddCategoryMapping("5", TorznabCatType.Books, "Ebook");
-            AddCategoryMapping("6", TorznabCatType.PC0day, "App");
-            AddCategoryMapping("6", TorznabCatType.PCISO, "App");
-            AddCategoryMapping("6", TorznabCatType.PCMac, "App");
-            AddCategoryMapping("6", TorznabCatType.PCPhoneAndroid, "App");
-            AddCategoryMapping("6", TorznabCatType.PCPhoneIOS, "App");
-            AddCategoryMapping("6", TorznabCatType.PCPhoneOther, "App");
-            AddCategoryMapping("6", TorznabCatType.OtherMisc, "App");
+            AddCategoryMapping("6", TorznabCatType.PC, "Apps");
             AddCategoryMapping("7", TorznabCatType.XXX, "Adult");
         }
 
