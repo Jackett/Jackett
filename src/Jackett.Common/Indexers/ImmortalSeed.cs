@@ -88,7 +88,6 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(51, TorznabCatType.PCPhoneAndroid, "Android");
             AddCategoryMapping(52, TorznabCatType.PC0day, "Windows");
             AddCategoryMapping(53, TorznabCatType.TVDocumentary, "Documentary - SD");
-            AddCategoryMapping(58, TorznabCatType.TVSport, "Olympics");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

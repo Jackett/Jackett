@@ -59,7 +59,6 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(11, TorznabCatType.Audio, "Audio");
             AddCategoryMapping(12, TorznabCatType.AudioVideo, "Videoclip");
             AddCategoryMapping(13, TorznabCatType.TVSport, "Sport");
-            AddCategoryMapping(13, TorznabCatType.TVSport, "Sport");
             AddCategoryMapping(15, TorznabCatType.TV, "Desene");
             AddCategoryMapping(16, TorznabCatType.Books, "Docs");
             AddCategoryMapping(17, TorznabCatType.PC, "Linux");
