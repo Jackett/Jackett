@@ -138,7 +138,6 @@
       - {id: 108, cat: TV/Anime, desc: "Anime Horror"}
       - {id: 109, cat: TV/Anime, desc: "Anime Other"}
       - {id: 157, cat: TV/Anime, desc: "Anime Romance"}
-      - {id: 158, cat: TV/Anime, desc: "Anime Sci-Fi"}
       # Movies
       - {id: 151, cat: Movies, desc: "Movies Action"}
       - {id: 110, cat: Movies, desc: "Movies Adventure"}

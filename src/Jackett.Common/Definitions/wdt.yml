@@ -26,7 +26,6 @@
       - {id: 9, cat: TV/Sport, desc: "Weekly"}
       - {id: 4, cat: TV/Sport, desc: "WWE"}
       - {id: 33, cat: TV/Sport, desc: "Xplosion"}
-      - {id: 34, cat: TV/Sport, desc: "Impact Wrestling PPV / One Nig"}
       - {id: 32, cat: TV/Sport, desc: "DVDRips"}
       - {id: 31, cat: TV/Sport, desc: "DVDs"}
       - {id: 6, cat: TV/Sport, desc: "Packs And DVDs"}
