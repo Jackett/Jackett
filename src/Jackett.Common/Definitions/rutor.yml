@@ -7,15 +7,15 @@
   encoding: UTF-8
   links:
     - http://rutor.info/ # site does not support https ERR_CONNECTION_REFUSED
-    - http://new-rutor.org/
-    - https://rutor.black-mirror.xyz/
-    - https://rutor.unblocked.casa/
-    - https://rutor.proxyportal.fun/
-    - https://rutor.uk-unblock.xyz/
-    - https://rutor.ind-unblock.xyz/
   legacylinks:
     - http://live-rutor.org/ # domain expired 9 Feb 2020
     - https://rutor.root.yt/ # currently down
+    - http://new-rutor.org/ # ERR_NAME_NOT_RESOLVED
+    - https://rutor.black-mirror.xyz/ # uses new-rutor.org
+    - https://rutor.unblocked.casa/ # uses new-rutor.org
+    - https://rutor.proxyportal.fun/ # uses new-rutor.org
+    - https://rutor.uk-unblock.xyz/ # uses new-rutor.org
+    - https://rutor.ind-unblock.xyz/ # uses new-rutor.org
 
   caps:
     # unfortunately RuTor does not display categories anywhere in its search results page :-(

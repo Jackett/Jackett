@@ -8,15 +8,15 @@
   followredirect: true
   links:
     - https://www.demonoid.is/
-    - https://dnoid.black-mirror.xyz/
-    - https://dnoid.unblocked.casa/
-    - https://dnoid.proxyportal.fun/
-    - https://dnoid.uk-unblock.xyz/
-    - https://dnoid.ind-unblock.xyz/
   legacylinks:
     - https://www.dnoid.to/
     - https://demonoid.unblockit.pro/
     - https://demonoid.unblockit.one/ # currently down
+    - https://dnoid.black-mirror.xyz/ # proxy's IP blocked
+    - https://dnoid.unblocked.casa/ # proxy's IP blocked
+    - https://dnoid.proxyportal.fun/ # proxy's IP blocked
+    - https://dnoid.uk-unblock.xyz/ # proxy's IP blocked
+    - https://dnoid.ind-unblock.xyz/ # proxy's IP blocked
 
   caps:
     categorymappings:
