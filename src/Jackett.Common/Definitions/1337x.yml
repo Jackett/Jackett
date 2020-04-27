@@ -17,15 +17,14 @@
     - https://1337x.unblockit.one/
     - https://1337.root.yt/
     - https://1337x.unblockninja.com/
-    - https://1337x.black-mirror.xyz/
-    - https://1337x.unblocked.casa/
-    - https://1337x.proxyportal.fun/
-    - https://1337x.uk-unblock.xyz/
-    - https://1337x.ind-unblock.xyz/
   legacylinks:
     - https://1337x.unblocked.earth/
     - https://1337x.unblockit.pro/
-    - https://1337x.black-mirror.xyz/ # nbg
+    - https://1337x.black-mirror.xyz/ # removed from black-mirror.xyz
+    - https://1337x.unblocked.casa/ # removed from black-mirror.xyz
+    - https://1337x.proxyportal.fun/ # removed from black-mirror.xyz
+    - https://1337x.uk-unblock.xyz/ # removed from black-mirror.xyz
+    - https://1337x.ind-unblock.xyz/ # removed from black-mirror.xyz
 
   caps:
     categorymappings:
