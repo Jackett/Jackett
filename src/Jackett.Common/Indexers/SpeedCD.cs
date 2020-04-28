@@ -137,15 +137,15 @@ namespace Jackett.Common.Indexers
                     var title = row.QuerySelector("td[class='lft'] > div > a").TextContent.Trim();
                     var link = new Uri(SiteLink + row.QuerySelector("img[title='Download']").ParentElement.GetAttribute("href").TrimStart('/'));
                     var comments = new Uri(SiteLink + row.QuerySelector("td[class='lft'] > div > a").GetAttribute("href").TrimStart('/'));
-                    var size = ReleaseInfo.GetBytes(cells[4].TextContent);
-                    var grabs = ParseUtil.CoerceInt(cells[5].TextContent);
-                    var seeders = ParseUtil.CoerceInt(cells[6].TextContent);
-                    var leechers = ParseUtil.CoerceInt(cells[7].TextContent);
+                    var size = ReleaseInfo.GetBytes(cells[5].TextContent);
+                    var grabs = ParseUtil.CoerceInt(cells[6].TextContent);
+                    var seeders = ParseUtil.CoerceInt(cells[7].TextContent);
+                    var leechers = ParseUtil.CoerceInt(cells[8].TextContent);
 
                     var pubDateStr = row.QuerySelector("span[class^='elapsedDate']").GetAttribute("title").Replace(" at", "");
                     var publishDate = DateTime.ParseExact(pubDateStr, "dddd, MMMM d, yyyy h:mmtt", CultureInfo.InvariantCulture);
 
-                    var cat = row.QuerySelector("a[href^='?c[]=']").GetAttribute("href").Replace("?c[]=", "");
+                    var cat = row.QuerySelector("a").GetAttribute("href").Split('/').Last();
                     var downloadVolumeFactor = row.QuerySelector("span:contains(\"[Freeleech]\")") != null ? 0 : 1;
 
                     var release = new ReleaseInfo
