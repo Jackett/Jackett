@@ -93,6 +93,7 @@
       - {id: 121, cat: XXX, desc: "XXX - UltraHD"}
       - {id: 119, cat: XXX, desc: "XXX - Videos"}
       - {id: 126, cat: XXX, desc: "XXX - XXX Games"}
+      - {id: 127, cat: XXX, desc: "XXX - XXX HD"}
 
     modes:
       search: [q]
@@ -188,6 +189,7 @@
           ":has(a:contains(\"TV\")):contains(\"Sport\")": 146
           ":has(a:contains(\"TV\")):contains(\"Ultra HD\")": 152
           ":has(a:contains(\"XXX\")):contains(\"Books\")": 124
+          ":has(a:contains(\"XXX\")):contains(\"HD\")": 127
           ":has(a:contains(\"XXX\")):contains(\"Hentai\")": 125
           ":has(a:contains(\"XXX\")):contains(\"Magazines\")": 123
           ":has(a:contains(\"XXX\")):contains(\"Pictures\")": 122
