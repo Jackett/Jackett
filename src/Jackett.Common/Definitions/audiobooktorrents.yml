@@ -31,15 +31,49 @@
       - {id: 190, cat: Audio/Audiobook, desc: "Non-Fiction"}
       - {id: 200, cat: Audio/Audiobook, desc: "Radio Drama"}
       - {id: 210, cat: Audio/Audiobook, desc: "Romance"}
-      - {id: 235, cat: Audio/Audiobook, desc: "Sci-Fi Apocalypse"}
       - {id: 220, cat: Audio/Audiobook, desc: "Science"}
       - {id: 230, cat: Audio/Audiobook, desc: "Science Fiction "}
-      - {id: 240, cat: Audio/Audiobook, desc: "Self Improvement"}
-      - {id: 250, cat: Audio/Audiobook, desc: "Suspense"}
-      - {id: 260, cat: Audio/Audiobook, desc: "Talk Radio"}
-      - {id: 245, cat: Audio/Audiobook, desc: "Thriller"}
-      - {id: 270, cat: Audio/Audiobook, desc: "Urban Fantasy"}
-      - {id: 280, cat: Audio/Audiobook, desc: "Western"}
+      - {id: 240, cat: Audio/Audiobook, desc: "Sci-Fi Apocalypse"}
+      - {id: 250, cat: Audio/Audiobook, desc: "Self Improvement"}
+      - {id: 270, cat: Audio/Audiobook, desc: "Suspense"}
+      - {id: 280, cat: Audio/Audiobook, desc: "Talk Radio"}
+      - {id: 260, cat: Audio/Audiobook, desc: "Thriller and Suspense"}
+      - {id: 290, cat: Audio/Audiobook, desc: "Urban Fantasy"}
+      - {id: 300, cat: Audio/Audiobook, desc: "Western"}
+      - {id: 400, cat: Books/Ebook, desc: "[E] Action/Adventure"}
+      - {id: 410, cat: Books/Ebook, desc: "[E] Adult / Erotica"}
+      - {id: 420, cat: Books/Ebook, desc: "[E] Arts &amp; Crafts (Hobbies)"}
+      - {id: 430, cat: Books/Ebook, desc: "[E] Biography/Memoirs"}
+      - {id: 730, cat: Books/Ebook, desc: "[E] Collections"}
+      - {id: 440, cat: Books/Ebook, desc: "[E] Comic Books"}
+      - {id: 450, cat: Books/Ebook, desc: "[E] Computer Learning"}
+      - {id: 460, cat: Books/Ebook, desc: "[E] Cookery"}
+      - {id: 470, cat: Books/Ebook, desc: "[E] Crime/Thriller/Mystery"}
+      - {id: 480, cat: Books/Ebook, desc: "[E] Fantasy"}
+      - {id: 490, cat: Books/Ebook, desc: "[E] Forteana"}
+      - {id: 500, cat: Books/Ebook, desc: "[E] General Fiction"}
+      - {id: 510, cat: Books/Ebook, desc: "[E] Historical Fiction"}
+      - {id: 520, cat: Books/Ebook, desc: "[E] History/Documentary"}
+      - {id: 530, cat: Books/Ebook, desc: "[E] Horror"}
+      - {id: 540, cat: Books/Ebook, desc: "[E] Humor ( Comedy)"}
+      - {id: 550, cat: Books/Ebook, desc: "[E] LGBT"}
+      - {id: 560, cat: Books/Ebook, desc: "[E] Literary Fiction"}
+      - {id: 570, cat: Books/Ebook, desc: "[E] Magazines - all"}
+      - {id: 580, cat: Books/Ebook, desc: "[E] Non-Fiction"}
+      - {id: 590, cat: Books/Ebook, desc: "[E] Paranormal Romance"}
+      - {id: 600, cat: Books/Ebook, desc: "[E] Reference/Educational"}
+      - {id: 610, cat: Books/Ebook, desc: "[E] Religion and Spirituality"}
+      - {id: 620, cat: Books/Ebook, desc: "[E] Romance"}
+      - {id: 630, cat: Books/Ebook, desc: "[E] Sci-Fi"}
+      - {id: 640, cat: Books/Ebook, desc: "[E] Sci-Fi/Apocalyptic"}
+      - {id: 650, cat: Books/Ebook, desc: "[E] Self-Help"}
+      - {id: 660, cat: Books/Ebook, desc: "[E] Sports/Fitness"}
+      - {id: 670, cat: Books/Ebook, desc: "[E] Travel"}
+      - {id: 680, cat: Books/Ebook, desc: "[E] Unsorted"}
+      - {id: 690, cat: Books/Ebook, desc: "[E] Urban Fantasy/Paranormal"}
+      - {id: 700, cat: Books/Ebook, desc: "[E] Western"}
+      - {id: 710, cat: Books/Ebook, desc: "[E] Young Adult"}
+      - {id: 720, cat: Books/Ebook, desc: "[E] Young Children"}
 
     modes:
       search: [q]
@@ -81,8 +115,7 @@
       incldead: 1
 
     rows:
-      selector: tr.browse_color, tr.freeleech_color, tr[id^="kdescr"]
-      after: 1
+      selector: table.table-striped > tbody > tr:has(a[href^="download.php?torrent="])
 
     fields: # some users (rank specific?) have an extra column (td:nth-child(4)) with bookmark features
       category:
@@ -92,61 +125,35 @@
           - name: querystring
             args: cat
       title:
-        selector: a[href^="details.php?id="][onmouseover]
-        attribute: onmouseover
-        filters:
-          - name: regexp
-            args: Tip\('<b>(.*?)</b>
-          - name: replace
-            args: ["\\", ""]
+        selector: div.torrent-name
       details:
-        selector: a[href^="details.php?id="][onmouseover]
+        selector: a[href^="details.php?id="]
         attribute: href
       download:
-        selector: a[href^="download.php"]
+        selector: a[href^="download.php?torrent="]
         attribute: href
       banner:
-        selector: a[href^="details.php?id="][onmouseover]
-        attribute: onmouseover
-        filters:
-          - name: regexp
-            args: src=\'(.*?)\'
-      description:
-        selector: a[href^="details.php?id="][onmouseover]
-        attribute: onmouseover
-        filters:
-          - name: regexp
-            args: <br /><b>(.*?)</b><br />
-      description:
-        selector: td:nth-child(2) > i
-        optional: true
-        filters:
-          - name: prepend
-            args: "{{ .Result.description }}<br>\n"
-      description:
-        selector: td[colspan="13"]
-        filters:
-          - name: prepend
-            args: "{{ .Result.description }}<br>\n"
+        selector: img[src*="/img.php?"]
+        attribute: src
       files:
-        selector: td:nth-last-child(9)
+        selector: td:nth-last-child(8)
       date:
-        selector: td:nth-last-child(7)
-      size:
         selector: td:nth-last-child(6)
-      grabs:
+      size:
         selector: td:nth-last-child(5)
+      grabs:
+        selector: td:nth-last-child(4)
         filters:
           - name: regexp
             args: (\d+)
       seeders:
-        selector: td:nth-last-child(4)
-      leechers:
         selector: td:nth-last-child(3)
+      leechers:
+        selector: td:nth-last-child(2)
       downloadvolumefactor:
         case:
           "a.info > b:contains(\"[FREE]\")": 0
           "*": 1
       uploadvolumefactor:
         text: 1
-# U-232 V4
+# U-232 V4.5
