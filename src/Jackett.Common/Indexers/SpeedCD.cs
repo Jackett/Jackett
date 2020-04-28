@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
+using Jackett.Common.Helpers;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -17,7 +18,7 @@ namespace Jackett.Common.Indexers
 {
     public class SpeedCD : BaseWebIndexer
     {
-        private string SearchUrl => SiteLink + "browse.php";
+        private string SearchUrl => SiteLink + "browse/";
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://speed.cd/",
@@ -105,20 +106,26 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
 
-            var qc = new List<KeyValuePair<string, string>>(); // NameValueCollection don't support c[]=30&c[]=52
-            if (query.IsImdbQuery)
-            {
-                qc.Add("search", query.ImdbID);
-                qc.Add("d", "on");
-            }
-            else
-                qc.Add("search", query.GetQueryString());
+            // the order of the params is important!
+            var qc = new List<string>();
 
             var catList = MapTorznabCapsToTrackers(query);
             foreach (var cat in catList)
-                qc.Add("c[]", cat);
+                qc.Add(cat);
 
-            var searchUrl = SearchUrl + "?" + qc.GetQueryString();
+            if (query.IsImdbQuery)
+            {
+                qc.Add("deep");
+                qc.Add("q");
+                qc.Add(query.ImdbID);
+            }
+            else
+            {
+                qc.Add("q");
+                qc.Add(WebUtilityHelpers.UrlEncode(query.GetQueryString(), Encoding));
+            }
+
+            var searchUrl = SearchUrl + string.Join("/", qc);
             var response = await RequestStringWithCookiesAndRetry(searchUrl);
             if (!response.Content.Contains("/logout.php"))
                 throw new Exception("The user is not logged in. It is possible that the cookie has expired or you " +
