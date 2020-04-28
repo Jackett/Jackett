@@ -63,7 +63,7 @@
           - name: querystring
             args: bo_table
       title:
-        selector: div.media-content > a[href^="./board.php"] > span
+        selector: div.media-content > a[href^="./board.php"]
       details:
         selector: div.media-content > a[href^="./board.php"]
         attribute: href
