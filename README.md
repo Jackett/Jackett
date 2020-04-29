@@ -52,7 +52,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * E-Hentai
  * EliteTorrent.biz
  * Epizod
- * EstrenosDTL
  * ETTV
  * EXT Torrents
  * ExtraTorrent.ag

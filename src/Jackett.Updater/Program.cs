@@ -302,6 +302,7 @@ namespace Jackett.Updater
                 "Definitions/elitehd.yml",
                 "Definitions/elittracker.yml",
                 "Definitions/eotforum.yml",
+                "Definitions/estrenosdtl.yml",
                 "Definitions/evolutionpalace.yml",
                 "Definitions/extratorrentclone.yml",
                 "Definitions/feedurneed.yml",
