@@ -158,7 +158,7 @@ namespace Jackett.Common.Indexers
                 var searchResultParser = new HtmlParser();
                 var doc = searchResultParser.ParseDocument(result.Content);
 
-                var onclick = doc.QuerySelector("a[onclick*=\"/download/torrent\"]")
+                var onclick = doc.QuerySelector("a[onclick*=\"/torrent\"]")
                     .GetAttribute("onclick");
                 downloadUrl = OnclickToDownloadLink(onclick);
             }
