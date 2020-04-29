@@ -29,7 +29,7 @@
   search:
     # https://www.bteye.org/q/2020
     paths:
-      - path: "q/{{ if .Keywords }}{{ .Keywords }}{{else}}2020{{end}}"
+      - path: "q/{{ if .Keywords }}{{ .Keywords }}{{else}}{{ .Today.Year }}{{end}}"
 
     rows:
       selector: div.plist
