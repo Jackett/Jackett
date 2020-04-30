@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -37,6 +39,14 @@ namespace Jackett.Common.Indexers.Feeds
             Encoding = Encoding.UTF8;
             Language = "en-en";
             Type = "public";
+        }
+
+        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        {
+            var results = await base.PerformQuery(query);
+            // results must contain search terms
+            results = results.Where(release => query.MatchQueryStringAND(release.Title));
+            return results;
         }
 
         protected override ReleaseInfo ResultFromFeedItem(XElement item)
