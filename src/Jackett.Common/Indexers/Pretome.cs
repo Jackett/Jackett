@@ -95,7 +95,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMappingAndParent("cat[]=7&tags=720p", TorznabCatType.TVHD, TorznabCatType.TV);
             AddCategoryMappingAndParent("cat[]=7&tags=HDTV", TorznabCatType.TVHD, TorznabCatType.TV);
             AddCategoryMappingAndParent("cat[]=7&tags=XviD", TorznabCatType.TVSD, TorznabCatType.TV);
-            AddCategoryMappingAndParent("cat[]=7&BluRay", TorznabCatType.TVHD, TorznabCatType.TV);
+            AddCategoryMappingAndParent("cat[]=7&tags=BluRay", TorznabCatType.TVHD, TorznabCatType.TV);
             AddCategoryMappingAndParent("cat[]=7&tags=DVDRip", TorznabCatType.TVSD, TorznabCatType.TV);
             AddCategoryMappingAndParent("cat[]=7&tags=DVD", TorznabCatType.TVSD, TorznabCatType.TV);
             AddCategoryMappingAndParent("cat[]=7&tags=Documentary", TorznabCatType.TVDocumentary, TorznabCatType.TV);
