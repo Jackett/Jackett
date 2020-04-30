@@ -26,8 +26,12 @@
       - path: /
     inputs:
       s: "{{ .Keywords }}"
+
     rows:
       selector: div.iso-item article:has(a.download)
+      filters:
+        - name: andmatch
+
     fields:
       title:
         selector: div.blog-content h3 a
