@@ -12,98 +12,109 @@
 
   caps:
     categories:
-      "ADULT LATINA": XXX
-      "ADULT MILF": XXX
-      "ADULT XXX": XXX
+      "": Other
       "ADULT": XXX
+      "ADULTLATINA": XXX
+      "ADULTMILF": XXX
+      "ADULTPORN": XXX
+      "ADULTXXX": XXX
       "ANIME": TV/Anime
-      "APPLICATIONS > ANDROID": PC
-      "APPLICATIONS > HANDHELD": PC/Phone-Other
-      "APPLICATIONS > MAC": PC/Mac
-      "APPLICATIONS > OTHER OS": PC
-      "APPLICATIONS > WINDOWS": PC/0day
+      "ANIMEDUBBEDSUBBED": TV/Anime
       "APPLICATIONS": PC
-      "APPS > ANDROID": PC
-      "APPS > HANDHELD": PC/Phone-Other
-      "APPS > MAC": PC/Mac
-      "APPS > OTHER OS": PC
-      "APPS > WINDOWS": PC/0day
-      "APPS > PC": PC
+      "APPLICATIONSANDROID": PC
+      "APPLICATIONSHANDHELD": PC/Phone-Other
+      "APPLICATIONSMAC": PC/Mac
+      "APPLICATIONSOTHEROS": PC
+      "APPLICATIONSWINDOWS": PC/0day
       "APPS": PC
-      "AUDIO > AUDIO BOOKS": Audio/Audiobook
-      "AUDIO > FLAC": Audio/Lossless
-      "AUDIO > MUSIC": Audio
-      "AUDIO > SOUND CLIPS": Audio
+      "APPSANDROID": PC
+      "APPSHANDHELD": PC/Phone-Other
+      "APPSMAC": PC/Mac
+      "APPSOTHEROS": PC
+      "APPSPC": PC
+      "APPSWINDOWS": PC/0day
       "AUDIO": Audio
+      "AUDIOAUDIOBOOKS": Audio/Audiobook
+      "AUDIOFLAC": Audio/Lossless
+      "AUDIOMUSIC": Audio
+      "AUDIOOTHER": Audio/Other
+      "AUDIOSOUNDCLIPS": Audio
       "BOOKS": Books
       "DOCUMENTARIES": TV/Documentary
+      "DVDRVIDEO": Movies/DVD
       "EBOOKS": Books/Ebook
       "ESTRENOS": XXX
-      "FLAC MUSIC": Audio/Lossless
       "FLAC": Audio/Lossless
-      "GAMES > HANDHELD": Console
-      "GAMES > OTHER": Console
-      "GAMES > PC": PC/Games
-      "GAMES > PS2": Console/PSP
-      "GAMES > PS3": Console/PS3
-      "GAMES > PS4": Console/PS4
-      "GAMES > PSP": Console/PSP
-      "GAMES > WII": Console/Wii
-      "GAMES > WIIU": Console/WiiU
-      "GAMES > XBOX": Console/Xbox
-      "GAMES > XBOX360": Console/Xbox 360
-      "GAMES > WINDOWS": PC/Games
+      "FLACMUSIC": Audio/Lossless
       "GAMES": PC/Games
-      "JUEGOS PS2": Console/PSP
-      "JUEGOS PS3": Console/PS3
-      "JUEGOS PS4": Console/PS4
-      "JUEGOS PSP": Console/PSP
-      "JUEGOS WII": Console/Wii
-      "JUEGOS WIIU": Console/WiiU
-      "JUEGOS XBOX": Console/Xbox
-      "JUEGOS XBOX360": Console/Xbox 360
+      "GAMESHANDHELD": Console
+      "GAMESOTHER": Console
+      "GAMESPC": PC/Games
+      "GAMESPS2": Console/PSP
+      "GAMESPS3": Console/PS3
+      "GAMESPS4": Console/PS4
+      "GAMESPSP": Console/PSP
+      "GAMESWII": Console/Wii
+      "GAMESWIIU": Console/WiiU
+      "GAMESWINDOWS": PC/Games
+      "GAMESXBOX": Console/Xbox
+      "GAMESXBOX360": Console/Xbox 360
       "JUEGOS": Console
+      "JUEGOSPC": PC/Games
+      "JUEGOSPS2": Console/PSP
+      "JUEGOSPS3": Console/PS3
+      "JUEGOSPS4": Console/PS4
+      "JUEGOSPSP": Console/PSP
+      "JUEGOSWII": Console/Wii
+      "JUEGOSWIIU": Console/WiiU
+      "JUEGOSXBOX": Console/Xbox
+      "JUEGOSXBOX360": Console/Xbox 360
       "MISCELLANEOUS": Other
       "MOBILE": PC/Phone-Other
-      "MOVIES > ENGLISH (SPANISH SUBT)": Movies
       "MOVIES": Movies
-      "MP3 MUSIC": Audio/MP3
+      "MOVIESBLURAYDISCREMUX": Movies/HD
+      "MOVIESENGLISHSPANISHSUBT": Movies
+      "MOVIESHEVCX265": Movies/HD
+      "MOVIESULTRAHD4K": Movies/UHD
       "MP3": Audio/MP3
-      "MUSIC > LOSSLESS": Audio/Lossless
-      "MUSIC > MP3": Audio/MP3
+      "MP3MUSIC": Audio/MP3
       "MUSIC": Audio
-      "OTHER > COVERS": Other
-      "OTHER > E-BOOKS": Other
-      "OTHER > OTHER": Other
-      "OTHER > PICTURES": Other
+      "MUSICLOSSLESS": Audio/Lossless
+      "MUSICMP3": Audio/MP3
       "OTHER": Other
+      "OTHERCOMICS": Other
+      "OTHERCOVERS": Other
+      "OTHEREBOOKS": Other
+      "OTHEROTHER": Other
+      "OTHERPICTURES": Other
+      "PELICULASDIVX": TV
       "PICTURES": Other
-      "PORN > GAMES": XXX
-      "PORN > MOVIE CLIPS": XXX
-      "PORN > MOVIES": XXX
-      "PORN > OTHER": XXX
-      "PORN > PICTURES": XXX
       "PORN": XXX
-      "SOFTWARE > MAC": PC/Mac
-      "SOFTWARE > WINDOWS": PC/0day
+      "PORNGAMES": XXX
+      "PORNMOVIECLIPS": XXX
+      "PORNMOVIES": XXX
+      "PORNOTHER": XXX
+      "PORNPICTURES": XXX
       "SOFTWARE": PC
+      "SOFTWAREMAC": PC/Mac
+      "SOFTWAREWINDOWS": PC/0day
       "TUTORIALS": Other
-      "TV > HEVC/X265": TV
-      "TV SHOWS": TV
       "TV": TV
-      "VIDEO > HD - MOVIES": Movies/HD
-      "VIDEO > HD - TV SHOWS": TV/HD
-      "VIDEO > MOVIE CLIPS": Movies
-      "VIDEO > MOVIES": Movies
-      "VIDEO > MUSIC VIDEOS": Audio/Video
-      "VIDEO > OTHER": Movies
-      "VIDEO > SD - MOVIES": Movies/SD
-      "VIDEO > SD - TV SHOWS": TV/SD
-      "VIDEO > TV SHOWS": TV
-      "VIDEO > UHD - MOVIES": Movies/UHD
-      "VIDEO > UHD - TV SHOWS": TV/UHD
-      "VIDEO HDRIP": Movies
+      "TVHEVCX265": TV
+      "TVSHOWS": TV
       "VIDEO": Movies
+      "VIDEOHDMOVIES": Movies/HD
+      "VIDEOHDRIP": Movies
+      "VIDEOHDTVSHOWS": TV/HD
+      "VIDEOMOVIECLIPS": Movies
+      "VIDEOMOVIES": Movies
+      "VIDEOMUSICVIDEOS": Audio/Video
+      "VIDEOOTHER": Movies
+      "VIDEOSDMOVIES": Movies/SD
+      "VIDEOSDTVSHOWS": TV/SD
+      "VIDEOTVSHOWS": TV
+      "VIDEOUHDMOVIES": Movies/UHD
+      "VIDEOUHDTVSHOWS": TV/UHD
       "WINDOWS": PC/0day
       "XXX": XXX
 
@@ -132,6 +143,8 @@
       category:
         selector: td:nth-child(1) a
         filters:
+          - name: re_replace
+            args: ["[^a-zA-Z0-9]+", ""]
           - name: toupper
       description:
         selector: td:nth-child(1) a
