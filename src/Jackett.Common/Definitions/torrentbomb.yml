@@ -25,10 +25,12 @@
       - {id: "torrent_top100_music", cat: Audio, desc: "멜론 탑100 (실시간업로드) (Music Top 100)"}
       - {id: "torrent_game", cat: Console, desc: "토렌트 게임 (Games)"}
       - {id: "torrent_util", cat: PC, desc: "토렌트 유틸 (Software)"}
+      - {id: "torrent_etc", cat: Other, desc: "토렌트 기타 (Other)"}
       - {id: "etc", cat: Other, desc: "토렌트 기타 (Other)"}
       - {id: "torrent_magnet", cat: Other, desc: "토렌트 마그넷 자료실 (Magnets)"}
       - {id: "torrent_netflix", cat: Movies, desc: "넷플릭스 (Netflix)"}
       - {id: "torrent", cat: Other, desc: "토렌트 기타 (Other)"}
+      - {id: "send", cat: Other, desc: "토렌트 기타 (Other)"}
 
     modes:
       search: [q]
