@@ -32,6 +32,8 @@
 
     rows:
       selector: tr[class^="tl"]
+      filters:
+        - name: andmatch
 
     fields:
       category:
