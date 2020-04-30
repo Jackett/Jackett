@@ -15,6 +15,7 @@
     categories:
       "mac-os-apps": PC/Mac
       "mac-games": PC/Games
+      "uncategorized": Other
 
     modes:
       search: [q]
@@ -36,7 +37,7 @@
       title:
         selector: div.blog-content h3 a
       category:
-        selector: a[href*="/mac-os-apps/"], a[href*="/mac-games/"]
+        selector: a[href*="/mac-os-apps/"], a[href*="/mac-games/"], a[href*="/uncategorized/"]
         attribute: href
         filters:
           - name: split
