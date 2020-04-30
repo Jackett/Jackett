@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Helpers;
@@ -18,6 +19,8 @@ namespace Jackett.Common.Indexers
 {
     public class SpeedCD : BaseWebIndexer
     {
+        private string LoginUrl1 => SiteLink + "checkpoint/API";
+        private string LoginUrl2 => SiteLink + "checkpoint/";
         private string SearchUrl => SiteLink + "browse/";
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
@@ -25,7 +28,7 @@ namespace Jackett.Common.Indexers
             "https://speed.click/"
         };
 
-        private new ConfigurationDataCookie configData => (ConfigurationDataCookie)base.configData;
+        private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
 
         public SpeedCD(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base("Speed.cd",
@@ -40,7 +43,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
-                   configData: new ConfigurationDataCookie(
+                   configData: new ConfigurationDataBasicLogin(
                        @"Speed.Cd have increased their security. If you are having problems please check the security tab
                     in your Speed.Cd profile. Eg. Geo Locking, your seedbox may be in a different country to the one where you login via your
                     web browser.<br><br>For best results, change the 'Torrents per page' setting to 100 in 'Profile Settings > Torrents'."))
@@ -85,21 +88,39 @@ namespace Jackett.Common.Indexers
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-            CookieHeader = configData.Cookie.Value;
-            try
+            await DoLogin();
+            return IndexerConfigurationStatus.RequiresTesting;
+        }
+
+        private async Task DoLogin()
+        {
+            // first request with username
+            var pairs = new Dictionary<string, string> {
+                { "username", configData.Username.Value }
+            };
+            var result = await RequestLoginAndFollowRedirect(LoginUrl1, pairs, null, true, null, SiteLink);
+            var tokenRegex = new Regex(@"name=\\""a\\"" value=\\""([^""]+)\\""");
+            var matches = tokenRegex.Match(result.Content);
+            if (!matches.Success)
+                throw new Exception("Error parsing the login form");
+            var token = matches.Groups[1].Value;
+
+            // second request with token and password
+            pairs = new Dictionary<string, string> {
+                { "pwd", configData.Password.Value },
+                { "a", token }
+            };
+            result = await RequestLoginAndFollowRedirect(LoginUrl2, pairs, result.Cookies, true, null, SiteLink);
+
+            await ConfigureIfOK(result.Cookies, result.Content?.Contains("/browse.php") == true, () =>
             {
-                var results = await PerformQuery(new TorznabQuery());
-                if (!results.Any())
-                    throw new Exception("Found 0 results in the tracker");
-                IsConfigured = true;
-                SaveConfig();
-                return IndexerConfigurationStatus.Completed;
-            }
-            catch (Exception e)
-            {
-                IsConfigured = false;
-                throw new Exception("Your cookie did not work: " + e.Message);
-            }
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(result.Content);
+                var errorMessage = dom.QuerySelector("h5")?.TextContent;
+                if (result.Content.Contains("Wrong Captcha!"))
+                    errorMessage = "Captcha required due to a failed login attempt. Login via a browser to whitelist your IP and then reconfigure Jackett.";
+                throw new Exception(errorMessage);
+            });
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
@@ -127,9 +148,11 @@ namespace Jackett.Common.Indexers
 
             var searchUrl = SearchUrl + string.Join("/", qc);
             var response = await RequestStringWithCookiesAndRetry(searchUrl);
-            if (!response.Content.Contains("/logout.php"))
-                throw new Exception("The user is not logged in. It is possible that the cookie has expired or you " +
-                                    "made a mistake when copying it. Please check the settings.");
+            if (!response.Content.Contains("/logout.php")) // re-login
+            {
+                await DoLogin();
+                response = await RequestStringWithCookiesAndRetry(searchUrl);
+            }
 
             try
             {
