@@ -50,6 +50,8 @@
     rows:
       selector: "table.listing tr.category_0"
       after: 1
+      filters:
+        - name: andmatch
 
     fields:
       category:
