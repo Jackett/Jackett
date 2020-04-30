@@ -255,7 +255,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Bit-City Reloaded
  * BitHUmen
  * BitTorrentFiles
- * BitTurk
+ * BiTTuRK
  * Bithorlo (BHO)
  * Bitspyder
  * BlueBird
