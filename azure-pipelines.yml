@@ -428,11 +428,10 @@ stages:
       steps:
       - checkout: self
 
-      - task: DownloadPipelineArtifact@2
+      - task: DownloadBuildArtifacts@0
         displayName: Download artifacts for integration tests
         inputs:
-          patterns: '**/Jackett*'
-          path: $(Build.ArtifactStagingDirectory)
+          downloadType: specific
 
       - task: PowerShell@2
         displayName: Install Jackett (Windows only)
@@ -485,11 +484,10 @@ stages:
       steps:
       - checkout: self
 
-      - task: DownloadPipelineArtifact@2
+      - task: DownloadBuildArtifacts@0
         displayName: Download Artifacts for Publish
         inputs:
-          patterns: '**/Jackett*'
-          path: $(Build.ArtifactStagingDirectory)
+          downloadType: specific
 
       - task: GitHubRelease@1
         displayName: Create Github release
