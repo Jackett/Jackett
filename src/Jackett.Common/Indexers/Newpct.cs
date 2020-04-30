@@ -495,7 +495,8 @@ namespace Jackett.Common.Indexers
                     var title = item["torrentName"].ToString();
                     var detailsUrl = SiteLink + item["guid"];
                     var quality = item["calidad"].ToString();
-                    var size = ReleaseInfo.GetBytes(item["torrentSize"].ToString());
+                    var sizeString = item["torrentSize"].ToString();
+                    var size = !sizeString.Contains("NAN") ? ReleaseInfo.GetBytes(sizeString) : 0;
                     DateTime.TryParseExact(item["torrentDateAdded"].ToString(), "dd/MM/yyyy", null, DateTimeStyles.None, out var publishDate);
                     var banner = SiteLink + item["imagen"].ToString().TrimStart('/');
 
