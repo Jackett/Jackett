@@ -283,6 +283,14 @@
       type: info
       label: How to get the Cookie
       default: "<ol><li>Access this tracker with your browser<li>click on the <b>Apply Filter</b> button on the page to invoke the search and solve the challenge<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
+    - name: useragent
+      type: text
+      label: User-Agent
+      label: User-Agent
+    - name: info_useragent
+      type: info
+      label: How to get the User-Agent
+      default: "<ol><li>From the same place you fetched the cookie,<li>Find <b>'user-agent:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole user-agent string <i>(everything after 'user-agent: ')</i> and <b>Paste</b> here.</ol>"
     - name: sort
       type: select
       label: Sort requested from site
@@ -301,8 +309,11 @@
 
   login:
     method: cookie
+    inputs:
+      cookie: "{{ .Config.cookie }}"
     test:
-      path: files/
+      # CloudFlare is only in /files/ path, not in /
+      path: /files/
 
   download:
     selector: a[href^="magnet:?xt="]
@@ -313,6 +324,8 @@
       # https://www.demonoid.is/files/?c154&language=0&quality=0&seeded=2&query=world&to=1&sort=
       # https://www.demonoid.is/files/?seeded=2&language=0&quality=0&to=1&query=world
       - path: files/
+    headers:
+      User-Agent: ["{{ .Config.useragent }}"]
     inputs:
       $raw: "{{ range .Categories }}c{{.}}&{{end}}"
       # 0 seeded 1 unseeded 2 both

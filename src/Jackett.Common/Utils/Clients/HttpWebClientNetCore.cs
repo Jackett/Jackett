@@ -210,7 +210,13 @@ namespace Jackett.Common.Utils.Clients
                                 request.Method = HttpMethod.Get;
                             }
 
-                            using (response = await client.SendAsync(request))
+                            // if we set the User-Agent header in one indexer, we have to create a new client without CloudflareSolverRe
+                            // handler because it overrides the User-Agent. we can't solve cloudflare challenge in this case
+                            var requestClient = client;
+                            if (request.Headers?.Contains("User-Agent") == true)
+                                requestClient = new HttpClient(clientHandlr);
+
+                            using (response = await requestClient.SendAsync(request))
                             {
                                 var result = new WebClientByteResult
                                 {

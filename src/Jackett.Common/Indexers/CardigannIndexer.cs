@@ -790,7 +790,8 @@ namespace Jackett.Common.Indexers
 
             // test if login was successful
             var LoginTestUrl = resolvePath(Login.Test.Path).ToString();
-            var testResult = await RequestStringWithCookies(LoginTestUrl);
+            var headers = ParseCustomHeaders(Definition.Search?.Headers, GetBaseTemplateVariables());
+            var testResult = await RequestStringWithCookies(LoginTestUrl, headers: headers);
 
             if (testResult.IsRedirect)
             {
@@ -1326,15 +1327,8 @@ namespace Jackett.Common.Indexers
                 var searchUrlUri = new Uri(searchUrl);
 
                 // send HTTP request
+                var headers = ParseCustomHeaders(Search.Headers, variables);
                 WebClientStringResult response = null;
-                Dictionary<string, string> headers = null;
-                if (Search.Headers != null)
-                {
-                    // FIXME: fix jackett header handling (allow it to specifiy the same header multipe times)
-                    headers = new Dictionary<string, string>();
-                    foreach (var header in Search.Headers)
-                        headers.Add(header.Key, header.Value[0]);
-                }
                 if (method == RequestType.POST)
                     response = await PostDataWithCookies(searchUrl, queryCollection, null, null, headers);
                 else
@@ -1763,7 +1757,8 @@ namespace Jackett.Common.Indexers
                 if (Download.Selector != null)
                 {
                     var selector = applyGoTemplateText(Download.Selector, variables);
-                    var response = await RequestStringWithCookies(link.ToString());
+                    var headers = ParseCustomHeaders(Definition.Search?.Headers, variables);
+                    var response = await RequestStringWithCookies(link.ToString(), headers: headers);
                     if (response.IsRedirect)
                         response = await RequestStringWithCookies(response.RedirectingTo);
                     var results = response.Content;
@@ -1795,6 +1790,20 @@ namespace Jackett.Common.Indexers
                 }
             }
             return await base.Download(link, method);
+        }
+
+        private Dictionary<string, string> ParseCustomHeaders(Dictionary<string, List<string>> customHeaders,
+                                                              Dictionary<string,object> variables)
+        {
+            if (customHeaders == null)
+                return null;
+
+            // FIXME: fix jackett header handling (allow it to specifiy the same header multipe times)
+            var headers = new Dictionary<string, string>();
+            foreach (var header in customHeaders)
+                headers.Add(header.Key, applyGoTemplateText(header.Value[0], variables));
+
+            return headers;
         }
     }
 }
