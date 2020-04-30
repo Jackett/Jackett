@@ -431,6 +431,7 @@ stages:
       - task: DownloadBuildArtifacts@0
         displayName: Download artifacts for integration tests
         inputs:
+          downloadType: specific
           itemPattern: $(Build.ArtifactStagingDirectory)
 
       # - task: DownloadPipelineArtifact@2
