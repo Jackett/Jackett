@@ -33,7 +33,7 @@
       s: "{{ .Keywords }}"
 
     rows:
-      selector: article
+      selector: article:not(:has(a[title="DMCA"]))
 
     fields:
       category:
