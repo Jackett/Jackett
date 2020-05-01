@@ -42,6 +42,7 @@
       description:
         selector: a > span
         attribute: class
+        optional: true
       banner:
         selector: img
         attribute: src
