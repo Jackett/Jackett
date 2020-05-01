@@ -28,6 +28,7 @@
       - {id: 1, cat: TV/Anime, desc: "Anime"}
       - {id: 2, cat: Books, desc: "Books"}
       - {id: 9, cat: Other, desc: "Other"}
+      - {id: 6, cat: Other, desc: "Pics"}
 
     modes:
       search: [q]
