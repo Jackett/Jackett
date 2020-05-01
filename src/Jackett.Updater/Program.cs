@@ -389,7 +389,6 @@ namespace Jackett.Updater
                 "Definitions/worldofp2p.yml",
                 "Definitions/worldwidetorrents.yml",
                 "Definitions/xktorrent.yml",
-                "Definitions/zetorrents.yml",
                 "Microsoft.Owin.dll",
                 "Microsoft.Owin.FileSystems.dll",
                 "Microsoft.Owin.Host.HttpListener.dll",
