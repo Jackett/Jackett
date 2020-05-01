@@ -225,7 +225,7 @@ namespace Jackett.Common.Indexers
             var publishDate = torrent["last_updated"] != null
                 ? DateTime.Parse((string)torrent["last_updated"])
                 : DateTime.Now;
-            var cat = (int)torrent["category"];
+            var cat = (string)torrent["category"] ?? "25"; // if category is null set "25 / Other" category
             var size = torrent["size"]?.ToObject<long>();
             return new ReleaseInfo
             {
@@ -243,7 +243,7 @@ namespace Jackett.Common.Indexers
                 Guid = comments,
                 Peers = seeders + (int)torrent["leechers"],
                 PublishDate = publishDate,
-                Category = MapTrackerCatToNewznab(cat.ToString()),
+                Category = MapTrackerCatToNewznab(cat),
                 Size = size
             };
         }
