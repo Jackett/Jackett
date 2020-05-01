@@ -20,6 +20,7 @@
       8: Books
       9: TV/Anime
       10: Other
+      0: Other
 
     modes:
       search: [q]
