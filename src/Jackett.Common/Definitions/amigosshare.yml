@@ -173,6 +173,9 @@
       _type:
         selector: div.list-group-item-content p.m-0 span.badge-info:contains("Rip"), div.list-group-item-content p.m-0 span.badge-info:contains("WEB-"), div.list-group-item-content p.m-0 span.badge-info:contains("TV"), div.list-group-item-content p.m-0 span.badge-info:contains("Blu-Ray"), div.list-group-item-content p.m-0 span.badge-info:contains("BD50"), div.list-group-item-content p.m-0 span.badge-info:contains("MUX"), div.list-group-item-content p.m-0 span.badge-info:contains("DVD"), div.list-group-item-content p.m-0 span.badge-info:contains("320"), div.list-group-item-content p.m-0 span.badge-info:contains("CAM"), div.list-group-item-content p.m-0 span.badge-info:contains("rip")
         optional: true
+      _language:
+        selector: div.list-group-item-content p.m-0 span.badge-primary[style$="#b6249d;"]
+        optional: true
       title:
         selector: a[href^="torrents-details.php?id="]
         filters:
@@ -188,6 +191,11 @@
             # add the type to the title
           - name: append
             args: "{{if .Result._type}} {{.Result._type}}{{else}}{{end}}"
+            # add audio to the title
+          - name: append
+            args: "{{if .Result._language}} {{.Result._language}}{{else}}{{end}}"
+          - name: re_replace
+            args: ["(Dual-Audio|Dublado)", "Brazilian $1"]
       details:
         selector: a[href^="torrents-details.php?id="]
         attribute: href
