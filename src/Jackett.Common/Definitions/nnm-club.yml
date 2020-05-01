@@ -250,11 +250,14 @@
       - {id: 347, cat: Audio, desc: " |- Easy listening"}
       - {id: 979, cat: Audio, desc: " |- Experimental, Industrial, EBM, Dark Electro (Lossless)"}
       - {id: 673, cat: Audio, desc: " |- Experimental Electronic"}
+      - {id: 1315, cat: Audio, desc: " |- Industrial, EBM, Dark Electro, Noise (Lossless)"}
       - {id: 671, cat: Audio, desc: " |- Industrial, EBM, Dark Electro"}
       - {id: 1224, cat: Audio, desc: " |- IDM (Lossless)"}
       - {id: 1225, cat: Audio, desc: " |- IDM"}
       - {id: 980, cat: Audio, desc: " |- Synthpop, New Wave (Lossless)"}
       - {id: 672, cat: Audio, desc: " |- Synthpop, New Wave"}
+      - {id: 1316, cat: Audio, desc: " |- Dubstep, Future Garage, Bass Music, UK Garage (Lossless)"}
+      - {id: 1317, cat: Audio, desc: " |- Dubstep, Future Garage, Bass Music, UK Garage"}
       - {id: 981, cat: Audio, desc: " |- Drum'n'Bass, Jungle, Breaks, Breakbeat, Dubstep (Lossless)"}
       - {id: 344, cat: Audio, desc: " |- Drum'n'Bass, Jungle, Breaks, Breakbeat, Dubstep"}
       - {id: 983, cat: Audio, desc: " |- Hardstyle, Jumpstyle, Hardcore (Lossless)"}
@@ -344,11 +347,7 @@
       - {id: 603, cat: TV, desc: "Спорт и активный отдых"}
       - {id: 1309, cat: TV, desc: " |- Футбол. Чемпионат мира 2018"}
       - {id: 1308, cat: TV, desc: " |- Хоккей. Чемпионат мира 2018"}
-      - {id: 1301, cat: TV, desc: " |- XXIII Зимние Олимпийские игры. Пхёнчхан 2018"}
-      - {id: 1287, cat: TV, desc: " |- XXXI Летние Олимпийские игры. Рио-де-Жанейро 2016"}
-      - {id: 1282, cat: TV, desc: " |- Футбол. Чемпионат Европы 2016"}
       - {id: 1206, cat: TV, desc: " |- Футбол. Чемпионат Мира 2014"}
-      - {id: 1200, cat: TV, desc: " |- ХI Зимние Паралимпийские игры. Сочи 2014"}
       - {id: 1194, cat: TV, desc: " |- ХХII Зимние Олимпийские игры. Сочи 2014"}
       - {id: 1062, cat: TV, desc: " |- XXX Летние Олимпийские игры. Лондон 2012"}
       - {id: 974, cat: TV, desc: " |- Футбол"}
@@ -521,6 +520,7 @@
       - {id: 387, cat: Other, desc: " |- Xbox 360"}
       - {id: 388, cat: Other, desc: " |- Wii"}
       - {id: 1264, cat: Other, desc: " |- Wii U"}
+      - {id: 1318, cat: Other, desc: " |- Switch"}
       - {id: 385, cat: Other, desc: " |- PS1"}
       - {id: 386, cat: Other, desc: " |- PS2"}
       - {id: 848, cat: Other, desc: " |- PS3"}
@@ -671,7 +671,6 @@
       - {id: 1073, cat: Other, desc: " |- Интернет-творчество"}
       - {id: 892 , cat: Other, desc: "Архив Мультфильмов"}
       - {id: 91 , cat: Other, desc: " |- Архив Видео"}
-      - {id: 150, cat: Other, desc: " |- Архив неактуальных Экранок и видео с Рекламой"}
       - {id: 668 , cat: Other, desc: " |- Архив Классики и Старого кино / Артхаус"}
       - {id: 1143 , cat: Other, desc: " |- Архив Музыкального Видео"}
       - {id: 802 , cat: Other, desc: " |- Архив Сериалов"}
