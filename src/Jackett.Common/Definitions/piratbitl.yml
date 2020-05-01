@@ -275,7 +275,9 @@
       - {id: 1424, cat: TV, desc: " |- Наши Мультфильмы (DVD)"}
       # Documentary, sports, educational videos
       - {id: 79, cat: TV/Documentary, desc: "Документальные фильмы и телепередачи"}
+      - {id: 359, cat: TV/Documentary, desc: "|- Информационно-аналитические и общественно-политические перед"}
       - {id: 348, cat: TV/Documentary, desc: " |- Научно-популярные фильмы"}
+      - {id: 1698, cat: TV/Documentary, desc: " |- Политика, религия"}
       - {id: 345, cat: TV/Documentary, desc: " |- Космос"}
       - {id: 342, cat: TV/Documentary, desc: " |- Военное дело"}
       - {id: 363, cat: TV/Documentary, desc: " |- National Geographic"}
@@ -591,10 +593,18 @@
       - {id: 627, cat: PC/Phone-Other, desc: " |- Igo"}
       - {id: 626, cat: PC/Phone-Other, desc: " |- Разное - системы навигации и карты"}
       # All by car and moto
+      - {id: 1457, cat: PC, desc: " |- Ремонт и эксплуатация транспортных средств"}
+      - {id: 1458, cat: PC, desc: " |- Ищу / Предлагаю (Ремонт и эксплуатация ТС)"}
+      - {id: 1459, cat: TV, desc: " |- Общение"}
+      - {id: 1464, cat: TV, desc: " |- Журналы по авто/мото"}
       - {id: 1467, cat: PC, desc: " |- Книги по ремонту/обслуживанию/эксплуатации ТС"}
       - {id: 1465, cat: PC, desc: " |- Программы по диагностике и ремонту"}
       - {id: 1466, cat: TV, desc: " |- Виртуальная автошкола"}
       - {id: 1463, cat: TV, desc: " |- Видеоуроки по ремонту транспортных средств"}
+      - {id: 1462, cat: TV, desc: " |- Видеоуроки по вождению транспортных средств"}
+      - {id: 1469, cat: TV, desc: " |- Оригинальные каталоги по подбору запчастей"}
+      - {id: 1470, cat: TV, desc: " |- Неоригинальные каталоги по подбору запчастей"}
+      - {id: 1460, cat: TV, desc: " |- Видеоуроки по ремонту транспортных средств"}
       # Desktop Wallpaper
       - {id: 474, cat: Other, desc: "Обои для рабочего стола"}
       # Parser Releases, Trial Distributions, Shopping Cart.
