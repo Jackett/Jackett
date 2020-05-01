@@ -16,6 +16,7 @@
       list: Other
       male: XXX
       music: Audio
+      play-circle: TV
       smile-o: TV/Anime
       television: TV
       wrench: PC
@@ -84,8 +85,10 @@
           - name: append
             args:  " ago"
           - name: timeago
-      size:
+      _size:
         selector: td:nth-child(6)
+      size:
+        text: "{{ if .Result._size }}{{ .Result._size }}{{else}}0 B{{end}}"
       seeders:
         selector: td:nth-child(3)
       leechers:
