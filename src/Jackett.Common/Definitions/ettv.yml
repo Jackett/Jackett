@@ -39,6 +39,7 @@
       - {id: 53, cat: Books/Ebook, desc: "Books - Ebooks"}
       - {id: 54, cat: Books/Magazines, desc: "Books - Magazines"}
       - {id: 68, cat: Books/Other, desc: "Books - Others"}
+      - {id: 90, cat: Books/Other, desc: "Books - Others"}
       - {id: 58, cat: PC/Games, desc: "Games - Android"}
       - {id: 71, cat: PC/Games, desc: "Games - Others"}
       - {id: 57, cat: PC/Games, desc: "Games - Windows"}
