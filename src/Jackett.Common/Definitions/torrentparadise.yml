@@ -34,11 +34,13 @@
       "APPSPC": PC
       "APPSWINDOWS": PC/0day
       "AUDIO": Audio
+      "AUDIOBOOKS": Audio/Audiobook
       "AUDIOAUDIOBOOKS": Audio/Audiobook
       "AUDIOFLAC": Audio/Lossless
       "AUDIOMUSIC": Audio
       "AUDIOOTHER": Audio/Other
       "AUDIOSOUNDCLIPS": Audio
+      "ADULTMOVIES": XXX
       "BOOKS": Books
       "DOCUMENTARIES": TV/Documentary
       "DVDRVIDEO": Movies/DVD
@@ -76,6 +78,7 @@
       "MOVIESENGLISHSPANISHSUBT": Movies
       "MOVIESHEVCX265": Movies/HD
       "MOVIESULTRAHD4K": Movies/UHD
+      "MOVIESX264H264": Movies/HD
       "MP3": Audio/MP3
       "MP3MUSIC": Audio/MP3
       "MUSIC": Audio
@@ -90,17 +93,20 @@
       "PELICULASDIVX": TV
       "PICTURES": Other
       "PORN": XXX
+      "PORNHDMOVIES": XXX
       "PORNGAMES": XXX
       "PORNMOVIECLIPS": XXX
       "PORNMOVIES": XXX
       "PORNOTHER": XXX
       "PORNPICTURES": XXX
+      "SERIES": TV
       "SOFTWARE": PC
       "SOFTWAREMAC": PC/Mac
       "SOFTWAREWINDOWS": PC/0day
       "TUTORIALS": Other
       "TV": TV
-      "TVHEVCX265": TV
+      "TVHEVCX265": TV/HD
+      "TVSDX264H264": TV/SD
       "TVSHOWS": TV
       "VIDEO": Movies
       "VIDEOHDMOVIES": Movies/HD
