@@ -152,6 +152,8 @@ namespace Jackett.Common.Indexers
                 foreach (var row in rows)
                 {
                     var qImg = row.QuerySelector("img");
+                    if (qImg == null)
+                        continue; // skip results without image
                     var title = qImg.GetAttribute("title");
                     if (!CheckTitleMatchWords(query.GetQueryString(), title))
                         continue; // skip if it doesn't contain all words
