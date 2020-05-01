@@ -135,7 +135,7 @@
           ":has(a:contains(\"Books\")):contains(\"Biography\")": 110
           ":has(a:contains(\"Books\")):contains(\"Children\")": 102
           ":has(a:contains(\"Books\")):contains(\"Comics\")": 103
-          ":has(a:contains(\"Books\")):contains(\"Computers &amp; Technology\")": 113
+          ":has(a:contains(\"Books\")):contains(\"Computers & Technology\")": 113
           ":has(a:contains(\"Books\")):contains(\"Cooking\")": 115
           ":has(a:contains(\"Books\")):contains(\"Educational\")": 114
           ":has(a:contains(\"Books\")):contains(\"Fiction\")": 107
