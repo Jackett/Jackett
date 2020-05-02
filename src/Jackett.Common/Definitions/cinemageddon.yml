@@ -35,8 +35,8 @@
       - {id: 22, cat: Movies, desc: "Trailers"}
 
     modes:
-      search: [q]
-      movie-search: [q]
+      search: [q, imdbid]
+      movie-search: [q, imdbid]
 
   login:
     path: takelogin.php
@@ -53,13 +53,17 @@
     paths:
       - path: browse.php
     inputs:
-      $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
-      search: "{{ .Query.Keywords }}"
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Query.Keywords }}{{end}}"
     rows:
       selector: table.torrenttable > tbody > tr:has(a[href^="browse.php?cat="])
     fields:
       category:
-        text: 1
+        selector: a[href^="browse.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
       title:
         selector: td:nth-child(2)
       download:
@@ -70,6 +74,10 @@
             args: ["details.php?id=", "download.php?id="]
       details:
         selector: a[href^="details.php?id="]
+        attribute: href
+      imdb:
+        optional: true
+        selector: a[href*="www.imdb.com/title/"]
         attribute: href
       grabs:
         selector: td:nth-child(6)
@@ -92,9 +100,9 @@
         filters:
           - name: regexp
             args: (\d{4}-\d{2}-\d{2})
-      downloadvolumefactor:
-        case:
-          "*": "1"
-      uploadvolumefactor:
-        case:
-          "*": "1"
+      # processing all kinds of up/dl bonus probably needs C#
+      # types of bonuses:
+      # - 4 types of coins (20,30,40,100%) (there's also black coin, but I don't think it's being used) https://cinemageddon.net/help/newuser.php
+      # - featured torrents (50%) on browse page
+      # - bumpy bonus (1%+) http://cinemageddon.net/cocks/showpage.php?id=368 - problematic one,
+      # since it can be applied to torrents already having other bonuses and only the highest one is counted
