@@ -1,0 +1,129 @@
+# Because API is broken we use screen scraping instead of the generic Gazelle based approach
+---
+  site: 32pages2fa
+  name: 32Pages2FA
+  description: "this indexer uses a cookie login for 32Pages for those that want to use 2FA"
+  language: en-us
+  type: private
+  encoding: UTF-8
+  links:
+    - https://32pag.es/
+
+  caps:
+    categories:
+      "Comics": Books/Comics
+
+    modes:
+      search: [q]
+
+  settings:
+    - name: cookie
+      type: text
+      label: Cookie
+    - name: infocookie
+      type: info
+      label: How to get the Cookie
+      default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
+    - name: sort
+      type: select
+      label: Sort requested from site
+      default: "time"
+      options:
+        "time": "created"
+        "seeders": "seeders"
+        "size": "size"
+        "name": "title"
+    - name: type
+      type: select
+      label: Order requested from site
+      default: "desc"
+      options:
+        "desc": "desc"
+        "asc": "asc"
+    - name: info
+      type: info
+      label: Results Per Page
+      default: For best results, your search query has to be <b>as specific as possible</b> (only <b>first 100</b> torrents will be displayed).
+
+  login:
+    method: cookie
+    inputs:
+      cookie: "{{ .Config.cookie }}"
+    error:
+      - selector: "#formerror"
+    test:
+      path: torrents.php
+      selector: "#nav_userinfo"
+
+  search:
+    paths:
+      - path: torrents.php
+      #site displays just 25 results per page, no profile options found to change this, so we attempt to fetch 4 pages
+      - path: torrents.php
+        inputs:
+          page: 2
+      - path: torrents.php
+        inputs:
+          page: 3
+      - path: torrents.php
+        inputs:
+          page: 4
+    inputs:
+      searchstr: "{{ .Keywords }}"
+      order_by: "{{ .Config.sort}}"
+      order_way: "{{ .Config.type}}"
+      disablegrouping: 1
+
+    rows:
+      selector: table#torrent_table > tbody > tr[class^="torrent"]
+
+    fields:
+      _grouptitle: 
+        selector: a[href^="torrents.php?id="]
+      _language:
+        selector: img[class^="flag"]
+        attribute: alt
+        optional: true
+      title:
+        selector: a[title="View Torrent"]
+        filters:
+          - name: prepend
+            args: "{{.Result._grouptitle}} - "
+          - name: replace
+            args: ["/  /","/"] #removes slash left after freeleech images
+          - name: append
+            args: "{{if .Result._language}} [{{.Result._language}}]{{else}}{{end}}"
+      category: 
+        text: Comics
+      details:
+        selector: a[title="View Torrent"]
+        attribute: href
+      download:
+        selector: a[title="Download"]
+        attribute: href
+      size:
+        selector: td[headers="browse_size"]
+      files:
+        selector: td[headers="browse_files"]
+      grabs:
+        selector: td[headers="browse_snatches"]
+      seeders:
+        selector: td[headers="browse_seeders"]
+      leechers:
+        selector: td[headers="browse_leechers"]
+      date:
+        selector: td[headers="browse_time"] > span[title]
+        attribute: title
+        filters:
+          - name: dateparse 
+            args: "Apr 04 2020, 16:24"
+      downloadvolumefactor:
+        case:
+          img.fl-diamond: 0
+          img.fl-sapphire: 0
+          img.fl-emerald: 0
+          img.fl-ruby: 0
+          "*": 1
+      uploadvolumefactor:
+        text: 1
+# gazelle
