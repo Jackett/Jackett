@@ -407,6 +407,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * notwhat.cd
  * OnlineSelfEducation
  * Orpheus
+ * OshenPT
  * Ourbits (HDPter)
  * P2PBG
  * P2PElite
