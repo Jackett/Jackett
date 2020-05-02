@@ -24,6 +24,7 @@
       other: Other
       photos: Other
       pictures: Other
+      unknown: Other
 
     modes:
       search: [q]
@@ -44,10 +45,12 @@
       - name: re_replace
         args: ["[\\s]+", "-"]
       - name: tolower
+
     rows:
       selector: tr.table-default
       filters:
         - name: andmatch
+
     fields:
       category:
         selector: td:nth-child(1)
