@@ -23,20 +23,6 @@
     - name: password
       type: password
       label: Password
-    - name: 2facode
-      type: text
-      label: 2FA code
-    - name: info_2fa
-      type: info
-      label: "About 2FA code"
-      default: "Only fill in the <b>2FA code</b> box if you have enabled <b>2FA</b> on the 32Pages Web Site. Otherwise just leave it empty."
-    - name: lockip
-      type: select
-      label: "Lock session to my IP address"
-      default: "1"
-      options:
-        "1": "yes"
-        "0": "no"
     - name: sort
       type: select
       label: Sort requested from site
@@ -65,9 +51,7 @@
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
-      twostep_pub: "{{ .Config.2facode }}"
       keeploggedin: 1
-      lockip: "{{ .Config.lockip }}"
     error:
       - selector: "#formerror"
     test:
