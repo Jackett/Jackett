@@ -296,6 +296,7 @@ namespace Jackett.Common.Indexers
                         }
 
                         release.Description = release.Description.Replace(" / Free", ""); // Remove Free Tag
+                        release.Description = release.Description.Replace("/ WEB ", "/ WEB-DL "); // Fix web/web-dl
                         release.Description = release.Description.Replace("Full HD", "1080p");
                         // Handles HDR conflict
                         release.Description = release.Description.Replace("/ HD /", "/ 720p /");
@@ -398,6 +399,7 @@ namespace Jackett.Common.Indexers
                         var year = "";
                         release.Description = "";
                         var extraInfo = "";
+                        var releaseQuality = "";
                         foreach (var child in qBJinfoBox.ChildNodes)
                         {
                             var type = child.NodeType;
@@ -419,7 +421,16 @@ namespace Jackett.Common.Indexers
                                 release.PublishDate = publishDate.ToLocalTime();
                             }
                             else if (line.StartsWith("Ano:"))
+                            {
                                 year = line.Substring("Ano: ".Length);
+                            }
+                            else if (line.StartsWith("Qualidade:"))
+                            {
+                                releaseQuality = line.Substring("Qualidade: ".Length);
+                                if (releaseQuality == "WEB")
+                                    releaseQuality = "WEB-DL";
+                                extraInfo += releaseQuality + " ";
+                            }
                             else
                             {
                                 release.Description += line + "\n";
