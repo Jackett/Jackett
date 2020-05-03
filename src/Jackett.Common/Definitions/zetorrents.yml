@@ -58,7 +58,7 @@
             args: ["VOSTFR", "{{ .Result.site_date }} VOSTFR"]
           # and we delete the year at the end
           - name: re_replace
-            args: ["(\\w+)$", ""]
+            args: ["(\\d{4})$", ""]
           - name: replace
             args: ["WEBRIP", "WEBDL"]
       details:
