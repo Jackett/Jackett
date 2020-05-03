@@ -31,6 +31,7 @@
       - {id: "torrent_netflix", cat: Movies, desc: "넷플릭스 (Netflix)"}
       - {id: "torrent", cat: Other, desc: "토렌트 기타 (Other)"}
       - {id: "send", cat: Other, desc: "토렌트 기타 (Other)"}
+      - {id: "book", cat: Books, desc: "도서류 (Books)"}
 
     modes:
       search: [q]
