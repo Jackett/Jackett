@@ -164,6 +164,36 @@ namespace Jackett.Common.Indexers
             return false;
         }
 
+        private string FixYearPosition(string title, string year)
+        {
+            int index = title.LastIndexOf('-');
+            // If its a series
+            if (index != -1)
+            {
+                title = title.Substring(0, index) + year + " " + title.Substring(index + 1);
+            }
+            else
+            {
+                title += " " + year;
+            }
+
+            return title;
+        }
+
+        private string FixNovelNumber(string title)
+        {
+
+            if (title.Contains("[Novela]"))
+            {
+                title = Regex.Replace(title, @"(Cap[\.]?[ ]?)", "S01E");
+                title = Regex.Replace(title, @"(\[Novela\]\ )", "");
+                title = Regex.Replace(title, @"(\ \-\s*Completo)", " - S01");
+                return title;
+            }
+
+            return title;
+        }
+
         private string FixAbsoluteNumbering(string title)
         {
             // if result is absolute numbered, convert title from SXXEXX to EXX
@@ -180,14 +210,6 @@ namespace Jackett.Common.Indexers
             if (IsAbsoluteNumbering(title))
             {
                 title = Regex.Replace(title, @"(Ep[\.]?[ ]?)|([S]\d\d[Ee])", "");
-                return title;
-            }
-
-            if (title.Contains("[Novela]"))
-            {
-                title = Regex.Replace(title, @"(Cap[\.]?[ ]?)", "S01E");
-                title = Regex.Replace(title, @"(\[Novela\]\ )", "");
-                title = Regex.Replace(title, @"(\ \-\s*Completo)", " - S01");
                 return title;
             }
 
@@ -447,9 +469,12 @@ namespace Jackett.Common.Indexers
                         }
 
                         var catStr = qCatLink.GetAttribute("href").Split('=')[1].Split('&')[0];
-                        release.Title = FixAbsoluteNumbering(release.Title);
                         if (!string.IsNullOrEmpty(year))
-                            release.Title += " " + year;
+                            release.Title = FixYearPosition(release.Title, year);
+
+                        release.Title = FixAbsoluteNumbering(release.Title);
+                        release.Title = FixNovelNumber(release.Title);
+
                         if (qQuality != null)
                         {
                             var quality = qQuality.TextContent;
