@@ -6,6 +6,8 @@
   type: private
   encoding: UTF-8
   links:
+    - https://www.haidan.video/
+  legacylinks:
     - https://www.haidan.cc/
 
   caps:
