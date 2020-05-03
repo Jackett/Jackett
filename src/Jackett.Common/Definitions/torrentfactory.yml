@@ -60,6 +60,11 @@
       - {id: 83 , cat: Books/Magazines, desc: "Ebooks - Publicacion Quincena"}
       - {id: 88 , cat: Books/Magazines, desc: "Ebooks - Publicacion Mensual"}
       - {id: 97 , cat: Books/Comics, desc: "Ebooks - Comic eBooks"}
+      # not listed / unknown
+      - {id: 50, cat: Other, desc: "Desconocida"}
+      - {id: 56, cat: Other, desc: "Desconocida"}
+      - {id: 100, cat: Other, desc: "Desconocida"}
+      - {id: 108, cat: Other, desc: "Desconocida"}
 
     modes:
       search: [q]
