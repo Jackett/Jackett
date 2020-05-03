@@ -182,6 +182,7 @@
       - {id: 2089, cat: PC/ISO, desc: "Openelec"}
       - {id: 2092, cat: PC/ISO, desc: "Openmediavault"}
       - {id: 2093, cat: PC/ISO, desc: "Opensuse"}
+      - {id: 2291, cat: PC/ISO, desc: "Opensuse"}
       - {id: 1237, cat: PC/ISO, desc: "Oracle Linux"}
       - {id: 4, cat: PC/ISO, desc: "Other distros"}
       - {id: 2218, cat: PC/ISO, desc: "OviOS Linux"}
@@ -248,10 +249,12 @@
       - {id: 506, cat: PC/ISO, desc: "Sms"}
       - {id: 2126, cat: PC/ISO, desc: "Solus"}
       - {id: 2127, cat: PC/ISO, desc: "Solydxk"}
+      - {id: 2127, cat: PC/ISO, desc: "Solydxk"}
       - {id: 1236, cat: PC/ISO, desc: "SparkyLinux"}
       - {id: 2225, cat: PC/ISO, desc: "Star"}
       - {id: 2132, cat: PC/ISO, desc: "Steamos"}
       - {id: 2174, cat: PC/ISO, desc: "Super Grub2 Disk"}
+      - {id: 531, cat: PC/ISO, desc: "Super Grub2 Disk"}
       - {id: 2134, cat: PC/ISO, desc: "SuperX"}
       - {id: 2189, cat: PC/ISO, desc: "SwagArch"}
       - {id: 2267, cat: PC/ISO, desc: "Symphony OS"}
@@ -386,9 +389,22 @@
       grabs:
         selector: td:nth-child(2) > table > tbody > tr:nth-child(5) > td
         remove: strong
+      cat:
+        selector: a[href^="index.php?page=torrents&category="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: category
+          - name: prepend
+            args: "category="
+          - name: append
+            args: "; "
       description:
-         selector: td:nth-child(2)
-         remove: table
+        selector: td:nth-child(2)
+        remove: table
+        filters:
+          - name: prepend
+            args: "{{ .Result.cat }}"
       downloadvolumefactor:
         text: 0
       uploadvolumefactor:
