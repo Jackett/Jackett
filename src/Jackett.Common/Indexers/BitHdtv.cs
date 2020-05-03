@@ -23,27 +23,22 @@ namespace Jackett.Common.Indexers
         private string TakeLoginUrl => SiteLink + "takelogin.php";
         private string SearchUrl => SiteLink + "torrents.php";
 
-        private new ConfigurationDataRecaptchaLogin configData
-        {
-            get => (ConfigurationDataRecaptchaLogin)base.configData;
-            set => base.configData = value;
-        }
+        private new ConfigurationDataRecaptchaLogin configData => (ConfigurationDataRecaptchaLogin)base.configData;
 
-        public BitHdtv(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps) :
-            base(
-                name: "BIT-HDTV",
-                description: "BIT-HDTV - Home of High Definition",
-                link: "https://www.bit-hdtv.com/",
-                caps: new TorznabCapabilities
-                {
-                    SupportsImdbMovieSearch = true
-                    // SupportsImdbTVSearch = true (supported by the site but disabled due to #8107)
-                },
-                configService: configService,
-                client: w,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataRecaptchaLogin("For best results, change the 'Torrents per page' setting to 100 in your profile."))
+        public BitHdtv(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
+            : base("BIT-HDTV",
+                   description: "BIT-HDTV - Home of High Definition",
+                   link: "https://www.bit-hdtv.com/",
+                   caps: new TorznabCapabilities
+                   {
+                       SupportsImdbMovieSearch = true
+                       // SupportsImdbTVSearch = true (supported by the site but disabled due to #8107)
+                   },
+                   configService: configService,
+                   client: w,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataRecaptchaLogin("For best results, change the 'Torrents per page' setting to 100 in your profile."))
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "en-us";
@@ -55,6 +50,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(6, TorznabCatType.AudioLossless); // HQ Audio
             AddCategoryMapping(7, TorznabCatType.Movies); // Movies
             AddCategoryMapping(8, TorznabCatType.AudioVideo); // Music Videos
+            AddCategoryMapping(9, TorznabCatType.Other); // Other
             AddCategoryMapping(5, TorznabCatType.TVSport); // Sports
             AddCategoryMapping(10, TorznabCatType.TV); // TV
             AddCategoryMapping(12, TorznabCatType.TV); // TV/Seasonpack
