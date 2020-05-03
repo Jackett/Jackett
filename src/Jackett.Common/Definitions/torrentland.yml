@@ -73,6 +73,14 @@
       - {id: 42, cat: PC/ISO, desc: "PC ISO"}
       - {id: 44, cat: PC, desc: "PC"}
       - {id: 39, cat: Books/Other, desc: "Books Other"}
+      - {id: 70, cat: Movies/SD, desc: "Screener"}
+      - {id: 17, cat: PC/Other, desc: "PC Other"}
+      - {id: 43, cat: PC/Mac, desc: "PC Mac"}
+      - {id: 30, cat: Console/NDS, desc: "Console NDS"}
+      - {id: 48, cat: Audio/Video, desc: "Music Video"}
+      - {id: 25, cat: Books/Ebook, desc: "Ebook"}
+      - {id: 0, cat: Books/Ebook, desc: "Ebook"}
+      - {id: 24, cat: XXX, desc: "Adultos"}
 
     modes:
       search: [q, imdbid]
@@ -176,6 +184,14 @@
       details:
         selector: td:nth-child(2) a
         attribute: href
+      description:
+        selector:  td:nth-child(1) a
+        attribute: href
+        filters:
+          - name: querystring
+            args: category
+          - name: prepend
+            args: "cat="
       size:
         selector: td:nth-child(6)
       seeders:
