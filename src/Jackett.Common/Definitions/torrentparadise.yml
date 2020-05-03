@@ -16,6 +16,7 @@
       "ADULT": XXX
       "ADULTLATINA": XXX
       "ADULTMILF": XXX
+      "ADULTHDMOVIES": XXX
       "ADULTPORN": XXX
       "ADULTXXX": XXX
       "ANIME": TV/Anime
@@ -42,6 +43,8 @@
       "AUDIOSOUNDCLIPS": Audio
       "ADULTMOVIES": XXX
       "BOOKS": Books
+      "BOOKSMAGAZINES": Books/Magazines
+      "COMICSNEM43COMICS": Books/Comics
       "DOCUMENTARIES": TV/Documentary
       "DVDRVIDEO": Movies/DVD
       "EBOOKS": Books/Ebook
@@ -76,7 +79,10 @@
       "MOVIES": Movies
       "MOVIESBLURAYDISCREMUX": Movies/HD
       "MOVIESENGLISHSPANISHSUBT": Movies
+      "MOVIESHD720P": Movies/HD
+      "MOVIESHD1080P": Movies/HD
       "MOVIESHEVCX265": Movies/HD
+      "MOVIESSPANISHLATINAMERICA": Movies
       "MOVIESULTRAHD4K": Movies/UHD
       "MOVIESX264H264": Movies/HD
       "MP3": Audio/MP3
@@ -90,6 +96,7 @@
       "OTHEREBOOKS": Other
       "OTHEROTHER": Other
       "OTHERPICTURES": Other
+      "PELICULASCVCD": TV
       "PELICULASDIVX": TV
       "PICTURES": Other
       "PORN": XXX
@@ -103,12 +110,17 @@
       "SOFTWARE": PC
       "SOFTWAREMAC": PC/Mac
       "SOFTWAREWINDOWS": PC/0day
+      "SPORTS": TV/Sport
+      "TVHDSPORTS": TV/Sport
       "TUTORIALS": Other
       "TV": TV
+      "TVHDX264H264": TV/HD
       "TVHEVCX265": TV/HD
       "TVSDX264H264": TV/SD
       "TVSHOWS": TV
+      "TVTVPACKS": TV
       "VIDEO": Movies
+      "UNSORTEDUNSORTED": Other
       "VIDEOHDMOVIES": Movies/HD
       "VIDEOHDRIP": Movies
       "VIDEOHDTVSHOWS": TV/HD
@@ -116,6 +128,7 @@
       "VIDEOMOVIES": Movies
       "VIDEOMUSICVIDEOS": Audio/Video
       "VIDEOOTHER": Movies
+      "VIDEOS": Movies
       "VIDEOSDMOVIES": Movies/SD
       "VIDEOSDTVSHOWS": TV/SD
       "VIDEOTVSHOWS": TV
@@ -123,6 +136,8 @@
       "VIDEOUHDTVSHOWS": TV/UHD
       "WINDOWS": PC/0day
       "XXX": XXX
+      "XXXHDVIDEO": XXX
+      "XXXVIDEO": XXX
 
     modes:
       search: [q]
