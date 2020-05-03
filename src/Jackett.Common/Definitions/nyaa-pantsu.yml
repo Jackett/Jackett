@@ -90,6 +90,8 @@
       - {id: 6_, cat: Other, desc: "Pictures"}
       - {id: 6_15, cat: Other, desc: "Pictures Graphics"}
       - {id: 6_16, cat: Other, desc: "Pictures Photos"}
+      # unknown
+      - {id: 2_2, cat: Other, desc: "UnKnown"}
 
     modes:
       search: [q]
