@@ -74,7 +74,7 @@
       - {id: 44, cat: PC, desc: "PC"}
       - {id: 39, cat: Books/Other, desc: "Books Other"}
       - {id: 70, cat: Movies/SD, desc: "Screener"}
-      - {id: 17, cat: PC/Other, desc: "PC Other"}
+      - {id: 17, cat: PC, desc: "PC Other"}
       - {id: 43, cat: PC/Mac, desc: "PC Mac"}
       - {id: 30, cat: Console/NDS, desc: "Console NDS"}
       - {id: 48, cat: Audio/Video, desc: "Music Video"}
