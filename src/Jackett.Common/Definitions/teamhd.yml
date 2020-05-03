@@ -72,6 +72,10 @@
       # 0 all 1 gold 2 silver 3 normal
       free: 0
       year: ""
+    keywordsfilters:
+      # remove the year from the titles as the site chokes on them during search https://github.com/Jackett/Jackett/issues/4397#issuecomment-623148789
+      - name: re_replace
+        args: [" +(?:19|20)\\d{2} *$", ""]
 
     rows:
       selector: table.browse > tbody > tr
