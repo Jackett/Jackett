@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ using NLog;
 
 namespace Jackett.Common.Indexers.Feeds
 {
+    [ExcludeFromCodeCoverage]
     public class AnimeTosho : BaseNewznabIndexer
     {
         public AnimeTosho(IIndexerConfigurationService configService, WebClient client, Logger logger, IProtectionService p)

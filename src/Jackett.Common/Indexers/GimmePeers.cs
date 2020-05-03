@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -16,7 +17,7 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
-    // ReSharper disable once InconsistentNaming
+    [ExcludeFromCodeCoverage]
     public class GimmePeers : BaseWebIndexer
     {
         private string BrowseUrl => SiteLink + "browse.php";

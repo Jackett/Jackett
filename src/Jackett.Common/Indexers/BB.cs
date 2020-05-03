@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -18,7 +19,7 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     // To comply with the rules for this tracker, only the acronym is used and no publicly displayed URLs to the site.
-
+    [ExcludeFromCodeCoverage]
     public class BB : BaseWebIndexer
     {
         private string BaseUrl => StringUtil.FromBase64("aHR0cHM6Ly9iYWNvbmJpdHMub3JnLw==");

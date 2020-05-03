@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -22,9 +23,7 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
-    /// <summary>s
-    /// Provider for Nordicbits Private Tracker
-    /// </summary>
+    [ExcludeFromCodeCoverage]
     public class Nordicbits : BaseCachingWebIndexer
     {
         private string LoginUrl => SiteLink + "login.php";

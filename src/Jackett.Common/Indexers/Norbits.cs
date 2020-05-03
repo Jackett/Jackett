@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -23,9 +24,7 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
-    /// <summary>s
-    /// Provider for Norbits Private Tracker
-    /// </summary>
+    [ExcludeFromCodeCoverage]
     public class Norbits : BaseCachingWebIndexer
     {
         private string LoginUrl => SiteLink + "login.php";

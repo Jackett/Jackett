@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -27,6 +28,7 @@ namespace Jackett.Common.Indexers
     /// Provider for Abnormal Private French Tracker
     /// gazelle based but the ajax.php API seems to be broken (always returning failure)
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class Abnormal : BaseCachingWebIndexer
     {
         private string LoginUrl => SiteLink + "login.php";

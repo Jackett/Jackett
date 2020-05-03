@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -19,9 +20,7 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
-    /// <summary>
-    /// Provider for Xthor Private French Tracker
-    /// </summary>
+    [ExcludeFromCodeCoverage]
     public class Xthor : BaseCachingWebIndexer
     {
         private static string ApiEndpoint => "https://api.xthor.tk/";

@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Jackett.Common.Indexers.Abstract;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
@@ -6,6 +7,7 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class CGPeers : GazelleTracker
     {
         public override string[] LegacySiteLinks { get; protected set; } = new string[] {
