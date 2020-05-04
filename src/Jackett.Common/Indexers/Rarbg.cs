@@ -78,8 +78,10 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(46, TorznabCatType.MoviesBluRay, "Movies/BD Remux");
             AddCategoryMapping(47, TorznabCatType.Movies3D, "Movies/x264/3D");
             AddCategoryMapping(48, TorznabCatType.MoviesHD, "Movies/XVID/720");
-            AddCategoryMapping(49, TorznabCatType.TVUHD, "TV UHD Episodes");        // torrentapi.org returns "Movies/TV-UHD-episodes" for some reason
-            AddCategoryMapping(49, TorznabCatType.TVUHD, "Movies/TV-UHD-episodes"); // possibly because thats what the category is called on the /top100.php page
+            AddCategoryMapping(49, TorznabCatType.TVUHD, "TV UHD Episodes");
+            // torrentapi.org returns "Movies/TV-UHD-episodes" for some reason
+            // possibly because thats what the category is called on the /top100.php page
+            AddCategoryMapping(49, TorznabCatType.TVUHD, "Movies/TV-UHD-episodes");
             AddCategoryMapping(50, TorznabCatType.MoviesUHD, "Movies/x264/4k");
             AddCategoryMapping(51, TorznabCatType.MoviesUHD, "Movies/x265/4k");
             AddCategoryMapping(52, TorznabCatType.MoviesUHD, "Movs/x265/4k/HDR");
@@ -112,7 +114,7 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
 
             // check the token and renewal if necessary
-            await RenewalToken();
+            await RenewalTokenAsync();
 
             var response = await RequestStringWithCookiesAndRetry(BuildSearchUrl(query));
             var jsonContent = JObject.Parse(response.Content);
@@ -123,7 +125,7 @@ namespace Jackett.Common.Indexers
                     break;
                 case 2:
                 case 4: // invalid token
-                    await RenewalToken(true); // force renewal token
+                    await RenewalTokenAsync(true); // force renewal token
                     response = await RequestStringWithCookiesAndRetry(BuildSearchUrl(query));
                     jsonContent = JObject.Parse(response.Content);
                     break;
@@ -224,7 +226,8 @@ namespace Jackett.Common.Indexers
             }*/
             else if (!string.IsNullOrWhiteSpace(searchString))
             {
-                searchString = searchString.Replace("'", ""); // ignore ' (e.g. search for america's Next Top Model)
+                // ignore ' (e.g. search for america's Next Top Model)
+                searchString = searchString.Replace("'", "");
                 qc.Add("mode", "search");
                 qc.Add("search_string", searchString);
             }
@@ -236,14 +239,15 @@ namespace Jackett.Common.Indexers
 
             var querycats = MapTorznabCapsToTrackers(query);
             if (querycats.Count == 0)
-                querycats = GetAllTrackerCategories(); // default to all, without specifing it some categories are missing (e.g. games), see #4146
+                // default to all, without specifying it some categories are missing (e.g. games), see #4146
+                querycats = GetAllTrackerCategories();
             var cats = string.Join(";", querycats);
             qc.Add("category", cats);
 
             return ApiEndpoint + "?" + qc.GetQueryString();
         }
 
-        private async Task RenewalToken(bool force = false)
+        private async Task RenewalTokenAsync(bool force = false)
         {
             if (!HasValidToken || force)
             {
