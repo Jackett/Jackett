@@ -22,7 +22,6 @@ namespace Jackett.Common.Indexers
     public class AnimeBytes : BaseCachingWebIndexer
     {
         private string ScrapeUrl => SiteLink + "scrape.php";
-        private string TorrentsUrl => SiteLink + "torrents.php";
         public bool AllowRaws => configData.IncludeRaw.Value;
         public bool PadEpisode => configData.PadEpisode != null && configData.PadEpisode.Value;
         public bool AddSynonyms => configData.AddSynonyms.Value;
@@ -262,7 +261,7 @@ namespace Jackett.Common.Indexers
                             var UploadTimeString = (string)torrent["UploadTime"];
                             var UploadTime = DateTime.ParseExact(UploadTimeString, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
                             var PublushDate = DateTime.SpecifyKind(UploadTime, DateTimeKind.Utc).ToLocalTime();
-                            var CommentsLink = TorrentsUrl + "?id=" + groupID.ToString() + "&torrentid=" + torrentID.ToString();
+                            var CommentsLink = SiteLink + "torrent/" + torrentID.ToString() + "/group";
                             var CommentsLinkUri = new Uri(CommentsLink);
                             var Size = (long)torrent["Size"];
                             var Snatched = (long)torrent["Snatched"];
