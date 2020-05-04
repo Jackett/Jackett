@@ -459,6 +459,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Shellife (SL)
  * SiamBIT
  * SnowPT (SSPT)
+ * SoulVoice
  * SpaceTorrent
  * SpeedCD
  * Speedmaster HD
