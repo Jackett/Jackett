@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -182,6 +181,7 @@ namespace Jackett.Common.Indexers
                 foreach (var row in rows)
                 {
                     var dateStr = row.QuerySelector(".rls-date").TextContent.Trim();
+                    var publishDate = DateTimeUtil.FromUnknown(dateStr);
 
                     var qTitle = row.QuerySelector("a");
                     var title = qTitle.TextContent;
@@ -198,16 +198,6 @@ namespace Jackett.Common.Indexers
 
                     var episode = qTitle.QuerySelector("strong")?.TextContent;
                     var comments = new Uri(resultUrl + (episode != null ? "#" + episode : ""));
-
-                    var publishDate = dateStr switch
-                    {
-                        "Today" => DateTime.Today,
-                        "Yesterday" => DateTime.Today.AddDays(-1),
-                        _ => DateTime.SpecifyKind(
-                                         DateTime.ParseExact(dateStr, "MM/dd/yy", CultureInfo.InvariantCulture),
-                                         DateTimeKind.Utc)
-                                     .ToLocalTime()
-                    };
 
                     var p480 = row.QuerySelector(".link-480p");
                     if (p480 != null) // size = 400 MB
@@ -229,8 +219,8 @@ namespace Jackett.Common.Indexers
             return releases;
         }
 
-        private ReleaseInfo MakeRelease(IElement releaseSelector, string title, long size, Uri comments,
-                                        DateTime publishDate)
+        private static ReleaseInfo MakeRelease(IElement releaseSelector, string title, long size, Uri comments,
+                                               DateTime publishDate)
         {
             Uri link = null;
             Uri magnet = null;
