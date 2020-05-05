@@ -68,6 +68,8 @@
 
     rows:
       selector: tr.torrent
+      filters:
+        - name: andmatch
 
     fields:
       category:
