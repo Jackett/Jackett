@@ -142,7 +142,7 @@ namespace Jackett.Common.Indexers
             var removeMovieAccentsItem = new BoolItem { Name = "Remove accents in movie searches", Value = true };
             configData.AddDynamic("RemoveMovieAccents", removeMovieAccentsItem);
 
-            var removeMovieYearItem = new BoolItem { Name = "Remove year from movie results", Value = false };
+            var removeMovieYearItem = new BoolItem { Name = "Remove year from movie results (enable for Radarr)", Value = false };
             configData.AddDynamic("RemoveMovieYear", removeMovieYearItem);
         }
 
@@ -517,20 +517,38 @@ namespace Jackett.Common.Indexers
                     // The Avengers [DVDRIP][VOSE English_Subs. EspaÃ±ol][2012]
                     // Harry Potter y las Reliquias de la Muerte Parte I.DVD5  [ DVDR] [AC3 5.1] [Multilenguaje] [2010]
                     // Joker (2019) 720p [Web Screener 720p ][Castellano][www.descargas2020.ORG][www.pctnew.ORG]
-                    title = title.Split('[')[0].Replace("720p", "").Trim();
 
-                    // we have to guess the language
+                    // remove quality and language from the title
+                    var titleParts = title.Split('[');
+                    title = titleParts[0].Replace("720p", "").Trim();
+
+                    // quality in the field quality/calidad is wrong in many cases
+                    if (!string.IsNullOrWhiteSpace(quality))
+                    {
+                        if (titleLower.Contains("720") && !quality.Contains("720"))
+                            quality += " 720p";
+                        if (titleLower.Contains("265") || titleLower.Contains("hevc"))
+                            quality += " x265";
+                        if (titleLower.Contains("dvdfull") || titleLower.Contains("dvd5") || titleLower.Contains("dvd9"))
+                            quality = "DVDR";
+                    }
+                    else if  (titleParts.Length > 2)
+                        quality = titleParts[1].Replace("]", "").Replace("MKV", "").Trim();
+
+                    // we have to guess the language (words DUAL or MULTI are not supported in Radarr)
                     var language = "spanish";
                     if ((titleLower.Contains("castellano") && titleLower.Contains("ingles")) ||
                         (titleLower.Contains("spanish") && titleLower.Contains("english")) ||
-                        titleLower.Contains("[es-en]"))
-                        language += " dual";
-                    else if (titleLower.Contains("multilenguaje"))
-                        language += " multi";
+                        titleLower.Contains("[es-en]") || titleLower.Contains("multilenguaje"))
+                        language += " english";
                     else if (titleLower.Contains("vose"))
                         language = "english vose";
 
-                    // we add the year if it's not in the title (could be removed later)
+                    // remove the movie year if the user chooses (the year in the title is wrong in many cases)
+                    if (_removeMovieYear)
+                        title = _titleYearRegex.Replace(title, "");
+
+                    // we add the year from search if it's not in the title
                     if (!string.IsNullOrWhiteSpace(year) && !_titleYearRegex.Match(title).Success)
                         title += " " + year;
 
@@ -648,12 +666,6 @@ namespace Jackett.Common.Indexers
 
         private string FixedTitle(NewpctRelease release, string quality, string language)
         {
-
-            var fixedTitle = release.Title;
-
-            if (release.NewpctReleaseType == ReleaseType.Movie && _removeMovieYear)
-                fixedTitle = _titleYearRegex.Replace(fixedTitle, "");
-
             var fixedLanguage = language.ToLower()
                                         .Replace("español", "spanish")
                                         .Replace("espanol", "spanish")
@@ -663,21 +675,31 @@ namespace Jackett.Common.Indexers
             var qualityLower = quality.ToLower();
             var fixedQuality = quality.Replace("-", " ");
             if (qualityLower.Contains("full"))
-                fixedQuality = qualityLower.Contains("4k") ? "BluRay 2160p COMPLETE" : "BluRay COMPLETE";
+                fixedQuality = qualityLower.Contains("4k") ? "BluRay 2160p COMPLETE x265" : "BluRay COMPLETE";
             else if (qualityLower.Contains("remux"))
-                fixedQuality = qualityLower.Contains("4k") ? "BluRay 2160p REMUX" : "BluRay REMUX";
+                fixedQuality = qualityLower.Contains("4k") ? "BluRay 2160p REMUX x265" : "BluRay REMUX";
             else if (qualityLower.Contains("4k")) // filter full and remux before 4k (there are 4k full and remux)
-                fixedQuality = "BluRay 2160p";
+                fixedQuality = "BluRay 2160p x265";
             else if (qualityLower.Contains("microhd"))
-                fixedQuality = "BluRay 1080p";
+                fixedQuality = qualityLower.Contains("720") ? "BluRay 720p MicroHD" : "BluRay 1080p MicroHD";
             else if (qualityLower.Contains("blurayrip"))
                 fixedQuality = "BluRay 720p";
-            else if (qualityLower.Contains("screener") || qualityLower.Contains("screeener")) // BluRay and DVD Screener are not supported in Radarr
-                fixedQuality = "TS Screener";
+            else if (qualityLower.Contains("dvdrip"))
+                fixedQuality = "DVDRip";
             else if (qualityLower.Contains("htdv"))
                 fixedQuality = "HDTV";
+            // BluRay and DVD Screener are not supported in Radarr
+            else if (qualityLower.Contains("screener") || qualityLower.Contains("screeener"))
+            {
+                if (qualityLower.Contains("720p") || qualityLower.Contains("dvd"))
+                    fixedQuality = "Screener 720p";
+                else if (qualityLower.Contains("bluray")) // there are bluray with 720p (condition after 720p)
+                    fixedQuality = "Screener 1080p";
+                else
+                    fixedQuality = "TS Screener";
+            }
 
-            return $"{fixedTitle} {fixedLanguage} {fixedQuality}";
+            return $"{release.Title} {fixedLanguage} {fixedQuality}";
         }
 
         private string RemoveDiacritics(string text)
