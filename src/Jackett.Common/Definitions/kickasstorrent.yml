@@ -9,7 +9,7 @@
   links:
     - https://katcr.co/
     - https://kat.root.yt/
-    - https://kat.unblockit.one/ # searching redirects to katcr.co in browser but appears to have no issue in Jackett
+    - https://kat.unblockit.me/ # searching redirects to katcr.co in browser but appears to have no issue in Jackett
     - https://kickasstorrents.unblockninja.com/
     - https://katcr.black-mirror.xyz/
     - https://katcr.unblocked.casa/
@@ -19,6 +19,7 @@
   legacylinks:
     - https://kickasstorrent.cr/ # possible 3rd kickasstorrent site/clone?
     - https://katcr.to/ # possible 3rd kickasstorrent site/clone?
+    - https://kat.unblockit.one/
 
   caps:
     categorymappings:
