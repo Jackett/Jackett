@@ -19,7 +19,8 @@
     - https://ilcorsaronero.pizza/
     - https://ilcorsaronero.pw/
     - https://ilcorsaronero.unblockit.pro/
-    - https://ilcorsaronero.unblockit.one/ # test and empty search fails, redirects to ilcorsaronero.fun
+    - https://ilcorsaronero.unblockit.one/
+    - https://ilcorsaronero.unblockit.me/ # test and empty search fails, redirects to ilcorsaronero.fun
 
   caps:
     categorymappings:
