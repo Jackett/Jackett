@@ -100,6 +100,7 @@
         selector: td:nth-child(7)
       leechers:
         selector: td:nth-child(8)
+      downloadvolumefactor:
         case:
           img[src$="/golden10.gif"]: 0 # freeleech
           img[src$="/golden1.gif"]: 0.9 # grey coin possibly 10% discount
