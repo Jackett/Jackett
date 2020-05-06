@@ -404,7 +404,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Norbits
  * NordicBits (NB)
  * NORDiCHD
- * Nostalgic (The Archive / VHSTAPES)
  * notwhat.cd
  * OnlineSelfEducation
  * Orpheus
@@ -528,6 +527,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * UHDBits
  * UnionGang
  * UnlimitZ
+ * VHSTAPES (The Archive / Nostalgic)
  * Vizuk
  * WDT (Wrestling Desires Torrents / Ultimate Wrestling Torrents)
  * World-In-HD
