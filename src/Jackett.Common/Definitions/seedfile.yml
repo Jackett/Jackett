@@ -6,6 +6,8 @@
   type: private
   encoding: UTF-8
   links:
+    - https://www.seedfile.io/
+  legacylinks:
     - https://www.seedfile.ro/
 
   caps:
