@@ -58,7 +58,7 @@
       search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
 
     rows:
-      selector: table.torrenttable > tbody > tr:has(a[href^="browse.php?cat="])
+      selector: table.torrenttable > tbody > tr:has(a[href*="browse.php?cat="])
 
     fields:
       category:
@@ -84,8 +84,6 @@
         filters:
           - name: dateparse
             args: "2006-01-0215:04:05"
-      grabs:
-        selector: td:nth-child(6)
       size:
         selector: td:nth-child(5)
         filters:
