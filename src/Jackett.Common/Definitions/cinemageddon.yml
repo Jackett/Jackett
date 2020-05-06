@@ -35,8 +35,8 @@
       - {id: 22, cat: Movies, desc: "Trailers"}
 
     modes:
-      search: [q]
-      movie-search: [q]
+      search: [q, imdbid]
+      movie-search: [q, imdbid]
 
   login:
     path: takelogin.php
@@ -48,53 +48,72 @@
       - selector: table:contains("Login failed!")
     test:
       path: index.php
+      selector: a[href$="/logout.php"]
 
   search:
     paths:
       - path: browse.php
     inputs:
-      $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
-      search: "{{ .Query.Keywords }}"
+      $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+      search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+
     rows:
-      selector: table.torrenttable > tbody > tr:has(a[href^="browse.php?cat="])
+      selector: table.torrenttable > tbody > tr:has(a[href*="browse.php?cat="])
+
     fields:
       category:
-        text: 1
+        selector: a[href*="browse.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
       title:
-        selector: td:nth-child(2)
-      download:
-        selector: a[href^="details.php?id="]
-        attribute: href
-        filters:
-          - name: replace
-            args: ["details.php?id=", "download.php?id="]
+        selector: a[href*="details.php?id="]
       details:
-        selector: a[href^="details.php?id="]
+        selector: a[href*="details.php?id="]
         attribute: href
-      grabs:
-        selector: td:nth-child(6)
-      files:
-        selector: td:nth-child(5)
+      download:
+        selector: a[href*="download.php?id="]
+        attribute: href
+      imdb:
+        optional: true
+        selector: a[href*="www.imdb.com/title/"]
+        attribute: href
+      date:
+        selector: td:nth-child(4)
         filters:
-          - name: regexp
-            args: (\d+)\s+file
+          - name: dateparse
+            args: "2006-01-0215:04:05"
       size:
         selector: td:nth-child(5)
         filters:
           - name: regexp
             args: (\d+.*(MB|GB)+)
+      files:
+        selector: td:nth-child(5)
+        filters:
+          - name: regexp
+            args: (\d+)\s+file
+      grabs:
+        selector: td:nth-child(6)
       seeders:
         selector: td:nth-child(7)
       leechers:
         selector: td:nth-child(8)
-      date:
-        selector: td:nth-child(4)
-        filters:
-          - name: regexp
-            args: (\d{4}-\d{2}-\d{2})
       downloadvolumefactor:
         case:
-          "*": "1"
+          img[src$="/golden10.gif"]: 0 # freeleech
+          img[src$="/golden1.gif"]: 0.9 # grey coin possibly 10% discount
+          img[src$="/golden2.gif"]: 0.8 # bronze coin 20% discount
+          img[src$="/golden3.gif"]: 0.7 # siver coin 30% discount
+          img[src$="/golden4.gif"]: 0.6 # gold coin 40% discount
+          "*": 1
       uploadvolumefactor:
         case:
-          "*": "1"
+          img[src$="/golden10.gif"]: 2 # freeleech 2x bonus
+          img[src$="/golden1.gif"]: 1.1 # gray coin possibly 10% bonus
+          img[src$="/golden2.gif"]: 1.2 # bronze coin 20% bonus
+          img[src$="/golden3.gif"]: 1.3 # silver coin 30% bonus
+          img[src$="/golden4.gif"]: 1.4 # gold coin 40% bonus
+          "*": 1
+# engine n/a
