@@ -34,7 +34,7 @@
 
     rows:
       # old cards do not have a download link
-      selector: table.each_card_table:has(a[href^="/download.php?torrent="])
+      selector: div.grid-item:has(a[href^="/download.php?torrent="])
 
     fields:
       category:
@@ -52,7 +52,7 @@
         attribute: src
         optional: true
       description:
-        selector: .imgDescription
+        selector: .card_overlay
         filters:
           - name: regexp
             args: "Quality: (.+?)$"
