@@ -6,9 +6,9 @@
   type: private
   encoding: UTF-8
   links:
-    - http://hdhome.org/ # site does not support https #6460
-  legacylinks:
     - https://hdhome.org/
+  legacylinks:
+    - http://hdhome.org/
 
   caps:
     categorymappings:
