@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Threading.Tasks;
 using Jackett.Common.Indexers.Abstract;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
@@ -36,6 +38,14 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(5, TorznabCatType.Movies, "E-Learning Videos");
             AddCategoryMapping(6, TorznabCatType.TV, "Comedy");
             AddCategoryMapping(7, TorznabCatType.Books, "Comics");
+        }
+
+        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        {
+            var results = await base.PerformQuery(query);
+            // results must contain search terms
+            results = results.Where(release => query.MatchQueryStringAND(release.Title));
+            return results;
         }
     }
 }
