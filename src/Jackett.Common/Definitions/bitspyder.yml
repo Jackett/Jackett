@@ -72,6 +72,10 @@
       options:
         "desc": "desc"
         "asc": "asc"
+    - name: info
+      type: info
+      label: Results Per Page
+      default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
 
   login:
     path: login.php
@@ -93,7 +97,7 @@
       # 0 active 1 incldead 2 onlydead
       incldead: 1
       # 0 title 1 default
-      scope: 1
+      scope: 0
       sort: "{{ .Config.sort }}"
       type: "{{ .Config.type }}"
 
@@ -114,7 +118,7 @@
             args: cat
       details:
         selector: a[href^="details.php?id="]
-        attribute: href    
+        attribute: href
       download:
         selector: a[href^="details.php?id="]
         attribute: href
@@ -146,7 +150,7 @@
             args: ["\xA0", " "]
           - name: append
             args: " +00:00"
-          - name: dateparse 
+          - name: dateparse
             args: "2006-01-02 15:04:05 -07:00"
       date:
         optional: true
@@ -157,7 +161,7 @@
             args: ["Upploaded at - ", ""]
           - name: append
             args: " +00:00"
-          - name: dateparse 
+          - name: dateparse
             args: "2006-01-02 15:04:05 -07:00"
       downloadvolumefactor:
         case:
