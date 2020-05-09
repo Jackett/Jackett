@@ -187,15 +187,18 @@ namespace Jackett.Common.Indexers
                 qParams.Add("freeleech", "on");
 
             var searchUrl = SearchUrl + "?" + qParams.GetQueryString();
-
             var results = await RequestStringWithCookies(searchUrl);
+
+            // response without results (the message is misleading)
+            if (results.Content?.Contains("slow down geek!!!") == true)
+                return new List<ReleaseInfo>();
+
+            // not logged in
             if (results.Content == null || !results.Content.Contains("/logout.php"))
                 throw new Exception("The user is not logged in. It is possible that the cookie has expired or you " +
                                     "made a mistake when copying it. Please check the settings.");
 
-            var releases = ParseResponse(query, results.Content);
-
-            return releases;
+            return ParseResponse(query, results.Content);
         }
 
         private List<ReleaseInfo> ParseResponse(TorznabQuery query, string htmlResponse)
