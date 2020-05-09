@@ -531,6 +531,8 @@ namespace Jackett.Common.Indexers
                             quality += " x265";
                         if (titleLower.Contains("dvdfull") || titleLower.Contains("dvd5") || titleLower.Contains("dvd9"))
                             quality = "DVDR";
+                        if (titleLower.Contains("[web screener]") || titleLower.Contains("[hd-tc]"))
+                            quality = "TS Screener";
                     }
                     else if  (titleParts.Length > 2)
                         quality = titleParts[1].Replace("]", "").Replace("MKV", "").Trim();
