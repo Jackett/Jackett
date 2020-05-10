@@ -63,6 +63,7 @@ caps:
     # not listed / unknown
     - {id: 50, cat: Other, desc: "Desconocida"}
     - {id: 56, cat: Other, desc: "Desconocida"}
+    - {id: 57, cat: Other, desc: "Desconocida"}
     - {id: 100, cat: Other, desc: "Desconocida"}
     - {id: 108, cat: Other, desc: "Desconocida"}
 
