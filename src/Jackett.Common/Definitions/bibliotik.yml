@@ -88,7 +88,7 @@ search:
         div[title="Magazines"]: 7
     _year:
       selector: .torYear
-      optional: true    
+      optional: true
     _filetype:
       selector: .torFormat
       optional: true
@@ -132,7 +132,7 @@ search:
     grabs:
       text: 0
     grabs:
-      optional: true  
+      optional: true
       selector: .snatches
     downloadvolumefactor:
       case:

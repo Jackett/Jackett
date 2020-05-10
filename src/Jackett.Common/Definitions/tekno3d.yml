@@ -77,7 +77,7 @@ login:
 
 search:
   paths:
-    - path: browse.php      
+    - path: browse.php
   inputs:
     $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"

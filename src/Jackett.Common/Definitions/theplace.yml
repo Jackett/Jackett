@@ -63,7 +63,7 @@ login:
     - selector: table:contains("Login failed!")
   test:
     path: main.php
-      
+
 search:
   paths:
     - path: browse.php

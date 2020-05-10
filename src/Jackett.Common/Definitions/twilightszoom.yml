@@ -120,7 +120,7 @@ login:
   test:
     path: index.php
     selector: a[href^="./logout.php"]
-      
+
 search:
   paths:
     - path: browse.php
@@ -153,7 +153,7 @@ search:
       attribute: href
     download:
       selector: a[href^="download.php?torrent="]
-      attribute: href    
+      attribute: href
     banner:
       selector: a[href^="details.php?id="]
       attribute: onmouseover

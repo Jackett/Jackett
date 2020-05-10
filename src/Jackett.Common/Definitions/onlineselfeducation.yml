@@ -101,7 +101,7 @@ login:
   test:
     path: index.php
     selector: a[href*="/logout.php?hash_insert="]
-      
+
 search:
   paths:
   # https://onlineselfeducation.com/browse.php?c9=1&c10=1&c11=1&search=&searchin=title&incldead=1

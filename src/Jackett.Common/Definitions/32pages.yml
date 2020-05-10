@@ -97,7 +97,7 @@ search:
     selector: table#torrent_table > tbody > tr[class^="torrent"]
 
   fields:
-    _grouptitle: 
+    _grouptitle:
       selector: a[href^="torrents.php?id="]
     _language:
       selector: img[class^="flag"]
@@ -112,7 +112,7 @@ search:
           args: ["/  /","/"] #removes slash left after freeleech images
         - name: append
           args: "{{if .Result._language}} [{{.Result._language}}]{{else}}{{end}}"
-    category: 
+    category:
       text: Comics
     details:
       selector: a[title="View Torrent"]
@@ -134,7 +134,7 @@ search:
       selector: td[headers="browse_time"] > span[title]
       attribute: title
       filters:
-        - name: dateparse 
+        - name: dateparse
           args: "Apr 04 2020, 16:24"
     downloadvolumefactor:
       case:

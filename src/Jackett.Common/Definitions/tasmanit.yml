@@ -72,7 +72,7 @@ search:
     keywords: "{{ .Keywords }}"
     search_type: t_name
     include_dead_torrents: yes
-  keywordsfilters: 
+  keywordsfilters:
     - name: re_replace
       args: ["[^a-zA-Z0-9]+", "%"]
 
@@ -93,7 +93,7 @@ search:
           args: category
     details:
       selector: a[href^="https://tasmanit.es/details.php?id="]
-      attribute: href    
+      attribute: href
     download:
       selector: a[href^="https://tasmanit.es/details.php?id="]
       attribute: href
