@@ -61,7 +61,7 @@
     - name: cookie
       type: text
       label: Cookie
-    - name: info
+    - name: info_cookie
       type: info
       label: How to get the Cookie
       default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
@@ -81,7 +81,7 @@
       options:
         "2": "desc"
         "1": "asc"
-    - name: info
+    - name: info_results
       type: info
       label: Results Per Page
       default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
