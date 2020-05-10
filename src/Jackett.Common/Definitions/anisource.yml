@@ -12,7 +12,7 @@ settings: []
 
 caps:
   categorymappings:
-    - {id: 1,   cat: TV/Anime, desc: "Raw Animes"}
+    - {id: 1, cat: TV/Anime, desc: "Raw Animes"}
 
   modes:
     search: [q]

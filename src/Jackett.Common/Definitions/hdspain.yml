@@ -10,15 +10,15 @@ links:
 
 caps:
   categorymappings:
-    - {id: 1 , cat: Movies/HD, desc: "Películas"}
-    - {id: 5 , cat: Movies/HD, desc: "Pelíc. Anim."}
-    - {id: 4 , cat: TV/HD, desc: "Series"}
-    - {id: 3 , cat: TV/HD, desc: "Series Anim."}
-    - {id: 6 , cat: TV/Documentary, desc: "Documentales"}
+    - {id: 1, cat: Movies/HD, desc: "Películas"}
+    - {id: 5, cat: Movies/HD, desc: "Pelíc. Anim."}
+    - {id: 4, cat: TV/HD, desc: "Series"}
+    - {id: 3, cat: TV/HD, desc: "Series Anim."}
+    - {id: 6, cat: TV/Documentary, desc: "Documentales"}
     - {id: 11, cat: TV/Sport, desc: "Deportes"}
-    - {id: 7 , cat: Audio/Video, desc: "Música/Espec."}
-    - {id: 9 , cat: TV/OTHER, desc: "Programas TV"}
-    - {id: 8 , cat: Audio/Lossless, desc: "Audios"}
+    - {id: 7, cat: Audio/Video, desc: "Música/Espec."}
+    - {id: 9, cat: TV/OTHER, desc: "Programas TV"}
+    - {id: 8, cat: Audio/Lossless, desc: "Audios"}
     - {id: 10, cat: XXX/x264, desc: "XXX"}
   modes:
     search: [q]

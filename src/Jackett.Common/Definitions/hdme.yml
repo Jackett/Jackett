@@ -13,7 +13,7 @@ caps:
     - {id: 24, cat: TV/Anime, desc: "Anime"}
     - {id: 25, cat: PC/0day, desc: "Appz"}
     - {id: 47, cat: Movies/HD, desc: "AVCHD"}
-    - {id: 26, cat: Movies/BluRay , desc: "Bluray"}
+    - {id: 26, cat: Movies/BluRay, desc: "Bluray"}
     - {id: 54, cat: Movies/HD, desc: "dbREMUX"}
     - {id: 41, cat: Movies/HD, desc: "Documentaries"}
     - {id: 50, cat: Movies/HD, desc: "FourGHD"}

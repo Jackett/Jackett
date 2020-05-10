@@ -110,7 +110,7 @@ caps:
     - {id: 1538, cat: Console, desc: "Игры для консолей"}
     - {id: 1539, cat: Console/PSP, desc: " |- PlayStation"}
     - {id: 878, cat: Console/Xbox, desc: " |- XBox"}
-    #Документалистика, развлекательные телепередачи , спорт Docs
+    #Документалистика, развлекательные телепередачи, спорт Docs
     - {id: 11, cat: TV/Documentary, desc: "Документальные фильмы и телепередачи"}
     - {id: 12, cat: TV, desc: "Развлекательные телепередачи"}
     - {id: 13, cat: TV/Sport, desc: "Спорт"}

@@ -33,7 +33,7 @@ caps:
     xxx: XXX
     other: Other
     # additional from proxy
-    video: TV # ,Movies
+    video: TV # Movies
     porn: XXX
     audio: Audio
 

@@ -43,16 +43,16 @@ settings:
 caps:
   categorymappings:
     # Art
-    - {id: 1_0,  cat: XXX, desc: "Adult Art"}
-    - {id: 1_1,  cat: XXX, desc: "Adult Anime"}
-    - {id: 1_2,  cat: XXX, desc: "Doujinshi"}
-    - {id: 1_3,  cat: XXX, desc: "Adult Games"}
-    - {id: 1_4,  cat: XXX, desc: "Adult Manga"}
-    - {id: 1_5,  cat: XXX, desc: "Adult Pictures"}
+    - {id: 1_0, cat: XXX, desc: "Adult Art"}
+    - {id: 1_1, cat: XXX, desc: "Adult Anime"}
+    - {id: 1_2, cat: XXX, desc: "Doujinshi"}
+    - {id: 1_3, cat: XXX, desc: "Adult Games"}
+    - {id: 1_4, cat: XXX, desc: "Adult Manga"}
+    - {id: 1_5, cat: XXX, desc: "Adult Pictures"}
     # Real Life
-    - {id: 2_0,  cat: XXX, desc: "Adult Real Life"}
-    - {id: 2_1,  cat: XXX, desc: "Adult Photobooks and Pictures"}
-    - {id: 2_2,  cat: XXX, desc: "Adult Videos"}
+    - {id: 2_0, cat: XXX, desc: "Adult Real Life"}
+    - {id: 2_1, cat: XXX, desc: "Adult Photobooks and Pictures"}
+    - {id: 2_2, cat: XXX, desc: "Adult Videos"}
 
   modes:
     search: [q]

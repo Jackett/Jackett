@@ -40,7 +40,7 @@ caps:
     - {id: 55, cat: Movies/UHD, desc: "Movies | 4K"}
     - {id: 59, cat: Movies/UHD, desc: "Movies | 4K-Ro"}
     - {id: 21, cat: Audio/Video, desc: "Music | Video"}
-    - {id: 19, cat: Audio , desc: "Music | Mp3/Flac"}
+    - {id: 19, cat: Audio, desc: "Music | Mp3/Flac"}
     - {id: 18, cat: Other, desc: "Other"}
     - {id: 42, cat: Other, desc: "Premiera | DsT"}
     - {id: 14, cat: TV/Sport, desc: "Sport"}

@@ -669,22 +669,22 @@ caps:
     - {id: 1139, cat: Other, desc: " |- Обои для рабочего стола (16+)"}
     - {id: 988, cat: Other, desc: " |- Графика (16+)"}
     - {id: 1073, cat: Other, desc: " |- Интернет-творчество"}
-    - {id: 892 , cat: Other, desc: "Архив Мультфильмов"}
-    - {id: 91 , cat: Other, desc: " |- Архив Видео"}
-    - {id: 668 , cat: Other, desc: " |- Архив Классики и Старого кино / Артхаус"}
-    - {id: 1143 , cat: Other, desc: " |- Архив Музыкального Видео"}
-    - {id: 802 , cat: Other, desc: " |- Архив Сериалов"}
-    - {id: 669 , cat: Other, desc: " |- Архив Документалистики и TV"}
-    - {id: 400 , cat: Other, desc: " |- Архив Юмора"}
-    - {id: 169 , cat: Other, desc: " |- Архив Аниме"}
-    - {id: 94 , cat: Other, desc: " |- Архив Книг и обучающих материалов"}
-    - {id: 303 , cat: Other, desc: " |- Архив Авто"}
-    - {id: 92 , cat: Other, desc: " |- Архив Музыки"}
-    - {id: 93 , cat: Other, desc: " |- Архив Игр"}
-    - {id: 95 , cat: Other, desc: " |- Архив Программ"}
-    - {id: 184 , cat: Other, desc: " |-  КПК и Мобильных устройств"}
-    - {id: 1080 , cat: Other, desc: " |-  4Apple"}
-    - {id: 180 , cat: Other, desc: " |-  Медиа-Диз-Графика"}
+    - {id: 892, cat: Other, desc: "Архив Мультфильмов"}
+    - {id: 91, cat: Other, desc: " |- Архив Видео"}
+    - {id: 668, cat: Other, desc: " |- Архив Классики и Старого кино / Артхаус"}
+    - {id: 1143, cat: Other, desc: " |- Архив Музыкального Видео"}
+    - {id: 802, cat: Other, desc: " |- Архив Сериалов"}
+    - {id: 669, cat: Other, desc: " |- Архив Документалистики и TV"}
+    - {id: 400, cat: Other, desc: " |- Архив Юмора"}
+    - {id: 169, cat: Other, desc: " |- Архив Аниме"}
+    - {id: 94, cat: Other, desc: " |- Архив Книг и обучающих материалов"}
+    - {id: 303, cat: Other, desc: " |- Архив Авто"}
+    - {id: 92, cat: Other, desc: " |- Архив Музыки"}
+    - {id: 93, cat: Other, desc: " |- Архив Игр"}
+    - {id: 95, cat: Other, desc: " |- Архив Программ"}
+    - {id: 184, cat: Other, desc: " |-  КПК и Мобильных устройств"}
+    - {id: 1080, cat: Other, desc: " |-  4Apple"}
+    - {id: 180, cat: Other, desc: " |-  Медиа-Диз-Графика"}
     - {id: 145, cat: Other, desc: "Видео (temp)"}
     - {id: 146, cat: Other, desc: " |- Аниме (temp)"}
     - {id: 161, cat: Other, desc: " |- Книги (temp)"}
