@@ -28,11 +28,13 @@ caps:
     "Программы FAQ": PC
     "Программы Web Оформление": PC
     "Linux": PC
-    "Мобилка": PC
+    "Мобилка": PC/Phone-Other
+    "Мобилка Игры": PC/Phone-Other
     "Литература": Books
     "Игры": PC/Games
     "Фильмы": Movies
     "Фильмы Сериалы": Movies
+    "Фильмы Скоро на трекере": Movies
     "Видео": Movies
     "Музыка": Audio
     "Музыка Фильмы": Audio
