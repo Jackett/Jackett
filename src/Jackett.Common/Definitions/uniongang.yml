@@ -101,12 +101,12 @@ search:
       selector: td:nth-last-child(2)
       filters:
         - name: split
-          args: [ "|", 0 ]
+          args: ["|", 0]
     leechers:
       selector: td:nth-last-child(2)
       filters:
         - name: split
-          args: [ "|", 1 ]
+          args: ["|", 1]
     grabs:
       selector: td:nth-last-child(1)
     downloadvolumefactor:

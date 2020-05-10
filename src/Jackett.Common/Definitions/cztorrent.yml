@@ -147,12 +147,12 @@ search:
       selector: td.detaily
       filters:
         - name: split
-          args: [ "|", 1 ]
+          args: ["|", 1]
     date:
       selector: td.detaily
       filters:
         - name: split
-          args: [ "|", 2 ]
+          args: ["|", 2]
         - name: append
           args: " +02:00"
         - name: dateparse

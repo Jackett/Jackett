@@ -109,14 +109,14 @@ search:
       selector: td:nth-child(3)
       filters:
         - name: split
-          args: [ "|", 0 ]
+          args: ["|", 0]
         - name: regexp
           args: "Velkost (.+?) ?$"
     date:
       selector: td:nth-child(3)
       filters:
         - name: split
-          args: [ "|", 1 ]
+          args: ["|", 1]
         - name: replace
           args: ["Pridany ", ""]
         - name: replace

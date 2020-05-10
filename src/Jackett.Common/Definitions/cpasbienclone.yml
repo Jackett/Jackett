@@ -91,26 +91,26 @@ search:
       selector: div.poid
       filters:
         - name: re_replace
-          args: [ "\\.(\\d)Ko", "$1X00"]
+          args: ["\\.(\\d)Ko", "$1X00"]
         - name: re_replace
-          args: [ "Ko", "000"]
+          args: ["Ko", "000"]
         - name: re_replace
-          args: [ "\\.(\\d)Mo", "$1X00000"]
+          args: ["\\.(\\d)Mo", "$1X00000"]
         - name: re_replace
-          args: [ "Mo", "000000"]
+          args: ["Mo", "000000"]
         - name: re_replace
-          args: [ "\\.(\\d)Go", "$1X00000000"]
+          args: ["\\.(\\d)Go", "$1X00000000"]
         - name: re_replace
-          args: [ "Go", "000000000"]
+          args: ["Go", "000000000"]
         - name: re_replace
-          args: [ "\\.(\\d)To", "$1X00000000000"]
+          args: ["\\.(\\d)To", "$1X00000000000"]
         - name: re_replace
-          args: [ "To", "000000000000"]
+          args: ["To", "000000000000"]
         - name: replace
-          args: [ "X", "" ]
+          args: ["X", ""]
           # this is for the search with keywords which returns sizes nnnnn.n without unit indicator.
         - name: re_replace
-          args: [ "(\\d+)\\.\\d", "$1 MB"]
+          args: ["(\\d+)\\.\\d", "$1 MB"]
     date:
       text: now
     seeders:

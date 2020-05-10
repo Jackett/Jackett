@@ -289,23 +289,23 @@ search:
         - name: replace
           args: ["il y a ", ""]
         - name: replace
-          args: [ " jours", " days"]
+          args: [" jours", " days"]
         - name: replace
-          args: [ " jour", " day"]
+          args: [" jour", " day"]
         - name: replace
-          args: [ " heures", " hours"]
+          args: [" heures", " hours"]
         - name: replace
-          args: [ " heure", " hour"]
+          args: [" heure", " hour"]
         - name: replace
-          args: [ " semaines", " weeks"]
+          args: [" semaines", " weeks"]
         - name: replace
-          args: [ " semaine", " week"]
+          args: [" semaine", " week"]
         - name: replace
-          args: [ " mois", " month"]
+          args: [" mois", " month"]
         - name: replace
-          args: [ " ans", " years"]
+          args: [" ans", " years"]
         - name: replace
-          args: [ " an", " year"]
+          args: [" an", " year"]
         - name: append
           args: " ago"
     size:
