@@ -17,7 +17,7 @@ caps:
     - {id: 35, cat: Movies, desc: "Movies-GSM"}
     - {id: 55, cat: Movies/3D, desc: "Movies-3D"}
     - {id: 18, cat: Movies/BluRay, desc: "Movies-BR/HD-DVD"}
-    - {id: 7, cat: TV/Documentary , desc: "Movies-Documentaries"}
+    - {id: 7, cat: TV/Documentary, desc: "Movies-Documentaries"}
     - {id: 11, cat: Movies/DVD, desc: "Movies-DVD"}
     - {id: 24, cat: TV/SD, desc: "TV-BG"}
     - {id: 14, cat: TV, desc: "TV-Shows"}

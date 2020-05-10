@@ -13,21 +13,21 @@ settings: []
 caps:
   categorymappings:
     # Anime
-    - {id: 1,   cat: TV/Anime, desc: "Raw Animes"}
-    - {id: 2,   cat: TV/Anime, desc: "Anime"}
-    - {id: 3,   cat: TV/Anime, desc: "Hentai"}
-    - {id: 4,   cat: TV/Anime, desc: "Drama"}
-    - {id: 9,   cat: TV/Anime, desc: "Anime Music Videos"}
-    - {id: 10,  cat: TV/Anime, desc: "Non-English"}
+    - {id: 1, cat: TV/Anime, desc: "Raw Animes"}
+    - {id: 2, cat: TV/Anime, desc: "Anime"}
+    - {id: 3, cat: TV/Anime, desc: "Hentai"}
+    - {id: 4, cat: TV/Anime, desc: "Drama"}
+    - {id: 9, cat: TV/Anime, desc: "Anime Music Videos"}
+    - {id: 10, cat: TV/Anime, desc: "Non-English"}
     # Software
-    - {id: 5,   cat: PC/ISO, desc: "DVD/ISO"}
-    - {id: 6,   cat: PC, desc: "Hentai-Game"}
+    - {id: 5, cat: PC/ISO, desc: "DVD/ISO"}
+    - {id: 6, cat: PC, desc: "Hentai-Game"}
     # Literature
-    - {id: 7,   cat: Books, desc: "Manga"}
+    - {id: 7, cat: Books, desc: "Manga"}
     # Audio
-    - {id: 8,   cat: Audio, desc: "Audio"}
+    - {id: 8, cat: Audio, desc: "Audio"}
     # Other
-    - {id: 11,  cat: Other, desc: "Other"}
+    - {id: 11, cat: Other, desc: "Other"}
 
   modes:
     search: [q]

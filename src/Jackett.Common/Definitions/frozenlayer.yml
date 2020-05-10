@@ -29,13 +29,13 @@ settings:
 
 caps:
   categorymappings:
-    - {id: Anime,  cat: TV/Anime, desc: "anime"}
-    - {id: Manga,  cat: TV/Anime, desc: "manga"}
-    - {id: Dorama,  cat: TV/Anime, desc: "dorama"}
-    - {id: Videojuego,  cat: TV/Anime, desc: "videojuego"}
-    - {id: Bso,  cat: TV/Anime, desc: "BSO"}
-    - {id: Pv,  cat: TV/Anime, desc: "PV"}
-    - {id: Otros,  cat: TV/Anime, desc: "otros"}
+    - {id: Anime, cat: TV/Anime, desc: "anime"}
+    - {id: Manga, cat: TV/Anime, desc: "manga"}
+    - {id: Dorama, cat: TV/Anime, desc: "dorama"}
+    - {id: Videojuego, cat: TV/Anime, desc: "videojuego"}
+    - {id: Bso, cat: TV/Anime, desc: "BSO"}
+    - {id: Pv, cat: TV/Anime, desc: "PV"}
+    - {id: Otros, cat: TV/Anime, desc: "otros"}
 
   modes:
     search: [q]

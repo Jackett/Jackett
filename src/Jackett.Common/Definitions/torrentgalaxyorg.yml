@@ -36,7 +36,7 @@ caps:
     - {id: 11, cat: Console, desc: "Games - Console"}
     - {id: 43, cat: PC/Phone-Other, desc: "Games - Mobile"}
     - {id: 17, cat: Console/Other, desc: "Games - Other"}
-    - {id: 10, cat: PC/Games , desc: "Games - Windows"}
+    - {id: 10, cat: PC/Games, desc: "Games - Windows"}
     - {id: 3, cat: Movies/UHD, desc: "Movies - 2K/4K UHD"}
     - {id: 46, cat: Movies/Foreign, desc: "Movies - Bollywood"}
     - {id: 45, cat: Movies/Other, desc: "Movies - CAM/TS"}
