@@ -65,7 +65,7 @@ search:
           args: cat
     details:
       selector: td.tor-name > a
-      attribute: href      
+      attribute: href
     download:
       selector: td.tor-down > a
       attribute: href

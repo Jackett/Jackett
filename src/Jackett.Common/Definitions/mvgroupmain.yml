@@ -147,7 +147,7 @@ search:
     filter: "{{ if .Config.hidef }}hd+{{else}}{{end}}{{ .Keywords }}"
     orderby: "{{ .Config.sort }}"
     order: "{{ .Config.type }}"
-  keywordsfilters: 
+  keywordsfilters:
     - name: re_replace
       args: ["S01E01", "{{ if .Config.stripS01E01 }}{{else}}S01E01{{end}}"] # optionally remove S01E01 from search
 

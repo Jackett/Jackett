@@ -7,7 +7,7 @@ type: public
 encoding: UTF-8
 links:
   - https://sukebei.nyaa.si/
-  
+
 settings:
   - name: cat-id
     type: select

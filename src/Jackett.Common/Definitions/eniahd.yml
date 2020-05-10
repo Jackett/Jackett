@@ -160,7 +160,7 @@ search:
       attribute: href
     magnet:
       optional: true
-      selector: a[href^="magnet:?xt="]      
+      selector: a[href^="magnet:?xt="]
       attribute: href
     category:
       selector: a.gen

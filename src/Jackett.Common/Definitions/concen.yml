@@ -73,9 +73,9 @@ search:
     seeders:
       selector: td.views-field-seeds
     leechers:
-      selector: td.views-field-peers 
+      selector: td.views-field-peers
     grabs:
-      selector: td.views-field-completed 
+      selector: td.views-field-completed
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

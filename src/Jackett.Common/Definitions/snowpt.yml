@@ -55,7 +55,7 @@ search:
       attribute: title
     details:
       selector: a[href^="/forum.php?mod=viewthread&tid="]
-      attribute: href    
+      attribute: href
     download:
       selector: a[href^="/download.php?id="]
       attribute: href

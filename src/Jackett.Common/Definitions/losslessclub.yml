@@ -27,7 +27,7 @@ login:
   test:
     path: browse.php
     selector: span.bar_user_welcome
-      
+
 search:
   paths:
     - path: browse.php

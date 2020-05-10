@@ -47,7 +47,7 @@ search:
     search: "{{ .Keywords }}"
     sort_field: "{{ .Config.sort }}"
     sort_dir: "{{ .Config.type }}"
-    
+
   rows:
     selector: table.table> tbody > tr:has(a[href^="/browse.php?cat="])
     filters:

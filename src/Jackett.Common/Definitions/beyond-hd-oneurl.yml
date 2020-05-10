@@ -41,7 +41,7 @@ caps:
 
 login:
   method: oneurl
-  inputs: 
+  inputs:
     oneurl: "{{ .Config.oneurl }}"
   test:
     path: torrents

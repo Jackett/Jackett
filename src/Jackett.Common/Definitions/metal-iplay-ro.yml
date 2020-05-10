@@ -103,9 +103,9 @@ search:
           args: '([\d]+) times'
     category:
       text: "Music"
-    downloadvolumefactor: 
+    downloadvolumefactor:
       case:
-        img[src$="pic/freedownload.gif"]: "0" 
+        img[src$="pic/freedownload.gif"]: "0"
         img[src$="pic/half.gif"]: "0.5"
         "*": "1"
     uploadvolumefactor:

@@ -58,7 +58,7 @@ caps:
     - {id: 47, cat: Movies, desc: "Movies Indian Bangla"}
     - {id: 46, cat: Movies, desc: "Movies Eid Natok"}
     - {id: 67, cat: Audio, desc: "Radio program"}
-    # Anime Anime 
+    # Anime Anime
     - {id: 36, cat: TV/Anime, desc: "Anime Cartoons"}
     - {id: 40, cat: TV/Anime, desc: "Anime Subbed"}
     - {id: 51, cat: TV/Anime, desc: "Anime Dubbed"}
