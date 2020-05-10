@@ -201,15 +201,15 @@ namespace Jackett.Common.Indexers
 
                     var p480 = row.QuerySelector(".link-480p");
                     if (p480 != null) // size = 400 MB
-                        releases.Add(MakeRelease(p480, $"{title} [480p]", 419430400, comments, publishDate));
+                        AddRelease(releases, p480, $"{title} [480p]", 419430400, comments, publishDate);
 
                     var p720 = row.QuerySelector(".link-720p");
                     if (p720 != null) // size 700 MB
-                        releases.Add(MakeRelease(p720, $"{title} [720p]", 734003200, comments, publishDate));
+                        AddRelease(releases, p720, $"{title} [720p]", 734003200, comments, publishDate);
 
                     var p1080 = row.QuerySelector(".link-1080p");
                     if (p1080 != null) // size 1.4 GB
-                        releases.Add(MakeRelease(p1080, $"{title} [1080p]", 1503238553, comments, publishDate));
+                        AddRelease(releases, p1080, $"{title} [1080p]", 1503238553, comments, publishDate);
                 }
             }
             catch (Exception ex)
@@ -219,8 +219,8 @@ namespace Jackett.Common.Indexers
             return releases;
         }
 
-        private static ReleaseInfo MakeRelease(IElement releaseSelector, string title, long size, Uri comments,
-                                               DateTime publishDate)
+        private static void AddRelease(List<ReleaseInfo> releases, IElement releaseSelector, string title, long size,
+                                       Uri comments, DateTime publishDate)
         {
             Uri link = null;
             Uri magnet = null;
@@ -235,6 +235,10 @@ namespace Jackett.Common.Indexers
                 link = new Uri(releaseSelector.QuerySelector(".hs-torrent-link > a").GetAttribute("href"));
                 guid = link;
             }
+
+            // eg https://horriblesubs.info/shows/space-brothers/#38
+            if (magnet == null && link == null)
+                return;
 
             var release = new ReleaseInfo
             {
@@ -254,7 +258,8 @@ namespace Jackett.Common.Indexers
                 DownloadVolumeFactor = 0,
                 UploadVolumeFactor = 1
             };
-            return release;
+
+            releases.Add(release);
         }
     }
 }
