@@ -47,7 +47,7 @@ search:
     - path: browse.php
       method: get
   inputs:
-    $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+    $raw: "{{ range .Categories }}c{{ . }}=1&{{ end }}"
     search: "{{ .Query.Keywords }}"
     incldead: "1"
     title: "0"

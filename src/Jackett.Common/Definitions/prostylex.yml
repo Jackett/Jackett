@@ -123,7 +123,7 @@ search:
     # http://prostylex.org/torrents-search.php?c1=1&c2=1&c3=1&search=expanse&lang=0&cat=0
     - path: torrents-search.php
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    $raw: "{{ range .Categories }}c{{ . }}=1&{{ end }}"
     search: "{{ .Keywords }}"
     cat: 0
     lang: 0

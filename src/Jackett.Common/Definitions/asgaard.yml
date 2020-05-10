@@ -111,9 +111,9 @@ search:
   # https://asgrd.org/browse.php?sns=&sna=&spf=&sr=&sg=&sys=&sye=&srs=&sre=&si=tt2401090&ss=&incldead=0&only_free=0&sort=4&type=desc
   - path: browse.php
   inputs:
-    $raw: "{{ range .Categories }}cats[]={{.}}&{{end}}"
+    $raw: "{{ range .Categories }}cats[]={{ . }}&{{ end }}"
     sns: ""
-    sna: "{{ if .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    sna: "{{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     spf: ""
     sr: ""
     sg: ""
@@ -121,7 +121,7 @@ search:
     sye: ""
     srs: ""
     sre: ""
-    si: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{end}}"
+    si: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ end }}"
     ss: ""
     # 0 active 1 incldead 2 onlydead
     incldead: 0

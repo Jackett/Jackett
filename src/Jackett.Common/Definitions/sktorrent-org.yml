@@ -97,7 +97,7 @@ search:
     # https://sktorrent.org/torrents-search.php?search=&cat=0&incldead=0&freeleech=0&inclexternal=0&lang=0
     - path: torrents-search.php
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    $raw: "{{ range .Categories }}c{{ . }}=1&{{ end }}"
     search: "{{ .Keywords }}"
     cat: 0
     # 0 active 1 incldead 2 onlydead

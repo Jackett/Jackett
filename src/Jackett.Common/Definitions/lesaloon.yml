@@ -114,7 +114,7 @@ search:
     - path: index.php
   inputs:
     page: torrents
-    search: "{{if .Keywords}}{{.Keywords}}{{else}}{{end}}"
+    search: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ end }}"
     parentcategory: 0
     category: 0
     genre: 0

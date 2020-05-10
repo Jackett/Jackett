@@ -25,7 +25,7 @@ download:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}search/{{ re_replace .Keywords \"\\s+\" \"-\" }}{{else}}torrents{{end}}"
+    - path: "{{ if .Keywords }}search/{{ re_replace .Keywords \"\\s+\" \"-\" }}{{ else }}torrents{{ end }}"
 
   rows:
     selector: div.torrents_list > div.torrent_element

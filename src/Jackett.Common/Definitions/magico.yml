@@ -133,7 +133,7 @@ search:
   inputs:
     p: torrents
     pid: 32
-    $raw: "{{ range .Categories }}cid[]={{.}}&{{end}}"
+    $raw: "{{ range .Categories }}cid[]={{ . }}&{{ end }}"
     keywords: "{{ .Keywords }}"
     search_type: name
     searchin: title

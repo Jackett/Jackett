@@ -38,7 +38,7 @@ search:
       method: post
       followredirect: true
   inputs:
-    keyword: "{{ if .Keywords }}{{ .Keywords }}{{else}}{{ .Today.Year }}{{end}}"
+    keyword: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
 
   rows:
     selector: div.list-area > dl.item

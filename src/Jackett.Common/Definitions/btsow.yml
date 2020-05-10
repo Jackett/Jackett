@@ -28,7 +28,7 @@ download:
 
 search:
   paths:
-    - path: "search/{{ if .Keywords }}{{ .Keywords }}{{else}}{{ .Today.Year }}{{end}}"
+    - path: "search/{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
   rows:
     selector: div.row:has(a[href*="/detail/hash/"])
   fields:

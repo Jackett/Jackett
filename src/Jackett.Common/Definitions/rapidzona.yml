@@ -86,7 +86,7 @@ search:
   paths:
     - path: index.php
   inputs:
-    $raw: "{{ range .Categories }}catlist[]={{.}}&{{end}}"
+    $raw: "{{ range .Categories }}catlist[]={{ . }}&{{ end }}"
     do: search
     subaction: search
     showposts: 1

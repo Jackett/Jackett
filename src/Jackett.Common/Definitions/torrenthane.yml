@@ -27,8 +27,8 @@ download:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}?s={{ .Keywords }}{{else}}kategori/torrent-filmler/{{end}}"
-    - path: "{{ if .Keywords }}{{else}}kategori/torrent-diziler/{{end}}"
+    - path: "{{ if .Keywords }}?s={{ .Keywords }}{{ else }}kategori/torrent-filmler/{{ end }}"
+    - path: "{{ if .Keywords }}{{ else }}kategori/torrent-diziler/{{ end }}"
     # does not support imdbid and does not return imdb link in results
 
   rows:
@@ -67,7 +67,7 @@ search:
         a[href*="-bolum-"]: 2 # episode
         "*": 3
     size:
-      text: "{{ if eq .Result.cat \"1\" }}2 GB{{else}}512 MB{{end}}"
+      text: "{{ if eq .Result.cat \"1\" }}2 GB{{ else }}512 MB{{ end }}"
     seeders:
       text: 1
     leechers:

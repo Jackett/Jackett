@@ -138,7 +138,7 @@ search:
   paths:
     - path: selection.php
   inputs:
-    $raw: "{{ if .Categories }}{{ range .Categories }}scat[]={{.}}&{{end}}{{else}}{{end}}"
+    $raw: "{{ if .Categories }}{{ range .Categories }}scat[]={{ . }}&{{ end }}{{ else }}{{ end }}"
     search: "{{ .Keywords }}"
     blah: 0
     orderby: "{{ .Config.sort }}"

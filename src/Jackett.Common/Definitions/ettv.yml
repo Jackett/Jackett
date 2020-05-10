@@ -106,9 +106,9 @@ download:
   attribute: href
 
 search:
-  path: "{{ if .Keywords }}torrents-search.php{{else}}torrents.php{{end}}"
+  path: "{{ if .Keywords }}torrents-search.php{{ else }}torrents.php{{ end }}"
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    $raw: "{{ range .Categories }}c{{ . }}=1&{{ end }}"
     search: "{{ .Keywords }}"
     sort: "{{ .Config.sort }}"
     order: "{{ .Config.type }}"

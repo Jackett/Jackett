@@ -40,7 +40,7 @@ settings:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}search.php?s={{ .Keywords }}&sort={{ .Config.sort }}{{else}}browse.php?sort={{ .Config.sort }}{{end}}"
+    - path: "{{ if .Keywords }}search.php?s={{ .Keywords }}&sort={{ .Config.sort }}{{ else }}browse.php?sort={{ .Config.sort }}{{ end }}"
 
   rows:
     selector: table.tb4 > tbody > tr:has(a[href^="magnet:?xt="])

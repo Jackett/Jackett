@@ -143,7 +143,7 @@ search:
     pn: ""
     # despite the all words flag the search engine returns anywords matching.
     allw: 1
-    $raw: "{{ if .Categories }}{{range .Categories}}&f[]={{.}}{{end}}{{else}}&f[]=-1{{end}}"
+    $raw: "{{ if .Categories }}{{ range .Categories }}&f[]={{ . }}{{ end }}{{ else }}&f[]=-1{{ end }}"
 
   rows:
     selector: tr[id^="tor_"]

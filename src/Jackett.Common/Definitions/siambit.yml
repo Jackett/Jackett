@@ -117,7 +117,7 @@ search:
     - path: viewbr.php
       categories: [901, 902, 903, 904, 905, 906, 907, 908, 910, 911, 912]
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    $raw: "{{ range .Categories }}c{{ . }}=1&{{ end }}"
     search: "{{ .Keywords }}"
     searchin: 0
     sortby: "{{ .Config.sort }}"

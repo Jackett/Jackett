@@ -76,8 +76,8 @@ search:
   paths:
     - path: torrents
   inputs:
-    $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
-    title: "{{ if .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    $raw: "{{ range .Categories }}categories[]={{ . }}&{{ end }}"
+    title: "{{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     imdb: "{{ .Query.IMDBIDShort }}"
     order_by: "{{ .Config.sort }}"
     direction: "{{ .Config.type }}"

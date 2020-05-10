@@ -53,9 +53,9 @@ download:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}/search/{{else}}/today/{{end}}"
+    - path: "{{ if .Keywords }}/search/{{ else }}/today/{{ end }}"
   inputs:
-    $raw: "{{ range .Categories }}s_cat={{.}}&{{end}}"
+    $raw: "{{ range .Categories }}s_cat={{ . }}&{{ end }}"
     search: "{{ .Keywords }}"
 
   rows:

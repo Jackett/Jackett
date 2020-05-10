@@ -39,9 +39,9 @@ download:
 
 search:
   paths:
-    - path: "{{if or (.Query.Album) (.Query.Artist) (.Keywords) }}search{{else}}music{{end}}"
+    - path: "{{ if or (.Query.Album) (.Query.Artist) (.Keywords) }}search{{ else }}music{{ end }}"
   inputs:
-    q: "{{if or (.Query.Album) (.Query.Artist) }}{{ or (.Query.Album) (.Query.Artist) }}{{else}}{{ .Keywords }}{{end}}"
+    q: "{{ if or (.Query.Album) (.Query.Artist) }}{{ or (.Query.Album) (.Query.Artist) }}{{ else }}{{ .Keywords }}{{ end }}"
     num: 50
 
   rows:

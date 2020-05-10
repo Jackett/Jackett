@@ -158,7 +158,7 @@ search:
     - path: search.php
   inputs:
     tracker_search: torrent
-    keywords: "{{ if .Keywords }}{{ .Keywords }}{{else}}2020{{end}}"
+    keywords: "{{ if .Keywords }}{{ .Keywords }}{{ else }}2020{{ end }}"
     terms: all
     fp: 1
     author: ""
@@ -171,7 +171,7 @@ search:
     ch: 300
     t: 0
     submit: Перейти
-    $raw: "{{ range .Categories }}&fid[]={{.}}{{end}}"
+    $raw: "{{ range .Categories }}&fid[]={{ . }}{{ end }}"
 
   rows:
     selector: table.tablebg > tbody > tr:has(a[href^="./download/file.php?id="])
@@ -223,7 +223,7 @@ search:
         - name: dateparse
           args: "02.01.2006"
     date:
-      text: "{{ if .Result.find_date }}{{ .Result.find_date}}{{else}}now{{end}}"
+      text: "{{ if .Result.find_date }}{{ .Result.find_date }}{{ else }}now{{ end }}"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

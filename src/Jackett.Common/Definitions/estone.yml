@@ -85,7 +85,7 @@ search:
   # http://estone.cc/letoltes.php?kereses_nev=wide&miben=0&cimke=&cat=0&submit.x=40&submit.y=9
     - path: letoltes.php
   inputs:
-    $raw: "{{ range .Categories }}kat[]={{.}}&{{end}}{{ .Config.sort }}={{ .Config.type }}"
+    $raw: "{{ range .Categories }}kat[]={{ . }}&{{ end }}{{ .Config.sort }}={{ .Config.type }}"
     kereses_nev: "{{ .Keywords }}"
     # 0 name 1 performer 2 director
     miben: 0

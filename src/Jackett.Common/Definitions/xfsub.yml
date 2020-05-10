@@ -39,7 +39,7 @@ caps:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}search.php?keyword={{ .Keywords }}{{else}}{{end}}"
+    - path: "{{ if .Keywords }}search.php?keyword={{ .Keywords }}{{ else }}{{ end }}"
 
   rows:
     selector: table#listTable > tbody > tr:has(a[href^="sort-"])

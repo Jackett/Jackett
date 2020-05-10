@@ -148,7 +148,7 @@ search:
     p: torrents
     page: 1
     pid: 10
-    $raw: "{{range .Categories}}&cid[]={{.}}{{end}}"
+    $raw: "{{ range .Categories }}&cid[]={{ . }}{{ end }}"
     keywords: "{{ .Keywords }}"
     # name description both uploader
     search_type: name

@@ -104,7 +104,7 @@ search:
   paths:
     - path: torrents-search.php
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    $raw: "{{ range .Categories }}c{{ . }}=1&{{ end }}"
     search: "{{ .Keywords }}"
     # 0 all 1 English 2 etc...
     lang: 0

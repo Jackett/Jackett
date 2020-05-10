@@ -150,7 +150,7 @@ search:
       args: ["[^a-zA-Z0-9]+", " "]
   inputs:
     page: torrents
-    $raw: "&category={{ range .Categories }}{{.}};{{end}}"
+    $raw: "&category={{ range .Categories }}{{ . }};{{ end }}"
     active: 1
     search: "{{ .Keywords }}"
     order: "{{ .Config.sort }}"

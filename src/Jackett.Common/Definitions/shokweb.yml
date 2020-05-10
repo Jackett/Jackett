@@ -31,7 +31,7 @@ search:
   paths:
     # https://shokweb.com/ (latest)
     # https://shokweb.com/search/supergirl%20s04e01 (search)
-    - path: "{{ if .Keywords }}/search/{{ .Keywords }}{{else}}{{end}}"
+    - path: "{{ if .Keywords }}/search/{{ .Keywords }}{{ else }}{{ end }}"
 
   rows:
     selector: div:has(a[href^="magnet:?"])

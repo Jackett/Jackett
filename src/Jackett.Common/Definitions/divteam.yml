@@ -99,7 +99,7 @@ search:
     - path: index.php
   inputs:
     page: "torrents"
-    category: "{{ range .Categories }}{{.}};{{end}}"
+    category: "{{ range .Categories }}{{ . }};{{ end }}"
     search: "{{ .Keywords }}"
     # 0 all 1 activeonly 2 deadonly
     active: 0

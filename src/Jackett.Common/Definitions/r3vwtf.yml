@@ -62,7 +62,7 @@ search:
   # https://r3vuk.wtf/browse.php?c1=1&c24=1&search=&searchin=title&incldead=0
     - path: browse.php
   inputs:
-    $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+    $raw: "{{ range .Categories }}c{{ . }}=1&{{ end }}"
     search: "{{ .Keywords }}"
     # title descr genre all
     searchin: "title"

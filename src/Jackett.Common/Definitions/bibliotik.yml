@@ -70,7 +70,7 @@ search:
     - path: torrents/
   inputs:
     search: "{{ .Keywords }}"
-    $raw: "{{ range .Categories }}cat[]={{.}}&{{end}}"
+    $raw: "{{ range .Categories }}cat[]={{ . }}&{{ end }}"
     orderby: "{{ .Config.orderby }}"
     order: "{{ .Config.order }}"
 
@@ -96,7 +96,7 @@ search:
       selector: .title a
       filters:
         - name: append
-          args: "{{ if .Result._year }} {{ .Result._year }}{{else}}{{end}}{{ if .Result._filetype }} {{ .Result._filetype }}{{else}}{{end}}"
+          args: "{{ if .Result._year }} {{ .Result._year }}{{ else }}{{ end }}{{ if .Result._filetype }} {{ .Result._filetype }}{{ else }}{{ end }}"
     details:
       selector: .title a
       attribute: href

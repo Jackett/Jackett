@@ -70,8 +70,8 @@ search:
   paths:
     - path: torrents
   inputs:
-    $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    $raw: "{{ range .Categories }}categories[]={{ . }}&{{ end }}"
+    search: "{{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     description: ""
     uploader: ""
     imdb: "{{ .Query.IMDBIDShort }}"
@@ -93,7 +93,7 @@ search:
         - name: regexp
           args: "/categories/.*?\\.(\\d+)"
     category:
-      text: "{{if .Result._category}}{{.Result._category}}{{else}}1{{end}}"
+      text: "{{ if .Result._category }}{{ .Result._category }}{{ else }}1{{ end }}"
     title:
       selector: a.torrent-name
     download:

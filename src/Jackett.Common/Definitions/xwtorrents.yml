@@ -119,7 +119,7 @@ search:
     # http://xtremewrestlingtorrents.net/browse.php?search=halftime+heat&c46=1&c51=1&c31=1&c11=1&incldead=1
     - path: browse.php
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    $raw: "{{ range .Categories }}c{{ . }}=1&{{ end }}"
     incldead: 1
     search: "{{ .Keywords }}"
     sort: "{{ .Config.sort }}"
@@ -145,7 +145,7 @@ search:
       selector: a[href^="download2.php"]
       attribute: href
     download:
-      text: "{{if .Config.seedbox}}{{ .Result.download2 }}{{else}}{{ .Result.download1 }}{{end}}"
+      text: "{{ if .Config.seedbox }}{{ .Result.download2 }}{{ else }}{{ .Result.download1 }}{{ end }}"
     details:
       selector: a[href^="details.php?id="]
       attribute: href

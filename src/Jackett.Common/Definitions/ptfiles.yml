@@ -83,12 +83,12 @@ search:
   # https://ptfiles.net/browse.php?search=tt3612126&incldead=1&title=1
     - path: browse.php
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    $raw: "{{ range .Categories }}c{{ . }}=1&{{ end }}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     # 0 active 1 both 2 dead 3 needseed
     incldead: 0
     # 0 title 1 descr 2 both 3 genre
-    title: "{{ if .Query.IMDBID }}1{{else}}0{{end}}"
+    title: "{{ if .Query.IMDBID }}1{{ else }}0{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
 

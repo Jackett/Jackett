@@ -125,7 +125,7 @@ search:
   paths:
     - path: torrents-search.php
   inputs:
-    $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+    $raw: "{{ range .Categories }}c{{ . }}=1&{{ end }}"
     search: "{{ .Keywords }}"
     # 0 active 1 incldead 2 onlydead
     incldead: 1
@@ -133,8 +133,8 @@ search:
     freeleech: 0
     # 0 any 1 French 2 English 3 Multi 4-8 32-41
     lang: 0
-    sort: "{{ .Config.sort}}"
-    order: "{{ .Config.order}}"
+    sort: "{{ .Config.sort }}"
+    order: "{{ .Config.order }}"
   keywordsfilters:
     - name: re_replace
       args: ["^$", "%"] # replace empty search string with %

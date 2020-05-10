@@ -74,7 +74,7 @@ search:
     - name: re_replace # strip S01E01
       args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", ""]
   inputs:
-    $raw: "{{ if .Categories }}{{ range .Categories }}category={{.}}&{{end}}{{else}}{{end}}"
+    $raw: "{{ if .Categories }}{{ range .Categories }}category={{ . }}&{{ end }}{{ else }}{{ end }}"
     f: 0
     page_size: 100
     name: "{{ .Keywords }}"
@@ -105,7 +105,7 @@ search:
           args: ["(.*)(\\([1|2][0-9]{3}\\))(.*)([CСcс]езон.*)", "$1$2$4$3"]
         # normalize to SXXEYY format
         - name: re_replace
-          args: ["(.*)[CСcс]езон +(\\d+).+[CСcс]ери[ия] +(\\d+) +(\\d+) +из +\\d+(.*)", "$1 S$2E$3-$4 rus {{ if .Config.addtvshows }}(TVShows) {{else}}{{end}}$5"]
+          args: ["(.*)[CСcс]езон +(\\d+).+[CСcс]ери[ия] +(\\d+) +(\\d+) +из +\\d+(.*)", "$1 S$2E$3-$4 rus {{ if .Config.addtvshows }}(TVShows) {{ else }}{{ end }}$5"]
         - name: re_replace
           args: ["(.*)[CСcс]езон +(\\d+)(.*)", "$1 S$2 rus $3"]
         - name: re_replace
@@ -125,7 +125,7 @@ search:
     title_without_year:
       text: "{{ re_replace .Result.title_with_year \"\\([1|2][0-9]{3}\\)\" \"\" }}"
     title:
-      text: "{{ if .Config.stripyear }}{{ .Result.title_without_year }}{{else}}{{ .Result.title_with_year }}{{end}}"
+      text: "{{ if .Config.stripyear }}{{ .Result.title_without_year }}{{ else }}{{ .Result.title_with_year }}{{ end }}"
     details:
       selector: a[href^="/torrent/"]
       attribute: href

@@ -103,10 +103,10 @@ search:
   paths:
     - path: browse.php
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    $raw: "{{ range .Categories }}c{{ . }}=1&{{ end }}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     # 0 name 1 genre 2 descr
-    genre: "{{ if .Query.IMDBID }}2{{else}}0{{end}}"
+    genre: "{{ if .Query.IMDBID }}2{{ else }}0{{ end }}"
     # 0 active 1 incldead 2 onlydead 3 free 4 double
     incldead: 1
     sort: "{{ .Config.sort }}"

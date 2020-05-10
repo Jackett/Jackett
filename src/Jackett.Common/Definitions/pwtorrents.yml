@@ -87,7 +87,7 @@ search:
     # https://pwtorrents.net/browse.php?c18=1&c16=1&c17=1&incldead=0
     - path: browse.php
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    $raw: "{{ range .Categories }}c{{ . }}=1&{{ end }}"
     incldead: "1"
     search: "{{ .Keywords }}"
     sort: "{{ .Config.sort }}"
@@ -115,7 +115,7 @@ search:
       selector: a[href^="seeddownload.php?id="]
       attribute: href
     download:
-      text: "{{ if .Config.seedbox }}{{ .Result.download2 }}{{else}}{{ .Result.download1 }}{{end}}"
+      text: "{{ if .Config.seedbox }}{{ .Result.download2 }}{{ else }}{{ .Result.download1 }}{{ end }}"
     date:
       selector: td:nth-child(4)
       filters:

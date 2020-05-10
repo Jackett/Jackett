@@ -64,7 +64,7 @@ search:
     - name: re_replace
       args: ["^$", "null"]
   inputs:
-    $raw: "{{range .Categories}}subcat[]={{.}}&{{end}}"
+    $raw: "{{ range .Categories }}subcat[]={{ . }}&{{ end }}"
     exclu: "0"
     freeleech: "0"
     reseed: "0"

@@ -103,7 +103,7 @@ search:
   # https://torrentgalaxy.org/torrents.php?c41=1&search=mercedes+s02e04&lang=0&sort=id&order=desc
   path: torrents.php
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    $raw: "{{ range .Categories }}c{{ . }}=1&{{ end }}"
     search: "{{ .Keywords }}"
     lang: 0
     sort: "{{ .Config.sort }}"

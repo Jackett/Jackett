@@ -66,8 +66,8 @@ search:
   paths:
     - path: browse.php
   inputs:
-    $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
-    search: "{{if .Keywords}}{{ .Keywords }}{{else}}  {{end}}"
+    $raw: "{{ range .Categories }}filter_cat[{{ . }}]=1&{{ end }}"
+    search: "{{ if .Keywords }}{{ .Keywords }}{{ else }}  {{ end }}"
   rows:
     selector: table#torrent_table > tbody > tr:has(a[href^="browse.php?cat="])
   fields:

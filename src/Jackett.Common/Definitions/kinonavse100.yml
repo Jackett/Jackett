@@ -111,7 +111,7 @@ search:
     - path: search.php
   inputs:
     tracker_search: torrent
-    keywords: "{{ if .Keywords }}{{ .Keywords }}{{else}}{{ .Today.Year }}{{end}}"
+    keywords: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
     terms: all
     author: ""
     sc: 1
@@ -123,7 +123,7 @@ search:
     ch: 300
     t: 0
     submit: Search
-    $raw: "{{range .Categories}}&fid[]={{.}}{{end}}"
+    $raw: "{{ range .Categories }}&fid[]={{ . }}{{ end }}"
 
   rows:
     selector: table.tablebg > tbody > tr:has(a[href^="./download/file.php?id="])

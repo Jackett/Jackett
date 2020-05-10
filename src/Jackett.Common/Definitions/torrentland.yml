@@ -135,12 +135,12 @@ search:
       args: ["(?i)\\bS(\\d+)", "T$1"]
   inputs:
     page: torrents
-    $raw: "category={{ range .Categories }}{{.}};{{end}}"
+    $raw: "category={{ range .Categories }}{{ . }};{{ end }}"
     # 0 filename 1 file&dsc 2 descr 5 gold 6 silver 7 bronze
-    options: "{{ if .Query.IMDBID }}2{{else}}0{{end}}"
+    options: "{{ if .Query.IMDBID }}2{{ else }}0{{ end }}"
     # 0 all 1 active 2 dead
     active: 0
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     order: "{{ .Config.sort }}"
     by: "{{ .Config.type }}"
     # does not return imdb link in results

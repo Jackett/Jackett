@@ -100,10 +100,10 @@ search:
     - path: index.php
   inputs:
     page: torrents
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-    category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{else}}0{{end}}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    category: "{{ if .Categories }}{{ range .Categories }}{{ . }};{{ end }}{{ else }}0{{ end }}"
     # 0 title 1 title&descr 2 descr
-    options: "{{ if .Query.IMDBID }}1{{else}}0{{end}}"
+    options: "{{ if .Query.IMDBID }}1{{ else }}0{{ end }}"
     # 0 all 1 activeonly 2 deadonly
     active: 0
     # 0 all 1 classic 2 50%free 3 100%free 4 50%+100&free

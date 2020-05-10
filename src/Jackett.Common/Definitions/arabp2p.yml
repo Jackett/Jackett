@@ -113,7 +113,7 @@ search:
   inputs:
     page: torrents
     search: "{{ .Keywords }}"
-    category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{else}}0{{end}}"
+    category: "{{ if .Categories }}{{ range .Categories }}{{ . }};{{ end }}{{ else }}0{{ end }}"
     # 0 all 1 activeonly 2 deadonly
     active: 0
     # 0 all 1 internal 2 external

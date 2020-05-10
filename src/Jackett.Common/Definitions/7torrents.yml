@@ -35,7 +35,7 @@ search:
   paths:
     - path: search
   inputs:
-    query: "{{ if .Keywords }}{{ .Keywords }}{{else}} {{end}}"
+    query: "{{ if .Keywords }}{{ .Keywords }}{{ else }} {{ end }}"
     sort: "{{ .Config.sort }}"
 
   rows:

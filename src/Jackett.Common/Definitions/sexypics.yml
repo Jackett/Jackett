@@ -48,8 +48,8 @@ search:
     # return results for 'of' if there are no search parms supplied (for use with the TEST button)
     # https://www.sexy-pics.us/h/hegre-1080p/age/desc/
     # https://www.sexy-pics.us/mp4/all/age/desc/2/
-    - path: "{{ if .Keywords }}{{ re_replace .Keywords \"(.).*\" \"$1\" }}/{{ .Keywords }}/{{else}}mp4/all/{{end}}{{ .Config.sort }}/{{ .Config.type }}/"
-    - path: "{{ if .Keywords }}{{ re_replace .Keywords \"(.).*\" \"$1\" }}/{{ .Keywords }}/{{else}}mp4/all/{{end}}{{ .Config.sort }}/{{ .Config.type }}/2/"
+    - path: "{{ if .Keywords }}{{ re_replace .Keywords \"(.).*\" \"$1\" }}/{{ .Keywords }}/{{ else }}mp4/all/{{ end }}{{ .Config.sort }}/{{ .Config.type }}/"
+    - path: "{{ if .Keywords }}{{ re_replace .Keywords \"(.).*\" \"$1\" }}/{{ .Keywords }}/{{ else }}mp4/all/{{ end }}{{ .Config.sort }}/{{ .Config.type }}/2/"
 
   rows:
     selector: tr:has(td.m)

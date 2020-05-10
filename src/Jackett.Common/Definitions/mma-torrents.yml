@@ -107,7 +107,7 @@ search:
   paths:
     - path: torrents.php
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    $raw: "{{ range .Categories }}c{{ . }}=1&{{ end }}"
     incldead: 1
     lang: 0
     # 0 all 1 notfree 2 onlyfree

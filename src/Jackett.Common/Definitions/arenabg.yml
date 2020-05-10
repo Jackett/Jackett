@@ -113,7 +113,7 @@ search:
       method: post
       followredirect: true
   inputs:
-    text: "{{ if .Keywords }}{{ .Keywords }}{{else}}{{end}}"
+    text: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ end }}"
     "text_mobile": ""
     type: 0
     audio: 0

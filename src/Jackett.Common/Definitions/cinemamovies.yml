@@ -73,12 +73,12 @@ search:
   paths:
     - path: browse.php
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    $raw: "{{ range .Categories }}c{{ . }}=1&{{ end }}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     # 0 onlyactive 1 all 4 requests 5 onlydead 6 polish 8 free 10 doubleup 11 premier 13 VOD
     incldead: 1
     # 0 title 1 descr
-    blah: "{{ if .Query.IMDBID }}1{{else}}0{{end}}"
+    blah: "{{ if .Query.IMDBID }}1{{ else }}0{{ end }}"
     gatunek: 0
     quality: none
     sort: "{{ .Config.sort }}"

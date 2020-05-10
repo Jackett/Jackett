@@ -106,7 +106,7 @@ search:
   # http://takeabyte-nordic.org/browse.php?c9=1&c26=1&c3=1&search=%22first+man%22&searchin=title&incldead=0
     - path: browse.php
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    $raw: "{{ range .Categories }}c{{ . }}=1&{{ end }}"
     search: "{{ .Keywords }}"
     searchin: title
     incldead: 1

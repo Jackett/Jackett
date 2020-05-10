@@ -681,8 +681,8 @@ search:
     tracker_search: torrent
     sk: "{{ .Config.sort }}"
     sd: "{{ .Config.type }}"
-    keywords: "{{ if .Keywords }}{{ .Keywords }}{{else}}{{ .Today.Year }}{{end}}"
-    $raw: "{{ range .Categories }}&fid[]={{.}}{{end}}"
+    keywords: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+    $raw: "{{ range .Categories }}&fid[]={{ . }}{{ end }}"
 
   rows:
     selector: table.tablebg tr.col_line

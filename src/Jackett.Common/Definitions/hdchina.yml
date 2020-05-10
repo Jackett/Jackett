@@ -65,12 +65,12 @@ search:
   paths:
     - path: torrents.php
   inputs:
-    $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    $raw: "{{ range .Categories }}cat{{ . }}=1&{{ end }}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     incldead: 0
     spstate: 0
     inclbookmarked: 0
-    search_area: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
+    search_area: "{{ if .Query.IMDBID }}4{{ else }}0{{ end }}"
     search_mode: 0
 
   rows:

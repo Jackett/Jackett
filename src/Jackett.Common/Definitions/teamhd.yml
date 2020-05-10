@@ -65,7 +65,7 @@ search:
   paths:
     - path: browse
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    $raw: "{{ range .Categories }}c{{ . }}=1&{{ end }}"
     search: "{{ .Keywords }}"
     # 0 active 1 incldead 2 onlydead 3 noseeders
     incldead: 1

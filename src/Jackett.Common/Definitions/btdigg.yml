@@ -35,7 +35,7 @@ search:
   paths:
     - path: search
   inputs:
-    q: "{{ if .Keywords }}{{ .Keywords }}{{else}}test{{end}}"
+    q: "{{ if .Keywords }}{{ .Keywords }}{{ else }}test{{ end }}"
     # 0 relevance 2 age 3 size 4 files
     order: "{{ .Config.sort }}"
 

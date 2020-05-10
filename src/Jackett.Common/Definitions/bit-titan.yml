@@ -150,7 +150,7 @@ search:
   inputs:
     suchfeld: 2
     alleanzeigen: 1
-    $raw: "{{ range .Categories }}kategorie[]={{.}}&{{end}}"
+    $raw: "{{ range .Categories }}kategorie[]={{ . }}&{{ end }}"
     suche: "{{ .Keywords }}"
     # searchin 1 name 2 descr 3 both
     durchsuche: 1

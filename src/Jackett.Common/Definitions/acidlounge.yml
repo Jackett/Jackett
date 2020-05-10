@@ -80,7 +80,7 @@ search:
   paths:
     - path: browse.php
   inputs:
-    $raw: "{{range .Categories}}cid[]={{.}}&{{end}}"
+    $raw: "{{ range .Categories }}cid[]={{ . }}&{{ end }}"
     search: "{{ .Keywords }}"
     search_type: "title"
   rows:

@@ -73,9 +73,9 @@ login:
 
 search:
   paths:
-    - path: "{{if .Query.Keywords}}search.php{{else}}torrentslist.php{{end}}"
+    - path: "{{ if .Query.Keywords }}search.php{{ else }}torrentslist.php{{ end }}"
   inputs:
-    $raw: "{{range .Categories}}type={{.}}&{{end}}"
+    $raw: "{{ range .Categories }}type={{ . }}&{{ end }}"
     textsearch: "{{ .Query.Keywords }}"
   rows:
     selector: ul.TorrentList

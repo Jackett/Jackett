@@ -144,7 +144,7 @@ search:
     options: 0
     # 0=all 1=onlyactive 2=onlydead
     active: 0
-    category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{else}}0{{end}}"
+    category: "{{ if .Categories }}{{ range .Categories }}{{ . }};{{ end }}{{ else }}0{{ end }}"
     search: "{{ .Keywords }}"
 
   rows:

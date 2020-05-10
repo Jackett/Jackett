@@ -32,7 +32,7 @@ search:
   paths:
     - path: browse.php
   inputs:
-    search: "{{if .Query.Artist}}{{ .Query.Artist }}{{else}}{{ .Keywords }}{{end}}"
+    search: "{{ if .Query.Artist }}{{ .Query.Artist }}{{ else }}{{ .Keywords }}{{ end }}"
     t: "all"
   rows:
     selector: div#releases-table > table > tbody > tr:has(a.browselink)

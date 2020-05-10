@@ -129,10 +129,10 @@ search:
   paths:
     - path: selection.php
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    $raw: "{{ range .Categories }}c{{ . }}=1&{{ end }}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     # 0 name 1 descr 2 both 4 imdb
-    blah: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
+    blah: "{{ if .Query.IMDBID }}4{{ else }}0{{ end }}"
     orderby: "{{ .Config.sort }}"
     sort: "{{ .Config.type }}"
 

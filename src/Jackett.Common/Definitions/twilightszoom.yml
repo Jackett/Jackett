@@ -125,8 +125,8 @@ search:
   paths:
     - path: browse.php
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ if or (.Query.Artist) (.Query.Album) }}{{ or (.Query.Artist) (.Query.Album) }}{{else}}{{ .Keywords }}{{end}}"
+    $raw: "{{ range .Categories }}c{{ . }}=1&{{ end }}"
+    search: "{{ if or (.Query.Artist) (.Query.Album) }}{{ or (.Query.Artist) (.Query.Album) }}{{ else }}{{ .Keywords }}{{ end }}"
     # 0 active 1 incldead 2 onlydead 3 free
     incldead: 1
     sort: "{{ .Config.sort }}"

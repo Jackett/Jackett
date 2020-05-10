@@ -478,7 +478,7 @@ search:
   paths:
     # find/376,414,310/vienna%20blood/all/desc/data/search//all/1
     # find/<category>/<title>/<all|active|dead>/<desc|asc>/<data|seeds|size>/search/<uploader>/<all|gold|silver|both|1.5x|2x|2.5x|3x|bothx>/<page>
-    - path: "find/{{ range .Categories }}{{.}},{{end}}/{{ .Keywords }}/all/{{ .Config.type }}/{{ .Config.sort }}/search//all/1"
+    - path: "find/{{ range .Categories }}{{ . }},{{ end }}/{{ .Keywords }}/all/{{ .Config.type }}/{{ .Config.sort }}/search//all/1"
       method: post
   keywordsfilters:
     - name: diacritics

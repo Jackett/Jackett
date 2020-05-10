@@ -107,8 +107,8 @@ search:
     - path: index.php
   inputs:
     page: torrents
-    category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{else}}0;{{end}}"
-    search: "{{ if .Keywords }}{{ .Keywords }}{{else}}{{end}}"
+    category: "{{ if .Categories }}{{ range .Categories }}{{ . }};{{ end }}{{ else }}0;{{ end }}"
+    search: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ end }}"
     # 0 all 1 active 2 dead
     active: 0
     order: "{{ .Config.sort }}"
@@ -146,7 +146,7 @@ search:
         - name: prepend
           args: "download.php?id="
         - name: append
-          args: "&f={{.Result.title}}.torrent"
+          args: "&f={{ .Result.title }}.torrent"
     banner:
       selector: td img[src="/torrentimg/pic.png"]
       attribute: onmouseover

@@ -45,7 +45,7 @@ search:
   # http://libranet.org/browse.php?cat56=1&cat57=1&search=&searchwhere=&subcat=&musicstyle=&format=
     - path: browse.php
   inputs:
-    $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
+    $raw: "{{ range .Categories }}cat{{ . }}=1&{{ end }}"
     search: "{{ .Keywords }}"
     searchwhere: ""
     subcat: ""

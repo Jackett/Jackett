@@ -185,11 +185,11 @@ search:
   paths:
     # only 20 results per page
     # https://www.racingfor.me/search/truck?c=-1&ob=sz_desc&offset=20#results
-    - path: "search/{{ if .Keywords }}{{ .Keywords }}{{else}}*{{end}}"
-    - path: "search/{{ if .Keywords }}{{ .Keywords }}{{else}}*{{end}}"
+    - path: "search/{{ if .Keywords }}{{ .Keywords }}{{ else }}*{{ end }}"
+    - path: "search/{{ if .Keywords }}{{ .Keywords }}{{ else }}*{{ end }}"
       inputs:
         offset: 20
-    - path: "search/{{ if .Keywords }}{{ .Keywords }}{{else}}*{{end}}"
+    - path: "search/{{ if .Keywords }}{{ .Keywords }}{{ else }}*{{ end }}"
       inputs:
         offset: 40
   inputs:

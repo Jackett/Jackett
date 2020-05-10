@@ -50,7 +50,7 @@ search:
     gr_id: ""
     # search in: title
     sfl: wr_subject
-    stx: "{{ if .Keywords }}{{ .Keywords }}{{else}}금요일{{end}}"
+    stx: "{{ if .Keywords }}{{ .Keywords }}{{ else }}금요일{{ end }}"
     # search operand: or, and
     sop: and
 
@@ -85,7 +85,7 @@ search:
         - name: querystring
           args: bo_table
     size:
-      text: "{{ if ne .Result.cat \"mov\" }}512 MB{{else}}2 GB{{end}}"
+      text: "{{ if ne .Result.cat \"mov\" }}512 MB{{ else }}2 GB{{ end }}"
     seeders:
       text: 1
     leechers:

@@ -50,8 +50,8 @@ search:
   paths:
     - path: torrents.php
   inputs:
-    $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
-    searchstr: "{{if .Query.Artist}}{{ .Query.Artist }}{{else}}{{ .Keywords }}{{end}}"
+    $raw: "{{ range .Categories }}filter_cat[{{ . }}]=1&{{ end }}"
+    searchstr: "{{ if .Query.Artist }}{{ .Query.Artist }}{{ else }}{{ .Keywords }}{{ end }}"
     order_by: time
     order_way: desc
     action: basic

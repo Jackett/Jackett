@@ -102,7 +102,7 @@ search:
     selected_sorting: "relevance"
     selected_group: ""
     search_username: ""
-    selected_sub[]: "{{join .Categories \",\"}}"
+    selected_sub[]: "{{ join .Categories \",\" }}"
   error:
     - selector: ":contains(\"Something was wrong with your request\")"
   preprocessingfilters:

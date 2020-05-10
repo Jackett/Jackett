@@ -53,7 +53,7 @@ search:
   inputs:
     page: torrents
     search: "{{ .Keywords }}"
-    category: "{{ range .Categories }}{{.}};{{end}}"
+    category: "{{ range .Categories }}{{ . }};{{ end }}"
     # 0 all 1 active 2 deadonly
     active: 1
     order: "{{ .Config.sort }}"

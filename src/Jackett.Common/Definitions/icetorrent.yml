@@ -122,10 +122,10 @@ ratio:
 search:
   paths:
     # https://icetorrent.org/browse?search=&submit=&sort=torrent.size&direction=desc&page=1
-  - path: "{{ if .Config.browseadult }}adult{{else}}browse{{end}}"
+  - path: "{{ if .Config.browseadult }}adult{{ else }}browse{{ end }}"
   inputs:
-    $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    $raw: "{{ range .Categories }}categories[]={{ . }}&{{ end }}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     sort: "torrent.{{ .Config.sort }}"
     direction: "{{ .Config.type }}"
 

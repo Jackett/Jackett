@@ -40,7 +40,7 @@ search:
       inputs:
         page: 2
   inputs:
-    q: "{{ if .Keywords }}{{ .Keywords }}{{else}}:latest:{{end}}"
+    q: "{{ if .Keywords }}{{ .Keywords }}{{ else }}:latest:{{ end }}"
     category: all
     x: 0
     y: 0
@@ -89,7 +89,7 @@ search:
     _size:
       selector: td:nth-child(6)
     size:
-      text: "{{ if .Result._size }}{{ .Result._size }}{{else}}0 B{{end}}"
+      text: "{{ if .Result._size }}{{ .Result._size }}{{ else }}0 B{{ end }}"
     seeders:
       selector: td:nth-child(3)
     leechers:

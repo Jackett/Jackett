@@ -198,7 +198,7 @@ search:
   inputs:
     page: torrents
     search: "{{ .Keywords }}"
-    category: "{{ range .Categories }}{{.}};{{end}}"
+    category: "{{ range .Categories }}{{ . }};{{ end }}"
     # 0 title 1 title&descr 2 descr
     options: 0
     active: "{{ .Config.active }}"
@@ -219,7 +219,7 @@ search:
         - name: re_replace
           args: ["[\\.\\s\\[\\-][Mm][Uu][Ll][Tt][Ii][\\.\\s\\]\\-]", ".{{ .Config.multilanguage }}."]
     title:
-      text: "{{if .Config.multilang }}{{ .Result.title_multilang }}{{else}}{{ .Result.title_phase1 }}{{end}}"
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
     details:
       selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
       attribute: href

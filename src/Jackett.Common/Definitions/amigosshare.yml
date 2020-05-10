@@ -149,7 +149,7 @@ search:
       inputs:
         page: 4
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    $raw: "{{ range .Categories }}c{{ . }}=1&{{ end }}"
     search: "{{ re_replace .Keywords \"[\\s]+\" \"%\" }}"
     incldead: 1
     freeleech: 0
@@ -184,16 +184,16 @@ search:
           args: ["^(.*?)[\\(](.*?)[\\)](.*?)$", "$2$3"]
           # add the year to the title
         - name: append
-          args: "{{if .Result._year}} {{.Result._year}}{{else}}{{end}}"
+          args: "{{ if .Result._year }} {{ .Result._year }}{{ else }}{{ end }}"
           # add the quality to the title
         - name: append
-          args: "{{if .Result._quality}} {{.Result._quality}}{{else}}{{end}}"
+          args: "{{ if .Result._quality }} {{ .Result._quality }}{{ else }}{{ end }}"
           # add the type to the title
         - name: append
-          args: "{{if .Result._type}} {{.Result._type}}{{else}}{{end}}"
+          args: "{{ if .Result._type }} {{ .Result._type }}{{ else }}{{ end }}"
           # add audio to the title
         - name: append
-          args: "{{if .Result._language}} {{.Result._language}}{{else}}{{end}}"
+          args: "{{ if .Result._language }} {{ .Result._language }}{{ else }}{{ end }}"
         - name: re_replace
           args: ["(Dual-Audio|Dublado)", "Brazilian $1"]
     details:

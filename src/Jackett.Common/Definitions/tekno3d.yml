@@ -79,12 +79,12 @@ search:
   paths:
     - path: browse.php
   inputs:
-    $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+    $raw: "{{ range .Categories }}c{{ . }}=1&{{ end }}"
     search: "{{ .Keywords }}"
     # title descr genre all
     searchin: title
     incldead: "{{ .Config.incldead }}"
-    only_free: "{{ if .Config.onlyfree }}1{{else}}0{{end}}"
+    only_free: "{{ if .Config.onlyfree }}1{{ else }}0{{ end }}"
   keywordsfilters:
     - name: re_replace
       args: ["(\\w+)", " +$1"] # prepend + to each word

@@ -102,7 +102,7 @@ search:
     - name: re_replace
       args: ["(?<=^| )(?!-|\\+)[^ ]+(?= |$)", "+$&"]
   inputs:
-    $raw: "{{range .Categories}}genre={{.}}&{{end}}"
+    $raw: "{{ range .Categories }}genre={{ . }}&{{ end }}"
     search: "{{ .Keywords }}"
     search_type: title
   rows:

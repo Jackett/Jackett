@@ -331,7 +331,7 @@ search:
       inputs:
         pages: 2
   inputs:
-    $raw: "category={{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{else}}0{{end}}&"
+    $raw: "category={{ if .Categories }}{{ range .Categories }}{{ . }};{{ end }}{{ else }}0{{ end }}&"
     search: "{{ .Keywords }}"
     page: torrents
     active: 1
@@ -367,7 +367,7 @@ search:
           args: ["View details: ", ""]
         - name: validfilename
     download:
-      text: "magnet:?xt=urn:btih:{{ .Result.magnet-hash}}&dn={{ .Result.magnet-name}}&tr=udp://tracker.coppersurfer.tk:6969/announce&tr=udp://tracker.leechers-paradise.org:6969/announce&tr=udp://open.stealth.si:80/announce&tr=udp://exodus.desync.com:6969&tr=udp://p4p.arenabg.com:1337/announce&tr=udp://explodie.org:6969/announce&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://tracker.tiny-vps.com:6969/announce&tr=udp://open.demonii.si:1337/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.pirateparty.gr:6969/announce&tr=udp://ipv4.tracker.harry.lu:80/announce&tr=udp://tracker.cyberia.is:6969/announce&tr=udp://9.rarbg.to:2710/announce&tr=udp://denis.stalker.upeer.me:6969/announce"
+      text: "magnet:?xt=urn:btih:{{ .Result.magnet-hash }}&dn={{ .Result.magnet-name }}&tr=udp://tracker.coppersurfer.tk:6969/announce&tr=udp://tracker.leechers-paradise.org:6969/announce&tr=udp://open.stealth.si:80/announce&tr=udp://exodus.desync.com:6969&tr=udp://p4p.arenabg.com:1337/announce&tr=udp://explodie.org:6969/announce&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://tracker.tiny-vps.com:6969/announce&tr=udp://open.demonii.si:1337/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.pirateparty.gr:6969/announce&tr=udp://ipv4.tracker.harry.lu:80/announce&tr=udp://tracker.cyberia.is:6969/announce&tr=udp://9.rarbg.to:2710/announce&tr=udp://denis.stalker.upeer.me:6969/announce"
     banner:
       selector: img[src*="/images/categories/"]
       attribute: src

@@ -123,7 +123,7 @@ search:
   # http://documentarytorrents.com/torrents.php?c123=1&c69=1&c67=1&c89=1&c88=1&search=grow+old&cat=0&incldead=1&freeleech=0&lang=0
     - path: torrents.php
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    $raw: "{{ range .Categories }}c{{ . }}=1&{{ end }}"
     search: "{{ .Keywords }}"
     cat: 0
     # 0 active 1 incldead 2 onlydead

@@ -65,7 +65,7 @@ download:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}/search_torrent/{{ .Keywords }}{{else}}/top_torrent/{{end}}"
+    - path: "{{ if .Keywords }}/search_torrent/{{ .Keywords }}{{ else }}/top_torrent/{{ end }}"
 
   rows:
     selector: table.table-striped > tbody > tr

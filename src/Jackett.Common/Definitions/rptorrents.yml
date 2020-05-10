@@ -87,7 +87,7 @@ search:
   paths:
     - path: torrents-search.php
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    $raw: "{{ range .Categories }}c{{ . }}=1&{{ end }}"
     search: "{{ .Keywords }}"
     # 0 name & desc 1 name 2 desc 3 genre
     incldesc: 1

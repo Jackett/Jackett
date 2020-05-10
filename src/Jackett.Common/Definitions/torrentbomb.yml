@@ -68,7 +68,7 @@ search:
       inputs:
         page: 5
   inputs:
-    keyword: "{{ if .Keywords }}{{ .Keywords }}{{else}}{{ .Today.Year }}{{end}}"
+    keyword: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
 
   rows:
     selector: section.sch_res_list > ul > li:has(span.sch_datetime:contains(":"))
@@ -100,7 +100,7 @@ search:
         - name: querystring
           args: bo_table
     size:
-      text: "{{ if or eq .Result.cat \"torrent_movie\" (or eq .Result.cat \"torrent_movie_etc\" eq .Result.cat \"torrent_movie_eng\") }}2 GB{{else}}512 MB{{end}}"
+      text: "{{ if or eq .Result.cat \"torrent_movie\" (or eq .Result.cat \"torrent_movie_etc\" eq .Result.cat \"torrent_movie_eng\") }}2 GB{{ else }}512 MB{{ end }}"
     seeders:
       text: 1
     leechers:

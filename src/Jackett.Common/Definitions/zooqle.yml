@@ -56,7 +56,7 @@ settings:
 search:
   # includes only verified torrents
   paths:
-    - path: "search?{{ if .Keywords }}s={{ .Config.sort }}&v=t&sd={{ .Config.type }}&q={{ .Keywords }}{{else}}s={{ .Config.sort }}&v=t&sd={{ .Config.type }}&q= *{{end}}{{ if .Categories }} category:{{ range .Categories }}{{.}},{{end}}{{else}}{{end}}"
+    - path: "search?{{ if .Keywords }}s={{ .Config.sort }}&v=t&sd={{ .Config.type }}&q={{ .Keywords }}{{ else }}s={{ .Config.sort }}&v=t&sd={{ .Config.type }}&q= *{{ end }}{{ if .Categories }} category:{{ range .Categories }}{{ . }},{{ end }}{{ else }}{{ end }}"
 
   rows:
     selector: tr:has(td[class^="text-muted3"])

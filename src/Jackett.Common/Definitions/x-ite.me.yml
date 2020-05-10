@@ -120,7 +120,7 @@ search:
     - name: re_replace
       args: ["(?<=^| )(?!-|\\+)[^ ]+(?= |$)", "+$&"]
   inputs:
-    $raw: "{{range .Categories}}&c{{.}}=1&{{end}}"
+    $raw: "{{ range .Categories }}&c{{ . }}=1&{{ end }}"
     search: "{{ .Keywords }}"
     incldead: "{{ .Config.incldead }}"
   rows:

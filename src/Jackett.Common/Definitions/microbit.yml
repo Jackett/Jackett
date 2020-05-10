@@ -87,11 +87,11 @@ search:
     # http://microbit.eu/browse.php?searchOpened=1&cat%5B12%5D=12&cat%5B13%5D=13&search=&searchWhat=0&filterOptions=0
     - path: browse.php
   inputs:
-    $raw: "{{ range .Categories }}cat[]={{.}}&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    $raw: "{{ range .Categories }}cat[]={{ . }}&{{ end }}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     searchOpened: 1
     # 0 title 1 descr 2 uploader
-    searchWhat: "{{ if .Query.IMDBID }}1{{else}}0{{end}}"
+    searchWhat: "{{ if .Query.IMDBID }}1{{ else }}0{{ end }}"
     # 0 active 1 active&dead 2 dead 3 dl multiplier 4 ul multiplier 5 dl&ul multiplier 6 bad torrent 7 unverified torrent 8 my torrent
     filterOptions: 1
     orderby: "{{ .Config.sort }}"

@@ -142,14 +142,14 @@ search:
   paths:
     - path: maintracker.php
   inputs:
-    seed: "{{ if .Config.seed }}1{{else}}0{{end}}"
+    seed: "{{ if .Config.seed }}1{{ else }}0{{ end }}"
     withsubs: "{{ re_replace .Config.withsubs \"_\" \"\" }}"
-    filter: "{{ if .Config.hidef }}hd+{{else}}{{end}}{{ .Keywords }}"
+    filter: "{{ if .Config.hidef }}hd+{{ else }}{{ end }}{{ .Keywords }}"
     orderby: "{{ .Config.sort }}"
     order: "{{ .Config.type }}"
   keywordsfilters:
     - name: re_replace
-      args: ["S01E01", "{{ if .Config.stripS01E01 }}{{else}}S01E01{{end}}"] # optionally remove S01E01 from search
+      args: ["S01E01", "{{ if .Config.stripS01E01 }}{{ else }}S01E01{{ end }}"] # optionally remove S01E01 from search
 
   rows:
     selector: tr:has(a.magnetlink)
@@ -165,7 +165,7 @@ search:
         - name: re_replace
           args: ["^BBC (.*)", "{{ if .Config.dropbbc }}{{ else }}BBC {{ end }}$1"]
         - name: append
-          args: "{{ if .Config.stripS01E01 }}{{else}} S01E01{{end}}"
+          args: "{{ if .Config.stripS01E01 }}{{ else }} S01E01{{ end }}"
     details:
       optional: true
       selector: td.singleindent a[href^="/index.php?showtopic="]

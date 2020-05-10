@@ -58,8 +58,8 @@ search:
   # https://torrent.e2k.ru/browse.php?c1=1&c4=1&c10=1&incldead=0&search=
     - path: browse.php
   inputs:
-    $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-    search: "{{if .Query.Artist}}{{ .Query.Artist }}{{else}}{{ .Keywords }}{{end}}"
+    $raw: "{{ range .Categories }}c{{ . }}=1&{{ end }}"
+    search: "{{ if .Query.Artist }}{{ .Query.Artist }}{{ else }}{{ .Keywords }}{{ end }}"
     # 0 active 1 incldead 2 onlydead
     incldead: 1
 

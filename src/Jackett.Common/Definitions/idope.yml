@@ -57,8 +57,8 @@ search:
   paths:
     # present trending results if there are no search parms supplied
     # sort torrent-list by age in descending order
-    - path: "{{ if .Keywords }}torrent-list/{{ .Keywords }}?o={{ .Config.sort }}&c={{ range .Categories }}{{.}}{{end}}{{else}}browse.html{{end}}"
-    - path: "{{ if .Keywords }}torrent-list/{{ .Keywords }}?p=2&o={{ .Config.sort }}&c={{ range .Categories }}{{.}}{{end}}{{else}}browse.html?&p=2{{end}}"
+    - path: "{{ if .Keywords }}torrent-list/{{ .Keywords }}?o={{ .Config.sort }}&c={{ range .Categories }}{{ . }}{{ end }}{{ else }}browse.html{{ end }}"
+    - path: "{{ if .Keywords }}torrent-list/{{ .Keywords }}?p=2&o={{ .Config.sort }}&c={{ range .Categories }}{{ . }}{{ end }}{{ else }}browse.html?&p=2{{ end }}"
 
   rows:
     selector: div.resultdiv
@@ -94,7 +94,7 @@ search:
         - name: append
           args: ".torrent"
     download:
-      text: "{{if .Config.itorrents-links}}{{ .Result.download-itorrents }}{{else}}{{end}}"
+      text: "{{ if .Config.itorrents-links }}{{ .Result.download-itorrents }}{{ else }}{{ end }}"
     magfile:
       text: "{{ .Result.title }}"
       filters:

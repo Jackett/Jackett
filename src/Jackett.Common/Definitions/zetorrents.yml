@@ -28,7 +28,7 @@ download:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}recherche/{{ .Keywords }}{{else}}{{end}}"
+    - path: "{{ if .Keywords }}recherche/{{ .Keywords }}{{ else }}{{ end }}"
 
   rows:
     selector: table.table > tbody > tr:has(a[href^="/torrent/"])

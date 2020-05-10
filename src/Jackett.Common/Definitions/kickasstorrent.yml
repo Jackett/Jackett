@@ -106,7 +106,7 @@ settings: []
 
 search:
   paths:
-    - path: "{{ if .Keywords }}katsearch/page/1/{{ .Keywords }}{{else}}category/latest/page/1{{end}}"
+    - path: "{{ if .Keywords }}katsearch/page/1/{{ .Keywords }}{{ else }}category/latest/page/1{{ end }}"
 
   rows:
     selector: table.torrents_table > tbody > tr

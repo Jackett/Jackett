@@ -21,8 +21,8 @@ settings: []
 
 search:
   paths:
-    - path: "{{ if .Keywords }}search/{{ .Keywords }}{{else}}new{{end}}"
-    - path: "{{ if .Keywords }}search/{{ .Keywords }}{{else}}new{{end}}?page=2"
+    - path: "{{ if .Keywords }}search/{{ .Keywords }}{{ else }}new{{ end }}"
+    - path: "{{ if .Keywords }}search/{{ .Keywords }}{{ else }}new{{ end }}?page=2"
 
   rows:
     selector: div.mb-3

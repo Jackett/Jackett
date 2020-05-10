@@ -107,7 +107,7 @@ search:
   # uses cats1[]=10 or cats3[]=20 which cannot be supported
     - path: browse.php
   inputs:
-    search: "{{.Keywords}}"
+    search: "{{ .Keywords }}"
     # title descr genre all
     searchin: title
     # 0 active 1 incldead 2 onlydead

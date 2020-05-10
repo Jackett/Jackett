@@ -74,8 +74,8 @@ search:
   # https://torrentdb.net/filter/torrents?&search=ring&categories[]=1&freeleech=1&doubleupload=1&sorting=created_at&direction=desc&qty=100
     - path: filter/torrents
   inputs:
-    $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBIDShort }}{{else}}{{ .Keywords }}{{end}}"
+    $raw: "{{ range .Categories }}categories[]={{ . }}&{{ end }}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBIDShort }}{{ else }}{{ .Keywords }}{{ end }}"
     sorting: "{{ .Config.sort }}"
     direction: "{{ .Config.type }}"
     qty: 100

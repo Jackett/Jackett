@@ -67,7 +67,7 @@ search:
     - path: torrent/torrents.php
   inputs:
     search: "{{ .Keywords }}"
-    category: "{{ range .Categories }}{{.}};{{end}}"
+    category: "{{ range .Categories }}{{ . }};{{ end }}"
     active: 1
   keywordsfilters:
     - name: diacritics

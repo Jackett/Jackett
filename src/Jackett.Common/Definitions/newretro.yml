@@ -85,7 +85,7 @@ search:
   paths:
     - path: browse.php
   inputs:
-    $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+    $raw: "{{ range .Categories }}c{{ . }}=1&{{ end }}"
     search: "{{ .Query.Keywords }}"
     showsearch: "1"
     orderby: "added"

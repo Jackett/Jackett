@@ -63,7 +63,7 @@ settings:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}usearch/{{ .Keywords }}/{{else}}new/{{end}}?field={{ .Config.sort }}&sorder={{ .Config.type }}"
+    - path: "{{ if .Keywords }}usearch/{{ .Keywords }}/{{ else }}new/{{ end }}?field={{ .Config.sort }}&sorder={{ .Config.type }}"
 
   rows:
     selector: table[class="data"] tr[id]

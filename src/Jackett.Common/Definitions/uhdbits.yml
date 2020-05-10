@@ -45,8 +45,8 @@ search:
   paths:
     - path: torrents.php
   inputs:
-    $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
-    searchstr: "{{ if .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    $raw: "{{ range .Categories }}filter_cat[{{ . }}]=1&{{ end }}"
+    searchstr: "{{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     imdbid: "{{ .Query.IMDBIDShort }}"
     tags_type: 1
     order_by: time

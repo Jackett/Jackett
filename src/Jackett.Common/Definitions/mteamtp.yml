@@ -111,14 +111,14 @@ search:
     - path: music.php
       categories: [406, 408, 434]
   inputs:
-    $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    $raw: "{{ range .Categories }}cat{{ . }}=1&{{ end }}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     # 0 incldead 1 active 2 dead
     incldead: 0
     # 0 all 1 normal 2 free 3 2x 4 2xfree 5 50% 6 2x50% 7 30%
     spstate: 0
     # 0 title 1 descr 3 uploaded 4 imdb url
-    search_area: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
+    search_area: "{{ if .Query.IMDBID }}4{{ else }}0{{ end }}"
     # 0 and 1 or 2 exact
     search_mode: 0
     sort: "{{ .Config.sort }}"

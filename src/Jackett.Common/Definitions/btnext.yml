@@ -163,10 +163,10 @@ search:
   inputs:
     p: torrents
     pid: 32
-    $raw: "{{ range .Categories }}cid[]={{.}}&{{end}}"
-    keywords: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    $raw: "{{ range .Categories }}cid[]={{ . }}&{{ end }}"
+    keywords: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     # name, description, both, uploader
-    search_type: "{{ if .Query.IMDBID }}description{{else}}name{{end}}"
+    search_type: "{{ if .Query.IMDBID }}description{{ else }}name{{ end }}"
     "sortOptions[sortBy]": "{{ .Config.sort }}"
     "sortOptions[sortOrder]": "{{ .Config.type }}"
   error:

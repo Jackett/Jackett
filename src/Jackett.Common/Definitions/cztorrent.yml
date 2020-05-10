@@ -72,7 +72,7 @@ search:
   paths:
     - path: torrents
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    $raw: "{{ range .Categories }}c{{ . }}=1&{{ end }}"
     s: "{{ .Keywords }}"
     # 0 approved 1 all 2 not approved
     t: 1

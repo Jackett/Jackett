@@ -69,7 +69,7 @@ search:
   paths:
     - path: torrents.php
   inputs:
-    $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
+    $raw: "{{ range .Categories }}cat{{ . }}=1&{{ end }}"
     search: "{{ .Keywords }}"
     # 0 incldead 1 active 2 dead
     incldead: 0

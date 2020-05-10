@@ -50,8 +50,8 @@ search:
   paths:
     - path: t
   inputs:
-    $raw: "{{ range .Categories }}{{.}}=&{{end}}"
-    q: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    $raw: "{{ range .Categories }}{{ . }}=&{{ end }}"
+    q: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     incldead: 1
   rows:
     selector: table#torrentsTable > tbody > tr:has(td.torrentNameInfo)

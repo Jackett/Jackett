@@ -33,7 +33,7 @@ search:
     # http://bt.etree.org/?searchzzzz=&cat=0
     - path: /
   inputs:
-    searchzzzz: "{{ if .Query.Artist }}{{ .Query.Artist }}{{else}}{{ .Keywords }}{{end}}"
+    searchzzzz: "{{ if .Query.Artist }}{{ .Query.Artist }}{{ else }}{{ .Keywords }}{{ end }}"
     cat: 0
     sort: "{{ .Config.sort }}"
 

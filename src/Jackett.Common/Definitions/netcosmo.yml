@@ -101,10 +101,10 @@ search:
     - name: replace
       args: ["-", ""]
   inputs:
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBIDShort }}{{else}}{{ .Keywords }}{{end}}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBIDShort }}{{ else }}{{ .Keywords }}{{ end }}"
     page: torrents
-    category: "{{ range .Categories }}{{.}};{{end}}"
-    options: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
+    category: "{{ range .Categories }}{{ . }};{{ end }}"
+    options: "{{ if .Query.IMDBID }}4{{ else }}0{{ end }}"
     # 0 all 1 active 2 dead
     active: 0
     # 0 filename 1 file&descr 2 descr 3 uploader 5 gold 6 silver 7 bronze

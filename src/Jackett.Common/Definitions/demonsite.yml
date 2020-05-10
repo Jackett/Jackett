@@ -94,7 +94,7 @@ search:
   # https://demon-site.eu/browse.php?c25=1&c26=1&search=&incldead=1
     - path: browse.php
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    $raw: "{{ range .Categories }}c{{ . }}=1&{{ end }}"
     search: "{{ .Keywords }}"
     # 0 active 1 both 2 dead 3 myupload 4 notseeded
     incldead: 1

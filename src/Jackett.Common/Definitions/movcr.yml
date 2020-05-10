@@ -32,7 +32,7 @@ download:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}search/search.php?q={{ .Keywords }}{{else}}/{{end}}"
+    - path: "{{ if .Keywords }}search/search.php?q={{ .Keywords }}{{ else }}/{{ end }}"
 
   rows:
     selector: tr:has(td.name a[href^="/download-"])

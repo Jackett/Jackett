@@ -80,10 +80,10 @@ download:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}index.php?do=search&subaction=search{{else}}{{end}}"
+    - path: "{{ if .Keywords }}index.php?do=search&subaction=search{{ else }}{{ end }}"
       method: post
   inputs:
-    story: "{{ if .Keywords }}{{ .Keywords }}{{else}}{{end}}"
+    story: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ end }}"
   # does not support imdbid search and does not return imdb link in results.
 
   rows:

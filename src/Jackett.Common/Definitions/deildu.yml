@@ -69,12 +69,12 @@ search:
   paths:
     - path: browse.php
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    $raw: "{{ range .Categories }}c{{ . }}=1&{{ end }}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     # active 1 incldead 2 onlydead
     incldead: 1
     # 1 = look in description
-    Lysing: "{{ if .Query.IMDBID }}1{{else}}{{end}}"
+    Lysing: "{{ if .Query.IMDBID }}1{{ else }}{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
     # does not return imdb links

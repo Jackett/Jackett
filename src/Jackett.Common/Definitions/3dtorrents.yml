@@ -67,7 +67,7 @@ search:
   paths:
     - path: index.php
   inputs:
-    $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
+    $raw: "{{ range .Categories }}filter_cat[{{ . }}]=1&{{ end }}"
     search: "{{ .Keywords }}"
     page: torrents
     category: 0

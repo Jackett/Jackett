@@ -60,7 +60,7 @@ search:
   paths:
     - path: browse.php
   inputs:
-    search: "{{.Keywords }}"
+    search: "{{ .Keywords }}"
     # 0 active 1 incldead 2 onlydead 3 gold 4 seedfree
     incldead: 1
     sort: "{{ .Config.sort }}"

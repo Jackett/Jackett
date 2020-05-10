@@ -80,12 +80,12 @@ search:
   inputs:
     search: "{{ .Keywords }}"
     page: torrents
-    category: "{{ range .Categories }}{{.}};{{end}}"
+    category: "{{ range .Categories }}{{ . }};{{ end }}"
     options: 0
     active: 0
 
   rows:
-    selector: table > tbody > tr > td > table.lista > tbody > tr:has(a[href^="index.php?page=torrent-details&id="]){{if .Config.donor }}{{else}}:not(:has(img[src*="keditbookmarks.png"])){{end}}
+    selector: table > tbody > tr > td > table.lista > tbody > tr:has(a[href^="index.php?page=torrent-details&id="]){{ if .Config.donor }}{{ else }}:not(:has(img[src*="keditbookmarks.png"])){{ end }}
 
   fields:
     download:

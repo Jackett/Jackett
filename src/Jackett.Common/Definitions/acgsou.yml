@@ -55,7 +55,7 @@ search:
   paths:
   # https://www.acgsou.com/1.html
   # https://www.acgsou.com/search.php?keyword=test
-    - path: "{{ if .Keywords }}search.php?keyword={{ .Keywords }}{{else}}1.html{{end}}"
+    - path: "{{ if .Keywords }}search.php?keyword={{ .Keywords }}{{ else }}1.html{{ end }}"
 
   rows:
     selector: table tbody tr[class^="alt"]:has(td:nth-child(3) a)

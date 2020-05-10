@@ -89,8 +89,8 @@ search:
         page: 4
   inputs:
     searchstr: "{{ .Keywords }}"
-    order_by: "{{ .Config.sort}}"
-    order_way: "{{ .Config.type}}"
+    order_by: "{{ .Config.sort }}"
+    order_way: "{{ .Config.type }}"
     disablegrouping: 1
 
   rows:
@@ -107,11 +107,11 @@ search:
       selector: a[title="View Torrent"]
       filters:
         - name: prepend
-          args: "{{.Result._grouptitle}} - "
+          args: "{{ .Result._grouptitle }} - "
         - name: replace
           args: ["/  /","/"] #removes slash left after freeleech images
         - name: append
-          args: "{{if .Result._language}} [{{.Result._language}}]{{else}}{{end}}"
+          args: "{{ if .Result._language }} [{{ .Result._language }}]{{ else }}{{ end }}"
     category:
       text: Comics
     details:

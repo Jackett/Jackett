@@ -117,7 +117,7 @@ search:
     - name: re_replace # strip S01E01
       args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", ""]
   inputs:
-    $raw: "{{ if .Categories }}{{ range .Categories }}c{{.}}=1&{{end}}{{else}}cat=0{{end}}"
+    $raw: "{{ if .Categories }}{{ range .Categories }}c{{ . }}=1&{{ end }}{{ else }}cat=0{{ end }}"
     # 0 active 1 incldead 2 onlydead 4 noseeds (isn't this == onlydead?)
     incldead: 1
     search: "{{ .Keywords }}"

@@ -70,7 +70,7 @@ search:
   error:
     - selector: a.altlink
   inputs:
-    $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+    $raw: "{{ range .Categories }}c{{ . }}=1&{{ end }}"
     search: "{{ .Query.Keywords }}"
     incldead: 1
     tyt: 0
@@ -93,7 +93,7 @@ search:
         - name: append
           args: " POLISH"
     title:
-      text: "{{ if and (.Config.lang) (.Result.is_polish) }}{{ .Result.title_polish }}{{else}}{{ .Result.title_phase1 }}{{end}}"
+      text: "{{ if and (.Config.lang) (.Result.is_polish) }}{{ .Result.title_polish }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
     details:
       selector: a[href^="details.php?id="]
       attribute: href

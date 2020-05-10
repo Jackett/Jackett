@@ -315,7 +315,7 @@ search:
     # https://www.demonoid.is/files/?seeded=2&language=0&quality=0&to=1&query=world
     - path: files/
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}&{{end}}"
+    $raw: "{{ range .Categories }}c{{ . }}&{{ end }}"
     # 0 seeded 1 unseeded 2 both
     seeded: 2
     # 0 all 1 English etc
@@ -323,8 +323,8 @@ search:
     # 0 all
     quality: 0
     # search in titles only
-    to: "{{ if .Query.IMDBID }}{{else}}1{{end}}"
-    query: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    to: "{{ if .Query.IMDBID }}{{ else }}1{{ end }}"
+    query: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     sort: "{{ .Config.sort }}"
     order: "{{ .Config.type }}"
     # does not return imdb link in results

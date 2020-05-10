@@ -75,8 +75,8 @@ search:
   # https://www.3evils.com/browse.php?c3=1&c4=1&search=&searchin=title&incldead=1
     - path: browse.php
   inputs:
-    $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-    search: "{{.Keywords}}"
+    $raw: "{{ range .Categories }}c{{ . }}=1&{{ end }}"
+    search: "{{ .Keywords }}"
     # title descr genre all
     searchin: title
     # 0 active 1 incldead 2 onlydead

@@ -97,10 +97,10 @@ search:
     - path: browse.php
   inputs:
     do: search
-    keywords: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    keywords: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     # t_name T_description t_both t_uploader t_genre
-    search_type: "{{ if .Query.IMDBID }}t_genre{{else}}t_name{{end}}"
-    category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{else}}0{{end}}"
+    search_type: "{{ if .Query.IMDBID }}t_genre{{ else }}t_name{{ end }}"
+    category: "{{ if .Categories }}{{ range .Categories }}{{ . }};{{ end }}{{ else }}0{{ end }}"
     include_dead_torrents: yes
     sort: "{{ .Config.sort }}"
     order: "{{ .Config.type }}"

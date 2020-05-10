@@ -53,7 +53,7 @@ login:
 
 search:
   paths:
-    - path: "browse/{{ if .Keywords }}search/{{ .Config.sort }}/name/{{ .Keywords }}{{else}}index/{{ .Config.sort }}{{end}}"
+    - path: "browse/{{ if .Keywords }}search/{{ .Config.sort }}/name/{{ .Keywords }}{{ else }}index/{{ .Config.sort }}{{ end }}"
 
   rows:
     selector: tr.default, tr.danger, tr.success

@@ -55,7 +55,7 @@ ratio:
 search:
   path: torrents.php
   inputs:
-    $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
+    $raw: "{{ range .Categories }}filter_cat[{{ . }}]=1&{{ end }}"
     searchstr: "{{ .Query.Keywords }}"
     order_by: time
     order_way: desc
@@ -74,7 +74,7 @@ search:
         - name: append
           args: "&usetoken=1"
     download:
-      text: "{{if .Config.usetoken}}{{ .Result.download-usetoken }}{{else}}{{ .Result.download-regular }}{{end}}"
+      text: "{{ if .Config.usetoken }}{{ .Result.download-usetoken }}{{ else }}{{ .Result.download-regular }}{{ end }}"
     title:
       selector: div.group_info
       remove: span:nth-child(1), div.tags

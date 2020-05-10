@@ -86,8 +86,8 @@ search:
   paths:
     - path: browse.php
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    $raw: "{{ range .Categories }}c{{ . }}=1&{{ end }}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     advcat: 0
     incldead: 1
     stype: b
@@ -125,7 +125,7 @@ search:
         - name: re_replace
           args: ["(?i)[\\.\\s\\[\\-]VFQ[\\.\\s\\]\\-]", ".{{ .Config.multilanguage }}."]
     title:
-      text: "{{if .Config.multilang }}{{ .Result._title_multilang }}{{else}}{{ .Result._title_normalized }}{{end}}"
+      text: "{{ if .Config.multilang }}{{ .Result._title_multilang }}{{ else }}{{ .Result._title_normalized }}{{ end }}"
     category:
       selector: a[href^="/browse.php?cat="]
       attribute: href

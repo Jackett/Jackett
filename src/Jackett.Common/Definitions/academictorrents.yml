@@ -43,7 +43,7 @@ search:
       inputs:
         page: 1
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    $raw: "{{ range .Categories }}c{{ . }}=1&{{ end }}"
     search: "{{ .Keywords }}"
     sort_field: "{{ .Config.sort }}"
     sort_dir: "{{ .Config.type }}"

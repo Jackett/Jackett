@@ -36,7 +36,7 @@ settings: []
 
 search:
   paths:
-    - path: "{{ if .Keywords }}search/{{ .Keywords }}{{else}}/{{end}}"
+    - path: "{{ if .Keywords }}search/{{ .Keywords }}{{ else }}/{{ end }}"
   keywordsfilters:
     - name: re_replace
       args: ["S[0-9]{2}([^E]|$)", ""] # remove season tag without episode (search doesn't support it)

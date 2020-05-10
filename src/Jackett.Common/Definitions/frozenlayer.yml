@@ -43,8 +43,8 @@ caps:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}buscar/descargas/{{ .Config.category }}/{{ .Keywords }}?search=Buscar{{else}}descargas{{end}}"
-    - path: "{{ if .Keywords }}buscar/descargas/{{ .Config.category }}/{{ .Keywords }}?search=Buscar&page=2{{else}}descargas{{end}}"
+    - path: "{{ if .Keywords }}buscar/descargas/{{ .Config.category }}/{{ .Keywords }}?search=Buscar{{ else }}descargas{{ end }}"
+    - path: "{{ if .Keywords }}buscar/descargas/{{ .Config.category }}/{{ .Keywords }}?search=Buscar&page=2{{ else }}descargas{{ end }}"
   keywordsfilters:
     - name: re_replace #remove S/EXX from search string
       args: ["(S1)", ""]

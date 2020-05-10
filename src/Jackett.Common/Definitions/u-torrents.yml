@@ -86,7 +86,7 @@ search:
   paths:
     - path: browse
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    $raw: "{{ range .Categories }}c{{ . }}=1&{{ end }}"
     search: "{{ .Keywords }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"

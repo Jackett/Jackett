@@ -86,7 +86,7 @@ search:
   paths:
     - path: browse.php
   inputs:
-    $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
+    $raw: "{{ range .Categories }}filter_cat[{{ . }}]=1&{{ end }}"
     search: "{{ .Keywords }}"
   rows:
     selector: table[border="0"] > tbody > tr.ttable:has(a[href^="browse.php?cat="])

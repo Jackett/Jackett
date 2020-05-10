@@ -101,7 +101,7 @@ search:
     - path: tfiles.php
   inputs:
     showsearch: 1
-    $raw: "{{ if .Categories }}{{ range .Categories }}c{{.}}=1&{{end}}{{else}}{{end}}"
+    $raw: "{{ if .Categories }}{{ range .Categories }}c{{ . }}=1&{{ end }}{{ else }}{{ end }}"
     search: "{{ .Keywords }}"
     orderby: "{{ .Config.sort }}"
     sort: "{{ .Config.type }}"

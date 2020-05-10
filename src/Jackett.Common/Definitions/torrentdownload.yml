@@ -68,7 +68,7 @@ login:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}search{{ re_replace .Config.sort \"_\" \"\" }}?q={{ .Keywords }}{{else}}{{end}}"
+    - path: "{{ if .Keywords }}search{{ re_replace .Config.sort \"_\" \"\" }}?q={{ .Keywords }}{{ else }}{{ end }}"
 
   rows:
     selector: table.table2 > tbody > tr:has(span.smallish)

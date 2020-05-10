@@ -81,12 +81,12 @@ search:
     # https://torrentleech.pl/browse.php?c60=1&c53=1&search=&incldead=1&titlesearch=0&polish=0&cat_film=&napisy=0
     - path: browse.php
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    $raw: "{{ range .Categories }}c{{ . }}=1&{{ end }}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     # 0 onlyactive 1 all 2 onlydead 3 free
     incldead: 1
     # 0 title 1 descr 2 both
-    titlesearch: "{{ if .Query.IMDBID }}1{{else}}0{{end}}"
+    titlesearch: "{{ if .Query.IMDBID }}1{{ else }}0{{ end }}"
     # 0 all 1 polish 2 not polish
     polish: 0
     cat_film: ""

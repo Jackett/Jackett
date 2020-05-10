@@ -105,7 +105,7 @@ search:
   paths:
     - path: lt/torrents.php
   inputs:
-    $raw: "{{ range .Categories }}cats[]={{.}}&{{end}}"
+    $raw: "{{ range .Categories }}cats[]={{ . }}&{{ end }}"
     search: "{{ .Keywords }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"

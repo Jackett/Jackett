@@ -140,10 +140,10 @@ login:
 search:
   path: browse.php
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    $raw: "{{ range .Categories }}c{{ . }}=1&{{ end }}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     # 0=title 1=descr 2=nfo 3=all
-    search_where: "{{ if .Query.IMDBID }}3{{else}}0{{end}}"
+    search_where: "{{ if .Query.IMDBID }}3{{ else }}0{{ end }}"
     # 0=active 1=all 2=dead 4=upload 5=doubleup 6=halfdown 7=highlight =request
     status: 1
     orderby: "{{ .Config.sort }}"

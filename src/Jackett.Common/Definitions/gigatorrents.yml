@@ -95,7 +95,7 @@ search:
   paths:
     - path: torrentek.php
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    $raw: "{{ range .Categories }}c{{ . }}=1&{{ end }}"
     search: "{{ .Keywords }}"
     incldead: 1
     blah: 0

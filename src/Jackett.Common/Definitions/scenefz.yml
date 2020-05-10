@@ -103,8 +103,8 @@ search:
   paths:
     - path: browse
   inputs:
-    $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    $raw: "{{ range .Categories }}categories[]={{ . }}&{{ end }}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     sort: "{{ .Config.sort }}"
     direction: "{{ .Config.type }}"
 

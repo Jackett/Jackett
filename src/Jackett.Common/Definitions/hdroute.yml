@@ -42,8 +42,8 @@ search:
   # http://hdroute.org/browse.php?s=&dp=0&add=0&action=s&c1=1&c3=1&or=1&imdb=
     - path: browse.php
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    s: "{{ if .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    $raw: "{{ range .Categories }}c{{ . }}=1&{{ end }}"
+    s: "{{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     # discount 0 all 1 none 2 30% 3 50% 4 70% 5 free 6 tempo free
     dp: 0
     # dates 0 all  1 thes week 2 this month 3 this season 4 this year
@@ -51,7 +51,7 @@ search:
     # order: 1 uptime 2 imdb 3 comment 4 size 5 complete 6 upload
     or: 1
     action: s
-    imdb: "{{ if .Query.IMDBID }}{{ .Query.IMDBIDShort }}{{else}}{{end}}"
+    imdb: "{{ if .Query.IMDBID }}{{ .Query.IMDBIDShort }}{{ else }}{{ end }}"
 
   rows:
     selector: div#unsticky-torrent-table dl, div#sticky-torrent-table dl

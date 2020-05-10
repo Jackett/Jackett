@@ -93,7 +93,7 @@ search:
       args: ["S(\\d{1,2})E(\\d{1,2})", "S$1/E$2"]
   inputs:
     page: torrents
-    $raw: "&category={{ range .Categories }}{{.}};{{end}}"
+    $raw: "&category={{ range .Categories }}{{ . }};{{ end }}"
     active: 1
     search: "{{ .Keywords }}"
     order: "{{ .Config.sort }}"

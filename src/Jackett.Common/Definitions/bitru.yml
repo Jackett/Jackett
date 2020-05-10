@@ -49,7 +49,7 @@ search:
   inputs:
     s: "{{ .Keywords }}"
     rek: "{{ .Config.adverts }}"
-    sort: "{{ re_replace .Config.sort \"_\" \"\"}}"
+    sort: "{{ re_replace .Config.sort \"_\" \"\" }}"
 
   rows:
     selector: table.browse-list > tbody > tr

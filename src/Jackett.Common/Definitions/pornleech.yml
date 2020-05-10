@@ -50,7 +50,7 @@ search:
   path: index.php
   inputs:
     page: torrents
-    $raw: "category={{ range .Categories }}{{.}};{{end}}"
+    $raw: "category={{ range .Categories }}{{ . }};{{ end }}"
     search: "{{ .Keywords }}"
     # 0 file 1 file&descr 2 descr 3 uploaders
     option: 0

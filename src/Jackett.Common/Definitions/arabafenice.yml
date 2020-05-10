@@ -139,10 +139,10 @@ search:
     - name: re_replace # S01E01 to 1 1
       args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "$1 $2"]
   inputs:
-    search: "{{if .Query.IMDBID}}{{ .Query.IMDBIDShort }}{{else}}{{ .Keywords }}{{end}}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBIDShort }}{{ else }}{{ .Keywords }}{{ end }}"
     page: torrents
-    category: "{{ range .Categories }}{{.}};{{end}}"
-    options: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
+    category: "{{ range .Categories }}{{ . }};{{ end }}"
+    options: "{{ if .Query.IMDBID }}4{{ else }}0{{ end }}"
     active: 0
     order: "{{ .Config.sort }}"
     by: "{{ .Config.type }}"

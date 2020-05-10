@@ -148,7 +148,7 @@ search:
         pages: 5
   inputs:
     search: "{{ .Keywords }}"
-    category: "{{ range .Categories }}{{.}};{{end}}"
+    category: "{{ range .Categories }}{{ . }};{{ end }}"
     page: torrents
     # 0 all 1 activeonly 2 deadonly
     active: 0

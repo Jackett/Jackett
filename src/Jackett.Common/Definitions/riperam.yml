@@ -843,9 +843,9 @@ search:
     # http://riperam.org/search.php?tracker_search=torrent&keywords=captain&terms=all&fp=1&author=&fid[]=1404&sc=1&sf=titleonly&sr=topics&sk=t&sd=d&st=0&ch=300&t=0
     - path: search.php
   inputs:
-    $raw: "{{ range .Categories }}&fid[]={{.}}{{end}}"
+    $raw: "{{ range .Categories }}&fid[]={{ . }}{{ end }}"
     tracker_search: torrent
-    keywords: "{{ if .Keywords }}{{ .Keywords }}{{else}}{{ .Today.Year }}{{end}}"
+    keywords: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
     terms: all
     fp: 1
     author: ""

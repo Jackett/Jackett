@@ -116,7 +116,7 @@ search:
   path: index.php
   inputs:
     page: torrents
-    $raw: "&category={{ range .Categories }}{{.}};{{end}}"
+    $raw: "&category={{ range .Categories }}{{ . }};{{ end }}"
     active: 1
     search: "{{ .Keywords }}"
     order: "{{ .Config.sort }}"

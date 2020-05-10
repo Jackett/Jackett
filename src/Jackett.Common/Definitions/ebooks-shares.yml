@@ -308,8 +308,8 @@ search:
   paths:
     - path: torrents-search.php
   inputs:
-    $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
-    search: "{{if .Keywords}}\"{{.Keywords}}\"{{else}}{{end}}"
+    $raw: "{{ range .Categories }}filter_cat[{{ . }}]=1&{{ end }}"
+    search: "{{ if .Keywords }}\"{{ .Keywords }}\"{{ else }}{{ end }}"
     # 0 only active 1 incl dead 2 only dead
     incldead: 0
     # 0 all 1 not freeleech 2 only freeleech

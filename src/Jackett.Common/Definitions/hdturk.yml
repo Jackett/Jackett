@@ -114,7 +114,7 @@ search:
   inputs:
   # does not support multi categories so defaulting to ALL
     do: search
-    keywords: "{{.Keywords}}"
+    keywords: "{{ .Keywords }}"
     category: 0
     search_type: t_name
     include_dead_torrents: yes

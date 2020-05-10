@@ -121,7 +121,7 @@ settings:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}/search/{{ .Keywords }}/0/{{ .Config.order }}/{{ join .Categories \",\"}}{{else}}/recent{{end}}"
+    - path: "{{ if .Keywords }}/search/{{ .Keywords }}/0/{{ .Config.order }}/{{ join .Categories \",\" }}{{ else }}/recent{{ end }}"
   keywordsfilters:
     # replace simplified chinese as this confuses TPB search engine #7291
     - name: re_replace

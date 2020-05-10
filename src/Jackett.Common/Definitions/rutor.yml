@@ -53,7 +53,7 @@ settings:
 search:
   paths:
     # http://rutor.info/search/0/0/100/0/gotham%2004x01
-    - path: "{{ if .Keywords }}search/0/0/100/{{ .Config.sort }}/{{ .Keywords }}/{{else}}top/{{end}}"
+    - path: "{{ if .Keywords }}search/0/0/100/{{ .Config.sort }}/{{ .Keywords }}/{{ else }}top/{{ end }}"
 
   rows:
     selector: tr:has(td:has(a.downgif))

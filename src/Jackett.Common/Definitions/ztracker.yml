@@ -100,10 +100,10 @@ search:
     - name: re_replace
       args: ["[^a-zA-Z0-9]+", "%"]
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    keywords: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    $raw: "{{ range .Categories }}c{{ . }}=1&{{ end }}"
+    keywords: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     # t_name, t_description, t_both, t_uploader
-    search_type: "{{ if .Query.IMDBID }}t_description{{else}}t_name{{end}}"
+    search_type: "{{ if .Query.IMDBID }}t_description{{ else }}t_name{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
     # does not return imdb link in results

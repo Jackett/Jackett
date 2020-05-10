@@ -78,7 +78,7 @@ search:
   paths:
     - path: browse.php
   inputs:
-    search_field: "{{range .Categories}}分类:`{{.}}` {{end}}{{ .Query.Keywords }}"
+    search_field: "{{ range .Categories }}分类:`{{ . }}` {{ end }}{{ .Query.Keywords }}"
     c: "M"
   rows:
     selector: table#torrent_table > tbody > tr[id]

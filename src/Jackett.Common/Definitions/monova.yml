@@ -48,10 +48,10 @@ search:
   paths:
     # https://monova.to/search?term=vikings+s05e05
     # https://monova.to/video
-    - path: "{{if .Keywords}}search?term={{.Keywords}}{{else}}video{{end}}"
-    - path: "{{if .Keywords}}search?term={{.Keywords}}{{else}}video{{end}}&page=2"
-    - path: "{{if .Keywords}}search?term={{.Keywords}}{{else}}video{{end}}&page=3"
-    - path: "{{if .Keywords}}search?term={{.Keywords}}{{else}}video{{end}}&page=4"
+    - path: "{{ if .Keywords }}search?term={{ .Keywords }}{{ else }}video{{ end }}"
+    - path: "{{ if .Keywords }}search?term={{ .Keywords }}{{ else }}video{{ end }}&page=2"
+    - path: "{{ if .Keywords }}search?term={{ .Keywords }}{{ else }}video{{ end }}&page=3"
+    - path: "{{ if .Keywords }}search?term={{ .Keywords }}{{ else }}video{{ end }}&page=4"
 
   keywordsfilters:
     - name: re_replace

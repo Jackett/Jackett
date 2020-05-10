@@ -107,7 +107,7 @@ search:
   # https://onlineselfeducation.com/browse.php?c9=1&c10=1&c11=1&search=&searchin=title&incldead=1
     - path: browse.php
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    $raw: "{{ range .Categories }}c{{ . }}=1&{{ end }}"
     search: "{{ .Keywords }}"
     # title descr all
     searchin: title

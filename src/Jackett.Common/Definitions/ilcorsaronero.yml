@@ -54,12 +54,12 @@ settings:
 
 search:
   paths:
-    - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=0{{else}}/browse/0{{end}}"
-    - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=1{{else}}/browse/1{{end}}"
-    - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=2{{else}}/browse/2{{end}}"
-    - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=3{{else}}/browse/3{{end}}"
-    - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=4{{else}}/browse/4{{end}}"
-    - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=5{{else}}/browse/5{{end}}"
+    - path: "{{ if .Keywords }}advsearch.php?&category={{ range .Categories }}{{ . }};{{ end }}&search={{ .Keywords }}&order=data&by=DESC&page=0{{ else }}/browse/0{{ end }}"
+    - path: "{{ if .Keywords }}advsearch.php?&category={{ range .Categories }}{{ . }};{{ end }}&search={{ .Keywords }}&order=data&by=DESC&page=1{{ else }}/browse/1{{ end }}"
+    - path: "{{ if .Keywords }}advsearch.php?&category={{ range .Categories }}{{ . }};{{ end }}&search={{ .Keywords }}&order=data&by=DESC&page=2{{ else }}/browse/2{{ end }}"
+    - path: "{{ if .Keywords }}advsearch.php?&category={{ range .Categories }}{{ . }};{{ end }}&search={{ .Keywords }}&order=data&by=DESC&page=3{{ else }}/browse/3{{ end }}"
+    - path: "{{ if .Keywords }}advsearch.php?&category={{ range .Categories }}{{ . }};{{ end }}&search={{ .Keywords }}&order=data&by=DESC&page=4{{ else }}/browse/4{{ end }}"
+    - path: "{{ if .Keywords }}advsearch.php?&category={{ range .Categories }}{{ . }};{{ end }}&search={{ .Keywords }}&order=data&by=DESC&page=5{{ else }}/browse/5{{ end }}"
   keywordsfilters:
     - name: re_replace # S01 to 1
       args: ["(?i)\\bS0*(\\d+)\\b", "$1"]
@@ -128,7 +128,7 @@ search:
         - name: append
           args: ".torrent"
     download:
-      text: "{{if .Config.itorrents-links}}{{ .Result.download-itorrents }}{{else}}{{end}}"
+      text: "{{ if .Config.itorrents-links }}{{ .Result.download-itorrents }}{{ else }}{{ end }}"
     magnet:
       selector: input.downarrow
       attribute: value

@@ -944,7 +944,7 @@ settings: []
 
 search:
   paths:
-    - path: "{{ if .Keywords }}search/?search={{ .Keywords }}{{else}}{{end}}"
+    - path: "{{ if .Keywords }}search/?search={{ .Keywords }}{{ else }}{{ end }}"
 
   rows:
     selector: tr[class^="tl"]

@@ -81,9 +81,9 @@ search:
     - path: xxx.php
       categories: [70, 39, 57]
   inputs:
-    $raw: "{{ range .Categories }}category[]={{.}}&{{end}}"
-    name: "{{ if .Query.IMDBID }}http://www.imdb.com/title/{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-    imdb_search: "{{ if .Query.IMDBID }}yes{{else}}{{end}}"
+    $raw: "{{ range .Categories }}category[]={{ . }}&{{ end }}"
+    name: "{{ if .Query.IMDBID }}http://www.imdb.com/title/{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    imdb_search: "{{ if .Query.IMDBID }}yes{{ else }}{{ end }}"
     k: yes
     tipuska: 1
 

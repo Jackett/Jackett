@@ -102,8 +102,8 @@ search:
       method: post
   inputs:
     do: search
-    keywords: "{{if or (.Query.Album) (.Query.Artist) }}{{ or (.Query.Album) (.Query.Artist) }}{{else}}{{ .Keywords }}{{end}}"
-    category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{else}}0{{end}}"
+    keywords: "{{ if or (.Query.Album) (.Query.Artist) }}{{ or (.Query.Album) (.Query.Artist) }}{{ else }}{{ .Keywords }}{{ end }}"
+    category: "{{ if .Categories }}{{ range .Categories }}{{ . }};{{ end }}{{ else }}0{{ end }}"
     # t_name t_description t_both t_uploader t_genre
     search_type: t_name
     include_dead_torrents: yes

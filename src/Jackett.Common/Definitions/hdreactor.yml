@@ -65,7 +65,7 @@ search:
     - name: re_replace # S01E01 to Сезон 1 Серии 1
       args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", " Сезон $1  Серии $2"]
   inputs:
-    $raw: "{{ range .Categories }}catlist[]={{.}}&{{end}}"
+    $raw: "{{ range .Categories }}catlist[]={{ . }}&{{ end }}"
     do: search
     subaction: search
     showposts: 1

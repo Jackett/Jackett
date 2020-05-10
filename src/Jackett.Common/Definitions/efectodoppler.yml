@@ -83,7 +83,7 @@ search:
       selector: a[href^="torrents.php?id="]
       filters:
         - name: prepend
-          args: "{{.Result.artist}} - "
+          args: "{{ .Result.artist }} - "
     details:
       selector: a[href^="torrents.php?id="]
       attribute: href
