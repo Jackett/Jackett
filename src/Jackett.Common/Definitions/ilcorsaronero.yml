@@ -77,7 +77,7 @@ search:
       attribute: href
       filters:
         - name: split
-          args: [ "/", -1 ]
+          args: ["/", -1]
         - name: diacritics
           args: replace
         - name: urldecode
@@ -107,13 +107,13 @@ search:
       attribute: href
       filters:
         - name: split
-          args: [ "/", -1 ]
+          args: ["/", -1]
     description:
       selector: td:nth-child(1) a
       attribute: href
       filters:
         - name: split
-          args: [ "/", -1 ]
+          args: ["/", -1]
         - name: prepend
           args: "cat="
     details:

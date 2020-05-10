@@ -76,14 +76,14 @@ search:
       selector: td.desc-bot
       filters:
         - name: split
-          args: [ "|", 1 ]
+          args: ["|", 1]
         - name: regexp
           args: "Size: (.+?) ?$"
     date:
       selector: td.desc-bot
       filters:
         - name: split
-          args: [ "|", 2 ]
+          args: ["|", 2]
         - name: regexp
           args: "Date: (.+?) ?$"
         - name: replace
