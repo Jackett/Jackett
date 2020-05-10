@@ -1,94 +1,94 @@
 ---
-  site: torrenting
-  name: Torrenting
-  description: "Torrenting (TT) is a Private site for MOVIES / TV / GENERAL"
-  language: en-us
-  type: private
-  encoding: windows-1252
-  links:
-    - https://torrenting.com/
+site: torrenting
+name: Torrenting
+description: "Torrenting (TT) is a Private site for MOVIES / TV / GENERAL"
+language: en-us
+type: private
+encoding: windows-1252
+links:
+  - https://torrenting.com/
 
-  caps:
-    categorymappings:
-      - {id: 1, cat: Movies, desc: "Movies"}
-      - {id: 2, cat: Movies/DVD, desc: "Movies/DVD-R"}
-      - {id: 3, cat: Movies/BluRay, desc: "BluRay Movies"}
-      - {id: 4, cat: TV/SD, desc: "TV/SD-x264"}
-      - {id: 5, cat: TV/HD, desc: "TV/X264 HD"}
-      - {id: 11, cat: Movies/HD, desc: "Movies/HD"}
-      - {id: 18, cat: TV, desc: "TV/Packs"}
-      - {id: 21, cat: Console, desc: "Games/Consoles"}
-      - {id: 26, cat: Audio/Video, desc: "Music/Videos"}
-      - {id: 27, cat: Audio, desc: "Music/Audio"}
-      - {id: 29, cat: TV/Anime, desc: "Anime/Toons"}
-      - {id: 30, cat: Books, desc: "Books"}
-      - {id: 34, cat: PC/0day, desc: "Applications/0-day"}
-      - {id: 35, cat: PC/Games, desc: "Games/PC"}
-      - {id: 40, cat: XXX, desc: "XXX"}
-      - {id: 47, cat: Movies, desc: "Movies/Packs"}
-      - {id: 49, cat: Movies/HD, desc: "x265 (HEVC)"}
+caps:
+  categorymappings:
+    - {id: 1, cat: Movies, desc: "Movies"}
+    - {id: 2, cat: Movies/DVD, desc: "Movies/DVD-R"}
+    - {id: 3, cat: Movies/BluRay, desc: "BluRay Movies"}
+    - {id: 4, cat: TV/SD, desc: "TV/SD-x264"}
+    - {id: 5, cat: TV/HD, desc: "TV/X264 HD"}
+    - {id: 11, cat: Movies/HD, desc: "Movies/HD"}
+    - {id: 18, cat: TV, desc: "TV/Packs"}
+    - {id: 21, cat: Console, desc: "Games/Consoles"}
+    - {id: 26, cat: Audio/Video, desc: "Music/Videos"}
+    - {id: 27, cat: Audio, desc: "Music/Audio"}
+    - {id: 29, cat: TV/Anime, desc: "Anime/Toons"}
+    - {id: 30, cat: Books, desc: "Books"}
+    - {id: 34, cat: PC/0day, desc: "Applications/0-day"}
+    - {id: 35, cat: PC/Games, desc: "Games/PC"}
+    - {id: 40, cat: XXX, desc: "XXX"}
+    - {id: 47, cat: Movies, desc: "Movies/Packs"}
+    - {id: 49, cat: Movies/HD, desc: "x265 (HEVC)"}
 
-    modes:
-      search: [q, imdbid]
-      tv-search: [q, season, ep, imdbid]
-      movie-search: [q, imdbid]
-      music-search: [q]
+  modes:
+    search: [q, imdbid]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
+    music-search: [q]
 
-  login:
-    path: login.php
-    method: form
-    form: form[action="do-login.php"]
-    inputs:
-      username: "{{ .Config.username }}"
-      password: "{{ .Config.password }}"
-    error:
-      - selector: td.embedded:has(h2:contains("failed"))
-    test:
-      path: t
+login:
+  path: login.php
+  method: form
+  form: form[action="do-login.php"]
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: td.embedded:has(h2:contains("failed"))
+  test:
+    path: t
 
-  search:
-    paths:
-      - path: t
-    inputs:
-      $raw: "{{ range .Categories }}{{.}}=&{{end}}"
-      q: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-      incldead: 1
-    rows:
-      selector: table#torrentsTable > tbody > tr:has(td.torrentNameInfo)
-    fields:
-      download:
-        selector: a[href^="/download.php/"]
-        attribute: href
-      title:
-        selector: a[href^="/details.php?id="]
-      details:
-        selector: a[href^="/details.php?id="]
-        attribute: href
-      category:
-        selector: a[href^="?"]
-        attribute: href
-        filters:
-          - name: replace
-            args: ["?", ""]
-      date:
-        selector: td.torrentNameInfo > div
-        filters:
-          - name: re_replace
-            args: [" by.*", ""]
-          - name: split
-            args: ["|", -1]
-      seeders:
-        selector: td:nth-last-child(2)
-      leechers:
-        selector: td:nth-last-child(1)
-      size:
-        selector: td:nth-last-child(3)
-      downloadvolumefactor:
-        text: 1
-      downloadvolumefactor:
-        case:
-          "span:contains(\"FreeLeech\")": 0
-          "*": 1
-      uploadvolumefactor:
-        text: 1
+search:
+  paths:
+    - path: t
+  inputs:
+    $raw: "{{ range .Categories }}{{.}}=&{{end}}"
+    q: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    incldead: 1
+  rows:
+    selector: table#torrentsTable > tbody > tr:has(td.torrentNameInfo)
+  fields:
+    download:
+      selector: a[href^="/download.php/"]
+      attribute: href
+    title:
+      selector: a[href^="/details.php?id="]
+    details:
+      selector: a[href^="/details.php?id="]
+      attribute: href
+    category:
+      selector: a[href^="?"]
+      attribute: href
+      filters:
+        - name: replace
+          args: ["?", ""]
+    date:
+      selector: td.torrentNameInfo > div
+      filters:
+        - name: re_replace
+          args: [" by.*", ""]
+        - name: split
+          args: ["|", -1]
+    seeders:
+      selector: td:nth-last-child(2)
+    leechers:
+      selector: td:nth-last-child(1)
+    size:
+      selector: td:nth-last-child(3)
+    downloadvolumefactor:
+      text: 1
+    downloadvolumefactor:
+      case:
+        "span:contains(\"FreeLeech\")": 0
+        "*": 1
+    uploadvolumefactor:
+      text: 1
 # engine tbd

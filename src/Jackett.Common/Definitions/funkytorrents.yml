@@ -1,123 +1,123 @@
 ---
-  site: funkytorrents
-  name: FunkyTorrents
-  description: "FunkyTorrents (FT) is a Private Torrent Tracker for MUSIC"
-  language: en-us
-  type: private
-  encoding: UTF-8
-  links:
-    - http://funkytorrents.com/ # site does not support https ERR_CONNECTION_REFUSED
+site: funkytorrents
+name: FunkyTorrents
+description: "FunkyTorrents (FT) is a Private Torrent Tracker for MUSIC"
+language: en-us
+type: private
+encoding: UTF-8
+links:
+  - http://funkytorrents.com/ # site does not support https ERR_CONNECTION_REFUSED
 
-  caps:
-    categories:
-      1: PC # (Apps)
-      2: Books # (eBooks)
-      3: Movies # (Movie)
-      33: Audio # (Music DVDs)
-      5: Audio/Video # (Music Vids)
-      4: Audio # (OST)
-      19: Audio # Alternative
-      28: Audio # Ambient
-      12: Audio # Classical
-      17: Audio # Dance
-      16: Audio # Drum 'n' Bass
-      20: Audio # Electronic
-      14: Audio # Emo
-      23: Audio # Experimental
-      34: Audio # Funk
-      18: Audio # Hardcore
-      13: Audio # House
-      31: Audio # IDM
-      21: Audio # Indie
-      26: Audio # Industrial
-      25: Audio # Jazz/Blues/Soul
-      37: Audio # Lo-Fi
-      6: Audio # Metal
-      22: Audio # Misc
-      7: Audio # Pop/RnB
-      29: Audio # Post-Rock
-      30: Audio # Psychedelic
-      8: Audio # Punk
-      9: Audio # Rap/Hip-Hop
-      35: Audio # Reggae
-      10: Audio # Rock
-      15: Audio # Ska
-      32: Audio # Techno
-      11: Audio # Trance
-      36: Audio # Trip-Hop
-      24: Audio # World/Ethnic
-      3010: Audio/MP3
-      3040: Audio/Lossless
+caps:
+  categories:
+    1: PC # (Apps)
+    2: Books # (eBooks)
+    3: Movies # (Movie)
+    33: Audio # (Music DVDs)
+    5: Audio/Video # (Music Vids)
+    4: Audio # (OST)
+    19: Audio # Alternative
+    28: Audio # Ambient
+    12: Audio # Classical
+    17: Audio # Dance
+    16: Audio # Drum 'n' Bass
+    20: Audio # Electronic
+    14: Audio # Emo
+    23: Audio # Experimental
+    34: Audio # Funk
+    18: Audio # Hardcore
+    13: Audio # House
+    31: Audio # IDM
+    21: Audio # Indie
+    26: Audio # Industrial
+    25: Audio # Jazz/Blues/Soul
+    37: Audio # Lo-Fi
+    6: Audio # Metal
+    22: Audio # Misc
+    7: Audio # Pop/RnB
+    29: Audio # Post-Rock
+    30: Audio # Psychedelic
+    8: Audio # Punk
+    9: Audio # Rap/Hip-Hop
+    35: Audio # Reggae
+    10: Audio # Rock
+    15: Audio # Ska
+    32: Audio # Techno
+    11: Audio # Trance
+    36: Audio # Trip-Hop
+    24: Audio # World/Ethnic
+    3010: Audio/MP3
+    3040: Audio/Lossless
 
-    modes:
-      search: [q]
-      music-search: [q, album, artist, label, year]
+  modes:
+    search: [q]
+    music-search: [q, album, artist, label, year]
 
-  login:
-    path: takelogin.php
-    method: post
-    inputs:
-      username: "{{ .Config.username }}"
-      password: "{{ .Config.password }}"
-    error:
-      - selector: td.embedded:has(h2:contains("failed"))
-    test:
-      path: browse.php
+login:
+  path: takelogin.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: td.embedded:has(h2:contains("failed"))
+  test:
+    path: browse.php
 
-  search:
-    paths:
-      - path: browse.php
-    inputs:
-      #$raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-      search: "{{if .Query.Artist}}{{ .Query.Artist }}{{else}}{{ .Keywords }}{{end}}"
-      incldead: 1
-    rows:
-      selector: table.mainouter > tbody > tr > td.outer > table > tbody > tr.mouse_out
-    fields:
-      description:
-        optional: true
-        selector: td:nth-child(2) > font
-      title:
-        selector: td:nth-child(2)
-        remove: font
-      category:
-        selector: a[href^="browse.php?cat="]
-        attribute: href
-        filters:
-          - name: querystring
-            args: cat
-      category:
-        optional: true
-        case:
-          a[href="/browse.php?ext=1&bitrate=Lossless"]: "3040"
-          a[href="/browse.php?ext=1&format=MP3"]: "3010"
-      details:
-        selector: a[href^="details.php?id="]
-        attribute: href
-      download:
-        selector: a[href^="download.php"]
-        attribute: href
-      files:
-        selector: td:nth-child(5)
-      size:
-        selector: td:nth-child(8)
-      seeders:
-        selector: td:nth-child(10)
-      leechers:
-        selector: td:nth-child(11)
-      date:
-        selector: td:nth-child(7)
-        filters:
-          - name: append
-            args: " +0000"
-          - name: dateparse
-            args: "2006-01-0215:04:05 -0700"
-      grabs:
-        selector: td:nth-child(9)
-      downloadvolumefactor:
-        case:
-          img[alt="Free Leech"]: "0"
-          "*": "1"
-      uploadvolumefactor:
-        case:
-          "*": "1"
+search:
+  paths:
+    - path: browse.php
+  inputs:
+    #$raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+    search: "{{if .Query.Artist}}{{ .Query.Artist }}{{else}}{{ .Keywords }}{{end}}"
+    incldead: 1
+  rows:
+    selector: table.mainouter > tbody > tr > td.outer > table > tbody > tr.mouse_out
+  fields:
+    description:
+      optional: true
+      selector: td:nth-child(2) > font
+    title:
+      selector: td:nth-child(2)
+      remove: font
+    category:
+      selector: a[href^="browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    category:
+      optional: true
+      case:
+        a[href="/browse.php?ext=1&bitrate=Lossless"]: "3040"
+        a[href="/browse.php?ext=1&format=MP3"]: "3010"
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="download.php"]
+      attribute: href
+    files:
+      selector: td:nth-child(5)
+    size:
+      selector: td:nth-child(8)
+    seeders:
+      selector: td:nth-child(10)
+    leechers:
+      selector: td:nth-child(11)
+    date:
+      selector: td:nth-child(7)
+      filters:
+        - name: append
+          args: " +0000"
+        - name: dateparse
+          args: "2006-01-0215:04:05 -0700"
+    grabs:
+      selector: td:nth-child(9)
+    downloadvolumefactor:
+      case:
+        img[alt="Free Leech"]: "0"
+        "*": "1"
+    uploadvolumefactor:
+      case:
+        "*": "1"

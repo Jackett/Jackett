@@ -1,132 +1,132 @@
 ---
-  site: zooqle
-  name: Zooqle
-  description: "Zooqle is a Public torrent index providing a huge database of verified torrents"
-  language: en-us
-  type: public
-  encoding: UTF-8
-  followredirect: true
-  links:
-    - https://zooqle.com/
-    - https://zooqle.unblockit.me/
-    - https://zooqle.black-mirror.xyz/
-    - https://zooqle.unblocked.casa/
-    - https://zooqle.proxyportal.fun/
-    - https://zooqle.uk-unblock.xyz/
-    - https://zooqle.ind-unblock.xyz/
-  legacylinks:
-    - https://zooqle.unblockit.pro/
-    - https://zooqle.unblockit.one/
+site: zooqle
+name: Zooqle
+description: "Zooqle is a Public torrent index providing a huge database of verified torrents"
+language: en-us
+type: public
+encoding: UTF-8
+followredirect: true
+links:
+  - https://zooqle.com/
+  - https://zooqle.unblockit.me/
+  - https://zooqle.black-mirror.xyz/
+  - https://zooqle.unblocked.casa/
+  - https://zooqle.proxyportal.fun/
+  - https://zooqle.uk-unblock.xyz/
+  - https://zooqle.ind-unblock.xyz/
+legacylinks:
+  - https://zooqle.unblockit.pro/
+  - https://zooqle.unblockit.one/
 
-  caps:
-    categories:
-      "anime": TV/Anime
-      "app": PC
-      "book": Books
-      "files": Other/Misc
-      "game": PC/Games
-      "movies": Movies
-      "music": Audio
-      "other": Other
-      "tv": TV
+caps:
+  categories:
+    "anime": TV/Anime
+    "app": PC
+    "book": Books
+    "files": Other/Misc
+    "game": PC/Games
+    "movies": Movies
+    "music": Audio
+    "other": Other
+    "tv": TV
 
-    modes:
-      search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
-      music-search: [q]
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
 
-  settings:
-    - name: sort
-      type: select
-      label: Sort requested from site
-      default: "dt"
-      options:
-        "dt": "created"
-        "ns": "seeders"
-        "sz": "size"
-    - name: type
-      type: select
-      label: Order requested from site
-      default: "d"
-      options:
-        "d": "desc"
-        "a": "asc"
+settings:
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: "dt"
+    options:
+      "dt": "created"
+      "ns": "seeders"
+      "sz": "size"
+  - name: type
+    type: select
+    label: Order requested from site
+    default: "d"
+    options:
+      "d": "desc"
+      "a": "asc"
 
-  search:
-    # includes only verified torrents
-    paths:
-      - path: "search?{{ if .Keywords }}s={{ .Config.sort }}&v=t&sd={{ .Config.type }}&q={{ .Keywords }}{{else}}s={{ .Config.sort }}&v=t&sd={{ .Config.type }}&q= *{{end}}{{ if .Categories }} category:{{ range .Categories }}{{.}},{{end}}{{else}}{{end}}"
+search:
+  # includes only verified torrents
+  paths:
+    - path: "search?{{ if .Keywords }}s={{ .Config.sort }}&v=t&sd={{ .Config.type }}&q={{ .Keywords }}{{else}}s={{ .Config.sort }}&v=t&sd={{ .Config.type }}&q= *{{end}}{{ if .Categories }} category:{{ range .Categories }}{{.}},{{end}}{{else}}{{end}}"
 
-    rows:
-      selector: tr:has(td[class^="text-muted3"])
+  rows:
+    selector: tr:has(td[class^="text-muted3"])
+    filters:
+      - name: andmatch
+
+  fields:
+    title:
+      selector: td:nth-child(2) a
+    category:
+      selector: td:nth-child(2) > i
+      attribute: class
       filters:
-        - name: andmatch
-
-    fields:
-      title:
-        selector: td:nth-child(2) a
-      category:
-        selector: td:nth-child(2) > i
-        attribute: class
-        filters:
-          # extract the second class
-          - name: split
-            args: [" ", 1]
-          # remove zqf- prefix
-          - name: replace
-            args: ["zqf-", ""]
-      details:
-        selector: td:nth-child(2) a
-        attribute: href
-      download:
-        # .torrent urls can be missing
-        optional: true
-        selector: a[title^="Generate .torrent"]
-        attribute: href
-      magnet:
-        # magnets urls can be missing
-        optional: true
-        selector: a[title^="Magnet link"]
-        attribute: href
-      date:
-        selector: td:nth-child(5)
-        filters:
-          # a date of 'long ago' causes the timeago filter to return '0m ago' which is contra
-          - name: replace
-            args: ["long ago", "99 years"]
-          # a date of 'yesterday' causes the timeago filter to return '0m ago' which is contra
-          - name: replace
-            args: ["yesterday", "1 day"]
-          - name: timeago
-      size:
-        selector: td:nth-child(4)
-        filters:
-          # a size of '– N/A –' causes Jackett to reject the row with an error
-          - name: replace
-            args: ["– N/A –", "0 Bytes"]
-      seeders:
-        # seeders can be missing
-        optional: true
-        selector: td:nth-child(6) div
-        attribute: title
-        filters:
-          - name: split
-            args: [" ", 1]
-          - name: replace
-            args: [",", ""]
-      leechers:
-        # leechers can be missing
-        optional: true
-        selector: td:nth-child(6) div
-        attribute: title
-        filters:
-          - name: split
-            args: [" ", 4]
-          - name: replace
-            args: [",", ""]
-      downloadvolumefactor:
-        text: 0
-      uploadvolumefactor:
-        text: 1
+        # extract the second class
+        - name: split
+          args: [" ", 1]
+        # remove zqf- prefix
+        - name: replace
+          args: ["zqf-", ""]
+    details:
+      selector: td:nth-child(2) a
+      attribute: href
+    download:
+      # .torrent urls can be missing
+      optional: true
+      selector: a[title^="Generate .torrent"]
+      attribute: href
+    magnet:
+      # magnets urls can be missing
+      optional: true
+      selector: a[title^="Magnet link"]
+      attribute: href
+    date:
+      selector: td:nth-child(5)
+      filters:
+        # a date of 'long ago' causes the timeago filter to return '0m ago' which is contra
+        - name: replace
+          args: ["long ago", "99 years"]
+        # a date of 'yesterday' causes the timeago filter to return '0m ago' which is contra
+        - name: replace
+          args: ["yesterday", "1 day"]
+        - name: timeago
+    size:
+      selector: td:nth-child(4)
+      filters:
+        # a size of '– N/A –' causes Jackett to reject the row with an error
+        - name: replace
+          args: ["– N/A –", "0 Bytes"]
+    seeders:
+      # seeders can be missing
+      optional: true
+      selector: td:nth-child(6) div
+      attribute: title
+      filters:
+        - name: split
+          args: [" ", 1]
+        - name: replace
+          args: [",", ""]
+    leechers:
+      # leechers can be missing
+      optional: true
+      selector: td:nth-child(6) div
+      attribute: title
+      filters:
+        - name: split
+          args: [" ", 4]
+        - name: replace
+          args: [",", ""]
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
 # engine n/a

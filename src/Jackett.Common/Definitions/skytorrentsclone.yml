@@ -1,95 +1,95 @@
 ---
-  site: skytorrentsclone
-  name: SkyTorrentsClone
-  description: "SkyTorrents.lol is a Public SkyTorrents clone for TV / MOVIES / GENERAL"
-  language: en-us
-  type: public
-  encoding: UTF-8
-  links:
-    - https://www.skytorrents.lol/
-    - https://skytorrents.black-mirror.xyz/
-    - https://skytorrents.unblocked.casa/
-    - https://skytorrents.proxyportal.fun/
-    - https://skytorrents.uk-unblock.xyz/
-    - https://skytorrents.ind-unblock.xyz/
-  legacylinks:
-    - https://www.skytorrents.to/
+site: skytorrentsclone
+name: SkyTorrentsClone
+description: "SkyTorrents.lol is a Public SkyTorrents clone for TV / MOVIES / GENERAL"
+language: en-us
+type: public
+encoding: UTF-8
+links:
+  - https://www.skytorrents.lol/
+  - https://skytorrents.black-mirror.xyz/
+  - https://skytorrents.unblocked.casa/
+  - https://skytorrents.proxyportal.fun/
+  - https://skytorrents.uk-unblock.xyz/
+  - https://skytorrents.ind-unblock.xyz/
+legacylinks:
+  - https://www.skytorrents.to/
 
-  caps:
-    categories:
-      "other": Other
-      # category=
-      "album": Audio
-      "ebook": Books
-      "movie": Movies
-      "show": TV
-      # type=
-      "audio": Audio
-      "doc": Books
-      "games": PC/Games
-      "software": PC
+caps:
+  categories:
+    "other": Other
+    # category=
+    "album": Audio
+    "ebook": Books
+    "movie": Movies
+    "show": TV
+    # type=
+    "audio": Audio
+    "doc": Books
+    "games": PC/Games
+    "software": PC
 
-    modes:
-      search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
-      music-search: [q]
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
 
-  settings:
-    - name: sort
-      type: select
-      label: Sort requested from site
-      default: "created"
-      options:
-        "created": "created"
-        "seeders": "seeders"
+settings:
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: "created"
+    options:
+      "created": "created"
+      "seeders": "seeders"
 
-  search:
-    # https://www.skytorrents.lol/?query=mr+mercedes+s02e05&sort=created
-    # https://www.skytorrents.lol/top100?sort=created
-    paths:
-      - path: "{{ if .Keywords }}?query={{ .Keywords }}&sort={{ .Config.sort }}{{else}}top100?sort={{ .Config.sort }}{{end}}"
-      - path: "{{ if .Keywords }}?query={{ .Keywords }}&sort={{ .Config.sort }}&page=2{{else}}{{end}}"
-      - path: "{{ if .Keywords }}?query={{ .Keywords }}&sort={{ .Config.sort }}&page=3{{else}}{{end}}"
-      - path: "{{ if .Keywords }}?query={{ .Keywords }}&sort={{ .Config.sort }}&page=4{{else}}{{end}}"
+search:
+  # https://www.skytorrents.lol/?query=mr+mercedes+s02e05&sort=created
+  # https://www.skytorrents.lol/top100?sort=created
+  paths:
+    - path: "{{ if .Keywords }}?query={{ .Keywords }}&sort={{ .Config.sort }}{{else}}top100?sort={{ .Config.sort }}{{end}}"
+    - path: "{{ if .Keywords }}?query={{ .Keywords }}&sort={{ .Config.sort }}&page=2{{else}}{{end}}"
+    - path: "{{ if .Keywords }}?query={{ .Keywords }}&sort={{ .Config.sort }}&page=3{{else}}{{end}}"
+    - path: "{{ if .Keywords }}?query={{ .Keywords }}&sort={{ .Config.sort }}&page=4{{else}}{{end}}"
 
-    rows:
-      selector: tr.result
+  rows:
+    selector: tr.result
 
-    fields:
-      title:
-        selector: td a
-      category:
-        text: other
-      category|noappend:
-        # try category=
-        selector: a.label[href*="category="]
-        optional: true
-      category|noappend:
-        # try type=
-        selector: a.label[href*="type="]
-        optional: true
-      details:
-        selector: td a
-        attribute: href
-      magnet:
-        selector: a[href^="magnet:?"]
-        attribute: href
-      size:
-        selector: td:nth-child(2)
-      files:
-        selector: td:nth-child(3)
-      date:
-        # 20 Minutes ago
-        selector: td:nth-child(4)
-        filters:
-          - name: timeago
-      seeders:
-        selector: td:nth-child(5)
-      leechers:
-        selector: td:nth-child(6)
-      downloadvolumefactor:
-        text: 0
-      uploadvolumefactor:
-        text: 1
+  fields:
+    title:
+      selector: td a
+    category:
+      text: other
+    category|noappend:
+      # try category=
+      selector: a.label[href*="category="]
+      optional: true
+    category|noappend:
+      # try type=
+      selector: a.label[href*="type="]
+      optional: true
+    details:
+      selector: td a
+      attribute: href
+    magnet:
+      selector: a[href^="magnet:?"]
+      attribute: href
+    size:
+      selector: td:nth-child(2)
+    files:
+      selector: td:nth-child(3)
+    date:
+      # 20 Minutes ago
+      selector: td:nth-child(4)
+      filters:
+        - name: timeago
+    seeders:
+      selector: td:nth-child(5)
+    leechers:
+      selector: td:nth-child(6)
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
 # engine n/a

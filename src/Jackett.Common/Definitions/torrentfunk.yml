@@ -1,102 +1,102 @@
 ---
-  site: torrentfunk
-  name: TorrentFunk
-  description: "TorrentFunk is a Public torrent index"
-  language: en-us
-  type: public
-  encoding: UTF-8
-  followredirect: true
-  links:
-    - https://www.torrentfunk.com/
-    - https://www.torrentfunk2.com/
-    - https://torrentfunk.unblockit.me/
-  legacylinks:
-    - https://torrentfunk.unblockit.pro/
-    - https://torrentfunk.unblockit.one/
+site: torrentfunk
+name: TorrentFunk
+description: "TorrentFunk is a Public torrent index"
+language: en-us
+type: public
+encoding: UTF-8
+followredirect: true
+links:
+  - https://www.torrentfunk.com/
+  - https://www.torrentfunk2.com/
+  - https://torrentfunk.unblockit.me/
+legacylinks:
+  - https://torrentfunk.unblockit.pro/
+  - https://torrentfunk.unblockit.one/
 
-  caps:
-    categories:
-      1: Movies
-      2: Audio
-      3: TV
-      4: PC/Games
-      5: PC
-      6: TV/Anime
-      7: XXX
-      8: Other
-      9: Other
-      0: Other
-      10: Books
+caps:
+  categories:
+    1: Movies
+    2: Audio
+    3: TV
+    4: PC/Games
+    5: PC
+    6: TV/Anime
+    7: XXX
+    8: Other
+    9: Other
+    0: Other
+    10: Books
 
-    modes:
-      search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
-      music-search: [q]
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
 
-  settings: []
+settings: []
 
-  search:
-    paths:
-      # https://www.torrentfunk.com/all/torrents/morty-402-castellano.html
-      - path: "all/torrents/{{ .Keywords }}.html"
-    keywordsfilters:
-      - name: re_replace
-        args: ["[\\s]+", "-"]
-      - name: tolower
+search:
+  paths:
+    # https://www.torrentfunk.com/all/torrents/morty-402-castellano.html
+    - path: "all/torrents/{{ .Keywords }}.html"
+  keywordsfilters:
+    - name: re_replace
+      args: ["[\\s]+", "-"]
+    - name: tolower
 
-    rows:
-      selector: table.tmain tbody tr:has(a[href^="/torrent/"])
+  rows:
+    selector: table.tmain tbody tr:has(a[href^="/torrent/"])
+    filters:
+      - name: andmatch
+
+  fields:
+    title:
+      selector: div a[href^="/torrent/"]
+    category:
+      selector: td[class^="tv"], td[class^="tn"]
+      attribute: class
       filters:
-        - name: andmatch
-
-    fields:
-      title:
-        selector: div a[href^="/torrent/"]
-      category:
-        selector: td[class^="tv"], td[class^="tn"]
-        attribute: class
-        filters:
-          - name: regexp
-            args: (\d+)
-      details:
-        selector: div a[href^="/torrent/"]
-        attribute: href
-      download:
-        # /tor/25878251.torrent
-        selector: div a[href^="/torrent/"]
-        attribute: href
-        filters:
-          - name: split
-            args: ["/", 2]
-          - name: prepend
-            args: "/tor/"
-          - name: append
-            args: ".torrent"
-        # two types of dates
-      date:
-        # Today
-        # Yesterday
-        selector: td:nth-child(2):contains("day")
-        optional: true
-        filters:
-          - name: fuzzytime
-      date:
-        # 7 Jul
-        # 25 Dec
-        selector: td:nth-child(2):not(:contains("day"))
-        optional: true
-        filters:
-          - name: dateparse
-            args: "2 Jan"
-      size:
-        selector: td:nth-child(3)
-      seeders:
-        selector: td:nth-child(4)
-      leechers:
-        selector: td:nth-child(5)
-      downloadvolumefactor:
-        text: 0
-      uploadvolumefactor:
-        text: 1
+        - name: regexp
+          args: (\d+)
+    details:
+      selector: div a[href^="/torrent/"]
+      attribute: href
+    download:
+      # /tor/25878251.torrent
+      selector: div a[href^="/torrent/"]
+      attribute: href
+      filters:
+        - name: split
+          args: ["/", 2]
+        - name: prepend
+          args: "/tor/"
+        - name: append
+          args: ".torrent"
+      # two types of dates
+    date:
+      # Today
+      # Yesterday
+      selector: td:nth-child(2):contains("day")
+      optional: true
+      filters:
+        - name: fuzzytime
+    date:
+      # 7 Jul
+      # 25 Dec
+      selector: td:nth-child(2):not(:contains("day"))
+      optional: true
+      filters:
+        - name: dateparse
+          args: "2 Jan"
+    size:
+      selector: td:nth-child(3)
+    seeders:
+      selector: td:nth-child(4)
+    leechers:
+      selector: td:nth-child(5)
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
 # engine n/a

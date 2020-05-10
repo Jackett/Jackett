@@ -1,1718 +1,1718 @@
 ---
-  site: riperam
-  name: RiperAM
-  description: "RiperAM is a RUSSIAN Semi-Private Torrent Tracker for MOVIES / TV"
-  language: ru-ru
-  type: semi-private
-  encoding: UTF-8
-  links:
-    - http://riperam.org/ # site does not support https ERR_CONNECTION_TIMED_OUT
+site: riperam
+name: RiperAM
+description: "RiperAM is a RUSSIAN Semi-Private Torrent Tracker for MOVIES / TV"
+language: ru-ru
+type: semi-private
+encoding: UTF-8
+links:
+  - http://riperam.org/ # site does not support https ERR_CONNECTION_TIMED_OUT
 
-  caps:
-    categorymappings:
-      - {id: 238, cat: Movies, desc: "Новинки кино (2018-2019). Новые фильмы скачать бесплатно"}
-      - {id: 425, cat: Movies/HD, desc: "DVDRip / DVD-5/DVD-9"}
-      - {id: 50, cat: Movies/HD, desc: "DVDRip"}
-      - {id: 52, cat: Movies/HD, desc: "DVD-5/DVD-9"}
-      - {id: 424, cat: Movies/HD, desc: "BDRip / HDRip / BD / HD / Blu - ray / Ultra HD (4K)"}
-      - {id: 51, cat: Movies/HD, desc: "BDRip/HDRip"}
-      - {id: 371, cat: Movies/HD, desc: "BD / HD"}
-      - {id: 251, cat: Movies/BluRay, desc: "Blu-ray"}
-      - {id: 1404, cat: Movies/UHD, desc: "Ultra HD (4K)"}
-      - {id: 349, cat: Movies, desc: "Видео для мобильных устройств"}
-      - {id: 350, cat: Movies, desc: "Видео (iPhone, iPod Touch)"}
-      - {id: 351, cat: Movies, desc: "HD Видео (Apple TV, iPad)"}
-      - {id: 352, cat: Movies, desc: "Видео для смартфонов и КПК"}
-      - {id: 239, cat: Movies, desc: "Фильмы, мультфильмы"}
-      - {id: 420, cat: Movies, desc: "Зарубежные фильмы"}
-      - {id: 12, cat: Movies, desc: "Зарубежные фильмы до 2000го года..."}
-      - {id: 13, cat: Movies, desc: "Зарубежные фильмы после 2000го года..."}
-      - {id: 423, cat: TV/Anime, desc: "Мультфильмы"}
-      - {id: 16, cat: TV/Anime, desc: "Зарубежные мультфильмы"}
-      - {id: 17, cat: TV/Anime, desc: "Советские мультфильмы"}
-      - {id: 18, cat: TV/Anime, desc: "Российские мультфильмы"}
-      - {id: 46, cat: TV/Anime, desc: "Эротические фильмы"}
-      - {id: 15, cat: TV/Anime, desc: "Российские фильмы"}
-      - {id: 14, cat: TV/Anime, desc: "Советские фильмы"}
-      - {id: 240, cat: TV, desc: "Сериалы, мультсериалы"}
-      - {id: 19, cat: TV, desc: "Зарубежные сериалы"}
-      - {id: 216, cat: TV, desc: "!!! Полные завершенные сезоны !!!"}
-      - {id: 118, cat: TV, desc: "H2O - Просто добавь воды (3й сезон! Озвучка RiperAM!)"}
-      - {id: 153, cat: TV, desc: "Split. Тайна крови"}
-      - {id: 363, cat: TV, desc: "Адские кошки / Hellcats"}
-      - {id: 1055, cat: TV, desc: "Виолетта / Violetta"}
-      - {id: 632, cat: TV, desc: "Вспышка-любовь / Popland!"}
-      - {id: 183, cat: TV, desc: "Грань"}
-      - {id: 178, cat: TV, desc: "Гимнастки"}
-      - {id: 364, cat: TV, desc: "Дайте Санни шанс / Sonny With A Chance"}
-      - {id: 319, cat: TV, desc: "Два короля / Pair of Kings"}
-      - {id: 267, cat: TV, desc: "Держись, Чарли / Good Luck"}
-      - {id: 1166, cat: TV, desc: "Мушкетеры / The Musketeers"}
-      - {id: 365, cat: TV, desc: "Никита / Nikita"}
-      - {id: 353, cat: TV, desc: "Обитель Анубиса / House of Anubis"}
-      - {id: 710, cat: TV, desc: "Проспект Бразилии / Avenida Brasil"}
-      - {id: 266, cat: TV, desc: "Сверхъестественное / Supernatural"}
-      - {id: 268, cat: TV, desc: "Следствие по телу / Body of Proof"}
-      - {id: 160, cat: TV, desc: "Теория большого взрыва"}
-      - {id: 20, cat: TV, desc: "Русские сериалы"}
-      - {id: 210, cat: TV, desc: "!!!   Полные завершенные сериалы   !!!"}
-      - {id: 969, cat: TV, desc: "13"}
-      - {id: 707, cat: TV, desc: "Агент"}
-      - {id: 1028, cat: TV, desc: "Белые волки"}
-      - {id: 736, cat: TV, desc: "Бомбила. Продолжение"}
-      - {id: 550, cat: TV, desc: "Брат за брата"}
-      - {id: 601, cat: TV, desc: "Братаны"}
-      - {id: 979, cat: TV, desc: "В Москве всегда солнечно"}
-      - {id: 790, cat: TV, desc: "Горюнов"}
-      - {id: 791, cat: TV, desc: "Груз (Фельдъегеря)"}
-      - {id: 803, cat: TV, desc: "Двойная жизнь"}
-      - {id: 994, cat: TV, desc: "Дворняжка Ляля / Красотка Ляля / Ляля. Возвращение"}
-      - {id: 735, cat: TV, desc: "Дело врачей"}
-      - {id: 992, cat: TV, desc: "Дело для двоих"}
-      - {id: 771, cat: TV, desc: "Департамент"}
-      - {id: 964, cat: TV, desc: "Дом с лилиями"}
-      - {id: 746, cat: TV, desc: "Домработница"}
-      - {id: 976, cat: TV, desc: "До свидания, мальчики"}
-      - {id: 719, cat: TV, desc: "ЗАГС"}
-      - {id: 1006, cat: TV, desc: "Женщины на грани"}
-      - {id: 768, cat: TV, desc: "Земский доктор - Возвращение"}
-      - {id: 984, cat: TV, desc: "Земский доктор. Любовь вопреки"}
-      - {id: 732, cat: TV, desc: "Икорный барон"}
-      - {id: 983, cat: TV, desc: "Королева игры"}
-      - {id: 774, cat: TV, desc: "Кулинар-2"}
-      - {id: 989, cat: TV, desc: "Курортная полиция"}
-      - {id: 961, cat: TV, desc: "Личное дело"}
-      - {id: 639, cat: TV, desc: "Ловушка"}
-      - {id: 703, cat: TV, desc: "Лорд. Пес-полицейский"}
-      - {id: 1013, cat: TV, desc: "Лучшие враги"}
-      - {id: 131, cat: TV, desc: "Майор полиции"}
-      - {id: 727, cat: TV, desc: "Маяковский - Два дня"}
-      - {id: 1058, cat: TV, desc: "Между двух огней"}
-      - {id: 641, cat: TV, desc: "Мент в законе-7"}
-      - {id: 644, cat: TV, desc: "Метод Лавровой-2"}
-      - {id: 779, cat: TV, desc: "Неzлоб"}
-      - {id: 372, cat: TV, desc: "Неравный брак"}
-      - {id: 957, cat: TV, desc: "Неформат"}
-      - {id: 766, cat: TV, desc: "ОСА"}
-      - {id: 991, cat: TV, desc: "Отмена всех ограничений"}
-      - {id: 653, cat: TV, desc: "Патруль. Васильевский остров"}
-      - {id: 962, cat: TV, desc: "Под прицелом"}
-      - {id: 683, cat: TV, desc: "Поцелуй"}
-      - {id: 708, cat: TV, desc: "Поцелуйте невесту"}
-      - {id: 1026, cat: TV, desc: "Профессионал"}
-      - {id: 787, cat: TV, desc: "Пропавшие без вести"}
-      - {id: 773, cat: TV, desc: "Пыльная работа"}
-      - {id: 799, cat: TV, desc: "Ржавчина"}
-      - {id: 794, cat: TV, desc: "Сашка"}
-      - {id: 756, cat: TV, desc: "Семейные обстоятельства"}
-      - {id: 706, cat: TV, desc: "Семин. Возмездие"}
-      - {id: 966, cat: TV, desc: "Скорая помощь"}
-      - {id: 960, cat: TV, desc: "Следователь Протасов"}
-      - {id: 714, cat: TV, desc: "Стервы"}
-      - {id: 755, cat: TV, desc: "Студия 17"}
-      - {id: 1039, cat: TV, desc: "Тайны следствия"}
-      - {id: 360, cat: TV, desc: "Такси"}
-      - {id: 981, cat: TV, desc: "Темный мир: Равновесие"}
-      - {id: 1046, cat: TV, desc: "Тест на беременность"}
-      - {id: 977, cat: TV, desc: "Тихая охота"}
-      - {id: 681, cat: TV, desc: "Топтуны"}
-      - {id: 675, cat: TV, desc: "Торговый центр"}
-      - {id: 988, cat: TV, desc: "Три звезды"}
-      - {id: 1033, cat: TV, desc: "Чужой"}
-      - {id: 690, cat: TV, desc: "Чужой район"}
-      - {id: 1030, cat: TV, desc: "Чужой среди своих"}
-      - {id: 804, cat: TV, desc: "Шаман"}
-      - {id: 780, cat: TV, desc: "Шерлок Холмс"}
-      - {id: 805, cat: TV, desc: "Этаж"}
-      - {id: 743, cat: TV, desc: "Ясмин"}
-      - {id: 973, cat: TV, desc: "Умник"}
-      - {id: 733, cat: TV, desc: "Хмуров"}
-      - {id: 505, cat: TV, desc: "Хозяйка моей судьбы"}
-      - {id: 1004, cat: TV, desc: "Анжелика"}
-      - {id: 1047, cat: TV, desc: "Бессмертник"}
-      - {id: 1074, cat: TV, desc: "Без свидетелей"}
-      - {id: 692, cat: TV, desc: "Верное средство"}
-      - {id: 1038, cat: TV, desc: "Верни мою любовь"}
-      - {id: 711, cat: TV, desc: "Береговая охрана"}
-      - {id: 1052, cat: TV, desc: "Граница времени"}
-      - {id: 1061, cat: TV, desc: "Второй шанс"}
-      - {id: 1042, cat: TV, desc: "Гречанка"}
-      - {id: 1108, cat: TV, desc: "Высокие ставки"}
-      - {id: 748, cat: TV, desc: "Дельта"}
-      - {id: 501, cat: TV, desc: "Дикий - 4"}
-      - {id: 980, cat: TV, desc: "Дознаватель"}
-      - {id: 1002, cat: TV, desc: "Долгий путь домой"}
-      - {id: 958, cat: TV, desc: "Дружба народов"}
-      - {id: 798, cat: TV, desc: "Зайцев+1"}
-      - {id: 1102, cat: TV, desc: "Запретная любовь"}
-      - {id: 1083, cat: TV, desc: "Код Константина"}
-      - {id: 1092, cat: TV, desc: "Измены"}
-      - {id: 565, cat: TV, desc: "Кодекс чести"}
-      - {id: 797, cat: TV, desc: "Корабль"}
-      - {id: 1070, cat: TV, desc: "Инспектор Купер"}
-      - {id: 640, cat: TV, desc: "Легавый"}
-      - {id: 1048, cat: TV, desc: "Луна"}
-      - {id: 1060, cat: TV, desc: "Ленинград 46"}
-      - {id: 684, cat: TV, desc: "Лесник"}
-      - {id: 1057, cat: TV, desc: "Между нами, девочками"}
-      - {id: 654, cat: TV, desc: "Морские дьяволы. Смерч"}
-      - {id: 1089, cat: TV, desc: "Неподкупный"}
-      - {id: 1095, cat: TV, desc: "Окрылённые"}
-      - {id: 1016, cat: TV, desc: "Отец Матвей"}
-      - {id: 687, cat: TV, desc: "Особый случай"}
-      - {id: 1054, cat: TV, desc: "Папа на вырост"}
-      - {id: 1094, cat: TV, desc: "Непридуманная жизнь"}
-      - {id: 986, cat: TV, desc: "Пляж"}
-      - {id: 750, cat: TV, desc: "Последний из Магикян"}
-      - {id: 1043, cat: TV, desc: "Последний янычар"}
-      - {id: 997, cat: TV, desc: "Практика"}
-      - {id: 1031, cat: TV, desc: "Хроники ломбарда"}
-      - {id: 1063, cat: TV, desc: "Цветок папоротника"}
-      - {id: 990, cat: TV, desc: "Человек - приманка"}
-      - {id: 1044, cat: TV, desc: "Свет и тень маяка"}
-      - {id: 1082, cat: TV, desc: "Следователи"}
-      - {id: 995, cat: TV, desc: "Слепая"}
-      - {id: 699, cat: TV, desc: "Солдаты 17 (Солдаты. Снова в строю)"}
-      - {id: 1025, cat: TV, desc: "Улыбка пересмешника"}
-      - {id: 1024, cat: TV, desc: "Литейный"}
-      - {id: 1023, cat: TV, desc: "Раскаяние"}
-      - {id: 1076, cat: TV, desc: "Родители"}
-      - {id: 972, cat: TV, desc: "Сватьи"}
-      - {id: 1105, cat: TV, desc: "Чума"}
-      - {id: 1073, cat: TV, desc: "Чужое гнездо"}
-      - {id: 1078, cat: TV, desc: "Чтец"}
-      - {id: 691, cat: TV, desc: "Черные кошки"}
-      - {id: 628, cat: TV, desc: "Карпов"}
-      - {id: 1101, cat: TV, desc: "Квест"}
-      - {id: 1088, cat: TV, desc: "Лондонград"}
-      - {id: 1072, cat: TV, desc: "Меч"}
-      - {id: 795, cat: TV, desc: "Пока станица спит"}
-      - {id: 978, cat: TV, desc: "ППС"}
-      - {id: 1003, cat: TV, desc: "Сердце звезды"}
-      - {id: 1194, cat: TV, desc: "Агентство скрытых камер"}
-      - {id: 1140, cat: TV, desc: "Академия"}
-      - {id: 1178, cat: TV, desc: "Беглые родственники"}
-      - {id: 1222, cat: TV, desc: "Анна-детективъ"}
-      - {id: 1161, cat: TV, desc: "Бедные люди"}
-      - {id: 1099, cat: TV, desc: "Ботаны"}
-      - {id: 1136, cat: TV, desc: "Бородач"}
-      - {id: 1184, cat: TV, desc: "Вижу - знаю"}
-      - {id: 1127, cat: TV, desc: "Владимирская, 15"}
-      - {id: 781, cat: TV, desc: "Выжить после"}
-      - {id: 1181, cat: TV, desc: "Вышибала"}
-      - {id: 1165, cat: TV, desc: "Гастролеры (Беглецы)"}
-      - {id: 1150, cat: TV, desc: "Гражданин Никто"}
-      - {id: 509, cat: TV, desc: "Два отца и два сына"}
-      - {id: 656, cat: TV, desc: "Деффчонки"}
-      - {id: 1128, cat: TV, desc: "Другой майор Соколов"}
-      - {id: 1192, cat: TV, desc: "Жемчуга"}
-      - {id: 1170, cat: TV, desc: "Законы улиц"}
-      - {id: 1183, cat: TV, desc: "Игра. Реванш"}
-      - {id: 1117, cat: TV, desc: "Иные"}
-      - {id: 1228, cat: TV, desc: "Казаки"}
-      - {id: 1107, cat: TV, desc: "Как я стал русским"}
-      - {id: 1077, cat: TV, desc: "Клан Ювелиров"}
-      - {id: 1118, cat: TV, desc: "Команда"}
-      - {id: 1132, cat: TV, desc: "Кости"}
-      - {id: 354, cat: TV, desc: "Кухня"}
-      - {id: 1040, cat: TV, desc: "Мажор"}
-      - {id: 1104, cat: TV, desc: "Метод"}
-      - {id: 1189, cat: TV, desc: "Москва. Центральный округ"}
-      - {id: 1135, cat: TV, desc: "На глубине"}
-      - {id: 1151, cat: TV, desc: "Напарницы"}
-      - {id: 1131, cat: TV, desc: "Не зарекайся"}
-      - {id: 1160, cat: TV, desc: "Невский"}
-      - {id: 1224, cat: TV, desc: "Нити судьбы"}
-      - {id: 1112, cat: TV, desc: "Озабоченные или любовь зла"}
-      - {id: 1139, cat: TV, desc: "Остров"}
-      - {id: 1080, cat: TV, desc: "Отдел 44"}
-      - {id: 761, cat: TV, desc: "Пасечник"}
-      - {id: 1103, cat: TV, desc: "Патруль Самооборона"}
-      - {id: 1157, cat: TV, desc: "Перевозчик"}
-      - {id: 1081, cat: TV, desc: "Пес"}
-      - {id: 1110, cat: TV, desc: "Последний мент"}
-      - {id: 1163, cat: TV, desc: "Последний москаль. Судный день"}
-      - {id: 1126, cat: TV, desc: "Прокуроры"}
-      - {id: 1179, cat: TV, desc: "Пушкин"}
-      - {id: 671, cat: TV, desc: "Пятая стража"}
-      - {id: 1019, cat: TV, desc: "Пятницкий. Глава четвертая"}
-      - {id: 1115, cat: TV, desc: "Ради любви я все смогу / Вечная любовь"}
-      - {id: 788, cat: TV, desc: "Розыск"}
-      - {id: 359, cat: TV, desc: "Светофор"}
-      - {id: 1098, cat: TV, desc: "Семейный бизнес"}
-      - {id: 1162, cat: TV, desc: "Следователь Тихонов"}
-      - {id: 1130, cat: TV, desc: "Сны"}
-      - {id: 1138, cat: TV, desc: "Солнце в подарок"}
-      - {id: 1144, cat: TV, desc: "Спросите у осени"}
-      - {id: 1180, cat: TV, desc: "Степные волки"}
-      - {id: 1133, cat: TV, desc: "Сын моего отца"}
-      - {id: 1049, cat: TV, desc: "Такая работа"}
-      - {id: 1185, cat: TV, desc: "Центральная больница"}
-      - {id: 1141, cat: TV, desc: "Человек без прошлого"}
-      - {id: 1223, cat: TV, desc: "Чёрная кошка"}
-      - {id: 1190, cat: TV, desc: "Шаман. Новая угроза"}
-      - {id: 1191, cat: TV, desc: "Я работаю в суде"}
-      - {id: 1235, cat: TV, desc: "Василиса"}
-      - {id: 1154, cat: TV, desc: "Вечный отпуск"}
-      - {id: 555, cat: TV, desc: "Восьмидесятые"}
-      - {id: 1231, cat: TV, desc: "Вы все меня бесите"}
-      - {id: 152, cat: TV, desc: "Интерны"}
-      - {id: 1156, cat: TV, desc: "Крыша мира"}
-      - {id: 1233, cat: TV, desc: "Райское место"}
-      - {id: 1302, cat: TV, desc: "Фамильные ценности"}
-      - {id: 1059, cat: TV, desc: "Это любовь"}
-      - {id: 1280, cat: TV, desc: "Адаптация"}
-      - {id: 48, cat: TV, desc: "Воронины"}
-      - {id: 1308, cat: TV, desc: "Женский доктор"}
-      - {id: 1186, cat: TV, desc: "Кризис нежного возраста"}
-      - {id: 1281, cat: TV, desc: "Куба"}
-      - {id: 1278, cat: TV, desc: "Майор и магия"}
-      - {id: 1125, cat: TV, desc: "Мамочки"}
-      - {id: 1155, cat: TV, desc: "Мент в законе"}
-      - {id: 1015, cat: TV, desc: "Ментовские войны"}
-      - {id: 1276, cat: TV, desc: "Один против всех"}
-      - {id: 1193, cat: TV, desc: "Ольга"}
-      - {id: 1227, cat: TV, desc: "Отель Элеон"}
-      - {id: 551, cat: TV, desc: "Паутина"}
-      - {id: 1159, cat: TV, desc: "Подкидыши"}
-      - {id: 225, cat: TV, desc: "Реальные пацаны"}
-      - {id: 680, cat: TV, desc: "СашаТаня"}
-      - {id: 1301, cat: TV, desc: "Свидетели"}
-      - {id: 630, cat: TV, desc: "Склифосовский (Склиф)"}
-      - {id: 226, cat: TV, desc: "След"}
-      - {id: 1116, cat: TV, desc: "Слуга народа"}
-      - {id: 1232, cat: TV, desc: "Стройка"}
-      - {id: 1045, cat: TV, desc: "Улицы разбитых фонарей"}
-      - {id: 445, cat: TV, desc: "Универ. Новая общага."}
-      - {id: 1285, cat: TV, desc: "Учитель в законе. Схватка"}
-      - {id: 970, cat: TV, desc: "Физрук"}
-      - {id: 1299, cat: TV, desc: "Филфак"}
-      - {id: 1062, cat: TV, desc: "ЧОП"}
-      - {id: 778, cat: TV, desc: "Шеф. Игра на повышение / Шеф-4"}
-      - {id: 21, cat: TV, desc: "Зарубежные мультсериалы"}
-      - {id: 185, cat: TV, desc: "WINX CLUB - Школа волшебниц"}
-      - {id: 463, cat: TV, desc: "Волшебные ПопПикси / PopPixie"}
-      - {id: 633, cat: TV, desc: "Winx Club 5й сезон - За гранью Беливикса"}
-      - {id: 772, cat: TV, desc: "Winx Club 6й сезон - Загадка Легендариума"}
-      - {id: 1093, cat: TV, desc: "Winx Club 7й сезон - Высшая сила животных"}
-      - {id: 606, cat: TV, desc: "Друзья ангелов"}
-      - {id: 1129, cat: TV, desc: "ЛедиБаг и Супер кот / Miraculous Ladybug"}
-      - {id: 789, cat: TV, desc: "Тотали Спайс! / Totally Spies!"}
-      - {id: 162, cat: TV, desc: "Футурама"}
-      - {id: 151, cat: TV, desc: "Хантик - Искатели секретов (Озвучка РиперАМ!)"}
-      - {id: 22, cat: TV, desc: "Русские мультсериалы"}
-      - {id: 1401, cat: TV, desc: "Маша и Медведь"}
-      - {id: 198, cat: TV, desc: "Архив Сериалов, Мультсериалов"}
-      - {id: 232, cat: TV/Anime, desc: "Аниме"}
-      - {id: 245, cat: TV/Anime, desc: "Полнометражные Аниме"}
-      - {id: 246, cat: TV/Anime, desc: "Аниме Сериалы"}
-      - {id: 592, cat: TV/Anime, desc: "High School DxD / Демоны старшей школы"}
-      - {id: 594, cat: TV/Anime, desc: "Корона Грешника / Guilty Crown"}
-      - {id: 591, cat: TV/Anime, desc: "Zero no Tsukaima TV-1 / Подручный бездарной Луизы ТВ-1"}
-      - {id: 595, cat: TV/Anime, desc: "Zero no Tsukaima: Futatsuki no Kishi TV-2 / Подручный бездарной Луизы: Рыцарь Двух Лун ТВ-2"}
-      - {id: 596, cat: TV/Anime, desc: "Zero no Tsukaima Princess no Rondo TV-3 / Подручный бездарной Луизы: Рондо Принцессы ТВ-3"}
-      - {id: 597, cat: TV/Anime, desc: "Zero no Tsukaima F TV-4 / Подручный бездарной Луизы Финал ТВ-4"}
-      - {id: 242, cat: TV, desc: "Без перевода"}
-      - {id: 241, cat: TV, desc: "ТВ-Шоу, документальные, спорт"}
-      - {id: 23, cat: TV, desc: "ТВ-Шоу и развлекательные передачи"}
-      - {id: 1075, cat: TV, desc: "Архив ТВ-Шоу"}
-      - {id: 491, cat: TV, desc: "Yesterday Live"}
-      - {id: 516, cat: TV, desc: "X-Фактор"}
-      - {id: 478, cat: TV, desc: "Без башни"}
-      - {id: 540, cat: TV, desc: "Болеро"}
-      - {id: 1010, cat: TV, desc: "Большие гонки"}
-      - {id: 538, cat: TV, desc: "Бункер News"}
-      - {id: 561, cat: TV, desc: "В черной-черной комнате"}
-      - {id: 713, cat: TV, desc: "Вышка"}
-      - {id: 191, cat: TV, desc: "Голые и смешные"}
-      - {id: 527, cat: TV, desc: "Готовим с Алексеем Зиминым"}
-      - {id: 460, cat: TV, desc: "Грязные деньги"}
-      - {id: 659, cat: TV, desc: "Два с половиной повара"}
-      - {id: 255, cat: TV, desc: "Девчата"}
-      - {id: 634, cat: TV, desc: "Дешево и сердито"}
-      - {id: 574, cat: TV, desc: "Дневники шоугелз"}
-      - {id: 764, cat: TV, desc: "ДНК"}
-      - {id: 637, cat: TV, desc: "Доброго здоровьица"}
-      - {id: 658, cat: TV, desc: "Дурнушек.net"}
-      - {id: 209, cat: TV, desc: "Ешь и худей"}
-      - {id: 800, cat: TV, desc: "Женское счастье"}
-      - {id: 475, cat: TV, desc: "Женская Лига"}
-      - {id: 740, cat: TV, desc: "Звезданутые"}
-      - {id: 741, cat: TV, desc: "Здравствуйте, я ваша Пятница"}
-      - {id: 737, cat: TV, desc: "Из песни слов не выкинешь"}
-      - {id: 587, cat: TV, desc: "Индустрия кино"}
-      - {id: 718, cat: TV, desc: "Истина где-то рядом"}
-      - {id: 1011, cat: TV, desc: "История Российской кухни"}
-      - {id: 456, cat: TV, desc: "Каникулы в Мексике"}
-      - {id: 682, cat: TV, desc: "Караоке киллер"}
-      - {id: 996, cat: TV, desc: "Когда мы дома"}
-      - {id: 785, cat: TV, desc: "Куб - Новый сезон"}
-      - {id: 668, cat: TV, desc: "Кулинарный поединок"}
-      - {id: 752, cat: TV, desc: "Луч Света"}
-      - {id: 533, cat: TV, desc: "Люди ХЭ"}
-      - {id: 447, cat: TV, desc: "Мама в законе"}
-      - {id: 529, cat: TV, desc: "Минута для победы с М. Авериным"}
-      - {id: 793, cat: TV, desc: "Мировой повар"}
-      - {id: 586, cat: TV, desc: "Минута славы"}
-      - {id: 472, cat: TV, desc: "Мульт Личности"}
-      - {id: 1009, cat: TV, desc: "Наш выход"}
-      - {id: 511, cat: TV, desc: "Нонна, давай"}
-      - {id: 531, cat: TV, desc: "НТВшники"}
-      - {id: 754, cat: TV, desc: "Остров"}
-      - {id: 715, cat: TV, desc: "Пародайс"}
-      - {id: 559, cat: TV, desc: "Первый класс"}
-      - {id: 636, cat: TV, desc: "Погоня"}
-      - {id: 679, cat: TV, desc: "Пока еще не поздно"}
-      - {id: 545, cat: TV, desc: "Понять. Простить"}
-      - {id: 537, cat: TV, desc: "Последнее слово"}
-      - {id: 792, cat: TV, desc: "Правила моей кухни"}
-      - {id: 547, cat: TV, desc: "Право на защиту"}
-      - {id: 731, cat: TV, desc: "Про декор"}
-      - {id: 982, cat: TV, desc: "Реальная кухня"}
-      - {id: 747, cat: TV, desc: "Самый лучший муж"}
-      - {id: 536, cat: TV, desc: "Самый умный"}
-      - {id: 742, cat: TV, desc: "Свидание со звездой"}
-      - {id: 544, cat: TV, desc: "Свобода и справедливость"}
-      - {id: 963, cat: TV, desc: "Свободное время"}
-      - {id: 575, cat: TV, desc: "Снимите это немедленно!"}
-      - {id: 489, cat: TV, desc: "Специальное задание"}
-      - {id: 495, cat: TV, desc: "Спокойной ночи, малыши!"}
-      - {id: 689, cat: TV, desc: "Страна в Shope"}
-      - {id: 492, cat: TV, desc: "СуперИнтуиция"}
-      - {id: 535, cat: TV, desc: "Съешьте это немедленно!"}
-      - {id: 1005, cat: TV, desc: "Тотальная распродажа"}
-      - {id: 521, cat: TV, desc: "Украина чудес"}
-      - {id: 698, cat: TV, desc: "Устами младенца"}
-      - {id: 451, cat: TV, desc: "Улетное видео по русски"}
-      - {id: 697, cat: TV, desc: "ХБ"}
-      - {id: 497, cat: TV, desc: "Ху из ху"}
-      - {id: 494, cat: TV, desc: "Школа злословия"}
-      - {id: 448, cat: TV, desc: "Что делать?"}
-      - {id: 366, cat: TV, desc: "6 кадров"}
-      - {id: 1032, cat: TV, desc: "Автошкола 2: Девчонки рулят"}
-      - {id: 471, cat: TV, desc: "Большая Разница"}
-      - {id: 744, cat: TV, desc: "В наше время"}
-      - {id: 1056, cat: TV, desc: "Все будет хорошо"}
-      - {id: 344, cat: TV, desc: "Галилео"}
-      - {id: 477, cat: TV, desc: "Даешь молодежь"}
-      - {id: 514, cat: TV, desc: "Ералаш"}
-      - {id: 959, cat: TV, desc: "Голос. Дети"}
-      - {id: 446, cat: TV, desc: "+100500"}
-      - {id: 693, cat: TV, desc: "Comedy Баттл. Без границ"}
-      - {id: 1164, cat: TV, desc: "Битва риелторов"}
-      - {id: 1071, cat: TV, desc: "Взвешенные люди"}
-      - {id: 229, cat: TV, desc: "Comedy Баттл. Отбор, турнир"}
-      - {id: 1096, cat: TV, desc: "Время Г"}
-      - {id: 1114, cat: TV, desc: "Голос"}
-      - {id: 522, cat: TV, desc: "Модный приговор"}
-      - {id: 971, cat: TV, desc: "Не спать!"}
-      - {id: 1137, cat: TV, desc: "Новая звезда"}
-      - {id: 1142, cat: TV, desc: "Таблетка"}
-      - {id: 677, cat: TV, desc: "Холостяк"}
-      - {id: 1034, cat: TV, desc: "Чисто News"}
-      - {id: 763, cat: TV, desc: "Я худею"}
-      - {id: 1087, cat: TV, desc: "Дикие игры"}
-      - {id: 649, cat: TV, desc: "Тайны Чапман"}
-      - {id: 452, cat: TV, desc: "Хочу знать"}
-      - {id: 1121, cat: TV, desc: "Хроники московского быта"}
-      - {id: 647, cat: TV, desc: "Чистосердечное признание"}
-      - {id: 643, cat: TV, desc: "Кинематограф"}
-      - {id: 532, cat: TV, desc: "Кино в деталях"}
-      - {id: 614, cat: TV, desc: "Мистические истории"}
-      - {id: 801, cat: TV, desc: "Пища богов"}
-      - {id: 974, cat: TV, desc: "Политика"}
-      - {id: 670, cat: TV, desc: "Репортерские истории"}
-      - {id: 252, cat: TV, desc: "Среда обитания"}
-      - {id: 89, cat: TV, desc: "Игровое видео/Фильм о фильме"}
-      - {id: 65, cat: TV, desc: "Вторая мировая война"}
-      - {id: 190, cat: TV, desc: "Давай поженимся"}
-      - {id: 530, cat: TV, desc: "Жди меня"}
-      - {id: 1086, cat: TV, desc: "На самом деле"}
-      - {id: 526, cat: TV, desc: "Вечерний квартал"}
-      - {id: 605, cat: TV, desc: "Вечерний Ургант"}
-      - {id: 1124, cat: TV, desc: "Где логика?"}
-      - {id: 480, cat: TV, desc: "Камеди Woman"}
-      - {id: 459, cat: TV, desc: "Говорим и показываем"}
-      - {id: 479, cat: TV, desc: "Comedy Club - Камеди Клаб"}
-      - {id: 1289, cat: TV, desc: "Двойные стандарты"}
-      - {id: 33, cat: TV, desc: "ДОМ 2"}
-      - {id: 270, cat: TV, desc: "Архив Дом-2"}
-      - {id: 696, cat: TV, desc: "Квартирный вопрос"}
-      - {id: 469, cat: TV, desc: "КВН - Клуб Веселых и Находчивых"}
-      - {id: 541, cat: TV, desc: "Кто хочет стать миллионером"}
-      - {id: 189, cat: TV, desc: "Контрольная закупка"}
-      - {id: 1284, cat: TV, desc: "Лига смеха"}
-      - {id: 775, cat: TV, desc: "МастерШеф"}
-      - {id: 1291, cat: TV, desc: "Международная пилорама"}
-      - {id: 1018, cat: TV, desc: "Мужское - женское"}
-      - {id: 769, cat: TV, desc: "Наедине со всеми"}
-      - {id: 1123, cat: TV, desc: "НашПотребНадзор"}
-      - {id: 1017, cat: TV, desc: "Однажды в России"}
-      - {id: 524, cat: TV, desc: "Орел и решка"}
-      - {id: 1309, cat: TV, desc: "Пацанки"}
-      - {id: 765, cat: TV, desc: "Перезагрузка"}
-      - {id: 493, cat: TV, desc: "Поле чудес"}
-      - {id: 730, cat: TV, desc: "Поедем, поедим"}
-      - {id: 1146, cat: TV, desc: "Пока все дома"}
-      - {id: 1196, cat: TV, desc: "Проводник"}
-      - {id: 588, cat: TV, desc: "Прямой эфир"}
-      - {id: 348, cat: TV, desc: "Пусть говорят"}
-      - {id: 539, cat: TV, desc: "Рассмеши комика"}
-      - {id: 1158, cat: TV, desc: "Ревизорро"}
-      - {id: 490, cat: TV, desc: "Сам себе режиссёр"}
-      - {id: 457, cat: TV, desc: "Своя игра"}
-      - {id: 520, cat: TV, desc: "Смак"}
-      - {id: 1106, cat: TV, desc: "Соль"}
-      - {id: 975, cat: TV, desc: "STAND UP"}
-      - {id: 496, cat: TV, desc: "Сто к одному"}
-      - {id: 786, cat: TV, desc: "Сегодня вечером с Максимом Галкиным и Юлией Меньшовой"}
-      - {id: 1287, cat: TV, desc: "Секрет на миллион"}
-      - {id: 1021, cat: TV, desc: "Танцы"}
-      - {id: 1286, cat: TV, desc: "Ты супер!"}
-      - {id: 470, cat: TV, desc: "Уральские пельмени"}
-      - {id: 967, cat: TV, desc: "Comedy Баттл. Последний сезон"}
-      - {id: 1290, cat: TV, desc: "Устами младенца"}
-      - {id: 1147, cat: TV, desc: "Фазенда"}
-      - {id: 188, cat: TV, desc: "Центральное телевидение"}
-      - {id: 543, cat: TV, desc: "Что? Где? Когда?"}
-      - {id: 738, cat: TV, desc: "Школа ремонта"}
-      - {id: 59, cat: TV, desc: "Э К С Т Р А С Е Н С Ы"}
-      - {id: 281, cat: TV, desc: "Удиви меня"}
-      - {id: 1035, cat: TV, desc: "Черно-белое"}
-      - {id: 280, cat: TV, desc: "Экстрасенсы против ученых"}
-      - {id: 279, cat: TV, desc: "Битва экстрасенсов"}
-      - {id: 24, cat: TV/Documentary, desc: "Документальные передачи"}
-      - {id: 728, cat: TV/Documentary, desc: "Чудо техники с Сергеем Малозёмовым"}
-      - {id: 69, cat: TV/Documentary, desc: "Авто"}
-      - {id: 669, cat: TV/Documentary, desc: "Главная дорога"}
-      - {id: 704, cat: TV/Documentary, desc: "Первая передача"}
-      - {id: 1111, cat: TV/Documentary, desc: "Без обмана"}
-      - {id: 88, cat: TV/Documentary, desc: "Биографии. Личности и кумиры"}
-      - {id: 379, cat: TV/Documentary, desc: "15 минут до завтра"}
-      - {id: 68, cat: TV/Documentary, desc: "Военное дело"}
-      - {id: 784, cat: TV/Documentary, desc: "Голос - За кадром"}
-      - {id: 729, cat: TV/Documentary, desc: "Дачный ответ"}
-      - {id: 1152, cat: TV/Documentary, desc: "Еда живая и мертвая"}
-      - {id: 194, cat: TV/Documentary, desc: "Discovery / NatGeo / BBC / Viasat"}
-      - {id: 1307, cat: TV/Documentary, desc: "Загадки человечества"}
-      - {id: 701, cat: TV/Documentary, desc: "Идеальный ремонт"}
-      - {id: 63, cat: TV/Documentary, desc: "Криминал"}
-      - {id: 590, cat: TV/Documentary, desc: "Криминальные хроники"}
-      - {id: 796, cat: TV/Documentary, desc: "Место происшествия. О главном"}
-      - {id: 1085, cat: TV/Documentary, desc: "Следствие ведут..."}
-      - {id: 652, cat: TV/Documentary, desc: "Следствие вели..."}
-      - {id: 498, cat: TV/Documentary, desc: "Чрезвычайное происшествие"}
-      - {id: 1120, cat: TV/Documentary, desc: "Линия защиты"}
-      - {id: 1145, cat: TV/Documentary, desc: "Непутевые заметки с Дмитрием Крыловым"}
-      - {id: 1067, cat: TV/Documentary, desc: "Обложка"}
-      - {id: 1288, cat: TV/Documentary, desc: "Однажды"}
-      - {id: 1119, cat: TV/Documentary, desc: "Осторожно, мошенники!"}
-      - {id: 1149, cat: TV/Documentary, desc: "Открытие Китая"}
-      - {id: 739, cat: TV/Documentary, desc: "Очная ставка"}
-      - {id: 965, cat: TV/Documentary, desc: "Познер. Интервью с..."}
-      - {id: 650, cat: TV/Documentary, desc: "Русские сенсации"}
-      - {id: 1122, cat: TV/Documentary, desc: "Русский вопрос"}
-      - {id: 1198, cat: TV/Documentary, desc: "Самые шокирующие гипотезы"}
-      - {id: 802, cat: TV/Documentary, desc: "Территория заблуждений с Игорем Прокопенко"}
-      - {id: 323, cat: TV/Documentary, desc: "Информационно-аналитические и общественно-политические передачи"}
-      - {id: 1195, cat: TV/Documentary, desc: "60 минут"}
-      - {id: 1041, cat: TV/Documentary, desc: "Вести"}
-      - {id: 672, cat: TV/Documentary, desc: "Вести в субботу с Сергеем Брилевым"}
-      - {id: 655, cat: TV/Documentary, desc: "Вести недели"}
-      - {id: 1014, cat: TV/Documentary, desc: "Вечер с Владимиром Соловьевым"}
-      - {id: 1007, cat: TV/Documentary, desc: "Время покажет"}
-      - {id: 712, cat: TV/Documentary, desc: "Воскресный вечер с Владимиром Соловьевым"}
-      - {id: 673, cat: TV/Documentary, desc: "Воскресное время - Первый канал"}
-      - {id: 759, cat: TV/Documentary, desc: "В центре событий с Анной Прохоровой"}
-      - {id: 999, cat: TV/Documentary, desc: "Добров в эфире"}
-      - {id: 758, cat: TV/Documentary, desc: "Известия. Главное"}
-      - {id: 1230, cat: TV/Documentary, desc: "Итоги недели"}
-      - {id: 1400, cat: TV/Documentary, desc: "Итоги недели с Сергеем Михеевым"}
-      - {id: 1402, cat: TV/Documentary, desc: "Кто против?"}
-      - {id: 1148, cat: TV/Documentary, desc: "Место встречи"}
-      - {id: 648, cat: TV/Documentary, desc: "Момент истины"}
-      - {id: 1279, cat: TV/Documentary, desc: "Первая студия"}
-      - {id: 327, cat: TV/Documentary, desc: "Поединок с Владимиром Соловьевым"}
-      - {id: 324, cat: TV/Documentary, desc: "Постскриптум с Алексеем Пушковым"}
-      - {id: 705, cat: TV/Documentary, desc: "Право голоса"}
-      - {id: 1029, cat: TV/Documentary, desc: "Право знать!"}
-      - {id: 1153, cat: TV/Documentary, desc: "Процесс"}
-      - {id: 1405, cat: TV/Documentary, desc: "Своя правда"}
-      - {id: 337, cat: TV/Documentary, desc: "Ты не поверишь!"}
-      - {id: 330, cat: TV/Documentary, desc: "Человек и закон"}
-      - {id: 25, cat: TV/Sport, desc: "Спортивные передачи"}
-      - {id: 127, cat: TV/Sport, desc: "ХХII Зимние Олимпийские Игры в Сочи"}
-      - {id: 616, cat: TV/Sport, desc: "Евро-2012 (Польша, Украина)"}
-      - {id: 201, cat: TV/Sport, desc: "Бокс, боевые единоборства , рестлинг"}
-      - {id: 146, cat: TV/Sport, desc: "Гонки"}
-      - {id: 145, cat: TV/Sport, desc: "Футбол"}
-      - {id: 985, cat: TV/Sport, desc: "Футбол. Чемпионат мира 2014 (Бразилия)"}
-      - {id: 661, cat: TV/Sport, desc: "Футбол.ru"}
-      - {id: 211, cat: TV/Sport, desc: "Хоккей"}
-      - {id: 192, cat: TV/Sport, desc: "ЧМ-2010"}
-      - {id: 622, cat: TV/Sport, desc: "ХХХ Летние Олимпийские Игры в Лондоне"}
-      - {id: 346, cat: TV/Sport, desc: "Театр"}
-      - {id: 199, cat: TV/Sport, desc: "Архив ТВ-Шоу, документальные, спорт"}
-      - {id: 577, cat: TV/Sport, desc: "Адская кухня - 2 (Россия)"}
-      - {id: 674, cat: TV/Sport, desc: "Большие танцы"}
-      - {id: 579, cat: TV/Sport, desc: "Две звезды"}
-      - {id: 576, cat: TV/Sport, desc: "Смотреть всем!"}
-      - {id: 694, cat: TV/Sport, desc: "Фитнес"}
-      - {id: 589, cat: TV/Sport, desc: "Достояние республики. Новый сезон 2011!"}
-      - {id: 585, cat: TV/Sport, desc: "Городок"}
-      - {id: 584, cat: TV/Sport, desc: "Адская кухня"}
-      - {id: 269, cat: TV/Sport, desc: "Одна за всех"}
-      - {id: 515, cat: TV/Sport, desc: "Стыдно, когда видно!"}
-      - {id: 468, cat: TV/Sport, desc: "Прожекторперисхилтон"}
-      - {id: 762, cat: TV/Sport, desc: "Хит"}
-      - {id: 767, cat: TV/Sport, desc: "Шурочка"}
-      - {id: 1113, cat: TV/Sport, desc: "Акценты недели"}
-      - {id: 333, cat: TV/Sport, desc: "Брачное чтиво"}
-      - {id: 1097, cat: TV/Sport, desc: "В теме"}
-      - {id: 1064, cat: TV/Sport, desc: "Время в 21:00"}
-      - {id: 332, cat: TV/Sport, desc: "ЖКХ"}
-      - {id: 660, cat: TV/Sport, desc: "Михаил Жванецкий. Дежурный по стране"}
-      - {id: 998, cat: TV/Sport, desc: "Итоги дня"}
-      - {id: 331, cat: TV/Sport, desc: "Неделя с Марианной Максимовской"}
-      - {id: 335, cat: TV/Sport, desc: "Операция «Должник»"}
-      - {id: 1134, cat: TV/Sport, desc: "Открытая студия"}
-      - {id: 1143, cat: TV/Sport, desc: "Поздняков. Интервью с ..."}
-      - {id: 336, cat: TV/Sport, desc: "Секретные территории"}
-      - {id: 702, cat: TV/Sport, desc: "Собчак живьём"}
-      - {id: 328, cat: TV/Sport, desc: "Специальный корреспондент"}
-      - {id: 1053, cat: TV/Sport, desc: "Список Норкина"}
-      - {id: 1022, cat: TV/Sport, desc: "Структура Момента"}
-      - {id: 325, cat: TV/Sport, desc: "Судите сами"}
-      - {id: 326, cat: TV/Sport, desc: "Честный понедельник"}
-      - {id: 329, cat: TV/Sport, desc: "Сегодня. Итоговая программа"}
-      - {id: 1100, cat: TV/Sport, desc: "Пропаганда"}
-      - {id: 1084, cat: TV/Sport, desc: "'Точка' с Максимом Шевченко"}
-      - {id: 334, cat: TV/Sport, desc: "День  космических  историй"}
-      - {id: 1091, cat: TV/Sport, desc: "50 оттенков. Белова"}
-      - {id: 298, cat: Console, desc: "Игры"}
-      - {id: 299, cat: Console, desc: "Оформление раздач"}
-      - {id: 1202, cat: Console, desc: "Новинки repack 'ов"}
-      - {id: 302, cat: Console, desc: "Горячие Новинки"}
-      - {id: 1225, cat: Console, desc: "Denuvo"}
-      - {id: 300, cat: Console, desc: "Игры для PC"}
-      - {id: 312, cat: Console, desc: "Action"}
-      - {id: 807, cat: Console, desc: "Action FPS (1st Person)"}
-      - {id: 808, cat: Console, desc: "Action TPS (3rd Person)"}
-      - {id: 665, cat: Console, desc: "Антологии"}
-      - {id: 309, cat: Console, desc: "Стратегии"}
-      - {id: 810, cat: Console, desc: "RTS (стратегии в реальном времени)"}
-      - {id: 809, cat: Console, desc: "TBS (пошаговые стратегии)"}
-      - {id: 811, cat: Console, desc: "Экономические стратегии"}
-      - {id: 938, cat: Console, desc: "Военные стратегии"}
-      - {id: 338, cat: Console, desc: "RPG"}
-      - {id: 1203, cat: Console, desc: "MMORPG"}
-      - {id: 305, cat: Console, desc: "Аркады"}
-      - {id: 717, cat: Console, desc: "Симуляторы"}
-      - {id: 1204, cat: Console, desc: "Авиасимуляторы"}
-      - {id: 1205, cat: Console, desc: "Гоночные симуляторы"}
-      - {id: 1206, cat: Console, desc: "Спортивные симуляторы"}
-      - {id: 311, cat: Console, desc: "Приключения, Квесты, Логические"}
-      - {id: 1207, cat: Console, desc: "Старые игры"}
-      - {id: 307, cat: Console, desc: "Детские обучающие игры"}
-      - {id: 812, cat: Console, desc: "Онлайновые игры"}
-      - {id: 1215, cat: Console, desc: "Эротические игры"}
-      - {id: 303, cat: Console, desc: "Мини-игры"}
-      - {id: 1208, cat: Console, desc: "Демо игры"}
-      - {id: 313, cat: Console, desc: "Прочее"}
-      - {id: 864, cat: Console, desc: "Дополнения к играм"}
-      - {id: 1209, cat: Console, desc: "NoCD/NoDVD"}
-      - {id: 1210, cat: Console, desc: "Русификаторы"}
-      - {id: 1211, cat: Console, desc: "Игровое видео"}
-      - {id: 1212, cat: Console, desc: "Патчи"}
-      - {id: 1213, cat: Console, desc: "Софт для игр на PC"}
-      - {id: 1214, cat: Console, desc: "Прочее"}
-      - {id: 1229, cat: Console, desc: "Новости игровой индустрии(Игромания)"}
-      - {id: 1352, cat: Console, desc: "Игромания"}
-      - {id: 1292, cat: Console, desc: "Шаблоны оформления раздач"}
-      - {id: 1310, cat: Console, desc: "Шаблон xatab"}
-      - {id: 1300, cat: Console, desc: "Шаблон оформления общий"}
-      - {id: 1298, cat: Console, desc: "Шаблон оформления VickNet"}
-      - {id: 1293, cat: Console, desc: "Шаблон оформления анимированный"}
-      - {id: 1295, cat: Console, desc: "Шаблон оформления общий №2"}
-      - {id: 1353, cat: Console, desc: "Для неопытных"}
-      - {id: 382, cat: PC, desc: "Программное обеспечение"}
-      - {id: 1237, cat: PC, desc: "Операционные системы"}
-      - {id: 1238, cat: PC, desc: "Windows 10"}
-      - {id: 1239, cat: PC, desc: "Windows 8, 8.1"}
-      - {id: 1240, cat: PC, desc: "Windows 7"}
-      - {id: 1243, cat: PC, desc: "Windows VISTA"}
-      - {id: 1241, cat: PC, desc: "Windows XP"}
-      - {id: 1275, cat: PC, desc: "Linux, Unix, Mac и другие ОС"}
-      - {id: 1242, cat: PC, desc: "Разное (Microsoft Windows OS)"}
-      - {id: 391, cat: PC, desc: "Системные программы"}
-      - {id: 405, cat: PC, desc: "Драйвера и сопутствующий софт"}
-      - {id: 1254, cat: PC, desc: "Архиваторы и файловые менеджеры"}
-      - {id: 1255, cat: PC, desc: "Программы для настройки и оптимизации ОС"}
-      - {id: 724, cat: PC, desc: "Защита, Антивирусы и Файерволы"}
-      - {id: 406, cat: PC, desc: "Сборники программ, WPI"}
-      - {id: 407, cat: PC, desc: "Работа с жёстким диском"}
-      - {id: 1245, cat: PC, desc: "Резервирование и восстановление данных"}
-      - {id: 1247, cat: PC, desc: "Работа с носителями информации"}
-      - {id: 1248, cat: PC, desc: "Обслуживание и диагностика компьютера"}
-      - {id: 1249, cat: PC, desc: "ПО для Интернета и сетей"}
-      - {id: 1251, cat: PC, desc: "Изменение интерфейса и скринсейверы ОС Windows"}
-      - {id: 408, cat: PC, desc: "Разное (Системные программы)"}
-      - {id: 399, cat: PC, desc: "Программы для работы с мультимедиа и 3D"}
-      - {id: 400, cat: PC, desc: "Графические редакторы, 3D моделирование"}
-      - {id: 401, cat: PC, desc: "Редакторы видео"}
-      - {id: 402, cat: PC, desc: "Видео- Аудио- конверторы"}
-      - {id: 404, cat: PC, desc: "Видео- Аудио- проигрыватели"}
-      - {id: 1270, cat: PC, desc: "Работа со звуком"}
-      - {id: 1271, cat: PC, desc: "Аудио- Видео Кодеки"}
-      - {id: 403, cat: PC, desc: "Разное (Программы для работы с мультимедиа и 3D)"}
-      - {id: 1244, cat: PC, desc: "Системы для бизнеса, офиса, научной и проектной работы"}
-      - {id: 1261, cat: PC, desc: "ГИС, Системы навигации и карты"}
-      - {id: 1256, cat: PC, desc: "Системы для научной работы"}
-      - {id: 1257, cat: PC, desc: "Офисные системы"}
-      - {id: 1263, cat: PC, desc: "Веб-разработка и Программирование"}
-      - {id: 1258, cat: PC, desc: "Системы для бизнеса"}
-      - {id: 1259, cat: PC, desc: "Работа с PDF и DjVu"}
-      - {id: 1262, cat: PC, desc: "Словари, переводчики"}
-      - {id: 1260, cat: PC, desc: "САПР, Софт для архитекторов и строителей"}
-      - {id: 1393, cat: PC, desc: "Разное"}
-      - {id: 726, cat: Other, desc: "Разное"}
-      - {id: 1273, cat: Other, desc: "Обои для рабочего стола"}
-      - {id: 1390, cat: Other, desc: "Аватары, Иконки, Смайлы"}
-      - {id: 1391, cat: Other, desc: "Растровые и Векторные Клипарты"}
-      - {id: 1272, cat: Other, desc: "Photoshop (Уроки) и Видеокурсы"}
-      - {id: 1392, cat: Other, desc: "Заготовки, виньетки, рамки"}
-      - {id: 243, cat: Audio, desc: "Музыка"}
-      - {id: 26, cat: Audio, desc: "Правила и предложения по улучшению раздела 'Музыка'"}
-      - {id: 96, cat: Audio, desc: "HD Видео"}
-      - {id: 70, cat: Audio, desc: "Pop"}
-      - {id: 97, cat: Audio, desc: "Видеоклипы / Концерты"}
-      - {id: 72, cat: Audio, desc: "Retro/Bandstand"}
-      - {id: 1358, cat: Audio/Lossless, desc: "Retro/Bandstand - lossless"}
-      - {id: 1359, cat: Audio/MP3, desc: "Retro/Bandstand - Mp3"}
-      - {id: 71, cat: Audio, desc: "Disco"}
-      - {id: 1356, cat: Audio/Lossless, desc: "Disco - lossless"}
-      - {id: 1357, cat: Audio/MP3, desc: "Disco - Mp3"}
-      - {id: 1354, cat: Audio/Lossless, desc: "Pop - lossless"}
-      - {id: 1355, cat: Audio/MP3, desc: "Pop - Mp3"}
-      - {id: 73, cat: Audio, desc: "Rock"}
-      - {id: 98, cat: Audio, desc: "Видеоклипы / Концерты"}
-      - {id: 1360, cat: Audio/Lossless, desc: "Rock - lossless"}
-      - {id: 1361, cat: Audio/MP3, desc: "Rock - Mp3"}
-      - {id: 74, cat: Audio, desc: "Alternative"}
-      - {id: 99, cat: Audio, desc: "Видеоклипы / Концерты"}
-      - {id: 1362, cat: Audio/Lossless, desc: "Alternative - lossless"}
-      - {id: 1363, cat: Audio/MP3, desc: "Alternative - Mp3"}
-      - {id: 75, cat: Audio, desc: "Metal"}
-      - {id: 100, cat: Audio, desc: "Видеоклипы / Концерты"}
-      - {id: 1364, cat: Audio/MP3, desc: "Metal - Mp3"}
-      - {id: 1365, cat: Audio/Lossless, desc: "Metal - lossless"}
-      - {id: 76, cat: Audio, desc: "Rap, Hip-Hop, R'n'B"}
-      - {id: 101, cat: Audio, desc: "Видеоклипы / Концерты"}
-      - {id: 78, cat: Audio, desc: "Зарубежный"}
-      - {id: 1368, cat: Audio/Lossless, desc: "Зарубежный - lossless"}
-      - {id: 1369, cat: Audio/MP3, desc: "Зарубежный - Mp3"}
-      - {id: 77, cat: Audio, desc: "Отечественный"}
-      - {id: 1370, cat: Audio/Lossless, desc: "Отечественный - lossless"}
-      - {id: 1371, cat: Audio/MP3, desc: "Отечественный - Mp3"}
-      - {id: 1366, cat: Audio/Lossless, desc: "Rap, Hip-Hop, R'n'B - lossless"}
-      - {id: 1367, cat: Audio/MP3, desc: "Rap, Hip-Hop, R'n'B - Mp3"}
-      - {id: 85, cat: Audio, desc: "Jazz, Blues"}
-      - {id: 1380, cat: Audio/Lossless, desc: "Jazz, Blues - lossless"}
-      - {id: 1381, cat: Audio/MP3, desc: "Jazz, Blues - Mp3"}
-      - {id: 82, cat: Audio, desc: "Chanson, Bard"}
-      - {id: 1386, cat: Audio/Lossless, desc: "Chanson, Bard - lossless"}
-      - {id: 1387, cat: Audio/MP3, desc: "Chanson, Bard - Mp3"}
-      - {id: 86, cat: Audio, desc: "Classical"}
-      - {id: 1378, cat: Audio/Lossless, desc: "Classical - lossless"}
-      - {id: 1379, cat: Audio/MP3, desc: "Classical - Mp3"}
-      - {id: 79, cat: Audio, desc: "Electronic"}
-      - {id: 102, cat: Audio, desc: "Видеоклипы / Концерты"}
-      - {id: 1372, cat: Audio, desc: "Electronic - lossless"}
-      - {id: 1373, cat: Audio/MP3, desc: "Electronic - Mp3"}
-      - {id: 80, cat: Audio, desc: "Other genres"}
-      - {id: 103, cat: Audio, desc: "Видеоклипы / Концерты"}
-      - {id: 87, cat: Audio, desc: "Военная песня"}
-      - {id: 1376, cat: Audio/Lossless, desc: "Военная песня - lossless"}
-      - {id: 1377, cat: Audio/MP3, desc: "Военная песня - Mp3"}
-      - {id: 84, cat: Audio, desc: "Reggae, Ska, Dub"}
-      - {id: 1382, cat: Audio/Lossless, desc: "Reggae, Ska, Dub - lossless"}
-      - {id: 1383, cat: Audio/MP3, desc: "Reggae, Ska, Dub - Mp3"}
-      - {id: 83, cat: Audio, desc: "Funk, Soul, Country"}
-      - {id: 1384, cat: Audio/Lossless, desc: "Funk, Soul, Country - lossless"}
-      - {id: 1385, cat: Audio/MP3, desc: "Funk, Soul, Country - Mp3"}
-      - {id: 81, cat: Audio, desc: "Folk, Ethnic, New Age, Meditative"}
-      - {id: 1388, cat: Audio/Lossless, desc: "Folk, Ethnic, New Age, Meditative - lossless"}
-      - {id: 1389, cat: Audio/MP3, desc: "Folk, Ethnic, New Age, Meditative - Mp3"}
-      - {id: 1374, cat: Audio/Lossless, desc: "Other genres - lossless"}
-      - {id: 1375, cat: Audio/MP3, desc: "Other genres - Mp3"}
-      - {id: 663, cat: Books, desc: "Книги(Аудиокниги) и журналы"}
-      - {id: 1036, cat: Books, desc: "Книги"}
-      - {id: 1324, cat: Books, desc: "Новинки"}
-      - {id: 1325, cat: Books, desc: "Боевики/Детективы/Триллеры"}
-      - {id: 1326, cat: Books, desc: "Приключения"}
-      - {id: 1327, cat: Books, desc: "Романы"}
-      - {id: 1328, cat: Books, desc: "Отечественная фантастика / фэнтези / мистика / ужасы"}
-      - {id: 1329, cat: Books, desc: "Зарубежная фантастика / фэнтези / мистика / ужасы"}
-      - {id: 1330, cat: Books, desc: "Классическая литература и современная проза"}
-      - {id: 1331, cat: Books, desc: "Детские книги"}
-      - {id: 1334, cat: Books, desc: "Военная литература"}
-      - {id: 1332, cat: Books, desc: "Комедийные произведения, юмор, сатира"}
-      - {id: 1333, cat: Books, desc: "Разное"}
-      - {id: 1312, cat: Books, desc: "Аудиокниги"}
-      - {id: 1398, cat: Books, desc: "Приключения"}
-      - {id: 1396, cat: Books, desc: "Детектив"}
-      - {id: 1397, cat: Books, desc: "Боевик / Триллер"}
-      - {id: 1313, cat: Books, desc: "История"}
-      - {id: 1315, cat: Books, desc: "Юмор"}
-      - {id: 1316, cat: Books, desc: "Религия"}
-      - {id: 1399, cat: Books, desc: "Ужасы / Мистика"}
-      - {id: 1318, cat: Books, desc: "Фантастика / фэнтези"}
-      - {id: 1319, cat: Books, desc: "Классика"}
-      - {id: 1320, cat: Books, desc: "Поэзия"}
-      - {id: 1321, cat: Books, desc: "Психология"}
-      - {id: 1317, cat: Books, desc: "Детская литература"}
-      - {id: 1322, cat: Books, desc: "Художественная литература"}
-      - {id: 1323, cat: Books, desc: "Прочая литература"}
-      - {id: 1037, cat: Books, desc: "Журналы"}
-      - {id: 1335, cat: Books, desc: "Авто-мото журналы"}
-      - {id: 1336, cat: Books, desc: "Строительство и дизайн"}
-      - {id: 1337, cat: Books, desc: "Политика и бизнес"}
-      - {id: 1338, cat: Books, desc: "Женские журналы"}
-      - {id: 1339, cat: Books, desc: "Медицина и ЗОЖ"}
-      - {id: 1340, cat: Books, desc: "Аудио-видео журналы"}
-      - {id: 1341, cat: Books, desc: "Компьютерные журналы"}
-      - {id: 1342, cat: Books, desc: "Кулинария"}
-      - {id: 1343, cat: Books, desc: "Сад, огород, дача"}
-      - {id: 1344, cat: Books, desc: "Мужские журналы"}
-      - {id: 1345, cat: Books, desc: "Научно-популярные журналы"}
-      - {id: 1346, cat: Books, desc: "Домоводство / Своими руками"}
-      - {id: 1347, cat: Books, desc: "Эротические журналы"}
-      - {id: 1348, cat: Books, desc: "Комиксы"}
-      - {id: 1349, cat: Books, desc: "Детские журналы"}
-      - {id: 1351, cat: Books, desc: "Военные журналы"}
-      - {id: 1350, cat: Books, desc: "Хобби (Разное)"}
-      - {id: 9999, cat: Other/Misc, desc: "Error, Category Not Found"}
+caps:
+  categorymappings:
+    - {id: 238, cat: Movies, desc: "Новинки кино (2018-2019). Новые фильмы скачать бесплатно"}
+    - {id: 425, cat: Movies/HD, desc: "DVDRip / DVD-5/DVD-9"}
+    - {id: 50, cat: Movies/HD, desc: "DVDRip"}
+    - {id: 52, cat: Movies/HD, desc: "DVD-5/DVD-9"}
+    - {id: 424, cat: Movies/HD, desc: "BDRip / HDRip / BD / HD / Blu - ray / Ultra HD (4K)"}
+    - {id: 51, cat: Movies/HD, desc: "BDRip/HDRip"}
+    - {id: 371, cat: Movies/HD, desc: "BD / HD"}
+    - {id: 251, cat: Movies/BluRay, desc: "Blu-ray"}
+    - {id: 1404, cat: Movies/UHD, desc: "Ultra HD (4K)"}
+    - {id: 349, cat: Movies, desc: "Видео для мобильных устройств"}
+    - {id: 350, cat: Movies, desc: "Видео (iPhone, iPod Touch)"}
+    - {id: 351, cat: Movies, desc: "HD Видео (Apple TV, iPad)"}
+    - {id: 352, cat: Movies, desc: "Видео для смартфонов и КПК"}
+    - {id: 239, cat: Movies, desc: "Фильмы, мультфильмы"}
+    - {id: 420, cat: Movies, desc: "Зарубежные фильмы"}
+    - {id: 12, cat: Movies, desc: "Зарубежные фильмы до 2000го года..."}
+    - {id: 13, cat: Movies, desc: "Зарубежные фильмы после 2000го года..."}
+    - {id: 423, cat: TV/Anime, desc: "Мультфильмы"}
+    - {id: 16, cat: TV/Anime, desc: "Зарубежные мультфильмы"}
+    - {id: 17, cat: TV/Anime, desc: "Советские мультфильмы"}
+    - {id: 18, cat: TV/Anime, desc: "Российские мультфильмы"}
+    - {id: 46, cat: TV/Anime, desc: "Эротические фильмы"}
+    - {id: 15, cat: TV/Anime, desc: "Российские фильмы"}
+    - {id: 14, cat: TV/Anime, desc: "Советские фильмы"}
+    - {id: 240, cat: TV, desc: "Сериалы, мультсериалы"}
+    - {id: 19, cat: TV, desc: "Зарубежные сериалы"}
+    - {id: 216, cat: TV, desc: "!!! Полные завершенные сезоны !!!"}
+    - {id: 118, cat: TV, desc: "H2O - Просто добавь воды (3й сезон! Озвучка RiperAM!)"}
+    - {id: 153, cat: TV, desc: "Split. Тайна крови"}
+    - {id: 363, cat: TV, desc: "Адские кошки / Hellcats"}
+    - {id: 1055, cat: TV, desc: "Виолетта / Violetta"}
+    - {id: 632, cat: TV, desc: "Вспышка-любовь / Popland!"}
+    - {id: 183, cat: TV, desc: "Грань"}
+    - {id: 178, cat: TV, desc: "Гимнастки"}
+    - {id: 364, cat: TV, desc: "Дайте Санни шанс / Sonny With A Chance"}
+    - {id: 319, cat: TV, desc: "Два короля / Pair of Kings"}
+    - {id: 267, cat: TV, desc: "Держись, Чарли / Good Luck"}
+    - {id: 1166, cat: TV, desc: "Мушкетеры / The Musketeers"}
+    - {id: 365, cat: TV, desc: "Никита / Nikita"}
+    - {id: 353, cat: TV, desc: "Обитель Анубиса / House of Anubis"}
+    - {id: 710, cat: TV, desc: "Проспект Бразилии / Avenida Brasil"}
+    - {id: 266, cat: TV, desc: "Сверхъестественное / Supernatural"}
+    - {id: 268, cat: TV, desc: "Следствие по телу / Body of Proof"}
+    - {id: 160, cat: TV, desc: "Теория большого взрыва"}
+    - {id: 20, cat: TV, desc: "Русские сериалы"}
+    - {id: 210, cat: TV, desc: "!!!   Полные завершенные сериалы   !!!"}
+    - {id: 969, cat: TV, desc: "13"}
+    - {id: 707, cat: TV, desc: "Агент"}
+    - {id: 1028, cat: TV, desc: "Белые волки"}
+    - {id: 736, cat: TV, desc: "Бомбила. Продолжение"}
+    - {id: 550, cat: TV, desc: "Брат за брата"}
+    - {id: 601, cat: TV, desc: "Братаны"}
+    - {id: 979, cat: TV, desc: "В Москве всегда солнечно"}
+    - {id: 790, cat: TV, desc: "Горюнов"}
+    - {id: 791, cat: TV, desc: "Груз (Фельдъегеря)"}
+    - {id: 803, cat: TV, desc: "Двойная жизнь"}
+    - {id: 994, cat: TV, desc: "Дворняжка Ляля / Красотка Ляля / Ляля. Возвращение"}
+    - {id: 735, cat: TV, desc: "Дело врачей"}
+    - {id: 992, cat: TV, desc: "Дело для двоих"}
+    - {id: 771, cat: TV, desc: "Департамент"}
+    - {id: 964, cat: TV, desc: "Дом с лилиями"}
+    - {id: 746, cat: TV, desc: "Домработница"}
+    - {id: 976, cat: TV, desc: "До свидания, мальчики"}
+    - {id: 719, cat: TV, desc: "ЗАГС"}
+    - {id: 1006, cat: TV, desc: "Женщины на грани"}
+    - {id: 768, cat: TV, desc: "Земский доктор - Возвращение"}
+    - {id: 984, cat: TV, desc: "Земский доктор. Любовь вопреки"}
+    - {id: 732, cat: TV, desc: "Икорный барон"}
+    - {id: 983, cat: TV, desc: "Королева игры"}
+    - {id: 774, cat: TV, desc: "Кулинар-2"}
+    - {id: 989, cat: TV, desc: "Курортная полиция"}
+    - {id: 961, cat: TV, desc: "Личное дело"}
+    - {id: 639, cat: TV, desc: "Ловушка"}
+    - {id: 703, cat: TV, desc: "Лорд. Пес-полицейский"}
+    - {id: 1013, cat: TV, desc: "Лучшие враги"}
+    - {id: 131, cat: TV, desc: "Майор полиции"}
+    - {id: 727, cat: TV, desc: "Маяковский - Два дня"}
+    - {id: 1058, cat: TV, desc: "Между двух огней"}
+    - {id: 641, cat: TV, desc: "Мент в законе-7"}
+    - {id: 644, cat: TV, desc: "Метод Лавровой-2"}
+    - {id: 779, cat: TV, desc: "Неzлоб"}
+    - {id: 372, cat: TV, desc: "Неравный брак"}
+    - {id: 957, cat: TV, desc: "Неформат"}
+    - {id: 766, cat: TV, desc: "ОСА"}
+    - {id: 991, cat: TV, desc: "Отмена всех ограничений"}
+    - {id: 653, cat: TV, desc: "Патруль. Васильевский остров"}
+    - {id: 962, cat: TV, desc: "Под прицелом"}
+    - {id: 683, cat: TV, desc: "Поцелуй"}
+    - {id: 708, cat: TV, desc: "Поцелуйте невесту"}
+    - {id: 1026, cat: TV, desc: "Профессионал"}
+    - {id: 787, cat: TV, desc: "Пропавшие без вести"}
+    - {id: 773, cat: TV, desc: "Пыльная работа"}
+    - {id: 799, cat: TV, desc: "Ржавчина"}
+    - {id: 794, cat: TV, desc: "Сашка"}
+    - {id: 756, cat: TV, desc: "Семейные обстоятельства"}
+    - {id: 706, cat: TV, desc: "Семин. Возмездие"}
+    - {id: 966, cat: TV, desc: "Скорая помощь"}
+    - {id: 960, cat: TV, desc: "Следователь Протасов"}
+    - {id: 714, cat: TV, desc: "Стервы"}
+    - {id: 755, cat: TV, desc: "Студия 17"}
+    - {id: 1039, cat: TV, desc: "Тайны следствия"}
+    - {id: 360, cat: TV, desc: "Такси"}
+    - {id: 981, cat: TV, desc: "Темный мир: Равновесие"}
+    - {id: 1046, cat: TV, desc: "Тест на беременность"}
+    - {id: 977, cat: TV, desc: "Тихая охота"}
+    - {id: 681, cat: TV, desc: "Топтуны"}
+    - {id: 675, cat: TV, desc: "Торговый центр"}
+    - {id: 988, cat: TV, desc: "Три звезды"}
+    - {id: 1033, cat: TV, desc: "Чужой"}
+    - {id: 690, cat: TV, desc: "Чужой район"}
+    - {id: 1030, cat: TV, desc: "Чужой среди своих"}
+    - {id: 804, cat: TV, desc: "Шаман"}
+    - {id: 780, cat: TV, desc: "Шерлок Холмс"}
+    - {id: 805, cat: TV, desc: "Этаж"}
+    - {id: 743, cat: TV, desc: "Ясмин"}
+    - {id: 973, cat: TV, desc: "Умник"}
+    - {id: 733, cat: TV, desc: "Хмуров"}
+    - {id: 505, cat: TV, desc: "Хозяйка моей судьбы"}
+    - {id: 1004, cat: TV, desc: "Анжелика"}
+    - {id: 1047, cat: TV, desc: "Бессмертник"}
+    - {id: 1074, cat: TV, desc: "Без свидетелей"}
+    - {id: 692, cat: TV, desc: "Верное средство"}
+    - {id: 1038, cat: TV, desc: "Верни мою любовь"}
+    - {id: 711, cat: TV, desc: "Береговая охрана"}
+    - {id: 1052, cat: TV, desc: "Граница времени"}
+    - {id: 1061, cat: TV, desc: "Второй шанс"}
+    - {id: 1042, cat: TV, desc: "Гречанка"}
+    - {id: 1108, cat: TV, desc: "Высокие ставки"}
+    - {id: 748, cat: TV, desc: "Дельта"}
+    - {id: 501, cat: TV, desc: "Дикий - 4"}
+    - {id: 980, cat: TV, desc: "Дознаватель"}
+    - {id: 1002, cat: TV, desc: "Долгий путь домой"}
+    - {id: 958, cat: TV, desc: "Дружба народов"}
+    - {id: 798, cat: TV, desc: "Зайцев+1"}
+    - {id: 1102, cat: TV, desc: "Запретная любовь"}
+    - {id: 1083, cat: TV, desc: "Код Константина"}
+    - {id: 1092, cat: TV, desc: "Измены"}
+    - {id: 565, cat: TV, desc: "Кодекс чести"}
+    - {id: 797, cat: TV, desc: "Корабль"}
+    - {id: 1070, cat: TV, desc: "Инспектор Купер"}
+    - {id: 640, cat: TV, desc: "Легавый"}
+    - {id: 1048, cat: TV, desc: "Луна"}
+    - {id: 1060, cat: TV, desc: "Ленинград 46"}
+    - {id: 684, cat: TV, desc: "Лесник"}
+    - {id: 1057, cat: TV, desc: "Между нами, девочками"}
+    - {id: 654, cat: TV, desc: "Морские дьяволы. Смерч"}
+    - {id: 1089, cat: TV, desc: "Неподкупный"}
+    - {id: 1095, cat: TV, desc: "Окрылённые"}
+    - {id: 1016, cat: TV, desc: "Отец Матвей"}
+    - {id: 687, cat: TV, desc: "Особый случай"}
+    - {id: 1054, cat: TV, desc: "Папа на вырост"}
+    - {id: 1094, cat: TV, desc: "Непридуманная жизнь"}
+    - {id: 986, cat: TV, desc: "Пляж"}
+    - {id: 750, cat: TV, desc: "Последний из Магикян"}
+    - {id: 1043, cat: TV, desc: "Последний янычар"}
+    - {id: 997, cat: TV, desc: "Практика"}
+    - {id: 1031, cat: TV, desc: "Хроники ломбарда"}
+    - {id: 1063, cat: TV, desc: "Цветок папоротника"}
+    - {id: 990, cat: TV, desc: "Человек - приманка"}
+    - {id: 1044, cat: TV, desc: "Свет и тень маяка"}
+    - {id: 1082, cat: TV, desc: "Следователи"}
+    - {id: 995, cat: TV, desc: "Слепая"}
+    - {id: 699, cat: TV, desc: "Солдаты 17 (Солдаты. Снова в строю)"}
+    - {id: 1025, cat: TV, desc: "Улыбка пересмешника"}
+    - {id: 1024, cat: TV, desc: "Литейный"}
+    - {id: 1023, cat: TV, desc: "Раскаяние"}
+    - {id: 1076, cat: TV, desc: "Родители"}
+    - {id: 972, cat: TV, desc: "Сватьи"}
+    - {id: 1105, cat: TV, desc: "Чума"}
+    - {id: 1073, cat: TV, desc: "Чужое гнездо"}
+    - {id: 1078, cat: TV, desc: "Чтец"}
+    - {id: 691, cat: TV, desc: "Черные кошки"}
+    - {id: 628, cat: TV, desc: "Карпов"}
+    - {id: 1101, cat: TV, desc: "Квест"}
+    - {id: 1088, cat: TV, desc: "Лондонград"}
+    - {id: 1072, cat: TV, desc: "Меч"}
+    - {id: 795, cat: TV, desc: "Пока станица спит"}
+    - {id: 978, cat: TV, desc: "ППС"}
+    - {id: 1003, cat: TV, desc: "Сердце звезды"}
+    - {id: 1194, cat: TV, desc: "Агентство скрытых камер"}
+    - {id: 1140, cat: TV, desc: "Академия"}
+    - {id: 1178, cat: TV, desc: "Беглые родственники"}
+    - {id: 1222, cat: TV, desc: "Анна-детективъ"}
+    - {id: 1161, cat: TV, desc: "Бедные люди"}
+    - {id: 1099, cat: TV, desc: "Ботаны"}
+    - {id: 1136, cat: TV, desc: "Бородач"}
+    - {id: 1184, cat: TV, desc: "Вижу - знаю"}
+    - {id: 1127, cat: TV, desc: "Владимирская, 15"}
+    - {id: 781, cat: TV, desc: "Выжить после"}
+    - {id: 1181, cat: TV, desc: "Вышибала"}
+    - {id: 1165, cat: TV, desc: "Гастролеры (Беглецы)"}
+    - {id: 1150, cat: TV, desc: "Гражданин Никто"}
+    - {id: 509, cat: TV, desc: "Два отца и два сына"}
+    - {id: 656, cat: TV, desc: "Деффчонки"}
+    - {id: 1128, cat: TV, desc: "Другой майор Соколов"}
+    - {id: 1192, cat: TV, desc: "Жемчуга"}
+    - {id: 1170, cat: TV, desc: "Законы улиц"}
+    - {id: 1183, cat: TV, desc: "Игра. Реванш"}
+    - {id: 1117, cat: TV, desc: "Иные"}
+    - {id: 1228, cat: TV, desc: "Казаки"}
+    - {id: 1107, cat: TV, desc: "Как я стал русским"}
+    - {id: 1077, cat: TV, desc: "Клан Ювелиров"}
+    - {id: 1118, cat: TV, desc: "Команда"}
+    - {id: 1132, cat: TV, desc: "Кости"}
+    - {id: 354, cat: TV, desc: "Кухня"}
+    - {id: 1040, cat: TV, desc: "Мажор"}
+    - {id: 1104, cat: TV, desc: "Метод"}
+    - {id: 1189, cat: TV, desc: "Москва. Центральный округ"}
+    - {id: 1135, cat: TV, desc: "На глубине"}
+    - {id: 1151, cat: TV, desc: "Напарницы"}
+    - {id: 1131, cat: TV, desc: "Не зарекайся"}
+    - {id: 1160, cat: TV, desc: "Невский"}
+    - {id: 1224, cat: TV, desc: "Нити судьбы"}
+    - {id: 1112, cat: TV, desc: "Озабоченные или любовь зла"}
+    - {id: 1139, cat: TV, desc: "Остров"}
+    - {id: 1080, cat: TV, desc: "Отдел 44"}
+    - {id: 761, cat: TV, desc: "Пасечник"}
+    - {id: 1103, cat: TV, desc: "Патруль Самооборона"}
+    - {id: 1157, cat: TV, desc: "Перевозчик"}
+    - {id: 1081, cat: TV, desc: "Пес"}
+    - {id: 1110, cat: TV, desc: "Последний мент"}
+    - {id: 1163, cat: TV, desc: "Последний москаль. Судный день"}
+    - {id: 1126, cat: TV, desc: "Прокуроры"}
+    - {id: 1179, cat: TV, desc: "Пушкин"}
+    - {id: 671, cat: TV, desc: "Пятая стража"}
+    - {id: 1019, cat: TV, desc: "Пятницкий. Глава четвертая"}
+    - {id: 1115, cat: TV, desc: "Ради любви я все смогу / Вечная любовь"}
+    - {id: 788, cat: TV, desc: "Розыск"}
+    - {id: 359, cat: TV, desc: "Светофор"}
+    - {id: 1098, cat: TV, desc: "Семейный бизнес"}
+    - {id: 1162, cat: TV, desc: "Следователь Тихонов"}
+    - {id: 1130, cat: TV, desc: "Сны"}
+    - {id: 1138, cat: TV, desc: "Солнце в подарок"}
+    - {id: 1144, cat: TV, desc: "Спросите у осени"}
+    - {id: 1180, cat: TV, desc: "Степные волки"}
+    - {id: 1133, cat: TV, desc: "Сын моего отца"}
+    - {id: 1049, cat: TV, desc: "Такая работа"}
+    - {id: 1185, cat: TV, desc: "Центральная больница"}
+    - {id: 1141, cat: TV, desc: "Человек без прошлого"}
+    - {id: 1223, cat: TV, desc: "Чёрная кошка"}
+    - {id: 1190, cat: TV, desc: "Шаман. Новая угроза"}
+    - {id: 1191, cat: TV, desc: "Я работаю в суде"}
+    - {id: 1235, cat: TV, desc: "Василиса"}
+    - {id: 1154, cat: TV, desc: "Вечный отпуск"}
+    - {id: 555, cat: TV, desc: "Восьмидесятые"}
+    - {id: 1231, cat: TV, desc: "Вы все меня бесите"}
+    - {id: 152, cat: TV, desc: "Интерны"}
+    - {id: 1156, cat: TV, desc: "Крыша мира"}
+    - {id: 1233, cat: TV, desc: "Райское место"}
+    - {id: 1302, cat: TV, desc: "Фамильные ценности"}
+    - {id: 1059, cat: TV, desc: "Это любовь"}
+    - {id: 1280, cat: TV, desc: "Адаптация"}
+    - {id: 48, cat: TV, desc: "Воронины"}
+    - {id: 1308, cat: TV, desc: "Женский доктор"}
+    - {id: 1186, cat: TV, desc: "Кризис нежного возраста"}
+    - {id: 1281, cat: TV, desc: "Куба"}
+    - {id: 1278, cat: TV, desc: "Майор и магия"}
+    - {id: 1125, cat: TV, desc: "Мамочки"}
+    - {id: 1155, cat: TV, desc: "Мент в законе"}
+    - {id: 1015, cat: TV, desc: "Ментовские войны"}
+    - {id: 1276, cat: TV, desc: "Один против всех"}
+    - {id: 1193, cat: TV, desc: "Ольга"}
+    - {id: 1227, cat: TV, desc: "Отель Элеон"}
+    - {id: 551, cat: TV, desc: "Паутина"}
+    - {id: 1159, cat: TV, desc: "Подкидыши"}
+    - {id: 225, cat: TV, desc: "Реальные пацаны"}
+    - {id: 680, cat: TV, desc: "СашаТаня"}
+    - {id: 1301, cat: TV, desc: "Свидетели"}
+    - {id: 630, cat: TV, desc: "Склифосовский (Склиф)"}
+    - {id: 226, cat: TV, desc: "След"}
+    - {id: 1116, cat: TV, desc: "Слуга народа"}
+    - {id: 1232, cat: TV, desc: "Стройка"}
+    - {id: 1045, cat: TV, desc: "Улицы разбитых фонарей"}
+    - {id: 445, cat: TV, desc: "Универ. Новая общага."}
+    - {id: 1285, cat: TV, desc: "Учитель в законе. Схватка"}
+    - {id: 970, cat: TV, desc: "Физрук"}
+    - {id: 1299, cat: TV, desc: "Филфак"}
+    - {id: 1062, cat: TV, desc: "ЧОП"}
+    - {id: 778, cat: TV, desc: "Шеф. Игра на повышение / Шеф-4"}
+    - {id: 21, cat: TV, desc: "Зарубежные мультсериалы"}
+    - {id: 185, cat: TV, desc: "WINX CLUB - Школа волшебниц"}
+    - {id: 463, cat: TV, desc: "Волшебные ПопПикси / PopPixie"}
+    - {id: 633, cat: TV, desc: "Winx Club 5й сезон - За гранью Беливикса"}
+    - {id: 772, cat: TV, desc: "Winx Club 6й сезон - Загадка Легендариума"}
+    - {id: 1093, cat: TV, desc: "Winx Club 7й сезон - Высшая сила животных"}
+    - {id: 606, cat: TV, desc: "Друзья ангелов"}
+    - {id: 1129, cat: TV, desc: "ЛедиБаг и Супер кот / Miraculous Ladybug"}
+    - {id: 789, cat: TV, desc: "Тотали Спайс! / Totally Spies!"}
+    - {id: 162, cat: TV, desc: "Футурама"}
+    - {id: 151, cat: TV, desc: "Хантик - Искатели секретов (Озвучка РиперАМ!)"}
+    - {id: 22, cat: TV, desc: "Русские мультсериалы"}
+    - {id: 1401, cat: TV, desc: "Маша и Медведь"}
+    - {id: 198, cat: TV, desc: "Архив Сериалов, Мультсериалов"}
+    - {id: 232, cat: TV/Anime, desc: "Аниме"}
+    - {id: 245, cat: TV/Anime, desc: "Полнометражные Аниме"}
+    - {id: 246, cat: TV/Anime, desc: "Аниме Сериалы"}
+    - {id: 592, cat: TV/Anime, desc: "High School DxD / Демоны старшей школы"}
+    - {id: 594, cat: TV/Anime, desc: "Корона Грешника / Guilty Crown"}
+    - {id: 591, cat: TV/Anime, desc: "Zero no Tsukaima TV-1 / Подручный бездарной Луизы ТВ-1"}
+    - {id: 595, cat: TV/Anime, desc: "Zero no Tsukaima: Futatsuki no Kishi TV-2 / Подручный бездарной Луизы: Рыцарь Двух Лун ТВ-2"}
+    - {id: 596, cat: TV/Anime, desc: "Zero no Tsukaima Princess no Rondo TV-3 / Подручный бездарной Луизы: Рондо Принцессы ТВ-3"}
+    - {id: 597, cat: TV/Anime, desc: "Zero no Tsukaima F TV-4 / Подручный бездарной Луизы Финал ТВ-4"}
+    - {id: 242, cat: TV, desc: "Без перевода"}
+    - {id: 241, cat: TV, desc: "ТВ-Шоу, документальные, спорт"}
+    - {id: 23, cat: TV, desc: "ТВ-Шоу и развлекательные передачи"}
+    - {id: 1075, cat: TV, desc: "Архив ТВ-Шоу"}
+    - {id: 491, cat: TV, desc: "Yesterday Live"}
+    - {id: 516, cat: TV, desc: "X-Фактор"}
+    - {id: 478, cat: TV, desc: "Без башни"}
+    - {id: 540, cat: TV, desc: "Болеро"}
+    - {id: 1010, cat: TV, desc: "Большие гонки"}
+    - {id: 538, cat: TV, desc: "Бункер News"}
+    - {id: 561, cat: TV, desc: "В черной-черной комнате"}
+    - {id: 713, cat: TV, desc: "Вышка"}
+    - {id: 191, cat: TV, desc: "Голые и смешные"}
+    - {id: 527, cat: TV, desc: "Готовим с Алексеем Зиминым"}
+    - {id: 460, cat: TV, desc: "Грязные деньги"}
+    - {id: 659, cat: TV, desc: "Два с половиной повара"}
+    - {id: 255, cat: TV, desc: "Девчата"}
+    - {id: 634, cat: TV, desc: "Дешево и сердито"}
+    - {id: 574, cat: TV, desc: "Дневники шоугелз"}
+    - {id: 764, cat: TV, desc: "ДНК"}
+    - {id: 637, cat: TV, desc: "Доброго здоровьица"}
+    - {id: 658, cat: TV, desc: "Дурнушек.net"}
+    - {id: 209, cat: TV, desc: "Ешь и худей"}
+    - {id: 800, cat: TV, desc: "Женское счастье"}
+    - {id: 475, cat: TV, desc: "Женская Лига"}
+    - {id: 740, cat: TV, desc: "Звезданутые"}
+    - {id: 741, cat: TV, desc: "Здравствуйте, я ваша Пятница"}
+    - {id: 737, cat: TV, desc: "Из песни слов не выкинешь"}
+    - {id: 587, cat: TV, desc: "Индустрия кино"}
+    - {id: 718, cat: TV, desc: "Истина где-то рядом"}
+    - {id: 1011, cat: TV, desc: "История Российской кухни"}
+    - {id: 456, cat: TV, desc: "Каникулы в Мексике"}
+    - {id: 682, cat: TV, desc: "Караоке киллер"}
+    - {id: 996, cat: TV, desc: "Когда мы дома"}
+    - {id: 785, cat: TV, desc: "Куб - Новый сезон"}
+    - {id: 668, cat: TV, desc: "Кулинарный поединок"}
+    - {id: 752, cat: TV, desc: "Луч Света"}
+    - {id: 533, cat: TV, desc: "Люди ХЭ"}
+    - {id: 447, cat: TV, desc: "Мама в законе"}
+    - {id: 529, cat: TV, desc: "Минута для победы с М. Авериным"}
+    - {id: 793, cat: TV, desc: "Мировой повар"}
+    - {id: 586, cat: TV, desc: "Минута славы"}
+    - {id: 472, cat: TV, desc: "Мульт Личности"}
+    - {id: 1009, cat: TV, desc: "Наш выход"}
+    - {id: 511, cat: TV, desc: "Нонна, давай"}
+    - {id: 531, cat: TV, desc: "НТВшники"}
+    - {id: 754, cat: TV, desc: "Остров"}
+    - {id: 715, cat: TV, desc: "Пародайс"}
+    - {id: 559, cat: TV, desc: "Первый класс"}
+    - {id: 636, cat: TV, desc: "Погоня"}
+    - {id: 679, cat: TV, desc: "Пока еще не поздно"}
+    - {id: 545, cat: TV, desc: "Понять. Простить"}
+    - {id: 537, cat: TV, desc: "Последнее слово"}
+    - {id: 792, cat: TV, desc: "Правила моей кухни"}
+    - {id: 547, cat: TV, desc: "Право на защиту"}
+    - {id: 731, cat: TV, desc: "Про декор"}
+    - {id: 982, cat: TV, desc: "Реальная кухня"}
+    - {id: 747, cat: TV, desc: "Самый лучший муж"}
+    - {id: 536, cat: TV, desc: "Самый умный"}
+    - {id: 742, cat: TV, desc: "Свидание со звездой"}
+    - {id: 544, cat: TV, desc: "Свобода и справедливость"}
+    - {id: 963, cat: TV, desc: "Свободное время"}
+    - {id: 575, cat: TV, desc: "Снимите это немедленно!"}
+    - {id: 489, cat: TV, desc: "Специальное задание"}
+    - {id: 495, cat: TV, desc: "Спокойной ночи, малыши!"}
+    - {id: 689, cat: TV, desc: "Страна в Shope"}
+    - {id: 492, cat: TV, desc: "СуперИнтуиция"}
+    - {id: 535, cat: TV, desc: "Съешьте это немедленно!"}
+    - {id: 1005, cat: TV, desc: "Тотальная распродажа"}
+    - {id: 521, cat: TV, desc: "Украина чудес"}
+    - {id: 698, cat: TV, desc: "Устами младенца"}
+    - {id: 451, cat: TV, desc: "Улетное видео по русски"}
+    - {id: 697, cat: TV, desc: "ХБ"}
+    - {id: 497, cat: TV, desc: "Ху из ху"}
+    - {id: 494, cat: TV, desc: "Школа злословия"}
+    - {id: 448, cat: TV, desc: "Что делать?"}
+    - {id: 366, cat: TV, desc: "6 кадров"}
+    - {id: 1032, cat: TV, desc: "Автошкола 2: Девчонки рулят"}
+    - {id: 471, cat: TV, desc: "Большая Разница"}
+    - {id: 744, cat: TV, desc: "В наше время"}
+    - {id: 1056, cat: TV, desc: "Все будет хорошо"}
+    - {id: 344, cat: TV, desc: "Галилео"}
+    - {id: 477, cat: TV, desc: "Даешь молодежь"}
+    - {id: 514, cat: TV, desc: "Ералаш"}
+    - {id: 959, cat: TV, desc: "Голос. Дети"}
+    - {id: 446, cat: TV, desc: "+100500"}
+    - {id: 693, cat: TV, desc: "Comedy Баттл. Без границ"}
+    - {id: 1164, cat: TV, desc: "Битва риелторов"}
+    - {id: 1071, cat: TV, desc: "Взвешенные люди"}
+    - {id: 229, cat: TV, desc: "Comedy Баттл. Отбор, турнир"}
+    - {id: 1096, cat: TV, desc: "Время Г"}
+    - {id: 1114, cat: TV, desc: "Голос"}
+    - {id: 522, cat: TV, desc: "Модный приговор"}
+    - {id: 971, cat: TV, desc: "Не спать!"}
+    - {id: 1137, cat: TV, desc: "Новая звезда"}
+    - {id: 1142, cat: TV, desc: "Таблетка"}
+    - {id: 677, cat: TV, desc: "Холостяк"}
+    - {id: 1034, cat: TV, desc: "Чисто News"}
+    - {id: 763, cat: TV, desc: "Я худею"}
+    - {id: 1087, cat: TV, desc: "Дикие игры"}
+    - {id: 649, cat: TV, desc: "Тайны Чапман"}
+    - {id: 452, cat: TV, desc: "Хочу знать"}
+    - {id: 1121, cat: TV, desc: "Хроники московского быта"}
+    - {id: 647, cat: TV, desc: "Чистосердечное признание"}
+    - {id: 643, cat: TV, desc: "Кинематограф"}
+    - {id: 532, cat: TV, desc: "Кино в деталях"}
+    - {id: 614, cat: TV, desc: "Мистические истории"}
+    - {id: 801, cat: TV, desc: "Пища богов"}
+    - {id: 974, cat: TV, desc: "Политика"}
+    - {id: 670, cat: TV, desc: "Репортерские истории"}
+    - {id: 252, cat: TV, desc: "Среда обитания"}
+    - {id: 89, cat: TV, desc: "Игровое видео/Фильм о фильме"}
+    - {id: 65, cat: TV, desc: "Вторая мировая война"}
+    - {id: 190, cat: TV, desc: "Давай поженимся"}
+    - {id: 530, cat: TV, desc: "Жди меня"}
+    - {id: 1086, cat: TV, desc: "На самом деле"}
+    - {id: 526, cat: TV, desc: "Вечерний квартал"}
+    - {id: 605, cat: TV, desc: "Вечерний Ургант"}
+    - {id: 1124, cat: TV, desc: "Где логика?"}
+    - {id: 480, cat: TV, desc: "Камеди Woman"}
+    - {id: 459, cat: TV, desc: "Говорим и показываем"}
+    - {id: 479, cat: TV, desc: "Comedy Club - Камеди Клаб"}
+    - {id: 1289, cat: TV, desc: "Двойные стандарты"}
+    - {id: 33, cat: TV, desc: "ДОМ 2"}
+    - {id: 270, cat: TV, desc: "Архив Дом-2"}
+    - {id: 696, cat: TV, desc: "Квартирный вопрос"}
+    - {id: 469, cat: TV, desc: "КВН - Клуб Веселых и Находчивых"}
+    - {id: 541, cat: TV, desc: "Кто хочет стать миллионером"}
+    - {id: 189, cat: TV, desc: "Контрольная закупка"}
+    - {id: 1284, cat: TV, desc: "Лига смеха"}
+    - {id: 775, cat: TV, desc: "МастерШеф"}
+    - {id: 1291, cat: TV, desc: "Международная пилорама"}
+    - {id: 1018, cat: TV, desc: "Мужское - женское"}
+    - {id: 769, cat: TV, desc: "Наедине со всеми"}
+    - {id: 1123, cat: TV, desc: "НашПотребНадзор"}
+    - {id: 1017, cat: TV, desc: "Однажды в России"}
+    - {id: 524, cat: TV, desc: "Орел и решка"}
+    - {id: 1309, cat: TV, desc: "Пацанки"}
+    - {id: 765, cat: TV, desc: "Перезагрузка"}
+    - {id: 493, cat: TV, desc: "Поле чудес"}
+    - {id: 730, cat: TV, desc: "Поедем, поедим"}
+    - {id: 1146, cat: TV, desc: "Пока все дома"}
+    - {id: 1196, cat: TV, desc: "Проводник"}
+    - {id: 588, cat: TV, desc: "Прямой эфир"}
+    - {id: 348, cat: TV, desc: "Пусть говорят"}
+    - {id: 539, cat: TV, desc: "Рассмеши комика"}
+    - {id: 1158, cat: TV, desc: "Ревизорро"}
+    - {id: 490, cat: TV, desc: "Сам себе режиссёр"}
+    - {id: 457, cat: TV, desc: "Своя игра"}
+    - {id: 520, cat: TV, desc: "Смак"}
+    - {id: 1106, cat: TV, desc: "Соль"}
+    - {id: 975, cat: TV, desc: "STAND UP"}
+    - {id: 496, cat: TV, desc: "Сто к одному"}
+    - {id: 786, cat: TV, desc: "Сегодня вечером с Максимом Галкиным и Юлией Меньшовой"}
+    - {id: 1287, cat: TV, desc: "Секрет на миллион"}
+    - {id: 1021, cat: TV, desc: "Танцы"}
+    - {id: 1286, cat: TV, desc: "Ты супер!"}
+    - {id: 470, cat: TV, desc: "Уральские пельмени"}
+    - {id: 967, cat: TV, desc: "Comedy Баттл. Последний сезон"}
+    - {id: 1290, cat: TV, desc: "Устами младенца"}
+    - {id: 1147, cat: TV, desc: "Фазенда"}
+    - {id: 188, cat: TV, desc: "Центральное телевидение"}
+    - {id: 543, cat: TV, desc: "Что? Где? Когда?"}
+    - {id: 738, cat: TV, desc: "Школа ремонта"}
+    - {id: 59, cat: TV, desc: "Э К С Т Р А С Е Н С Ы"}
+    - {id: 281, cat: TV, desc: "Удиви меня"}
+    - {id: 1035, cat: TV, desc: "Черно-белое"}
+    - {id: 280, cat: TV, desc: "Экстрасенсы против ученых"}
+    - {id: 279, cat: TV, desc: "Битва экстрасенсов"}
+    - {id: 24, cat: TV/Documentary, desc: "Документальные передачи"}
+    - {id: 728, cat: TV/Documentary, desc: "Чудо техники с Сергеем Малозёмовым"}
+    - {id: 69, cat: TV/Documentary, desc: "Авто"}
+    - {id: 669, cat: TV/Documentary, desc: "Главная дорога"}
+    - {id: 704, cat: TV/Documentary, desc: "Первая передача"}
+    - {id: 1111, cat: TV/Documentary, desc: "Без обмана"}
+    - {id: 88, cat: TV/Documentary, desc: "Биографии. Личности и кумиры"}
+    - {id: 379, cat: TV/Documentary, desc: "15 минут до завтра"}
+    - {id: 68, cat: TV/Documentary, desc: "Военное дело"}
+    - {id: 784, cat: TV/Documentary, desc: "Голос - За кадром"}
+    - {id: 729, cat: TV/Documentary, desc: "Дачный ответ"}
+    - {id: 1152, cat: TV/Documentary, desc: "Еда живая и мертвая"}
+    - {id: 194, cat: TV/Documentary, desc: "Discovery / NatGeo / BBC / Viasat"}
+    - {id: 1307, cat: TV/Documentary, desc: "Загадки человечества"}
+    - {id: 701, cat: TV/Documentary, desc: "Идеальный ремонт"}
+    - {id: 63, cat: TV/Documentary, desc: "Криминал"}
+    - {id: 590, cat: TV/Documentary, desc: "Криминальные хроники"}
+    - {id: 796, cat: TV/Documentary, desc: "Место происшествия. О главном"}
+    - {id: 1085, cat: TV/Documentary, desc: "Следствие ведут..."}
+    - {id: 652, cat: TV/Documentary, desc: "Следствие вели..."}
+    - {id: 498, cat: TV/Documentary, desc: "Чрезвычайное происшествие"}
+    - {id: 1120, cat: TV/Documentary, desc: "Линия защиты"}
+    - {id: 1145, cat: TV/Documentary, desc: "Непутевые заметки с Дмитрием Крыловым"}
+    - {id: 1067, cat: TV/Documentary, desc: "Обложка"}
+    - {id: 1288, cat: TV/Documentary, desc: "Однажды"}
+    - {id: 1119, cat: TV/Documentary, desc: "Осторожно, мошенники!"}
+    - {id: 1149, cat: TV/Documentary, desc: "Открытие Китая"}
+    - {id: 739, cat: TV/Documentary, desc: "Очная ставка"}
+    - {id: 965, cat: TV/Documentary, desc: "Познер. Интервью с..."}
+    - {id: 650, cat: TV/Documentary, desc: "Русские сенсации"}
+    - {id: 1122, cat: TV/Documentary, desc: "Русский вопрос"}
+    - {id: 1198, cat: TV/Documentary, desc: "Самые шокирующие гипотезы"}
+    - {id: 802, cat: TV/Documentary, desc: "Территория заблуждений с Игорем Прокопенко"}
+    - {id: 323, cat: TV/Documentary, desc: "Информационно-аналитические и общественно-политические передачи"}
+    - {id: 1195, cat: TV/Documentary, desc: "60 минут"}
+    - {id: 1041, cat: TV/Documentary, desc: "Вести"}
+    - {id: 672, cat: TV/Documentary, desc: "Вести в субботу с Сергеем Брилевым"}
+    - {id: 655, cat: TV/Documentary, desc: "Вести недели"}
+    - {id: 1014, cat: TV/Documentary, desc: "Вечер с Владимиром Соловьевым"}
+    - {id: 1007, cat: TV/Documentary, desc: "Время покажет"}
+    - {id: 712, cat: TV/Documentary, desc: "Воскресный вечер с Владимиром Соловьевым"}
+    - {id: 673, cat: TV/Documentary, desc: "Воскресное время - Первый канал"}
+    - {id: 759, cat: TV/Documentary, desc: "В центре событий с Анной Прохоровой"}
+    - {id: 999, cat: TV/Documentary, desc: "Добров в эфире"}
+    - {id: 758, cat: TV/Documentary, desc: "Известия. Главное"}
+    - {id: 1230, cat: TV/Documentary, desc: "Итоги недели"}
+    - {id: 1400, cat: TV/Documentary, desc: "Итоги недели с Сергеем Михеевым"}
+    - {id: 1402, cat: TV/Documentary, desc: "Кто против?"}
+    - {id: 1148, cat: TV/Documentary, desc: "Место встречи"}
+    - {id: 648, cat: TV/Documentary, desc: "Момент истины"}
+    - {id: 1279, cat: TV/Documentary, desc: "Первая студия"}
+    - {id: 327, cat: TV/Documentary, desc: "Поединок с Владимиром Соловьевым"}
+    - {id: 324, cat: TV/Documentary, desc: "Постскриптум с Алексеем Пушковым"}
+    - {id: 705, cat: TV/Documentary, desc: "Право голоса"}
+    - {id: 1029, cat: TV/Documentary, desc: "Право знать!"}
+    - {id: 1153, cat: TV/Documentary, desc: "Процесс"}
+    - {id: 1405, cat: TV/Documentary, desc: "Своя правда"}
+    - {id: 337, cat: TV/Documentary, desc: "Ты не поверишь!"}
+    - {id: 330, cat: TV/Documentary, desc: "Человек и закон"}
+    - {id: 25, cat: TV/Sport, desc: "Спортивные передачи"}
+    - {id: 127, cat: TV/Sport, desc: "ХХII Зимние Олимпийские Игры в Сочи"}
+    - {id: 616, cat: TV/Sport, desc: "Евро-2012 (Польша, Украина)"}
+    - {id: 201, cat: TV/Sport, desc: "Бокс, боевые единоборства , рестлинг"}
+    - {id: 146, cat: TV/Sport, desc: "Гонки"}
+    - {id: 145, cat: TV/Sport, desc: "Футбол"}
+    - {id: 985, cat: TV/Sport, desc: "Футбол. Чемпионат мира 2014 (Бразилия)"}
+    - {id: 661, cat: TV/Sport, desc: "Футбол.ru"}
+    - {id: 211, cat: TV/Sport, desc: "Хоккей"}
+    - {id: 192, cat: TV/Sport, desc: "ЧМ-2010"}
+    - {id: 622, cat: TV/Sport, desc: "ХХХ Летние Олимпийские Игры в Лондоне"}
+    - {id: 346, cat: TV/Sport, desc: "Театр"}
+    - {id: 199, cat: TV/Sport, desc: "Архив ТВ-Шоу, документальные, спорт"}
+    - {id: 577, cat: TV/Sport, desc: "Адская кухня - 2 (Россия)"}
+    - {id: 674, cat: TV/Sport, desc: "Большие танцы"}
+    - {id: 579, cat: TV/Sport, desc: "Две звезды"}
+    - {id: 576, cat: TV/Sport, desc: "Смотреть всем!"}
+    - {id: 694, cat: TV/Sport, desc: "Фитнес"}
+    - {id: 589, cat: TV/Sport, desc: "Достояние республики. Новый сезон 2011!"}
+    - {id: 585, cat: TV/Sport, desc: "Городок"}
+    - {id: 584, cat: TV/Sport, desc: "Адская кухня"}
+    - {id: 269, cat: TV/Sport, desc: "Одна за всех"}
+    - {id: 515, cat: TV/Sport, desc: "Стыдно, когда видно!"}
+    - {id: 468, cat: TV/Sport, desc: "Прожекторперисхилтон"}
+    - {id: 762, cat: TV/Sport, desc: "Хит"}
+    - {id: 767, cat: TV/Sport, desc: "Шурочка"}
+    - {id: 1113, cat: TV/Sport, desc: "Акценты недели"}
+    - {id: 333, cat: TV/Sport, desc: "Брачное чтиво"}
+    - {id: 1097, cat: TV/Sport, desc: "В теме"}
+    - {id: 1064, cat: TV/Sport, desc: "Время в 21:00"}
+    - {id: 332, cat: TV/Sport, desc: "ЖКХ"}
+    - {id: 660, cat: TV/Sport, desc: "Михаил Жванецкий. Дежурный по стране"}
+    - {id: 998, cat: TV/Sport, desc: "Итоги дня"}
+    - {id: 331, cat: TV/Sport, desc: "Неделя с Марианной Максимовской"}
+    - {id: 335, cat: TV/Sport, desc: "Операция «Должник»"}
+    - {id: 1134, cat: TV/Sport, desc: "Открытая студия"}
+    - {id: 1143, cat: TV/Sport, desc: "Поздняков. Интервью с ..."}
+    - {id: 336, cat: TV/Sport, desc: "Секретные территории"}
+    - {id: 702, cat: TV/Sport, desc: "Собчак живьём"}
+    - {id: 328, cat: TV/Sport, desc: "Специальный корреспондент"}
+    - {id: 1053, cat: TV/Sport, desc: "Список Норкина"}
+    - {id: 1022, cat: TV/Sport, desc: "Структура Момента"}
+    - {id: 325, cat: TV/Sport, desc: "Судите сами"}
+    - {id: 326, cat: TV/Sport, desc: "Честный понедельник"}
+    - {id: 329, cat: TV/Sport, desc: "Сегодня. Итоговая программа"}
+    - {id: 1100, cat: TV/Sport, desc: "Пропаганда"}
+    - {id: 1084, cat: TV/Sport, desc: "'Точка' с Максимом Шевченко"}
+    - {id: 334, cat: TV/Sport, desc: "День  космических  историй"}
+    - {id: 1091, cat: TV/Sport, desc: "50 оттенков. Белова"}
+    - {id: 298, cat: Console, desc: "Игры"}
+    - {id: 299, cat: Console, desc: "Оформление раздач"}
+    - {id: 1202, cat: Console, desc: "Новинки repack 'ов"}
+    - {id: 302, cat: Console, desc: "Горячие Новинки"}
+    - {id: 1225, cat: Console, desc: "Denuvo"}
+    - {id: 300, cat: Console, desc: "Игры для PC"}
+    - {id: 312, cat: Console, desc: "Action"}
+    - {id: 807, cat: Console, desc: "Action FPS (1st Person)"}
+    - {id: 808, cat: Console, desc: "Action TPS (3rd Person)"}
+    - {id: 665, cat: Console, desc: "Антологии"}
+    - {id: 309, cat: Console, desc: "Стратегии"}
+    - {id: 810, cat: Console, desc: "RTS (стратегии в реальном времени)"}
+    - {id: 809, cat: Console, desc: "TBS (пошаговые стратегии)"}
+    - {id: 811, cat: Console, desc: "Экономические стратегии"}
+    - {id: 938, cat: Console, desc: "Военные стратегии"}
+    - {id: 338, cat: Console, desc: "RPG"}
+    - {id: 1203, cat: Console, desc: "MMORPG"}
+    - {id: 305, cat: Console, desc: "Аркады"}
+    - {id: 717, cat: Console, desc: "Симуляторы"}
+    - {id: 1204, cat: Console, desc: "Авиасимуляторы"}
+    - {id: 1205, cat: Console, desc: "Гоночные симуляторы"}
+    - {id: 1206, cat: Console, desc: "Спортивные симуляторы"}
+    - {id: 311, cat: Console, desc: "Приключения, Квесты, Логические"}
+    - {id: 1207, cat: Console, desc: "Старые игры"}
+    - {id: 307, cat: Console, desc: "Детские обучающие игры"}
+    - {id: 812, cat: Console, desc: "Онлайновые игры"}
+    - {id: 1215, cat: Console, desc: "Эротические игры"}
+    - {id: 303, cat: Console, desc: "Мини-игры"}
+    - {id: 1208, cat: Console, desc: "Демо игры"}
+    - {id: 313, cat: Console, desc: "Прочее"}
+    - {id: 864, cat: Console, desc: "Дополнения к играм"}
+    - {id: 1209, cat: Console, desc: "NoCD/NoDVD"}
+    - {id: 1210, cat: Console, desc: "Русификаторы"}
+    - {id: 1211, cat: Console, desc: "Игровое видео"}
+    - {id: 1212, cat: Console, desc: "Патчи"}
+    - {id: 1213, cat: Console, desc: "Софт для игр на PC"}
+    - {id: 1214, cat: Console, desc: "Прочее"}
+    - {id: 1229, cat: Console, desc: "Новости игровой индустрии(Игромания)"}
+    - {id: 1352, cat: Console, desc: "Игромания"}
+    - {id: 1292, cat: Console, desc: "Шаблоны оформления раздач"}
+    - {id: 1310, cat: Console, desc: "Шаблон xatab"}
+    - {id: 1300, cat: Console, desc: "Шаблон оформления общий"}
+    - {id: 1298, cat: Console, desc: "Шаблон оформления VickNet"}
+    - {id: 1293, cat: Console, desc: "Шаблон оформления анимированный"}
+    - {id: 1295, cat: Console, desc: "Шаблон оформления общий №2"}
+    - {id: 1353, cat: Console, desc: "Для неопытных"}
+    - {id: 382, cat: PC, desc: "Программное обеспечение"}
+    - {id: 1237, cat: PC, desc: "Операционные системы"}
+    - {id: 1238, cat: PC, desc: "Windows 10"}
+    - {id: 1239, cat: PC, desc: "Windows 8, 8.1"}
+    - {id: 1240, cat: PC, desc: "Windows 7"}
+    - {id: 1243, cat: PC, desc: "Windows VISTA"}
+    - {id: 1241, cat: PC, desc: "Windows XP"}
+    - {id: 1275, cat: PC, desc: "Linux, Unix, Mac и другие ОС"}
+    - {id: 1242, cat: PC, desc: "Разное (Microsoft Windows OS)"}
+    - {id: 391, cat: PC, desc: "Системные программы"}
+    - {id: 405, cat: PC, desc: "Драйвера и сопутствующий софт"}
+    - {id: 1254, cat: PC, desc: "Архиваторы и файловые менеджеры"}
+    - {id: 1255, cat: PC, desc: "Программы для настройки и оптимизации ОС"}
+    - {id: 724, cat: PC, desc: "Защита, Антивирусы и Файерволы"}
+    - {id: 406, cat: PC, desc: "Сборники программ, WPI"}
+    - {id: 407, cat: PC, desc: "Работа с жёстким диском"}
+    - {id: 1245, cat: PC, desc: "Резервирование и восстановление данных"}
+    - {id: 1247, cat: PC, desc: "Работа с носителями информации"}
+    - {id: 1248, cat: PC, desc: "Обслуживание и диагностика компьютера"}
+    - {id: 1249, cat: PC, desc: "ПО для Интернета и сетей"}
+    - {id: 1251, cat: PC, desc: "Изменение интерфейса и скринсейверы ОС Windows"}
+    - {id: 408, cat: PC, desc: "Разное (Системные программы)"}
+    - {id: 399, cat: PC, desc: "Программы для работы с мультимедиа и 3D"}
+    - {id: 400, cat: PC, desc: "Графические редакторы, 3D моделирование"}
+    - {id: 401, cat: PC, desc: "Редакторы видео"}
+    - {id: 402, cat: PC, desc: "Видео- Аудио- конверторы"}
+    - {id: 404, cat: PC, desc: "Видео- Аудио- проигрыватели"}
+    - {id: 1270, cat: PC, desc: "Работа со звуком"}
+    - {id: 1271, cat: PC, desc: "Аудио- Видео Кодеки"}
+    - {id: 403, cat: PC, desc: "Разное (Программы для работы с мультимедиа и 3D)"}
+    - {id: 1244, cat: PC, desc: "Системы для бизнеса, офиса, научной и проектной работы"}
+    - {id: 1261, cat: PC, desc: "ГИС, Системы навигации и карты"}
+    - {id: 1256, cat: PC, desc: "Системы для научной работы"}
+    - {id: 1257, cat: PC, desc: "Офисные системы"}
+    - {id: 1263, cat: PC, desc: "Веб-разработка и Программирование"}
+    - {id: 1258, cat: PC, desc: "Системы для бизнеса"}
+    - {id: 1259, cat: PC, desc: "Работа с PDF и DjVu"}
+    - {id: 1262, cat: PC, desc: "Словари, переводчики"}
+    - {id: 1260, cat: PC, desc: "САПР, Софт для архитекторов и строителей"}
+    - {id: 1393, cat: PC, desc: "Разное"}
+    - {id: 726, cat: Other, desc: "Разное"}
+    - {id: 1273, cat: Other, desc: "Обои для рабочего стола"}
+    - {id: 1390, cat: Other, desc: "Аватары, Иконки, Смайлы"}
+    - {id: 1391, cat: Other, desc: "Растровые и Векторные Клипарты"}
+    - {id: 1272, cat: Other, desc: "Photoshop (Уроки) и Видеокурсы"}
+    - {id: 1392, cat: Other, desc: "Заготовки, виньетки, рамки"}
+    - {id: 243, cat: Audio, desc: "Музыка"}
+    - {id: 26, cat: Audio, desc: "Правила и предложения по улучшению раздела 'Музыка'"}
+    - {id: 96, cat: Audio, desc: "HD Видео"}
+    - {id: 70, cat: Audio, desc: "Pop"}
+    - {id: 97, cat: Audio, desc: "Видеоклипы / Концерты"}
+    - {id: 72, cat: Audio, desc: "Retro/Bandstand"}
+    - {id: 1358, cat: Audio/Lossless, desc: "Retro/Bandstand - lossless"}
+    - {id: 1359, cat: Audio/MP3, desc: "Retro/Bandstand - Mp3"}
+    - {id: 71, cat: Audio, desc: "Disco"}
+    - {id: 1356, cat: Audio/Lossless, desc: "Disco - lossless"}
+    - {id: 1357, cat: Audio/MP3, desc: "Disco - Mp3"}
+    - {id: 1354, cat: Audio/Lossless, desc: "Pop - lossless"}
+    - {id: 1355, cat: Audio/MP3, desc: "Pop - Mp3"}
+    - {id: 73, cat: Audio, desc: "Rock"}
+    - {id: 98, cat: Audio, desc: "Видеоклипы / Концерты"}
+    - {id: 1360, cat: Audio/Lossless, desc: "Rock - lossless"}
+    - {id: 1361, cat: Audio/MP3, desc: "Rock - Mp3"}
+    - {id: 74, cat: Audio, desc: "Alternative"}
+    - {id: 99, cat: Audio, desc: "Видеоклипы / Концерты"}
+    - {id: 1362, cat: Audio/Lossless, desc: "Alternative - lossless"}
+    - {id: 1363, cat: Audio/MP3, desc: "Alternative - Mp3"}
+    - {id: 75, cat: Audio, desc: "Metal"}
+    - {id: 100, cat: Audio, desc: "Видеоклипы / Концерты"}
+    - {id: 1364, cat: Audio/MP3, desc: "Metal - Mp3"}
+    - {id: 1365, cat: Audio/Lossless, desc: "Metal - lossless"}
+    - {id: 76, cat: Audio, desc: "Rap, Hip-Hop, R'n'B"}
+    - {id: 101, cat: Audio, desc: "Видеоклипы / Концерты"}
+    - {id: 78, cat: Audio, desc: "Зарубежный"}
+    - {id: 1368, cat: Audio/Lossless, desc: "Зарубежный - lossless"}
+    - {id: 1369, cat: Audio/MP3, desc: "Зарубежный - Mp3"}
+    - {id: 77, cat: Audio, desc: "Отечественный"}
+    - {id: 1370, cat: Audio/Lossless, desc: "Отечественный - lossless"}
+    - {id: 1371, cat: Audio/MP3, desc: "Отечественный - Mp3"}
+    - {id: 1366, cat: Audio/Lossless, desc: "Rap, Hip-Hop, R'n'B - lossless"}
+    - {id: 1367, cat: Audio/MP3, desc: "Rap, Hip-Hop, R'n'B - Mp3"}
+    - {id: 85, cat: Audio, desc: "Jazz, Blues"}
+    - {id: 1380, cat: Audio/Lossless, desc: "Jazz, Blues - lossless"}
+    - {id: 1381, cat: Audio/MP3, desc: "Jazz, Blues - Mp3"}
+    - {id: 82, cat: Audio, desc: "Chanson, Bard"}
+    - {id: 1386, cat: Audio/Lossless, desc: "Chanson, Bard - lossless"}
+    - {id: 1387, cat: Audio/MP3, desc: "Chanson, Bard - Mp3"}
+    - {id: 86, cat: Audio, desc: "Classical"}
+    - {id: 1378, cat: Audio/Lossless, desc: "Classical - lossless"}
+    - {id: 1379, cat: Audio/MP3, desc: "Classical - Mp3"}
+    - {id: 79, cat: Audio, desc: "Electronic"}
+    - {id: 102, cat: Audio, desc: "Видеоклипы / Концерты"}
+    - {id: 1372, cat: Audio, desc: "Electronic - lossless"}
+    - {id: 1373, cat: Audio/MP3, desc: "Electronic - Mp3"}
+    - {id: 80, cat: Audio, desc: "Other genres"}
+    - {id: 103, cat: Audio, desc: "Видеоклипы / Концерты"}
+    - {id: 87, cat: Audio, desc: "Военная песня"}
+    - {id: 1376, cat: Audio/Lossless, desc: "Военная песня - lossless"}
+    - {id: 1377, cat: Audio/MP3, desc: "Военная песня - Mp3"}
+    - {id: 84, cat: Audio, desc: "Reggae, Ska, Dub"}
+    - {id: 1382, cat: Audio/Lossless, desc: "Reggae, Ska, Dub - lossless"}
+    - {id: 1383, cat: Audio/MP3, desc: "Reggae, Ska, Dub - Mp3"}
+    - {id: 83, cat: Audio, desc: "Funk, Soul, Country"}
+    - {id: 1384, cat: Audio/Lossless, desc: "Funk, Soul, Country - lossless"}
+    - {id: 1385, cat: Audio/MP3, desc: "Funk, Soul, Country - Mp3"}
+    - {id: 81, cat: Audio, desc: "Folk, Ethnic, New Age, Meditative"}
+    - {id: 1388, cat: Audio/Lossless, desc: "Folk, Ethnic, New Age, Meditative - lossless"}
+    - {id: 1389, cat: Audio/MP3, desc: "Folk, Ethnic, New Age, Meditative - Mp3"}
+    - {id: 1374, cat: Audio/Lossless, desc: "Other genres - lossless"}
+    - {id: 1375, cat: Audio/MP3, desc: "Other genres - Mp3"}
+    - {id: 663, cat: Books, desc: "Книги(Аудиокниги) и журналы"}
+    - {id: 1036, cat: Books, desc: "Книги"}
+    - {id: 1324, cat: Books, desc: "Новинки"}
+    - {id: 1325, cat: Books, desc: "Боевики/Детективы/Триллеры"}
+    - {id: 1326, cat: Books, desc: "Приключения"}
+    - {id: 1327, cat: Books, desc: "Романы"}
+    - {id: 1328, cat: Books, desc: "Отечественная фантастика / фэнтези / мистика / ужасы"}
+    - {id: 1329, cat: Books, desc: "Зарубежная фантастика / фэнтези / мистика / ужасы"}
+    - {id: 1330, cat: Books, desc: "Классическая литература и современная проза"}
+    - {id: 1331, cat: Books, desc: "Детские книги"}
+    - {id: 1334, cat: Books, desc: "Военная литература"}
+    - {id: 1332, cat: Books, desc: "Комедийные произведения, юмор, сатира"}
+    - {id: 1333, cat: Books, desc: "Разное"}
+    - {id: 1312, cat: Books, desc: "Аудиокниги"}
+    - {id: 1398, cat: Books, desc: "Приключения"}
+    - {id: 1396, cat: Books, desc: "Детектив"}
+    - {id: 1397, cat: Books, desc: "Боевик / Триллер"}
+    - {id: 1313, cat: Books, desc: "История"}
+    - {id: 1315, cat: Books, desc: "Юмор"}
+    - {id: 1316, cat: Books, desc: "Религия"}
+    - {id: 1399, cat: Books, desc: "Ужасы / Мистика"}
+    - {id: 1318, cat: Books, desc: "Фантастика / фэнтези"}
+    - {id: 1319, cat: Books, desc: "Классика"}
+    - {id: 1320, cat: Books, desc: "Поэзия"}
+    - {id: 1321, cat: Books, desc: "Психология"}
+    - {id: 1317, cat: Books, desc: "Детская литература"}
+    - {id: 1322, cat: Books, desc: "Художественная литература"}
+    - {id: 1323, cat: Books, desc: "Прочая литература"}
+    - {id: 1037, cat: Books, desc: "Журналы"}
+    - {id: 1335, cat: Books, desc: "Авто-мото журналы"}
+    - {id: 1336, cat: Books, desc: "Строительство и дизайн"}
+    - {id: 1337, cat: Books, desc: "Политика и бизнес"}
+    - {id: 1338, cat: Books, desc: "Женские журналы"}
+    - {id: 1339, cat: Books, desc: "Медицина и ЗОЖ"}
+    - {id: 1340, cat: Books, desc: "Аудио-видео журналы"}
+    - {id: 1341, cat: Books, desc: "Компьютерные журналы"}
+    - {id: 1342, cat: Books, desc: "Кулинария"}
+    - {id: 1343, cat: Books, desc: "Сад, огород, дача"}
+    - {id: 1344, cat: Books, desc: "Мужские журналы"}
+    - {id: 1345, cat: Books, desc: "Научно-популярные журналы"}
+    - {id: 1346, cat: Books, desc: "Домоводство / Своими руками"}
+    - {id: 1347, cat: Books, desc: "Эротические журналы"}
+    - {id: 1348, cat: Books, desc: "Комиксы"}
+    - {id: 1349, cat: Books, desc: "Детские журналы"}
+    - {id: 1351, cat: Books, desc: "Военные журналы"}
+    - {id: 1350, cat: Books, desc: "Хобби (Разное)"}
+    - {id: 9999, cat: Other/Misc, desc: "Error, Category Not Found"}
 
-    modes:
-      search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
-      music-search: [q]
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
 
-  settings:
-    - name: username
-      type: text
-      label: Username
-    - name: password
-      type: password
-      label: Password
-    - name: sort
-      type: select
-      label: Sort requested from site
-      default: "t"
-      options:
-        "t": "created"
-        "ts": "seeders"
-        "sz": "size"
-        "i": "title"
-    - name: type
-      type: select
-      label: Order requested from site
-      default: "desc"
-      options:
-        "d": "desc"
-        "a": "asc"
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: "t"
+    options:
+      "t": "created"
+      "ts": "seeders"
+      "sz": "size"
+      "i": "title"
+  - name: type
+    type: select
+    label: Order requested from site
+    default: "desc"
+    options:
+      "d": "desc"
+      "a": "asc"
 
 
-  login:
-    path: ucp.php?mode=login
-    method: form
-    form: form#login
-    inputs:
-      username: "{{ .Config.username }}"
-      password: "{{ .Config.password }}"
-      autologin: on
-    error:
-      - selector: fieldset:has(div.error)
-    test:
-      path: /
-      selector: :has(a[href*="/ucp.php?mode=logout&sid="])
+login:
+  path: ucp.php?mode=login
+  method: form
+  form: form#login
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    autologin: on
+  error:
+    - selector: fieldset:has(div.error)
+  test:
+    path: /
+    selector: :has(a[href*="/ucp.php?mode=logout&sid="])
 
-  search:
-    paths:
-      # http://riperam.org/search.php?tracker_search=torrent&keywords=captain&terms=all&fp=1&author=&fid[]=1404&sc=1&sf=titleonly&sr=topics&sk=t&sd=d&st=0&ch=300&t=0
-      - path: search.php
-    inputs:
-      $raw: "{{ range .Categories }}&fid[]={{.}}{{end}}"
-      tracker_search: torrent
-      keywords: "{{ if .Keywords }}{{ .Keywords }}{{else}}{{ .Today.Year }}{{end}}"
-      terms: all
-      fp: 1
-      author: ""
-      sc: 1
-      sf: titleonly
-      sr: topics
-      sk: "{{ .Config.sort }}"
-      sd: "{{ .Config.type }}"
-      st: 0
-      ch: 300
-      t: 0
+search:
+  paths:
+    # http://riperam.org/search.php?tracker_search=torrent&keywords=captain&terms=all&fp=1&author=&fid[]=1404&sc=1&sf=titleonly&sr=topics&sk=t&sd=d&st=0&ch=300&t=0
+    - path: search.php
+  inputs:
+    $raw: "{{ range .Categories }}&fid[]={{.}}{{end}}"
+    tracker_search: torrent
+    keywords: "{{ if .Keywords }}{{ .Keywords }}{{else}}{{ .Today.Year }}{{end}}"
+    terms: all
+    fp: 1
+    author: ""
+    sc: 1
+    sf: titleonly
+    sr: topics
+    sk: "{{ .Config.sort }}"
+    sd: "{{ .Config.type }}"
+    st: 0
+    ch: 300
+    t: 0
 
-    rows:
-      selector: li.row:has(a[href^="./download/file.php?id="])
+  rows:
+    selector: li.row:has(a[href^="./download/file.php?id="])
 
-    fields:
-      title:
-        selector: a.topictitle
-      details:
-        selector: a.topictitle
-        attribute: href
-      description:
-        selector: dt a:last-of-type
-      category:
-        selector: dt a:last-of-type
-        case:
-          ":contains(\"Новинки кино (2018-2019)\")": 238
-          ":contains(\"DVDRip / DVD-5/DVD-9\")": 425
-          ":contains(\"DVDRip\")": 50
-          ":contains(\"DVD-5/DVD-9\")": 52
-          ":contains(\"BDRip / HDRip / BD / HD / Blu - ray / Ultra HD (4K)\")": 424
-          ":contains(\"BDRip/HDRip\")": 51
-          ":contains(\"BD / HD\")": 371
-          ":contains(\"Blu-ray\")": 251
-          ":contains(\"Ultra HD (4K)\")": 1404
-          ":contains(\"Видео для мобильных устройств\")": 349
-          ":contains(\"Видео (iPhone, iPod Touch)\")": 350
-          ":contains(\"HD Видео (Apple TV, iPad)\")": 351
-          ":contains(\"Видео для смартфонов и КПК\")": 352
-          ":contains(\"Фильмы, мультфильмы\")": 239
-          ":contains(\"Зарубежные фильмы\")": 420
-          ":contains(\"Зарубежные фильмы до 2000\")": 12
-          ":contains(\"Зарубежные фильмы после 2000\")": 13
-          ":contains(\"Мультфильмы\")": 423
-          ":contains(\"Зарубежные мультфильмы\")": 16
-          ":contains(\"Советские мультфильмы\")": 17
-          ":contains(\"Российские мультфильмы\")": 18
-          ":contains(\"Эротические фильмы\")": 46
-          ":contains(\"Российские фильмы\")": 15
-          ":contains(\"Советские фильмы\")": 14
-          ":contains(\"Сериалы, мультсериалы\")": 240
-          ":contains(\"Зарубежные сериалы\")": 19
-          ":contains(\"Полные завершенные сезоны\")": 216
-          ":contains(\"H2O - Просто добавь воды\")": 118
-          ":contains(\"Split. Тайна крови\")": 153
-          ":contains(\"Адские кошки / Hellcats\")": 363
-          ":contains(\"Виолетта / Violetta\")": 1055
-          ":contains(\"Вспышка-любовь / Popland\")": 632
-          ":contains(\"Грань\")": 183
-          ":contains(\"Гимнастки\")": 178
-          ":contains(\"Дайте Санни шанс / Sonny With A Chance\")": 364
-          ":contains(\"Два короля / Pair of Kings\")": 319
-          ":contains(\"Держись, Чарли / Good Luck\")": 267
-          ":contains(\"Мушкетеры / The Musketeers\")": 1166
-          ":contains(\"Никита / Nikita\")": 365
-          ":contains(\"Обитель Анубиса / House of Anubis\")": 353
-          ":contains(\"Проспект Бразилии / Avenida Brasil\")": 710
-          ":contains(\"Сверхъестественное / Supernatural\")": 266
-          ":contains(\"Следствие по телу / Body of Proof\")": 268
-          ":contains(\"Теория большого взрыва\")": 160
-          ":contains(\"Русские сериалы\")": 20
-          ":contains(\"Полные завершенные сериалы\")": 210
-          ":contains(\"13\")": 969
-          ":contains(\"Агент\")": 707
-          ":contains(\"Белые волки\")": 1028
-          ":contains(\"Бомбила. Продолжение\")": 736
-          ":contains(\"Брат за брата\")": 550
-          ":contains(\"Братаны\")": 601
-          ":contains(\"В Москве всегда солнечно\")": 979
-          ":contains(\"Горюнов\")": 790
-          ":contains(\"Груз (Фельдъегеря)\")": 791
-          ":contains(\"Двойная жизнь\")": 803
-          ":contains(\"Дворняжка Ляля\")": 994
-          ":contains(\"Дело врачей\")": 735
-          ":contains(\"Дело для двоих\")": 992
-          ":contains(\"Департамент\")": 771
-          ":contains(\"Дом с лилиями\")": 964
-          ":contains(\"Домработница\")": 746
-          ":contains(\"До свидания, мальчики\")": 976
-          ":contains(\"ЗАГС\")": 719
-          ":contains(\"Женщины на грани\")": 1006
-          ":contains(\"Земский доктор - Возвращение\")": 768
-          ":contains(\"Земский доктор. Любовь вопреки\")": 984
-          ":contains(\"Икорный барон\")": 732
-          ":contains(\"Королева игры\")": 983
-          ":contains(\"Кулинар-2\")": 774
-          ":contains(\"Курортная полиция\")": 989
-          ":contains(\"Личное дело\")": 961
-          ":contains(\"Ловушка\")": 639
-          ":contains(\"Лорд. Пес-полицейский\")": 703
-          ":contains(\"Лучшие враги\")": 1013
-          ":contains(\"Майор полиции\")": 131
-          ":contains(\"Маяковский - Два дня\")": 727
-          ":contains(\"Между двух огней\")": 1058
-          ":contains(\"Мент в законе-7\")": 641
-          ":contains(\"Метод Лавровой-2\")": 644
-          ":contains(\"Неzлоб\")": 779
-          ":contains(\"Неравный брак\")": 372
-          ":contains(\"Неформат\")": 957
-          ":contains(\"ОСА\")": 766
-          ":contains(\"Отмена всех ограничений\")": 991
-          ":contains(\"Патруль. Васильевский остров\")": 653
-          ":contains(\"Под прицелом\")": 962
-          ":contains(\"Поцелуй\")": 683
-          ":contains(\"Поцелуйте невесту\")": 708
-          ":contains(\"Профессионал\")": 1026
-          ":contains(\"Пропавшие без вести\")": 787
-          ":contains(\"Пыльная работа\")": 773
-          ":contains(\"Ржавчина\")": 799
-          ":contains(\"Сашка\")": 794
-          ":contains(\"Семейные обстоятельства\")": 756
-          ":contains(\"Семин. Возмездие\")": 706
-          ":contains(\"Скорая помощь\")": 966
-          ":contains(\"Следователь Протасов\")": 960
-          ":contains(\"Стервы\")": 714
-          ":contains(\"Студия 17\")": 755
-          ":contains(\"Тайны следствия\")": 1039
-          ":contains(\"Такси\")": 360
-          ":contains(\"Темный мир\")": 981
-          ":contains(\"Тест на беременность\")": 1046
-          ":contains(\"Тихая охота\")": 977
-          ":contains(\"Топтуны\")": 681
-          ":contains(\"Торговый центр\")": 675
-          ":contains(\"Три звезды\")": 988
-          ":contains(\"Чужой\")": 1033
-          ":contains(\"Чужой район\")": 690
-          ":contains(\"Чужой среди своих\")": 1030
-          ":contains(\"Шаман\")": 804
-          ":contains(\"Шерлок Холмс\")": 780
-          ":contains(\"Этаж\")": 805
-          ":contains(\"Ясмин\")": 743
-          ":contains(\"Умник\")": 973
-          ":contains(\"Хмуров\")": 733
-          ":contains(\"Хозяйка моей судьбы\")": 505
-          ":contains(\"Анжелика\")": 1004
-          ":contains(\"Бессмертник\")": 1047
-          ":contains(\"Без свидетелей\")": 1074
-          ":contains(\"Верное средство\")": 692
-          ":contains(\"Верни мою любовь\")": 1038
-          ":contains(\"Береговая охрана\")": 711
-          ":contains(\"Граница времени\")": 1052
-          ":contains(\"Второй шанс\")": 1061
-          ":contains(\"Гречанка\")": 1042
-          ":contains(\"Высокие ставки\")": 1108
-          ":contains(\"Дельта\")": 748
-          ":contains(\"Дикий - 4\")": 501
-          ":contains(\"Дознаватель\")": 980
-          ":contains(\"Долгий путь домой\")": 1002
-          ":contains(\"Дружба народов\")": 958
-          ":contains(\"Зайцев+1\")": 798
-          ":contains(\"Запретная любовь\")": 1102
-          ":contains(\"Код Константина\")": 1083
-          ":contains(\"Измены\")": 1092
-          ":contains(\"Кодекс чести\")": 565
-          ":contains(\"Корабль\")": 797
-          ":contains(\"Инспектор Купер\")": 1070
-          ":contains(\"Легавый\")": 640
-          ":contains(\"Луна\")": 1048
-          ":contains(\"Ленинград 46\")": 1060
-          ":contains(\"Лесник\")": 684
-          ":contains(\"Между нами, девочками\")": 1057
-          ":contains(\"Морские дьяволы. Смерч\")": 654
-          ":contains(\"Неподкупный\")": 1089
-          ":contains(\"Окрылённые\")": 1095
-          ":contains(\"Отец Матвей\")": 1016
-          ":contains(\"Особый случай\")": 687
-          ":contains(\"Папа на вырост\")": 1054
-          ":contains(\"Непридуманная жизнь\")": 1094
-          ":contains(\"Пляж\")": 750
-          ":contains(\"Последний из Магикян\")": 750
-          ":contains(\"Последний янычар\")": 1043
-          ":contains(\"Практика\")": 997
-          ":contains(\"Хроники ломбарда\")": 1031
-          ":contains(\"Цветок папоротника\")": 1063
-          ":contains(\"Человек - приманка\")": 990
-          ":contains(\"Свет и тень маяка\")": 1044
-          ":contains(\"Следователи\")": 1082
-          ":contains(\"Слепая\")": 995
-          ":contains(\"Солдаты 17\")": 699
-          ":contains(\"Улыбка пересмешника\")": 1025
-          ":contains(\"Литейный\")": 1024
-          ":contains(\"Раскаяние\")": 1023
-          ":contains(\"Родители\")": 1076
-          ":contains(\"Сватьи\")": 972
-          ":contains(\"Чума\")": 1105
-          ":contains(\"Чужое гнездо\")": 1073
-          ":contains(\"Чтец\")": 1078
-          ":contains(\"Черные кошки\")": 691
-          ":contains(\"Карпов\")": 628
-          ":contains(\"Квест\")": 1101
-          ":contains(\"Лондонград\")": 1088
-          ":contains(\"Меч\")": 1072
-          ":contains(\"Пока станица спит\")": 795
-          ":contains(\"ППС\")": 978
-          ":contains(\"Сердце звезды\")": 1003
-          ":contains(\"Агентство скрытых камер\")": 1194
-          ":contains(\"Академия\")": 1140
-          ":contains(\"Беглые родственники\")": 1178
-          ":contains(\"Анна-детективъ\")": 1222
-          ":contains(\"Бедные люди\")": 1161
-          ":contains(\"Ботаны\")": 1099
-          ":contains(\"Бородач\")": 1136
-          ":contains(\"Вижу - знаю\")": 1184
-          ":contains(\"Владимирская, 15\")": 1127
-          ":contains(\"Выжить после\")": 781
-          ":contains(\"Вышибала\")": 1181
-          ":contains(\"Гастролеры (Беглецы)\")": 1165
-          ":contains(\"Гражданин Никто\")": 1150
-          ":contains(\"Два отца и два сына\")": 509
-          ":contains(\"Деффчонки\")": 656
-          ":contains(\"Другой майор Соколов\")": 1128
-          ":contains(\"Жемчуга\")": 1192
-          ":contains(\"Законы улиц\")": 1170
-          ":contains(\"Игра. Реванш\")": 1183
-          ":contains(\"Иные\")": 1117
-          ":contains(\"Казаки\")": 1228
-          ":contains(\"Как я стал русским\")": 1107
-          ":contains(\"Клан Ювелиров\")": 1077
-          ":contains(\"Команда\")": 1118
-          ":contains(\"Кости\")": 1132
-          ":contains(\"Кухня\")": 354
-          ":contains(\"Мажор\")": 1040
-          ":contains(\"Метод\")": 1104
-          ":contains(\"Москва. Центральный округ\")": 1189
-          ":contains(\"На глубине\")": 1135
-          ":contains(\"Напарницы\")": 1151
-          ":contains(\"Не зарекайся\")": 1131
-          ":contains(\"Невский\")": 1160
-          ":contains(\"Нити судьбы\")": 1224
-          ":contains(\"Озабоченные или любовь зла\")": 1112
-          ":contains(\"Остров\")": 1139
-          ":contains(\"Отдел 44\")": 1080
-          ":contains(\"Пасечник\")": 761
-          ":contains(\"Патруль Самооборона\")": 1103
-          ":contains(\"Перевозчик\")": 1157
-          ":contains(\"Пес\")": 1081
-          ":contains(\"Последний мент\")": 1110
-          ":contains(\"Последний москаль. Судный день\")": 1163
-          ":contains(\"Прокуроры\")": 1126
-          ":contains(\"Пушкин\")": 1179
-          ":contains(\"Пятая стража\")": 671
-          ":contains(\"Пятницкий. Глава четвертая\")": 1019
-          ":contains(\"Ради любви я все смогу\")": 1115
-          ":contains(\"Розыск\")": 788
-          ":contains(\"Светофор\")": 359
-          ":contains(\"Семейный бизнес\")": 1098
-          ":contains(\"Следователь Тихонов\")": 1162
-          ":contains(\"Сны\")": 1130
-          ":contains(\"Солнце в подарок\")": 1138
-          ":contains(\"Спросите у осени\")": 1144
-          ":contains(\"Степные волки\")": 1180
-          ":contains(\"Сын моего отца\")": 1133
-          ":contains(\"Такая работа\")": 1049
-          ":contains(\"Центральная больница\")": 1185
-          ":contains(\"Человек без прошлого\")": 1141
-          ":contains(\"Чёрная кошка\")": 1223
-          ":contains(\"Шаман. Новая угроза\")": 1190
-          ":contains(\"Я работаю в суде\")": 1191
-          ":contains(\"Василиса\")": 1235
-          ":contains(\"Вечный отпуск\")": 1154
-          ":contains(\"Восьмидесятые\")": 555
-          ":contains(\"Вы все меня бесите\")": 1231
-          ":contains(\"Интерны\")": 152
-          ":contains(\"Крыша мира\")": 1156
-          ":contains(\"Райское место\")": 1233
-          ":contains(\"Фамильные ценности\")": 1302
-          ":contains(\"Это любовь\")": 1059
-          ":contains(\"Адаптация\")": 1280
-          ":contains(\"Воронины\")": 48
-          ":contains(\"Женский доктор\")": 1308
-          ":contains(\"Кризис нежного возраста\")": 1186
-          ":contains(\"Куба\")": 1281
-          ":contains(\"Майор и магия\")": 1278
-          ":contains(\"Мамочки\")": 1125
-          ":contains(\"Мент в законе\")": 1155
-          ":contains(\"Ментовские войны\")": 1015
-          ":contains(\"Один против всех\")": 1276
-          ":contains(\"Ольга\")": 1193
-          ":contains(\"Отель Элеон\")": 1227
-          ":contains(\"Паутина\")": 551
-          ":contains(\"Подкидыши\")": 1159
-          ":contains(\"Реальные пацаны\")": 225
-          ":contains(\"СашаТаня\")": 680
-          ":contains(\"Свидетели\")": 1301
-          ":contains(\"Склифосовский (Склиф)\")": 630
-          ":contains(\"След\")": 226
-          ":contains(\"Слуга народа\")": 1116
-          ":contains(\"Стройка\")": 1232
-          ":contains(\"Улицы разбитых фонарей\")": 1045
-          ":contains(\"Универ. Новая общага.\")": 445
-          ":contains(\"Учитель в законе. Схватка\")": 1285
-          ":contains(\"Физрук\")": 970
-          ":contains(\"Филфак\")": 1299
-          ":contains(\"ЧОП\")": 1062
-          ":contains(\"Шеф. Игра на повышение / Шеф-4\")": 778
-          ":contains(\"Зарубежные мультсериалы\")": 21
-          ":contains(\"WINX CLUB - Школа волшебниц\")": 185
-          ":contains(\"Волшебные ПопПикси / PopPixie\")": 463
-          ":contains(\"Winx Club 5й сезон\")": 633
-          ":contains(\"Winx Club 6й сезон\")": 772
-          ":contains(\"Winx Club 7й сезон\")": 1093
-          ":contains(\"Друзья ангелов\")": 606
-          ":contains(\"ЛедиБаг и Супер кот\")": 1129
-          ":contains(\"Тотали Спайс\")": 789
-          ":contains(\"Футурама\")": 162
-          ":contains(\"Хантик - Искатели секретов\")": 151
-          ":contains(\"Русские мультсериалы\")": 22
-          ":contains(\"Маша и Медведь\")": 1401
-          ":contains(\"Архив Сериалов, Мультсериалов\")": 198
-          ":contains(\"Аниме\")": 232
-          ":contains(\"Полнометражные Аниме\")": 245
-          ":contains(\"Аниме Сериалы\")": 246
-          ":contains(\"Демоны старшей школы\")": 592
-          ":contains(\"Корона Грешника\")": 594
-          ":contains(\"Подручный бездарной Луизы ТВ-1\")": 591
-          ":contains(\"Рыцарь Двух Лун ТВ-2\")": 595
-          ":contains(\"Рондо Принцессы ТВ-3\")": 596
-          ":contains(\"Подручный бездарной Луизы Финал ТВ-4\")": 597
-          ":contains(\"Без перевода\")": 242
-          ":contains(\"ТВ-Шоу, документальные, спорт\")": 241
-          ":contains(\"ТВ-Шоу и развлекательные передачи\")": 23
-          ":contains(\"Архив ТВ-Шоу\")": 1075
-          ":contains(\"Yesterday Live\")": 491
-          ":contains(\"X-Фактор\")": 516
-          ":contains(\"Без башни\")": 478
-          ":contains(\"Болеро\")": 540
-          ":contains(\"Большие гонки\")": 1010
-          ":contains(\"Бункер News\")": 538
-          ":contains(\"В черной-черной комнате\")": 561
-          ":contains(\"Вышка\")": 713
-          ":contains(\"Голые и смешные\")": 191
-          ":contains(\"Готовим с Алексеем Зиминым\")": 527
-          ":contains(\"Грязные деньги\")": 460
-          ":contains(\"Два с половиной повара\")": 659
-          ":contains(\"Девчата\")": 255
-          ":contains(\"Дешево и сердито\")": 634
-          ":contains(\"Дневники шоугелз\")": 574
-          ":contains(\"ДНК\")": 764
-          ":contains(\"Доброго здоровьица\")": 637
-          ":contains(\"Дурнушек.net\")": 658
-          ":contains(\"Ешь и худей\")": 209
-          ":contains(\"Женское счастье\")": 800
-          ":contains(\"Женская Лига\")": 475
-          ":contains(\"Звезданутые\")": 740
-          ":contains(\"Здравствуйте, я ваша Пятница\")": 741
-          ":contains(\"Из песни слов не выкинешь\")": 737
-          ":contains(\"Индустрия кино\")": 587
-          ":contains(\"Истина где-то рядом\")": 718
-          ":contains(\"История Российской кухни\")": 1011
-          ":contains(\"Каникулы в Мексике\")": 456
-          ":contains(\"Караоке киллер\")": 682
-          ":contains(\"Когда мы дома\")": 996
-          ":contains(\"Куб - Новый сезон\")": 785
-          ":contains(\"Кулинарный поединок\")": 668
-          ":contains(\"Луч Света\")": 752
-          ":contains(\"Люди ХЭ\")": 533
-          ":contains(\"Мама в законе\")": 447
-          ":contains(\"Минута для победы с М. Авериным\")": 529
-          ":contains(\"Мировой повар\")": 793
-          ":contains(\"Минута славы\")": 586
-          ":contains(\"Мульт Личности\")": 472
-          ":contains(\"Наш выход\")": 1009
-          ":contains(\"Нонна, давай\")": 511
-          ":contains(\"НТВшники\")": 531
-          ":contains(\"Остров\")": 754
-          ":contains(\"Пародайс\")": 715
-          ":contains(\"Первый класс\")": 559
-          ":contains(\"Погоня\")": 636
-          ":contains(\"Пока еще не поздно\")": 679
-          ":contains(\"Понять. Простить\")": 545
-          ":contains(\"Последнее слово\")": 537
-          ":contains(\"Правила моей кухни\")": 792
-          ":contains(\"Право на защиту\")": 547
-          ":contains(\"Про декор\")": 731
-          ":contains(\"Реальная кухня\")": 982
-          ":contains(\"Самый лучший муж\")": 747
-          ":contains(\"Самый умный\")": 536
-          ":contains(\"Свидание со звездой\")": 742
-          ":contains(\"Свобода и справедливость\")": 544
-          ":contains(\"Свободное время\")": 963
-          ":contains(\"Снимите это немедленно\")": 575
-          ":contains(\"Специальное задание\")": 489
-          ":contains(\"Спокойной ночи, малыши\")": 495
-          ":contains(\"Страна в Shope\")": 689
-          ":contains(\"СуперИнтуиция\")": 492
-          ":contains(\"Съешьте это немедленно\")": 535
-          ":contains(\"Тотальная распродажа\")": 1005
-          ":contains(\"Украина чудес\")": 521
-          ":contains(\"Устами младенца\")": 698
-          ":contains(\"Улетное видео по русски\")": 451
-          ":contains(\"ХБ\")": 697
-          ":contains(\"Ху из ху\")": 497
-          ":contains(\"Школа злословия\")": 494
-          ":contains(\"Что делать?\")": 448
-          ":contains(\"6 кадров\")": 366
-          ":contains(\"Автошкола 2\")": 1032
-          ":contains(\"Большая Разница\")": 471
-          ":contains(\"В наше время\")": 744
-          ":contains(\"Все будет хорошо\")": 1056
-          ":contains(\"Галилео\")": 344
-          ":contains(\"Даешь молодежь\")": 477
-          ":contains(\"Ералаш\")": 514
-          ":contains(\"Голос. Дети\")": 959
-          ":contains(\"+100500\")": 446
-          ":contains(\"Comedy Баттл. Без границ\")": 693
-          ":contains(\"Битва риелторов\")": 1164
-          ":contains(\"Взвешенные люди\")": 1071
-          ":contains(\"Comedy Баттл. Отбор, турнир\")": 229
-          ":contains(\"Время Г\")": 1096
-          ":contains(\"Голос\")": 1114
-          ":contains(\"Модный приговор\")": 522
-          ":contains(\"Не спать\")": 971
-          ":contains(\"Новая звезда\")": 1137
-          ":contains(\"Таблетка\")": 1142
-          ":contains(\"Холостяк\")": 677
-          ":contains(\"Чисто News\")": 1034
-          ":contains(\"Я худею\")": 763
-          ":contains(\"Дикие игры\")": 1087
-          ":contains(\"Тайны Чапман\")": 649
-          ":contains(\"Хочу знать\")": 452
-          ":contains(\"Хроники московского быта\")": 1121
-          ":contains(\"Чистосердечное признание\")": 647
-          ":contains(\"Кинематограф\")": 643
-          ":contains(\"Кино в деталях\")": 532
-          ":contains(\"Мистические истории\")": 614
-          ":contains(\"Пища богов\")": 801
-          ":contains(\"Политика\")": 974
-          ":contains(\"Репортерские истории\")": 670
-          ":contains(\"Среда обитания\")": 252
-          ":contains(\"Игровое видео/Фильм о фильме\")": 89
-          ":contains(\"Вторая мировая война\")": 65
-          ":contains(\"Давай поженимся\")": 190
-          ":contains(\"Жди меня\")": 530
-          ":contains(\"На самом деле\")": 1086
-          ":contains(\"Вечерний квартал\")": 526
-          ":contains(\"Вечерний Ургант\")": 605
-          ":contains(\"Где логика?\")": 1124
-          ":contains(\"Камеди Woman\")": 480
-          ":contains(\"Говорим и показываем\")": 459
-          ":contains(\"Comedy Club - Камеди Клаб\")": 479
-          ":contains(\"Двойные стандарты\")": 1289
-          ":contains(\"ДОМ 2\")": 33
-          ":contains(\"Архив Дом-2\")": 270
-          ":contains(\"Квартирный вопрос\")": 696
-          ":contains(\"КВН - Клуб Веселых и Находчивых\")": 469
-          ":contains(\"Кто хочет стать миллионером\")": 541
-          ":contains(\"Контрольная закупка\")": 189
-          ":contains(\"Лига смеха\")": 1284
-          ":contains(\"МастерШеф\")": 775
-          ":contains(\"Международная пилорама\")": 1291
-          ":contains(\"Мужское - женское\")": 1018
-          ":contains(\"Наедине со всеми\")": 769
-          ":contains(\"НашПотребНадзор\")": 1123
-          ":contains(\"Однажды в России\")": 1017
-          ":contains(\"Орел и решка\")": 524
-          ":contains(\"Пацанки\")": 1309
-          ":contains(\"Перезагрузка\")": 765
-          ":contains(\"Поле чудес\")": 493
-          ":contains(\"Поедем, поедим\")": 730
-          ":contains(\"Пока все дома\")": 1146
-          ":contains(\"Проводник\")": 1196
-          ":contains(\"Прямой эфир\")": 588
-          ":contains(\"Пусть говорят\")": 348
-          ":contains(\"Рассмеши комика\")": 539
-          ":contains(\"Ревизорро\")": 1158
-          ":contains(\"Сам себе режиссёр\")": 490
-          ":contains(\"Своя игра\")": 457
-          ":contains(\"Смак\")": 520
-          ":contains(\"Соль\")": 1106
-          ":contains(\"STAND UP\")": 975
-          ":contains(\"Сто к одному\")": 496
-          ":contains(\"Сегодня вечером с Максимом\")": 786
-          ":contains(\"Секрет на миллион\")": 1287
-          ":contains(\"Танцы\")": 1021
-          ":contains(\"Ты супер\")": 1286
-          ":contains(\"Уральские пельмени\")": 470
-          ":contains(\"Comedy Баттл. Последний сезон\")": 967
-          ":contains(\"Устами младенца\")": 1290
-          ":contains(\"Фазенда\")": 1147
-          ":contains(\"Центральное телевидение\")": 188
-          ":contains(\"Что? Где? Когда?\")": 543
-          ":contains(\"Школа ремонта\")": 738
-          ":contains(\"Э К С Т Р А С Е Н С Ы\")": 59
-          ":contains(\"Удиви меня\")": 281
-          ":contains(\"Черно-белое\")": 1035
-          ":contains(\"Экстрасенсы против ученых\")": 280
-          ":contains(\"Битва экстрасенсов\")": 279
-          ":contains(\"Документальные передачи\")": 24
-          ":contains(\"Чудо техники с Сергеем Малозёмовым\")": 728
-          ":contains(\"Авто\")": 69
-          ":contains(\"Главная дорога\")": 669
-          ":contains(\"Первая передача\")": 704
-          ":contains(\"Без обмана\")": 1111
-          ":contains(\"Биографии. Личности и кумиры\")": 88
-          ":contains(\"15 минут до завтра\")": 379
-          ":contains(\"Военное дело\")": 68
-          ":contains(\"Голос - За кадром\")": 784
-          ":contains(\"Дачный ответ\")": 729
-          ":contains(\"Еда живая и мертвая\")": 1152
-          ":contains(\"Discovery / NatGeo / BBC / Viasat\")": 194
-          ":contains(\"Загадки человечества\")": 1307
-          ":contains(\"Идеальный ремонт\")": 701
-          ":contains(\"Криминал\")": 63
-          ":contains(\"Криминальные хроники\")": 590
-          ":contains(\"Место происшествия. О главном\")": 796
-          ":contains(\"Следствие ведут\")": 1085
-          ":contains(\"Следствие вели\")": 652
-          ":contains(\"Чрезвычайное происшествие\")": 498
-          ":contains(\"Линия защиты\")": 1120
-          ":contains(\"Непутевые заметки с Дмитрием Крыловым\")": 1145
-          ":contains(\"Обложка\")": 1067
-          ":contains(\"Однажды\")": 1288
-          ":contains(\"Осторожно, мошенники\")": 1119
-          ":contains(\"Открытие Китая\")": 1149
-          ":contains(\"Очная ставка\")": 739
-          ":contains(\"Познер. Интервью с\")": 965
-          ":contains(\"Русские сенсации\")": 650
-          ":contains(\"Русский вопрос\")": 1122
-          ":contains(\"Самые шокирующие гипотезы\")": 1198
-          ":contains(\"Территория заблуждений с Игорем Прокопенко\")": 802
-          ":contains(\"Информационно-аналитические\")": 323
-          ":contains(\"60 минут\")": 1195
-          ":contains(\"Вести\")": 1041
-          ":contains(\"Вести в субботу с Сергеем Брилевым\")": 672
-          ":contains(\"Вести недели\")": 655
-          ":contains(\"Вечер с Владимиром Соловьевым\")": 1014
-          ":contains(\"Время покажет\")": 1007
-          ":contains(\"Воскресный вечер с Владимиром Соловьевым\")": 712
-          ":contains(\"Воскресное время - Первый канал\")": 673
-          ":contains(\"В центре событий с Анной Прохоровой\")": 759
-          ":contains(\"Добров в эфире\")": 999
-          ":contains(\"Известия. Главное\")": 758
-          ":contains(\"Итоги недели\")": 1230
-          ":contains(\"Итоги недели с Сергеем Михеевым\")": 1400
-          ":contains(\"Кто против?\")": 1402
-          ":contains(\"Место встречи\")": 1148
-          ":contains(\"Момент истины\")": 648
-          ":contains(\"Первая студия\")": 1279
-          ":contains(\"Поединок с Владимиром Соловьевым\")": 327
-          ":contains(\"Постскриптум с Алексеем Пушковым\")": 324
-          ":contains(\"Право голоса\")": 705
-          ":contains(\"Право знать\")": 1029
-          ":contains(\"Процесс\")": 1153
-          ":contains(\"Своя правда\")": 1405
-          ":contains(\"Ты не поверишь\")": 337
-          ":contains(\"Человек и закон\")": 330
-          ":contains(\"Спортивные передачи\")": 25
-          ":contains(\"ХХII Зимние Олимпийские Игры в Сочи\")": 127
-          ":contains(\"Евро-2012 (Польша, Украина)\")": 616
-          ":contains(\"Бокс, боевые единоборства , рестлинг\")": 201
-          ":contains(\"Гонки\")": 146
-          ":contains(\"Футбол\")": 145
-          ":contains(\"Футбол. Чемпионат мира 2014\")": 985
-          ":contains(\"Футбол.ru\")": 661
-          ":contains(\"Хоккей\")": 211
-          ":contains(\"ЧМ-2010\")": 192
-          ":contains(\"ХХХ Летние Олимпийские Игры в Лондоне\")": 622
-          ":contains(\"Театр\")": 346
-          ":contains(\"Архив ТВ-Шоу, документальные, спорт\")": 199
-          ":contains(\"Адская кухня - 2 (Россия)\")": 577
-          ":contains(\"Большие танцы\")": 674
-          ":contains(\"Две звезды\")": 579
-          ":contains(\"Смотреть всем\")": 576
-          ":contains(\"Фитнес\")": 694
-          ":contains(\"Достояние республики. Новый сезон 2011\")": 589
-          ":contains(\"Городок\")": 585
-          ":contains(\"Адская кухня\")": 584
-          ":contains(\"Одна за всех\")": 269
-          ":contains(\"Стыдно, когда видно\")": 515
-          ":contains(\"Прожекторперисхилтон\")": 468
-          ":contains(\"Хит\")": 762
-          ":contains(\"Шурочка\")": 767
-          ":contains(\"Акценты недели\")": 1113
-          ":contains(\"Брачное чтиво\")": 333
-          ":contains(\"В теме\")": 1097
-          ":contains(\"Время в 21\")": 1064
-          ":contains(\"ЖКХ\")": 332
-          ":contains(\"Михаил Жванецкий. Дежурный по стране\")": 660
-          ":contains(\"Итоги дня\")": 998
-          ":contains(\"Неделя с Марианной Максимовской\")": 331
-          ":contains(\"Операция «Должник»\")": 335
-          ":contains(\"Открытая студия\")": 1134
-          ":contains(\"Поздняков. Интервью с\")": 1143
-          ":contains(\"Секретные территории\")": 336
-          ":contains(\"Собчак живьём\")": 702
-          ":contains(\"Специальный корреспондент\")": 328
-          ":contains(\"Список Норкина\")": 1053
-          ":contains(\"Структура Момента\")": 1022
-          ":contains(\"Судите сами\")": 325
-          ":contains(\"Честный понедельник\")": 326
-          ":contains(\"Сегодня. Итоговая программа\")": 329
-          ":contains(\"Пропаганда\")": 1100
-          ":contains(\"'Точка' с Максимом Шевченко\")": 1084
-          ":contains(\"День  космических  историй\")": 334
-          ":contains(\"50 оттенков. Белова\")": 1091
-          ":contains(\"Игры\")": 298
-          ":contains(\"Оформление раздач\")": 299
-          ":contains(\"Новинки repack 'ов'\")": 1202
-          ":contains(\"Горячие Новинки\")": 302
-          ":contains(\"Denuvo\")": 1225
-          ":contains(\"Игры для PC\")": 300
-          ":contains(\"Action\")": 312
-          ":contains(\"Action FPS (1st Person)\")": 807
-          ":contains(\"Action TPS (3rd Person)\")": 808
-          ":contains(\"Антологии\")": 665
-          ":contains(\"Стратегии\")": 309
-          ":contains(\"RTS (стратегии в реальном времени)\")": 810
-          ":contains(\"TBS (пошаговые стратегии)\")": 809
-          ":contains(\"Экономические стратегии\")": 811
-          ":contains(\"Военные стратегии\")": 938
-          ":contains(\"RPG\")": 338
-          ":contains(\"MMORPG\")": 1203
-          ":contains(\"Аркады\")": 305
-          ":contains(\"Симуляторы\")": 717
-          ":contains(\"Авиасимуляторы\")": 1204
-          ":contains(\"Гоночные симуляторы\")": 1205
-          ":contains(\"Спортивные симуляторы\")": 1206
-          ":contains(\"Приключения, Квесты, Логические\")": 311
-          ":contains(\"Старые игры\")": 1207
-          ":contains(\"Детские обучающие игры\")": 307
-          ":contains(\"Онлайновые игры\")": 812
-          ":contains(\"Эротические игры\")": 1215
-          ":contains(\"Мини-игры\")": 303
-          ":contains(\"Демо игры\")": 1208
-          ":contains(\"Прочее\")": 313
-          ":contains(\"Дополнения к играм\")": 864
-          ":contains(\"NoCD/NoDVD\")": 1209
-          ":contains(\"Русификаторы\")": 1210
-          ":contains(\"Игровое видео\")": 1211
-          ":contains(\"Патчи\")": 1212
-          ":contains(\"Софт для игр на PC\")": 1213
-          ":contains(\"Прочее\")": 1214
-          ":contains(\"Новости игровой индустрии(Игромания)\")": 1229
-          ":contains(\"Игромания\")": 1352
-          ":contains(\"Шаблоны оформления раздач\")": 1292
-          ":contains(\"Шаблон xatab\")": 1310
-          ":contains(\"Шаблон оформления общий\")": 1300
-          ":contains(\"Шаблон оформления VickNet\")": 1298
-          ":contains(\"Шаблон оформления анимированный\")": 1293
-          ":contains(\"Шаблон оформления общий №2\")": 1295
-          ":contains(\"Для неопытных\")": 1353
-          ":contains(\"Программное обеспечение\")": 382
-          ":contains(\"Операционные системы\")": 1237
-          ":contains(\"Windows 10\")": 1238
-          ":contains(\"Windows 8, 8.1\")": 1239
-          ":contains(\"Windows 7\")": 1240
-          ":contains(\"Windows VISTA\")": 1243
-          ":contains(\"Windows XP\")": 1241
-          ":contains(\"Linux, Unix, Mac и другие ОС\")": 1275
-          ":contains(\"Разное (Microsoft Windows OS)\")": 1242
-          ":contains(\"Системные программы\")": 391
-          ":contains(\"Драйвера и сопутствующий софт\")": 405
-          ":contains(\"Архиваторы и файловые менеджеры\")": 1254
-          ":contains(\"Программы для настройки и оптимизации ОС\")": 1255
-          ":contains(\"Защита, Антивирусы и Файерволы\")": 724
-          ":contains(\"Сборники программ, WPI\")": 406
-          ":contains(\"Работа с жёстким диском\")": 407
-          ":contains(\"Резервирование и восстановление данных\")": 1245
-          ":contains(\"Работа с носителями информации\")": 1247
-          ":contains(\"Обслуживание и диагностика компьютера\")": 1248
-          ":contains(\"ПО для Интернета и сетей\")": 1249
-          ":contains(\"Изменение интерфейса и скринсейверы ОС Windows\")": 1251
-          ":contains(\"Разное (Системные программы)\")": 399
-          ":contains(\"Программы для работы с мультимедиа и 3D\")": 399
-          ":contains(\"Графические редакторы, 3D моделирование\")": 400
-          ":contains(\"Редакторы видео\")": 401
-          ":contains(\"Видео- Аудио- конверторы\")": 402
-          ":contains(\"Видео- Аудио- проигрыватели\")": 404
-          ":contains(\"Работа со звуком\")": 1270
-          ":contains(\"Аудио- Видео Кодеки\")": 1271
-          ":contains(\"Разное (Программы для работы с мультимедиа и 3D)\")": 403
-          ":contains(\"Системы для бизнеса,\")": 1244
-          ":contains(\"ГИС, Системы навигации и карты\")": 1261
-          ":contains(\"Системы для научной работы\")": 1256
-          ":contains(\"Офисные системы\")": 1257
-          ":contains(\"Веб-разработка и Программирование\")": 1263
-          ":contains(\"Системы для бизнеса\")": 1258
-          ":contains(\"Работа с PDF и DjVu\")": 1259
-          ":contains(\"Словари, переводчики\")": 1262
-          ":contains(\"САПР, Софт для архитекторов и строителей\")": 1260
-          ":contains(\"Разное\")": 1393
-          ":contains(\"Разное\")": 726
-          ":contains(\"Обои для рабочего стола\")": 1273
-          ":contains(\"Аватары, Иконки, Смайлы\")": 1390
-          ":contains(\"Растровые и Векторные Клипарты\")": 1391
-          ":contains(\"Photoshop (Уроки) и Видеокурсы\")": 1272
-          ":contains(\"Заготовки, виньетки, рамки\")": 1392
-          ":contains(\"Музыка\")": 243
-          ":contains(\"Правила и предложения\")": 26
-          ":contains(\"HD Видео\")": 96
-          ":contains(\"Pop\")": 70
-          ":contains(\"Видеоклипы / Концерты\")": 97
-          ":contains(\"Retro/Bandstand\")": 72
-          ":contains(\"Retro/Bandstand - lossless\")": 1358
-          ":contains(\"Retro/Bandstand - Mp3\")": 1359
-          ":contains(\"Disco\")": 71
-          ":contains(\"Disco - lossless\")": 1356
-          ":contains(\"Disco - Mp3\")": 1357
-          ":contains(\"Pop - lossless\")": 1354
-          ":contains(\"Pop - Mp3\")": 1355
-          ":contains(\"Rock\")": 73
-          ":contains(\"Видеоклипы / Концерты\")": 98
-          ":contains(\"Rock - lossless\")": 1360
-          ":contains(\"Rock - Mp3\")": 1361
-          ":contains(\"Alternative\")": 74
-          ":contains(\"Видеоклипы / Концерты\")": 99
-          ":contains(\"Alternative - lossless\")": 1362
-          ":contains(\"Alternative - Mp3\")": 1363
-          ":contains(\"Metal\")": 75
-          ":contains(\"Видеоклипы / Концерты\")": 100
-          ":contains(\"Metal - Mp3\")": 1364
-          ":contains(\"Metal - lossless\")": 1365
-          ":contains(\"Rap, Hip-Hop, R'n'B\")": 76
-          ":contains(\"Видеоклипы / Концерты\")": 101
-          ":contains(\"Зарубежный\")": 78
-          ":contains(\"Зарубежный - lossless\")": 1368
-          ":contains(\"Зарубежный - Mp3\")": 1369
-          ":contains(\"Отечественный\")": 77
-          ":contains(\"Отечественный - lossless\")": 1370
-          ":contains(\"Отечественный - Mp3\")": 1371
-          ":contains(\"Rap, Hip-Hop, R'n'B - lossless\")": 1366
-          ":contains(\"Rap, Hip-Hop, R'n'B - Mp3\")": 1367
-          ":contains(\"Jazz, Blues\")": 85
-          ":contains(\"Jazz, Blues - lossless\")": 1380
-          ":contains(\"Jazz, Blues - Mp3\")": 1381
-          ":contains(\"Chanson, Bard\")": 82
-          ":contains(\"Chanson, Bard - lossless\")": 1386
-          ":contains(\"Chanson, Bard - Mp3\")": 1387
-          ":contains(\"Classical\")": 86
-          ":contains(\"Classical - lossless\")": 1378
-          ":contains(\"Classical - Mp3\")": 1379
-          ":contains(\"Electronic\")": 79
-          ":contains(\"Видеоклипы / Концерты\")": 102
-          ":contains(\"Electronic - lossless\")": 1372
-          ":contains(\"Electronic - Mp3\")": 1373
-          ":contains(\"Other genres\")": 80
-          ":contains(\"Видеоклипы / Концерты\")": 103
-          ":contains(\"Военная песня\")": 87
-          ":contains(\"Военная песня - lossless\")": 1376
-          ":contains(\"Военная песня - Mp3\")": 1377
-          ":contains(\"Reggae, Ska, Dub\")": 84
-          ":contains(\"Reggae, Ska, Dub - lossless\")": 1382
-          ":contains(\"Reggae, Ska, Dub - Mp3\")": 1383
-          ":contains(\"Funk, Soul, Country\")": 83
-          ":contains(\"Funk, Soul, Country - lossless\")": 1384
-          ":contains(\"Funk, Soul, Country - Mp3\")": 1385
-          ":contains(\"Folk, Ethnic, New Age, Meditative\")": 81
-          ":contains(\"Folk, Ethnic, New Age, Meditative - lossless\")": 1388
-          ":contains(\"Folk, Ethnic, New Age, Meditative - Mp3\")": 1389
-          ":contains(\"Other genres - lossless\")": 1374
-          ":contains(\"Other genres - Mp3\")": 1375
-          ":contains(\"Книги(Аудиокниги) и журналы\")": 663
-          ":contains(\"Книги\")": 1036
-          ":contains(\"Новинки\")": 1324
-          ":contains(\"Боевики/Детективы/Триллеры\")": 1325
-          ":contains(\"Приключения\")": 1326
-          ":contains(\"Романы\")": 1327
-          ":contains(\"Отечественная фантастика\")": 1328
-          ":contains(\"Зарубежная фантастика\")": 1329
-          ":contains(\"Классическая литература\")": 1330
-          ":contains(\"Детские книги\")": 1331
-          ":contains(\"Военная литература\")": 1334
-          ":contains(\"Комедийные произведения\")": 1332
-          ":contains(\"Разное\")": 1333
-          ":contains(\"Аудиокниги\")": 1312
-          ":contains(\"Приключения\")": 1398
-          ":contains(\"Детектив\")": 1396
-          ":contains(\"Боевик / Триллер\")": 1397
-          ":contains(\"История\")": 1313
-          ":contains(\"Юмор\")": 1315
-          ":contains(\"Религия\")": 1316
-          ":contains(\"Ужасы / Мистика\")": 1399
-          ":contains(\"Фантастика / фэнтези\")": 1318
-          ":contains(\"Классика\")": 1319
-          ":contains(\"Поэзия\")": 1320
-          ":contains(\"Психология\")": 1321
-          ":contains(\"Детская литература\")": 1317
-          ":contains(\"Художественная литература\")": 1322
-          ":contains(\"Прочая литература\")": 1323
-          ":contains(\"Журналы\")": 1037
-          ":contains(\"Авто-мото журналы\")": 1335
-          ":contains(\"Строительство и дизайн\")": 1336
-          ":contains(\"Политика и бизнес\")": 1337
-          ":contains(\"Женские журналы\")": 1338
-          ":contains(\"Медицина и ЗОЖ\")": 1339
-          ":contains(\"Аудио-видео журналы\")": 1340
-          ":contains(\"Компьютерные журналы\")": 1341
-          ":contains(\"Кулинария\")": 1342
-          ":contains(\"Сад, огород, дача\")": 1343
-          ":contains(\"Мужские журналы\")": 1344
-          ":contains(\"Научно-популярные журналы\")": 1345
-          ":contains(\"Домоводство / Своими руками\")": 1346
-          ":contains(\"Эротические журналы\")": 1347
-          ":contains(\"Комиксы\")": 1348
-          ":contains(\"Детские журналы\")": 1349
-          ":contains(\"Военные журналы\")": 1351
-          ":contains(\"Хобби (Разное)\")": 1350
-          "*": 9999
-      download:
-        selector: a[href^="./download/file.php?id="]
-        attribute: href
-      size:
-        selector: dt
-        filters:
-          # extract the size
-          - name: regexp
-            args: "Размер: (.+?),"
-          - name: replace
-            args: ["ТБ", "TB"]
-          - name: replace
-            args: ["ГБ", "GB"]
-          - name: replace
-            args: ["МБ", "MB"]
-          - name: replace
-            args: ["КБ", "KB"]
-      seeders:
-        selector: dd.posts span.seed
-      leechers:
-        selector: dd.posts span.leech
-      grabs:
-        selector: dd.views span.complet
-      date:
-        # 12 янв 2019, 11:26
-        selector: dt
-        filters:
-          # extract the date
-          - name: regexp
-            args: "(\\d{2} \\D{3} \\d{4}, \\d{2}:\\d{2})"
-            # replace month abbreviations
-          - name: replace
-            args: ["янв", "Jan"]
-          - name: replace
-            args: ["фев", "Feb"]
-          - name: replace
-            args: ["мар", "Mar"]
-          - name: replace
-            args: ["апр", "Apr"]
-          - name: replace
-            args: ["май", "May"]
-          - name: replace
-            args: ["июн", "Jun"]
-          - name: replace
-            args: ["июл", "Jul"]
-          - name: replace
-            args: ["авг", "Aug"]
-          - name: replace
-            args: ["сен", "Sep"]
-          - name: replace
-            args: ["окт", "Oct"]
-          - name: replace
-            args: ["ноя", "Nov"]
-          - name: replace
-            args: ["дек", "Dec"]
-          - name: dateparse
-            args: "02 Jan 2006, 15:04"
-      downloadvolumefactor:
-        text: 0
-      uploadvolumefactor:
-        text: 1
+  fields:
+    title:
+      selector: a.topictitle
+    details:
+      selector: a.topictitle
+      attribute: href
+    description:
+      selector: dt a:last-of-type
+    category:
+      selector: dt a:last-of-type
+      case:
+        ":contains(\"Новинки кино (2018-2019)\")": 238
+        ":contains(\"DVDRip / DVD-5/DVD-9\")": 425
+        ":contains(\"DVDRip\")": 50
+        ":contains(\"DVD-5/DVD-9\")": 52
+        ":contains(\"BDRip / HDRip / BD / HD / Blu - ray / Ultra HD (4K)\")": 424
+        ":contains(\"BDRip/HDRip\")": 51
+        ":contains(\"BD / HD\")": 371
+        ":contains(\"Blu-ray\")": 251
+        ":contains(\"Ultra HD (4K)\")": 1404
+        ":contains(\"Видео для мобильных устройств\")": 349
+        ":contains(\"Видео (iPhone, iPod Touch)\")": 350
+        ":contains(\"HD Видео (Apple TV, iPad)\")": 351
+        ":contains(\"Видео для смартфонов и КПК\")": 352
+        ":contains(\"Фильмы, мультфильмы\")": 239
+        ":contains(\"Зарубежные фильмы\")": 420
+        ":contains(\"Зарубежные фильмы до 2000\")": 12
+        ":contains(\"Зарубежные фильмы после 2000\")": 13
+        ":contains(\"Мультфильмы\")": 423
+        ":contains(\"Зарубежные мультфильмы\")": 16
+        ":contains(\"Советские мультфильмы\")": 17
+        ":contains(\"Российские мультфильмы\")": 18
+        ":contains(\"Эротические фильмы\")": 46
+        ":contains(\"Российские фильмы\")": 15
+        ":contains(\"Советские фильмы\")": 14
+        ":contains(\"Сериалы, мультсериалы\")": 240
+        ":contains(\"Зарубежные сериалы\")": 19
+        ":contains(\"Полные завершенные сезоны\")": 216
+        ":contains(\"H2O - Просто добавь воды\")": 118
+        ":contains(\"Split. Тайна крови\")": 153
+        ":contains(\"Адские кошки / Hellcats\")": 363
+        ":contains(\"Виолетта / Violetta\")": 1055
+        ":contains(\"Вспышка-любовь / Popland\")": 632
+        ":contains(\"Грань\")": 183
+        ":contains(\"Гимнастки\")": 178
+        ":contains(\"Дайте Санни шанс / Sonny With A Chance\")": 364
+        ":contains(\"Два короля / Pair of Kings\")": 319
+        ":contains(\"Держись, Чарли / Good Luck\")": 267
+        ":contains(\"Мушкетеры / The Musketeers\")": 1166
+        ":contains(\"Никита / Nikita\")": 365
+        ":contains(\"Обитель Анубиса / House of Anubis\")": 353
+        ":contains(\"Проспект Бразилии / Avenida Brasil\")": 710
+        ":contains(\"Сверхъестественное / Supernatural\")": 266
+        ":contains(\"Следствие по телу / Body of Proof\")": 268
+        ":contains(\"Теория большого взрыва\")": 160
+        ":contains(\"Русские сериалы\")": 20
+        ":contains(\"Полные завершенные сериалы\")": 210
+        ":contains(\"13\")": 969
+        ":contains(\"Агент\")": 707
+        ":contains(\"Белые волки\")": 1028
+        ":contains(\"Бомбила. Продолжение\")": 736
+        ":contains(\"Брат за брата\")": 550
+        ":contains(\"Братаны\")": 601
+        ":contains(\"В Москве всегда солнечно\")": 979
+        ":contains(\"Горюнов\")": 790
+        ":contains(\"Груз (Фельдъегеря)\")": 791
+        ":contains(\"Двойная жизнь\")": 803
+        ":contains(\"Дворняжка Ляля\")": 994
+        ":contains(\"Дело врачей\")": 735
+        ":contains(\"Дело для двоих\")": 992
+        ":contains(\"Департамент\")": 771
+        ":contains(\"Дом с лилиями\")": 964
+        ":contains(\"Домработница\")": 746
+        ":contains(\"До свидания, мальчики\")": 976
+        ":contains(\"ЗАГС\")": 719
+        ":contains(\"Женщины на грани\")": 1006
+        ":contains(\"Земский доктор - Возвращение\")": 768
+        ":contains(\"Земский доктор. Любовь вопреки\")": 984
+        ":contains(\"Икорный барон\")": 732
+        ":contains(\"Королева игры\")": 983
+        ":contains(\"Кулинар-2\")": 774
+        ":contains(\"Курортная полиция\")": 989
+        ":contains(\"Личное дело\")": 961
+        ":contains(\"Ловушка\")": 639
+        ":contains(\"Лорд. Пес-полицейский\")": 703
+        ":contains(\"Лучшие враги\")": 1013
+        ":contains(\"Майор полиции\")": 131
+        ":contains(\"Маяковский - Два дня\")": 727
+        ":contains(\"Между двух огней\")": 1058
+        ":contains(\"Мент в законе-7\")": 641
+        ":contains(\"Метод Лавровой-2\")": 644
+        ":contains(\"Неzлоб\")": 779
+        ":contains(\"Неравный брак\")": 372
+        ":contains(\"Неформат\")": 957
+        ":contains(\"ОСА\")": 766
+        ":contains(\"Отмена всех ограничений\")": 991
+        ":contains(\"Патруль. Васильевский остров\")": 653
+        ":contains(\"Под прицелом\")": 962
+        ":contains(\"Поцелуй\")": 683
+        ":contains(\"Поцелуйте невесту\")": 708
+        ":contains(\"Профессионал\")": 1026
+        ":contains(\"Пропавшие без вести\")": 787
+        ":contains(\"Пыльная работа\")": 773
+        ":contains(\"Ржавчина\")": 799
+        ":contains(\"Сашка\")": 794
+        ":contains(\"Семейные обстоятельства\")": 756
+        ":contains(\"Семин. Возмездие\")": 706
+        ":contains(\"Скорая помощь\")": 966
+        ":contains(\"Следователь Протасов\")": 960
+        ":contains(\"Стервы\")": 714
+        ":contains(\"Студия 17\")": 755
+        ":contains(\"Тайны следствия\")": 1039
+        ":contains(\"Такси\")": 360
+        ":contains(\"Темный мир\")": 981
+        ":contains(\"Тест на беременность\")": 1046
+        ":contains(\"Тихая охота\")": 977
+        ":contains(\"Топтуны\")": 681
+        ":contains(\"Торговый центр\")": 675
+        ":contains(\"Три звезды\")": 988
+        ":contains(\"Чужой\")": 1033
+        ":contains(\"Чужой район\")": 690
+        ":contains(\"Чужой среди своих\")": 1030
+        ":contains(\"Шаман\")": 804
+        ":contains(\"Шерлок Холмс\")": 780
+        ":contains(\"Этаж\")": 805
+        ":contains(\"Ясмин\")": 743
+        ":contains(\"Умник\")": 973
+        ":contains(\"Хмуров\")": 733
+        ":contains(\"Хозяйка моей судьбы\")": 505
+        ":contains(\"Анжелика\")": 1004
+        ":contains(\"Бессмертник\")": 1047
+        ":contains(\"Без свидетелей\")": 1074
+        ":contains(\"Верное средство\")": 692
+        ":contains(\"Верни мою любовь\")": 1038
+        ":contains(\"Береговая охрана\")": 711
+        ":contains(\"Граница времени\")": 1052
+        ":contains(\"Второй шанс\")": 1061
+        ":contains(\"Гречанка\")": 1042
+        ":contains(\"Высокие ставки\")": 1108
+        ":contains(\"Дельта\")": 748
+        ":contains(\"Дикий - 4\")": 501
+        ":contains(\"Дознаватель\")": 980
+        ":contains(\"Долгий путь домой\")": 1002
+        ":contains(\"Дружба народов\")": 958
+        ":contains(\"Зайцев+1\")": 798
+        ":contains(\"Запретная любовь\")": 1102
+        ":contains(\"Код Константина\")": 1083
+        ":contains(\"Измены\")": 1092
+        ":contains(\"Кодекс чести\")": 565
+        ":contains(\"Корабль\")": 797
+        ":contains(\"Инспектор Купер\")": 1070
+        ":contains(\"Легавый\")": 640
+        ":contains(\"Луна\")": 1048
+        ":contains(\"Ленинград 46\")": 1060
+        ":contains(\"Лесник\")": 684
+        ":contains(\"Между нами, девочками\")": 1057
+        ":contains(\"Морские дьяволы. Смерч\")": 654
+        ":contains(\"Неподкупный\")": 1089
+        ":contains(\"Окрылённые\")": 1095
+        ":contains(\"Отец Матвей\")": 1016
+        ":contains(\"Особый случай\")": 687
+        ":contains(\"Папа на вырост\")": 1054
+        ":contains(\"Непридуманная жизнь\")": 1094
+        ":contains(\"Пляж\")": 750
+        ":contains(\"Последний из Магикян\")": 750
+        ":contains(\"Последний янычар\")": 1043
+        ":contains(\"Практика\")": 997
+        ":contains(\"Хроники ломбарда\")": 1031
+        ":contains(\"Цветок папоротника\")": 1063
+        ":contains(\"Человек - приманка\")": 990
+        ":contains(\"Свет и тень маяка\")": 1044
+        ":contains(\"Следователи\")": 1082
+        ":contains(\"Слепая\")": 995
+        ":contains(\"Солдаты 17\")": 699
+        ":contains(\"Улыбка пересмешника\")": 1025
+        ":contains(\"Литейный\")": 1024
+        ":contains(\"Раскаяние\")": 1023
+        ":contains(\"Родители\")": 1076
+        ":contains(\"Сватьи\")": 972
+        ":contains(\"Чума\")": 1105
+        ":contains(\"Чужое гнездо\")": 1073
+        ":contains(\"Чтец\")": 1078
+        ":contains(\"Черные кошки\")": 691
+        ":contains(\"Карпов\")": 628
+        ":contains(\"Квест\")": 1101
+        ":contains(\"Лондонград\")": 1088
+        ":contains(\"Меч\")": 1072
+        ":contains(\"Пока станица спит\")": 795
+        ":contains(\"ППС\")": 978
+        ":contains(\"Сердце звезды\")": 1003
+        ":contains(\"Агентство скрытых камер\")": 1194
+        ":contains(\"Академия\")": 1140
+        ":contains(\"Беглые родственники\")": 1178
+        ":contains(\"Анна-детективъ\")": 1222
+        ":contains(\"Бедные люди\")": 1161
+        ":contains(\"Ботаны\")": 1099
+        ":contains(\"Бородач\")": 1136
+        ":contains(\"Вижу - знаю\")": 1184
+        ":contains(\"Владимирская, 15\")": 1127
+        ":contains(\"Выжить после\")": 781
+        ":contains(\"Вышибала\")": 1181
+        ":contains(\"Гастролеры (Беглецы)\")": 1165
+        ":contains(\"Гражданин Никто\")": 1150
+        ":contains(\"Два отца и два сына\")": 509
+        ":contains(\"Деффчонки\")": 656
+        ":contains(\"Другой майор Соколов\")": 1128
+        ":contains(\"Жемчуга\")": 1192
+        ":contains(\"Законы улиц\")": 1170
+        ":contains(\"Игра. Реванш\")": 1183
+        ":contains(\"Иные\")": 1117
+        ":contains(\"Казаки\")": 1228
+        ":contains(\"Как я стал русским\")": 1107
+        ":contains(\"Клан Ювелиров\")": 1077
+        ":contains(\"Команда\")": 1118
+        ":contains(\"Кости\")": 1132
+        ":contains(\"Кухня\")": 354
+        ":contains(\"Мажор\")": 1040
+        ":contains(\"Метод\")": 1104
+        ":contains(\"Москва. Центральный округ\")": 1189
+        ":contains(\"На глубине\")": 1135
+        ":contains(\"Напарницы\")": 1151
+        ":contains(\"Не зарекайся\")": 1131
+        ":contains(\"Невский\")": 1160
+        ":contains(\"Нити судьбы\")": 1224
+        ":contains(\"Озабоченные или любовь зла\")": 1112
+        ":contains(\"Остров\")": 1139
+        ":contains(\"Отдел 44\")": 1080
+        ":contains(\"Пасечник\")": 761
+        ":contains(\"Патруль Самооборона\")": 1103
+        ":contains(\"Перевозчик\")": 1157
+        ":contains(\"Пес\")": 1081
+        ":contains(\"Последний мент\")": 1110
+        ":contains(\"Последний москаль. Судный день\")": 1163
+        ":contains(\"Прокуроры\")": 1126
+        ":contains(\"Пушкин\")": 1179
+        ":contains(\"Пятая стража\")": 671
+        ":contains(\"Пятницкий. Глава четвертая\")": 1019
+        ":contains(\"Ради любви я все смогу\")": 1115
+        ":contains(\"Розыск\")": 788
+        ":contains(\"Светофор\")": 359
+        ":contains(\"Семейный бизнес\")": 1098
+        ":contains(\"Следователь Тихонов\")": 1162
+        ":contains(\"Сны\")": 1130
+        ":contains(\"Солнце в подарок\")": 1138
+        ":contains(\"Спросите у осени\")": 1144
+        ":contains(\"Степные волки\")": 1180
+        ":contains(\"Сын моего отца\")": 1133
+        ":contains(\"Такая работа\")": 1049
+        ":contains(\"Центральная больница\")": 1185
+        ":contains(\"Человек без прошлого\")": 1141
+        ":contains(\"Чёрная кошка\")": 1223
+        ":contains(\"Шаман. Новая угроза\")": 1190
+        ":contains(\"Я работаю в суде\")": 1191
+        ":contains(\"Василиса\")": 1235
+        ":contains(\"Вечный отпуск\")": 1154
+        ":contains(\"Восьмидесятые\")": 555
+        ":contains(\"Вы все меня бесите\")": 1231
+        ":contains(\"Интерны\")": 152
+        ":contains(\"Крыша мира\")": 1156
+        ":contains(\"Райское место\")": 1233
+        ":contains(\"Фамильные ценности\")": 1302
+        ":contains(\"Это любовь\")": 1059
+        ":contains(\"Адаптация\")": 1280
+        ":contains(\"Воронины\")": 48
+        ":contains(\"Женский доктор\")": 1308
+        ":contains(\"Кризис нежного возраста\")": 1186
+        ":contains(\"Куба\")": 1281
+        ":contains(\"Майор и магия\")": 1278
+        ":contains(\"Мамочки\")": 1125
+        ":contains(\"Мент в законе\")": 1155
+        ":contains(\"Ментовские войны\")": 1015
+        ":contains(\"Один против всех\")": 1276
+        ":contains(\"Ольга\")": 1193
+        ":contains(\"Отель Элеон\")": 1227
+        ":contains(\"Паутина\")": 551
+        ":contains(\"Подкидыши\")": 1159
+        ":contains(\"Реальные пацаны\")": 225
+        ":contains(\"СашаТаня\")": 680
+        ":contains(\"Свидетели\")": 1301
+        ":contains(\"Склифосовский (Склиф)\")": 630
+        ":contains(\"След\")": 226
+        ":contains(\"Слуга народа\")": 1116
+        ":contains(\"Стройка\")": 1232
+        ":contains(\"Улицы разбитых фонарей\")": 1045
+        ":contains(\"Универ. Новая общага.\")": 445
+        ":contains(\"Учитель в законе. Схватка\")": 1285
+        ":contains(\"Физрук\")": 970
+        ":contains(\"Филфак\")": 1299
+        ":contains(\"ЧОП\")": 1062
+        ":contains(\"Шеф. Игра на повышение / Шеф-4\")": 778
+        ":contains(\"Зарубежные мультсериалы\")": 21
+        ":contains(\"WINX CLUB - Школа волшебниц\")": 185
+        ":contains(\"Волшебные ПопПикси / PopPixie\")": 463
+        ":contains(\"Winx Club 5й сезон\")": 633
+        ":contains(\"Winx Club 6й сезон\")": 772
+        ":contains(\"Winx Club 7й сезон\")": 1093
+        ":contains(\"Друзья ангелов\")": 606
+        ":contains(\"ЛедиБаг и Супер кот\")": 1129
+        ":contains(\"Тотали Спайс\")": 789
+        ":contains(\"Футурама\")": 162
+        ":contains(\"Хантик - Искатели секретов\")": 151
+        ":contains(\"Русские мультсериалы\")": 22
+        ":contains(\"Маша и Медведь\")": 1401
+        ":contains(\"Архив Сериалов, Мультсериалов\")": 198
+        ":contains(\"Аниме\")": 232
+        ":contains(\"Полнометражные Аниме\")": 245
+        ":contains(\"Аниме Сериалы\")": 246
+        ":contains(\"Демоны старшей школы\")": 592
+        ":contains(\"Корона Грешника\")": 594
+        ":contains(\"Подручный бездарной Луизы ТВ-1\")": 591
+        ":contains(\"Рыцарь Двух Лун ТВ-2\")": 595
+        ":contains(\"Рондо Принцессы ТВ-3\")": 596
+        ":contains(\"Подручный бездарной Луизы Финал ТВ-4\")": 597
+        ":contains(\"Без перевода\")": 242
+        ":contains(\"ТВ-Шоу, документальные, спорт\")": 241
+        ":contains(\"ТВ-Шоу и развлекательные передачи\")": 23
+        ":contains(\"Архив ТВ-Шоу\")": 1075
+        ":contains(\"Yesterday Live\")": 491
+        ":contains(\"X-Фактор\")": 516
+        ":contains(\"Без башни\")": 478
+        ":contains(\"Болеро\")": 540
+        ":contains(\"Большие гонки\")": 1010
+        ":contains(\"Бункер News\")": 538
+        ":contains(\"В черной-черной комнате\")": 561
+        ":contains(\"Вышка\")": 713
+        ":contains(\"Голые и смешные\")": 191
+        ":contains(\"Готовим с Алексеем Зиминым\")": 527
+        ":contains(\"Грязные деньги\")": 460
+        ":contains(\"Два с половиной повара\")": 659
+        ":contains(\"Девчата\")": 255
+        ":contains(\"Дешево и сердито\")": 634
+        ":contains(\"Дневники шоугелз\")": 574
+        ":contains(\"ДНК\")": 764
+        ":contains(\"Доброго здоровьица\")": 637
+        ":contains(\"Дурнушек.net\")": 658
+        ":contains(\"Ешь и худей\")": 209
+        ":contains(\"Женское счастье\")": 800
+        ":contains(\"Женская Лига\")": 475
+        ":contains(\"Звезданутые\")": 740
+        ":contains(\"Здравствуйте, я ваша Пятница\")": 741
+        ":contains(\"Из песни слов не выкинешь\")": 737
+        ":contains(\"Индустрия кино\")": 587
+        ":contains(\"Истина где-то рядом\")": 718
+        ":contains(\"История Российской кухни\")": 1011
+        ":contains(\"Каникулы в Мексике\")": 456
+        ":contains(\"Караоке киллер\")": 682
+        ":contains(\"Когда мы дома\")": 996
+        ":contains(\"Куб - Новый сезон\")": 785
+        ":contains(\"Кулинарный поединок\")": 668
+        ":contains(\"Луч Света\")": 752
+        ":contains(\"Люди ХЭ\")": 533
+        ":contains(\"Мама в законе\")": 447
+        ":contains(\"Минута для победы с М. Авериным\")": 529
+        ":contains(\"Мировой повар\")": 793
+        ":contains(\"Минута славы\")": 586
+        ":contains(\"Мульт Личности\")": 472
+        ":contains(\"Наш выход\")": 1009
+        ":contains(\"Нонна, давай\")": 511
+        ":contains(\"НТВшники\")": 531
+        ":contains(\"Остров\")": 754
+        ":contains(\"Пародайс\")": 715
+        ":contains(\"Первый класс\")": 559
+        ":contains(\"Погоня\")": 636
+        ":contains(\"Пока еще не поздно\")": 679
+        ":contains(\"Понять. Простить\")": 545
+        ":contains(\"Последнее слово\")": 537
+        ":contains(\"Правила моей кухни\")": 792
+        ":contains(\"Право на защиту\")": 547
+        ":contains(\"Про декор\")": 731
+        ":contains(\"Реальная кухня\")": 982
+        ":contains(\"Самый лучший муж\")": 747
+        ":contains(\"Самый умный\")": 536
+        ":contains(\"Свидание со звездой\")": 742
+        ":contains(\"Свобода и справедливость\")": 544
+        ":contains(\"Свободное время\")": 963
+        ":contains(\"Снимите это немедленно\")": 575
+        ":contains(\"Специальное задание\")": 489
+        ":contains(\"Спокойной ночи, малыши\")": 495
+        ":contains(\"Страна в Shope\")": 689
+        ":contains(\"СуперИнтуиция\")": 492
+        ":contains(\"Съешьте это немедленно\")": 535
+        ":contains(\"Тотальная распродажа\")": 1005
+        ":contains(\"Украина чудес\")": 521
+        ":contains(\"Устами младенца\")": 698
+        ":contains(\"Улетное видео по русски\")": 451
+        ":contains(\"ХБ\")": 697
+        ":contains(\"Ху из ху\")": 497
+        ":contains(\"Школа злословия\")": 494
+        ":contains(\"Что делать?\")": 448
+        ":contains(\"6 кадров\")": 366
+        ":contains(\"Автошкола 2\")": 1032
+        ":contains(\"Большая Разница\")": 471
+        ":contains(\"В наше время\")": 744
+        ":contains(\"Все будет хорошо\")": 1056
+        ":contains(\"Галилео\")": 344
+        ":contains(\"Даешь молодежь\")": 477
+        ":contains(\"Ералаш\")": 514
+        ":contains(\"Голос. Дети\")": 959
+        ":contains(\"+100500\")": 446
+        ":contains(\"Comedy Баттл. Без границ\")": 693
+        ":contains(\"Битва риелторов\")": 1164
+        ":contains(\"Взвешенные люди\")": 1071
+        ":contains(\"Comedy Баттл. Отбор, турнир\")": 229
+        ":contains(\"Время Г\")": 1096
+        ":contains(\"Голос\")": 1114
+        ":contains(\"Модный приговор\")": 522
+        ":contains(\"Не спать\")": 971
+        ":contains(\"Новая звезда\")": 1137
+        ":contains(\"Таблетка\")": 1142
+        ":contains(\"Холостяк\")": 677
+        ":contains(\"Чисто News\")": 1034
+        ":contains(\"Я худею\")": 763
+        ":contains(\"Дикие игры\")": 1087
+        ":contains(\"Тайны Чапман\")": 649
+        ":contains(\"Хочу знать\")": 452
+        ":contains(\"Хроники московского быта\")": 1121
+        ":contains(\"Чистосердечное признание\")": 647
+        ":contains(\"Кинематограф\")": 643
+        ":contains(\"Кино в деталях\")": 532
+        ":contains(\"Мистические истории\")": 614
+        ":contains(\"Пища богов\")": 801
+        ":contains(\"Политика\")": 974
+        ":contains(\"Репортерские истории\")": 670
+        ":contains(\"Среда обитания\")": 252
+        ":contains(\"Игровое видео/Фильм о фильме\")": 89
+        ":contains(\"Вторая мировая война\")": 65
+        ":contains(\"Давай поженимся\")": 190
+        ":contains(\"Жди меня\")": 530
+        ":contains(\"На самом деле\")": 1086
+        ":contains(\"Вечерний квартал\")": 526
+        ":contains(\"Вечерний Ургант\")": 605
+        ":contains(\"Где логика?\")": 1124
+        ":contains(\"Камеди Woman\")": 480
+        ":contains(\"Говорим и показываем\")": 459
+        ":contains(\"Comedy Club - Камеди Клаб\")": 479
+        ":contains(\"Двойные стандарты\")": 1289
+        ":contains(\"ДОМ 2\")": 33
+        ":contains(\"Архив Дом-2\")": 270
+        ":contains(\"Квартирный вопрос\")": 696
+        ":contains(\"КВН - Клуб Веселых и Находчивых\")": 469
+        ":contains(\"Кто хочет стать миллионером\")": 541
+        ":contains(\"Контрольная закупка\")": 189
+        ":contains(\"Лига смеха\")": 1284
+        ":contains(\"МастерШеф\")": 775
+        ":contains(\"Международная пилорама\")": 1291
+        ":contains(\"Мужское - женское\")": 1018
+        ":contains(\"Наедине со всеми\")": 769
+        ":contains(\"НашПотребНадзор\")": 1123
+        ":contains(\"Однажды в России\")": 1017
+        ":contains(\"Орел и решка\")": 524
+        ":contains(\"Пацанки\")": 1309
+        ":contains(\"Перезагрузка\")": 765
+        ":contains(\"Поле чудес\")": 493
+        ":contains(\"Поедем, поедим\")": 730
+        ":contains(\"Пока все дома\")": 1146
+        ":contains(\"Проводник\")": 1196
+        ":contains(\"Прямой эфир\")": 588
+        ":contains(\"Пусть говорят\")": 348
+        ":contains(\"Рассмеши комика\")": 539
+        ":contains(\"Ревизорро\")": 1158
+        ":contains(\"Сам себе режиссёр\")": 490
+        ":contains(\"Своя игра\")": 457
+        ":contains(\"Смак\")": 520
+        ":contains(\"Соль\")": 1106
+        ":contains(\"STAND UP\")": 975
+        ":contains(\"Сто к одному\")": 496
+        ":contains(\"Сегодня вечером с Максимом\")": 786
+        ":contains(\"Секрет на миллион\")": 1287
+        ":contains(\"Танцы\")": 1021
+        ":contains(\"Ты супер\")": 1286
+        ":contains(\"Уральские пельмени\")": 470
+        ":contains(\"Comedy Баттл. Последний сезон\")": 967
+        ":contains(\"Устами младенца\")": 1290
+        ":contains(\"Фазенда\")": 1147
+        ":contains(\"Центральное телевидение\")": 188
+        ":contains(\"Что? Где? Когда?\")": 543
+        ":contains(\"Школа ремонта\")": 738
+        ":contains(\"Э К С Т Р А С Е Н С Ы\")": 59
+        ":contains(\"Удиви меня\")": 281
+        ":contains(\"Черно-белое\")": 1035
+        ":contains(\"Экстрасенсы против ученых\")": 280
+        ":contains(\"Битва экстрасенсов\")": 279
+        ":contains(\"Документальные передачи\")": 24
+        ":contains(\"Чудо техники с Сергеем Малозёмовым\")": 728
+        ":contains(\"Авто\")": 69
+        ":contains(\"Главная дорога\")": 669
+        ":contains(\"Первая передача\")": 704
+        ":contains(\"Без обмана\")": 1111
+        ":contains(\"Биографии. Личности и кумиры\")": 88
+        ":contains(\"15 минут до завтра\")": 379
+        ":contains(\"Военное дело\")": 68
+        ":contains(\"Голос - За кадром\")": 784
+        ":contains(\"Дачный ответ\")": 729
+        ":contains(\"Еда живая и мертвая\")": 1152
+        ":contains(\"Discovery / NatGeo / BBC / Viasat\")": 194
+        ":contains(\"Загадки человечества\")": 1307
+        ":contains(\"Идеальный ремонт\")": 701
+        ":contains(\"Криминал\")": 63
+        ":contains(\"Криминальные хроники\")": 590
+        ":contains(\"Место происшествия. О главном\")": 796
+        ":contains(\"Следствие ведут\")": 1085
+        ":contains(\"Следствие вели\")": 652
+        ":contains(\"Чрезвычайное происшествие\")": 498
+        ":contains(\"Линия защиты\")": 1120
+        ":contains(\"Непутевые заметки с Дмитрием Крыловым\")": 1145
+        ":contains(\"Обложка\")": 1067
+        ":contains(\"Однажды\")": 1288
+        ":contains(\"Осторожно, мошенники\")": 1119
+        ":contains(\"Открытие Китая\")": 1149
+        ":contains(\"Очная ставка\")": 739
+        ":contains(\"Познер. Интервью с\")": 965
+        ":contains(\"Русские сенсации\")": 650
+        ":contains(\"Русский вопрос\")": 1122
+        ":contains(\"Самые шокирующие гипотезы\")": 1198
+        ":contains(\"Территория заблуждений с Игорем Прокопенко\")": 802
+        ":contains(\"Информационно-аналитические\")": 323
+        ":contains(\"60 минут\")": 1195
+        ":contains(\"Вести\")": 1041
+        ":contains(\"Вести в субботу с Сергеем Брилевым\")": 672
+        ":contains(\"Вести недели\")": 655
+        ":contains(\"Вечер с Владимиром Соловьевым\")": 1014
+        ":contains(\"Время покажет\")": 1007
+        ":contains(\"Воскресный вечер с Владимиром Соловьевым\")": 712
+        ":contains(\"Воскресное время - Первый канал\")": 673
+        ":contains(\"В центре событий с Анной Прохоровой\")": 759
+        ":contains(\"Добров в эфире\")": 999
+        ":contains(\"Известия. Главное\")": 758
+        ":contains(\"Итоги недели\")": 1230
+        ":contains(\"Итоги недели с Сергеем Михеевым\")": 1400
+        ":contains(\"Кто против?\")": 1402
+        ":contains(\"Место встречи\")": 1148
+        ":contains(\"Момент истины\")": 648
+        ":contains(\"Первая студия\")": 1279
+        ":contains(\"Поединок с Владимиром Соловьевым\")": 327
+        ":contains(\"Постскриптум с Алексеем Пушковым\")": 324
+        ":contains(\"Право голоса\")": 705
+        ":contains(\"Право знать\")": 1029
+        ":contains(\"Процесс\")": 1153
+        ":contains(\"Своя правда\")": 1405
+        ":contains(\"Ты не поверишь\")": 337
+        ":contains(\"Человек и закон\")": 330
+        ":contains(\"Спортивные передачи\")": 25
+        ":contains(\"ХХII Зимние Олимпийские Игры в Сочи\")": 127
+        ":contains(\"Евро-2012 (Польша, Украина)\")": 616
+        ":contains(\"Бокс, боевые единоборства , рестлинг\")": 201
+        ":contains(\"Гонки\")": 146
+        ":contains(\"Футбол\")": 145
+        ":contains(\"Футбол. Чемпионат мира 2014\")": 985
+        ":contains(\"Футбол.ru\")": 661
+        ":contains(\"Хоккей\")": 211
+        ":contains(\"ЧМ-2010\")": 192
+        ":contains(\"ХХХ Летние Олимпийские Игры в Лондоне\")": 622
+        ":contains(\"Театр\")": 346
+        ":contains(\"Архив ТВ-Шоу, документальные, спорт\")": 199
+        ":contains(\"Адская кухня - 2 (Россия)\")": 577
+        ":contains(\"Большие танцы\")": 674
+        ":contains(\"Две звезды\")": 579
+        ":contains(\"Смотреть всем\")": 576
+        ":contains(\"Фитнес\")": 694
+        ":contains(\"Достояние республики. Новый сезон 2011\")": 589
+        ":contains(\"Городок\")": 585
+        ":contains(\"Адская кухня\")": 584
+        ":contains(\"Одна за всех\")": 269
+        ":contains(\"Стыдно, когда видно\")": 515
+        ":contains(\"Прожекторперисхилтон\")": 468
+        ":contains(\"Хит\")": 762
+        ":contains(\"Шурочка\")": 767
+        ":contains(\"Акценты недели\")": 1113
+        ":contains(\"Брачное чтиво\")": 333
+        ":contains(\"В теме\")": 1097
+        ":contains(\"Время в 21\")": 1064
+        ":contains(\"ЖКХ\")": 332
+        ":contains(\"Михаил Жванецкий. Дежурный по стране\")": 660
+        ":contains(\"Итоги дня\")": 998
+        ":contains(\"Неделя с Марианной Максимовской\")": 331
+        ":contains(\"Операция «Должник»\")": 335
+        ":contains(\"Открытая студия\")": 1134
+        ":contains(\"Поздняков. Интервью с\")": 1143
+        ":contains(\"Секретные территории\")": 336
+        ":contains(\"Собчак живьём\")": 702
+        ":contains(\"Специальный корреспондент\")": 328
+        ":contains(\"Список Норкина\")": 1053
+        ":contains(\"Структура Момента\")": 1022
+        ":contains(\"Судите сами\")": 325
+        ":contains(\"Честный понедельник\")": 326
+        ":contains(\"Сегодня. Итоговая программа\")": 329
+        ":contains(\"Пропаганда\")": 1100
+        ":contains(\"'Точка' с Максимом Шевченко\")": 1084
+        ":contains(\"День  космических  историй\")": 334
+        ":contains(\"50 оттенков. Белова\")": 1091
+        ":contains(\"Игры\")": 298
+        ":contains(\"Оформление раздач\")": 299
+        ":contains(\"Новинки repack 'ов'\")": 1202
+        ":contains(\"Горячие Новинки\")": 302
+        ":contains(\"Denuvo\")": 1225
+        ":contains(\"Игры для PC\")": 300
+        ":contains(\"Action\")": 312
+        ":contains(\"Action FPS (1st Person)\")": 807
+        ":contains(\"Action TPS (3rd Person)\")": 808
+        ":contains(\"Антологии\")": 665
+        ":contains(\"Стратегии\")": 309
+        ":contains(\"RTS (стратегии в реальном времени)\")": 810
+        ":contains(\"TBS (пошаговые стратегии)\")": 809
+        ":contains(\"Экономические стратегии\")": 811
+        ":contains(\"Военные стратегии\")": 938
+        ":contains(\"RPG\")": 338
+        ":contains(\"MMORPG\")": 1203
+        ":contains(\"Аркады\")": 305
+        ":contains(\"Симуляторы\")": 717
+        ":contains(\"Авиасимуляторы\")": 1204
+        ":contains(\"Гоночные симуляторы\")": 1205
+        ":contains(\"Спортивные симуляторы\")": 1206
+        ":contains(\"Приключения, Квесты, Логические\")": 311
+        ":contains(\"Старые игры\")": 1207
+        ":contains(\"Детские обучающие игры\")": 307
+        ":contains(\"Онлайновые игры\")": 812
+        ":contains(\"Эротические игры\")": 1215
+        ":contains(\"Мини-игры\")": 303
+        ":contains(\"Демо игры\")": 1208
+        ":contains(\"Прочее\")": 313
+        ":contains(\"Дополнения к играм\")": 864
+        ":contains(\"NoCD/NoDVD\")": 1209
+        ":contains(\"Русификаторы\")": 1210
+        ":contains(\"Игровое видео\")": 1211
+        ":contains(\"Патчи\")": 1212
+        ":contains(\"Софт для игр на PC\")": 1213
+        ":contains(\"Прочее\")": 1214
+        ":contains(\"Новости игровой индустрии(Игромания)\")": 1229
+        ":contains(\"Игромания\")": 1352
+        ":contains(\"Шаблоны оформления раздач\")": 1292
+        ":contains(\"Шаблон xatab\")": 1310
+        ":contains(\"Шаблон оформления общий\")": 1300
+        ":contains(\"Шаблон оформления VickNet\")": 1298
+        ":contains(\"Шаблон оформления анимированный\")": 1293
+        ":contains(\"Шаблон оформления общий №2\")": 1295
+        ":contains(\"Для неопытных\")": 1353
+        ":contains(\"Программное обеспечение\")": 382
+        ":contains(\"Операционные системы\")": 1237
+        ":contains(\"Windows 10\")": 1238
+        ":contains(\"Windows 8, 8.1\")": 1239
+        ":contains(\"Windows 7\")": 1240
+        ":contains(\"Windows VISTA\")": 1243
+        ":contains(\"Windows XP\")": 1241
+        ":contains(\"Linux, Unix, Mac и другие ОС\")": 1275
+        ":contains(\"Разное (Microsoft Windows OS)\")": 1242
+        ":contains(\"Системные программы\")": 391
+        ":contains(\"Драйвера и сопутствующий софт\")": 405
+        ":contains(\"Архиваторы и файловые менеджеры\")": 1254
+        ":contains(\"Программы для настройки и оптимизации ОС\")": 1255
+        ":contains(\"Защита, Антивирусы и Файерволы\")": 724
+        ":contains(\"Сборники программ, WPI\")": 406
+        ":contains(\"Работа с жёстким диском\")": 407
+        ":contains(\"Резервирование и восстановление данных\")": 1245
+        ":contains(\"Работа с носителями информации\")": 1247
+        ":contains(\"Обслуживание и диагностика компьютера\")": 1248
+        ":contains(\"ПО для Интернета и сетей\")": 1249
+        ":contains(\"Изменение интерфейса и скринсейверы ОС Windows\")": 1251
+        ":contains(\"Разное (Системные программы)\")": 399
+        ":contains(\"Программы для работы с мультимедиа и 3D\")": 399
+        ":contains(\"Графические редакторы, 3D моделирование\")": 400
+        ":contains(\"Редакторы видео\")": 401
+        ":contains(\"Видео- Аудио- конверторы\")": 402
+        ":contains(\"Видео- Аудио- проигрыватели\")": 404
+        ":contains(\"Работа со звуком\")": 1270
+        ":contains(\"Аудио- Видео Кодеки\")": 1271
+        ":contains(\"Разное (Программы для работы с мультимедиа и 3D)\")": 403
+        ":contains(\"Системы для бизнеса,\")": 1244
+        ":contains(\"ГИС, Системы навигации и карты\")": 1261
+        ":contains(\"Системы для научной работы\")": 1256
+        ":contains(\"Офисные системы\")": 1257
+        ":contains(\"Веб-разработка и Программирование\")": 1263
+        ":contains(\"Системы для бизнеса\")": 1258
+        ":contains(\"Работа с PDF и DjVu\")": 1259
+        ":contains(\"Словари, переводчики\")": 1262
+        ":contains(\"САПР, Софт для архитекторов и строителей\")": 1260
+        ":contains(\"Разное\")": 1393
+        ":contains(\"Разное\")": 726
+        ":contains(\"Обои для рабочего стола\")": 1273
+        ":contains(\"Аватары, Иконки, Смайлы\")": 1390
+        ":contains(\"Растровые и Векторные Клипарты\")": 1391
+        ":contains(\"Photoshop (Уроки) и Видеокурсы\")": 1272
+        ":contains(\"Заготовки, виньетки, рамки\")": 1392
+        ":contains(\"Музыка\")": 243
+        ":contains(\"Правила и предложения\")": 26
+        ":contains(\"HD Видео\")": 96
+        ":contains(\"Pop\")": 70
+        ":contains(\"Видеоклипы / Концерты\")": 97
+        ":contains(\"Retro/Bandstand\")": 72
+        ":contains(\"Retro/Bandstand - lossless\")": 1358
+        ":contains(\"Retro/Bandstand - Mp3\")": 1359
+        ":contains(\"Disco\")": 71
+        ":contains(\"Disco - lossless\")": 1356
+        ":contains(\"Disco - Mp3\")": 1357
+        ":contains(\"Pop - lossless\")": 1354
+        ":contains(\"Pop - Mp3\")": 1355
+        ":contains(\"Rock\")": 73
+        ":contains(\"Видеоклипы / Концерты\")": 98
+        ":contains(\"Rock - lossless\")": 1360
+        ":contains(\"Rock - Mp3\")": 1361
+        ":contains(\"Alternative\")": 74
+        ":contains(\"Видеоклипы / Концерты\")": 99
+        ":contains(\"Alternative - lossless\")": 1362
+        ":contains(\"Alternative - Mp3\")": 1363
+        ":contains(\"Metal\")": 75
+        ":contains(\"Видеоклипы / Концерты\")": 100
+        ":contains(\"Metal - Mp3\")": 1364
+        ":contains(\"Metal - lossless\")": 1365
+        ":contains(\"Rap, Hip-Hop, R'n'B\")": 76
+        ":contains(\"Видеоклипы / Концерты\")": 101
+        ":contains(\"Зарубежный\")": 78
+        ":contains(\"Зарубежный - lossless\")": 1368
+        ":contains(\"Зарубежный - Mp3\")": 1369
+        ":contains(\"Отечественный\")": 77
+        ":contains(\"Отечественный - lossless\")": 1370
+        ":contains(\"Отечественный - Mp3\")": 1371
+        ":contains(\"Rap, Hip-Hop, R'n'B - lossless\")": 1366
+        ":contains(\"Rap, Hip-Hop, R'n'B - Mp3\")": 1367
+        ":contains(\"Jazz, Blues\")": 85
+        ":contains(\"Jazz, Blues - lossless\")": 1380
+        ":contains(\"Jazz, Blues - Mp3\")": 1381
+        ":contains(\"Chanson, Bard\")": 82
+        ":contains(\"Chanson, Bard - lossless\")": 1386
+        ":contains(\"Chanson, Bard - Mp3\")": 1387
+        ":contains(\"Classical\")": 86
+        ":contains(\"Classical - lossless\")": 1378
+        ":contains(\"Classical - Mp3\")": 1379
+        ":contains(\"Electronic\")": 79
+        ":contains(\"Видеоклипы / Концерты\")": 102
+        ":contains(\"Electronic - lossless\")": 1372
+        ":contains(\"Electronic - Mp3\")": 1373
+        ":contains(\"Other genres\")": 80
+        ":contains(\"Видеоклипы / Концерты\")": 103
+        ":contains(\"Военная песня\")": 87
+        ":contains(\"Военная песня - lossless\")": 1376
+        ":contains(\"Военная песня - Mp3\")": 1377
+        ":contains(\"Reggae, Ska, Dub\")": 84
+        ":contains(\"Reggae, Ska, Dub - lossless\")": 1382
+        ":contains(\"Reggae, Ska, Dub - Mp3\")": 1383
+        ":contains(\"Funk, Soul, Country\")": 83
+        ":contains(\"Funk, Soul, Country - lossless\")": 1384
+        ":contains(\"Funk, Soul, Country - Mp3\")": 1385
+        ":contains(\"Folk, Ethnic, New Age, Meditative\")": 81
+        ":contains(\"Folk, Ethnic, New Age, Meditative - lossless\")": 1388
+        ":contains(\"Folk, Ethnic, New Age, Meditative - Mp3\")": 1389
+        ":contains(\"Other genres - lossless\")": 1374
+        ":contains(\"Other genres - Mp3\")": 1375
+        ":contains(\"Книги(Аудиокниги) и журналы\")": 663
+        ":contains(\"Книги\")": 1036
+        ":contains(\"Новинки\")": 1324
+        ":contains(\"Боевики/Детективы/Триллеры\")": 1325
+        ":contains(\"Приключения\")": 1326
+        ":contains(\"Романы\")": 1327
+        ":contains(\"Отечественная фантастика\")": 1328
+        ":contains(\"Зарубежная фантастика\")": 1329
+        ":contains(\"Классическая литература\")": 1330
+        ":contains(\"Детские книги\")": 1331
+        ":contains(\"Военная литература\")": 1334
+        ":contains(\"Комедийные произведения\")": 1332
+        ":contains(\"Разное\")": 1333
+        ":contains(\"Аудиокниги\")": 1312
+        ":contains(\"Приключения\")": 1398
+        ":contains(\"Детектив\")": 1396
+        ":contains(\"Боевик / Триллер\")": 1397
+        ":contains(\"История\")": 1313
+        ":contains(\"Юмор\")": 1315
+        ":contains(\"Религия\")": 1316
+        ":contains(\"Ужасы / Мистика\")": 1399
+        ":contains(\"Фантастика / фэнтези\")": 1318
+        ":contains(\"Классика\")": 1319
+        ":contains(\"Поэзия\")": 1320
+        ":contains(\"Психология\")": 1321
+        ":contains(\"Детская литература\")": 1317
+        ":contains(\"Художественная литература\")": 1322
+        ":contains(\"Прочая литература\")": 1323
+        ":contains(\"Журналы\")": 1037
+        ":contains(\"Авто-мото журналы\")": 1335
+        ":contains(\"Строительство и дизайн\")": 1336
+        ":contains(\"Политика и бизнес\")": 1337
+        ":contains(\"Женские журналы\")": 1338
+        ":contains(\"Медицина и ЗОЖ\")": 1339
+        ":contains(\"Аудио-видео журналы\")": 1340
+        ":contains(\"Компьютерные журналы\")": 1341
+        ":contains(\"Кулинария\")": 1342
+        ":contains(\"Сад, огород, дача\")": 1343
+        ":contains(\"Мужские журналы\")": 1344
+        ":contains(\"Научно-популярные журналы\")": 1345
+        ":contains(\"Домоводство / Своими руками\")": 1346
+        ":contains(\"Эротические журналы\")": 1347
+        ":contains(\"Комиксы\")": 1348
+        ":contains(\"Детские журналы\")": 1349
+        ":contains(\"Военные журналы\")": 1351
+        ":contains(\"Хобби (Разное)\")": 1350
+        "*": 9999
+    download:
+      selector: a[href^="./download/file.php?id="]
+      attribute: href
+    size:
+      selector: dt
+      filters:
+        # extract the size
+        - name: regexp
+          args: "Размер: (.+?),"
+        - name: replace
+          args: ["ТБ", "TB"]
+        - name: replace
+          args: ["ГБ", "GB"]
+        - name: replace
+          args: ["МБ", "MB"]
+        - name: replace
+          args: ["КБ", "KB"]
+    seeders:
+      selector: dd.posts span.seed
+    leechers:
+      selector: dd.posts span.leech
+    grabs:
+      selector: dd.views span.complet
+    date:
+      # 12 янв 2019, 11:26
+      selector: dt
+      filters:
+        # extract the date
+        - name: regexp
+          args: "(\\d{2} \\D{3} \\d{4}, \\d{2}:\\d{2})"
+          # replace month abbreviations
+        - name: replace
+          args: ["янв", "Jan"]
+        - name: replace
+          args: ["фев", "Feb"]
+        - name: replace
+          args: ["мар", "Mar"]
+        - name: replace
+          args: ["апр", "Apr"]
+        - name: replace
+          args: ["май", "May"]
+        - name: replace
+          args: ["июн", "Jun"]
+        - name: replace
+          args: ["июл", "Jul"]
+        - name: replace
+          args: ["авг", "Aug"]
+        - name: replace
+          args: ["сен", "Sep"]
+        - name: replace
+          args: ["окт", "Oct"]
+        - name: replace
+          args: ["ноя", "Nov"]
+        - name: replace
+          args: ["дек", "Dec"]
+        - name: dateparse
+          args: "02 Jan 2006, 15:04"
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
 # phpBB

@@ -1,99 +1,99 @@
 ---
-  site: hdbitscom
-  name: HD-Bits.com
-  description: "HD tracker"
-  language: en-us
-  encoding: UTF-8
-  type: private
-  links:
-    - https://www.hd-bits.com/
+site: hdbitscom
+name: HD-Bits.com
+description: "HD tracker"
+language: en-us
+encoding: UTF-8
+type: private
+links:
+  - https://www.hd-bits.com/
 
-  caps:
-    categorymappings:
-      - {id: 1, cat: Audio, desc: "Music"}
-      - {id: 2, cat: Movies, desc: "Movies"}
-      - {id: 3, cat: TV, desc: "TV-Series"}
-      - {id: 4, cat: PC, desc: "Applications"}
-      - {id: 5, cat: XXX, desc: "Adult"}
+caps:
+  categorymappings:
+    - {id: 1, cat: Audio, desc: "Music"}
+    - {id: 2, cat: Movies, desc: "Movies"}
+    - {id: 3, cat: TV, desc: "TV-Series"}
+    - {id: 4, cat: PC, desc: "Applications"}
+    - {id: 5, cat: XXX, desc: "Adult"}
 
-    modes:
-      search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
-      music-search: [q]
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
 
-  login:
-    path: login.php
-    method: post
-    inputs:
-      username: "{{ .Config.username }}"
-      password: "{{ .Config.password }}"
-      keeplogged: 1
-      login: "Log in"
-    error:
-      - selector: form#loginform > span.warning
-    test:
-      path: torrents.php
-
-  ratio:
+login:
+  path: login.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    keeplogged: 1
+    login: "Log in"
+  error:
+    - selector: form#loginform > span.warning
+  test:
     path: torrents.php
-    selector: li#stats_ratio > span
 
-  search:
-    paths:
-      - path: torrents.php
-    inputs:
-      $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
-      searchstr: "{{ .Query.Keywords }}"
-      order_by: time
-      order_way: desc
-      action: basic
-      searchsubmit: 1
-    rows:
-      selector: table#torrent_table > tbody > tr.torrent
-    fields:
-      download:
-        selector: a[href^="torrents.php?action=download&id="]
-        attribute: href
-      description:
-        selector: div.group_info div.tags
-      title:
-        selector: div.group_info a[href^="torrents.php?id="]
-      category:
-        selector: td.cats_col
-        case:
-          div.cats_music: 1
-          div.cats_movies: 2
-          div.cats_tvseries: 3
-          div.cats_applications: 4
-          div.cats_xxx: 5
-      comments:
-        selector: a[href^="torrents.php?id="]
-        attribute: href
-      imdb:
-        selector: a[href*="www.imdb.com/title/tt"]
-        optional: true
-        attribute: href
-      banner:
-        selector: img[alt="Cover"]
-        optional: true
-        attribute: src
-      files:
-        selector: td:nth-child(3)
-      date:
-        selector: td:nth-child(4)
-      size:
-        selector: td:nth-child(5)
-      grabs:
-        selector: td:nth-child(6)
-      seeders:
-        selector: td:nth-child(7)
-      leechers:
-        selector: td:nth-child(8)
-      downloadvolumefactor:
-        case:
-          "div.freeleech:contains('Freeleech!')": "0"
-          "*": "1"
-      uploadvolumefactor:
-        case:
-          "*": "1"
+ratio:
+  path: torrents.php
+  selector: li#stats_ratio > span
+
+search:
+  paths:
+    - path: torrents.php
+  inputs:
+    $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
+    searchstr: "{{ .Query.Keywords }}"
+    order_by: time
+    order_way: desc
+    action: basic
+    searchsubmit: 1
+  rows:
+    selector: table#torrent_table > tbody > tr.torrent
+  fields:
+    download:
+      selector: a[href^="torrents.php?action=download&id="]
+      attribute: href
+    description:
+      selector: div.group_info div.tags
+    title:
+      selector: div.group_info a[href^="torrents.php?id="]
+    category:
+      selector: td.cats_col
+      case:
+        div.cats_music: 1
+        div.cats_movies: 2
+        div.cats_tvseries: 3
+        div.cats_applications: 4
+        div.cats_xxx: 5
+    comments:
+      selector: a[href^="torrents.php?id="]
+      attribute: href
+    imdb:
+      selector: a[href*="www.imdb.com/title/tt"]
+      optional: true
+      attribute: href
+    banner:
+      selector: img[alt="Cover"]
+      optional: true
+      attribute: src
+    files:
+      selector: td:nth-child(3)
+    date:
+      selector: td:nth-child(4)
+    size:
+      selector: td:nth-child(5)
+    grabs:
+      selector: td:nth-child(6)
+    seeders:
+      selector: td:nth-child(7)
+    leechers:
+      selector: td:nth-child(8)
+    downloadvolumefactor:
+      case:
+        "div.freeleech:contains('Freeleech!')": "0"
+        "*": "1"
+    uploadvolumefactor:
+      case:
+        "*": "1"

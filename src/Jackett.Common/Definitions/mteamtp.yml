@@ -1,201 +1,201 @@
 ---
-  site: mteamtp
-  name: M-Team - TP
-  description: "M-Team TP (MTTP) is a CHINESE Private Torrent Tracker for HD MOVIES / TV / XXX"
-  language: zh-cn
-  type: private
-  encoding: UTF-8
-  links:
-    - https://pt.m-team.cc/
-  legacylinks:
-    - https://tp.m-team.cc/
+site: mteamtp
+name: M-Team - TP
+description: "M-Team TP (MTTP) is a CHINESE Private Torrent Tracker for HD MOVIES / TV / XXX"
+language: zh-cn
+type: private
+encoding: UTF-8
+links:
+  - https://pt.m-team.cc/
+legacylinks:
+  - https://tp.m-team.cc/
 
-  caps:
-    categorymappings:
-      - {id: 401, cat: Movies/SD, desc: "Movie(電影)/SD"}
-      - {id: 419, cat: Movies/HD, desc: "Movie(電影)/HD"}
-      - {id: 420, cat: Movies/DVD, desc: "Movie(電影)/DVDiSo"}
-      - {id: 421, cat: Movies/BluRay, desc: "Movie(電影)/Blu-Ray"}
-      - {id: 439, cat: Movies/Other, desc: "Movie(電影)/Remux"}
-      - {id: 403, cat: TV/SD, desc: "TV Series(影劇/綜藝)/SD"}
-      - {id: 402, cat: TV/HD, desc: "TV Series(影劇/綜藝)/HD"}
-      - {id: 435, cat: TV/SD, desc: "TV Series(影劇/綜藝)/DVDiSo"}
-      - {id: 438, cat: TV/HD, desc: "TV Series(影劇/綜藝)/BD"}
-      - {id: 404, cat: TV/Documentary, desc: "紀錄教育"}
-      - {id: 405, cat: TV/Anime, desc: "Anime(動畫)"}
-      - {id: 407, cat: TV/Sport, desc: "Sports(運動)"}
-      - {id: 422, cat: PC/0day, desc: "Software(軟體)"}
-      - {id: 423, cat: PC/Games, desc: "PCGame(PC遊戲)"}
-      - {id: 427, cat: Books, desc: "eBook(電子書)"}
-      - {id: 409, cat: Other, desc: "Misc(其他)"}
-      # music
-      - {id: 406, cat: Audio/Video, desc: "MV(演唱)"}
-      - {id: 408, cat: Audio/Other, desc: "Music(AAC/ALAC)"}
-      - {id: 434, cat: Audio, desc: "Music(無損)"}
-      # adult
-      - {id: 410, cat: XXX, desc: "AV(有碼)/HD Censored"}
-      - {id: 429, cat: XXX, desc: "AV(無碼)/HD Uncensored"}
-      - {id: 424, cat: XXX, desc: "AV(有碼)/SD Censored"}
-      - {id: 430, cat: XXX, desc: "AV(無碼)/SD Uncensored"}
-      - {id: 426, cat: XXX, desc: "AV(無碼)/DVDiSo Uncensored"}
-      - {id: 437, cat: XXX, desc: "AV(有碼)/DVDiSo Censored"}
-      - {id: 431, cat: XXX, desc: "AV(有碼)/Blu-Ray Censored"}
-      - {id: 432, cat: XXX, desc: "AV(無碼)/Blu-Ray Uncensored"}
-      - {id: 436, cat: XXX, desc: "AV(網站)/0Day"}
-      - {id: 425, cat: XXX, desc: "IV(寫真影集)/Video Collection"}
-      - {id: 433, cat: XXX, desc: "IV(寫真圖集)/Picture Collection"}
-      - {id: 411, cat: XXX, desc: "H-Game(遊戲)"}
-      - {id: 412, cat: XXX, desc: "H-Anime(動畫)"}
-      - {id: 413, cat: XXX, desc: "H-Comic(漫畫)"}
+caps:
+  categorymappings:
+    - {id: 401, cat: Movies/SD, desc: "Movie(電影)/SD"}
+    - {id: 419, cat: Movies/HD, desc: "Movie(電影)/HD"}
+    - {id: 420, cat: Movies/DVD, desc: "Movie(電影)/DVDiSo"}
+    - {id: 421, cat: Movies/BluRay, desc: "Movie(電影)/Blu-Ray"}
+    - {id: 439, cat: Movies/Other, desc: "Movie(電影)/Remux"}
+    - {id: 403, cat: TV/SD, desc: "TV Series(影劇/綜藝)/SD"}
+    - {id: 402, cat: TV/HD, desc: "TV Series(影劇/綜藝)/HD"}
+    - {id: 435, cat: TV/SD, desc: "TV Series(影劇/綜藝)/DVDiSo"}
+    - {id: 438, cat: TV/HD, desc: "TV Series(影劇/綜藝)/BD"}
+    - {id: 404, cat: TV/Documentary, desc: "紀錄教育"}
+    - {id: 405, cat: TV/Anime, desc: "Anime(動畫)"}
+    - {id: 407, cat: TV/Sport, desc: "Sports(運動)"}
+    - {id: 422, cat: PC/0day, desc: "Software(軟體)"}
+    - {id: 423, cat: PC/Games, desc: "PCGame(PC遊戲)"}
+    - {id: 427, cat: Books, desc: "eBook(電子書)"}
+    - {id: 409, cat: Other, desc: "Misc(其他)"}
+    # music
+    - {id: 406, cat: Audio/Video, desc: "MV(演唱)"}
+    - {id: 408, cat: Audio/Other, desc: "Music(AAC/ALAC)"}
+    - {id: 434, cat: Audio, desc: "Music(無損)"}
+    # adult
+    - {id: 410, cat: XXX, desc: "AV(有碼)/HD Censored"}
+    - {id: 429, cat: XXX, desc: "AV(無碼)/HD Uncensored"}
+    - {id: 424, cat: XXX, desc: "AV(有碼)/SD Censored"}
+    - {id: 430, cat: XXX, desc: "AV(無碼)/SD Uncensored"}
+    - {id: 426, cat: XXX, desc: "AV(無碼)/DVDiSo Uncensored"}
+    - {id: 437, cat: XXX, desc: "AV(有碼)/DVDiSo Censored"}
+    - {id: 431, cat: XXX, desc: "AV(有碼)/Blu-Ray Censored"}
+    - {id: 432, cat: XXX, desc: "AV(無碼)/Blu-Ray Uncensored"}
+    - {id: 436, cat: XXX, desc: "AV(網站)/0Day"}
+    - {id: 425, cat: XXX, desc: "IV(寫真影集)/Video Collection"}
+    - {id: 433, cat: XXX, desc: "IV(寫真圖集)/Picture Collection"}
+    - {id: 411, cat: XXX, desc: "H-Game(遊戲)"}
+    - {id: 412, cat: XXX, desc: "H-Anime(動畫)"}
+    - {id: 413, cat: XXX, desc: "H-Comic(漫畫)"}
 
-    modes:
-      search: [q, imdbid]
-      tv-search: [q, season, ep, imdbid]
-      movie-search: [q, imdbid]
-      music-search: [q]
+  modes:
+    search: [q, imdbid]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
+    music-search: [q]
 
-  settings:
-    - name: username
-      type: text
-      label: Username
-    - name: password
-      type: password
-      label: Password
-    - name: info
-      type: info
-      label: ""
-      default: For best results disable the torrent name tooltip (User CP/Tracker Settings/Torrents Page). Otherwise long release names will be cut off.
-    - name: sort
-      type: select
-      label: Sort requested from site
-      default: "4"
-      options:
-        "4": "created"
-        "7": "seeders"
-        "5": "size"
-        "1": "title"
-    - name: type
-      type: select
-      label: Order requested from site
-      default: "desc"
-      options:
-        "desc": "desc"
-        "asc": "asc"
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: info
+    type: info
+    label: ""
+    default: For best results disable the torrent name tooltip (User CP/Tracker Settings/Torrents Page). Otherwise long release names will be cut off.
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: "4"
+    options:
+      "4": "created"
+      "7": "seeders"
+      "5": "size"
+      "1": "title"
+  - name: type
+    type: select
+    label: Order requested from site
+    default: "desc"
+    options:
+      "desc": "desc"
+      "asc": "asc"
 
-  login:
-    path: takelogin.php
-    method: post
-    inputs:
-      username: "{{ .Config.username }}"
-      password: "{{ .Config.password }}"
-    error:
-      - selector: td.embedded:has(h2:contains("登录失败"))
-      - selector: td.embedded:has(h2:contains("failed"))
-    test:
-      path: index.php
-      selector: a[href="logout.php"]
+login:
+  path: takelogin.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: td.embedded:has(h2:contains("登录失败"))
+    - selector: td.embedded:has(h2:contains("failed"))
+  test:
+    path: index.php
+    selector: a[href="logout.php"]
 
-  ratio:
-    path: torrents.php
-    selector: table#info_block
-    filters:
-      - name: regexp
-        args: "Ratio:\\s(.*?)\\s\\s"
+ratio:
+  path: torrents.php
+  selector: table#info_block
+  filters:
+    - name: regexp
+      args: "Ratio:\\s(.*?)\\s\\s"
 
-  search:
-    paths:
-      - path: torrents.php
-        categories: ["!", 410, 429, 424, 430, 426, 437, 431, 432, 436, 425, 433, 411, 412, 413, 406, 408, 434]
-      - path: adult.php
-        categories: [410, 429, 424, 430, 426, 437, 431, 432, 436, 425, 433, 411, 412, 413]
-      - path: music.php
-        categories: [406, 408, 434]
-    inputs:
-      $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
-      search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-      # 0 incldead 1 active 2 dead
-      incldead: 0
-      # 0 all 1 normal 2 free 3 2x 4 2xfree 5 50% 6 2x50% 7 30%
-      spstate: 0
-      # 0 title 1 descr 3 uploaded 4 imdb url
-      search_area: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
-      # 0 and 1 or 2 exact
-      search_mode: 0
-      sort: "{{ .Config.sort }}"
-      type: "{{ .Config.type }}"
+search:
+  paths:
+    - path: torrents.php
+      categories: ["!", 410, 429, 424, 430, 426, 437, 431, 432, 436, 425, 433, 411, 412, 413, 406, 408, 434]
+    - path: adult.php
+      categories: [410, 429, 424, 430, 426, 437, 431, 432, 436, 425, 433, 411, 412, 413]
+    - path: music.php
+      categories: [406, 408, 434]
+  inputs:
+    $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    # 0 incldead 1 active 2 dead
+    incldead: 0
+    # 0 all 1 normal 2 free 3 2x 4 2xfree 5 50% 6 2x50% 7 30%
+    spstate: 0
+    # 0 title 1 descr 3 uploaded 4 imdb url
+    search_area: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
+    # 0 and 1 or 2 exact
+    search_mode: 0
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
 
-    rows:
-      selector: table.torrents > tbody > tr:has(table.torrentname)
+  rows:
+    selector: table.torrents > tbody > tr:has(table.torrentname)
 
-    fields:
-      title: # shortened for long release names
-        selector: a[href^="details.php?id="] > b
-      title:
-        optional: true # not available if IMDB tooltips are turned on
-        selector: a[title][href^="details.php?id="]
-        attribute: title
-      category:
-        selector: a[href^="?cat="]
-        attribute: href
-        filters:
-          - name: querystring
-            args: cat
-      details:
-        selector: a[href^="details.php?id="]
-        attribute: href
-      download:
-        selector: a[href^="download.php?id="]
-        attribute: href
-      banner:
-        selector: img[alt="torrent thumbnail"]
-        attribute: src
-        filters:
-          - name: replace
-            args: ["pic/nopic.jpg", ""]
-      imdb:
-        optional: true
-        selector: a[href*="www.imdb.com/title/tt"]
-        attribute: href
-      size:
-        selector: td.rowfollow:nth-last-child(6)
-      grabs:
-        selector: td.rowfollow:nth-last-child(3)
-      seeders:
-        selector: td.rowfollow:nth-last-child(5)
-      leechers:
-        selector: td.rowfollow:nth-last-child(4)
-      date:
-        selector: td.rowfollow:nth-last-child(7):not(:has(span))
-        optional: true
-        filters:
-          - name: append
-            args: " +08:00"
-          - name: dateparse
-            args: "2006-01-0215:04:05 -07:00"
-      date:
-        selector: td.rowfollow:nth-last-child(7) > span[title]
-        optional: true
-        attribute: title
-        filters:
-          - name: append
-            args: " +08:00"
-          - name: dateparse
-            args: "2006-01-02 15:04:05 -07:00"
-      downloadvolumefactor:
-        case:
-          img.pro_free: 0
-          img.pro_free2up: 0
-          img.pro_50pctdown: 0.5
-          img.pro_50pctdown2up: 0.5
-          img.pro_30pctdown: 0.3
-          "*": 1
-      uploadvolumefactor:
-        case:
-          img.pro_50pctdown2up: 2
-          img.pro_free2up: 2
-          img.pro_2up: 2
-          "*": 1
-      description:
-        selector: td:nth-child(2)
-        remove: a, img
+  fields:
+    title: # shortened for long release names
+      selector: a[href^="details.php?id="] > b
+    title:
+      optional: true # not available if IMDB tooltips are turned on
+      selector: a[title][href^="details.php?id="]
+      attribute: title
+    category:
+      selector: a[href^="?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="download.php?id="]
+      attribute: href
+    banner:
+      selector: img[alt="torrent thumbnail"]
+      attribute: src
+      filters:
+        - name: replace
+          args: ["pic/nopic.jpg", ""]
+    imdb:
+      optional: true
+      selector: a[href*="www.imdb.com/title/tt"]
+      attribute: href
+    size:
+      selector: td.rowfollow:nth-last-child(6)
+    grabs:
+      selector: td.rowfollow:nth-last-child(3)
+    seeders:
+      selector: td.rowfollow:nth-last-child(5)
+    leechers:
+      selector: td.rowfollow:nth-last-child(4)
+    date:
+      selector: td.rowfollow:nth-last-child(7):not(:has(span))
+      optional: true
+      filters:
+        - name: append
+          args: " +08:00"
+        - name: dateparse
+          args: "2006-01-0215:04:05 -07:00"
+    date:
+      selector: td.rowfollow:nth-last-child(7) > span[title]
+      optional: true
+      attribute: title
+      filters:
+        - name: append
+          args: " +08:00"
+        - name: dateparse
+          args: "2006-01-02 15:04:05 -07:00"
+    downloadvolumefactor:
+      case:
+        img.pro_free: 0
+        img.pro_free2up: 0
+        img.pro_50pctdown: 0.5
+        img.pro_50pctdown2up: 0.5
+        img.pro_30pctdown: 0.3
+        "*": 1
+    uploadvolumefactor:
+      case:
+        img.pro_50pctdown2up: 2
+        img.pro_free2up: 2
+        img.pro_2up: 2
+        "*": 1
+    description:
+      selector: td:nth-child(2)
+      remove: a, img
 # NexusPHP Standard v1.5 Beta 4

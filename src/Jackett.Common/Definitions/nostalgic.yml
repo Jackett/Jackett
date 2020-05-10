@@ -1,152 +1,152 @@
 ---
-  site: nostalgic
-  name: VHSTAPES
-  description: "VHSTAPES (The Archive / Nostalgic) is a Private Torrent Tracker for MOVIES / TV / GENERAL NOSTALGIA"
-  language: en-us
-  type: private
-  encoding: UTF-8
-  links:
-    - https://vhstapes.org/
-  legacylinks:
-    - https://nostalgic.to/
-    - https://nostalgic.is/
+site: nostalgic
+name: VHSTAPES
+description: "VHSTAPES (The Archive / Nostalgic) is a Private Torrent Tracker for MOVIES / TV / GENERAL NOSTALGIA"
+language: en-us
+type: private
+encoding: UTF-8
+links:
+  - https://vhstapes.org/
+legacylinks:
+  - https://nostalgic.to/
+  - https://nostalgic.is/
 
-  caps:
-    categorymappings:
-      - {id: 28, cat: TV, desc: "AdultSwim"}
-      - {id: 29, cat: TV, desc: "AdultSwim WOC"}
-      - {id: 24, cat: TV/Anime, desc: "Anime-x264"}
-      - {id: 20, cat: TV/Anime, desc: "Anime-x265/AV1"}
-      - {id: 32, cat: Movies/Foreign, desc: "Asian Movies"}
-      - {id: 31, cat: TV/FOREIGN, desc: "Asian TV (ENGSUB)"}
-      - {id: 6, cat: Audio/Audiobook, desc: "Audio / E-Books"}
-      - {id: 9, cat: Books/Comics, desc: "Comics / Manga"}
-      - {id: 22, cat: TV, desc: "Current TV"}
-      - {id: 17, cat: TV/Documentary, desc: "Documentaries"}
-      - {id: 27, cat: Movies, desc: "Movies"}
-      - {id: 25, cat: Audio/Video, desc: "Music / Video"}
-      - {id: 23, cat: PC/Games, desc: "PC Games"}
-      - {id: 8, cat: TV/WEB-DL, desc: "Podcasts"}
-      - {id: 16, cat: PC/0day, desc: "Roms / Emulation"}
-      - {id: 12, cat: TV, desc: "TV - Pre 2009 WOC"}
-      - {id: 11, cat: TV, desc: "TV - Pre 2013"}
-      - {id: 10, cat: TV, desc: "TV Animation"}
-      - {id: 18, cat: TV, desc: "TV Animation WOC"}
-      - {id: 33, cat: TV, desc: "TV Archive Packs"}
-      - {id: 34, cat: Movies, desc: "Laserdiscs"}
-      - {id: 35, cat: XXX, desc: "NSFW"}
-      - {id: 36, cat: TV, desc: "Youtube Archives"}
-      - {id: 5, cat: Other, desc: "Other"}
+caps:
+  categorymappings:
+    - {id: 28, cat: TV, desc: "AdultSwim"}
+    - {id: 29, cat: TV, desc: "AdultSwim WOC"}
+    - {id: 24, cat: TV/Anime, desc: "Anime-x264"}
+    - {id: 20, cat: TV/Anime, desc: "Anime-x265/AV1"}
+    - {id: 32, cat: Movies/Foreign, desc: "Asian Movies"}
+    - {id: 31, cat: TV/FOREIGN, desc: "Asian TV (ENGSUB)"}
+    - {id: 6, cat: Audio/Audiobook, desc: "Audio / E-Books"}
+    - {id: 9, cat: Books/Comics, desc: "Comics / Manga"}
+    - {id: 22, cat: TV, desc: "Current TV"}
+    - {id: 17, cat: TV/Documentary, desc: "Documentaries"}
+    - {id: 27, cat: Movies, desc: "Movies"}
+    - {id: 25, cat: Audio/Video, desc: "Music / Video"}
+    - {id: 23, cat: PC/Games, desc: "PC Games"}
+    - {id: 8, cat: TV/WEB-DL, desc: "Podcasts"}
+    - {id: 16, cat: PC/0day, desc: "Roms / Emulation"}
+    - {id: 12, cat: TV, desc: "TV - Pre 2009 WOC"}
+    - {id: 11, cat: TV, desc: "TV - Pre 2013"}
+    - {id: 10, cat: TV, desc: "TV Animation"}
+    - {id: 18, cat: TV, desc: "TV Animation WOC"}
+    - {id: 33, cat: TV, desc: "TV Archive Packs"}
+    - {id: 34, cat: Movies, desc: "Laserdiscs"}
+    - {id: 35, cat: XXX, desc: "NSFW"}
+    - {id: 36, cat: TV, desc: "Youtube Archives"}
+    - {id: 5, cat: Other, desc: "Other"}
 
-    modes:
-      search: [q]
-      tv-search: [q]
-      movie-search: [q]
+  modes:
+    search: [q]
+    tv-search: [q]
+    movie-search: [q]
 
-  settings:
-    - name: username
-      type: text
-      label: Username
-    - name: password
-      type: password
-      label: Password
-    - name: sort
-      type: select
-      label: Sort requested from site
-      default: "time"
-      options:
-        "time": "created"
-        "seeders": "seeders"
-        "size": "size"
-    - name: type
-      type: select
-      label: Order requested from site
-      default: "desc"
-      options:
-        "desc": "desc"
-        "asc": "asc"
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: "time"
+    options:
+      "time": "created"
+      "seeders": "seeders"
+      "size": "size"
+  - name: type
+    type: select
+    label: Order requested from site
+    default: "desc"
+    options:
+      "desc": "desc"
+      "asc": "asc"
 
-  login:
-    path: login
-    method: form
-    form: form[action="/login"]
-    inputs:
-      username: "{{ .Config.username }}"
-      password: "{{ .Config.password }}"
-      cinfo: "1536|864|24|-780"
-      iplocked: 0
-      submit: login
-    selectorinputs:
-      token:
-        selector: input[name="token"]
-        attribute: value
-    error:
-      - selector: table#maincontent tr td div div#messagebarA
+login:
+  path: login
+  method: form
+  form: form[action="/login"]
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    cinfo: "1536|864|24|-780"
+    iplocked: 0
+    submit: login
+  selectorinputs:
+    token:
+      selector: input[name="token"]
+      attribute: value
+  error:
+    - selector: table#maincontent tr td div div#messagebarA
 
-  search:
-    paths:
-      - path: torrents.php
-    inputs:
-      $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
-      order_by: "{{ .Config.sort }}"
-      order_way: "{{ .Config.type }}"
-      searchtext: ""
-      action: advanced
-      title: "{{ .Keywords }}"
-      sizeall: ""
-      sizetype: gb
-      sizerange: 0.01
-      filelist: ""
-      taglist: ""
-      autocomplete_toggle: 1
+search:
+  paths:
+    - path: torrents.php
+  inputs:
+    $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
+    order_by: "{{ .Config.sort }}"
+    order_way: "{{ .Config.type }}"
+    searchtext: ""
+    action: advanced
+    title: "{{ .Keywords }}"
+    sizeall: ""
+    sizetype: gb
+    sizerange: 0.01
+    filelist: ""
+    taglist: ""
+    autocomplete_toggle: 1
 
-    rows:
-      selector: table#torrent_table tr:has(a[href^="torrents.php?action=download"])
+  rows:
+    selector: table#torrent_table tr:has(a[href^="torrents.php?action=download"])
 
-    fields:
-      category:
-        selector: a[href^="/torrents.php?filter_cat"]
-        attribute: href
-        filters:
-          - name: regexp
-            args: "(\\d+)]=1"
-      title:
-        selector: a[href^="/torrents.php?id="]
-      details:
-        selector: a[href^="/torrents.php?id="]
-        attribute: href
-      download:
-        selector: a[href^="torrents.php?action=download"]
-        attribute: href
-      description:
-        selector: div.tags
-      banner:
-        selector: td:nth-child(2) > script
-        filters:
-          - name: regexp
-            args: "src=\\\\\"(.*?)\\\\\">"
-          - name: re_replace
-            args: ["\\\\(.)", "$1"]
-          - name: replace
-            args: ["/static/common/noartwork/noimage.png", ""]
-      files:
-        selector: td:nth-last-child(8)
-      date:
-        selector: td:nth-last-child(6)
-        filters:
-          - name: timeago
-      size:
-        selector: td:nth-last-child(5)
-      grabs:
-        selector: td:nth-last-child(4)
-      seeders:
-        selector: td:nth-last-child(3)
-      leechers:
-        selector: td:nth-last-child(2)
-      downloadvolumefactor:
-        case:
-          "img[alt=\"Freeleech\"]": 0
-          "*": 1
-      uploadvolumefactor:
-        text: 1
+  fields:
+    category:
+      selector: a[href^="/torrents.php?filter_cat"]
+      attribute: href
+      filters:
+        - name: regexp
+          args: "(\\d+)]=1"
+    title:
+      selector: a[href^="/torrents.php?id="]
+    details:
+      selector: a[href^="/torrents.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="torrents.php?action=download"]
+      attribute: href
+    description:
+      selector: div.tags
+    banner:
+      selector: td:nth-child(2) > script
+      filters:
+        - name: regexp
+          args: "src=\\\\\"(.*?)\\\\\">"
+        - name: re_replace
+          args: ["\\\\(.)", "$1"]
+        - name: replace
+          args: ["/static/common/noartwork/noimage.png", ""]
+    files:
+      selector: td:nth-last-child(8)
+    date:
+      selector: td:nth-last-child(6)
+      filters:
+        - name: timeago
+    size:
+      selector: td:nth-last-child(5)
+    grabs:
+      selector: td:nth-last-child(4)
+    seeders:
+      selector: td:nth-last-child(3)
+    leechers:
+      selector: td:nth-last-child(2)
+    downloadvolumefactor:
+      case:
+        "img[alt=\"Freeleech\"]": 0
+        "*": 1
+    uploadvolumefactor:
+      text: 1
 # luminance

@@ -1,140 +1,140 @@
 ---
-  site: dxp
-  name: DXP
-  description: "Deaf Experts (DXP) is a RUSSIAN Semi-Private Torrent Tracker for MOVIES / TV with Russian Subtitles."
-  language: ru-ru
-  type: semi-private
-  encoding: windows-1251
-  links:
-    - https://dxp.ru/
+site: dxp
+name: DXP
+description: "Deaf Experts (DXP) is a RUSSIAN Semi-Private Torrent Tracker for MOVIES / TV with Russian Subtitles."
+language: ru-ru
+type: semi-private
+encoding: windows-1251
+links:
+  - https://dxp.ru/
 
-  caps:
-    categorymappings:
-      - {id: 14, cat: Movies/HD, desc: "Фильмы HDTV"}
-      - {id: 15, cat: Movies/DVD, desc: "Фильмы DVD"}
-      - {id: 13, cat: Movies/SD, desc: "Фильмы XviD"}
-      - {id: 12, cat: Movies/Other, desc: "Мультфильмы"}
-      - {id: 9, cat: TV/Documentary, desc: "Документальные"}
-      - {id: 11, cat: TV, desc: "Сериалы"}
+caps:
+  categorymappings:
+    - {id: 14, cat: Movies/HD, desc: "Фильмы HDTV"}
+    - {id: 15, cat: Movies/DVD, desc: "Фильмы DVD"}
+    - {id: 13, cat: Movies/SD, desc: "Фильмы XviD"}
+    - {id: 12, cat: Movies/Other, desc: "Мультфильмы"}
+    - {id: 9, cat: TV/Documentary, desc: "Документальные"}
+    - {id: 11, cat: TV, desc: "Сериалы"}
 
-      - {id: 10, cat: Audio, desc: "Музыка"}
-      - {id: 16, cat: Books, desc: "Книги"}
-      - {id: 22, cat: Other, desc: "Картинки"}
+    - {id: 10, cat: Audio, desc: "Музыка"}
+    - {id: 16, cat: Books, desc: "Книги"}
+    - {id: 22, cat: Other, desc: "Картинки"}
 
-      - {id: 1, cat: PC, desc: "Приложения Windows"}
-      - {id: 3, cat: PC, desc: "Приложения Unix/Linux"}
-      - {id: 4, cat: PC/Mac, desc: "Приложения Mac"}
-      - {id: 2, cat: PC/Phone-Other, desc: "Приложения PDA"}
+    - {id: 1, cat: PC, desc: "Приложения Windows"}
+    - {id: 3, cat: PC, desc: "Приложения Unix/Linux"}
+    - {id: 4, cat: PC/Mac, desc: "Приложения Mac"}
+    - {id: 2, cat: PC/Phone-Other, desc: "Приложения PDA"}
 
-      - {id: 5, cat: PC/Games, desc: "Игры PC"}
-      - {id: 23, cat: PC/Games, desc: "Игры Unix/Linux"}
-      - {id: 6, cat: Console/PS3, desc: "Игры PlayStation 3"}
-      - {id: 7, cat: Console/Xbox, desc: "Игры X-Box"}
-      - {id: 8, cat: Console/PSP, desc: "Игры PSP"}
+    - {id: 5, cat: PC/Games, desc: "Игры PC"}
+    - {id: 23, cat: PC/Games, desc: "Игры Unix/Linux"}
+    - {id: 6, cat: Console/PS3, desc: "Игры PlayStation 3"}
+    - {id: 7, cat: Console/Xbox, desc: "Игры X-Box"}
+    - {id: 8, cat: Console/PSP, desc: "Игры PSP"}
 
-      - {id: 18, cat: Other, desc: "Эксклюзивы"}
-      - {id: 21, cat: Other, desc: "Лавка субтитров"}
-      - {id: 20, cat: Other, desc: "DEMO"}
-      - {id: 17, cat: Other/Misc, desc: "VIP"}
-      - {id: 24, cat: Other/Misc, desc: "SuperVIP"}
+    - {id: 18, cat: Other, desc: "Эксклюзивы"}
+    - {id: 21, cat: Other, desc: "Лавка субтитров"}
+    - {id: 20, cat: Other, desc: "DEMO"}
+    - {id: 17, cat: Other/Misc, desc: "VIP"}
+    - {id: 24, cat: Other/Misc, desc: "SuperVIP"}
 
-    modes:
-      search: [q]
-      music-search: [q]
+  modes:
+    search: [q]
+    music-search: [q]
 
-  settings:
-    - name: username
-      type: text
-      label: Username
-    - name: password
-      type: password
-      label: Password
-    - name: sort
-      type: select
-      label: Sort requested from site
-      default: "4"
-      options:
-        "4": "created"
-        "7": "seeders"
-        "5": "size"
-        "1": "title"
-    - name: type
-      type: select
-      label: Order requested from site
-      default: "desc"
-      options:
-        "desc": "desc"
-        "asc": "asc"
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: "4"
+    options:
+      "4": "created"
+      "7": "seeders"
+      "5": "size"
+      "1": "title"
+  - name: type
+    type: select
+    label: Order requested from site
+    default: "desc"
+    options:
+      "desc": "desc"
+      "asc": "asc"
 
-  login:
-    path: takelogin.php
-    method: post
-    inputs:
-      username: "{{ .Config.username }}"
-      password: "{{ .Config.password }}"
-      login: submit
-    error:
-      - selector: div.error
-    test:
-      path: index.php
-      selector: a[href="logout.php"]
+login:
+  path: takelogin.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    login: submit
+  error:
+    - selector: div.error
+  test:
+    path: index.php
+    selector: a[href="logout.php"]
 
-  download:
-    selector: a[href^="download.php?id="]
-    attribute: href
+download:
+  selector: a[href^="download.php?id="]
+  attribute: href
 
-  search:
-    # https://dxp.ru/torrents.php?search=&sort=4&type=desc
-    paths:
-      - path: torrents.php
-    inputs:
-      search: "{{ .Keywords }}"
-      sort: "{{ .Config.sort }}"
-      type: "{{ .Config.type }}"
+search:
+  # https://dxp.ru/torrents.php?search=&sort=4&type=desc
+  paths:
+    - path: torrents.php
+  inputs:
+    search: "{{ .Keywords }}"
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
 
-    rows:
-      selector: table#loading-table tbody#highlighted tr:has(a[href^="torrents.php?cat="]), table#loading-table tbody#highlighted tr:has(a[href^="details.php?id="])
-      after: 1
+  rows:
+    selector: table#loading-table tbody#highlighted tr:has(a[href^="torrents.php?cat="]), table#loading-table tbody#highlighted tr:has(a[href^="details.php?id="])
+    after: 1
 
-    fields:
-      category:
-        selector: a[href^="torrents.php?cat="]
-        attribute: href
-        filters:
-          - name: querystring
-            args: cat
-      download:
-        selector: a[href^="torrent-"]
-        attribute: href
-      title:
-        selector: a[href^="torrent-"]
-      details:
-        selector: a[href^="torrent-"]
-        attribute: href
-      date:
-        selector: i
-        filters:
-          - name: dateparse
-            args: "2006-01-02 15:04:05"
-      files:
-        selector: td:nth-child(4)
-      size:
-        selector: td:nth-child(6)
-      seeders:
-        selector: td:nth-child(7)
-        filters:
-          - name: split
-            args: ["|", 0]
-      leechers:
-        selector: td:nth-child(7)
-        filters:
-          - name: split
-            args: ["|", 1]
-      downloadvolumefactor:
-        case:
-          a[href="torrents.php?cat=17"]: 1 # vip
-          a[href="torrents.php?cat=24"]: 1 # super vip
-          "*": 0
-      uploadvolumefactor:
-        text: 1
+  fields:
+    category:
+      selector: a[href^="torrents.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    download:
+      selector: a[href^="torrent-"]
+      attribute: href
+    title:
+      selector: a[href^="torrent-"]
+    details:
+      selector: a[href^="torrent-"]
+      attribute: href
+    date:
+      selector: i
+      filters:
+        - name: dateparse
+          args: "2006-01-02 15:04:05"
+    files:
+      selector: td:nth-child(4)
+    size:
+      selector: td:nth-child(6)
+    seeders:
+      selector: td:nth-child(7)
+      filters:
+        - name: split
+          args: ["|", 0]
+    leechers:
+      selector: td:nth-child(7)
+      filters:
+        - name: split
+          args: ["|", 1]
+    downloadvolumefactor:
+      case:
+        a[href="torrents.php?cat=17"]: 1 # vip
+        a[href="torrents.php?cat=24"]: 1 # super vip
+        "*": 0
+    uploadvolumefactor:
+      text: 1
 # engine n/a

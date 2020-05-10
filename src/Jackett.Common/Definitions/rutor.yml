@@ -1,141 +1,141 @@
 ---
-  site: rutor
-  name: RuTor
-  description: "RuTor is a RUSSIAN Public site for MOVIES / TV / GENERAL"
-  language: ru-ru
-  type: public
-  encoding: UTF-8
-  links:
-    - http://rutor.info/ # site does not support https ERR_CONNECTION_REFUSED
-  legacylinks:
-    - http://live-rutor.org/ # domain expired 9 Feb 2020
-    - https://rutor.root.yt/ # currently down
-    - http://new-rutor.org/ # ERR_NAME_NOT_RESOLVED
-    - https://rutor.black-mirror.xyz/ # uses new-rutor.org
-    - https://rutor.unblocked.casa/ # uses new-rutor.org
-    - https://rutor.proxyportal.fun/ # uses new-rutor.org
-    - https://rutor.uk-unblock.xyz/ # uses new-rutor.org
-    - https://rutor.ind-unblock.xyz/ # uses new-rutor.org
+site: rutor
+name: RuTor
+description: "RuTor is a RUSSIAN Public site for MOVIES / TV / GENERAL"
+language: ru-ru
+type: public
+encoding: UTF-8
+links:
+  - http://rutor.info/ # site does not support https ERR_CONNECTION_REFUSED
+legacylinks:
+  - http://live-rutor.org/ # domain expired 9 Feb 2020
+  - https://rutor.root.yt/ # currently down
+  - http://new-rutor.org/ # ERR_NAME_NOT_RESOLVED
+  - https://rutor.black-mirror.xyz/ # uses new-rutor.org
+  - https://rutor.unblocked.casa/ # uses new-rutor.org
+  - https://rutor.proxyportal.fun/ # uses new-rutor.org
+  - https://rutor.uk-unblock.xyz/ # uses new-rutor.org
+  - https://rutor.ind-unblock.xyz/ # uses new-rutor.org
 
-  caps:
-    # unfortunately RuTor does not display categories anywhere in its search results page :-(
-    # albeit you can select a single category in its search options
-    # so I've opted not to support categories
-    categorymappings:
-      - {id: 1, cat: Movies, desc: "Movies"}
-      - {id: 2, cat: TV, desc: "TV"}
-      - {id: 3, cat: Other, desc: "Other"}
+caps:
+  # unfortunately RuTor does not display categories anywhere in its search results page :-(
+  # albeit you can select a single category in its search options
+  # so I've opted not to support categories
+  categorymappings:
+    - {id: 1, cat: Movies, desc: "Movies"}
+    - {id: 2, cat: TV, desc: "TV"}
+    - {id: 3, cat: Other, desc: "Other"}
 
-    modes:
-      search: [q]
-      tv-search: [q]
-      movie-search: [q]
+  modes:
+    search: [q]
+    tv-search: [q]
+    movie-search: [q]
 
-  settings:
-    - name: info
-      type: info
-      label: A note about RuTor
-      default: RuTor does not display categories in its search results page. This definition is probably only suitable for Jackett Dashboard Manual searches.
-    - name: sort
-      type: select
-      label: Sort requested from site (Applies only to Search with Keywords)
-      default: "0"
-      options:
-        "0": "created desc"
-        "1": "created asc"
-        "2": "seeders desc"
-        "3": "seeders asc"
-        "6": "size desc"
-        "7": "size asc"
-        "8": "title desc"
-        "9": "title asc"
+settings:
+  - name: info
+    type: info
+    label: A note about RuTor
+    default: RuTor does not display categories in its search results page. This definition is probably only suitable for Jackett Dashboard Manual searches.
+  - name: sort
+    type: select
+    label: Sort requested from site (Applies only to Search with Keywords)
+    default: "0"
+    options:
+      "0": "created desc"
+      "1": "created asc"
+      "2": "seeders desc"
+      "3": "seeders asc"
+      "6": "size desc"
+      "7": "size asc"
+      "8": "title desc"
+      "9": "title asc"
 
-  search:
-    paths:
-      # http://rutor.info/search/0/0/100/0/gotham%2004x01
-      - path:  "{{ if .Keywords }}search/0/0/100/{{ .Config.sort }}/{{ .Keywords }}/{{else}}top/{{end}}"
+search:
+  paths:
+    # http://rutor.info/search/0/0/100/0/gotham%2004x01
+    - path:  "{{ if .Keywords }}search/0/0/100/{{ .Config.sort }}/{{ .Keywords }}/{{else}}top/{{end}}"
 
-    rows:
-      selector: tr:has(td:has(a.downgif))
+  rows:
+    selector: tr:has(td:has(a.downgif))
 
-    fields:
-      category:
-        text: 3
-      title:
-        selector: td:nth-of-type(2) a[href^="/torrent/"]
-        filters:
-          - name: re_replace
-            args: [".+\\/\\s([^а-яА-я\\/]+)\\s.*\\[(?:S*(\\d+))(?:x*(\\d+-*\\d*).*)*\\].*\\)\\s+(.+)\\s+(?:\\||от)\\s*(.+)","$1 - S$2E$3 - rus - $4 - $5"]
-          - name: replace
-            args: ["E -", "E01-99 -"]
-          - name: replace
-            args: ["Кураж-Бамбей", "kurazh"]
-      details:
-        selector: td:nth-of-type(2) a[href^="/torrent/"]
-        attribute: href
-      download:
-        selector: td:nth-of-type(2) a.downgif
-        attribute: href
-      magnet:
-        optional: true
-        selector: td:nth-of-type(2) a[href^="magnet:?xt="]
-        attribute: href
-      date:
-        # 27 Окт 17
-        selector: td:nth-of-type(1)
-        filters:
-            # replace white spaces
-          - name: re_replace
-            args: ["[\\s]+", " "]
-            # replace month abbreviations
-          - name: replace
-            args: ["Янв", "Jan"]
-          - name: replace
-            args: ["Фев", "Feb"]
-          - name: replace
-            args: ["Мар", "Mar"]
-          - name: replace
-            args: ["Апр", "Apr"]
-          - name: replace
-            args: ["Май", "May"]
-          - name: replace
-            args: ["Июн", "Jun"]
-          - name: replace
-            args: ["Июл", "Jul"]
-          - name: replace
-            args: ["Авг", "Aug"]
-          - name: replace
-            args: ["Сен", "Sep"]
-          - name: replace
-            args: ["Окт", "Oct"]
-          - name: replace
-            args: ["Ноя", "Nov"]
-          - name: replace
-            args: ["Дек", "Dec"]
-            # Moscow +3 UTC
-          - name: append
-            args: " 00:00:00 +03:00"
-          - name: dateparse
-            args: "02 Jan 06 15:04:05 -07:00"
-      # some results don't have comments which throws off td count. So we go fishing for the following fields
-      size:
-        optional: true
-        selector: td:contains(\00a0GB)
-      size:
-        optional: true
-        selector: td:contains(\00a0MB)
-      size:
-        optional: true
-        selector: td:contains(\00a0kB)
-      size:
-        optional: true
-        selector: td:contains(\00a0B)
-      seeders:
-        selector: td span.green
-      leechers:
-        selector: td span.red
-      downloadvolumefactor:
-        text: 0
-      uploadvolumefactor:
-        text: 1
+  fields:
+    category:
+      text: 3
+    title:
+      selector: td:nth-of-type(2) a[href^="/torrent/"]
+      filters:
+        - name: re_replace
+          args: [".+\\/\\s([^а-яА-я\\/]+)\\s.*\\[(?:S*(\\d+))(?:x*(\\d+-*\\d*).*)*\\].*\\)\\s+(.+)\\s+(?:\\||от)\\s*(.+)","$1 - S$2E$3 - rus - $4 - $5"]
+        - name: replace
+          args: ["E -", "E01-99 -"]
+        - name: replace
+          args: ["Кураж-Бамбей", "kurazh"]
+    details:
+      selector: td:nth-of-type(2) a[href^="/torrent/"]
+      attribute: href
+    download:
+      selector: td:nth-of-type(2) a.downgif
+      attribute: href
+    magnet:
+      optional: true
+      selector: td:nth-of-type(2) a[href^="magnet:?xt="]
+      attribute: href
+    date:
+      # 27 Окт 17
+      selector: td:nth-of-type(1)
+      filters:
+          # replace white spaces
+        - name: re_replace
+          args: ["[\\s]+", " "]
+          # replace month abbreviations
+        - name: replace
+          args: ["Янв", "Jan"]
+        - name: replace
+          args: ["Фев", "Feb"]
+        - name: replace
+          args: ["Мар", "Mar"]
+        - name: replace
+          args: ["Апр", "Apr"]
+        - name: replace
+          args: ["Май", "May"]
+        - name: replace
+          args: ["Июн", "Jun"]
+        - name: replace
+          args: ["Июл", "Jul"]
+        - name: replace
+          args: ["Авг", "Aug"]
+        - name: replace
+          args: ["Сен", "Sep"]
+        - name: replace
+          args: ["Окт", "Oct"]
+        - name: replace
+          args: ["Ноя", "Nov"]
+        - name: replace
+          args: ["Дек", "Dec"]
+          # Moscow +3 UTC
+        - name: append
+          args: " 00:00:00 +03:00"
+        - name: dateparse
+          args: "02 Jan 06 15:04:05 -07:00"
+    # some results don't have comments which throws off td count. So we go fishing for the following fields
+    size:
+      optional: true
+      selector: td:contains(\00a0GB)
+    size:
+      optional: true
+      selector: td:contains(\00a0MB)
+    size:
+      optional: true
+      selector: td:contains(\00a0kB)
+    size:
+      optional: true
+      selector: td:contains(\00a0B)
+    seeders:
+      selector: td span.green
+    leechers:
+      selector: td span.red
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
 # engine n/a

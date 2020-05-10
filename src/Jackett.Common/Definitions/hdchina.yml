@@ -1,131 +1,131 @@
 ---
-  site: hdchina
-  name: HDChina
-  description: "HDChina (HDWing) is a CHINESE Private Torrent Tracker for HD MOVIES / TV"
-  language: zh-cn
-  type: private
-  encoding: UTF-8
-  links:
-    - https://hdchina.org/
-  legacylinks:
-    - https://hdchina.club/
+site: hdchina
+name: HDChina
+description: "HDChina (HDWing) is a CHINESE Private Torrent Tracker for HD MOVIES / TV"
+language: zh-cn
+type: private
+encoding: UTF-8
+links:
+  - https://hdchina.org/
+legacylinks:
+  - https://hdchina.club/
 
-  caps:
-    categorymappings:
-      - {id: 20, cat: Movies/BluRay, desc: "Movie Full BD"}
-      - {id: 17, cat: Movies/HD, desc: "Movie 1080p"}
-      - {id: 16, cat: Movies/HD, desc: "Movie 1080i"}
-      - {id: 9, cat: Movies/HD, desc: "Movie 720p"}
-      - {id: 13, cat: TV, desc: "EU/US TV series"}
-      - {id: 25, cat: TV, desc: "Chinese TV series"}
-      - {id: 26, cat: TV, desc: "Kor Drama"}
-      - {id: 24, cat: TV, desc: "Jpn Drama"}
-      - {id: 21, cat: TV, desc: "EU/US TV series pack"}
-      - {id: 22, cat: TV, desc: "Chinese TV series pack"}
-      - {id: 23, cat: TV, desc: "JPN/KOR drama pack"}
-      - {id: 27, cat: Movies/SD, desc: "iPad Video"}
-      - {id: 5, cat: TV/Documentary, desc: "Documentary"}
-      - {id: 15, cat: TV/Sport, desc: "Sports"}
-      - {id: 14, cat: TV/Anime, desc: "Animation"}
-      - {id: 401, cat: TV, desc: "TV Shows"}
-      - {id: 402, cat: Audio, desc: "Vocal Concert"}
-      - {id: 406, cat: Audio, desc: "Music Video"}
-      - {id: 408, cat: Audio, desc: "Music"}
-      - {id: 19, cat: Audio, desc: "Audio Track"}
-      - {id: 405, cat: Audio, desc: "Drama"}
-      - {id: 404, cat: Books, desc: "Book"}
-      - {id: 409, cat: Other, desc: "Other"}
-      - {id: 410, cat: Movies/HD, desc: "4K UltraHD"}
-      - {id: 411, cat: TV, desc: "Travel"}
-      - {id: 412, cat: TV, desc: "Food"}
+caps:
+  categorymappings:
+    - {id: 20, cat: Movies/BluRay, desc: "Movie Full BD"}
+    - {id: 17, cat: Movies/HD, desc: "Movie 1080p"}
+    - {id: 16, cat: Movies/HD, desc: "Movie 1080i"}
+    - {id: 9, cat: Movies/HD, desc: "Movie 720p"}
+    - {id: 13, cat: TV, desc: "EU/US TV series"}
+    - {id: 25, cat: TV, desc: "Chinese TV series"}
+    - {id: 26, cat: TV, desc: "Kor Drama"}
+    - {id: 24, cat: TV, desc: "Jpn Drama"}
+    - {id: 21, cat: TV, desc: "EU/US TV series pack"}
+    - {id: 22, cat: TV, desc: "Chinese TV series pack"}
+    - {id: 23, cat: TV, desc: "JPN/KOR drama pack"}
+    - {id: 27, cat: Movies/SD, desc: "iPad Video"}
+    - {id: 5, cat: TV/Documentary, desc: "Documentary"}
+    - {id: 15, cat: TV/Sport, desc: "Sports"}
+    - {id: 14, cat: TV/Anime, desc: "Animation"}
+    - {id: 401, cat: TV, desc: "TV Shows"}
+    - {id: 402, cat: Audio, desc: "Vocal Concert"}
+    - {id: 406, cat: Audio, desc: "Music Video"}
+    - {id: 408, cat: Audio, desc: "Music"}
+    - {id: 19, cat: Audio, desc: "Audio Track"}
+    - {id: 405, cat: Audio, desc: "Drama"}
+    - {id: 404, cat: Books, desc: "Book"}
+    - {id: 409, cat: Other, desc: "Other"}
+    - {id: 410, cat: Movies/HD, desc: "4K UltraHD"}
+    - {id: 411, cat: TV, desc: "Travel"}
+    - {id: 412, cat: TV, desc: "Food"}
 
-    modes:
-      search: [q, imdbid]
-      tv-search: [q, season, ep, imdbid]
-      movie-search: [q, imdbid]
-      music-search: [q]
+  modes:
+    search: [q, imdbid]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
+    music-search: [q]
 
-  settings:
-    - name: cookie
-      type: text
-      label: Cookie
-    - name: info
-      type: info
-      label: How to get the Cookie
-      default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info
+    type: info
+    label: How to get the Cookie
+    default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
 
-  login:
-    method: cookie
-    inputs:
-      cookie: "{{ .Config.cookie }}"
-    test:
-      path: torrents.php
+login:
+  method: cookie
+  inputs:
+    cookie: "{{ .Config.cookie }}"
+  test:
+    path: torrents.php
 
-  search:
-    paths:
-      - path: torrents.php
-    inputs:
-      $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
-      search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-      incldead: 0
-      spstate: 0
-      inclbookmarked: 0
-      search_area: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
-      search_mode: 0
+search:
+  paths:
+    - path: torrents.php
+  inputs:
+    $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    incldead: 0
+    spstate: 0
+    inclbookmarked: 0
+    search_area: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
+    search_mode: 0
 
-    rows:
-      selector: table.torrent_list > tbody > tr:has(a[href^="?cat="])
+  rows:
+    selector: table.torrent_list > tbody > tr:has(a[href^="?cat="])
 
-    fields:
-      title:
-        selector: td:nth-child(2) a
-      category:
-        selector: a[href^="?cat="]
-        attribute: href
-        filters:
-          - name: querystring
-            args: cat
-      details:
-        selector: a[href^="details.php?id="]
-        attribute: href
-      download:
-        selector: a[href^="download.php?hash="]
-        attribute: href
-      size:
-        selector: td.t_size
-      grabs:
-        selector: td.t_completed
-      seeders:
-        selector: td.t_torrents
-      leechers:
-        selector: td.t_leech
-      date:
-        selector: td.t_time
-        filters:
-          - name: replace
-            args: ["时", " hours"]
-          - name: replace
-            args: ["分", " minutes"]
-          - name: replace
-            args: ["天", " days"]
-          - name: replace
-            args: ["年", " year"]
-          - name: replace
-            args: ["月", " months"]
-          - name: append
-            args: " ago"
-      downloadvolumefactor:
-        case:
-          img.pro_free: 0
-          img.pro_free2up: 0
-          img.pro_50pctdown: 0.5
-          img.pro_50pctdown2up: 0.5
-          img.pro_30pctdown: 0.3
-          "*": 1
-      uploadvolumefactor:
-        case:
-          img.pro_50pctdown2up: 2
-          img.pro_free2up: 2
-          img.pro_2up: 2
-          "*": 1
+  fields:
+    title:
+      selector: td:nth-child(2) a
+    category:
+      selector: a[href^="?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="download.php?hash="]
+      attribute: href
+    size:
+      selector: td.t_size
+    grabs:
+      selector: td.t_completed
+    seeders:
+      selector: td.t_torrents
+    leechers:
+      selector: td.t_leech
+    date:
+      selector: td.t_time
+      filters:
+        - name: replace
+          args: ["时", " hours"]
+        - name: replace
+          args: ["分", " minutes"]
+        - name: replace
+          args: ["天", " days"]
+        - name: replace
+          args: ["年", " year"]
+        - name: replace
+          args: ["月", " months"]
+        - name: append
+          args: " ago"
+    downloadvolumefactor:
+      case:
+        img.pro_free: 0
+        img.pro_free2up: 0
+        img.pro_50pctdown: 0.5
+        img.pro_50pctdown2up: 0.5
+        img.pro_30pctdown: 0.3
+        "*": 1
+    uploadvolumefactor:
+      case:
+        img.pro_50pctdown2up: 2
+        img.pro_free2up: 2
+        img.pro_2up: 2
+        "*": 1
 # NexusPHP tbd

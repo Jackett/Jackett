@@ -1,191 +1,191 @@
 ---
-  site: nyaasi
-  name: Nyaa.si
-  description: "Nyaa is a Public torrent site focused on Eastern Asian media including anime, manga, literature and music"
-  language: en-us
-  type: public
-  encoding: UTF-8
-  links:
-    - https://nyaa.si/
-    - https://nyaa.root.yt/
-    - https://nyaa.black-mirror.xyz/
-    - https://nyaa.unblocked.casa/
-    - https://nyaa.proxyportal.fun/
-    - https://nyaa.uk-unblock.xyz/
-    - https://nyaa.ind-unblock.xyz/
+site: nyaasi
+name: Nyaa.si
+description: "Nyaa is a Public torrent site focused on Eastern Asian media including anime, manga, literature and music"
+language: en-us
+type: public
+encoding: UTF-8
+links:
+  - https://nyaa.si/
+  - https://nyaa.root.yt/
+  - https://nyaa.black-mirror.xyz/
+  - https://nyaa.unblocked.casa/
+  - https://nyaa.proxyportal.fun/
+  - https://nyaa.uk-unblock.xyz/
+  - https://nyaa.ind-unblock.xyz/
 
-  settings:
-    - name: filter-id
-      type: select
-      label: Filter
-      default: "0"
-      options:
-        0: No filter
-        1: No remakes
-        2: Trusted only
-    - name: cat-id
-      type: select
-      label: Category
-      default: "0_0"
-      options:
-        0_0: "All categories"
-        1_0: "Anime"
-        1_1: "Anime - Anime Music Video"
-        1_2: "Anime - English-translated"
-        1_3: "Anime - Non-English-translated"
-        1_4: "Anime - Raw"
-        2_0: "Audio"
-        2_1: "Audio - Lossless"
-        2_2: "Audio - Lossy"
-        3_0: "Literature"
-        3_1: "Literature - English-translated"
-        3_2: "Literature - Non-English-translated"
-        3_3: "Literature - Lossy"
-        4_0: "Live Action"
-        4_1: "Live Action - English"
-        4_2: "Live Action - Idol/PV"
-        4_3: "Live Action - Non-English"
-        4_4: "Live Action - Raw"
-        5_0: "Pictures"
-        5_1: "Pictures  - Graphics"
-        5_2: "Pictures  - Photos"
-        6_0: "Software"
-        6_1: "Software - Applications"
-        6_2: "Software - Games"
-    - name: sort
-      type: select
-      label: Sort requested from site
-      default: "id"
-      options:
-        "id": "created"
-        "seeders": "seeders"
-        "size": "size"
-    - name: type
-      type: select
-      label: Order requested from site
-      default: "desc"
-      options:
-        "desc": "desc"
-        "asc": "asc"
+settings:
+  - name: filter-id
+    type: select
+    label: Filter
+    default: "0"
+    options:
+      0: No filter
+      1: No remakes
+      2: Trusted only
+  - name: cat-id
+    type: select
+    label: Category
+    default: "0_0"
+    options:
+      0_0: "All categories"
+      1_0: "Anime"
+      1_1: "Anime - Anime Music Video"
+      1_2: "Anime - English-translated"
+      1_3: "Anime - Non-English-translated"
+      1_4: "Anime - Raw"
+      2_0: "Audio"
+      2_1: "Audio - Lossless"
+      2_2: "Audio - Lossy"
+      3_0: "Literature"
+      3_1: "Literature - English-translated"
+      3_2: "Literature - Non-English-translated"
+      3_3: "Literature - Lossy"
+      4_0: "Live Action"
+      4_1: "Live Action - English"
+      4_2: "Live Action - Idol/PV"
+      4_3: "Live Action - Non-English"
+      4_4: "Live Action - Raw"
+      5_0: "Pictures"
+      5_1: "Pictures  - Graphics"
+      5_2: "Pictures  - Photos"
+      6_0: "Software"
+      6_1: "Software - Applications"
+      6_2: "Software - Games"
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: "id"
+    options:
+      "id": "created"
+      "seeders": "seeders"
+      "size": "size"
+  - name: type
+    type: select
+    label: Order requested from site
+    default: "desc"
+    options:
+      "desc": "desc"
+      "asc": "asc"
 
-  caps:
-    categorymappings:
-      # Anime
-      - {id: 1_0,  cat: TV/Anime, desc: "Anime"}
-      - {id: 1_1,  cat: TV/Anime, desc: "Anime music videos"}
-      - {id: 1_2,  cat: TV/Anime, desc: "English subtitled animes"}
-      - {id: 1_3,  cat: TV/Anime, desc: "Non-english subtitled animes"}
-      - {id: 1_4,  cat: TV/Anime, desc: "Raw animes"}
-      # Anime as Movies (Radarr uses t=movie):
-      - {id: 1_0,  cat: Movies/Other, desc: "Anime"}
-      - {id: 1_1,  cat: Movies/Other, desc: "Anime music videos"}
-      - {id: 1_2,  cat: Movies/Other, desc: "English subtitled animes"}
-      - {id: 1_3,  cat: Movies/Other, desc: "Non-english subtitled animes"}
-      - {id: 1_4,  cat: Movies/Other, desc: "Raw animes"}
-      # Audio
-      - {id: 2_0,  cat: Audio, desc: "Audio"}
-      - {id: 2_1,  cat: Audio, desc: "Lossless audio"}
-      - {id: 2_2,  cat: Audio, desc: "Lossy audio"}
-      # Literature
-      - {id: 3_0,  cat: Books, desc: "Literature"}
-      - {id: 3_1,  cat: Books, desc: "Literature english translated"}
-      - {id: 3_2,  cat: Books, desc: "Literature non-english translated"}
-      - {id: 3_3,  cat: Books, desc: "Raw literature"}
-      # Live
-      - {id: 4_0,  cat: TV, desc: "Live Action"}
-      - {id: 4_1,  cat: TV, desc: "Live Action - English"}
-      - {id: 4_2,  cat: TV, desc: "Live Action - Idol/PV"}
-      - {id: 4_3,  cat: TV, desc: "Live Action - Non-English"}
-      - {id: 4_4,  cat: TV, desc: "Live Action - Raw"}
-      # Pics
-      - {id: 5_0,  cat: Other, desc: "Pictures"}
-      - {id: 5_1,  cat: Other, desc: "Pictures  - Graphics"}
-      - {id: 5_2,  cat: Other, desc: "Pictures  - Photos"}
-      # Software
-      - {id: 6_0,  cat: PC, desc: "Software"}
-      - {id: 6_1,  cat: PC/ISO, desc: "Applications"}
-      - {id: 6_2,  cat: PC/Games, desc: "Games"}
-    modes:
-      search: [q]
-      tv-search: [q]
-      movie-search: [q]
+caps:
+  categorymappings:
+    # Anime
+    - {id: 1_0,  cat: TV/Anime, desc: "Anime"}
+    - {id: 1_1,  cat: TV/Anime, desc: "Anime music videos"}
+    - {id: 1_2,  cat: TV/Anime, desc: "English subtitled animes"}
+    - {id: 1_3,  cat: TV/Anime, desc: "Non-english subtitled animes"}
+    - {id: 1_4,  cat: TV/Anime, desc: "Raw animes"}
+    # Anime as Movies (Radarr uses t=movie):
+    - {id: 1_0,  cat: Movies/Other, desc: "Anime"}
+    - {id: 1_1,  cat: Movies/Other, desc: "Anime music videos"}
+    - {id: 1_2,  cat: Movies/Other, desc: "English subtitled animes"}
+    - {id: 1_3,  cat: Movies/Other, desc: "Non-english subtitled animes"}
+    - {id: 1_4,  cat: Movies/Other, desc: "Raw animes"}
+    # Audio
+    - {id: 2_0,  cat: Audio, desc: "Audio"}
+    - {id: 2_1,  cat: Audio, desc: "Lossless audio"}
+    - {id: 2_2,  cat: Audio, desc: "Lossy audio"}
+    # Literature
+    - {id: 3_0,  cat: Books, desc: "Literature"}
+    - {id: 3_1,  cat: Books, desc: "Literature english translated"}
+    - {id: 3_2,  cat: Books, desc: "Literature non-english translated"}
+    - {id: 3_3,  cat: Books, desc: "Raw literature"}
+    # Live
+    - {id: 4_0,  cat: TV, desc: "Live Action"}
+    - {id: 4_1,  cat: TV, desc: "Live Action - English"}
+    - {id: 4_2,  cat: TV, desc: "Live Action - Idol/PV"}
+    - {id: 4_3,  cat: TV, desc: "Live Action - Non-English"}
+    - {id: 4_4,  cat: TV, desc: "Live Action - Raw"}
+    # Pics
+    - {id: 5_0,  cat: Other, desc: "Pictures"}
+    - {id: 5_1,  cat: Other, desc: "Pictures  - Graphics"}
+    - {id: 5_2,  cat: Other, desc: "Pictures  - Photos"}
+    # Software
+    - {id: 6_0,  cat: PC, desc: "Software"}
+    - {id: 6_1,  cat: PC/ISO, desc: "Applications"}
+    - {id: 6_2,  cat: PC/Games, desc: "Games"}
+  modes:
+    search: [q]
+    tv-search: [q]
+    movie-search: [q]
 
-  search:
-    paths:
-      - path: /
-    inputs:
-      q: "{{ .Keywords }}"
-      f: "{{ .Config.filter-id }}"
-      c: "{{ .Config.cat-id }}"
-      s: "{{ .Config.sort }}"
-      o: "{{ .Config.type }}"
+search:
+  paths:
+    - path: /
+  inputs:
+    q: "{{ .Keywords }}"
+    f: "{{ .Config.filter-id }}"
+    c: "{{ .Config.cat-id }}"
+    s: "{{ .Config.sort }}"
+    o: "{{ .Config.type }}"
 
-    rows:
-      selector: tr.default,tr.danger,tr.success
+  rows:
+    selector: tr.default,tr.danger,tr.success
 
-    fields:
-      category:
-        selector: td:nth-child(1) a
-        attribute: href
-        filters:
-          - name: split
-            args: [ "=", -1 ]
-      title:
-        selector: td:nth-child(2) a:last-of-type
-      title:
-        selector: td:nth-child(2) a:last-of-type:contains("[PuyaSubs!] ")
-        optional: true
-        filters:
-          - name: append
-            args: " [Spanish]"
-      details:
-        selector: td:nth-child(2) a:last-of-type
-        attribute: href
-      download:
-        selector: td:nth-child(3) a[href$=".torrent"]
-        attribute: href
-        optional: true
-      magnet:
-        selector: td:nth-child(3) a[href^="magnet:?"]
-        attribute: href
-      size:
-        selector: td:nth-child(4)
-      date:
-        selector: td:nth-child(5)
-        filters:
-          - name: append
-            args: " -00"
-          - name: dateparse
-            args: "2006-01-02 15:04 -07"
-      seeders:
-        selector: td:nth-child(6):empty
-        optional: true
-        filters:
-          - name: append
-            args: 0
-      seeders:
-        selector: td:nth-child(6):not(:empty)
-        optional: true
-      leechers:
-        selector: td:nth-child(7):empty
-        optional: true
-        filters:
-          - name: append
-            args: 0
-      leechers:
-        selector: td:nth-child(7):not(:empty)
-        optional: true
-      grabs:
-        selector: td:nth-child(8):empty
-        optional: true
-        filters:
-          - name: append
-            args: 0
-      grabs:
-        selector: td:nth-child(8):not(:empty)
-        optional: true
-      downloadvolumefactor:
-        text: 0
-      uploadvolumefactor:
-        text: 1
+  fields:
+    category:
+      selector: td:nth-child(1) a
+      attribute: href
+      filters:
+        - name: split
+          args: [ "=", -1 ]
+    title:
+      selector: td:nth-child(2) a:last-of-type
+    title:
+      selector: td:nth-child(2) a:last-of-type:contains("[PuyaSubs!] ")
+      optional: true
+      filters:
+        - name: append
+          args: " [Spanish]"
+    details:
+      selector: td:nth-child(2) a:last-of-type
+      attribute: href
+    download:
+      selector: td:nth-child(3) a[href$=".torrent"]
+      attribute: href
+      optional: true
+    magnet:
+      selector: td:nth-child(3) a[href^="magnet:?"]
+      attribute: href
+    size:
+      selector: td:nth-child(4)
+    date:
+      selector: td:nth-child(5)
+      filters:
+        - name: append
+          args: " -00"
+        - name: dateparse
+          args: "2006-01-02 15:04 -07"
+    seeders:
+      selector: td:nth-child(6):empty
+      optional: true
+      filters:
+        - name: append
+          args: 0
+    seeders:
+      selector: td:nth-child(6):not(:empty)
+      optional: true
+    leechers:
+      selector: td:nth-child(7):empty
+      optional: true
+      filters:
+        - name: append
+          args: 0
+    leechers:
+      selector: td:nth-child(7):not(:empty)
+      optional: true
+    grabs:
+      selector: td:nth-child(8):empty
+      optional: true
+      filters:
+        - name: append
+          args: 0
+    grabs:
+      selector: td:nth-child(8):not(:empty)
+      optional: true
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
 # engine n/a

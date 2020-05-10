@@ -1,138 +1,138 @@
 ---
-  site: diablotorrent
-  name: Diablo Torrent
-  description: " Diablo Torrent is a Hungarian Private site for TV / MOVIES / GENERAL"
-  language: hu-hu
-  type: private
-  encoding: UTF-8
-  links:
-    - https://diablotorrent.net/
+site: diablotorrent
+name: Diablo Torrent
+description: " Diablo Torrent is a Hungarian Private site for TV / MOVIES / GENERAL"
+language: hu-hu
+type: private
+encoding: UTF-8
+links:
+  - https://diablotorrent.net/
 
-  caps:
-    categorymappings:
-      - {id: 49, cat: Movies/SD, desc: "film / Cam"}
-      - {id: 21, cat: Movies/SD, desc: "film / Cam [magyar]"}
-      - {id: 6, cat: Movies/SD, desc: "film / DVDRip/XviD"}
-      - {id: 5, cat: Movies/SD, desc: "film / DVDRip/XviD [magyar]"}
-      - {id: 32, cat: Movies/SD, desc: "film / BDRip/XviD"}
-      - {id: 33, cat: Movies/SD, desc: "film / BDRip/XviD [magyar]"}
-      - {id: 50, cat: Movies/SD, desc: "film / BDRip/x264"}
-      - {id: 51, cat: Movies/SD, desc: "film / BDRip/x264 [magyar]"}
-      - {id: 4, cat: Movies/DVD, desc: "film / DVD-R"}
-      - {id: 3, cat: Movies/DVD, desc: "film / DVD-R [magyar]"}
-      - {id: 45, cat: Movies/DVD, desc: "film / DVD9"}
-      - {id: 46, cat: Movies/DVD, desc: "film / DVD9 [magyar]"}
-      - {id: 30, cat: Movies/HD, desc: "film / HD"}
-      - {id: 31, cat: Movies/HD, desc: "film / HD [magyar]"}
-      - {id: 48, cat: Movies/BluRay, desc: "film / Bluray"}
-      - {id: 47, cat: Movies/BluRay, desc: "film / Bluray [magyar]"}
-      - {id: 10, cat: TV/SD, desc: "Sorozat / XviD"}
-      - {id: 11, cat: TV/SD, desc: "Sorozat / XviD [magyar]"}
-      - {id: 43, cat: TV/SD, desc: "Sorozat / DVD-R"}
-      - {id: 41, cat: TV/SD, desc: "Sorozat / DVD-R [magyar]"}
-      - {id: 44, cat: TV/HD, desc: "Sorozat / HD"}
-      - {id: 42, cat: TV/HD, desc: "Sorozat / HD [magyar]"}
-      - {id: 8, cat: Audio/MP3, desc: "Zene / MP3"}
-      - {id: 9, cat: Audio/MP3, desc: "Zene / MP3 [magyar]"}
-      - {id: 38, cat: Audio/Lossless, desc: "Zene / Lossless"}
-      - {id: 37, cat: Audio/Lossless, desc: "Zene / Lossless [magyar]"}
-      - {id: 27, cat: Other, desc: "Egyéb / !! Feltöltési segédlet !!"}
-      - {id: 29, cat: Other, desc: "Egyéb / Képek"}
-      - {id: 12, cat: PC/Games, desc: "Játék / PC"}
-      - {id: 14, cat: Console/PS4, desc: "Játék / PS"}
-      - {id: 39, cat: Console/Xbox, desc: "Játék / Xbox"}
-      - {id: 40, cat: Console/Other, desc: "Játék / Egyéb"}
-      - {id: 16, cat: PC/ISO, desc: "Programok / PC"}
-      - {id: 24, cat: PC/Phone-Other, desc: "Programok / Mobil"}
-      - {id: 53, cat: PC/0day, desc: "Programok / Egyéb"}
-      - {id: 17, cat: XXX/Xvid, desc: "Pornó / XviD"}
-      - {id: 34, cat: XXX/DVD, desc: "Pornó / DVD-R"}
-      - {id: 35, cat: XXX, desc: "Pornó / HD"}
-      - {id: 36, cat: XXX, desc: "Pornó / Képek"}
-      - {id: 20, cat: Books, desc: "E-Book / Magyar"}
-      - {id: 52, cat: Books, desc: "E-Book / Egyéb"}
+caps:
+  categorymappings:
+    - {id: 49, cat: Movies/SD, desc: "film / Cam"}
+    - {id: 21, cat: Movies/SD, desc: "film / Cam [magyar]"}
+    - {id: 6, cat: Movies/SD, desc: "film / DVDRip/XviD"}
+    - {id: 5, cat: Movies/SD, desc: "film / DVDRip/XviD [magyar]"}
+    - {id: 32, cat: Movies/SD, desc: "film / BDRip/XviD"}
+    - {id: 33, cat: Movies/SD, desc: "film / BDRip/XviD [magyar]"}
+    - {id: 50, cat: Movies/SD, desc: "film / BDRip/x264"}
+    - {id: 51, cat: Movies/SD, desc: "film / BDRip/x264 [magyar]"}
+    - {id: 4, cat: Movies/DVD, desc: "film / DVD-R"}
+    - {id: 3, cat: Movies/DVD, desc: "film / DVD-R [magyar]"}
+    - {id: 45, cat: Movies/DVD, desc: "film / DVD9"}
+    - {id: 46, cat: Movies/DVD, desc: "film / DVD9 [magyar]"}
+    - {id: 30, cat: Movies/HD, desc: "film / HD"}
+    - {id: 31, cat: Movies/HD, desc: "film / HD [magyar]"}
+    - {id: 48, cat: Movies/BluRay, desc: "film / Bluray"}
+    - {id: 47, cat: Movies/BluRay, desc: "film / Bluray [magyar]"}
+    - {id: 10, cat: TV/SD, desc: "Sorozat / XviD"}
+    - {id: 11, cat: TV/SD, desc: "Sorozat / XviD [magyar]"}
+    - {id: 43, cat: TV/SD, desc: "Sorozat / DVD-R"}
+    - {id: 41, cat: TV/SD, desc: "Sorozat / DVD-R [magyar]"}
+    - {id: 44, cat: TV/HD, desc: "Sorozat / HD"}
+    - {id: 42, cat: TV/HD, desc: "Sorozat / HD [magyar]"}
+    - {id: 8, cat: Audio/MP3, desc: "Zene / MP3"}
+    - {id: 9, cat: Audio/MP3, desc: "Zene / MP3 [magyar]"}
+    - {id: 38, cat: Audio/Lossless, desc: "Zene / Lossless"}
+    - {id: 37, cat: Audio/Lossless, desc: "Zene / Lossless [magyar]"}
+    - {id: 27, cat: Other, desc: "Egyéb / !! Feltöltési segédlet !!"}
+    - {id: 29, cat: Other, desc: "Egyéb / Képek"}
+    - {id: 12, cat: PC/Games, desc: "Játék / PC"}
+    - {id: 14, cat: Console/PS4, desc: "Játék / PS"}
+    - {id: 39, cat: Console/Xbox, desc: "Játék / Xbox"}
+    - {id: 40, cat: Console/Other, desc: "Játék / Egyéb"}
+    - {id: 16, cat: PC/ISO, desc: "Programok / PC"}
+    - {id: 24, cat: PC/Phone-Other, desc: "Programok / Mobil"}
+    - {id: 53, cat: PC/0day, desc: "Programok / Egyéb"}
+    - {id: 17, cat: XXX/Xvid, desc: "Pornó / XviD"}
+    - {id: 34, cat: XXX/DVD, desc: "Pornó / DVD-R"}
+    - {id: 35, cat: XXX, desc: "Pornó / HD"}
+    - {id: 36, cat: XXX, desc: "Pornó / Képek"}
+    - {id: 20, cat: Books, desc: "E-Book / Magyar"}
+    - {id: 52, cat: Books, desc: "E-Book / Egyéb"}
 
 
-    modes:
-      search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
-      music-search: [q]
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
 
-  login:
-    path: login
-    submitpath: login/run
-    method: form
-    inputs:
-      referer: ""
-      nev: "{{ .Config.username }}"
-      jelszo: "{{ .Config.password }}"
-      fsv: "0"
-      login: "1"
-      belepes: "1"
-      rhash: "123"
-    test:
-      path: browse
+login:
+  path: login
+  submitpath: login/run
+  method: form
+  inputs:
+    referer: ""
+    nev: "{{ .Config.username }}"
+    jelszo: "{{ .Config.password }}"
+    fsv: "0"
+    login: "1"
+    belepes: "1"
+    rhash: "123"
+  test:
+    path: browse
 
-  search:
-    paths:
-      - path: browse
-    inputs:
-      $raw: "{{range .Categories}}category[]={{.}}&{{end}}"
-      search: "{{ .Keywords }}"
-      s_alapjan: "7"
-      s_sorrend: "desc"
-    rows:
-      selector: div.torrent_row, div.torrent_details
-      after: 1
-    fields:
-      download:
-        selector: div.box_download > a
-        attribute: href
-      title:
-        selector: a.box_name_a > span
-      details:
-        selector: a.box_name_a
-        attribute: href
-      category:
-        selector: div.box_category > img
-        attribute: onclick
-        filters:
-          - name: regexp
-            args: "category\\((\\d+),\\d+\\);"
-      seeders:
-        selector: div.box_seeders
-      leechers:
-        selector: div.box_leechers
-      grabs:
-        selector: div.box_completed
-      files:
-        selector: div.box_files
-      date:
-        selector: div.box_uploaded
-        filters:
-          - name: append
-            args: " +01:00"
-          - name: dateparse
-            args: "2006-01-0215:04:05 -07:00"
-      size:
-        selector: div.box_size
-      banner:
-        optional: true
-        selector: a.cover_a
-        attribute: title
-        filters:
-          - name: regexp
-            args: src='(.*?)'
-      imdb:
-        optional: true
-        selector: a[href*="www.imdb.com/title/tt"]
-        attribute: href
-      description:
-        selector: div.torrent_row_magyarcim
-        remove: span.torrent_row_new
-      downloadvolumefactor:
-        text: "0"
-      uploadvolumefactor:
-        case:
-          "*": "1"
+search:
+  paths:
+    - path: browse
+  inputs:
+    $raw: "{{range .Categories}}category[]={{.}}&{{end}}"
+    search: "{{ .Keywords }}"
+    s_alapjan: "7"
+    s_sorrend: "desc"
+  rows:
+    selector: div.torrent_row, div.torrent_details
+    after: 1
+  fields:
+    download:
+      selector: div.box_download > a
+      attribute: href
+    title:
+      selector: a.box_name_a > span
+    details:
+      selector: a.box_name_a
+      attribute: href
+    category:
+      selector: div.box_category > img
+      attribute: onclick
+      filters:
+        - name: regexp
+          args: "category\\((\\d+),\\d+\\);"
+    seeders:
+      selector: div.box_seeders
+    leechers:
+      selector: div.box_leechers
+    grabs:
+      selector: div.box_completed
+    files:
+      selector: div.box_files
+    date:
+      selector: div.box_uploaded
+      filters:
+        - name: append
+          args: " +01:00"
+        - name: dateparse
+          args: "2006-01-0215:04:05 -07:00"
+    size:
+      selector: div.box_size
+    banner:
+      optional: true
+      selector: a.cover_a
+      attribute: title
+      filters:
+        - name: regexp
+          args: src='(.*?)'
+    imdb:
+      optional: true
+      selector: a[href*="www.imdb.com/title/tt"]
+      attribute: href
+    description:
+      selector: div.torrent_row_magyarcim
+      remove: span.torrent_row_new
+    downloadvolumefactor:
+      text: "0"
+    uploadvolumefactor:
+      case:
+        "*": "1"

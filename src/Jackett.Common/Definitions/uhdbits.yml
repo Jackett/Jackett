@@ -1,144 +1,144 @@
 ---
-  site: uhdbits
-  name: UHDBits
-  description: "A vietnamese general tracker"
-  language: en-us
-  type: private
-  encoding: UTF-8
-  links:
-    - https://uhdbits.org/
+site: uhdbits
+name: UHDBits
+description: "A vietnamese general tracker"
+language: en-us
+type: private
+encoding: UTF-8
+links:
+  - https://uhdbits.org/
 
-  caps:
-    categories:
-      1: Movies
-      2: Audio
-      3: TV
-      4: Audio
-      5: PC
-      6: Other
+caps:
+  categories:
+    1: Movies
+    2: Audio
+    3: TV
+    4: Audio
+    5: PC
+    6: Other
 
-    modes:
-      search: [q, imdbid]
-      tv-search: [q, season, ep, imdbid]
-      movie-search: [q, imdbid]
-      music-search: [q]
+  modes:
+    search: [q, imdbid]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
+    music-search: [q]
 
-  login:
-    path: login.php
-    form: form.auth_form
-    inputs:
-      username: "{{ .Config.username }}"
-      password: "{{ .Config.password }}"
-      keeplogged: "1"
-    error:
-    - selector: .auth_form > .warning
-      message:
-        selector: ".auth_form > .warning"
-    test:
-      path: top10.php
-
-  ratio:
+login:
+  path: login.php
+  form: form.auth_form
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    keeplogged: "1"
+  error:
+  - selector: .auth_form > .warning
+    message:
+      selector: ".auth_form > .warning"
+  test:
     path: top10.php
-    selector: span.r99
 
-  search:
-    paths:
-      - path: torrents.php
-    inputs:
-      $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
-      searchstr: "{{ if .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-      imdbid: "{{ .Query.IMDBIDShort }}"
-      tags_type: 1
-      order_by: time
-      order_way: desc
-      action: advanced
-      searchsubmit: 1
+ratio:
+  path: top10.php
+  selector: span.r99
 
-    rows:
-      selector: table#torrent_table > tbody > tr.torrent
-    fields:
-      # note: there are optinal extra colums
-      download:
-        selector: a[title="Download"]
-        attribute: href
-        filters:
-          - name: replace
-            args: ["\t", " "]
-      title:
-        selector: div.group_info
-        remove: span, div.tags
-        filters:
-          - name: replace
-            args: ["\t\t\t\t", " "]
-          - name: replace
-            args: [" / Free", ""]
-          - name: replace
-            args: [" / ViE", ""]
-          - name: replace
-            args: [" / User", ""]
-          - name: replace
-            args: [" / Exclusive!", ""]
-          - name: replace
-            args: [" / ↓25%", ""]
-          - name: replace
-            args: [" / ↓50%", ""]
-          - name: replace
-            args: [" / ↓75%", ""]
-          - name: replace
-            args: [" / 2x 50%", ""]
-          - name: replace
-            args: [" / 2x Free", ""]
-          - name: replace
-            args: [" / 2x", ""]
-      downloadvolumefactor:
-        case:
-          "strong.blink_me:contains(\"Free\")": 0
-          "strong.blink_me:contains(\"50\")": 0.5
-          "strong.blink_me:contains(\"25\")": 0.75
-          "strong.blink_me:contains(\"75\")": 0.25
-          "*": 1
-      uploadvolumefactor:
-        case:
-          "strong.blink_me:contains(\"2x\")": 2
-          "*": 1
-      category:
-        selector: a[href^="torrents.php?filter_cat"]
-        attribute: href
-        filters:
-          - name: regexp
-            args: "\\[(\\d+?)\\]"
-      comments:
-        selector: a.torrent_name
-        attribute: href
-        filters:
-          - name: replace
-            args: ["\t", " "]
-      details:
-        selector: a.torrent_name
-        attribute: href
-        filters:
-          - name: replace
-            args: ["\t", " "]
-          - name: regexp
-            args: (.*)#torrent\d+$
-      size:
-        selector: td[class="number_column nobr"]
-      grabs:
-        selector: td[class="number_column nobr"] ~ td
-      files:
-        selector: td:nth-child(3)
-      seeders:
-        selector: td[class="number_column nobr"] ~ td ~ td
-      leechers:
-        selector: td[class="number_column nobr"] ~ td ~ td ~ td
-      date:
-        selector: td:nth-child(5) > span[title]
-        attribute: title
-        filters:
-          - name: replace
-            args: [",",""]
-          - name: append
-            args: " +07:00"
-          - name: dateparse
-            args: "Jan 02 2006 15:04 -07:00"
+search:
+  paths:
+    - path: torrents.php
+  inputs:
+    $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
+    searchstr: "{{ if .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    imdbid: "{{ .Query.IMDBIDShort }}"
+    tags_type: 1
+    order_by: time
+    order_way: desc
+    action: advanced
+    searchsubmit: 1
+
+  rows:
+    selector: table#torrent_table > tbody > tr.torrent
+  fields:
+    # note: there are optinal extra colums
+    download:
+      selector: a[title="Download"]
+      attribute: href
+      filters:
+        - name: replace
+          args: ["\t", " "]
+    title:
+      selector: div.group_info
+      remove: span, div.tags
+      filters:
+        - name: replace
+          args: ["\t\t\t\t", " "]
+        - name: replace
+          args: [" / Free", ""]
+        - name: replace
+          args: [" / ViE", ""]
+        - name: replace
+          args: [" / User", ""]
+        - name: replace
+          args: [" / Exclusive!", ""]
+        - name: replace
+          args: [" / ↓25%", ""]
+        - name: replace
+          args: [" / ↓50%", ""]
+        - name: replace
+          args: [" / ↓75%", ""]
+        - name: replace
+          args: [" / 2x 50%", ""]
+        - name: replace
+          args: [" / 2x Free", ""]
+        - name: replace
+          args: [" / 2x", ""]
+    downloadvolumefactor:
+      case:
+        "strong.blink_me:contains(\"Free\")": 0
+        "strong.blink_me:contains(\"50\")": 0.5
+        "strong.blink_me:contains(\"25\")": 0.75
+        "strong.blink_me:contains(\"75\")": 0.25
+        "*": 1
+    uploadvolumefactor:
+      case:
+        "strong.blink_me:contains(\"2x\")": 2
+        "*": 1
+    category:
+      selector: a[href^="torrents.php?filter_cat"]
+      attribute: href
+      filters:
+        - name: regexp
+          args: "\\[(\\d+?)\\]"
+    comments:
+      selector: a.torrent_name
+      attribute: href
+      filters:
+        - name: replace
+          args: ["\t", " "]
+    details:
+      selector: a.torrent_name
+      attribute: href
+      filters:
+        - name: replace
+          args: ["\t", " "]
+        - name: regexp
+          args: (.*)#torrent\d+$
+    size:
+      selector: td[class="number_column nobr"]
+    grabs:
+      selector: td[class="number_column nobr"] ~ td
+    files:
+      selector: td:nth-child(3)
+    seeders:
+      selector: td[class="number_column nobr"] ~ td ~ td
+    leechers:
+      selector: td[class="number_column nobr"] ~ td ~ td ~ td
+    date:
+      selector: td:nth-child(5) > span[title]
+      attribute: title
+      filters:
+        - name: replace
+          args: [",",""]
+        - name: append
+          args: " +07:00"
+        - name: dateparse
+          args: "Jan 02 2006 15:04 -07:00"
 # engine tbd

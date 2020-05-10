@@ -1,118 +1,118 @@
 ---
-  site: hdme
-  name: HDME
-  description: "HDME is a Private Torrent Tracker for HD MOVIES / TV / GENERAL"
-  language: en-us
-  type: private
-  encoding: windows-1252
-  links:
-    - https://hdme.eu/
+site: hdme
+name: HDME
+description: "HDME is a Private Torrent Tracker for HD MOVIES / TV / GENERAL"
+language: en-us
+type: private
+encoding: windows-1252
+links:
+  - https://hdme.eu/
 
-  caps:
-    categorymappings:
-      - {id: 24, cat: TV/Anime, desc: "Anime"}
-      - {id: 25, cat: PC/0day, desc: "Appz"}
-      - {id: 47, cat: Movies/HD, desc: "AVCHD"}
-      - {id: 26, cat: Movies/BluRay , desc: "Bluray"}
-      - {id: 54, cat: Movies/HD, desc: "dbREMUX"}
-      - {id: 41, cat: Movies/HD, desc: "Documentaries"}
-      - {id: 50, cat: Movies/HD, desc: "FourGHD"}
-      - {id: 44, cat: Movies/HD, desc: "HDME"}
-      - {id: 28, cat: Audio/Lossless, desc: "HQ Music"}
-      - {id: 48, cat: Movies/HD, desc: "iCandy"}
-      - {id: 45, cat: Movies/HD, desc: "INtL"}
-      - {id: 29, cat: Other, desc: "Misc"}
-      - {id: 49, cat: PC/Phone-Other, desc: "Mobile"}
-      - {id: 30, cat: Movies/HD, desc: "Movie 1080i"}
-      - {id: 31, cat: Movies/HD, desc: "Movie 1080p"}
-      - {id: 32, cat: Movies/HD, desc: "Movie 720p"}
-      - {id: 33, cat: Audio/Video, desc: "Music Videos"}
-      - {id: 34, cat: TV, desc: "Packs"}
-      - {id: 53, cat: Movies/HD, desc: "Remux"}
-      - {id: 56, cat: Movies/HD, desc: "RUXi"}
-      - {id: 55, cat: Movies/HD, desc: "SiNiSteR"}
-      - {id: 36, cat: TV/Sport, desc: "Sports"}
-      - {id: 37, cat: TV/HD, desc: "TV Series 1080i"}
-      - {id: 38, cat: TV/HD, desc: "TV Series 1080p"}
-      - {id: 39, cat: TV/HD, desc: "TV Series 720p"}
-      - {id: 57, cat: Movies/UHD, desc: "UHD 2160p"}
-      - {id: 40, cat: XXX, desc: "XXX"}
+caps:
+  categorymappings:
+    - {id: 24, cat: TV/Anime, desc: "Anime"}
+    - {id: 25, cat: PC/0day, desc: "Appz"}
+    - {id: 47, cat: Movies/HD, desc: "AVCHD"}
+    - {id: 26, cat: Movies/BluRay , desc: "Bluray"}
+    - {id: 54, cat: Movies/HD, desc: "dbREMUX"}
+    - {id: 41, cat: Movies/HD, desc: "Documentaries"}
+    - {id: 50, cat: Movies/HD, desc: "FourGHD"}
+    - {id: 44, cat: Movies/HD, desc: "HDME"}
+    - {id: 28, cat: Audio/Lossless, desc: "HQ Music"}
+    - {id: 48, cat: Movies/HD, desc: "iCandy"}
+    - {id: 45, cat: Movies/HD, desc: "INtL"}
+    - {id: 29, cat: Other, desc: "Misc"}
+    - {id: 49, cat: PC/Phone-Other, desc: "Mobile"}
+    - {id: 30, cat: Movies/HD, desc: "Movie 1080i"}
+    - {id: 31, cat: Movies/HD, desc: "Movie 1080p"}
+    - {id: 32, cat: Movies/HD, desc: "Movie 720p"}
+    - {id: 33, cat: Audio/Video, desc: "Music Videos"}
+    - {id: 34, cat: TV, desc: "Packs"}
+    - {id: 53, cat: Movies/HD, desc: "Remux"}
+    - {id: 56, cat: Movies/HD, desc: "RUXi"}
+    - {id: 55, cat: Movies/HD, desc: "SiNiSteR"}
+    - {id: 36, cat: TV/Sport, desc: "Sports"}
+    - {id: 37, cat: TV/HD, desc: "TV Series 1080i"}
+    - {id: 38, cat: TV/HD, desc: "TV Series 1080p"}
+    - {id: 39, cat: TV/HD, desc: "TV Series 720p"}
+    - {id: 57, cat: Movies/UHD, desc: "UHD 2160p"}
+    - {id: 40, cat: XXX, desc: "XXX"}
 
-    modes:
-      search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
-      music-search: [q]
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
 
-  login:
-    path: takelogin.php
-    method: post
-    form: form
-    inputs:
-      username: "{{ .Config.username }}"
-      password: "{{ .Config.password }}"
-    error:
-      - selector: td.embedded
-        message:
-          selector: td.text
-    test:
-      path: my.php
-
-  ratio:
+login:
+  path: takelogin.php
+  method: post
+  form: form
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: td.embedded
+      message:
+        selector: td.text
+  test:
     path: my.php
-    selector: span.smallfont > font
-    filters:
-      - name: regexp
-        args: "Ratio:(.+?)Uploaded"
-      - name: replace
-        args: [",", ""]
 
-  search:
-    paths:
-      - path: browse.php
-    inputs:
-      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-      search: "{{ .Keywords }}"
-      incldead: "1"
-      blah: "0"
-    rows:
-      selector: table[width="100%"] > tbody > tr:has(td.bottom[background="_images/bg_torrent.jpg"])
-    fields:
-      category:
-        selector: td:nth-child(2) a
-        attribute: href
-        filters:
-          - name: querystring
-            args: cat
-      title:
-        selector: td:nth-child(3) > a
-        attribute: title
-      comments:
-        selector: td:nth-child(3) > a
-        attribute: href
-      download:
-        selector: td:nth-child(11) > a
-        attribute: href
-        filters:
-          - name: prepend
-            args: "{{ .Config.sitelink }}"
-          - name: replace # https download links are redirected to http causing invalid cookies => invalid passkeys
-            args: ["https", "http"]
-      size:
-        selector: td:nth-child(6)
-        remove: br
-      date:
-        selector: td:nth-child(3)
-        filters:
-          - name: regexp
-            args: "Added: (.+?)\n"
-      seeders:
-        selector: td:nth-child(8)
-      leechers:
-        selector: td:nth-child(9)
-      downloadvolumefactor:
-        case:
-          "font:contains(\"(FreeLeech)\")": "0"
-          "*": "1"
-      uploadvolumefactor:
-        text: "1"
+ratio:
+  path: my.php
+  selector: span.smallfont > font
+  filters:
+    - name: regexp
+      args: "Ratio:(.+?)Uploaded"
+    - name: replace
+      args: [",", ""]
+
+search:
+  paths:
+    - path: browse.php
+  inputs:
+    $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+    search: "{{ .Keywords }}"
+    incldead: "1"
+    blah: "0"
+  rows:
+    selector: table[width="100%"] > tbody > tr:has(td.bottom[background="_images/bg_torrent.jpg"])
+  fields:
+    category:
+      selector: td:nth-child(2) a
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: td:nth-child(3) > a
+      attribute: title
+    comments:
+      selector: td:nth-child(3) > a
+      attribute: href
+    download:
+      selector: td:nth-child(11) > a
+      attribute: href
+      filters:
+        - name: prepend
+          args: "{{ .Config.sitelink }}"
+        - name: replace # https download links are redirected to http causing invalid cookies => invalid passkeys
+          args: ["https", "http"]
+    size:
+      selector: td:nth-child(6)
+      remove: br
+    date:
+      selector: td:nth-child(3)
+      filters:
+        - name: regexp
+          args: "Added: (.+?)\n"
+    seeders:
+      selector: td:nth-child(8)
+    leechers:
+      selector: td:nth-child(9)
+    downloadvolumefactor:
+      case:
+        "font:contains(\"(FreeLeech)\")": "0"
+        "*": "1"
+    uploadvolumefactor:
+      text: "1"

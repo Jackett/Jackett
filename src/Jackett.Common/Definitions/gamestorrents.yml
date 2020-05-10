@@ -1,83 +1,83 @@
 ---
-  site: gamestorrents
-  name: GamesTorrents
-  description: "GamesTorrents is a SPANISH Public tracker for GAMES"
-  language: es-es
-  type: public
-  encoding: UTF-8
-  links:
-    - https://www.gamestorrents.nu/
-  legacylinks:
-    - https://www.gamestorrents.com/
-    - https://www.gamestorrents.tv/
+site: gamestorrents
+name: GamesTorrents
+description: "GamesTorrents is a SPANISH Public tracker for GAMES"
+language: es-es
+type: public
+encoding: UTF-8
+links:
+  - https://www.gamestorrents.nu/
+legacylinks:
+  - https://www.gamestorrents.com/
+  - https://www.gamestorrents.tv/
 
-  caps:
-    categories:
-      "juegos-pc": PC/Games
-      "juegos-psp": Console/PSP
-      "juegos-ps3": Console/PS3
-      "juegos-ps4": Console/PS4
-      "juegos-ps2": Console/PS Vita
-      "juegos-mac": PC/Mac
-      "juegos-xbox360": Console/Xbox 360
-      "juegos-wii": Console/Wii
-      "juegos-nds": Console/NDS
+caps:
+  categories:
+    "juegos-pc": PC/Games
+    "juegos-psp": Console/PSP
+    "juegos-ps3": Console/PS3
+    "juegos-ps4": Console/PS4
+    "juegos-ps2": Console/PS Vita
+    "juegos-mac": PC/Mac
+    "juegos-xbox360": Console/Xbox 360
+    "juegos-wii": Console/Wii
+    "juegos-nds": Console/NDS
 
-    modes:
-      search: [q]
+  modes:
+    search: [q]
 
-  settings: []
+settings: []
 
-  download:
-    selector: a#download_torrent
-    attribute: href
+download:
+  selector: a#download_torrent
+  attribute: href
 
-  search:
-    paths:
-      - path: /
-    inputs:
-      s: "{{ .Keywords }}"
+search:
+  paths:
+    - path: /
+  inputs:
+    s: "{{ .Keywords }}"
 
-    rows:
-      selector: table.metalion > tbody > tr
+  rows:
+    selector: table.metalion > tbody > tr
+    filters:
+      - name: andmatch
+
+  fields:
+    title:
+      selector: td:nth-child(1) a
+    details:
+      selector: td:nth-child(1) a
+      attribute: href
+    category:
+      selector: td:nth-child(1) a
+      attribute: href
       filters:
-        - name: andmatch
-
-    fields:
-      title:
-        selector: td:nth-child(1) a
-      details:
-        selector: td:nth-child(1) a
-        attribute: href
-      category:
-        selector: td:nth-child(1) a
-        attribute: href
-        filters:
-          - name: split
-            args: ["/", 3]
-      download:
-        selector: td:nth-child(1) a
-        attribute: href
-      date:
-        selector: td:nth-child(2)
-        filters:
-          - name: dateparse
-            args: "02-01-2006"
-      size:
-        selector: td:nth-child(3)
-        filters:
-          - name: replace
-            args: ["Undefined", "0 B"]
-          - name: replace
-            args: ["s", ""]
-      description:
-        selector: td:nth-child(4)
-      seeders:
-        text: 1
-      leechers:
-        text: 1
-      downloadvolumefactor:
-        text: 0
-      uploadvolumefactor:
-        text: 1
+        - name: split
+          args: ["/", 3]
+    download:
+      selector: td:nth-child(1) a
+      attribute: href
+    date:
+      selector: td:nth-child(2)
+      filters:
+        - name: dateparse
+          args: "02-01-2006"
+    size:
+      selector: td:nth-child(3)
+      filters:
+        - name: replace
+          args: ["Undefined", "0 B"]
+        - name: replace
+          args: ["s", ""]
+    description:
+      selector: td:nth-child(4)
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
 # engine n/a

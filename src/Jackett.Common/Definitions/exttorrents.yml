@@ -1,115 +1,115 @@
 ---
-  site: exttorrents
-  name: EXT Torrents
-  description: "EXT Torrents is a Public torrent site for MOVIES / TV / GENERAL"
-  language: en-us
-  type: public
-  encoding: UTF-8
-  links:
-    - https://ext.to/
-    - https://t.extto.com/
-  legacylinks:
-    - https://ext.unblockninja.com/ # currently redirects to https://ext.to/
+site: exttorrents
+name: EXT Torrents
+description: "EXT Torrents is a Public torrent site for MOVIES / TV / GENERAL"
+language: en-us
+type: public
+encoding: UTF-8
+links:
+  - https://ext.to/
+  - https://t.extto.com/
+legacylinks:
+  - https://ext.unblockninja.com/ # currently redirects to https://ext.to/
 
-  caps:
-    categories:
-      "/anime/": TV/Anime
-      "anime/english-translated/": TV/Anime
-      "/applications/": PC
-      "/applications/android/": PC/Phone-Android
-      "/applications/ios/": PC/Phone-IOS
-      "/applications/linux/": PC
-      "/applications/mac/": PC/Mac
-      "/applications/other-applications/": PC/Phone-Other
-      "/applications/windows/": PC/0day
-      "/books/": Books
-      "/books/audio-books/": Audio/Audiobook
-      "/books/comics/": Books/Comics
-      "/books/ebooks/": Books/Ebook
-      "/games/": PC/Games
-      "/games/nds/": Console/NDS
-      "/games/other-games/": Console/Other
-      "/games/pc-games/": PC/Games
-      "/games/ps3/": Console/PS3
-      "/games/ps4/": Console/PS4
-      "/games/psp/": Console/PSP
-      "/games/wii/": Console/Wii
-      "/games/xbox360/": Console/Xbox 360
-      "/movies/": Movies
-      "/movies/3d-movies/": Movies/3D
-      "/movies/bollywood/": Movies
-      "/movies/dubbed-movies/": Movies
-      "/movies/highres-movies/": Movies/HD
-      "/movies/mp4/": Movies
-      "/movies/ultrahd/": Movies/UHD
-      "/music/": Audio
-      "/music/aac/": Audio
-      "/music/lossless/": Audio/Lossless
-      "/music/mp3/": Audio/MP3
-      "/music/other-music/": Audio/Other
-      "/music/radio-shows/": Audio
-      "/other/": Other
-      "/tv/": TV
+caps:
+  categories:
+    "/anime/": TV/Anime
+    "anime/english-translated/": TV/Anime
+    "/applications/": PC
+    "/applications/android/": PC/Phone-Android
+    "/applications/ios/": PC/Phone-IOS
+    "/applications/linux/": PC
+    "/applications/mac/": PC/Mac
+    "/applications/other-applications/": PC/Phone-Other
+    "/applications/windows/": PC/0day
+    "/books/": Books
+    "/books/audio-books/": Audio/Audiobook
+    "/books/comics/": Books/Comics
+    "/books/ebooks/": Books/Ebook
+    "/games/": PC/Games
+    "/games/nds/": Console/NDS
+    "/games/other-games/": Console/Other
+    "/games/pc-games/": PC/Games
+    "/games/ps3/": Console/PS3
+    "/games/ps4/": Console/PS4
+    "/games/psp/": Console/PSP
+    "/games/wii/": Console/Wii
+    "/games/xbox360/": Console/Xbox 360
+    "/movies/": Movies
+    "/movies/3d-movies/": Movies/3D
+    "/movies/bollywood/": Movies
+    "/movies/dubbed-movies/": Movies
+    "/movies/highres-movies/": Movies/HD
+    "/movies/mp4/": Movies
+    "/movies/ultrahd/": Movies/UHD
+    "/music/": Audio
+    "/music/aac/": Audio
+    "/music/lossless/": Audio/Lossless
+    "/music/mp3/": Audio/MP3
+    "/music/other-music/": Audio/Other
+    "/music/radio-shows/": Audio
+    "/other/": Other
+    "/tv/": TV
 
-    modes:
-      search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
-      music-search: [q]
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
 
-  settings:
-    - name: sort
-      type: select
-      label: Sort requested from site
-      default: "age"
-      options:
-        "age": "created"
-        "seed": "seeders"
-        "size": "size"
-    - name: type
-      type: select
-      label: Order requested from site
-      default: "desc"
-      options:
-        "desc": "desc"
-        "asc": "asc"
+settings:
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: "age"
+    options:
+      "age": "created"
+      "seed": "seeders"
+      "size": "size"
+  - name: type
+    type: select
+    label: Order requested from site
+    default: "desc"
+    options:
+      "desc": "desc"
+      "asc": "asc"
 
 
-  download:
-    selector: a[href^="magnet:?xt="]
-    attribute: href
+download:
+  selector: a[href^="magnet:?xt="]
+  attribute: href
 
-  search:
-    paths:
-      - path: "{{ if .Keywords }}search/?order={{ .Config.sort }}&sort={{ .Config.type }}&q={{ .Keywords }}{{ else }}latest/?order={{ .Config.sort }}&sort={{ .Config.type }}{{ end }}"
+search:
+  paths:
+    - path: "{{ if .Keywords }}search/?order={{ .Config.sort }}&sort={{ .Config.type }}&q={{ .Keywords }}{{ else }}latest/?order={{ .Config.sort }}&sort={{ .Config.type }}{{ end }}"
 
-    rows:
-      selector: table.table-striped > tbody > tr
+  rows:
+    selector: table.table-striped > tbody > tr
 
-    fields:
-      category:
-        selector: td:nth-child(1) div div a:last-child
-        attribute: href
-      title:
-        selector: td:nth-child(1) div a
-      details:
-        selector: td:nth-child(1) div a
-        attribute: href
-      download:
-        selector: td:nth-child(1) div a
-        attribute: href
-      size:
-        selector: td:nth-child(2)
-      files:
-        selector: td:nth-child(3)
-      date:
-        selector: td:nth-child(4)
-      seeders:
-        selector: td:nth-child(5)
-      leechers:
-        selector: td:nth-child(6)
-      downloadvolumefactor:
-        text: 0
-      uploadvolumefactor:
-        text: 1
+  fields:
+    category:
+      selector: td:nth-child(1) div div a:last-child
+      attribute: href
+    title:
+      selector: td:nth-child(1) div a
+    details:
+      selector: td:nth-child(1) div a
+      attribute: href
+    download:
+      selector: td:nth-child(1) div a
+      attribute: href
+    size:
+      selector: td:nth-child(2)
+    files:
+      selector: td:nth-child(3)
+    date:
+      selector: td:nth-child(4)
+    seeders:
+      selector: td:nth-child(5)
+    leechers:
+      selector: td:nth-child(6)
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
 # engine n/a

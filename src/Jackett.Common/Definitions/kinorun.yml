@@ -1,171 +1,171 @@
 ---
-  site: kinorun
-  name: Kinorun
-  description: "Kinorun is a RUSSIAN Semi-Private Torrent Tracker for 3X"
-  language: ru-ru
-  type: semi-private
-  encoding: windows-1251
-  links:
-    - http://kinorun.top/ # site does not support https ERR_CONNECTION_TIMED_OUT
+site: kinorun
+name: Kinorun
+description: "Kinorun is a RUSSIAN Semi-Private Torrent Tracker for 3X"
+language: ru-ru
+type: semi-private
+encoding: windows-1251
+links:
+  - http://kinorun.top/ # site does not support https ERR_CONNECTION_TIMED_OUT
 
-  caps:
-    categorymappings:
-    - {id: 9, cat: XXX, desc: "All sex"}
-    - {id: 51, cat: XXX, desc: "Anal Sex"}
-    - {id: 58, cat: XXX, desc: "Asian"}
-    - {id: 63, cat: XXX, desc: "BBW, FAT"}
-    - {id: 45, cat: XXX, desc: "Bdsm"}
-    - {id: 59, cat: XXX, desc: "Big tits"}
-    - {id: 66, cat: XXX, desc: "Black (Ebony)"}
-    - {id: 73, cat: XXX, desc: "Bukkake"}
-    - {id: 46, cat: XXX, desc: "Copro, Scat"}
-    - {id: 47, cat: XXX, desc: "Documentary"}
-    - {id: 70, cat: XXX, desc: "Fisting"}
-    - {id: 38, cat: XXX, desc: "Gay (homosexual)"}
-    - {id: 42, cat: XXX, desc: "Hentai, Cartoon"}
-    - {id: 43, cat: XXX, desc: "Home sex, Amateur"}
-    - {id: 56, cat: XXX, desc: "Incest"}
-    - {id: 34, cat: XXX, desc: "Lesbians"}
-    - {id: 60, cat: XXX, desc: "Mature 35"}
-    - {id: 67, cat: XXX, desc: "Midgets"}
-    - {id: 68, cat: XXX, desc: "Old 50"}
-    - {id: 55, cat: XXX, desc: "Orgy, group sex"}
-    - {id: 54, cat: XXX, desc: "Oral Sex"}
-    - {id: 77, cat: XXX, desc: "Porno pack"}
-    - {id: 76, cat: XXX, desc: "Porno parody"}
-    - {id: 69, cat: XXX, desc: "Pregnant"}
-    - {id: 75, cat: XXX, desc: "Retro porno "}
-    - {id: 52, cat: XXX, desc: "Russian porn"}
-    - {id: 44, cat: XXX, desc: "Shemales, Tranny"}
-    - {id: 61, cat: XXX, desc: "Solo, Toys"}
-    - {id: 32, cat: XXX, desc: "Special Movies"}
-    - {id: 39, cat: XXX, desc: "Teens 18"}
-    - {id: 74, cat: XXX, desc: "w/ Russian Subs"}
-    - {id: 79, cat: XXX, desc: "Erotic"}
-    - {id: 5, cat: XXX, desc: "Games"}
-    - {id: 14, cat: XXX, desc: "Cartoons"}
-    - {id: 24, cat: XXX, desc: "Other"}
-    - {id: 37, cat: XXX, desc: "Photo"}
-    - {id: 72, cat: XXX, desc: "Horses"}
-    - {id: 71, cat: XXX, desc: "Dogs"}
-    - {id: 30, cat: XXX, desc: "Animals"}
+caps:
+  categorymappings:
+  - {id: 9, cat: XXX, desc: "All sex"}
+  - {id: 51, cat: XXX, desc: "Anal Sex"}
+  - {id: 58, cat: XXX, desc: "Asian"}
+  - {id: 63, cat: XXX, desc: "BBW, FAT"}
+  - {id: 45, cat: XXX, desc: "Bdsm"}
+  - {id: 59, cat: XXX, desc: "Big tits"}
+  - {id: 66, cat: XXX, desc: "Black (Ebony)"}
+  - {id: 73, cat: XXX, desc: "Bukkake"}
+  - {id: 46, cat: XXX, desc: "Copro, Scat"}
+  - {id: 47, cat: XXX, desc: "Documentary"}
+  - {id: 70, cat: XXX, desc: "Fisting"}
+  - {id: 38, cat: XXX, desc: "Gay (homosexual)"}
+  - {id: 42, cat: XXX, desc: "Hentai, Cartoon"}
+  - {id: 43, cat: XXX, desc: "Home sex, Amateur"}
+  - {id: 56, cat: XXX, desc: "Incest"}
+  - {id: 34, cat: XXX, desc: "Lesbians"}
+  - {id: 60, cat: XXX, desc: "Mature 35"}
+  - {id: 67, cat: XXX, desc: "Midgets"}
+  - {id: 68, cat: XXX, desc: "Old 50"}
+  - {id: 55, cat: XXX, desc: "Orgy, group sex"}
+  - {id: 54, cat: XXX, desc: "Oral Sex"}
+  - {id: 77, cat: XXX, desc: "Porno pack"}
+  - {id: 76, cat: XXX, desc: "Porno parody"}
+  - {id: 69, cat: XXX, desc: "Pregnant"}
+  - {id: 75, cat: XXX, desc: "Retro porno "}
+  - {id: 52, cat: XXX, desc: "Russian porn"}
+  - {id: 44, cat: XXX, desc: "Shemales, Tranny"}
+  - {id: 61, cat: XXX, desc: "Solo, Toys"}
+  - {id: 32, cat: XXX, desc: "Special Movies"}
+  - {id: 39, cat: XXX, desc: "Teens 18"}
+  - {id: 74, cat: XXX, desc: "w/ Russian Subs"}
+  - {id: 79, cat: XXX, desc: "Erotic"}
+  - {id: 5, cat: XXX, desc: "Games"}
+  - {id: 14, cat: XXX, desc: "Cartoons"}
+  - {id: 24, cat: XXX, desc: "Other"}
+  - {id: 37, cat: XXX, desc: "Photo"}
+  - {id: 72, cat: XXX, desc: "Horses"}
+  - {id: 71, cat: XXX, desc: "Dogs"}
+  - {id: 30, cat: XXX, desc: "Animals"}
 
-    modes:
-      search: [q]
-      tv-search: [q]
-      movie-search: [q]
+  modes:
+    search: [q]
+    tv-search: [q]
+    movie-search: [q]
 
-  settings:
-    - name: username
-      type: text
-      label: Username
-    - name: password
-      type: password
-      label: Password
-    - name: ip_filtering
-      type: info
-      label: "IP Filtering"
-      default: "Kinorun allows only certain IP addressess. The error <b>403 Forbidden: Parse error</b> means your IP was not accepted."
-    - name: sort
-      type: select
-      label: Sort requested from site
-      default: "4"
-      options:
-        "4": "created"
-        "7": "seeders"
-        "5": "size"
-        "1": "title"
-    - name: type
-      type: select
-      label: Order requested from site
-      default: "desc"
-      options:
-        "desc": "desc"
-        "asc": "asc"
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: ip_filtering
+    type: info
+    label: "IP Filtering"
+    default: "Kinorun allows only certain IP addressess. The error <b>403 Forbidden: Parse error</b> means your IP was not accepted."
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: "4"
+    options:
+      "4": "created"
+      "7": "seeders"
+      "5": "size"
+      "1": "title"
+  - name: type
+    type: select
+    label: Order requested from site
+    default: "desc"
+    options:
+      "desc": "desc"
+      "asc": "asc"
 
-  login:
-    path: takelogin1.php
-    method: post
-    inputs:
-      username: "{{ .Config.username }}"
-      password: "{{ .Config.password }}"
-    error:
-      - selector: td.embedded:has(div.error)
-      - selector: title:contains("403")
-    test:
-      path: /
-      selector: a[href="/logout.php"]
+login:
+  path: takelogin1.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: td.embedded:has(div.error)
+    - selector: title:contains("403")
+  test:
+    path: /
+    selector: a[href="/logout.php"]
 
-  search:
-    paths:
-      - path: browse.php
-    inputs:
-      $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-      search: "{{ .Keywords }}"
-      # 0 active 1 incldead 2 onlydead 3 gold 4 noseeds 5 notverfied
-      incldead: 1
-      sort: "{{ .Config.sort }}"
-      type: "{{ .Config.type }}"
+search:
+  paths:
+    - path: browse.php
+  inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    search: "{{ .Keywords }}"
+    # 0 active 1 incldead 2 onlydead 3 gold 4 noseeds 5 notverfied
+    incldead: 1
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
 
-    rows:
-      selector: table.embedded > tbody > tr:has(a[href^="details.php?id="])
+  rows:
+    selector: table.embedded > tbody > tr:has(a[href^="details.php?id="])
 
-    fields:
-      category:
-        selector: a[href^="browse.php?cat="]
-        attribute: href
-        filters:
-          - name: querystring
-            args: cat
-      title:
-        selector: a[href^="./torrent-"]
-      details:
-        selector: a[href^="details.php?id="]
-        attribute: href
-      id:
-        selector: a[href^="details.php?id="]
-        attribute: href
-        filters:
-          - name: querystring
-            args: id
-      download:
-        text: "download.php?id={{ .Result.id }}"
-      description:
-        selector: a[href^="browse.php?cat="] img
-        attribute: alt
-        optional: true
-      banner:
-        selector: td[onmouseover]
-        attribute: onmouseover
-        optional: true
-        filters:
-          - name: regexp
-            args: "src=(.+?) width"
-      date:
-        selector: td:nth-child(2) i
-        filters:
-          - name: dateparse
-            args: "2006-01-02 15:04:05"
-      files:
-        selector: td:nth-child(3)
-      size:
-        selector: td:nth-child(5)
-      grabs:
-        selector: td:nth-child(6)
-      seeders:
-        selector: td:nth-child(7)
-        filters:
-          - name: split
-            args: ["|", 0]
-      leechers:
-        selector: td:nth-child(7)
-        filters:
-          - name: split
-            args: ["|", 1]
-      downloadvolumefactor:
-        case:
-          img[src="pic/freedownload.gif"]: 0
-          "*": 1
-      uploadvolumefactor:
-        text: 1
+  fields:
+    category:
+      selector: a[href^="browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: a[href^="./torrent-"]
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    id:
+      selector: a[href^="details.php?id="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: id
+    download:
+      text: "download.php?id={{ .Result.id }}"
+    description:
+      selector: a[href^="browse.php?cat="] img
+      attribute: alt
+      optional: true
+    banner:
+      selector: td[onmouseover]
+      attribute: onmouseover
+      optional: true
+      filters:
+        - name: regexp
+          args: "src=(.+?) width"
+    date:
+      selector: td:nth-child(2) i
+      filters:
+        - name: dateparse
+          args: "2006-01-02 15:04:05"
+    files:
+      selector: td:nth-child(3)
+    size:
+      selector: td:nth-child(5)
+    grabs:
+      selector: td:nth-child(6)
+    seeders:
+      selector: td:nth-child(7)
+      filters:
+        - name: split
+          args: ["|", 0]
+    leechers:
+      selector: td:nth-child(7)
+      filters:
+        - name: split
+          args: ["|", 1]
+    downloadvolumefactor:
+      case:
+        img[src="pic/freedownload.gif"]: 0
+        "*": 1
+    uploadvolumefactor:
+      text: 1
 # TBDev

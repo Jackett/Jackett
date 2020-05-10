@@ -1,138 +1,138 @@
 ---
-  site: theoccult
-  name: The Occult
-  description: "Cult E-Learning"
-  language: en-us
-  type: private
-  encoding: UTF-8
-  links:
-    - https://theoccult.click/
-  legacylinks:
-    - http://theoccult.click/
+site: theoccult
+name: The Occult
+description: "Cult E-Learning"
+language: en-us
+type: private
+encoding: UTF-8
+links:
+  - https://theoccult.click/
+legacylinks:
+  - http://theoccult.click/
 
-  caps:
-    categorymappings:
-      - {id: 63, cat: Other, desc: "Academic / Reference"}
-      - {id: 21, cat: Other, desc: "Everything Else"}
-      - {id: 68, cat: Other, desc: "Mythology and Folklore"}
-      - {id: 61, cat: Other, desc: "Rajneesh"}
-      - {id: 1, cat: Other, desc: "Thelema / Crowley"}
-      - {id: 51, cat: Other, desc: "African/African Diaspora Relig"}
-      - {id: 30, cat: Other, desc: "Fourth Way"}
-      - {id: 17, cat: Other, desc: "Native American"}
-      - {id: 57, cat: Other, desc: "Ritual Magic"}
-      - {id: 74, cat: Other, desc: "Theosophy / Anthroposophy"}
-      - {id: 10, cat: Other, desc: "Alchemy"}
-      - {id: 7, cat: Other, desc: "Freemasonry"}
-      - {id: 54, cat: Other, desc: "New Age"}
-      - {id: 34, cat: Other, desc: "Rosicrucian"}
-      - {id: 73, cat: Other, desc: "Traditional Left-Hand Path"}
-      - {id: 69, cat: Other, desc: "Ancient Languages"}
-      - {id: 6, cat: Other, desc: "Golden Dawn"}
-      - {id: 76, cat: Other, desc: "Non-Dualism"}
-      - {id: 75, cat: Other, desc: "Sacred Geometry"}
-      - {id: 71, cat: Other, desc: "Traditional Witchcraft"}
-      - {id: 9, cat: Other, desc: "Astrology"}
-      - {id: 35, cat: Other, desc: "Grimoires"}
-      - {id: 52, cat: Other, desc: "Northern European Paganism"}
-      - {id: 31, cat: Other, desc: "Satanism"}
-      - {id: 77, cat: Other, desc: "Transpersonal Psychology"}
-      - {id: 25, cat: Other, desc: "Buddhism "}
-      - {id: 26, cat: Other, desc: "Hinduism"}
-      - {id: 70, cat: Other, desc: "Other Divination"}
-      - {id: 28, cat: Other, desc: "Shamanism"}
-      - {id: 19, cat: Other, desc: "Wicca / NeoWicca / Eclectic"}
-      - {id: 32, cat: Other, desc: "Chaos Magic "}
-      - {id: 64, cat: Other, desc: "Lovecraft Mythos"}
-      - {id: 67, cat: Other, desc: "Other Eastern Traditions"}
-      - {id: 56, cat: Other, desc: "Southern European Paganism"}
-      - {id: 20, cat: Other, desc: "Yoga / Tantra"}
-      - {id: 66, cat: Other, desc: "Energy Healing"}
-      - {id: 13, cat: Other, desc: "Lucid Dreams/Astral Projection"}
-      - {id: 49, cat: Other, desc: "Paranormal"}
-      - {id: 72, cat: Other, desc: "Specialty Presses"}
-      - {id: 4, cat: Other, desc: "Enochian"}
-      - {id: 14, cat: Other, desc: "Meditation"}
-      - {id: 33, cat: Other, desc: "Parapsychology"}
-      - {id: 58, cat: Other, desc: "Sufism"}
-      - {id: 11, cat: Other, desc: "Entheogens"}
-      - {id: 53, cat: Other, desc: "Middle Eastern Magic"}
-      - {id: 15, cat: Other, desc: "Philosophy"}
-      - {id: 55, cat: Other, desc: "Taoism / Daoism"}
-      - {id: 29, cat: Other, desc: "Esoteric Christianity"}
-      - {id: 65, cat: Other, desc: "Modern Grimoires"}
-      - {id: 12, cat: Other, desc: "Qabalah / Kabbalah / Cabala"}
-      - {id: 18, cat: Other, desc: "Tarot / Oracle Cards"}
+caps:
+  categorymappings:
+    - {id: 63, cat: Other, desc: "Academic / Reference"}
+    - {id: 21, cat: Other, desc: "Everything Else"}
+    - {id: 68, cat: Other, desc: "Mythology and Folklore"}
+    - {id: 61, cat: Other, desc: "Rajneesh"}
+    - {id: 1, cat: Other, desc: "Thelema / Crowley"}
+    - {id: 51, cat: Other, desc: "African/African Diaspora Relig"}
+    - {id: 30, cat: Other, desc: "Fourth Way"}
+    - {id: 17, cat: Other, desc: "Native American"}
+    - {id: 57, cat: Other, desc: "Ritual Magic"}
+    - {id: 74, cat: Other, desc: "Theosophy / Anthroposophy"}
+    - {id: 10, cat: Other, desc: "Alchemy"}
+    - {id: 7, cat: Other, desc: "Freemasonry"}
+    - {id: 54, cat: Other, desc: "New Age"}
+    - {id: 34, cat: Other, desc: "Rosicrucian"}
+    - {id: 73, cat: Other, desc: "Traditional Left-Hand Path"}
+    - {id: 69, cat: Other, desc: "Ancient Languages"}
+    - {id: 6, cat: Other, desc: "Golden Dawn"}
+    - {id: 76, cat: Other, desc: "Non-Dualism"}
+    - {id: 75, cat: Other, desc: "Sacred Geometry"}
+    - {id: 71, cat: Other, desc: "Traditional Witchcraft"}
+    - {id: 9, cat: Other, desc: "Astrology"}
+    - {id: 35, cat: Other, desc: "Grimoires"}
+    - {id: 52, cat: Other, desc: "Northern European Paganism"}
+    - {id: 31, cat: Other, desc: "Satanism"}
+    - {id: 77, cat: Other, desc: "Transpersonal Psychology"}
+    - {id: 25, cat: Other, desc: "Buddhism "}
+    - {id: 26, cat: Other, desc: "Hinduism"}
+    - {id: 70, cat: Other, desc: "Other Divination"}
+    - {id: 28, cat: Other, desc: "Shamanism"}
+    - {id: 19, cat: Other, desc: "Wicca / NeoWicca / Eclectic"}
+    - {id: 32, cat: Other, desc: "Chaos Magic "}
+    - {id: 64, cat: Other, desc: "Lovecraft Mythos"}
+    - {id: 67, cat: Other, desc: "Other Eastern Traditions"}
+    - {id: 56, cat: Other, desc: "Southern European Paganism"}
+    - {id: 20, cat: Other, desc: "Yoga / Tantra"}
+    - {id: 66, cat: Other, desc: "Energy Healing"}
+    - {id: 13, cat: Other, desc: "Lucid Dreams/Astral Projection"}
+    - {id: 49, cat: Other, desc: "Paranormal"}
+    - {id: 72, cat: Other, desc: "Specialty Presses"}
+    - {id: 4, cat: Other, desc: "Enochian"}
+    - {id: 14, cat: Other, desc: "Meditation"}
+    - {id: 33, cat: Other, desc: "Parapsychology"}
+    - {id: 58, cat: Other, desc: "Sufism"}
+    - {id: 11, cat: Other, desc: "Entheogens"}
+    - {id: 53, cat: Other, desc: "Middle Eastern Magic"}
+    - {id: 15, cat: Other, desc: "Philosophy"}
+    - {id: 55, cat: Other, desc: "Taoism / Daoism"}
+    - {id: 29, cat: Other, desc: "Esoteric Christianity"}
+    - {id: 65, cat: Other, desc: "Modern Grimoires"}
+    - {id: 12, cat: Other, desc: "Qabalah / Kabbalah / Cabala"}
+    - {id: 18, cat: Other, desc: "Tarot / Oracle Cards"}
 
-    modes:
-      search: [q]
+  modes:
+    search: [q]
 
-  login:
-    path: login.php
-    method: form
-    form: form
-    inputs:
-      username: "{{ .Config.username }}"
-      password: "{{ .Config.password }}"
-    captcha:
-      type: image
-      selector: img#freecap
-      input: word
-    error:
-      - selector: table:contains("Login failed!")
-    test:
-      path: main.php
+login:
+  path: login.php
+  method: form
+  form: form
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  captcha:
+    type: image
+    selector: img#freecap
+    input: word
+  error:
+    - selector: table:contains("Login failed!")
+  test:
+    path: main.php
 
-  search:
-    paths:
-      - path: browse.php
-    inputs:
-      $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
-      search: "{{ .Keywords }}"
-    rows:
-      selector: table[border="0"] > tbody > tr.ttable:has(a[href^="browse.php?cat="])
-    fields:
-      category:
-        selector: a[href^="browse.php?cat="]
-        attribute: href
-        filters:
-          - name: querystring
-            args: cat
-      title:
-        filters:
-        selector: td:nth-child(2) b
-      download:
-        selector: a[href^="download.php/"]
-        attribute: href
-      details:
-        selector: a[href^="details.php?id="]
-        attribute: href
-      grabs:
-        selector: td:nth-child(8)
-        filters:
-          - name: replace
-            args: ["Never", "0"]
-          - name: regexp
-            args: (\d+)
-      files:
-        selector: td:nth-child(4)
-      size:
-        selector: td:nth-child(7)
-      seeders:
-        selector: td:nth-child(9)
-      leechers:
-        selector: td:nth-child(10)
-      date:
-        selector: td:nth-child(6)
-        filters:
-          - name: regexp
-            args: (\d{4}-\d{2}-\d{2})
-      downloadvolumefactor:
-        case:
-          "font[color=\"green\"]": "0"
-          "font[color=\"blue\"]": "0"
-          "*": "1"
-      uploadvolumefactor:
-        case:
-          "font[color=\"green\"]": "0"
-          "*": "1"
+search:
+  paths:
+    - path: browse.php
+  inputs:
+    $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
+    search: "{{ .Keywords }}"
+  rows:
+    selector: table[border="0"] > tbody > tr.ttable:has(a[href^="browse.php?cat="])
+  fields:
+    category:
+      selector: a[href^="browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      filters:
+      selector: td:nth-child(2) b
+    download:
+      selector: a[href^="download.php/"]
+      attribute: href
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    grabs:
+      selector: td:nth-child(8)
+      filters:
+        - name: replace
+          args: ["Never", "0"]
+        - name: regexp
+          args: (\d+)
+    files:
+      selector: td:nth-child(4)
+    size:
+      selector: td:nth-child(7)
+    seeders:
+      selector: td:nth-child(9)
+    leechers:
+      selector: td:nth-child(10)
+    date:
+      selector: td:nth-child(6)
+      filters:
+        - name: regexp
+          args: (\d{4}-\d{2}-\d{2})
+    downloadvolumefactor:
+      case:
+        "font[color=\"green\"]": "0"
+        "font[color=\"blue\"]": "0"
+        "*": "1"
+    uploadvolumefactor:
+      case:
+        "font[color=\"green\"]": "0"
+        "*": "1"

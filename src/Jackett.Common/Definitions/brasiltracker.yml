@@ -1,118 +1,118 @@
 ---
-  site: brasiltracker
-  name: BrasilTracker
-  description: "BrasilTracker is a BRAZILIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
-  language: en-us
-  encoding: UTF-8
-  type: private
-  links:
-    - https://brasiltracker.org/
+site: brasiltracker
+name: BrasilTracker
+description: "BrasilTracker is a BRAZILIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: en-us
+encoding: UTF-8
+type: private
+links:
+  - https://brasiltracker.org/
 
-  caps:
-    categorymappings:
-      - {id: 1, cat: Other, desc: "Filmes/Series/Música"}
+caps:
+  categorymappings:
+    - {id: 1, cat: Other, desc: "Filmes/Series/Música"}
 
-    modes:
-      search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
 
-  settings:
-    - name: username
-      type: text
-      label: Username
-    - name: password
-      type: password
-      label: Password
-    - name: sort
-      type: select
-      label: Sort requested from site
-      default: "time"
-      options:
-        "time": "created"
-        "seeders": "seeders"
-        "size": "size"
-    - name: type
-      type: select
-      label: Order requested from site
-      default: "desc"
-      options:
-        "desc": "desc"
-        "asc": "asc"
-    - name: info_results
-      type: info
-      label: "Search results"
-      default: "This indexer does not support <b>Torrent Groups</b><br />Un-tick the <b>Torrent grouping</b><i> (Habilitar Grupo de Torrents)</i> checkbox in your <b>Configurações</b>."
-    - name: info_categories
-      type: info
-      label: "About categories"
-      default: "BrasilTracker does not show <b>Categories</b> in its Search Results.<br />To use this indexer with Sonarr/Radarr set your indexer category to <b>7000</b>."
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: "time"
+    options:
+      "time": "created"
+      "seeders": "seeders"
+      "size": "size"
+  - name: type
+    type: select
+    label: Order requested from site
+    default: "desc"
+    options:
+      "desc": "desc"
+      "asc": "asc"
+  - name: info_results
+    type: info
+    label: "Search results"
+    default: "This indexer does not support <b>Torrent Groups</b><br />Un-tick the <b>Torrent grouping</b><i> (Habilitar Grupo de Torrents)</i> checkbox in your <b>Configurações</b>."
+  - name: info_categories
+    type: info
+    label: "About categories"
+    default: "BrasilTracker does not show <b>Categories</b> in its Search Results.<br />To use this indexer with Sonarr/Radarr set your indexer category to <b>7000</b>."
 
-  login:
-    path: login.php
-    method: form
-    form: form#loginform
-    inputs:
-      username: "{{ .Config.username }}"
-      password: "{{ .Config.password }}"
-      keeplogged: 1
-    error:
-      - selector: form#loginform:contains("incorretos")
-    test:
-      path: index.php
-      selector: a[href^="logout.php?auth="]
+login:
+  path: login.php
+  method: form
+  form: form#loginform
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    keeplogged: 1
+  error:
+    - selector: form#loginform:contains("incorretos")
+  test:
+    path: index.php
+    selector: a[href^="logout.php?auth="]
 
-  search:
-    paths:
-      - path: torrents.php
-    inputs:
-    # torrents.php?searchstr=mandalorain&order_by=size&order_way=desc&action=basic&searchsubmit=1
-      searchstr: "{{ .Keywords }}"
-      order_by: "{{ .Config.sort }}"
-      order_way: "{{ .Config.type }}"
-      action: basic
-      searchsubmit: 1
+search:
+  paths:
+    - path: torrents.php
+  inputs:
+  # torrents.php?searchstr=mandalorain&order_by=size&order_way=desc&action=basic&searchsubmit=1
+    searchstr: "{{ .Keywords }}"
+    order_by: "{{ .Config.sort }}"
+    order_way: "{{ .Config.type }}"
+    action: basic
+    searchsubmit: 1
 
-    rows:
-      selector: table#torrent_table > tbody > tr.torrent
+  rows:
+    selector: table#torrent_table > tbody > tr.torrent
 
-    fields:
-      category:
-        text: 1
-      title:
-        selector: a[href^="torrents.php?id="]
-      details:
-        selector: a[href^="torrents.php?id="]
-        attribute: href
-      download:
-        selector: a[href^="torrents.php?action=download&id="]
-        attribute: href
-      description:
-        selector: div.tags
-      banner:
-        selector: img[alt="Cover"]
-        attribute: src
-      files:
-        selector: td:nth-child(3)
-      date:
-        selector: span.time
-        attribute: title
-        filters:
-          - name: dateparse
-            args: "Jan 2 2006, 15:04"
-      size:
-        selector: td:nth-child(5)
-      grabs:
-        selector: td:nth-child(6)
-      seeders:
-        selector: td:nth-child(7)
-      leechers:
-        selector: td:nth-child(8)
-      downloadvolumefactor:
-        case:
-          strong.tl_free: 0
-          "*": 1
-      uploadvolumefactor:
-        case:
-          "*": 1
+  fields:
+    category:
+      text: 1
+    title:
+      selector: a[href^="torrents.php?id="]
+    details:
+      selector: a[href^="torrents.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="torrents.php?action=download&id="]
+      attribute: href
+    description:
+      selector: div.tags
+    banner:
+      selector: img[alt="Cover"]
+      attribute: src
+    files:
+      selector: td:nth-child(3)
+    date:
+      selector: span.time
+      attribute: title
+      filters:
+        - name: dateparse
+          args: "Jan 2 2006, 15:04"
+    size:
+      selector: td:nth-child(5)
+    grabs:
+      selector: td:nth-child(6)
+    seeders:
+      selector: td:nth-child(7)
+    leechers:
+      selector: td:nth-child(8)
+    downloadvolumefactor:
+      case:
+        strong.tl_free: 0
+        "*": 1
+    uploadvolumefactor:
+      case:
+        "*": 1
 # engine n/a

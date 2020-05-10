@@ -1,362 +1,362 @@
 ---
-  site: casstudiotv
-  name: CasStudioTV
-  description: "CasStudioTV is a RUSSIAN Semi-Private Torrent Tracker for TV"
-  language: ru-ru
-  type: semi-private
-  encoding: UTF-8
-  links:
-    - https://casstudio.tk/
-  legacylinks:
-    - https://casstudio.tv/
+site: casstudiotv
+name: CasStudioTV
+description: "CasStudioTV is a RUSSIAN Semi-Private Torrent Tracker for TV"
+language: ru-ru
+type: semi-private
+encoding: UTF-8
+links:
+  - https://casstudio.tk/
+legacylinks:
+  - https://casstudio.tv/
 
-  caps:
-    categorymappings:
-      - {id: 259, cat: TV, desc: "Сериалы"}
-      - {id: 372, cat: TV, desc: "Австралийские сериалы"}
-      - {id: 375, cat: TV, desc: "Американские сериалы"}
-      - {id: 343, cat: TV, desc: "A&E"}
-      - {id: 126, cat: TV, desc: "Мотель Бейтс / Bates Motel"}
-      - {id: 317, cat: TV, desc: "ABC"}
-      - {id: 72, cat: TV, desc: "Агент Картер / Agent Carter"}
-      - {id: 120, cat: TV, desc: "Агенты Щ.И.Т. / Agents of S.H.I.E.L.D."}
-      - {id: 110, cat: TV, desc: "Американская семейка / Modern Family"}
-      - {id: 70, cat: TV, desc: "Анатомия страсти / Анатомия Грей / Grey's Anatomy"}
-      - {id: 210, cat: TV, desc: "База Куантико / Quantico"}
-      - {id: 65, cat: TV, desc: "Возмездие / Revenge"}
-      - {id: 119, cat: TV, desc: "Бывает и хуже / The Middle"}
-      - {id: 145, cat: TV, desc: "Город Хищниц / Cougar Town"}
-      - {id: 75, cat: TV, desc: "Как избежать наказания за убийство / How to Get Away with Murder"}
-      - {id: 63, cat: TV, desc: "Касл / Castle"}
-      - {id: 222, cat: TV, desc: "Клуб жен астронавтов / The Astronaut Wives Club"}
-      - {id: 147, cat: TV, desc: "Копы-новобранцы / Rookie Blue"}
-      - {id: 276, cat: TV, desc: "Любовницы / Mistresses US"}
-      - {id: 308, cat: TV, desc: "Хороший доктор / The Good Doctor"}
-      - {id: 189, cat: TV, desc: "Шёпот / The Whispers"}
-      - {id: 164, cat: TV, desc: "Нэшвилл / Nashville"}
-      - {id: 303, cat: TV, desc: "Одаренные / The Gifted"}
-      - {id: 92, cat: TV, desc: "Однажды в сказке / Once Upon A Time"}
-      - {id: 163, cat: TV, desc: "Отчаянные домохозяйки / Desperate Housewives"}
-      - {id: 287, cat: TV, desc: "Приговор / Conviction"}
-      - {id: 135, cat: TV, desc: "ПригорАД / Suburgatory"}
-      - {id: 267, cat: TV, desc: "Семья / The Family"}
-      - {id: 64, cat: TV, desc: "Скандал / Scandal"}
-      - {id: 106, cat: TV, desc: "Шпионка / Alias"}
-      - {id: 358, cat: TV, desc: "Adult Swim"}
-      - {id: 323, cat: TV, desc: "Amazon"}
-      - {id: 232, cat: TV, desc: "Десница Божья / Hand of God"}
-      - {id: 231, cat: TV, desc: "Моцарт в джунглях / Mozart in the Jungle"}
-      - {id: 280, cat: TV, desc: "Тик / The Tick"}
-      - {id: 328, cat: TV, desc: "AMC"}
-      - {id: 103, cat: TV, desc: "Ад На Колёсах / Hell On Wheels"}
-      - {id: 122, cat: TV, desc: "Безумцы / Mad Men"}
-      - {id: 208, cat: TV, desc: "Бойтесь ходячих мертвецов / Fear the Walking Dead"}
-      - {id: 219, cat: TV, desc: "В пустыне смерти / Into the Badlands"}
-      - {id: 198, cat: TV, desc: "Люди / Humans"}
-      - {id: 274, cat: TV, desc: "Проповедник / Preacher"}
-      - {id: 95, cat: TV, desc: "Убийство / The Killing"}
-      - {id: 59, cat: TV, desc: "Ходячие мертвецы / The Walking Dead"}
-      - {id: 356, cat: TV, desc: "Audience"}
-      - {id: 320, cat: TV, desc: "CBS"}
-      - {id: 87, cat: TV, desc: "В поле зрения / Person of Interest"}
-      - {id: 293, cat: TV, desc: "Голубая кровь / Blue Bloods"}
-      - {id: 108, cat: TV, desc: "Две девицы на мели / 2 Broke Girls"}
-      - {id: 201, cat: TV, desc: "За пределами / Выжившая / Род человеческий / Extant"}
-      - {id: 314, cat: TV, desc: "Звёздный путь / Star Trek"}
-      - {id: 141, cat: TV, desc: "Как Я Встретил Вашу Маму / How I Met Your Mother"}
-      - {id: 127, cat: TV, desc: "Майк и Молли / Mike & Molly"}
-      - {id: 313, cat: TV, desc: "МакГайвер / MacGyver"}
-      - {id: 180, cat: TV, desc: "Миллеры в разводе / The Millers"}
-      - {id: 76, cat: TV, desc: "Мыслить как преступник / Criminal Minds"}
-      - {id: 144, cat: TV, desc: "Полиция Гавайев / Hawaii Five-0"}
-      - {id: 99, cat: TV, desc: "Под куполом / Under The Dome"}
-      - {id: 78, cat: TV, desc: "Помнить все / Незабываемое / Unforgettable"}
-      - {id: 107, cat: TV, desc: "Теория Большого Взрыва / The Big Bang Theory"}
-      - {id: 105, cat: TV, desc: "Элементарно / Elementary"}
-      - {id: 318, cat: TV, desc: "CW"}
-      - {id: 307, cat: TV, desc: "Династия / Dynasty"}
-      - {id: 102, cat: TV, desc: "Дневники вампира / The Vampire Diaries"}
-      - {id: 104, cat: TV, desc: "Древние / The Originals"}
-      - {id: 277, cat: TV, desc: "Карантин / Containment"}
-      - {id: 193, cat: TV, desc: "Красавица и чудовище / Beauty and the Beast"}
-      - {id: 238, cat: TV, desc: "Легенды завтрашнего дня / Legends of Tomorrow"}
-      - {id: 290, cat: TV, desc: "Радиоволна / Frequency"}
-      - {id: 111, cat: TV, desc: "Сверхъестественное / Supernatural"}
-      - {id: 109, cat: TV, desc: "Сотня / 100 / The Hundred"}
-      - {id: 131, cat: TV, desc: "Стрела / Arrow"}
-      - {id: 190, cat: TV, desc: "Супергёрл / Supergirl"}
-      - {id: 142, cat: TV, desc: "Флэш / Flash"}
-      - {id: 124, cat: TV, desc: "Царство / Reign"}
-      - {id: 270, cat: TV, desc: "яЗомби / iZombie"}
-      - {id: 336, cat: TV, desc: "DC"}
-      - {id: 316, cat: TV, desc: "FOX"}
-      - {id: 310, cat: TV, desc: "9-1-1"}
-      - {id: 61, cat: TV, desc: "Готэм / Gotham"}
-      - {id: 182, cat: TV, desc: "Задержка в развитии / Arrested Development"}
-      - {id: 74, cat: TV, desc: "Империя / Empire"}
-      - {id: 247, cat: TV, desc: "Люцифер / Lucifer"}
-      - {id: 157, cat: TV, desc: "Секретные материалы / X-Files"}
-      - {id: 286, cat: TV, desc: "Смертельное Оружие / Lethal Weapon"}
-      - {id: 304, cat: TV, desc: "Орвилл / The Orville"}
-      - {id: 162, cat: TV, desc: "Последователи / The Following"}
-      - {id: 187, cat: TV, desc: "Уэйуорд Пайнс / Wayward Pines"}
-      - {id: 288, cat: TV, desc: "Экзорцист / The Exorcist"}
-      - {id: 327, cat: TV, desc: "FX"}
-      - {id: 62, cat: TV, desc: "Американцы / The Americans"}
-      - {id: 239, cat: TV, desc: "Баскетс / Baskets"}
-      - {id: 300, cat: TV, desc: "Легион / Legion"}
-      - {id: 85, cat: TV, desc: "Штамм / The Strain"}
-      - {id: 82, cat: TV, desc: "Сыны Анархии / Sons of Anarchy"}
-      - {id: 98, cat: TV, desc: "Уилфред / Wilfred"}
-      - {id: 337, cat: TV, desc: "History"}
-      - {id: 91, cat: TV, desc: "Викинги / Vikings"}
-      - {id: 324, cat: TV, desc: "HULU"}
-      - {id: 246, cat: TV, desc: "11.22.63"}
-      - {id: 305, cat: TV, desc: "Беглецы / Runaways"}
-      - {id: 345, cat: TV, desc: "MTV, Sprike"}
-      - {id: 137, cat: TV, desc: "Оборотень / Teen Wolf"}
-      - {id: 237, cat: TV, desc: "Хроники Шаннары / The Shannara Chronicles"}
-      - {id: 319, cat: TV, desc: "NBC"}
-      - {id: 192, cat: TV, desc: "Водолей / Aquarius"}
-      - {id: 166, cat: TV, desc: "Ганнибал / Hannibal"}
-      - {id: 211, cat: TV, desc: "Герои: Возрождение / Heroes Reborn"}
-      - {id: 117, cat: TV, desc: "Гримм / Grimm"}
-      - {id: 285, cat: TV, desc: "Квантовый скачок / Quantum Leap"}
-      - {id: 245, cat: TV, desc: "Медики Чикаго / Chicago Med"}
-      - {id: 234, cat: TV, desc: "Мистер Робинсон / Mr. Robinson"}
-      - {id: 80, cat: TV, desc: "Пересекающиеся линии / Пересекая черту / Crossing Lines"}
-      - {id: 90, cat: TV, desc: "Пожарные Чикаго / Chicago Fire"}
-      - {id: 77, cat: TV, desc: "Полиция Чикаго / Chicago PD"}
-      - {id: 112, cat: TV, desc: "Революция / Revolution"}
-      - {id: 213, cat: TV, desc: "Слепое пятно / Blindspot"}
-      - {id: 93, cat: TV, desc: "Сообщество / Community"}
-      - {id: 273, cat: TV, desc: "Тайны Лауры / The Mysteries of Laura"}
-      - {id: 177, cat: TV, desc: "Черный список / The Blacklist"}
-      - {id: 321, cat: TV, desc: "NETFLIX"}
-      - {id: 281, cat: TV, desc: "Барыги / Narcos"}
-      - {id: 309, cat: TV, desc: "Видоизмененный углерод / Altered Carbon"}
-      - {id: 229, cat: TV, desc: "Джессика Джонс / Jessica Jones"}
-      - {id: 278, cat: TV, desc: "Загадочные события / Stranger Things"}
-      - {id: 301, cat: TV, desc: "Защитники / The Defenders"}
-      - {id: 306, cat: TV, desc: "Каратель / The Punisher"}
-      - {id: 174, cat: TV, desc: "Карточный домик / House of Cards"}
-      - {id: 130, cat: TV, desc: "Лиллехаммер / Lilyhammer"}
-      - {id: 294, cat: TV, desc: "Лемони Сникет: 33 несчастья / A Series of Unfortunate Events"}
-      - {id: 275, cat: TV, desc: "Оранжевый - хит сезона / Orange is the New Black"}
-      - {id: 194, cat: TV, desc: "Сорвиголова / Daredevil"}
-      - {id: 115, cat: TV, desc: "Чёрное зеркало / Black Mirror"}
-      - {id: 333, cat: TV, desc: "Showtime"}
-      - {id: 154, cat: TV, desc: "Блудливая Калифорния / Californication"}
-      - {id: 118, cat: TV, desc: "Веб терапия / Web Therapy"}
-      - {id: 176, cat: TV, desc: "Декстер / Dexter"}
-      - {id: 282, cat: TV, desc: "Дорожная команда / Roadies"}
-      - {id: 203, cat: TV, desc: "Как бы счастье / Happyish"}
-      - {id: 156, cat: TV, desc: "Мастера Секса / Masters of Sex"}
-      - {id: 244, cat: TV, desc: "Миллиарды / Billions"}
-      - {id: 58, cat: TV, desc: "Обитель лжи / House of Lies"}
-      - {id: 83, cat: TV, desc: "Родина / Homeland"}
-      - {id: 128, cat: TV, desc: "Рэй Донован / Ray Donovan"}
-      - {id: 191, cat: TV, desc: "Страшные сказки / Penny Dreadful"}
-      - {id: 330, cat: TV, desc: "STARZ"}
-      - {id: 204, cat: TV, desc: "Власть в ночном городе / Power"}
-      - {id: 271, cat: TV, desc: "Девушка по вызову / The Girlfriend Experience"}
-      - {id: 218, cat: TV, desc: "Плоть и кости / Flesh and Bone"}
-      - {id: 217, cat: TV, desc: "Эш против Зловещих мертвецов / Ash vs Evil Dead"}
-      - {id: 153, cat: TV, desc: "Спартак / Spartacus"}
-      - {id: 73, cat: TV, desc: "Черные Паруса / Black Sails"}
-      - {id: 326, cat: TV, desc: "SyFy"}
-      - {id: 86, cat: TV, desc: "12 Обезьян / 12 Monkeys"}
-      - {id: 228, cat: TV, desc: "Волшебники / The Magicians"}
-      - {id: 195, cat: TV, desc: "Киллджойс / Killjoys"}
-      - {id: 233, cat: TV, desc: "Конец детства / Childhood's End"}
-      - {id: 235, cat: TV, desc: "Пространство / The Expanse"}
-      - {id: 196, cat: TV, desc: "Тёмная материя / Dark Matter"}
-      - {id: 143, cat: TV, desc: "Хранилище 13 / Warehouse 13"}
-      - {id: 94, cat: TV, desc: "Хэйвен / Haven"}
-      - {id: 351, cat: TV, desc: "TBS"}
-      - {id: 334, cat: TV, desc: "TNT"}
-      - {id: 243, cat: TV, desc: "Библиотекари / The Librarians"}
-      - {id: 220, cat: TV, desc: "Восприятие / Perception"}
-      - {id: 136, cat: TV, desc: "Риццоли и Айлc / Rizzoli & Isles"}
-      - {id: 160, cat: TV, desc: "Рухнувшие Небеса / Falling Skies"}
-      - {id: 341, cat: TV, desc: "TV Land"}
-      - {id: 146, cat: TV, desc: "Красотки в Кливленде / Hot in Cleveland"}
-      - {id: 325, cat: TV, desc: "USA"}
-      - {id: 158, cat: TV, desc: "4400 / The 4400"}
-      - {id: 134, cat: TV, desc: "Белый воротничок / White Collar"}
-      - {id: 230, cat: TV, desc: "Колония / Colony"}
-      - {id: 291, cat: TV, desc: "Королева Юга / Queen of the South"}
-      - {id: 200, cat: TV, desc: "Мистер робот / Mr. Robot"}
-      - {id: 236, cat: TV, desc: "Полицейские на велосипедах / Pacific Blue"}
-      - {id: 168, cat: TV, desc: "Форс-мажоры / Костюмы / Suits"}
-      - {id: 352, cat: TV, desc: "YouTube"}
-      - {id: 370, cat: TV, desc: "Британские сериалы"}
-      - {id: 69, cat: TV, desc: "Мушкетеры / The Musketeers"}
-      - {id: 139, cat: TV, desc: "Острые козырьки / Peaky Blinders"}
-      - {id: 165, cat: TV, desc: "Лютер / Luther"}
-      - {id: 272, cat: TV, desc: "Поворот / TURN"}
-      - {id: 373, cat: TV, desc: "Датские и Шведские сериалы"}
-      - {id: 381, cat: TV, desc: "Ирландские сериалы"}
-      - {id: 367, cat: TV, desc: "Испанские сериалы"}
-      - {id: 380, cat: TV, desc: "Итальянские сериалы"}
-      - {id: 371, cat: TV, desc: "Канадские сериалы"}
-      - {id: 368, cat: TV, desc: "Немецкие сериалы"}
-      - {id: 376, cat: TV, desc: "Нидерландские сериалы"}
-      - {id: 379, cat: TV, desc: "Норвежские сериалы"}
-      - {id: 377, cat: TV, desc: "Российские сериалы"}
-      - {id: 369, cat: TV, desc: "Французкие сериалы"}
-      - {id: 374, cat: TV, desc: "Швейцарские сериалы"}
-      - {id: 382, cat: TV, desc: "Японские сериалы"}
-      - {id: 357, cat: TV, desc: "Сериалы только с субтитрами"}
-      - {id: 378, cat: TV, desc: "Сериалы производства нескольких стран"}
-      - {id: 88, cat: TV, desc: "Мультсериалы"}
-      - {id: 101, cat: TV, desc: "Южный Парк / South Park"}
-      - {id: 89, cat: TV, desc: "Спецагент Арчер / Archer"}
-      - {id: 225, cat: TV, desc: "Стендап / Stand Up"}
-      - {id: 54, cat: TV, desc: "Особый раздел"}
-      - {id: 100, cat: TV, desc: "Короткометражки"}
-      - {id: 60, cat: TV, desc: "Документальные и научно-популярные передачи"}
-      - {id: 159, cat: TV, desc: "Разное"}
-      - {id: 261, cat: TV, desc: "Спорт"}
-      - {id: 262, cat: TV, desc: "Автомотоспорт"}
-      - {id: 263, cat: TV, desc: "Формула 1 / Formula 1"}
-      - {id: 264, cat: TV, desc: "MotoGP / SBK"}
-      - {id: 265, cat: TV, desc: "V8 supercars"}
-      - {id: 31, cat: TV, desc: "Пользователи"}
-      - {id: 188, cat: TV, desc: "Поздравления"}
+caps:
+  categorymappings:
+    - {id: 259, cat: TV, desc: "Сериалы"}
+    - {id: 372, cat: TV, desc: "Австралийские сериалы"}
+    - {id: 375, cat: TV, desc: "Американские сериалы"}
+    - {id: 343, cat: TV, desc: "A&E"}
+    - {id: 126, cat: TV, desc: "Мотель Бейтс / Bates Motel"}
+    - {id: 317, cat: TV, desc: "ABC"}
+    - {id: 72, cat: TV, desc: "Агент Картер / Agent Carter"}
+    - {id: 120, cat: TV, desc: "Агенты Щ.И.Т. / Agents of S.H.I.E.L.D."}
+    - {id: 110, cat: TV, desc: "Американская семейка / Modern Family"}
+    - {id: 70, cat: TV, desc: "Анатомия страсти / Анатомия Грей / Grey's Anatomy"}
+    - {id: 210, cat: TV, desc: "База Куантико / Quantico"}
+    - {id: 65, cat: TV, desc: "Возмездие / Revenge"}
+    - {id: 119, cat: TV, desc: "Бывает и хуже / The Middle"}
+    - {id: 145, cat: TV, desc: "Город Хищниц / Cougar Town"}
+    - {id: 75, cat: TV, desc: "Как избежать наказания за убийство / How to Get Away with Murder"}
+    - {id: 63, cat: TV, desc: "Касл / Castle"}
+    - {id: 222, cat: TV, desc: "Клуб жен астронавтов / The Astronaut Wives Club"}
+    - {id: 147, cat: TV, desc: "Копы-новобранцы / Rookie Blue"}
+    - {id: 276, cat: TV, desc: "Любовницы / Mistresses US"}
+    - {id: 308, cat: TV, desc: "Хороший доктор / The Good Doctor"}
+    - {id: 189, cat: TV, desc: "Шёпот / The Whispers"}
+    - {id: 164, cat: TV, desc: "Нэшвилл / Nashville"}
+    - {id: 303, cat: TV, desc: "Одаренные / The Gifted"}
+    - {id: 92, cat: TV, desc: "Однажды в сказке / Once Upon A Time"}
+    - {id: 163, cat: TV, desc: "Отчаянные домохозяйки / Desperate Housewives"}
+    - {id: 287, cat: TV, desc: "Приговор / Conviction"}
+    - {id: 135, cat: TV, desc: "ПригорАД / Suburgatory"}
+    - {id: 267, cat: TV, desc: "Семья / The Family"}
+    - {id: 64, cat: TV, desc: "Скандал / Scandal"}
+    - {id: 106, cat: TV, desc: "Шпионка / Alias"}
+    - {id: 358, cat: TV, desc: "Adult Swim"}
+    - {id: 323, cat: TV, desc: "Amazon"}
+    - {id: 232, cat: TV, desc: "Десница Божья / Hand of God"}
+    - {id: 231, cat: TV, desc: "Моцарт в джунглях / Mozart in the Jungle"}
+    - {id: 280, cat: TV, desc: "Тик / The Tick"}
+    - {id: 328, cat: TV, desc: "AMC"}
+    - {id: 103, cat: TV, desc: "Ад На Колёсах / Hell On Wheels"}
+    - {id: 122, cat: TV, desc: "Безумцы / Mad Men"}
+    - {id: 208, cat: TV, desc: "Бойтесь ходячих мертвецов / Fear the Walking Dead"}
+    - {id: 219, cat: TV, desc: "В пустыне смерти / Into the Badlands"}
+    - {id: 198, cat: TV, desc: "Люди / Humans"}
+    - {id: 274, cat: TV, desc: "Проповедник / Preacher"}
+    - {id: 95, cat: TV, desc: "Убийство / The Killing"}
+    - {id: 59, cat: TV, desc: "Ходячие мертвецы / The Walking Dead"}
+    - {id: 356, cat: TV, desc: "Audience"}
+    - {id: 320, cat: TV, desc: "CBS"}
+    - {id: 87, cat: TV, desc: "В поле зрения / Person of Interest"}
+    - {id: 293, cat: TV, desc: "Голубая кровь / Blue Bloods"}
+    - {id: 108, cat: TV, desc: "Две девицы на мели / 2 Broke Girls"}
+    - {id: 201, cat: TV, desc: "За пределами / Выжившая / Род человеческий / Extant"}
+    - {id: 314, cat: TV, desc: "Звёздный путь / Star Trek"}
+    - {id: 141, cat: TV, desc: "Как Я Встретил Вашу Маму / How I Met Your Mother"}
+    - {id: 127, cat: TV, desc: "Майк и Молли / Mike & Molly"}
+    - {id: 313, cat: TV, desc: "МакГайвер / MacGyver"}
+    - {id: 180, cat: TV, desc: "Миллеры в разводе / The Millers"}
+    - {id: 76, cat: TV, desc: "Мыслить как преступник / Criminal Minds"}
+    - {id: 144, cat: TV, desc: "Полиция Гавайев / Hawaii Five-0"}
+    - {id: 99, cat: TV, desc: "Под куполом / Under The Dome"}
+    - {id: 78, cat: TV, desc: "Помнить все / Незабываемое / Unforgettable"}
+    - {id: 107, cat: TV, desc: "Теория Большого Взрыва / The Big Bang Theory"}
+    - {id: 105, cat: TV, desc: "Элементарно / Elementary"}
+    - {id: 318, cat: TV, desc: "CW"}
+    - {id: 307, cat: TV, desc: "Династия / Dynasty"}
+    - {id: 102, cat: TV, desc: "Дневники вампира / The Vampire Diaries"}
+    - {id: 104, cat: TV, desc: "Древние / The Originals"}
+    - {id: 277, cat: TV, desc: "Карантин / Containment"}
+    - {id: 193, cat: TV, desc: "Красавица и чудовище / Beauty and the Beast"}
+    - {id: 238, cat: TV, desc: "Легенды завтрашнего дня / Legends of Tomorrow"}
+    - {id: 290, cat: TV, desc: "Радиоволна / Frequency"}
+    - {id: 111, cat: TV, desc: "Сверхъестественное / Supernatural"}
+    - {id: 109, cat: TV, desc: "Сотня / 100 / The Hundred"}
+    - {id: 131, cat: TV, desc: "Стрела / Arrow"}
+    - {id: 190, cat: TV, desc: "Супергёрл / Supergirl"}
+    - {id: 142, cat: TV, desc: "Флэш / Flash"}
+    - {id: 124, cat: TV, desc: "Царство / Reign"}
+    - {id: 270, cat: TV, desc: "яЗомби / iZombie"}
+    - {id: 336, cat: TV, desc: "DC"}
+    - {id: 316, cat: TV, desc: "FOX"}
+    - {id: 310, cat: TV, desc: "9-1-1"}
+    - {id: 61, cat: TV, desc: "Готэм / Gotham"}
+    - {id: 182, cat: TV, desc: "Задержка в развитии / Arrested Development"}
+    - {id: 74, cat: TV, desc: "Империя / Empire"}
+    - {id: 247, cat: TV, desc: "Люцифер / Lucifer"}
+    - {id: 157, cat: TV, desc: "Секретные материалы / X-Files"}
+    - {id: 286, cat: TV, desc: "Смертельное Оружие / Lethal Weapon"}
+    - {id: 304, cat: TV, desc: "Орвилл / The Orville"}
+    - {id: 162, cat: TV, desc: "Последователи / The Following"}
+    - {id: 187, cat: TV, desc: "Уэйуорд Пайнс / Wayward Pines"}
+    - {id: 288, cat: TV, desc: "Экзорцист / The Exorcist"}
+    - {id: 327, cat: TV, desc: "FX"}
+    - {id: 62, cat: TV, desc: "Американцы / The Americans"}
+    - {id: 239, cat: TV, desc: "Баскетс / Baskets"}
+    - {id: 300, cat: TV, desc: "Легион / Legion"}
+    - {id: 85, cat: TV, desc: "Штамм / The Strain"}
+    - {id: 82, cat: TV, desc: "Сыны Анархии / Sons of Anarchy"}
+    - {id: 98, cat: TV, desc: "Уилфред / Wilfred"}
+    - {id: 337, cat: TV, desc: "History"}
+    - {id: 91, cat: TV, desc: "Викинги / Vikings"}
+    - {id: 324, cat: TV, desc: "HULU"}
+    - {id: 246, cat: TV, desc: "11.22.63"}
+    - {id: 305, cat: TV, desc: "Беглецы / Runaways"}
+    - {id: 345, cat: TV, desc: "MTV, Sprike"}
+    - {id: 137, cat: TV, desc: "Оборотень / Teen Wolf"}
+    - {id: 237, cat: TV, desc: "Хроники Шаннары / The Shannara Chronicles"}
+    - {id: 319, cat: TV, desc: "NBC"}
+    - {id: 192, cat: TV, desc: "Водолей / Aquarius"}
+    - {id: 166, cat: TV, desc: "Ганнибал / Hannibal"}
+    - {id: 211, cat: TV, desc: "Герои: Возрождение / Heroes Reborn"}
+    - {id: 117, cat: TV, desc: "Гримм / Grimm"}
+    - {id: 285, cat: TV, desc: "Квантовый скачок / Quantum Leap"}
+    - {id: 245, cat: TV, desc: "Медики Чикаго / Chicago Med"}
+    - {id: 234, cat: TV, desc: "Мистер Робинсон / Mr. Robinson"}
+    - {id: 80, cat: TV, desc: "Пересекающиеся линии / Пересекая черту / Crossing Lines"}
+    - {id: 90, cat: TV, desc: "Пожарные Чикаго / Chicago Fire"}
+    - {id: 77, cat: TV, desc: "Полиция Чикаго / Chicago PD"}
+    - {id: 112, cat: TV, desc: "Революция / Revolution"}
+    - {id: 213, cat: TV, desc: "Слепое пятно / Blindspot"}
+    - {id: 93, cat: TV, desc: "Сообщество / Community"}
+    - {id: 273, cat: TV, desc: "Тайны Лауры / The Mysteries of Laura"}
+    - {id: 177, cat: TV, desc: "Черный список / The Blacklist"}
+    - {id: 321, cat: TV, desc: "NETFLIX"}
+    - {id: 281, cat: TV, desc: "Барыги / Narcos"}
+    - {id: 309, cat: TV, desc: "Видоизмененный углерод / Altered Carbon"}
+    - {id: 229, cat: TV, desc: "Джессика Джонс / Jessica Jones"}
+    - {id: 278, cat: TV, desc: "Загадочные события / Stranger Things"}
+    - {id: 301, cat: TV, desc: "Защитники / The Defenders"}
+    - {id: 306, cat: TV, desc: "Каратель / The Punisher"}
+    - {id: 174, cat: TV, desc: "Карточный домик / House of Cards"}
+    - {id: 130, cat: TV, desc: "Лиллехаммер / Lilyhammer"}
+    - {id: 294, cat: TV, desc: "Лемони Сникет: 33 несчастья / A Series of Unfortunate Events"}
+    - {id: 275, cat: TV, desc: "Оранжевый - хит сезона / Orange is the New Black"}
+    - {id: 194, cat: TV, desc: "Сорвиголова / Daredevil"}
+    - {id: 115, cat: TV, desc: "Чёрное зеркало / Black Mirror"}
+    - {id: 333, cat: TV, desc: "Showtime"}
+    - {id: 154, cat: TV, desc: "Блудливая Калифорния / Californication"}
+    - {id: 118, cat: TV, desc: "Веб терапия / Web Therapy"}
+    - {id: 176, cat: TV, desc: "Декстер / Dexter"}
+    - {id: 282, cat: TV, desc: "Дорожная команда / Roadies"}
+    - {id: 203, cat: TV, desc: "Как бы счастье / Happyish"}
+    - {id: 156, cat: TV, desc: "Мастера Секса / Masters of Sex"}
+    - {id: 244, cat: TV, desc: "Миллиарды / Billions"}
+    - {id: 58, cat: TV, desc: "Обитель лжи / House of Lies"}
+    - {id: 83, cat: TV, desc: "Родина / Homeland"}
+    - {id: 128, cat: TV, desc: "Рэй Донован / Ray Donovan"}
+    - {id: 191, cat: TV, desc: "Страшные сказки / Penny Dreadful"}
+    - {id: 330, cat: TV, desc: "STARZ"}
+    - {id: 204, cat: TV, desc: "Власть в ночном городе / Power"}
+    - {id: 271, cat: TV, desc: "Девушка по вызову / The Girlfriend Experience"}
+    - {id: 218, cat: TV, desc: "Плоть и кости / Flesh and Bone"}
+    - {id: 217, cat: TV, desc: "Эш против Зловещих мертвецов / Ash vs Evil Dead"}
+    - {id: 153, cat: TV, desc: "Спартак / Spartacus"}
+    - {id: 73, cat: TV, desc: "Черные Паруса / Black Sails"}
+    - {id: 326, cat: TV, desc: "SyFy"}
+    - {id: 86, cat: TV, desc: "12 Обезьян / 12 Monkeys"}
+    - {id: 228, cat: TV, desc: "Волшебники / The Magicians"}
+    - {id: 195, cat: TV, desc: "Киллджойс / Killjoys"}
+    - {id: 233, cat: TV, desc: "Конец детства / Childhood's End"}
+    - {id: 235, cat: TV, desc: "Пространство / The Expanse"}
+    - {id: 196, cat: TV, desc: "Тёмная материя / Dark Matter"}
+    - {id: 143, cat: TV, desc: "Хранилище 13 / Warehouse 13"}
+    - {id: 94, cat: TV, desc: "Хэйвен / Haven"}
+    - {id: 351, cat: TV, desc: "TBS"}
+    - {id: 334, cat: TV, desc: "TNT"}
+    - {id: 243, cat: TV, desc: "Библиотекари / The Librarians"}
+    - {id: 220, cat: TV, desc: "Восприятие / Perception"}
+    - {id: 136, cat: TV, desc: "Риццоли и Айлc / Rizzoli & Isles"}
+    - {id: 160, cat: TV, desc: "Рухнувшие Небеса / Falling Skies"}
+    - {id: 341, cat: TV, desc: "TV Land"}
+    - {id: 146, cat: TV, desc: "Красотки в Кливленде / Hot in Cleveland"}
+    - {id: 325, cat: TV, desc: "USA"}
+    - {id: 158, cat: TV, desc: "4400 / The 4400"}
+    - {id: 134, cat: TV, desc: "Белый воротничок / White Collar"}
+    - {id: 230, cat: TV, desc: "Колония / Colony"}
+    - {id: 291, cat: TV, desc: "Королева Юга / Queen of the South"}
+    - {id: 200, cat: TV, desc: "Мистер робот / Mr. Robot"}
+    - {id: 236, cat: TV, desc: "Полицейские на велосипедах / Pacific Blue"}
+    - {id: 168, cat: TV, desc: "Форс-мажоры / Костюмы / Suits"}
+    - {id: 352, cat: TV, desc: "YouTube"}
+    - {id: 370, cat: TV, desc: "Британские сериалы"}
+    - {id: 69, cat: TV, desc: "Мушкетеры / The Musketeers"}
+    - {id: 139, cat: TV, desc: "Острые козырьки / Peaky Blinders"}
+    - {id: 165, cat: TV, desc: "Лютер / Luther"}
+    - {id: 272, cat: TV, desc: "Поворот / TURN"}
+    - {id: 373, cat: TV, desc: "Датские и Шведские сериалы"}
+    - {id: 381, cat: TV, desc: "Ирландские сериалы"}
+    - {id: 367, cat: TV, desc: "Испанские сериалы"}
+    - {id: 380, cat: TV, desc: "Итальянские сериалы"}
+    - {id: 371, cat: TV, desc: "Канадские сериалы"}
+    - {id: 368, cat: TV, desc: "Немецкие сериалы"}
+    - {id: 376, cat: TV, desc: "Нидерландские сериалы"}
+    - {id: 379, cat: TV, desc: "Норвежские сериалы"}
+    - {id: 377, cat: TV, desc: "Российские сериалы"}
+    - {id: 369, cat: TV, desc: "Французкие сериалы"}
+    - {id: 374, cat: TV, desc: "Швейцарские сериалы"}
+    - {id: 382, cat: TV, desc: "Японские сериалы"}
+    - {id: 357, cat: TV, desc: "Сериалы только с субтитрами"}
+    - {id: 378, cat: TV, desc: "Сериалы производства нескольких стран"}
+    - {id: 88, cat: TV, desc: "Мультсериалы"}
+    - {id: 101, cat: TV, desc: "Южный Парк / South Park"}
+    - {id: 89, cat: TV, desc: "Спецагент Арчер / Archer"}
+    - {id: 225, cat: TV, desc: "Стендап / Stand Up"}
+    - {id: 54, cat: TV, desc: "Особый раздел"}
+    - {id: 100, cat: TV, desc: "Короткометражки"}
+    - {id: 60, cat: TV, desc: "Документальные и научно-популярные передачи"}
+    - {id: 159, cat: TV, desc: "Разное"}
+    - {id: 261, cat: TV, desc: "Спорт"}
+    - {id: 262, cat: TV, desc: "Автомотоспорт"}
+    - {id: 263, cat: TV, desc: "Формула 1 / Formula 1"}
+    - {id: 264, cat: TV, desc: "MotoGP / SBK"}
+    - {id: 265, cat: TV, desc: "V8 supercars"}
+    - {id: 31, cat: TV, desc: "Пользователи"}
+    - {id: 188, cat: TV, desc: "Поздравления"}
 
-    modes:
-      search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
 
-  settings:
-    - name: username
-      type: text
-      label: Username
-    - name: password
-      type: password
-      label: Password
-    - name: sort
-      type: select
-      label: Sort requested from site
-      default: "t"
-      options:
-        "t": "created"
-        "ts": "seeders"
-        "sz": "size"
-        "i": "title"
-    - name: type
-      type: select
-      label: Order requested from site
-      default: "d"
-      options:
-        "d": "desc"
-        "a": "asc"
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: "t"
+    options:
+      "t": "created"
+      "ts": "seeders"
+      "sz": "size"
+      "i": "title"
+  - name: type
+    type: select
+    label: Order requested from site
+    default: "d"
+    options:
+      "d": "desc"
+      "a": "asc"
 
-  login:
-    path: ucp.php?mode=login
-    method: form
-    form: form#login
-    inputs:
-      username: "{{ .Config.username }}"
-      password: "{{ .Config.password }}"
-    error:
-      - selector: fieldset:has(div.error)
-    test:
-      path: /
-      selector: :has(a[href^="./ucp.php?mode=logout&sid="])
+login:
+  path: ucp.php?mode=login
+  method: form
+  form: form#login
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: fieldset:has(div.error)
+  test:
+    path: /
+    selector: :has(a[href^="./ucp.php?mode=logout&sid="])
 
-  search:
-    paths:
-      #https://casstudio.tv/search.php?tracker_search=torrent&keywords=star&terms=all&author=&sc=1&sf=titleonly&sr=topics&sk=t&sd=d&st=0&ch=300&t=0&submit=Search
-      - path: search.php
-    inputs:
-      tracker_search: torrent
-      keywords: "{{ if .Keywords }}{{ .Keywords }}{{else}}{{ .Today.Year }}{{end}}"
-      terms: all
-      author: ""
-      sc: 1
-      sf: titleonly
-      sr: topics
-      sk: "{{ .Config.sort }}"
-      sd: "{{ .Config.type }}"
-      st: 0
-      ch: 300
-      t: 0
-      submit: Search
+search:
+  paths:
+    #https://casstudio.tv/search.php?tracker_search=torrent&keywords=star&terms=all&author=&sc=1&sf=titleonly&sr=topics&sk=t&sd=d&st=0&ch=300&t=0&submit=Search
+    - path: search.php
+  inputs:
+    tracker_search: torrent
+    keywords: "{{ if .Keywords }}{{ .Keywords }}{{else}}{{ .Today.Year }}{{end}}"
+    terms: all
+    author: ""
+    sc: 1
+    sf: titleonly
+    sr: topics
+    sk: "{{ .Config.sort }}"
+    sd: "{{ .Config.type }}"
+    st: 0
+    ch: 300
+    t: 0
+    submit: Search
 
-    rows:
-      selector: tr.row
+  rows:
+    selector: tr.row
 
-    fields:
-      title:
-        selector: a.topictitle
-      details:
-        selector: a.topictitle
-        attribute: href
-      category:
-        selector: a[href^="./viewforum.php?f="]
-        attribute: href
-        filters:
-          - name: querystring
-            args: f
-      download:
-        selector: a[href^="./download/file.php?id="]
-        attribute: href
-      size:
-        selector: a[href^="./viewforum.php?f="] + b
-        filters:
-          - name: replace
-            args: ["ТБ", "TB"]
-          - name: replace
-            args: ["ГБ", "GB"]
-          - name: replace
-            args: ["МБ", "MB"]
-          - name: replace
-            args: ["КБ", "KB"]
-      seeders:
-        selector: td.forumtopics span.seed
-      leechers:
-        selector: td.forumtopics span.leech
-      grabs:
-        selector: td.forumposts span.complet
-      date:
-        # 12 янв 2019, 11:26
-        selector: td.forumdetails span.forum-descriptions
-        filters:
-          # extract the date
-          - name: regexp
-            args: "(\\d{2} \\D{3} \\d{4}, \\d{2}:\\d{2})"
-            # replace month abbreviations
-          - name: replace
-            args: ["янв", "Jan"]
-          - name: replace
-            args: ["фев", "Feb"]
-          - name: replace
-            args: ["мар", "Mar"]
-          - name: replace
-            args: ["апр", "Apr"]
-          - name: replace
-            args: ["май", "May"]
-          - name: replace
-            args: ["июн", "Jun"]
-          - name: replace
-            args: ["июл", "Jul"]
-          - name: replace
-            args: ["авг", "Aug"]
-          - name: replace
-            args: ["сен", "Sep"]
-          - name: replace
-            args: ["окт", "Oct"]
-          - name: replace
-            args: ["ноя", "Nov"]
-          - name: replace
-            args: ["дек", "Dec"]
-          - name: dateparse
-            args: "02 Jan 06, 15:04"
-      downloadvolumefactor:
-        text: 1
-      uploadvolumefactor:
-        text: 1
+  fields:
+    title:
+      selector: a.topictitle
+    details:
+      selector: a.topictitle
+      attribute: href
+    category:
+      selector: a[href^="./viewforum.php?f="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: f
+    download:
+      selector: a[href^="./download/file.php?id="]
+      attribute: href
+    size:
+      selector: a[href^="./viewforum.php?f="] + b
+      filters:
+        - name: replace
+          args: ["ТБ", "TB"]
+        - name: replace
+          args: ["ГБ", "GB"]
+        - name: replace
+          args: ["МБ", "MB"]
+        - name: replace
+          args: ["КБ", "KB"]
+    seeders:
+      selector: td.forumtopics span.seed
+    leechers:
+      selector: td.forumtopics span.leech
+    grabs:
+      selector: td.forumposts span.complet
+    date:
+      # 12 янв 2019, 11:26
+      selector: td.forumdetails span.forum-descriptions
+      filters:
+        # extract the date
+        - name: regexp
+          args: "(\\d{2} \\D{3} \\d{4}, \\d{2}:\\d{2})"
+          # replace month abbreviations
+        - name: replace
+          args: ["янв", "Jan"]
+        - name: replace
+          args: ["фев", "Feb"]
+        - name: replace
+          args: ["мар", "Mar"]
+        - name: replace
+          args: ["апр", "Apr"]
+        - name: replace
+          args: ["май", "May"]
+        - name: replace
+          args: ["июн", "Jun"]
+        - name: replace
+          args: ["июл", "Jul"]
+        - name: replace
+          args: ["авг", "Aug"]
+        - name: replace
+          args: ["сен", "Sep"]
+        - name: replace
+          args: ["окт", "Oct"]
+        - name: replace
+          args: ["ноя", "Nov"]
+        - name: replace
+          args: ["дек", "Dec"]
+        - name: dateparse
+          args: "02 Jan 06, 15:04"
+    downloadvolumefactor:
+      text: 1
+    uploadvolumefactor:
+      text: 1
 # phpBB
