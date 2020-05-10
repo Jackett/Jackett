@@ -1,209 +1,209 @@
 ---
-  site: marinetracker
-  name: Marine Tracker
-  description: "Marine Tracker is a RUSSIAN Semi-Private Torrent Tracker for MARITIME E-LEARNING"
-  language: ru-ru
-  type: semi-private
-  encoding: UTF-8
-  links:
-    - https://seatracker.ru/
+site: marinetracker
+name: Marine Tracker
+description: "Marine Tracker is a RUSSIAN Semi-Private Torrent Tracker for MARITIME E-LEARNING"
+language: ru-ru
+type: semi-private
+encoding: UTF-8
+links:
+  - https://seatracker.ru/
 
-  caps:
-    categorymappings:
-      - {id: 5, cat: Books, desc: "Shipbuilding & Shiprepairing"}
-      - {id: 196, cat: Books, desc: "Shipbuilding & Shiprepairing-Welding"}
-      - {id: 195, cat: Books, desc: "Shipbuilding & Shiprepairing-Turnary"}
-      - {id: 226, cat: Books, desc: "Mobile Apps for Seafarers"}
-      - {id: 6, cat: PC, desc: "Maritime Software"}
-      - {id: 211, cat: PC, desc: "Maritime Software-Navigation soft & Charts"}
-      - {id: 19, cat: PC, desc: "Maritime Software-Training software"}
-      - {id: 13, cat: PC, desc: "Maritime Software-Marine Tests"}
-      - {id: 14, cat: PC, desc: "Maritime Software-Maritime Simulators"}
-      - {id: 12, cat: PC, desc: "Maritime Software-Answers to tests"}
-      - {id: 20, cat: PC, desc: "Maritime Software-Calculation soft"}
-      - {id: 188, cat: PC, desc: "Maritime Software-Other soft"}
-      - {id: 179, cat: PC, desc: "Maritime Software-Programming and SDK software"}
-      - {id: 21, cat: Books, desc: "Deckofficer's Library"}
-      - {id: 114, cat: Books, desc: "Deckofficer's Library-Watch keeping"}
-      - {id: 115, cat: Books, desc: "Deckofficer's Library-Keeping the ship documentation"}
-      - {id: 32, cat: Books, desc: "Deckofficer's Library-Cargo operations"}
-      - {id: 34, cat: Books, desc: "Deckofficer's Library-Navigation"}
-      - {id: 35, cat: Books, desc: "Deckofficer's Library-Ship handling"}
-      - {id: 36, cat: Books, desc: "Deckofficer's Library-Technical equipment of navigation"}
-      - {id: 95, cat: Books, desc: "Deckofficer's Library-Hydrometeorology"}
-      - {id: 100, cat: Books, desc: "Deckofficer's Library-Ship Theory"}
-      - {id: 110, cat: Books, desc: "Deckofficer's Library-Astronomy"}
-      - {id: 94, cat: Books, desc: "Deckofficer's Library-Nautical charts, tables, sailing directions"}
-      - {id: 116, cat: Books, desc: "Deckofficer's Library-Global Maritime Distress and Safety System (GMDSS)"}
-      - {id: 192, cat: Books, desc: "Deckofficer's Library-Navigation in the ice"}
-      - {id: 42, cat: Books, desc: "Safety of Navigation"}
-      - {id: 8, cat: Movies, desc: "Video for Seamen"}
-      - {id: 237, cat: Movies, desc: "Video for Seamen-Видео по яхтингу"}
-      - {id: 234, cat: Movies, desc: "Video for Seamen-Video for Deck Officers"}
-      - {id: 233, cat: Movies, desc: "Video for Seamen-Video for Marine Engineers"}
-      - {id: 235, cat: Movies, desc: "Video for Seamen-Other videos"}
-      - {id: 206, cat: Movies, desc: "Marine films"}
-      - {id: 209, cat: Movies, desc: "Marine films-Documentary films"}
-      - {id: 208, cat: Movies, desc: "Marine films-Russian films"}
-      - {id: 102, cat: Books, desc: "Marine Engineer's Library"}
-      - {id: 28, cat: Books, desc: Marine Engineer's Library-Ship's systems and mechanisms"}
-      - {id: 22, cat: Books, desc: Marine Engineer's Library-Daihatsu"}
-      - {id: 164, cat: Books, desc: Marine Engineer's Library-Operation of ship's power plants"}
-      - {id: 199, cat: Books, desc: Marine Engineer's Library-Ship Propulsion"}
-      - {id: 176, cat: Books, desc: Marine Engineer's Library-Marine refrigeration plants"}
-      - {id: 175, cat: Books, desc: Marine Engineer's Library-Marine boilers"}
-      - {id: 173, cat: Books, desc: Marine Engineer's Library-MAK & Caterpillar"}
-      - {id: 166, cat: Books, desc: Marine Engineer's Library-Ship's steam and gas turbines"}
-      - {id: 134, cat: Books, desc: Marine Engineer's Library-Marine Pumps"}
-      - {id: 112, cat: Books, desc: Marine Engineer's Library-AALBORG"}
-      - {id: 108, cat: Books, desc: Marine Engineer's Library-Hydraulics"}
-      - {id: 16, cat: Books, desc: Marine Engineer's Library-MAN B&W"}
-      - {id: 17, cat: Books, desc: Marine Engineer's Library-Wärtsilä & Sulzer"}
-      - {id: 7, cat: Books, desc: "Technical Books (Not maritime)"}
-      - {id: 10, cat: Books, desc: "English for seamen"}
-      - {id: 205, cat: Books, desc: "General english"}
-      - {id: 101, cat: Books, desc: "Electrical Technical Officer's Library"}
-      - {id: 29, cat: Books, desc: "Electrical Technical Officer's Library-Marine Electronics"}
-      - {id: 103, cat: Books, desc: "Electrical Technical Officer's Library-Ship's automatics"}
-      - {id: 104, cat: Books, desc: "Electrical Technical Officer's Library-Electrical machines"}
-      - {id: 210, cat: Books, desc: "Electrical Technical Officer's Library-Programmable Logic Controllers (PLC)"}
-      - {id: 172, cat: Books, desc: "Electrical Technical Officer's Library-Incinerators"}
-      - {id: 167, cat: Books, desc: "Electrical Technical Officer's Library-Cranes"}
-      - {id: 107, cat: Books, desc: "Electrical Technical Officer's Library-ETO Handbooks"}
-      - {id: 105, cat: Books, desc: "Electrical Technical Officer's Library-Sources of electricity"}
-      - {id: 37, cat: Books, desc: "Organization and management of maritime transport"}
-      - {id: 11, cat: Books, desc: "Section for cadets"}
-      - {id: 191, cat: Books, desc: "Maritime Law"}
-      - {id: 240, cat: Books, desc: "Maritime Law-IMO Resolutions"}
-      - {id: 38, cat: Books, desc: "Handbooks, manuals"}
-      - {id: 190, cat: Books, desc: "Catalogs"}
-      - {id: 113, cat: Books, desc: "Medicine"}
-      - {id: 39, cat: Books, desc: "Purpose-built ships"}
-      - {id: 239, cat: Books, desc: "Purpose-built ships-Offshore"}
-      - {id: 99, cat: Audio, desc: "Audio"}
-      - {id: 212, cat: Books, desc: "Ship's documentation"}
-      - {id: 111, cat: Books, desc: "Yachting, sailing, boating"}
-      - {id: 177, cat: Books, desc: "Shipmodeling"}
-      - {id: 197, cat: Books, desc: "Marine bulletins"}
-      - {id: 219, cat: Books, desc: "History of Merchant Marine"}
-      - {id: 218, cat: Books, desc: "Maritime Fiction"}
-      - {id: 198, cat: Books, desc: "Navy"}
-      - {id: 220, cat: Books, desc: "Fishing & Spearfishing"}
-      - {id: 187, cat: Books, desc: "Others (not maritime)"}
-      - {id: 162, cat: Books, desc: "Archive"}
+caps:
+  categorymappings:
+    - {id: 5, cat: Books, desc: "Shipbuilding & Shiprepairing"}
+    - {id: 196, cat: Books, desc: "Shipbuilding & Shiprepairing-Welding"}
+    - {id: 195, cat: Books, desc: "Shipbuilding & Shiprepairing-Turnary"}
+    - {id: 226, cat: Books, desc: "Mobile Apps for Seafarers"}
+    - {id: 6, cat: PC, desc: "Maritime Software"}
+    - {id: 211, cat: PC, desc: "Maritime Software-Navigation soft & Charts"}
+    - {id: 19, cat: PC, desc: "Maritime Software-Training software"}
+    - {id: 13, cat: PC, desc: "Maritime Software-Marine Tests"}
+    - {id: 14, cat: PC, desc: "Maritime Software-Maritime Simulators"}
+    - {id: 12, cat: PC, desc: "Maritime Software-Answers to tests"}
+    - {id: 20, cat: PC, desc: "Maritime Software-Calculation soft"}
+    - {id: 188, cat: PC, desc: "Maritime Software-Other soft"}
+    - {id: 179, cat: PC, desc: "Maritime Software-Programming and SDK software"}
+    - {id: 21, cat: Books, desc: "Deckofficer's Library"}
+    - {id: 114, cat: Books, desc: "Deckofficer's Library-Watch keeping"}
+    - {id: 115, cat: Books, desc: "Deckofficer's Library-Keeping the ship documentation"}
+    - {id: 32, cat: Books, desc: "Deckofficer's Library-Cargo operations"}
+    - {id: 34, cat: Books, desc: "Deckofficer's Library-Navigation"}
+    - {id: 35, cat: Books, desc: "Deckofficer's Library-Ship handling"}
+    - {id: 36, cat: Books, desc: "Deckofficer's Library-Technical equipment of navigation"}
+    - {id: 95, cat: Books, desc: "Deckofficer's Library-Hydrometeorology"}
+    - {id: 100, cat: Books, desc: "Deckofficer's Library-Ship Theory"}
+    - {id: 110, cat: Books, desc: "Deckofficer's Library-Astronomy"}
+    - {id: 94, cat: Books, desc: "Deckofficer's Library-Nautical charts, tables, sailing directions"}
+    - {id: 116, cat: Books, desc: "Deckofficer's Library-Global Maritime Distress and Safety System (GMDSS)"}
+    - {id: 192, cat: Books, desc: "Deckofficer's Library-Navigation in the ice"}
+    - {id: 42, cat: Books, desc: "Safety of Navigation"}
+    - {id: 8, cat: Movies, desc: "Video for Seamen"}
+    - {id: 237, cat: Movies, desc: "Video for Seamen-Видео по яхтингу"}
+    - {id: 234, cat: Movies, desc: "Video for Seamen-Video for Deck Officers"}
+    - {id: 233, cat: Movies, desc: "Video for Seamen-Video for Marine Engineers"}
+    - {id: 235, cat: Movies, desc: "Video for Seamen-Other videos"}
+    - {id: 206, cat: Movies, desc: "Marine films"}
+    - {id: 209, cat: Movies, desc: "Marine films-Documentary films"}
+    - {id: 208, cat: Movies, desc: "Marine films-Russian films"}
+    - {id: 102, cat: Books, desc: "Marine Engineer's Library"}
+    - {id: 28, cat: Books, desc: Marine Engineer's Library-Ship's systems and mechanisms"}
+    - {id: 22, cat: Books, desc: Marine Engineer's Library-Daihatsu"}
+    - {id: 164, cat: Books, desc: Marine Engineer's Library-Operation of ship's power plants"}
+    - {id: 199, cat: Books, desc: Marine Engineer's Library-Ship Propulsion"}
+    - {id: 176, cat: Books, desc: Marine Engineer's Library-Marine refrigeration plants"}
+    - {id: 175, cat: Books, desc: Marine Engineer's Library-Marine boilers"}
+    - {id: 173, cat: Books, desc: Marine Engineer's Library-MAK & Caterpillar"}
+    - {id: 166, cat: Books, desc: Marine Engineer's Library-Ship's steam and gas turbines"}
+    - {id: 134, cat: Books, desc: Marine Engineer's Library-Marine Pumps"}
+    - {id: 112, cat: Books, desc: Marine Engineer's Library-AALBORG"}
+    - {id: 108, cat: Books, desc: Marine Engineer's Library-Hydraulics"}
+    - {id: 16, cat: Books, desc: Marine Engineer's Library-MAN B&W"}
+    - {id: 17, cat: Books, desc: Marine Engineer's Library-Wärtsilä & Sulzer"}
+    - {id: 7, cat: Books, desc: "Technical Books (Not maritime)"}
+    - {id: 10, cat: Books, desc: "English for seamen"}
+    - {id: 205, cat: Books, desc: "General english"}
+    - {id: 101, cat: Books, desc: "Electrical Technical Officer's Library"}
+    - {id: 29, cat: Books, desc: "Electrical Technical Officer's Library-Marine Electronics"}
+    - {id: 103, cat: Books, desc: "Electrical Technical Officer's Library-Ship's automatics"}
+    - {id: 104, cat: Books, desc: "Electrical Technical Officer's Library-Electrical machines"}
+    - {id: 210, cat: Books, desc: "Electrical Technical Officer's Library-Programmable Logic Controllers (PLC)"}
+    - {id: 172, cat: Books, desc: "Electrical Technical Officer's Library-Incinerators"}
+    - {id: 167, cat: Books, desc: "Electrical Technical Officer's Library-Cranes"}
+    - {id: 107, cat: Books, desc: "Electrical Technical Officer's Library-ETO Handbooks"}
+    - {id: 105, cat: Books, desc: "Electrical Technical Officer's Library-Sources of electricity"}
+    - {id: 37, cat: Books, desc: "Organization and management of maritime transport"}
+    - {id: 11, cat: Books, desc: "Section for cadets"}
+    - {id: 191, cat: Books, desc: "Maritime Law"}
+    - {id: 240, cat: Books, desc: "Maritime Law-IMO Resolutions"}
+    - {id: 38, cat: Books, desc: "Handbooks, manuals"}
+    - {id: 190, cat: Books, desc: "Catalogs"}
+    - {id: 113, cat: Books, desc: "Medicine"}
+    - {id: 39, cat: Books, desc: "Purpose-built ships"}
+    - {id: 239, cat: Books, desc: "Purpose-built ships-Offshore"}
+    - {id: 99, cat: Audio, desc: "Audio"}
+    - {id: 212, cat: Books, desc: "Ship's documentation"}
+    - {id: 111, cat: Books, desc: "Yachting, sailing, boating"}
+    - {id: 177, cat: Books, desc: "Shipmodeling"}
+    - {id: 197, cat: Books, desc: "Marine bulletins"}
+    - {id: 219, cat: Books, desc: "History of Merchant Marine"}
+    - {id: 218, cat: Books, desc: "Maritime Fiction"}
+    - {id: 198, cat: Books, desc: "Navy"}
+    - {id: 220, cat: Books, desc: "Fishing & Spearfishing"}
+    - {id: 187, cat: Books, desc: "Others (not maritime)"}
+    - {id: 162, cat: Books, desc: "Archive"}
 
-    modes:
-      search: [q]
+  modes:
+    search: [q]
 
-  settings:
-    - name: username
-      type: text
-      label: Username
-    - name: password
-      type: password
-      label: Password
-    - name: sort
-      type: select
-      label: Sort requested from site
-      default: "1"
-      options:
-        "1": "created"
-        "10": "seeders"
-        "7": "size"
-        "2": "title"
-    - name: type
-      type: select
-      label: Order requested from site
-      default: "2"
-      options:
-        "2": "desc"
-        "1": "asc"
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: "1"
+    options:
+      "1": "created"
+      "10": "seeders"
+      "7": "size"
+      "2": "title"
+  - name: type
+    type: select
+    label: Order requested from site
+    default: "2"
+    options:
+      "2": "desc"
+      "1": "asc"
 
-  login:
+login:
+  path: /
+  method: form
+  form: form.logform
+  inputs:
+    login_username: "{{ .Config.username }}"
+    login_password: "{{ .Config.password }}"
+    autologin: 1
+  error:
+    - selector: div#error_fon
+  test:
     path: /
-    method: form
-    form: form.logform
-    inputs:
-      login_username: "{{ .Config.username }}"
-      login_password: "{{ .Config.password }}"
-      autologin: 1
-    error:
-      - selector: div#error_fon
-    test:
-      path: /
-      selector: a[href^="/./login.php?logout="]
+    selector: a[href^="/./login.php?logout="]
 
-  search:
-    paths:
-      - path: tracker.php
-        method: post
-    inputs:
-      $raw: "{{ if .Categories }}{{ range .Categories }}f[]={{.}}&{{end}}{{else}}f[]=-1{{end}}"
-      nm: "{{ .Keywords }}"
-      allw: 1
-      o: "{{ .Config.sort }}"
-      s: "{{ .Config.type }}"
-      tm: -1
-      sns: -1
-      prev_allw: 1
-      prev_a: 0
-      prev_dla: 0
-      prev_dlc: 0
-      prev_dld: 0
-      prev_dlw: 0
-      prev_my: 0
-      prev_new: 0
-      prev_sd: 0
-      prev_da: 1
-      prev_dc: 0
-      prev_df: 1
-      prev_dl: 1
-      prev_ds: 0
-      prev_tor_type: 0
-      df: 1
-      da: 1
-      dl: 1
-      pn: ""
-      submit: "%C2%A0%C2%A0Search%C2%A0%C2%A0"
+search:
+  paths:
+    - path: tracker.php
+      method: post
+  inputs:
+    $raw: "{{ if .Categories }}{{ range .Categories }}f[]={{.}}&{{end}}{{else}}f[]=-1{{end}}"
+    nm: "{{ .Keywords }}"
+    allw: 1
+    o: "{{ .Config.sort }}"
+    s: "{{ .Config.type }}"
+    tm: -1
+    sns: -1
+    prev_allw: 1
+    prev_a: 0
+    prev_dla: 0
+    prev_dlc: 0
+    prev_dld: 0
+    prev_dlw: 0
+    prev_my: 0
+    prev_new: 0
+    prev_sd: 0
+    prev_da: 1
+    prev_dc: 0
+    prev_df: 1
+    prev_dl: 1
+    prev_ds: 0
+    prev_tor_type: 0
+    df: 1
+    da: 1
+    dl: 1
+    pn: ""
+    submit: "%C2%A0%C2%A0Search%C2%A0%C2%A0"
 
-    rows:
-      selector: tr[id^="tor_"]:has(a[href^="./download.php?id="])
+  rows:
+    selector: tr[id^="tor_"]:has(a[href^="./download.php?id="])
 
-    fields:
-      title:
-        selector: a.tLink
-      details:
-        selector: a.tLink
-        attribute: href
-      download:
-        selector: a[href^="./download.php?id="]
-        attribute: href
-      category:
-        selector: td a.gen
-        attribute: href
-        filters:
-          - name: querystring
-            args: f
-      description:
-        selector: td span.iconDL
-      size:
-        text: 0
-      size:
-        selector: td:nth-last-child(5) > u
-        optional: true
-      seeders:
-        selector: td.seedmed
-      leechers:
-        selector: td.leechmed
-      grabs:
-        selector: td:nth-last-child(2)
-      date:
-        selector: td:last-child > u
-      downloadvolumefactor:
-        case:
-          img[src="images/tor_gold.gif"]: 0
-          img[src="images/tor_silver.gif"]: 0.5
-          "*": 1
-      uploadvolumefactor:
-        text: 1
+  fields:
+    title:
+      selector: a.tLink
+    details:
+      selector: a.tLink
+      attribute: href
+    download:
+      selector: a[href^="./download.php?id="]
+      attribute: href
+    category:
+      selector: td a.gen
+      attribute: href
+      filters:
+        - name: querystring
+          args: f
+    description:
+      selector: td span.iconDL
+    size:
+      text: 0
+    size:
+      selector: td:nth-last-child(5) > u
+      optional: true
+    seeders:
+      selector: td.seedmed
+    leechers:
+      selector: td.leechmed
+    grabs:
+      selector: td:nth-last-child(2)
+    date:
+      selector: td:last-child > u
+    downloadvolumefactor:
+      case:
+        img[src="images/tor_gold.gif"]: 0
+        img[src="images/tor_silver.gif"]: 0.5
+        "*": 1
+    uploadvolumefactor:
+      text: 1
 # Engine n/a

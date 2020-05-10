@@ -1,134 +1,134 @@
 ---
-  site: acidlounge
-  name: Acid-Lounge
-  description: "Acid Lounge (A-L) is a Private Torrent Tracker for 0DAY / GENERAL"
-  language: en-us
-  type: private
-  encoding: UTF-8
-  links:
-    - https://www.acid-lounge.org.uk/
+site: acidlounge
+name: Acid-Lounge
+description: "Acid Lounge (A-L) is a Private Torrent Tracker for 0DAY / GENERAL"
+language: en-us
+type: private
+encoding: UTF-8
+links:
+  - https://www.acid-lounge.org.uk/
 
-  caps:
-    categorymappings:
-      - {id: 79, cat: PC/Phone-Android, desc: "Android"}
-      - {id: 61, cat: TV/Anime, desc: "Anime"}
-      - {id: 55, cat: PC/0day, desc: "Appz/0-Day"}
-      - {id: 59, cat: PC/Mac, desc: "Appz/Mac"}
-      - {id: 22, cat: PC, desc: "Appz/Misc"}
-      - {id: 32, cat: PC, desc: "Appz/PC"}
-      - {id: 48, cat: Audio/Audiobook, desc: "Audio/Books"}
-      - {id: 84, cat: Other, desc: "Damaged Torrent"}
-      - {id: 14, cat: Books, desc: "eBooks"}
-      - {id: 82, cat: Books, desc: "eBooks/Comics"}
-      - {id: 81, cat: Books, desc: "eBooks/Mags"}
-      - {id: 60, cat: PC/Mac, desc: "Games/Mac"}
-      - {id: 54, cat: Console/NDS, desc: "Games/NDS"}
-      - {id: 4, cat: PC/Games, desc: "Games/PC"}
-      - {id: 42, cat: Console/PS3, desc: "Games/PS3"}
-      - {id: 56, cat: Console/Wii, desc: "Games/Wii"}
-      - {id: 36, cat: Console/Xbox360, desc: "Games/xbox360"}
-      - {id: 69, cat: Other, desc: "Halloween"}
-      - {id: 80, cat: PC/Phone-IOS, desc: "iPhone / iPad"}
-      - {id: 46, cat: Other, desc: "Kids"}
-      - {id: 63, cat: PC, desc: "Linux"}
-      - {id: 49, cat: Other, desc: "Misc"}
-      - {id: 77, cat: Movies/3D, desc: "Movies/3D BLURAY"}
-      - {id: 73, cat: Movies/HD, desc: "Movies/Boxsets HD"}
-      - {id: 74, cat: Movies/SD, desc: "Movies/Boxsets SD"}
-      - {id: 25, cat: Movies/DVD, desc: "Movies/DVD-R"}
-      - {id: 51, cat: Movies/HD, desc: "Movies/HD"}
-      - {id: 26, cat: Movies, desc: "Movies/Retro"}
-      - {id: 29, cat: Movies/SD, desc: "Movies/SD"}
-      - {id: 52, cat: Movies/SD, desc: "Movies/WMV"}
-      - {id: 85, cat: Movies/HD, desc: "Movies/X265"}
-      - {id: 66, cat: Audio/Lossless, desc: "Music/Flac"}
-      - {id: 35, cat: Audio/MP3, desc: "Music/MP3"}
-      - {id: 31, cat: Audio/Video, desc: "Music/Videos"}
-      - {id: 72, cat: Movies, desc: "Sci-Fi"}
-      - {id: 83, cat: Movies, desc: "Tribute Packs"}
-      - {id: 30, cat: TV, desc: "TV"}
-      - {id: 50, cat: TV/HD, desc: "TV-HD/X264"}
-      - {id: 71, cat: TV/SD, desc: "TV-SD/X264"}
-      - {id: 75, cat: TV/HD, desc: "TV/Boxsets HD"}
-      - {id: 76, cat: TV/SD, desc: "TV/Boxsets SD"}
-      - {id: 37, cat: XXX, desc: "XXX"}
-      - {id: 78, cat: XXX, desc: "XXX/3D"}
+caps:
+  categorymappings:
+    - {id: 79, cat: PC/Phone-Android, desc: "Android"}
+    - {id: 61, cat: TV/Anime, desc: "Anime"}
+    - {id: 55, cat: PC/0day, desc: "Appz/0-Day"}
+    - {id: 59, cat: PC/Mac, desc: "Appz/Mac"}
+    - {id: 22, cat: PC, desc: "Appz/Misc"}
+    - {id: 32, cat: PC, desc: "Appz/PC"}
+    - {id: 48, cat: Audio/Audiobook, desc: "Audio/Books"}
+    - {id: 84, cat: Other, desc: "Damaged Torrent"}
+    - {id: 14, cat: Books, desc: "eBooks"}
+    - {id: 82, cat: Books, desc: "eBooks/Comics"}
+    - {id: 81, cat: Books, desc: "eBooks/Mags"}
+    - {id: 60, cat: PC/Mac, desc: "Games/Mac"}
+    - {id: 54, cat: Console/NDS, desc: "Games/NDS"}
+    - {id: 4, cat: PC/Games, desc: "Games/PC"}
+    - {id: 42, cat: Console/PS3, desc: "Games/PS3"}
+    - {id: 56, cat: Console/Wii, desc: "Games/Wii"}
+    - {id: 36, cat: Console/Xbox360, desc: "Games/xbox360"}
+    - {id: 69, cat: Other, desc: "Halloween"}
+    - {id: 80, cat: PC/Phone-IOS, desc: "iPhone / iPad"}
+    - {id: 46, cat: Other, desc: "Kids"}
+    - {id: 63, cat: PC, desc: "Linux"}
+    - {id: 49, cat: Other, desc: "Misc"}
+    - {id: 77, cat: Movies/3D, desc: "Movies/3D BLURAY"}
+    - {id: 73, cat: Movies/HD, desc: "Movies/Boxsets HD"}
+    - {id: 74, cat: Movies/SD, desc: "Movies/Boxsets SD"}
+    - {id: 25, cat: Movies/DVD, desc: "Movies/DVD-R"}
+    - {id: 51, cat: Movies/HD, desc: "Movies/HD"}
+    - {id: 26, cat: Movies, desc: "Movies/Retro"}
+    - {id: 29, cat: Movies/SD, desc: "Movies/SD"}
+    - {id: 52, cat: Movies/SD, desc: "Movies/WMV"}
+    - {id: 85, cat: Movies/HD, desc: "Movies/X265"}
+    - {id: 66, cat: Audio/Lossless, desc: "Music/Flac"}
+    - {id: 35, cat: Audio/MP3, desc: "Music/MP3"}
+    - {id: 31, cat: Audio/Video, desc: "Music/Videos"}
+    - {id: 72, cat: Movies, desc: "Sci-Fi"}
+    - {id: 83, cat: Movies, desc: "Tribute Packs"}
+    - {id: 30, cat: TV, desc: "TV"}
+    - {id: 50, cat: TV/HD, desc: "TV-HD/X264"}
+    - {id: 71, cat: TV/SD, desc: "TV-SD/X264"}
+    - {id: 75, cat: TV/HD, desc: "TV/Boxsets HD"}
+    - {id: 76, cat: TV/SD, desc: "TV/Boxsets SD"}
+    - {id: 37, cat: XXX, desc: "XXX"}
+    - {id: 78, cat: XXX, desc: "XXX/3D"}
 
-    modes:
-      search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
-      music-search: [q]
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
 
-  login:
-    path: Main/?act=Login
-    method: form
-    form: form#login
-    captcha:
-      type: image
-      selector: img[alt="Security code"]
-      input: code
-    inputs:
-      username: "{{ .Config.username }}"
-      password: "{{ .Config.password }}"
-    error:
-      - selector: div.errorWrap
-    test:
-      path: browse.php
+login:
+  path: Main/?act=Login
+  method: form
+  form: form#login
+  captcha:
+    type: image
+    selector: img[alt="Security code"]
+    input: code
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: div.errorWrap
+  test:
+    path: browse.php
 
-  search:
-    paths:
-      - path: browse.php
-    inputs:
-      $raw: "{{range .Categories}}cid[]={{.}}&{{end}}"
-      search: "{{ .Keywords }}"
-      search_type: "title"
-    rows:
-      selector: table#browse_torrents_table > tbody > tr[id^="torrent_row_"]
-    fields:
-      title:
-        selector: a.torrent_name
-        attribute: title
-      description:
-        selector: span.torrent_small_desc
-      category:
-        selector: td.torrent_table_type > a
-        attribute: href
-        filters:
-          - name: querystring
-            args: cat[]
-      details:
-        selector: a.torrent_name
-        attribute: href
-      download:
-        selector: a[href^="download.php?"]
-        attribute: href
-      size:
-        selector: td.torrent_table_size
-      files:
-        selector: td.torrent_table_files
-      seeders:
-        selector: td.torrent_table_seeders
-      leechers:
-        selector: td.torrent_table_leechers
-      grabs:
-        selector: td.torrent_table_snatched
-        filters:
-          - name: regexp
-            args: ([\d\.]+)
-      downloadvolumefactor:
-        case:
-          ":root div#notice_ratioBoostingMadness": "0"
-          "*": "1"
-      uploadvolumefactor:
-        case:
-          "*": "1"
-      date:
-        selector: td.torrent_table_dateAdded
-        filters:
-          - name: append
-            args: " +01:00"
-          - name: dateparse
-            args: "2006-01-02 15:04:05 -07:00"
+search:
+  paths:
+    - path: browse.php
+  inputs:
+    $raw: "{{range .Categories}}cid[]={{.}}&{{end}}"
+    search: "{{ .Keywords }}"
+    search_type: "title"
+  rows:
+    selector: table#browse_torrents_table > tbody > tr[id^="torrent_row_"]
+  fields:
+    title:
+      selector: a.torrent_name
+      attribute: title
+    description:
+      selector: span.torrent_small_desc
+    category:
+      selector: td.torrent_table_type > a
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat[]
+    details:
+      selector: a.torrent_name
+      attribute: href
+    download:
+      selector: a[href^="download.php?"]
+      attribute: href
+    size:
+      selector: td.torrent_table_size
+    files:
+      selector: td.torrent_table_files
+    seeders:
+      selector: td.torrent_table_seeders
+    leechers:
+      selector: td.torrent_table_leechers
+    grabs:
+      selector: td.torrent_table_snatched
+      filters:
+        - name: regexp
+          args: ([\d\.]+)
+    downloadvolumefactor:
+      case:
+        ":root div#notice_ratioBoostingMadness": "0"
+        "*": "1"
+    uploadvolumefactor:
+      case:
+        "*": "1"
+    date:
+      selector: td.torrent_table_dateAdded
+      filters:
+        - name: append
+          args: " +01:00"
+        - name: dateparse
+          args: "2006-01-02 15:04:05 -07:00"
 
 

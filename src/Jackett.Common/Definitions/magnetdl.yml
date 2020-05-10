@@ -1,102 +1,102 @@
 ---
-  site: magnetdl
-  name: MagnetDL
-  description: "MagnetDL is a Public torrent Magnet Links search engine"
-  language: en-us
-  type: public
-  encoding: UTF-8
-  followredirect: true
-  links:
-    - https://www.magnetdl.com/
-    - https://www.magnetdl.org/
-    - https://magnetdl.unblockninja.com/
-    - https://magnetdl.unblockit.me/
-  legacylinks:
-    - http://www.magnetdl.com/
-    - https://www.magnetdl.me/ # fake
-    - https://magnetdl.unblockit.pro/
-    - https://magnetdl.unblockit.one/
+site: magnetdl
+name: MagnetDL
+description: "MagnetDL is a Public torrent Magnet Links search engine"
+language: en-us
+type: public
+encoding: UTF-8
+followredirect: true
+links:
+  - https://www.magnetdl.com/
+  - https://www.magnetdl.org/
+  - https://magnetdl.unblockninja.com/
+  - https://magnetdl.unblockit.me/
+legacylinks:
+  - http://www.magnetdl.com/
+  - https://www.magnetdl.me/ # fake
+  - https://magnetdl.unblockit.pro/
+  - https://magnetdl.unblockit.one/
 
-  caps:
-    categories:
-      "TV": TV
-      "Movie": Movies
-      "Music": Audio
-      "E-Book": Books/Ebook
-      "Game": PC/Games
-      "Software": PC
-      "Other": Other
+caps:
+  categories:
+    "TV": TV
+    "Movie": Movies
+    "Music": Audio
+    "E-Book": Books/Ebook
+    "Game": PC/Games
+    "Software": PC
+    "Other": Other
 
-    modes:
-      search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
-      music-search: [q]
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
 
-  settings:
-    - name: sort
-      type: select
-      label: Sort requested from site
-      default: "age"
-      options:
-        "age": "created"
-        "se": "seeders"
-        "size": "size"
-    - name: type
-      type: select
-      label: Order requested from site
-      default: "desc"
-      options:
-        "desc": "desc"
-        "asc": "asc"
+settings:
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: "age"
+    options:
+      "age": "created"
+      "se": "seeders"
+      "size": "size"
+  - name: type
+    type: select
+    label: Order requested from site
+    default: "desc"
+    options:
+      "desc": "desc"
+      "asc": "asc"
 
-  search:
-    headers:
-      # prevent redirect
-      Accept: ["text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8"]
-    keywordsfilters:
-      # replace space between keywords with - to prevent 404 Not Found
-      - name: re_replace
-        args: [" ", "-"]
-      - name: tolower
-    paths:
-      # return results for 'of' if there are no search parms supplied (for use with the TEST button)
-      # http://www.magnetdl.com/m/midnight-texas-s01e10/
-      - path: "{{ if .Keywords }}{{ re_replace .Keywords \"(.).*\" \"$1\" }}/{{ .Keywords }}/{{else}}o/of/{{end}}{{ .Config.sort }}/{{ .Config.type }}/"
-      - path: "{{ if .Keywords }}{{ re_replace .Keywords \"(.).*\" \"$1\" }}/{{ .Keywords }}/{{else}}o/of/{{end}}{{ .Config.sort }}/{{ .Config.type }}/2/"
+search:
+  headers:
+    # prevent redirect
+    Accept: ["text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8"]
+  keywordsfilters:
+    # replace space between keywords with - to prevent 404 Not Found
+    - name: re_replace
+      args: [" ", "-"]
+    - name: tolower
+  paths:
+    # return results for 'of' if there are no search parms supplied (for use with the TEST button)
+    # http://www.magnetdl.com/m/midnight-texas-s01e10/
+    - path: "{{ if .Keywords }}{{ re_replace .Keywords \"(.).*\" \"$1\" }}/{{ .Keywords }}/{{else}}o/of/{{end}}{{ .Config.sort }}/{{ .Config.type }}/"
+    - path: "{{ if .Keywords }}{{ re_replace .Keywords \"(.).*\" \"$1\" }}/{{ .Keywords }}/{{else}}o/of/{{end}}{{ .Config.sort }}/{{ .Config.type }}/2/"
 
-    rows:
-      selector: tr:has(td.m)
+  rows:
+    selector: tr:has(td.m)
 
-    fields:
-      title:
-        selector: td.n a
-        attribute: title
-      category:
-        text: Other
-      category|noappend:
-        optional: true
-        selector:  td[class^="t"]
-      details:
-        selector: td.n a
-        attribute: href
-      magnet:
-        selector: td.m a
-        attribute: href
-      date:
-        selector: td:nth-child(3)
-        filters:
-          - name: timeago
-      files:
-        selector: td:nth-child(5)
-      size:
-        selector: td:nth-child(6)
-      seeders:
-        selector: td.s
-      leechers:
-        selector: td.l
-      downloadvolumefactor:
-        text: 0
-      uploadvolumefactor:
-        text: 1
+  fields:
+    title:
+      selector: td.n a
+      attribute: title
+    category:
+      text: Other
+    category|noappend:
+      optional: true
+      selector:  td[class^="t"]
+    details:
+      selector: td.n a
+      attribute: href
+    magnet:
+      selector: td.m a
+      attribute: href
+    date:
+      selector: td:nth-child(3)
+      filters:
+        - name: timeago
+    files:
+      selector: td:nth-child(5)
+    size:
+      selector: td:nth-child(6)
+    seeders:
+      selector: td.s
+    leechers:
+      selector: td.l
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
 # engine n/a

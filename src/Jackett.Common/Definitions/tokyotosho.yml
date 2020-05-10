@@ -1,101 +1,101 @@
 ---
-  site: tokyotosho
-  name: Tokyo Toshokan
-  description: "A BitTorrent Library for Japanese Media"
-  language: en-us
-  type: public
-  encoding: UTF-8
-  links:
-    - https://www.tokyotosho.info/
-    - https://tokyotosho.black-mirror.xyz/
-    - https://tokyotosho.unblocked.casa/
-    - https://tokyotosho.proxyportal.fun/
-    - https://tokyotosho.uk-unblock.xyz/
-    - https://tokyotosho.ind-unblock.xyz/
+site: tokyotosho
+name: Tokyo Toshokan
+description: "A BitTorrent Library for Japanese Media"
+language: en-us
+type: public
+encoding: UTF-8
+links:
+  - https://www.tokyotosho.info/
+  - https://tokyotosho.black-mirror.xyz/
+  - https://tokyotosho.unblocked.casa/
+  - https://tokyotosho.proxyportal.fun/
+  - https://tokyotosho.uk-unblock.xyz/
+  - https://tokyotosho.ind-unblock.xyz/
 
-  settings:
-    - name: type-id
-      type: text
-      label: Type Id
+settings:
+  - name: type-id
+    type: text
+    label: Type Id
 
-  caps:
-    categories:
-      1:  TV/Anime # Anime
-      10: TV/Anime # Non-English Anime
-      3:  Books    # Manga
-      8:  TV/Anime # Drama
-      2:  Audio    # Anime Music
-      9:  TV/Anime # Anime Music Videos
-      7:  TV/Anime # Raw Anime
-      4:  XXX      # Hentai
-      12: XXX      # Hentai (Anime)
-      13: XXX      # Hentai (Manga)
-      14: XXX      # Hentai (Games)
-      11: TV/Anime # Batch
-      15: XXX      # JAV
-      5:  Other    # Other
+caps:
+  categories:
+    1:  TV/Anime # Anime
+    10: TV/Anime # Non-English Anime
+    3:  Books    # Manga
+    8:  TV/Anime # Drama
+    2:  Audio    # Anime Music
+    9:  TV/Anime # Anime Music Videos
+    7:  TV/Anime # Raw Anime
+    4:  XXX      # Hentai
+    12: XXX      # Hentai (Anime)
+    13: XXX      # Hentai (Manga)
+    14: XXX      # Hentai (Games)
+    11: TV/Anime # Batch
+    15: XXX      # JAV
+    5:  Other    # Other
 
-    modes:
-      search: [q]
-      tv-search: [q, season, ep]
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
 
-  search:
-    paths:
-      - path: "{{ if .Keywords }}search.php{{else}}index.php{{end}}"
-    inputs:
-      terms: "{{ .Keywords }}"
-      type: "{{ .Config.type-id }}"
-      cat: "{{ .Config.type-id }}"
+search:
+  paths:
+    - path: "{{ if .Keywords }}search.php{{else}}index.php{{end}}"
+  inputs:
+    terms: "{{ .Keywords }}"
+    type: "{{ .Config.type-id }}"
+    cat: "{{ .Config.type-id }}"
 
-    rows:
-      selector: "table.listing tr.category_0"
-      after: 1
+  rows:
+    selector: "table.listing tr.category_0"
+    after: 1
+    filters:
+      - name: andmatch
+
+  fields:
+    category:
+      selector: a[href*="?cat="]
+      attribute: href
       filters:
-        - name: andmatch
-
-    fields:
-      category:
-        selector: a[href*="?cat="]
-        attribute: href
-        filters:
-          - name: regexp
-            args: (\d+)
-      title:
-        selector: td.desc-top a[type="application/x-bittorrent"]
-      details:
-        selector: a[href^="details.php?id="]
-        attribute: href
-      download:
-        selector: td.desc-top a[type="application/x-bittorrent"]
-        attribute: href
-      magnet:
-        selector: a[href^="magnet:?xt="]
-        attribute: href
-        optional: true
-      size:
-        selector: td.desc-bot
-        filters:
-          - name: split
-            args: [ "|", 1 ]
-          - name: regexp
-            args: "Size: (.+?) ?$"
-      date:
-        selector: td.desc-bot
-        filters:
-          - name: split
-            args: [ "|", 2 ]
-          - name: regexp
-            args: "Date: (.+?) ?$"
-          - name: replace
-            args: ["UTC","-00"]
-          - name: dateparse
-            args: "2006-01-02 15:04 -07"
-      seeders:
-        selector: td.stats > span:nth-child(1)
-      leechers:
-        selector: td.stats > span:nth-child(2)
-      downloadvolumefactor:
-        text: 0
-      uploadvolumefactor:
-        text: 1
+        - name: regexp
+          args: (\d+)
+    title:
+      selector: td.desc-top a[type="application/x-bittorrent"]
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: td.desc-top a[type="application/x-bittorrent"]
+      attribute: href
+    magnet:
+      selector: a[href^="magnet:?xt="]
+      attribute: href
+      optional: true
+    size:
+      selector: td.desc-bot
+      filters:
+        - name: split
+          args: [ "|", 1 ]
+        - name: regexp
+          args: "Size: (.+?) ?$"
+    date:
+      selector: td.desc-bot
+      filters:
+        - name: split
+          args: [ "|", 2 ]
+        - name: regexp
+          args: "Date: (.+?) ?$"
+        - name: replace
+          args: ["UTC","-00"]
+        - name: dateparse
+          args: "2006-01-02 15:04 -07"
+    seeders:
+      selector: td.stats > span:nth-child(1)
+    leechers:
+      selector: td.stats > span:nth-child(2)
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
 # Engine n/a

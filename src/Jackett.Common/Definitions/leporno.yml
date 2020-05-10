@@ -1,105 +1,105 @@
 ---
-  site: leporno
-  name: LePorno
-  description: "LePorno is a Public Tracker for 3X"
-  language: en
-  type: public
-  encoding: UTF-8
-  links:
-    - http://leporno.org/ # site does not support https ERR_SSL_VERSION_OR_CIPHER_MISMATCH
+site: leporno
+name: LePorno
+description: "LePorno is a Public Tracker for 3X"
+language: en
+type: public
+encoding: UTF-8
+links:
+  - http://leporno.org/ # site does not support https ERR_SSL_VERSION_OR_CIPHER_MISMATCH
 
-  caps:
-    categorymappings:
-      - {id: 1, cat: XXX, desc: "XXX"}
+caps:
+  categorymappings:
+    - {id: 1, cat: XXX, desc: "XXX"}
 
-    modes:
-      search: [q]
-      tv-search: [q]
-      movie-search: [q]
+  modes:
+    search: [q]
+    tv-search: [q]
+    movie-search: [q]
 
-  settings:
-    - name: sort
-      type: select
-      label: Sort requested from site
-      default: "1"
-      options:
-        "1": "created"
-        "10": "seeders"
-        "7": "size"
-        "2": "title"
-    - name: type
-      type: select
-      label: Order requested from site
-      default: "2"
-      options:
-        "2": "desc"
-        "1": "asc"
+settings:
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: "1"
+    options:
+      "1": "created"
+      "10": "seeders"
+      "7": "size"
+      "2": "title"
+  - name: type
+    type: select
+    label: Order requested from site
+    default: "2"
+    options:
+      "2": "desc"
+      "1": "asc"
 
-  download:
-    selector: a[href*="/dl.php?id="]
-    attribute: href
+download:
+  selector: a[href*="/dl.php?id="]
+  attribute: href
+  filters:
+    - name: replace
+      args: ["https://gotozin.com/?", ""]
+
+search:
+  paths:
+    - path: tracker.php#results
+      method: post
+  inputs:
+    prev_allw: 1
+    prev_a: 0
+    prev_dla: 0
+    prev_dlc: 0
+    prev_dld: 0
+    prev_dlw: 0
+    prev_my: 0
+    prev_new: 0
+    prev_sd: 0
+    prev_da: 1
+    prev_dc: 0
+    prev_df: 1
+    prev_ds: 0
+    prev_tor_type: 0
+    f[]: -1
+    o: "{{ .Config.sort }}"
+    s: "{{ .Config.type }}"
+    tm: -1
+    sns: -1
+    srg: -1
+    df: 1
+    da: 1
+    pn: ""
+    nm: "{{ .Keywords }}"
+    allw: 1
+    submit: Search
+
+  rows:
+    selector: table#tor-tbl tr[id^="tor_"]
     filters:
-      - name: replace
-        args: ["https://gotozin.com/?", ""]
+      - name: andmatch
 
-  search:
-    paths:
-      - path: tracker.php#results
-        method: post
-    inputs:
-      prev_allw: 1
-      prev_a: 0
-      prev_dla: 0
-      prev_dlc: 0
-      prev_dld: 0
-      prev_dlw: 0
-      prev_my: 0
-      prev_new: 0
-      prev_sd: 0
-      prev_da: 1
-      prev_dc: 0
-      prev_df: 1
-      prev_ds: 0
-      prev_tor_type: 0
-      f[]: -1
-      o: "{{ .Config.sort }}"
-      s: "{{ .Config.type }}"
-      tm: -1
-      sns: -1
-      srg: -1
-      df: 1
-      da: 1
-      pn: ""
-      nm: "{{ .Keywords }}"
-      allw: 1
-      submit: Search
-
-    rows:
-      selector: table#tor-tbl tr[id^="tor_"]
-      filters:
-        - name: andmatch
-
-    fields:
-      title:
-        selector: a[href^="./viewtopic.php?t="]
-      details:
-        selector: a[href^="./viewtopic.php?t="]
-        attribute: href
-      download:
-        selector: a[href^="./viewtopic.php?t="]
-        attribute: href
-      category:
-        text: 1
-      size:
-        selector: td:nth-child(6) u
-      date:
-        selector: td:nth-child(10) u
-      seeders:
-        selector: td.seedmed > b
-      leechers:
-        selector: td.leechmed > b
-      downloadvolumefactor:
-        text: 0
-      uploadvolumefactor:
-        text: 1
+  fields:
+    title:
+      selector: a[href^="./viewtopic.php?t="]
+    details:
+      selector: a[href^="./viewtopic.php?t="]
+      attribute: href
+    download:
+      selector: a[href^="./viewtopic.php?t="]
+      attribute: href
+    category:
+      text: 1
+    size:
+      selector: td:nth-child(6) u
+    date:
+      selector: td:nth-child(10) u
+    seeders:
+      selector: td.seedmed > b
+    leechers:
+      selector: td.leechmed > b
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
 # engine n/a

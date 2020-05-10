@@ -1,78 +1,78 @@
 ---
-  site: btdigg
-  name: BTDigg
-  description: "BTDigg is a Public BitTorrent DHT search engine."
-  language: en-us
-  type: public
-  encoding: UTF-8
-  links:
-    -  https://btdig.com/
+site: btdigg
+name: BTDigg
+description: "BTDigg is a Public BitTorrent DHT search engine."
+language: en-us
+type: public
+encoding: UTF-8
+links:
+  -  https://btdig.com/
 
-  caps:
-    categories:
-      1: Other
+caps:
+  categories:
+    1: Other
 
-    modes:
-      search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
 
-  settings:
-    - name: info
-      type: info
-      default: BTDigg does not use categories. In your software Indexer settings, set the category to 7000.
-    - name: sort
-      type: select
-      label: Sort requested from site
-      default: "2"
-      options:
-        "2": "created"
-        "3": "size"
+settings:
+  - name: info
+    type: info
+    default: BTDigg does not use categories. In your software Indexer settings, set the category to 7000.
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: "2"
+    options:
+      "2": "created"
+      "3": "size"
 
-  search:
-    # https://btdig.com/search?q=test&order=2
-    # only 10 results per page
-    paths:
-      - path: search
-    inputs:
-      q: "{{ if .Keywords }}{{ .Keywords }}{{else}}test{{end}}"
-      # 0 relevance 2 age 3 size 4 files
-      order: "{{ .Config.sort }}"
+search:
+  # https://btdig.com/search?q=test&order=2
+  # only 10 results per page
+  paths:
+    - path: search
+  inputs:
+    q: "{{ if .Keywords }}{{ .Keywords }}{{else}}test{{end}}"
+    # 0 relevance 2 age 3 size 4 files
+    order: "{{ .Config.sort }}"
 
-    rows:
-      selector: div.one_result
+  rows:
+    selector: div.one_result
+    filters:
+      - name: andmatch
+
+  fields:
+    title:
+      selector: div.torrent_name a
+    category:
+      text: 1
+    details:
+      selector: div.torrent_name a
+      attribute: href
+    download:
+      selector: a[href^="magnet:?xt="]
+      attribute: href
+    date:
+      selector: span.torrent_age
       filters:
-        - name: andmatch
-
-    fields:
-      title:
-        selector: div.torrent_name a
-      category:
-        text: 1
-      details:
-        selector: div.torrent_name a
-        attribute: href
-      download:
-        selector: a[href^="magnet:?xt="]
-        attribute: href
-      date:
-        selector: span.torrent_age
-        filters:
-          - name: replace
-            args: ["found ", ""]
-      files:
-        text: 1
-      files:
-        selector: span.torrent_files
-        optional: true
-      size:
-        selector: span.torrent_size
-      seeders:
-        text: 1
-      leechers:
-        text: 1
-      downloadvolumefactor:
-        text: 0
-      uploadvolumefactor:
-        text: 1
+        - name: replace
+          args: ["found ", ""]
+    files:
+      text: 1
+    files:
+      selector: span.torrent_files
+      optional: true
+    size:
+      selector: span.torrent_size
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
 # dhtcrawler2

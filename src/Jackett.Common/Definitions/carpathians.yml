@@ -1,162 +1,162 @@
 ---
-  site: carpathians
-  name: Carpathians
-  description: "Carpathians is a HUNGARIAN Private Torrent Tracker for 0DAY / GENERAL"
-  language: hu-hu
-  type: private
-  encoding: UTF-8
-  links:
-    - https://mycarpathians.net/
+site: carpathians
+name: Carpathians
+description: "Carpathians is a HUNGARIAN Private Torrent Tracker for 0DAY / GENERAL"
+language: hu-hu
+type: private
+encoding: UTF-8
+links:
+  - https://mycarpathians.net/
 
-  caps:
-    categorymappings:
-      - {id: 186, cat: Books, desc: "E-book"}
-      - {id: 194, cat: Movies/SD, desc: "Film/CAM/Hun"}
-      - {id: 60, cat: Movies/DVD, desc: "Film/DVD-R/Eng"}
-      - {id: 10, cat: Movies/DVD, desc: "Film/DVD-R/Hun"}
-      - {id: 20, cat: Movies/DVD, desc: "Film/DVD9/Hun"}
-      - {id: 181, cat: Movies/HD, desc: "Film/HD/Eng"}
-      - {id: 183, cat: Movies/HD, desc: "Film/HD/Hun"}
-      - {id: 192, cat: Movies/HD, desc: "Film/x264/Eng"}
-      - {id: 190, cat: Movies/HD, desc: "Film/x264/Hun"}
-      - {id: 70, cat: Movies/SD, desc: "Film/XviD/Eng"}
-      - {id: 30, cat: Movies/SD, desc: "Film/XviD/Hun"}
-      - {id: 140, cat: PC/Games, desc: "Játék/DOX"}
-      - {id: 130, cat: PC/Games, desc: "Játék/PCiso"}
-      - {id: 160, cat: Console/PS3, desc: "Játék/PS2-PS3"}
-      - {id: 189, cat: Console/PSP, desc: "Játék/PSP"}
-      - {id: 184, cat: Console/Wii, desc: "Játék/Wii"}
-      - {id: 150, cat: Console/Xbox, desc: "Játék/XBOX (XBOX360)"}
-      - {id: 182, cat: Audio/Lossless, desc: "Lossless"}
-      - {id: 90, cat: Audio/MP3, desc: "Mp3/Eng"}
-      - {id: 50, cat: Audio/MP3, desc: "Mp3/Hun"}
-      - {id: 100, cat: Audio/Video, desc: "Music-Video"}
-      - {id: 180, cat: PC/Phone-Other, desc: "Program/Mobil"}
-      - {id: 170, cat: PC/0day, desc: "Program/PC"}
-      - {id: 80, cat: TV, desc: "Sorozat/Eng"}
-      - {id: 40, cat: TV, desc: "Sorozat/Hun"}
-      - {id: 110, cat: XXX, desc: "XXX"}
+caps:
+  categorymappings:
+    - {id: 186, cat: Books, desc: "E-book"}
+    - {id: 194, cat: Movies/SD, desc: "Film/CAM/Hun"}
+    - {id: 60, cat: Movies/DVD, desc: "Film/DVD-R/Eng"}
+    - {id: 10, cat: Movies/DVD, desc: "Film/DVD-R/Hun"}
+    - {id: 20, cat: Movies/DVD, desc: "Film/DVD9/Hun"}
+    - {id: 181, cat: Movies/HD, desc: "Film/HD/Eng"}
+    - {id: 183, cat: Movies/HD, desc: "Film/HD/Hun"}
+    - {id: 192, cat: Movies/HD, desc: "Film/x264/Eng"}
+    - {id: 190, cat: Movies/HD, desc: "Film/x264/Hun"}
+    - {id: 70, cat: Movies/SD, desc: "Film/XviD/Eng"}
+    - {id: 30, cat: Movies/SD, desc: "Film/XviD/Hun"}
+    - {id: 140, cat: PC/Games, desc: "Játék/DOX"}
+    - {id: 130, cat: PC/Games, desc: "Játék/PCiso"}
+    - {id: 160, cat: Console/PS3, desc: "Játék/PS2-PS3"}
+    - {id: 189, cat: Console/PSP, desc: "Játék/PSP"}
+    - {id: 184, cat: Console/Wii, desc: "Játék/Wii"}
+    - {id: 150, cat: Console/Xbox, desc: "Játék/XBOX (XBOX360)"}
+    - {id: 182, cat: Audio/Lossless, desc: "Lossless"}
+    - {id: 90, cat: Audio/MP3, desc: "Mp3/Eng"}
+    - {id: 50, cat: Audio/MP3, desc: "Mp3/Hun"}
+    - {id: 100, cat: Audio/Video, desc: "Music-Video"}
+    - {id: 180, cat: PC/Phone-Other, desc: "Program/Mobil"}
+    - {id: 170, cat: PC/0day, desc: "Program/PC"}
+    - {id: 80, cat: TV, desc: "Sorozat/Eng"}
+    - {id: 40, cat: TV, desc: "Sorozat/Hun"}
+    - {id: 110, cat: XXX, desc: "XXX"}
 
-    modes:
-      search: [q, imdbid]
-      tv-search: [q, season, ep, imdbid]
-      movie-search: [q, imdbid]
-      music-search: [q]
+  modes:
+    search: [q, imdbid]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
+    music-search: [q]
 
-  settings:
-    - name: username
-      type: text
-      label: Username
-    - name: password
-      type: password
-      label: Password
-    - name: sort
-      type: select
-      label: Sort requested from site
-      default: "5"
-      options:
-        "5": "created"
-        "8": "seeders"
-        "6": "size"
-        "2": "title"
-    - name: type
-      type: select
-      label: Order requested from site
-      default: "desc"
-      options:
-        "desc": "desc"
-        "asc": "asc"
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: "5"
+    options:
+      "5": "created"
+      "8": "seeders"
+      "6": "size"
+      "2": "title"
+  - name: type
+    type: select
+    label: Order requested from site
+    default: "desc"
+    options:
+      "desc": "desc"
+      "asc": "asc"
 
-  login:
-    path: takelogin.php
-    method: post
-    inputs:
-      username: "{{ .Config.username }}"
-      password: "{{ .Config.password }}"
-    test:
-      path: browse.php
+login:
+  path: takelogin.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  test:
+    path: browse.php
 
-  search:
-    paths:
-      - path: browse.php
-    inputs:
-      $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-      search: "{{ if .Query.IMDBID }}https://www.imdb.com/title/{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-      # 0 both 1 only active 2 only dead
-      incldead: 0
-      onlyname: 1
-      onlyname2: true
-      sort: "{{ .Config.sort }}"
-      type: "{{ .Config.type }}"
+search:
+  paths:
+    - path: browse.php
+  inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    search: "{{ if .Query.IMDBID }}https://www.imdb.com/title/{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    # 0 both 1 only active 2 only dead
+    incldead: 0
+    onlyname: 1
+    onlyname2: true
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
 
-    rows:
-      selector: table[id!="torrent_ajanlo"] > tbody > tr[id]
+  rows:
+    selector: table[id!="torrent_ajanlo"] > tbody > tr[id]
 
-    fields:
-      download:
-        selector: a[href^="download.php/"]
-        attribute: href
-      title:
-        selector: a[id][href^="details.php?"]
-        attribute: title
-      description:
-        selector: font.line
-        filters:
-          - name: regexp
-            args: .*?\|\s*(.*)
-      category:
-        selector: a[href^="browse.php?cat="]
-        attribute: href
-        filters:
-          - name: querystring
-            args: cat
-      details:
-        selector: a[id][href^="details.php?"]
-        attribute: href
-      imdb:
-        selector: a[href*="www.imdb.com/title/tt"]
-        optional: true
-        attribute: href
-      banner:
-        selector: a[rel^="prettyPhoto["]
-        optional: true
-        attribute: href
-      files:
-        selector: td:nth-child(4)
-      size:
-        selector: td:nth-child(6)
-      grabs:
-        selector: td:nth-child(7)
-        filters:
-          - name: regexp
-            args: (\d+)
-      seeders:
-        selector: td:nth-child(8)
-      leechers:
-        selector: td:nth-child(9)
-      date:
-        selector: font.line
-        filters:
-          - name: split
-            args: ["|", 0]
-          - name: replace
-            args: ["Feltöltve: ", ""]
-          - name: replace
-            args: ["Feltöltve : ", ""]
-          - name: replace
-            args: ["perce", "minute"]
-          - name: replace
-            args: ["órája", "hour"]
-          - name: replace
-            args: ["napja", "day"]
-          - name: replace
-            args: ["hete", "week"]
-          - name: timeago
-      downloadvolumefactor:
-        text: 1
-      uploadvolumefactor:
-        case:
-          img[src="pic/double.png"]: 2
-          img[src="pic/doubledouble2.png"]: 4
-          "*": 1
+  fields:
+    download:
+      selector: a[href^="download.php/"]
+      attribute: href
+    title:
+      selector: a[id][href^="details.php?"]
+      attribute: title
+    description:
+      selector: font.line
+      filters:
+        - name: regexp
+          args: .*?\|\s*(.*)
+    category:
+      selector: a[href^="browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    details:
+      selector: a[id][href^="details.php?"]
+      attribute: href
+    imdb:
+      selector: a[href*="www.imdb.com/title/tt"]
+      optional: true
+      attribute: href
+    banner:
+      selector: a[rel^="prettyPhoto["]
+      optional: true
+      attribute: href
+    files:
+      selector: td:nth-child(4)
+    size:
+      selector: td:nth-child(6)
+    grabs:
+      selector: td:nth-child(7)
+      filters:
+        - name: regexp
+          args: (\d+)
+    seeders:
+      selector: td:nth-child(8)
+    leechers:
+      selector: td:nth-child(9)
+    date:
+      selector: font.line
+      filters:
+        - name: split
+          args: ["|", 0]
+        - name: replace
+          args: ["Feltöltve: ", ""]
+        - name: replace
+          args: ["Feltöltve : ", ""]
+        - name: replace
+          args: ["perce", "minute"]
+        - name: replace
+          args: ["órája", "hour"]
+        - name: replace
+          args: ["napja", "day"]
+        - name: replace
+          args: ["hete", "week"]
+        - name: timeago
+    downloadvolumefactor:
+      text: 1
+    uploadvolumefactor:
+      case:
+        img[src="pic/double.png"]: 2
+        img[src="pic/doubledouble2.png"]: 4
+        "*": 1
 # TBDev & XBTT

@@ -1,93 +1,93 @@
 ---
-  site: bluebirdhd
-  name: BlueBird
-  description: "BlueBird is a RUSSIAN Private Torrent Tracker for HD MOVIES"
-  language: ru-ru
-  type: private
-  encoding: windows-1251
-  links:
-    - https://bluebird-hd.org/
+site: bluebirdhd
+name: BlueBird
+description: "BlueBird is a RUSSIAN Private Torrent Tracker for HD MOVIES"
+language: ru-ru
+type: private
+encoding: windows-1251
+links:
+  - https://bluebird-hd.org/
 
-  caps:
-    categorymappings:
-      - {id: 1, cat: Movies, desc: "Films"}
-      - {id: 2, cat: TV/Anime, desc: "Cartoons"}
-      - {id: 3, cat: TV/Documentary, desc: "documentary"}
-      - {id: 4, cat: Audio, desc: "Show / Music"}
-      - {id: 5, cat: TV/Sport, desc: "Sport"}
-      - {id: 6, cat: TV, desc: "TV series"}
-      - {id: 7, cat: XXX, desc: "erotica"}
-      - {id: 8, cat: Other, desc: "Demo / Misc"}
+caps:
+  categorymappings:
+    - {id: 1, cat: Movies, desc: "Films"}
+    - {id: 2, cat: TV/Anime, desc: "Cartoons"}
+    - {id: 3, cat: TV/Documentary, desc: "documentary"}
+    - {id: 4, cat: Audio, desc: "Show / Music"}
+    - {id: 5, cat: TV/Sport, desc: "Sport"}
+    - {id: 6, cat: TV, desc: "TV series"}
+    - {id: 7, cat: XXX, desc: "erotica"}
+    - {id: 8, cat: Other, desc: "Demo / Misc"}
 
-    modes:
-      search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
-      music-search: [q]
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
 
-  login:
-    path: takelogin.php
-    method: post
-    inputs:
-      username: "{{ .Config.username }}"
-      password: "{{ .Config.password }}"
-    error:
-      - selector: div.error
-    test:
-      path: browse.php
+login:
+  path: takelogin.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: div.error
+  test:
+    path: browse.php
 
-  search:
-    paths:
-      - path: browse.php
-    inputs:
-      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-      search: "{{ .Query.Keywords }}"
-      incldead: "1"
-    rows:
-      selector: table > tbody > tr:has(a[href^="details.php?id="])
-    fields:
-      title:
-        selector: a[href^="details.php?id="]
-      details:
-        selector: a[href^="details.php?id="]
-        attribute: href
-      category:
-        selector: a[href^="browse.php?cat="]
-        attribute: href
-        filters:
-          - name: querystring
-            args: cat
-      download:
-        selector: a[href^="download.php?id="]
-        attribute: href
-      grabs:
-        selector: a[href*="&snatched=1#snatched"]
-        filters:
-          - name: regexp
-            args: (\d+)
-      size:
-        selector: td:nth-child(7)
-        remove: a
-      date:
-        selector: div#cleft > font
-      seeders:
-        selector: td:nth-child(5)
-      leechers:
-        selector: td:nth-child(6)
-      banner:
-        selector: a.tname
-        attribute: onmouseover
-        filters:
-          - name: regexp
-            args: src=([^\s]+)
-      downloadvolumefactor:
-        case:
-          img[src="pic/diamond.png"]: "0"
-          img[src="pic/freedownload.gif"]: "0"
-          img[src="pic/silver.gif"]: "0.5"
-          img[src="pic/bronze.gif"]: "0.75"
-          "*": "1"
-      uploadvolumefactor:
-        case:
-          img[src="pic/diamond.png"]: "2"
-          "*": "1"
+search:
+  paths:
+    - path: browse.php
+  inputs:
+    $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+    search: "{{ .Query.Keywords }}"
+    incldead: "1"
+  rows:
+    selector: table > tbody > tr:has(a[href^="details.php?id="])
+  fields:
+    title:
+      selector: a[href^="details.php?id="]
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    category:
+      selector: a[href^="browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    download:
+      selector: a[href^="download.php?id="]
+      attribute: href
+    grabs:
+      selector: a[href*="&snatched=1#snatched"]
+      filters:
+        - name: regexp
+          args: (\d+)
+    size:
+      selector: td:nth-child(7)
+      remove: a
+    date:
+      selector: div#cleft > font
+    seeders:
+      selector: td:nth-child(5)
+    leechers:
+      selector: td:nth-child(6)
+    banner:
+      selector: a.tname
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: src=([^\s]+)
+    downloadvolumefactor:
+      case:
+        img[src="pic/diamond.png"]: "0"
+        img[src="pic/freedownload.gif"]: "0"
+        img[src="pic/silver.gif"]: "0.5"
+        img[src="pic/bronze.gif"]: "0.75"
+        "*": "1"
+    uploadvolumefactor:
+      case:
+        img[src="pic/diamond.png"]: "2"
+        "*": "1"

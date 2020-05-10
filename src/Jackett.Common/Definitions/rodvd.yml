@@ -1,131 +1,131 @@
 ---
-  site: rodvd
-  name: RoDVD
-  description: "RoDVD (Cinefiles) is a ROMANIAN Private Torrent Tracker for DVD-R / HD MOVIES"
-  language: ro-ro
-  type: private
-  encoding: windows-1252
-  links:
-    - https://rodvd.net/
-  legacylinks:
-    - http://rodvd.net/
+site: rodvd
+name: RoDVD
+description: "RoDVD (Cinefiles) is a ROMANIAN Private Torrent Tracker for DVD-R / HD MOVIES"
+language: ro-ro
+type: private
+encoding: windows-1252
+links:
+  - https://rodvd.net/
+legacylinks:
+  - http://rodvd.net/
 
-  caps:
-    categorymappings:
-      - {id: 48, cat: Movies/3D, desc: "3D"}
-      - {id: 1, cat: PC/0day, desc: "Appz"}
-      - {id: 3, cat: Other, desc: "Cartoons"}
-      - {id: 42, cat: TV/Documentary, desc: "Documentaries"}
-      - {id: 6, cat: Books, desc: "eBooks"}
-      - {id: 11, cat: PC/Games, desc: "Games | PC"}
-      - {id: 12, cat: Console/PS3, desc: "Games | PS2"}
-      - {id: 36, cat: Console/PS3, desc: "Games | PS3"}
-      - {id: 40, cat: Console/PSP, desc: "Games | PSP"}
-      - {id: 25, cat: Console/Wii, desc: "Games | Wii"}
-      - {id: 16, cat: Console/Xbox, desc: "Games | XBOX"}
-      - {id: 19, cat: PC/Phone-Other, desc: "Mobile"}
-      - {id: 43, cat: Movies/BluRay, desc: "Movies | Blu-Ray"}
-      - {id: 49, cat: Movies/BluRay, desc: "Movies | Blu-Ray-RO"}
-      - {id: 7, cat: Movies/DVD, desc: "Movies | DVD-R"}
-      - {id: 2, cat: Movies/DVD, desc: "Movies | DVD-RO"}
-      - {id: 17, cat: Movies/HD, desc: "Movies | HD"}
-      - {id: 45, cat: Movies/HD, desc: "Movies | HD-RO"}
-      - {id: 21, cat: Movies, desc: "Movies | Oldies"}
-      - {id: 38, cat: Movies, desc: "Movies | Packs"}
-      - {id: 8, cat: Movies/SD, desc: "Movies | x264"}
-      - {id: 4, cat: Movies/SD, desc: "Movies | x264-RO"}
-      - {id: 10, cat: Movies/SD, desc: "Movies | XviD"}
-      - {id: 44, cat: Movies/SD, desc: "Movies | XviD-RO"}
-      - {id: 5, cat: Audio/MP3, desc: "Music | Mp3"}
-      - {id: 39, cat: Audio, desc: "Music | Packs"}
-      - {id: 23, cat: Audio/Video, desc: "Music | Videos"}
-      - {id: 18, cat: Other, desc: "Pictures"}
-      - {id: 46, cat: XXX/Imageset, desc: "Pictures | xxx"}
-      - {id: 22, cat: TV/Sport, desc: "Sport"}
-      - {id: 50, cat: TV, desc: "STAR"}
-      - {id: 20, cat: TV/SD, desc: "TV | Episodes"}
-      - {id: 47, cat: TV/HD, desc: "TV | Episodes HD"}
-      - {id: 41, cat: TV, desc: "TV | Packs"}
-      - {id: 15, cat: XXX, desc: "xXx"}
+caps:
+  categorymappings:
+    - {id: 48, cat: Movies/3D, desc: "3D"}
+    - {id: 1, cat: PC/0day, desc: "Appz"}
+    - {id: 3, cat: Other, desc: "Cartoons"}
+    - {id: 42, cat: TV/Documentary, desc: "Documentaries"}
+    - {id: 6, cat: Books, desc: "eBooks"}
+    - {id: 11, cat: PC/Games, desc: "Games | PC"}
+    - {id: 12, cat: Console/PS3, desc: "Games | PS2"}
+    - {id: 36, cat: Console/PS3, desc: "Games | PS3"}
+    - {id: 40, cat: Console/PSP, desc: "Games | PSP"}
+    - {id: 25, cat: Console/Wii, desc: "Games | Wii"}
+    - {id: 16, cat: Console/Xbox, desc: "Games | XBOX"}
+    - {id: 19, cat: PC/Phone-Other, desc: "Mobile"}
+    - {id: 43, cat: Movies/BluRay, desc: "Movies | Blu-Ray"}
+    - {id: 49, cat: Movies/BluRay, desc: "Movies | Blu-Ray-RO"}
+    - {id: 7, cat: Movies/DVD, desc: "Movies | DVD-R"}
+    - {id: 2, cat: Movies/DVD, desc: "Movies | DVD-RO"}
+    - {id: 17, cat: Movies/HD, desc: "Movies | HD"}
+    - {id: 45, cat: Movies/HD, desc: "Movies | HD-RO"}
+    - {id: 21, cat: Movies, desc: "Movies | Oldies"}
+    - {id: 38, cat: Movies, desc: "Movies | Packs"}
+    - {id: 8, cat: Movies/SD, desc: "Movies | x264"}
+    - {id: 4, cat: Movies/SD, desc: "Movies | x264-RO"}
+    - {id: 10, cat: Movies/SD, desc: "Movies | XviD"}
+    - {id: 44, cat: Movies/SD, desc: "Movies | XviD-RO"}
+    - {id: 5, cat: Audio/MP3, desc: "Music | Mp3"}
+    - {id: 39, cat: Audio, desc: "Music | Packs"}
+    - {id: 23, cat: Audio/Video, desc: "Music | Videos"}
+    - {id: 18, cat: Other, desc: "Pictures"}
+    - {id: 46, cat: XXX/Imageset, desc: "Pictures | xxx"}
+    - {id: 22, cat: TV/Sport, desc: "Sport"}
+    - {id: 50, cat: TV, desc: "STAR"}
+    - {id: 20, cat: TV/SD, desc: "TV | Episodes"}
+    - {id: 47, cat: TV/HD, desc: "TV | Episodes HD"}
+    - {id: 41, cat: TV, desc: "TV | Packs"}
+    - {id: 15, cat: XXX, desc: "xXx"}
 
-    modes:
-      search: [q, imdbid]
-      tv-search: [q, season, ep, imdbid]
-      movie-search: [q, imdbid]
-      music-search: [q]
+  modes:
+    search: [q, imdbid]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
+    music-search: [q]
 
-  login:
-    path: login.php
-    method: form
-    form: form
-    inputs:
-      username: "{{ .Config.username }}"
-      password: "{{ .Config.password }}"
-    error:
-      - selector: td.loginerr
-    test:
-      path: browse.php
-
-  ratio:
+login:
+  path: login.php
+  method: form
+  form: form
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: td.loginerr
+  test:
     path: browse.php
-    selector: a#link14
 
-  search:
-    paths:
-      - path: browse.php
-    inputs:
-      $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-      search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-      key: 9
-    rows:
-      selector: table.torrents > tbody > tr:has(a[href^="details.php?id="])
+ratio:
+  path: browse.php
+  selector: a#link14
+
+search:
+  paths:
+    - path: browse.php
+  inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    key: 9
+  rows:
+    selector: table.torrents > tbody > tr:has(a[href^="details.php?id="])
+    filters:
+      - name: andmatch
+    dateheaders:
+      selector: "td.days > font > b"
       filters:
-        - name: andmatch
-      dateheaders:
-        selector: "td.days > font > b"
-        filters:
-          - name: replace
-            args: ["Torrents Added: ", ""]
-          - name: dateparse
-            args: "2.1.2006"
-    fields:
-      title:
-        selector: a[href^="details.php?id="] font
-      details:
-        selector: a[href^="details.php?id="]
-        attribute: href
-      category:
-        selector: a[href^="browse.php?cat="]
-        attribute: href
-        filters:
-          - name: querystring
-            args: cat
-      download:
-        selector: a[href^="download.php"]
-        attribute: href
-      imdb:
-        optional: true
-        selector: a[href*="www.imdb.com/title/tt"]
-        attribute: href
-      size:
-        selector: td:nth-child(4)
-      seeders:
-        text: 9999
-      leechers:
-        text: 0
-      banner:
-        selector: a[onmouseover][href^="details.php?id="]
-        attribute: onmouseover
-        filters:
-          - name: regexp
-            args: "src=\"([^\"]+)"
-      downloadvolumefactor:
-        case:
-          "font.small[color]:contains(\"Free\")": 0
-          "*": 1
-      uploadvolumefactor:
-        text: 1
-      description:
-        selector: td:nth-child(2)
-        remove: a[href^="details.php?id="]
+        - name: replace
+          args: ["Torrents Added: ", ""]
+        - name: dateparse
+          args: "2.1.2006"
+  fields:
+    title:
+      selector: a[href^="details.php?id="] font
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    category:
+      selector: a[href^="browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    download:
+      selector: a[href^="download.php"]
+      attribute: href
+    imdb:
+      optional: true
+      selector: a[href*="www.imdb.com/title/tt"]
+      attribute: href
+    size:
+      selector: td:nth-child(4)
+    seeders:
+      text: 9999
+    leechers:
+      text: 0
+    banner:
+      selector: a[onmouseover][href^="details.php?id="]
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: "src=\"([^\"]+)"
+    downloadvolumefactor:
+      case:
+        "font.small[color]:contains(\"Free\")": 0
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    description:
+      selector: td:nth-child(2)
+      remove: a[href^="details.php?id="]
 # engine tbd

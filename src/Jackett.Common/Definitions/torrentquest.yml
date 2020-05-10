@@ -1,94 +1,94 @@
 ---
-  site: torrentquest
-  name: TorrentQuest
-  description: "TorrentQuest is a Public torrent Magnet Links search engine"
-  language: en-us
-  type: public
-  encoding: UTF-8
-  links:
-    - https://torrentquest.com/
+site: torrentquest
+name: TorrentQuest
+description: "TorrentQuest is a Public torrent Magnet Links search engine"
+language: en-us
+type: public
+encoding: UTF-8
+links:
+  - https://torrentquest.com/
 
-  caps:
-    categories:
-      "TV": TV
-      "Movie": Movies
-      "Music": Audio
-      "E-Book": Books/Ebook
-      "Game": PC/Games
-      "Software": PC
-      "Other": Other
+caps:
+  categories:
+    "TV": TV
+    "Movie": Movies
+    "Music": Audio
+    "E-Book": Books/Ebook
+    "Game": PC/Games
+    "Software": PC
+    "Other": Other
 
-    modes:
-      search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
-      music-search: [q]
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
 
-  settings:
-    - name: sort
-      type: select
-      label: Sort requested from site
-      default: "age"
-      options:
-        "age": "created"
-        "se": "seeders"
-        "size": "size"
-    - name: type
-      type: select
-      label: Order requested from site
-      default: "desc"
-      options:
-        "desc": "desc"
-        "asc": "asc"
+settings:
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: "age"
+    options:
+      "age": "created"
+      "se": "seeders"
+      "size": "size"
+  - name: type
+    type: select
+    label: Order requested from site
+    default: "desc"
+    options:
+      "desc": "desc"
+      "asc": "asc"
 
-  search:
-    headers:
-      # prevent redirect
-      Accept: ["text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8"]
-    keywordsfilters:
-      # replace space between keywords with - to prevent 404 Not Found
-      - name: re_replace
-        args: [" ", "-"]
-      - name: tolower
-    paths:
-      # return movie and tv results if there are no search parms supplied (for use with the TEST button)
-      # https://torrentquest.com/download/movies/se/desc/
-      # https://torrentquest.com/m/mandalorian-s01e07/age/desc/
-      - path: "{{ if .Keywords }}{{ re_replace .Keywords \"(.).*\" \"$1\" }}/{{ .Keywords }}{{else}}download/movies{{end}}/{{ .Config.sort }}/{{ .Config.type }}/"
-      - path: "{{ if .Keywords }}{{else}}download/tv/{{ .Config.sort }}/{{ .Config.type }}/{{end}}"
+search:
+  headers:
+    # prevent redirect
+    Accept: ["text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8"]
+  keywordsfilters:
+    # replace space between keywords with - to prevent 404 Not Found
+    - name: re_replace
+      args: [" ", "-"]
+    - name: tolower
+  paths:
+    # return movie and tv results if there are no search parms supplied (for use with the TEST button)
+    # https://torrentquest.com/download/movies/se/desc/
+    # https://torrentquest.com/m/mandalorian-s01e07/age/desc/
+    - path: "{{ if .Keywords }}{{ re_replace .Keywords \"(.).*\" \"$1\" }}/{{ .Keywords }}{{else}}download/movies{{end}}/{{ .Config.sort }}/{{ .Config.type }}/"
+    - path: "{{ if .Keywords }}{{else}}download/tv/{{ .Config.sort }}/{{ .Config.type }}/{{end}}"
 
-    rows:
-      selector: tr:has(td.m)
+  rows:
+    selector: tr:has(td.m)
 
-    fields:
-      title:
-        selector: td.n a
-        attribute: title
-      category:
-        text: Other
-      category|noappend:
-        optional: true
-        selector:  td[class^="t"]
-      details:
-        selector: td.n a
-        attribute: href
-      magnet:
-        selector: td.m a
-        attribute: href
-      date:
-        selector: td:nth-child(3)
-        filters:
-          - name: timeago
-      files:
-        selector: td:nth-child(5)
-      size:
-        selector: td:nth-child(6)
-      seeders:
-        selector: td.s
-      leechers:
-        selector: td.l
-      downloadvolumefactor:
-        text: 0
-      uploadvolumefactor:
-        text: 1
+  fields:
+    title:
+      selector: td.n a
+      attribute: title
+    category:
+      text: Other
+    category|noappend:
+      optional: true
+      selector:  td[class^="t"]
+    details:
+      selector: td.n a
+      attribute: href
+    magnet:
+      selector: td.m a
+      attribute: href
+    date:
+      selector: td:nth-child(3)
+      filters:
+        - name: timeago
+    files:
+      selector: td:nth-child(5)
+    size:
+      selector: td:nth-child(6)
+    seeders:
+      selector: td.s
+    leechers:
+      selector: td.l
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
 # engine n/a

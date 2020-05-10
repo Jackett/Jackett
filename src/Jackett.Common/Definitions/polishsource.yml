@@ -1,161 +1,161 @@
 ---
-  site: polishsource
-  name: PolishSource
-  description: "PolishSource (PS) is a POLISH Private Torrent Tracker for MOVIES / TV / GENERAL"
-  language: pl-pl
-  type: private
-  encoding: ISO-8859-2
-  links:
-    - https://polishsource.cz/
+site: polishsource
+name: PolishSource
+description: "PolishSource (PS) is a POLISH Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: pl-pl
+type: private
+encoding: ISO-8859-2
+links:
+  - https://polishsource.cz/
 
-  caps:
-    categorymappings:
-      - {id: 12, cat: Movies/SD, desc: "Movies/SD"}
-      - {id: 11, cat: Movies/HD, desc: "Movies/HD"}
-      - {id: 46, cat: Movies/UHD, desc: "Movies/UHD"}
-      - {id: 10, cat: TV/SD, desc: "TV/SD"}
-      - {id: 39, cat: TV/HD, desc: "TV/HD"}
-      - {id: 8, cat: PC/Games, desc: "Games/PC"}
-      - {id: 3, cat: Console, desc: "Games/Consoles"}
-      - {id: 5, cat: Books, desc: "E-Books"}
-      - {id: 42, cat: Audio, desc: "Music"}
-      - {id: 18, cat: PC/0day, desc: "Apps"}
-      - {id: 13, cat: XXX, desc: "XXX"}
+caps:
+  categorymappings:
+    - {id: 12, cat: Movies/SD, desc: "Movies/SD"}
+    - {id: 11, cat: Movies/HD, desc: "Movies/HD"}
+    - {id: 46, cat: Movies/UHD, desc: "Movies/UHD"}
+    - {id: 10, cat: TV/SD, desc: "TV/SD"}
+    - {id: 39, cat: TV/HD, desc: "TV/HD"}
+    - {id: 8, cat: PC/Games, desc: "Games/PC"}
+    - {id: 3, cat: Console, desc: "Games/Consoles"}
+    - {id: 5, cat: Books, desc: "E-Books"}
+    - {id: 42, cat: Audio, desc: "Music"}
+    - {id: 18, cat: PC/0day, desc: "Apps"}
+    - {id: 13, cat: XXX, desc: "XXX"}
 
-    modes:
-      search: [q, imdbid]
-      tv-search: [q, season, ep, imdbid]
-      movie-search: [q, imdbid]
-      music-search: [q]
+  modes:
+    search: [q, imdbid]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
+    music-search: [q]
 
-  settings:
-    - name: username
-      type: text
-      label: Username
-    - name: password
-      type: password
-      label: Password
-    - name: sort
-      type: select
-      label: Sort requested from site
-      default: "4"
-      options:
-        "4": "created"
-        "7": "seeders"
-        "5": "size"
-        "1": "title"
-    - name: type
-      type: select
-      label: Order requested from site
-      default: "desc"
-      options:
-        "desc": "desc"
-        "asc": "asc"
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: "4"
+    options:
+      "4": "created"
+      "7": "seeders"
+      "5": "size"
+      "1": "title"
+  - name: type
+    type: select
+    label: Order requested from site
+    default: "desc"
+    options:
+      "desc": "desc"
+      "asc": "asc"
 
-  login:
-    path: login.php
-    method: form
-    form: form[action="takelogin.php"]
-    captcha:
-      type: image
-      selector: img[src="img.php"]
-      input: vImageCodP
-    inputs:
-      username: "{{ .Config.username }}"
-      password: "{{ .Config.password }}"
-    error:
-      - selector: td.embedded:has(h2:contains("nieudane"))
-      - selector: td.embedded:has(h2:contains("failed"))
-      - selector: td.embedded:has(h2:contains("Error"))
-    test:
-      path: browse.php
-      selector: a[href^="logout.php"]
+login:
+  path: login.php
+  method: form
+  form: form[action="takelogin.php"]
+  captcha:
+    type: image
+    selector: img[src="img.php"]
+    input: vImageCodP
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: td.embedded:has(h2:contains("nieudane"))
+    - selector: td.embedded:has(h2:contains("failed"))
+    - selector: td.embedded:has(h2:contains("Error"))
+  test:
+    path: browse.php
+    selector: a[href^="logout.php"]
 
-  search:
-    paths:
-    # https://polishsource.cz/browse.php?search=tt1598778&incldead=1&scene=0&pl=0&sub=&search_in=nfo
-      - path: browse.php
-    inputs:
-      $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-      search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-      # 0 onlyactive 1 all 2 onlydead
-      incldead: 1
-      # 0 all 1 scene 2 notscene 3 internal
-      scene: 0
-      # 0 all 1 Polish 2 non-Polish 4 subtitled
-      pl: 0
-      # subcat blank=all
-      sub: ""
-      # title both nfo
-      search_in: "{{ if .Query.IMDBID }}nfo{{else}}title{{end}}"
-      sort: "{{ .Config.sort }}"
-      type: "{{ .Config.type }}"
+search:
+  paths:
+  # https://polishsource.cz/browse.php?search=tt1598778&incldead=1&scene=0&pl=0&sub=&search_in=nfo
+    - path: browse.php
+  inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    # 0 onlyactive 1 all 2 onlydead
+    incldead: 1
+    # 0 all 1 scene 2 notscene 3 internal
+    scene: 0
+    # 0 all 1 Polish 2 non-Polish 4 subtitled
+    pl: 0
+    # subcat blank=all
+    sub: ""
+    # title both nfo
+    search_in: "{{ if .Query.IMDBID }}nfo{{else}}title{{end}}"
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
 
-    rows:
-      selector: table#restable > tbody > tr:has(a[href^="details.php?id="])
+  rows:
+    selector: table#restable > tbody > tr:has(a[href^="details.php?id="])
 
-    fields:
-      category:
-        selector: a[href^="?cat="]
-        attribute: href
-        filters:
-          - name: querystring
-            args: cat
-      title:
-        selector: a[href^="details.php?id="]
-      details:
-        selector: a[href^="details.php?id="]
-        attribute: href
-      download:
-        selector: a[href^="downloadssl.php?id="]
-        attribute: href
-      description:
-        optional: true
-        selector: td:nth-child(2) > small
-        filters:
-          - name: prepend
-            args: "Genre: "
-          - name: append
-            args: "\n<br>"
-      description:
-        optional: true
-        selector: img[src="pic/pl.png"]
-        filters:
-          - name: append
-            args: "Language: polish\n<br>"
-          - name: prepend
-            args: "{{ .Result.description }}"
-      description:
-        optional: true
-        selector: img[src="pic/napisy.png"]
-        filters:
-          - name: append
-            args: "Subbed\n<br>"
-          - name: prepend
-            args: "{{ .Result.description }}"
-      imdb:
-        optional: true
-        selector: a[href*="www.imdb.com/title/tt"]
-      date:
-        selector: td:nth-child(4)
-        filters:
-          - name: append
-            args: " +00:00"
-          - name: dateparse
-            args: "2006-01-0215:04:05 -07:00"
-      size:
-        selector: td:nth-child(5)
-      grabs:
-        selector: td:nth-child(6)
-        filters:
-          - name: regexp
-            args: (\d+)
-      seeders:
-        selector: td:nth-child(7)
-      leechers:
-        selector: td:nth-child(8)
-      downloadvolumefactor:
-        text: 0
-      uploadvolumefactor:
-        text: 1
+  fields:
+    category:
+      selector: a[href^="?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: a[href^="details.php?id="]
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="downloadssl.php?id="]
+      attribute: href
+    description:
+      optional: true
+      selector: td:nth-child(2) > small
+      filters:
+        - name: prepend
+          args: "Genre: "
+        - name: append
+          args: "\n<br>"
+    description:
+      optional: true
+      selector: img[src="pic/pl.png"]
+      filters:
+        - name: append
+          args: "Language: polish\n<br>"
+        - name: prepend
+          args: "{{ .Result.description }}"
+    description:
+      optional: true
+      selector: img[src="pic/napisy.png"]
+      filters:
+        - name: append
+          args: "Subbed\n<br>"
+        - name: prepend
+          args: "{{ .Result.description }}"
+    imdb:
+      optional: true
+      selector: a[href*="www.imdb.com/title/tt"]
+    date:
+      selector: td:nth-child(4)
+      filters:
+        - name: append
+          args: " +00:00"
+        - name: dateparse
+          args: "2006-01-0215:04:05 -07:00"
+    size:
+      selector: td:nth-child(5)
+    grabs:
+      selector: td:nth-child(6)
+      filters:
+        - name: regexp
+          args: (\d+)
+    seeders:
+      selector: td:nth-child(7)
+    leechers:
+      selector: td:nth-child(8)
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
 # engine n/a

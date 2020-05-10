@@ -1,94 +1,94 @@
 ---
-  site: extratorrent-cd
-  name: ExtraTorrent.cd
-  description: "ExtraTorrent.cd is a Public tracker, a  popular alternative to the original ET site, providing Movie / TV / General magnets"
-  language: en-us
-  type: public
-  encoding: UTF-8
-  followredirect: true
-  links:
-    - https://extratorrent.si/
-  legacylinks:
-    - https://extratorrent.unblockit.pro/
-    - https://extratorrent.unblockit.one/ # for .ag
+site: extratorrent-cd
+name: ExtraTorrent.cd
+description: "ExtraTorrent.cd is a Public tracker, a  popular alternative to the original ET site, providing Movie / TV / General magnets"
+language: en-us
+type: public
+encoding: UTF-8
+followredirect: true
+links:
+  - https://extratorrent.si/
+legacylinks:
+  - https://extratorrent.unblockit.pro/
+  - https://extratorrent.unblockit.one/ # for .ag
 
-  caps:
-    categories:
-      other: Other
+caps:
+  categories:
+    other: Other
 
-    modes:
-      search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
 
-  settings:
-    - name: info
-      type: info
-      default: ExtraTorrent-cd does not use categories. In your software Indexer settings, set the category to 7000.
+settings:
+  - name: info
+    type: info
+    default: ExtraTorrent-cd does not use categories. In your software Indexer settings, set the category to 7000.
 
-  search:
-    paths:
-      - path: "search/?search={{ .Keywords }}"
+search:
+  paths:
+    - path: "search/?search={{ .Keywords }}"
 
-    rows:
-      selector: tr[class^="tl"]
+  rows:
+    selector: tr[class^="tl"]
+    filters:
+      - name: andmatch
+
+  fields:
+    category:
+      text: other #8228
+    title:
+      selector: a[href*="/torrent/"][title^="view"]
+    details:
+      selector: a[href*="/torrent/"]
+      attribute: href
       filters:
-        - name: andmatch
-
-    fields:
-      category:
-        text: other #8228
-      title:
-        selector: a[href*="/torrent/"][title^="view"]
-      details:
-        selector: a[href*="/torrent/"]
-        attribute: href
-        filters:
-          - name: replace
-            args: ["///", "//"]
-      download:
-        selector: a[href^="magnet:?xt="]
-        attribute: href
-      date:
-        selector: td:nth-last-of-type(5):contains("Y-day-"), td:nth-last-of-type(5):contains("Today-")
-        optional: true
-        filters:
-          - name: replace
-            args: ["\xA0", " "]
-          - name: re_replace
-            args: ["(Today-.*)", "Today"]
-          - name: re_replace
-            args: ["(Y-day-.*)", "Yesterday"]
-          - name: fuzzytime
-      date:
-        selector: td:nth-last-of-type(5):contains(":"):not(:contains("Y-day-")):not(:contains("Today-"))
-        optional: true
-        filters:
-          - name: replace
-            args: ["\xA0", " "]
-          - name: fuzzytime
-      date:
-        selector: td:nth-last-of-type(5):not(:contains(":")):not(:contains("Y-day-")):not(:contains("Today-"))
-        optional: true
-        filters:
-          - name: replace
-            args: ["\xA0", "-"]
-          - name: dateparse
-            args: "01-02-2006"
-      size:
-        selector: td:nth-last-of-type(4)
-      seeders:
-        text: 0
-      seeders:
-        optional: true
-        selector: td.sy, td.sn
-      leechers:
-        text: 0
-      leechers:
-        optional: true
-        selector: td.ly, td.ln
-      downloadvolumefactor:
-        text: 0
-      uploadvolumefactor:
-        text: 1
+        - name: replace
+          args: ["///", "//"]
+    download:
+      selector: a[href^="magnet:?xt="]
+      attribute: href
+    date:
+      selector: td:nth-last-of-type(5):contains("Y-day-"), td:nth-last-of-type(5):contains("Today-")
+      optional: true
+      filters:
+        - name: replace
+          args: ["\xA0", " "]
+        - name: re_replace
+          args: ["(Today-.*)", "Today"]
+        - name: re_replace
+          args: ["(Y-day-.*)", "Yesterday"]
+        - name: fuzzytime
+    date:
+      selector: td:nth-last-of-type(5):contains(":"):not(:contains("Y-day-")):not(:contains("Today-"))
+      optional: true
+      filters:
+        - name: replace
+          args: ["\xA0", " "]
+        - name: fuzzytime
+    date:
+      selector: td:nth-last-of-type(5):not(:contains(":")):not(:contains("Y-day-")):not(:contains("Today-"))
+      optional: true
+      filters:
+        - name: replace
+          args: ["\xA0", "-"]
+        - name: dateparse
+          args: "01-02-2006"
+    size:
+      selector: td:nth-last-of-type(4)
+    seeders:
+      text: 0
+    seeders:
+      optional: true
+      selector: td.sy, td.sn
+    leechers:
+      text: 0
+    leechers:
+      optional: true
+      selector: td.ly, td.ln
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
 # engine n/a

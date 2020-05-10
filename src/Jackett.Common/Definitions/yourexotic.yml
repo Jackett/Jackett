@@ -1,85 +1,85 @@
 ---
-  site: yourexotic
-  name: ExoticaZ
-  description: "ExoticaZ (YourExotic) is a Private Torrent Tracker for 3X"
-  language: en-us
-  type: private
-  encoding: UTF-8
-  links:
-    - https://exoticaz.to/
-  legacylinks:
-    - https://torrents.yourexotic.com/
+site: yourexotic
+name: ExoticaZ
+description: "ExoticaZ (YourExotic) is a Private Torrent Tracker for 3X"
+language: en-us
+type: private
+encoding: UTF-8
+links:
+  - https://exoticaz.to/
+legacylinks:
+  - https://torrents.yourexotic.com/
 
-  caps:
-    categorymappings:
-      - {id: 1, cat: XXX, desc: "DVDRip"}
+caps:
+  categorymappings:
+    - {id: 1, cat: XXX, desc: "DVDRip"}
 
-    modes:
-      search: [q]
-      tv-search: [q]
-      movie-search: [q]
+  modes:
+    search: [q]
+    tv-search: [q]
+    movie-search: [q]
 
-  login:
-    path: login
-    method: form
-    inputs:
-      username_email: "{{ .Config.username }}"
-      password: "{{ .Config.password }}"
-      remember: on
-    error:
-      - selector: div.invalid-feedback
-    test:
-      selector: div.ratio-bar
+login:
+  path: login
+  method: form
+  inputs:
+    username_email: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    remember: on
+  error:
+    - selector: div.invalid-feedback
+  test:
+    selector: div.ratio-bar
 
-  search:
-    path: torrents
-    inputs:
-    # 0 any 1 filename 2 descr 3 files
-      in: 1
-      search: "{{ .Keywords }}"
-      category: 0
+search:
+  path: torrents
+  inputs:
+  # 0 any 1 filename 2 descr 3 files
+    in: 1
+    search: "{{ .Keywords }}"
+    category: 0
 
-    rows:
-      selector: div.table-responsive > table > tbody > tr
+  rows:
+    selector: div.table-responsive > table > tbody > tr
 
-    fields:
-      category:
-        text: 1
-      title:
-        selector: a.torrent-link
-        attribute: title
-      details:
-        selector: a.torrent-link
-        attribute: href
-      download:
-        selector: a[href*="/download/"]
-        attribute: href
-      banner:
-        selector: .screen-image
-        attribute: data-screens
-        filters:
-          - name: split
-            args: ["|", 0]
-      date:
-        selector: td:nth-last-child(5)
-        filters:
-          - name: append
-            args: " ago"
-      size:
-        selector: td:nth-last-child(4)
-      seeders:
-        selector: td:nth-last-child(3)
-      leechers:
-        selector: td:nth-last-child(2)
-      grabs:
-        selector: td:nth-last-child(1)
-      downloadvolumefactor:
+  fields:
+    category:
+      text: 1
+    title:
+      selector: a.torrent-link
+      attribute: title
+    details:
+      selector: a.torrent-link
+      attribute: href
+    download:
+      selector: a[href*="/download/"]
+      attribute: href
+    banner:
+      selector: .screen-image
+      attribute: data-screens
+      filters:
+        - name: split
+          args: ["|", 0]
+    date:
+      selector: td:nth-last-child(5)
+      filters:
+        - name: append
+          args: " ago"
+    size:
+      selector: td:nth-last-child(4)
+    seeders:
+      selector: td:nth-last-child(3)
+    leechers:
+      selector: td:nth-last-child(2)
+    grabs:
+      selector: td:nth-last-child(1)
+    downloadvolumefactor:
+      case:
+        i[title="Free Download"]: 0
+        i[title="Half Download"]: 0.5
+        "*": 1
+    uploadvolumefactor:
         case:
-          i[title="Free Download"]: 0
-          i[title="Half Download"]: 0.5
+          i.fa-gem: 2
           "*": 1
-      uploadvolumefactor:
-          case:
-            i.fa-gem: 2
-            "*": 1
 # engine tbd

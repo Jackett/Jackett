@@ -1,71 +1,71 @@
 ---
-  site: topnow
-  name: TopNow
-  description: "TopNow is a Public torrent site for TV / MOVIES"
-  language: en-us
-  type: public
-  encoding: UTF-8
-  links:
-    - https://topnow.se/
-  legacylinks:
-    - http://topnow.se/
+site: topnow
+name: TopNow
+description: "TopNow is a Public torrent site for TV / MOVIES"
+language: en-us
+type: public
+encoding: UTF-8
+links:
+  - https://topnow.se/
+legacylinks:
+  - http://topnow.se/
 
-  caps:
-    categories:
-      "other": Other
+caps:
+  categories:
+    "other": Other
 
-    modes:
-      search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
 
-  settings: []
+settings: []
 
-  search:
-    paths:
-      # https://topnow.se/index.php?search=
-      - path: index.php
-    inputs:
-      search: "{{ .Keywords }}"
-    keywordsfilters:
-      # the site uses % for wildcard
-      - name: re_replace
-        args: ["[^a-zA-Z0-9]+", "%"]
+search:
+  paths:
+    # https://topnow.se/index.php?search=
+    - path: index.php
+  inputs:
+    search: "{{ .Keywords }}"
+  keywordsfilters:
+    # the site uses % for wildcard
+    - name: re_replace
+      args: ["[^a-zA-Z0-9]+", "%"]
 
-    rows:
-      # old cards do not have a download link
-      selector: div.grid-item:has(a[href^="/download.php?torrent="])
+  rows:
+    # old cards do not have a download link
+    selector: div.grid-item:has(a[href^="/download.php?torrent="])
 
-    fields:
-      category:
-        text: other
-      title:
-        selector: h2.titles
-      details:
-        # new cards do not have details page links
-        text: /
-      download:
-        selector: a[href^="/download.php?torrent="]
-        attribute: href
-      banner:
-        selector: img
-        attribute: src
-        optional: true
-      description:
-        selector: .card_overlay
-        filters:
-          - name: regexp
-            args: "Quality: (.+?)$"
-      date:
-        text: now
-      size:
-        text: "512 MB"
-      seeders:
-        text: 1
-      leechers:
-        text: 1
-      downloadvolumefactor:
-        text: 0
-      uploadvolumefactor:
-        text: 1
+  fields:
+    category:
+      text: other
+    title:
+      selector: h2.titles
+    details:
+      # new cards do not have details page links
+      text: /
+    download:
+      selector: a[href^="/download.php?torrent="]
+      attribute: href
+    banner:
+      selector: img
+      attribute: src
+      optional: true
+    description:
+      selector: .card_overlay
+      filters:
+        - name: regexp
+          args: "Quality: (.+?)$"
+    date:
+      text: now
+    size:
+      text: "512 MB"
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
 # Engine n/a

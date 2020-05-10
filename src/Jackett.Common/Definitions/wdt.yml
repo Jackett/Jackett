@@ -1,166 +1,166 @@
 ---
-  site: wdt
-  name: WDT
-  description: "Wrestling Desires Torrents (Ultimate Wrestling Torrents) is a Private Torrent Tracker for PROFESSIONAL WRESTLING / MMA"
-  language: en-us
-  type: private
-  encoding: UTF-8
-  links:
-    - https://ultimatewrestlingtorrents.com/
+site: wdt
+name: WDT
+description: "Wrestling Desires Torrents (Ultimate Wrestling Torrents) is a Private Torrent Tracker for PROFESSIONAL WRESTLING / MMA"
+language: en-us
+type: private
+encoding: UTF-8
+links:
+  - https://ultimatewrestlingtorrents.com/
 
-  caps:
-    categorymappings:
-      - {id: 3, cat: Audio, desc: "Audio"}
-      - {id: 14, cat: Audio/Audiobook, desc: "Audiobooks"}
-      - {id: 16, cat: Audio, desc: "Music Audio"}
-      - {id: 13, cat: Audio, desc: "Podcasts"}
-      - {id: 15, cat: Audio, desc: "Wrestling Themes"}
-      - {id: 5, cat: Books/Ebook, desc: "EbooksAndMagazines"}
-      - {id: 29, cat: Books/Ebook, desc: "Ebooks"}
-      - {id: 28, cat: Books/Magazines, desc: "Magazines"}
-      - {id: 30, cat: Books/Other, desc: "Misc"}
-      - {id: 18, cat: Books/Other, desc: "Wrestling Newsletters"}
-      - {id: 1, cat: TV/Sport, desc: "Impact Wrestling"}
-      - {id: 34, cat: TV/Sport, desc: "Impact Wrestling PPV / One Nig"}
-      - {id: 2, cat: TV, desc: "Videos"}
-      - {id: 9, cat: TV/Sport, desc: "Weekly"}
-      - {id: 4, cat: TV/Sport, desc: "WWE"}
-      - {id: 33, cat: TV/Sport, desc: "Xplosion"}
-      - {id: 32, cat: TV/Sport, desc: "DVDRips"}
-      - {id: 31, cat: TV/Sport, desc: "DVDs"}
-      - {id: 6, cat: TV/Sport, desc: "Packs And DVDs"}
-      - {id: 20, cat: TV/Sport, desc: "Packs"}
-      - {id: 7, cat: PC, desc: "Programs And Games"}
-      - {id: 19, cat: PC, desc: "Computer Programs"}
-      - {id: 35, cat: PC/Games, desc: "Games"}
-      - {id: 36, cat: PC/Phone-Other, desc: "Mobile Apps"}
-      - {id: 37, cat: TV/Sport, desc: "Boxing"}
-      - {id: 38, cat: TV/Sport, desc: "Classics"}
-      - {id: 12, cat: TV/Documentary, desc: "Documentary"}
-      - {id: 40, cat: TV, desc: "Indy Other Promotions"}
-      - {id: 44, cat: TV, desc: "Other MMA"}
-      - {id: 11, cat: TV, desc: "Other Videos"}
-      - {id: 42, cat: TV, desc: "Puro NJPW"}
-      - {id: 43, cat: TV, desc: "Self Defense Tutorials"}
-      - {id: 21, cat: TV, desc: "Shoots"}
-      - {id: 22, cat: TV, desc: "TV Episodes"}
-      - {id: 41, cat: TV/Sport, desc: "UFC"}
-      - {id: 10, cat: Movies, desc: "Wrestlers Movies"}
-      - {id: 26, cat: TV/Sport, desc: "Network"}
-      - {id: 24, cat: TV/Sport, desc: "NXT"}
-      - {id: 27, cat: TV/Sport, desc: "Other WWE Shows"}
-      - {id: 17, cat: TV/Sport, desc: "Raw"}
-      - {id: 23, cat: TV/Sport, desc: "Smackdown"}
-      - {id: 25, cat: TV/Sport, desc: "WWE PPV"}
+caps:
+  categorymappings:
+    - {id: 3, cat: Audio, desc: "Audio"}
+    - {id: 14, cat: Audio/Audiobook, desc: "Audiobooks"}
+    - {id: 16, cat: Audio, desc: "Music Audio"}
+    - {id: 13, cat: Audio, desc: "Podcasts"}
+    - {id: 15, cat: Audio, desc: "Wrestling Themes"}
+    - {id: 5, cat: Books/Ebook, desc: "EbooksAndMagazines"}
+    - {id: 29, cat: Books/Ebook, desc: "Ebooks"}
+    - {id: 28, cat: Books/Magazines, desc: "Magazines"}
+    - {id: 30, cat: Books/Other, desc: "Misc"}
+    - {id: 18, cat: Books/Other, desc: "Wrestling Newsletters"}
+    - {id: 1, cat: TV/Sport, desc: "Impact Wrestling"}
+    - {id: 34, cat: TV/Sport, desc: "Impact Wrestling PPV / One Nig"}
+    - {id: 2, cat: TV, desc: "Videos"}
+    - {id: 9, cat: TV/Sport, desc: "Weekly"}
+    - {id: 4, cat: TV/Sport, desc: "WWE"}
+    - {id: 33, cat: TV/Sport, desc: "Xplosion"}
+    - {id: 32, cat: TV/Sport, desc: "DVDRips"}
+    - {id: 31, cat: TV/Sport, desc: "DVDs"}
+    - {id: 6, cat: TV/Sport, desc: "Packs And DVDs"}
+    - {id: 20, cat: TV/Sport, desc: "Packs"}
+    - {id: 7, cat: PC, desc: "Programs And Games"}
+    - {id: 19, cat: PC, desc: "Computer Programs"}
+    - {id: 35, cat: PC/Games, desc: "Games"}
+    - {id: 36, cat: PC/Phone-Other, desc: "Mobile Apps"}
+    - {id: 37, cat: TV/Sport, desc: "Boxing"}
+    - {id: 38, cat: TV/Sport, desc: "Classics"}
+    - {id: 12, cat: TV/Documentary, desc: "Documentary"}
+    - {id: 40, cat: TV, desc: "Indy Other Promotions"}
+    - {id: 44, cat: TV, desc: "Other MMA"}
+    - {id: 11, cat: TV, desc: "Other Videos"}
+    - {id: 42, cat: TV, desc: "Puro NJPW"}
+    - {id: 43, cat: TV, desc: "Self Defense Tutorials"}
+    - {id: 21, cat: TV, desc: "Shoots"}
+    - {id: 22, cat: TV, desc: "TV Episodes"}
+    - {id: 41, cat: TV/Sport, desc: "UFC"}
+    - {id: 10, cat: Movies, desc: "Wrestlers Movies"}
+    - {id: 26, cat: TV/Sport, desc: "Network"}
+    - {id: 24, cat: TV/Sport, desc: "NXT"}
+    - {id: 27, cat: TV/Sport, desc: "Other WWE Shows"}
+    - {id: 17, cat: TV/Sport, desc: "Raw"}
+    - {id: 23, cat: TV/Sport, desc: "Smackdown"}
+    - {id: 25, cat: TV/Sport, desc: "WWE PPV"}
 
-    modes:
-      search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
-      music-search: [q]
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
 
-  settings:
-    - name: username
-      type: text
-      label: Username
-    - name: password
-      type: password
-      label: Password
-    - name: sort
-      type: select
-      label: Sort requested from site
-      default: "4"
-      options:
-        "4": "created"
-        "7": "seeders"
-        "5": "size"
-        "1": "title"
-    - name: type
-      type: select
-      label: Order requested from site
-      default: "desc"
-      options:
-        "desc": "desc"
-        "asc": "asc"
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: "4"
+    options:
+      "4": "created"
+      "7": "seeders"
+      "5": "size"
+      "1": "title"
+  - name: type
+    type: select
+    label: Order requested from site
+    default: "desc"
+    options:
+      "desc": "desc"
+      "asc": "asc"
 
-  login:
-    path: login.php
-    method: form
-    form: form[action="takelogin.php"]
-    inputs:
-      username: "{{ .Config.username }}"
-      password: "{{ .Config.password }}"
-      use_ssl: 1
-      perm_ssl: ""
-      returnto: "/"
-    error:
-      - selector: table.main:contains("Login failed!")
-        message:
-          selector: table tr td.colhead2
-    test:
-      path: /
-      selector: a[href*="logout.php?hash_please="]
+login:
+  path: login.php
+  method: form
+  form: form[action="takelogin.php"]
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    use_ssl: 1
+    perm_ssl: ""
+    returnto: "/"
+  error:
+    - selector: table.main:contains("Login failed!")
+      message:
+        selector: table tr td.colhead2
+  test:
+    path: /
+    selector: a[href*="logout.php?hash_please="]
 
-  search:
-    paths:
-      # https://ultimatewrestlingtorrents.com/browse.php?search=&searchin=title&incldead=1
-      - path: browse.php
-    inputs:
-      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-      search: "{{.Keywords}}"
-      # title descr genre all
-      searchin: title
-      # 0 active 1 incldead 2 onlydead
-      incldead: 1
-      sort: "{{ .Config.sort }}"
-      type: "{{ .Config.type }}"
+search:
+  paths:
+    # https://ultimatewrestlingtorrents.com/browse.php?search=&searchin=title&incldead=1
+    - path: browse.php
+  inputs:
+    $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+    search: "{{.Keywords}}"
+    # title descr genre all
+    searchin: title
+    # 0 active 1 incldead 2 onlydead
+    incldead: 1
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
 
-    rows:
-      selector: table.table-bordered tr:has(a[href^="download.php?torrent="])
+  rows:
+    selector: table.table-bordered tr:has(a[href^="download.php?torrent="])
 
-    fields:
-      category:
-        selector: a[href^="browse.php?cat="]
-        attribute: href
-        filters:
-          - name: querystring
-            args: cat
-      title:
-        selector: a[href^="details.php?id="]
-        attribute: onmouseover
-        filters:
-          - name: regexp
-            args: "Tip\\('<b>(.+?)</b>"
-      download:
-        selector: a[href^="download.php?torrent="]
-        attribute: href
-      details:
-        selector: a[href^="details.php?id="]
-        attribute: href
-      files:
-        selector: td:nth-child(5)
-      date:
-        selector: td:nth-child(7)
-        filters:
-          - name: dateparse
-            args: "Jan 2 2006 03:04 PM"
-      size:
-        selector: td:nth-child(8)
-      grabs:
-        selector: td:nth-child(9)
-        filters:
-          - name: regexp
-            args: (\d+)
-      seeders:
-        selector: td:nth-child(10)
-      leechers:
-        selector: td:nth-child(11)
-      downloadvolumefactor:
-        case:
-          a.info:contains("[FREE]"): 0
-          a.info:contains("[SILVER]"): 0.5
-          "*": 1
-      uploadvolumefactor:
-        case:
-          "*": 1
+  fields:
+    category:
+      selector: a[href^="browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: a[href^="details.php?id="]
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: "Tip\\('<b>(.+?)</b>"
+    download:
+      selector: a[href^="download.php?torrent="]
+      attribute: href
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    files:
+      selector: td:nth-child(5)
+    date:
+      selector: td:nth-child(7)
+      filters:
+        - name: dateparse
+          args: "Jan 2 2006 03:04 PM"
+    size:
+      selector: td:nth-child(8)
+    grabs:
+      selector: td:nth-child(9)
+      filters:
+        - name: regexp
+          args: (\d+)
+    seeders:
+      selector: td:nth-child(10)
+    leechers:
+      selector: td:nth-child(11)
+    downloadvolumefactor:
+      case:
+        a.info:contains("[FREE]"): 0
+        a.info:contains("[SILVER]"): 0.5
+        "*": 1
+    uploadvolumefactor:
+      case:
+        "*": 1
 # U-232 V5

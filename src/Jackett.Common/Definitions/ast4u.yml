@@ -1,130 +1,130 @@
 ---
-  site: ast4u
-  name: AST4u
-  description: "AST4u is a GERMAN Private site for TV / MOVIES / ANIME / HENTAI"
-  language: de-de
-  type: private
-  encoding: iso-8859-1
-  links:
-    - https://www.ast4u.me/
+site: ast4u
+name: AST4u
+description: "AST4u is a GERMAN Private site for TV / MOVIES / ANIME / HENTAI"
+language: de-de
+type: private
+encoding: iso-8859-1
+links:
+  - https://www.ast4u.me/
 
-  caps:
-    categorymappings:
-      - {id: 35, cat: TV/Anime, desc: "Anime Movie"}
-      - {id: 36, cat: TV/Anime, desc: "Anime Serie"}
-      - {id: 37, cat: Audio/Foreign, desc: "Anime Musik"}
-      - {id: 41, cat: Books, desc: "Anime Pic & Manga"}
-      - {id: 42, cat: XXX, desc: "Hentai Movie & OVA"}
-      - {id: 43, cat: XXX, desc: "Hentai Serie"}
-      - {id: 44, cat: PC, desc: "Hentai Game"}
-      - {id: 45, cat: Movies, desc: "Cartoon Movie"}
-      - {id: 46, cat: TV, desc: "Cartoon Serie"}
-      - {id: 47, cat:  TV, desc: "TV-Serie"}
-      - {id: 49, cat:  TV/Documentary, desc: "Sonstiges Doku"}
-      - {id: 50, cat:  Audio, desc: "Sonstiges Soundtrack"}
-      - {id: 52, cat:  Movies/HD, desc: "Movie HD"}
-      - {id: 53, cat:  Other, desc: "Sonstiges"}
-      - {id: 55, cat: Movies/Foreign, desc: "Movie Asia & MartialArts"}
-      - {id: 56, cat: TV/Anime, desc: "Anime OVA"}
-      - {id: 58, cat: Movies, desc: "Movie"}
-      - {id: 59, cat:  Audio/Audiobook, desc: "Sonstiges Hoerspiele"}
-      - {id: 62, cat:  Console, desc: "Sonstiges Game"}
-      - {id: 65, cat: Movies/BluRay, desc: "Movie BluRay"}
-      - {id: 66, cat:  TV, desc: "TV-Serie BluRay"}
-      - {id: 67, cat:  TV/HD, desc: "TV-Serie HD"}
-      - {id: 68, cat: TV/Anime, desc: "Anime Movie HD & BD"}
-      - {id: 69, cat: TV/Anime, desc: "Anime OVA HD & BD"}
-      - {id: 70, cat: TV/Anime, desc: "Anime Serie HD & BD"}
+caps:
+  categorymappings:
+    - {id: 35, cat: TV/Anime, desc: "Anime Movie"}
+    - {id: 36, cat: TV/Anime, desc: "Anime Serie"}
+    - {id: 37, cat: Audio/Foreign, desc: "Anime Musik"}
+    - {id: 41, cat: Books, desc: "Anime Pic & Manga"}
+    - {id: 42, cat: XXX, desc: "Hentai Movie & OVA"}
+    - {id: 43, cat: XXX, desc: "Hentai Serie"}
+    - {id: 44, cat: PC, desc: "Hentai Game"}
+    - {id: 45, cat: Movies, desc: "Cartoon Movie"}
+    - {id: 46, cat: TV, desc: "Cartoon Serie"}
+    - {id: 47, cat:  TV, desc: "TV-Serie"}
+    - {id: 49, cat:  TV/Documentary, desc: "Sonstiges Doku"}
+    - {id: 50, cat:  Audio, desc: "Sonstiges Soundtrack"}
+    - {id: 52, cat:  Movies/HD, desc: "Movie HD"}
+    - {id: 53, cat:  Other, desc: "Sonstiges"}
+    - {id: 55, cat: Movies/Foreign, desc: "Movie Asia & MartialArts"}
+    - {id: 56, cat: TV/Anime, desc: "Anime OVA"}
+    - {id: 58, cat: Movies, desc: "Movie"}
+    - {id: 59, cat:  Audio/Audiobook, desc: "Sonstiges Hoerspiele"}
+    - {id: 62, cat:  Console, desc: "Sonstiges Game"}
+    - {id: 65, cat: Movies/BluRay, desc: "Movie BluRay"}
+    - {id: 66, cat:  TV, desc: "TV-Serie BluRay"}
+    - {id: 67, cat:  TV/HD, desc: "TV-Serie HD"}
+    - {id: 68, cat: TV/Anime, desc: "Anime Movie HD & BD"}
+    - {id: 69, cat: TV/Anime, desc: "Anime OVA HD & BD"}
+    - {id: 70, cat: TV/Anime, desc: "Anime Serie HD & BD"}
 
-    modes:
-      search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
-      music-search: [q]
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
 
-  settings:
-    - name: username
-      type: text
-      label: Username
-    - name: password
-      type: password
-      label: Password
-    - name: info
-      type: info
-      label: Results Per Page
-      default: For best results, change the 'Torrentliste' setting to "Platzsparendes Layout mit PopUp für zusätzliche Informationen" in your profile.
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: info
+    type: info
+    label: Results Per Page
+    default: For best results, change the 'Torrentliste' setting to "Platzsparendes Layout mit PopUp für zusätzliche Informationen" in your profile.
 
-  login:
-    path: takelogin.php
-    method: post
-    inputs:
-      username: "{{ .Config.username }}"
-      password: "{{ .Config.password }}"
-      returnto: "/index.php"
-    test:
-      path: browse.php
+login:
+  path: takelogin.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    returnto: "/index.php"
+  test:
+    path: browse.php
 
-  search:
-    paths:
-      - path: browse.php
-    inputs:
-      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-      search: "{{ .Query.Keywords }}"
-      incldead: "0"
-      orderby: "added"
-      sort: "desc"
+search:
+  paths:
+    - path: browse.php
+  inputs:
+    $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+    search: "{{ .Query.Keywords }}"
+    incldead: "0"
+    orderby: "added"
+    sort: "desc"
 
-    rows:
-      selector: table.tableinborder > tbody > tr:has(a[href^="details.php"])
-    fields: # note: two alternative layouts available
-      title:
-        selector: a[href^="details.php"]
-      title:
-        optional: true
-        selector: a[href^="details.php"][title]
-        attribute: title
-      category:
-        selector: a[href^="browse.php?cat="]
-        attribute: href
-        filters:
-          - name: querystring
-            args: cat
-      details:
-        selector: a[href^="details.php"]
-        attribute: href
-      download:
-        selector: a[href^=" /gettorrent/"]
-        attribute: href
-      files:
-        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(1) > b:nth-child(2), a[href*="&filelist=1"]
-      grabs:
-        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(3) > b:nth-child(1), a[href*="&tosnatchers=1"]
-      size:
-        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(1) > b:nth-child(1), td:nth-child(7):has(br)
-        filters:
-          - name: replace
-            args: [".", ""]
-          - name: replace
-            args: [",", "."]
-      seeders:
-        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(2) > b:nth-child(1), a[href*="&toseeders=1"]
-      leechers:
-        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(2) > b:nth-child(3), a[href*="&todlers=1"]
-      date:
-        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(5), td:nth-child(5):has(br)
-        filters:
-          - name: replace
-            args: [" ", ""]
-          - name: append
-            args: " +2:00"
-          - name: replace
-            args: ["\xA0", ""]
-          - name: dateparse
-            args: "02.01.200615:04:05 -07:00"
-      downloadvolumefactor:
-        case:
-          img[src="/pic/free.gif"]: "0"
-          "*": "1"
-      uploadvolumefactor:
-        case:
-          "*": "1"
+  rows:
+    selector: table.tableinborder > tbody > tr:has(a[href^="details.php"])
+  fields: # note: two alternative layouts available
+    title:
+      selector: a[href^="details.php"]
+    title:
+      optional: true
+      selector: a[href^="details.php"][title]
+      attribute: title
+    category:
+      selector: a[href^="browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    details:
+      selector: a[href^="details.php"]
+      attribute: href
+    download:
+      selector: a[href^=" /gettorrent/"]
+      attribute: href
+    files:
+      selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(1) > b:nth-child(2), a[href*="&filelist=1"]
+    grabs:
+      selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(3) > b:nth-child(1), a[href*="&tosnatchers=1"]
+    size:
+      selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(1) > b:nth-child(1), td:nth-child(7):has(br)
+      filters:
+        - name: replace
+          args: [".", ""]
+        - name: replace
+          args: [",", "."]
+    seeders:
+      selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(2) > b:nth-child(1), a[href*="&toseeders=1"]
+    leechers:
+      selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(2) > b:nth-child(3), a[href*="&todlers=1"]
+    date:
+      selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(5), td:nth-child(5):has(br)
+      filters:
+        - name: replace
+          args: [" ", ""]
+        - name: append
+          args: " +2:00"
+        - name: replace
+          args: ["\xA0", ""]
+        - name: dateparse
+          args: "02.01.200615:04:05 -07:00"
+    downloadvolumefactor:
+      case:
+        img[src="/pic/free.gif"]: "0"
+        "*": "1"
+    uploadvolumefactor:
+      case:
+        "*": "1"

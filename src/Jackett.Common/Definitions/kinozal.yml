@@ -1,225 +1,225 @@
 ---
-  site: kinozal
-  name: Kinozal
-  description: "Kinozal is a RUSSIAN Semi-Private Torrent Tracker for MOVIES / TV / MUSIC"
-  language: ru-ru
-  type: semi-private
-  encoding: windows-1251
-  links:
-    - http://kinozal.tv/ # site forces http, https is not supported
+site: kinozal
+name: Kinozal
+description: "Kinozal is a RUSSIAN Semi-Private Torrent Tracker for MOVIES / TV / MUSIC"
+language: ru-ru
+type: semi-private
+encoding: windows-1251
+links:
+  - http://kinozal.tv/ # site forces http, https is not supported
 
-  caps:
-    categorymappings:
-      # TV
-      - {id: 1001, cat: TV, desc: "All TV Shows"}
-      - {id: 45, cat: TV, desc: "Russian TV Series"}
-      - {id: 46, cat: TV, desc: "TV Series"}
-      # Movies
-      - {id: 1002, cat: Movies, desc: "All Movies"}
-      - {id: 8, cat: Movies, desc: "Movies - Comedy"}
-      - {id: 6, cat: Movies, desc: "Movies - Action / War"}
-      - {id: 15, cat: Movies, desc: "Movies - Thriller / Detective"}
-      - {id: 17, cat: Movies, desc: "Movies - Drama"}
-      - {id: 35, cat: Movies, desc: "Movies - Melodrama"}
-      - {id: 39, cat: Movies, desc: "Movies - Indian"}
-      - {id: 13, cat: Movies, desc: "Movies - Science Fiction"}
-      - {id: 14, cat: Movies, desc: "Movies - Fantasy"}
-      - {id: 24, cat: Movies, desc: "Movies - Horror / Mystery"}
-      - {id: 11, cat: Movies, desc: "Movies - Adventure"}
-      - {id: 10, cat: Movies, desc: "Movies - Russian Movies"}
-      - {id: 9, cat: Movies, desc: "Movies - Historical"}
-      - {id: 47, cat: Movies, desc: "Movies - Asian"}
-      - {id: 18, cat: Movies, desc: "Movies - Documentaries"}
-      - {id: 37, cat: Movies, desc: "Movies - Sport"}
-      - {id: 12, cat: Movies, desc: "Movies - Kids / Family"}
-      - {id: 7, cat: Movies, desc: "Movies - Classic"}
-      - {id: 48, cat: Movies, desc: "Movies - Concerts"}
-      - {id: 49, cat: Movies, desc: "Movies - Shows / TV Shows"}
-      - {id: 50, cat: Movies, desc: "Movies - TV Show Mir"}
-      - {id: 38, cat: Movies, desc: "Movies - Theatre, Opera, Ballet"}
-      - {id: 16, cat: Movies, desc: "Movies - Erotica"}
-      # Cartoons
-      - {id: 1003, cat: TV/Anime, desc: "All Cartoons/Anime"}
-      - {id: 21, cat: TV/Anime, desc: "Cartoons"}
-      - {id: 22, cat: TV/Anime, desc: "Cartoons - Russian"}
-      - {id: 20, cat: TV/Anime, desc: "Cartoons - Anime"}
-      # Music
-      - {id: 1004, cat: Audio, desc: "All Music"}
-      - {id: 3, cat: Audio, desc: "Music"}
-      - {id: 4, cat: Audio, desc: "Music - Russian"}
-      - {id: 5, cat: Audio, desc: "Music - Collections"}
-      - {id: 42, cat: Audio, desc: "Music - Classical"}
-      # Other
-      - {id: 1006, cat: Other, desc: "Shows, Concerts, Sports"}
-      - {id: 2, cat: Other, desc: "Other - AudioBooks"}
-      - {id: 1, cat: Other, desc: "Other - Music Video's"}
-      - {id: 23, cat: Other, desc: "Other - Games"}
-      - {id: 32, cat: Other, desc: "Other - Programs"}
-      - {id: 40, cat: Other, desc: "Other - Design / Graphics"}
-      - {id: 41, cat: Other, desc: "Other - Library"}
+caps:
+  categorymappings:
+    # TV
+    - {id: 1001, cat: TV, desc: "All TV Shows"}
+    - {id: 45, cat: TV, desc: "Russian TV Series"}
+    - {id: 46, cat: TV, desc: "TV Series"}
+    # Movies
+    - {id: 1002, cat: Movies, desc: "All Movies"}
+    - {id: 8, cat: Movies, desc: "Movies - Comedy"}
+    - {id: 6, cat: Movies, desc: "Movies - Action / War"}
+    - {id: 15, cat: Movies, desc: "Movies - Thriller / Detective"}
+    - {id: 17, cat: Movies, desc: "Movies - Drama"}
+    - {id: 35, cat: Movies, desc: "Movies - Melodrama"}
+    - {id: 39, cat: Movies, desc: "Movies - Indian"}
+    - {id: 13, cat: Movies, desc: "Movies - Science Fiction"}
+    - {id: 14, cat: Movies, desc: "Movies - Fantasy"}
+    - {id: 24, cat: Movies, desc: "Movies - Horror / Mystery"}
+    - {id: 11, cat: Movies, desc: "Movies - Adventure"}
+    - {id: 10, cat: Movies, desc: "Movies - Russian Movies"}
+    - {id: 9, cat: Movies, desc: "Movies - Historical"}
+    - {id: 47, cat: Movies, desc: "Movies - Asian"}
+    - {id: 18, cat: Movies, desc: "Movies - Documentaries"}
+    - {id: 37, cat: Movies, desc: "Movies - Sport"}
+    - {id: 12, cat: Movies, desc: "Movies - Kids / Family"}
+    - {id: 7, cat: Movies, desc: "Movies - Classic"}
+    - {id: 48, cat: Movies, desc: "Movies - Concerts"}
+    - {id: 49, cat: Movies, desc: "Movies - Shows / TV Shows"}
+    - {id: 50, cat: Movies, desc: "Movies - TV Show Mir"}
+    - {id: 38, cat: Movies, desc: "Movies - Theatre, Opera, Ballet"}
+    - {id: 16, cat: Movies, desc: "Movies - Erotica"}
+    # Cartoons
+    - {id: 1003, cat: TV/Anime, desc: "All Cartoons/Anime"}
+    - {id: 21, cat: TV/Anime, desc: "Cartoons"}
+    - {id: 22, cat: TV/Anime, desc: "Cartoons - Russian"}
+    - {id: 20, cat: TV/Anime, desc: "Cartoons - Anime"}
+    # Music
+    - {id: 1004, cat: Audio, desc: "All Music"}
+    - {id: 3, cat: Audio, desc: "Music"}
+    - {id: 4, cat: Audio, desc: "Music - Russian"}
+    - {id: 5, cat: Audio, desc: "Music - Collections"}
+    - {id: 42, cat: Audio, desc: "Music - Classical"}
+    # Other
+    - {id: 1006, cat: Other, desc: "Shows, Concerts, Sports"}
+    - {id: 2, cat: Other, desc: "Other - AudioBooks"}
+    - {id: 1, cat: Other, desc: "Other - Music Video's"}
+    - {id: 23, cat: Other, desc: "Other - Games"}
+    - {id: 32, cat: Other, desc: "Other - Programs"}
+    - {id: 40, cat: Other, desc: "Other - Design / Graphics"}
+    - {id: 41, cat: Other, desc: "Other - Library"}
 
-    modes:
-      search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
-      music-search: [q]
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
 
-  settings:
-    - name: username
-      type: text
-      label: Username
-    - name: password
-      type: password
-      label: Password
-    - name: striprussian
-      type: checkbox
-      label: Strip Russian Letters
-      default: true
-    - name: sort
-      type: select
-      label: Sort requested from site
-      default: "0"
-      options:
-        "0": "created"
-        "1": "seeders"
-        "3": "size"
-    - name: type
-      type: select
-      label: Order requested from site
-      default: "0"
-      options:
-        "0": "desc"
-        "1": "asc"
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: striprussian
+    type: checkbox
+    label: Strip Russian Letters
+    default: true
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: "0"
+    options:
+      "0": "created"
+      "1": "seeders"
+      "3": "size"
+  - name: type
+    type: select
+    label: Order requested from site
+    default: "0"
+    options:
+      "0": "desc"
+      "1": "asc"
 
-  login:
-    path: takelogin.php
-    method: post
-    inputs:
-      username: "{{ .Config.username }}"
-      password: "{{ .Config.password }}"
-    error:
-      - selector: div.bx1:has(div.red)
-        message:
-          selector: div.bx1 div.red
-    test:
-      path: userdetails.php
+login:
+  path: takelogin.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: div.bx1:has(div.red)
+      message:
+        selector: div.bx1 div.red
+  test:
+    path: userdetails.php
 
-  search:
-    paths:
-    # http://kinozal.tv/browse.php?s=lucifer+2017&g=0&c=0&v=0&d=0&w=0&t=0&f=0
-      - path: browse.php
-    keywordsfilters:
-      - name: diacritics
-        args: replace
-      - name: re_replace # S01 to 1
-        args: ["(?i)\\bS0*(\\d+)\\b", "$1"]
-      - name: re_replace # S01E01 to 1 1
-        args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "$1 $2"]
-    inputs:
-      # multi cat is not supported. so defaulting to ALL
-      c: 0
-      s: "{{ .Keywords }}"
-       # where 0 the title 1 person 2 genres 3 regular expression
-      g: 0
-      # format 0 all
-      v: 0
-      # released 0 all
-      d: 0
-      # filter 0 all
-      w: 0
-      t: "{{ .Config.sort }}"
-      f: "{{ .Config.type }}"
+search:
+  paths:
+  # http://kinozal.tv/browse.php?s=lucifer+2017&g=0&c=0&v=0&d=0&w=0&t=0&f=0
+    - path: browse.php
+  keywordsfilters:
+    - name: diacritics
+      args: replace
+    - name: re_replace # S01 to 1
+      args: ["(?i)\\bS0*(\\d+)\\b", "$1"]
+    - name: re_replace # S01E01 to 1 1
+      args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "$1 $2"]
+  inputs:
+    # multi cat is not supported. so defaulting to ALL
+    c: 0
+    s: "{{ .Keywords }}"
+     # where 0 the title 1 person 2 genres 3 regular expression
+    g: 0
+    # format 0 all
+    v: 0
+    # released 0 all
+    d: 0
+    # filter 0 all
+    w: 0
+    t: "{{ .Config.sort }}"
+    f: "{{ .Config.type }}"
 
-    rows:
-      selector: table > tbody > tr:has(td.bt)
+  rows:
+    selector: table > tbody > tr:has(td.bt)
 
-    fields:
-      title:
-        selector: td.nam a[href^="/details.php?id="]
-        filters:
-          # normalize to SXXEYY format
-          - name: replace
-            args: [" / ", " "]
-          - name: replace
-            args: ["Кураж-Бамбей", "kurazh"]
-          - name: replace
-            args: ["Кубик в Кубе", "Kubik"]
-          - name: replace
-            args: ["Кравец", "Kravec"]
-          - name: re_replace
-            args: ["\\((\\d+)\\s+[Сс]езон:\\s+(?:(\\d+-*\\d*)\\s+[Сс]ери[ия]\\s+.*\\d+)\\)(.*)\\s([12][0-9]{3})\\s(.*)", "$3 - S$1E$2 - rus $5"]
-          - name: re_replace
-            args: ["(\\([А-Яа-яЁё\\W]+\\))|(^[А-Яа-яЁё\\W\\d]+\\/ )|([а-яА-ЯЁё \\-]+,+)|([а-яА-ЯЁё]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
-          - name: re_replace
-            args: ["\\((\\d+p)\\)", "$1"]
-          - name: replace
-            args: ["-Rip", "Rip"]
-          - name: replace
-            args: ["WEB-DL", "WEBDL"]
-          - name: replace
-            args: ["WEBDLRip", "WEBDL"]
-          - name: replace
-            args: ["HDTVRip", "HDTV"]
-      details:
-        selector: td.nam a[href^="/details.php?id="]
-        attribute: href
-      category:
-        selector: td.bt img
-        attribute: onclick
-        filters:
-          - name: re_replace
-            args: ["[^\\d+]", ""]
-      download:
-        selector: td.nam a[href^="/details.php?id="]
-        attribute: href
-        filters:
-          - name: replace
-            args: ["details", "download"]
-      size:
-        selector: td:nth-child(4)
-        filters:
-          - name: replace
-            args: ["ТБ", "TB"]
-          - name: replace
-            args: ["ГБ", "GB"]
-          - name: replace
-            args: ["МБ", "MB"]
-          - name: replace
-            args: ["КБ", "KB"]
-      seeders:
-        selector: td:nth-child(5)
-      leechers:
-        selector: td:nth-child(6)
-      # dates come in four flavours:
-      date:
-        # now
-        # Today 09:10
-        # Yesterday 13:04
-        selector: td:nth-child(7):not(:contains("."))
-        optional: true
-        filters:
-          - name: replace
-            args: [" в", ""]
-          - name: replace
-            args: ["сейчас", "now"]
-          - name: replace
-            args: ["сегодня", "Today"]
-          - name: replace
-            args: ["вчера", "Yesterday"]
-      date:
-        # 24.10.2017 at 23:44
-        selector: td:nth-child(7):contains(".")
-        optional: true
-        filters:
-          - name: replace
-            args: [" в", ""]
-          - name: dateparse
-            args: "02.01.2006 15:04"
-      downloadvolumefactor:
-        case:
-          a.r1: 0 # gold
-          a.r2: 0.5 # silver
-          "*": 1
-      uploadvolumefactor:
-        text: 1
+  fields:
+    title:
+      selector: td.nam a[href^="/details.php?id="]
+      filters:
+        # normalize to SXXEYY format
+        - name: replace
+          args: [" / ", " "]
+        - name: replace
+          args: ["Кураж-Бамбей", "kurazh"]
+        - name: replace
+          args: ["Кубик в Кубе", "Kubik"]
+        - name: replace
+          args: ["Кравец", "Kravec"]
+        - name: re_replace
+          args: ["\\((\\d+)\\s+[Сс]езон:\\s+(?:(\\d+-*\\d*)\\s+[Сс]ери[ия]\\s+.*\\d+)\\)(.*)\\s([12][0-9]{3})\\s(.*)", "$3 - S$1E$2 - rus $5"]
+        - name: re_replace
+          args: ["(\\([А-Яа-яЁё\\W]+\\))|(^[А-Яа-яЁё\\W\\d]+\\/ )|([а-яА-ЯЁё \\-]+,+)|([а-яА-ЯЁё]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
+        - name: re_replace
+          args: ["\\((\\d+p)\\)", "$1"]
+        - name: replace
+          args: ["-Rip", "Rip"]
+        - name: replace
+          args: ["WEB-DL", "WEBDL"]
+        - name: replace
+          args: ["WEBDLRip", "WEBDL"]
+        - name: replace
+          args: ["HDTVRip", "HDTV"]
+    details:
+      selector: td.nam a[href^="/details.php?id="]
+      attribute: href
+    category:
+      selector: td.bt img
+      attribute: onclick
+      filters:
+        - name: re_replace
+          args: ["[^\\d+]", ""]
+    download:
+      selector: td.nam a[href^="/details.php?id="]
+      attribute: href
+      filters:
+        - name: replace
+          args: ["details", "download"]
+    size:
+      selector: td:nth-child(4)
+      filters:
+        - name: replace
+          args: ["ТБ", "TB"]
+        - name: replace
+          args: ["ГБ", "GB"]
+        - name: replace
+          args: ["МБ", "MB"]
+        - name: replace
+          args: ["КБ", "KB"]
+    seeders:
+      selector: td:nth-child(5)
+    leechers:
+      selector: td:nth-child(6)
+    # dates come in four flavours:
+    date:
+      # now
+      # Today 09:10
+      # Yesterday 13:04
+      selector: td:nth-child(7):not(:contains("."))
+      optional: true
+      filters:
+        - name: replace
+          args: [" в", ""]
+        - name: replace
+          args: ["сейчас", "now"]
+        - name: replace
+          args: ["сегодня", "Today"]
+        - name: replace
+          args: ["вчера", "Yesterday"]
+    date:
+      # 24.10.2017 at 23:44
+      selector: td:nth-child(7):contains(".")
+      optional: true
+      filters:
+        - name: replace
+          args: [" в", ""]
+        - name: dateparse
+          args: "02.01.2006 15:04"
+    downloadvolumefactor:
+      case:
+        a.r1: 0 # gold
+        a.r2: 0.5 # silver
+        "*": 1
+    uploadvolumefactor:
+      text: 1
 # engine n/a

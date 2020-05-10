@@ -1,114 +1,114 @@
 # looks like gazelle but ajax.php seems to be disabled:
 # https://jpopsuki.eu/ajax.php?action=browse&order_by=time&order_way=desc => Invalid
 ---
-  site: jpopsuki
-  name: JPopsuki
-  description: "JPopSuki is a Private Torrent Tracker for ASIAN MUSIC"
-  language: en-us
-  type: private
-  encoding: UTF-8
-  links:
-    - https://jpopsuki.eu/
+site: jpopsuki
+name: JPopsuki
+description: "JPopSuki is a Private Torrent Tracker for ASIAN MUSIC"
+language: en-us
+type: private
+encoding: UTF-8
+links:
+  - https://jpopsuki.eu/
 
-  caps:
-    categorymappings:
-      - {id: 1, cat: Audio, desc: "Album"}
-      - {id: 2, cat: Audio, desc: "Single"}
-      - {id: 3, cat: Movies, desc: "PV"}
-      - {id: 4, cat: Movies/DVD, desc: "DVD"}
-      - {id: 5, cat: TV, desc: "TV-Music"}
-      - {id: 6, cat: TV, desc: "TV-Variety"}
-      - {id: 7, cat: TV, desc: "TV-Drama"}
-      - {id: 8, cat: Other, desc: "Fansubs"}
-      - {id: 9, cat: Other, desc: "Pictures"}
-      - {id: 10, cat: Other/Misc, desc: "Misc"}
+caps:
+  categorymappings:
+    - {id: 1, cat: Audio, desc: "Album"}
+    - {id: 2, cat: Audio, desc: "Single"}
+    - {id: 3, cat: Movies, desc: "PV"}
+    - {id: 4, cat: Movies/DVD, desc: "DVD"}
+    - {id: 5, cat: TV, desc: "TV-Music"}
+    - {id: 6, cat: TV, desc: "TV-Variety"}
+    - {id: 7, cat: TV, desc: "TV-Drama"}
+    - {id: 8, cat: Other, desc: "Fansubs"}
+    - {id: 9, cat: Other, desc: "Pictures"}
+    - {id: 10, cat: Other/Misc, desc: "Misc"}
 
-    modes:
-      search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
-      music-search: [q, album, artist, label, year]
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q, album, artist, label, year]
 
-  login:
-    path: login.php
-    method: post
-    inputs:
-      username: "{{ .Config.username }}"
-      password: "{{ .Config.password }}"
-      keeplogged: 1
-      login: "Log in"
-    error:
-      - selector: form#loginform > span.warning, font[color="red"]
-    test:
-      path: torrents.php
-
-  ratio:
+login:
+  path: login.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    keeplogged: 1
+    login: "Log in"
+  error:
+    - selector: form#loginform > span.warning, font[color="red"]
+  test:
     path: torrents.php
-    selector: li#stats_ratio > span
 
-  search:
-    paths:
-      - path: torrents.php
-    inputs:
-      $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
-      searchstr: "{{if .Query.Artist}}{{ .Query.Artist }}{{else}}{{ .Keywords }}{{end}}"
-      order_by: time
-      order_way: desc
-      action: basic
-      searchsubmit: 1
-      disablegrouping: 1
-    rows:
-      selector: table#torrent_table > tbody > tr[class^="torrent"]
-    fields:
-      download:
-        selector: a[href^="torrents.php?action=download&id="]
-        attribute: href
-      description:
-        selector: div.tags
-      title:
-        selector: td:nth-child(3)
-        remove: span, div.tags, a[title="View Comments"]
-        filters:
-          - name: replace
-            args: [" ()", ""]
-          - name: replace
-            args: ["\t", ""]
-          - name: replace
-            args: [" / Freeleech!", ""]
-      category:
-        selector: a[href*="filter_cat"]
-        attribute: href
-        filters:
-          - name: regexp
-            args: "%5B(\\d+?)%5D"
-      details:
-        selector: a[href^="torrents.php?id="]
-        attribute: href
-      banner:
-        selector: td:nth-child(2) img
-        attribute: src
-      files:
-        selector: td:nth-child(4)
-      date:
-        selector: td:nth-child(5)
-        attribute: title
-        filters:
-          - name: append
-            args: " +00:00"
-          - name: dateparse
-            args: "Jan 02 2006, 15:04 -07:00"
-      size:
-        selector: td:nth-child(6)
-      grabs:
-        selector: td:nth-child(7)
-      seeders:
-        selector: td:nth-child(8)
-      leechers:
-        selector: td:nth-child(9)
-      downloadvolumefactor:
-        case:
-          "strong:contains(\"Freeleech!\")": "0"
-          "*": "1"
-      uploadvolumefactor:
-        case:
-          "*": "1"
+ratio:
+  path: torrents.php
+  selector: li#stats_ratio > span
+
+search:
+  paths:
+    - path: torrents.php
+  inputs:
+    $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
+    searchstr: "{{if .Query.Artist}}{{ .Query.Artist }}{{else}}{{ .Keywords }}{{end}}"
+    order_by: time
+    order_way: desc
+    action: basic
+    searchsubmit: 1
+    disablegrouping: 1
+  rows:
+    selector: table#torrent_table > tbody > tr[class^="torrent"]
+  fields:
+    download:
+      selector: a[href^="torrents.php?action=download&id="]
+      attribute: href
+    description:
+      selector: div.tags
+    title:
+      selector: td:nth-child(3)
+      remove: span, div.tags, a[title="View Comments"]
+      filters:
+        - name: replace
+          args: [" ()", ""]
+        - name: replace
+          args: ["\t", ""]
+        - name: replace
+          args: [" / Freeleech!", ""]
+    category:
+      selector: a[href*="filter_cat"]
+      attribute: href
+      filters:
+        - name: regexp
+          args: "%5B(\\d+?)%5D"
+    details:
+      selector: a[href^="torrents.php?id="]
+      attribute: href
+    banner:
+      selector: td:nth-child(2) img
+      attribute: src
+    files:
+      selector: td:nth-child(4)
+    date:
+      selector: td:nth-child(5)
+      attribute: title
+      filters:
+        - name: append
+          args: " +00:00"
+        - name: dateparse
+          args: "Jan 02 2006, 15:04 -07:00"
+    size:
+      selector: td:nth-child(6)
+    grabs:
+      selector: td:nth-child(7)
+    seeders:
+      selector: td:nth-child(8)
+    leechers:
+      selector: td:nth-child(9)
+    downloadvolumefactor:
+      case:
+        "strong:contains(\"Freeleech!\")": "0"
+        "*": "1"
+    uploadvolumefactor:
+      case:
+        "*": "1"

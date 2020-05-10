@@ -1,107 +1,107 @@
 ---
-  site: itorrent
-  name: iTorrent
-  description: "iTorrent is a Public HUNGARIAN site"
-  language: hu
-  type: public
-  encoding: UTF-8
-  followredirect: true
-  links:
-    - https://itorrent.ws/
-    - https://itorrent.unblockit.me/
-  legacylinks:
-    - https://itorrent.unblockit.pro/
-    - https://itorrent.unblockit.one/
+site: itorrent
+name: iTorrent
+description: "iTorrent is a Public HUNGARIAN site"
+language: hu
+type: public
+encoding: UTF-8
+followredirect: true
+links:
+  - https://itorrent.ws/
+  - https://itorrent.unblockit.me/
+legacylinks:
+  - https://itorrent.unblockit.pro/
+  - https://itorrent.unblockit.one/
 
-  caps:
-    categories:
-      "app": PC
-      "book": Books
-      "game": PC/Games
-      "movies": Movies
-      "music": Audio
-      "heart": XXX
-      "tv": TV
+caps:
+  categories:
+    "app": PC
+    "book": Books
+    "game": PC/Games
+    "movies": Movies
+    "music": Audio
+    "heart": XXX
+    "tv": TV
 
-    modes:
-      search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
-      music-search: [q]
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
 
-  settings:
-    - name: sort
-      type: select
-      label: Sort requested from site
-      default: "date_added"
-      options:
-        "date_added": "created"
-        "seeders": "seeders"
-        "size": "size"
-        "title": "title"
-    - name: type
-      type: select
-      label: Order requested from site
-      default: "DESC"
-      options:
-        "DESC": "desc"
-        "ASC": "asc"
+settings:
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: "date_added"
+    options:
+      "date_added": "created"
+      "seeders": "seeders"
+      "size": "size"
+      "title": "title"
+  - name: type
+    type: select
+    label: Order requested from site
+    default: "DESC"
+    options:
+      "DESC": "desc"
+      "ASC": "asc"
 
 
-  download:
-    selector: a[href^="/torrentfiles/"]
-    attribute: href
+download:
+  selector: a[href^="/torrentfiles/"]
+  attribute: href
 
-  search:
-    paths:
-      - path: "torrentek/title/{{ .Keywords }}/order/{{ .Config.sort }}/by/{{ .Config.type }}/"
+search:
+  paths:
+    - path: "torrentek/title/{{ .Keywords }}/order/{{ .Config.sort }}/by/{{ .Config.type }}/"
 
-    rows:
-      selector: tr.gradeX
+  rows:
+    selector: tr.gradeX
+    filters:
+      - name: andmatch
+
+  fields:
+    category:
+      selector: td:nth-child(1) i
+      attribute: class
       filters:
-        - name: andmatch
-
-    fields:
-      category:
-        selector: td:nth-child(1) i
-        attribute: class
-        filters:
-          - name: replace
-            args: ["zqf zqf-", ""]
-      title:
-        selector: td:nth-child(2) a
-      details:
-        selector: td:nth-child(2) a
-        attribute: href
-      download:
-        selector: td:nth-child(2) a
-        attribute: href
-      date:
-        selector: td:nth-child(4) span
-        optional: true
-        attribute: title
-        filters:
-          - name: dateparse
-            args: "2006.01.02 15:04"
-      date:
-        selector: td:nth-child(4):not(:has(span))
-        optional: true
-        filters:
-          - name: dateparse
-            args: "2006.01.02"
-      size:
-        selector: td:nth-child(5)
-      grabs:
-        selector: td:nth-child(6)
-        filters:
-          - name: replace
-            args: [" ", ""]
-      seeders:
-        selector: td:nth-child(7)
-      leechers:
-        selector: td:nth-child(8)
-      downloadvolumefactor:
-        text: 0
-      uploadvolumefactor:
-        text: 1
+        - name: replace
+          args: ["zqf zqf-", ""]
+    title:
+      selector: td:nth-child(2) a
+    details:
+      selector: td:nth-child(2) a
+      attribute: href
+    download:
+      selector: td:nth-child(2) a
+      attribute: href
+    date:
+      selector: td:nth-child(4) span
+      optional: true
+      attribute: title
+      filters:
+        - name: dateparse
+          args: "2006.01.02 15:04"
+    date:
+      selector: td:nth-child(4):not(:has(span))
+      optional: true
+      filters:
+        - name: dateparse
+          args: "2006.01.02"
+    size:
+      selector: td:nth-child(5)
+    grabs:
+      selector: td:nth-child(6)
+      filters:
+        - name: replace
+          args: [" ", ""]
+    seeders:
+      selector: td:nth-child(7)
+    leechers:
+      selector: td:nth-child(8)
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
 # engine n/a

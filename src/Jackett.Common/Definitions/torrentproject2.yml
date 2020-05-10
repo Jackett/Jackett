@@ -1,115 +1,115 @@
 ---
-  site: torrentproject2
-  name: TorrentProject2
-  description: "TorrentProject2 is a Public torrent meta-search engine"
-  language: en-us
-  type: public
-  encoding: UTF-8
-  links:
-    - https://torrentproject.cc/
-    - https://torrentproject2.org/
-  legacylinks:
-    - https://torrentproject2.se/
+site: torrentproject2
+name: TorrentProject2
+description: "TorrentProject2 is a Public torrent meta-search engine"
+language: en-us
+type: public
+encoding: UTF-8
+links:
+  - https://torrentproject.cc/
+  - https://torrentproject2.org/
+legacylinks:
+  - https://torrentproject2.se/
 
-  caps:
-    categories:
-      "video tv": TV
-      "video dvd": Movies/SD
-      "Video Dvdrip": Movies/SD
-      "video hdrip": Movies/HD
-      "Video Lq": Movies/Foreign
-      "audio mp3": Audio/MP3
-      "audio lossless": Audio/Lossless
-      "video": Movies
-      "ebooks": Books/Ebook
-      "Ebooks Comics": Books/Comics
-      "Ebooks Magazines": Other
-      "Ebooks Audiobook": Audio/Audiobook
-      "Ebooks Tutorials": Books/Ebook
-      "Games PC": PC/Games
-      "Games Nintendo": Console
-      "Games PlayStation": Console
-      "Games XBox": Console/XBox
-      "Mobile": PC/Phone-Other
-      "Applications": PC
-      "Images": Other
-      "Other": Other
+caps:
+  categories:
+    "video tv": TV
+    "video dvd": Movies/SD
+    "Video Dvdrip": Movies/SD
+    "video hdrip": Movies/HD
+    "Video Lq": Movies/Foreign
+    "audio mp3": Audio/MP3
+    "audio lossless": Audio/Lossless
+    "video": Movies
+    "ebooks": Books/Ebook
+    "Ebooks Comics": Books/Comics
+    "Ebooks Magazines": Other
+    "Ebooks Audiobook": Audio/Audiobook
+    "Ebooks Tutorials": Books/Ebook
+    "Games PC": PC/Games
+    "Games Nintendo": Console
+    "Games PlayStation": Console
+    "Games XBox": Console/XBox
+    "Mobile": PC/Phone-Other
+    "Applications": PC
+    "Images": Other
+    "Other": Other
 
-    modes:
-      search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
-      music-search: [q]
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
 
-  settings:
-    - name: filter-verified
-      type: checkbox
-      label: "Only include verifed content in results"
-      default: false
-    - name: sort
-      type: select
-      label: Sort requested from site
-      default: "latest"
-      options:
-        "latest": "created desc"
-        "oldest": "created asc"
-        "seeders": "seeders"
-        "size": "size"
-    - name: info
-      type: info
-      label: A note about TP2
-      default: TP2 does not display categories in its search results page. To add to Sonarr or Radarr replace all categories with 7000.
+settings:
+  - name: filter-verified
+    type: checkbox
+    label: "Only include verifed content in results"
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: "latest"
+    options:
+      "latest": "created desc"
+      "oldest": "created asc"
+      "seeders": "seeders"
+      "size": "size"
+  - name: info
+    type: info
+    label: A note about TP2
+    default: TP2 does not display categories in its search results page. To add to Sonarr or Radarr replace all categories with 7000.
 
-  download:
-    selector: "#download > div:nth-child(2) > div:nth-child(1) > a"
-    attribute: href
-    filters:
-      - name: replace
-        args: ["https://mylink.me.uk/?url=" ,""]
-        args: ["https://mylink.cx/?url=" ,""]
-      - name: urldecode
+download:
+  selector: "#download > div:nth-child(2) > div:nth-child(1) > a"
+  attribute: href
+  filters:
+    - name: replace
+      args: ["https://mylink.me.uk/?url=" ,""]
+      args: ["https://mylink.cx/?url=" ,""]
+    - name: urldecode
 
-  search:
-    paths:
-      - path: "?t={{ if .Keywords }}{{ re_replace .Keywords \" \" \"+\" }}{{else}}test{{end}}&orderby={{ .Config.sort }}{{ if .Config.filter-verified }}&safe=on{{else}}{{end}}"
-        followredirect: true
+search:
+  paths:
+    - path: "?t={{ if .Keywords }}{{ re_replace .Keywords \" \" \"+\" }}{{else}}test{{end}}&orderby={{ .Config.sort }}{{ if .Config.filter-verified }}&safe=on{{else}}{{end}}"
+      followredirect: true
 
-    rows:
-      selector: "#similarfiles div:has(a[href^=\"/t\"])"
+  rows:
+    selector: "#similarfiles div:has(a[href^=\"/t\"])"
 
-    fields:
-      category:
-        text: Other
-      category|noappend:
-        optional: true
-        selector: div > span:nth-child(1) > span
-      title:
-        selector: span > a
-      details:
-        selector: span > a
-        attribute: href
-      download:
-        selector: span > a
-        attribute: href
-      date:
-        selector: div > span:nth-child(4)
-      size:
-        selector: div > span:nth-child(5)
-        filters:
-          - name: re_replace # 1.014.2 MB => 1014.2 MB
-            args: ["\\.([0-9]{3})", "$1"]
-      seeders:
-        selector: div > span:nth-child(2)
-        filters:
-          - name: replace
-            args: ["N/A", "0"]
-      leechers:
-        selector: div > span:nth-child(3)
-        filters:
-          - name: replace
-            args: ["N/A", "0"]
-      downloadvolumefactor:
-        text: 0
-      uploadvolumefactor:
-        text: 1
+  fields:
+    category:
+      text: Other
+    category|noappend:
+      optional: true
+      selector: div > span:nth-child(1) > span
+    title:
+      selector: span > a
+    details:
+      selector: span > a
+      attribute: href
+    download:
+      selector: span > a
+      attribute: href
+    date:
+      selector: div > span:nth-child(4)
+    size:
+      selector: div > span:nth-child(5)
+      filters:
+        - name: re_replace # 1.014.2 MB => 1014.2 MB
+          args: ["\\.([0-9]{3})", "$1"]
+    seeders:
+      selector: div > span:nth-child(2)
+      filters:
+        - name: replace
+          args: ["N/A", "0"]
+    leechers:
+      selector: div > span:nth-child(3)
+      filters:
+        - name: replace
+          args: ["N/A", "0"]
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
 # engine n/a

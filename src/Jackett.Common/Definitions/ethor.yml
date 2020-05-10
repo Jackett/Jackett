@@ -1,165 +1,165 @@
 ---
-  site: ethor
-  name: Ethor.net (Thor's Land)
-  description: "A French gerneral tracker"
-  language: fr-fr
-  type: private
-  encoding: UTF-8
-  links:
-    - https://ethor.net/
+site: ethor
+name: Ethor.net (Thor's Land)
+description: "A French gerneral tracker"
+language: fr-fr
+type: private
+encoding: UTF-8
+links:
+  - https://ethor.net/
 
-  caps:
-    categorymappings:
-      - {id: 22, cat: PC, desc: "Applications/Divers"}
-      - {id: 1, cat: PC, desc: "Applications/PC ISO"}
-      - {id: 44, cat: PC, desc: "Applications/Portable"}
-      - {id: 47, cat: Movies/BluRay, desc: "Films/Bluray"}
-      - {id: 20, cat: Movies/DVD, desc: "Films/DVDr"}
-      - {id: 42, cat: Movies/HD, desc: "Films/HD Rip"}
-      - {id: 19, cat: Movies/SD, desc: "Films/SD Rip"}
-      - {id: 5, cat: Movies/SD, desc: "Films/VCD"}
-      - {id: 4, cat: PC/Games, desc: "Jeux/PC"}
-      - {id: 41, cat: Console, desc: "Jeux/Portable"}
-      - {id: 34, cat: Console/PS4, desc: "Jeux/PS2-PS3"}
-      - {id: 38, cat: Console/Wii, desc: "Jeux/Wii-GC"}
-      - {id: 40, cat: Console/Xbox, desc: "Jeux/Xbox360"}
-      - {id: 6, cat: Audio, desc: "Musique"}
-      - {id: 37, cat: Audio/Video, desc: "Musique/Video"}
-      - {id: 48, cat: TV/HD, desc: "Série-Télé/Bluray"}
-      - {id: 45, cat: TV/SD, desc: "Série-Télé/DVDr"}
-      - {id: 43, cat: TV/HD, desc: "Série-Télé/HD Rip"}
-      - {id: 7, cat: TV/SD, desc: "Série-Télé/SD Rip"}
-      - {id: 23, cat: Books, desc: "E-Books"}
-      - {id: 46, cat: Other, desc: "Évé. sportif"}
-      - {id: 36, cat: Other, desc: "Kidz"}
-      - {id: 25, cat: Other, desc: "Misc"}
-      - {id: 9, cat: XXX, desc: "XXX"}
+caps:
+  categorymappings:
+    - {id: 22, cat: PC, desc: "Applications/Divers"}
+    - {id: 1, cat: PC, desc: "Applications/PC ISO"}
+    - {id: 44, cat: PC, desc: "Applications/Portable"}
+    - {id: 47, cat: Movies/BluRay, desc: "Films/Bluray"}
+    - {id: 20, cat: Movies/DVD, desc: "Films/DVDr"}
+    - {id: 42, cat: Movies/HD, desc: "Films/HD Rip"}
+    - {id: 19, cat: Movies/SD, desc: "Films/SD Rip"}
+    - {id: 5, cat: Movies/SD, desc: "Films/VCD"}
+    - {id: 4, cat: PC/Games, desc: "Jeux/PC"}
+    - {id: 41, cat: Console, desc: "Jeux/Portable"}
+    - {id: 34, cat: Console/PS4, desc: "Jeux/PS2-PS3"}
+    - {id: 38, cat: Console/Wii, desc: "Jeux/Wii-GC"}
+    - {id: 40, cat: Console/Xbox, desc: "Jeux/Xbox360"}
+    - {id: 6, cat: Audio, desc: "Musique"}
+    - {id: 37, cat: Audio/Video, desc: "Musique/Video"}
+    - {id: 48, cat: TV/HD, desc: "Série-Télé/Bluray"}
+    - {id: 45, cat: TV/SD, desc: "Série-Télé/DVDr"}
+    - {id: 43, cat: TV/HD, desc: "Série-Télé/HD Rip"}
+    - {id: 7, cat: TV/SD, desc: "Série-Télé/SD Rip"}
+    - {id: 23, cat: Books, desc: "E-Books"}
+    - {id: 46, cat: Other, desc: "Évé. sportif"}
+    - {id: 36, cat: Other, desc: "Kidz"}
+    - {id: 25, cat: Other, desc: "Misc"}
+    - {id: 9, cat: XXX, desc: "XXX"}
 
-    modes:
-      search: [q, imdbid]
-      tv-search: [q, season, ep, imdbid]
-      movie-search: [q, imdbid]
-      music-search: [q]
+  modes:
+    search: [q, imdbid]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
+    music-search: [q]
 
-  settings:
-    - name: username
-      type: text
-      label: Username
-    - name: password
-      type: password
-      label: Password
-    - name: multilang
-      type: checkbox
-      label: Replace VFQ/MULTI by another language in release name
-      default:  false
-    - name: multilanguage
-      type: select
-      label: Replace MULTI by this language
-      default: MULTI.FRENCH
-      options:
-        FRENCH : "FRENCH"
-        MULTI.FRENCH : "MULTI.FRENCH"
-        ENGLISH: "ENGLISH"
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: multilang
+    type: checkbox
+    label: Replace VFQ/MULTI by another language in release name
+    default:  false
+  - name: multilanguage
+    type: select
+    label: Replace MULTI by this language
+    default: MULTI.FRENCH
+    options:
+      FRENCH : "FRENCH"
+      MULTI.FRENCH : "MULTI.FRENCH"
+      ENGLISH: "ENGLISH"
 
-  login:
-    path: login3.php
-    method: form
-    form: form[action="login3.php?takelogin=1"]
-    captcha:
-      type: image
-      selector: img#validationimage
-      input: validationcode
-    inputs:
-      username: "{{ .Config.username }}"
-      password: "{{ .Config.password }}"
-      secure_cookie: "0"
-    error:
-      - selector: :contains("\"status\":\"error\"")
-    test:
-      path: browse.php
-
-  ratio:
+login:
+  path: login3.php
+  method: form
+  form: form[action="login3.php?takelogin=1"]
+  captcha:
+    type: image
+    selector: img#validationimage
+    input: validationcode
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    secure_cookie: "0"
+  error:
+    - selector: :contains("\"status\":\"error\"")
+  test:
     path: browse.php
-    selector: span#ratioRatio
 
-  search:
-    paths:
-      - path: browse.php
-    inputs:
-      $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-      search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-      advcat: 0
-      incldead: 1
-      stype: b
-      dp: 0
-      isUserClick: 0
+ratio:
+  path: browse.php
+  selector: span#ratioRatio
 
-    rows:
-      selector: p + table > tbody > tr:has(a[href^="/details.php"])
+search:
+  paths:
+    - path: browse.php
+  inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    advcat: 0
+    incldead: 1
+    stype: b
+    dp: 0
+    isUserClick: 0
 
-    fields:
-      download:
-        selector: a[href^="/details.php"]:has(b)
-        attribute: href
-        filters:
-          - name: replace
-            args: ["/details.php", "/download.php"]
-      _title_original:
-        selector: a[href^="/details.php"]:has(b)
-      _title_original: # long titles (shortened with ...)
-        selector: a[href^="/details.php"][title]
-        attribute: title
-        optional: true
-      _title_normalized:
-        text: "{{ .Result._title_original }}"
-        filters:
-          - name: re_replace
-            args: ["S(\\d{2}) E(\\d{2})", "S$1E$2"]
-          - name: re_replace
-            args: ["S(\\d{1}) E(\\d{2})", "S0$1E$2"]
-      _title_multilang:
-        text: "{{ .Result._title_normalized }}"
-        filters:
-          - name: re_replace
-            args: ["(?i)[\\.\\s\\[\\-]MULTI[\\.\\s\\]\\-]", ".{{ .Config.multilanguage }}."]
-          - name: re_replace
-            args: ["(?i)[\\.\\s\\[\\-]VFQ[\\.\\s\\]\\-]", ".{{ .Config.multilanguage }}."]
-      title:
-        text: "{{if .Config.multilang }}{{ .Result._title_multilang }}{{else}}{{ .Result._title_normalized }}{{end}}"
-      category:
-        selector: a[href^="/browse.php?cat="]
-        attribute: href
-        filters:
-          - name: querystring
-            args: cat
-      comments:
-        selector: a[href^="/details.php"]:has(b)
-        attribute: href
-      files:
-        selector: a[href*="#filelist"]
-      size:
-        selector: td:nth-child(6)
-      grabs:
-        selector: td:nth-child(7)
-        filters:
-          - name: regexp
-            args: "(\\d+)"
-      seeders:
-        selector: td:nth-child(8)
-      leechers:
-        selector: td:nth-child(9)
-      date:
-        selector: td:nth-child(5)
-        filters:
-          - name: append
-            args: " -05:00" # timezone offset
-          - name: dateparse
-            args: "2006-01-0215:04:05 -07:00"
-      downloadvolumefactor:
-        case:
-          "img[title^=\"Freeleech: \"]": 0
-          "img[title^=\"Half Freeleech: \"]": 0.5
-          "*": 1
-      uploadvolumefactor:
-        text: 1
+  rows:
+    selector: p + table > tbody > tr:has(a[href^="/details.php"])
+
+  fields:
+    download:
+      selector: a[href^="/details.php"]:has(b)
+      attribute: href
+      filters:
+        - name: replace
+          args: ["/details.php", "/download.php"]
+    _title_original:
+      selector: a[href^="/details.php"]:has(b)
+    _title_original: # long titles (shortened with ...)
+      selector: a[href^="/details.php"][title]
+      attribute: title
+      optional: true
+    _title_normalized:
+      text: "{{ .Result._title_original }}"
+      filters:
+        - name: re_replace
+          args: ["S(\\d{2}) E(\\d{2})", "S$1E$2"]
+        - name: re_replace
+          args: ["S(\\d{1}) E(\\d{2})", "S0$1E$2"]
+    _title_multilang:
+      text: "{{ .Result._title_normalized }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)[\\.\\s\\[\\-]MULTI[\\.\\s\\]\\-]", ".{{ .Config.multilanguage }}."]
+        - name: re_replace
+          args: ["(?i)[\\.\\s\\[\\-]VFQ[\\.\\s\\]\\-]", ".{{ .Config.multilanguage }}."]
+    title:
+      text: "{{if .Config.multilang }}{{ .Result._title_multilang }}{{else}}{{ .Result._title_normalized }}{{end}}"
+    category:
+      selector: a[href^="/browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    comments:
+      selector: a[href^="/details.php"]:has(b)
+      attribute: href
+    files:
+      selector: a[href*="#filelist"]
+    size:
+      selector: td:nth-child(6)
+    grabs:
+      selector: td:nth-child(7)
+      filters:
+        - name: regexp
+          args: "(\\d+)"
+    seeders:
+      selector: td:nth-child(8)
+    leechers:
+      selector: td:nth-child(9)
+    date:
+      selector: td:nth-child(5)
+      filters:
+        - name: append
+          args: " -05:00" # timezone offset
+        - name: dateparse
+          args: "2006-01-0215:04:05 -07:00"
+    downloadvolumefactor:
+      case:
+        "img[title^=\"Freeleech: \"]": 0
+        "img[title^=\"Half Freeleech: \"]": 0.5
+        "*": 1
+    uploadvolumefactor:
+      text: 1
 # engine tbd

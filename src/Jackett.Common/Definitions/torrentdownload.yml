@@ -1,109 +1,109 @@
 ---
-  site: torrentdownload
-  name: TorrentDownload
-  description: "TorrentDownload is a Public general torrent index"
-  language: en-us
-  type: semi-private
-  encoding: UTF-8
-  followredirect: true
-  links:
-    - https://www.torrentdownload.info/
-    - https://torrentdownload.unblockit.me/
-    - https://torrentdownload.black-mirror.xyz/
-    - https://torrentdownload.unblocked.casa/
-    - https://torrentdownload.proxyportal.fun/
-    - https://torrentdownload.uk-unblock.xyz/
-    - https://torrentdownload.ind-unblock.xyz/
-  legacylinks:
-    - https://torrentdownload.unblockit.pro/
-    - https://torrentdownload.unblockit.one/
+site: torrentdownload
+name: TorrentDownload
+description: "TorrentDownload is a Public general torrent index"
+language: en-us
+type: semi-private
+encoding: UTF-8
+followredirect: true
+links:
+  - https://www.torrentdownload.info/
+  - https://torrentdownload.unblockit.me/
+  - https://torrentdownload.black-mirror.xyz/
+  - https://torrentdownload.unblocked.casa/
+  - https://torrentdownload.proxyportal.fun/
+  - https://torrentdownload.uk-unblock.xyz/
+  - https://torrentdownload.ind-unblock.xyz/
+legacylinks:
+  - https://torrentdownload.unblockit.pro/
+  - https://torrentdownload.unblockit.one/
 
-  caps:
-    categories:
-      "TV": TV
-      "TVshows": TV
-      "Television": TV
-      "Anime": TV/Anime
-      "MoviesDocumentary": TV/Documentary
-      "Movies": Movies
-      "VideoMobile": Movies
-      "Music": Audio
-      "AudioBooks": Audio/Audiobook
-      "Games": Console
-      "Applications": PC/0day
-      "Other": Other/Misc
-      "OtherUnsorted": Other/Misc
+caps:
+  categories:
+    "TV": TV
+    "TVshows": TV
+    "Television": TV
+    "Anime": TV/Anime
+    "MoviesDocumentary": TV/Documentary
+    "Movies": Movies
+    "VideoMobile": Movies
+    "Music": Audio
+    "AudioBooks": Audio/Audiobook
+    "Games": Console
+    "Applications": PC/0day
+    "Other": Other/Misc
+    "OtherUnsorted": Other/Misc
 
-    modes:
-      search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
-      music-search: [q]
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
 
-  settings:
-    - name: cookie
-      type: text
-      label: Cookie
-    - name: info
-      type: info
-      label: How to get the Cookie
-      default: "<ol><li>Access this tracker with your browser<li>Solve the challenge<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
-    - name: sort
-      type: select
-      label: Sort requested from site (Applies only to Search with Keywords)
-      default: "d"
-      options:
-        "d": "created"
-        "s": "seeders"
-        "_": "size"
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info
+    type: info
+    label: How to get the Cookie
+    default: "<ol><li>Access this tracker with your browser<li>Solve the challenge<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
+  - name: sort
+    type: select
+    label: Sort requested from site (Applies only to Search with Keywords)
+    default: "d"
+    options:
+      "d": "created"
+      "s": "seeders"
+      "_": "size"
 
-  download:
-    selector: a[href^="magnet:?xt="]
-    attribute: href
+download:
+  selector: a[href^="magnet:?xt="]
+  attribute: href
 
-  login:
-    method: cookie
-    test:
-      path: /
+login:
+  method: cookie
+  test:
+    path: /
 
-  search:
-    paths:
-      - path: "{{ if .Keywords }}search{{ re_replace .Config.sort \"_\" \"\" }}?q={{ .Keywords }}{{else}}{{end}}"
+search:
+  paths:
+    - path: "{{ if .Keywords }}search{{ re_replace .Config.sort \"_\" \"\" }}?q={{ .Keywords }}{{else}}{{end}}"
 
-    rows:
-      selector: table.table2 > tbody > tr:has(span.smallish)
+  rows:
+    selector: table.table2 > tbody > tr:has(span.smallish)
 
-    fields:
-      category:
-        selector: div.tt-name > span.smallish
-        filters:
-          - name: re_replace
-            args: ["[^A-Za-z]+", ""] # strip everything but letters
-      title:
-        selector: div.tt-name > a[href^="/"]
-      details:
-        selector: div.tt-name > a[href^="/"]
-        attribute: href
-      download:
-        selector: div.tt-name > a[href^="/"]
-        attribute: href
-      date:
-        selector: td:nth-child(2)
-        filters:
-          - name: replace
-            args: ["right ", ""]
-          - name: replace
-            args: ["Last Month", "1 month ago"]
-          - name: replace
-            args: ["+", " ago"]
-      size:
-        selector: td:nth-child(3)
-      seeders:
-        selector: td.tdseed
-      leechers:
-        selector: td.tdleech
-      downloadvolumefactor:
-        text: 0
-      uploadvolumefactor:
-        text: 1
+  fields:
+    category:
+      selector: div.tt-name > span.smallish
+      filters:
+        - name: re_replace
+          args: ["[^A-Za-z]+", ""] # strip everything but letters
+    title:
+      selector: div.tt-name > a[href^="/"]
+    details:
+      selector: div.tt-name > a[href^="/"]
+      attribute: href
+    download:
+      selector: div.tt-name > a[href^="/"]
+      attribute: href
+    date:
+      selector: td:nth-child(2)
+      filters:
+        - name: replace
+          args: ["right ", ""]
+        - name: replace
+          args: ["Last Month", "1 month ago"]
+        - name: replace
+          args: ["+", " ago"]
+    size:
+      selector: td:nth-child(3)
+    seeders:
+      selector: td.tdseed
+    leechers:
+      selector: td.tdleech
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
 # engine n/a

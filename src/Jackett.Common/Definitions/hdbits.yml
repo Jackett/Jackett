@@ -1,84 +1,84 @@
 ---
-  site: hdbits
-  name: HDBits
-  description: "Best HD Tracker"
-  language: en-us
-  type: private
-  encoding: UTF-8
-  links:
-    - https://hdbits.org/
+site: hdbits
+name: HDBits
+description: "Best HD Tracker"
+language: en-us
+type: private
+encoding: UTF-8
+links:
+  - https://hdbits.org/
 
-  caps:
-    categorymappings:
-      - {id: 1, cat: "Movies", desc: "Movie"}
-      - {id: 2, cat: "TV", desc: "TV"}
-      - {id: 3, cat: "TV/Documentary", desc: "Documentary"}
-      - {id: 4, cat: "Audio", desc: "Music"}
-      - {id: 5, cat: "TV/Sport", desc: "Sport"}
-      - {id: 6, cat: "Audio", desc: "Audio Track"}
-      - {id: 7, cat: "XXX", desc: "XXX"}
-      - {id: 8, cat: "Other", desc: "Misc/Demo"}
+caps:
+  categorymappings:
+    - {id: 1, cat: "Movies", desc: "Movie"}
+    - {id: 2, cat: "TV", desc: "TV"}
+    - {id: 3, cat: "TV/Documentary", desc: "Documentary"}
+    - {id: 4, cat: "Audio", desc: "Music"}
+    - {id: 5, cat: "TV/Sport", desc: "Sport"}
+    - {id: 6, cat: "Audio", desc: "Audio Track"}
+    - {id: 7, cat: "XXX", desc: "XXX"}
+    - {id: 8, cat: "Other", desc: "Misc/Demo"}
 
-    modes:
-      search: [q]
-      tv-search: [q]
-      movie-search: [q]
-      music-search: [q]
+  modes:
+    search: [q]
+    tv-search: [q]
+    movie-search: [q]
+    music-search: [q]
 
-  login:
-    path: login
-    method: form
-    form: form
-    inputs:
-      uname: "{{ .Config.username }}"
-      password: "{{ .Config.password }}"
-    error:
-      - selector: table.main:contains("Login Failed!")
-    test:
-      path: my.php
+login:
+  path: login
+  method: form
+  form: form
+  inputs:
+    uname: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: table.main:contains("Login Failed!")
+  test:
+    path: my.php
 
-  search:
-    paths:
-      - path: browse.php
-    inputs:
-      $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
-      search: "{{ .Query.Keywords }}"
-    rows:
-      selector: table#torrent-list > tbody > tr:has(a[href^="/details.php?id="])
-    fields:
-      category:
-        selector: a[href^="?cat="]
-        attribute: href
-        filters:
-          - name: querystring
-            args: cat
-      title:
-        selector: td:nth-child(3) a
-      download:
-        selector: a[href^="/download.php"]
-        attribute: href
-      details:
-        selector: a[href^="/details.php?id="]
-        attribute: href
-      grabs:
-        selector: td:nth-child(7) a
-      size:
-        selector: td:nth-child(6)
-      seeders:
-        selector: td:nth-child(8)
-      leechers:
-        selector: td:nth-child(9)
-      date:
-        selector: td:nth-child(5)
-        filters:
-          - name: append
-            args: " ago"
-      downloadvolumefactor:
-        case:
-          "a[title=\"25% Free Leech: only 75% of the download is counted.\"]": "0.25"
-          "a[title=\"50% Free Leech: only half the download is counted.\"]": "0.5"
-          "a[title=\"100% FL: no download is counted.\"]": "0"
-          "*": "1"
-      uploadvolumefactor:
-        case:
-          "*": "1"
+search:
+  paths:
+    - path: browse.php
+  inputs:
+    $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
+    search: "{{ .Query.Keywords }}"
+  rows:
+    selector: table#torrent-list > tbody > tr:has(a[href^="/details.php?id="])
+  fields:
+    category:
+      selector: a[href^="?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: td:nth-child(3) a
+    download:
+      selector: a[href^="/download.php"]
+      attribute: href
+    details:
+      selector: a[href^="/details.php?id="]
+      attribute: href
+    grabs:
+      selector: td:nth-child(7) a
+    size:
+      selector: td:nth-child(6)
+    seeders:
+      selector: td:nth-child(8)
+    leechers:
+      selector: td:nth-child(9)
+    date:
+      selector: td:nth-child(5)
+      filters:
+        - name: append
+          args: " ago"
+    downloadvolumefactor:
+      case:
+        "a[title=\"25% Free Leech: only 75% of the download is counted.\"]": "0.25"
+        "a[title=\"50% Free Leech: only half the download is counted.\"]": "0.5"
+        "a[title=\"100% FL: no download is counted.\"]": "0"
+        "*": "1"
+    uploadvolumefactor:
+      case:
+        "*": "1"

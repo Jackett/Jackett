@@ -1,204 +1,204 @@
 ---
-  site: turktorrent
-  name: TurkTorrent
-  description: "TurkTorrent (TT) is a TURKISH Private Torrent Tracker for MOVIES / TV / GENERAL"
-  language: tr-TR
-  type: private
-  encoding: UTF-8
-  links:
-    - https://turktorrent.us/
-  legacylinks:
-    - http://turktorrent1.in/
-    - http://turktorrent.us/
+site: turktorrent
+name: TurkTorrent
+description: "TurkTorrent (TT) is a TURKISH Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: tr-TR
+type: private
+encoding: UTF-8
+links:
+  - https://turktorrent.us/
+legacylinks:
+  - http://turktorrent1.in/
+  - http://turktorrent.us/
 
-  caps:
-    categorymappings:
-      - {id: 36, cat: Movies, desc: "Film"}
-      - {id: 59, cat: Movies, desc: "Türk Filmi"}
-      - {id: 61, cat: Movies/3D, desc: "3D"}
-      - {id: 18, cat: Movies, desc: "Anime - Çizgi Türkçe"}
-      - {id: 19, cat: Movies, desc: "Anime - Çizgi TR Altyazı"}
-      - {id: 20, cat: Movies, desc: "Boxset Türkçe"}
-      - {id: 21, cat: Movies, desc: "Boxset Tr Altyzı"}
-      - {id: 22, cat: Movies/DVD, desc: "DVD Disk Türkçe"}
-      - {id: 23, cat: Movies/DVD, desc: "DVD Disk Tr Altyazı"}
-      - {id: 24, cat: Movies/BluRay, desc: "Bluray Disk Türkçe"}
-      - {id: 25, cat: Movies/BluRay, desc: "Bluray Disk Tr Altyazı"}
-      - {id: 26, cat: Movies/UHD, desc: "4K UHD Disk Türkçe"}
-      - {id: 27, cat: Movies/UHD, desc: "4K UHD Disk Tr Altyazı"}
-      - {id: 28, cat: Movies/HD, desc: "X265 Türkçe"}
-      - {id: 29, cat: Movies/HD, desc: "X265 Tr Altyazı"}
-      - {id: 30, cat: Movies/HD, desc: "X264 Türkçe"}
-      - {id: 37, cat: Movies/HD, desc: "X264 Tr Altyazı"}
-      - {id: 63, cat: Movies/SD, desc: "XviD Türkçe"}
-      - {id: 64, cat: Movies/SD, desc: "XviD Tr Altyazı"}
-      - {id: 31, cat: TV, desc: "Dizi"}
-      - {id: 32, cat: TV, desc: "Dizi Yerli"}
-      - {id: 33, cat: TV, desc: "Dizi Yabancı Orjinal Dil / Tr Dublaj "}
-      - {id: 34, cat: TV, desc: "Dizi Boxset"}
-      - {id: 35, cat: TV, desc: "Netflix"}
-      - {id: 41, cat: TV, desc: "Netflix Anime - Çizgi"}
-      - {id: 39, cat: TV, desc: "Netflix Film"}
-      - {id: 38, cat: TV, desc: "Netflix Dizi"}
-      - {id: 40, cat: TV, desc: "Netflix Belgesel"}
-      - {id: 42, cat: Audio, desc: "Müzik"}
-      - {id: 43, cat: Audio, desc: "Müzik Türkçe"}
-      - {id: 44, cat: Audio, desc: "Müzik Yabancı"}
-      - {id: 45, cat: Audio, desc: "Müzik Seri Albüm - Diskografi"}
-      - {id: 2, cat: Console, desc: "Oyun"}
-      - {id: 46, cat: Console, desc: "Oyun PC"}
-      - {id: 3, cat: Console, desc: "Oyun Sony PS"}
-      - {id: 4, cat: Console, desc: "Oyun Wii"}
-      - {id: 14, cat: Console, desc: "Oyun XboX"}
-      - {id: 16, cat: Console, desc: "Oyun Nintendo"}
-      - {id: 47, cat: PC, desc: "Programlar"}
-      - {id: 48, cat: PC, desc: "Programlar Windows"}
-      - {id: 49, cat: PC, desc: "Programlar MaC"}
-      - {id: 50, cat: PC, desc: "Programlar Mobile"}
-      - {id: 51, cat: Other, desc: "Diğer"}
-      - {id: 62, cat: Other, desc: "Diğer Eğitim"}
-      - {id: 52, cat: Other, desc: "Diğer Belgesel"}
-      - {id: 53, cat: Other, desc: "Diğer Dini Yayınlar"}
-      - {id: 54, cat: TV/Sport, desc: "Spor"}
-      - {id: 55, cat: Other, desc: "Diğer Duvar Kağıtları"}
-      - {id: 56, cat: Other, desc: "Diğer  Her Şey"}
-      - {id: 65, cat: Books/Ebook, desc: "E-Kitap"}
+caps:
+  categorymappings:
+    - {id: 36, cat: Movies, desc: "Film"}
+    - {id: 59, cat: Movies, desc: "Türk Filmi"}
+    - {id: 61, cat: Movies/3D, desc: "3D"}
+    - {id: 18, cat: Movies, desc: "Anime - Çizgi Türkçe"}
+    - {id: 19, cat: Movies, desc: "Anime - Çizgi TR Altyazı"}
+    - {id: 20, cat: Movies, desc: "Boxset Türkçe"}
+    - {id: 21, cat: Movies, desc: "Boxset Tr Altyzı"}
+    - {id: 22, cat: Movies/DVD, desc: "DVD Disk Türkçe"}
+    - {id: 23, cat: Movies/DVD, desc: "DVD Disk Tr Altyazı"}
+    - {id: 24, cat: Movies/BluRay, desc: "Bluray Disk Türkçe"}
+    - {id: 25, cat: Movies/BluRay, desc: "Bluray Disk Tr Altyazı"}
+    - {id: 26, cat: Movies/UHD, desc: "4K UHD Disk Türkçe"}
+    - {id: 27, cat: Movies/UHD, desc: "4K UHD Disk Tr Altyazı"}
+    - {id: 28, cat: Movies/HD, desc: "X265 Türkçe"}
+    - {id: 29, cat: Movies/HD, desc: "X265 Tr Altyazı"}
+    - {id: 30, cat: Movies/HD, desc: "X264 Türkçe"}
+    - {id: 37, cat: Movies/HD, desc: "X264 Tr Altyazı"}
+    - {id: 63, cat: Movies/SD, desc: "XviD Türkçe"}
+    - {id: 64, cat: Movies/SD, desc: "XviD Tr Altyazı"}
+    - {id: 31, cat: TV, desc: "Dizi"}
+    - {id: 32, cat: TV, desc: "Dizi Yerli"}
+    - {id: 33, cat: TV, desc: "Dizi Yabancı Orjinal Dil / Tr Dublaj "}
+    - {id: 34, cat: TV, desc: "Dizi Boxset"}
+    - {id: 35, cat: TV, desc: "Netflix"}
+    - {id: 41, cat: TV, desc: "Netflix Anime - Çizgi"}
+    - {id: 39, cat: TV, desc: "Netflix Film"}
+    - {id: 38, cat: TV, desc: "Netflix Dizi"}
+    - {id: 40, cat: TV, desc: "Netflix Belgesel"}
+    - {id: 42, cat: Audio, desc: "Müzik"}
+    - {id: 43, cat: Audio, desc: "Müzik Türkçe"}
+    - {id: 44, cat: Audio, desc: "Müzik Yabancı"}
+    - {id: 45, cat: Audio, desc: "Müzik Seri Albüm - Diskografi"}
+    - {id: 2, cat: Console, desc: "Oyun"}
+    - {id: 46, cat: Console, desc: "Oyun PC"}
+    - {id: 3, cat: Console, desc: "Oyun Sony PS"}
+    - {id: 4, cat: Console, desc: "Oyun Wii"}
+    - {id: 14, cat: Console, desc: "Oyun XboX"}
+    - {id: 16, cat: Console, desc: "Oyun Nintendo"}
+    - {id: 47, cat: PC, desc: "Programlar"}
+    - {id: 48, cat: PC, desc: "Programlar Windows"}
+    - {id: 49, cat: PC, desc: "Programlar MaC"}
+    - {id: 50, cat: PC, desc: "Programlar Mobile"}
+    - {id: 51, cat: Other, desc: "Diğer"}
+    - {id: 62, cat: Other, desc: "Diğer Eğitim"}
+    - {id: 52, cat: Other, desc: "Diğer Belgesel"}
+    - {id: 53, cat: Other, desc: "Diğer Dini Yayınlar"}
+    - {id: 54, cat: TV/Sport, desc: "Spor"}
+    - {id: 55, cat: Other, desc: "Diğer Duvar Kağıtları"}
+    - {id: 56, cat: Other, desc: "Diğer  Her Şey"}
+    - {id: 65, cat: Books/Ebook, desc: "E-Kitap"}
 
-    modes:
-      search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
-      music-search: [q]
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
 
-  settings:
-    - name: username
-      type: text
-      label: Username
-    - name: password
-      type: password
-      label: Password
-    - name: info
-      type: info
-      label: Layout
-      default: "<ol><li>Only the English Classic profile is supported.<li>Make sure to set the <b>Torrent Listing (Listeleme Biçimi)</b> option in your profile to <b>Classic (Klasik)</b><li>And set the <b>Language (Dil)</b> to <b>English</b><li>Using the <i>Modern</i> theme will prevent results, and using <i>Turkish</i> will prevent upload dates.</ol>"
-    - name: sort
-      type: select
-      label: Sort requested from site
-      default: "added"
-      options:
-        "added": "created"
-        "seeders": "seeders"
-        "size": "size"
-    - name: type
-      type: select
-      label: Order requested from site
-      default: "desc"
-      options:
-        "desc": "desc"
-        "asc": "asc"
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: info
+    type: info
+    label: Layout
+    default: "<ol><li>Only the English Classic profile is supported.<li>Make sure to set the <b>Torrent Listing (Listeleme Biçimi)</b> option in your profile to <b>Classic (Klasik)</b><li>And set the <b>Language (Dil)</b> to <b>English</b><li>Using the <i>Modern</i> theme will prevent results, and using <i>Turkish</i> will prevent upload dates.</ol>"
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: "added"
+    options:
+      "added": "created"
+      "seeders": "seeders"
+      "size": "size"
+  - name: type
+    type: select
+    label: Order requested from site
+    default: "desc"
+    options:
+      "desc": "desc"
+      "asc": "asc"
 
-  login:
+login:
+  path: ?p=home&pid=1
+  method: form
+  form: form#loginbox_form
+  submitpath: ajax/login.php
+  inputs:
+    action: login
+    loginbox_membername: "{{ .Config.username }}"
+    loginbox_password: "{{ .Config.password }}"
+    loginbox_remember: 1
+  selectorinputs:
+    securitytoken:
+      selector: "script:contains(\"stKey: \")"
+      filters:
+        - name: regexp
+          args: "stKey: \"(.+?)\","
+  error:
+    - selector: div.error
+    - selector: :contains("-ERROR-")
+  test:
     path: ?p=home&pid=1
-    method: form
-    form: form#loginbox_form
-    submitpath: ajax/login.php
-    inputs:
-      action: login
-      loginbox_membername: "{{ .Config.username }}"
-      loginbox_password: "{{ .Config.password }}"
-      loginbox_remember: 1
-    selectorinputs:
-      securitytoken:
-        selector: "script:contains(\"stKey: \")"
-        filters:
-          - name: regexp
-            args: "stKey: \"(.+?)\","
-    error:
-      - selector: div.error
-      - selector: :contains("-ERROR-")
-    test:
-      path: ?p=home&pid=1
-      selector: div#member_info_bar
+    selector: div#member_info_bar
 
-  search:
-    paths:
-      - path: /
-    inputs:
-      p: torrents
-      pid: 32
-      $raw: "{{ range .Categories }}cid[]={{.}}&{{end}}"
-      keywords: "{{ .Keywords }}"
-      # name description both uploader
-      search_type: name
-      "sortOptions[sortBy]": "{{ .Config.sort }}"
-      "sortOptions[sortOrder]": "{{ .Config.type }}"
+search:
+  paths:
+    - path: /
+  inputs:
+    p: torrents
+    pid: 32
+    $raw: "{{ range .Categories }}cid[]={{.}}&{{end}}"
+    keywords: "{{ .Keywords }}"
+    # name description both uploader
+    search_type: name
+    "sortOptions[sortBy]": "{{ .Config.sort }}"
+    "sortOptions[sortOrder]": "{{ .Config.type }}"
 
-    rows:
-      selector: table#torrents_table_classic > tbody > tr:has(td.torrent_name)
+  rows:
+    selector: table#torrents_table_classic > tbody > tr:has(td.torrent_name)
 
-    fields:
-      category:
-        selector: div.category_image > a
-        attribute: href
-        filters:
-          - name: querystring
-            args: cid
-      title:
-        selector: a[href*="?p=torrents&pid=10&action=details"]
-      details:
-        selector: a[href*="?p=torrents&pid=10&action=details"]
-        attribute: href
-      date:
-      # within the hour
-        optional: true
-        selector: td.torrent_name
-        attribute: data-time
-      date:
-        optional: true
-         # Uploaded 30-01-2019 15:02 by
-        selector: td.torrent_name:not(:contains(" at "))
-        filters:
-          - name: regexp
-            args: "Uploaded (.+?) by"
-          - name: dateparse
-            args: "02-01-2006 15:04"
-      date:
-        optional: true
-         # Uploaded Friday at 05:11 by
-         # Uploaded Today at 00:48 by
-         # Uploaded Yesterday at 23:57 by
-        selector: td.torrent_name:contains(" at ")
-        filters:
-          - name: regexp
-            args: "Uploaded (.+?) by"
-          - name: replace
-            args: [" at ", " "]
-      download:
-        selector: a[href*="?p=torrents&pid=10&action=download"]
-        attribute: href
-      magnet:
-        optional: true
-        selector: a[href^="magnet:?xt="]
-        attribute: href
-      size:
-        selector: a[rel="torrent_size"]
-      seeders:
-        selector: a[rel="torrent_seeders"]
-      leechers:
-        selector: a[rel="torrent_leechers"]
-      grabs:
-        selector: a[rel="times_completed"]
-      banner:
-        optional: true
-        selector: a[rel="fancybox"]
-        attribute: href
-      downloadvolumefactor:
-        case:
-          "img[title=\"FREE!\"]": 0
-          "img[title=\"Download Multiplier: 0.5\"]": 0.5
-          "*": 1
-      uploadvolumefactor:
-        case:
-          "img[title=\"Upload Multiplier: 2\"]": 2
-          "*": 1
+  fields:
+    category:
+      selector: div.category_image > a
+      attribute: href
+      filters:
+        - name: querystring
+          args: cid
+    title:
+      selector: a[href*="?p=torrents&pid=10&action=details"]
+    details:
+      selector: a[href*="?p=torrents&pid=10&action=details"]
+      attribute: href
+    date:
+    # within the hour
+      optional: true
+      selector: td.torrent_name
+      attribute: data-time
+    date:
+      optional: true
+       # Uploaded 30-01-2019 15:02 by
+      selector: td.torrent_name:not(:contains(" at "))
+      filters:
+        - name: regexp
+          args: "Uploaded (.+?) by"
+        - name: dateparse
+          args: "02-01-2006 15:04"
+    date:
+      optional: true
+       # Uploaded Friday at 05:11 by
+       # Uploaded Today at 00:48 by
+       # Uploaded Yesterday at 23:57 by
+      selector: td.torrent_name:contains(" at ")
+      filters:
+        - name: regexp
+          args: "Uploaded (.+?) by"
+        - name: replace
+          args: [" at ", " "]
+    download:
+      selector: a[href*="?p=torrents&pid=10&action=download"]
+      attribute: href
+    magnet:
+      optional: true
+      selector: a[href^="magnet:?xt="]
+      attribute: href
+    size:
+      selector: a[rel="torrent_size"]
+    seeders:
+      selector: a[rel="torrent_seeders"]
+    leechers:
+      selector: a[rel="torrent_leechers"]
+    grabs:
+      selector: a[rel="times_completed"]
+    banner:
+      optional: true
+      selector: a[rel="fancybox"]
+      attribute: href
+    downloadvolumefactor:
+      case:
+        "img[title=\"FREE!\"]": 0
+        "img[title=\"Download Multiplier: 0.5\"]": 0.5
+        "*": 1
+    uploadvolumefactor:
+      case:
+        "img[title=\"Upload Multiplier: 2\"]": 2
+        "*": 1
 # TSUE 2.2

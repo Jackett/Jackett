@@ -1,130 +1,130 @@
 ---
-  site: torlock
-  name: Torlock
-  description: "Torlock is a torrent search site that lists verified torrents only for TV series and movies"
-  language: en-us
-  type: public
-  encoding: UTF-8
-  followredirect: true
-  links:
-    - https://www.torlock.com/
-    - https://www.torlock2.com/
-    - https://www.torlock.icu/
-    - https://torlock.unblockit.me/
-  legacylinks:
-    - https://torlock.com/
-    - https://torlock.unblockit.pro/
-    - https://torlock.unblockit.one/
+site: torlock
+name: Torlock
+description: "Torlock is a torrent search site that lists verified torrents only for TV series and movies"
+language: en-us
+type: public
+encoding: UTF-8
+followredirect: true
+links:
+  - https://www.torlock.com/
+  - https://www.torlock2.com/
+  - https://www.torlock.icu/
+  - https://torlock.unblockit.me/
+legacylinks:
+  - https://torlock.com/
+  - https://torlock.unblockit.pro/
+  - https://torlock.unblockit.one/
 
-  caps:
-    categorymappings:
-      - {id: TELEVISION, cat: TV, desc: "TV Shows"}
-      - {id: MOVIES, cat: Movies, desc: "Movies"}
-      - {id: MUSIC, cat: Audio, desc: "Music"}
-      - {id: GAMES, cat: PC/Games, desc: "Games"}
-      - {id: SOFTWARE, cat: PC, desc: "Software"}
-      - {id: ANIME, cat: TV/Anime, desc: "Anime"}
-      - {id: EBOOKS, cat: Books/Ebook, desc: "Books"}
-      - {id: OTHER, cat: Other, desc: "Other"}
-      - {id: ADULT, cat: XXX, desc: "Adult"}
-      - {id: AUDIOBOOK, cat: Audio/Audiobook, desc: "Audiobook"}
-      - {id: IMAGES, cat: Other/Misc, desc: "Images"}
+caps:
+  categorymappings:
+    - {id: TELEVISION, cat: TV, desc: "TV Shows"}
+    - {id: MOVIES, cat: Movies, desc: "Movies"}
+    - {id: MUSIC, cat: Audio, desc: "Music"}
+    - {id: GAMES, cat: PC/Games, desc: "Games"}
+    - {id: SOFTWARE, cat: PC, desc: "Software"}
+    - {id: ANIME, cat: TV/Anime, desc: "Anime"}
+    - {id: EBOOKS, cat: Books/Ebook, desc: "Books"}
+    - {id: OTHER, cat: Other, desc: "Other"}
+    - {id: ADULT, cat: XXX, desc: "Adult"}
+    - {id: AUDIOBOOK, cat: Audio/Audiobook, desc: "Audiobook"}
+    - {id: IMAGES, cat: Other/Misc, desc: "Images"}
 
-    modes:
-      search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
-      music-search: [q]
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
 
-  settings:
-    - name: sort
-      type: select
-      label: Sort requested from site (only works for search with keywords)
-      default: "added"
-      options:
-        "added": "created"
-        "seeds": "seeders"
-        "size": "size"
-    - name: type
-      type: select
-      label: Order requested from site
-      default: "desc"
-      options:
-        "desc": "desc"
-        "asc": "asc"
+settings:
+  - name: sort
+    type: select
+    label: Sort requested from site (only works for search with keywords)
+    default: "added"
+    options:
+      "added": "created"
+      "seeds": "seeders"
+      "size": "size"
+  - name: type
+    type: select
+    label: Order requested from site
+    default: "desc"
+    options:
+      "desc": "desc"
+      "asc": "asc"
 
-  search:
-    paths:
-      - path: "{{if .Keywords}}/all/torrents/{{ .Keywords }}.html?sort={{ .Config.sort }}&order={{ .Config.type }}{{else}}/fresh.html{{end}}"
-    keywordsfilters:
-      - name: tolower
-      - name: re_replace
-        args: ["[^a-zA-Z0-9]+", "-"]
+search:
+  paths:
+    - path: "{{if .Keywords}}/all/torrents/{{ .Keywords }}.html?sort={{ .Config.sort }}&order={{ .Config.type }}{{else}}/fresh.html{{end}}"
+  keywordsfilters:
+    - name: tolower
+    - name: re_replace
+      args: ["[^a-zA-Z0-9]+", "-"]
 
-    rows:
-      selector: table > tbody > tr:has(td:has(div:has(a[href^="/torrent/"])))
+  rows:
+    selector: table > tbody > tr:has(td:has(div:has(a[href^="/torrent/"])))
+    filters:
+      - name: andmatch
+
+  fields:
+    category:
+      selector: span[class^="tv"]
+      attribute: class
+      case:
+        span.tv0: OTHER
+        span.tv1: MOVIES
+        span.tv2: MUSIC
+        span.tv3: TELEVISION
+        span.tv4: GAMES
+        span.tv5: SOFTWARE
+        span.tv6: ANIME
+        span.tv7: ADULT
+        span.tv8: EBOOKS
+        span.tv9: IMAGES
+        span.tv10: EBOOKS
+        span.tv12: AUDIOBOOK
+        "*": "OTHER" # some torrents have invalid categories
+    title:
+      selector: td:nth-child(1) > div > a
+    details:
+      selector: td:nth-child(1) > div > a[href^="/torrent/"]
+      attribute: href
+    download:
+      selector: td:nth-child(1) > div > a[href^="/torrent/"]
+      attribute: href
       filters:
-        - name: andmatch
-
-    fields:
-      category:
-        selector: span[class^="tv"]
-        attribute: class
-        case:
-          span.tv0: OTHER
-          span.tv1: MOVIES
-          span.tv2: MUSIC
-          span.tv3: TELEVISION
-          span.tv4: GAMES
-          span.tv5: SOFTWARE
-          span.tv6: ANIME
-          span.tv7: ADULT
-          span.tv8: EBOOKS
-          span.tv9: IMAGES
-          span.tv10: EBOOKS
-          span.tv12: AUDIOBOOK
-          "*": "OTHER" # some torrents have invalid categories
-      title:
-        selector: td:nth-child(1) > div > a
-      details:
-        selector: td:nth-child(1) > div > a[href^="/torrent/"]
-        attribute: href
-      download:
-        selector: td:nth-child(1) > div > a[href^="/torrent/"]
-        attribute: href
-        filters:
-        - name: replace
-          args: ["/torrent/", "/tor/"]
-        - name: regexp
-          args: (^/tor/\d*)
-        - name: append
-          args: ".torrent"
-      date:
-        selector: td:nth-child(2):contains("/")
-        optional: true
-        filters:
-          - name: dateparse
-            args: "1/2/2006"
-      date:
-        selector: td:nth-child(2):contains("Today"), td:nth-child(2):contains("Yesterday")
-        optional: true
-        filters:
-          - name: fuzzytime
-      date:
-        selector: td:nth-child(2):not(:contains("Today")):not(:contains("Yesterday")):not(:contains("/"))
-        optional: true
-        filters:
-          - name: re_replace
-            args: ["(min|mins)", "minutes"]
-          - name: timeago
-      size:
-        selector: td:nth-child(3)
-      seeders:
-        selector: td:nth-child(4)
-      leechers:
-        selector: td:nth-child(5)
-      downloadvolumefactor:
-        text: 0
-      uploadvolumefactor:
-        text: 1
+      - name: replace
+        args: ["/torrent/", "/tor/"]
+      - name: regexp
+        args: (^/tor/\d*)
+      - name: append
+        args: ".torrent"
+    date:
+      selector: td:nth-child(2):contains("/")
+      optional: true
+      filters:
+        - name: dateparse
+          args: "1/2/2006"
+    date:
+      selector: td:nth-child(2):contains("Today"), td:nth-child(2):contains("Yesterday")
+      optional: true
+      filters:
+        - name: fuzzytime
+    date:
+      selector: td:nth-child(2):not(:contains("Today")):not(:contains("Yesterday")):not(:contains("/"))
+      optional: true
+      filters:
+        - name: re_replace
+          args: ["(min|mins)", "minutes"]
+        - name: timeago
+    size:
+      selector: td:nth-child(3)
+    seeders:
+      selector: td:nth-child(4)
+    leechers:
+      selector: td:nth-child(5)
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
 # Engine n/a

@@ -1,118 +1,118 @@
 ---
-  site: tasmanit
-  name: Tasmanit
-  description: "Tasmanit.es is a AUSTRALIAN / NEW ZEALAND Private Torrent Tracker for AUS / NZ TV"
-  language: en-us
-  type: private
-  encoding: UTF-8
-  links:
-    - https://tasmanit.es/
+site: tasmanit
+name: Tasmanit
+description: "Tasmanit.es is a AUSTRALIAN / NEW ZEALAND Private Torrent Tracker for AUS / NZ TV"
+language: en-us
+type: private
+encoding: UTF-8
+links:
+  - https://tasmanit.es/
 
-  caps:
-    categorymappings:
-      - {id: 72, cat: TV, desc: "All Australian TV"}
-      - {id: 23, cat: TV, desc: "AU-AUTOGEN"}
-      - {id: 8, cat: TV, desc: "Australian Comedy"}
-      - {id: 18, cat: TV, desc: "Australian Crime Shows"}
-      - {id: 14, cat: TV, desc: "Australian Documentaries"}
-      - {id: 9, cat: TV, desc: "Australian Dramas"}
-      - {id: 10, cat: TV, desc: "Australian Game/Quiz Shows"}
-      - {id: 12, cat: TV, desc: "Australian Kids Shows"}
-      - {id: 21, cat: TV, desc: "Australian Lifestyle TV"}
-      - {id: 11, cat: TV, desc: "Aussie News and Current Affairs"}
-      - {id: 76, cat: TV/Other, desc: "Australian TV Other"}
-      - {id: 15, cat: TV, desc: "Australian Real Crime"}
-      - {id: 13, cat: TV, desc: "Australian Reality TV"}
-      - {id: 17, cat: TV, desc: "Australian Science Shows"}
-      - {id: 80, cat: TV, desc: "Australian Soaps"}
-      - {id: 16, cat: TV, desc: "Australian Talkshows"}
-      - {id: 22, cat: TV, desc: "Australian Movies"}
-      - {id: 73, cat: TV, desc: "New Zealand TV"}
-      - {id: 61, cat: TV, desc: "NZ-AUTOGEN"}
-      - {id: 47, cat: TV, desc: "New Zealand Comedy"}
-      - {id: 58, cat: TV, desc: "New Zealand Crime Shows"}
-      - {id: 53, cat: TV, desc: "New Zealand Documentaries"}
-      - {id: 48, cat: TV, desc: "New Zealand Dramas"}
-      - {id: 49, cat: TV, desc: "New Zealand Game/Quiz Shows"}
-      - {id: 51, cat: TV, desc: "New Zealand Kids Shows"}
-      - {id: 56, cat: TV, desc: "New Zealand Lifestyle TV"}
-      - {id: 50, cat: TV, desc: "New Zealand News and Current Affairs"}
-      - {id: 60, cat: TV, desc: "New Zealand Real Crime"}
-      - {id: 52, cat: TV, desc: "New Zealand Reality TV"}
-      - {id: 54, cat: TV, desc: "New Zealand Science Shows"}
-      - {id: 81, cat: TV, desc: "New Zealand Soaps"}
-      - {id: 57, cat: TV, desc: "New Zealand Talkshows"}
-      - {id: 59, cat: TV, desc: "New Zealand Movies"}
-      - {id: 36, cat: TV, desc: "New Zealand TV"}
-      - {id: 55, cat: TV, desc: "SATV - All"}
-      - {id: 55, cat: TV, desc: "South African TV"}
-      - {id: 7, cat: TV/Other, desc: "New Zealand TV Other"}
+caps:
+  categorymappings:
+    - {id: 72, cat: TV, desc: "All Australian TV"}
+    - {id: 23, cat: TV, desc: "AU-AUTOGEN"}
+    - {id: 8, cat: TV, desc: "Australian Comedy"}
+    - {id: 18, cat: TV, desc: "Australian Crime Shows"}
+    - {id: 14, cat: TV, desc: "Australian Documentaries"}
+    - {id: 9, cat: TV, desc: "Australian Dramas"}
+    - {id: 10, cat: TV, desc: "Australian Game/Quiz Shows"}
+    - {id: 12, cat: TV, desc: "Australian Kids Shows"}
+    - {id: 21, cat: TV, desc: "Australian Lifestyle TV"}
+    - {id: 11, cat: TV, desc: "Aussie News and Current Affairs"}
+    - {id: 76, cat: TV/Other, desc: "Australian TV Other"}
+    - {id: 15, cat: TV, desc: "Australian Real Crime"}
+    - {id: 13, cat: TV, desc: "Australian Reality TV"}
+    - {id: 17, cat: TV, desc: "Australian Science Shows"}
+    - {id: 80, cat: TV, desc: "Australian Soaps"}
+    - {id: 16, cat: TV, desc: "Australian Talkshows"}
+    - {id: 22, cat: TV, desc: "Australian Movies"}
+    - {id: 73, cat: TV, desc: "New Zealand TV"}
+    - {id: 61, cat: TV, desc: "NZ-AUTOGEN"}
+    - {id: 47, cat: TV, desc: "New Zealand Comedy"}
+    - {id: 58, cat: TV, desc: "New Zealand Crime Shows"}
+    - {id: 53, cat: TV, desc: "New Zealand Documentaries"}
+    - {id: 48, cat: TV, desc: "New Zealand Dramas"}
+    - {id: 49, cat: TV, desc: "New Zealand Game/Quiz Shows"}
+    - {id: 51, cat: TV, desc: "New Zealand Kids Shows"}
+    - {id: 56, cat: TV, desc: "New Zealand Lifestyle TV"}
+    - {id: 50, cat: TV, desc: "New Zealand News and Current Affairs"}
+    - {id: 60, cat: TV, desc: "New Zealand Real Crime"}
+    - {id: 52, cat: TV, desc: "New Zealand Reality TV"}
+    - {id: 54, cat: TV, desc: "New Zealand Science Shows"}
+    - {id: 81, cat: TV, desc: "New Zealand Soaps"}
+    - {id: 57, cat: TV, desc: "New Zealand Talkshows"}
+    - {id: 59, cat: TV, desc: "New Zealand Movies"}
+    - {id: 36, cat: TV, desc: "New Zealand TV"}
+    - {id: 55, cat: TV, desc: "SATV - All"}
+    - {id: 55, cat: TV, desc: "South African TV"}
+    - {id: 7, cat: TV/Other, desc: "New Zealand TV Other"}
 
-    modes:
-      search: [q]
-      tv-search: [q, season, ep]
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
 
-  login:
-    path: takelogin.php
-    method: post
-    inputs:
-      username: "{{ .Config.username }}"
-      password: "{{ .Config.password }}"
-    error:
-      - selector: div#content:has(h2:contains("Login Failed"))
-    test:
-      path: browse.php
+login:
+  path: takelogin.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: div#content:has(h2:contains("Login Failed"))
+  test:
+    path: browse.php
 
-  search:
-    paths:
-      - path: browse.php
-        method: post
-    inputs:
-      do: search
-      keywords: "{{ .Keywords }}"
-      search_type: t_name
-      include_dead_torrents: yes
-    keywordsfilters: 
-      - name: re_replace
-        args: ["[^a-zA-Z0-9]+", "%"]
+search:
+  paths:
+    - path: browse.php
+      method: post
+  inputs:
+    do: search
+    keywords: "{{ .Keywords }}"
+    search_type: t_name
+    include_dead_torrents: yes
+  keywordsfilters: 
+    - name: re_replace
+      args: ["[^a-zA-Z0-9]+", "%"]
 
-    rows:
-      selector: table#sortabletable > tbody > tr:has(a[href])
+  rows:
+    selector: table#sortabletable > tbody > tr:has(a[href])
 
-    fields:
-      title:
-        selector: td:nth-child(2) a
-      title:
-        optional: true
-        selector: div.tooltip-content > div
-      category:
-        selector: a[href^="https://tasmanit.es/browse.php?category="]
-        attribute: href
-        filters:
-          - name: querystring
-            args: category
-      details:
-        selector: a[href^="https://tasmanit.es/details.php?id="]
-        attribute: href    
-      download:
-        selector: a[href^="https://tasmanit.es/details.php?id="]
-        attribute: href
-        filters:
-          - name: replace
-            args: ["details.php", "download.php"]
-      size:
-        selector: td:nth-child(5)
-      grabs:
-        selector: td:nth-child(6)
-      seeders:
-        selector: td:nth-child(7)
-      leechers:
-        selector: td:nth-child(8)
-      date:
-        selector: td:nth-child(2)
-      downloadvolumefactor:
-        case:
-          "*": 1
-      uploadvolumefactor:
-        case:
-          "*": 1
+  fields:
+    title:
+      selector: td:nth-child(2) a
+    title:
+      optional: true
+      selector: div.tooltip-content > div
+    category:
+      selector: a[href^="https://tasmanit.es/browse.php?category="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: category
+    details:
+      selector: a[href^="https://tasmanit.es/details.php?id="]
+      attribute: href    
+    download:
+      selector: a[href^="https://tasmanit.es/details.php?id="]
+      attribute: href
+      filters:
+        - name: replace
+          args: ["details.php", "download.php"]
+    size:
+      selector: td:nth-child(5)
+    grabs:
+      selector: td:nth-child(6)
+    seeders:
+      selector: td:nth-child(7)
+    leechers:
+      selector: td:nth-child(8)
+    date:
+      selector: td:nth-child(2)
+    downloadvolumefactor:
+      case:
+        "*": 1
+    uploadvolumefactor:
+      case:
+        "*": 1

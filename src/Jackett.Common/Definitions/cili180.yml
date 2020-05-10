@@ -1,74 +1,74 @@
 ---
-  site: cili180
-  name: Cili180
-  description: "Cili180 is a Public BitTorrent DHT search engine."
-  language: en-us
-  type: public
-  encoding: UTF-8
-  links:
-    -  https://www.cilijj.xyz/
-    -  https://www.liaorenso11.xyz/
-    -  https://www.liaorenso12.xyz/
-    -  https://www.liaorenso13.xyz/
-    -  https://www.liaorenso14.xyz/
-    -  https://www.liaorenso15.xyz/
-    -  https://www.liaorenso16.xyz/
-    -  https://www.liaorenso17.xyz/
-    -  https://www.liaorenso18.xyz/
-  legacylinks:
-    -  http://www.cili180.com/
-    -  http://www.cilijj.xyz/
-    -  https://www.liaorenso.xyz/ # proxy list only
-    -  https://www.liaorenso19.xyz/ # proxy list only
+site: cili180
+name: Cili180
+description: "Cili180 is a Public BitTorrent DHT search engine."
+language: en-us
+type: public
+encoding: UTF-8
+links:
+  -  https://www.cilijj.xyz/
+  -  https://www.liaorenso11.xyz/
+  -  https://www.liaorenso12.xyz/
+  -  https://www.liaorenso13.xyz/
+  -  https://www.liaorenso14.xyz/
+  -  https://www.liaorenso15.xyz/
+  -  https://www.liaorenso16.xyz/
+  -  https://www.liaorenso17.xyz/
+  -  https://www.liaorenso18.xyz/
+legacylinks:
+  -  http://www.cili180.com/
+  -  http://www.cilijj.xyz/
+  -  https://www.liaorenso.xyz/ # proxy list only
+  -  https://www.liaorenso19.xyz/ # proxy list only
 
-  caps:
-    categories:
-      1: Other
+caps:
+  categories:
+    1: Other
 
-    modes:
-      search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
 
-  settings: []
+settings: []
 
-  search:
-    paths:
-      - path: search/
-        method: post
-        followredirect: true
-    inputs:
-      keyword: "{{ if .Keywords }}{{ .Keywords }}{{else}}{{ .Today.Year }}{{end}}"
+search:
+  paths:
+    - path: search/
+      method: post
+      followredirect: true
+  inputs:
+    keyword: "{{ if .Keywords }}{{ .Keywords }}{{else}}{{ .Today.Year }}{{end}}"
 
-    rows:
-      selector: div.list-area > dl.item
+  rows:
+    selector: div.list-area > dl.item
+    filters:
+      - name: andmatch
+
+  fields:
+    category:
+      text: 1
+    title:
+      selector: dt a
+    details:
+      selector: dt a
+      attribute: href
+    download:
+      selector: a[href^="magnet:?xt="]
+      attribute: href
+    date:
+      selector: dd.attr span:nth-child(1) b
       filters:
-        - name: andmatch
-
-    fields:
-      category:
-        text: 1
-      title:
-        selector: dt a
-      details:
-        selector: dt a
-        attribute: href
-      download:
-        selector: a[href^="magnet:?xt="]
-        attribute: href
-      date:
-        selector: dd.attr span:nth-child(1) b
-        filters:
-          - name: dateparse
-            args: "2006-01-02"
-      size:
-        selector: dd.attr span:nth-child(2) b
-      seeders:
-        text: 1
-      leechers:
-        text: 1
-      downloadvolumefactor:
-        text: 0
-      uploadvolumefactor:
-        text: 1
+        - name: dateparse
+          args: "2006-01-02"
+    size:
+      selector: dd.attr span:nth-child(2) b
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
 # engine n/a

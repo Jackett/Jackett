@@ -1,116 +1,116 @@
 ---
-  site: linkomanija
-  name: LinkoManija
-  description: "LinkoManija is an LITHUANIAN Private site for TV / MOVIES / GENERAL"
-  language: lt-lt
-  type: private
-  encoding: UTF-8
-  links:
-    - https://www.linkomanija.net/
+site: linkomanija
+name: LinkoManija
+description: "LinkoManija is an LITHUANIAN Private site for TV / MOVIES / GENERAL"
+language: lt-lt
+type: private
+encoding: UTF-8
+links:
+  - https://www.linkomanija.net/
 
-  caps:
-    categorymappings:
-      - {id: 29, cat: Movies/SD, desc: "movies"}
-      - {id: 52, cat: Movies/HD, desc: "movies HD"}
-      - {id: 30, cat: TV/SD, desc: "TV"}
-      - {id: 60, cat: TV/HD, desc: "HD TV"}
-      - {id: 45, cat: PC/Games, desc: "PC Games"}
-      - {id: 37, cat: Audio, desc: "Music"}
-      - {id: 56, cat: Books, desc: "Books"}
-      - {id: 40, cat: Other/Misc, desc: "misc"}
-      - {id: 53, cat: Movies/SD, desc: "movies E"}
-      - {id: 61, cat: Movies/HD, desc: "E HD Movies"}
-      - {id: 28, cat: TV/SD, desc: "TV E"}
-      - {id: 62, cat: TV/HD, desc: "E HD TV"}
-      - {id: 63, cat: PC/Games, desc: "PC Games Misc"}
-      - {id: 33, cat: Audio, desc: "Music E"}
-      - {id: 57, cat: Books, desc: "Books E"}
-      - {id: 43, cat: Other/Misc, desc: "misc E"}
-      - {id: 51, cat: Movies/SD, desc: "movies RU"}
-      - {id: 64, cat: Movies/HD, desc: "RU Movies HD"}
-      - {id: 65, cat: TV, desc: "TV RU"}
-      - {id: 25, cat: Movies/DVD, desc: "DVD"}
-      - {id: 42, cat: Console/Xbox, desc: "XBOX"}
-      - {id: 66, cat: Audio/Lossless, desc: "Music Lossless"}
-      - {id: 41, cat: PC/Mac, desc: "MAC"}
-      - {id: 69, cat: PC/Phone-Android, desc: "Android"}
-      - {id: 46, cat: TV/Sport, desc: "Sports"}
-      - {id: 58, cat: TV/Documentary, desc: "Documentaries"}
-      - {id: 38, cat: TV/Anime, desc: "Anime"}
-      - {id: 26, cat: Movies/DVD, desc: "DVD E"}
-      - {id: 44, cat: Console/Other, desc: "Consoles"}
-      - {id: 31, cat: Audio/Video, desc: "Music Videos"}
-      - {id: 32, cat: PC/0day, desc: "Appz"}
+caps:
+  categorymappings:
+    - {id: 29, cat: Movies/SD, desc: "movies"}
+    - {id: 52, cat: Movies/HD, desc: "movies HD"}
+    - {id: 30, cat: TV/SD, desc: "TV"}
+    - {id: 60, cat: TV/HD, desc: "HD TV"}
+    - {id: 45, cat: PC/Games, desc: "PC Games"}
+    - {id: 37, cat: Audio, desc: "Music"}
+    - {id: 56, cat: Books, desc: "Books"}
+    - {id: 40, cat: Other/Misc, desc: "misc"}
+    - {id: 53, cat: Movies/SD, desc: "movies E"}
+    - {id: 61, cat: Movies/HD, desc: "E HD Movies"}
+    - {id: 28, cat: TV/SD, desc: "TV E"}
+    - {id: 62, cat: TV/HD, desc: "E HD TV"}
+    - {id: 63, cat: PC/Games, desc: "PC Games Misc"}
+    - {id: 33, cat: Audio, desc: "Music E"}
+    - {id: 57, cat: Books, desc: "Books E"}
+    - {id: 43, cat: Other/Misc, desc: "misc E"}
+    - {id: 51, cat: Movies/SD, desc: "movies RU"}
+    - {id: 64, cat: Movies/HD, desc: "RU Movies HD"}
+    - {id: 65, cat: TV, desc: "TV RU"}
+    - {id: 25, cat: Movies/DVD, desc: "DVD"}
+    - {id: 42, cat: Console/Xbox, desc: "XBOX"}
+    - {id: 66, cat: Audio/Lossless, desc: "Music Lossless"}
+    - {id: 41, cat: PC/Mac, desc: "MAC"}
+    - {id: 69, cat: PC/Phone-Android, desc: "Android"}
+    - {id: 46, cat: TV/Sport, desc: "Sports"}
+    - {id: 58, cat: TV/Documentary, desc: "Documentaries"}
+    - {id: 38, cat: TV/Anime, desc: "Anime"}
+    - {id: 26, cat: Movies/DVD, desc: "DVD E"}
+    - {id: 44, cat: Console/Other, desc: "Consoles"}
+    - {id: 31, cat: Audio/Video, desc: "Music Videos"}
+    - {id: 32, cat: PC/0day, desc: "Appz"}
 
-    modes:
-      search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
-      music-search: [q]
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
 
-  login:
-    path: takelogin.php
-    method: post
-    inputs:
-      username: "{{ .Config.username }}"
-      password: "{{ .Config.password }}"
-    error:
-      - selector: div.klaida
-    test:
-      path: browse.php
+login:
+  path: takelogin.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: div.klaida
+  test:
+    path: browse.php
 
-  search:
-    paths:
-      - path: browse.php
-    inputs:
-      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-      search: "{{ .Query.Keywords }}"
-      incldead: "1"
-    rows:
-      selector: table> tbody > tr:has(a[href^="details?"])
+search:
+  paths:
+    - path: browse.php
+  inputs:
+    $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+    search: "{{ .Query.Keywords }}"
+    incldead: "1"
+  rows:
+    selector: table> tbody > tr:has(a[href^="details?"])
+    filters:
+      - name: andmatch
+  fields:
+    download:
+      selector: a[href^="download.php?id="]
+      attribute: href
+    title:
+      selector: a[href^="details?"]
+    description:
+      optional: true
+      selector: td:nth-child(2) > span
+    details:
+      selector: a[href^="details?"]
+      attribute: href
+    category:
+      selector: a[href^="browse.php?cat="]
+      attribute: href
       filters:
-        - name: andmatch
-    fields:
-      download:
-        selector: a[href^="download.php?id="]
-        attribute: href
-      title:
-        selector: a[href^="details?"]
-      description:
-        optional: true
-        selector: td:nth-child(2) > span
-      details:
-        selector: a[href^="details?"]
-        attribute: href
-      category:
-        selector: a[href^="browse.php?cat="]
-        attribute: href
-        filters:
-          - name: querystring
-            args: cat
-      seeders:
-        selector: td:nth-child(8)
-      leechers:
-        selector: td:nth-child(9)
-      grabs:
-        selector: td:nth-child(7)
-      files:
-        selector: td:nth-child(3)
-      size:
-        selector: td:nth-child(6)
-      downloadvolumefactor:
-        case:
-          img[src="//static.linkomanija.net/images/flag_green.gif"]: "0"
-          "*": "1"
-      uploadvolumefactor:
-        case:
-          "*": "1"
-      date:
-        selector: td:nth-child(5)
-        filters:
-          - name: append
-            args: " +01:00"
-          - name: dateparse
-            args: "2006-01-0215:04:05 -07:00"
+        - name: querystring
+          args: cat
+    seeders:
+      selector: td:nth-child(8)
+    leechers:
+      selector: td:nth-child(9)
+    grabs:
+      selector: td:nth-child(7)
+    files:
+      selector: td:nth-child(3)
+    size:
+      selector: td:nth-child(6)
+    downloadvolumefactor:
+      case:
+        img[src="//static.linkomanija.net/images/flag_green.gif"]: "0"
+        "*": "1"
+    uploadvolumefactor:
+      case:
+        "*": "1"
+    date:
+      selector: td:nth-child(5)
+      filters:
+        - name: append
+          args: " +01:00"
+        - name: dateparse
+          args: "2006-01-0215:04:05 -07:00"
 
 

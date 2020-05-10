@@ -1,270 +1,270 @@
 ---
-  site: downloadville
-  name: Downloadville
-  description: "Downloadville is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
-  language: fr-fr
-  type: private
-  encoding: UTF-8
-  links:
-    - https://downloadville.net/
-  legacylinks:
-    - https://downloadville.net/tracker/
+site: downloadville
+name: Downloadville
+description: "Downloadville is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: fr-fr
+type: private
+encoding: UTF-8
+links:
+  - https://downloadville.net/
+legacylinks:
+  - https://downloadville.net/tracker/
 
-  caps:
-    categorymappings:
-        # Films
-      - {id: 1, cat: Movies, desc: "Films"}
-      - {id: 13, cat: Movies/BluRay, desc: "Films BD-Rip / BRRip"}
-      - {id: 15, cat: Movies/DVD, desc: "Films DVD-Rip"}
-      - {id: 18, cat: Movies/HD, desc: "Films HD 720p"}
-      - {id: 19, cat: Movies/WEBDL, desc: "Films WEB-DL / WEB-Rip"}
-      - {id: 20, cat: Movies/HD, desc: "Films HD 1080p"}
-      - {id: 26, cat: Movies/HD, desc: "Films mHD 720p"}
-      - {id: 27, cat: Movies/HD, desc: "Films mHD 1080p"}
-      - {id: 28, cat: Movies/HD, desc: "Films x265"}
-      - {id: 30, cat: Movies/BluRay, desc: "Films Blu-Ray (complet)"}
-      - {id: 31, cat: Movies/3D, desc: "Films 3D"}
-      - {id: 32, cat: Movies/UHD, desc: "Films 4K UHD"}
-      - {id: 33, cat: Movies/SD, desc: "Films Québécois SD"}
-      - {id: 34, cat: Movies/HD, desc: "Films Québécois HD"}
-      - {id: 35, cat: Movies/DVD, desc: "Films Québécois DVD-R"}
-      - {id: 37, cat: Movies/DVD, desc: "Films DVD-R"}
-      - {id: 38, cat: Movies/SD, desc: "Films V.O.S.T. SD"}
-      - {id: 39, cat: MovieS/HD, desc: "Films V.O.S.T. HD"}
-      - {id: 40, cat: Movies/SD, desc: "Films V.O. SD"}
-      - {id: 41, cat: Movies/HD, desc: "Films V.O. HD"}
-      - {id: 42, cat: Movies, desc: "Films TV-Rip"}
-        # 4K LIGHT
-      - {id: 95, cat: Movies, desc: "4K LIGHT"}
-        # Séries-Télé
-      - {id: 16, cat: TV, desc: "Séries-Télé"}
-      - {id: 17, cat: TV/SD, desc: "Séries-Télé TV Pack SD"}
-      - {id: 21, cat: TV/SD, desc: "Séries-Télé SD"}
-      - {id: 22, cat: TV/HD, desc: "Séries-Télé HD"}
-      - {id: 23, cat: TV/HD, desc: "Séries-Télé TV Pack HD"}
-      - {id: 45, cat: TV/SD, desc: "Séries-Télé Québécois SD"}
-      - {id: 46, cat: TV/HD, desc: "Séries-Télé Québécois HD"}
-      - {id: 47, cat: TV/SD, desc: "Séries-Télé V.O.S.T. SD"}
-      - {id: 48, cat: TV/HD, desc: "Séries-TéléV.O.S.T. HD"}
-      - {id: 49, cat: TV/SD, desc: "Séries-Télé Émissions TV SD"}
-      - {id: 50, cat: TV/HD, desc: "Séries-Télé Émissions TV HD"}
-      - {id: 51, cat: TV, desc: "Séries-Télé Blu-Ray"}
-      - {id: 52, cat: TV, desc: "Séries-Télé DVD-R"}
-      - {id: 94, cat: TV/HD, desc: "Séries-Télé x265 - TV"}
-        # Musique
-      - {id: 2, cat: Audio, desc: "Musique"}
-      - {id: 54, cat: Audio/MP3, desc: "Musique MP3"}
-      - {id: 55, cat: Audio/Lossless, desc: "Musique FLAC"}
-      - {id: 56, cat: Audio, desc: "Musique DSD"}
-      - {id: 57, cat: Audio, desc: "Musique Karaoke"}
-      - {id: 58, cat: Audio, desc: "Musique Autres"}
-        # Jeux
-      - {id: 3, cat: PC/Games, desc: "Jeux"}
-      - {id: 59, cat: PC/Games, desc: "Jeux PC"}
-      - {id: 60, cat: Console, desc: "Jeux Consoles"}
-      - {id: 84, cat: PC/Games, desc: "Jeux Android"}
-        # Livres
-      - {id: 6, cat: Books, desc: "Livres"}
-      - {id: 61, cat: Books/Ebook, desc: "Livres epub"}
-      - {id: 62, cat: Books, desc: "Livres pdf"}
-      - {id: 63, cat: Books, desc: "Livres Journaux"}
-      - {id: 64, cat: Books/Magazines, desc: "Livres Magazines"}
-      - {id: 65, cat: Books, desc: "Livres Bandes Dessinées"}
-      - {id: 66, cat: Books, desc: "Livres Multi-Format"}
-      - {id: 85, cat: Audio/Audiobook, desc: "Livres Audio"}
-        # Logiciels
-      - {id: 67, cat: PC, desc: "Logiciels"}
-      - {id: 68, cat: PC/0day, desc: "Logiciels Windows"}
-      - {id: 69, cat: PC/Mac, desc: "Logiciels Mac"}
-      - {id: 86, cat: PC, desc: "Logiciels Linux"}
-      - {id: 87, cat: PC/Phone-Android, desc: "Logiciels Android"}
-        # Spectacles
-      - {id: 70, cat: TV/Other, desc: "Spectacles"}
-      - {id: 71, cat: TV/Other, desc: "Spectacles Humour"}
-      - {id: 72, cat: TV/Other, desc: "Spectacles Live"}
-      - {id: 88, cat: TV/Other, desc: "Spectacles Théatre"}
-        # Séries Animées
-      - {id: 73, cat: TV/Anime, desc: "Séries Animées"}
-      - {id: 83, cat: TV/Anime, desc: "Séries Animées"}
-        # Sports
-      - {id: 24, cat: TV/Sport, desc: "Sports"}
-      - {id: 74, cat: TV/Sport, desc: "Sports [Français]"}
-      - {id: 75, cat: TV/Sport, desc: "Sports [Anglais]"}
-        # Documentaires
-      - {id: 76, cat: TV/Documentary, desc: "Documentaires"}
-      - {id: 77, cat: TV/Documentary, desc: "Docu. SD"}
-      - {id: 78, cat: TV/Documentary, desc: "Docu. HD"}
-      - {id: 79, cat: TV/Documentary, desc: "Docu. V.O.S.T. SD"}
-      - {id: 80, cat: TV/Documentary, desc: "Docu. V.O.S.T. HD"}
-        # Autres / Inclassable
-      - {id: 81, cat: Other, desc: "Autres / Inclassable"}
-      - {id: 82, cat: Other, desc: "Autres / Inclassable"}
+caps:
+  categorymappings:
+      # Films
+    - {id: 1, cat: Movies, desc: "Films"}
+    - {id: 13, cat: Movies/BluRay, desc: "Films BD-Rip / BRRip"}
+    - {id: 15, cat: Movies/DVD, desc: "Films DVD-Rip"}
+    - {id: 18, cat: Movies/HD, desc: "Films HD 720p"}
+    - {id: 19, cat: Movies/WEBDL, desc: "Films WEB-DL / WEB-Rip"}
+    - {id: 20, cat: Movies/HD, desc: "Films HD 1080p"}
+    - {id: 26, cat: Movies/HD, desc: "Films mHD 720p"}
+    - {id: 27, cat: Movies/HD, desc: "Films mHD 1080p"}
+    - {id: 28, cat: Movies/HD, desc: "Films x265"}
+    - {id: 30, cat: Movies/BluRay, desc: "Films Blu-Ray (complet)"}
+    - {id: 31, cat: Movies/3D, desc: "Films 3D"}
+    - {id: 32, cat: Movies/UHD, desc: "Films 4K UHD"}
+    - {id: 33, cat: Movies/SD, desc: "Films Québécois SD"}
+    - {id: 34, cat: Movies/HD, desc: "Films Québécois HD"}
+    - {id: 35, cat: Movies/DVD, desc: "Films Québécois DVD-R"}
+    - {id: 37, cat: Movies/DVD, desc: "Films DVD-R"}
+    - {id: 38, cat: Movies/SD, desc: "Films V.O.S.T. SD"}
+    - {id: 39, cat: MovieS/HD, desc: "Films V.O.S.T. HD"}
+    - {id: 40, cat: Movies/SD, desc: "Films V.O. SD"}
+    - {id: 41, cat: Movies/HD, desc: "Films V.O. HD"}
+    - {id: 42, cat: Movies, desc: "Films TV-Rip"}
+      # 4K LIGHT
+    - {id: 95, cat: Movies, desc: "4K LIGHT"}
+      # Séries-Télé
+    - {id: 16, cat: TV, desc: "Séries-Télé"}
+    - {id: 17, cat: TV/SD, desc: "Séries-Télé TV Pack SD"}
+    - {id: 21, cat: TV/SD, desc: "Séries-Télé SD"}
+    - {id: 22, cat: TV/HD, desc: "Séries-Télé HD"}
+    - {id: 23, cat: TV/HD, desc: "Séries-Télé TV Pack HD"}
+    - {id: 45, cat: TV/SD, desc: "Séries-Télé Québécois SD"}
+    - {id: 46, cat: TV/HD, desc: "Séries-Télé Québécois HD"}
+    - {id: 47, cat: TV/SD, desc: "Séries-Télé V.O.S.T. SD"}
+    - {id: 48, cat: TV/HD, desc: "Séries-TéléV.O.S.T. HD"}
+    - {id: 49, cat: TV/SD, desc: "Séries-Télé Émissions TV SD"}
+    - {id: 50, cat: TV/HD, desc: "Séries-Télé Émissions TV HD"}
+    - {id: 51, cat: TV, desc: "Séries-Télé Blu-Ray"}
+    - {id: 52, cat: TV, desc: "Séries-Télé DVD-R"}
+    - {id: 94, cat: TV/HD, desc: "Séries-Télé x265 - TV"}
+      # Musique
+    - {id: 2, cat: Audio, desc: "Musique"}
+    - {id: 54, cat: Audio/MP3, desc: "Musique MP3"}
+    - {id: 55, cat: Audio/Lossless, desc: "Musique FLAC"}
+    - {id: 56, cat: Audio, desc: "Musique DSD"}
+    - {id: 57, cat: Audio, desc: "Musique Karaoke"}
+    - {id: 58, cat: Audio, desc: "Musique Autres"}
+      # Jeux
+    - {id: 3, cat: PC/Games, desc: "Jeux"}
+    - {id: 59, cat: PC/Games, desc: "Jeux PC"}
+    - {id: 60, cat: Console, desc: "Jeux Consoles"}
+    - {id: 84, cat: PC/Games, desc: "Jeux Android"}
+      # Livres
+    - {id: 6, cat: Books, desc: "Livres"}
+    - {id: 61, cat: Books/Ebook, desc: "Livres epub"}
+    - {id: 62, cat: Books, desc: "Livres pdf"}
+    - {id: 63, cat: Books, desc: "Livres Journaux"}
+    - {id: 64, cat: Books/Magazines, desc: "Livres Magazines"}
+    - {id: 65, cat: Books, desc: "Livres Bandes Dessinées"}
+    - {id: 66, cat: Books, desc: "Livres Multi-Format"}
+    - {id: 85, cat: Audio/Audiobook, desc: "Livres Audio"}
+      # Logiciels
+    - {id: 67, cat: PC, desc: "Logiciels"}
+    - {id: 68, cat: PC/0day, desc: "Logiciels Windows"}
+    - {id: 69, cat: PC/Mac, desc: "Logiciels Mac"}
+    - {id: 86, cat: PC, desc: "Logiciels Linux"}
+    - {id: 87, cat: PC/Phone-Android, desc: "Logiciels Android"}
+      # Spectacles
+    - {id: 70, cat: TV/Other, desc: "Spectacles"}
+    - {id: 71, cat: TV/Other, desc: "Spectacles Humour"}
+    - {id: 72, cat: TV/Other, desc: "Spectacles Live"}
+    - {id: 88, cat: TV/Other, desc: "Spectacles Théatre"}
+      # Séries Animées
+    - {id: 73, cat: TV/Anime, desc: "Séries Animées"}
+    - {id: 83, cat: TV/Anime, desc: "Séries Animées"}
+      # Sports
+    - {id: 24, cat: TV/Sport, desc: "Sports"}
+    - {id: 74, cat: TV/Sport, desc: "Sports [Français]"}
+    - {id: 75, cat: TV/Sport, desc: "Sports [Anglais]"}
+      # Documentaires
+    - {id: 76, cat: TV/Documentary, desc: "Documentaires"}
+    - {id: 77, cat: TV/Documentary, desc: "Docu. SD"}
+    - {id: 78, cat: TV/Documentary, desc: "Docu. HD"}
+    - {id: 79, cat: TV/Documentary, desc: "Docu. V.O.S.T. SD"}
+    - {id: 80, cat: TV/Documentary, desc: "Docu. V.O.S.T. HD"}
+      # Autres / Inclassable
+    - {id: 81, cat: Other, desc: "Autres / Inclassable"}
+    - {id: 82, cat: Other, desc: "Autres / Inclassable"}
 
-    modes:
-      search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
-      music-search: [q]
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
 
-  settings:
-    - name: uid
-      type: text
-      label: Username
-    - name: pwd
-      type: password
-      label: Password
-    - name: active
-      type: select
-      label: Rechercher dans (Look at)
-      default: "0"
-      options:
-        "0" : "Tous (All)"
-        "1" : "Actif Seul. (Active Only)"
-        "2" : "Mort Seul. (Dead Only)"
-    - name: gold
-      type: select
-      label: FreeLeech
-      default: "0"
-      options:
-        "0" : "Tous (all)"
-        "1" : "Classic"
-        "2" : "Argent (Silver)"
-        "3" : "Or (Gold)"
-        "4" : "Argent & Or (Both)"
-    - name: multilang
-      type: checkbox
-      label: Replace MULTI by another language in release name
-      default:  false
-    - name: multilanguage
-      type: select
-      label: Replace MULTI by this language
-      default: FRENCH
-      options:
-        FRENCH : "FRENCH"
-        MULTI.FRENCH : "MULTI.FRENCH"
-        ENGLISH: "ENGLISH"
-    - name: sort
-      type: select
-      label: Sort requested from site
-      default: "3"
-      options:
-        "3": "created"
-        "5": "seeders"
-        "4": "size"
-        "2": "title"
-    - name: type
-      type: select
-      label: Order requested from site
-      default: "2"
-      options:
-        "2": "desc"
-        "1": "asc"
-    - name: info
-      type: info
-      label: Results Per Page
-      default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+settings:
+  - name: uid
+    type: text
+    label: Username
+  - name: pwd
+    type: password
+    label: Password
+  - name: active
+    type: select
+    label: Rechercher dans (Look at)
+    default: "0"
+    options:
+      "0" : "Tous (All)"
+      "1" : "Actif Seul. (Active Only)"
+      "2" : "Mort Seul. (Dead Only)"
+  - name: gold
+    type: select
+    label: FreeLeech
+    default: "0"
+    options:
+      "0" : "Tous (all)"
+      "1" : "Classic"
+      "2" : "Argent (Silver)"
+      "3" : "Or (Gold)"
+      "4" : "Argent & Or (Both)"
+  - name: multilang
+    type: checkbox
+    label: Replace MULTI by another language in release name
+    default:  false
+  - name: multilanguage
+    type: select
+    label: Replace MULTI by this language
+    default: FRENCH
+    options:
+      FRENCH : "FRENCH"
+      MULTI.FRENCH : "MULTI.FRENCH"
+      ENGLISH: "ENGLISH"
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: "3"
+    options:
+      "3": "created"
+      "5": "seeders"
+      "4": "size"
+      "2": "title"
+  - name: type
+    type: select
+    label: Order requested from site
+    default: "2"
+    options:
+      "2": "desc"
+      "1": "asc"
+  - name: info
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
 
-  login:
-    path: tracker/index.php?page=login
+login:
+  path: tracker/index.php?page=login
+  method: post
+  form: form[action="index.php?page=login"]
+  inputs:
+    uid: "{{ .Config.uid }}"
+    pwd: "{{ .Config.pwd }}"
+  error:
+    - selector: form[action="index.php?page=login&returnto=index.php"] table tr:nth-of-type(2) td
+      message:
+        selector: form[action="index.php?page=login&returnto=index.php"] table tr:nth-of-type(2) td span
+  test:
+    path: tracker/index.php
+    selector: a[href="logout.php"]
+
+download:
+  before:
+    path: tracker/thanks.php
     method: post
-    form: form[action="index.php?page=login"]
     inputs:
-      uid: "{{ .Config.uid }}"
-      pwd: "{{ .Config.pwd }}"
-    error:
-      - selector: form[action="index.php?page=login&returnto=index.php"] table tr:nth-of-type(2) td
-        message:
-          selector: form[action="index.php?page=login&returnto=index.php"] table tr:nth-of-type(2) td span
-    test:
-      path: tracker/index.php
-      selector: a[href="logout.php"]
+      infohash: "{{ .DownloadUri.Query.id }}"
+      thanks: 1
+      rndval: "1487013827343"
+  selector: a[href^="download.php?id="]
+  attribute: href
 
-  download:
-    before:
-      path: tracker/thanks.php
-      method: post
-      inputs:
-        infohash: "{{ .DownloadUri.Query.id }}"
-        thanks: 1
-        rndval: "1487013827343"
-    selector: a[href^="download.php?id="]
-    attribute: href
+search:
+  paths:
+    - path: tracker/index.php
+  headers:
+    Referer: ["https://downloadville.net/tracker/index.php?page=torrents&search=fake_referer&active=0"]
+  inputs:
+    page: torrents
+    search: "{{ .Keywords }}"
+    category: "{{ range .Categories }}{{.}};{{end}}"
+    # 0 title 1 title&descr 2 descr
+    options: 0
+    active: "{{ .Config.active }}"
+    gold: "{{ .Config.gold }}"
+    order: "{{ .Config.sort }}"
+    by: "{{ .Config.type }}"
+    # does not support imdbid search and does not ruturn imdb link in results
 
-  search:
-    paths:
-      - path: tracker/index.php
-    headers:
-      Referer: ["https://downloadville.net/tracker/index.php?page=torrents&search=fake_referer&active=0"]
-    inputs:
-      page: torrents
-      search: "{{ .Keywords }}"
-      category: "{{ range .Categories }}{{.}};{{end}}"
-      # 0 title 1 title&descr 2 descr
-      options: 0
-      active: "{{ .Config.active }}"
-      gold: "{{ .Config.gold }}"
-      order: "{{ .Config.sort }}"
-      by: "{{ .Config.type }}"
-      # does not support imdbid search and does not ruturn imdb link in results
+  rows:
+    selector: table > tbody > tr > td > table.lista > tbody > tr:has(td[onmouseover="this.className='post'"])
 
-    rows:
-      selector: table > tbody > tr > td > table.lista > tbody > tr:has(td[onmouseover="this.className='post'"])
-
-    fields:
-      title_phase1:
-        selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
-      title_multilang:
-        text: "{{ .Result.title_phase1 }}"
-        filters:
-          - name: re_replace
-            args: ["[\\.\\s\\[\\-][Mm][Uu][Ll][Tt][Ii][\\.\\s\\]\\-]", ".{{ .Config.multilanguage }}."]
-      title:
-        text: "{{if .Config.multilang }}{{ .Result.title_multilang }}{{else}}{{ .Result.title_phase1 }}{{end}}"
-      details:
-        selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
-        attribute: href
-      download:
-        selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
-        attribute: href
-      banner:
-        selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
-        attribute: onmouseover
-        filters:
-          - name: regexp
-            args: "src=(.*?) "
-      category:
-        selector: a[href^="index.php?page=torrents&category="]
-        attribute: href
-        filters:
-          - name: querystring
-            args: "category"
-      date: # some users will have a extra wait time column before the bookmark column, so use last-of-type
-        selector: td:nth-last-of-type(10)
-        filters:
-          - name: append
-            args: " -04:00"
-          - name: dateparse
-            args: "02/01/2006 15:04:05 -07:00"
-      seeders:
-        selector: td:nth-last-of-type(8)
-      leechers:
-        selector: td:nth-last-of-type(7)
-      grabs:
-        selector: td:nth-last-of-type(6)
-        filters:
-          - name: replace
-            args: ["---", "0"]
-      size:
-        selector: td:nth-last-of-type(4)
-        filters:
-          - name: replace
-            args: [",", "."]
-      downloadvolumefactor:
-        case:
-          img[src="images/freeleech.gif"]: 0
-          img[src="gold/gold.gif"]: 0
-          img[src="gold/slver.gif"]: 0.5
-          "*": 1
-      uploadvolumefactor:
-        text: 1
+  fields:
+    title_phase1:
+      selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
+    title_multilang:
+      text: "{{ .Result.title_phase1 }}"
+      filters:
+        - name: re_replace
+          args: ["[\\.\\s\\[\\-][Mm][Uu][Ll][Tt][Ii][\\.\\s\\]\\-]", ".{{ .Config.multilanguage }}."]
+    title:
+      text: "{{if .Config.multilang }}{{ .Result.title_multilang }}{{else}}{{ .Result.title_phase1 }}{{end}}"
+    details:
+      selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
+      attribute: href
+    download:
+      selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
+      attribute: href
+    banner:
+      selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: "src=(.*?) "
+    category:
+      selector: a[href^="index.php?page=torrents&category="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: "category"
+    date: # some users will have a extra wait time column before the bookmark column, so use last-of-type
+      selector: td:nth-last-of-type(10)
+      filters:
+        - name: append
+          args: " -04:00"
+        - name: dateparse
+          args: "02/01/2006 15:04:05 -07:00"
+    seeders:
+      selector: td:nth-last-of-type(8)
+    leechers:
+      selector: td:nth-last-of-type(7)
+    grabs:
+      selector: td:nth-last-of-type(6)
+      filters:
+        - name: replace
+          args: ["---", "0"]
+    size:
+      selector: td:nth-last-of-type(4)
+      filters:
+        - name: replace
+          args: [",", "."]
+    downloadvolumefactor:
+      case:
+        img[src="images/freeleech.gif"]: 0
+        img[src="gold/gold.gif"]: 0
+        img[src="gold/slver.gif"]: 0.5
+        "*": 1
+    uploadvolumefactor:
+      text: 1
 # xbtit dt fm v20.0
