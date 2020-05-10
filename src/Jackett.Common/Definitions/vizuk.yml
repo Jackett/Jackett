@@ -140,7 +140,7 @@ search:
 
   fields:
     category:
-      selector:  td.torrent_image div.category_image a, .categoryImage a
+      selector: td.torrent_image div.category_image a, .categoryImage a
       attribute: href
       filters:
         - name: querystring

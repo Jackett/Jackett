@@ -120,15 +120,15 @@ settings:
     label: Catégorie
     default: all
     options:
-      all : "Tous"
-      2145 : "Film/Vidéo"
-      2139 : "Audio"
-      2144 : "Application"
-      2142 : "Jeu vidéo"
-      2140 : "eBook"
-      2141 : "Emulation"
-      2143 : "GPS"
-      2188 : "XXX"
+      all: "Tous"
+      2145: "Film/Vidéo"
+      2139: "Audio"
+      2144: "Application"
+      2142: "Jeu vidéo"
+      2140: "eBook"
+      2141: "Emulation"
+      2143: "GPS"
+      2188: "XXX"
   - name: filter_title
     type: checkbox
     label: Try to normalize releases names by moving year after the title
@@ -136,13 +136,13 @@ settings:
   - name: multilang
     type: checkbox
     label: Replace MULTI by another language in release name
-    default:  false
+    default: false
   - name: multilanguage
     type: select
     label: Replace MULTI by this language
     default: FRENCH
     options:
-      FRENCH : "FRENCH"
+      FRENCH: "FRENCH"
       MULTI.FRENCH: "MULTI.FRENCH"
       ENGLISH: "ENGLISH"
       MULTI.ENGLISH: "MULTI.ENGLISH"
@@ -151,7 +151,7 @@ settings:
   - name: vostfr
     type: checkbox
     label: Replace VOSTFR with ENGLISH
-    default:  false
+    default: false
   - name: enhancedAnime
     type: checkbox
     label: Enhance sonarr compatibility with anime by renaming episode (xxx to exxx). Works only if episode is at the end of the query. Can disturb movies search. (back to the future 3 -> back to the future e3)

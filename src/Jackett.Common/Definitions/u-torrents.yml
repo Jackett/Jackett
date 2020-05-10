@@ -80,7 +80,7 @@ login:
     - selector: div.card-body:contains("incorrect")
   test:
     path: index.php
-    selector:  a[href^="logout.php?id="]
+    selector: a[href^="logout.php?id="]
 
 search:
   paths:

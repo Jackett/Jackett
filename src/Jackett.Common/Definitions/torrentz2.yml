@@ -142,7 +142,7 @@ search:
       remove: a
       filters:
         - name: re_replace
-          args:  ["[^a-zA-Z0-9\\s]+", ""]
+          args: ["[^a-zA-Z0-9\\s]+", ""]
         - name: trim
     date:
       selector: dd span:nth-child(2)

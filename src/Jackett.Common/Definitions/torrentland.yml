@@ -150,7 +150,7 @@ search:
 
   fields:
     category:
-      selector:  td:nth-child(1) a
+      selector: td:nth-child(1) a
       attribute: href
       filters:
         - name: querystring
@@ -185,7 +185,7 @@ search:
       selector: td:nth-child(2) a
       attribute: href
     description:
-      selector:  td:nth-child(1) a
+      selector: td:nth-child(1) a
       attribute: href
       filters:
         - name: querystring

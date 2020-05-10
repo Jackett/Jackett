@@ -27,14 +27,14 @@ caps:
     - {id: 27, cat: Console, desc: "Roms and Emulators"}
     - {id: 30, cat: Console, desc: "Playstation"}
     - {id: 7, cat: Audio, desc: "Music"}
-    - {id: 16, cat:  TV/Documentary, desc: "Docu"}
+    - {id: 16, cat: TV/Documentary, desc: "Docu"}
     - {id: 5, cat: Books, desc: "EBooks"}
     - {id: 38, cat: Console, desc: "Hyperspin Bolt-on Edition"}
     - {id: 34, cat: TV, desc: "Kids"}
     - {id: 8, cat: PC/Games, desc: "PC Games"}
     - {id: 22, cat: PC/Games, desc: "CoinOPS"}
     - {id: 33, cat: TV/Sport, desc: "MMA/Boxing"}
-    - {id: 32, cat:  Movies, desc: "Movie Pack"}
+    - {id: 32, cat: Movies, desc: "Movie Pack"}
     - {id: 31, cat: Console, desc: "Nintendo"}
 
   modes:

@@ -197,7 +197,7 @@ search:
         - name: prepend
           args: "{{ .Config.sitelink }}"
     category:
-      selector:  div.torrentCategory a
+      selector: div.torrentCategory a
       attribute: href
       filters:
         - name: querystring

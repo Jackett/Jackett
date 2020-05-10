@@ -185,7 +185,7 @@ search:
       text: 40
     category|noappend:
       optional: true
-      selector:  td[class^="coll-1"] a[href^="/sub/"]
+      selector: td[class^="coll-1"] a[href^="/sub/"]
       attribute: href
       filters:
         # extract the third part

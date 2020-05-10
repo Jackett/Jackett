@@ -160,7 +160,7 @@ search:
     selector: "#category+table table tr:not(:first-child):not(:last-child)"
   fields:
     category:
-      selector:  td:nth-child(1) a
+      selector: td:nth-child(1) a
       attribute: href
       filters:
         - name: querystring

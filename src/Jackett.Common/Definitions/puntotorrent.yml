@@ -161,7 +161,7 @@ search:
 
   fields:
     category:
-      selector:  td:nth-child(1) a
+      selector: td:nth-child(1) a
       attribute: href
       filters:
         - name: querystring

@@ -56,7 +56,7 @@ search:
     selector: "table.listatorrents tr:not(:first-child)"
   fields:
     category:
-      selector:  td.categorias a
+      selector: td.categorias a
       attribute: href
       filters:
         - name: querystring
