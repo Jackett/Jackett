@@ -134,14 +134,14 @@ settings:
   - name: multilang
     type: checkbox
     label: Replace MULTI by another language in release name
-    default:  false
+    default: false
   - name: multilanguage
     type: select
     label: Replace MULTI by this language
     default: FRENCH
     options:
-      FRENCH : "FRENCH"
-      MULTI.FRENCH : "MULTI.FRENCH"
+      FRENCH: "FRENCH"
+      MULTI.FRENCH: "MULTI.FRENCH"
       ENGLISH: "ENGLISH"
   - name: sort
     type: select

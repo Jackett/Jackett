@@ -19,19 +19,19 @@ caps:
     - {id: 44, cat: PC, desc: "Hentai Game"}
     - {id: 45, cat: Movies, desc: "Cartoon Movie"}
     - {id: 46, cat: TV, desc: "Cartoon Serie"}
-    - {id: 47, cat:  TV, desc: "TV-Serie"}
-    - {id: 49, cat:  TV/Documentary, desc: "Sonstiges Doku"}
-    - {id: 50, cat:  Audio, desc: "Sonstiges Soundtrack"}
-    - {id: 52, cat:  Movies/HD, desc: "Movie HD"}
-    - {id: 53, cat:  Other, desc: "Sonstiges"}
+    - {id: 47, cat: TV, desc: "TV-Serie"}
+    - {id: 49, cat: TV/Documentary, desc: "Sonstiges Doku"}
+    - {id: 50, cat: Audio, desc: "Sonstiges Soundtrack"}
+    - {id: 52, cat: Movies/HD, desc: "Movie HD"}
+    - {id: 53, cat: Other, desc: "Sonstiges"}
     - {id: 55, cat: Movies/Foreign, desc: "Movie Asia & MartialArts"}
     - {id: 56, cat: TV/Anime, desc: "Anime OVA"}
     - {id: 58, cat: Movies, desc: "Movie"}
-    - {id: 59, cat:  Audio/Audiobook, desc: "Sonstiges Hoerspiele"}
-    - {id: 62, cat:  Console, desc: "Sonstiges Game"}
+    - {id: 59, cat: Audio/Audiobook, desc: "Sonstiges Hoerspiele"}
+    - {id: 62, cat: Console, desc: "Sonstiges Game"}
     - {id: 65, cat: Movies/BluRay, desc: "Movie BluRay"}
-    - {id: 66, cat:  TV, desc: "TV-Serie BluRay"}
-    - {id: 67, cat:  TV/HD, desc: "TV-Serie HD"}
+    - {id: 66, cat: TV, desc: "TV-Serie BluRay"}
+    - {id: 67, cat: TV/HD, desc: "TV-Serie HD"}
     - {id: 68, cat: TV/Anime, desc: "Anime Movie HD & BD"}
     - {id: 69, cat: TV/Anime, desc: "Anime OVA HD & BD"}
     - {id: 70, cat: TV/Anime, desc: "Anime Serie HD & BD"}

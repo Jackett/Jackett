@@ -20,20 +20,20 @@ settings:
 
 caps:
   categories:
-    1:  TV/Anime # Anime
+    1: TV/Anime  # Anime
     10: TV/Anime # Non-English Anime
-    3:  Books    # Manga
-    8:  TV/Anime # Drama
-    2:  Audio    # Anime Music
-    9:  TV/Anime # Anime Music Videos
-    7:  TV/Anime # Raw Anime
-    4:  XXX      # Hentai
+    3: Books     # Manga
+    8: TV/Anime  # Drama
+    2: Audio     # Anime Music
+    9: TV/Anime  # Anime Music Videos
+    7: TV/Anime  # Raw Anime
+    4: XXX       # Hentai
     12: XXX      # Hentai (Anime)
     13: XXX      # Hentai (Manga)
     14: XXX      # Hentai (Games)
     11: TV/Anime # Batch
     15: XXX      # JAV
-    5:  Other    # Other
+    5: Other     # Other
 
   modes:
     search: [q]

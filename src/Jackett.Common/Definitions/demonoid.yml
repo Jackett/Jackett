@@ -348,7 +348,7 @@ search:
       optional: true
       attribute: title
     category:
-      selector:  span > a[href*="&subcategory="]
+      selector: span > a[href*="&subcategory="]
       attribute: href
       optional: true
       filters:

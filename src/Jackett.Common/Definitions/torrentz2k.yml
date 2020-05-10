@@ -84,7 +84,7 @@ search:
         - name: replace
           args: ["hr", "hours"]
         - name: append
-          args:  " ago"
+          args: " ago"
         - name: timeago
     _size:
       selector: td:nth-child(6)

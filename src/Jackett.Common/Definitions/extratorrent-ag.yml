@@ -953,7 +953,7 @@ search:
     title:
       selector: td.tli a
     category:
-      selector:  td a[href^="/category/"]
+      selector: td a[href^="/category/"]
       attribute: href
       filters:
         - name: split

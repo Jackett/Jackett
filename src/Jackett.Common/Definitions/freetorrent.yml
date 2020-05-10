@@ -1,6 +1,6 @@
 ---
-site:  freetorrent
-name:  FreeTorrent
+site: freetorrent
+name: FreeTorrent
 description: "FreeTorrent is a Private Torrent Tracker for HD MOVIES / TV"
 language: en-us
 type: private

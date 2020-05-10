@@ -68,7 +68,7 @@ search:
       text: Other
     category|noappend:
       optional: true
-      selector:  td[class^="t"]
+      selector: td[class^="t"]
     details:
       selector: td.n a
       attribute: href

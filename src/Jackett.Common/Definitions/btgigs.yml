@@ -17,7 +17,7 @@ settings:
   - name: lang
     type: checkbox
     label: Add POLISH to title if is in polish category
-    default:  false
+    default: false
 
 caps:
   categorymappings:

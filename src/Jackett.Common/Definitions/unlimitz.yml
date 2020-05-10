@@ -99,7 +99,7 @@ login:
     selector: a[href="logout.php"]
 
 download:
-  selector:  a[href^="d.php?keyalert1="]
+  selector: a[href^="d.php?keyalert1="]
   attribute: href
   filters:
     - name: replace

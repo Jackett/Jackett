@@ -38,15 +38,15 @@ settings:
 
 caps:
   categorymappings:
-    - {id:  5, cat: Audio, desc: "Music"}
-    - {id:  6, cat: Audio/Audiobook, desc: "Audiobooks"}
-    - {id:  4, cat: Books/Comics, desc: "Comics"}
-    - {id:  7, cat: Books/EBook, desc: "E-Books"}
+    - {id: 5, cat: Audio, desc: "Music"}
+    - {id: 6, cat: Audio/Audiobook, desc: "Audiobooks"}
+    - {id: 4, cat: Books/Comics, desc: "Comics"}
+    - {id: 7, cat: Books/EBook, desc: "E-Books"}
     - {id: 16, cat: Movies, desc: "Family Movies"}
     - {id: 23, cat: Movies, desc: "Teen Movies"}
-    - {id:  8, cat: PC/Games, desc: "Games"}
-    - {id:  1, cat: TV, desc: "Kids"}
-    - {id:  2, cat: TV, desc: "Family"}
+    - {id: 8, cat: PC/Games, desc: "Games"}
+    - {id: 1, cat: TV, desc: "Kids"}
+    - {id: 2, cat: TV, desc: "Family"}
     - {id: 15, cat: TV, desc: "Educational"}
     - {id: 24, cat: TV, desc: "Teens"}
 
