@@ -18,7 +18,7 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class Superbits : BaseWebIndexer
+    public class SuperBits : BaseWebIndexer
     {
         private string SearchUrl => SiteLink + "api/v1/torrents";
         private string LoginUrl => SiteLink + "api/v1/auth";
@@ -29,10 +29,10 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        public Superbits(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
+        public SuperBits(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
             : base(id: "superbits",
                    name: "Superbits",
-                   description: "SuperBits is a SWEDISH Private Torrent Tracker for MOVIES / TV / GENERAL",
+                   description: "Superbits is a SWEDISH Private Torrent Tracker for MOVIES / TV / GENERAL",
                    link: "https://superbits.org/",
                    caps: new TorznabCapabilities
                    {

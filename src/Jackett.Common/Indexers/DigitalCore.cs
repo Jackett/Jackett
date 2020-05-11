@@ -18,7 +18,7 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class Digitalcore : BaseWebIndexer
+    public class DigitalCore : BaseWebIndexer
     {
         private string SearchUrl => SiteLink + "api/v1/torrents";
         private string LoginUrl => SiteLink + "api/v1/auth";
@@ -29,7 +29,7 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        public Digitalcore(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
+        public DigitalCore(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
             : base(id: "digitalcore",
                    name: "DigitalCore",
                    description: "DigitalCore is a Private Torrent Tracker for MOVIES / TV / GENERAL",

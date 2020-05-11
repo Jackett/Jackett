@@ -15,7 +15,7 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class Corsarored : BaseWebIndexer
+    public class CorsaroRed : BaseWebIndexer
     {
         private const int MaxSearchPageLimit = 4;
         private const int MaxResultsPerPage = 25;
@@ -45,7 +45,7 @@ namespace Jackett.Common.Indexers
             ["Content-Type"] = "application/json"
         };
 
-        public Corsarored(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public CorsaroRed(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base(id: "corsarored",
                    name: "Corsaro.red",
                    description: "Italian Torrents",

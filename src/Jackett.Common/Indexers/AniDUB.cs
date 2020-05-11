@@ -20,14 +20,14 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    internal class AniDub : BaseWebIndexer
+    internal class AniDUB : BaseWebIndexer
     {
         private static readonly Regex EpisodeInfoRegex = new Regex(@"\[(.*?)(?: \(.*?\))? из (.*?)\]$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex SeasonInfoQueryRegex = new Regex(@"S(\d+)(?:E\d*)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex SeasonInfoRegex = new Regex(@"(?:(?:TV-)|(?:ТВ-))(\d+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Lazy<Regex> StripRussianTitleRegex = new Lazy<Regex>(() => new Regex(@"^.*?\/\s*", RegexOptions.Compiled));
 
-        public AniDub(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public AniDUB(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base(id: "anidub",
                    name: "AniDUB",
                    description: "AniDUB Tracker is a semi-private russian tracker and release group for anime",
