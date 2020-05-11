@@ -79,7 +79,10 @@ caps:
     "MOBILE": PC/Phone-Other
     "MOVIES": Movies
     "MOVIESBLURAYDISCREMUX": Movies/HD
+    "MOVIESCAMTS": Movies
+    "MOVIESDUBSDUALAUDIO": Movies
     "MOVIESENGLISHSPANISHSUBT": Movies
+    "MOVIESHD": Movies/HD
     "MOVIESHD720P": Movies/HD
     "MOVIESHD1080P": Movies/HD
     "MOVIESHEVCX265": Movies/HD
@@ -99,6 +102,7 @@ caps:
     "OTHERPICTURES": Other
     "PELICULASCVCD": TV
     "PELICULASDIVX": TV
+    "PELICULASMICROHD": TV
     "PICTURES": Other
     "PORN": XXX
     "PORNHDMOVIES": XXX
