@@ -81,6 +81,7 @@ caps:
     - {id: 25, cat: Books/Ebook, desc: "Ebook"}
     - {id: 0, cat: Books/Ebook, desc: "Ebook"}
     - {id: 24, cat: XXX, desc: "Adultos"}
+    - {id: 64, cat: PC/Phone-Android, desc: "PC Android"}
 
   modes:
     search: [q, imdbid]
