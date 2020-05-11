@@ -29,15 +29,16 @@ namespace Jackett.Common.Indexers
         }
 
         public TransmitheNet(IIndexerConfigurationService configService, Utils.Clients.WebClient c, Logger l, IProtectionService ps)
-            : base(name: "Nebulance",
-                description: " At Nebulance we will change the way you think about TV",
-                link: "https://nebulance.io/",
-                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                configService: configService,
-                client: c,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataBasicLogin("For best results, change the 'Torrents per page' setting to 100 in your profile on the NBL webpage."))
+            : base(id: "transmithenet",
+                   name: "Nebulance",
+                   description: " At Nebulance we will change the way you think about TV",
+                   link: "https://nebulance.io/",
+                   caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                   configService: configService,
+                   client: c,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataBasicLogin("For best results, change the 'Torrents per page' setting to 100 in your profile on the NBL webpage."))
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";

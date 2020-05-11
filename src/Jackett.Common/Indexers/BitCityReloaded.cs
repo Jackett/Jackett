@@ -31,7 +31,8 @@ namespace Jackett.Common.Indexers
         }
 
         public BitCityReloaded(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "Bit-City Reloaded",
+            : base(id: "bitcityreloaded",
+                   name: "Bit-City Reloaded",
                    description: "A German general tracker.",
                    link: "https://bc-reloaded.net/",
                    caps: TorznabUtil.CreateDefaultTorznabTVCaps(),

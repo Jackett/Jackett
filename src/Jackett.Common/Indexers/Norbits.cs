@@ -43,19 +43,19 @@ namespace Jackett.Common.Indexers
         private ConfigurationDataNorbits ConfigData => (ConfigurationDataNorbits)configData;
 
         public Norbits(IIndexerConfigurationService configService, Utils.Clients.WebClient w, Logger l, IProtectionService ps)
-            : base(
-                name: "Norbits",
-                description: "Norbits is a Norwegian Private site for MOVIES / TV / GENERAL",
-                link: "https://norbits.net/",
-                caps: new TorznabCapabilities
-                {
-                    SupportsImdbMovieSearch = true
-                },
-                configService: configService,
-                client: w,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataNorbits())
+            : base(id: "norbits",
+                   name: "Norbits",
+                   description: "Norbits is a Norwegian Private site for MOVIES / TV / GENERAL",
+                   link: "https://norbits.net/",
+                   caps: new TorznabCapabilities
+                   {
+                       SupportsImdbMovieSearch = true
+                   },
+                   configService: configService,
+                   client: w,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataNorbits())
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "nb-no";

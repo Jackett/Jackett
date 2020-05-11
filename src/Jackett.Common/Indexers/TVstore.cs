@@ -32,7 +32,8 @@ namespace Jackett.Common.Indexers
             @"S(?<season>\d{1,3})(?:E(?<episode>\d{1,3}))?$", RegexOptions.IgnoreCase);
 
         public TVstore(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps) :
-            base("TV Store",
+            base(id: "tvstore",
+                 name: "TV Store",
                  description: "TV Store is a HUNGARIAN Private Torrent Tracker for TV",
                  link: "https://tvstore.me/",
                  caps: new TorznabCapabilities

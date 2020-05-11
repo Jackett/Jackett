@@ -32,7 +32,8 @@ namespace Jackett.Common.Indexers
         }
 
         public Shazbat(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps)
-            : base(name: "Shazbat",
+            : base(id: "shazbat",
+                   name: "Shazbat",
                    description: "Modern indexer",
                    link: "https://www.shazbat.tv/",
                    caps: new TorznabCapabilities(

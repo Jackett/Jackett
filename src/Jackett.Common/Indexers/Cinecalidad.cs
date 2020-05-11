@@ -32,7 +32,8 @@ namespace Jackett.Common.Indexers
         };
 
         public Cinecalidad(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base("Cinecalidad",
+            : base(id: "cinecalidad",
+                   name: "Cinecalidad",
                    description: "Películas Full HD en Castellano y Latino Dual.",
                    link: "https://www.cinecalidad.is/",
                    caps: new TorznabCapabilities(),

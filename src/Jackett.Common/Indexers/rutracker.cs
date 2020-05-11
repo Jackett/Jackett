@@ -34,7 +34,8 @@ namespace Jackett.Common.Indexers
         }
 
         public RuTracker(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "RuTracker",
+            : base(id: "rutracker",
+                   name: "RuTracker",
                    description: "RuTracker is a Semi-Private Russian torrent site with a thriving file-sharing community",
                    link: "https://rutracker.org/",
                    caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
@@ -1689,7 +1690,7 @@ namespace Jackett.Common.Indexers
                     }
                     catch (Exception ex)
                     {
-                        logger.Error(string.Format("{0}: Error while parsing row '{1}':\n\n{2}", ID, Row.OuterHtml, ex));
+                        logger.Error(string.Format("{0}: Error while parsing row '{1}':\n\n{2}", Id, Row.OuterHtml, ex));
                     }
                 }
             }

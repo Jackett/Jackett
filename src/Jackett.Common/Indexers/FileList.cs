@@ -31,18 +31,19 @@ namespace Jackett.Common.Indexers
         private new ConfigurationDataFileList configData => (ConfigurationDataFileList)base.configData;
 
         public FileList(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base("FileList",
-                description: "The best Romanian site.",
-                link: "https://filelist.io/",
-                caps: new TorznabCapabilities
-                {
-                    SupportsImdbMovieSearch = true
-                },
-                configService: configService,
-                client: wc,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataFileList())
+            : base(id: "filelist",
+                   name: "FileList",
+                   description: "The best Romanian site.",
+                   link: "https://filelist.io/",
+                   caps: new TorznabCapabilities
+                   {
+                       SupportsImdbMovieSearch = true
+                   },
+                   configService: configService,
+                   client: wc,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataFileList())
         {
             Encoding = Encoding.UTF8;
             Language = "ro-ro";

@@ -11,10 +11,11 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class PassTheHeadphones : GazelleTracker
+    public class Redacted : GazelleTracker
     {
-        public PassTheHeadphones(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base("Redacted",
+        public Redacted(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+            : base(id: "passtheheadphones",
+                   name: "Redacted",
                    description: "A music tracker",
                    link: "https://redacted.ch/",
                    caps: new TorznabCapabilities

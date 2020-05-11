@@ -32,18 +32,19 @@ namespace Jackett.Common.Indexers
         }
 
         public TorrentSyndikat(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
-            : base(name: "Torrent-Syndikat",
-                description: "A German general tracker",
-                link: "https://torrent-syndikat.org/",
-                caps: new TorznabCapabilities
-                {
-                    SupportsImdbMovieSearch = true
-                },
-                configService: configService,
-                client: w,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
+            : base(id: "torrentsyndikat",
+                   name: "Torrent-Syndikat",
+                   description: "A German general tracker",
+                   link: "https://torrent-syndikat.org/",
+                   caps: new TorznabCapabilities
+                   {
+                       SupportsImdbMovieSearch = true
+                   },
+                   configService: configService,
+                   client: w,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
             Encoding = Encoding.UTF8;
             Language = "de-de";

@@ -28,7 +28,8 @@ namespace Jackett.Common.Indexers
         private new ConfigurationDataRecaptchaLogin configData => (ConfigurationDataRecaptchaLogin)base.configData;
 
         public BitHdtv(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
-            : base("BIT-HDTV",
+            : base(id: "bithdtv",
+                   name: "BIT-HDTV",
                    description: "BIT-HDTV - Home of High Definition",
                    link: "https://www.bit-hdtv.com/",
                    caps: new TorznabCapabilities

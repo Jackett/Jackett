@@ -22,7 +22,8 @@ namespace Jackett.Common.Indexers
     public class TorrentHeaven : BaseWebIndexer
     {
         public TorrentHeaven(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps) :
-            base("TorrentHeaven",
+            base(id: "torrentheaven",
+                 name: "TorrentHeaven",
                  description: "A German general tracker.",
                  link: "https://newheaven.nl/",
                  caps: new TorznabCapabilities(),

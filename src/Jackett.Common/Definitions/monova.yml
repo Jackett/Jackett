@@ -1,5 +1,5 @@
 ---
-site: monova
+id: monova
 name: Monova
 description: "Monova is a Public torrent index."
 language: en-us

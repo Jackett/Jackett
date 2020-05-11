@@ -1,5 +1,5 @@
 ---
-site: torrentbd
+id: torrentbd
 name: TorrentBD
 description: "A general Bangladesh tracker"
 language: en-us

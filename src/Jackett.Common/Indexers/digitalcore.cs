@@ -29,20 +29,20 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-
         public Digitalcore(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
-            : base(name: "DigitalCore",
-                description: "DigitalCore is a Private Torrent Tracker for MOVIES / TV / GENERAL",
-                link: "https://digitalcore.club/",
-                caps: new TorznabCapabilities
-                {
-                    SupportsImdbMovieSearch = true
-                },
-                configService: configService,
-                client: w,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataCookie())
+            : base(id: "digitalcore",
+                   name: "DigitalCore",
+                   description: "DigitalCore is a Private Torrent Tracker for MOVIES / TV / GENERAL",
+                   link: "https://digitalcore.club/",
+                   caps: new TorznabCapabilities
+                   {
+                       SupportsImdbMovieSearch = true
+                   },
+                   configService: configService,
+                   client: w,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataCookie())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";

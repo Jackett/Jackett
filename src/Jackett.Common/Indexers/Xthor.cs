@@ -41,17 +41,17 @@ namespace Jackett.Common.Indexers
         private ConfigurationDataXthor ConfigData => (ConfigurationDataXthor)configData;
 
         public Xthor(IIndexerConfigurationService configService, Utils.Clients.WebClient w, Logger l, IProtectionService ps)
-            : base(
-                name: "Xthor",
-                description: "General French Private Tracker",
-                link: "https://xthor.tk/",
-                caps: new TorznabCapabilities(),
-                configService: configService,
-                client: w,
-                logger: l,
-                p: ps,
-                downloadBase: "https://xthor.tk/download.php?torrent=",
-                configData: new ConfigurationDataXthor())
+            : base(id: "xthor",
+                   name: "Xthor",
+                   description: "General French Private Tracker",
+                   link: "https://xthor.tk/",
+                   caps: new TorznabCapabilities(),
+                   configService: configService,
+                   client: w,
+                   logger: l,
+                   p: ps,
+                   downloadBase: "https://xthor.tk/download.php?torrent=",
+                   configData: new ConfigurationDataXthor())
         {
             Encoding = Encoding.UTF8;
             Language = "fr-fr";

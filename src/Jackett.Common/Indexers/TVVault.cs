@@ -29,7 +29,8 @@ namespace Jackett.Common.Indexers
         }
 
         public TVVault(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "TV-Vault",
+            : base(id: "tvvault",
+                   name: "TV-Vault",
                    description: "A TV tracker for old shows.",
                    link: "https://tv-vault.me/",
                    caps: TorznabUtil.CreateDefaultTorznabTVCaps(),

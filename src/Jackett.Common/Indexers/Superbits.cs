@@ -30,18 +30,19 @@ namespace Jackett.Common.Indexers
         }
 
         public Superbits(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
-            : base(name: "Superbits",
-                description: "SuperBits is a SWEDISH Private Torrent Tracker for MOVIES / TV / GENERAL",
-                link: "https://superbits.org/",
-                caps: new TorznabCapabilities
-                {
-                    SupportsImdbMovieSearch = true
-                },
-                configService: configService,
-                client: w,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataCookie())
+            : base(id: "superbits",
+                   name: "Superbits",
+                   description: "SuperBits is a SWEDISH Private Torrent Tracker for MOVIES / TV / GENERAL",
+                   link: "https://superbits.org/",
+                   caps: new TorznabCapabilities
+                   {
+                       SupportsImdbMovieSearch = true
+                   },
+                   configService: configService,
+                   client: w,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataCookie())
         {
             Encoding = Encoding.UTF8;
             Language = "sv-sw";

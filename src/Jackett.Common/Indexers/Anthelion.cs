@@ -8,14 +8,15 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class TehConnectionMe : GazelleTracker
+    public class Anthelion : GazelleTracker
     {
         public override string[] LegacySiteLinks { get; protected set; } = new string[] {
             "https://tehconnection.me/",
         };
 
-        public TehConnectionMe(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base("Anthelion", // old name: TehConnection.me
+        public Anthelion(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+            : base(id: "tehconnectionme",
+                   name: "Anthelion", // old name: TehConnection.me
                    description: "A movies tracker",
                    link: "https://anthelion.me/",
                    caps: new TorznabCapabilities(),

@@ -12,7 +12,8 @@ namespace Jackett.Common.Indexers
     public class notwhatcd : GazelleTracker
     {
         public notwhatcd(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base("notwhat.cd",
+            : base(id: "notwhatcd",
+                   name: "notwhat.cd",
                    description: "A music tracker",
                    link: "https://notwhat.cd/",
                    caps: new TorznabCapabilities

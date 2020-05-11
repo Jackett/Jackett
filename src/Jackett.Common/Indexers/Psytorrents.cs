@@ -12,7 +12,8 @@ namespace Jackett.Common.Indexers
     public class Psytorrents : GazelleTracker
     {
         public Psytorrents(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base("Psytorrents",
+            : base(id: "psytorrents",
+                   name: "Psytorrents",
                    description: "Psytorrents (PSY) is a Private Torrent Tracker for ELECTRONIC MUSIC",
                    link: "https://psytorrents.info/",
                    caps: new TorznabCapabilities(),

@@ -26,7 +26,8 @@ namespace Jackett.Common.Indexers
         private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
 
         public HDSpace(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base("HD-Space",
+            : base(id: "hdspace",
+                   name: "HD-Space",
                    description: "Sharing The Universe",
                    link: "https://hd-space.org/",
                    caps: TorznabUtil.CreateDefaultTorznabTVCaps(),

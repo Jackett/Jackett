@@ -1,5 +1,5 @@
 ---
-site: hdroute
+id: hdroute
 name: HDRoute
 description: "HDRoute is a CHINESE Private Torrent Tracker for HD MOVIES / TV"
 language: zh-cn

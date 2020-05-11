@@ -42,19 +42,19 @@ namespace Jackett.Common.Indexers
         private ConfigurationDataNordicbits ConfigData => (ConfigurationDataNordicbits)configData;
 
         public Nordicbits(IIndexerConfigurationService configService, Utils.Clients.WebClient w, Logger l, IProtectionService ps)
-            : base(
-                name: "Nordicbits",
-                description: "Nordicbits is a Danish Private site for MOVIES / TV / GENERAL",
-                link: "https://nordicb.org/",
-                caps: new TorznabCapabilities
-                {
-                    SupportsImdbMovieSearch = true
-                },
-                configService: configService,
-                client: w,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataNordicbits())
+            : base(id: "nordicbits",
+                   name: "Nordicbits",
+                   description: "Nordicbits is a Danish Private site for MOVIES / TV / GENERAL",
+                   link: "https://nordicb.org/",
+                   caps: new TorznabCapabilities
+                   {
+                       SupportsImdbMovieSearch = true
+                   },
+                   configService: configService,
+                   client: w,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataNordicbits())
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "da-dk";

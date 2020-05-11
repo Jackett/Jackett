@@ -1,5 +1,5 @@
 ---
-site: torrentquest
+id: torrentquest
 name: TorrentQuest
 description: "TorrentQuest is a Public torrent Magnet Links search engine"
 language: en-us

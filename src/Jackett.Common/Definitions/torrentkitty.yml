@@ -1,5 +1,5 @@
 ---
-site: torrentkitty
+id: torrentkitty
 name: TorrentKitty
 description: "TorrentKitty is a Public torrent indexer"
 language: en-us

@@ -1,5 +1,5 @@
 ---
-site: kickasstorrent
+id: kickasstorrent
 name: KickAssTorrent
 description: "Kickass Torrents (KATcr) is a well-know Public torrent site indexing thousands of torrents verified and commented by a large file-sharing community"
 language: en-us

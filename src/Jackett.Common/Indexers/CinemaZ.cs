@@ -11,7 +11,8 @@ namespace Jackett.Common.Indexers
     public class CinemaZ : AvistazTracker
     {
         public CinemaZ(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base("CinemaZ",
+            : base(id: "cinemaz",
+                   name: "CinemaZ",
                    description: "Part of the Avistaz network.",
                    link: "https://cinemaz.to/",
                    caps: new TorznabCapabilities

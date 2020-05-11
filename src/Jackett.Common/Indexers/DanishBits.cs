@@ -26,7 +26,8 @@ namespace Jackett.Common.Indexers
         }
 
         public DanishBits(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base("DanishBits",
+            : base(id: "danishbits",
+                   name: "DanishBits",
                    description: "A danish closed torrent tracker",
                    link: "https://danishbits.org/",
                    caps: new TorznabCapabilities
