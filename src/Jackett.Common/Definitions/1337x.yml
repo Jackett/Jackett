@@ -168,13 +168,20 @@ search:
     selector: tr:has(a[href^="/torrent/"])
 
   fields:
-    title:
+    title_text:
+      # the movies, tv and music pages abbreviate the title
+      selector: td[class^="coll-1"] a[href^="/torrent/"]
+    title_href:
       # the movies, tv and music pages abbreviate the title so we process the href instead. #8137
       selector: td[class^="coll-1"] a[href^="/torrent/"]
       attribute: href
       filters:
         - name: split
           args: ["/", 3]
+    title:
+      # title_href can be empty so use the title_text instead #8586
+      text: "{{ if .Result.title_href }}{{ .Result.title_href }}{{ else }}{{ .Result.title_text }}{{ end }}"
+      filters:
         - name: re_replace
           args: ["(-+)", " "]
         - name: replace
