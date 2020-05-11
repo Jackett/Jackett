@@ -14,7 +14,7 @@ legacylinks:
 caps:
   categories:
     "/anime/": TV/Anime
-    "anime/english-translated/": TV/Anime
+    "/anime/english-translated/": TV/Anime
     "/applications/": PC
     "/applications/android/": PC/Phone-Android
     "/applications/ios/": PC/Phone-IOS
