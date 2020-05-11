@@ -18,7 +18,7 @@ using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class Newpct : BaseCachingWebIndexer
+    public class NewPCT : BaseCachingWebIndexer
     {
         private enum ReleaseType
         {
@@ -115,10 +115,10 @@ namespace Jackett.Common.Indexers
             "http://pctnew.com/",
         };
 
-        public Newpct(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public NewPCT(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base(id: "newpct",
-                   name: "Newpct",
-                   description: "Newpct - Descargar peliculas, series y estrenos torrent gratis",
+                   name: "NewPCT",
+                   description: "NewPCT - Descargar peliculas, series y estrenos torrent gratis",
                    link: "https://descargas2020.org/",
                    caps: new TorznabCapabilities(TorznabCatType.TV,
                                                  TorznabCatType.TVSD,

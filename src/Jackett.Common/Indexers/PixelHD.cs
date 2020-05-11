@@ -17,7 +17,7 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class PiXELHD : BaseWebIndexer
+    public class PixelHD : BaseWebIndexer
     {
         private string LoginUrl => SiteLink + "login.php";
         private string BrowseUrl => SiteLink + "torrents.php";
@@ -32,7 +32,7 @@ namespace Jackett.Common.Indexers
         private string input_username = null;
         private string input_password = null;
 
-        public PiXELHD(IIndexerConfigurationService configService, WebClient webClient, Logger logger, IProtectionService protectionService)
+        public PixelHD(IIndexerConfigurationService configService, WebClient webClient, Logger logger, IProtectionService protectionService)
             : base(id: "pixelhd",
                    name: "PiXELHD",
                    description: "PixelHD (PxHD) is a Private Torrent Tracker for HD .MP4 MOVIES / TV",

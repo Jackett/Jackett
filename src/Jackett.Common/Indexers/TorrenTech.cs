@@ -20,7 +20,7 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class Torrentech : BaseWebIndexer
+    public class TorrenTech : BaseWebIndexer
     {
         private string LoginUrl => SiteLink + "index.php?act=Login&CODE=01&CookieDate=1";
         private string IndexUrl => SiteLink + "index.php";
@@ -31,10 +31,10 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        public Torrentech(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)
+        public TorrenTech(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)
             : base(id: "torrentech",
                    name: "Torrentech",
-                   description: "TorrenTech (TTH) is a Private Torrent Tracker for ELECTRONIC MUSIC",
+                   description: "Torrentech (TTH) is a Private Torrent Tracker for ELECTRONIC MUSIC",
                    link: "https://www.torrentech.org/",
                    caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                    configService: configService,

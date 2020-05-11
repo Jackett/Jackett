@@ -18,7 +18,7 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class Myanonamouse : BaseWebIndexer
+    public class MyAnonamouse : BaseWebIndexer
     {
         private string LoginUrl => SiteLink + "takelogin.php";
         private string SearchUrl => SiteLink + "tor/js/loadSearchJSONbasic.php";
@@ -29,7 +29,7 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        public Myanonamouse(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps)
+        public MyAnonamouse(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps)
             : base(id: "myanonamouse",
                    name: "MyAnonamouse",
                    description: "Friendliness, Warmth and Sharing",

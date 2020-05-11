@@ -86,7 +86,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * MovCr
  * MoviesDVDR
  * MyPornClub
- * Newpct (aka: tvsinpagar, descargas2020, torrentlocura, torrentrapid, tumejortorrent, pctnew, etc)
+ * NewPCT (aka: tvsinpagar, descargas2020, torrentlocura, torrentrapid, tumejortorrent, pctnew, etc)
  * Newstudio
  * Nitro
  * NNTT
@@ -114,7 +114,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * shokweb
  * ShowRSS
  * SkyTorrentsClone
- * SolidTorrents
+ * Solid Torrents
  * sosulki
  * sukebei-Pantsu
  * sukebei.Nyaa.si
@@ -189,7 +189,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Metal Tracker
  * MuziekFrabriek
  * NetHD (VietTorrent)
- * Pornolab
+ * PornoLab
  * PussyTorrents
  * RiperAM
  * RockBox
@@ -401,7 +401,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * NetCosmo
  * NetLab
  * New Real World
- * Norbits
+ * NorBits
  * NordicBits (NB)
  * NORDiCHD
  * notwhat.cd
@@ -468,7 +468,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * SportHD
  * SportsCult
  * SpringSunday
- * SuperBits (SBS)
+ * Superbits (SBS)
  * TEKNO3D
  * TLFBits
  * TOrrent-tuRK (TORK)

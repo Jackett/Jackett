@@ -17,13 +17,13 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class Pretome : BaseWebIndexer
+    public class PreToMe : BaseWebIndexer
     {
         private string LoginUrl => SiteLink + "takelogin.php";
         private string SearchUrl => SiteLink + "browse.php";
         private new ConfigurationDataPinNumber configData => (ConfigurationDataPinNumber)base.configData;
 
-        public Pretome(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public PreToMe(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base(id: "pretome",
                    name: "PreToMe",
                    description: "BitTorrent site for High Quality, High Definition (HD) movies and TV Shows",

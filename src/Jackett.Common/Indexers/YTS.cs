@@ -17,7 +17,7 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class Yts : BaseWebIndexer
+    public class YTS : BaseWebIndexer
     {
         public override string[] LegacySiteLinks { get; protected set; } = new string[] {
             "https://yts.ag/",
@@ -33,7 +33,7 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        public Yts(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public YTS(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base(id: "yts",
                    name: "YTS",
                    description: "YTS is a Public torrent site specialising in HD movies of small size",

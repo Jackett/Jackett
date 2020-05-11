@@ -18,7 +18,7 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class Pornolab : BaseWebIndexer
+    public class PornoLab : BaseWebIndexer
     {
         private string LoginUrl => SiteLink + "forum/login.php";
         private string SearchUrl => SiteLink + "forum/tracker.php";
@@ -33,10 +33,10 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        public Pornolab(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public PornoLab(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base(id: "pornolab",
-                   name: "Pornolab",
-                   description: "Pornolab is a Semi-Private Russian site for Adult content",
+                   name: "PornoLab",
+                   description: "PornoLab is a Semi-Private Russian site for Adult content",
                    link: "https://pornolab.net/",
                    caps: new TorznabCapabilities(),
                    configService: configService,
