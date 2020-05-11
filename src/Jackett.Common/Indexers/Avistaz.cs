@@ -11,7 +11,8 @@ namespace Jackett.Common.Indexers
     public class Avistaz : AvistazTracker
     {
         public Avistaz(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base("Avistaz",
+            : base(id: "avistaz",
+                   name: "Avistaz",
                    description: "Aka AsiaTorrents",
                    link: "https://avistaz.to/",
                    caps: new TorznabCapabilities

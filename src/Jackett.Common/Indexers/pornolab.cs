@@ -34,7 +34,8 @@ namespace Jackett.Common.Indexers
         }
 
         public Pornolab(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "Pornolab",
+            : base(id: "pornolab",
+                   name: "Pornolab",
                    description: "Pornolab is a Semi-Private Russian site for Adult content",
                    link: "https://pornolab.net/",
                    caps: new TorznabCapabilities(),

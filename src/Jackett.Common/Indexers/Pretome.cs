@@ -24,15 +24,16 @@ namespace Jackett.Common.Indexers
         private new ConfigurationDataPinNumber configData => (ConfigurationDataPinNumber)base.configData;
 
         public Pretome(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base("PreToMe",
-                description: "BitTorrent site for High Quality, High Definition (HD) movies and TV Shows",
-                link: "https://pretome.info/",
-                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                client: wc,
-                configService: configService,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataPinNumber("For best results, change the 'Torrents per page' setting to 100 in 'Profile => Torrent browse settings'."))
+            : base(id: "pretome",
+                   name: "PreToMe",
+                   description: "BitTorrent site for High Quality, High Definition (HD) movies and TV Shows",
+                   link: "https://pretome.info/",
+                   caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                   client: wc,
+                   configService: configService,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataPinNumber("For best results, change the 'Torrents per page' setting to 100 in 'Profile => Torrent browse settings'."))
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "en-us";

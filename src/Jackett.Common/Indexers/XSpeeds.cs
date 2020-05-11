@@ -36,15 +36,16 @@ namespace Jackett.Common.Indexers
         }
 
         public XSpeeds(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "XSpeeds",
-                description: "XSpeeds (XS) is a Private Torrent Tracker for MOVIES / TV / GENERAL",
-                link: "https://www.xspeeds.eu/",
-                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                configService: configService,
-                client: wc,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
+            : base(id: "xspeeds",
+                   name: "XSpeeds",
+                   description: "XSpeeds (XS) is a Private Torrent Tracker for MOVIES / TV / GENERAL",
+                   link: "https://www.xspeeds.eu/",
+                   caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                   configService: configService,
+                   client: wc,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";

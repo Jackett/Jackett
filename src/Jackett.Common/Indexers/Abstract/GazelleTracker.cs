@@ -37,18 +37,20 @@ namespace Jackett.Common.Indexers.Abstract
             set => base.configData = value;
         }
 
-        protected GazelleTracker(string name, string link, string description, IIndexerConfigurationService configService,
-                                 WebClient client, Logger logger, IProtectionService p, TorznabCapabilities caps,
-                                 bool supportsFreeleechTokens, bool imdbInTags = false, bool has2Fa = false)
-            : base(name,
-                description: description,
-                link: link,
-                caps: caps,
-                configService: configService,
-                client: client,
-                logger: logger,
-                p: p,
-                configData: new ConfigurationDataBasicLogin())
+        protected GazelleTracker(string link, string id, string name, string description,
+                                 IIndexerConfigurationService configService, WebClient client, Logger logger,
+                                 IProtectionService p, TorznabCapabilities caps, bool supportsFreeleechTokens,
+                                 bool imdbInTags = false, bool has2Fa = false)
+            : base(id: id,
+                   name: name,
+                   description: description,
+                   link: link,
+                   caps: caps,
+                   configService: configService,
+                   client: client,
+                   logger: logger,
+                   p: p,
+                   configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.UTF8;
             this.supportsFreeleechTokens = supportsFreeleechTokens;

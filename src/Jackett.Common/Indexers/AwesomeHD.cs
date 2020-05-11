@@ -25,19 +25,21 @@ namespace Jackett.Common.Indexers
         private new ConfigurationDataPasskey configData => (ConfigurationDataPasskey)base.configData;
 
         public AwesomeHD(IIndexerConfigurationService configService, Utils.Clients.WebClient c, Logger l, IProtectionService ps)
-            : base("Awesome-HD",
-                description: "An HD tracker",
-                link: "https://awesome-hd.me/",
-                caps: new TorznabCapabilities
-                {
-                    SupportsImdbMovieSearch = true
-                    // SupportsImdbTVSearch = true (supported by the site but disabled due to #8107)
-                },
-                configService: configService,
-                client: c,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataPasskey("Note: You can find the Passkey in your profile, next to Personal information."))
+            : base(id: "awesomehd",
+                   name: "Awesome-HD",
+                   description: "An HD tracker",
+                   link: "https://awesome-hd.me/",
+                   caps: new TorznabCapabilities
+                   {
+                       SupportsImdbMovieSearch = true
+                       // SupportsImdbTVSearch = true (supported by the site but disabled due to #8107)
+                   },
+                   configService: configService,
+                   client: c,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataPasskey("Note: You can find the Passkey in your profile, " +
+                                                            "next to Personal information."))
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";

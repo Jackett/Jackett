@@ -34,18 +34,19 @@ namespace Jackett.Common.Indexers
         }
 
         public Yts(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "YTS",
-                description: "YTS is a Public torrent site specialising in HD movies of small size",
-                link: "https://yts.mx/",
-                caps: new TorznabCapabilities
-                {
-                    SupportsImdbMovieSearch = true
-                },
-                configService: configService,
-                client: wc,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationData())
+            : base(id: "yts",
+                   name: "YTS",
+                   description: "YTS is a Public torrent site specialising in HD movies of small size",
+                   link: "https://yts.mx/",
+                   caps: new TorznabCapabilities
+                   {
+                       SupportsImdbMovieSearch = true
+                   },
+                   configService: configService,
+                   client: wc,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationData())
         {
             Encoding = Encoding.GetEncoding("windows-1252");
             Language = "en-us";

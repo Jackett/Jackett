@@ -30,15 +30,16 @@ namespace Jackett.Common.Indexers
         }
 
         public BroadcastTheNet(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "BroadcastTheNet",
-                description: "Broadcasthe.net (BTN) is an invite-only torrent tracker focused on TV shows",
-                link: "https://broadcasthe.net/",
-                caps: new TorznabCapabilities(),
-                configService: configService,
-                client: wc,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataAPIKey())
+            : base(id: "broadcastthenet",
+                   name: "BroadcastTheNet",
+                   description: "Broadcasthe.net (BTN) is an invite-only torrent tracker focused on TV shows",
+                   link: "https://broadcasthe.net/",
+                   caps: new TorznabCapabilities(),
+                   configService: configService,
+                   client: wc,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataAPIKey())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";

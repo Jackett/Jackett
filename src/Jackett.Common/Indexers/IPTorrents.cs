@@ -46,7 +46,8 @@ namespace Jackett.Common.Indexers
         private new ConfigurationDataCookie configData => (ConfigurationDataCookie)base.configData;
 
         public IPTorrents(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)
-            : base("IPTorrents",
+            : base(id: "iptorrents",
+                   name: "IPTorrents",
                    description: "Always a step ahead.",
                    link: "https://iptorrents.com/",
                    caps: new TorznabCapabilities

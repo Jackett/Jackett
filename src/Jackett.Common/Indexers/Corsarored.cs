@@ -46,15 +46,16 @@ namespace Jackett.Common.Indexers
         };
 
         public Corsarored(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base("Corsaro.red",
-                description: "Italian Torrents",
-                link: "https://corsaro.red/",
-                caps: new TorznabCapabilities(),
-                configService: configService,
-                client: wc,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationData())
+            : base(id: "corsarored",
+                   name: "Corsaro.red",
+                   description: "Italian Torrents",
+                   link: "https://corsaro.red/",
+                   caps: new TorznabCapabilities(),
+                   configService: configService,
+                   client: wc,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationData())
         {
             Encoding = Encoding.UTF8;
             Language = "it-it";

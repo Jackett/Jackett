@@ -23,7 +23,8 @@ namespace Jackett.Common.Indexers
         private new ConfigurationData configData => base.configData;
 
         public TorrentsCSV(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base("Torrents.csv",
+            : base(id: "torrentscsv",
+                   name: "Torrents.csv",
                    description: "Torrents.csv is a self-hostable, open source torrent search engine and database",
                    link: "https://torrents-csv.ml/",
                    caps: new TorznabCapabilities

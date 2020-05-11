@@ -34,15 +34,16 @@ namespace Jackett.Common.Indexers
         }
 
         public BB(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
-            : base(name: "bB",
-                description: "BaconBits (bB) is a Private Torrent Tracker for 0DAY / GENERAL",
-                link: StringUtil.FromBase64("aHR0cHM6Ly9iYWNvbmJpdHMub3JnLw=="),
-                caps: new TorznabCapabilities(),
-                configService: configService,
-                client: w,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataBasicLogin())
+            : base(id: "bb",
+                   name: "bB",
+                   description: "BaconBits (bB) is a Private Torrent Tracker for 0DAY / GENERAL",
+                   link: StringUtil.FromBase64("aHR0cHM6Ly9iYWNvbmJpdHMub3JnLw=="),
+                   caps: new TorznabCapabilities(),
+                   configService: configService,
+                   client: w,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";

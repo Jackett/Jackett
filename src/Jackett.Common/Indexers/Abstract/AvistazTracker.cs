@@ -32,9 +32,11 @@ namespace Jackett.Common.Indexers.Abstract
         // hook to adjust the search term
         protected virtual string GetSearchTerm(TorznabQuery query) => $"{query.SearchTerm} {query.GetEpisodeSearchString()}";
 
-        protected AvistazTracker(string name, string link, string description, IIndexerConfigurationService configService,
-                                 WebClient client, Logger logger, IProtectionService p, TorznabCapabilities caps)
-            : base(name,
+        protected AvistazTracker(string link, string id, string name, string description,
+                                 IIndexerConfigurationService configService, WebClient client, Logger logger,
+                                 IProtectionService p, TorznabCapabilities caps)
+            : base(id: id,
+                   name: name,
                    description: description,
                    link: link,
                    caps: caps,

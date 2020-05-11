@@ -60,19 +60,20 @@ namespace Jackett.Common.Indexers
             {"greys anatomy", "grey's anatomy"}
         };
 
-        public BJShare(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps) :
-            base("BJ-Share",
-                 description: "A brazilian tracker.",
-                 link: "https://bj-share.info/",
-                 caps: new TorznabCapabilities
-                 {
-                     SupportsImdbMovieSearch = true
-                 },
-                 configService: configService,
-                 client: wc,
-                 logger: l,
-                 p: ps,
-                 configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
+        public BJShare(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+            :  base(id: "bjshare",
+                    name: "BJ-Share",
+                    description: "A brazilian tracker.",
+                    link: "https://bj-share.info/",
+                    caps: new TorznabCapabilities
+                    {
+                        SupportsImdbMovieSearch = true
+                    },
+                    configService: configService,
+                    client: wc,
+                    logger: l,
+                    p: ps,
+                    configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
             Encoding = Encoding.UTF8;
             Language = "pt-br";

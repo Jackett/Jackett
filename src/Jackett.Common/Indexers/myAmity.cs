@@ -29,7 +29,8 @@ namespace Jackett.Common.Indexers
         }
 
         public myAmity(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "myAmity",
+            : base(id: "myamity",
+                   name: "myAmity",
                    description: "A German general tracker.",
                    link: "https://ttv2.myamity.info/",
                    caps: TorznabUtil.CreateDefaultTorznabTVCaps(),

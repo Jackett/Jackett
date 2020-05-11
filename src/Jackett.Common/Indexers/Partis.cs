@@ -29,7 +29,8 @@ namespace Jackett.Common.Indexers
         }
 
         public Partis(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "Partis",
+            : base(id: "partis",
+                   name: "Partis",
                    description: "Partis is a SLOVENIAN Private Torrent Tracker",
                    link: "https://www.partis.si/",
                    caps: TorznabUtil.CreateDefaultTorznabTVCaps(),

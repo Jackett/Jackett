@@ -34,7 +34,8 @@ namespace Jackett.Common.Indexers
         }
 
         public RuTracker(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "RuTracker",
+            : base(id: "rutracker",
+                   name: "RuTracker",
                    description: "RuTracker is a Semi-Private Russian torrent site with a thriving file-sharing community",
                    link: "https://rutracker.org/",
                    caps: TorznabUtil.CreateDefaultTorznabTVCaps(),

@@ -14,8 +14,21 @@ namespace Jackett.Common.Indexers.Meta
 {
     public abstract class BaseMetaIndexer : BaseWebIndexer
     {
-        protected BaseMetaIndexer(string name, string description, IFallbackStrategyProvider fallbackStrategyProvider, IResultFilterProvider resultFilterProvider, IIndexerConfigurationService configService, WebClient webClient, Logger logger, ConfigurationData configData, IProtectionService p, Func<IIndexer, bool> filter)
-            : base(name, "http://127.0.0.1/", description, configService, webClient, logger, configData, p, null, null)
+        protected BaseMetaIndexer(string name, string id, string description,
+                                  IFallbackStrategyProvider fallbackStrategyProvider,
+                                  IResultFilterProvider resultFilterProvider,IIndexerConfigurationService configService,
+                                  WebClient client, Logger logger, ConfigurationData configData, IProtectionService p,
+                                  Func<IIndexer, bool> filter)
+            : base(id: id,
+                   name: name,
+                   description: description,
+                   link: "http://127.0.0.1/",
+                   caps: null,
+                   configService: configService,
+                   client: client,
+                   logger: logger,
+                   p: p,
+                   configData: configData)
         {
             filterFunc = filter;
             this.fallbackStrategyProvider = fallbackStrategyProvider;

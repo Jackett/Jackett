@@ -30,15 +30,16 @@ namespace Jackett.Common.Indexers
         }
 
         public Myanonamouse(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps)
-            : base(name: "MyAnonamouse",
-                description: "Friendliness, Warmth and Sharing",
-                link: "https://www.myanonamouse.net/",
-                configService: configService,
-                caps: new TorznabCapabilities(),
-                client: c,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataMyAnonamouse())
+            : base(id: "myanonamouse",
+                   name: "MyAnonamouse",
+                   description: "Friendliness, Warmth and Sharing",
+                   link: "https://www.myanonamouse.net/",
+                   configService: configService,
+                   caps: new TorznabCapabilities(),
+                   client: c,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataMyAnonamouse())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";

@@ -30,7 +30,8 @@ namespace Jackett.Common.Indexers
         }
 
         public NewRealWorld(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "New Real World",
+            : base(id: "newrealworld",
+                   name: "New Real World",
                    description: "A German general tracker.",
                    link: "https://nrw-tracker.eu/",
                    caps: TorznabUtil.CreateDefaultTorznabTVCaps(),

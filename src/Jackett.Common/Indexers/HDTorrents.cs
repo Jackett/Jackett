@@ -45,7 +45,8 @@ namespace Jackett.Common.Indexers
         private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
 
         public HDTorrents(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
-            : base("HD-Torrents",
+            : base(id: "hdtorrents",
+                   name: "HD-Torrents",
                    description: "HD-Torrents is a private torrent website with HD torrents and strict rules on their content.",
                    link: "https://hdts.ru/", // Domain https://hdts.ru/ seems more reliable
                    caps: new TorznabCapabilities

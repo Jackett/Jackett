@@ -31,16 +31,16 @@ namespace Jackett.Common.Indexers
         }
 
         public TorrentSeeds(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps) :
-            base(
-                name: "TorrentSeeds",
-                description: "TorrentSeeds is a Private site for MOVIES / TV / GENERAL",
-                link: "https://torrentseeds.org/",
-                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                configService: configService,
-                client: wc,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
+            base(id: "torrentseeds",
+                 name: "TorrentSeeds",
+                 description: "TorrentSeeds is a Private site for MOVIES / TV / GENERAL",
+                 link: "https://torrentseeds.org/",
+                 caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                 configService: configService,
+                 client: wc,
+                 logger: l,
+                 p: ps,
+                 configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";

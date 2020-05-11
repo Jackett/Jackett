@@ -30,7 +30,8 @@ namespace Jackett.Common.Indexers
         }
 
         public GazelleGames(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "GazelleGames",
+            : base(id: "gazellegames",
+                   name: "GazelleGames",
                    description: "A gaming tracker.",
                    link: "https://gazellegames.net/",
                    caps: new TorznabCapabilities(),

@@ -28,15 +28,16 @@ namespace Jackett.Common.Indexers
         private static readonly Lazy<Regex> StripRussianTitleRegex = new Lazy<Regex>(() => new Regex(@"^.*?\/\s*", RegexOptions.Compiled));
 
         public AniDub(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-                    : base(name: "AniDUB",
-                           description: "AniDUB Tracker is a semi-private russian tracker and release group for anime",
-                           link: "https://tr.anidub.com/",
-                           caps: new TorznabCapabilities(),
-                           configService: configService,
-                           client: wc,
-                           logger: l,
-                           p: ps,
-                           configData: new ConfigurationDataAniDub())
+            : base(id: "anidub",
+                   name: "AniDUB",
+                   description: "AniDUB Tracker is a semi-private russian tracker and release group for anime",
+                   link: "https://tr.anidub.com/",
+                   caps: new TorznabCapabilities(),
+                   configService: configService,
+                   client: wc,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataAniDub())
         {
             Encoding = Encoding.UTF8;
             Language = "ru-ru";

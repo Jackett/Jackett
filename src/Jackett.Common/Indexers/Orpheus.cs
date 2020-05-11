@@ -12,7 +12,8 @@ namespace Jackett.Common.Indexers
     public class Orpheus : GazelleTracker
     {
         public Orpheus(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base("Orpheus",
+            : base(id: "orpheus",
+                   name: "Orpheus",
                    description: "A music tracker",
                    link: "https://orpheus.network/",
                    caps: new TorznabCapabilities

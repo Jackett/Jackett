@@ -30,7 +30,8 @@ namespace Jackett.Common.Indexers
         }
 
         public Hebits(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "Hebits",
+            : base(id: "hebits",
+                   name: "Hebits",
                    description: "The Israeli Tracker",
                    link: "https://hebits.net/",
                    caps: TorznabUtil.CreateDefaultTorznabTVCaps(),

@@ -14,7 +14,8 @@ namespace Jackett.Common.Indexers
     public class PassTheHeadphones : GazelleTracker
     {
         public PassTheHeadphones(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base("Redacted",
+            : base(id: "redacted",
+                   name: "Redacted",
                    description: "A music tracker",
                    link: "https://redacted.ch/",
                    caps: new TorznabCapabilities

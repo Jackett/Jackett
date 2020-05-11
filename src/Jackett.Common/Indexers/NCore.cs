@@ -42,7 +42,8 @@ namespace Jackett.Common.Indexers
         };
 
         public NCore(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps) :
-            base("nCore",
+            base(id: "ncore",
+                 name: "nCore",
                  description: "A Hungarian private torrent site.",
                  link: "https://ncore.cc/",
                  caps: new TorznabCapabilities

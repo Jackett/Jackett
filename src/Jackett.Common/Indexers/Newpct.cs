@@ -116,7 +116,8 @@ namespace Jackett.Common.Indexers
         };
 
         public Newpct(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base("Newpct",
+            : base(id: "newpct",
+                   name: "Newpct",
                    description: "Newpct - Descargar peliculas, series y estrenos torrent gratis",
                    link: "https://descargas2020.org/",
                    caps: new TorznabCapabilities(TorznabCatType.TV,

@@ -90,7 +90,8 @@ namespace Jackett.Common.Indexers
         }
 
         public LostFilm(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "LostFilm.tv",
+            : base(id: "lostfilm",
+                   name: "LostFilm.tv",
                    description: "Unique portal about foreign series",
                    link: "https://www.lostfilm.tv/",
                    caps: TorznabUtil.CreateDefaultTorznabTVCaps(),

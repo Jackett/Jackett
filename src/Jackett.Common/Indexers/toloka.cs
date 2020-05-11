@@ -32,7 +32,8 @@ namespace Jackett.Common.Indexers
         }
 
         public Toloka(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "Toloka.to",
+            : base(id: "toloka",
+                   name: "Toloka.to",
                    description: "Toloka is a Semi-Private Ukrainian torrent site with a thriving file-sharing community",
                    link: "https://toloka.to/",
                    caps: TorznabUtil.CreateDefaultTorznabTVCaps(),

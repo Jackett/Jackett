@@ -26,8 +26,6 @@ namespace Jackett.Common.Indexers
     public class CardigannIndexer : BaseWebIndexer
     {
         protected IndexerDefinition Definition;
-        public override string ID => (Definition != null ? Definition.Id : GetIndexerID(GetType()));
-
         protected WebClientStringResult landingResult;
         protected IHtmlDocument landingResultDocument;
 
@@ -59,13 +57,15 @@ namespace Jackett.Common.Indexers
         private static readonly Regex _LogicFunctionRegex = new Regex(
             @$"\b({string.Join("|", _SupportedLogicFunctions.Select(Regex.Escape))})(?:\s+(\(?\.[^\)\s]+\)?|""[^""]+"")){{2,}}");
 
-        public CardigannIndexer(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps, IndexerDefinition Definition)
+        public CardigannIndexer(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
+                                IProtectionService ps, IndexerDefinition Definition)
             : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps)
         {
             this.Definition = Definition;
+            ID = Definition.Id;
 
             // Add default data if necessary
             if (Definition.Settings == null)

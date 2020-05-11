@@ -36,7 +36,8 @@ namespace Jackett.Common.Indexers
         }
 
         public SolidTorrents(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "Solid Torrents",
+            : base(id: "solidtorrents",
+                   name: "Solid Torrents",
                    description: "SolidTorrents is a Public torrent meta-search engine",
                    link: "https://solidtorrents.net/",
                    caps: new TorznabCapabilities(),

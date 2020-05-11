@@ -11,7 +11,8 @@ namespace Jackett.Common.Indexers
     public class BrokenStones : GazelleTracker
     {
         public BrokenStones(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base("BrokenStones",
+            : base(id: "brokenstones",
+                   name: "BrokenStones",
                    description: "Broken Stones is a Private site for MacOS and iOS APPS / GAMES",
                    link: "https://brokenstones.club/",
                    caps: new TorznabCapabilities(),
