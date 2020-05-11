@@ -1,5 +1,5 @@
 ---
-site: btdigg
+id: btdigg
 name: BTDigg
 description: "BTDigg is a Public BitTorrent DHT search engine."
 language: en-us

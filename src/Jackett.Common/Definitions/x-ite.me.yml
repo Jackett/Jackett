@@ -4,7 +4,7 @@
 # TODO:
 #    x-ite.me doesn't support altering the number of results, therefore only the 20 first results are shown (this is hardcoded), Jackett may support pagination in the future tho
 #
-site: xiteme
+id: xiteme
 name: x-ite.me
 description: "Tracker for LGBTQ movies, TV, books, magazines, anime, PC and XXX."
 language: en-us

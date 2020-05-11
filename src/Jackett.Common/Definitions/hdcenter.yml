@@ -1,5 +1,5 @@
 ---
-site: hdcenter
+id: hdcenter
 name: HDCenter
 description: "An German HD tracker"
 language: de-de

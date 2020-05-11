@@ -1,5 +1,5 @@
 ---
-site: btdb
+id: btdb
 name: BTDB
 description: "BTDB is a Public BitTorrent DHT search engine."
 language: en-us

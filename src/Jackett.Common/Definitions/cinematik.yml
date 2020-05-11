@@ -2,7 +2,7 @@
 # Update by LA5T based on the orignial 'cinematik.yml'
 # 29.07.2018 22:53 UTC+2
 #
-site: cinematik
+id: cinematik
 name: Cinematik
 description: "Tracker for non-hollywood movies."
 language: en-us

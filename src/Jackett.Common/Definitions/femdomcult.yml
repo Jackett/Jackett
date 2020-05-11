@@ -2,7 +2,7 @@
 # ajax.php API additionally needs the auth=$authkey argument
 # Because the API is e.g. missing banner images we use screen scraping instead of the generic gazelle based approach
 ---
-site: femdomcult
+id: femdomcult
 name: Femdomcult
 description: "Femdomcult is a Private Torrent Tracker for FETISH XXX"
 language: en-us

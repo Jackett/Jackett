@@ -1,5 +1,5 @@
 ---
-site: yourbittorrent
+id: yourbittorrent
 name: YourBittorrent
 description: "YourBittorrent is a Public torrent index"
 language: en-us
