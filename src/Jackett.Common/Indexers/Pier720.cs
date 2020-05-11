@@ -20,7 +20,7 @@ namespace Jackett.Common.Indexers
     public class Pier720 : BaseWebIndexer
     {
         public Pier720(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps) :
-            base(id: "720pier",
+            base(id: "pier720",
                  name: "720pier",
                  description: "720pier is a RUSSIAN Private Torrent Tracker for HD SPORTS",
                  link: "https://720pier.ru/",
