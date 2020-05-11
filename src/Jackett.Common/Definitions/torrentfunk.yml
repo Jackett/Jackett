@@ -26,7 +26,8 @@ caps:
     8: Other
     9: Other
     0: Other
-    10: Books
+    10: Other
+    11: Other
 
   modes:
     search: [q]
