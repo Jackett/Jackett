@@ -6,9 +6,9 @@ language: en-us
 type: private
 encoding: UTF-8
 links:
-  - http://xwt-classics.net/ # https is not supported, redirecting
-links:
   - https://xwt-classics.net/
+legacylinks:
+  - http://xwt-classics.net/
 
 caps:
   categorymappings:

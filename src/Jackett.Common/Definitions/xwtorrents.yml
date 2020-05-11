@@ -6,9 +6,9 @@ language: en-us
 type: private
 encoding: windows-1252
 links:
-  - http://xtremewrestlingtorrents.net/ # https is not supported, redirecting
-links:
   - https://xtremewrestlingtorrents.net/
+legacylinks:
+  - http://xtremewrestlingtorrents.net/
 
 caps:
   categorymappings:
