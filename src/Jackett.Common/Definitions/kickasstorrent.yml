@@ -11,15 +11,18 @@ links:
   - https://kat.root.yt/
   - https://kat.unblockit.me/ # searching redirects to katcr.co in browser but appears to have no issue in Jackett
   - https://kickasstorrents.unblockninja.com/
+  - https://katcr.unblocked.bar/
+  - https://katcr.proxyportal.pw/
+  - https://katcr.uk-unblock.pro/
+legacylinks:
+  - https://kickasstorrent.cr/ # possible 3rd kickasstorrent site/clone?
+  - https://katcr.to/ # possible 3rd kickasstorrent site/clone?
+  - https://kat.unblockit.one/
   - https://katcr.black-mirror.xyz/
   - https://katcr.unblocked.casa/
   - https://katcr.proxyportal.fun/
   - https://katcr.uk-unblock.xyz/
   - https://katcr.ind-unblock.xyz/
-legacylinks:
-  - https://kickasstorrent.cr/ # possible 3rd kickasstorrent site/clone?
-  - https://katcr.to/ # possible 3rd kickasstorrent site/clone?
-  - https://kat.unblockit.one/
 
 caps:
   categorymappings:
