@@ -113,9 +113,23 @@ search:
     selector: div[class="tgxtablerow"]
 
   fields:
-    title:
+    title_full:
       selector: div a[href^="/torrent/"]
       attribute: title
+    # this title text is abbreviated but may be needed when quotes in full title cause empty title #8585
+    title_text:
+      selector: div a[href^="/torrent/"]
+    # fall back title, use href and clean it up
+    title_href:
+      selector: div a[href^="/torrent/"]
+      attribute: href
+      filters:
+        - name: re_replace
+          args: ["-quot-", " "]
+        - name: re_replace
+          args: ["-", " "]
+    title:
+      text: "{{ if or .Result.title_full .Result.title_text }}{{ or .Result.title_full .Result.title_text }}{{ else }}{{ .Result.href }}{{ end }}"
     category:
       selector: div a[href^="/torrents.php?cat="]
       attribute: href
