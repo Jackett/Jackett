@@ -95,7 +95,7 @@ namespace Jackett.Common.Indexers.Meta
             }
             catch
             {
-                logger.Error(aggregateTask.Exception, "Error during request in metaindexer " + ID);
+                logger.Error(aggregateTask.Exception, "Error during request in metaindexer " + Id);
             }
 
             var unorderedResult = aggregateTask.Result.SelectMany(r => r.Releases);

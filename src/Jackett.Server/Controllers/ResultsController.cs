@@ -139,7 +139,7 @@ namespace Jackett.Server.Controllers
 
             if (!resultController.CurrentIndexer.CanHandleQuery(resultController.CurrentQuery))
             {
-                context.Result = ResultsController.GetErrorActionResult(context.RouteData, HttpStatusCode.BadRequest, 201, $"{resultController.CurrentIndexer.ID} " +
+                context.Result = ResultsController.GetErrorActionResult(context.RouteData, HttpStatusCode.BadRequest, 201, $"{resultController.CurrentIndexer.Id} " +
                     $"does not support the requested query. Please check the capabilities (t=caps) and make sure the search mode and categories are supported.");
 
             }
@@ -212,7 +212,7 @@ namespace Jackett.Server.Controllers
             var trackers = IndexerService.GetAllIndexers().ToList().Where(t => t.IsConfigured);
             if (request.Tracker != null)
             {
-                trackers = trackers.Where(t => request.Tracker.Contains(t.ID));
+                trackers = trackers.Where(t => request.Tracker.Contains(t.Id));
             }
 
             trackers = trackers.Where(t => t.CanHandleQuery(CurrentQuery));
@@ -262,7 +262,7 @@ namespace Jackett.Server.Controllers
 
                 if (indexer != null)
                 {
-                    resultIndexer.ID = indexer.ID;
+                    resultIndexer.ID = indexer.Id;
                     resultIndexer.Name = indexer.DisplayName;
                 }
                 return resultIndexer;
@@ -278,7 +278,7 @@ namespace Jackett.Server.Controllers
                 {
                     var item = AutoMapper.Mapper.Map<TrackerCacheResult>(result);
                     item.Tracker = indexer.DisplayName;
-                    item.TrackerId = indexer.ID;
+                    item.TrackerId = indexer.Id;
                     item.Peers = item.Peers - item.Seeders; // Use peers as leechers
 
                     return item;
@@ -320,7 +320,7 @@ namespace Jackett.Server.Controllers
                     new XElement("indexers",
                         from i in indexers
                         select new XElement("indexer",
-                            new XAttribute("id", i.ID),
+                            new XAttribute("id", i.Id),
                             new XAttribute("configured", i.IsConfigured),
                             new XElement("title", i.DisplayName),
                             new XElement("description", i.DisplayDescription),
@@ -403,7 +403,7 @@ namespace Jackett.Server.Controllers
                     Title = CurrentIndexer.DisplayName,
                     Description = CurrentIndexer.DisplayDescription,
                     Link = new Uri(CurrentIndexer.SiteLink),
-                    ImageUrl = new Uri(serverUrl + "logos/" + CurrentIndexer.ID + ".png"),
+                    ImageUrl = new Uri(serverUrl + "logos/" + CurrentIndexer.Id + ".png"),
                     ImageTitle = CurrentIndexer.DisplayName,
                     ImageLink = new Uri(CurrentIndexer.SiteLink),
                     ImageDescription = CurrentIndexer.DisplayName
@@ -411,7 +411,7 @@ namespace Jackett.Server.Controllers
 
                 var proxiedReleases = result.Releases.Select(r => AutoMapper.Mapper.Map<ReleaseInfo>(r)).Select(r =>
                 {
-                    r.Link = serverService.ConvertToProxyLink(r.Link, serverUrl, r.Origin.ID, "dl", r.Title);
+                    r.Link = serverService.ConvertToProxyLink(r.Link, serverUrl, r.Origin.Id, "dl", r.Title);
                     return r;
                 });
 
@@ -498,7 +498,7 @@ namespace Jackett.Server.Controllers
             var potatoReleases = result.Releases.Where(r => r.Link != null || r.MagnetUri != null).Select(r =>
             {
                 var release = AutoMapper.Mapper.Map<ReleaseInfo>(r);
-                release.Link = serverService.ConvertToProxyLink(release.Link, serverUrl, CurrentIndexer.ID, "dl", release.Title);
+                release.Link = serverService.ConvertToProxyLink(release.Link, serverUrl, CurrentIndexer.Id, "dl", release.Title);
                 // IMPORTANT: We can't use Uri.ToString(), because it generates URLs without URL encode (links with unicode
                 // characters are broken). We must use Uri.AbsoluteUri instead that handles encoding correctly
                 var item = new TorrentPotatoResponseItem()

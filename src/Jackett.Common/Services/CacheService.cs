@@ -19,12 +19,12 @@ namespace Jackett.Common.Services
         {
             lock (cache)
             {
-                var trackerCache = cache.FirstOrDefault(c => c.TrackerId == indexer.ID);
+                var trackerCache = cache.FirstOrDefault(c => c.TrackerId == indexer.Id);
                 if (trackerCache == null)
                 {
                     trackerCache = new TrackerCache
                     {
-                        TrackerId = indexer.ID,
+                        TrackerId = indexer.Id,
                         TrackerName = indexer.DisplayName
                     };
                     cache.Add(trackerCache);
@@ -58,7 +58,7 @@ namespace Jackett.Common.Services
             lock (cache)
             {
                 var newItemCount = 0;
-                var trackerCache = cache.FirstOrDefault(c => c.TrackerId == indexer.ID);
+                var trackerCache = cache.FirstOrDefault(c => c.TrackerId == indexer.Id);
                 if (trackerCache != null)
                 {
                     foreach (var release in releases)

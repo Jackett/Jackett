@@ -374,7 +374,7 @@ namespace Jackett.Common.Indexers
                     }
                     catch (Exception ex)
                     {
-                        logger.Error($"{ID}: Error while parsing row '{row.OuterHtml}': {ex.Message}");
+                        logger.Error($"{Id}: Error while parsing row '{row.OuterHtml}': {ex.Message}");
                     }
             }
             catch (Exception ex)
@@ -503,7 +503,7 @@ namespace Jackett.Common.Indexers
                     }
                     catch (Exception ex)
                     {
-                        logger.Error($"{ID}: Error while parsing row '{row.OuterHtml}': {ex.Message}");
+                        logger.Error($"{Id}: Error while parsing row '{row.OuterHtml}': {ex.Message}");
                     }
             }
             catch (Exception ex)

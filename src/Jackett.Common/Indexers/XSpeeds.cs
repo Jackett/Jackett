@@ -157,7 +157,7 @@ namespace Jackett.Common.Indexers
             }
             else
             {
-                logger.Debug(string.Format("{0}: No captcha image found", ID));
+                logger.Debug(string.Format("{0}: No captcha image found", Id));
             }
 
             return configData;

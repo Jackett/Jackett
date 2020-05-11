@@ -129,7 +129,7 @@ namespace Jackett.Common.Indexers
                         }
                         catch (Exception ex)
                         {
-                            logger.Error($"CardigannIndexer ({ID}): Error while parsing row '{row.ToHtmlPretty()}':\n\n{ex}");
+                            logger.Error($"CardigannIndexer ({Id}): Error while parsing row '{row.ToHtmlPretty()}':\n\n{ex}");
                         }
                     }
                 }
