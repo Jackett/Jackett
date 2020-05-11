@@ -26,7 +26,7 @@ namespace Jackett.Common.Indexers
     public class CardigannIndexer : BaseWebIndexer
     {
         protected IndexerDefinition Definition;
-        public override string ID => (Definition != null ? Definition.Site : GetIndexerID(GetType()));
+        public override string ID => (Definition != null ? Definition.Id : GetIndexerID(GetType()));
 
         protected WebClientStringResult landingResult;
         protected IHtmlDocument landingResultDocument;
