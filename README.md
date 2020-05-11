@@ -265,6 +265,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BroadCity
  * BroadcastTheNet (BTN)
  * BrokenStones
+ * BWTorrents
  * CCFBits
  * CGPeers
  * CHDBits
