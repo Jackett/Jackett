@@ -11,7 +11,8 @@ namespace Jackett.Common.Indexers
     public class PrivateHD : AvistazTracker
     {
         public PrivateHD(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base("PrivateHD",
+            : base(id: "privatehd",
+                   name: "PrivateHD",
                    description: "BitTorrent site for High Quality, High Definition (HD) movies and TV Shows",
                    link: "https://privatehd.to/",
                    caps: new TorznabCapabilities

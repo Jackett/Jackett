@@ -1,5 +1,5 @@
 ---
-site: btdb
+id: btdb
 name: BTDB
 description: "BTDB is a Public BitTorrent DHT search engine."
 language: en-us
@@ -8,7 +8,7 @@ encoding: UTF-8
 followredirect: true
 links:
   - https://btdb.io/
-  - https://btdb.unblockit.me/ # redirects to btdb.io in browser but appears to have no issue in Jackett
+  - https://btdb.unblockit.me/
 legacylinks:
   - https://btdb.to/
   - https://btdb.unblocked.app/

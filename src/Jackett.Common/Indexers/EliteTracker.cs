@@ -25,19 +25,20 @@ namespace Jackett.Common.Indexers
         private new ConfigurationDataEliteTracker configData => (ConfigurationDataEliteTracker)base.configData;
 
         public EliteTracker(IIndexerConfigurationService configService, WebClient webClient, Logger logger, IProtectionService protectionService)
-            : base("Elite-Tracker",
-                description: "French Torrent Tracker",
-                link: "https://elite-tracker.net/",
-                caps: new TorznabCapabilities
-                {
-                    SupportsImdbMovieSearch = true
-                    // SupportsImdbTVSearch = true (supported by the site but disabled due to #8107)
-                },
-                configService: configService,
-                logger: logger,
-                p: protectionService,
-                client: webClient,
-                configData: new ConfigurationDataEliteTracker()
+            : base(id: "elitetracker",
+                   name: "Elite-Tracker",
+                   description: "French Torrent Tracker",
+                   link: "https://elite-tracker.net/",
+                   caps: new TorznabCapabilities
+                   {
+                       SupportsImdbMovieSearch = true
+                       // SupportsImdbTVSearch = true (supported by the site but disabled due to #8107)
+                   },
+                   configService: configService,
+                   logger: logger,
+                   p: protectionService,
+                   client: webClient,
+                   configData: new ConfigurationDataEliteTracker()
                 )
         {
             Encoding = Encoding.UTF8;

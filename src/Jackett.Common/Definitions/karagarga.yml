@@ -2,7 +2,7 @@
 # Update by LA5T based on the orignial 'karagarga.yml'
 # 29.07.2018 23:15 UTC+2
 #
-site: karagarga
+id: karagarga
 name: Karagarga
 description: "Tracker for non-hollywood, rare and obscure movies, music and literature."
 language: en-us

@@ -1,14 +1,14 @@
 ---
-site: xwtorrents
+id: xwtorrents
 name: XWtorrents
 description: "XtremeWrestlingTorrents (XWT) is a Private Torrent Tracker for PROFESSIONAL WRESTLING / MMA"
 language: en-us
 type: private
 encoding: windows-1252
 links:
-  - http://xtremewrestlingtorrents.net/ # https is not supported, redirecting
-links:
   - https://xtremewrestlingtorrents.net/
+legacylinks:
+  - http://xtremewrestlingtorrents.net/
 
 caps:
   categorymappings:

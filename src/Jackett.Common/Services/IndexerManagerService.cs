@@ -82,7 +82,7 @@ namespace Jackett.Common.Services
             {
                 if (idx == null)
                     continue;
-                indexers.Add(idx.ID, idx);
+                indexers.Add(idx.Id, idx);
                 configService.Load(idx);
             }
         }
@@ -137,13 +137,13 @@ namespace Jackett.Common.Services
 
                 foreach (var indexer in cardigannIndexers)
                 {
-                    if (indexers.ContainsKey(indexer.ID))
+                    if (indexers.ContainsKey(indexer.Id))
                     {
-                        logger.Debug(string.Format("Ignoring definition ID={0}: Indexer already exists", indexer.ID));
+                        logger.Debug(string.Format("Ignoring definition ID={0}: Indexer already exists", indexer.Id));
                         continue;
                     }
 
-                    indexers.Add(indexer.ID, indexer);
+                    indexers.Add(indexer.Id, indexer);
                 }
                 logger.Info("Cardigann definitions loaded: " + string.Join(", ", indexers.Keys));
             }

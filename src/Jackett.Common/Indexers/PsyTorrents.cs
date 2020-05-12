@@ -9,10 +9,11 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class Psytorrents : GazelleTracker
+    public class PsyTorrents : GazelleTracker
     {
-        public Psytorrents(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base("Psytorrents",
+        public PsyTorrents(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+            : base(id: "psytorrents",
+                   name: "Psytorrents",
                    description: "Psytorrents (PSY) is a Private Torrent Tracker for ELECTRONIC MUSIC",
                    link: "https://psytorrents.info/",
                    caps: new TorznabCapabilities(),

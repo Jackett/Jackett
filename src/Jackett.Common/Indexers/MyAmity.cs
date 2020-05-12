@@ -17,7 +17,7 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class myAmity : BaseWebIndexer
+    public class MyAmity : BaseWebIndexer
     {
         private string LoginUrl => SiteLink + "account-login.php";
         private string BrowseUrl => SiteLink + "torrents-search.php";
@@ -28,8 +28,9 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        public myAmity(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "myAmity",
+        public MyAmity(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+            : base(id: "myamity",
+                   name: "myAmity",
                    description: "A German general tracker.",
                    link: "https://ttv2.myamity.info/",
                    caps: TorznabUtil.CreateDefaultTorznabTVCaps(),

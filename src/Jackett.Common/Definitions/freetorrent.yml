@@ -1,9 +1,9 @@
 ---
-site: freetorrent
+id: freetorrent
 name: FreeTorrent
-description: "FreeTorrent is a Private Torrent Tracker for HD MOVIES / TV"
+description: "FreeTorrent is a Semi-Private Torrent Tracker for HD MOVIES / TV"
 language: en-us
-type: private
+type: semi-private
 encoding: UTF-8
 links:
   -  https://freetorrent.tk/

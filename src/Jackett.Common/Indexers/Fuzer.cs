@@ -36,7 +36,8 @@ namespace Jackett.Common.Indexers
         }
 
         public Fuzer(IIndexerConfigurationService configService, Utils.Clients.WebClient w, Logger l, IProtectionService ps)
-            : base(name: "Fuzer",
+            : base(id: "fuzer",
+                   name: "Fuzer",
                    description: "Fuzer is a private torrent website with israeli torrents.",
                    link: "https://www.fuzer.me/",
                    caps: new TorznabCapabilities

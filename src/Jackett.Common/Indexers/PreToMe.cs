@@ -17,22 +17,23 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class Pretome : BaseWebIndexer
+    public class PreToMe : BaseWebIndexer
     {
         private string LoginUrl => SiteLink + "takelogin.php";
         private string SearchUrl => SiteLink + "browse.php";
         private new ConfigurationDataPinNumber configData => (ConfigurationDataPinNumber)base.configData;
 
-        public Pretome(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base("PreToMe",
-                description: "BitTorrent site for High Quality, High Definition (HD) movies and TV Shows",
-                link: "https://pretome.info/",
-                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                client: wc,
-                configService: configService,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataPinNumber("For best results, change the 'Torrents per page' setting to 100 in 'Profile => Torrent browse settings'."))
+        public PreToMe(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+            : base(id: "pretome",
+                   name: "PreToMe",
+                   description: "BitTorrent site for High Quality, High Definition (HD) movies and TV Shows",
+                   link: "https://pretome.info/",
+                   caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                   client: wc,
+                   configService: configService,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataPinNumber("For best results, change the 'Torrents per page' setting to 100 in 'Profile => Torrent browse settings'."))
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "en-us";

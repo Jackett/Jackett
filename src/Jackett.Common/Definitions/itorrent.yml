@@ -1,5 +1,5 @@
 ---
-site: itorrent
+id: itorrent
 name: iTorrent
 description: "iTorrent is a Public HUNGARIAN site"
 language: hu
@@ -8,10 +8,10 @@ encoding: UTF-8
 followredirect: true
 links:
   - https://itorrent.ws/
-  - https://itorrent.unblockit.me/
 legacylinks:
   - https://itorrent.unblockit.pro/
   - https://itorrent.unblockit.one/
+  - https://itorrent.unblockit.me/ # currently mirroring 01torrent.net
 
 caps:
   categories:

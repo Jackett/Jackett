@@ -31,15 +31,17 @@ namespace Jackett.Common.Indexers
         }
 
         public BakaBT(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "BakaBT",
-                description: "Anime Comunity",
-                link: "https://bakabt.me/",
-                caps: new TorznabCapabilities(TorznabCatType.TVAnime),
-                configService: configService,
-                client: wc,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataBasicLogin("To prevent 0-results-error, Enable the Show-Adult-Content option in your BakaBT account Settings."))
+            : base(id: "bakabt",
+                   name: "BakaBT",
+                   description: "Anime Comunity",
+                   link: "https://bakabt.me/",
+                   caps: new TorznabCapabilities(TorznabCatType.TVAnime),
+                   configService: configService,
+                   client: wc,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataBasicLogin("To prevent 0-results-error, Enable the " +
+                                                               "Show-Adult-Content option in your BakaBT account Settings."))
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";

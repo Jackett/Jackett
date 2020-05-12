@@ -1,7 +1,7 @@
 # looks like gazelle but ajax.php seems to be disabled:
 # https://jpopsuki.eu/ajax.php?action=browse&order_by=time&order_way=desc => Invalid
 ---
-site: jpopsuki
+id: jpopsuki
 name: JPopsuki
 description: "JPopSuki is a Private Torrent Tracker for ASIAN MUSIC"
 language: en-us

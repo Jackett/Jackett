@@ -18,7 +18,7 @@ using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class Rarbg : BaseWebIndexer
+    public class RarBG : BaseWebIndexer
     {
         // API doc: https://torrentapi.org/apidocs_v2.txt?app_id=Jackett
         private const string ApiEndpoint = "https://torrentapi.org/pubapi_v2.php";
@@ -30,8 +30,9 @@ namespace Jackett.Common.Indexers
 
         private new ConfigurationData configData => base.configData;
 
-        public Rarbg(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)
-            : base("RARBG",
+        public RarBG(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)
+            : base(id: "rarbg",
+                   name: "RARBG",
                    description: "RARBG is a Public torrent site for MOVIES / TV / GENERAL",
                    link: "https://rarbg.to/",
                    caps: new TorznabCapabilities

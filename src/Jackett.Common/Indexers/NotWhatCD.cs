@@ -9,10 +9,11 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class notwhatcd : GazelleTracker
+    public class NotWhatCD : GazelleTracker
     {
-        public notwhatcd(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base("notwhat.cd",
+        public NotWhatCD(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+            : base(id: "notwhatcd",
+                   name: "notwhat.cd",
                    description: "A music tracker",
                    link: "https://notwhat.cd/",
                    caps: new TorznabCapabilities

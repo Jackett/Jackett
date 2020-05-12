@@ -25,7 +25,8 @@ namespace Jackett.Common.Indexers
         private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
 
         public TorrentBytes(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base("TorrentBytes",
+            : base(id: "torrentbytes",
+                   name: "TorrentBytes",
                    description: "A decade of TorrentBytes",
                    link: "https://www.torrentbytes.net/",
                    caps: TorznabUtil.CreateDefaultTorznabTVCaps(),

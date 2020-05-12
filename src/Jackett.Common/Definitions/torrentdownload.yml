@@ -1,5 +1,5 @@
 ---
-site: torrentdownload
+id: torrentdownload
 name: TorrentDownload
 description: "TorrentDownload is a Public general torrent index"
 language: en-us

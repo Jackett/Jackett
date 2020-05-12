@@ -18,7 +18,7 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class Myanonamouse : BaseWebIndexer
+    public class MyAnonamouse : BaseWebIndexer
     {
         private string LoginUrl => SiteLink + "takelogin.php";
         private string SearchUrl => SiteLink + "tor/js/loadSearchJSONbasic.php";
@@ -29,16 +29,17 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        public Myanonamouse(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps)
-            : base(name: "MyAnonamouse",
-                description: "Friendliness, Warmth and Sharing",
-                link: "https://www.myanonamouse.net/",
-                configService: configService,
-                caps: new TorznabCapabilities(),
-                client: c,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataMyAnonamouse())
+        public MyAnonamouse(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps)
+            : base(id: "myanonamouse",
+                   name: "MyAnonamouse",
+                   description: "Friendliness, Warmth and Sharing",
+                   link: "https://www.myanonamouse.net/",
+                   configService: configService,
+                   caps: new TorznabCapabilities(),
+                   client: c,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataMyAnonamouse())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";

@@ -51,17 +51,17 @@ namespace Jackett.Common.Indexers
         }
 
         public Abnormal(IIndexerConfigurationService configService, Utils.Clients.WebClient w, Logger l, IProtectionService ps)
-            : base(
-                name: "Abnormal",
-                description: "General French Private Tracker",
-                link: "https://abnormal.ws/",
-                caps: new TorznabCapabilities(),
-                configService: configService,
-                client: w,
-                logger: l,
-                p: ps,
-                downloadBase: "https://abnormal.ws/torrents.php?action=download&id=",
-                configData: new ConfigurationDataAbnormal())
+            : base(id: "abnormal",
+                   name: "Abnormal",
+                   description: "General French Private Tracker",
+                   link: "https://abnormal.ws/",
+                   caps: new TorznabCapabilities(),
+                   configService: configService,
+                   client: w,
+                   logger: l,
+                   p: ps,
+                   downloadBase: "https://abnormal.ws/torrents.php?action=download&id=",
+                   configData: new ConfigurationDataAbnormal())
         {
             Language = "fr-fr";
             Encoding = Encoding.UTF8;

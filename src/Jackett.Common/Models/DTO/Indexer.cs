@@ -43,7 +43,7 @@ namespace Jackett.Common.Models.DTO
 
         public Indexer(IIndexer indexer)
         {
-            id = indexer.ID;
+            id = indexer.Id;
             name = indexer.DisplayName;
             description = indexer.DisplayDescription;
             type = indexer.Type;

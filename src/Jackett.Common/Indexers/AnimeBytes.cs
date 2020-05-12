@@ -34,23 +34,24 @@ namespace Jackett.Common.Indexers
         }
 
         public AnimeBytes(IIndexerConfigurationService configService, Utils.Clients.WebClient client, Logger l, IProtectionService ps)
-            : base(name: "AnimeBytes",
-                link: "https://animebytes.tv/",
-                description: "Powered by Tentacles",
-                configService: configService,
-                client: client,
-                caps: new TorznabCapabilities(TorznabCatType.TVAnime,
-                                              TorznabCatType.Movies,
-                                              TorznabCatType.BooksComics,
-                                              TorznabCatType.ConsolePSP,
-                                              TorznabCatType.ConsoleOther,
-                                              TorznabCatType.PCGames,
-                                              TorznabCatType.AudioMP3,
-                                              TorznabCatType.AudioLossless,
-                                              TorznabCatType.AudioOther),
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataAnimeBytes("Note: Go to AnimeBytes site and open your account settings. Go to 'Account' tab, move cursor over black part near 'Passkey' and copy its value. Your username is case sensitive."))
+            : base(id: "animebytes",
+                   name: "AnimeBytes",
+                   description: "Powered by Tentacles",
+                   link: "https://animebytes.tv/",
+                   configService: configService,
+                   client: client,
+                   caps: new TorznabCapabilities(TorznabCatType.TVAnime,
+                                                 TorznabCatType.Movies,
+                                                 TorznabCatType.BooksComics,
+                                                 TorznabCatType.ConsolePSP,
+                                                 TorznabCatType.ConsoleOther,
+                                                 TorznabCatType.PCGames,
+                                                 TorznabCatType.AudioMP3,
+                                                 TorznabCatType.AudioLossless,
+                                                 TorznabCatType.AudioOther),
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataAnimeBytes("Note: Go to AnimeBytes site and open your account settings. Go to 'Account' tab, move cursor over black part near 'Passkey' and copy its value. Your username is case sensitive."))
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";

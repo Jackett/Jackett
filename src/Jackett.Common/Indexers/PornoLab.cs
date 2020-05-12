@@ -18,7 +18,7 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class Pornolab : BaseWebIndexer
+    public class PornoLab : BaseWebIndexer
     {
         private string LoginUrl => SiteLink + "forum/login.php";
         private string SearchUrl => SiteLink + "forum/tracker.php";
@@ -33,9 +33,10 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        public Pornolab(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "Pornolab",
-                   description: "Pornolab is a Semi-Private Russian site for Adult content",
+        public PornoLab(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+            : base(id: "pornolab",
+                   name: "PornoLab",
+                   description: "PornoLab is a Semi-Private Russian site for Adult content",
                    link: "https://pornolab.net/",
                    caps: new TorznabCapabilities(),
                    configService: configService,
@@ -320,7 +321,7 @@ namespace Jackett.Common.Indexers
                     }
                     catch (Exception ex)
                     {
-                        logger.Error(string.Format("{0}: Error while parsing row '{1}':\n\n{2}", ID, Row.OuterHtml, ex));
+                        logger.Error(string.Format("{0}: Error while parsing row '{1}':\n\n{2}", Id, Row.OuterHtml, ex));
                     }
                 }
             }
@@ -344,14 +345,14 @@ namespace Jackett.Common.Indexers
             var DlUri = SearchResultDocument.QuerySelector(downloadSelector);
             if (DlUri != null)
             {
-                logger.Debug(string.Format("{0}: Download selector {1} matched:{2}", ID, downloadSelector, DlUri.OuterHtml));
+                logger.Debug(string.Format("{0}: Download selector {1} matched:{2}", Id, downloadSelector, DlUri.OuterHtml));
                 var href = DlUri.GetAttribute("href");
                 downloadlink = new Uri(SiteLink + "forum/" + href);
 
             }
             else
             {
-                logger.Error(string.Format("{0}: Download selector {1} didn't match:\n{2}", ID, downloadSelector, results));
+                logger.Error(string.Format("{0}: Download selector {1} didn't match:\n{2}", Id, downloadSelector, results));
                 throw new Exception(string.Format("Download selector {0} didn't match", downloadSelector));
             }
             return await base.Download(downloadlink, RequestType.POST, link.ToString());

@@ -31,15 +31,16 @@ namespace Jackett.Common.Indexers
         }
 
         public ShowRSS(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "ShowRSS",
-                description: "showRSS is a service that allows you to keep track of your favorite TV shows",
-                link: "https://showrss.info/",
-                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                configService: configService,
-                client: wc,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationData())
+            : base(id: "showrss",
+                   name: "ShowRSS",
+                   description: "showRSS is a service that allows you to keep track of your favorite TV shows",
+                   link: "https://showrss.info/",
+                   caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                   configService: configService,
+                   client: wc,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationData())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";

@@ -44,7 +44,8 @@ namespace Jackett.Common.Indexers
         };
 
         public EpubLibre(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base("EpubLibre",
+            : base(id: "epublibre",
+                   name: "EpubLibre",
                    description: "Más libros, Más libres",
                    link: "https://epublibre.org/",
                    caps: new TorznabCapabilities(TorznabCatType.BooksEbook),

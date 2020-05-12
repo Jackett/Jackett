@@ -33,7 +33,8 @@ namespace Jackett.Common.Indexers
         private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
 
         public SpeedCD(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base("Speed.cd",
+            : base(id: "speedcd",
+                   name: "Speed.cd",
                    description: "Your home now!",
                    link: "https://speed.cd/",
                    caps: new TorznabCapabilities

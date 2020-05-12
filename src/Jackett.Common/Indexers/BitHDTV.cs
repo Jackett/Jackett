@@ -19,7 +19,7 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class BitHdtv : BaseWebIndexer
+    public class BitHDTV : BaseWebIndexer
     {
         private string LoginUrl => SiteLink + "login.php";
         private string TakeLoginUrl => SiteLink + "takelogin.php";
@@ -27,8 +27,9 @@ namespace Jackett.Common.Indexers
 
         private new ConfigurationDataRecaptchaLogin configData => (ConfigurationDataRecaptchaLogin)base.configData;
 
-        public BitHdtv(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
-            : base("BIT-HDTV",
+        public BitHDTV(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
+            : base(id: "bithdtv",
+                   name: "BIT-HDTV",
                    description: "BIT-HDTV - Home of High Definition",
                    link: "https://www.bit-hdtv.com/",
                    caps: new TorznabCapabilities

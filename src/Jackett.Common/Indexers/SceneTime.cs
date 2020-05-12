@@ -29,7 +29,8 @@ namespace Jackett.Common.Indexers
         private new ConfigurationDataSceneTime configData => (ConfigurationDataSceneTime)base.configData;
 
         public SceneTime(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
-            : base("SceneTime",
+            : base(id: "scenetime",
+                   name: "SceneTime",
                    description: "Always on time",
                    link: "https://www.scenetime.com/",
                    caps: new TorznabCapabilities(),

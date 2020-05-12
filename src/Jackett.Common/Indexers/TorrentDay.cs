@@ -50,7 +50,8 @@ namespace Jackett.Common.Indexers
         private new ConfigurationDataRecaptchaLogin configData => (ConfigurationDataRecaptchaLogin)base.configData;
 
         public TorrentDay(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base("TorrentDay",
+            : base(id: "torrentday",
+                   name: "TorrentDay",
                    description: "TorrentDay (TD) is a Private site for TV / MOVIES / GENERAL",
                    link: "https://tday.love/",
                    caps: new TorznabCapabilities

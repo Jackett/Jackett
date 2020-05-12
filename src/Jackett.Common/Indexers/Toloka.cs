@@ -32,7 +32,8 @@ namespace Jackett.Common.Indexers
         }
 
         public Toloka(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "Toloka.to",
+            : base(id: "toloka",
+                   name: "Toloka.to",
                    description: "Toloka is a Semi-Private Ukrainian torrent site with a thriving file-sharing community",
                    link: "https://toloka.to/",
                    caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
@@ -306,7 +307,7 @@ namespace Jackett.Common.Indexers
                     }
                     catch (Exception ex)
                     {
-                        logger.Error(string.Format("{0}: Error while parsing row '{1}':\n\n{2}", ID, Row.OuterHtml, ex));
+                        logger.Error(string.Format("{0}: Error while parsing row '{1}':\n\n{2}", Id, Row.OuterHtml, ex));
                     }
                 }
             }

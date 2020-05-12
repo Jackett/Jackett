@@ -28,7 +28,8 @@ namespace Jackett.Common.Indexers
         };
 
         public HorribleSubs(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base("Horrible Subs",
+            : base(id: "horriblesubs",
+                   name: "Horrible Subs",
                    description: "HorribleSubs - So bad yet so good",
                    link: "https://horriblesubs.info/",
                    caps: new TorznabCapabilities(TorznabCatType.TVAnime),

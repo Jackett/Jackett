@@ -24,7 +24,7 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class Nordicbits : BaseCachingWebIndexer
+    public class NordicBits : BaseCachingWebIndexer
     {
         private string LoginUrl => SiteLink + "login.php";
         private string LoginCheckUrl => SiteLink + "takelogin.php";
@@ -41,20 +41,20 @@ namespace Jackett.Common.Indexers
 
         private ConfigurationDataNordicbits ConfigData => (ConfigurationDataNordicbits)configData;
 
-        public Nordicbits(IIndexerConfigurationService configService, Utils.Clients.WebClient w, Logger l, IProtectionService ps)
-            : base(
-                name: "Nordicbits",
-                description: "Nordicbits is a Danish Private site for MOVIES / TV / GENERAL",
-                link: "https://nordicb.org/",
-                caps: new TorznabCapabilities
-                {
-                    SupportsImdbMovieSearch = true
-                },
-                configService: configService,
-                client: w,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataNordicbits())
+        public NordicBits(IIndexerConfigurationService configService, Utils.Clients.WebClient w, Logger l, IProtectionService ps)
+            : base(id: "nordicbits",
+                   name: "NordicBits",
+                   description: "NordicBits is a Danish Private site for MOVIES / TV / GENERAL",
+                   link: "https://nordicb.org/",
+                   caps: new TorznabCapabilities
+                   {
+                       SupportsImdbMovieSearch = true
+                   },
+                   configService: configService,
+                   client: w,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataNordicbits())
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "da-dk";

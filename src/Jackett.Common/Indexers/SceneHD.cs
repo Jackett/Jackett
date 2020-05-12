@@ -26,7 +26,8 @@ namespace Jackett.Common.Indexers
         private new ConfigurationDataPasskey configData => (ConfigurationDataPasskey)base.configData;
 
         public SceneHD(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps)
-            : base("SceneHD",
+            : base(id: "scenehd",
+                   name: "SceneHD",
                    description: "SceneHD is Private site for HD TV / MOVIES",
                    link: "https://scenehd.org/",
                    configService: configService,

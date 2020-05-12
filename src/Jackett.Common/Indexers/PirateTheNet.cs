@@ -32,18 +32,19 @@ namespace Jackett.Common.Indexers
         }
 
         public PirateTheNet(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
-            : base(name: "PirateTheNet",
-                description: "A movie tracker",
-                link: "http://piratethenet.org/",
-                caps: new TorznabCapabilities
-                {
-                    SupportsImdbMovieSearch = true
-                },
-                configService: configService,
-                client: w,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
+            : base(id: "piratethenet",
+                   name: "PirateTheNet",
+                   description: "A movie tracker",
+                   link: "http://piratethenet.org/",
+                   caps: new TorznabCapabilities
+                   {
+                       SupportsImdbMovieSearch = true
+                   },
+                   configService: configService,
+                   client: w,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";

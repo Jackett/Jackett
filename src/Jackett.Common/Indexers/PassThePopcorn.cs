@@ -30,18 +30,19 @@ namespace Jackett.Common.Indexers
         }
 
         public PassThePopcorn(IIndexerConfigurationService configService, Utils.Clients.WebClient c, Logger l, IProtectionService ps)
-            : base(name: "PassThePopcorn",
-                description: "PassThePopcorn is a Private site for MOVIES / TV",
-                link: "https://passthepopcorn.me/",
-                caps: new TorznabCapabilities
-                {
-                    SupportsImdbMovieSearch = true
-                },
-                configService: configService,
-                client: c,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataAPILoginWithUserAndPasskeyAndFilter(@"Enter filter options below to restrict search results.
+            : base(id: "passthepopcorn",
+                   name: "PassThePopcorn",
+                   description: "PassThePopcorn is a Private site for MOVIES / TV",
+                   link: "https://passthepopcorn.me/",
+                   caps: new TorznabCapabilities
+                   {
+                       SupportsImdbMovieSearch = true
+                   },
+                   configService: configService,
+                   client: c,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataAPILoginWithUserAndPasskeyAndFilter(@"Enter filter options below to restrict search results.
                                                                         Separate options with a space if using more than one option.<br>Filter options available:
                                                                         <br><code>GoldenPopcorn</code><br><code>Scene</code><br><code>Checked</code><br><code>Free</code>"))
         {

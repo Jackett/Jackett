@@ -1,5 +1,5 @@
 ---
-site: pctorrent
+id: pctorrent
 name: PC-torrent
 description: "PC-torrent is a RUSSIAN Public Torrent Tracker for Games"
 language: ru-ru

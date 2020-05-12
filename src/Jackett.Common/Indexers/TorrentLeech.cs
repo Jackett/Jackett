@@ -31,7 +31,8 @@ namespace Jackett.Common.Indexers
         };
 
         public TorrentLeech(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)
-            : base("TorrentLeech",
+            : base(id: "torrentleech",
+                   name: "TorrentLeech",
                    description: "This is what happens when you seed",
                    link: "https://www.torrentleech.org/",
                    caps: new TorznabCapabilities

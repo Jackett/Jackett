@@ -44,15 +44,16 @@ namespace Jackett.Common.Indexers
         };
 
         public MejorTorrent(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
-            : base(name: "MejorTorrent",
-                description: "MejorTorrent - Hay veces que un torrent viene mejor! :)",
-                link: "https://www.mejortorrentt.net/",
-                caps: new TorznabCapabilities(),
-                configService: configService,
-                client: w,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationData())
+            : base(id: "mejortorrent",
+                   name: "MejorTorrent",
+                   description: "MejorTorrent - Hay veces que un torrent viene mejor! :)",
+                   link: "https://www.mejortorrentt.net/",
+                   caps: new TorznabCapabilities(),
+                   configService: configService,
+                   client: w,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationData())
         {
             Encoding = Encoding.UTF8;
             Language = "es-es";

@@ -34,15 +34,16 @@ namespace Jackett.Common.Indexers
         }
 
         public ImmortalSeed(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "ImmortalSeed",
-                description: "ImmortalSeed (iS) is a Private Torrent Tracker for MOVIES / TV / GENERAL",
-                link: "https://immortalseed.me/",
-                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                configService: configService,
-                client: wc,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataBasicLogin())
+            : base(id: "immortalseed",
+                   name: "ImmortalSeed",
+                   description: "ImmortalSeed (iS) is a Private Torrent Tracker for MOVIES / TV / GENERAL",
+                   link: "https://immortalseed.me/",
+                   caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                   configService: configService,
+                   client: wc,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";

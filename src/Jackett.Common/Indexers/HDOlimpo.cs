@@ -34,15 +34,16 @@ namespace Jackett.Common.Indexers
         }
 
         public HDOlimpo(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
-            : base(name: "HD-Olimpo",
-                description: "HD-Olimpo is a SPANISH site for HD content",
-                link: "https://hdolimpo.co/",
-                caps: new TorznabCapabilities(),
-                configService: configService,
-                client: w,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataBasicLoginWithEmail())
+            : base(id: "hdolimpo",
+                   name: "HD-Olimpo",
+                   description: "HD-Olimpo is a SPANISH site for HD content",
+                   link: "https://hdolimpo.co/",
+                   caps: new TorznabCapabilities(),
+                   configService: configService,
+                   client: w,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataBasicLoginWithEmail())
         {
             Encoding = Encoding.UTF8;
             Language = "es-es";

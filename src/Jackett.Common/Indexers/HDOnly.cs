@@ -13,7 +13,8 @@ namespace Jackett.Common.Indexers
     public class HDOnly : GazelleTracker
     {
         public HDOnly(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base("HD-Only",
+            : base(id: "hdonly",
+                   name: "HD-Only",
                    description: "HD-Only (HD-O) is a FRENCH Private Torrent Tracker for HD MOVIES / TV",
                    link: "https://hd-only.org/",
                    caps: new TorznabCapabilities(),

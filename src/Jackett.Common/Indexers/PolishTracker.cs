@@ -29,7 +29,8 @@ namespace Jackett.Common.Indexers
         private new ConfigurationDataBasicLoginWithEmail configData => (ConfigurationDataBasicLoginWithEmail)base.configData;
 
         public PolishTracker(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base("PolishTracker",
+            : base(id: "polishtracker",
+                   name: "PolishTracker",
                    description: "Polish Tracker is a POLISH Private site for 0DAY / MOVIES / GENERAL",
                    link: "https://pte.nu/",
                    caps: new TorznabCapabilities

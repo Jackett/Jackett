@@ -45,15 +45,16 @@ namespace Jackett.Common.Indexers
         }
 
         public DivxTotal(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
-            : base(name: "DivxTotal",
-                description: "DivxTotal is a SPANISH site for Movies, TV series and Software",
-                link: "https://www.divxtotal.la/",
-                caps: new TorznabCapabilities(),
-                configService: configService,
-                client: w,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationData())
+            : base(id: "divxtotal",
+                   name: "DivxTotal",
+                   description: "DivxTotal is a SPANISH site for Movies, TV series and Software",
+                   link: "https://www.divxtotal.la/",
+                   caps: new TorznabCapabilities(),
+                   configService: configService,
+                   client: w,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationData())
         {
             Encoding = Encoding.UTF8;
             Language = "es-es";
@@ -128,7 +129,7 @@ namespace Jackett.Common.Indexers
                         }
                         catch (Exception ex)
                         {
-                            logger.Error($"CardigannIndexer ({ID}): Error while parsing row '{row.ToHtmlPretty()}':\n\n{ex}");
+                            logger.Error($"CardigannIndexer ({Id}): Error while parsing row '{row.ToHtmlPretty()}':\n\n{ex}");
                         }
                     }
                 }

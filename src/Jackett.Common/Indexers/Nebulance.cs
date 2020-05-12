@@ -17,7 +17,7 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class TransmitheNet : BaseWebIndexer
+    public class Nebulance : BaseWebIndexer
     {
         private string LoginUrl => SiteLink + "login.php";
         private string SearchUrl => SiteLink + "torrents.php?action=basic&order_by=time&order_way=desc&search_type=0&taglist=&tags_type=0";
@@ -28,16 +28,17 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        public TransmitheNet(IIndexerConfigurationService configService, Utils.Clients.WebClient c, Logger l, IProtectionService ps)
-            : base(name: "Nebulance",
-                description: " At Nebulance we will change the way you think about TV",
-                link: "https://nebulance.io/",
-                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                configService: configService,
-                client: c,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataBasicLogin("For best results, change the 'Torrents per page' setting to 100 in your profile on the NBL webpage."))
+        public Nebulance(IIndexerConfigurationService configService, Utils.Clients.WebClient c, Logger l, IProtectionService ps)
+            : base(id: "transmithenet",
+                   name: "Nebulance",
+                   description: "At Nebulance we will change the way you think about TV",
+                   link: "https://nebulance.io/",
+                   caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                   configService: configService,
+                   client: c,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataBasicLogin("For best results, change the 'Torrents per page' setting to 100 in your profile on the NBL webpage."))
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";

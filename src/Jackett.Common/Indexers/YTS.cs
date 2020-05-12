@@ -17,7 +17,7 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class Yts : BaseWebIndexer
+    public class YTS : BaseWebIndexer
     {
         public override string[] LegacySiteLinks { get; protected set; } = new string[] {
             "https://yts.ag/",
@@ -33,19 +33,20 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        public Yts(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "YTS",
-                description: "YTS is a Public torrent site specialising in HD movies of small size",
-                link: "https://yts.mx/",
-                caps: new TorznabCapabilities
-                {
-                    SupportsImdbMovieSearch = true
-                },
-                configService: configService,
-                client: wc,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationData())
+        public YTS(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+            : base(id: "yts",
+                   name: "YTS",
+                   description: "YTS is a Public torrent site specialising in HD movies of small size",
+                   link: "https://yts.mx/",
+                   caps: new TorznabCapabilities
+                   {
+                       SupportsImdbMovieSearch = true
+                   },
+                   configService: configService,
+                   client: wc,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationData())
         {
             Encoding = Encoding.GetEncoding("windows-1252");
             Language = "en-us";

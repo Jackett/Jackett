@@ -1,6 +1,6 @@
 # Pornbay is based on Gazelle, but I used the Empornium definition as a base.
 ---
-site: pornbay
+id: pornbay
 name: Pornbay
 description: "Pornbay is a Private Torrent Tracker for XXX"
 language: en-us

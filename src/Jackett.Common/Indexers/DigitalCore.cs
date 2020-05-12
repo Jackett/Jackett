@@ -18,7 +18,7 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class Superbits : BaseWebIndexer
+    public class DigitalCore : BaseWebIndexer
     {
         private string SearchUrl => SiteLink + "api/v1/torrents";
         private string LoginUrl => SiteLink + "api/v1/auth";
@@ -29,48 +29,60 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        public Superbits(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
-            : base(name: "Superbits",
-                description: "SuperBits is a SWEDISH Private Torrent Tracker for MOVIES / TV / GENERAL",
-                link: "https://superbits.org/",
-                caps: new TorznabCapabilities
-                {
-                    SupportsImdbMovieSearch = true
-                },
-                configService: configService,
-                client: w,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataCookie())
+        public DigitalCore(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
+            : base(id: "digitalcore",
+                   name: "DigitalCore",
+                   description: "DigitalCore is a Private Torrent Tracker for MOVIES / TV / GENERAL",
+                   link: "https://digitalcore.club/",
+                   caps: new TorznabCapabilities
+                   {
+                       SupportsImdbMovieSearch = true
+                   },
+                   configService: configService,
+                   client: w,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataCookie())
         {
             Encoding = Encoding.UTF8;
-            Language = "sv-sw";
+            Language = "en-us";
             Type = "private";
 
-            AddCategoryMapping(1, TorznabCatType.MoviesDVD, "DVD-R Swesub");
-            AddCategoryMapping(2, TorznabCatType.TV, "DVD-R TV");
-            AddCategoryMapping(3, TorznabCatType.BooksEbook, "eBok");
-            AddCategoryMapping(4, TorznabCatType.MoviesHD, "Film 1080");
-            AddCategoryMapping(5, TorznabCatType.Movies3D, "Film 3D");
-            AddCategoryMapping(6, TorznabCatType.MoviesHD, "Film 720");
-            AddCategoryMapping(7, TorznabCatType.MoviesBluRay, "Film Bluray");
-            AddCategoryMapping(8, TorznabCatType.TV, "Svensk TV");
-            AddCategoryMapping(9, TorznabCatType.AudioAudiobook, "Ljudböcker");
-            AddCategoryMapping(10, TorznabCatType.AudioVideo, "Musikvideos");
-            AddCategoryMapping(11, TorznabCatType.BooksMagazines, "E-tidningar");
-            AddCategoryMapping(12, TorznabCatType.Audio, "Musik");
-            AddCategoryMapping(13, TorznabCatType.Other, "Omslag");
-            AddCategoryMapping(14, TorznabCatType.Other, "Övrigt");
-            AddCategoryMapping(15, TorznabCatType.PCGames, "PC-Spel");
-            AddCategoryMapping(16, TorznabCatType.PC0day, "Program");
-            AddCategoryMapping(17, TorznabCatType.ConsolePS3, "PS3");
-            AddCategoryMapping(18, TorznabCatType.TV, "TV");
-            AddCategoryMapping(19, TorznabCatType.ConsoleWii, "Wii");
-            AddCategoryMapping(20, TorznabCatType.ConsoleXbox, "Xbox");
-            AddCategoryMapping(21, TorznabCatType.MoviesOther, "Xvid");
-            AddCategoryMapping(22, TorznabCatType.XXX, "XXX");
-            AddCategoryMapping(24, TorznabCatType.MoviesUHD, "Film 4K");
-            AddCategoryMapping(26, TorznabCatType.TV, "TV DK");
+            AddCategoryMapping(1, TorznabCatType.MoviesDVD, "Movies/DVDR");
+            AddCategoryMapping(2, TorznabCatType.MoviesSD, "Movies/SD");
+            AddCategoryMapping(3, TorznabCatType.MoviesBluRay, "Movies/BluRay");
+            AddCategoryMapping(4, TorznabCatType.MoviesUHD, "Movies/4K");
+            AddCategoryMapping(5, TorznabCatType.MoviesHD, "Movies/720p");
+            AddCategoryMapping(6, TorznabCatType.MoviesHD, "Movies/1080p");
+            AddCategoryMapping(7, TorznabCatType.MoviesHD, "Movies/PACKS");
+
+            AddCategoryMapping(8, TorznabCatType.TVHD, "Tv/720p");
+            AddCategoryMapping(9, TorznabCatType.TVHD, "Tv/1080p");
+            AddCategoryMapping(10, TorznabCatType.TVSD, "Tv/SD");
+            AddCategoryMapping(11, TorznabCatType.TVSD, "Tv/DVDR");
+            AddCategoryMapping(12, TorznabCatType.TVHD, "Tv/PACKS");
+            AddCategoryMapping(13, TorznabCatType.TVUHD, "Tv/4K");
+            AddCategoryMapping(14, TorznabCatType.TVHD, "Tv/BluRay");
+
+            AddCategoryMapping(17, TorznabCatType.Other, "Unknown");
+            AddCategoryMapping(18, TorznabCatType.PC0day, "Apps/0day");
+            AddCategoryMapping(20, TorznabCatType.PCISO, "Apps/PC");
+            AddCategoryMapping(21, TorznabCatType.PCMac, "Apps/Mac");
+
+            AddCategoryMapping(22, TorznabCatType.AudioMP3, "Music/MP3");
+            AddCategoryMapping(23, TorznabCatType.AudioLossless, "Music/FLAC");
+            AddCategoryMapping(24, TorznabCatType.Audio, "Music/MTV");
+
+            AddCategoryMapping(25, TorznabCatType.PCGames, "Games/PC");
+            AddCategoryMapping(26, TorznabCatType.Console, "Games/NSW");
+            AddCategoryMapping(27, TorznabCatType.PCMac, "Games/Mac");
+
+            AddCategoryMapping(28, TorznabCatType.Books, "Ebooks");
+
+            AddCategoryMapping(30, TorznabCatType.XXX, "XXX/SD");
+            AddCategoryMapping(31, TorznabCatType.XXX, "XXX/HD");
+            AddCategoryMapping(32, TorznabCatType.XXX, "XXX/4K");
+
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -100,8 +112,6 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            // And this was option one from
-            // https://github.com/Jackett/Jackett/pull/7166#discussion_r376817517
             var releases = new List<ReleaseInfo>();
             var queryCollection = new NameValueCollection();
             var searchString = query.GetQueryString();
@@ -120,8 +130,6 @@ namespace Jackett.Common.Indexers
             queryCollection.Add("sort", "d");
             queryCollection.Add("section", "all");
             queryCollection.Add("stereoscopic", "false");
-            queryCollection.Add("sweaudio", "false");
-            queryCollection.Add("swesub", "false");
             queryCollection.Add("watchview", "false");
 
             searchUrl += "?" + queryCollection.GetQueryString();
@@ -160,8 +168,12 @@ namespace Jackett.Common.Indexers
                         release.DownloadVolumeFactor = 1;
                     release.UploadVolumeFactor = 1;
 
-                    if (!string.IsNullOrWhiteSpace(row.customcover.ToString()))
-                        release.BannerUrl = new Uri(SiteLink + row.customcover);
+
+                    if (!string.IsNullOrWhiteSpace(row.firstpic.ToString()))
+                    {
+                        release.BannerUrl = (row.firstpic);
+                    }
+
 
                     if (row.imdbid2 != null && row.imdbid2.ToString().StartsWith("tt"))
                     {
@@ -172,7 +184,7 @@ namespace Jackett.Common.Indexers
                         descriptions.Add("Tagline: " + row.tagline);
                         descriptions.Add("Cast: " + row.cast);
                         descriptions.Add("Rating: " + row.rating);
-                        descriptions.Add("Plot: " + row.plot);
+                        //descriptions.Add("Plot: " + row.plot);
 
                         release.BannerUrl = new Uri(SiteLink + "img/imdb/" + row.imdbid2 + ".jpg");
                     }
@@ -183,23 +195,21 @@ namespace Jackett.Common.Indexers
                         tags.Add("Pack");
                     if ((int)row.reqid != 0)
                         tags.Add("Request");
-                    if ((int)row.sweaudio != 0)
-                        tags.Add("Swedish audio");
-                    if ((int)row.swesub != 0)
-                        tags.Add("Swedish subtitles");
 
                     if (tags.Count > 0)
                         descriptions.Add("Tags: " + string.Join(", ", tags));
 
                     var preDate = row.preDate.ToString();
                     if (!string.IsNullOrWhiteSpace(preDate) && preDate != "1970-01-01 01:00:00")
-                        descriptions.Add("PRE: " + preDate);
-
+                    {
+                        descriptions.Add("Pre: " + preDate);
+                    }
                     descriptions.Add("Section: " + row.section);
 
                     release.Description = string.Join("<br>\n", descriptions);
 
                     releases.Add(release);
+
                 }
             }
             catch (Exception ex)
