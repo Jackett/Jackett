@@ -66,9 +66,11 @@ namespace Jackett.Common.Services
                 var oldPath = configService.GetIndexerConfigFilePath(oldId);
                 if (File.Exists(oldPath))
                 {
-                    // if the old configuration exists, we rename if to be used by the renamed indexer
+                    // if the old configuration exists, we rename it to be used by the renamed indexer
                     var newPath = configService.GetIndexerConfigFilePath(renamedIndexers[oldId]);
                     File.Move(oldPath, newPath);
+                    if (File.Exists(oldPath + ".bak"))
+                        File.Move(oldPath + ".bak", newPath + ".bak");
                     logger.Info($"Configuration renamed: {oldPath} => {newPath}");
                 }
             }
