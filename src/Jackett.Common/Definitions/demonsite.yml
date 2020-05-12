@@ -91,7 +91,7 @@ login:
 
 search:
   paths:
-  # https://demon-site.eu/browse.php?c25=1&c26=1&search=&incldead=1
+    # https://demon-site.eu/browse.php?c25=1&c26=1&search=&incldead=1
     - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"

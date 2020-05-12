@@ -33,7 +33,7 @@ settings:
     label: Category Filter
     default: "0"
     options:
-      "0" : "All"
+      "0": "All"
       "1": "Anime"
       "2": "Software"
       "3": "Games"

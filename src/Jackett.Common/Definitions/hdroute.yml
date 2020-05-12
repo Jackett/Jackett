@@ -39,7 +39,7 @@ login:
 
 search:
   paths:
-  # http://hdroute.org/browse.php?s=&dp=0&add=0&action=s&c1=1&c3=1&or=1&imdb=
+    # http://hdroute.org/browse.php?s=&dp=0&add=0&action=s&c1=1&c3=1&or=1&imdb=
     - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"

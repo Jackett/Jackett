@@ -56,10 +56,10 @@ login:
 
 search:
   paths:
-  # https://theaudioscene.net/torrentsettings/torrentbrowse.php?SrcCat=0&SrcDat=0&SrcEnd=0&search=
+    # https://theaudioscene.net/torrentsettings/torrentbrowse.php?SrcCat=0&SrcDat=0&SrcEnd=0&search=
     - path: torrentsettings/torrentbrowse.php
   inputs:
-  # catalog 0 all
+    # catalog 0 all
     SrcCat: 0
     SrcDat: "{{ .Config.sort }}"
     # 0 new&old 1 new only 2 old only

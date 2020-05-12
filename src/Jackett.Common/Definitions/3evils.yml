@@ -116,7 +116,7 @@ search:
           #  onmouseover="Tip('<b>blahblah /><img src=\'img.php/tvmaze/80.jpg\' blahblah />');"
           # <img src=\'./pic/noposter.png\'
         - name: regexp
-          args: "src=\\\\\'(.+?)\\\\\'"
+          args: "src=\\\\'(.+?)\\\\'"
         - name: replace
           args: ["./pic/noposter.png", ""]
     size:

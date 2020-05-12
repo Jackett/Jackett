@@ -248,8 +248,8 @@ download:
 
 search:
   paths:
-  # https://galeriens.eu/TTV3/Torrents/Recherche?recherche=&type=tout&endroit=nomtorrent&langue=0&tl=peuimporte
-  # categories for searching are unsupported
+    # https://galeriens.eu/TTV3/Torrents/Recherche?recherche=&type=tout&endroit=nomtorrent&langue=0&tl=peuimporte
+    # categories for searching are unsupported
     - path: TTV3/Torrents/Recherche
   inputs:
     recherche: "{{ .Keywords }}"

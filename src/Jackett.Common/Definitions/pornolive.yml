@@ -10,7 +10,7 @@ links:
 
 caps:
   categorymappings:
-  - {id: XXX, cat: XXX, desc: "XXX"}
+    - {id: XXX, cat: XXX, desc: "XXX"}
 
   modes:
     search: [q]

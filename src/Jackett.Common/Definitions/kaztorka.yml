@@ -10,7 +10,7 @@ links:
 
 caps:
   categorymappings:
-  # films
+    # films
     - {id: 13, cat: Movies, desc: "Фильмы"}
     - {id: 68, cat: Movies, desc: "Новинки кинопроката"}
     - {id: 670, cat: Movies, desc: "Авторские переводы"}

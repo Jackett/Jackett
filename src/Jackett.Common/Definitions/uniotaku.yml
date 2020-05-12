@@ -75,18 +75,18 @@ search:
       selector: td:nth-child(2)
       attribute: src
       case:
-       "img[src$=\"/anime.png\"]": 28
-       "img[src$=\"/dorama.png\"]": 50
-       "img[src$=\"/manga.png\"]": 49
-       "img[src$=\"/ova.png\"]": 48
-       "img[src$=\"/filme.png\"]": 47
-       "img[src$=\"/ost.png\"]": 51
-       "img[src$=\"/completo.png\"]": 52
-       "img[src$=\"/completo_m.png\"]": 53
-       "img[src$=\"/completo_m.png\"]": 54
-       "img[src$=\"/hentai.png\"]": 55
-       "img[src$=\"/hdojinshi.png\"]": 56
-       "img[src$=\"/tokusatsu.png\"]": 57
+        "img[src$=\"/anime.png\"]": 28
+        "img[src$=\"/dorama.png\"]": 50
+        "img[src$=\"/manga.png\"]": 49
+        "img[src$=\"/ova.png\"]": 48
+        "img[src$=\"/filme.png\"]": 47
+        "img[src$=\"/ost.png\"]": 51
+        "img[src$=\"/completo.png\"]": 52
+        "img[src$=\"/completo_m.png\"]": 53
+        "img[src$=\"/completo_m.png\"]": 54
+        "img[src$=\"/hentai.png\"]": 55
+        "img[src$=\"/hdojinshi.png\"]": 56
+        "img[src$=\"/tokusatsu.png\"]": 57
     date:
       text: now
     seeders:

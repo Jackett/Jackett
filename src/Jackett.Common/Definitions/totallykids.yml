@@ -71,7 +71,7 @@ login:
 
 search:
   paths:
-  # http://www.totallykids.tv/index.php?page=torrents&search=scooby&category=1;2;5;6;4;7;8;15;24;16;23&options=0&active=0
+    # http://www.totallykids.tv/index.php?page=torrents&search=scooby&category=1;2;5;6;4;7;8;15;24;16;23&options=0&active=0
     - path: index.php
   inputs:
     page: torrents
@@ -124,14 +124,14 @@ search:
       selector: td:nth-child(10)
     # two flavours of dates
     date:
-        # Yesterday at 10:03:30 PM
+      # Yesterday at 10:03:30 PM
       selector: td:nth-child(5):contains("day")
       optional: true
       filters:
         - name: re_replace
           args: ["[ ]at|[\\s+]|[//\xa0],\\/g", " "]
     date:
-        # February 09, 2019, 06:35:08 AM
+      # February 09, 2019, 06:35:08 AM
       selector: td:nth-child(5):not(:contains("day"))
       optional: true
       filters:
