@@ -14,11 +14,6 @@ links:
   - https://www.limetor.pro/
   - https://limetorrents.unblockit.me/
   - https://limetorrents.unblockninja.com/
-  - https://limetorrents.black-mirror.xyz/
-  - https://limetorrents.unblocked.casa/
-  - https://limetorrents.proxyportal.fun/
-  - https://limetorrents.uk-unblock.xyz/
-  - https://limetorrents.ind-unblock.xyz/
 legacylinks:
   - https://www.limetorrents.io/
   - https://www.limetorrents.cc/
@@ -26,6 +21,14 @@ legacylinks:
   - https://www.limetorrents.zone/ # redirects to .info
   - https://limetorrents.unblockit.pro/
   - https://limetorrents.unblockit.one/
+  - https://limetorrents.black-mirror.xyz/
+  - https://limetorrents.unblocked.casa/
+  - https://limetorrents.proxyportal.fun/
+  - https://limetorrents.uk-unblock.xyz/
+  - https://limetorrents.ind-unblock.xyz/
+  - https://limetorrents.unblocked.bar/ # search fails in Jackett and browser
+  - https://limetorrents.proxyportal.pw/ # search fails in Jackett and browser
+  - https://limetorrents.uk-unblock.pro/ # search fails in Jackett and browser
 
 caps:
   categories:

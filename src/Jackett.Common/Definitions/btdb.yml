@@ -15,11 +15,14 @@ legacylinks:
   - https://btdb.eu/
   - https://btdb.unblockit.pro/
   - https://btdb.unblockit.one/
-  - https://btdb.black-mirror.xyz/ # removed from black-mirror.xyz
-  - https://btdb.unblocked.casa/ # removed from black-mirror.xyz
-  - https://btdb.proxyportal.fun/ # removed from black-mirror.xyz
-  - https://btdb.uk-unblock.xyz/ # removed from black-mirror.xyz
-  - https://btdb.ind-unblock.xyz/ # removed from black-mirror.xyz
+  - https://btdb.black-mirror.xyz/
+  - https://btdb.unblocked.casa/
+  - https://btdb.proxyportal.fun/
+  - https://btdb.uk-unblock.xyz/
+  - https://btdb.ind-unblock.xyz/
+  - https://btdb.unblocked.bar/ # search broken by Cloudflare DDoS protection in browser and Jackett
+  - https://btdb.proxyportal.pw/ # search broken by Cloudflare DDoS protection in browser and Jackett
+  - https://btdb.uk-unblock.pro/ # search broken by Cloudflare DDoS protection in browser and Jackett
 
 caps:
   categorymappings:
