@@ -119,7 +119,7 @@ search:
       attribute: onmouseover
       filters:
         - name: regexp
-          args: "src=\\\\\'(.+?)\\\\\'"
+          args: "src=\\\\'(.+?)\\\\'"
     imdb:
       optional: true
       selector: a[href*="imdb.com/title/tt"]

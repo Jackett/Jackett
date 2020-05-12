@@ -177,7 +177,7 @@ settings:
 
 search:
   paths:
-  #http://parnuxi.com/search.php?tracker_search=torrent&keywords=2020&terms=all&fp=1&author=&sc=1&sf=titleonly&sk=t&sd=d&sr=topics&st=0&ch=300&t=0&submit=%D0%9F%D0%BE%D0%B8%D1%81%D0%BA
+    #http://parnuxi.com/search.php?tracker_search=torrent&keywords=2020&terms=all&fp=1&author=&sc=1&sf=titleonly&sk=t&sd=d&sr=topics&st=0&ch=300&t=0&submit=%D0%9F%D0%BE%D0%B8%D1%81%D0%BA
     - path: search.php
   inputs:
     tracker_search: torrent
@@ -247,4 +247,3 @@ search:
     uploadvolumefactor:
       text: 1
 # phpBB
-

@@ -32,7 +32,7 @@ settings:
     label: Download link
     default: "magnet:?xt="
     options:
-      "/download/" : ".torrent"
+      "/download/": ".torrent"
       "magnet:?xt=": "magnet"
 
 download:

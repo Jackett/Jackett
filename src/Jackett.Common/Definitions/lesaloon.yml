@@ -83,7 +83,7 @@ caps:
     music-search: [q]
 
 login:
-# https://lesaloonv2-0.net/yupy_login.php
+  # https://lesaloonv2-0.net/yupy_login.php
   path: yupy_login.php
   method: form
   form: form[action^="index.php?page=login"]
@@ -145,7 +145,7 @@ search:
         - name: regexp
           args: "src=(.*?) "
     date:
-        # 06/02/2019 18:19:28
+      # 06/02/2019 18:19:28
       selector: td:nth-child(7)
       filters:
         - name: dateparse

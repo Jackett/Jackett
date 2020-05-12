@@ -33,6 +33,7 @@ caps:
     "Литература": Books
     "Игры": PC/Games
     "Фильмы": Movies
+    "Фильмы Видео": Movies
     "Фильмы Сериалы": Movies
     "Фильмы Скоро на трекере": Movies
     "Видео": Movies
@@ -88,6 +89,9 @@ search:
       attribute: href
     size:
       selector: td.td-size, li.meta-size
+      filters:
+        - name: replace
+          args: ["-", "0 B"]
     date:
       selector: td:nth-child(5), li.meta-date
       filters:

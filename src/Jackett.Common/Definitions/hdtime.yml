@@ -158,4 +158,3 @@ search:
       selector: td:nth-child(2)
       remove: a, img
 # customised NexusPHP Standard v0.1
-

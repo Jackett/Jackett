@@ -203,7 +203,7 @@ search:
       optional: true
       attribute: href
     imdb:
-    # a href="http://tracker.btnext.com/data/torrents/imdb/tt0249677.jpg"
+      # a href="http://tracker.btnext.com/data/torrents/imdb/tt0249677.jpg"
       optional: true
       selector: a[href*="/imdb/tt"]
       attribute: href

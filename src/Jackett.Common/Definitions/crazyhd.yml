@@ -154,8 +154,8 @@ search:
     title:
       selector: div.list-name a.tlink
       filters:
-         - name: re_replace
-           args: [" [\\(\\=\\!]+(50|100).*?[\\!\\=\\)]+", ""]
+        - name: re_replace
+          args: [" [\\(\\=\\!]+(50|100).*?[\\!\\=\\)]+", ""]
     details:
       selector: div.list-name a.tlink
       attribute: href

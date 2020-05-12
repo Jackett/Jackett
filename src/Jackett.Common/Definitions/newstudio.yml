@@ -63,11 +63,11 @@ search:
         - name: re_replace
           args: ["\\bS(\\d+)E(\\d{1})\\b", "S$1E0$2"]
         - name: replace
-          args: ["WEBDLRip","WEBDL"]
+          args: ["WEBDLRip", "WEBDL"]
         - name: replace
-          args: ["HDTVRip","HDTV"]
+          args: ["HDTVRip", "HDTV"]
         - name: replace
-          args: ["E -","E01-99 -"]
+          args: ["E -", "E01-99 -"]
     details:
       selector: a[href^="./viewtopic.php?t="]
       attribute: href
@@ -91,12 +91,12 @@ search:
       # 14-Ноя-17, 06:11
       selector: td:nth-child(6)
       filters:
-          # replace white spaces
+        # replace white spaces
         - name: re_replace
           args: ["(Сегодня|Вчера|\\s|,|-)+", " "]
         - name: re_replace
           args: ["(Today|Yesterday|\\s|,|-)+", " "]
-          # replace month abbreviations
+        # replace month abbreviations
         - name: replace
           args: ["Янв", "Jan"]
         - name: replace

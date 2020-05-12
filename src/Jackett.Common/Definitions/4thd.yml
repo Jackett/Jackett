@@ -79,9 +79,9 @@ login:
 
 search:
   paths:
+    # https://4thd.xyz/torrents.php?order_by=time&order_way=desc&filter_freeleech=1&title=twilight+zone&search_type=1&taglist=&tags_type=0
     - path: torrents.php
   inputs:
-  # https://4thd.xyz/torrents.php?order_by=time&order_way=desc&filter_freeleech=1&title=twilight+zone&search_type=1&taglist=&tags_type=0
     $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
     order_by: "{{ .Config.sort }}"
     order_way: "{{ .Config.type }}"

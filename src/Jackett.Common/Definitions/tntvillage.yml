@@ -12,36 +12,36 @@ legacylinks:
 
 caps:
   categorymappings:
-   - {id: 4, cat: Movies, desc: "Film"}
-   - {id: 2, cat: Audio, desc: "Musica"}
-   - {id: 1, cat: TV, desc: "Film TV e programmi"}
-   - {id: 14, cat: TV/Documentary, desc: "Documentari"}
-   - {id: 13, cat: Other, desc: "Students Releases"}
-   - {id: 3, cat: Books/Ebook, desc: "E Books"}
-   - {id: 6, cat: PC, desc: "Linux"}
-   - {id: 7, cat: TV/Anime, desc: "Anime"}
-   - {id: 8, cat: TV/Anime, desc: "Cartoni"}
-   - {id: 9, cat: PC/Mac, desc: "Macintosh"}
-   - {id: 10, cat: PC/0day, desc: "Windows Software"}
-   - {id: 11, cat: PC/Games, desc: "Pc Game"}
-   - {id: 12, cat: Console/PSP, desc: "Playstation"}
-   - {id: 21, cat: Audio/Video, desc: "Video Musicali"}
-   - {id: 22, cat: TV/Sport, desc: "Sport"}
-   - {id: 23, cat: TV, desc: "Teatro"}
-   - {id: 24, cat: TV/Sport, desc: "Wrestling"}
-   - {id: 25, cat: TV, desc: "Varie"}
-   - {id: 26, cat: Console/Xbox, desc: "Xbox"}
-   - {id: 27, cat: Other, desc: "Immagini sfondi"}
-   - {id: 28, cat: Console, desc: "Altri Giochi"}
-   - {id: 29, cat: TV, desc: "Serie TV"}
-   - {id: 30, cat: Books/Comics, desc: "Fumetteria"}
-   - {id: 31, cat: Other, desc: "Trash"}
-   - {id: 32, cat: Console/NDS, desc: "Nintendo"}
-   - {id: 34, cat: Audio/Audiobook, desc: "A Book"}
-   - {id: 35, cat: Audio, desc: "Podcast"}
-   - {id: 36, cat: Books/Magazines, desc: "Edicola"}
-   - {id: 37, cat: PC/Phone-Other, desc: "Mobile"}
-   - {id: 0, cat: Other, desc: "UnKnown"}
+    - {id: 4, cat: Movies, desc: "Film"}
+    - {id: 2, cat: Audio, desc: "Musica"}
+    - {id: 1, cat: TV, desc: "Film TV e programmi"}
+    - {id: 14, cat: TV/Documentary, desc: "Documentari"}
+    - {id: 13, cat: Other, desc: "Students Releases"}
+    - {id: 3, cat: Books/Ebook, desc: "E Books"}
+    - {id: 6, cat: PC, desc: "Linux"}
+    - {id: 7, cat: TV/Anime, desc: "Anime"}
+    - {id: 8, cat: TV/Anime, desc: "Cartoni"}
+    - {id: 9, cat: PC/Mac, desc: "Macintosh"}
+    - {id: 10, cat: PC/0day, desc: "Windows Software"}
+    - {id: 11, cat: PC/Games, desc: "Pc Game"}
+    - {id: 12, cat: Console/PSP, desc: "Playstation"}
+    - {id: 21, cat: Audio/Video, desc: "Video Musicali"}
+    - {id: 22, cat: TV/Sport, desc: "Sport"}
+    - {id: 23, cat: TV, desc: "Teatro"}
+    - {id: 24, cat: TV/Sport, desc: "Wrestling"}
+    - {id: 25, cat: TV, desc: "Varie"}
+    - {id: 26, cat: Console/Xbox, desc: "Xbox"}
+    - {id: 27, cat: Other, desc: "Immagini sfondi"}
+    - {id: 28, cat: Console, desc: "Altri Giochi"}
+    - {id: 29, cat: TV, desc: "Serie TV"}
+    - {id: 30, cat: Books/Comics, desc: "Fumetteria"}
+    - {id: 31, cat: Other, desc: "Trash"}
+    - {id: 32, cat: Console/NDS, desc: "Nintendo"}
+    - {id: 34, cat: Audio/Audiobook, desc: "A Book"}
+    - {id: 35, cat: Audio, desc: "Podcast"}
+    - {id: 36, cat: Books/Magazines, desc: "Edicola"}
+    - {id: 37, cat: PC/Phone-Other, desc: "Mobile"}
+    - {id: 0, cat: Other, desc: "UnKnown"}
 
   modes:
     search: [q]

@@ -106,7 +106,7 @@ login:
 
 search:
   paths:
-  # http://kinozal.tv/browse.php?s=lucifer+2017&g=0&c=0&v=0&d=0&w=0&t=0&f=0
+    # http://kinozal.tv/browse.php?s=lucifer+2017&g=0&c=0&v=0&d=0&w=0&t=0&f=0
     - path: browse.php
   keywordsfilters:
     - name: diacritics
@@ -119,7 +119,7 @@ search:
     # multi cat is not supported. so defaulting to ALL
     c: 0
     s: "{{ .Keywords }}"
-     # where 0 the title 1 person 2 genres 3 regular expression
+    # where 0 the title 1 person 2 genres 3 regular expression
     g: 0
     # format 0 all
     v: 0

@@ -84,7 +84,7 @@ settings:
     label: Download link
     default: "magnet:?xt="
     options:
-      "/get/key:" : ".torrent"
+      "/get/key:": ".torrent"
       "magnet:?xt=": "magnet"
 
 login:
@@ -142,14 +142,14 @@ search:
     size:
       selector: td:nth-child(4)
     date:
-        # 08:49:09
+      # 08:49:09
       selector: td:nth-child(3):contains(":")
       optional: true
       filters:
         - name: dateparse
           args: "15:04:05"
     date:
-        # 2018-10-19
+      # 2018-10-19
       selector: td:nth-child(3):contains("-")
       optional: true
       filters:

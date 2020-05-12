@@ -34,7 +34,7 @@ download:
   attribute: href
 
 search:
-# site returns just 30 results, attempt to fetch upto 90
+  # site returns just 30 results, attempt to fetch upto 90
   paths:
     - path: /
     - path: /page/2/
@@ -52,7 +52,7 @@ search:
   rows:
     selector: "#principal .miniboxs-ficha li"
     filters:
-    - name: andmatch
+      - name: andmatch
 
   fields:
     title:
@@ -86,7 +86,7 @@ search:
     size:
       text: "0 B"
     size:
-    # size can be missing
+      # size can be missing
       optional: true
       selector: .voto1
       filters:

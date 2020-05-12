@@ -113,7 +113,7 @@ search:
     date:
       selector: td:nth-child(5)
       filters:
-          # replace month abbreviations
+        # replace month abbreviations
         - name: replace
           args: ["янв", "Jan"]
         - name: replace

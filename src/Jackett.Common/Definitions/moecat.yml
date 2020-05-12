@@ -68,7 +68,7 @@ login:
 
 search:
   paths:
-  # https://moecat.best/torrents.php?incldead=0&spstate=0&picktype=0&inclbookmarked=0&search=guilty+ones&search_area=0&search_mode=0
+    # https://moecat.best/torrents.php?incldead=0&spstate=0&picktype=0&inclbookmarked=0&search=guilty+ones&search_area=0&search_mode=0
     - path: torrents.php
   inputs:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"

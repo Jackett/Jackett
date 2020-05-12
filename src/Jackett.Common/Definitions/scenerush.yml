@@ -142,7 +142,7 @@ search:
       selector: td:nth-child(7)
       filters:
         - name: re_replace
-          args: ["(\\d{4}-\\d{2}-\\d{2})(\\d{2}:\\d{2}:\\d{2})","$1 $2"]
+          args: ["(\\d{4}-\\d{2}-\\d{2})(\\d{2}:\\d{2}:\\d{2})", "$1 $2"]
         - name: dateparse
           args: "2006-01-02 15:04:05"
     downloadvolumefactor:

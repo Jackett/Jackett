@@ -101,7 +101,7 @@ login:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
   error:
-  - selector: p#msgError
+    - selector: p#msgError
   test:
     path: torrents-search.php
     selector: a[href="account-logout.php"]

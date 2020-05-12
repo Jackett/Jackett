@@ -121,7 +121,7 @@ search:
         - name: replace
           args: ["december", "December"]
         - name: re_replace
-          args: ["\\s*om\\s*"," "]
+          args: ["\\s*om\\s*", " "]
         - name: dateparse
           args: "2 January 2006 15:04:05"
     seeders:

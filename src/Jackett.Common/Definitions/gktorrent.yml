@@ -51,7 +51,7 @@ settings:
     label: Download link
     default: "magnet:?xt="
     options:
-      "/telecharger/" : ".torrent"
+      "/telecharger/": ".torrent"
       "magnet:?xt=": "magnet"
 
 download:

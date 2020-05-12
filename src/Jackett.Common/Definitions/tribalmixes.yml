@@ -10,28 +10,28 @@ links:
 
 caps:
   categorymappings:
-   - {id: 1, cat: Audio, desc: "tribal"}
-   - {id: 2, cat: Audio, desc: "electro"}
-   - {id: 3, cat: Audio, desc: "chillout"}
-   - {id: 4, cat: Audio, desc: "house"}
-   - {id: 5, cat: Audio, desc: "video"}
-   - {id: 6, cat: Audio, desc: "breaks"}
-   - {id: 7, cat: Audio, desc: "trance"}
-   - {id: 8, cat: Audio, desc: "deep house"}
-   - {id: 9, cat: Audio, desc: "techno"}
-   - {id: 10, cat: Audio, desc: "drum&bass"}
-   - {id: 11, cat: Audio, desc: "classic"}
-   - {id: 12, cat: Audio, desc: "minimal"}
-   - {id: 14, cat: Audio, desc: "progressive"}
-   - {id: 15, cat: Audio, desc: "tech house"}
-   - {id: 16, cat: Audio, desc: "psy-goa trance"}
-   - {id: 17, cat: Audio, desc: "electro-tribe"}
-   - {id: 18, cat: Audio, desc: "mega-pack"}
-   - {id: 19, cat: Audio, desc: "dark"}
-   - {id: 20, cat: Audio, desc: "dubstep"}
-   - {id: 22, cat: Audio, desc: "misc"}
-   - {id: 30, cat: Audio, desc: "(tm) mixes"}
-   - {id: 31, cat: Audio, desc: "(tm) ONLY"}
+    - {id: 1, cat: Audio, desc: "tribal"}
+    - {id: 2, cat: Audio, desc: "electro"}
+    - {id: 3, cat: Audio, desc: "chillout"}
+    - {id: 4, cat: Audio, desc: "house"}
+    - {id: 5, cat: Audio, desc: "video"}
+    - {id: 6, cat: Audio, desc: "breaks"}
+    - {id: 7, cat: Audio, desc: "trance"}
+    - {id: 8, cat: Audio, desc: "deep house"}
+    - {id: 9, cat: Audio, desc: "techno"}
+    - {id: 10, cat: Audio, desc: "drum&bass"}
+    - {id: 11, cat: Audio, desc: "classic"}
+    - {id: 12, cat: Audio, desc: "minimal"}
+    - {id: 14, cat: Audio, desc: "progressive"}
+    - {id: 15, cat: Audio, desc: "tech house"}
+    - {id: 16, cat: Audio, desc: "psy-goa trance"}
+    - {id: 17, cat: Audio, desc: "electro-tribe"}
+    - {id: 18, cat: Audio, desc: "mega-pack"}
+    - {id: 19, cat: Audio, desc: "dark"}
+    - {id: 20, cat: Audio, desc: "dubstep"}
+    - {id: 22, cat: Audio, desc: "misc"}
+    - {id: 30, cat: Audio, desc: "(tm) mixes"}
+    - {id: 31, cat: Audio, desc: "(tm) ONLY"}
 
   modes:
     search: [q]

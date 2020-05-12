@@ -109,7 +109,7 @@ search:
         - name: prepend
           args: "{{.Result._grouptitle}} - "
         - name: replace
-          args: ["/  /","/"] #removes slash left after freeleech images
+          args: ["/  /", "/"] #removes slash left after freeleech images
         - name: append
           args: "{{if .Result._language}} [{{.Result._language}}]{{else}}{{end}}"
     category:

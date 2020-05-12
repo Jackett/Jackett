@@ -78,8 +78,8 @@ search:
     grabs:
       selector: td:nth-child(7)
       filters:
-      - name: regexp
-        args: (\d+)
+        - name: regexp
+          args: (\d+)
     seeders:
       selector: td:nth-child(8)
     leechers:

@@ -856,7 +856,7 @@ search:
     date:
       selector: td[title="Added"] p:last-of-type, td[title="Добавлен"] p:last-of-type, td[title="Додано"] p:last-of-type
       filters:
-          # replace month abbreviations
+        # replace month abbreviations
         - name: re_replace
           args: ["Янв|Січ", "Jan"]
         - name: re_replace

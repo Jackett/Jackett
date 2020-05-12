@@ -96,8 +96,8 @@ search:
   paths:
     - path: "{{if .Config.filter-verified }}verified{{else}}search{{end}}{{ re_replace .Config.sort \"_\" \"\" }}"
   inputs:
-     f: "{{ if .Keywords }}title: {{ .Keywords }}{{else}}{{end}}"
-     safe: "{{ if .Config.filter-safe }}1{{else}}0{{end}}"
+    f: "{{ if .Keywords }}title: {{ .Keywords }}{{else}}{{end}}"
+    safe: "{{ if .Config.filter-safe }}1{{else}}0{{end}}"
 
   rows:
     selector: "html body #wrap .results dl:has(a)"

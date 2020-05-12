@@ -65,8 +65,9 @@ download:
   attribute: href
   filters:
     - name: replace
-      args: ["https://mylink.me.uk/?url=" ,""]
-      args: ["https://mylink.cx/?url=" ,""]
+      args: ["https://mylink.me.uk/?url=", ""]
+    - name: replace
+      args: ["https://mylink.cx/?url=", ""]
     - name: urldecode
 
 search:

@@ -102,8 +102,8 @@ login:
 
 search:
   paths:
-  # http://takeabyte-nordic.org/browse.php?search=first+man&searchin=title&incldead=0
-  # http://takeabyte-nordic.org/browse.php?c9=1&c26=1&c3=1&search=%22first+man%22&searchin=title&incldead=0
+    # http://takeabyte-nordic.org/browse.php?search=first+man&searchin=title&incldead=0
+    # http://takeabyte-nordic.org/browse.php?c9=1&c26=1&c3=1&search=%22first+man%22&searchin=title&incldead=0
     - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
@@ -157,7 +157,7 @@ search:
       selector: td:nth-last-child(5):not(:contains("day"))
       filters:
         - name: regex # drop break in between date and time
-          args: ["(.+?)<[^>]*>(.+?)","$1 $2"]
+          args: ["(.+?)<[^>]*>(.+?)", "$1 $2"]
         - name: dateparse
           args: "Jan 2 2006 15:04:05"
     seeders:

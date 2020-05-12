@@ -31,9 +31,9 @@ login:
     password: "{{ .Config.password }}"
     keeplogged: "1"
   error:
-  - selector: .auth_form > .warning
-    message:
-      selector: ".auth_form > .warning"
+    - selector: .auth_form > .warning
+      message:
+        selector: ".auth_form > .warning"
   test:
     path: top10.php
 
@@ -136,7 +136,7 @@ search:
       attribute: title
       filters:
         - name: replace
-          args: [",",""]
+          args: [",", ""]
         - name: append
           args: " +07:00"
         - name: dateparse

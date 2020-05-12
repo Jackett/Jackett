@@ -116,7 +116,7 @@ namespace Jackett.Common.Utils.Clients
         {
             clearanceHandlr = new ClearanceHandler(BrowserUtil.ChromeUserAgent)
             {
-                MaxTries = 30
+                MaxTries = 10
             };
             clientHandlr = new HttpClientHandler
             {

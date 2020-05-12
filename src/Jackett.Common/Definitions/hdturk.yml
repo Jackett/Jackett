@@ -112,7 +112,7 @@ search:
     - name: re_replace # E01 to BL01
       args: ["(?i)\\bE(\\d+)\\b", "E$1"]
   inputs:
-  # does not support multi categories so defaulting to ALL
+    # does not support multi categories so defaulting to ALL
     do: search
     keywords: "{{.Keywords}}"
     category: 0

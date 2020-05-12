@@ -117,7 +117,7 @@ search:
         - name: querystring
           args: category
     title:
-    # abbreviated title
+      # abbreviated title
       selector: a[href*="/details.php?id="]
     title:
       selector: div.tooltip-content > div

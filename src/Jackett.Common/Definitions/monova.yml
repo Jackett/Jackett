@@ -86,7 +86,7 @@ search:
       selector: td.center-align
       filters:
         - name: replace
-          args: ["N/A","500 MB"]
+          args: ["N/A", "500 MB"]
     seeders:
       text: 1
     leechers:
@@ -101,10 +101,10 @@ search:
       remove: a
       filters:
         - name: replace
-          args: ["added ",""]
+          args: ["added ", ""]
         - name: replace
-          args: [" ago.*$",""]
+          args: [" ago.*$", ""]
         - name: replace
-          args: ["min.","minutes"]
+          args: ["min.", "minutes"]
         - name: timeago
 # engine n/a

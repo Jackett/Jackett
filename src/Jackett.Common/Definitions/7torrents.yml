@@ -6,7 +6,7 @@ language: en-us
 type: public
 encoding: UTF-8
 links:
-  -  https://www.7torrents.cc/
+  - https://www.7torrents.cc/
 
 caps:
   categories:

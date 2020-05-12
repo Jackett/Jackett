@@ -52,7 +52,7 @@ download:
 
 search:
   paths:
-  # https://www.toros.co/all/torrents/capital-hill.html?v=&smi=&sma=&i=100&sort=added&o=desc
+    # https://www.toros.co/all/torrents/capital-hill.html?v=&smi=&sma=&i=100&sort=added&o=desc
     - path: "{{ if .Keywords }}all/torrents/{{ .Keywords }}.html?v=&smi=&sma=&i=100&sort={{ .Config.sort }}&o={{ .Config.type }}{{ else }}top100.html{{ end }}"
 
   keywordsfilters:

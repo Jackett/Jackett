@@ -97,8 +97,8 @@ search:
         - name: replace
           args: ["https://via.placeholder.com/600x900", ""]
     comments:
-       selector: a[href*="#comments"]
-       attribute: href
+      selector: a[href*="#comments"]
+      attribute: href
     size:
       selector: td:nth-last-child(4)
     seeders:
@@ -117,7 +117,7 @@ search:
     date:
       selector: time
       filters:
-          # translations for Turkish|Estonian|Danish|Italian|Polish|Norwegian|Portuguese|Czech|Russian|Romanian|Spanish|French|German|Bulgarian|Dutch|Chinese
+        # translations for Turkish|Estonian|Danish|Italian|Polish|Norwegian|Portuguese|Czech|Russian|Romanian|Spanish|French|German|Bulgarian|Dutch|Chinese
         - name: re_replace
           args: ["(?i)(önce|tagasi|geleden|fa|temu|siden|há|atrás|nazpět|назад|acum|în urmă|hace|il y a|vor|преди|前)", " ago"]
         - name: re_replace

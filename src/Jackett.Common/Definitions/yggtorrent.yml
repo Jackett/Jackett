@@ -273,8 +273,8 @@ search:
     title_anime:
       text: "{{ .Result.title_phase3 }}"
       filters:
-      # Sonarr need E in front of 3 digit number or else it thinks it is episode
-      # S01E10 for number 110 for example ==> enhancedAnime
+        # Sonarr need E in front of 3 digit number or else it thinks it is episode
+        # S01E10 for number 110 for example ==> enhancedAnime
         - name: re_replace
           args: ["(.*)(\\.| |\\-)(\\d{2,3})(\\.| |\\-)(.*)", "$1 E$3 $5"]
     title:
@@ -283,7 +283,7 @@ search:
       selector: td:nth-child(2) > a
       attribute: href
     category:
-    # changed the catid into and hidden div as of last tracker problem
+      # changed the catid into and hidden div as of last tracker problem
       selector: ":nth-child(1) > div.hidden"
     comments:
       optional: true

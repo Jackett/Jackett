@@ -88,8 +88,8 @@ download:
 
 search:
   paths:
-  # https://fou-du-cinema.net/TTV3/Torrents/Recherche?search=mortal+legends&cat=0&incldead=1&freeleech=0&lang=0
-  # categories for searching are unsupported
+    # https://fou-du-cinema.net/TTV3/Torrents/Recherche?search=mortal+legends&cat=0&incldead=1&freeleech=0&lang=0
+    # categories for searching are unsupported
     - path: TTV3/Torrents/Recherche
   inputs:
     search: "{{ .Keywords }}"

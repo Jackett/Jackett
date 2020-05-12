@@ -72,7 +72,7 @@ settings:
 
 search:
   paths:
-  # https://glodls.to/search_results.php?c1=1&c72=1&c41=1&search=blacklist+s07e05&cat=0&incldead=1&inclexternal=0&lang=0&sort=id&order=desc
+    # https://glodls.to/search_results.php?c1=1&c72=1&c41=1&search=blacklist+s07e05&cat=0&incldead=1&inclexternal=0&lang=0&sort=id&order=desc
     - path: search_results.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"

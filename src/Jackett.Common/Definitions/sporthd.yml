@@ -147,7 +147,7 @@ download:
 
 search:
   paths:
-  # http://sporthd.org/browse.php?cat=0&incldead=1&sort=2&type=desc&s=0&stype=0&search=
+    # http://sporthd.org/browse.php?cat=0&incldead=1&sort=2&type=desc&s=0&stype=0&search=
     - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"

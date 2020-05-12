@@ -131,7 +131,7 @@ search:
       attribute: onmouseover
       filters:
         - name: regexp
-          args: "src=\\\\\'(.+?)\\\\\'"
+          args: "src=\\\\'(.+?)\\\\'"
         - name: replace
           args: ["./pic/noposter.png", ""]
     files:

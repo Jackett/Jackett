@@ -45,7 +45,7 @@ search:
     num: 50
 
   rows:
-  # first selector is for the music page (recent uploads) and the second selector is for the search page
+    # first selector is for the music page (recent uploads) and the second selector is for the search page
     selector: div[itemscope] > table.browse_albums, div.div-rellist
 
   fields:
@@ -69,7 +69,7 @@ search:
     # dates come in two flavours:
     # Russian, Spanish and English supported
     date:
-    # fix for spanish yesterday, the time is not present
+      # fix for spanish yesterday, the time is not present
       text: now
     date:
       # Today at 22:28:10
@@ -117,10 +117,10 @@ search:
         - name: dateparse
           args: "2 January 2006"
     size:
-    # search page does not have size.
+      # search page does not have size.
       text: "500 MB"
     size:
-    # but today's page can, if the content fixed-length string contains a title that is not too long.
+      # but today's page can, if the content fixed-length string contains a title that is not too long.
       selector: tr:nth-child(2) td.descr meta
       attribute: content
       optional: true

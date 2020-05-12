@@ -48,7 +48,7 @@ settings:
 
 search:
   paths:
-  # http://www.legittorrents.info/index.php?page=torrents&search=windows&category=0&active=0
+    # http://www.legittorrents.info/index.php?page=torrents&search=windows&category=0&active=0
     - path: index.php
   inputs:
     page: torrents

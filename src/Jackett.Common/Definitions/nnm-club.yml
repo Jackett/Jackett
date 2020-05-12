@@ -695,7 +695,7 @@ caps:
     - {id: 183, cat: Other, desc: " |- КПК и Мобильные устройства (temp)"}
     - {id: 1145, cat: Other, desc: " |- 4Apple (temp)"}
     - {id: 171, cat: Other, desc: " |- Медиа-Диз-Графика (temp)"}
-# Everything for children and parents
+    # Everything for children and parents
     - {id: 724, cat: TV, desc: "Видео"}
     - {id: 725, cat: TV, desc: " |- Обучающее Видео для родителей"}
     - {id: 729, cat: TV, desc: " |- Развивающее Видео для детей"}

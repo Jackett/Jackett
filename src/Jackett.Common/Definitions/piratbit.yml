@@ -714,20 +714,20 @@ search:
       selector: td > u
       # 2 date flavours for 3 languages
     date:
-    # 15:04
+      # 15:04
       optional: true
       selector: td[title="Добавлен"] p:first-of-type:not(:contains("-")), td[title="Доданий"] p:first-of-type:not(:contains("-")), td[title="Added"] p:first-of-type:not(:contains("-"))
       filters:
         - name: dateparse
           args: "15:04"
     date:
-    # 15:04 24-02-19
+      # 15:04 24-02-19
       optional: true
       selector: td[title="Добавлен"] p:first-of-type:contains("-"), td[title="Доданий"] p:first-of-type:contains("-"), td[title="Added"] p:first-of-type:contains("-")
       filters:
         - name: dateparse
           args: "15:04 2-01-06"
-      # Russian and Ukranian and English languages are supported
+    # Russian and Ukranian and English languages are supported
     grabs:
       selector: td[title^="Ответов"], td[title^="Відповідей"], td[title^="Replies"]
     seeders:

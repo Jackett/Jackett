@@ -6,11 +6,11 @@ language: en-us
 type: public
 encoding: UTF-8
 links:
-  -  https://ibit.to/
-  -  https://ibit.uno/
-  -  https://ibit.am/
+  - https://ibit.to/
+  - https://ibit.uno/
+  - https://ibit.am/
 legacylinks:
-  -  https://ibit.ws/ # this is the ibit blog site not the search engine
+  - https://ibit.ws/ # this is the ibit blog site not the search engine
 
 caps:
   categories:

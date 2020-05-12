@@ -155,7 +155,7 @@ search:
       selector: h1 > a
       attribute: href
     download:
-    # <a href="https://rapidzona.tv/engine/download.php?id=78824">
+      # <a href="https://rapidzona.tv/engine/download.php?id=78824">
       selector: h1 > a
       attribute: href
     size:
@@ -169,7 +169,7 @@ search:
     date:
       selector: p.title-footer
       filters:
-          # 20/02/2020 18:34
+        # 20/02/2020 18:34
         - name: regexp
           args: "(\\d{1,2}\\/\\d{2}\\/\\d{4} \\d{1,2}\\:\\d{2})"
         - name: dateparse

@@ -131,7 +131,7 @@ search:
     date:
       selector: div.news-content
       filters:
-          # - 30-10-2019, 14:49]
+        # - 30-10-2019, 14:49]
         - name: regexp
           args: "(\\d{1,2}\\-\\d{2}\\-\\d{4}\\, \\d{1,2}\\:\\d{2})"
         - name: replace

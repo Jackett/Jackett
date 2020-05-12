@@ -152,12 +152,14 @@ search:
     - name: re_replace
       args: ["[^a-zA-Z0-9]+", " "]
   inputs:
-    page: "torrents"
-    $raw: "&category={{range .Categories}}{{.}};{{end}}"
-    active: "1"
+    page: torrents
+    $raw: "&category={{ range .Categories }}{{.}};{{end}}"
+    active: 1
     search: "{{ .Keywords }}"
+
   rows:
     selector: "#category+table table tr:not(:first-child):not(:last-child)"
+
   fields:
     category:
       selector: td:nth-child(1) a
@@ -176,7 +178,7 @@ search:
         - name: re_replace
           args: ["(?i)\\w*Temp\\w*\\b\\s?(\\d{1,2})(ª|\\D)?\\b", " S$1 "]
         - name: re_replace
-          args: ["(?i)(\\d{1,2})(ª|\\D)?\\s?\\w*Temp\\w*\\b"," S$1 "]
+          args: ["(?i)(\\d{1,2})(ª|\\D)?\\s?\\w*Temp\\w*\\b", " S$1 "]
     title:
       selector: td[valign="middle"] a:not(:contains("VOSE"))
       optional: true
@@ -188,7 +190,7 @@ search:
         - name: re_replace
           args: ["(?i)\\w*Temp\\w*\\b\\s?(\\d{1,2})(ª|\\D)?\\b", " S$1 "]
         - name: re_replace
-          args: ["(?i)(\\d{1,2})(ª|\\D)?\\s?\\w*Temp\\w*\\b"," S$1 "]
+          args: ["(?i)(\\d{1,2})(ª|\\D)?\\s?\\w*Temp\\w*\\b", " S$1 "]
     details:
       selector: td[valign="middle"] a
       attribute: href
@@ -220,18 +222,18 @@ search:
       attribute: href
     downloadvolumefactor:
       case:
-        img[src$="freeleech.gif"]: "0"
-        img[src$="gold.gif"]: "0"
-        img[src$="silver.gif"]: "0.5"
-        "*": "1"
+        img[src$="freeleech.gif"]: 0
+        img[src$="gold.gif"]: 0
+        img[src$="silver.gif"]: 0.5
+        "*": 1
     uploadvolumefactor:
-        case:
-          img[src$="2x.gif"]: "2"
-          img[src$="3x.gif"]: "3"
-          img[src$="4x.gif"]: "4"
-          img[src$="5x.gif"]: "5"
-          img[src$="6x.gif"]: "6"
-          img[src$="7x.gif"]: "7"
-          img[src$="8x.gif"]: "8"
-          img[src$="9x.gif"]: "9"
-          "*": "1"
+      case:
+        img[src$="2x.gif"]: 2
+        img[src$="3x.gif"]: 3
+        img[src$="4x.gif"]: 4
+        img[src$="5x.gif"]: 5
+        img[src$="6x.gif"]: 6
+        img[src$="7x.gif"]: 7
+        img[src$="8x.gif"]: 8
+        img[src$="9x.gif"]: 9
+        "*": 1

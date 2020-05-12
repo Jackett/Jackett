@@ -6,6 +6,8 @@ language: sr-sp
 type: private
 encoding: UTF-8
 links:
+  - https://www.crnaberza.com/
+legacylinks:
   - http://www.crnaberza.com/
 
 caps:
@@ -83,6 +85,8 @@ login:
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
+    remember: 1
+    returnto: /
   error:
     - selector: h2
       message:
@@ -100,7 +104,7 @@ ratio:
 
 search:
   paths:
-  # http://www.crnaberza.com/browse.php?c52=1&c20=1&c34=1&incldead=1&search=star+trek
+    # http://www.crnaberza.com/browse.php?c52=1&c20=1&c34=1&incldead=1&search=star+trek
     - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"

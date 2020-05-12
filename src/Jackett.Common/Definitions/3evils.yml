@@ -71,8 +71,8 @@ login:
 
 search:
   paths:
-  # https://www.3evils.com/browse.php?search=black+lightning+s02e11&searchin=title&incldead=1
-  # https://www.3evils.com/browse.php?c3=1&c4=1&search=&searchin=title&incldead=1
+    # https://www.3evils.com/browse.php?search=black+lightning+s02e11&searchin=title&incldead=1
+    # https://www.3evils.com/browse.php?c3=1&c4=1&search=&searchin=title&incldead=1
     - path: browse.php
   inputs:
     $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
@@ -113,10 +113,10 @@ search:
       attribute: onmouseover
       optional: true
       filters:
-          #  onmouseover="Tip('<b>blahblah /><img src=\'img.php/tvmaze/80.jpg\' blahblah />');"
-          # <img src=\'./pic/noposter.png\'
+        #  onmouseover="Tip('<b>blahblah /><img src=\'img.php/tvmaze/80.jpg\' blahblah />');"
+        # <img src=\'./pic/noposter.png\'
         - name: regexp
-          args: "src=\\\\\'(.+?)\\\\\'"
+          args: "src=\\\\'(.+?)\\\\'"
         - name: replace
           args: ["./pic/noposter.png", ""]
     size:

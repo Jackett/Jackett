@@ -132,9 +132,9 @@ settings:
     label: Download link
     default: "magnet:"
     options:
-      "http://itorrents.org/" : "iTorrents.org"
-      "http://torrage.info/" : "Torrage.info"
-      "http://btcache.me/" : "BTcache.me"
+      "http://itorrents.org/": "iTorrents.org"
+      "http://torrage.info/": "Torrage.info"
+      "http://btcache.me/": "BTcache.me"
       "magnet:": "magnet"
   - name: sort
     type: select

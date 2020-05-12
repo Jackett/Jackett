@@ -76,18 +76,18 @@ search:
     grabs:
       selector: td:nth-child(9)
       filters:
-      - name: regexp
-        args: "(\\d+)"
+        - name: regexp
+          args: "(\\d+)"
     seeders:
       selector: td:nth-child(10)
       filters:
-      - name: regexp
-        args: "^(\\d+)"
+        - name: regexp
+          args: "^(\\d+)"
     leechers:
       selector: td:nth-child(11)
       filters:
-      - name: regexp
-        args: "^(\\d+)"
+        - name: regexp
+          args: "^(\\d+)"
     date:
       selector: td:nth-child(7)
     downloadvolumefactor:

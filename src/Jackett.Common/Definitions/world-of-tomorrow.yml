@@ -116,12 +116,12 @@ search:
       selector: span:nth-child(5)
       filters:
         - name: split
-          args: [":",1]
+          args: [":", 1]
     size:
       selector: span:nth-child(2)
       filters:
         - name: split
-          args: [":",1]
+          args: [":", 1]
         - name: replace
           args: [".", ""]
         - name: replace
@@ -130,12 +130,12 @@ search:
       selector: span:nth-child(3)
       filters:
         - name: split
-          args: [":",1]
+          args: [":", 1]
     leechers:
       selector: span:nth-child(4)
       filters:
         - name: split
-          args: [":",1]
+          args: [":", 1]
     date:
       selector: td:nth-child(3)
       remove: center, br

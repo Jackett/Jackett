@@ -168,7 +168,7 @@ search:
         a[href^="?doubleup=four"]: 4
         a[href^="?doubleup=three"]: 3
         a[href^="?doubleup=two"]: 2
-        "*" : 1
+        "*": 1
     description:
       selector: div.contenttext
       optional: true

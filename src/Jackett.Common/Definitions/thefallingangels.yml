@@ -242,7 +242,6 @@ search:
           args: [".", ""]
         - name: replace
           args: [",", "."]
-      # 2 flavours of dates
     date:
       # Heute 13:30:04
       # Gestern 09:10:10
@@ -254,7 +253,7 @@ search:
         - name: replace
           args: ["Gestern", "Yesterday"]
     date:
-        # 30.02.2018 um 23:12:50
+      # 30.02.2018 um 23:12:50
       selector: div.selection_unter_ab:contains(".")
       optional: true
       filters:
