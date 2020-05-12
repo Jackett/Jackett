@@ -64,12 +64,14 @@ search:
   paths:
     - path: browse.php
   inputs:
-    $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
     incldead: 1
     dsearch: ""
+
   rows:
     selector: table.embedded > tbody > tr:has(a[href^="download.php?id="])
+
   fields:
     title:
       selector: a[href^="/torrent-"]
@@ -111,8 +113,8 @@ search:
       selector: td:nth-last-child(1)
     downloadvolumefactor:
       case:
-        img[src="pic/freedownload.gif"]: "0"
-        img[src="pic/silverdownload.gif"]: "0.5"
-        "*": "1"
+        img[src="pic/freedownload.gif"]: 0
+        img[src="pic/silverdownload.gif"]: 0.5
+        "*": 1
     uploadvolumefactor:
-        text: "1"
+      text: 1

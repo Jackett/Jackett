@@ -34,7 +34,7 @@ login:
 search:
   path: torrents
   inputs:
-  # 0 any 1 filename 2 descr 3 files
+    # 0 any 1 filename 2 descr 3 files
     in: 1
     search: "{{ .Keywords }}"
     category: 0
@@ -79,7 +79,7 @@ search:
         i[title="Half Download"]: 0.5
         "*": 1
     uploadvolumefactor:
-        case:
-          i.fa-gem: 2
-          "*": 1
+      case:
+        i.fa-gem: 2
+        "*": 1
 # engine tbd

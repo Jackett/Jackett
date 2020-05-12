@@ -176,14 +176,14 @@ search:
         img[src$="silver.png"]: 0.5
         "*": 1
     uploadvolumefactor:
-        case:
-          img[src$="2x.gif"]: 2
-          img[src$="3x.gif"]: 3
-          img[src$="4x.gif"]: 4
-          img[src$="5x.gif"]: 5
-          img[src$="6x.gif"]: 6
-          img[src$="7x.gif"]: 7
-          img[src$="8x.gif"]: 8
-          img[src$="9x.gif"]: 9
-          "*": 1
+      case:
+        img[src$="2x.gif"]: 2
+        img[src$="3x.gif"]: 3
+        img[src$="4x.gif"]: 4
+        img[src$="5x.gif"]: 5
+        img[src$="6x.gif"]: 6
+        img[src$="7x.gif"]: 7
+        img[src$="8x.gif"]: 8
+        img[src$="9x.gif"]: 9
+        "*": 1
 # xbtitFM 2.1.08

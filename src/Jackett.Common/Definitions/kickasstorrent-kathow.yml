@@ -79,7 +79,7 @@ search:
         - name: tolower
         - name: trim
           args: /
-     # proxy uses Video for both TV and Movies
+    # proxy uses Video for both TV and Movies
     category:
       optional: true
       selector: span[id^="cat_"] > strong > a:contains("Video")

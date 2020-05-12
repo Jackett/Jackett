@@ -74,7 +74,6 @@ search:
           args: "/tor/"
         - name: append
           args: ".torrent"
-      # two types of dates
     date:
       # Today
       # Yesterday

@@ -166,7 +166,7 @@ login:
     login_name: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
   error:
-  - selector: td#msgError
+    - selector: td#msgError
   test:
     path: index.php
     selector: a[href="account-logout.php"]
@@ -183,13 +183,13 @@ download:
 
 search:
   paths:
-  # 40 results per page
+    # 40 results per page
     - path: torrents-search.php
     - path: torrents-search.php
       inputs:
         page: 1
   inputs:
-#      multi cats unsupported, defaulting to all
+    # multi cats unsupported, defaulting to all
     cat: 0
     search: "{{ .Keywords }}"
     # 0 active 1 incldead 2 onlydead

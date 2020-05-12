@@ -108,7 +108,7 @@ login:
 
 search:
   paths:
-  # 25 results per page
+    # 25 results per page
     - path: "index.php?torrents/&filename={{ .Keywords }}"
     - path: "index.php?torrents/&filename={{ .Keywords }}&page=2"
     - path: "index.php?torrents/&filename={{ .Keywords }}&page=3"
