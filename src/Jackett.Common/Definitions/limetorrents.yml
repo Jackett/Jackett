@@ -52,7 +52,7 @@ settings:
     label: Download link
     default: "magnet:"
     options:
-      "http://itorrents.org/" : "iTorrents.org"
+      "http://itorrents.org/": "iTorrents.org"
       "magnet:": "magnet"
   - name: sort
     type: select

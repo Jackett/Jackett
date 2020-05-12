@@ -104,7 +104,7 @@ login:
 
 search:
   paths:
-  # uses cats1[]=10 or cats3[]=20 which cannot be supported
+    # uses cats1[]=10 or cats3[]=20 which cannot be supported
     - path: browse.php
   inputs:
     search: "{{.Keywords}}"

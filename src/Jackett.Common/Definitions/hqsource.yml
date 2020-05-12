@@ -52,7 +52,7 @@ login:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
     pin: "{{ .Config.pin }}"
-    returnto:	"/"
+    returnto: /
   error:
     - selector: td.embedded:has(h2:contains("failed"))
     - selector: td.embedded:has(h2:contains("Error"))

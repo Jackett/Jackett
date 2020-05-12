@@ -106,7 +106,7 @@ settings:
 
 search:
   paths:
-  # http://www.filebase.ws/torrents/search/?s=dateD&t=all&c=serials&search=mandalorian&t=all
+    # http://www.filebase.ws/torrents/search/?s=dateD&t=all&c=serials&search=mandalorian&t=all
     - path: torrents/search/
   keywordsfilters:
     - name: diacritics

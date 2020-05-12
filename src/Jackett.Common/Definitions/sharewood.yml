@@ -6,7 +6,7 @@ language: fr-fr
 type: semi-private
 encoding: UTF-8
 links:
-  -  https://www.sharewood.tv/
+  - https://www.sharewood.tv/
 
 caps:
   categorymappings:
@@ -162,10 +162,10 @@ search:
           args: " ago"
     downloadvolumefactor:
       case:
-        "span.badge-extra:contains('Freeleech')" : 0
+        "span.badge-extra:contains('Freeleech')": 0
         "*": 1
     uploadvolumefactor:
       case:
-        "span.badge-extra:contains('Double Upload')" : 2
+        "span.badge-extra:contains('Double Upload')": 2
         "*": 1
 # UNIT3D

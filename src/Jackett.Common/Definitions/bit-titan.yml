@@ -200,7 +200,7 @@ search:
         - name: replace
           args: ["Gestern", "Yesterday"]
     date:
-        # &nbsp;&nbsp;27.05.2019 <b>12:52:11</b>
+      # &nbsp;&nbsp;27.05.2019 <b>12:52:11</b>
       selector: div.tor-date:contains(".")
       optional: true
       filters:

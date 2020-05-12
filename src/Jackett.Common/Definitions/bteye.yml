@@ -6,7 +6,7 @@ language: en-us
 type: public
 encoding: UTF-8
 links:
-  -  https://www.bteye.org/
+  - https://www.bteye.org/
 
 caps:
   categories:

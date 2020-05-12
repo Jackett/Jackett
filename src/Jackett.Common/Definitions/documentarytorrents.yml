@@ -120,7 +120,7 @@ ratio:
 
 search:
   paths:
-  # http://documentarytorrents.com/torrents.php?c123=1&c69=1&c67=1&c89=1&c88=1&search=grow+old&cat=0&incldead=1&freeleech=0&lang=0
+    # http://documentarytorrents.com/torrents.php?c123=1&c69=1&c67=1&c89=1&c88=1&search=grow+old&cat=0&incldead=1&freeleech=0&lang=0
     - path: torrents.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
@@ -164,7 +164,7 @@ search:
     leechers:
       selector: td:nth-child(8)
     date:
-        text: now
+      text: now
     downloadvolumefactor:
       case:
         img[src="images/freeleech_star.gif"]: 0

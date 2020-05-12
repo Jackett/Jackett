@@ -10,24 +10,24 @@ links:
 
 caps:
   categorymappings:
-     - {id: 9, cat: TV/Anime, desc: "Anime"}
-     - {id: 1, cat: PC/0day, desc: "Apps"}
-     - {id: 29, cat: Audio, desc: "Audio Tracks"}
-     - {id: 26, cat: Movies/UHD, desc: "BETA UHD HDR-X"}
-     - {id: 32, cat: Movies, desc: "Dolby Vision"}
-     - {id: 5, cat: TV, desc: "Episodes"}
-     - {id: 28, cat: Movies, desc: "INTERNAL HDR-X"}
-     - {id: 3, cat: Movies, desc: "Movies"}
-     - {id: 17, cat: Movies/HD, desc: "Movies/1080p BACKUP"}
-     - {id: 18, cat: Movies/HD, desc: "Movies/1080p HDR"}
-     - {id: 11, cat: Movies/HD, desc: "Movies/HDTV"}
-     - {id: 16, cat: Movies/UHD, desc: "Movies/UltraHD 4K HDR"}
-     - {id: 19, cat: Movies/UHD, desc: "Movies/UltraHD 4K SDR"}
-     - {id: 21, cat: TV/HD, desc: "TV Series/1080p SDR"}
-     - {id: 22, cat: TV/UHD, desc: "TV Series/Ultra HD 4K HDR"}
-     - {id: 20, cat: TV/UHD, desc: "TV Series/Ultra HD 4K SDR"}
-     - {id: 31, cat: Other, desc: "YouTube HDR"}
-     - {id: 30, cat: Other, desc: "[SAMPLES] INTERNAL HDR-X"}
+    - {id: 9, cat: TV/Anime, desc: "Anime"}
+    - {id: 1, cat: PC/0day, desc: "Apps"}
+    - {id: 29, cat: Audio, desc: "Audio Tracks"}
+    - {id: 26, cat: Movies/UHD, desc: "BETA UHD HDR-X"}
+    - {id: 32, cat: Movies, desc: "Dolby Vision"}
+    - {id: 5, cat: TV, desc: "Episodes"}
+    - {id: 28, cat: Movies, desc: "INTERNAL HDR-X"}
+    - {id: 3, cat: Movies, desc: "Movies"}
+    - {id: 17, cat: Movies/HD, desc: "Movies/1080p BACKUP"}
+    - {id: 18, cat: Movies/HD, desc: "Movies/1080p HDR"}
+    - {id: 11, cat: Movies/HD, desc: "Movies/HDTV"}
+    - {id: 16, cat: Movies/UHD, desc: "Movies/UltraHD 4K HDR"}
+    - {id: 19, cat: Movies/UHD, desc: "Movies/UltraHD 4K SDR"}
+    - {id: 21, cat: TV/HD, desc: "TV Series/1080p SDR"}
+    - {id: 22, cat: TV/UHD, desc: "TV Series/Ultra HD 4K HDR"}
+    - {id: 20, cat: TV/UHD, desc: "TV Series/Ultra HD 4K SDR"}
+    - {id: 31, cat: Other, desc: "YouTube HDR"}
+    - {id: 30, cat: Other, desc: "[SAMPLES] INTERNAL HDR-X"}
 
   modes:
     search: [q]
@@ -46,7 +46,7 @@ settings:
     label: "Search Torrents that are:"
     default: "0"
     options:
-      "0" : "Active"
+      "0": "Active"
       "1": "Including Dead"
       "2": "Only Dead"
   - name: onlyfree
