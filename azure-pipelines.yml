@@ -260,7 +260,8 @@ stages:
     displayName: Code Style Compliance
     dependsOn: []
     jobs:
-      - job: Linting
+      - job: Linting_Dotnet
+        displayName: Linting Dotnet
         pool:
           vmImage: ubuntu-latest
         workspace:
@@ -297,6 +298,26 @@ stages:
                 dotnet-format --dry-run --check --verbosity diagnostic --folder ./src/Jackett.Test
                 dotnet-format --dry-run --check --verbosity diagnostic --folder ./src/Jackett.Tray
                 dotnet-format --dry-run --check --verbosity diagnostic --folder ./src/Jackett.Updater
+
+      - job: Linting_YAML
+        displayName: Linting YAML
+        pool:
+          vmImage: ubuntu-latest
+        workspace:
+          clean: all
+        steps:
+          - checkout: self
+
+          - task: UsePythonVersion@0
+            displayName: Install Python
+            inputs:
+              versionSpec: '3.8'
+
+          - script: pip install yamllint
+            displayName: Install yamllint
+
+          - script: yamllint -s -c ./yamllint.yml ./src/Jackett.Common/Definitions/
+            displayName: Lint YAML
 
   - stage: UnitTestJackett
     displayName: Unit Tests
@@ -399,7 +420,9 @@ stages:
 
   - stage: Integration
     displayName: Integration Tests
-    dependsOn: BuildJackett
+    dependsOn:
+      - BuildJackett
+      - CodeStyle
     jobs:
       - job: Selenium
         workspace:

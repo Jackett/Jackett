@@ -1,0 +1,8 @@
+---
+extends: default
+
+rules:
+  line-length: disable
+  key-duplicates: disable
+  truthy: disable
+  comments: disable  # enable this check in the future
