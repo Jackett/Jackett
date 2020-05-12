@@ -63,7 +63,7 @@ namespace Jackett.Common.Indexers
             if (!string.IsNullOrWhiteSpace(searchString) && searchString.Length < 3)
                 return releases; // search needs at least 3 characters
             if (string.IsNullOrEmpty(searchString))
-                searchString = DateTime.Now.Year.ToString();
+                searchString = "202"; // this search 2020 (yep, 2020 is not working)
 
             var qc = new NameValueCollection
             {
