@@ -448,7 +448,7 @@ login:
 
 search:
   paths:
-  # http://korsar.info/search.php?keywords=deux+moi&sr=topics&sf=titleonly&tracker_search=torrent
+    # http://korsar.info/search.php?keywords=deux+moi&sr=topics&sf=titleonly&tracker_search=torrent
     - path: search.php
   inputs:
     keywords: "{{ if .Keywords }}{{ .Keywords }}{{else}}2020{{end}}"

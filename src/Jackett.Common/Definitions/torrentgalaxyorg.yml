@@ -158,7 +158,7 @@ search:
       filters:
         - name: timeago
     date:
-        # 24/12/18 13:55
+      # 24/12/18 13:55
       optional: true
       selector: div.tgxtablecell:last-of-type small:contains(":")
       filters:

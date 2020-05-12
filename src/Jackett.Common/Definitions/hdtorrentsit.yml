@@ -39,8 +39,8 @@ login:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
   error:
-     - selector: div.error
-     - selector: h1:contains("404 Not Found")
+    - selector: div.error
+    - selector: h1:contains("404 Not Found")
   test:
     path: browse.php
 

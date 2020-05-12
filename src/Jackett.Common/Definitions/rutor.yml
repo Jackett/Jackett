@@ -68,7 +68,7 @@ search:
       selector: td:nth-of-type(2) a[href^="/torrent/"]
       filters:
         - name: re_replace
-          args: [".+\\/\\s([^а-яА-я\\/]+)\\s.*\\[(?:S*(\\d+))(?:x*(\\d+-*\\d*).*)*\\].*\\)\\s+(.+)\\s+(?:\\||от)\\s*(.+)","$1 - S$2E$3 - rus - $4 - $5"]
+          args: [".+\\/\\s([^а-яА-я\\/]+)\\s.*\\[(?:S*(\\d+))(?:x*(\\d+-*\\d*).*)*\\].*\\)\\s+(.+)\\s+(?:\\||от)\\s*(.+)", "$1 - S$2E$3 - rus - $4 - $5"]
         - name: replace
           args: ["E -", "E01-99 -"]
         - name: replace
@@ -87,10 +87,10 @@ search:
       # 27 Окт 17
       selector: td:nth-of-type(1)
       filters:
-          # replace white spaces
+        # replace white spaces
         - name: re_replace
           args: ["[\\s]+", " "]
-          # replace month abbreviations
+        # replace month abbreviations
         - name: replace
           args: ["Янв", "Jan"]
         - name: replace

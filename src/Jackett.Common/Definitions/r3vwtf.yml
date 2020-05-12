@@ -59,7 +59,7 @@ login:
 
 search:
   paths:
-  # https://r3vuk.wtf/browse.php?c1=1&c24=1&search=&searchin=title&incldead=0
+    # https://r3vuk.wtf/browse.php?c1=1&c24=1&search=&searchin=title&incldead=0
     - path: browse.php
   inputs:
     $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
@@ -98,15 +98,15 @@ search:
     files:
       selector: td:nth-last-child(8)
     date:
-    # Jul 4 2019 08:04 AM
+      # Jul 4 2019 08:04 AM
       selector: td:nth-last-child(6):not(:contains("day"))
       optional: true
       filters:
         - name: dateparse
           args: "Jan 2 2006 03:04 PM"
     date:
-    # Today 02:40 PM
-    # Yesterday 09:10 AM
+      # Today 02:40 PM
+      # Yesterday 09:10 AM
       selector: td:nth-last-child(6):contains("day")
       optional: true
     size:

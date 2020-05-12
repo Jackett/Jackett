@@ -14,57 +14,57 @@ legacylinks:
 caps:
   categorymappings:
     # Adult
-     - {id: 12, cat: XXX, desc: "Adult"}
+    - {id: 12, cat: XXX, desc: "Adult"}
     # Applicazioni
-     - {id: 5, cat: PC/Phone-Android, desc: "Android"}
-     - {id: 30, cat: PC/Phone-IOS, desc: "iOS / iPhone"}
-     - {id: 7, cat: PC/0day, desc: "Windows"}
-     - {id: 8, cat: PC, desc: "Linux"}
-     - {id: 9, cat: PC/Mac, desc: "Mac"}
-     - {id: 40, cat: PC, desc: "Emulatori"}
-     - {id: 34, cat: PC, desc: "Student's Office"}
+    - {id: 5, cat: PC/Phone-Android, desc: "Android"}
+    - {id: 30, cat: PC/Phone-IOS, desc: "iOS / iPhone"}
+    - {id: 7, cat: PC/0day, desc: "Windows"}
+    - {id: 8, cat: PC, desc: "Linux"}
+    - {id: 9, cat: PC/Mac, desc: "Mac"}
+    - {id: 40, cat: PC, desc: "Emulatori"}
+    - {id: 34, cat: PC, desc: "Student's Office"}
     # Books
-     - {id: 6, cat: Books/Ebook, desc: "Books"}
-     - {id: 45, cat: Books/Comics, desc: "Fumetti"}
-     - {id: 51, cat: Books/Ebook, desc: "Pdf"}
-     - {id: 33, cat: Books/Ebook, desc: "Romanzi"}
-     - {id: 26, cat: Books/Magazines, desc: "Edicola: Giornali/Quotidiani"}
+    - {id: 6, cat: Books/Ebook, desc: "Books"}
+    - {id: 45, cat: Books/Comics, desc: "Fumetti"}
+    - {id: 51, cat: Books/Ebook, desc: "Pdf"}
+    - {id: 33, cat: Books/Ebook, desc: "Romanzi"}
+    - {id: 26, cat: Books/Magazines, desc: "Edicola: Giornali/Quotidiani"}
     # Games
-     - {id: 3, cat: PC/Games, desc: "Games PC"}
-     - {id: 27, cat: Console, desc: "Games Console"}
-     - {id: 41, cat: Console/Xbox, desc: "Games Xbox360"}
-     - {id: 43, cat: Console, desc: "Games Retro"}
-     - {id: 47, cat: Console/NDS, desc: "Games Nintendo"}
+    - {id: 3, cat: PC/Games, desc: "Games PC"}
+    - {id: 27, cat: Console, desc: "Games Console"}
+    - {id: 41, cat: Console/Xbox, desc: "Games Xbox360"}
+    - {id: 43, cat: Console, desc: "Games Retro"}
+    - {id: 47, cat: Console/NDS, desc: "Games Nintendo"}
     # Music
-     - {id: 2, cat: Audio, desc: "Music"}
-     - {id: 48, cat: Audio/MP3, desc: "Music MP3"}
-     - {id: 49, cat: Audio, desc: "Radio Trasmissioni"}
+    - {id: 2, cat: Audio, desc: "Music"}
+    - {id: 48, cat: Audio/MP3, desc: "Music MP3"}
+    - {id: 49, cat: Audio, desc: "Radio Trasmissioni"}
     # Movies
-     - {id: 17, cat: Movies/HD, desc: "Movie BDRip"}
-     - {id: 39, cat: Movies/HD, desc: "Movie BDRip TNT"}
-     - {id: 21, cat: Movies/Other, desc: "Movie Films"}
-     - {id: 11, cat: Movies/DVD, desc: "Movie DVD-R"}
-     - {id: 14, cat: Movies/HD, desc: "Movie 720p"}
-     - {id: 13, cat: Movies/HD, desc: "Movie 1080p"}
-     - {id: 15, cat: Movies/3D, desc: "Movie 3D"}
-     - {id: 25, cat: Movies/UHD, desc: "Movie UHD"}
-     - {id: 36, cat: Movies, desc: "Movie TNT"}
-     - {id: 24, cat: TV/SD, desc: "TV Show Standard"}
-     - {id: 19, cat: TV/HD, desc: "TV Show 1080p"}
-     - {id: 20, cat: TV/HD, desc: "TV Show 720"}
-     - {id: 50, cat: TV, desc: "TV Show TNT"}
-     - {id: 28, cat: TV/Anime, desc: "Anime"}
-     - {id: 29, cat: TV, desc: "Cartoons"}
-     - {id: 37, cat: TV/Sport, desc: "Sport"}
-     - {id: 35, cat: TV/Documentary, desc: "Documentari"}
-     - {id: 38, cat: Movies, desc: "Commedia"}
-     - {id: 46, cat: Movies, desc: "Movie Parodie"}
+    - {id: 17, cat: Movies/HD, desc: "Movie BDRip"}
+    - {id: 39, cat: Movies/HD, desc: "Movie BDRip TNT"}
+    - {id: 21, cat: Movies/Other, desc: "Movie Films"}
+    - {id: 11, cat: Movies/DVD, desc: "Movie DVD-R"}
+    - {id: 14, cat: Movies/HD, desc: "Movie 720p"}
+    - {id: 13, cat: Movies/HD, desc: "Movie 1080p"}
+    - {id: 15, cat: Movies/3D, desc: "Movie 3D"}
+    - {id: 25, cat: Movies/UHD, desc: "Movie UHD"}
+    - {id: 36, cat: Movies, desc: "Movie TNT"}
+    - {id: 24, cat: TV/SD, desc: "TV Show Standard"}
+    - {id: 19, cat: TV/HD, desc: "TV Show 1080p"}
+    - {id: 20, cat: TV/HD, desc: "TV Show 720"}
+    - {id: 50, cat: TV, desc: "TV Show TNT"}
+    - {id: 28, cat: TV/Anime, desc: "Anime"}
+    - {id: 29, cat: TV, desc: "Cartoons"}
+    - {id: 37, cat: TV/Sport, desc: "Sport"}
+    - {id: 35, cat: TV/Documentary, desc: "Documentari"}
+    - {id: 38, cat: Movies, desc: "Commedia"}
+    - {id: 46, cat: Movies, desc: "Movie Parodie"}
     # Various
-     - {id: 4, cat: Other, desc: "Other"}
-     - {id: 23, cat: Other, desc: "Archive"}
-     - {id: 42, cat: Other, desc: "Disegni e Modelli"}
-     - {id: 16, cat: Other, desc: "V.I.P."}
-     - {id: 32, cat: Other, desc: "Premium"}
+    - {id: 4, cat: Other, desc: "Other"}
+    - {id: 23, cat: Other, desc: "Archive"}
+    - {id: 42, cat: Other, desc: "Disegni e Modelli"}
+    - {id: 16, cat: Other, desc: "V.I.P."}
+    - {id: 32, cat: Other, desc: "Premium"}
 
   modes:
     search: [q]

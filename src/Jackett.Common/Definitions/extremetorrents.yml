@@ -69,7 +69,7 @@ login:
 
 download:
   before:
-  # https://www.extremetorrents.org/comment.php?action=add&tid=166386
+    # https://www.extremetorrents.org/comment.php?action=add&tid=166386
     path: comment.php
     method: post
     inputs:

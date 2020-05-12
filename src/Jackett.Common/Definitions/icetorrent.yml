@@ -12,49 +12,49 @@ legacylinks:
 
 caps:
   categorymappings:
-   - {id: 38, cat: Movies, desc: "Movie Packs"}
-   - {id: 10, cat: Movies/SD, desc: "Movies: SD"}
-   - {id: 35, cat: Movies/SD, desc: "Movies: SD Ro"}
-   - {id: 8, cat: Movies/HD, desc: "Movies: HD"}
-   - {id: 29, cat: Movies/HD, desc: "Movies: HD Ro"}
-   - {id: 7, cat: Movies/DVD, desc: "Movies: DVD"}
-   - {id: 2, cat: Movies/DVD, desc: "Movies: DVD Ro"}
-   - {id: 17, cat: Movies/BluRay, desc: "Movies: BluRay"}
-   - {id: 24, cat: Movies/BluRay, desc: "Movies: BluRay Ro"}
-   - {id: 59, cat: Movies, desc: "Movies: Ro"}
-   - {id: 57, cat: Movies/UHD, desc: "Movies: 4K (2160p) Ro"}
-   - {id: 61, cat: Movies/UHD, desc: "Movies: 4K (2160p)"}
-   - {id: 41, cat: TV, desc: "TV Packs"}
-   - {id: 66, cat: TV, desc: "TV Packs Ro"}
-   - {id: 45, cat: TV, desc: "TV Episodes"}
-   - {id: 46, cat: TV, desc: "TV Episodes Ro"}
-   - {id: 43, cat: TV/HD, desc: "TV Episodes HD"}
-   - {id: 44, cat: TV/HD, desc: "TV Episodes HD Ro"}
-   - {id: 60, cat: TV, desc: "TV Ro"}
-   - {id: 11, cat: PC/Games, desc: "Games: PC-ISO"}
-   - {id: 52, cat: Console, desc: "Games: Console"}
-   - {id: 1, cat: PC/0day, desc: "Applications"}
-   - {id: 14, cat: PC, desc: "Applications: Linux"}
-   - {id: 37, cat: PC/Mac, desc: "Applications: Mac"}
-   - {id: 19, cat: PC/Phone-Other, desc: "Applications: Mobile"}
-   - {id: 62, cat: TV, desc: "TV Cartoons"}
-   - {id: 3, cat: TV/Anime, desc: "TV Anime / Hentai"}
-   - {id: 6, cat: Books/Ebook, desc: "E-books"}
-   - {id: 5, cat: Audio, desc: "Music"}
-   - {id: 64, cat: Audio/Video, desc: "Music Video"}
-   - {id: 18, cat: Other, desc: "Images"}
-   - {id: 22, cat: TV/Sport, desc: "TV Sports"}
-   - {id: 58, cat: TV/Sport, desc: "TV Sports Ro"}
-   - {id: 9, cat: TV/Documentary, desc: "TV Documentary"}
-   - {id: 63, cat: TV/Documentary, desc: "TV Documentary Ro"}
-   - {id: 65, cat: Other, desc: "Tutorial"}
-   - {id: 67, cat: Other, desc: "Miscellaneous"}
-   - {id: 15, cat: XXX, desc: "XXX Movies"}
-   - {id: 47, cat: XXX, desc: "XXX DVD"}
-   - {id: 48, cat: XXX, desc: "XXX HD"}
-   - {id: 49, cat: XXX, desc: "XXX Images"}
-   - {id: 50, cat: XXX, desc: "XXX Packs"}
-   - {id: 51, cat: XXX, desc: "XXX SD"}
+    - {id: 38, cat: Movies, desc: "Movie Packs"}
+    - {id: 10, cat: Movies/SD, desc: "Movies: SD"}
+    - {id: 35, cat: Movies/SD, desc: "Movies: SD Ro"}
+    - {id: 8, cat: Movies/HD, desc: "Movies: HD"}
+    - {id: 29, cat: Movies/HD, desc: "Movies: HD Ro"}
+    - {id: 7, cat: Movies/DVD, desc: "Movies: DVD"}
+    - {id: 2, cat: Movies/DVD, desc: "Movies: DVD Ro"}
+    - {id: 17, cat: Movies/BluRay, desc: "Movies: BluRay"}
+    - {id: 24, cat: Movies/BluRay, desc: "Movies: BluRay Ro"}
+    - {id: 59, cat: Movies, desc: "Movies: Ro"}
+    - {id: 57, cat: Movies/UHD, desc: "Movies: 4K (2160p) Ro"}
+    - {id: 61, cat: Movies/UHD, desc: "Movies: 4K (2160p)"}
+    - {id: 41, cat: TV, desc: "TV Packs"}
+    - {id: 66, cat: TV, desc: "TV Packs Ro"}
+    - {id: 45, cat: TV, desc: "TV Episodes"}
+    - {id: 46, cat: TV, desc: "TV Episodes Ro"}
+    - {id: 43, cat: TV/HD, desc: "TV Episodes HD"}
+    - {id: 44, cat: TV/HD, desc: "TV Episodes HD Ro"}
+    - {id: 60, cat: TV, desc: "TV Ro"}
+    - {id: 11, cat: PC/Games, desc: "Games: PC-ISO"}
+    - {id: 52, cat: Console, desc: "Games: Console"}
+    - {id: 1, cat: PC/0day, desc: "Applications"}
+    - {id: 14, cat: PC, desc: "Applications: Linux"}
+    - {id: 37, cat: PC/Mac, desc: "Applications: Mac"}
+    - {id: 19, cat: PC/Phone-Other, desc: "Applications: Mobile"}
+    - {id: 62, cat: TV, desc: "TV Cartoons"}
+    - {id: 3, cat: TV/Anime, desc: "TV Anime / Hentai"}
+    - {id: 6, cat: Books/Ebook, desc: "E-books"}
+    - {id: 5, cat: Audio, desc: "Music"}
+    - {id: 64, cat: Audio/Video, desc: "Music Video"}
+    - {id: 18, cat: Other, desc: "Images"}
+    - {id: 22, cat: TV/Sport, desc: "TV Sports"}
+    - {id: 58, cat: TV/Sport, desc: "TV Sports Ro"}
+    - {id: 9, cat: TV/Documentary, desc: "TV Documentary"}
+    - {id: 63, cat: TV/Documentary, desc: "TV Documentary Ro"}
+    - {id: 65, cat: Other, desc: "Tutorial"}
+    - {id: 67, cat: Other, desc: "Miscellaneous"}
+    - {id: 15, cat: XXX, desc: "XXX Movies"}
+    - {id: 47, cat: XXX, desc: "XXX DVD"}
+    - {id: 48, cat: XXX, desc: "XXX HD"}
+    - {id: 49, cat: XXX, desc: "XXX Images"}
+    - {id: 50, cat: XXX, desc: "XXX Packs"}
+    - {id: 51, cat: XXX, desc: "XXX SD"}
 
   modes:
     search: [q, imdbid]
@@ -122,7 +122,7 @@ ratio:
 search:
   paths:
     # https://icetorrent.org/browse?search=&submit=&sort=torrent.size&direction=desc&page=1
-  - path: "{{ if .Config.browseadult }}adult{{else}}browse{{end}}"
+    - path: "{{ if .Config.browseadult }}adult{{else}}browse{{end}}"
   inputs:
     $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"

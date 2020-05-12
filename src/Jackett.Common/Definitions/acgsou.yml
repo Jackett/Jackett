@@ -53,8 +53,8 @@ download:
 
 search:
   paths:
-  # https://www.acgsou.com/1.html
-  # https://www.acgsou.com/search.php?keyword=test
+    # https://www.acgsou.com/1.html
+    # https://www.acgsou.com/search.php?keyword=test
     - path: "{{ if .Keywords }}search.php?keyword={{ .Keywords }}{{else}}1.html{{end}}"
 
   rows:
