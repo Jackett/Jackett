@@ -95,7 +95,7 @@ login:
 
 search:
   paths:
-  # https://divteam.com/index.php?page=torrents&search=daredevil&category=20;23;31;65;64;60;63;69;70;71;72;73;74;75;76;77;78;80;81;82;83;84&active=1
+    # https://divteam.com/index.php?page=torrents&search=daredevil&category=20;23;31;65;64;60;63;69;70;71;72;73;74;75;76;77;78;80;81;82;83;84&active=1
     - path: index.php
   inputs:
     page: "torrents"

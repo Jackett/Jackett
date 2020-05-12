@@ -93,12 +93,12 @@ search:
       selector: td:nth-child(1) > div > a[href^="/torrent/"]
       attribute: href
       filters:
-      - name: replace
-        args: ["/torrent/", "/tor/"]
-      - name: regexp
-        args: (^/tor/\d*)
-      - name: append
-        args: ".torrent"
+        - name: replace
+          args: ["/torrent/", "/tor/"]
+        - name: regexp
+          args: (^/tor/\d*)
+        - name: append
+          args: ".torrent"
     date:
       selector: td:nth-child(2):contains("/")
       optional: true

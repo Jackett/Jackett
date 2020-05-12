@@ -165,8 +165,8 @@ download:
 
 search:
   paths:
-  # https://lechaudron.nl/TTV3/Torrents/Recherche?recherche=viva+maria&type=exacte&endroit=nomtorrent&langue=0&tl=peuimporte
-  # categories for searching are unsupported
+    # https://lechaudron.nl/TTV3/Torrents/Recherche?recherche=viva+maria&type=exacte&endroit=nomtorrent&langue=0&tl=peuimporte
+    # categories for searching are unsupported
     - path: TTV3/Torrents/Recherche
   inputs:
     recherche: "{{ .Keywords }}"
