@@ -316,9 +316,8 @@ stages:
           - script: pip install yamllint
             displayName: Install yamllint
 
-          - script: yamllint -s -c ./yamllint.yml ./src/Jackett.Common/Definitions/ | tr '\n' ',' | sed 's/,,/\n/g' | sed 's/^/##vso[task.logissue type=error]/' >&2
+          - script: yamllint -c ./yamllint.yml ./src/Jackett.Common/Definitions/
             displayName: Lint YAML
-            failOnStderr: true
 
   - stage: UnitTestJackett
     displayName: Unit Tests
