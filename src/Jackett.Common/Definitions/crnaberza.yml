@@ -6,6 +6,8 @@ language: sr-sp
 type: private
 encoding: UTF-8
 links:
+  - https://www.crnaberza.com/
+legacylinks:
   - http://www.crnaberza.com/
 
 caps:
@@ -83,6 +85,8 @@ login:
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
+    remember: 1
+    returnto: /
   error:
     - selector: h2
       message:
