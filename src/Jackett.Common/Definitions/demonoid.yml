@@ -21,7 +21,7 @@ legacylinks:
 
 caps:
   categorymappings:
-  # fetch these from https://www.demonoid.is/cached/torrent_categories_script.js?v5
+    # fetch these from https://www.demonoid.is/cached/torrent_categories_script.js?v5
     # Applications
     - {id: 1, cat: PC/Phone-Android, desc: "Applications Android"}
     - {id: 2, cat: PC/Phone-IOS, desc: "Applications Iphone / Ipod touch"}

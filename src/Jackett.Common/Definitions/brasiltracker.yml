@@ -64,9 +64,9 @@ login:
 
 search:
   paths:
+    # torrents.php?searchstr=mandalorain&order_by=size&order_way=desc&action=basic&searchsubmit=1
     - path: torrents.php
   inputs:
-  # torrents.php?searchstr=mandalorain&order_by=size&order_way=desc&action=basic&searchsubmit=1
     searchstr: "{{ .Keywords }}"
     order_by: "{{ .Config.sort }}"
     order_way: "{{ .Config.type }}"

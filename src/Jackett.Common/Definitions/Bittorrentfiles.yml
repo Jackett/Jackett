@@ -209,7 +209,7 @@ search:
         - name: replace
           args: ["Gestern", "Yesterday"]
     date:
-        # 30.02.2018 23:12:50
+      # 30.02.2018 23:12:50
       selector: td:nth-child(10):contains("."):contains(":")
       optional: true
       filters:

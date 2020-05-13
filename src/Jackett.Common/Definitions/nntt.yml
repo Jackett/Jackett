@@ -725,7 +725,7 @@ search:
       # 12 янв 2019
       selector: td:nth-of-type(6) p
       filters:
-          # replace month abbreviations
+        # replace month abbreviations
         - name: replace
           args: ["янв", "Jan"]
         - name: replace

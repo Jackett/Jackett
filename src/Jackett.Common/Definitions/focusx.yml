@@ -180,7 +180,7 @@ settings:
 
 search:
   paths:
-  # https://focu.sx/tracker/search?freeleech=0&query=daredevil
+    # https://focu.sx/tracker/search?freeleech=0&query=daredevil
     - path: "tracker/{{ if .Keywords }}search?freeleech=0&query={{ .Keywords }}&{{else}}?{{end}}order={{ .Config.sort }}&direction={{ .Config.type }}"
       followredirect: true
 

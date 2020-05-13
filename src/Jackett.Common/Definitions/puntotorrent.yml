@@ -179,7 +179,7 @@ search:
         - name: re_replace
           args: ["(?i)\\w*Temp\\w*\\b\\s?(\\d{1,2})(ª|\\D)?\\b", " S$1 "]
         - name: re_replace
-          args: ["(?i)(\\d{1,2})(ª|\\D)?\\s?\\w*Temp\\w*\\b"," S$1 "]
+          args: ["(?i)(\\d{1,2})(ª|\\D)?\\s?\\w*Temp\\w*\\b", " S$1 "]
         - name: re_replace
           args: ["(?i)(\\d{1,2})[x|\\/|\\\\](\\d{1,2})", "S$1E$2"]
     title:
@@ -195,9 +195,9 @@ search:
         - name: re_replace
           args: ["(?i)\\w*Temp\\w*\\b\\s?(\\d{1,2})(ª|\\D)?\\b", " S$1 "]
         - name: re_replace
-          args: ["(?i)(\\d{1,2})(ª|\\D)?\\s?\\w*Temp\\w*\\b"," S$1 "]
+          args: ["(?i)(\\d{1,2})(ª|\\D)?\\s?\\w*Temp\\w*\\b", " S$1 "]
         - name: re_replace
-          args: ["(?i)(\\d{1,2})(ª|\\D)?\\s?\\w*Temp\\w*\\b"," S$1 "]
+          args: ["(?i)(\\d{1,2})(ª|\\D)?\\s?\\w*Temp\\w*\\b", " S$1 "]
         - name: re_replace
           args: ["(?i)(\\d{1,2})[x|\\/|\\\\](\\d{1,2})", "S$1E$2"]
         - name: re_replace # S02/C01 => S02E01  /  S02xC01 => S02E01  /  S02C01 => S02E01
@@ -241,8 +241,8 @@ search:
         img[src$="silver.gif"]: 0.5
         "*": 1
     uploadvolumefactor:
-        case:
-          img[src$="x2.gif"]: 2
-          img[src$="x3.gif"]: 3
-          "*": 1
+      case:
+        img[src$="x2.gif"]: 2
+        img[src$="x3.gif"]: 3
+        "*": 1
 # xbtit 2.3.0

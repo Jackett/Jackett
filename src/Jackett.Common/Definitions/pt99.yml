@@ -70,7 +70,7 @@ ratio:
   selector: table#info_block
   filters:
     - name: replace
-      args: ["分享率:","Ratio:"] # for simplified chinese language setting
+      args: ["分享率:", "Ratio:"] # for simplified chinese language setting
     - name: regexp
       args: "Ratio:\\s(.*?)\\s\\s"
 

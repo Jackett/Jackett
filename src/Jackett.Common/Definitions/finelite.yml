@@ -77,7 +77,7 @@ login:
 
 search:
   paths:
-  # https://finelite.org/selaa.php?c14=1&c15=1&c31=1&search=tt6591554&hae=1&type=desc&cat=0&incldead=1&sort=4
+    # https://finelite.org/selaa.php?c14=1&c15=1&c31=1&search=tt6591554&hae=1&type=desc&cat=0&incldead=1&sort=4
     - path: selaa.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
@@ -115,7 +115,7 @@ search:
     files:
       selector: td:nth-last-child(6)
     date:
-        # 26.03.2020 <br/>3:53
+      # 26.03.2020 <br/>3:53
       selector: td:nth-last-child(4)
       filters:
         - name: re_replace

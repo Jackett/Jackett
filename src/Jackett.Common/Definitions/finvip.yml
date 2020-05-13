@@ -96,7 +96,7 @@ download:
 
 search:
   paths:
-  # https://finvip.org/index.php?page=torrents&active=0&gold=0&category=5;25;6&order=3&by=2
+    # https://finvip.org/index.php?page=torrents&active=0&gold=0&category=5;25;6&order=3&by=2
     - path: index.php
   inputs:
     page: torrents
@@ -146,7 +146,7 @@ search:
     seeders:
       selector: td:nth-last-child(3)
     date:
-        # 23/12/2019 07:57
+      # 23/12/2019 07:57
       selector: td:nth-last-child(4)
       filters:
         - name: dateparse

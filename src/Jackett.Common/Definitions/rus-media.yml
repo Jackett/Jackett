@@ -371,7 +371,7 @@ search:
       selector: td:nth-of-type(6) p:nth-of-type(1):not(:contains("Сегодня")):not(:contains("Вчера"))
       optional: true
       filters:
-          # replace month abbreviations
+        # replace month abbreviations
         - name: replace
           args: ["янв", "Jan"]
         - name: replace

@@ -149,13 +149,13 @@ search:
       selector: a[href*="?p=torrents&pid=10&action=details"]
       attribute: href
     date:
-    # within the hour
+      # within the hour
       optional: true
       selector: td.torrent_name
       attribute: data-time
     date:
       optional: true
-       # Uploaded 30-01-2019 15:02 by
+      # Uploaded 30-01-2019 15:02 by
       selector: td.torrent_name:not(:contains(" at "))
       filters:
         - name: regexp
@@ -164,9 +164,9 @@ search:
           args: "02-01-2006 15:04"
     date:
       optional: true
-       # Uploaded Friday at 05:11 by
-       # Uploaded Today at 00:48 by
-       # Uploaded Yesterday at 23:57 by
+      # Uploaded Friday at 05:11 by
+      # Uploaded Today at 00:48 by
+      # Uploaded Yesterday at 23:57 by
       selector: td.torrent_name:contains(" at ")
       filters:
         - name: regexp

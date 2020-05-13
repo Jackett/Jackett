@@ -80,7 +80,7 @@ login:
 
 search:
   paths:
-  # https://ptfiles.net/browse.php?search=tt3612126&incldead=1&title=1
+    # https://ptfiles.net/browse.php?search=tt3612126&incldead=1&title=1
     - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"

@@ -71,7 +71,7 @@ ratio:
 
 search:
   paths:
-  # https://torrentdb.net/filter/torrents?&search=ring&categories[]=1&freeleech=1&doubleupload=1&sorting=created_at&direction=desc&qty=100
+    # https://torrentdb.net/filter/torrents?&search=ring&categories[]=1&freeleech=1&doubleupload=1&sorting=created_at&direction=desc&qty=100
     - path: filter/torrents
   inputs:
     $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
