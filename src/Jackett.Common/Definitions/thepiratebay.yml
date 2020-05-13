@@ -37,7 +37,7 @@ legacylinks:
 
 caps:
   categorymappings:
-    #Audio
+    # Audio
     - {id: 100, cat: Audio, desc: "Audio", default: true}
     - {id: 101, cat: Audio, desc: "Music", default: true}
     - {id: 102, cat: Audio/Audiobook, desc: "Audio books", default: true}
@@ -45,7 +45,7 @@ caps:
     - {id: 104, cat: Audio/Lossless, desc: "FLAC", default: true}
     - {id: 199, cat: Audio/Other, desc: "Audio Other", default: true}
 
-    #Video
+    # Video
     - {id: 200, cat: Movies, desc: "Video", default: true}
     - {id: 201, cat: Movies, desc: "Movies", default: true}
     - {id: 202, cat: Movies/DVD, desc: "Movies DVDR", default: true}
@@ -58,7 +58,7 @@ caps:
     - {id: 209, cat: Movies/3D, desc: "3D", default: true}
     - {id: 299, cat: Movies/Other, desc: "Video Other", default: true}
 
-    #Applications
+    # Applications
     - {id: 300, cat: PC, desc: "Applications", default: true}
     - {id: 301, cat: PC, desc: "Windows", default: true}
     - {id: 302, cat: PC/Mac, desc: "Mac", default: true}
@@ -68,7 +68,7 @@ caps:
     - {id: 306, cat: PC/Phone-Android, desc: "Android", default: true}
     - {id: 399, cat: PC, desc: "Other OS", default: true}
 
-    #Games
+    # Games
     - {id: 400, cat: Console, desc: "Games", default: true}
     - {id: 401, cat: PC/Games, desc: "PC", default: true}
     - {id: 402, cat: PC/Mac, desc: "Mac", default: true}
@@ -80,7 +80,7 @@ caps:
     - {id: 408, cat: Console/Other, desc: "Android", default: true}
     - {id: 499, cat: Console/Other, desc: "Games Other", default: true}
 
-    #Porn
+    # Porn
     - {id: 500, cat: XXX, desc: "Porn", default: true}
     - {id: 501, cat: XXX, desc: "Movies", default: true}
     - {id: 502, cat: XXX/DVD, desc: "Movies DVDR", default: true}
@@ -90,7 +90,7 @@ caps:
     - {id: 506, cat: XXX, desc: "Movie clips", default: true}
     - {id: 599, cat: XXX/Other, desc: "Porn Other", default: true}
 
-    #Other
+    # Other
     - {id: 600, cat: Other, desc: "Other", default: true}
     - {id: 601, cat: Books, desc: "E-books", default: true}
     - {id: 602, cat: Books/Comics, desc: "Comics", default: true}

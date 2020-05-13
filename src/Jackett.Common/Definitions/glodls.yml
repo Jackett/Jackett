@@ -93,7 +93,7 @@ search:
 
   fields:
     category:
-      text: 33 #7113
+      text: 33 # issue #7113
     category|noappend:
       optional: true
       selector: a[href^="/search.php?cat="]

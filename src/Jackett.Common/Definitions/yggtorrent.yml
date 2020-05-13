@@ -197,17 +197,17 @@ search:
     # One Punch Man S2 10 OR One Punch Man S2 2
     # BY
     # One Punch Man S02E10 OR One Punch Man S02E02
-    - name: re_replace #S 1-9 & EP >= 10
+    - name: re_replace # S 1-9 & EP >= 10
       args: ["(.*)[sS]([1-9])\\s(\\d{2,3})$", "$1 S0$2E$3"]
-    - name: re_replace #S 1-9 & EP 1-9
+    - name: re_replace # S 1-9 & EP 1-9
       args: ["(.*)[sS]([1-9])\\s(\\d{1})$", "$1 S0$2E0$3"]
-    - name: re_replace #S >= 10 & EP >= 10
+    - name: re_replace # S >= 10 & EP >= 10
       args: ["(.*)[sS]([1-9][0-9])\\s(\\d{2,3})$", "$1 S0$2E$3"]
-    - name: re_replace #S >= 10 & EP 1-9
+    - name: re_replace # S >= 10 & EP 1-9
       args: ["(.*)[sS]([1-9][0-9])\\s(\\d{1})$", "$1 S0$2E0$3"]
-    - name: re_replace #Full season S 1-9
+    - name: re_replace # Full season S 1-9
       args: ["(.*)[sS]([1-9])$", "$1 S0$2"]
-    - name: re_replace #Full season S >= 10
+    - name: re_replace # Full season S >= 10
       args: ["(.*)[sS]([1-9][0-9])$", "$1 S$2"]
     # END ANIME HACK
     - name: replace

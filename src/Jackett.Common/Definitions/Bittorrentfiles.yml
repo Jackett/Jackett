@@ -86,7 +86,7 @@ caps:
     - {id: 47, cat: Other, desc: "Sonstiges Line"}
     - {id: 9, cat: Other, desc: "Sonstiges Andere"}
 
-    #XXX
+    # XXX
     - {id: 58, cat: Books/Comics, desc: "XXX HD"}
     - {id: 46, cat: XXX, desc: "XXX Hentai"}
     - {id: 35, cat: XXX/Other, desc: "XXX Andere"}

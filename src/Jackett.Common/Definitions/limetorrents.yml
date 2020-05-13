@@ -73,7 +73,7 @@ search:
     - path: "{{ if .Keywords }}search/all/{{ .Keywords }}/{{ .Config.sort }}/1/{{else}}/latest100{{end}}"
   keywordsfilters:
     - name: re_replace
-      args: ["S[0-9]{2}([^E]|$)", ""] #remove season tag without episode
+      args: ["S[0-9]{2}([^E]|$)", ""] # remove season tag without episode
 
   rows:
     selector: ".table2 > tbody > tr[bgcolor]"

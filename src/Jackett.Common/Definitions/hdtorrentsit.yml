@@ -53,9 +53,9 @@ search:
       args: ["[^a-zA-Z0-9]+", "%"]
     - name: diacritics
       args: replace
-    - name: re_replace #remove SXXEYY from research
+    - name: re_replace # remove SXXEYY from research
       args: ["(S\\d{1,2}E\\d{1,2})", ""]
-    - name: re_replace #remove SXX from research
+    - name: re_replace # remove SXX from research
       args: ["(S\\d{1,2})", ""]
   inputs:
     ajax: false
@@ -67,43 +67,43 @@ search:
     title:
       selector: td:nth-child(2) a:nth-child(1)
       filters:
-        - name: re_replace #separate title
+        - name: re_replace # separate title
           args: ["(\\s+\\/\\s+|\\/\\s+|\\s+\\/|\\/)(.*)\\s\\(", " ("]
-        - name: re_replace #remove (yyyy) from the title
+        - name: re_replace # remove (yyyy) from the title
           args: ["(\\(\\d{4}\\)?\\s?)", ""]
-        - name: re_replace #remove |
+        - name: re_replace # remove |
           args: ["(\\s\\||\\s\\/)", ""]
         - name: re_replace # Stagione X --> S0X
           args: ["(?i)\\bStagion[ei]\\s?(\\d{1})\\b|\\bSeason'?s?\\s?(\\d{1})\\b", "S0$1$2"]
         - name: re_replace # Stagione XX --> SXX
           args: ["(?i)\\bStagion[ei]\\s?(\\d{2,})\\b|\\bSeason'?s?\\s?(\\d{2,})\\b", "S$1$2"]
-        - name: re_replace #/ Episodio [YY-YY --> EYY-YY
+        - name: re_replace # / Episodio [YY-YY --> EYY-YY
           args: ["(?i)(\\s\\/?\\s?Episodi[o]?)\\s\\[", "E"]
         - name: re_replace # Episodio 4 to E4
           args: ["(?i)\\b(?:[\\s\\/\\|]?Episodi[o]?\\s?(\\d+)|Puntata\\s?(\\d+))", "E$1$2"]
-        - name: re_replace #/ Completa [episodi  YY-YY --> EYY-YY
+        - name: re_replace # / Completa [episodi  YY-YY --> EYY-YY
           args: ["(?i)(\\s\\/\\sCompleta\\s\\[episodi\\s)", "E"]
-        - name: re_replace #remove  di YY] | remove /YY]
+        - name: re_replace # remove  di YY] | remove /YY]
           args: ["(?i)(\\sdi\\s\\d{1,2}|\\/\\d{1,2})\\]", " "]
-        - name: re_replace #remove various
+        - name: re_replace # remove various
           args: ["(?i)(Serie completa|Completa|\\[in pausa\\])", ""]
-    title|append: #start year
+    title|append: # start year
       text: " ("
-    title|append: #add year
+    title|append: # add year
       selector: td:nth-child(2) a:nth-child(1)
       filters:
-        - name: regexp #find torrent year
+        - name: regexp # find torrent year
           args: (\d{4})
-    title|append: #end year
+    title|append: # end year
       text: ") "
-    title|append: #start quality TAG
+    title|append: # start quality TAG
       text: "["
-    title|append: #quality TAG (BDRip 1080, BDRip 720p etc)
+    title|append: # quality TAG (BDRip 1080, BDRip 720p etc)
       selector: td:nth-child(1) a:nth-child(1) img
       attribute: alt
-    title|append: #separator
+    title|append: # separator
       text: " - "
-    title|append: #ita audio TAG
+    title|append: # ita audio TAG
       selector: a[href^="download.php?id="]
       attribute: href
       filters:
@@ -113,7 +113,7 @@ search:
           args: (DTS AC3 ITA|DTS ITA|AC3 ITA)
         - name: re_replace
           args: ["ITA", ""]
-    title|append: #end TAG
+    title|append: # end TAG
       text: "ITA]"
       filters:
         - name: re_replace # replace multiple spaces

@@ -269,7 +269,7 @@ login:
 
 search:
   paths:
-    #https://casstudio.tv/search.php?tracker_search=torrent&keywords=star&terms=all&author=&sc=1&sf=titleonly&sr=topics&sk=t&sd=d&st=0&ch=300&t=0&submit=Search
+    # https://casstudio.tv/search.php?tracker_search=torrent&keywords=star&terms=all&author=&sc=1&sf=titleonly&sr=topics&sk=t&sd=d&st=0&ch=300&t=0&submit=Search
     - path: search.php
   inputs:
     tracker_search: torrent

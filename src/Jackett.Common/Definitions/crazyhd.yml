@@ -52,7 +52,7 @@ caps:
     - {id: 39, cat: PC, desc: "Software Tutorials"}
     - {id: 63, cat: PC, desc: "Software Linux"}
     - {id: 89, cat: PC/Mac, desc: "Software MAC OSX"}
-    #Bangla
+    # Bangla
     - {id: 56, cat: Movies, desc: "Movies Bangla"}
     - {id: 35, cat: Movies, desc: "Movies Bangla Natok"}
     - {id: 47, cat: Movies, desc: "Movies Indian Bangla"}

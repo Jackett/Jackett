@@ -13,7 +13,7 @@ legacylinks:
 
 caps:
   categorymappings:
-    #Anime
+    # Anime
     - {id: 1, cat: TV/Anime, desc: "Anime"}
     - {id: 963, cat: TV/Anime, desc: "Anime - Absolute Duo"}
     - {id: 951, cat: TV/Anime, desc: "Anime - Akame ga Kill"}
@@ -62,7 +62,7 @@ caps:
     - {id: 953, cat: TV/Anime, desc: "Anime - Sword Art Online II"}
     - {id: 958, cat: TV/Anime, desc: "Anime - Tokyo Ghoul"}
 
-    #Audio
+    # Audio
     - {id: 5, cat: Audio, desc: "Music"}
     - {id: 54, cat: Audio, desc: "Music - Alternative"}
     - {id: 990, cat: Audio, desc: "Music - Ambient"}
@@ -125,7 +125,7 @@ caps:
     - {id: 1011, cat: Audio, desc: "Music - Radio"}
     - {id: 1012, cat: Audio, desc: "Music - Single"}
 
-    #Movies
+    # Movies
     - {id: 4, cat: Movies, desc: "Movies"}
     - {id: 419, cat: Movies, desc: "Movies - Action"}
     - {id: 28, cat: Movies, desc: "Movies - Adventure"}
@@ -176,7 +176,7 @@ caps:
     - {id: 1034, cat: Movies, desc: "Movies - SVCD/VCD"}
     - {id: 1035, cat: Movies, desc: "Movies - YIFY"}
 
-    #TV
+    # TV
     - {id: 8, cat: TV, desc: "TV"}
     - {id: 986, cat: TV, desc: "TV - 12 Monkeys"}
     - {id: 598, cat: TV, desc: "TV - 19-2"}
@@ -833,7 +833,7 @@ caps:
     - {id: 1028, cat: TV, desc: "TV/HD - HD"}
     - {id: 1029, cat: TV, desc: "TV - SVCD/VCD"}
 
-    #Apps
+    # Apps
     - {id: 7, cat: PC, desc: "Software"}
     - {id: 416, cat: PC/Phone-Other, desc: "Software - Mobile"}
     - {id: 532, cat: PC, desc: "Software - KeyGen / Tools"}
@@ -849,7 +849,7 @@ caps:
     - {id: 23, cat: PC, desc: "Software - Windows - Sound Editing"}
     - {id: 24, cat: PC, desc: "Software - Windows - Video Apps"}
 
-    #Games
+    # Games
     - {id: 3, cat: PC/Games, desc: "Games"}
     - {id: 136, cat: PC/Games, desc: "Games - fixes/patches"}
     - {id: 422, cat: PC/Games, desc: "Games - Other"}
@@ -873,7 +873,7 @@ caps:
     - {id: 1015, cat: Console, desc: "Games - Dreamcast"}
     - {id: 1016, cat: Console, desc: "Games - GameCube"}
 
-    #XXX
+    # XXX
     - {id: 533, cat: XXX, desc: "XXX"}
     - {id: 943, cat: XXX, desc: "XXX - Animation/Hentai"}
     - {id: 553, cat: XXX/DVD, desc: "XXX - DVD"}
@@ -886,7 +886,7 @@ caps:
     - {id: 806, cat: XXX, desc: "XXX - Wallpapers"}
     - {id: 811, cat: XXX, desc: "XXX - Books"}
 
-    #Books
+    # Books
     - {id: 2, cat: Books, desc: "Books"}
     - {id: 625, cat: Books, desc: "Books - Adventure"}
     - {id: 51, cat: Books, desc: "Books - Audio books"}
@@ -900,7 +900,7 @@ caps:
     - {id: 1000, cat: Books, desc: "Books - Sexual Fitness and Education"}
     - {id: 626, cat: Books, desc: "Books - True Stories"}
 
-    #Other
+    # Other
     - {id: 6, cat: Other, desc: "Pictures"}
     - {id: 9, cat: Other, desc: "Other"}
     - {id: 53, cat: Other, desc: "Pictures - Other"}
@@ -918,7 +918,7 @@ caps:
     - {id: 1022, cat: Other, desc: "Other - Sounds"}
     - {id: 1023, cat: Other, desc: "Other - Nulled Scripts"}
 
-    #Mobile
+    # Mobile
     - {id: 752, cat: PC/Phone-Other, desc: "Mobile - Games for Android"}
     - {id: 746, cat: PC/Phone-Other, desc: "Mobile - Games for Apple iPod, iPod Touch, iPad, iPhone"}
     - {id: 745, cat: PC/Phone-Other, desc: "Mobile - Games for Java"}

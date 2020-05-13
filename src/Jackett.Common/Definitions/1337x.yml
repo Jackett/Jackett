@@ -32,14 +32,14 @@ legacylinks:
 
 caps:
   categorymappings:
-    #Anime
+    # Anime
     - {id: 28, cat: TV/Anime, desc: "Anime/Anime"}
     - {id: 78, cat: TV/Anime, desc: "Anime/Dual Audio"}
     - {id: 79, cat: TV/Anime, desc: "Anime/Dubbed"}
     - {id: 80, cat: TV/Anime, desc: "Anime/Subbed"}
     - {id: 81, cat: TV/Anime, desc: "Anime/Raw"}
 
-    #Audio
+    # Audio
     - {id: 22, cat: Audio/MP3, desc: "Music/MP3"}
     - {id: 23, cat: Audio/Lossless, desc: "Music/Lossless"}
     - {id: 24, cat: Audio, desc: "Music/DVD"}
@@ -53,7 +53,7 @@ caps:
     - {id: 68, cat: Audio, desc: "Music/Concerts"}
     - {id: 69, cat: Audio, desc: "Music/AAC"}
 
-    #Movies
+    # Movies
     - {id: 1, cat: Movies/DVD, desc: "Movies/DVD"}
     - {id: 2, cat: Movies/SD, desc: "Movies/Divx/Xvid"}
     - {id: 3, cat: Movies, desc: "Movies/SVCD/VCD"}
@@ -66,7 +66,7 @@ caps:
     - {id: 73, cat: Movies, desc: "Movies/Bollywood"}
     - {id: 76, cat: Movies/UHD, desc: "Movies/UHD"}
 
-    #TV
+    # TV
     - {id: 5, cat: TV, desc: "TV/DVD"}
     - {id: 6, cat: TV, desc: "TV/Divx/Xvid"}
     - {id: 7, cat: TV, desc: "TV/SVCD/VCD"}
@@ -76,7 +76,7 @@ caps:
     - {id: 75, cat: TV/SD, desc: "TV/SD"}
     - {id: 9, cat: TV/Documentary, desc: "TV/Documentary"}
 
-    #Apps
+    # Apps
     - {id: 18, cat: PC, desc: "Apps/PC Software"}
     - {id: 19, cat: PC/Mac, desc: "Apps/Mac"}
     - {id: 20, cat: PC, desc: "Apps/Linux"}
@@ -84,7 +84,7 @@ caps:
     - {id: 56, cat: PC/Phone-Android, desc: "Apps/Android"}
     - {id: 57, cat: PC/Phone-IOS, desc: "Apps/iOS"}
 
-    #Games
+    # Games
     - {id: 10, cat: PC/Games, desc: "Games/PC Game"}
     - {id: 11, cat: Console/Other, desc: "Games/PS2"}
     - {id: 12, cat: Console/PSP, desc: "Games/PSP"}
@@ -101,14 +101,14 @@ caps:
     - {id: 77, cat: Console/PS4, desc: "Games/PS4"}
     - {id: 82, cat: Console/Other, desc: "Games/Switch"}
 
-    #XXX
+    # XXX
     - {id: 48, cat: XXX/DVD, desc: "XXX/Video"}
     - {id: 49, cat: XXX/Imageset, desc: "XXX/Picture"}
     - {id: 50, cat: XXX, desc: "XXX/Magazine"}
     - {id: 51, cat: XXX, desc: "XXX/Hentai"}
     - {id: 67, cat: XXX, desc: "XXX/Games"}
 
-    #Other
+    # Other
     - {id: 33, cat: Other, desc: "Other/Emulation"}
     - {id: 34, cat: Books, desc: "Other/Tutorial"}
     - {id: 35, cat: Other, desc: "Other/Sounds"}

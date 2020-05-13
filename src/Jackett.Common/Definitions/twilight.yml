@@ -138,7 +138,7 @@ search:
     downloadvolumefactor:
       case:
         img[src="free.gif"]: 0
-        img[src="./pic/fre.gif"]: 0 #7116 freeleech with expiry date
+        img[src="./pic/fre.gif"]: 0 # issue #7116 freeleech with expiry date
         "*": 1
     uploadvolumefactor:
       text: 1
