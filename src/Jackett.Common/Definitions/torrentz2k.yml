@@ -55,7 +55,7 @@ search:
       - name: andmatch
 
   fields:
-    category:
+    _category:
       selector: i
       attribute: class
       filters:
@@ -65,6 +65,9 @@ search:
         # remove fa- prefix
         - name: replace
           args: ["fa-", ""]
+    category:
+      # _category can be null so replace with list when that happens
+      text: "{{ if .Result._category }}{{ .Result._category }}{{ else }}list{{ end}}"
     title:
       selector: button
       attribute: title
