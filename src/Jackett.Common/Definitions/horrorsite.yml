@@ -76,7 +76,7 @@ login:
     - selector: table.browse:contains("hiba")
   test:
     path: /
-    selector: a[href="/logout.php"]
+    selector: a[href$="/logout.php"]
 
 search:
   paths:
