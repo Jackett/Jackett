@@ -79,7 +79,7 @@ search:
   rows:
     selector: table[border="1"][cellpadding=5] > tbody > tr:has(a[href^="details.php?id="])
   fields:
-    is_polish: #Workaround: https://github.com/Jackett/Jackett/issues/8068#issuecomment-610222414
+    is_polish: # Workaround: https://github.com/Jackett/Jackett/issues/8068#issuecomment-610222414
       text: ""
     is_polish:
       optional: true

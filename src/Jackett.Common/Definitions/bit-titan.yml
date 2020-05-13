@@ -225,6 +225,6 @@ search:
         "font.mu:contains(\"2x\")": 2
         "font.mu:contains(\"5x\")": 5
         "font.mu:contains(\"10x\")": 10
-        font.fl: 0  # freeleech neither dl or ul is counted
+        font.fl: 0 # freeleech neither dl or ul is counted
         "*": 1
 # engine n/a

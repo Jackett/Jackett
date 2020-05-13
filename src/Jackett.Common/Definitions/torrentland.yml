@@ -10,7 +10,7 @@ links:
 
 caps:
   categorymappings:
-    #Peliculas
+    # Peliculas
     - {id: 75, cat: Movies/UHD, desc: "Peliculas - 4K"}
     - {id: 83, cat: Movies/UHD, desc: "Peliculas - 4K CUSTOM"}
     - {id: 81, cat: Movies/UHD, desc: "Peliculas - 4K Remux"}
@@ -26,7 +26,7 @@ caps:
     - {id: 14, cat: Movies/SD, desc: "Peliculas - HDRip"}
     - {id: 15, cat: Movies/DVD, desc: "Peliculas - DVDRip"}
     - {id: 71, cat: Movies/Other, desc: "Peliculas - Peliculas V.O."}
-    #Eml HDTeam
+    # Eml HDTeam
     - {id: 69, cat: Movies/BluRay, desc: "Eml HDTeam - FULLBR"}
     - {id: 68, cat: Movies/BluRay, desc: "Eml HDTeam - JMBD"}
     - {id: 67, cat: Movies/BluRay, desc: "EML HDTeam - BDRemux"}
@@ -38,7 +38,7 @@ caps:
     - {id: 77, cat: Movies/Other, desc: "EML HDTeam - Animacion"}
     - {id: 78, cat: Movies/UHD, desc: "EML HDTeam - 4K"}
     - {id: 79, cat: Movies/BluRay, desc: "EML HDTeam - CUSTOM BR"}
-    #Series
+    # Series
     - {id: 50, cat: TV/HD, desc: "Series - Full BluRay"}
     - {id: 86, cat: TV/UHD, desc: "Series - 4K"}
     - {id: 49, cat: TV/HD, desc: "Series - H264"}
@@ -46,18 +46,18 @@ caps:
     - {id: 22, cat: TV/SD, desc: "Series - DVD"}
     - {id: 20, cat: TV/SD, desc: "Series - HDRip"}
     - {id: 51, cat: TV/OTHER, desc: "Series - Otros Formatos"}
-    #Documentales
+    # Documentales
     - {id: 53, cat: TV/Documentary, desc: "Documentales - HD"}
     - {id: 52, cat: TV/Documentary, desc: "Documentales - SD"}
     - {id: 85, cat: Books, desc: "Manuales"}
-    #Adultos
+    # Adultos
     - {id: 55, cat: XXX/x264, desc: "Adultos - HD"}
     - {id: 54, cat: XXX/XviD, desc: "Adultos - SD"}
-    #Animación
+    # Animación
     - {id: 58, cat: Movies/HD, desc: "Animacion - HD"}
     - {id: 57, cat: Movies/SD, desc: "Animacion - SD"}
     - {id: 76, cat: Movies/3D, desc: "Animacion - 3D"}
-    #Deportes
+    # Deportes
     - {id: 61, cat: TV/Sport, desc: "Deportes - HD"}
     - {id: 60, cat: TV/Sport, desc: "Deportes - SD"}
     # internal cats not provided in search category dropdown !?!

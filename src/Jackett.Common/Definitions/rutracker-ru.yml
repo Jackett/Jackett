@@ -10,7 +10,7 @@ links:
 
 caps:
   categorymappings:
-    #Кинематограф movies
+    # Кинематограф movies
     - {id: 1564, cat: Movies, desc: "Новинки кинопроката 2020"}
     - {id: 1573, cat: Movies, desc: " |- Зарубежные новинки (2020)"}
     - {id: 1572, cat: Movies, desc: " |- Отечественные новинки (2020)"}
@@ -75,7 +75,7 @@ caps:
     - {id: 810, cat: Movies, desc: " |- Классика отечественного кино"}
     - {id: 1318, cat: Movies, desc: " |- Детские фильмы, сказки, сериалы"}
     - {id: 804, cat: Movies, desc: " |- Сборники фильмов / Фильмографии"}
-    #Сериалы TV
+    # Сериалы TV
     - {id: 17, cat: TV, desc: "Зарубежные сериалы"}
     - {id: 1551, cat: TV/UHD, desc: " |- [4K | ULTRA HD | 2160p]"}
     - {id: 1085, cat: TV/HD, desc: " |- BDRip 1080p , HDTV 1080 , WEB-DL 1080р"}
@@ -85,7 +85,7 @@ caps:
     - {id: 1082, cat: TV/HD, desc: " |- BDRip 1080p , HDTV 1080 , WEB-DL 1080р"}
     - {id: 1083, cat: TV/HD, desc: " |- BDRip 720p , WEB-DL 720p , HDTVRip 720p"}
     - {id: 1084, cat: TV/SD, desc: " |- DVD5 , DVD9"}
-    #Мультипликация Animation
+    # Мультипликация Animation
     - {id: 125, cat: TV, desc: "Мультфильмы"}
     - {id: 1353, cat: TV/HD, desc: " |- BDRip 1080p , HDTV 1080 , WEB-DL 1080р"}
     - {id: 1355, cat: TV/HD, desc: " |- BDRip 720p , WEB-DL 720p , HDTVRip 720p"}
@@ -96,7 +96,7 @@ caps:
     - {id: 1347, cat: TV/HD, desc: " |- BDRip 1080p , HDTV 1080 , WEB-DL 1080р"}
     - {id: 1348, cat: TV/HD, desc: " |- BDRip 720p , WEB-DL 720p , HDTVRip 720p"}
     - {id: 1349, cat: TV/SD, desc: " |- DVD5 , DVD9"}
-    #Игры Games
+    # Игры Games
     - {id: 60, cat: PC/Games, desc: "Игры для PC"}
     - {id: 73, cat: Console, desc: " |- Горячие новинки 2020 года (только AAA проекты)"}
     - {id: 61, cat: Console, desc: " |- Онлайн Игры"}
@@ -110,11 +110,11 @@ caps:
     - {id: 1538, cat: Console, desc: "Игры для консолей"}
     - {id: 1539, cat: Console/PSP, desc: " |- PlayStation"}
     - {id: 878, cat: Console/Xbox, desc: " |- XBox"}
-    #Документалистика, развлекательные телепередачи, спорт Docs
+    # Документалистика, развлекательные телепередачи, спорт Docs
     - {id: 11, cat: TV/Documentary, desc: "Документальные фильмы и телепередачи"}
     - {id: 12, cat: TV, desc: "Развлекательные телепередачи"}
     - {id: 13, cat: TV/Sport, desc: "Спорт"}
-    #Книги, Журналы, Аудиокниги Books
+    # Книги, Журналы, Аудиокниги Books
     - {id: 726, cat: Books, desc: "Художественная литература, журналы, газеты"}
     - {id: 728, cat: Books, desc: " |- Журналы и газеты"}
     - {id: 761, cat: Books, desc: " |- Фантастика, фентези, мистика"}
@@ -135,7 +135,7 @@ caps:
     - {id: 1233, cat: Audio/Audiobook, desc: " |- Отечественная проза"}
     - {id: 1159, cat: Audio/Audiobook, desc: " |- Любовные романы"}
     - {id: 1315, cat: Audio/Audiobook, desc: " |- Детская аудиокнига"}
-    #Музыка (Lossy) Music
+    # Музыка (Lossy) Music
     - {id: 1179, cat: Audio/MP3, desc: " |- Сборники поп музыки (50/50 общие)"}
     - {id: 1178, cat: Audio/MP3, desc: " |- Зарубежные поп сборники"}
     - {id: 1427, cat: Audio/MP3, desc: " |- Сборники Российской поп музыки"}
@@ -168,7 +168,7 @@ caps:
     - {id: 1563, cat: Audio/MP3, desc: " |- Jazz, Blues, Swing"}
     - {id: 1562, cat: Audio/MP3, desc: " |- Инструментальная и классическая музыка"}
     - {id: 1185, cat: Audio/MP3, desc: " |- New Age, Relax, Meditative"}
-    #Музыка (Lossless) Music
+    # Музыка (Lossless) Music
     - {id: 1210, cat: Audio/Lossless, desc: "Отечественная музыка (Lossless)"}
     - {id: 1211, cat: Audio/Lossless, desc: " |- Поп музыка"}
     - {id: 1212, cat: Audio/Lossless, desc: " |- Отечественный Рок, Панк, Метал, Альтернатива."}
@@ -182,7 +182,7 @@ caps:
     - {id: 1308, cat: Audio/Lossless, desc: " |- Официальные сборники зарубежных исполнителей"}
     - {id: 1534, cat: Audio/Lossless, desc: " |- Classical and instrumental music"}
     - {id: 1231, cat: Audio/Lossless, desc: " |- Other musical genres"}
-    #Программное обеспечение Software
+    # Программное обеспечение Software
     - {id: 1120, cat: PC, desc: " |- Windows 10"}
     - {id: 706, cat: PC, desc: " |- Windows 8, 8.1"}
     - {id: 212, cat: PC, desc: " |- Windows 7"}
@@ -228,7 +228,7 @@ caps:
     - {id: 1503, cat: PC, desc: " |- Дополнительные материалы для мультимедиа"}
     - {id: 968, cat: PC, desc: " |- Разное (Программы для работы с мультимедиа и 3D)"}
     - {id: 1505, cat: PC, desc: " |- Безопасность"}
-    #Все для мобильных устройств Mobiles
+    # Все для мобильных устройств Mobiles
     - {id: 1287, cat: PC/Phone-Other, desc: "Видео"}
     - {id: 1307, cat: PC/Phone-Other, desc: " |- Мобильные телефоны"}
     - {id: 1306, cat: PC/Phone-IOS, desc: " |- iPhone"}
@@ -246,7 +246,7 @@ caps:
     - {id: 1299, cat: PC, desc: " |- Symbian OS"}
     - {id: 1296, cat: PC/Phone-IOS, desc: " |- iPhone"}
     - {id: 1295, cat: PC/Phone-Other, desc: " |- Windows Mobile"}
-    #Клубничка ХХХ 18+️
+    # Клубничка ХХХ 18+️
     - {id: 1490, cat: XXX, desc: "Эротика (не порно)"}
     - {id: 1491, cat: XXX, desc: " |-  Эротические фильмы ≪с переводом Rus≫"}
     - {id: 1492, cat: XXX, desc: " |-  Эротические фильмы с «родной» озвучкой"}
@@ -291,7 +291,7 @@ caps:
     - {id: 1542, cat: XXX, desc: " |-  Порно игры / Porno games"}
     - {id: 1481, cat: XXX, desc: " |-  Мультфильмы / Cartoons"}
     - {id: 1482, cat: XXX, desc: " |-  Хентай / Hentai "}
-    #Разное Other
+    # Разное Other
     - {id: 118, cat: Other, desc: "Разное"}
     - {id: 987, cat: Other, desc: " |- Обои для рабочего стола"}
     - {id: 1068, cat: Other, desc: " |- Эротические обои"}

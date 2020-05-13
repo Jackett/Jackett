@@ -94,7 +94,7 @@ settings:
 
 search:
   paths:
-    #https://www.pornorip.biz/search.php?tracker_search=torrent&keywords=slut&terms=all&fp=1&author=&sc=1&sf=titleonly&sr=topics&sk=t&sd=d&st=0&ch=300&t=0&submit=Search
+    # https://www.pornorip.biz/search.php?tracker_search=torrent&keywords=slut&terms=all&fp=1&author=&sc=1&sf=titleonly&sr=topics&sk=t&sd=d&st=0&ch=300&t=0&submit=Search
     - path: search.php
   inputs:
     tracker_search: torrent

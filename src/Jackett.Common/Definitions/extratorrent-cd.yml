@@ -37,7 +37,7 @@ search:
 
   fields:
     category:
-      text: other #8228
+      text: other # issue #8228
     title:
       selector: a[href*="/torrent/"][title^="view"]
     details:

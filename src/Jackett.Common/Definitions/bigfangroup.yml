@@ -90,7 +90,6 @@ settings:
 
 search:
   # https://bigfangroup.org/browse.php?search=black+lightning&cat=0&incldead=0&year=0&format=0
-  #
   paths:
     - path: browse.php
   inputs:

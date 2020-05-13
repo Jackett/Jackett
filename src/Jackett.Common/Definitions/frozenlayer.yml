@@ -46,13 +46,13 @@ search:
     - path: "{{ if .Keywords }}buscar/descargas/{{ .Config.category }}/{{ .Keywords }}?search=Buscar{{else}}descargas{{end}}"
     - path: "{{ if .Keywords }}buscar/descargas/{{ .Config.category }}/{{ .Keywords }}?search=Buscar&page=2{{else}}descargas{{end}}"
   keywordsfilters:
-    - name: re_replace #remove S/EXX from search string
+    - name: re_replace # remove S/EXX from search string
       args: ["(S1)", ""]
-    - name: re_replace #remove S/EXX from search string
+    - name: re_replace # remove S/EXX from search string
       args: ["(S2)", "segunda temporada"]
-    - name: re_replace #remove S/EXX from search string
+    - name: re_replace # remove S/EXX from search string
       args: ["(S3)", "tercera temporada"]
-    - name: re_replace #remove S/EXX from search string
+    - name: re_replace # remove S/EXX from search string
       args: ["E([0-9]+)", "$1"]
 
   rows:

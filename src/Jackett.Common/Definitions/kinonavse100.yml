@@ -107,7 +107,7 @@ login:
 
 search:
   paths:
-    #http://kinonavse100.com/search.php?tracker_search=torrent&keywords=2020&terms=all&author=&sc=1&sf=titleonly&sk=t&sd=d&sr=topics&st=0&ch=300&t=0&submit=Search
+    # http://kinonavse100.com/search.php?tracker_search=torrent&keywords=2020&terms=all&author=&sc=1&sf=titleonly&sk=t&sd=d&sr=topics&st=0&ch=300&t=0&submit=Search
     - path: search.php
   inputs:
     tracker_search: torrent

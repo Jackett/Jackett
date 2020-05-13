@@ -142,7 +142,7 @@ search:
         - name: re_replace
           args: ["( torrent)$", ""]
     category:
-      text: 78 #7110
+      text: 78 # issue #7110
     category|noappend:
       optional: true
       selector: a[href^="/torrents.php?cat="]
