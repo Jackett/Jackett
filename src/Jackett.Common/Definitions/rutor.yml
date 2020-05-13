@@ -7,6 +7,7 @@ type: public
 encoding: UTF-8
 links:
   - http://rutor.info/ # site does not support https ERR_CONNECTION_REFUSED
+  - http://rutor.is/ # site does not support https ERR_CONNECTION_REFUSED
   - https://rutor.unblocked.bar/
   - https://rutor.proxyportal.pw/
   - https://rutor.uk-unblock.pro/
