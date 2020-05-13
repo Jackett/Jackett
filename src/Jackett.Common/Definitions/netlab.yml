@@ -55,7 +55,7 @@ login:
 
 search:
   paths:
-  # https://torrent.e2k.ru/browse.php?c1=1&c4=1&c10=1&incldead=0&search=
+    # https://torrent.e2k.ru/browse.php?c1=1&c4=1&c10=1&incldead=0&search=
     - path: browse.php
   inputs:
     $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
@@ -109,7 +109,7 @@ search:
     leechers:
       selector: td:nth-child(8)
     downloadvolumefactor:
-        text: 1
+      text: 1
     uploadvolumefactor:
-        text: 1
+      text: 1
 # engine n/a

@@ -28,7 +28,7 @@ caps:
     - {id: 40, cat: Console, desc: "FBA"}
     - {id: 51, cat: Console, desc: "HBMAME"}
     - {id: 58, cat: Console, desc: "Dice"}
-     # Computer
+    # Computer
     - {id: 16, cat: Console, desc: "Amiga"}
     - {id: 19, cat: Console, desc: "Amstrad"}
     - {id: 20, cat: Console, desc: "Commodore 64"}
@@ -39,7 +39,7 @@ caps:
     - {id: 50, cat: Console, desc: "eXoDOS"}
     - {id: 53, cat: Console, desc: "Win3xO"}
     - {id: 55, cat: Console, desc: "Neo Kobe"}
-     # Computer / Console
+    # Computer / Console
     - {id: 15, cat: Console, desc: "MESS"}
     - {id: 24, cat: Console, desc: "Atari"}
     - {id: 31, cat: Console, desc: "TOSEC"}
@@ -50,7 +50,7 @@ caps:
     - {id: 52, cat: Console, desc: "GoodTools"}
     - {id: 57, cat: Console, desc: "Hyperspin"}
     - {id: 61, cat: Console, desc: "RAWdump"}
-     # Console
+    # Console
     - {id: 18, cat: Console, desc: "Sega"}
     - {id: 21, cat: Console, desc: "3DO"}
     - {id: 23, cat: Console, desc: "PC Engine"}
@@ -59,7 +59,7 @@ caps:
     - {id: 54, cat: Console, desc: "No-Intro"}
     - {id: 59, cat: Console, desc: "XBOX"}
     - {id: 60, cat: Console, desc: "DMC"}
-     # iscellaneous
+    # iscellaneous
     - {id: 4, cat: Console, desc: "Other"}
     - {id: 37, cat: Console, desc: "Remix Projects"}
     - {id: 39, cat: Console, desc: "EmuMovies"}
@@ -144,7 +144,7 @@ search:
       selector: a[href^="download.php?id="]
       attribute: href
     date:
-        # 19/01/2019
+      # 19/01/2019
       selector: td:nth-last-child(9)
       filters:
         - name: dateparse

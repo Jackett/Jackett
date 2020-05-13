@@ -91,7 +91,7 @@ search:
         - name: regexp
           args: "Date: (.+?) ?$"
         - name: replace
-          args: ["UTC","-00"]
+          args: ["UTC", "-00"]
         - name: dateparse
           args: "2006-01-02 15:04 -07"
     seeders:

@@ -73,7 +73,7 @@ login:
 
 search:
   paths:
-  # https://polishsource.cz/browse.php?search=tt1598778&incldead=1&scene=0&pl=0&sub=&search_in=nfo
+    # https://polishsource.cz/browse.php?search=tt1598778&incldead=1&scene=0&pl=0&sub=&search_in=nfo
     - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"

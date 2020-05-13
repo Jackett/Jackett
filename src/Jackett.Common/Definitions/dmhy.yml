@@ -40,7 +40,7 @@ search:
   paths:
     - path: topics/list
   inputs:
-  # https://share.dmhy.org/topics/list?keyword=one+piece&sort_id=0&team_id=0&order=date-desc
+    # https://share.dmhy.org/topics/list?keyword=one+piece&sort_id=0&team_id=0&order=date-desc
     keyword: "{{ .Keywords }}"
     sort_id: 0
     order: date-desc

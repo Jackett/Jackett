@@ -85,7 +85,7 @@ login:
 
 search:
   paths:
-  # https://tracker.0day.kiev.ua/browse.php?c10=1&c27=1&search=endgame&incldead=1&where=0
+    # https://tracker.0day.kiev.ua/browse.php?c10=1&c27=1&search=endgame&incldead=1&where=0
     - path: browse.php
   keywordsfilters:
     - name: diacritics
