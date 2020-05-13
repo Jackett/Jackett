@@ -39,6 +39,7 @@ caps:
     "AUDIOBOOKS": Audio/Audiobook
     "AUDIOAUDIOBOOKS": Audio/Audiobook
     "AUDIOFLAC": Audio/Lossless
+    "AUDIOMP3": Audio/MP3
     "AUDIOMUSIC": Audio
     "AUDIOOTHER": Audio/Other
     "AUDIOSOUNDCLIPS": Audio
@@ -125,6 +126,7 @@ caps:
     "TV": TV
     "TVHDX264H264": TV/HD
     "TVHEVCX265": TV/HD
+    "TVDIVXXVID": TV/SD
     "TVSDX264H264": TV/SD
     "TVSHOWS": TV
     "TVTVPACKS": TV
