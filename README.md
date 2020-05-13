@@ -162,7 +162,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BaibaKo
  * BookTracker
  * CasStudioTV
- * Crazy's Corner
  * CzTorrent
  * DXP (Deaf Experts)
  * Deildu
@@ -493,7 +492,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * The Shinning (TsH)
  * The Show
  * The Vault
- * The-Madhouse
  * TheAudioScene
  * TheEmpire (TE)
  * ToTheGlory
