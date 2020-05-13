@@ -113,7 +113,7 @@ search:
       attribute: onmouseover
       filters:
         - name: regexp
-          args: "src=\\\\\'(.*?)\\\\\' "
+          args: "src=\\\\'(.*?)\\\\' "
     download:
       selector: td a[href^="download.php?torrent="]
       attribute: href

@@ -183,7 +183,7 @@ search:
       attribute: onmouseover
       filters:
         - name: regexp
-          args: "src=\\\\\'(.*?)\\\\\'"
+          args: "src=\\\\'(.*?)\\\\'"
     comments:
       selector: td:nth-child(7) a
       attribute: href
