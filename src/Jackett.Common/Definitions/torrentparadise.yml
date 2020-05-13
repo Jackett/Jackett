@@ -65,6 +65,7 @@ caps:
     "GAMESWINDOWS": PC/Games
     "GAMESXBOX": Console/Xbox
     "GAMESXBOX360": Console/Xbox 360
+    "IMAGES": Other
     "JUEGOS": Console
     "JUEGOSPC": PC/Games
     "JUEGOSPS2": Console/PSP
@@ -91,18 +92,21 @@ caps:
     "MOVIESX264H264": Movies/HD
     "MP3": Audio/MP3
     "MP3MUSIC": Audio/MP3
+    "MSICA": Other
     "MUSIC": Audio
     "MUSICLOSSLESS": Audio/Lossless
     "MUSICMP3": Audio/MP3
+    "MUSICVIDEOS": Audio/Video
     "OTHER": Other
     "OTHERCOMICS": Other
     "OTHERCOVERS": Other
     "OTHEREBOOKS": Other
     "OTHEROTHER": Other
     "OTHERPICTURES": Other
-    "PELICULASCVCD": TV
-    "PELICULASDIVX": TV
-    "PELICULASMICROHD": TV
+    "PELICULASCVCD": TV/SD
+    "PELICULASDIVX": TV/SD
+    "PELICULASHDRIP": TV/HD
+    "PELICULASMICROHD": TV/HD
     "PICTURES": Other
     "PORN": XXX
     "PORNHDMOVIES": XXX
