@@ -82,6 +82,9 @@ login:
       attribute: value
   error:
     - selector: table#maincontent tr td div div#messagebarA
+  test:
+    path: index.php
+    selector: a[href="/logout"]
 
 search:
   paths:
