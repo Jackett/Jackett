@@ -1,7 +1,7 @@
 ---
 id: totheglory
 name: ToTheGlory
-description: "A chinese tracker"
+description: "ToTheGlory (TTG) A Chinese tracker"
 language: zh-cn
 type: private
 encoding: UTF-8
@@ -56,12 +56,55 @@ caps:
     movie-search: [q]
     music-search: [q]
 
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: 2facode
+    type: text
+    label: 2FA code
+  - name: info_2fa
+    type: info
+    label: "About 2FA code"
+    default: "Only fill in the <b>2FA code</b> box if you have enabled <b>2FA</b> on the TTG Web Site. Otherwise just leave it empty."
+  - name: passid
+    type: select
+    label: Security Question ID
+    default: "0"
+    options:
+      "0": "Security question (Ignore not set)"
+      "1": "When did your start using PT?"
+      "2": "How did you get to know about TTG?"
+      "3": "What's the name of the first movie you watched in a cinema?"
+      "4": "What's your favorite movie?"
+      "5": "Who's your favorite porn star?"
+      "6": "Who's your favorite actor/actress?"
+      "7": "What's your most anticipated movie?"
+  - name: info_passid
+    type: info
+    label: "About Security ID"
+    default: "Only select the <b>Security Question ID</b> from the pulldown if you have set it on the TTG Web Site. Otherwise just leave it as ignore not set."
+  - name: passan
+    type: text
+    label: Security Question Answer
+  - name: info_passan
+    type: info
+    label: "About Security Question Answer"
+    default: "Only fill in the <b>Security Question Answer</b> box if you have set it on the TTG Web Site. Dont forget to write your answer in the same language you saved it on the TTG Web Site. Otherwise just leave it empty."
+
 login:
   path: login.php?returnto=
   method: form
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
+    rememberme: yes
+    otp: "{{ .Config.2facode }}"
+    passid: "{{ .Config.passid }}"
+    passan: "{{ .Config.passan }}"
   error:
     - selector: form#loginform > span.warning
   test:
@@ -78,10 +121,12 @@ search:
   paths:
     - path: browse.php
   inputs:
-    search_field: "{{range .Categories}}分类:`{{.}}` {{end}}{{ .Query.Keywords }}"
-    c: "M"
+    search_field: "{{ range .Categories }}分类:`{{.}}` {{end}}{{ .Keywords }}"
+    c: M
+
   rows:
     selector: table#torrent_table > tbody > tr[id]
+
   fields:
     description:
       selector: div.name_left > a > b
@@ -124,7 +169,7 @@ search:
       selector: td:nth-child(8)
       filters:
         - name: regexp
-          args: "(\\d+)"
+          args: (\d+)
     date:
       selector: td:nth-child(5)
       filters:
@@ -137,10 +182,10 @@ search:
       attribute: href
     downloadvolumefactor:
       case:
-        img[alt="free"]: "0"
-        img[alt="50%"]: "0.5"
-        img[alt="30%"]: "0.3"
-        "*": "1"
+        img[alt="free"]: 0
+        img[alt="50%"]: 0.5
+        img[alt="30%"]: 0.3
+        "*": 1
     uploadvolumefactor:
-      case:
-        "*": "1"
+      text: 1
+# engine n/a
