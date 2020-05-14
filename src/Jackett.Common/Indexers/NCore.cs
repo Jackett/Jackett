@@ -229,14 +229,15 @@ namespace Jackett.Common.Indexers
                         var imdbId = ParseUtil.GetLongFromString(infoLink?.GetAttribute("href"));
                         var desc = row.QuerySelector("span")?.GetAttribute("title") + " " +
                                    infoLink?.TextContent;
-                        var downloadLink = SiteLink + torrentTxt.GetAttribute("href");
-                        var downloadId = ParseUtil.GetArgumentFromQueryString(downloadLink, "id");
+                        var torrentLink = SiteLink + torrentTxt.GetAttribute("href");
+                        var downloadId = ParseUtil.GetArgumentFromQueryString(torrentLink, "id");
 
                         //Build site links
-                        var baseLink = SiteLink + "torrents.php?action=download&id=" + downloadId;
-                        var commentsUri = new Uri(baseLink);
-                        var guidUri = new Uri(baseLink + "#comments");
-                        var linkUri = new Uri(QueryHelpers.AddQueryString(baseLink, "key", key));
+                        var baseLink = SiteLink + "torrents.php?action=details&id=" + downloadId;
+                        var downloadLink = SiteLink + "torrents.php?action=download&id=" + downloadId;
+                        var commentsUri = new Uri(baseLink + "#comments");
+                        var guidUri = new Uri(baseLink);
+                        var linkUri = new Uri(QueryHelpers.AddQueryString(downloadLink, "key", key));
 
                         var seeders = ParseUtil.CoerceInt(row.QuerySelector(".box_s2 a").TextContent);
                         var leechers = ParseUtil.CoerceInt(row.QuerySelector(".box_l2 a").TextContent);
