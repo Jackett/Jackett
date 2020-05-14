@@ -10,50 +10,52 @@ links:
 
 caps:
   categories:
-    # 电影
+    # 电影 Movie
     电影DVDRip: Movies/SD # Movie DVDRip
     电影720p: Movies/HD # Movie 720p
     电影1080i/p: Movies/HD # Movie 1080i / p
     BluRay原盘: Movies/BluRay # BluRay original disc
+    影视2160p: Movies/UHD # Media - 2160p
+    UHD原盘: Movies/UHD # Blu-ray UHD
 
-    # 纪录片
+    # 纪录片 Docs
     纪录片720p: Movies/HD # Documentary 720p
     纪录片1080i/p: Movies/HD # Documentary 1080i / p
     纪录片BluRay原盘: Movies/BluRay # Documentary BluRay Original
 
-    # 剧集
-    欧美剧720p: TV/HD # 欧美剧720p
-    欧美剧1080i/p: TV/HD # 欧美剧1080i/p
-    高清日剧: TV/HD # 高清日剧
-    大陆港台剧1080i/p: TV/HD # 大陆港台剧1080i/p
-    大陆港台剧720p: TV/HD # 大陆港台剧720p
-    高清韩剧: TV/HD # 高清韩剧
+    # 剧集 TV
+    欧美剧720p: TV/HD # TV Series - EU/US - 720p
+    欧美剧1080i/p: TV/HD # TV Series - EU/US - 1080i/p
+    高清日剧: TV/HD # TV Series - JP
+    大陆港台剧1080i/p: TV/HD # TV Series - CN - 1080i/p
+    大陆港台剧720p: TV/HD # TV Series - CN - 720p
+    高清韩剧: TV/HD # TV Series - KR
 
-    # 剧集包
-    欧美剧包: TV/HD # 欧美剧包
-    日剧包: TV/HD # 日剧包
-    韩剧包: TV/HD # 韩剧包
-    华语剧包: TV/HD # 华语剧包
+    # 剧集包 TV Packs
+    欧美剧包: TV/HD # TV Packs - EU/US
+    日剧包: TV/HD # TV Packs - JP
+    韩剧包: TV/HD # TV Packs - CN
+    华语剧包: TV/HD # TV Packs - KR
 
-    # 音乐
-    (电影原声&Game)OST: Audio # (电影原声&Game)OST
-    无损音乐FLAC&APE: Audio/Lossless  # 无损音乐FLAC&APE
-    MV&amp;演唱会: Audio/Video # MV&演唱会
+    # 音乐 Audio
+    (电影原声&Game)OST: Audio # OST - (Movie & Game) Track
+    无损音乐FLAC&APE: Audio/Lossless  # FLAC & APE
+    MV&amp;演唱会: Audio/Video # MV & Concert
 
-    # 其他
-    高清体育节目: TV/Sport # High-definition sports programs
-    高清动漫: TV/Anime # HD animation
-    韩国综艺: TV/HD # South Korea Variety
-    日本综艺: TV/HD # Japanese variety
-    高清综艺: TV/HD # HD Variety
+    # 其他 Other
+    高清体育节目: TV/Sport # HD Sports
+    高清动漫: TV/Anime # HD Animation
+    韩国综艺: TV/HD # TV Shows - KR
+    高清综艺: TV/HD # TV Shows
+    日本综艺: TV/HD # TV Shows - JP
     MiniVideo: Other # MiniVideo
     补充音轨: Audio # Supplemental audio tracks
     iPhone/iPad视频: PC/Phone-Other # IPhone / iPad video
 
   modes:
-    search: [q]
-    tv-search: [q, season, ep]
-    movie-search: [q]
+    search: [q, imdbid]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
     music-search: [q]
 
 settings:
@@ -121,9 +123,8 @@ search:
   paths:
     - path: browse.php
   inputs:
-    search_field: "{{ range .Categories }}分类:`{{.}}` {{end}}{{ .Keywords }}"
+    search_field: "{{ range .Categories }}分类:`{{.}}` {{end}}{{ if .Query.IMDBID }}imdb{{ .Query.IMDBIDShort }}{{ else }}{{ .Keywords }}{{ end }}"
     c: M
-
   rows:
     selector: table#torrent_table > tbody > tr[id]
 
@@ -187,5 +188,7 @@ search:
         img[alt="30%"]: 0.3
         "*": 1
     uploadvolumefactor:
-      text: 1
+      case:
+        img[alt="200%"]: 2
+        "*": 1
 # engine n/a
