@@ -494,7 +494,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * The Vault
  * TheAudioScene
  * TheEmpire (TE)
- * ToTheGlory
+ * ToTheGlory (TTG)
  * Torrent Network (TN)
  * Torrent Sector Crew (TSC)
  * Torrent-Syndikat
