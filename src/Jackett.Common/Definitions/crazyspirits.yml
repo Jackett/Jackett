@@ -148,7 +148,7 @@ download:
 
 search:
   paths:
-  # http://crazyspirits.com/torrents-search.php?c101=1&c102=1&c103=1&c104=1&c105=1&c106=1&search=&cat=0&incldead=0&freeleech=0&lang=0
+    # http://crazyspirits.com/torrents-search.php?c101=1&c102=1&c103=1&c104=1&c105=1&c106=1&search=&cat=0&incldead=0&freeleech=0&lang=0
     - path: torrents-search.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"

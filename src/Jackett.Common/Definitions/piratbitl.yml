@@ -653,8 +653,6 @@ login:
     redirect: "/"
   error:
     - selector: table tr td div.alert
-#        message:
-#          selector: table tr td div.msg
   test:
     path: index.php
     selector: li a[href="/login.php?logout=1"]
