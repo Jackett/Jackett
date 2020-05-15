@@ -22,14 +22,10 @@ namespace Jackett.Common.Indexers
         private string LoginUrl => SiteLink + "login.php";
         private string SearchUrl => SiteLink + "torrents.php?action=basic&order_by=time&order_way=desc&search_type=0&taglist=&tags_type=0";
 
-        private new ConfigurationDataBasicLogin configData
-        {
-            get => (ConfigurationDataBasicLogin)base.configData;
-            set => base.configData = value;
-        }
+        private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
 
         public Nebulance(IIndexerConfigurationService configService, Utils.Clients.WebClient c, Logger l, IProtectionService ps)
-            : base(id: "transmithenet",
+            : base(id: "nebulance",
                    name: "Nebulance",
                    description: "At Nebulance we will change the way you think about TV",
                    link: "https://nebulance.io/",
@@ -79,28 +75,19 @@ namespace Jackett.Common.Indexers
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var loggedInCheck = await RequestStringWithCookies(SearchUrl);
-            if (!loggedInCheck.Content.Contains("logout.php"))
-            {
-                //Cookie appears to expire after a period of time or logging in to the site via browser
+            if (!loggedInCheck.Content.Contains("logout.php")) // re-login
                 await DoLogin();
-            }
 
             // #6413
-            //string Url;
-            //if (string.IsNullOrEmpty(query.GetQueryString()))
-            //    Url = SearchUrl;
-            //else
-            //{
-            var Url = $"{SearchUrl}&searchtext={WebUtility.UrlEncode(query.GetQueryString())}";
-            //}
+            var url = $"{SearchUrl}&searchtext={WebUtility.UrlEncode(query.GetQueryString())}";
 
-            var response = await RequestStringWithCookiesAndRetry(Url);
+            var response = await RequestStringWithCookiesAndRetry(url);
             var releases = ParseResponse(response.Content);
 
             return releases;
         }
 
-        public List<ReleaseInfo> ParseResponse(string htmlResponse)
+        private List<ReleaseInfo> ParseResponse(string htmlResponse)
         {
             var releases = new List<ReleaseInfo>();
 
@@ -128,9 +115,7 @@ namespace Jackett.Common.Indexers
                     else
                     {
                         if (title.Length > 5 && title.Substring(title.Length - 5).Contains("."))
-                        {
-                            title = title.Remove(title.LastIndexOf("."));
-                        }
+                            title = title.Remove(title.LastIndexOf(".", StringComparison.Ordinal));
                     }
 
                     release.Title = title;

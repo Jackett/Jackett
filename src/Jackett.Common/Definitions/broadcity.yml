@@ -2,13 +2,13 @@
 id: broadcity
 name: BroadCity
 description: "BroadCity is a TURKISH Private Torrent Tracker for MOVIES and TV"
-language: tr
+language: tr-TR
 type: private
 encoding: UTF-8
 links:
-  - https://broadcity.in/
+  - http://broadcity.in/ # site is forcing to http
 legacylinks:
-  - http://broadcity.in/
+  - https://broadcity.in/
 
 caps:
   categorymappings:
@@ -65,8 +65,7 @@ login:
     selector: img#regimage
     input: imagestring
   error:
-    - selector: table:contains("Bir Hata oluştu!")
-    - selector: table:contains("Bir Hata Oluştu!")
+    - selector: table:contains("Hata")
     - selector: table:contains("Login Giriş Kilitlendi!")
   test:
     path: index.php
@@ -145,3 +144,4 @@ search:
       case:
         img[src$="/x2.gif"]: 2
         "*": 1
+# TS Special Edition v.7.5

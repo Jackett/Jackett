@@ -23,16 +23,9 @@ namespace Jackett.Common.Indexers
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://iptorrents.com/",
             "https://www.iptorrents.com/",
-            "https://ipt-update.com/",
             "https://iptorrents.eu/",
             "https://nemo.iptorrents.com/",
             "https://ipt.rocks/",
-            "http://ipt.read-books.org/",
-            "http://alien.eating-organic.net/",
-            "http://kong.net-freaks.com/",
-            "http://ghost.cable-modem.org/",
-            "http://logan.unusualperson.com/",
-            "http://baywatch.workisboring.com/",
             "https://ipt.getcrazy.me/",
             "https://ipt.findnemo.net/",
             "https://ipt.beelyrics.net/",
@@ -40,7 +33,17 @@ namespace Jackett.Common.Indexers
             "https://ipt.workisboring.net/",
             "https://ipt.lol/",
             "https://ipt.cool/",
-            "https://ipt.world/",
+            "https://ipt.world/"
+        };
+
+        public override string[] LegacySiteLinks { get; protected set; } = {
+            "https://ipt-update.com/",
+            "http://ipt.read-books.org/",
+            "http://alien.eating-organic.net/",
+            "http://kong.net-freaks.com/",
+            "http://ghost.cable-modem.org/",
+            "http://logan.unusualperson.com/",
+            "http://baywatch.workisboring.com/"
         };
 
         private new ConfigurationDataCookie configData => (ConfigurationDataCookie)base.configData;

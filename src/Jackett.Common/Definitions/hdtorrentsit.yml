@@ -6,7 +6,7 @@ language: it-it
 type: private
 encoding: UTF-8
 links:
-  - https://hdtorrents.xyz/
+  - https://hdtorrents.xyz/ # Italian IP address filtering
 legacylinks:
   - http://hdtorrents.it/
   - http://hdtorrents.xyz/

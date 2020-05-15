@@ -83,16 +83,17 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
+            var queryCopy = query.Clone(); // we can't change the original object
             // This tracker only deals with full seasons so chop off the episode/season number if we have it D:
-            if (!string.IsNullOrWhiteSpace(query.SearchTerm))
+            if (!string.IsNullOrWhiteSpace(queryCopy.SearchTerm))
             {
-                var splitindex = query.SearchTerm.LastIndexOf(' ');
+                var splitindex = queryCopy.SearchTerm.LastIndexOf(' ');
                 if (splitindex > -1)
-                    query.SearchTerm = query.SearchTerm.Substring(0, splitindex);
+                    queryCopy.SearchTerm = queryCopy.SearchTerm.Substring(0, splitindex);
             }
 
             var releases = new List<ReleaseInfo>();
-            var searchString = query.SanitizedSearchTerm;
+            var searchString = queryCopy.SanitizedSearchTerm;
             var episodeSearchUrl = SearchUrl + WebUtility.UrlEncode(searchString);
             var response = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
             if (!response.Content.Contains(LogoutStr))

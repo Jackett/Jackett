@@ -1612,8 +1612,14 @@ namespace Jackett.Common.Indexers
                         var qDetailsLink = Row.QuerySelector("td.t-title > div.t-title > a.tLink");
                         var qSize = Row.QuerySelector("td.tor-size");
                         var comments = new Uri(SiteLink + "forum/" + qDetailsLink.GetAttribute("href"));
-                        var seedersString = Row.QuerySelector("td:nth-child(7) b").TextContent;
-                        var seeders = string.IsNullOrWhiteSpace(seedersString) ? 0 : ParseUtil.CoerceInt(seedersString);
+                        var seeders = 0;
+                        var qSeeders = Row.QuerySelector("td:nth-child(7)");
+                        if (qSeeders != null && !qSeeders.TextContent.Contains("дн"))
+                        {
+                            var seedersString = qSeeders.QuerySelector("b").TextContent;
+                            if (!string.IsNullOrWhiteSpace(seedersString))
+                                seeders = ParseUtil.CoerceInt(seedersString);
+                        }
                         var timestr = Row.QuerySelector("td:nth-child(10)").GetAttribute("data-ts_text");
                         var forum = Row.QuerySelector("td.f-name > div.f-name > a");
                         var forumid = forum.GetAttribute("href").Split('=')[1];
