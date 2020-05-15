@@ -2,7 +2,7 @@
 id: hdturk
 name: HDTurk
 description: "HDTurk is a TURKISH Private Torrent Tracker for MOVIES / TV / GENERAL"
-language: tr
+language: tr-TR
 type: private
 encoding: UTF-8
 links:
@@ -93,7 +93,7 @@ login:
     selector: img#regimage2
     input: imagestring
   error:
-    - selector: table:contains("Bir hata oluştu!")
+    - selector: table:contains("hata")
   test:
     path: index.php
     selector: a[href*="/logout.php?logouthash="]
