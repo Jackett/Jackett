@@ -388,6 +388,7 @@ namespace Jackett.Updater
                 "Definitions/ultimategamerclub.yml",
                 "Definitions/ultrahdclub.yml",
                 "Definitions/utorrents.yml", // same as SzeneFZ now
+                "Definitions/vanila.yml",
                 "Definitions/waffles.yml",
                 "Definitions/worldofp2p.yml",
                 "Definitions/worldwidetorrents.yml",
