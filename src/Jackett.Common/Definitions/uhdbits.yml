@@ -23,17 +23,31 @@ caps:
     movie-search: [q, imdbid]
     music-search: [q]
 
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: 2facode
+    type: text
+    label: 2FA code
+  - name: info_2fa
+    type: info
+    label: "About 2FA code"
+    default: "Only fill in the <b>2FA code</b> box if you have enabled <b>2FA</b> on the UHDBits Web Site. Otherwise just leave it empty."
+
 login:
   path: login.php
   form: form.auth_form
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
-    keeplogged: "1"
+    two_step: "{{ .Config.2facode }}"
+    keeplogged: 1
   error:
     - selector: .auth_form > .warning
-      message:
-        selector: ".auth_form > .warning"
   test:
     path: top10.php
 
@@ -57,7 +71,13 @@ search:
   rows:
     selector: table#torrent_table > tbody > tr.torrent
   fields:
-    # note: there are optinal extra colums
+    category:
+      selector: a[href^="torrents.php?filter_cat"]
+      attribute: href
+      filters:
+        - name: regexp
+          args: "\\[(\\d+?)\\]"
+    # note: there are optional extra colums
     download:
       selector: a[title="Download"]
       attribute: href
@@ -90,23 +110,8 @@ search:
           args: [" / 2x Free", ""]
         - name: replace
           args: [" / 2x", ""]
-    downloadvolumefactor:
-      case:
-        "strong.blink_me:contains(\"Free\")": 0
-        "strong.blink_me:contains(\"50\")": 0.5
-        "strong.blink_me:contains(\"25\")": 0.75
-        "strong.blink_me:contains(\"75\")": 0.25
-        "*": 1
-    uploadvolumefactor:
-      case:
-        "strong.blink_me:contains(\"2x\")": 2
-        "*": 1
-    category:
-      selector: a[href^="torrents.php?filter_cat"]
-      attribute: href
-      filters:
-        - name: regexp
-          args: "\\[(\\d+?)\\]"
+        - name: re_replace
+          args: [" / ", " "]
     comments:
       selector: a.torrent_name
       attribute: href
@@ -141,4 +146,15 @@ search:
           args: " +07:00"
         - name: dateparse
           args: "Jan 02 2006 15:04 -07:00"
+    downloadvolumefactor:
+      case:
+        "strong.blink_me:contains(\"Free\")": 0
+        "strong.blink_me:contains(\"50\")": 0.5
+        "strong.blink_me:contains(\"25\")": 0.75
+        "strong.blink_me:contains(\"75\")": 0.25
+        "*": 1
+    uploadvolumefactor:
+      case:
+        "strong.blink_me:contains(\"2x\")": 2
+        "*": 1
 # engine tbd
