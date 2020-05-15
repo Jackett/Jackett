@@ -84,12 +84,23 @@ namespace Jackett.Common.Services
         {
             if (serverConfig.RuntimeSettings.NoUpdates)
             {
-                logger.Info($"Updates are disabled via --NoUpdates.");
+                logger.Info("Updates are disabled via --NoUpdates.");
                 return;
             }
             if (serverConfig.UpdateDisabled && !forceupdatecheck)
             {
-                logger.Info($"Skipping update check as it is disabled.");
+                logger.Info("Skipping update check as it is disabled.");
+                return;
+            }
+            if (Debugger.IsAttached)
+            {
+                logger.Info("Skipping checking for new releases as the debugger is attached.");
+                return;
+            }
+            var currentVersion = $"v{EnvironmentUtil.JackettVersion}";
+            if (currentVersion == "v0.0.0.0")
+            {
+                logger.Info("Skipping checking for new releases because we are runing in IDE.");
                 return;
             }
 
@@ -100,11 +111,6 @@ namespace Jackett.Common.Services
             forceupdatecheck = true;
 
             var isWindows = System.Environment.OSVersion.Platform != PlatformID.Unix;
-            if (Debugger.IsAttached)
-            {
-                logger.Info($"Skipping checking for new releases as the debugger is attached.");
-                return;
-            }
 
             var trayIsRunning = false;
             if (isWindows)
@@ -136,9 +142,7 @@ namespace Jackett.Common.Services
                 if (releases.Count > 0)
                 {
                     var latestRelease = releases.OrderByDescending(o => o.Created_at).First();
-                    var currentVersion = $"v{GetCurrentVersion()}";
-
-                    if (latestRelease.Name != currentVersion && currentVersion != "v0.0.0.0")
+                    if (latestRelease.Name != currentVersion)
                     {
                         logger.Info($"New release found. Current: {currentVersion} New: {latestRelease.Name}");
                         logger.Info($"Downloading release {latestRelease.Name} It could take a while...");
@@ -183,13 +187,6 @@ namespace Jackett.Common.Services
                 ? Path.Combine(tempDirectory, "Jackett", "JackettUpdater")
                 : Path.Combine(tempDirectory, "Jackett", "JackettUpdater.exe");
 
-        private string GetCurrentVersion()
-        {
-            var assembly = Assembly.GetExecutingAssembly();
-            var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
-            return fvi.ProductVersion;
-        }
-
         private WebRequest SetDownloadHeaders(WebRequest req)
         {
             req.Headers = new Dictionary<string, string>()
@@ -231,6 +228,19 @@ namespace Jackett.Common.Services
             {
                 logger.Error("Unexpected error while deleting temp files from " + tempDir.ToString());
                 logger.Error(e);
+            }
+        }
+
+        public void CheckUpdaterLock()
+        {
+            // check .lock file to detect errors in the update process
+            var lockFilePath = Path.Combine(Path.GetDirectoryName(ExePath()), ".lock");
+            if (File.Exists(lockFilePath))
+            {
+                logger.Error("An error occurred during the last update. If this error occurs again, you need to reinstall " +
+                             "Jackett following the documentation. If the problem continues after reinstalling, " +
+                             "report the issue and attach the Jackett and Updater logs.");
+                File.Delete(lockFilePath);
             }
         }
 
@@ -377,6 +387,11 @@ namespace Jackett.Common.Services
             {
                 startInfo.Arguments += " --StartTray";
             }
+
+            // create .lock file to detect errors in the update process
+            var lockFilePath = Path.Combine(installLocation, ".lock");
+            if (!File.Exists(lockFilePath))
+                File.Create(lockFilePath).Dispose();
 
             logger.Info($"Starting updater: {startInfo.FileName} {startInfo.Arguments}");
             var procInfo = Process.Start(startInfo);

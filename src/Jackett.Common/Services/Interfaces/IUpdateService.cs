@@ -5,5 +5,6 @@ namespace Jackett.Common.Services.Interfaces
         void StartUpdateChecker();
         void CheckForUpdatesNow();
         void CleanupTempDir();
+        void CheckUpdaterLock();
     }
 }
