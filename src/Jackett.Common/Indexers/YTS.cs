@@ -99,7 +99,7 @@ namespace Jackett.Common.Indexers
             }
 
             var searchUrl = ApiEndpoint + "?" + queryCollection.GetQueryString();
-            var response = await RequestStringWithCookiesAndRetry(searchUrl, string.Empty);
+            var response = await RequestStringWithCookiesAndRetry(searchUrl);
 
             try
             {
