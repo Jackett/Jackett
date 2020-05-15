@@ -39,7 +39,8 @@ namespace Jackett.Common.Services
             {"nostalgic", "vhstapes"},
             {"passtheheadphones", "redacted"},
             {"tehconnectionme", "anthelion"},
-            {"transmithenet", "nebulance"}
+            {"transmithenet", "nebulance"},
+            {"yourexotic", "exoticaz"}
         };
 
         public IndexerManagerService(IIndexerConfigurationService config, IProtectionService protectionService, WebClient webClient, Logger l, ICacheService cache, IProcessService processService, IConfigurationService globalConfigService, ServerConfig serverConfig)
