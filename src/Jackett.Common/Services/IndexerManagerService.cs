@@ -36,9 +36,10 @@ namespace Jackett.Common.Services
         // use: {"<old id>", "<new id>"}
         private readonly Dictionary<string, string> renamedIndexers = new Dictionary<string, string>
         {
+            {"nostalgic", "vhstapes"},
+            {"passtheheadphones", "redacted"},
             {"tehconnectionme", "anthelion"},
-            {"transmithenet", "nebulance"},
-            {"nostalgic", "vhstapes"}
+            {"transmithenet", "nebulance"}
         };
 
         public IndexerManagerService(IIndexerConfigurationService config, IProtectionService protectionService, WebClient webClient, Logger l, ICacheService cache, IProcessService processService, IConfigurationService globalConfigService, ServerConfig serverConfig)

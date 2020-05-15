@@ -14,7 +14,7 @@ namespace Jackett.Common.Indexers
     public class Redacted : GazelleTracker
     {
         public Redacted(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(id: "passtheheadphones",
+            : base(id: "redacted",
                    name: "Redacted",
                    description: "A music tracker",
                    link: "https://redacted.ch/",
