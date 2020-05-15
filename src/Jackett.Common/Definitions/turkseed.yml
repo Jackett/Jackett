@@ -72,13 +72,17 @@ login:
   path: login.php
   method: form
   form: form[action="takelogin.php"]
+  captcha:
+    type: image
+    selector: img#regimage
+    input: imagestring
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
     logout: ""
-    submit: "GİRİŞ"
   error:
     - selector: table:contains("HATA")
+    - selector: table:contains("Hata")
   test:
     path: index.php
     selector: a[href*="/logout.php?logouthash="]
