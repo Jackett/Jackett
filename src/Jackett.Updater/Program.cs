@@ -423,6 +423,11 @@ namespace Jackett.Updater
                 }
             }
 
+            // remove .lock file to detect errors in the update process
+            var lockFilePath = Path.Combine(options.Path, ".lock");
+            if (File.Exists(lockFilePath))
+                File.Delete(lockFilePath);
+
             // kill pids after the update on UNIX
             if (!isWindows)
                 KillPids(pids);
