@@ -24,27 +24,27 @@ namespace Jackett.Common.Indexers
         private string LoginUrl => SiteLink + "tak3login.php";
         private string SearchUrl => SiteLink + "t.json";
 
-        public override string[] LegacySiteLinks { get; protected set; } = {
-            "https://torrentday.com/",
-        };
-
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://tday.love/",
             "https://torrentday.cool/",
-            "https://tdonline.org/",
             "https://secure.torrentday.com/",
-            "https://torrentday.eu/",
             "https://classic.torrentday.com/",
             "https://www.torrentday.com/",
-            "https://td-update.com/",
-            "https://www.torrentday.me/",
-            "https://www.torrentday.ru/",
-            "https://www.td.af/",
             "https://torrentday.it/",
             "https://td.findnemo.net/",
             "https://td.getcrazy.me/",
             "https://td.venom.global/",
-            "https://td.workisboring.net/",
+            "https://td.workisboring.net/"
+        };
+
+        public override string[] LegacySiteLinks { get; protected set; } = {
+            "https://torrentday.com/",
+            "https://tdonline.org/", // redirect to https://www.torrentday.com/
+            "https://torrentday.eu/", // redirect to https://www.torrentday.com/
+            "https://td-update.com/", // redirect to https://www.torrentday.com/
+            "https://www.torrentday.me/",
+            "https://www.torrentday.ru/",
+            "https://www.td.af/"
         };
 
         private new ConfigurationDataRecaptchaLogin configData => (ConfigurationDataRecaptchaLogin)base.configData;
