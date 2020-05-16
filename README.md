@@ -99,6 +99,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * PC-torrent
  * PiratBit
  * Pirateiro
+ * Pornforall
  * PornLeech
  * PornoLive
  * PornoRip
