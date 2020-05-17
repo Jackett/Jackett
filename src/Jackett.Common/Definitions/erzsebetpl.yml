@@ -30,7 +30,7 @@ caps:
     - {id: 162, cat: TV/Anime, desc: "Мультфильмы Аниме (Японская анимация)"}
     - {id: 179, cat: Movies, desc: "Театр"}
     - {id: 180, cat: Movies, desc: "Театр Произведения театрального искусства"}
-      # Audio
+    # Audio
     - {id: 175, cat: Audio, desc: "Популярная музыка"}
     - {id: 183, cat: Audio/Lossless, desc: "Популярная музыка Зарубежная популярная музыка (lossless)"}
     - {id: 184, cat: Audio, desc: "Популярная музыка Сборники песен для детей (lossy и lossless)"}
@@ -49,7 +49,7 @@ caps:
     - {id: 155, cat: Audio/Lossless, desc: "Рок-музыка Отечественный Rock, Metal (lossless)"}
     - {id: 154, cat: Audio/Video, desc: "Рок-музыка Metal (DVD Video)"}
     - {id: 153, cat: Audio/Video, desc: "Рок-музыка Рок-музыка (HD Video)"}
-      # Games
+    # Games
     - {id: 27, cat: PC/Games, desc: "Игры для Windows "}
     - {id: 28, cat: PC/Games, desc: "Игры для Windows Горячие новинки"}
     - {id: 38, cat: PC/Games, desc: "Игры для Windows Аркады"}
@@ -75,7 +75,7 @@ caps:
     - {id: 171, cat: Console, desc: "Игры для Консолей PSP "}
     - {id: 164, cat: Console, desc: "Игры для Консолей Xbox 360 "}
     - {id: 167, cat: Console, desc: "Игры для Консолей Остальные платформы"}
-      # Programs
+    # Programs
     - {id: 13, cat: PC, desc: "Операционные системы"}
     - {id: 14, cat: PC, desc: "Операционные системы Windows "}
     - {id: 15, cat: PC, desc: "Операционные системы Linux "}
@@ -93,7 +93,7 @@ caps:
     - {id: 77, cat: PC, desc: "ГИС, системы навигации и карты"}
     - {id: 79, cat: PC, desc: "ГИС, системы навигации и карты Разное - системы навигации и карты"}
     - {id: 78, cat: PC, desc: "ГИС, системы навигации и карты Navigon / Navitel "}
-      # tutorial video
+    # tutorial video
     - {id: 53, cat: Other, desc: "Видеоуроки и обучающие интерактивные DVD "}
     - {id: 56, cat: Other, desc: "Видеоуроки и обучающие интерактивные DVD Кулинария"}
     - {id: 57, cat: Other, desc: "Видеоуроки и обучающие интерактивные DVD Спорт"}
@@ -107,7 +107,7 @@ caps:
     - {id: 72, cat: Other, desc: "Компьютерные видеоуроки и обучающие интерактивные DVD 2D и 3D графика"}
     - {id: 75, cat: Other, desc: "Компьютерные видеоуроки и обучающие интерактивные DVD Программирование (видеоуроки)"}
     - {id: 76, cat: Other, desc: "Компьютерные видеоуроки и обучающие интерактивные DVD Работа с видео"}
-      # Sport
+    # Sport
     - {id: 49, cat: TV/Sport, desc: "Футбол"}
     - {id: 177, cat: TV/Sport, desc: "Футбол Чемпионаты Мира"}
     - {id: 178, cat: TV/Sport, desc: "Футбол Россия и СССР"}
@@ -124,7 +124,7 @@ caps:
     - {id: 229, cat: TV/Sport, desc: "Баскетбол Международные соревнования"}
     - {id: 228, cat: TV/Sport, desc: "Баскетбол NBA / NCAA "}
     - {id: 227, cat: TV/Sport, desc: "Баскетбол Европейский клубный баскетбол"}
-      # XXX
+    # XXX
     - {id: 116, cat: XXX, desc: "Зарубежные порнофильмы"}
     - {id: 126, cat: XXX, desc: "Зарубежные порнофильмы Паки полных фильмов"}
     - {id: 118, cat: XXX, desc: "Зарубежные порнофильмы Классические фильмы"}
@@ -193,7 +193,7 @@ caps:
     - {id: 231, cat: XXX, desc: "Гей-порно Азиатские гей-фильмы в высоком качестве (DVD и HD)"}
     - {id: 235, cat: XXX, desc: "Гей-порно ПАКи гей-роликов и сайтрипов"}
     - {id: 238, cat: XXX, desc: "Гей-порно Гей-ролики в высоком качестве (HD Video)"}
-      # Archive
+    # Archive
     - {id: 197, cat: Other, desc: "Повторы и поглощенные раздачи"}
 
   modes:
