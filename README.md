@@ -376,6 +376,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * JPopsuki
  * Kapaki
  * Karagarga
+ * Keep Friends
  * LastFiles
  * Le Saloon
  * LeChaudron
