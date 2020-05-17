@@ -542,6 +542,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Xthor
  * XtreMeZone (MYXZ)
  * XtremeFile
+ * YDYPT
  * Zamunda.net
  * Zelka.org
 </details>
