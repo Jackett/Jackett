@@ -183,11 +183,8 @@ download:
 
 search:
   paths:
-    # 40 results per page
+    # 40 results per page, but only fetching one page due to issue #8702
     - path: torrents-search.php
-    - path: torrents-search.php
-      inputs:
-        page: 1
   inputs:
     # multi cats unsupported, defaulting to all
     cat: 0
