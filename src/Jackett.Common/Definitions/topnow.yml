@@ -24,9 +24,7 @@ settings: []
 search:
   paths:
     # https://topnow.se/index.php?search=
-    - path: index.php
-  inputs:
-    search: "{{ .Keywords }}"
+    - path: "index.php{{if .Keywords}}?search={{ .Keywords }}{{else}}{{end}}"
   keywordsfilters:
     # the site uses % for wildcard
     - name: re_replace
