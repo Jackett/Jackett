@@ -128,7 +128,7 @@ search:
       attribute: href
     date:
       # time type: time elapsed (default)
-      selector: td:nth-last-child(6) > span[title]
+      selector: td.rowfollow:nth-last-child(6) > span[title]
       attribute: title
       optional: true
       filters:
@@ -138,7 +138,7 @@ search:
           args: "2006-01-02 15:04:05 -07:00"
     date:
       # time added
-      selector: td:nth-last-child(6):not(:has(span))
+      selector: td.rowfollow:nth-last-child(6):not(:has(span))
       optional: true
       filters:
         - name: append
@@ -146,13 +146,13 @@ search:
         - name: dateparse
           args: "2006-01-0215:04:05 -07:00"
     size:
-      selector: td:nth-last-child(5)
+      selector: td.rowfollow:nth-last-child(5)
     seeders:
-      selector: td:nth-last-child(4)
+      selector: td.rowfollow:nth-last-child(4)
     leechers:
-      selector: td:nth-last-child(3)
+      selector: td.rowfollow:nth-last-child(3)
     grabs:
-      selector: td:nth-last-child(2)
+      selector: td.rowfollow:nth-last-child(2)
     downloadvolumefactor:
       case:
         img.pro_free: 0
