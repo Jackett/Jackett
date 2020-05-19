@@ -81,6 +81,12 @@ search:
   fields:
     title:
       selector: div.tt-name > a[href^="/"]
+      attribute: href
+      filters:
+        - name: regexp
+          args: "/(.+?)-torrent-\\d+\\.html"
+        - name: re_replace
+          args: ["-", " "]
     details:
       selector: div.tt-name > a[href^="/"]
       attribute: href
