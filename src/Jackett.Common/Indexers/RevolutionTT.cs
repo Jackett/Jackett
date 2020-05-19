@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -17,6 +18,7 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class RevolutionTT : BaseWebIndexer
     {
         private string LandingPageURL => SiteLink + "login.php";
@@ -33,16 +35,17 @@ namespace Jackett.Common.Indexers
         }
 
         public RevolutionTT(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "RevolutionTT",
-                description: "The Revolution has begun",
-                link: "https://revolutiontt.me/",
-                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                configService: configService,
-                client: wc,
-                logger: l,
-                p: ps,
-                downloadBase: "https://revolutiontt.me/download.php/",
-                configData: new ConfigurationDataBasicLoginWithRSS())
+            : base(id: "revolutiontt",
+                   name: "RevolutionTT",
+                   description: "The Revolution has begun",
+                   link: "https://revolutiontt.me/",
+                   caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                   configService: configService,
+                   client: wc,
+                   logger: l,
+                   p: ps,
+                   downloadBase: "https://revolutiontt.me/download.php/",
+                   configData: new ConfigurationDataBasicLoginWithRSS())
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "en-us";

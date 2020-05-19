@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -15,29 +16,27 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class ShowRSS : BaseWebIndexer
     {
         private string SearchAllUrl => SiteLink + "other/all.rss";
-        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
+        public override string[] LegacySiteLinks { get; protected set; } = {
             "http://showrss.info/",
         };
 
-        private new ConfigurationData configData
-        {
-            get => base.configData;
-            set => base.configData = value;
-        }
+        private new ConfigurationData configData => base.configData;
 
         public ShowRSS(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "ShowRSS",
-                description: "showRSS is a service that allows you to keep track of your favorite TV shows",
-                link: "https://showrss.info/",
-                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                configService: configService,
-                client: wc,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationData())
+            : base(id: "showrss",
+                   name: "ShowRSS",
+                   description: "showRSS is a service that allows you to keep track of your favorite TV shows",
+                   link: "https://showrss.info/",
+                   caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                   configService: configService,
+                   client: wc,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationData())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
@@ -61,7 +60,7 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
             var episodeSearchUrl = string.Format(SearchAllUrl);
-            var result = await RequestStringWithCookiesAndRetry(episodeSearchUrl, string.Empty);
+            var result = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
             var xmlDoc = new XmlDocument();
 
             try
@@ -94,13 +93,12 @@ namespace Jackett.Common.Indexers
                         PublishDate = publishDate,
                         Description = infoHash,
                         InfoHash = infoHash,
+                        MagnetUri = magnetUri,
                         Size = 0,
-                        //TODO fix seeder/peer counts if available
                         Seeders = 1,
-                        Peers = 1,
+                        Peers = 2,
                         DownloadVolumeFactor = 0,
-                        UploadVolumeFactor = 1,
-                        MagnetUri = magnetUri
+                        UploadVolumeFactor = 1
                     };
                     releases.Add(release);
                 }

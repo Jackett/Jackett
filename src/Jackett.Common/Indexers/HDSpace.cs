@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -16,19 +17,17 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class HDSpace : BaseWebIndexer
     {
         private string LoginUrl => SiteLink + "index.php?page=login";
         private string SearchUrl => SiteLink + "index.php?page=torrents&";
 
-        private new ConfigurationDataBasicLogin configData
-        {
-            get => (ConfigurationDataBasicLogin)base.configData;
-            set => base.configData = value;
-        }
+        private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
 
         public HDSpace(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "HD-Space",
+            : base(id: "hdspace",
+                   name: "HD-Space",
                    description: "Sharing The Universe",
                    link: "https://hd-space.org/",
                    caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
@@ -36,7 +35,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
-            configData: new ConfigurationDataBasicLogin())
+                   configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
@@ -47,7 +46,6 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(15, TorznabCatType.MoviesBluRay); // Movie / Blu-ray
             AddMultiCategoryMapping(TorznabCatType.MoviesHD,
                                     19, // Movie / 1080p
-                                    41, // Movie / 4K UHD
                                     18, // Movie / 720p
                                     40, // Movie / Remux
                                     16 // Movie / HD-DVD
@@ -56,18 +54,24 @@ namespace Jackett.Common.Indexers
                                     21, // TV Show / 720p HDTV
                                     22 // TV Show / 1080p HDTV
                 );
-            AddCategoryMapping(30, TorznabCatType.AudioLossless); // Music / Lossless
-            AddCategoryMapping(31, TorznabCatType.AudioVideo); // Music / Videos
             AddMultiCategoryMapping(TorznabCatType.TVDocumentary,
-                                    24, // TV Show / Documentary / 720p
-                                    25 // TV Show / Documentary / 1080p
+                                    24, // Documentary / 720p
+                                    25 // Documentary / 1080p
                 );
+            AddMultiCategoryMapping(TorznabCatType.TVAnime,
+                                    27, // Animation / 720p
+                                    28 // Animation / 1080p
+                );
+            AddCategoryMapping(30, TorznabCatType.AudioLossless); // Music / HQ Audio
+            AddCategoryMapping(31, TorznabCatType.AudioVideo); // Music / Videos
             AddMultiCategoryMapping(TorznabCatType.XXX,
                                     33, // XXX / 720p
                                     34 // XXX / 1080p
                 );
-            AddCategoryMapping("37", TorznabCatType.PC);
-            AddCategoryMapping("38", TorznabCatType.Other);
+            AddCategoryMapping(36, TorznabCatType.MoviesOther); // Trailers
+            AddCategoryMapping(37, TorznabCatType.PC); // Software
+            AddCategoryMapping(38, TorznabCatType.Other); // Others
+            AddCategoryMapping(41, TorznabCatType.MoviesUHD); // Movie / 4K UHD
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

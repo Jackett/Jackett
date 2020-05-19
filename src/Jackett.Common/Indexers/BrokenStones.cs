@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Jackett.Common.Indexers.Abstract;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
@@ -6,10 +7,12 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class BrokenStones : GazelleTracker
     {
         public BrokenStones(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base("BrokenStones",
+            : base(id: "brokenstones",
+                   name: "BrokenStones",
                    description: "Broken Stones is a Private site for MacOS and iOS APPS / GAMES",
                    link: "https://brokenstones.club/",
                    caps: new TorznabCapabilities(),

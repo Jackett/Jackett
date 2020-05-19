@@ -147,7 +147,7 @@ namespace Jackett.Common.Utils.Clients
 
             using (var clearanceHandlr = new ClearanceHandler(userAgent))
             {
-                clearanceHandlr.MaxTries = 30;
+                clearanceHandlr.MaxTries = 10;
                 using (var clientHandlr = new HttpClientHandler
                 {
                     CookieContainer = cookies,

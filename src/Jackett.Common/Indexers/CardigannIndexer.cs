@@ -26,8 +26,6 @@ namespace Jackett.Common.Indexers
     public class CardigannIndexer : BaseWebIndexer
     {
         protected IndexerDefinition Definition;
-        public override string ID => (Definition != null ? Definition.Site : GetIndexerID(GetType()));
-
         protected WebClientStringResult landingResult;
         protected IHtmlDocument landingResultDocument;
 
@@ -59,13 +57,15 @@ namespace Jackett.Common.Indexers
         private static readonly Regex _LogicFunctionRegex = new Regex(
             @$"\b({string.Join("|", _SupportedLogicFunctions.Select(Regex.Escape))})(?:\s+(\(?\.[^\)\s]+\)?|""[^""]+"")){{2,}}");
 
-        public CardigannIndexer(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps, IndexerDefinition Definition)
+        public CardigannIndexer(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
+                                IProtectionService ps, IndexerDefinition Definition)
             : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps)
         {
             this.Definition = Definition;
+            Id = Definition.Id;
 
             // Add default data if necessary
             if (Definition.Settings == null)
@@ -182,7 +182,7 @@ namespace Jackett.Common.Indexers
                     var cat = TorznabCatType.GetCatByName(Category.Value);
                     if (cat == null)
                     {
-                        logger.Error(string.Format("CardigannIndexer ({0}): invalid Torznab category for id {1}: {2}", ID, Category.Key, Category.Value));
+                        logger.Error(string.Format("CardigannIndexer ({0}): invalid Torznab category for id {1}: {2}", Id, Category.Key, Category.Value));
                         continue;
                     }
                     AddCategoryMapping(Category.Key, cat);
@@ -200,7 +200,7 @@ namespace Jackett.Common.Indexers
                         TorznabCat = TorznabCatType.GetCatByName(Categorymapping.cat);
                         if (TorznabCat == null)
                         {
-                            logger.Error(string.Format("CardigannIndexer ({0}): invalid Torznab category for id {1}: {2}", ID, Categorymapping.id, Categorymapping.cat));
+                            logger.Error(string.Format("CardigannIndexer ({0}): invalid Torznab category for id {1}: {2}", Id, Categorymapping.id, Categorymapping.cat));
                             continue;
                         }
                     }
@@ -224,41 +224,26 @@ namespace Jackett.Common.Indexers
             }
         }
 
-        protected Dictionary<string, object> getTemplateVariablesFromConfigData()
+        protected Dictionary<string, object> GetBaseTemplateVariables()
         {
             var variables = new Dictionary<string, object>
             {
                 [".Config.sitelink"] = SiteLink,
                 [".True"] = "True",
-                [".False"] = null
+                [".False"] = null,
+                [".Today.Year"] = DateTime.Today.Year.ToString()
             };
-            foreach (var Setting in Definition.Settings)
-            {
-                var item = configData.GetDynamic(Setting.Name);
-
-                // CheckBox item is an array of strings
-                if (item.GetType() == typeof(CheckboxItem))
+            foreach (var setting in Definition.Settings)
+                variables[".Config." + setting.Name] = configData.GetDynamic(setting.Name) switch
                 {
-                    variables[".Config." + Setting.Name] = ((CheckboxItem)item).Values;
-                }
-                else
-                {
-                    string value;
-                    if (item.GetType() == typeof(BoolItem))
-                    {
-                        value = (((BoolItem)item).Value == true ? "true" : "");
-                    }
-                    else if (item.GetType() == typeof(SelectItem))
-                    {
-                        value = ((SelectItem)item).Value;
-                    }
-                    else
-                    {
-                        value = ((StringItem)item).Value;
-                    }
-                    variables[".Config." + Setting.Name] = value;
-                }
-            }
+                    CheckboxItem checkbox => checkbox.Values,
+                    BoolItem boolItem => variables[boolItem.Value ? ".True" : ".False"],
+                    SelectItem selectItem => selectItem.Value,
+                    StringItem stringItem => stringItem.Value,
+                    // Throw exception here to match original functionality.
+                    // Currently this will only throw for ImageItem.
+                    _ => throw new NotSupportedException()
+                };
             return variables;
         }
 
@@ -269,7 +254,7 @@ namespace Jackett.Common.Indexers
         {
             if (variables == null)
             {
-                variables = getTemplateVariablesFromConfigData();
+                variables = GetBaseTemplateVariables();
             }
 
             // handle re_replace expression
@@ -778,7 +763,7 @@ namespace Jackett.Common.Indexers
             {
                 throw new NotImplementedException("Login method " + Definition.Login.Method + " not implemented");
             }
-            logger.Debug(string.Format("CardigannIndexer ({0}): Cookies after login: {1}", ID, CookieHeader));
+            logger.Debug(string.Format("CardigannIndexer ({0}): Cookies after login: {1}", Id, CookieHeader));
             return true;
         }
 
@@ -881,7 +866,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception e)
             {
-                logger.Error("Exception in GetConfigurationForSetup (" + ID + "): " + e);
+                logger.Error("Exception in GetConfigurationForSetup (" + Id + "): " + e);
                 return configData;
             }
         }
@@ -952,7 +937,7 @@ namespace Jackett.Common.Indexers
                     }
                     else
                     {
-                        logger.Debug(string.Format("CardigannIndexer ({0}): No captcha image found", ID));
+                        logger.Debug(string.Format("CardigannIndexer ({0}): No captcha image found", Id));
                     }
                 }
                 else if (Captcha.Type == "text")
@@ -970,7 +955,7 @@ namespace Jackett.Common.Indexers
                     }
                     else
                     {
-                        logger.Debug(string.Format("CardigannIndexer ({0}): No captcha image found", ID));
+                        logger.Debug(string.Format("CardigannIndexer ({0}): No captcha image found", Id));
                     }
                 }
                 else
@@ -982,7 +967,7 @@ namespace Jackett.Common.Indexers
             if (hasCaptcha && automaticlogin)
             {
                 configData.LastError.Value = "Got captcha during automatic login, please reconfigure manually";
-                logger.Error(string.Format("CardigannIndexer ({0}): Found captcha during automatic login, aborting", ID));
+                logger.Error(string.Format("CardigannIndexer ({0}): Found captcha during automatic login, aborting", Id));
                 return null;
             }
 
@@ -1127,7 +1112,7 @@ namespace Jackett.Common.Indexers
                     case "hexdump":
                         // this is mainly for debugging invisible special char related issues
                         var HexData = string.Join("", Data.Select(c => c + "(" + ((int)c).ToString("X2") + ")"));
-                        logger.Debug(string.Format("CardigannIndexer ({0}): strdump: {1}", ID, HexData));
+                        logger.Debug(string.Format("CardigannIndexer ({0}): strdump: {1}", Id, HexData));
                         break;
                     case "strdump":
                         // for debugging
@@ -1137,7 +1122,7 @@ namespace Jackett.Common.Indexers
                             strTag = string.Format("({0}):", strTag);
                         else
                             strTag = ":";
-                        logger.Debug(string.Format("CardigannIndexer ({0}): strdump{1} {2}", ID, strTag, DebugData));
+                        logger.Debug(string.Format("CardigannIndexer ({0}): strdump{1} {2}", Id, strTag, DebugData));
                         break;
                     default:
                         break;
@@ -1226,7 +1211,7 @@ namespace Jackett.Common.Indexers
             var Search = Definition.Search;
 
             // init template context
-            var variables = getTemplateVariablesFromConfigData();
+            var variables = GetBaseTemplateVariables();
 
             variables[".Query.Type"] = query.QueryType;
             variables[".Query.Q"] = query.SearchTerm;
@@ -1370,7 +1355,7 @@ namespace Jackett.Common.Indexers
                     var loginNeeded = CheckIfLoginIsNeeded(response, SearchResultDocument);
                     if (loginNeeded)
                     {
-                        logger.Info(string.Format("CardigannIndexer ({0}): Relogin required", ID));
+                        logger.Info(string.Format("CardigannIndexer ({0}): Relogin required", Id));
                         var LoginResult = await DoLogin();
                         if (!LoginResult)
                             throw new Exception(string.Format("Relogin failed"));
@@ -1393,7 +1378,7 @@ namespace Jackett.Common.Indexers
                     {
                         results = applyFilters(results, Search.Preprocessingfilters, variables);
                         SearchResultDocument = SearchResultParser.ParseDocument(results);
-                        logger.Debug(string.Format("CardigannIndexer ({0}): result after preprocessingfilters: {1}", ID, results));
+                        logger.Debug(string.Format("CardigannIndexer ({0}): result after preprocessingfilters: {1}", Id, results));
                     }
 
                     var rowsSelector = applyGoTemplateText(Search.Rows.Selector, variables);
@@ -1628,16 +1613,16 @@ namespace Jackett.Common.Indexers
 
                                             if (!query.MatchQueryStringAND(release.Title, CharacterLimit, queryKeywords))
                                             {
-                                                logger.Debug(string.Format("CardigannIndexer ({0}): skipping {1} (andmatch filter)", ID, release.Title));
+                                                logger.Debug(string.Format("CardigannIndexer ({0}): skipping {1} (andmatch filter)", Id, release.Title));
                                                 SkipRelease = true;
                                             }
                                             break;
                                         case "strdump":
                                             // for debugging
-                                            logger.Debug(string.Format("CardigannIndexer ({0}): row strdump: {1}", ID, Row.ToHtmlPretty()));
+                                            logger.Debug(string.Format("CardigannIndexer ({0}): row strdump: {1}", Id, Row.ToHtmlPretty()));
                                             break;
                                         default:
-                                            logger.Error(string.Format("CardigannIndexer ({0}): Unsupported rows filter: {1}", ID, Filter.Name));
+                                            logger.Error(string.Format("CardigannIndexer ({0}): Unsupported rows filter: {1}", Id, Filter.Name));
                                             break;
                                     }
                                 }
@@ -1690,7 +1675,7 @@ namespace Jackett.Common.Indexers
                         }
                         catch (Exception ex)
                         {
-                            logger.Error(string.Format("CardigannIndexer ({0}): Error while parsing row '{1}':\n\n{2}", ID, Row.ToHtmlPretty(), ex));
+                            logger.Error(string.Format("CardigannIndexer ({0}): Error while parsing row '{1}':\n\n{2}", Id, Row.ToHtmlPretty(), ex));
                         }
                     }
                 }
@@ -1736,7 +1721,7 @@ namespace Jackett.Common.Indexers
             }
 
             var response = await RequestBytesWithCookiesAndRetry(requestLinkStr, null, method, referer, pairs);
-            logger.Debug($"CardigannIndexer ({ID}): handleRequest() remote server returned {response.Status.ToString()}" + (response.IsRedirect ? " => " + response.RedirectingTo : ""));
+            logger.Debug($"CardigannIndexer ({Id}): handleRequest() remote server returned {response.Status.ToString()}" + (response.IsRedirect ? " => " + response.RedirectingTo : ""));
             return response;
         }
 
@@ -1764,7 +1749,7 @@ namespace Jackett.Common.Indexers
             if (Definition.Download != null)
             {
                 var Download = Definition.Download;
-                var variables = getTemplateVariablesFromConfigData();
+                var variables = GetBaseTemplateVariables();
                 AddTemplateVariablesFromUri(variables, link, ".DownloadUri");
                 if (Download.Before != null)
                 {
@@ -1787,7 +1772,7 @@ namespace Jackett.Common.Indexers
                     var downloadElement = searchResultDocument.QuerySelector(selector);
                     if (downloadElement != null)
                     {
-                        logger.Debug(string.Format("CardigannIndexer ({0}): Download selector {1} matched:{2}", ID, selector, downloadElement.ToHtmlPretty()));
+                        logger.Debug(string.Format("CardigannIndexer ({0}): Download selector {1} matched:{2}", Id, selector, downloadElement.ToHtmlPretty()));
                         var href = "";
                         if (Download.Attribute != null)
                         {
@@ -1804,7 +1789,7 @@ namespace Jackett.Common.Indexers
                     }
                     else
                     {
-                        logger.Error(string.Format("CardigannIndexer ({0}): Download selector {1} didn't match:\n{2}", ID, Download.Selector, results));
+                        logger.Error(string.Format("CardigannIndexer ({0}): Download selector {1} didn't match:\n{2}", Id, Download.Selector, results));
                         throw new Exception(string.Format("Download selector {0} didn't match", Download.Selector));
                     }
                 }

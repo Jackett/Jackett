@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class NewRealWorld : BaseWebIndexer
     {
         private string LoginUrl => SiteLink + "login.php";
@@ -28,7 +30,8 @@ namespace Jackett.Common.Indexers
         }
 
         public NewRealWorld(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "New Real World",
+            : base(id: "newrealworld",
+                   name: "New Real World",
                    description: "A German general tracker.",
                    link: "https://nrw-tracker.eu/",
                    caps: TorznabUtil.CreateDefaultTorznabTVCaps(),

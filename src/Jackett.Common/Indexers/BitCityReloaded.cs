@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class BitCityReloaded : BaseWebIndexer
     {
         private string LoginUrl => SiteLink + "login/index.php";
@@ -29,7 +31,8 @@ namespace Jackett.Common.Indexers
         }
 
         public BitCityReloaded(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "Bit-City Reloaded",
+            : base(id: "bitcityreloaded",
+                   name: "Bit-City Reloaded",
                    description: "A German general tracker.",
                    link: "https://bc-reloaded.net/",
                    caps: TorznabUtil.CreateDefaultTorznabTVCaps(),

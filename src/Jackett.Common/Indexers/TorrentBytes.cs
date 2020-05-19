@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class TorrentBytes : BaseWebIndexer
     {
         private string LoginUrl => SiteLink + "takelogin.php";
@@ -23,7 +25,8 @@ namespace Jackett.Common.Indexers
         private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
 
         public TorrentBytes(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base("TorrentBytes",
+            : base(id: "torrentbytes",
+                   name: "TorrentBytes",
                    description: "A decade of TorrentBytes",
                    link: "https://www.torrentbytes.net/",
                    caps: TorznabUtil.CreateDefaultTorznabTVCaps(),

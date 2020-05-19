@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -17,6 +18,7 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class TorrentLeech : BaseWebIndexer
     {
         private string LoginUrl => SiteLink + "user/account/login/";
@@ -29,7 +31,8 @@ namespace Jackett.Common.Indexers
         };
 
         public TorrentLeech(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)
-            : base("TorrentLeech",
+            : base(id: "torrentleech",
+                   name: "TorrentLeech",
                    description: "This is what happens when you seed",
                    link: "https://www.torrentleech.org/",
                    caps: new TorznabCapabilities
@@ -141,7 +144,7 @@ namespace Jackett.Common.Indexers
                 {
                     var results = await PerformQuery(new TorznabQuery());
                     if (!results.Any())
-                        throw new Exception("Your cookie did not work");
+                        throw new Exception("Found 0 results in the tracker");
 
                     IsConfigured = true;
                     SaveConfig();

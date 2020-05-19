@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class HDOlimpo : BaseWebIndexer
     {
         private string LoginUrl => SiteLink + "login";
@@ -32,15 +34,16 @@ namespace Jackett.Common.Indexers
         }
 
         public HDOlimpo(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
-            : base(name: "HD-Olimpo",
-                description: "HD-Olimpo is a SPANISH site for HD content",
-                link: "https://hdolimpo.co/",
-                caps: new TorznabCapabilities(),
-                configService: configService,
-                client: w,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataBasicLoginWithEmail())
+            : base(id: "hdolimpo",
+                   name: "HD-Olimpo",
+                   description: "HD-Olimpo is a SPANISH site for HD content",
+                   link: "https://hdolimpo.co/",
+                   caps: new TorznabCapabilities(),
+                   configService: configService,
+                   client: w,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataBasicLoginWithEmail())
         {
             Encoding = Encoding.UTF8;
             Language = "es-es";

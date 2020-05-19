@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -17,6 +18,7 @@ using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class Cinecalidad : BaseWebIndexer
     {
         private const int MaxItemsPerPage = 15;
@@ -30,7 +32,8 @@ namespace Jackett.Common.Indexers
         };
 
         public Cinecalidad(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base("Cinecalidad",
+            : base(id: "cinecalidad",
+                   name: "Cinecalidad",
                    description: "Películas Full HD en Castellano y Latino Dual.",
                    link: "https://www.cinecalidad.is/",
                    caps: new TorznabCapabilities(),
@@ -152,6 +155,8 @@ namespace Jackett.Common.Indexers
                 foreach (var row in rows)
                 {
                     var qImg = row.QuerySelector("img");
+                    if (qImg == null)
+                        continue; // skip results without image
                     var title = qImg.GetAttribute("title");
                     if (!CheckTitleMatchWords(query.GetQueryString(), title))
                         continue; // skip if it doesn't contain all words

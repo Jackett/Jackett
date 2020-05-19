@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -18,7 +19,7 @@ using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
 namespace Jackett.Common.Indexers
 {
-    // ReSharper disable once UnusedType.Global
+    [ExcludeFromCodeCoverage]
     public class InternetArchive : BaseWebIndexer
     {
         private string SearchUrl => SiteLink + "advancedsearch.php";
@@ -41,7 +42,8 @@ namespace Jackett.Common.Indexers
         private ConfigurationData ConfigData => configData;
 
         public InternetArchive(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "Internet Archive",
+            : base(id: "internetarchive",
+                   name: "Internet Archive",
                    description: "Internet Archive is a non-profit digital library offering free universal access to books, movies & music, as well as 406 billion archived web pages",
                    link: "https://archive.org/",
                    caps: new TorznabCapabilities(),
@@ -168,31 +170,31 @@ namespace Jackett.Common.Indexers
 
         private ReleaseInfo MakeRelease(JToken torrent)
         {
-            var release = new ReleaseInfo();
-
-            var title = GetFieldAs<string>("title", torrent);
-            release.Title = title;
-
             var id = GetFieldAs<string>("identifier", torrent);
-            release.Comments = new Uri(CommentsUrl + id);
-            release.Guid = release.Comments;
-
-            release.PublishDate = GetFieldAs<DateTime>("publicdate", torrent);
-            release.Category = MapTrackerCatToNewznab(GetFieldAs<string>("mediatype", torrent));
-            release.Size = GetFieldAs<long>("item_size", torrent);
-            release.Seeders = 1;
-            release.Peers = 2;
-            release.Grabs = GetFieldAs<long>("downloads", torrent);
-
+            var title = GetFieldAs<string>("title", torrent) ?? id;
+            var comments = new Uri(CommentsUrl + id);
             var btih = GetFieldAs<string>("btih", torrent);
-            release.Link = new Uri(LinkUrl + id + "/" + id + "_archive.torrent");
-            release.MagnetUri = GenerateMagnetLink(btih, title);
-            release.InfoHash = btih;
+            var link = new Uri(LinkUrl + id + "/" + id + "_archive.torrent");
 
-            release.MinimumRatio = 1;
-            release.MinimumSeedTime = 172800; // 48 hours
-            release.DownloadVolumeFactor = 0;
-            release.UploadVolumeFactor = 1;
+            var release = new ReleaseInfo
+            {
+                Title = title,
+                Comments = comments,
+                Guid = comments,
+                PublishDate = GetFieldAs<DateTime>("publicdate", torrent),
+                Category = MapTrackerCatToNewznab(GetFieldAs<string>("mediatype", torrent)),
+                Size = GetFieldAs<long>("item_size", torrent),
+                Seeders = 1,
+                Peers = 2,
+                Grabs = GetFieldAs<long>("downloads", torrent),
+                Link = link,
+                MagnetUri = GenerateMagnetLink(btih, title),
+                InfoHash = btih,
+                MinimumRatio = 1,
+                MinimumSeedTime = 172800, // 48 hours
+                DownloadVolumeFactor = 0,
+                UploadVolumeFactor = 1
+            };
 
             return release;
         }

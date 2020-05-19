@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Jackett.Common.Indexers.Abstract;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
@@ -6,10 +7,12 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class AlphaRatio : GazelleTracker
     {
         public AlphaRatio(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base("AlphaRatio",
+            : base(id: "alpharatio",
+                   name: "AlphaRatio",
                    description: "AlphaRatio (AR) is a Private Torrent Tracker for 0DAY / GENERAL",
                    link: "https://alpharatio.cc/",
                    caps: new TorznabCapabilities
@@ -58,7 +61,15 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(30, TorznabCatType.Other, "Misc");
         }
 
-        // Alpharatio can't handle dots in the searchstr
-        protected override string GetSearchTerm(TorznabQuery query) => query.GetQueryString().Replace(".", " ");
+        protected override string GetSearchTerm(TorznabQuery query)
+        {
+            // Ignore season search without episode. Alpharatio doesn't support it.
+            var searchTerm = string.IsNullOrWhiteSpace(query.Episode)
+                ? query.SanitizedSearchTerm
+                : query.GetQueryString();
+
+            // Alpharatio can't handle dots in the searchstr
+            return searchTerm.Replace(".", " ");
+        }
     }
 }

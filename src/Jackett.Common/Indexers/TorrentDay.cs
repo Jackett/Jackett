@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,39 +17,41 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class TorrentDay : BaseWebIndexer
     {
         private string StartPageUrl => SiteLink + "login.php";
         private string LoginUrl => SiteLink + "tak3login.php";
         private string SearchUrl => SiteLink + "t.json";
 
-        public override string[] LegacySiteLinks { get; protected set; } = {
-            "https://torrentday.com/",
-        };
-
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://tday.love/",
             "https://torrentday.cool/",
-            "https://tdonline.org/",
             "https://secure.torrentday.com/",
-            "https://torrentday.eu/",
             "https://classic.torrentday.com/",
             "https://www.torrentday.com/",
-            "https://td-update.com/",
-            "https://www.torrentday.me/",
-            "https://www.torrentday.ru/",
-            "https://www.td.af/",
             "https://torrentday.it/",
             "https://td.findnemo.net/",
             "https://td.getcrazy.me/",
             "https://td.venom.global/",
-            "https://td.workisboring.net/",
+            "https://td.workisboring.net/"
+        };
+
+        public override string[] LegacySiteLinks { get; protected set; } = {
+            "https://torrentday.com/",
+            "https://tdonline.org/", // redirect to https://www.torrentday.com/
+            "https://torrentday.eu/", // redirect to https://www.torrentday.com/
+            "https://td-update.com/", // redirect to https://www.torrentday.com/
+            "https://www.torrentday.me/",
+            "https://www.torrentday.ru/",
+            "https://www.td.af/"
         };
 
         private new ConfigurationDataRecaptchaLogin configData => (ConfigurationDataRecaptchaLogin)base.configData;
 
         public TorrentDay(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base("TorrentDay",
+            : base(id: "torrentday",
+                   name: "TorrentDay",
                    description: "TorrentDay (TD) is a Private site for TV / MOVIES / GENERAL",
                    link: "https://tday.love/",
                    caps: new TorznabCapabilities
@@ -154,7 +157,7 @@ namespace Jackett.Common.Indexers
                 {
                     var results = await PerformQuery(new TorznabQuery());
                     if (!results.Any())
-                        throw new Exception("no results found, please report this bug");
+                        throw new Exception("Found 0 results in the tracker");
 
                     IsConfigured = true;
                     SaveConfig();

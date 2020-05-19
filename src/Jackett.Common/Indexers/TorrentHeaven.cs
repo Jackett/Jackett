@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -16,10 +18,12 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class TorrentHeaven : BaseWebIndexer
     {
         public TorrentHeaven(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps) :
-            base("TorrentHeaven",
+            base(id: "torrentheaven",
+                 name: "TorrentHeaven",
                  description: "A German general tracker.",
                  link: "https://newheaven.nl/",
                  caps: new TorznabCapabilities(),
@@ -191,7 +195,7 @@ namespace Jackett.Common.Indexers
                     var qDetailsLink = row.QuerySelector("a[href^=\"index.php?strWebValue=torrent&strWebAction=details\"]");
                     var qCatLink = row.QuerySelector("a[href^=\"index.php?strWebValue=torrent&strWebAction=search&dir=\"]");
                     var qDlLink = row.QuerySelector("a[href^=\"index.php?strWebValue=torrent&strWebAction=download&id=\"]");
-                    var qSeeders = row.QuerySelectorAll("td.column1")[3];
+                    var qSeeders = row.QuerySelectorAll("td.column1")[2];
                     var qLeechers = row.QuerySelectorAll("td.column2")[3];
                     var qDateStr = row.QuerySelector("font:has(a)");
                     var qSize = row.QuerySelector("td.column2[align=center]");

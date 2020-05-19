@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -16,6 +17,7 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class BakaBT : BaseWebIndexer
     {
         private string SearchUrl => SiteLink + "browse.php?only=0&hentai=1&incomplete=1&lossless=1&hd=1&multiaudio=1&bonus=1&reorder=1&q=";
@@ -29,15 +31,17 @@ namespace Jackett.Common.Indexers
         }
 
         public BakaBT(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "BakaBT",
-                description: "Anime Comunity",
-                link: "https://bakabt.me/",
-                caps: new TorznabCapabilities(TorznabCatType.TVAnime),
-                configService: configService,
-                client: wc,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataBasicLogin("To prevent 0-results-error, Enable the Show-Adult-Content option in your BakaBT account Settings."))
+            : base(id: "bakabt",
+                   name: "BakaBT",
+                   description: "Anime Comunity",
+                   link: "https://bakabt.me/",
+                   caps: new TorznabCapabilities(TorznabCatType.TVAnime),
+                   configService: configService,
+                   client: wc,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataBasicLogin("To prevent 0-results-error, Enable the " +
+                                                               "Show-Adult-Content option in your BakaBT account Settings."))
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
@@ -79,16 +83,17 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
+            var queryCopy = query.Clone(); // we can't change the original object
             // This tracker only deals with full seasons so chop off the episode/season number if we have it D:
-            if (!string.IsNullOrWhiteSpace(query.SearchTerm))
+            if (!string.IsNullOrWhiteSpace(queryCopy.SearchTerm))
             {
-                var splitindex = query.SearchTerm.LastIndexOf(' ');
+                var splitindex = queryCopy.SearchTerm.LastIndexOf(' ');
                 if (splitindex > -1)
-                    query.SearchTerm = query.SearchTerm.Substring(0, splitindex);
+                    queryCopy.SearchTerm = queryCopy.SearchTerm.Substring(0, splitindex);
             }
 
             var releases = new List<ReleaseInfo>();
-            var searchString = query.SanitizedSearchTerm;
+            var searchString = queryCopy.SanitizedSearchTerm;
             var episodeSearchUrl = SearchUrl + WebUtility.UrlEncode(searchString);
             var response = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
             if (!response.Content.Contains(LogoutStr))

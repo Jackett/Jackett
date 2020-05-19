@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class DigitalHive : BaseWebIndexer
     {
         private string SearchUrl => SiteLink + "browse.php";
@@ -29,15 +31,16 @@ namespace Jackett.Common.Indexers
         }
 
         public DigitalHive(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
-            : base(name: "DigitalHive",
-                description: "DigitalHive is one of the oldest general trackers",
-                link: "https://www.digitalhive.org/",
-                caps: new TorznabCapabilities(),
-                configService: configService,
-                client: w,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataRecaptchaLogin())
+            : base(id: "digitalhive",
+                   name: "DigitalHive",
+                   description: "DigitalHive is one of the oldest general trackers",
+                   link: "https://www.digitalhive.org/",
+                   caps: new TorznabCapabilities(),
+                   configService: configService,
+                   client: w,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataRecaptchaLogin())
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "en-us";
@@ -132,7 +135,7 @@ namespace Jackett.Common.Indexers
                     var results = await PerformQuery(new TorznabQuery());
                     if (!results.Any())
                     {
-                        throw new Exception("Your cookie did not work");
+                        throw new Exception("Found 0 results in the tracker");
                     }
 
                     IsConfigured = true;

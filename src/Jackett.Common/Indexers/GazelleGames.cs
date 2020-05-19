@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,7 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class GazelleGames : BaseWebIndexer
     {
         private string LoginUrl => SiteLink + "login.php";
@@ -28,7 +30,8 @@ namespace Jackett.Common.Indexers
         }
 
         public GazelleGames(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "GazelleGames",
+            : base(id: "gazellegames",
+                   name: "GazelleGames",
                    description: "A gaming tracker.",
                    link: "https://gazellegames.net/",
                    caps: new TorznabCapabilities(),
@@ -184,7 +187,7 @@ namespace Jackett.Common.Indexers
                 var results = await PerformQuery(new TorznabQuery());
                 if (results.Count() == 0)
                 {
-                    throw new Exception("Your cookie did not work");
+                    throw new Exception("Found 0 results in the tracker");
                 }
 
                 IsConfigured = true;

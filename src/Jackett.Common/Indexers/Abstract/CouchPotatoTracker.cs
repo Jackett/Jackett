@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -12,6 +13,7 @@ using NLog;
 
 namespace Jackett.Common.Indexers.Abstract
 {
+    [ExcludeFromCodeCoverage]
     public abstract class CouchPotatoTracker : BaseWebIndexer
     {
         protected string endpoint;
@@ -23,10 +25,12 @@ namespace Jackett.Common.Indexers.Abstract
             set => base.configData = value;
         }
 
-        protected CouchPotatoTracker(string name, string link, string description, IIndexerConfigurationService configService,
-                                     WebClient client, Logger logger, IProtectionService p, TorznabCapabilities caps,
-                                     ConfigurationData configData, string endpoint)
-            : base(name,
+        protected CouchPotatoTracker(string link, string id, string name, string description,
+                                     IIndexerConfigurationService configService, WebClient client, Logger logger,
+                                     IProtectionService p, TorznabCapabilities caps, ConfigurationData configData,
+                                     string endpoint)
+            : base(id: id,
+                   name: name,
                    description: description,
                    link: link,
                    caps: caps,

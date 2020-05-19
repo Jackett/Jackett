@@ -18,8 +18,7 @@ namespace Jackett.Common.Indexers
 {
     public abstract class BaseIndexer : IIndexer
     {
-        public static string GetIndexerID(Type type) => type.Name.ToLowerInvariant().StripNonAlphaNumeric();
-
+        public string Id { get; protected set; }
         public string SiteLink { get; protected set; }
         public virtual string[] LegacySiteLinks { get; protected set; }
         public string DefaultSiteLink { get; protected set; }
@@ -28,7 +27,7 @@ namespace Jackett.Common.Indexers
         public string DisplayName { get; protected set; }
         public string Language { get; protected set; }
         public string Type { get; protected set; }
-        public virtual string ID => GetIndexerID(GetType());
+
 
         [JsonConverter(typeof(EncodingJsonConverter))]
         public Encoding Encoding { get; protected set; }
@@ -61,7 +60,9 @@ namespace Jackett.Common.Indexers
         public abstract TorznabCapabilities TorznabCaps { get; protected set; }
 
         // standard constructor used by most indexers
-        public BaseIndexer(string name, string link, string description, IIndexerConfigurationService configService, Logger logger, ConfigurationData configData, IProtectionService p)
+        public BaseIndexer(string link, string id, string name, string description,
+                           IIndexerConfigurationService configService, Logger logger, ConfigurationData configData,
+                           IProtectionService p)
         {
             this.logger = logger;
             configurationService = configService;
@@ -70,6 +71,7 @@ namespace Jackett.Common.Indexers
             if (!link.EndsWith("/", StringComparison.Ordinal))
                 throw new Exception("Site link must end with a slash.");
 
+            Id = id;
             DisplayName = name;
             DisplayDescription = description;
             SiteLink = link;
@@ -192,7 +194,7 @@ namespace Jackett.Common.Indexers
                     // protection is based on the item.Name value (property name might be different, example: Abnormal), so check the Name again
                     if (!string.Equals(passwordPropertyValue.Name, "password", StringComparison.InvariantCultureIgnoreCase))
                     {
-                        logger.Debug($"Skipping non default password property (unencrpyted password) for [{ID}] while attempting migration");
+                        logger.Debug($"Skipping non default password property (unencrpyted password) for [{Id}] while attempting migration");
                         return false;
                     }
                 }
@@ -201,7 +203,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception)
             {
-                logger.Debug($"Unable to source password for [{ID}] while attempting migration, likely a tracker without a password setting");
+                logger.Debug($"Unable to source password for [{Id}] while attempting migration, likely a tracker without a password setting");
                 return false;
             }
 
@@ -217,10 +219,10 @@ namespace Jackett.Common.Indexers
                 {
                     if (ex.Message != "The provided payload cannot be decrypted because it was not protected with this protection provider.")
                     {
-                        logger.Info($"Password could not be unprotected using Microsoft.AspNetCore.DataProtection - {ID} : " + ex);
+                        logger.Info($"Password could not be unprotected using Microsoft.AspNetCore.DataProtection - {Id} : " + ex);
                     }
 
-                    logger.Info($"Attempting legacy Unprotect - {ID} : ");
+                    logger.Info($"Attempting legacy Unprotect - {Id} : ");
 
                     try
                     {
@@ -231,13 +233,13 @@ namespace Jackett.Common.Indexers
                         SaveConfig();
                         IsConfigured = true;
 
-                        logger.Info($"Password successfully migrated for {ID}");
+                        logger.Info($"Password successfully migrated for {Id}");
 
                         return true;
                     }
                     catch (Exception exception)
                     {
-                        logger.Info($"Password could not be unprotected using legacy DPAPI - {ID} : " + exception);
+                        logger.Info($"Password could not be unprotected using legacy DPAPI - {Id} : " + exception);
                     }
                 }
             }
@@ -349,8 +351,11 @@ namespace Jackett.Common.Indexers
 
     public abstract class BaseWebIndexer : BaseIndexer, IWebIndexer
     {
-        protected BaseWebIndexer(string name, string link, string description, IIndexerConfigurationService configService, WebClient client, Logger logger, ConfigurationData configData, IProtectionService p, TorznabCapabilities caps = null, string downloadBase = null)
-            : base(name, link, description, configService, logger, configData, p)
+        protected BaseWebIndexer(string link, string id, string name, string description,
+                                 IIndexerConfigurationService configService, WebClient client, Logger logger,
+                                 ConfigurationData configData, IProtectionService p, TorznabCapabilities caps = null,
+                                 string downloadBase = null)
+            : base(link, id, name, description, configService, logger, configData, p)
         {
             webclient = client;
             downloadUrlBase = downloadBase;
@@ -362,7 +367,7 @@ namespace Jackett.Common.Indexers
 
         // minimal constructor used by e.g. cardigann generic indexer
         protected BaseWebIndexer(IIndexerConfigurationService configService, WebClient client, Logger logger, IProtectionService p)
-            : base("", "/", "", configService, logger, null, p) => webclient = client;
+            : base("/", "", "", "", configService, logger, null, p) => webclient = client;
 
         public virtual async Task<byte[]> Download(Uri link)
         {
@@ -835,8 +840,11 @@ namespace Jackett.Common.Indexers
 
     public abstract class BaseCachingWebIndexer : BaseWebIndexer
     {
-        protected BaseCachingWebIndexer(string name, string link, string description, IIndexerConfigurationService configService, WebClient client, Logger logger, ConfigurationData configData, IProtectionService p, TorznabCapabilities caps = null, string downloadBase = null)
-            : base(name, link, description, configService, client, logger, configData, p, caps, downloadBase)
+        protected BaseCachingWebIndexer(string link,string id, string name, string description,
+                                        IIndexerConfigurationService configService, WebClient client, Logger logger,
+                                        ConfigurationData configData, IProtectionService p, TorznabCapabilities caps = null,
+                                        string downloadBase = null)
+            : base(link, id, name, description, configService, client, logger, configData, p, caps, downloadBase)
         {
         }
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,7 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class Hebits : BaseWebIndexer
     {
         private string LoginPostUrl => SiteLink + "takeloginAjax.php";
@@ -28,7 +30,8 @@ namespace Jackett.Common.Indexers
         }
 
         public Hebits(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "Hebits",
+            : base(id: "hebits",
+                   name: "Hebits",
                    description: "The Israeli Tracker",
                    link: "https://hebits.net/",
                    caps: TorznabUtil.CreateDefaultTorznabTVCaps(),

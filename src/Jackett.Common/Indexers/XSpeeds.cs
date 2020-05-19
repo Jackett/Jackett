@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -17,6 +18,7 @@ using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class XSpeeds : BaseWebIndexer
     {
         private string LandingUrl => SiteLink + "login.php";
@@ -34,15 +36,16 @@ namespace Jackett.Common.Indexers
         }
 
         public XSpeeds(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "XSpeeds",
-                description: "XSpeeds (XS) is a Private Torrent Tracker for MOVIES / TV / GENERAL",
-                link: "https://www.xspeeds.eu/",
-                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                configService: configService,
-                client: wc,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
+            : base(id: "xspeeds",
+                   name: "XSpeeds",
+                   description: "XSpeeds (XS) is a Private Torrent Tracker for MOVIES / TV / GENERAL",
+                   link: "https://www.xspeeds.eu/",
+                   caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                   configService: configService,
+                   client: wc,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
@@ -154,7 +157,7 @@ namespace Jackett.Common.Indexers
             }
             else
             {
-                logger.Debug(string.Format("{0}: No captcha image found", ID));
+                logger.Debug(string.Format("{0}: No captcha image found", Id));
             }
 
             return configData;

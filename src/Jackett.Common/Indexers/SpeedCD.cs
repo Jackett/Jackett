@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
+using Jackett.Common.Helpers;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -15,11 +18,12 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class SpeedCD : BaseWebIndexer
     {
         private string LoginUrl1 => SiteLink + "checkpoint/API";
         private string LoginUrl2 => SiteLink + "checkpoint/";
-        private string SearchUrl => SiteLink + "browse.php";
+        private string SearchUrl => SiteLink + "browse/";
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://speed.cd/",
@@ -29,20 +33,21 @@ namespace Jackett.Common.Indexers
         private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
 
         public SpeedCD(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base("Speed.cd",
-                description: "Your home now!",
-                link: "https://speed.cd/",
-                caps: new TorznabCapabilities
-                {
-                    SupportsImdbMovieSearch = true
-                    // SupportsImdbTVSearch = true (supported by the site but disabled due to #8107)
-                },
-                configService: configService,
-                client: wc,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataBasicLogin(
-                    @"Speed.Cd have increased their security. If you are having problems please check the security tab
+            : base(id: "speedcd",
+                   name: "Speed.cd",
+                   description: "Your home now!",
+                   link: "https://speed.cd/",
+                   caps: new TorznabCapabilities
+                   {
+                       SupportsImdbMovieSearch = true
+                       // SupportsImdbTVSearch = true (supported by the site but disabled due to #8107)
+                   },
+                   configService: configService,
+                   client: wc,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataBasicLogin(
+                       @"Speed.Cd have increased their security. If you are having problems please check the security tab
                     in your Speed.Cd profile. Eg. Geo Locking, your seedbox may be in a different country to the one where you login via your
                     web browser.<br><br>For best results, change the 'Torrents per page' setting to 100 in 'Profile Settings > Torrents'."))
         {
@@ -100,13 +105,13 @@ namespace Jackett.Common.Indexers
             var tokenRegex = new Regex(@"name=\\""a\\"" value=\\""([^""]+)\\""");
             var matches = tokenRegex.Match(result.Content);
             if (!matches.Success)
-                throw new ExceptionWithConfigData("Error parsing the login form", configData);
+                throw new Exception("Error parsing the login form");
             var token = matches.Groups[1].Value;
 
             // second request with token and password
             pairs = new Dictionary<string, string> {
-                { "a", token },
-                { "b", configData.Password.Value },
+                { "pwd", configData.Password.Value },
+                { "a", token }
             };
             result = await RequestLoginAndFollowRedirect(LoginUrl2, pairs, result.Cookies, true, null, SiteLink);
 
@@ -117,7 +122,7 @@ namespace Jackett.Common.Indexers
                 var errorMessage = dom.QuerySelector("h5")?.TextContent;
                 if (result.Content.Contains("Wrong Captcha!"))
                     errorMessage = "Captcha required due to a failed login attempt. Login via a browser to whitelist your IP and then reconfigure Jackett.";
-                throw new ExceptionWithConfigData(errorMessage, configData);
+                throw new Exception(errorMessage);
             });
         }
 
@@ -125,20 +130,26 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
 
-            var qc = new List<KeyValuePair<string, string>>(); // NameValueCollection don't support c[]=30&c[]=52
-            if (query.IsImdbQuery)
-            {
-                qc.Add("search", query.ImdbID);
-                qc.Add("d", "on");
-            }
-            else
-                qc.Add("search", query.GetQueryString());
+            // the order of the params is important!
+            var qc = new List<string>();
 
             var catList = MapTorznabCapsToTrackers(query);
             foreach (var cat in catList)
-                qc.Add("c[]", cat);
+                qc.Add(cat);
 
-            var searchUrl = SearchUrl + "?" + qc.GetQueryString();
+            if (query.IsImdbQuery)
+            {
+                qc.Add("deep");
+                qc.Add("q");
+                qc.Add(query.ImdbID);
+            }
+            else
+            {
+                qc.Add("q");
+                qc.Add(WebUtilityHelpers.UrlEncode(query.GetQueryString(), Encoding));
+            }
+
+            var searchUrl = SearchUrl + string.Join("/", qc);
             var response = await RequestStringWithCookiesAndRetry(searchUrl);
             if (!response.Content.Contains("/logout.php")) // re-login
             {
@@ -159,15 +170,15 @@ namespace Jackett.Common.Indexers
                     var title = row.QuerySelector("td[class='lft'] > div > a").TextContent.Trim();
                     var link = new Uri(SiteLink + row.QuerySelector("img[title='Download']").ParentElement.GetAttribute("href").TrimStart('/'));
                     var comments = new Uri(SiteLink + row.QuerySelector("td[class='lft'] > div > a").GetAttribute("href").TrimStart('/'));
-                    var size = ReleaseInfo.GetBytes(cells[4].TextContent);
-                    var grabs = ParseUtil.CoerceInt(cells[5].TextContent);
-                    var seeders = ParseUtil.CoerceInt(cells[6].TextContent);
-                    var leechers = ParseUtil.CoerceInt(cells[7].TextContent);
+                    var size = ReleaseInfo.GetBytes(cells[5].TextContent);
+                    var grabs = ParseUtil.CoerceInt(cells[6].TextContent);
+                    var seeders = ParseUtil.CoerceInt(cells[7].TextContent);
+                    var leechers = ParseUtil.CoerceInt(cells[8].TextContent);
 
                     var pubDateStr = row.QuerySelector("span[class^='elapsedDate']").GetAttribute("title").Replace(" at", "");
                     var publishDate = DateTime.ParseExact(pubDateStr, "dddd, MMMM d, yyyy h:mmtt", CultureInfo.InvariantCulture);
 
-                    var cat = row.QuerySelector("a[href^='?c[]=']").GetAttribute("href").Replace("?c[]=", "");
+                    var cat = row.QuerySelector("a").GetAttribute("href").Split('/').Last();
                     var downloadVolumeFactor = row.QuerySelector("span:contains(\"[Freeleech]\")") != null ? 0 : 1;
 
                     var release = new ReleaseInfo

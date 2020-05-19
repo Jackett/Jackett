@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class TVVault : BaseWebIndexer
     {
         private string LoginUrl => SiteLink + "login.php";
@@ -27,7 +29,8 @@ namespace Jackett.Common.Indexers
         }
 
         public TVVault(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "TV-Vault",
+            : base(id: "tvvault",
+                   name: "TV-Vault",
                    description: "A TV tracker for old shows.",
                    link: "https://tv-vault.me/",
                    caps: TorznabUtil.CreateDefaultTorznabTVCaps(),

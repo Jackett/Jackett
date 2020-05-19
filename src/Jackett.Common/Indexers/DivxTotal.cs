@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -20,7 +21,7 @@ using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
 namespace Jackett.Common.Indexers
 {
-    // ReSharper disable once UnusedType.Global
+    [ExcludeFromCodeCoverage]
     public class DivxTotal : BaseWebIndexer
     {
         private const int MaxResultsPerPage = 15;
@@ -44,15 +45,16 @@ namespace Jackett.Common.Indexers
         }
 
         public DivxTotal(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
-            : base(name: "DivxTotal",
-                description: "DivxTotal is a SPANISH site for Movies, TV series and Software",
-                link: "https://www.divxtotal.la/",
-                caps: new TorznabCapabilities(),
-                configService: configService,
-                client: w,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationData())
+            : base(id: "divxtotal",
+                   name: "DivxTotal",
+                   description: "DivxTotal is a SPANISH site for Movies, TV series and Software",
+                   link: "https://www.divxtotal.la/",
+                   caps: new TorznabCapabilities(),
+                   configService: configService,
+                   client: w,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationData())
         {
             Encoding = Encoding.UTF8;
             Language = "es-es";
@@ -127,7 +129,7 @@ namespace Jackett.Common.Indexers
                         }
                         catch (Exception ex)
                         {
-                            logger.Error($"CardigannIndexer ({ID}): Error while parsing row '{row.ToHtmlPretty()}':\n\n{ex}");
+                            logger.Error($"CardigannIndexer ({Id}): Error while parsing row '{row.ToHtmlPretty()}':\n\n{ex}");
                         }
                     }
                 }
@@ -158,7 +160,7 @@ namespace Jackett.Common.Indexers
                 var searchResultParser = new HtmlParser();
                 var doc = searchResultParser.ParseDocument(result.Content);
 
-                var onclick = doc.QuerySelector("a[onclick*=\"/download/torrent\"]")
+                var onclick = doc.QuerySelector("a[onclick*=\"/torrent\"]")
                     .GetAttribute("onclick");
                 downloadUrl = OnclickToDownloadLink(onclick);
             }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -18,6 +19,7 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class AnimeTorrents : BaseWebIndexer
     {
         private string LoginUrl => SiteLink + "login.php";
@@ -31,15 +33,16 @@ namespace Jackett.Common.Indexers
         }
 
         public AnimeTorrents(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps)
-            : base(name: "AnimeTorrents",
-                description: "Definitive source for anime and manga",
-                link: "https://animetorrents.me/",
-                caps: new TorznabCapabilities(),
-                configService: configService,
-                client: c,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataBasicLogin())
+            : base(id: "animetorrents",
+                   name: "AnimeTorrents",
+                   description: "Definitive source for anime and manga",
+                   link: "https://animetorrents.me/",
+                   caps: new TorznabCapabilities(),
+                   configService: configService,
+                   client: c,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";

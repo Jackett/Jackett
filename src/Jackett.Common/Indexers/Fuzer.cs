@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -17,6 +18,7 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class Fuzer : BaseWebIndexer
     {
         public override string[] LegacySiteLinks { get; protected set; } =
@@ -34,7 +36,8 @@ namespace Jackett.Common.Indexers
         }
 
         public Fuzer(IIndexerConfigurationService configService, Utils.Clients.WebClient w, Logger l, IProtectionService ps)
-            : base(name: "Fuzer",
+            : base(id: "fuzer",
+                   name: "Fuzer",
                    description: "Fuzer is a private torrent website with israeli torrents.",
                    link: "https://www.fuzer.me/",
                    caps: new TorznabCapabilities
@@ -138,7 +141,7 @@ namespace Jackett.Common.Indexers
                 {
                     var results = await PerformQuery(new TorznabQuery());
                     if (!results.Any())
-                        throw new Exception("Your cookie did not work");
+                        throw new Exception("Found 0 results in the tracker");
                     IsConfigured = true;
                     SaveConfig();
                     return IndexerConfigurationStatus.Completed;

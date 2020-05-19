@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -15,8 +16,7 @@ using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
 namespace Jackett.Common.Indexers
 {
-    // ReSharper disable once UnusedType.Global
-    // ReSharper disable once UnusedMember.Global
+    [ExcludeFromCodeCoverage]
     public class EpubLibre : BaseWebIndexer
     {
         private string SearchUrl => SiteLink + "catalogo/index/{0}/nuevo/todos/sin/todos/{1}/ajax";
@@ -44,7 +44,8 @@ namespace Jackett.Common.Indexers
         };
 
         public EpubLibre(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base("EpubLibre",
+            : base(id: "epublibre",
+                   name: "EpubLibre",
                    description: "Más libros, Más libres",
                    link: "https://epublibre.org/",
                    caps: new TorznabCapabilities(TorznabCatType.BooksEbook),

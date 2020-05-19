@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Jackett.Common.Models;
@@ -14,26 +16,30 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class AwesomeHD : BaseWebIndexer
     {
         private string SearchUrl => SiteLink + "searchapi.php";
         private string TorrentUrl => SiteLink + "torrents.php";
+        private readonly Regex _removeYearRegex = new Regex(@" [\(\[]?(19|20)\d{2}[\)\]]?$", RegexOptions.Compiled);
         private new ConfigurationDataPasskey configData => (ConfigurationDataPasskey)base.configData;
 
         public AwesomeHD(IIndexerConfigurationService configService, Utils.Clients.WebClient c, Logger l, IProtectionService ps)
-            : base("Awesome-HD",
-                description: "An HD tracker",
-                link: "https://awesome-hd.me/",
-                caps: new TorznabCapabilities
-                {
-                    SupportsImdbMovieSearch = true
-                    // SupportsImdbTVSearch = true (supported by the site but disabled due to #8107)
-                },
-                configService: configService,
-                client: c,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataPasskey("Note: You can find the Passkey in your profile, next to Personal information."))
+            : base(id: "awesomehd",
+                   name: "Awesome-HD",
+                   description: "An HD tracker",
+                   link: "https://awesome-hd.me/",
+                   caps: new TorznabCapabilities
+                   {
+                       SupportsImdbMovieSearch = true
+                       // SupportsImdbTVSearch = true (supported by the site but disabled due to #8107)
+                   },
+                   configService: configService,
+                   client: c,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataPasskey("Note: You can find the Passkey in your profile, " +
+                                                            "next to Personal information."))
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
@@ -75,10 +81,13 @@ namespace Jackett.Common.Indexers
             }
             else if (!string.IsNullOrWhiteSpace(query.GetQueryString()))
             {
-                var searchTerm = query.SearchTerm; // not use query.GetQueryString(), because it includes the season
-                if (query.Season > 0) // search for tv series
+                // not use query.GetQueryString(), because it includes the season
+                var searchTerm = query.SearchTerm;
+                // search for tv series
+                if (query.Season > 0)
                     searchTerm += $": Season {query.Season:D2}";
-
+                // remove the year, it's not supported in the api
+                searchTerm = _removeYearRegex.Replace(searchTerm, "");
                 qc.Add("action", "titlesearch");
                 qc.Add("title", searchTerm);
             }

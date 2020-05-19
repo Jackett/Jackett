@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Jackett.Common.Indexers.Abstract;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
@@ -6,10 +7,12 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class PrivateHD : AvistazTracker
     {
         public PrivateHD(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base("PrivateHD",
+            : base(id: "privatehd",
+                   name: "PrivateHD",
                    description: "BitTorrent site for High Quality, High Definition (HD) movies and TV Shows",
                    link: "https://privatehd.to/",
                    caps: new TorznabCapabilities

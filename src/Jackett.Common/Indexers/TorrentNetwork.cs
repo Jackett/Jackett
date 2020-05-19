@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
@@ -15,6 +16,7 @@ using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class TorrentNetwork : BaseWebIndexer
     {
         private string APIUrl => SiteLink + "api/";
@@ -32,7 +34,8 @@ namespace Jackett.Common.Indexers
         }
 
         public TorrentNetwork(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "Torrent Network",
+            : base(id: "torrentnetwork",
+                   name: "Torrent Network",
                    description: "Torrent Network (TN) is a GERMAN Private site for TV / MOVIES / GENERAL",
                    link: "https://tntracker.org/",
                    caps: new TorznabCapabilities(),

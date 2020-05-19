@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -18,6 +19,7 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class BJShare : BaseWebIndexer
     {
         private string LoginUrl => SiteLink + "login.php";
@@ -58,19 +60,20 @@ namespace Jackett.Common.Indexers
             {"greys anatomy", "grey's anatomy"}
         };
 
-        public BJShare(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps) :
-            base("BJ-Share",
-                 description: "A brazilian tracker.",
-                 link: "https://bj-share.info/",
-                 caps: new TorznabCapabilities
-                 {
-                     SupportsImdbMovieSearch = true
-                 },
-                 configService: configService,
-                 client: wc,
-                 logger: l,
-                 p: ps,
-                 configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
+        public BJShare(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+            :  base(id: "bjshare",
+                    name: "BJ-Share",
+                    description: "A brazilian tracker.",
+                    link: "https://bj-share.info/",
+                    caps: new TorznabCapabilities
+                    {
+                        SupportsImdbMovieSearch = true
+                    },
+                    configService: configService,
+                    client: wc,
+                    logger: l,
+                    p: ps,
+                    configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
             Encoding = Encoding.UTF8;
             Language = "pt-br";
@@ -164,6 +167,36 @@ namespace Jackett.Common.Indexers
             return false;
         }
 
+        private string FixYearPosition(string title, string year)
+        {
+            int index = title.LastIndexOf('-');
+            // If its a series
+            if (index != -1)
+            {
+                title = title.Substring(0, index) + year + " " + title.Substring(index + 1);
+            }
+            else
+            {
+                title += " " + year;
+            }
+
+            return title;
+        }
+
+        private string FixNovelNumber(string title)
+        {
+
+            if (title.Contains("[Novela]"))
+            {
+                title = Regex.Replace(title, @"(Cap[\.]?[ ]?)", "S01E");
+                title = Regex.Replace(title, @"(\[Novela\]\ )", "");
+                title = Regex.Replace(title, @"(\ \-\s*Completo)", " - S01");
+                return title;
+            }
+
+            return title;
+        }
+
         private string FixAbsoluteNumbering(string title)
         {
             // if result is absolute numbered, convert title from SXXEXX to EXX
@@ -180,14 +213,6 @@ namespace Jackett.Common.Indexers
             if (IsAbsoluteNumbering(title))
             {
                 title = Regex.Replace(title, @"(Ep[\.]?[ ]?)|([S]\d\d[Ee])", "");
-                return title;
-            }
-
-            if (title.Contains("[Novela]"))
-            {
-                title = Regex.Replace(title, @"(Cap[\.]?[ ]?)", "S01E");
-                title = Regex.Replace(title, @"(\[Novela\]\ )", "");
-                title = Regex.Replace(title, @"(\ \-\s*Completo)", " - S01");
                 return title;
             }
 
@@ -296,6 +321,7 @@ namespace Jackett.Common.Indexers
                         }
 
                         release.Description = release.Description.Replace(" / Free", ""); // Remove Free Tag
+                        release.Description = release.Description.Replace("/ WEB ", "/ WEB-DL "); // Fix web/web-dl
                         release.Description = release.Description.Replace("Full HD", "1080p");
                         // Handles HDR conflict
                         release.Description = release.Description.Replace("/ HD /", "/ 720p /");
@@ -303,10 +329,6 @@ namespace Jackett.Common.Indexers
                         release.Description = release.Description.Replace("4K", "2160p");
                         release.Description = release.Description.Replace("SD", "480p");
                         release.Description = release.Description.Replace("Dual Áudio", "Dual");
-                        // If it ain't nacional there will be the type of the audio / original audio
-                        if (!release.Description.Contains("Nacional"))
-                            release.Description = Regex.Replace(
-                                release.Description, @"(Dual|Legendado|Dublado) \/ (.*?) \/", "$1 /");
 
                         // Adjust the description in order to can be read by Radarr and Sonarr
                         var cleanDescription = release.Description.Trim().TrimStart('[').TrimEnd(']');
@@ -348,7 +370,7 @@ namespace Jackett.Common.Indexers
                     }
                     catch (Exception ex)
                     {
-                        logger.Error($"{ID}: Error while parsing row '{row.OuterHtml}': {ex.Message}");
+                        logger.Error($"{Id}: Error while parsing row '{row.OuterHtml}': {ex.Message}");
                     }
             }
             catch (Exception ex)
@@ -398,6 +420,7 @@ namespace Jackett.Common.Indexers
                         var year = "";
                         release.Description = "";
                         var extraInfo = "";
+                        var releaseQuality = "";
                         foreach (var child in qBJinfoBox.ChildNodes)
                         {
                             var type = child.NodeType;
@@ -419,7 +442,16 @@ namespace Jackett.Common.Indexers
                                 release.PublishDate = publishDate.ToLocalTime();
                             }
                             else if (line.StartsWith("Ano:"))
+                            {
                                 year = line.Substring("Ano: ".Length);
+                            }
+                            else if (line.StartsWith("Qualidade:"))
+                            {
+                                releaseQuality = line.Substring("Qualidade: ".Length);
+                                if (releaseQuality == "WEB")
+                                    releaseQuality = "WEB-DL";
+                                extraInfo += releaseQuality + " ";
+                            }
                             else
                             {
                                 release.Description += line + "\n";
@@ -436,9 +468,12 @@ namespace Jackett.Common.Indexers
                         }
 
                         var catStr = qCatLink.GetAttribute("href").Split('=')[1].Split('&')[0];
-                        release.Title = FixAbsoluteNumbering(release.Title);
                         if (!string.IsNullOrEmpty(year))
-                            release.Title += " " + year;
+                            release.Title = FixYearPosition(release.Title, year);
+
+                        release.Title = FixAbsoluteNumbering(release.Title);
+                        release.Title = FixNovelNumber(release.Title);
+
                         if (qQuality != null)
                         {
                             var quality = qQuality.TextContent;
@@ -464,7 +499,7 @@ namespace Jackett.Common.Indexers
                     }
                     catch (Exception ex)
                     {
-                        logger.Error($"{ID}: Error while parsing row '{row.OuterHtml}': {ex.Message}");
+                        logger.Error($"{Id}: Error while parsing row '{row.OuterHtml}': {ex.Message}");
                     }
             }
             catch (Exception ex)

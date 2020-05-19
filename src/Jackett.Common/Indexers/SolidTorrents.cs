@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class SolidTorrents : BaseWebIndexer
     {
         private string SearchUrl => SiteLink + "api/v1/search";
@@ -34,8 +36,9 @@ namespace Jackett.Common.Indexers
         }
 
         public SolidTorrents(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "Solid Torrents",
-                   description: "SolidTorrents is a Public torrent meta-search engine",
+            : base(id: "solidtorrents",
+                   name: "Solid Torrents",
+                   description: "Solid Torrents is a Public torrent meta-search engine",
                    link: "https://solidtorrents.net/",
                    caps: new TorznabCapabilities(),
                    configService: configService,

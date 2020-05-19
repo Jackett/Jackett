@@ -29,7 +29,7 @@ namespace Jackett.Common.Models
     // Cardigann yaml classes
     public class IndexerDefinition
     {
-        public string Site { get; set; }
+        public string Id { get; set; }
         public List<settingsField> Settings { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }

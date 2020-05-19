@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -17,6 +18,7 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class MoreThanTV : BaseWebIndexer
     {
         private string LoginUrl => SiteLink + "login.php";
@@ -27,18 +29,19 @@ namespace Jackett.Common.Indexers
         private ConfigurationDataBasicLogin ConfigData => (ConfigurationDataBasicLogin)configData;
 
         public MoreThanTV(IIndexerConfigurationService configService, Utils.Clients.WebClient c, Logger l, IProtectionService ps)
-            : base(name: "MoreThanTV",
-                description: "Private torrent tracker for TV / MOVIES, and the internal tracker for the release group DRACULA.",
-                link: "https://www.morethan.tv/",
-                caps: new TorznabCapabilities(
-                    TorznabCatType.Movies,
-                    TorznabCatType.TV,
-                    TorznabCatType.Other),
-                configService: configService,
-                client: c,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataBasicLogin())
+            : base(id: "morethantv",
+                   name: "MoreThanTV",
+                   description: "Private torrent tracker for TV / MOVIES, and the internal tracker for the release group DRACULA.",
+                   link: "https://www.morethan.tv/",
+                   caps: new TorznabCapabilities(
+                       TorznabCatType.Movies,
+                       TorznabCatType.TV,
+                       TorznabCatType.Other),
+                   configService: configService,
+                   client: c,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -17,10 +18,10 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class AnimeBytes : BaseCachingWebIndexer
     {
         private string ScrapeUrl => SiteLink + "scrape.php";
-        private string TorrentsUrl => SiteLink + "torrents.php";
         public bool AllowRaws => configData.IncludeRaw.Value;
         public bool PadEpisode => configData.PadEpisode != null && configData.PadEpisode.Value;
         public bool AddSynonyms => configData.AddSynonyms.Value;
@@ -33,23 +34,24 @@ namespace Jackett.Common.Indexers
         }
 
         public AnimeBytes(IIndexerConfigurationService configService, Utils.Clients.WebClient client, Logger l, IProtectionService ps)
-            : base(name: "AnimeBytes",
-                link: "https://animebytes.tv/",
-                description: "Powered by Tentacles",
-                configService: configService,
-                client: client,
-                caps: new TorznabCapabilities(TorznabCatType.TVAnime,
-                                              TorznabCatType.Movies,
-                                              TorznabCatType.BooksComics,
-                                              TorznabCatType.ConsolePSP,
-                                              TorznabCatType.ConsoleOther,
-                                              TorznabCatType.PCGames,
-                                              TorznabCatType.AudioMP3,
-                                              TorznabCatType.AudioLossless,
-                                              TorznabCatType.AudioOther),
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataAnimeBytes("Note: Go to AnimeBytes site and open your account settings. Go to 'Account' tab, move cursor over black part near 'Passkey' and copy its value. Your username is case sensitive."))
+            : base(id: "animebytes",
+                   name: "AnimeBytes",
+                   description: "Powered by Tentacles",
+                   link: "https://animebytes.tv/",
+                   configService: configService,
+                   client: client,
+                   caps: new TorznabCapabilities(TorznabCatType.TVAnime,
+                                                 TorznabCatType.Movies,
+                                                 TorznabCatType.BooksComics,
+                                                 TorznabCatType.ConsolePSP,
+                                                 TorznabCatType.ConsoleOther,
+                                                 TorznabCatType.PCGames,
+                                                 TorznabCatType.AudioMP3,
+                                                 TorznabCatType.AudioLossless,
+                                                 TorznabCatType.AudioOther),
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataAnimeBytes("Note: Go to AnimeBytes site and open your account settings. Go to 'Account' tab, move cursor over black part near 'Passkey' and copy its value. Your username is case sensitive."))
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
@@ -260,7 +262,7 @@ namespace Jackett.Common.Indexers
                             var UploadTimeString = (string)torrent["UploadTime"];
                             var UploadTime = DateTime.ParseExact(UploadTimeString, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
                             var PublushDate = DateTime.SpecifyKind(UploadTime, DateTimeKind.Utc).ToLocalTime();
-                            var CommentsLink = TorrentsUrl + "?id=" + groupID.ToString() + "&torrentid=" + torrentID.ToString();
+                            var CommentsLink = SiteLink + "torrent/" + torrentID.ToString() + "/group";
                             var CommentsLinkUri = new Uri(CommentsLink);
                             var Size = (long)torrent["Size"];
                             var Snatched = (long)torrent["Snatched"];

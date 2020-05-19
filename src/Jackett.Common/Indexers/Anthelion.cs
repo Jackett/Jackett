@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Jackett.Common.Indexers.Abstract;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
@@ -6,14 +7,16 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
-    public class TehConnectionMe : GazelleTracker
+    [ExcludeFromCodeCoverage]
+    public class Anthelion : GazelleTracker
     {
-        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
+        public override string[] LegacySiteLinks { get; protected set; } = {
             "https://tehconnection.me/",
         };
 
-        public TehConnectionMe(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base("Anthelion", // old name: TehConnection.me
+        public Anthelion(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+            : base(id: "anthelion",
+                   name: "Anthelion", // old name: TehConnection.me
                    description: "A movies tracker",
                    link: "https://anthelion.me/",
                    caps: new TorznabCapabilities(),

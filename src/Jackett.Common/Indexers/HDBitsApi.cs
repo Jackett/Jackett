@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class HDBitsApi : BaseWebIndexer
     {
         private string APIUrl => SiteLink + "api/";
@@ -24,18 +26,19 @@ namespace Jackett.Common.Indexers
         }
 
         public HDBitsApi(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "HDBits (API)",
-                description: "The HighDefinition Bittorrent Community",
-                link: "https://hdbits.org/",
-                caps: new TorznabCapabilities
-                {
-                    SupportsImdbMovieSearch = true
-                },
-                configService: configService,
-                client: wc,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataHDBitsApi())
+            : base(id: "hdbitsapi",
+                   name: "HDBits (API)",
+                   description: "The HighDefinition Bittorrent Community",
+                   link: "https://hdbits.org/",
+                   caps: new TorznabCapabilities
+                   {
+                       SupportsImdbMovieSearch = true
+                   },
+                   configService: configService,
+                   client: wc,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataHDBitsApi())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";

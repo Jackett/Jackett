@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -17,6 +18,7 @@ using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
 namespace Jackett.Common.Indexers.Abstract
 {
+    [ExcludeFromCodeCoverage]
     public abstract class GazelleTracker : BaseWebIndexer
     {
         protected string LoginUrl => SiteLink + "login.php";
@@ -35,18 +37,20 @@ namespace Jackett.Common.Indexers.Abstract
             set => base.configData = value;
         }
 
-        protected GazelleTracker(string name, string link, string description, IIndexerConfigurationService configService,
-                                 WebClient client, Logger logger, IProtectionService p, TorznabCapabilities caps,
-                                 bool supportsFreeleechTokens, bool imdbInTags = false, bool has2Fa = false)
-            : base(name,
-                description: description,
-                link: link,
-                caps: caps,
-                configService: configService,
-                client: client,
-                logger: logger,
-                p: p,
-                configData: new ConfigurationDataBasicLogin())
+        protected GazelleTracker(string link, string id, string name, string description,
+                                 IIndexerConfigurationService configService, WebClient client, Logger logger,
+                                 IProtectionService p, TorznabCapabilities caps, bool supportsFreeleechTokens,
+                                 bool imdbInTags = false, bool has2Fa = false)
+            : base(id: id,
+                   name: name,
+                   description: description,
+                   link: link,
+                   caps: caps,
+                   configService: configService,
+                   client: client,
+                   logger: logger,
+                   p: p,
+                   configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.UTF8;
             this.supportsFreeleechTokens = supportsFreeleechTokens;
@@ -110,7 +114,7 @@ namespace Jackett.Common.Indexers.Abstract
                     var results = await PerformQuery(new TorznabQuery());
                     if (!results.Any())
                     {
-                        throw new Exception("Your cookie did not work");
+                        throw new Exception("Found 0 results in the tracker");
                     }
 
                     IsConfigured = true;

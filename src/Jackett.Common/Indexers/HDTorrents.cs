@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -17,6 +18,7 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class HDTorrents : BaseWebIndexer
     {
         private string SearchUrl => SiteLink + "torrents.php?";
@@ -43,7 +45,8 @@ namespace Jackett.Common.Indexers
         private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
 
         public HDTorrents(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
-            : base("HD-Torrents",
+            : base(id: "hdtorrents",
+                   name: "HD-Torrents",
                    description: "HD-Torrents is a private torrent website with HD torrents and strict rules on their content.",
                    link: "https://hdts.ru/", // Domain https://hdts.ru/ seems more reliable
                    caps: new TorznabCapabilities

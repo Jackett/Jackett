@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -16,7 +17,7 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
-    // ReSharper disable once UnusedType.Global
+    [ExcludeFromCodeCoverage]
     internal class EliteTracker : BaseWebIndexer
     {
         private string LoginUrl => SiteLink + "takelogin.php";
@@ -24,19 +25,20 @@ namespace Jackett.Common.Indexers
         private new ConfigurationDataEliteTracker configData => (ConfigurationDataEliteTracker)base.configData;
 
         public EliteTracker(IIndexerConfigurationService configService, WebClient webClient, Logger logger, IProtectionService protectionService)
-            : base("Elite-Tracker",
-                description: "French Torrent Tracker",
-                link: "https://elite-tracker.net/",
-                caps: new TorznabCapabilities
-                {
-                    SupportsImdbMovieSearch = true
-                    // SupportsImdbTVSearch = true (supported by the site but disabled due to #8107)
-                },
-                configService: configService,
-                logger: logger,
-                p: protectionService,
-                client: webClient,
-                configData: new ConfigurationDataEliteTracker()
+            : base(id: "elitetracker",
+                   name: "Elite-Tracker",
+                   description: "French Torrent Tracker",
+                   link: "https://elite-tracker.net/",
+                   caps: new TorznabCapabilities
+                   {
+                       SupportsImdbMovieSearch = true
+                       // SupportsImdbTVSearch = true (supported by the site but disabled due to #8107)
+                   },
+                   configService: configService,
+                   logger: logger,
+                   p: protectionService,
+                   client: webClient,
+                   configData: new ConfigurationDataEliteTracker()
                 )
         {
             Encoding = Encoding.UTF8;
@@ -129,6 +131,7 @@ namespace Jackett.Common.Indexers
 
             AddCategoryMapping(47, TorznabCatType.TV, "SPECTACLES/EMISSIONS");
             AddCategoryMapping(71, TorznabCatType.TV, "SPECTACLES/EMISSIONS - Emissions");
+            AddCategoryMapping(103, TorznabCatType.TV, "SPECTACLES/EMISSIONS - Emissions Pack");
             AddCategoryMapping(72, TorznabCatType.TV, "SPECTACLES/EMISSIONS - Spectacles");
 
             AddCategoryMapping(35, TorznabCatType.TVSport, "SPORT");
@@ -256,7 +259,7 @@ namespace Jackett.Common.Indexers
 
                     // issue #6855 Replace VOSTFR with ENGLISH
                     if (configData.Vostfr.Value)
-                        release.Title = release.Title.Replace("VOSTFR", "ENGLISH");
+                        release.Title = release.Title.Replace("VOSTFR", "ENGLISH").Replace("SUBFRENCH", "ENGLISH");
 
                     var qPretime = qTags.QuerySelector("font.mkprettytime");
                     if (qPretime != null)

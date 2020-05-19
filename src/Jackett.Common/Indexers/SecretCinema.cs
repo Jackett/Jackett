@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Jackett.Common.Indexers.Abstract;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
@@ -8,10 +9,12 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class SecretCinema : GazelleTracker
     {
         public SecretCinema(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base("Secret Cinema",
+            : base(id: "secretcinema",
+                   name: "Secret Cinema",
                    description: "A tracker for rare movies.",
                    link: "https://secret-cinema.pw/",
                    caps: new TorznabCapabilities
