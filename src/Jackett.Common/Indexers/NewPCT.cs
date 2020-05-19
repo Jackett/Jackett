@@ -62,10 +62,10 @@ namespace Jackett.Common.Indexers
         private readonly char[] _wordSeparators = { ' ', '.', ',', ';', '(', ')', '[', ']', '-', '_' };
         private readonly int _wordNotFoundScore = 100000;
         private readonly Regex _searchStringRegex = new Regex(@"(.+?)S(\d{2})(E(\d{2}))?$", RegexOptions.IgnoreCase);
-        // Defending Jacob Temporada 1 Capitulo 1
-        private readonly Regex _seriesChapterTitleRegex = new Regex(@"(.+)Temporada (\d+) Capitulo (\d+)", RegexOptions.IgnoreCase);
-        // Love 101 - Temporada 1 Capitulos 1 al 8
-        private readonly Regex _seriesChaptersTitleRegex = new Regex(@"(.+)Temporada (\d+) Capitulos (\d+) al (\d+)", RegexOptions.IgnoreCase);
+        // Defending Jacob Temp. 1 Capitulo 1
+        private readonly Regex _seriesChapterTitleRegex = new Regex(@"(.+)Temp. (\d+) Capitulo (\d+)", RegexOptions.IgnoreCase);
+        // Love 101 - Temp. 1 Capitulos 1 al 8
+        private readonly Regex _seriesChaptersTitleRegex = new Regex(@"(.+)Temp. (\d+) Capitulos (\d+) al (\d+)", RegexOptions.IgnoreCase);
         private readonly Regex _titleYearRegex = new Regex(@" *[\[\(]? *((19|20)\d{2}) *[\]\)]? *$");
         private readonly DownloadMatcher[] _downloadMatchers =
         {
