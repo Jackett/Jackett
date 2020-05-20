@@ -109,7 +109,7 @@ search:
     # http://kinozal.tv/browse.php?s=lucifer+2017&g=0&c=0&v=0&d=0&w=0&t=0&f=0
     - path: browse.php
   keywordsfilters:
-    - name: diacritics
+#    - name: diacritics # 8686
       args: replace
     - name: re_replace # S01 to 1
       args: ["(?i)\\bS0*(\\d+)\\b", "$1"]
