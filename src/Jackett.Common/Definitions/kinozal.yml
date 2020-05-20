@@ -110,7 +110,7 @@ search:
     - path: browse.php
   keywordsfilters:
 #    - name: diacritics # 8686
-      args: replace
+#      args: replace
     - name: re_replace # S01 to 1
       args: ["(?i)\\bS0*(\\d+)\\b", "$1"]
     - name: re_replace # S01E01 to 1 1
