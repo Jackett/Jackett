@@ -53,6 +53,10 @@ login:
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
+    logout: ""
+    securelogin: ""
+    ssl: ""
+    trackerssl: ""
   error:
     - selector: form#loginform > span.warning
   test:

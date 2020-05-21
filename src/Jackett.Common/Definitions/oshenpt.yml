@@ -6,7 +6,9 @@ language: zh-cn
 type: private
 encoding: UTF-8
 links:
-  - https://www.oshen.win/
+  - http://www.oshen.win/
+links:
+  - https://www.oshen.win/ # forces http
 
 caps:
   categorymappings:
@@ -57,8 +59,12 @@ login:
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
+    logout: ""
+    securelogin: ""
+    ssl: ""
+    trackerssl: ""
   error:
-    - selector: td.embedded:has(h2:contains("登录失败"))
+    - selector: td.embedded:has(h2:contains("失败"))
   test:
     path: index.php
     selector: a[href="logout.php"]
