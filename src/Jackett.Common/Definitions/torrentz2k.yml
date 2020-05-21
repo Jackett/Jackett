@@ -55,19 +55,18 @@ search:
       - name: andmatch
 
   fields:
-    _category:
+    category:
       selector: i
       attribute: class
       filters:
+        - name: append
+          args: " list"
         # extract the second class
         - name: split
           args: [" ", 1]
         # remove fa- prefix
         - name: replace
           args: ["fa-", ""]
-    category:
-      # _category can be null so replace with list when that happens
-      text: "{{ if .Result._category }}{{ .Result._category }}{{ else }}list{{ end}}"
     title:
       selector: button
       attribute: title
