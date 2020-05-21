@@ -67,6 +67,7 @@ caps:
     "GAMESXBOX": Console/Xbox
     "GAMESXBOX360": Console/Xbox 360
     "IMAGES": Other
+    "JAPANESEANIME": TV/Anime
     "JUEGOS": Console
     "JUEGOSPC": PC/Games
     "JUEGOSPS2": Console/PSP
@@ -88,6 +89,7 @@ caps:
     "MOVIESHD720P": Movies/HD
     "MOVIESHD1080P": Movies/HD
     "MOVIESHEVCX265": Movies/HD
+    "MOVIESSPANISHLANGUAGE": Movies
     "MOVIESSPANISHLATINAMERICA": Movies
     "MOVIESULTRAHD4K": Movies/UHD
     "MOVIESX264H264": Movies/HD
@@ -113,6 +115,7 @@ caps:
     "PORNHDMOVIES": XXX
     "PORNGAMES": XXX
     "PORNMOVIECLIPS": XXX
+    "PORNMOVIESDVDR": XXX
     "PORNMOVIES": XXX
     "PORNOTHER": XXX
     "PORNPICTURES": XXX
