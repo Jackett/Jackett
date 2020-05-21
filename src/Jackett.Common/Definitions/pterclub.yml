@@ -74,6 +74,7 @@ login:
     password: "{{ .Config.password }}"
     verify_code: "{{ .Config.2facode }}"
     ssl: yes
+    securelogin: no
   error:
     - selector: td.embedded:has(h2:contains("失败"))
     - selector: td.embedded:has(h2:contains("登录失败"))
