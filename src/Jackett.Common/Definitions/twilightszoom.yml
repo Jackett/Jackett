@@ -24,6 +24,7 @@ caps:
     - {id: 20, cat: Audio, desc: "Comedy"}
     - {id: 18, cat: Audio, desc: "Country"}
     - {id: 4, cat: Audio, desc: "Dance"}
+    - {id: 84, cat: Audio, desc: "Death Metal"}
     - {id: 62, cat: Audio, desc: "Discography"}
     - {id: 40, cat: Audio, desc: "DJ Tools"}
     - {id: 60, cat: Audio, desc: "DMC"}
