@@ -121,7 +121,8 @@ search:
       selector: a[href^="details.php?id="]
       filters:
         - name: re_replace
-          args: ["^(.* / )(.*)$", "$2"]
+          args: ["^(.*/)(.*)$", "$2"]
+        - name: trim
     title:
       text: "{{ if .Config.drop_polish_prefix }}{{ .Result.title_stripped }}{{ else }}{{ .Result.title_raw }}{{ end }}"
     details:
