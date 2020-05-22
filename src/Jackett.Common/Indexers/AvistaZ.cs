@@ -8,16 +8,17 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class Avistaz : AvistazTracker
+    public class AvistaZ : AvistazTracker
     {
-        public Avistaz(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public AvistaZ(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base(id: "avistaz",
-                   name: "Avistaz",
+                   name: "AvistaZ",
                    description: "Aka AsiaTorrents",
                    link: "https://avistaz.to/",
                    caps: new TorznabCapabilities
                    {
                        SupportsImdbMovieSearch = true
+                       // SupportsImdbTVSearch = true (supported by the site but disabled due to #8107)
                    },
                    configService: configService,
                    client: wc,

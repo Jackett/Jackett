@@ -1,33 +1,35 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using AngleSharp.Dom;
-using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
-using Jackett.Common.Utils.Clients;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
+using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
 namespace Jackett.Common.Indexers.Abstract
 {
     [ExcludeFromCodeCoverage]
     public abstract class AvistazTracker : BaseWebIndexer
     {
-        private string LoginUrl => SiteLink + "auth/login";
-        private string SearchUrl => SiteLink + "torrents?";
-        private string IMDBSearch => SiteLink + "ajax/movies/3?term=";
-        private readonly Regex _catRegex = new Regex(@"\s+fa\-([a-z]+)\s+", RegexOptions.IgnoreCase);
+        private readonly Dictionary<string, string> AuthHeaders = new Dictionary<string, string>
+        {
+            {"Accept", "application/json"},
+            {"Content-Type", "application/json"}
+        };
+        private string AuthUrl => SiteLink + "api/v1/jackett/auth";
+        private string SearchUrl => SiteLink + "api/v1/jackett/torrents";
         private readonly HashSet<string> _hdResolutions = new HashSet<string> { "1080p", "1080i", "720p" };
+        private string _token;
 
-        private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
+        private new ConfigurationDataBasicLoginWithPID configData => (ConfigurationDataBasicLoginWithPID)base.configData;
 
         // hook to adjust the search term
         protected virtual string GetSearchTerm(TorznabQuery query) => $"{query.SearchTerm} {query.GetEpisodeSearchString()}";
@@ -44,7 +46,8 @@ namespace Jackett.Common.Indexers.Abstract
                    client: client,
                    logger: logger,
                    p: p,
-                   configData: new ConfigurationDataBasicLogin())
+                   configData: new ConfigurationDataBasicLoginWithPID(@"You have to check 'Enable RSS Feed' in 'My Account',
+without this configuration the torrent download does not work.<br/>You can find the PID in 'My profile'."))
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
@@ -63,26 +66,29 @@ namespace Jackett.Common.Indexers.Abstract
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-            var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
-            var token = new Regex("<meta name=\"_token\" content=\"(.*?)\">").Match(loginPage.Content).Groups[1].ToString();
-            var pairs = new Dictionary<string, string> {
-                { "_token", token },
-                { "email_username", configData.Username.Value },
-                { "password", configData.Password.Value },
-                { "remember", "1" }
-            };
 
-            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, null, LoginUrl);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("auth/logout"), () =>
+            await RenewalTokenAsync();
+
+            var releases = await PerformQuery(new TorznabQuery());
+            await ConfigureIfOK(string.Empty, releases.Any(),
+                                () => throw new Exception("Could not find releases."));
+
+            return IndexerConfigurationStatus.Completed;
+        }
+
+        private async Task RenewalTokenAsync()
+        {
+            var body = new Dictionary<string, string>
             {
-                var parser = new HtmlParser();
-                var dom = parser.ParseDocument(result.Content);
-                var messageEl = dom.QuerySelector(".form-error");
-                var errorMessage = messageEl.Text().Trim();
-                throw new ExceptionWithConfigData(errorMessage, configData);
-            });
-
-            return IndexerConfigurationStatus.RequiresTesting;
+                { "username", configData.Username.Value.Trim() },
+                { "password", configData.Password.Value.Trim() },
+                { "pid", configData.Pid.Value.Trim() }
+            };
+            var result = await PostDataWithCookies(AuthUrl, body, headers: AuthHeaders);
+            var json = JObject.Parse(result.Content);
+            _token = json.Value<string>("token");
+            if (_token == null)
+                throw new Exception(json.Value<string>("message"));
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
@@ -112,66 +118,65 @@ namespace Jackett.Common.Indexers.Abstract
                     qc.Add("video_quality[]", "1"); // SD
             }
 
-            // imdb search
+            // note, search by tmdb and tvdb are supported too
+            // https://privatehd.to/api/v1/jackett/torrents?tmdb=1234
+            // https://privatehd.to/api/v1/jackett/torrents?tvdb=3653
             if (query.IsImdbQuery)
-            {
-                var movieId = await GetMovieId(query.ImdbID);
-                if (movieId == null)
-                    return releases; // movie not found or service broken => return 0 results
-                qc.Add("movie_id", movieId);
-            }
+                qc.Add("imdb", query.ImdbID);
             else
                 qc.Add("search", GetSearchTerm(query).Trim());
 
-            var episodeSearchUrl = SearchUrl + qc.GetQueryString();
-            var response = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
-            if (response.IsRedirect)
+            var episodeSearchUrl = SearchUrl + "?" + qc.GetQueryString();
+            var response = await RequestStringWithCookiesAndRetry(episodeSearchUrl, headers: GetSearchHeaders());
+            if (response.Status == HttpStatusCode.Unauthorized || response.Status == HttpStatusCode.PreconditionFailed)
             {
-                // re-login
-                await ApplyConfiguration(null);
-                response = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
+                await RenewalTokenAsync();
+                response = await RequestStringWithCookiesAndRetry(episodeSearchUrl, headers: GetSearchHeaders());
             }
+            else if (response.Status != HttpStatusCode.OK)
+                throw new Exception($"Unknown error: {response.Content}");
 
             try
             {
-                var parser = new HtmlParser();
-                var dom = parser.ParseDocument(response.Content);
-                var rows = dom.QuerySelectorAll("table:has(thead) > tbody > tr");
-                foreach (var row in rows)
+                var jsonContent = JToken.Parse(response.Content);
+                foreach (var row in jsonContent.Value<JArray>("data"))
                 {
-                    var release = new ReleaseInfo
+                    var comments = new Uri(row.Value<string>("url"));
+                    var link = new Uri(row.Value<string>("download"));
+                    var publishDate = DateTime.ParseExact(row.Value<string>("created_at"), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+
+                    long? imdb = null;
+                    long? tvdb = null;
+                    long? tmdb = null;
+                    var jMovieTv = row.Value<JToken>("movie_tv");
+                    if (jMovieTv != null && jMovieTv.HasValues)
                     {
-                        MinimumRatio = 1,
-                        MinimumSeedTime = 172800 // 48 hours
-                    };
+                        imdb = ParseUtil.GetImdbID(jMovieTv.Value<string>("imdb"));
+                        if (long.TryParse(jMovieTv.Value<string>("tvdb"), out var tvdbParsed))
+                            tvdb = tvdbParsed;
+                        if (long.TryParse(jMovieTv.Value<string>("tmdb"), out var tmdbParsed))
+                            tmdb = tmdbParsed;
+                    }
 
-                    var qLink = row.QuerySelector("a.torrent-filename");
-                    release.Title = qLink.Text().Trim();
-                    release.Comments = new Uri(qLink.GetAttribute("href"));
-                    release.Guid = release.Comments;
+                    var description = "";
+                    var jAudio = row.Value<JArray>("audio");
+                    if (jAudio != null && jAudio.HasValues)
+                    {
+                        var audioList = jAudio.Select(tag => tag.Value<string>("language")).ToList();
+                        description += $"Audio: {string.Join(", ", audioList)}";
+                    }
+                    var jSubtitle = row.Value<JArray>("subtitle");
+                    if (jSubtitle != null && jSubtitle.HasValues)
+                    {
+                        var subtitleList = jSubtitle.Select(tag => tag.Value<string>("language")).ToList();
+                        description += $"<br/>Subtitles: {string.Join(", ", subtitleList)}";
+                    }
 
-                    var qDownload = row.QuerySelector("a.torrent-download-icon");
-                    release.Link = new Uri(qDownload.GetAttribute("href"));
-
-                    var qBanner = row.QuerySelector("img.img-tor-poster")?.GetAttribute("data-poster-mid");
-                    if (qBanner != null)
-                        release.BannerUrl = new Uri(qBanner);
-
-                    var dateStr = row.QuerySelector("td:nth-of-type(4) > span").Text().Trim();
-                    release.PublishDate = DateTimeUtil.FromTimeAgo(dateStr);
-
-                    var sizeStr = row.QuerySelector("td:nth-of-type(6) > span").Text().Trim();
-                    release.Size = ReleaseInfo.GetBytes(sizeStr);
-
-                    release.Seeders = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(7)").Text().Trim());
-                    release.Peers = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(8)").Text().Trim()) + release.Seeders;
-
-                    var resolution = row.QuerySelector("span.badge-extra")?.TextContent.Trim();
-                    var catMatch = _catRegex.Match(row.QuerySelectorAll("td:nth-of-type(1) i").First().GetAttribute("class"));
                     var cats = new List<int>();
-                    switch(catMatch.Groups[1].Value)
+                    var resolution = row.Value<string>("video_quality");
+                    switch(row.Value<string>("type"))
                     {
-                        case "film":
+                        case "Movie":
                             if (query.Categories.Contains(TorznabCatType.Movies.ID))
                                 cats.Add(TorznabCatType.Movies.ID);
                             cats.Add(resolution switch
@@ -181,7 +186,7 @@ namespace Jackett.Common.Indexers.Abstract
                                 _ => TorznabCatType.MoviesSD.ID
                             });
                             break;
-                        case "tv":
+                        case "TV-Show":
                             if (query.Categories.Contains(TorznabCatType.TV.ID))
                                 cats.Add(TorznabCatType.TV.ID);
                             cats.Add(resolution switch
@@ -191,25 +196,36 @@ namespace Jackett.Common.Indexers.Abstract
                                 _ => TorznabCatType.TVSD.ID
                             });
                             break;
-                        case "music":
+                        case "Music":
                             cats.Add(TorznabCatType.Audio.ID);
                             break;
                         default:
                             throw new Exception("Error parsing category!");
                     }
-                    release.Category = cats;
 
-                    var grabs = row.QuerySelector("td:nth-child(9)").Text();
-                    release.Grabs = ParseUtil.CoerceInt(grabs);
-
-                    if (row.QuerySelectorAll("i.fa-star").Any())
-                        release.DownloadVolumeFactor = 0;
-                    else if (row.QuerySelectorAll("i.fa-star-half-o").Any())
-                        release.DownloadVolumeFactor = 0.5;
-                    else
-                        release.DownloadVolumeFactor = 1;
-
-                    release.UploadVolumeFactor = row.QuerySelectorAll("i.fa-diamond").Any() ? 2 : 1;
+                    var release = new ReleaseInfo
+                    {
+                        Title = row.Value<string>("file_name"),
+                        Link = link,
+                        InfoHash = row.Value<string>("info_hash"),
+                        Comments = comments,
+                        Guid = comments,
+                        Category = cats,
+                        PublishDate = publishDate,
+                        Description = description,
+                        Size = row.Value<long>("file_size"),
+                        Files = row.Value<long>("file_count"),
+                        Grabs = row.Value<long>("completed"),
+                        Seeders = row.Value<int>("seed"),
+                        Peers = row.Value<int>("leech") + row.Value<int>("seed"),
+                        Imdb = imdb,
+                        TVDBId = tvdb,
+                        TMDb = tmdb,
+                        DownloadVolumeFactor = row.Value<double>("download_multiply"),
+                        UploadVolumeFactor = row.Value<double>("upload_multiply"),
+                        MinimumRatio = 1,
+                        MinimumSeedTime = 172800 // 48 hours
+                    };
 
                     releases.Add(release);
                 }
@@ -221,26 +237,9 @@ namespace Jackett.Common.Indexers.Abstract
             return releases;
         }
 
-        private async Task<string> GetMovieId(string imdbId)
+        private Dictionary<string, string> GetSearchHeaders() => new Dictionary<string, string>
         {
-            try
-            {
-                var imdbUrl = IMDBSearch + imdbId;
-                var imdbHeaders = new Dictionary<string, string> { { "X-Requested-With", "XMLHttpRequest" } };
-                var imdbResponse = await RequestStringWithCookiesAndRetry(imdbUrl, null, null, imdbHeaders);
-                if (imdbResponse.IsRedirect)
-                {
-                    // re-login
-                    await ApplyConfiguration(null);
-                    imdbResponse = await RequestStringWithCookiesAndRetry(imdbUrl, null, null, imdbHeaders);
-                }
-                var json = JsonConvert.DeserializeObject<dynamic>(imdbResponse.Content);
-                return (string)((JArray)json["data"])[0]["id"];
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
+            {"Authorization", $"Bearer {_token}"}
+        };
     }
 }
