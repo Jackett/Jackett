@@ -18,6 +18,7 @@ namespace Jackett.Common.Indexers
                    caps: new TorznabCapabilities
                    {
                        SupportsImdbMovieSearch = true
+                       // SupportsImdbTVSearch = true (supported by the site but disabled due to #8107)
                    },
                    configService: configService,
                    client: wc,
