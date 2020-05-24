@@ -237,7 +237,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * AsianCinema
  * AudioNews (AN)
  * Audiobook Torrents (ABT + RNS)
- * Avistaz (AsiaTorrents)
+ * AvistaZ (AsiaTorrents)
  * Awesome-HD (AHD)
  * BIGTorrent
  * BIT-HDTV
