@@ -26,6 +26,10 @@ login:
     username_email: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
     remember: on
+  captcha:
+    type: image
+    selector: img[alt="Captcha Image"]
+    input: captcha
   error:
     - selector: div.invalid-feedback
   test:
