@@ -106,17 +106,15 @@ namespace Jackett.Common.Services
 
             var variants = new Variants();
             variant = variants.GetVariant();
-            logger.Info("Jackett variant: " + variant.ToString());
+            logger.Info("Jackett variant: " + variant);
 
             forceupdatecheck = true;
 
-            var isWindows = System.Environment.OSVersion.Platform != PlatformID.Unix;
+            var isWindows = Environment.OSVersion.Platform != PlatformID.Unix;
 
             var trayIsRunning = false;
             if (isWindows)
-            {
                 trayIsRunning = Process.GetProcessesByName("JackettTray").Length > 0;
-            }
 
             try
             {
@@ -130,14 +128,13 @@ namespace Jackett.Common.Services
                 if (response.Status != System.Net.HttpStatusCode.OK)
                 {
                     logger.Error("Failed to get the release list: " + response.Status);
+                    return;
                 }
 
                 var releases = JsonConvert.DeserializeObject<List<Release>>(response.Content);
 
                 if (!serverConfig.UpdatePrerelease)
-                {
                     releases = releases.Where(r => !r.Prerelease).ToList();
-                }
 
                 if (releases.Count > 0)
                 {
@@ -153,9 +150,7 @@ namespace Jackett.Common.Services
                             var installDir = Path.GetDirectoryName(ExePath());
                             var updaterPath = GetUpdaterPath(tempDir);
                             if (updaterPath != null)
-                            {
                                 StartUpdate(updaterPath, installDir, isWindows, serverConfig.RuntimeSettings.NoRestart, trayIsRunning);
-                            }
                         }
                         catch (Exception e)
                         {
@@ -163,9 +158,7 @@ namespace Jackett.Common.Services
                         }
                     }
                     else
-                    {
                         logger.Info($"Checked for a updated release but none was found. Current: {currentVersion} Latest: {latestRelease.Name}");
-                    }
                 }
             }
             catch (Exception e)
@@ -175,9 +168,7 @@ namespace Jackett.Common.Services
             finally
             {
                 if (!isWindows)
-                {
                     System.Net.ServicePointManager.ServerCertificateValidationCallback -= AcceptCert;
-                }
             }
         }
 
@@ -210,7 +201,7 @@ namespace Jackett.Common.Services
 
             if (!Directory.Exists(tempDir))
             {
-                logger.Error("Temp dir doesn't exist: " + tempDir.ToString());
+                logger.Error("Temp dir doesn't exist: " + tempDir);
                 return;
             }
 
@@ -218,7 +209,6 @@ namespace Jackett.Common.Services
             {
                 var d = new DirectoryInfo(tempDir);
                 foreach (var dir in d.GetDirectories("JackettUpdate-*"))
-                {
                     try
                     {
                         logger.Info("Deleting JackettUpdate temp files from " + dir.FullName);
@@ -229,11 +219,10 @@ namespace Jackett.Common.Services
                         logger.Error("Error while deleting temp files from " + dir.FullName);
                         logger.Error(e);
                     }
-                }
             }
             catch (Exception e)
             {
-                logger.Error("Unexpected error while deleting temp files from " + tempDir.ToString());
+                logger.Error("Unexpected error while deleting temp files from " + tempDir);
                 logger.Error(e);
             }
         }
@@ -268,16 +257,12 @@ namespace Jackett.Common.Services
             var data = await client.GetBytes(SetDownloadHeaders(new WebRequest() { Url = url, EmulateBrowser = true, Type = RequestType.GET }));
 
             while (data.IsRedirect)
-            {
                 data = await client.GetBytes(new WebRequest() { Url = data.RedirectingTo, EmulateBrowser = true, Type = RequestType.GET });
-            }
 
             var tempDir = Path.Combine(Path.GetTempPath(), "JackettUpdate-" + version + "-" + DateTime.Now.Ticks);
 
             if (Directory.Exists(tempDir))
-            {
                 Directory.Delete(tempDir, true);
-            }
 
             Directory.CreateDirectory(tempDir);
 
@@ -309,7 +294,6 @@ namespace Jackett.Common.Services
                     //https://github.com/xamarin/XamarinComponents/issues/282
 
                     // When the files get extracted, the execute permission for jackett and JackettUpdater don't get carried across
-
                     var jackettPath = tempDir + "/Jackett/jackett";
                     filePermissionService.MakeFileExecutable(jackettPath);
 
@@ -345,9 +329,7 @@ namespace Jackett.Common.Services
             var appType = "Console";
 
             if (isWindows && windowsService.ServiceExists() && windowsService.ServiceRunning())
-            {
                 appType = "WindowsService";
-            }
 
             var exe = Path.GetFileName(ExePath());
             var args = string.Join(" ", Environment.GetCommandLineArgs().Skip(1).Select(a => a.Contains(" ") ? "\"" + a + "\"" : a)).Replace("\"", "\\\"");
@@ -363,7 +345,6 @@ namespace Jackett.Common.Services
             {
                 // Wrap mono
                 args = exe + " " + args;
-                exe = "mono";
 
                 startInfo.Arguments = $"{Path.Combine(updaterExePath)} --Path \"{installLocation}\" --Type \"{appType}\" --Args \" {args}\"";
                 startInfo.FileName = "mono";
@@ -386,14 +367,10 @@ namespace Jackett.Common.Services
             }
 
             if (NoRestart)
-            {
                 startInfo.Arguments += " --NoRestart";
-            }
 
             if (trayIsRunning && appType == "Console")
-            {
                 startInfo.Arguments += " --StartTray";
-            }
 
             // create .lock file to detect errors in the update process
             var lockFilePath = Path.Combine(installLocation, ".lock");
