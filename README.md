@@ -411,6 +411,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * NORDiCHD
  * notwhat.cd
  * OnlineSelfEducation
+ * ONLYscene
  * Orpheus
  * OshenPT
  * Ourbits (HDPter)
