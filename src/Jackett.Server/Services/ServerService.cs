@@ -46,8 +46,6 @@ namespace Jackett.Server.Services
             _protectionService = protectionService;
         }
 
-        public List<string> notices { get; } = new List<string>();
-
         public Uri ConvertToProxyLink(Uri link, string serverUrl, string indexerId, string action = "dl", string file = "t")
         {
             if (link == null || (link.IsAbsoluteUri && link.Scheme == "magnet" && action != "bh")) // no need to convert a magnet link to a proxy link unless it's a blackhole link
@@ -160,7 +158,7 @@ namespace Jackett.Server.Services
                     if (monoVersionO.Major < 5 || (monoVersionO.Major == 5 && monoVersionO.Minor < 8))
                     {
                         var notice = "A minimum Mono version of 5.8 is required. Please update to the latest version from http://www.mono-project.com/download/";
-                        notices.Add(notice);
+                        config.Notices.Add(notice);
                         logger.Error(notice);
                     }
 
@@ -173,7 +171,7 @@ namespace Jackett.Server.Services
                         {
                             var notice =
                                 "It looks like the mono-devel package is not installed, please make sure it's installed to avoid crashes.";
-                            notices.Add(notice);
+                            config.Notices.Add(notice);
                             logger.Error(notice);
                         }
                     }
@@ -190,7 +188,7 @@ namespace Jackett.Server.Services
                         {
                             var notice =
                                 "The ca-certificates-mono package is not installed, HTTPS trackers won't work. Please install it.";
-                            notices.Add(notice);
+                            config.Notices.Add(notice);
                             logger.Error(notice);
                         }
                     }
@@ -253,7 +251,7 @@ namespace Jackett.Server.Services
                                               "If you don't have root access or you're running MacOS, please run the following command as the jackett user (" +
                                               Environment.UserName + "):<br/>\n";
                                     notice += logSpacer + "<pre>" + CommandUser + "</pre>";
-                                    notices.Add(notice);
+                                    config.Notices.Add(notice);
                                     logger.Error(Regex.Replace(notice, "<.*?>", string.Empty));
                                 }
                             }
@@ -275,7 +273,7 @@ namespace Jackett.Server.Services
                 if (Environment.UserName == "root")
                 {
                     var notice = "Jackett is running with root privileges. You should run Jackett as an unprivileged user.";
-                    notices.Add(notice);
+                    config.Notices.Add(notice);
                     logger.Error(notice);
                 }
             }
@@ -293,7 +291,7 @@ namespace Jackett.Server.Services
                 {
                     var version = configService.GetVersion();
                     var notice = $"Your version of Jackett v{version} is very old. Multiple indexers are likely to fail when using an old version. Update to the latest version of Jackett.";
-                    notices.Add(notice);
+                    config.Notices.Add(notice);
                     logger.Error(notice);
                 }
             }

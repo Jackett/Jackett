@@ -9,6 +9,9 @@ namespace Jackett.Common.Models.Config
         [JsonIgnore]
         protected List<IObserver<ServerConfig>> observers;
 
+        [JsonIgnore]
+        public List<string> Notices { get; } = new List<string>();
+
         public ServerConfig(RuntimeSettings runtimeSettings)
         {
             observers = new List<IObserver<ServerConfig>>();
@@ -30,7 +33,7 @@ namespace Jackett.Common.Models.Config
         public string OmdbApiUrl { get; set; }
 
         /// <summary>
-        /// Ignore as we don't really want to be saving settings specified in the command line. 
+        /// Ignore as we don't really want to be saving settings specified in the command line.
         /// This is a bit of a hack, but in future it might not be all that bad to be able to override config values using settings that were provided at runtime. (and save them if required)
         /// </summary>
         [JsonIgnore]

@@ -22,7 +22,6 @@ using NLog;
 
 namespace Jackett.Common.Services
 {
-
     public class UpdateService : IUpdateService
     {
         private readonly Logger logger;
@@ -34,10 +33,11 @@ namespace Jackett.Common.Services
         private readonly IServiceConfigService windowsService;
         private readonly IFilePermissionService filePermissionService;
         private readonly ServerConfig serverConfig;
-        private bool forceupdatecheck = false;
-        private Variants.JackettVariant variant = Variants.JackettVariant.NotFound;
+        private bool forceUpdateCheck = false;
+        private Variants.JackettVariant variant;
 
-        public UpdateService(Logger l, WebClient c, IConfigurationService cfg, ITrayLockService ls, IProcessService ps, IServiceConfigService ws, IFilePermissionService fps, ServerConfig sc)
+        public UpdateService(Logger l, WebClient c, IConfigurationService cfg, ITrayLockService ls, IProcessService ps,
+                             IServiceConfigService ws, IFilePermissionService fps, ServerConfig sc)
         {
             logger = l;
             client = c;
@@ -47,6 +47,8 @@ namespace Jackett.Common.Services
             windowsService = ws;
             serverConfig = sc;
             filePermissionService = fps;
+
+            variant = new Variants().GetVariant();
         }
 
         private string ExePath()
@@ -62,7 +64,7 @@ namespace Jackett.Common.Services
 
         public void CheckForUpdatesNow()
         {
-            forceupdatecheck = true;
+            forceUpdateCheck = true;
             locker.Set();
         }
 
@@ -82,14 +84,13 @@ namespace Jackett.Common.Services
 
         private async Task CheckForUpdates()
         {
-            if (serverConfig.RuntimeSettings.NoUpdates)
+            logger.Info("Checking for updates... Jackett variant: " + variant);
+
+            // Skip update check in development environment
+            var currentVersion = $"v{GetCurrentVersion()}";
+            if (currentVersion == "v0.0.0")
             {
-                logger.Info("Updates are disabled via --NoUpdates.");
-                return;
-            }
-            if (serverConfig.UpdateDisabled && !forceupdatecheck)
-            {
-                logger.Info("Skipping update check as it is disabled.");
+                logger.Info("Skipping checking for new releases because we are runing in IDE.");
                 return;
             }
             if (Debugger.IsAttached)
@@ -97,73 +98,73 @@ namespace Jackett.Common.Services
                 logger.Info("Skipping checking for new releases as the debugger is attached.");
                 return;
             }
-            var currentVersion = $"v{GetCurrentVersion()}";
-            if (currentVersion == "v0.0.0")
-            {
-                logger.Info("Skipping checking for new releases because we are runing in IDE.");
-                return;
-            }
-
-            var variants = new Variants();
-            variant = variants.GetVariant();
-            logger.Info("Jackett variant: " + variant);
-
-            forceupdatecheck = true;
 
             var isWindows = Environment.OSVersion.Platform != PlatformID.Unix;
-
-            var trayIsRunning = false;
-            if (isWindows)
-                trayIsRunning = Process.GetProcessesByName("JackettTray").Length > 0;
-
             try
             {
-                var response = await client.GetString(new WebRequest()
+                // Get the list of latest releases
+                var releases = await GetLatestReleases();
+                if (!releases.Any())
                 {
-                    Url = "https://api.github.com/repos/Jackett/Jackett/releases",
-                    Encoding = Encoding.UTF8,
-                    EmulateBrowser = false
-                });
-
-                if (response.Status != System.Net.HttpStatusCode.OK)
-                {
-                    logger.Error("Failed to get the release list: " + response.Status);
+                    logger.Error("There was an error getting the list of latest releases from GitHub.");
                     return;
                 }
 
-                var releases = JsonConvert.DeserializeObject<List<Release>>(response.Content);
-
-                if (!serverConfig.UpdatePrerelease)
-                    releases = releases.Where(r => !r.Prerelease).ToList();
-
-                if (releases.Count > 0)
+                // If updates are disabled we still check the version an show a notification if it is outdated
+                var isUpdateDisabled = false;
+                if (serverConfig.RuntimeSettings.NoUpdates)
                 {
-                    var latestRelease = releases.OrderByDescending(o => o.Created_at).First();
-                    if (latestRelease.Name != currentVersion)
+                    logger.Info("Updates are disabled via --NoUpdates.");
+                    isUpdateDisabled = true;
+                }
+                if (serverConfig.UpdateDisabled && !forceUpdateCheck)
+                {
+                    logger.Info("Skipping update check as it is disabled.");
+                    isUpdateDisabled = true;
+                }
+                forceUpdateCheck = false; // Used when updates are disabled and the user click update button
+                if (isUpdateDisabled)
+                {
+                    // We check the latest 5 versions (Docker's releases are delayed)
+                    if (releases.Count >= 5 && releases[0].Name != currentVersion && releases[1].Name != currentVersion &&
+                        releases[2].Name != currentVersion && releases[3].Name != currentVersion && releases[4].Name != currentVersion)
                     {
-                        logger.Info($"New release found. Current: {currentVersion} New: {latestRelease.Name}");
-                        logger.Info($"Downloading release {latestRelease.Name} It could take a while...");
-                        try
-                        {
-                            var tempDir = await DownloadRelease(latestRelease.Assets, isWindows, latestRelease.Name);
-                            // Copy updater
-                            var installDir = Path.GetDirectoryName(ExePath());
-                            var updaterPath = GetUpdaterPath(tempDir);
-                            if (updaterPath != null)
-                                StartUpdate(updaterPath, installDir, isWindows, serverConfig.RuntimeSettings.NoRestart, trayIsRunning);
-                        }
-                        catch (Exception e)
-                        {
-                            logger.Error(e, "Error performing update.");
-                        }
+                        var notice = "Automatic updates are disabled and the current version of Jackett is outdated. " +
+                                      "You can still use this version but it is highly recommended to activate automatic updates.";
+                        logger.Error(notice);
+                        if (!serverConfig.Notices.Any() || serverConfig.Notices.Last() != notice)
+                            serverConfig.Notices.Add(notice);
                     }
-                    else
-                        logger.Info($"Checked for a updated release but none was found. Current: {currentVersion} Latest: {latestRelease.Name}");
+                    return;
+                }
+
+                // Check if update is required
+                var latestRelease = releases.First();
+                if (latestRelease.Name == currentVersion)
+                {
+                    logger.Info($"Jackett is updated. Current version: {currentVersion}");
+                    return;
+                }
+
+                // Start update process
+                logger.Info($"New release found. Current version: {currentVersion} New version: {latestRelease.Name}");
+                logger.Info($"Downloading release {latestRelease.Name} It could take a while...");
+
+                var tempDir = await DownloadRelease(latestRelease.Assets, isWindows, latestRelease.Name);
+                // Copy updater
+                var installDir = Path.GetDirectoryName(ExePath());
+                var updaterPath = GetUpdaterPath(tempDir);
+                if (updaterPath != null)
+                {
+                    var trayIsRunning = false;
+                    if (isWindows)
+                        trayIsRunning = Process.GetProcessesByName("JackettTray").Length > 0;
+                    StartUpdate(updaterPath, installDir, isWindows, serverConfig.RuntimeSettings.NoRestart, trayIsRunning);
                 }
             }
             catch (Exception e)
             {
-                logger.Error(e, "Error checking for updates.");
+                logger.Error(e, "Error performing update.");
             }
             finally
             {
@@ -191,7 +192,6 @@ namespace Jackett.Common.Services
             {
                 { "Accept", "application/octet-stream" }
             };
-
             return req;
         }
 
@@ -240,10 +240,32 @@ namespace Jackett.Common.Services
             }
         }
 
+        private async Task<List<Release>> GetLatestReleases()
+        {
+            var releases = new List<Release>();
+
+            var response = await client.GetString(new WebRequest()
+            {
+                Url = "https://api.github.com/repos/Jackett/Jackett/releases",
+                Encoding = Encoding.UTF8,
+                EmulateBrowser = false
+            });
+
+            if (response.Status != System.Net.HttpStatusCode.OK)
+                throw new Exception("Failed to get the release list: " + response.Status);
+
+            releases = JsonConvert.DeserializeObject<List<Release>>(response.Content);
+
+            if (!serverConfig.UpdatePrerelease)
+                releases = releases.Where(r => !r.Prerelease).ToList();
+
+            releases = releases.OrderByDescending(o => o.Created_at).ToList();
+            return releases;
+        }
+
         private async Task<string> DownloadRelease(List<Asset> assets, bool isWindows, string version)
         {
-            var variants = new Variants();
-            var artifactFileName = variants.GetArtifactFileName(variant);
+            var artifactFileName = new Variants().GetArtifactFileName(variant);
             var targetAsset = assets.FirstOrDefault(a => a.Browser_download_url.EndsWith(artifactFileName, StringComparison.OrdinalIgnoreCase) && artifactFileName.Length > 0);
 
             if (targetAsset == null)

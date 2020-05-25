@@ -49,9 +49,9 @@ namespace Jackett.Common.Models.DTO
 
         public ServerConfig() => notices = new string[0];
 
-        public ServerConfig(IEnumerable<string> notices, Models.Config.ServerConfig config, string version, bool canRunNetCore)
+        public ServerConfig(Models.Config.ServerConfig config, string version, bool canRunNetCore)
         {
-            this.notices = notices;
+            notices = config.Notices;
             port = config.Port;
             external = config.AllowExternal;
             api_key = config.APIKey;

@@ -13,7 +13,6 @@ namespace Jackett.Common.Services.Interfaces
         Uri ConvertToProxyLink(Uri link, string serverUrl, string indexerId, string action = "dl", string file = "t");
         string BasePath();
         string GetServerUrl(HttpRequest Request);
-        List<string> notices { get; }
         string GetBlackholeDirectory();
         string GetApiKey();
         bool MonoUserCanRunNetCore();
