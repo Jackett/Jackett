@@ -29,6 +29,18 @@ caps:
     movie-search: [q, imdbid]
     music-search: [q]
 
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+
 login:
   path: login.php
   method: form
