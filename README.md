@@ -349,6 +349,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HDBits
  * HDCenter
  * HDChina (HDWing)
+ * HDC (HDCiTY)
  * HDCity
  * HDDisk (HDD)
  * HDHome (HDBigger)
