@@ -92,7 +92,7 @@ search:
       selector: form[action^="download.php?id="]
       attribute: action
     imdb:
-      selector: a[href*="www.imdb.com/title/tt"]
+      selector: a[href*="imdb.com/title/tt"]
       attribute: href
     size:
       selector: td.rowfollow:nth-child(5)

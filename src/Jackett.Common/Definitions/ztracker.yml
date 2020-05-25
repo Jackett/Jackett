@@ -126,7 +126,7 @@ search:
           args: img src=\\'(.*?)\\'
     imdb:
       optional: true
-      selector: a[href*="www.imdb.com/title/tt"]
+      selector: a[href*="imdb.com/title/tt"]
       attribute: href
     details:
       selector: a[href*="details.php?id="][onmouseover]

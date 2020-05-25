@@ -149,7 +149,7 @@ search:
           args: ["pic/nopic.jpg", ""]
     imdb:
       optional: true
-      selector: a[href*="www.imdb.com/title/tt"]
+      selector: a[href*="imdb.com/title/tt"]
       attribute: href
     size:
       selector: td.rowfollow:nth-last-child(6)
