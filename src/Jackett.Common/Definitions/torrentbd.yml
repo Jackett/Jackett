@@ -102,7 +102,7 @@ login:
     cookie: "{{ .Config.cookie }}"
   test:
     path: torrent/
-    selector: a[href="account-logout.php"]
+    selector: button[href="account-logout.php"]
 
 search:
   paths:
