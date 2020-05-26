@@ -78,12 +78,20 @@ search:
     banner:
       selector: .imagen img
       attribute: data-src
-    category:
+    category_movie:
       selector: .meta a
       attribute: href
       filters:
-        - name: split
-          args: ["/", 3]
+        - name: regexp
+          args: "^.*/(peliculas)/.*$"
+    category_tv:
+      selector: .meta a
+      attribute: href
+      filters:
+        - name: regexp
+          args: "^.*/(series)/.*$"
+    category:
+      text: "{{ if or .Result.category_movie .Result.category_tv }}{{ or .Result.category_movie .Result.category_tv }}{{ else }}{{ end }}"
     size:
       text: "0 B"
     size:
