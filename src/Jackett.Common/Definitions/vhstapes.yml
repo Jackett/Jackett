@@ -26,14 +26,14 @@ caps:
     - {id: 27, cat: Movies, desc: "Movies"}
     - {id: 25, cat: Audio/Video, desc: "Music / Video"}
     - {id: 23, cat: PC/Games, desc: "PC Games"}
-    - {id: 8, cat: TV/WEB-DL, desc: "Podcasts"}
+    - {id: 8, cat: TV/WEB-DL, desc: "Howard Stern"}
     - {id: 16, cat: PC/0day, desc: "Roms / Emulation"}
     - {id: 12, cat: TV, desc: "TV - Pre 2009 WOC"}
-    - {id: 11, cat: TV, desc: "TV - Pre 2013"}
+    - {id: 11, cat: TV, desc: "TV - Pre 2014"}
     - {id: 10, cat: TV, desc: "TV Animation"}
     - {id: 18, cat: TV, desc: "TV Animation WOC"}
-    - {id: 33, cat: TV, desc: "TV Archive Packs"}
-    - {id: 34, cat: Movies, desc: "Laserdiscs"}
+    - {id: 34, cat: TV, desc: "TV Archive Packs"}
+    - {id: 33, cat: Movies, desc: "Laserdiscs"}
     - {id: 35, cat: XXX, desc: "NSFW"}
     - {id: 36, cat: TV, desc: "Youtube Archives"}
     - {id: 5, cat: Other, desc: "Other"}
@@ -90,6 +90,7 @@ search:
   paths:
     - path: torrents.php
   inputs:
+    view: list
     $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
     order_by: "{{ .Config.sort }}"
     order_way: "{{ .Config.type }}"
