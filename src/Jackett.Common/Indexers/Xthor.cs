@@ -230,6 +230,9 @@ namespace Jackett.Common.Indexers
                             torrent.name = regex.Replace(torrent.name, "$1" + ReplaceMulti + "$2");
                         }
 
+                        // issue #8759 replace vostfr and subfrench with English
+                        if (ConfigData.Vostfr.Value) torrent.name = torrent.name.Replace("VOSTFR","ENGLISH").Replace("SUBFRENCH","ENGLISH");
+
                         var publishDate = DateTimeUtil.UnixTimestampToDateTime(torrent.added);
                         //TODO replace with download link?
                         var guid = new Uri(TorrentDescriptionUrl.Replace("{id}", torrent.id.ToString()));

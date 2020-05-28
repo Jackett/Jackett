@@ -14,6 +14,8 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
         public BoolItem HardDriveCache { get; private set; }
         public StringItem HardDriveCacheKeepTime { get; private set; }
 
+        public BoolItem Vostfr { get; private set; }
+
         public ConfigurationDataXthor()
             : base()
         {
@@ -28,6 +30,8 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
             DevMode = new BoolItem { Name = "Enable DEV MODE (Developers ONLY)", Value = false };
             HardDriveCache = new BoolItem { Name = "Enable HARD DRIVE CACHE (Developers ONLY)", Value = false };
             HardDriveCacheKeepTime = new StringItem { Name = "Keep Cached files for (ms)", Value = "300000" };
+            Vostfr = new BoolItem() { Name = "Replace VOSTFR or SUBFRENCH with ENGLISH", Value = false };
+
         }
     }
 }
