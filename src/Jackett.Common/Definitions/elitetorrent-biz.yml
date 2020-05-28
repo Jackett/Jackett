@@ -6,7 +6,7 @@ language: es-es
 type: public
 encoding: UTF-8
 links:
-  - https://wwvv.elitetorrent.nl/
+  - https://wvvw.elitetorrent.nl/
 legacylinks:
   - https://www.elitetorrent.biz/
   - https://www.elitetorrent.io/
@@ -17,6 +17,7 @@ legacylinks:
   - https://www.elitetorrent.li/
   - https://www.elitetorrent.bz/
   - https://www.elitetorrent.nl/
+  - https://wwvv.elitetorrent.nl/
 
 caps:
   categories:
