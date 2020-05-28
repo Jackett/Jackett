@@ -10,7 +10,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
-using Jackett.Common.Models.GitHub;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
@@ -232,11 +231,7 @@ namespace Jackett.Common.Indexers
                         }
 
                         // issue #8759 replace vostfr and subfrench with English
-                        if (ConfigData.Vostfr.Value)
-                        {
-                            torrent.name = torrent.name.Replace("VOSTFR", "ENGLISH");
-                            torrent.name = torrent.name.Replace("SUBFRENCH", "ENGLISH");
-                        }
+                        if (ConfigData.Vostfr.Value) torrent.name = torrent.name.Replace("VOSTFR","ENGLISH").Replace("SUBFRENCH","ENGLISH");
 
                         var publishDate = DateTimeUtil.UnixTimestampToDateTime(torrent.added);
                         //TODO replace with download link?
