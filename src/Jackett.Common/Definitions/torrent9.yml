@@ -7,6 +7,7 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
+  - https://www.oxtorrent.me/
   - https://ww1.torrent9.is/
   - https://ww1.torrent9.to/
 
@@ -39,7 +40,6 @@ legacylinks:
   - https://torrent9.proxyportal.fun/ # this is a proxy for torrent9clone
   - https://torrent9.uk-unblock.xyz/ # this is a proxy for torrent9clone
   - https://torrent9.ind-unblock.xyz/ # this is a proxy for torrent9clone
-  - https://www.oxtorrent.me/
 
 caps:
   categorymappings:
