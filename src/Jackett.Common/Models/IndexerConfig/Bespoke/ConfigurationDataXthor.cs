@@ -30,7 +30,7 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
             DevMode = new BoolItem { Name = "Enable DEV MODE (Developers ONLY)", Value = false };
             HardDriveCache = new BoolItem { Name = "Enable HARD DRIVE CACHE (Developers ONLY)", Value = false };
             HardDriveCacheKeepTime = new StringItem { Name = "Keep Cached files for (ms)", Value = "300000" };
-            Vostfr = new BoolItem() { Name = "Replace VOSTFR with ENGLISH", Value = false };
+            Vostfr = new BoolItem() { Name = "Replace VOSTFR or SUBFRENCH with ENGLISH", Value = false };
 
         }
     }
