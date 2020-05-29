@@ -313,6 +313,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * eStone (XiDER, BeLoad)
  * Ethor.net (Thor's Land)
  * ExoticaZ (YourExotic)
+ * ExtremeBits
  * ExtremeTorrents
  * FANO.IN
  * Fantastic Heaven
