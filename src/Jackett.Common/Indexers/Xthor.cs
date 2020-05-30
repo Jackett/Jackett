@@ -40,7 +40,6 @@ namespace Jackett.Common.Indexers
         public Dictionary<string, string> EmulatedBrowserHeaders { get; } = new Dictionary<string, string>();
         private ConfigurationDataXthor ConfigData => (ConfigurationDataXthor)configData;
 
-        // TODO: maybe use this variable?
         private const int MaxItemsPerPage = 32;
         // 3 pages max : 3*32= 96 results max
         private const int MaxSearchPageLimit = 2; 
@@ -283,9 +282,9 @@ namespace Jackett.Common.Indexers
                         }));
                     }
 
-                    // Break the loop if the number of results 
+                    // Break the loop if the number of results is less than the maximum number of results per page (32 results)
                     if (xthorResponse.torrents.Count < MaxItemsPerPage)
-                        break;
+                        break; // This is the last page
                 }
                 catch (Exception ex)
                 {
