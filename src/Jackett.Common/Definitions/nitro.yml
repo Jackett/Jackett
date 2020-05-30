@@ -6,7 +6,9 @@ language: pl-pl
 type: public
 encoding: UTF-8
 links:
-  - http://nitro.to/ # does not support https NET::ERR_CERT_AUTHORITY_INVALID
+  - https://nitro.to/
+legacylinks:
+  - http://nitro.to/
 
 caps:
   categorymappings:
