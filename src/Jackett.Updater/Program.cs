@@ -322,6 +322,7 @@ namespace Jackett.Updater
                 "Definitions/hon3yhd-net.yml",
                 "Definitions/horriblesubs.yml",
                 "Definitions/hyperay.yml",
+                "Definitions/icetorrent.yml", // migrated to C# XtremeZone base tracker
                 "Definitions/idopeclone.yml",
                 "Definitions/iloveclassics.yml",
                 "Definitions/infinityt.yml",
@@ -352,6 +353,7 @@ namespace Jackett.Updater
                 "Definitions/rns.yml", // site merged with audiobooktorrents
                 "Definitions/rockethd.yml",
                 "Definitions/rockhardlossless.yml",
+                "Definitions/scenefz.yml", // migrated to C# XtremeZone base tracker
                 "Definitions/scenehd.yml", // migrated to C# (use JSON API)
                 "Definitions/scenereactor.yml",
                 "Definitions/scenexpress.yml",
@@ -393,6 +395,7 @@ namespace Jackett.Updater
                 "Definitions/worldofp2p.yml",
                 "Definitions/worldwidetorrents.yml",
                 "Definitions/xktorrent.yml",
+                "Definitions/xtremezone.yml", // migrated to C# XtremeZone base tracker
                 "Definitions/yourexotic.yml", // renamed to exoticaz.yml
                 "Microsoft.Owin.dll",
                 "Microsoft.Owin.FileSystems.dll",
