@@ -68,7 +68,7 @@ search:
       inputs:
         page: 5
   inputs:
-    keyword: "{{ if .Keywords }}{{ .Keywords }}{{else}}{{ .Today.Year }}{{end}}"
+    keyword: "{{ if .Keywords }}{{ .Keywords }}{{else}}-{{end}}"
 
   rows:
     selector: section.sch_res_list > ul > li:has(span.sch_datetime:contains(":"))
