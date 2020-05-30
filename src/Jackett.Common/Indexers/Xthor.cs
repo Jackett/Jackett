@@ -40,6 +40,11 @@ namespace Jackett.Common.Indexers
         public Dictionary<string, string> EmulatedBrowserHeaders { get; } = new Dictionary<string, string>();
         private ConfigurationDataXthor ConfigData => (ConfigurationDataXthor)configData;
 
+        // TODO: maybe use this variable?
+        private const int MaxItemsPerPage = 32;
+        // 3 pages max : 3*32= 96 results max
+        private const int MaxSearchPageLimit = 2; 
+
         public Xthor(IIndexerConfigurationService configService, Utils.Clients.WebClient w, Logger l, IProtectionService ps)
             : base(id: "xthor",
                    name: "Xthor",
@@ -56,6 +61,9 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "fr-fr";
             Type = "private";
+
+            // requestDelay for API Limit (1 request per 2 seconds)
+            webclient.requestDelay = 2.1;
 
             // Movies
             AddCategoryMapping(118, TorznabCatType.MoviesBluRay, "UHD FULL BLURAY");
@@ -204,75 +212,89 @@ namespace Jackett.Common.Indexers
             }
 
             // Build our query
-            var request = BuildQuery(searchTerm, query, ApiEndpoint);
 
-            // Getting results & Store content
-            var results = await QueryExec(request);
-
-            try
+            for (var page = 0; page <= MaxSearchPageLimit; page++)
             {
-                // Deserialize our Json Response
-                var xthorResponse = JsonConvert.DeserializeObject<XthorResponse>(results);
+                var request = BuildQuery(searchTerm, query, ApiEndpoint);
 
-                // Check Tracker's State
-                CheckApiState(xthorResponse.error);
+                // Add option page at the end of the request variable
+                request = request + "&page=" + page;
+                var results = await QueryExec(request);
+                // Getting results & Store content
 
-                // If contains torrents
-                if (xthorResponse.torrents != null)
+                try
                 {
-                    // Adding each torrent row to releases
-                    releases.AddRange(xthorResponse.torrents.Select(torrent =>
+                    // Deserialize our Json Response
+                    var xthorResponse = JsonConvert.DeserializeObject<XthorResponse>(results);
+
+                    // Check Tracker's State
+                    CheckApiState(xthorResponse.error);
+
+                    // If contains torrents
+                    if (xthorResponse.torrents != null)
                     {
-                        //issue #3847 replace multi keyword
-                        if (!string.IsNullOrEmpty(ReplaceMulti))
+                        // Adding each torrent row to releases
+                        releases.AddRange(xthorResponse.torrents.Select(torrent =>
                         {
-                            var regex = new Regex("(?i)([\\.\\- ])MULTI([\\.\\- ])");
-                            torrent.name = regex.Replace(torrent.name, "$1" + ReplaceMulti + "$2");
-                        }
+                            //issue #3847 replace multi keyword
+                            if (!string.IsNullOrEmpty(ReplaceMulti))
+                            {
+                                var regex = new Regex("(?i)([\\.\\- ])MULTI([\\.\\- ])");
+                                torrent.name = regex.Replace(torrent.name, "$1" + ReplaceMulti + "$2");
+                            }
 
-                        // issue #8759 replace vostfr and subfrench with English
-                        if (ConfigData.Vostfr.Value) torrent.name = torrent.name.Replace("VOSTFR","ENGLISH").Replace("SUBFRENCH","ENGLISH");
+                            // issue #8759 replace vostfr and subfrench with English
+                            if (ConfigData.Vostfr.Value)
+                                torrent.name = torrent.name.Replace("VOSTFR", "ENGLISH").Replace("SUBFRENCH", "ENGLISH");
 
-                        var publishDate = DateTimeUtil.UnixTimestampToDateTime(torrent.added);
-                        //TODO replace with download link?
-                        var guid = new Uri(TorrentDescriptionUrl.Replace("{id}", torrent.id.ToString()));
-                        var comments = new Uri(TorrentCommentUrl.Replace("{id}", torrent.id.ToString()));
-                        var link = new Uri(torrent.download_link);
-                        var release = new ReleaseInfo
-                        {
-                            // Mapping data
-                            Category = MapTrackerCatToNewznab(torrent.category.ToString()),
-                            Title = torrent.name,
-                            Seeders = torrent.seeders,
-                            Peers = torrent.seeders + torrent.leechers,
-                            MinimumRatio = 1,
-                            MinimumSeedTime = 345600,
-                            PublishDate = publishDate,
-                            Size = torrent.size,
-                            Grabs = torrent.times_completed,
-                            Files = torrent.numfiles,
-                            UploadVolumeFactor = 1,
-                            DownloadVolumeFactor = (torrent.freeleech == 1 ? 0 : 1),
-                            Guid = guid,
-                            Comments = comments,
-                            Link = link,
-                            TMDb = torrent.tmdb_id
-                        };
+                            var publishDate = DateTimeUtil.UnixTimestampToDateTime(torrent.added);
+                            //TODO replace with download link?
+                            var guid = new Uri(TorrentDescriptionUrl.Replace("{id}", torrent.id.ToString()));
+                            var comments = new Uri(TorrentCommentUrl.Replace("{id}", torrent.id.ToString()));
+                            var link = new Uri(torrent.download_link);
+                            var release = new ReleaseInfo
+                            {
+                                // Mapping data
+                                Category = MapTrackerCatToNewznab(torrent.category.ToString()),
+                                Title = torrent.name,
+                                Seeders = torrent.seeders,
+                                Peers = torrent.seeders + torrent.leechers,
+                                MinimumRatio = 1,
+                                MinimumSeedTime = 345600,
+                                PublishDate = publishDate,
+                                Size = torrent.size,
+                                Grabs = torrent.times_completed,
+                                Files = torrent.numfiles,
+                                UploadVolumeFactor = 1,
+                                DownloadVolumeFactor = (torrent.freeleech == 1 ? 0 : 1),
+                                Guid = guid,
+                                Comments = comments,
+                                Link = link,
+                                TMDb = torrent.tmdb_id
+                            };
 
-                        //TODO make consistent with other trackers
-                        if (DevMode)
-                        {
-                            Output(release.ToString());
-                        }
+                            //TODO make consistent with other trackers
+                            if (DevMode)
+                            {
+                                Output(release.ToString());
+                            }
 
-                        return release;
-                    }));
+                            return release;
+                        }));
+                    }
+
+                    // Break the loop if the number of results 
+                    if (xthorResponse.torrents.Count < MaxItemsPerPage)
+                        break;
+                }
+                catch (Exception ex)
+                {
+                    OnParseError("Unable to parse result \n" + ex.StackTrace, ex);
                 }
             }
-            catch (Exception ex)
-            {
-                OnParseError("Unable to parse result \n" + ex.StackTrace, ex);
-            }
+
+
+
 
             // Return found releases
             return releases;
@@ -379,6 +401,8 @@ namespace Jackett.Common.Indexers
             {
                 parameters.Add("accent", ConfigData.Accent.Value);
             }
+
+       //     parameters.Add("page","");
 
             // Building our query -- Cannot use GetQueryString due to UrlEncode (generating wrong category param)
             url += "?" + string.Join("&", parameters.AllKeys.Select(a => a + "=" + parameters[a]));
