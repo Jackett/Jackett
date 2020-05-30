@@ -292,9 +292,6 @@ namespace Jackett.Common.Indexers
                 }
             }
 
-
-
-
             // Return found releases
             return releases;
         }
@@ -400,8 +397,6 @@ namespace Jackett.Common.Indexers
             {
                 parameters.Add("accent", ConfigData.Accent.Value);
             }
-
-       //     parameters.Add("page","");
 
             // Building our query -- Cannot use GetQueryString due to UrlEncode (generating wrong category param)
             url += "?" + string.Join("&", parameters.AllKeys.Select(a => a + "=" + parameters[a]));
