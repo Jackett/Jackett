@@ -42,7 +42,7 @@ namespace Jackett.Common.Indexers
 
         private const int MaxItemsPerPage = 32;
         // 3 pages max : 3*32= 96 results max
-        private const int MaxSearchPageLimit = 2; 
+        private const int MaxSearchPageLimit = 3; 
 
         public Xthor(IIndexerConfigurationService configService, Utils.Clients.WebClient w, Logger l, IProtectionService ps)
             : base(id: "xthor",
@@ -212,7 +212,7 @@ namespace Jackett.Common.Indexers
 
             // Build our query
 
-            for (var page = 0; page <= MaxSearchPageLimit; page++)
+            for (var page = 1; page <= MaxSearchPageLimit; page++)
             {
                 var request = BuildQuery(searchTerm, query, ApiEndpoint);
 
