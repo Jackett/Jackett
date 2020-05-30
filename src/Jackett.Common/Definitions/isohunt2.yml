@@ -6,8 +6,9 @@ language: en-us
 type: public
 encoding: UTF-8
 links:
-  - https://isohunt2.net/
   - https://isohunt.nz/
+legacylinks:
+  - https://isohunt2.net/
 
 caps:
   categorymappings:
