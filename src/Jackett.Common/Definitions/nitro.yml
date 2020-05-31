@@ -6,9 +6,9 @@ language: pl-pl
 type: public
 encoding: UTF-8
 links:
-  - https://nitro.to/
-legacylinks:
   - http://nitro.to/
+legacylinks:
+  - https://nitro.to/ # site is forcing http
 
 caps:
   categorymappings:
