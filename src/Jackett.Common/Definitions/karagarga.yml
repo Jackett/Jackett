@@ -74,11 +74,19 @@ search:
       selector: a[href^="browse.php?country="] img
       attribute: title
       optional: true
+    filename:
+      selector: a[href^="/down.php/"]
+      attribute: href
+      filters:
+        - name: regexp
+          args: "(?:/down\\.php/\\d+/)(.+?)\\.torrent"
+        - name: re_replace
+          args: ["%20", "."]
     title:
       selector: a[href^="details.php?id="]
       filters:
         - name: append
-          args: " {{ .Result.year }} {{ .Result.flag }}"
+          args: " {{ .Result.year }} {{ .Result.flag }} [{{ .Result.filename }}]"
     details:
       selector: a[href^="details.php?id="]
       attribute: href
