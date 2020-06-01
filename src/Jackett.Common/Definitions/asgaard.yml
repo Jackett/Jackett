@@ -158,11 +158,6 @@ search:
     download:
       selector: a[href*="download.php?torrent="]
       attribute: href
-    date:
-      selector: td:nth-child(2) > div > div:last-of-type
-      filters:
-        - name: dateparse
-          args: "2 Jan 2006 15:04:05"
     files:
       # remember #5754 advanced users have additional last TD so dont go using nth-last-child ;-)
       selector: td:nth-child(5)
@@ -174,6 +169,24 @@ search:
       selector: td:nth-child(9)
     leechers:
       selector: td:nth-child(10)
+    date:
+      # 26 May 20 14:05:06
+      selector: td:nth-child(2) > div > div:last-of-type:not(:contains("day"))
+      optional: true
+      # drop New!
+      remove: span
+      filters:
+        - name: dateparse
+          args: "2 Jan 2006 15:04:05"
+    date:
+      # Today, 20:26:23
+      # Yesterday, 13:50:05
+      selector: td:nth-child(2) > div > div:last-of-type:contains("day")
+      optional: true
+      # drop New!
+      remove: span
+      filters:
+        - name: fuzzytime
     downloadvolumefactor:
       case:
         img[src="./images/gold.png"]: 0
