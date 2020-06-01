@@ -106,7 +106,7 @@ settings:
 login:
   path: login.php
   method: form
-  form: form[action="/login.php"]
+  form: form[method="post"]
   cookies: ["JAVA=OK"] # avoid jscheck redirect
   inputs:
     username: "{{ .Config.username }}"
