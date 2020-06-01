@@ -129,7 +129,7 @@ namespace Jackett.Common.Indexers.Abstract
                     var description = row.Value<string>("short_description");
 
                     var jBanner = row.Value<string>("poster");
-                    var banner = string.IsNullOrEmpty(jBanner) ? null : new Uri(jBanner);
+                    var banner = (string.IsNullOrEmpty(jBanner) || !jBanner.StartsWith("http")) ? null : new Uri(jBanner);
 
                     var dlVolumeFactor = row.Value<bool>("is_half_download") ? 0.5: 1.0;
                     dlVolumeFactor = row.Value<bool>("is_freeleech") ? 0.0 : dlVolumeFactor;
