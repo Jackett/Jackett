@@ -22,7 +22,7 @@ namespace Jackett.Common.Indexers
     public class SceneTime : BaseWebIndexer
     {
         private string StartPageUrl => SiteLink + "login.php";
-        private string LoginUrl => SiteLink + "takelogin.php";
+        private string LoginUrl => SiteLink + "takelogin1.php";
         private string SearchUrl => SiteLink + "browse.php";
         private string DownloadUrl => SiteLink + "download.php/{0}/download.torrent";
 
