@@ -74,8 +74,8 @@ login:
   path: login.php
   method: post
   inputs:
-    take_login: "1"
-    logout: "no"
+    take_login: 1
+    logout: no
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
   error:
@@ -87,12 +87,14 @@ search:
   paths:
     - path: browse.php
   inputs:
-    $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
-    incldead: "1"
-    blah: "0"
+    incldead: 1
+    blah: 0
+
   rows:
     selector: table.row1 > tbody > tr:has(a.torname)
+
   fields:
     _id:
       selector: a.torname
@@ -124,14 +126,19 @@ search:
           args: "2006-01-0215:04:05 -07:00"
     size:
       selector: td:has(a[href$="filelist=1"]) ~ td ~ td ~ td ~ td
-    seeders:
+    grabs:
       selector: td:has(a[href$="filelist=1"]) ~ td ~ td ~ td ~ td ~ td
-    leechers:
+      filters:
+        - name: regexp
+          args: (\d+)
+    seeders:
       selector: td:has(a[href$="filelist=1"]) ~ td ~ td ~ td ~ td ~ td ~ td
+    leechers:
+      selector: td:has(a[href$="filelist=1"]) ~ td ~ td ~ td ~ td ~ td ~ td ~ td
     downloadvolumefactor:
       case:
-        "img[src=\"pic/free.png\"]": "0"
-        "*": "1"
+        "img[src=\"pic/free.png\"]": 0
+        "*": 1
     uploadvolumefactor:
-      case:
-        "*": "1"
+      text: 1
+# engine tbc
