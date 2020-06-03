@@ -28,6 +28,8 @@ caps:
     - {id: 29, cat: Audio/Video, desc: "Audio Videos"}
     # Doku
     - {id: 113, cat: TV/Documentary, desc: "Doku 3D"}
+    - {id: 130, cat: TV/Documentary, desc: "Doku Bluray"}
+    - {id: 131, cat: TV/Documentary, desc: "Doku DVDR"}
     - {id: 76, cat: TV/Documentary, desc: "Doku HD"}
     - {id: 78, cat: TV/Documentary, desc: "Doku Packs"}
     - {id: 75, cat: TV/Documentary, desc: "Doku SD"}
@@ -47,11 +49,16 @@ caps:
     - {id: 36, cat: Movies/HD, desc: "Filme SD"}
     # Serien
     - {id: 112, cat: TV/Anime, desc: "Serien Anime"}
+    - {id: 128, cat: TV/HD, desc: "Serien Bluray"}
+    - {id: 129, cat: TV/SD, desc: "Serien DVDR"}
     - {id: 69, cat: TV/HD, desc: "Serien HD"}
     - {id: 72, cat: TV/Foreign, desc: "Serien Int."}
-    - {id: 68, cat: TV, desc: "Serien Packs"}
+    - {id: 68, cat: TV/SD, desc: "Serien Packs SD"}
     - {id: 66, cat: TV/SD, desc: "Serien SD"}
+    - {id: 125, cat: TV/HD, desc: "Serien Packs HD"}
+    - {id: 126, cat: TV/UHD, desc: "Serien Packs UHD"}
     - {id: 108, cat: TV, desc: "Serien TV-Shows"}
+    - {id: 127, cat: TV/UHD, desc: "Serien TV-Shows UHD"}
     # Sonstige
     - {id: 117, cat: Other, desc: "Sonstige Diverses"}
     - {id: 28, cat: Books, desc: "Sonstige eBooks"}
@@ -134,6 +141,7 @@ search:
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
+    # 0 active, 1 all, 2 dead
     incldead: 1
     orderby: "{{ .Config.sort }}"
     sort: "{{ .Config.type }}"
