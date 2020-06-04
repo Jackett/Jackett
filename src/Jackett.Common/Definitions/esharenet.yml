@@ -83,9 +83,7 @@ login:
       selector: input[name="_token"]
       attribute: value
   error:
-    - selector: script[nonce]:contains("Error")
-      message:
-        selector: script[nonce]:contains("Error")
+    - selector: div#ERROR_COPY
 #    test:
 #      path: /
 #      selector: a[href$="/logout"]
@@ -99,7 +97,7 @@ ratio:
 
 search:
   paths:
-    - path: filterTorrents
+    - path: torrents/filter
   inputs:
     $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
     search: "{{ if .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
@@ -124,7 +122,7 @@ search:
       attribute: href
       filters:
         - name: regexp
-          args: "/categories/.*?\\.(\\d+)"
+          args: "/categories/(\\d+)"
     title:
       selector: a.view-torrent
     download:
@@ -208,4 +206,4 @@ search:
         i[class*="fa-globe text-green"]: 2 # Global Double Upload
         i[class*="fa-certificate text-pink"]: 2 # Featured Torrent
         "*": 1
-# UNIT3D 1.9.4
+# UNIT3D 2.4.0

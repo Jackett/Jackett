@@ -79,6 +79,7 @@ caps:
     - {id: 87, cat: Other, desc: "Wallpapers, Themes & Screensavers"}
     - {id: 88, cat: PC/Phone-Android, desc: "Android Games"}
     - {id: 89, cat: PC, desc: "Other Releases"}
+    - {id: 100, cat: Other, desc: "Tutorials"}
     - {id: 107, cat: PC, desc: "Windows 10 Releases"}
     - {id: 109, cat: PC, desc: "Windows 10 Releases 64 Bit"}
     - {id: 110, cat: PC, desc: "Windows 10 Releases x86-x64 AIO"}
@@ -87,14 +88,16 @@ caps:
     - {id: 113, cat: PC/0day, desc: "32 Bit Ghost Images"}
     - {id: 114, cat: PC/0day, desc: "64 Bit Ghost Images"}
     - {id: 125, cat: PC, desc: "Dead Torrents"}
-    - {id: 131, cat: PC/Mac, desc: "MAC OS X"}
+    - {id: 131, cat: PC/Mac, desc: "Mac Games"}
     - {id: 132, cat: PC/Phone-Other, desc: "Linux/Unix"}
+    - {id: 140, cat: PC/Mac, desc: "MacOS"}
+    - {id: 141, cat: PC/Mac, desc: "Mac Apps"}
 
   modes:
     search: [q]
 
 login:
-  path: index.php?login/login
+  path: login/login
   method: post
   inputs:
     login: "{{ .Config.username }}"
@@ -103,31 +106,31 @@ login:
   error:
     - selector: div.blockMessage--error
   test:
-    path: index.php
-    selector: a[href="/index.php?conversations/"]
+    path: /
+    selector: a[href="/account/"]
 
 search:
   paths:
     # 25 results per page
-    - path: "index.php?torrents/&filename={{ .Keywords }}"
-    - path: "index.php?torrents/&filename={{ .Keywords }}&page=2"
-    - path: "index.php?torrents/&filename={{ .Keywords }}&page=3"
-    - path: "index.php?torrents/&filename={{ .Keywords }}&page=4"
+    - path: "torrents/?filename={{ .Keywords }}"
+    - path: "torrents/?filename={{ .Keywords }}&page=2"
+    - path: "torrents/?filename={{ .Keywords }}&page=3"
+    - path: "torrents/?filename={{ .Keywords }}&page=4"
 
   rows:
     selector: tr.dataList-row:has(td.download)
 
   fields:
     category:
-      selector: a[href^="/index.php?forums/"]
+      selector: a[href^="/forums/"]
       attribute: href
       filters:
         - name: regexp
           args: "\\.(\\d+)\\/$"
     title:
-      selector: a[href^="/index.php?threads/"]
+      selector: a[href^="/threads/"]
     details:
-      selector: a[href^="/index.php?threads/"]
+      selector: a[href^="/threads/"]
       attribute: href
     download:
       selector: td.download a

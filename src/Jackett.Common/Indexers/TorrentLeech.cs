@@ -190,7 +190,7 @@ namespace Jackett.Common.Indexers
             if (query.IsImdbQuery)
                 searchUrl += "imdbID/" + query.ImdbID + "/";
             else if (!string.IsNullOrWhiteSpace(searchString))
-                searchUrl += "query/" + WebUtility.UrlEncode(searchString) + "/";
+                searchUrl += "exact/1/query/" + WebUtility.UrlEncode(searchString) + "/";
 
             var cats = MapTorznabCapsToTrackers(query);
             if (cats.Count > 0)
