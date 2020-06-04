@@ -7,12 +7,10 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://btdb.io/
-  - https://btdb.unblockit.me/
+  - https://btdb.eu/
 legacylinks:
   - https://btdb.to/
   - https://btdb.unblocked.app/
-  - https://btdb.eu/
   - https://btdb.unblockit.pro/
   - https://btdb.unblockit.one/
   - https://btdb.black-mirror.xyz/
@@ -20,9 +18,11 @@ legacylinks:
   - https://btdb.proxyportal.fun/
   - https://btdb.uk-unblock.xyz/
   - https://btdb.ind-unblock.xyz/
-  - https://btdb.unblocked.bar/ # search broken by Cloudflare DDoS protection in browser and Jackett
-  - https://btdb.proxyportal.pw/ # search broken by Cloudflare DDoS protection in browser and Jackett
-  - https://btdb.uk-unblock.pro/ # search broken by Cloudflare DDoS protection in browser and Jackett
+  - https://btdb.unblocked.bar/ # redirects to .eu
+  - https://btdb.proxyportal.pw/ # redirects to .eu
+  - https://btdb.uk-unblock.pro/ # redirects to .eu
+  - https://btdb.unblockit.me/ # redirects to .eu
+  - https://btdb.io/ # ERR_NAME_NOT_RESOLVED
 
 caps:
   categorymappings:
