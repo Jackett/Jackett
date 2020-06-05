@@ -452,7 +452,7 @@ namespace Jackett.Common.Indexers
 
         protected bool checkForError(WebClientStringResult loginResult, IList<errorBlock> errorBlocks)
         {
-            if (loginResult.Status == HttpStatusCode.Unauthorized) // e.g. used by YGGtorrent
+            if (loginResult.Status == HttpStatusCode.Unauthorized)
                 throw new ExceptionWithConfigData("401 Unauthorized, check your credentials", configData);
 
             if (errorBlocks == null)
