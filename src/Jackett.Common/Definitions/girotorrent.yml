@@ -104,6 +104,10 @@ settings:
     options:
       "2": "desc"
       "1": "asc"
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile. The default is <i>15</i>.
 
 login:
   path: index.php?page=login
