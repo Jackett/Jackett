@@ -41,6 +41,7 @@ namespace Jackett.Common.Services
             {"nnm-club", "noname-club"},
             {"nostalgic", "vhstapes"},
             {"passtheheadphones", "redacted"},
+            {"rstorrent", "redstartorrent"},
             {"tehconnectionme", "anthelion"},
             {"transmithenet", "nebulance"},
             {"yourexotic", "exoticaz"}
