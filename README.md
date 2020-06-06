@@ -265,7 +265,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Boxing Torrents
  * Brasil Tracker
  * BroadCity
- * BroadcastTheNet (BTN)
+ * BroadcasTheNet (BTN)
  * BrokenStones
  * BWTorrents
  * CCFBits

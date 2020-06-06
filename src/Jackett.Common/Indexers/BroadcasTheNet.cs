@@ -17,7 +17,7 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class BroadcastTheNet : BaseWebIndexer
+    public class BroadcasTheNet : BaseWebIndexer
     {
         // Docs at http://apidocs.broadcasthe.net/docs.php
         private readonly string APIBASE = "https://api.broadcasthe.net";
@@ -29,10 +29,10 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        public BroadcastTheNet(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(id: "broadcastthenet",
-                   name: "BroadcastTheNet",
-                   description: "Broadcasthe.net (BTN) is an invite-only torrent tracker focused on TV shows",
+        public BroadcasTheNet(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+            : base(id: "broadcasthenet",
+                   name: "BroadcasTheNet",
+                   description: "BroadcasTheNet (BTN) is an invite-only torrent tracker focused on TV shows",
                    link: "https://broadcasthe.net/",
                    caps: new TorznabCapabilities(),
                    configService: configService,
