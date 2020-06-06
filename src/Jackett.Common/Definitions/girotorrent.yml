@@ -132,20 +132,6 @@ search:
   paths:
     # 15 results per page fetch 5 (site is slow, dont be greedy and fetch more)
     - path: index.php
-      inputs:
-        pages: 1
-    - path: index.php
-      inputs:
-        pages: 2
-    - path: index.php
-      inputs:
-        pages: 3
-    - path: index.php
-      inputs:
-        pages: 4
-    - path: index.php
-      inputs:
-        pages: 5
   inputs:
     search: "{{ .Keywords }}"
     category: "{{ range .Categories }}{{.}};{{end}}"
