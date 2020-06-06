@@ -38,6 +38,7 @@ namespace Jackett.Common.Services
         {
             {"broadcastthenet", "broadcasthenet"},
             {"cili180", "liaorencili"},
+            {"metaliplayro", "romanianmetaltorrents"},
             {"nnm-club", "noname-club"},
             {"nostalgic", "vhstapes"},
             {"passtheheadphones", "redacted"},

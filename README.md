@@ -451,7 +451,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * RetroFlix
  * RevolutionTT
  * RoDVD (Cinefiles)
- * Romanian Metal Torrent (RMT)
+ * Romanian Metal Torrents (RMT)
  * SDBits
  * SceneFZ
  * SceneHD
