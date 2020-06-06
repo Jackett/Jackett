@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -192,16 +191,14 @@ namespace Jackett.Common.Indexers
                 var rows = dom.QuerySelectorAll("table.torrenttable > tbody > tr");
                 foreach (var row in rows.Skip(1))
                 {
+                    var qColumn1 = row.QuerySelectorAll("td.column1");
+                    var qColumn2 = row.QuerySelectorAll("td.column2");
                     var qDetailsLink = row.QuerySelector("a[href^=\"index.php?strWebValue=torrent&strWebAction=details\"]");
                     var qCatLink = row.QuerySelector("a[href^=\"index.php?strWebValue=torrent&strWebAction=search&dir=\"]");
                     var qDlLink = row.QuerySelector("a[href^=\"index.php?strWebValue=torrent&strWebAction=download&id=\"]");
-                    var qSeeders = row.QuerySelectorAll("td.column1")[2];
-                    var qLeechers = row.QuerySelectorAll("td.column2")[3];
                     var qDateStr = row.QuerySelector("font:has(a)");
-                    var qSize = row.QuerySelector("td.column2[align=center]");
                     var catStr = qCatLink.GetAttribute("href").Split('=')[3].Split('#')[0];
                     var link = new Uri(SiteLink + qDlLink.GetAttribute("href"));
-                    var sizeStr = qSize.TextContent;
                     var dateStr = qDateStr.TextContent;
                     var split = dateStr.IndexOf("Uploader", StringComparison.OrdinalIgnoreCase);
                     dateStr = dateStr.Substring(0, split > 0 ? split : dateStr.Length).Trim().Replace("Heute", "Today")
@@ -217,10 +214,12 @@ namespace Jackett.Common.Indexers
                         downloadFactor = 1;
                     var title = titleRegexp.Match(qDetailsLink.GetAttribute("onmouseover")).Groups[1].Value;
                     var comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
-                    var seeders = ParseUtil.CoerceInt(qSeeders.TextContent);
-                    var leechers = ParseUtil.CoerceInt(qLeechers.TextContent);
-                    var grabs = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(7)").TextContent);
+                    var size = ReleaseInfo.GetBytes(qColumn2[1].TextContent);
+                    var seeders = ParseUtil.CoerceInt(qColumn1[3].TextContent);
+                    var leechers = ParseUtil.CoerceInt(qColumn2[3].TextContent);
+                    var grabs = ParseUtil.CoerceInt(qColumn2[2].TextContent);
                     var publishDate = TimeZoneInfo.ConvertTime(dateGerman, germanyTz, TimeZoneInfo.Local);
+
                     var release = new ReleaseInfo
                     {
                         MinimumRatio = 0.8,
@@ -230,7 +229,7 @@ namespace Jackett.Common.Indexers
                         Comments = comments,
                         Link = link,
                         Guid = link,
-                        Size = ReleaseInfo.GetBytes(sizeStr),
+                        Size = size,
                         Seeders = seeders,
                         Peers = leechers + seeders,
                         PublishDate = publishDate,
