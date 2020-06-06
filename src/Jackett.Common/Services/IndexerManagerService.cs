@@ -37,6 +37,7 @@ namespace Jackett.Common.Services
         private readonly Dictionary<string, string> renamedIndexers = new Dictionary<string, string>
         {
             {"broadcastthenet", "broadcasthenet"},
+            {"cili180", "liaorencili"},
             {"nostalgic", "vhstapes"},
             {"passtheheadphones", "redacted"},
             {"tehconnectionme", "anthelion"},
