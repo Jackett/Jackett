@@ -7,7 +7,7 @@ type: public
 encoding: Windows-1252
 followredirect: true
 links:
-  - https://ilcorsaronero.xyz/
+  - https://ilcorsaronero.link/
   - https://ilcorsaronero.fun/
   - https://ilcorsaronero.pro/
   - https://ilcorsaronero.unblockit.me/
@@ -21,6 +21,7 @@ legacylinks:
   - https://ilcorsaronero.pw/
   - https://ilcorsaronero.unblockit.pro/
   - https://ilcorsaronero.unblockit.one/
+  - https://ilcorsaronero.xyz/
 
 caps:
   categorymappings:
