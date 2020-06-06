@@ -90,7 +90,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Newstudio
  * Nitro
  * NNTT
- * NoName Club (NNM-Club)
+ * NoNaMe Club (NNM-Club)
  * Nyaa-Pantsu
  * Nyaa.si
  * OneJAV

@@ -293,7 +293,7 @@ namespace Jackett.Updater
                 "Definitions/btkitty.yml",
                 "Definitions/btstornet.yml",
                 "Definitions/btxpress.yml",
-                "Definitions/cili180.yml",
+                "Definitions/cili180.yml", // renamed to liaorencili
                 "Definitions/cinefilhd.yml",
                 "Definitions/crazyscorner.yml",
                 "Definitions/czteam.yml",
@@ -340,7 +340,8 @@ namespace Jackett.Updater
                 "Definitions/music-master.yml",
                 "Definitions/nachtwerk.yml",
                 "Definitions/nexttorrent.yml",
-                "Definitions/nostalgic.yml", // renamed to vhstapes.yml
+                "Definitions/nnm-club.yml", // renamed to noname-club
+                "Definitions/nostalgic.yml", // renamed to vhstapes
                 "Definitions/nyaa.yml",
                 "Definitions/nyoo.yml",
                 "Definitions/passionetorrent.yml",
