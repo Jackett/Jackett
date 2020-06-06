@@ -293,6 +293,7 @@ namespace Jackett.Updater
                 "Definitions/btkitty.yml",
                 "Definitions/btstornet.yml",
                 "Definitions/btxpress.yml",
+                "Definitions/cili180.yml",
                 "Definitions/cinefilhd.yml",
                 "Definitions/crazyscorner.yml",
                 "Definitions/czteam.yml",

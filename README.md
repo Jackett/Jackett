@@ -42,7 +42,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BTDIGG
  * BTeye
  * BTSOW
- * Cili180
  * ConCen
  * Corsaro.red
  * cpasbien
@@ -76,6 +75,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * KickAssTorrent (KATcr)
  * Legit Torrents
  * LePorno
+ * LIAORENCILI (Cili180)
  * LimeTorrents
  * LinuxTracker
  * MacTorrents
