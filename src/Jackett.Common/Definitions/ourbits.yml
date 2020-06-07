@@ -29,7 +29,6 @@ caps:
     music-search: [q]
 
 settings:
-settings:
   - name: cookie
     type: text
     label: Cookie
