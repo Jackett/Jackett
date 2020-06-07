@@ -34,6 +34,79 @@ namespace Jackett.Common.Indexers.Abstract
         // hook to adjust the search term
         protected virtual string GetSearchTerm(TorznabQuery query) => $"{query.SearchTerm} {query.GetEpisodeSearchString()}";
 
+        // hook to adjust the search category
+        protected virtual List<KeyValuePair<string, string>> GetSearchQueryParameters(TorznabQuery query)
+        {
+            var categoryMapping = MapTorznabCapsToTrackers(query).Distinct().ToList();
+            var qc = new List<KeyValuePair<string, string>> // NameValueCollection don't support cat[]=19&cat[]=6
+            {
+                {"in", "1"},
+                {"type", categoryMapping.Any() ? categoryMapping.First() : "0"}
+            };
+
+            // resolution filter to improve the search
+            if (!query.Categories.Contains(TorznabCatType.Movies.ID) && !query.Categories.Contains(TorznabCatType.TV.ID) &&
+                !query.Categories.Contains(TorznabCatType.Audio.ID))
+            {
+                if (query.Categories.Contains(TorznabCatType.MoviesUHD.ID) || query.Categories.Contains(TorznabCatType.TVUHD.ID))
+                    qc.Add("video_quality[]", "6"); // 2160p
+                if (query.Categories.Contains(TorznabCatType.MoviesHD.ID) || query.Categories.Contains(TorznabCatType.TVHD.ID))
+                {
+                    qc.Add("video_quality[]", "2"); // 720p
+                    qc.Add("video_quality[]", "7"); // 1080i
+                    qc.Add("video_quality[]", "3"); // 1080p
+                }
+                if (query.Categories.Contains(TorznabCatType.MoviesSD.ID) || query.Categories.Contains(TorznabCatType.TVSD.ID))
+                    qc.Add("video_quality[]", "1"); // SD
+            }
+
+            // note, search by tmdb and tvdb are supported too
+            // https://privatehd.to/api/v1/jackett/torrents?tmdb=1234
+            // https://privatehd.to/api/v1/jackett/torrents?tvdb=3653
+            if (query.IsImdbQuery)
+                qc.Add("imdb", query.ImdbID);
+            else
+                qc.Add("search", GetSearchTerm(query).Trim());
+
+            return qc;
+        }
+
+        // hook to adjust category parsing
+        protected virtual List<int> ParseCategories(TorznabQuery query, JToken row)
+        {
+            var cats = new List<int>();
+            var resolution = row.Value<string>("video_quality");
+            switch(row.Value<string>("type"))
+            {
+                case "Movie":
+                    if (query.Categories.Contains(TorznabCatType.Movies.ID))
+                        cats.Add(TorznabCatType.Movies.ID);
+                    cats.Add(resolution switch
+                    {
+                        var res when _hdResolutions.Contains(res) => TorznabCatType.MoviesHD.ID,
+                        "2160p" => TorznabCatType.MoviesUHD.ID,
+                        _ => TorznabCatType.MoviesSD.ID
+                    });
+                    break;
+                case "TV-Show":
+                    if (query.Categories.Contains(TorznabCatType.TV.ID))
+                        cats.Add(TorznabCatType.TV.ID);
+                    cats.Add(resolution switch
+                    {
+                        var res when _hdResolutions.Contains(res) => TorznabCatType.TVHD.ID,
+                        "2160p" => TorznabCatType.TVUHD.ID,
+                        _ => TorznabCatType.TVSD.ID
+                    });
+                    break;
+                case "Music":
+                    cats.Add(TorznabCatType.Audio.ID);
+                    break;
+                default:
+                    throw new Exception("Error parsing category!");
+            }
+            return cats;
+        }
+
         protected AvistazTracker(string link, string id, string name, string description,
                                  IIndexerConfigurationService configService, WebClient client, Logger logger,
                                  IProtectionService p, TorznabCapabilities caps)
@@ -51,16 +124,7 @@ without this configuration the torrent download does not work.<br/>You can find 
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
-
-            AddCategoryMapping(1, TorznabCatType.Movies);
-            AddCategoryMapping(1, TorznabCatType.MoviesUHD);
-            AddCategoryMapping(1, TorznabCatType.MoviesHD);
-            AddCategoryMapping(1, TorznabCatType.MoviesSD);
-            AddCategoryMapping(2, TorznabCatType.TV);
-            AddCategoryMapping(2, TorznabCatType.TVUHD);
-            AddCategoryMapping(2, TorznabCatType.TVHD);
-            AddCategoryMapping(2, TorznabCatType.TVSD);
-            AddCategoryMapping(3, TorznabCatType.Audio);
+            Type = "private";
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -95,37 +159,7 @@ without this configuration the torrent download does not work.<br/>You can find 
         {
             var releases = new List<ReleaseInfo>();
 
-            var categoryMapping = MapTorznabCapsToTrackers(query).Distinct().ToList();
-            var qc = new List<KeyValuePair<string, string>> // NameValueCollection don't support cat[]=19&cat[]=6
-            {
-                {"in", "1"},
-                {"type", categoryMapping.Any() ? categoryMapping.First() : "0"} // type=0 => all categories
-            };
-
-            // resolution filter to improve the search
-            if (!query.Categories.Contains(TorznabCatType.Movies.ID) && !query.Categories.Contains(TorznabCatType.TV.ID) &&
-                !query.Categories.Contains(TorznabCatType.Audio.ID))
-            {
-                if (query.Categories.Contains(TorznabCatType.MoviesUHD.ID) || query.Categories.Contains(TorznabCatType.TVUHD.ID))
-                    qc.Add("video_quality[]", "6"); // 2160p
-                if (query.Categories.Contains(TorznabCatType.MoviesHD.ID) || query.Categories.Contains(TorznabCatType.TVHD.ID))
-                {
-                    qc.Add("video_quality[]", "2"); // 720p
-                    qc.Add("video_quality[]", "7"); // 1080i
-                    qc.Add("video_quality[]", "3"); // 1080p
-                }
-                if (query.Categories.Contains(TorznabCatType.MoviesSD.ID) || query.Categories.Contains(TorznabCatType.TVSD.ID))
-                    qc.Add("video_quality[]", "1"); // SD
-            }
-
-            // note, search by tmdb and tvdb are supported too
-            // https://privatehd.to/api/v1/jackett/torrents?tmdb=1234
-            // https://privatehd.to/api/v1/jackett/torrents?tvdb=3653
-            if (query.IsImdbQuery)
-                qc.Add("imdb", query.ImdbID);
-            else
-                qc.Add("search", GetSearchTerm(query).Trim());
-
+            var qc = GetSearchQueryParameters(query);
             var episodeSearchUrl = SearchUrl + "?" + qc.GetQueryString();
             var response = await RequestStringWithCookiesAndRetry(episodeSearchUrl, headers: GetSearchHeaders());
             if (response.Status == HttpStatusCode.Unauthorized || response.Status == HttpStatusCode.PreconditionFailed)
@@ -172,36 +206,7 @@ without this configuration the torrent download does not work.<br/>You can find 
                         description += $"<br/>Subtitles: {string.Join(", ", subtitleList)}";
                     }
 
-                    var cats = new List<int>();
-                    var resolution = row.Value<string>("video_quality");
-                    switch(row.Value<string>("type"))
-                    {
-                        case "Movie":
-                            if (query.Categories.Contains(TorznabCatType.Movies.ID))
-                                cats.Add(TorznabCatType.Movies.ID);
-                            cats.Add(resolution switch
-                            {
-                                var res when _hdResolutions.Contains(res) => TorznabCatType.MoviesHD.ID,
-                                "2160p" => TorznabCatType.MoviesUHD.ID,
-                                _ => TorznabCatType.MoviesSD.ID
-                            });
-                            break;
-                        case "TV-Show":
-                            if (query.Categories.Contains(TorznabCatType.TV.ID))
-                                cats.Add(TorznabCatType.TV.ID);
-                            cats.Add(resolution switch
-                            {
-                                var res when _hdResolutions.Contains(res) => TorznabCatType.TVHD.ID,
-                                "2160p" => TorznabCatType.TVUHD.ID,
-                                _ => TorznabCatType.TVSD.ID
-                            });
-                            break;
-                        case "Music":
-                            cats.Add(TorznabCatType.Audio.ID);
-                            break;
-                        default:
-                            throw new Exception("Error parsing category!");
-                    }
+                    var cats = ParseCategories(query, row);
 
                     var release = new ReleaseInfo
                     {

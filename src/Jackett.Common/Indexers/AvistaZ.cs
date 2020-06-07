@@ -24,7 +24,17 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps)
-            => Type = "private";
+        {
+            AddCategoryMapping(1, TorznabCatType.Movies);
+            AddCategoryMapping(1, TorznabCatType.MoviesUHD);
+            AddCategoryMapping(1, TorznabCatType.MoviesHD);
+            AddCategoryMapping(1, TorznabCatType.MoviesSD);
+            AddCategoryMapping(2, TorznabCatType.TV);
+            AddCategoryMapping(2, TorznabCatType.TVUHD);
+            AddCategoryMapping(2, TorznabCatType.TVHD);
+            AddCategoryMapping(2, TorznabCatType.TVSD);
+            AddCategoryMapping(3, TorznabCatType.Audio);
+        }
 
         // Avistaz has episodes without season. eg Running Man E323
         protected override string GetSearchTerm(TorznabQuery query) =>
