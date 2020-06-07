@@ -18,7 +18,8 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class TorrentsCSV : BaseWebIndexer
     {
-        private string ApiEndpoint => SiteLink + "service/search";
+        private string SearchEndpoint => SiteLink + "service/search";
+        private string NewEndpoint => SiteLink + "service/new";
 
         private new ConfigurationData configData => base.configData;
 
@@ -27,10 +28,7 @@ namespace Jackett.Common.Indexers
                    name: "Torrents.csv",
                    description: "Torrents.csv is a self-hostable, open source torrent search engine and database",
                    link: "https://torrents-csv.ml/",
-                   caps: new TorznabCapabilities
-                   {
-                       SupportsImdbMovieSearch = true
-                   },
+                   caps: new TorznabCapabilities(),
                    configService: configService,
                    client: wc,
                    logger: l,
@@ -62,17 +60,16 @@ namespace Jackett.Common.Indexers
             var searchString = query.GetQueryString();
             if (!string.IsNullOrWhiteSpace(searchString) && searchString.Length < 3)
                 return releases; // search needs at least 3 characters
-            if (string.IsNullOrEmpty(searchString))
-                searchString = "202"; // this search 2020 (yep, 2020 is not working)
 
             var qc = new NameValueCollection
             {
-                { "q", searchString },
-                { "size", "100" },
-                { "type_", "torrent" }
+                { "size", "100" }
             };
+            if (!string.IsNullOrWhiteSpace(searchString))
+                qc.Add("q", searchString );
 
-            var searchUrl = ApiEndpoint + "?" + qc.GetQueryString();
+            var searchUrl = (string.IsNullOrWhiteSpace(searchString) ? NewEndpoint : SearchEndpoint)
+                            + "?" + qc.GetQueryString();
             var response = await RequestStringWithCookiesAndRetry(searchUrl);
 
             try

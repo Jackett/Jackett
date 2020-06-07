@@ -76,10 +76,20 @@ namespace Jackett.Common.Services
                 if (File.Exists(oldPath))
                 {
                     // if the old configuration exists, we rename it to be used by the renamed indexer
+                    logger.Info($"Old configuration detected: {oldPath}");
                     var newPath = configService.GetIndexerConfigFilePath(renamedIndexers[oldId]);
+                    if (File.Exists(newPath))
+                        File.Delete(newPath);
                     File.Move(oldPath, newPath);
-                    if (File.Exists(oldPath + ".bak"))
-                        File.Move(oldPath + ".bak", newPath + ".bak");
+                    // backups
+                    var oldPathBak = oldPath + ".bak";
+                    var newPathBak = newPath + ".bak";
+                    if (File.Exists(oldPathBak))
+                    {
+                        if (File.Exists(newPathBak))
+                            File.Delete(newPathBak);
+                        File.Move(oldPathBak, newPathBak);
+                    }
                     logger.Info($"Configuration renamed: {oldPath} => {newPath}");
                 }
             }
