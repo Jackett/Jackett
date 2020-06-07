@@ -52,6 +52,46 @@ caps:
     补充音轨: Audio # Supplemental audio tracks
     iPhone/iPad视频: PC/Phone-Other # IPhone / iPad video
 
+    # 单机游戏
+    PC: PC/Games # Games - PC
+    MAC: PC/Mac # Games - MAC
+
+    # 微软系列
+    XBOX360: Console/Xbox 360 # MicroSoft - XBOX360
+    XBOX1: Console/Xbox # MicroSoft - XBOX360
+    XBLA: Console/Xbox # MicroSoft - XBLA
+    XBOX+to+XBOX360: Console/Xbox # MicroSoft - XBOX to XBOX360
+
+    # 索尼系列
+    PS2: Console/Other # SONY - PS2
+    PSP: Console/PSP # SONY - PSP
+    PS4: Console/PS4 # SONY - PS4
+    PS3: Console/PS3 # SONY - PS3
+    PSV: Console/PS Vita # SONY - PSV
+
+    # 任天堂系列
+    WIIU: Console/WiiU # Nintendo - WIIU
+    WII: Console/Wii # Nintendo- WII
+    SWITCH: Console/Other # Nintendo - SWITCH
+    NDS: Console/NDS # Nintendo - NDS
+    NGC: Console/Other # Nintendo - NGC
+
+    # 主机影视
+    PS3兼容高清: Console/PS3 # Video - HD - PS3
+    PSP兼容高清&标清: Console/PSP # Video - SD&HD - PSP
+    XBOX360兼容高清: Console/Xbox 360 # Video - HD - XBOX360
+    Game+Video: Console/Other # Video - Game Video
+
+    # 软件
+    APPZ: PC # Software - APPZ
+    Game+Ebook: Books/Ebook # Software - Game Ebook
+    Ebook: Books/Ebook # Software - Ebook
+
+    # 苹果系列
+    iPhone/iPad游戏: PC/Phone-IOS # Apple - Game - iPhone/iPad
+    iPad书籍: Books/Ebook # Apple - Book - iPad
+    iPhone/iPad软件: PC/Phone-IOS # Apple - Software - iPhone/iPad
+
   modes:
     search: [q, imdbid]
     tv-search: [q, season, ep, imdbid]
@@ -122,9 +162,14 @@ ratio:
 search:
   paths:
     - path: browse.php
+      inputs:
+        c: M
+    - path: browse.php
+      categories: [1000, 1010, 1020, 1030, 1040, 1050, 1060, 1070, 1080, 1090, 1100, 1110, 1120, 1130, 1140, 1150, 1160, 1170, 1180, 4000, 4010, 4020, 4030, 4040, 4050, 4060, 4070, 7000, 7010, 7020, 7030, 7040, 7050, 7060]
+      inputs:
+        c: G
   inputs:
     search_field: "{{ range .Categories }}分类:`{{.}}` {{end}}{{ if .Query.IMDBID }}imdb{{ .Query.IMDBIDShort }}{{ else }}{{ .Keywords }}{{ end }}"
-    c: M
   rows:
     selector: table#torrent_table > tbody > tr[id]
 
@@ -179,6 +224,7 @@ search:
         - name: dateparse
           args: "2006-01-0215:04:05 -0700"
     imdb:
+      optional: true
       selector: span.imdb_rate > a
       attribute: href
     downloadvolumefactor:
