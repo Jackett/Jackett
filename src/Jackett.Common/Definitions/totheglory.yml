@@ -237,4 +237,12 @@ search:
       case:
         img[alt="200%"]: 2
         "*": 1
+    minimumratio:
+      case:
+        img[title="Hit and Run"]: 1
+        "*": 0
+    minimumseedtime:
+      case:
+        img[title="Hit and Run"]: 216000
+        "*": 0
 # engine n/a
