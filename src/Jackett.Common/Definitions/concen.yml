@@ -63,9 +63,6 @@ search:
     magnet:
       selector: td.views-field-name a
       attribute: href
-      filters:
-        - name: prepend
-          args: "magnet:"
     date:
       selector: td.views-field-created
     size:
