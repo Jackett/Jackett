@@ -336,6 +336,7 @@ namespace Jackett.Updater
                 "Definitions/maniatorrent.yml",
                 "Definitions/manicomioshare.yml",
                 "Definitions/megabliz.yml",
+                "Definitions/metal-iplay-ro.yml", // renamed to romanianmetaltorrents
                 "Definitions/mkvcage.yml",
                 "Definitions/music-master.yml",
                 "Definitions/nachtwerk.yml",
