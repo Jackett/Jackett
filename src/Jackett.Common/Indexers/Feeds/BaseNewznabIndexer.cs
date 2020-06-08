@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Xml.Linq;
 using Jackett.Common.Models;
@@ -10,9 +12,24 @@ using NLog;
 
 namespace Jackett.Common.Indexers.Feeds
 {
+    [ExcludeFromCodeCoverage]
     public abstract class BaseNewznabIndexer : BaseFeedIndexer
     {
-        protected BaseNewznabIndexer(string name, string link, string description, IIndexerConfigurationService configService, WebClient client, Logger logger, ConfigurationData configData, IProtectionService p, TorznabCapabilities caps = null, string downloadBase = null) : base(name, link, description, configService, client, logger, configData, p, caps, downloadBase)
+        protected BaseNewznabIndexer(string link, string id, string name, string description,
+                                     IIndexerConfigurationService configService, WebClient client, Logger logger,
+                                     ConfigurationData configData, IProtectionService p, TorznabCapabilities caps = null,
+                                     string downloadBase = null)
+            : base(id: id,
+                   name: name,
+                   description: description,
+                   link: link,
+                   caps: caps,
+                   configService: configService,
+                   client: client,
+                   logger: logger,
+                   p: p,
+                   configData: configData,
+                   downloadBase: downloadBase)
         {
         }
 
@@ -28,21 +45,25 @@ namespace Jackett.Common.Indexers.Feeds
         protected virtual ReleaseInfo ResultFromFeedItem(XElement item)
         {
             var attributes = item.Descendants().Where(e => e.Name.LocalName == "attr");
+            var size = long.TryParse(ReadAttribute(attributes, "size"), out var longVal) ? (long?)longVal : null;
+            var files = long.TryParse(ReadAttribute(attributes, "files"), out longVal) ? (long?)longVal : null;
+            var seeders = int.TryParse(ReadAttribute(attributes, "seeders"), out var intVal) ? (int?)intVal : null;
+            var peers = int.TryParse(ReadAttribute(attributes, "peers"), out intVal) ? (int?)intVal : null;
             var release = new ReleaseInfo
             {
                 Title = item.FirstValue("title"),
-                Guid = item.FirstValue("guid").ToUri(),
-                Link = item.FirstValue("link").ToUri(),
-                Comments = item.FirstValue("comments").ToUri(),
-                PublishDate = item.FirstValue("pubDate").ToDateTime(),
+                Guid = new Uri(item.FirstValue("guid")),
+                Link = new Uri(item.FirstValue("link")),
+                Comments = new Uri(item.FirstValue("comments")),
+                PublishDate = DateTime.Parse(item.FirstValue("pubDate")),
                 Category = new List<int> { int.Parse(attributes.First(e => e.Attribute("name").Value == "category").Attribute("value").Value) },
-                Size = ReadAttribute(attributes, "size").TryParse<long>(),
-                Files = ReadAttribute(attributes, "files").TryParse<long>(),
+                Size = size,
+                Files = files,
                 Description = item.FirstValue("description"),
-                Seeders = ReadAttribute(attributes, "seeders").TryParse<int>(),
-                Peers = ReadAttribute(attributes, "peers").TryParse<int>(),
+                Seeders = seeders,
+                Peers = peers,
                 InfoHash = attributes.First(e => e.Attribute("name").Value == "infohash").Attribute("value").Value,
-                MagnetUri = attributes.First(e => e.Attribute("name").Value == "magneturl").Attribute("value").Value.ToUri(),
+                MagnetUri = new Uri(attributes.First(e => e.Attribute("name").Value == "magneturl").Attribute("value").Value),
             };
             return release;
         }

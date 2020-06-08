@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class DigitalHive : BaseWebIndexer
     {
         private string SearchUrl => SiteLink + "browse.php";
@@ -29,15 +31,16 @@ namespace Jackett.Common.Indexers
         }
 
         public DigitalHive(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
-            : base(name: "DigitalHive",
-                description: "DigitalHive is one of the oldest general trackers",
-                link: "https://www.digitalhive.org/",
-                caps: new TorznabCapabilities(),
-                configService: configService,
-                client: w,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataRecaptchaLogin())
+            : base(id: "digitalhive",
+                   name: "DigitalHive",
+                   description: "DigitalHive is one of the oldest general trackers",
+                   link: "https://www.digitalhive.org/",
+                   caps: new TorznabCapabilities(),
+                   configService: configService,
+                   client: w,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataRecaptchaLogin())
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "en-us";
@@ -102,16 +105,15 @@ namespace Jackett.Common.Indexers
                 result.Captcha.Version = "2";
                 return result;
             }
-            else
+
+            return new ConfigurationDataBasicLogin
             {
-                var result = new ConfigurationDataBasicLogin();
-                result.SiteLink.Value = configData.SiteLink.Value;
-                result.Instructions.Value = configData.Instructions.Value;
-                result.Username.Value = configData.Username.Value;
-                result.Password.Value = configData.Password.Value;
-                result.CookieHeader.Value = loginPage.Cookies;
-                return result;
-            }
+                SiteLink = { Value = configData.SiteLink.Value },
+                Instructions = { Value = configData.Instructions.Value },
+                Username = { Value = configData.Username.Value },
+                Password = { Value = configData.Password.Value },
+                CookieHeader = { Value = loginPage.Cookies }
+            };
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -133,7 +135,7 @@ namespace Jackett.Common.Indexers
                     var results = await PerformQuery(new TorznabQuery());
                     if (!results.Any())
                     {
-                        throw new Exception("Your cookie did not work");
+                        throw new Exception("Found 0 results in the tracker");
                     }
 
                     IsConfigured = true;

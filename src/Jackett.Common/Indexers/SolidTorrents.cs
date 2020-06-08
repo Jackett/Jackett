@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class SolidTorrents : BaseWebIndexer
     {
         private string SearchUrl => SiteLink + "api/v1/search";
@@ -34,8 +36,9 @@ namespace Jackett.Common.Indexers
         }
 
         public SolidTorrents(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "Solid Torrents",
-                   description: "SolidTorrents is a Public torrent meta-search engine",
+            : base(id: "solidtorrents",
+                   name: "Solid Torrents",
+                   description: "Solid Torrents is a Public torrent meta-search engine",
                    link: "https://solidtorrents.net/",
                    caps: new TorznabCapabilities(),
                    configService: configService,
@@ -138,37 +141,33 @@ namespace Jackett.Common.Indexers
             return releases;
         }
 
+        //TODO inline single use function
         private ReleaseInfo MakeRelease(JToken torrent)
         {
-            var release = new ReleaseInfo();
-
-            release.Title = (string)torrent["title"];
-
             // https://solidtorrents.net/view/5e10885d651df640a70ee826
-            release.Comments = new Uri(SiteLink + "view/" + (string)torrent["_id"]);
-            release.Guid = release.Comments;
-
-            release.PublishDate = DateTime.Now;
-            if (torrent["imported"] != null)
-                release.PublishDate = DateTime.Parse((string)torrent["imported"]);
-
-            release.Category = MapTrackerCatToNewznab((string)torrent["category"]);
-            release.Size = (long)torrent["size"];
-
+            var comments = new Uri(SiteLink + "view/" + (string)torrent["_id"]);
             var swarm = torrent["swarm"];
-            release.Seeders = (int)swarm["seeders"];
-            release.Peers = release.Seeders + (int)swarm["leechers"];
-            release.Grabs = (long)swarm["downloads"];
-
-            release.InfoHash = (string)torrent["infohash"];
-            release.MagnetUri = new Uri((string)torrent["magnet"]);
-
-            release.MinimumRatio = 1;
-            release.MinimumSeedTime = 172800; // 48 hours
-            release.DownloadVolumeFactor = 0;
-            release.UploadVolumeFactor = 1;
-
-            return release;
+            var seeders = (int)swarm["seeders"];
+            var publishDate = torrent["imported"] != null ? DateTime.Parse((string)torrent["imported"]) : DateTime.Now;
+            var magnetUri = new Uri((string)torrent["magnet"]);
+            return new ReleaseInfo
+            {
+                Title = (string)torrent["title"],
+                Comments = comments,
+                Guid = comments,
+                PublishDate = publishDate,
+                Category = MapTrackerCatToNewznab((string)torrent["category"]),
+                Size = (long)torrent["size"],
+                Seeders = seeders,
+                Peers = seeders + (int)swarm["leechers"],
+                Grabs = (long)swarm["downloads"],
+                InfoHash = (string)torrent["infohash"],
+                MagnetUri = magnetUri,
+                MinimumRatio = 1,
+                MinimumSeedTime = 172800, // 48 hours
+                DownloadVolumeFactor = 0,
+                UploadVolumeFactor = 1
+            };
         }
     }
 }

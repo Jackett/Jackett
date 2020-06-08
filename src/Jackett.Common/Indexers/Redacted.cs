@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Threading.Tasks;
 using Jackett.Common.Indexers.Abstract;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
@@ -7,23 +10,27 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
-    public class PassTheHeadphones : GazelleTracker
+    [ExcludeFromCodeCoverage]
+    public class Redacted : GazelleTracker
     {
-        public PassTheHeadphones(IIndexerConfigurationService configService, WebClient webClient, Logger logger, IProtectionService protectionService)
-            : base(name: "Redacted",
-                desc: "A music tracker",
-                link: "https://redacted.ch/",
-                configService: configService,
-                logger: logger,
-                protectionService: protectionService,
-                webClient: webClient,
-                supportsFreeleechTokens: true,
-                has2Fa: true
-                )
+        public Redacted(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+            : base(id: "redacted",
+                   name: "Redacted",
+                   description: "A music tracker",
+                   link: "https://redacted.ch/",
+                   caps: new TorznabCapabilities
+                   {
+                       SupportedMusicSearchParamsList = new List<string> { "q", "album", "artist", "label", "year" }
+                   },
+                   configService: configService,
+                   client: wc,
+                   logger: l,
+                   p: ps,
+                   supportsFreeleechTokens: true,
+                   has2Fa: true)
         {
             Language = "en-us";
             Type = "private";
-            TorznabCaps.SupportedMusicSearchParamsList = new List<string>() { "q", "album", "artist", "label", "year" };
 
             AddCategoryMapping(1, TorznabCatType.Audio, "Music");
             AddCategoryMapping(2, TorznabCatType.PC, "Applications");
@@ -32,6 +39,14 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(5, TorznabCatType.Movies, "E-Learning Videos");
             AddCategoryMapping(6, TorznabCatType.TV, "Comedy");
             AddCategoryMapping(7, TorznabCatType.Books, "Comics");
+        }
+
+        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        {
+            var results = await base.PerformQuery(query);
+            // results must contain search terms
+            results = results.Where(release => query.MatchQueryStringAND(release.Title));
+            return results;
         }
     }
 }

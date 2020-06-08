@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
@@ -15,27 +15,29 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class FunFile : BaseWebIndexer
     {
-        private string SearchUrl => SiteLink + "browse.php";
         private string LoginUrl => SiteLink + "takelogin.php";
+        private string SearchUrl => SiteLink + "browse.php";
 
-        private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
-        {
-            get => (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData;
-            set => base.configData = value;
-        }
+        private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
 
         public FunFile(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
-            : base(name: "FunFile",
-                description: "A general tracker",
-                link: "https://www.funfile.org/",
-                caps: new TorznabCapabilities(),
-                configService: configService,
-                client: w,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
+            : base(id: "funfile",
+                   name: "FunFile",
+                   description: "A general tracker",
+                   link: "https://www.funfile.org/",
+                   caps: new TorznabCapabilities
+                   {
+                       SupportsImdbMovieSearch = true
+                       // SupportsImdbTVSearch = true (supported by the site but disabled due to #8107)
+                   },
+                   configService: configService,
+                   client: w,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataBasicLogin("For best results, change the 'Torrents per page' setting to 100 in your profile."))
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "en-us";
@@ -50,6 +52,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(19, TorznabCatType.Movies); // Movies
             AddCategoryMapping(6, TorznabCatType.Audio); // Music
             AddCategoryMapping(31, TorznabCatType.PCPhoneOther); // Portable
+            AddCategoryMapping(49, TorznabCatType.Other); // Tutorials
             AddCategoryMapping(7, TorznabCatType.TV); // TV
         }
 
@@ -64,11 +67,11 @@ namespace Jackett.Common.Indexers
             };
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl);
-            await ConfigureIfOK(result.Cookies, result.ContentString.Contains("logout.php"), () =>
+            await ConfigureIfOK(result.Cookies, result.ContentString?.Contains("logout.php") == true, () =>
             {
                 var parser = new HtmlParser();
                 var dom = parser.ParseDocument(result.ContentString);
-                var errorMessage = dom.QuerySelector("td.mf_content").InnerHtml;
+                var errorMessage = dom.QuerySelector("td.mf_content").TextContent;
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
             return IndexerConfigurationStatus.RequiresTesting;
@@ -78,21 +81,25 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
 
-            var cats = MapTorznabCapsToTrackers(query);
             var qc = new NameValueCollection
             {
                 {"incldead", "1"},
                 {"showspam", "1"},
-                {"cat", cats.Count == 1 ? cats[0] : "0"}
+                {"cat", MapTorznabCapsToTrackers(query).FirstIfSingleOrDefault("0")}
             };
-            if (!string.IsNullOrWhiteSpace(query.GetQueryString()))
+
+            if (query.IsImdbQuery)
+            {
+                qc.Add("search", query.ImdbID);
+                qc.Add("s_desc", "1");
+            }
+            else
                 qc.Add("search", query.GetQueryString());
 
             var searchUrl = SearchUrl + "?" + qc.GetQueryString();
             var results = await RequestStringWithCookiesAndRetry(searchUrl);
 
-            // Occasionally the cookies become invalid, login again if that happens
-            if (results.IsRedirect)
+            if (results.IsRedirect) // re-login
             {
                 await ApplyConfiguration(null);
                 results = await RequestStringWithCookiesAndRetry(searchUrl);
@@ -105,49 +112,47 @@ namespace Jackett.Common.Indexers
                 var rows = dom.QuerySelectorAll("table[cellpadding=2] > tbody > tr:has(td.row3)");
                 foreach (var row in rows)
                 {
-                    var release = new ReleaseInfo();
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800; // 48 hours
-
-                    var qCatLink = row.QuerySelector("a[href^=\"browse.php?cat=\"]");
-                    var qDetailsLink = row.QuerySelector("a[href^=\"details.php?id=\"]");
-                    var qSeeders = row.QuerySelector("td:nth-of-type(10)");
-                    var qLeechers = row.QuerySelector("td:nth-of-type(11)");
                     var qDownloadLink = row.QuerySelector("a[href^=\"download.php\"]");
-                    var qTimeAgo = row.QuerySelector("td:nth-of-type(6)");
-                    var qSize = row.QuerySelector("td:nth-of-type(8)");
-
                     if (qDownloadLink == null)
                         throw new Exception("Download links not found. Make sure you can download from the website.");
+                    var link = new Uri(SiteLink + qDownloadLink.GetAttribute("href"));
 
-                    release.Link = new Uri(SiteLink + qDownloadLink.GetAttribute("href"));
-                    release.Title = qDetailsLink.GetAttribute("title").Trim();
-                    release.Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
-                    release.Guid = release.Link;
+                    var qDetailsLink = row.QuerySelector("a[href^=\"details.php?id=\"]");
+                    var title = qDetailsLink.GetAttribute("title").Trim();
+                    var comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
 
+                    var qCatLink = row.QuerySelector("a[href^=\"browse.php?cat=\"]");
                     var catStr = qCatLink.GetAttribute("href").Split('=')[1].Split('&')[0];
-                    release.Category = MapTrackerCatToNewznab(catStr);
 
-                    var sizeStr = qSize.TextContent;
-                    release.Size = ReleaseInfo.GetBytes(sizeStr);
+                    var files = ParseUtil.CoerceInt(row.Children[3].TextContent);
+                    var publishDate = DateTimeUtil.FromTimeAgo(row.Children[5].TextContent);
+                    var size = ReleaseInfo.GetBytes(row.Children[7].TextContent);
+                    var grabs = ParseUtil.CoerceInt(row.Children[8].TextContent);
+                    var seeders = ParseUtil.CoerceInt(row.Children[9].TextContent);
+                    var leechers = ParseUtil.CoerceInt(row.Children[10].TextContent);
 
-                    release.Seeders = ParseUtil.CoerceInt(qSeeders.TextContent);
-                    release.Peers = ParseUtil.CoerceInt(qLeechers.TextContent) + release.Seeders;
+                    var ka = row.NextElementSibling.QuerySelector("table > tbody > tr:nth-child(3)");
+                    var ulFactor = ParseUtil.CoerceDouble(ka.Children[0].TextContent.Replace("X", ""));
+                    var dlFactor = ParseUtil.CoerceDouble(ka.Children[1].TextContent.Replace("X", ""));
 
-                    var dateStr = qTimeAgo.TextContent;
-                    release.PublishDate = DateTimeUtil.FromTimeAgo(dateStr);
-
-                    var files = row.QuerySelector("td:nth-child(4)").TextContent;
-                    release.Files = ParseUtil.CoerceInt(files);
-
-                    var grabs = row.QuerySelector("td:nth-child(9)").TextContent;
-                    release.Grabs = ParseUtil.CoerceInt(grabs);
-
-                    var ka = row.NextElementSibling;
-                    var dlFactor = ka.QuerySelector("table > tbody > tr:nth-child(3)").QuerySelector("td:nth-child(2)").TextContent.Replace("X", "");
-                    var ulFactor = ka.QuerySelector("table > tbody > tr:nth-child(3)").QuerySelector("td:nth-child(1)").TextContent.Replace("X", "");
-                    release.DownloadVolumeFactor = ParseUtil.CoerceDouble(dlFactor);
-                    release.UploadVolumeFactor = ParseUtil.CoerceDouble(ulFactor);
+                    var release = new ReleaseInfo
+                    {
+                        Title = title,
+                        Comments = comments,
+                        Link = link,
+                        Guid = link,
+                        Category = MapTrackerCatToNewznab(catStr),
+                        PublishDate = publishDate,
+                        Size = size,
+                        Files = files,
+                        Grabs = grabs,
+                        Seeders = seeders,
+                        Peers = leechers + seeders,
+                        MinimumRatio = 1,
+                        MinimumSeedTime = 172800, // 48 hours
+                        DownloadVolumeFactor = dlFactor,
+                        UploadVolumeFactor = ulFactor
+                    };
 
                     releases.Add(release);
                 }

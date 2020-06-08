@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class Partis : BaseWebIndexer
     {
         private string LoginUrl => SiteLink + "user/login/";
@@ -27,7 +29,8 @@ namespace Jackett.Common.Indexers
         }
 
         public Partis(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "Partis",
+            : base(id: "partis",
+                   name: "Partis",
                    description: "Partis is a SLOVENIAN Private Torrent Tracker",
                    link: "https://www.partis.si/",
                    caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
@@ -211,7 +214,7 @@ namespace Jackett.Common.Indexers
                     }
                     catch (Exception ex)
                     {
-                        logger.Error(string.Format("{0}: Error while parsing row '{1}':\n\n{2}", ID, Row.OuterHtml, ex));
+                        logger.Error(string.Format("{0}: Error while parsing row '{1}':\n\n{2}", Id, Row.OuterHtml, ex));
                     }
                 }
             }

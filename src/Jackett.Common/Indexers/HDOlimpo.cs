@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -9,6 +8,7 @@ using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -17,6 +17,7 @@ using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class HDOlimpo : BaseWebIndexer
     {
         private string LoginUrl => SiteLink + "login";
@@ -33,15 +34,16 @@ namespace Jackett.Common.Indexers
         }
 
         public HDOlimpo(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
-            : base(name: "HD-Olimpo",
-                description: "HD-Olimpo is a SPANISH site for HD content",
-                link: "https://hdolimpo.co/",
-                caps: new TorznabCapabilities(),
-                configService: configService,
-                client: w,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataBasicLoginWithEmail())
+            : base(id: "hdolimpo",
+                   name: "HD-Olimpo",
+                   description: "HD-Olimpo is a SPANISH site for HD content",
+                   link: "https://hdolimpo.co/",
+                   caps: new TorznabCapabilities(),
+                   configService: configService,
+                   client: w,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataBasicLoginWithEmail())
         {
             Encoding = Encoding.UTF8;
             Language = "es-es";
@@ -93,20 +95,18 @@ namespace Jackett.Common.Indexers
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var includePremium = ((BoolItem)configData.GetDynamic("IncludePremium")).Value;
+            var cats = MapTorznabCapsToTrackers(query);
 
             var pairs = new Dictionary<string, string>
             {
                 {"freetorrent", "false"},
                 {"ordenar_por", "created_at"},
                 {"orden", "desc"},
-                {"titulo", query.GetQueryString()}
+                {"titulo", query.GetQueryString()},
+                {"categoria", MapTorznabCapsToTrackers(query).FirstIfSingleOrDefault("0")}
             };
 
-            var cats = MapTorznabCapsToTrackers(query);
-            var category = cats.Count == 1 ? cats.First() : "0";
-            pairs.Add("categoria", category);
-
-            var boundary = "---------------------------" + (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds.ToString(CultureInfo.InvariantCulture).Replace(".", "");
+            var boundary = "---------------------------" + DateTimeUtil.DateTimeToUnixTimestamp(DateTime.UtcNow);
             var bodyParts = new List<string>();
 
             foreach (var pair in pairs)
@@ -159,48 +159,47 @@ namespace Jackett.Common.Indexers
             {
                 foreach (var torrent in torrents)
                 {
-                    var release = new ReleaseInfo();
-
-                    release.Title = (string)torrent["titulo"] + " " + (string)torrent["titulo_extra"];
-
+                    var title = (string)torrent["titulo"] + " " + (string)torrent["titulo_extra"];
                     // for downloading "premium" torrents you need special account
                     if ((string)torrent["premium"] == "si")
                     {
                         if (includePremium)
-                            release.Title += " [PREMIUM]";
+                            title += " [PREMIUM]";
                         else
                             continue;
                     }
 
-                    release.Comments = new Uri(CommentsUrl + (string)torrent["id"]);
-                    release.Guid = release.Comments;
-
-                    release.PublishDate = DateTime.Now;
+                    var comments = new Uri(CommentsUrl + (string)torrent["id"]);
+                    var publishDate = DateTime.Now;
                     if (torrent["created_at"] != null)
-                        release.PublishDate = DateTime.Parse((string)torrent["created_at"]);
-
+                        publishDate = DateTime.Parse((string)torrent["created_at"]);
+                    Uri bannerUrl = null;
                     if (torrent["portada"] != null)
-                        release.BannerUrl = new Uri(BannerUrl + (string)(torrent["portada"]["hash"]) + "." + (string)(torrent["portada"]["ext"]));
+                        bannerUrl = new Uri(BannerUrl + (string)(torrent["portada"]["hash"]) + "." + (string)(torrent["portada"]["ext"]));
 
-                    release.Category = MapTrackerCatToNewznab((string)torrent["categoria"]);
-                    release.Size = (long)torrent["size"];
-
-                    release.Seeders = (int)torrent["seeders"];
-                    release.Peers = release.Seeders + (int)torrent["leechers"];
-                    release.Grabs = (long)torrent["snatched"];
-
-                    release.InfoHash = (string)torrent["plain_info_hash"];
-                    release.Link = new Uri(DownloadUrl + (string)torrent["id"]);
-
-                    var files = (JArray)JsonConvert.DeserializeObject<dynamic>((string)torrent["files_list"]);
-                    release.Files = files.Count;
-
-                    release.DownloadVolumeFactor = (string)torrent["freetorrent"] == "0" ? 1 : 0;
-                    release.UploadVolumeFactor = (string)torrent["doubletorrent"] == "0" ? 1 : 2;
-
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800; // 48 hours
-
+                    var seeders = (int)torrent["seeders"];
+                    var link = new Uri(DownloadUrl + (string)torrent["id"]);
+                    var fileCount = ((JArray)JsonConvert.DeserializeObject<dynamic>((string)torrent["files_list"])).Count;
+                    var release = new ReleaseInfo
+                    {
+                        Title = title,
+                        Category = MapTrackerCatToNewznab((string)torrent["categoria"]),
+                        Size = (long)torrent["size"],
+                        Grabs = (long)torrent["snatched"],
+                        InfoHash = (string)torrent["plain_info_hash"],
+                        Link = link,
+                        Files = fileCount,
+                        DownloadVolumeFactor = (string)torrent["freetorrent"] == "0" ? 1 : 0,
+                        UploadVolumeFactor = (string)torrent["doubletorrent"] == "0" ? 1 : 2,
+                        MinimumRatio = 1,
+                        MinimumSeedTime = 172800, // 48 hours
+                        PublishDate = publishDate,
+                        Comments = comments,
+                        Guid = comments,
+                        Seeders = seeders,
+                        Peers = seeders + (int)torrent["leechers"],
+                        BannerUrl = bannerUrl
+                    };
                     releases.Add(release);
                 }
             }

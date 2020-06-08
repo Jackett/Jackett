@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -19,9 +20,7 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
-    /// <summary>
-    /// Provider for Xthor Private French Tracker
-    /// </summary>
+    [ExcludeFromCodeCoverage]
     public class Xthor : BaseCachingWebIndexer
     {
         private static string ApiEndpoint => "https://api.xthor.tk/";
@@ -42,24 +41,21 @@ namespace Jackett.Common.Indexers
         private ConfigurationDataXthor ConfigData => (ConfigurationDataXthor)configData;
 
         public Xthor(IIndexerConfigurationService configService, Utils.Clients.WebClient w, Logger l, IProtectionService ps)
-            : base(
-                name: "Xthor",
-                description: "General French Private Tracker",
-                link: "https://xthor.tk/",
-                caps: new TorznabCapabilities(),
-                configService: configService,
-                client: w,
-                logger: l,
-                p: ps,
-                downloadBase: "https://xthor.tk/download.php?torrent=",
-                configData: new ConfigurationDataXthor())
+            : base(id: "xthor",
+                   name: "Xthor",
+                   description: "General French Private Tracker",
+                   link: "https://xthor.tk/",
+                   caps: new TorznabCapabilities(),
+                   configService: configService,
+                   client: w,
+                   logger: l,
+                   p: ps,
+                   downloadBase: "https://xthor.tk/download.php?torrent=",
+                   configData: new ConfigurationDataXthor())
         {
             Encoding = Encoding.UTF8;
             Language = "fr-fr";
             Type = "private";
-
-            // Clean capabilities
-            TorznabCaps.Categories.Clear();
 
             // Movies
             AddCategoryMapping(118, TorznabCatType.MoviesBluRay, "UHD FULL BLURAY");
@@ -139,7 +135,7 @@ namespace Jackett.Common.Indexers
 
         // Warning 1998 is async method with no await calls inside
         // TODO: Remove pragma by wrapping return in Task.FromResult and removing async
-        
+
 #pragma warning disable 1998
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -234,6 +230,14 @@ namespace Jackett.Common.Indexers
                             torrent.name = regex.Replace(torrent.name, "$1" + ReplaceMulti + "$2");
                         }
 
+                        // issue #8759 replace vostfr and subfrench with English
+                        if (ConfigData.Vostfr.Value) torrent.name = torrent.name.Replace("VOSTFR","ENGLISH").Replace("SUBFRENCH","ENGLISH");
+
+                        var publishDate = DateTimeUtil.UnixTimestampToDateTime(torrent.added);
+                        //TODO replace with download link?
+                        var guid = new Uri(TorrentDescriptionUrl.Replace("{id}", torrent.id.ToString()));
+                        var comments = new Uri(TorrentCommentUrl.Replace("{id}", torrent.id.ToString()));
+                        var link = new Uri(torrent.download_link);
                         var release = new ReleaseInfo
                         {
                             // Mapping data
@@ -243,18 +247,19 @@ namespace Jackett.Common.Indexers
                             Peers = torrent.seeders + torrent.leechers,
                             MinimumRatio = 1,
                             MinimumSeedTime = 345600,
-                            PublishDate = DateTimeUtil.UnixTimestampToDateTime(torrent.added),
+                            PublishDate = publishDate,
                             Size = torrent.size,
                             Grabs = torrent.times_completed,
                             Files = torrent.numfiles,
                             UploadVolumeFactor = 1,
                             DownloadVolumeFactor = (torrent.freeleech == 1 ? 0 : 1),
-                            Guid = new Uri(TorrentDescriptionUrl.Replace("{id}", torrent.id.ToString())),
-                            Comments = new Uri(TorrentCommentUrl.Replace("{id}", torrent.id.ToString())),
-                            Link = new Uri(torrent.download_link),
+                            Guid = guid,
+                            Comments = comments,
+                            Link = link,
                             TMDb = torrent.tmdb_id
                         };
 
+                        //TODO make consistent with other trackers
                         if (DevMode)
                         {
                             Output(release.ToString());

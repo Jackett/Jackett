@@ -138,15 +138,40 @@ namespace Jackett.Common.Utils
             return changed ? sb.ToString() : text;
         }
 
-        public static string GetQueryString(this NameValueCollection collection, Encoding encoding = null) =>
-            string.Join("&", collection.AllKeys.Select(a =>
-                $"{a}={WebUtilityHelpers.UrlEncode(collection[a], encoding ?? Encoding.UTF8)}"));
+        /// <summary>
+        /// Converts a NameValueCollection to an appropriately formatted query string.
+        /// Duplicate keys are allowed in a NameValueCollection, but are stored as a csv string in Value.
+        /// This function handles leaving the values together in the csv string or splitting the value into separate keys
+        /// </summary>
+        /// <param name="collection">The NameValueCollection being converted</param>
+        /// <param name="encoding">The Encoding to use in url encoding Value</param>
+        /// <param name="duplicateKeysIfMulti">Duplicate keys are handled as true => {"Key=Val1", "Key=Val2} or false => {"Key=Val1,Val2"}</param>
+        /// <param name="separator">The string used to separate each query value</param>
+        /// <returns>A web encoded string of key=value parameters separated by the separator</returns>
+        public static string GetQueryString(this NameValueCollection collection, Encoding encoding = null,
+                                            bool duplicateKeysIfMulti = false, string separator = "&") =>
+            collection.ToEnumerable(duplicateKeysIfMulti).GetQueryString(encoding, separator);
 
-        public static string GetQueryString(this ICollection<KeyValuePair<string, string>> collection, Encoding encoding = null) =>
-            string.Join("&", collection.Select(a =>
-                $"{a.Key}={WebUtilityHelpers.UrlEncode(a.Value, encoding ?? Encoding.UTF8)}"));
+        public static string GetQueryString(this IEnumerable<KeyValuePair<string, string>> collection,
+                                            Encoding encoding = null, string separator = "&") =>
+            string.Join(separator,
+                        collection.Select(a => $"{a.Key}={WebUtilityHelpers.UrlEncode(a.Value, encoding ?? Encoding.UTF8)}"));
 
         public static void Add(this ICollection<KeyValuePair<string, string>> collection, string key, string value) => collection.Add(new KeyValuePair<string, string>(key, value));
+
+        public static IEnumerable<KeyValuePair<string, string>> ToEnumerable(
+            this NameValueCollection collection, bool duplicateKeysIfMulti = false)
+        {
+            foreach (string key in collection.Keys)
+            {
+                var value = collection[key];
+                if (duplicateKeysIfMulti)
+                    foreach (var val in value.Split(','))
+                        yield return new KeyValuePair<string, string>(key, val);
+                else
+                    yield return new KeyValuePair<string, string>(key, value);
+            }
+        }
 
         public static string ToHtmlPretty(this IElement element)
         {

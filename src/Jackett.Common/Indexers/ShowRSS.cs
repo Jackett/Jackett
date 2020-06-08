@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -15,29 +16,27 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class ShowRSS : BaseWebIndexer
     {
         private string SearchAllUrl => SiteLink + "other/all.rss";
-        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
+        public override string[] LegacySiteLinks { get; protected set; } = {
             "http://showrss.info/",
         };
 
-        private new ConfigurationData configData
-        {
-            get => base.configData;
-            set => base.configData = value;
-        }
+        private new ConfigurationData configData => base.configData;
 
         public ShowRSS(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "ShowRSS",
-                description: "showRSS is a service that allows you to keep track of your favorite TV shows",
-                link: "https://showrss.info/",
-                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                configService: configService,
-                client: wc,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationData())
+            : base(id: "showrss",
+                   name: "ShowRSS",
+                   description: "showRSS is a service that allows you to keep track of your favorite TV shows",
+                   link: "https://showrss.info/",
+                   caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                   configService: configService,
+                   client: wc,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationData())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
@@ -61,47 +60,46 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
             var episodeSearchUrl = string.Format(SearchAllUrl);
-            var result = await RequestStringWithCookiesAndRetry(episodeSearchUrl, string.Empty);
+            var result = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
             var xmlDoc = new XmlDocument();
 
             try
             {
                 xmlDoc.LoadXml(result.ContentString);
-                ReleaseInfo release;
-                string serie_title;
-
                 foreach (XmlNode node in xmlDoc.GetElementsByTagName("item"))
                 {
-                    release = new ReleaseInfo();
-
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800; // 48 hours
-
-                    serie_title = node.SelectSingleNode(".//*[local-name()='raw_title']").InnerText;
-                    release.Title = serie_title;
-
-                    if ((query.ImdbID == null || !TorznabCaps.SupportsImdbMovieSearch) && !query.MatchQueryStringAND(release.Title))
+                    //TODO revisit for refactoring
+                    var title = node.SelectSingleNode(".//*[local-name()='raw_title']").InnerText;
+                    if ((!query.IsImdbQuery || !TorznabCaps.SupportsImdbMovieSearch) &&
+                        !query.MatchQueryStringAND(title))
                         continue;
 
-                    release.Comments = new Uri(node.SelectSingleNode("link").InnerText);
-
                     // Try to guess the category... I'm not proud of myself...
-                    var category = 5030;
-                    if (serie_title.Contains("720p"))
-                        category = 5040;
-                    release.Category = new List<int> { category };
+                    var category = title.Contains("720p") ? TorznabCatType.TVHD.ID : TorznabCatType.TVSD.ID;
                     var test = node.SelectSingleNode("enclosure");
-                    release.Guid = new Uri(test.Attributes["url"].Value);
-                    release.PublishDate = DateTime.Parse(node.SelectSingleNode("pubDate").InnerText, CultureInfo.InvariantCulture);
-
-                    release.Description = node.SelectSingleNode("description").InnerText;
-                    release.InfoHash = node.SelectSingleNode("description").InnerText;
-                    release.Size = 0;
-                    release.Seeders = 1;
-                    release.Peers = 1;
-                    release.DownloadVolumeFactor = 0;
-                    release.UploadVolumeFactor = 1;
-                    release.MagnetUri = new Uri(node.SelectSingleNode("link").InnerText);
+                    var magnetUri = new Uri(node.SelectSingleNode("link").InnerText);
+                    var publishDate = DateTime.Parse(node.SelectSingleNode("pubDate").InnerText, CultureInfo.InvariantCulture);
+                    var infoHash = node.SelectSingleNode("description").InnerText;
+                    //TODO Maybe use magnetUri instead? https://github.com/Jackett/Jackett/pull/7342#discussion_r397552678
+                    var guid = new Uri(test.Attributes["url"].Value);
+                    var release = new ReleaseInfo
+                    {
+                        MinimumRatio = 1,
+                        MinimumSeedTime = 172800, // 48 hours
+                        Title = title,
+                        Comments = magnetUri,
+                        Category = new List<int> { category },
+                        Guid = guid,
+                        PublishDate = publishDate,
+                        Description = infoHash,
+                        InfoHash = infoHash,
+                        MagnetUri = magnetUri,
+                        Size = 0,
+                        Seeders = 1,
+                        Peers = 2,
+                        DownloadVolumeFactor = 0,
+                        UploadVolumeFactor = 1
+                    };
                     releases.Add(release);
                 }
             }

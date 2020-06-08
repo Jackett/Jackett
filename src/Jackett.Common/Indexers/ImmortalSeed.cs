@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -15,6 +16,7 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class ImmortalSeed : BaseWebIndexer
     {
         private string BrowsePage => SiteLink + "browse.php";
@@ -32,15 +34,16 @@ namespace Jackett.Common.Indexers
         }
 
         public ImmortalSeed(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "ImmortalSeed",
-                description: "ImmortalSeed (iS) is a Private Torrent Tracker for MOVIES / TV / GENERAL",
-                link: "https://immortalseed.me/",
-                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                configService: configService,
-                client: wc,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataBasicLogin())
+            : base(id: "immortalseed",
+                   name: "ImmortalSeed",
+                   description: "ImmortalSeed (iS) is a Private Torrent Tracker for MOVIES / TV / GENERAL",
+                   link: "https://immortalseed.me/",
+                   caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                   configService: configService,
+                   client: wc,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
@@ -88,7 +91,6 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(51, TorznabCatType.PCPhoneAndroid, "Android");
             AddCategoryMapping(52, TorznabCatType.PC0day, "Windows");
             AddCategoryMapping(53, TorznabCatType.TVDocumentary, "Documentary - SD");
-            AddCategoryMapping(58, TorznabCatType.TVSport, "Olympics");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

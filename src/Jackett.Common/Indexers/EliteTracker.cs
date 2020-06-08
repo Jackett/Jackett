@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -16,7 +17,7 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
-    // ReSharper disable once UnusedType.Global
+    [ExcludeFromCodeCoverage]
     internal class EliteTracker : BaseWebIndexer
     {
         private string LoginUrl => SiteLink + "takelogin.php";
@@ -24,23 +25,25 @@ namespace Jackett.Common.Indexers
         private new ConfigurationDataEliteTracker configData => (ConfigurationDataEliteTracker)base.configData;
 
         public EliteTracker(IIndexerConfigurationService configService, WebClient webClient, Logger logger, IProtectionService protectionService)
-            : base("Elite-Tracker",
-                description: "French Torrent Tracker",
-                link: "https://elite-tracker.net/",
-                caps: new TorznabCapabilities(),
-                configService: configService,
-                logger: logger,
-                p: protectionService,
-                client: webClient,
-                configData: new ConfigurationDataEliteTracker()
+            : base(id: "elitetracker",
+                   name: "Elite-Tracker",
+                   description: "French Torrent Tracker",
+                   link: "https://elite-tracker.net/",
+                   caps: new TorznabCapabilities
+                   {
+                       SupportsImdbMovieSearch = true
+                       // SupportsImdbTVSearch = true (supported by the site but disabled due to #8107)
+                   },
+                   configService: configService,
+                   logger: logger,
+                   p: protectionService,
+                   client: webClient,
+                   configData: new ConfigurationDataEliteTracker()
                 )
         {
             Encoding = Encoding.UTF8;
             Language = "fr-fr";
             Type = "private";
-
-            TorznabCaps.SupportsImdbMovieSearch = true;
-            TorznabCaps.SupportsImdbTVSearch = true;
 
             AddCategoryMapping(27, TorznabCatType.TVAnime, "Animation/Animes");
             AddCategoryMapping(90, TorznabCatType.TVAnime, "Animes - 3D");
@@ -128,6 +131,7 @@ namespace Jackett.Common.Indexers
 
             AddCategoryMapping(47, TorznabCatType.TV, "SPECTACLES/EMISSIONS");
             AddCategoryMapping(71, TorznabCatType.TV, "SPECTACLES/EMISSIONS - Emissions");
+            AddCategoryMapping(103, TorznabCatType.TV, "SPECTACLES/EMISSIONS - Emissions Pack");
             AddCategoryMapping(72, TorznabCatType.TV, "SPECTACLES/EMISSIONS - Spectacles");
 
             AddCategoryMapping(35, TorznabCatType.TVSport, "SPORT");
@@ -165,8 +169,8 @@ namespace Jackett.Common.Indexers
             var pairs = new Dictionary<string, string>
             {
                 {"do", "search"},
-                {"search_type", !string.IsNullOrWhiteSpace(query.ImdbID) ? "t_genre" : "t_name"},
-                {"keywords", !string.IsNullOrWhiteSpace(query.ImdbID) ? query.ImdbID : query.GetQueryString()},
+                {"search_type", query.IsImdbQuery ? "t_genre" : "t_name"},
+                {"keywords", query.IsImdbQuery ? query.ImdbID : query.GetQueryString()},
                 {"category", "0"} // multi cat search not supported
             };
 
@@ -194,13 +198,12 @@ namespace Jackett.Common.Indexers
                     var cat = row.Children[0].QuerySelector("a").GetAttribute("href").Split('=')[1];
                     var title = row.Children[1].QuerySelector("a").TextContent;
                     var qLinks = row.Children[2].QuerySelectorAll("a");
-                    var link = configData.TorrentHTTPSMode.Value ? qLinks[1].GetAttribute("href") : qLinks[0].GetAttribute("href");
-                    var comments = row.Children[1].QuerySelector("a").GetAttribute("href");
+                    var link = new Uri(configData.TorrentHTTPSMode.Value ? qLinks[1].GetAttribute("href") : qLinks[0].GetAttribute("href"));
+                    var comments = new Uri(row.Children[1].QuerySelector("a").GetAttribute("href"));
                     var size = row.Children[4].TextContent;
                     var grabs = row.Children[5].QuerySelector("a").TextContent;
-                    var seeders = row.Children[6].QuerySelector("a").TextContent;
-                    var leechers = row.Children[7].QuerySelector("a").TextContent;
-
+                    var seeders = ParseUtil.CoerceInt(row.Children[6].QuerySelector("a").TextContent);
+                    var leechers = ParseUtil.CoerceInt(row.Children[7].QuerySelector("a").TextContent);
                     var qTags = row.Children[1].QuerySelector("div:has(span[style=\"float: right;\"])");
                     var dlVolumeFactor = 1.0;
                     if (qTags.QuerySelector("img[alt^=\"TORRENT GRATUIT\"]") != null)
@@ -209,23 +212,22 @@ namespace Jackett.Common.Indexers
                         dlVolumeFactor = 0.5;
 
                     var upVolumeFactor = qTags.QuerySelector("img[alt^=\"TORRENT X2\"]") != null ? 2.0 : 1.0;
-
                     var release = new ReleaseInfo
                     {
                         MinimumRatio = 1,
                         MinimumSeedTime = 0,
                         Category = MapTrackerCatToNewznab(cat),
                         Title = title,
-                        Link = new Uri(link),
-                        Comments = new Uri(comments),
+                        Link = link,
+                        Comments = comments,
                         Size = ReleaseInfo.GetBytes(size),
-                        Seeders = ParseUtil.CoerceInt(seeders),
+                        Seeders = seeders,
                         Grabs = ParseUtil.CoerceLong(grabs),
                         DownloadVolumeFactor = dlVolumeFactor,
-                        UploadVolumeFactor = upVolumeFactor
+                        UploadVolumeFactor = upVolumeFactor,
+                        Peers = leechers + seeders,
+                        Guid = link
                     };
-                    release.Peers = ParseUtil.CoerceInt(leechers) + release.Seeders;
-                    release.Guid = release.Link;
 
                     var qTooltip = row.Children[1].QuerySelector("div.tooltip-content");
                     if (qTooltip != null)
@@ -257,7 +259,7 @@ namespace Jackett.Common.Indexers
 
                     // issue #6855 Replace VOSTFR with ENGLISH
                     if (configData.Vostfr.Value)
-                        release.Title = release.Title.Replace("VOSTFR", "ENGLISH");
+                        release.Title = release.Title.Replace("VOSTFR", "ENGLISH").Replace("SUBFRENCH", "ENGLISH");
 
                     var qPretime = qTags.QuerySelector("font.mkprettytime");
                     if (qPretime != null)

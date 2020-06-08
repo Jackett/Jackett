@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -12,6 +13,7 @@ using NLog;
 
 namespace Jackett.Common.Indexers.Abstract
 {
+    [ExcludeFromCodeCoverage]
     public abstract class CouchPotatoTracker : BaseWebIndexer
     {
         protected string endpoint;
@@ -23,20 +25,22 @@ namespace Jackett.Common.Indexers.Abstract
             set => base.configData = value;
         }
 
-        public CouchPotatoTracker(IIndexerConfigurationService configService, WebClient client, Logger logger, IProtectionService p, ConfigurationDataUserPasskey configData, string name, string description, string link, string endpoint)
-            : base(name: name,
-                description: description,
-                link: link,
-                caps: new TorznabCapabilities(),
-                configService: configService,
-                client: client,
-                logger: logger,
-                p: p,
-                configData: configData
-            )
+        protected CouchPotatoTracker(string link, string id, string name, string description,
+                                     IIndexerConfigurationService configService, WebClient client, Logger logger,
+                                     IProtectionService p, TorznabCapabilities caps, ConfigurationData configData,
+                                     string endpoint)
+            : base(id: id,
+                   name: name,
+                   description: description,
+                   link: link,
+                   caps: caps,
+                   configService: configService,
+                   client: client,
+                   logger: logger,
+                   p: p,
+                   configData: configData)
         {
             this.endpoint = endpoint;
-            TorznabCaps.SupportsImdbMovieSearch = true;
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

@@ -8,7 +8,6 @@ using Jackett.Common.Indexers.Meta;
 using Jackett.Common.Models;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
-using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using NLog;
 using YamlDotNet.Serialization;
@@ -31,6 +30,24 @@ namespace Jackett.Common.Services
         private readonly Dictionary<string, IIndexer> indexers = new Dictionary<string, IIndexer>();
         private AggregateIndexer aggregateIndexer;
 
+        // this map is used to maintain backward compatibility when renaming the id of an indexer
+        // (the id is used in the torznab/download/search urls and in the indexer configuration file)
+        // if the indexer is removed, remove it from this list too
+        // use: {"<old id>", "<new id>"}
+        private readonly Dictionary<string, string> renamedIndexers = new Dictionary<string, string>
+        {
+            {"broadcastthenet", "broadcasthenet"},
+            {"cili180", "liaorencili"},
+            {"metaliplayro", "romanianmetaltorrents"},
+            {"nnm-club", "noname-club"},
+            {"nostalgic", "vhstapes"},
+            {"passtheheadphones", "redacted"},
+            {"rstorrent", "redstartorrent"},
+            {"tehconnectionme", "anthelion"},
+            {"transmithenet", "nebulance"},
+            {"yourexotic", "exoticaz"}
+        };
+
         public IndexerManagerService(IIndexerConfigurationService config, IProtectionService protectionService, WebClient webClient, Logger l, ICacheService cache, IProcessService processService, IConfigurationService globalConfigService, ServerConfig serverConfig)
         {
             configService = config;
@@ -45,9 +62,37 @@ namespace Jackett.Common.Services
 
         public void InitIndexers(IEnumerable<string> path)
         {
+            MigrateRenamedIndexers();
             InitIndexers();
             InitCardigannIndexers(path);
             InitAggregateIndexer();
+        }
+
+        private void MigrateRenamedIndexers()
+        {
+            foreach (var oldId in renamedIndexers.Keys)
+            {
+                var oldPath = configService.GetIndexerConfigFilePath(oldId);
+                if (File.Exists(oldPath))
+                {
+                    // if the old configuration exists, we rename it to be used by the renamed indexer
+                    logger.Info($"Old configuration detected: {oldPath}");
+                    var newPath = configService.GetIndexerConfigFilePath(renamedIndexers[oldId]);
+                    if (File.Exists(newPath))
+                        File.Delete(newPath);
+                    File.Move(oldPath, newPath);
+                    // backups
+                    var oldPathBak = oldPath + ".bak";
+                    var newPathBak = newPath + ".bak";
+                    if (File.Exists(oldPathBak))
+                    {
+                        if (File.Exists(newPathBak))
+                            File.Delete(newPathBak);
+                        File.Move(oldPathBak, newPathBak);
+                    }
+                    logger.Info($"Configuration renamed: {oldPath} => {newPath}");
+                }
+            }
         }
 
         private void InitIndexers()
@@ -83,7 +128,7 @@ namespace Jackett.Common.Services
             {
                 if (idx == null)
                     continue;
-                indexers.Add(idx.ID, idx);
+                indexers.Add(idx.Id, idx);
                 configService.Load(idx);
             }
         }
@@ -94,7 +139,7 @@ namespace Jackett.Common.Services
 
             var deserializer = new DeserializerBuilder()
                         .WithNamingConvention(CamelCaseNamingConvention.Instance)
-                        .IgnoreUnmatchedProperties()
+//                        .IgnoreUnmatchedProperties()
                         .Build();
 
             try
@@ -138,13 +183,13 @@ namespace Jackett.Common.Services
 
                 foreach (var indexer in cardigannIndexers)
                 {
-                    if (indexers.ContainsKey(indexer.ID))
+                    if (indexers.ContainsKey(indexer.Id))
                     {
-                        logger.Debug(string.Format("Ignoring definition ID={0}: Indexer already exists", indexer.ID));
+                        logger.Debug(string.Format("Ignoring definition ID={0}: Indexer already exists", indexer.Id));
                         continue;
                     }
 
-                    indexers.Add(indexer.ID, indexer);
+                    indexers.Add(indexer.Id, indexer);
                 }
                 logger.Info("Cardigann definitions loaded: " + string.Join(", ", indexers.Keys));
             }
@@ -159,9 +204,9 @@ namespace Jackett.Common.Services
             var omdbApiKey = serverConfig.OmdbApiKey;
             IFallbackStrategyProvider fallbackStrategyProvider = null;
             IResultFilterProvider resultFilterProvider = null;
-            if (!omdbApiKey.IsNullOrEmptyOrWhitespace())
+            if (!string.IsNullOrWhiteSpace(omdbApiKey))
             {
-                var imdbResolver = new OmdbResolver(webClient, omdbApiKey.ToNonNull(), serverConfig.OmdbApiUrl);
+                var imdbResolver = new OmdbResolver(webClient, omdbApiKey, serverConfig.OmdbApiUrl);
                 fallbackStrategyProvider = new ImdbFallbackStrategyProvider(imdbResolver);
                 resultFilterProvider = new ImdbTitleResultFilterProvider(imdbResolver);
             }
@@ -172,25 +217,32 @@ namespace Jackett.Common.Services
             }
 
             logger.Info("Adding aggregate indexer");
-            aggregateIndexer = new AggregateIndexer(fallbackStrategyProvider, resultFilterProvider, configService, webClient, logger, protectionService);
-            aggregateIndexer.Indexers = indexers.Values;
+            aggregateIndexer = new AggregateIndexer(fallbackStrategyProvider, resultFilterProvider, configService, webClient, logger, protectionService)
+            {
+                Indexers = indexers.Values
+            };
         }
 
         public IIndexer GetIndexer(string name)
         {
-            if (indexers.ContainsKey(name))
+            // old id of renamed indexer is used to maintain backward compatibility
+            // both, the old id and the new one can be used until we remove it from renamedIndexers
+            var realName = name;
+            if (renamedIndexers.ContainsKey(name))
             {
-                return indexers[name];
+                realName = renamedIndexers[name];
+                logger.Warn($"Indexer {name} has been renamed to {realName}. Please, update the URL of the feeds. " +
+                            "This may stop working in the future.");
             }
-            else if (name == "all")
-            {
+
+            if (indexers.ContainsKey(realName))
+                return indexers[realName];
+
+            if (realName == "all")
                 return aggregateIndexer;
-            }
-            else
-            {
-                logger.Error("Request for unknown indexer: " + name);
-                throw new Exception("Unknown indexer: " + name);
-            }
+
+            logger.Error("Request for unknown indexer: " + realName);
+            throw new Exception("Unknown indexer: " + realName);
         }
 
         public IWebIndexer GetWebIndexer(string name)
@@ -213,10 +265,12 @@ namespace Jackett.Common.Services
         public async Task TestIndexer(string name)
         {
             var indexer = GetIndexer(name);
-            var browseQuery = new TorznabQuery();
-            browseQuery.QueryType = "search";
-            browseQuery.SearchTerm = "";
-            browseQuery.IsTest = true;
+            var browseQuery = new TorznabQuery
+            {
+                QueryType = "search",
+                SearchTerm = "",
+                IsTest = true
+            };
             var result = await indexer.ResultsForQuery(browseQuery);
             logger.Info(string.Format("Found {0} releases from {1}", result.Releases.Count(), indexer.DisplayName));
             if (result.Releases.Count() == 0)

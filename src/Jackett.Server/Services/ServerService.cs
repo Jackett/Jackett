@@ -102,7 +102,7 @@ namespace Jackett.Server.Services
                         {
                             var firstLine = reader.ReadLine();
                             if (firstLine != null)
-                                logger.Info( $"File {issueFile}: {firstLine}");
+                                logger.Info($"File {issueFile}: {firstLine}");
                         }
                 }
                 catch (Exception e)
@@ -333,10 +333,13 @@ namespace Jackett.Server.Services
             }
 
             CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
+
             // Load indexers
             indexerService.InitIndexers(configService.GetCardigannDefinitionsFolders());
             client.Init();
+
             updater.CleanupTempDir();
+            updater.CheckUpdaterLock();
         }
 
         public void Start() => updater.StartUpdateChecker();

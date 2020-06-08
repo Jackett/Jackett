@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -17,6 +18,7 @@ using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class XSpeeds : BaseWebIndexer
     {
         private string LandingUrl => SiteLink + "login.php";
@@ -34,15 +36,16 @@ namespace Jackett.Common.Indexers
         }
 
         public XSpeeds(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "XSpeeds",
-                description: "XSpeeds (XS) is a Private Torrent Tracker for MOVIES / TV / GENERAL",
-                link: "https://www.xspeeds.eu/",
-                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                configService: configService,
-                client: wc,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
+            : base(id: "xspeeds",
+                   name: "XSpeeds",
+                   description: "XSpeeds (XS) is a Private Torrent Tracker for MOVIES / TV / GENERAL",
+                   link: "https://www.xspeeds.eu/",
+                   caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                   configService: configService,
+                   client: wc,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
@@ -154,7 +157,7 @@ namespace Jackett.Common.Indexers
             }
             else
             {
-                logger.Debug(string.Format("{0}: No captcha image found", ID));
+                logger.Debug(string.Format("{0}: No captcha image found", Id));
             }
 
             return configData;
@@ -324,10 +327,8 @@ namespace Jackett.Common.Indexers
                 {
                     var release = new ReleaseInfo();
 
-                    var qDetails = row.QuerySelector("div > a[href*=\"details.php?id=\"]"); // details link, release name get's shortened if it's to long
-                    var qTitle =
-                        row.QuerySelector("td:nth-of-type(2) .tooltip-content div:nth-of-type(1)") // use Title from tooltip
-                        ?? qDetails; // fallback to Details link if there's no tooltip
+                    var qDetails = row.QuerySelector("div > a[href*=\"details.php?id=\"]");
+                    var qTitle = qDetails; // #7975
 
                     release.Title = qTitle.TextContent;
 
@@ -337,7 +338,7 @@ namespace Jackett.Common.Indexers
                     //08-08-2015 12:51
                     release.PublishDate = DateTime.ParseExact(
                         row.QuerySelectorAll("td:nth-of-type(2) div").Last().TextContent.Trim(), "dd-MM-yyyy H:mm",
-                        CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal); 
+                        CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
                     release.Seeders = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(7)").TextContent);
                     release.Peers = release.Seeders + ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(8)").TextContent.Trim());
                     release.Size = ReleaseInfo.GetBytes(row.QuerySelector("td:nth-of-type(5)").TextContent.Trim());

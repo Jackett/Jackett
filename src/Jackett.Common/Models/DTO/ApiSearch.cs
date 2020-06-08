@@ -11,8 +11,10 @@ namespace Jackett.Common.Models.DTO
 
         public static TorznabQuery ToTorznabQuery(ApiSearch request)
         {
-            var stringQuery = new TorznabQuery();
-            stringQuery.QueryType = "search";
+            var stringQuery = new TorznabQuery
+            {
+                QueryType = "search"
+            };
 
             var queryStr = request.Query;
             if (queryStr != null)
@@ -38,9 +40,7 @@ namespace Jackett.Common.Models.DTO
             }
 
             stringQuery.SearchTerm = queryStr;
-            stringQuery.Categories = request.Category;
-            if (stringQuery.Categories == null)
-                stringQuery.Categories = new int[0];
+            stringQuery.Categories = request.Category ?? new int[0];
             stringQuery.ExpandCatsToSubCats();
 
             // try to build an IMDB Query (tt plus 6 to 8 digits)

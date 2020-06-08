@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -15,6 +16,7 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class Shazbat : BaseWebIndexer
     {
         private string LoginUrl => SiteLink + "login";
@@ -30,7 +32,8 @@ namespace Jackett.Common.Indexers
         }
 
         public Shazbat(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps)
-            : base(name: "Shazbat",
+            : base(id: "shazbat",
+                   name: "Shazbat",
                    description: "Modern indexer",
                    link: "https://www.shazbat.tv/",
                    caps: new TorznabCapabilities(
@@ -114,6 +117,7 @@ namespace Jackett.Common.Indexers
                         dom.QuerySelector("span:contains(\"Freeleech until:\"):has(span.datetime)") != null;
                     foreach (var row in rows.Skip(1))
                     {
+                        // TODO switch to initializer
                         var release = new ReleaseInfo();
                         var titleRow = row.QuerySelector("td:nth-of-type(3)");
                         foreach (var child in titleRow.Children)
@@ -161,8 +165,8 @@ namespace Jackett.Common.Indexers
             }
             foreach (var release in releases)
                 release.Category = release.Title.Contains("1080p") || release.Title.Contains("720p")
-                    ? new List<int> {TorznabCatType.TVHD.ID}
-                    : new List<int> {TorznabCatType.TVSD.ID};
+                    ? new List<int> { TorznabCatType.TVHD.ID }
+                    : new List<int> { TorznabCatType.TVSD.ID };
             return releases;
         }
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -18,6 +19,7 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class AnimeTorrents : BaseWebIndexer
     {
         private string LoginUrl => SiteLink + "login.php";
@@ -31,15 +33,16 @@ namespace Jackett.Common.Indexers
         }
 
         public AnimeTorrents(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps)
-            : base(name: "AnimeTorrents",
-                description: "Definitive source for anime and manga",
-                link: "https://animetorrents.me/",
-                caps: new TorznabCapabilities(),
-                configService: configService,
-                client: c,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataBasicLogin())
+            : base(id: "animetorrents",
+                   name: "AnimeTorrents",
+                   description: "Definitive source for anime and manga",
+                   link: "https://animetorrents.me/",
+                   caps: new TorznabCapabilities(),
+                   configService: configService,
+                   client: c,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
@@ -98,23 +101,15 @@ namespace Jackett.Common.Indexers
             //  replace any space, special char, etc. with % (wildcard)
             var ReplaceRegex = new Regex("[^a-zA-Z0-9]+");
             searchString = ReplaceRegex.Replace(searchString, "%");
-
             var searchUrl = SearchUrl;
-            var queryCollection = new NameValueCollection();
-
-            queryCollection.Add("total", "146"); // Not sure what this is about but its required!
-
-            var cat = "0";
-            var queryCats = MapTorznabCapsToTrackers(query);
-            if (queryCats.Count == 1)
+            var queryCollection = new NameValueCollection
             {
-                cat = queryCats.First().ToString();
-            }
-
-            queryCollection.Add("cat", cat);
-            queryCollection.Add("searchin", "filename");
-            queryCollection.Add("search", searchString);
-            queryCollection.Add("page", "1");
+                {"total", "146"}, // Not sure what this is about but its required!
+                {"cat", MapTorznabCapsToTrackers(query).FirstIfSingleOrDefault("0")},
+                {"page", "1"},
+                {"searchin", "filename"},
+                {"search", searchString}
+            };
             searchUrl += "?" + queryCollection.GetQueryString();
 
             var extraHeaders = new Dictionary<string, string>()

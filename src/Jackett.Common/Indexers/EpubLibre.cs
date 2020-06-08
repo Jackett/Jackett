@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -15,9 +16,7 @@ using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
 namespace Jackett.Common.Indexers
 {
-    // ReSharper disable once UnusedType.Global
-    // ReSharper disable once UnusedMember.Global
-
+    [ExcludeFromCodeCoverage]
     public class EpubLibre : BaseWebIndexer
     {
         private string SearchUrl => SiteLink + "catalogo/index/{0}/nuevo/todos/sin/todos/{1}/ajax";
@@ -45,7 +44,8 @@ namespace Jackett.Common.Indexers
         };
 
         public EpubLibre(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base("EpubLibre",
+            : base(id: "epublibre",
+                   name: "EpubLibre",
                    description: "Más libros, Más libres",
                    link: "https://epublibre.org/",
                    caps: new TorznabCapabilities(TorznabCatType.BooksEbook),
@@ -114,7 +114,6 @@ namespace Jackett.Common.Indexers
 
                         // publish date is not available in the torrent list, but we add a relative date so we can sort
                         lastPublishDate = lastPublishDate.AddMinutes(-1);
-
                         var release = new ReleaseInfo
                         {
                             Title = title,
@@ -124,7 +123,7 @@ namespace Jackett.Common.Indexers
                             PublishDate = lastPublishDate,
                             BannerUrl = banner,
                             Description = description,
-                            Category = new List<int> {TorznabCatType.BooksEbook.ID},
+                            Category = new List<int> { TorznabCatType.BooksEbook.ID },
                             Size = 5242880, // 5 MB
                             Seeders = 1,
                             Peers = 2,
@@ -150,10 +149,11 @@ namespace Jackett.Common.Indexers
 
         public override async Task<byte[]> Download(Uri link)
         {
-            var result = await RequestStringWithCookies(link.AbsoluteUri);
+            var result = await RequestStringWithCookiesAndRetry(link.AbsoluteUri);
             if (SobrecargaUrl.Equals(result.RedirectingTo))
                 throw new Exception("El servidor se encuentra sobrecargado en estos momentos. / The server is currently overloaded.");
-            try {
+            try
+            {
                 var parser = new HtmlParser();
                 var doc = parser.ParseDocument(result.ContentString);
                 var magnetLink = doc.QuerySelector("a[id=en_desc]").GetAttribute("href");

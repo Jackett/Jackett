@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -17,30 +18,27 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class SceneTime : BaseWebIndexer
     {
         private string StartPageUrl => SiteLink + "login.php";
-        private string LoginUrl => SiteLink + "takelogin.php";
+        private string LoginUrl => SiteLink + "takelogin1.php";
         private string SearchUrl => SiteLink + "browse.php";
         private string DownloadUrl => SiteLink + "download.php/{0}/download.torrent";
 
-
-        private new ConfigurationDataSceneTime configData
-        {
-            get => (ConfigurationDataSceneTime)base.configData;
-            set => base.configData = value;
-        }
+        private new ConfigurationDataSceneTime configData => (ConfigurationDataSceneTime)base.configData;
 
         public SceneTime(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
-            : base(name: "SceneTime",
-                description: "Always on time",
-                link: "https://www.scenetime.com/",
-                caps: new TorznabCapabilities(),
-                configService: configService,
-                client: w,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataSceneTime())
+            : base(id: "scenetime",
+                   name: "SceneTime",
+                   description: "Always on time",
+                   link: "https://www.scenetime.com/",
+                   caps: new TorznabCapabilities(),
+                   configService: configService,
+                   client: w,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataSceneTime())
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "en-us";
@@ -118,17 +116,15 @@ namespace Jackett.Common.Indexers
                 result.Captcha.SiteKey = recaptcha.GetAttribute("data-sitekey");
                 return result;
             }
-            else
+
+            var stdResult = new ConfigurationDataBasicLogin
             {
-                var stdResult = new ConfigurationDataBasicLogin
-                {
-                    SiteLink = {Value = configData.SiteLink.Value},
-                    Username = {Value = configData.Username.Value},
-                    Password = {Value = configData.Password.Value},
-                    CookieHeader = {Value = loginPage.Cookies}
-                };
-                return stdResult;
-            }
+                SiteLink = { Value = configData.SiteLink.Value },
+                Username = { Value = configData.Username.Value },
+                Password = { Value = configData.Password.Value },
+                CookieHeader = { Value = loginPage.Cookies }
+            };
+            return stdResult;
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -147,7 +143,7 @@ namespace Jackett.Common.Indexers
                 {
                     var results = await PerformQuery(new TorznabQuery());
                     if (!results.Any())
-                        throw new Exception("Your cookie did not work");
+                        throw new Exception("Found 0 results in the tracker");
 
                     IsConfigured = true;
                     SaveConfig();
@@ -192,11 +188,18 @@ namespace Jackett.Common.Indexers
                 qParams.Add("freeleech", "on");
 
             var searchUrl = SearchUrl + "?" + qParams.GetQueryString();
-
             var results = await RequestStringWithCookies(searchUrl);
-            var releases = ParseResponse(query, results.ContentString);
 
-            return releases;
+            // response without results (the message is misleading)
+            if (results.ContentString?.Contains("slow down geek!!!") == true)
+                return new List<ReleaseInfo>();
+
+            // not logged in
+            if (results.ContentString == null || !results.ContentString.Contains("/logout.php"))
+                throw new Exception("The user is not logged in. It is possible that the cookie has expired or you " +
+                                    "made a mistake when copying it. Please check the settings.");
+
+            return ParseResponse(query, results.ContentString);
         }
 
         private List<ReleaseInfo> ParseResponse(TorznabQuery query, string htmlResponse)
@@ -223,6 +226,7 @@ namespace Jackett.Common.Indexers
                 var rows = dom.QuerySelectorAll("tr.browse");
                 foreach (var row in rows)
                 {
+                    // TODO convert to initializer
                     var release = new ReleaseInfo();
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800; // 48 hours

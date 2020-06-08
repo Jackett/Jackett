@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -16,7 +17,8 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
-    public class Myanonamouse : BaseWebIndexer
+    [ExcludeFromCodeCoverage]
+    public class MyAnonamouse : BaseWebIndexer
     {
         private string LoginUrl => SiteLink + "takelogin.php";
         private string SearchUrl => SiteLink + "tor/js/loadSearchJSONbasic.php";
@@ -27,16 +29,17 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        public Myanonamouse(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps)
-            : base(name: "MyAnonamouse",
-                description: "Friendliness, Warmth and Sharing",
-                link: "https://www.myanonamouse.net/",
-                configService: configService,
-                caps: new TorznabCapabilities(),
-                client: c,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataMyAnonamouse())
+        public MyAnonamouse(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps)
+            : base(id: "myanonamouse",
+                   name: "MyAnonamouse",
+                   description: "Friendliness, Warmth and Sharing",
+                   link: "https://www.myanonamouse.net/",
+                   configService: configService,
+                   caps: new TorznabCapabilities(),
+                   client: c,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataMyAnonamouse())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
@@ -168,21 +171,22 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
 
-            var qParams = new NameValueCollection();
-            qParams.Add("tor[text]", query.GetQueryString());
-            qParams.Add("tor[srchIn][title]", "true");
-            qParams.Add("tor[srchIn][author]", "true");
-            qParams.Add("tor[searchType]", "all");
-            qParams.Add("tor[searchIn]", "torrents");
-            qParams.Add("tor[hash]", "");
-            qParams.Add("tor[sortType]", "default");
-            qParams.Add("tor[startNumber]", "0");
-
-            qParams.Add("thumbnails", "1"); // gives links for thumbnail sized versions of their posters
-            //qParams.Add("posterLink", "1"); // gives links for a full sized poster
-            //qParams.Add("dlLink", "1"); // include the url to download the torrent
-            qParams.Add("description", "1"); // include the description
-            //qParams.Add("bookmarks", "0"); // include if the item is bookmarked or not
+            var qParams = new NameValueCollection
+            {
+                {"tor[text]", query.GetQueryString()},
+                {"tor[srchIn][title]", "true"},
+                {"tor[srchIn][author]", "true"},
+                {"tor[searchType]", "all"},
+                {"tor[searchIn]", "torrents"},
+                {"tor[hash]", ""},
+                {"tor[sortType]", "default"},
+                {"tor[startNumber]", "0"},
+                {"thumbnails", "1"}, // gives links for thumbnail sized versions of their posters
+                //{ "posterLink", "1"}, // gives links for a full sized poster
+                //{ "dlLink", "1"}, // include the url to download the torrent
+                {"description", "1"}, // include the description
+                //{"bookmarks", "0"} // include if the item is bookmarked or not
+            };
 
             var catList = MapTorznabCapsToTrackers(query);
             if (catList.Any())
@@ -225,6 +229,7 @@ namespace Jackett.Common.Indexers
 
                 foreach (var item in jsonContent.Value<JArray>("data"))
                 {
+                    //TODO shift to ReleaseInfo object initializer for consistency
                     var release = new ReleaseInfo();
 
                     var id = item.Value<long>("id");

@@ -25,7 +25,7 @@ namespace Jackett.Common.Utils.Tests
             };
 
             foreach (var testCase in testCases)
-                Assert.AreEqual( testCase.Value, DateTimeUtil.FromUnknown(testCase.Key));
+                Assert.AreEqual(testCase.Value, DateTimeUtil.FromUnknown(testCase.Key));
         }
     }
 }

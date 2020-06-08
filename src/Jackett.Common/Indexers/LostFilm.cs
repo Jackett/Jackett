@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -18,6 +19,7 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     internal class LostFilm : BaseWebIndexer
     {
         private static readonly Regex parsePlayEpisodeRegex = new Regex("PlayEpisode\\('(?<id>\\d{1,3})(?<season>\\d{3})(?<episode>\\d{3})'\\)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -88,7 +90,8 @@ namespace Jackett.Common.Indexers
         }
 
         public LostFilm(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "LostFilm.tv",
+            : base(id: "lostfilm",
+                   name: "LostFilm.tv",
                    description: "Unique portal about foreign series",
                    link: "https://www.lostfilm.tv/",
                    caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
@@ -585,7 +588,7 @@ namespace Jackett.Common.Indexers
                         }
                         catch (Exception ex)
                         {
-                            logger.Error(string.Format("{0}: Error while parsing row '{1}':\n\n{2}", ID, row.OuterHtml, ex));
+                            logger.Error(string.Format("{0}: Error while parsing row '{1}':\n\n{2}", Id, row.OuterHtml, ex));
                         }
 
                         if (couldBreak)
@@ -608,10 +611,12 @@ namespace Jackett.Common.Indexers
 
         private async Task<List<ReleaseInfo>> FetchTrackerReleases(TrackerUrlDetails details)
         {
-            var queryCollection = new NameValueCollection();
-            queryCollection.Add("c", details.seriesId);
-            queryCollection.Add("s", details.season);
-            queryCollection.Add("e", string.IsNullOrEmpty(details.episode) ? "999" : details.episode); // 999 is a synonym for the whole serie
+            var queryCollection = new NameValueCollection
+            {
+                { "c", details.seriesId },
+                { "s", details.season },
+                { "e", string.IsNullOrEmpty(details.episode) ? "999" : details.episode } // 999 is a synonym for the whole serie
+            };
             var url = ReleaseUrl + "?" + queryCollection.GetQueryString();
 
             logger.Debug("FetchTrackerReleases: " + url);
@@ -671,12 +676,12 @@ namespace Jackett.Common.Indexers
                 {
                     try
                     {
-                        var release = new ReleaseInfo();
-
-                        release.Category = new int[] { TorznabCatType.TV.ID };
 
                         var detailsInfo = row.QuerySelector("div.inner-box--desc").TextContent;
                         var releaseDetails = parseReleaseDetailsRegex.Match(detailsInfo);
+
+                        // ReSharper states "Expression is always false"
+                        // TODO Refactor to get the intended operation
                         if (releaseDetails == null)
                         {
                             throw new FormatException("Failed to map release details string: " + detailsInfo);
@@ -697,8 +702,11 @@ namespace Jackett.Common.Indexers
                         quality = Regex.Replace(quality, "1080 ", "1080p ", RegexOptions.IgnoreCase);
                         quality = Regex.Replace(quality, "720 ", "720p ", RegexOptions.IgnoreCase);
 
-                        var techComponents = new string[] {
-                            "rus", quality, "(LostFilm)"
+                        var techComponents = new[]
+                        {
+                            "rus",
+                            quality,
+                            "(LostFilm)"
                         };
                         var techInfo = string.Join(" ", techComponents.Where(s => !string.IsNullOrEmpty(s)));
 
@@ -707,33 +715,38 @@ namespace Jackett.Common.Indexers
                         var titleComponents = new string[] {
                             serieTitle, details.GetEpisodeString(), episodeName, techInfo
                         };
-                        release.Title = string.Join(" - ", titleComponents.Where(s => !string.IsNullOrEmpty(s)));
-
                         var downloadLink = row.QuerySelector("div.inner-box--link > a");
-                        release.Link = new Uri(downloadLink.GetAttribute("href"));
-                        release.Guid = release.Link;
-
                         var sizeString = releaseDetails.Groups["size"].Value.ToUpper();
                         sizeString = sizeString.Replace("ТБ", "TB"); // untested
                         sizeString = sizeString.Replace("ГБ", "GB");
                         sizeString = sizeString.Replace("МБ", "MB");
                         sizeString = sizeString.Replace("КБ", "KB"); // untested
-                        release.Size = ReleaseInfo.GetBytes(sizeString);
+                        var link = new Uri(downloadLink.GetAttribute("href"));
 
-                        // add missing torznab fields not available from results
-                        release.Seeders = 1;
-                        release.Peers = 2;
-                        release.DownloadVolumeFactor = 0;
-                        release.UploadVolumeFactor = 1;
-                        release.MinimumRatio = 1;
-                        release.MinimumSeedTime = 172800; // 48 hours
+                        // TODO this feels sparse compared to other trackers. Expand later
+                        var release = new ReleaseInfo
+                        {
+                            Category = new[] { TorznabCatType.TV.ID },
+                            Title = string.Join(" - ", titleComponents.Where(s => !string.IsNullOrEmpty(s))),
+                            Link = link,
+                            Guid = link,
+                            Size = ReleaseInfo.GetBytes(sizeString),
+                            // add missing torznab fields not available from results
+                            Seeders = 1,
+                            Peers = 2,
+                            DownloadVolumeFactor = 0,
+                            UploadVolumeFactor = 1,
+                            MinimumRatio = 1,
+                            MinimumSeedTime = 172800 // 48 hours
+                        };
 
+                        // TODO Other trackers don't have this log line. Remove or add to other trackers?
                         logger.Debug("> Add: " + release.Title);
                         releases.Add(release);
                     }
                     catch (Exception ex)
                     {
-                        logger.Error(string.Format("{0}: Error while parsing row '{1}':\n\n{2}", ID, row.OuterHtml, ex));
+                        logger.Error(string.Format("{0}: Error while parsing row '{1}':\n\n{2}", Id, row.OuterHtml, ex));
                     }
                 }
             }

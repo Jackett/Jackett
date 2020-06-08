@@ -26,8 +26,6 @@ namespace Jackett.Common.Indexers
     public class CardigannIndexer : BaseWebIndexer
     {
         protected IndexerDefinition Definition;
-        public override string ID => (Definition != null ? Definition.Site : GetIndexerID(GetType()));
-
         protected BaseWebResult landingResult;
         protected IHtmlDocument landingResultDocument;
 
@@ -41,20 +39,42 @@ namespace Jackett.Common.Indexers
 
         protected readonly string[] OptionalFileds = new string[] { "imdb", "rageid", "tvdbid", "banner" };
 
-        public CardigannIndexer(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps, IndexerDefinition Definition)
+        private static readonly string[] _SupportedLogicFunctions =
+        {
+            "and",
+            "or",
+            "eq",
+            "ne"
+        };
+
+        private static readonly string[] _LogicFunctionsUsingStringLiterals =
+        {
+            "eq",
+            "ne"
+        };
+
+        // Matches a logic function above and 2 or more of (.varname) or .varname or "string literal" in any combination
+        private static readonly Regex _LogicFunctionRegex = new Regex(
+            @$"\b({string.Join("|", _SupportedLogicFunctions.Select(Regex.Escape))})(?:\s+(\(?\.[^\)\s]+\)?|""[^""]+"")){{2,}}");
+
+        public CardigannIndexer(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
+                                IProtectionService ps, IndexerDefinition Definition)
             : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps)
         {
             this.Definition = Definition;
+            Id = Definition.Id;
 
             // Add default data if necessary
             if (Definition.Settings == null)
             {
-                Definition.Settings = new List<settingsField>();
-                Definition.Settings.Add(new settingsField { Name = "username", Label = "Username", Type = "text" });
-                Definition.Settings.Add(new settingsField { Name = "password", Label = "Password", Type = "password" });
+                Definition.Settings = new List<settingsField>
+                {
+                    new settingsField { Name = "username", Label = "Username", Type = "text" },
+                    new settingsField { Name = "password", Label = "Password", Type = "password" }
+                };
             }
 
             if (Definition.Encoding == null)
@@ -71,10 +91,11 @@ namespace Jackett.Common.Indexers
             // convert definitions with a single search Path to a Paths entry
             if (Definition.Search.Path != null)
             {
-                var legacySearchPath = new searchPathBlock();
-                legacySearchPath.Path = Definition.Search.Path;
-                legacySearchPath.Inheritinputs = true;
-                Definition.Search.Paths.Add(legacySearchPath);
+                Definition.Search.Paths.Add(new searchPathBlock
+                {
+                    Path = Definition.Search.Path,
+                    Inheritinputs = true
+                });
             }
 
             // init missing mandatory attributes
@@ -90,9 +111,10 @@ namespace Jackett.Common.Indexers
                 DefaultSiteLink += "/";
             Language = Definition.Language;
             Type = Definition.Type;
-            TorznabCaps = new TorznabCapabilities();
-
-            TorznabCaps.SupportsImdbMovieSearch = Definition.Caps.Modes.Where(c => c.Key == "movie-search" && c.Value.Contains("imdbid")).Any();
+            TorznabCaps = new TorznabCapabilities
+            {
+                SupportsImdbMovieSearch = Definition.Caps.Modes.Any(c => c.Key == "movie-search" && c.Value.Contains("imdbid"))
+            };
             if (Definition.Caps.Modes.ContainsKey("music-search"))
                 TorznabCaps.SupportedMusicSearchParamsList = Definition.Caps.Modes["music-search"];
 
@@ -160,7 +182,7 @@ namespace Jackett.Common.Indexers
                     var cat = TorznabCatType.GetCatByName(Category.Value);
                     if (cat == null)
                     {
-                        logger.Error(string.Format("CardigannIndexer ({0}): invalid Torznab category for id {1}: {2}", ID, Category.Key, Category.Value));
+                        logger.Error(string.Format("CardigannIndexer ({0}): invalid Torznab category for id {1}: {2}", Id, Category.Key, Category.Value));
                         continue;
                     }
                     AddCategoryMapping(Category.Key, cat);
@@ -178,7 +200,7 @@ namespace Jackett.Common.Indexers
                         TorznabCat = TorznabCatType.GetCatByName(Categorymapping.cat);
                         if (TorznabCat == null)
                         {
-                            logger.Error(string.Format("CardigannIndexer ({0}): invalid Torznab category for id {1}: {2}", ID, Categorymapping.id, Categorymapping.cat));
+                            logger.Error(string.Format("CardigannIndexer ({0}): invalid Torznab category for id {1}: {2}", Id, Categorymapping.id, Categorymapping.cat));
                             continue;
                         }
                     }
@@ -202,38 +224,26 @@ namespace Jackett.Common.Indexers
             }
         }
 
-        protected Dictionary<string, object> getTemplateVariablesFromConfigData()
+        protected Dictionary<string, object> GetBaseTemplateVariables()
         {
-            var variables = new Dictionary<string, object>();
-
-            variables[".Config.sitelink"] = SiteLink;
-            foreach (var Setting in Definition.Settings)
+            var variables = new Dictionary<string, object>
             {
-                var item = configData.GetDynamic(Setting.Name);
-
-                // CheckBox item is an array of strings
-                if (item.GetType() == typeof(CheckboxItem))
+                [".Config.sitelink"] = SiteLink,
+                [".True"] = "True",
+                [".False"] = null,
+                [".Today.Year"] = DateTime.Today.Year.ToString()
+            };
+            foreach (var setting in Definition.Settings)
+                variables[".Config." + setting.Name] = configData.GetDynamic(setting.Name) switch
                 {
-                    variables[".Config." + Setting.Name] = ((CheckboxItem)item).Values;
-                }
-                else
-                {
-                    string value;
-                    if (item.GetType() == typeof(BoolItem))
-                    {
-                        value = (((BoolItem)item).Value == true ? "true" : "");
-                    }
-                    else if (item.GetType() == typeof(SelectItem))
-                    {
-                        value = ((SelectItem)item).Value;
-                    }
-                    else
-                    {
-                        value = ((StringItem)item).Value;
-                    }
-                    variables[".Config." + Setting.Name] = value;
-                }
-            }
+                    CheckboxItem checkbox => checkbox.Values,
+                    BoolItem boolItem => variables[boolItem.Value ? ".True" : ".False"],
+                    SelectItem selectItem => selectItem.Value,
+                    StringItem stringItem => stringItem.Value,
+                    // Throw exception here to match original functionality.
+                    // Currently this will only throw for ImageItem.
+                    _ => throw new NotSupportedException()
+                };
             return variables;
         }
 
@@ -244,7 +254,7 @@ namespace Jackett.Common.Indexers
         {
             if (variables == null)
             {
-                variables = getTemplateVariablesFromConfigData();
+                variables = GetBaseTemplateVariables();
             }
 
             // handle re_replace expression
@@ -291,63 +301,64 @@ namespace Jackett.Common.Indexers
                 JoinMatches = JoinMatches.NextMatch();
             }
 
-            // handle or, and functions
-            var AndOrRegex = new Regex(@"(and|or)\s+\((\..+?)\)\s+\((\..+?)\)(\s+\((\..+?)\)){0,1}");
-            var AndOrRegexMatches = AndOrRegex.Match(template);
+            var logicMatch = _LogicFunctionRegex.Match(template);
 
-            while (AndOrRegexMatches.Success)
+            while (logicMatch.Success)
             {
+                var functionStartIndex = logicMatch.Groups[0].Index;
+                var functionLength = logicMatch.Groups[0].Length;
+                var functionName = logicMatch.Groups[1].Value;
+                // Use Group.Captures to get each matching string in a repeating Match.Group
+                // Strip () around variable names here, as they are optional. Use quotes to differentiate variables and literals
+                var parameters = logicMatch.Groups[2].Captures.Cast<Capture>().Select(c => c.Value.Trim('(', ')')).ToList();
                 var functionResult = "";
-                var all = AndOrRegexMatches.Groups[0].Value;
-                var op = AndOrRegexMatches.Groups[1].Value;
-                var first = AndOrRegexMatches.Groups[2].Value;
-                var second = AndOrRegexMatches.Groups[3].Value;
-                var third = "";
-                if (AndOrRegexMatches.Groups.Count > 5)
+
+                // If the function can't use string literals, fail silently by removing the literals.
+                if (!_LogicFunctionsUsingStringLiterals.Contains(functionName))
+                    parameters.RemoveAll(param => param.StartsWith("\""));
+
+                switch (functionName)
                 {
-                    third = AndOrRegexMatches.Groups[5].Value;
+                    case "and": // returns first null or empty, else last variable
+                    case "or": // returns first not null or empty, else last variable
+                        var isAnd = functionName == "and";
+                        foreach (var parameter in parameters)
+                        {
+                            functionResult = parameter;
+                            // (null as string) == null
+                            // (if null or empty) break if and, continue if or
+                            // (if neither null nor empty) continue if and, break if or
+                            if (string.IsNullOrWhiteSpace(variables[parameter] as string) == isAnd)
+                                break;
+                        }
+                        break;
+                    case "eq": // Returns .True if equal
+                    case "ne": // Returns .False if equal
+                    {
+                        var wantEqual = functionName == "eq";
+                        // eq/ne take exactly 2 params. Update the length to match
+                        // This removes the whitespace between params 2 and 3.
+                        // It shouldn't matter because the match starts at a word boundary
+                        if (parameters.Count > 2)
+                            functionLength = logicMatch.Groups[2].Captures[2].Index - functionStartIndex;
+
+                        // Take first two parameters, convert vars to values and strip quotes on string literals
+                        // Counting distinct gives us 1 if equal and 2 if not.
+                        var isEqual =
+                            parameters.Take(2).Select(param => param.StartsWith("\"") ? param.Trim('"') : variables[param] as string)
+                                      .Distinct().Count() == 1;
+
+                        functionResult = isEqual == wantEqual ? ".True" : ".False";
+                        break;
+                    }
                 }
 
-                var value = variables[first];
-                if (op == "and")
-                {
-                    functionResult = second;
-                    if (value == null || (value is string && string.IsNullOrWhiteSpace((string)value)))
-                    {
-                        functionResult = first;
-                    }
-                    else
-                    {
-                        if (!string.IsNullOrWhiteSpace(third))
-                        {
-                            functionResult = third;
-                            value = variables[second];
-                            if (value == null || (value is string && string.IsNullOrWhiteSpace((string)value)))
-                            {
-                                functionResult = second;
-                            }
-                        }
-                    }
-                }
-                if (op == "or")
-                {
-                    functionResult = first;
-                    if (value == null || (value is string && string.IsNullOrWhiteSpace((string)value)))
-                    {
-                        functionResult = second;
-                        if (!string.IsNullOrWhiteSpace(third))
-                        {
-                            value = variables[second];
-                            if (value == null || (value is string && string.IsNullOrWhiteSpace((string)value)))
-                            {
-                                functionResult = third;
-                            }
-                        }
-                    }
-
-                }
-                template = template.Replace(all, functionResult);
-                AndOrRegexMatches = AndOrRegexMatches.NextMatch();
+                template = template.Remove(functionStartIndex, functionLength)
+                                   .Insert(functionStartIndex, functionResult);
+                // Rerunning match instead of using nextMatch allows us to support nested functions
+                // like {{if and eq (.Var1) "string1" eq (.Var2) "string2"}}
+                // No performance is lost because Match/NextMatch are lazy evaluated and pause execution after first match
+                logicMatch = _LogicFunctionRegex.Match(template);
             }
 
             // handle if ... else ... expression
@@ -509,10 +520,12 @@ namespace Jackett.Common.Indexers
                     var CloudFlareCaptchaChallenge = landingResultDocument.QuerySelector("script[src=\"/cdn-cgi/scripts/cf.challenge.js\"]");
                     if (CloudFlareCaptchaChallenge != null)
                     {
-                        var CloudFlareQueryCollection = new NameValueCollection();
-                        CloudFlareQueryCollection["id"] = CloudFlareCaptchaChallenge.GetAttribute("data-ray");
+                        var CloudFlareQueryCollection = new NameValueCollection
+                        {
+                            ["id"] = CloudFlareCaptchaChallenge.GetAttribute("data-ray"),
 
-                        CloudFlareQueryCollection["g-recaptcha-response"] = CaptchaConfigItem.Value;
+                            ["g-recaptcha-response"] = CaptchaConfigItem.Value
+                        };
                         var ClearanceUrl = resolvePath("/cdn-cgi/l/chk_captcha?" + CloudFlareQueryCollection.GetQueryString());
 
                         var ClearanceResult = await RequestStringWithCookies(ClearanceUrl.ToString(), null, SiteLink);
@@ -750,7 +763,7 @@ namespace Jackett.Common.Indexers
             {
                 throw new NotImplementedException("Login method " + Definition.Login.Method + " not implemented");
             }
-            logger.Debug(string.Format("CardigannIndexer ({0}): Cookies after login: {1}", ID, CookieHeader));
+            logger.Debug(string.Format("CardigannIndexer ({0}): Cookies after login: {1}", Id, CookieHeader));
             return true;
         }
 
@@ -851,7 +864,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception e)
             {
-                logger.Error("Exception in GetConfigurationForSetup (" + ID + "): " + e);
+                logger.Error("Exception in GetConfigurationForSetup (" + Id + "): " + e);
                 return configData;
             }
         }
@@ -888,12 +901,14 @@ namespace Jackett.Common.Indexers
             if (cloudFlareCaptchaScript != null && grecaptcha != null && cloudFlareCaptchaDisplay)
             {
                 hasCaptcha = true;
-                var CaptchaItem = new RecaptchaItem();
-                CaptchaItem.Name = "Captcha";
-                CaptchaItem.Version = "2";
-                CaptchaItem.SiteKey = grecaptcha.GetAttribute("data-sitekey");
-                if (CaptchaItem.SiteKey == null) // some sites don't store the sitekey in the .g-recaptcha div (e.g. cloudflare captcha challenge page)
-                    CaptchaItem.SiteKey = landingResultDocument.QuerySelector("[data-sitekey]").GetAttribute("data-sitekey");
+                var CaptchaItem = new RecaptchaItem
+                {
+                    Name = "Captcha",
+                    Version = "2",
+                    // some sites don't store the sitekey in the .g-recaptcha div (e.g. cloudflare captcha challenge page)
+                    SiteKey = grecaptcha.GetAttribute("data-sitekey") ??
+                              landingResultDocument.QuerySelector("[data-sitekey]").GetAttribute("data-sitekey")
+                };
 
                 configData.AddDynamic("Captcha", CaptchaItem);
             }
@@ -920,7 +935,7 @@ namespace Jackett.Common.Indexers
                     }
                     else
                     {
-                        logger.Debug(string.Format("CardigannIndexer ({0}): No captcha image found", ID));
+                        logger.Debug(string.Format("CardigannIndexer ({0}): No captcha image found", Id));
                     }
                 }
                 else if (Captcha.Type == "text")
@@ -938,7 +953,7 @@ namespace Jackett.Common.Indexers
                     }
                     else
                     {
-                        logger.Debug(string.Format("CardigannIndexer ({0}): No captcha image found", ID));
+                        logger.Debug(string.Format("CardigannIndexer ({0}): No captcha image found", Id));
                     }
                 }
                 else
@@ -950,7 +965,7 @@ namespace Jackett.Common.Indexers
             if (hasCaptcha && automaticlogin)
             {
                 configData.LastError.Value = "Got captcha during automatic login, please reconfigure manually";
-                logger.Error(string.Format("CardigannIndexer ({0}): Found captcha during automatic login, aborting", ID));
+                logger.Error(string.Format("CardigannIndexer ({0}): Found captcha during automatic login, aborting", Id));
                 return null;
             }
 
@@ -1095,12 +1110,17 @@ namespace Jackett.Common.Indexers
                     case "hexdump":
                         // this is mainly for debugging invisible special char related issues
                         var HexData = string.Join("", Data.Select(c => c + "(" + ((int)c).ToString("X2") + ")"));
-                        logger.Debug(string.Format("CardigannIndexer ({0}): strdump: {1}", ID, HexData));
+                        logger.Debug(string.Format("CardigannIndexer ({0}): strdump: {1}", Id, HexData));
                         break;
                     case "strdump":
                         // for debugging
                         var DebugData = Data.Replace("\r", "\\r").Replace("\n", "\\n").Replace("\xA0", "\\xA0");
-                        logger.Debug(string.Format("CardigannIndexer ({0}): strdump: {1}", ID, DebugData));
+                        var strTag = (string)Filter.Args;
+                        if (strTag != null)
+                            strTag = string.Format("({0}):", strTag);
+                        else
+                            strTag = ":";
+                        logger.Debug(string.Format("CardigannIndexer ({0}): strdump{1} {2}", Id, strTag, DebugData));
                         break;
                     default:
                         break;
@@ -1189,7 +1209,7 @@ namespace Jackett.Common.Indexers
             var Search = Definition.Search;
 
             // init template context
-            var variables = getTemplateVariablesFromConfigData();
+            var variables = GetBaseTemplateVariables();
 
             variables[".Query.Type"] = query.QueryType;
             variables[".Query.Q"] = query.SearchTerm;
@@ -1333,7 +1353,7 @@ namespace Jackett.Common.Indexers
                     var loginNeeded = CheckIfLoginIsNeeded(response, SearchResultDocument);
                     if (loginNeeded)
                     {
-                        logger.Info(string.Format("CardigannIndexer ({0}): Relogin required", ID));
+                        logger.Info(string.Format("CardigannIndexer ({0}): Relogin required", Id));
                         var LoginResult = await DoLogin();
                         if (!LoginResult)
                             throw new Exception(string.Format("Relogin failed"));
@@ -1356,7 +1376,7 @@ namespace Jackett.Common.Indexers
                     {
                         results = applyFilters(results, Search.Preprocessingfilters, variables);
                         SearchResultDocument = SearchResultParser.ParseDocument(results);
-                        logger.Debug(string.Format("CardigannIndexer ({0}): result after preprocessingfilters: {1}", ID, results));
+                        logger.Debug(string.Format("CardigannIndexer ({0}): result after preprocessingfilters: {1}", Id, results));
                     }
 
                     var rowsSelector = applyGoTemplateText(Search.Rows.Selector, variables);
@@ -1393,9 +1413,11 @@ namespace Jackett.Common.Indexers
                     {
                         try
                         {
-                            var release = new ReleaseInfo();
-                            release.MinimumRatio = 1;
-                            release.MinimumSeedTime = 172800; // 48 hours
+                            var release = new ReleaseInfo
+                            {
+                                MinimumRatio = 1,
+                                MinimumSeedTime = 172800 // 48 hours
+                            };
 
                             // Parse fields
                             foreach (var Field in Search.Fields)
@@ -1471,17 +1493,12 @@ namespace Jackett.Common.Indexers
                                             break;
                                         case "category":
                                             var cats = MapTrackerCatToNewznab(value);
-                                            if (release.Category == null)
+                                            if (cats.Any())
                                             {
-                                                release.Category = cats;
-                                            }
-                                            else
-                                            {
-                                                foreach (var cat in cats)
-                                                {
-                                                    if (!release.Category.Contains(cat))
-                                                        release.Category.Add(cat);
-                                                }
+                                                if (release.Category == null || FieldModifiers.Contains("noappend"))
+                                                    release.Category = cats;
+                                                else
+                                                    release.Category = release.Category.Union(cats).ToList();
                                             }
                                             value = release.Category.ToString();
                                             break;
@@ -1590,18 +1607,20 @@ namespace Jackett.Common.Indexers
                                             if (query.ImdbID != null && TorznabCaps.SupportsImdbMovieSearch)
                                                 break; // skip andmatch filter for imdb searches
 
-                                            if (!query.MatchQueryStringAND(release.Title, CharacterLimit))
+                                            var queryKeywords = variables[".Keywords"] as string;
+
+                                            if (!query.MatchQueryStringAND(release.Title, CharacterLimit, queryKeywords))
                                             {
-                                                logger.Debug(string.Format("CardigannIndexer ({0}): skipping {1} (andmatch filter)", ID, release.Title));
+                                                logger.Debug(string.Format("CardigannIndexer ({0}): skipping {1} (andmatch filter)", Id, release.Title));
                                                 SkipRelease = true;
                                             }
                                             break;
                                         case "strdump":
                                             // for debugging
-                                            logger.Debug(string.Format("CardigannIndexer ({0}): row strdump: {1}", ID, Row.ToHtmlPretty()));
+                                            logger.Debug(string.Format("CardigannIndexer ({0}): row strdump: {1}", Id, Row.ToHtmlPretty()));
                                             break;
                                         default:
-                                            logger.Error(string.Format("CardigannIndexer ({0}): Unsupported rows filter: {1}", ID, Filter.Name));
+                                            logger.Error(string.Format("CardigannIndexer ({0}): Unsupported rows filter: {1}", Id, Filter.Name));
                                             break;
                                     }
                                 }
@@ -1654,7 +1673,7 @@ namespace Jackett.Common.Indexers
                         }
                         catch (Exception ex)
                         {
-                            logger.Error(string.Format("CardigannIndexer ({0}): Error while parsing row '{1}':\n\n{2}", ID, Row.ToHtmlPretty(), ex));
+                            logger.Error(string.Format("CardigannIndexer ({0}): Error while parsing row '{1}':\n\n{2}", Id, Row.ToHtmlPretty(), ex));
                         }
                     }
                 }
@@ -1694,13 +1713,13 @@ namespace Jackett.Common.Indexers
             if (queryCollection.Count > 0)
             {
                 if (!requestLinkStr.Contains("?"))
-                    requestLinkStr += "?" + queryCollection.GetQueryString(Encoding).Substring(1);
+                    requestLinkStr += "?" + queryCollection.GetQueryString(Encoding, separator: request.Queryseparator).Substring(1);
                 else
-                    requestLinkStr += queryCollection.GetQueryString(Encoding);
+                    requestLinkStr += queryCollection.GetQueryString(Encoding, separator: request.Queryseparator);
             }
 
             var response = await RequestBytesWithCookiesAndRetry(requestLinkStr, null, method, referer, pairs);
-            logger.Debug($"CardigannIndexer ({ID}): handleRequest() remote server returned {response.Status.ToString()}" + (response.IsRedirect ? " => " + response.RedirectingTo : ""));
+            logger.Debug($"CardigannIndexer ({Id}): handleRequest() remote server returned {response.Status.ToString()}" + (response.IsRedirect ? " => " + response.RedirectingTo : ""));
             return response;
         }
 
@@ -1728,7 +1747,7 @@ namespace Jackett.Common.Indexers
             if (Definition.Download != null)
             {
                 var Download = Definition.Download;
-                var variables = getTemplateVariablesFromConfigData();
+                var variables = GetBaseTemplateVariables();
                 AddTemplateVariablesFromUri(variables, link, ".DownloadUri");
                 if (Download.Before != null)
                 {
@@ -1751,7 +1770,7 @@ namespace Jackett.Common.Indexers
                     var downloadElement = searchResultDocument.QuerySelector(selector);
                     if (downloadElement != null)
                     {
-                        logger.Debug(string.Format("CardigannIndexer ({0}): Download selector {1} matched:{2}", ID, selector, downloadElement.ToHtmlPretty()));
+                        logger.Debug(string.Format("CardigannIndexer ({0}): Download selector {1} matched:{2}", Id, selector, downloadElement.ToHtmlPretty()));
                         var href = "";
                         if (Download.Attribute != null)
                         {
@@ -1768,7 +1787,7 @@ namespace Jackett.Common.Indexers
                     }
                     else
                     {
-                        logger.Error(string.Format("CardigannIndexer ({0}): Download selector {1} didn't match:\n{2}", ID, Download.Selector, results));
+                        logger.Error(string.Format("CardigannIndexer ({0}): Download selector {1} didn't match:\n{2}", Id, Download.Selector, results));
                         throw new Exception(string.Format("Download selector {0} didn't match", Download.Selector));
                     }
                 }

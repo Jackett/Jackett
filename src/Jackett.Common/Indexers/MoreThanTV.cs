@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -17,28 +18,30 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class MoreThanTV : BaseWebIndexer
     {
         private string LoginUrl => SiteLink + "login.php";
         private string SearchUrl => SiteLink + "ajax.php?action=browse&searchstr=";
         private string DownloadUrl => SiteLink + "torrents.php?action=download&id=";
-        private string GuidUrl => SiteLink + "torrents.php?torrentid=";
+        private string CommentsUrl => SiteLink + "torrents.php?torrentid=";
 
         private ConfigurationDataBasicLogin ConfigData => (ConfigurationDataBasicLogin)configData;
 
         public MoreThanTV(IIndexerConfigurationService configService, Utils.Clients.WebClient c, Logger l, IProtectionService ps)
-            : base(name: "MoreThanTV",
-                description: "Private torrent tracker for TV / MOVIES, and the internal tracker for the release group DRACULA.",
-                link: "https://www.morethan.tv/",
-                caps: new TorznabCapabilities(
-                    TorznabCatType.Movies,
-                    TorznabCatType.TV,
-                    TorznabCatType.Other),
-                configService: configService,
-                client: c,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataBasicLogin())
+            : base(id: "morethantv",
+                   name: "MoreThanTV",
+                   description: "Private torrent tracker for TV / MOVIES, and the internal tracker for the release group DRACULA.",
+                   link: "https://www.morethan.tv/",
+                   caps: new TorznabCapabilities(
+                       TorznabCatType.Movies,
+                       TorznabCatType.TV,
+                       TorznabCatType.Other),
+                   configService: configService,
+                   client: c,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
@@ -267,13 +270,13 @@ namespace Jackett.Common.Indexers
             var grabs = int.Parse(torrentData[1].TextContent, NumberStyles.AllowThousands, CultureInfo.InvariantCulture);
             var seeders = int.Parse(torrentData[2].TextContent, NumberStyles.AllowThousands, CultureInfo.InvariantCulture);
             var leechers = int.Parse(torrentData[3].TextContent, NumberStyles.AllowThousands, CultureInfo.InvariantCulture);
-            var guid = new Uri(GuidUrl + torrentId);
-
+            var comments = new Uri(CommentsUrl + torrentId);
+            var link = new Uri(DownloadUrl + torrentId);
             return new ReleaseInfo
             {
                 Title = title,
                 Category = new List<int> { category }, // Who seasons movies right
-                Link = new Uri(DownloadUrl + torrentId),
+                Link = link,
                 PublishDate = publishDate,
                 BannerUrl = banner,
                 Description = description,
@@ -282,8 +285,8 @@ namespace Jackett.Common.Indexers
                 Files = files,
                 Size = size,
                 Grabs = grabs,
-                Guid = guid,
-                Comments = guid,
+                Guid = comments,
+                Comments = comments,
                 DownloadVolumeFactor = 0, // ratioless tracker
                 UploadVolumeFactor = 1
             };

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -16,7 +17,7 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
-    // ReSharper disable once InconsistentNaming
+    [ExcludeFromCodeCoverage]
     public class GimmePeers : BaseWebIndexer
     {
         private string BrowseUrl => SiteLink + "browse.php";
@@ -29,15 +30,16 @@ namespace Jackett.Common.Indexers
         }
 
         public GimmePeers(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "GimmePeers",
-                description: "Formerly ILT",
-                link: "https://www.gimmepeers.com/",
-                caps: new TorznabCapabilities(),
-                configService: configService,
-                client: wc,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataBasicLogin())
+            : base(id: "gimmepeers",
+                   name: "GimmePeers",
+                   description: "Formerly ILT",
+                   link: "https://www.gimmepeers.com/",
+                   caps: new TorznabCapabilities(),
+                   configService: configService,
+                   client: wc,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "en-us";

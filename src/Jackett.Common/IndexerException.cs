@@ -17,7 +17,7 @@ namespace Jackett.Common
         }
 
         public IndexerException(IIndexer Indexer, Exception innerException)
-            : this(Indexer, "Exception (" + Indexer.ID + "): " + innerException.GetBaseException().Message, innerException)
+            : this(Indexer, "Exception (" + Indexer.Id + "): " + innerException.GetBaseException().Message, innerException)
         {
         }
     }

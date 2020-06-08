@@ -129,6 +129,6 @@ namespace Jackett.Common.Models.Config
         }
 
         public void ConfigChanged() =>
-            observers.ForEach(obs=>obs.OnNext(this));
+            observers.ForEach(obs => obs.OnNext(this));
     }
 }

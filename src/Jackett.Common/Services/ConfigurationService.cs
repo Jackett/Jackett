@@ -69,7 +69,9 @@ namespace Jackett.Common.Services
                         {
                             try
                             {
-                                processService.StartProcessAndLog(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath, "--MigrateSettings", true);
+                                // Use EscapedCodeBase to avoid Uri reserved characters from causing bugs
+                                // https://stackoverflow.com/questions/896572
+                                processService.StartProcessAndLog(new Uri(Assembly.GetExecutingAssembly().EscapedCodeBase).LocalPath, "--MigrateSettings", true);
                             }
                             catch
                             {
@@ -164,7 +166,9 @@ namespace Jackett.Common.Services
             }
         }
 
-        public string ApplicationFolder() => Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath);
+        // Use EscapedCodeBase to avoid Uri reserved characters from causing bugs
+        // https://stackoverflow.com/questions/896572
+        public string ApplicationFolder() => Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().EscapedCodeBase).LocalPath);
 
         public string GetContentFolder()
         {
@@ -232,7 +236,7 @@ namespace Jackett.Common.Services
             }
             else
             {
-                //We don't load these out of the config files as it could get confusing to users who accidently save. 
+                //We don't load these out of the config files as it could get confusing to users who accidently save.
                 //In future we could flatten the serverconfig, and use command line parameters to override any configuration.
                 config.RuntimeSettings = runtimeSettings;
             }
