@@ -6,6 +6,8 @@ language: fr-FR
 type: public
 encoding: UTF-8
 links:
+  - https://wwv.epizod.tv/
+legacylinks:
   - https://www.epizod.tv/
 
 caps:
