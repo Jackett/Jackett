@@ -107,7 +107,7 @@ namespace Jackett.Common.Indexers
             return IndexerConfigurationStatus.Completed;
         }
 
-        private dynamic CheckResponse(BaseWebResult result)
+        private dynamic CheckResponse(WebResult result)
         {
             try
             {

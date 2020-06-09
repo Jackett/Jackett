@@ -186,7 +186,7 @@ namespace Jackett.Common.Utils.Clients
             return;
         }
 
-        public virtual async Task<BaseWebResult> GetBytes(WebRequest request)
+        public virtual async Task<WebResult> GetBytes(WebRequest request)
         {
             logger.Debug(string.Format("WebClient({0}).GetBytes(Url:{1})", ClientType, request.Url));
             PrepareRequest(request);
@@ -198,7 +198,7 @@ namespace Jackett.Common.Utils.Clients
             return result;
         }
 
-        public virtual async Task<BaseWebResult> GetString(WebRequest request)
+        public virtual async Task<WebResult> GetString(WebRequest request)
         {
             logger.Debug(string.Format("WebClient({0}).GetString(Url:{1})", ClientType, request.Url));
             PrepareRequest(request);
@@ -206,7 +206,7 @@ namespace Jackett.Common.Utils.Clients
             var result = await Run(request);
             lastRequest = DateTime.Now;
             result.Request = request;
-            BaseWebResult stringResult = result;
+            WebResult stringResult = result;
 
             logger.Debug(string.Format("WebClient({0}): Returning {1} => {2}", ClientType, result.Status, (result.IsRedirect ? result.RedirectingTo + " " : "") + (stringResult.ContentString ?? "<NULL>")));
 
@@ -219,7 +219,7 @@ namespace Jackett.Common.Utils.Clients
         }
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-        protected virtual async Task<WebClientByteResult> Run(WebRequest webRequest) => throw new NotImplementedException();
+        protected virtual async Task<WebResult> Run(WebRequest webRequest) => throw new NotImplementedException();
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
 
         public virtual void Init()

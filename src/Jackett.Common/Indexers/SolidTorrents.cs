@@ -76,7 +76,7 @@ namespace Jackett.Common.Indexers
             return IndexerConfigurationStatus.Completed;
         }
 
-        private JArray CheckResponse(BaseWebResult result)
+        private JArray CheckResponse(WebResult result)
         {
             try
             {
