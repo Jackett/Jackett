@@ -8,7 +8,7 @@ encoding: UTF-8
 followredirect: true
 links:
   - https://kickass.ws/
-  - https://kickass.unblockit.me/
+  - https://kickass.unblockit.pw/
 legacylinks:
   - https://kickass.gg/
   - https://katcr.io/
@@ -21,6 +21,7 @@ legacylinks:
   - https://kickasstorrent.cr/ # possible 3rd kickasstorrent site/clone?
   - https://kickass.unblockit.pro/
   - https://kickass.unblockit.one/
+  - https://kickass.unblockit.me/
 
 caps:
   categories:
