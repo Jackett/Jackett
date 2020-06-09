@@ -109,13 +109,13 @@ namespace Jackett.Common.Indexers
                 pairs.Add("proofcode", configData.CaptchaText.Value);
             var result = await RequestLoginAndFollowRedirect(
                 IndexUrl, pairs, configData.CaptchaCookie.Value, true, referer: IndexUrl, accumulateCookies: true);
-            if (result.Content == null || (!result.Content.Contains("login_complete") &&
-                                           !result.Content.Contains("index.php?strWebValue=account&strWebAction=logout")))
+            if (result.ContentString == null || (!result.ContentString.Contains("login_complete") &&
+                                           !result.ContentString.Contains("index.php?strWebValue=account&strWebAction=logout")))
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(result.Content);
+                var dom = parser.ParseDocument(result.ContentString);
                 var errorMessageEl = dom.QuerySelector("table > tbody > tr > td[valign=top][width=100%]");
-                var errorMessage = errorMessageEl != null ? errorMessageEl.InnerHtml : result.Content;
+                var errorMessage = errorMessageEl != null ? errorMessageEl.InnerHtml : result.ContentString;
                 throw new ExceptionWithConfigData(errorMessage, configData);
             }
 
@@ -130,7 +130,7 @@ namespace Jackett.Common.Indexers
         {
             var loginPage = await RequestStringWithCookies(IndexUrl, string.Empty);
             var parser = new HtmlParser();
-            var dom = parser.ParseDocument(loginPage.Content);
+            var dom = parser.ParseDocument(loginPage.ContentString);
             var qCaptchaImg = dom.QuerySelector("td.tablea > img");
             if (qCaptchaImg != null)
             {
@@ -187,7 +187,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(response.Content);
+                var dom = parser.ParseDocument(response.ContentString);
                 var rows = dom.QuerySelectorAll("table.torrenttable > tbody > tr");
                 foreach (var row in rows.Skip(1))
                 {
@@ -242,7 +242,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
 
             return releases;

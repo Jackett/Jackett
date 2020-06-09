@@ -81,7 +81,7 @@ namespace Jackett.Common.Indexers
             };
 
             var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginForm.Cookies, true, null, SiteLink);
-            var responseContent = response.Content;
+            var responseContent = response.ContentString;
             await ConfigureIfOK(response.Cookies, responseContent.Contains(LogoutStr), () =>
             {
                 var parser = new HtmlParser();
@@ -107,7 +107,7 @@ namespace Jackett.Common.Indexers
             var searchString = queryCopy.SanitizedSearchTerm;
             var episodeSearchUrl = SearchUrl + WebUtility.UrlEncode(searchString);
             var response = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
-            if (!response.Content.Contains(LogoutStr))
+            if (!response.ContentString.Contains(LogoutStr))
             {
                 //Cookie appears to expire after a period of time or logging in to the site via browser
                 await DoLogin();
@@ -117,7 +117,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(response.Content);
+                var dom = parser.ParseDocument(response.ContentString);
                 var rows = dom.QuerySelectorAll(".torrents tr.torrent, .torrents tr.torrent_alt");
                 ICollection<int> currentCategories = new List<int> {TorznabCatType.TVAnime.ID};
 
@@ -207,7 +207,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
 
             return releases;
@@ -248,7 +248,7 @@ namespace Jackett.Common.Indexers
         {
             var downloadPage = await RequestStringWithCookies(link.ToString());
             var parser = new HtmlParser();
-            var dom = parser.ParseDocument(downloadPage.Content);
+            var dom = parser.ParseDocument(downloadPage.ContentString);
             var downloadLink = dom.QuerySelectorAll(".download_link").First().GetAttribute("href");
 
             if (string.IsNullOrWhiteSpace(downloadLink))

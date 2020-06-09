@@ -126,7 +126,7 @@ namespace Jackett.Common.Services
                     logger.Error("Failed to get the release list: " + response.Status);
                 }
 
-                var releases = JsonConvert.DeserializeObject<List<Release>>(response.Content);
+                var releases = JsonConvert.DeserializeObject<List<Release>>(response.ContentString);
 
                 if (!serverConfig.UpdatePrerelease)
                 {

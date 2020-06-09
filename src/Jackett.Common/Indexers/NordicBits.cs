@@ -260,7 +260,7 @@ namespace Jackett.Common.Indexers
             // Checking ...
             Output("\n-> Checking logged-in state....");
             var loggedInCheck = await RequestStringWithCookies(SearchUrl);
-            if (!loggedInCheck.Content.Contains("logout.php"))
+            if (!loggedInCheck.ContentString.Contains("logout.php"))
             {
                 // Cookie expired, renew session on provider
                 Output("-> Not logged, login now...\n");
@@ -318,7 +318,7 @@ namespace Jackett.Common.Indexers
                 // Getting results & Store content
                 var response = await RequestStringWithCookiesAndRetry(request, ConfigData.CookieHeader.Value);
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(response.Content);
+                var dom = parser.ParseDocument(response.ContentString);
 
                 try
                 {

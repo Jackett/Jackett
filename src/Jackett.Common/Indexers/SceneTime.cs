@@ -116,7 +116,7 @@ namespace Jackett.Common.Indexers
             }
 
             var parser = new HtmlParser();
-            var dom = parser.ParseDocument(loginPage.Content);
+            var dom = parser.ParseDocument(loginPage.ContentString);
             var recaptcha = dom.QuerySelector(".g-recaptcha");
             if (recaptcha != null)
             {
@@ -167,10 +167,10 @@ namespace Jackett.Common.Indexers
             }
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
+            await ConfigureIfOK(result.Cookies, result.ContentString != null && result.ContentString.Contains("logout.php"), () =>
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(result.Content);
+                var dom = parser.ParseDocument(result.ContentString);
                 var errorMessage = dom.QuerySelector("td.text").TextContent.Trim();
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
@@ -201,15 +201,15 @@ namespace Jackett.Common.Indexers
             var results = await RequestStringWithCookies(searchUrl);
 
             // response without results (the message is misleading)
-            if (results.Content?.Contains("slow down geek!!!") == true)
+            if (results.ContentString?.Contains("slow down geek!!!") == true)
                 return new List<ReleaseInfo>();
 
             // not logged in
-            if (results.Content == null || !results.Content.Contains("/logout.php"))
+            if (results.ContentString == null || !results.ContentString.Contains("/logout.php"))
                 throw new Exception("The user is not logged in. It is possible that the cookie has expired or you " +
                                     "made a mistake when copying it. Please check the settings.");
 
-            return ParseResponse(query, results.Content);
+            return ParseResponse(query, results.ContentString);
         }
 
         private List<ReleaseInfo> ParseResponse(TorznabQuery query, string htmlResponse)

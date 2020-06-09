@@ -142,7 +142,7 @@ namespace Jackett.Common.Indexers
             var loginCookies = result.Cookies;
             await FollowIfRedirect(result, LoginUrl, null, loginCookies);
 
-            await ConfigureIfOK(loginCookies, result.Content?.Contains("logout.php") == true,
+            await ConfigureIfOK(loginCookies, result.ContentString?.Contains("logout.php") == true,
                                 () => throw new ExceptionWithConfigData("Login failed", configData));
 
             return IndexerConfigurationStatus.RequiresTesting;
@@ -211,7 +211,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(response.Content);
+                var dom = parser.ParseDocument(response.ContentString);
                 var rows = dom.QuerySelectorAll("table > tbody > tr.browse");
                 foreach (var row in rows)
                 {
@@ -258,7 +258,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
             return releases;
         }
