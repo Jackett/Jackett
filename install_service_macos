@@ -6,7 +6,7 @@ BOLDGREEN="$(printf '\033[1;32m')"
 NC="$(printf '\033[0m')" # No Color
 
 # Stop and unload the service if it's running
-launchctl unload ~/Library/LaunchAgents/org.user.Jackett.plist &>-
+launchctl unload ~/Library/LaunchAgents/org.user.Jackett.plist &>/dev/null
 
 # Move working directory to Jackett's
 cd "$(dirname "$0")"
@@ -55,7 +55,7 @@ cat >~/Library/LaunchAgents/org.user.Jackett.plist <<EOL
 EOL
 
 # Un-quarantine all dylib and DLL files
-qstr="$(xattr -p com.apple.quarantine jackett)" 2>-
+qstr="$(xattr -p com.apple.quarantine jackett)" 2>/dev/null
 if [[ $qstr ]]; then
     echo "Removing Jackett executable and all .dylib and .dll files from quarantine..."
     qstr="00c1${qstr:4}"
