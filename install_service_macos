@@ -5,8 +5,10 @@ BOLDRED="$(printf '\033[1;31m')"
 BOLDGREEN="$(printf '\033[1;32m')"
 NC="$(printf '\033[0m')" # No Color
 
-# Stop and unload the service if it's running
-launchctl remove org.user.Jackett
+# Stop and unload the service if it's running. The wait and sleep is to ensure that launchctl "unlists" the process entirely
+launchctl remove org.user.Jackett &
+wait $!
+sleep .5s
 
 # Move working directory to Jackett's
 cd "$(dirname "$0")"
@@ -55,18 +57,20 @@ cat >~/Library/LaunchAgents/org.user.Jackett.plist <<EOL
 EOL
 
 # Un-quarantine all dylib and DLL files
-echo "Removing Jackett executable and all .dylib and .dll files from quarantine..."
-qstr="$(xattr -p com.apple.quarantine jackett)"
-qstr="00c1${qstr:4}"
-xattr -w com.apple.quarantine $qstr jackett
-xattr -w com.apple.quarantine $qstr *.{dylib,dll}
+qstr="$(xattr -p com.apple.quarantine jackett)" 2>-
+if [[ $qstr ]]; then
+    echo "Removing Jackett executable and all .dylib and .dll files from quarantine..."
+    qstr="00c1${qstr:4}"
+    xattr -w com.apple.quarantine $qstr jackett
+    xattr -w com.apple.quarantine $qstr *.{dylib,dll}
+fi
 
 # Run the agent
 launchctl load ~/Library/LaunchAgents/org.user.Jackett.plist
 
 # Check that it's running
 if [[ $(launchctl list | grep org.user.Jackett) ]]; then
-echo "${BOLDGREEN}Agent successfully installed and launched!${NC}"
+    echo "${BOLDGREEN}Agent successfully installed and launched!${NC}"
 else
     cat << EOL
 ${BOLDRED}ERROR${NC}: Could not launch agent. The installation might have failed.
