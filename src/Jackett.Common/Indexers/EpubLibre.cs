@@ -89,7 +89,7 @@ namespace Jackett.Common.Indexers
 
                 try
                 {
-                    var json = JsonConvert.DeserializeObject<dynamic>(result.Content);
+                    var json = JsonConvert.DeserializeObject<dynamic>(result.ContentString);
                     var parser = new HtmlParser();
                     var doc = parser.ParseDocument((string)json["contenido"]);
 
@@ -140,7 +140,7 @@ namespace Jackett.Common.Indexers
                 }
                 catch (Exception ex)
                 {
-                    OnParseError(result.Content, ex);
+                    OnParseError(result.ContentString, ex);
                 }
             }
 
@@ -155,13 +155,13 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var doc = parser.ParseDocument(result.Content);
+                var doc = parser.ParseDocument(result.ContentString);
                 var magnetLink = doc.QuerySelector("a[id=en_desc]").GetAttribute("href");
                 return Encoding.UTF8.GetBytes(magnetLink);
             }
             catch (Exception ex)
             {
-                OnParseError(result.Content, ex);
+                OnParseError(result.ContentString, ex);
             }
             return null;
         }

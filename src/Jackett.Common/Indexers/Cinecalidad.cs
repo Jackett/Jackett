@@ -125,18 +125,18 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(results.Content);
+                var dom = parser.ParseDocument(results.ContentString);
                 var preotectedLink = dom.QuerySelector("a[service=BitTorrent]").GetAttribute("href");
                 preotectedLink = SiteLink + preotectedLink.TrimStart('/');
 
                 results = await RequestStringWithCookies(preotectedLink);
-                dom = parser.ParseDocument(results.Content);
+                dom = parser.ParseDocument(results.ContentString);
                 var magnetUrl = dom.QuerySelector("a[href^=magnet]").GetAttribute("href");
                 return await base.Download(new Uri(magnetUrl));
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return null;
@@ -149,7 +149,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(response.Content);
+                var dom = parser.ParseDocument(response.ContentString);
 
                 var rows = dom.QuerySelectorAll("div.home_post_cont");
                 foreach (var row in rows)
@@ -189,7 +189,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
 
             return releases;

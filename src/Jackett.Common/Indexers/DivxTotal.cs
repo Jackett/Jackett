@@ -102,12 +102,12 @@ namespace Jackett.Common.Indexers
                 var result = await RequestStringWithCookies(url);
 
                 if (result.Status != HttpStatusCode.OK)
-                    throw new ExceptionWithConfigData(result.Content, configData);
+                    throw new ExceptionWithConfigData(result.ContentString, configData);
 
                 try
                 {
                     var searchResultParser = new HtmlParser();
-                    var doc = searchResultParser.ParseDocument(result.Content);
+                    var doc = searchResultParser.ParseDocument(result.ContentString);
 
                     var table = doc.QuerySelector("table.table");
                     if (table == null)
@@ -135,7 +135,7 @@ namespace Jackett.Common.Indexers
                 }
                 catch (Exception ex)
                 {
-                    OnParseError(result.Content, ex);
+                    OnParseError(result.ContentString, ex);
                 }
 
                 page++; // update page number
@@ -155,10 +155,10 @@ namespace Jackett.Common.Indexers
                 var result = await RequestStringWithCookies(downloadUrl);
 
                 if (result.Status != HttpStatusCode.OK)
-                    throw new ExceptionWithConfigData(result.Content, configData);
+                    throw new ExceptionWithConfigData(result.ContentString, configData);
 
                 var searchResultParser = new HtmlParser();
-                var doc = searchResultParser.ParseDocument(result.Content);
+                var doc = searchResultParser.ParseDocument(result.ContentString);
 
                 var onclick = doc.QuerySelector("a[onclick*=\"/torrent\"]")
                     .GetAttribute("onclick");
@@ -214,10 +214,10 @@ namespace Jackett.Common.Indexers
             var result = await RequestStringWithCookies(commentsLink);
 
             if (result.Status != HttpStatusCode.OK)
-                throw new ExceptionWithConfigData(result.Content, configData);
+                throw new ExceptionWithConfigData(result.ContentString, configData);
 
             var searchResultParser = new HtmlParser();
-            var doc = searchResultParser.ParseDocument(result.Content);
+            var doc = searchResultParser.ParseDocument(result.ContentString);
 
             var tables = doc.QuerySelectorAll("table.table");
             foreach (var table in tables)

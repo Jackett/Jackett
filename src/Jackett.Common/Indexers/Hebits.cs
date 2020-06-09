@@ -69,10 +69,10 @@ namespace Jackett.Common.Indexers
             CookieHeader = string.Empty;
             var result = await RequestLoginAndFollowRedirect(LoginPostUrl, pairs, CookieHeader, true, null, SiteLink);
             await ConfigureIfOK(
-                result.Cookies, result.Content?.Contains("OK") == true, () =>
+                result.Cookies, result.ContentString?.Contains("OK") == true, () =>
                 {
                     var parser = new HtmlParser();
-                    var dom = parser.ParseDocument(result.Content);
+                    var dom = parser.ParseDocument(result.ContentString);
                     var errorMessage = dom.TextContent.Trim();
                     errorMessage += " attempts left. Please check your credentials.";
                     throw new ExceptionWithConfigData(errorMessage, configData);
@@ -94,7 +94,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(response.Content);
+                var dom = parser.ParseDocument(response.ContentString);
                 var rows = dom.QuerySelectorAll(".browse > div > div");
                 foreach (var row in rows)
                 {
@@ -132,7 +132,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
 
             return releases;

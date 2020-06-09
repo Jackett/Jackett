@@ -118,7 +118,7 @@ namespace Jackett.Common.Indexers
             await RenewalTokenAsync();
 
             var response = await RequestStringWithCookiesAndRetry(BuildSearchUrl(query));
-            var jsonContent = JObject.Parse(response.Content);
+            var jsonContent = JObject.Parse(response.ContentString);
             var errorCode = jsonContent.Value<int>("error_code");
             switch (errorCode)
             {
@@ -128,13 +128,13 @@ namespace Jackett.Common.Indexers
                 case 4: // invalid token
                     await RenewalTokenAsync(true); // force renewal token
                     response = await RequestStringWithCookiesAndRetry(BuildSearchUrl(query));
-                    jsonContent = JObject.Parse(response.Content);
+                    jsonContent = JObject.Parse(response.ContentString);
                     break;
                 case 10: // imdb not found, see issue #1486
                 case 20: // no results found
                     return releases;
                 default:
-                    throw new Exception("Unknown error code: " + errorCode + " response: " + response.Content);
+                    throw new Exception("Unknown error code: " + errorCode + " response: " + response.ContentString);
             }
 
             try
@@ -191,7 +191,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
 
             return releases;
@@ -259,7 +259,7 @@ namespace Jackett.Common.Indexers
                 };
                 var tokenUrl = ApiEndpoint + "?" + qc.GetQueryString();
                 var result = await RequestStringWithCookiesAndRetry(tokenUrl);
-                var json = JObject.Parse(result.Content);
+                var json = JObject.Parse(result.ContentString);
                 _token = json.Value<string>("token");
                 _lastTokenFetch = DateTime.Now;
             }
