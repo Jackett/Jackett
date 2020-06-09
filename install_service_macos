@@ -5,10 +5,8 @@ BOLDRED="$(printf '\033[1;31m')"
 BOLDGREEN="$(printf '\033[1;32m')"
 NC="$(printf '\033[0m')" # No Color
 
-# Stop and unload the service if it's running. The wait and sleep is to ensure that launchctl "unlists" the process entirely
-launchctl remove org.user.Jackett &
-wait $!
-sleep .5s
+# Stop and unload the service if it's running
+launchctl unload ~/Library/LaunchAgents/org.user.Jackett.plist &>-
 
 # Move working directory to Jackett's
 cd "$(dirname "$0")"
