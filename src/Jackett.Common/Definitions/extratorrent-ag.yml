@@ -7,9 +7,10 @@ type: public
 encoding: UTF-8
 links:
   - https://extratorrent.ag/
-  - https://extratorrent.unblockit.me/
+  - https://extratorrent.unblockit.pw/
 legacylinks:
   - https://extratorrent.unblockit.one/
+  - https://extratorrent.unblockit.me/
 
 caps:
   categorymappings:
