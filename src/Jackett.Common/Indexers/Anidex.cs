@@ -163,7 +163,7 @@ namespace Jackett.Common.Indexers
                 throw new WebException($"Anidex search returned unexpected result. Expected 200 OK but got {response.Status}.", WebExceptionStatus.ProtocolError);
 
             // Search seems to have been a success so parse it
-            return ParseResult(response.Content);
+            return ParseResult(response.ContentString);
         }
 
         private IEnumerable<ReleaseInfo> ParseResult(string response)

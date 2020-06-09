@@ -173,7 +173,7 @@ namespace Jackett.Common.Indexers
             {
                 // Parse error page
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(response.Content);
+                var dom = parser.ParseDocument(response.ContentString);
                 var message = dom.QuerySelector(".warning").TextContent.Split('.').Reverse().Skip(1).First();
 
                 // Try left
@@ -558,7 +558,7 @@ namespace Jackett.Common.Indexers
             results = await RequestStringWithCookiesAndRetry(request, null, null, emulatedBrowserHeaders);
 
             // Return results from tracker
-            return results.Content;
+            return results.ContentString;
         }
 
         /// <summary>

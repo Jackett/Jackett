@@ -65,7 +65,7 @@ namespace Jackett.Common.Indexers
 
             try
             {
-                xmlDoc.LoadXml(result.Content);
+                xmlDoc.LoadXml(result.ContentString);
                 foreach (XmlNode node in xmlDoc.GetElementsByTagName("item"))
                 {
                     //TODO revisit for refactoring
@@ -105,7 +105,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(result.Content, ex);
+                OnParseError(result.ContentString, ex);
             }
 
             return releases;

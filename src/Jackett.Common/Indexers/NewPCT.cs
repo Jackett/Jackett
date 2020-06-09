@@ -165,7 +165,7 @@ namespace Jackett.Common.Indexers
         {
             var results = await RequestStringWithCookiesAndRetry(linkParam.AbsoluteUri);
 
-            var uriLink = ExtractDownloadUri(results.Content, linkParam.AbsoluteUri);
+            var uriLink = ExtractDownloadUri(results.ContentString, linkParam.AbsoluteUri);
             if (uriLink == null)
                 throw new Exception("Download link not found!");
 
@@ -212,10 +212,10 @@ namespace Jackett.Common.Indexers
                 {
                     var pageUrl = SiteLink + string.Format(_dailyUrl, pg);
                     var results = await RequestStringWithCookiesAndRetry(pageUrl);
-                    if (results == null || string.IsNullOrEmpty(results.Content))
+                    if (results == null || string.IsNullOrEmpty(results.ContentString))
                         break;
 
-                    var items = ParseDailyContent(results.Content);
+                    var items = ParseDailyContent(results.ContentString);
                     if (items == null || !items.Any())
                         break;
 
@@ -305,13 +305,13 @@ namespace Jackett.Common.Indexers
 
             // Episodes list
             var results = await RequestStringWithCookiesAndRetry(uri.AbsoluteUri);
-            var seriesEpisodesUrl = ParseSeriesListContent(results.Content, seriesName);
+            var seriesEpisodesUrl = ParseSeriesListContent(results.ContentString, seriesName);
 
             // TV serie list
             if (!string.IsNullOrEmpty(seriesEpisodesUrl))
             {
                 results = await RequestStringWithCookiesAndRetry(seriesEpisodesUrl);
-                var items = ParseEpisodesListContent(results.Content);
+                var items = ParseEpisodesListContent(results.ContentString);
                 if (items != null && items.Any())
                     releases.AddRange(items);
             }
@@ -465,7 +465,7 @@ namespace Jackett.Common.Indexers
                 };
 
                 var results = await PostDataWithCookies(searchJsonUrl, queryCollection);
-                var items = ParseSearchJsonContent(results.Content, year);
+                var items = ParseSearchJsonContent(results.ContentString, year);
                 if (!items.Any())
                     break;
 

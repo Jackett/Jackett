@@ -180,7 +180,7 @@ namespace Jackett.Common.Indexers
 
             var searchUrl = SearchUrl + "?" + qc.GetQueryString();
             var response = await RequestStringWithCookiesAndRetry(searchUrl, null, SearchUrl);
-            var results = response.Content;
+            var results = response.ContentString;
 
             if (results == null || !results.Contains("/lout.php"))
                 throw new Exception("The user is not logged in. It is possible that the cookie has expired or you made a mistake when copying it. Please check the settings.");

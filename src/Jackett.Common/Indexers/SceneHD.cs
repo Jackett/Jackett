@@ -93,12 +93,12 @@ namespace Jackett.Common.Indexers
             var searchUrl = SearchUrl + qc.GetQueryString();
             var response = await RequestStringWithCookiesAndRetry(searchUrl);
 
-            if (response.Content?.Contains("User not found or passkey not set") == true)
+            if (response.ContentString?.Contains("User not found or passkey not set") == true)
                 throw new Exception("The passkey is invalid. Check the indexer configuration.");
 
             try
             {
-                var jsonContent = JArray.Parse(response.Content);
+                var jsonContent = JArray.Parse(response.ContentString);
                 foreach (var item in jsonContent)
                 {
                     var title = item.Value<string>("name");
@@ -136,7 +136,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
 
             return releases;

@@ -93,7 +93,7 @@ namespace Jackett.Common.Indexers
 
             try
             {
-                var response = JsonConvert.DeserializeObject<MilkieResponse>(jsonResponse.Content);
+                var response = JsonConvert.DeserializeObject<MilkieResponse>(jsonResponse.ContentString);
 
                 var dlQueryParams = new NameValueCollection
                 {
@@ -129,7 +129,7 @@ namespace Jackett.Common.Indexers
             }
             catch(Exception ex)
             {
-                OnParseError(jsonResponse.Content, ex);
+                OnParseError(jsonResponse.ContentString, ex);
             }
 
             return releases;
