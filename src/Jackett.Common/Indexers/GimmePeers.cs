@@ -87,7 +87,7 @@ namespace Jackett.Common.Indexers
                 { "login", "Log in!" }
             };
 
-            var loginPage = await RequestStringWithCookies(SiteLink, string.Empty);
+            var loginPage = await WebRequestWithCookiesAsync(SiteLink, string.Empty);
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, SiteLink, SiteLink);
             await ConfigureIfOK(result.Cookies, result.ContentString?.Contains("logout.php") == true, () =>
@@ -122,12 +122,12 @@ namespace Jackett.Common.Indexers
             }
 
             searchUrl += "?" + queryCollection.GetQueryString();
-            var response = await RequestStringWithCookiesAndRetry(searchUrl, null, BrowseUrl);
+            var response = await RequestWithCookiesAndRetryAsync(searchUrl, null, RequestType.GET, BrowseUrl, null, null);
             if (response.IsRedirect)
             {
                 // re login
                 await ApplyConfiguration(null);
-                response = await RequestStringWithCookiesAndRetry(searchUrl, null, BrowseUrl);
+                response = await RequestWithCookiesAndRetryAsync(searchUrl, null, RequestType.GET, BrowseUrl, null, null);
             }
 
             var results = response.ContentString;

@@ -10,6 +10,7 @@ using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 
@@ -179,7 +180,7 @@ namespace Jackett.Common.Indexers
                 qc.Add(cat, string.Empty);
 
             var searchUrl = SearchUrl + "?" + qc.GetQueryString();
-            var response = await RequestStringWithCookiesAndRetry(searchUrl, null, SearchUrl);
+            var response = await RequestWithCookiesAndRetryAsync(searchUrl, null, RequestType.GET, SearchUrl, null, null);
             var results = response.ContentString;
 
             if (results == null || !results.Contains("/lout.php"))

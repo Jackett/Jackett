@@ -176,14 +176,15 @@ namespace Jackett.Common.Indexers
             requestData["username"] = configData.Username.Value;
             requestData["passkey"] = configData.Passkey.Value;
             JObject json = null;
-
-            var response = await PostDataWithCookiesAndRetry(APIUrl + url, null, null, null, new Dictionary<string, string>()
+            Dictionary<string, string> headers = new Dictionary<string, string>()
             {
                 {"Accept", "application/json"},
                 {"Content-Type", "application/json"}
-            }, requestData.ToString(), false);
+            };
+            var response = await RequestWithCookiesAndRetryAsync(
+                APIUrl + url, null, RequestType.POST, null, null, headers, requestData.ToString(), false);
 
-            CheckTrackerDown(response);
+            CheckSiteDown(response);
 
             try
             {

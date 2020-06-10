@@ -14,6 +14,7 @@ using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
+using WebRequest = Jackett.Common.Utils.Clients.WebRequest;
 
 namespace Jackett.Common.Indexers
 {
@@ -57,7 +58,7 @@ namespace Jackett.Common.Indexers
 
         private async Task DoLogin()
         {
-            var loginForm = await webclient.GetString(new Utils.Clients.WebRequest()
+            var loginForm = await webclient.GetResultAsync(new Utils.Clients.WebRequest()
             {
                 Url = LoginUrl,
                 Type = RequestType.GET
@@ -95,12 +96,12 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
             var searchString = queryCopy.SanitizedSearchTerm;
             var episodeSearchUrl = SearchUrl + WebUtility.UrlEncode(searchString);
-            var response = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
+            var response = await RequestWithCookiesAndRetryAsync(episodeSearchUrl, null, RequestType.GET, null, null, null);
             if (!response.ContentString.Contains(LogoutStr))
             {
                 //Cookie appears to expire after a period of time or logging in to the site via browser
                 await DoLogin();
-                response = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
+                response = await RequestWithCookiesAndRetryAsync(episodeSearchUrl, null, RequestType.GET, null, null, null);
             }
 
             try
@@ -201,7 +202,7 @@ namespace Jackett.Common.Indexers
 
         public override async Task<byte[]> Download(Uri link)
         {
-            var downloadPage = await RequestStringWithCookies(link.ToString());
+            var downloadPage = await WebRequestWithCookiesAsync(link.ToString());
             var parser = new HtmlParser();
             var dom = parser.ParseDocument(downloadPage.ContentString);
             var downloadLink = dom.QuerySelectorAll(".download_link").First().GetAttribute("href");
@@ -209,7 +210,7 @@ namespace Jackett.Common.Indexers
             if (string.IsNullOrWhiteSpace(downloadLink))
                 throw new Exception("Unable to find download link.");
 
-            var response = await RequestBytesWithCookies(SiteLink + downloadLink);
+            var response = await WebRequestWithCookiesAsync(SiteLink + downloadLink, null, RequestType.GET, null, null, null);
             return response.ContentBytes;
         }
     }

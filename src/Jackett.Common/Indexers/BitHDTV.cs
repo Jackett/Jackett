@@ -63,7 +63,7 @@ namespace Jackett.Common.Indexers
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
             var result = configData;
-            var loginPage = await RequestStringWithCookies(LoginUrl, configData.CookieHeader.Value);
+            var loginPage = await WebRequestWithCookiesAsync(LoginUrl, configData.CookieHeader.Value);
             if (loginPage.IsRedirect)
                 return result; // already logged in
             var parser = new HtmlParser();
@@ -129,10 +129,10 @@ namespace Jackett.Common.Indexers
                 qc.Add("search", query.ImdbID);
                 qc.Add("options", "4"); //Search URL field for IMDB link
                 search.Query = qc.GetQueryString();
-                results.Add(await RequestStringWithCookiesAndRetry(search.ToString()));
+                results.Add(await RequestWithCookiesAndRetryAsync(search.ToString(), null, RequestType.GET, null, null, null));
                 qc["Options"] = "1"; //Search Title and Description
                 search.Query = qc.GetQueryString();
-                results.Add(await RequestStringWithCookiesAndRetry(search.ToString()));
+                results.Add(await RequestWithCookiesAndRetryAsync(search.ToString(), null, RequestType.GET, null, null, null));
             }
             else
             {
@@ -140,7 +140,7 @@ namespace Jackett.Common.Indexers
                 qc.Add("search", query.GetQueryString());
                 qc.Add("options", "0"); //Search Title Only
                 search.Query = qc.GetQueryString();
-                results.Add(await RequestStringWithCookiesAndRetry(search.ToString()));
+                results.Add(await RequestWithCookiesAndRetryAsync(search.ToString(), null, RequestType.GET, null, null, null));
             }
 
             var parser = new HtmlParser();

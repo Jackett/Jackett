@@ -75,7 +75,7 @@ namespace Jackett.Common.Indexers.Abstract
 
             searchUrl += "?" + queryCollection.GetQueryString();
 
-            var response = await RequestStringWithCookiesAndRetry(searchUrl);
+            var response = await RequestWithCookiesAndRetryAsync(searchUrl, null, RequestType.GET, null, null, null);
 
             JObject json = null;
             try

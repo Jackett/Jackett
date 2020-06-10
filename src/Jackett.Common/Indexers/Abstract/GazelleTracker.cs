@@ -12,6 +12,7 @@ using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 using WebClient = Jackett.Common.Utils.Clients.WebClient;
@@ -196,12 +197,12 @@ namespace Jackett.Common.Indexers.Abstract
 
             searchUrl += "?" + queryCollection.GetQueryString();
 
-            var response = await RequestStringWithCookiesAndRetry(searchUrl);
+            var response = await RequestWithCookiesAndRetryAsync(searchUrl, null, RequestType.GET, null, null, null);
             if (response.IsRedirect)
             {
                 // re-login
                 await ApplyConfiguration(null);
-                response = await RequestStringWithCookiesAndRetry(searchUrl);
+                response = await RequestWithCookiesAndRetryAsync(searchUrl, null, RequestType.GET, null, null, null);
             }
 
             try

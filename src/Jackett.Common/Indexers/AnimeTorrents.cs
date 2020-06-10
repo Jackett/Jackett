@@ -79,7 +79,7 @@ namespace Jackett.Common.Indexers
                 { "rememberme[]", "1" }
             };
 
-            var loginPage = await RequestStringWithCookiesAndRetry(LoginUrl, "", LoginUrl);
+            var loginPage = await RequestWithCookiesAndRetryAsync(LoginUrl, "", RequestType.GET, LoginUrl, null, null);
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true);
             await ConfigureIfOK(result.Cookies, result.ContentString != null && result.ContentString.Contains("logout.php"), () =>
@@ -117,7 +117,7 @@ namespace Jackett.Common.Indexers
                 { "X-Requested-With", "XMLHttpRequest" }
             };
 
-            var response = await RequestStringWithCookiesAndRetry(searchUrl, null, SearchUrlReferer, extraHeaders);
+            var response = await RequestWithCookiesAndRetryAsync(searchUrl, null, RequestType.GET, SearchUrlReferer, null, extraHeaders);
 
             var results = response.ContentString;
             try

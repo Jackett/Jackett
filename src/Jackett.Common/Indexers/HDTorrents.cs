@@ -104,7 +104,7 @@ namespace Jackett.Common.Indexers
         {
             LoadValuesFromJson(configJson);
 
-            var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
+            var loginPage = await WebRequestWithCookiesAsync(LoginUrl, string.Empty);
 
             var pairs = new Dictionary<string, string> {
                 { "uid", configData.Username.Value },
@@ -134,7 +134,7 @@ namespace Jackett.Common.Indexers
             // manually url encode parenthesis to prevent "hacking" detection
             searchUrl += queryCollection.GetQueryString().Replace("(", "%28").Replace(")", "%29");
 
-            var results = await RequestStringWithCookiesAndRetry(searchUrl);
+            var results = await RequestWithCookiesAndRetryAsync(searchUrl, null, RequestType.GET, null, null, null);
             try
             {
                 var parser = new HtmlParser();

@@ -21,6 +21,7 @@ using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
+using WebRequest = Jackett.Common.Utils.Clients.WebRequest;
 
 namespace Jackett.Common.Indexers
 {
@@ -164,7 +165,7 @@ namespace Jackett.Common.Indexers
             // Perform loggin
             latencyNow();
             output("\nPerform loggin.. with " + LoginUrl);
-            var response = await webclient.GetString(request);
+            var response = await webclient.GetResultAsync(request);
 
             // Test if we are logged in
             await ConfigureIfOK(response.Cookies, response.Cookies.Contains("session="), () =>
@@ -546,14 +547,12 @@ namespace Jackett.Common.Indexers
         /// <returns>Results from query</returns>
         private async Task<string> queryTracker(string request)
         {
-            WebResult results = null;
-
             // Cache mode not enabled or cached file didn't exist for our query
             output("\nQuerying tracker for results....");
 
             // Request our first page
             latencyNow();
-            results = await RequestStringWithCookiesAndRetry(request, null, null, emulatedBrowserHeaders);
+            var results = await RequestWithCookiesAndRetryAsync(request, null, RequestType.GET, null, null, emulatedBrowserHeaders);
 
             // Return results from tracker
             return results.ContentString;

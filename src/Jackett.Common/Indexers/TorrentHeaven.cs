@@ -119,7 +119,7 @@ namespace Jackett.Common.Indexers
                 throw new ExceptionWithConfigData(errorMessage, configData);
             }
 
-            var result2 = await RequestStringWithCookies(LoginCompleteUrl, result.Cookies);
+            var result2 = await WebRequestWithCookiesAsync(LoginCompleteUrl, result.Cookies);
             await ConfigureIfOK(
                 result2.Cookies, result2.Cookies?.Contains("pass") == true,
                 () => throw new ExceptionWithConfigData("Didn't get a user/pass cookie", configData));
@@ -128,14 +128,14 @@ namespace Jackett.Common.Indexers
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var loginPage = await RequestStringWithCookies(IndexUrl, string.Empty);
+            var loginPage = await WebRequestWithCookiesAsync(IndexUrl, string.Empty);
             var parser = new HtmlParser();
             var dom = parser.ParseDocument(loginPage.ContentString);
             var qCaptchaImg = dom.QuerySelector("td.tablea > img");
             if (qCaptchaImg != null)
             {
                 var captchaUrl = SiteLink + qCaptchaImg.GetAttribute("src");
-                var captchaImage = await RequestBytesWithCookies(captchaUrl, loginPage.Cookies);
+                var captchaImage = await WebRequestWithCookiesAsync(captchaUrl, loginPage.Cookies, RequestType.GET, null, null, null);
                 configData.CaptchaImage.Value = captchaImage.ContentBytes;
             }
             else
@@ -182,7 +182,7 @@ namespace Jackett.Common.Indexers
             foreach (var cat in MapTorznabCapsToTrackers(query))
                 queryCollection.Add("dirs" + cat, "1");
             searchUrl += "?" + queryCollection.GetQueryString();
-            var response = await RequestStringWithCookies(searchUrl);
+            var response = await WebRequestWithCookiesAsync(searchUrl);
             var titleRegexp = new Regex(@"^return buildTable\('(.*?)',\s+");
             try
             {

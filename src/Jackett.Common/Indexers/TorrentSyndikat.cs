@@ -111,7 +111,7 @@ namespace Jackett.Common.Indexers
             LoadValuesFromJson(configJson);
             CookieHeader = "";
 
-            var result1 = await RequestStringWithCookies(CaptchaUrl);
+            var result1 = await WebRequestWithCookiesAsync(CaptchaUrl);
             var json1 = JObject.Parse(result1.ContentString);
             var captchaSelection = json1["images"][0]["hash"];
 
@@ -172,12 +172,12 @@ namespace Jackett.Common.Indexers
 
             var searchUrl = SearchUrl + "?" + queryCollection.GetQueryString();
 
-            var results = await RequestStringWithCookiesAndRetry(searchUrl);
+            var results = await RequestWithCookiesAndRetryAsync(searchUrl, null, RequestType.GET, null, null, null);
 
             if (results.IsRedirect)
             {
                 await ApplyConfiguration(null);
-                results = await RequestStringWithCookiesAndRetry(searchUrl);
+                results = await RequestWithCookiesAndRetryAsync(searchUrl, null, RequestType.GET, null, null, null);
             }
 
             try

@@ -13,6 +13,7 @@ using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 
@@ -107,7 +108,7 @@ namespace Jackett.Common.Indexers
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
+            var loginPage = await WebRequestWithCookiesAsync(LoginUrl, string.Empty);
             var parser = new HtmlParser();
             var cq = parser.ParseDocument(loginPage.ContentString);
             var captcha = cq.QuerySelector(".g-recaptcha"); // invisible recaptcha
@@ -153,7 +154,7 @@ namespace Jackett.Common.Indexers
                 }
             }
 
-            var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
+            var loginPage = await WebRequestWithCookiesAsync(LoginUrl, string.Empty);
             var pairs = new Dictionary<string, string>
             {
                 {"vb_login_username", configData.Username.Value},
@@ -204,7 +205,7 @@ namespace Jackett.Common.Indexers
             }
 
             searchUrl = MapTorznabCapsToTrackers(query).Aggregate(searchUrl, (current, cat) => $"{current}&c[]={cat}");
-            var data = await RequestStringWithCookiesAndRetry(searchUrl);
+            var data = await RequestWithCookiesAndRetryAsync(searchUrl, null, RequestType.GET, null, null, null);
             try
             {
                 var parser = new HtmlParser();
@@ -276,7 +277,7 @@ namespace Jackett.Common.Indexers
                 Path = "index.php",
                 Query = queryString.GetQueryString()
             };
-            var results = await RequestStringWithCookies(site.ToString());
+            var results = await WebRequestWithCookiesAsync(site.ToString());
             var parser = new HtmlParser();
             var dom = parser.ParseDocument(results.ContentString);
             var rows = dom.QuerySelectorAll("#listtable > tbody > tr");

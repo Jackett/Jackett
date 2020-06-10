@@ -145,7 +145,8 @@ namespace Jackett.Common.Indexers
 
         private async Task EnsureAuthorized()
         {
-            var result = await RequestStringWithCookiesAndRetry(SiteLink);
+            string url = SiteLink;
+            var result = await RequestWithCookiesAndRetryAsync(url, null, RequestType.GET, null, null, null);
 
             if (!IsAuthorized(result))
             {
@@ -156,8 +157,8 @@ namespace Jackett.Common.Indexers
         private async Task<List<ReleaseInfo>> FetchNewReleases()
         {
             const string ReleaseLinksSelector = "#dle-content > .story > .story_h > .lcol > h2 > a";
-
-            var result = await RequestStringWithCookiesAndRetry(SiteLink);
+            string url1 = SiteLink;
+            var result = await RequestWithCookiesAndRetryAsync(url1, null, RequestType.GET, null, null, null);
             var releases = new List<ReleaseInfo>();
 
             try
@@ -195,7 +196,7 @@ namespace Jackett.Common.Indexers
                 return releases;
             }
 
-            var result = await RequestStringWithCookiesAndRetry(url);
+            var result = await RequestWithCookiesAndRetryAsync(url, null, RequestType.GET, null, null, null);
 
             try
             {
@@ -529,8 +530,9 @@ namespace Jackett.Common.Indexers
             const string searchLinkSelector = "#dle-content > .searchitem > h3 > a";
 
             var releases = new List<ReleaseInfo>();
-
-            var response = await PostDataWithCookiesAndRetry(SearchUrl, PreparePostData(query));
+            IEnumerable<KeyValuePair<string, string>> data = PreparePostData(query);
+            var response = await RequestWithCookiesAndRetryAsync(
+                SearchUrl, null, RequestType.POST, null, data, null, null, null);
 
             try
             {

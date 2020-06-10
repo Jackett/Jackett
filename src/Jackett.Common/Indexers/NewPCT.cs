@@ -162,7 +162,7 @@ namespace Jackett.Common.Indexers
 
         public override async Task<byte[]> Download(Uri linkParam)
         {
-            var results = await RequestStringWithCookiesAndRetry(linkParam.AbsoluteUri);
+            var results = await RequestWithCookiesAndRetryAsync(linkParam.AbsoluteUri, null, RequestType.GET, null, null, null);
 
             var uriLink = ExtractDownloadUri(results.ContentString, linkParam.AbsoluteUri);
             if (uriLink == null)
@@ -210,7 +210,7 @@ namespace Jackett.Common.Indexers
                 while (pg <= _maxDailyPages)
                 {
                     var pageUrl = SiteLink + string.Format(_dailyUrl, pg);
-                    var results = await RequestStringWithCookiesAndRetry(pageUrl);
+                    var results = await RequestWithCookiesAndRetryAsync(pageUrl, null, RequestType.GET, null, null, null);
                     if (results == null || string.IsNullOrEmpty(results.ContentString))
                         break;
 
@@ -303,13 +303,13 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
 
             // Episodes list
-            var results = await RequestStringWithCookiesAndRetry(uri.AbsoluteUri);
+            var results = await RequestWithCookiesAndRetryAsync(uri.AbsoluteUri, null, RequestType.GET, null, null, null);
             var seriesEpisodesUrl = ParseSeriesListContent(results.ContentString, seriesName);
 
             // TV serie list
             if (!string.IsNullOrEmpty(seriesEpisodesUrl))
             {
-                results = await RequestStringWithCookiesAndRetry(seriesEpisodesUrl);
+                results = await RequestWithCookiesAndRetryAsync(seriesEpisodesUrl, null, RequestType.GET, null, null, null);
                 var items = ParseEpisodesListContent(results.ContentString);
                 if (items != null && items.Any())
                     releases.AddRange(items);
@@ -463,7 +463,7 @@ namespace Jackett.Common.Indexers
                     {"pg", pg.ToString()}
                 };
 
-                var results = await PostDataWithCookies(searchJsonUrl, queryCollection);
+                var results = await WebRequestWithCookiesAsync(searchJsonUrl, method: RequestType.POST, data: queryCollection);
                 var items = ParseSearchJsonContent(results.ContentString, year);
                 if (!items.Any())
                     break;

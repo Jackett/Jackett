@@ -12,6 +12,7 @@ using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -107,7 +108,7 @@ namespace Jackett.Common.Indexers
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
+            var loginPage = await WebRequestWithCookiesAsync(LoginUrl, string.Empty);
             var parser = new HtmlParser();
             var dom = parser.ParseDocument(loginPage.ContentString);
             var captcha = dom.QuerySelector(".g-recaptcha");
@@ -198,12 +199,12 @@ namespace Jackett.Common.Indexers
             else
                 searchUrl += "newfilter/2"; // include 0day and music
 
-            var results = await RequestStringWithCookiesAndRetry(searchUrl);
+            var results = await RequestWithCookiesAndRetryAsync(searchUrl, null, RequestType.GET, null, null, null);
 
             if (results.ContentString.Contains("/user/account/login")) // re-login
             {
                 await DoLogin();
-                results = await RequestStringWithCookiesAndRetry(searchUrl);
+                results = await RequestWithCookiesAndRetryAsync(searchUrl, null, RequestType.GET, null, null, null);
             }
 
             try

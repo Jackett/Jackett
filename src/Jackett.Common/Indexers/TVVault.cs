@@ -91,7 +91,7 @@ namespace Jackett.Common.Indexers
 
             searchUrl += "?" + queryCollection.GetQueryString();
 
-            var results = await RequestStringWithCookies(searchUrl);
+            var results = await WebRequestWithCookiesAsync(searchUrl);
             try
             {
                 var RowsSelector = "table.torrent_table > tbody > tr.torrent";

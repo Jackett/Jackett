@@ -138,14 +138,14 @@ namespace Jackett.Common.Indexers
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var loginPage = await RequestStringWithCookies(LandingUrl);
+            var loginPage = await WebRequestWithCookiesAsync(LandingUrl);
             var parser = new HtmlParser();
             var dom = parser.ParseDocument(loginPage.ContentString);
             var qCaptchaImg = dom.QuerySelector("img#regimage");
             if (qCaptchaImg != null)
             {
                 var CaptchaUrl = qCaptchaImg.GetAttribute("src");
-                var captchaImage = await RequestBytesWithCookies(CaptchaUrl, loginPage.Cookies, RequestType.GET, LandingUrl);
+                var captchaImage = await WebRequestWithCookiesAsync(CaptchaUrl, loginPage.Cookies, RequestType.GET, LandingUrl, null, null);
 
                 var CaptchaImage = new ImageItem { Name = "Captcha Image" };
                 var CaptchaText = new StringItem { Name = "Captcha Text" };
@@ -201,7 +201,8 @@ namespace Jackett.Common.Indexers
                                     {"timezone", "0"},
                                     {"showrows", "50"}
                                 };
-                var rssPage = await PostDataWithCookies(GetRSSKeyUrl, rssParams, result.Cookies);
+                var rssPage = await WebRequestWithCookiesAsync(
+                    GetRSSKeyUrl, result.Cookies, RequestType.POST, data: rssParams);
                 var match = Regex.Match(rssPage.ContentString, "(?<=secret_key\\=)([a-zA-z0-9]*)");
                 configData.RSSKey.Value = match.Success ? match.Value : string.Empty;
                 if (string.IsNullOrWhiteSpace(configData.RSSKey.Value))
@@ -266,7 +267,7 @@ namespace Jackett.Common.Indexers
                             Link = new Uri(string.Format(DownloadUrl, torrentId)),
                             Seeders = ParseUtil.CoerceInt(infoMatch.Groups["seeders"].Value),
                             Peers = ParseUtil.CoerceInt(infoMatch.Groups["leechers"].Value),
-                            Size = ReleaseInfo.GetBytes(infoMatch.Groups["size"].Value),
+                            Size = ReleaseInfo.GetResultAsync(infoMatch.Groups["size"].Value),
                             Category = MapTrackerCatToNewznab(category)
                         };
 
@@ -310,12 +311,16 @@ namespace Jackett.Common.Indexers
                     searchParams.Add("search_type", "t_name");
             }
 
-            var searchPage = await PostDataWithCookiesAndRetry(SearchUrl, searchParams, CookieHeader);
+            string cookieOverride = CookieHeader;
+            var searchPage = await RequestWithCookiesAndRetryAsync(
+                SearchUrl, cookieOverride, RequestType.POST, null, searchParams, null, null, null);
             // Occasionally the cookies become invalid, login again if that happens
             if (searchPage.IsRedirect)
             {
                 await ApplyConfiguration(null);
-                searchPage = await PostDataWithCookiesAndRetry(SearchUrl, searchParams, CookieHeader);
+                string cookieOverride1 = CookieHeader;
+                searchPage = await RequestWithCookiesAndRetryAsync(
+                    SearchUrl, cookieOverride1, RequestType.POST, null, searchParams, null, null, null);
             }
 
             try

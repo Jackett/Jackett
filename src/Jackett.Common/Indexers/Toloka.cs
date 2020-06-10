@@ -232,12 +232,12 @@ namespace Jackett.Common.Indexers
             }
 
             var searchUrl = SearchUrl + "?" + queryCollection.GetQueryString();
-            var results = await RequestStringWithCookies(searchUrl);
+            var results = await WebRequestWithCookiesAsync(searchUrl);
             if (!results.ContentString.Contains("logout=true"))
             {
                 // re login
                 await ApplyConfiguration(null);
-                results = await RequestStringWithCookies(searchUrl);
+                results = await WebRequestWithCookiesAsync(searchUrl);
             }
             try
             {

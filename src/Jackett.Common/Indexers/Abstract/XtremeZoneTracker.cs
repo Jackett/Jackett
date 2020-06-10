@@ -10,6 +10,7 @@ using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -74,7 +75,8 @@ namespace Jackett.Common.Indexers.Abstract
                 { "password", configData.Password.Value.Trim() }
             };
             var jsonData = JsonConvert.SerializeObject(body);
-            var result = await PostDataWithCookies(LoginUrl, null, headers: ApiHeaders, rawbody: jsonData);
+            var result = await WebRequestWithCookiesAsync(
+                LoginUrl, method: RequestType.POST, headers: ApiHeaders, rawbody: jsonData);
             var json = JObject.Parse(result.ContentString);
             _token = json.Value<string>("token");
             if (_token == null)
@@ -105,11 +107,11 @@ namespace Jackett.Common.Indexers.Abstract
                 await RenewalTokenAsync();
 
             var searchUrl = SearchUrl + "?" + qc.GetQueryString();
-            var response = await RequestStringWithCookies(searchUrl, headers: GetSearchHeaders());
+            var response = await WebRequestWithCookiesAsync(searchUrl, headers: GetSearchHeaders());
             if (response.Status == HttpStatusCode.Unauthorized)
             {
                 await RenewalTokenAsync(); // re-login
-                response = await RequestStringWithCookies(searchUrl, headers: GetSearchHeaders());
+                response = await WebRequestWithCookiesAsync(searchUrl, headers: GetSearchHeaders());
             }
             else if (response.Status != HttpStatusCode.OK)
                 throw new Exception($"Unknown error in search: {response.ContentString}");
@@ -167,11 +169,13 @@ namespace Jackett.Common.Indexers.Abstract
 
         public override async Task<byte[]> Download(Uri link)
         {
-            var response = await RequestBytesWithCookies(link.ToString(), headers: GetSearchHeaders());
+            Dictionary<string, string> headers = GetSearchHeaders();
+            var response = await WebRequestWithCookiesAsync(link.ToString(), null, RequestType.GET, null, null, headers);
             if (response.Status == HttpStatusCode.Unauthorized)
             {
                 await RenewalTokenAsync();
-                response = await RequestBytesWithCookies(link.ToString(), headers: GetSearchHeaders());
+                Dictionary<string, string> headers1 = GetSearchHeaders();
+                response = await WebRequestWithCookiesAsync(link.ToString(), null, RequestType.GET, null, null, headers1);
             }
             else if (response.Status != HttpStatusCode.OK)
                 throw new Exception($"Unknown error in download: {response.ContentBytes}");

@@ -72,7 +72,7 @@ namespace Jackett.Common.Indexers
             };
 
             var searchUrl = ApiEndpoint + "?" + queryCollection.GetQueryString();
-            var response = await RequestStringWithCookiesAndRetry(searchUrl);
+            var response = await RequestWithCookiesAndRetryAsync(searchUrl, null, RequestType.GET, null, null, null);
 
             try
             {
@@ -112,7 +112,7 @@ namespace Jackett.Common.Indexers
             };
 
             var searchUrl = ApiEndpoint + "?" + queryCollection.GetQueryString();
-            var response = await RequestStringWithCookiesAndRetry(searchUrl);
+            var response = await RequestWithCookiesAndRetryAsync(searchUrl, null, RequestType.GET, null, null, null);
 
             try
             {
@@ -146,7 +146,7 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
             var parser = new HtmlParser();
 
-            var response = await RequestStringWithCookiesAndRetry(resultUrl);
+            var response = await RequestWithCookiesAndRetryAsync(resultUrl, null, RequestType.GET, null, null, null);
             await FollowIfRedirect(response);
 
             try
@@ -168,7 +168,7 @@ namespace Jackett.Common.Indexers
                     var nextId = 0;
                     while (true)
                     {
-                        var showApiResponse = await RequestStringWithCookiesAndRetry(apiUrl + "&nextid=" + nextId);
+                        var showApiResponse = await RequestWithCookiesAndRetryAsync(apiUrl + "&nextid=" + nextId, null, RequestType.GET, null, null, null);
                         var showApiDom = parser.ParseDocument(showApiResponse.ContentString);
                         var releaseRowResults = showApiDom.QuerySelectorAll("div.rls-info-container");
                         rows.AddRange(releaseRowResults);

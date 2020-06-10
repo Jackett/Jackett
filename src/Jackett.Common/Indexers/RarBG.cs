@@ -11,6 +11,7 @@ using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
@@ -117,7 +118,7 @@ namespace Jackett.Common.Indexers
             // check the token and renewal if necessary
             await RenewalTokenAsync();
 
-            var response = await RequestStringWithCookiesAndRetry(BuildSearchUrl(query));
+            var response = await RequestWithCookiesAndRetryAsync(BuildSearchUrl(query), null, RequestType.GET, null, null, null);
             var jsonContent = JObject.Parse(response.ContentString);
             var errorCode = jsonContent.Value<int>("error_code");
             switch (errorCode)
@@ -127,7 +128,7 @@ namespace Jackett.Common.Indexers
                 case 2:
                 case 4: // invalid token
                     await RenewalTokenAsync(true); // force renewal token
-                    response = await RequestStringWithCookiesAndRetry(BuildSearchUrl(query));
+                    response = await RequestWithCookiesAndRetryAsync(BuildSearchUrl(query), null, RequestType.GET, null, null, null);
                     jsonContent = JObject.Parse(response.ContentString);
                     break;
                 case 10: // imdb not found, see issue #1486
@@ -258,7 +259,7 @@ namespace Jackett.Common.Indexers
                     { "app_id", _appId }
                 };
                 var tokenUrl = ApiEndpoint + "?" + qc.GetQueryString();
-                var result = await RequestStringWithCookiesAndRetry(tokenUrl);
+                var result = await RequestWithCookiesAndRetryAsync(tokenUrl, null, RequestType.GET, null, null, null);
                 var json = JObject.Parse(result.ContentString);
                 _token = json.Value<string>("token");
                 _lastTokenFetch = DateTime.Now;
