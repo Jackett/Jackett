@@ -30,7 +30,7 @@ namespace Jackett.Common.Utils.Clients
             base.Init();
         }
 
-        protected override async Task<WebClientByteResult> Run(WebRequest webRequest)
+        protected override async Task<WebResult> Run(WebRequest webRequest)
         {
             ServicePointManager.SecurityProtocol = (SecurityProtocolType)192 | (SecurityProtocolType)768 | (SecurityProtocolType)3072;
 
@@ -117,7 +117,7 @@ namespace Jackett.Common.Utils.Clients
 
                             using (response = await client.SendAsync(request))
                             {
-                                var result = new WebClientByteResult
+                                var result = new WebResult
                                 {
                                     ContentBytes = await response.Content.ReadAsByteArrayAsync()
                                 };
@@ -147,7 +147,7 @@ namespace Jackett.Common.Utils.Clients
                                                 redirval = value.Substring(start + 1);
                                                 result.RedirectingTo = redirval;
                                                 // normally we don't want a serviceunavailable (503) to be a redirect, but that's the nature
-                                                // of this cloudflare approach..don't want to alter BaseWebResult.IsRedirect because normally
+                                                // of this cloudflare approach..don't want to alter WebResult.IsRedirect because normally
                                                 // it shoudln't include service unavailable..only if we have this redirect header.
                                                 response.StatusCode = System.Net.HttpStatusCode.Redirect;
                                                 redirtime = int.Parse(value.Substring(0, end));
