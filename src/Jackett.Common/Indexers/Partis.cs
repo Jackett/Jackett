@@ -116,7 +116,7 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();     //List of releases initialization
             var searchString = query.GetQueryString();  //get search string from query
 
-            BaseWebResult results = null;
+            WebResult results = null;
             var queryCollection = new NameValueCollection();
             var catList = MapTorznabCapsToTrackers(query);     // map categories from query to indexer specific
             var categ = string.Join(",", catList);

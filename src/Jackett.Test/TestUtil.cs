@@ -33,13 +33,13 @@ namespace Jackett.Test
 
         public static IContainer Container => testContainer;
 
-        public static void RegisterByteCall(WebRequest r, Func<WebRequest, WebClientByteResult> f)
+        public static void RegisterByteCall(WebRequest r, Func<WebRequest, WebResult> f)
         {
             var client = testContainer.Resolve<WebClient>() as TestWebClient;
             client.RegisterByteCall(r, f);
         }
 
-        public static void RegisterStringCall(WebRequest r, Func<WebRequest, WebClientStringResult> f)
+        public static void RegisterStringCall(WebRequest r, Func<WebRequest, WebResult> f)
         {
             var client = testContainer.Resolve<WebClient>() as TestWebClient;
             client.RegisterStringCall(r, f);
