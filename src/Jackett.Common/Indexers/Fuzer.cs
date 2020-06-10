@@ -205,7 +205,7 @@ namespace Jackett.Common.Indexers
             }
 
             searchUrl = MapTorznabCapsToTrackers(query).Aggregate(searchUrl, (current, cat) => $"{current}&c[]={cat}");
-            var data = await RequestWithCookiesAndRetryAsync(searchUrl, null, RequestType.GET, null, null, null);
+            var data = await RequestWithCookiesAndRetryAsync(searchUrl);
             try
             {
                 var parser = new HtmlParser();

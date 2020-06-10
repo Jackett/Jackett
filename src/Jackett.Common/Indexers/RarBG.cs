@@ -118,7 +118,7 @@ namespace Jackett.Common.Indexers
             // check the token and renewal if necessary
             await RenewalTokenAsync();
 
-            var response = await RequestWithCookiesAndRetryAsync(BuildSearchUrl(query), null, RequestType.GET, null, null, null);
+            var response = await RequestWithCookiesAndRetryAsync(BuildSearchUrl(query));
             var jsonContent = JObject.Parse(response.ContentString);
             var errorCode = jsonContent.Value<int>("error_code");
             switch (errorCode)
@@ -128,7 +128,7 @@ namespace Jackett.Common.Indexers
                 case 2:
                 case 4: // invalid token
                     await RenewalTokenAsync(true); // force renewal token
-                    response = await RequestWithCookiesAndRetryAsync(BuildSearchUrl(query), null, RequestType.GET, null, null, null);
+                    response = await RequestWithCookiesAndRetryAsync(BuildSearchUrl(query));
                     jsonContent = JObject.Parse(response.ContentString);
                     break;
                 case 10: // imdb not found, see issue #1486
@@ -259,7 +259,7 @@ namespace Jackett.Common.Indexers
                     { "app_id", _appId }
                 };
                 var tokenUrl = ApiEndpoint + "?" + qc.GetQueryString();
-                var result = await RequestWithCookiesAndRetryAsync(tokenUrl, null, RequestType.GET, null, null, null);
+                var result = await RequestWithCookiesAndRetryAsync(tokenUrl);
                 var json = JObject.Parse(result.ContentString);
                 _token = json.Value<string>("token");
                 _lastTokenFetch = DateTime.Now;

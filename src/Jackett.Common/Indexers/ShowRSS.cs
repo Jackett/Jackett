@@ -60,7 +60,7 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
             var episodeSearchUrl = string.Format(SearchAllUrl);
-            var result = await RequestWithCookiesAndRetryAsync(episodeSearchUrl, null, RequestType.GET, null, null, null);
+            var result = await RequestWithCookiesAndRetryAsync(episodeSearchUrl);
             var xmlDoc = new XmlDocument();
 
             try

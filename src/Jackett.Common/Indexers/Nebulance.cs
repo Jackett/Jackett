@@ -82,7 +82,7 @@ namespace Jackett.Common.Indexers
             // #6413
             var url = $"{SearchUrl}&searchtext={WebUtility.UrlEncode(query.GetQueryString())}";
 
-            var response = await RequestWithCookiesAndRetryAsync(url, null, RequestType.GET, null, null, null);
+            var response = await RequestWithCookiesAndRetryAsync(url);
             var releases = ParseResponse(response.ContentString);
 
             return releases;

@@ -129,10 +129,10 @@ namespace Jackett.Common.Indexers
                 qc.Add("search", query.ImdbID);
                 qc.Add("options", "4"); //Search URL field for IMDB link
                 search.Query = qc.GetQueryString();
-                results.Add(await RequestWithCookiesAndRetryAsync(search.ToString(), null, RequestType.GET, null, null, null));
+                results.Add(await RequestWithCookiesAndRetryAsync(search.ToString()));
                 qc["Options"] = "1"; //Search Title and Description
                 search.Query = qc.GetQueryString();
-                results.Add(await RequestWithCookiesAndRetryAsync(search.ToString(), null, RequestType.GET, null, null, null));
+                results.Add(await RequestWithCookiesAndRetryAsync(search.ToString()));
             }
             else
             {
@@ -140,7 +140,7 @@ namespace Jackett.Common.Indexers
                 qc.Add("search", query.GetQueryString());
                 qc.Add("options", "0"); //Search Title Only
                 search.Query = qc.GetQueryString();
-                results.Add(await RequestWithCookiesAndRetryAsync(search.ToString(), null, RequestType.GET, null, null, null));
+                results.Add(await RequestWithCookiesAndRetryAsync(search.ToString()));
             }
 
             var parser = new HtmlParser();

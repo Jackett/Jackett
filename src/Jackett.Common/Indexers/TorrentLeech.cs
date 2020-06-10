@@ -199,12 +199,12 @@ namespace Jackett.Common.Indexers
             else
                 searchUrl += "newfilter/2"; // include 0day and music
 
-            var results = await RequestWithCookiesAndRetryAsync(searchUrl, null, RequestType.GET, null, null, null);
+            var results = await RequestWithCookiesAndRetryAsync(searchUrl);
 
             if (results.ContentString.Contains("/user/account/login")) // re-login
             {
                 await DoLogin();
-                results = await RequestWithCookiesAndRetryAsync(searchUrl, null, RequestType.GET, null, null, null);
+                results = await RequestWithCookiesAndRetryAsync(searchUrl);
             }
 
             try

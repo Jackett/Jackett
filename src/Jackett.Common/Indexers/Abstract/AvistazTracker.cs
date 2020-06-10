@@ -162,13 +162,11 @@ without this configuration the torrent download does not work.<br/>You can find 
 
             var qc = GetSearchQueryParameters(query);
             var episodeSearchUrl = SearchUrl + "?" + qc.GetQueryString();
-            Dictionary<string, string> headers = GetSearchHeaders();
-            var response = await RequestWithCookiesAndRetryAsync(episodeSearchUrl, null, RequestType.GET, null, null, headers);
+            var response = await RequestWithCookiesAndRetryAsync(episodeSearchUrl, headers: GetSearchHeaders());
             if (response.Status == HttpStatusCode.Unauthorized || response.Status == HttpStatusCode.PreconditionFailed)
             {
                 await RenewalTokenAsync();
-                Dictionary<string, string> headers1 = GetSearchHeaders();
-                response = await RequestWithCookiesAndRetryAsync(episodeSearchUrl, null, RequestType.GET, null, null, headers1);
+                response = await RequestWithCookiesAndRetryAsync(episodeSearchUrl, headers: GetSearchHeaders());
             }
             else if (response.Status != HttpStatusCode.OK)
                 throw new Exception($"Unknown error: {response.ContentString}");

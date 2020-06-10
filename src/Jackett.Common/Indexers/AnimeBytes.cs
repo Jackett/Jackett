@@ -178,7 +178,7 @@ namespace Jackett.Common.Indexers
             }
 
             // Get the content from the tracker
-            var response = await RequestWithCookiesAndRetryAsync(queryUrl, null, RequestType.GET, null, null, null);
+            var response = await RequestWithCookiesAndRetryAsync(queryUrl);
             if (!response.ContentString.StartsWith("{")) // not JSON => error
                 throw new ExceptionWithConfigData("unexcepted response (not JSON)", configData);
             dynamic json = JsonConvert.DeserializeObject<dynamic>(response.ContentString);

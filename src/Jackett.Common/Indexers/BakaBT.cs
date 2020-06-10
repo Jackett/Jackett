@@ -96,12 +96,12 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
             var searchString = queryCopy.SanitizedSearchTerm;
             var episodeSearchUrl = SearchUrl + WebUtility.UrlEncode(searchString);
-            var response = await RequestWithCookiesAndRetryAsync(episodeSearchUrl, null, RequestType.GET, null, null, null);
+            var response = await RequestWithCookiesAndRetryAsync(episodeSearchUrl);
             if (!response.ContentString.Contains(LogoutStr))
             {
                 //Cookie appears to expire after a period of time or logging in to the site via browser
                 await DoLogin();
-                response = await RequestWithCookiesAndRetryAsync(episodeSearchUrl, null, RequestType.GET, null, null, null);
+                response = await RequestWithCookiesAndRetryAsync(episodeSearchUrl);
             }
 
             try
@@ -210,7 +210,7 @@ namespace Jackett.Common.Indexers
             if (string.IsNullOrWhiteSpace(downloadLink))
                 throw new Exception("Unable to find download link.");
 
-            var response = await WebRequestWithCookiesAsync(SiteLink + downloadLink, null, RequestType.GET, null, null, null);
+            var response = await WebRequestWithCookiesAsync(SiteLink + downloadLink);
             return response.ContentBytes;
         }
     }

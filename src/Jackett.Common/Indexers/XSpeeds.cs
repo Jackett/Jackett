@@ -145,7 +145,7 @@ namespace Jackett.Common.Indexers
             if (qCaptchaImg != null)
             {
                 var CaptchaUrl = qCaptchaImg.GetAttribute("src");
-                var captchaImage = await WebRequestWithCookiesAsync(CaptchaUrl, loginPage.Cookies, RequestType.GET, LandingUrl, null, null);
+                var captchaImage = await WebRequestWithCookiesAsync(CaptchaUrl, loginPage.Cookies, RequestType.GET, LandingUrl);
 
                 var CaptchaImage = new ImageItem { Name = "Captcha Image" };
                 var CaptchaText = new StringItem { Name = "Captcha Text" };
@@ -313,14 +313,14 @@ namespace Jackett.Common.Indexers
 
             string cookieOverride = CookieHeader;
             var searchPage = await RequestWithCookiesAndRetryAsync(
-                SearchUrl, cookieOverride, RequestType.POST, null, searchParams, null, null, null);
+                SearchUrl, cookieOverride, RequestType.POST, null, searchParams);
             // Occasionally the cookies become invalid, login again if that happens
             if (searchPage.IsRedirect)
             {
                 await ApplyConfiguration(null);
                 string cookieOverride1 = CookieHeader;
                 searchPage = await RequestWithCookiesAndRetryAsync(
-                    SearchUrl, cookieOverride1, RequestType.POST, null, searchParams, null, null, null);
+                    SearchUrl, cookieOverride1, RequestType.POST, null, searchParams);
             }
 
             try

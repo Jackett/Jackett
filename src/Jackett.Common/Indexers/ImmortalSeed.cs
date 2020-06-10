@@ -122,13 +122,13 @@ namespace Jackett.Common.Indexers
             if (!string.IsNullOrWhiteSpace(query.GetQueryString()))
                 searchUrl += string.Format(QueryString, WebUtility.UrlEncode(query.GetQueryString()));
 
-            var results = await RequestWithCookiesAndRetryAsync(searchUrl, null, RequestType.GET, null, null, null);
+            var results = await RequestWithCookiesAndRetryAsync(searchUrl);
 
             // Occasionally the cookies become invalid, login again if that happens
             if (results.ContentString.Contains("You do not have permission to access this page."))
             {
                 await ApplyConfiguration(null);
-                results = await RequestWithCookiesAndRetryAsync(searchUrl, null, RequestType.GET, null, null, null);
+                results = await RequestWithCookiesAndRetryAsync(searchUrl);
             }
 
             try

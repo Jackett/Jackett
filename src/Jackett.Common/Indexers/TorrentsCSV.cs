@@ -70,7 +70,7 @@ namespace Jackett.Common.Indexers
 
             var searchUrl = (string.IsNullOrWhiteSpace(searchString) ? NewEndpoint : SearchEndpoint)
                             + "?" + qc.GetQueryString();
-            var response = await RequestWithCookiesAndRetryAsync(searchUrl, null, RequestType.GET, null, null, null);
+            var response = await RequestWithCookiesAndRetryAsync(searchUrl);
 
             try
             {

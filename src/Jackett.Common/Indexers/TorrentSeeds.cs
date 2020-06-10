@@ -152,12 +152,12 @@ namespace Jackett.Common.Indexers
             foreach (var cat in MapTorznabCapsToTrackers(query))
                 queryCollection.Add("cat[" + cat + "]", "1");
             searchUrl += "?" + queryCollection.GetQueryString();
-            var response = await RequestWithCookiesAndRetryAsync(searchUrl, null, RequestType.GET, null, null, null);
+            var response = await RequestWithCookiesAndRetryAsync(searchUrl);
             var results = response.ContentString;
             if (!results.Contains("/logout.php?"))
             {
                 await ApplyConfiguration(null);
-                response = await RequestWithCookiesAndRetryAsync(searchUrl, null, RequestType.GET, null, null, null);
+                response = await RequestWithCookiesAndRetryAsync(searchUrl);
             }
 
             if (response.IsRedirect)

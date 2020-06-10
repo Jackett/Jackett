@@ -69,7 +69,7 @@ namespace Jackett.Common.Indexers
                 var catchaInput = LoginDocument.QuerySelector("input[maxlength=\"6\"]");
                 input_captcha = catchaInput.GetAttribute("name");
 
-                var captchaImage = await WebRequestWithCookiesAsync(SiteLink + catchaImg.GetAttribute("src"), loginPage.Cookies, RequestType.GET, LoginUrl, null, null);
+                var captchaImage = await WebRequestWithCookiesAsync(SiteLink + catchaImg.GetAttribute("src"), loginPage.Cookies, RequestType.GET, LoginUrl);
                 configData.CaptchaImage.Value = captchaImage.ContentBytes;
             }
             else

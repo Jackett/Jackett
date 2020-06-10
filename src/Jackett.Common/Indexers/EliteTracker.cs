@@ -151,8 +151,7 @@ namespace Jackett.Common.Indexers
                 { "password", configData.Password.Value }
             };
 
-            var result = await WebRequestWithCookiesAsync(
-                LoginUrl, "", RequestType.POST, null, pairs, null, null, null);
+            var result = await WebRequestWithCookiesAsync(LoginUrl, "", RequestType.POST, data: pairs);
 
             await ConfigureIfOK(result.Cookies, result.Cookies != null, () =>
            {

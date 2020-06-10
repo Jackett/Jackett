@@ -181,12 +181,12 @@ namespace Jackett.Common.Indexers
 
             queryCollection.Add("blah", "0");
 
-            var results = await RequestWithCookiesAndRetryAsync(searchUrl + "?" + queryCollection.GetQueryString(), null, RequestType.GET, null, null, null);
+            var results = await RequestWithCookiesAndRetryAsync(searchUrl + "?" + queryCollection.GetQueryString());
             if (results.IsRedirect)
             {
                 // re-login
                 await ApplyConfiguration(null);
-                results = await RequestWithCookiesAndRetryAsync(searchUrl + "?" + queryCollection.GetQueryString(), null, RequestType.GET, null, null, null);
+                results = await RequestWithCookiesAndRetryAsync(searchUrl + "?" + queryCollection.GetQueryString());
             }
             try
             {

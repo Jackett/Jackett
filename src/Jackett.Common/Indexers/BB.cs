@@ -134,7 +134,7 @@ namespace Jackett.Common.Indexers
                 if (results.IsRedirect)
                 {
                     await ApplyConfiguration(null);
-                    results = await RequestWithCookiesAndRetryAsync(request_urls[i], null, RequestType.GET, null, null, null);
+                    results = await RequestWithCookiesAndRetryAsync(request_urls[i]);
                 }
                 try
                 {

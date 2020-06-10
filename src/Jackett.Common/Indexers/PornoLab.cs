@@ -189,7 +189,7 @@ namespace Jackett.Common.Indexers
             var captchaimg = LoginResultDocument.QuerySelector("img[src*=\"/captcha/\"]");
             if (captchaimg != null)
             {
-                var captchaImage = await WebRequestWithCookiesAsync("https:" + captchaimg.GetAttribute("src"), null, RequestType.GET, null, null, null);
+                var captchaImage = await WebRequestWithCookiesAsync("https:" + captchaimg.GetAttribute("src"));
                 configData.CaptchaImage.Value = captchaImage.ContentBytes;
 
                 var codefield = LoginResultDocument.QuerySelector("input[name^=\"cap_code_\"]");

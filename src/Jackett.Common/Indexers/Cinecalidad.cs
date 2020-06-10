@@ -100,7 +100,7 @@ namespace Jackett.Common.Indexers
             {
                 var pageParam = page > 1 ? $"page/{page}/" : "";
                 var searchUrl = string.Format(templateUrl, pageParam);
-                var response = await RequestWithCookiesAndRetryAsync(searchUrl, null, RequestType.GET, null, null, null);
+                var response = await RequestWithCookiesAndRetryAsync(searchUrl);
                 var pageReleases = ParseReleases(response, query);
 
                 // publish date is not available in the torrent list, but we add a relative date so we can sort

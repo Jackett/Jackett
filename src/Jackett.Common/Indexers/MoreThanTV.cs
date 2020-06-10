@@ -61,7 +61,7 @@ namespace Jackett.Common.Indexers
                 { "keeplogged", "1" }
             };
             string cookieOverride = string.Empty;
-            var preRequest = await RequestWithCookiesAndRetryAsync(LoginUrl, cookieOverride, RequestType.GET, null, null, null);
+            var preRequest = await RequestWithCookiesAndRetryAsync(LoginUrl, cookieOverride);
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, preRequest.Cookies, true, SearchUrl, SiteLink);
 
             await ConfigureIfOK(result.Cookies, result.ContentString != null && result.ContentString.Contains("status\":\"success\""), () =>
@@ -135,12 +135,12 @@ namespace Jackett.Common.Indexers
         private async Task GetReleases(ICollection<ReleaseInfo> releases, TorznabQuery query, string searchQuery)
         {
             var searchUrl = GetTorrentSearchUrl(query, searchQuery);
-            var response = await RequestWithCookiesAndRetryAsync(searchUrl, null, RequestType.GET, null, null, null);
+            var response = await RequestWithCookiesAndRetryAsync(searchUrl);
             if (response.IsRedirect)
             {
                 // re login
                 await ApplyConfiguration(null);
-                response = await RequestWithCookiesAndRetryAsync(searchUrl, null, RequestType.GET, null, null, null);
+                response = await RequestWithCookiesAndRetryAsync(searchUrl);
             }
 
             try

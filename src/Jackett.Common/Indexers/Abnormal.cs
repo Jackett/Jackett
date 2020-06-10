@@ -552,7 +552,7 @@ namespace Jackett.Common.Indexers
 
             // Request our first page
             latencyNow();
-            var results = await RequestWithCookiesAndRetryAsync(request, null, RequestType.GET, null, null, emulatedBrowserHeaders);
+            var results = await RequestWithCookiesAndRetryAsync(request, headers: emulatedBrowserHeaders);
 
             // Return results from tracker
             return results.ContentString;

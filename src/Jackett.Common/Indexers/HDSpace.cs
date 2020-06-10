@@ -119,7 +119,7 @@ namespace Jackett.Common.Indexers
                 queryCollection.Add("search", query.GetQueryString());
             }
 
-            var response = await RequestWithCookiesAndRetryAsync(SearchUrl + queryCollection.GetQueryString(), null, RequestType.GET, null, null, null);
+            var response = await RequestWithCookiesAndRetryAsync(SearchUrl + queryCollection.GetQueryString());
 
             try
             {

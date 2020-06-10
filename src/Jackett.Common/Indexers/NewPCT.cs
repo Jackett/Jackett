@@ -162,7 +162,7 @@ namespace Jackett.Common.Indexers
 
         public override async Task<byte[]> Download(Uri linkParam)
         {
-            var results = await RequestWithCookiesAndRetryAsync(linkParam.AbsoluteUri, null, RequestType.GET, null, null, null);
+            var results = await RequestWithCookiesAndRetryAsync(linkParam.AbsoluteUri);
 
             var uriLink = ExtractDownloadUri(results.ContentString, linkParam.AbsoluteUri);
             if (uriLink == null)
@@ -210,7 +210,7 @@ namespace Jackett.Common.Indexers
                 while (pg <= _maxDailyPages)
                 {
                     var pageUrl = SiteLink + string.Format(_dailyUrl, pg);
-                    var results = await RequestWithCookiesAndRetryAsync(pageUrl, null, RequestType.GET, null, null, null);
+                    var results = await RequestWithCookiesAndRetryAsync(pageUrl);
                     if (results == null || string.IsNullOrEmpty(results.ContentString))
                         break;
 
@@ -303,13 +303,13 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
 
             // Episodes list
-            var results = await RequestWithCookiesAndRetryAsync(uri.AbsoluteUri, null, RequestType.GET, null, null, null);
+            var results = await RequestWithCookiesAndRetryAsync(uri.AbsoluteUri);
             var seriesEpisodesUrl = ParseSeriesListContent(results.ContentString, seriesName);
 
             // TV serie list
             if (!string.IsNullOrEmpty(seriesEpisodesUrl))
             {
-                results = await RequestWithCookiesAndRetryAsync(seriesEpisodesUrl, null, RequestType.GET, null, null, null);
+                results = await RequestWithCookiesAndRetryAsync(seriesEpisodesUrl);
                 var items = ParseEpisodesListContent(results.ContentString);
                 if (items != null && items.Any())
                     releases.AddRange(items);

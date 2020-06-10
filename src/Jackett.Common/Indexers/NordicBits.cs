@@ -316,7 +316,7 @@ namespace Jackett.Common.Indexers
                 var request = BuildQuery(searchTerm, query, searchUrl);
 
                 // Getting results & Store content
-                var response = await RequestWithCookiesAndRetryAsync(request, ConfigData.CookieHeader.Value, RequestType.GET, null, null, null);
+                var response = await RequestWithCookiesAndRetryAsync(request, ConfigData.CookieHeader.Value);
                 var parser = new HtmlParser();
                 var dom = parser.ParseDocument(response.ContentString);
 

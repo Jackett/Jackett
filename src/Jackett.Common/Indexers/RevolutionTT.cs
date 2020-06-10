@@ -239,7 +239,7 @@ namespace Jackett.Common.Indexers
             // If query is empty, use the RSS Feed
             if (string.IsNullOrWhiteSpace(searchString))
             {
-                var rssPage = await RequestWithCookiesAndRetryAsync(RSSUrl + configData.RSSKey.Value, null, RequestType.GET, null, null, null);
+                var rssPage = await RequestWithCookiesAndRetryAsync(RSSUrl + configData.RSSKey.Value);
                 var rssDoc = XDocument.Parse(rssPage.ContentString);
 
                 foreach (var item in rssDoc.Descendants("item"))
@@ -312,12 +312,12 @@ namespace Jackett.Common.Indexers
                     }
                 }
 
-                var results = await RequestWithCookiesAndRetryAsync(searchUrl, null, RequestType.GET, null, null, null);
+                var results = await RequestWithCookiesAndRetryAsync(searchUrl);
                 if (results.IsRedirect)
                 {
                     // re-login
                     await ApplyConfiguration(null);
-                    results = await RequestWithCookiesAndRetryAsync(searchUrl, null, RequestType.GET, null, null, null);
+                    results = await RequestWithCookiesAndRetryAsync(searchUrl);
                 }
 
                 try

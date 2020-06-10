@@ -134,7 +134,7 @@ namespace Jackett.Common.Indexers
             // manually url encode parenthesis to prevent "hacking" detection
             searchUrl += queryCollection.GetQueryString().Replace("(", "%28").Replace(")", "%29");
 
-            var results = await RequestWithCookiesAndRetryAsync(searchUrl, null, RequestType.GET, null, null, null);
+            var results = await RequestWithCookiesAndRetryAsync(searchUrl);
             try
             {
                 var parser = new HtmlParser();

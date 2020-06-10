@@ -67,7 +67,7 @@ namespace Jackett.Common.Indexers
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl);
             await ConfigureIfOK(result.Cookies, result.ContentString?.Contains("glyphicon-log-out") == true,
                                 () => throw new ExceptionWithConfigData("The username and password entered do not match.", configData));
-            var rssProfile = await RequestWithCookiesAndRetryAsync(RSSProfile, null, RequestType.GET, null, null, null);
+            var rssProfile = await RequestWithCookiesAndRetryAsync(RSSProfile);
             var parser = new HtmlParser();
             var rssDom = parser.ParseDocument(rssProfile.ContentString);
             configData.RSSKey.Value = rssDom.QuerySelector(".col-sm-9:nth-of-type(1)").TextContent.Trim();
@@ -90,7 +90,7 @@ namespace Jackett.Common.Indexers
                     {"search", query.SanitizedSearchTerm}
                 };
                 results = await RequestWithCookiesAndRetryAsync(
-                    SearchUrl, null, RequestType.POST, TorrentsUrl, pairs, null, null, null);
+                    SearchUrl, null, RequestType.POST, TorrentsUrl, pairs);
                 results = await ReloginIfNecessary(results);
                 var parser = new HtmlParser();
                 var dom = parser.ParseDocument(results.ContentString);

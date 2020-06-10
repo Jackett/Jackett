@@ -153,13 +153,13 @@ namespace Jackett.Common.Indexers
 
             // Make search request
             var searchUri = GetAbsoluteUrl("?" + queryParameters.GetQueryString());
-            var response = await RequestWithCookiesAndRetryAsync(searchUri.AbsoluteUri, null, RequestType.GET, null, null, null);
+            var response = await RequestWithCookiesAndRetryAsync(searchUri.AbsoluteUri);
 
             // Check for DDOS Guard
             if (response.Status == System.Net.HttpStatusCode.Forbidden)
             {
                 await ConfigureDDoSGuardCookie();
-                response = await RequestWithCookiesAndRetryAsync(searchUri.AbsoluteUri, null, RequestType.GET, null, null, null);
+                response = await RequestWithCookiesAndRetryAsync(searchUri.AbsoluteUri);
             }
 
             if (response.Status != System.Net.HttpStatusCode.OK)

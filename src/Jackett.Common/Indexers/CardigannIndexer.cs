@@ -925,7 +925,8 @@ namespace Jackett.Common.Indexers
                         hasCaptcha = true;
 
                         var CaptchaUrl = resolvePath(captchaElement.GetAttribute("src"), LoginUrl);
-                        var captchaImageData = await WebRequestWithCookiesAsync(CaptchaUrl.ToString(), landingResult.Cookies, RequestType.GET, LoginUrl.AbsoluteUri, null, null);
+                        var captchaImageData = await WebRequestWithCookiesAsync(
+                            CaptchaUrl.ToString(), landingResult.Cookies, referer: LoginUrl.AbsoluteUri);
                         var CaptchaImage = new ImageItem { Name = "Captcha Image" };
                         var CaptchaText = new StringItem { Name = "Captcha Text" };
 

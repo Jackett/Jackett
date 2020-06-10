@@ -125,12 +125,12 @@ namespace Jackett.Common.Indexers
 
             var searchUrl = SearchUrl + "?" + qc.GetQueryString();
 
-            var results = await RequestWithCookiesAndRetryAsync(searchUrl, null, RequestType.GET, null, null, null);
+            var results = await RequestWithCookiesAndRetryAsync(searchUrl);
             if (results.IsRedirect)
             {
                 // re-login
                 await ApplyConfiguration(null);
-                results = await RequestWithCookiesAndRetryAsync(searchUrl, null, RequestType.GET, null, null, null);
+                results = await RequestWithCookiesAndRetryAsync(searchUrl);
             }
 
             try
