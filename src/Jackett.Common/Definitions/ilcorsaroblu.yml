@@ -6,10 +6,11 @@ language: it-it
 type: semi-private
 encoding: UTF-8
 links:
-  - https://www.ilcorsaroblu.org/
+  - https://ilcorsaroblu.org/
 legacylinks:
   - http://ilcorsaroblu.org/
   - https://www.ilcorsaroblu.info/
+  - https://www.ilcorsaroblu.org/
 
 caps:
   categorymappings:
