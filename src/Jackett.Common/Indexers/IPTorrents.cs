@@ -180,7 +180,7 @@ namespace Jackett.Common.Indexers
                 qc.Add(cat, string.Empty);
 
             var searchUrl = SearchUrl + "?" + qc.GetQueryString();
-            var response = await RequestWithCookiesAndRetryAsync(searchUrl, null, RequestType.GET, SearchUrl);
+            var response = await RequestWithCookiesAndRetryAsync(searchUrl, referer: SearchUrl);
             var results = response.ContentString;
 
             if (results == null || !results.Contains("/lout.php"))

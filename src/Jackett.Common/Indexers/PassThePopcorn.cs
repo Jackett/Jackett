@@ -116,9 +116,9 @@ namespace Jackett.Common.Indexers
                 { "ApiKey", configData.Key.Value }
             };
 
-            var results = await RequestWithCookiesAndRetryAsync(movieListSearchUrl, null, RequestType.GET, null, null, authHeaders);
+            var results = await RequestWithCookiesAndRetryAsync(movieListSearchUrl, headers: authHeaders);
             if (results.IsRedirect) // untested
-                results = await RequestWithCookiesAndRetryAsync(movieListSearchUrl, null, RequestType.GET, null, null, authHeaders);
+                results = await RequestWithCookiesAndRetryAsync(movieListSearchUrl, headers: authHeaders);
             try
             {
                 //Iterate over the releases for each movie

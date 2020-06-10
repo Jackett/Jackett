@@ -1,4 +1,4 @@
-using System;
+ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
@@ -117,7 +117,8 @@ namespace Jackett.Common.Indexers
                 { "X-Requested-With", "XMLHttpRequest" }
             };
 
-            var response = await RequestWithCookiesAndRetryAsync(searchUrl, null, RequestType.GET, SearchUrlReferer, null, extraHeaders);
+            var response = await RequestWithCookiesAndRetryAsync(
+                searchUrl, referer: SearchUrlReferer, headers: extraHeaders);
 
             var results = response.ContentString;
             try

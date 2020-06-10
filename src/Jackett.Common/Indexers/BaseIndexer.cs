@@ -406,31 +406,36 @@ namespace Jackett.Common.Indexers
             return response.ContentBytes;
         }
 
-        protected async Task<WebResult> RequestWithCookiesAndRetryAsync(string url, string cookieOverride = null, RequestType method = RequestType.GET, string referer = null, IEnumerable<KeyValuePair<string, string>> data = null, Dictionary<string,string> headers = null, string rawbody = null, bool? emulateBrowser = null)
+        protected async Task<WebResult> RequestWithCookiesAndRetryAsync(
+            string url, string cookieOverride = null, RequestType method = RequestType.GET,
+            string referer = null, IEnumerable<KeyValuePair<string, string>> data = null,
+            Dictionary<string, string> headers = null, string rawbody = null, bool? emulateBrowser = null)
         {
             Exception lastException = null;
             for (var i = 0; i < 3; i++)
             {
                 try
                 {
-                    return await WebRequestWithCookiesAsync(url, cookieOverride, method, referer, data, headers, rawbody, emulateBrowser);
+                    return await WebRequestWithCookiesAsync(
+                        url, cookieOverride, method, referer, data, headers, rawbody, emulateBrowser);
                 }
                 catch (Exception e)
                 {
-                    logger.Error(e, string.Format("On attempt {0} downloading from {1}: {2}", (i + 1), DisplayName, e.Message));
+                    logger.Error(
+                        e, string.Format("On attempt {0} downloading from {1}: {2}", (i + 1), DisplayName, e.Message));
                     lastException = e;
                 }
+
                 await Task.Delay(500);
             }
 
             throw lastException;
         }
 
-        protected virtual async Task<WebResult> WebRequestWithCookiesAsync(string url, string cookieOverride = null,
-                                                                 RequestType method = RequestType.GET, string referer = null,
-                                                                 IEnumerable<KeyValuePair<string, string>> data = null,
-                                                                 Dictionary<string, string> headers = null,
-                                                                 string rawbody = null, bool? emulateBrowser = null)
+        protected virtual async Task<WebResult> WebRequestWithCookiesAsync(
+            string url, string cookieOverride = null, RequestType method = RequestType.GET,
+            string referer = null, IEnumerable<KeyValuePair<string, string>> data = null,
+            Dictionary<string, string> headers = null, string rawbody = null, bool? emulateBrowser = null)
         {
             var request = new WebRequest
             {
