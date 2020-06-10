@@ -1326,7 +1326,6 @@ namespace Jackett.Common.Indexers
                 var searchUrlUri = new Uri(searchUrl);
 
                 // send HTTP request
-                WebResult response = null;
                 Dictionary<string, string> headers = null;
                 if (Search.Headers != null)
                 {
@@ -1336,7 +1335,8 @@ namespace Jackett.Common.Indexers
                         headers.Add(header.Key, header.Value[0]);
                 }
 
-                response = await WebRequestWithCookiesAsync(searchUrl, method: method, headers: headers);
+                var response = await WebRequestWithCookiesAsync(
+                    searchUrl, method: method, headers: headers, data: queryCollection);
 
                 if (response.IsRedirect && SearchPath.Followredirect)
                     await FollowIfRedirect(response);
@@ -1358,9 +1358,7 @@ namespace Jackett.Common.Indexers
                         if (!LoginResult)
                             throw new Exception(string.Format("Relogin failed"));
                         await TestLogin();
-                        response = method == RequestType.POST
-                            ? await WebRequestWithCookiesAsync(searchUrl, method: RequestType.POST, data: queryCollection)
-                            : await WebRequestWithCookiesAsync(searchUrl);
+                        response = await WebRequestWithCookiesAsync(searchUrl, method: method, data: queryCollection);
                         if (response.IsRedirect && SearchPath.Followredirect)
                             await FollowIfRedirect(response);
 

@@ -166,9 +166,8 @@ namespace Jackett.Common.Indexers
                 cats = cats.Except(_languageCats).ToList();
 
             pairs.Add("kivalasztott_tipus[]", string.Join(",", cats));
-            IEnumerable<KeyValuePair<string, string>> data = pairs.ToEnumerable(true);
             var results = await RequestWithCookiesAndRetryAsync(
-                SearchUrl, null, RequestType.POST, null, data);
+                SearchUrl, null, RequestType.POST, null, pairs.ToEnumerable(true));
             var parser = new HtmlParser();
             var dom = parser.ParseDocument(results.ContentString);
 
@@ -201,9 +200,8 @@ namespace Jackett.Common.Indexers
             for (var page = startPage; page <= pages && releases.Count < limit; page++)
             {
                 pairs["oldal"] = page.ToString();
-                IEnumerable<KeyValuePair<string, string>> data1 = pairs.ToEnumerable(true);
                 results = await RequestWithCookiesAndRetryAsync(
-                    SearchUrl, null, RequestType.POST, null, data1);
+                    SearchUrl, null, RequestType.POST, null, pairs.ToEnumerable(true));
                 releases.AddRange(ParseTorrents(results, episodeString, query, releases.Count, limit, previouslyParsedOnPage));
                 previouslyParsedOnPage = 0;
             }

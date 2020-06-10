@@ -311,16 +311,14 @@ namespace Jackett.Common.Indexers
                     searchParams.Add("search_type", "t_name");
             }
 
-            string cookieOverride = CookieHeader;
             var searchPage = await RequestWithCookiesAndRetryAsync(
-                SearchUrl, cookieOverride, RequestType.POST, null, searchParams);
+                SearchUrl, CookieHeader, RequestType.POST, null, searchParams);
             // Occasionally the cookies become invalid, login again if that happens
             if (searchPage.IsRedirect)
             {
                 await ApplyConfiguration(null);
-                string cookieOverride1 = CookieHeader;
                 searchPage = await RequestWithCookiesAndRetryAsync(
-                    SearchUrl, cookieOverride1, RequestType.POST, null, searchParams);
+                    SearchUrl, CookieHeader, RequestType.POST, null, searchParams);
             }
 
             try

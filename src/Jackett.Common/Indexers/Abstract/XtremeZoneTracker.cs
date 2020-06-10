@@ -169,13 +169,11 @@ namespace Jackett.Common.Indexers.Abstract
 
         public override async Task<byte[]> Download(Uri link)
         {
-            Dictionary<string, string> headers = GetSearchHeaders();
-            var response = await WebRequestWithCookiesAsync(link.ToString(), null, RequestType.GET, null, null, headers);
+            var response = await WebRequestWithCookiesAsync(link.ToString(), headers: GetSearchHeaders());
             if (response.Status == HttpStatusCode.Unauthorized)
             {
                 await RenewalTokenAsync();
-                Dictionary<string, string> headers1 = GetSearchHeaders();
-                response = await WebRequestWithCookiesAsync(link.ToString(), null, RequestType.GET, null, null, headers1);
+                response = await WebRequestWithCookiesAsync(link.ToString(), headers: GetSearchHeaders());
             }
             else if (response.Status != HttpStatusCode.OK)
                 throw new Exception($"Unknown error in download: {response.ContentBytes}");

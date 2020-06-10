@@ -129,7 +129,7 @@ namespace Jackett.Common.Indexers
 
             searchUrl += "?" + queryCollection.GetQueryString();
 
-            var response = await RequestWithCookiesAndRetryAsync(searchUrl, null, RequestType.GET, BrowseUrl);
+            var response = await RequestWithCookiesAndRetryAsync(searchUrl, referer: BrowseUrl);
             var results = response.ContentString;
             try
             {

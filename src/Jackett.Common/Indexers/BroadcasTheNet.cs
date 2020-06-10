@@ -110,14 +110,13 @@ namespace Jackett.Common.Indexers
                 new JValue(btnResults),
                 new JValue(btnOffset)
             };
-            Dictionary<string, string> headers = new Dictionary<string, string>()
-            {
-                { "Accept", "application/json-rpc, application/json"},
-                {"Content-Type", "application/json-rpc"}
-            };
-            string rawbody = JsonRPCRequest("getTorrents", parameters);
             var response = await RequestWithCookiesAndRetryAsync(
-                APIBASE, null, RequestType.POST, null, null, headers, rawbody, false);
+                APIBASE, method: RequestType.POST,
+                headers: new Dictionary<string, string>
+                {
+                    {"Accept", "application/json-rpc, application/json"},
+                    {"Content-Type", "application/json-rpc"}
+                }, rawbody: JsonRPCRequest("getTorrents", parameters), emulateBrowser: false);
 
             try
             {

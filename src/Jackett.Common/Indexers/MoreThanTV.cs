@@ -60,8 +60,7 @@ namespace Jackett.Common.Indexers
                 { "login", "Log in" },
                 { "keeplogged", "1" }
             };
-            string cookieOverride = string.Empty;
-            var preRequest = await RequestWithCookiesAndRetryAsync(LoginUrl, cookieOverride);
+            var preRequest = await RequestWithCookiesAndRetryAsync(LoginUrl, string.Empty);
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, preRequest.Cookies, true, SearchUrl, SiteLink);
 
             await ConfigureIfOK(result.Cookies, result.ContentString != null && result.ContentString.Contains("status\":\"success\""), () =>
