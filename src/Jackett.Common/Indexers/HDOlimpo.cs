@@ -73,7 +73,7 @@ namespace Jackett.Common.Indexers
 
         private async Task DoLogin()
         {
-            var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
+            var loginPage = await WebRequestWithCookiesAsync(LoginUrl, string.Empty);
             var token = new Regex("name=\"_token\" value=\"(.*?)\">").Match(loginPage.ContentString).Groups[1].ToString();
             var pairs = new Dictionary<string, string> {
                 { "_token", token },
@@ -126,15 +126,16 @@ namespace Jackett.Common.Indexers
                 {"Content-Type", "multipart/form-data; boundary=" + boundary}
             };
             AddXsrfTokenHeader(headers, configData.CookieHeader.Value);
-
-            var response = await PostDataWithCookies(SearchUrl, pairs, configData.CookieHeader.Value, SiteLink, headers, body);
+            var response = await WebRequestWithCookiesAsync(
+                SearchUrl, configData.CookieHeader.Value, RequestType.POST, SiteLink, pairs, headers, body);
             if (response.ContentString.StartsWith("<!doctype html>"))
             {
                 //Cookie appears to expire after a period of time or logging in to the site via browser
                 await DoLogin();
 
                 AddXsrfTokenHeader(headers, configData.CookieHeader.Value);
-                response = await PostDataWithCookies(SearchUrl, pairs, configData.CookieHeader.Value, SiteLink, headers, body);
+                response = await WebRequestWithCookiesAsync(
+                    SearchUrl, configData.CookieHeader.Value, RequestType.POST, SiteLink, pairs, headers, body);
             }
 
             var releases = ParseResponse(response, includePremium);

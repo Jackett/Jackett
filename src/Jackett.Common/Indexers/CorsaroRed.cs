@@ -130,13 +130,14 @@ namespace Jackett.Common.Indexers
 
         private async Task<dynamic> SendApiRequest(IEnumerable<KeyValuePair<string, string>> data)
         {
-            var result = await PostDataWithCookiesAndRetry(ApiSearch, data, null, SiteLink, _apiHeaders, null, true);
+            var result = await RequestWithCookiesAndRetryAsync(
+                ApiSearch, null, RequestType.POST, SiteLink, data, _apiHeaders, null, true);
             return CheckResponse(result);
         }
 
         private async Task<dynamic> SendApiRequestLatest()
         {
-            var result = await RequestStringWithCookiesAndRetry(ApiLatest, null, SiteLink, _apiHeaders);
+            var result = await RequestWithCookiesAndRetryAsync(ApiLatest, referer: SiteLink, headers: _apiHeaders);
             return CheckResponse(result);
         }
 

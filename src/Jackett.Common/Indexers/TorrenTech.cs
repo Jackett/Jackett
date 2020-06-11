@@ -100,10 +100,10 @@ namespace Jackett.Common.Indexers
             }
 
             var searchUrl = IndexUrl + "?" + queryCollection.GetQueryString();
-            results = await RequestStringWithCookies(searchUrl);
+            results = await WebRequestWithCookiesAsync(searchUrl);
             if (results.IsRedirect && results.RedirectingTo.Contains("CODE=show"))
             {
-                results = await RequestStringWithCookies(results.RedirectingTo);
+                results = await WebRequestWithCookiesAsync(results.RedirectingTo);
             }
             try
             {
@@ -203,7 +203,7 @@ namespace Jackett.Common.Indexers
 
         public override async Task<byte[]> Download(Uri link)
         {
-            var response = await RequestStringWithCookies(link.ToString());
+            var response = await WebRequestWithCookiesAsync(link.ToString());
             var results = response.ContentString;
             var SearchResultParser = new HtmlParser();
             var SearchResultDocument = SearchResultParser.ParseDocument(results);

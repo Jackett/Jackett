@@ -209,7 +209,7 @@ namespace Jackett.Common.Indexers
                 urlSearch += $"?{qParams.GetQueryString()}";
             }
 
-            var response = await RequestStringWithCookiesAndRetry(urlSearch);
+            var response = await RequestWithCookiesAndRetryAsync(urlSearch);
             if (response.ContentString.StartsWith("Error"))
             {
                 throw new Exception(response.ContentString);

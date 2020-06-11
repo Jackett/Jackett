@@ -11,6 +11,7 @@ using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 
@@ -115,9 +116,9 @@ namespace Jackett.Common.Indexers
                 { "ApiKey", configData.Key.Value }
             };
 
-            var results = await RequestStringWithCookiesAndRetry(movieListSearchUrl, headers: authHeaders);
+            var results = await RequestWithCookiesAndRetryAsync(movieListSearchUrl, headers: authHeaders);
             if (results.IsRedirect) // untested
-                results = await RequestStringWithCookiesAndRetry(movieListSearchUrl, headers: authHeaders);
+                results = await RequestWithCookiesAndRetryAsync(movieListSearchUrl, headers: authHeaders);
             try
             {
                 //Iterate over the releases for each movie

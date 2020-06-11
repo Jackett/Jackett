@@ -135,13 +135,13 @@ namespace Jackett.Common.Indexers
             logger.Info(string.Format("Searh URL Partis_: {0}", searchUrl));
 
             // add necessary headers
-            var heder = new Dictionary<string, string>
+            var header = new Dictionary<string, string>
             {
                 { "X-requested-with", "XMLHttpRequest" }
             };
 
             //get results and follow redirect
-            results = await RequestStringWithCookies(searchUrl, null, SearchUrl, heder);
+            results = await WebRequestWithCookiesAsync(searchUrl, referer: SearchUrl, headers: header);
             await FollowIfRedirect(results, null, null, null, true);
 
             // are we logged in?
@@ -150,7 +150,8 @@ namespace Jackett.Common.Indexers
                 await ApplyConfiguration(null);
             }
             // another request with specific query - NEEDED for succesful response - return data
-            results = await RequestStringWithCookies(SiteLink + "brskaj/?rs=false&offset=0", null, SearchUrl, heder);
+            results = await WebRequestWithCookiesAsync(
+                SiteLink + "brskaj/?rs=false&offset=0", referer: SearchUrl, headers: header);
             await FollowIfRedirect(results, null, null, null, true);
 
             // parse results

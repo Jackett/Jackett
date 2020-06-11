@@ -116,7 +116,7 @@ namespace Jackett.Common.Indexers
                 { "autologin", "on" }
             };
             var htmlParser = new HtmlParser();
-            var loginDocument = htmlParser.ParseDocument((await RequestStringWithCookies(LoginUrl)).ContentString);
+            var loginDocument = htmlParser.ParseDocument((await WebRequestWithCookiesAsync(LoginUrl)).ContentString);
             pairs["creation_time"] = loginDocument.GetElementsByName("creation_time")[0].GetAttribute("value");
             pairs["form_token"] = loginDocument.GetElementsByName("form_token")[0].GetAttribute("value");
             pairs["sid"] = loginDocument.GetElementsByName("sid")[0].GetAttribute("value");
@@ -145,11 +145,11 @@ namespace Jackett.Common.Indexers
                     { "sf", "titleonly" }
                 };
             var searchUrl = SearchUrl + "?" + queryCollection.GetQueryString();
-            var results = await RequestStringWithCookies(searchUrl);
+            var results = await WebRequestWithCookiesAsync(searchUrl);
             if (!results.ContentString.Contains("ucp.php?mode=logout"))
             {
                 await ApplyConfiguration(null);
-                results = await RequestStringWithCookies(searchUrl);
+                results = await WebRequestWithCookiesAsync(searchUrl);
             }
 
             try
@@ -163,7 +163,7 @@ namespace Jackett.Common.Indexers
                 foreach (var rowLink in rows)
                 {
                     var detailLink = SiteLink + rowLink.GetAttribute("href");
-                    var detailsResult = await RequestStringWithCookies(detailLink);
+                    var detailsResult = await WebRequestWithCookiesAsync(detailLink);
                     var detailsDocument = resultParser.ParseDocument(detailsResult.ContentString);
                     var detailRow = detailsDocument.QuerySelector("table.table2 > tbody > tr");
                     if (detailRow == null)

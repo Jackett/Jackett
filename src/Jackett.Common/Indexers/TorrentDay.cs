@@ -123,11 +123,11 @@ namespace Jackett.Common.Indexers
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var loginPage = await RequestStringWithCookies(StartPageUrl, string.Empty);
+            var loginPage = await WebRequestWithCookiesAsync(StartPageUrl, string.Empty);
             if (loginPage.IsRedirect)
-                loginPage = await RequestStringWithCookies(loginPage.RedirectingTo, string.Empty);
+                loginPage = await WebRequestWithCookiesAsync(loginPage.RedirectingTo, string.Empty);
             if (loginPage.IsRedirect)
-                loginPage = await RequestStringWithCookies(loginPage.RedirectingTo, string.Empty);
+                loginPage = await WebRequestWithCookiesAsync(loginPage.RedirectingTo, string.Empty);
 
             var parser = new HtmlParser();
             var dom = parser.ParseDocument(loginPage.ContentString);
@@ -208,7 +208,7 @@ namespace Jackett.Common.Indexers
             else
                 searchUrl += ";q=" + WebUtilityHelpers.UrlEncode(query.GetQueryString(), Encoding);
 
-            var results = await RequestStringWithCookiesAndRetry(searchUrl);
+            var results = await RequestWithCookiesAndRetryAsync(searchUrl);
 
             // Check for being logged out
             if (results.IsRedirect)

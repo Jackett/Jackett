@@ -55,7 +55,7 @@ namespace Jackett.Common.Indexers.Feeds
                 Type = RequestType.GET,
                 Encoding = Encoding
             };
-            var result = await webclient.GetString(request);
+            var result = await webclient.GetResultAsync(request);
 
             var results = ParseFeedForResults(result.ContentString);
 

@@ -1507,13 +1507,13 @@ namespace Jackett.Common.Indexers
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
             configData.CookieHeader.Value = null;
-            var response = await RequestStringWithCookies(LoginUrl);
+            var response = await WebRequestWithCookiesAsync(LoginUrl);
             var LoginResultParser = new HtmlParser();
             var LoginResultDocument = LoginResultParser.ParseDocument(response.ContentString);
             var captchaimg = LoginResultDocument.QuerySelector("img[src^=\"https://static.t-ru.org/captcha/\"]");
             if (captchaimg != null)
             {
-                var captchaImage = await RequestBytesWithCookies(captchaimg.GetAttribute("src"));
+                var captchaImage = await WebRequestWithCookiesAsync(captchaimg.GetAttribute("src"));
                 configData.CaptchaImage.Value = captchaImage.ContentBytes;
 
                 var codefield = LoginResultDocument.QuerySelector("input[name^=\"cap_code_\"]");
@@ -1588,12 +1588,12 @@ namespace Jackett.Common.Indexers
             }
 
             var searchUrl = SearchUrl + "?" + queryCollection.GetQueryString();
-            var results = await RequestStringWithCookies(searchUrl);
+            var results = await WebRequestWithCookiesAsync(searchUrl);
             if (!results.ContentString.Contains("id=\"logged-in-username\""))
             {
                 // re login
                 await ApplyConfiguration(null);
-                results = await RequestStringWithCookies(searchUrl);
+                results = await WebRequestWithCookiesAsync(searchUrl);
             }
             try
             {

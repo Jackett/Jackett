@@ -124,7 +124,8 @@ namespace Jackett.Common.Indexers
         private async Task<dynamic> SendAPIRequest(string endpoint, object data)
         {
             var jsonData = JsonConvert.SerializeObject(data);
-            var result = await PostDataWithCookies(APIUrl + endpoint, null, null, SiteLink, APIHeaders, jsonData);
+            var result = await WebRequestWithCookiesAsync(
+                APIUrl + endpoint, method: RequestType.POST, referer: SiteLink, headers: APIHeaders, rawbody: jsonData);
             if (!result.ContentString.StartsWith("{")) // not JSON => error
                 throw new ExceptionWithConfigData(result.ContentString, configData);
             dynamic json = JsonConvert.DeserializeObject<dynamic>(result.ContentString);

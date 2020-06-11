@@ -99,7 +99,7 @@ namespace Jackett.Common.Indexers
             do
             {
                 var url = SiteLink + "page/" + page + "/?" + qc.GetQueryString();
-                var result = await RequestStringWithCookies(url);
+                var result = await WebRequestWithCookiesAsync(url);
 
                 if (result.Status != HttpStatusCode.OK)
                     throw new ExceptionWithConfigData(result.ContentString, configData);
@@ -152,7 +152,7 @@ namespace Jackett.Common.Indexers
             // for other categories we have to do another step
             if (!downloadUrl.EndsWith(".torrent"))
             {
-                var result = await RequestStringWithCookies(downloadUrl);
+                var result = await WebRequestWithCookiesAsync(downloadUrl);
 
                 if (result.Status != HttpStatusCode.OK)
                     throw new ExceptionWithConfigData(result.ContentString, configData);
@@ -211,7 +211,7 @@ namespace Jackett.Common.Indexers
         private async Task ParseSeriesRelease(ICollection<ReleaseInfo> releases, TorznabQuery query,
             string commentsLink, string cat, DateTime publishDate)
         {
-            var result = await RequestStringWithCookies(commentsLink);
+            var result = await WebRequestWithCookiesAsync(commentsLink);
 
             if (result.Status != HttpStatusCode.OK)
                 throw new ExceptionWithConfigData(result.ContentString, configData);

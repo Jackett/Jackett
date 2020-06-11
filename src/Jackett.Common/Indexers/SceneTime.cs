@@ -104,7 +104,7 @@ namespace Jackett.Common.Indexers
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var loginPage = await RequestStringWithCookies(StartPageUrl, string.Empty);
+            var loginPage = await WebRequestWithCookiesAsync(StartPageUrl, string.Empty);
             var parser = new HtmlParser();
             var dom = parser.ParseDocument(loginPage.ContentString);
             var recaptcha = dom.QuerySelector(".g-recaptcha");
@@ -188,7 +188,7 @@ namespace Jackett.Common.Indexers
                 qParams.Add("freeleech", "on");
 
             var searchUrl = SearchUrl + "?" + qParams.GetQueryString();
-            var results = await RequestStringWithCookies(searchUrl);
+            var results = await WebRequestWithCookiesAsync(searchUrl);
 
             // response without results (the message is misleading)
             if (results.ContentString?.Contains("slow down geek!!!") == true)
