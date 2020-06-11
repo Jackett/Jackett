@@ -70,9 +70,9 @@ launchctl load ~/Library/LaunchAgents/org.user.Jackett.plist
 userid=$(id -u)
 if [[ $(launchctl list | grep org.user.Jackett) ]]; then
     if [[ $(launchctl print gui/${userid}/org.user.Jackett | grep 'state') =~ "running" ]]; then
-        echo "${BOLDGREEN}Agent successfully installed and loaded!${NC}"
+        echo "${BOLDGREEN}Agent successfully installed and running!${NC}"
         echo "Jackett agent:"
-        launchctl print gui/${userid}/org.user.Jackett | egrep 'state|pid '
+        launchctl print gui/${userid}/org.user.Jackett | egrep 'state|pid |path|working'
     else
         cat << EOL
 ${BOLDRED}ERROR${NC}: Agent was loaded but is not running. The installation might have failed.
@@ -86,7 +86,7 @@ $(ls -la ~/Library/LaunchAgents | egrep ' \.|Jackett')
 EOL
     fi
 else
-    echo "${BOLDRED}ERROR${NC}: Agent could not be loaded. Please open an issue on https://github.com/Jackett/Jackett/issues and paste the above output."
+    echo "${BOLDRED}ERROR${NC}: Agent could not be loaded. Please open an issue on https://github.com/Jackett/Jackett/issues and paste the output."
     echo "*Jackett directory*: ${jackettdir}"
     echo "*LaunchAgents permissions*:"
     ls -la ~/Library/LaunchAgents | egrep ' \.|Jackett'
