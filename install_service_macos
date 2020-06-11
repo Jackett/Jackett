@@ -66,14 +66,28 @@ fi
 # Run the agent
 launchctl load ~/Library/LaunchAgents/org.user.Jackett.plist
 
-# Check that it's running
+# Check that it's launched
+userid=$(id -u)
 if [[ $(launchctl list | grep org.user.Jackett) ]]; then
-    echo "${BOLDGREEN}Agent successfully installed and launched!${NC}"
-else
-    cat << EOL
-${BOLDRED}ERROR${NC}: Could not launch agent. The installation might have failed.
+    if [[ $(launchctl print gui/${userid}/org.user.Jackett | grep 'state') =~ "running" ]]; then
+        echo "${BOLDGREEN}Agent successfully installed and loaded!${NC}"
+        echo "Jackett agent:"
+        launchctl print gui/${userid}/org.user.Jackett | egrep 'state|pid '
+    else
+        cat << EOL
+${BOLDRED}ERROR${NC}: Agent was loaded but is not running. The installation might have failed.
 Please open an issue on https://github.com/Jackett/Jackett/issues and paste following information:
-Jackett directory: \`${jackettdir}\`
+*Jackett directory*: ${jackettdir}
+*launchctl info*:
+$(launchctl print gui/${userid}/org.user.Jackett)
+*LaunchAgents permissions*:
+$(ls -la ~/Library/LaunchAgents | egrep ' \.|Jackett')
 
 EOL
+    fi
+else
+    echo "${BOLDRED}ERROR${NC}: Agent could not be loaded. Please open an issue on https://github.com/Jackett/Jackett/issues and paste the above output."
+    echo "*Jackett directory*: ${jackettdir}"
+    echo "*LaunchAgents permissions*:"
+    ls -la ~/Library/LaunchAgents | egrep ' \.|Jackett'
 fi
