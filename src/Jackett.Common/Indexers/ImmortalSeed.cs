@@ -11,6 +11,7 @@ using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 
@@ -121,13 +122,13 @@ namespace Jackett.Common.Indexers
             if (!string.IsNullOrWhiteSpace(query.GetQueryString()))
                 searchUrl += string.Format(QueryString, WebUtility.UrlEncode(query.GetQueryString()));
 
-            var results = await RequestStringWithCookiesAndRetry(searchUrl);
+            var results = await RequestWithCookiesAndRetryAsync(searchUrl);
 
             // Occasionally the cookies become invalid, login again if that happens
             if (results.ContentString.Contains("You do not have permission to access this page."))
             {
                 await ApplyConfiguration(null);
-                results = await RequestStringWithCookiesAndRetry(searchUrl);
+                results = await RequestWithCookiesAndRetryAsync(searchUrl);
             }
 
             try

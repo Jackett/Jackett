@@ -128,7 +128,7 @@ namespace Jackett.Common.Indexers
             searchUrl += "?" + queryCollection.GetQueryString();
             foreach (var cat in MapTorznabCapsToTrackers(query))
                 searchUrl += "&categories[]=" + cat;
-            var results = await RequestStringWithCookies(searchUrl, null, SiteLink);
+            var results = await WebRequestWithCookiesAsync(searchUrl, referer: SiteLink);
 
             try
             {

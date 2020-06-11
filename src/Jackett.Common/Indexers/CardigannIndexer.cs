@@ -532,13 +532,12 @@ namespace Jackett.Common.Indexers
                             ["g-recaptcha-response"] = CaptchaConfigItem.Value
                         };
                         var ClearanceUrl = resolvePath("/cdn-cgi/l/chk_captcha?" + CloudFlareQueryCollection.GetQueryString());
-
-                        var ClearanceResult = await RequestStringWithCookies(ClearanceUrl.ToString(), null, SiteLink);
+                        var ClearanceResult = await WebRequestWithCookiesAsync(ClearanceUrl.ToString(), referer: SiteLink);
 
                         if (ClearanceResult.IsRedirect) // clearance successfull
                         {
                             // request real login page again
-                            landingResult = await RequestStringWithCookies(LoginUrl, null, SiteLink);
+                            landingResult = await WebRequestWithCookiesAsync(LoginUrl, referer: SiteLink);
                             var htmlParser = new HtmlParser();
                             landingResultDocument = htmlParser.ParseDocument(landingResult.ContentString);
                         }
@@ -654,7 +653,7 @@ namespace Jackett.Common.Indexers
                 if (simpleCaptchaPresent != null)
                 {
                     var captchaUrl = resolvePath("simpleCaptcha.php?numImages=1");
-                    var simpleCaptchaResult = await RequestStringWithCookies(captchaUrl.ToString(), null, LoginUrl);
+                    var simpleCaptchaResult = await WebRequestWithCookiesAsync(captchaUrl.ToString(), referer: LoginUrl);
                     var simpleCaptchaJSON = JObject.Parse(simpleCaptchaResult.ContentString);
                     var captchaSelection = simpleCaptchaJSON["images"][0]["hash"].ToString();
                     pairs["captchaSelection"] = captchaSelection;
@@ -723,7 +722,9 @@ namespace Jackett.Common.Indexers
 
                     headers.Add("Content-Type", "multipart/form-data; boundary=" + boundary);
                     var body = string.Join("\r\n", bodyParts);
-                    loginResult = await PostDataWithCookies(submitUrl.ToString(), pairs, configData.CookieHeader.Value, SiteLink, headers, body);
+                    loginResult = await WebRequestWithCookiesAsync(
+                        submitUrl.ToString(), configData.CookieHeader.Value, RequestType.POST, SiteLink, pairs, headers,
+                        body);
                 }
                 else
                 {
@@ -749,7 +750,7 @@ namespace Jackett.Common.Indexers
 
                 var LoginUrl = resolvePath(Login.Path + "?" + queryCollection.GetQueryString()).ToString();
                 configData.CookieHeader.Value = null;
-                var loginResult = await RequestStringWithCookies(LoginUrl, null, SiteLink);
+                var loginResult = await WebRequestWithCookiesAsync(LoginUrl, referer: SiteLink);
                 configData.CookieHeader.Value = loginResult.Cookies;
 
                 checkForError(loginResult, Definition.Login.Error);
@@ -759,7 +760,7 @@ namespace Jackett.Common.Indexers
                 var OneUrl = applyGoTemplateText(Definition.Login.Inputs["oneurl"]);
                 var LoginUrl = resolvePath(Login.Path + OneUrl).ToString();
                 configData.CookieHeader.Value = null;
-                var loginResult = await RequestStringWithCookies(LoginUrl, null, SiteLink);
+                var loginResult = await WebRequestWithCookiesAsync(LoginUrl, referer: SiteLink);
                 configData.CookieHeader.Value = loginResult.Cookies;
 
                 checkForError(loginResult, Definition.Login.Error);
@@ -793,7 +794,7 @@ namespace Jackett.Common.Indexers
 
             // test if login was successful
             var LoginTestUrl = resolvePath(Login.Test.Path).ToString();
-            var testResult = await RequestStringWithCookies(LoginTestUrl);
+            var testResult = await WebRequestWithCookiesAsync(LoginTestUrl);
 
             if (testResult.IsRedirect)
             {
@@ -886,7 +887,7 @@ namespace Jackett.Common.Indexers
             configData.CookieHeader.Value = null;
             if (Login.Cookies != null)
                 configData.CookieHeader.Value = string.Join("; ", Login.Cookies);
-            landingResult = await RequestStringWithCookies(LoginUrl.AbsoluteUri, null, SiteLink);
+            landingResult = await WebRequestWithCookiesAsync(LoginUrl.AbsoluteUri, referer: SiteLink);
 
             var htmlParser = new HtmlParser();
             landingResultDocument = htmlParser.ParseDocument(landingResult.ContentString);
@@ -929,7 +930,8 @@ namespace Jackett.Common.Indexers
                         hasCaptcha = true;
 
                         var CaptchaUrl = resolvePath(captchaElement.GetAttribute("src"), LoginUrl);
-                        var captchaImageData = await RequestBytesWithCookies(CaptchaUrl.ToString(), landingResult.Cookies, RequestType.GET, LoginUrl.AbsoluteUri);
+                        var captchaImageData = await WebRequestWithCookiesAsync(
+                            CaptchaUrl.ToString(), landingResult.Cookies, referer: LoginUrl.AbsoluteUri);
                         var CaptchaImage = new ImageItem { Name = "Captcha Image" };
                         var CaptchaText = new StringItem { Name = "Captcha Text" };
 
@@ -1334,7 +1336,6 @@ namespace Jackett.Common.Indexers
                 logger.Info($"Fetching: {searchUrl}");
 
                 // send HTTP request
-                WebResult response = null;
                 Dictionary<string, string> headers = null;
                 if (Search.Headers != null)
                 {
@@ -1343,10 +1344,9 @@ namespace Jackett.Common.Indexers
                     foreach (var header in Search.Headers)
                         headers.Add(header.Key, header.Value[0]);
                 }
-                if (method == RequestType.POST)
-                    response = await PostDataWithCookies(searchUrl, queryCollection, null, null, headers);
-                else
-                    response = await RequestStringWithCookies(searchUrl, null, null, headers);
+
+                var response = await WebRequestWithCookiesAsync(
+                    searchUrl, method: method, headers: headers, data: queryCollection);
 
                 if (response.IsRedirect && SearchPath.Followredirect)
                     await FollowIfRedirect(response);
@@ -1368,11 +1368,7 @@ namespace Jackett.Common.Indexers
                         if (!LoginResult)
                             throw new Exception(string.Format("Relogin failed"));
                         await TestLogin();
-                        if (method == RequestType.POST)
-                            response = await PostDataWithCookies(searchUrl, queryCollection);
-                        else
-                            response = await RequestStringWithCookies(searchUrl);
-
+                        response = await WebRequestWithCookiesAsync(searchUrl, method: method, data: queryCollection);
                         if (response.IsRedirect && SearchPath.Followredirect)
                             await FollowIfRedirect(response);
 
@@ -1753,7 +1749,7 @@ namespace Jackett.Common.Indexers
                     requestLinkStr += queryCollection.GetQueryString(Encoding, separator: request.Queryseparator);
             }
 
-            var response = await RequestBytesWithCookiesAndRetry(requestLinkStr, null, method, referer, pairs);
+            var response = await RequestWithCookiesAndRetryAsync(requestLinkStr, null, method, referer, pairs);
             logger.Debug($"CardigannIndexer ({Id}): handleRequest() remote server returned {response.Status.ToString()}" + (response.IsRedirect ? " => " + response.RedirectingTo : ""));
             return response;
         }
@@ -1796,9 +1792,9 @@ namespace Jackett.Common.Indexers
                 if (Download.Selector != null)
                 {
                     var selector = applyGoTemplateText(Download.Selector, variables);
-                    var response = await RequestStringWithCookies(link.ToString());
+                    var response = await WebRequestWithCookiesAsync(link.ToString());
                     if (response.IsRedirect)
-                        response = await RequestStringWithCookies(response.RedirectingTo);
+                        response = await WebRequestWithCookiesAsync(response.RedirectingTo);
                     var results = response.ContentString;
                     var searchResultParser = new HtmlParser();
                     var searchResultDocument = searchResultParser.ParseDocument(results);

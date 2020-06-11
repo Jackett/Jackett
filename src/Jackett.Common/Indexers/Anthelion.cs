@@ -94,7 +94,7 @@ namespace Jackett.Common.Indexers
                 qc.Add($"filter_cat[{cat}]", "1");
 
             var searchUrl = BrowseUrl + "?" + qc.GetQueryString();
-            var results = await RequestStringWithCookies(searchUrl);
+            var results = await WebRequestWithCookiesAsync(searchUrl);
             try
             {
                 var parser = new HtmlParser();

@@ -155,7 +155,7 @@ namespace Jackett.Common.Indexers
             else
                 searchUrl += ";q=" + WebUtilityHelpers.UrlEncode(query.GetQueryString(), Encoding);
 
-            var results = await RequestStringWithCookiesAndRetry(searchUrl);
+            var results = await RequestWithCookiesAndRetryAsync(searchUrl);
 
             // Check for being logged out
             if (results.IsRedirect)

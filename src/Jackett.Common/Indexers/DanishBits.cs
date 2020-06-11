@@ -65,10 +65,13 @@ namespace Jackett.Common.Indexers
             return searchString;
         }
 
-        protected override async Task<WebResult> RequestBytesWithCookies(string url, string cookieOverride = null, RequestType method = RequestType.GET, string referer = null, IEnumerable<KeyValuePair<string, string>> data = null, Dictionary<string, string> headers = null)
+        protected override async Task<WebResult> WebRequestWithCookiesAsync(
+            string url, string cookieOverride = null, RequestType method = RequestType.GET, string referer = null,
+            IEnumerable<KeyValuePair<string, string>> data = null, Dictionary<string, string> headers = null,
+            string rawbody = null, bool? emulateBrowser = null)
         {
             CookieHeader = null; // Download fill fail with cookies set
-            return await base.RequestBytesWithCookies(url, cookieOverride, method, referer, data, headers);
+            return await base.WebRequestWithCookiesAsync(url, cookieOverride, method, referer, data, headers);
         }
     }
 }

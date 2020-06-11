@@ -105,7 +105,7 @@ namespace Jackett.Common.Indexers
             var cats = MapTorznabCapsToTrackers(query);
             if (cats.Count > 0)
                 searchUrl = cats.Aggregate(searchUrl, (url, cat) => $"{url}&c{cat}=1");
-            var response = await RequestStringWithCookies(searchUrl);
+            var response = await WebRequestWithCookiesAsync(searchUrl);
             try
             {
                 var parser = new HtmlParser();

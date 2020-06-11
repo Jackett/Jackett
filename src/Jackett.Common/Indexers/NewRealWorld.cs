@@ -150,12 +150,12 @@ namespace Jackett.Common.Indexers
 
             searchUrl += "?" + queryCollection.GetQueryString();
 
-            var response = await RequestStringWithCookies(searchUrl);
+            var response = await WebRequestWithCookiesAsync(searchUrl);
             if (response.IsRedirect)
             {
                 // re-login
                 await ApplyConfiguration(null);
-                response = await RequestStringWithCookies(searchUrl);
+                response = await WebRequestWithCookiesAsync(searchUrl);
             }
 
             try
