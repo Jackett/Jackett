@@ -11,6 +11,7 @@ using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 
@@ -74,14 +75,14 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            var loggedInCheck = await RequestStringWithCookies(SearchUrl);
+            var loggedInCheck = await WebRequestWithCookiesAsync(SearchUrl);
             if (!loggedInCheck.ContentString.Contains("logout.php")) // re-login
                 await DoLogin();
 
             // #6413
             var url = $"{SearchUrl}&searchtext={WebUtility.UrlEncode(query.GetQueryString())}";
 
-            var response = await RequestStringWithCookiesAndRetry(url);
+            var response = await RequestWithCookiesAndRetryAsync(url);
             var releases = ParseResponse(response.ContentString);
 
             return releases;

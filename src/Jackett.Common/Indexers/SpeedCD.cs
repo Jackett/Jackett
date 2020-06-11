@@ -151,11 +151,11 @@ namespace Jackett.Common.Indexers
             }
 
             var searchUrl = SearchUrl + string.Join("/", qc);
-            var response = await RequestStringWithCookiesAndRetry(searchUrl);
+            var response = await RequestWithCookiesAndRetryAsync(searchUrl);
             if (!response.ContentString.Contains("/logout.php")) // re-login
             {
                 await DoLogin();
-                response = await RequestStringWithCookiesAndRetry(searchUrl);
+                response = await RequestWithCookiesAndRetryAsync(searchUrl);
             }
 
             try

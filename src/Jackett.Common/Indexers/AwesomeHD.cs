@@ -100,7 +100,7 @@ namespace Jackett.Common.Indexers
             }
 
             var searchUrl = SearchUrl + "?" + qc.GetQueryString();
-            var results = await RequestStringWithCookies(searchUrl);
+            var results = await WebRequestWithCookiesAsync(searchUrl);
             if (string.IsNullOrWhiteSpace(results.ContentString))
                 throw new Exception("Empty response. Please, check the Passkey.");
 

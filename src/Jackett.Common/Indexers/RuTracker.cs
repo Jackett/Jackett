@@ -1510,13 +1510,13 @@ namespace Jackett.Common.Indexers
             try
             {
                 configData.CookieHeader.Value = null;
-                var response = await RequestStringWithCookies(LoginUrl);
+                var response = await WebRequestWithCookiesAsync(LoginUrl);
                 var parser = new HtmlParser();
                 var doc = parser.ParseDocument(response.ContentString);
                 var captchaimg = doc.QuerySelector("img[src^=\"https://static.t-ru.org/captcha/\"]");
                 if (captchaimg != null)
                 {
-                    var captchaImage = await RequestBytesWithCookies(captchaimg.GetAttribute("src"));
+                    var captchaImage = await WebRequestWithCookiesAsync(captchaimg.GetAttribute("src"));
                     configData.CaptchaImage.Value = captchaImage.ContentBytes;
 
                     var codefield = doc.QuerySelector("input[name^=\"cap_code_\"]");
@@ -1591,12 +1591,12 @@ namespace Jackett.Common.Indexers
             }
 
             var searchUrl = SearchUrl + "?" + queryCollection.GetQueryString();
-            var results = await RequestStringWithCookies(searchUrl);
+            var results = await WebRequestWithCookiesAsync(searchUrl);
             if (!results.ContentString.Contains("id=\"logged-in-username\""))
             {
                 // re login
                 await ApplyConfiguration(null);
-                results = await RequestStringWithCookies(searchUrl);
+                results = await WebRequestWithCookiesAsync(searchUrl);
             }
             try
             {

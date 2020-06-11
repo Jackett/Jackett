@@ -122,8 +122,8 @@ namespace Jackett.Common.Indexers
 
                 request_urls.Add(SearchUrl + queryCollection.GetQueryString());
             }
-            var downloadTasksQuery =
-                from url in request_urls select RequestStringWithCookiesAndRetry(url);
+
+            var downloadTasksQuery = from url in request_urls select RequestWithCookiesAndRetryAsync(url);
 
             var responses = await Task.WhenAll(downloadTasksQuery.ToArray());
 
@@ -134,7 +134,7 @@ namespace Jackett.Common.Indexers
                 if (results.IsRedirect)
                 {
                     await ApplyConfiguration(null);
-                    results = await RequestStringWithCookiesAndRetry(request_urls[i]);
+                    results = await RequestWithCookiesAndRetryAsync(request_urls[i]);
                 }
                 try
                 {
