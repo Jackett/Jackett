@@ -206,6 +206,7 @@ namespace Jackett.Common.Indexers
                 { "format", "json_extended" },
                 { "app_id", _appId },
                 { "limit", "100" },
+                { "ranked", "0" },
                 { "sort", _sort }
             };
 
@@ -228,7 +229,6 @@ namespace Jackett.Common.Indexers
             {
                 // ignore ' (e.g. search for america's Next Top Model)
                 searchString = searchString.Replace("'", "");
-                qc.Add("ranked", "0");
                 qc.Add("mode", "search");
                 qc.Add("search_string", searchString);
             }
