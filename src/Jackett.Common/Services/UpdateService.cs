@@ -311,8 +311,8 @@ namespace Jackett.Common.Services
 
                     if (variant == Variants.JackettVariant.CoreMacOs)
                     {
-                        var macosServicePath = tempDir + "/Jackett/install_service_macos";
-                        filePermissionService.MakeFileExecutable(macosServicePath);
+                        filePermissionService.MakeFileExecutable(tempDir + "/Jackett/install_service_macos");
+                        filePermissionService.MakeFileExecutable(tempDir + "/Jackett/uninstall_jackett_macos");
                     }
                     else if (variant == Variants.JackettVariant.Mono)
                     {

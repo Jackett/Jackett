@@ -180,7 +180,9 @@ stages:
             condition: and(succeeded(), startsWith(variables['buildDescription'], 'macOS'))
             inputs:
               SourceFolder: $(Build.SourcesDirectory)
-              contents: install_service_macos
+              contents: |
+                install_service_macos
+                uninstall_jackett_macos
               targetFolder: $(Build.BinariesDirectory)/Jackett
 
           - task: CopyFiles@2
@@ -229,6 +231,7 @@ stages:
                 chmod 755 JackettUpdater
                 if [ -f install_service_systemd_mono.sh ]; then chmod 755 install_service_systemd_mono.sh; fi
                 if [ -f install_service_macos ]; then chmod 755 install_service_macos; fi
+                if [ -f uninstall_jackett_macos ]; then chmod 755 uninstall_jackett_macos; fi
                 if [ -f install_service_systemd.sh ]; then chmod 755 install_service_systemd.sh; fi
                 if [ -f jackett_launcher.sh ]; then chmod 755 jackett_launcher.sh; fi
 
