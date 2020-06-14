@@ -138,18 +138,18 @@ search:
     files:
       selector: td:nth-last-child(8)
     date:
-      selector: td:nth-last-child(6)
+      selector: td:nth-last-child(7)
     size:
-      selector: td:nth-last-child(5)
+      selector: td:nth-last-child(6)
     grabs:
-      selector: td:nth-last-child(4)
+      selector: td:nth-last-child(5)
       filters:
         - name: regexp
           args: (\d+)
     seeders:
-      selector: td:nth-last-child(3)
+      selector: td:nth-last-child(4)
     leechers:
-      selector: td:nth-last-child(2)
+      selector: td:nth-last-child(3)
     downloadvolumefactor:
       case:
         "a.info > b:contains(\"[FREE]\")": 0
