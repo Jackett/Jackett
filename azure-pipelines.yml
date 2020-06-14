@@ -371,6 +371,15 @@ stages:
               version: $(netCoreSdkVersion)
               installationPath: $(Agent.ToolsDirectory)/dotnet
 
+          # this task is a workaround to fix a bug in Azure (not required under normal circumstances)
+          # https://developercommunity.visualstudio.com/content/problem/983843/dotnet-build-task-does-not-use-nugetorg-for-one-pr.html
+          - task: DotNetCoreCLI@2
+            displayName: Restore Test Project
+            inputs:
+              command: restore
+              projects: '**/*.Test*/*.csproj'
+              includeNuGetOrg: true
+
           - task: DotNetCoreCLI@2
             displayName: Build Test Project
             inputs:
