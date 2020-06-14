@@ -50,7 +50,7 @@ settings:
   - name: info_downloadlink
     type: info
     label: "About the Download Link"
-    default: "Note that only <b>www.oxtorrent.com</b> supports the use of the <b>.torrent</b> download link.<br />All sites support <b>magnet</b> links."
+    default: "Note that only <b>www.oxtorrent.pw</b> supports the use of the <b>.torrent</b> download link.<br />All sites support <b>magnet</b> links."
 
 download:
   selector: a[href*="{{ .Config.downloadlink }}"]
