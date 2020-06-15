@@ -357,6 +357,7 @@ namespace Jackett.Updater
                 "Definitions/rns.yml", // site merged with audiobooktorrents
                 "Definitions/rockethd.yml",
                 "Definitions/rockhardlossless.yml",
+                "Definitions/rodvd.yml",
                 "Definitions/scenefz.yml", // migrated to C# XtremeZone base tracker
                 "Definitions/scenehd.yml", // migrated to C# (use JSON API)
                 "Definitions/scenereactor.yml",
