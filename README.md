@@ -451,7 +451,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Redacted (PassTheHeadphones)
  * RetroFlix
  * RevolutionTT
- * RoDVD (Cinefiles)
  * Romanian Metal Torrents (RMT)
  * SDBits
  * SceneFZ
