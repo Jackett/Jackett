@@ -6,9 +6,10 @@ language: pt-br
 type: private
 encoding: UTF-8
 links:
-  - https://amigos-share.club/
+  - https://cliente.amigos-share.club/
 legacylinks:
   - http://amigos-share.club/
+  - https://amigos-share.club/
 
 settings:
   - name: username
