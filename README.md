@@ -53,7 +53,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Epizod
  * ETTV
  * EXT Torrents
- * ExtraTorrent.ag
  * ExtraTorrent.cd
  * EZTV
  * Filebase
