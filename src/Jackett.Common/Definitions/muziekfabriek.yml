@@ -65,17 +65,17 @@ search:
       - name: andmatch
 
   fields:
-    title:
-      selector: a[href^="details.php?id="]
-    details:
-      selector: a[href^="details.php?id="]
-      attribute: href
     category:
       selector: a[href^="browse.php?cat="]
       attribute: href
       filters:
         - name: querystring
           args: cat
+    title:
+      selector: a[href^="details.php?id="]
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
     download:
       selector: a[href^="download.php?id="]
       attribute: href
@@ -98,7 +98,7 @@ search:
         - name: regexp
           args: (\d+)
     date:
-      selector: td:nth-child(4) table tr:nth-child(2) td:nth-child(3)
+      selector: td:nth-child(4) table tr:nth-child(2) td:nth-child(2)
       filters:
         - name: replace
           args: ["januari", "January"]
