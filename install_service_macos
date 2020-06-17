@@ -71,6 +71,7 @@ userid=$(id -u)
 if [[ $(launchctl list | grep org.user.Jackett) ]]; then
     if [[ $(launchctl print gui/${userid}/org.user.Jackett | grep 'state') =~ "running" ]]; then
         echo "${BOLDGREEN}Agent successfully installed and running!${NC}"
+        echo "Jackett location: ${jackettdir}"
         echo "Jackett agent:"
         launchctl print gui/${userid}/org.user.Jackett | egrep 'state|pid |path|working'
     else
