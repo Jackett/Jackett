@@ -1,0 +1,59 @@
+#!/bin/zsh
+
+#Setting up colors
+BOLDRED="$(printf '\033[1;31m')"
+BOLDGREEN="$(printf '\033[1;32m')"
+NC="$(printf '\033[0m')" # No Color
+
+# Move working directory to Jackett's
+cd "$(dirname "$0")"
+
+# Check if we're running from Jackett's directory
+if [ ! -f ./jackett ]; then
+echo "${BOLDRED}ERROR${NC}: Couldn't locate ./jackett - Is the script in the right directory?"
+    exit 1
+fi
+jackettdir="$(pwd)"
+
+echo "This script will uninstall Jackett. Do you want to proceed?"
+select yn in "Yes" "No"; do
+    case $yn in
+        Yes ) break;;
+        No ) exit;;
+    esac
+done
+
+echo "What should be removed? ${BOLDRED}WARNING${NC}: deleting binaries will remove all files located in ${jackettdir}. ${BOLDRED}WARNING${NC}: deleting config files prevents Jackett from being reinstalled."
+select yn in "Only agent" "Only agent and binaries" "Agent, binaries and config"; do
+    case $yn in
+        "Only agent" ) delagent=true; break;;
+        "Only agent and binaries" ) delagent=true; delbin=true; break;;
+        "Agent, binaries and config" ) delagent=true; delbin=true; delconf=true; break;;
+    esac
+done
+
+# Unload and delete agent
+if [[ "$delagent" = true ]]; then
+    echo "Deleting agent..."
+    launchctl unload ~/Library/LaunchAgents/org.user.Jackett.plist
+    rm ~/Library/LaunchAgents/org.user.Jackett.plist
+fi
+
+# Deleting the current folder
+if [[ "$delbin" = true ]]; then
+    echo "Deleting binaries..."
+    rm -R $jackettdir
+else
+    echo "Binaries have not been deleted from ${jackettdir}"
+fi
+
+# Remove config files
+if [[ "$delconf" = true ]]; then
+    echo "Deleting config files..."
+    rm -R ~/.config/Jackett/
+else
+    echo "Configuration files have been kept in ~/.config/Jackett/"
+fi
+
+echo "${BOLDGREEN}Uninstall completed.${NC}"
+
