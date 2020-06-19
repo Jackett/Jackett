@@ -7,7 +7,6 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://thepiratebay.vip/
   - https://thepiratebay0.org/
   - https://thepiratebay10.org/
   - https://pirateproxy.live/
@@ -34,6 +33,7 @@ legacylinks:
   - https://tpb.bike/ # broken search
   - https://pirateproxy.page/ # using new html
   - https://tpb14.ukpass.co/ # using new html and has broken search
+  - https://thepiratebay.vip/ # 522
 
 caps:
   categorymappings:
