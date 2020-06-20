@@ -25,22 +25,20 @@ namespace Jackett.Common.Indexers
         private string LoginUrl => SiteLink + "takelogin.php";
         private string GetRSSKeyUrl => SiteLink + "getrss.php";
         private string SearchUrl => SiteLink + "browse.php";
-        private string RSSUrl => SiteLink + "rss.php?secret_key={0}&feedtype=download&timezone=0&showrows=50&categories=all";
-        private string CommentUrl => SiteLink + "details.php?id={0}";
-        private string DownloadUrl => SiteLink + "download.php?id={0}";
 
-        private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
-        {
-            get => (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData;
-            set => base.configData = value;
-        }
+        private new ConfigurationDataBasicLoginWithRSSAndDisplay configData =>
+            (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData;
 
         public XSpeeds(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base(id: "xspeeds",
                    name: "XSpeeds",
                    description: "XSpeeds (XS) is a Private Torrent Tracker for MOVIES / TV / GENERAL",
                    link: "https://www.xspeeds.eu/",
-                   caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                   caps: new TorznabCapabilities
+                   {
+                       SupportsImdbMovieSearch = true
+                       // SupportsImdbTVSearch = true (supported by the site but disabled due to #8107)
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,
@@ -50,11 +48,6 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
-
-            configData.DisplayText.Value = "Expect an initial delay (often around 10 seconds) due to XSpeeds CloudFlare DDoS protection";
-            configData.DisplayText.Name = "Notice";
-
-            TorznabCaps.SupportsImdbMovieSearch = true;
 
             AddCategoryMapping(92, TorznabCatType.MoviesUHD, "4K Movies");
             AddCategoryMapping(91, TorznabCatType.TVUHD, "4K TV");
@@ -144,21 +137,17 @@ namespace Jackett.Common.Indexers
             var qCaptchaImg = dom.QuerySelector("img#regimage");
             if (qCaptchaImg != null)
             {
-                var CaptchaUrl = qCaptchaImg.GetAttribute("src");
-                var captchaImage = await RequestBytesWithCookies(CaptchaUrl, loginPage.Cookies, RequestType.GET, LandingUrl);
+                var captchaUrl = qCaptchaImg.GetAttribute("src");
+                var captchaImageResponse = await RequestBytesWithCookies(captchaUrl, loginPage.Cookies, RequestType.GET, LandingUrl);
 
-                var CaptchaImage = new ImageItem { Name = "Captcha Image" };
-                var CaptchaText = new StringItem { Name = "Captcha Text" };
+                var captchaText = new StringItem { Name = "Captcha Text" };
+                var captchaImage = new ImageItem {Name = "Captcha Image", Value = captchaImageResponse.Content};
 
-                CaptchaImage.Value = captchaImage.Content;
-
-                configData.AddDynamic("CaptchaImage", CaptchaImage);
-                configData.AddDynamic("CaptchaText", CaptchaText);
+                configData.AddDynamic("CaptchaText", captchaText);
+                configData.AddDynamic("CaptchaImage", captchaImage);
             }
             else
-            {
-                logger.Debug(string.Format("{0}: No captcha image found", Id));
-            }
+                logger.Debug($"{Id}: No captcha image found");
 
             return configData;
         }
@@ -173,11 +162,9 @@ namespace Jackett.Common.Indexers
                             {"password", configData.Password.Value}
                         };
 
-            var CaptchaText = (StringItem)configData.GetDynamic("CaptchaText");
-            if (CaptchaText != null)
-            {
-                pairs.Add("imagestring", CaptchaText.Value);
-            }
+            var captchaText = (StringItem)configData.GetDynamic("CaptchaText");
+            if (captchaText != null)
+                pairs.Add("imagestring", captchaText.Value);
 
             //var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, SiteLink, true);
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, SearchUrl, LandingUrl, true);
@@ -221,75 +208,7 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();
             var prevCook = CookieHeader + "";
-            var searchStringIsImdbQuery = (ParseUtil.GetImdbID(searchString) != null);
 
-            // If we have no query use the RSS Page as their server is slow enough at times!
-            // ~15.01.2019 they removed the description tag making the RSS feed almost useless, we don't use it for now. See #4458
-            // if (false && query.IsTest || string.IsNullOrWhiteSpace(searchString))
-            /*
-            if (false)
-            {
-                var rssPage = await RequestStringWithCookiesAndRetry(string.Format(RSSUrl, configData.RSSKey.Value));
-                try
-                {
-                    if (rssPage.Content.EndsWith("\0"))
-                    {
-                        rssPage.Content = rssPage.Content.Substring(0, rssPage.Content.Length - 1);
-                    }
-                    rssPage.Content = RemoveInvalidXmlChars(rssPage.Content);
-                    var rssDoc = XDocument.Parse(rssPage.Content);
-
-                    foreach (var item in rssDoc.Descendants("item"))
-                    {
-                        var title = item.Descendants("title").First().Value;
-                        var description = item.Descendants("description").First().Value;
-                        var link = item.Descendants("link").First().Value;
-                        var category = item.Descendants("category").First().Value;
-                        var date = item.Descendants("pubDate").First().Value;
-
-                        var torrentIdMatch = Regex.Match(link, "(?<=id=)(\\d)*");
-                        var torrentId = torrentIdMatch.Success ? torrentIdMatch.Value : string.Empty;
-                        if (string.IsNullOrWhiteSpace(torrentId))
-                            throw new Exception("Missing torrent id");
-
-                        var infoMatch = Regex.Match(description, @"Category:\W(?<cat>.*)\W\/\WSeeders:\W(?<seeders>[\d\,]*)\W\/\WLeechers:\W(?<leechers>[\d\,]*)\W\/\WSize:\W(?<size>[\d\.]*\W\S*)");
-                        if (!infoMatch.Success)
-                            throw new Exception("Unable to find info");
-
-                        var release = new ReleaseInfo
-                        {
-                            Title = title,
-                            Description = title,
-                            Guid = new Uri(string.Format(DownloadUrl, torrentId)),
-                            Comments = new Uri(string.Format(CommentUrl, torrentId)),
-                            PublishDate = DateTime.ParseExact(date, "yyyy-MM-dd H:mm:ss", CultureInfo.InvariantCulture), //2015-08-08 21:20:31
-                            Link = new Uri(string.Format(DownloadUrl, torrentId)),
-                            Seeders = ParseUtil.CoerceInt(infoMatch.Groups["seeders"].Value),
-                            Peers = ParseUtil.CoerceInt(infoMatch.Groups["leechers"].Value),
-                            Size = ReleaseInfo.GetBytes(infoMatch.Groups["size"].Value),
-                            Category = MapTrackerCatToNewznab(category)
-                        };
-
-                        release.Peers += release.Seeders;
-                        releases.Add(release);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    logger.Error("XSpeeds: Error while parsing the RSS feed:");
-                    logger.Error(rssPage.Content);
-                    throw ex;
-                }
-            }
-            */
-            //if (query.IsTest || !string.IsNullOrWhiteSpace(searchString))
-            /*
-            if (searchString.Length < 3 && !query.IsTest)
-            {
-                OnParseError("", new Exception("Minimum search length is 3"));
-                return releases;
-            }
-            */
             var searchParams = new Dictionary<string, string> {
                 { "do", "search" },
                 { "category", "0" },
@@ -304,10 +223,7 @@ namespace Jackett.Common.Indexers
             else
             {
                 searchParams.Add("keywords", searchString);
-                if (searchStringIsImdbQuery)
-                    searchParams.Add("search_type", "t_both");
-                else
-                    searchParams.Add("search_type", "t_name");
+                searchParams.Add("search_type", "t_name");
             }
 
             var searchPage = await PostDataWithCookiesAndRetry(SearchUrl, searchParams, CookieHeader);
@@ -375,10 +291,10 @@ namespace Jackett.Common.Indexers
             {
                 OnParseError(searchPage.Content, ex);
             }
+
             if (!CookieHeader.Trim().Equals(prevCook.Trim()))
-            {
                 SaveConfig();
-            }
+
             return releases;
         }
     }
