@@ -1,4 +1,5 @@
 using System;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using BencodeNET.Objects;
@@ -66,11 +67,8 @@ namespace Jackett.Server.Controllers
                     && downloadBytes[6] == 0x3a // :
                     )
                 {
-                    // some sites provide magnet links with non-ascii characters, the only way to be sure the url
-                    // is well encoded is to unscape and escape again
-                    // https://github.com/Jackett/Jackett/issues/5372
-                    // https://github.com/Jackett/Jackett/issues/4761
-                    var magneturi = Uri.EscapeUriString(Uri.UnescapeDataString(Encoding.UTF8.GetString(downloadBytes)));
+                    var uriString = Encoding.UTF8.GetString(downloadBytes);
+                    var magneturi = WebUtility.HtmlDecode(WebUtility.UrlDecode(uriString));
                     return Redirect(magneturi);
                 }
 
