@@ -198,13 +198,8 @@ namespace Jackett.Common.Indexers
             var homePageLoad = await RequestLoginAndFollowRedirect(LandingPageURL, new Dictionary<string, string> { }, null, true, null, SiteLink);
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, homePageLoad.Cookies, true, null, LandingPageURL);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("/logout.php"), () =>
-            {
-                var parser = new HtmlParser();
-                var dom = parser.ParseDocument(result.Content);
-                var errorMessage = dom.QuerySelector(".error").TextContent.Trim();
-                throw new ExceptionWithConfigData(errorMessage, configData);
-            });
+            await ConfigureIfOK(result.Cookies, result.Content?.Contains("/logout.php") == true, () =>
+                throw new ExceptionWithConfigData("Login failed! Check the username and password. If they are ok, try logging on the website.", configData));
 
             //  Store RSS key from feed generator page
             try
