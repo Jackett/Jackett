@@ -123,6 +123,9 @@ search:
   paths:
     - path: "{{ if .Keywords }}/search/{{ .Keywords }}/0/{{ .Config.order }}/{{ join .Categories \",\"}}{{else}}/recent{{end}}"
   keywordsfilters:
+    # remove it's #8829
+    - name: re_replace
+      args: ["(?i)(it's\\s)", ""]
     # replace simplified chinese as this confuses TPB search engine #7291
     - name: re_replace
       args: ["([\\p{IsCJKUnifiedIdeographs}\\W]+)", "."]
