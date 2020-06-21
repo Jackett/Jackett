@@ -24,14 +24,15 @@ namespace Jackett.Common.Indexers
         private string LoginUrl => SiteLink + "forum/login.php";
         private string SearchUrl => SiteLink + "forum/tracker.php";
 
-        protected string cap_sid = null;
-        protected string cap_code_field = null;
+        private string _capSid;
+        private string _capCodeField;
 
-        private new ConfigurationDataRutracker configData
-        {
-            get => (ConfigurationDataRutracker)base.configData;
-            set => base.configData = value;
-        }
+        private new ConfigurationDataRutracker configData => (ConfigurationDataRutracker)base.configData;
+
+        public override string[] AlternativeSiteLinks { get; protected set; } = {
+            "https://rutracker.org/",
+            "https://rutracker.net/"
+        };
 
         public RuTracker(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base(id: "rutracker",
@@ -1506,26 +1507,32 @@ namespace Jackett.Common.Indexers
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
-            configData.CookieHeader.Value = null;
-            var response = await RequestStringWithCookies(LoginUrl);
-            var LoginResultParser = new HtmlParser();
-            var LoginResultDocument = LoginResultParser.ParseDocument(response.Content);
-            var captchaimg = LoginResultDocument.QuerySelector("img[src^=\"https://static.t-ru.org/captcha/\"]");
-            if (captchaimg != null)
+            try
             {
-                var captchaImage = await RequestBytesWithCookies(captchaimg.GetAttribute("src"));
-                configData.CaptchaImage.Value = captchaImage.Content;
+                configData.CookieHeader.Value = null;
+                var response = await RequestStringWithCookies(LoginUrl);
+                var parser = new HtmlParser();
+                var doc = parser.ParseDocument(response.Content);
+                var captchaimg = doc.QuerySelector("img[src^=\"https://static.t-ru.org/captcha/\"]");
+                if (captchaimg != null)
+                {
+                    var captchaImage = await RequestBytesWithCookies(captchaimg.GetAttribute("src"));
+                    configData.CaptchaImage.Value = captchaImage.Content;
 
-                var codefield = LoginResultDocument.QuerySelector("input[name^=\"cap_code_\"]");
-                cap_code_field = codefield.GetAttribute("name");
+                    var codefield = doc.QuerySelector("input[name^=\"cap_code_\"]");
+                    _capCodeField = codefield.GetAttribute("name");
 
-                var sidfield = LoginResultDocument.QuerySelector("input[name=\"cap_sid\"]");
-                cap_sid = sidfield.GetAttribute("value");
+                    var sidfield = doc.QuerySelector("input[name=\"cap_sid\"]");
+                    _capSid = sidfield.GetAttribute("value");
+                }
+                else
+                    configData.CaptchaImage.Value = null;
             }
-            else
+            catch (Exception e)
             {
-                configData.CaptchaImage.Value = null;
+                logger.Error("Error loading configuration: " + e);
             }
+
             return configData;
         }
 
@@ -1540,13 +1547,13 @@ namespace Jackett.Common.Indexers
                 { "login", "Login" }
             };
 
-            if (!string.IsNullOrWhiteSpace(cap_sid))
+            if (!string.IsNullOrWhiteSpace(_capSid))
             {
-                pairs.Add("cap_sid", cap_sid);
-                pairs.Add(cap_code_field, configData.CaptchaText.Value);
+                pairs.Add("cap_sid", _capSid);
+                pairs.Add(_capCodeField, configData.CaptchaText.Value);
 
-                cap_sid = null;
-                cap_code_field = null;
+                _capSid = null;
+                _capCodeField = null;
             }
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, CookieHeader, true, null, LoginUrl, true);
@@ -1554,9 +1561,9 @@ namespace Jackett.Common.Indexers
             {
                 logger.Debug(result.Content);
                 var errorMessage = "Unknown error message, please report";
-                var LoginResultParser = new HtmlParser();
-                var LoginResultDocument = LoginResultParser.ParseDocument(result.Content);
-                var errormsg = LoginResultDocument.QuerySelector("h4[class=\"warnColor1 tCenter mrg_16\"]");
+                var parser = new HtmlParser();
+                var doc = parser.ParseDocument(result.Content);
+                var errormsg = doc.QuerySelector("h4[class=\"warnColor1 tCenter mrg_16\"]");
                 if (errormsg != null)
                     errorMessage = errormsg.TextContent;
 
@@ -1574,16 +1581,12 @@ namespace Jackett.Common.Indexers
 
             // if the search string is empty use the getnew view
             if (string.IsNullOrWhiteSpace(searchString))
-            {
                 queryCollection.Add("nm", searchString);
-            }
             else // use the normal search
             {
                 searchString = searchString.Replace("-", " ");
                 if (query.Season != 0)
-                {
                     searchString += " Сезон: " + query.Season;
-                }
                 queryCollection.Add("nm", searchString);
             }
 
@@ -1597,36 +1600,33 @@ namespace Jackett.Common.Indexers
             }
             try
             {
-                var RowsSelector = "table#tor-tbl > tbody > tr";
-
-                var SearchResultParser = new HtmlParser();
-                var SearchResultDocument = SearchResultParser.ParseDocument(results.Content);
-                var Rows = SearchResultDocument.QuerySelectorAll(RowsSelector);
-                foreach (var Row in Rows)
-                {
+                var parser = new HtmlParser();
+                var doc = parser.ParseDocument(results.Content);
+                var rows = doc.QuerySelectorAll("table#tor-tbl > tbody > tr");
+                foreach (var row in rows)
                     try
                     {
-                        var qDownloadLink = Row.QuerySelector("td.tor-size > a.tr-dl");
+                        var qDownloadLink = row.QuerySelector("td.tor-size > a.tr-dl");
                         if (qDownloadLink == null) // Expects moderation
                             continue;
-                        var qDetailsLink = Row.QuerySelector("td.t-title > div.t-title > a.tLink");
-                        var qSize = Row.QuerySelector("td.tor-size");
+                        var qDetailsLink = row.QuerySelector("td.t-title > div.t-title > a.tLink");
+                        var qSize = row.QuerySelector("td.tor-size");
                         var comments = new Uri(SiteLink + "forum/" + qDetailsLink.GetAttribute("href"));
                         var seeders = 0;
-                        var qSeeders = Row.QuerySelector("td:nth-child(7)");
+                        var qSeeders = row.QuerySelector("td:nth-child(7)");
                         if (qSeeders != null && !qSeeders.TextContent.Contains("дн"))
                         {
                             var seedersString = qSeeders.QuerySelector("b").TextContent;
                             if (!string.IsNullOrWhiteSpace(seedersString))
                                 seeders = ParseUtil.CoerceInt(seedersString);
                         }
-                        var timestr = Row.QuerySelector("td:nth-child(10)").GetAttribute("data-ts_text");
-                        var forum = Row.QuerySelector("td.f-name > div.f-name > a");
+                        var timestr = row.QuerySelector("td:nth-child(10)").GetAttribute("data-ts_text");
+                        var forum = row.QuerySelector("td.f-name > div.f-name > a");
                         var forumid = forum.GetAttribute("href").Split('=')[1];
                         var link = new Uri(SiteLink + "forum/" + qDownloadLink.GetAttribute("href"));
                         var size = ReleaseInfo.GetBytes(qSize.GetAttribute("data-ts_text"));
-                        var leechers = ParseUtil.CoerceInt(Row.QuerySelector("td:nth-child(8)").TextContent);
-                        var grabs = ParseUtil.CoerceLong(Row.QuerySelector("td:nth-child(9)").TextContent);
+                        var leechers = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(8)").TextContent);
+                        var grabs = ParseUtil.CoerceLong(row.QuerySelector("td:nth-child(9)").TextContent);
                         var publishDate = DateTimeUtil.UnixTimestampToDateTime(long.Parse(timestr));
                         var release = new ReleaseInfo
                         {
@@ -1645,11 +1645,6 @@ namespace Jackett.Common.Indexers
                             DownloadVolumeFactor = 1,
                             UploadVolumeFactor = 1
                         };
-
-
-
-
-
 
                         // TODO finish extracting release variables to simiplify release initialization
                         if (release.Category.Contains(TorznabCatType.TV.ID) ||
@@ -1696,9 +1691,8 @@ namespace Jackett.Common.Indexers
                     }
                     catch (Exception ex)
                     {
-                        logger.Error(string.Format("{0}: Error while parsing row '{1}':\n\n{2}", Id, Row.OuterHtml, ex));
+                        logger.Error($"{Id}: Error while parsing row '{row.OuterHtml}':\n\n{ex}");
                     }
-                }
             }
             catch (Exception ex)
             {
