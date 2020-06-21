@@ -34,6 +34,8 @@ namespace Jackett.Common.Models.DTO
         [DataMember]
         public long cache_max_results_per_indexer { get; set; }
         [DataMember]
+        public string flaresolverrurl { get; set; }
+        [DataMember]
         public string omdbkey { get; set; }
         [DataMember]
         public string omdburl { get; set; }
@@ -70,6 +72,7 @@ namespace Jackett.Common.Models.DTO
             cache_enabled = config.CacheEnabled;
             cache_ttl = config.CacheTtl;
             cache_max_results_per_indexer = config.CacheMaxResultsPerIndexer;
+            flaresolverrurl = config.FlareSolverrUrl;
             omdbkey = config.OmdbApiKey;
             omdburl = config.OmdbApiUrl;
             app_version = version;

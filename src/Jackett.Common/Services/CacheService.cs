@@ -8,7 +8,6 @@ using Jackett.Common.Indexers;
 using Jackett.Common.Models;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
-using Jint.Parser;
 using NLog;
 
 namespace Jackett.Common.Services
@@ -218,7 +217,9 @@ namespace Jackett.Common.Services
                 var total = resultsPerQuery.Select(q => q.Item2).Sum();
                 if (total <= _serverConfig.CacheMaxResultsPerIndexer)
                     break;
-                trackerCache.Queries.Remove(resultsPerQuery.Pop().Item1); // remove the older
+                var olderQuery = resultsPerQuery.Last();
+                trackerCache.Queries.Remove(olderQuery.Item1); // remove the older
+                resultsPerQuery.Remove(olderQuery);
                 prunedCounter++;
             }
 
