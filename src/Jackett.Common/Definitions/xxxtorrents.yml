@@ -144,6 +144,8 @@ search:
 
   rows:
     selector: tr[id^="tor_"]:has(a[href^="magnet:?xt="])
+    filters:
+      - name: andmatch
 
   fields:
     category:
@@ -171,7 +173,7 @@ search:
     date:
       selector: td:last-child > u
     downloadvolumefactor:
-      text: 1
+      text: 0
     uploadvolumefactor:
       text: 1
 # TorrentPier
