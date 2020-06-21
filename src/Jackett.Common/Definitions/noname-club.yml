@@ -419,13 +419,14 @@ caps:
     - {id: 457, cat: Books, desc: " |- Иностранные языки"}
     - {id: 462, cat: Books, desc: " |- Другие"}
     - {id: 437, cat: Books, desc: "Обучающие видеоматериалы"}
-    - {id: 467, cat: Books, desc: " |- Физические тренинги"}
     - {id: 466, cat: Books, desc: " |- Бизнес"}
-    - {id: 958, cat: Books, desc: " |- Дизайн"}
-    - {id: 465, cat: Books, desc: " |- Музыка"}
-    - {id: 464, cat: Books, desc: " |- Популярная психология"}
+    - {id: 1319, cat: Books, desc: " |- Иностранные языки, обуч.видео"}
     - {id: 463, cat: Books, desc: " |- Компьютеры"}
     - {id: 1223, cat: Books, desc: " |- Фотография, Видео"}
+    - {id: 467, cat: Books, desc: " |- Физические тренинги"}
+    - {id: 958, cat: Books, desc: " |- Дизайн"}
+    - {id: 464, cat: Books, desc: " |- Популярная психология"}
+    - {id: 465, cat: Books, desc: " |- Музыка"}
     - {id: 469, cat: Books, desc: " |- Другие"}
     - {id: 439, cat: Books, desc: "Мультимедийные материалы"}
     - {id: 477, cat: Books, desc: " |- Образование"}
@@ -729,6 +730,9 @@ caps:
     - {id: 1239, cat: Other, desc: " |- ГИА, ОГЭ, ЕГЭ, ЕМЭ, ГВЭ"}
     - {id: 740, cat: Other, desc: " |- Развивающие Игры для детей"}
     - {id: 741, cat: Other, desc: " |- Детские Игры"}
+    - {id: 48, cat: Other, desc: " |- Региональные встречи"}
+    - {id: 925, cat: Other, desc: " |- Авторские релизы"}
+    - {id: 872, cat: Other, desc: " |- Архив"}
 
   modes:
     search: [q]
