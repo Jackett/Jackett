@@ -17,6 +17,8 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    // This tracker is based on GazelleTracker but we can't use the API/abstract because there are some
+    // missing features. https://github.com/Jackett/Jackett/issues/8508
     [ExcludeFromCodeCoverage]
     public class TVVault : BaseWebIndexer
     {
@@ -62,8 +64,13 @@ namespace Jackett.Common.Indexers
             };
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl, true);
-            await ConfigureIfOK(result.Cookies, result.Content?.Contains("logout.php") == true,
-                                () => throw new ExceptionWithConfigData(result.Content, configData));
+            await ConfigureIfOK(result.Cookies, result.Content?.Contains("logout.php") == true, () =>
+            {
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(result.Content);
+                var errorMessage = dom.QuerySelector("form#loginform").TextContent.Trim();
+                throw new ExceptionWithConfigData(errorMessage, configData);
+            });
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
