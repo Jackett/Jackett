@@ -20,7 +20,7 @@ namespace Jackett.Common.Services
                 logs.Insert(0, new CachedLog()
                 {
                     Level = l.Level.Name,
-                    Message = l.FormattedMessage,
+                    Message = $"{l.Message} {l.Exception}".Trim(),
                     When = l.TimeStamp
                 });
                 logs = logs.Take(200).ToList();
