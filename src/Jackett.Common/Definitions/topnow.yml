@@ -33,6 +33,8 @@ search:
   rows:
     # old cards do not have a download link
     selector: div.grid-item:has(a[href^="/download.php?torrent="])
+    filters:
+      - name: andmatch
 
   fields:
     category:
