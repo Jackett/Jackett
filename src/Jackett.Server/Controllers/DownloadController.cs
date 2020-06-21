@@ -66,12 +66,8 @@ namespace Jackett.Server.Controllers
                     && downloadBytes[6] == 0x3a // :
                     )
                 {
-                    // some sites provide magnet links with non-ascii characters, the only way to be sure the url
-                    // is well encoded is to unscape and escape again
-                    // https://github.com/Jackett/Jackett/issues/5372
-                    // https://github.com/Jackett/Jackett/issues/4761
-                    var magneturi = Uri.EscapeUriString(Uri.UnescapeDataString(Encoding.UTF8.GetString(downloadBytes)));
-                    return Redirect(magneturi);
+                    var magnetUrl = Encoding.UTF8.GetString(downloadBytes);
+                    return Redirect(magnetUrl);
                 }
 
                 // This will fix torrents where the keys are not sorted, and thereby not supported by Sonarr.
