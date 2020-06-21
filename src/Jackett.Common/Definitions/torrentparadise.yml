@@ -46,14 +46,17 @@ caps:
     "ADULTMOVIES": XXX
     "BOOKS": Books
     "BOOKSMAGAZINES": Books/Magazines
+    "BOOKSNONFICTION": Books
     "COMICSNEM43COMICS": Books/Comics
     "DOCUMENTARIES": TV/Documentary
     "DVDRVIDEO": Movies/DVD
     "EBOOKS": Books/Ebook
+    "EBOOKSTUTORIALS": Books/Ebook
     "ESTRENOS": XXX
     "FLAC": Audio/Lossless
     "FLACMUSIC": Audio/Lossless
     "GAMES": PC/Games
+    "GAMESANDROID": PC/Games
     "GAMESHANDHELD": Console
     "GAMESOTHER": Console
     "GAMESPC": PC/Games
@@ -93,6 +96,7 @@ caps:
     "MOVIESSPANISHLATINAMERICA": Movies
     "MOVIESULTRAHD4K": Movies/UHD
     "MOVIESX264H264": Movies/HD
+    "MOVIESXVID": Movies/SD
     "MP3": Audio/MP3
     "MP3MUSIC": Audio/MP3
     "MSICA": Other
@@ -135,6 +139,7 @@ caps:
     "TVTVPACKS": TV
     "VIDEO": Movies
     "UNSORTEDUNSORTED": Other
+    "VIDEOHANDHELD": Movies
     "VIDEOHDMOVIES": Movies/HD
     "VIDEOHDRIP": Movies
     "VIDEOHDTVSHOWS": TV/HD
