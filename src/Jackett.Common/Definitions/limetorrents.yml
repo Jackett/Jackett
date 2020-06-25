@@ -12,7 +12,7 @@ links:
   - https://www.limetorrents.co/
   - https://limetor.com/
   - https://www.limetor.pro/
-  - https://limetorrents.unblockit.pw/
+  - https://limetorrents.unblockit.id/
 legacylinks:
   - https://www.limetorrents.io/
   - https://www.limetorrents.cc/
@@ -30,6 +30,7 @@ legacylinks:
   - https://limetorrents.uk-unblock.pro/ # search fails in Jackett and browser
   - https://limetorrents.unblockninja.com/ # search fails in Jackett and browser
   - https://limetorrents.unblockit.me/
+  - https://limetorrents.unblockit.pw/
 
 caps:
   categories:
