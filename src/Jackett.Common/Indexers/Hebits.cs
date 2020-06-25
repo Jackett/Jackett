@@ -45,15 +45,30 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.GetEncoding("windows-1255");
             Language = "he-il";
             Type = "private";
-            AddCategoryMapping(19, TorznabCatType.MoviesSD);
-            AddCategoryMapping(25, TorznabCatType.MoviesOther); // Israeli Content
-            AddCategoryMapping(20, TorznabCatType.MoviesDVD);
-            AddCategoryMapping(36, TorznabCatType.MoviesBluRay);
-            AddCategoryMapping(27, TorznabCatType.MoviesHD);
-            AddCategoryMapping(7, TorznabCatType.TVSD); // Israeli SDTV
-            AddCategoryMapping(24, TorznabCatType.TVSD); // English SDTV
-            AddCategoryMapping(1, TorznabCatType.TVHD); // Israel HDTV
-            AddCategoryMapping(37, TorznabCatType.TVHD); // Israel HDTV
+            AddCategoryMapping(21, TorznabCatType.PCGames, "משחקים - PC (PC Games)");
+            AddCategoryMapping(33, TorznabCatType.Console, "משחקים - קונסולות (Console Games)");
+            AddCategoryMapping(19, TorznabCatType.MoviesSD, "סרטי SD (Movies SD)");
+            AddCategoryMapping(25, TorznabCatType.MoviesOther, "סרטים ישראלי (Movies ISR)");
+            AddCategoryMapping(20, TorznabCatType.MoviesDVD, "סרטים - DVD-R (Movies DVD");
+            AddCategoryMapping(36, TorznabCatType.MoviesBluRay, "Bluray / Remux");
+            AddCategoryMapping(27, TorznabCatType.MoviesHD, "סרטי HD (Movies HD)");
+            AddCategoryMapping(34, TorznabCatType.Movies, "טופ IMDB (Top IMDB)");
+            AddCategoryMapping(7, TorznabCatType.TVSD, "סדרות ישראליות (TV SD ISR)");
+            AddCategoryMapping(24, TorznabCatType.TVSD, "סדרות לועזיות - עם תרגום מובנה (TV with subs)");
+            AddCategoryMapping(1, TorznabCatType.TVHD, "סדרות HD לועזיות (TV HD)");
+            AddCategoryMapping(37, TorznabCatType.TVHD, "סדרות HD ישראליות (TV HD ISR)");
+            AddCategoryMapping(23, TorznabCatType.TVAnime, "אנימציה - מצויירים (Anime)");
+            AddCategoryMapping(28, TorznabCatType.Audio, "מוזיקה לועזית (Music)");
+            AddCategoryMapping(6, TorznabCatType.Audio, "מוזיקה ישראלית (Music ISR)");
+            AddCategoryMapping(28, TorznabCatType.AudioLossless, "מוזיקה - Flac (Music Flac)");
+            AddCategoryMapping(35, TorznabCatType.AudioVideo, "הופעות (Music Concerts)");
+            AddCategoryMapping(30, TorznabCatType.Audio, "פסי קול (Music OST)");
+            AddCategoryMapping(32, TorznabCatType.PCPhoneOther, "סלולאר (Mobile)");
+            AddCategoryMapping(26, TorznabCatType.Books, "ספרים (Books)");
+            AddCategoryMapping(22, TorznabCatType.PC, "תוכנות (Apps)");
+            AddCategoryMapping(29, TorznabCatType.Other, "שונות (Other)");
+            AddCategoryMapping(9, TorznabCatType.XXX, "פורנו XXX (3X)");
+            AddCategoryMapping(41, TorznabCatType.TVSport, "ספורט (Sport)");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -101,6 +116,9 @@ namespace Jackett.Common.Indexers
                     var release = new ReleaseInfo();
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800; // 48 hours
+                    var qCatLink = row.QuerySelector("a[href^=\"browse.php?cat=\"]");
+                    var catStr = qCatLink.GetAttribute("href").Split('=')[1];
+                    release.Category = MapTrackerCatToNewznab(catStr);
                     var qTitle = row.QuerySelector(".bTitle");
                     var titleParts = qTitle.TextContent.Split('/');
                     release.Title = titleParts.Length >= 2 ? titleParts[1].Trim() : titleParts[0].Trim();
