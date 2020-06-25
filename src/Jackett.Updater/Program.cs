@@ -382,6 +382,7 @@ namespace Jackett.Updater
                 "Definitions/thetorrents.yml",
                 "Definitions/the-madhouse.yml",
                 "Definitions/tigers-dl.yml",
+                "Definitions/tntvillage.yml",
                 "Definitions/torrentcouch.yml",
                 "Definitions/torrentkim.yml",
                 "Definitions/torrentproject.yml",
