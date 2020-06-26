@@ -22,16 +22,13 @@ namespace Jackett.Common.Indexers
         private string SearchUrl => SiteLink + "t.json";
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
-            "https://tday.love/",
-            "https://torrentday.cool/",
             "https://secure.torrentday.com/",
             "https://classic.torrentday.com/",
             "https://www.torrentday.com/",
-            "https://torrentday.it/",
             "https://td.findnemo.net/",
             "https://td.getcrazy.me/",
             "https://td.venom.global/",
-            "https://td.workisboring.net/"
+            "https://td.workisboring.net/",
         };
 
         public override string[] LegacySiteLinks { get; protected set; } = {
@@ -41,7 +38,10 @@ namespace Jackett.Common.Indexers
             "https://td-update.com/", // redirect to https://www.torrentday.com/
             "https://www.torrentday.me/",
             "https://www.torrentday.ru/",
-            "https://www.td.af/"
+            "https://www.td.af/",
+            "https://tday.love/", // looping on cloudflare checking page
+            "https://torrentday.cool/", // looping on cloudflare checking page
+            "https://torrentday.it/", // looping on cloudflare checking page
         };
 
         private new ConfigurationDataCookie configData => (ConfigurationDataCookie)base.configData;
@@ -50,7 +50,7 @@ namespace Jackett.Common.Indexers
             : base(id: "torrentday",
                    name: "TorrentDay",
                    description: "TorrentDay (TD) is a Private site for TV / MOVIES / GENERAL",
-                   link: "https://tday.love/",
+                   link: "https://secure.torrentday.com/",
                    caps: new TorznabCapabilities
                    {
                        SupportsImdbMovieSearch = true
