@@ -520,6 +520,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Torrenting (TT)
  * Torrentland
  * TotallyKids (TK)
+ * TorrentSeed
  * TranceTraffic
  * Trezzor
  * TurkSeed
