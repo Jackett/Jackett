@@ -7,7 +7,7 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://torrentview14.net/
+  - https://torrentview15.net/
 legacylinks:
   - https://torrentview.net/
   - https://torrentview3.net/
@@ -21,6 +21,7 @@ legacylinks:
   - https://torrentview11.net/
   - https://torrentview12.net/
   - https://torrentview13.net/
+  - https://torrentview14.net/
 
 caps:
   categorymappings:
