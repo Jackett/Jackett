@@ -150,12 +150,7 @@ namespace Jackett.Common.Indexers
                 if (!string.Equals(newTitle, cleanTitle, StringComparison.CurrentCultureIgnoreCase))
                     cleanTitle = newTitle;
             }
-
-            // do not include year to animes
-            if (categoryStr == "14")
-                cleanTitle += " " + seasonEp;
-            else
-                cleanTitle += " " + year + " " + seasonEp;
+            cleanTitle += " " + year + " " + seasonEp;
             return FixAbsoluteNumbering(cleanTitle);
         }
 
