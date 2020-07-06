@@ -17,8 +17,10 @@ namespace Jackett.Common.Models
         public bool MovieSearchAvailable { get; set; }
 
         public bool SupportsTVRageSearch { get; set; }
+        public bool SupportsTvdbSearch { get; set; }
 
         public bool SupportsImdbMovieSearch { get; set; }
+        public bool SupportsTmdbMovieSearch { get; set; }
 
         public bool SupportsImdbTVSearch { get; set; }
 
@@ -35,7 +37,9 @@ namespace Jackett.Common.Models
             TVSearchAvailable = true;
             MovieSearchAvailable = false;
             SupportsTVRageSearch = false;
+            SupportsTvdbSearch = false;
             SupportsImdbMovieSearch = false;
+            SupportsTmdbMovieSearch = false;
             SupportsImdbTVSearch = false;
             SupportedMusicSearchParamsList = new List<string>();
         }
@@ -45,7 +49,9 @@ namespace Jackett.Common.Models
             SearchAvailable = true;
             TVSearchAvailable = true;
             SupportsTVRageSearch = false;
+            SupportsTvdbSearch = false;
             SupportsImdbMovieSearch = false;
+            SupportsTmdbMovieSearch = false;
             SupportsImdbTVSearch = false;
             SupportedMusicSearchParamsList = new List<string>();
             Categories = new List<TorznabCategory>();
@@ -60,6 +66,8 @@ namespace Jackett.Common.Models
                 var parameters = new List<string>() { "q", "season", "ep" };
                 if (SupportsTVRageSearch)
                     parameters.Add("rid");
+                if (SupportsTvdbSearch)
+                    parameters.Add("tvdbid");
                 if (SupportsImdbTVSearch)
                     parameters.Add("imdbid");
                 return string.Join(",", parameters);
@@ -73,6 +81,8 @@ namespace Jackett.Common.Models
                 var parameters = new List<string>() { "q" };
                 if (SupportsImdbMovieSearch)
                     parameters.Add("imdbid");
+                if (SupportsTmdbMovieSearch)
+                    parameters.Add("tmdbid");
                 return string.Join(",", parameters);
             }
         }
@@ -150,7 +160,9 @@ namespace Jackett.Common.Models
             lhs.TVSearchAvailable = lhs.TVSearchAvailable || rhs.TVSearchAvailable;
             lhs.MovieSearchAvailable = lhs.MovieSearchAvailable || rhs.MovieSearchAvailable;
             lhs.SupportsTVRageSearch = lhs.SupportsTVRageSearch || rhs.SupportsTVRageSearch;
+            lhs.SupportsTvdbSearch = lhs.SupportsTvdbSearch || rhs.SupportsTvdbSearch;
             lhs.SupportsImdbMovieSearch = lhs.SupportsImdbMovieSearch || rhs.SupportsImdbMovieSearch;
+            lhs.SupportsTmdbMovieSearch = lhs.SupportsTmdbMovieSearch || rhs.SupportsTmdbMovieSearch;
             lhs.SupportsImdbTVSearch = lhs.SupportsImdbTVSearch || rhs.SupportsImdbTVSearch;
             lhs.Categories.AddRange(rhs.Categories.Where(x => x.ID < 100000).Except(lhs.Categories)); // exclude indexer specific categories (>= 100000)
 

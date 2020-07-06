@@ -16,7 +16,9 @@ namespace Jackett.Common.Models
         public int Limit { get; set; }
         public int Offset { get; set; }
         public int? RageID { get; set; }
+        public int? TvdbID { get; set; }
         public string ImdbID { get; set; }
+        public int? TmdbID { get; set; }
 
         public int Season { get; set; }
         public string Episode { get; set; }
@@ -45,7 +47,11 @@ namespace Jackett.Common.Models
 
         public bool IsTVRageSearch => RageID != null;
 
+        public bool IsTvdbSearch => TvdbID != null;
+
         public bool IsImdbQuery => ImdbID != null;
+
+        public bool IsTmdbQuery => TmdbID != null;
 
         public bool HasSpecifiedCategories => (Categories != null && Categories.Length > 0);
 
@@ -122,7 +128,9 @@ namespace Jackett.Common.Models
                 Track = Track,
                 Year = Year,
                 RageID = RageID,
-                ImdbID = ImdbID
+                TvdbID = TvdbID,
+                ImdbID = ImdbID,
+                TmdbID = TmdbID
             };
             if (Categories?.Length > 0)
             {

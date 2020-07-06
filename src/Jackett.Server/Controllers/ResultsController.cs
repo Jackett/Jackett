@@ -365,6 +365,24 @@ namespace Jackett.Server.Controllers
                 }
             }
 
+            if (CurrentQuery.TmdbID != null)
+            {
+                if (CurrentQuery.IsMovieSearch && !CurrentIndexer.TorznabCaps.SupportsTmdbMovieSearch)
+                {
+                    logger.Warn($"A search request with tmdbid from {Request.HttpContext.Connection.RemoteIpAddress} was made but the indexer {CurrentIndexer.DisplayName} doesn't support it.");
+                    return GetErrorXML(203, "Function Not Available: tmdbid is not supported for movie search by this indexer");
+                }
+            }
+
+            if (CurrentQuery.TvdbID != null)
+            {
+                if (CurrentQuery.IsTVSearch && !CurrentIndexer.TorznabCaps.SupportsTvdbSearch)
+                {
+                    logger.Warn($"A search request with tvdbid from {Request.HttpContext.Connection.RemoteIpAddress} was made but the indexer {CurrentIndexer.DisplayName} doesn't support it.");
+                    return GetErrorXML(203, "Function Not Available: tvdbid is not supported for movie search by this indexer");
+                }
+            }
+
             try
             {
                 var result = await CurrentIndexer.ResultsForQuery(CurrentQuery);
