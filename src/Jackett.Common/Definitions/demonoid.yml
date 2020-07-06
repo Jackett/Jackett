@@ -8,7 +8,7 @@ encoding: UTF-8
 followredirect: true
 links:
   - https://www.demonoid.is/
-  - https://demonoid.unblockit.pw/
+  - https://demonoid.unblockit.id/
 legacylinks:
   - https://www.dnoid.to/
   - https://demonoid.unblockit.pro/
@@ -19,6 +19,7 @@ legacylinks:
   - https://dnoid.proxyportal.fun/
   - https://dnoid.uk-unblock.xyz/
   - https://dnoid.ind-unblock.xyz/
+  - https://demonoid.unblockit.pw/
 
 caps:
   categorymappings:
@@ -290,16 +291,11 @@ settings:
     label: Sort requested from site
     default: "added"
     options:
-      "added": "created"
-      "seeders": "seeders"
-      "size": "size"
-  - name: type
-    type: select
-    label: Order requested from site
-    default: "desc"
-    options:
-      "desc": "desc"
-      "asc": "asc"
+      "_": "created"
+      "S": "seeders desc"
+      "s": "seeders asc"
+      "B": "size desc"
+      "b": "size asc"
 
 login:
   method: cookie
@@ -312,6 +308,7 @@ download:
 
 search:
   paths:
+    # https://www.demonoid.is/files/?category=0&subcategory=0&quality=0&seeded=2&external=2&query=&sort=S
     # https://www.demonoid.is/files/?c154&language=0&quality=0&seeded=2&query=world&to=1&sort=
     # https://www.demonoid.is/files/?seeded=2&language=0&quality=0&to=1&query=world
     - path: files/
@@ -319,15 +316,14 @@ search:
     $raw: "{{ range .Categories }}c{{.}}&{{end}}"
     # 0 seeded 1 unseeded 2 both
     seeded: 2
-    # 0 all 1 English etc
-    language: 0
     # 0 all
     quality: 0
+    # 0 Demonoid 1 External 2 Both
+    external: 2
     # search in titles only
     to: "{{ if .Query.IMDBID }}{{else}}1{{end}}"
     query: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-    sort: "{{ .Config.sort }}"
-    order: "{{ .Config.type }}"
+    sort: "{{ re_replace .Config.sort \"_\" \"\" }}"
     # does not return imdb link in results
 
   rows:

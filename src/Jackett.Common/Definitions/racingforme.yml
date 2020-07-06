@@ -222,6 +222,9 @@ search:
       filters:
         - name: regexp
           args: "(.+?) in"
+        # fix double points error
+        - name: re_replace
+          args: ["(\\d+)\\.(\\d{3})(\\.\\d{2})", "$1$2$3"]
     files:
       selector: span.torrentData span.torrentFiles
       filters:

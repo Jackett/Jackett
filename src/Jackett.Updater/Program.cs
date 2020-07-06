@@ -344,6 +344,7 @@ namespace Jackett.Updater
                 "Definitions/nachtwerk.yml",
                 "Definitions/nexttorrent.yml",
                 "Definitions/nnm-club.yml", // renamed to noname-club
+                "Definitions/nordichd.yml",
                 "Definitions/nostalgic.yml", // renamed to vhstapes
                 "Definitions/nyaa.yml",
                 "Definitions/nyoo.yml",
@@ -381,6 +382,7 @@ namespace Jackett.Updater
                 "Definitions/thetorrents.yml",
                 "Definitions/the-madhouse.yml",
                 "Definitions/tigers-dl.yml",
+                "Definitions/tntvillage.yml",
                 "Definitions/torrentcouch.yml",
                 "Definitions/torrentkim.yml",
                 "Definitions/torrentproject.yml",

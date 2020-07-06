@@ -119,7 +119,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * sukebei-Pantsu
  * sukebei.Nyaa.si
  * The Pirate Bay (TPB)
- * TNTVillage
  * Tokyo Tosho
  * TopNow
  * Torlock
@@ -410,7 +409,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * New Real World
  * NorBits
  * NordicBits (NB)
- * NORDiCHD
  * notwhat.cd
  * oMg[WtF]trackr
  * OnlineSelfEducation
@@ -523,6 +521,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Torrenting (TT)
  * Torrentland
  * TotallyKids (TK)
+ * TorrentSeed
  * TranceTraffic
  * Trezzor
  * TurkSeed

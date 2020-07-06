@@ -169,6 +169,8 @@ namespace Jackett.Common.Indexers
                     if (detailRow == null)
                         continue; //No torrents in result
                     var qDownloadLink = detailRow.QuerySelector("a[href^=\"/download/torrent\"]");
+                    if (qDownloadLink == null)
+                        continue; //No permission to view link
                     var link = new Uri(SiteLink + qDownloadLink.GetAttribute("href").TrimStart('/'));
                     var timestr = detailRow.Children[0].QuerySelector("ul.dropdown-contents span.my_tt").TextContent;
                     var publishDate = DateTimeUtil.FromUnknown(timestr, "UK");

@@ -322,13 +322,32 @@ search:
     grabs:
       selector: td.forumposts span.complet
     date:
-      # 12 янв 2019, 11:26
-      selector: td.forumdetails span.forum-descriptions
+      # Вчера, 10:34
+      selector: td.forumdetails span.forum-descriptions:contains("Вчера")
+      optional: true
       filters:
-        # extract the date
+        - name: regexp
+          args: "(Вчера, \\d{2}:\\d{2})"
+        - name: replace
+          args: ["Вчера", "Today"]
+        - name: fuzzytime
+    date:
+      # Сегодня, 17:54
+      selector: td.forumdetails span.forum-descriptions:contains("Сегодня")
+      optional: true
+      filters:
+        - name: regexp
+          args: "(Сегодня, \\d{2}:\\d{2})"
+        - name: replace
+          args: ["Сегодня", "Today"]
+        - name: fuzzytime
+    date:
+      # 12 янв 2019, 11:26
+      selector: td.forumdetails span.forum-descriptions:not(:contains("Сегодня")):not(:contains("Вчера"))
+      optional: true
+      filters:
         - name: regexp
           args: "(\\d{2} \\D{3} \\d{4}, \\d{2}:\\d{2})"
-          # replace month abbreviations
         - name: replace
           args: ["янв", "Jan"]
         - name: replace
@@ -354,7 +373,7 @@ search:
         - name: replace
           args: ["дек", "Dec"]
         - name: dateparse
-          args: "02 Jan 06, 15:04"
+          args: "02 Jan 2006, 15:04"
     downloadvolumefactor:
       text: 1
     uploadvolumefactor:

@@ -118,7 +118,7 @@ search:
     # does not support imdbid searches and does not have imdb links in results.
 
   rows:
-    selector: table[width="1200"] > tbody > tr
+    selector: table[width="1200"] > tbody > tr:has(a[href^="download.php/"])
 
   fields:
     category:
