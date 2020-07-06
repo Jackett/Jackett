@@ -37,6 +37,7 @@ namespace Jackett.Common.Indexers
                    link: "https://rarbg.to/",
                    caps: new TorznabCapabilities
                    {
+                       SupportsImdbTVSearch = true, 
                        SupportsImdbMovieSearch = true
                    },
                    configService: configService,
