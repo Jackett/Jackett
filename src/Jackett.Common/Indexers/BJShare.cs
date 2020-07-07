@@ -219,6 +219,11 @@ namespace Jackett.Common.Indexers
             return title;
         }
 
+        private bool IsSessionIsClosed(WebClientStringResult result)
+        {
+            return result.IsRedirect && result.RedirectingTo.Contains("login.php");
+        }
+
         private string FixSearchTerm(TorznabQuery query)
         {
             if (query.IsImdbQuery)
@@ -253,7 +258,7 @@ namespace Jackett.Common.Indexers
                 queryCollection.Add("filter_cat[" + cat + "]", "1");
             searchUrl += "?" + queryCollection.GetQueryString();
             var results = await RequestStringWithCookies(searchUrl);
-            if (results.IsRedirect)
+            if (IsSessionIsClosed(results))
             {
                 // re-login
                 await ApplyConfiguration(null);
@@ -385,7 +390,7 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
             var results = await RequestStringWithCookies(TodayUrl);
-            if (results.IsRedirect)
+            if (IsSessionIsClosed(results))
             {
                 // re-login
                 await ApplyConfiguration(null);
