@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -17,39 +18,40 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class AnimeBytes : BaseCachingWebIndexer
     {
-        private string ScrapeUrl { get { return SiteLink + "scrape.php"; } }
-        private string TorrentsUrl { get { return SiteLink + "torrents.php"; } }
-        public bool AllowRaws { get { return configData.IncludeRaw.Value; } }
-        public bool PadEpisode { get { return configData.PadEpisode != null && configData.PadEpisode.Value; } }
-        public bool AddSynonyms { get { return configData.AddSynonyms.Value; } }
-        public bool FilterSeasonEpisode { get { return configData.FilterSeasonEpisode.Value; } }
+        private string ScrapeUrl => SiteLink + "scrape.php";
+        public bool AllowRaws => configData.IncludeRaw.Value;
+        public bool PadEpisode => configData.PadEpisode != null && configData.PadEpisode.Value;
+        public bool AddSynonyms => configData.AddSynonyms.Value;
+        public bool FilterSeasonEpisode => configData.FilterSeasonEpisode.Value;
 
         private new ConfigurationDataAnimeBytes configData
         {
-            get { return (ConfigurationDataAnimeBytes)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataAnimeBytes)base.configData;
+            set => base.configData = value;
         }
 
         public AnimeBytes(IIndexerConfigurationService configService, Utils.Clients.WebClient client, Logger l, IProtectionService ps)
-            : base(name: "AnimeBytes",
-                link: "https://animebytes.tv/",
-                description: "Powered by Tentacles",
-                configService: configService,
-                client: client,
-                caps: new TorznabCapabilities(TorznabCatType.TVAnime,
-                                              TorznabCatType.Movies,
-                                              TorznabCatType.BooksComics,
-                                              TorznabCatType.ConsolePSP,
-                                              TorznabCatType.ConsoleOther,
-                                              TorznabCatType.PCGames,
-                                              TorznabCatType.AudioMP3,
-                                              TorznabCatType.AudioLossless,
-                                              TorznabCatType.AudioOther),
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataAnimeBytes("Note: Go to AnimeBytes site and open your account settings. Go to 'Account' tab, move cursor over black part near 'Passkey' and copy its value. Your username is case sensitive."))
+            : base(id: "animebytes",
+                   name: "AnimeBytes",
+                   description: "Powered by Tentacles",
+                   link: "https://animebytes.tv/",
+                   configService: configService,
+                   client: client,
+                   caps: new TorznabCapabilities(TorznabCatType.TVAnime,
+                                                 TorznabCatType.Movies,
+                                                 TorznabCatType.BooksComics,
+                                                 TorznabCatType.ConsolePSP,
+                                                 TorznabCatType.ConsoleOther,
+                                                 TorznabCatType.PCGames,
+                                                 TorznabCatType.AudioMP3,
+                                                 TorznabCatType.AudioLossless,
+                                                 TorznabCatType.AudioOther),
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataAnimeBytes("Note: Go to AnimeBytes site and open your account settings. Go to 'Account' tab, move cursor over black part near 'Passkey' and copy its value. Your username is case sensitive."))
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
@@ -74,12 +76,10 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("printedtype[artbook]", TorznabCatType.BooksComics, "Artbook");
 
         }
+        // Prevent filtering
+        protected override IEnumerable<ReleaseInfo> FilterResults(TorznabQuery query, IEnumerable<ReleaseInfo> input) =>
 
-        protected override IEnumerable<ReleaseInfo> FilterResults(TorznabQuery query, IEnumerable<ReleaseInfo> input)
-        {
-            // Prevent filtering
-            return input;
-        }
+            input;
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
@@ -164,7 +164,7 @@ namespace Jackett.Common.Indexers
             queryCollection.Add("type", searchType);
             queryCollection.Add("searchstr", searchTerm);
             var queryUrl = ScrapeUrl + "?" + queryCollection.GetQueryString();
-            
+
             // Check cache first so we don't query the server for each episode when searching for each episode in a series.
             lock (cache)
             {
@@ -190,7 +190,7 @@ namespace Jackett.Common.Indexers
 
                 var Matches = (long)json["Matches"];
 
-                if(Matches > 0)
+                if (Matches > 0)
                 {
                     var groups = (JArray)json.Groups;
 
@@ -203,30 +203,15 @@ namespace Jackett.Common.Indexers
                         var Year = (int)group["Year"];
                         var GroupName = (string)group["GroupName"];
                         var SeriesName = (string)group["SeriesName"];
-                        var Artists = (string)group["Artists"];
-
                         var mainTitle = WebUtility.HtmlDecode((string)group["FullName"]);
                         if (SeriesName != null)
                             mainTitle = SeriesName;
 
                         synonyms.Add(mainTitle);
-
-                        // If the title contains a comma then we can't use the synonyms as they are comma seperated
-                        if (!mainTitle.Contains(",") && AddSynonyms)
+                        if (AddSynonyms)
                         {
-                            var symnomnNames = WebUtility.HtmlDecode((string)group["Synonymns"]);
-
-                            if (!string.IsNullOrWhiteSpace(symnomnNames))
-                            {
-                                foreach (var name in symnomnNames.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries))
-                                {
-                                    var theName = name.Trim();
-                                    if (!theName.Contains("&#") && !string.IsNullOrWhiteSpace(theName))
-                                    {
-                                        synonyms.Add(theName);
-                                    }
-                                }
-                            }
+                            foreach (string synonym in group["Synonymns"])
+                                synonyms.Add(synonym);
                         }
 
                         List<int> Category = null;
@@ -243,12 +228,12 @@ namespace Jackett.Common.Indexers
                             if (!string.IsNullOrWhiteSpace(EditionTitle))
                                 releaseInfo = WebUtility.HtmlDecode(EditionTitle);
 
-                            Regex SeasonRegEx = new Regex(@"Season (\d+)", RegexOptions.Compiled);
+                            var SeasonRegEx = new Regex(@"Season (\d+)", RegexOptions.Compiled);
                             var SeasonRegExMatch = SeasonRegEx.Match(releaseInfo);
                             if (SeasonRegExMatch.Success)
                                 season = ParseUtil.CoerceInt(SeasonRegExMatch.Groups[1].Value);
 
-                            Regex EpisodeRegEx = new Regex(@"Episode (\d+)", RegexOptions.Compiled);
+                            var EpisodeRegEx = new Regex(@"Episode (\d+)", RegexOptions.Compiled);
                             var EpisodeRegExMatch = EpisodeRegEx.Match(releaseInfo);
                             if (EpisodeRegExMatch.Success)
                                 episode = EpisodeRegExMatch.Groups[1].Value;
@@ -257,7 +242,7 @@ namespace Jackett.Common.Indexers
                             releaseInfo = releaseInfo.Replace("Season ", "S");
                             releaseInfo = releaseInfo.Trim();
 
-                            if (PadEpisode && int.TryParse(releaseInfo, out int test) && releaseInfo.Length == 1)
+                            if (PadEpisode && int.TryParse(releaseInfo, out var test) && releaseInfo.Length == 1)
                             {
                                 releaseInfo = "0" + releaseInfo;
                             }
@@ -277,7 +262,7 @@ namespace Jackett.Common.Indexers
                             var UploadTimeString = (string)torrent["UploadTime"];
                             var UploadTime = DateTime.ParseExact(UploadTimeString, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
                             var PublushDate = DateTime.SpecifyKind(UploadTime, DateTimeKind.Utc).ToLocalTime();
-                            var CommentsLink = TorrentsUrl + "?id=" + groupID.ToString() + "&torrentid=" + torrentID.ToString();
+                            var CommentsLink = SiteLink + "torrent/" + torrentID.ToString() + "/group";
                             var CommentsLinkUri = new Uri(CommentsLink);
                             var Size = (long)torrent["Size"];
                             var Snatched = (long)torrent["Snatched"];
@@ -337,7 +322,7 @@ namespace Jackett.Common.Indexers
 
                             // We dont actually have a release name >.> so try to create one
                             var releaseTags = Property.Split("|".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
-                            for (int i = releaseTags.Count - 1; i >= 0; i--)
+                            for (var i = releaseTags.Count - 1; i >= 0; i--)
                             {
                                 releaseTags[i] = releaseTags[i].Trim();
                                 if (string.IsNullOrWhiteSpace(releaseTags[i]))
@@ -360,16 +345,10 @@ namespace Jackett.Common.Indexers
                             {
                                 releasegroup = string.Empty;
                             }
+                            if (!AllowRaws && releaseTags.Contains("raw", StringComparer.InvariantCultureIgnoreCase))
+                                continue;
 
-                            var infoString = "";
-
-                            for (int i = 0; i + 1 < releaseTags.Count(); i++)
-                            {
-                                if (releaseTags[i] == "Raw" && !AllowRaws)
-                                    continue;
-                                infoString += "[" + releaseTags[i] + "]";
-                            }
-
+                            var infoString = releaseTags.Aggregate("", (prev, cur) => prev + "[" + cur + "]");
                             var MinimumSeedTime = 259200;
                             //  Additional 5 hours per GB
                             MinimumSeedTime += (int)((Size / 1000000000) * 18000);
@@ -386,24 +365,27 @@ namespace Jackett.Common.Indexers
                                     releaseTitle = string.Format("{0}{1} {2} {3}", releasegroup, title, releaseInfo, infoString);
                                 }
 
-                                var release = new ReleaseInfo();
-                                release.MinimumRatio = 1;
-                                release.MinimumSeedTime = MinimumSeedTime;
-                                release.Title = releaseTitle;
-                                release.Comments = CommentsLinkUri;
-                                release.Guid = new Uri(CommentsLinkUri + "&nh=" + StringUtil.Hash(title)); // Sonarr should dedupe on this url - allow a url per name.
-                                release.Link = LinkUri;
-                                release.BannerUrl = ImageUrl;
-                                release.PublishDate = PublushDate;
-                                release.Category = Category;
-                                release.Description = Description;
-                                release.Size = Size;
-                                release.Seeders = Seeders;
-                                release.Peers = Peers;
-                                release.Grabs = Snatched;
-                                release.Files = FileCount;
-                                release.DownloadVolumeFactor = RawDownMultiplier;
-                                release.UploadVolumeFactor = RawUpMultiplier;
+                                var guid = new Uri(CommentsLinkUri + "&nh=" + StringUtil.Hash(title));
+                                var release = new ReleaseInfo
+                                {
+                                    MinimumRatio = 1,
+                                    MinimumSeedTime = MinimumSeedTime,
+                                    Title = releaseTitle,
+                                    Comments = CommentsLinkUri,
+                                    Guid = guid, // Sonarr should dedupe on this url - allow a url per name.
+                                    Link = LinkUri,
+                                    BannerUrl = ImageUrl,
+                                    PublishDate = PublushDate,
+                                    Category = Category,
+                                    Description = Description,
+                                    Size = Size,
+                                    Seeders = Seeders,
+                                    Peers = Peers,
+                                    Grabs = Snatched,
+                                    Files = FileCount,
+                                    DownloadVolumeFactor = RawDownMultiplier,
+                                    UploadVolumeFactor = RawUpMultiplier
+                                };
 
                                 releases.Add(release);
                             }

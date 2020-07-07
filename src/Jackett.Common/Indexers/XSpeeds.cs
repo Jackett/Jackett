@@ -1,11 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using CsQuery;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -14,45 +15,39 @@ using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
-using static Jackett.Common.Utils.ParseUtil;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class XSpeeds : BaseWebIndexer
     {
         private string LandingUrl => SiteLink + "login.php";
         private string LoginUrl => SiteLink + "takelogin.php";
         private string GetRSSKeyUrl => SiteLink + "getrss.php";
         private string SearchUrl => SiteLink + "browse.php";
-        private string RSSUrl => SiteLink + "rss.php?secret_key={0}&feedtype=download&timezone=0&showrows=50&categories=all";
-        private string CommentUrl => SiteLink + "details.php?id={0}";
-        private string DownloadUrl => SiteLink + "download.php?id={0}";
 
-        private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
-        {
-            get { return (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData; }
-            set { base.configData = value; }
-        }
+        private new ConfigurationDataBasicLoginWithRSSAndDisplay configData =>
+            (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData;
 
         public XSpeeds(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "XSpeeds",
-                description: "XSpeeds (XS) is a Private Torrent Tracker for MOVIES / TV / GENERAL",
-                link: "https://www.xspeeds.eu/",
-                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                configService: configService,
-                client: wc,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
+            : base(id: "xspeeds",
+                   name: "XSpeeds",
+                   description: "XSpeeds (XS) is a Private Torrent Tracker for MOVIES / TV / GENERAL",
+                   link: "https://www.xspeeds.eu/",
+                   caps: new TorznabCapabilities
+                   {
+                       SupportsImdbMovieSearch = true
+                       // SupportsImdbTVSearch = true (supported by the site but disabled due to #8107)
+                   },
+                   configService: configService,
+                   client: wc,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
-
-            configData.DisplayText.Value = "Expect an initial delay (often around 10 seconds) due to XSpeeds CloudFlare DDoS protection";
-            configData.DisplayText.Name = "Notice";
-
-            TorznabCaps.SupportsImdbMovieSearch = true;
 
             AddCategoryMapping(92, TorznabCatType.MoviesUHD, "4K Movies");
             AddCategoryMapping(91, TorznabCatType.TVUHD, "4K TV");
@@ -137,25 +132,22 @@ namespace Jackett.Common.Indexers
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
             var loginPage = await RequestStringWithCookies(LandingUrl);
-            CQ dom = loginPage.Content;
-            CQ qCaptchaImg = dom.Find("img#regimage").First();
-            if (qCaptchaImg.Length > 0)
+            var parser = new HtmlParser();
+            var dom = parser.ParseDocument(loginPage.Content);
+            var qCaptchaImg = dom.QuerySelector("img#regimage");
+            if (qCaptchaImg != null)
             {
-                var CaptchaUrl = qCaptchaImg.Attr("src");
-                var captchaImage = await RequestBytesWithCookies(CaptchaUrl, loginPage.Cookies, RequestType.GET, LandingUrl);
+                var captchaUrl = qCaptchaImg.GetAttribute("src");
+                var captchaImageResponse = await RequestBytesWithCookies(captchaUrl, loginPage.Cookies, RequestType.GET, LandingUrl);
 
-                var CaptchaImage = new ImageItem { Name = "Captcha Image" };
-                var CaptchaText = new StringItem { Name = "Captcha Text" };
+                var captchaText = new StringItem { Name = "Captcha Text" };
+                var captchaImage = new ImageItem {Name = "Captcha Image", Value = captchaImageResponse.Content};
 
-                CaptchaImage.Value = captchaImage.Content;
-
-                configData.AddDynamic("CaptchaImage", CaptchaImage);
-                configData.AddDynamic("CaptchaText", CaptchaText);
+                configData.AddDynamic("CaptchaText", captchaText);
+                configData.AddDynamic("CaptchaImage", captchaImage);
             }
             else
-            {
-                logger.Debug(string.Format("{0}: No captcha image found", ID));
-            }
+                logger.Debug($"{Id}: No captcha image found");
 
             return configData;
         }
@@ -170,21 +162,20 @@ namespace Jackett.Common.Indexers
                             {"password", configData.Password.Value}
                         };
 
-            var CaptchaText = (StringItem)configData.GetDynamic("CaptchaText");
-            if (CaptchaText != null)
-            {
-                pairs.Add("imagestring", CaptchaText.Value);
-            }
+            var captchaText = (StringItem)configData.GetDynamic("CaptchaText");
+            if (captchaText != null)
+                pairs.Add("imagestring", captchaText.Value);
 
             //var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, SiteLink, true);
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, SearchUrl, LandingUrl, true);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"),
+            await ConfigureIfOK(result.Cookies, result.Content?.Contains("logout.php") == true,
                 () =>
                 {
-                    CQ dom = result.Content;
-                    var errorMessage = dom[".left_side table:eq(0) tr:eq(1)"].Text().Trim().Replace("\n\t", " ");
+                    var parser = new HtmlParser();
+                    var dom = parser.ParseDocument(result.Content);
+                    var errorMessage = dom.QuerySelector(".left_side table:nth-of-type(1) tr:nth-of-type(2)")?.TextContent.Trim().Replace("\n\t", " ");
                     if (string.IsNullOrWhiteSpace(errorMessage))
-                        errorMessage = dom["div.notification-body"].Text().Trim().Replace("\n\t", " ");
+                        errorMessage = dom.QuerySelector("div.notification-body").TextContent.Trim().Replace("\n\t", " ");
                     throw new ExceptionWithConfigData(errorMessage, configData);
                 });
 
@@ -217,75 +208,7 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();
             var prevCook = CookieHeader + "";
-            var searchStringIsImdbQuery = (ParseUtil.GetImdbID(searchString) != null);
 
-            // If we have no query use the RSS Page as their server is slow enough at times!
-            // ~15.01.2019 they removed the description tag making the RSS feed almost useless, we don't use it for now. See #4458
-            // if (false && query.IsTest || string.IsNullOrWhiteSpace(searchString))
-            /*
-            if (false)
-            {
-                var rssPage = await RequestStringWithCookiesAndRetry(string.Format(RSSUrl, configData.RSSKey.Value));
-                try
-                {
-                    if (rssPage.Content.EndsWith("\0"))
-                    {
-                        rssPage.Content = rssPage.Content.Substring(0, rssPage.Content.Length - 1);
-                    }
-                    rssPage.Content = RemoveInvalidXmlChars(rssPage.Content);
-                    var rssDoc = XDocument.Parse(rssPage.Content);
-
-                    foreach (var item in rssDoc.Descendants("item"))
-                    {
-                        var title = item.Descendants("title").First().Value;
-                        var description = item.Descendants("description").First().Value;
-                        var link = item.Descendants("link").First().Value;
-                        var category = item.Descendants("category").First().Value;
-                        var date = item.Descendants("pubDate").First().Value;
-
-                        var torrentIdMatch = Regex.Match(link, "(?<=id=)(\\d)*");
-                        var torrentId = torrentIdMatch.Success ? torrentIdMatch.Value : string.Empty;
-                        if (string.IsNullOrWhiteSpace(torrentId))
-                            throw new Exception("Missing torrent id");
-
-                        var infoMatch = Regex.Match(description, @"Category:\W(?<cat>.*)\W\/\WSeeders:\W(?<seeders>[\d\,]*)\W\/\WLeechers:\W(?<leechers>[\d\,]*)\W\/\WSize:\W(?<size>[\d\.]*\W\S*)");
-                        if (!infoMatch.Success)
-                            throw new Exception("Unable to find info");
-
-                        var release = new ReleaseInfo
-                        {
-                            Title = title,
-                            Description = title,
-                            Guid = new Uri(string.Format(DownloadUrl, torrentId)),
-                            Comments = new Uri(string.Format(CommentUrl, torrentId)),
-                            PublishDate = DateTime.ParseExact(date, "yyyy-MM-dd H:mm:ss", CultureInfo.InvariantCulture), //2015-08-08 21:20:31
-                            Link = new Uri(string.Format(DownloadUrl, torrentId)),
-                            Seeders = ParseUtil.CoerceInt(infoMatch.Groups["seeders"].Value),
-                            Peers = ParseUtil.CoerceInt(infoMatch.Groups["leechers"].Value),
-                            Size = ReleaseInfo.GetBytes(infoMatch.Groups["size"].Value),
-                            Category = MapTrackerCatToNewznab(category)
-                        };
-
-                        release.Peers += release.Seeders;
-                        releases.Add(release);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    logger.Error("XSpeeds: Error while parsing the RSS feed:");
-                    logger.Error(rssPage.Content);
-                    throw ex;
-                }
-            }
-            */
-            //if (query.IsTest || !string.IsNullOrWhiteSpace(searchString))
-            /*
-            if (searchString.Length < 3 && !query.IsTest)
-            {
-                OnParseError("", new Exception("Minimum search length is 3"));
-                return releases;
-            }
-            */
             var searchParams = new Dictionary<string, string> {
                 { "do", "search" },
                 { "category", "0" },
@@ -300,10 +223,7 @@ namespace Jackett.Common.Indexers
             else
             {
                 searchParams.Add("keywords", searchString);
-                if (searchStringIsImdbQuery)
-                    searchParams.Add("search_type", "t_both");
-                else
-                    searchParams.Add("search_type", "t_name");
+                searchParams.Add("search_type", "t_name");
             }
 
             var searchPage = await PostDataWithCookiesAndRetry(SearchUrl, searchParams, CookieHeader);
@@ -316,50 +236,50 @@ namespace Jackett.Common.Indexers
 
             try
             {
-                CQ dom = searchPage.Content;
-                var rows = dom["table#sortabletable > tbody > tr:has(div > a[href*=\"details.php?id=\"])"];
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(searchPage.Content);
+                var rows = dom.QuerySelectorAll("table#sortabletable > tbody > tr:has(div > a[href*=\"details.php?id=\"])");
                 foreach (var row in rows)
                 {
                     var release = new ReleaseInfo();
-                    var qRow = row.Cq();
 
-                    var qDetails = qRow.Find("div > a[href*=\"details.php?id=\"]"); // details link, release name get's shortened if it's to long
-                    var qTitle = qRow.Find("td:eq(1) .tooltip-content div:eq(0)"); // use Title from tooltip
-                    if (!qTitle.Any()) // fallback to Details link if there's no tooltip
-                    {
-                        qTitle = qDetails;
-                    }
-                    release.Title = qTitle.Text();
+                    var qDetails = row.QuerySelector("div > a[href*=\"details.php?id=\"]");
+                    var qTitle = qDetails; // #7975
 
-                    release.Guid = new Uri(qRow.Find("td:eq(2) a").Attr("href"));
+                    release.Title = qTitle.TextContent;
+
+                    release.Guid = new Uri(row.QuerySelector("td:nth-of-type(3) a").GetAttribute("href"));
                     release.Link = release.Guid;
-                    release.Comments = new Uri(qDetails.Attr("href"));
-                    release.PublishDate = DateTime.ParseExact(qRow.Find("td:eq(1) div").Last().Text().Trim(), "dd-MM-yyyy H:mm", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal); //08-08-2015 12:51
-                    release.Seeders = ParseUtil.CoerceInt(qRow.Find("td:eq(6)").Text());
-                    release.Peers = release.Seeders + ParseUtil.CoerceInt(qRow.Find("td:eq(7)").Text().Trim());
-                    release.Size = ReleaseInfo.GetBytes(qRow.Find("td:eq(4)").Text().Trim());
+                    release.Comments = new Uri(qDetails.GetAttribute("href"));
+                    //08-08-2015 12:51
+                    release.PublishDate = DateTime.ParseExact(
+                        row.QuerySelectorAll("td:nth-of-type(2) div").Last().TextContent.Trim(), "dd-MM-yyyy H:mm",
+                        CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
+                    release.Seeders = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(7)").TextContent);
+                    release.Peers = release.Seeders + ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(8)").TextContent.Trim());
+                    release.Size = ReleaseInfo.GetBytes(row.QuerySelector("td:nth-of-type(5)").TextContent.Trim());
 
-                    var qBanner = qRow.Find("td:eq(1) .tooltip-content img").First();
-                    if (qBanner.Length > 0)
-                        release.BannerUrl = new Uri(qBanner.Attr("src"));
+                    var qBanner = row.QuerySelector("td:nth-of-type(2) .tooltip-content img");
+                    if (qBanner != null)
+                        release.BannerUrl = new Uri(qBanner.GetAttribute("src"));
 
-                    var cat = row.Cq().Find("td:eq(0) a").First().Attr("href");
+                    var cat = row.QuerySelector("td:nth-of-type(1) a").GetAttribute("href");
                     var catSplit = cat.LastIndexOf('=');
                     if (catSplit > -1)
                         cat = cat.Substring(catSplit + 1);
                     release.Category = MapTrackerCatToNewznab(cat);
 
-                    var grabs = qRow.Find("td:nth-child(6)").Text();
+                    var grabs = row.QuerySelector("td:nth-child(6)").TextContent;
                     release.Grabs = ParseUtil.CoerceInt(grabs);
 
-                    if (qRow.Find("img[alt^=\"Free Torrent\"]").Length >= 1)
+                    if (row.QuerySelector("img[alt^=\"Free Torrent\"]") != null)
                         release.DownloadVolumeFactor = 0;
-                    else if (qRow.Find("img[alt^=\"Silver Torrent\"]").Length >= 1)
+                    else if (row.QuerySelector("img[alt^=\"Silver Torrent\"]") != null)
                         release.DownloadVolumeFactor = 0.5;
                     else
                         release.DownloadVolumeFactor = 1;
 
-                    if (qRow.Find("img[alt^=\"x2 Torrent\"]").Length >= 1)
+                    if (row.QuerySelector("img[alt^=\"x2 Torrent\"]") != null)
                         release.UploadVolumeFactor = 2;
                     else
                         release.UploadVolumeFactor = 1;
@@ -371,10 +291,10 @@ namespace Jackett.Common.Indexers
             {
                 OnParseError(searchPage.Content, ex);
             }
+
             if (!CookieHeader.Trim().Equals(prevCook.Trim()))
-            {
                 SaveConfig();
-            }
+
             return releases;
         }
     }

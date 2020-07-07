@@ -1,10 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Globalization;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using AngleSharp.Dom;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -12,29 +15,29 @@ using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System.Text.RegularExpressions;
-using AngleSharp.Html.Parser;
 
 namespace Jackett.Common.Indexers
 {
-    class HorribleSubs : BaseWebIndexer
+    [ExcludeFromCodeCoverage]
+    internal class HorribleSubs : BaseWebIndexer
     {
-        private string ApiEndpoint { get { return SiteLink + "api.php"; } }
+        private string ApiEndpoint => SiteLink + "api.php";
 
-        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
+        public override string[] LegacySiteLinks { get; protected set; } = {
             "http://horriblesubs.info/"
         };
 
         public HorribleSubs(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-    : base(name: "Horrible Subs",
-        description: "HorribleSubs - So bad yet so good",
-        link: "https://horriblesubs.info/",
-        caps: new TorznabCapabilities(TorznabCatType.TVAnime),
-        configService: configService,
-        client: wc,
-        logger: l,
-        p: ps,
-        configData: new ConfigurationData())
+            : base(id: "horriblesubs",
+                   name: "Horrible Subs",
+                   description: "HorribleSubs - So bad yet so good",
+                   link: "https://horriblesubs.info/",
+                   caps: new TorznabCapabilities(TorznabCatType.TVAnime),
+                   configService: configService,
+                   client: wc,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationData())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
@@ -46,55 +49,49 @@ namespace Jackett.Common.Indexers
             configData.LoadValuesFromJson(configJson);
             var releases = await PerformQuery(new TorznabQuery());
 
-            await ConfigureIfOK(string.Empty, releases.Any(), () =>
-            {
-                throw new Exception("Could not find releases from this URL");
-            });
+            await ConfigureIfOK(string.Empty, releases.Any(),
+                                () => throw new Exception("Could not find releases from this URL"));
 
             return IndexerConfigurationStatus.Completed;
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            var ResultParser = new HtmlParser();
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();
-            var queryCollection = new NameValueCollection();
-
 
             if (string.IsNullOrWhiteSpace(searchString))
-            {
-                return await PerformLatestQuery(query);
-            }
-            else
-            {
-                queryCollection.Add("method", "search");
+                return await PerformLatestQuery();
 
-                searchString = searchString.Replace("'", ""); // ignore ' (e.g. search for america's Next Top Model)
-                queryCollection.Add("value", searchString);
-            }
+            // ignore ' (e.g. search for america's Next Top Model)
+            searchString = searchString.Replace("'", "");
+            var queryCollection = new NameValueCollection
+            {
+                {"method", "search"},
+                {"value", searchString}
+            };
 
             var searchUrl = ApiEndpoint + "?" + queryCollection.GetQueryString();
-            var response = await RequestStringWithCookiesAndRetry(searchUrl, string.Empty);
+            var response = await RequestStringWithCookiesAndRetry(searchUrl);
 
             try
             {
                 if (response.Content.Contains("Nothing was found"))
-                {
-                    return releases.ToArray();
-                }
-                var dom = ResultParser.ParseDocument(response.Content);
+                    return releases;
+
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(response.Content);
                 var resultLinks = dom.QuerySelectorAll("ul > li > a");
                 var uniqueShowLinks = new HashSet<string>();
                 foreach (var resultLink in resultLinks)
                 {
-                    var href = SiteLink + resultLink.Attributes["href"].Value.Substring(1); // = https://horriblesubs.info/shows/boruto-naruto-next-generations#71
-                    var showUrl = href.Substring(0, href.LastIndexOf("#"));
+                    var href = SiteLink + resultLink.GetAttribute("href").TrimStart('/'); // = https://horriblesubs.info/shows/boruto-naruto-next-generations#71
+                    var showUrl = href.Split('#').First();
                     uniqueShowLinks.Add(showUrl);
                 }
                 foreach (var showLink in uniqueShowLinks)
                 {
-                    var showReleases = await GetReleases(showLink, latestOnly: false);
+                    var showReleases = await GetReleases(showLink, false);
                     releases.AddRange(showReleases);
                 }
             }
@@ -106,33 +103,33 @@ namespace Jackett.Common.Indexers
             return releases;
         }
 
-        private async Task<IEnumerable<ReleaseInfo>> PerformLatestQuery(TorznabQuery query)
+        private async Task<IEnumerable<ReleaseInfo>> PerformLatestQuery()
         {
-            var ResultParser = new HtmlParser();
             var releases = new List<ReleaseInfo>();
-            var searchString = query.GetQueryString();
-            var queryCollection = new NameValueCollection();
-
-            queryCollection.Add("method", "getlatest");
+            var queryCollection = new NameValueCollection
+            {
+                { "method", "getlatest" }
+            };
 
             var searchUrl = ApiEndpoint + "?" + queryCollection.GetQueryString();
-            var response = await RequestStringWithCookiesAndRetry(searchUrl, string.Empty);
+            var response = await RequestStringWithCookiesAndRetry(searchUrl);
 
             try
             {
                 if (response.Content.Contains("Nothing was found"))
-                {
-                    return releases.ToArray();
-                }
+                    return releases;
 
-                var dom = ResultParser.ParseDocument(response.Content);
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(response.Content);
                 var latestresults = dom.QuerySelectorAll("ul > li > a");
                 foreach (var resultLink in latestresults)
                 {
-                    var href = SiteLink + resultLink.Attributes["href"].Value.Substring(1); // = https://horriblesubs.info/shows/boruto-naruto-next-generations#71
-                    var episodeNumber = href.Substring(href.LastIndexOf("#") + 1); // = 71
-                    var showUrl = href.Substring(0, href.LastIndexOf("#"));
-                    var showReleases = await GetReleases(showUrl, latestOnly: true, titleContains: episodeNumber);
+                    // href = https://horriblesubs.info/shows/boruto-naruto-next-generations#71
+                    var href = SiteLink + resultLink.GetAttribute("href").TrimStart('/');
+                    var hrefParts = href.Split('#');
+                    var episodeNumber = hrefParts.Last(); // episodeNumber = 71
+                    var showUrl = hrefParts.First();
+                    var showReleases = await GetReleases(showUrl, true, episodeNumber);
                     releases.AddRange(showReleases);
                 }
             }
@@ -144,175 +141,126 @@ namespace Jackett.Common.Indexers
             return releases;
         }
 
-        private async Task<IEnumerable<ReleaseInfo>> GetReleases(string ResultURL, bool latestOnly, string titleContains = null)
+        private async Task<IEnumerable<ReleaseInfo>> GetReleases(string resultUrl, bool latestOnly, string titleContains = null)
         {
             var releases = new List<ReleaseInfo>();
-            var ResultParser = new HtmlParser();
+            var parser = new HtmlParser();
+
+            var response = await RequestStringWithCookiesAndRetry(resultUrl);
+            await FollowIfRedirect(response);
+
             try
             {
-                var showPageResponse = await RequestStringWithCookiesAndRetry(ResultURL, string.Empty);
-                await FollowIfRedirect(showPageResponse);
-
-                Match match = Regex.Match(showPageResponse.Content, "(var hs_showid = )([0-9]*)(;)", RegexOptions.IgnoreCase);
+                var match = Regex.Match(response.Content, "(var hs_showid = )([0-9]*)(;)", RegexOptions.IgnoreCase);
                 if (match.Success == false)
-                {
                     return releases;
-                }
 
-                int ShowID = int.Parse(match.Groups[2].Value);
+                var showId = int.Parse(match.Groups[2].Value);
 
-                var apiUrls = new string[] {
-                    ApiEndpoint + "?method=getshows&type=batch&showid=" + ShowID, //https://horriblesubs.info/api.php?method=getshows&type=batch&showid=1194
-                    ApiEndpoint + "?method=getshows&type=show&showid=" + ShowID //https://horriblesubs.info/api.php?method=getshows&type=show&showid=869
+                var apiUrls = new [] {
+                    ApiEndpoint + "?method=getshows&type=batch&showid=" + showId, // https://horriblesubs.info/api.php?method=getshows&type=batch&showid=1194
+                    ApiEndpoint + "?method=getshows&type=show&showid=" + showId // https://horriblesubs.info/api.php?method=getshows&type=show&showid=869
                 };
 
-                var releaserows = new List<AngleSharp.Dom.IElement>();
-                foreach (string apiUrl in apiUrls)
+                var rows = new List<IElement>();
+                foreach (var apiUrl in apiUrls)
                 {
-                    int nextId = 0;
-                    while(true)
+                    var nextId = 0;
+                    while (true)
                     {
-                        var showAPIResponse = await RequestStringWithCookiesAndRetry(apiUrl + "&nextid=" + nextId, string.Empty);
-                        var showAPIdom = ResultParser.ParseDocument(showAPIResponse.Content);
-                        var releaseRowResults = showAPIdom.QuerySelectorAll("div.rls-info-container");
-                        releaserows.AddRange(releaseRowResults);
+                        var showApiResponse = await RequestStringWithCookiesAndRetry(apiUrl + "&nextid=" + nextId);
+                        var showApiDom = parser.ParseDocument(showApiResponse.Content);
+                        var releaseRowResults = showApiDom.QuerySelectorAll("div.rls-info-container");
+                        rows.AddRange(releaseRowResults);
                         nextId++;
 
-                        if (releaseRowResults.Length == 0 || latestOnly) {
+                        if (releaseRowResults.Length == 0 || latestOnly)
                             break;
-                        }
                     }
                 }
 
-                foreach (var releaserow in releaserows)
+                foreach (var row in rows)
                 {
-                    string dateStr = releaserow.QuerySelector(".rls-date").TextContent.Trim();
-                    string title = releaserow.FirstChild.TextContent;
+                    var dateStr = row.QuerySelector(".rls-date").TextContent.Trim();
+                    var publishDate = DateTimeUtil.FromUnknown(dateStr);
+
+                    var qTitle = row.QuerySelector("a");
+                    var title = qTitle.TextContent;
                     title = title.Replace("SD720p1080p", "");
                     title = title.Replace(dateStr, "");
 
                     if (!string.IsNullOrWhiteSpace(titleContains) && !title.Contains(titleContains))
-                    {
                         continue;
-                    }
 
                     // Ensure fansub group name is present in the title
                     // This is needed for things like configuring tag restrictions in Sonarr
                     if (!title.Contains("[HorribleSubs]"))
-                    {
                         title = "[HorribleSubs] " + title;
-                    }
 
-                    DateTime releasedate;
-                    if (dateStr == "Today")
-                    {
-                        releasedate = DateTime.Today;
-                    }
-                    else if (dateStr == "Yesterday")
-                    {
-                        releasedate = DateTime.Today.AddDays(-1);
-                    }
-                    else
-                    {
-                        releasedate = DateTime.SpecifyKind(DateTime.ParseExact(dateStr, "MM/dd/yy", CultureInfo.InvariantCulture), DateTimeKind.Utc).ToLocalTime();
-                    }
+                    var episode = qTitle.QuerySelector("strong")?.TextContent;
+                    var comments = new Uri(resultUrl + (episode != null ? "#" + episode : ""));
 
-                    var p480 = releaserow.QuerySelector(".link-480p");
+                    var p480 = row.QuerySelector(".link-480p");
+                    if (p480 != null) // size = 400 MB
+                        AddRelease(releases, p480, $"{title} [480p]", 419430400, comments, publishDate);
 
-                    if (p480 != null)
-                    {
-                        var release = new ReleaseInfo
-                        {
-                            PublishDate = releasedate,
-                            Files = 1,
-                            Category = new List<int> { TorznabCatType.TVAnime.ID },
-                            Size = 524288000,
-                            Seeders = 1,
-                            Peers = 2,
-                            DownloadVolumeFactor = 0,
-                            UploadVolumeFactor = 1
-                        };
-                        release.Title = string.Format("{0} [480p]", title);
-                        if (p480.QuerySelector(".hs-torrent-link > a") != null)
-                        {
-                            release.Link = new Uri(p480.QuerySelector(".hs-torrent-link > a").GetAttribute("href"));
-                            release.Comments = new Uri(release.Link.AbsoluteUri.Replace("/torrent", string.Empty));
-                            release.Guid = release.Link;
-                        }
-                        if (p480.QuerySelector(".hs-magnet-link > a") != null)
-                        {
-                            release.MagnetUri = new Uri(p480.QuerySelector(".hs-magnet-link > a").GetAttribute("href"));
-                            release.Guid = release.MagnetUri;
-                        }
-                        releases.Add(release);
-                    }
+                    var p720 = row.QuerySelector(".link-720p");
+                    if (p720 != null) // size 700 MB
+                        AddRelease(releases, p720, $"{title} [720p]", 734003200, comments, publishDate);
 
-                    var p720 = releaserow.QuerySelector(".link-720p");
-
-                    if (p720 != null)
-                    {
-                        var release = new ReleaseInfo
-                        {
-                            PublishDate = releasedate,
-                            Files = 1,
-                            Category = new List<int> { TorznabCatType.TVAnime.ID },
-                            Size = 524288000,
-                            Seeders = 1,
-                            Peers = 2,
-                            DownloadVolumeFactor = 0,
-                            UploadVolumeFactor = 1
-                        };
-                        release.Title = string.Format("{0} [720p]", title);
-                        if (p720.QuerySelector(".hs-torrent-link > a") != null)
-                        {
-                            release.Link = new Uri(p720.QuerySelector(".hs-torrent-link > a").GetAttribute("href"));
-                            release.Comments = new Uri(release.Link.AbsoluteUri.Replace("/torrent", string.Empty));
-                            release.Guid = release.Link;
-                        }
-                        if (p720.QuerySelector(".hs-magnet-link > a") != null)
-                        {
-                            release.MagnetUri = new Uri(p720.QuerySelector(".hs-magnet-link > a").GetAttribute("href"));
-                            release.Guid = release.MagnetUri;
-                        }
-                        releases.Add(release);
-                    }
-
-                    var p1080 = releaserow.QuerySelector(".link-1080p");
-
-                    if (p1080 != null)
-                    {
-                        var release = new ReleaseInfo
-                        {
-                            PublishDate = releasedate,
-                            Files = 1,
-                            Category = new List<int> { TorznabCatType.TVAnime.ID },
-                            Size = 524288000,
-                            Seeders = 1,
-                            Peers = 2,
-                            DownloadVolumeFactor = 0,
-                            UploadVolumeFactor = 1
-                        };
-                        release.Title = string.Format("{0} [1080p]", title);
-                        if (p1080.QuerySelector(".hs-torrent-link > a") != null)
-                        {
-                            release.Link = new Uri(p1080.QuerySelector(".hs-torrent-link > a").GetAttribute("href"));
-                            release.Comments = new Uri(release.Link.AbsoluteUri.Replace("/torrent", string.Empty));
-                            release.Guid = release.Link;
-                        }
-                        if (p1080.QuerySelector(".hs-magnet-link > a") != null)
-                        {
-                            release.MagnetUri = new Uri(p1080.QuerySelector(".hs-magnet-link > a").GetAttribute("href"));
-                            release.Guid = release.MagnetUri;
-                        }
-                        releases.Add(release);
-                    }
+                    var p1080 = row.QuerySelector(".link-1080p");
+                    if (p1080 != null) // size 1.4 GB
+                        AddRelease(releases, p1080, $"{title} [1080p]", 1503238553, comments, publishDate);
                 }
             }
             catch (Exception ex)
             {
-                OnParseError("", ex);
+                OnParseError(response.Content, ex);
             }
             return releases;
+        }
+
+        private static void AddRelease(List<ReleaseInfo> releases, IElement releaseSelector, string title, long size,
+                                       Uri comments, DateTime publishDate)
+        {
+            Uri link = null;
+            Uri magnet = null;
+            Uri guid = null;
+            if (releaseSelector.QuerySelector(".hs-magnet-link > a") != null)
+            {
+                magnet = new Uri(releaseSelector.QuerySelector(".hs-magnet-link > a").GetAttribute("href"));
+                guid = magnet;
+            }
+            if (releaseSelector.QuerySelector(".hs-torrent-link > a") != null)
+            {
+                link = new Uri(releaseSelector.QuerySelector(".hs-torrent-link > a").GetAttribute("href"));
+                guid = link;
+            }
+
+            // eg https://horriblesubs.info/shows/space-brothers/#38
+            if (magnet == null && link == null)
+                return;
+
+            var release = new ReleaseInfo
+            {
+                Title = title,
+                Link = link,
+                MagnetUri = magnet,
+                Guid = guid,
+                Comments = comments,
+                PublishDate = publishDate,
+                Files = 1,
+                Category = new List<int> { TorznabCatType.TVAnime.ID },
+                Size = size,
+                Seeders = 1,
+                Peers = 2,
+                MinimumRatio = 1,
+                MinimumSeedTime = 172800, // 48 hours
+                DownloadVolumeFactor = 0,
+                UploadVolumeFactor = 1
+            };
+
+            releases.Add(release);
         }
     }
 }

@@ -195,9 +195,6 @@ FakesAssemblies/
 # Visual Studio 6 workspace options file
 *.opt
 /tools
-/BuildOutput
-/Artifacts
-/TestResults
 *.DS_Store
 .idea/
 launchSettings.json

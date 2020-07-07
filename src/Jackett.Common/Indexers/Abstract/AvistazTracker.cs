@@ -1,157 +1,236 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using CsQuery;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Newtonsoft.Json.Linq;
 using NLog;
+using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
 namespace Jackett.Common.Indexers.Abstract
 {
+    [ExcludeFromCodeCoverage]
     public abstract class AvistazTracker : BaseWebIndexer
     {
-        private string LoginUrl { get { return SiteLink + "auth/login"; } }
-        private string SearchUrl { get { return SiteLink + "torrents?in=1&type={0}&search={1}"; } }
-
-        new ConfigurationDataBasicLogin configData
+        private readonly Dictionary<string, string> AuthHeaders = new Dictionary<string, string>
         {
-            get { return (ConfigurationDataBasicLogin)base.configData; }
-            set { base.configData = value; }
-        }
+            {"Accept", "application/json"},
+            {"Content-Type", "application/json"}
+        };
+        private string AuthUrl => SiteLink + "api/v1/jackett/auth";
+        private string SearchUrl => SiteLink + "api/v1/jackett/torrents";
+        private readonly HashSet<string> _hdResolutions = new HashSet<string> { "1080p", "1080i", "720p" };
+        private string _token;
+
+        private new ConfigurationDataBasicLoginWithPID configData => (ConfigurationDataBasicLoginWithPID)base.configData;
 
         // hook to adjust the search term
-        protected virtual string GetSearchTerm(TorznabQuery query)
+        protected virtual string GetSearchTerm(TorznabQuery query) => $"{query.SearchTerm} {query.GetEpisodeSearchString()}";
+
+        // hook to adjust the search category
+        protected virtual List<KeyValuePair<string, string>> GetSearchQueryParameters(TorznabQuery query)
         {
-            return query.GetQueryString();
+            var categoryMapping = MapTorznabCapsToTrackers(query).Distinct().ToList();
+            var qc = new List<KeyValuePair<string, string>> // NameValueCollection don't support cat[]=19&cat[]=6
+            {
+                {"in", "1"},
+                {"type", categoryMapping.Any() ? categoryMapping.First() : "0"}
+            };
+
+            // resolution filter to improve the search
+            if (!query.Categories.Contains(TorznabCatType.Movies.ID) && !query.Categories.Contains(TorznabCatType.TV.ID) &&
+                !query.Categories.Contains(TorznabCatType.Audio.ID))
+            {
+                if (query.Categories.Contains(TorznabCatType.MoviesUHD.ID) || query.Categories.Contains(TorznabCatType.TVUHD.ID))
+                    qc.Add("video_quality[]", "6"); // 2160p
+                if (query.Categories.Contains(TorznabCatType.MoviesHD.ID) || query.Categories.Contains(TorznabCatType.TVHD.ID))
+                {
+                    qc.Add("video_quality[]", "2"); // 720p
+                    qc.Add("video_quality[]", "7"); // 1080i
+                    qc.Add("video_quality[]", "3"); // 1080p
+                }
+                if (query.Categories.Contains(TorznabCatType.MoviesSD.ID) || query.Categories.Contains(TorznabCatType.TVSD.ID))
+                    qc.Add("video_quality[]", "1"); // SD
+            }
+
+            // note, search by tmdb and tvdb are supported too
+            // https://privatehd.to/api/v1/jackett/torrents?tmdb=1234
+            // https://privatehd.to/api/v1/jackett/torrents?tvdb=3653
+            if (query.IsImdbQuery)
+                qc.Add("imdb", query.ImdbID);
+            else
+                qc.Add("search", GetSearchTerm(query).Trim());
+
+            return qc;
         }
 
-        public AvistazTracker(IIndexerConfigurationService configService, Utils.Clients.WebClient webClient, Logger logger, IProtectionService protectionService, string name, string desc, string link)
-            : base(name: name,
-                description: desc,
-                link: link,
-                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                configService: configService,
-                client: webClient,
-                logger: logger,
-                p: protectionService,
-                configData: new ConfigurationDataBasicLogin())
+        // hook to adjust category parsing
+        protected virtual List<int> ParseCategories(TorznabQuery query, JToken row)
+        {
+            var cats = new List<int>();
+            var resolution = row.Value<string>("video_quality");
+            switch(row.Value<string>("type"))
+            {
+                case "Movie":
+                    if (query.Categories.Contains(TorznabCatType.Movies.ID))
+                        cats.Add(TorznabCatType.Movies.ID);
+                    cats.Add(resolution switch
+                    {
+                        var res when _hdResolutions.Contains(res) => TorznabCatType.MoviesHD.ID,
+                        "2160p" => TorznabCatType.MoviesUHD.ID,
+                        _ => TorznabCatType.MoviesSD.ID
+                    });
+                    break;
+                case "TV-Show":
+                    if (query.Categories.Contains(TorznabCatType.TV.ID))
+                        cats.Add(TorznabCatType.TV.ID);
+                    cats.Add(resolution switch
+                    {
+                        var res when _hdResolutions.Contains(res) => TorznabCatType.TVHD.ID,
+                        "2160p" => TorznabCatType.TVUHD.ID,
+                        _ => TorznabCatType.TVSD.ID
+                    });
+                    break;
+                case "Music":
+                    cats.Add(TorznabCatType.Audio.ID);
+                    break;
+                default:
+                    throw new Exception("Error parsing category!");
+            }
+            return cats;
+        }
+
+        protected AvistazTracker(string link, string id, string name, string description,
+                                 IIndexerConfigurationService configService, WebClient client, Logger logger,
+                                 IProtectionService p, TorznabCapabilities caps)
+            : base(id: id,
+                   name: name,
+                   description: description,
+                   link: link,
+                   caps: caps,
+                   configService: configService,
+                   client: client,
+                   logger: logger,
+                   p: p,
+                   configData: new ConfigurationDataBasicLoginWithPID(@"You have to check 'Enable RSS Feed' in 'My Account',
+without this configuration the torrent download does not work.<br/>You can find the PID in 'My profile'."))
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
-
-            AddCategoryMapping(1, TorznabCatType.Movies);
-            AddCategoryMapping(1, TorznabCatType.MoviesForeign);
-            AddCategoryMapping(1, TorznabCatType.MoviesHD);
-            AddCategoryMapping(1, TorznabCatType.MoviesSD);
-            AddCategoryMapping(2, TorznabCatType.TV);
-            AddCategoryMapping(3, TorznabCatType.Audio);
+            Type = "private";
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-            var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
-            var token = new Regex("<meta name=\"_token\" content=\"(.*?)\">").Match(loginPage.Content).Groups[1].ToString();
-            var pairs = new Dictionary<string, string> {
-                { "_token", token },
-                { "email_username", configData.Username.Value },
-                { "password", configData.Password.Value },
-                { "remember", "1" }
-            };
 
-            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, null, LoginUrl);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("auth/logout"), () =>
+            await RenewalTokenAsync();
+
+            var releases = await PerformQuery(new TorznabQuery());
+            await ConfigureIfOK(string.Empty, releases.Any(),
+                                () => throw new Exception("Could not find releases."));
+
+            return IndexerConfigurationStatus.Completed;
+        }
+
+        private async Task RenewalTokenAsync()
+        {
+            var body = new Dictionary<string, string>
             {
-                CQ dom = result.Content;
-                var messageEl = dom[".form-error"];
-                var errorMessage = messageEl.Text().Trim();
-                throw new ExceptionWithConfigData(errorMessage, configData);
-            });
-
-            return IndexerConfigurationStatus.RequiresTesting;
+                { "username", configData.Username.Value.Trim() },
+                { "password", configData.Password.Value.Trim() },
+                { "pid", configData.Pid.Value.Trim() }
+            };
+            var result = await PostDataWithCookies(AuthUrl, body, headers: AuthHeaders);
+            var json = JObject.Parse(result.Content);
+            _token = json.Value<string>("token");
+            if (_token == null)
+                throw new Exception(json.Value<string>("message"));
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
 
-            var categoryMapping = MapTorznabCapsToTrackers(query).Distinct();
-            string category = "0"; // Aka all
-            if (categoryMapping.Count() == 1)
+            var qc = GetSearchQueryParameters(query);
+            var episodeSearchUrl = SearchUrl + "?" + qc.GetQueryString();
+            var response = await RequestStringWithCookiesAndRetry(episodeSearchUrl, headers: GetSearchHeaders());
+            if (response.Status == HttpStatusCode.Unauthorized || response.Status == HttpStatusCode.PreconditionFailed)
             {
-                category = categoryMapping.First();
+                await RenewalTokenAsync();
+                response = await RequestStringWithCookiesAndRetry(episodeSearchUrl, headers: GetSearchHeaders());
             }
-
-
-            var episodeSearchUrl = string.Format(SearchUrl, category, WebUtility.UrlEncode(GetSearchTerm(query)));
-
-            var response = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
-            if (response.IsRedirect)
-            {
-                // re-login
-                await ApplyConfiguration(null);
-                response = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
-            }
+            else if (response.Status != HttpStatusCode.OK)
+                throw new Exception($"Unknown error: {response.Content}");
 
             try
             {
-                CQ dom = response.Content;
-                var rows = dom["table:has(thead) > tbody > tr"];
-                foreach (var row in rows)
+                var jsonContent = JToken.Parse(response.Content);
+                foreach (var row in jsonContent.Value<JArray>("data"))
                 {
-                    CQ qRow = row.Cq();
-                    var release = new ReleaseInfo();
+                    var comments = new Uri(row.Value<string>("url"));
+                    var link = new Uri(row.Value<string>("download"));
+                    var publishDate = DateTime.ParseExact(row.Value<string>("created_at"), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
 
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800;
+                    long? imdb = null;
+                    long? tvdb = null;
+                    long? tmdb = null;
+                    var jMovieTv = row.Value<JToken>("movie_tv");
+                    if (jMovieTv != null && jMovieTv.HasValues)
+                    {
+                        imdb = ParseUtil.GetImdbID(jMovieTv.Value<string>("imdb"));
+                        if (long.TryParse(jMovieTv.Value<string>("tvdb"), out var tvdbParsed))
+                            tvdb = tvdbParsed;
+                        if (long.TryParse(jMovieTv.Value<string>("tmdb"), out var tmdbParsed))
+                            tmdb = tmdbParsed;
+                    }
 
-                    var qLink = qRow.Find("a.torrent-filename"); ;
-                    release.Title = qLink.Text().Trim();
-                    release.Comments = new Uri(qLink.Attr("href"));
-                    release.Guid = release.Comments;
+                    var description = "";
+                    var jAudio = row.Value<JArray>("audio");
+                    if (jAudio != null && jAudio.HasValues)
+                    {
+                        var audioList = jAudio.Select(tag => tag.Value<string>("language")).ToList();
+                        description += $"Audio: {string.Join(", ", audioList)}";
+                    }
+                    var jSubtitle = row.Value<JArray>("subtitle");
+                    if (jSubtitle != null && jSubtitle.HasValues)
+                    {
+                        var subtitleList = jSubtitle.Select(tag => tag.Value<string>("language")).ToList();
+                        description += $"<br/>Subtitles: {string.Join(", ", subtitleList)}";
+                    }
 
-                    var qDownload = qRow.Find("a.torrent-download-icon"); ;
-                    release.Link = new Uri(qDownload.Attr("href"));
+                    var cats = ParseCategories(query, row);
 
-                    var dateStr = qRow.Find("td:eq(3) > span").Text().Trim();
-                    release.PublishDate = DateTimeUtil.FromTimeAgo(dateStr);
-
-                    var sizeStr = qRow.Find("td:eq(5) > span").Text().Trim();
-                    release.Size = ReleaseInfo.GetBytes(sizeStr);
-
-                    release.Seeders = ParseUtil.CoerceInt(qRow.Find("td:eq(6)").Text().Trim());
-                    release.Peers = ParseUtil.CoerceInt(qRow.Find("td:eq(7)").Text().Trim()) + release.Seeders;
-
-                    var cat = row.Cq().Find("td:eq(0) i").First().Attr("class")
-                                            .Replace("torrent-icon", string.Empty)
-                                            .Replace("fa fa-", string.Empty)
-                                            .Replace("film", "1")
-                                            .Replace("tv", "2")
-                                            .Replace("music", "3")
-                                            .Replace("text-pink", string.Empty);
-                    release.Category = MapTrackerCatToNewznab(cat.Trim());
-
-                    var grabs = row.Cq().Find("td:nth-child(9)").Text();
-                    release.Grabs = ParseUtil.CoerceInt(grabs);
-
-                    if (row.Cq().Find("i.fa-star").Any())
-                        release.DownloadVolumeFactor = 0;
-                    else if (row.Cq().Find("i.fa-star-half-o").Any())
-                        release.DownloadVolumeFactor = 0.5;
-                    else
-                        release.DownloadVolumeFactor = 1;
-
-                    if (row.Cq().Find("i.fa-diamond").Any())
-                        release.UploadVolumeFactor = 2;
-                    else
-                        release.UploadVolumeFactor = 1;
+                    var release = new ReleaseInfo
+                    {
+                        Title = row.Value<string>("file_name"),
+                        Link = link,
+                        InfoHash = row.Value<string>("info_hash"),
+                        Comments = comments,
+                        Guid = comments,
+                        Category = cats,
+                        PublishDate = publishDate,
+                        Description = description,
+                        Size = row.Value<long>("file_size"),
+                        Files = row.Value<long>("file_count"),
+                        Grabs = row.Value<long>("completed"),
+                        Seeders = row.Value<int>("seed"),
+                        Peers = row.Value<int>("leech") + row.Value<int>("seed"),
+                        Imdb = imdb,
+                        TVDBId = tvdb,
+                        TMDb = tmdb,
+                        DownloadVolumeFactor = row.Value<double>("download_multiply"),
+                        UploadVolumeFactor = row.Value<double>("upload_multiply"),
+                        MinimumRatio = 1,
+                        MinimumSeedTime = 172800 // 48 hours
+                    };
 
                     releases.Add(release);
                 }
@@ -162,5 +241,10 @@ namespace Jackett.Common.Indexers.Abstract
             }
             return releases;
         }
+
+        private Dictionary<string, string> GetSearchHeaders() => new Dictionary<string, string>
+        {
+            {"Authorization", $"Bearer {_token}"}
+        };
     }
 }

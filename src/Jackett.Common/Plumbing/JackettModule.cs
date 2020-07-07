@@ -1,53 +1,44 @@
-﻿using Autofac;
 using System;
 using System.Reflection;
-using System.IO;
-using Newtonsoft.Json.Linq;
+using Autofac;
 using Jackett.Common.Indexers;
 using Jackett.Common.Indexers.Meta;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services;
 using Jackett.Common.Services.Interfaces;
-using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 
 namespace Jackett.Common.Plumbing
 {
     public class JackettModule : Autofac.Module
     {
-        private RuntimeSettings _runtimeSettings;
+        private readonly RuntimeSettings _runtimeSettings;
 
-        public JackettModule (RuntimeSettings runtimeSettings)
-            {
-            _runtimeSettings = runtimeSettings;
-        }
+        public JackettModule(RuntimeSettings runtimeSettings) => _runtimeSettings = runtimeSettings;
 
         protected override void Load(ContainerBuilder builder)
         {
             // Just register everything! TODO: Something better and more explicit than scanning everything.
-                builder.RegisterAssemblyTypes(typeof(JackettModule).Assembly)
-                       .Except<IIndexer>()
-                       .Except<IImdbResolver>()
-                       .Except<OmdbResolver>()
-                       .Except<IFallbackStrategyProvider>()
-                       .Except<ImdbFallbackStrategyProvider>()
-                       .Except<IFallbackStrategy>()
-                       .Except<ImdbFallbackStrategy>()
-                       .Except<IResultFilterProvider>()
-                       .Except<ImdbTitleResultFilterProvider>()
-                       .Except<IResultFilter>()
-                       .Except<ImdbTitleResultFilterProvider>()
-                       .Except<BaseMetaIndexer>()
-                       .Except<AggregateIndexer>()
-                       .Except<CardigannIndexer>()
-                       .AsImplementedInterfaces().SingleInstance();
+            builder.RegisterAssemblyTypes(typeof(JackettModule).Assembly)
+                   .Except<IIndexer>()
+                   .Except<IImdbResolver>()
+                   .Except<OmdbResolver>()
+                   .Except<IFallbackStrategyProvider>()
+                   .Except<ImdbFallbackStrategyProvider>()
+                   .Except<IFallbackStrategy>()
+                   .Except<ImdbFallbackStrategy>()
+                   .Except<IResultFilterProvider>()
+                   .Except<ImdbTitleResultFilterProvider>()
+                   .Except<IResultFilter>()
+                   .Except<ImdbTitleResultFilterProvider>()
+                   .Except<BaseMetaIndexer>()
+                   .Except<AggregateIndexer>()
+                   .Except<CardigannIndexer>()
+                   .AsImplementedInterfaces().SingleInstance();
 
 
             builder.RegisterInstance(_runtimeSettings);
-            builder.Register(ctx =>
-            {
-                return BuildServerConfig(ctx);
-            }).As<ServerConfig>().SingleInstance();
+            builder.Register(BuildServerConfig).As<ServerConfig>().SingleInstance();
             builder.RegisterType<HttpWebClient>();
 
             // Register the best web client for the platform or the override
@@ -72,10 +63,7 @@ namespace Jackett.Common.Plumbing
             }
         }
 
-        private void RegisterWebClient<WebClientType>(ContainerBuilder builder)
-        {
-            builder.RegisterType<WebClientType>().As<WebClient>();
-        }
+        private void RegisterWebClient<WebClientType>(ContainerBuilder builder) => builder.RegisterType<WebClientType>().As<WebClient>();
 
         private ServerConfig BuildServerConfig(IComponentContext ctx)
         {
@@ -85,13 +73,13 @@ namespace Jackett.Common.Plumbing
 
         private static bool DetectMonoCompatabilityWithHttpClient()
         {
-            bool usehttpclient = false;
+            var usehttpclient = false;
             try
             {
-                Type monotype = Type.GetType("Mono.Runtime");
+                var monotype = Type.GetType("Mono.Runtime");
                 if (monotype != null)
                 {
-                    MethodInfo displayName = monotype.GetMethod("GetDisplayName", BindingFlags.NonPublic | BindingFlags.Static);
+                    var displayName = monotype.GetMethod("GetDisplayName", BindingFlags.NonPublic | BindingFlags.Static);
                     if (displayName != null)
                     {
                         var monoVersion = displayName.Invoke(null, null).ToString();
@@ -100,17 +88,17 @@ namespace Jackett.Common.Plumbing
                         {
                             // check if btls is supported
                             var monoSecurity = Assembly.Load("Mono.Security");
-                            Type monoTlsProviderFactory = monoSecurity.GetType("Mono.Security.Interface.MonoTlsProviderFactory");
+                            var monoTlsProviderFactory = monoSecurity.GetType("Mono.Security.Interface.MonoTlsProviderFactory");
                             if (monoTlsProviderFactory != null)
                             {
-                                MethodInfo isProviderSupported = monoTlsProviderFactory.GetMethod("IsProviderSupported");
+                                var isProviderSupported = monoTlsProviderFactory.GetMethod("IsProviderSupported");
                                 if (isProviderSupported != null)
                                 {
                                     var btlsSupported = (bool)isProviderSupported.Invoke(null, new string[] { "btls" });
                                     if (btlsSupported)
                                     {
                                         // initialize btls
-                                        MethodInfo initialize = monoTlsProviderFactory.GetMethod("Initialize", new[] { typeof(string) });
+                                        var initialize = monoTlsProviderFactory.GetMethod("Initialize", new[] { typeof(string) });
                                         if (initialize != null)
                                         {
                                             initialize.Invoke(null, new string[] { "btls" });
@@ -131,6 +119,6 @@ namespace Jackett.Common.Plumbing
             return usehttpclient;
         }
 
-      
+
     }
 }

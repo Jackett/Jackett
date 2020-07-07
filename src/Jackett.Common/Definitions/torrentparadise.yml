@@ -1,0 +1,216 @@
+---
+id: torrentparadise
+name: TorrentParadise
+description: "Torrent Paradise is a Public magnet indexer"
+language: en-us
+type: public
+encoding: UTF-8
+links:
+  - https://torrentparadise.cl/
+legacylinks:
+  - https://torrentparadise.org/
+
+caps:
+  categories:
+    "": Other
+    "ADULT": XXX
+    "ADULTLATINA": XXX
+    "ADULTMILF": XXX
+    "ADULTHDMOVIES": XXX
+    "ADULTPORN": XXX
+    "ADULTXXX": XXX
+    "ANDROID": PC
+    "ANIME": TV/Anime
+    "ANIMEDUBBEDSUBBED": TV/Anime
+    "APPLICATIONS": PC
+    "APPLICATIONSANDROID": PC
+    "APPLICATIONSHANDHELD": PC/Phone-Other
+    "APPLICATIONSMAC": PC/Mac
+    "APPLICATIONSOTHEROS": PC
+    "APPLICATIONSWINDOWS": PC/0day
+    "APPS": PC
+    "APPSANDROID": PC
+    "APPSHANDHELD": PC/Phone-Other
+    "APPSMAC": PC/Mac
+    "APPSOTHEROS": PC
+    "APPSPC": PC
+    "APPSWINDOWS": PC/0day
+    "AUDIO": Audio
+    "AUDIOBOOKS": Audio/Audiobook
+    "AUDIOAUDIOBOOKS": Audio/Audiobook
+    "AUDIOFLAC": Audio/Lossless
+    "AUDIOMP3": Audio/MP3
+    "AUDIOMUSIC": Audio
+    "AUDIOOTHER": Audio/Other
+    "AUDIOSOUNDCLIPS": Audio
+    "ADULTMOVIES": XXX
+    "BOOKS": Books
+    "BOOKSMAGAZINES": Books/Magazines
+    "BOOKSNONFICTION": Books
+    "COMICSNEM43COMICS": Books/Comics
+    "DOCUMENTARIES": TV/Documentary
+    "DVDRVIDEO": Movies/DVD
+    "EBOOKS": Books/Ebook
+    "EBOOKSTUTORIALS": Books/Ebook
+    "ESTRENOS": XXX
+    "FLAC": Audio/Lossless
+    "FLACMUSIC": Audio/Lossless
+    "GAMES": PC/Games
+    "GAMESANDROID": PC/Games
+    "GAMESHANDHELD": Console
+    "GAMESOTHER": Console
+    "GAMESPC": PC/Games
+    "GAMESPS2": Console/PSP
+    "GAMESPS3": Console/PS3
+    "GAMESPS4": Console/PS4
+    "GAMESPSP": Console/PSP
+    "GAMESWII": Console/Wii
+    "GAMESWIIU": Console/WiiU
+    "GAMESWINDOWS": PC/Games
+    "GAMESXBOX": Console/Xbox
+    "GAMESXBOX360": Console/Xbox 360
+    "IMAGES": Other
+    "JAPANESEANIME": TV/Anime
+    "JUEGOS": Console
+    "JUEGOSPC": PC/Games
+    "JUEGOSPS2": Console/PSP
+    "JUEGOSPS3": Console/PS3
+    "JUEGOSPS4": Console/PS4
+    "JUEGOSPSP": Console/PSP
+    "JUEGOSWII": Console/Wii
+    "JUEGOSWIIU": Console/WiiU
+    "JUEGOSXBOX": Console/Xbox
+    "JUEGOSXBOX360": Console/Xbox 360
+    "MISCELLANEOUS": Other
+    "MOBILE": PC/Phone-Other
+    "MOVIES": Movies
+    "MOVIESBLURAYDISCREMUX": Movies/HD
+    "MOVIESCAMTS": Movies
+    "MOVIESDUBSDUALAUDIO": Movies
+    "MOVIESENGLISHSPANISHSUBT": Movies
+    "MOVIESHD": Movies/HD
+    "MOVIESHD720P": Movies/HD
+    "MOVIESHD1080P": Movies/HD
+    "MOVIESHEVCX265": Movies/HD
+    "MOVIESSPANISHLANGUAGE": Movies
+    "MOVIESSPANISHLATINAMERICA": Movies
+    "MOVIESULTRAHD4K": Movies/UHD
+    "MOVIESX264H264": Movies/HD
+    "MOVIESXVID": Movies/SD
+    "MP3": Audio/MP3
+    "MP3MUSIC": Audio/MP3
+    "MSICA": Other
+    "MUSIC": Audio
+    "MUSICFLAC": Audio/Lossless
+    "MUSICLOSSLESS": Audio/Lossless
+    "MUSICMP3": Audio/MP3
+    "MUSICVIDEOS": Audio/Video
+    "OTHER": Other
+    "OTHERCOMICS": Other
+    "OTHERCOVERS": Other
+    "OTHEREBOOKS": Other
+    "OTHEROTHER": Other
+    "OTHERPICTURES": Other
+    "PELICULASCVCD": TV/SD
+    "PELICULASDIVX": TV/SD
+    "PELICULASHDRIP": TV/HD
+    "PELICULASMICROHD": TV/HD
+    "PICTURES": Other
+    "PORN": XXX
+    "PORNHDMOVIES": XXX
+    "PORNGAMES": XXX
+    "PORNMOVIECLIPS": XXX
+    "PORNMOVIESDVDR": XXX
+    "PORNMOVIES": XXX
+    "PORNOTHER": XXX
+    "PORNPICTURES": XXX
+    "SERIES": TV
+    "SOFTWARE": PC
+    "SOFTWAREMAC": PC/Mac
+    "SOFTWAREWINDOWS": PC/0day
+    "SPORTS": TV/Sport
+    "TVHDSPORTS": TV/Sport
+    "TUTORIALS": Other
+    "TV": TV
+    "TVHDX264H264": TV/HD
+    "TVHEVCX265": TV/HD
+    "TVDIVXXVID": TV/SD
+    "TVSDXVID": TV/SD
+    "TVSDX264H264": TV/SD
+    "TVSHOWS": TV
+    "TVSPORT": TV/Sport
+    "TVTVPACKS": TV
+    "VIDEO": Movies
+    "UNSORTEDUNSORTED": Other
+    "VIDEOHANDHELD": Movies
+    "VIDEOHDMOVIES": Movies/HD
+    "VIDEOHDRIP": Movies
+    "VIDEOHDTVSHOWS": TV/HD
+    "VIDEOMOVIECLIPS": Movies
+    "VIDEOMOVIES": Movies
+    "VIDEOMUSICVIDEOS": Audio/Video
+    "VIDEOOTHER": Movies
+    "VIDEOS": Movies
+    "VIDEOSDMOVIES": Movies/SD
+    "VIDEOSDTVSHOWS": TV/SD
+    "VIDEOTVSHOWS": TV
+    "VIDEOUHDMOVIES": Movies/UHD
+    "VIDEOUHDTVSHOWS": TV/UHD
+    "WINDOWS": PC/0day
+    "XXX": XXX
+    "XXXHDVIDEO": XXX
+    "XXXVIDEO": XXX
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+
+settings: []
+
+download:
+  selector: a[href^="magnet:?xt="]
+  attribute: href
+
+search:
+  # https://torrentparadise.org/search.php?f=monday+night
+  # https://torrentparadise.org/recent
+  paths:
+    - path: "{{ if .Keywords }}search.php?f={{ .Keywords }}{{ else }}recent{{ end }}"
+
+  rows:
+    selector: table.table-bordered > tbody > tr.table-default
+
+  fields:
+    category:
+      selector: td:nth-child(1) a
+      filters:
+        - name: re_replace
+          args: ["[^a-zA-Z0-9]+", ""]
+        - name: toupper
+    description:
+      selector: td:nth-child(1) a
+    title:
+      selector: td:nth-child(2) a
+    details:
+      selector: td:nth-child(2) a
+      attribute: href
+    download:
+      selector: td:nth-child(2) a
+      attribute: href
+    size:
+      selector: td:nth-child(3)
+    date:
+      selector: td:nth-child(4)
+      filters:
+        - name: timeago
+    seeders:
+      selector: td:nth-child(5)
+    leechers:
+      selector: td:nth-child(6)
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a

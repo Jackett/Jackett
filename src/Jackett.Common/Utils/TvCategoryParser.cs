@@ -1,4 +1,4 @@
-﻿//Regex sourced from Sonarr  - https://github.com/Sonarr/Sonarr/blob/develop/src/NzbDrone.Core/Parser/QualityParser.cs
+//Regex sourced from Sonarr  - https://github.com/Sonarr/Sonarr/blob/develop/src/NzbDrone.Core/Parser/QualityParser.cs
 
 using System.Text.RegularExpressions;
 using Jackett.Common.Models;
@@ -37,7 +37,7 @@ namespace Jackett.Common.Utils
 
         public static int ParseTvShowQuality(string tvShowFileName)
         {
-            string normalizedName = tvShowFileName.Trim().Replace('_', ' ').Trim().ToLower();
+            var normalizedName = tvShowFileName.Trim().Replace('_', ' ').Trim().ToLower();
 
             var sourceMatch = SourceRegex.Match(normalizedName);
             var resolutionMatch = ResolutionRegex.Match(normalizedName);
