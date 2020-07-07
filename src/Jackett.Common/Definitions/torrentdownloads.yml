@@ -58,15 +58,21 @@ download:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}/search/{{else}}/today/{{end}}"
+    - path: "{{ if .Keywords }}/search/{{ else }}/today/{{ end }}"
   inputs:
     $raw: "{{ range .Categories }}s_cat={{.}}&{{end}}"
     search: "{{ .Keywords }}"
 
   rows:
-    selector: div.inner_container > div:has(p:has(a[href^="/torrent/"]))
+    selector: div.inner_container > div:has(p:has(a[href^="/torrent/"])):not(:has(span.__cf_email__))
 
   fields:
+    category:
+      selector: img[src^="/templates/new/images/icons/menu_icon"]
+      attribute: src
+      filters:
+        - name: regexp
+          args: (\d+)
     title:
       selector: p:nth-child(1) > a
       attribute: title
@@ -87,12 +93,6 @@ search:
       selector: span:nth-child(4)
     leechers:
       selector: span:nth-child(3)
-    category:
-      selector: img[src^="/templates/new/images/icons/menu_icon"]
-      attribute: src
-      filters:
-        - name: regexp
-          args: (\d+)
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
