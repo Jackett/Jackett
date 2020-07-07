@@ -295,6 +295,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * DesiReleasers
  * DesiTorrents
  * Diablo Torrent
+ * DICMusic
  * DigitalCore
  * DigitalHive
  * DivTeam
