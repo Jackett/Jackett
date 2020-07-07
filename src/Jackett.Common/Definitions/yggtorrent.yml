@@ -212,13 +212,20 @@ search:
     # END ANIME HACK
     - name: replace
       args: ["\"", ""]
+    - name: replace
+      args: ["  ", " "]
     - name: trim
   paths:
     - path: "https://{{ .Config.searchanddlurl }}/{{ if .Config.betasearchengine }}new_search{{else}}engine{{end}}/search?category={{ .Config.category }}&name={{ if .Config.betasearchengine }}{{ .Keywords }}{{else}}{{ re_replace .Keywords \"\\b[^\\s]+\\b\"  \"\"$&\"\"}}{{end}}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}"
       followredirect: true
     - path: "https://{{ .Config.searchanddlurl }}/{{ if .Config.betasearchengine }}new_search{{else}}engine{{end}}/search?category={{ .Config.category }}&name={{ if .Config.betasearchengine }}{{ .Keywords }}{{else}}{{ re_replace .Keywords \"\\b[^\\s]+\\b\"  \"\"$&\"\"}}{{end}}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}&page=50"
       followredirect: true
-
+    #Saison Word
+    - path: "https://{{ .Config.searchanddlurl }}/{{ if .Config.betasearchengine }}new_search{{else}}engine{{end}}/search?category={{ .Config.category }}&name={{ re_replace .Keywords \"[sS](\\d{1,2})\"  \"Saison $1\"}}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}"
+      followredirect: true
+    - path: "https://{{ .Config.searchanddlurl }}/{{ if .Config.betasearchengine }}new_search{{else}}engine{{end}}/search?category={{ .Config.category }}&name={{ re_replace .Keywords \"[sS]0(\\d{1,2})\"  \"Saison $1\"}}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}"
+      followredirect: true
+      
   rows:
     selector: table.table > tbody > tr
 
@@ -250,7 +257,7 @@ search:
         - name: re_replace
           args: ["([Ss]aison|[Ss]aison |SAISON|SAISON )([1-9])", "S0$2"]
         - name: re_replace
-          args: ["([Ss]aison|[Ss]aison |SAISON|SAISON )(\\d{2,4})", "S$2"]
+          args: ["([Ss]aison|[Ss]aison |SAISON|SAISON )(\\d{1,4})", "S$2"]
     title_filtered:
       #selector: td:nth-child(2) > a
       text: "{{ .Result.title_normal }}"
