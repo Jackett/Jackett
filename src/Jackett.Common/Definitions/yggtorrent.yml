@@ -198,17 +198,17 @@ search:
     # BY
     # One Punch Man S02E10 OR One Punch Man S02E02
     - name: re_replace # S 1-9 & EP >= 10
-      args: ["(.*)[sS]([1-9])\\s(\\d{2,3})$", "$1 S0$2E$3"]
+      args: ["(?i)(.*)s([1-9])\\s(\\d{2,3})$", "$1 S0$2E$3"]
     - name: re_replace # S 1-9 & EP 1-9
-      args: ["(.*)[sS]([1-9])\\s(\\d{1})$", "$1 S0$2E0$3"]
+      args: ["(?i)(.*)s([1-9])\\s(\\d{1})$", "$1 S0$2E0$3"]
     - name: re_replace # S >= 10 & EP >= 10
-      args: ["(.*)[sS]([1-9][0-9])\\s(\\d{2,3})$", "$1 S0$2E$3"]
+      args: ["(?i)(.*)s([1-9][0-9])\\s(\\d{2,3})$", "$1 S0$2E$3"]
     - name: re_replace # S >= 10 & EP 1-9
-      args: ["(.*)[sS]([1-9][0-9])\\s(\\d{1})$", "$1 S0$2E0$3"]
+      args: ["(?i)(.*)s([1-9][0-9])\\s(\\d{1})$", "$1 S0$2E0$3"]
     - name: re_replace # Full season S 1-9
-      args: ["(.*)[sS]([1-9])$", "$1 S0$2"]
+      args: ["(?i)(.*)s([1-9])$", "$1 S0$2"]
     - name: re_replace # Full season S >= 10
-      args: ["(.*)[sS]([1-9][0-9])$", "$1 S$2"]
+      args: ["(?i)(.*)s([1-9][0-9])$", "$1 S$2"]
     # END ANIME HACK
     - name: replace
       args: ["\"", ""]
@@ -221,7 +221,7 @@ search:
     # Saison Word
     - path: "https://{{ .Config.searchanddlurl }}/{{ if .Config.betasearchengine }}new_search{{else}}engine{{end}}/search?category={{ .Config.category }}&name={{ re_replace .Keywords \"[sS]0(\\d{1,2})\"  \"Saison.$1\"}}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}"
       followredirect: true
-      
+
   rows:
     selector: table.table > tbody > tr
 
@@ -236,24 +236,24 @@ search:
       selector: td:nth-child(2) > a
       filters:
         - name: re_replace # S 1-9 & EP >= 10
-          args: ["(.*)[sS]([1-9])\\s(\\d{2,3})$", "$1 S0$2E$3"]
+          args: ["(?i)(.*)s([1-9])\\s(\\d{2,3})$", "$1 S0$2E$3"]
         - name: re_replace # S 1-9 & EP 1-9
-          args: ["(.*)[sS]([1-9])\\s(\\d{1})$", "$1 S0$2E0$3"]
+          args: ["(?i)(.*)s([1-9])\\s(\\d{1})$", "$1 S0$2E0$3"]
         - name: re_replace # S >= 10 & EP >= 10
-          args: ["(.*)[sS]([1-9][0-9])\\s(\\d{2,3})$", "$1 S0$2E$3"]
+          args: ["(?i)(.*)s([1-9][0-9])\\s(\\d{2,3})$", "$1 S0$2E$3"]
         - name: re_replace # S >= 10 & EP 1-9
-          args: ["(.*)[sS]([1-9][0-9])\\s(\\d{1})$", "$1 S0$2E0$3"]
+          args: ["(?i)(.*)s([1-9][0-9])\\s(\\d{1})$", "$1 S0$2E0$3"]
         - name: re_replace # Full season S 1-9
-          args: ["(.*)[sS]([1-9])$", "$1 S0$2"]
+          args: ["(?i)(.*)s([1-9])$", "$1 S0$2"]
         - name: re_replace # Full season S >= 10
-          args: ["(.*)[sS]([1-9][0-9])$", "$1 S$2"]
+          args: ["(?i)(.*)s([1-9][0-9])$", "$1 S$2"]
         - name: re_replace
-          args: ["([Mm][Uu][Ll][Tt][Ii])", "MULTi"]
+          args: ["(?i)(multi)", "MULTi"]
         # Replace French Saison by Season
         - name: re_replace
-          args: ["([Ss]aison|[Ss]aison |SAISON|SAISON )([1-9])", "S0$2"]
+          args: ["(?i)(saison|saison )([1-9])", "S0$2"]
         - name: re_replace
-          args: ["([Ss]aison|[Ss]aison |SAISON|SAISON )(\\d{1,4})", "S$2"]
+          args: ["(?i)(saison|saison )(\\d{1,4})", "S$2"]
     title_filtered:
       text: "{{ .Result.title_normal }}"
       filters:
@@ -273,16 +273,16 @@ search:
       text: "{{ .Result.title_phase1 }}"
       filters:
         - name: re_replace
-          args: ["[\\.\\s\\[\\-][Mm][Uu][Ll][Tt][Ii][\\.\\s\\]\\-]", ".{{ .Config.multilanguage }}."]
+          args: ["(?i)[\\.\\s\\[\\-]multi[\\.\\s\\]\\-]", ".{{ .Config.multilanguage }}."]
     title_phase2:
       text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{else}}{{ .Result.title_phase1 }}{{end}}"
     title_vostfr:
       text: "{{ .Result.title_phase2 }}"
       filters:
         - name: re_replace
-          args: ["[\\.\\s\\[\\-][Vv][Oo][Ss][Tt][Ff][Rr][\\.\\s\\]\\-]", ".ENGLISH."]
+          args: ["(?i)[\\.\\s\\[\\-]vostfr[\\.\\s\\]\\-]", ".ENGLISH."]
         - name: re_replace
-          args: ["[\\.\\s\\[\\-][Ss][Uu][Bb][Ff][Rr][Ee][Nn][Cc][Hh][\\.\\s\\]\\-]", ".ENGLISH."]
+          args: ["(?i)[\\.\\s\\[\\-]subfrench[\\.\\s\\]\\-]", ".ENGLISH."]
     title_phase3:
       text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{else}}{{ .Result.title_phase2 }}{{end}}"
     title_anime:
