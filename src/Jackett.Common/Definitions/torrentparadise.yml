@@ -101,6 +101,7 @@ caps:
     "MP3MUSIC": Audio/MP3
     "MSICA": Other
     "MUSIC": Audio
+    "MUSICFLAC": Audio/Lossless
     "MUSICLOSSLESS": Audio/Lossless
     "MUSICMP3": Audio/MP3
     "MUSICVIDEOS": Audio/Video
@@ -134,8 +135,10 @@ caps:
     "TVHDX264H264": TV/HD
     "TVHEVCX265": TV/HD
     "TVDIVXXVID": TV/SD
+    "TVSDXVID": TV/SD
     "TVSDX264H264": TV/SD
     "TVSHOWS": TV
+    "TVSPORT": TV/Sport
     "TVTVPACKS": TV
     "VIDEO": Movies
     "UNSORTEDUNSORTED": Other
