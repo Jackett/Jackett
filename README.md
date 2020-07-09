@@ -525,6 +525,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TranceTraffic
  * Trezzor
  * TurkSeed
+ * TurkNova
  * TurkTorrent (TT)
  * Twilight Torrents
  * Twilights Zoom
