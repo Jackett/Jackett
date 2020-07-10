@@ -32,7 +32,7 @@ caps:
     - {id: "Gry PC", cat: PC/Games, desc: "Gry PC"}
     - {id: "Dla Dzieci", cat: Movies, desc: "Dla Dzieci"}
     - {id: "Książki", cat: Books, desc: "Książki"}
-    - {id:  "Linux", cat: PC, desc: "Linux"}
+    - {id: "Linux", cat: PC, desc: "Linux"}
     - {id: "Mac", cat: PC/Mac, desc: "Mac"}
     - {id: "Sport", cat: TV/Sport, desc: "Sport"}
     - {id: "Inne", cat: Other, desc: "Inne"}
