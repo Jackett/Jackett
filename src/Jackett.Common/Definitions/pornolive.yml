@@ -6,7 +6,9 @@ language: ru-ru
 type: public
 encoding: windows-1251
 links:
-  - http://pornolive.org/ # site does not support https ERR_CONNECTION_REFUSED
+  - https://pornolive.org/
+legacylinks:
+  - http://pornolive.org/
 
 caps:
   categorymappings:
