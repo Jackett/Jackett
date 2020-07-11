@@ -1,0 +1,168 @@
+---
+id: darmowetorenty
+name: Darmowe torrenty
+description: "Darmowe torrenty is a POLISH Semi-Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: pl-pl
+type: semi-private
+encoding: iso-8859-2
+links:
+  - https://darmowe-torenty.pl/
+
+caps:
+  categorymappings:
+    - {id: 14, cat: Movies, desc: "Filmy"}
+    - {id: 27, cat: Movies/DVD, desc: "Filmy DVD-R"}
+    - {id: 28, cat: Movies/SD, desc: "Filmy VCD/SVCD"}
+    - {id: 29, cat: Movies/BluRay, desc: "Filmy BluRay/x264"}
+    - {id: 30, cat: Movies/SD, desc: "Filmy DivX/XviD LEKTOR/NAPISY PL"}
+    - {id: 72, cat: Movies/SD, desc: "Filmy DivX/XviD ENG/..."}
+    - {id: 31, cat: Movies, desc: "Filmy RMVB"}
+    - {id: 74, cat: Movies/HD, desc: "Filmy HD"}
+    - {id: 75, cat: Movies/3D, desc: "Filmy 3D"}
+    - {id: 16, cat: TV, desc: "Seriale"}
+    - {id: 25, cat: TV, desc: "Seriale Polskie"}
+    - {id: 26, cat: TV, desc: "Seriale Zagraniczne"}
+    - {id: 17, cat: Movies, desc: "Dla Dzieci"}
+    - {id: 32, cat: Movies, desc: "Bajki Pl/Eng"}
+    - {id: 18, cat: PC/Games, desc: "Gry"}
+    - {id: 34, cat: PC/Games, desc: "Gry PC"}
+    - {id: 35, cat: Console/PSP, desc: "Gry PS2/PS3/PSP"}
+    - {id: 36, cat: Console/Xbox, desc: "Gry Xbox"}
+    - {id: 37, cat: Console, desc: "Gry Inne Konsole"}
+    - {id: 19, cat: Audio, desc: "Muzyka"}
+    - {id: 38, cat: Audio, desc: "Muzyka Polska/Zagraniczna"}
+    - {id: 39, cat: Audio, desc: "Muzyka Soundtracki"}
+    - {id: 40, cat: Audio, desc: "Muzyka Teledyski/Koncerty"}
+    - {id: 20, cat: PC/Phone-Other, desc: "GSM/PDA"}
+    - {id: 42, cat: PC/Phone-Other, desc: " Tapety GSM/PDA"}
+    - {id: 43, cat: PC/Phone-Other, desc: " Programy GSM/PDA"}
+    - {id: 44, cat: PC/Phone-Other, desc: " Filmy GSM/PDA"}
+    - {id: 45, cat: PC/Phone-Other, desc: " Dzwonki GSM/PDA"}
+    - {id: 46, cat: PC/Phone-Other, desc: " Gry GSM/PDA"}
+    - {id: 21, cat: Books, desc: "Książki/Czasopisma"}
+    - {id: 47, cat: Books/Ebook, desc: "Książki/Czasopisma E-Booki"}
+    - {id: 48, cat: Audio/Audiobook, desc: "Książki/Czasopisma Audio-Booki"}
+    - {id: 49, cat: Books/Magazines, desc: "Książki/Czasopisma Czasopisma"}
+    - {id: 50, cat: Books/Comics, desc: "Książki/Czasopisma Komiksy"}
+    - {id: 22, cat: PC, desc: "Programy"}
+    - {id: 51, cat: PC/0day, desc: "Programy Windows"}
+    - {id: 52, cat: PC, desc: "Programy Linux"}
+    - {id: 53, cat: PC/Mac, desc: "Programy Macintosh"}
+    - {id: 23, cat: Other, desc: "Inne"}
+    - {id: 55, cat: Other, desc: "Inne Tapety"}
+    - {id: 54, cat: Other, desc: "Inne Śmieszne"}
+    - {id: 56, cat: TV/Sport, desc: "Inne Sport"}
+    - {id: 57, cat: Other, desc: "Inne Pozostałe"}
+    - {id: 24, cat: XXX, desc: "Erotyka"}
+    - {id: 58, cat: XXX, desc: "Erotyka Czasopisma"}
+    - {id: 59, cat: XXX, desc: "Erotyka Zdjęcia "}
+    - {id: 60, cat: XXX, desc: "Erotyka Filmy"}
+    - {id: 61, cat: XXX, desc: "Erotyka Gry "}
+    - {id: 63, cat: XXX, desc: "Erotyka Hentai+18"}
+    - {id: 68, cat: TV/Anime, desc: "Anime"}
+    - {id: 69, cat: TV/Anime, desc: "Anime Pl"}
+    - {id: 70, cat: TV/Anime, desc: "Anime"}
+    - {id: 76, cat: Other, desc: "Archiwum"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+
+login:
+  path: login.php
+  method: form
+  form: form[action="login.php"]
+  inputs:
+    uid: "{{ .Config.username }}"
+    pwd: "{{ .Config.password }}"
+    returnto: /
+  error:
+    - selector: div:contains("Podany login jest")
+  test:
+    path: index.php
+    selector: a[href^="logout.php?check_hash="]
+
+search:
+  paths:
+    # https://darmowe-torenty.pl/torrenty.php?search=&category=0
+    - path: torrenty.php
+  inputs:
+    # does not support multi cat search
+    category: 0
+    search: "{{ .Keywords }}"
+    erotyka: 1
+    strona: 0
+    # does not support imdbid searching and does not display imdb links in results
+
+  rows:
+    selector: table.header > tbody > tr > td
+    after: 2
+
+  fields:
+    category:
+      selector: a[href^="/torrenty.php?category="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: category
+    title:
+      selector: a[href^="details.php?id="]:has(span)
+    details:
+      selector: a[href^="details.php?id="]:has(span)
+      attribute: href
+    id:
+      selector: img[src^="./imgtorrent/"]
+      attribute: src
+      filters:
+        - name: regexp
+          args: "\\.\\/imgtorrent\\/tmp\\/(.+?)-darmowe-torenty.jpg"
+    download:
+      # download link is obfuscated ( decodeURIComponent((atob($link.attr('data-href')))) ) so we create our own
+      text: "download.php?id={{ .Result.id }}&f={{ .Result.title }}.torrent"
+    banner:
+      selector: img[src^="./imgtorrent/"]
+      attribute: src
+    date:
+      selector: p
+      remove: br
+      filters:
+        - name: regexp
+          args: "Dodano: (\\d{2}\\/\\d{2}\\/\\d{4})"
+        - name: dateparse
+          args: "02/01/2006"
+    size:
+      selector: p
+      filters:
+        - name: regexp
+          args: "Rozmiar: (\\d{1,4}\\.\\d{2}\\s[K|M|G][B])"
+    seeders:
+      text: 0
+    seeders:
+      selector: p
+      optional: true
+      filters:
+        - name: regexp
+          args: "Seedów: (\\d+)"
+    leechers:
+      text: 0
+    leechers:
+      selector: p
+      optional: true
+      filters:
+        - name: regexp
+          args: "Leecherów: (\\d+)"
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a

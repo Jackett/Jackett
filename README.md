@@ -164,9 +164,10 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * CasStudioTV
  * CzTorrent
  * cool-torrent
- * DXP (Deaf Experts)
+ * Darmowe torrenty
  * Deildu
  * DimeADozen (EzTorrent)
+ * DXP (Deaf Experts)
  * EniaHD
  * Erzsebet
  * Erzsebet.pl
