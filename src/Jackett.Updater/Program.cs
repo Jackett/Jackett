@@ -329,6 +329,7 @@ namespace Jackett.Updater
                 "Definitions/idopeclone.yml",
                 "Definitions/iloveclassics.yml",
                 "Definitions/infinityt.yml",
+                "Definitions/inperil.yml",
                 "Definitions/isohunt.yml",
                 "Definitions/katcrs.yml",
                 "Definitions/kikibt.yml",

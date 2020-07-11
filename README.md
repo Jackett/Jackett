@@ -376,7 +376,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * IPTorrents (IPT)
  * ImmortalSeed (iS)
  * Immortuos
- * inPeril
  * Insane Tracker
  * JPopsuki
  * Kapaki
