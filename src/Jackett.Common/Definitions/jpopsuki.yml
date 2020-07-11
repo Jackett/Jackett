@@ -1,5 +1,3 @@
-# looks like gazelle but ajax.php seems to be disabled:
-# https://jpopsuki.eu/ajax.php?action=browse&order_by=time&order_way=desc => Invalid
 ---
 id: jpopsuki
 name: JPopsuki
@@ -48,7 +46,7 @@ ratio:
 
 search:
   paths:
-    - path: torrents.php
+    - path: ajax.php
   inputs:
     $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
     searchstr: "{{ if .Query.Artist }}{{ .Query.Artist }}{{ else }}{{ .Keywords }}{{ end }}"
@@ -56,11 +54,8 @@ search:
     order_by: s3
     # desc, asc
     order_way: desc
-    # basic, advanced
-    action: basic
-    # 0 any, 1 all
-    searchtags: 0
     disablegrouping: 1
+    section: torrents
 
   rows:
     selector: table#torrent_table > tbody > tr[class^="torrent"]
