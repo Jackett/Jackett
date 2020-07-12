@@ -6,7 +6,9 @@ language: ru-ru
 type: semi-private
 encoding: windows-1251
 links:
-  - http://baibako.tv/ # site does not support https NET::ERR_CERT_AUTHORITY_INVALID
+  - https://baibako.tv/
+legacylinks:
+  - http://baibako.tv/
 
 caps:
   categorymappings:
