@@ -297,6 +297,7 @@ namespace Jackett.Updater
                 "Definitions/cinefilhd.yml",
                 "Definitions/crazyscorner.yml",
                 "Definitions/czteam.yml",
+                "Definitions/demonsite.yml",
                 "Definitions/digbt.yml",
                 "Definitions/dragonworld.yml",
                 "Definitions/dreamteam.yml",

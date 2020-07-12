@@ -293,7 +293,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Dark Tracker
  * Das Unerwartete
  * DataScene (DS)
- * Demon-Site
  * DesiReleasers
  * DesiTorrents
  * Diablo Torrent
