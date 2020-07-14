@@ -10,7 +10,6 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
-using AutoMapper;
 using com.LandonKey.SocksWebProxy;
 using com.LandonKey.SocksWebProxy.Proxy;
 using Jackett.Common.Models.Config;
@@ -35,6 +34,17 @@ namespace Jackett.Common.Utils.Clients
         protected static string webProxyUrl;
         protected static IWebProxy webProxy;
 
+        protected void UpdateCookies(Uri requestUri, WebRequest webRequest, in CookieContainer cookies)
+        {
+            if (!string.IsNullOrWhiteSpace(webRequest.Cookies))
+            {
+                // don't include the path, Scheme is needed for mono compatibility
+                var cookieUrl = new Uri(requestUri.Scheme + "://" + requestUri.Host);
+                var cookieDictionary = CookieUtil.CookieHeaderToDictionary(webRequest.Cookies);
+                foreach (var kv in cookieDictionary)
+                    cookies.Add(cookieUrl, new Cookie(kv.Key, kv.Value));
+            }
+        }
 
         [DebuggerNonUserCode] // avoid "Exception User-Unhandled" Visual Studio messages
         public static bool ValidateCertificate(HttpRequestMessage request, X509Certificate2 certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
@@ -210,11 +220,15 @@ namespace Jackett.Common.Utils.Clients
 
         public virtual void Init()
         {
+            ServicePointManager.DefaultConnectionLimit = 1000;
             if (serverConfig.RuntimeSettings.IgnoreSslErrors == true)
             {
                 logger.Info($"WebClient({ClientType}): Disabling certificate validation");
                 ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => { return true; };
             }
+
+            ServicePointManager.SecurityProtocol =
+                (SecurityProtocolType)192 | (SecurityProtocolType)768 | (SecurityProtocolType)3072;
         }
 
 
