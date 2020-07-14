@@ -386,9 +386,9 @@ stages:
           - task: DotNetCoreCLI@2
             displayName: Build Test Project
             inputs:
-              command: build
+              command: 'build'
               projects: '**/*.Test*/*.csproj'
-              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework)'
+              arguments: '--no-restore --configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework)'
 
           - task: DotNetCoreCLI@2
             displayName: Unit Tests (Mono, Linux and macOS)
