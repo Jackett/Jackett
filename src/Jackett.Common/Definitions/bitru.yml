@@ -27,6 +27,13 @@ caps:
     music-search: [q]
 
 settings:
+  - name: adverts
+    type: select
+    label: Include Advertising
+    default: "_"
+    options:
+      "_": "yes"
+      "no": "no"
   - name: sort
     type: select
     label: Sort requested from site
@@ -41,6 +48,7 @@ search:
     - path: browse.php
   inputs:
     s: "{{ .Keywords }}"
+    rek: "{{ .Config.adverts }}"
     sort: "{{ re_replace .Config.sort \"_\" \"\"}}"
 
   rows:
