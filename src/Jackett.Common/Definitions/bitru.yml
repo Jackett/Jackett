@@ -30,9 +30,9 @@ settings:
   - name: adverts
     type: select
     label: Include Advertising
-    default: "yes"
+    default: "_"
     options:
-      "yes": "yes"
+      "_": "yes"
       "no": "no"
   - name: sort
     type: select
@@ -111,7 +111,7 @@ search:
         - name: replace
           args: ["февраля", "February"]
         - name: replace
-          args: ["марта ", "March"]
+          args: ["марта", "March"]
         - name: replace
           args: ["апреля", "April"]
         - name: replace
