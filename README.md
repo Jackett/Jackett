@@ -193,6 +193,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * NetHD (VietTorrent)
  * PornoLab
  * PussyTorrents
+ * Rainbow Tracker
  * RiperAM
  * RockBox
  * RuTracker
