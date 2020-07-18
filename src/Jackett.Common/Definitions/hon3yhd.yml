@@ -14,9 +14,11 @@ caps:
     - {id: 70, cat: Movies/3D, desc: "3D Movies"}
     - {id: 30, cat: Movies/BluRay, desc: "720p BluRay"}
     - {id: 68, cat: TV/Anime, desc: "Animation"}
+    - {id: 73, cat: TV/Anime, desc: "Anime"}
     - {id: 9, cat: Movies/BluRay, desc: "BD25"}
     - {id: 10, cat: Movies/BluRay, desc: "BD50"}
     - {id: 8, cat: Movies/DVD, desc: "DVD5"}
+    - {id: 71, cat: Movies, desc: "Bengali Movies"}
     - {id: 7, cat: Movies/DVD, desc: "DvD9"}
     - {id: 1, cat: Movies/SD, desc: "DVDRips"}
     - {id: 26, cat: Books, desc: "Ebooks"}
@@ -28,6 +30,7 @@ caps:
     - {id: 21, cat: TV, desc: "Hollywood TV"}
     - {id: 20, cat: TV, desc: "Indian TV"}
     - {id: 18, cat: Movies, desc: "Malayalam Movies"}
+    - {id: 72, cat: Movies, desc: "Marathi Movies"}
     - {id: 25, cat: Audio, desc: "Music"}
     - {id: 24, cat: Audio/Video, desc: "Music Videos"}
     - {id: 5, cat: Movies, desc: "Pakistani Movies"}
@@ -69,12 +72,14 @@ search:
   paths:
     - path: browse.php
   inputs:
-    $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
-    searchin: "title"
-    incldead: "1"
+    # title, descr, all
+    searchin: title
+    # 0 active, 1 incldead, 2 onlydead
+    incldead: 1
   keywordsfilters:
-    # by default the search returns unordered resuts of an OR query making the results useless in many cases, adding + to the keywords improves the situration (Issue #1859)
+    # by default the search returns unordered resuts of an OR query making the results useless in many cases, adding + to the keywords improves the situation (Issue #1859)
     - name: re_replace # replace special characters with " +"
       args: ["[^\\w\\d]+", " +"]
     - name: prepend
@@ -122,8 +127,15 @@ search:
       selector: td:nth-child(6)
     downloadvolumefactor:
       case:
-        "a.info > b:contains(\"Free\")": "0"
-        "*": "1"
+        "a.info > b:contains(\"Free\")": 0
+        "*": 1
     uploadvolumefactor:
       case:
-        "*": "1"
+        "a.info > b:contains(\"Double Upload\")": 2
+        "*": 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
+# engine n/a
