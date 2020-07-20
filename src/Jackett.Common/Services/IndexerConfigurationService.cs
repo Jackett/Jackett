@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Jackett.Common.Indexers;
 using Jackett.Common.Services.Interfaces;
 using Newtonsoft.Json.Linq;
@@ -10,6 +12,7 @@ namespace Jackett.Common.Services
 
     public class IndexerConfigurationService : IIndexerConfigurationService
     {
+        private const string ConfigFileSuffix = ".json";
 
         //public override void LoadFromSavedConfiguration(JToken jsonConfig)
         //{
@@ -141,8 +144,22 @@ namespace Jackett.Common.Services
             }
         }
 
+        public IEnumerable<string> FindConfiguredIndexerIds()
+        {
+            var directoryInfo = new DirectoryInfo(configService.GetIndexerConfigDir());
+
+            if (!directoryInfo.Exists)
+            {
+                return new List<string>();
+            }
+
+            var fileNames = directoryInfo
+                            .GetFiles().Select(file => file.Name).Where(fileName => fileName.EndsWith(ConfigFileSuffix)).ToList();
+            return fileNames.Select(file => file.Split('.')[0]).ToList();
+        }
+
         public string GetIndexerConfigFilePath(string indexerId)
-            => Path.Combine(configService.GetIndexerConfigDir(), indexerId + ".json");
+            => Path.Combine(configService.GetIndexerConfigDir(), indexerId + ConfigFileSuffix);
 
         private readonly IConfigurationService configService;
         private readonly Logger logger;

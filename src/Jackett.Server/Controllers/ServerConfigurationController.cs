@@ -79,6 +79,7 @@ namespace Jackett.Server.Controllers
             var updateDisabled = config.updatedisabled;
             var preRelease = config.prerelease;
             var logging = config.logging;
+            var loadonlyconfiguredindexers = config.loadonlyconfiguredindexers;
             var basePathOverride = config.basepathoverride;
             if (basePathOverride != null)
             {
@@ -95,6 +96,7 @@ namespace Jackett.Server.Controllers
                 webHostRestartNeeded = true;
             }
 
+            serverConfig.LoadOnlyConfiguredIndexers = loadonlyconfiguredindexers;
             serverConfig.UpdateDisabled = updateDisabled;
             serverConfig.UpdatePrerelease = preRelease;
             serverConfig.BasePathOverride = basePathOverride;
