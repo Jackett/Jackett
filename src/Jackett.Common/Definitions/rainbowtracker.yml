@@ -10,46 +10,46 @@ links:
 
 caps:
   categorymappings:
-    - {id: 3, cat: XXX, desc: "Художественные гей-фильмы"}
-    - {id: 67, cat: XXX, desc: "Художественные гей-фильмы - Российское гей-кино"}
-    - {id: 66, cat: XXX, desc: "Художественные гей-фильмы - Ретро гей-фильмы"}
-    - {id: 65, cat: XXX, desc: "Художественные гей-фильмы - Азиатские гей-фильмы"}
-    - {id: 63, cat: XXX, desc: "Художественные гей-фильмы - Короткометражные гей-фильмы"}
-    - {id: 74, cat: XXX, desc: "Художественные гей-фильмы - Фильмы с элементами гей-Pron "}
-    - {id: 82, cat: XXX, desc: "Художественные гей-фильмы - Фильмы с элементами гей-темы"}
-    - {id: 4, cat: XXX, desc: "Художественные лесби-фильмы"}
-    - {id: 89, cat: XXX, desc: "Художественные лесби-фильмы - Российское лесби-кино"}
-    - {id: 90, cat: XXX, desc: "Художественные лесби-фильмы - Ретро лесби-фильмы"}
-    - {id: 78, cat: XXX, desc: "Художественные лесби-фильмы - Азиатское лесби-кино"}
-    - {id: 64, cat: XXX, desc: "Художественные лесби-фильмы - Короткометражные лесби-фильмы"}
-    - {id: 91, cat: XXX, desc: "Художественные лесби-фильмы - Фильмы с элементами лесби-Pron "}
-    - {id: 88, cat: XXX, desc: "Художественные лесби-фильмы - Фильмы с элементами лесби-темы"}
-    - {id: 96, cat: XXX, desc: "Художественные фильмы Транс*тематики"}
-    - {id: 5, cat: XXX, desc: "Арт-хаус и авторское кино"}
-    - {id: 7, cat: XXX, desc: "Документальные фильмы"}
-    - {id: 76, cat: XXX, desc: "Документальные фильмы - Фильмы с элементами Pron "}
-    - {id: 8, cat: XXX, desc: "Мультфильмы, Аниме"}
+    - {id: 3, cat: Movies, desc: "Художественные гей-фильмы"}
+    - {id: 67, cat: Movies/Foreign, desc: "Художественные гей-фильмы - Российское гей-кино"}
+    - {id: 66, cat: Movies, desc: "Художественные гей-фильмы - Ретро гей-фильмы"}
+    - {id: 65, cat: Movies/Foreign, desc: "Художественные гей-фильмы - Азиатские гей-фильмы"}
+    - {id: 63, cat: Movies, desc: "Художественные гей-фильмы - Короткометражные гей-фильмы"}
+    - {id: 74, cat: XXX/Other, desc: "Художественные гей-фильмы - Фильмы с элементами гей-Pron "}
+    - {id: 82, cat: Movies, desc: "Художественные гей-фильмы - Фильмы с элементами гей-темы"}
+    - {id: 4, cat: Movies, desc: "Художественные лесби-фильмы"}
+    - {id: 89, cat: Movies/Foreign, desc: "Художественные лесби-фильмы - Российское лесби-кино"}
+    - {id: 90, cat: Movies, desc: "Художественные лесби-фильмы - Ретро лесби-фильмы"}
+    - {id: 78, cat: Movies/Foreign, desc: "Художественные лесби-фильмы - Азиатское лесби-кино"}
+    - {id: 64, cat: Movies, desc: "Художественные лесби-фильмы - Короткометражные лесби-фильмы"}
+    - {id: 91, cat: XXX/Other, desc: "Художественные лесби-фильмы - Фильмы с элементами лесби-Pron "}
+    - {id: 88, cat: Movies, desc: "Художественные лесби-фильмы - Фильмы с элементами лесби-темы"}
+    - {id: 96, cat: Movies, desc: "Художественные фильмы Транс*тематики"}
+    - {id: 5, cat: Movies, desc: "Арт-хаус и авторское кино"}
+    - {id: 7, cat: TV/Documentary, desc: "Документальные фильмы"}
+    - {id: 76, cat: XXX/Other, desc: "Документальные фильмы - Фильмы с элементами Pron "}
+    - {id: 8, cat: TV/Anime, desc: "Мультфильмы, Аниме"}
     - {id: 9, cat: XXX, desc: "Эротическое видео"}
     - {id: 71, cat: XXX, desc: "Эротическое видео - Документальные фильмы"}
     - {id: 72, cat: XXX, desc: "Эротическое видео - Нудизм-Натуризм"}
-    - {id: 11, cat: XXX, desc: "Шоу, Клипы, Музыка, Юмор и т.п."}
-    - {id: 6, cat: XXX, desc: "Сериалы"}
-    - {id: 80, cat: XXX, desc: "Сериалы - Эпизод (серия) с гей-темой"}
-    - {id: 87, cat: XXX, desc: "Сериалы - Бесстыжие / Shameless "}
-    - {id: 77, cat: XXX, desc: "Сериалы - В поиске / Looking "}
-    - {id: 58, cat: XXX, desc: "Сериалы - Дрянные девчонки / Bad Girls "}
-    - {id: 56, cat: XXX, desc: "Сериалы - Лузеры / Хор / Glee "}
-    - {id: 49, cat: XXX, desc: "Сериалы - Физика или Химия"}
-    - {id: 44, cat: XXX, desc: "Сериалы - Юг нигде / South of nowhere "}
-    - {id: 41, cat: XXX, desc: "Сериалы - Охота на парней / Manhunt "}
-    - {id: 39, cat: XXX, desc: "Сериалы - Секс в другом городе / Мир Л / The L Word "}
-    - {id: 37, cat: XXX, desc: "Сериалы - Логово / The Lair "}
-    - {id: 34, cat: XXX, desc: "Сериалы - Бухта Данте"}
-    - {id: 29, cat: XXX, desc: "Сериалы - Ноев ковчег / Noah's Arc "}
-    - {id: 26, cat: XXX, desc: "Сериалы - Маленькая Британия / Little Britain "}
-    - {id: 21, cat: XXX, desc: "Сериалы - Молокососы / Skins. season "}
-    - {id: 15, cat: XXX, desc: "Сериалы - Близкие друзья / Queer as folk "}
-    - {id: 25, cat: XXX, desc: "Фото, Картинки"}
+    - {id: 11, cat: TV/Other, desc: "Шоу, Клипы, Музыка, Юмор и т.п."}
+    - {id: 6, cat: TV, desc: "Сериалы"}
+    - {id: 80, cat: TV, desc: "Сериалы - Эпизод (серия) с гей-темой"}
+    - {id: 87, cat: TV, desc: "Сериалы - Бесстыжие / Shameless "}
+    - {id: 77, cat: TV, desc: "Сериалы - В поиске / Looking "}
+    - {id: 58, cat: TV, desc: "Сериалы - Дрянные девчонки / Bad Girls "}
+    - {id: 56, cat: TV, desc: "Сериалы - Лузеры / Хор / Glee "}
+    - {id: 49, cat: TV, desc: "Сериалы - Физика или Химия"}
+    - {id: 44, cat: TV, desc: "Сериалы - Юг нигде / South of nowhere "}
+    - {id: 41, cat: TV, desc: "Сериалы - Охота на парней / Manhunt "}
+    - {id: 39, cat: TV, desc: "Сериалы - Секс в другом городе / Мир Л / The L Word "}
+    - {id: 37, cat: TV, desc: "Сериалы - Логово / The Lair "}
+    - {id: 34, cat: TV, desc: "Сериалы - Бухта Данте"}
+    - {id: 29, cat: TV, desc: "Сериалы - Ноев ковчег / Noah's Arc "}
+    - {id: 26, cat: TV, desc: "Сериалы - Маленькая Британия / Little Britain "}
+    - {id: 21, cat: TV, desc: "Сериалы - Молокососы / Skins. season "}
+    - {id: 15, cat: TV, desc: "Сериалы - Близкие друзья / Queer as folk "}
+    - {id: 25, cat: XXX/Imageset, desc: "Фото, Картинки"}
     - {id: 10, cat: XXX, desc: "Pron "}
     - {id: 16, cat: XXX, desc: "Pron - Pron-Фильмы"}
     - {id: 86, cat: XXX, desc: "Pron - Pron-Фильмы (азиатские)"}
@@ -60,19 +60,19 @@ caps:
     - {id: 19, cat: XXX, desc: "Pron - Pron-Гетеро"}
     - {id: 59, cat: XXX, desc: "Pron - Pron с переводом"}
     - {id: 81, cat: XXX, desc: "Pron - Pron-Мультфильмы, Pron-Аниме"}
-    - {id: 33, cat: XXX, desc: "Pron - Pron-Разное"}
-    - {id: 13, cat: XXX, desc: "Разное"}
-    - {id: 95, cat: XXX, desc: "Разное - Клипы, Трейлеры, Рекламма"}
-    - {id: 48, cat: XXX, desc: "Разное - Фильмы, мультфильмы"}
-    - {id: 57, cat: XXX, desc: "Разное - Сериалы"}
-    - {id: 54, cat: XXX, desc: "Разное - Картинки"}
-    - {id: 55, cat: XXX, desc: "Разное - Музыка"}
-    - {id: 94, cat: XXX, desc: "Разное - Аудиокниги"}
-    - {id: 47, cat: XXX, desc: "Разное - Книги"}
-    - {id: 46, cat: XXX, desc: "Разное - Игры"}
-    - {id: 45, cat: XXX, desc: "Разное - Программы"}
-    - {id: 14, cat: XXX, desc: "Тестовый форум"}
-    - {id: 32, cat: XXX, desc: "Мусорка"}
+    - {id: 33, cat: XXX/Other, desc: "Pron - Pron-Разное"}
+    - {id: 13, cat: Other, desc: "Разное"}
+    - {id: 95, cat: Other/Misc, desc: "Разное - Клипы, Трейлеры, Рекламма"}
+    - {id: 48, cat: Other/Misc, desc: "Разное - Фильмы, мультфильмы"}
+    - {id: 57, cat: Other/Misc, desc: "Разное - Сериалы"}
+    - {id: 54, cat: Other/Misc, desc: "Разное - Картинки"}
+    - {id: 55, cat: Other/Misc, desc: "Разное - Музыка"}
+    - {id: 94, cat: Other/Misc, desc: "Разное - Аудиокниги"}
+    - {id: 47, cat: Other/Misc, desc: "Разное - Книги"}
+    - {id: 46, cat: Other/Misc, desc: "Разное - Игры"}
+    - {id: 45, cat: Other/Misc, desc: "Разное - Программы"}
+    - {id: 14, cat: Other, desc: "Тестовый форум"}
+    - {id: 32, cat: Other, desc: "Мусорка"}
 
   modes:
     search: [q]
