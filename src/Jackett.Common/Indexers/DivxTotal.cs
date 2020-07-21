@@ -413,22 +413,21 @@ namespace Jackett.Common.Indexers
             }
             catch
             {
-                // ignored
+                return dateDefault;
             }
-            return dateDefault;
         }
 
         private static long TryToParseSize(string sizeToParse, long sizeDefault)
         {
             try
             {
-                return ReleaseInfo.GetBytes(sizeToParse);
+                var parsedSize = ReleaseInfo.GetBytes(sizeToParse);
+                return parsedSize > 0 ? parsedSize : sizeDefault;
             }
             catch
             {
-                // ignored
+                return sizeDefault;
             }
-            return sizeDefault;
         }
     }
 }
