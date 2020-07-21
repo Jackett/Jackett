@@ -85,6 +85,7 @@ login:
     pwd: "{{ .Config.password }}"
   test:
     path: index.php
+    selector: a[href="logout.php"]
 
 search:
   path: index.php
