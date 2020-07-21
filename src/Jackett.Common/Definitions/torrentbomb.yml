@@ -44,13 +44,13 @@ caps:
 settings: []
 
 download:
-  # https://lngui.xyz/magnet.php?magnet:?xt=urn:btih:6c0649e8b299a5a7d61d7fc15bd099e37e5ed2fe
+  # https://lngui.xyz/magnetgo.php?magnet:?xt=urn:btih:6d9551ec2c62c4ae8eef6709adc6be9b3fd7a709
   selector: a[href*="magnet:?xt="]
   attribute: href
   filters:
     # strip the leading magnet provider site
     - name: re_replace
-      args: ["^(.+?\\/magnet.php\\?)(.+?)$", "$2"]
+      args: ["^(.+?\\/magnetgo.php\\?)(.+?)$", "$2"]
 
 search:
   paths:
