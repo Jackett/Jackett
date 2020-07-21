@@ -25,19 +25,26 @@ legacylinks:
 
 caps:
   categories:
+    "Adult": XXX
+    "Anime": TV/Anime
+    "Applications": PC/0day
+    "AudioBooks": Audio/Audiobook
+    "BooksAcademic": Books
+    "BooksEbooks": Books
+    "BooksFiction": Books
+    "BooksNonfiction": Books
+    "Games": Console
+    "GamesWindows": PC/Games
+    "Movies": Movies
+    "MoviesDocumentary": TV/Documentary
+    "Music": Audio
+    "Other": Other/Misc
+    "OtherUnsorted": Other/Misc
     "TV": TV
     "TVshows": TV
     "Television": TV
-    "Anime": TV/Anime
-    "MoviesDocumentary": TV/Documentary
-    "Movies": Movies
     "VideoMobile": Movies
-    "Music": Audio
-    "AudioBooks": Audio/Audiobook
-    "Games": Console
-    "Applications": PC/0day
-    "Other": Other/Misc
-    "OtherUnsorted": Other/Misc
+    "XXX": XXX
 
   modes:
     search: [q]
