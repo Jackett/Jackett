@@ -65,7 +65,7 @@ namespace Jackett.Common.Services
         {
             MigrateRenamedIndexers();
             InitIndexers(GetIndexersToLoad());
-            InitCardigannIndexers(GetRelevantIndexedDefinitionFiles(path));
+            InitCardigannIndexers(GetRelevantIndexedDefinitionFiles(new HashSet<string>(path)));
             InitAggregateIndexer();
         }
 
@@ -89,7 +89,7 @@ namespace Jackett.Common.Services
             return configuredIndexers != null && configuredIndexers.Contains(indexerId);
         }
 
-        private IEnumerable<FileInfo> GetRelevantIndexedDefinitionFiles(IEnumerable<string> path)
+        private IEnumerable<FileInfo> GetRelevantIndexedDefinitionFiles(ISet<string> path)
         {
             logger.Info("Loading Cardigann definitions from: " + string.Join(", ", path));
             if (!serverConfig.LoadOnlyConfiguredIndexers)
@@ -106,16 +106,8 @@ namespace Jackett.Common.Services
         private IEnumerable<FileInfo> GetIndexerDefinitionFiles(IEnumerable<string> path,
                                                                 ISet<string> configuredIndexers)
         {
-            return FlattenDirectoryFiles(path)
+            return GetIndexerDefinitionFiles(path)
                    .Where(file => configuredIndexers.Contains(file.Name.SplitWithTrimming('.')[0])).ToList();
-        }
-
-        private static IEnumerable<FileInfo> FlattenDirectoryFiles(IEnumerable<string> paths)
-        {
-            var directoryInfos = paths.Select(path => new DirectoryInfo(path));
-            var existingDirectories = directoryInfos.Where(info => info.Exists);
-            var files = existingDirectories.SelectMany(d => d.GetFiles("*.yml"));
-            return files;
         }
 
         private void MigrateRenamedIndexers()
