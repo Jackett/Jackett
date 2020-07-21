@@ -65,6 +65,7 @@ search:
       text: 1
     title:
       selector: a[href*="/torrent/"]
+      attribute: title
     details:
       selector: a[href*="/torrent/"]
       attribute: href
