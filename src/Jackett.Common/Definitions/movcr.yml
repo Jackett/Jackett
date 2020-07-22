@@ -6,7 +6,7 @@ language: en-us
 type: public
 encoding: UTF-8
 links:
-  - https://movcr.to/
+  - https://movcr.st/
 legacylinks:
   - https://movcr.tv/
   - https://movcr.black-mirror.xyz/
@@ -17,6 +17,7 @@ legacylinks:
   - https://movcr.unblocked.bar/ # some torrent links are broken if 'movcr.to' is in its name
   - https://movcr.proxyportal.pw/ # some torrent links are broken if 'movcr.to' is in its name
   - https://movcr.uk-unblock.pro/ # some torrent links are broken if 'movcr.to' is in its name
+  - https://movcr.to/
 
 caps:
   categories:
