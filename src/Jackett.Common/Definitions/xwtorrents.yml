@@ -13,7 +13,7 @@ legacylinks:
 caps:
   categorymappings:
     - {id: 47, cat: TV/Sport, desc: "Boxing"}
-    - {id: 14, cat: TV/Sport, desc: "Documentary"}
+    - {id: 14, cat: Movies, desc: "Documentary"}
     - {id: 20, cat: TV/Sport, desc: "DVD"}
     - {id: 2, cat: TV/Sport, desc: "ECW Original"}
     - {id: 26, cat: TV/Sport, desc: "ECW Weekly"}
@@ -66,6 +66,7 @@ caps:
   modes:
     search: [q]
     tv-search: [q, season, ep]
+    movie-search: [q]
 
 settings:
   - name: username
