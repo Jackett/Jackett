@@ -398,6 +398,7 @@ namespace Jackett.Updater
                 "Definitions/torrof.yml",
                 "Definitions/torviet.yml",
                 "Definitions/tspate.yml",
+                "Definitions/u-torrents.yml",
                 "Definitions/ultimategamerclub.yml",
                 "Definitions/ultrahdclub.yml",
                 "Definitions/utorrents.yml", // same as SzeneFZ now

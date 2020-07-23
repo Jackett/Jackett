@@ -530,8 +530,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TurkTorrent (TT)
  * Twilight Torrents
  * Twilights Zoom
- * U-Torrents
- * u-torrents (SceneFZ)
  * U2 (U2分享園@動漫花園)
  * UHDBits
  * UnionGang
