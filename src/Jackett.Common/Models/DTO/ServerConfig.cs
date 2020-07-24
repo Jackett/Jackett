@@ -37,6 +37,9 @@ namespace Jackett.Common.Models.DTO
         public bool can_run_netcore { get; set; }
 
         [DataMember]
+        public bool loadonlyconfiguredindexers { get; set; }
+
+        [DataMember]
         public ProxyType proxy_type { get; set; }
         [DataMember]
         public string proxy_url { get; set; }
@@ -65,6 +68,7 @@ namespace Jackett.Common.Models.DTO
             omdburl = config.OmdbApiUrl;
             app_version = version;
             can_run_netcore = canRunNetCore;
+            loadonlyconfiguredindexers = config.LoadOnlyConfiguredIndexers;
 
             proxy_type = config.ProxyType;
             proxy_url = config.ProxyUrl;

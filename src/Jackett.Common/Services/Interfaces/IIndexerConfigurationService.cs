@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Jackett.Common.Indexers;
 using Newtonsoft.Json.Linq;
 
@@ -9,5 +10,6 @@ namespace Jackett.Common.Services.Interfaces
         void Save(IIndexer indexer, JToken config);
         void Delete(IIndexer indexer);
         string GetIndexerConfigFilePath(string indexerId);
+        IEnumerable<string> FindConfiguredIndexerIds();
     }
 }
