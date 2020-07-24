@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using AngleSharp.Text;
 using Jackett.Common.Indexers;
 using Jackett.Common.Indexers.Meta;
 using Jackett.Common.Models;
@@ -63,9 +64,50 @@ namespace Jackett.Common.Services
         public void InitIndexers(IEnumerable<string> path)
         {
             MigrateRenamedIndexers();
-            InitIndexers();
-            InitCardigannIndexers(path);
+            InitIndexers(GetIndexersToLoad());
+            InitCardigannIndexers(GetRelevantIndexedDefinitionFiles(new HashSet<string>(path)));
             InitAggregateIndexer();
+        }
+
+        private ISet<string> GetIndexersToLoad()
+        {
+            if (serverConfig.LoadOnlyConfiguredIndexers)
+            {
+                return new HashSet<string>(configService.FindConfiguredIndexerIds());
+            }
+
+            return null;
+        }
+
+        private bool GetIndexerShouldBeLoaded(string indexerId, ISet<string> configuredIndexers)
+        {
+            if (!serverConfig.LoadOnlyConfiguredIndexers)
+            {
+                return true;
+            }
+
+            return configuredIndexers != null && configuredIndexers.Contains(indexerId);
+        }
+
+        private IEnumerable<FileInfo> GetRelevantIndexedDefinitionFiles(ISet<string> path)
+        {
+            logger.Info("Loading Cardigann definitions from: " + string.Join(", ", path));
+            if (!serverConfig.LoadOnlyConfiguredIndexers)
+            {
+                logger.Info("Loading all Indexer definitions");
+                return GetIndexerDefinitionFiles(path);
+            }
+
+            logger.Info("Loading only configured Indexer definitions");
+            var configuredIndexers = configService.FindConfiguredIndexerIds();
+            return GetIndexerDefinitionFiles(path, new HashSet<string>(configuredIndexers));
+        }
+
+        private IEnumerable<FileInfo> GetIndexerDefinitionFiles(IEnumerable<string> path,
+                                                                ISet<string> configuredIndexers)
+        {
+            return GetIndexerDefinitionFiles(path)
+                   .Where(file => configuredIndexers.Contains(file.Name.SplitWithTrimming('.')[0])).ToList();
         }
 
         private void MigrateRenamedIndexers()
@@ -95,7 +137,7 @@ namespace Jackett.Common.Services
             }
         }
 
-        private void InitIndexers()
+        private void InitIndexers(ISet<string> configuredIndexers)
         {
             logger.Info("Using HTTP Client: " + webClient.GetType().Name);
 
@@ -115,28 +157,30 @@ namespace Jackett.Common.Services
 
                     var arguments = new object[] { configService, indexerWebClientInstance, logger, protectionService };
                     var indexer = (IIndexer)constructor.Invoke(arguments);
-                    return indexer;
+
+                    if (GetIndexerShouldBeLoaded(indexer.Id, configuredIndexers))
+                    {
+                        return indexer;
+                    }
+
+                    return null;
                 }
                 else
                 {
                     logger.Error("Cannot instantiate " + type.Name);
                 }
                 return null;
-            });
+            }).Where(indexer => indexer != null);
 
             foreach (var idx in ixs)
             {
-                if (idx == null)
-                    continue;
                 indexers.Add(idx.Id, idx);
                 configService.Load(idx);
             }
         }
 
-        private void InitCardigannIndexers(IEnumerable<string> path)
+        private void InitCardigannIndexers(IEnumerable<FileInfo> files)
         {
-            logger.Info("Loading Cardigann definitions from: " + string.Join(", ", path));
-
             var deserializer = new DeserializerBuilder()
                         .WithNamingConvention(CamelCaseNamingConvention.Instance)
 //                        .IgnoreUnmatchedProperties()
@@ -144,9 +188,6 @@ namespace Jackett.Common.Services
 
             try
             {
-                var directoryInfos = path.Select(p => new DirectoryInfo(p));
-                var existingDirectories = directoryInfos.Where(d => d.Exists);
-                var files = existingDirectories.SelectMany(d => d.GetFiles("*.yml"));
                 var definitions = files.Select(file =>
                 {
                     logger.Debug("Loading Cardigann definition " + file.FullName);
@@ -191,12 +232,20 @@ namespace Jackett.Common.Services
 
                     indexers.Add(indexer.Id, indexer);
                 }
-                logger.Info("Cardigann definitions loaded: " + string.Join(", ", indexers.Keys));
+                logger.Info("Cardigann definitions loaded ("+indexers.Count+"): " + string.Join(", ", indexers.Keys));
             }
             catch (Exception ex)
             {
                 logger.Error(ex, "Error while loading Cardigann definitions: " + ex.Message);
             }
+        }
+
+        private static IEnumerable<FileInfo> GetIndexerDefinitionFiles(IEnumerable<string> path)
+        {
+            var directoryInfos = path.Select(p => new DirectoryInfo(p));
+            var existingDirectories = directoryInfos.Where(d => d.Exists);
+            var files = existingDirectories.SelectMany(d => d.GetFiles("*.yml"));
+            return files;
         }
 
         public void InitAggregateIndexer()
