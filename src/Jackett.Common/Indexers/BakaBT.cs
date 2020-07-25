@@ -24,6 +24,8 @@ namespace Jackett.Common.Indexers
         private string LoginUrl => SiteLink + "login.php";
         private readonly string LogoutStr = "<a href=\"logout.php\">Logout</a>";
 
+        private readonly List<int> defaultCategories = new List<int> {TorznabCatType.TVAnime.ID};
+
         private new ConfigurationDataBasicLogin configData
         {
             get => (ConfigurationDataBasicLogin)base.configData;
@@ -46,6 +48,21 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
+
+            InitCategoryMappings();
+        }
+
+        private void InitCategoryMappings()
+        {
+            AddCategoryMapping(1, TorznabCatType.TVAnime, "Anime Series");
+            AddCategoryMapping(2, TorznabCatType.TVAnime, "OVA");
+            AddCategoryMapping(3, TorznabCatType.AudioOther, "Soundtrack");
+            AddCategoryMapping(4, TorznabCatType.BooksComics, "Manga");
+            AddCategoryMapping(5, TorznabCatType.TVAnime, "Anime Movie");
+            AddCategoryMapping(6, TorznabCatType.TVOTHER, "Live Action");
+            AddCategoryMapping(7, TorznabCatType.BooksOther, "Artbook");
+            AddCategoryMapping(8, TorznabCatType.AudioVideo, "Music Video");
+            AddCategoryMapping(9, TorznabCatType.BooksEbook, "Light Novel");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -108,6 +125,7 @@ namespace Jackett.Common.Indexers
                 var parser = new HtmlParser();
                 var dom = parser.ParseDocument(response.Content);
                 var rows = dom.QuerySelectorAll(".torrents tr.torrent, .torrents tr.torrent_alt");
+                ICollection<int> currentCategories = new List<int> {TorznabCatType.TVAnime.ID};
 
                 foreach (var row in rows)
                 {
@@ -129,6 +147,8 @@ namespace Jackett.Common.Indexers
                     var titleSplit = Math.Min(taidx, tbidx);
                     var titleSeries = title.Substring(0, titleSplit);
                     var releaseInfo = title.Substring(titleSplit);
+
+                    currentCategories = GetNextCategory(row, currentCategories);
 
                     // For each over each pipe deliminated name
                     foreach (var name in titleSeries.Split("|".ToCharArray(), StringSplitOptions.RemoveEmptyEntries))
@@ -153,7 +173,7 @@ namespace Jackett.Common.Indexers
                             release.Title = release.Title.Substring(0, insertPoint) + "Season 1 " + release.Title.Substring(insertPoint);
                         }
 
-                        release.Category = new List<int> { TorznabCatType.TVAnime.ID };
+                        release.Category = currentCategories;
                         release.Description = row.QuerySelector("span.tags")?.TextContent;
                         release.Guid = new Uri(SiteLink + qTitleLink.GetAttribute("href"));
                         release.Comments = release.Guid;
@@ -197,6 +217,39 @@ namespace Jackett.Common.Indexers
             }
 
             return releases;
+        }
+
+        private ICollection<int> GetNextCategory(IElement row, ICollection<int> currentCategories)
+        {
+            string nextCategoryName = GetCategoryName(row);
+            if (nextCategoryName != null)
+            {
+                currentCategories = MapTrackerCatDescToNewznab(nextCategoryName);
+                if (currentCategories.Count == 0)
+                {
+                    return defaultCategories;
+                }
+            }
+
+            return currentCategories;
+        }
+
+        private string GetCategoryName(IElement row)
+        {
+            var categoryElement = row.QuerySelector("td.category span");
+            if (categoryElement == null)
+            {
+                return null;
+            }
+
+            var categoryName = categoryElement.GetAttribute("title");
+
+            if (!string.IsNullOrWhiteSpace(categoryName))
+            {
+                return categoryName;
+            }
+
+            return null;
         }
 
         public override async Task<byte[]> Download(Uri link)
