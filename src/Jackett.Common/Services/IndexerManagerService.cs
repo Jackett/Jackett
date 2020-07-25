@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using AngleSharp.Text;
 using Jackett.Common.Indexers;
 using Jackett.Common.Indexers.Meta;
 using Jackett.Common.Models;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using NLog;
 using YamlDotNet.Serialization;
@@ -79,14 +79,14 @@ namespace Jackett.Common.Services
             return null;
         }
 
-        private bool GetIndexerShouldBeLoaded(string indexerId, ISet<string> configuredIndexers)
+        private bool GetIndexerShouldBeLoaded(string indexerId, ICollection<string> configuredIndexers)
         {
             if (!serverConfig.LoadOnlyConfiguredIndexers)
             {
                 return true;
             }
 
-            return configuredIndexers != null && configuredIndexers.Contains(indexerId);
+            return configuredIndexers != null && configuredIndexers.Contains(indexerId.ToLower());
         }
 
         private IEnumerable<FileInfo> GetRelevantIndexedDefinitionFiles(ISet<string> path)
@@ -106,8 +106,17 @@ namespace Jackett.Common.Services
         private IEnumerable<FileInfo> GetIndexerDefinitionFiles(IEnumerable<string> path,
                                                                 ISet<string> configuredIndexers)
         {
-            return GetIndexerDefinitionFiles(path)
-                   .Where(file => configuredIndexers.Contains(file.Name.SplitWithTrimming('.')[0])).ToList();
+            var indexerDefinitionFiles = GetIndexerDefinitionFiles(path);
+            return indexerDefinitionFiles
+                   .Where(file =>
+                   {
+                       var indexId = FilesystemUtil.getLowercaseFileNameWithoutExtension(file.Name);
+                       if (indexId == null)
+                       {
+                           return false;
+                       }
+                       return configuredIndexers.Contains(indexId);
+                   }).ToList();
         }
 
         private void MigrateRenamedIndexers()

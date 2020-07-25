@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Jackett.Common.Indexers;
 using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
 using Newtonsoft.Json.Linq;
 using NLog;
 
@@ -154,8 +155,13 @@ namespace Jackett.Common.Services
             }
 
             var fileNames = directoryInfo
-                            .GetFiles().Select(file => file.Name).Where(fileName => fileName.EndsWith(ConfigFileSuffix)).ToList();
-            return fileNames.Select(file => file.Split('.')[0]).ToList();
+                            .GetFiles().Select(file => file.Name)
+                            .Where(fileName => fileName.EndsWith(ConfigFileSuffix))
+                            .ToList();
+
+            return fileNames.Select(FilesystemUtil.getLowercaseFileNameWithoutExtension)
+                            .Where(indexId => indexId != null)
+                            .ToList();
         }
 
         public string GetIndexerConfigFilePath(string indexerId)
