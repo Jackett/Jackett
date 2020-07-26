@@ -351,6 +351,7 @@ namespace Jackett.Updater
                 "Definitions/nyaa.yml",
                 "Definitions/nyoo.yml",
                 "Definitions/passionetorrent.yml",
+                "Definitions/pctorrent.yml",
                 "Definitions/polishtracker.yml",
                 "Definitions/qctorrent.yml",
                 "Definitions/qxr.yml",
