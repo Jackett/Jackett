@@ -8,8 +8,7 @@ encoding: UTF-8
 links:
   - https://takeabyte-nordic.org/
 certificates:
-  - 8b88d216d270b9b672ba44fbbdd5ca3d8919e5fd # expired Nov 2015
-  - a36a3d8f50b9d638a9e0d30a66ac23572acc55ed # NET::ERR_CERT_AUTHORITY_INVALID
+  - 4a558e562fa0fb01b17ea9e5842bbd96b9093192 # NET::ERR_CERT_AUTHORITY_INVALID
 
 caps:
   categorymappings:
