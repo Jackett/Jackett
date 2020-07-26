@@ -6,7 +6,7 @@ language: en-us
 type: public
 encoding: UTF-8
 links:
-  - https://btsow.cyou/
+  - https://btsow.monster/
 legacylinks:
   - https://btos.pw/
   - https://btio.pw/
@@ -15,6 +15,7 @@ legacylinks:
   - https://btsow.fun/
   - https://btsow.space/
   - https://btsow.site/
+  - https://btsow.cyou/
 
 caps:
   categories:
