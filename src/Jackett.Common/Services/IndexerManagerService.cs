@@ -64,8 +64,9 @@ namespace Jackett.Common.Services
         public void InitIndexers(IEnumerable<string> path)
         {
             MigrateRenamedIndexers();
-            InitIndexers(GetIndexersToLoad());
-            InitCardigannIndexers(GetRelevantIndexedDefinitionFiles(new HashSet<string>(path)));
+            var indexersToLoad = GetIndexersToLoad();
+            InitIndexers(indexersToLoad);
+            InitCardigannIndexers(GetIndexerDefinitionFiles(path), indexersToLoad);
             InitAggregateIndexer();
         }
 
@@ -86,37 +87,7 @@ namespace Jackett.Common.Services
                 return true;
             }
 
-            return configuredIndexers != null && configuredIndexers.Contains(indexerId.ToLower());
-        }
-
-        private IEnumerable<FileInfo> GetRelevantIndexedDefinitionFiles(ISet<string> path)
-        {
-            logger.Info("Loading Cardigann definitions from: " + string.Join(", ", path));
-            if (!serverConfig.LoadOnlyConfiguredIndexers)
-            {
-                logger.Info("Loading all Indexer definitions");
-                return GetIndexerDefinitionFiles(path);
-            }
-
-            logger.Info("Loading only configured Indexer definitions");
-            var configuredIndexers = configService.FindConfiguredIndexerIds();
-            return GetIndexerDefinitionFiles(path, new HashSet<string>(configuredIndexers));
-        }
-
-        private IEnumerable<FileInfo> GetIndexerDefinitionFiles(IEnumerable<string> path,
-                                                                ISet<string> configuredIndexers)
-        {
-            var indexerDefinitionFiles = GetIndexerDefinitionFiles(path);
-            return indexerDefinitionFiles
-                   .Where(file =>
-                   {
-                       var indexId = FilesystemUtil.getLowercaseFileNameWithoutExtension(file.Name);
-                       if (indexId == null)
-                       {
-                           return false;
-                       }
-                       return configuredIndexers.Contains(indexId);
-                   }).ToList();
+            return configuredIndexers != null && configuredIndexers.Contains(indexerId);
         }
 
         private void MigrateRenamedIndexers()
@@ -188,7 +159,7 @@ namespace Jackett.Common.Services
             }
         }
 
-        private void InitCardigannIndexers(IEnumerable<FileInfo> files)
+        private void InitCardigannIndexers(IEnumerable<FileInfo> files, ISet<string> indexersToLoad)
         {
             var deserializer = new DeserializerBuilder()
                         .WithNamingConvention(CamelCaseNamingConvention.Instance)
@@ -204,7 +175,12 @@ namespace Jackett.Common.Services
                     {
                         var DefinitionString = File.ReadAllText(file.FullName);
                         var definition = deserializer.Deserialize<IndexerDefinition>(DefinitionString);
-                        return definition;
+                        if (GetIndexerShouldBeLoaded(definition.Id, indexersToLoad))
+                        {
+                            return definition;
+                        }
+
+                        return null;
                     }
                     catch (Exception ex)
                     {

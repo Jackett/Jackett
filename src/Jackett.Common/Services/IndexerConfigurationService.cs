@@ -159,7 +159,7 @@ namespace Jackett.Common.Services
                             .Where(fileName => fileName.EndsWith(ConfigFileSuffix))
                             .ToList();
 
-            return fileNames.Select(FilesystemUtil.getLowercaseFileNameWithoutExtension)
+            return fileNames.Select(FilesystemUtil.getFileNameWithoutExtension)
                             .Where(indexId => indexId != null)
                             .ToList();
         }
