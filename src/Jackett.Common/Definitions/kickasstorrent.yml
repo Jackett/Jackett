@@ -8,6 +8,12 @@ encoding: UTF-8
 followredirect: true
 links:
   - https://newkatcr.co/
+  - https://kat.root.yt/
+  - https://kickasstorrents.unblockninja.com/
+  - https://kat.unblockit.win/
+  - https://katcr.unblocked.bar/
+  - https://katcr.proxyportal.pw/
+  - https://katcr.uk-unblock.pro/
 legacylinks:
   - https://kickasstorrent.cr/ # possible 3rd kickasstorrent site/clone?
   - https://katcr.to/ # possible 3rd kickasstorrent site/clone?
@@ -19,13 +25,8 @@ legacylinks:
   - https://katcr.ind-unblock.xyz/
   - https://kat.unblockit.me/
   - https://kat.unblockit.pw/
-  - https://kickasstorrents.unblockninja.com/ # down
   - https://katcr.co/
-  - https://kat.root.yt/
   - https://kat.unblockit.id/
-  - https://katcr.unblocked.bar/
-  - https://katcr.proxyportal.pw/
-  - https://katcr.uk-unblock.pro/
 
 caps:
   categorymappings:
