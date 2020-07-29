@@ -16,7 +16,7 @@ caps:
     - {id: 1, cat: Movies, desc: "Movies"}
     - {id: 2, cat: TV, desc: "TV"}
     - {id: 3, cat: Audio, desc: "Music"}
-    - {id: 4, cat: PC/0day, desc: "Software"}
+    - {id: 4, cat: PC/Software, desc: "Software"}
     - {id: 5, cat: Books, desc: "Ebook"}
     - {id: 6, cat: PC/Games, desc: "Games"}
     - {id: 7, cat: TV, desc: "Animations"}
@@ -193,4 +193,4 @@ search:
         i[class*="fa-globe text-green"]: 2 # Global Double Upload
         i[class*="fa-certificate text-pink"]: 2 # Featured Torrent
         "*": 1
-# UNIT3D 2.2.5
+# UNIT3D 2.7.0
