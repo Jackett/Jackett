@@ -197,6 +197,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * RockBox
  * RuTracker
  * Rustorka
+ * SDkino
  * Sharewood
  * SkTorrent
  * SkTorrent-org
