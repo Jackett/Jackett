@@ -186,4 +186,7 @@ search:
         i[class*="fa-globe text-green"]: 2 # Global Double Upload
         i[class*="fa-certificate text-pink"]: 2 # Featured Torrent
         "*": 1
+    minimumseedtime:
+      # 5 days (as seconds = 5 x 24 x 60 x 60)
+      text: 432000
 # UNIT3D 2.3.0
