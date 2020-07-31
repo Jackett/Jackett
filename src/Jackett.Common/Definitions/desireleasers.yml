@@ -182,4 +182,6 @@ search:
         i[class*="fa-globe text-green"]: 2 # Global Double Upload
         i[class*="fa-certificate text-pink"]: 2 # Featured Torrent
         "*": 1
+    minimumratio:
+      text: 0.4
 # UNIT3D 2.7.0
