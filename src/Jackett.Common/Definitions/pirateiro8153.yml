@@ -1,0 +1,124 @@
+---
+id: pirateiro8153
+name: Pirateiro8153
+description: "Pirateiro is a Public site for MOVIES / TV / GENERAL"
+language: en-us
+type: public
+encoding: UTF-8
+followredirect: true
+links:
+  - https://pirateiro.com/
+  - https://pirateiro.eu/
+  - https://pirateiro.unblockit.me/
+legacylinks:
+  - http://pirateiro.com/
+  - https://pirateiro.unblockit.pro/
+  - https://pirateiro.unblockit.one/
+
+caps:
+  categories:
+    "cat100": TV/Anime
+    "cat200": PC
+    "cat300": Movies
+    "cat400": Console
+    "cat500": Audio
+    "cat600": Other
+    "cat700": TV
+    "cat800": XXX
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info
+    type: info
+    label: How to get the Cookie
+    default: "<ol><li>Access this tracker with your browser<li>click on the <b>Apply Filter</b> button on the page to invoke the search and solve the challenge<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
+  - name: useragent
+    type: text
+    label: User-Agent
+    label: User-Agent
+  - name: info_useragent
+    type: info
+    label: How to get the User-Agent
+    default: "<ol><li>From the same place you fetched the cookie,<li>Find <b>'user-agent:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole user-agent string <i>(everything after 'user-agent: ')</i> and <b>Paste</b> here.</ol>"
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: "enviado"
+    options:
+      "enviado": "created"
+      "seeders": "seeders"
+      "tamanho": "size"
+
+login:
+  method: cookie
+  inputs:
+    cookie: "{{ .Config.cookie }}"
+  test:
+    path: torrents/
+
+search:
+  headers:
+    User-Agent: ["{{ .Config.useragent }}"]
+  paths:
+    - path: torrents/
+  inputs:
+    search: "{{ .Keywords }}"
+    orderby: "{{ .Config.sort }}"
+
+  rows:
+    selector: table.torrenttable tbody tr:has(a[href^="magnet:?xt="])
+
+  fields:
+    category:
+      selector: td:nth-child(1) a
+      attribute: class
+      filters:
+        # extract the first class
+        - name: split
+          args: [" ", 0]
+    title:
+      selector: td:nth-child(1) a:nth-child(2)
+    details:
+      selector: td:nth-child(1) a:nth-child(2)
+      attribute: href
+    download:
+      # .torrent urls can be missing
+      optional: true
+      selector: a[href$="/download"]
+      attribute: href
+    magnet:
+      selector: a[href^="magnet:?xt="]
+      attribute: href
+    date:
+      selector: td:nth-child(3) span
+      attribute: title
+      filters:
+        - name: append
+          args: " +01:00"
+        - name: dateparse
+          args: "02/01/2006 15:04:05 -07:00"
+    size:
+      selector: td:nth-child(4)
+    seeders:
+      selector: td:nth-child(5)
+      filters:
+        - name: replace
+          args: [" ", ""]
+    leechers:
+      selector: td:nth-child(6)
+      filters:
+        - name: replace
+          args: [" ", ""]
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a
