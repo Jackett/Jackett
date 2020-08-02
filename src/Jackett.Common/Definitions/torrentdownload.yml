@@ -28,6 +28,7 @@ caps:
   categories:
     "Adult": XXX
     "Anime": TV/Anime
+    "AnimeAnimeOther": TV/Anime
     "Applications": PC/0day
     "AudioBooks": Audio/Audiobook
     "BooksAcademic": Books
@@ -37,6 +38,7 @@ caps:
     "Games": Console
     "GamesWindows": PC/Games
     "Movies": Movies
+    "MoviesConcerts": Movies
     "MoviesDocumentary": TV/Documentary
     "Music": Audio
     "Other": Other/Misc
