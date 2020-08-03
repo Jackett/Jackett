@@ -192,6 +192,10 @@ search:
     - path: "search/{{ if .Keywords }}{{ .Keywords }}{{else}}*{{end}}"
       inputs:
         offset: 40
+  keywordsfilters:
+    # S2020E02 Becomes `2020 Round 2`
+    - name: re_replace
+      args: ["S(\\d{1,4})E(\\d{1,2})", "$1 Round $2"]
   inputs:
     c: -1
     ob: "{{ .Config.sort }}"
