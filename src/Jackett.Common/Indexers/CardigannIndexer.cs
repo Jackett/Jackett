@@ -1588,7 +1588,10 @@ namespace Jackett.Common.Indexers
                                     if (!variables.ContainsKey(variablesKey))
                                         variables[variablesKey] = null;
                                     if (OptionalFileds.Contains(Field.Key) || FieldModifiers.Contains("optional") || Field.Value.Optional)
+                                    {
+                                        variables[variablesKey] = null;
                                         continue;
+                                    }
                                     throw new Exception(string.Format("Error while parsing field={0}, selector={1}, value={2}: {3}", Field.Key, Field.Value.Selector, (value == null ? "<null>" : value), ex.Message));
                                 }
                             }
