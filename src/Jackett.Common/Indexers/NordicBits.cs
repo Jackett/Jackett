@@ -688,7 +688,7 @@ namespace Jackett.Common.Indexers
             if (xmas.Any(dom.Body.InnerHtml.Contains))
             {
                 // Return all occurrences of torrents found
-                return dom.QuerySelectorAll("#base_around > table.mainouter > tbody > tr > td.outer > div.article > table  > tbody")[1].QuerySelectorAll("tr");
+                return dom.QuerySelectorAll("#base_around > table.mainouter > tbody > tr > td.outer > div.article > table > tbody > tr").Skip(1).ToCollection();
             }
 
             // template 7 contains a reference to template 2 (logout button), so check for oldV2 first
@@ -701,7 +701,7 @@ namespace Jackett.Common.Indexers
             if (defaultTheme.Any(dom.Body.InnerHtml.Contains))
             {
                 // Return all occurrences of torrents found
-                return dom.QuerySelectorAll("#base_content2 > div.article > table > tbody")[1].QuerySelectorAll("tr");
+                return dom.QuerySelectorAll("#base_content2 > div.article > table > tbody > tr").Skip(1).ToCollection();
             }
             return null;
         }
