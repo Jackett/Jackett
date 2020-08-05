@@ -52,14 +52,12 @@ settings:
 
 login:
   path: /
-  method: form
-  form: form#loginform
-  submitpath: /
+  method: post
   inputs:
-    action: login
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
-    keeploggedin: 1
+    keeplogged: 1
+    login: "Log In!"
   error:
     - selector: center:first-of-type
   test:
