@@ -106,7 +106,7 @@ search:
     - path: torrents/filter
   inputs:
     $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    search: "{{ if or .Query.IMDBID .Keywords }}{{ or .Query.IMDBID .Keywords }}{{else}}{{ .Today.Year }}{{end}}"
     description: ""
     uploader: ""
     imdb: "{{ .Query.IMDBIDShort }}"
@@ -243,4 +243,4 @@ search:
         i[class*="fa-globe text-green"]: 2 # Global Double Upload
         i[class*="fa-certificate text-pink"]: 2 # Featured Torrent
         "*": 1
-# UNIT3D 2.2.7
+# UNIT3D 2.7.0
