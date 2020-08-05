@@ -29,6 +29,9 @@ namespace Jackett.Common.Models
         public int? Year { get; set; }
         public ICollection<string> Genre { get; set; }
 
+        public string Author { get; set; }
+        public string Title { get; set; }
+
         public bool IsTest { get; set; }
 
         public string ImdbIDShort => ImdbID?.TrimStart('t');
@@ -42,6 +45,8 @@ namespace Jackett.Common.Models
         public bool IsMovieSearch => QueryType == "movie" || (QueryType == "TorrentPotato" && !string.IsNullOrWhiteSpace(SearchTerm));
 
         public bool IsMusicSearch => QueryType == "music";
+
+        public bool IsBookSearch => QueryType == "book";
 
         public bool IsTVRageSearch => RageID != null;
 
@@ -121,6 +126,8 @@ namespace Jackett.Common.Models
                 Label = Label,
                 Track = Track,
                 Year = Year,
+                Author = Author,
+                Title = Title,
                 RageID = RageID,
                 ImdbID = ImdbID
             };
