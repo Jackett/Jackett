@@ -19,8 +19,8 @@ caps:
 
   modes:
     search: [q, imdbid]
-    tv-search: [q, season, ep, imdbid, tvdbid]
-    movie-search: [q, imdbid, tmdbid]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
 
 login:
   path: login
@@ -58,8 +58,8 @@ search:
     description: ""
     uploader: ""
     imdb: "{{ .Query.IMDBIDShort }}"
-    tvdb: "{{ .Query.TVDBID }}"
-    tmdb: "{{ .Query.TMDBID }}"
+    tvdb: ""
+    tmdb: ""
     mal: ""
     igdb: ""
     sort: created_at
