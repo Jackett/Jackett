@@ -112,8 +112,7 @@ namespace Jackett.Common.Indexers
             if (result.Status != HttpStatusCode.OK)
                 throw new ExceptionWithConfigData(result.Content, configData);
             dom = parser.ParseDocument(result.Content);
-            var onClickParts = dom.QuerySelector("a[onclick*=\"/torrent\"]").GetAttribute("onclick").Split('\'');
-            downloadUrl = $"{SiteLink}tor/{onClickParts[3]}/{onClickParts[5]}";
+            downloadUrl = SiteLink + dom.QuerySelector("a[href^=\"/tor/\"]").GetAttribute("href");
 
             // Eg https://www.mejortorrentt.net/tor/peliculas/Harry_Potter_1_y_la_Piedra_Filosofal_MicroHD_1080p.torrent
             var content = await base.Download(new Uri(downloadUrl));
