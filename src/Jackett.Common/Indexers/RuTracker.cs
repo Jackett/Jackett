@@ -1609,7 +1609,7 @@ namespace Jackett.Common.Indexers
                         var qDownloadLink = row.QuerySelector("td.tor-size > a.tr-dl");
                         if (qDownloadLink == null) // Expects moderation
                             continue;
-                        var qDetailsLink = row.QuerySelector("td.t-title > div.t-title > a.tLink");
+                        var qDetailsLink = row.QuerySelector("td.t-title-col > div.t-title > a.tLink");
                         var qSize = row.QuerySelector("td.tor-size");
                         var comments = new Uri(SiteLink + "forum/" + qDetailsLink.GetAttribute("href"));
                         var seeders = 0;
@@ -1621,7 +1621,7 @@ namespace Jackett.Common.Indexers
                                 seeders = ParseUtil.CoerceInt(seedersString);
                         }
                         var timestr = row.QuerySelector("td:nth-child(10)").GetAttribute("data-ts_text");
-                        var forum = row.QuerySelector("td.f-name > div.f-name > a");
+                        var forum = row.QuerySelector("td.f-name-col > div.f-name > a");
                         var forumid = forum.GetAttribute("href").Split('=')[1];
                         var link = new Uri(SiteLink + "forum/" + qDownloadLink.GetAttribute("href"));
                         var size = ReleaseInfo.GetBytes(qSize.GetAttribute("data-ts_text"));

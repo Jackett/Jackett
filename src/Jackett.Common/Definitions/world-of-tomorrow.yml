@@ -77,26 +77,28 @@ settings:
     label: "Secure Code"
 
 login:
-  path: login.php
-  method: form
-  form: form
+  path: takelogin.php
+  method: post
   inputs:
-    take: "yes"
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
-    secure_code: "{{ .Config.secure_code }}"
+    pin: "{{ .Config.secure_code }}"
+  error:
+    - selector: table.tableinborder:contains("Fehler")
+    - selector: table.tableinborder:contains("gebannt")
   test:
-    path: sessioncheck.php
+    path: tfiles.php
 
 search:
   path: tfiles.php
   inputs:
-    search: "{{ .Query.Keywords }}"
-    incldead: "1"
+    search: "{{ .Keywords }}"
+    incldead: 1
     showsearch: 0
 
   rows:
     selector: table.table-bordered > tbody > tr
+
   fields:
     title:
       selector: a[href^="details.php"]
@@ -142,3 +144,4 @@ search:
       filters:
         - name: dateparse
           args: "02.01.2006 15:04:05"
+# engine n/a

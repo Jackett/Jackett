@@ -94,7 +94,7 @@ search:
       selector: a[title][href^="details.php?id="]
       attribute: href
     download:
-      selector: form[action^="download.php?id="]
+      selector: form[action*="/download.php?id="]
       attribute: action
     imdb:
       selector: a[href*="imdb.com/title/tt"]

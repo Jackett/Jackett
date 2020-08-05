@@ -6,9 +6,10 @@ language: en-us
 type: public
 encoding: UTF-8
 links:
-  - https://torrentparadise.cl/
+  - https://torrentparadise.to/
 legacylinks:
   - https://torrentparadise.org/
+  - https://torrentparadise.cl/
 
 caps:
   categories:

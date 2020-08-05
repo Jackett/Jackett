@@ -45,36 +45,37 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "private";
 
-            AddCategoryMapping(1, TorznabCatType.TVAnime);
-            AddCategoryMapping(5, TorznabCatType.BooksEbook);
-            AddCategoryMapping(10, TorznabCatType.PCGames);
-            AddCategoryMapping(11, TorznabCatType.ConsolePS3);
-            AddCategoryMapping(11, TorznabCatType.ConsolePS4);
-            AddCategoryMapping(11, TorznabCatType.ConsolePSP);
-            AddCategoryMapping(12, TorznabCatType.ConsoleXBOX360DLC);
-            AddCategoryMapping(12, TorznabCatType.ConsoleXbox);
-            AddCategoryMapping(12, TorznabCatType.ConsoleXbox360);
-            AddCategoryMapping(12, TorznabCatType.ConsoleXboxOne);
-            AddCategoryMapping(6, TorznabCatType.Audio);
+            AddCategoryMapping(1, TorznabCatType.TVAnime, "Anime");
+            AddCategoryMapping(3, TorznabCatType.BooksOther, "Tutorials");
+            AddCategoryMapping(5, TorznabCatType.BooksEbook, "Ebooks");
+            AddCategoryMapping(29, TorznabCatType.AudioAudiobook, "Abooks");
+            AddCategoryMapping(9, TorznabCatType.ConsoleNDS, "Game-NIN");
+            AddCategoryMapping(10, TorznabCatType.PCGames, "Game-WIN");
+            AddCategoryMapping(11, TorznabCatType.ConsolePS3, "Game-PS");
+            AddCategoryMapping(12, TorznabCatType.ConsoleXbox, "Game-XBOX");
+            AddCategoryMapping(7, TorznabCatType.Audio, "Music");
+            AddCategoryMapping(2, TorznabCatType.PCMac, "App-MAC");
+            AddCategoryMapping(4, TorznabCatType.PC0day, "App-WIN");
+            AddCategoryMapping(27, TorznabCatType.PC, "App-LINUX");
+            AddCategoryMapping(6, TorznabCatType.PCPhoneOther, "Mobile");
+            AddCategoryMapping(8, TorznabCatType.Other, "Other");
 
-            AddCategoryMapping(21, TorznabCatType.TV);
-            AddCategoryMapping(20, TorznabCatType.TVSD);
-            AddCategoryMapping(21, TorznabCatType.TVHD);
-            AddCategoryMapping(22, TorznabCatType.TV);
-            AddCategoryMapping(24, TorznabCatType.TVSD);
-            AddCategoryMapping(25, TorznabCatType.TVHD);
+            AddCategoryMapping(20, TorznabCatType.TVHD, "TV-HD");
+            AddCategoryMapping(21, TorznabCatType.TVSD, "TV-SD");
+            AddCategoryMapping(22, TorznabCatType.TVHD, "TV-x265");
+            AddCategoryMapping(23, TorznabCatType.TV, "TV-Packs");
+            AddCategoryMapping(24, TorznabCatType.TVSD, "TV-Retail-SD");
+            AddCategoryMapping(25, TorznabCatType.TVHD, "TV-Retail-HD");
+            AddCategoryMapping(28, TorznabCatType.TVSport, "TV-Sports");
 
-            AddCategoryMapping(50, TorznabCatType.XXX);
-            AddCategoryMapping(49, TorznabCatType.XXXDVD);
-            AddCategoryMapping(50, TorznabCatType.XXXx264);
-
-            AddCategoryMapping(13, TorznabCatType.Movies3D);
-            AddCategoryMapping(14, TorznabCatType.MoviesBluRay);
-            AddCategoryMapping(15, TorznabCatType.MoviesDVD);
-            AddCategoryMapping(16, TorznabCatType.MoviesHD);
-            AddCategoryMapping(17, TorznabCatType.Movies);
-            AddCategoryMapping(19, TorznabCatType.Movies);
-            AddCategoryMapping(26, TorznabCatType.MoviesUHD);
+            AddCategoryMapping(13, TorznabCatType.Movies3D, "Movie-3D");
+            AddCategoryMapping(14, TorznabCatType.MoviesBluRay, "Movie-Bluray");
+            AddCategoryMapping(15, TorznabCatType.MoviesDVD, "Movie-DVDR");
+            AddCategoryMapping(16, TorznabCatType.MoviesHD, "Movie-x264");
+            AddCategoryMapping(17, TorznabCatType.MoviesHD, "Movie-x265");
+            AddCategoryMapping(18, TorznabCatType.Movies, "Movie-Packs");
+            AddCategoryMapping(19, TorznabCatType.MoviesSD, "Movie-XVID");
+            AddCategoryMapping(26, TorznabCatType.MoviesUHD, "Movie-4K");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

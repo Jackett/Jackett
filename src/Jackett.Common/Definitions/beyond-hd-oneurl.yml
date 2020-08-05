@@ -8,6 +8,16 @@ encoding: UTF-8
 links:
   - https://beyond-hd.me/
 
+caps:
+  categorymappings:
+    - {id: 1, cat: Movies, desc: "Movies"}
+    - {id: 2, cat: TV, desc: "TV"}
+
+  modes:
+    search: [q, imdbid]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
+
 settings:
   - name: oneurl
     type: text
@@ -29,16 +39,6 @@ settings:
       "desc": "desc"
       "asc": "asc"
 
-caps:
-  categorymappings:
-    - {id: 1, cat: Movies, desc: "Movies"}
-    - {id: 2, cat: TV, desc: "TV"}
-
-  modes:
-    search: [q, imdbid]
-    tv-search: [q, season, ep, imdbid]
-    movie-search: [q, imdbid]
-
 login:
   method: oneurl
   inputs:
@@ -51,8 +51,7 @@ search:
     - path: torrents
   inputs:
     $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-    description: ""
+    search: "{{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     uploader: ""
     imdb: "{{ .Query.IMDBIDShort }}"
     tmdb: ""
@@ -61,7 +60,7 @@ search:
     qty: 100
 
   rows:
-    selector: table > tbody > tr
+    selector: div.table-torrents > table > tbody > tr
     after: 1
 
   fields:
@@ -73,7 +72,7 @@ search:
         - name: regexp
           args: "/categories/.*?\\.(\\d+)"
     category:
-      text: "{{if .Result._category}}{{.Result._category}}{{else}}1{{end}}"
+      text: "{{ if .Result._category }}{{ .Result._category }}{{ else }}1{{ end }}"
     title:
       selector: a.torrent-name
     download:
@@ -115,4 +114,4 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
-# UNIT3D
+# UNIT3D (custom)

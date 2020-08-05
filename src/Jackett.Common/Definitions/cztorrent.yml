@@ -72,6 +72,9 @@ login:
 search:
   paths:
     - path: torrents
+  keywordsfilters:
+    - name: re_replace
+      args: ["S[0-9]{2}([^E]|$)", ""] # remove season tag without episode (search doesn't support it)
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     s: "{{ .Keywords }}"
@@ -82,10 +85,6 @@ search:
 
   rows:
     selector: tr.torr_hover
-
-  keywordsfilters:
-    - name: re_replace
-      args: ["S[0-9]{2}([^E]|$)", ""] # remove season tag without episode (search doesn't support it)
 
   fields:
     title:

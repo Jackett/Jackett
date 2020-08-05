@@ -66,6 +66,8 @@ namespace Jackett.Common.Indexers
             Language = "fr-fr";
             Encoding = Encoding.UTF8;
             Type = "private";
+            // NET::ERR_CERT_DATE_INVALID expired ‎29 ‎July ‎2020
+            w.AddTrustedCertificate(new Uri(SiteLink).Host, "9cb32582b564256146616afddbdb8e7c94c428ed");
 
             // Movies
             AddCategoryMapping("MOVIE|DVDR", TorznabCatType.MoviesDVD);             // DVDR

@@ -8,7 +8,10 @@ encoding: UTF-8
 followredirect: true
 links:
   - https://torrentz2.is/
-  - https://torrentz.unblockit.id/
+  - https://torrentsmirror.com/
+  - https://torrentz.pl/
+  - https://torrentz2.unblockninja.com/
+  - https://torrentz.unblockit.win/
   - https://torrentz2.unblocked.bar/
   - https://torrentz2.proxyportal.pw/
   - https://torrentz2.uk-unblock.pro/
@@ -23,7 +26,7 @@ legacylinks:
   - https://torrentz.unblockit.me/
   - https://torrentz.unblockit.pw/
   - https://torrentz2.eu/ # domain suspended by registry
-  - https://torrentz2.unblockninja.com/ # only supports search?f=
+  - https://torrentz.unblockit.id/
 
 caps:
   categories:

@@ -7,9 +7,10 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://katcr.co/
+  - https://newkatcr.co/
   - https://kat.root.yt/
-  - https://kat.unblockit.id/
+  - https://kickasstorrents.unblockninja.com/
+  - https://kat.unblockit.win/
   - https://katcr.unblocked.bar/
   - https://katcr.proxyportal.pw/
   - https://katcr.uk-unblock.pro/
@@ -24,7 +25,8 @@ legacylinks:
   - https://katcr.ind-unblock.xyz/
   - https://kat.unblockit.me/
   - https://kat.unblockit.pw/
-  - https://kickasstorrents.unblockninja.com/ # down
+  - https://katcr.co/
+  - https://kat.unblockit.id/
 
 caps:
   categorymappings:
@@ -111,7 +113,7 @@ settings: []
 
 search:
   paths:
-    - path: "{{ if .Keywords }}katsearch/page/1/{{ .Keywords }}{{else}}category/latest/page/1{{end}}"
+    - path: "{{ if .Keywords }}search/?q={{ .Keywords }}{{ else }}v2/category/latest/1/6/{{ end }}"
 
   rows:
     selector: table.torrents_table > tbody > tr
@@ -128,7 +130,10 @@ search:
       selector: a[href^="magnet:?xt="]
       attribute: href
     category:
+      text: 138
+    category|noappend:
       selector: span.torrents_table__upload_info
+      optional: true
       case:
         ":has(a:contains(\"Anime\")):contains(\"English Translated\")": 118
         ":has(a:contains(\"Anime\")):contains(\"Other\")": 133
@@ -208,19 +213,13 @@ search:
     files:
       selector: td[data-title="Files"]
     date:
-      selector: td[data-title="Age"]:contains("-")
+      selector: td[data-title="Age"][title]
       attribute: title
-      optional: true
       filters:
+        - name: replace
+          args: ["(UTC)", "+00:00"]
         - name: dateparse
-          args: "2006-01-02"
-    date:
-      selector: td[data-title="Age"]:not(:contains("-"))
-      attribute: title
-      optional: true
-      filters:
-        - name: dateparse
-          args: "2006-01-02 15:04:05"
+          args: "2006-01-02 15:04:05 -07:00"
     seeders:
       selector: td[data-title="Seed"]
     leechers:

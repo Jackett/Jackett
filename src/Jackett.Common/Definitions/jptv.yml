@@ -1,37 +1,26 @@
 ---
-id: tvchaosuk
-name: TVChaosUK
-description: "TV Chaos UK (TVCUK) is a Private Torrent Tracker for UK TV"
-language: en-uk
+id: jptv
+name: JPTV
+description: "JPTV is a JAPANESE Private Torrent Tracker for JAPANESE TV / MOVIES"
+language: ja-JP
 type: private
 encoding: UTF-8
 links:
-  - https://tvchaosuk.com/
+  - https://jptv.club/
 
 caps:
   categorymappings:
-    - {id: 53, cat: Other, desc: "None"}
-    - {id: 29, cat: TV, desc: "Comedy"}
-    - {id: 5, cat: TV/Documentary, desc: "Documentary"}
-    - {id: 11, cat: TV, desc: "Drama"}
-    - {id: 14, cat: TV, desc: "Entertainment"}
-    - {id: 19, cat: TV, desc: "Factual"}
-    - {id: 43, cat: TV, desc: "Foreign"}
-    - {id: 32, cat: TV, desc: "Kids/Family"}
-    - {id: 44, cat: Movies, desc: "Movies"}
-    - {id: 45, cat: TV, desc: "News & Current Affairs"}
-    - {id: 51, cat: Audio, desc: "Radio"}
-    - {id: 52, cat: TV, desc: "Reality"}
-    - {id: 30, cat: TV, desc: "Soaps"}
-    - {id: 33, cat: TV, desc: "Sci-Fi"}
-    - {id: 42, cat: TV/Sport, desc: "Sport"}
-    - {id: 4, cat: TV, desc: "Holding Bin"}
+    - {id: 1, cat: Movies, desc: "Movies"}
+    - {id: 2, cat: TV, desc: "TV"}
+    - {id: 6, cat: TV, desc: "ts Firehose (RAW TS)"}
+    - {id: 7, cat: TV/Anime, desc: "Anime Movies"}
+    - {id: 9, cat: TV/Anime, desc: "Anime Series"}
+    - {id: 8, cat: Audio, desc: "Music"}
 
   modes:
     search: [q, imdbid]
     tv-search: [q, season, ep, imdbid]
     movie-search: [q, imdbid]
-    music-search: [q]
 
 settings:
   - name: username
@@ -193,7 +182,4 @@ search:
         i[class*="fa-globe text-green"]: 2 # Global Double Upload
         i[class*="fa-certificate text-pink"]: 2 # Featured Torrent
         "*": 1
-    minimumseedtime:
-      # 1 day (as seconds = 24 x 60 x 60)
-      text: 86400
-# UNIT3D 2.2.7
+# UNIT3D 2.5.0

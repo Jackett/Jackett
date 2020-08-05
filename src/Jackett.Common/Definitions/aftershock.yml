@@ -6,6 +6,8 @@ language: hu-hu
 type: private
 encoding: iso-8859-1
 links:
+  - https://aftershock-tracker.net/
+legacylinks:
   - https://aftershock-tracker.eu/
 
 caps:

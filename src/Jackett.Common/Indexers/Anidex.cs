@@ -134,21 +134,19 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            // Get specified categories. If none were specified, use all available.
-            var searchCategories = MapTorznabCapsToTrackers(query);
-            if (searchCategories.Count == 0)
-                searchCategories = GetAllTrackerCategories();
-
             // Prepare the search query
             var queryParameters = new NameValueCollection
             {
-                { "page", "search" },
-                { "id", string.Join(",", searchCategories) },
-                { "group", "0" }, // No group
                 { "q", query.SearchTerm ?? string.Empty },
                 { "s", GetSortBy },
-                { "o", GetOrder }
+                { "o", GetOrder },
+                { "group", "0" }, // No group
             };
+
+            // Get specified categories
+            var searchCategories = MapTorznabCapsToTrackers(query);
+            if (searchCategories.Count > 0)
+                queryParameters.Add("id", string.Join(",", searchCategories));
 
             // Make search request
             var searchUri = GetAbsoluteUrl("?" + queryParameters.GetQueryString());

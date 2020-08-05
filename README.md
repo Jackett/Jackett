@@ -95,7 +95,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * OneJAV
  * OxTorrent
  * ParnuXi
- * PC-torrent
  * PiratBit
  * Pirateiro
  * Pornforall
@@ -110,6 +109,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Rus-media
  * RuTor
  * RuTracker.RU
+ * seleZen
  * Sexy-Pics
  * shokweb
  * ShowRSS
@@ -133,7 +133,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TorrentDownload
  * TorrentFunk
  * TorrentGalaxy (TGx)
- * TorrentHane
  * TorrentKitty
  * TorrentParadise
  * TorrentProject2
@@ -193,10 +192,12 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * NetHD (VietTorrent)
  * PornoLab
  * PussyTorrents
+ * Rainbow Tracker
  * RiperAM
  * RockBox
  * RuTracker
  * Rustorka
+ * SDkino
  * Sharewood
  * SkTorrent
  * SkTorrent-org
@@ -377,6 +378,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Immortuos
  * Insane Tracker
  * JPopsuki
+ * JPTV
  * Kapaki
  * Karagarga
  * Keep Friends
@@ -525,12 +527,9 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TranceTraffic
  * Trezzor
  * TurkSeed
- * TurkNova
  * TurkTorrent (TT)
  * Twilight Torrents
  * Twilights Zoom
- * U-Torrents
- * u-torrents (SceneFZ)
  * U2 (U2分享園@動漫花園)
  * UHDBits
  * UnionGang
@@ -539,6 +538,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Vizuk
  * WDT (Wrestling Desires Torrents / Ultimate Wrestling Torrents)
  * World-In-HD
+ * Witch-Hunter (Demon-Site)
  * World-of-Tomorrow
  * x-ite.me (XM)
  * xBytesV2
