@@ -27,8 +27,8 @@ caps:
 
   modes:
     search: [q, imdbid]
-    tv-search: [q, season, ep, imdbid, tvdbid]
-    movie-search: [q, imdbid, tmdbid]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
     music-search: [q]
 
 settings:
@@ -91,8 +91,8 @@ search:
     description: ""
     uploader: ""
     imdb: "{{ .Query.IMDBIDShort }}"
-    tvdb: "{{ .Query.TVDBID }}"
-    tmdb: "{{ .Query.TMDBID }}"
+    tvdb: ""
+    tmdb: ""
     sorting: "{{ .Config.sort }}"
     sort: "{{ .Config.sort }}"
     direction: "{{ .Config.type }}"
