@@ -18,6 +18,7 @@ caps:
 
   modes:
     search: [q]
+    book-search: [q, author, title]
 
 settings:
   - name: username
@@ -69,7 +70,7 @@ search:
   paths:
     - path: torrents/
   inputs:
-    search: "{{ .Keywords }}"
+    search: "{{ if .Query.Author }} @authors {{ .Query.Author }}{{else}}{{end}}{{ if .Query.Title }} @title {{ .Query.Title }}{{else}}{{end}}{{ .Keywords }}"
     $raw: "{{ range .Categories }}cat[]={{.}}&{{end}}"
     orderby: "{{ .Config.orderby }}"
     order: "{{ .Config.order }}"
@@ -103,8 +104,10 @@ search:
     _retail:
       selector: .torRetail
       optional: true
-    title:
+    booktitle:
       selector: .title a
+    title:
+      text: "{{.Result.booktitle}}"
       filters:
         - name: append
           args: "{{ if .Result.author }} by {{ .Result.author }}{{else}}{{end}}{{ if .Result._year }} {{ .Result._year }}{{else}}{{end}}{{ if .Result._filetype }} {{ .Result._filetype }}{{else}}{{end}}{{ if .Result._retail }} {{ .Result._retail }}{{else}}{{end}}"
