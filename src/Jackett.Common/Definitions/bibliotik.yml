@@ -117,22 +117,18 @@ search:
     date:
       optional: true
       selector: .t_files_size_added time
-      filters:
-        - name: timeago
+      attribute: datetime
     download:
       selector: a[title="Download"]
       attribute: href
-#      files:
-#        selector: .t_files_size_added
-#        filters:
-#          - name: regexp
-#            args: "^\\s*(\\d+)\\s*file"
-    size:
+    files:
       selector: .t_files_size_added
       filters:
-        - name: split
-          args: [",", 1]
-        - name: trim
+        - name: regexp
+          args: "^\\s*(\\d+)\\s*file"
+    size:
+      selector: .t_files_size_added span
+      attribute: data-bytecount
     seeders:
       text: 0
     seeders:
