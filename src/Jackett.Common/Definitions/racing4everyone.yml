@@ -48,7 +48,7 @@ caps:
 
   modes:
     search: [q, imdbid]
-    tv-search: [q, season, ep, imdbid, tvdbid]
+    tv-search: [q, season, ep, imdbid]
 
 settings:
   - name: username
@@ -108,8 +108,8 @@ search:
     description: ""
     uploader: ""
     imdb: "{{ .Query.IMDBIDShort }}"
-    tvdb: "{{ .Query.TVDBID }}"
-    tmdb: "{{ .Query.TMDBID }}"
+    tvdb: ""
+    tmdb: ""
     sorting: "{{ .Config.sort }}"
     sort: "{{ .Config.sort }}"
     direction: "{{ .Config.type }}"
