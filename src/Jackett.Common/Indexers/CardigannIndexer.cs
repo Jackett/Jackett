@@ -113,7 +113,8 @@ namespace Jackett.Common.Indexers
             Type = Definition.Type;
             TorznabCaps = new TorznabCapabilities
             {
-                SupportsImdbTVSearch = Definition.Caps.Modes.Any(c => c.Key == "tv-search" && c.Value.Contains("imdbid")),
+                // SupportsImdbTVSearch temporarily disabled due to #8107
+                // SupportsImdbTVSearch = Definition.Caps.Modes.Any(c => c.Key == "tv-search" && c.Value.Contains("imdbid")),
                 SupportsTvdbSearch = Definition.Caps.Modes.Any(c => c.Key == "tv-search" && c.Value.Contains("tvdbid")),
                 SupportsImdbMovieSearch = Definition.Caps.Modes.Any(c => c.Key == "movie-search" && c.Value.Contains("imdbid")),
                 SupportsTmdbMovieSearch = Definition.Caps.Modes.Any(c => c.Key == "movie-search" && c.Value.Contains("tmdbid"))
