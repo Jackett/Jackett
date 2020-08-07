@@ -48,12 +48,6 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
-
-            InitCategoryMappings();
-        }
-
-        private void InitCategoryMappings()
-        {
             AddCategoryMapping(1, TorznabCatType.TVAnime, "Anime Series");
             AddCategoryMapping(2, TorznabCatType.TVAnime, "OVA");
             AddCategoryMapping(3, TorznabCatType.AudioOther, "Soundtrack");
@@ -226,9 +220,7 @@ namespace Jackett.Common.Indexers
             {
                 currentCategories = MapTrackerCatDescToNewznab(nextCategoryName);
                 if (currentCategories.Count == 0)
-                {
                     return defaultCategories;
-                }
             }
 
             return currentCategories;
