@@ -37,7 +37,7 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        protected readonly string[] OptionalFileds = new string[] { "imdb", "rageid", "tvdbid", "banner" };
+        protected readonly string[] OptionalFields = new string[] { "imdb", "rageid", "tvdbid", "banner" };
 
         private static readonly string[] _SupportedLogicFunctions =
         {
@@ -1587,8 +1587,11 @@ namespace Jackett.Common.Indexers
                                 {
                                     if (!variables.ContainsKey(variablesKey))
                                         variables[variablesKey] = null;
-                                    if (OptionalFileds.Contains(Field.Key) || FieldModifiers.Contains("optional") || Field.Value.Optional)
+                                    if (OptionalFields.Contains(Field.Key) || FieldModifiers.Contains("optional") || Field.Value.Optional)
+                                    {
+                                        variables[variablesKey] = null;
                                         continue;
+                                    }
                                     throw new Exception(string.Format("Error while parsing field={0}, selector={1}, value={2}: {3}", Field.Key, Field.Value.Selector, (value == null ? "<null>" : value), ex.Message));
                                 }
                             }

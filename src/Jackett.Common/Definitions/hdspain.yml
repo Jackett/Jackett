@@ -62,8 +62,6 @@ search:
         - name: querystring
           args: cat
     extras:
-      text: ""
-    extras:
       optional: true
       selector: td.titulo a[class]
       filters:

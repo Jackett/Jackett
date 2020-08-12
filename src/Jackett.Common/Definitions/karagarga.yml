@@ -119,20 +119,14 @@ search:
     leechers:
       selector: td:nth-child(14)
     subs:
-      text: ""
-    subs:
       selector: span:contains("Subs:")
       optional: true
-    genre:
-      text: ""
     genre:
       selector: td:nth-child(5)
       optional: true
       filters:
         - name: prepend
           args: "Genre: "
-    mom:
-      text: ""
     mom:
       selector: img[title^="CURRENT"]
       attribute: title
