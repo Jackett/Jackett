@@ -137,8 +137,6 @@ search:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     description:
-      text: ""
-    description:
       optional: true
       selector: img[src="pic/pl.jpg"]
       filters:
