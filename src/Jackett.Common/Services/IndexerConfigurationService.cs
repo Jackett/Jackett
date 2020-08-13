@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using Jackett.Common.Indexers;
 using Jackett.Common.Services.Interfaces;
@@ -33,7 +33,7 @@ namespace Jackett.Common.Services
 
         public void Delete(IIndexer indexer)
         {
-            var configFilePath = GetIndexerConfigFilePath(indexer);
+            var configFilePath = GetIndexerConfigFilePath(indexer.Id);
             File.Delete(configFilePath);
             var configFilePathBak = configFilePath + ".bak";
             if (File.Exists(configFilePathBak))
@@ -42,20 +42,20 @@ namespace Jackett.Common.Services
             }
         }
 
-        public void Load(IIndexer idx)
+        public void Load(IIndexer indexer)
         {
-            var configFilePath = GetIndexerConfigFilePath(idx);
+            var configFilePath = GetIndexerConfigFilePath(indexer.Id);
             if (File.Exists(configFilePath))
             {
                 try
                 {
                     var fileStr = File.ReadAllText(configFilePath);
                     var jsonString = JToken.Parse(fileStr);
-                    idx.LoadFromSavedConfiguration(jsonString);
+                    indexer.LoadFromSavedConfiguration(jsonString);
                 }
                 catch (Exception ex)
                 {
-                    logger.Error(ex, "Failed loading configuration for {0}, trying backup", idx.DisplayName);
+                    logger.Error(ex, "Failed loading configuration for {0}, trying backup", indexer.DisplayName);
                     var configFilePathBak = configFilePath + ".bak";
                     if (File.Exists(configFilePathBak))
                     {
@@ -63,18 +63,18 @@ namespace Jackett.Common.Services
                         {
                             var fileStrBak = File.ReadAllText(configFilePathBak);
                             var jsonStringBak = JToken.Parse(fileStrBak);
-                            idx.LoadFromSavedConfiguration(jsonStringBak);
-                            logger.Info("Successfully loaded backup config for {0}", idx.DisplayName);
-                            idx.SaveConfig();
+                            indexer.LoadFromSavedConfiguration(jsonStringBak);
+                            logger.Info("Successfully loaded backup config for {0}", indexer.DisplayName);
+                            indexer.SaveConfig();
                         }
                         catch (Exception exbak)
                         {
-                            logger.Error(exbak, "Failed loading backup configuration for {0}, you must reconfigure this indexer", idx.DisplayName);
+                            logger.Error(exbak, "Failed loading backup configuration for {0}, you must reconfigure this indexer", indexer.DisplayName);
                         }
                     }
                     else
                     {
-                        logger.Error(ex, "Failed loading backup configuration for {0} (no backup available), you must reconfigure this indexer", idx.DisplayName);
+                        logger.Error(ex, "Failed loading backup configuration for {0} (no backup available), you must reconfigure this indexer", indexer.DisplayName);
                     }
                 }
             }
@@ -85,7 +85,7 @@ namespace Jackett.Common.Services
             lock (configWriteLock)
             {
                 var uID = Guid.NewGuid().ToString("N");
-                var configFilePath = GetIndexerConfigFilePath(indexer);
+                var configFilePath = GetIndexerConfigFilePath(indexer.Id);
                 var configFilePathBak = configFilePath + ".bak";
                 var configFilePathTmp = configFilePath + "." + uID + ".tmp";
                 var content = obj.ToString();
@@ -94,12 +94,12 @@ namespace Jackett.Common.Services
 
                 if (string.IsNullOrWhiteSpace(content))
                 {
-                    throw new Exception(string.Format("New config content for {0} is empty, please report this bug.", indexer.ID));
+                    throw new Exception(string.Format("New config content for {0} is empty, please report this bug.", indexer.Id));
                 }
 
                 if (content.Contains("\x00"))
                 {
-                    throw new Exception(string.Format("New config content for {0} contains 0x00, please report this bug. Content: {1}", indexer.ID, content));
+                    throw new Exception(string.Format("New config content for {0} contains 0x00, please report this bug. Content: {1}", indexer.Id, content));
                 }
 
                 // make sure the config directory exists
@@ -141,13 +141,11 @@ namespace Jackett.Common.Services
             }
         }
 
-        private string GetIndexerConfigFilePath(IIndexer indexer)
-        {
-            return Path.Combine(configService.GetIndexerConfigDir(), indexer.ID + ".json");
-        }
+        public string GetIndexerConfigFilePath(string indexerId)
+            => Path.Combine(configService.GetIndexerConfigDir(), indexerId + ".json");
 
-        private IConfigurationService configService;
-        private Logger logger;
+        private readonly IConfigurationService configService;
+        private readonly Logger logger;
 
         private static readonly object configWriteLock = new object();
     }

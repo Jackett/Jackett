@@ -1,4 +1,4 @@
-﻿namespace Jackett.Common.Models
+namespace Jackett.Common.Models
 {
     public enum IndexerConfigurationStatus
     {

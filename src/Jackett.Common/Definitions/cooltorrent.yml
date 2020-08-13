@@ -1,0 +1,136 @@
+---
+id: cooltorrent
+name: cool-torrent
+description: "cool-torrent is a POLISH Semi-Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: pl-pl
+type: semi-private
+encoding: UTF-8
+links:
+  - http://cool-torrent.pl/
+legacylinks:
+  - https://cool-torrent.pl/ # NET::ERR_CERT_COMMON_NAME_INVALID
+
+caps:
+  categorymappings:
+    - {id: "Filmy XviD", cat: Movies/SD, desc: "Filmy XviD/DivX"}
+    - {id: "BluRay", cat: Movies/HD, desc: "BluRay/x264 720p"}
+    - {id: "Filmy x264", cat: Movies/HD, desc: "Filmy x264/h264"}
+    - {id: "Filmy HD 1080p AVC", cat: Movies/HD, desc: "Filmy HD 1080p AVC"}
+    - {id: "Filmy x265", cat: Movies/HD, desc: "Filmy x265/h265"}
+    - {id: "Filmy 4K UHD", cat: Movies/UHD, desc: "Filmy 4K UHD"}
+    - {id: "Filmy DVD", cat: Movies/DVD, desc: "Filmy DVD"}
+    - {id: "Filmy 3D", cat: Movies/3D, desc: "Filmy 3D"}
+    - {id: "Filmy RMVB", cat: Movies, desc: "Filmy RMVB"}
+    - {id: "Filmy IVO", cat: Movies, desc: "Filmy IVO"}
+    - {id: "Filmy TS", cat: Movies/SD, desc: "Filmy TS/CAM"}
+    - {id: "TV", cat: TV, desc: "TV/Seriale"}
+    - {id: "Erotyka", cat: XXX, desc: "Erotyka"}
+    - {id: "Muzyka", cat: Audio, desc: "Muzyka"}
+    - {id: "Programy", cat: PC, desc: "Programy"}
+    - {id: "GSM", cat: PC/Phone-Other, desc: "GSM/PDA"}
+    - {id: "Konsole", cat: Console, desc: "Konsole"}
+    - {id: "Gry PC", cat: PC/Games, desc: "Gry PC"}
+    - {id: "Dla Dzieci", cat: Movies, desc: "Dla Dzieci"}
+    - {id: "Książki", cat: Books, desc: "Książki"}
+    - {id: "Linux", cat: PC, desc: "Linux"}
+    - {id: "Mac", cat: PC/Mac, desc: "Mac"}
+    - {id: "Sport", cat: TV/Sport, desc: "Sport"}
+    - {id: "Inne", cat: Other, desc: "Inne"}
+    - {id: "Anime", cat: TV/Anime, desc: "Anime"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+
+login:
+  path: takelogin.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    returnto: /
+  error:
+    - selector: table[class="main-2"][cellpadding="10"]:has(b:contains("Błąd"))
+  test:
+    path: /
+    selector: a[href$="logout.php"]
+
+search:
+  paths:
+    # http://cool-torrent.pl/szukaj.php?form-display-time=1&search=&cat=0
+    - path: szukaj.php
+  inputs:
+    form-display-time: 1
+    # does not support multi cat search
+    cat: 0
+    search: "{{ .Keywords }}"
+    # does not support imdbid searching and does not display imdb links in results
+
+  rows:
+    selector: table.test5 > tbody > tr > td > div[id]:has(a[href*="/download/"])
+
+  fields:
+    category:
+      selector: a[href^="files/"]
+      attribute: href
+      filters:
+        - name: split
+          args: ["/", 1]
+    title:
+      selector: a[href^="/torrent/"]
+      attribute: title
+    details:
+      selector: a[href^="/torrent/"]
+      attribute: href
+    download:
+      selector: a[href*="/download/"]
+      attribute: href
+    banner:
+      optional: true
+      selector: img.browse_poster
+      attribute: src
+    date:
+      selector: td.descr3
+      remove: br
+      filters:
+        - name: regexp
+          args: (\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})
+        - name: append
+          args: " +00:00"
+        - name: dateparse
+          args: "2006-01-02 15:04:05 -07:00"
+    size:
+      selector: td.descr3
+      filters:
+        - name: regexp
+          args: (\d{1,4}\.\d{2}\s[K|M|G][B])
+    seeders:
+      selector: td.descr3
+      filters:
+        - name: regexp
+          args: "Seedów: (\\d+)"
+    leechers:
+      selector: td.descr3
+      filters:
+        - name: regexp
+          args: "Peerów: (\\d+)"
+    grabs:
+      selector: td.descr3
+      filters:
+        - name: regexp
+          args: "Pobrano: (\\d+)"
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a

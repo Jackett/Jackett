@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using MimeMapping;
 
@@ -8,7 +8,7 @@ namespace Jackett.Common.Utils
     {
         public static string ReadFileToDataUrl(string file)
         {
-            string mime = MimeUtility.GetMimeMapping(file);
+            var mime = MimeUtility.GetMimeMapping(file);
             return "data:" + mime + ";base64," + Convert.ToBase64String(File.ReadAllBytes(file));
         }
 

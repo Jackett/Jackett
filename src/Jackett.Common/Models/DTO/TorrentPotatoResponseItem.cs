@@ -1,4 +1,4 @@
-﻿namespace Jackett.Common.Models.DTO
+namespace Jackett.Common.Models.DTO
 {
     public class TorrentPotatoResponseItem
     {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
@@ -7,8 +7,8 @@ namespace Jackett.Common.Models
 {
     public class TorznabCapabilities
     {
-        public int? LimitsMax { get; set; } = null;
-        public int? LimitsDefault { get; set; } = null;
+        public int? LimitsMax { get; set; }
+        public int? LimitsDefault { get; set; }
 
         public bool SearchAvailable { get; set; }
 
@@ -20,13 +20,9 @@ namespace Jackett.Common.Models
 
         public bool SupportsImdbMovieSearch { get; set; }
 
-        public bool MusicSearchAvailable
-        {
-            get
-            {
-                return (SupportedMusicSearchParamsList.Count > 0);
-            }
-        }
+        public bool SupportsImdbTVSearch { get; set; }
+
+        public bool MusicSearchAvailable => (SupportedMusicSearchParamsList.Count > 0);
 
         public List<string> SupportedMusicSearchParamsList;
 
@@ -40,6 +36,7 @@ namespace Jackett.Common.Models
             MovieSearchAvailable = false;
             SupportsTVRageSearch = false;
             SupportsImdbMovieSearch = false;
+            SupportsImdbTVSearch = false;
             SupportedMusicSearchParamsList = new List<string>();
         }
 
@@ -49,24 +46,27 @@ namespace Jackett.Common.Models
             TVSearchAvailable = true;
             SupportsTVRageSearch = false;
             SupportsImdbMovieSearch = false;
+            SupportsImdbTVSearch = false;
             SupportedMusicSearchParamsList = new List<string>();
             Categories = new List<TorznabCategory>();
             Categories.AddRange(cats);
             MovieSearchAvailable = Categories.Any(i => TorznabCatType.Movies.Contains(i));
         }
 
-        string SupportedTVSearchParams
+        private string SupportedTVSearchParams
         {
             get
             {
                 var parameters = new List<string>() { "q", "season", "ep" };
                 if (SupportsTVRageSearch)
                     parameters.Add("rid");
+                if (SupportsImdbTVSearch)
+                    parameters.Add("imdbid");
                 return string.Join(",", parameters);
             }
         }
 
-        string SupportedMovieSearchParams
+        private string SupportedMovieSearchParams
         {
             get
             {
@@ -77,13 +77,7 @@ namespace Jackett.Common.Models
             }
         }
 
-        string SupportedMusicSearchParams
-        {
-            get
-            {
-                return string.Join(",", SupportedMusicSearchParamsList);
-            }
-        }
+        private string SupportedMusicSearchParams => string.Join(",", SupportedMusicSearchParamsList);
 
         public bool SupportsCategories(int[] categories)
         {
@@ -147,12 +141,9 @@ namespace Jackett.Common.Models
             return xdoc;
         }
 
-        public string ToXml()
-        {
-            var xdoc = GetXDocument();
+        public string ToXml() =>
+            GetXDocument().Declaration + Environment.NewLine + GetXDocument();
 
-            return xdoc.Declaration.ToString() + Environment.NewLine + xdoc.ToString();
-        }
         public static TorznabCapabilities Concat(TorznabCapabilities lhs, TorznabCapabilities rhs)
         {
             lhs.SearchAvailable = lhs.SearchAvailable || rhs.SearchAvailable;
@@ -160,6 +151,7 @@ namespace Jackett.Common.Models
             lhs.MovieSearchAvailable = lhs.MovieSearchAvailable || rhs.MovieSearchAvailable;
             lhs.SupportsTVRageSearch = lhs.SupportsTVRageSearch || rhs.SupportsTVRageSearch;
             lhs.SupportsImdbMovieSearch = lhs.SupportsImdbMovieSearch || rhs.SupportsImdbMovieSearch;
+            lhs.SupportsImdbTVSearch = lhs.SupportsImdbTVSearch || rhs.SupportsImdbTVSearch;
             lhs.Categories.AddRange(rhs.Categories.Where(x => x.ID < 100000).Except(lhs.Categories)); // exclude indexer specific categories (>= 100000)
 
             return lhs;

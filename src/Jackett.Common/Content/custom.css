@@ -7,10 +7,8 @@ body {
     border-radius: 6px;
     background-color: white;
     max-width: 900px;
-    margin: 0 auto;
-    margin-top: 30px;
     padding: 20px;
-    margin-bottom: 100px;
+    margin: 30px auto 100px;
 }
 
 .container-fluid {
@@ -22,7 +20,7 @@ body {
 
 #indexers {
    text-align: center;
-   margin-top: 30px;
+   margin-top: 20px;
 }
 
 .indexer-table {
@@ -55,6 +53,14 @@ body {
 
 .setup-item-inputstring {
     max-width: 255px;
+}
+
+.setup-item-inputcheckbox label {
+    padding: 0 1.5em;
+}
+
+.setup-item-inputcheckbox input {
+    height: 20px;
 }
 
 .setup-item-inputbool input {
@@ -116,7 +122,7 @@ hr {
 }
 
 .input-area {
-    margin: 4px 0px;
+    margin: 4px 0;
 }
 
     .input-area > * {
@@ -155,8 +161,7 @@ hr {
 
 #footer {
     color: #444444;
-    margin: 0 auto;
-    margin-top: 10px;
+    margin: 10px auto 0;
     text-align: center;
 }
 
@@ -170,12 +175,18 @@ hr {
 }
 
 .indexer-caps {
-   padding: 0px 15px 15px 15px;
+   padding: 0 15px 15px 15px;
    border-top: 1px solid #e5e5e5;
 }
 
 .indexer-caps table {
     border-bottom:   1px solid #ddd;
+}
+
+.jackettlog-narrowcol {
+    width: 1px;
+    white-space: nowrap;
+    vertical-align: top;
 }
 
 .jackettlogWarn {
@@ -201,23 +212,57 @@ hr {
 pre {
     display: block;
     padding: 3px;
-    margin: 0 0 0px;
+    margin: 0 0 0;
     font-size: 13px;
     line-height: 1.42857143;
     color: #333;
-    word-break: break-all;
-    word-wrap: break-word;
     background-color: transparent;
-    border: 0px;
-    border-radius: 0px;
+    border: 0;
+    border-radius: 0;
+    word-break: normal;
+    white-space: pre-wrap;       /* Since CSS 2.1 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
 }
 
 .modal-open .modal {
     overflow-x: auto;  /* Model can be bigger than the screen on mobiles */
 }
 
+.dataTables_length {
+    white-space: nowrap;
+}
+
+.dataTables_length select, .dataTables_filter input, .dataTable.compact tfoot td select {
+    display: inline-block;
+    height: 26px;
+    padding: 0 8px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.dataTables_length select {
+    width: inherit;
+}
+
 .dataTables_filter input {
-    width: 400px 
+    width: 400px;
+}
+
+.dataTable.compact tfoot td {
+    padding: 4px 0;
+}
+
+.dataTable.compact tfoot td select {
+    height: 26px;
+    padding: 0;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    padding: 3px 9px !important;
 }
 
 #unconfigured-indexers-template {
@@ -250,7 +295,7 @@ table td.fit{
 
 .tooltip-inner img {
     max-width: 250px;
-    height: auto;      
+    height: auto;
 }
 
 .type-public {
@@ -272,7 +317,8 @@ table td.fit{
 }
 
 input#searchquery {
-	width:400px;
+	width: 400px;
+    display: inline-block;
 }
 
 #proxy-warning {

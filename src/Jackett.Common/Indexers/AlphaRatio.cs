@@ -1,4 +1,5 @@
-﻿using Jackett.Common.Indexers.Abstract;
+using System.Diagnostics.CodeAnalysis;
+using Jackett.Common.Indexers.Abstract;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
@@ -6,23 +7,27 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class AlphaRatio : GazelleTracker
     {
-        public AlphaRatio(IIndexerConfigurationService configService, Utils.Clients.WebClient webClient, Logger logger, IProtectionService protectionService)
-            : base(name: "AlphaRatio",
-                desc: "AlphaRatio (AR) is a Private Torrent Tracker for 0DAY / GENERAL",
-                link: "https://alpharatio.cc/",
-                configService: configService,
-                logger: logger,
-                protectionService: protectionService,
-                webClient: webClient,
-                supportsFreeleechTokens: true,
-                imdbInTags: true
-                )
+        public AlphaRatio(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+            : base(id: "alpharatio",
+                   name: "AlphaRatio",
+                   description: "AlphaRatio (AR) is a Private Torrent Tracker for 0DAY / GENERAL",
+                   link: "https://alpharatio.cc/",
+                   caps: new TorznabCapabilities
+                   {
+                       SupportsImdbMovieSearch = true
+                   },
+                   configService: configService,
+                   client: wc,
+                   logger: l,
+                   p: ps,
+                   supportsFreeleechTokens: true,
+                   imdbInTags: true)
         {
             Language = "en-us";
             Type = "private";
-            TorznabCaps.SupportsImdbMovieSearch = true;
 
             AddCategoryMapping(1, TorznabCatType.TVSD, "TvSD");
             AddCategoryMapping(2, TorznabCatType.TVHD, "TvHD");
@@ -58,7 +63,13 @@ namespace Jackett.Common.Indexers
 
         protected override string GetSearchTerm(TorznabQuery query)
         {
-            return query.GetQueryString().Replace(".", " "); // Alpharatio can't handle dots in the searchstr
+            // Ignore season search without episode. Alpharatio doesn't support it.
+            var searchTerm = string.IsNullOrWhiteSpace(query.Episode)
+                ? query.SanitizedSearchTerm
+                : query.GetQueryString();
+
+            // Alpharatio can't handle dots in the searchstr
+            return searchTerm.Replace(".", " ");
         }
     }
 }

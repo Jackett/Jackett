@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,7 +30,7 @@ namespace Jackett.Common.Indexers
         string Type { get; }
         string Language { get; }
         string LastError { get; set; }
-        string ID { get; }
+        string Id { get; }
         Encoding Encoding { get; }
 
         TorznabCapabilities TorznabCaps { get; }

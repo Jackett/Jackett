@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -13,48 +13,68 @@ using AngleSharp.Html.Parser;
 using Jackett.Common.Helpers;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
-using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Microsoft.AspNetCore.WebUtilities;
 using Newtonsoft.Json.Linq;
 using NLog;
+using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
 {
     public class CardigannIndexer : BaseWebIndexer
     {
         protected IndexerDefinition Definition;
-        public override string ID { get { return (Definition != null ? Definition.Site : GetIndexerID(GetType())); } }
-
         protected WebClientStringResult landingResult;
         protected IHtmlDocument landingResultDocument;
 
         protected List<string> DefaultCategories = new List<string>();
 
-        new ConfigurationData configData
+        private new ConfigurationData configData
         {
-            get { return (ConfigurationData)base.configData; }
-            set { base.configData = value; }
+            get => base.configData;
+            set => base.configData = value;
         }
 
-        protected readonly string[] OptionalFileds = new string[] { "imdb", "rageid", "tvdbid", "banner" };
+        protected readonly string[] OptionalFields = new string[] { "imdb", "rageid", "tvdbid", "banner" };
 
-        public CardigannIndexer(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps, IndexerDefinition Definition)
+        private static readonly string[] _SupportedLogicFunctions =
+        {
+            "and",
+            "or",
+            "eq",
+            "ne"
+        };
+
+        private static readonly string[] _LogicFunctionsUsingStringLiterals =
+        {
+            "eq",
+            "ne"
+        };
+
+        // Matches a logic function above and 2 or more of (.varname) or .varname or "string literal" in any combination
+        private static readonly Regex _LogicFunctionRegex = new Regex(
+            @$"\b({string.Join("|", _SupportedLogicFunctions.Select(Regex.Escape))})(?:\s+(\(?\.[^\)\s]+\)?|""[^""]+"")){{2,}}");
+
+        public CardigannIndexer(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
+                                IProtectionService ps, IndexerDefinition Definition)
             : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps)
         {
             this.Definition = Definition;
+            Id = Definition.Id;
 
             // Add default data if necessary
             if (Definition.Settings == null)
             {
-                Definition.Settings = new List<settingsField>();
-                Definition.Settings.Add(new settingsField { Name = "username", Label = "Username", Type = "text" });
-                Definition.Settings.Add(new settingsField { Name = "password", Label = "Password", Type = "password" });
+                Definition.Settings = new List<settingsField>
+                {
+                    new settingsField { Name = "username", Label = "Username", Type = "text" },
+                    new settingsField { Name = "password", Label = "Password", Type = "password" }
+                };
             }
 
             if (Definition.Encoding == null)
@@ -71,10 +91,11 @@ namespace Jackett.Common.Indexers
             // convert definitions with a single search Path to a Paths entry
             if (Definition.Search.Path != null)
             {
-                var legacySearchPath = new searchPathBlock();
-                legacySearchPath.Path = Definition.Search.Path;
-                legacySearchPath.Inheritinputs = true;
-                Definition.Search.Paths.Add(legacySearchPath);
+                Definition.Search.Paths.Add(new searchPathBlock
+                {
+                    Path = Definition.Search.Path,
+                    Inheritinputs = true
+                });
             }
 
             // init missing mandatory attributes
@@ -90,9 +111,10 @@ namespace Jackett.Common.Indexers
                 DefaultSiteLink += "/";
             Language = Definition.Language;
             Type = Definition.Type;
-            TorznabCaps = new TorznabCapabilities();
-
-            TorznabCaps.SupportsImdbMovieSearch = Definition.Caps.Modes.Where(c => c.Key == "movie-search" && c.Value.Contains("imdbid")).Any();
+            TorznabCaps = new TorznabCapabilities
+            {
+                SupportsImdbMovieSearch = Definition.Caps.Modes.Any(c => c.Key == "movie-search" && c.Value.Contains("imdbid"))
+            };
             if (Definition.Caps.Modes.ContainsKey("music-search"))
                 TorznabCaps.SupportedMusicSearchParamsList = Definition.Caps.Modes["music-search"];
 
@@ -118,6 +140,14 @@ namespace Jackett.Common.Indexers
                         case "text":
                             item = new StringItem { Value = Setting.Default };
                             break;
+                        case "multi-select":
+                            if (Setting.Options == null)
+                            {
+                                throw new Exception("Options must be given for the 'multi-select' type.");
+                            }
+
+                            item = new CheckboxItem(Setting.Options) { Values = Setting.Defaults };
+                            break;
                         case "select":
                             if (Setting.Options == null)
                             {
@@ -135,7 +165,8 @@ namespace Jackett.Common.Indexers
                 }
                 else
                 {
-                    item = new StringItem { Value = Setting.Default }; ;
+                    item = new StringItem { Value = Setting.Default };
+                    ;
                 }
 
                 item.Name = Setting.Label;
@@ -151,7 +182,7 @@ namespace Jackett.Common.Indexers
                     var cat = TorznabCatType.GetCatByName(Category.Value);
                     if (cat == null)
                     {
-                        logger.Error(string.Format("CardigannIndexer ({0}): invalid Torznab category for id {1}: {2}", ID, Category.Key, Category.Value));
+                        logger.Error(string.Format("CardigannIndexer ({0}): invalid Torznab category for id {1}: {2}", Id, Category.Key, Category.Value));
                         continue;
                     }
                     AddCategoryMapping(Category.Key, cat);
@@ -169,7 +200,7 @@ namespace Jackett.Common.Indexers
                         TorznabCat = TorznabCatType.GetCatByName(Categorymapping.cat);
                         if (TorznabCat == null)
                         {
-                            logger.Error(string.Format("CardigannIndexer ({0}): invalid Torznab category for id {1}: {2}", ID, Categorymapping.id, Categorymapping.cat));
+                            logger.Error(string.Format("CardigannIndexer ({0}): invalid Torznab category for id {1}: {2}", Id, Categorymapping.id, Categorymapping.cat));
                             continue;
                         }
                     }
@@ -193,29 +224,26 @@ namespace Jackett.Common.Indexers
             }
         }
 
-        protected Dictionary<string, object> getTemplateVariablesFromConfigData()
+        protected Dictionary<string, object> GetBaseTemplateVariables()
         {
-            Dictionary<string, object> variables = new Dictionary<string, object>();
-
-            variables[".Config.sitelink"] = SiteLink;
-            foreach (settingsField Setting in Definition.Settings)
+            var variables = new Dictionary<string, object>
             {
-                string value;
-                var item = configData.GetDynamic(Setting.Name);
-                if (item.GetType() == typeof(BoolItem))
+                [".Config.sitelink"] = SiteLink,
+                [".True"] = "True",
+                [".False"] = null,
+                [".Today.Year"] = DateTime.Today.Year.ToString()
+            };
+            foreach (var setting in Definition.Settings)
+                variables[".Config." + setting.Name] = configData.GetDynamic(setting.Name) switch
                 {
-                    value = (((BoolItem)item).Value == true ? "true" : "");
-                }
-                else if (item.GetType() == typeof(SelectItem))
-                {
-                    value = ((SelectItem)item).Value;
-                }
-                else
-                {
-                    value = ((StringItem)item).Value;
-                }
-                variables[".Config." + Setting.Name] = value;
-            }
+                    CheckboxItem checkbox => checkbox.Values,
+                    BoolItem boolItem => variables[boolItem.Value ? ".True" : ".False"],
+                    SelectItem selectItem => selectItem.Value,
+                    StringItem stringItem => stringItem.Value,
+                    // Throw exception here to match original functionality.
+                    // Currently this will only throw for ImageItem.
+                    _ => throw new NotSupportedException()
+                };
             return variables;
         }
 
@@ -226,22 +254,22 @@ namespace Jackett.Common.Indexers
         {
             if (variables == null)
             {
-                variables = getTemplateVariablesFromConfigData();
+                variables = GetBaseTemplateVariables();
             }
 
             // handle re_replace expression
             // Example: {{ re_replace .Query.Keywords "[^a-zA-Z0-9]+" "%" }}
-            Regex ReReplaceRegex = new Regex(@"{{\s*re_replace\s+(\..+?)\s+""(.*?)""\s+""(.*?)""\s*}}");
+            var ReReplaceRegex = new Regex(@"{{\s*re_replace\s+(\..+?)\s+""(.*?)""\s+""(.*?)""\s*}}");
             var ReReplaceRegexMatches = ReReplaceRegex.Match(template);
 
             while (ReReplaceRegexMatches.Success)
             {
-                string all = ReReplaceRegexMatches.Groups[0].Value;
-                string variable = ReReplaceRegexMatches.Groups[1].Value;
-                string regexp = ReReplaceRegexMatches.Groups[2].Value;
-                string newvalue = ReReplaceRegexMatches.Groups[3].Value;
+                var all = ReReplaceRegexMatches.Groups[0].Value;
+                var variable = ReReplaceRegexMatches.Groups[1].Value;
+                var regexp = ReReplaceRegexMatches.Groups[2].Value;
+                var newvalue = ReReplaceRegexMatches.Groups[3].Value;
 
-                Regex ReplaceRegex = new Regex(regexp);
+                var ReplaceRegex = new Regex(regexp);
                 var input = (string)variables[variable];
                 var expanded = ReplaceRegex.Replace(input, newvalue);
 
@@ -254,14 +282,14 @@ namespace Jackett.Common.Indexers
 
             // handle join expression
             // Example: {{ join .Categories "," }}
-            Regex JoinRegex = new Regex(@"{{\s*join\s+(\..+?)\s+""(.*?)""\s*}}");
+            var JoinRegex = new Regex(@"{{\s*join\s+(\..+?)\s+""(.*?)""\s*}}");
             var JoinMatches = JoinRegex.Match(template);
 
             while (JoinMatches.Success)
             {
-                string all = JoinMatches.Groups[0].Value;
-                string variable = JoinMatches.Groups[1].Value;
-                string delimiter = JoinMatches.Groups[2].Value;
+                var all = JoinMatches.Groups[0].Value;
+                var variable = JoinMatches.Groups[1].Value;
+                var delimiter = JoinMatches.Groups[2].Value;
 
                 var input = (ICollection<string>)variables[variable];
                 var expanded = string.Join(delimiter, input);
@@ -273,18 +301,78 @@ namespace Jackett.Common.Indexers
                 JoinMatches = JoinMatches.NextMatch();
             }
 
+            var logicMatch = _LogicFunctionRegex.Match(template);
+
+            while (logicMatch.Success)
+            {
+                var functionStartIndex = logicMatch.Groups[0].Index;
+                var functionLength = logicMatch.Groups[0].Length;
+                var functionName = logicMatch.Groups[1].Value;
+                // Use Group.Captures to get each matching string in a repeating Match.Group
+                // Strip () around variable names here, as they are optional. Use quotes to differentiate variables and literals
+                var parameters = logicMatch.Groups[2].Captures.Cast<Capture>().Select(c => c.Value.Trim('(', ')')).ToList();
+                var functionResult = "";
+
+                // If the function can't use string literals, fail silently by removing the literals.
+                if (!_LogicFunctionsUsingStringLiterals.Contains(functionName))
+                    parameters.RemoveAll(param => param.StartsWith("\""));
+
+                switch (functionName)
+                {
+                    case "and": // returns first null or empty, else last variable
+                    case "or": // returns first not null or empty, else last variable
+                        var isAnd = functionName == "and";
+                        foreach (var parameter in parameters)
+                        {
+                            functionResult = parameter;
+                            // (null as string) == null
+                            // (if null or empty) break if and, continue if or
+                            // (if neither null nor empty) continue if and, break if or
+                            if (string.IsNullOrWhiteSpace(variables[parameter] as string) == isAnd)
+                                break;
+                        }
+                        break;
+                    case "eq": // Returns .True if equal
+                    case "ne": // Returns .False if equal
+                    {
+                        var wantEqual = functionName == "eq";
+                        // eq/ne take exactly 2 params. Update the length to match
+                        // This removes the whitespace between params 2 and 3.
+                        // It shouldn't matter because the match starts at a word boundary
+                        if (parameters.Count > 2)
+                            functionLength = logicMatch.Groups[2].Captures[2].Index - functionStartIndex;
+
+                        // Take first two parameters, convert vars to values and strip quotes on string literals
+                        // Counting distinct gives us 1 if equal and 2 if not.
+                        var isEqual =
+                            parameters.Take(2).Select(param => param.StartsWith("\"") ? param.Trim('"') : variables[param] as string)
+                                      .Distinct().Count() == 1;
+
+                        functionResult = isEqual == wantEqual ? ".True" : ".False";
+                        break;
+                    }
+                }
+
+                template = template.Remove(functionStartIndex, functionLength)
+                                   .Insert(functionStartIndex, functionResult);
+                // Rerunning match instead of using nextMatch allows us to support nested functions
+                // like {{if and eq (.Var1) "string1" eq (.Var2) "string2"}}
+                // No performance is lost because Match/NextMatch are lazy evaluated and pause execution after first match
+                logicMatch = _LogicFunctionRegex.Match(template);
+            }
+
             // handle if ... else ... expression
-            Regex IfElseRegex = new Regex(@"{{\s*if\s*(.+?)\s*}}(.*?){{\s*else\s*}}(.*?){{\s*end\s*}}");
+            var IfElseRegex = new Regex(@"{{\s*if\s*(.+?)\s*}}(.*?){{\s*else\s*}}(.*?){{\s*end\s*}}");
             var IfElseRegexMatches = IfElseRegex.Match(template);
 
             while (IfElseRegexMatches.Success)
             {
                 string conditionResult = null;
 
-                string all = IfElseRegexMatches.Groups[0].Value;
-                string condition = IfElseRegexMatches.Groups[1].Value;
-                string onTrue = IfElseRegexMatches.Groups[2].Value;
-                string onFalse = IfElseRegexMatches.Groups[3].Value;
+                var all = IfElseRegexMatches.Groups[0].Value;
+                var condition = IfElseRegexMatches.Groups[1].Value;
+                var onTrue = IfElseRegexMatches.Groups[2].Value;
+                var onFalse = IfElseRegexMatches.Groups[3].Value;
 
                 if (condition.StartsWith("."))
                 {
@@ -318,19 +406,19 @@ namespace Jackett.Common.Indexers
             }
 
             // handle range expression
-            Regex RangeRegex = new Regex(@"{{\s*range\s*(.+?)\s*}}(.*?){{\.}}(.*?){{end}}");
+            var RangeRegex = new Regex(@"{{\s*range\s*(.+?)\s*}}(.*?){{\.}}(.*?){{end}}");
             var RangeRegexMatches = RangeRegex.Match(template);
 
             while (RangeRegexMatches.Success)
             {
-                string expanded = string.Empty;
+                var expanded = string.Empty;
 
-                string all = RangeRegexMatches.Groups[0].Value;
-                string variable = RangeRegexMatches.Groups[1].Value;
-                string prefix = RangeRegexMatches.Groups[2].Value;
-                string postfix = RangeRegexMatches.Groups[3].Value;
+                var all = RangeRegexMatches.Groups[0].Value;
+                var variable = RangeRegexMatches.Groups[1].Value;
+                var prefix = RangeRegexMatches.Groups[2].Value;
+                var postfix = RangeRegexMatches.Groups[3].Value;
 
-                foreach (string value in (ICollection<string>)variables[variable])
+                foreach (var value in (ICollection<string>)variables[variable])
                 {
                     var newvalue = value;
                     if (modifier != null)
@@ -342,17 +430,17 @@ namespace Jackett.Common.Indexers
             }
 
             // handle simple variables
-            Regex VariablesRegEx = new Regex(@"{{\s*(\..+?)\s*}}");
+            var VariablesRegEx = new Regex(@"{{\s*(\..+?)\s*}}");
             var VariablesRegExMatches = VariablesRegEx.Match(template);
 
             while (VariablesRegExMatches.Success)
             {
-                string expanded = string.Empty;
+                var expanded = string.Empty;
 
-                string all = VariablesRegExMatches.Groups[0].Value;
-                string variable = VariablesRegExMatches.Groups[1].Value;
+                var all = VariablesRegExMatches.Groups[0].Value;
+                var variable = VariablesRegExMatches.Groups[1].Value;
 
-                string value = (string)variables[variable];
+                var value = (string)variables[variable];
                 if (modifier != null)
                     value = modifier(value);
                 template = template.Replace(all, value);
@@ -364,7 +452,7 @@ namespace Jackett.Common.Indexers
 
         protected bool checkForError(WebClientStringResult loginResult, IList<errorBlock> errorBlocks)
         {
-            if(loginResult.Status == HttpStatusCode.Unauthorized) // e.g. used by YGGtorrent
+            if (loginResult.Status == HttpStatusCode.Unauthorized) // e.g. used by YGGtorrent
                 throw new ExceptionWithConfigData("401 Unauthorized, check your credentials", configData);
 
             if (errorBlocks == null)
@@ -372,12 +460,12 @@ namespace Jackett.Common.Indexers
 
             var ResultParser = new HtmlParser();
             var ResultDocument = ResultParser.ParseDocument(loginResult.Content);
-            foreach (errorBlock error in errorBlocks)
+            foreach (var error in errorBlocks)
             {
                 var selection = ResultDocument.QuerySelector(error.Selector);
                 if (selection != null)
                 {
-                    string errorMessage = selection.TextContent;
+                    var errorMessage = selection.TextContent;
                     if (error.Message != null)
                     {
                         errorMessage = handleSelector(error.Message, ResultDocument.FirstElementChild);
@@ -432,10 +520,12 @@ namespace Jackett.Common.Indexers
                     var CloudFlareCaptchaChallenge = landingResultDocument.QuerySelector("script[src=\"/cdn-cgi/scripts/cf.challenge.js\"]");
                     if (CloudFlareCaptchaChallenge != null)
                     {
-                        var CloudFlareQueryCollection = new NameValueCollection();
-                        CloudFlareQueryCollection["id"] = CloudFlareCaptchaChallenge.GetAttribute("data-ray");
+                        var CloudFlareQueryCollection = new NameValueCollection
+                        {
+                            ["id"] = CloudFlareCaptchaChallenge.GetAttribute("data-ray"),
 
-                        CloudFlareQueryCollection["g-recaptcha-response"] = CaptchaConfigItem.Value;
+                            ["g-recaptcha-response"] = CaptchaConfigItem.Value
+                        };
                         var ClearanceUrl = resolvePath("/cdn-cgi/l/chk_captcha?" + CloudFlareQueryCollection.GetQueryString());
 
                         var ClearanceResult = await RequestStringWithCookies(ClearanceUrl.ToString(), null, SiteLink);
@@ -659,11 +749,21 @@ namespace Jackett.Common.Indexers
 
                 checkForError(loginResult, Definition.Login.Error);
             }
+            else if (Login.Method == "oneurl")
+            {
+                var OneUrl = applyGoTemplateText(Definition.Login.Inputs["oneurl"]);
+                var LoginUrl = resolvePath(Login.Path + OneUrl).ToString();
+                configData.CookieHeader.Value = null;
+                var loginResult = await RequestStringWithCookies(LoginUrl, null, SiteLink);
+                configData.CookieHeader.Value = loginResult.Cookies;
+
+                checkForError(loginResult, Definition.Login.Error);
+            }
             else
             {
                 throw new NotImplementedException("Login method " + Definition.Login.Method + " not implemented");
             }
-            logger.Debug(string.Format("CardigannIndexer ({0}): Cookies after login: {1}", ID, CookieHeader));
+            logger.Debug(string.Format("CardigannIndexer ({0}): Cookies after login: {1}", Id, CookieHeader));
             return true;
         }
 
@@ -677,15 +777,9 @@ namespace Jackett.Common.Indexers
             return null;
         }
 
-        protected string getRedirectDomainHint(WebClientByteResult result)
-        {
-            return getRedirectDomainHint(result.Request.Url, result.RedirectingTo);
-        }
+        protected string getRedirectDomainHint(WebClientByteResult result) => getRedirectDomainHint(result.Request.Url, result.RedirectingTo);
 
-        protected string getRedirectDomainHint(WebClientStringResult result)
-        {
-            return getRedirectDomainHint(result.Request.Url, result.RedirectingTo);
-        }
+        protected string getRedirectDomainHint(WebClientStringResult result) => getRedirectDomainHint(result.Request.Url, result.RedirectingTo);
 
         protected async Task<bool> TestLogin()
         {
@@ -766,7 +860,15 @@ namespace Jackett.Common.Indexers
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
-            return await GetConfigurationForSetup(false);
+            try
+            {
+                return await GetConfigurationForSetup(false);
+            }
+            catch (Exception e)
+            {
+                logger.Error("Exception in GetConfigurationForSetup (" + Id + "): " + e);
+                return configData;
+            }
         }
 
         public async Task<ConfigurationData> GetConfigurationForSetup(bool automaticlogin)
@@ -780,7 +882,7 @@ namespace Jackett.Common.Indexers
 
             configData.CookieHeader.Value = null;
             if (Login.Cookies != null)
-                configData.CookieHeader.Value = String.Join("; ", Login.Cookies);
+                configData.CookieHeader.Value = string.Join("; ", Login.Cookies);
             landingResult = await RequestStringWithCookies(LoginUrl.AbsoluteUri, null, SiteLink);
 
             var htmlParser = new HtmlParser();
@@ -801,12 +903,14 @@ namespace Jackett.Common.Indexers
             if (cloudFlareCaptchaScript != null && grecaptcha != null && cloudFlareCaptchaDisplay)
             {
                 hasCaptcha = true;
-                var CaptchaItem = new RecaptchaItem();
-                CaptchaItem.Name = "Captcha";
-                CaptchaItem.Version = "2";
-                CaptchaItem.SiteKey = grecaptcha.GetAttribute("data-sitekey");
-                if (CaptchaItem.SiteKey == null) // some sites don't store the sitekey in the .g-recaptcha div (e.g. cloudflare captcha challenge page)
-                    CaptchaItem.SiteKey = landingResultDocument.QuerySelector("[data-sitekey]").GetAttribute("data-sitekey");
+                var CaptchaItem = new RecaptchaItem
+                {
+                    Name = "Captcha",
+                    Version = "2",
+                    // some sites don't store the sitekey in the .g-recaptcha div (e.g. cloudflare captcha challenge page)
+                    SiteKey = grecaptcha.GetAttribute("data-sitekey") ??
+                              landingResultDocument.QuerySelector("[data-sitekey]").GetAttribute("data-sitekey")
+                };
 
                 configData.AddDynamic("Captcha", CaptchaItem);
             }
@@ -833,7 +937,7 @@ namespace Jackett.Common.Indexers
                     }
                     else
                     {
-                        logger.Debug(string.Format("CardigannIndexer ({0}): No captcha image found", ID));
+                        logger.Debug(string.Format("CardigannIndexer ({0}): No captcha image found", Id));
                     }
                 }
                 else if (Captcha.Type == "text")
@@ -851,7 +955,7 @@ namespace Jackett.Common.Indexers
                     }
                     else
                     {
-                        logger.Debug(string.Format("CardigannIndexer ({0}): No captcha image found", ID));
+                        logger.Debug(string.Format("CardigannIndexer ({0}): No captcha image found", Id));
                     }
                 }
                 else
@@ -863,7 +967,7 @@ namespace Jackett.Common.Indexers
             if (hasCaptcha && automaticlogin)
             {
                 configData.LastError.Value = "Got captcha during automatic login, please reconfigure manually";
-                logger.Error(string.Format("CardigannIndexer ({0}): Found captcha during automatic login, aborting", ID));
+                logger.Error(string.Format("CardigannIndexer ({0}): Found captcha during automatic login, aborting", Id));
                 return null;
             }
 
@@ -887,7 +991,7 @@ namespace Jackett.Common.Indexers
             if (Filters == null)
                 return Data;
 
-            foreach (filterBlock Filter in Filters)
+            foreach (var Filter in Filters)
             {
                 switch (Filter.Name)
                 {
@@ -901,7 +1005,7 @@ namespace Jackett.Common.Indexers
                         try
                         {
                             var Date = DateTimeUtil.ParseDateTimeGoLang(Data, layout);
-                            Data = Date.ToString(DateTimeUtil.RFC1123ZPattern);
+                            Data = Date.ToString(DateTimeUtil.Rfc1123ZPattern);
                         }
                         catch (FormatException ex)
                         {
@@ -918,7 +1022,7 @@ namespace Jackett.Common.Indexers
                         var regexpreplace_pattern = (string)Filter.Args[0];
                         var regexpreplace_replacement = (string)Filter.Args[1];
                         regexpreplace_replacement = applyGoTemplateText(regexpreplace_replacement, variables);
-                        Regex regexpreplace_regex = new Regex(regexpreplace_pattern);
+                        var regexpreplace_regex = new Regex(regexpreplace_pattern);
                         Data = regexpreplace_regex.Replace(Data, regexpreplace_replacement);
                         break;
                     case "split":
@@ -967,10 +1071,10 @@ namespace Jackett.Common.Indexers
                         break;
                     case "timeago":
                     case "reltime":
-                        Data = DateTimeUtil.FromTimeAgo(Data).ToString(DateTimeUtil.RFC1123ZPattern);
+                        Data = DateTimeUtil.FromTimeAgo(Data).ToString(DateTimeUtil.Rfc1123ZPattern);
                         break;
                     case "fuzzytime":
-                        Data = DateTimeUtil.FromUnknown(Data).ToString(DateTimeUtil.RFC1123ZPattern);
+                        Data = DateTimeUtil.FromUnknown(Data).ToString(DateTimeUtil.Rfc1123ZPattern);
                         break;
                     case "validfilename":
                         Data = StringUtil.MakeValidFileName(Data, '_', false);
@@ -981,12 +1085,12 @@ namespace Jackett.Common.Indexers
                         {
                             // Should replace diacritics charcaters with their base character
                             // It's not perfect, e.g. "ŠĐĆŽ - šđčćž" becomes "SĐCZ-sđccz"
-                            string stFormD = Data.Normalize(NormalizationForm.FormD);
-                            int len = stFormD.Length;
-                            StringBuilder sb = new StringBuilder();
-                            for (int i = 0; i < len; i++)
+                            var stFormD = Data.Normalize(NormalizationForm.FormD);
+                            var len = stFormD.Length;
+                            var sb = new StringBuilder();
+                            for (var i = 0; i < len; i++)
                             {
-                                System.Globalization.UnicodeCategory uc = System.Globalization.CharUnicodeInfo.GetUnicodeCategory(stFormD[i]);
+                                var uc = System.Globalization.CharUnicodeInfo.GetUnicodeCategory(stFormD[i]);
                                 if (uc != System.Globalization.UnicodeCategory.NonSpacingMark)
                                 {
                                     sb.Append(stFormD[i]);
@@ -1008,12 +1112,17 @@ namespace Jackett.Common.Indexers
                     case "hexdump":
                         // this is mainly for debugging invisible special char related issues
                         var HexData = string.Join("", Data.Select(c => c + "(" + ((int)c).ToString("X2") + ")"));
-                        logger.Debug(string.Format("CardigannIndexer ({0}): strdump: {1}", ID, HexData));
+                        logger.Debug(string.Format("CardigannIndexer ({0}): strdump: {1}", Id, HexData));
                         break;
                     case "strdump":
                         // for debugging
                         var DebugData = Data.Replace("\r", "\\r").Replace("\n", "\\n").Replace("\xA0", "\\xA0");
-                        logger.Debug(string.Format("CardigannIndexer ({0}): strdump: {1}", ID, DebugData));
+                        var strTag = (string)Filter.Args;
+                        if (strTag != null)
+                            strTag = string.Format("({0}):", strTag);
+                        else
+                            strTag = ":";
+                        logger.Debug(string.Format("CardigannIndexer ({0}): strdump{1} {2}", Id, strTag, DebugData));
                         break;
                     default:
                         break;
@@ -1043,7 +1152,7 @@ namespace Jackett.Common.Indexers
                 return applyFilters(applyGoTemplateText(Selector.Text, variables), Selector.Filters, variables);
             }
 
-            IElement selection = Dom;
+            var selection = Dom;
             string value = null;
 
             if (Selector.Selector != null)
@@ -1093,22 +1202,16 @@ namespace Jackett.Common.Indexers
             return applyFilters(ParseUtil.NormalizeSpace(value), Selector.Filters, variables);
         }
 
-        protected Uri resolvePath(string path, Uri currentUrl = null)
-        {
-            if (currentUrl == null)
-                currentUrl = new Uri(SiteLink);
-
-            return new Uri(currentUrl, path);
-        }
+        protected Uri resolvePath(string path, Uri currentUrl = null) => new Uri(currentUrl ?? new Uri(SiteLink), path);
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
 
-            searchBlock Search = Definition.Search;
+            var Search = Definition.Search;
 
             // init template context
-            var variables = getTemplateVariablesFromConfigData();
+            var variables = GetBaseTemplateVariables();
 
             variables[".Query.Type"] = query.QueryType;
             variables[".Query.Q"] = query.SearchTerm;
@@ -1138,7 +1241,7 @@ namespace Jackett.Common.Indexers
             var mappedCategories = MapTorznabCapsToTrackers(query);
             if (mappedCategories.Count == 0)
             {
-                mappedCategories = this.DefaultCategories;
+                mappedCategories = DefaultCategories;
             }
 
             variables[".Categories"] = mappedCategories;
@@ -1157,7 +1260,7 @@ namespace Jackett.Common.Indexers
             variables[".Query.Keywords"] = string.Join(" ", KeywordTokens);
             variables[".Keywords"] = applyFilters((string)variables[".Query.Keywords"], Search.Keywordsfilters);
 
-            // TODO: prepare queries first and then send them parallel 
+            // TODO: prepare queries first and then send them parallel
             var SearchPaths = Search.Paths;
             foreach (var SearchPath in SearchPaths)
             {
@@ -1176,9 +1279,9 @@ namespace Jackett.Common.Indexers
                 // HttpUtility.UrlPathEncode seems to only encode spaces, we use UrlEncode and replace + with %20 as a workaround
                 var searchUrl = resolvePath(applyGoTemplateText(SearchPath.Path, variables, WebUtility.UrlEncode).Replace("+", "%20")).AbsoluteUri;
                 var queryCollection = new List<KeyValuePair<string, string>>();
-                RequestType method = RequestType.GET;
+                var method = RequestType.GET;
 
-                if (String.Equals(SearchPath.Method, "post", StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(SearchPath.Method, "post", StringComparison.OrdinalIgnoreCase))
                 {
                     method = RequestType.POST;
                 }
@@ -1197,7 +1300,7 @@ namespace Jackett.Common.Indexers
                             if (Input.Key == "$raw")
                             {
                                 var rawStr = applyGoTemplateText(Input.Value, variables, WebUtility.UrlEncode);
-                                foreach (string part in rawStr.Split('&'))
+                                foreach (var part in rawStr.Split('&'))
                                 {
                                     var parts = part.Split(new char[] { '=' }, 2);
                                     var key = parts[0];
@@ -1252,7 +1355,7 @@ namespace Jackett.Common.Indexers
                     var loginNeeded = CheckIfLoginIsNeeded(response, SearchResultDocument);
                     if (loginNeeded)
                     {
-                        logger.Info(string.Format("CardigannIndexer ({0}): Relogin required", ID));
+                        logger.Info(string.Format("CardigannIndexer ({0}): Relogin required", Id));
                         var LoginResult = await DoLogin();
                         if (!LoginResult)
                             throw new Exception(string.Format("Relogin failed"));
@@ -1275,12 +1378,12 @@ namespace Jackett.Common.Indexers
                     {
                         results = applyFilters(results, Search.Preprocessingfilters, variables);
                         SearchResultDocument = SearchResultParser.ParseDocument(results);
-                        logger.Debug(string.Format("CardigannIndexer ({0}): result after preprocessingfilters: {1}", ID, results));
+                        logger.Debug(string.Format("CardigannIndexer ({0}): result after preprocessingfilters: {1}", Id, results));
                     }
 
                     var rowsSelector = applyGoTemplateText(Search.Rows.Selector, variables);
                     var RowsDom = SearchResultDocument.QuerySelectorAll(rowsSelector);
-                    List<IElement> Rows = new List<IElement>();
+                    var Rows = new List<IElement>();
                     foreach (var RowDom in RowsDom)
                     {
                         Rows.Add(RowDom);
@@ -1290,14 +1393,14 @@ namespace Jackett.Common.Indexers
                     var After = Definition.Search.Rows.After;
                     if (After > 0)
                     {
-                        for (int i = 0; i < Rows.Count; i += 1)
+                        for (var i = 0; i < Rows.Count; i += 1)
                         {
                             var CurrentRow = Rows[i];
-                            for (int j = 0; j < After; j += 1)
+                            for (var j = 0; j < After; j += 1)
                             {
                                 var MergeRowIndex = i + j + 1;
                                 var MergeRow = Rows[MergeRowIndex];
-                                List<INode> MergeNodes = new List<INode>();
+                                var MergeNodes = new List<INode>();
                                 foreach (var node in MergeRow.ChildNodes)
                                 {
                                     MergeNodes.Add(node);
@@ -1312,9 +1415,11 @@ namespace Jackett.Common.Indexers
                     {
                         try
                         {
-                            var release = new ReleaseInfo();
-                            release.MinimumRatio = 1;
-                            release.MinimumSeedTime = 48 * 60 * 60;
+                            var release = new ReleaseInfo
+                            {
+                                MinimumRatio = 1,
+                                MinimumSeedTime = 172800 // 48 hours
+                            };
 
                             // Parse fields
                             foreach (var Field in Search.Fields)
@@ -1352,8 +1457,11 @@ namespace Jackett.Common.Indexers
                                             }
                                             break;
                                         case "magnet":
-                                            release.MagnetUri = new Uri(value);
-                                            value = release.MagnetUri.ToString();
+                                            var magnetUri = new Uri(value);
+                                            release.MagnetUri = magnetUri;
+                                            value = magnetUri.ToString();
+                                            if (release.Guid == null)
+                                                release.Guid = magnetUri;
                                             break;
                                         case "details":
                                             var url = resolvePath(value, searchUrlUri);
@@ -1387,17 +1495,12 @@ namespace Jackett.Common.Indexers
                                             break;
                                         case "category":
                                             var cats = MapTrackerCatToNewznab(value);
-                                            if (release.Category == null)
+                                            if (cats.Any())
                                             {
-                                                release.Category = cats;
-                                            }
-                                            else
-                                            {
-                                                foreach (var cat in cats)
-                                                {
-                                                    if (!release.Category.Contains(cat))
-                                                        release.Category.Add(cat);
-                                                }
+                                                if (release.Category == null || FieldModifiers.Contains("noappend"))
+                                                    release.Category = cats;
+                                                else
+                                                    release.Category = release.Category.Union(cats).ToList();
                                             }
                                             value = release.Category.ToString();
                                             break;
@@ -1423,7 +1526,7 @@ namespace Jackett.Common.Indexers
                                             break;
                                         case "date":
                                             release.PublishDate = DateTimeUtil.FromUnknown(value);
-                                            value = release.PublishDate.ToString(DateTimeUtil.RFC1123ZPattern);
+                                            value = release.PublishDate.ToString(DateTimeUtil.Rfc1123ZPattern);
                                             break;
                                         case "files":
                                             release.Files = ParseUtil.CoerceLong(value);
@@ -1454,14 +1557,14 @@ namespace Jackett.Common.Indexers
                                             value = release.Imdb.ToString();
                                             break;
                                         case "rageid":
-                                            Regex RageIDRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
+                                            var RageIDRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
                                             var RageIDMatch = RageIDRegEx.Match(value);
                                             var RageID = RageIDMatch.Groups[1].Value;
                                             release.RageID = ParseUtil.CoerceLong(RageID);
                                             value = release.RageID.ToString();
                                             break;
                                         case "tvdbid":
-                                            Regex TVDBIdRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
+                                            var TVDBIdRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
                                             var TVDBIdMatch = TVDBIdRegEx.Match(value);
                                             var TVDBId = TVDBIdMatch.Groups[1].Value;
                                             release.TVDBId = ParseUtil.CoerceLong(TVDBId);
@@ -1484,8 +1587,11 @@ namespace Jackett.Common.Indexers
                                 {
                                     if (!variables.ContainsKey(variablesKey))
                                         variables[variablesKey] = null;
-                                    if (OptionalFileds.Contains(Field.Key) || FieldModifiers.Contains("optional") || Field.Value.Optional)
+                                    if (OptionalFields.Contains(Field.Key) || FieldModifiers.Contains("optional") || Field.Value.Optional)
+                                    {
+                                        variables[variablesKey] = null;
                                         continue;
+                                    }
                                     throw new Exception(string.Format("Error while parsing field={0}, selector={1}, value={2}: {3}", Field.Key, Field.Value.Selector, (value == null ? "<null>" : value), ex.Message));
                                 }
                             }
@@ -1494,30 +1600,32 @@ namespace Jackett.Common.Indexers
                             var SkipRelease = false;
                             if (Filters != null)
                             {
-                                foreach (filterBlock Filter in Filters)
+                                foreach (var Filter in Filters)
                                 {
                                     switch (Filter.Name)
                                     {
                                         case "andmatch":
-                                            int CharacterLimit = -1;
+                                            var CharacterLimit = -1;
                                             if (Filter.Args != null)
                                                 CharacterLimit = int.Parse(Filter.Args);
 
                                             if (query.ImdbID != null && TorznabCaps.SupportsImdbMovieSearch)
                                                 break; // skip andmatch filter for imdb searches
 
-                                            if (!query.MatchQueryStringAND(release.Title, CharacterLimit))
+                                            var queryKeywords = variables[".Keywords"] as string;
+
+                                            if (!query.MatchQueryStringAND(release.Title, CharacterLimit, queryKeywords))
                                             {
-                                                logger.Debug(string.Format("CardigannIndexer ({0}): skipping {1} (andmatch filter)", ID, release.Title));
+                                                logger.Debug(string.Format("CardigannIndexer ({0}): skipping {1} (andmatch filter)", Id, release.Title));
                                                 SkipRelease = true;
                                             }
                                             break;
                                         case "strdump":
                                             // for debugging
-                                            logger.Debug(string.Format("CardigannIndexer ({0}): row strdump: {1}", ID, Row.ToHtmlPretty()));
+                                            logger.Debug(string.Format("CardigannIndexer ({0}): row strdump: {1}", Id, Row.ToHtmlPretty()));
                                             break;
                                         default:
-                                            logger.Error(string.Format("CardigannIndexer ({0}): Unsupported rows filter: {1}", ID, Filter.Name));
+                                            logger.Error(string.Format("CardigannIndexer ({0}): Unsupported rows filter: {1}", Id, Filter.Name));
                                             break;
                                     }
                                 }
@@ -1541,7 +1649,7 @@ namespace Jackett.Common.Indexers
                                 while (PrevRow != null)
                                 {
                                     var CurRow = PrevRow;
-                                    logger.Info(PrevRow.OuterHtml);
+                                    logger.Debug(PrevRow.OuterHtml);
                                     try
                                     {
                                         value = handleSelector(DateHeaders, CurRow);
@@ -1570,7 +1678,7 @@ namespace Jackett.Common.Indexers
                         }
                         catch (Exception ex)
                         {
-                            logger.Error(string.Format("CardigannIndexer ({0}): Error while parsing row '{1}':\n\n{2}", ID, Row.ToHtmlPretty(), ex));
+                            logger.Error(string.Format("CardigannIndexer ({0}): Error while parsing row '{1}':\n\n{2}", Id, Row.ToHtmlPretty(), ex));
                         }
                     }
                 }
@@ -1591,8 +1699,8 @@ namespace Jackett.Common.Indexers
             Dictionary<string, string> pairs = null;
             var queryCollection = new NameValueCollection();
 
-            RequestType method = RequestType.GET;
-            if (String.Equals(request.Method, "post", StringComparison.OrdinalIgnoreCase))
+            var method = RequestType.GET;
+            if (string.Equals(request.Method, "post", StringComparison.OrdinalIgnoreCase))
             {
                 method = RequestType.POST;
                 pairs = new Dictionary<string, string>();
@@ -1610,13 +1718,13 @@ namespace Jackett.Common.Indexers
             if (queryCollection.Count > 0)
             {
                 if (!requestLinkStr.Contains("?"))
-                    requestLinkStr += "?" + queryCollection.GetQueryString(Encoding).Substring(1);
+                    requestLinkStr += "?" + queryCollection.GetQueryString(Encoding, separator: request.Queryseparator).Substring(1);
                 else
-                    requestLinkStr += queryCollection.GetQueryString(Encoding);
+                    requestLinkStr += queryCollection.GetQueryString(Encoding, separator: request.Queryseparator);
             }
 
             var response = await RequestBytesWithCookiesAndRetry(requestLinkStr, null, method, referer, pairs);
-            logger.Debug($"CardigannIndexer ({ID}): handleRequest() remote server returned {response.Status.ToString()}" + (response.IsRedirect ? " => " + response.RedirectingTo : ""));
+            logger.Debug($"CardigannIndexer ({Id}): handleRequest() remote server returned {response.Status.ToString()}" + (response.IsRedirect ? " => " + response.RedirectingTo : ""));
             return response;
         }
 
@@ -1630,7 +1738,7 @@ namespace Jackett.Common.Indexers
             variables[prefix + ".PathAndQuery"] = uri.PathAndQuery;
             variables[prefix + ".Query"] = uri.Query;
             var queryString = QueryHelpers.ParseQuery(uri.Query);
-            foreach (string key in queryString.Keys)
+            foreach (var key in queryString.Keys)
             {
                 //If we have supplied the same query string multiple time, just take the first.
                 variables[prefix + ".Query." + key] = queryString[key].First();
@@ -1644,7 +1752,7 @@ namespace Jackett.Common.Indexers
             if (Definition.Download != null)
             {
                 var Download = Definition.Download;
-                var variables = getTemplateVariablesFromConfigData();
+                var variables = GetBaseTemplateVariables();
                 AddTemplateVariablesFromUri(variables, link, ".DownloadUri");
                 if (Download.Before != null)
                 {
@@ -1662,19 +1770,29 @@ namespace Jackett.Common.Indexers
                     if (response.IsRedirect)
                         response = await RequestStringWithCookies(response.RedirectingTo);
                     var results = response.Content;
-                    var SearchResultParser = new HtmlParser();
-                    var SearchResultDocument = SearchResultParser.ParseDocument(results);
-                    var DlUri = SearchResultDocument.QuerySelector(selector);
-                    if (DlUri != null)
+                    var searchResultParser = new HtmlParser();
+                    var searchResultDocument = searchResultParser.ParseDocument(results);
+                    var downloadElement = searchResultDocument.QuerySelector(selector);
+                    if (downloadElement != null)
                     {
-                        logger.Debug(string.Format("CardigannIndexer ({0}): Download selector {1} matched:{2}", ID, selector, DlUri.ToHtmlPretty()));
-                        var href = DlUri.GetAttribute("href");
+                        logger.Debug(string.Format("CardigannIndexer ({0}): Download selector {1} matched:{2}", Id, selector, downloadElement.ToHtmlPretty()));
+                        var href = "";
+                        if (Download.Attribute != null)
+                        {
+                            href = downloadElement.GetAttribute(Download.Attribute);
+                            if (href == null)
+                                throw new Exception(string.Format("Attribute \"{0}\" is not set for element {1}", Download.Attribute, downloadElement.ToHtmlPretty()));
+                        }
+                        else
+                        {
+                            href = downloadElement.TextContent;
+                        }
                         href = applyFilters(href, Download.Filters, variables);
                         link = resolvePath(href, link);
                     }
                     else
                     {
-                        logger.Error(string.Format("CardigannIndexer ({0}): Download selector {1} didn't match:\n{2}", ID, Download.Selector, results));
+                        logger.Error(string.Format("CardigannIndexer ({0}): Download selector {1} didn't match:\n{2}", Id, Download.Selector, results));
                         throw new Exception(string.Format("Download selector {0} didn't match", Download.Selector));
                     }
                 }

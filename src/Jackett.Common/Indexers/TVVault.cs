@@ -1,6 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -15,27 +17,31 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    // This tracker is based on GazelleTracker but we can't use the API/abstract because there are some
+    // missing features. https://github.com/Jackett/Jackett/issues/8508
+    [ExcludeFromCodeCoverage]
     public class TVVault : BaseWebIndexer
     {
-        private string LoginUrl { get { return SiteLink + "login.php"; } }
-        private string BrowseUrl { get { return SiteLink + "torrents.php"; } }
+        private string LoginUrl => SiteLink + "login.php";
+        private string BrowseUrl => SiteLink + "torrents.php";
 
-        private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
-        {
-            get { return (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData; }
-            set { base.configData = value; }
-        }
+        private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
 
         public TVVault(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "TV-Vault",
-                   description: "A TV tracker for old shows.",
+            : base(id: "tvvault",
+                   name: "TV-Vault",
+                   description: "A TV tracker for old shows",
                    link: "https://tv-vault.me/",
-                   caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                   caps: new TorznabCapabilities
+                   {
+                       SupportsImdbMovieSearch = true
+                       // SupportsImdbTVSearch = true (supported by the site but disabled due to #8107)
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
-                   configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
+                   configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
@@ -58,88 +64,88 @@ namespace Jackett.Common.Indexers
             };
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl, true);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
+            await ConfigureIfOK(result.Cookies, result.Content?.Contains("logout.php") == true, () =>
             {
-                var errorMessage = result.Content;
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(result.Content);
+                var errorMessage = dom.QuerySelector("form#loginform").TextContent.Trim();
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
             return IndexerConfigurationStatus.RequiresTesting;
-        }
-
-        private string StripSearchString(string term)
-        {
-            // Search does not support searching with episode numbers so strip it if we have one
-            // Ww AND filter the result later to archive the proper result
-            term = Regex.Replace(term, @"[S|E]\d\d", string.Empty);
-            return term.Trim();
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
 
-            var searchString = query.GetQueryString();
-            var searchUrl = BrowseUrl;
+            var qc = new NameValueCollection
+            {
+                { "order_by", "s3" },
+                { "order_way", "desc" },
+                { "disablegrouping", "1" }
+            };
 
-            var queryCollection = new NameValueCollection();
-            queryCollection.Add("searchstr", StripSearchString(searchString));
-            queryCollection.Add("order_by", "s3");
-            queryCollection.Add("order_way", "desc");
-            queryCollection.Add("disablegrouping", "1");
+            if (query.IsImdbQuery)
+            {
+                qc.Add("action", "advanced");
+                qc.Add("imdbid", query.ImdbID);
+            }
+            else
+                qc.Add("searchstr", StripSearchString(query.GetQueryString()));
 
-            searchUrl += "?" + queryCollection.GetQueryString();
-
+            var searchUrl = BrowseUrl + "?" + qc.GetQueryString();
             var results = await RequestStringWithCookies(searchUrl);
             try
             {
-                string RowsSelector = "table.torrent_table > tbody > tr.torrent";
+                var seasonRegEx = new Regex(@$"Season\s+0*{query.Season}[^\d]", RegexOptions.IgnoreCase);
 
-                var SearchResultParser = new HtmlParser();
-                var SearchResultDocument = SearchResultParser.ParseDocument(results.Content);
-                var Rows = SearchResultDocument.QuerySelectorAll(RowsSelector);
-                foreach (var Row in Rows)
+                var parser = new HtmlParser();
+                var doc = parser.ParseDocument(results.Content);
+                var rows = doc.QuerySelectorAll("table.torrent_table > tbody > tr.torrent");
+                foreach (var row in rows)
                 {
-                    var release = new ReleaseInfo();
+                    var qDetailsLink = row.QuerySelector("a[href^=\"torrents.php?id=\"]");
+                    var title = qDetailsLink.TextContent;
+                    // if it's a season search, we filter results. the trailing space is to match regex
+                    if (query.Season > 0 && !seasonRegEx.Match($"{title} ").Success)
+                        continue;
 
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 0;
+                    var description = qDetailsLink.NextSibling.TextContent.Trim();
+                    title += " " + description;
+                    var comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
+                    var torrentId = qDetailsLink.GetAttribute("href").Split('=').Last();
+                    var link = new Uri(SiteLink + "torrents.php?action=download&id=" + torrentId);
 
-                    var qDetailsLink = Row.QuerySelector("a[href^=\"torrents.php?id=\"]");
-                    var DescStr = qDetailsLink.NextSibling;
-                    var Files = Row.QuerySelector("td:nth-child(3)");
-                    var Added = Row.QuerySelector("td:nth-child(4)");
-                    var Size = Row.QuerySelector("td:nth-child(5)").FirstChild;
-                    var Grabs = Row.QuerySelector("td:nth-child(6)");
-                    var Seeders = Row.QuerySelector("td:nth-child(7)");
-                    var Leechers = Row.QuerySelector("td:nth-child(8)");
-                    var FreeLeech = Row.QuerySelector("strong.freeleech_normal");
+                    var files = ParseUtil.CoerceLong(row.QuerySelector("td:nth-child(3)").TextContent);
+                    var publishDate = DateTimeUtil.FromTimeAgo(row.QuerySelector("td:nth-child(4)").TextContent);
+                    var size = ReleaseInfo.GetBytes(row.QuerySelector("td:nth-child(5)").FirstChild.TextContent);
+                    var grabs = ParseUtil.CoerceLong(row.QuerySelector("td:nth-child(6)").TextContent);
+                    var seeders = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(7)").TextContent);
+                    var leechers = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(8)").TextContent);
 
-                    var TorrentIdParts = qDetailsLink.GetAttribute("href").Split('=');
-                    var TorrentId = TorrentIdParts[TorrentIdParts.Length - 1];
-                    var DLLink = "torrents.php?action=download&id=" + TorrentId.ToString();
+                    var dlVolumeFactor = row.QuerySelector("strong.freeleech_normal") != null ? 0 : 1;
 
-                    release.Description = DescStr.TextContent.Trim();
-                    release.Title = qDetailsLink.TextContent + " " + release.Description;
-                    release.PublishDate = DateTimeUtil.FromTimeAgo(Added.TextContent);
-                    release.Category = new List<int> { TvCategoryParser.ParseTvShowQuality(release.Description) };
+                    var category = new List<int> { TvCategoryParser.ParseTvShowQuality(description) };
 
-                    release.Link = new Uri(SiteLink + DLLink);
-                    release.Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
-                    release.Guid = release.Link;
-
-                    release.Seeders = ParseUtil.CoerceInt(Seeders.TextContent);
-                    release.Peers = ParseUtil.CoerceInt(Leechers.TextContent) + release.Seeders;
-                    release.Size = ReleaseInfo.GetBytes(Size.TextContent);
-                    release.Grabs = ReleaseInfo.GetBytes(Grabs.TextContent);
-                    release.Files = ReleaseInfo.GetBytes(Files.TextContent);
-
-                    if (FreeLeech != null)
-                        release.DownloadVolumeFactor = 0;
-                    else
-                        release.DownloadVolumeFactor = 1;
-
-                    release.UploadVolumeFactor = 1;
-
+                    var release = new ReleaseInfo
+                    {
+                        MinimumRatio = 1,
+                        MinimumSeedTime = 0,
+                        Description = description,
+                        Title = title,
+                        PublishDate = publishDate,
+                        Category = category,
+                        Link = link,
+                        Comments = comments,
+                        Guid = link,
+                        Seeders = seeders,
+                        Peers = leechers + seeders,
+                        Size = size,
+                        Grabs = grabs,
+                        Files = files,
+                        DownloadVolumeFactor = dlVolumeFactor,
+                        UploadVolumeFactor = 1
+                    };
                     releases.Add(release);
                 }
             }
@@ -150,5 +156,14 @@ namespace Jackett.Common.Indexers
 
             return releases;
         }
+
+        private string StripSearchString(string term)
+        {
+            // Search does not support searching with episode numbers so strip it if we have one
+            // Ww AND filter the result later to archive the proper result
+            term = Regex.Replace(term, @"[S|E]\d\d", string.Empty);
+            return term.Trim();
+        }
+
     }
 }

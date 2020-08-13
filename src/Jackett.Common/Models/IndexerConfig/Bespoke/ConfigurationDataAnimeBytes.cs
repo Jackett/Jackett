@@ -1,6 +1,6 @@
-﻿namespace Jackett.Common.Models.IndexerConfig.Bespoke
+namespace Jackett.Common.Models.IndexerConfig.Bespoke
 {
-    class ConfigurationDataAnimeBytes : ConfigurationDataUserPasskey
+    internal class ConfigurationDataAnimeBytes : ConfigurationDataUserPasskey
     {
         public BoolItem IncludeRaw { get; private set; }
         //public DisplayItem DateWarning { get; private set; }

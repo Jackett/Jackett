@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.Reflection;
 
@@ -8,7 +8,7 @@ namespace Jackett.Common.Utils
     {
         public static DateTime GetBuildDateTime()
         {
-            Assembly commonAssembly = Assembly.GetExecutingAssembly();
+            var commonAssembly = Assembly.GetExecutingAssembly();
             var attribute = commonAssembly.GetCustomAttribute<BuildDateAttribute>();
             return attribute?.DateTime ?? default(DateTime);
         }
@@ -17,10 +17,7 @@ namespace Jackett.Common.Utils
     [AttributeUsage(AttributeTargets.Assembly)]
     public class BuildDateAttribute : Attribute
     {
-        public BuildDateAttribute(string value)
-        {
-            DateTime = DateTime.ParseExact(value, "yyyyMMddHHmmss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
-        }
+        public BuildDateAttribute(string value) => DateTime = DateTime.ParseExact(value, "yyyyMMddHHmmss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
 
         public DateTime DateTime { get; }
     }

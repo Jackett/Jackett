@@ -1,9 +1,9 @@
-﻿using Jackett.Common.Models.Config;
+using System;
+using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Server.Services;
 using NLog;
-using System;
 
 namespace Jackett.Server
 {
@@ -106,7 +106,7 @@ namespace Jackett.Server
             // Override port
             if (consoleOptions.Port != 0)
             {
-                Int32.TryParse(serverConfig.Port.ToString(), out Int32 configPort);
+                int.TryParse(serverConfig.Port.ToString(), out var configPort);
 
                 if (configPort != consoleOptions.Port)
                 {

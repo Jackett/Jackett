@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
@@ -15,10 +15,10 @@ namespace Jackett.Common.Services
 
     public class ConfigurationService : IConfigurationService
     {
-        private ISerializeService serializeService;
-        private Logger logger;
-        private IProcessService processService;
-        private RuntimeSettings runtimeSettings;
+        private readonly ISerializeService serializeService;
+        private readonly Logger logger;
+        private readonly IProcessService processService;
+        private readonly RuntimeSettings runtimeSettings;
 
         public ConfigurationService(ISerializeService s, IProcessService p, Logger l, RuntimeSettings settings)
         {
@@ -29,10 +29,7 @@ namespace Jackett.Common.Services
             CreateOrMigrateSettings();
         }
 
-        public string GetAppDataFolder()
-        {
-            return runtimeSettings.DataFolder;
-        }
+        public string GetAppDataFolder() => runtimeSettings.DataFolder;
 
         public void CreateOrMigrateSettings()
         {
@@ -59,7 +56,7 @@ namespace Jackett.Common.Services
             {
                 try
                 {
-                    string oldDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Jackett");
+                    var oldDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Jackett");
                     if (Directory.Exists(oldDir))
                     {
 
@@ -72,7 +69,9 @@ namespace Jackett.Common.Services
                         {
                             try
                             {
-                                processService.StartProcessAndLog(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath, "--MigrateSettings", true);
+                                // Use EscapedCodeBase to avoid Uri reserved characters from causing bugs
+                                // https://stackoverflow.com/questions/896572
+                                processService.StartProcessAndLog(new Uri(Assembly.GetExecutingAssembly().EscapedCodeBase).LocalPath, "--MigrateSettings", true);
                             }
                             catch
                             {
@@ -146,7 +145,7 @@ namespace Jackett.Common.Services
             catch (Exception e)
             {
                 logger.Error(e, "Error reading config file " + fullPath);
-                return default(T);
+                return default;
             }
         }
 
@@ -167,15 +166,14 @@ namespace Jackett.Common.Services
             }
         }
 
-        public string ApplicationFolder()
-        {
-            return Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath);
-        }
+        // Use EscapedCodeBase to avoid Uri reserved characters from causing bugs
+        // https://stackoverflow.com/questions/896572
+        public string ApplicationFolder() => Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().EscapedCodeBase).LocalPath);
 
         public string GetContentFolder()
         {
             // If we are debugging we can use the non copied content.
-            string dir = Path.Combine(ApplicationFolder(), "Content"); ;
+            var dir = Path.Combine(ApplicationFolder(), "Content");
 
 #if DEBUG
             // When we are running in debug use the source files
@@ -190,7 +188,7 @@ namespace Jackett.Common.Services
 
         public List<string> GetCardigannDefinitionsFolders()
         {
-            List<string> dirs = new List<string>();
+            var dirs = new List<string>();
 
             if (System.Environment.OSVersion.Platform == PlatformID.Unix)
             {
@@ -204,7 +202,7 @@ namespace Jackett.Common.Services
             }
 
             // If we are debugging we can use the non copied definitions.
-            string dir = Path.Combine(ApplicationFolder(), "Definitions"); ;
+            var dir = Path.Combine(ApplicationFolder(), "Definitions");
 
 #if DEBUG
             // When we are running in debug use the source files
@@ -220,25 +218,13 @@ namespace Jackett.Common.Services
 
 
 
-        public string GetIndexerConfigDir()
-        {
-            return Path.Combine(GetAppDataFolder(), "Indexers");
-        }
+        public string GetIndexerConfigDir() => Path.Combine(GetAppDataFolder(), "Indexers");
 
-        public string GetConfigFile()
-        {
-            return Path.Combine(GetAppDataFolder(), "config.json");
-        }
+        public string GetConfigFile() => Path.Combine(GetAppDataFolder(), "config.json");
 
-        public string GetSonarrConfigFile()
-        {
-            return Path.Combine(GetAppDataFolder(), "sonarr_api.json");
-        }
+        public string GetSonarrConfigFile() => Path.Combine(GetAppDataFolder(), "sonarr_api.json");
 
-        public string GetVersion()
-        {
-            return EnvironmentUtil.JackettVersion;
-        }
+        public string GetVersion() => EnvironmentUtil.JackettVersion;
 
         public ServerConfig BuildServerConfig(RuntimeSettings runtimeSettings)
         {
@@ -250,7 +236,7 @@ namespace Jackett.Common.Services
             }
             else
             {
-                //We don't load these out of the config files as it could get confusing to users who accidently save. 
+                //We don't load these out of the config files as it could get confusing to users who accidently save.
                 //In future we could flatten the serverconfig, and use command line parameters to override any configuration.
                 config.RuntimeSettings = runtimeSettings;
             }
@@ -266,11 +252,10 @@ namespace Jackett.Common.Services
 
                 // Check for legacy settings
 
-                var path = Path.Combine(GetAppDataFolder(), "config.json"); ;
-                var jsonReply = new JObject();
+                var path = Path.Combine(GetAppDataFolder(), "config.json");
                 if (File.Exists(path))
                 {
-                    jsonReply = JObject.Parse(File.ReadAllText(path));
+                    var jsonReply = JObject.Parse(File.ReadAllText(path));
                     config.Port = (int)jsonReply["port"];
                     config.AllowExternal = (bool)jsonReply["public"];
                 }

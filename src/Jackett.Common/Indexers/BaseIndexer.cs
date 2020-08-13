@@ -1,4 +1,9 @@
-﻿using AutoMapper;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using AutoMapper;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -7,22 +12,13 @@ using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
 {
     public abstract class BaseIndexer : IIndexer
     {
-        public static string GetIndexerID(Type type)
-        {
-            return type.Name.ToLowerInvariant().StripNonAlphaNumeric();
-        }
-
+        public string Id { get; protected set; }
         public string SiteLink { get; protected set; }
         public virtual string[] LegacySiteLinks { get; protected set; }
         public string DefaultSiteLink { get; protected set; }
@@ -31,7 +27,7 @@ namespace Jackett.Common.Indexers
         public string DisplayName { get; protected set; }
         public string Language { get; protected set; }
         public string Type { get; protected set; }
-        public virtual string ID { get { return GetIndexerID(GetType()); } }
+
 
         [JsonConverter(typeof(EncodingJsonConverter))]
         public Encoding Encoding { get; protected set; }
@@ -45,16 +41,16 @@ namespace Jackett.Common.Indexers
 
         protected string CookieHeader
         {
-            get { return configData.CookieHeader.Value; }
-            set { configData.CookieHeader.Value = value; }
+            get => configData.CookieHeader.Value;
+            set => configData.CookieHeader.Value = value;
         }
 
         public string LastError
         {
-            get { return configData.LastError.Value; }
+            get => configData.LastError.Value;
             set
             {
-                bool SaveNeeded = configData.LastError.Value != value && IsConfigured;
+                var SaveNeeded = configData.LastError.Value != value && IsConfigured;
                 configData.LastError.Value = value;
                 if (SaveNeeded)
                     SaveConfig();
@@ -64,7 +60,9 @@ namespace Jackett.Common.Indexers
         public abstract TorznabCapabilities TorznabCaps { get; protected set; }
 
         // standard constructor used by most indexers
-        public BaseIndexer(string name, string link, string description, IIndexerConfigurationService configService, Logger logger, ConfigurationData configData, IProtectionService p)
+        public BaseIndexer(string link, string id, string name, string description,
+                           IIndexerConfigurationService configService, Logger logger, ConfigurationData configData,
+                           IProtectionService p)
         {
             this.logger = logger;
             configurationService = configService;
@@ -73,6 +71,7 @@ namespace Jackett.Common.Indexers
             if (!link.EndsWith("/", StringComparison.Ordinal))
                 throw new Exception("Site link must end with a slash.");
 
+            Id = id;
             DisplayName = name;
             DisplayDescription = description;
             SiteLink = link;
@@ -82,10 +81,7 @@ namespace Jackett.Common.Indexers
                 LoadValuesFromJson(null);
         }
 
-        public virtual Task<ConfigurationData> GetConfigurationForSetup()
-        {
-            return Task.FromResult<ConfigurationData>(configData);
-        }
+        public virtual Task<ConfigurationData> GetConfigurationForSetup() => Task.FromResult<ConfigurationData>(configData);
 
         public virtual void ResetBaseConfig()
         {
@@ -93,14 +89,11 @@ namespace Jackett.Common.Indexers
             IsConfigured = false;
         }
 
-        public virtual void SaveConfig()
-        {
-            configurationService.Save(this as IIndexer, configData.ToJson(protectionService, forDisplay: false));
-        }
+        public virtual void SaveConfig() => configurationService.Save(this as IIndexer, configData.ToJson(protectionService, forDisplay: false));
 
         protected void LoadLegacyCookieConfig(JToken jsonConfig)
         {
-            string legacyCookieHeader = (string)jsonConfig["cookie_header"];
+            var legacyCookieHeader = (string)jsonConfig["cookie_header"];
             if (!string.IsNullOrEmpty(legacyCookieHeader))
             {
                 CookieHeader = legacyCookieHeader;
@@ -113,7 +106,7 @@ namespace Jackett.Common.Indexers
                 {
                     var array = (JArray)jcookies;
                     legacyCookieHeader = string.Empty;
-                    for (int i = 0; i < array.Count; i++)
+                    for (var i = 0; i < array.Count; i++)
                     {
                         if (i != 0)
                             legacyCookieHeader += "; ";
@@ -128,7 +121,7 @@ namespace Jackett.Common.Indexers
             }
         }
 
-        virtual public void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)
+        public virtual void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)
         {
             IProtectionService ps = null;
             if (useProtectionService)
@@ -165,7 +158,7 @@ namespace Jackett.Common.Indexers
                 }
             }
             // read and upgrade old settings file format
-            else if (jsonConfig is Object)
+            else if (jsonConfig is object)
             {
                 LoadLegacyCookieConfig(jsonConfig);
                 SaveConfig();
@@ -176,7 +169,7 @@ namespace Jackett.Common.Indexers
         //TODO: Remove this section once users have moved off DPAPI
         private bool MigratedFromDPAPI(JToken jsonConfig)
         {
-            bool isWindows = Environment.OSVersion.Platform == PlatformID.Win32NT;
+            var isWindows = Environment.OSVersion.Platform == PlatformID.Win32NT;
 
             if (!isWindows && DotNetCoreUtil.IsRunningOnDotNetCore)
             {
@@ -187,7 +180,7 @@ namespace Jackett.Common.Indexers
             LoadValuesFromJson(jsonConfig, false);
 
             StringItem passwordPropertyValue = null;
-            string passwordValue = "";
+            var passwordValue = "";
 
             try
             {
@@ -201,7 +194,7 @@ namespace Jackett.Common.Indexers
                     // protection is based on the item.Name value (property name might be different, example: Abnormal), so check the Name again
                     if (!string.Equals(passwordPropertyValue.Name, "password", StringComparison.InvariantCultureIgnoreCase))
                     {
-                        logger.Debug($"Skipping non default password property (unencrpyted password) for [{ID}] while attempting migration");
+                        logger.Debug($"Skipping non default password property (unencrpyted password) for [{Id}] while attempting migration");
                         return false;
                     }
                 }
@@ -210,7 +203,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception)
             {
-                logger.Debug($"Unable to source password for [{ID}] while attempting migration, likely a tracker without a password setting");
+                logger.Debug($"Unable to source password for [{Id}] while attempting migration, likely a tracker without a password setting");
                 return false;
             }
 
@@ -226,27 +219,27 @@ namespace Jackett.Common.Indexers
                 {
                     if (ex.Message != "The provided payload cannot be decrypted because it was not protected with this protection provider.")
                     {
-                        logger.Info($"Password could not be unprotected using Microsoft.AspNetCore.DataProtection - {ID} : " + ex);
+                        logger.Info($"Password could not be unprotected using Microsoft.AspNetCore.DataProtection - {Id} : " + ex);
                     }
 
-                    logger.Info($"Attempting legacy Unprotect - {ID} : ");
+                    logger.Info($"Attempting legacy Unprotect - {Id} : ");
 
                     try
                     {
-                        string unprotectedPassword = protectionService.LegacyUnProtect(passwordValue);
+                        var unprotectedPassword = protectionService.LegacyUnProtect(passwordValue);
                         //Password successfully unprotected using Windows/Mono DPAPI
 
                         passwordPropertyValue.Value = unprotectedPassword;
                         SaveConfig();
                         IsConfigured = true;
 
-                        logger.Info($"Password successfully migrated for {ID}");
+                        logger.Info($"Password successfully migrated for {Id}");
 
                         return true;
                     }
                     catch (Exception exception)
                     {
-                        logger.Info($"Password could not be unprotected using legacy DPAPI - {ID} : " + exception);
+                        logger.Info($"Password could not be unprotected using legacy DPAPI - {Id} : " + exception);
                     }
                 }
             }
@@ -273,10 +266,9 @@ namespace Jackett.Common.Indexers
             if (query.Categories.Length == 0)
                 return results;
 
-            var filteredResults = results.Where(result =>
-            {
-                return result.Category.IsEmptyOrNull() || query.Categories.Intersect(result.Category).Any() || TorznabCatType.QueryContainsParentCategory(query.Categories, result.Category);
-            });
+            var filteredResults = results.Where(
+                result => result.Category?.Any() != true || query.Categories.Intersect(result.Category).Any() ||
+                          TorznabCatType.QueryContainsParentCategory(query.Categories, result.Category));
 
             return filteredResults;
         }
@@ -293,7 +285,9 @@ namespace Jackett.Common.Indexers
             if (query.HasSpecifiedCategories)
                 if (!caps.SupportsCategories(query.Categories))
                     return false;
-            if (caps.SupportsImdbMovieSearch && query.IsImdbQuery)
+            if (caps.SupportsImdbTVSearch && query.IsImdbQuery && query.IsTVSearch)
+                return true;
+            if (caps.SupportsImdbMovieSearch && query.IsImdbQuery && query.IsMovieSearch)
                 return true;
             else if (!caps.SupportsImdbMovieSearch && query.IsImdbQuery && query.QueryType != "TorrentPotato") // potato query should always contain imdb+search term
                 return false;
@@ -357,11 +351,14 @@ namespace Jackett.Common.Indexers
 
     public abstract class BaseWebIndexer : BaseIndexer, IWebIndexer
     {
-        protected BaseWebIndexer(string name, string link, string description, IIndexerConfigurationService configService, WebClient client, Logger logger, ConfigurationData configData, IProtectionService p, TorznabCapabilities caps = null, string downloadBase = null)
-            : base(name, link, description, configService, logger, configData, p)
+        protected BaseWebIndexer(string link, string id, string name, string description,
+                                 IIndexerConfigurationService configService, WebClient client, Logger logger,
+                                 ConfigurationData configData, IProtectionService p, TorznabCapabilities caps = null,
+                                 string downloadBase = null)
+            : base(link, id, name, description, configService, logger, configData, p)
         {
-            this.webclient = client;
-            this.downloadUrlBase = downloadBase;
+            webclient = client;
+            downloadUrlBase = downloadBase;
 
             if (caps == null)
                 caps = TorznabUtil.CreateDefaultTorznabTVCaps();
@@ -370,18 +367,15 @@ namespace Jackett.Common.Indexers
 
         // minimal constructor used by e.g. cardigann generic indexer
         protected BaseWebIndexer(IIndexerConfigurationService configService, WebClient client, Logger logger, IProtectionService p)
-            : base("", "/", "", configService, logger, null, p)
-        {
-            this.webclient = client;
-        }
+            : base("/", "", "", "", configService, logger, null, p) => webclient = client;
 
-        public async virtual Task<byte[]> Download(Uri link)
+        public virtual async Task<byte[]> Download(Uri link)
         {
             var uncleanLink = UncleanLink(link);
             return await Download(uncleanLink, RequestType.GET);
         }
 
-        protected async Task<byte[]> Download(Uri link, RequestType method)
+        protected async Task<byte[]> Download(Uri link, RequestType method, string refererlink = null)
         {
             // return magnet link
             if (link.Scheme == "magnet")
@@ -393,13 +387,17 @@ namespace Jackett.Common.Indexers
                 .Replace(")", "%29")
                 .Replace("'", "%27");
             var response = await RequestBytesWithCookiesAndRetry(requestLink, null, method, requestLink);
+
+            // if referer link is provied it will be used
+            if (refererlink != null)
+                response = await RequestBytesWithCookiesAndRetry(requestLink, null, method, refererlink);
             if (response.IsRedirect)
             {
                 await FollowIfRedirect(response);
             }
             if (response.Status != System.Net.HttpStatusCode.OK && response.Status != System.Net.HttpStatusCode.Continue && response.Status != System.Net.HttpStatusCode.PartialContent)
             {
-                logger.Error("Failed download cookies: " + this.CookieHeader);
+                logger.Error("Failed download cookies: " + CookieHeader);
                 if (response.Content != null)
                     logger.Error("Failed download response:\n" + Encoding.UTF8.GetString(response.Content));
                 throw new Exception($"Remote server returned {response.Status.ToString()}" + (response.IsRedirect ? " => " + response.RedirectingTo : ""));
@@ -411,7 +409,7 @@ namespace Jackett.Common.Indexers
         protected async Task<WebClientByteResult> RequestBytesWithCookiesAndRetry(string url, string cookieOverride = null, RequestType method = RequestType.GET, string referer = null, IEnumerable<KeyValuePair<string, string>> data = null)
         {
             Exception lastException = null;
-            for (int i = 0; i < 3; i++)
+            for (var i = 0; i < 3; i++)
             {
                 try
                 {
@@ -442,7 +440,7 @@ namespace Jackett.Common.Indexers
 
             if (cookieOverride != null)
                 request.Cookies = cookieOverride;
-            WebClientStringResult result = await webclient.GetString(request);
+            var result = await webclient.GetString(request);
             CheckTrackerDown(result);
             UpdateCookieHeader(result.Cookies, cookieOverride);
             return result;
@@ -451,7 +449,7 @@ namespace Jackett.Common.Indexers
         protected async Task<WebClientStringResult> RequestStringWithCookiesAndRetry(string url, string cookieOverride = null, string referer = null, Dictionary<string, string> headers = null)
         {
             Exception lastException = null;
-            for (int i = 0; i < 3; i++)
+            for (var i = 0; i < 3; i++)
             {
                 try
                 {
@@ -504,7 +502,7 @@ namespace Jackett.Common.Indexers
 
             if (emulateBrowser.HasValue)
                 request.EmulateBrowser = emulateBrowser.Value;
-            WebClientStringResult result = await webclient.GetString(request);
+            var result = await webclient.GetString(request);
             CheckTrackerDown(result);
             UpdateCookieHeader(result.Cookies, cookieOverride);
             return result;
@@ -513,7 +511,7 @@ namespace Jackett.Common.Indexers
         protected async Task<WebClientStringResult> PostDataWithCookiesAndRetry(string url, IEnumerable<KeyValuePair<string, string>> data, string cookieOverride = null, string referer = null, Dictionary<string, string> headers = null, string rawbody = null, bool? emulateBrowser = null)
         {
             Exception lastException = null;
-            for (int i = 0; i < 3; i++)
+            for (var i = 0; i < 3; i++)
             {
                 try
                 {
@@ -593,7 +591,7 @@ namespace Jackett.Common.Indexers
         protected async Task FollowIfRedirect(WebClientByteResult response, string referrer = null, string overrideRedirectUrl = null, string overrideCookies = null, bool accumulateCookies = false)
         {
             // Follow up  to 5 redirects
-            for (int i = 0; i < 5; i++)
+            for (var i = 0; i < 5; i++)
             {
                 if (!response.IsRedirect)
                     break;
@@ -610,26 +608,22 @@ namespace Jackett.Common.Indexers
             }
         }
 
-        private String ResolveCookies(String incomingCookies = "")
+        private string ResolveCookies(string incomingCookies = "")
         {
-            var redirRequestCookies = (CookieHeader != null && CookieHeader != "" ? CookieHeader + " " : "") + incomingCookies;
-            System.Text.RegularExpressions.Regex expression = new System.Text.RegularExpressions.Regex(@"([^\\,;\s]+)=([^=\\,;\s]*)");
-            Dictionary<string, string> cookieDIctionary = new Dictionary<string, string>();
-            var matches = expression.Match(redirRequestCookies);
-            while (matches.Success)
-            {
-                if (matches.Groups.Count > 2) cookieDIctionary[matches.Groups[1].Value] = matches.Groups[2].Value;
-                matches = matches.NextMatch();
-            }
-            return string.Join("; ", cookieDIctionary
-                .Where(kv => kv.Key != "cf_use_ob" && kv.Key != "cf_ob_info") // These cookies are causing BadGateway errors, so we drop them, see issue #2306
-                .Select(kv => kv.Key.ToString() + "=" + kv.Value.ToString()).ToArray());
+            var redirRequestCookies = string.IsNullOrWhiteSpace(CookieHeader) ? incomingCookies : CookieHeader + " " + incomingCookies;
+            var cookieDictionary = CookieUtil.CookieHeaderToDictionary(redirRequestCookies);
+
+            // These cookies are causing BadGateway errors, so we drop them, see issue #2306
+            cookieDictionary.Remove("cf_use_ob");
+            cookieDictionary.Remove("cf_ob_info");
+
+            return CookieUtil.CookieDictionaryToHeader(cookieDictionary);
         }
 
         // Update CookieHeader with new cookies and save the config if something changed (e.g. a new CloudFlare clearance cookie was issued)
         protected virtual void UpdateCookieHeader(string newCookies, string cookieOverride = null)
         {
-            string newCookieHeader = ResolveCookies((cookieOverride != null && cookieOverride != "" ? cookieOverride + " " : "") + newCookies);
+            var newCookieHeader = ResolveCookies((cookieOverride != null && cookieOverride != "" ? cookieOverride + " " : "") + newCookies);
             if (CookieHeader != newCookieHeader)
             {
                 logger.Debug(string.Format("updating Cookies {0} => {1}", CookieHeader, newCookieHeader));
@@ -664,10 +658,7 @@ namespace Jackett.Common.Indexers
             }
         }
 
-        protected List<string> GetAllTrackerCategories()
-        {
-            return categoryMapping.Select(x => x.TrackerCategory).ToList();
-        }
+        protected List<string> GetAllTrackerCategories() => categoryMapping.Select(x => x.TrackerCategory).ToList();
 
         protected void AddCategoryMapping(string trackerCategory, TorznabCategory newznabCategory, string trackerCategoryDesc = null)
         {
@@ -682,6 +673,7 @@ namespace Jackett.Common.Indexers
             // add 1:1 categories
             if (trackerCategoryDesc != null && trackerCategory != null)
             {
+                //TODO convert to int.TryParse() to avoid using throw as flow control
                 try
                 {
                     var trackerCategoryInt = int.Parse(trackerCategory);
@@ -696,10 +688,7 @@ namespace Jackett.Common.Indexers
             }
         }
 
-        protected void AddCategoryMapping(int trackerCategory, TorznabCategory newznabCategory, string trackerCategoryDesc = null)
-        {
-            AddCategoryMapping(trackerCategory.ToString(), newznabCategory, trackerCategoryDesc);
-        }
+        protected void AddCategoryMapping(int trackerCategory, TorznabCategory newznabCategory, string trackerCategoryDesc = null) => AddCategoryMapping(trackerCategory.ToString(), newznabCategory, trackerCategoryDesc);
 
         protected void AddMultiCategoryMapping(TorznabCategory newznabCategory, params int[] trackerCategories)
         {
@@ -844,15 +833,18 @@ namespace Jackett.Common.Indexers
 
         public override TorznabCapabilities TorznabCaps { get; protected set; }
 
-        private List<CategoryMapping> categoryMapping = new List<CategoryMapping>();
+        private readonly List<CategoryMapping> categoryMapping = new List<CategoryMapping>();
         protected WebClient webclient;
         protected readonly string downloadUrlBase = "";
     }
 
     public abstract class BaseCachingWebIndexer : BaseWebIndexer
     {
-        protected BaseCachingWebIndexer(string name, string link, string description, IIndexerConfigurationService configService, WebClient client, Logger logger, ConfigurationData configData, IProtectionService p, TorznabCapabilities caps = null, string downloadBase = null)
-            : base(name, link, description, configService, client, logger, configData, p, caps, downloadBase)
+        protected BaseCachingWebIndexer(string link,string id, string name, string description,
+                                        IIndexerConfigurationService configService, WebClient client, Logger logger,
+                                        ConfigurationData configData, IProtectionService p, TorznabCapabilities caps = null,
+                                        string downloadBase = null)
+            : base(link, id, name, description, configService, client, logger, configData, p, caps, downloadBase)
         {
         }
 

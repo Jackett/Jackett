@@ -1,4 +1,4 @@
-﻿namespace Jackett.Common.Models.Config
+namespace Jackett.Common.Models.Config
 {
     public enum ProxyType
     {

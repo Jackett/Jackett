@@ -1,5 +1,5 @@
-﻿using Jackett.Common.Models.Config;
 using System.Collections.Generic;
+using Jackett.Common.Models.Config;
 
 namespace Jackett.Common.Services.Interfaces
 {
