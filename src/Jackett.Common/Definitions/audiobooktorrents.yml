@@ -156,4 +156,7 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
+    minimumseedtime:
+      # 14 days (as seconds = 14 x 24 x 60 x 60)
+      text: 1209600
 # U-232 V4.5
