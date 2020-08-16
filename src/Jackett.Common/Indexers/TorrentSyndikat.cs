@@ -168,7 +168,7 @@ namespace Jackett.Common.Indexers
 
             }
             foreach (var cat in MapTorznabCapsToTrackers(query))
-                queryCollection.Add("cat[]",cat);
+                queryCollection.Add("c" + cat, "1");
 
             var searchUrl = SearchUrl + "?" + queryCollection.GetQueryString();
 
