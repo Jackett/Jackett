@@ -10,33 +10,34 @@ links:
 
 caps:
   categorymappings:
+    - {id: 49, cat: PC/Phone-Android, desc: "Android"}
     - {id: 15, cat: TV/Anime, desc: "Anime"}
+    - {id: 47, cat: Books/Comics, desc: "Comic"}
     - {id: 33, cat: TV/Sport, desc: "Deportes"}
-    - {id: 13, cat: Console, desc: "Juegos"}
-    - {id: 24, cat: Console/NDS, desc: "Juegos Nintendo"}
-    - {id: 19, cat: PC/Games, desc: "Juegos PC"}
-    - {id: 22, cat: Console/PS4, desc: "Juegos PS4"}
-    - {id: 23, cat: Console/Xbox, desc: "Juegos XBOX"}
+    - {id: 62, cat: TV/Documentary, desc: "Documentales"}
+    - {id: 38, cat: Books/Other, desc: "e-Learning"}
+    - {id: 39, cat: Console/NDS, desc: "Juegos Nintendo"}
+    - {id: 42, cat: PC/Games, desc: "Juegos PC"}
+    - {id: 41, cat: Console/PS4, desc: "Juegos PlayStation"}
+    - {id: 40, cat: Console/Xbox, desc: "Juegos XBOX"}
     - {id: 14, cat: Books, desc: "Libros"}
-    - {id: 4, cat: Audio, desc: "Musica"}
-    - {id: 34, cat: Audio/Video, desc: "Musica Música Video  HD"}
-    - {id: 3, cat: Movies, desc: "Peliculas"}
-    - {id: 30, cat: Movies/BluRay, desc: "Peliculas BD25 / BD50"}
-    - {id: 28, cat: Movies/Other, desc: "Peliculas- CAM / TS"}
-    - {id: 5, cat: Movies/DVD, desc: "Peliculas DVD-R"}
-    - {id: 7, cat: Movies/HD, desc: "Peliculas HD (720p 1080p)"}
-    - {id: 36, cat: Movies/3D, desc: "Peliculas  3D"}
-    - {id: 6, cat: Movies/SD, desc: "Peliculas SD"}
-    - {id: 35, cat: Movies/UHD, desc: "Peliculas UHD 4K"}
-    - {id: 29, cat: Movies/WEBDL, desc: "Peliculas- Web-DL"}
-    - {id: 16, cat: PC, desc: "Programas"}
-    - {id: 25, cat: PC/Phone-Android, desc: "Programas Android"}
-    - {id: 27, cat: PC/Mac, desc: "Programas MAC"}
-    - {id: 26, cat: PC/0day, desc: "Programas Windows"}
-    - {id: 8, cat: TV, desc: "TV"}
-    - {id: 9, cat: TV/SD, desc: "TV SD"}
-    - {id: 10, cat: TV/HD, desc: "TV HD (720p, 1080p)"}
+    - {id: 50, cat: PC, desc: "Programas Linux"}
+    - {id: 52, cat: PC/Mac, desc: "Programas MacOS"}
+    - {id: 45, cat: Audio/Video, desc: "Musica Video"}
+    - {id: 43, cat: Audio/Lossless, desc: "Musica FLAC"}
+    - {id: 44, cat: Audio/MP3, desc: "Musica MP3"}
+    - {id: 48, cat: Other, desc: "Otros"}
+    - {id: 55, cat: Movies/HD, desc: "Peliculas 1080p"}
+    - {id: 54, cat: Movies/HD, desc: "Peliculas 1440p (2K)"}
+    - {id: 56, cat: Movies/3D, desc: "Peliculas  3D"}
+    - {id: 57, cat: Movies/UHD, desc: "Peliculas  4K"}
+    - {id: 58, cat: Movies/HD, desc: "Peliculas 720p"}
+    - {id: 59, cat: Movies/BluRay, desc: "Peliculas Bluray"}
+    - {id: 60, cat: Movies/DVD, desc: "Peliculas DVD"}
+    - {id: 61, cat: Movies/SD, desc: "Peliculas SD"}
+    - {id: 53, cat: TV, desc: "TV Series"}
     - {id: 11, cat: Other, desc: "VIP"}
+    - {id: 51, cat: PC/0day, desc: "Programas Windows"}
     - {id: 12, cat: XXX, desc: "XXX"}
 
   modes:
