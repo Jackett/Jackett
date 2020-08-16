@@ -23,6 +23,8 @@ namespace Jackett.Common.Models.DTO
         public string track { get; set; }
         public string year { get; set; }
         public string genre { get; set; }
+        public string author { get; set; }
+        public string title { get; set; }
         public string configured { get; set; }
 
         public static TorznabQuery ToTorznabQuery(TorznabRequest request)
@@ -77,6 +79,11 @@ namespace Jackett.Common.Models.DTO
                 query.Year = int.Parse(request.year);
             if (!string.IsNullOrWhiteSpace(request.genre))
                 query.Genre = request.genre.Split(',');
+
+            if (!string.IsNullOrWhiteSpace(request.title))
+                query.Title = request.title;
+            if (!string.IsNullOrWhiteSpace(request.author))
+                query.Author = request.author;
 
             query.ExpandCatsToSubCats();
 

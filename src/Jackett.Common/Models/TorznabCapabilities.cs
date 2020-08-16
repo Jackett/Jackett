@@ -28,6 +28,8 @@ namespace Jackett.Common.Models
 
         public List<string> SupportedMusicSearchParamsList;
 
+        public bool BookSearchAvailable { get; set; }
+
         public List<TorznabCategory> Categories { get; private set; }
 
         public TorznabCapabilities()
@@ -42,6 +44,7 @@ namespace Jackett.Common.Models
             SupportsTmdbMovieSearch = false;
             SupportsImdbTVSearch = false;
             SupportedMusicSearchParamsList = new List<string>();
+            BookSearchAvailable = false;
         }
 
         public TorznabCapabilities(params TorznabCategory[] cats)
@@ -54,6 +57,7 @@ namespace Jackett.Common.Models
             SupportsTmdbMovieSearch = false;
             SupportsImdbTVSearch = false;
             SupportedMusicSearchParamsList = new List<string>();
+            BookSearchAvailable = false;
             Categories = new List<TorznabCategory>();
             Categories.AddRange(cats);
             MovieSearchAvailable = Categories.Any(i => TorznabCatType.Movies.Contains(i));
@@ -88,6 +92,17 @@ namespace Jackett.Common.Models
         }
 
         private string SupportedMusicSearchParams => string.Join(",", SupportedMusicSearchParamsList);
+
+        private string SupportedBookSearchParams
+        {
+            get
+            {
+                var parameters = new List<string>() { "q" };
+                if (BookSearchAvailable)
+                    parameters.Add("author,title");
+                return string.Join(",", parameters);
+            }
+        }
 
         public bool SupportsCategories(int[] categories)
         {
@@ -132,6 +147,10 @@ namespace Jackett.Common.Models
                         new XElement("audio-search",
                             new XAttribute("available", MusicSearchAvailable ? "yes" : "no"),
                             new XAttribute("supportedParams", SupportedMusicSearchParams)
+                        ),
+                        new XElement("book-search",
+                            new XAttribute("available", BookSearchAvailable ? "yes" : "no"),
+                            new XAttribute("supportedParams", SupportedBookSearchParams)
                         )
                     ),
                     new XElement("categories",
@@ -159,6 +178,7 @@ namespace Jackett.Common.Models
             lhs.SearchAvailable = lhs.SearchAvailable || rhs.SearchAvailable;
             lhs.TVSearchAvailable = lhs.TVSearchAvailable || rhs.TVSearchAvailable;
             lhs.MovieSearchAvailable = lhs.MovieSearchAvailable || rhs.MovieSearchAvailable;
+            lhs.BookSearchAvailable = lhs.BookSearchAvailable || rhs.BookSearchAvailable;
             lhs.SupportsTVRageSearch = lhs.SupportsTVRageSearch || rhs.SupportsTVRageSearch;
             lhs.SupportsTvdbSearch = lhs.SupportsTvdbSearch || rhs.SupportsTvdbSearch;
             lhs.SupportsImdbMovieSearch = lhs.SupportsImdbMovieSearch || rhs.SupportsImdbMovieSearch;

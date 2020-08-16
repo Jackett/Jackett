@@ -118,6 +118,7 @@ namespace Jackett.Common.Indexers
                 SupportsTvdbSearch = Definition.Caps.Modes.Any(c => c.Key == "tv-search" && c.Value.Contains("tvdbid")),
                 SupportsImdbMovieSearch = Definition.Caps.Modes.Any(c => c.Key == "movie-search" && c.Value.Contains("imdbid")),
                 SupportsTmdbMovieSearch = Definition.Caps.Modes.Any(c => c.Key == "movie-search" && c.Value.Contains("tmdbid"))
+                BookSearchAvailable = Definition.Caps.Modes.Any(c => c.Key == "book-search" && c.Value.Contains("author") && c.Value.Contains("title"))
             };
             if (Definition.Caps.Modes.ContainsKey("music-search"))
                 TorznabCaps.SupportedMusicSearchParamsList = Definition.Caps.Modes["music-search"];
@@ -1242,6 +1243,8 @@ namespace Jackett.Common.Indexers
             variables[".Query.Track"] = query.Track;
             //variables[".Query.Genre"] = query.Genre ?? new List<string>();
             variables[".Query.Episode"] = query.GetEpisodeSearchString();
+            variables[".Query.Author"] = query.Author;
+            variables[".Query.Title"] = query.Title;
 
             var mappedCategories = MapTorznabCapsToTrackers(query);
             if (mappedCategories.Count == 0)
@@ -1329,6 +1332,8 @@ namespace Jackett.Common.Indexers
                         searchUrl += "?" + queryCollection.GetQueryString(Encoding);
                 }
                 var searchUrlUri = new Uri(searchUrl);
+
+                logger.Info($"Fetching: {searchUrl}");
 
                 // send HTTP request
                 WebClientStringResult response = null;
@@ -1581,6 +1586,12 @@ namespace Jackett.Common.Indexers
                                             var TVDBId = TVDBIdMatch.Groups[1].Value;
                                             release.TVDBId = ParseUtil.CoerceLong(TVDBId);
                                             value = release.TVDBId.ToString();
+                                            break;
+                                        case "author":
+                                            release.Author = value;
+                                            break;
+                                        case "booktitle":
+                                            release.BookTitle = value;
                                             break;
                                         case "banner":
                                             if (!string.IsNullOrWhiteSpace(value))
