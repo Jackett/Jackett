@@ -126,10 +126,12 @@ search:
   paths:
     - path: /
   keywordsfilters:
+    - name: re_replace # add brackets to year on searchquery if missing
+      args: ["(\\b(19|20)\\d{2})", " ($1)"]
     - name: replace # use this as a workaround till #893 is implemented
       args: ["Greys Anatomy", "Grey's Anatomy"]
     - name: re_replace
-      args: ["[^\\w\\d]+", "%"]
+      args: ["[^\\w\\d\\(\\)]+", "%"]
   inputs:
     p: torrents
     pid: 32
