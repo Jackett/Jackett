@@ -9,10 +9,12 @@ namespace Jackett.Common.Models.DTO
         public string q { get; set; }
         public string cat { get; set; }
         public string imdbid { get; set; }
+        public string tmdbid { get; set; }
         public string extended { get; set; }
         public string limit { get; set; }
         public string offset { get; set; }
         public string rid { get; set; }
+        public string tvdbid { get; set; }
         public string season { get; set; }
         public string ep { get; set; }
         public string album { get; set; }
@@ -57,9 +59,13 @@ namespace Jackett.Common.Models.DTO
 
             if (!string.IsNullOrWhiteSpace(request.rid))
                 query.RageID = int.Parse(request.rid);
-
+            if (!string.IsNullOrWhiteSpace(request.tvdbid))
+                query.TvdbID = int.Parse(request.tvdbid);
             if (!string.IsNullOrWhiteSpace(request.season))
                 query.Season = int.Parse(request.season);
+
+            if (!string.IsNullOrWhiteSpace(request.tmdbid))
+                query.TmdbID = int.Parse(request.tmdbid);
 
             if (!string.IsNullOrWhiteSpace(request.album))
                 query.Album = request.album;

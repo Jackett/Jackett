@@ -82,6 +82,7 @@ namespace Jackett.Common.Models
                             getTorznabElement("rageid", r.RageID),
                             getTorznabElement("thetvdb", r.TVDBId),
                             getTorznabElement("imdb", r.Imdb == null ? null : ((long)r.Imdb).ToString("D7")),
+                            getTorznabElement("tmdb", r.TMDb),
                             getTorznabElement("author", r.Author),
                             getTorznabElement("booktitle", r.BookTitle),
                             getTorznabElement("seeders", r.Seeders),

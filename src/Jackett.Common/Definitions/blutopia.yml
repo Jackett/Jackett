@@ -18,8 +18,8 @@ caps:
 
   modes:
     search: [q, imdbid]
-    tv-search: [q, season, ep, imdbid]
-    movie-search: [q, imdbid]
+    tv-search: [q, season, ep, imdbid, tvdbid]
+    movie-search: [q, imdbid, tmdbid]
 
 settings:
   - name: username
@@ -79,8 +79,8 @@ search:
     description: ""
     uploader: ""
     imdb: "{{ .Query.IMDBIDShort }}"
-    tvdb: ""
-    tmdb: ""
+    tvdb: "{{ .Query.TVDBID }}"
+    tmdb: "{{ .Query.TMDBID }}"
     mal: ""
     igdb: ""
     sorting: "{{ .Config.sort }}"
@@ -130,6 +130,10 @@ search:
     imdb:
       optional: true
       selector: a[href*="imdb.com/title/tt"]
+      attribute: href
+    tmdbid:
+      optional: true
+      selector: a[href*="themoviedb.org/movie/"]
       attribute: href
     date:
       selector: time
@@ -184,4 +188,4 @@ search:
     minimumseedtime:
       # 7 days (as seconds = 7 x 24 x 60 x 60)
       text: 604800
-# UNIT3D 2.7.0
+# UNIT3D 2.7.0b
