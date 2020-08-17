@@ -84,6 +84,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(54, TorznabCatType.Books, "Educational");
             AddCategoryMapping(27, TorznabCatType.Books, "Books-Mags");
             AddCategoryMapping(26, TorznabCatType.Audio, "Music/Audio");
+            AddCategoryMapping(3, TorznabCatType.Audio, "Music/Flac");
             AddCategoryMapping(44, TorznabCatType.Audio, "Music/Pack");
             AddCategoryMapping(29, TorznabCatType.AudioVideo, "Music/Video");
         }
