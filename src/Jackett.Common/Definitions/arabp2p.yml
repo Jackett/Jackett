@@ -6,7 +6,9 @@ language: ar-ar
 type: private
 encoding: UTF-8
 links:
-  - https://www.arabp2p.com/
+  - http://www.arabp2p.com/
+legacylinks:
+  - https://www.arabp2p.com/ # redirecting to http
 
 settings:
   - name: username
