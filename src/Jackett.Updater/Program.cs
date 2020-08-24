@@ -410,6 +410,7 @@ namespace Jackett.Updater
                 "Definitions/worldofp2p.yml",
                 "Definitions/worldwidetorrents.yml",
                 "Definitions/xktorrent.yml",
+                "Definitions/xtremefile.yml",
                 "Definitions/xtremezone.yml", // migrated to C# XtremeZone base tracker
                 "Definitions/yourexotic.yml", // renamed to exoticaz.yml
                 "Microsoft.Owin.dll",
