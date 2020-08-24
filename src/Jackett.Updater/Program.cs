@@ -403,6 +403,7 @@ namespace Jackett.Updater
                 "Definitions/u-torrents.yml",
                 "Definitions/ultimategamerclub.yml",
                 "Definitions/ultrahdclub.yml",
+                "Definitions/uniotaku.yml",
                 "Definitions/utorrents.yml", // same as SzeneFZ now
                 "Definitions/vanila.yml",
                 "Definitions/waffles.yml",

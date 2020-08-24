@@ -208,7 +208,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Torrents-Local
  * TribalMixes
  * Union Fansub
- * UniOtaku
  * YggTorrent (YGG)
  * Ztracker
 </details>
