@@ -473,7 +473,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Speedmaster HD
  * SpeedTorrent Reloaded
  * Spirit of Revolution
- * SportHD
  * SportsCult
  * SpringSunday
  * Superbits (SBS)
