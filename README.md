@@ -95,6 +95,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * OneJAV
  * OxTorrent
  * ParnuXi
+ * PC-torrent
  * PiratBit
  * Pirateiro
  * Pornforall
