@@ -7,6 +7,8 @@ type: public
 encoding: windows-1251
 links:
   - https://pc-torrent.pro/
+legacylinks:
+  - https://pc-torrent.org/
 
 caps:
   categorymappings:
