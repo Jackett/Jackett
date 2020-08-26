@@ -34,7 +34,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * AniRena
  * AniSource
  * AudioBook Bay (ABB)
- * Badass Torrents
  * BigFANGroup
  * BitRu
  * BT.etree
