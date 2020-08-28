@@ -9,6 +9,7 @@ followredirect: true
 links:
   - https://kickass.ws/
   - https://kickass.unblockit.top/
+  - https://kickasstorrents.unblockninja.com/
 legacylinks:
   - https://kickass.gg/
   - https://katcr.io/
@@ -16,7 +17,6 @@ legacylinks:
   - https://thekat.se/
   - https://kat.how/
   - https://kat.li/
-  - https://kickasstorrents.unblockninja.com/ # kickasstorrent proxy, not kickasstorrent-kathow
   - https://katcr.to/ # possible 3rd kickasstorrent site/clone?
   - https://kickasstorrent.cr/ # possible 3rd kickasstorrent site/clone?
   - https://kickass.unblockit.pro/
