@@ -101,7 +101,8 @@ namespace Jackett.Common.Indexers
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://descargas2020.org/",
             "https://pctnew.org/",
-            "https://pctreload.com/"
+            "https://pctreload.com/",
+            "https://pctmix.com/"
         };
 
         public override string[] LegacySiteLinks { get; protected set; } = {
