@@ -85,6 +85,7 @@ caps:
     - {id: 39, cat: Audio, desc: "Musica: Dance"}
     - {id: 40, cat: Audio, desc: "Musica: Discografia"}
     - {id: 43, cat: Audio, desc: "Musica: Dubstep"}
+    - {id: 30, cat: Audio, desc: "Musica: Eletronica"}
     - {id: 41, cat: Audio, desc: "Musica: Erudita"}
     - {id: 42, cat: Audio, desc: "Musica: Forró"}
     - {id: 31, cat: Audio, desc: "Musica: Funk"}
@@ -107,7 +108,14 @@ caps:
     - {id: 62, cat: TV/Sport, desc: "Tv: Esportes"}
     - {id: 64, cat: TV, desc: "Tv: Fechada"}
     - {id: 73, cat: TV, desc: "Video Aula: Video Aula"}
-    - {id: 999, cat: Other, desc: "Error Cat not Found"}
+    - {id: 127, cat: Other, desc: "Outros: Add-ons"}
+    - {id: 126, cat: Other, desc: "Outros: Extensões"}
+    - {id: 129, cat: Other, desc: "Outros: Fonts"}
+    - {id: 130, cat: Other, desc: "Outros: MOD"}
+    - {id: 125, cat: Other, desc: "Outros: Pack de Imagens"}
+    - {id: 122, cat: Other, desc: "Outros: Plug-ins"}
+    - {id: 128, cat: Other, desc: "Outros: Scripts"}
+    - {id: 124, cat: Other, desc: "Outros: Vetores"}
 
   modes:
     search: [q]
@@ -134,9 +142,9 @@ ratio:
 
 search:
   paths:
-    # http://amigos-share.club/torrents-search.php?search=&c1=1&c19=1&c36=1&incldead=0&freeleech=0&lang=0sort=id&order=desc&page=1
+    # http://amigos-share.club/torrents-search.php?search=&sort=id&order=desc&page=1
     - path: torrents-search.php
-    # site displays just 9 results, no profile options found to change this, so we attempt to fetch 5 pages
+    # site displays just 20 results, no profile options found to change this, so we attempt to fetch 5 pages
     - path: torrents-search.php
       inputs:
         page: 1
@@ -150,16 +158,16 @@ search:
       inputs:
         page: 4
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    # note: site does not support multi cat search.
+    # replace spaces with wildcard (percent symbol) as site's default search is exact string.
     search: "{{ re_replace .Keywords \"[\\s]+\" \"%\" }}"
-    incldead: 1
-    freeleech: 0
-    lang: 0
     sort: "{{ .Config.sort }}"
     order: "{{ .Config.type }}"
+  # torrents-search.php does not support imdbid search or return imdb links.
   keywordsfilters:
+  # drop the year from searches since site titles do not include year
     - name: re_replace
-      args: ["([12][0-9]{3})", ""]
+      args: ["(19|20[0-9]{2})", ""]
 
   rows:
     selector: div#fancy-list-group ul.list-group li.list-group-item
@@ -178,42 +186,44 @@ search:
       selector: div.list-group-item-content p.m-0 span.badge-primary[style$="#b6249d;"]
       optional: true
     title:
-      selector: a[href^="torrents-details.php?id="]
+      selector: a[href*="torrents-details.php?id="]
       filters:
         # strip out the non-english title [to the left of the brackets] and drop the brackets enclosing the english title
         - name: re_replace
           args: ["^(.*?)[\\(](.*?)[\\)](.*?)$", "$2$3"]
         # add the year to the title
         - name: append
-          args: "{{if .Result._year}} {{.Result._year}}{{else}}{{end}}"
+          args: "{{ if .Result._year }} {{ .Result._year }}{{ else }}{{ end }}"
         # add the quality to the title
         - name: append
-          args: "{{if .Result._quality}} {{.Result._quality}}{{else}}{{end}}"
+          args: "{{ if .Result._quality }} {{ .Result._quality }}{{ else }}{{ end }}"
         # add the type to the title
         - name: append
-          args: "{{if .Result._type}} {{.Result._type}}{{else}}{{end}}"
+          args: "{{ if .Result._type }} {{ .Result._type }}{{ else }}{{ end }}"
         # add audio to the title
         - name: append
-          args: "{{if .Result._language}} {{.Result._language}}{{else}}{{end}}"
+          args: "{{ if .Result._language }} {{ .Result._language }}{{ else }}{{ end }}"
         - name: re_replace
           args: ["(Dual-Audio|Dublado)", "Brazilian $1"]
     details:
-      selector: a[href^="torrents-details.php?id="]
+      selector: a[href*="torrents-details.php?id="]
       attribute: href
     download:
-      selector: a[href^="download.php?id="]
+      selector: a[href*="download.php?id="]
       attribute: href
     category:
       selector: div.list-group-item-addon img
       attribute: src
       case:
-        # unfortunately the site does not have category numbers on the results page, just a .png which can apply to both movies and tv.
-        # therefore I've order the list to favour movies,
-        # also, not all .png have been verified as the site has many empty categories. their image names have been extrapolated from the cat desc.
-        "[src$=\"/XXXZ.png\"]": 74
+        # unfortunately the site does not have category numbers on the results page, just a image which can apply to both movies and tv.
+        # therefore I've order the list to favour movies.
+        # also, not all images have been verified as the site has many empty categories. their image names have been extrapolated from the cat desc.
+        "[src$=\"/Adultos.fw.png\"]": 74
+        "[src$=\"/Gay.jpeg\"]": 107
+        "[src$=\"/Trans.jpeg\"]": 108
         "[src$=\"/Hentai.png\"]": 75
-        "[src$=\"/Anime.png\"]": 69
-        "[src$=\"/Windows.png\"]": 21
+        "[src$=\"/Anime2.fw.png\"]": 69
+        "[src$=\"/aplicativos.fw.png\"]": 21
         "[src$=\"/Mac.png\"]": 22
         "[src$=\"/Android.png\"]": 23
         "[src$=\"/Linux.png\"]": 25
@@ -225,7 +235,7 @@ search:
         "[src$=\"/E-books.png\"]": 67
         "[src$=\"/Revista.png\"]": 68
         "[src$=\"/HQ.png\"]": 112
-        "[src$=\"/Filmes.png\"]": 119
+        "[src$=\"/filmes2.fw.png\"]": 119
         "[src$=\"/Revistas-XXX.png\"]": 70
         "[src$=\"/PS4.png\"]": 79
         "[src$=\"/Jogos-PC.png\"]": 47
@@ -241,10 +251,11 @@ search:
         "[src$=\"/Jogos-Wii.png\"]": 55
         "[src$=\"/Jogos-DS.png\"]": 58
         "[src$=\"/jogosandroid.png\"]": 57
-        "[src$=\"/Jogos-PSP.png\"]": 82
+        "[src$=\"/PSP.png\"]": 82
         "[src$=\"/Jogos-NS.png\"]": 110
         "[src$=\"/Jogos-XboxOne.png\"]": 78
         "[src$=\"/Axe.png\"]": 29
+        "[src$=\"/Eletronica.png\"]": 30
         "[src$=\"/Funk.png\"]": 31
         "[src$=\"/Pagode.png\"]": 32
         "[src$=\"/HIP_HOP.png\"]": 33
@@ -265,13 +276,20 @@ search:
         "[src$=\"/POP.png\"]": 115
         "[src$=\"/MPB.png\"]": 114
         "[src$=\"/OST.png\"]": 84
-        "[src$=\"/Seriados.png\"]": 120
-        "[src$=\"/Shows.png\"]": 65
+        "[src$=\"/seriados.fw.png\"]": 120
+        "[src$=\"/show.fw.png\"]": 65
         "[src$=\"/Aberta.png\"]": 63
         "[src$=\"/Esporte.png\"]": 62
         "[src$=\"/Fechada.png\"]": 64
-        "[src$=\"/Videoaula.png\"]": 73
-        "*": 999
+        "[src$=\"/video aula4.fw.png\"]": 73
+        "[src$=\"/Add-ons.png\"]": 127
+        "[src$=\"/Extensões.png\"]": 126
+        "[src$=\"/Fonts.png\"]": 129
+        "[src$=\"/MOD.png\"]": 130
+        "[src$=\"/Imagens.png\"]": 125
+        "[src$=\"/Plug-ins.png\"]": 122
+        "[src$=\"/Scripts.png\"]": 128
+        "[src$=\"/Vetores.png\"]": 124
     date:
       text: now
     date:
