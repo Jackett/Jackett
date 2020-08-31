@@ -142,10 +142,10 @@ namespace Jackett.Common.Indexers
             var searchUrl = SearchUrl;
             var queryCollection = new NameValueCollection
             {
-                { "searchin", "title" },
-                { "incldead", "1" },
-                { "sort", "4" },
-                { "type", "desc" }
+                { "searchin", "name" },
+                { "search_mode", "all" },
+                { "order_by", "added" },
+                { "order_way", "desc" }
             };
             if (!string.IsNullOrWhiteSpace(finalSearchString))
                 queryCollection.Add("search", finalSearchString);
@@ -165,26 +165,26 @@ namespace Jackett.Common.Indexers
             {
                 var parser = new HtmlParser();
                 var dom = parser.ParseDocument(results);
-                var rows = dom.QuerySelectorAll("table.table-bordered > tbody > tr.browse_color");
+                var rows = dom.QuerySelectorAll("table.table-bordered > tbody > tr[class*=\"torrent_row_\"]");
                 foreach (var row in rows)
                 {
                     var release = new ReleaseInfo();
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 72 * 60 * 60;
-                    var qCatLink = row.QuerySelector("a[href^=\"browse.php?cat=\"]");
+                    var qCatLink = row.QuerySelector("a[href^=\"/browse_elastic.php?cat=\"]");
                     var catStr = qCatLink.GetAttribute("href").Split('=')[1];
                     release.Category = MapTrackerCatToNewznab(catStr);
-                    var qDetailsLink = row.QuerySelector("a[href^=\"details.php?id=\"]");
-                    var qDetailsTitle = row.QuerySelector("td:has(a[href^=\"details.php?id=\"]) b");
+                    var qDetailsLink = row.QuerySelector("a[href^=\"/details.php?id=\"]");
+                    var qDetailsTitle = row.QuerySelector("td:has(a[href^=\"/details.php?id=\"]) b");
                     release.Title = qDetailsTitle.TextContent.Trim();
-                    var qDlLink = row.QuerySelector("a[href^=\"download.php?torrent=\"]");
+                    var qDlLink = row.QuerySelector("a[href^=\"/download.php?torrent=\"]");
 
                     release.Link = new Uri(SiteLink + qDlLink.GetAttribute("href"));
                     release.Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
                     release.Guid = release.Comments;
 
                     var qColumns = row.QuerySelectorAll("td");
-                    release.Files = ParseUtil.CoerceInt(qColumns[4].TextContent);
+                    release.Files = ParseUtil.CoerceInt(qColumns[3].TextContent);
                     release.PublishDate = DateTimeUtil.FromUnknown(qColumns[5].TextContent);
                     release.Size = ReleaseInfo.GetBytes(qColumns[6].TextContent);
                     release.Grabs = ParseUtil.CoerceInt(qColumns[7].TextContent.Replace("Times", ""));
@@ -198,7 +198,7 @@ namespace Jackett.Common.Indexers
                         release.Imdb = ParseUtil.GetImdbID(WebUtility.UrlDecode(deRefUrl).Split('/').Last());
                     }
 
-                    release.DownloadVolumeFactor = row.QuerySelector("img[src*=\"freedownload\"]") != null ? 0 : 1;
+                    release.DownloadVolumeFactor = row.QuerySelector("span.freeleech") != null ? 0 : 1;
                     release.UploadVolumeFactor = 1;
                     releases.Add(release);
                 }
