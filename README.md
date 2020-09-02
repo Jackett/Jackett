@@ -532,7 +532,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * UHDBits
  * UnionGang
  * UnlimitZ
- * VHSTAPES (The Archive / Nostalgic)
  * Vizuk
  * WDT (Wrestling Desires Torrents / Ultimate Wrestling Torrents)
  * World-In-HD
