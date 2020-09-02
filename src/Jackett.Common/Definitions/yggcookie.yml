@@ -298,7 +298,7 @@ search:
       selector: td:nth-child(1) > a[href$="#comments"]
       attribute: href
     download:
-      text: "https://{{ .Config.searchanddlurl }}/engine/download_torrent?id={{ .Result._id }}"
+      text: "https://{{ .Config.searchanddlurl }}/engine/download_torrent?id={{ .Result._id }}&attempt=3"
     date:
       selector: td:nth-child(5)
       filters:
