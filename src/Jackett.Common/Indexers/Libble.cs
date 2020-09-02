@@ -80,12 +80,10 @@ namespace Jackett.Common.Indexers
             await ConfigureIfOK(result.Cookies, result.Content?.Contains("logout.php") == true,
                 () =>
                 {
-                    // TODO: <span class="warning">Your username, password or code was incorrect.<br><br></span>
                     var parser = new HtmlParser();
                     var dom = parser.ParseDocument(result.Content);
-                    var errorMessage = dom.QuerySelector("class:")?.TextContent.Trim().Replace("\n\t", " ");
-                    if (string.IsNullOrWhiteSpace(errorMessage))
-                        errorMessage = dom.QuerySelector("div.notification-body").TextContent.Trim().Replace("\n\t", " ");
+                    var warningNode = dom.QuerySelector("#loginform > .warning");
+                    var errorMessage = warningNode?.TextContent.Trim().Replace("\n\t", " ");
                     throw new ExceptionWithConfigData(errorMessage, configData);
                 });
 
@@ -142,10 +140,10 @@ namespace Jackett.Common.Indexers
                     var thumbnailNode = row.QuerySelector(".thumbnail");
 
                     var releaseArtist = "Various Artists";
-                    if (artistsNameNodes.Count() > 0) 
+                    if (artistsNameNodes.Count() > 0)
                     {
                         List<string> aristNames = new List<string>();
-                        foreach (var aristNode in artistsNameNodes) 
+                        foreach (var aristNode in artistsNameNodes)
                         {
                             aristNames.Add(aristNode.TextContent.Trim());
                         }
@@ -157,21 +155,21 @@ namespace Jackett.Common.Indexers
                     var releaseAlbumYear = ParseUtil.CoerceInt(albumYearNode.TextContent.Replace("[", "").Replace("]", "").Trim());
 
                     Uri releaseThumbnailUri = null;
-                    if (thumbnailNode != null) 
+                    if (thumbnailNode != null)
                     {
                         releaseThumbnailUri = new Uri(thumbnailNode.GetAttribute("title"));
                     }
 
                     ICollection<int> releaseNewznabCategory = null;
                     var categoriesSplit = categoryNode.ClassName.Split(' ');
-                    foreach (var rawCategory in categoriesSplit) 
+                    foreach (var rawCategory in categoriesSplit)
                     {
                         var newznabCat = MapTrackerCatToNewznab(rawCategory);
                         if (newznabCat.Count != 0) {
                             releaseNewznabCategory = newznabCat;
                         }
                     }
-                    
+
                     var releaseRows = dom.QuerySelectorAll(String.Format(".group_torrent.groupid_{0}", releaseGroupId));
 
                     string lastEdition = null;
@@ -201,7 +199,7 @@ namespace Jackett.Common.Indexers
                             release.Link = new Uri(SiteLink + releaseDownloadDetails.GetAttribute("href"));
                             release.Guid = release.Link;
                             release.Comments = new Uri(SiteLink + albumNameNode.GetAttribute("href"));
-                            
+
                             // Aug 31 2020, 15:50
                             try {
                                 release.PublishDate = DateTime.ParseExact(
