@@ -209,7 +209,7 @@ namespace Jackett.Common.Indexers
                                     DateTimeStyles.AssumeUniversal
                                 );
                             }
-                            catch(Exception ex) {
+                            catch(Exception) {
                             }
 
                             release.Files = ParseUtil.CoerceInt(releaseFileCountDetails.TextContent.Trim());
