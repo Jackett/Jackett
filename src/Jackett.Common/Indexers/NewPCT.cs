@@ -99,7 +99,6 @@ namespace Jackett.Common.Indexers
         private readonly string[] _voUrls = { "serie-vo", "serievo" };
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
-            "https://descargas2020.org/",
             "https://pctnew.org/",
             "https://pctreload.com/",
             "https://pctmix.com/"
@@ -114,13 +113,14 @@ namespace Jackett.Common.Indexers
             "http://torrentrapid.com/",
             "http://tumejortorrent.com/",
             "http://pctnew.com/",
+            "https://descargas2020.org/"
         };
 
         public NewPCT(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base(id: "newpct",
                    name: "NewPCT",
                    description: "NewPCT - Descargar peliculas, series y estrenos torrent gratis",
-                   link: "https://descargas2020.org/",
+                   link: "https://pctnew.org/",
                    caps: new TorznabCapabilities(TorznabCatType.TV,
                                                  TorznabCatType.TVSD,
                                                  TorznabCatType.TVHD,
