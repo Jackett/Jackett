@@ -338,6 +338,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * GigaTorrents
  * GimmePeers (formerly ILT)
  * GiroTorrent
+ * GreekDiamond
  * Greek Team
  * HD-Bits.com
  * HD-Forever (HDF)
