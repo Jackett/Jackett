@@ -93,9 +93,7 @@ login:
     uid: "{{ .Config.uid }}"
     pwd: "{{ .Config.pwd }}"
   error:
-    - selector: form[action="index.php?page=login&returnto=index.php"] table tr:nth-of-type(2) td
-      message:
-        selector: form[action="index.php?page=login&returnto=index.php"] table tr:nth-of-type(2) td span
+    - selector: form[action="index.php?page=login&returnto=index.php"] table tr:nth-of-type(2) td span
   test:
     path: index.php
     selector: a[href="logout.php"]
@@ -176,4 +174,6 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
+    minimumratio:
+      text: 1.0
 # xbtit dt fm v20.0
