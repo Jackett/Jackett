@@ -369,6 +369,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HQSource (HQS)
  * HacheDe
  * Hebits
+ * HellasTZ
  * Hon3y HD
  * Horror Site
  * HuSh
