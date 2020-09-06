@@ -146,6 +146,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Underverse
  * UnionDHT
  * XFSUB
+ * xxxAdultTorrent
  * xxxtor
  * xxxtorrents
  * YourBittorrent
