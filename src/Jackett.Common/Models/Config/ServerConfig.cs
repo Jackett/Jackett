@@ -69,8 +69,12 @@ namespace Jackett.Common.Models.Config
             {
                 url = $"{authString}@{url}";
             }
-
-            if (ProxyType != ProxyType.Http)
+            
+            if (ProxyType = ProxyType.Disabled)
+            {
+                var protocol = null;
+            }
+            else if (ProxyType != ProxyType.Http)
             {
                 var protocol = (Enum.GetName(typeof(ProxyType), ProxyType) ?? "").ToLower();
                 if (!string.IsNullOrEmpty(protocol))
