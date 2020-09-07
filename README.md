@@ -106,6 +106,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Rapidzona
  * RARBG
  * RinTor
+ * RinTorNeT
  * Rus-media
  * RuTor
  * RuTracker.RU
