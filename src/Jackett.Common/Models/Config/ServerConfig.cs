@@ -70,7 +70,7 @@ namespace Jackett.Common.Models.Config
                 url = $"{authString}@{url}";
             }
             
-            if (ProxyType = ProxyType.Disabled)
+            if (ProxyType == ProxyType.Disabled)
             {
                 return null;
             }
