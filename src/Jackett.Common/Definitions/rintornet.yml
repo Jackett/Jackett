@@ -45,7 +45,7 @@ search:
   inputs:
     do: search
     subaction: search
-    story:  "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+    story: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
     titleonly: 3
     sortby: date
     resorder: desc
