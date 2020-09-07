@@ -61,7 +61,7 @@ namespace Jackett.Common.Utils.Clients
                 proxy.Dispose();
             webProxy = null;
             webProxyUrl = serverConfig.GetProxyUrl();
-            if (serverConfig.ProxyType = ProxyType.Disabled)
+            if (serverConfig.ProxyType == ProxyType.Disabled)
             {
                 webProxy = null;
             }
