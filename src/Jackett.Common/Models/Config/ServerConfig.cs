@@ -72,7 +72,7 @@ namespace Jackett.Common.Models.Config
             
             if (ProxyType = ProxyType.Disabled)
             {
-                var protocol = null;
+                return null;
             }
             else if (ProxyType != ProxyType.Http)
             {
