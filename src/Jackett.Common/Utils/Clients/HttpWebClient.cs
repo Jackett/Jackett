@@ -58,13 +58,13 @@ namespace Jackett.Common.Utils.Clients
                 proxy.Dispose();
             webProxy = null;
             webProxyUrl = serverConfig.GetProxyUrl();
-            if (!string.IsNullOrWhiteSpace(webProxyUrl))
+            if (serverConfig.ProxyType = ProxyType.Disabled)
             {
-                if (serverConfig.ProxyType = ProxyType.Disabled)
-                {
-                    webProxy = null;
-                }
-                else if (serverConfig.ProxyType != ProxyType.Http)
+                webProxy = null;
+            }
+            else if (!string.IsNullOrWhiteSpace(webProxyUrl))
+            {
+                if (serverConfig.ProxyType != ProxyType.Http)
                 {
                     var addresses = Dns.GetHostAddressesAsync(serverConfig.ProxyUrl).Result;
                     var socksConfig = new ProxyConfig
