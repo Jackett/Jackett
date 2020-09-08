@@ -8,15 +8,14 @@ encoding: UTF-8
 followredirect: true
 links:
   - https://torrentgalaxy.to/
-  - https://torrentgalaxy.org/
-  - https://torrentgalaxy.pw/
+  - https://torrentgalaxy.mx/
+  - https://torrentgalaxy.su/
   - https://torrentgalaxy.root.yt/
   - https://torrentgalaxy.unblockninja.com/
   - https://torrentgalaxy.unblockit.top/
-  - https://tgx.unblocked.bar/
-  - https://tgx.proxyportal.pw/
-  - https://tgx.uk-unblock.pro/
+  - https://tgx.unblocked.rest/
 legacylinks:
+  - https://torrentgalaxy.org/ # redirects to *.to
   - https://torrentgalaxy.unblockit.pro/
   - https://torrentgalaxy.unblockit.one/
   - https://tgx.black-mirror.xyz/
@@ -28,6 +27,10 @@ legacylinks:
   - https://torrentgalaxy.unblockit.pw/
   - https://torrentgalaxy.unblockit.id/
   - https://torrentgalaxy.unblockit.win/
+  - https://torrentgalaxy.pw/ # proxy list only
+  - https://tgx.unblocked.bar/
+  - https://tgx.proxyportal.pw/
+  - https://tgx.uk-unblock.pro/
 
 caps:
   categorymappings:
