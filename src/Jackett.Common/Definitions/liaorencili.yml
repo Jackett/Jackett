@@ -6,6 +6,28 @@ language: en-us
 type: public
 encoding: UTF-8
 links:
+  - http://www.cilinb1.xyz/
+  - http://www.cilinb2.xyz/
+  - http://www.cilinb3.xyz/
+  - http://www.cilinb4.xyz/
+  - http://www.cilinb5.xyz/
+  - http://www.cilinb6.xyz/
+  - http://www.cilinb7.xyz/
+  - http://www.cilinb8.xyz/
+  - http://www.cilinb9.xyz/
+  - http://www.cilinb10.xyz/
+legacylinks:
+  - http://www.cili180.com/
+  - https://www.cilijj.xyz/
+  - https://www.liaorenso.xyz/
+  - https://www.liaorenso11.xyz/
+  - https://www.liaorenso12.xyz/
+  - https://www.liaorenso19.xyz/
+  - http://lrcili.xyz/ # proxy list only
+  - http://www.lrcili.xyz/ # proxy list only
+  - https://www.lrcili1.xyz/ # ERR_CONNECTION_TIMED_OUT
+  - https://www.lrcili2.xyz/ # ERR_CONNECTION_TIMED_OUT
+  - https://www.lrcili7.xyz/ # 404 Not Found
   - https://www.lrcili3.xyz/
   - https://www.lrcili4.xyz/
   - https://www.lrcili5.xyz/
@@ -38,29 +60,7 @@ links:
   - http://www.lrsoso8.xyz/
   - http://www.lrsoso9.xyz/
   - http://www.lrsoso10.xyz/
-  - http://www.cilinb1.xyz/
-  - http://www.cilinb2.xyz/
-  - http://www.cilinb3.xyz/
-  - http://www.cilinb4.xyz/
-  - http://www.cilinb5.xyz/
-  - http://www.cilinb6.xyz/
-  - http://www.cilinb7.xyz/
-  - http://www.cilinb8.xyz/
-  - http://www.cilinb9.xyz/
-  - http://www.cilinb10.xyz/
   - http://www.cilijj.xyz/
-legacylinks:
-  - http://www.cili180.com/
-  - https://www.cilijj.xyz/
-  - https://www.liaorenso.xyz/
-  - https://www.liaorenso11.xyz/
-  - https://www.liaorenso12.xyz/
-  - https://www.liaorenso19.xyz/
-  - http://lrcili.xyz/ # proxy list only
-  - http://www.lrcili.xyz/ # proxy list only
-  - https://www.lrcili1.xyz/ # ERR_CONNECTION_TIMED_OUT
-  - https://www.lrcili2.xyz/ # ERR_CONNECTION_TIMED_OUT
-  - https://www.lrcili7.xyz/ # 404 Not Found
 
 caps:
   categories:
