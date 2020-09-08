@@ -8,7 +8,6 @@ encoding: UTF-8
 followredirect: true
 links:
   - https://torrentgalaxy.to/
-  - https://torrentgalaxy.org/
   - https://torrentgalaxy.mx/
   - https://torrentgalaxy.su/
   - https://torrentgalaxy.root.yt/
@@ -16,6 +15,7 @@ links:
   - https://torrentgalaxy.unblockit.top/
   - https://tgx.unblocked.rest/
 legacylinks:
+  - https://torrentgalaxy.org/ # redirects to *.to
   - https://torrentgalaxy.unblockit.pro/
   - https://torrentgalaxy.unblockit.one/
   - https://tgx.black-mirror.xyz/
