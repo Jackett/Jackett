@@ -8,10 +8,7 @@ encoding: UTF-8
 links:
   - http://rutor.info/ # site does not support https ERR_CONNECTION_REFUSED
   - http://rutor.is/ # site does not support https ERR_CONNECTION_REFUSED
-  - https://rutor.unblocked.bar/
-  - https://rutor.proxyportal.pw/
-  - https://rutor.uk-unblock.pro/
-  - https://rutor.root.yt/
+  - https://rutor.unblocked.rest/
 legacylinks:
   - http://live-rutor.org/ # domain expired 9 Feb 2020
   - http://new-rutor.org/ # ERR_NAME_NOT_RESOLVED
@@ -20,6 +17,10 @@ legacylinks:
   - https://rutor.proxyportal.fun/
   - https://rutor.uk-unblock.xyz/
   - https://rutor.ind-unblock.xyz/
+  - https://rutor.unblocked.bar/
+  - https://rutor.proxyportal.pw/
+  - https://rutor.uk-unblock.pro/
+  - https://rutor.root.yt/ # Error 504 Gateway time-out
 
 caps:
   # unfortunately RuTor does not display categories anywhere in its search results page :-(
