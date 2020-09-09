@@ -8,7 +8,6 @@ encoding: UTF-8
 followredirect: true
 links:
   - https://www.ettvcentral.com/
-  - https://www.ettv.be/
   - https://ettv.unblockninja.com/
   - https://ettv.unblockit.top/
   - https://ettv.unblocked.rest/
@@ -31,6 +30,7 @@ legacylinks:
   - https://ettv.proxyportal.pw/
   - https://ettv.uk-unblock.pro/
   - https://ettv.root.yt/ # currently redirects to ettvcentral.com
+  - https://www.ettv.be/
 
 caps:
   categorymappings:
