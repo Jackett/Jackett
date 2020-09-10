@@ -11,34 +11,6 @@ legacylinks:
   - http://amigos-share.club/
   - https://amigos-share.club/
 
-settings:
-  - name: username
-    type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
-  - name: info_results
-    type: info
-    label: "Search results"
-    default: "Set <b>Exibição De Torrents</b> to <b>Lista</b> in your <b>Minhas Configurações</b>.<br />Using <b>Capas</b> is not supported and will return 0 results."
-  - name: sort
-    type: select
-    label: Sort requested from site
-    default: "id"
-    options:
-      "id": "created"
-      "seeders": "seeders"
-      "size": "size"
-      "name": "title"
-  - name: type
-    type: select
-    label: Order requested from site
-    default: "desc"
-    options:
-      "desc": "desc"
-      "asc": "asc"
-
 caps:
   categorymappings:
     - {id: 107, cat: XXX, desc: "Adultos: Gay"}
@@ -123,6 +95,38 @@ caps:
     movie-search: [q]
     music-search: [q]
 
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: info_results
+    type: info
+    label: "Search results"
+    default: "Set <b>Exibição De Torrents</b> to <b>Lista</b> in your <b>Minhas Configurações</b>.<br />Using <b>Capas</b> is not supported and will return 0 results."
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: "id"
+    options:
+      "id": "created"
+      "seeders": "seeders"
+      "size": "size"
+      "name": "title"
+  - name: type
+    type: select
+    label: Order requested from site
+    default: "desc"
+    options:
+      "desc": "desc"
+      "asc": "asc"
+
 login:
   path: account-login.php
   method: post
@@ -170,7 +174,7 @@ search:
       args: ["(19|20[0-9]{2})", ""]
 
   rows:
-    selector: div#fancy-list-group ul.list-group li.list-group-item
+    selector: "div#fancy-list-group ul.list-group li.list-group-item{{ if .Config.freeleech }}:has(span.badge-success:contains(\"FREE\")){{ else }}{{ end }}"
 
   fields:
     _quality:
@@ -186,7 +190,7 @@ search:
       selector: div.list-group-item-content p.m-0 span.badge-primary[style$="#b6249d;"]
       optional: true
     title:
-      selector: a[href*="torrents-details.php?id="]
+      selector: a[href*="torrents-details.php?id="], a[href*="details-misc.php?id="]
       filters:
         # strip out the non-english title [to the left of the brackets] and drop the brackets enclosing the english title
         - name: re_replace
@@ -206,7 +210,7 @@ search:
         - name: re_replace
           args: ["(Dual-Audio|Dublado)", "Brazilian $1"]
     details:
-      selector: a[href*="torrents-details.php?id="]
+      selector: a[href*="torrents-details.php?id="], a[href*="details-misc.php?id="]
       attribute: href
     download:
       selector: a[href*="download.php?id="]
@@ -290,6 +294,7 @@ search:
         "[src$=\"/Plug-ins.png\"]": 122
         "[src$=\"/Scripts.png\"]": 128
         "[src$=\"/Vetores.png\"]": 124
+        "[src$=\"/outros2.png\"]": 130
     date:
       text: now
     date:
