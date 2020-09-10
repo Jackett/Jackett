@@ -229,6 +229,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Abnormal
  * Acid Lounge (A-L)
  * Aftershock
+ * Aidoru!Online
  * Aither
  * AlphaRatio (AR)
  * AmigosShareClub
