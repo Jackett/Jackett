@@ -299,9 +299,15 @@ namespace Jackett.Common.Indexers
                 return true;
             if (caps.MusicSearchAvailable && query.IsMusicSearch)
                 return true;
+            if (caps.BookSearchAvailable && query.IsBookSearch)
+                return true;
             if (caps.SupportsTVRageSearch && query.IsTVRageSearch)
                 return true;
+            if (caps.SupportsTvdbSearch && query.IsTvdbSearch)
+                return true;
             if (caps.SupportsImdbMovieSearch && query.IsImdbQuery)
+                return true;
+            if (caps.SupportsTmdbMovieSearch && query.IsTmdbQuery)
                 return true;
 
             return false;

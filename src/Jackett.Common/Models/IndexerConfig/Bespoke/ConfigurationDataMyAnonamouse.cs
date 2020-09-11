@@ -1,10 +1,12 @@
-namespace Jackett.Common.Models.IndexerConfig
+namespace Jackett.Common.Models.IndexerConfig.Bespoke
 {
 
     public class ConfigurationDataMyAnonamouse : ConfigurationData
     {
         public StringItem MamId { get; private set; }
         public DisplayItem MamIdHint { get; private set; }
+        public BoolItem ExcludeVip { get; private set; }
+        public DisplayItem Instructions { get; private set; }
 
         public ConfigurationDataMyAnonamouse()
         {
@@ -14,6 +16,8 @@ namespace Jackett.Common.Models.IndexerConfig
             {
                 Name = "mam_id instructions"
             };
+            ExcludeVip = new BoolItem { Name = "Exclude VIP torrents" };
+            Instructions = new DisplayItem("For best results, change the 'Torrents per page' setting to 100 in your Profile => Torrent tab.") { Name = "" };
         }
     }
 

@@ -284,6 +284,7 @@ namespace Jackett.Updater
                 "Definitions/avg.yml",
                 "Definitions/awesomehd.yml", // migrated to C#
                 "Definitions/b2s-share.yml",
+                "Definitions/badasstorrents.yml", // to be migrated to c#
                 "Definitions/bithq.yml",
                 "Definitions/bitme.yml",
                 "Definitions/bittorrentam.yml",
@@ -333,6 +334,7 @@ namespace Jackett.Updater
                 "Definitions/inperil.yml",
                 "Definitions/isohunt.yml",
                 "Definitions/katcrs.yml",
+                "Definitions/kaztorka.yml",
                 "Definitions/kikibt.yml",
                 "Definitions/lapausetorrents.yml",
                 "Definitions/lemencili.yml",
@@ -351,7 +353,6 @@ namespace Jackett.Updater
                 "Definitions/nyaa.yml",
                 "Definitions/nyoo.yml",
                 "Definitions/passionetorrent.yml",
-                "Definitions/pctorrent.yml",
                 "Definitions/polishtracker.yml",
                 "Definitions/qctorrent.yml",
                 "Definitions/qxr.yml",
@@ -374,6 +375,7 @@ namespace Jackett.Updater
                 "Definitions/skytorrents.yml",
                 "Definitions/solidtorrents.yml", // migrated to C#
                 "Definitions/speed-share.yml",
+                "Definitions/sporthd.yml",
                 "Definitions/t411.yml",
                 "Definitions/t411v2.yml",
                 "Definitions/tazmaniaden.yml",
@@ -403,12 +405,15 @@ namespace Jackett.Updater
                 "Definitions/u-torrents.yml",
                 "Definitions/ultimategamerclub.yml",
                 "Definitions/ultrahdclub.yml",
+                "Definitions/uniotaku.yml", // to be migrated to c#
                 "Definitions/utorrents.yml", // same as SzeneFZ now
                 "Definitions/vanila.yml",
+                "Definitions/vhstapes.yml",
                 "Definitions/waffles.yml",
                 "Definitions/worldofp2p.yml",
                 "Definitions/worldwidetorrents.yml",
                 "Definitions/xktorrent.yml",
+                "Definitions/xtremefile.yml",
                 "Definitions/xtremezone.yml", // migrated to C# XtremeZone base tracker
                 "Definitions/yourexotic.yml", // renamed to exoticaz.yml
                 "Microsoft.Owin.dll",

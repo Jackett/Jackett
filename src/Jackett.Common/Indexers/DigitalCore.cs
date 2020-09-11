@@ -68,6 +68,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(18, TorznabCatType.PC0day, "Apps/0day");
             AddCategoryMapping(20, TorznabCatType.PCISO, "Apps/PC");
             AddCategoryMapping(21, TorznabCatType.PCMac, "Apps/Mac");
+            AddCategoryMapping(33, TorznabCatType.PC, "Apps/Tutorials");
 
             AddCategoryMapping(22, TorznabCatType.AudioMP3, "Music/MP3");
             AddCategoryMapping(23, TorznabCatType.AudioLossless, "Music/FLAC");

@@ -170,7 +170,7 @@ search:
       selector: td.torrent_name > a, .newIndicator > a
       filters:
         - name: append
-          args: " [spanish]"
+          args: " SPANISH"
     details:
       selector: td.torrent_name > a, .newIndicator > a
       attribute: href

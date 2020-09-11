@@ -37,7 +37,7 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        protected readonly string[] OptionalFileds = new string[] { "imdb", "rageid", "tvdbid", "banner" };
+        protected readonly string[] OptionalFields = new string[] { "imdb", "rageid", "tvdbid", "banner" };
 
         private static readonly string[] _SupportedLogicFunctions =
         {
@@ -113,7 +113,12 @@ namespace Jackett.Common.Indexers
             Type = Definition.Type;
             TorznabCaps = new TorznabCapabilities
             {
-                SupportsImdbMovieSearch = Definition.Caps.Modes.Any(c => c.Key == "movie-search" && c.Value.Contains("imdbid"))
+                // SupportsImdbTVSearch temporarily disabled due to #8107
+                // SupportsImdbTVSearch = Definition.Caps.Modes.Any(c => c.Key == "tv-search" && c.Value.Contains("imdbid")),
+                SupportsTvdbSearch = Definition.Caps.Modes.Any(c => c.Key == "tv-search" && c.Value.Contains("tvdbid")),
+                SupportsImdbMovieSearch = Definition.Caps.Modes.Any(c => c.Key == "movie-search" && c.Value.Contains("imdbid")),
+                SupportsTmdbMovieSearch = Definition.Caps.Modes.Any(c => c.Key == "movie-search" && c.Value.Contains("tmdbid")),
+                BookSearchAvailable = Definition.Caps.Modes.Any(c => c.Key == "book-search" && c.Value.Contains("author") && c.Value.Contains("title"))
             };
             if (Definition.Caps.Modes.ContainsKey("music-search"))
                 TorznabCaps.SupportedMusicSearchParamsList = Definition.Caps.Modes["music-search"];
@@ -1225,10 +1230,11 @@ namespace Jackett.Common.Indexers
             variables[".Query.Extended"] = query.Extended.ToString();
             variables[".Query.Categories"] = query.Categories;
             variables[".Query.APIKey"] = query.ApiKey;
-            variables[".Query.TVDBID"] = null;
+            variables[".Query.TVDBID"] = query.TvdbID.ToString();
             variables[".Query.TVRageID"] = query.RageID;
             variables[".Query.IMDBID"] = query.ImdbID;
             variables[".Query.IMDBIDShort"] = query.ImdbIDShort;
+            variables[".Query.TMDBID"] = query.TmdbID.ToString();
             variables[".Query.TVMazeID"] = null;
             variables[".Query.TraktID"] = null;
             variables[".Query.Album"] = query.Album;
@@ -1237,6 +1243,8 @@ namespace Jackett.Common.Indexers
             variables[".Query.Track"] = query.Track;
             //variables[".Query.Genre"] = query.Genre ?? new List<string>();
             variables[".Query.Episode"] = query.GetEpisodeSearchString();
+            variables[".Query.Author"] = query.Author;
+            variables[".Query.Title"] = query.Title;
 
             var mappedCategories = MapTorznabCapsToTrackers(query);
             if (mappedCategories.Count == 0)
@@ -1324,6 +1332,8 @@ namespace Jackett.Common.Indexers
                         searchUrl += "?" + queryCollection.GetQueryString(Encoding);
                 }
                 var searchUrlUri = new Uri(searchUrl);
+
+                logger.Info($"Fetching: {searchUrl}");
 
                 // send HTTP request
                 WebClientStringResult response = null;
@@ -1556,6 +1566,13 @@ namespace Jackett.Common.Indexers
                                             release.Imdb = ParseUtil.GetLongFromString(value);
                                             value = release.Imdb.ToString();
                                             break;
+                                        case "tmdbid":
+                                            var TmdbIDRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
+                                            var TmdbIDMatch = TmdbIDRegEx.Match(value);
+                                            var TmdbID = TmdbIDMatch.Groups[1].Value;
+                                            release.TMDb = ParseUtil.CoerceLong(TmdbID);
+                                            value = release.TMDb.ToString();
+                                            break;
                                         case "rageid":
                                             var RageIDRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
                                             var RageIDMatch = RageIDRegEx.Match(value);
@@ -1569,6 +1586,12 @@ namespace Jackett.Common.Indexers
                                             var TVDBId = TVDBIdMatch.Groups[1].Value;
                                             release.TVDBId = ParseUtil.CoerceLong(TVDBId);
                                             value = release.TVDBId.ToString();
+                                            break;
+                                        case "author":
+                                            release.Author = value;
+                                            break;
+                                        case "booktitle":
+                                            release.BookTitle = value;
                                             break;
                                         case "banner":
                                             if (!string.IsNullOrWhiteSpace(value))
@@ -1587,8 +1610,11 @@ namespace Jackett.Common.Indexers
                                 {
                                     if (!variables.ContainsKey(variablesKey))
                                         variables[variablesKey] = null;
-                                    if (OptionalFileds.Contains(Field.Key) || FieldModifiers.Contains("optional") || Field.Value.Optional)
+                                    if (OptionalFields.Contains(Field.Key) || FieldModifiers.Contains("optional") || Field.Value.Optional)
+                                    {
+                                        variables[variablesKey] = null;
                                         continue;
+                                    }
                                     throw new Exception(string.Format("Error while parsing field={0}, selector={1}, value={2}: {3}", Field.Key, Field.Value.Selector, (value == null ? "<null>" : value), ex.Message));
                                 }
                             }
@@ -1608,6 +1634,12 @@ namespace Jackett.Common.Indexers
 
                                             if (query.ImdbID != null && TorznabCaps.SupportsImdbMovieSearch)
                                                 break; // skip andmatch filter for imdb searches
+
+                                            if (query.TmdbID != null && TorznabCaps.SupportsTmdbMovieSearch)
+                                                break; // skip andmatch filter for tmdb searches
+
+                                            if (query.TvdbID != null && TorznabCaps.SupportsTvdbSearch)
+                                                break; // skip andmatch filter for tvdb searches
 
                                             var queryKeywords = variables[".Keywords"] as string;
 

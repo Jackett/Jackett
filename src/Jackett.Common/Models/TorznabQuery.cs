@@ -16,7 +16,9 @@ namespace Jackett.Common.Models
         public int Limit { get; set; }
         public int Offset { get; set; }
         public int? RageID { get; set; }
+        public int? TvdbID { get; set; }
         public string ImdbID { get; set; }
+        public int? TmdbID { get; set; }
 
         public int Season { get; set; }
         public string Episode { get; set; }
@@ -28,6 +30,9 @@ namespace Jackett.Common.Models
         public string Track { get; set; }
         public int? Year { get; set; }
         public ICollection<string> Genre { get; set; }
+
+        public string Author { get; set; }
+        public string Title { get; set; }
 
         public bool IsTest { get; set; }
 
@@ -43,9 +48,15 @@ namespace Jackett.Common.Models
 
         public bool IsMusicSearch => QueryType == "music";
 
+        public bool IsBookSearch => QueryType == "book";
+
         public bool IsTVRageSearch => RageID != null;
 
+        public bool IsTvdbSearch => TvdbID != null;
+
         public bool IsImdbQuery => ImdbID != null;
+
+        public bool IsTmdbQuery => TmdbID != null;
 
         public bool HasSpecifiedCategories => (Categories != null && Categories.Length > 0);
 
@@ -121,8 +132,12 @@ namespace Jackett.Common.Models
                 Label = Label,
                 Track = Track,
                 Year = Year,
+                Author = Author,
+                Title = Title,
                 RageID = RageID,
-                ImdbID = ImdbID
+                TvdbID = TvdbID,
+                ImdbID = ImdbID,
+                TmdbID = TmdbID
             };
             if (Categories?.Length > 0)
             {

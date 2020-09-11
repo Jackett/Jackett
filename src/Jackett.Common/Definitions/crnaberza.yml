@@ -61,6 +61,10 @@ settings:
     type: info
     label: Results Per Page
     default: For best results, change the 'Torrents per page' setting to 100 on your 'Personal Options' from the 'Personal' menu on the Crna Berza webpage.
+  - name: freeleech
+    type: checkbox
+    label: Filter freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -109,16 +113,16 @@ search:
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
-    # 0 title 1 descr 2 both
+    # 0 title, 1 descr, 2 both
     blah: 0
-    # 0 active 1 incldead 2 onlydead
+    # 0 active, 1 incldead, 2 onlydead
     incldead: 1
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
     # does not support searching imdbid and does not return imdb links
 
   rows:
-    selector: tr:has(td.trowtorrent)
+    selector: "tr:has(td.trowtorrent){{ if .Config.freeleech }}:has(img[src$=\"/pic/freedownload.gif\"]){{ else }}{{ end }}"
 
   fields:
     category:
@@ -171,4 +175,9 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 7 day (as seconds = 7 x 24 x 60 x 60)
+      text: 604800
 # U-232

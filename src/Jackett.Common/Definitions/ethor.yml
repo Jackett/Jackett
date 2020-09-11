@@ -104,12 +104,14 @@ search:
       filters:
         - name: replace
           args: ["/details.php", "/download.php"]
-    _title_original:
-      selector: a[href^="/details.php"]:has(b)
-    _title_original: # long titles (shortened with ...)
+    _title_original_b:
+      selector: a[href^="/details.php"] b
+    _title_original_title: # long titles (shortened with ...)
       selector: a[href^="/details.php"][title]
       attribute: title
       optional: true
+    _title_original:
+      text: "{{ if .Result._title_original_title }}{{ .Result._title_original_title }}{{ else }}{{ .Result._title_original_b }}{{ end }}"
     _title_normalized:
       text: "{{ .Result._title_original }}"
       filters:

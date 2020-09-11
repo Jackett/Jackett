@@ -7,9 +7,7 @@ type: semi-private
 encoding: UTF-8
 links:
   - https://prostylex.org/
-  - https://prostylex.unblocked.bar/
-  - https://prostylex.proxyportal.pw/
-  - https://prostylex.uk-unblock.pro/
+  - https://prostylex.unblocked.rest/
 legacylinks:
   - http://prostylex.com/
   - https://prostylex.black-mirror.xyz/
@@ -17,6 +15,9 @@ legacylinks:
   - https://prostylex.proxyportal.fun/
   - https://prostylex.uk-unblock.xyz/
   - https://prostylex.ind-unblock.xyz/
+  - https://prostylex.unblocked.bar/
+  - https://prostylex.proxyportal.pw/
+  - https://prostylex.uk-unblock.pro/
 
 caps:
   categorymappings:
@@ -114,7 +115,7 @@ login:
   error:
     - selector: div.myFrame:contains("Access Denied")
   test:
-    path: torrents-search.php
+    path: search.php
 
 download:
   selector: a[href^="magnet:?"]
@@ -122,9 +123,9 @@ download:
 
 search:
   paths:
-    # http://prostylex.org/torrents-search.php?search=
-    # http://prostylex.org/torrents-search.php?c1=1&c2=1&c3=1&search=expanse&lang=0&cat=0
-    - path: torrents-search.php
+    # http://prostylex.org/search.php?search=
+    # http://prostylex.org/search.php?c1=1&c2=1&c3=1&search=expanse&lang=0&cat=0
+    - path: search.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"

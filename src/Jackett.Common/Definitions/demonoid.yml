@@ -8,9 +8,10 @@ encoding: UTF-8
 followredirect: true
 links:
   - https://www.demonoid.is/
-  - https://demonoid.unblockit.win/
-legacylinks:
   - https://www.dnoid.to/
+  - https://www.dnoid.pw/
+  - https://demonoid.unblockit.top/
+legacylinks:
   - https://demonoid.unblockit.pro/
   - https://demonoid.unblockit.one/
   - https://demonoid.unblockit.me/
@@ -21,6 +22,7 @@ legacylinks:
   - https://dnoid.ind-unblock.xyz/
   - https://demonoid.unblockit.pw/
   - https://demonoid.unblockit.id/
+  - https://demonoid.unblockit.win/
 
 caps:
   categorymappings:

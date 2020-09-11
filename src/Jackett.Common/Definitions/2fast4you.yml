@@ -90,6 +90,10 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -127,11 +131,11 @@ search:
   inputs:
     $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
-    # 0 active 1 incldead 2 onlydead
+    # 0 active, 1 incldead, 2 onlydead
     incldead: 1
-    # 0 all 1 notfree 2 onlyfree
-    freeleech: 0
-    # 0 any 1 French 2 English 3 Multi 4-8 32-41
+    # 0 all, 1 notfree, 2 onlyfree
+    freeleech: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
+    # 0 any, 1 French, 2 English, 3 Multi, 4-8 32-41
     lang: 0
     sort: "{{ .Config.sort}}"
     order: "{{ .Config.order}}"

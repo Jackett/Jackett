@@ -40,7 +40,6 @@ namespace Jackett.Common.Services
             {"cili180", "liaorencili"},
             {"metaliplayro", "romanianmetaltorrents"},
             {"nnm-club", "noname-club"},
-            {"nostalgic", "vhstapes"},
             {"passtheheadphones", "redacted"},
             {"rstorrent", "redstartorrent"},
             {"tehconnectionme", "anthelion"},
