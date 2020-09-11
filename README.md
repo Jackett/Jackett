@@ -182,7 +182,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HamsterStudio
  * IV-Torrents
  * KinoNaVse100
- * Kaztorka
  * Kinorun
  * Kinozal
  * Korsar

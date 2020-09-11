@@ -334,6 +334,7 @@ namespace Jackett.Updater
                 "Definitions/inperil.yml",
                 "Definitions/isohunt.yml",
                 "Definitions/katcrs.yml",
+                "Definitions/kaztorka.yml",
                 "Definitions/kikibt.yml",
                 "Definitions/lapausetorrents.yml",
                 "Definitions/lemencili.yml",
