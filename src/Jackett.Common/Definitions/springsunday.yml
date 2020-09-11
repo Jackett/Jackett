@@ -34,6 +34,10 @@ settings:
     type: info
     label: How to get the Cookie
     default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -81,11 +85,11 @@ search:
     # 0 incldead, 1 active, 2 onlydead
     incldead: 0
     # 0 all, 1 normal, 2 free, 3 2x, 4 2xFree, 5 50%, 6 2x50%, 7 30%
-    spstate: 0
+    spstate: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
     # 0 all, 1 popular, 2 classic, 3 recomended, 4 2+3
     pick: 0
     # 0 title. 1 descr, 3 uploader, 4 imdb URL
-    search_area: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
+    search_area: "{{ if .Query.IMDBID }}4{{ else }}0{{ end }}"
     # 0 AND, 1 OR, 2 Exact
     search_mode: 0
     sort: "{{ .Config.sort }}"

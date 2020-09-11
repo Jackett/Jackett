@@ -5,6 +5,8 @@ description: "FinVip is a FINNISH Private Torrent Tracker for MOVIES / TV / GENE
 language: fi-fi
 type: private
 encoding: UTF-8
+certificates:
+  - 646731cb7f3a332c1a1442302589480c46152ef6 # expired ‎Tuesday, ‎8 ‎September ‎2020 10:58:46
 links:
   - https://finvip.org/
 

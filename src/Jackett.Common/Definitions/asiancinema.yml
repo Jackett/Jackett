@@ -27,6 +27,10 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -86,6 +90,7 @@ search:
     sort: "{{ .Config.sort }}"
     direction: "{{ .Config.type }}"
     qty: 100
+    freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
 
   rows:
     selector: table > tbody > tr

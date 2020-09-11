@@ -65,7 +65,10 @@ settings:
     type: info
     label: How to get the Cookie
     default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
-
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -99,13 +102,13 @@ search:
     # https://divteam.com/index.php?page=torrents&search=daredevil&category=20;23;31;65;64;60;63;69;70;71;72;73;74;75;76;77;78;80;81;82;83;84&active=1
     - path: index.php
   inputs:
-    page: "torrents"
+    page: torrents
     category: "{{ range .Categories }}{{.}};{{end}}"
     search: "{{ .Keywords }}"
-    # 0 all 1 activeonly 2 deadonly
+    # 0 all, 1 activeonly, 2 deadonly
     active: 0
-    # 0 title 1 title&desc 2 descr 3 uploaders 5 gold 6 silver 9 2x 10 3x 11 4x
-    options: 0
+    # 0 title, 1 title&desc, 2 descr, 3 uploaders, 5 gold, 6 silver, 9 2x, 10 3x, 11 4x, 12 5x
+    options: "{{ if .Config.freeleech }}5{{ else }}0{{ end }}"
     order: "{{ .Config.sort }}"
     by: "{{ .Config.type }}"
     # does not support imdbid search and does not supply imdb link in results.

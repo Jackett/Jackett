@@ -39,6 +39,10 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -77,10 +81,11 @@ search:
   inputs:
     $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
     search: "{{.Keywords}}"
-    # title descr genre all
+    # title, descr, genre, all
     searchin: title
-    # 0 active 1 incldead 2 onlydead
+    # 0 active, 1 incldead, 2 onlydead
     incldead: 1
+    only_free: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
 

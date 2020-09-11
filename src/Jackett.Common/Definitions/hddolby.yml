@@ -42,6 +42,10 @@ settings:
     type: info
     label: "About 2FA code"
     default: "Only fill in the <b>2FA code</b> box if you have enabled <b>2FA</b> on the HDDolby Web Site. Otherwise just leave it empty."
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: info_tpp
     type: info
     label: Results Per Page
@@ -85,14 +89,14 @@ search:
     - path: torrents.php
   inputs:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-    # 0=including dead 1=active 2=dead
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    # 0=incldead, 1=active, 2=dead
     incldead: 0
-    # show promotions: 0=all 1=normal 2=free 3=2x 4=2xFree 5=50% 6=2x50% 7=30%
-    spstate: 0
-    # 0=title 1=descr 3=uploader 4=imdb URL
-    search_area: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
-    # 0=AND 1=OR 2=Exact
+    # show promotions: 0=all, 1=normal, 2=free, 3=2x, 4=2xFree, 5=50%, 6=2x50%, 7=30%
+    spstate: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
+    # 0=title, 1=descr, 3=uploader, 4=imdb URL
+    search_area: "{{ if .Query.IMDBID }}4{{ else }}0{{ end }}"
+    # 0=AND, 1=OR, 2=Exact
     search_mode: 0
 
   rows:

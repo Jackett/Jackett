@@ -88,9 +88,9 @@ caps:
     - {id: 9999, cat: Other, desc: "unsort"}
 
   modes:
-    search: [q]
+    search: [q, imdbid]
     tv-search: [q, season, ep]
-    movie-search: [q]
+    movie-search: [q, imdbid]
     music-search: [q]
 
 settings:
@@ -100,6 +100,10 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -151,12 +155,14 @@ search:
     suchfeld: 2
     alleanzeigen: 1
     $raw: "{{ range .Categories }}kategorie[]={{.}}&{{end}}"
-    suche: "{{ .Keywords }}"
-    # searchin 1 name 2 descr 3 both
-    durchsuche: 1
-    # includedead 1 active 2 all 3 dead 4 highlight 5 bookmark 6 onlyups 7 freeleech 8 multi2 9 multi5 10 multi10 11 25%dl 12 50%dl 13 75%dl
-    suchein: 2
-    # cat 1 all 1000 film 2000 tv 3000 docs 4000 sport 5000 xxx 6000 games 7000 apps 8000 music 9000 other
+    suche: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    # searchin: 1 name, 2 descr, 3 all, 4 genre, 5 movei titles, 6 actors, 7 authors, 8 directors, 9 filmcrew, 10 plot, 11 imdbid, 12 tmdbid
+    # note: although tmdbid appears as option 12, searching for this yields no results.
+    durchsuche: "{{ if .Query.IMDBID }}11{{ else }}1{{ end }}"
+    # incldead: 1 active, 2 all, 3 onlydead, 4 highlight, 5 bookmark, 6 onlyups, 7 freeleech, 8 multi2, 9 multi5, 10 multi10, 11 25%d,l 12 50%dl, 13 75%dl
+    # note: searching with freeleech yielded no results, using onlyups works.
+    suchein: "{{ if .Config.freeleech }}6{{ else }}2{{ end }}"
+    # cat: 1 all, 1000 film, 2000 tv, 3000 docs, 4000 sport, 5000 xxx, 6000 games, 7000 apps, 8000 music, 9000 other
     sucheaus: 1
     sortierenach: "{{ .Config.sort }}"
     sortierung: "{{ .Config.type }}"
@@ -227,4 +233,7 @@ search:
         "font.mu:contains(\"10x\")": 10
         font.fl: 0 # freeleech neither dl or ul is counted
         "*": 1
+    minimumseedtime:
+      # 2 day (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
 # engine n/a

@@ -27,6 +27,7 @@ namespace Jackett.Common.Indexers
             Type = "private";
 
             webclient.AddTrustedCertificate(new Uri(SiteLink).Host, "B52C043ABDE7AFB2231E162B1DD468758AEEE307");
+            webclient.AddTrustedCertificate(new Uri(SiteLink).Host, "AAA3E062739F3733FE659BA4A89E55E4EB48063B");
 
             AddCategoryMapping(1, TorznabCatType.Audio, "Music");
             AddCategoryMapping(2, TorznabCatType.Movies, "Movies");
