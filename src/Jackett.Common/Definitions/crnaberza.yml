@@ -63,7 +63,7 @@ settings:
     default: For best results, change the 'Torrents per page' setting to 100 on your 'Personal Options' from the 'Personal' menu on the Crna Berza webpage.
   - name: freeleech
     type: checkbox
-    label: Search freeleech only
+    label: Filter freeleech only
     default: false
   - name: sort
     type: select
