@@ -26,7 +26,7 @@ search:
     - path: "{{ if .Keywords }}search/{{ .Keywords }}{{ else }}browse/0/0/0/0{{ end }}"
 
   rows:
-    selector: tr.gai
+    selector: tr.gai:has(a[href^="/torrent/"])
 
   fields:
     category:
