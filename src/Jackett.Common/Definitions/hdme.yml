@@ -51,6 +51,10 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -102,7 +106,7 @@ search:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     # 0 active, 1 incldead, 2 onlydead, 3 onlyfree
-    incldead: 1
+    incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
     # 0 name, 1 descr, 2 both
     blah: "{{ if .Query.IMDBID }}1{{ else }}0{{ end }}"
     sort: "{{ .Config.sort }}"
@@ -146,7 +150,7 @@ search:
       selector: td:nth-child(9)
     downloadvolumefactor:
       case:
-        "font:contains(\"(FreeLeech)\")": 0
+        font[color="#D4A017"]: 0
         "*": 1
     uploadvolumefactor:
       text: 1
