@@ -1519,15 +1519,17 @@ namespace Jackett.Common.Indexers
                                             value = release.Size.ToString();
                                             break;
                                         case "leechers":
-                                            var Leechers = ParseUtil.CoerceInt(value);
+                                            var leechers = ParseUtil.CoerceLong(value);
+                                            leechers = leechers < 5000000L ? leechers : 0; // to fix #6558
                                             if (release.Peers == null)
-                                                release.Peers = Leechers;
+                                                release.Peers = leechers;
                                             else
-                                                release.Peers += Leechers;
-                                            value = Leechers.ToString();
+                                                release.Peers += leechers;
+                                            value = leechers.ToString();
                                             break;
                                         case "seeders":
-                                            release.Seeders = ParseUtil.CoerceInt(value);
+                                            release.Seeders = ParseUtil.CoerceLong(value);
+                                            release.Seeders = release.Seeders < 5000000L ? release.Seeders : 0; // to fix #6558
                                             if (release.Peers == null)
                                                 release.Peers = release.Seeders;
                                             else
