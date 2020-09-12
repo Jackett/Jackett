@@ -383,7 +383,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Insane Tracker
  * JPopsuki
  * JPTV
- * Kapaki
  * Karagarga
  * Keep Friends
  * LastFiles
