@@ -31,7 +31,7 @@ namespace Jackett.Common.Indexers
             { "cats_musicvideos", "Music Videos" },
         };
 
-       private new ConfigurationDataBasicLogin configData
+        private new ConfigurationDataBasicLogin configData
         {
             get => (ConfigurationDataBasicLogin)base.configData;
             set => base.configData = value;
@@ -44,7 +44,8 @@ namespace Jackett.Common.Indexers
                    link: "https://libble.me/",
                    caps: new TorznabCapabilities
                    {
-                       TVSearchAvailable = false
+                       TVSearchAvailable = false,
+                       SupportedMusicSearchParamsList = new List<string> { "q", "album", "artist", "label", "year" }
                    },
                    configService: configService,
                    client: wc,
@@ -103,26 +104,49 @@ namespace Jackett.Common.Indexers
             var prevCook = CookieHeader + "";
             var searchUrl = SearchUrl;
 
-            var searchParams = new Dictionary<string, string>{};
-            var queryCollection = new NameValueCollection{};
+            var searchParams = new Dictionary<string, string> { };
+            var queryCollection = new NameValueCollection { };
 
             // Skip search params if its a test, ask for all torrents
-            if (!query.IsTest && (searchString.Trim().Length != 0))
+            if (!query.IsTest)
             {
-                string[] searchParamParts = searchString.Split(' ');
-                string searchStringCombined = "";
-                foreach (var part in searchParamParts) {
-                    searchStringCombined += part + "+";
+                if (!string.IsNullOrWhiteSpace(query.ImdbID))
+                {
+                    queryCollection.Add("cataloguenumber", query.ImdbID);
                 }
-
-                queryCollection.Add("searchstr", searchStringCombined);
+                else if (!string.IsNullOrWhiteSpace(searchString))
+                {
+                    queryCollection.Add("searchstr", searchString);
+                }
             }
 
             // Filter Categories
-            if (query.HasSpecifiedCategories) {
-                foreach(var cat in MapTorznabCapsToTrackers(query)) {
+            if (query.HasSpecifiedCategories)
+            {
+                foreach (var cat in MapTorznabCapsToTrackers(query))
+                {
                     queryCollection.Add("filter_cat[" + cat.ToString() + "]", "1");
                 }
+            }
+
+            if (query.Artist != null)
+            {
+                queryCollection.Add("artistname", query.Artist);
+            }
+
+            if (query.Label != null)
+            {
+                queryCollection.Add("recordlabel", query.Label);
+            }
+
+            if (query.Year != null)
+            {
+                queryCollection.Add("year", query.Year.ToString());
+            }
+
+            if (query.Album != null)
+            {
+                queryCollection.Add("groupname", query.Album);
             }
 
             searchUrl += "?" + queryCollection.GetQueryString();
@@ -175,9 +199,11 @@ namespace Jackett.Common.Indexers
                     var categoriesSplit = categoryNode.ClassName.Split(' ');
                     foreach (var rawCategory in categoriesSplit)
                     {
-                        if (CategoryMappings.ContainsKey(rawCategory)) {
+                        if (CategoryMappings.ContainsKey(rawCategory))
+                        {
                             var newznabCat = MapTrackerCatDescToNewznab(CategoryMappings[rawCategory]);
-                            if (newznabCat.Count != 0) {
+                            if (newznabCat.Count != 0)
+                            {
                                 releaseNewznabCategory = newznabCat;
                             }
                         }
@@ -186,15 +212,18 @@ namespace Jackett.Common.Indexers
                     var releaseRows = dom.QuerySelectorAll(String.Format(".group_torrent.groupid_{0}", releaseGroupId));
 
                     string lastEdition = null;
-                    foreach (var releaseDetails in releaseRows) {
+                    foreach (var releaseDetails in releaseRows)
+                    {
                         var editionInfoDetails = releaseDetails.QuerySelector(".edition_info");
 
                         // Process as release details
-                        if (editionInfoDetails != null) {
+                        if (editionInfoDetails != null)
+                        {
                             lastEdition = editionInfoDetails.QuerySelector("strong").TextContent;
                         }
                         // Process as torrent
-                        else {
+                        else
+                        {
                             // https://libble.me/torrents.php?id=51694&torrentid=89758
                             var release = new ReleaseInfo();
 
@@ -214,7 +243,8 @@ namespace Jackett.Common.Indexers
                             release.Comments = new Uri(SiteLink + albumNameNode.GetAttribute("href"));
 
                             // Aug 31 2020, 15:50
-                            try {
+                            try
+                            {
                                 release.PublishDate = DateTime.ParseExact(
                                     releaseDateDetails.GetAttribute("title").Trim(),
                                     "MMM dd yyyy, HH:mm",
@@ -222,7 +252,8 @@ namespace Jackett.Common.Indexers
                                     DateTimeStyles.AssumeUniversal
                                 );
                             }
-                            catch(Exception) {
+                            catch (Exception)
+                            {
                             }
 
                             release.Files = ParseUtil.CoerceInt(releaseFileCountDetails.TextContent.Trim());
