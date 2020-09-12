@@ -24,6 +24,7 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class DivxTotal : BaseWebIndexer
     {
+        private const string DownloadLink = "/download_tt.php";
         private const int MaxResultsPerPage = 15;
         private const int MaxSearchPageLimit = 3;
         private static class DivxTotalCategories
@@ -150,7 +151,7 @@ namespace Jackett.Common.Indexers
             // for tv series we already have the link
             var downloadUrl = link.ToString();
             // for other categories we have to do another step
-            if (!downloadUrl.EndsWith(".torrent"))
+            if (!downloadUrl.Contains(DownloadLink))
             {
                 var result = await RequestStringWithCookies(downloadUrl);
 
@@ -159,16 +160,11 @@ namespace Jackett.Common.Indexers
 
                 var searchResultParser = new HtmlParser();
                 var doc = searchResultParser.ParseDocument(result.Content);
-
-                var onclick = doc.QuerySelector("a[onclick*=\"/torrent\"]")
-                    .GetAttribute("onclick");
-                downloadUrl = OnclickToDownloadLink(onclick);
+                downloadUrl = GetDownloadLink(doc);
             }
-
             var content = await base.Download(new Uri(downloadUrl));
             return content;
         }
-
 
         private async Task ParseRelease(ICollection<ReleaseInfo> releases, IParentNode row, TorznabQuery query,
             bool matchWords)
@@ -192,9 +188,7 @@ namespace Jackett.Common.Indexers
 
             // parsing is different for each category
             if (cat == DivxTotalCategories.Series)
-            {
                 await ParseSeriesRelease(releases, query, commentsLink, cat, publishDate);
-            }
             else if (query.Episode == null) // if it's scene series, we don't return other categories
             {
                 if (cat == DivxTotalCategories.Peliculas || cat == DivxTotalCategories.PeliculasHd ||
@@ -234,8 +228,7 @@ namespace Jackett.Common.Indexers
 
                     var anchor = row.QuerySelector("a");
                     var episodeTitle = anchor.TextContent.Trim();
-                    var onclick = anchor.GetAttribute("onclick");
-                    var downloadLink = OnclickToDownloadLink(onclick);
+                    var downloadLink = GetDownloadLink(row);
                     var episodePublishStr = row.QuerySelectorAll("td")[3].TextContent.Trim();
                     var episodePublish = TryToParseDate(episodePublishStr, publishDate);
 
@@ -318,13 +311,8 @@ namespace Jackett.Common.Indexers
             releases.Add(release);
         }
 
-        private static string OnclickToDownloadLink(string onclick)
-        {
-            // onclick="post('/download/torrent.php', {u: 'aHR0cHM6Ly93d3cuZGl2eHRvdGF='});"
-            var base64EncodedData = onclick.Split('\'')[3];
-            var base64EncodedBytes = Convert.FromBase64String(base64EncodedData);
-            return Encoding.UTF8.GetString(base64EncodedBytes);
-        }
+        private static string GetDownloadLink(IParentNode dom) =>
+            dom.QuerySelector($"a[href*=\"{DownloadLink}\"]")?.GetAttribute("href");
 
         private static bool CheckTitleMatchWords(string queryStr, string title)
         {
