@@ -219,7 +219,9 @@ namespace Jackett.Common.Indexers
                             release.Size = ReleaseInfo.GetBytes(releaseSizeDetails.TextContent.Trim());
                             release.BannerUrl = releaseThumbnailUri;
                             release.Category = releaseNewznabCategory;
-
+                            release.MinimumSeedTime = 259200; // 72 hours
+                            release.DownloadVolumeFactor = 1;
+                            release.UploadVolumeFactor = 1;
                             // TODO: Neutral / Freeleech
 
                             releases.Add(release);
