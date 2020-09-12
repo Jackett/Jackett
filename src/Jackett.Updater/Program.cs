@@ -334,6 +334,7 @@ namespace Jackett.Updater
                 "Definitions/inperil.yml",
                 "Definitions/isohunt.yml",
                 "Definitions/katcrs.yml",
+                "Definitions/kaztorka.yml",
                 "Definitions/kikibt.yml",
                 "Definitions/lapausetorrents.yml",
                 "Definitions/lemencili.yml",
@@ -479,12 +480,13 @@ namespace Jackett.Updater
                 {
                     logger.Info("Starting Windows service");
 
-                    if (ServerUtil.IsUserAdministrator())
+                    try
                     {
                         windowsService.Start();
                     }
-                    else
+                    catch
                     {
+                        logger.Info("Failed to start service. Attempting to start console.");
                         try
                         {
                             var consolePath = Path.Combine(options.Path, "JackettConsole.exe");
@@ -492,7 +494,7 @@ namespace Jackett.Updater
                         }
                         catch
                         {
-                            logger.Error("Failed to get admin rights to start the service.");
+                            logger.Error("Failed to start the service or console.");
                         }
                     }
                 }
