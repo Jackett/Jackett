@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
@@ -24,6 +25,11 @@ namespace Jackett.Common.Indexers
         private string LandingUrl => SiteLink + "login.php";
         private string LoginUrl => SiteLink + "login.php";
         private string SearchUrl => SiteLink + "torrents.php";
+        private Dictionary<string, string> CategoryMappings = new Dictionary<string, string>{
+            { "cats_music", "Music" },
+            { "cats_libblemixtapes", "Libble Mixtapes" },
+            { "cats_musicvideos", "Music Videos" },
+        };
 
        private new ConfigurationDataBasicLogin configData
         {
@@ -50,13 +56,9 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "private";
 
-            AddCategoryMapping(13, TorznabCatType.Audio, "Music");
-            AddCategoryMapping(15, TorznabCatType.AudioVideo, "Music Videos");
-
-            // RSS Textual categories
-            AddCategoryMapping("cats_music", TorznabCatType.Audio);
-            AddCategoryMapping("cats_libblemixtapes", TorznabCatType.Audio);
-            AddCategoryMapping("cats_musicvideos", TorznabCatType.AudioVideo);
+            AddCategoryMapping(1, TorznabCatType.Audio, "Music");
+            AddCategoryMapping(2, TorznabCatType.Audio, "Libble Mixtapes");
+            AddCategoryMapping(7, TorznabCatType.AudioVideo, "Music Videos");
         }
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
@@ -102,9 +104,10 @@ namespace Jackett.Common.Indexers
             var searchUrl = SearchUrl;
 
             var searchParams = new Dictionary<string, string>{};
+            var queryCollection = new NameValueCollection{};
 
             // Skip search params if its a test, ask for all torrents
-            if (!query.IsTest)
+            if (!query.IsTest && (searchString.Trim().Length != 0))
             {
                 string[] searchParamParts = searchString.Split(' ');
                 string searchStringCombined = "";
@@ -112,9 +115,17 @@ namespace Jackett.Common.Indexers
                     searchStringCombined += part + "+";
                 }
 
-               searchUrl += "?searchstr=" + searchStringCombined;
+                queryCollection.Add("searchstr", searchStringCombined);
             }
 
+            // Filter Categories
+            if (query.HasSpecifiedCategories) {
+                foreach(var cat in MapTorznabCapsToTrackers(query)) {
+                    queryCollection.Add("filter_cat[" + cat.ToString() + "]", "1");
+                }
+            }
+
+            searchUrl += "?" + queryCollection.GetQueryString();
 
             var searchPage = await PostDataWithCookiesAndRetry(searchUrl, searchParams, CookieHeader);
             // Occasionally the cookies become invalid, login again if that happens
@@ -164,9 +175,11 @@ namespace Jackett.Common.Indexers
                     var categoriesSplit = categoryNode.ClassName.Split(' ');
                     foreach (var rawCategory in categoriesSplit)
                     {
-                        var newznabCat = MapTrackerCatToNewznab(rawCategory);
-                        if (newznabCat.Count != 0) {
-                            releaseNewznabCategory = newznabCat;
+                        if (CategoryMappings.ContainsKey(rawCategory)) {
+                            var newznabCat = MapTrackerCatDescToNewznab(CategoryMappings[rawCategory]);
+                            if (newznabCat.Count != 0) {
+                                releaseNewznabCategory = newznabCat;
+                            }
                         }
                     }
 
@@ -181,7 +194,7 @@ namespace Jackett.Common.Indexers
                             lastEdition = editionInfoDetails.QuerySelector("strong").TextContent;
                         }
                         // Process as torrent
-                        else if (lastEdition != null) {
+                        else {
                             // https://libble.me/torrents.php?id=51694&torrentid=89758
                             var release = new ReleaseInfo();
 
@@ -225,9 +238,6 @@ namespace Jackett.Common.Indexers
                             // TODO: Neutral / Freeleech
 
                             releases.Add(release);
-                        }
-                        else {
-                            // TODO: Error, no release edition
                         }
                     }
                 }
