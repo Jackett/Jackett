@@ -7,7 +7,7 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://gtdb.to/
+  - https://www.gtdb.to/
   - https://glodls.to/
   - https://glotorrents.unblockit.top/
   - https://glodls.unblocked.rest/
@@ -27,6 +27,7 @@ legacylinks:
   - https://glodls.unblocked.bar/
   - https://glodls.proxyportal.pw/
   - https://glodls.uk-unblock.pro/
+  - https://gtdb.to/
 
 caps:
   categorymappings:
