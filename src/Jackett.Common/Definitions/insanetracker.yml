@@ -87,8 +87,8 @@ search:
     - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-    # 0 active 1 both 2 dead
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    # 0 active, 1 both, 2 dead
     incldead: 1
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
@@ -162,7 +162,9 @@ search:
         - name: dateparse
           args: "2006-01-02 15:04"
     downloadvolumefactor:
-      text: 0
+      case:
+        a[href^="?nohnr=1"]: 0
+        "*": 1
     uploadvolumefactor:
       case:
         a[href^="?doubleup=four"]: 4
@@ -173,4 +175,9 @@ search:
       selector: div.contenttext
       optional: true
       remove: div.contenttitle
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 1 day (as seconds = 24 x 60 x 60)
+      text: 86400
 # custom v2.0b
