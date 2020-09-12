@@ -88,6 +88,10 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -140,10 +144,10 @@ search:
     search: "{{ .Keywords }}"
     category: "{{ range .Categories }}{{.}};{{end}}"
     page: torrents
-    # 0 all 1 activeonly 2 deadonly
+    # 0 all, 1 activeonly, 2 deadonly
     active: 0
-    # 0 name 1 name&descr 2 descr 3 uploader 5 gold 6 silver 7 bronze
-    options: 0
+    # 0 name, 1 name&descr, 2 descr, 3 uploader, 5 gold, 6 silver, 7 bronze
+    options: "{{ if .Config.freeleech }}5{{ else }}0{{ end }}"
     order: "{{ .Config.sort }}"
     by: "{{ .Config.type }}"
   keywordsfilters:
@@ -238,4 +242,6 @@ search:
       filters:
         - name: replace
           args: ["x Upload Multiplier", ""]
+    minimumratio:
+      text: 0.5
 # xbtitFM 3.0.00
