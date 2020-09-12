@@ -5,12 +5,11 @@ description: "TenYardTorrents (TYT) is a Private Torrent Tracker for AMERICAN FO
 language: en-us
 type: private
 encoding: UTF-8
-certificates:
-  - C77A88F4AC9798E3E5B18C4AA6CE2ABF32ECF025 # NET::ERR_CERT_COMMON_NAME_INVALID
 links:
-  - https://tenyardtracker.com/
+  - https://talk.tenyardtracker.com/
 legacylinks:
   - http://tenyardtracker.com/
+  - https://tenyardtracker.com/
 
 caps:
   categories:
