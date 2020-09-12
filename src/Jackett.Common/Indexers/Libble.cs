@@ -30,6 +30,25 @@ namespace Jackett.Common.Indexers
             { "cats_libblemixtapes", "Libble Mixtapes" },
             { "cats_musicvideos", "Music Videos" },
         };
+        class VolumeFactorTag
+        {
+            public double DownloadVolumeFactor { get; set; } = 1.0;
+            public double UploadVolumeFactor { get; set; } = 1.0;
+        }
+        private Dictionary<string, VolumeFactorTag> VolumeTagMappings = new Dictionary<string, VolumeFactorTag>{
+            { "Neutral!", new VolumeFactorTag 
+                {
+                    DownloadVolumeFactor = 0,
+                    UploadVolumeFactor = 0
+                } 
+            },
+            { "Freeleech!", new VolumeFactorTag 
+                {
+                    DownloadVolumeFactor = 0,
+                    UploadVolumeFactor = 1
+                } 
+            },
+        };
 
         private new ConfigurationDataBasicLogin configData
         {
@@ -237,7 +256,6 @@ namespace Jackett.Common.Indexers
                             var releaseDownloadDetails = releaseDetails.QuerySelector("a[href*=\"action=download\"]");
                             var releaseMediaType = releaseMediaDetails.TextContent;
 
-                            release.Title = String.Format("{0} - {1} [{2}] {3}", releaseArtist, releaseAlbumName, releaseAlbumYear, releaseMediaType);
                             release.Link = new Uri(SiteLink + releaseDownloadDetails.GetAttribute("href"));
                             release.Guid = release.Link;
                             release.Comments = new Uri(SiteLink + albumNameNode.GetAttribute("href"));
@@ -264,9 +282,25 @@ namespace Jackett.Common.Indexers
                             release.BannerUrl = releaseThumbnailUri;
                             release.Category = releaseNewznabCategory;
                             release.MinimumSeedTime = 259200; // 72 hours
+
+                            // Attempt to find volume factor tag
                             release.DownloadVolumeFactor = 1;
                             release.UploadVolumeFactor = 1;
-                            // TODO: Neutral / Freeleech
+                            var releaseTags = releaseMediaType.Split('/').Select(tag => tag.Trim()).ToList();
+                            for (int i = releaseTags.Count - 1; i >= 0; i--)
+                            {
+                                string releaseTag = releaseTags[i];
+                                if (VolumeTagMappings.ContainsKey(releaseTag)) {
+                                    VolumeFactorTag volumeFactor = VolumeTagMappings[releaseTag];
+                                    release.DownloadVolumeFactor = volumeFactor.DownloadVolumeFactor;
+                                    release.UploadVolumeFactor = volumeFactor.UploadVolumeFactor;
+                                    releaseTags.RemoveAt(i);
+                                }
+                            }
+
+                            // Set title (with volume factor tags stripped)
+                            var releaseTagsString = string.Join(" / ", releaseTags);
+                            release.Title = String.Format("{0} - {1} [{2}] {3}", releaseArtist, releaseAlbumName, releaseAlbumYear, releaseTagsString);
 
                             releases.Add(release);
                         }
