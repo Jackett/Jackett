@@ -44,8 +44,12 @@ caps:
     "AUDIOMUSIC": Audio
     "AUDIOOTHER": Audio/Other
     "AUDIOSOUNDCLIPS": Audio
+    "ADULTGAMES": XXX
     "ADULTMOVIES": XXX
     "BOOKS": Books
+    "BOOKSAUDIO": Audio/Audiobook
+    "BOOKSCOMICS": Books/Comics
+    "BOOKSEBOOKS": Books/Ebook
     "BOOKSMAGAZINES": Books/Magazines
     "BOOKSNONFICTION": Books
     "COMICSNEM43COMICS": Books/Comics
@@ -86,6 +90,7 @@ caps:
     "MOBILE": PC/Phone-Other
     "MOVIES": Movies
     "MOVIESBLURAYDISCREMUX": Movies/HD
+    "MOVIESBOLLYWOOD": Movies
     "MOVIESCAMTS": Movies
     "MOVIESDUBSDUALAUDIO": Movies
     "MOVIESENGLISHSPANISHSUBT": Movies
@@ -127,6 +132,7 @@ caps:
     "PORNPICTURES": XXX
     "SERIES": TV
     "SOFTWARE": PC
+    "SOFTWAREANDROID": PC/Phone-Android
     "SOFTWAREMAC": PC/Mac
     "SOFTWAREWINDOWS": PC/0day
     "SPORTS": TV/Sport
