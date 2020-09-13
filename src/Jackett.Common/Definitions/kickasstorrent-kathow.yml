@@ -131,8 +131,6 @@ search:
       filters:
         - name: replace
           args: ["N/A", "0"]
-    description:
-      selector: td:nth-child(1) > div > div > span
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
