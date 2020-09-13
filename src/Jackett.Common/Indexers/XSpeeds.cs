@@ -70,6 +70,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(15, TorznabCatType.AudioVideo, "Music Videos");
             AddCategoryMapping(32, TorznabCatType.ConsoleNDS, "NDS Games");
             AddCategoryMapping(9, TorznabCatType.Other, "Other");
+            AddCategoryMapping(95, TorznabCatType.PCMac, "Mac Games");
             AddCategoryMapping(6, TorznabCatType.PCGames, "PC Games");
             AddCategoryMapping(45, TorznabCatType.Other, "Pictures");
             AddCategoryMapping(31, TorznabCatType.ConsolePS4, "Playstation");
