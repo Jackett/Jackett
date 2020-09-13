@@ -69,6 +69,8 @@ namespace Jackett.Server
 
         private static void InitAutomapper()
         {
+#pragma warning disable 612, 618
+            // TODO: fix deprecation warning (remove #pragma to see the build warning)
             Mapper.Initialize(cfg =>
             {
                 cfg.CreateMap<WebClientByteResult, WebClientStringResult>().ForMember(x => x.Content, opt => opt.Ignore()).AfterMap((be, str) =>
@@ -102,6 +104,7 @@ namespace Jackett.Server
                     }
                 });
             });
+#pragma warning restore 612, 618
         }
 
         public static void SetupLogging(ContainerBuilder builder) =>
