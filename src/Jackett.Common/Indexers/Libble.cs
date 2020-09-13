@@ -36,17 +36,17 @@ namespace Jackett.Common.Indexers
             public double UploadVolumeFactor { get; set; } = 1.0;
         }
         private Dictionary<string, VolumeFactorTag> VolumeTagMappings = new Dictionary<string, VolumeFactorTag>{
-            { "Neutral!", new VolumeFactorTag 
+            { "Neutral!", new VolumeFactorTag
                 {
                     DownloadVolumeFactor = 0,
                     UploadVolumeFactor = 0
-                } 
+                }
             },
-            { "Freeleech!", new VolumeFactorTag 
+            { "Freeleech!", new VolumeFactorTag
                 {
                     DownloadVolumeFactor = 0,
                     UploadVolumeFactor = 1
-                } 
+                }
             },
         };
 
@@ -126,18 +126,12 @@ namespace Jackett.Common.Indexers
             var searchParams = new Dictionary<string, string> { };
             var queryCollection = new NameValueCollection { };
 
-            // Skip search params if its a test, ask for all torrents
-            if (!query.IsTest)
-            {
-                if (!string.IsNullOrWhiteSpace(query.ImdbID))
-                {
-                    queryCollection.Add("cataloguenumber", query.ImdbID);
-                }
-                else if (!string.IsNullOrWhiteSpace(searchString))
-                {
-                    queryCollection.Add("searchstr", searchString);
-                }
-            }
+            // Search String
+            if (!string.IsNullOrWhiteSpace(query.ImdbID))
+                queryCollection.Add("cataloguenumber", query.ImdbID);
+            else if (!string.IsNullOrWhiteSpace(searchString))
+                queryCollection.Add("searchstr", searchString);
+
 
             // Filter Categories
             if (query.HasSpecifiedCategories)
@@ -149,33 +143,25 @@ namespace Jackett.Common.Indexers
             }
 
             if (query.Artist != null)
-            {
                 queryCollection.Add("artistname", query.Artist);
-            }
 
             if (query.Label != null)
-            {
                 queryCollection.Add("recordlabel", query.Label);
-            }
 
             if (query.Year != null)
-            {
                 queryCollection.Add("year", query.Year.ToString());
-            }
 
             if (query.Album != null)
-            {
                 queryCollection.Add("groupname", query.Album);
-            }
 
             searchUrl += "?" + queryCollection.GetQueryString();
 
-            var searchPage = await PostDataWithCookiesAndRetry(searchUrl, searchParams, CookieHeader);
+            var searchPage = await PostDataWithCookiesAndRetry(searchUrl, searchParams);
             // Occasionally the cookies become invalid, login again if that happens
             if (searchPage.IsRedirect)
             {
                 await ApplyConfiguration(null);
-                searchPage = await PostDataWithCookiesAndRetry(searchUrl, searchParams, CookieHeader);
+                searchPage = await PostDataWithCookiesAndRetry(searchUrl, searchParams);
             }
 
             try
@@ -210,9 +196,7 @@ namespace Jackett.Common.Indexers
 
                     Uri releaseThumbnailUri = null;
                     if (thumbnailNode != null)
-                    {
                         releaseThumbnailUri = new Uri(thumbnailNode.GetAttribute("title"));
-                    }
 
                     ICollection<int> releaseNewznabCategory = null;
                     var categoriesSplit = categoryNode.ClassName.Split(' ');
@@ -222,9 +206,7 @@ namespace Jackett.Common.Indexers
                         {
                             var newznabCat = MapTrackerCatDescToNewznab(CategoryMappings[rawCategory]);
                             if (newznabCat.Count != 0)
-                            {
                                 releaseNewznabCategory = newznabCat;
-                            }
                         }
                     }
 
@@ -311,9 +293,6 @@ namespace Jackett.Common.Indexers
             {
                 OnParseError(searchPage.Content, ex);
             }
-
-            if (!CookieHeader.Trim().Equals(prevCook.Trim()))
-                SaveConfig();
 
             return releases;
         }
