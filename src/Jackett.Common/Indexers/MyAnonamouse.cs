@@ -225,11 +225,17 @@ namespace Jackett.Common.Indexers
                     var authorInfo = item.Value<string>("author_info");
                     string author = null;
                     if (!string.IsNullOrWhiteSpace(authorInfo))
-                    {
-                        authorInfo = Regex.Unescape(authorInfo);
-                        var authorInfoJson = JObject.Parse(authorInfo);
-                        author = authorInfoJson.First.Last.Value<string>();
-                    }
+                        try
+                        {
+                            authorInfo = Regex.Unescape(authorInfo);
+                            var authorInfoJson = JObject.Parse(authorInfo);
+                            author = authorInfoJson.First.Last.Value<string>();
+                        }
+                        catch (Exception)
+                        {
+                            // the JSON on author_info field can be malformed due to double quotes
+                            logger.Warn($"{DisplayName} error parsing author_info: {authorInfo}");
+                        }
                     if (author != null)
                         release.Title += " by " + author;
 
