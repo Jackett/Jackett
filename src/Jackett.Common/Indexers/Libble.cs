@@ -120,7 +120,6 @@ namespace Jackett.Common.Indexers
             // https://libble.me/torrents.php?searchstr=the+used&taglist=&tags_type=1&order_by=time&order_way=desc
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();
-            var prevCook = CookieHeader + "";
             var searchUrl = SearchUrl;
 
             var searchParams = new Dictionary<string, string> { };
