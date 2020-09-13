@@ -391,6 +391,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * LeagueHD
  * LearnFlakes
  * LegacyHD (HD4Free)
+ * Libble
  * LibraNet (LN)
  * LinkoManija
  * LosslessClub
