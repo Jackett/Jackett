@@ -134,11 +134,12 @@ namespace Jackett.Common.Indexers
                     foreach (var torrent in movie["Torrents"])
                     {
                         var releaseName = (string)torrent["ReleaseName"];
+                        var torrentId = (string)torrent["Id"];
 
                         var releaseLinkQuery = new NameValueCollection
                         {
                             {"action", "download"},
-                            {"id", (string)torrent["Id"]},
+                            {"id", torrentId},
                             {"authkey", AuthKey},
                             {"torrent_pass", configData.Passkey.Value},
                         };
@@ -158,7 +159,7 @@ namespace Jackett.Common.Indexers
                             continue;
                         var link = new Uri($"{SearchUrl}?{releaseLinkQuery.GetQueryString()}");
                         var seeders = int.Parse((string)torrent["Seeders"]);
-                        var comments = new Uri($"{SearchUrl}?id={WebUtility.UrlEncode(movieGroupId)}");
+                        var comments = new Uri($"{SearchUrl}?id={WebUtility.UrlEncode(movieGroupId)}&torrentid={WebUtility.UrlEncode(torrentId)}");
                         var size = long.Parse((string)torrent["Size"]);
                         var grabs = long.Parse((string)torrent["Snatched"]);
                         var publishDate = DateTime.ParseExact((string)torrent["UploadTime"],
