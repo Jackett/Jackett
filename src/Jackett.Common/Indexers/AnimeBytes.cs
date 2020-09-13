@@ -24,7 +24,9 @@ namespace Jackett.Common.Indexers
         private string ScrapeUrl => SiteLink + "scrape.php";
         public bool AllowRaws => configData.IncludeRaw.Value;
         public bool PadEpisode => configData.PadEpisode != null && configData.PadEpisode.Value;
-        public bool AddSynonyms => configData.AddSynonyms.Value;
+        public bool AddJapaneseTitle => configData.AddJapaneseTitle.Value;
+        public bool AddRomajiTitle => configData.AddRomajiTitle.Value;
+        public bool AddAlternativeTitles => configData.AddAlternativeTitles.Value;
         public bool FilterSeasonEpisode => configData.FilterSeasonEpisode.Value;
 
         private new ConfigurationDataAnimeBytes configData
@@ -208,10 +210,31 @@ namespace Jackett.Common.Indexers
                             mainTitle = SeriesName;
 
                         synonyms.Add(mainTitle);
-                        if (AddSynonyms)
+
+                        if (group["Synonymns"].HasValues)
                         {
-                            foreach (string synonym in group["Synonymns"])
-                                synonyms.Add(synonym);
+                            if (group["Synonymns"] is JArray)
+                            {
+                                List<string> allSyonyms = group["Synonymns"].ToObject<List<string>>();
+
+                                if (AddJapaneseTitle && allSyonyms.Count >= 1)
+                                    synonyms.Add(allSyonyms[0]);
+                                if (AddRomajiTitle && allSyonyms.Count >= 2)
+                                    synonyms.Add(allSyonyms[1]);
+                                if (AddAlternativeTitles && allSyonyms.Count >= 3)
+                                    synonyms.AddRange(allSyonyms[2].Split(',').Select(t => t.Trim()));
+                            } else
+                            {
+                                Dictionary<int, string> allSynonyms = group["Synonymns"].ToObject<Dictionary<int, string>>();
+
+                                if (AddJapaneseTitle && allSynonyms.ContainsKey(0))
+                                    synonyms.Add(allSynonyms[0]);
+                                if (AddRomajiTitle && allSynonyms.ContainsKey(1))
+                                    synonyms.Add(allSynonyms[1]);
+                                if (AddAlternativeTitles && allSynonyms.ContainsKey(2)) {
+                                    synonyms.AddRange(allSynonyms[2].Split(',').Select(t => t.Trim()));
+                                }
+                            }
                         }
 
                         List<int> Category = null;

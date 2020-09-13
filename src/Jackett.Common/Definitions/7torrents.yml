@@ -50,9 +50,10 @@ search:
     details:
       selector: div.media h5 a
       attribute: href
-    download:
-      selector: div.media-right a[href*="/torrent/"]
-      attribute: href
+# #7966
+#    download:
+#      selector: div.media-right a[href*="/torrent/"]
+#      attribute: href
     magnet:
       selector: a[href^="magnet:?xt="]
       attribute: href

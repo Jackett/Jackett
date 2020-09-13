@@ -44,8 +44,12 @@ caps:
     "AUDIOMUSIC": Audio
     "AUDIOOTHER": Audio/Other
     "AUDIOSOUNDCLIPS": Audio
+    "ADULTGAMES": XXX
     "ADULTMOVIES": XXX
     "BOOKS": Books
+    "BOOKSAUDIO": Audio/Audiobook
+    "BOOKSCOMICS": Books/Comics
+    "BOOKSEBOOKS": Books/Ebook
     "BOOKSMAGAZINES": Books/Magazines
     "BOOKSNONFICTION": Books
     "COMICSNEM43COMICS": Books/Comics
@@ -86,9 +90,11 @@ caps:
     "MOBILE": PC/Phone-Other
     "MOVIES": Movies
     "MOVIESBLURAYDISCREMUX": Movies/HD
+    "MOVIESBOLLYWOOD": Movies
     "MOVIESCAMTS": Movies
     "MOVIESDUBSDUALAUDIO": Movies
     "MOVIESENGLISHSPANISHSUBT": Movies
+    "MOVIESSDX264H264": Movies/SD
     "MOVIESHD": Movies/HD
     "MOVIESHD720P": Movies/HD
     "MOVIESHD1080P": Movies/HD
@@ -127,6 +133,7 @@ caps:
     "PORNPICTURES": XXX
     "SERIES": TV
     "SOFTWARE": PC
+    "SOFTWAREANDROID": PC/Phone-Android
     "SOFTWAREMAC": PC/Mac
     "SOFTWAREWINDOWS": PC/0day
     "SPORTS": TV/Sport
@@ -138,6 +145,7 @@ caps:
     "TVDIVXXVID": TV/SD
     "TVSDXVID": TV/SD
     "TVSDX264H264": TV/SD
+    "TVSDX264X265": TV/SD
     "TVSHOWS": TV
     "TVSPORT": TV/Sport
     "TVTVPACKS": TV
@@ -147,6 +155,7 @@ caps:
     "VIDEOHDMOVIES": Movies/HD
     "VIDEOHDRIP": Movies
     "VIDEOHDTVSHOWS": TV/HD
+    "VIDEOMOVIESDVDR": Movies/DVD
     "VIDEOMOVIECLIPS": Movies
     "VIDEOMOVIES": Movies
     "VIDEOMUSICVIDEOS": Audio/Video

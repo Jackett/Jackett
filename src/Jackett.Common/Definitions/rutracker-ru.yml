@@ -39,6 +39,7 @@ caps:
     - {id: 1328, cat: Movies/HD, desc: " |- Отечественные фильмы в 720p (2017)"}
     - {id: 1329, cat: Movies/HD, desc: " |- Зарубежные фильмы в 1080p (2017)"}
     - {id: 1330, cat: Movies/HD, desc: " |- Отечественные фильмы в 1080р (2017)"}
+    - {id: 820, cat: Movies/HD, desc: "Зарубежные фильмы"}
     - {id: 1346, cat: Movies/UHD, desc: " |- [4K | ULTRA HD | 2160p]"}
     - {id: 843, cat: Movies/HD, desc: " |- Blu-Ray , BDRip 1080p , HDTV 1080 , WEB-DL 1080р"}
     - {id: 842, cat: Movies/HD, desc: " |- BDRip 720p , WEB-DL 720p , HDTVRip 720p"}
@@ -55,11 +56,13 @@ caps:
     - {id: 839, cat: Movies, desc: " |- Ужасы , Триллер"}
     - {id: 836, cat: Movies, desc: " |- Фантастика"}
     - {id: 832, cat: Movies, desc: " |- Классика зарубежного кино"}
+    - {id: 1608, cat: Movies, desc: " |- Классика зарубежного кино (720p, 1080p)"}
     - {id: 1317, cat: Movies, desc: " |- Детские фильмы, сказки, сериалы"}
     - {id: 837, cat: Movies, desc: " |- Сборники фильмов , Фильмографии"}
     - {id: 838, cat: Movies, desc: " |- Короткометражные фильмы"}
     - {id: 845, cat: Movies, desc: " |- В оригинале"}
     - {id: 1560, cat: Movies, desc: " |- | - фильмы с переводом UKR"}
+    - {id: 798, cat: Movies/HD, desc: "Российские фильмы"}
     - {id: 817, cat: Movies/HD, desc: " |- Blu-Ray , BDRip 1080p , HDTV 1080 , WEB-DL 1080р"}
     - {id: 818, cat: Movies/HD, desc: " |- BDRip 720p , WEB-DL 720p , HDTVRip 720p"}
     - {id: 802, cat: Movies/DVD, desc: " |- DVD5 , DVD9"}
@@ -114,6 +117,8 @@ caps:
     - {id: 11, cat: TV/Documentary, desc: "Документальные фильмы и телепередачи"}
     - {id: 12, cat: TV, desc: "Развлекательные телепередачи"}
     - {id: 13, cat: TV/Sport, desc: "Спорт"}
+    - {id: 1621, cat: TV/Sport, desc: " |- Формула 1"}
+    - {id: 1622, cat: TV/Sport, desc: " |- Автоспорт"}
     # Книги, Журналы, Аудиокниги Books
     - {id: 726, cat: Books, desc: "Художественная литература, журналы, газеты"}
     - {id: 728, cat: Books, desc: " |- Журналы и газеты"}
@@ -126,7 +131,6 @@ caps:
     - {id: 1021, cat: Books, desc: " |- Инструкции, Схемы, Технические и сервисные документации"}
     - {id: 1020, cat: Books, desc: " |- Сварка, Пайка"}
     - {id: 730, cat: Audio/Audiobook, desc: "Аудиокниги"}
-    - {id: 1223, cat: Audio/Audiobook, desc: " |- Аудиокниги Учебная, Научная и Техническая литература"}
     - {id: 776, cat: Audio/Audiobook, desc: " |- Фантастика Фэнтези"}
     - {id: 777, cat: Audio/Audiobook, desc: " |- Детективы триллеры боевики"}
     - {id: 1164, cat: Audio/Audiobook, desc: " |- Радиоспектакли аудиофильмы"}
@@ -135,6 +139,7 @@ caps:
     - {id: 1233, cat: Audio/Audiobook, desc: " |- Отечественная проза"}
     - {id: 1159, cat: Audio/Audiobook, desc: " |- Любовные романы"}
     - {id: 1315, cat: Audio/Audiobook, desc: " |- Детская аудиокнига"}
+    - {id: 1223, cat: Audio/Audiobook, desc: " |- Аудиокниги Учебная, Научная и Техническая литература"}
     # Музыка (Lossy) Music
     - {id: 1177, cat: Audio/MP3, desc: "Неофициальные и внежанровые сборники"}
     - {id: 1179, cat: Audio/MP3, desc: " |- Сборники поп музыки (50/50 общие)"}
@@ -193,7 +198,6 @@ caps:
     - {id: 1206, cat: Audio/MP3, desc: " |- Trip Hop, Abstract Hip-Hop"}
     - {id: 1575, cat: Audio/MP3, desc: " |- Traditional Electronic, Ambient, Modern Classical,..."}
     - {id: 1576, cat: Audio/MP3, desc: " |- Industrial, Noise, EBM, Dark Electro, Aggrotech,..."}
-    - {id: 1458, cat: Audio/MP3, desc: " |- Dance, Club, Hands Up"}
     - {id: 1577, cat: Audio/MP3, desc: " |- Electronic music (разные стили)"}
     - {id: 1540, cat: Audio/MP3, desc: "Остальные муз. жанры, + Видео"}
     - {id: 1578, cat: Audio/MP3, desc: " |- Российская попса (альбомы, синглы)"}
@@ -230,6 +234,7 @@ caps:
     - {id: 213, cat: PC, desc: " |- Серверные ОС от Microsoft"}
     - {id: 215, cat: PC, desc: " |- Разное (RC, Beta, Service Packs, Cracks)"}
     - {id: 1395, cat: PC, desc: " |- Linux, Unix, Mac и другие ОС"}
+    - {id: 107, cat: PC, desc: "Системные программы"}
     - {id: 1405, cat: PC, desc: " |- Драйверы"}
     - {id: 1398, cat: PC, desc: " |- Обслуживание и диагностика компьютера"}
     - {id: 193, cat: PC, desc: " |- Работа с жёсткими дисками"}
@@ -239,11 +244,13 @@ caps:
     - {id: 196, cat: PC, desc: " |- Настройка и оптимизация и изменение интерфейса ОС"}
     - {id: 969, cat: PC, desc: " |- WPI и прочие сборники программ"}
     - {id: 1523, cat: PC, desc: " |- LiveCD/DVD/USB"}
+    - {id: 1505, cat: PC, desc: "Безопасность"}
     - {id: 201, cat: PC, desc: " |- Антивирусы"}
     - {id: 1506, cat: PC, desc: " |- Фаерволы, брандмауэры"}
     - {id: 1508, cat: PC, desc: " |- Антишпионское, антирекламное и антиблокировочное ПО"}
     - {id: 1509, cat: PC, desc: " |- Средства защиты информации"}
     - {id: 1507, cat: PC, desc: " |- Комплексная защита ПК"}
+    - {id: 108, cat: PC, desc: "Программы для бизнеса, офиса, научной и проектной работы"}
     - {id: 217, cat: PC, desc: " |- Офисные системы"}
     - {id: 218, cat: PC, desc: " |- Системы для бизнеса"}
     - {id: 222, cat: PC, desc: " |- Системы для научной работы"}
@@ -253,11 +260,13 @@ caps:
     - {id: 220, cat: PC, desc: " |- Работа с PDF, DjVu, FB2, EPUB, MOBI и пр."}
     - {id: 221, cat: PC, desc: " |- Словари, переводчики, программы обучения языкам"}
     - {id: 219, cat: PC, desc: " |- Распознавание текста, звука и синтез речи"}
+    - {id: 1511, cat: PC, desc: "Программирование и веб-разработка"}
     - {id: 1512, cat: PC, desc: " |- WYSIWYG-редакторы для веб-дизайна"}
     - {id: 1513, cat: PC, desc: " |- Текстовые редакторы с подсветкой кода"}
     - {id: 1514, cat: PC, desc: " |- Среды программирования, компиляторы и вспомогател..."}
     - {id: 1515, cat: PC, desc: " |- Системы управления базами данных (СУБД)"}
     - {id: 1516, cat: PC, desc: " |- Скрипты и шаблоны"}
+    - {id: 110, cat: PC, desc: "Программы для работы с мультимедиа и 3D"}
     - {id: 966, cat: PC, desc: " |- Графические редакторы и каталогизаторы"}
     - {id: 1500, cat: PC, desc: " |- Видеоредакторы"}
     - {id: 1501, cat: PC, desc: " |- Аудиоредакторы"}
@@ -267,7 +276,6 @@ caps:
     - {id: 1502, cat: PC, desc: " |- Программные комплекты"}
     - {id: 1503, cat: PC, desc: " |- Дополнительные материалы для мультимедиа"}
     - {id: 968, cat: PC, desc: " |- Разное (Программы для работы с мультимедиа и 3D)"}
-    - {id: 1505, cat: PC, desc: " |- Безопасность"}
     # Все для мобильных устройств Mobiles
     - {id: 1287, cat: PC/Phone-Other, desc: "Видео"}
     - {id: 1307, cat: PC/Phone-Other, desc: " |- Мобильные телефоны"}
