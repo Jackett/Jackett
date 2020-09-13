@@ -7,14 +7,24 @@ namespace Jackett.Common.Models
 {
     public class TorznabCapabilities
     {
+        public enum SearchEngineType
+        {
+            sphinx,
+            raw
+        }
+
         public int? LimitsMax { get; set; }
         public int? LimitsDefault { get; set; }
+
+        public SearchEngineType? SearchType { get; set; }
 
         public bool SearchAvailable { get; set; }
 
         public bool TVSearchAvailable { get; set; }
 
         public bool MovieSearchAvailable { get; set; }
+
+        public bool SupportsTitleSearch { get; set; }
 
         public bool SupportsTVRageSearch { get; set; }
         public bool SupportsTvdbSearch { get; set; }
@@ -32,12 +42,21 @@ namespace Jackett.Common.Models
 
         public List<TorznabCategory> Categories { get; private set; }
 
+        public bool SupportsSearchEngine
+        {
+            get
+            {
+                return SearchType != null;
+            }
+        }
+
         public TorznabCapabilities()
         {
             Categories = new List<TorznabCategory>();
             SearchAvailable = true;
             TVSearchAvailable = true;
             MovieSearchAvailable = false;
+            SupportsTitleSearch = false;
             SupportsTVRageSearch = false;
             SupportsTvdbSearch = false;
             SupportsImdbMovieSearch = false;
@@ -51,6 +70,7 @@ namespace Jackett.Common.Models
         {
             SearchAvailable = true;
             TVSearchAvailable = true;
+            SupportsTitleSearch = false;
             SupportsTVRageSearch = false;
             SupportsTvdbSearch = false;
             SupportsImdbMovieSearch = false;
@@ -63,17 +83,33 @@ namespace Jackett.Common.Models
             MovieSearchAvailable = Categories.Any(i => TorznabCatType.Movies.Contains(i));
         }
 
+        private string SupportedSearchParams
+        {
+            get
+            {
+                var parameters = new List<string>() { "q" };
+                if (SupportsSearchEngine)
+                    parameters.Add("title");
+                return string.Join(",", parameters);
+            }
+        }
+
         private string SupportedTVSearchParams
         {
             get
             {
                 var parameters = new List<string>() { "q", "season", "ep" };
+                if (SupportsSearchEngine)
+                    parameters.Add("title");
                 if (SupportsTVRageSearch)
                     parameters.Add("rid");
                 if (SupportsTvdbSearch)
                     parameters.Add("tvdbid");
                 if (SupportsImdbTVSearch)
                     parameters.Add("imdbid");
+                if (SupportsTitleSearch)
+                    parameters.Add("title");
+
                 return string.Join(",", parameters);
             }
         }
@@ -129,11 +165,13 @@ namespace Jackett.Common.Models
                     new XElement("searching",
                         new XElement("search",
                             new XAttribute("available", SearchAvailable ? "yes" : "no"),
-                            new XAttribute("supportedParams", "q")
+                            new XAttribute("supportedParams", SupportedSearchParams),
+                            SupportsSearchEngine ? new XAttribute("searchEngine", SearchType) : null
                         ),
                         new XElement("tv-search",
                             new XAttribute("available", TVSearchAvailable ? "yes" : "no"),
-                            new XAttribute("supportedParams", SupportedTVSearchParams)
+                            new XAttribute("supportedParams", SupportedTVSearchParams),
+                            SupportsSearchEngine ? new XAttribute("searchEngine", SearchType) : null
                         ),
                         new XElement("movie-search",
                             new XAttribute("available", MovieSearchAvailable ? "yes" : "no"),
@@ -185,6 +223,7 @@ namespace Jackett.Common.Models
             lhs.SupportsTmdbMovieSearch = lhs.SupportsTmdbMovieSearch || rhs.SupportsTmdbMovieSearch;
             lhs.SupportsImdbTVSearch = lhs.SupportsImdbTVSearch || rhs.SupportsImdbTVSearch;
             lhs.Categories.AddRange(rhs.Categories.Where(x => x.ID < 100000).Except(lhs.Categories)); // exclude indexer specific categories (>= 100000)
+            lhs.SearchType = lhs.SearchType != null ? lhs.SearchType : rhs.SearchType;
 
             return lhs;
         }

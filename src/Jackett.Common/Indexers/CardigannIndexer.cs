@@ -1244,7 +1244,7 @@ namespace Jackett.Common.Indexers
             //variables[".Query.Genre"] = query.Genre ?? new List<string>();
             variables[".Query.Episode"] = query.GetEpisodeSearchString();
             variables[".Query.Author"] = query.Author;
-            variables[".Query.Title"] = query.Title;
+            variables[".Query.BookTitle"] = query.BookTitle;
 
             var mappedCategories = MapTorznabCapsToTrackers(query);
             if (mappedCategories.Count == 0)

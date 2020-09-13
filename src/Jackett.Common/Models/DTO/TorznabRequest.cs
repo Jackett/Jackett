@@ -7,6 +7,7 @@ namespace Jackett.Common.Models.DTO
     {
         public string t { get; set; }
         public string q { get; set; }
+        public string title { get; set; }
         public string cat { get; set; }
         public string imdbid { get; set; }
         public string tmdbid { get; set; }
@@ -24,7 +25,7 @@ namespace Jackett.Common.Models.DTO
         public string year { get; set; }
         public string genre { get; set; }
         public string author { get; set; }
-        public string title { get; set; }
+        public string booktitle { get; set; }
         public string configured { get; set; }
 
         public static TorznabQuery ToTorznabQuery(TorznabRequest request)
@@ -44,6 +45,10 @@ namespace Jackett.Common.Models.DTO
                 query.Limit = ParseUtil.CoerceInt(request.limit);
             if (!string.IsNullOrWhiteSpace(request.offset))
                 query.Offset = ParseUtil.CoerceInt(request.offset);
+
+            // For Sonarr's latest support of Raw SearchTerm. See https://github.com/Jackett/Jackett/issues/8246
+            if (!string.IsNullOrWhiteSpace(request.title) && string.IsNullOrWhiteSpace(request.q))
+                query.SearchTerm = request.title;
 
             if (request.cat != null)
             {
@@ -80,8 +85,8 @@ namespace Jackett.Common.Models.DTO
             if (!string.IsNullOrWhiteSpace(request.genre))
                 query.Genre = request.genre.Split(',');
 
-            if (!string.IsNullOrWhiteSpace(request.title))
-                query.Title = request.title;
+            if (!string.IsNullOrWhiteSpace(request.booktitle))
+                query.BookTitle = request.booktitle;
             if (!string.IsNullOrWhiteSpace(request.author))
                 query.Author = request.author;
 

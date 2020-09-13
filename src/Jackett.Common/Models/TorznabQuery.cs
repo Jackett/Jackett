@@ -32,7 +32,7 @@ namespace Jackett.Common.Models
         public ICollection<string> Genre { get; set; }
 
         public string Author { get; set; }
-        public string Title { get; set; }
+        public string BookTitle { get; set; }
 
         public bool IsTest { get; set; }
 
@@ -133,7 +133,7 @@ namespace Jackett.Common.Models
                 Track = Track,
                 Year = Year,
                 Author = Author,
-                Title = Title,
+                BookTitle = BookTitle,
                 RageID = RageID,
                 TvdbID = TvdbID,
                 ImdbID = ImdbID,

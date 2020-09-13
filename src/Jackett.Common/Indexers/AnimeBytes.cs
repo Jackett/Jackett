@@ -51,7 +51,10 @@ namespace Jackett.Common.Indexers
                                                  TorznabCatType.PCGames,
                                                  TorznabCatType.AudioMP3,
                                                  TorznabCatType.AudioLossless,
-                                                 TorznabCatType.AudioOther),
+                                                 TorznabCatType.AudioOther)
+                   {
+                       SearchType = TorznabCapabilities.SearchEngineType.raw
+                   },
                    logger: l,
                    p: ps,
                    configData: new ConfigurationDataAnimeBytes("Note: Go to AnimeBytes site and open your account settings. Go to 'Account' tab, move cursor over black part near 'Passkey' and copy its value. Your username is case sensitive."))
@@ -104,7 +107,7 @@ namespace Jackett.Common.Indexers
 
         private string StripEpisodeNumber(string term)
         {
-            // Tracer does not support searching with episode number so strip it if we have one
+            // Tracker does not support searching with episode number so strip it if we have one
             term = Regex.Replace(term, @"\W(\dx)?\d?\d$", string.Empty);
             term = Regex.Replace(term, @"\W(S\d\d?E)?\d?\d$", string.Empty);
             term = Regex.Replace(term, @"\W\d+$", string.Empty);
@@ -115,16 +118,17 @@ namespace Jackett.Common.Indexers
         {
             // The result list
             var releases = new List<ReleaseInfo>();
+            var searchTerm = null != query.SearchTerm ? query.SearchTerm : "";
 
             if (ContainsMusicCategories(query.Categories))
             {
-                foreach (var result in await GetResults(query, "music", query.SanitizedSearchTerm))
+                foreach (var result in await GetResults(query, "music", searchTerm))
                 {
                     releases.Add(result);
                 }
             }
 
-            foreach (var result in await GetResults(query, "anime", StripEpisodeNumber(query.SanitizedSearchTerm)))
+            foreach (var result in await GetResults(query, "anime", StripEpisodeNumber(searchTerm)))
             {
                 releases.Add(result);
             }
