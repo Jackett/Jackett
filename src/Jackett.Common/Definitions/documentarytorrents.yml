@@ -84,6 +84,10 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -126,11 +130,11 @@ search:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
     cat: 0
-    # 0 active 1 incldead 2 onlydead
+    # 0 active, 1 incldead, 2 onlydead
     incldead: 1
-    # 0 all 1 notfree 2 onlyfree
-    freeleech: 0
-    # 0 all 1 english 2 french etc
+    # 0 all, 1 notfree, 2 onlyfree
+    freeleech: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
+    # 0 all, 1 english, 2 french, etc
     lang: 0
     sort: "{{ .Config.sort }}"
     order: "{{ .Config.type }}"
@@ -171,4 +175,6 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
+    minimumratio:
+      text: 0.4
 # TorrentTrader v2-svn

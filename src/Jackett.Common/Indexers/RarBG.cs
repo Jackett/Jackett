@@ -111,7 +111,10 @@ namespace Jackett.Common.Indexers
             return IndexerConfigurationStatus.Completed;
         }
 
-        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query) {
+        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+            => await PerformQueryWithRetry(query, true);
+
+        private async Task<IEnumerable<ReleaseInfo>> PerformQueryWithRetry(TorznabQuery query, bool retry) {
             var releases = new List<ReleaseInfo>();
 
             // check the token and renewal if necessary
@@ -132,7 +135,9 @@ namespace Jackett.Common.Indexers
                     break;
                 case 10: // imdb not found, see issue #1486
                 case 20: // no results found
-                    return releases;
+                    // the api returns "no results" in some valid queries. we do one retry on this case but we can't do more
+                    // because we can't distinguish between search without results and api malfunction
+                    return retry ? await PerformQueryWithRetry(query, false) : releases;
                 default:
                     throw new Exception("Unknown error code: " + errorCode + " response: " + response.Content);
             }

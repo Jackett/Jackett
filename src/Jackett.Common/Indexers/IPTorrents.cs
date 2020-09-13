@@ -25,7 +25,6 @@ namespace Jackett.Common.Indexers
             "https://www.iptorrents.com/",
             "https://iptorrents.eu/",
             "https://nemo.iptorrents.com/",
-            "https://ipt.rocks/",
             "https://ipt.getcrazy.me/",
             "https://ipt.findnemo.net/",
             "https://ipt.beelyrics.net/",
@@ -43,6 +42,7 @@ namespace Jackett.Common.Indexers
             "http://kong.net-freaks.com/",
             "http://ghost.cable-modem.org/",
             "http://logan.unusualperson.com/",
+            "https://ipt.rocks/",
             "http://baywatch.workisboring.com/"
         };
 

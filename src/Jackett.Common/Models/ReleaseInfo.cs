@@ -26,8 +26,8 @@ namespace Jackett.Common.Models
         public long? TMDb { get; set; }
         public string Author { get; set; }
         public string BookTitle { get; set; }
-        public int? Seeders { get; set; }
-        public int? Peers { get; set; }
+        public long? Seeders { get; set; }
+        public long? Peers { get; set; }
         public Uri BannerUrl { get; set; }
         public string InfoHash { get; set; }
         public Uri MagnetUri { get; set; }
