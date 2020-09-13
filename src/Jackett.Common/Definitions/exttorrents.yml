@@ -102,7 +102,10 @@ search:
     size:
       selector: td:nth-child(2)
     files:
+      text: 0
+    files:
       selector: td:nth-child(3)
+      optional: true
     date:
       selector: td:nth-child(4)
     seeders:
