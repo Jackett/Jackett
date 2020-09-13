@@ -72,6 +72,7 @@ caps:
     - {id: 28, cat: Console/PSP, desc: "Console PSP / PS3"}
     - {id: 42, cat: PC/ISO, desc: "PC ISO"}
     - {id: 44, cat: PC, desc: "PC"}
+    - {id: 38, cat: Books/Other, desc: "Books Other"}
     - {id: 39, cat: Books/Other, desc: "Books Other"}
     - {id: 70, cat: Movies/SD, desc: "Screener"}
     - {id: 17, cat: PC, desc: "PC Other"}

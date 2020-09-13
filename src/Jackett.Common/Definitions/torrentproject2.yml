@@ -6,10 +6,11 @@ language: en-us
 type: public
 encoding: UTF-8
 links:
-  - https://torrentproject.cc/
+  - https://torrentproject2.com/
   - https://torrentproject2.org/
 legacylinks:
   - https://torrentproject2.se/
+  - https://torrentproject.cc/
 
 caps:
   categories:

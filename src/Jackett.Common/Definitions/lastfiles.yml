@@ -67,6 +67,10 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -104,11 +108,11 @@ search:
     - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     # 0 name 1 genre 2 descr
-    genre: "{{ if .Query.IMDBID }}2{{else}}0{{end}}"
-    # 0 active 1 incldead 2 onlydead 3 free 4 double
-    incldead: 1
+    genre: "{{ if .Query.IMDBID }}2{{ else }}0{{ end }}"
+    # 0 active, 1 incldead, 2 onlydead, 3 free, 4 double
+    incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
 
@@ -161,4 +165,9 @@ search:
       case:
         "span:contains(\"2XUP\")": 2
         "*": 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 36 hours (as seconds = 36 x 60 x 60)
+      text: 129600
 # engine n/a

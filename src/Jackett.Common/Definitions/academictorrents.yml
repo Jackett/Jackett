@@ -36,6 +36,10 @@ settings:
       "ASC": "asc"
 
 search:
+  headers:
+    # bypass browser check
+    Cookie: ["check=1872638182319"]
+
   # https://academictorrents.com/browse.php?search=&c5=1&c6=1&c7=1&sort_field=added&sort_dir=DESC
   paths:
     - path: browse.php

@@ -15,6 +15,10 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -78,14 +82,16 @@ login:
 search:
   paths:
     # https://finelite.org/selaa.php?c14=1&c15=1&c31=1&search=tt6591554&hae=1&type=desc&cat=0&incldead=1&sort=4
+    # https://finelite.org/selaa.php?search=&hae=0&type=desc&cat=0&incldead=0&freeleech=yes&sort=4
     - path: selaa.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-    # 0 name&descr 1 name 2 descr 3 tags
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    # 0 name&descr, 1 name, 2 descr, 3 tags
     hae: 1
-    # 0 active 1 incldead 2 deadonly
+    # 0 active, 1 incldead, 2 deadonly
     incldead: 1
+    freeleech: "{{ if .Config.freeleech }}yes{{ else }}{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
 
@@ -134,4 +140,9 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
 # custom 3.1.4

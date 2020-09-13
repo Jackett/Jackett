@@ -7,7 +7,6 @@ type: public
 encoding: UTF-8
 links:
   - https://nyaa.si/
-  - https://nyaa.root.yt/
 legacylinks:
   - https://nyaa.black-mirror.xyz/
   - https://nyaa.unblocked.casa/
@@ -17,6 +16,7 @@ legacylinks:
   - https://nyaa.unblocked.bar/
   - https://nyaa.proxyportal.pw/
   - https://nyaa.uk-unblock.pro/
+  - https://nyaa.root.yt/ # 402 Payment Required
 
 settings:
   - name: filter-id

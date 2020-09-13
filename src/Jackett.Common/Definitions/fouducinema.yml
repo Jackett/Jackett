@@ -62,6 +62,18 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
 
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+
 login:
   path: TTV3/Connexion
   method: post
@@ -93,10 +105,10 @@ search:
     - path: TTV3/Torrents/Recherche
   inputs:
     search: "{{ .Keywords }}"
-    # 0 active 1 incldead 2 onlydead
+    # 0 active, 1 incldead, 2 onlydead
     incldead: 1
-    # 0 not important 1 no 2 yes
-    freeleech: 0
+    # 0 not important, 1 no, 2 yes
+    freeleech: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
     # 0 all 1 German etc...
     lang: 0
 

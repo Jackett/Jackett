@@ -21,7 +21,7 @@ namespace Jackett.Common.Indexers
     public class TorrentSeeds : BaseWebIndexer
     {
         private string LoginUrl => SiteLink + "takelogin.php";
-        private string SearchUrl => SiteLink + "browse.php";
+        private string SearchUrl => SiteLink + "browse_elastic.php";
         private string TokenUrl => SiteLink + "login.php";
 
         private new ConfigurationDataBasicLoginWithRSSAndDisplay configData => (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData;
@@ -133,24 +133,21 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
 
-            // remove operator characters / all words must be present (+ prefix)
+            // remove operator characters
             var cleanSearchString = Regex.Replace(query.GetQueryString().Trim(), "[ _.+-]+", " ", RegexOptions.Compiled);
-            var finalSearchString = cleanSearchString.Split(' ')
-                                                     .Aggregate("", (current, word) => current + $"+{word} ")
-                                                     .Trim();
 
             var searchUrl = SearchUrl;
             var queryCollection = new NameValueCollection
             {
-                { "searchin", "name" },
+                { "search_in", "name" },
                 { "search_mode", "all" },
                 { "order_by", "added" },
                 { "order_way", "desc" }
             };
-            if (!string.IsNullOrWhiteSpace(finalSearchString))
-                queryCollection.Add("search", finalSearchString);
+            if (!string.IsNullOrWhiteSpace(cleanSearchString))
+                queryCollection.Add("query", cleanSearchString);
             foreach (var cat in MapTorznabCapsToTrackers(query))
-                queryCollection.Add("c" + cat, "1");
+                queryCollection.Add($"cat[{cat}]", "1");
             searchUrl += "?" + queryCollection.GetQueryString();
             var response = await RequestStringWithCookiesAndRetry(searchUrl);
             var results = response.Content;
@@ -179,8 +176,8 @@ namespace Jackett.Common.Indexers
                     release.Title = qDetailsTitle.TextContent.Trim();
                     var qDlLink = row.QuerySelector("a[href^=\"/download.php?torrent=\"]");
 
-                    release.Link = new Uri(SiteLink + qDlLink.GetAttribute("href"));
-                    release.Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
+                    release.Link = new Uri(SiteLink + qDlLink.GetAttribute("href").TrimStart('/'));
+                    release.Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href").TrimStart('/'));
                     release.Guid = release.Comments;
 
                     var qColumns = row.QuerySelectorAll("td");

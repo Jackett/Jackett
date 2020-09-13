@@ -31,6 +31,10 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -77,8 +81,9 @@ search:
     - path: torrents
   inputs:
     $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
-    title: "{{ if .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    title: "{{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     imdb: "{{ .Query.IMDBIDShort }}"
+    freeleech: "{{ if .Config.freeleech }}on{{ else }}{{ end }}"
     order_by: "{{ .Config.sort }}"
     direction: "{{ .Config.type }}"
 
@@ -127,4 +132,9 @@ search:
         i.fa-certificate: 2 # Featured
         i.fa-gem: 2 # Double Upload
         "*": 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 7 day (as seconds = 7 x 24 x 60 x 60)
+      text: 604800
 # UNIT3D

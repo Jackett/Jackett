@@ -71,7 +71,7 @@ settings:
     label: Password
   - name: freeleech
     type: checkbox
-    label: Search freeleech only
+    label: Filter freeleech only
     default: false
   - name: info
     type: info

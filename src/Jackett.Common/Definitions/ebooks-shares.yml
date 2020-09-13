@@ -127,6 +127,7 @@ caps:
     - {id: 270, cat: Books/Ebook, desc: "Fiction: Historical "}
     - {id: 312, cat: Books/Ebook, desc: "Fiction: Various Authors"}
     - {id: 303, cat: Books/Ebook, desc: "Fiction: Poetry"}
+    - {id: 313, cat: Books/Ebook, desc: "Fiction: Dystopian"}
     - {id: 140, cat: Books/Ebook, desc: "Hobby/Pastime: Art"}
     - {id: 141, cat: Books/Ebook, desc: "Hobby/Pastime: Boating"}
     - {id: 142, cat: Books/Ebook, desc: "Hobby/Pastime: Crafts/Knitting/Sewing"}

@@ -182,7 +182,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HamsterStudio
  * IV-Torrents
  * KinoNaVse100
- * Kaztorka
  * Kinorun
  * Kinozal
  * Korsar
@@ -229,6 +228,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Abnormal
  * Acid Lounge (A-L)
  * Aftershock
+ * Aidoru!Online
  * Aither
  * AlphaRatio (AR)
  * AmigosShareClub
@@ -383,7 +383,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Insane Tracker
  * JPopsuki
  * JPTV
- * Kapaki
  * Karagarga
  * Keep Friends
  * LastFiles

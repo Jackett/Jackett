@@ -10,35 +10,6 @@ certificates:
 links:
   - https://finvip.org/
 
-settings:
-  - name: username
-    type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
-  - name: info_results
-    type: info
-    label: "Search results"
-    default: "For best results, increase the torrents number in your profile to 100."
-    default: "<ol><li>Only the Xbtit style is supported.</li><ul>Make sure to set the <b>Style</b> option in your profile to <b>Xbtit</b>.</ul><li>For best results, increase the torrents number in your profile to 100.</li><ul>Set the <b>Torrents Per Page</b> option to <b>100</b>.</ul></ol>"
-  - name: sort
-    type: select
-    label: Sort requested from site
-    default: "3"
-    options:
-      "3": "created"
-      "5": "seeders"
-      "4": "size"
-      "2": "title"
-  - name: type
-    type: select
-    label: Order requested from site
-    default: "2"
-    options:
-      "2": "desc"
-      "1": "asc"
-
 caps:
   categorymappings:
     - {id: 5, cat: TV/Anime, desc: "Anime"}
@@ -79,6 +50,39 @@ caps:
     movie-search: [q, imdbid]
     music-search: [q]
 
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: info_results
+    type: info
+    label: "Search results"
+    default: "For best results, increase the torrents number in your profile to 100."
+    default: "<ol><li>Only the Xbtit style is supported.</li><ul>Make sure to set the <b>Style</b> option in your profile to <b>Xbtit</b>.</ul><li>For best results, increase the torrents number in your profile to 100.</li><ul>Set the <b>Torrents Per Page</b> option to <b>100</b>.</ul></ol>"
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: "3"
+    options:
+      "3": "created"
+      "5": "seeders"
+      "4": "size"
+      "2": "title"
+  - name: type
+    type: select
+    label: Order requested from site
+    default: "2"
+    options:
+      "2": "desc"
+      "1": "asc"
+
 login:
   path: index.php?page=login
   method: post
@@ -102,14 +106,14 @@ search:
     - path: index.php
   inputs:
     page: torrents
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{else}}0{{end}}"
     # 0 title 1 title&descr 2 descr
-    options: "{{ if .Query.IMDBID }}1{{else}}0{{end}}"
-    # 0 all 1 activeonly 2 deadonly
+    options: "{{ if .Query.IMDBID }}1{{ else }}0{{ end }}"
+    # 0 all, 1 activeonly, 2 deadonly
     active: 0
-    # 0 all 1 classic 2 50%free 3 100%free 4 50%+100&free
-    gold: 0
+    # 0 all, 1 classic, 2 50%free, 3 100%free, 4 50%+100&free
+    gold: "{{ if .Config.freeleech }}3{{ else }}0{{ end }}"
     order: "{{ .Config.sort }}"
     by: "{{ .Config.type }}"
 
@@ -164,4 +168,9 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
-# xbtit
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
+# xbtit 2.0.0

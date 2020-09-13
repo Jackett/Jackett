@@ -525,6 +525,7 @@ caps:
     - {id: 385, cat: Other, desc: " |- PS1"}
     - {id: 386, cat: Other, desc: " |- PS2"}
     - {id: 848, cat: Other, desc: " |- PS3"}
+    - {id: 1321, cat: Other, desc: " |- PS4"}
     - {id: 383, cat: Other, desc: " |- PSP"}
     - {id: 384, cat: Other, desc: " |- Psx to PSP"}
     - {id: 1292, cat: Other, desc: " |- PS Vita"}
@@ -686,16 +687,6 @@ caps:
     - {id: 184, cat: Other, desc: " |-  КПК и Мобильных устройств"}
     - {id: 1080, cat: Other, desc: " |-  4Apple"}
     - {id: 180, cat: Other, desc: " |-  Медиа-Диз-Графика"}
-    - {id: 145, cat: Other, desc: "Видео (temp)"}
-    - {id: 146, cat: Other, desc: " |- Аниме (temp)"}
-    - {id: 161, cat: Other, desc: " |- Книги (temp)"}
-    - {id: 302, cat: Other, desc: " |- Авто (temp)"}
-    - {id: 147, cat: Other, desc: " |- Музыка (temp)"}
-    - {id: 148, cat: Other, desc: " |- Игры (temp)"}
-    - {id: 149, cat: Other, desc: " |- Программы (temp)"}
-    - {id: 183, cat: Other, desc: " |- КПК и Мобильные устройства (temp)"}
-    - {id: 1145, cat: Other, desc: " |- 4Apple (temp)"}
-    - {id: 171, cat: Other, desc: " |- Медиа-Диз-Графика (temp)"}
     # Everything for children and parents
     - {id: 724, cat: TV, desc: "Видео"}
     - {id: 725, cat: TV, desc: " |- Обучающее Видео для родителей"}
