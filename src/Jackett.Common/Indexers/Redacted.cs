@@ -1,18 +1,22 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Jackett.Common.Indexers.Abstract;
 using Jackett.Common.Models;
+using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
-using Jackett.Common.Utils.Clients;
 using NLog;
+using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
     public class Redacted : GazelleTracker
     {
+        protected override string DownloadUrl => SiteLink + "ajax.php?action=download&usetoken=" + (useTokens ? "1" : "0") + "&id=";
+
         public Redacted(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base(id: "redacted",
                    name: "Redacted",
@@ -27,7 +31,8 @@ namespace Jackett.Common.Indexers
                    logger: l,
                    p: ps,
                    supportsFreeleechTokens: true,
-                   has2Fa: true)
+                   has2Fa: false,
+                   useApiKey: true)
         {
             Language = "en-us";
             Type = "private";
@@ -39,6 +44,13 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(5, TorznabCatType.Movies, "E-Learning Videos");
             AddCategoryMapping(6, TorznabCatType.TV, "Comedy");
             AddCategoryMapping(7, TorznabCatType.Books, "Comics");
+
+            var cookieHint = new ConfigurationData.DisplayItem(
+                "<ol><li>Go to Redacted's site and open your account settings.</li><li>Go to <b>Access Settings</b> tab and copy the API Key.</li><li>Ensure that you've checked <b>Confirm API Key</b>.</li><li>Finally, click <b>Save Profile</b>.</li></ol>")
+            {
+                Name = ""
+            };
+            configData.AddDynamic("cookieHint", cookieHint);
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
@@ -48,5 +60,6 @@ namespace Jackett.Common.Indexers
             results = results.Where(release => query.MatchQueryStringAND(release.Title));
             return results;
         }
+
     }
 }
