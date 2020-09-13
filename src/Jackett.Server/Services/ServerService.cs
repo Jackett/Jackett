@@ -112,9 +112,18 @@ namespace Jackett.Server.Services
 
                 try
                 {
-                    var cgroupFile = "/proc/1/cgroup";
-                    if (File.Exists(cgroupFile))
-                        logger.Info("Running in Docker: " + (File.ReadAllText(cgroupFile).Contains("/docker/") ? "Yes" : "No"));
+                    var dockerMsg = "No";
+                    const string cgroupFile = "/proc/1/cgroup";
+                    if (File.Exists(cgroupFile) && File.ReadAllText(cgroupFile).Contains("/docker/"))
+                    {
+                        // this file is created in the Docker image build
+                        // https://github.com/linuxserver/docker-jackett/pull/105
+                        const string dockerImageFile = "/etc/docker-image";
+                        dockerMsg = File.Exists(dockerImageFile)
+                            ? "Yes (image build: " + File.ReadAllText(dockerImageFile).Trim() + ")"
+                            : "Yes (image build: unknown)";
+                    }
+                    logger.Info($"Running in Docker: {dockerMsg}");
                 }
                 catch (Exception e)
                 {
