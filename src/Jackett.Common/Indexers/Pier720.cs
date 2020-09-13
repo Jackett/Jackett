@@ -34,6 +34,7 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "ru-ru";
             Type = "private";
+
             AddCategoryMapping(32, TorznabCatType.TVSport, "Basketball");
             AddCategoryMapping(34, TorznabCatType.TVSport, "Basketball - NBA");
             AddCategoryMapping(87, TorznabCatType.TVSport, "Basketball - NBA Playoffs");
@@ -111,16 +112,16 @@ namespace Jackett.Common.Indexers
             {
                 { "username", configData.Username.Value },
                 { "password", configData.Password.Value },
-                { "redirect", "/" },
+                { "redirect", "index.php" },
                 { "login", "Login" },
                 { "autologin", "on" }
             };
             var htmlParser = new HtmlParser();
-            var loginDocument = htmlParser.ParseDocument((await RequestStringWithCookies(LoginUrl)).Content);
+            var loginDocument = htmlParser.ParseDocument((await RequestStringWithCookies(LoginUrl, "")).Content);
             pairs["creation_time"] = loginDocument.GetElementsByName("creation_time")[0].GetAttribute("value");
             pairs["form_token"] = loginDocument.GetElementsByName("form_token")[0].GetAttribute("value");
             pairs["sid"] = loginDocument.GetElementsByName("sid")[0].GetAttribute("value");
-            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl, true);
+            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, CookieHeader, true, null, LoginUrl, true);
             await ConfigureIfOK(
                 result.Cookies, result.Content?.Contains("ucp.php?mode=logout&") == true,
                 () => throw new ExceptionWithConfigData(result.Content, configData));
@@ -165,7 +166,7 @@ namespace Jackett.Common.Indexers
                     var detailLink = SiteLink + rowLink.GetAttribute("href");
                     var detailsResult = await RequestStringWithCookies(detailLink);
                     var detailsDocument = resultParser.ParseDocument(detailsResult.Content);
-                    var detailRow = detailsDocument.QuerySelector("table.table2 > tbody > tr");
+                    var detailRow = detailsDocument.QuerySelector("table.table2 > tbody > tr.bg1");
                     if (detailRow == null)
                         continue; //No torrents in result
                     var qDownloadLink = detailRow.QuerySelector("a[href^=\"/download/torrent\"]");
