@@ -94,6 +94,7 @@ caps:
     "MOVIESCAMTS": Movies
     "MOVIESDUBSDUALAUDIO": Movies
     "MOVIESENGLISHSPANISHSUBT": Movies
+    "MOVIESSDX264H264": Movies/SD
     "MOVIESHD": Movies/HD
     "MOVIESHD720P": Movies/HD
     "MOVIESHD1080P": Movies/HD
@@ -144,6 +145,7 @@ caps:
     "TVDIVXXVID": TV/SD
     "TVSDXVID": TV/SD
     "TVSDX264H264": TV/SD
+    "TVSDX264X265": TV/SD
     "TVSHOWS": TV
     "TVSPORT": TV/Sport
     "TVTVPACKS": TV
@@ -153,6 +155,7 @@ caps:
     "VIDEOHDMOVIES": Movies/HD
     "VIDEOHDRIP": Movies
     "VIDEOHDTVSHOWS": TV/HD
+    "VIDEOMOVIESDVDR": Movies/DVD
     "VIDEOMOVIECLIPS": Movies
     "VIDEOMOVIES": Movies
     "VIDEOMUSICVIDEOS": Audio/Video
