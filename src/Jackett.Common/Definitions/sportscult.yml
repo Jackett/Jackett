@@ -110,7 +110,8 @@ search:
     search: "{{ .Keywords }}"
     page: torrents
     category: 0
-    active: 1
+    # 0 all, 1 active, 2 dead
+    active: 0
     order: "{{ .Config.sort }}"
     by: "{{ .Config.type }}"
 
@@ -156,8 +157,14 @@ search:
           args: "02/01/2006"
     downloadvolumefactor:
       case:
+        img[src="gold/gold.gif"]: 0
+        img[src="gold/silver.gif"]: 0.5
         "*": 1
     uploadvolumefactor:
-      case:
-        "*": 1
+      text: 1
+    minimumratio:
+      text: 0.9
+    minimumseedtime:
+      # 36 hours (as seconds = 36 x 60 x 60)
+      text: 129600
 # xbtit 2.3.0
