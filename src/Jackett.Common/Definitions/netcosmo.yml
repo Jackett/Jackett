@@ -37,6 +37,10 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -79,16 +83,6 @@ login:
     path: index.php
     selector: a[href="logout.php"]
 
-#  download:
-#    before:
-#      path: thanks.php
-#      method: "post"
-#      inputs:
-#        infohash: "{{ .DownloadUri.Query.id }}"
-#        thanks: "1"
-#        rndval: "1487013827343"
-#    selector: a[href^="download.php?id="]
-
 search:
   paths:
     - path: index.php
@@ -101,14 +95,14 @@ search:
     - name: replace
       args: ["-", ""]
   inputs:
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBIDShort }}{{else}}{{ .Keywords }}{{end}}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBIDShort }}{{ else }}{{ .Keywords }}{{ end }}"
     page: torrents
     category: "{{ range .Categories }}{{.}};{{end}}"
-    options: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
+    options: "{{ if .Query.IMDBID }}4{{ else }}0{{ end }}"
     # 0 all 1 active 2 dead
     active: 0
-    # 0 filename 1 file&descr 2 descr 3 uploader 5 gold 6 silver 7 bronze
-    options: 0
+    # 0 filename, 1 file&descr, 2 descr, 3 uploader, 5 gold, 6 silver, 7 bronze
+    options: "{{ if .Config.freeleech }}5{{ else }}0{{ end }}"
     order: "{{ .Config.sort }}"
     by: "{{ .Config.type }}"
 
@@ -140,7 +134,6 @@ search:
       selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
       attribute: href
     download:
-#        selector: a[href^="index.php?page=downloadcheck&id="]
       selector: a[href^="download.php?id="]
       attribute: href
     size:
@@ -179,4 +172,6 @@ search:
         img[alt="9x Upload Multiplier"]: 9
         img[alt="10x Upload Multiplier"]: 10
         "*": 1
+    minimumratio:
+      text: 0.9
 # xbtitFM v2.2.09
