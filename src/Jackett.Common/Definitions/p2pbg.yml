@@ -108,8 +108,8 @@ search:
   inputs:
     page: torrents
     category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{else}}0;{{end}}"
-    search: "{{ if .Keywords }}{{ .Keywords }}{{else}}{{end}}"
-    # 0 all 1 active 2 dead
+    search: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ end }}"
+    # 0 all 1, active, 2 dead
     active: 0
     order: "{{ .Config.sort }}"
     by: "{{ .Config.type }}"
@@ -182,7 +182,9 @@ search:
     grabs:
       selector: td:nth-child(10)
     downloadvolumefactor:
-      text: 0
+      text: 1
     uploadvolumefactor:
       text: 1
+    minimumratio:
+      text: 1.0
 # xbtit customised
