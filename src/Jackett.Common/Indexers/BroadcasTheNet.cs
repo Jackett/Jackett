@@ -95,21 +95,33 @@ namespace Jackett.Common.Indexers
                 btnResults = (int)TorznabCaps.LimitsDefault;
             var btnOffset = query.Offset;
             var releases = new List<ReleaseInfo>();
+            var searchParam = new Dictionary<string, string>();
 
-            // If only the season is searched for then change format to match expected format
-            var seasonOnlyMatch = new Regex(@".*\s[Ss]{1}\d{2}(?<![Ee]{1}\d{2,3})?$").Match(searchString);
+            // If only the season/episode is searched for then change format to match expected format
+            var seasonOnlyMatch = new Regex(@"(.*)\s[Ss]{1}\d{2}(?<![Ee]{1}\d{2,3})$").Match(searchString);
+            var seasonEpisodeMatch = new Regex(@"(.*)\s[Ss]{1}\d{2}[Ee]{1}(\d{2,3})$").Match(searchString);
             if (seasonOnlyMatch.Success)
             {
-                searchString = Regex.Replace(searchString, @"[Ss]{1}\d{2}", $"Season {query.Season}");
+                searchString = seasonOnlyMatch.Groups[1].Value.Trim();
+                searchParam["name"] = $"Season {query.Season}";
+                searchParam["category"] = "Season";
+            } else if (seasonEpisodeMatch.Success)
+            {
+                searchString = seasonEpisodeMatch.Groups[1].Value.Trim();
+                searchParam["name"] = string.Format("S{0:00}E{1:00}", query.Season, int.Parse(query.Episode));
+                searchParam["category"] = "Episode";
             }
+
+            searchParam["search"] = searchString.Replace(" ", "%");
 
             var parameters = new JArray
             {
                 new JValue(configData.Key.Value),
-                new JValue(searchString.Trim()),
+                JObject.FromObject(searchParam),
                 new JValue(btnResults),
                 new JValue(btnOffset)
             };
+
             var response = await RequestWithCookiesAndRetryAsync(
                 APIBASE, method: RequestType.POST,
                 headers: new Dictionary<string, string>
