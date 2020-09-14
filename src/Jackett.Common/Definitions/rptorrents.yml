@@ -51,6 +51,10 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -89,15 +93,15 @@ search:
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
-    # 0 name & desc 1 name 2 desc 3 genre
+    # 0 name & desc, 1 name, 2 desc, 3 genre
     incldesc: 1
-    # 0 active 1 incldead 2 onlydead
+    # 0 active, 1 incldead, 2 onlydead
     incldead: 1
-    # 0 inclfree 1 notfree 2 onlyfree
-    freeleech: 0
-    # 0 both 1 localonly 2 extonly
+    # 0 inclfree, 1 notfree, 2 onlyfree
+    freeleech: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
+    # 0 both, 1 localonly, 2 extonly
     inclexternal: 0
-    # 0 all 1 English 2 etc...
+    # 0 al,l 1 English, 2 etc...
     lang: 0
     sort: "{{ .Config.sort }}"
     order: "{{ .Config.type }}"
@@ -143,4 +147,6 @@ search:
       case:
         img[src="images/t_extern.png"]: 0
         "*": 1
+    minimumratio:
+      text: 1.0
 # TorrentTrader-Ro 3.0
