@@ -22,6 +22,7 @@ namespace Jackett.Common.Indexers
     {
         private static string SearchUrl => "https://passthepopcorn.me/torrents.php";
         private string AuthKey { get; set; }
+        private string PassKey { get; set; }
 
         // TODO: merge ConfigurationDataAPILoginWithUserAndPasskeyAndFilter class with with ConfigurationDataUserPasskey
         private new ConfigurationDataAPILoginWithUserAndPasskeyAndFilter configData
@@ -123,6 +124,10 @@ namespace Jackett.Common.Indexers
             {
                 //Iterate over the releases for each movie
                 var jsResults = JObject.Parse(results.ContentString);
+
+                AuthKey = (string)jsResults["AuthKey"];
+                PassKey = (string)jsResults["PassKey"];
+
                 foreach (var movie in jsResults["Movies"])
                 {
                     var movieTitle = (string)movie["Title"];
@@ -142,7 +147,7 @@ namespace Jackett.Common.Indexers
                             {"action", "download"},
                             {"id", torrentId},
                             {"authkey", AuthKey},
-                            {"torrent_pass", configData.Passkey.Value},
+                            {"torrent_pass", PassKey},
                         };
                         var free = !(torrent["FreeleechType"] is null);
 
