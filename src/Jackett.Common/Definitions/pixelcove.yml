@@ -65,6 +65,10 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -97,14 +101,18 @@ login:
 
 search:
   paths:
+    # https://www.pixelcove.me/torrents.php?order_by=time&order_way=desc&filter_freeleech=1&searchtext=&action=advanced&title=&sizeall=&sizetype=gb&sizerange=0.01&filelist=&taglist=&autocomplete_toggle=1
     - path: torrents.php
   inputs:
     $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
-    title: "{{ .Keywords }}"
     order_by: "{{ .Config.sort }}"
     order_way: "{{ .Config.type }}"
-    action: basic
-    searchsubmit: 1
+    action: advanced
+    filter_freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+    searchtext: ""
+    title: "{{ .Keywords }}"
+    filelist: ""
+    taglist: ""
 
   rows:
     # exclude redbar torrents
@@ -157,8 +165,10 @@ search:
       selector: td:nth-child(9)
     downloadvolumefactor:
       case:
-        "span.fltag": 0
+        img[src$="/freedownload.gif"]: 0
         "*": 1
     uploadvolumefactor:
       text: 1
+    minimumratio:
+      text: 0.5
 # luminance
