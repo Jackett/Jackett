@@ -43,19 +43,19 @@ caps:
     - {id: 5020, cat: TV/Sport, desc: "F1 Misc Driver/team specials"}
     - {id: 5030, cat: TV/Sport, desc: "F1 Misc Event specials"}
     - {id: 5040, cat: TV/Sport, desc: "F1 Misc Other"}
-    - {id: 6000, cat: TV/Sport, desc: "Formula 1 - 2020"}
-    - {id: 6010, cat: TV/Sport, desc: "F1 2018 Free practices"}
-    - {id: 6020, cat: TV/Sport, desc: "F1 2018 Qualifications"}
-    - {id: 6030, cat: TV/Sport, desc: "F1 2018 Races"}
-    - {id: 6040, cat: TV/Sport, desc: "F1 2018 Highlights"}
-    - {id: 6050, cat: TV/Sport, desc: "F1 2018 Onboards"}
-    - {id: 6060, cat: TV/Sport, desc: "F1 2018 Other"}
-    - {id: 7000, cat: TV/Sport, desc: "Formula 1 - 2020 (HD)"}
-    - {id: 7010, cat: TV/Sport, desc: "F1 2018 (HD) Free practices"}
-    - {id: 7020, cat: TV/Sport, desc: "F1 2018 (HD) Qualifications"}
-    - {id: 7030, cat: TV/Sport, desc: "F1 2018 (HD) Races"}
-    - {id: 7040, cat: TV/Sport, desc: "F1 2018 (HD) Highlights"}
-    - {id: 7050, cat: TV/Sport, desc: "F1 2018 (HD) Other"}
+    - {id: 6000, cat: TV/Sport, desc: "Formula 1 - current season"}
+    - {id: 6010, cat: TV/Sport, desc: "F1 current season Free practices"}
+    - {id: 6020, cat: TV/Sport, desc: "F1 current season Qualifications"}
+    - {id: 6030, cat: TV/Sport, desc: "F1 current season Races"}
+    - {id: 6040, cat: TV/Sport, desc: "F1 current season Highlights"}
+    - {id: 6050, cat: TV/Sport, desc: "F1 current season Onboards"}
+    - {id: 6060, cat: TV/Sport, desc: "F1 current season Other"}
+    - {id: 7000, cat: TV/Sport, desc: "Formula 1 - current season (HD)"}
+    - {id: 7010, cat: TV/Sport, desc: "F1 current season (HD) Free practices"}
+    - {id: 7020, cat: TV/Sport, desc: "F1 current season (HD) Qualifications"}
+    - {id: 7030, cat: TV/Sport, desc: "F1 current season (HD) Races"}
+    - {id: 7040, cat: TV/Sport, desc: "F1 current season (HD) Highlights"}
+    - {id: 7050, cat: TV/Sport, desc: "F1 current season (HD) Other"}
     - {id: 8000, cat: TV/Sport, desc: "Moto3 / Moto2 / MotoGP"}
     - {id: 8010, cat: TV/Sport, desc: "Moto 125cc"}
     - {id: 8020, cat: TV/Sport, desc: "Moto 250cc"}
@@ -257,4 +257,6 @@ search:
       text: 1
     uploadvolumefactor:
       text: 1
+    minimumratio:
+      text: 0.5
 # crankShaft v0.1.6
