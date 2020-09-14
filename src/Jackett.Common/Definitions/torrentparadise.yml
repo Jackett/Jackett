@@ -139,10 +139,12 @@ caps:
     "SPORTS": TV/Sport
     "TVHDSPORTS": TV/Sport
     "TUTORIALS": Other
+    "TUTORIALSTUTORIALS": Other
     "TV": TV
     "TVHDX264H264": TV/HD
     "TVHEVCX265": TV/HD
     "TVDIVXXVID": TV/SD
+    "TVDOCUMENTARY": TV/Documentary
     "TVSDXVID": TV/SD
     "TVSDX264H264": TV/SD
     "TVSDX264X265": TV/SD
