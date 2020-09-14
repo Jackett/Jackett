@@ -43,6 +43,18 @@ caps:
     movie-search: [q]
     music-search: [q]
 
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+
 login:
   path: takelogin.php
   method: post
@@ -64,8 +76,8 @@ search:
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
-    # 0 active 1 incldead 2 onlydead 3 freeleech
-    incldead: 1
+    # 0 active, 1 incldead, 2 onlydead, 3 freeleech
+    incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
 
   rows:
     selector: tr.browse
@@ -135,4 +147,9 @@ search:
         "*": "1"
     uploadvolumefactor:
       text: 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
 # engine n/a
