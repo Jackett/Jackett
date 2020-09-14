@@ -55,9 +55,9 @@ caps:
     - {id: 53, cat: XXX/Packs, desc: "XXX-Pack"}
 
   modes:
-    search: [q]
-    tv-search: [q, season, ep]
-    movie-search: [q]
+    search: [q, imdbid]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
     music-search: [q]
 
 settings:
@@ -67,6 +67,10 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -101,14 +105,22 @@ login:
 
 search:
   paths:
-    # http://takeabyte-nordic.org/browse.php?search=first+man&searchin=title&incldead=0
     # http://takeabyte-nordic.org/browse.php?c9=1&c26=1&c3=1&search=%22first+man%22&searchin=title&incldead=0
+    # https://takeabyte-nordic.org/browse.php?search=&searchin=title&incldead=0&audio=0&subs=0&only_free=1
+    # https://takeabyte-nordic.org/browse.php?search=tt2702920&searchin=imdb&incldead=1&audio=0&subs=0
     - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ .Keywords }}"
-    searchin: title
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    # title, descr, genre, imdb, all
+    searchin: "{{ if .Query.IMDBID }}imdb{{ else }}title{{ end }}"
+    # 0 active, 1 incldead, 2 onlydead
     incldead: 1
+    # 0 all, 2 English, etc.
+    audio: 0
+    # 0 all, 2 Eng, etc
+    subs: 0
+    only_free: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
 
@@ -135,6 +147,10 @@ search:
       filters:
         - name: replace
           args: ["details.php?id=", "download.php?torrent="]
+    imdb:
+      selector: a[href*="imdb.com/title/tt"]
+      attribute: href
+      optional: true
     size:
       selector: td:nth-last-child(4)
     files:
@@ -171,4 +187,9 @@ search:
       case:
         "b:contains(\"[Free and Double]\")": 2
         "*": 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
 # U-232 V4
