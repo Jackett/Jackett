@@ -82,7 +82,10 @@ search:
     # does not appear to support multi category searches
     cat: 0
     search: "{{ .Keywords }}"
+    # 0 name, 1 descr, 2 both
     searchin: 0
+    # note: using incldead=3 causes `Unknown column 'free' in 'where clause'` at web site
+    # 0 active, 1 incldead, 2 onlydead, 3 freeleech
     incldead: 1
     sort: "{{ .Config.sort }}"
     d: "{{ .Config.type }}"
@@ -131,4 +134,9 @@ search:
         - name: replace
           args: ["Uploaded ", ""]
         - name: timeago
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 1 day (as seconds = 24 x 60 x 60)
+      text: 86400
 # engine n/a
