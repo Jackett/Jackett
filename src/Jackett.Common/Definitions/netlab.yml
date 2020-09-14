@@ -59,8 +59,8 @@ search:
     - path: browse.php
   inputs:
     $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-    search: "{{if .Query.Artist}}{{ .Query.Artist }}{{else}}{{ .Keywords }}{{end}}"
-    # 0 active 1 incldead 2 onlydead
+    search: "{{if .Query.Artist}}{{ .Query.Artist }}{{ else }}{{ .Keywords }}{{ end }}"
+    # 0 active, 1 incldead, 2 onlydead
     incldead: 1
 
   rows:
@@ -109,7 +109,10 @@ search:
     leechers:
       selector: td:nth-child(8)
     downloadvolumefactor:
+      # there is suposed to be a gold where ul is counted at 100% and dl counted for 35% but I've not seen it yet
       text: 1
     uploadvolumefactor:
       text: 1
+    minimumratio:
+      text: 0.15
 # engine n/a

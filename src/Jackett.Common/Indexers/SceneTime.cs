@@ -104,7 +104,17 @@ namespace Jackett.Common.Indexers
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var loginPage = await RequestStringWithCookies(StartPageUrl, string.Empty);
+            WebClientStringResult loginPage;
+            try
+            {
+                loginPage = await RequestStringWithCookies(StartPageUrl, string.Empty);
+            }
+            catch (Exception)
+            {
+                // The login page is protected by Cloudflare
+                return configData;
+            }
+
             var parser = new HtmlParser();
             var dom = parser.ParseDocument(loginPage.Content);
             var recaptcha = dom.QuerySelector(".g-recaptcha");
