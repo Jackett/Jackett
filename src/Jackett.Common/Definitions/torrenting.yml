@@ -39,6 +39,18 @@ caps:
     movie-search: [q, imdbid]
     music-search: [q]
 
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+
 login:
   path: login.php
   method: form
@@ -53,13 +65,9 @@ login:
 
 search:
   paths:
-    # https://torrenting.com/t?29=&34=&30=&q=&qf=ti
-    - path: t
-  inputs:
-    $raw: "{{ range .Categories }}{{.}}=&{{end}}"
-    q: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-    # ti title, ta tags, all title tags descr, adv advanced
-    qf: "{{ if .Query.IMDBID }}adv{{else}}ti{{end}}"
+    # https://torrenting.com/t?1=&5=&free=on&q=climax&qf=ti
+    # note: &free= or &free is treated as fleeleech so use if input block here does not work!
+    - path: "t?{{ range .Categories }}{{.}}=&{{end}}{{ if .Config.freeleech }}free=on&{{ else }}{{ end }}q={{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}&qf={{ if .Query.IMDBID }}adv{{ else }}ti{{ end }}"
 
   rows:
     selector: table#torrentsTable > tbody > tr:has(td.torrentNameInfo)
