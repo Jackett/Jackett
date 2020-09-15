@@ -32,13 +32,16 @@ caps:
     "AdultPornHDVideo": XXX
     "AdultPornVideo": XXX
     "Anime": TV/Anime
+    "AnimeEnglishtranslated": TV/Anime
     "AnimeAnimeOther": TV/Anime
     "Applications": PC/0day
     "AudioBooks": Audio/Audiobook
     "BooksAcademic": Books
     "BooksEbooks": Books
+    "BooksEducational": Books
     "BooksFiction": Books
     "BooksNonfiction": Books
+    "Ebooks": Books/Ebook
     "Games": Console
     "GamesWindows": PC/Games
     "Movies": Movies
@@ -46,10 +49,12 @@ caps:
     "MoviesDocumentary": TV/Documentary
     "Music": Audio
     "Other": Other
+    "OtherComics": Other
     "OtherUnsorted": Other
     "PicturesPicturesOther": Other/Misc
     "PicturesWallpapers": Other/Misc
     "TV": TV
+    "TVOther": TV/Other
     "TVshows": TV
     "Television": TV
     "VideoMobile": Movies
