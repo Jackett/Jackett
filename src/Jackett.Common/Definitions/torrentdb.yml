@@ -30,6 +30,10 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -71,17 +75,14 @@ ratio:
 
 search:
   paths:
-    # https://torrentdb.net/filter/torrents?&search=ring&categories[]=1&freeleech=1&doubleupload=1&sorting=created_at&direction=desc&qty=100
-    - path: filter/torrents
-  inputs:
-    $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBIDShort }}{{else}}{{ .Keywords }}{{end}}"
-    sorting: "{{ .Config.sort }}"
-    direction: "{{ .Config.type }}"
-    qty: 100
+    # https://torrentdb.net/filter/torrents?search=&tags=&freeleech=1&sorting=created_at&direction=desc&qty=25
+    # note: bug at web site means adding freeleech= or freeleech=0 still returns only freeleech, so use of the input block here does not work!
+    - path: "filter/torrents?{{ range .Categories }}categories[]={{.}}&{{end}}{{ if .Config.freeleech }}freeleech=1&{{ else }}{{ end }}search={{ if .Query.IMDBID }}{{ .Query.IMDBIDShort }}{{ else }}{{ .Keywords }}{{ end }}&tags=&sorting={{ .Config.sort }}&direction={{ .Config.type }}&qty=100"
 
   rows:
     selector: table > tbody > tr
+    filters:
+      - name: andmatch
 
   fields:
     category:
@@ -126,4 +127,9 @@ search:
         i.fa-certificate: 2 # Featured
         i.fa-gem: 2 # Double Upload
         "*": 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 7 days (as seconds = 7 x 24 x 60 x 60)
+      text: 604800
 # UNIT3D
