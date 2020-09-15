@@ -90,6 +90,10 @@ settings:
   - name: pin
     type: text
     label: Pin
+  - name: freeleech
+    type: checkbox
+    label: Filter freeleech only
+    default: false
   - name: info_results
     type: info
     label: "Search results"
@@ -147,7 +151,7 @@ search:
     sort: "{{ .Config.type }}"
 
   rows:
-    selector: table.tablebrowse > tbody > tr:has(a[href^="download_ssl.php"])
+    selector: "table.tablebrowse > tbody > tr:has(a[href^=\"download_ssl.php\"]){{ if .Config.freeleech }}:has(font[color=\"#730d1e\"]:contains(\"[OnlyUpload]\")){{ else }}{{ end }}"
 
   fields:
     title:
@@ -204,6 +208,10 @@ search:
         "font[color=\"#730d1e\"]:contains(\"[OnlyUpload]\")": 0
         "*": 1
     uploadvolumefactor:
-      case:
-        "*": 1
+      text: 1
+    minimumratio:
+      text: 0.7
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
 # engine n/a
