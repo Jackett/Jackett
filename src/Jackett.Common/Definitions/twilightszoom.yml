@@ -89,6 +89,10 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -127,9 +131,9 @@ search:
     - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ if or (.Query.Artist) (.Query.Album) }}{{ or (.Query.Artist) (.Query.Album) }}{{else}}{{ .Keywords }}{{end}}"
-    # 0 active 1 incldead 2 onlydead 3 free
-    incldead: 1
+    search: "{{ if or (.Query.Artist) (.Query.Album) }}{{ or (.Query.Artist) (.Query.Album) }}{{ else }}{{ .Keywords }}{{ end }}"
+    # 0 active, 1 incldead, 2 onlydead, 3 free
+    incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
 
@@ -191,4 +195,6 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
+    minimumratio:
+      text: 0.5
 # TBDEV,U232,and Btdev (customised)
