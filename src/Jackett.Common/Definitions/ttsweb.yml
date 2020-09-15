@@ -71,6 +71,10 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -104,16 +108,19 @@ login:
 
 search:
   paths:
+    # https://ttsweb.org/torrents-search.php?search=&searchin=title&incldead=0&only_free=1
     # uses cats1[]=10 or cats3[]=20 which cannot be supported
     - path: browse.php
   inputs:
-    search: "{{.Keywords}}"
-    # title descr genre all
+    search: "{{ .Keywords }}"
+    # title, descr, genre, all
     searchin: title
-    # 0 active 1 incldead 2 onlydead
+    # 0 active, 1 incldead, 2 onlydead
     incldead: 1
+    only_free: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
+    # does not support searching for imdbid
 
   rows:
     selector: table[border="1"][cellspacing="0"][cellpadding="5"] tr:has(a[href^="details.php?id="]):has(a[href^="browse.php?cat="])
@@ -189,4 +196,9 @@ search:
       case:
         img[src="./pic/icons2/doubleseed.gif"]: 2
         "*": 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
 # U-232 V3.5
