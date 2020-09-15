@@ -27,6 +27,7 @@ caps:
   categories:
     "series": TV
     "peliculas": Movies
+    "other": Other
 
   modes:
     search: [q]
@@ -48,9 +49,9 @@ search:
   keywordsfilters:
     # most ES/ITA TV torrents are in XXxYY format, so we search without S/E prefixes and filter later
     - name: re_replace
-      args: ["S0?(\\d{1,2})", " $1 "]
+      args: ["(?i)S0?(\\d{1,2})", " $1 "]
     - name: re_replace
-      args: ["E(\\d{2,3})", " $1 "]
+      args: ["(?i)E(\\d{2,3})", " $1 "]
   inputs:
     s: "{{ .Keywords }}"
     $raw: "&x=0&y=0"
@@ -61,19 +62,40 @@ search:
       - name: andmatch
 
   fields:
-    title:
-      selector: .meta a
-      attribute: href
+    quality:
+      selector: span:nth-of-type(2) > i
+      filters:
+        - name: replace
+          args: ["---", ""]
+    language:
+      selector: span#idiomacio > i > img
+      attribute: title
+      filters:
+        - name: replace
+          args: ["Pelicula en ", ""]
+        - name: replace
+          args: ["Español", "Spanish"]
+        - name: replace
+          args: ["Ingles", "English"]
+        - name: replace
+          args: ["Subtitulado", "Subtitled"]
+    _title:
+      selector: div.imagen > a
+      attribute: title
       # normalize to SXXEYY format
       filters:
-        - name: re_replace
-          args: [".*/([^/]*)/$", "$1"]
         - name: replace
-          args: ["-", " "]
+          args: [" – ", " "]
+        - name: replace
+          args: ["(", ""]
+        - name: replace
+          args: [")", ""]
         - name: re_replace
           args: ["(\\d{2})×(\\d{2})", "S$1E$2"]
         - name: re_replace
           args: ["(\\d{1})×(\\d{2})", "S0$1E$2"]
+    title:
+      text: "{{ .Result._title}} {{ .Result.quality }} {{ .Result.language }}"
     details:
       selector: .meta a
       attribute: href
@@ -96,7 +118,7 @@ search:
         - name: regexp
           args: "^.*/(series)/.*$"
     category:
-      text: "{{ if or .Result.category_movie .Result.category_tv }}{{ or .Result.category_movie .Result.category_tv }}{{ else }}{{ end }}"
+      text: "{{ if or .Result.category_movie .Result.category_tv }}{{ or .Result.category_movie .Result.category_tv }}{{ else }}other{{ end }}"
     size:
       text: "0 B"
     size:
