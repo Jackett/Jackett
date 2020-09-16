@@ -300,6 +300,7 @@ namespace Jackett.Updater
                 "Definitions/czteam.yml",
                 "Definitions/demonsite.yml",
                 "Definitions/digbt.yml",
+                "Definitions/downloadville.yml",
                 "Definitions/dragonworld.yml",
                 "Definitions/dreamteam.yml",
                 "Definitions/eggmeon.yml",

@@ -306,7 +306,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * DivTeam
  * DivxTotal
  * DocumentaryTorrents (DT)
- * Downloadville
  * Dragonworld Reloaded
  * EbookParadijs
  * Ebooks-Shares
