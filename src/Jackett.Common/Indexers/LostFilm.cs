@@ -22,9 +22,8 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     internal class LostFilm : BaseWebIndexer
     {
-        public override string[] AlternativeSiteLinks { get; protected set; } = {
+        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
             "https://www.lostfilm.tv/",
-            "https://www.lostfilm.run/",
         };
 
         private static readonly Regex parsePlayEpisodeRegex = new Regex("PlayEpisode\\('(?<id>\\d{1,3})(?<season>\\d{3})(?<episode>\\d{3})'\\)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -98,7 +97,7 @@ namespace Jackett.Common.Indexers
             : base(id: "lostfilm",
                    name: "LostFilm.tv",
                    description: "Unique portal about foreign series",
-                   link: "https://www.lostfilm.tv/",
+                   link: "https://www.lostfilm.run/",
                    caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                    configService: configService,
                    client: wc,
