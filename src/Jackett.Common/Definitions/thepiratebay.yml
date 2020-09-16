@@ -109,7 +109,7 @@ settings:
   - name: info
     type: info
     label: Proxies
-    default: Yes, <b>The Pirate Bay</b> is currently only reachable via <b>TOR</b>.</br>But you can try to use any of the unofficial proxies above.</br>To check on the status of the official TPB Web Site access the <a href="https://pirates-forum.org/misc.php?page=tpbstatus" target="_blank">tpbstatus</a> page. When the <i>https</i> column has green dots then the site is online.
+    default: This indexer is no longer capable of processing the ThePirateBay.org domain web site due to changes the site has made to their results presentation methods.</br>But you can use any of the unofficial proxies above, which all fetch the same data that the original domain uses, only they continue to present it in a format this indexer can process.
   - name: order
     type: select
     label: Order results
