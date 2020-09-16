@@ -89,6 +89,10 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Filter freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -130,13 +134,13 @@ search:
     pid: 10
     $raw: "{{ range .Categories }}&cid[]={{.}}{{end}}"
     keywords: "{{ .Keywords }}"
-    # name description both uploader
+    # name, description, both, uploader
     search_type: name
     "sortOptions[sortBy]": "{{ .Config.sort }}"
     "sortOptions[sortOrder]": "{{ .Config.type }}"
 
   rows:
-    selector: table#torrents_table_classic > tbody > tr:not(:first-child), .torrent-box[id^="torrent_"]
+    selector: "table#torrents_table_classic > tbody > tr:not(:first-child){{ if .Config.freeleech }}:has(img[src$=\"torrent_free.png\"]){{ else }}{{ end }}, .torrent-box[id^=\"torrent_\"]{{ if .Config.freeleech }}:has(img[src$=\"torrent_free.png\"]){{ else }}{{ end }}"
 
   fields:
     category:
@@ -243,5 +247,6 @@ search:
     minimumratio:
       text: 1.0
     minimumseedtime:
-      text: 345600 # 4 day (96h)
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
 # TSUE 2.2
