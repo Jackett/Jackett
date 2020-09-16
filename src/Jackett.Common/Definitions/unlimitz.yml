@@ -62,6 +62,10 @@ settings:
   - name: staffpass
     type: text
     label: Staff Pass
+  - name: freeleech
+    type: checkbox
+    label: Filter freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -113,15 +117,16 @@ search:
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
-    # 0 title 1 descr 2 both
+    # 0 title, 1 descr, 2 both
     blah: 0
-    # 0 active 1 incldead 2 onlydead
+    # 0 active, 1 incldead, 2 onlydead
     incldead: 1
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
+    # site does not support imdbid search or provide imdb links in results
 
   rows:
-    selector: table[border="1"][cellspacing="0"][cellpadding="5"] > tbody > tr:has(a[href^="details.php?id="])
+    selector: "table[border=1][cellspacing=0][cellpadding=5] > tbody > tr:has(a[href^=\"details.php?id=\"]){{ if .Config.freeleech }}:has(img[src=\"pic/freedownload.gif\"]){{ else }}{{ end }}"
 
   fields:
     category:
@@ -165,4 +170,6 @@ search:
         img[src="icon/upl2.png"]: 2
         img[src="icon/upl3.png"]: 3
         "*": 1
+    minimumratio:
+      text: 1.0
 # Bitcomet 1.52
