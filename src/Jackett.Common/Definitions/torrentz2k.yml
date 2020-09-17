@@ -7,6 +7,8 @@ type: public
 encoding: UTF-8
 links:
   - https://torrentz2k.xyz/
+legacylinks:
+  - https://torrentz2k.pw/
 
 caps:
   categories:
@@ -68,7 +70,7 @@ search:
         - name: replace
           args: ["fa-", ""]
     title:
-      selector: button
+      selector: span.btntitle
       attribute: title
     details:
       # details page is only accessible via  form and post which Cardigann does not support.
