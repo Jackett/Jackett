@@ -6,6 +6,8 @@ language: ru-ru
 type: semi-private
 encoding: UTF-8
 links:
+  - https://iv-torrents.com/
+legacylinks:
   - https://iv-torrents.ru/
 
 caps:
