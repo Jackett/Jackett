@@ -150,7 +150,7 @@ download:
       id: "{{ .DownloadUri.Query.id }}"
       to: "give"
       torrent: "{{ .DownloadUri.Query.id }}"
-  selector: a:contains("Télécharger ce torrent")
+  selector: "a[href^=\"/{{ .DownloadUri.Query.id }}/\"]"
   attribute: href
 
 search:
@@ -220,6 +220,8 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
+    minimumratio:
+      text: 0.5
     minimumseedtime:
       # 2 day (as seconds = 2 x 24 x 60 x 60)
       text: 172800
