@@ -6,23 +6,21 @@ language: en-us
 type: public
 encoding: UTF-8
 links:
-  - https://torrentz2k.pw/
-legacylinks:
   - https://torrentz2k.xyz/
 
 caps:
   categories:
-    movies: Movies
-    games: Console
-    xxx: XXX
+    book: Books
+    film: Movies
+    gamepad: Console
+    list: Other
+    male: XXX
     music: Audio
-    anime: TV/Anime
-    tv: TV
-    applications: PC
-    apps: PC
-    windows: PC/0day
-    android: PC/Phone-Android
-    other: Other
+    sellsy: Audio/Lossless
+    play-circle: TV
+    smile-o: TV/Anime
+    television: TV
+    wrench: PC
 
   modes:
     search: [q]
@@ -33,6 +31,7 @@ caps:
 settings: []
 
 search:
+  # https://torrentz2k.xyz/search/
   paths:
     - path: search/
       method: post
@@ -57,34 +56,26 @@ search:
 
   fields:
     category:
-      selector: a[href^="/category/"]
-      attribute: href
+      selector: i
+      attribute: class
       filters:
+        - name: append
+          args: " list"
+        # extract the second class
         - name: split
-          args: ["/", 2]
+          args: [" ", 1]
+        # remove fa- prefix
+        - name: replace
+          args: ["fa-", ""]
     title:
-      selector: span.btntitle
+      selector: button
       attribute: title
     details:
-      selector: td > a
+      # details page is only accessible via  form and post which Cardigann does not support.
+      text: /
+    download:
+      selector: a[href^="magnet:?xt="]
       attribute: href
-    _magnetfilename: # convert title to valid magnet filename
-      text: "{{ .Result.title }}"
-      filters:
-        - name: validfilename
-        - name: urlencode
-    # the magnet is burried in a tertiary page, so we build our own instead
-    magnet: # generate magnet link from details page link
-      optional: true
-      selector: td > a
-      attribute: href
-      filters:
-        - name: replace
-          args: ["/", ""]
-        - name: prepend
-          args: "magnet:?xt=urn:btih:"
-        - name: append
-          args: "&dn={{ .Result._magnetfilename }}.torrent&tr=udp://tracker.coppersurfer.tk:6969&tr=udp://tracker.leechers-paradise.org:6969&tr=udp://tracker.opentrackr.org:1337"
     date:
       selector: td:nth-child(5)
       filters:
