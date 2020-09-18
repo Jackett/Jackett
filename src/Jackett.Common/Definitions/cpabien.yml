@@ -124,16 +124,16 @@ search:
       selector: a
       filters:
         # now we put the date at the right place according scene naming rules using .Result.site_date
-        - name: replace
-          args: [" FRENCH", " {{ .Result.site_date }} FRENCH"]
-        - name: replace
-          args: [" MULTI", " {{ .Result.site_date }} MULTI"]
-        - name: replace
-          args: [" TRUEFRENCH", " {{ .Result.site_date }} TRUEFRENCH"]
-        - name: replace
-          args: [" VOSTFR", " {{ .Result.site_date }} VOSTFR"]
-        - name: replace
-          args: [" SUBFRENCH", " {{ .Result.site_date }} SUBFRENCH"]
+        - name: re_replace
+          args: ["(?i)( FRENCH)", " {{ .Result.site_date }} FRENCH"]
+        - name: re_replace
+          args: ["(?i)( MULTI)", " {{ .Result.site_date }} MULTI"]
+        - name: re_replace
+          args: ["(?i)( TRUEFRENCH)", " {{ .Result.site_date }} TRUEFRENCH"]
+        - name: re_replace
+          args: ["(?i)( VOSTFR)", " {{ .Result.site_date }} VOSTFR"]
+        - name: re_replace
+          args: ["(?i)( SUBFRENCH)", " {{ .Result.site_date }} SUBFRENCH"]
         # and we delete it at the end
         - name: re_replace
           args: ["(19|20\\d{2})$", ""]
