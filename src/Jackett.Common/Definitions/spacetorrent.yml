@@ -35,6 +35,25 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: multilang
+    type: checkbox
+    label: Replace MULTI by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTI by this language
+    default: FRENCH
+    options:
+      FRENCH: "FRENCH"
+      MULTI.FRENCH: "MULTI.FRENCH"
+      ENGLISH: "ENGLISH"
+      MULTI.ENGLISH: "MULTI.ENGLISH"
+      VOSTFR: "VOSTFR"
+      MULTI.VOSTFR: "MULTI.VOSTFR"
+  - name: vostfr
+    type: checkbox
+    label: Replace VOSTFR with ENGLISH
+    default: false
 
 login:
   method: post
@@ -69,20 +88,39 @@ search:
     selector: table#table-1 tbody tr
 
   fields:
-    download:
-      selector: a[href^="../torrent/"]
-      attribute: href
-    title:
-      selector: a[href^="../torrent/"]
-    details:
-      selector: a[href^="../torrent/"]
-      attribute: href
     category:
       selector: a[href^="../recherche?"]
       attribute: href
       filters:
         - name: querystring
           args: cat
+    title_phase1:
+      selector: a[href^="../torrent/"]
+      filters:
+        - name: re_replace
+          args: ["([\\.]+)", " "]
+    title_multilang:
+      text: "{{ .Result.title_phase1 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)(\\smulti\\s)", " {{ .Config.multilanguage }} "]
+    title_phase2:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    title_vostfr:
+      text: "{{ .Result.title_phase2 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)(\\svostfr\\s)", " ENGLISH "]
+        - name: re_replace
+          args: ["(?i)(\\ssubfrench\\s)", " ENGLISH "]
+    title:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
+    details:
+      selector: a[href^="../torrent/"]
+      attribute: href
+    download:
+      selector: a[href^="../torrent/"]
+      attribute: href
     date:
       selector: td:nth-child(4)
       filters:
