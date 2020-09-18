@@ -94,6 +94,25 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: multilang
+    type: checkbox
+    label: Replace MULTI by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTI by this language
+    default: FRENCH
+    options:
+      FRENCH: "FRENCH"
+      MULTI.FRENCH: "MULTI.FRENCH"
+      ENGLISH: "ENGLISH"
+      MULTI.ENGLISH: "MULTI.ENGLISH"
+      VOSTFR: "VOSTFR"
+      MULTI.VOSTFR: "MULTI.VOSTFR"
+  - name: vostfr
+    type: checkbox
+    label: Replace VOSTFR with ENGLISH
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -153,20 +172,36 @@ search:
       filters:
         - name: querystring
           args: cat
+    title_phase1:
+      selector: a[href^="torrents-details.php?id="]
+      filters:
+        - name: replace
+          args: [" - (Nouveau!)", ""]
+    title_multilang:
+      text: "{{ .Result.title_phase1 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)(\\smulti\\s)", " {{ .Config.multilanguage }} "]
+    title_phase2:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    title_vostfr:
+      text: "{{ .Result.title_phase2 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)(\\svostfr\\s)", " ENGLISH "]
+        - name: re_replace
+          args: ["(?i)(\\ssubfrench\\s)", " ENGLISH "]
+    title:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
+    details:
+      selector: a[href^="torrents-details.php?id="]
+      attribute: href
     download:
       selector: a[href^="torrents-details.php?id="]
       attribute: href
       filters:
         - name: replace
           args: ["torrents-details.php", "download.php"]
-    title:
-      selector: a[href^="torrents-details.php?id="]
-      filters:
-        - name: replace
-          args: [" - (Nouveau!)", ""]
-    details:
-      selector: a[href^="torrents-details.php?id="]
-      attribute: href
     banner:
       selector: img.rounded-img
       attribute: src
@@ -185,4 +220,6 @@ search:
     uploadvolumefactor:
       case:
         "*": 1
+    minimumratio:
+      text: 0.75
 # engine n/a
