@@ -209,7 +209,7 @@ search:
       text: "{{ .Result.title_original }}"
       filters:
         - name: re_replace
-          args: ["\\s[Mm][Uu][Ll][Tt][Ii]\\s", " {{ .Config.multilanguage }} "]
+          args: ["(?i)(\\sMULTI\\s)", " {{ .Config.multilanguage }} "]
     title:
       text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{else}}{{ .Result.title_original }}{{end}}"
     category:
