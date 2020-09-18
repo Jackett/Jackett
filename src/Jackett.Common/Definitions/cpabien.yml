@@ -7,7 +7,7 @@ type: semi-private
 encoding: UTF-8
 followredirect: true
 links:
-  - https://wvw.cpasbien-fr.fr/
+  - https://wwwv.cpasbien-fr.fr/
 legacylinks:
   - http://www.cpasbiens.cc/
   - http://www.cpabien.cm/
@@ -39,6 +39,7 @@ legacylinks:
   - https://www.cpasbien.lol/
   - https://www.gktorrent.biz/
   - https://vww.cpasbien-fr.fr/
+  - https://wvw.cpasbien-fr.fr/
 
 caps:
   categorymappings:
@@ -69,6 +70,25 @@ settings:
     type: info
     label: "About categories"
     default: "cpasbien does not show <b>Categories</b> in its Search Results.<br />To use this indexer with Sonarr/Radarr set your indexer category to <b>7000</b>."
+  - name: multilang
+    type: checkbox
+    label: Replace MULTI by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTI by this language
+    default: FRENCH
+    options:
+      FRENCH: "FRENCH"
+      MULTI.FRENCH: "MULTI.FRENCH"
+      ENGLISH: "ENGLISH"
+      MULTI.ENGLISH: "MULTI.ENGLISH"
+      VOSTFR: "VOSTFR"
+      MULTI.VOSTFR: "MULTI.VOSTFR"
+  - name: vostfr
+    type: checkbox
+    label: Replace VOSTFR with ENGLISH
+    default: false
 
 login:
   method: cookie
@@ -99,22 +119,40 @@ search:
       filters:
         # date is at the end of the title, so we get it and name it site_date
         - name: regexp
-          args: "(\\w+)$"
-    title:
+          args: "(19|20\\d{2})$"
+    title_phase1:
       selector: a
       filters:
         # now we put the date at the right place according scene naming rules using .Result.site_date
         - name: replace
           args: [" FRENCH", " {{ .Result.site_date }} FRENCH"]
         - name: replace
-          args: ["MULTI", "{{ .Result.site_date }} MULTI"]
+          args: [" MULTI", " {{ .Result.site_date }} MULTI"]
         - name: replace
-          args: ["TRUEFRENCH", "{{ .Result.site_date }} TRUEFRENCH"]
+          args: [" TRUEFRENCH", " {{ .Result.site_date }} TRUEFRENCH"]
         - name: replace
-          args: ["VOSTFR", "{{ .Result.site_date }} VOSTFR"]
+          args: [" VOSTFR", " {{ .Result.site_date }} VOSTFR"]
+        - name: replace
+          args: [" SUBFRENCH", " {{ .Result.site_date }} SUBFRENCH"]
         # and we delete it at the end
         - name: re_replace
-          args: ["(\\w+)$", ""]
+          args: ["(19|20\\d{2})$", ""]
+    title_multilang:
+      text: "{{ .Result.title_phase1 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)(\\smulti\\s)", " {{ .Config.multilanguage }} "]
+    title_phase2:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    title_vostfr:
+      text: "{{ .Result.title_phase2 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)(\\svostfr\\s)", " ENGLISH "]
+        - name: re_replace
+          args: ["(?i)(\\ssubfrench\\s)", " ENGLISH "]
+    title:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
     details:
       selector: a
       attribute: href
