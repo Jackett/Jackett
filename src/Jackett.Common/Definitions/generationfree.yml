@@ -127,6 +127,10 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: multilang
     type: checkbox
     label: Replace MULTI by another language in release name
@@ -192,7 +196,7 @@ search:
     # 0 active 1 incldead 2 onlydead
     incldead: 1
     # 0 all 1 notfree 2 freeonly
-    freeleech: 0
+    freeleech: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
     # 0 all 1 French 2 English 3 etc
     lang: 0
     sort: "{{ .Config.sort }}"
