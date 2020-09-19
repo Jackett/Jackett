@@ -42,15 +42,10 @@ namespace Jackett.Common.Plumbing
             // Register the best web client for the platform or the override
             switch (_runtimeSettings.ClientOverride)
             {
-                case "httpclientnetcore":
-                case "httpclient":
-                    RegisterWebClient<HttpWebClient>(builder);
-                    break;
-                case "httpclient2netcore":
                 case "httpclient2":
                     RegisterWebClient<HttpWebClient2>(builder);
                     break;
-                default:
+                default: // "httpclient"
                     RegisterWebClient<HttpWebClient>(builder);
                     break;
             }
