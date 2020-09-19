@@ -140,7 +140,7 @@ search:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
     incldead: 1
-    freeleech: "{{ if .Config.freeleech }}1{{ else }}0{{ end }}"
+    freeleech: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
     lang: 0
     sort: "{{ .Config.sort }}"
     order: "{{ .Config.type }}"
