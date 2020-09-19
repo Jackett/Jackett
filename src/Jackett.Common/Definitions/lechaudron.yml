@@ -152,6 +152,13 @@ login:
     selector: a[href$="/TTV3/Deconnexion"]
 
 download:
+  before:
+    # <form method="post" action="https://lechaudron.nl/TTV3/Torrents/5610/remercier">
+    # <input type="hidden" name="torrent" value="5610">
+    path: "/TTV3/Torrents/{{ re_replace .DownloadUri.PathAndQuery \"^(.+?)(\\d+)$\" \"$2\" }}/remercier"
+    method: post
+    inputs:
+      torrent: "{{ re_replace .DownloadUri.PathAndQuery \"^(.+?)(\\d+)$\" \"$2\" }}"
   selector: a[href*="/Telechargement/"]
   attribute: href
 
