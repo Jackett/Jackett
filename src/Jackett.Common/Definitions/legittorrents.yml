@@ -55,7 +55,7 @@ search:
     search: "{{ .Keywords }}"
     category: "{{ range .Categories }}{{.}};{{end}}"
     # 0 all 1 active 2 deadonly
-    active: 1
+    active: 0
     order: "{{ .Config.sort }}"
     by: "{{ .Config.type }}"
 
