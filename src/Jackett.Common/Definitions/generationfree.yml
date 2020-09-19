@@ -37,6 +37,7 @@ caps:
     - {id: 14, cat: TV/Documentary, desc: "Documentaires: DivX"}
     - {id: 76, cat: TV/Documentary, desc: "Documentaires: TVRip/HDTV"}
     - {id: 139, cat: TV/Documentary, desc: "Documentaires: Noel"}
+    - {id: 147, cat: TV/Documentary, desc: "Documentaires: Web Dl"}
     - {id: 138, cat: Books/Ebook, desc: "E-Books: Noel"}
     - {id: 53, cat: Books/Ebook, desc: "E-Books: Livre Anglais"}
     - {id: 52, cat: Books/Ebook, desc: "E-Books: Revue - Journaux"}
@@ -44,7 +45,6 @@ caps:
     - {id: 62, cat: Audio/Audiobook, desc: "E-Books: E-Books Audio"}
     - {id: 49, cat: Books/Ebook, desc: "E-Books: Manuel Anglais"}
     - {id: 50, cat: Books/Ebook, desc: "E-Books: Manuel Français"}
-    - {id: 51, cat: Books/Ebook, desc: "E-Books: BD"}
     - {id: 88, cat: Movies/BluRay, desc: "Films: Full BD/BR"}
     - {id: 72, cat: TV/HD, desc: "Films: TVRip/HDTV"}
     - {id: 89, cat: Movies/BluRay, desc: "Films: BD/BR Rip"}
@@ -77,7 +77,7 @@ caps:
     - {id: 70, cat: Movies/HD, desc: "Films: MHD X265"}
     - {id: 100, cat: Movies/UHD, desc: "Films: 4KLight"}
     - {id: 5, cat: Movies/DVD, desc: "Films: DVD9"}
-    - {id: 57, cat: Movies, desc: "Films: TS/CAM"}
+    - {id: 145, cat: Movies/SD, desc: "Films: VHS"}
     - {id: 128, cat: Movies/UHD, desc: "Films: Webdl 4K"}
     - {id: 92, cat: Movies/UHD, desc: "Films: 4K"}
     - {id: 59, cat: TV, desc: "Films: Spectacle"}
@@ -89,6 +89,7 @@ caps:
     - {id: 137, cat: Audio, desc: "Musique: Noel"}
     - {id: 22, cat: Audio/MP3, desc: "Musique: Album MP3"}
     - {id: 115, cat: Audio/MP3, desc: "Musique: Coffret mp3"}
+    - {id: 143, cat: Audio/MP3, desc: "Musique: Wav"}
     - {id: 25, cat: Audio/MP3, desc: "Musique: Single MP3"}
     - {id: 24, cat: Audio/Lossless, desc: "Musique: Single Flac"}
     - {id: 23, cat: Audio/Lossless, desc: "Musique: Album Flac"}
@@ -113,6 +114,8 @@ caps:
     - {id: 119, cat: TV/HD, desc: "Serie TV: Episode Bluray 720p"}
     - {id: 61, cat: TV, desc: "Serie TV: Episode VOSTFR"}
     - {id: 114, cat: TV, desc: "Serie TV: Saison QC"}
+    - {id: 144, cat: TV/WEB-DL, desc: "Serie TV: WEB-Rip"}
+    - {id: 146, cat: TV/SD, desc: "Serie TV: VHSrip"}
 
   modes:
     search: [q]
@@ -230,11 +233,11 @@ search:
       attribute: href
     size:
       selector: td:nth-last-child(5)
-    grabs:
-      selector: td:nth-last-child(4)
     seeders:
-      selector: td:nth-last-child(3)
+      selector: td:nth-last-child(4)
     leechers:
+      selector: td:nth-last-child(3)
+    grabs:
       selector: td:nth-last-child(2)
     date:
       text: now
