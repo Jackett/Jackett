@@ -1726,6 +1726,7 @@ namespace Jackett.Common.Indexers
         protected async Task<WebClientByteResult> handleRequest(requestBlock request, Dictionary<string, object> variables = null, string referer = null)
         {
             var requestLinkStr = resolvePath(applyGoTemplateText(request.Path, variables)).ToString();
+            logger.Debug($"CardigannIndexer ({Id}): handleRequest() requestLinkStr= {requestLinkStr}");
 
             Dictionary<string, string> pairs = null;
             var queryCollection = new NameValueCollection();
