@@ -234,6 +234,13 @@ login:
     selector: a[href$="/TTV3/Deconnexion"]
 
 download:
+  before:
+    # https://galeriens.com/TTV3/Torrents/11222/Remercier
+    # note http GET does not seem to work as the html suggests, so using same as LeChaudron which is also a TT3.00FRENCH engine.
+    path: "/TTV3/Torrents/{{ re_replace .DownloadUri.PathAndQuery \"^(.+?)(\\d+)$\" \"$2\" }}/Remercier"
+    method: post
+    inputs:
+      torrent: "{{ re_replace .DownloadUri.PathAndQuery \"^(.+?)(\\d+)$\" \"$2\" }}"
   selector: a[href*="/Telechargement/"]
   attribute: href
 
