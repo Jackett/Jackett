@@ -39,7 +39,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BT.etree
  * BTDB
  * BTDIGG
- * BTeye
  * BTSOW
  * ConCen
  * Corsaro.red

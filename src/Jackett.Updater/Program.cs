@@ -292,6 +292,7 @@ namespace Jackett.Updater
                 "Definitions/blubits.yml",
                 "Definitions/bt-scene.yml",
                 "Definitions/btbit.yml",
+                "Definitions/bteye.yml",
                 "Definitions/btkitty.yml",
                 "Definitions/btstornet.yml",
                 "Definitions/btxpress.yml",
