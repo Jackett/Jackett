@@ -47,12 +47,12 @@ settings:
     label: Download link
     default: "magnet:?xt="
     options:
-      "/telecharger/": ".torrent"
+      "get_torrents": ".torrent"
       "magnet:?xt=": "magnet"
   - name: info_downloadlink
     type: info
     label: "About the Download Link"
-    default: "Note that only <b>www.oxtorrent.pw</b> supports the use of the <b>.torrent</b> download link.<br />All sites support <b>magnet</b> links."
+    default: "Note that only <b>www.oxtorrent.cc</b> supports the use of the <b>.torrent</b> download link.<br />All sites support <b>magnet</b> links."
   - name: multilang
     type: checkbox
     label: Replace MULTI by another language in release name
