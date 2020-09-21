@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace Jackett.Common.Utils.Clients
 {
-    public class WebResult
+    public abstract class BaseWebResult
     {
         private string _contentString;
         private Encoding _encoding;

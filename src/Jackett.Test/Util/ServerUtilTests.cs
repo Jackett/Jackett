@@ -10,7 +10,7 @@ namespace Jackett.Test.Util
         [Test]
         public void ResureRedirectIsFullyQualified_makes_redicts_fully_qualified()
         {
-            var res = new WebResult
+            var res = new WebClientByteResult()
             {
                 RedirectingTo = "list?p=1"
             };

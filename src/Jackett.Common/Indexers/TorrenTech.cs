@@ -76,7 +76,7 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();
 
-            WebResult results = null;
+            BaseWebResult results = null;
             var queryCollection = new NameValueCollection
             {
                 { "act", "search" },

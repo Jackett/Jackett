@@ -119,7 +119,7 @@ namespace Jackett.Common.Indexers
         /// <param name="alreadyFound">Number of the already found torrents.(used for limit)</param>
         /// <param name="limit">The limit to the number of torrents to download </param>
         /// <param name="previouslyParsedOnPage">Current position in parsed results</param>
-        private async Task<List<ReleaseInfo>> ParseTorrentsAsync(WebResult results, int alreadyFound, int limit,
+        private async Task<List<ReleaseInfo>> ParseTorrentsAsync(BaseWebResult results, int alreadyFound, int limit,
                                                                  int previouslyParsedOnPage)
         {
             var releases = new List<ReleaseInfo>();
