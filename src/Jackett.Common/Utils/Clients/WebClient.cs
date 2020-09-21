@@ -1,16 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Net.Security;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
-using AutoMapper;
 using com.LandonKey.SocksWebProxy;
 using com.LandonKey.SocksWebProxy.Proxy;
 using Jackett.Common.Models.Config;
@@ -35,31 +31,6 @@ namespace Jackett.Common.Utils.Clients
         protected static string webProxyUrl;
         protected static IWebProxy webProxy;
 
-
-        [DebuggerNonUserCode] // avoid "Exception User-Unhandled" Visual Studio messages
-        public static bool ValidateCertificate(HttpRequestMessage request, X509Certificate2 certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
-        {
-            {
-                var hash = certificate.GetCertHashString();
-
-
-                trustedCertificates.TryGetValue(hash, out var hosts);
-                if (hosts != null)
-                {
-                    if (hosts.Contains(request.RequestUri.Host))
-                        return true;
-                }
-
-                if (sslPolicyErrors != SslPolicyErrors.None)
-                {
-                    // Throw exception with certificate details, this will cause a "Exception User-Unhandled" when running it in the Visual Studio debugger.
-                    // The certificate is only available inside this function, so we can't catch it at the calling method.
-                    throw new Exception("certificate validation failed: " + certificate.ToString());
-                }
-
-                return sslPolicyErrors == SslPolicyErrors.None;
-            }
-        }
         public static void InitProxy(ServerConfig serverConfig)
         {
             // dispose old SocksWebProxy
