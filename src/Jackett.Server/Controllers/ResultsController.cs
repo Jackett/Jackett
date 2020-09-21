@@ -217,7 +217,7 @@ namespace Jackett.Server.Controllers
 
             trackers = trackers.Where(t => t.CanHandleQuery(CurrentQuery));
 
-            var tasks = trackers.ToList().Select(t => t.ResultsForQuery(CurrentQuery)).ToList();
+            var tasks = trackers.ToList().Select(t => t.ResultsForQuery(CurrentQuery.Clone())).ToList();
             try
             {
                 var aggregateTask = Task.WhenAll(tasks);
@@ -385,7 +385,7 @@ namespace Jackett.Server.Controllers
 
             try
             {
-                var result = await CurrentIndexer.ResultsForQuery(CurrentQuery);
+                var result = await CurrentIndexer.ResultsForQuery(CurrentQuery.Clone());
 
                 // Some trackers do not support multiple category filtering so filter the releases that match manually.
                 int? newItemCount = null;
@@ -500,7 +500,7 @@ namespace Jackett.Server.Controllers
         [HttpGet]
         public async Task<TorrentPotatoResponse> Potato([FromQuery]TorrentPotatoRequest request)
         {
-            var result = await CurrentIndexer.ResultsForQuery(CurrentQuery);
+            var result = await CurrentIndexer.ResultsForQuery(CurrentQuery.Clone());
 
             // Cache non query results
             if (string.IsNullOrEmpty(CurrentQuery.SanitizedSearchTerm))

@@ -270,7 +270,7 @@ namespace Jackett.Common.Services
                 SearchTerm = "",
                 IsTest = true
             };
-            var result = await indexer.ResultsForQuery(browseQuery);
+            var result = await indexer.ResultsForQuery(browseQuery.Clone());
             logger.Info(string.Format("Found {0} releases from {1}", result.Releases.Count(), indexer.DisplayName));
             if (result.Releases.Count() == 0)
                 throw new Exception("Found no results while trying to browse this tracker");
