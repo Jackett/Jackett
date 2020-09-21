@@ -114,9 +114,14 @@ namespace Jackett.Common.Utils.Clients
             var result = await Run(request);
             lastRequest = DateTime.Now;
             result.Request = request;
-            WebClientStringResult stringResult = result;
+            var stringResult = Mapper.Map<WebClientStringResult>(result);
 
-            logger.Debug(string.Format("WebClient({0}): Returning {1} => {2}", ClientType, result.Status, (result.IsRedirect ? result.RedirectingTo + " " : "") + (stringResult.ContentString ?? "<NULL>")));
+            string decodedContent = null;
+            if (result.ContentBytes != null)
+                decodedContent = result.Encoding.GetString(result.ContentBytes);
+
+            stringResult.ContentString = decodedContent;
+            logger.Debug(string.Format("WebClient({0}): Returning {1} => {2}", ClientType, result.Status, (result.IsRedirect ? result.RedirectingTo + " " : "") + (decodedContent == null ? "<NULL>" : decodedContent)));
 
             if (stringResult.Headers.TryGetValue("server", out var server))
             {
