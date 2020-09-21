@@ -76,7 +76,7 @@ namespace Jackett.Common.Indexers
             LoadValuesFromJson(configJson);
             CookieHeader = ""; // clear old cookies
 
-            var result1 = await WebRequestWithCookiesAsync(CaptchaUrl);
+            var result1 = await RequestWithCookiesAsync(CaptchaUrl);
             var json1 = JObject.Parse(result1.ContentString);
             var captchaSelection = json1["images"][0]["hash"];
 

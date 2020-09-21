@@ -217,7 +217,7 @@ namespace Jackett.Common.Indexers
         private async Task ConfigureDDoSGuardCookie()
         {
             const string ddosPostUrl = "https://check.ddos-guard.net/check.js";
-            var response = await WebRequestWithCookiesAsync(ddosPostUrl, string.Empty);
+            var response = await RequestWithCookiesAsync(ddosPostUrl, string.Empty);
             if (response.Status != System.Net.HttpStatusCode.OK)
                 throw new WebException($"Unexpected DDOS Guard response: Status: {response.Status}", WebExceptionStatus.ProtocolError);
             if (response.IsRedirect)

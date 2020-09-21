@@ -108,7 +108,7 @@ namespace Jackett.Common.Indexers
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var loginPage = await WebRequestWithCookiesAsync(LoginUrl, string.Empty);
+            var loginPage = await RequestWithCookiesAsync(LoginUrl, string.Empty);
             var parser = new HtmlParser();
             var cq = parser.ParseDocument(loginPage.ContentString);
             var captcha = cq.QuerySelector(".g-recaptcha"); // invisible recaptcha
@@ -154,7 +154,7 @@ namespace Jackett.Common.Indexers
                 }
             }
 
-            var loginPage = await WebRequestWithCookiesAsync(LoginUrl, string.Empty);
+            var loginPage = await RequestWithCookiesAsync(LoginUrl, string.Empty);
             var pairs = new Dictionary<string, string>
             {
                 {"vb_login_username", configData.Username.Value},
@@ -277,7 +277,7 @@ namespace Jackett.Common.Indexers
                 Path = "index.php",
                 Query = queryString.GetQueryString()
             };
-            var results = await WebRequestWithCookiesAsync(site.ToString());
+            var results = await RequestWithCookiesAsync(site.ToString());
             var parser = new HtmlParser();
             var dom = parser.ParseDocument(results.ContentString);
             var rows = dom.QuerySelectorAll("#listtable > tbody > tr");

@@ -464,7 +464,7 @@ namespace Jackett.Common.Indexers
                     {"pg", pg.ToString()}
                 };
 
-                var results = await WebRequestWithCookiesAsync(searchJsonUrl, method: RequestType.POST, data: queryCollection);
+                var results = await RequestWithCookiesAsync(searchJsonUrl, method: RequestType.POST, data: queryCollection);
                 var items = ParseSearchJsonContent(results.ContentString, year);
                 if (!items.Any())
                     break;

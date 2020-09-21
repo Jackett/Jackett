@@ -208,7 +208,7 @@ namespace Jackett.Common.Indexers
                 var rssParams = new Dictionary<string, string> {
                 { "feed", "dl" }
             };
-                var rssPage = await WebRequestWithCookiesAsync(
+                var rssPage = await RequestWithCookiesAsync(
                     GetRSSKeyUrl, result.Cookies, RequestType.POST, data: rssParams);
                 var match = Regex.Match(rssPage.ContentString, "(?<=passkey\\=)([a-zA-z0-9]*)");
                 configData.RSSKey.Value = match.Success ? match.Value : string.Empty;

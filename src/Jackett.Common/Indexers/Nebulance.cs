@@ -75,7 +75,7 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            var loggedInCheck = await WebRequestWithCookiesAsync(SearchUrl);
+            var loggedInCheck = await RequestWithCookiesAsync(SearchUrl);
             if (!loggedInCheck.ContentString.Contains("logout.php")) // re-login
                 await DoLogin();
 
