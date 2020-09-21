@@ -277,14 +277,14 @@ namespace Jackett.Common.Services
             if (isWindows)
             {
                 var zipPath = Path.Combine(tempDir, "Update.zip");
-                File.WriteAllBytes(zipPath, data.ContentBytes);
+                File.WriteAllBytes(zipPath, data.Content);
                 var fastZip = new FastZip();
                 fastZip.ExtractZip(zipPath, tempDir, null);
             }
             else
             {
                 var gzPath = Path.Combine(tempDir, "Update.tar.gz");
-                File.WriteAllBytes(gzPath, data.ContentBytes);
+                File.WriteAllBytes(gzPath, data.Content);
                 Stream inStream = File.OpenRead(gzPath);
                 Stream gzipStream = new GZipInputStream(inStream);
 

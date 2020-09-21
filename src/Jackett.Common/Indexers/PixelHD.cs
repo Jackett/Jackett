@@ -70,7 +70,7 @@ namespace Jackett.Common.Indexers
                 input_captcha = catchaInput.GetAttribute("name");
 
                 var captchaImage = await RequestBytesWithCookies(SiteLink + catchaImg.GetAttribute("src"), loginPage.Cookies, RequestType.GET, LoginUrl);
-                configData.CaptchaImage.Value = captchaImage.ContentBytes;
+                configData.CaptchaImage.Value = captchaImage.Content;
             }
             else
             {

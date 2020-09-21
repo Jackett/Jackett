@@ -142,7 +142,7 @@ namespace Jackett.Common.Indexers
                 var captchaImageResponse = await RequestBytesWithCookies(captchaUrl, loginPage.Cookies, RequestType.GET, LandingUrl);
 
                 var captchaText = new StringItem { Name = "Captcha Text" };
-                var captchaImage = new ImageItem {Name = "Captcha Image", Value = captchaImageResponse.ContentBytes};
+                var captchaImage = new ImageItem {Name = "Captcha Image", Value = captchaImageResponse.Content};
 
                 configData.AddDynamic("CaptchaText", captchaText);
                 configData.AddDynamic("CaptchaImage", captchaImage);

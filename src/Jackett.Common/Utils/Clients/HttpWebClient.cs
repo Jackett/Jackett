@@ -216,7 +216,7 @@ namespace Jackett.Common.Utils.Clients
                             {
                                 var result = new WebClientByteResult
                                 {
-                                    ContentBytes = await response.Content.ReadAsByteArrayAsync()
+                                    Content = await response.Content.ReadAsByteArrayAsync()
                                 };
 
                                 foreach (var header in response.Headers)
