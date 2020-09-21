@@ -14,16 +14,16 @@ using NLog;
 
 namespace Jackett.Common.Utils.Clients
 {
-    public class HttpWebClient : WebClient
+    // custom HttpWebClient based WebClient for netcore (due to changed custom certificate validation API)
+    public class HttpWebClientNetCore : WebClient
     {
-        public HttpWebClient(IProcessService p, Logger l, IConfigurationService c, ServerConfig sc)
+        public HttpWebClientNetCore(IProcessService p, Logger l, IConfigurationService c, ServerConfig sc)
             : base(p: p,
                    l: l,
                    c: c,
                    sc: sc)
         {
         }
-
         public override void Init()
         {
             ServicePointManager.DefaultConnectionLimit = 1000;
@@ -63,13 +63,14 @@ namespace Jackett.Common.Utils.Clients
                 {
                     // custom certificate validation handler (netcore version)
                     clientHandlr.ServerCertificateCustomValidationCallback = ValidateCertificate;
+
                     clearanceHandlr.InnerHandler = clientHandlr;
                     using (var client = new HttpClient(clearanceHandlr))
                     {
-                        if (webRequest.EmulateBrowser == true)
-                            client.DefaultRequestHeaders.Add("User-Agent", BrowserUtil.ChromeUserAgent);
-                        else
-                            client.DefaultRequestHeaders.Add("User-Agent", "Jackett/" + configService.GetVersion());
+                        //if (webRequest.EmulateBrowser == true)
+                        //    client.DefaultRequestHeaders.Add("User-Agent", BrowserUtil.ChromeUserAgent);
+                        //else
+                        //    client.DefaultRequestHeaders.Add("User-Agent", "Jackett/" + configService.GetVersion());
 
                         HttpResponseMessage response = null;
                         using (var request = new HttpRequestMessage())

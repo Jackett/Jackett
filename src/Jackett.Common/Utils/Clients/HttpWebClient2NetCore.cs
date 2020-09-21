@@ -15,15 +15,15 @@ using NLog;
 namespace Jackett.Common.Utils.Clients
 {
     // Compared to HttpWebClient this implementation will reuse the HttpClient instance (one per indexer).
-    // This should improve performance and avoid problems with too man open file handles.
-    public class HttpWebClient2 : WebClient
+    // This should improve performance and avoid problems with too many open file handles.
+    public class HttpWebClient2NetCore : WebClient
     {
         private readonly CookieContainer cookies;
         private ClearanceHandler clearanceHandlr;
         private HttpClientHandler clientHandlr;
         private HttpClient client;
-        
-        public HttpWebClient2(IProcessService p, Logger l, IConfigurationService c, ServerConfig sc)
+
+        public HttpWebClient2NetCore(IProcessService p, Logger l, IConfigurationService c, ServerConfig sc)
             : base(p: p,
                    l: l,
                    c: c,
@@ -69,9 +69,9 @@ namespace Jackett.Common.Utils.Clients
 
         public override void Init()
         {
-            base.Init();
+            ServicePointManager.DefaultConnectionLimit = 1000;
 
-            ServicePointManager.SecurityProtocol = (SecurityProtocolType)192 | (SecurityProtocolType)768 | (SecurityProtocolType)3072;
+            base.Init();
         }
 
         protected override async Task<WebClientByteResult> Run(WebRequest webRequest)
@@ -81,10 +81,10 @@ namespace Jackett.Common.Utils.Clients
             request.Headers.ExpectContinue = false;
             request.RequestUri = new Uri(webRequest.Url);
 
-            if (webRequest.EmulateBrowser == true)
-                request.Headers.UserAgent.ParseAdd(BrowserUtil.ChromeUserAgent);
-            else
-                request.Headers.UserAgent.ParseAdd("Jackett/" + configService.GetVersion());
+            //if (webRequest.EmulateBrowser == true)
+            //    request.Headers.UserAgent.ParseAdd(BrowserUtil.ChromeUserAgent);
+            //else
+            //    request.Headers.UserAgent.ParseAdd("Jackett/" + configService.GetVersion());
 
             // clear cookies from cookiecontainer
             var oldCookies = cookies.GetCookies(request.RequestUri);
