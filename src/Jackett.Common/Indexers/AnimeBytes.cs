@@ -180,9 +180,9 @@ namespace Jackett.Common.Indexers
 
             // Get the content from the tracker
             var response = await RequestStringWithCookiesAndRetry(queryUrl);
-            if (!response.ContentString.StartsWith("{")) // not JSON => error
+            if (!response.Content.StartsWith("{")) // not JSON => error
                 throw new ExceptionWithConfigData("unexcepted response (not JSON)", configData);
-            dynamic json = JsonConvert.DeserializeObject<dynamic>(response.ContentString);
+            dynamic json = JsonConvert.DeserializeObject<dynamic>(response.Content);
 
             // Parse
             try
@@ -418,7 +418,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(response.ContentString, ex);
+                OnParseError(response.Content, ex);
             }
 
             // Add to the cache

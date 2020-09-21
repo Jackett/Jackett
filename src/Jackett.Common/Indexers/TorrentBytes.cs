@@ -92,12 +92,12 @@ namespace Jackett.Common.Indexers
             var loginPage = await RequestStringWithCookies(SiteLink, string.Empty);
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, SiteLink, SiteLink);
             await ConfigureIfOK(
-                result.Cookies, result.ContentString?.Contains("my.php") == true, () =>
+                result.Cookies, result.Content?.Contains("my.php") == true, () =>
                 {
                     var parser = new HtmlParser();
-                    var dom = parser.ParseDocument(result.ContentString);
+                    var dom = parser.ParseDocument(result.Content);
                     var messageEl = dom.QuerySelector("td.embedded");
-                    var errorMessage = messageEl != null ? messageEl.TextContent : result.ContentString;
+                    var errorMessage = messageEl != null ? messageEl.TextContent : result.Content;
                     throw new ExceptionWithConfigData(errorMessage, configData);
                 });
             return IndexerConfigurationStatus.RequiresTesting;
@@ -138,7 +138,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(response.ContentString);
+                var dom = parser.ParseDocument(response.Content);
                 var rows = dom.QuerySelectorAll("table > tbody:has(tr > td.colhead) > tr:not(:has(td.colhead))");
                 foreach (var row in rows)
                 {
@@ -187,7 +187,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(response.ContentString, ex);
+                OnParseError(response.Content, ex);
             }
 
             return releases;

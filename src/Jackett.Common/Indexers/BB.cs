@@ -75,10 +75,10 @@ namespace Jackett.Common.Indexers
             };
 
             var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, SiteLink);
-            await ConfigureIfOK(response.Cookies, response.ContentString != null && response.ContentString.Contains("logout.php"), () =>
+            await ConfigureIfOK(response.Cookies, response.Content != null && response.Content.Contains("logout.php"), () =>
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(response.ContentString);
+                var dom = parser.ParseDocument(response.Content);
                 var messageEl = dom.QuerySelectorAll("#loginform");
                 var messages = new List<string>();
                 for (var i = 0; i < 13; i++)
@@ -139,7 +139,7 @@ namespace Jackett.Common.Indexers
                 try
                 {
                     var parser = new HtmlParser();
-                    var dom = parser.ParseDocument(results.ContentString);
+                    var dom = parser.ParseDocument(results.Content);
                     var rows = dom.QuerySelectorAll("#torrent_table > tbody > tr.torrent");
                     foreach (var row in rows)
                     {
@@ -195,7 +195,7 @@ namespace Jackett.Common.Indexers
                 }
                 catch (Exception ex)
                 {
-                    OnParseError(results.ContentString, ex);
+                    OnParseError(results.Content, ex);
                 }
             }
             return releases;

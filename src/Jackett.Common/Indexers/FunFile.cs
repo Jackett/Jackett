@@ -67,10 +67,10 @@ namespace Jackett.Common.Indexers
             };
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl);
-            await ConfigureIfOK(result.Cookies, result.ContentString?.Contains("logout.php") == true, () =>
+            await ConfigureIfOK(result.Cookies, result.Content?.Contains("logout.php") == true, () =>
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(result.ContentString);
+                var dom = parser.ParseDocument(result.Content);
                 var errorMessage = dom.QuerySelector("td.mf_content").TextContent;
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
@@ -108,7 +108,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(results.ContentString);
+                var dom = parser.ParseDocument(results.Content);
                 var rows = dom.QuerySelectorAll("table[cellpadding=2] > tbody > tr:has(td.row3)");
                 foreach (var row in rows)
                 {
@@ -159,7 +159,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.ContentString, ex);
+                OnParseError(results.Content, ex);
             }
 
             return releases;

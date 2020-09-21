@@ -129,13 +129,13 @@ namespace Jackett.Common.Indexers.Abstract
             }
 
             var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, string.Empty, true, SiteLink);
-            await ConfigureIfOK(response.Cookies, response.ContentString != null && response.ContentString.Contains("logout.php"), () =>
+            await ConfigureIfOK(response.Cookies, response.Content != null && response.Content.Contains("logout.php"), () =>
             {
                 var loginResultParser = new HtmlParser();
-                var loginResultDocument = loginResultParser.ParseDocument(response.ContentString);
+                var loginResultDocument = loginResultParser.ParseDocument(response.Content);
                 var loginform = loginResultDocument.QuerySelector("#loginform");
                 if (loginform == null)
-                    throw new ExceptionWithConfigData(response.ContentString, configData);
+                    throw new ExceptionWithConfigData(response.Content, configData);
 
                 loginform.QuerySelector("table").Remove();
                 var errorMessage = loginform.TextContent.Replace("\n\t", " ").Trim();
@@ -206,7 +206,7 @@ namespace Jackett.Common.Indexers.Abstract
 
             try
             {
-                var json = JObject.Parse(response.ContentString);
+                var json = JObject.Parse(response.Content);
                 foreach (JObject r in json["response"]["results"])
                 {
                     var groupTime = DateTimeUtil.UnixTimestampToDateTime(long.Parse((string)r["groupTime"]));
@@ -266,7 +266,7 @@ namespace Jackett.Common.Indexers.Abstract
             }
             catch (Exception ex)
             {
-                OnParseError(response.ContentString, ex);
+                OnParseError(response.Content, ex);
             }
 
             return releases;

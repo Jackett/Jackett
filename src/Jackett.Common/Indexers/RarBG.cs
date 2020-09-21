@@ -121,7 +121,7 @@ namespace Jackett.Common.Indexers
             await RenewalTokenAsync();
 
             var response = await RequestStringWithCookiesAndRetry(BuildSearchUrl(query));
-            var jsonContent = JObject.Parse(response.ContentString);
+            var jsonContent = JObject.Parse(response.Content);
             var errorCode = jsonContent.Value<int>("error_code");
             switch (errorCode)
             {
@@ -131,7 +131,7 @@ namespace Jackett.Common.Indexers
                 case 4: // invalid token
                     await RenewalTokenAsync(true); // force renewal token
                     response = await RequestStringWithCookiesAndRetry(BuildSearchUrl(query));
-                    jsonContent = JObject.Parse(response.ContentString);
+                    jsonContent = JObject.Parse(response.Content);
                     break;
                 case 10: // imdb not found, see issue #1486
                 case 20: // no results found
@@ -139,7 +139,7 @@ namespace Jackett.Common.Indexers
                     // because we can't distinguish between search without results and api malfunction
                     return retry ? await PerformQueryWithRetry(query, false) : releases;
                 default:
-                    throw new Exception("Unknown error code: " + errorCode + " response: " + response.ContentString);
+                    throw new Exception("Unknown error code: " + errorCode + " response: " + response.Content);
             }
 
             try
@@ -196,7 +196,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(response.ContentString, ex);
+                OnParseError(response.Content, ex);
             }
 
             return releases;
@@ -264,7 +264,7 @@ namespace Jackett.Common.Indexers
                 };
                 var tokenUrl = ApiEndpoint + "?" + qc.GetQueryString();
                 var result = await RequestStringWithCookiesAndRetry(tokenUrl);
-                var json = JObject.Parse(result.ContentString);
+                var json = JObject.Parse(result.Content);
                 _token = json.Value<string>("token");
                 _lastTokenFetch = DateTime.Now;
             }

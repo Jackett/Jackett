@@ -141,7 +141,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 //var json = JArray.Parse(results.Content);
-                dynamic json = JsonConvert.DeserializeObject<dynamic>(results.ContentString);
+                dynamic json = JsonConvert.DeserializeObject<dynamic>(results.Content);
                 foreach (var row in json ?? System.Linq.Enumerable.Empty<dynamic>())
                 {
                     var release = new ReleaseInfo();
@@ -215,7 +215,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.ContentString, ex);
+                OnParseError(results.Content, ex);
             }
 
             return releases;

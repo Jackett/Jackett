@@ -75,7 +75,7 @@ namespace Jackett.Common.Indexers.Abstract
             };
             var jsonData = JsonConvert.SerializeObject(body);
             var result = await PostDataWithCookies(LoginUrl, null, headers: ApiHeaders, rawbody: jsonData);
-            var json = JObject.Parse(result.ContentString);
+            var json = JObject.Parse(result.Content);
             _token = json.Value<string>("token");
             if (_token == null)
                 throw new Exception(json.Value<string>("message"));
@@ -112,11 +112,11 @@ namespace Jackett.Common.Indexers.Abstract
                 response = await RequestStringWithCookies(searchUrl, headers: GetSearchHeaders());
             }
             else if (response.Status != HttpStatusCode.OK)
-                throw new Exception($"Unknown error in search: {response.ContentString}");
+                throw new Exception($"Unknown error in search: {response.Content}");
 
             try
             {
-                var rows = JArray.Parse(response.ContentString);
+                var rows = JArray.Parse(response.Content);
                 foreach (var row in rows)
                 {
                     var id = row.Value<string>("id");
@@ -160,7 +160,7 @@ namespace Jackett.Common.Indexers.Abstract
             }
             catch (Exception ex)
             {
-                OnParseError(response.ContentString, ex);
+                OnParseError(response.Content, ex);
             }
             return releases;
         }

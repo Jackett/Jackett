@@ -200,12 +200,12 @@ namespace Jackett.Common.Indexers
                 urlSearch += $"?{qParams.GetQueryString()}";
 
             var response = await RequestStringWithCookiesAndRetry(urlSearch);
-            if (response.ContentString.StartsWith("Error"))
-                throw new Exception(response.ContentString);
+            if (response.Content.StartsWith("Error"))
+                throw new Exception(response.Content);
 
             try
             {
-                var jsonContent = JObject.Parse(response.ContentString);
+                var jsonContent = JObject.Parse(response.Content);
                 var sitelink = new Uri(SiteLink);
 
                 var error = jsonContent.Value<string>("error");
@@ -281,7 +281,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(response.ContentString, ex);
+                OnParseError(response.Content, ex);
             }
 
             return releases;

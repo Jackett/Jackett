@@ -111,7 +111,7 @@ namespace Jackett.Common.Indexers
         {
             try
             {
-                var json = JsonConvert.DeserializeObject<dynamic>(result.ContentString);
+                var json = JsonConvert.DeserializeObject<dynamic>(result.Content);
 
                 switch (json)
                 {
@@ -124,7 +124,7 @@ namespace Jackett.Common.Indexers
             catch (Exception e)
             {
                 logger.Error("checkResponse() Error: ", e.Message);
-                throw new ExceptionWithConfigData(result.ContentString, configData);
+                throw new ExceptionWithConfigData(result.Content, configData);
             }
         }
 

@@ -187,11 +187,11 @@ namespace Jackett.Common.Indexers
 
             try
             {
-                json = JObject.Parse(response.ContentString);
+                json = JObject.Parse(response.Content);
             }
             catch (Exception ex)
             {
-                throw new Exception("Error while parsing json: " + response.ContentString, ex);
+                throw new Exception("Error while parsing json: " + response.Content, ex);
             }
 
             if ((int)json["status"] != 0)

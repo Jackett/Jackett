@@ -101,12 +101,12 @@ namespace Jackett.Common.Indexers
 
             var searchUrl = SearchUrl + "?" + qc.GetQueryString();
             var results = await RequestStringWithCookies(searchUrl);
-            if (string.IsNullOrWhiteSpace(results.ContentString))
+            if (string.IsNullOrWhiteSpace(results.Content))
                 throw new Exception("Empty response. Please, check the Passkey.");
 
             try
             {
-                var doc = XDocument.Parse(results.ContentString);
+                var doc = XDocument.Parse(results.Content);
 
                 var errorMsg = doc.Descendants("error").FirstOrDefault()?.Value;
                 if (errorMsg?.Contains("No Results") == true)
@@ -208,7 +208,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.ContentString, ex);
+                OnParseError(results.Content, ex);
             }
 
             return releases;

@@ -236,7 +236,7 @@ namespace Jackett.Common.Indexers
                 var RowsSelector = ".torrent_table > tbody > tr";
 
                 var SearchResultParser = new HtmlParser();
-                var SearchResultDocument = SearchResultParser.ParseDocument(results.ContentString);
+                var SearchResultDocument = SearchResultParser.ParseDocument(results.Content);
                 var Rows = SearchResultDocument.QuerySelectorAll(RowsSelector);
 
                 var stickyGroup = false;
@@ -321,7 +321,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.ContentString, ex);
+                OnParseError(results.Content, ex);
             }
 
             return releases;

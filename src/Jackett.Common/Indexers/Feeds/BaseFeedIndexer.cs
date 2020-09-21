@@ -57,7 +57,7 @@ namespace Jackett.Common.Indexers.Feeds
             };
             var result = await webclient.GetString(request);
 
-            var results = ParseFeedForResults(result.ContentString);
+            var results = ParseFeedForResults(result.Content);
 
             return results;
         }

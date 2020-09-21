@@ -79,10 +79,10 @@ namespace Jackett.Common.Indexers
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl, true);
 
-            await ConfigureIfOK(result.Cookies, result.ContentString != null && result.Cookies.Contains("pass=") && !result.Cookies.Contains("deleted"), () =>
+            await ConfigureIfOK(result.Cookies, result.Content != null && result.Cookies.Contains("pass=") && !result.Cookies.Contains("deleted"), () =>
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(result.ContentString);
+                var dom = parser.ParseDocument(result.Content);
                 var errorMessage = dom.QuerySelector("div.myFrame-content").InnerHtml;
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
@@ -127,7 +127,7 @@ namespace Jackett.Common.Indexers
                 response = await RequestStringWithCookies(searchUrl);
             }
 
-            var results = response.ContentString;
+            var results = response.Content;
             try
             {
                 var parser = new HtmlParser();

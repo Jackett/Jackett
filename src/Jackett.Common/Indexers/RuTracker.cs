@@ -1512,7 +1512,7 @@ namespace Jackett.Common.Indexers
                 configData.CookieHeader.Value = null;
                 var response = await RequestStringWithCookies(LoginUrl);
                 var parser = new HtmlParser();
-                var doc = parser.ParseDocument(response.ContentString);
+                var doc = parser.ParseDocument(response.Content);
                 var captchaimg = doc.QuerySelector("img[src^=\"https://static.t-ru.org/captcha/\"]");
                 if (captchaimg != null)
                 {
@@ -1557,12 +1557,12 @@ namespace Jackett.Common.Indexers
             }
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, CookieHeader, true, null, LoginUrl, true);
-            await ConfigureIfOK(result.Cookies, result.ContentString != null && result.ContentString.Contains("id=\"logged-in-username\""), () =>
+            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("id=\"logged-in-username\""), () =>
             {
-                logger.Debug(result.ContentString);
+                logger.Debug(result.Content);
                 var errorMessage = "Unknown error message, please report";
                 var parser = new HtmlParser();
-                var doc = parser.ParseDocument(result.ContentString);
+                var doc = parser.ParseDocument(result.Content);
                 var errormsg = doc.QuerySelector("h4[class=\"warnColor1 tCenter mrg_16\"]");
                 if (errormsg != null)
                     errorMessage = errormsg.TextContent;
@@ -1592,7 +1592,7 @@ namespace Jackett.Common.Indexers
 
             var searchUrl = SearchUrl + "?" + queryCollection.GetQueryString();
             var results = await RequestStringWithCookies(searchUrl);
-            if (!results.ContentString.Contains("id=\"logged-in-username\""))
+            if (!results.Content.Contains("id=\"logged-in-username\""))
             {
                 // re login
                 await ApplyConfiguration(null);
@@ -1601,7 +1601,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var doc = parser.ParseDocument(results.ContentString);
+                var doc = parser.ParseDocument(results.Content);
                 var rows = doc.QuerySelectorAll("table#tor-tbl > tbody > tr");
                 foreach (var row in rows)
                     try
@@ -1696,7 +1696,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.ContentString, ex);
+                OnParseError(results.Content, ex);
             }
 
             return releases;

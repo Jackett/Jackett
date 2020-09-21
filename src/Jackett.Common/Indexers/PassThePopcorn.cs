@@ -121,7 +121,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 //Iterate over the releases for each movie
-                var jsResults = JObject.Parse(results.ContentString);
+                var jsResults = JObject.Parse(results.Content);
                 foreach (var movie in jsResults["Movies"])
                 {
                     var movieTitle = (string)movie["Title"];
@@ -248,7 +248,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.ContentString, ex);
+                OnParseError(results.Content, ex);
             }
 
             return releases;

@@ -104,9 +104,9 @@ namespace Jackett.Common.Indexers
 
             var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl);
 
-            await ConfigureIfOK(response.Cookies, response.ContentString.Contains("You have successfully logged in"), () =>
+            await ConfigureIfOK(response.Cookies, response.Content.Contains("You have successfully logged in"), () =>
             {
-                var errorMessage = response.ContentString;
+                var errorMessage = response.Content;
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
 
@@ -124,7 +124,7 @@ namespace Jackett.Common.Indexers
             var results = await RequestStringWithCookiesAndRetry(searchUrl);
 
             // Occasionally the cookies become invalid, login again if that happens
-            if (results.ContentString.Contains("You do not have permission to access this page."))
+            if (results.Content.Contains("You do not have permission to access this page."))
             {
                 await ApplyConfiguration(null);
                 results = await RequestStringWithCookiesAndRetry(searchUrl);
@@ -133,7 +133,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(results.ContentString);
+                var dom = parser.ParseDocument(results.Content);
 
                 var rows = dom.QuerySelectorAll("#sortabletable tr:has(a[href*=\"details.php?id=\"])");
                 foreach (var row in rows)
@@ -192,7 +192,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.ContentString, ex);
+                OnParseError(results.Content, ex);
             }
 
             return releases;

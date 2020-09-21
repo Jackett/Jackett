@@ -464,7 +464,7 @@ namespace Jackett.Common.Indexers
                 return true; // no error
 
             var ResultParser = new HtmlParser();
-            var ResultDocument = ResultParser.ParseDocument(loginResult.ContentString);
+            var ResultDocument = ResultParser.ParseDocument(loginResult.Content);
             foreach (var error in errorBlocks)
             {
                 var selection = ResultDocument.QuerySelector(error.Selector);
@@ -540,11 +540,11 @@ namespace Jackett.Common.Indexers
                             // request real login page again
                             landingResult = await RequestStringWithCookies(LoginUrl, null, SiteLink);
                             var htmlParser = new HtmlParser();
-                            landingResultDocument = htmlParser.ParseDocument(landingResult.ContentString);
+                            landingResultDocument = htmlParser.ParseDocument(landingResult.Content);
                         }
                         else
                         {
-                            throw new ExceptionWithConfigData(string.Format("Login failed: Cloudflare clearance failed using cookies {0}: {1}", CookieHeader, ClearanceResult.ContentString), configData);
+                            throw new ExceptionWithConfigData(string.Format("Login failed: Cloudflare clearance failed using cookies {0}: {1}", CookieHeader, ClearanceResult.Content), configData);
                         }
                     }
                     else
@@ -655,7 +655,7 @@ namespace Jackett.Common.Indexers
                 {
                     var captchaUrl = resolvePath("simpleCaptcha.php?numImages=1");
                     var simpleCaptchaResult = await RequestStringWithCookies(captchaUrl.ToString(), null, LoginUrl);
-                    var simpleCaptchaJSON = JObject.Parse(simpleCaptchaResult.ContentString);
+                    var simpleCaptchaJSON = JObject.Parse(simpleCaptchaResult.Content);
                     var captchaSelection = simpleCaptchaJSON["images"][0]["hash"].ToString();
                     pairs["captchaSelection"] = captchaSelection;
                     pairs["submitme"] = "X";
@@ -818,7 +818,7 @@ namespace Jackett.Common.Indexers
             if (Login.Test.Selector != null)
             {
                 var testResultParser = new HtmlParser();
-                var testResultDocument = testResultParser.ParseDocument(testResult.ContentString);
+                var testResultDocument = testResultParser.ParseDocument(testResult.Content);
                 var selection = testResultDocument.QuerySelectorAll(Login.Test.Selector);
                 if (selection.Length == 0)
                 {
@@ -891,7 +891,7 @@ namespace Jackett.Common.Indexers
             landingResult = await RequestStringWithCookies(LoginUrl.AbsoluteUri, null, SiteLink);
 
             var htmlParser = new HtmlParser();
-            landingResultDocument = htmlParser.ParseDocument(landingResult.ContentString);
+            landingResultDocument = htmlParser.ParseDocument(landingResult.Content);
 
             var hasCaptcha = false;
 
@@ -1353,7 +1353,7 @@ namespace Jackett.Common.Indexers
                 if (response.IsRedirect && SearchPath.Followredirect)
                     await FollowIfRedirect(response);
 
-                var results = response.ContentString;
+                var results = response.Content;
 
 
                 try
@@ -1378,7 +1378,7 @@ namespace Jackett.Common.Indexers
                         if (response.IsRedirect && SearchPath.Followredirect)
                             await FollowIfRedirect(response);
 
-                        results = response.ContentString;
+                        results = response.Content;
                         SearchResultDocument = SearchResultParser.ParseDocument(results);
                     }
 
@@ -1801,7 +1801,7 @@ namespace Jackett.Common.Indexers
                     var response = await RequestStringWithCookies(link.ToString());
                     if (response.IsRedirect)
                         response = await RequestStringWithCookies(response.RedirectingTo);
-                    var results = response.ContentString;
+                    var results = response.Content;
                     var searchResultParser = new HtmlParser();
                     var searchResultDocument = searchResultParser.ParseDocument(results);
                     var downloadElement = searchResultDocument.QuerySelector(selector);

@@ -75,7 +75,7 @@ namespace Jackett.Common.Indexers
 
             await ConfigureIfOK(result.Cookies, result.Cookies?.Contains("id=") == true, () =>
             {
-                var errorMessage = result.ContentString;
+                var errorMessage = result.Content;
                 if (errorMessage.Contains("Error!"))
                     errorMessage = "E-mail or password is incorrect";
                 throw new ExceptionWithConfigData(errorMessage, configData);
@@ -112,10 +112,10 @@ namespace Jackett.Common.Indexers
                 result = await RequestStringWithCookiesAndRetry(searchUrl, null, SearchUrl);
             }
 
-            if (!result.ContentString.StartsWith("{")) // not JSON => error
-                throw new ExceptionWithConfigData(result.ContentString, configData);
+            if (!result.Content.StartsWith("{")) // not JSON => error
+                throw new ExceptionWithConfigData(result.Content, configData);
 
-            var json = JsonConvert.DeserializeObject<dynamic>(result.ContentString);
+            var json = JsonConvert.DeserializeObject<dynamic>(result.Content);
             try
             {
                 var torrents = json["torrents"]; // latest torrents

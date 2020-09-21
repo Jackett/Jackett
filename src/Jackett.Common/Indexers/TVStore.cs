@@ -76,7 +76,7 @@ namespace Jackett.Common.Indexers
             };
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, referer: SiteLink);
             await ConfigureIfOK(
-                result.Cookies, result.ContentString?.Contains("Főoldal") == true,
+                result.Cookies, result.Content?.Contains("Főoldal") == true,
                 () => throw new ExceptionWithConfigData("Error while trying to login.", configData));
             return IndexerConfigurationStatus.RequiresTesting;
         }
@@ -137,7 +137,7 @@ namespace Jackett.Common.Indexers
                  * First 3 items per page are total results, results per page, and results this page
                  * There is also a tail of ~4 items after the results for some reason. Looks like \1\\\
                  */
-                var parameters = results.ContentString.Split('\\');
+                var parameters = results.Content.Split('\\');
                 var torrentsThisPage = int.Parse(parameters[2]);
                 var maxTorrents = Math.Min(torrentsThisPage, limit - alreadyFound);
                 var rows = parameters.Skip(3) //Skip pages info
@@ -164,7 +164,7 @@ namespace Jackett.Common.Indexers
                     queryParams["now"] = DateTimeUtil.DateTimeToUnixTimestamp(DateTime.UtcNow)
                                                      .ToString(CultureInfo.InvariantCulture);
                     var filesList = (await RequestStringWithCookiesAndRetry(SearchUrl + "?" + queryParams.GetQueryString()))
-                        .ContentString;
+                        .Content;
                     var firstFileName = filesList.Split(
                         new[]
                         {
@@ -203,7 +203,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.ContentString, ex);
+                OnParseError(results.Content, ex);
             }
 
             return releases;
@@ -216,7 +216,7 @@ namespace Jackett.Common.Indexers
         private async Task PopulateImdbMapAsync()
         {
             var result = await RequestStringWithCookiesAndRetry(BrowseUrl);
-            foreach (Match match in _seriesInfoMatch.Matches(result.ContentString))
+            foreach (Match match in _seriesInfoMatch.Matches(result.Content))
             {
                 var internalId = int.Parse(match.Groups["seriesID"].Value);
                 var imdbId = long.Parse(match.Groups["ImdbId"].Value);
@@ -282,7 +282,7 @@ namespace Jackett.Common.Indexers
 
             var results = await RequestStringWithCookiesAndRetry(SearchUrl + "?" + queryParams.GetQueryString());
             // Parse page Information from result
-            var content = results.ContentString;
+            var content = results.Content;
             var splits = content.Split('\\');
             var totalFound = int.Parse(splits[0]);
             var torrentPerPage = int.Parse(splits[1]);

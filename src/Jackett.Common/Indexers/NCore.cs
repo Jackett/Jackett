@@ -113,10 +113,10 @@ namespace Jackett.Common.Indexers
                 pairs.Add("2factor", configData.TwoFactor.Value);
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, referer: SiteLink);
             await ConfigureIfOK(
-                result.Cookies, result.ContentString?.Contains("profile.php") == true, () =>
+                result.Cookies, result.Content?.Contains("profile.php") == true, () =>
                 {
                     var parser = new HtmlParser();
-                    var dom = parser.ParseDocument(result.ContentString);
+                    var dom = parser.ParseDocument(result.Content);
                     var msgContainer = dom.QuerySelector("#hibauzenet table tbody tr")?.Children[1];
                     throw new ExceptionWithConfigData(msgContainer?.TextContent ?? "Error while trying to login.", configData);
                 });
@@ -168,7 +168,7 @@ namespace Jackett.Common.Indexers
             pairs.Add("kivalasztott_tipus[]", string.Join(",", cats));
             var results = await PostDataWithCookiesAndRetry(SearchUrl, pairs.ToEnumerable(true));
             var parser = new HtmlParser();
-            var dom = parser.ParseDocument(results.ContentString);
+            var dom = parser.ParseDocument(results.Content);
 
             // find number of torrents / page
             var torrentPerPage = dom.QuerySelectorAll(".box_torrent").Length;
@@ -214,7 +214,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(results.ContentString);
+                var dom = parser.ParseDocument(results.Content);
                 var rows = dom.QuerySelectorAll(".box_torrent").Skip(previouslyParsedOnPage).Take(limit - alreadyFound);
 
                 var key = ParseUtil.GetArgumentFromQueryString(
@@ -333,7 +333,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.ContentString, ex);
+                OnParseError(results.Content, ex);
             }
 
             return releases;

@@ -109,7 +109,7 @@ namespace Jackett.Common.Indexers
         {
             var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
             var parser = new HtmlParser();
-            var cq = parser.ParseDocument(loginPage.ContentString);
+            var cq = parser.ParseDocument(loginPage.Content);
             var captcha = cq.QuerySelector(".g-recaptcha"); // invisible recaptcha
             if (captcha != null)
             {
@@ -165,7 +165,7 @@ namespace Jackett.Common.Indexers
                 {"cookieuser", "1"}
             };
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, null, LoginUrl);
-            await ConfigureIfOK(result.Cookies, result.ContentString?.Contains("images/loading.gif") == true,
+            await ConfigureIfOK(result.Cookies, result.Content?.Contains("images/loading.gif") == true,
                                 () => throw new ExceptionWithConfigData("Couldn't login", configData));
             Thread.Sleep(2);
             return IndexerConfigurationStatus.RequiresTesting;
@@ -208,7 +208,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(data.ContentString);
+                var dom = parser.ParseDocument(data.Content);
                 var rows = dom.QuerySelectorAll("tr.box_torrent");
                 foreach (var row in rows)
                 {
@@ -254,7 +254,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(data.ContentString, ex);
+                OnParseError(data.Content, ex);
             }
 
             return releases;
@@ -278,7 +278,7 @@ namespace Jackett.Common.Indexers
             };
             var results = await RequestStringWithCookies(site.ToString());
             var parser = new HtmlParser();
-            var dom = parser.ParseDocument(results.ContentString);
+            var dom = parser.ParseDocument(results.Content);
             var rows = dom.QuerySelectorAll("#listtable > tbody > tr");
             foreach (var row in rows.Skip(1))
             {
@@ -288,7 +288,7 @@ namespace Jackett.Common.Indexers
                     var address = link.GetAttribute("href");
                     if (string.IsNullOrEmpty(address))
                         continue;
-                    var realDom = parser.ParseDocument(results.ContentString);
+                    var realDom = parser.ParseDocument(results.Content);
                     return realDom.QuerySelector("#content:nth-child(1) > h1").TextContent;
                 }
             }

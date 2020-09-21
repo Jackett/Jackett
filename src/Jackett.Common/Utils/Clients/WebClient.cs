@@ -152,13 +152,13 @@ namespace Jackett.Common.Utils.Clients
             if (result.Content != null)
                 decodedContent = encoding.GetString(result.Content);
 
-            stringResult.ContentString = decodedContent;
+            stringResult.Content = decodedContent;
             logger.Debug(string.Format("WebClient({0}): Returning {1} => {2}", ClientType, result.Status, (result.IsRedirect ? result.RedirectingTo + " " : "") + (decodedContent == null ? "<NULL>" : decodedContent)));
 
             if (stringResult.Headers.TryGetValue("server", out var server))
             {
                 if (server[0] == "cloudflare-nginx")
-                    stringResult.ContentString = BrowserUtil.DecodeCloudFlareProtectedEmailFromHTML(stringResult.ContentString);
+                    stringResult.Content = BrowserUtil.DecodeCloudFlareProtectedEmailFromHTML(stringResult.Content);
             }
             return stringResult;
         }

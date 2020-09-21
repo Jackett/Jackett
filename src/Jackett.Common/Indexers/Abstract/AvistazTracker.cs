@@ -149,7 +149,7 @@ without this configuration the torrent download does not work.<br/>You can find 
                 { "pid", configData.Pid.Value.Trim() }
             };
             var result = await PostDataWithCookies(AuthUrl, body, headers: AuthHeaders);
-            var json = JObject.Parse(result.ContentString);
+            var json = JObject.Parse(result.Content);
             _token = json.Value<string>("token");
             if (_token == null)
                 throw new Exception(json.Value<string>("message"));
@@ -168,11 +168,11 @@ without this configuration the torrent download does not work.<br/>You can find 
                 response = await RequestStringWithCookiesAndRetry(episodeSearchUrl, headers: GetSearchHeaders());
             }
             else if (response.Status != HttpStatusCode.OK)
-                throw new Exception($"Unknown error: {response.ContentString}");
+                throw new Exception($"Unknown error: {response.Content}");
 
             try
             {
-                var jsonContent = JToken.Parse(response.ContentString);
+                var jsonContent = JToken.Parse(response.Content);
                 foreach (var row in jsonContent.Value<JArray>("data"))
                 {
                     var comments = new Uri(row.Value<string>("url"));
@@ -237,7 +237,7 @@ without this configuration the torrent download does not work.<br/>You can find 
             }
             catch (Exception ex)
             {
-                OnParseError(response.ContentString, ex);
+                OnParseError(response.Content, ex);
             }
             return releases;
         }

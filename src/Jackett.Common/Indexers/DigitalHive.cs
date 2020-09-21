@@ -95,7 +95,7 @@ namespace Jackett.Common.Indexers
         {
             var loginPage = await RequestStringWithCookies(LoginUrl, configData.CookieHeader.Value);
             var parser = new HtmlParser();
-            var cq = parser.ParseDocument(loginPage.ContentString);
+            var cq = parser.ParseDocument(loginPage.Content);
             var recaptchaSiteKey = cq.QuerySelector(".g-recaptcha")?.GetAttribute("data-sitekey");
             if (recaptchaSiteKey != null)
             {
@@ -151,10 +151,10 @@ namespace Jackett.Common.Indexers
 
             var result = await RequestLoginAndFollowRedirect(AjaxLoginUrl, pairs, configData.CookieHeader.Value, true, SiteLink, LoginUrl);
 
-            await ConfigureIfOK(result.Cookies, result.ContentString.Contains("logout.php"), () =>
+            await ConfigureIfOK(result.Cookies, result.Content.Contains("logout.php"), () =>
             {
                 var parser = new HtmlParser();
-                var errorMessage = parser.ParseDocument(result.ContentString);
+                var errorMessage = parser.ParseDocument(result.Content);
                 throw new ExceptionWithConfigData(errorMessage.Text(), configData);
             });
 
@@ -190,11 +190,11 @@ namespace Jackett.Common.Indexers
             }
             try
             {
-                releases.AddRange(contentToReleaseInfos(query, results.ContentString));
+                releases.AddRange(contentToReleaseInfos(query, results.Content));
             }
             catch (Exception ex)
             {
-                OnParseError(results.ContentString, ex);
+                OnParseError(results.Content, ex);
             }
 
             return releases;

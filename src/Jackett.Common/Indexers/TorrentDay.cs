@@ -166,7 +166,7 @@ namespace Jackett.Common.Indexers
 
             try
             {
-                var rows = JsonConvert.DeserializeObject<dynamic>(results.ContentString);
+                var rows = JsonConvert.DeserializeObject<dynamic>(results.Content);
 
                 foreach (var row in rows)
                 {
@@ -207,7 +207,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.ContentString, ex);
+                OnParseError(results.Content, ex);
             }
             return releases;
         }

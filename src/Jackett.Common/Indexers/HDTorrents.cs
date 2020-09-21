@@ -114,7 +114,7 @@ namespace Jackett.Common.Indexers
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, null, LoginUrl);
 
             await ConfigureIfOK(
-                result.Cookies, result.ContentString?.Contains("If your browser doesn't have javascript enabled") == true,
+                result.Cookies, result.Content?.Contains("If your browser doesn't have javascript enabled") == true,
                 () => throw new ExceptionWithConfigData("Couldn't login", configData));
             return IndexerConfigurationStatus.RequiresTesting;
         }
@@ -138,7 +138,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(results.ContentString);
+                var dom = parser.ParseDocument(results.Content);
 
                 var userInfo = dom.QuerySelector("table.navus tr");
                 var userRank = userInfo.Children[1].TextContent.Replace("Rank:", string.Empty).Trim();
@@ -234,7 +234,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.ContentString, ex);
+                OnParseError(results.Content, ex);
             }
 
             return releases;
