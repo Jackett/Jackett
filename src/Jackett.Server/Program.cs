@@ -46,7 +46,16 @@ namespace Jackett.Server
             optionsResult.WithParsed(options =>
             {
                 if (string.IsNullOrEmpty(options.Client))
-                    options.Client = DotNetCoreUtil.IsRunningOnDotNetCore ? "httpclient2" : "httpclient";
+                {
+                    if (DotNetCoreUtil.IsRunningOnDotNetCore)
+                    {
+                        options.Client = "httpclient2netcore";
+                    }
+                    else
+                    {
+                        options.Client = "httpclient";
+                    }
+                }
 
                 Settings = options.ToRunTimeSettings();
                 consoleOptions = options;
