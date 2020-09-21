@@ -99,7 +99,7 @@ namespace Jackett.Common.Indexers
             LoadValuesFromJson(configJson);
             if (configData.Hungarian.Value == false && configData.English.Value == false)
                 throw new ExceptionWithConfigData("Please select at least one language.", configData);
-            var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
+            var loginPage = await WebRequestWithCookiesAsync(LoginUrl, string.Empty);
             var pairs = new Dictionary<string, string>
             {
                 {"nev", configData.Username.Value},
@@ -113,10 +113,10 @@ namespace Jackett.Common.Indexers
                 pairs.Add("2factor", configData.TwoFactor.Value);
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, referer: SiteLink);
             await ConfigureIfOK(
-                result.Cookies, result.Content?.Contains("profile.php") == true, () =>
+                result.Cookies, result.ContentString?.Contains("profile.php") == true, () =>
                 {
                     var parser = new HtmlParser();
-                    var dom = parser.ParseDocument(result.Content);
+                    var dom = parser.ParseDocument(result.ContentString);
                     var msgContainer = dom.QuerySelector("#hibauzenet table tbody tr")?.Children[1];
                     throw new ExceptionWithConfigData(msgContainer?.TextContent ?? "Error while trying to login.", configData);
                 });
@@ -166,9 +166,10 @@ namespace Jackett.Common.Indexers
                 cats = cats.Except(_languageCats).ToList();
 
             pairs.Add("kivalasztott_tipus[]", string.Join(",", cats));
-            var results = await PostDataWithCookiesAndRetry(SearchUrl, pairs.ToEnumerable(true));
+            var results = await RequestWithCookiesAndRetryAsync(
+                SearchUrl, null, RequestType.POST, null, pairs.ToEnumerable(true));
             var parser = new HtmlParser();
-            var dom = parser.ParseDocument(results.Content);
+            var dom = parser.ParseDocument(results.ContentString);
 
             // find number of torrents / page
             var torrentPerPage = dom.QuerySelectorAll(".box_torrent").Length;
@@ -199,7 +200,8 @@ namespace Jackett.Common.Indexers
             for (var page = startPage; page <= pages && releases.Count < limit; page++)
             {
                 pairs["oldal"] = page.ToString();
-                results = await PostDataWithCookiesAndRetry(SearchUrl, pairs.ToEnumerable(true));
+                results = await RequestWithCookiesAndRetryAsync(
+                    SearchUrl, null, RequestType.POST, null, pairs.ToEnumerable(true));
                 releases.AddRange(ParseTorrents(results, episodeString, query, releases.Count, limit, previouslyParsedOnPage));
                 previouslyParsedOnPage = 0;
             }
@@ -207,14 +209,14 @@ namespace Jackett.Common.Indexers
             return releases;
         }
 
-        private List<ReleaseInfo> ParseTorrents(WebClientStringResult results, string episodeString, TorznabQuery query,
+        private List<ReleaseInfo> ParseTorrents(WebResult results, string episodeString, TorznabQuery query,
                                                 int alreadyFound, int limit, int previouslyParsedOnPage)
         {
             var releases = new List<ReleaseInfo>();
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(results.Content);
+                var dom = parser.ParseDocument(results.ContentString);
                 var rows = dom.QuerySelectorAll(".box_torrent").Skip(previouslyParsedOnPage).Take(limit - alreadyFound);
 
                 var key = ParseUtil.GetArgumentFromQueryString(
@@ -333,7 +335,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return releases;

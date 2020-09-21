@@ -83,7 +83,7 @@ namespace Jackett.Common.Indexers
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
-            await RequestStringWithCookies(LandingUrl);
+            await WebRequestWithCookiesAsync(LandingUrl);
             return configData;
         }
 
@@ -99,11 +99,11 @@ namespace Jackett.Common.Indexers
                         };
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, SearchUrl, LandingUrl, true);
-            await ConfigureIfOK(result.Cookies, result.Content?.Contains("logout.php") == true,
+            await ConfigureIfOK(result.Cookies, result.ContentString?.Contains("logout.php") == true,
                 () =>
                 {
                     var parser = new HtmlParser();
-                    var dom = parser.ParseDocument(result.Content);
+                    var dom = parser.ParseDocument(result.ContentString);
                     var warningNode = dom.QuerySelector("#loginform > .warning");
                     var errorMessage = warningNode?.TextContent.Trim().Replace("\n\t", " ");
                     throw new ExceptionWithConfigData(errorMessage, configData);
@@ -155,18 +155,18 @@ namespace Jackett.Common.Indexers
 
             searchUrl += "?" + queryCollection.GetQueryString();
 
-            var searchPage = await PostDataWithCookiesAndRetry(searchUrl, searchParams);
+            var searchPage = await RequestWithCookiesAndRetryAsync(searchUrl, method: RequestType.POST, data: searchParams);
             // Occasionally the cookies become invalid, login again if that happens
             if (searchPage.IsRedirect)
             {
                 await ApplyConfiguration(null);
-                searchPage = await PostDataWithCookiesAndRetry(searchUrl, searchParams);
+                searchPage = await RequestWithCookiesAndRetryAsync(searchUrl, method: RequestType.POST, data: searchParams);
             }
 
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(searchPage.Content);
+                var dom = parser.ParseDocument(searchPage.ContentString);
                 var albumRows = dom.QuerySelectorAll("table#torrent_table > tbody > tr:has(strong > a[href*=\"torrents.php?id=\"])");
                 foreach (var row in albumRows)
                 {
@@ -290,7 +290,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(searchPage.Content, ex);
+                OnParseError(searchPage.ContentString, ex);
             }
 
             return releases;

@@ -1,4 +1,4 @@
-using System;
+ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
@@ -79,13 +79,13 @@ namespace Jackett.Common.Indexers
                 { "rememberme[]", "1" }
             };
 
-            var loginPage = await RequestStringWithCookiesAndRetry(LoginUrl, "", LoginUrl);
+            var loginPage = await RequestWithCookiesAndRetryAsync(LoginUrl, "", RequestType.GET, LoginUrl);
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
+            await ConfigureIfOK(result.Cookies, result.ContentString != null && result.ContentString.Contains("logout.php"), () =>
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(result.Content);
+                var dom = parser.ParseDocument(result.ContentString);
                 var errorMessage = dom.QuerySelector(".ui-state-error").Text().Trim();
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
@@ -117,9 +117,10 @@ namespace Jackett.Common.Indexers
                 { "X-Requested-With", "XMLHttpRequest" }
             };
 
-            var response = await RequestStringWithCookiesAndRetry(searchUrl, null, SearchUrlReferer, extraHeaders);
+            var response = await RequestWithCookiesAndRetryAsync(
+                searchUrl, referer: SearchUrlReferer, headers: extraHeaders);
 
-            var results = response.Content;
+            var results = response.ContentString;
             try
             {
                 var parser = new HtmlParser();

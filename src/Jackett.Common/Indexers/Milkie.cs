@@ -87,13 +87,13 @@ namespace Jackett.Common.Indexers
             {
                 { "x-milkie-auth", configData.Key.Value }
             };
-            var jsonResponse = await RequestStringWithCookies(endpoint, headers: headers);
+            var jsonResponse = await WebRequestWithCookiesAsync(endpoint, headers: headers);
 
             var releases = new List<ReleaseInfo>();
 
             try
             {
-                var response = JsonConvert.DeserializeObject<MilkieResponse>(jsonResponse.Content);
+                var response = JsonConvert.DeserializeObject<MilkieResponse>(jsonResponse.ContentString);
 
                 var dlQueryParams = new NameValueCollection
                 {
@@ -129,7 +129,7 @@ namespace Jackett.Common.Indexers
             }
             catch(Exception ex)
             {
-                OnParseError(jsonResponse.Content, ex);
+                OnParseError(jsonResponse.ContentString, ex);
             }
 
             return releases;

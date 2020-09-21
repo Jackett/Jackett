@@ -163,9 +163,9 @@ namespace Jackett.Common.Indexers
 
         public override async Task<byte[]> Download(Uri linkParam)
         {
-            var results = await RequestStringWithCookiesAndRetry(linkParam.AbsoluteUri);
+            var results = await RequestWithCookiesAndRetryAsync(linkParam.AbsoluteUri);
 
-            var uriLink = ExtractDownloadUri(results.Content, linkParam.AbsoluteUri);
+            var uriLink = ExtractDownloadUri(results.ContentString, linkParam.AbsoluteUri);
             if (uriLink == null)
                 throw new Exception("Download link not found!");
 
@@ -211,11 +211,11 @@ namespace Jackett.Common.Indexers
                 while (pg <= _maxDailyPages)
                 {
                     var pageUrl = SiteLink + string.Format(_dailyUrl, pg);
-                    var results = await RequestStringWithCookiesAndRetry(pageUrl);
-                    if (results == null || string.IsNullOrEmpty(results.Content))
+                    var results = await RequestWithCookiesAndRetryAsync(pageUrl);
+                    if (results == null || string.IsNullOrEmpty(results.ContentString))
                         break;
 
-                    var items = ParseDailyContent(results.Content);
+                    var items = ParseDailyContent(results.ContentString);
                     if (items == null || !items.Any())
                         break;
 
@@ -304,14 +304,14 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
 
             // Episodes list
-            var results = await RequestStringWithCookiesAndRetry(uri.AbsoluteUri);
-            var seriesEpisodesUrl = ParseSeriesListContent(results.Content, seriesName);
+            var results = await RequestWithCookiesAndRetryAsync(uri.AbsoluteUri);
+            var seriesEpisodesUrl = ParseSeriesListContent(results.ContentString, seriesName);
 
             // TV serie list
             if (!string.IsNullOrEmpty(seriesEpisodesUrl))
             {
-                results = await RequestStringWithCookiesAndRetry(seriesEpisodesUrl);
-                var items = ParseEpisodesListContent(results.Content);
+                results = await RequestWithCookiesAndRetryAsync(seriesEpisodesUrl);
+                var items = ParseEpisodesListContent(results.ContentString);
                 if (items != null && items.Any())
                     releases.AddRange(items);
             }
@@ -464,8 +464,8 @@ namespace Jackett.Common.Indexers
                     {"pg", pg.ToString()}
                 };
 
-                var results = await PostDataWithCookies(searchJsonUrl, queryCollection);
-                var items = ParseSearchJsonContent(results.Content, year);
+                var results = await WebRequestWithCookiesAsync(searchJsonUrl, method: RequestType.POST, data: queryCollection);
+                var items = ParseSearchJsonContent(results.ContentString, year);
                 if (!items.Any())
                     break;
 

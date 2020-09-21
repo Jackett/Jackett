@@ -101,17 +101,17 @@ namespace Jackett.Common.Indexers
             var downloadUrl = link.ToString();
 
             // Eg https://www.mejortorrentt.net/peli-descargar-torrent-11995-Harry-Potter-y-la-piedra-filosofal.html
-            var result = await RequestStringWithCookies(downloadUrl);
+            var result = await WebRequestWithCookiesAsync(downloadUrl);
             if (result.Status != HttpStatusCode.OK)
-                throw new ExceptionWithConfigData(result.Content, configData);
-            var dom = parser.ParseDocument(result.Content);
+                throw new ExceptionWithConfigData(result.ContentString, configData);
+            var dom = parser.ParseDocument(result.ContentString);
             downloadUrl = SiteLink + dom.QuerySelector("a[href*=\"sec=descargas\"]").GetAttribute("href");
 
             // Eg https://www.mejortorrentt.net/secciones.php?sec=descargas&ap=contar&tabla=peliculas&id=11995&link_bajar=1
-            result = await RequestStringWithCookies(downloadUrl);
+            result = await WebRequestWithCookiesAsync(downloadUrl);
             if (result.Status != HttpStatusCode.OK)
-                throw new ExceptionWithConfigData(result.Content, configData);
-            dom = parser.ParseDocument(result.Content);
+                throw new ExceptionWithConfigData(result.ContentString, configData);
+            dom = parser.ParseDocument(result.ContentString);
             downloadUrl = SiteLink + dom.QuerySelector("a[href^=\"/tor/\"]").GetAttribute("href");
 
             // Eg https://www.mejortorrentt.net/tor/peliculas/Harry_Potter_1_y_la_Piedra_Filosofal_MicroHD_1080p.torrent
@@ -123,13 +123,13 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
             var url = SiteLink + NewTorrentsUrl;
-            var result = await RequestStringWithCookies(url);
+            var result = await WebRequestWithCookiesAsync(url);
             if (result.Status != HttpStatusCode.OK)
-                throw new ExceptionWithConfigData(result.Content, configData);
+                throw new ExceptionWithConfigData(result.ContentString, configData);
             try
             {
                 var searchResultParser = new HtmlParser();
-                var doc = searchResultParser.ParseDocument(result.Content);
+                var doc = searchResultParser.ParseDocument(result.ContentString);
 
                 var container = doc.QuerySelector("#main_table_center_center1 table div");
                 var parsedCommentsLink = new List<string>();
@@ -167,7 +167,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(result.Content, ex);
+                OnParseError(result.ContentString, ex);
             }
 
             return releases;
@@ -180,14 +180,14 @@ namespace Jackett.Common.Indexers
             var searchTerm = GetLongestWord(query.SearchTerm);
             var qc = new NameValueCollection { { "sec", "buscador" }, { "valor", searchTerm } };
             var url = SiteLink + SearchUrl + "?" + qc.GetQueryString();
-            var result = await RequestStringWithCookies(url);
+            var result = await WebRequestWithCookiesAsync(url);
             if (result.Status != HttpStatusCode.OK)
-                throw new ExceptionWithConfigData(result.Content, configData);
+                throw new ExceptionWithConfigData(result.ContentString, configData);
 
             try
             {
                 var searchResultParser = new HtmlParser();
-                var doc = searchResultParser.ParseDocument(result.Content);
+                var doc = searchResultParser.ParseDocument(result.ContentString);
 
                 var table = doc.QuerySelector("#main_table_center_center2 table table");
                 // check the search term is valid
@@ -214,7 +214,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(result.Content, ex);
+                OnParseError(result.ContentString, ex);
             }
 
             return releases;
@@ -259,12 +259,12 @@ namespace Jackett.Common.Indexers
         private async Task ParseSeriesRelease(ICollection<ReleaseInfo> releases, TorznabQuery query, string title,
             string commentsLink, string cat, DateTime publishDate)
         {
-            var result = await RequestStringWithCookies(commentsLink);
+            var result = await WebRequestWithCookiesAsync(commentsLink);
             if (result.Status != HttpStatusCode.OK)
-                throw new ExceptionWithConfigData(result.Content, configData);
+                throw new ExceptionWithConfigData(result.ContentString, configData);
 
             var searchResultParser = new HtmlParser();
-            var doc = searchResultParser.ParseDocument(result.Content);
+            var doc = searchResultParser.ParseDocument(result.ContentString);
 
             var rows = doc.QuerySelectorAll("#main_table_center_center1 table table table tr");
             foreach (var row in rows)

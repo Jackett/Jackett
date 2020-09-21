@@ -60,12 +60,12 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
             var episodeSearchUrl = string.Format(SearchAllUrl);
-            var result = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
+            var result = await RequestWithCookiesAndRetryAsync(episodeSearchUrl);
             var xmlDoc = new XmlDocument();
 
             try
             {
-                xmlDoc.LoadXml(result.Content);
+                xmlDoc.LoadXml(result.ContentString);
                 foreach (XmlNode node in xmlDoc.GetElementsByTagName("item"))
                 {
                     //TODO revisit for refactoring
@@ -105,7 +105,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(result.Content, ex);
+                OnParseError(result.ContentString, ex);
             }
 
             return releases;

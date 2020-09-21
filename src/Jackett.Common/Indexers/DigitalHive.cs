@@ -93,9 +93,9 @@ namespace Jackett.Common.Indexers
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var loginPage = await RequestStringWithCookies(LoginUrl, configData.CookieHeader.Value);
+            var loginPage = await WebRequestWithCookiesAsync(LoginUrl, configData.CookieHeader.Value);
             var parser = new HtmlParser();
-            var cq = parser.ParseDocument(loginPage.Content);
+            var cq = parser.ParseDocument(loginPage.ContentString);
             var recaptchaSiteKey = cq.QuerySelector(".g-recaptcha")?.GetAttribute("data-sitekey");
             if (recaptchaSiteKey != null)
             {
@@ -151,10 +151,10 @@ namespace Jackett.Common.Indexers
 
             var result = await RequestLoginAndFollowRedirect(AjaxLoginUrl, pairs, configData.CookieHeader.Value, true, SiteLink, LoginUrl);
 
-            await ConfigureIfOK(result.Cookies, result.Content.Contains("logout.php"), () =>
+            await ConfigureIfOK(result.Cookies, result.ContentString.Contains("logout.php"), () =>
             {
                 var parser = new HtmlParser();
-                var errorMessage = parser.ParseDocument(result.Content);
+                var errorMessage = parser.ParseDocument(result.ContentString);
                 throw new ExceptionWithConfigData(errorMessage.Text(), configData);
             });
 
@@ -181,20 +181,20 @@ namespace Jackett.Common.Indexers
 
             queryCollection.Add("blah", "0");
 
-            var results = await RequestStringWithCookiesAndRetry(searchUrl + "?" + queryCollection.GetQueryString());
+            var results = await RequestWithCookiesAndRetryAsync(searchUrl + "?" + queryCollection.GetQueryString());
             if (results.IsRedirect)
             {
                 // re-login
                 await ApplyConfiguration(null);
-                results = await RequestStringWithCookiesAndRetry(searchUrl + "?" + queryCollection.GetQueryString());
+                results = await RequestWithCookiesAndRetryAsync(searchUrl + "?" + queryCollection.GetQueryString());
             }
             try
             {
-                releases.AddRange(contentToReleaseInfos(query, results.Content));
+                releases.AddRange(contentToReleaseInfos(query, results.ContentString));
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return releases;

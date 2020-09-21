@@ -72,15 +72,15 @@ namespace Jackett.Common.Indexers
             };
 
             var searchUrl = ApiEndpoint + "?" + queryCollection.GetQueryString();
-            var response = await RequestStringWithCookiesAndRetry(searchUrl);
+            var response = await RequestWithCookiesAndRetryAsync(searchUrl);
 
             try
             {
-                if (response.Content.Contains("Nothing was found"))
+                if (response.ContentString.Contains("Nothing was found"))
                     return releases;
 
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(response.Content);
+                var dom = parser.ParseDocument(response.ContentString);
                 var resultLinks = dom.QuerySelectorAll("ul > li > a");
                 var uniqueShowLinks = new HashSet<string>();
                 foreach (var resultLink in resultLinks)
@@ -97,7 +97,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
 
             return releases;
@@ -112,15 +112,15 @@ namespace Jackett.Common.Indexers
             };
 
             var searchUrl = ApiEndpoint + "?" + queryCollection.GetQueryString();
-            var response = await RequestStringWithCookiesAndRetry(searchUrl);
+            var response = await RequestWithCookiesAndRetryAsync(searchUrl);
 
             try
             {
-                if (response.Content.Contains("Nothing was found"))
+                if (response.ContentString.Contains("Nothing was found"))
                     return releases;
 
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(response.Content);
+                var dom = parser.ParseDocument(response.ContentString);
                 var latestresults = dom.QuerySelectorAll("ul > li > a");
                 foreach (var resultLink in latestresults)
                 {
@@ -135,7 +135,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
 
             return releases;
@@ -146,12 +146,12 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
             var parser = new HtmlParser();
 
-            var response = await RequestStringWithCookiesAndRetry(resultUrl);
+            var response = await RequestWithCookiesAndRetryAsync(resultUrl);
             await FollowIfRedirect(response);
 
             try
             {
-                var match = Regex.Match(response.Content, "(var hs_showid = )([0-9]*)(;)", RegexOptions.IgnoreCase);
+                var match = Regex.Match(response.ContentString, "(var hs_showid = )([0-9]*)(;)", RegexOptions.IgnoreCase);
                 if (match.Success == false)
                     return releases;
 
@@ -168,8 +168,8 @@ namespace Jackett.Common.Indexers
                     var nextId = 0;
                     while (true)
                     {
-                        var showApiResponse = await RequestStringWithCookiesAndRetry(apiUrl + "&nextid=" + nextId);
-                        var showApiDom = parser.ParseDocument(showApiResponse.Content);
+                        var showApiResponse = await RequestWithCookiesAndRetryAsync(apiUrl + "&nextid=" + nextId);
+                        var showApiDom = parser.ParseDocument(showApiResponse.ContentString);
                         var releaseRowResults = showApiDom.QuerySelectorAll("div.rls-info-container");
                         rows.AddRange(releaseRowResults);
                         nextId++;
@@ -215,7 +215,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
             return releases;
         }

@@ -109,17 +109,17 @@ namespace Jackett.Common.Indexers
                 pairs.Add("proofcode", configData.CaptchaText.Value);
             var result = await RequestLoginAndFollowRedirect(
                 IndexUrl, pairs, configData.CaptchaCookie.Value, true, referer: IndexUrl, accumulateCookies: true);
-            if (result.Content == null || (!result.Content.Contains("login_complete") &&
-                                           !result.Content.Contains("index.php?strWebValue=account&strWebAction=logout")))
+            if (result.ContentString == null || (!result.ContentString.Contains("login_complete") &&
+                                           !result.ContentString.Contains("index.php?strWebValue=account&strWebAction=logout")))
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(result.Content);
+                var dom = parser.ParseDocument(result.ContentString);
                 var errorMessageEl = dom.QuerySelector("table > tbody > tr > td[valign=top][width=100%]");
-                var errorMessage = errorMessageEl != null ? errorMessageEl.InnerHtml : result.Content;
+                var errorMessage = errorMessageEl != null ? errorMessageEl.InnerHtml : result.ContentString;
                 throw new ExceptionWithConfigData(errorMessage, configData);
             }
 
-            var result2 = await RequestStringWithCookies(LoginCompleteUrl, result.Cookies);
+            var result2 = await WebRequestWithCookiesAsync(LoginCompleteUrl, result.Cookies);
             await ConfigureIfOK(
                 result2.Cookies, result2.Cookies?.Contains("pass") == true,
                 () => throw new ExceptionWithConfigData("Didn't get a user/pass cookie", configData));
@@ -128,15 +128,15 @@ namespace Jackett.Common.Indexers
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var loginPage = await RequestStringWithCookies(IndexUrl, string.Empty);
+            var loginPage = await WebRequestWithCookiesAsync(IndexUrl, string.Empty);
             var parser = new HtmlParser();
-            var dom = parser.ParseDocument(loginPage.Content);
+            var dom = parser.ParseDocument(loginPage.ContentString);
             var qCaptchaImg = dom.QuerySelector("td.tablea > img");
             if (qCaptchaImg != null)
             {
                 var captchaUrl = SiteLink + qCaptchaImg.GetAttribute("src");
-                var captchaImage = await RequestBytesWithCookies(captchaUrl, loginPage.Cookies);
-                configData.CaptchaImage.Value = captchaImage.Content;
+                var captchaImage = await WebRequestWithCookiesAsync(captchaUrl, loginPage.Cookies);
+                configData.CaptchaImage.Value = captchaImage.ContentBytes;
             }
             else
                 configData.CaptchaImage.Value = Array.Empty<byte>();
@@ -182,12 +182,12 @@ namespace Jackett.Common.Indexers
             foreach (var cat in MapTorznabCapsToTrackers(query))
                 queryCollection.Add("dirs" + cat, "1");
             searchUrl += "?" + queryCollection.GetQueryString();
-            var response = await RequestStringWithCookies(searchUrl);
+            var response = await WebRequestWithCookiesAsync(searchUrl);
             var titleRegexp = new Regex(@"^return buildTable\('(.*?)',\s+");
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(response.Content);
+                var dom = parser.ParseDocument(response.ContentString);
                 var rows = dom.QuerySelectorAll("table.torrenttable > tbody > tr");
                 foreach (var row in rows.Skip(1))
                 {
@@ -242,7 +242,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
 
             return releases;

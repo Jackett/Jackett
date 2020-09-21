@@ -104,7 +104,7 @@ namespace Jackett.Common.Indexers
         {
             LoadValuesFromJson(configJson);
 
-            var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
+            var loginPage = await WebRequestWithCookiesAsync(LoginUrl, string.Empty);
 
             var pairs = new Dictionary<string, string> {
                 { "uid", configData.Username.Value },
@@ -114,7 +114,7 @@ namespace Jackett.Common.Indexers
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, null, LoginUrl);
 
             await ConfigureIfOK(
-                result.Cookies, result.Content?.Contains("If your browser doesn't have javascript enabled") == true,
+                result.Cookies, result.ContentString?.Contains("If your browser doesn't have javascript enabled") == true,
                 () => throw new ExceptionWithConfigData("Couldn't login", configData));
             return IndexerConfigurationStatus.RequiresTesting;
         }
@@ -134,11 +134,11 @@ namespace Jackett.Common.Indexers
             // manually url encode parenthesis to prevent "hacking" detection
             searchUrl += queryCollection.GetQueryString().Replace("(", "%28").Replace(")", "%29");
 
-            var results = await RequestStringWithCookiesAndRetry(searchUrl);
+            var results = await RequestWithCookiesAndRetryAsync(searchUrl);
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(results.Content);
+                var dom = parser.ParseDocument(results.ContentString);
 
                 var userInfo = dom.QuerySelector("table.navus tr");
                 var userRank = userInfo.Children[1].TextContent.Replace("Rank:", string.Empty).Trim();
@@ -234,7 +234,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return releases;

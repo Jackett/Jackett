@@ -114,7 +114,7 @@ namespace Jackett.Common.Services
 
             try
             {
-                var response = await client.GetString(new WebRequest()
+                var response = await client.GetResultAsync(new WebRequest()
                 {
                     Url = "https://api.github.com/repos/Jackett/Jackett/releases",
                     Encoding = Encoding.UTF8,
@@ -126,7 +126,7 @@ namespace Jackett.Common.Services
                     logger.Error("Failed to get the release list: " + response.Status);
                 }
 
-                var releases = JsonConvert.DeserializeObject<List<Release>>(response.Content);
+                var releases = JsonConvert.DeserializeObject<List<Release>>(response.ContentString);
 
                 if (!serverConfig.UpdatePrerelease)
                 {
@@ -258,11 +258,11 @@ namespace Jackett.Common.Services
 
             var url = targetAsset.Browser_download_url;
 
-            var data = await client.GetBytes(SetDownloadHeaders(new WebRequest() { Url = url, EmulateBrowser = true, Type = RequestType.GET }));
+            var data = await client.GetResultAsync(SetDownloadHeaders(new WebRequest() { Url = url, EmulateBrowser = true, Type = RequestType.GET }));
 
             while (data.IsRedirect)
             {
-                data = await client.GetBytes(new WebRequest() { Url = data.RedirectingTo, EmulateBrowser = true, Type = RequestType.GET });
+                data = await client.GetResultAsync(new WebRequest() { Url = data.RedirectingTo, EmulateBrowser = true, Type = RequestType.GET });
             }
 
             var tempDir = Path.Combine(Path.GetTempPath(), "JackettUpdate-" + version + "-" + DateTime.Now.Ticks);
@@ -277,14 +277,14 @@ namespace Jackett.Common.Services
             if (isWindows)
             {
                 var zipPath = Path.Combine(tempDir, "Update.zip");
-                File.WriteAllBytes(zipPath, data.Content);
+                File.WriteAllBytes(zipPath, data.ContentBytes);
                 var fastZip = new FastZip();
                 fastZip.ExtractZip(zipPath, tempDir, null);
             }
             else
             {
                 var gzPath = Path.Combine(tempDir, "Update.tar.gz");
-                File.WriteAllBytes(gzPath, data.Content);
+                File.WriteAllBytes(gzPath, data.ContentBytes);
                 Stream inStream = File.OpenRead(gzPath);
                 Stream gzipStream = new GZipInputStream(inStream);
 

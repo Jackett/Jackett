@@ -123,7 +123,7 @@ namespace Jackett.Common.Indexers
         {
             LoadValuesFromJson(configJson);
 
-            var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
+            var loginPage = await WebRequestWithCookiesAsync(LoginUrl, string.Empty);
 
             var pairs = new Dictionary<string, string> {
                 { "returnto", "%2F" },
@@ -134,7 +134,7 @@ namespace Jackett.Common.Indexers
             };
 
             // Send Post
-            var result = await PostDataWithCookies(LoginUrl, pairs, loginPage.Cookies);
+            var result = await WebRequestWithCookiesAsync(LoginUrl, loginPage.Cookies, RequestType.POST, data: pairs);
             if (result.RedirectingTo == null)
                 throw new ExceptionWithConfigData("Login failed. Did you use the PIN number that pretome emailed you?", configData);
 
@@ -142,7 +142,7 @@ namespace Jackett.Common.Indexers
             var loginCookies = result.Cookies;
             await FollowIfRedirect(result, LoginUrl, null, loginCookies);
 
-            await ConfigureIfOK(loginCookies, result.Content?.Contains("logout.php") == true,
+            await ConfigureIfOK(loginCookies, result.ContentString?.Contains("logout.php") == true,
                                 () => throw new ExceptionWithConfigData("Login failed", configData));
 
             return IndexerConfigurationStatus.RequiresTesting;
@@ -200,18 +200,18 @@ namespace Jackett.Common.Indexers
             }
 
             var searchUrl = SearchUrl + "?" + qc.GetQueryString();
-            var response = await RequestStringWithCookiesAndRetry(searchUrl);
+            var response = await RequestWithCookiesAndRetryAsync(searchUrl);
 
             if (response.IsRedirect) // re-login
             {
                 await ApplyConfiguration(null);
-                response = await RequestStringWithCookiesAndRetry(searchUrl);
+                response = await RequestWithCookiesAndRetryAsync(searchUrl);
             }
 
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(response.Content);
+                var dom = parser.ParseDocument(response.ContentString);
                 var rows = dom.QuerySelectorAll("table > tbody > tr.browse");
                 foreach (var row in rows)
                 {
@@ -258,7 +258,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
             return releases;
         }

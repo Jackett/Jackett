@@ -72,6 +72,10 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -111,7 +115,7 @@ search:
     incldead: 1
     lang: 0
     # 0 all 1 notfree 2 onlyfree
-    freeleech: 0
+    freeleech: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
     search: "{{ .Keywords }}"
     sort: "{{ .Config.sort }}"
     order: "{{ .Config.type }}"

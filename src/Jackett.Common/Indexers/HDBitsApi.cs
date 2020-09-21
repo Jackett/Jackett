@@ -176,22 +176,22 @@ namespace Jackett.Common.Indexers
             requestData["username"] = configData.Username.Value;
             requestData["passkey"] = configData.Passkey.Value;
             JObject json = null;
-
-            var response = await PostDataWithCookiesAndRetry(APIUrl + url, null, null, null, new Dictionary<string, string>()
-            {
-                {"Accept", "application/json"},
-                {"Content-Type", "application/json"}
-            }, requestData.ToString(), false);
-
-            CheckTrackerDown(response);
+            var response = await RequestWithCookiesAndRetryAsync(
+                APIUrl + url, null, RequestType.POST, null, null,
+                new Dictionary<string, string>
+                {
+                    {"Accept", "application/json"},
+                    {"Content-Type", "application/json"}
+                }, requestData.ToString(), false);
+            CheckSiteDown(response);
 
             try
             {
-                json = JObject.Parse(response.Content);
+                json = JObject.Parse(response.ContentString);
             }
             catch (Exception ex)
             {
-                throw new Exception("Error while parsing json: " + response.Content, ex);
+                throw new Exception("Error while parsing json: " + response.ContentString, ex);
             }
 
             if ((int)json["status"] != 0)

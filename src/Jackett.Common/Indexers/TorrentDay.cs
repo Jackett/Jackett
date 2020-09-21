@@ -155,7 +155,7 @@ namespace Jackett.Common.Indexers
             else
                 searchUrl += ";q=" + WebUtilityHelpers.UrlEncode(query.GetQueryString(), Encoding);
 
-            var results = await RequestStringWithCookiesAndRetry(searchUrl);
+            var results = await RequestWithCookiesAndRetryAsync(searchUrl);
 
             // Check for being logged out
             if (results.IsRedirect)
@@ -166,7 +166,7 @@ namespace Jackett.Common.Indexers
 
             try
             {
-                var rows = JsonConvert.DeserializeObject<dynamic>(results.Content);
+                var rows = JsonConvert.DeserializeObject<dynamic>(results.ContentString);
 
                 foreach (var row in rows)
                 {
@@ -207,7 +207,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
             return releases;
         }

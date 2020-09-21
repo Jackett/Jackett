@@ -183,14 +183,14 @@ namespace Jackett.Common.Indexers
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
             configData.CookieHeader.Value = null;
-            var response = await RequestStringWithCookies(LoginUrl);
+            var response = await WebRequestWithCookiesAsync(LoginUrl);
             var LoginResultParser = new HtmlParser();
-            var LoginResultDocument = LoginResultParser.ParseDocument(response.Content);
+            var LoginResultDocument = LoginResultParser.ParseDocument(response.ContentString);
             var captchaimg = LoginResultDocument.QuerySelector("img[src*=\"/captcha/\"]");
             if (captchaimg != null)
             {
-                var captchaImage = await RequestBytesWithCookies("https:" + captchaimg.GetAttribute("src"));
-                configData.CaptchaImage.Value = captchaImage.Content;
+                var captchaImage = await WebRequestWithCookiesAsync("https:" + captchaimg.GetAttribute("src"));
+                configData.CaptchaImage.Value = captchaImage.ContentBytes;
 
                 var codefield = LoginResultDocument.QuerySelector("input[name^=\"cap_code_\"]");
                 cap_code_field = codefield.GetAttribute("name");
@@ -226,12 +226,12 @@ namespace Jackett.Common.Indexers
             }
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, CookieHeader, true, null, LoginUrl, true);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("Вы зашли как:"), () =>
+            await ConfigureIfOK(result.Cookies, result.ContentString != null && result.ContentString.Contains("Вы зашли как:"), () =>
             {
-                logger.Debug(result.Content);
+                logger.Debug(result.ContentString);
                 var errorMessage = "Unknown error message, please report";
                 var LoginResultParser = new HtmlParser();
-                var LoginResultDocument = LoginResultParser.ParseDocument(result.Content);
+                var LoginResultDocument = LoginResultParser.ParseDocument(result.ContentString);
                 var errormsg = LoginResultDocument.QuerySelector("h4[class=\"warnColor1 tCenter mrg_16\"]");
                 if (errormsg != null)
                     errorMessage = errormsg.TextContent;
@@ -260,19 +260,19 @@ namespace Jackett.Common.Indexers
             }
 
             var searchUrl = SearchUrl + "?" + queryCollection.GetQueryString();
-            var results = await RequestStringWithCookies(searchUrl);
-            if (!results.Content.Contains("Вы зашли как:"))
+            var results = await WebRequestWithCookiesAsync(searchUrl);
+            if (!results.ContentString.Contains("Вы зашли как:"))
             {
                 // re login
                 await ApplyConfiguration(null);
-                results = await RequestStringWithCookies(searchUrl);
+                results = await WebRequestWithCookiesAsync(searchUrl);
             }
             try
             {
                 var RowsSelector = "table#tor-tbl > tbody > tr";
 
                 var SearchResultParser = new HtmlParser();
-                var SearchResultDocument = SearchResultParser.ParseDocument(results.Content);
+                var SearchResultDocument = SearchResultParser.ParseDocument(results.ContentString);
                 var Rows = SearchResultDocument.QuerySelectorAll(RowsSelector);
                 foreach (var Row in Rows)
                 {
@@ -327,7 +327,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return releases;
@@ -337,8 +337,8 @@ namespace Jackett.Common.Indexers
         public override async Task<byte[]> Download(Uri link)
         {
             var downloadlink = link;
-            var response = await RequestStringWithCookies(link.ToString());
-            var results = response.Content;
+            var response = await WebRequestWithCookiesAsync(link.ToString());
+            var results = response.ContentString;
             var SearchResultParser = new HtmlParser();
             var SearchResultDocument = SearchResultParser.ParseDocument(results);
             var downloadSelector = "a[class=\"dl-stub dl-link\"]";

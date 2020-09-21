@@ -13,6 +13,7 @@ using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 
@@ -107,9 +108,9 @@ namespace Jackett.Common.Indexers
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
+            var loginPage = await WebRequestWithCookiesAsync(LoginUrl, string.Empty);
             var parser = new HtmlParser();
-            var cq = parser.ParseDocument(loginPage.Content);
+            var cq = parser.ParseDocument(loginPage.ContentString);
             var captcha = cq.QuerySelector(".g-recaptcha"); // invisible recaptcha
             if (captcha != null)
             {
@@ -153,7 +154,7 @@ namespace Jackett.Common.Indexers
                 }
             }
 
-            var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
+            var loginPage = await WebRequestWithCookiesAsync(LoginUrl, string.Empty);
             var pairs = new Dictionary<string, string>
             {
                 {"vb_login_username", configData.Username.Value},
@@ -165,7 +166,7 @@ namespace Jackett.Common.Indexers
                 {"cookieuser", "1"}
             };
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, null, LoginUrl);
-            await ConfigureIfOK(result.Cookies, result.Content?.Contains("images/loading.gif") == true,
+            await ConfigureIfOK(result.Cookies, result.ContentString?.Contains("images/loading.gif") == true,
                                 () => throw new ExceptionWithConfigData("Couldn't login", configData));
             Thread.Sleep(2);
             return IndexerConfigurationStatus.RequiresTesting;
@@ -204,11 +205,11 @@ namespace Jackett.Common.Indexers
             }
 
             searchUrl = MapTorznabCapsToTrackers(query).Aggregate(searchUrl, (current, cat) => $"{current}&c[]={cat}");
-            var data = await RequestStringWithCookiesAndRetry(searchUrl);
+            var data = await RequestWithCookiesAndRetryAsync(searchUrl);
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(data.Content);
+                var dom = parser.ParseDocument(data.ContentString);
                 var rows = dom.QuerySelectorAll("tr.box_torrent");
                 foreach (var row in rows)
                 {
@@ -254,7 +255,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(data.Content, ex);
+                OnParseError(data.ContentString, ex);
             }
 
             return releases;
@@ -276,9 +277,9 @@ namespace Jackett.Common.Indexers
                 Path = "index.php",
                 Query = queryString.GetQueryString()
             };
-            var results = await RequestStringWithCookies(site.ToString());
+            var results = await WebRequestWithCookiesAsync(site.ToString());
             var parser = new HtmlParser();
-            var dom = parser.ParseDocument(results.Content);
+            var dom = parser.ParseDocument(results.ContentString);
             var rows = dom.QuerySelectorAll("#listtable > tbody > tr");
             foreach (var row in rows.Skip(1))
             {
@@ -288,7 +289,7 @@ namespace Jackett.Common.Indexers
                     var address = link.GetAttribute("href");
                     if (string.IsNullOrEmpty(address))
                         continue;
-                    var realDom = parser.ParseDocument(results.Content);
+                    var realDom = parser.ParseDocument(results.ContentString);
                     return realDom.QuerySelector("#content:nth-child(1) > h1").TextContent;
                 }
             }

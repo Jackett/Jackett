@@ -10,6 +10,7 @@ using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 
@@ -179,8 +180,8 @@ namespace Jackett.Common.Indexers
                 qc.Add(cat, string.Empty);
 
             var searchUrl = SearchUrl + "?" + qc.GetQueryString();
-            var response = await RequestStringWithCookiesAndRetry(searchUrl, null, SearchUrl);
-            var results = response.Content;
+            var response = await RequestWithCookiesAndRetryAsync(searchUrl, referer: SearchUrl);
+            var results = response.ContentString;
 
             if (results == null || !results.Contains("/lout.php"))
                 throw new Exception("The user is not logged in. It is possible that the cookie has expired or you made a mistake when copying it. Please check the settings.");

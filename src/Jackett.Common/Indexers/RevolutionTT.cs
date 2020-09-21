@@ -13,6 +13,7 @@ using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 
@@ -198,7 +199,7 @@ namespace Jackett.Common.Indexers
             var homePageLoad = await RequestLoginAndFollowRedirect(LandingPageURL, new Dictionary<string, string> { }, null, true, null, SiteLink);
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, homePageLoad.Cookies, true, null, LandingPageURL);
-            await ConfigureIfOK(result.Cookies, result.Content?.Contains("/logout.php") == true, () =>
+            await ConfigureIfOK(result.Cookies, result.ContentString?.Contains("/logout.php") == true, () =>
                 throw new ExceptionWithConfigData("Login failed! Check the username and password. If they are ok, try logging on the website.", configData));
 
             //  Store RSS key from feed generator page
@@ -207,8 +208,9 @@ namespace Jackett.Common.Indexers
                 var rssParams = new Dictionary<string, string> {
                 { "feed", "dl" }
             };
-                var rssPage = await PostDataWithCookies(GetRSSKeyUrl, rssParams, result.Cookies);
-                var match = Regex.Match(rssPage.Content, "(?<=passkey\\=)([a-zA-z0-9]*)");
+                var rssPage = await WebRequestWithCookiesAsync(
+                    GetRSSKeyUrl, result.Cookies, RequestType.POST, data: rssParams);
+                var match = Regex.Match(rssPage.ContentString, "(?<=passkey\\=)([a-zA-z0-9]*)");
                 configData.RSSKey.Value = match.Success ? match.Value : string.Empty;
                 if (string.IsNullOrWhiteSpace(configData.RSSKey.Value))
                     throw new Exception("Failed to get RSS Key");
@@ -232,8 +234,8 @@ namespace Jackett.Common.Indexers
             // If query is empty, use the RSS Feed
             if (string.IsNullOrWhiteSpace(searchString))
             {
-                var rssPage = await RequestStringWithCookiesAndRetry(RSSUrl + configData.RSSKey.Value);
-                var rssDoc = XDocument.Parse(rssPage.Content);
+                var rssPage = await RequestWithCookiesAndRetryAsync(RSSUrl + configData.RSSKey.Value);
+                var rssDoc = XDocument.Parse(rssPage.ContentString);
 
                 foreach (var item in rssDoc.Descendants("item"))
                 {
@@ -305,18 +307,18 @@ namespace Jackett.Common.Indexers
                     }
                 }
 
-                var results = await RequestStringWithCookiesAndRetry(searchUrl);
+                var results = await RequestWithCookiesAndRetryAsync(searchUrl);
                 if (results.IsRedirect)
                 {
                     // re-login
                     await ApplyConfiguration(null);
-                    results = await RequestStringWithCookiesAndRetry(searchUrl);
+                    results = await RequestWithCookiesAndRetryAsync(searchUrl);
                 }
 
                 try
                 {
                     var parser = new HtmlParser();
-                    var dom = parser.ParseDocument(results.Content);
+                    var dom = parser.ParseDocument(results.ContentString);
                     var rows = dom.QuerySelectorAll("#torrents-table > tbody > tr");
 
                     foreach (var row in rows.Skip(1))
@@ -363,7 +365,7 @@ namespace Jackett.Common.Indexers
                 }
                 catch (Exception ex)
                 {
-                    OnParseError(results.Content, ex);
+                    OnParseError(results.ContentString, ex);
                 }
             }
 

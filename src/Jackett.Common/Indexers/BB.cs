@@ -75,10 +75,10 @@ namespace Jackett.Common.Indexers
             };
 
             var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, SiteLink);
-            await ConfigureIfOK(response.Cookies, response.Content != null && response.Content.Contains("logout.php"), () =>
+            await ConfigureIfOK(response.Cookies, response.ContentString != null && response.ContentString.Contains("logout.php"), () =>
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(response.Content);
+                var dom = parser.ParseDocument(response.ContentString);
                 var messageEl = dom.QuerySelectorAll("#loginform");
                 var messages = new List<string>();
                 for (var i = 0; i < 13; i++)
@@ -122,8 +122,8 @@ namespace Jackett.Common.Indexers
 
                 request_urls.Add(SearchUrl + queryCollection.GetQueryString());
             }
-            var downloadTasksQuery =
-                from url in request_urls select RequestStringWithCookiesAndRetry(url);
+
+            var downloadTasksQuery = from url in request_urls select RequestWithCookiesAndRetryAsync(url);
 
             var responses = await Task.WhenAll(downloadTasksQuery.ToArray());
 
@@ -134,12 +134,12 @@ namespace Jackett.Common.Indexers
                 if (results.IsRedirect)
                 {
                     await ApplyConfiguration(null);
-                    results = await RequestStringWithCookiesAndRetry(request_urls[i]);
+                    results = await RequestWithCookiesAndRetryAsync(request_urls[i]);
                 }
                 try
                 {
                     var parser = new HtmlParser();
-                    var dom = parser.ParseDocument(results.Content);
+                    var dom = parser.ParseDocument(results.ContentString);
                     var rows = dom.QuerySelectorAll("#torrent_table > tbody > tr.torrent");
                     foreach (var row in rows)
                     {
@@ -195,7 +195,7 @@ namespace Jackett.Common.Indexers
                 }
                 catch (Exception ex)
                 {
-                    OnParseError(results.Content, ex);
+                    OnParseError(results.ContentString, ex);
                 }
             }
             return releases;

@@ -17,6 +17,7 @@ using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
+using WebRequest = Jackett.Common.Utils.Clients.WebRequest;
 
 namespace Jackett.Common.Indexers
 {
@@ -488,12 +489,12 @@ namespace Jackett.Common.Indexers
             };
 
             // Request our first page
-            var results = await webclient.GetString(myIndexRequest);
+            var results = await webclient.GetResultAsync(myIndexRequest);
             if (results.Status == HttpStatusCode.InternalServerError) // See issue #2110
-                throw new Exception("Internal Server Error (" + results.Content + "), probably you reached the API limits, please reduce the number of queries");
+                throw new Exception("Internal Server Error (" + results.ContentString + "), probably you reached the API limits, please reduce the number of queries");
 
             // Return results from tracker
-            return results.Content;
+            return results.ContentString;
         }
 
         /// <summary>

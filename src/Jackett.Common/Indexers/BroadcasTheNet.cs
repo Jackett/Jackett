@@ -110,15 +110,17 @@ namespace Jackett.Common.Indexers
                 new JValue(btnResults),
                 new JValue(btnOffset)
             };
-            var response = await PostDataWithCookiesAndRetry(APIBASE, null, null, null, new Dictionary<string, string>()
-            {
-                { "Accept", "application/json-rpc, application/json"},
-                {"Content-Type", "application/json-rpc"}
-            }, JsonRPCRequest("getTorrents", parameters), false);
+            var response = await RequestWithCookiesAndRetryAsync(
+                APIBASE, method: RequestType.POST,
+                headers: new Dictionary<string, string>
+                {
+                    {"Accept", "application/json-rpc, application/json"},
+                    {"Content-Type", "application/json-rpc"}
+                }, rawbody: JsonRPCRequest("getTorrents", parameters), emulateBrowser: false);
 
             try
             {
-                var btnResponse = JsonConvert.DeserializeObject<BTNRPCResponse>(response.Content);
+                var btnResponse = JsonConvert.DeserializeObject<BTNRPCResponse>(response.ContentString);
 
                 if (btnResponse?.Result?.Torrents != null)
                 {
@@ -177,7 +179,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
             return releases;
         }

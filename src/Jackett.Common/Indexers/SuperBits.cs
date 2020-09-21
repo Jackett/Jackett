@@ -128,12 +128,12 @@ namespace Jackett.Common.Indexers
             searchUrl += "?" + queryCollection.GetQueryString();
             foreach (var cat in MapTorznabCapsToTrackers(query))
                 searchUrl += "&categories[]=" + cat;
-            var results = await RequestStringWithCookies(searchUrl, null, SiteLink);
+            var results = await WebRequestWithCookiesAsync(searchUrl, referer: SiteLink);
 
             try
             {
                 //var json = JArray.Parse(results.Content);
-                dynamic json = JsonConvert.DeserializeObject<dynamic>(results.Content);
+                dynamic json = JsonConvert.DeserializeObject<dynamic>(results.ContentString);
                 foreach (var row in json ?? System.Linq.Enumerable.Empty<dynamic>())
                 {
                     var release = new ReleaseInfo();
@@ -205,7 +205,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return releases;

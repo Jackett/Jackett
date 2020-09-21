@@ -1,12 +1,18 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using AutoMapper;
+using com.LandonKey.SocksWebProxy;
+using com.LandonKey.SocksWebProxy.Proxy;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
 using NLog;
@@ -24,6 +30,82 @@ namespace Jackett.Common.Utils.Clients
         protected TimeSpan requestDelayTimeSpan;
         protected string ClientType;
         public bool EmulateBrowser = true;
+
+        protected static Dictionary<string, ICollection<string>> trustedCertificates = new Dictionary<string, ICollection<string>>();
+        protected static string webProxyUrl;
+        protected static IWebProxy webProxy;
+
+
+        [DebuggerNonUserCode] // avoid "Exception User-Unhandled" Visual Studio messages
+        public static bool ValidateCertificate(HttpRequestMessage request, X509Certificate2 certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+        {
+            {
+                var hash = certificate.GetCertHashString();
+
+
+                trustedCertificates.TryGetValue(hash, out var hosts);
+                if (hosts != null)
+                {
+                    if (hosts.Contains(request.RequestUri.Host))
+                        return true;
+                }
+
+                if (sslPolicyErrors != SslPolicyErrors.None)
+                {
+                    // Throw exception with certificate details, this will cause a "Exception User-Unhandled" when running it in the Visual Studio debugger.
+                    // The certificate is only available inside this function, so we can't catch it at the calling method.
+                    throw new Exception("certificate validation failed: " + certificate.ToString());
+                }
+
+                return sslPolicyErrors == SslPolicyErrors.None;
+            }
+        }
+        public static void InitProxy(ServerConfig serverConfig)
+        {
+            // dispose old SocksWebProxy
+            if (webProxy is SocksWebProxy proxy)
+                proxy.Dispose();
+            webProxy = null;
+            webProxyUrl = serverConfig.GetProxyUrl();
+            if (!string.IsNullOrWhiteSpace(webProxyUrl))
+            {
+                if (serverConfig.ProxyType != ProxyType.Http)
+                {
+                    var addresses = Dns.GetHostAddressesAsync(serverConfig.ProxyUrl).Result;
+                    var socksConfig = new ProxyConfig
+                    {
+                        SocksAddress = addresses.FirstOrDefault(),
+                        Username = serverConfig.ProxyUsername,
+                        Password = serverConfig.ProxyPassword,
+                        Version = serverConfig.ProxyType == ProxyType.Socks4 ?
+                            ProxyConfig.SocksVersion.Four :
+                            ProxyConfig.SocksVersion.Five
+                    };
+                    if (serverConfig.ProxyPort.HasValue)
+                    {
+                        socksConfig.SocksPort = serverConfig.ProxyPort.Value;
+                    }
+                    webProxy = new SocksWebProxy(socksConfig, false);
+                }
+                else
+                {
+                    NetworkCredential creds = null;
+                    if (!serverConfig.ProxyIsAnonymous)
+                    {
+                        var username = serverConfig.ProxyUsername;
+                        var password = serverConfig.ProxyPassword;
+                        creds = new NetworkCredential(username, password);
+                    }
+                    webProxy = new WebProxy(webProxyUrl)
+                    {
+                        BypassProxyOnLocal = false,
+                        Credentials = creds
+                    };
+                }
+            }
+        }
+
+
         public double requestDelay
         {
             get => requestDelayTimeSpan.TotalSeconds;
@@ -36,7 +118,14 @@ namespace Jackett.Common.Utils.Clients
 
         public virtual void AddTrustedCertificate(string host, string hash)
         {
-            // not implemented by default
+            hash = hash.ToUpper();
+            trustedCertificates.TryGetValue(hash.ToUpper(), out var hosts);
+            if (hosts == null)
+            {
+                hosts = new HashSet<string>();
+                trustedCertificates[hash] = hosts;
+            }
+            hosts.Add(host);
         }
 
         public WebClient(IProcessService p, Logger l, IConfigurationService c, ServerConfig sc)
@@ -47,6 +136,9 @@ namespace Jackett.Common.Utils.Clients
             serverConfig = sc;
             ClientType = GetType().Name;
             ServerConfigUnsubscriber = serverConfig.Subscribe(this);
+
+            if (webProxyUrl == null)
+                InitProxy(sc);
         }
 
         protected async Task DelayRequest(WebRequest request)
@@ -94,80 +186,37 @@ namespace Jackett.Common.Utils.Clients
             return;
         }
 
-        public virtual async Task<WebClientByteResult> GetBytes(WebRequest request)
+        public virtual async Task<WebResult> GetResultAsync(WebRequest request)
         {
-            logger.Debug(string.Format("WebClient({0}).GetBytes(Url:{1})", ClientType, request.Url));
+            logger.Debug(string.Format("WebClient({0}).GetResultAsync(Url:{1})", ClientType, request.Url));
             PrepareRequest(request);
             await DelayRequest(request);
             var result = await Run(request);
             lastRequest = DateTime.Now;
             result.Request = request;
-            logger.Debug(string.Format("WebClient({0}): Returning {1} => {2} bytes", ClientType, result.Status, (result.IsRedirect ? result.RedirectingTo + " " : "") + (result.Content == null ? "<NULL>" : result.Content.Length.ToString())));
+            logger.Debug(
+                string.Format(
+                    "WebClient({0}): Returning {1} => {2} bytes", ClientType, result.Status,
+                    (result.IsRedirect ? result.RedirectingTo + " " : "") +
+                    (result.ContentBytes == null ? "<NULL>" : result.ContentBytes.Length.ToString())));
+            if (result.Headers.TryGetValue("server", out var server) && server[0] == "cloudflare-nginx")
+                result.ContentString = BrowserUtil.DecodeCloudFlareProtectedEmailFromHTML(result.ContentString);
             return result;
         }
 
-        public virtual async Task<WebClientStringResult> GetString(WebRequest request)
-        {
-            logger.Debug(string.Format("WebClient({0}).GetString(Url:{1})", ClientType, request.Url));
-            PrepareRequest(request);
-            await DelayRequest(request);
-            var result = await Run(request);
-            lastRequest = DateTime.Now;
-            result.Request = request;
-            var stringResult = Mapper.Map<WebClientStringResult>(result);
-            Encoding encoding = null;
-            if (request.Encoding != null)
-            {
-                encoding = request.Encoding;
-            }
-            else if (result.Headers.ContainsKey("content-type"))
-            {
-                var CharsetRegex = new Regex(@"charset=([\w-]+)", RegexOptions.Compiled);
-                var CharsetRegexMatch = CharsetRegex.Match(result.Headers["content-type"][0]);
-                if (CharsetRegexMatch.Success)
-                {
-                    var charset = CharsetRegexMatch.Groups[1].Value;
-                    try
-                    {
-                        encoding = Encoding.GetEncoding(charset);
-                    }
-                    catch (Exception ex)
-                    {
-                        logger.Error(string.Format("WebClient({0}).GetString(Url:{1}): Error loading encoding {2} based on header {3}: {4}", ClientType, request.Url, charset, result.Headers["content-type"][0], ex));
-                    }
-                }
-                else
-                {
-                    logger.Error(string.Format("WebClient({0}).GetString(Url:{1}): Got header without charset: {2}", ClientType, request.Url, result.Headers["content-type"][0]));
-                }
-            }
-
-            if (encoding == null)
-            {
-                logger.Error(string.Format("WebClient({0}).GetString(Url:{1}): No encoding detected, defaulting to UTF-8", ClientType, request.Url));
-                encoding = Encoding.UTF8;
-            }
-
-            string decodedContent = null;
-            if (result.Content != null)
-                decodedContent = encoding.GetString(result.Content);
-
-            stringResult.Content = decodedContent;
-            logger.Debug(string.Format("WebClient({0}): Returning {1} => {2}", ClientType, result.Status, (result.IsRedirect ? result.RedirectingTo + " " : "") + (decodedContent == null ? "<NULL>" : decodedContent)));
-
-            if (stringResult.Headers.TryGetValue("server", out var server))
-            {
-                if (server[0] == "cloudflare-nginx")
-                    stringResult.Content = BrowserUtil.DecodeCloudFlareProtectedEmailFromHTML(stringResult.Content);
-            }
-            return stringResult;
-        }
-
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-        protected virtual async Task<WebClientByteResult> Run(WebRequest webRequest) => throw new NotImplementedException();
+        protected virtual async Task<WebResult> Run(WebRequest webRequest) => throw new NotImplementedException();
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
 
-        public abstract void Init();
+        public virtual void Init()
+        {
+            if (serverConfig.RuntimeSettings.IgnoreSslErrors == true)
+            {
+                logger.Info($"WebClient({ClientType}): Disabling certificate validation");
+                ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => { return true; };
+            }
+        }
+
 
         public virtual void OnCompleted() => throw new NotImplementedException();
 
@@ -175,7 +224,9 @@ namespace Jackett.Common.Utils.Clients
 
         public virtual void OnNext(ServerConfig value)
         {
-            // nothing by default
+            var newProxyUrl = serverConfig.GetProxyUrl();
+            if (webProxyUrl != newProxyUrl) // if proxy URL changed
+                InitProxy(serverConfig);
         }
 
         /**

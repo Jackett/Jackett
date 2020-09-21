@@ -9,26 +9,20 @@ using NLog;
 
 namespace Jackett.Test
 {
+
+    // Currently not used in any Unit tests. Leaving it for potential future testing purposes.
     public class TestWebClient : WebClient
     {
-        private readonly Dictionary<WebRequest, Func<WebRequest, WebClientByteResult>> byteCallbacks = new Dictionary<WebRequest, Func<WebRequest, WebClientByteResult>>();
-        private readonly Dictionary<WebRequest, Func<WebRequest, WebClientStringResult>> stringCallbacks = new Dictionary<WebRequest, Func<WebRequest, WebClientStringResult>>();
+        private readonly Dictionary<WebRequest, Func<WebRequest, WebResult>> _requestCallbacks = new Dictionary<WebRequest, Func<WebRequest, WebResult>>();
 
         public TestWebClient(IProcessService p, Logger l, IConfigurationService c, ServerConfig sc)
-            : base(p: p,
-                   l: l,
-                   c: c,
-                   sc: sc)
+            : base(p, l, c, sc)
         {
         }
 
-        public void RegisterByteCall(WebRequest req, Func<WebRequest, WebClientByteResult> f) => byteCallbacks.Add(req, f);
+        public void RegisterRequestCallback(WebRequest req, Func<WebRequest, WebResult> f) => _requestCallbacks.Add(req, f);
 
-        public void RegisterStringCall(WebRequest req, Func<WebRequest, WebClientStringResult> f) => stringCallbacks.Add(req, f);
-
-        public override Task<WebClientByteResult> GetBytes(WebRequest request) => Task.FromResult<WebClientByteResult>(byteCallbacks.Where(r => r.Key.Equals(request)).First().Value.Invoke(request));
-
-        public override Task<WebClientStringResult> GetString(WebRequest request) => Task.FromResult<WebClientStringResult>(stringCallbacks.Where(r => r.Key.Equals(request)).First().Value.Invoke(request));
+        public override Task<WebResult> GetResultAsync(WebRequest request) => Task.FromResult(_requestCallbacks.First(r => r.Key.Equals(request)).Value.Invoke(request));
 
         public override void Init()
         {

@@ -9,6 +9,7 @@ using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -85,11 +86,11 @@ namespace Jackett.Common.Indexers
             for (var page = 0; page < maxPages; page++)
             {
                 var searchUrl = string.Format(SearchUrl, page * MaxItemsPerPage, searchString);
-                var result = await RequestStringWithCookies(searchUrl, null, null, _apiHeaders);
+                var result = await WebRequestWithCookiesAsync(searchUrl, headers: _apiHeaders);
 
                 try
                 {
-                    var json = JsonConvert.DeserializeObject<dynamic>(result.Content);
+                    var json = JsonConvert.DeserializeObject<dynamic>(result.ContentString);
                     var parser = new HtmlParser();
                     var doc = parser.ParseDocument((string)json["contenido"]);
 
@@ -140,7 +141,7 @@ namespace Jackett.Common.Indexers
                 }
                 catch (Exception ex)
                 {
-                    OnParseError(result.Content, ex);
+                    OnParseError(result.ContentString, ex);
                 }
             }
 
@@ -149,19 +150,19 @@ namespace Jackett.Common.Indexers
 
         public override async Task<byte[]> Download(Uri link)
         {
-            var result = await RequestStringWithCookiesAndRetry(link.AbsoluteUri);
+            var result = await RequestWithCookiesAndRetryAsync(link.AbsoluteUri);
             if (SobrecargaUrl.Equals(result.RedirectingTo))
                 throw new Exception("El servidor se encuentra sobrecargado en estos momentos. / The server is currently overloaded.");
             try
             {
                 var parser = new HtmlParser();
-                var doc = parser.ParseDocument(result.Content);
+                var doc = parser.ParseDocument(result.ContentString);
                 var magnetLink = doc.QuerySelector("a[id=en_desc]").GetAttribute("href");
                 return Encoding.UTF8.GetBytes(magnetLink);
             }
             catch (Exception ex)
             {
-                OnParseError(result.Content, ex);
+                OnParseError(result.ContentString, ex);
             }
             return null;
         }

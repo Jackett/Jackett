@@ -79,10 +79,10 @@ namespace Jackett.Common.Indexers
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl, true);
 
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Cookies.Contains("pass=") && !result.Cookies.Contains("deleted"), () =>
+            await ConfigureIfOK(result.Cookies, result.ContentString != null && result.Cookies.Contains("pass=") && !result.Cookies.Contains("deleted"), () =>
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(result.Content);
+                var dom = parser.ParseDocument(result.ContentString);
                 var errorMessage = dom.QuerySelector("div.myFrame-content").InnerHtml;
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
@@ -119,15 +119,15 @@ namespace Jackett.Common.Indexers
             }
             searchUrl += "?" + queryCollection.GetQueryString();
 
-            var response = await RequestStringWithCookies(searchUrl);
+            var response = await WebRequestWithCookiesAsync(searchUrl);
             if (response.IsRedirect || response.Cookies != null && response.Cookies.Contains("pass=deleted;"))
             {
                 // re-login
                 await ApplyConfiguration(null);
-                response = await RequestStringWithCookies(searchUrl);
+                response = await WebRequestWithCookiesAsync(searchUrl);
             }
 
-            var results = response.Content;
+            var results = response.ContentString;
             try
             {
                 var parser = new HtmlParser();

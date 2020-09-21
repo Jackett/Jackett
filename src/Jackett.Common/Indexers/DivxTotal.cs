@@ -100,15 +100,15 @@ namespace Jackett.Common.Indexers
             do
             {
                 var url = SiteLink + "page/" + page + "/?" + qc.GetQueryString();
-                var result = await RequestStringWithCookies(url);
+                var result = await WebRequestWithCookiesAsync(url);
 
                 if (result.Status != HttpStatusCode.OK)
-                    throw new ExceptionWithConfigData(result.Content, configData);
+                    throw new ExceptionWithConfigData(result.ContentString, configData);
 
                 try
                 {
                     var searchResultParser = new HtmlParser();
-                    var doc = searchResultParser.ParseDocument(result.Content);
+                    var doc = searchResultParser.ParseDocument(result.ContentString);
 
                     var table = doc.QuerySelector("table.table");
                     if (table == null)
@@ -136,7 +136,7 @@ namespace Jackett.Common.Indexers
                 }
                 catch (Exception ex)
                 {
-                    OnParseError(result.Content, ex);
+                    OnParseError(result.ContentString, ex);
                 }
 
                 page++; // update page number
@@ -153,13 +153,13 @@ namespace Jackett.Common.Indexers
             // for other categories we have to do another step
             if (!downloadUrl.Contains(DownloadLink))
             {
-                var result = await RequestStringWithCookies(downloadUrl);
+                var result = await WebRequestWithCookiesAsync(downloadUrl);
 
                 if (result.Status != HttpStatusCode.OK)
-                    throw new ExceptionWithConfigData(result.Content, configData);
+                    throw new ExceptionWithConfigData(result.ContentString, configData);
 
                 var searchResultParser = new HtmlParser();
-                var doc = searchResultParser.ParseDocument(result.Content);
+                var doc = searchResultParser.ParseDocument(result.ContentString);
                 downloadUrl = GetDownloadLink(doc);
             }
             var content = await base.Download(new Uri(downloadUrl));
@@ -205,13 +205,13 @@ namespace Jackett.Common.Indexers
         private async Task ParseSeriesRelease(ICollection<ReleaseInfo> releases, TorznabQuery query,
             string commentsLink, string cat, DateTime publishDate)
         {
-            var result = await RequestStringWithCookies(commentsLink);
+            var result = await WebRequestWithCookiesAsync(commentsLink);
 
             if (result.Status != HttpStatusCode.OK)
-                throw new ExceptionWithConfigData(result.Content, configData);
+                throw new ExceptionWithConfigData(result.ContentString, configData);
 
             var searchResultParser = new HtmlParser();
-            var doc = searchResultParser.ParseDocument(result.Content);
+            var doc = searchResultParser.ParseDocument(result.ContentString);
 
             var tables = doc.QuerySelectorAll("table.table");
             foreach (var table in tables)

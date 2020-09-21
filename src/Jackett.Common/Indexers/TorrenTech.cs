@@ -63,9 +63,9 @@ namespace Jackett.Common.Indexers
             };
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl, true);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("Logged in as: "), () =>
+            await ConfigureIfOK(result.Cookies, result.ContentString != null && result.ContentString.Contains("Logged in as: "), () =>
             {
-                var errorMessage = result.Content;
+                var errorMessage = result.ContentString;
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
             return IndexerConfigurationStatus.RequiresTesting;
@@ -76,7 +76,7 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();
 
-            WebClientStringResult results = null;
+            WebResult results = null;
             var queryCollection = new NameValueCollection
             {
                 { "act", "search" },
@@ -100,17 +100,17 @@ namespace Jackett.Common.Indexers
             }
 
             var searchUrl = IndexUrl + "?" + queryCollection.GetQueryString();
-            results = await RequestStringWithCookies(searchUrl);
+            results = await WebRequestWithCookiesAsync(searchUrl);
             if (results.IsRedirect && results.RedirectingTo.Contains("CODE=show"))
             {
-                results = await RequestStringWithCookies(results.RedirectingTo);
+                results = await WebRequestWithCookiesAsync(results.RedirectingTo);
             }
             try
             {
                 var RowsSelector = "div.borderwrap:has(div.maintitle) > table > tbody > tr:has(a[href*=\"index.php?showtopic=\"])";
 
                 var SearchResultParser = new HtmlParser();
-                var SearchResultDocument = SearchResultParser.ParseDocument(results.Content);
+                var SearchResultDocument = SearchResultParser.ParseDocument(results.ContentString);
                 var Rows = SearchResultDocument.QuerySelectorAll(RowsSelector);
                 foreach (var Row in Rows)
                 {
@@ -195,7 +195,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return releases;
@@ -203,8 +203,8 @@ namespace Jackett.Common.Indexers
 
         public override async Task<byte[]> Download(Uri link)
         {
-            var response = await RequestStringWithCookies(link.ToString());
-            var results = response.Content;
+            var response = await WebRequestWithCookiesAsync(link.ToString());
+            var results = response.ContentString;
             var SearchResultParser = new HtmlParser();
             var SearchResultDocument = SearchResultParser.ParseDocument(results);
             var downloadSelector = "a[title=\"Download attachment\"]";

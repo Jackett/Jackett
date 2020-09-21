@@ -68,6 +68,8 @@ caps:
     - {id: 64, cat: Books/Magazines, desc: "Livres Magazines"}
     - {id: 65, cat: Books/Comics, desc: "Livres Bandes Dessinées"}
     - {id: 66, cat: Books/Other, desc: "Livres Multi-Format"}
+    - {id: 68, cat: PC/0day, desc: "Logiciels Windows"}
+    - {id: 69, cat: PC/Mac, desc: "Logiciels Mac"}
     - {id: 71, cat: TV/Other, desc: "Spectacles Humour"}
     - {id: 72, cat: TV/Other, desc: "Spectacles Live"}
     - {id: 84, cat: TV/Other, desc: "Théâtre"}
@@ -81,6 +83,37 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: multilang
+    type: checkbox
+    label: Replace MULTI by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTI by this language
+    default: FRENCH
+    options:
+      FRENCH: "FRENCH"
+      MULTI.FRENCH: "MULTI.FRENCH"
+      ENGLISH: "ENGLISH"
+      MULTI.ENGLISH: "MULTI.ENGLISH"
+      VOSTFR: "VOSTFR"
+      MULTI.VOSTFR: "MULTI.VOSTFR"
+  - name: vostfr
+    type: checkbox
+    label: Replace VOSTFR with ENGLISH
+    default: false
 
 login:
   # https://lesaloonv2-0.net/yupy_login.php
@@ -114,27 +147,47 @@ search:
     - path: index.php
   inputs:
     page: torrents
-    search: "{{if .Keywords}}{{.Keywords}}{{else}}{{end}}"
+    search: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ end }}"
     parentcategory: 0
     category: 0
     genre: 0
-    options: 0
+    # 0 name, 1 name & descr, 2 desc, 3 uploaders, 5 gold, 6 silver, 7 bronze
+    options: "{{ if .Config.freeleech }}5{{ else }}0{{ end }}"
+    # 0 all, 1 active, 2 dead
     active: 0
+    # does not support imdbid searching and does not have imdb links in results
 
   rows:
     selector: table.torrentlist tbody tr:has(a[href^="index.php?page=torrent-details"])
+
   fields:
-    title:
-      selector: td a[href^="index.php?page=torrent-details"]
-    details:
-      selector: td a[href^="index.php?page=torrent-details"]
-      attribute: href
     category:
       selector: td a[href^="index.php?page=torrents&category="]
       attribute: href
       filters:
         - name: querystring
           args: category
+    title_phase1:
+      selector: td a[href^="index.php?page=torrent-details"]
+    title_multilang:
+      text: "{{ .Result.title_phase1 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)(\\smulti\\s)", " {{ .Config.multilanguage }} "]
+    title_phase2:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    title_vostfr:
+      text: "{{ .Result.title_phase2 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)(\\svostfr\\s)", " ENGLISH "]
+        - name: re_replace
+          args: ["(?i)(\\ssubfrench\\s)", " ENGLISH "]
+    title:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
+    details:
+      selector: td a[href^="index.php?page=torrent-details"]
+      attribute: href
     download:
       selector: td a[href^="download.php?id="]
       attribute: href
@@ -160,12 +213,13 @@ search:
       selector: td:nth-child(12)
     downloadvolumefactor:
       case:
-        img[src="images/freeleech.gif"]: "0"
-        img[src="images/gold.gif"]: "0"
-        img[src="images/silver.gif"]: "0.5"
-        img[src="images/bronze.gif"]: "0.25"
-        "*": "1"
+        img[src="images/freeleech.gif"]: 0
+        img[src="images/gold.gif"]: 0
+        img[src="images/silver.gif"]: 0.5
+        img[src="images/bronze.gif"]: 0.25
+        "*": 1
     uploadvolumefactor:
       case:
 #          img[src="images/bronze.gif"]: "2" # its in the rules as x2up, but all the bronze i've see so far are just 1/4 download in the title.
-        "*": "1"
+        "*": 1
+# engine n/a

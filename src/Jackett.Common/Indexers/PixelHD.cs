@@ -57,9 +57,9 @@ namespace Jackett.Common.Indexers
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
+            var loginPage = await WebRequestWithCookiesAsync(LoginUrl, string.Empty);
             var LoginParser = new HtmlParser();
-            var LoginDocument = LoginParser.ParseDocument(loginPage.Content);
+            var LoginDocument = LoginParser.ParseDocument(loginPage.ContentString);
 
             configData.CaptchaCookie.Value = loginPage.Cookies;
 
@@ -69,8 +69,8 @@ namespace Jackett.Common.Indexers
                 var catchaInput = LoginDocument.QuerySelector("input[maxlength=\"6\"]");
                 input_captcha = catchaInput.GetAttribute("name");
 
-                var captchaImage = await RequestBytesWithCookies(SiteLink + catchaImg.GetAttribute("src"), loginPage.Cookies, RequestType.GET, LoginUrl);
-                configData.CaptchaImage.Value = captchaImage.Content;
+                var captchaImage = await WebRequestWithCookiesAsync(SiteLink + catchaImg.GetAttribute("src"), loginPage.Cookies, RequestType.GET, LoginUrl);
+                configData.CaptchaImage.Value = captchaImage.ContentBytes;
             }
             else
             {
@@ -103,10 +103,10 @@ namespace Jackett.Common.Indexers
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, configData.CaptchaCookie.Value, true);
 
-            await ConfigureIfOK(result.Cookies, result.Content.Contains("logout.php"), () =>
+            await ConfigureIfOK(result.Cookies, result.ContentString.Contains("logout.php"), () =>
            {
                var LoginParser = new HtmlParser();
-               var LoginDocument = LoginParser.ParseDocument(result.Content);
+               var LoginDocument = LoginParser.ParseDocument(result.ContentString);
                var errorMessage = LoginDocument.QuerySelector("span.warning[id!=\"no-cookies\"]:has(br)").TextContent;
                throw new ExceptionWithConfigData(errorMessage, configData);
            });
@@ -137,18 +137,18 @@ namespace Jackett.Common.Indexers
 
             var searchUrl = BrowseUrl + "?" + queryCollection.GetQueryString();
 
-            var results = await RequestStringWithCookies(searchUrl);
+            var results = await WebRequestWithCookiesAsync(searchUrl);
             if (results.IsRedirect)
             {
                 // re login
                 await GetConfigurationForSetup();
                 await ApplyConfiguration(null);
-                results = await RequestStringWithCookies(searchUrl);
+                results = await WebRequestWithCookiesAsync(searchUrl);
             }
 
             var IMDBRegEx = new Regex(@"tt(\d+)", RegexOptions.Compiled);
             var hParser = new HtmlParser();
-            var ResultDocument = hParser.ParseDocument(results.Content);
+            var ResultDocument = hParser.ParseDocument(results.ContentString);
             try
             {
                 var Groups = ResultDocument.QuerySelectorAll("div.browsePoster");
@@ -207,7 +207,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return releases;

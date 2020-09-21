@@ -65,11 +65,11 @@ namespace Jackett.Common.Indexers
 
             // Get cookie
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl);
-            await ConfigureIfOK(result.Cookies, result.Content?.Contains("glyphicon-log-out") == true,
+            await ConfigureIfOK(result.Cookies, result.ContentString?.Contains("glyphicon-log-out") == true,
                                 () => throw new ExceptionWithConfigData("The username and password entered do not match.", configData));
-            var rssProfile = await RequestStringWithCookiesAndRetry(RSSProfile);
+            var rssProfile = await RequestWithCookiesAndRetryAsync(RSSProfile);
             var parser = new HtmlParser();
-            var rssDom = parser.ParseDocument(rssProfile.Content);
+            var rssDom = parser.ParseDocument(rssProfile.ContentString);
             configData.RSSKey.Value = rssDom.QuerySelector(".col-sm-9:nth-of-type(1)").TextContent.Trim();
             if (string.IsNullOrWhiteSpace(configData.RSSKey.Value))
                 throw new ExceptionWithConfigData("Failed to find RSS key.", configData);
@@ -81,7 +81,7 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
             var queryString = query.GetQueryString();
-            WebClientStringResult results = null;
+            WebResult results = null;
             var searchUrls = new List<string>();
             if (!string.IsNullOrWhiteSpace(query.SanitizedSearchTerm))
             {
@@ -89,10 +89,11 @@ namespace Jackett.Common.Indexers
                 {
                     {"search", query.SanitizedSearchTerm}
                 };
-                results = await PostDataWithCookiesAndRetry(SearchUrl, pairs, null, TorrentsUrl);
+                results = await RequestWithCookiesAndRetryAsync(
+                    SearchUrl, null, RequestType.POST, TorrentsUrl, pairs);
                 results = await ReloginIfNecessary(results);
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(results.Content);
+                var dom = parser.ParseDocument(results.ContentString);
                 var shows = dom.QuerySelectorAll("div.show[data-id]");
                 foreach (var show in shows)
                 {
@@ -107,10 +108,10 @@ namespace Jackett.Common.Indexers
             {
                 foreach (var searchUrl in searchUrls)
                 {
-                    results = await RequestStringWithCookies(searchUrl);
+                    results = await WebRequestWithCookiesAsync(searchUrl);
                     results = await ReloginIfNecessary(results);
                     var parser = new HtmlParser();
-                    var dom = parser.ParseDocument(results.Content);
+                    var dom = parser.ParseDocument(results.ContentString);
                     var rows = dom.QuerySelectorAll(
                         string.IsNullOrWhiteSpace(queryString) ? "#torrent-table tr" : "table tr");
                     var globalFreeleech =
@@ -161,7 +162,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
             foreach (var release in releases)
                 release.Category = release.Title.Contains("1080p") || release.Title.Contains("720p")
@@ -170,14 +171,14 @@ namespace Jackett.Common.Indexers
             return releases;
         }
 
-        private async Task<WebClientStringResult> ReloginIfNecessary(WebClientStringResult response)
+        private async Task<WebResult> ReloginIfNecessary(WebResult response)
         {
-            if (response.Content.Contains("onclick=\"document.location='logout'\""))
+            if (response.ContentString.Contains("onclick=\"document.location='logout'\""))
                 return response;
 
             await ApplyConfiguration(null);
             response.Request.Cookies = CookieHeader;
-            return await webclient.GetString(response.Request);
+            return await webclient.GetResultAsync(response.Request);
         }
     }
 }

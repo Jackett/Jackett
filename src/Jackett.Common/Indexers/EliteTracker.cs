@@ -151,11 +151,11 @@ namespace Jackett.Common.Indexers
                 { "password", configData.Password.Value }
             };
 
-            var result = await PostDataWithCookies(LoginUrl, pairs, "");
+            var result = await WebRequestWithCookiesAsync(LoginUrl, "", RequestType.POST, data: pairs);
 
             await ConfigureIfOK(result.Cookies, result.Cookies != null, () =>
            {
-               var errorMessage = result.Content;
+               var errorMessage = result.ContentString;
                throw new ExceptionWithConfigData(errorMessage, configData);
            });
 
@@ -174,12 +174,12 @@ namespace Jackett.Common.Indexers
                 {"category", "0"} // multi cat search not supported
             };
 
-            var results = await PostDataWithCookies(BrowseUrl, pairs);
+            var results = await WebRequestWithCookiesAsync(BrowseUrl, method: RequestType.POST, data: pairs);
             if (results.IsRedirect)
             {
                 // re-login
                 await ApplyConfiguration(null);
-                results = await PostDataWithCookies(BrowseUrl, pairs);
+                results = await WebRequestWithCookiesAsync(BrowseUrl, method: RequestType.POST, data: pairs);
             }
 
             try
@@ -187,7 +187,7 @@ namespace Jackett.Common.Indexers
                 var lastDate = DateTime.Now;
 
                 var parser = new HtmlParser();
-                var doc = parser.ParseDocument(results.Content);
+                var doc = parser.ParseDocument(results.ContentString);
                 var rows = doc.QuerySelectorAll("table[id='sortabletable'] > tbody > tr");
 
                 foreach (var row in rows.Skip(1))
@@ -281,7 +281,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return releases;

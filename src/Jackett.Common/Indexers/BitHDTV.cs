@@ -63,11 +63,11 @@ namespace Jackett.Common.Indexers
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
             var result = configData;
-            var loginPage = await RequestStringWithCookies(LoginUrl, configData.CookieHeader.Value);
+            var loginPage = await WebRequestWithCookiesAsync(LoginUrl, configData.CookieHeader.Value);
             if (loginPage.IsRedirect)
                 return result; // already logged in
             var parser = new HtmlParser();
-            var cq = parser.ParseDocument(loginPage.Content);
+            var cq = parser.ParseDocument(loginPage.ContentString);
             var recaptchaSiteKey = cq.QuerySelector(".g-recaptcha")?.GetAttribute("data-sitekey");
             result.CookieHeader.Value = loginPage.Cookies;
             result.Captcha.SiteKey = recaptchaSiteKey;
@@ -105,10 +105,10 @@ namespace Jackett.Common.Indexers
             }
 
             var response = await RequestLoginAndFollowRedirect(TakeLoginUrl, pairs, null, true, referer: SiteLink);
-            await ConfigureIfOK(response.Cookies, response.Content?.Contains("logout.php") == true, () =>
+            await ConfigureIfOK(response.Cookies, response.ContentString?.Contains("logout.php") == true, () =>
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(response.Content);
+                var dom = parser.ParseDocument(response.ContentString);
                 var errorMessage = dom.QuerySelector("table.detail td.text").FirstChild.TextContent.Trim();
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
@@ -122,17 +122,17 @@ namespace Jackett.Common.Indexers
             {
                 {"cat", MapTorznabCapsToTrackers(query, true).FirstIfSingleOrDefault("0")}
             };
-            var results = new List<WebClientStringResult>();
+            var results = new List<WebResult>();
             var search = new UriBuilder(SearchUrl);
             if (query.IsImdbQuery)
             {
                 qc.Add("search", query.ImdbID);
                 qc.Add("options", "4"); //Search URL field for IMDB link
                 search.Query = qc.GetQueryString();
-                results.Add(await RequestStringWithCookiesAndRetry(search.ToString()));
+                results.Add(await RequestWithCookiesAndRetryAsync(search.ToString()));
                 qc["Options"] = "1"; //Search Title and Description
                 search.Query = qc.GetQueryString();
-                results.Add(await RequestStringWithCookiesAndRetry(search.ToString()));
+                results.Add(await RequestWithCookiesAndRetryAsync(search.ToString()));
             }
             else
             {
@@ -140,14 +140,14 @@ namespace Jackett.Common.Indexers
                 qc.Add("search", query.GetQueryString());
                 qc.Add("options", "0"); //Search Title Only
                 search.Query = qc.GetQueryString();
-                results.Add(await RequestStringWithCookiesAndRetry(search.ToString()));
+                results.Add(await RequestWithCookiesAndRetryAsync(search.ToString()));
             }
 
             var parser = new HtmlParser();
             foreach (var result in results)
                 try
                 {
-                    var dom = parser.ParseDocument(result.Content);
+                    var dom = parser.ParseDocument(result.ContentString);
                     foreach (var child in dom.QuerySelectorAll("#needseed"))
                         child.Remove();
                     var table = dom.QuerySelector("table[align=center] + br + table > tbody");
@@ -206,7 +206,7 @@ namespace Jackett.Common.Indexers
                 }
                 catch (Exception ex)
                 {
-                    OnParseError(result.Content, ex);
+                    OnParseError(result.ContentString, ex);
                 }
 
             return releases;

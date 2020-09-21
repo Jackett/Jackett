@@ -10,6 +10,7 @@ using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -74,8 +75,9 @@ namespace Jackett.Common.Indexers.Abstract
                 { "password", configData.Password.Value.Trim() }
             };
             var jsonData = JsonConvert.SerializeObject(body);
-            var result = await PostDataWithCookies(LoginUrl, null, headers: ApiHeaders, rawbody: jsonData);
-            var json = JObject.Parse(result.Content);
+            var result = await WebRequestWithCookiesAsync(
+                LoginUrl, method: RequestType.POST, headers: ApiHeaders, rawbody: jsonData);
+            var json = JObject.Parse(result.ContentString);
             _token = json.Value<string>("token");
             if (_token == null)
                 throw new Exception(json.Value<string>("message"));
@@ -105,18 +107,18 @@ namespace Jackett.Common.Indexers.Abstract
                 await RenewalTokenAsync();
 
             var searchUrl = SearchUrl + "?" + qc.GetQueryString();
-            var response = await RequestStringWithCookies(searchUrl, headers: GetSearchHeaders());
+            var response = await WebRequestWithCookiesAsync(searchUrl, headers: GetSearchHeaders());
             if (response.Status == HttpStatusCode.Unauthorized)
             {
                 await RenewalTokenAsync(); // re-login
-                response = await RequestStringWithCookies(searchUrl, headers: GetSearchHeaders());
+                response = await WebRequestWithCookiesAsync(searchUrl, headers: GetSearchHeaders());
             }
             else if (response.Status != HttpStatusCode.OK)
-                throw new Exception($"Unknown error in search: {response.Content}");
+                throw new Exception($"Unknown error in search: {response.ContentString}");
 
             try
             {
-                var rows = JArray.Parse(response.Content);
+                var rows = JArray.Parse(response.ContentString);
                 foreach (var row in rows)
                 {
                     var id = row.Value<string>("id");
@@ -160,22 +162,22 @@ namespace Jackett.Common.Indexers.Abstract
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
             return releases;
         }
 
         public override async Task<byte[]> Download(Uri link)
         {
-            var response = await RequestBytesWithCookies(link.ToString(), headers: GetSearchHeaders());
+            var response = await WebRequestWithCookiesAsync(link.ToString(), headers: GetSearchHeaders());
             if (response.Status == HttpStatusCode.Unauthorized)
             {
                 await RenewalTokenAsync();
-                response = await RequestBytesWithCookies(link.ToString(), headers: GetSearchHeaders());
+                response = await WebRequestWithCookiesAsync(link.ToString(), headers: GetSearchHeaders());
             }
             else if (response.Status != HttpStatusCode.OK)
-                throw new Exception($"Unknown error in download: {response.Content}");
-            return response.Content;
+                throw new Exception($"Unknown error in download: {response.ContentBytes}");
+            return response.ContentBytes;
         }
 
         private Dictionary<string, string> GetSearchHeaders() => new Dictionary<string, string>

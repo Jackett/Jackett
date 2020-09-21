@@ -392,11 +392,11 @@ namespace Jackett.Common.Indexers
                 .Replace("(", "%28")
                 .Replace(")", "%29")
                 .Replace("'", "%27");
-            var response = await RequestBytesWithCookiesAndRetry(requestLink, null, method, requestLink);
+            var response = await RequestWithCookiesAndRetryAsync(requestLink, null, method, requestLink);
 
             // if referer link is provied it will be used
             if (refererlink != null)
-                response = await RequestBytesWithCookiesAndRetry(requestLink, null, method, refererlink);
+                response = await RequestWithCookiesAndRetryAsync(requestLink, null, method, refererlink);
             if (response.IsRedirect)
             {
                 await FollowIfRedirect(response);
@@ -404,100 +404,49 @@ namespace Jackett.Common.Indexers
             if (response.Status != System.Net.HttpStatusCode.OK && response.Status != System.Net.HttpStatusCode.Continue && response.Status != System.Net.HttpStatusCode.PartialContent)
             {
                 logger.Error("Failed download cookies: " + CookieHeader);
-                if (response.Content != null)
-                    logger.Error("Failed download response:\n" + Encoding.UTF8.GetString(response.Content));
+                if (response.ContentBytes != null)
+                    logger.Error("Failed download response:\n" + Encoding.UTF8.GetString(response.ContentBytes));
                 throw new Exception($"Remote server returned {response.Status.ToString()}" + (response.IsRedirect ? " => " + response.RedirectingTo : ""));
             }
 
-            return response.Content;
+            return response.ContentBytes;
         }
 
-        protected async Task<WebClientByteResult> RequestBytesWithCookiesAndRetry(string url, string cookieOverride = null, RequestType method = RequestType.GET, string referer = null, IEnumerable<KeyValuePair<string, string>> data = null)
+        protected async Task<WebResult> RequestWithCookiesAndRetryAsync(
+            string url, string cookieOverride = null, RequestType method = RequestType.GET,
+            string referer = null, IEnumerable<KeyValuePair<string, string>> data = null,
+            Dictionary<string, string> headers = null, string rawbody = null, bool? emulateBrowser = null)
         {
             Exception lastException = null;
             for (var i = 0; i < 3; i++)
             {
                 try
                 {
-                    return await RequestBytesWithCookies(url, cookieOverride, method, referer, data);
+                    return await WebRequestWithCookiesAsync(
+                        url, cookieOverride, method, referer, data, headers, rawbody, emulateBrowser);
                 }
                 catch (Exception e)
                 {
-                    logger.Error(e, string.Format("On attempt {0} downloading from {1}: {2}", (i + 1), DisplayName, e.Message));
+                    logger.Error(
+                        e, string.Format("On attempt {0} downloading from {1}: {2}", (i + 1), DisplayName, e.Message));
                     lastException = e;
                 }
+
                 await Task.Delay(500);
             }
 
             throw lastException;
         }
 
-        protected async Task<WebClientStringResult> RequestStringWithCookies(string url, string cookieOverride = null, string referer = null, Dictionary<string, string> headers = null)
+        protected virtual async Task<WebResult> WebRequestWithCookiesAsync(
+            string url, string cookieOverride = null, RequestType method = RequestType.GET,
+            string referer = null, IEnumerable<KeyValuePair<string, string>> data = null,
+            Dictionary<string, string> headers = null, string rawbody = null, bool? emulateBrowser = null)
         {
-            var request = new Utils.Clients.WebRequest()
-            {
-                Url = url,
-                Type = RequestType.GET,
-                Cookies = CookieHeader,
-                Referer = referer,
-                Headers = headers,
-                Encoding = Encoding
-            };
-
-            if (cookieOverride != null)
-                request.Cookies = cookieOverride;
-            var result = await webclient.GetString(request);
-            CheckTrackerDown(result);
-            UpdateCookieHeader(result.Cookies, cookieOverride);
-            return result;
-        }
-
-        protected async Task<WebClientStringResult> RequestStringWithCookiesAndRetry(string url, string cookieOverride = null, string referer = null, Dictionary<string, string> headers = null)
-        {
-            Exception lastException = null;
-            for (var i = 0; i < 3; i++)
-            {
-                try
-                {
-                    return await RequestStringWithCookies(url, cookieOverride, referer, headers);
-                }
-                catch (Exception e)
-                {
-                    logger.Error(string.Format("On attempt {0} checking for results from {1}: {2}", (i + 1), DisplayName, e.Message));
-                    lastException = e;
-                }
-                await Task.Delay(500);
-            }
-
-            throw lastException;
-        }
-
-        protected virtual async Task<WebClientByteResult> RequestBytesWithCookies(string url, string cookieOverride = null, RequestType method = RequestType.GET, string referer = null, IEnumerable<KeyValuePair<string, string>> data = null, Dictionary<string, string> headers = null)
-        {
-            var request = new Utils.Clients.WebRequest()
+            var request = new WebRequest
             {
                 Url = url,
                 Type = method,
-                Cookies = cookieOverride ?? CookieHeader,
-                PostData = data,
-                Referer = referer,
-                Headers = headers,
-                Encoding = Encoding
-            };
-
-            if (cookieOverride != null)
-                request.Cookies = cookieOverride;
-            var result = await webclient.GetBytes(request);
-            UpdateCookieHeader(result.Cookies, cookieOverride);
-            return result;
-        }
-
-        protected async Task<WebClientStringResult> PostDataWithCookies(string url, IEnumerable<KeyValuePair<string, string>> data, string cookieOverride = null, string referer = null, Dictionary<string, string> headers = null, string rawbody = null, bool? emulateBrowser = null)
-        {
-            var request = new Utils.Clients.WebRequest()
-            {
-                Url = url,
-                Type = RequestType.POST,
                 Cookies = cookieOverride ?? CookieHeader,
                 PostData = data,
                 Referer = referer,
@@ -508,33 +457,13 @@ namespace Jackett.Common.Indexers
 
             if (emulateBrowser.HasValue)
                 request.EmulateBrowser = emulateBrowser.Value;
-            var result = await webclient.GetString(request);
-            CheckTrackerDown(result);
+            var result = await webclient.GetResultAsync(request);
+            CheckSiteDown(result);
             UpdateCookieHeader(result.Cookies, cookieOverride);
             return result;
         }
 
-        protected async Task<WebClientStringResult> PostDataWithCookiesAndRetry(string url, IEnumerable<KeyValuePair<string, string>> data, string cookieOverride = null, string referer = null, Dictionary<string, string> headers = null, string rawbody = null, bool? emulateBrowser = null)
-        {
-            Exception lastException = null;
-            for (var i = 0; i < 3; i++)
-            {
-                try
-                {
-                    return await PostDataWithCookies(url, data, cookieOverride, referer, headers, rawbody, emulateBrowser);
-                }
-                catch (Exception e)
-                {
-                    logger.Error(string.Format("On attempt {0} checking for results from {1}: {2}", (i + 1), DisplayName, e.Message));
-                    lastException = e;
-                }
-                await Task.Delay(500);
-            }
-
-            throw lastException;
-        }
-
-        protected async Task<WebClientStringResult> RequestLoginAndFollowRedirect(string url, IEnumerable<KeyValuePair<string, string>> data, string cookies, bool returnCookiesFromFirstCall, string redirectUrlOverride = null, string referer = null, bool accumulateCookies = false)
+        protected async Task<WebResult> RequestLoginAndFollowRedirect(string url, IEnumerable<KeyValuePair<string, string>> data, string cookies, bool returnCookiesFromFirstCall, string redirectUrlOverride = null, string referer = null, bool accumulateCookies = false)
         {
             var request = new Utils.Clients.WebRequest()
             {
@@ -545,8 +474,8 @@ namespace Jackett.Common.Indexers
                 PostData = data,
                 Encoding = Encoding
             };
-            var response = await webclient.GetString(request);
-            CheckTrackerDown(response);
+            var response = await webclient.GetResultAsync(request);
+            CheckSiteDown(response);
             if (accumulateCookies)
             {
                 response.Cookies = ResolveCookies((request.Cookies == null ? "" : request.Cookies + " ") + response.Cookies);
@@ -566,7 +495,7 @@ namespace Jackett.Common.Indexers
             return response;
         }
 
-        protected void CheckTrackerDown(WebClientStringResult response)
+        protected static void CheckSiteDown(WebResult response)
         {
             if (response.Status == System.Net.HttpStatusCode.BadGateway
                 || response.Status == System.Net.HttpStatusCode.GatewayTimeout
@@ -578,23 +507,13 @@ namespace Jackett.Common.Indexers
                 throw new Exception("Request to " + response.Request.Url + " failed (Error " + response.Status + ") - The tracker seems to be down.");
             }
 
-            if (response.Status == System.Net.HttpStatusCode.Forbidden && response.Content.Contains("<span data-translate=\"complete_sec_check\">Please complete the security check to access</span>"))
+            if (response.Status == System.Net.HttpStatusCode.Forbidden && response.ContentString.Contains("<span data-translate=\"complete_sec_check\">Please complete the security check to access</span>"))
             {
                 throw new Exception("Request to " + response.Request.Url + " failed (Error " + response.Status + ") - The page is protected by an Cloudflare reCaptcha. The page is in aggressive DDoS mitigation mode or your IP might be blacklisted (e.g. in case of shared VPN IPs). There's no easy way of making it usable with Jackett.");
             }
         }
 
-        protected async Task FollowIfRedirect(WebClientStringResult response, string referrer = null, string overrideRedirectUrl = null, string overrideCookies = null, bool accumulateCookies = false)
-        {
-            var byteResult = new WebClientByteResult();
-            // Map to byte
-            Mapper.Map(response, byteResult);
-            await FollowIfRedirect(byteResult, referrer, overrideRedirectUrl, overrideCookies, accumulateCookies);
-            // Map to string
-            Mapper.Map(byteResult, response);
-        }
-
-        protected async Task FollowIfRedirect(WebClientByteResult response, string referrer = null, string overrideRedirectUrl = null, string overrideCookies = null, bool accumulateCookies = false)
+        protected async Task FollowIfRedirect(WebResult response, string referrer = null, string overrideRedirectUrl = null, string overrideCookies = null, bool accumulateCookies = false)
         {
             // Follow up  to 5 redirects
             for (var i = 0; i < 5; i++)
@@ -639,7 +558,7 @@ namespace Jackett.Common.Indexers
             }
         }
 
-        private async Task DoFollowIfRedirect(WebClientByteResult incomingResponse, string referrer = null, string overrideRedirectUrl = null, string overrideCookies = null, bool accumulateCookies = false)
+        private async Task DoFollowIfRedirect(WebResult incomingResponse, string referrer = null, string overrideRedirectUrl = null, string overrideCookies = null, bool accumulateCookies = false)
         {
             if (incomingResponse.IsRedirect)
             {
@@ -653,7 +572,7 @@ namespace Jackett.Common.Indexers
                     redirRequestCookies = (overrideCookies != null ? overrideCookies : "");
                 }
                 // Do redirect
-                var redirectedResponse = await webclient.GetBytes(new WebRequest()
+                var redirectedResponse = await webclient.GetResultAsync(new WebRequest()
                 {
                     Url = overrideRedirectUrl ?? incomingResponse.RedirectingTo,
                     Referer = referrer,

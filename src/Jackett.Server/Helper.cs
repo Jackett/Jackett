@@ -73,23 +73,6 @@ namespace Jackett.Server
             // TODO: fix deprecation warning (remove #pragma to see the build warning)
             Mapper.Initialize(cfg =>
             {
-                cfg.CreateMap<WebClientByteResult, WebClientStringResult>().ForMember(x => x.Content, opt => opt.Ignore()).AfterMap((be, str) =>
-                {
-                    var encoding = be.Request.Encoding ?? Encoding.UTF8;
-                    str.Content = encoding.GetString(be.Content);
-                });
-
-                cfg.CreateMap<WebClientStringResult, WebClientByteResult>().ForMember(x => x.Content, opt => opt.Ignore()).AfterMap((str, be) =>
-                {
-                    if (!string.IsNullOrEmpty(str.Content))
-                    {
-                        var encoding = str.Request.Encoding ?? Encoding.UTF8;
-                        be.Content = encoding.GetBytes(str.Content);
-                    }
-                });
-
-                cfg.CreateMap<WebClientStringResult, WebClientStringResult>();
-                cfg.CreateMap<WebClientByteResult, WebClientByteResult>();
                 cfg.CreateMap<ReleaseInfo, ReleaseInfo>();
 
                 cfg.CreateMap<ReleaseInfo, TrackerCacheResult>().AfterMap((r, t) =>

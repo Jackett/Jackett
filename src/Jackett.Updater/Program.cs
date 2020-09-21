@@ -292,6 +292,7 @@ namespace Jackett.Updater
                 "Definitions/blubits.yml",
                 "Definitions/bt-scene.yml",
                 "Definitions/btbit.yml",
+                "Definitions/bteye.yml",
                 "Definitions/btkitty.yml",
                 "Definitions/btstornet.yml",
                 "Definitions/btxpress.yml",
@@ -347,6 +348,7 @@ namespace Jackett.Updater
                 "Definitions/megabliz.yml",
                 "Definitions/metal-iplay-ro.yml", // renamed to romanianmetaltorrents
                 "Definitions/mkvcage.yml",
+                "Definitions/moecat.yml",
                 "Definitions/music-master.yml",
                 "Definitions/nachtwerk.yml",
                 "Definitions/nexttorrent.yml",

@@ -188,8 +188,8 @@ namespace Jackett.Common.Indexers
                 {
                     {"Authorization", "Basic " + auth}
                 };
-                var response = await RequestStringWithCookies(searchUrl, headers: headers);
-                return response.Content;
+                var response = await WebRequestWithCookiesAsync(searchUrl, headers: headers);
+                return response.ContentString;
             }
             catch (Exception inner)
             {

@@ -132,17 +132,17 @@ namespace Jackett.Common.Indexers
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var loginPage = await RequestStringWithCookies(LandingUrl);
+            var loginPage = await WebRequestWithCookiesAsync(LandingUrl);
             var parser = new HtmlParser();
-            var dom = parser.ParseDocument(loginPage.Content);
+            var dom = parser.ParseDocument(loginPage.ContentString);
             var qCaptchaImg = dom.QuerySelector("img#regimage");
             if (qCaptchaImg != null)
             {
                 var captchaUrl = qCaptchaImg.GetAttribute("src");
-                var captchaImageResponse = await RequestBytesWithCookies(captchaUrl, loginPage.Cookies, RequestType.GET, LandingUrl);
+                var captchaImageResponse = await WebRequestWithCookiesAsync(captchaUrl, loginPage.Cookies, RequestType.GET, LandingUrl);
 
                 var captchaText = new StringItem { Name = "Captcha Text" };
-                var captchaImage = new ImageItem {Name = "Captcha Image", Value = captchaImageResponse.Content};
+                var captchaImage = new ImageItem {Name = "Captcha Image", Value = captchaImageResponse.ContentBytes};
 
                 configData.AddDynamic("CaptchaText", captchaText);
                 configData.AddDynamic("CaptchaImage", captchaImage);
@@ -169,11 +169,11 @@ namespace Jackett.Common.Indexers
 
             //var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, SiteLink, true);
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, SearchUrl, LandingUrl, true);
-            await ConfigureIfOK(result.Cookies, result.Content?.Contains("logout.php") == true,
+            await ConfigureIfOK(result.Cookies, result.ContentString?.Contains("logout.php") == true,
                 () =>
                 {
                     var parser = new HtmlParser();
-                    var dom = parser.ParseDocument(result.Content);
+                    var dom = parser.ParseDocument(result.ContentString);
                     var errorMessage = dom.QuerySelector(".left_side table:nth-of-type(1) tr:nth-of-type(2)")?.TextContent.Trim().Replace("\n\t", " ");
                     if (string.IsNullOrWhiteSpace(errorMessage))
                         errorMessage = dom.QuerySelector("div.notification-body").TextContent.Trim().Replace("\n\t", " ");
@@ -189,8 +189,9 @@ namespace Jackett.Common.Indexers
                                     {"timezone", "0"},
                                     {"showrows", "50"}
                                 };
-                var rssPage = await PostDataWithCookies(GetRSSKeyUrl, rssParams, result.Cookies);
-                var match = Regex.Match(rssPage.Content, "(?<=secret_key\\=)([a-zA-z0-9]*)");
+                var rssPage = await WebRequestWithCookiesAsync(
+                    GetRSSKeyUrl, result.Cookies, RequestType.POST, data: rssParams);
+                var match = Regex.Match(rssPage.ContentString, "(?<=secret_key\\=)([a-zA-z0-9]*)");
                 configData.RSSKey.Value = match.Success ? match.Value : string.Empty;
                 if (string.IsNullOrWhiteSpace(configData.RSSKey.Value))
                     throw new Exception("Failed to get RSS Key");
@@ -227,18 +228,20 @@ namespace Jackett.Common.Indexers
                 searchParams.Add("search_type", "t_name");
             }
 
-            var searchPage = await PostDataWithCookiesAndRetry(SearchUrl, searchParams, CookieHeader);
+            var searchPage = await RequestWithCookiesAndRetryAsync(
+                SearchUrl, CookieHeader, RequestType.POST, null, searchParams);
             // Occasionally the cookies become invalid, login again if that happens
             if (searchPage.IsRedirect)
             {
                 await ApplyConfiguration(null);
-                searchPage = await PostDataWithCookiesAndRetry(SearchUrl, searchParams, CookieHeader);
+                searchPage = await RequestWithCookiesAndRetryAsync(
+                    SearchUrl, CookieHeader, RequestType.POST, null, searchParams);
             }
 
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(searchPage.Content);
+                var dom = parser.ParseDocument(searchPage.ContentString);
                 var rows = dom.QuerySelectorAll("table#sortabletable > tbody > tr:has(div > a[href*=\"details.php?id=\"])");
                 foreach (var row in rows)
                 {
@@ -290,7 +293,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(searchPage.Content, ex);
+                OnParseError(searchPage.ContentString, ex);
             }
 
             if (!CookieHeader.Trim().Equals(prevCook.Trim()))

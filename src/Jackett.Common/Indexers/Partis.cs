@@ -101,10 +101,10 @@ namespace Jackett.Common.Indexers
             };
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, string.Empty, false, null, null, true);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("/odjava"), () =>
+            await ConfigureIfOK(result.Cookies, result.ContentString != null && result.ContentString.Contains("/odjava"), () =>
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(result.Content);
+                var dom = parser.ParseDocument(result.ContentString);
                 var errorMessage = dom.QuerySelector("div.obvet > span.najvecji").TextContent.Trim(); // Prijava ni uspela! obvestilo
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
@@ -116,7 +116,7 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();     //List of releases initialization
             var searchString = query.GetQueryString();  //get search string from query
 
-            WebClientStringResult results = null;
+            WebResult results = null;
             var queryCollection = new NameValueCollection();
             var catList = MapTorznabCapsToTrackers(query);     // map categories from query to indexer specific
             var categ = string.Join(",", catList);
@@ -135,22 +135,23 @@ namespace Jackett.Common.Indexers
             logger.Info(string.Format("Searh URL Partis_: {0}", searchUrl));
 
             // add necessary headers
-            var heder = new Dictionary<string, string>
+            var header = new Dictionary<string, string>
             {
                 { "X-requested-with", "XMLHttpRequest" }
             };
 
             //get results and follow redirect
-            results = await RequestStringWithCookies(searchUrl, null, SearchUrl, heder);
+            results = await WebRequestWithCookiesAsync(searchUrl, referer: SearchUrl, headers: header);
             await FollowIfRedirect(results, null, null, null, true);
 
             // are we logged in?
-            if (!results.Content.Contains("/odjava"))
+            if (!results.ContentString.Contains("/odjava"))
             {
                 await ApplyConfiguration(null);
             }
             // another request with specific query - NEEDED for succesful response - return data
-            results = await RequestStringWithCookies(SiteLink + "brskaj/?rs=false&offset=0", null, SearchUrl, heder);
+            results = await WebRequestWithCookiesAsync(
+                SiteLink + "brskaj/?rs=false&offset=0", referer: SearchUrl, headers: header);
             await FollowIfRedirect(results, null, null, null, true);
 
             // parse results
@@ -159,7 +160,7 @@ namespace Jackett.Common.Indexers
                 var RowsSelector = "div.list > div[name=\"torrrow\"]";
 
                 var ResultParser = new HtmlParser();
-                var SearchResultDocument = ResultParser.ParseDocument(results.Content);
+                var SearchResultDocument = ResultParser.ParseDocument(results.ContentString);
                 var Rows = SearchResultDocument.QuerySelectorAll(RowsSelector);
                 foreach (var Row in Rows)
                 {
@@ -220,7 +221,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return releases;

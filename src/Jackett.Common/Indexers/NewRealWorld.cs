@@ -111,10 +111,10 @@ namespace Jackett.Common.Indexers
             };
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl, true);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
+            await ConfigureIfOK(result.Cookies, result.ContentString != null && result.ContentString.Contains("logout.php"), () =>
                 {
                     var parser = new HtmlParser();
-                    var dom = parser.ParseDocument(result.Content);
+                    var dom = parser.ParseDocument(result.ContentString);
                     var errorMessage = dom.QuerySelector("table.tableinborder").InnerHtml;
                     throw new ExceptionWithConfigData(errorMessage, configData);
                 });
@@ -150,18 +150,18 @@ namespace Jackett.Common.Indexers
 
             searchUrl += "?" + queryCollection.GetQueryString();
 
-            var response = await RequestStringWithCookies(searchUrl);
+            var response = await WebRequestWithCookiesAsync(searchUrl);
             if (response.IsRedirect)
             {
                 // re-login
                 await ApplyConfiguration(null);
-                response = await RequestStringWithCookies(searchUrl);
+                response = await WebRequestWithCookiesAsync(searchUrl);
             }
 
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(response.Content);
+                var dom = parser.ParseDocument(response.ContentString);
                 var rows = dom.QuerySelectorAll("table.testtable> tbody > tr:has(td.tableb)");
 
                 foreach (var row in rows)
@@ -219,7 +219,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
 
             return releases;

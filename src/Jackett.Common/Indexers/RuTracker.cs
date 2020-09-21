@@ -1510,14 +1510,14 @@ namespace Jackett.Common.Indexers
             try
             {
                 configData.CookieHeader.Value = null;
-                var response = await RequestStringWithCookies(LoginUrl);
+                var response = await WebRequestWithCookiesAsync(LoginUrl);
                 var parser = new HtmlParser();
-                var doc = parser.ParseDocument(response.Content);
+                var doc = parser.ParseDocument(response.ContentString);
                 var captchaimg = doc.QuerySelector("img[src^=\"https://static.t-ru.org/captcha/\"]");
                 if (captchaimg != null)
                 {
-                    var captchaImage = await RequestBytesWithCookies(captchaimg.GetAttribute("src"));
-                    configData.CaptchaImage.Value = captchaImage.Content;
+                    var captchaImage = await WebRequestWithCookiesAsync(captchaimg.GetAttribute("src"));
+                    configData.CaptchaImage.Value = captchaImage.ContentBytes;
 
                     var codefield = doc.QuerySelector("input[name^=\"cap_code_\"]");
                     _capCodeField = codefield.GetAttribute("name");
@@ -1557,12 +1557,12 @@ namespace Jackett.Common.Indexers
             }
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, CookieHeader, true, null, LoginUrl, true);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("id=\"logged-in-username\""), () =>
+            await ConfigureIfOK(result.Cookies, result.ContentString != null && result.ContentString.Contains("id=\"logged-in-username\""), () =>
             {
-                logger.Debug(result.Content);
+                logger.Debug(result.ContentString);
                 var errorMessage = "Unknown error message, please report";
                 var parser = new HtmlParser();
-                var doc = parser.ParseDocument(result.Content);
+                var doc = parser.ParseDocument(result.ContentString);
                 var errormsg = doc.QuerySelector("h4[class=\"warnColor1 tCenter mrg_16\"]");
                 if (errormsg != null)
                     errorMessage = errormsg.TextContent;
@@ -1591,17 +1591,17 @@ namespace Jackett.Common.Indexers
             }
 
             var searchUrl = SearchUrl + "?" + queryCollection.GetQueryString();
-            var results = await RequestStringWithCookies(searchUrl);
-            if (!results.Content.Contains("id=\"logged-in-username\""))
+            var results = await WebRequestWithCookiesAsync(searchUrl);
+            if (!results.ContentString.Contains("id=\"logged-in-username\""))
             {
                 // re login
                 await ApplyConfiguration(null);
-                results = await RequestStringWithCookies(searchUrl);
+                results = await WebRequestWithCookiesAsync(searchUrl);
             }
             try
             {
                 var parser = new HtmlParser();
-                var doc = parser.ParseDocument(results.Content);
+                var doc = parser.ParseDocument(results.ContentString);
                 var rows = doc.QuerySelectorAll("table#tor-tbl > tbody > tr");
                 foreach (var row in rows)
                     try
@@ -1696,7 +1696,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return releases;

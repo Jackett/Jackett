@@ -114,9 +114,9 @@ namespace Jackett.Common.Indexers
             };
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl, true);
             await ConfigureIfOK(
-                result.Cookies, result.Content?.Contains("logout.php") == true, () =>
+                result.Cookies, result.ContentString?.Contains("logout.php") == true, () =>
                 {
-                    var errorMessage = result.Content;
+                    var errorMessage = result.ContentString;
                     throw new ExceptionWithConfigData(errorMessage, ConfigData);
                 });
             return IndexerConfigurationStatus.RequiresTesting;
@@ -219,7 +219,7 @@ namespace Jackett.Common.Indexers
             return title;
         }
 
-        private bool IsSessionIsClosed(WebClientStringResult result)
+        private bool IsSessionIsClosed(WebResult result)
         {
             return result.IsRedirect && result.RedirectingTo.Contains("login.php");
         }
@@ -257,19 +257,19 @@ namespace Jackett.Common.Indexers
             foreach (var cat in MapTorznabCapsToTrackers(query))
                 queryCollection.Add("filter_cat[" + cat + "]", "1");
             searchUrl += "?" + queryCollection.GetQueryString();
-            var results = await RequestStringWithCookies(searchUrl);
+            var results = await WebRequestWithCookiesAsync(searchUrl);
             if (IsSessionIsClosed(results))
             {
                 // re-login
                 await ApplyConfiguration(null);
-                results = await RequestStringWithCookies(searchUrl);
+                results = await WebRequestWithCookiesAsync(searchUrl);
             }
 
             try
             {
                 const string rowsSelector = "table.torrent_table > tbody > tr:not(tr.colhead)";
                 var searchResultParser = new HtmlParser();
-                var searchResultDocument = searchResultParser.ParseDocument(results.Content);
+                var searchResultDocument = searchResultParser.ParseDocument(results.ContentString);
                 var rows = searchResultDocument.QuerySelectorAll(rowsSelector);
                 ICollection<int> groupCategory = null;
                 string groupTitle = null;
@@ -380,7 +380,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return releases;
@@ -389,19 +389,19 @@ namespace Jackett.Common.Indexers
         private async Task<List<ReleaseInfo>> ParseLast24HoursAsync()
         {
             var releases = new List<ReleaseInfo>();
-            var results = await RequestStringWithCookies(TodayUrl);
+            var results = await WebRequestWithCookiesAsync(TodayUrl);
             if (IsSessionIsClosed(results))
             {
                 // re-login
                 await ApplyConfiguration(null);
-                results = await RequestStringWithCookies(TodayUrl);
+                results = await WebRequestWithCookiesAsync(TodayUrl);
             }
 
             try
             {
                 const string rowsSelector = "table.torrent_table > tbody > tr:not(tr.colhead)";
                 var searchResultParser = new HtmlParser();
-                var searchResultDocument = searchResultParser.ParseDocument(results.Content);
+                var searchResultDocument = searchResultParser.ParseDocument(results.ContentString);
                 var rows = searchResultDocument.QuerySelectorAll(rowsSelector);
                 foreach (var row in rows)
                     try
@@ -509,7 +509,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return releases;

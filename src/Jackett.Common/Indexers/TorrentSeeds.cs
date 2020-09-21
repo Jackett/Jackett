@@ -12,6 +12,7 @@ using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 
@@ -104,9 +105,9 @@ namespace Jackett.Common.Indexers
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-            var loginPage = await RequestStringWithCookies(TokenUrl);
+            var loginPage = await WebRequestWithCookiesAsync(TokenUrl);
             var parser = new HtmlParser();
-            var dom = parser.ParseDocument(loginPage.Content);
+            var dom = parser.ParseDocument(loginPage.ContentString);
             var token = dom.QuerySelector("form.form-horizontal > span");
             var csrf = token.Children[1].GetAttribute("value");
             var pairs = new Dictionary<string, string>
@@ -119,10 +120,10 @@ namespace Jackett.Common.Indexers
             };
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, accumulateCookies: true);
             await ConfigureIfOK(
-                result.Cookies, result.Content.Contains("/logout.php?"),
+                result.Cookies, result.ContentString.Contains("/logout.php?"),
                 () =>
                 {
-                    var errorDom = parser.ParseDocument(result.Content);
+                    var errorDom = parser.ParseDocument(result.ContentString);
                     var errorMessage = errorDom.QuerySelector("td.colhead2").InnerHtml;
                     throw new ExceptionWithConfigData(errorMessage, configData);
                 });
@@ -149,13 +150,13 @@ namespace Jackett.Common.Indexers
             foreach (var cat in MapTorznabCapsToTrackers(query))
                 queryCollection.Add($"cat[{cat}]", "1");
             searchUrl += "?" + queryCollection.GetQueryString();
-            var response = await RequestStringWithCookiesAndRetry(searchUrl);
-            var results = response.Content;
+            var response = await RequestWithCookiesAndRetryAsync(searchUrl);
+            var results = response.ContentString;
             if (!results.Contains("/logout.php?"))
             {
                 await ApplyConfiguration(null);
-                response = await RequestStringWithCookiesAndRetry(searchUrl);
-                results = response.Content;
+                response = await RequestWithCookiesAndRetryAsync(searchUrl);
+                results = response.ContentString;
             }
 
             try

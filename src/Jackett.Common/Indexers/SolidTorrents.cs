@@ -76,11 +76,11 @@ namespace Jackett.Common.Indexers
             return IndexerConfigurationStatus.Completed;
         }
 
-        private JArray CheckResponse(WebClientStringResult result)
+        private JArray CheckResponse(WebResult result)
         {
             try
             {
-                var json = JsonConvert.DeserializeObject<dynamic>(result.Content);
+                var json = JsonConvert.DeserializeObject<dynamic>(result.ContentString);
                 if (!(json is JObject) || !(json["results"] is JArray) || json["results"] == null)
                     throw new Exception("Server error");
                 return (JArray)json["results"];
@@ -88,7 +88,7 @@ namespace Jackett.Common.Indexers
             catch (Exception e)
             {
                 logger.Error("CheckResponse() Error: ", e.Message);
-                throw new ExceptionWithConfigData(result.Content, ConfigData);
+                throw new ExceptionWithConfigData(result.ContentString, ConfigData);
             }
         }
 
@@ -103,7 +103,7 @@ namespace Jackett.Common.Indexers
                 {"fuv", "no"}
             };
             var fullSearchUrl = SearchUrl + "?" + queryCollection.GetQueryString();
-            var result = await RequestStringWithCookies(fullSearchUrl, null, null, APIHeaders);
+            var result = await WebRequestWithCookiesAsync(fullSearchUrl, headers: APIHeaders);
             return CheckResponse(result);
         }
 
