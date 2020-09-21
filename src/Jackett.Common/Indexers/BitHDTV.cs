@@ -122,7 +122,7 @@ namespace Jackett.Common.Indexers
             {
                 {"cat", MapTorznabCapsToTrackers(query, true).FirstIfSingleOrDefault("0")}
             };
-            var results = new List<BaseWebResult>();
+            var results = new List<WebClientStringResult>();
             var search = new UriBuilder(SearchUrl);
             if (query.IsImdbQuery)
             {

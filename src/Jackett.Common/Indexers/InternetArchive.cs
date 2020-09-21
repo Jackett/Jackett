@@ -150,7 +150,7 @@ namespace Jackett.Common.Indexers
             return releases;
         }
 
-        private JArray ParseResponse(BaseWebResult result)
+        private JArray ParseResponse(WebClientStringResult result)
         {
             try
             {

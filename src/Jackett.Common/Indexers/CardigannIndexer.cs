@@ -26,7 +26,7 @@ namespace Jackett.Common.Indexers
     public class CardigannIndexer : BaseWebIndexer
     {
         protected IndexerDefinition Definition;
-        protected BaseWebResult landingResult;
+        protected WebClientStringResult landingResult;
         protected IHtmlDocument landingResultDocument;
 
         protected List<string> DefaultCategories = new List<string>();
@@ -455,7 +455,7 @@ namespace Jackett.Common.Indexers
             return template;
         }
 
-        protected bool checkForError(BaseWebResult loginResult, IList<errorBlock> errorBlocks)
+        protected bool checkForError(WebClientStringResult loginResult, IList<errorBlock> errorBlocks)
         {
             if (loginResult.Status == HttpStatusCode.Unauthorized) // e.g. used by YGGtorrent
                 throw new ExceptionWithConfigData("401 Unauthorized, check your credentials", configData);
@@ -702,7 +702,7 @@ namespace Jackett.Common.Indexers
                 landingResult = null;
                 landingResultDocument = null;
 
-                BaseWebResult loginResult = null;
+                WebClientStringResult loginResult = null;
                 var enctype = form.GetAttribute("enctype");
                 if (enctype == "multipart/form-data")
                 {
@@ -1334,7 +1334,7 @@ namespace Jackett.Common.Indexers
                 logger.Info($"Fetching: {searchUrl}");
 
                 // send HTTP request
-                BaseWebResult response = null;
+                WebClientStringResult response = null;
                 Dictionary<string, string> headers = null;
                 if (Search.Headers != null)
                 {
@@ -1721,7 +1721,7 @@ namespace Jackett.Common.Indexers
             return releases;
         }
 
-        protected async Task<BaseWebResult> handleRequest(requestBlock request, Dictionary<string, object> variables = null, string referer = null)
+        protected async Task<WebClientByteResult> handleRequest(requestBlock request, Dictionary<string, object> variables = null, string referer = null)
         {
             var requestLinkStr = resolvePath(applyGoTemplateText(request.Path, variables)).ToString();
             logger.Debug($"CardigannIndexer ({Id}): handleRequest() requestLinkStr= {requestLinkStr}");

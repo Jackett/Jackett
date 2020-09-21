@@ -104,7 +104,7 @@ namespace Jackett.Common.Indexers
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
-            BaseWebResult loginPage;
+            WebClientStringResult loginPage;
             try
             {
                 loginPage = await RequestStringWithCookies(StartPageUrl, string.Empty);

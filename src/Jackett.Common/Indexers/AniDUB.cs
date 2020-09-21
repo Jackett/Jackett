@@ -509,7 +509,7 @@ namespace Jackett.Common.Indexers
             return domDate.NodeValue.Trim();
         }
 
-        private bool IsAuthorized(BaseWebResult result) =>
+        private bool IsAuthorized(WebClientStringResult result) =>
             result.ContentString.Contains("index.php?action=logout");
 
         private IEnumerable<int> ParseCategories(Uri showUri)
