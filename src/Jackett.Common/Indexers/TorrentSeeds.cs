@@ -12,7 +12,6 @@ using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
-using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 
@@ -105,7 +104,7 @@ namespace Jackett.Common.Indexers
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-            var loginPage = await WebRequestWithCookiesAsync(TokenUrl);
+            var loginPage = await RequestStringWithCookies(TokenUrl);
             var parser = new HtmlParser();
             var dom = parser.ParseDocument(loginPage.ContentString);
             var token = dom.QuerySelector("form.form-horizontal > span");
@@ -150,12 +149,12 @@ namespace Jackett.Common.Indexers
             foreach (var cat in MapTorznabCapsToTrackers(query))
                 queryCollection.Add($"cat[{cat}]", "1");
             searchUrl += "?" + queryCollection.GetQueryString();
-            var response = await RequestWithCookiesAndRetryAsync(searchUrl);
+            var response = await RequestStringWithCookiesAndRetry(searchUrl);
             var results = response.ContentString;
             if (!results.Contains("/logout.php?"))
             {
                 await ApplyConfiguration(null);
-                response = await RequestWithCookiesAndRetryAsync(searchUrl);
+                response = await RequestStringWithCookiesAndRetry(searchUrl);
                 results = response.ContentString;
             }
 

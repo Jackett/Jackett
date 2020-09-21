@@ -12,7 +12,6 @@ using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
-using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -180,7 +179,7 @@ namespace Jackett.Common.Indexers
             }
 
             // Get the content from the tracker
-            var response = await RequestWithCookiesAndRetryAsync(queryUrl);
+            var response = await RequestStringWithCookiesAndRetry(queryUrl);
             if (!response.ContentString.StartsWith("{")) // not JSON => error
                 throw new ExceptionWithConfigData("unexcepted response (not JSON)", configData);
             dynamic json = JsonConvert.DeserializeObject<dynamic>(response.ContentString);

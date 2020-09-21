@@ -66,7 +66,7 @@ namespace Jackett.Common.Indexers
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-            var loginPage = await WebRequestWithCookiesAsync(LoginPageUrl, string.Empty);
+            var loginPage = await RequestStringWithCookies(LoginPageUrl, string.Empty);
             var pairs = new Dictionary<string, string>
             {
                 {"username", configData.Username.Value},
@@ -163,7 +163,7 @@ namespace Jackett.Common.Indexers
                     queryParams["id"] = torrentId;
                     queryParams["now"] = DateTimeUtil.DateTimeToUnixTimestamp(DateTime.UtcNow)
                                                      .ToString(CultureInfo.InvariantCulture);
-                    var filesList = (await RequestWithCookiesAndRetryAsync(SearchUrl + "?" + queryParams.GetQueryString()))
+                    var filesList = (await RequestStringWithCookiesAndRetry(SearchUrl + "?" + queryParams.GetQueryString()))
                         .ContentString;
                     var firstFileName = filesList.Split(
                         new[]
@@ -215,7 +215,7 @@ namespace Jackett.Common.Indexers
         /// </summary>
         private async Task PopulateImdbMapAsync()
         {
-            var result = await RequestWithCookiesAndRetryAsync(BrowseUrl);
+            var result = await RequestStringWithCookiesAndRetry(BrowseUrl);
             foreach (Match match in _seriesInfoMatch.Matches(result.ContentString))
             {
                 var internalId = int.Parse(match.Groups["seriesID"].Value);
@@ -280,7 +280,7 @@ namespace Jackett.Common.Indexers
                     queryParams.Add("e", query.Episode);
             }
 
-            var results = await RequestWithCookiesAndRetryAsync(SearchUrl + "?" + queryParams.GetQueryString());
+            var results = await RequestStringWithCookiesAndRetry(SearchUrl + "?" + queryParams.GetQueryString());
             // Parse page Information from result
             var content = results.ContentString;
             var splits = content.Split('\\');
@@ -302,7 +302,7 @@ namespace Jackett.Common.Indexers
             for (var page = startPage; page <= pages && releases.Count < query.Limit; page++)
             {
                 queryParams["page"] = page.ToString();
-                results = await RequestWithCookiesAndRetryAsync(SearchUrl + "?" + queryParams.GetQueryString());
+                results = await RequestStringWithCookiesAndRetry(SearchUrl + "?" + queryParams.GetQueryString());
                 releases.AddRange(await ParseTorrentsAsync(results, releases.Count, query.Limit, previouslyParsedOnPage));
                 previouslyParsedOnPage = 0;
             }

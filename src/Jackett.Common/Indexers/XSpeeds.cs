@@ -132,14 +132,14 @@ namespace Jackett.Common.Indexers
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var loginPage = await WebRequestWithCookiesAsync(LandingUrl);
+            var loginPage = await RequestStringWithCookies(LandingUrl);
             var parser = new HtmlParser();
             var dom = parser.ParseDocument(loginPage.ContentString);
             var qCaptchaImg = dom.QuerySelector("img#regimage");
             if (qCaptchaImg != null)
             {
                 var captchaUrl = qCaptchaImg.GetAttribute("src");
-                var captchaImageResponse = await WebRequestWithCookiesAsync(captchaUrl, loginPage.Cookies, RequestType.GET, LandingUrl);
+                var captchaImageResponse = await RequestBytesWithCookies(captchaUrl, loginPage.Cookies, RequestType.GET, LandingUrl);
 
                 var captchaText = new StringItem { Name = "Captcha Text" };
                 var captchaImage = new ImageItem {Name = "Captcha Image", Value = captchaImageResponse.ContentBytes};
@@ -189,8 +189,7 @@ namespace Jackett.Common.Indexers
                                     {"timezone", "0"},
                                     {"showrows", "50"}
                                 };
-                var rssPage = await WebRequestWithCookiesAsync(
-                    GetRSSKeyUrl, result.Cookies, RequestType.POST, data: rssParams);
+                var rssPage = await PostDataWithCookies(GetRSSKeyUrl, rssParams, result.Cookies);
                 var match = Regex.Match(rssPage.ContentString, "(?<=secret_key\\=)([a-zA-z0-9]*)");
                 configData.RSSKey.Value = match.Success ? match.Value : string.Empty;
                 if (string.IsNullOrWhiteSpace(configData.RSSKey.Value))
@@ -228,14 +227,12 @@ namespace Jackett.Common.Indexers
                 searchParams.Add("search_type", "t_name");
             }
 
-            var searchPage = await RequestWithCookiesAndRetryAsync(
-                SearchUrl, CookieHeader, RequestType.POST, null, searchParams);
+            var searchPage = await PostDataWithCookiesAndRetry(SearchUrl, searchParams, CookieHeader);
             // Occasionally the cookies become invalid, login again if that happens
             if (searchPage.IsRedirect)
             {
                 await ApplyConfiguration(null);
-                searchPage = await RequestWithCookiesAndRetryAsync(
-                    SearchUrl, CookieHeader, RequestType.POST, null, searchParams);
+                searchPage = await PostDataWithCookiesAndRetry(SearchUrl, searchParams, CookieHeader);
             }
 
             try

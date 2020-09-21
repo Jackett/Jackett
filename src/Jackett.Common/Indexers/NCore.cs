@@ -99,7 +99,7 @@ namespace Jackett.Common.Indexers
             LoadValuesFromJson(configJson);
             if (configData.Hungarian.Value == false && configData.English.Value == false)
                 throw new ExceptionWithConfigData("Please select at least one language.", configData);
-            var loginPage = await WebRequestWithCookiesAsync(LoginUrl, string.Empty);
+            var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
             var pairs = new Dictionary<string, string>
             {
                 {"nev", configData.Username.Value},
@@ -166,8 +166,7 @@ namespace Jackett.Common.Indexers
                 cats = cats.Except(_languageCats).ToList();
 
             pairs.Add("kivalasztott_tipus[]", string.Join(",", cats));
-            var results = await RequestWithCookiesAndRetryAsync(
-                SearchUrl, null, RequestType.POST, null, pairs.ToEnumerable(true));
+            var results = await PostDataWithCookiesAndRetry(SearchUrl, pairs.ToEnumerable(true));
             var parser = new HtmlParser();
             var dom = parser.ParseDocument(results.ContentString);
 
@@ -200,8 +199,7 @@ namespace Jackett.Common.Indexers
             for (var page = startPage; page <= pages && releases.Count < limit; page++)
             {
                 pairs["oldal"] = page.ToString();
-                results = await RequestWithCookiesAndRetryAsync(
-                    SearchUrl, null, RequestType.POST, null, pairs.ToEnumerable(true));
+                results = await PostDataWithCookiesAndRetry(SearchUrl, pairs.ToEnumerable(true));
                 releases.AddRange(ParseTorrents(results, episodeString, query, releases.Count, limit, previouslyParsedOnPage));
                 previouslyParsedOnPage = 0;
             }

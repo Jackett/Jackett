@@ -94,7 +94,7 @@ namespace Jackett.Common.Indexers
                 qc.Add("searchstr", StripSearchString(query.GetQueryString()));
 
             var searchUrl = BrowseUrl + "?" + qc.GetQueryString();
-            var results = await WebRequestWithCookiesAsync(searchUrl);
+            var results = await RequestStringWithCookies(searchUrl);
             try
             {
                 var seasonRegEx = new Regex(@$"Season\s+0*{query.Season}[^\d]", RegexOptions.IgnoreCase);

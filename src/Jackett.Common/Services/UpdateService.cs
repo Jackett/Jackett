@@ -114,7 +114,7 @@ namespace Jackett.Common.Services
 
             try
             {
-                var response = await client.GetResultAsync(new WebRequest()
+                var response = await client.GetString(new WebRequest()
                 {
                     Url = "https://api.github.com/repos/Jackett/Jackett/releases",
                     Encoding = Encoding.UTF8,
@@ -258,11 +258,11 @@ namespace Jackett.Common.Services
 
             var url = targetAsset.Browser_download_url;
 
-            var data = await client.GetResultAsync(SetDownloadHeaders(new WebRequest() { Url = url, EmulateBrowser = true, Type = RequestType.GET }));
+            var data = await client.GetBytes(SetDownloadHeaders(new WebRequest() { Url = url, EmulateBrowser = true, Type = RequestType.GET }));
 
             while (data.IsRedirect)
             {
-                data = await client.GetResultAsync(new WebRequest() { Url = data.RedirectingTo, EmulateBrowser = true, Type = RequestType.GET });
+                data = await client.GetBytes(new WebRequest() { Url = data.RedirectingTo, EmulateBrowser = true, Type = RequestType.GET });
             }
 
             var tempDir = Path.Combine(Path.GetTempPath(), "JackettUpdate-" + version + "-" + DateTime.Now.Ticks);

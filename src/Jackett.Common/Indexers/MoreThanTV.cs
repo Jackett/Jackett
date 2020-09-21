@@ -13,7 +13,6 @@ using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
-using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 
@@ -60,7 +59,8 @@ namespace Jackett.Common.Indexers
                 { "login", "Log in" },
                 { "keeplogged", "1" }
             };
-            var preRequest = await RequestWithCookiesAndRetryAsync(LoginUrl, string.Empty);
+
+            var preRequest = await RequestStringWithCookiesAndRetry(LoginUrl, string.Empty);
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, preRequest.Cookies, true, SearchUrl, SiteLink);
 
             await ConfigureIfOK(result.Cookies, result.ContentString != null && result.ContentString.Contains("status\":\"success\""), () =>
@@ -134,12 +134,12 @@ namespace Jackett.Common.Indexers
         private async Task GetReleases(ICollection<ReleaseInfo> releases, TorznabQuery query, string searchQuery)
         {
             var searchUrl = GetTorrentSearchUrl(query, searchQuery);
-            var response = await RequestWithCookiesAndRetryAsync(searchUrl);
+            var response = await RequestStringWithCookiesAndRetry(searchUrl);
             if (response.IsRedirect)
             {
                 // re login
                 await ApplyConfiguration(null);
-                response = await RequestWithCookiesAndRetryAsync(searchUrl);
+                response = await RequestStringWithCookiesAndRetry(searchUrl);
             }
 
             try

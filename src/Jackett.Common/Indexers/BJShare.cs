@@ -257,12 +257,12 @@ namespace Jackett.Common.Indexers
             foreach (var cat in MapTorznabCapsToTrackers(query))
                 queryCollection.Add("filter_cat[" + cat + "]", "1");
             searchUrl += "?" + queryCollection.GetQueryString();
-            var results = await WebRequestWithCookiesAsync(searchUrl);
+            var results = await RequestStringWithCookies(searchUrl);
             if (IsSessionIsClosed(results))
             {
                 // re-login
                 await ApplyConfiguration(null);
-                results = await WebRequestWithCookiesAsync(searchUrl);
+                results = await RequestStringWithCookies(searchUrl);
             }
 
             try
@@ -389,12 +389,12 @@ namespace Jackett.Common.Indexers
         private async Task<List<ReleaseInfo>> ParseLast24HoursAsync()
         {
             var releases = new List<ReleaseInfo>();
-            var results = await WebRequestWithCookiesAsync(TodayUrl);
+            var results = await RequestStringWithCookies(TodayUrl);
             if (IsSessionIsClosed(results))
             {
                 // re-login
                 await ApplyConfiguration(null);
-                results = await WebRequestWithCookiesAsync(TodayUrl);
+                results = await RequestStringWithCookies(TodayUrl);
             }
 
             try

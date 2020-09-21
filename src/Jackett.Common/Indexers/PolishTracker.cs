@@ -104,12 +104,12 @@ namespace Jackett.Common.Indexers
                 qc.Add("cat[]", cat);
 
             var searchUrl = SearchUrl + "?" + qc.GetQueryString();
-            var result = await RequestWithCookiesAndRetryAsync(searchUrl, referer: SearchUrl);
+            var result = await RequestStringWithCookiesAndRetry(searchUrl, null, SearchUrl);
             if (result.IsRedirect)
             {
                 // re-login
                 await ApplyConfiguration(null);
-                result = await RequestWithCookiesAndRetryAsync(searchUrl, referer: SearchUrl);
+                result = await RequestStringWithCookiesAndRetry(searchUrl, null, SearchUrl);
             }
 
             if (!result.ContentString.StartsWith("{")) // not JSON => error

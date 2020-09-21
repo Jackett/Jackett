@@ -77,7 +77,7 @@ namespace Jackett.Common.Indexers
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-            var loginPage = await WebRequestWithCookiesAsync(LoginUrl, string.Empty);
+            var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
             var pairs = new Dictionary<string, string>
             {
                 {"uid", configData.Username.Value},
@@ -119,7 +119,7 @@ namespace Jackett.Common.Indexers
                 queryCollection.Add("search", query.GetQueryString());
             }
 
-            var response = await RequestWithCookiesAndRetryAsync(SearchUrl + queryCollection.GetQueryString());
+            var response = await RequestStringWithCookiesAndRetry(SearchUrl + queryCollection.GetQueryString());
 
             try
             {

@@ -14,7 +14,6 @@ using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
-using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
@@ -151,13 +150,13 @@ namespace Jackett.Common.Indexers
 
             // Make search request
             var searchUri = GetAbsoluteUrl("?" + queryParameters.GetQueryString());
-            var response = await RequestWithCookiesAndRetryAsync(searchUri.AbsoluteUri);
+            var response = await RequestStringWithCookiesAndRetry(searchUri.AbsoluteUri);
 
             // Check for DDOS Guard
             if (response.Status == System.Net.HttpStatusCode.Forbidden)
             {
                 await ConfigureDDoSGuardCookie();
-                response = await RequestWithCookiesAndRetryAsync(searchUri.AbsoluteUri);
+                response = await RequestStringWithCookiesAndRetry(searchUri.AbsoluteUri);
             }
 
             if (response.Status != System.Net.HttpStatusCode.OK)
@@ -217,7 +216,7 @@ namespace Jackett.Common.Indexers
         private async Task ConfigureDDoSGuardCookie()
         {
             const string ddosPostUrl = "https://check.ddos-guard.net/check.js";
-            var response = await WebRequestWithCookiesAsync(ddosPostUrl, string.Empty);
+            var response = await RequestStringWithCookies(ddosPostUrl, string.Empty);
             if (response.Status != System.Net.HttpStatusCode.OK)
                 throw new WebException($"Unexpected DDOS Guard response: Status: {response.Status}", WebExceptionStatus.ProtocolError);
             if (response.IsRedirect)

@@ -10,7 +10,6 @@ using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
-using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 using WebClient = Jackett.Common.Utils.Clients.WebClient;
@@ -149,7 +148,7 @@ without this configuration the torrent download does not work.<br/>You can find 
                 { "password", configData.Password.Value.Trim() },
                 { "pid", configData.Pid.Value.Trim() }
             };
-            var result = await WebRequestWithCookiesAsync(AuthUrl, method: RequestType.POST, data: body, headers: AuthHeaders);
+            var result = await PostDataWithCookies(AuthUrl, body, headers: AuthHeaders);
             var json = JObject.Parse(result.ContentString);
             _token = json.Value<string>("token");
             if (_token == null)
@@ -162,11 +161,11 @@ without this configuration the torrent download does not work.<br/>You can find 
 
             var qc = GetSearchQueryParameters(query);
             var episodeSearchUrl = SearchUrl + "?" + qc.GetQueryString();
-            var response = await RequestWithCookiesAndRetryAsync(episodeSearchUrl, headers: GetSearchHeaders());
+            var response = await RequestStringWithCookiesAndRetry(episodeSearchUrl, headers: GetSearchHeaders());
             if (response.Status == HttpStatusCode.Unauthorized || response.Status == HttpStatusCode.PreconditionFailed)
             {
                 await RenewalTokenAsync();
-                response = await RequestWithCookiesAndRetryAsync(episodeSearchUrl, headers: GetSearchHeaders());
+                response = await RequestStringWithCookiesAndRetry(episodeSearchUrl, headers: GetSearchHeaders());
             }
             else if (response.Status != HttpStatusCode.OK)
                 throw new Exception($"Unknown error: {response.ContentString}");

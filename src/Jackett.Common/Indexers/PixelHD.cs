@@ -57,7 +57,7 @@ namespace Jackett.Common.Indexers
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var loginPage = await WebRequestWithCookiesAsync(LoginUrl, string.Empty);
+            var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
             var LoginParser = new HtmlParser();
             var LoginDocument = LoginParser.ParseDocument(loginPage.ContentString);
 
@@ -69,7 +69,7 @@ namespace Jackett.Common.Indexers
                 var catchaInput = LoginDocument.QuerySelector("input[maxlength=\"6\"]");
                 input_captcha = catchaInput.GetAttribute("name");
 
-                var captchaImage = await WebRequestWithCookiesAsync(SiteLink + catchaImg.GetAttribute("src"), loginPage.Cookies, RequestType.GET, LoginUrl);
+                var captchaImage = await RequestBytesWithCookies(SiteLink + catchaImg.GetAttribute("src"), loginPage.Cookies, RequestType.GET, LoginUrl);
                 configData.CaptchaImage.Value = captchaImage.ContentBytes;
             }
             else
@@ -137,13 +137,13 @@ namespace Jackett.Common.Indexers
 
             var searchUrl = BrowseUrl + "?" + queryCollection.GetQueryString();
 
-            var results = await WebRequestWithCookiesAsync(searchUrl);
+            var results = await RequestStringWithCookies(searchUrl);
             if (results.IsRedirect)
             {
                 // re login
                 await GetConfigurationForSetup();
                 await ApplyConfiguration(null);
-                results = await WebRequestWithCookiesAsync(searchUrl);
+                results = await RequestStringWithCookies(searchUrl);
             }
 
             var IMDBRegEx = new Regex(@"tt(\d+)", RegexOptions.Compiled);

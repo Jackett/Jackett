@@ -9,7 +9,6 @@ using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
-using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -86,7 +85,7 @@ namespace Jackett.Common.Indexers
             for (var page = 0; page < maxPages; page++)
             {
                 var searchUrl = string.Format(SearchUrl, page * MaxItemsPerPage, searchString);
-                var result = await WebRequestWithCookiesAsync(searchUrl, headers: _apiHeaders);
+                var result = await RequestStringWithCookies(searchUrl, null, null, _apiHeaders);
 
                 try
                 {
@@ -150,7 +149,7 @@ namespace Jackett.Common.Indexers
 
         public override async Task<byte[]> Download(Uri link)
         {
-            var result = await RequestWithCookiesAndRetryAsync(link.AbsoluteUri);
+            var result = await RequestStringWithCookiesAndRetry(link.AbsoluteUri);
             if (SobrecargaUrl.Equals(result.RedirectingTo))
                 throw new Exception("El servidor se encuentra sobrecargado en estos momentos. / The server is currently overloaded.");
             try

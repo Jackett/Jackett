@@ -107,7 +107,7 @@ namespace Jackett.Common.Indexers
             WebResult loginPage;
             try
             {
-                loginPage = await WebRequestWithCookiesAsync(StartPageUrl, string.Empty);
+                loginPage = await RequestStringWithCookies(StartPageUrl, string.Empty);
             }
             catch (Exception)
             {
@@ -198,7 +198,7 @@ namespace Jackett.Common.Indexers
                 qParams.Add("freeleech", "on");
 
             var searchUrl = SearchUrl + "?" + qParams.GetQueryString();
-            var results = await WebRequestWithCookiesAsync(searchUrl);
+            var results = await RequestStringWithCookies(searchUrl);
 
             // response without results (the message is misleading)
             if (results.ContentString?.Contains("slow down geek!!!") == true)

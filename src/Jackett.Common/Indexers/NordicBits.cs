@@ -191,7 +191,7 @@ namespace Jackett.Common.Indexers
 
             // Get index page for cookies
             Output("\nGetting index page (for cookies).. with " + SiteLink);
-            var indexPage = await webclient.GetResultAsync(myIndexRequest);
+            var indexPage = await webclient.GetString(myIndexRequest);
 
             // Building login form data
             var pairs = new Dictionary<string, string> {
@@ -213,7 +213,7 @@ namespace Jackett.Common.Indexers
             // Get login page -- (not used, but simulation needed by tracker security's checks)
             LatencyNow();
             Output("\nGetting login page (user simulation).. with " + LoginUrl);
-            await webclient.GetResultAsync(myRequestLogin);
+            await webclient.GetString(myRequestLogin);
 
             // Build WebRequest for submitting authentification
             var request = new Utils.Clients.WebRequest()
@@ -230,7 +230,7 @@ namespace Jackett.Common.Indexers
             // Perform loggin
             LatencyNow();
             Output("\nPerform loggin.. with " + LoginCheckUrl);
-            var response = await webclient.GetResultAsync(request);
+            var response = await webclient.GetString(request);
 
             // Test if we are logged in
             await ConfigureIfOK(response.Cookies, response.Cookies != null && response.Cookies.Contains("uid="), () =>
@@ -259,7 +259,7 @@ namespace Jackett.Common.Indexers
         {
             // Checking ...
             Output("\n-> Checking logged-in state....");
-            var loggedInCheck = await WebRequestWithCookiesAsync(SearchUrl);
+            var loggedInCheck = await RequestStringWithCookies(SearchUrl);
             if (!loggedInCheck.ContentString.Contains("logout.php"))
             {
                 // Cookie expired, renew session on provider
@@ -316,7 +316,7 @@ namespace Jackett.Common.Indexers
                 var request = BuildQuery(searchTerm, query, searchUrl);
 
                 // Getting results & Store content
-                var response = await RequestWithCookiesAndRetryAsync(request, ConfigData.CookieHeader.Value);
+                var response = await RequestStringWithCookiesAndRetry(request, ConfigData.CookieHeader.Value);
                 var parser = new HtmlParser();
                 var dom = parser.ParseDocument(response.ContentString);
 
@@ -597,7 +597,7 @@ namespace Jackett.Common.Indexers
 
             // Request our first page
             LatencyNow();
-            var results = await RequestWithCookiesAndRetryAsync(request, ConfigData.CookieHeader.Value, RequestType.GET, SearchUrl, null, _emulatedBrowserHeaders);
+            var results = await RequestStringWithCookiesAndRetry(request, ConfigData.CookieHeader.Value, SearchUrl, _emulatedBrowserHeaders);
 
             // Return results from tracker
             return results;

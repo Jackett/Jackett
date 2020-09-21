@@ -13,7 +13,6 @@ using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
-using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 
@@ -208,8 +207,7 @@ namespace Jackett.Common.Indexers
                 var rssParams = new Dictionary<string, string> {
                 { "feed", "dl" }
             };
-                var rssPage = await WebRequestWithCookiesAsync(
-                    GetRSSKeyUrl, result.Cookies, RequestType.POST, data: rssParams);
+                var rssPage = await PostDataWithCookies(GetRSSKeyUrl, rssParams, result.Cookies);
                 var match = Regex.Match(rssPage.ContentString, "(?<=passkey\\=)([a-zA-z0-9]*)");
                 configData.RSSKey.Value = match.Success ? match.Value : string.Empty;
                 if (string.IsNullOrWhiteSpace(configData.RSSKey.Value))
@@ -234,7 +232,7 @@ namespace Jackett.Common.Indexers
             // If query is empty, use the RSS Feed
             if (string.IsNullOrWhiteSpace(searchString))
             {
-                var rssPage = await RequestWithCookiesAndRetryAsync(RSSUrl + configData.RSSKey.Value);
+                var rssPage = await RequestStringWithCookiesAndRetry(RSSUrl + configData.RSSKey.Value);
                 var rssDoc = XDocument.Parse(rssPage.ContentString);
 
                 foreach (var item in rssDoc.Descendants("item"))
@@ -307,12 +305,12 @@ namespace Jackett.Common.Indexers
                     }
                 }
 
-                var results = await RequestWithCookiesAndRetryAsync(searchUrl);
+                var results = await RequestStringWithCookiesAndRetry(searchUrl);
                 if (results.IsRedirect)
                 {
                     // re-login
                     await ApplyConfiguration(null);
-                    results = await RequestWithCookiesAndRetryAsync(searchUrl);
+                    results = await RequestStringWithCookiesAndRetry(searchUrl);
                 }
 
                 try

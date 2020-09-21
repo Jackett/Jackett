@@ -186,22 +186,36 @@ namespace Jackett.Common.Utils.Clients
             return;
         }
 
-        public virtual async Task<WebResult> GetResultAsync(WebRequest request)
+        public virtual async Task<WebResult> GetBytes(WebRequest request)
         {
-            logger.Debug(string.Format("WebClient({0}).GetResultAsync(Url:{1})", ClientType, request.Url));
+            logger.Debug(string.Format("WebClient({0}).GetBytes(Url:{1})", ClientType, request.Url));
             PrepareRequest(request);
             await DelayRequest(request);
             var result = await Run(request);
             lastRequest = DateTime.Now;
             result.Request = request;
-            logger.Debug(
-                string.Format(
-                    "WebClient({0}): Returning {1} => {2} bytes", ClientType, result.Status,
-                    (result.IsRedirect ? result.RedirectingTo + " " : "") +
-                    (result.ContentBytes == null ? "<NULL>" : result.ContentBytes.Length.ToString())));
-            if (result.Headers.TryGetValue("server", out var server) && server[0] == "cloudflare-nginx")
-                result.ContentString = BrowserUtil.DecodeCloudFlareProtectedEmailFromHTML(result.ContentString);
+            logger.Debug(string.Format("WebClient({0}): Returning {1} => {2} bytes", ClientType, result.Status, (result.IsRedirect ? result.RedirectingTo + " " : "") + (result.ContentBytes == null ? "<NULL>" : result.ContentBytes.Length.ToString())));
             return result;
+        }
+
+        public virtual async Task<WebResult> GetString(WebRequest request)
+        {
+            logger.Debug(string.Format("WebClient({0}).GetString(Url:{1})", ClientType, request.Url));
+            PrepareRequest(request);
+            await DelayRequest(request);
+            var result = await Run(request);
+            lastRequest = DateTime.Now;
+            result.Request = request;
+            WebResult stringResult = result;
+
+            logger.Debug(string.Format("WebClient({0}): Returning {1} => {2}", ClientType, result.Status, (result.IsRedirect ? result.RedirectingTo + " " : "") + (stringResult.ContentString ?? "<NULL>")));
+
+            if (stringResult.Headers.TryGetValue("server", out var server))
+            {
+                if (server[0] == "cloudflare-nginx")
+                    stringResult.ContentString = BrowserUtil.DecodeCloudFlareProtectedEmailFromHTML(stringResult.ContentString);
+            }
+            return stringResult;
         }
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously

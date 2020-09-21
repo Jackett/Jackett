@@ -33,11 +33,16 @@ namespace Jackett.Test
 
         public static IContainer Container => testContainer;
 
-        //Currently not used in any Unit Tests
-        public static void RegisterRequestCallback(WebRequest r, Func<WebRequest, WebResult> f)
+        public static void RegisterByteCall(WebRequest r, Func<WebRequest, WebResult> f)
         {
             var client = testContainer.Resolve<WebClient>() as TestWebClient;
-            client.RegisterRequestCallback(r, f);
+            client.RegisterByteCall(r, f);
+        }
+
+        public static void RegisterStringCall(WebRequest r, Func<WebRequest, WebResult> f)
+        {
+            var client = testContainer.Resolve<WebClient>() as TestWebClient;
+            client.RegisterStringCall(r, f);
         }
 
         public static string GetResource(string item)

@@ -83,7 +83,7 @@ namespace Jackett.Common.Indexers
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
-            await WebRequestWithCookiesAsync(LandingUrl);
+            await RequestStringWithCookies(LandingUrl);
             return configData;
         }
 
@@ -155,12 +155,12 @@ namespace Jackett.Common.Indexers
 
             searchUrl += "?" + queryCollection.GetQueryString();
 
-            var searchPage = await RequestWithCookiesAndRetryAsync(searchUrl, method: RequestType.POST, data: searchParams);
+            var searchPage = await PostDataWithCookiesAndRetry(searchUrl, searchParams);
             // Occasionally the cookies become invalid, login again if that happens
             if (searchPage.IsRedirect)
             {
                 await ApplyConfiguration(null);
-                searchPage = await RequestWithCookiesAndRetryAsync(searchUrl, method: RequestType.POST, data: searchParams);
+                searchPage = await PostDataWithCookiesAndRetry(searchUrl, searchParams);
             }
 
             try

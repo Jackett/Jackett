@@ -1,4 +1,4 @@
- using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
@@ -79,7 +79,7 @@ namespace Jackett.Common.Indexers
                 { "rememberme[]", "1" }
             };
 
-            var loginPage = await RequestWithCookiesAndRetryAsync(LoginUrl, "", RequestType.GET, LoginUrl);
+            var loginPage = await RequestStringWithCookiesAndRetry(LoginUrl, "", LoginUrl);
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true);
             await ConfigureIfOK(result.Cookies, result.ContentString != null && result.ContentString.Contains("logout.php"), () =>
@@ -117,8 +117,7 @@ namespace Jackett.Common.Indexers
                 { "X-Requested-With", "XMLHttpRequest" }
             };
 
-            var response = await RequestWithCookiesAndRetryAsync(
-                searchUrl, referer: SearchUrlReferer, headers: extraHeaders);
+            var response = await RequestStringWithCookiesAndRetry(searchUrl, null, SearchUrlReferer, extraHeaders);
 
             var results = response.ContentString;
             try

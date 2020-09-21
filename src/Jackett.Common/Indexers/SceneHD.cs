@@ -91,7 +91,7 @@ namespace Jackett.Common.Indexers
                 qc.Add("categories[" + cat + "]", "1");
 
             var searchUrl = SearchUrl + qc.GetQueryString();
-            var response = await RequestWithCookiesAndRetryAsync(searchUrl);
+            var response = await RequestStringWithCookiesAndRetry(searchUrl);
 
             if (response.ContentString?.Contains("User not found or passkey not set") == true)
                 throw new Exception("The passkey is invalid. Check the indexer configuration.");

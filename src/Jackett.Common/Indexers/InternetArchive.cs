@@ -143,7 +143,7 @@ namespace Jackett.Common.Indexers
                 {"output", "json"}
             };
             var fullSearchUrl = SearchUrl + "?" + qc.GetQueryString();
-            var result = await RequestWithCookiesAndRetryAsync(fullSearchUrl);
+            var result = await RequestStringWithCookiesAndRetry(fullSearchUrl);
             foreach (var torrent in ParseResponse(result))
                 releases.Add(MakeRelease(torrent));
 
