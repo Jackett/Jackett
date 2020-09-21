@@ -55,6 +55,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(2, TorznabCatType.PC);
             AddCategoryMapping(3, TorznabCatType.BooksEbook);
             AddCategoryMapping(4, TorznabCatType.AudioAudiobook);
+            AddCategoryMapping(5, TorznabCatType.Other);
+            AddCategoryMapping(6, TorznabCatType.BooksMagazines);
             AddCategoryMapping(7, TorznabCatType.BooksComics);
             AddCategoryMapping(8, TorznabCatType.TVAnime);
             AddCategoryMapping(9, TorznabCatType.Movies);
@@ -62,6 +64,9 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(10, TorznabCatType.TVSD);
             AddCategoryMapping(10, TorznabCatType.TV);
             AddCategoryMapping(11, TorznabCatType.PCGames);
+            AddCategoryMapping(12, TorznabCatType.Console);
+            AddCategoryMapping(13, TorznabCatType.Other);
+            AddCategoryMapping(14, TorznabCatType.Other);
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -151,9 +156,8 @@ namespace Jackett.Common.Indexers
                         var catStr = row.Children[0].FirstElementChild.GetAttribute("href").Split(new char[] { '[', ']' })[1];
                         release.Category = MapTrackerCatToNewznab(catStr);
 
-                        var qLink = row.Children[1].QuerySelector("a");
-                        var linkStr = qLink.GetAttribute("href");
-                        release.Comments = new Uri(BaseUrl + "/" + linkStr);
+                        var qDetails = row.Children[1].QuerySelector("a[title='View Torrent']");
+                        release.Comments = new Uri(BaseUrl + "/" + qDetails.GetAttribute("href"));
                         release.Guid = release.Comments;
 
                         var qDownload = row.Children[1].QuerySelector("a[title='Download']");
@@ -166,7 +170,6 @@ namespace Jackett.Common.Indexers
                         release.Size = ReleaseInfo.GetBytes(sizeStr);
 
                         release.Files = ParseUtil.CoerceInt(row.Children[2].TextContent.Trim());
-                        release.Grabs = ParseUtil.CoerceInt(row.Children[6].TextContent.Trim());
                         release.Seeders = ParseUtil.CoerceInt(row.Children[7].TextContent.Trim());
                         release.Peers = ParseUtil.CoerceInt(row.Children[8].TextContent.Trim()) + release.Seeders;
 
