@@ -105,12 +105,12 @@ login:
   inputs:
     cookie: "{{ .Config.cookie }}"
   test:
-    path: torrent/
+    path: /
     selector: button[href="account-logout.php"]
 
 search:
   paths:
-    - path: torrent/ajgettorrents.php
+    - path: ajgettorrents.php
       method: post
   inputs:
     page: 1
@@ -152,7 +152,7 @@ search:
           args: ["wk", "week"]
         - name: timeago
     download:
-      selector: a[href^="download.php?id="]
+      selector: a[href*="download.php?id="]
       attribute: href
     comments:
       selector: a[href*="#comments"]
