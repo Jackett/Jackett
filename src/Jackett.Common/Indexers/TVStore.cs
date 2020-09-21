@@ -66,7 +66,7 @@ namespace Jackett.Common.Indexers
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-            var loginPage = await WebRequestWithCookiesAsync(LoginPageUrl, string.Empty);
+            var loginPage = await RequestWithCookiesAsync(LoginPageUrl, string.Empty);
             var pairs = new Dictionary<string, string>
             {
                 {"username", configData.Username.Value},

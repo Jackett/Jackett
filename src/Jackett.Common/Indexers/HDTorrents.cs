@@ -104,7 +104,7 @@ namespace Jackett.Common.Indexers
         {
             LoadValuesFromJson(configJson);
 
-            var loginPage = await WebRequestWithCookiesAsync(LoginUrl, string.Empty);
+            var loginPage = await RequestWithCookiesAsync(LoginUrl, string.Empty);
 
             var pairs = new Dictionary<string, string> {
                 { "uid", configData.Username.Value },

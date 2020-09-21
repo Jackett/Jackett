@@ -119,12 +119,12 @@ namespace Jackett.Common.Indexers
             }
             searchUrl += "?" + queryCollection.GetQueryString();
 
-            var response = await WebRequestWithCookiesAsync(searchUrl);
+            var response = await RequestWithCookiesAsync(searchUrl);
             if (response.IsRedirect || response.Cookies != null && response.Cookies.Contains("pass=deleted;"))
             {
                 // re-login
                 await ApplyConfiguration(null);
-                response = await WebRequestWithCookiesAsync(searchUrl);
+                response = await RequestWithCookiesAsync(searchUrl);
             }
 
             var results = response.ContentString;

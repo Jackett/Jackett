@@ -89,7 +89,7 @@ namespace Jackett.Common.Indexers
                 {"returnto", "/"},
                 {"login", "Log in!"}
             };
-            var loginPage = await WebRequestWithCookiesAsync(SiteLink, string.Empty);
+            var loginPage = await RequestWithCookiesAsync(SiteLink, string.Empty);
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, SiteLink, SiteLink);
             await ConfigureIfOK(
                 result.Cookies, result.ContentString?.Contains("my.php") == true, () =>

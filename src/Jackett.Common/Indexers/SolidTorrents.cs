@@ -103,7 +103,7 @@ namespace Jackett.Common.Indexers
                 {"fuv", "no"}
             };
             var fullSearchUrl = SearchUrl + "?" + queryCollection.GetQueryString();
-            var result = await WebRequestWithCookiesAsync(fullSearchUrl, headers: APIHeaders);
+            var result = await RequestWithCookiesAsync(fullSearchUrl, headers: APIHeaders);
             return CheckResponse(result);
         }
 

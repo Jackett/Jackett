@@ -93,7 +93,7 @@ namespace Jackett.Common.Indexers
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var loginPage = await WebRequestWithCookiesAsync(LoginUrl, configData.CookieHeader.Value);
+            var loginPage = await RequestWithCookiesAsync(LoginUrl, configData.CookieHeader.Value);
             var parser = new HtmlParser();
             var cq = parser.ParseDocument(loginPage.ContentString);
             var recaptchaSiteKey = cq.QuerySelector(".g-recaptcha")?.GetAttribute("data-sitekey");

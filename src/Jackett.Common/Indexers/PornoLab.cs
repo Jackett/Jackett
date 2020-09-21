@@ -183,13 +183,13 @@ namespace Jackett.Common.Indexers
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
             configData.CookieHeader.Value = null;
-            var response = await WebRequestWithCookiesAsync(LoginUrl);
+            var response = await RequestWithCookiesAsync(LoginUrl);
             var LoginResultParser = new HtmlParser();
             var LoginResultDocument = LoginResultParser.ParseDocument(response.ContentString);
             var captchaimg = LoginResultDocument.QuerySelector("img[src*=\"/captcha/\"]");
             if (captchaimg != null)
             {
-                var captchaImage = await WebRequestWithCookiesAsync("https:" + captchaimg.GetAttribute("src"));
+                var captchaImage = await RequestWithCookiesAsync("https:" + captchaimg.GetAttribute("src"));
                 configData.CaptchaImage.Value = captchaImage.ContentBytes;
 
                 var codefield = LoginResultDocument.QuerySelector("input[name^=\"cap_code_\"]");
@@ -260,12 +260,12 @@ namespace Jackett.Common.Indexers
             }
 
             var searchUrl = SearchUrl + "?" + queryCollection.GetQueryString();
-            var results = await WebRequestWithCookiesAsync(searchUrl);
+            var results = await RequestWithCookiesAsync(searchUrl);
             if (!results.ContentString.Contains("Вы зашли как:"))
             {
                 // re login
                 await ApplyConfiguration(null);
-                results = await WebRequestWithCookiesAsync(searchUrl);
+                results = await RequestWithCookiesAsync(searchUrl);
             }
             try
             {
@@ -337,7 +337,7 @@ namespace Jackett.Common.Indexers
         public override async Task<byte[]> Download(Uri link)
         {
             var downloadlink = link;
-            var response = await WebRequestWithCookiesAsync(link.ToString());
+            var response = await RequestWithCookiesAsync(link.ToString());
             var results = response.ContentString;
             var SearchResultParser = new HtmlParser();
             var SearchResultDocument = SearchResultParser.ParseDocument(results);

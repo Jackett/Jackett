@@ -63,7 +63,7 @@ namespace Jackett.Common.Indexers
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
             var result = configData;
-            var loginPage = await WebRequestWithCookiesAsync(LoginUrl, configData.CookieHeader.Value);
+            var loginPage = await RequestWithCookiesAsync(LoginUrl, configData.CookieHeader.Value);
             if (loginPage.IsRedirect)
                 return result; // already logged in
             var parser = new HtmlParser();

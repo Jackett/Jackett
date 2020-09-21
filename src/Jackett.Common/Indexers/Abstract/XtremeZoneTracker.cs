@@ -75,7 +75,7 @@ namespace Jackett.Common.Indexers.Abstract
                 { "password", configData.Password.Value.Trim() }
             };
             var jsonData = JsonConvert.SerializeObject(body);
-            var result = await WebRequestWithCookiesAsync(
+            var result = await RequestWithCookiesAsync(
                 LoginUrl, method: RequestType.POST, headers: ApiHeaders, rawbody: jsonData);
             var json = JObject.Parse(result.ContentString);
             _token = json.Value<string>("token");
@@ -107,11 +107,11 @@ namespace Jackett.Common.Indexers.Abstract
                 await RenewalTokenAsync();
 
             var searchUrl = SearchUrl + "?" + qc.GetQueryString();
-            var response = await WebRequestWithCookiesAsync(searchUrl, headers: GetSearchHeaders());
+            var response = await RequestWithCookiesAsync(searchUrl, headers: GetSearchHeaders());
             if (response.Status == HttpStatusCode.Unauthorized)
             {
                 await RenewalTokenAsync(); // re-login
-                response = await WebRequestWithCookiesAsync(searchUrl, headers: GetSearchHeaders());
+                response = await RequestWithCookiesAsync(searchUrl, headers: GetSearchHeaders());
             }
             else if (response.Status != HttpStatusCode.OK)
                 throw new Exception($"Unknown error in search: {response.ContentString}");
@@ -169,11 +169,11 @@ namespace Jackett.Common.Indexers.Abstract
 
         public override async Task<byte[]> Download(Uri link)
         {
-            var response = await WebRequestWithCookiesAsync(link.ToString(), headers: GetSearchHeaders());
+            var response = await RequestWithCookiesAsync(link.ToString(), headers: GetSearchHeaders());
             if (response.Status == HttpStatusCode.Unauthorized)
             {
                 await RenewalTokenAsync();
-                response = await WebRequestWithCookiesAsync(link.ToString(), headers: GetSearchHeaders());
+                response = await RequestWithCookiesAsync(link.ToString(), headers: GetSearchHeaders());
             }
             else if (response.Status != HttpStatusCode.OK)
                 throw new Exception($"Unknown error in download: {response.ContentBytes}");

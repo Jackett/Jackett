@@ -105,7 +105,7 @@ namespace Jackett.Common.Indexers
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-            var loginPage = await WebRequestWithCookiesAsync(TokenUrl);
+            var loginPage = await RequestWithCookiesAsync(TokenUrl);
             var parser = new HtmlParser();
             var dom = parser.ParseDocument(loginPage.ContentString);
             var token = dom.QuerySelector("form.form-horizontal > span");

@@ -86,7 +86,7 @@ namespace Jackett.Common.Indexers
             for (var page = 0; page < maxPages; page++)
             {
                 var searchUrl = string.Format(SearchUrl, page * MaxItemsPerPage, searchString);
-                var result = await WebRequestWithCookiesAsync(searchUrl, headers: _apiHeaders);
+                var result = await RequestWithCookiesAsync(searchUrl, headers: _apiHeaders);
 
                 try
                 {

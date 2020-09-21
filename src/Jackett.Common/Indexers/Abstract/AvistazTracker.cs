@@ -149,7 +149,7 @@ without this configuration the torrent download does not work.<br/>You can find 
                 { "password", configData.Password.Value.Trim() },
                 { "pid", configData.Pid.Value.Trim() }
             };
-            var result = await WebRequestWithCookiesAsync(AuthUrl, method: RequestType.POST, data: body, headers: AuthHeaders);
+            var result = await RequestWithCookiesAsync(AuthUrl, method: RequestType.POST, data: body, headers: AuthHeaders);
             var json = JObject.Parse(result.ContentString);
             _token = json.Value<string>("token");
             if (_token == null)

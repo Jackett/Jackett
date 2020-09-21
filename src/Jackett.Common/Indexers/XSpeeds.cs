@@ -132,14 +132,14 @@ namespace Jackett.Common.Indexers
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var loginPage = await WebRequestWithCookiesAsync(LandingUrl);
+            var loginPage = await RequestWithCookiesAsync(LandingUrl);
             var parser = new HtmlParser();
             var dom = parser.ParseDocument(loginPage.ContentString);
             var qCaptchaImg = dom.QuerySelector("img#regimage");
             if (qCaptchaImg != null)
             {
                 var captchaUrl = qCaptchaImg.GetAttribute("src");
-                var captchaImageResponse = await WebRequestWithCookiesAsync(captchaUrl, loginPage.Cookies, RequestType.GET, LandingUrl);
+                var captchaImageResponse = await RequestWithCookiesAsync(captchaUrl, loginPage.Cookies, RequestType.GET, LandingUrl);
 
                 var captchaText = new StringItem { Name = "Captcha Text" };
                 var captchaImage = new ImageItem {Name = "Captcha Image", Value = captchaImageResponse.ContentBytes};
@@ -189,7 +189,7 @@ namespace Jackett.Common.Indexers
                                     {"timezone", "0"},
                                     {"showrows", "50"}
                                 };
-                var rssPage = await WebRequestWithCookiesAsync(
+                var rssPage = await RequestWithCookiesAsync(
                     GetRSSKeyUrl, result.Cookies, RequestType.POST, data: rssParams);
                 var match = Regex.Match(rssPage.ContentString, "(?<=secret_key\\=)([a-zA-z0-9]*)");
                 configData.RSSKey.Value = match.Success ? match.Value : string.Empty;

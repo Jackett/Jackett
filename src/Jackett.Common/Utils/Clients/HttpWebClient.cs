@@ -16,6 +16,8 @@ using NLog;
 
 namespace Jackett.Common.Utils.Clients
 {
+    // This implementation is legacy and it's used only by Mono version
+    // TODO: Merge with HttpWebClient2 or remove when we drop support for Mono 5.x
     public class HttpWebClient : WebClient
     {
         public HttpWebClient(IProcessService p, Logger l, IConfigurationService c, ServerConfig sc)

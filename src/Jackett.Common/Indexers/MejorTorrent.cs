@@ -101,14 +101,14 @@ namespace Jackett.Common.Indexers
             var downloadUrl = link.ToString();
 
             // Eg https://www.mejortorrentt.net/peli-descargar-torrent-11995-Harry-Potter-y-la-piedra-filosofal.html
-            var result = await WebRequestWithCookiesAsync(downloadUrl);
+            var result = await RequestWithCookiesAsync(downloadUrl);
             if (result.Status != HttpStatusCode.OK)
                 throw new ExceptionWithConfigData(result.ContentString, configData);
             var dom = parser.ParseDocument(result.ContentString);
             downloadUrl = SiteLink + dom.QuerySelector("a[href*=\"sec=descargas\"]").GetAttribute("href");
 
             // Eg https://www.mejortorrentt.net/secciones.php?sec=descargas&ap=contar&tabla=peliculas&id=11995&link_bajar=1
-            result = await WebRequestWithCookiesAsync(downloadUrl);
+            result = await RequestWithCookiesAsync(downloadUrl);
             if (result.Status != HttpStatusCode.OK)
                 throw new ExceptionWithConfigData(result.ContentString, configData);
             dom = parser.ParseDocument(result.ContentString);
@@ -123,7 +123,7 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
             var url = SiteLink + NewTorrentsUrl;
-            var result = await WebRequestWithCookiesAsync(url);
+            var result = await RequestWithCookiesAsync(url);
             if (result.Status != HttpStatusCode.OK)
                 throw new ExceptionWithConfigData(result.ContentString, configData);
             try
@@ -180,7 +180,7 @@ namespace Jackett.Common.Indexers
             var searchTerm = GetLongestWord(query.SearchTerm);
             var qc = new NameValueCollection { { "sec", "buscador" }, { "valor", searchTerm } };
             var url = SiteLink + SearchUrl + "?" + qc.GetQueryString();
-            var result = await WebRequestWithCookiesAsync(url);
+            var result = await RequestWithCookiesAsync(url);
             if (result.Status != HttpStatusCode.OK)
                 throw new ExceptionWithConfigData(result.ContentString, configData);
 
@@ -259,7 +259,7 @@ namespace Jackett.Common.Indexers
         private async Task ParseSeriesRelease(ICollection<ReleaseInfo> releases, TorznabQuery query, string title,
             string commentsLink, string cat, DateTime publishDate)
         {
-            var result = await WebRequestWithCookiesAsync(commentsLink);
+            var result = await RequestWithCookiesAsync(commentsLink);
             if (result.Status != HttpStatusCode.OK)
                 throw new ExceptionWithConfigData(result.ContentString, configData);
 

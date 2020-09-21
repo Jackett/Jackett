@@ -259,7 +259,7 @@ namespace Jackett.Common.Indexers
         {
             // Checking ...
             Output("\n-> Checking logged-in state....");
-            var loggedInCheck = await WebRequestWithCookiesAsync(SearchUrl);
+            var loggedInCheck = await RequestWithCookiesAsync(SearchUrl);
             if (!loggedInCheck.ContentString.Contains("logout.php"))
             {
                 // Cookie expired, renew session on provider

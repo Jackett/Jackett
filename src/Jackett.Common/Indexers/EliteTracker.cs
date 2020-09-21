@@ -151,7 +151,7 @@ namespace Jackett.Common.Indexers
                 { "password", configData.Password.Value }
             };
 
-            var result = await WebRequestWithCookiesAsync(LoginUrl, "", RequestType.POST, data: pairs);
+            var result = await RequestWithCookiesAsync(LoginUrl, "", RequestType.POST, data: pairs);
 
             await ConfigureIfOK(result.Cookies, result.Cookies != null, () =>
            {
@@ -174,12 +174,12 @@ namespace Jackett.Common.Indexers
                 {"category", "0"} // multi cat search not supported
             };
 
-            var results = await WebRequestWithCookiesAsync(BrowseUrl, method: RequestType.POST, data: pairs);
+            var results = await RequestWithCookiesAsync(BrowseUrl, method: RequestType.POST, data: pairs);
             if (results.IsRedirect)
             {
                 // re-login
                 await ApplyConfiguration(null);
-                results = await WebRequestWithCookiesAsync(BrowseUrl, method: RequestType.POST, data: pairs);
+                results = await RequestWithCookiesAsync(BrowseUrl, method: RequestType.POST, data: pairs);
             }
 
             try
