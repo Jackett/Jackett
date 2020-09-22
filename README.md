@@ -40,6 +40,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BTDB
  * BTDIGG
  * BTSOW
+ * CiliPro (LIAORENCILI)
  * ConCen
  * Corsaro.red
  * cpasbien
@@ -72,7 +73,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * KickAssTorrent (KATcr)
  * Legit Torrents
  * LePorno
- * LIAORENCILI (Cili180)
  * LimeTorrents
  * LinuxTracker
  * MacTorrents
