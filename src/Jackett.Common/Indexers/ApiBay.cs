@@ -179,7 +179,7 @@ namespace Jackett.Common.Indexers
         private class QueryResponseItem
         {
             [JsonProperty("id")]
-            [JsonConverter(typeof(ParseStringConverter))]
+            [JsonConverter(typeof(StringToLongConverter))]
             public long Id { get; set; }
 
             [JsonProperty("name")]
@@ -189,33 +189,33 @@ namespace Jackett.Common.Indexers
             public string InfoHash { get; set; }
 
             [JsonProperty("leechers")]
-            [JsonConverter(typeof(ParseStringConverter))]
+            [JsonConverter(typeof(StringToLongConverter))]
             public long Leechers { get; set; }
 
             [JsonProperty("seeders")]
-            [JsonConverter(typeof(ParseStringConverter))]
+            [JsonConverter(typeof(StringToLongConverter))]
             public long Seeders { get; set; }
 
             [JsonProperty("num_files")]
-            [JsonConverter(typeof(ParseStringConverter))]
+            [JsonConverter(typeof(StringToLongConverter))]
             public long NumFiles { get; set; }
 
             [JsonProperty("size")]
-            [JsonConverter(typeof(ParseStringConverter))]
+            [JsonConverter(typeof(StringToLongConverter))]
             public long Size { get; set; }
 
             [JsonProperty("username")]
             public string Username { get; set; }
 
             [JsonProperty("added")]
-            [JsonConverter(typeof(ParseStringConverter))]
+            [JsonConverter(typeof(StringToLongConverter))]
             public long Added { get; set; }
 
             [JsonProperty("status")]
             public string Status { get; set; }
 
             [JsonProperty("category")]
-            [JsonConverter(typeof(ParseStringConverter))]
+            [JsonConverter(typeof(StringToLongConverter))]
             public long Category { get; set; }
 
             [JsonProperty("imdb")]
