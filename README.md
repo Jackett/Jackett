@@ -33,6 +33,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Anime Tosho
  * AniRena
  * AniSource
+ * ApiBay (ThePirateBay via its API)
  * AudioBook Bay (ABB)
  * BigFANGroup
  * BitRu
