@@ -135,6 +135,12 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
+            // Keywordless search terms return recent torrents rather than no results.
+            if (string.IsNullOrEmpty(query.SearchTerm))
+            {
+                return await GetRecentTorrents();
+            }
+
             var categories = MapTorznabCapsToTrackers(query);
 
             var queryStringCategories = string.Join(
@@ -150,13 +156,22 @@ namespace Jackett.Common.Indexers
 
             var queryResponseItems = JsonConvert.DeserializeObject<List<QueryResponseItem>>(response.ContentString);
 
-            // The API returns a single item to represent a state of no results. Avoid returning this as a result.
+            // The API returns a single item to represent a state of no results. Avoid returning this result.
             if (queryResponseItems.Count == 1 && queryResponseItems.First().Id == 0)
             {
                 return Enumerable.Empty<ReleaseInfo>();
             }
 
             return queryResponseItems.Select(CreateReleaseInfo);
+        }
+
+        private async Task<IEnumerable<ReleaseInfo>> GetRecentTorrents()
+        {
+            var response = await RequestWithCookiesAsync($"{SiteLink}precompiled/data_top100_recent.json");
+
+            return JsonConvert
+                   .DeserializeObject<List<QueryResponseItem>>(response.ContentString)
+                   .Select(CreateReleaseInfo);
         }
 
         private ReleaseInfo CreateReleaseInfo(QueryResponseItem item)

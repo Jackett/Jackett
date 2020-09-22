@@ -17,14 +17,15 @@ namespace Jackett.Common.Converters
             {
                 return null;
             }
-            if (long.TryParse((string)reader.Value, out var foo))
+
+            if (reader.Value is long)
             {
-                return foo;
+                return reader.Value;
             }
-            else
-            {
-                return null;
-            }
+
+            return long.TryParse((string)reader.Value, out var foo)
+                ? foo
+                : (long?) null;
         }
 
         public override bool CanConvert(Type objectType) => objectType == typeof(string);
