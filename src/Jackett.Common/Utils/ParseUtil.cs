@@ -83,23 +83,6 @@ namespace Jackett.Common.Utils
 
             return "tt" + ((int)imdbid).ToString("D7");
         }
-        
-        public static DateTime ParseDateTimeFromUnixEpochTimeStamp(double unixTimeStamp)
-        {
-            var epochDateTime = new DateTime(
-                1970
-                , 1
-                , 1
-                , 0
-                , 0
-                , 0
-                , 0
-                , DateTimeKind.Utc
-            );
-            
-            epochDateTime = epochDateTime.AddSeconds(unixTimeStamp).ToLocalTime();
-            
-            return epochDateTime;
-        }
+
     }
 }

@@ -161,7 +161,7 @@ namespace Jackett.Common.Indexers
                 Category = MapTrackerCatToNewznab(item.Category.ToString()),
                 MagnetUri = magnetUri,
                 InfoHash = item.InfoHash,
-                PublishDate = ParseUtil.ParseDateTimeFromUnixEpochTimeStamp(item.Added),
+                PublishDate = DateTimeUtil.UnixTimestampToDateTime(item.Added),
                 Guid = magnetUri,
                 Seeders = item.Seeders,
                 Peers = item.Seeders + item.Leechers,
