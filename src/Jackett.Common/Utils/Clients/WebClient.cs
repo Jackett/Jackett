@@ -159,17 +159,31 @@ namespace Jackett.Common.Utils.Clients
 
         public virtual async Task<WebResult> GetResultAsync(WebRequest request)
         {
-            logger.Debug(string.Format("WebClient({0}).GetResultAsync(Url:{1})", ClientType, request.Url));
+            logger.Debug($"WebClient({ClientType}).GetResultAsync(Method: {request.Type} Url: {request.Url})");
             PrepareRequest(request);
             await DelayRequest(request);
             var result = await Run(request);
             lastRequest = DateTime.Now;
             result.Request = request;
-            logger.Debug(
-                string.Format(
-                    "WebClient({0}): Returning {1} => {2} bytes", ClientType, result.Status,
-                    (result.IsRedirect ? result.RedirectingTo + " " : "") +
-                    (result.ContentBytes == null ? "<NULL>" : result.ContentBytes.Length.ToString())));
+
+            if (logger.IsDebugEnabled) // optimization to compute result.ContentString in debug mode only
+            {
+                var body = "";
+                var bodySize = 0;
+                if (result.ContentBytes != null && result.ContentBytes.Length > 0)
+                {
+                    bodySize = result.ContentBytes.Length;
+                    var contentString = result.ContentString.Trim();
+                    if (contentString.StartsWith("<") || contentString.StartsWith("{"))
+                        body = "\n" + contentString;
+                    else
+                        body = " <BINARY>";
+                }
+                logger.Debug($@"WebClient({ClientType}): Returning {result.Status} => {
+                                     (result.IsRedirect ? result.RedirectingTo + " " : "")
+                                 }{bodySize} bytes{body}");
+            }
+
             if (result.Headers.TryGetValue("server", out var server) && server[0] == "cloudflare-nginx")
                 result.ContentString = BrowserUtil.DecodeCloudFlareProtectedEmailFromHTML(result.ContentString);
             return result;
