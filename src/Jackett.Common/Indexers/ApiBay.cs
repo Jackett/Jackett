@@ -33,7 +33,10 @@ namespace Jackett.Common.Indexers
             : base(
                 id: "apibay", name: "The Pirate Bay (API Bay)",
                 description: "Pirate Bay (TPB) is the galaxy’s most resilient Public BitTorrent site",
-                link: "https://apibay.org/", caps: new TorznabCapabilities(), configService: configService,
+                link: "https://apibay.org/", caps: new TorznabCapabilities
+                {
+                    SupportsImdbMovieSearch = true
+                }, configService: configService,
                 client: client,
                 logger: logger, p: p, configData: new ConfigurationData())
         {
@@ -131,14 +134,14 @@ namespace Jackett.Common.Indexers
                 .Select(CreateReleaseInfo);
         }
 
-        private static ReleaseInfo CreateReleaseInfo(QueryResponseItem item)
+        private ReleaseInfo CreateReleaseInfo(QueryResponseItem item)
         {
             var magnetUri = new Uri(MagnetUri.Replace(KeyInfoHash, item.InfoHash));
 
             return new ReleaseInfo
             {
                 Title = item.Name,
-                // Category = MapTrackerCatDescToNewznab(item.Value<string>("category")),
+                Category = MapTrackerCatToNewznab(item.Category.ToString()),
                 MagnetUri = magnetUri,
                 InfoHash = item.InfoHash,
                 PublishDate = ParseUtil.ParseDateTimeFromUnixEpochTimeStamp(item.Added),
@@ -146,8 +149,12 @@ namespace Jackett.Common.Indexers
                 Seeders = item.Seeders,
                 Peers = item.Seeders + item.Leechers,
                 Size = item.Size,
+                Author = item.Username,
                 DownloadVolumeFactor = 0,
-                UploadVolumeFactor = 1
+                UploadVolumeFactor = 1,
+                Imdb = string.IsNullOrEmpty(item.Imdb)
+                    ? null
+                    : ParseUtil.GetImdbID(item.Imdb)
             };
         }
 
