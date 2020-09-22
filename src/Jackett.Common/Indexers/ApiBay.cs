@@ -29,25 +29,32 @@ namespace Jackett.Common.Indexers
             "ounce&tr=udp%3A%2F%2Ftracker.pirateparty.gr%3A6969%2Fannounce&tr=udp%3A" +
             "%2F%2Ftracker.cyberia.is%3A6969%2Fannounce";
 
-        public ApiBay(IIndexerConfigurationService configService, WebClient client, Logger logger, IProtectionService p)
-            : base(
-                id: "apibay", name: "The Pirate Bay (API Bay)",
-                description: "Pirate Bay (TPB) is the galaxy’s most resilient Public BitTorrent site",
-                link: "https://apibay.org/", caps: new TorznabCapabilities
-                {
-                    SupportsImdbMovieSearch = true
-                }, configService: configService,
+        public ApiBay(
+            IIndexerConfigurationService configService,
+            WebClient client,
+            Logger logger,
+            IProtectionService p
+            ) : base(
+                id: "apibay",
+                name: "The Pirate Bay (API Bay)",
+                description: "The Pirate Bay API",
+                link: "https://apibay.org/",
+                caps: new TorznabCapabilities(),
+                configService: configService,
                 client: client,
-                logger: logger, p: p, configData: new ConfigurationData())
+                logger: logger,
+                p: p,
+                configData: new ConfigurationData()
+                )
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "public";
 
-            ConfigureCategoryMappings();
+            AddCategoryMappings();
         }
 
-        private void ConfigureCategoryMappings()
+        private void AddCategoryMappings()
         {
             // Audio
             AddCategoryMapping(100, TorznabCatType.Audio, "Audio");
@@ -110,7 +117,15 @@ namespace Jackett.Common.Indexers
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-            await ConfigureIfOK(string.Empty, true, () => throw new Exception("Could not find releases from this URL"));
+
+            var releases = await PerformQuery(new TorznabQuery());
+
+            await ConfigureIfOK(
+                string.Empty,
+                releases.Any(),
+                () => throw new Exception("Could not find releases from this URL")
+                );
+
             return IndexerConfigurationStatus.Completed;
         }
 
@@ -158,7 +173,7 @@ namespace Jackett.Common.Indexers
             };
         }
 
-        public class QueryResponseItem
+        private class QueryResponseItem
         {
             [JsonProperty("id")]
             [JsonConverter(typeof(ParseStringConverter))]
