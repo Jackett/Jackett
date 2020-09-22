@@ -22,7 +22,9 @@ namespace Jackett.Common.Indexers
     {
         private const string KeyInfoHash = "{info_hash}";
 
-        private static readonly string MagnetUri =
+        private static readonly Uri _pirateProxyBaseUri = new Uri("https://pirateproxy.cloud");
+
+        private static readonly string _magnetUri =
             $"magnet:?xt=urn:btih:{KeyInfoHash}&tr=udp%3A%2F%2Ftracker.coppersurfer.tk" +
             "%3A6969%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2920%2Fannounce&tr=udp%3" +
             "A%2F%2Ftracker.opentrackr.org%3A1337&tr=udp%3A%2F%2Ftracker.internetwar" +
@@ -159,12 +161,15 @@ namespace Jackett.Common.Indexers
 
         private ReleaseInfo CreateReleaseInfo(QueryResponseItem item)
         {
-            var magnetUri = new Uri(MagnetUri.Replace(KeyInfoHash, item.InfoHash));
+            var magnetUri = new Uri(_magnetUri.Replace(KeyInfoHash, item.InfoHash));
 
             return new ReleaseInfo
             {
                 Title = item.Name,
                 Category = MapTrackerCatToNewznab(item.Category.ToString()),
+                Comments = item.Id == 0
+                    ? null
+                    : new Uri(_pirateProxyBaseUri, $"description.php?id={item.Id}"),
                 MagnetUri = magnetUri,
                 InfoHash = item.InfoHash,
                 PublishDate = DateTimeUtil.UnixTimestampToDateTime(item.Added),
