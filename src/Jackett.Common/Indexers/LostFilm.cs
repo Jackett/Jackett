@@ -113,14 +113,14 @@ namespace Jackett.Common.Indexers
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
             // looks like after some failed login attempts there's a captcha
-            var loginPage = await WebRequestWithCookiesAsync(LoginUrl, string.Empty);
+            var loginPage = await RequestWithCookiesAsync(LoginUrl, string.Empty);
             var parser = new HtmlParser();
             var document = parser.ParseDocument(loginPage.ContentString);
             var qCaptchaImg = document.QuerySelector("img#captcha_pictcha");
             if (qCaptchaImg != null)
             {
                 var captchaUrl = SiteLink + qCaptchaImg.GetAttribute("src");
-                var captchaImage = await WebRequestWithCookiesAsync(captchaUrl, loginPage.Cookies);
+                var captchaImage = await RequestWithCookiesAsync(captchaUrl, loginPage.Cookies);
                 configData.CaptchaImage.Value = captchaImage.ContentBytes;
             }
             else
@@ -183,7 +183,7 @@ namespace Jackett.Common.Indexers
                 { "type", "logout" }
             };
 
-            var response = await WebRequestWithCookiesAsync(ApiUrl, method: RequestType.POST, data: data);
+            var response = await RequestWithCookiesAsync(ApiUrl, method: RequestType.POST, data: data);
             logger.Debug("Logout result: " + response.ContentString);
 
             var isOK = response.Status == System.Net.HttpStatusCode.OK;
@@ -214,7 +214,7 @@ namespace Jackett.Common.Indexers
 
         private async Task<WebResult> RequestStringAndRelogin(string url)
         {
-            var results = await WebRequestWithCookiesAsync(url);
+            var results = await RequestWithCookiesAsync(url);
             if (results.ContentString.Contains("503 Service"))
             {
                 throw new ExceptionWithConfigData(results.ContentString, configData);
@@ -223,7 +223,7 @@ namespace Jackett.Common.Indexers
             {
                 // Re-login
                 await ApplyConfiguration(null);
-                return await WebRequestWithCookiesAsync(url);
+                return await RequestWithCookiesAsync(url);
             }
             else
             {
@@ -287,7 +287,7 @@ namespace Jackett.Common.Indexers
                     { "val", searchString }
                 };
                 logger.Debug("> Searching: " + searchString);
-                var response = await WebRequestWithCookiesAsync(ApiUrl, method: RequestType.POST, data: data);
+                var response = await RequestWithCookiesAsync(ApiUrl, method: RequestType.POST, data: data);
                 if (response.ContentString == null)
                 {
                     logger.Debug("> Empty series response for query: " + searchString);
@@ -471,7 +471,7 @@ namespace Jackett.Common.Indexers
             logger.Debug("FetchSeriesReleases: " + url + " S: " + query.Season.ToString() + " E: " + query.Episode + " Filter: " + filter);
 
             var releases = new List<ReleaseInfo>();
-            var results = await WebRequestWithCookiesAsync(url);
+            var results = await RequestWithCookiesAsync(url);
 
             try
             {
@@ -626,7 +626,7 @@ namespace Jackett.Common.Indexers
             logger.Debug("FetchTrackerReleases: " + url);
 
             // Get redirection page with generated link on it. This link can't be constructed manually as it contains Hash field and hashing algo is unknown.
-            var results = await WebRequestWithCookiesAsync(url);
+            var results = await RequestWithCookiesAsync(url);
             if (results.ContentString == null)
             {
                 throw new ExceptionWithConfigData("Empty response from " + url, configData);
@@ -659,7 +659,7 @@ namespace Jackett.Common.Indexers
         private async Task<List<ReleaseInfo>> FollowTrackerRedirection(string url, TrackerUrlDetails details)
         {
             logger.Debug("FollowTrackerRedirection: " + url);
-            var results = await WebRequestWithCookiesAsync(url);
+            var results = await RequestWithCookiesAsync(url);
             var releases = new List<ReleaseInfo>();
 
             try

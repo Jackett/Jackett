@@ -87,7 +87,7 @@ namespace Jackett.Common.Indexers
             {
                 { "x-milkie-auth", configData.Key.Value }
             };
-            var jsonResponse = await WebRequestWithCookiesAsync(endpoint, headers: headers);
+            var jsonResponse = await RequestWithCookiesAsync(endpoint, headers: headers);
 
             var releases = new List<ReleaseInfo>();
 

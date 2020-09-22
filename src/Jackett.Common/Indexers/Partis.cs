@@ -141,7 +141,7 @@ namespace Jackett.Common.Indexers
             };
 
             //get results and follow redirect
-            results = await WebRequestWithCookiesAsync(searchUrl, referer: SearchUrl, headers: header);
+            results = await RequestWithCookiesAsync(searchUrl, referer: SearchUrl, headers: header);
             await FollowIfRedirect(results, null, null, null, true);
 
             // are we logged in?
@@ -150,7 +150,7 @@ namespace Jackett.Common.Indexers
                 await ApplyConfiguration(null);
             }
             // another request with specific query - NEEDED for succesful response - return data
-            results = await WebRequestWithCookiesAsync(
+            results = await RequestWithCookiesAsync(
                 SiteLink + "brskaj/?rs=false&offset=0", referer: SearchUrl, headers: header);
             await FollowIfRedirect(results, null, null, null, true);
 

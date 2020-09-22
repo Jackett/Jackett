@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using CloudflareSolverRe;
@@ -21,7 +24,7 @@ namespace Jackett.Common.Utils.Clients
         private ClearanceHandler clearanceHandlr;
         private HttpClientHandler clientHandlr;
         private HttpClient client;
-        
+
         public HttpWebClient2(IProcessService p, Logger l, IConfigurationService c, ServerConfig sc)
             : base(p: p,
                    l: l,
@@ -30,6 +33,29 @@ namespace Jackett.Common.Utils.Clients
         {
             cookies = new CookieContainer();
             CreateClient();
+        }
+
+        [DebuggerNonUserCode] // avoid "Exception User-Unhandled" Visual Studio messages
+        public static bool ValidateCertificate(HttpRequestMessage request, X509Certificate2 certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+        {
+            var hash = certificate.GetCertHashString();
+
+
+            trustedCertificates.TryGetValue(hash, out var hosts);
+            if (hosts != null)
+            {
+                if (hosts.Contains(request.RequestUri.Host))
+                    return true;
+            }
+
+            if (sslPolicyErrors != SslPolicyErrors.None)
+            {
+                // Throw exception with certificate details, this will cause a "Exception User-Unhandled" when running it in the Visual Studio debugger.
+                // The certificate is only available inside this function, so we can't catch it at the calling method.
+                throw new Exception("certificate validation failed: " + certificate.ToString());
+            }
+
+            return sslPolicyErrors == SslPolicyErrors.None;
         }
 
         public void CreateClient()

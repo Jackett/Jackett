@@ -108,7 +108,7 @@ namespace Jackett.Common.Indexers
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var loginPage = await WebRequestWithCookiesAsync(LoginUrl, string.Empty);
+            var loginPage = await RequestWithCookiesAsync(LoginUrl, string.Empty);
             var parser = new HtmlParser();
             var dom = parser.ParseDocument(loginPage.ContentString);
             var captcha = dom.QuerySelector(".g-recaptcha");

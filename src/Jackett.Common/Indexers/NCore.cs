@@ -99,7 +99,7 @@ namespace Jackett.Common.Indexers
             LoadValuesFromJson(configJson);
             if (configData.Hungarian.Value == false && configData.English.Value == false)
                 throw new ExceptionWithConfigData("Please select at least one language.", configData);
-            var loginPage = await WebRequestWithCookiesAsync(LoginUrl, string.Empty);
+            var loginPage = await RequestWithCookiesAsync(LoginUrl, string.Empty);
             var pairs = new Dictionary<string, string>
             {
                 {"nev", configData.Username.Value},

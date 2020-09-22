@@ -83,7 +83,7 @@ namespace Jackett.Common.Indexers
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
-            await WebRequestWithCookiesAsync(LandingUrl);
+            await RequestWithCookiesAsync(LandingUrl);
             return configData;
         }
 

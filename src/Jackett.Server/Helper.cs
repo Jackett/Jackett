@@ -73,6 +73,8 @@ namespace Jackett.Server
             // TODO: fix deprecation warning (remove #pragma to see the build warning)
             Mapper.Initialize(cfg =>
             {
+                cfg.CreateMap<WebResult, WebResult>();
+
                 cfg.CreateMap<ReleaseInfo, ReleaseInfo>();
 
                 cfg.CreateMap<ReleaseInfo, TrackerCacheResult>().AfterMap((r, t) =>

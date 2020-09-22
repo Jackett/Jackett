@@ -120,7 +120,7 @@ namespace Jackett.Common.Indexers
 
         public override async Task<byte[]> Download(Uri link)
         {
-            var results = await WebRequestWithCookiesAsync(link.ToString());
+            var results = await RequestWithCookiesAsync(link.ToString());
 
             try
             {
@@ -129,7 +129,7 @@ namespace Jackett.Common.Indexers
                 var preotectedLink = dom.QuerySelector("a[service=BitTorrent]").GetAttribute("href");
                 preotectedLink = SiteLink + preotectedLink.TrimStart('/');
 
-                results = await WebRequestWithCookiesAsync(preotectedLink);
+                results = await RequestWithCookiesAsync(preotectedLink);
                 dom = parser.ParseDocument(results.ContentString);
                 var magnetUrl = dom.QuerySelector("a[href^=magnet]").GetAttribute("href");
                 return await base.Download(new Uri(magnetUrl));

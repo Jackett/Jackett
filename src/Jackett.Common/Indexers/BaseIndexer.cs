@@ -422,7 +422,7 @@ namespace Jackett.Common.Indexers
             {
                 try
                 {
-                    return await WebRequestWithCookiesAsync(
+                    return await RequestWithCookiesAsync(
                         url, cookieOverride, method, referer, data, headers, rawbody, emulateBrowser);
                 }
                 catch (Exception e)
@@ -438,7 +438,7 @@ namespace Jackett.Common.Indexers
             throw lastException;
         }
 
-        protected virtual async Task<WebResult> WebRequestWithCookiesAsync(
+        protected virtual async Task<WebResult> RequestWithCookiesAsync(
             string url, string cookieOverride = null, RequestType method = RequestType.GET,
             string referer = null, IEnumerable<KeyValuePair<string, string>> data = null,
             Dictionary<string, string> headers = null, string rawbody = null, bool? emulateBrowser = null)

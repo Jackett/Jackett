@@ -108,7 +108,7 @@ namespace Jackett.Common.Indexers
             {
                 foreach (var searchUrl in searchUrls)
                 {
-                    results = await WebRequestWithCookiesAsync(searchUrl);
+                    results = await RequestWithCookiesAsync(searchUrl);
                     results = await ReloginIfNecessary(results);
                     var parser = new HtmlParser();
                     var dom = parser.ParseDocument(results.ContentString);

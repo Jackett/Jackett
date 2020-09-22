@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using CloudflareSolverRe;
@@ -13,6 +16,8 @@ using NLog;
 
 namespace Jackett.Common.Utils.Clients
 {
+    // This implementation is legacy and it's used only by Mono version
+    // TODO: Merge with HttpWebClient2 or remove when we drop support for Mono 5.x
     public class HttpWebClient : WebClient
     {
         public HttpWebClient(IProcessService p, Logger l, IConfigurationService c, ServerConfig sc)
@@ -23,11 +28,41 @@ namespace Jackett.Common.Utils.Clients
         {
         }
 
+        [DebuggerNonUserCode] // avoid "Exception User-Unhandled" Visual Studio messages
+        public static bool ValidateCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+        {
+            if (sender.GetType() != typeof(HttpWebRequest))
+                return sslPolicyErrors == SslPolicyErrors.None;
+
+            var request = (HttpWebRequest)sender;
+            var hash = certificate.GetCertHashString();
+
+
+            trustedCertificates.TryGetValue(hash, out var hosts);
+            if (hosts != null)
+            {
+                if (hosts.Contains(request.Host))
+                    return true;
+            }
+
+            if (sslPolicyErrors != SslPolicyErrors.None)
+            {
+                // Throw exception with certificate details, this will cause a "Exception User-Unhandled" when running it in the Visual Studio debugger.
+                // The certificate is only available inside this function, so we can't catch it at the calling method.
+                throw new Exception("certificate validation failed: " + certificate.ToString());
+            }
+
+            return sslPolicyErrors == SslPolicyErrors.None;
+        }
+
         public override void Init()
         {
             ServicePointManager.DefaultConnectionLimit = 1000;
 
             base.Init();
+
+            // custom handler for our own internal certificates
+            ServicePointManager.ServerCertificateValidationCallback += ValidateCertificate;
         }
 
         protected override async Task<WebResult> Run(WebRequest webRequest)
@@ -60,8 +95,6 @@ namespace Jackett.Common.Utils.Clients
                     AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
                 })
                 {
-                    // custom certificate validation handler (netcore version)
-                    clientHandlr.ServerCertificateCustomValidationCallback = ValidateCertificate;
                     clearanceHandlr.InnerHandler = clientHandlr;
                     using (var client = new HttpClient(clearanceHandlr))
                     {

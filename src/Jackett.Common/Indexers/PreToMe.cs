@@ -123,7 +123,7 @@ namespace Jackett.Common.Indexers
         {
             LoadValuesFromJson(configJson);
 
-            var loginPage = await WebRequestWithCookiesAsync(LoginUrl, string.Empty);
+            var loginPage = await RequestWithCookiesAsync(LoginUrl, string.Empty);
 
             var pairs = new Dictionary<string, string> {
                 { "returnto", "%2F" },
@@ -134,7 +134,7 @@ namespace Jackett.Common.Indexers
             };
 
             // Send Post
-            var result = await WebRequestWithCookiesAsync(LoginUrl, loginPage.Cookies, RequestType.POST, data: pairs);
+            var result = await RequestWithCookiesAsync(LoginUrl, loginPage.Cookies, RequestType.POST, data: pairs);
             if (result.RedirectingTo == null)
                 throw new ExceptionWithConfigData("Login failed. Did you use the PIN number that pretome emailed you?", configData);
 
