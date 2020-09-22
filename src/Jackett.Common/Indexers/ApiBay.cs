@@ -113,7 +113,18 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            var response = await RequestWithCookiesAsync($"{SiteLink}q.php?q={query.SearchTerm}&cat=0");
+            var categories = MapTorznabCapsToTrackers(query);
+
+            var queryStringCategories = string.Join(
+                ",",
+                categories.Count == 0
+                    ? GetAllTrackerCategories()
+                    : categories
+                );
+
+            var response = await RequestWithCookiesAsync(
+                $"{SiteLink}q.php?q={query.SearchTerm}&cat={queryStringCategories}"
+                );
 
             return JsonConvert
                 .DeserializeObject<List<QueryResponseItem>>(response.ContentString)
