@@ -15,6 +15,9 @@ using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
 namespace Jackett.Common.Indexers
 {
+    /// <summary>
+    /// This <see cref="BaseWebIndexer"/> implementation is for the The Pirate Bay API (https://apibay.org).
+    /// </summary>
     public class ApiBay : BaseWebIndexer
     {
         private const string KeyInfoHash = "{info_hash}";
