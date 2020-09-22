@@ -40,6 +40,68 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "public";
+
+            ConfigureCategoryMappings();
+        }
+
+        private void ConfigureCategoryMappings()
+        {
+            // Audio
+            AddCategoryMapping(100, TorznabCatType.Audio, "Audio");
+            AddCategoryMapping(101, TorznabCatType.Audio, "Music");
+            AddCategoryMapping(102, TorznabCatType.AudioAudiobook, "Audio Books");
+            AddCategoryMapping(103, TorznabCatType.Audio, "Sound Clips");
+            AddCategoryMapping(104, TorznabCatType.AudioLossless, "FLAC");
+            AddCategoryMapping(199, TorznabCatType.AudioOther, "Audio Other");
+            // Video
+            AddCategoryMapping(200, TorznabCatType.Movies, "Video");
+            AddCategoryMapping(201, TorznabCatType.Movies, "Movies");
+            AddCategoryMapping(202, TorznabCatType.Movies, "Movies");
+            AddCategoryMapping(203, TorznabCatType.AudioVideo, "Music Videos");
+            AddCategoryMapping(204, TorznabCatType.MoviesOther, "Movie Clips");
+            AddCategoryMapping(205, TorznabCatType.TV, "TV");
+            AddCategoryMapping(206, TorznabCatType.TVOTHER, "Handheld");
+            AddCategoryMapping(207, TorznabCatType.MoviesHD, "HD - Movies");
+            AddCategoryMapping(208, TorznabCatType.TVHD, "HD - TV shows");
+            AddCategoryMapping(209, TorznabCatType.Movies3D, "3D");
+            AddCategoryMapping(299, TorznabCatType.MoviesOther, "Video Other");
+            // Applications
+            AddCategoryMapping(300, TorznabCatType.PC, "Applications");
+            AddCategoryMapping(301, TorznabCatType.PC, "Windows");
+            AddCategoryMapping(302, TorznabCatType.PCMac, "Mac");
+            AddCategoryMapping(303, TorznabCatType.PC, "UNIX");
+            AddCategoryMapping(304, TorznabCatType.PCPhoneOther, "Handheld");
+            AddCategoryMapping(305, TorznabCatType.PCPhoneIOS, "IOS (iPad/iPhone)");
+            AddCategoryMapping(306, TorznabCatType.PCPhoneAndroid, "Android");
+            AddCategoryMapping(399, TorznabCatType.PC, "Other OS");
+            // Games
+            AddCategoryMapping(400, TorznabCatType.Console, "Games");
+            AddCategoryMapping(401, TorznabCatType.PCGames, "PC");
+            AddCategoryMapping(402, TorznabCatType.PCMac, "Mac");
+            AddCategoryMapping(403, TorznabCatType.ConsolePS4, "PSx");
+            AddCategoryMapping(404, TorznabCatType.ConsoleXbox, "XBOX360");
+            AddCategoryMapping(405, TorznabCatType.ConsoleWii, "Wii");
+            AddCategoryMapping(406, TorznabCatType.ConsoleOther, "Handheld");
+            AddCategoryMapping(407, TorznabCatType.ConsoleOther, "IOS (iPad/iPhone)");
+            AddCategoryMapping(408, TorznabCatType.ConsoleOther, "Android");
+            AddCategoryMapping(499, TorznabCatType.ConsoleOther, "Games Other");
+            // Porn
+            AddCategoryMapping(500, TorznabCatType.XXX, "Porn");
+            AddCategoryMapping(501, TorznabCatType.XXX, "Movies");
+            AddCategoryMapping(502, TorznabCatType.XXXDVD, "Movies DVDR");
+            AddCategoryMapping(503, TorznabCatType.XXXImageset, "Pictures");
+            AddCategoryMapping(504, TorznabCatType.XXX, "Games");
+            AddCategoryMapping(505, TorznabCatType.XXX, "HD - Movies");
+            AddCategoryMapping(506, TorznabCatType.XXX, "Movie Clips");
+            AddCategoryMapping(599, TorznabCatType.XXXOther, "Porn other");
+            // Other
+            AddCategoryMapping(600, TorznabCatType.Other, "Other");
+            AddCategoryMapping(601, TorznabCatType.Books, "E-books");
+            AddCategoryMapping(602, TorznabCatType.BooksComics, "Comics");
+            AddCategoryMapping(603, TorznabCatType.Books, "Pictures");
+            AddCategoryMapping(604, TorznabCatType.Books, "Covers");
+            AddCategoryMapping(605, TorznabCatType.Books, "Physibles");
+            AddCategoryMapping(699, TorznabCatType.BooksOther, "Other Other");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
