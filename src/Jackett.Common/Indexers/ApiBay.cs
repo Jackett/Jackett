@@ -146,9 +146,15 @@ namespace Jackett.Common.Indexers
                 $"{SiteLink}q.php?q={query.SearchTerm}&cat={queryStringCategories}"
                 );
 
-            return JsonConvert
-                .DeserializeObject<List<QueryResponseItem>>(response.ContentString)
-                .Select(CreateReleaseInfo);
+            var queryResponseItems = JsonConvert.DeserializeObject<List<QueryResponseItem>>(response.ContentString);
+
+            // The API returns a single item to represent a state of no results. Avoid returning this as a result.
+            if (queryResponseItems.Count == 1 && queryResponseItems.First().Id == 0)
+            {
+                return Enumerable.Empty<ReleaseInfo>();
+            }
+
+            return queryResponseItems.Select(CreateReleaseInfo);
         }
 
         private ReleaseInfo CreateReleaseInfo(QueryResponseItem item)
