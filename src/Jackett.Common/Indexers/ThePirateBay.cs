@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
@@ -16,10 +17,10 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
-    [ExcludeFromCodeCoverage]
     /// <summary>
     /// The Pirate Bay via API.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class ThePirateBay : BaseWebIndexer
     {
         public override string[] AlternativeSiteLinks { get; protected set; } = {
@@ -37,7 +38,7 @@ namespace Jackett.Common.Indexers
             "https://piratesbaycc.com/",
         };
 
-        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
+        public override string[] LegacySiteLinks { get; protected set; } = {
             "https://thepiratebay0.org/",
             "https://thepiratebay10.org/",
             "https://pirateproxy.live/",
@@ -179,11 +180,17 @@ namespace Jackett.Common.Indexers
                 categories.Count == 0
                     ? GetAllTrackerCategories()
                     : categories
-                );
+            );
+
+            var queryCollection = new NameValueCollection
+            {
+                { "q", query.SearchTerm },
+                { "cat", queryStringCategories }
+            };
 
             var response = await RequestWithCookiesAsync(
-                $"{_ApiBaseUri}q.php?q={query.SearchTerm}&cat={queryStringCategories}"
-                );
+                $"{_ApiBaseUri}q.php?{queryCollection.GetQueryString()}"
+            );
 
             var queryResponseItems = JsonConvert.DeserializeObject<List<QueryResponseItem>>(response.ContentString);
 
