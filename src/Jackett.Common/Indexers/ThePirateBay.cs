@@ -26,7 +26,6 @@ namespace Jackett.Common.Indexers
             "https://thepiratebay.org/",
             "https://pirateproxy.cloud/",
             "https://tpb18.ukpass.co/",
-            "https://knaben.ru/",
             "https://tpb.sadzawka.tk/",
             "https://www.tpbay.win/",
             "https://tpb.cnp.cx/",
@@ -36,8 +35,6 @@ namespace Jackett.Common.Indexers
             "https://piratetoday.xyz/",
             "https://piratenow.xyz/",
             "https://piratesbaycc.com/",
-            "https://piratebayztemzmv.onion.pet/",
-            "https://piratebayztemzmv.onion.ly/",
         };
 
         public override string[] LegacySiteLinks { get; protected set; } = new string[] {
@@ -51,6 +48,9 @@ namespace Jackett.Common.Indexers
             "https://piratebay.live/",
             "https://tpb.biz/",
             "https://pirate.johnedwarddoyle.co.uk/",
+            "https://knaben.ru/",
+            "https://piratebayztemzmv.onion.pet/",
+            "https://piratebayztemzmv.onion.ly/",
         };
 
         private const string KeyInfoHash = "{info_hash}";
