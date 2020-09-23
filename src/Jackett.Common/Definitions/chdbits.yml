@@ -27,18 +27,6 @@ caps:
     music-search: [q]
 
 settings:
-  - name: username
-    type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
-  - name: info_tpp
-    type: info
-    label: Results Per Page
-    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
-
-settings:
   - name: cookie
     type: text
     label: Cookie
