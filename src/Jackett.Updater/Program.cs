@@ -392,6 +392,7 @@ namespace Jackett.Updater
                 "Definitions/theresurrection.yml",
                 "Definitions/thetorrents.yml",
                 "Definitions/the-madhouse.yml",
+                "Definitions/thepiratebay.yml", // migrated to c#
                 "Definitions/tigers-dl.yml",
                 "Definitions/tntvillage.yml",
                 "Definitions/torrentcouch.yml",
