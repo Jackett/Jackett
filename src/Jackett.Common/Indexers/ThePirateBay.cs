@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,23 +9,55 @@ using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
-using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     /// <summary>
     /// This <see cref="BaseWebIndexer"/> implementation is for the The Pirate Bay API (https://apibay.org).
     /// </summary>
-    public class ApiBay : BaseWebIndexer
+    public class ThePirateBay : BaseWebIndexer
     {
+        public override string[] AlternativeSiteLinks { get; protected set; } = {
+            "https://thepiratebay.org/",
+            "https://pirateproxy.cloud/",
+            "https://tpb18.ukpass.co/",
+            "https://knaben.ru/",
+            "https://tpb.sadzawka.tk/",
+            "https://www.tpbay.win/",
+            "https://tpb.cnp.cx/",
+            "https://thepiratebay.d4.re/",
+            "https://baypirated.site/",
+            "https://tpb.skynetcloud.site/",
+            "https://piratetoday.xyz/",
+            "https://piratenow.xyz/",
+            "https://piratesbaycc.com/",
+            "https://piratebayztemzmv.onion.pet/",
+            "https://piratebayztemzmv.onion.ly/",
+        };
+
+        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
+            "https://thepiratebay0.org/",
+            "https://thepiratebay10.org/",
+            "https://pirateproxy.live/",
+            "https://thehiddenbay.com/",
+            "https://thepiratebay.zone/",
+            "https://tpb.party/",
+            "https://piratebayproxy.live/",
+            "https://piratebay.live/",
+            "https://tpb.biz/",
+            "https://pirate.johnedwarddoyle.co.uk/",
+        };
+
         private const string KeyInfoHash = "{info_hash}";
 
-        private static readonly Uri _pirateProxyBaseUri = new Uri("https://pirateproxy.cloud");
+        private static readonly Uri _ApiBaseUri = new Uri("https://apibay.org/");
 
-        private static readonly string _magnetUri =
+        private static readonly string _MagnetUri =
             $"magnet:?xt=urn:btih:{KeyInfoHash}&tr=udp%3A%2F%2Ftracker.coppersurfer.tk" +
             "%3A6969%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2920%2Fannounce&tr=udp%3" +
             "A%2F%2Ftracker.opentrackr.org%3A1337&tr=udp%3A%2F%2Ftracker.internetwar" +
@@ -33,16 +66,16 @@ namespace Jackett.Common.Indexers
             "ounce&tr=udp%3A%2F%2Ftracker.pirateparty.gr%3A6969%2Fannounce&tr=udp%3A" +
             "%2F%2Ftracker.cyberia.is%3A6969%2Fannounce";
 
-        public ApiBay(
+        public ThePirateBay(
             IIndexerConfigurationService configService,
             WebClient client,
             Logger logger,
             IProtectionService p
             ) : base(
-                id: "apibay",
-                name: "The Pirate Bay (API Bay)",
-                description: "The Pirate Bay API",
-                link: "https://apibay.org/",
+                id: "thepiratebay",
+                name: "The Pirate Bay",
+                description: "Pirate Bay (TPB) is the galaxy’s most resilient Public BitTorrent site",
+                link: "https://thepiratebay.org/",
                 caps: new TorznabCapabilities(),
                 configService: configService,
                 client: client,
@@ -137,9 +170,7 @@ namespace Jackett.Common.Indexers
         {
             // Keywordless search terms return recent torrents rather than no results.
             if (string.IsNullOrEmpty(query.SearchTerm))
-            {
                 return await GetRecentTorrents();
-            }
 
             var categories = MapTorznabCapsToTrackers(query);
 
@@ -151,23 +182,21 @@ namespace Jackett.Common.Indexers
                 );
 
             var response = await RequestWithCookiesAsync(
-                $"{SiteLink}q.php?q={query.SearchTerm}&cat={queryStringCategories}"
+                $"{_ApiBaseUri}q.php?q={query.SearchTerm}&cat={queryStringCategories}"
                 );
 
             var queryResponseItems = JsonConvert.DeserializeObject<List<QueryResponseItem>>(response.ContentString);
 
             // The API returns a single item to represent a state of no results. Avoid returning this result.
             if (queryResponseItems.Count == 1 && queryResponseItems.First().Id == 0)
-            {
                 return Enumerable.Empty<ReleaseInfo>();
-            }
 
             return queryResponseItems.Select(CreateReleaseInfo);
         }
 
         private async Task<IEnumerable<ReleaseInfo>> GetRecentTorrents()
         {
-            var response = await RequestWithCookiesAsync($"{SiteLink}precompiled/data_top100_recent.json");
+            var response = await RequestWithCookiesAsync($"{_ApiBaseUri}precompiled/data_top100_recent.json");
 
             return JsonConvert
                    .DeserializeObject<List<QueryResponseItem>>(response.ContentString)
@@ -176,7 +205,7 @@ namespace Jackett.Common.Indexers
 
         private ReleaseInfo CreateReleaseInfo(QueryResponseItem item)
         {
-            var magnetUri = new Uri(_magnetUri.Replace(KeyInfoHash, item.InfoHash));
+            var magnetUri = new Uri(_MagnetUri.Replace(KeyInfoHash, item.InfoHash));
 
             return new ReleaseInfo
             {
@@ -184,7 +213,7 @@ namespace Jackett.Common.Indexers
                 Category = MapTrackerCatToNewznab(item.Category.ToString()),
                 Comments = item.Id == 0
                     ? null
-                    : new Uri(_pirateProxyBaseUri, $"description.php?id={item.Id}"),
+                    : new Uri($"{SiteLink}description.php?id={item.Id}"),
                 MagnetUri = magnetUri,
                 InfoHash = item.InfoHash,
                 PublishDate = DateTimeUtil.UnixTimestampToDateTime(item.Added),
@@ -192,6 +221,7 @@ namespace Jackett.Common.Indexers
                 Seeders = item.Seeders,
                 Peers = item.Seeders + item.Leechers,
                 Size = item.Size,
+				Files = item.NumFiles,
                 Author = item.Username,
                 DownloadVolumeFactor = 0,
                 UploadVolumeFactor = 1,
