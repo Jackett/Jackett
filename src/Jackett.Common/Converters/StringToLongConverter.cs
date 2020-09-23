@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 namespace Jackett.Common.Converters
 {
     /// <summary>
-    /// This <see cref="JsonConverter"/> implementation converts a string value to a long and vice-versa.
+    /// converts a string value to a long and vice-versa.
     /// </summary>
     public sealed class StringToLongConverter : JsonConverter
     {
