@@ -174,7 +174,7 @@ namespace Jackett.Common.Utils.Clients
                 {
                     bodySize = result.ContentBytes.Length;
                     var contentString = result.ContentString.Trim();
-                    if (contentString.StartsWith("<") || contentString.StartsWith("{"))
+                    if (contentString.StartsWith("<") || contentString.StartsWith("{") || contentString.StartsWith("["))
                         body = "\n" + contentString;
                     else
                         body = " <BINARY>";
