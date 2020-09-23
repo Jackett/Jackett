@@ -18,7 +18,7 @@ namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
     /// <summary>
-    /// This <see cref="BaseWebIndexer"/> implementation is for the The Pirate Bay API (https://apibay.org).
+    /// The Pirate Bay via API.
     /// </summary>
     public class ThePirateBay : BaseWebIndexer
     {
@@ -221,7 +221,7 @@ namespace Jackett.Common.Indexers
                 Seeders = item.Seeders,
                 Peers = item.Seeders + item.Leechers,
                 Size = item.Size,
-				Files = item.NumFiles,
+                Files = item.NumFiles,
                 Author = item.Username,
                 DownloadVolumeFactor = 0,
                 UploadVolumeFactor = 1,
