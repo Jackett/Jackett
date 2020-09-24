@@ -43,7 +43,7 @@ namespace Jackett.Server.Controllers
                 var indexer = indexerService.GetWebIndexer(indexerID);
                 if (!indexer.IsConfigured)
                 {
-                    logger.Warn(string.Format("Rejected a request to {0} which is unconfigured.", indexer.DisplayName));
+                    logger.Warn($"Rejected a request to {indexer.DisplayName} which is unconfigured.");
                     throw new Exception("This indexer is not configured.");
                 }
 
@@ -79,7 +79,7 @@ namespace Jackett.Server.Controllers
 
                 if (!Directory.Exists(serverConfig.BlackholeDir))
                 {
-                    throw new Exception("Blackhole directory does not exist: " + serverConfig.BlackholeDir);
+                    throw new Exception($"Blackhole directory does not exist: {serverConfig.BlackholeDir}");
                 }
 
                 var fileName = DateTime.Now.Ticks.ToString() + "-" + StringUtil.MakeValidFileName(indexer.DisplayName, '_', false);
@@ -91,11 +91,11 @@ namespace Jackett.Server.Controllers
                 System.IO.File.WriteAllBytes(Path.Combine(serverConfig.BlackholeDir, fileName), downloadBytes);
                 jsonReply["result"] = "success";
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                logger.Error(ex, "Error downloading to blackhole " + indexerID + " " + path);
+                logger.Error($"Error downloading to blackhole. indexer: {indexerID} path: {path}\n{e}");
                 jsonReply["result"] = "error";
-                jsonReply["error"] = ex.Message;
+                jsonReply["error"] = e.Message;
             }
 
             return Json(jsonReply);

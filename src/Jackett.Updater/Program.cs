@@ -74,7 +74,7 @@ namespace Jackett.Updater
             }
             catch (Exception e)
             {
-                logger.Error(e, "Exception applying update!");
+                logger.Error($"Exception applying update!\n{e}");
             }
         }
 
@@ -111,27 +111,24 @@ namespace Jackett.Updater
                         }
                         catch (Exception e)
                         {
-                            logger.Error(e, "Error while sending SIGTERM to " + pid.ToString());
+                            logger.Error($"Error while sending SIGTERM to {pid}\n{e}");
                         }
                         if (!exited)
-                            logger.Info("Process " + pid.ToString() + " didn't exit within 2 seconds after a SIGTERM");
+                            logger.Info($"Process {pid} didn't exit within 2 seconds after a SIGTERM");
                     }
                     if (!exited)
-                    {
                         proc.Kill(); // send SIGKILL
-                    }
                     exited = proc.WaitForExit(5000);
                     if (!exited)
-                        logger.Info("Process " + pid.ToString() + " didn't exit within 5 seconds after a SIGKILL");
+                        logger.Info($"Process {pid} didn't exit within 5 seconds after a SIGKILL");
                 }
                 catch (ArgumentException)
                 {
-                    logger.Info("Process " + pid.ToString() + " is already dead");
+                    logger.Info($"Process {pid} is already dead");
                 }
                 catch (Exception e)
                 {
-                    logger.Info("Error killing process " + pid.ToString());
-                    logger.Info(e);
+                    logger.Error($"Error killing process {pid}\n{e}");
                 }
             }
         }
@@ -140,9 +137,7 @@ namespace Jackett.Updater
         {
             var updateLocation = GetUpdateLocation();
             if (!(updateLocation.EndsWith("\\") || updateLocation.EndsWith("/")))
-            {
                 updateLocation += Path.DirectorySeparatorChar;
-            }
 
             var pids = new int[] { };
             if (options.KillPids != null)
@@ -157,18 +152,17 @@ namespace Jackett.Updater
             if (isWindows)
             {
                 if (trayProcesses.Length > 0)
-                {
                     foreach (var proc in trayProcesses)
-                    {
                         try
                         {
-                            logger.Info("Killing tray process " + proc.Id);
+                            logger.Info($"Killing tray process {proc.Id}");
                             proc.Kill();
                             trayRunning = true;
                         }
-                        catch { }
-                    }
-                }
+                        catch (Exception e)
+                        {
+                            logger.Error(e);
+                        }
 
                 // on unix we don't have to wait (we can overwrite files which are in use)
                 // On unix we kill the PIDs after the update so e.g. systemd can automatically restart the process
@@ -201,9 +195,7 @@ namespace Jackett.Updater
                             logger.Info("Deleted " + fileForDelete);
                         }
                         else
-                        {
                             logger.Info("File for deleting not found: " + fileForDelete);
-                        }
                     }
                     catch (Exception e)
                     {
@@ -214,7 +206,7 @@ namespace Jackett.Updater
 
             logger.Info("Finding files in: " + updateLocation);
             var files = Directory.GetFiles(updateLocation, "*.*", SearchOption.AllDirectories).OrderBy(x => x).ToList();
-            logger.Info($"{files.Count()} update files found");
+            logger.Info($"{files.Count} update files found");
 
             try
             {
@@ -223,22 +215,17 @@ namespace Jackett.Updater
                     var fileName = Path.GetFileName(file).ToLowerInvariant();
 
                     if (fileName.EndsWith(".zip") || fileName.EndsWith(".tar") || fileName.EndsWith(".gz"))
-                    {
                         continue;
-                    }
 
                     var fileCopySuccess = CopyUpdateFile(options.Path, file, updateLocation, false);
 
-                    if (!fileCopySuccess)
-                    {
-                        //Perform second attempt, this time removing the target file first
+                    if (!fileCopySuccess) //Perform second attempt, this time removing the target file first
                         CopyUpdateFile(options.Path, file, updateLocation, true);
-                    }
                 }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                logger.Error(ex);
+                logger.Error(e);
             }
 
             logger.Info("File copying complete");
@@ -622,14 +609,7 @@ namespace Jackett.Updater
         private string GetJackettConsolePath(string directoryPath)
         {
             var variants = new Variants();
-            if (variants.IsNonWindowsDotNetCoreVariant(variant))
-            {
-                return Path.Combine(directoryPath, "jackett");
-            }
-            else
-            {
-                return Path.Combine(directoryPath, "JackettConsole.exe");
-            }
+            return Path.Combine(directoryPath, variants.IsNonWindowsDotNetCoreVariant(variant) ? "jackett" : "JackettConsole.exe");
         }
 
         private static void UnhandledExceptionTrapper(object sender, UnhandledExceptionEventArgs e)
