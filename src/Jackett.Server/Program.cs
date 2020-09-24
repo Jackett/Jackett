@@ -40,7 +40,6 @@ namespace Jackett.Server
                 text.Heading = "Jackett v" + EnvironmentUtil.JackettVersion;
                 Console.WriteLine(text);
                 Environment.Exit(1);
-                return;
             });
 
             optionsResult.WithParsed(options =>
@@ -67,7 +66,7 @@ namespace Jackett.Server
                 }
                 catch (Exception e)
                 {
-                    logger.Error(e, "Error while creating the PID file");
+                    logger.Error($"Error while creating the PID file\n{e}");
                 }
             }
 
@@ -89,7 +88,7 @@ namespace Jackett.Server
                 }
                 else
                 {
-                    logger.Error($"ReserveUrls and service arguments only apply to Windows, please remove them from your start arguments");
+                    logger.Error("ReserveUrls and service arguments only apply to Windows, please remove them from your start arguments");
                     Environment.Exit(1);
                 }
             }
@@ -125,14 +124,14 @@ namespace Jackett.Server
 
                     CreateWebHostBuilder(args, url, applicationFolder).Build().Run();
                 }
-                catch (Exception ex)
+                catch (Exception e)
                 {
-                    if (ex.InnerException is Microsoft.AspNetCore.Connections.AddressInUseException)
+                    if (e.InnerException is Microsoft.AspNetCore.Connections.AddressInUseException)
                     {
-                        logger.Error("Address already in use: Most likely Jackett is already running. " + ex.Message);
+                        logger.Error($"Address already in use: Most likely Jackett is already running. {e.Message}");
                         Environment.Exit(1);
                     }
-                    logger.Error(ex);
+                    logger.Error(e);
                     throw;
                 }
             } while (isWebHostRestart);
@@ -152,11 +151,11 @@ namespace Jackett.Server
             {
                 if (Settings != null && !string.IsNullOrWhiteSpace(Settings.PIDFile))
                 {
-                    var PIDFile = Settings.PIDFile;
-                    if (File.Exists(PIDFile))
+                    var pidFile = Settings.PIDFile;
+                    if (File.Exists(pidFile))
                     {
-                        Console.WriteLine("Deleting PID file " + PIDFile);
-                        File.Delete(PIDFile);
+                        Console.WriteLine("Deleting PID file " + pidFile);
+                        File.Delete(pidFile);
                     }
                     LogManager.Shutdown();
                 }
