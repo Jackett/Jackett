@@ -6,6 +6,8 @@ language: en-us
 type: private
 encoding: UTF-8
 links:
+  - https://www.chd4.com/
+legacylinks:
   - https://www.crazyhd.com/
 
 caps:
