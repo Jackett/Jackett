@@ -31,7 +31,7 @@ namespace Jackett.Common.Utils.Clients
         protected static string webProxyUrl;
         protected static IWebProxy webProxy;
 
-        public static void InitProxy(ServerConfig serverConfig)
+        public void InitProxy(ServerConfig serverConfig)
         {
             // dispose old SocksWebProxy
             if (webProxy is SocksWebProxy proxy)
@@ -58,7 +58,17 @@ namespace Jackett.Common.Utils.Clients
             }
             else if (serverConfig.ProxyType == ProxyType.Socks4 || serverConfig.ProxyType == ProxyType.Socks5)
             {
-                var addresses = Dns.GetHostAddressesAsync(serverConfig.ProxyUrl).Result;
+                // in case of error in DNS resolution, we use a fake proxy to avoid leaking the user IP (disabling proxy)
+                // https://github.com/Jackett/Jackett/issues/8826
+                var addresses = new [] { new IPAddress(2130706433) }; // 127.0.0.1
+                try
+                {
+                    addresses = Dns.GetHostAddressesAsync(serverConfig.ProxyUrl).Result;
+                }
+                catch (Exception e)
+                {
+                    logger.Error($"Unable to resolve proxy URL: {serverConfig.ProxyUrl}. The proxy will not work properly.\n{e}");
+                }
                 var socksConfig = new ProxyConfig
                 {
                     SocksAddress = addresses.FirstOrDefault(),
