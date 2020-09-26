@@ -17,9 +17,6 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
-    /// <summary>
-    /// The Pirate Bay via API.
-    /// </summary>
     [ExcludeFromCodeCoverage]
     public class ThePirateBay : BaseWebIndexer
     {
@@ -232,6 +229,8 @@ namespace Jackett.Common.Indexers
                 Author = item.Username,
                 DownloadVolumeFactor = 0,
                 UploadVolumeFactor = 1,
+                MinimumRatio = 1,
+                MinimumSeedTime = 172800, // 48 hours
                 Imdb = string.IsNullOrEmpty(item.Imdb)
                     ? null
                     : ParseUtil.GetImdbID(item.Imdb)
