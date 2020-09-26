@@ -95,8 +95,6 @@ namespace Jackett.Common.Indexers
                         Peers = 2,
                         DownloadVolumeFactor = 0,
                         UploadVolumeFactor = 1,
-                        MinimumRatio = 1,
-                        MinimumSeedTime = 172800, // 48 hours
                     };
                     releases.Add(release);
                 }

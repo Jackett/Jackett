@@ -194,8 +194,6 @@ namespace Jackett.Common.Indexers
                         release.Grabs = ParseIntValueFromRow(r, nameof(release.Grabs), "td:nth-child(11)");
                         release.Comments = ParseValueFromRow(r, nameof(release.Comments), "td:nth-child(3) a", (e) => GetAbsoluteUrl(e.Attributes["href"].Value));
                         release.Guid = release.Comments;
-                        release.MinimumRatio = 1;
-                        release.MinimumSeedTime = 172800; // 48 hours
                         release.DownloadVolumeFactor = 0;
                         release.UploadVolumeFactor = 1;
 
