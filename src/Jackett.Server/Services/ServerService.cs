@@ -137,7 +137,7 @@ namespace Jackett.Server.Services
 
                 logger.Info("App config/log directory: " + configService.GetAppDataFolder());
 
-                logger.Info("Using Proxy: " + (string.IsNullOrEmpty(config.ProxyUrl) ? "No" : config.ProxyType.ToString()));
+                logger.Info($"Using proxy: {config.ProxyType}");
 
                 var monotype = Type.GetType("Mono.Runtime");
                 if (monotype != null && !DotNetCoreUtil.IsRunningOnDotNetCore)
