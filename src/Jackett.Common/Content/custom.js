@@ -85,6 +85,7 @@ function loadJackettSettings() {
         $("#jackett-proxy-port").val(data.proxy_port);
         $("#jackett-proxy-username").val(data.proxy_username);
         $("#jackett-proxy-password").val(data.proxy_password);
+        proxyWarning(data.proxy_type);
 
         $("#jackett-basepathoverride").val(data.basepathoverride);
         basePath = data.basepathoverride;
@@ -114,10 +115,9 @@ function loadJackettSettings() {
         $.each(data.notices, function (index, value) {
             console.log(value);
             doNotify(value, "danger", "glyphicon glyphicon-alert", false);
-        })
+        });
 
         reloadIndexers();
-        proxyWarning(data.proxy_url);
     });
 }
 
@@ -1241,7 +1241,7 @@ function bindUIButtons() {
             doNotify("Redirecting you to complete configuration update..", "success", "glyphicon glyphicon-ok");
             window.setTimeout(function () {
                 window.location.reload(true);
-            }, 3000);
+            }, 5000);
         }).fail(function (data) {
             if (data.responseJSON !== undefined && data.responseJSON.result == "error") {
                 doNotify("Error: " + data.responseJSON.error, "danger", "glyphicon glyphicon-alert");
@@ -1284,13 +1284,13 @@ function bindUIButtons() {
         });
     });
 
-    $('#jackett-proxy-url').on('input', function () {
+    $('#jackett-proxy-type').on('input', function () {
         proxyWarning($(this).val());
     });
 }
 
 function proxyWarning(input) {
-    if (input != null && input.trim() !== "") {
+    if (input != null && input.toString().trim() !== "-1") { // disabled = -1
         $('#proxy-warning').show();
     }
     else

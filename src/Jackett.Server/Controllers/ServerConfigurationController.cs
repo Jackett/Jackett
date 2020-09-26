@@ -122,8 +122,8 @@ namespace Jackett.Server.Controllers
                 if (config.proxy_port < 1 || config.proxy_port > 65535)
                     throw new Exception("The port you have selected is invalid, it must be below 65535.");
 
+                serverConfig.ProxyType = string.IsNullOrWhiteSpace(config.proxy_url) ? ProxyType.Disabled : config.proxy_type;
                 serverConfig.ProxyUrl = config.proxy_url;
-                serverConfig.ProxyType = config.proxy_type;
                 serverConfig.ProxyPort = config.proxy_port;
                 serverConfig.ProxyUsername = config.proxy_username;
                 serverConfig.ProxyPassword = config.proxy_password;

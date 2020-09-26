@@ -143,9 +143,10 @@
         <div class="input-area">
             <span class="input-header">Proxy type: </span>
             <select id="jackett-proxy-type" class="form-control input-right">
-                <option value="0">http</option>
-                <option value="1">socks4</option>
-                <option value="2">socks5</option>
+                <option value="-1">Disabled</option>
+                <option value="0">HTTP</option>
+                <option value="1">SOCKS4</option>
+                <option value="2">SOCKS5</option>
             </select>
         </div>
         <div id="proxy-warning" hidden>
@@ -154,8 +155,8 @@
             </span>
         </div>
         <div class="input-area">
-            <span class="input-header">Proxy url: </span>
-            <input id="jackett-proxy-url" class="form-control input-right" type="text" value="" placeholder="Blank to disable">
+            <span class="input-header">Proxy URL: </span>
+            <input id="jackett-proxy-url" class="form-control input-right" type="text" value="" placeholder="">
         </div>
         <div class="input-area">
             <span class="input-header">Proxy port: </span>
@@ -691,6 +692,6 @@
     </script>
 
     <script type="text/javascript" src="../libs/api.js?changed=2017083001"></script>
-    <script type="text/javascript" src="../custom.js?changed=20200410"></script>
+    <script type="text/javascript" src="../custom.js?changed=20200926"></script>
 </body>
 </html>
