@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Xml.Linq;
 
@@ -9,10 +10,16 @@ namespace Jackett.Common.Models
 {
     public class ResultPage
     {
-        private static readonly XNamespace atomNs = "http://www.w3.org/2005/Atom";
-        private static readonly XNamespace torznabNs = "http://torznab.com/schemas/2015/feed";
+        private static readonly XNamespace _AtomNs = "http://www.w3.org/2005/Atom";
+        private static readonly XNamespace _TorznabNs = "http://torznab.com/schemas/2015/feed";
 
-        public ChannelInfo ChannelInfo { get; private set; }
+        // filters control characters but allows only properly-formed surrogate sequences
+        // https://stackoverflow.com/a/961504
+        private static readonly Regex _InvalidXmlChars = new Regex(
+            @"(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x9F\uFEFF\uFFFE\uFFFF]",
+            RegexOptions.Compiled);
+
+        private ChannelInfo ChannelInfo { get; }
         public IEnumerable<ReleaseInfo> Releases { get; set; }
 
         public ResultPage(ChannelInfo channelInfo)
@@ -21,15 +28,29 @@ namespace Jackett.Common.Models
             Releases = new List<ReleaseInfo>();
         }
 
-        private string xmlDateFormat(DateTime dt)
+        /// <summary>
+        /// removes any unusual unicode characters that can't be encoded into XML (eg 0x1A)
+        /// </summary>
+        private static string RemoveInvalidXMLChars(string text)
+        {
+            if (text == null)
+                return null;
+            return _InvalidXmlChars.Replace(text, "");
+        }
+
+        private static string XmlDateFormat(DateTime dt)
         {
             Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
             //Sat, 14 Mar 2015 17:10:42 -0400
-            var f = string.Format(@"{0:ddd, dd MMM yyyy HH:mm:ss }{1}", dt, string.Format("{0:zzz}", dt).Replace(":", ""));
-            return f;
+            return $"{dt:ddd, dd MMM yyyy HH:mm:ss} " + $"{dt:zzz}".Replace(":", "");
         }
 
-        private XElement getTorznabElement(string name, object value) => value == null ? null : new XElement(torznabNs + "attr", new XAttribute("name", name), new XAttribute("value", value));
+        private static XElement GetTorznabElement(string name, object value)
+        {
+            if (value == null)
+                return null;
+            return new XElement(_TorznabNs + "attr", new XAttribute("name", name), new XAttribute("value", value));
+        }
 
         public string ToXml(Uri selfAtom)
         {
@@ -39,10 +60,10 @@ namespace Jackett.Common.Models
                 new XDeclaration("1.0", "UTF-8", null),
                 new XElement("rss",
                     new XAttribute("version", "1.0"),
-                    new XAttribute(XNamespace.Xmlns + "atom", atomNs.NamespaceName),
-                    new XAttribute(XNamespace.Xmlns + "torznab", torznabNs.NamespaceName),
+                    new XAttribute(XNamespace.Xmlns + "atom", _AtomNs.NamespaceName),
+                    new XAttribute(XNamespace.Xmlns + "torznab", _TorznabNs.NamespaceName),
                     new XElement("channel",
-                        new XElement(atomNs + "link",
+                        new XElement(_AtomNs + "link",
                             new XAttribute("href", selfAtom.AbsoluteUri),
                             new XAttribute("rel", "self"),
                             new XAttribute("type", "application/rss+xml")
@@ -60,15 +81,15 @@ namespace Jackett.Common.Models
                         ),
                         from r in Releases
                         select new XElement("item",
-                            new XElement("title", r.Title),
+                            new XElement("title", RemoveInvalidXMLChars(r.Title)),
                             new XElement("guid", r.Guid.AbsoluteUri),  // GUID and (Link or Magnet) are mandatory
                             new XElement("jackettindexer", new XAttribute("id", r.Origin.Id), r.Origin.DisplayName),
                             r.Comments == null ? null : new XElement("comments", r.Comments.AbsoluteUri),
-                            r.PublishDate == DateTime.MinValue ? new XElement("pubDate", xmlDateFormat(DateTime.Now)) : new XElement("pubDate", xmlDateFormat(r.PublishDate)),
+                            r.PublishDate == DateTime.MinValue ? new XElement("pubDate", XmlDateFormat(DateTime.Now)) : new XElement("pubDate", XmlDateFormat(r.PublishDate)),
                             r.Size == null ? null : new XElement("size", r.Size),
                             r.Files == null ? null : new XElement("files", r.Files),
                             r.Grabs == null ? null : new XElement("grabs", r.Grabs),
-                            new XElement("description", r.Description),
+                            new XElement("description", RemoveInvalidXMLChars(r.Description)),
                             new XElement("link", r.Link?.AbsoluteUri ?? r.MagnetUri.AbsoluteUri),
                             r.Category == null ? null : from c in r.Category select new XElement("category", c),
                             new XElement(
@@ -77,27 +98,27 @@ namespace Jackett.Common.Models
                                 r.Size == null ? null : new XAttribute("length", r.Size),
                                 new XAttribute("type", "application/x-bittorrent")
                             ),
-                            r.Category == null ? null : from c in r.Category select getTorznabElement("category", c),
-                            getTorznabElement("magneturl", r.MagnetUri?.AbsoluteUri),
-                            getTorznabElement("rageid", r.RageID),
-                            getTorznabElement("thetvdb", r.TVDBId),
-                            getTorznabElement("imdb", r.Imdb == null ? null : ((long)r.Imdb).ToString("D7")),
-                            getTorznabElement("tmdb", r.TMDb),
-                            getTorznabElement("author", r.Author),
-                            getTorznabElement("booktitle", r.BookTitle),
-                            getTorznabElement("seeders", r.Seeders),
-                            getTorznabElement("peers", r.Peers),
-                            getTorznabElement("infohash", r.InfoHash),
-                            getTorznabElement("minimumratio", r.MinimumRatio),
-                            getTorznabElement("minimumseedtime", r.MinimumSeedTime),
-                            getTorznabElement("downloadvolumefactor", r.DownloadVolumeFactor),
-                            getTorznabElement("uploadvolumefactor", r.UploadVolumeFactor)
+                            r.Category == null ? null : from c in r.Category select GetTorznabElement("category", c),
+                            GetTorznabElement("magneturl", r.MagnetUri?.AbsoluteUri),
+                            GetTorznabElement("rageid", r.RageID),
+                            GetTorznabElement("thetvdb", r.TVDBId),
+                            GetTorznabElement("imdb", r.Imdb?.ToString("D7")),
+                            GetTorznabElement("tmdb", r.TMDb),
+                            GetTorznabElement("author", RemoveInvalidXMLChars(r.Author)),
+                            GetTorznabElement("booktitle", RemoveInvalidXMLChars(r.BookTitle)),
+                            GetTorznabElement("seeders", r.Seeders),
+                            GetTorznabElement("peers", r.Peers),
+                            GetTorznabElement("infohash", RemoveInvalidXMLChars(r.InfoHash)),
+                            GetTorznabElement("minimumratio", r.MinimumRatio),
+                            GetTorznabElement("minimumseedtime", r.MinimumSeedTime),
+                            GetTorznabElement("downloadvolumefactor", r.DownloadVolumeFactor),
+                            GetTorznabElement("uploadvolumefactor", r.UploadVolumeFactor)
                         )
                     )
                 )
             );
 
-            return xdoc.Declaration.ToString() + Environment.NewLine + xdoc.ToString();
+            return xdoc.Declaration + Environment.NewLine + xdoc;
         }
     }
 }
