@@ -193,15 +193,7 @@ namespace Jackett.Common.Utils.Clients
         protected virtual async Task<WebResult> Run(WebRequest webRequest) => throw new NotImplementedException();
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
 
-        public virtual void Init()
-        {
-            if (serverConfig.RuntimeSettings.IgnoreSslErrors == true)
-            {
-                logger.Info($"WebClient({ClientType}): Disabling certificate validation");
-                ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => { return true; };
-            }
-        }
-
+        public virtual void Init() => ServicePointManager.DefaultConnectionLimit = 1000;
 
         public virtual void OnCompleted() => throw new NotImplementedException();
 

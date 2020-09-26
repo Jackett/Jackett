@@ -37,32 +37,27 @@ namespace Jackett.Common.Utils.Clients
             var request = (HttpWebRequest)sender;
             var hash = certificate.GetCertHashString();
 
-
             trustedCertificates.TryGetValue(hash, out var hosts);
-            if (hosts != null)
-            {
-                if (hosts.Contains(request.Host))
+            if (hosts != null && hosts.Contains(request.Host))
                     return true;
-            }
 
+            // Throw exception with certificate details, this will cause a "Exception User-Unhandled" when running it in the Visual Studio debugger.
+            // The certificate is only available inside this function, so we can't catch it at the calling method.
             if (sslPolicyErrors != SslPolicyErrors.None)
-            {
-                // Throw exception with certificate details, this will cause a "Exception User-Unhandled" when running it in the Visual Studio debugger.
-                // The certificate is only available inside this function, so we can't catch it at the calling method.
-                throw new Exception("certificate validation failed: " + certificate.ToString());
-            }
+                throw new Exception("certificate validation failed: " + certificate);
 
             return sslPolicyErrors == SslPolicyErrors.None;
         }
 
         public override void Init()
         {
-            ServicePointManager.DefaultConnectionLimit = 1000;
-
             base.Init();
 
             // custom handler for our own internal certificates
-            ServicePointManager.ServerCertificateValidationCallback += ValidateCertificate;
+            if (serverConfig.RuntimeSettings.IgnoreSslErrors == true)
+                ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => true;
+            else
+                ServicePointManager.ServerCertificateValidationCallback += ValidateCertificate;
         }
 
         protected override async Task<WebResult> Run(WebRequest webRequest)
