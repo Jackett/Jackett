@@ -40,20 +40,14 @@ namespace Jackett.Common.Utils.Clients
         {
             var hash = certificate.GetCertHashString();
 
-
             trustedCertificates.TryGetValue(hash, out var hosts);
-            if (hosts != null)
-            {
-                if (hosts.Contains(request.RequestUri.Host))
+            if (hosts != null && hosts.Contains(request.RequestUri.Host))
                     return true;
-            }
 
+            // Throw exception with certificate details, this will cause a "Exception User-Unhandled" when running it in the Visual Studio debugger.
+            // The certificate is only available inside this function, so we can't catch it at the calling method.
             if (sslPolicyErrors != SslPolicyErrors.None)
-            {
-                // Throw exception with certificate details, this will cause a "Exception User-Unhandled" when running it in the Visual Studio debugger.
-                // The certificate is only available inside this function, so we can't catch it at the calling method.
-                throw new Exception("certificate validation failed: " + certificate.ToString());
-            }
+                throw new Exception("certificate validation failed: " + certificate);
 
             return sslPolicyErrors == SslPolicyErrors.None;
         }
@@ -75,7 +69,10 @@ namespace Jackett.Common.Utils.Clients
             };
 
             // custom certificate validation handler (netcore version)
-            clientHandlr.ServerCertificateCustomValidationCallback = ValidateCertificate;
+            if (serverConfig.RuntimeSettings.IgnoreSslErrors == true)
+                clientHandlr.ServerCertificateCustomValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
+            else
+                clientHandlr.ServerCertificateCustomValidationCallback = ValidateCertificate;
 
             clearanceHandlr.InnerHandler = clientHandlr;
             client = new HttpClient(clearanceHandlr);
@@ -94,8 +91,6 @@ namespace Jackett.Common.Utils.Clients
 
         public override void Init()
         {
-            ServicePointManager.DefaultConnectionLimit = 1000;
-
             base.Init();
 
             ServicePointManager.SecurityProtocol = (SecurityProtocolType)192 | (SecurityProtocolType)768 | (SecurityProtocolType)3072;
