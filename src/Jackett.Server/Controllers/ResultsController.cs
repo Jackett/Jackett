@@ -223,16 +223,16 @@ namespace Jackett.Server.Controllers
                 var aggregateTask = Task.WhenAll(tasks);
                 await aggregateTask;
             }
-            catch (AggregateException aex)
+            catch (AggregateException e)
             {
-                foreach (var ex in aex.InnerExceptions)
+                foreach (var ex in e.InnerExceptions)
                 {
                     logger.Error(ex);
                 }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                logger.Error(ex);
+                logger.Error(e);
             }
 
             manualResult.Indexers = tasks.Select(t =>
@@ -440,10 +440,10 @@ namespace Jackett.Server.Controllers
 
                 return Content(xml, "application/rss+xml", Encoding.UTF8);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                logger.Error(ex);
-                return GetErrorXML(900, ex.ToString());
+                logger.Error(e);
+                return GetErrorXML(900, e.ToString());
             }
         }
 

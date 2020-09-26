@@ -40,6 +40,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BTDB
  * BTDIGG
  * BTSOW
+ * CiliPro (LIAORENCILI)
  * ConCen
  * Corsaro.red
  * cpasbien
@@ -72,7 +73,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * KickAssTorrent (KATcr)
  * Legit Torrents
  * LePorno
- * LIAORENCILI (Cili180)
  * LimeTorrents
  * LinuxTracker
  * MacTorrents
@@ -174,7 +174,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Erzsebet.pl
  * ExKinoRay
  * ExtremlymTorrents
- * FilmsClub
  * Gay-Torrents.net
  * Gay-Torrents.org
  * HD Dolby
@@ -215,6 +214,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 <details> <summary> <b> Supported Private Trackers </b> </summary>
 
  * 0day.kiev
+ * 1ptbar
  * 2 Fast 4 You
  * 32Pages (32P)
  * 3ChangTrai (3CT)

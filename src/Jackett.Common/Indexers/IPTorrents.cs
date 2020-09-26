@@ -49,7 +49,7 @@ namespace Jackett.Common.Indexers
 
         private new ConfigurationDataCookie configData => (ConfigurationDataCookie)base.configData;
 
-        public IPTorrents(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)
+        public IPTorrents(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base(id: "iptorrents",
                    name: "IPTorrents",
                    description: "Always a step ahead.",
@@ -224,9 +224,8 @@ namespace Jackett.Common.Indexers
                     // Torrents - Category column == Icons
                     var cat = MapTrackerCatToNewznab(catIcon.GetAttribute("href").Substring(1));
 
-                    var grabs = ParseUtil.CoerceInt(row.QuerySelector("td:nth-last-child(3)").TextContent);
                     var size = ReleaseInfo.GetBytes(row.Children[5].TextContent);
-                    var files = ParseUtil.CoerceInt(row.Children[6].TextContent);
+                    var grabs = ParseUtil.CoerceInt(row.Children[6].TextContent);
                     var seeders = ParseUtil.CoerceInt(row.QuerySelector(".t_seeders").TextContent.Trim());
                     var leechers = ParseUtil.CoerceInt(row.QuerySelector(".t_leechers").TextContent.Trim());
                     var dlVolumeFactor = row.QuerySelector("span.t_tag_free_leech") != null ? 0 : 1;
@@ -241,7 +240,6 @@ namespace Jackett.Common.Indexers
                         Category = cat,
                         Description = description,
                         Size = size,
-                        Files = files,
                         Grabs = grabs,
                         Seeders = seeders,
                         Peers = seeders + leechers,
