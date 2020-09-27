@@ -83,7 +83,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(30, TorznabCatType.XXX, "XXX/SD");
             AddCategoryMapping(31, TorznabCatType.XXX, "XXX/HD");
             AddCategoryMapping(32, TorznabCatType.XXX, "XXX/4K");
-
+            AddCategoryMapping(34, TorznabCatType.XXXImageset, "XXX/Imagesets");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
