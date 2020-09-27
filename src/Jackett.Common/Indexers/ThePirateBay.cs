@@ -17,9 +17,6 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
-    /// <summary>
-    /// The Pirate Bay via API.
-    /// </summary>
     [ExcludeFromCodeCoverage]
     public class ThePirateBay : BaseWebIndexer
     {
@@ -229,7 +226,6 @@ namespace Jackett.Common.Indexers
                 Peers = item.Seeders + item.Leechers,
                 Size = item.Size,
                 Files = item.NumFiles,
-                Author = item.Username,
                 DownloadVolumeFactor = 0,
                 UploadVolumeFactor = 1,
                 Imdb = string.IsNullOrEmpty(item.Imdb)

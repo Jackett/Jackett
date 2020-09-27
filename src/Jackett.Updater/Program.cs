@@ -264,6 +264,7 @@ namespace Jackett.Updater
                 "Definitions/420files.yml",
                 "Definitions/academictorrents.yml",
                 "Definitions/alein.yml",
+                "Definitions/alexfilm.yml",
                 "Definitions/anidex.yml", // migrated to C#
                 "Definitions/aox.yml",
                 "Definitions/apollo.yml", // migrated to C# gazelle base tracker

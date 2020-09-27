@@ -157,7 +157,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 
 <details> <summary> <b> Supported Semi-Private Trackers </b> </summary>
 
- * AlexFilm
  * AniDUB
  * ArenaBG
  * BaibaKo
@@ -238,6 +237,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * ArabP2P
  * Asgaard (AG)
  * AsianCinema
+ * Asylum Share
  * AudioNews (AN)
  * Audiobook Torrents (ABT + RNS)
  * AvistaZ (AsiaTorrents)
