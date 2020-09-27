@@ -49,6 +49,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("1", TorznabCatType.PCISO);
             AddCategoryMapping("36", TorznabCatType.Books);
             AddCategoryMapping("36", TorznabCatType.BooksEbook);
+            AddCategoryMapping("4", TorznabCatType.PCGames);
             AddCategoryMapping("21", TorznabCatType.PCGames);
             AddCategoryMapping("16", TorznabCatType.ConsolePS3);
             AddCategoryMapping("40", TorznabCatType.ConsoleWii);
