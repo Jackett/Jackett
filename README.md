@@ -101,6 +101,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * PornoLive
  * PornoRip
  * PornoTor
+ * ProPorn
  * ProStyleX
  * Rapidzona
  * RARBG
@@ -237,6 +238,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * ArabP2P
  * Asgaard (AG)
  * AsianCinema
+ * Asylum Share
  * AudioNews (AN)
  * Audiobook Torrents (ABT + RNS)
  * AvistaZ (AsiaTorrents)

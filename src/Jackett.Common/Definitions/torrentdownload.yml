@@ -35,6 +35,7 @@ caps:
     "AnimeEnglishtranslated": TV/Anime
     "AnimeAnimeOther": TV/Anime
     "Applications": PC/0day
+    "ApplicationsAndroid": PC/Phone-Android
     "AudioBooks": Audio/Audiobook
     "BooksAcademic": Books
     "BooksEbooks": Books
@@ -47,7 +48,14 @@ caps:
     "Movies": Movies
     "MoviesConcerts": Movies
     "MoviesDocumentary": TV/Documentary
+    "MoviesMusicvideos": Audio/Video
     "Music": Audio
+    "MusicHardrock": Audio
+    "MusicMp": Audio/MP3
+    "MusicFLAC": Audio/Lossless
+    "MusicLossless": Audio/Lossless
+    "MusicRB": Audio
+    "MusicTranceHouseDance": Audio
     "Other": Other
     "OtherComics": Other
     "OtherUnsorted": Other
