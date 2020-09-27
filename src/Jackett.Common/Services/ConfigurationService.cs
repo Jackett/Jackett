@@ -87,9 +87,9 @@ namespace Jackett.Common.Services
                     }
 
                 }
-                catch (Exception ex)
+                catch (Exception e)
                 {
-                    logger.Error("ERROR could not migrate settings directory " + ex);
+                    logger.Error($"ERROR could not migrate settings directory\n{e}");
                 }
             }
         }
@@ -144,7 +144,7 @@ namespace Jackett.Common.Services
             }
             catch (Exception e)
             {
-                logger.Error(e, "Error reading config file " + fullPath);
+                logger.Error($"Error reading config file {fullPath}\n{e}");
                 return default;
             }
         }
@@ -162,7 +162,7 @@ namespace Jackett.Common.Services
             }
             catch (Exception e)
             {
-                logger.Error(e, "Error writing config file " + fullPath);
+                logger.Error($"Error writing config file {fullPath}\n{e}");
             }
         }
 

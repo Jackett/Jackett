@@ -32,7 +32,8 @@ namespace Jackett.Common.Indexers
                    link: "https://hdbits.org/",
                    caps: new TorznabCapabilities
                    {
-                       SupportsImdbMovieSearch = true
+                       SupportsImdbMovieSearch = true,
+                       SupportsTvdbSearch= true
                    },
                    configService: configService,
                    client: wc,
@@ -86,6 +87,21 @@ namespace Jackett.Common.Indexers
             {
                 requestData["imdb"] = new JObject();
                 requestData["imdb"]["id"] = imdbId;
+            }
+            else if (query.TvdbID != null)
+            {
+                requestData["tvdb"] = new JObject();
+                requestData["tvdb"]["id"] = query.TvdbID;
+
+                if (query.Season != 0)
+                {
+                    requestData["tvdb"]["season"] = query.Season;
+                }
+
+                if (!string.IsNullOrEmpty(query.Episode))
+                {
+                    requestData["tvdb"]["episode"] = query.Episode;
+                }
             }
             else if (!string.IsNullOrWhiteSpace(queryString))
             {

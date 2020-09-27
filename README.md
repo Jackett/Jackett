@@ -157,7 +157,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 
 <details> <summary> <b> Supported Semi-Private Trackers </b> </summary>
 
- * AlexFilm
  * AniDUB
  * ArenaBG
  * BaibaKo
@@ -174,7 +173,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Erzsebet.pl
  * ExKinoRay
  * ExtremlymTorrents
- * FilmsClub
  * Gay-Torrents.net
  * Gay-Torrents.org
  * HD Dolby
