@@ -134,6 +134,8 @@ search:
 
   rows:
     selector: li.row
+    filters:
+      - name: andmatch
 
   fields:
     title:
@@ -162,6 +164,12 @@ search:
       selector: dd.views span.my_tt.complet
     date:
       selector: div.left-box time
+      filters:
+        # All times are Pacific/Pitcairn UTC-08:00
+        - name: replace
+          args: ["T", " "]
+        - name: replace
+          args: ["+00:00", " -08:00"]
     downloadvolumefactor:
       text: 1
     uploadvolumefactor:
