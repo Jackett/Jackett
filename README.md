@@ -493,6 +493,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TeamOS
  * TellyTorrent
  * TenYardTorrents (TYT)
+ * The-Unknown
  * The Falling Angels (TFA)
  * The Geeks
  * The Horror Charnel (THC)
