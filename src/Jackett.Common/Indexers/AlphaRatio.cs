@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 using Jackett.Common.Indexers.Abstract;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
@@ -70,6 +72,17 @@ namespace Jackett.Common.Indexers
 
             // Alpharatio can't handle dots in the searchstr
             return searchTerm.Replace(".", " ");
+        }
+
+        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        {
+            var releases = await base.PerformQuery(query);
+            foreach (var release in releases)
+            {
+                release.MinimumRatio = 1;
+                release.MinimumSeedTime = 259200;
+            }
+            return releases;
         }
     }
 }
