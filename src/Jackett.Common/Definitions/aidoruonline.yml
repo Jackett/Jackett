@@ -29,6 +29,7 @@ caps:
     search: [q]
     tv-search: [q]
     movie-search: [q]
+    music-search: [q]
 
 settings:
   - name: cookie
