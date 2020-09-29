@@ -144,4 +144,6 @@ search:
       case:
         img[src="images/freeleech2.png"]: 2
         "*": 1
+    minimumratio:
+      text: 0.8
 # TorrentTrader v2-svn
