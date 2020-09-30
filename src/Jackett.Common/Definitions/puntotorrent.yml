@@ -193,6 +193,10 @@ search:
           args: [" Torrent.*", ""] # Delete [Torrent x2...]
         - name: re_replace
           args: [" GOLDEN:.*", ""] # Delete [GOLDEN...]
+        - name: re_replace
+          args: ["\\W", "."] # Spaces and other characters -> .
+        - name: re_replace
+          args: ["\\.+", "."] # More than 1 dot -> .
 
     title|append: # Remux
       selector: td:nth-child(2) a:contains("REMUX"),a:contains("Remux"),a:contains("remux")
@@ -201,7 +205,7 @@ search:
         - name: re_replace
           args: [".", ""]
         - name: append
-          args: " | Remux-"
+          args: "Remux."
 
     title|append: # WEBDL
       selector: td:nth-child(2) a:contains("WEB"),a:contains("web"),a:contains("Web")
@@ -210,7 +214,7 @@ search:
         - name: re_replace
           args: [".", ""]
         - name: append
-          args: " | WEBDL-"
+          args: "WEBDL."
 
     title|append: # HDTV
       selector: td:nth-child(2) a:contains("HDTV"),a:contains("HDtv"),a:contains("hdtv")
@@ -219,7 +223,7 @@ search:
         - name: re_replace
           args: [".", ""]
         - name: append
-          args: " | HDTV-"
+          args: "HDTV."
 
     title|append: # DVD
       selector: td:nth-child(2) a:contains("DVD"),a:contains("dvd"),a:contains("Dvd")
@@ -228,7 +232,7 @@ search:
         - name: re_replace
           args: [".", ""]
         - name: append
-          args: " | DVD Spanish"
+          args: "DVD.Spanish-PuntoTorrent"
 
     title|append: # BluRay
       selector: td:nth-child(2) a:not(:contains("HDTV"))a:not(:contains("hdtv"))a:not(:contains("REMUX"))a:not(:contains("Remux"))a:not(:contains("remux"))a:not(:contains("WEB"))a:not(:contains("web"))a:not(:contains("Web"))a:contains("1080"),:contains("2160"):contains("uhd")
@@ -237,7 +241,7 @@ search:
         - name: re_replace
           args: [".", ""]
         - name: append
-          args: " | BluRay-"
+          args: "BluRay."
 
     title|append: # 2160p
       selector: td:nth-child(2) a:contains("2160"),a:contains("4k"),a:contains("4K"),a:contains("uhd"),a:contains("UHD")
@@ -246,7 +250,7 @@ search:
         - name: re_replace
           args: [".", ""]
         - name: append
-          args: "2160p Spanish"
+          args: "2160p.Spanish-PuntoTorrent"
 
     title|append: # 1080
       selector: td:nth-child(2) a:contains("1080"),a:contains("microhd"),a:contains("mhd"),a:contains("BDRemux"):not(:contains("2160"))
@@ -255,7 +259,7 @@ search:
         - name: re_replace
           args: [".", ""]
         - name: append
-          args: "1080p Spanish"
+          args: "1080p.Spanish-PuntoTorrent"
 
     title|append: # 720
       selector: td:nth-child(2) a:contains("720")
@@ -264,7 +268,7 @@ search:
         - name: re_replace
           args: [".", ""]
         - name: append
-          args: "720p Spanish"
+          args: "720p.Spanish-PuntoTorrent"
     
     title|append: # 480
       selector: td:nth-child(2) a:contains("Xvid"),a:contains("XVID"),a:contains("xvid")
@@ -273,7 +277,7 @@ search:
         - name: re_replace
           args: [".", ""]
         - name: append
-          args: "480 Spanish"
+          args: "480.Spanish-PuntoTorrent"
 
     title:
       selector: td:nth-child(2) a:contains("VOSE")
