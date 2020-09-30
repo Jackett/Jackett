@@ -2,7 +2,7 @@
 id: brasiltracker
 name: BrasilTracker
 description: "BrasilTracker is a BRAZILIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
-language: en-us
+language: pt-br
 encoding: UTF-8
 type: private
 links:
@@ -10,6 +10,7 @@ links:
 
 caps:
   categorymappings:
+    # site does not have categories in results so we are unable to support cats for fitering or reporting
     - {id: 1, cat: Other, desc: "Filmes/Series/Música"}
 
   modes:
@@ -26,7 +27,7 @@ settings:
     label: Password
   - name: freeleech
     type: checkbox
-    label: Filter freeleech only
+    label: Search freeleech only
     default: false
   - name: sort
     type: select
@@ -68,6 +69,7 @@ login:
 
 search:
   paths:
+    # https://brasiltracker.org/torrents.php?order_by=time&order_way=desc&freetorrent=1&filter_cat[6]=1&filter_cat[3]=1&action=basic&searchsubmit=1
     # https://brasiltracker.org/torrents.php?searchstr=mandalorain&order_by=size&order_way=desc&action=basic&searchsubmit=1
     # https://brasiltracker.org/torrents.php?searchstr=tt8179024&order_by=time&order_way=desc&action=basic&searchsubmit=1
     - path: torrents.php
@@ -76,10 +78,11 @@ search:
     order_by: "{{ .Config.sort }}"
     order_way: "{{ .Config.type }}"
     action: basic
+    freetorrent: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
     searchsubmit: 1
 
   rows:
-    selector: "table#torrent_table > tbody > tr.torrent{{ if .Config.freeleech }}:has(strong.tl_free){{ else }}{{ end }}"
+    selector: table#torrent_table > tbody > tr.torrent
 
   fields:
     category:
@@ -106,8 +109,10 @@ search:
       selector: span.time
       attribute: title
       filters:
+        - name: append
+          args: " -03:00" # BRT
         - name: dateparse
-          args: "Jan 2 2006, 15:04"
+          args: "Jan 2 2006, 15:04 -07:00"
     size:
       selector: td:nth-child(5)
     grabs:
@@ -130,4 +135,9 @@ search:
       filters:
         - name: append
           args: " {{ .Result.title_details }}"
-# engine n/a
+    minimumratio:
+      text: 0.6
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
+# Project Gazelle
