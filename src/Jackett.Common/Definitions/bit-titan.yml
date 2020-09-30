@@ -205,6 +205,8 @@ search:
           args: ["Heute", "Today"]
         - name: replace
           args: ["Gestern", "Yesterday"]
+        - name: append
+          args: " +01:00" # CET
     date:
       # &nbsp;&nbsp;27.05.2019 <b>12:52:11</b>
       selector: div.tor-date:contains(".")
@@ -212,8 +214,10 @@ search:
       filters:
         - name: replace
           args: ["\u00a0", ""]
+        - name: append
+          args: " +01:00" # CET
         - name: dateparse
-          args: "02.01.2006 15:04:05"
+          args: "02.01.2006 15:04:05 -07:00"
     size:
       selector: div.tor-size
       filters:
