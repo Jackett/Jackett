@@ -1,11 +1,9 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Jackett.Common.Indexers.Abstract;
 using Jackett.Common.Models;
-using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using NLog;
 using WebClient = Jackett.Common.Utils.Clients.WebClient;
@@ -32,7 +30,9 @@ namespace Jackett.Common.Indexers
                    p: ps,
                    supportsFreeleechTokens: true,
                    has2Fa: false,
-                   useApiKey: true)
+                   useApiKey: true,
+                   instructionMessageOptional: "<ol><li>Go to Redacted's site and open your account settings.</li><li>Go to <b>Access Settings</b> tab and copy the API Key.</li><li>Ensure that you've checked <b>Confirm API Key</b>.</li><li>Finally, click <b>Save Profile</b>.</li></ol>"
+                )
         {
             Language = "en-us";
             Type = "private";
@@ -44,13 +44,6 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(5, TorznabCatType.Movies, "E-Learning Videos");
             AddCategoryMapping(6, TorznabCatType.TV, "Comedy");
             AddCategoryMapping(7, TorznabCatType.Books, "Comics");
-
-            var cookieHint = new ConfigurationData.DisplayItem(
-                "<ol><li>Go to Redacted's site and open your account settings.</li><li>Go to <b>Access Settings</b> tab and copy the API Key.</li><li>Ensure that you've checked <b>Confirm API Key</b>.</li><li>Finally, click <b>Save Profile</b>.</li></ol>")
-            {
-                Name = ""
-            };
-            configData.AddDynamic("cookieHint", cookieHint);
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
