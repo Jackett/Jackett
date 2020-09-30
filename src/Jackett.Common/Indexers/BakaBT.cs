@@ -5,7 +5,6 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
@@ -15,7 +14,6 @@ using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using WebRequest = Jackett.Common.Utils.Clients.WebRequest;
 
 namespace Jackett.Common.Indexers
 {
@@ -82,17 +80,11 @@ namespace Jackett.Common.Indexers
                 { "returnto", "/index.php" }
             };
 
-            //BakaBT for some reason, has two different login pages.
-            try
-            {
-                var loginKeyMatch = Regex.Match(loginForm.ContentString, @"name=\""loginKey\"".+value=\""(.+?)\""");
-                var loginKey = loginKeyMatch.Groups[1].Value;
-                pairs["loginKey"] = loginKey;
-            }
-            catch (Exception)
-            {
-                //Skip
-            }
+            var parser = new HtmlParser();
+            var dom = parser.ParseDocument(loginForm.ContentString);
+            var loginKey = dom.QuerySelector("input[name=\"loginKey\"]");
+            if (loginKey !=null )
+                pairs["loginKey"] = loginKey.GetAttribute("value");
             
             var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginForm.Cookies, true, null, SiteLink);
             var responseContent = response.ContentString;
