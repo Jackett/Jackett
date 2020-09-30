@@ -12,9 +12,8 @@ caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Movies"}
     - {id: 2, cat: TV, desc: "TV"}
-    - {id: 3, cat: Movies, desc: "FANRES"}
-    - {id: 6, cat: TV/Anime, desc: "Anime"}
-    - {id: 7, cat: Movies/Other, desc: "Trailer"}
+    - {id: 3, cat: Movies/Other, desc: "FANRES"}
+    - {id: 5, cat: Movies/Other, desc: "Trailer"}
 
   modes:
     search: [q, imdbid]
@@ -76,21 +75,28 @@ ratio:
 
 search:
   paths:
+    # https://blutopia.xyz/torrents/filter?
+    # search=&description=&keywords=&uploader=&imdb=&tvdb=&view=list&tmdb=&mal=&igdb=
+    # &start_year=&end_year=&categories%5B%5D=3&sorting=seeders&direction=asc&page=0&qty=25
     - path: torrents/filter
   inputs:
     $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    search: "{{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     description: ""
+    keywords: ""
     uploader: ""
     imdb: "{{ .Query.IMDBIDShort }}"
     tvdb: "{{ .Query.TVDBID }}"
+    view: list
     tmdb: "{{ .Query.TMDBID }}"
     mal: ""
     igdb: ""
+    start_year: ""
+    end_year: ""
     sorting: "{{ .Config.sort }}"
-    sort: "{{ .Config.sort }}"
     direction: "{{ .Config.type }}"
     qty: 100
+    page: 0
     freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
 
   rows:
@@ -193,4 +199,4 @@ search:
     minimumseedtime:
       # 7 days (as seconds = 7 x 24 x 60 x 60)
       text: 604800
-# UNIT3D 2.7.0b
+# UNIT3D 3.0.0b
