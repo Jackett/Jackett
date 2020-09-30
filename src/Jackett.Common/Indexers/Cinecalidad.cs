@@ -49,13 +49,13 @@ namespace Jackett.Common.Indexers
 
             var language = new SelectItem(new Dictionary<string, string>
                 {
-                    {"castellano", "Spanish Castellano"},
-                    {"latino", "Spanish Latino"}
+                    {"castellano", "Castilian Spanish"},
+                    {"latino", "Latin American Spanish"}
                 })
-                {
-                    Name = "Select language",
-                    Value = "castellano"
-                };
+            {
+                Name = "Select language",
+                Value = "castellano"
+            };
             configData.AddDynamic("language", language);
 
             AddCategoryMapping(1, TorznabCatType.MoviesHD);
@@ -104,7 +104,7 @@ namespace Jackett.Common.Indexers
                 var pageReleases = ParseReleases(response, query);
 
                 // publish date is not available in the torrent list, but we add a relative date so we can sort
-                foreach(var release in pageReleases)
+                foreach (var release in pageReleases)
                 {
                     release.PublishDate = lastPublishDate;
                     lastPublishDate = lastPublishDate.AddMinutes(-1);
@@ -160,8 +160,8 @@ namespace Jackett.Common.Indexers
                     var title = qImg.GetAttribute("title");
                     if (!CheckTitleMatchWords(query.GetQueryString(), title))
                         continue; // skip if it doesn't contain all words
-                    title += _language.Equals("castellano") ? " SPANiSH" : " LATiN-SPANiSH";
-                    title += " DUAL 1080p BDRip x264";
+                    title += _language.Equals("castellano") ? " MULTi/SPANiSH" : " MULTi/LATiN SPANiSH";
+                    title += " 1080p BDRip x264";
 
                     var banner = new Uri(qImg.GetAttribute("src"));
                     var link = new Uri(row.QuerySelector("a").GetAttribute("href"));
@@ -172,7 +172,7 @@ namespace Jackett.Common.Indexers
                         Link = link,
                         Comments = link,
                         Guid = link,
-                        Category = new List<int> {TorznabCatType.MoviesHD.ID},
+                        Category = new List<int> { TorznabCatType.MoviesHD.ID },
                         BannerUrl = banner,
                         Size = 2147483648, // 2 GB
                         Files = 1,
