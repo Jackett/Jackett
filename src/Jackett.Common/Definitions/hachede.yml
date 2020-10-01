@@ -169,8 +169,12 @@ search:
     title:
       selector: td.torrent_name > a, .newIndicator > a
       filters:
+        - name: re_replace
+          args: ["\\W", "."] # Spaces and other characters -> .
         - name: append
-          args: " SPANISH"
+          args: ".Spanish-HacheDe"
+        - name: re_replace
+          args: ["\\.+", "."] # More than 1 dot -> .
     details:
       selector: td.torrent_name > a, .newIndicator > a
       attribute: href
