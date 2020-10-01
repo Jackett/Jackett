@@ -197,6 +197,8 @@ search:
           args: ["\\W", "."] # Spaces and other characters -> .
         - name: re_replace
           args: ["\\.+", "."] # More than 1 dot -> .
+        - name: re_replace
+          args: ["^\\.", ""] # Delete first dot
 
     title|append: # Remux
       selector: td:nth-child(2) a:contains("REMUX"),a:contains("Remux"),a:contains("remux")
