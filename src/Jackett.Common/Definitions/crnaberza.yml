@@ -151,13 +151,17 @@ search:
           args: ["Danas", "Today"]
         - name: replace
           args: ["Juče", "Yesterday"]
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
     date:
       # Feb 14 2019<br>10:20 AM
       optional: true
       selector: td:nth-of-type(6):not(:contains("Juče")):not(:contains("Danas"))
       filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "Jan 2 2006 03:04 PM"
+          args: "Jan 2 2006 03:04 PM -07:00"
     size:
       selector: td:nth-of-type(7)
     grabs:

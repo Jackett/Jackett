@@ -165,11 +165,9 @@ search:
     date:
       selector: div.left-box time
       filters:
-        # All times are Pacific/Pitcairn UTC-08:00
+        # datetime is auto adjusted by site account profile
         - name: replace
           args: ["T", " "]
-        - name: replace
-          args: ["+00:00", " -08:00"]
     downloadvolumefactor:
       text: 1
     uploadvolumefactor:

@@ -140,7 +140,7 @@ search:
         - name: re_replace
           args: ["[ ]at|[\\s+]|[//\xa0],\\/g", " "]
         - name: append
-          args: " -07:00" # PTZ
+          args: " +00:00" # auto adjusted by site account profile
     date:
       # February 09, 2019, 06:35:08 AM
       selector: td:nth-child(5):not(:contains("day"))
@@ -149,7 +149,7 @@ search:
         - name: re_replace
           args: ["[,]|[\\s+]|[//\xa0],\\/g", " "]
         - name: append
-          args: " -07:00" # PTZ
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "January 02  2006  03:04:05 PM -07:00"
     seeders:

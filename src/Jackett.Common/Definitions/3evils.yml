@@ -141,14 +141,14 @@ search:
       selector: td[data-label="Added"]:contains("day")
       filters:
         - name: append
-          args: " -07:00"
+          args: " +00:00" # auto adjusted by site account profile
     date:
       # Feb 14 2019<br> 10:20 AM
       optional: true
       selector: td[data-label="Added"]:not(:contains("day"))
       filters:
         - name: append
-          args: " -07:00"
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "Jan 2 2006 03:04 PM -07:00"
     seeders:

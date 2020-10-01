@@ -161,7 +161,7 @@ search:
       selector: td:nth-child(5)
       filters:
         - name: append
-          args: " -07:00" # PTZ
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "02-01-200615:04:05 -07:00"
     size:
