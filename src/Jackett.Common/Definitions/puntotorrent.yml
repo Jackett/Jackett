@@ -166,28 +166,11 @@ search:
       filters:
         - name: querystring
           args: category
-    title:
-      selector: td:nth-child(2) a:contains("VOSE")
+
+    title: # Clean Title
+      selector: td:nth-child(2)
       optional: true
       filters:
-        - name: append
-          args: " [English]"
-        - name: re_replace
-          args: ["(?i)T[\\s-_]?(\\d{1,2})(.*)\\[(\\d{1,2})[x|\\/|\\\\](\\d{1,2})\\]", "S$1E$3 $2"]
-        - name: re_replace
-          args: ["(?i)T[\\s-_]?(\\d{1,2})\\b", " S$1 "]
-        - name: re_replace
-          args: ["(?i)\\w*Temp\\w*\\b\\s?(\\d{1,2})(ª|\\D)?\\b", " S$1 "]
-        - name: re_replace
-          args: ["(?i)(\\d{1,2})(ª|\\D)?\\s?\\w*Temp\\w*\\b", " S$1 "]
-        - name: re_replace
-          args: ["(?i)(\\d{1,2})[x|\\/|\\\\](\\d{1,2})", "S$1E$2"]
-    title:
-      selector: td:nth-child(2) a:not(:contains("VOSE"))
-      optional: true
-      filters:
-        - name: append
-          args: " [Spanish]"
         - name: re_replace
           args: ["(?i)T[\\s-_]?(\\d{1,2})(.*)\\[(\\d{1,2})[x|\\/|\\\\](\\d{1,2})\\]", "S$1E$3 $2"]
         - name: re_replace
@@ -202,6 +185,118 @@ search:
           args: ["(?i)(\\d{1,2})[x|\\/|\\\\](\\d{1,2})", "S$1E$2"]
         - name: re_replace # S02/C01 => S02E01  /  S02xC01 => S02E01  /  S02C01 => S02E01
           args: ["(?i)S(\\d{1,2})[/x]?C(\\d{1,2})", "S$1E$2"]
+        - name: re_replace
+          args: ["(?i)\\[\\.[a-zA-Z.]+\\]", ""] # Delete [.Group]
+        - name: re_replace
+          args: [" SILVER:.*", ""] # Delete [SILVER...]
+        - name: re_replace
+          args: [" Torrent.*", ""] # Delete [Torrent x2...]
+        - name: re_replace
+          args: [" GOLDEN:.*", ""] # Delete [GOLDEN...]
+        - name: re_replace
+          args: ["\\W", "."] # Spaces and other characters -> .
+        - name: re_replace
+          args: ["\\.+", "."] # More than 1 dot -> .
+        - name: re_replace
+          args: ["^\\.", ""] # Delete first dot
+
+    title|append: # Remux
+      selector: td:nth-child(2) a:contains("REMUX"),a:contains("Remux"),a:contains("remux")
+      optional: true
+      filters:
+        - name: re_replace
+          args: [".", ""]
+        - name: append
+          args: "Remux."
+
+    title|append: # WEBDL
+      selector: td:nth-child(2) a:contains("WEB"),a:contains("web"),a:contains("Web")
+      optional: true
+      filters:
+        - name: re_replace
+          args: [".", ""]
+        - name: append
+          args: "WEBDL."
+
+    title|append: # HDTV
+      selector: td:nth-child(2) a:contains("HDTV"),a:contains("HDtv"),a:contains("hdtv")
+      optional: true
+      filters:
+        - name: re_replace
+          args: [".", ""]
+        - name: append
+          args: "HDTV."
+
+    title|append: # DVD
+      selector: td:nth-child(2) a:contains("DVD"),a:contains("dvd"),a:contains("Dvd")
+      optional: true
+      filters:
+        - name: re_replace
+          args: [".", ""]
+        - name: append
+          args: "DVD.Spanish-PuntoTorrent"
+
+    title|append: # BluRay
+      selector: td:nth-child(2) a:not(:contains("HDTV"))a:not(:contains("hdtv"))a:not(:contains("REMUX"))a:not(:contains("Remux"))a:not(:contains("remux"))a:not(:contains("WEB"))a:not(:contains("web"))a:not(:contains("Web"))a:contains("1080"),:contains("2160"):contains("uhd")
+      optional: true
+      filters:
+        - name: re_replace
+          args: [".", ""]
+        - name: append
+          args: "BluRay."
+
+    title|append: # 2160p
+      selector: td:nth-child(2) a:contains("2160"),a:contains("4k"),a:contains("4K"),a:contains("uhd"),a:contains("UHD")
+      optional: true
+      filters:
+        - name: re_replace
+          args: [".", ""]
+        - name: append
+          args: "2160p.Spanish-PuntoTorrent"
+
+    title|append: # 1080
+      selector: td:nth-child(2) a:contains("1080"),a:contains("microhd"),a:contains("mhd"),a:contains("BDRemux"):not(:contains("2160"))
+      optional: true
+      filters:
+        - name: re_replace
+          args: [".", ""]
+        - name: append
+          args: "1080p.Spanish-PuntoTorrent"
+
+    title|append: # 720
+      selector: td:nth-child(2) a:contains("720")
+      optional: true
+      filters:
+        - name: re_replace
+          args: [".", ""]
+        - name: append
+          args: "720p.Spanish-PuntoTorrent"
+
+    title|append: # 480
+      selector: td:nth-child(2) a:contains("Xvid"),a:contains("XVID"),a:contains("xvid")
+      optional: true
+      filters:
+        - name: re_replace
+          args: [".", ""]
+        - name: append
+          args: "480.Spanish-PuntoTorrent"
+
+    title:
+      selector: td:nth-child(2) a:contains("VOSE")
+      optional: true
+      filters:
+        - name: append
+          args: " | English"
+        - name: re_replace
+          args: ["(?i)T[\\s-_]?(\\d{1,2})(.*)\\[(\\d{1,2})[x|\\/|\\\\](\\d{1,2})\\]", "S$1E$3 $2"]
+        - name: re_replace
+          args: ["(?i)T[\\s-_]?(\\d{1,2})\\b", " S$1 "]
+        - name: re_replace
+          args: ["(?i)\\w*Temp\\w*\\b\\s?(\\d{1,2})(ª|\\D)?\\b", " S$1 "]
+        - name: re_replace
+          args: ["(?i)(\\d{1,2})(ª|\\D)?\\s?\\w*Temp\\w*\\b", " S$1 "]
+        - name: re_replace
+          args: ["(?i)(\\d{1,2})[x|\\/|\\\\](\\d{1,2})", "S$1E$2"]
     details:
       selector: a[href^="download.php"]
       attribute: href
