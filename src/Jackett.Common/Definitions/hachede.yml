@@ -175,6 +175,8 @@ search:
           args: ".Spanish-HacheDe"
         - name: re_replace
           args: ["\\.+", "."] # More than 1 dot -> .
+        - name: re_replace
+          args: ["^\\.", ""] # Delete first dot
     details:
       selector: td.torrent_name > a, .newIndicator > a
       attribute: href
