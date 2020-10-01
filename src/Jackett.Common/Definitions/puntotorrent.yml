@@ -271,7 +271,7 @@ search:
           args: [".", ""]
         - name: append
           args: "720p.Spanish-PuntoTorrent"
-    
+
     title|append: # 480
       selector: td:nth-child(2) a:contains("Xvid"),a:contains("XVID"),a:contains("xvid")
       optional: true
