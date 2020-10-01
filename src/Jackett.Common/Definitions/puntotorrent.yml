@@ -106,6 +106,10 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -151,7 +155,8 @@ search:
   inputs:
     page: torrents
     $raw: "&category={{ range .Categories }}{{.}};{{end}}"
-    active: 1
+    # 0 all, 1 onlyactive, 2 onlydead, 3 gold, 4 silver, 5 upx2, 6 upx3
+    active: "{{ if .Config.freeleech }}3{{ else }}0{{ end }}"
     search: "{{ .Keywords }}"
     order: "{{ .Config.sort }}"
     by: "{{ .Config.type }}"
