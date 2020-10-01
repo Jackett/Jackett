@@ -104,8 +104,25 @@ search:
       filters:
         - name: regexp
           args: "/categories/(\\d+)"
-    title:
+
+    title: 
       selector: a.view-torrent
+      filters:
+        - name: re_replace
+          args: ["Full", "BRDISK."] # Full(BR/UHD) -> BRDISK
+        - name: re_replace
+          args: ["FULL", "BRDISK."] # FULL(BR/UHD) -> BRDISK
+        - name: re_replace
+          args: ["HDOlimpo", ""] # Delete HDOlimpo
+        - name: re_replace
+          args: ["HD-Olimpo", ""] # Delete HD-Olimpo
+        - name: re_replace
+          args: ["\\W", "."] # Spaces and other characters -> .
+        - name: append
+          args: ".Spanish-HDOlimpo"
+        - name: re_replace
+          args: ["\\.+", "."] # More than 1 dot -> .
+
     download:
       selector: a[href*="/download/"]
       attribute: href
