@@ -137,7 +137,7 @@ search:
         - name: re_replace
           args: ["\\.+", "."] # More than 1 dot -> .
         - name: re_replace
-          args: ["^\\.", ""] # Delete first dot 
+          args: ["^\\.", ""] # Delete first dot
     banner:
       selector: a[onmouseover][href^="index.php?page=torrent-details"]
       attribute: onmouseover
@@ -179,4 +179,3 @@ search:
         img[src="images/4x.png"]: 4
         img[src="images/5x.png"]: 5
         "*": 1
-# xbtit customised
