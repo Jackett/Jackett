@@ -22,6 +22,10 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class MoreThanTV : BaseWebIndexer
     {
+        public override string[] LegacySiteLinks { get; protected set; } = {
+            "https://www.morethan.tv/",
+        };
+
         private string LoginUrl => SiteLink + "login.php";
         private string SearchUrl => SiteLink + "ajax.php?action=browse&searchstr=";
         private string DownloadUrl => SiteLink + "torrents.php?action=download&id=";
@@ -33,7 +37,7 @@ namespace Jackett.Common.Indexers
             : base(id: "morethantv",
                    name: "MoreThanTV",
                    description: "Private torrent tracker for TV / MOVIES, and the internal tracker for the release group DRACULA.",
-                   link: "https://www.morethan.tv/",
+                   link: "https://www.morethantv.me/",
                    caps: new TorznabCapabilities(
                        TorznabCatType.Movies,
                        TorznabCatType.TV,
