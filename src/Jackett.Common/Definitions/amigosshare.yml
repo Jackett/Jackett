@@ -306,7 +306,7 @@ search:
         - name: re_replace
           args: [" (\\d:)", " 0$1"]
         - name: append
-          args: " -03:00"
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "02/01/06 15:04:05 -07:00"
     size:

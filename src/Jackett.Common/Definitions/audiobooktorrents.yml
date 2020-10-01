@@ -150,7 +150,7 @@ search:
       selector: td:nth-last-child(7)
       filters:
         - name: append
-          args: " -07:00" # PTZ
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "Jan 2 2006 03:04 PM -07:00"
     size:

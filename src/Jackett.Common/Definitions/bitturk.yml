@@ -160,7 +160,7 @@ search:
         - name: regexp
           args: "Uploaded (.+?) by"
         - name: append
-          args: " +03:00" # TRT
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "02-01-2006 15:04 -07:00"
     date:
@@ -175,7 +175,7 @@ search:
         - name: replace
           args: [" at ", " "]
         - name: append
-          args: " +03:00" # TRT
+          args: " +00:00" # auto adjusted by site account profile
     size:
       selector: a[rel="torrent_size"]
     seeders:
