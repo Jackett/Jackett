@@ -22,7 +22,7 @@ caps:
     - {id: 23, cat: Movies/HD, desc: "Movies x265"}
     - {id: 24, cat: Movies/SD, desc: "Movies xvid"}
     - {id: 48, cat: TV/Documentary, desc: "Documentary"}
-    - {id: 50, cat: TV/Anim, desc: "Animated"}
+    - {id: 50, cat: TV/Anime, desc: "Animated"}
     - {id: 26, cat: TV, desc: "TV Packs"}
     - {id: 27, cat: TV/HD, desc: "TV x264"}
     - {id: 28, cat: TV/HD, desc: "TV x265"}
