@@ -125,13 +125,17 @@ search:
       optional: true
       filters:
         - name: append
-          args: " | English"
+          args: " English"
     title:
       selector: a[href^="index.php?page=torrent-details"][onmouseover]:not(:contains("VOSE"))
       optional: true
       filters:
+        - name: re_replace
+          args: ["\\W", "."] # Spaces and other characters -> .
         - name: append
-          args: " | Spanish"
+          args: ".Spanish-DivTeam"
+        - name: re_replace
+          args: ["\\.+", "."] # More than 1 dot -> .
     banner:
       selector: a[onmouseover][href^="index.php?page=torrent-details"]
       attribute: onmouseover
