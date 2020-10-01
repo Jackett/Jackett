@@ -109,9 +109,7 @@ search:
       selector: a.view-torrent
       filters:
         - name: re_replace
-          args: ["Full", "BRDISK."] # Full(BR/UHD) -> BRDISK
-        - name: re_replace
-          args: ["FULL", "BRDISK."] # FULL(BR/UHD) -> BRDISK
+          args: ["(?i)full", "BRDISK."] # FULL(BR/UHD) -> BRDISK
         - name: re_replace
           args: ["HDOlimpo", ""] # Delete HDOlimpo
         - name: re_replace
