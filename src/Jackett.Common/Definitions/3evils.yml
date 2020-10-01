@@ -66,7 +66,7 @@ login:
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
-    submitme: "X"
+    submitme: X
   error:
     - selector: div.callout:contains("Login failed!")
   test:
@@ -80,7 +80,7 @@ search:
     - path: browse.php
   inputs:
     $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-    search: "{{.Keywords}}"
+    search: "{{ .Keywords }}"
     # title, descr, genre, all
     searchin: title
     # 0 active, 1 incldead, 2 onlydead
@@ -139,13 +139,18 @@ search:
       # Yesterday<br> 08:03 PM
       optional: true
       selector: td[data-label="Added"]:contains("day")
+      filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
     date:
       # Feb 14 2019<br> 10:20 AM
       optional: true
       selector: td[data-label="Added"]:not(:contains("day"))
       filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "Jan 2 2006 03:04 PM"
+          args: "Jan 2 2006 03:04 PM -07:00"
     seeders:
       selector: td[data-label="Seeders"]
     leechers:

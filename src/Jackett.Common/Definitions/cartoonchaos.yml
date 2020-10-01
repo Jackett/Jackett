@@ -88,7 +88,7 @@ search:
     category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{else}}0{{end}}"
     # 0=title, 1=title&descr, 2=descr
     options: "{{ if .Query.IMDBID }}2{{ else }}0{{ end }}"
-    # 0 all 1 activeonly 2 deadonly
+    # 0 all, 1 activeonly, 2 deadonly
     active: 0
     order: "{{ .Config.sort }}"
     by: "{{ .Config.type }}"
@@ -139,6 +139,8 @@ search:
       filters:
         - name: re_replace
           args: ["[ ]at|[\\s+]|[//\xa0],\\/g", " "]
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
     date:
       # February 09, 2019, 06:35:08 AM
       selector: td:nth-child(5):not(:contains("day"))
@@ -146,8 +148,10 @@ search:
       filters:
         - name: re_replace
           args: ["[,]|[\\s+]|[//\xa0],\\/g", " "]
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "January 02  2006  03:04:05 PM"
+          args: "January 02  2006  03:04:05 PM -07:00"
     seeders:
       selector: td:nth-child(6)
     leechers:

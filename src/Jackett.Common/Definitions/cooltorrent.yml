@@ -106,7 +106,7 @@ search:
         - name: regexp
           args: (\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})
         - name: append
-          args: " +00:00"
+          args: " +01:00" # CET
         - name: dateparse
           args: "2006-01-02 15:04:05 -07:00"
     size:
