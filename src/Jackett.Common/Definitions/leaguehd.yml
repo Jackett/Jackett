@@ -12,24 +12,24 @@ caps:
   categorymappings:
     - {id: 300, cat: Movies/UHD, desc: "Movies UHD-4K"}
     - {id: 301, cat: Movies/UHD, desc: "Movies 2160p"}
+    - {id: 420, cat: Movies/UHD, desc: "Movies 2160p REMUX"}
     - {id: 401, cat: Movies/BluRay, desc: "Movies Blu-ray"}
     - {id: 410, cat: Movies/HD, desc: "Movies 1080p"}
+    - {id: 415, cat: Movies, desc: "Movies 1080p REMUX"}
+    - {id: 416, cat: Movies/3D, desc: "Movies 3D"}
     - {id: 411, cat: Movies/HD, desc: "Movies 720p"}
     - {id: 412, cat: Movies/WEBDL, desc: "Movies WEB-DL"}
     - {id: 413, cat: TV/HD, desc: "Movies HDTV"}
-    - {id: 414, cat: Movies/DVD, desc: "Movies DVD"}
-    - {id: 415, cat: Movies, desc: "Movies REMUX"}
-    - {id: 416, cat: Movies/3D, desc: "Movies 3D"}
     - {id: 417, cat: Movies, desc: "Movies iPad"}
-    - {id: 418, cat: Movies/WEBDL, desc: "Movies NF WEB-DL"}
-    - {id: 419, cat: Movies/WEBDL, desc: "Movies VIU WEB-DL"}
-    - {id: 404, cat: TV/Documentary, desc: "Documentaries"}
-    - {id: 405, cat: TV/Anime, desc: "Animations(动画片)"}
+    - {id: 414, cat: Movies/DVD, desc: "Movies DVD"}
     - {id: 402, cat: TV, desc: "TV Series(电视剧)"}
     - {id: 403, cat: TV, desc: "TV Shows(综艺)"}
+    - {id: 404, cat: TV/Documentary, desc: "Documentaries"}
     - {id: 406, cat: Audio/Video, desc: "Music Videos(MV)"}
     - {id: 407, cat: TV/Sport, desc: "Sports(体育)"}
     - {id: 408, cat: Audio, desc: "HQ Audio(音乐)"}
+    - {id: 421, cat: Books, desc: "Book(学习资料)"}
+    - {id: 422, cat: Console, desc: "Game(游戏)"}
     - {id: 409, cat: Other, desc: "Misc(其他)"}
 
   modes:
@@ -115,7 +115,7 @@ search:
       selector: a[href^="details.php?id="]
       attribute: href
     download:
-      selector: a[href^="download.php?id="]
+      selector: a[href^="download.php?"]
       attribute: href
     imdb:
       optional: true
@@ -128,7 +128,7 @@ search:
       optional: true
       filters:
         - name: append
-          args: " +08:00"
+          args: " +08:00" # CST
         - name: dateparse
           args: "2006-01-02 15:04:05 -07:00"
     date:
@@ -137,7 +137,7 @@ search:
       optional: true
       filters:
         - name: append
-          args: " +08:00"
+          args: " +08:00" # CST
         - name: dateparse
           args: "2006-01-0215:04:05 -07:00"
     size:

@@ -178,4 +178,6 @@ search:
       case:
         span.icon_upload: 2
         "*": 1
+    minimumratio:
+      text: 0.31
 # XBT v3

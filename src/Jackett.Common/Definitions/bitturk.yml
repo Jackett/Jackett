@@ -159,8 +159,10 @@ search:
       filters:
         - name: regexp
           args: "Uploaded (.+?) by"
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02-01-2006 15:04"
+          args: "02-01-2006 15:04 -07:00"
     date:
       optional: true
       # Uploaded Friday at 05:11 by
@@ -172,6 +174,8 @@ search:
           args: "Uploaded (.+?) by"
         - name: replace
           args: [" at ", " "]
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
     size:
       selector: a[rel="torrent_size"]
     seeders:

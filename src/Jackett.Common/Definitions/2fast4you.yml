@@ -207,6 +207,8 @@ search:
       attribute: src
     size:
       selector: td:nth-child(5)
+    grabs:
+      selector: td:nth-child(6)
     seeders:
       selector: td:nth-child(7)
     leechers:

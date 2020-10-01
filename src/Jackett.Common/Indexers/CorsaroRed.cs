@@ -240,8 +240,6 @@ namespace Jackett.Common.Indexers
                 InfoHash = (string)torrent["hash"],
                 MagnetUri = magnetUri,
                 Comments = comments,
-                MinimumRatio = 1,
-                MinimumSeedTime = 172800, // 48 hours
                 DownloadVolumeFactor = 0,
                 UploadVolumeFactor = 1,
                 Guid = comments,

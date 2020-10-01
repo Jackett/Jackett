@@ -29,6 +29,7 @@ caps:
     search: [q]
     tv-search: [q]
     movie-search: [q]
+    music-search: [q]
 
 settings:
   - name: cookie
@@ -132,7 +133,7 @@ search:
       selector: td:last-child
       filters:
         - name: append
-          args: " +09:00"
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "060102 15:04:05 -07:00"
     downloadvolumefactor:
@@ -144,4 +145,6 @@ search:
       case:
         img[src="images/freeleech2.png"]: 2
         "*": 1
+    minimumratio:
+      text: 0.8
 # TorrentTrader v2-svn
