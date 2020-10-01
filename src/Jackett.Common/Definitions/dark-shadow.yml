@@ -136,8 +136,8 @@ search:
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-    # 0 name 1 descr 2 both 4 imdb
-    blah: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
+    # 0 name, 1 descr, 2 both, 4 imdb
+    blah: "{{ if .Query.IMDBID }}4{{ else }}0{{ end }}"
     orderby: "{{ .Config.sort }}"
     sort: "{{ .Config.type }}"
 
@@ -242,6 +242,8 @@ search:
           args: ["Heute", "Today"]
         - name: replace
           args: ["Gestern", "Yesterday"]
+        - name: append
+          args: " +01:00" # CET
     date:
       # 30.02.2018 um 23:12:50
       selector: div.selection_unter_ab:contains(".")
@@ -249,8 +251,10 @@ search:
       filters:
         - name: replace
           args: [" um", ""]
+        - name: append
+          args: " +01:00" # CET
         - name: dateparse
-          args: "02.01.2006 15:04:05"
+          args: "02.01.2006 15:04:05 -07:00"
     description:
       selector: selection_unter_af
       optional: true
