@@ -6,6 +6,8 @@ language: es-419
 type: private
 encoding: UTF-8
 links:
+  - https://purovicio.in/
+legacylinks:
   - https://purovicio.pw/
 
 caps:
