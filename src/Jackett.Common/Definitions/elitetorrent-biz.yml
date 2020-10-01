@@ -74,11 +74,15 @@ search:
         - name: replace
           args: ["Pelicula en ", ""]
         - name: replace
-          args: ["Español", "Spanish"]
+          args: ["Español Latino", "LATiN SPANiSH"]
+        - name: replace
+          args: ["Español Castellano", "SPANiSH"]
         - name: replace
           args: ["Ingles", "English"]
         - name: replace
-          args: ["Subtitulado", "Subtitled"]
+          args: ["Subtitulado", " SPASUBS"]
+        - name: replace
+          args: ["VOSE", ""]
     _title:
       selector: div.imagen > a
       attribute: title
@@ -95,7 +99,7 @@ search:
         - name: re_replace
           args: ["(\\d{1})×(\\d{2})", "S0$1E$2"]
     title:
-      text: "{{ .Result._title}} {{ .Result.quality }} {{ .Result.language }}"
+      text: "{{ .Result._title}} {{ .Result.language }} {{ .Result.quality }}"
     details:
       selector: .meta a
       attribute: href
