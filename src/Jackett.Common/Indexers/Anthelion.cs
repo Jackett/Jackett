@@ -141,7 +141,7 @@ namespace Jackett.Common.Indexers
                     var release = new ReleaseInfo
                     {
                         MinimumRatio = 1,
-                        MinimumSeedTime = 0,
+                        MinimumSeedTime = 259200,
                         Description = description,
                         Title = title,
                         PublishDate = publishDate,

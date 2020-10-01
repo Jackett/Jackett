@@ -1419,11 +1419,7 @@ namespace Jackett.Common.Indexers
                     {
                         try
                         {
-                            var release = new ReleaseInfo
-                            {
-                                MinimumRatio = 1,
-                                MinimumSeedTime = 172800 // 48 hours
-                            };
+                            var release = new ReleaseInfo();
 
                             // Parse fields
                             foreach (var Field in Search.Fields)

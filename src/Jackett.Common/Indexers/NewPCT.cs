@@ -662,8 +662,6 @@ namespace Jackett.Common.Indexers
             result.Size = size;
             result.DownloadVolumeFactor = 0;
             result.UploadVolumeFactor = 1;
-            result.MinimumRatio = 1;
-            result.MinimumSeedTime = 172800; // 48 hours
 
             return result;
         }

@@ -29,6 +29,10 @@ settings:
     type: checkbox
     label: Strip Russian Letters
     default: false
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -63,8 +67,8 @@ search:
     - path: browse.php
   inputs:
     search: "{{.Keywords }}"
-    # 0 active 1 incldead 2 onlydead 3 gold 4 seedfree
-    incldead: 1
+    # 0 active, 1 incldead, 2 onlydead, 3 gold, 4 seedfree
+    incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
   keywordsfilters:
@@ -75,6 +79,8 @@ search:
     selector: table > tbody > tr:has(a[href^="details.php?id="])
 
   fields:
+    category:
+      text: 1
     title:
       selector: a[href^="details.php?id="]
       filters:
@@ -105,8 +111,6 @@ search:
     details:
       selector: a[href^="details.php?id="]
       attribute: href
-    category:
-      text: 1
     banner:
       selector: img[src^="/posters/"]
       attribute: src
@@ -144,8 +148,10 @@ search:
           args: ["ноября", "November"]
         - name: replace
           args: ["декабря", "December"]
+        - name: append
+          args: " +03:00" # MSK
         - name: dateparse
-          args: "2 January 2006 15:04:05"
+          args: "2 January 2006 15:04:05 -07:00"
     files:
       selector: td:nth-last-child(5)
     size:
@@ -167,6 +173,7 @@ search:
         "a[href^=\"details.php?id=\"]:contains(\"(Золото)\")": 0
         "*": 1
     uploadvolumefactor:
-      case:
-        "*": 1
+      text: 1
+    minimumratio:
+      text: 0.3
 # engine n/a
