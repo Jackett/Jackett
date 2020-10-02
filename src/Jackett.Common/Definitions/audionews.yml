@@ -274,7 +274,7 @@ search:
       selector: td[colspan="20"] > strong
       filters:
         - name: append
-          args: " -07:00" # PTZ
+          args: " -07:00" # PDT
         - name: dateparse
           args: "01-02-2006 -07:00"
 
