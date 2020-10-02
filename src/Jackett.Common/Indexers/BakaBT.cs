@@ -5,11 +5,13 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
@@ -23,12 +25,14 @@ namespace Jackett.Common.Indexers
         private string SearchUrl => SiteLink + "browse.php?only=0&hentai=1&incomplete=1&lossless=1&hd=1&multiaudio=1&bonus=1&reorder=1&q=";
         private string LoginUrl => SiteLink + "login.php";
         private readonly string LogoutStr = "<a href=\"logout.php\">Logout</a>";
+        private bool AddRomajiTitle => configData.AddRomajiTitle.Value;
+        private bool AppendSeason => configData.AppendSeason.Value;
 
-        private readonly List<int> defaultCategories = new List<int> {TorznabCatType.TVAnime.ID};
+        private readonly List<int> defaultCategories = new List<int> { TorznabCatType.TVAnime.ID };
 
-        private new ConfigurationDataBasicLogin configData
+        private new ConfigurationDataBakaBT configData
         {
-            get => (ConfigurationDataBasicLogin)base.configData;
+            get => (ConfigurationDataBakaBT)base.configData;
             set => base.configData = value;
         }
 
@@ -42,7 +46,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
-                   configData: new ConfigurationDataBasicLogin("To prevent 0-results-error, Enable the " +
+                   configData: new ConfigurationDataBakaBT("To prevent 0-results-error, Enable the " +
                                                                "Show-Adult-Content option in your BakaBT account Settings."))
         {
             Encoding = Encoding.UTF8;
@@ -83,9 +87,9 @@ namespace Jackett.Common.Indexers
             var parser = new HtmlParser();
             var dom = parser.ParseDocument(loginForm.ContentString);
             var loginKey = dom.QuerySelector("input[name=\"loginKey\"]");
-            if (loginKey !=null )
+            if (loginKey != null)
                 pairs["loginKey"] = loginKey.GetAttribute("value");
-            
+
             var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginForm.Cookies, true, null, SiteLink);
             var responseContent = response.ContentString;
             await ConfigureIfOK(response.Cookies, responseContent.Contains(LogoutStr), () =>
@@ -100,17 +104,13 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            var queryCopy = query.Clone(); // we can't change the original object
-            // This tracker only deals with full seasons so chop off the episode/season number if we have it D:
-            if (!string.IsNullOrWhiteSpace(queryCopy.SearchTerm))
-            {
-                var splitindex = queryCopy.SearchTerm.LastIndexOf(' ');
-                if (splitindex > -1)
-                    queryCopy.SearchTerm = queryCopy.SearchTerm.Substring(0, splitindex);
-            }
+            var searchString = query.SanitizedSearchTerm;
+
+            var match = Regex.Match(query.SanitizedSearchTerm, @".*(?=\s(?:[Ee]\d+|\d+)$)");
+            if (match.Success)
+                searchString = match.Value;
 
             var releases = new List<ReleaseInfo>();
-            var searchString = queryCopy.SanitizedSearchTerm;
             var episodeSearchUrl = SearchUrl + WebUtility.UrlEncode(searchString);
             var response = await RequestWithCookiesAndRetryAsync(episodeSearchUrl);
             if (!response.ContentString.Contains(LogoutStr))
@@ -125,7 +125,7 @@ namespace Jackett.Common.Indexers
                 var parser = new HtmlParser();
                 var dom = parser.ParseDocument(response.ContentString);
                 var rows = dom.QuerySelectorAll(".torrents tr.torrent, .torrents tr.torrent_alt");
-                ICollection<int> currentCategories = new List<int> {TorznabCatType.TVAnime.ID};
+                ICollection<int> currentCategories = new List<int> { TorznabCatType.TVAnime.ID };
 
                 foreach (var row in rows)
                 {
@@ -150,14 +150,18 @@ namespace Jackett.Common.Indexers
 
                     currentCategories = GetNextCategory(row, currentCategories);
 
-                    // For each over each pipe deliminated name
-                    foreach (var name in titleSeries.Split("|".ToCharArray(), StringSplitOptions.RemoveEmptyEntries))
+                    var stringSeparator = new string[] { " | " };
+                    var titles = titleSeries.Split(stringSeparator, StringSplitOptions.RemoveEmptyEntries);
+                    if (titles.Count() > 1 && !AddRomajiTitle)
+                        titles = titles.Skip(1).ToArray();
+
+                    foreach (var name in titles)
                     {
                         var release = new ReleaseInfo();
 
                         release.Title = (name + releaseInfo).Trim();
                         // Ensure the season is defined as this tracker only deals with full seasons
-                        if (release.Title.IndexOf("Season") == -1)
+                        if (release.Title.IndexOf("Season") == -1 && AppendSeason)
                         {
                             // Insert before the release info
                             var aidx = release.Title.IndexOf('(');
@@ -170,7 +174,7 @@ namespace Jackett.Common.Indexers
                                 bidx = release.Title.Length;
 
                             var insertPoint = Math.Min(aidx, bidx);
-                            release.Title = release.Title.Substring(0, insertPoint) + "Season 1 " + release.Title.Substring(insertPoint);
+                            release.Title = release.Title.Substring(0, insertPoint) + " Season 1 " + release.Title.Substring(insertPoint);
                         }
 
                         release.Category = currentCategories;
@@ -209,6 +213,7 @@ namespace Jackett.Common.Indexers
 
                         releases.Add(release);
                     }
+
                 }
             }
             catch (Exception ex)
