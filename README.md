@@ -61,7 +61,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * GkTorrent
  * GloDLS
  * HDReactor
- * Horrible Subs
  * IBit
  * Idope
  * Il CorSaRo Blu

@@ -177,4 +177,5 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
+# minimumratio: ratioless site, uses credit points instead.
 # engine n/a

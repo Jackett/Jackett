@@ -141,7 +141,7 @@ search:
         - name: split
           args: ["(", 0]
         - name: append
-          args: "+01:00"
+          args: "+01:00" # CET
         - name: dateparse
           args: "2006-01-02 15:04:05 -07:00"
     downloadvolumefactor:

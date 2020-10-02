@@ -158,8 +158,10 @@ search:
     date:
       selector: td:nth-child(6)
       filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02/01/2006"
+          args: "02/01/2006 -07:00"
     seeders:
       selector: td:nth-last-child(4)
     leechers:
@@ -179,4 +181,9 @@ search:
         img[src="images/4x.png"]: 4
         img[src="images/5x.png"]: 5
         "*": 1
+    minimumratio:
+      text: 0.7
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
 # xbtit customised

@@ -81,15 +81,13 @@ search:
     category:
       text: 1
     artist:
-      text: "Varios artistas"
-    artist:
       selector: a[href^="artist.php?id="]
       optional: true
     title:
       selector: a[href^="torrents.php?id="]
       filters:
         - name: prepend
-          args: "{{.Result.artist}} - "
+          args: "{{ if .Result.artist }}{{ .Result.artist }}{{ else }}Varios artistas{{ end }} - "
     details:
       selector: a[href^="torrents.php?id="]
       attribute: href
@@ -107,8 +105,10 @@ search:
       selector: td:nth-child(4) span
       attribute: title
       filters:
+        - name: append
+          args: " +01:00" # CET
         - name: dateparse
-          args: "Jan 02 2006, 15:04"
+          args: "Jan 02 2006, 15:04 -07:00"
     size:
       selector: td:nth-child(5)
     grabs:
@@ -126,4 +126,9 @@ search:
       case:
         strong.torrent_label[title*="Neutral"]: 0
         "*": 1
+    minimumratio:
+      text: 0.6
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
 # engine n/a

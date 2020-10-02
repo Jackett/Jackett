@@ -1,6 +1,3 @@
-# Empornium uses the Luminance code, which is based on gazelle
-# ajax.php API additionally needs the auth=$authkey argument
-# Because the API is e.g. missing banner images we use screen scraping instead of the generic gazelle based approach
 ---
 id: empornium
 name: Empornium
@@ -144,7 +141,7 @@ search:
       attribute: title
       filters:
         - name: append
-          args: " +00:00"
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "Jan 02 2006, 15:04 -07:00"
     size:
@@ -162,4 +159,6 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
+    minimumratio:
+      text: 0.5
 # Luminance
