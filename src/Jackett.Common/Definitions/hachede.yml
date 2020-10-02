@@ -173,6 +173,8 @@ search:
       selector: td.torrent_name > a, .newIndicator > a
       filters:
         - name: re_replace
+          args: ["(?i)full", "BRDISK."] # FULL(BR/UHD) -> BRDISK
+        - name: re_replace
           args: ["\\W", "."] # Spaces and other characters -> .
         - name: append
           args: ".Spanish-HacheDe"
