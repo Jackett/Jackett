@@ -113,7 +113,7 @@ search:
       method: post
       followredirect: true
   inputs:
-    text: "{{ if .Keywords }}{{ .Keywords }}{{else}}{{end}}"
+    text: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ end }}"
     "text_mobile": ""
     type: 0
     audio: 0
@@ -146,15 +146,19 @@ search:
       selector: td:nth-child(3):contains(":")
       optional: true
       filters:
+        - name: append
+          args: " +02:00" # EET
         - name: dateparse
-          args: "15:04:05"
+          args: "15:04:05 -07:00"
     date:
       # 2018-10-19
       selector: td:nth-child(3):contains("-")
       optional: true
       filters:
+        - name: append
+          args: " +02:00" # EET
         - name: dateparse
-          args: "2006-01-02"
+          args: "2006-01-02 -07:00"
     seeders:
       selector: td:nth-child(6)
       filters:

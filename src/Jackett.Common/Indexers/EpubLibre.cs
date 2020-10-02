@@ -128,8 +128,6 @@ namespace Jackett.Common.Indexers
                             Size = 5242880, // 5 MB
                             Seeders = 1,
                             Peers = 2,
-                            MinimumRatio = 1,
-                            MinimumSeedTime = 172800, // 48 hours
                             DownloadVolumeFactor = 0,
                             UploadVolumeFactor = 1
                         };

@@ -187,8 +187,10 @@ search:
     date:
       selector: div.torrent-time
       filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02/01/2006"
+          args: "02/01/2006 -07:00"
     seeders:
       selector: div.torrent-seeder
     leechers:

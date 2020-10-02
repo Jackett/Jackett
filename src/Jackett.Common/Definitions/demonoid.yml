@@ -317,15 +317,15 @@ search:
     - path: files/
   inputs:
     $raw: "{{ range .Categories }}c{{.}}&{{end}}"
-    # 0 seeded 1 unseeded 2 both
+    # 0 seeded, 1 unseeded, 2 both
     seeded: 2
     # 0 all
     quality: 0
-    # 0 Demonoid 1 External 2 Both
+    # 0 Demonoid, 1 External, 2 Both
     external: 2
     # search in titles only
-    to: "{{ if .Query.IMDBID }}{{else}}1{{end}}"
-    query: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    to: "{{ if .Query.IMDBID }}{{ else }}1{{ end }}"
+    query: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     sort: "{{ re_replace .Config.sort \"_\" \"\" }}"
     # does not return imdb link in results
 

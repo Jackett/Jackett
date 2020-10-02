@@ -163,8 +163,6 @@ namespace Jackett.Common.Indexers
                 Grabs = (long)swarm["downloads"],
                 InfoHash = (string)torrent["infohash"],
                 MagnetUri = magnetUri,
-                MinimumRatio = 1,
-                MinimumSeedTime = 172800, // 48 hours
                 DownloadVolumeFactor = 0,
                 UploadVolumeFactor = 1
             };

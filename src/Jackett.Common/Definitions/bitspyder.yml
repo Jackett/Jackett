@@ -48,6 +48,7 @@ caps:
 
   modes:
     search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -94,9 +95,9 @@ search:
     - path: browse.php
   inputs:
     search: "{{ .Keywords }}"
-    # 0 active 1 incldead 2 onlydead
+    # 0 active, 1 incldead, 2 onlydead
     incldead: 1
-    # 0 title 1 default
+    # 0 title, 1 default
     scope: 0
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
@@ -149,7 +150,7 @@ search:
         - name: replace
           args: ["\xA0", " "]
         - name: append
-          args: " +00:00"
+          args: " +00:00" # GMT
         - name: dateparse
           args: "2006-01-02 15:04:05 -07:00"
     date:
@@ -159,17 +160,19 @@ search:
       filters:
         - name: replace
           args: ["Upploaded at - ", ""]
+        - name: replace
+          args: ["\xA0", " "]
         - name: append
-          args: " +00:00"
+          args: " +00:00" # GMT
         - name: dateparse
           args: "2006-01-02 15:04:05 -07:00"
     downloadvolumefactor:
-      case:
-        "*": "1"
+      text: 1
     uploadvolumefactor:
-      case:
-        "*": "1"
+      text: 1
     description:
       optional: true
       selector: font[color="#990000"]
+    minimumratio:
+      text: 1.0
 # custom v4

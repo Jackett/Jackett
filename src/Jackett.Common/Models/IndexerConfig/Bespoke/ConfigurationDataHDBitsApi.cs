@@ -8,7 +8,7 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
         public CheckboxItem Mediums { get; private set; }
         public CheckboxItem Origins { get; private set; }
 
-        public ConfigurationDataHDBitsApi() : base()
+        public ConfigurationDataHDBitsApi()
         {
             Codecs = new CheckboxItem(new Dictionary<string, string>()
                 {
@@ -20,7 +20,7 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
                     {"6", "VP9"},
                     {"4", "XviD"}
                 })
-            { Name = "Codec", Values = new string[] { "0", "1", "5", "2", "3", "6", "4" } };
+            { Name = "Codec", Values = new [] { "0", "1", "5", "2", "3", "6", "4" } };
 
             Mediums = new CheckboxItem(new Dictionary<string, string>()
                 {
@@ -31,14 +31,14 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
                     {"5", "Remux"},
                     {"6", "WEB-DL"}
                 })
-            { Name = "Medium", Values = new string[] { "0", "1", "4", "3", "5", "6" } };
+            { Name = "Medium", Values = new [] { "0", "1", "4", "3", "5", "6" } };
 
             Origins = new CheckboxItem(new Dictionary<string, string>()
                 {
                     {"0", "Undefined"},
                     {"1", "Internal"}
                 })
-            { Name = "Origin", Values = new string[] { "0", "1" } };
+            { Name = "Origin", Values = new [] { "0", "1" } };
         }
     }
 }
