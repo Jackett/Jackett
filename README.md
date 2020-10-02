@@ -172,7 +172,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Erzsebet
  * Erzsebet.pl
  * ExKinoRay
- * ExtremlymTorrents
+ * ExtremlymTorrents (XTR)
  * Gay-Torrents.net
  * Gay-Torrents.org
  * HD Dolby
