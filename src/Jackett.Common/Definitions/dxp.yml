@@ -40,7 +40,10 @@ caps:
 
   modes:
     search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -85,10 +88,13 @@ download:
 
 search:
   # https://dxp.ru/torrents.php?search=&sort=4&type=desc
+  # https://dxp.ru/torrents.php?search=&cat=0&incldead=1
   paths:
     - path: torrents.php
   inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
+    incldead: 1
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
 
@@ -114,8 +120,10 @@ search:
     date:
       selector: i
       filters:
+        - name: append
+          args: " +03:00" # MSK
         - name: dateparse
-          args: "2006-01-02 15:04:05"
+          args: "2006-01-02 15:04:05 -07:00"
     files:
       selector: td:nth-child(4)
     size:
@@ -137,4 +145,6 @@ search:
         "*": 0
     uploadvolumefactor:
       text: 1
+    minimumratio:
+      text: 0.3
 # engine n/a
