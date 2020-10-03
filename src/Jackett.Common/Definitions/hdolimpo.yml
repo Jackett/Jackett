@@ -161,6 +161,8 @@ search:
         - name: re_replace
           args: ["(?i)(önce|tagasi|geleden|fa|temu|siden|há|atrás|nazpět|назад|acum|în urmă|hace|il y a|vor|преди|前)", " ago"]
         - name: re_replace
+          args: ["(?i)(saniye|sekundit|sekunder|secondi|sekund|segundos|sekundami|секунд|secunde|secondes|Sekunden|секунди|seconden|秒前)", "seconds"]
+        - name: re_replace
           args: ["(?i)(minutit|minutter|minuti|minuty|minutos|минуты|минут|Minuten|минути|minuten)", "minutes"]
         - name: re_replace
           args: ["(?i)(dakika|minut|minuto|minuta|minutt|минута|Minute|minuut|分钟|分)", " minute"]
