@@ -145,12 +145,14 @@ namespace Jackett.Common.Indexers
             };
 
             // Get specified categories
+            // AniDex throws errors when categories are url encoded. See issue #9727
             var searchCategories = MapTorznabCapsToTrackers(query);
+            var catString = "";
             if (searchCategories.Count > 0)
-                queryParameters.Add("id", string.Join(",", searchCategories));
+                catString = "&id=" + string.Join(",", searchCategories);
 
             // Make search request
-            var searchUri = GetAbsoluteUrl("?" + queryParameters.GetQueryString());
+            var searchUri = GetAbsoluteUrl("?" + queryParameters.GetQueryString() + catString);
             var response = await RequestWithCookiesAndRetryAsync(searchUri.AbsoluteUri);
 
             // Check for DDOS Guard
