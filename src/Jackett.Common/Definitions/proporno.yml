@@ -86,7 +86,29 @@ search:
       attribute: src
       optional: true
     date:
-      selector: div.mini
+      # Сегодня, 19:56
+      selector: div.mini:contains("Сегодня")
+      optional: true
+      filters:
+        - name: regexp
+          args: "(Сегодня, \\d{2}:\\d{2})"
+        - name: replace
+          args: ["Сегодня", "Today"]
+        - name: fuzzytime
+    date:
+      # Вчера, 20:01
+      selector: div.mini:contains("Вчера")
+      optional: true
+      filters:
+        - name: regexp
+          args: "(Вчера, \\d{2}:\\d{2})"
+        - name: replace
+          args: ["Вчера", "Yesterday"]
+        - name: fuzzytime
+    date:
+      # 20-09-2020, 19:41
+      selector: div.mini:contains("-")
+      optional: true
       filters:
         - name: regexp
           args: "(\\d{1,2}-\\d{2}-\\d{4}, \\d{2}:\\d{2})"
