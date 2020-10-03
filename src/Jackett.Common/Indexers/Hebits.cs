@@ -114,8 +114,8 @@ namespace Jackett.Common.Indexers
                 foreach (var row in rows)
                 {
                     var release = new ReleaseInfo();
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800; // 48 hours
+                    release.MinimumRatio = 0.8;
+                    release.MinimumSeedTime = 259200; // 72 hours
                     var qCatLink = row.QuerySelector("a[href^=\"browse.php?cat=\"]");
                     var catStr = qCatLink.GetAttribute("href").Split('=')[1];
                     release.Category = MapTrackerCatToNewznab(catStr);
