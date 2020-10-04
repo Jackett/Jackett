@@ -142,7 +142,7 @@ search:
         - name: replace
           args: ["Προστέθηκε: ", ""]
         - name: append
-          args: " +02:00"
+          args: " +02:00" # EET
         - name: dateparse
           args: "15:04:05 02/01/2006 -07:00"
     seeders:
