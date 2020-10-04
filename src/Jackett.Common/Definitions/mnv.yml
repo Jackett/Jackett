@@ -51,8 +51,16 @@ settings:
     label: Password
   - name: freeleech
     type: checkbox
-    label: Search freeleech only
+    label: Search FreeLeech only
     default: false
+  - name: onlyupload
+    type: checkbox
+    label: Search OnlyUpload only
+    default: false
+  - name: info_free
+    type: info
+    label: About Freeleech and OnlyUpload at MNV
+    default: <li>FreeLeech are torrents where neither the download or upload is counted.</li><li>OnlyUpload are torrents where download is not counted but upload is. Good for buiding your Ratio up.</li><li>Do not set both FreeLeech and OnlyUpload check boxes, there are no torrents with both these flags so you will get a no-results error.</li>
   - name: sort
     type: select
     label: Sort requested from site
@@ -99,8 +107,10 @@ search:
     team: 0
     language: all
     freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+    free: "{{ if .Config.onlyupload }}1{{ else }}{{ end }}"
     orderby: "{{ .Config.sort }}"
     order: "{{ .Config.type }}"
+    # site does not support imdbid search from the browse.php page or return imdb links in results
 
   rows:
     selector: table.tableinborder > tbody > tr:has(a[href^="download.php"])
@@ -120,6 +130,12 @@ search:
     download:
       selector: a[href^="download.php"]
       attribute: href
+    banner:
+      selector: a[href^="details.php"]
+      attribute: onMouseover
+      filters:
+        - name: regexp
+          args: "src=(.*?) width"
     date:
       selector: td.tablea table tbody tr:nth-child(2) td:nth-child(2) b
       filters:
@@ -159,7 +175,9 @@ search:
         img[src="pic/freeleech.gif"]: 0
         "*": 1
     uploadvolumefactor:
-      text: 1
+      case:
+        img[src="pic/freeleech.gif"]: 0
+        "*": 1
     minimumratio:
       text: 0.7
     minimumseedtime:
