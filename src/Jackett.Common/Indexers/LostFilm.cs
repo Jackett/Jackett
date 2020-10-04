@@ -558,6 +558,8 @@ namespace Jackett.Common.Indexers
                             }
 
                             var playButton = row.QuerySelector("td.zeta > div.external-btn");
+                            if (playButton == null) // #9725
+                                continue;
 
                             if (!string.IsNullOrEmpty(query.Episode))
                             {

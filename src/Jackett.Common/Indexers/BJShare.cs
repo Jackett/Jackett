@@ -156,7 +156,10 @@ namespace Jackett.Common.Indexers
                 cleanTitle += " " + seasonEp;
             else
                 cleanTitle += " " + year + " " + seasonEp;
-            return FixAbsoluteNumbering(cleanTitle);
+
+            cleanTitle = FixAbsoluteNumbering(cleanTitle);
+            cleanTitle = FixNovelNumber(cleanTitle);
+            return cleanTitle;
         }
 
         private bool IsAbsoluteNumbering(string title)
@@ -422,6 +425,7 @@ namespace Jackett.Common.Indexers
                         var qTitle = qDetailsLink.QuerySelector("font");
                         // Get international title if available, or use the full title if not
                         release.Title = Regex.Replace(qTitle.TextContent, @".* \[(.*?)\](.*)", "$1$2");
+                        var seasonEp = _EpisodeRegex.Match(qTitle.TextContent).Value;
                         var year = "";
                         release.Description = "";
                         var extraInfo = "";
@@ -474,11 +478,8 @@ namespace Jackett.Common.Indexers
 
                         var catStr = qCatLink.GetAttribute("href").Split('=')[1].Split('&')[0];
                         if (!string.IsNullOrEmpty(year))
-                            release.Title = FixYearPosition(release.Title, year);
-
-                        release.Title = FixAbsoluteNumbering(release.Title);
-                        release.Title = FixNovelNumber(release.Title);
-
+                            release.Title = ParseTitle(release.Title, seasonEp, year, catStr);
+                            
                         if (qQuality != null)
                         {
                             var quality = qQuality.TextContent;

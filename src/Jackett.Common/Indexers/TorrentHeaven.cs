@@ -214,10 +214,10 @@ namespace Jackett.Common.Indexers
                         downloadFactor = 1;
                     var title = titleRegexp.Match(qDetailsLink.GetAttribute("onmouseover")).Groups[1].Value;
                     var comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
-                    var size = ReleaseInfo.GetBytes(qColumn2[1].TextContent);
-                    var seeders = ParseUtil.CoerceInt(qColumn1[3].TextContent);
-                    var leechers = ParseUtil.CoerceInt(qColumn2[3].TextContent);
-                    var grabs = ParseUtil.CoerceInt(qColumn2[2].TextContent);
+                    var size = ReleaseInfo.GetBytes(qColumn1[1].TextContent);
+                    var seeders = ParseUtil.CoerceInt(qColumn2[2].TextContent);
+                    var leechers = ParseUtil.CoerceInt(qColumn1[3].TextContent);
+                    var grabs = ParseUtil.CoerceInt(qColumn1[2].TextContent);
                     var publishDate = TimeZoneInfo.ConvertTime(dateGerman, germanyTz, TimeZoneInfo.Local);
 
                     var release = new ReleaseInfo
