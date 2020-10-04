@@ -71,7 +71,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * KickAssTorrent (kat.li)
  * KickAssTorrent (KATcr)
  * Legit Torrents
- * LePorno
  * LimeTorrents
  * LinuxTracker
  * MacTorrents
