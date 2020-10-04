@@ -333,6 +333,7 @@ namespace Jackett.Updater
                 "Definitions/lapausetorrents.yml",
                 "Definitions/lemencili.yml",
                 "Definitions/leparadisdunet.yml",
+                "Definitions/leporno.yml",
                 "Definitions/maniatorrent.yml",
                 "Definitions/manicomioshare.yml",
                 "Definitions/megabliz.yml",
