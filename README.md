@@ -402,6 +402,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * MNV (Max-New-Vision)
  * Mononoké-BT
  * MoreThanTV (MTV)
+ * Movie Zone (Mz)
  * MyAnonamouse (MAM)
  * myAmity
  * MySpleen

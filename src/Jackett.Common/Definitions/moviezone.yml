@@ -1,41 +1,48 @@
 ---
-id: horrorsite
-name: Horror Site
-description: "Horror Site is a Hungarian Private site for MOVIES / TV"
+id: moviezone
+name: Movie Zone
+description: "Movie Zone (Mz) is a HUNGARIAN Private Torrent Tracker for 0DAY / GENERAL"
 language: hu-hu
 type: private
-encoding: iso-8859-1
+encoding: iso-8859-2
 links:
-  - https://selection-tracker.net/
-legacylinks:
-  - https://horror-site.net/
+  - https://moviezone.ws/
 
 caps:
   categorymappings:
-    - {id: 80, cat: Movies, desc: "Film /PACK"}
-    - {id: 82, cat: Movies/SD, desc: "Cam-Hun"}
-    - {id: 105, cat: Movies/DVD, desc: "Film/DVD-R/Eng"}
+    - {id: 76, cat: PC/Phone-Android, desc: "Android"}
+    - {id: 68, cat: Movies/DVD, desc: "DVD-9"}
+    - {id: 60, cat: Books/Ebook, desc: "eBook/Eng"}
+    - {id: 61, cat: Books/Ebook, desc: "eBook/Hun"}
+    - {id: 37, cat: Movies/DVD, desc: "Film/DVD-R/Eng"}
     - {id: 38, cat: Movies/DVD, desc: "Film/DVD-R/Hun"}
-    - {id: 76, cat: Movies/HD, desc: "Film/HD/Eng"}
+    - {id: 48, cat: Movies/HD, desc: "Film/HD/Eng"}
     - {id: 71, cat: Movies/HD, desc: "Film/HD/Hun"}
-    - {id: 103, cat: Movies/SD, desc: "Film/SD/Eng"}
-    - {id: 104, cat: Movies/SD, desc: "Film/SD/Hun"}
+    - {id: 47, cat: Movies/HD, desc: "Film/x264/Eng"}
+    - {id: 82, cat: Movies/HD, desc: "Film/x264/Hun"}
     - {id: 40, cat: Movies/SD, desc: "Film/XviD/Eng"}
     - {id: 39, cat: Movies/SD, desc: "Film/XviD/Hun"}
-    - {id: 52, cat: PC/Games, desc: "Játék/RIP/ISO"}
+    - {id: 59, cat: XXX, desc: "Film/XXX"}
+    - {id: 87, cat: Audio/Audiobook, desc: "Hangoskönyv"}
+    - {id: 73, cat: PC/Games, desc: "Játék/Gyermek"}
+    - {id: 51, cat: PC/Games, desc: "Játék/ISO"}
+    - {id: 53, cat: Console/PSP, desc: "Játék/PS"}
+    - {id: 52, cat: PC/Games, desc: "Játék/Rip"}
+    - {id: 56, cat: Console/Xbox, desc: "Játék/Xbox (X-360)"}
     - {id: 75, cat: Other, desc: "Képek"}
-    - {id: 107, cat: Books, desc: "eBook/Eng"}
-    - {id: 61, cat: Books, desc: "eBook/Hun"}
-    - {id: 106, cat: PC/Phone-Other, desc: "Mobil"}
+    - {id: 74, cat: XXX, desc: "Képek/XXX"}
+    - {id: 86, cat: Audio/Video, desc: "Klip"}
+    - {id: 66, cat: Audio/Lossless, desc: "Lossless"}
     - {id: 50, cat: Audio/MP3, desc: "Mp3/Eng"}
     - {id: 49, cat: Audio/MP3, desc: "Mp3/Hun"}
-    - {id: 45, cat: PC, desc: "Program ISO /RIP"}
-    - {id: 43, cat: TV, desc: "Rajzfilm/Hun"}
+    - {id: 45, cat: PC/ISO, desc: "Program/ISO"}
+    - {id: 44, cat: PC, desc: "Program/Misc"}
+    - {id: 36, cat: PC/Phone-Other, desc: "Program/Mobil"}
+    - {id: 46, cat: PC/Phone-Other, desc: "Program/PDA"}
+    - {id: 42, cat: TV/Anime, desc: "Rajzfilm/Eng"}
+    - {id: 43, cat: TV/Anime, desc: "Rajzfilm/Hun"}
     - {id: 57, cat: TV, desc: "Sorozat/Eng"}
     - {id: 58, cat: TV, desc: "Sorozat/Hun"}
-    - {id: 102, cat: XXX, desc: "Film/XXX/HD"}
-    - {id: 59, cat: XXX, desc: "Film/XXX/SD"}
-    - {id: 74, cat: XXX, desc: "Képek/XXX"}
 
   modes:
     search: [q]
@@ -53,7 +60,7 @@ settings:
     label: Password
   - name: freeleech
     type: checkbox
-    label: Filter freeleech only
+    label: Search freeleech only
     default: false
   - name: sort
     type: select
@@ -80,27 +87,26 @@ login:
   path: takelogin.php
   method: post
   inputs:
-    post_kuldes: engedelyezve
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
+    returnto: /
   error:
     - selector: table.browse:contains("hiba")
   test:
     path: /
-    selector: a[href$="/logout.php"]
+    selector: a[href$="../logout.php"]
 
 search:
   paths:
+    # https://moviezone.ws/browse.php?search=&cat=0&genre=0&incldead=1&blah=0
     - path: browse.php
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    # hidden field
-    turkalo: 0
+    $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
-    # 0 active, 1 all, 2 dead, 3 recomended, 4 double, 5 free
+    # 0 active, 1 all, 2 dead, 3 recomended, 4 double, 5 free, 6 MZ releases, 7 Race torrents
     # note: option 4 and 5 do not actually filter. everything is returned.
-    # incldead: "{{ if .Config.freeleech }}5{{ else }}1{{ end }}"
-    incldead: 1
+    incldead: "{{ if .Config.freeleech }}5{{ else }}1{{ end }}"
+    genre: 0
     # 0 name, 1 descr, 2 both
     blah: 0
     sort: "{{ .Config.sort }}"
@@ -108,9 +114,7 @@ search:
     # does not support imdbid search
 
   rows:
-    selector: "table > tbody > tr.sor:has(a[href^=\"/download.php/\"]){{ if .Config.freeleech }}:has(img[src=\"../pic/freedownload.gif\"]){{ else }}{{ end }}"
-#    error:
-#      - selector: div.content:contains("Meg van vonva a letöltési jogod")
+    selector: table > tbody > tr.sh1:has(a[href*="/download.php/"]), table > tbody > tr.sor:has(a[href*="/download.php/"])
 
   fields:
     category:
@@ -126,7 +130,7 @@ search:
       selector: a[href^="details.php?id="]
       attribute: href
     download:
-      selector: a[href^="/download.php/"]
+      selector: a[href*="/download.php/"]
       attribute: href
     imdb:
       selector: a[href*="imdb.com/title/tt"]
@@ -138,7 +142,7 @@ search:
       attribute: onmouseover
       filters:
         - name: regexp
-          args: "src=(.+?) "
+          args: "src=(.+?)>"
     files:
       selector: td:nth-last-child(8)
     date:
@@ -154,6 +158,9 @@ search:
           args: "2006-01-02 15:04:05 -07:00"
     size:
       selector: td:nth-last-child(5) > u
+      filters:
+        - name: replace
+          args: [",", "."]
     grabs:
       selector: td:nth-last-child(4)
     seeders:
@@ -162,15 +169,15 @@ search:
       selector: td:nth-last-child(2)
     downloadvolumefactor:
       case:
-        img[src="../pic/freedownload.gif"]: 0
+        "font[color=\"#AF0000\"]:contains(\"x0\")": 0
         "*": 1
     uploadvolumefactor:
       case:
-#          img[src="../pic/????????.gif"]: 2 # there is a double (according to incldead=4) but not found at this time.
+        "font[color=\"#2A821E\"]:contains(\"x2\")": 2
         "*": 1
     minimumratio:
-      text: 1.0
+      text: 0.6
     minimumseedtime:
-      # 7 days (as seconds = 7 x 24 x 60 x 60)
-      text: 604800
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
 # engine n/a

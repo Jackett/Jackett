@@ -80,6 +80,10 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -129,9 +133,9 @@ search:
     page: torrents
     search: "{{ .Keywords }}"
     category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{else}}0{{end}}"
-    # 0 title 1 title & descr 2 descr 3 uploaders 5 gold 6 silver 7 bronze
-    options: 0
-    # 0 all 1 activeonly 2 deadonly
+    # 0 title, 1 title & descr, 2 descr, 3 uploaders, 5 gold, 6 silver, 7 bronze
+    options: "{{ if .Config.freeleech }}5{{ else }}0{{ end }}"
+    # 0 all, 1 activeonly, 2 deadonly
     active: 0
     order: "{{ .Config.sort }}"
     by: "{{ .Config.type }}"
@@ -223,8 +227,10 @@ search:
       selector: td:nth-last-child(7):contains('/')
       optional: true
       filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02/01/2006"
+          args: "02/01/2006 -07:00"
     grabs:
       selector: td:nth-last-child(4)
       filters:
@@ -242,4 +248,5 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
+# minimumratio: appears to be ratioless
 # xbtit
