@@ -285,9 +285,6 @@ namespace Jackett.Common.Indexers
                         if (row.QuerySelector(".edition_info") != null)
                             continue;
 
-                        var torrentInfoEl = row.QuerySelector("div.torrent_info");
-                        var seasonEl = row.QuerySelector("a[href^=\"torrents.php?torrentid=\"]");
-
                         // some torrents has more than one link, and the one with .tooltip is the wrong one in that case,
                         // so let's try to pick up first without the .tooltip class,
                         // if nothing is found, then we try again without that filter
@@ -301,6 +298,8 @@ namespace Jackett.Common.Indexers
                             }
                         }
                         var title = StripSearchString(qDetailsLink.TextContent, false);
+
+                        var seasonEl = row.QuerySelector("a[href^=\"torrents.php?torrentid=\"]");
                         string seasonEp = null;
                         if (seasonEl != null)
                         {
@@ -316,6 +315,8 @@ namespace Jackett.Common.Indexers
                             var qCatLink = row.QuerySelector("a[href^=\"/torrents.php?filter_cat\"]");
                             categoryStr = qCatLink.GetAttribute("href").Split('=')[1].Split('&')[0];
                             category = MapTrackerCatToNewznab(categoryStr);
+
+                            var torrentInfoEl = row.QuerySelector("div.torrent_info");
                             if (torrentInfoEl != null)
                             {
                                 // valid for torrent grouped but that has only 1 episode yet
