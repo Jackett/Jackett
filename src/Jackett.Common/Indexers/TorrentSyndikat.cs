@@ -121,20 +121,13 @@ namespace Jackett.Common.Indexers
             if (query.ImdbIDShort != null)
             {
                 queryCollection.Add("imdbId", query.ImdbIDShort);
-            } else if (!string.IsNullOrWhiteSpace(searchString))
+            }
+            else if (!string.IsNullOrWhiteSpace(searchString))
             {
-                // use AND+wildcard operator to avoid getting to many useless results
-                var searchStringArray = Regex.Split(searchString.Trim(), "[ _.-]+", RegexOptions.Compiled).ToList();
-                searchStringArray =
-                    searchStringArray.Where(x => x.Length >= 3)
-                        .ToList(); //  remove words with less than 3 characters
-                searchStringArray = searchStringArray
-                    .Where(x => !new string[] {"der", "die", "das", "the", "und", "and"}.Contains(x.ToLower()))
-                    .ToList(); //  remove words with less than 3 characters
-                searchStringArray =
-                    searchStringArray.Select(x => "+" + x + "*").ToList(); // add AND operators+wildcards
-                var searchStringFinal = string.Join(" ", searchStringArray);
-                queryCollection.Add("searchstring", searchStringFinal);
+                // Suffix the first occurence of `s01` surrounded by whitespace with *
+                // That way we also search for single episodes in a whole season search
+                var regex = new Regex(@"(^|\s)(s\d{2})(\s|$)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                queryCollection.Add("searchstring", regex.Replace(searchString.Trim(), @"$1$2*$3"));
             }
 
             var cats = string.Join(",", MapTorznabCapsToTrackers(query));
