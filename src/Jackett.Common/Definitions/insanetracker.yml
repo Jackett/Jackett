@@ -45,6 +45,7 @@ caps:
     tv-search: [q, season, ep, imdbid]
     movie-search: [q, imdbid]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -53,6 +54,10 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -76,7 +81,7 @@ login:
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
-    notsecure: 1
+    notsecure: ""
   error:
     - selector: div.login_error_content_text
   test:
@@ -84,12 +89,14 @@ login:
 
 search:
   paths:
+    # https://newinsane.info/browse.php?search=&nohnr=1&doubleup=&incldead=1&ggen=0&sty=0&all=0
     - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     # 0 active, 1 both, 2 dead
     incldead: 1
+    nohnr: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
 
@@ -157,10 +164,10 @@ search:
     date:
       selector: td.center.date
       filters:
-        - name: re_replace
-          args: ["(\\-)(\\d{2})(\\d{2})(\\:)", "-$2 $3:"]
+        - name: append
+          args: " +01:00" # CET
         - name: dateparse
-          args: "2006-01-02 15:04"
+          args: "2006-01-0215:04 -07:00"
     downloadvolumefactor:
       case:
         a[href^="?nohnr=1"]: 0
