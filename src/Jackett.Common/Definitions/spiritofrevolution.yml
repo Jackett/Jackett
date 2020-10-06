@@ -32,13 +32,12 @@ caps:
     - {id: 129, cat: Audio/Lossless, desc: "Audio FLAC"}
     - {id: 175, cat: Audio/Video, desc: "Audio Musikvideos"}
     - {id: 172, cat: Audio, desc: "Audio Charts"}
-    - {id: 154, cat: Audio, desc: "Audio Hoerbuch"}
+    - {id: 154, cat: Audio/Audiobook, desc: "Audio Hoerbuch"}
     - {id: 29, cat: PC/Games, desc: "Games PC"}
     - {id: 13, cat: Console, desc: "Games Konsole"}
     - {id: 150, cat: Console/Other, desc: "Games Android"}
     - {id: 49, cat: PC/0day, desc: "APPZ Windows"}
     - {id: 130, cat: PC/Mac, desc: "APPZ Mac/Linux"}
-    - {id: 152, cat: PC/Phone-Other, desc: "APPZ Navi"}
     - {id: 153, cat: PC/Phone-Android, desc: "APPZ Android"}
     - {id: 132, cat: Books, desc: "E-Book Epub"}
     - {id: 131, cat: Books, desc: "E-Book PDF"}
@@ -55,6 +54,7 @@ caps:
     tv-search: [q, season, ep, imdbid]
     movie-search: [q, imdbid]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
