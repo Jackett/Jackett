@@ -5,16 +5,14 @@ using System.Threading.Tasks;
 using Jackett.Common.Indexers.Abstract;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils.Clients;
 using NLog;
-using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
     public class Redacted : GazelleTracker
     {
-        protected override string DownloadUrl => SiteLink + "ajax.php?action=download&usetoken=" + (useTokens ? "1" : "0") + "&id=";
-
         public Redacted(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base(id: "redacted",
                    name: "Redacted",
@@ -29,10 +27,7 @@ namespace Jackett.Common.Indexers
                    logger: l,
                    p: ps,
                    supportsFreeleechTokens: true,
-                   has2Fa: false,
-                   useApiKey: true,
-                   instructionMessageOptional: "<ol><li>Go to Redacted's site and open your account settings.</li><li>Go to <b>Access Settings</b> tab and copy the API Key.</li><li>Ensure that you've checked <b>Confirm API Key</b>.</li><li>Finally, click <b>Save Profile</b>.</li></ol>"
-                )
+                   has2Fa: true)
         {
             Language = "en-us";
             Type = "private";
@@ -53,6 +48,5 @@ namespace Jackett.Common.Indexers
             results = results.Where(release => query.MatchQueryStringAND(release.Title));
             return results;
         }
-
     }
 }
