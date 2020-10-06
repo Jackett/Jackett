@@ -27,9 +27,9 @@ namespace Jackett.Common.Indexers
         private string LoginUrl => BaseUri + "login.php";
         private string SearchUrl => BaseUri + "torrents.php?searchtags=&tags_type=0&order_by=s3&order_way=desc&disablegrouping=1&";
 
-        private new ConfigurationDataBasicLogin configData
+        private new ConfigurationDataBasicLoginWithFreeleech configData
         {
-            get => (ConfigurationDataBasicLogin)base.configData;
+            get => (ConfigurationDataBasicLoginWithFreeleech)base.configData;
             set => base.configData = value;
         }
 
@@ -43,7 +43,7 @@ namespace Jackett.Common.Indexers
                    client: w,
                    logger: l,
                    p: ps,
-                   configData: new ConfigurationDataBasicLogin())
+                   configData: new ConfigurationDataBasicLoginWithFreeleech())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
@@ -108,16 +108,27 @@ namespace Jackett.Common.Indexers
                 searchStrings.Add((query.SanitizedSearchTerm + " " + string.Format("\"Season {0}\"", query.Season)).Trim());
 
             var categories = MapTorznabCapsToTrackers(query);
-            var request_urls = new List<string>();
+            var requestUrls = new List<string>();
 
             foreach (var searchString in searchStrings)
             {
                 var queryCollection = new NameValueCollection();
-                queryCollection.Add("action", "basic");
+                var argAction = "basic";
+                var argnameQuery = "searchstr";
+
+                // If only Freeleech enabled, switch to advanced search
+                if (configData.Freeleech.Value)
+                {
+                    argAction = "advanced";
+                    argnameQuery = "torrentname";
+                    queryCollection.Add("freeleech", "1");
+                }
+
+                queryCollection.Add("action", argAction);
 
                 if (!string.IsNullOrWhiteSpace(searchString))
                 {
-                    queryCollection.Add("searchstr", searchString);
+                    queryCollection.Add(argnameQuery, searchString);
                 }
 
                 foreach (var cat in categories)
@@ -125,10 +136,10 @@ namespace Jackett.Common.Indexers
                     queryCollection.Add("filter_cat[" + cat + "]", "1");
                 }
 
-                request_urls.Add(SearchUrl + queryCollection.GetQueryString());
+                requestUrls.Add(SearchUrl + queryCollection.GetQueryString());
             }
 
-            var downloadTasksQuery = from url in request_urls select RequestWithCookiesAndRetryAsync(url);
+            var downloadTasksQuery = from url in requestUrls select RequestWithCookiesAndRetryAsync(url);
 
             var responses = await Task.WhenAll(downloadTasksQuery.ToArray());
 
@@ -139,7 +150,7 @@ namespace Jackett.Common.Indexers
                 if (results.IsRedirect)
                 {
                     await ApplyConfiguration(null);
-                    results = await RequestWithCookiesAndRetryAsync(request_urls[i]);
+                    results = await RequestWithCookiesAndRetryAsync(requestUrls[i]);
                 }
                 try
                 {
