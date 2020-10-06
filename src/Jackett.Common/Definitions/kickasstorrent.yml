@@ -230,4 +230,12 @@ search:
       text: 0
     uploadvolumefactor:
       text: 1
+    imdb:
+      selector: a[href^="/find/content/ttimdb/tt"]
+      attribute: href
+      filters:
+        - name: regexp
+          args: "/(tt\\d+)/"
+        - name: append
+          args: "https://www.imdb.com/title/"
 # engine n/a

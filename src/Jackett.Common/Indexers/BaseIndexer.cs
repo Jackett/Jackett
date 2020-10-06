@@ -381,7 +381,7 @@ namespace Jackett.Common.Indexers
             return await Download(uncleanLink, RequestType.GET);
         }
 
-        protected async Task<byte[]> Download(Uri link, RequestType method, string refererlink = null, Dictionary<string, string>headers = null)
+        protected async Task<byte[]> Download(Uri link, RequestType method, string refererlink = null)
         {
             // return magnet link
             if (link.Scheme == "magnet")
@@ -392,8 +392,11 @@ namespace Jackett.Common.Indexers
                 .Replace("(", "%28")
                 .Replace(")", "%29")
                 .Replace("'", "%27");
-            var response = await RequestWithCookiesAndRetryAsync(requestLink, null, method, refererlink, null, headers);
+            var response = await RequestWithCookiesAndRetryAsync(requestLink, null, method, requestLink);
 
+            // if referer link is provied it will be used
+            if (refererlink != null)
+                response = await RequestWithCookiesAndRetryAsync(requestLink, null, method, refererlink);
             if (response.IsRedirect)
             {
                 await FollowIfRedirect(response);

@@ -6,11 +6,12 @@ language: ru-ru
 type: semi-private
 encoding: UTF-8
 links:
-  - http://korsar.tv/
+  - http://korsar.rest/
 legacylinks:
   - https://korsar.tv/
   - http://korsar.info/
   - https://korsar.info/
+  - http://korsar.tv/
 
 caps:
   categorymappings:
@@ -408,6 +409,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -452,7 +454,7 @@ search:
     # http://korsar.info/search.php?keywords=deux+moi&sr=topics&sf=titleonly&tracker_search=torrent
     - path: search.php
   inputs:
-    keywords: "{{ if .Keywords }}{{ .Keywords }}{{else}}2020{{end}}"
+    keywords: "{{ if .Keywords }}{{ .Keywords }}{{else}}{{ .Today.Year }}{{end}}"
     sr: topics
     sf: titleonly
     tracker_search: torrent
@@ -464,11 +466,14 @@ search:
 
   fields:
     category:
-      selector: dt a:last-of-type
+      text: 408 # Misc
+    category|noappend:
+      selector: dt a[href*="/viewtopic.php?f="]
       attribute: href
+      optional: true
       filters:
-        - name: regexp
-          args: "-f(\\d+).html"
+        - name: querystring
+          args: f
     title:
       selector: a.topictitle
     details:
@@ -496,21 +501,10 @@ search:
       selector: dd.posts span.leech
     grabs:
       selector: dd.posts span.complet
-    description_category:
-      selector: dt a:last-of-type
-      attribute: href
-      filters:
-        - name: regexp
-          args: "-f(\\d+).html"
-    description:
-      selector: dt a:last-of-type
-      filters:
-        - name: prepend
-          args: "({{ .Result.description_category }}) "
     date:
       # Сегодня, 15:10 (today)
       # Вчера, 23:28 (yesterday)
-      selector: dd:last-of-type:contains("Сегодня,"), dd:contains("Вчера,")
+      selector: dd:last-of-type:contains("Сегодня,"), dd:last-of-type:contains("Вчера,")
       remove: a
       optional: true
       filters:
@@ -578,8 +572,10 @@ search:
           args: ["ноя", "Nov"]
         - name: replace
           args: ["дек", "Dec"]
+        - name: append
+          args: " +03:00" # MSK
         - name: dateparse
-          args: "02 Jan 2006, 15:04"
+          args: "02 Jan 2006, 15:04 -07:00"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

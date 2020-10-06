@@ -36,7 +36,7 @@ namespace Jackett.Common.Indexers
         public BB(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
             : base(id: "bb",
                    name: "bB",
-                   description: "BaconBits (bB) is a Private Torrent Tracker for 0DAY / GENERAL",
+                   description: "bB is a Private Torrent Tracker for 0DAY / GENERAL",
                    link: StringUtil.FromBase64("aHR0cHM6Ly9iYWNvbmJpdHMub3JnLw=="),
                    caps: new TorznabCapabilities(),
                    configService: configService,
@@ -157,11 +157,11 @@ namespace Jackett.Common.Indexers
                         release.Category = MapTrackerCatToNewznab(catStr);
 
                         var qDetails = row.Children[1].QuerySelector("a[title='View Torrent']");
-                        release.Comments = new Uri(BaseUrl + "/" + qDetails.GetAttribute("href"));
+                        release.Comments = new Uri(BaseUri + qDetails.GetAttribute("href"));
                         release.Guid = release.Comments;
 
                         var qDownload = row.Children[1].QuerySelector("a[title='Download']");
-                        release.Link = new Uri(BaseUrl + "/" + qDownload.GetAttribute("href"));
+                        release.Link = new Uri(BaseUri + qDownload.GetAttribute("href"));
 
                         var dateStr = row.Children[3].TextContent.Trim().Replace(" and", "");
                         release.PublishDate = DateTimeUtil.FromTimeAgo(dateStr);

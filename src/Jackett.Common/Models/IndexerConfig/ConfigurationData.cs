@@ -169,7 +169,6 @@ namespace Jackett.Common.Models.IndexerConfig
                 .GetProperties()
                 .Where(p => p.CanRead)
                 .Where(p => p.PropertyType.IsSubclassOf(typeof(Item)))
-                .Where(p => p.GetValue(this) != null)
                 .Select(p => (Item)p.GetValue(this)).ToList();
 
             // remove/insert Site Link manualy to make sure it shows up first

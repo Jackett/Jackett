@@ -248,7 +248,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BTNext (BTNT)
  * BTSCHOOL
  * Back-ups
- * BaconBits (bB)
+ * bB
  * BakaBT
  * BeiTai
  * BeyondHD (BHD)
