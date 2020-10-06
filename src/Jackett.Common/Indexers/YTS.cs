@@ -141,14 +141,16 @@ namespace Jackett.Common.Indexers
                         switch (type)
                         {
                             case "web":
-                                type = " WEBRip";
+                                type = "WEBRip";
                                 break;
                             default:
-                                type = " BRRip";
+                                type = "BRRip";
                                 break;
                         }
                         var quality = torrent_info.Value<string>("quality");
-                        release.Title = "[YTS] " + movie_item.Value<string>("title_long") + " " + quality + type;
+                        var title = movie_item.Value<string>("title").Replace(":","").Replace(' ', '.');
+                        var year = movie_item.Value<int>("year");
+                        release.Title = $"{title}.{year}.{quality}.{type}-YTS";
                         var imdb = movie_item.Value<string>("imdb_code");
                         release.Imdb = ParseUtil.GetImdbID(imdb);
 
