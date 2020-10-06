@@ -22,10 +22,10 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class BB : BaseWebIndexer
     {
-        private string BaseUrl => StringUtil.FromBase64("aHR0cHM6Ly9iYWNvbmJpdHMub3JnLw==");
+        private string BaseUrl => StringUtil.FromBase64("aHR0cHM6Ly9iYWNvbmJpdHMub3Jn");
         private Uri BaseUri => new Uri(BaseUrl);
-        private string LoginUrl => BaseUri + "login.php";
-        private string SearchUrl => BaseUri + "torrents.php?searchtags=&tags_type=0&order_by=s3&order_way=desc&disablegrouping=1&";
+        private string LoginUrl => BaseUri + "/login.php";
+        private string SearchUrl => BaseUri + "/torrents.php?searchtags=&tags_type=0&order_by=s3&order_way=desc&disablegrouping=1&";
 
         private new ConfigurationDataBasicLogin configData
         {
@@ -37,7 +37,7 @@ namespace Jackett.Common.Indexers
             : base(id: "bb",
                    name: "bB",
                    description: "BaconBits (bB) is a Private Torrent Tracker for 0DAY / GENERAL",
-                   link: StringUtil.FromBase64("aHR0cHM6Ly9iYWNvbmJpdHMub3JnLw=="),
+                   link: StringUtil.FromBase64("aHR0cHM6Ly9iYWNvbmJpdHMub3Jn"),
                    caps: new TorznabCapabilities(),
                    configService: configService,
                    client: w,
