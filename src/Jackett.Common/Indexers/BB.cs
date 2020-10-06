@@ -22,10 +22,10 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class BB : BaseWebIndexer
     {
-        private string BaseUrl => StringUtil.FromBase64("aHR0cHM6Ly9iYWNvbmJpdHMub3Jn");
+        private string BaseUrl => StringUtil.FromBase64("aHR0cHM6Ly9iYWNvbmJpdHMub3JnLw==");
         private Uri BaseUri => new Uri(BaseUrl);
-        private string LoginUrl => BaseUri + "/login.php";
-        private string SearchUrl => BaseUri + "/torrents.php?searchtags=&tags_type=0&order_by=s3&order_way=desc&disablegrouping=1&";
+        private string LoginUrl => BaseUri + "login.php";
+        private string SearchUrl => BaseUri + "torrents.php?searchtags=&tags_type=0&order_by=s3&order_way=desc&disablegrouping=1&";
 
         private new ConfigurationDataBasicLogin configData
         {
@@ -37,7 +37,7 @@ namespace Jackett.Common.Indexers
             : base(id: "bb",
                    name: "bB",
                    description: "bB is a Private Torrent Tracker for 0DAY / GENERAL",
-                   link: StringUtil.FromBase64("aHR0cHM6Ly9iYWNvbmJpdHMub3Jn"),
+                   link: StringUtil.FromBase64("aHR0cHM6Ly9iYWNvbmJpdHMub3JnLw=="),
                    caps: new TorznabCapabilities(),
                    configService: configService,
                    client: w,
@@ -157,11 +157,11 @@ namespace Jackett.Common.Indexers
                         release.Category = MapTrackerCatToNewznab(catStr);
 
                         var qDetails = row.Children[1].QuerySelector("a[title='View Torrent']");
-                        release.Comments = new Uri(BaseUrl + "/" + qDetails.GetAttribute("href"));
+                        release.Comments = new Uri(BaseUri + qDetails.GetAttribute("href"));
                         release.Guid = release.Comments;
 
                         var qDownload = row.Children[1].QuerySelector("a[title='Download']");
-                        release.Link = new Uri(BaseUrl + "/" + qDownload.GetAttribute("href"));
+                        release.Link = new Uri(BaseUri + qDownload.GetAttribute("href"));
 
                         var dateStr = row.Children[3].TextContent.Trim().Replace(" and", "");
                         release.PublishDate = DateTimeUtil.FromTimeAgo(dateStr);
