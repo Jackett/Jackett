@@ -110,8 +110,8 @@ search:
   inputs:
     $raw: "{{ if .Categories }}{{ range .Categories }}scat[]={{.}}&{{end}}{{else}}{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-    # 0 name 1 descr 2 both 4 imdb
-    blah: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
+    # 0 name, 1 descr, 2 both, 3 imdb
+    blah: "{{ if .Query.IMDBID }}3{{else}}0{{end}}"
     orderby: "{{ .Config.sort }}"
     sort: "{{ .Config.type }}"
 
@@ -181,7 +181,7 @@ search:
       optional: true
       filters:
         - name: append
-          args: " +01:00"
+          args: " +01:00" # CET
         - name: replace
           args: ["um ", ""]
         - name: dateparse
