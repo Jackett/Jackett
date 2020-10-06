@@ -26,7 +26,8 @@ search:
     - path: "{{ if .Keywords }}search/{{ .Keywords }}{{ else }}browse/0/0/0/0{{ end }}"
 
   rows:
-    selector: tr.gai:has(a[href^="/torrent/"])
+    # filter out torrents with 0B for issue #9756
+    selector: tr.gai:has(a[href^="/torrent/"]):has(td:nth-of-type(3):contains("GB")), tr.gai:has(a[href^="/torrent/"]):has(td:nth-of-type(3):contains("MB"))
 
   fields:
     category:
