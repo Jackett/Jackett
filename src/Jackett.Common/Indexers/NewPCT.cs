@@ -75,8 +75,8 @@ namespace Jackett.Common.Indexers
             },
             new DownloadMatcher
             {
-                MatchRegex = new Regex(@"nalt\s*=\s*'([^\/]*)"),
-                MatchEvaluator = m => string.Format("/download/{0}.torrent", m.Groups[1])
+                MatchRegex = new Regex(@"window\.location\.href\s*=\s*""([^""]+)"""),
+                MatchEvaluator = m => $"https:{m.Groups[1]}"
             },
         };
 
@@ -98,12 +98,8 @@ namespace Jackett.Common.Indexers
         private readonly string[] _seriesVoLetterUrls = { "series-vo/letter/{0}" };
         private readonly string[] _voUrls = { "serie-vo", "serievo" };
 
-        public override string[] AlternativeSiteLinks { get; protected set; } = {
-            "https://pctreload.com/",
-            "https://pctmix.com/"
-        };
-
         public override string[] LegacySiteLinks { get; protected set; } = {
+            "https://pctreload.com/", // site is working but latest releases page is not
             "http://descargas2020.com/",
             "http://www.tvsinpagar.com/",
             "http://torrentlocura.com/",
@@ -120,7 +116,7 @@ namespace Jackett.Common.Indexers
             : base(id: "newpct",
                    name: "NewPCT",
                    description: "NewPCT - Descargar peliculas, series y estrenos torrent gratis",
-                   link: "https://pctreload.com/",
+                   link: "https://pctmix.com/",
                    caps: new TorznabCapabilities(TorznabCatType.TV,
                                                  TorznabCatType.TVSD,
                                                  TorznabCatType.TVHD,
