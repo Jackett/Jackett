@@ -11,6 +11,7 @@ using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
+using Microsoft.AspNetCore.Http.Internal;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -170,20 +171,7 @@ namespace Jackett.Common.Indexers
             if (string.IsNullOrEmpty(query.SearchTerm))
                 return await GetRecentTorrents();
 
-            var categories = MapTorznabCapsToTrackers(query);
-
-            var queryStringCategories = string.Join(
-                ",",
-                categories.Count == 0
-                    ? GetAllTrackerCategories()
-                    : categories
-            );
-
-            var queryCollection = new NameValueCollection
-            {
-                { "q", query.SearchTerm },
-                { "cat", queryStringCategories }
-            };
+            var queryCollection = CreateQueryNameValueCollection(query);
 
             var response = await RequestWithCookiesAsync(
                 $"{_ApiBaseUri}q.php?{queryCollection.GetQueryString()}"
@@ -196,6 +184,30 @@ namespace Jackett.Common.Indexers
                 return Enumerable.Empty<ReleaseInfo>();
 
             return queryResponseItems.Select(CreateReleaseInfo);
+        }
+
+        private NameValueCollection CreateQueryNameValueCollection(TorznabQuery query)
+        {
+            var categories = MapTorznabCapsToTrackers(query);
+
+            var queryStringCategories = string.Join(
+                ",",
+                categories.Count == 0
+                    ? GetAllTrackerCategories()
+                    : categories
+                );
+
+            var episodeQueryString = query.GetEpisodeSearchString();
+
+            var queryString = string.IsNullOrEmpty(episodeQueryString)
+                ? query.SearchTerm
+                : $"{query.SearchTerm} {query.GetEpisodeSearchString()}";
+
+            return new NameValueCollection
+            {
+                { "q", queryString },
+                { "cat", queryStringCategories }
+            };
         }
 
         private async Task<IEnumerable<ReleaseInfo>> GetRecentTorrents()
