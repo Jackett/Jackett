@@ -53,8 +53,8 @@ caps:
     search: [q]
     tv-search: [q]
     movie-search: [q]
-    
-    settings:
+
+settings:
   - name: username
     type: text
     label: Username
@@ -157,4 +157,4 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
- # Gazelle
+# Gazelle
