@@ -52,6 +52,7 @@ caps:
     tv-search: [q, season, ep, imdbid]
     movie-search: [q, imdbid]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: cookie
@@ -155,7 +156,7 @@ search:
       selector: td:nth-child(6)
       filters:
         - name: append
-          args: " +01:00"
+          args: " +01:00" # CET
         - name: dateparse
           args: "2006-01-02 15:04:05 -07:00"
     downloadvolumefactor:
@@ -166,4 +167,9 @@ search:
         img[title="Ennél a torrentnél 3x szorzó van."]: 3
         img[title="Ennél a torrentnél 4x szorzó van."]: 4
         "*": 1
-# engine tbd
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
+# engine n/a
