@@ -290,6 +290,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * CrnaBerza
  * DXDHD
  * DanishBits (DB)
+ * Darius Tracker
  * Dark-Shadow
  * Dark Tracker
  * Das Unerwartete
