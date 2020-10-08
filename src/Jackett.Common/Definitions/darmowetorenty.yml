@@ -92,6 +92,16 @@ login:
     path: index.php
     selector: a[href^="logout.php?check_hash="]
 
+download:
+  selector: table[align="center"][width="100%"] tbody tr:nth-child(2) td:nth-child(2)
+  filters:
+    - name: toupper
+    - name: trim
+    - name: prepend
+      args: "magnet:?xt=urn:btih:"
+    - name: append
+      args: "&tr=udp://tracker.opentrackr.org:1337&tr=udp://tracker.coppersurfer.tk:6969&tr=udp://tracker.internetwarriors.net:1337&tr=udp://tracker.leechers-paradise.org:6969"
+
 search:
   paths:
     # https://darmowe-torenty.pl/torrenty.php?search=&category=0
@@ -103,6 +113,8 @@ search:
     erotyka: 1
     strona: 0
     # does not support imdbid searching and does not display imdb links in results
+  error:
+    - selector: td.lista:contains("Nie ma torrentów")
 
   rows:
     selector: table.header > tbody > tr > td
@@ -120,15 +132,9 @@ search:
     details:
       selector: a[href^="details.php?id="]:has(span)
       attribute: href
-    id:
-      selector: img[src^="./imgtorrent/"]
-      attribute: src
-      filters:
-        - name: regexp
-          args: "\\.\\/imgtorrent\\/tmp\\/(.+?)-darmowe-torenty.jpg"
     download:
-      # download link is obfuscated ( decodeURIComponent((atob($link.attr('data-href')))) ) so we create our own
-      text: "download.php?id={{ .Result.id }}&f={{ .Result.title }}.torrent"
+      selector: a[href^="details.php?id="]:has(span)
+      attribute: href
     banner:
       selector: img[src^="./imgtorrent/"]
       attribute: src
