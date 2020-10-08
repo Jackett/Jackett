@@ -35,7 +35,7 @@ caps:
     - {id: 27, cat: Books, desc: "Könyv/Hun"}
     - {id: 65, cat: Other, desc: "Képek"}
     - {id: 66, cat: XXX, desc: "Képek/XXX"}
-    - {id: 71, cat: Ausio/Lossless, desc: "Lossless/Eng"}
+    - {id: 71, cat: Audio/Lossless, desc: "Lossless/Eng"}
     - {id: 84, cat: Audio/Lossless, desc: "Lossless/Hun"}
     - {id: 68, cat: Movies/DVD, desc: "Mese/DVD"}
     - {id: 69, cat: Movies/SD, desc: "Mese/XviD"}

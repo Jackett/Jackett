@@ -1,57 +1,60 @@
 ---
-id: muziekfabriek
-name: MuziekFabriek
-description: "MuziekFabriek is a DUTCH Private Torrent Tracker for MUSIC"
+id: puurhollands
+name: Puur-Hollands
+description: "Puur-Hollands is a DUTCH Private Torrent Tracker for MUSIC"
 language: nl-NL
 type: private
 encoding: UTF-8
 links:
-  - https://www.muziekfabriek.org/
+  - https://www.puur-hollands.org/
 
 caps:
   categorymappings:
-    - {id: 1, cat: Audio, desc: "Eigen Verzamel"}
-    - {id: 2, cat: Audio, desc: "NL Album"}
-    - {id: 3, cat: Audio, desc: "NL Diverse"}
-    - {id: 4, cat: Audio, desc: "Engels"}
-    - {id: 5, cat: Audio, desc: "Country"}
-    - {id: 6, cat: Audio, desc: "DVD Muziek"}
-    - {id: 7, cat: Audio, desc: "Instrumentaal"}
-    - {id: 8, cat: Audio, desc: "Reggae"}
-    - {id: 9, cat: Audio, desc: "Kinderen"}
-    - {id: 28, cat: Audio, desc: "Allerlei Albums"}
-    - {id: 11, cat: Audio, desc: "Duits"}
-    - {id: 26, cat: Audio, desc: "Carnaval"}
-    - {id: 13, cat: Audio, desc: "Verzamel"}
-    - {id: 14, cat: Audio, desc: "Soul"}
-    - {id: 15, cat: Audio, desc: "Classic"}
-    - {id: 16, cat: Audio, desc: "Rock-Roll"}
-    - {id: 17, cat: Audio, desc: "Blues"}
-    - {id: 18, cat: Audio, desc: "MuziekFabriek"}
-    - {id: 19, cat: Audio, desc: "Trance"}
-    - {id: 20, cat: Audio, desc: "Dance"}
-    - {id: 21, cat: Audio, desc: "Oldies"}
-    - {id: 22, cat: Audio, desc: "Hardcore"}
-    - {id: 23, cat: Audio, desc: "Sint"}
-    - {id: 24, cat: Audio, desc: "Kerstfeest"}
+    - {id: 2, cat: Audio, desc: "Nederlandse Albums"}
+    - {id: 3, cat: Audio, desc: "Nederlandse Verzamel"}
+    - {id: 4, cat: Audio, desc: "Nederlandse Piraten"}
+    - {id: 5, cat: Audio, desc: "Losse Mp3 Verzameling"}
+    - {id: 7, cat: Audio, desc: "Limburgse Muziek"}
+    - {id: 8, cat: Audio, desc: "Nederlandse Instrumentaal"}
+    - {id: 9, cat: Audio, desc: "Nederlandse Dvds"}
 
   modes:
     search: [q]
     music-search: [q, album, artist, label, year]
 
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info
+    type: info
+    label: How to get the Cookie
+    default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
+  - name: thankyou
+    type: text
+    label: Thank You Comment
+  - name: info_comment
+    type: info
+    label: Thank you comment
+    default: This site requires you to leave a Thank You comment before you can download. Enter your personalised comment above.
+
 login:
-  path: takelogin.php
-  method: post
+  method: cookie
   inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-  error:
-    - selector: table[border="0"][cellspacing="0"][cellpadding="10"] tr td font[color="orange"]
+    cookie: "{{ .Config.cookie }}"
   test:
-    path: /
-    selector: :has(a[href="logout.php"])
+    path: index.php
+    selector: a[href="logout.php"]
 
 download:
+  before:
+    # https://www.ebookparadijs.org/comment.php?action=add&tid=23079
+    path: comment.php
+    method: post
+    inputs:
+      action: add
+      tid: "{{ .DownloadUri.Query.id }}"
+      text: "{{ .Config.thankyou }}"
   selector: a[href^="download.php?id="]
   attribute: href
 
@@ -148,4 +151,5 @@ search:
       text: 0
     uploadvolumefactor:
       text: 1
+# minimumratio: appears to be ratioless
 # engine n/a

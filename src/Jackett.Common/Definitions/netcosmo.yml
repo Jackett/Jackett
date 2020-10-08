@@ -18,10 +18,11 @@ caps:
     - {id: 21, cat: Movies/HD, desc: "Full HD"}
     - {id: 31, cat: TV/HD, desc: "Serie TV 720P"}
     - {id: 25, cat: Audio, desc: "Musica"}
+    - {id: 26, cat: PC/Games, desc: "PC-Game"}
     - {id: 27, cat: PC, desc: "Software"}
     - {id: 28, cat: Books, desc: "Letture"}
     - {id: 32, cat: Other, desc: "Navigazione Saghe"}
-    - {id: 35, cat: Other, desc: "Cat. provvisoria"}
+    - {id: 35, cat: Other, desc: "Happy Hour"}
     - {id: 37, cat: Other, desc: "Tutte le saghe"}
 
   modes:
@@ -142,7 +143,7 @@ search:
       selector: td:nth-last-child(7)
       filters:
         - name: append
-          args: " +01:00"
+          args: " +01:00" # CET
         - name: dateparse
           args: "02/01/2006 -07:00"
     grabs:
@@ -173,5 +174,8 @@ search:
         img[alt="10x Upload Multiplier"]: 10
         "*": 1
     minimumratio:
-      text: 0.9
+      text: 1.0
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
 # xbtitFM v2.2.09
