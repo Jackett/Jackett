@@ -43,12 +43,9 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings: []
-
-download:
-  selector: a#download-file
-  attribute: href
 
 search:
   paths:
@@ -81,9 +78,23 @@ search:
     details:
       selector: td.torrent_name a
       attribute: href
-    download:
+    _magnetfilename: # convert title to valid magnet filename
+      text: "{{ .Result.title }}"
+      filters:
+        - name: validfilename
+        - name: urlencode
+    magnet: # generate magnet link from details link
       selector: td.torrent_name a
       attribute: href
+      filters:
+        - name: regexp
+          args: ([0-9A-Fa-f]{40})
+        - name: prepend
+          args: "magnet:?xt=urn:btih:"
+        - name: append
+          args: "&dn={{ .Result._magnetfilename }}.torrent"
+        - name: append
+          args: "&tr=udp://tracker.opentrackr.org:1337&tr=udp://tracker.coppersurfer.tk:6969&tr=udp://tracker.internetwarriors.net:1337&tr=udp://tracker.leechers-paradise.org:6969"
     size:
       optional: true
       selector: td.center-align
