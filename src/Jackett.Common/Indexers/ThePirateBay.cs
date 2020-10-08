@@ -181,7 +181,7 @@ namespace Jackett.Common.Indexers
 
             var queryCollection = new NameValueCollection
             {
-                { "q", query.SearchTerm },
+                { "q", query.GetQueryString() },
                 { "cat", queryStringCategories }
             };
 
