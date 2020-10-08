@@ -150,6 +150,8 @@ namespace Jackett.Common.Indexers
                         Seeders = seeds,
                         Peers = seeds + leechers,
                         BannerUrl = bannerUri,
+                        MinimumRatio = 0, // ratioless
+                        MinimumSeedTime = 86400, // 24 hours
                         DownloadVolumeFactor = 0, // ratioless tracker
                         UploadVolumeFactor = 1
                     };
