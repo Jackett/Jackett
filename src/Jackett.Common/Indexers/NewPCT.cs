@@ -80,7 +80,7 @@ namespace Jackett.Common.Indexers
             },
         };
 
-        private readonly int _maxDailyPages = 4;
+        //private readonly int _maxDailyPages = 4;
         private readonly int _maxMoviesPages = 6;
         private readonly int[] _allTvCategories = (new [] {TorznabCatType.TV }).Concat(TorznabCatType.TV.SubCategories).Select(c => c.ID).ToArray();
         private readonly int[] _allMoviesCategories = (new [] { TorznabCatType.Movies }).Concat(TorznabCatType.Movies.SubCategories).Select(c => c.ID).ToArray();
@@ -92,14 +92,18 @@ namespace Jackett.Common.Indexers
         private DateTime _dailyNow;
         private int _dailyResultIdx;
 
+        //private readonly string _dailyUrl = "ultimas-descargas/pg/{0}";
         private readonly string _searchJsonUrl = "get/result/";
-        private readonly string _dailyUrl = "ultimas-descargas/pg/{0}";
         private readonly string[] _seriesLetterUrls = { "series/letter/{0}", "series-hd/letter/{0}" };
         private readonly string[] _seriesVoLetterUrls = { "series-vo/letter/{0}" };
         private readonly string[] _voUrls = { "serie-vo", "serievo" };
 
+        public override string[] AlternativeSiteLinks { get; protected set; } = {
+            "https://pctmix.com/",
+            "https://pctreload.com/"
+        };
+
         public override string[] LegacySiteLinks { get; protected set; } = {
-            "https://pctreload.com/", // site is working but latest releases page is not
             "http://descargas2020.com/",
             "http://www.tvsinpagar.com/",
             "http://torrentlocura.com/",
@@ -203,6 +207,11 @@ namespace Jackett.Common.Indexers
 
             if (rssMode)
             {
+                // Temporary fix until they restore "last uploads" page. Only returns movies
+                // https://pctmix.com/ultimas-descargas/
+                releases.AddRange(await MovieSearch(new TorznabQuery{ SearchTerm = "a" }, false));
+
+                /*
                 var pg = 1;
                 while (pg <= _maxDailyPages)
                 {
@@ -218,6 +227,7 @@ namespace Jackett.Common.Indexers
                     releases.AddRange(items);
                     pg++;
                 }
+                */
             }
             else
             {
@@ -229,7 +239,7 @@ namespace Jackett.Common.Indexers
                 var isMovieSearch = query.Categories == null || query.Categories.Length == 0 ||
                     query.Categories.Any(c => _allMoviesCategories.Contains(c));
                 if (isMovieSearch)
-                    releases.AddRange(await MovieSearch(query));
+                    releases.AddRange(await MovieSearch(query, _filterMovies));
             }
 
             // Database lost on 2018/04/05, all previous torrents don't have download links
@@ -429,7 +439,7 @@ namespace Jackett.Common.Indexers
             return releases;
         }
 
-        private async Task<IEnumerable<ReleaseInfo>> MovieSearch(TorznabQuery query)
+        private async Task<IEnumerable<ReleaseInfo>> MovieSearch(TorznabQuery query, bool filterMovies)
         {
             var releases = new List<NewpctRelease>();
 
@@ -471,7 +481,7 @@ namespace Jackett.Common.Indexers
 
             ScoreReleases(releases, searchStr);
 
-            if (_filterMovies)
+            if (filterMovies)
                 releases = releases.Where(r => r.Score < _wordNotFoundScore).ToList();
 
             return releases;
