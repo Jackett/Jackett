@@ -67,6 +67,7 @@ caps:
     "Television": TV
     "VideoMobile": Movies
     "XXX": XXX
+    "XXXVideo": XXX
 
   modes:
     search: [q]
