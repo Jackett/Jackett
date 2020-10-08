@@ -68,13 +68,13 @@ search:
     subaction: search
     showposts: 1
     # 0 in article 1 in comments 2 in static pages 3 in article titles
-    titleonly: "{{ if .Query.IMDBID }}0{{else}}3{{end}}"
+    titleonly: "{{ if .Query.IMDBID }}0{{ else }}3{{ end }}"
     story: "{{ if or .Query.IMDBID .Keywords }}{{ or .Query.IMDBID .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
     sortby: "{{ .Config.sort }}"
     resorder: "{{ .Config.type }}"
 
   rows:
-    selector: div.card-default
+    selector: div.card-default:has(i.fa-file-video-o)
 
   fields:
     category:
