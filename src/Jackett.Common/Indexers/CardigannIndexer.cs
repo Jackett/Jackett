@@ -1777,14 +1777,11 @@ namespace Jackett.Common.Indexers
                 var variables = GetBaseTemplateVariables();
                 AddTemplateVariablesFromUri(variables, link, ".DownloadUri");
                 if (Download.Before != null)
-                {
-                    var beforeresult = await handleRequest(Download.Before, variables, link.ToString());
-                }
-                if (Download.Method != null)
-                {
-                    if (Download.Method == "post")
-                        method = RequestType.POST;
-                }
+                    await handleRequest(Download.Before, variables, link.ToString());
+
+                if (Download.Method == "post")
+                    method = RequestType.POST;
+
                 if (Download.Selector != null)
                 {
                     var selector = applyGoTemplateText(Download.Selector, variables);
@@ -1819,7 +1816,7 @@ namespace Jackett.Common.Indexers
                     }
                 }
             }
-            return await base.Download(link, method);
+            return await base.Download(link, method, link.ToString());
         }
     }
 }
