@@ -99,7 +99,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMappingAndParent("cat[]=7&tags=HDTV", TorznabCatType.TVHD, TorznabCatType.TV);
             AddCategoryMappingAndParent("cat[]=7&tags=XviD", TorznabCatType.TVSD, TorznabCatType.TV);
             AddCategoryMappingAndParent("cat[]=7&tags=BluRay", TorznabCatType.TVHD, TorznabCatType.TV);
-            AddCategoryMappingAndParent("cat[]=7&tags=DVDRip", TorznabCatType.TVSD, TorznabCatType.TV);
+            AddCategoryMappingAndParent("cat[]=7&tags=DVDRiP", TorznabCatType.TVSD, TorznabCatType.TV);
             AddCategoryMappingAndParent("cat[]=7&tags=DVD", TorznabCatType.TVSD, TorznabCatType.TV);
             AddCategoryMappingAndParent("cat[]=7&tags=Documentary", TorznabCatType.TVDocumentary, TorznabCatType.TV);
             AddCategoryMappingAndParent("cat[]=7&tags=PDTV", TorznabCatType.TVSD, TorznabCatType.TV);
@@ -247,8 +247,8 @@ namespace Jackett.Common.Indexers
                         Grabs = grabs,
                         Seeders = seeders,
                         Peers = leechers + seeders,
-                        MinimumRatio = 1,
-                        MinimumSeedTime = 172800, // 48 hours
+                        MinimumRatio = 0.75,
+                        MinimumSeedTime = 216000, // 60 hours
                         DownloadVolumeFactor = 0, // ratioless
                         UploadVolumeFactor = 1
                     };
