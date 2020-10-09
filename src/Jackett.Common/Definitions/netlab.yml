@@ -112,8 +112,9 @@ search:
     leechers:
       selector: td:nth-child(8)
     downloadvolumefactor:
-      # there is suposed to be a gold where ul is counted at 100% and dl counted for 35% but I've not seen it yet
-      text: 1
+      case:
+        img[src$="_gold.png"]: 0.65
+        "*": 1
     uploadvolumefactor:
       text: 1
     minimumratio:
