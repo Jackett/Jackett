@@ -113,12 +113,10 @@ search:
     erotyka: 1
     strona: 0
     # does not support imdbid searching and does not display imdb links in results
-  error:
-    - selector: td.lista:contains("Nie ma torrentów")
 
   rows:
-    selector: table.header > tbody > tr > td
-    after: 2
+    selector: table.header > tbody > tr:has(td)
+    after: 1
 
   fields:
     category:
