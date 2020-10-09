@@ -27,6 +27,7 @@ caps:
     tv-search: [q]
     movie-search: [q]
     music-search: [q, album, artist, label, year]
+    book-search: [q]
 
 settings:
   - name: username
@@ -95,8 +96,10 @@ search:
     date:
       selector: td:nth-child(4)
       filters:
+        - name: append
+          args: " +03:00" # MSK
         - name: dateparse
-          args: "2006-01-0215:04:05"
+          args: "2006-01-0215:04:05 -07:00"
     size:
       selector: td:nth-child(5)
     grabs:
