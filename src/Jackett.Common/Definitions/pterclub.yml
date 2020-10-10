@@ -145,7 +145,7 @@ search:
       optional: true
       filters:
         - name: append
-          args: " +08:00"
+          args: " +08:00" # CST
         - name: dateparse
           args: "2006-01-02 15:04:05 -07:00"
     date:
@@ -154,7 +154,7 @@ search:
       optional: true
       filters:
         - name: append
-          args: " +08:00"
+          args: " +08:00" # CST
         - name: dateparse
           args: "2006-01-0215:04:05 -07:00"
     size:
@@ -182,4 +182,6 @@ search:
     description:
       selector: td:nth-child(2)
       remove: a, img
+    minimumratio:
+      text: 0.9
 # NexusPHP custom v2019.12
