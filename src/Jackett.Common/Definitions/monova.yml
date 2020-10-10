@@ -9,7 +9,7 @@ followredirect: true
 links:
   - https://monova.org/
   - https://monova.to/
-  - https://monova.unblockit.id/
+  - https://monova.unblockit.lat/
   - https://monova.unblocked.rest/
 legacylinks:
   - https://monova.unblockninja.com/ # currently redirects to https://monova.org/
@@ -25,6 +25,7 @@ legacylinks:
   - https://monova.unblocked.bar/
   - https://monova.proxyportal.pw/
   - https://monova.uk-unblock.pro/
+  - https://monova.unblockit.id/
 
 caps:
   categories:
