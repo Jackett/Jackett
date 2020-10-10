@@ -6,7 +6,9 @@ language: en-us
 type: private
 encoding: UTF-8
 links:
-  - http://sporthd.org/ # site does not support https ERR_CONNECTION_REFUSED
+  - http://satsporthd.org/ # site does not support https ERR_CONNECTION_REFUSED
+legacylinks:
+  - http://sporthd.org/
 
 caps:
   categorymappings:
@@ -148,16 +150,15 @@ download:
 
 search:
   paths:
-    # http://sporthd.org/browse.php?cat=0&incldead=1&sort=2&type=desc&s=0&stype=0&search=
     - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
     search: "{{ .Keywords }}"
-    # 1 active 2 dead 3 free
+    # 1 active, 2 dead, 3 free
     incldead: 1
-    # 0 match again 1 match like
+    # 0 match again, 1 match like
     s: 0
-    # 0 name 1 description
+    # 0 name, 1 description
     stype: 0
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
@@ -211,4 +212,5 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
+# minimumratio: tbd
 # engine n/a
