@@ -795,3 +795,5 @@ dotnet publish Jackett.Server -f netcoreapp3.1 --self-contained -r linux-x64 -c 
 ![screenshot](https://raw.githubusercontent.com/Jackett/Jackett/master/.github/jackett-screenshot3.png)
 
 [inviteneeded]: https://raw.githubusercontent.com/Jackett/Jackett/master/.github/label-inviteneeded.png
+
+Thanks!!
