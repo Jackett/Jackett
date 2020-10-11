@@ -160,8 +160,6 @@ namespace Jackett.Common.Indexers
             var peers = (seeders == null && leechers == null) ? (int?)null : (seeders ?? 0) + (leechers ?? 0);
             var release = new ReleaseInfo
             {
-                MinimumRatio = 1,
-                MinimumSeedTime = 90 * 60,
                 Title = details.TextContent,
                 Category = categories,
                 Seeders = seeders,
