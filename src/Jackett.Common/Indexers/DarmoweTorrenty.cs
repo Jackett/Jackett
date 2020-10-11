@@ -206,8 +206,6 @@ namespace Jackett.Common.Indexers
             {
                 var parser = new HtmlParser();
                 var dom = parser.ParseDocument(results);
-                var listElement = dom.QuerySelector(
-                    "td[class^=\"lista\"]");
                 var rows = dom.QuerySelectorAll("table.header > tbody > tr:has(td)");
                 if (rows[0].TextContent.Contains("Nie ma torrentów")) // issue #9782
                 {
