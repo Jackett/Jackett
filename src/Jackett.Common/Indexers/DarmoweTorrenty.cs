@@ -38,7 +38,7 @@ namespace Jackett.Common.Indexers
         }
 
         public DarmoweTorrenty(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(id: "darmowetorrenty",
+            : base(id: "darmowetorenty",
                    name: "Darmowe torrenty",
                    description: "Darmowe torrenty is a POLISH Semi-Private Torrent Tracker for MOVIES / TV / GENERAL",
                    link: "https://darmowe-torenty.pl/",
