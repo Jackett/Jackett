@@ -155,9 +155,9 @@ namespace Jackett.Common.Indexers
             var encodedDownloadLink = detailsRow.QuerySelector("a[id^=\"download_\"]").GetAttribute("data-href");
             var downloadLink = new Uri(SiteLink + Uri.UnescapeDataString(StringUtil.FromBase64(encodedDownloadLink)));
             var bannerLink = detailsRow.QuerySelector("img[src^=\"./imgtorrent/\"]")?.GetAttribute("src");
-            var seeders = seedsMatch.Success ? int.Parse(seedsMatch.Groups[1].Value) : (int?)null;
-            var leechers = leechersMatch.Success ? int.Parse(leechersMatch.Groups[1].Value) : (int?)null;
-            var peers = (seeders == null && leechers == null) ? (int?)null : (seeders ?? 0) + (leechers ?? 0);
+            var seeders = seedsMatch.Success ? int.Parse(seedsMatch.Groups[1].Value) : 0;
+            var leechers = leechersMatch.Success ? int.Parse(leechersMatch.Groups[1].Value) : 0;
+            var peers = seeders + leechers;
             var release = new ReleaseInfo
             {
                 Title = details.TextContent,
