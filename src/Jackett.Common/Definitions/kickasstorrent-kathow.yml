@@ -8,7 +8,6 @@ encoding: UTF-8
 followredirect: true
 links:
   - https://kickass.ws/
-  - https://kickass.unblockit.top/
   - https://kickasstorrents.unblockninja.com/
 legacylinks:
   - https://kickass.gg/
@@ -25,6 +24,7 @@ legacylinks:
   - https://kickass.unblockit.pw/
   - https://kickass.unblockit.id/
   - https://kickass.unblockit.win/
+  - https://kickass.unblockit.top/ # currently redirects to https://kat.unblockit.lat/ (newkatcr.co proxy)
 
 caps:
   categories:
