@@ -123,7 +123,12 @@ namespace Jackett.Common.Indexers
             {
                 var parser = new HtmlParser();
                 var dom = parser.ParseDocument(result.ContentString);
-                var errorMessage = dom.QuerySelector("div:contains(\"Podany login jest\")").InnerHtml;
+                var invalidPasswordDiv = dom.QuerySelector("div:contains(\"Podane hasło jest\")");
+                var invalidLoginDiv = dom.QuerySelector("div:contains(\"Podany login jest\")");
+                var bannedUserElement = dom.QuerySelector("b:contains(\"has been blocked - fill captcha that\")");
+                var errorMessage = invalidLoginDiv?.TextContent ??
+                                   invalidPasswordDiv?.TextContent ??
+                                   bannedUserElement?.TextContent;
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
             return IndexerConfigurationStatus.RequiresTesting;
