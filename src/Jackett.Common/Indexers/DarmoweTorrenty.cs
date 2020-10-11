@@ -152,6 +152,7 @@ namespace Jackett.Common.Indexers
                 date = pubDateUtc.ToLocalTime();
             }
             var details = titleRow.QuerySelector("a[href^=\"details.php?id=\"]:has(span)");
+            var detailsLink = new Uri(SiteLink + details.GetAttribute("href"));
             var encodedDownloadLink = detailsRow.QuerySelector("a[id^=\"download_\"]").GetAttribute("data-href");
             var downloadLink = new Uri(SiteLink + Uri.UnescapeDataString(StringUtil.FromBase64(encodedDownloadLink)));
             var bannerLink = detailsRow.QuerySelector("img[src^=\"./imgtorrent/\"]")?.GetAttribute("src");
@@ -169,8 +170,9 @@ namespace Jackett.Common.Indexers
                 DownloadVolumeFactor = 0,
                 UploadVolumeFactor = 1,
                 Link = downloadLink,
-                Guid = downloadLink,
-                Size = sizeMatch.Success ? ReleaseInfo.GetBytes(sizeMatch.Groups[1].Value) : (long?)null
+                Guid = detailsLink,
+                Comments = detailsLink,
+                Size = sizeMatch.Success ? ReleaseInfo.GetBytes(sizeMatch.Groups[1].Value) : 0
             };
             return release;
         }
