@@ -8,7 +8,7 @@ encoding: UTF-8
 followredirect: true
 links:
   - https://btdb.eu/
-  - https://btdb.unblockit.top/
+  - https://btdb.unblockit.lat/
 legacylinks:
   - https://btdb.to/
   - https://btdb.unblocked.app/
@@ -27,6 +27,7 @@ legacylinks:
   - https://btdb.unblocked.bar/
   - https://btdb.proxyportal.pw/
   - https://btdb.uk-unblock.pro/
+  - https://btdb.unblockit.top/
 
 caps:
   categorymappings:
