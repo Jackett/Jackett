@@ -29,8 +29,6 @@ namespace Jackett.Common.Indexers
         private static readonly Regex _DateRegex = new Regex("Dodano: (\\d{2}\\/\\d{2}\\/\\d{4})", RegexOptions.Compiled);
         private static readonly Regex _SeedsRegex = new Regex("Seedów: (\\d+)", RegexOptions.Compiled);
         private static readonly Regex _LeechersRegex = new Regex("Leecherów: (\\d+)", RegexOptions.Compiled);
-
-        private TimeZoneInfo _polandTz;
         private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
         {
             get => (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData;
@@ -152,9 +150,8 @@ namespace Jackett.Common.Indexers
             var date = DateTime.MinValue; // In case of parsing failure
             if (dateMatch.Success)
             {
-                var polishDate = DateTime.SpecifyKind(DateTime.ParseExact(dateMatch.Groups[1].Value, "dd/MM/yyyy", CultureInfo.InvariantCulture), DateTimeKind.Unspecified);
-                var pubDateUtc = TimeZoneInfo.ConvertTimeToUtc(polishDate, _polandTz);
-                date = pubDateUtc.ToLocalTime();
+                date = DateTime.ParseExact(
+                    $"{dateMatch.Groups[1].Value} +01:00", "dd/MM/yyyy zzz", CultureInfo.InvariantCulture);
             }
             var details = titleRow.QuerySelector("a[href^=\"details.php?id=\"]:has(span)");
             var detailsLink = new Uri(SiteLink + details.GetAttribute("href"));
@@ -187,14 +184,6 @@ namespace Jackett.Common.Indexers
         }
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            var startTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 3, 0, 0), 3, 5, DayOfWeek.Sunday);
-            var endTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 4, 0, 0), 10, 5, DayOfWeek.Sunday);
-            var delta = new TimeSpan(1, 0, 0);
-            var adjustment = TimeZoneInfo.AdjustmentRule.CreateAdjustmentRule(new DateTime(1999, 10, 1), DateTime.MaxValue.Date, delta, startTransition, endTransition);
-            TimeZoneInfo.AdjustmentRule[] adjustments = { adjustment };
-            _polandTz = TimeZoneInfo.CreateCustomTimeZone("C. Europe Standard Time", new TimeSpan(1, 0, 0), "(GMT+01:00) C. Europe Standard Time", "C. Europe Standard Time", "C. Europe DST Time", adjustments);
-
-
             var releases = new List<ReleaseInfo>();
 
             var searchString = query.GetQueryString();
