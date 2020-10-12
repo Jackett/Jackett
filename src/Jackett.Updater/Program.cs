@@ -289,6 +289,7 @@ namespace Jackett.Updater
                 "Definitions/cinefilhd.yml",
                 "Definitions/crazyscorner.yml",
                 "Definitions/czteam.yml",
+                "Definitions/cztorrent.yml",
                 "Definitions/demonsite.yml",
                 "Definitions/digbt.yml",
                 "Definitions/downloadville.yml",
