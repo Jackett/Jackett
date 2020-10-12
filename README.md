@@ -266,7 +266,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Brasil Tracker
  * BroadCity
  * BroadcasTheNet (BTN)
- * BRObits
  * BrokenStones
  * BWTorrents
  * CCFBits
