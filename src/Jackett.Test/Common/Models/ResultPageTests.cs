@@ -8,7 +8,7 @@ using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using Assert = NUnit.Framework.Assert;
 
-namespace Jackett.Test.Models
+namespace Jackett.Test.Common.Models
 {
     class TestIndexer : BaseIndexer
     {

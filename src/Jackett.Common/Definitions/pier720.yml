@@ -133,7 +133,8 @@ search:
     submit: Search
 
   rows:
-    selector: li.row
+    # drop topics without size as they will not have download links in details page
+    selector: li.row:has(div.list-inner div[style="float:right;"])
     filters:
       - name: andmatch
 

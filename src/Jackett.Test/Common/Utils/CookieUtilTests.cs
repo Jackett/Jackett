@@ -6,7 +6,7 @@ using NUnit.Framework;
 using Assert = NUnit.Framework.Assert;
 using CollectionAssert = NUnit.Framework.CollectionAssert;
 
-namespace Jackett.Test.Utils
+namespace Jackett.Test.Common.Utils
 {
     [TestFixture]
     public class CookieUtilTests
