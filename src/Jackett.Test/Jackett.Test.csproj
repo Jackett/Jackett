@@ -10,15 +10,12 @@
   <ItemGroup>
     <Compile Remove="Indexers\**" />
     <EmbeddedResource Remove="Indexers\**" />
+    <EmbeddedResource Include="Common\Utils\Invalid-RSS.xml" />
     <None Remove="Indexers\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Util\Invalid-RSS.xml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Util\Invalid-RSS.xml" />
+    <None Remove="Common\Utils\Invalid-RSS.xml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,7 +36,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Common" />
     <Folder Include="Properties\" />
+    <Folder Include="Server" />
   </ItemGroup>
 
   <ItemGroup>
