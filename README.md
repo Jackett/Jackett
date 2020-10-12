@@ -540,7 +540,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * WDT (Wrestling Desires Torrents / Ultimate Wrestling Torrents)
  * Witch-Hunter (Demon-Site)
  * World-In-HD
- * World-of-Tomorrow
  * x-ite.me (XM)
  * xBytesV2
  * XSpeeds (XS)
