@@ -194,7 +194,7 @@ namespace Jackett.Common.Indexers
                 {"category", "0"}, // multi category search not supported
                 {"erotyka", "1"}
             };
-            searchUrl += "?" + queryCollection.GetQueryString();
+            searchUrl += "?" + queryCollection.GetQueryString(Encoding);
 
             var response = await RequestWithCookiesAsync(searchUrl);
             if (response.IsRedirect || response.Cookies != null && response.Cookies.Contains("pass=deleted;"))
