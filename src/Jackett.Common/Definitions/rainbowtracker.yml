@@ -224,10 +224,17 @@ search:
           args: ["Ноя", "Nov"]
         - name: replace
           args: ["Дек", "Dec"]
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "15:04 2-Jan-06"
+          args: "15:04 2-Jan-06 -07:00"
     downloadvolumefactor:
-      text: 0
+      case:
+        img[src="images/tor_gold.gif"]: 0
+        img[src="images/tor_silver.gif"]: 0.5
+        "*" : 1
     uploadvolumefactor:
       text: 1
+    minimumratio:
+      text: 0.3
 # TorrentPier
