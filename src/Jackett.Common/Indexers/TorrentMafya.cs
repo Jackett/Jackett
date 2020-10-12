@@ -134,6 +134,7 @@ namespace Jackett.Common.Indexers
                 rowLink = new Uri(fileLink);
             }
 
+            var detailsLink = new Uri(firstColumn.QuerySelector("a").GetAttribute("href"));
             var category = ParseReleaseCategory(firstColumn.QuerySelector("i")?.ClassList);
             var seederContent = mainColumn.QuerySelector("span.sayiGonderen")?.TextContent;
             var leecherContent  = mainColumn.QuerySelector("span.sayiIndiren")?.TextContent;
@@ -142,6 +143,7 @@ namespace Jackett.Common.Indexers
             return new ReleaseInfo
             {
                 Title = firstColumn.QuerySelector("a")?.TextContent,
+                Comments = detailsLink,
                 PublishDate = ParseReleasePublishDate(row.col2),
                 Category = category,
                 Seeders = seeders,
@@ -182,12 +184,14 @@ namespace Jackett.Common.Indexers
             {"tur", "1"}
         };
 
+
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var result = new List<ReleaseInfo>();
+            var searchString = query.GetQueryString().Replace(" ", "%");
             var searchUrl = $"{SiteLink}table.php";
             var referrer = $"{SiteLink}arsiv/";
-            var body = PrepareSearchQueryCollection(query.GetQueryString());
+            var body = PrepareSearchQueryCollection(searchString);
             var response = await RequestWithCookiesAsync(searchUrl, null, RequestType.POST, referrer, body);
             var content = response.ContentString;
             try
