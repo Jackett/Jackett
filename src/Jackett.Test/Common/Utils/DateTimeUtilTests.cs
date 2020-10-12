@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
+using Jackett.Common.Utils;
 using NUnit.Framework;
 
-namespace Jackett.Common.Utils.Tests
+namespace Jackett.Test.Common.Utils
 {
     [TestFixture]
     public class DateTimeUtilTests

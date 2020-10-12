@@ -278,6 +278,7 @@ namespace Jackett.Updater
                 "Definitions/bitme.yml",
                 "Definitions/bittorrentam.yml",
                 "Definitions/blubits.yml",
+                "Definitions/brobits.yml",
                 "Definitions/bt-scene.yml",
                 "Definitions/btbit.yml",
                 "Definitions/bteye.yml",
@@ -288,6 +289,7 @@ namespace Jackett.Updater
                 "Definitions/cinefilhd.yml",
                 "Definitions/crazyscorner.yml",
                 "Definitions/czteam.yml",
+                "Definitions/cztorrent.yml",
                 "Definitions/darmowetorenty.yml", // migrated to C#
                 "Definitions/demonsite.yml",
                 "Definitions/digbt.yml",

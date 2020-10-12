@@ -6,7 +6,7 @@ using FluentAssertions;
 using Jackett.Common.Utils;
 using NUnit.Framework;
 
-namespace Jackett.Test.Util
+namespace Jackett.Test.Common.Utils
 {
     [TestFixture]
     public class ParseUtilTests

@@ -1,22 +1,28 @@
 ---
-id: hdforever
-name: HD-Forever
-description: "HD-Forever (HD-F) is a FRENCH Private Torrent Tracker for HD MOVIES"
+id: hdonly
+name: HD-Only
+description: "HD-Only (HD-O) is a FRENCH Private Torrent Tracker for HD MOVIES / TV"
 language: fr-fr
 type: private
 encoding: UTF-8
 links:
-  - https://hdf.world/
+  - https://hd-only.org/
 
 caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Film"}
-    - {id: 2, cat: Movies, desc: "Dessin animé"}
-    - {id: 3, cat: Movies, desc: "Bonus BD"}
+    - {id: 3, cat: TV/Anime, desc: "Dessin animé"}
     - {id: 4, cat: Movies, desc: "Concert"}
     - {id: 5, cat: TV, desc: "Série"}
     - {id: 6, cat: TV/Anime, desc: "Série anim"}
-    - {id: 7, cat: Movies, desc: "Documentaire"}
+    - {id: 7, cat: Movies/Other, desc: "Film d'animation"}
+    - {id: 7, cat: Audio/Video, desc: "Concert"}
+    - {id: 11, cat: TV/Documentary, desc: "Documentaire"}
+    - {id: 13, cat: Movies/Other, desc: "Court-métrage"}
+    - {id: 14, cat: Movies/Other, desc: "Clip"}
+    - {id: 15, cat: Movies/Other, desc: "Démonstration"}
+    - {id: 16, cat: Movies/Other, desc: "Bonus de BD"}
+    - {id: 21, cat: Other, desc: "Autre"}
 
   modes:
     search: [q]
@@ -33,10 +39,6 @@ settings:
   - name: freeleech
     type: checkbox
     label: Search freeleech only
-    default: false
-  - name: usetoken
-    type: checkbox
-    label: Always try to use the FreeLeech Token
     default: false
   - name: multilang
     type: checkbox
@@ -91,10 +93,11 @@ ratio:
   selector: li#stats_ratio > span
 
 search:
-  # https://hdf.world/torrents.php?groupname=blood&freetorrent=1&order_by=time&order_way=desc&action=advanced&searchsubmit=1
+  # https://hd-only.org/torrents.php?groupname=blood&freetorrent=1&order_by=time&order_way=desc&action=advanced&searchsubmit=1
   path: torrents.php
   inputs:
-    $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
+    # does not support categories, uses releasetype for single filter so we canot do multi releasetype filtering either.
+    # $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
     groupname: "{{ .Keywords }}"
     order_by: "{{ .Config.sort }}"
     order_way: "{{ .Config.type }}"
@@ -108,27 +111,9 @@ search:
     selector: table#torrent_table > tbody > tr.torrent
 
   fields:
-    category:
-      selector: td.cats_col
-      case:
-        div.cats_film: 1
-        div.cats_dessinanimé: 2
-        div.cats_bonusbd: 3
-        div.cats_concert: 4
-        div.cats_série: 5
-        div.cats_sérieanim: 6
-        div.cats_documentaire: 7
-    download-regular:
-      selector: a[href^="torrents.php?action=download&"]
-      attribute: href
-    download-usetoken:
-      selector: a[href^="torrents.php?action=download&"]
-      attribute: href
-      filters:
-        - name: append
-          args: "&usetoken=1"
     download:
-      text: "{{if .Config.usetoken}}{{ .Result.download-usetoken }}{{else}}{{ .Result.download-regular }}{{end}}"
+      selector: a[href^="torrents.php?action=download&"]
+      attribute: href
     title_phase1:
       selector: div.group_info
       remove: span:nth-child(1), div.tags
@@ -180,58 +165,78 @@ search:
         - name: replace
           args: ["/ Exc YOU", "/ YT"]
         - name: replace
-          args: [" / ↓25%", ""]
-        - name: replace
-          args: [" / ↓50%", ""]
-        - name: replace
-          args: [" / ↓75%", ""]
-        - name: replace
-          args: [" / Free", ""]
+          args: [" / Freeleech!", ""]
         - name: replace
           args: [" / Complété!", ""]
         - name: replace
           args: [" / ", "."]
         - name: trim
         - name: replace
-          args: [".VFF.VFQ.StFr.MULTI", ".MULTI.VFF.VFQ"]
+          args: [".VFF.VFQ.stFR.MULTI", ".MULTI.VFF.VFQ"]
         - name: replace
-          args: [".VFF.VFQ.VO.StFr.MULTI", ".MULTI.VFF.VFQ"]
+          args: [".VFF.VFQ.VO.stFR.MULTI", ".MULTI.VFF.VFQ"]
         - name: replace
-          args: [".VFF.VFQ.VO.StFr", ".MULTI.VFF.VFQ"]
+          args: [".VFF.VFQ.VO.stFR", ".MULTI.VFF.VFQ"]
         - name: replace
-          args: [".VFQ.VO.StFr", ".MULTI.VFQ"]
+          args: [".VFQ.VO.stFR", ".MULTI.VFQ"]
         - name: replace
-          args: [".VO.VFI.StFr", ".MULTI"]
+          args: [".VO.VFI.stFR", ".MULTI"]
         - name: replace
-          args: [".VO.VF?.StFr", ".MULTI"]
+          args: [".VO.VF?.stFR", ".MULTI"]
         - name: replace
-          args: [".VFF.VO.StFr", ".MULTI.VFF"]
+          args: [".VFF.VO.stFR", ".MULTI.VFF"]
         - name: replace
-          args: [".VOF.StFr", ".FRENCH"]
+          args: [".VOF.stFR", ".FRENCH"]
         - name: replace
-          args: [".VFQ.StFr", ".FRENCH"]
+          args: [".VFQ.stFR", ".FRENCH"]
         - name: replace
-          args: [".VFF.StFr.MULTI", ".MULTI.VFF"]
+          args: [".VFF.stFR.MULTI", ".MULTI.VFF"]
         - name: replace
-          args: [".VFF.StFr", ".FRENCH"]
+          args: [".VFF.stFR", ".FRENCH"]
         - name: replace
           args: [".VFI.MULTI", ".MULTI"]
         - name: replace
-          args: [".VO.StFr", ".VOSTFR"]
+          args: [".VO.stFR", ".VOSTFR"]
         - name: replace
           args: [".VFQ.VO", ".MULTI.VFQ"]
         - name: replace
           args: [".VFF.VO", ".MULTI.VFF"]
         - name: replace
-          args: [".VO.VF?.StFr", ".MULTI"]
+          args: [".VO.VF?.stFR", ".MULTI"]
         - name: replace
-          args: [".VFI.StFr", ".FRENCH"]
+          args: [".VFI.stFR", ".FRENCH"]
         - name: replace
           args: [".VOF.MULTI", ".MULTI.FRENCH"]
         - name: replace
           args: [".VOF", ".FRENCH"]
         - name: replace
           args: [".VFQ.MULTI", ".MULTI.VFQ"]
+        - name: replace
+          args: ["[Film]", ""]
+        - name: replace
+          args: ["[Dessin animé]", ""]
+        - name: replace
+          args: ["[Film d'animation]", ""]
+        - name: replace
+          args: ["[Concert]", ""]
+        - name: replace
+          args: ["[Documentaire]", ""]
+        - name: replace
+          args: ["[Court-métrage]", ""]
+        - name: replace
+          args: ["[Clip]", ""]
+        - name: replace
+          args: ["[Démonstration]", ""]
+        - name: replace
+          args: ["[Bonus de BD]", ""]
+        - name: replace
+          args: ["[Autre]", ""]
+        - name: replace
+          args: ["[Série Animée]", ""]
+        - name: replace
+          args: ["[Série]", ""]
+        - name: re_replace
+          args: ["\\[(\\d{4})\\]", "$1"]
     title_multilang:
       text: "{{ .Result.title_phase1 }}"
       filters:
@@ -266,8 +271,6 @@ search:
       selector: td:nth-child(4)
       filters:
         - name: replace
-          args: ["Il y a ", ""]
-        - name: replace
           args: ["heures", "hours"]
         - name: replace
           args: ["heure", "hour"]
@@ -297,15 +300,29 @@ search:
       selector: td:nth-child(8)
     downloadvolumefactor:
       case:
-        "div.group_info:contains(\"/ Free\")": 0
-        "div.group_info:contains(\"↓75%\")": 0.75
-        "div.group_info:contains(\"↓50%\")": 0.50
-        "div.group_info:contains(\"↓25%\")": 0.25 # for this site this is the count ratio, which is 25% of the total torrent size. (I.E. it's 75% free)
+        "div.group_info:contains(\"/ Freeleech!\")": 0
         "*": 1
     uploadvolumefactor:
       text: 1
+    category:
+      selector: div.group_info
+      remove: span, div, a
+      case:
+        ":contains(\"[Film]\")": 1
+        ":contains(\"[Dessin animé]\")": 3
+        ":contains(\"[Série]\")": 5
+        ":contains(\"[Série Animée]\")": 6
+        ":contains(\"[Film d'animation]\")": 7
+        ":contains(\"[Concert]\")": 9
+        ":contains(\"[Documentaire]\")": 11
+        ":contains(\"[Court-métrage]\")": 13
+        ":contains(\"[Clip]\")": 14
+        ":contains(\"[Démonstration]\")": 15
+        ":contains(\"[Bonus de BD]\")": 16
+        ":contains(\"[Autre]\")": 21
+        "*": 5
     minimumratio:
-      text: 0.6
+      text: 1.0
     minimumseedtime:
       # 3 days (as seconds = 3 x 24 x 60 x 60)
       text: 259200

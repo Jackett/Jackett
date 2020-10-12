@@ -2,7 +2,7 @@ using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using NUnit.Framework;
 
-namespace Jackett.Test.Util
+namespace Jackett.Test.Common.Utils
 {
     [TestFixture]
     internal class ServerUtilTests : TestBase

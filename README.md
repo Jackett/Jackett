@@ -161,7 +161,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BaibaKo
  * BookTracker
  * CasStudioTV
- * CzTorrent
  * cool-torrent
  * Darmowe torrenty
  * Deildu
@@ -266,7 +265,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Brasil Tracker
  * BroadCity
  * BroadcasTheNet (BTN)
- * BRObits
  * BrokenStones
  * BWTorrents
  * CCFBits
@@ -299,7 +297,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Diablo Torrent
  * DICMusic
  * DigitalCore
- * DigitalHive
  * DivTeam
  * DivxTotal
  * DocumentaryTorrents (DT)
