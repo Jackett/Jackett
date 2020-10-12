@@ -152,7 +152,7 @@ namespace Jackett.Common.Indexers
                 UploadVolumeFactor = 1,
                 Link = rowLink,
                 Guid = rowLink,
-                Size = !string.IsNullOrEmpty(sizeContent) ? ReleaseInfo.GetBytes(sizeContent) : (long?)null
+                Size = !string.IsNullOrEmpty(sizeContent) ? ReleaseInfo.GetBytes(sizeContent) : 0
             };
         }
 
