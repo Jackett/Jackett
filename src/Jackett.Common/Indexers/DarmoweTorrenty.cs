@@ -38,7 +38,7 @@ namespace Jackett.Common.Indexers
         }
 
         public DarmoweTorrenty(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(id: "darmowetorrenty",
+            : base(id: "darmowetorenty",
                    name: "Darmowe torrenty",
                    description: "Darmowe torrenty is a POLISH Semi-Private Torrent Tracker for MOVIES / TV / GENERAL",
                    link: "https://darmowe-torenty.pl/",
@@ -152,16 +152,15 @@ namespace Jackett.Common.Indexers
                 date = pubDateUtc.ToLocalTime();
             }
             var details = titleRow.QuerySelector("a[href^=\"details.php?id=\"]:has(span)");
+            var detailsLink = new Uri(SiteLink + details.GetAttribute("href"));
             var encodedDownloadLink = detailsRow.QuerySelector("a[id^=\"download_\"]").GetAttribute("data-href");
             var downloadLink = new Uri(SiteLink + Uri.UnescapeDataString(StringUtil.FromBase64(encodedDownloadLink)));
             var bannerLink = detailsRow.QuerySelector("img[src^=\"./imgtorrent/\"]")?.GetAttribute("src");
-            var seeders = seedsMatch.Success ? int.Parse(seedsMatch.Groups[1].Value) : (int?)null;
-            var leechers = leechersMatch.Success ? int.Parse(leechersMatch.Groups[1].Value) : (int?)null;
-            var peers = (seeders == null && leechers == null) ? (int?)null : (seeders ?? 0) + (leechers ?? 0);
+            var seeders = seedsMatch.Success ? int.Parse(seedsMatch.Groups[1].Value) : 0;
+            var leechers = leechersMatch.Success ? int.Parse(leechersMatch.Groups[1].Value) : 0;
+            var peers = seeders + leechers;
             var release = new ReleaseInfo
             {
-                MinimumRatio = 1,
-                MinimumSeedTime = 90 * 60,
                 Title = details.TextContent,
                 Category = categories,
                 Seeders = seeders,
@@ -171,8 +170,9 @@ namespace Jackett.Common.Indexers
                 DownloadVolumeFactor = 0,
                 UploadVolumeFactor = 1,
                 Link = downloadLink,
-                Guid = downloadLink,
-                Size = sizeMatch.Success ? ReleaseInfo.GetBytes(sizeMatch.Groups[1].Value) : (long?)null
+                Guid = detailsLink,
+                Comments = detailsLink,
+                Size = sizeMatch.Success ? ReleaseInfo.GetBytes(sizeMatch.Groups[1].Value) : 0
             };
             return release;
         }
