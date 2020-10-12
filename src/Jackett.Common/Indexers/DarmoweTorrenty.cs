@@ -20,7 +20,7 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class DarmoweTorrenty : BaseWebIndexer
+    public class DarmoweTorenty : BaseWebIndexer
     {
         private string LoginUrl => SiteLink + "login.php";
         private string BrowseUrl => SiteLink + "torrenty.php";
@@ -37,21 +37,8 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        public DarmoweTorrenty(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(id: "darmowetorenty",
-                   name: "Darmowe torrenty",
-                   description: "Darmowe torrenty is a POLISH Semi-Private Torrent Tracker for MOVIES / TV / GENERAL",
-                   link: "https://darmowe-torenty.pl/",
-                   caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                   configService: configService,
-                   client: wc,
-                   logger: l,
-                   p: ps,
-                   configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
+        private void MapCategories()
         {
-            Encoding = Encoding.GetEncoding("iso-8859-2");
-            Language = "pl-pl";
-            Type = "semi-private";
             AddCategoryMapping(14, TorznabCatType.Movies, "Filmy");
             AddCategoryMapping(27, TorznabCatType.MoviesDVD, "Filmy DVD-R");
             AddCategoryMapping(28, TorznabCatType.MoviesSD, "Filmy VCD/SVCD");
@@ -107,6 +94,24 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(76, TorznabCatType.Other, "Archiwum");
         }
 
+        public DarmoweTorenty(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+            : base(id: "darmowetorenty",
+                   name: "Darmowe torenty",
+                   description: "Darmowe torenty is a POLISH Semi-Private Torrent Tracker for MOVIES / TV / GENERAL",
+                   link: "https://darmowe-torenty.pl/",
+                   caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                   configService: configService,
+                   client: wc,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
+        {
+            Encoding = Encoding.GetEncoding("iso-8859-2");
+            Language = "pl-pl";
+            Type = "semi-private";
+            MapCategories();
+        }
+
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
@@ -154,7 +159,11 @@ namespace Jackett.Common.Indexers
             var details = titleRow.QuerySelector("a[href^=\"details.php?id=\"]:has(span)");
             var detailsLink = new Uri(SiteLink + details.GetAttribute("href"));
             var encodedDownloadLink = detailsRow.QuerySelector("a[id^=\"download_\"]").GetAttribute("data-href");
-            var downloadLink = new Uri(SiteLink + Uri.UnescapeDataString(StringUtil.FromBase64(encodedDownloadLink)));
+            var siteDownloadLink =  new Uri(SiteLink + Uri.UnescapeDataString(StringUtil.FromBase64(encodedDownloadLink)));
+            var hash = HttpUtility.ParseQueryString(siteDownloadLink.Query)["id"];
+            var magnet =
+                $"magnet:?xt=urn:btih:{hash}&tr=udp://tracker.opentrackr.org:1337&tr=udp://tracker.coppersurfer.tk:6969&tr=udp://tracker.internetwarriors.net:1337&tr=udp://tracker.leechers-paradise.org:6969";
+            var downloadLink = new Uri(magnet);
             var bannerLink = detailsRow.QuerySelector("img[src^=\"./imgtorrent/\"]")?.GetAttribute("src");
             var seeders = seedsMatch.Success ? int.Parse(seedsMatch.Groups[1].Value) : 0;
             var leechers = leechersMatch.Success ? int.Parse(leechersMatch.Groups[1].Value) : 0;
