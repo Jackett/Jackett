@@ -74,6 +74,10 @@ settings:
     options:
       "desc": "desc"
       "asc": "asc"
+  - name: info_radarr
+    type: info
+    label: About Radarr
+    default: The HD-Only web site cannot find movies if you use the release year in a title search. When you define your Radarr v3 Indexer remember to tick the <i>Remove year from search string</i> checkbox.
 
 login:
   path: login.php
