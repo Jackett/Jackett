@@ -31,21 +31,12 @@ namespace Jackett.Common.Indexers
             public IEnumerable<TorrentMafyaRowResult> aaData { get; set; }
         }
 
-        private void MapCategories()
-        {
-            AddCategoryMapping("games", TorznabCatType.PCGames,"Oyun");
-            AddCategoryMapping("programs", TorznabCatType.PC, "Program");
-            AddCategoryMapping("movies", TorznabCatType.Movies, "Film");
-            AddCategoryMapping("tv", TorznabCatType.TV, "Dizi");
-            AddCategoryMapping("apk", TorznabCatType.PCPhoneAndroid, "APK");
-        }
-
         public TorrentMafya(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base(id: "torrentmafya",
                    name: "TorrentMafya",
                    description: "TorrentMafya is a Turkish general torrent tracker ",
                    link: "https://www.torrentmafya.org/",
-                   caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                   caps: new TorznabCapabilities(),
                    configService: configService,
                    client: wc,
                    logger: l,
@@ -55,7 +46,12 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "tr-tr";
             Type = "public";
-            MapCategories();
+
+            AddCategoryMapping("games", TorznabCatType.PCGames,"Oyun");
+            AddCategoryMapping("programs", TorznabCatType.PC, "Program");
+            AddCategoryMapping("movies", TorznabCatType.Movies, "Film");
+            AddCategoryMapping("tv", TorznabCatType.TV, "Dizi");
+            AddCategoryMapping("apk", TorznabCatType.PCPhoneAndroid, "APK");
         }
 
         private static DateTime ParseReleasePublishDate(string date)

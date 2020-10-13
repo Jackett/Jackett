@@ -36,14 +36,14 @@ namespace Jackett.Common.Indexers
                    name: "Toloka.to",
                    description: "Toloka is a Semi-Private Ukrainian torrent site with a thriving file-sharing community",
                    link: "https://toloka.to/",
-                   caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                   caps: new TorznabCapabilities(),
                    configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
                    configData: new ConfigurationDataToloka())
         {
-            Encoding = Encoding.GetEncoding("utf-8");
+            Encoding = Encoding.UTF8;
             Language = "uk-ua";
             Type = "semi-private";
 

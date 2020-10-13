@@ -34,7 +34,7 @@ namespace Jackett.Common.Indexers
                    name: "New Real World",
                    description: "A German general tracker.",
                    link: "https://nrw-tracker.eu/",
-                   caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                   caps: new TorznabCapabilities(),
                    configService: configService,
                    client: wc,
                    logger: l,

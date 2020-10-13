@@ -21,6 +21,7 @@ namespace Jackett.Test.Torznab
                  name: "test_name",
                  description: "test_description",
                  link: "https://test.link/",
+                 caps: new TorznabCapabilities(),
                  client: null,
                  configService: null,
                  logger: null,
@@ -36,13 +37,9 @@ namespace Jackett.Test.Torznab
         [Test]
         public void TestCSharpTorznabCategories()
         {
-            // TODO: remove those defauls and remove the class TorznabUtil
             // TODO: make sure TVSearchAvailable is false by default
-            // by default all indexers have 3 categories
-            Assert.AreEqual(3, TorznabCaps.Categories.Count);
-            Assert.AreEqual(TorznabCatType.TV.ID, TorznabCaps.Categories[0].ID);
-            Assert.AreEqual(TorznabCatType.TVSD.ID, TorznabCaps.Categories[1].ID);
-            Assert.AreEqual(TorznabCatType.TVHD.ID, TorznabCaps.Categories[2].ID);
+            // by default all indexers have 0 categories
+            Assert.AreEqual(0, TorznabCaps.Categories.Count);
 
             Assert.True(TorznabCaps.SearchAvailable);
             Assert.True(TorznabCaps.TVSearchAvailable);
@@ -59,39 +56,38 @@ namespace Jackett.Test.Torznab
             // TODO: movies category enables MovieSearchAvailable but other categories like tv or books don't
             // add "int" category (parent category)
             AddCategoryMapping(1, TorznabCatType.Movies);
-            Assert.AreEqual(4, TorznabCaps.Categories.Count);
-            Assert.AreEqual(2000, TorznabCaps.Categories[3].ID);
+            Assert.AreEqual(1, TorznabCaps.Categories.Count);
+            Assert.AreEqual(2000, TorznabCaps.Categories[0].ID);
 
             Assert.True(TorznabCaps.MovieSearchAvailable);
 
             // add "string" category (child category)
             AddCategoryMapping("mov_sd", TorznabCatType.MoviesSD);
-            Assert.AreEqual(5, TorznabCaps.Categories.Count);
-            Assert.AreEqual(2030, TorznabCaps.Categories[4].ID);
+            Assert.AreEqual(2, TorznabCaps.Categories.Count);
+            Assert.AreEqual(2030, TorznabCaps.Categories[1].ID);
 
             // add subcategory of books (child category)
             AddCategoryMapping(33, TorznabCatType.BooksComics);
-            Assert.AreEqual(6, TorznabCaps.Categories.Count);
-            Assert.AreEqual(8020, TorznabCaps.Categories[5].ID);
+            Assert.AreEqual(3, TorznabCaps.Categories.Count);
+            Assert.AreEqual(8020, TorznabCaps.Categories[2].ID);
 
             // add int category with description => custom category. it's converted into 2 different categories
             AddCategoryMapping(44, TorznabCatType.ConsoleXbox, "Console/Xbox_c");
-            Assert.AreEqual(8, TorznabCaps.Categories.Count);
-            Assert.AreEqual(1040, TorznabCaps.Categories[6].ID);
-            Assert.AreEqual(100044, TorznabCaps.Categories[7].ID);
+            Assert.AreEqual(5, TorznabCaps.Categories.Count);
+            Assert.AreEqual(1040, TorznabCaps.Categories[3].ID);
+            Assert.AreEqual(100044, TorznabCaps.Categories[4].ID);
 
             // TODO: we should add a way to add custom categories for string categories
             // https://github.com/Sonarr/Sonarr/wiki/Implementing-a-Torznab-indexer#caps-endpoint
             // add string category with description. it's converted into 1 category
             AddCategoryMapping("con_wii", TorznabCatType.ConsoleWii, "Console/Wii_c");
-            Assert.AreEqual(9, TorznabCaps.Categories.Count);
-            Assert.AreEqual(1030, TorznabCaps.Categories[8].ID);
+            Assert.AreEqual(6, TorznabCaps.Categories.Count);
+            Assert.AreEqual(1030, TorznabCaps.Categories[5].ID);
 
             // add another int category with description that maps to ConsoleXbox (there are 2 tracker cats => 1 torznab cat)
             AddCategoryMapping(45, TorznabCatType.ConsoleXbox, "Console/Xbox_c2");
-            Assert.AreEqual(10, TorznabCaps.Categories.Count);
-            //Assert.AreEqual(1040, TorznabCaps.Categories[9].ID); // it's duplicated
-            Assert.AreEqual(100045, TorznabCaps.Categories[9].ID);
+            Assert.AreEqual(7, TorznabCaps.Categories.Count);
+            Assert.AreEqual(100045, TorznabCaps.Categories[6].ID); // 1040 is duplicated and it is not added
 
             // TODO: test AddMultiCategoryMapping
             // TODO: add duplicates: different trackerCat but same newznabCat
@@ -214,39 +210,31 @@ namespace Jackett.Test.Torznab
             Assert.AreEqual(0, torznabCats.Count);
 
             // TODO: move these methods to TorznabCaps or TorznabQuery classess
-            // TODO: test Cardignann indexer
 
             // test Jackett UI categories (internal JSON)
             var dto = new Jackett.Common.Models.DTO.Indexer(this);
             var dtoCaps = dto.caps.ToList();
-            Assert.AreEqual(10, dtoCaps.Count);
+            Assert.AreEqual(7, dtoCaps.Count);
             Assert.AreEqual("100044", dtoCaps[0].ID);
             Assert.AreEqual("100045", dtoCaps[1].ID);
             Assert.AreEqual("1030", dtoCaps[2].ID);
             Assert.AreEqual("1040", dtoCaps[3].ID);
             Assert.AreEqual("2000", dtoCaps[4].ID);
             Assert.AreEqual("2030", dtoCaps[5].ID);
-            Assert.AreEqual("5000", dtoCaps[6].ID);
-            Assert.AreEqual("5030", dtoCaps[7].ID);
-            Assert.AreEqual("5040", dtoCaps[8].ID);
-            Assert.AreEqual("8020", dtoCaps[9].ID);
+            Assert.AreEqual("8020", dtoCaps[6].ID);
 
             // test Torznab caps (XML) => more in Common.Model.TorznabCapabilitiesTests
             var xDocument = TorznabCaps.GetXDocument();
             var xDoumentCategories = xDocument.Root?.Element("categories")?.Elements("category").ToList();
-            Assert.AreEqual(10, xDoumentCategories?.Count);
+            Assert.AreEqual(7, xDoumentCategories?.Count);
             Assert.AreEqual("100044", xDoumentCategories?[0].Attribute("id")?.Value);
             Assert.AreEqual("100045", xDoumentCategories?[1].Attribute("id")?.Value);
             Assert.AreEqual("1030", xDoumentCategories?[2].Attribute("id")?.Value);
             Assert.AreEqual("1040", xDoumentCategories?[3].Attribute("id")?.Value);
             Assert.AreEqual("2000", xDoumentCategories?[4].Attribute("id")?.Value); // Movies
             Assert.AreEqual("2030", xDoumentCategories?[5].Attribute("id")?.Value);
-            Assert.AreEqual("5000", xDoumentCategories?[6].Attribute("id")?.Value); // TV
-            Assert.AreEqual("5030", xDoumentCategories?[7].Attribute("id")?.Value);
-            Assert.AreEqual("5040", xDoumentCategories?[8].Attribute("id")?.Value);
-            Assert.AreEqual("8020", xDoumentCategories?[9].Attribute("id")?.Value);
+            Assert.AreEqual("8020", xDoumentCategories?[6].Attribute("id")?.Value);
             Assert.AreEqual(9, xDoumentCategories?[4]?.Elements("subcat").ToList().Count); // Movies
-            Assert.AreEqual(9, xDoumentCategories?[6]?.Elements("subcat").ToList().Count); // TV
         }
 
         [Test]
@@ -263,7 +251,6 @@ namespace Jackett.Test.Torznab
             };
             var indexer = new CardigannIndexer(null, null, null, null, definition);
 
-            // TODO: this is different from C# indexers
             // by default all indexers have 0 categories
             Assert.AreEqual(0, indexer.TorznabCaps.Categories.Count);
 

@@ -34,7 +34,7 @@ namespace Jackett.Common.Indexers
                    name: "Hebits",
                    description: "The Israeli Tracker",
                    link: "https://hebits.net/",
-                   caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                   caps: new TorznabCapabilities(),
                    configService: configService,
                    client: wc,
                    logger: l,
@@ -45,6 +45,7 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.GetEncoding("windows-1255");
             Language = "he-il";
             Type = "private";
+
             AddCategoryMapping(21, TorznabCatType.PCGames, "משחקים - PC (PC Games)");
             AddCategoryMapping(33, TorznabCatType.Console, "משחקים - קונסולות (Console Games)");
             AddCategoryMapping(19, TorznabCatType.MoviesSD, "סרטי SD (Movies SD)");
