@@ -290,6 +290,7 @@ namespace Jackett.Updater
                 "Definitions/crazyscorner.yml",
                 "Definitions/czteam.yml",
                 "Definitions/cztorrent.yml",
+                "Definitions/darmowetorenty.yml", // migrated to C#
                 "Definitions/demonsite.yml",
                 "Definitions/digbt.yml",
                 "Definitions/downloadville.yml",
@@ -409,6 +410,7 @@ namespace Jackett.Updater
                 "Definitions/utorrents.yml", // same as SzeneFZ now
                 "Definitions/vanila.yml",
                 "Definitions/vhstapes.yml",
+                "Definitions/world-of-tomorrow.yml", // #9213
                 "Definitions/waffles.yml",
                 "Definitions/worldofp2p.yml",
                 "Definitions/worldwidetorrents.yml",
