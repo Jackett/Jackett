@@ -32,7 +32,7 @@ namespace Jackett.Common.Indexers
                  name: "TorrentSeeds",
                  description: "TorrentSeeds is a Private site for MOVIES / TV / GENERAL",
                  link: "https://torrentseeds.org/",
-                 caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                 caps: new TorznabCapabilities(),
                  configService: configService,
                  client: wc,
                  logger: l,
@@ -42,6 +42,7 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
+
             AddCategoryMapping(13, TorznabCatType.PC0day, "Apps/0DAY");
             AddCategoryMapping(37, TorznabCatType.TVAnime, "Anime/HD");
             AddCategoryMapping(9, TorznabCatType.TVAnime, "Anime/SD");

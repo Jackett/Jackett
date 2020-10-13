@@ -35,7 +35,7 @@ namespace Jackett.Common.Indexers
                    name: "Bit-City Reloaded",
                    description: "A German general tracker.",
                    link: "https://bc-reloaded.net/",
-                   caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                   caps: new TorznabCapabilities(),
                    configService: configService,
                    client: wc,
                    logger: l,
