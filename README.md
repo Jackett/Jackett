@@ -132,6 +132,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TorrentFunk
  * TorrentGalaxy (TGx)
  * TorrentKitty
+ * TorrentMafya
  * TorrentParadise
  * TorrentProject2
  * TorrentQuest
