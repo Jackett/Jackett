@@ -384,6 +384,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Karagarga
  * Keep Friends
  * LastFiles
+ * LatinoP2P
  * Le Saloon
  * LeChaudron
  * LeagueHD
@@ -522,8 +523,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Torrentech (TTH)
  * Torrenting (TT)
  * Torrentland
-* TotallyKids (TK)
- * TorrentSeed
+ * TotallyKids (TK)
  * TranceTraffic
  * Trezzor
  * TTsWEB
