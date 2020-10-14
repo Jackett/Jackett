@@ -1,6 +1,6 @@
 ---
 id: RockBox
-name: RockBox Rock/Metal Tracker
+name: RockBox
 description: "RockBox Semi-Private site dedicated to HEAVY METAL/ROCK MUSIC. This definition is for the English site."
 language: en-us
 type: semi-private
@@ -59,10 +59,10 @@ search:
   paths:
     - path: torrents.php
   inputs:
-    search: "{{ if or (.Query.Artist) (.Query.Album) }}{{ or (.Query.Artist) (.Query.Album) }}{{else}}{{ .Keywords }}{{end}}"
-    # 0 all 1 active 2 dead 3 seedwanted
+    search: "{{ if or (.Query.Artist) (.Query.Album) }}{{ or (.Query.Artist) (.Query.Album) }}{{ else }}{{ .Keywords }}{{ end }}"
+    # 0 all, 1 active, 2 dead, 3 seedwanted
     active: 0
-    # 0 title 1 title+descr 2 title+subgen
+    # 0 title, 1 title+descr, 2 title+subgen
     options: 0
     order: "{{ .Config.sort }}"
     by: "{{ .Config.type }}"
@@ -71,6 +71,8 @@ search:
     selector: table.lista[width="100%"] tbody tr:has(a[href^="download.php?id="])
 
   fields:
+    category:
+      text: Music
     title:
       selector: td a[href^="details.php?id="]
     details:
@@ -88,8 +90,10 @@ search:
       selector: td:nth-child(6):contains("/")
       optional: true
       filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02/01/2006"
+          args: "02/01/2006 -07:00"
     date:
       # 1 hour ago, 2 days ago, 3 weeks ago etc
       selector: td:nth-child(6):not(:contains("/"))
@@ -104,10 +108,13 @@ search:
       selector: td:nth-child(10)
     grabs:
       selector: td:nth-child(11)
-    category:
-      text: Music
     downloadvolumefactor:
       text: 1
     uploadvolumefactor:
       text: 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 1 day (as seconds = 24 x 60 x 60)
+      text: 86400
 # BtitTracker (customised)
