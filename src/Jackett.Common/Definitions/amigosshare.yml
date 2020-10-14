@@ -305,8 +305,10 @@ search:
           args: "Lançado: (.+?)$"
         - name: re_replace
           args: [" (\\d:)", " 0$1"]
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02/01/06 15:04:05"
+          args: "02/01/06 15:04:05 -07:00"
     size:
       selector: div.list-group-item-content p.m-0 span.badge-info
     seeders:
@@ -321,4 +323,6 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
+    minimumratio:
+      text: 1.0
 # engine n/a

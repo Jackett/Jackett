@@ -22,6 +22,7 @@ caps:
     - {id: 120, cat: Movies/WEBDL, desc: "Bollywood-1080p WEB-Rips"}
     - {id: 188, cat: Movies/WEBDL, desc: "Bollywood-720p WEB-Rips"}
     - {id: 121, cat: Movies/DVD, desc: "Bollywood-Untouched DVDs"}
+    - {id: 189, cat: Movies/DVD, desc: "Bollywood-Encoded DVDs"}
     - {id: 122, cat: Movies/WEBDL, desc: "Bollywood-DVDRips 1080p/720p"}
     - {id: 123, cat: Movies/WEBDL, desc: "Bollywood-SDRips WEB/DVD"}
     - {id: 124, cat: Movies/3D, desc: "Bollywood-3D-Movies"}
@@ -37,6 +38,7 @@ caps:
     - {id: 133, cat: Movies/DVD, desc: "Hollywood-Untouched DVDs"}
     - {id: 191, cat: Movies/WEBDL, desc: "Hollywood-Encoded DVDs"}
     - {id: 134, cat: Movies/WEBDL, desc: "Hollywood-DVDRips 1080p/720p"}
+    - {id: 193, cat: Movies/SD, desc: "Hollywood-SDRips - WEB/DVD"}
     - {id: 135, cat: Movies/3D, desc: "Hollywood-3D-Movies"}
     - {id: 136, cat: Movies, desc: "Hollywood-Pre-Release"}
     - {id: 194, cat: Movies, desc: "Hollywood-Movies packs"}
@@ -52,6 +54,8 @@ caps:
     - {id: 185, cat: Movies, desc: "Gujarati-Movies"}
     - {id: 184, cat: Movies, desc: "Bollywood-South Hindi Dubbed"}
     - {id: 183, cat: Movies, desc: "Hindi Dubbed Movies"}
+    - {id: 197, cat: Movies, desc: "Turkish Hindi Dubbed"}
+    - {id: 198, cat: Movies, desc: "TV-MTV"}
     - {id: 182, cat: Movies, desc: "Other Movies"}
     - {id: 146, cat: TV, desc: "TV-Colors"}
     - {id: 147, cat: TV, desc: "TV-TV"}
@@ -156,8 +160,10 @@ search:
     date:
       selector: td:nth-child(5)
       filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02-01-200615:04:05"
+          args: "02-01-200615:04:05 -07:00"
     size:
       selector: td:nth-child(6)
     download:
@@ -171,7 +177,7 @@ search:
       selector: td:nth-child(9)
     downloadvolumefactor:
       case:
-        font:contains("FreeLeech"): 0
+        "font:contains(\"FreeLeech\")": 0
         "*": 1
     uploadvolumefactor:
       case:

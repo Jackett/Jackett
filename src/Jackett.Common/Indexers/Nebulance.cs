@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -11,7 +11,6 @@ using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
-using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 
@@ -21,25 +20,31 @@ namespace Jackett.Common.Indexers
     public class Nebulance : BaseWebIndexer
     {
         private string LoginUrl => SiteLink + "login.php";
-        private string SearchUrl => SiteLink + "torrents.php?action=basic&order_by=time&order_way=desc&search_type=0&taglist=&tags_type=0";
+        private string SearchUrl => SiteLink + "torrents.php";
 
-        private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
+        private new ConfigurationDataBasicLoginWith2FA configData => (ConfigurationDataBasicLoginWith2FA)base.configData;
 
         public Nebulance(IIndexerConfigurationService configService, Utils.Clients.WebClient c, Logger l, IProtectionService ps)
             : base(id: "nebulance",
                    name: "Nebulance",
                    description: "At Nebulance we will change the way you think about TV",
                    link: "https://nebulance.io/",
-                   caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                   caps: new TorznabCapabilities(),
                    configService: configService,
                    client: c,
                    logger: l,
                    p: ps,
-                   configData: new ConfigurationDataBasicLogin("For best results, change the 'Torrents per page' setting to 100 in your profile on the NBL webpage."))
+                   configData: new ConfigurationDataBasicLoginWith2FA(@"If 2FA is disabled, let the field empty.
+ We recommend to disable 2FA because re-login will require manual actions.
+<br/>For best results, change the 'Torrents per page' setting to 100 in your profile on the NBL webpage."))
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
+
+            AddCategoryMapping(1, TorznabCatType.TV);
+            AddCategoryMapping(2, TorznabCatType.TVSD);
+            AddCategoryMapping(3, TorznabCatType.TVHD);
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -54,6 +59,7 @@ namespace Jackett.Common.Indexers
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
                 { "password", configData.Password.Value },
+                { "twofa", configData.TwoFactorAuth.Value },
                 { "keeplogged", "on" },
                 { "login", "Login" }
             };
@@ -75,38 +81,32 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            var loggedInCheck = await RequestWithCookiesAsync(SearchUrl);
-            if (!loggedInCheck.ContentString.Contains("logout.php")) // re-login
-                await DoLogin();
-
-            // #6413
-            var url = $"{SearchUrl}&searchtext={WebUtility.UrlEncode(query.GetQueryString())}";
-
-            var response = await RequestWithCookiesAndRetryAsync(url);
-            var releases = ParseResponse(response.ContentString);
-
-            return releases;
-        }
-
-        private List<ReleaseInfo> ParseResponse(string htmlResponse)
-        {
             var releases = new List<ReleaseInfo>();
+
+            var qc = new NameValueCollection
+            {
+                {"action", "basic"},
+                {"order_by", "time"},
+                {"order_way", "desc"},
+                {"searchtext", query.GetQueryString()}
+            };
+
+            var searchUrl = SearchUrl + "?" + qc.GetQueryString();
+            var response = await RequestWithCookiesAsync(searchUrl);
+            if (!response.ContentString.Contains("logout.php")) // re-login
+            {
+                await DoLogin();
+                response = await RequestWithCookiesAsync(searchUrl);
+            }
 
             try
             {
-                var globalFreeleech = false;
                 var parser = new HtmlParser();
-                var document = parser.ParseDocument(htmlResponse);
-
-                if (document.QuerySelector("div.nicebar > span:contains(\"Personal Freeleech\")") != null)
-                    globalFreeleech = true;
-
+                var document = parser.ParseDocument(response.ContentString);
                 var rows = document.QuerySelectorAll(".torrent_table > tbody > tr[class^='torrent row']");
 
                 foreach (var row in rows)
                 {
-                    var release = new ReleaseInfo();
-
                     var title = row.QuerySelector("a[data-src]").GetAttribute("data-src");
                     if (string.IsNullOrEmpty(title) || title == "0")
                     {
@@ -119,42 +119,53 @@ namespace Jackett.Common.Indexers
                             title = title.Remove(title.LastIndexOf(".", StringComparison.Ordinal));
                     }
 
-                    release.Title = title;
-                    release.Description = release.Title;
-                    release.Guid = new Uri(SiteLink + row.QuerySelector("a[data-src]").GetAttribute("href"));
-                    release.Comments = release.Guid;
-                    release.Link = new Uri(SiteLink + row.QuerySelector("a[href*='action=download']").GetAttribute("href"));
-                    release.Category = new List<int> { TvCategoryParser.ParseTvShowQuality(release.Title) };
+                    var bannerStr = row.QuerySelector("img")?.GetAttribute("src");
+                    var bannerUri = !string.IsNullOrWhiteSpace(bannerStr) ? new Uri(bannerStr) : null;
 
-                    var timeAnchor = row.QuerySelector("span[class='time']");
-                    var publishdate = timeAnchor.GetAttribute("title");
-                    release.PublishDate = !string.IsNullOrEmpty(publishdate) && publishdate.Contains(",")
-                        ? DateTime.ParseExact(publishdate, "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal)
-                        : DateTime.ParseExact(timeAnchor.TextContent.Trim(), "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal);
-                    release.Seeders = ParseUtil.CoerceInt(timeAnchor.ParentElement.NextElementSibling.NextElementSibling.TextContent.Trim());
-                    release.Peers = ParseUtil.CoerceInt(timeAnchor.ParentElement.NextElementSibling.NextElementSibling.NextElementSibling.TextContent.Trim()) + release.Seeders;
-                    release.Size = ReleaseInfo.GetBytes(timeAnchor.ParentElement.PreviousElementSibling.TextContent);
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800; // 48 hours
+                    var commentsUri = new Uri(SiteLink + row.QuerySelector("a[data-src]").GetAttribute("href"));
+                    var linkUri = new Uri(SiteLink + row.QuerySelector("a[href*='action=download']").GetAttribute("href"));
 
-                    release.Files = ParseUtil.CoerceLong(row.QuerySelector("td > div:contains(\"Files:\")").TextContent.Split(':')[1].Trim());
-                    release.Grabs = ParseUtil.CoerceLong(row.QuerySelector("td:nth-last-child(3)").TextContent);
+                    var qColSize = row.QuerySelector("td:nth-child(3)");
+                    var size = ReleaseInfo.GetBytes(qColSize.Children[0].TextContent);
+                    var files = ParseUtil.CoerceLong(qColSize.Children[1].TextContent.Split(':')[1].Trim());
 
-                    if (globalFreeleech)
-                        release.DownloadVolumeFactor = 0;
-                    else if (row.QuerySelector("img[alt=\"Freeleech\"]") != null)
-                        release.DownloadVolumeFactor = 0;
-                    else
-                        release.DownloadVolumeFactor = 1;
 
-                    release.UploadVolumeFactor = 1;
+                    var qPublishdate = row.QuerySelector("td:nth-child(4) span");
+                    var publishDateStr = qPublishdate.GetAttribute("title");
+                    var publishDate = !string.IsNullOrEmpty(publishDateStr) && publishDateStr.Contains(",")
+                        ? DateTime.ParseExact(publishDateStr, "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture)
+                        : DateTime.ParseExact(qPublishdate.TextContent.Trim(), "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture);
+
+                    var grabs = ParseUtil.CoerceLong(row.QuerySelector("td:nth-child(5)").TextContent);
+                    var seeds = ParseUtil.CoerceLong(row.QuerySelector("td:nth-child(6)").TextContent);
+                    var leechers = ParseUtil.CoerceLong(row.QuerySelector("td:nth-child(7)").TextContent);
+
+                    var release = new ReleaseInfo
+                    {
+                        Title = title,
+                        Guid = commentsUri,
+                        Comments = commentsUri,
+                        Link = linkUri,
+                        Category = new List<int> { TvCategoryParser.ParseTvShowQuality(title) },
+                        Size = size,
+                        Files = files,
+                        PublishDate = publishDate,
+                        Grabs = grabs,
+                        Seeders = seeds,
+                        Peers = seeds + leechers,
+                        BannerUrl = bannerUri,
+                        MinimumRatio = 0, // ratioless
+                        MinimumSeedTime = 86400, // 24 hours
+                        DownloadVolumeFactor = 0, // ratioless tracker
+                        UploadVolumeFactor = 1
+                    };
 
                     releases.Add(release);
                 }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                OnParseError(htmlResponse, ex);
+                OnParseError(response.ContentString, e);
             }
 
             return releases;

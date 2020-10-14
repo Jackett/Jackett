@@ -35,7 +35,7 @@ namespace Jackett.Common.Indexers
         private const string NewTorrentsUrl = "secciones.php?sec=ultimos_torrents";
         private const string SearchUrl = "secciones.php";
 
-        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
+        public override string[] LegacySiteLinks { get; protected set; } = {
             "http://www.mejortorrent.org/",
             "http://www.mejortorrent.tv/",
             "http://www.mejortorrentt.com/",
@@ -59,14 +59,15 @@ namespace Jackett.Common.Indexers
             Language = "es-es";
             Type = "public";
 
-            var matchWords = new BoolItem() { Name = "Match words in title", Value = true };
+            var matchWords = new BoolItem { Name = "Match words in title", Value = true };
             configData.AddDynamic("MatchWords", matchWords);
 
             AddCategoryMapping(MejorTorrentCatType.Pelicula, TorznabCatType.Movies);
             AddCategoryMapping(MejorTorrentCatType.Serie, TorznabCatType.TVSD);
             AddCategoryMapping(MejorTorrentCatType.SerieHd, TorznabCatType.TVHD);
             AddCategoryMapping(MejorTorrentCatType.Musica, TorznabCatType.Audio);
-            AddCategoryMapping(MejorTorrentCatType.Otro, TorznabCatType.Other);
+            // Other category is disabled because we have problems parsing documentaries
+            //AddCategoryMapping(MejorTorrentCatType.Otro, TorznabCatType.Other);
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -229,6 +230,9 @@ namespace Jackett.Common.Indexers
                 title = title.Remove(title.Length - 1).Trim();
 
             var cat = GetMejortorrentCategory(mejortorrentCat, commentsLink, title);
+            if (cat == MejorTorrentCatType.Otro)
+                return; // skip releases from this category
+
             var categories = MapTrackerCatToNewznab(cat);
             var publishDate = TryToParseDate(publishStr, DateTime.Now);
 
@@ -373,8 +377,6 @@ namespace Jackett.Common.Indexers
                 Files = 1,
                 Seeders = 1,
                 Peers = 2,
-                MinimumRatio = 1,
-                MinimumSeedTime = 172800,// 48 hours
                 DownloadVolumeFactor = 0,
                 UploadVolumeFactor = 1
             };

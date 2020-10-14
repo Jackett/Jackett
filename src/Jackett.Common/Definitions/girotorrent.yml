@@ -121,6 +121,7 @@ login:
     pwd: "{{ .Config.password }}"
   error:
     - selector: div.error
+    - selector: span[style="color:#FF0000;"]
   test:
     path: index.php
     selector: a[href="logout.php"]
@@ -213,8 +214,10 @@ search:
     date:
       selector: td:nth-last-child(8)
       filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02/01/2006"
+          args: "02/01/2006 -07:00"
     seeders:
       selector: td:nth-last-child(7)
     leechers:

@@ -65,6 +65,7 @@ search:
     files:
       selector: td:nth-child(3)
     date:
+      # timeago
       selector: td:nth-child(4)
     size:
       selector: td:nth-child(5)
@@ -80,4 +81,9 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
+    minimumratio:
+      text: 0.6
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
 # engine n/a

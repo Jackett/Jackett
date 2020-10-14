@@ -5,14 +5,16 @@ using System.Threading.Tasks;
 using Jackett.Common.Indexers.Abstract;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
-using Jackett.Common.Utils.Clients;
 using NLog;
+using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
     public class Redacted : GazelleTracker
     {
+        protected override string DownloadUrl => SiteLink + "torrents.php?action=download&usetoken=" + (useTokens ? "1" : "0") + "&id=";
+
         public Redacted(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base(id: "redacted",
                    name: "Redacted",
@@ -27,10 +29,14 @@ namespace Jackett.Common.Indexers
                    logger: l,
                    p: ps,
                    supportsFreeleechTokens: true,
-                   has2Fa: true)
+                   has2Fa: true,
+                   useApiKey: false
+                )
         {
             Language = "en-us";
             Type = "private";
+
+            webclient.EmulateBrowser = false; // Issue #9751
 
             AddCategoryMapping(1, TorznabCatType.Audio, "Music");
             AddCategoryMapping(2, TorznabCatType.PC, "Applications");
@@ -48,5 +54,6 @@ namespace Jackett.Common.Indexers
             results = results.Where(release => query.MatchQueryStringAND(release.Title));
             return results;
         }
+
     }
 }

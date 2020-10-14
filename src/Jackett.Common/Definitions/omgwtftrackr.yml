@@ -65,6 +65,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -200,4 +201,5 @@ search:
       text: 0
     uploadvolumefactor:
       text: 1
+# minimumratio: appears to be ratioless and no H&R for minimumseedtime
 # Engine n/a

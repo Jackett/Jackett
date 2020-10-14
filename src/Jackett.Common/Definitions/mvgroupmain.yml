@@ -142,19 +142,21 @@ search:
   paths:
     - path: maintracker.php
   inputs:
-    seed: "{{ if .Config.seed }}1{{else}}0{{end}}"
+    seed: "{{ if .Config.seed }}1{{ else }}0{{ end }}"
     withsubs: "{{ re_replace .Config.withsubs \"_\" \"\" }}"
-    filter: "{{ if .Config.hidef }}hd+{{else}}{{end}}{{ .Keywords }}"
+    filter: "{{ if .Config.hidef }}hd+{{ else }}{{ end }}{{ .Keywords }}"
     orderby: "{{ .Config.sort }}"
     order: "{{ .Config.type }}"
   keywordsfilters:
     - name: re_replace
-      args: ["S01E01", "{{ if .Config.stripS01E01 }}{{else}}S01E01{{end}}"] # optionally remove S01E01 from search
+      args: ["S01E01", "{{ if .Config.stripS01E01 }}{{ else }}S01E01{{ end }}"] # optionally remove S01E01 from search
 
   rows:
     selector: tr:has(a.magnetlink)
 
   fields:
+    category:
+      text: 1
     title:
       # fallback title (to prevent abend if optional is not found)
       text: "title not found"
@@ -165,7 +167,7 @@ search:
         - name: re_replace
           args: ["^BBC (.*)", "{{ if .Config.dropbbc }}{{ else }}BBC {{ end }}$1"]
         - name: append
-          args: "{{ if .Config.stripS01E01 }}{{else}} S01E01{{end}}"
+          args: "{{ if .Config.stripS01E01 }}{{ else }} S01E01{{ end }}"
     details:
       optional: true
       selector: td.singleindent a[href^="/index.php?showtopic="]
@@ -176,15 +178,15 @@ search:
     magnet:
       selector: td a.magnetlink
       attribute: href
-    category:
-      text: 1
     size:
       text: "500 MB"
     date:
       selector: td:nth-of-type(3)
       filters:
+        - name: append
+          args: " +00:00" # GMT
         - name: dateparse
-          args: "2006/01/02"
+          args: "2006/01/02 -07:00"
     seeders:
       selector: td:nth-of-type(4)
     leechers:

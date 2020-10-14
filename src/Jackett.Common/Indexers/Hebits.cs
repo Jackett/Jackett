@@ -34,7 +34,7 @@ namespace Jackett.Common.Indexers
                    name: "Hebits",
                    description: "The Israeli Tracker",
                    link: "https://hebits.net/",
-                   caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                   caps: new TorznabCapabilities(),
                    configService: configService,
                    client: wc,
                    logger: l,
@@ -45,6 +45,7 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.GetEncoding("windows-1255");
             Language = "he-il";
             Type = "private";
+
             AddCategoryMapping(21, TorznabCatType.PCGames, "משחקים - PC (PC Games)");
             AddCategoryMapping(33, TorznabCatType.Console, "משחקים - קונסולות (Console Games)");
             AddCategoryMapping(19, TorznabCatType.MoviesSD, "סרטי SD (Movies SD)");
@@ -114,8 +115,8 @@ namespace Jackett.Common.Indexers
                 foreach (var row in rows)
                 {
                     var release = new ReleaseInfo();
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800; // 48 hours
+                    release.MinimumRatio = 0.8;
+                    release.MinimumSeedTime = 259200; // 72 hours
                     var qCatLink = row.QuerySelector("a[href^=\"browse.php?cat=\"]");
                     var catStr = qCatLink.GetAttribute("href").Split('=')[1];
                     release.Category = MapTrackerCatToNewznab(catStr);

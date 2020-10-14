@@ -63,6 +63,7 @@ namespace Jackett.Common.Models.Config
         {
             var options = this;
             var runtimeSettings = new RuntimeSettings();
+
             // Logging
             if (options.Logging)
                 runtimeSettings.LogRequests = true;
@@ -83,11 +84,11 @@ namespace Jackett.Common.Models.Config
 
             // Use Proxy
             if (options.ProxyConnection != null)
-            {
                 runtimeSettings.ProxyConnection = options.ProxyConnection.ToLowerInvariant();
-            }
+
             // Ignore SSL errors on Curl
             runtimeSettings.IgnoreSslErrors = options.IgnoreSslErrors;
+
             runtimeSettings.NoRestart = options.NoRestart;
             runtimeSettings.NoUpdates = options.NoUpdates;
 

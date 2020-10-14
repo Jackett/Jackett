@@ -215,7 +215,7 @@ namespace Jackett.Common.Indexers
                     var release = new ReleaseInfo
                     {
                         MinimumRatio = 1,
-                        MinimumSeedTime = 0,
+                        MinimumSeedTime = 172800,
                         Category = MapTrackerCatToNewznab(cat),
                         Title = title,
                         Link = link,

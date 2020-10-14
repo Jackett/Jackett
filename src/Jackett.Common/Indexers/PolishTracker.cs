@@ -18,7 +18,6 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class PolishTracker : BaseWebIndexer
     {
-        private string LoginUrl => SiteLink + "login";
         private string SearchUrl => SiteLink + "apitorrents";
         private static string CdnUrl => "https://cdn.pte.nu/";
 
@@ -26,7 +25,7 @@ namespace Jackett.Common.Indexers
             "https://polishtracker.net/",
         };
 
-        private new ConfigurationDataBasicLoginWithEmail configData => (ConfigurationDataBasicLoginWithEmail)base.configData;
+        private new ConfigurationDataCookie configData => (ConfigurationDataCookie)base.configData;
 
         public PolishTracker(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base(id: "polishtracker",
@@ -42,7 +41,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
-                   configData: new ConfigurationDataBasicLoginWithEmail())
+                   configData: new ConfigurationDataCookie())
         {
             Encoding = Encoding.UTF8;
             Language = "pl-pl";
@@ -66,21 +65,22 @@ namespace Jackett.Common.Indexers
         {
             LoadValuesFromJson(configJson);
 
-            var pairs = new Dictionary<string, string>
+            CookieHeader = configData.Cookie.Value;
+            try
             {
-                { "email", configData.Email.Value },
-                { "pass", configData.Password.Value }
-            };
-            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, SiteLink);
+                var results = await PerformQuery(new TorznabQuery());
+                if (!results.Any())
+                    throw new Exception("Found 0 results in the tracker");
 
-            await ConfigureIfOK(result.Cookies, result.Cookies?.Contains("id=") == true, () =>
+                IsConfigured = true;
+                SaveConfig();
+                return IndexerConfigurationStatus.Completed;
+            }
+            catch (Exception)
             {
-                var errorMessage = result.ContentString;
-                if (errorMessage.Contains("Error!"))
-                    errorMessage = "E-mail or password is incorrect";
-                throw new ExceptionWithConfigData(errorMessage, configData);
-            });
-            return IndexerConfigurationStatus.RequiresTesting;
+                IsConfigured = false;
+                throw;
+            }
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
@@ -106,11 +106,7 @@ namespace Jackett.Common.Indexers
             var searchUrl = SearchUrl + "?" + qc.GetQueryString();
             var result = await RequestWithCookiesAndRetryAsync(searchUrl, referer: SearchUrl);
             if (result.IsRedirect)
-            {
-                // re-login
-                await ApplyConfiguration(null);
-                result = await RequestWithCookiesAndRetryAsync(searchUrl, referer: SearchUrl);
-            }
+                throw new Exception($"Your cookie did not work. Please, configure the tracker again. Message: {result.ContentString}");
 
             if (!result.ContentString.StartsWith("{")) // not JSON => error
                 throw new ExceptionWithConfigData(result.ContentString, configData);

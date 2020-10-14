@@ -104,8 +104,25 @@ search:
       filters:
         - name: regexp
           args: "/categories/(\\d+)"
+
     title:
       selector: a.view-torrent
+      filters:
+        - name: re_replace
+          args: ["(?i)full", "BRDISK."] # FULL(BR/UHD) -> BRDISK
+        - name: re_replace
+          args: ["HDOlimpo", ""] # Delete HDOlimpo
+        - name: re_replace
+          args: ["HD-Olimpo", ""] # Delete HD-Olimpo
+        - name: re_replace
+          args: ["\\W", "."] # Spaces and other characters -> .
+        - name: append
+          args: ".Spanish-HDOlimpo"
+        - name: re_replace
+          args: ["\\.+", "."] # More than 1 dot -> .
+        - name: re_replace
+          args: ["^\\.", ""] # Delete first dot
+
     download:
       selector: a[href*="/download/"]
       attribute: href
@@ -143,6 +160,8 @@ search:
         # translations for Turkish|Estonian|Danish|Italian|Polish|Norwegian|Portuguese|Czech|Russian|Romanian|Spanish|French|German|Bulgarian|Dutch|Chinese|Japanese
         - name: re_replace
           args: ["(?i)(önce|tagasi|geleden|fa|temu|siden|há|atrás|nazpět|назад|acum|în urmă|hace|il y a|vor|преди|前)", " ago"]
+        - name: re_replace
+          args: ["(?i)(saniye|sekundit|sekunder|secondi|sekund|segundos|sekundami|секунд|secunde|secondes|Sekunden|секунди|seconden|秒前)", "seconds"]
         - name: re_replace
           args: ["(?i)(minutit|minutter|minuti|minuty|minutos|минуты|минут|Minuten|минути|minuten)", "minutes"]
         - name: re_replace

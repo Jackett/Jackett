@@ -359,15 +359,12 @@ namespace Jackett.Common.Indexers
     {
         protected BaseWebIndexer(string link, string id, string name, string description,
                                  IIndexerConfigurationService configService, WebClient client, Logger logger,
-                                 ConfigurationData configData, IProtectionService p, TorznabCapabilities caps = null,
+                                 ConfigurationData configData, IProtectionService p, TorznabCapabilities caps,
                                  string downloadBase = null)
             : base(link, id, name, description, configService, logger, configData, p)
         {
             webclient = client;
             downloadUrlBase = downloadBase;
-
-            if (caps == null)
-                caps = TorznabUtil.CreateDefaultTorznabTVCaps();
             TorznabCaps = caps;
         }
 
@@ -381,7 +378,7 @@ namespace Jackett.Common.Indexers
             return await Download(uncleanLink, RequestType.GET);
         }
 
-        protected async Task<byte[]> Download(Uri link, RequestType method, string refererlink = null)
+        protected async Task<byte[]> Download(Uri link, RequestType method, string referer = null, Dictionary<string, string>headers = null)
         {
             // return magnet link
             if (link.Scheme == "magnet")
@@ -392,11 +389,8 @@ namespace Jackett.Common.Indexers
                 .Replace("(", "%28")
                 .Replace(")", "%29")
                 .Replace("'", "%27");
-            var response = await RequestWithCookiesAndRetryAsync(requestLink, null, method, requestLink);
+            var response = await RequestWithCookiesAndRetryAsync(requestLink, null, method, referer, null, headers);
 
-            // if referer link is provied it will be used
-            if (refererlink != null)
-                response = await RequestWithCookiesAndRetryAsync(requestLink, null, method, refererlink);
             if (response.IsRedirect)
             {
                 await FollowIfRedirect(response);

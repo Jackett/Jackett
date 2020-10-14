@@ -24,6 +24,7 @@ caps:
     tv-search: [q, season, ep, imdbid]
     movie-search: [q, imdbid]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: cookie
@@ -63,7 +64,7 @@ login:
   inputs:
     cookie: "{{ .Config.cookie }}"
   test:
-    path: torrents.php
+    path: torrents1.php
 
 search:
   # https://retroflix.club/torrents1.php?incldead=0&spstate=0&inclbookmarked=0&search=tt0055254&search_area=4&search_mode=0
@@ -127,7 +128,7 @@ search:
       attribute: onmouseover
       filters:
         - name: regexp
-          args: "src=\\\\'(.+?)\\\\'"
+          args: "src=(.+?) "
     imdb:
       optional: true
       selector: a[href*="imdb.com/title/tt"]
@@ -139,7 +140,7 @@ search:
       optional: true
       filters:
         - name: append
-          args: " +00:00"
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "02-01-2006 15:04:05 -07:00"
     date:
@@ -148,7 +149,7 @@ search:
       optional: true
       filters:
         - name: append
-          args: " +00:00"
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "02-01-200615:04:05 -07:00"
     size:
@@ -173,4 +174,9 @@ search:
         img.pro_free2up: 2
         img.pro_2up: 2
         "*": 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
 # NexusPHP

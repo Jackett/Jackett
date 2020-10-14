@@ -144,6 +144,7 @@ search:
     leechers:
       selector: td:nth-last-child(2) > span > b:nth-child(2)
     date:
+      # timeago
       selector: td:nth-child(2) > span > span > small
       filters:
         - name: replace

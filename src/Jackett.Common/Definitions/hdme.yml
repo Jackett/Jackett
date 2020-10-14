@@ -140,10 +140,15 @@ search:
       selector: td:nth-child(6)
       remove: br
     date:
+      #  October 2, 2020, 1:33 pm
       selector: td:nth-child(3)
       filters:
         - name: regexp
           args: "Added: (.+?)\n"
+        - name: append
+          args: " -07:00" # PDT
+        - name: dateparse
+          args: "January 2, 2006, 3:04 PM -07:00"
     seeders:
       selector: td:nth-child(8)
     leechers:

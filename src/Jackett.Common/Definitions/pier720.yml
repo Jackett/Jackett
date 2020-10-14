@@ -12,12 +12,16 @@ legacylinks:
 
 caps:
   categorymappings:
+    - {id: 30, cat: TV/Sport, desc: "Sports"}
     - {id: 32, cat: TV/Sport, desc: "Basketball"}
     - {id: 34, cat: TV/Sport, desc: "Basketball - NBA"}
     - {id: 87, cat: TV/Sport, desc: "Basketball - NBA Playoffs"}
-    - {id: 81, cat: TV/Sport, desc: "Basketball - NBA Playoffs - 2016"}
+    - {id: 106, cat: TV/Sport, desc: "Basketball - NBA Playoffs - 2019"}
+    - {id: 103, cat: TV/Sport, desc: "Basketball - NBA Playoffs - 2018"}
     - {id: 95, cat: TV/Sport, desc: "Basketball - NBA Playoffs - 2017"}
-    - {id: 58, cat: TV/Sport, desc: "Basketball - NBA (до 2015 г.)"}
+    - {id: 81, cat: TV/Sport, desc: "Basketball - NBA Playoffs - 2016"}
+    - {id: 58, cat: TV/Sport, desc: "Basketball - NBA Classic Games"}
+    - {id: 105, cat: TV/Sport, desc: "Basketball - NBA The Finals"}
     - {id: 52, cat: TV/Sport, desc: "Basketball - NCAA"}
     - {id: 82, cat: TV/Sport, desc: "Basketball - WNBA"}
     - {id: 36, cat: TV/Sport, desc: "Basketball - European basketball"}
@@ -29,6 +33,7 @@ caps:
     - {id: 43, cat: TV/Sport, desc: "Football - NFL"}
     - {id: 66, cat: TV/Sport, desc: "Football - Super Bowls"}
     - {id: 53, cat: TV/Sport, desc: "Football - NCAA"}
+    - {id: 104, cat: TV/Sport, desc: "Football - XFL"}
     - {id: 99, cat: TV/Sport, desc: "Football - CFL"}
     - {id: 101, cat: TV/Sport, desc: "Football - AAF"}
     - {id: 54, cat: TV/Sport, desc: "Football - Reviews and highlights"}
@@ -37,11 +42,10 @@ caps:
     - {id: 46, cat: TV/Sport, desc: "Hockey"}
     - {id: 48, cat: TV/Sport, desc: "Hockey - NHL"}
     - {id: 88, cat: TV/Sport, desc: "Hockey - NHL Playoffs"}
+    - {id: 102, cat: TV/Sport, desc: "Hockey - NHL Playoffs 2018-2019"}
     - {id: 93, cat: TV/Sport, desc: "Hockey - NHL Playoffs - 2017"}
     - {id: 80, cat: TV/Sport, desc: "Hockey - NHL Playoffs - 2016"}
     - {id: 65, cat: TV/Sport, desc: "Hockey - Stanley Cup Finals"}
-    - {id: 69, cat: TV/Sport, desc: "Hockey - Stanley Cup Finals - 2005-2014"}
-    - {id: 70, cat: TV/Sport, desc: "Hockey - Stanley Cup Finals - 2003"}
     - {id: 92, cat: TV/Sport, desc: "Hockey - NCAA"}
     - {id: 49, cat: TV/Sport, desc: "Hockey - World Championship"}
     - {id: 68, cat: TV/Sport, desc: "Hockey - Documentaries"}
@@ -51,13 +55,6 @@ caps:
     - {id: 71, cat: TV/Sport, desc: "Baseball - MLB"}
     - {id: 72, cat: TV/Sport, desc: "Baseball - Other"}
     - {id: 85, cat: TV/Sport, desc: "Baseball - Reviews, highlights, documentaries"}
-    - {id: 59, cat: TV/Sport, desc: "Soccer"}
-    - {id: 61, cat: TV/Sport, desc: "Soccer - English soccer"}
-    - {id: 86, cat: TV/Sport, desc: "Soccer - UEFA"}
-    - {id: 100, cat: TV/Sport, desc: "Soccer - MLS"}
-    - {id: 62, cat: TV/Sport, desc: "Soccer - Other tournaments, championships"}
-    - {id: 63, cat: TV/Sport, desc: "Soccer - World Championships"}
-    - {id: 98, cat: TV/Sport, desc: "Soccer - FIFA World Cup"}
     - {id: 45, cat: TV/Sport, desc: "Other sports"}
     - {id: 79, cat: TV/Sport, desc: "Other sports - Rugby"}
     - {id: 78, cat: TV/Sport, desc: "Other sports - Lacrosse"}
@@ -65,11 +62,11 @@ caps:
     - {id: 76, cat: TV/Sport, desc: "Other sports - Volleyball"}
     - {id: 75, cat: TV/Sport, desc: "Other sports - Tennis"}
     - {id: 74, cat: TV/Sport, desc: "Other sports - Fighting"}
-    - {id: 73, cat: TV/Sport, desc: "Other sports - Auto, moto racing"}
-    - {id: 91, cat: TV/Sport, desc: "Other sports - Olympic Games"}
     - {id: 94, cat: TV/Sport, desc: "Other sports - Misc"}
+    - {id: 100, cat: TV/Sport, desc: "Soccer"}
+    - {id: 98, cat: TV/Sport, desc: "Soccer - FIFA World Cup"}
     - {id: 56, cat: TV/Sport, desc: "Sports on tv"}
-    - {id: 30, cat: TV/Sport, desc: "Sports"}
+    - {id: 70, cat: TV/Sport, desc: "Sports on tv ESPN Films"}
 
   modes:
     search: [q]
@@ -136,7 +133,10 @@ search:
     submit: Search
 
   rows:
-    selector: li.row
+    # drop topics without size as they will not have download links in details page
+    selector: li.row:has(div.list-inner div[style="float:right;"])
+    filters:
+      - name: andmatch
 
   fields:
     title:
@@ -165,6 +165,10 @@ search:
       selector: dd.views span.my_tt.complet
     date:
       selector: div.left-box time
+      filters:
+        # datetime is auto adjusted by site account profile
+        - name: replace
+          args: ["T", " "]
     downloadvolumefactor:
       text: 1
     uploadvolumefactor:

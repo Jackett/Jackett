@@ -6,9 +6,10 @@ language: el-gr
 type: private
 encoding: UTF-8
 links:
-  - https://magico.one/
+  - https://magico.club/
 legacylinks:
   - https://magico.info/
+  - https://magico.one/
 
 caps:
   categorymappings:
@@ -99,6 +100,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -217,15 +219,13 @@ search:
         - name: replace
           args: [" by", ""]
         - name: replace
-          args: ["at ", ""]
-        - name: replace
           args: ["Ανέβηκε ", ""] # Uploaded
         - name: replace
           args: [" από", ""] # by
         - name: replace
           args: [" τον/την", ""] # him/her
         - name: replace
-          args: ["στις ", ""] # at
+          args: ["στις ", "at "] # at
         - name: replace
           args: ["σήμερα", "Today"]
         - name: replace
@@ -264,8 +264,10 @@ search:
           args: [" τον/την", ""] # him/her
         - name: replace
           args: ["στις ", ""] # at
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02-01-2006 15:04"
+          args: "02-01-2006 15:04 -07:00"
     date:
       # <br /> Uploaded Saturday at 21:09 by
       optional: true
@@ -278,6 +280,8 @@ search:
           args: [" by", ""]
         - name: replace
           args: ["at ", ""]
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02-01-2006 15:04"
+          args: "02-01-2006 15:04 -07:00"
 # TSUE 2.2

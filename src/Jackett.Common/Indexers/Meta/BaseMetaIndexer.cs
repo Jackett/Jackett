@@ -23,7 +23,7 @@ namespace Jackett.Common.Indexers.Meta
                    name: name,
                    description: description,
                    link: "http://127.0.0.1/",
-                   caps: null,
+                   caps: new TorznabCapabilities(),
                    configService: configService,
                    client: client,
                    logger: logger,

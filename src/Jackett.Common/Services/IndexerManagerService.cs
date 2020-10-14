@@ -44,6 +44,7 @@ namespace Jackett.Common.Services
             {"passtheheadphones", "redacted"},
             {"rstorrent", "redstartorrent"},
             {"tehconnectionme", "anthelion"},
+            {"torrentseed", "latinop2p"},
             {"transmithenet", "nebulance"},
             {"yourexotic", "exoticaz"}
         };
@@ -97,7 +98,7 @@ namespace Jackett.Common.Services
 
         private void InitIndexers()
         {
-            logger.Info("Using HTTP Client: " + webClient.GetType().Name);
+            logger.Info($"Using HTTP Client: {webClient.GetType().Name}");
 
             var allTypes = GetType().Assembly.GetTypes();
             var allIndexerTypes = allTypes.Where(p => typeof(IIndexer).IsAssignableFrom(p));
@@ -106,7 +107,7 @@ namespace Jackett.Common.Services
             var indexerTypes = allNonMetaInstantiatableIndexerTypes.Where(p => p.Name != "CardigannIndexer");
             var ixs = indexerTypes.Select(type =>
             {
-                var constructorArgumentTypes = new Type[] { typeof(IIndexerConfigurationService), typeof(WebClient), typeof(Logger), typeof(IProtectionService) };
+                var constructorArgumentTypes = new [] { typeof(IIndexerConfigurationService), typeof(WebClient), typeof(Logger), typeof(IProtectionService) };
                 var constructor = type.GetConstructor(constructorArgumentTypes);
                 if (constructor != null)
                 {
@@ -117,10 +118,8 @@ namespace Jackett.Common.Services
                     var indexer = (IIndexer)constructor.Invoke(arguments);
                     return indexer;
                 }
-                else
-                {
-                    logger.Error("Cannot instantiate " + type.Name);
-                }
+
+                logger.Error($"Cannot instantiate {type.Name}");
                 return null;
             });
 
@@ -139,7 +138,7 @@ namespace Jackett.Common.Services
 
             var deserializer = new DeserializerBuilder()
                         .WithNamingConvention(CamelCaseNamingConvention.Instance)
-//                        .IgnoreUnmatchedProperties()
+                        //.IgnoreUnmatchedProperties()
                         .Build();
 
             try
@@ -152,13 +151,13 @@ namespace Jackett.Common.Services
                     logger.Debug("Loading Cardigann definition " + file.FullName);
                     try
                     {
-                        var DefinitionString = File.ReadAllText(file.FullName);
-                        var definition = deserializer.Deserialize<IndexerDefinition>(DefinitionString);
+                        var definitionString = File.ReadAllText(file.FullName);
+                        var definition = deserializer.Deserialize<IndexerDefinition>(definitionString);
                         return definition;
                     }
-                    catch (Exception ex)
+                    catch (Exception e)
                     {
-                        logger.Error(ex, "Error while parsing Cardigann definition " + file.FullName + ": " + ex.Message);
+                        logger.Error($"Error while parsing Cardigann definition {file.FullName}\n{e}");
                         return null;
                     }
                 }).Where(definition => definition != null);
@@ -174,9 +173,9 @@ namespace Jackett.Common.Services
                         configService.Load(indexer);
                         return indexer;
                     }
-                    catch (Exception ex)
+                    catch (Exception e)
                     {
-                        logger.Error(ex, "Error while creating Cardigann instance from Definition: " + ex.Message);
+                        logger.Error($"Error while creating Cardigann instance from Definition: {e}");
                         return null;
                     }
                 }).Where(cardigannIndexer => cardigannIndexer != null).ToList(); // Explicit conversion to list to avoid repeated resource loading
@@ -185,7 +184,7 @@ namespace Jackett.Common.Services
                 {
                     if (indexers.ContainsKey(indexer.Id))
                     {
-                        logger.Debug(string.Format("Ignoring definition ID={0}: Indexer already exists", indexer.Id));
+                        logger.Debug($"Ignoring definition ID={indexer.Id}: Indexer already exists");
                         continue;
                     }
 
@@ -193,17 +192,17 @@ namespace Jackett.Common.Services
                 }
                 logger.Info("Cardigann definitions loaded: " + string.Join(", ", indexers.Keys));
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                logger.Error(ex, "Error while loading Cardigann definitions: " + ex.Message);
+                logger.Error($"Error while loading Cardigann definitions: {e}");
             }
         }
 
         public void InitAggregateIndexer()
         {
             var omdbApiKey = serverConfig.OmdbApiKey;
-            IFallbackStrategyProvider fallbackStrategyProvider = null;
-            IResultFilterProvider resultFilterProvider = null;
+            IFallbackStrategyProvider fallbackStrategyProvider;
+            IResultFilterProvider resultFilterProvider;
             if (!string.IsNullOrWhiteSpace(omdbApiKey))
             {
                 var imdbResolver = new OmdbResolver(webClient, omdbApiKey, serverConfig.OmdbApiUrl);
@@ -231,8 +230,8 @@ namespace Jackett.Common.Services
             if (renamedIndexers.ContainsKey(name))
             {
                 realName = renamedIndexers[name];
-                logger.Warn($"Indexer {name} has been renamed to {realName}. Please, update the URL of the feeds. " +
-                            "This may stop working in the future.");
+                logger.Warn($@"Indexer {name} has been renamed to {realName}. Please, update the URL of the feeds.
+ This may stop working in the future.");
             }
 
             if (indexers.ContainsKey(realName))
@@ -241,23 +240,20 @@ namespace Jackett.Common.Services
             if (realName == "all")
                 return aggregateIndexer;
 
-            logger.Error("Request for unknown indexer: " + realName);
-            throw new Exception("Unknown indexer: " + realName);
+            logger.Error($"Request for unknown indexer: {realName}");
+            throw new Exception($"Unknown indexer: {realName}");
         }
 
         public IWebIndexer GetWebIndexer(string name)
         {
             if (indexers.ContainsKey(name))
-            {
                 return indexers[name] as IWebIndexer;
-            }
-            else if (name == "all")
-            {
-                return aggregateIndexer as IWebIndexer;
-            }
 
-            logger.Error("Request for unknown indexer: " + name);
-            throw new Exception("Unknown indexer: " + name);
+            if (name == "all")
+                return aggregateIndexer;
+
+            logger.Error($"Request for unknown indexer: {name}");
+            throw new Exception($"Unknown indexer: {name}");
         }
 
         public IEnumerable<IIndexer> GetAllIndexers() => indexers.Values.OrderBy(_ => _.DisplayName);
@@ -272,8 +268,8 @@ namespace Jackett.Common.Services
                 IsTest = true
             };
             var result = await indexer.ResultsForQuery(browseQuery);
-            logger.Info(string.Format("Found {0} releases from {1}", result.Releases.Count(), indexer.DisplayName));
-            if (result.Releases.Count() == 0)
+            logger.Info($"Found {result.Releases.Count()} releases from {indexer.DisplayName}");
+            if (!result.Releases.Any())
                 throw new Exception("Found no results while trying to browse this tracker");
             cacheService.CacheRssResults(indexer, result.Releases);
         }

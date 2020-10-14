@@ -319,6 +319,7 @@ search:
     grabs:
       selector: td:nth-child(9)
     date:
+      # unix
       selector: td:last-child > u
     downloadvolumefactor:
       text: 1

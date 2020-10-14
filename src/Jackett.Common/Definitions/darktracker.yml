@@ -11,6 +11,7 @@ links:
 
 caps:
   categorymappings:
+    - {id: 511, cat: Movies/HD, desc: "Форум HD Video/RIP"}
     # 3D
     - {id: 801, cat: Movies/3D, desc: " | Фильмы в формате 3D"}
     - {id: 802, cat: Movies/3D, desc: " | Мультфильмы в формате 3D"}
@@ -784,6 +785,7 @@ search:
     grabs:
       selector: td:nth-child(9)
     date:
+      # unix
       selector: td:last-child > u
     downloadvolumefactor:
       case:

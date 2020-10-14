@@ -70,11 +70,11 @@ search:
     - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-    # active 1 incldead 2 onlydead
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    # 0 active, 1 incldead, 2 onlydead
     incldead: 1
     # 1 = look in description
-    Lysing: "{{ if .Query.IMDBID }}1{{else}}{{end}}"
+    Lysing: "{{ if .Query.IMDBID }}1{{ else }}{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
     # does not return imdb links
@@ -116,8 +116,10 @@ search:
     date:
       selector: td:nth-child(6)
       filters:
+        - name: append
+          args: " +00:00" # GMT
         - name: dateparse
-          args: "2006-01-0215:04:05"
+          args: "2006-01-0215:04:05 -07:00"
     downloadvolumefactor:
       text: 1
     uploadvolumefactor:

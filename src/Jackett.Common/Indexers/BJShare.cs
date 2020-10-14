@@ -156,7 +156,10 @@ namespace Jackett.Common.Indexers
                 cleanTitle += " " + seasonEp;
             else
                 cleanTitle += " " + year + " " + seasonEp;
-            return FixAbsoluteNumbering(cleanTitle);
+
+            cleanTitle = FixAbsoluteNumbering(cleanTitle);
+            cleanTitle = FixNovelNumber(cleanTitle);
+            return cleanTitle;
         }
 
         private bool IsAbsoluteNumbering(string title)
@@ -281,9 +284,30 @@ namespace Jackett.Common.Indexers
                         // ignore sub groups info row, it's just an row with an info about the next section, something like "Dual Áudio" or "Legendado"
                         if (row.QuerySelector(".edition_info") != null)
                             continue;
-                        var qDetailsLink = row.QuerySelector("a[href^=\"torrents.php?id=\"]");
+
+                        // some torrents has more than one link, and the one with .tooltip is the wrong one in that case,
+                        // so let's try to pick up first without the .tooltip class,
+                        // if nothing is found, then we try again without that filter
+                        var qDetailsLink = row.QuerySelector("a[href^=\"torrents.php?id=\"]:not(.tooltip)");
+                        if (qDetailsLink == null) {
+                            qDetailsLink = row.QuerySelector("a[href^=\"torrents.php?id=\"]");
+                            // if still can't find the right link, skip it
+                            if (qDetailsLink == null) {
+                                logger.Error($"{Id}: Error while parsing row '{row.OuterHtml}': Can't find the right details link");
+                                continue;
+                            }
+                        }
                         var title = StripSearchString(qDetailsLink.TextContent, false);
-                        var seasonEp = _EpisodeRegex.Match(qDetailsLink.TextContent).Value;
+
+                        var seasonEl = row.QuerySelector("a[href^=\"torrents.php?torrentid=\"]");
+                        string seasonEp = null;
+                        if (seasonEl != null)
+                        {
+                            var seasonMatch = _EpisodeRegex.Match(seasonEl.TextContent);
+                            seasonEp = seasonMatch.Success ? seasonMatch.Value : null;
+                        }
+                        seasonEp ??= _EpisodeRegex.Match(qDetailsLink.TextContent).Value;
+
                         ICollection<int> category = null;
                         string yearStr = null;
                         if (row.ClassList.Contains("group") || row.ClassList.Contains("torrent")) // group/ungrouped headers
@@ -291,7 +315,15 @@ namespace Jackett.Common.Indexers
                             var qCatLink = row.QuerySelector("a[href^=\"/torrents.php?filter_cat\"]");
                             categoryStr = qCatLink.GetAttribute("href").Split('=')[1].Split('&')[0];
                             category = MapTrackerCatToNewznab(categoryStr);
-                            yearStr = qDetailsLink.NextSibling.TextContent.Trim().TrimStart('[').TrimEnd(']');
+
+                            var torrentInfoEl = row.QuerySelector("div.torrent_info");
+                            if (torrentInfoEl != null)
+                            {
+                                // valid for torrent grouped but that has only 1 episode yet
+                                yearStr = torrentInfoEl.GetAttribute("data-year");
+                            }
+                            yearStr ??= qDetailsLink.NextSibling.TextContent.Trim().TrimStart('[').TrimEnd(']');
+
                             if (row.ClassList.Contains("group")) // group headers
                             {
                                 groupCategory = category;
@@ -422,6 +454,7 @@ namespace Jackett.Common.Indexers
                         var qTitle = qDetailsLink.QuerySelector("font");
                         // Get international title if available, or use the full title if not
                         release.Title = Regex.Replace(qTitle.TextContent, @".* \[(.*?)\](.*)", "$1$2");
+                        var seasonEp = _EpisodeRegex.Match(qTitle.TextContent).Value;
                         var year = "";
                         release.Description = "";
                         var extraInfo = "";
@@ -474,10 +507,7 @@ namespace Jackett.Common.Indexers
 
                         var catStr = qCatLink.GetAttribute("href").Split('=')[1].Split('&')[0];
                         if (!string.IsNullOrEmpty(year))
-                            release.Title = FixYearPosition(release.Title, year);
-
-                        release.Title = FixAbsoluteNumbering(release.Title);
-                        release.Title = FixNovelNumber(release.Title);
+                            release.Title = ParseTitle(release.Title, seasonEp, year, catStr);
 
                         if (qQuality != null)
                         {

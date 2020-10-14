@@ -7,7 +7,6 @@ type: semi-private
 encoding: UTF-8
 links:
   - https://prostylex.org/
-  - https://prostylex.unblocked.rest/
 legacylinks:
   - http://prostylex.com/
   - https://prostylex.black-mirror.xyz/
@@ -18,6 +17,7 @@ legacylinks:
   - https://prostylex.unblocked.bar/
   - https://prostylex.proxyportal.pw/
   - https://prostylex.uk-unblock.pro/
+  - https://prostylex.unblocked.rest/ # Cloudflare - This web property is not accessible via this address.
 
 caps:
   categorymappings:
@@ -80,6 +80,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -166,4 +167,5 @@ search:
       text: 0
     uploadvolumefactor:
       text: 1
+# minimumratio: the site appears to be ratioless
 # TorrentTrader

@@ -36,6 +36,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -142,8 +143,10 @@ search:
           args: ["ноя", "Nov"]
         - name: replace
           args: ["дек", "Dec"]
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "15:04:0502 Jan 2006"
+          args: "15:04:0502 Jan 2006 -07:00"
     seeders:
       selector: td:nth-child(8)
     leechers:

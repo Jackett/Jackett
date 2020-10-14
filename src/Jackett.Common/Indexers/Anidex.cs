@@ -145,12 +145,14 @@ namespace Jackett.Common.Indexers
             };
 
             // Get specified categories
+            // AniDex throws errors when categories are url encoded. See issue #9727
             var searchCategories = MapTorznabCapsToTrackers(query);
+            var catString = "";
             if (searchCategories.Count > 0)
-                queryParameters.Add("id", string.Join(",", searchCategories));
+                catString = "&id=" + string.Join(",", searchCategories);
 
             // Make search request
-            var searchUri = GetAbsoluteUrl("?" + queryParameters.GetQueryString());
+            var searchUri = GetAbsoluteUrl("?" + queryParameters.GetQueryString() + catString);
             var response = await RequestWithCookiesAndRetryAsync(searchUri.AbsoluteUri);
 
             // Check for DDOS Guard
@@ -194,8 +196,6 @@ namespace Jackett.Common.Indexers
                         release.Grabs = ParseIntValueFromRow(r, nameof(release.Grabs), "td:nth-child(11)");
                         release.Comments = ParseValueFromRow(r, nameof(release.Comments), "td:nth-child(3) a", (e) => GetAbsoluteUrl(e.Attributes["href"].Value));
                         release.Guid = release.Comments;
-                        release.MinimumRatio = 1;
-                        release.MinimumSeedTime = 172800; // 48 hours
                         release.DownloadVolumeFactor = 0;
                         release.UploadVolumeFactor = 1;
 
