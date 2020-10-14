@@ -69,7 +69,7 @@ login:
     ssl: yes
     trackerssl: yes
   error:
-    - selector: td.embedded:has(h2:contains("澶辫触"))
+    - selector: td.embedded:has(h2:contains("失败"))
     - selector: td.embedded:has(h2:contains("failed"))
   test:
     path: torrents.php
