@@ -796,38 +796,38 @@ caps:
     - {id: 1349, cat: Books, desc: "Детские журналы"}
     - {id: 1351, cat: Books, desc: "Военные журналы"}
     - {id: 1350, cat: Books, desc: "Хобби (Разное)"}
-    - {id: 1427 , cat: XXX, desc: "Клубника(18+)"}
-    - {id: 1428 , cat: XXX, desc: " Русское порно"}
-    - {id: 1429 , cat: XXX, desc: "  Русские порно фильмы"}
-    - {id: 1431 , cat: XXX, desc: "  Русские порно ролики"}
-    - {id: 1430 , cat: XXX, desc: "  Русское любительское"}
-    - {id: 1432 , cat: XXX, desc: " Зарубежные порно"}
-    - {id: 1446 , cat: XXX, desc: "  Зарубежные порно фильмы (DVD, HD и Blu-ray)"}
-    - {id: 1447 , cat: XXX, desc: "   Порно фильмы HD"}
-    - {id: 1448 , cat: XXX, desc: "   Порно фильмы DVD"}
-    - {id: 1449 , cat: XXX, desc: "  Зарубежные порно ролики"}
-    - {id: 1450 , cat: XXX, desc: "   Большие сиськи"}
-    - {id: 1451 , cat: XXX, desc: "   HD ролики"}
-    - {id: 1452 , cat: XXX, desc: "   Анальный секс"}
-    - {id: 1453 , cat: XXX, desc: "   Домашнее порно"}
-    - {id: 1454 , cat: XXX, desc: "   Подростки"}
-    - {id: 1455 , cat: XXX, desc: "   Мамочки"}
-    - {id: 1456 , cat: XXX, desc: "   Сцены из фильмов"}
-    - {id: 1457 , cat: XXX, desc: "   Любительское"}
-    - {id: 1458 , cat: XXX, desc: "   Разное"}
-    - {id: 1433 , cat: XXX, desc: "  Порно фильмы с русским переводом"}
-    - {id: 1434 , cat: XXX, desc: "  Порно фильмы с сюжетом"}
-    - {id: 1435 , cat: XXX, desc: "  Порно фильмы без сюжета"}
-    - {id: 1437 , cat: XXX, desc: "  Гонзо"}
-    - {id: 1438 , cat: XXX, desc: "  Лесбиянки"}
-    - {id: 1439 , cat: XXX, desc: "  Молодые/Студенты"}
-    - {id: 1440 , cat: XXX, desc: "  Скрытые камеры"}
-    - {id: 1441 , cat: XXX, desc: "  Классические порно фильмы"}
-    - {id: 1442 , cat: XXX, desc: "  Этнические порно фильмы"}
-    - {id: 1443 , cat: XXX, desc: "  Японские фильмы"}
-    - {id: 1444 , cat: XXX, desc: "  Нетрадиционное порно"}
-    - {id: 1445 , cat: XXX, desc: "  Эротические фильмы"}
-    - {id: 1459 , cat: XXX, desc: "  Мультфильмы / Cartoons"}
+    - {id: 1427, cat: XXX, desc: "Клубника(18+)"}
+    - {id: 1428, cat: XXX, desc: " Русское порно"}
+    - {id: 1429, cat: XXX, desc: "  Русские порно фильмы"}
+    - {id: 1431, cat: XXX, desc: "  Русские порно ролики"}
+    - {id: 1430, cat: XXX, desc: "  Русское любительское"}
+    - {id: 1432, cat: XXX, desc: " Зарубежные порно"}
+    - {id: 1446, cat: XXX, desc: "  Зарубежные порно фильмы (DVD, HD и Blu-ray)"}
+    - {id: 1447, cat: XXX, desc: "   Порно фильмы HD"}
+    - {id: 1448, cat: XXX, desc: "   Порно фильмы DVD"}
+    - {id: 1449, cat: XXX, desc: "  Зарубежные порно ролики"}
+    - {id: 1450, cat: XXX, desc: "   Большие сиськи"}
+    - {id: 1451, cat: XXX, desc: "   HD ролики"}
+    - {id: 1452, cat: XXX, desc: "   Анальный секс"}
+    - {id: 1453, cat: XXX, desc: "   Домашнее порно"}
+    - {id: 1454, cat: XXX, desc: "   Подростки"}
+    - {id: 1455, cat: XXX, desc: "   Мамочки"}
+    - {id: 1456, cat: XXX, desc: "   Сцены из фильмов"}
+    - {id: 1457, cat: XXX, desc: "   Любительское"}
+    - {id: 1458, cat: XXX, desc: "   Разное"}
+    - {id: 1433, cat: XXX, desc: "  Порно фильмы с русским переводом"}
+    - {id: 1434, cat: XXX, desc: "  Порно фильмы с сюжетом"}
+    - {id: 1435, cat: XXX, desc: "  Порно фильмы без сюжета"}
+    - {id: 1437, cat: XXX, desc: "  Гонзо"}
+    - {id: 1438, cat: XXX, desc: "  Лесбиянки"}
+    - {id: 1439, cat: XXX, desc: "  Молодые/Студенты"}
+    - {id: 1440, cat: XXX, desc: "  Скрытые камеры"}
+    - {id: 1441, cat: XXX, desc: "  Классические порно фильмы"}
+    - {id: 1442, cat: XXX, desc: "  Этнические порно фильмы"}
+    - {id: 1443, cat: XXX, desc: "  Японские фильмы"}
+    - {id: 1444, cat: XXX, desc: "  Нетрадиционное порно"}
+    - {id: 1445, cat: XXX, desc: "  Эротические фильмы"}
+    - {id: 1459, cat: XXX, desc: "  Мультфильмы / Cartoons"}
 
   modes:
     search: [q]
