@@ -26,10 +26,11 @@ caps:
     - {id: 37, cat: Other, desc: "Tutte le saghe"}
 
   modes:
-    search: [q, imdbid]
-    tv-search: [q, season, ep, imdbid]
-    movie-search: [q, imdbid]
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -64,9 +65,8 @@ settings:
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
 
 login:
-  path: sbg_login_new.php
-  method: form
-  form: form[action="index.php?page=login"]
+  path: index.php?page=login
+  method: post
   inputs:
     uid: "{{ .Config.username }}"
     pwd: "{{ .Config.password }}"
@@ -96,16 +96,16 @@ search:
     - name: replace
       args: ["-", ""]
   inputs:
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBIDShort }}{{ else }}{{ .Keywords }}{{ end }}"
+    search: "{{ .Keywords }}"
     page: torrents
     category: "{{ range .Categories }}{{.}};{{end}}"
-    options: "{{ if .Query.IMDBID }}4{{ else }}0{{ end }}"
-    # 0 all 1 active 2 dead
+    # 0 all, 1 active, 2 dead
     active: 0
     # 0 filename, 1 file&descr, 2 descr, 3 uploader, 5 gold, 6 silver, 7 bronze
     options: "{{ if .Config.freeleech }}5{{ else }}0{{ end }}"
     order: "{{ .Config.sort }}"
     by: "{{ .Config.type }}"
+    # does not support imdbid searching or provide imdb link in results.
 
   rows:
     selector: table > tbody > tr > td > table.lista > tbody > tr:has(a[href^="index.php?page=torrent-details&id="])

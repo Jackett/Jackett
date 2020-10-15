@@ -69,13 +69,6 @@ login:
 #      path: /
 #      selector: a[href$="/logout"]
 
-ratio:
-  path: /
-  selector: span:has(i.fa-percent)
-  filters:
-    - name: regexp
-      args: "Ratio : (\\d+)"
-
 search:
   paths:
     - path: torrents

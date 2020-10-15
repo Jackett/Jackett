@@ -32,7 +32,7 @@ namespace Jackett.Common.Indexers
                    name: "ShowRSS",
                    description: "showRSS is a service that allows you to keep track of your favorite TV shows",
                    link: "https://showrss.info/",
-                   caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                   caps: new TorznabCapabilities(),
                    configService: configService,
                    client: wc,
                    logger: l,
@@ -42,6 +42,10 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "public";
+
+            AddCategoryMapping(1, TorznabCatType.TV);
+            AddCategoryMapping(2, TorznabCatType.TVSD);
+            AddCategoryMapping(3, TorznabCatType.TVHD);
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -71,6 +75,7 @@ namespace Jackett.Common.Indexers
                     if (!query.MatchQueryStringAND(title))
                         continue;
 
+                    // TODO: use Jackett.Common.Utils.TvCategoryParser.ParseTvShowQuality
                     // guess category from title
                     var category = title.Contains("720p") || title.Contains("1080p") ?
                         TorznabCatType.TVHD.ID :

@@ -44,62 +44,30 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "private";
 
-            //Movies
-            AddCategoryMapping(1, TorznabCatType.MoviesSD, "Movies/XviD");
-            AddCategoryMapping(3, TorznabCatType.MoviesDVD, "Movies/DVD-R");
-            AddCategoryMapping(10, TorznabCatType.XXX, "Movies/XxX");
-            AddCategoryMapping(47, TorznabCatType.Movies, "Movie/Packs");
-            AddCategoryMapping(56, TorznabCatType.Movies, "Movies/Anime");
-            AddCategoryMapping(57, TorznabCatType.MoviesSD, "Movies/SD");
-            AddCategoryMapping(59, TorznabCatType.MoviesHD, "Movies/HD");
-            AddCategoryMapping(61, TorznabCatType.Movies, "Movies/Classic");
-            AddCategoryMapping(64, TorznabCatType.Movies3D, "Movies/3D");
-            AddCategoryMapping(80, TorznabCatType.MoviesForeign, "Movies/Non-English");
-            AddCategoryMapping(81, TorznabCatType.MoviesBluRay, "Movies/BluRay");
-            AddCategoryMapping(82, TorznabCatType.MoviesOther, "Movies/CAM-TS");
-            AddCategoryMapping(102, TorznabCatType.MoviesOther, "Movies/Remux");
-            AddCategoryMapping(22, TorznabCatType.MoviesWEBDL, "Movies/Web-Rip/DL");
-            AddCategoryMapping(105, TorznabCatType.Movies, "Movies/Kids");
-            AddCategoryMapping(16, TorznabCatType.MoviesUHD, "Movies/4K");
-            AddCategoryMapping(17, TorznabCatType.MoviesBluRay, "Movies/4K bluray");
-
-            //TV
-            AddCategoryMapping(2, TorznabCatType.TVSD, "TV/XviD");
-            AddCategoryMapping(43, TorznabCatType.TV, "TV/Packs");
-            AddCategoryMapping(9, TorznabCatType.TVHD, "TV-HD");
-            AddCategoryMapping(63, TorznabCatType.TV, "TV/Classic");
-            AddCategoryMapping(77, TorznabCatType.TVSD, "TV/SD");
-            AddCategoryMapping(79, TorznabCatType.TVSport, "Sports");
-            AddCategoryMapping(100, TorznabCatType.TVFOREIGN, "TV/Non-English");
-            AddCategoryMapping(83, TorznabCatType.TVWEBDL, "TV/Web-Rip");
-            AddCategoryMapping(8, TorznabCatType.TVOTHER, "TV-Mobile");
-            AddCategoryMapping(18, TorznabCatType.TVAnime, "TV/Anime");
-            AddCategoryMapping(19, TorznabCatType.TVHD, "TV-x265");
-
-            // Games
-            AddCategoryMapping(6, TorznabCatType.PCGames, "Games/PC ISO");
-            AddCategoryMapping(48, TorznabCatType.ConsoleXbox, "Games/XBOX");
-            AddCategoryMapping(49, TorznabCatType.ConsolePSP, "Games/PSP");
-            AddCategoryMapping(50, TorznabCatType.ConsolePS3, "Games/PS3");
-            AddCategoryMapping(51, TorznabCatType.ConsoleWii, "Games/Wii");
-            AddCategoryMapping(55, TorznabCatType.ConsoleNDS, "Games/Nintendo DS");
-            AddCategoryMapping(12, TorznabCatType.ConsolePS4, "Games/Ps4");
-            AddCategoryMapping(13, TorznabCatType.ConsoleOther, "Games/PS1");
-            AddCategoryMapping(14, TorznabCatType.ConsoleOther, "Games/PS2");
-            AddCategoryMapping(15, TorznabCatType.ConsoleOther, "Games/Dreamcast");
-
-            // Miscellaneous
-            AddCategoryMapping(5, TorznabCatType.PC0day, "Apps/0DAY");
-            AddCategoryMapping(7, TorznabCatType.Books, "Books-Mags");
-            AddCategoryMapping(52, TorznabCatType.PCMac, "Mac");
-            AddCategoryMapping(65, TorznabCatType.BooksComics, "Books/Comic");
-            AddCategoryMapping(53, TorznabCatType.PC, "Appz");
-            AddCategoryMapping(24, TorznabCatType.PCPhoneOther, "Mobile/Appz");
-
-            // Music
-            AddCategoryMapping(4, TorznabCatType.Audio, "Music/Audio");
-            AddCategoryMapping(11, TorznabCatType.AudioVideo, "Music/Videos");
-            AddCategoryMapping(116, TorznabCatType.Audio, "Music/Pack");
+            AddCategoryMapping(10, TorznabCatType.XXX, "Movies Adult");
+            AddCategoryMapping(47, TorznabCatType.Movies, "Movie Packs");
+            AddCategoryMapping(57, TorznabCatType.MoviesSD, "Movies SD");
+            AddCategoryMapping(59, TorznabCatType.MoviesHD, "Movies HD");
+            AddCategoryMapping(64, TorznabCatType.Movies3D, "Movies 3D");
+            AddCategoryMapping(82, TorznabCatType.MoviesOther, "Movies CAM-TS");
+            AddCategoryMapping(16, TorznabCatType.MoviesUHD, "Movies UHD");
+            AddCategoryMapping(2, TorznabCatType.TVUHD, "TV UHD");
+            AddCategoryMapping(43, TorznabCatType.TV, "TV Packs");
+            AddCategoryMapping(9, TorznabCatType.TVHD, "TV HD");
+            AddCategoryMapping(77, TorznabCatType.TVSD, "TV SD");
+            AddCategoryMapping(6, TorznabCatType.PCGames, "Games PC ISO");
+            AddCategoryMapping(48, TorznabCatType.ConsoleXbox, "Games XBOX");
+            AddCategoryMapping(51, TorznabCatType.ConsoleWii, "Games Wii");
+            AddCategoryMapping(55, TorznabCatType.ConsoleNDS, "Games Nintendo DS");
+            AddCategoryMapping(12, TorznabCatType.ConsolePS4, "Games/PS");
+            AddCategoryMapping(15, TorznabCatType.ConsoleOther, "Games Dreamcast");
+            AddCategoryMapping(52, TorznabCatType.PCMac, "Mac/Linux");
+            AddCategoryMapping(53, TorznabCatType.PC0day, "Apps");
+            AddCategoryMapping(24, TorznabCatType.PCPhoneOther, "Mobile Apps");
+            AddCategoryMapping(7, TorznabCatType.Books, "Books and Magazines");
+            AddCategoryMapping(65, TorznabCatType.BooksComics, "Books Comic");
+            AddCategoryMapping(4, TorznabCatType.Audio, "Music");
+            AddCategoryMapping(116, TorznabCatType.Audio, "Music Pack");
         }
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
@@ -238,8 +206,8 @@ namespace Jackett.Common.Indexers
                 {
                     // TODO convert to initializer
                     var release = new ReleaseInfo();
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800; // 48 hours
+                    release.MinimumRatio = 0.31;
+                    release.MinimumSeedTime = 259200; // 72 hours
 
                     var qCatLink = row.Children[categoryIndex].QuerySelector("a");
                     if (qCatLink != null)

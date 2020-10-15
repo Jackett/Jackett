@@ -98,7 +98,7 @@ namespace Jackett.Common.Indexers
                    name: "LostFilm.tv",
                    description: "Unique portal about foreign series",
                    link: "https://www.lostfilm.run/",
-                   caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                   caps: new TorznabCapabilities(),
                    configService: configService,
                    client: wc,
                    logger: l,
@@ -108,6 +108,8 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "ru-ru";
             Type = "semi-private";
+
+            AddCategoryMapping(1, TorznabCatType.Movies);
         }
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()

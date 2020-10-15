@@ -129,10 +129,6 @@ login:
     path: torrents-search.php
     selector: a[href="account-logout.php"]
 
-ratio:
-  path: torrents-search.php
-  selector: div#infobar b
-
 search:
   paths:
     - path: torrents-search.php

@@ -359,15 +359,12 @@ namespace Jackett.Common.Indexers
     {
         protected BaseWebIndexer(string link, string id, string name, string description,
                                  IIndexerConfigurationService configService, WebClient client, Logger logger,
-                                 ConfigurationData configData, IProtectionService p, TorznabCapabilities caps = null,
+                                 ConfigurationData configData, IProtectionService p, TorznabCapabilities caps,
                                  string downloadBase = null)
             : base(link, id, name, description, configService, logger, configData, p)
         {
             webclient = client;
             downloadUrlBase = downloadBase;
-
-            if (caps == null)
-                caps = TorznabUtil.CreateDefaultTorznabTVCaps();
             TorznabCaps = caps;
         }
 

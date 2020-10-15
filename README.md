@@ -132,6 +132,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TorrentFunk
  * TorrentGalaxy (TGx)
  * TorrentKitty
+ * TorrentMafya
  * TorrentParadise
  * TorrentProject2
  * TorrentQuest
@@ -383,6 +384,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Karagarga
  * Keep Friends
  * LastFiles
+ * LatinoP2P
  * Le Saloon
  * LeChaudron
  * LeagueHD
@@ -521,8 +523,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Torrentech (TTH)
  * Torrenting (TT)
  * Torrentland
-* TotallyKids (TK)
- * TorrentSeed
+ * TotallyKids (TK)
  * TranceTraffic
  * Trezzor
  * TTsWEB
@@ -540,6 +541,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Vizuk
  * WDT (Wrestling Desires Torrents / Ultimate Wrestling Torrents)
  * Witch-Hunter (Demon-Site)
+ * wOOt
  * World-In-HD
  * x-ite.me (XM)
  * xBytesV2

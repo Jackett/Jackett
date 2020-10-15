@@ -119,13 +119,6 @@ login:
 #      path: /
 #      selector: a[href$="/logout"]
 
-ratio:
-  path: /
-  selector: li:has(i.fa-signal)
-  filters:
-    - name: regexp
-      args: "Ratio : (\\d+)"
-
 search:
   paths:
     - path: filterTorrents

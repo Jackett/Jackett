@@ -30,7 +30,11 @@ namespace Jackett.Common.Indexers
                    name: "HD-Space",
                    description: "Sharing The Universe",
                    link: "https://hd-space.org/",
-                   caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                   caps: new TorznabCapabilities
+                   {
+                       SupportsImdbMovieSearch = true
+                       //SupportsImdbTVSearch = true; (supported by the site but disabled due to #8107)
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,
@@ -40,8 +44,6 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
-            TorznabCaps.SupportsImdbMovieSearch = true;
-            // TorznabCaps.SupportsImdbTVSearch = true; (supported by the site but disabled due to #8107)
 
             AddCategoryMapping(15, TorznabCatType.MoviesBluRay); // Movie / Blu-ray
             AddMultiCategoryMapping(TorznabCatType.MoviesHD,

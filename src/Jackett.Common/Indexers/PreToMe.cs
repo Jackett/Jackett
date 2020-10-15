@@ -28,7 +28,11 @@ namespace Jackett.Common.Indexers
                    name: "PreToMe",
                    description: "BitTorrent site for High Quality, High Definition (HD) movies and TV Shows",
                    link: "https://pretome.info/",
-                   caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                   caps: new TorznabCapabilities
+                   {
+                       SupportsImdbMovieSearch = true
+                       // SupportsImdbTVSearch = true; (supported by the site but disabled due to #8107)
+                   },
                    client: wc,
                    configService: configService,
                    logger: l,
@@ -38,9 +42,6 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "en-us";
             Type = "private";
-
-            TorznabCaps.SupportsImdbMovieSearch = true;
-            // TorznabCaps.SupportsImdbTVSearch = true; (supported by the site but disabled due to #8107)
 
             // Unfortunately most of them are tags not categories and they return the parent category
             // we have to re-add the tags with the parent category so the results are not removed with the filtering

@@ -99,13 +99,6 @@ login:
     path: browse.php
     selector: a[href$="/logout.php"]
 
-ratio:
-  path: browse.php
-  selector: div div font:contains("Ratio:")
-  filters:
-    - name: regexp
-      args: "Ratio:\\s(.*?)\\s\\s"
-
 search:
   paths:
     # http://www.crnaberza.com/browse.php?c52=1&c20=1&c34=1&incldead=1&search=star+trek

@@ -92,10 +92,6 @@ login:
   test:
     path: browse_old.php
 
-ratio:
-  path: browse_old.php
-  selector: img[title="Reitings:"]+font
-
 search:
   paths:
     - path: browse_old.php

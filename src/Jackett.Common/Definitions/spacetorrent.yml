@@ -67,10 +67,6 @@ login:
     path: recherche
     selector: a[href="../logout"]
 
-ratio:
-  path: recherche
-  selector: a.nav-link i[class="ti-pulse"]
-
 download:
   selector: a[href^="magnet:?xt="]
   attribute: href

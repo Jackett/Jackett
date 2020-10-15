@@ -35,8 +35,22 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        private void MapCategories()
+        public DarmoweTorenty(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+            : base(id: "darmowetorenty",
+                   name: "Darmowe torenty",
+                   description: "Darmowe torenty is a POLISH Semi-Private Torrent Tracker for MOVIES / TV / GENERAL",
+                   link: "https://darmowe-torenty.pl/",
+                   caps: new TorznabCapabilities(),
+                   configService: configService,
+                   client: wc,
+                   logger: l,
+                   p: ps,
+                   configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
+            Encoding = Encoding.GetEncoding("iso-8859-2");
+            Language = "pl-pl";
+            Type = "semi-private";
+
             AddCategoryMapping(14, TorznabCatType.Movies, "Filmy");
             AddCategoryMapping(27, TorznabCatType.MoviesDVD, "Filmy DVD-R");
             AddCategoryMapping(28, TorznabCatType.MoviesSD, "Filmy VCD/SVCD");
@@ -90,24 +104,6 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(69, TorznabCatType.TVAnime, "Anime Pl");
             AddCategoryMapping(70, TorznabCatType.TVAnime, "Anime");
             AddCategoryMapping(76, TorznabCatType.Other, "Archiwum");
-        }
-
-        public DarmoweTorenty(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(id: "darmowetorenty",
-                   name: "Darmowe torenty",
-                   description: "Darmowe torenty is a POLISH Semi-Private Torrent Tracker for MOVIES / TV / GENERAL",
-                   link: "https://darmowe-torenty.pl/",
-                   caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                   configService: configService,
-                   client: wc,
-                   logger: l,
-                   p: ps,
-                   configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
-        {
-            Encoding = Encoding.GetEncoding("iso-8859-2");
-            Language = "pl-pl";
-            Type = "semi-private";
-            MapCategories();
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
