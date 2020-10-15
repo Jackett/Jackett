@@ -79,13 +79,6 @@ login:
     path: my.php
     selector: a[href="logout.php"]
 
-ratio:
-  path: browse.php
-  selector: span.smallfont:has(a[href="logout.php"])
-  filters:
-    - name: regexp
-      args: "Ratio:\\s(.*?)\\s\\s"
-
 search:
   paths:
     # https://pwtorrents.net/browse.php?c18=1&c16=1&c17=1&incldead=0

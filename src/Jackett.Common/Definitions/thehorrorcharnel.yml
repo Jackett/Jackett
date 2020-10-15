@@ -139,17 +139,6 @@ login:
   test:
     path: usercp.php
 
-ratio:
-  path: my.php
-  selector: td.navi_top:contains("Deine Ratio:")
-  filters:
-    - name: replace
-      args: ["Deine Ratio: ", ""]
-    - name: replace
-      args: [".", ""]
-    - name: replace
-      args: [",", "."]
-
 search:
   paths:
     - path: browse.php

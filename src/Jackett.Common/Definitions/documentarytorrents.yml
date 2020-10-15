@@ -118,10 +118,6 @@ login:
     path: index.php
     selector: a[href$="/account-logout.php"]
 
-ratio:
-  path: index.php
-  selector: img[title="Ratio"]
-
 search:
   paths:
     # http://documentarytorrents.com/torrents.php?c123=1&c69=1&c67=1&c89=1&c88=1&search=grow+old&cat=0&incldead=1&freeleech=0&lang=0

@@ -98,13 +98,6 @@ login:
     path: /
     selector: a[href="/logout.php"]
 
-ratio:
-  path: /
-  selector: p.sajatadatok font
-  filters:
-    - name: replace
-      args: [",", ""]
-
 search:
   paths:
     - path: browse.php

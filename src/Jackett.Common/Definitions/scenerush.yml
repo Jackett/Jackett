@@ -104,13 +104,6 @@ login:
     path: index.php
     selector: a[href="logout.php"]
 
-ratio:
-  path: browse.php
-  selector: td.text:contains("Ratio")
-  filters:
-    - name: regexp
-      args: "Ratio actual ›(.*?) ]"
-
 search:
   paths:
     - path: browse.php

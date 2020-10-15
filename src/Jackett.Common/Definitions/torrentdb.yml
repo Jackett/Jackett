@@ -69,10 +69,6 @@ login:
 #      path: /
 #      selector: a[href$="/logout"]
 
-ratio:
-  path: /
-  selector: span[title="Ratio"]
-
 search:
   paths:
     # https://torrentdb.net/filter/torrents?search=&tags=&freeleech=1&sorting=created_at&direction=desc&qty=25

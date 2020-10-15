@@ -70,10 +70,6 @@ login:
   test:
     path: top10.php
 
-ratio:
-  path: top10.php
-  selector: span.r99
-
 search:
   paths:
     # https://uhdbits.org/torrents.php?groupname=&filelist=&description=&artistname=&recordlabel=&remastertitle=&remasterrecordlabel=&rating=0&rating1=10&freetorrent=1&searchstr=&taglist=&tags_type=1&order_by=time&order_way=desc&action=advanced&searchsubmit=1

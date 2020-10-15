@@ -81,10 +81,6 @@ login:
   test:
     path: browse.php
 
-ratio:
-  path: browse.php
-  selector: span#ratioRatio
-
 search:
   paths:
     - path: browse.php
