@@ -29,6 +29,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * ACG.RIP
  * ACGsou (36DM)
  * Anidex
+ * Anilibria
  * Anime Tosho
  * AniRena
  * AniSource
