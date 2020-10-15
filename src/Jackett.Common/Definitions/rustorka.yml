@@ -380,7 +380,7 @@ caps:
     - {id: 661, cat: TV/Anime, desc: " |- mp3"}
     - {id: 660, cat: TV/Anime, desc: " |- lossless"}
     - {id: 662, cat: TV/Anime, desc: "Обои на рабочий стол/картинки/арты"}
-    - {id: 642 cat: TV/Anime, desc: "Флудилка"}
+    - {id: 642, cat: TV/Anime, desc: "Флудилка"}
     # Документалистика, Юмор, Спорт
     # Documentary, Comedy, Sports
     - {id: 1918, cat: TV/Documentary, desc: "Документальные фильмы и передачи"}
