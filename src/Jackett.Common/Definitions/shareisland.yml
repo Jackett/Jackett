@@ -13,38 +13,14 @@ legacylinks:
 
 caps:
   categorymappings:
-    # Movie
-    - {id: 1, cat: Movies/HD, desc: "Movie 1080p"}
-    - {id: 5, cat: Movies/HD, desc: "Movie 720p"}
-    - {id: 6, cat: Movies/UHD, desc: "Movie 4K-Ultra-HD"}
-    - {id: 9, cat: Movies/BluRay, desc: "Movie BluRay Full"}
-    - {id: 8, cat: Movies/SD, desc: "Movie BDRip"}
-    - {id: 10, cat: Movies/DVD, desc: "Movie DVD-9"}
-    - {id: 11, cat: Movies/DVD, desc: "Movie DVD-5"}
-    - {id: 12, cat: Movies/DVD, desc: "Movie DVD-Rip"}
-    - {id: 13, cat: Movies/SD, desc: "Movie Divx"}
-    - {id: 14, cat: Movies, desc: "Movie CineCam"}
-    - {id: 25, cat: Movies/Foreign, desc: "Movie Lingua Originale"}
-    # TV
-    - {id: 4, cat: TV/HD, desc: "Serie TV HD"}
-    - {id: 2, cat: TV/SD, desc: "Serie TV SD"}
-    # Anime
-    - {id: 20, cat: TV/Anime, desc: "Anime"}
-    - {id: 22, cat: TV/Anime, desc: "Cartoons"}
-    # Edicola
+    - {id: 1, cat: Movies, desc: "Movie"}
+    - {id: 2, cat: TV, desc: "Serie TV"}
     - {id: 15, cat: Books/Ebook, desc: "Ebook"}
-    - {id: 17, cat: Books, desc: "Riviste e Giornali"}
-    - {id: 18, cat: Books, desc: "Fumetti"}
-    - {id: 19, cat: XXX, desc: "Fumetti XXX"}
-    # Music
+    - {id: 17, cat: Books/Magazines, desc: "Riviste e Giornali"}
+    - {id: 19, cat: XXX, desc: "XXX"}
     - {id: 3, cat: Audio, desc: "Music"}
-    # Games
-    - {id: 7, cat: PC/Games, desc: "Games PC"}
-    - {id: 21, cat: Console/Xbox, desc: "Games XboX"}
-    - {id: 16, cat: Console/PS3, desc: "Games PS3"}
-    # Applicazioni
-    - {id: 23, cat: PC, desc: "Programmi PC"}
-    - {id: 24, cat: PC/Mac, desc: "Applicazioni Mac"}
+    - {id: 7, cat: PC/Games, desc: "Games"}
+    - {id: 23, cat: PC, desc: "Software"}
 
   modes:
     search: [q, imdbid]
