@@ -54,7 +54,7 @@ namespace Jackett.Common.Indexers
                    name: "EpubLibre",
                    description: "Más libros, Más libres",
                    link: "https://epublibre.org/",
-                   caps: new TorznabCapabilities(TorznabCatType.BooksEbook),
+                   caps: new TorznabCapabilities(),
                    configService: configService,
                    client: wc,
                    logger: l,
@@ -64,6 +64,8 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "es-es";
             Type = "public";
+
+            AddCategoryMapping(1, TorznabCatType.BooksEbook);
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

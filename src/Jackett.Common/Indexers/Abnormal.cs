@@ -56,7 +56,9 @@ namespace Jackett.Common.Indexers
                    name: "Abnormal",
                    description: "General French Private Tracker",
                    link: "https://abnormal.ws/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities {
+                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q }
+                   },
                    configService: configService,
                    client: w,
                    logger: l,

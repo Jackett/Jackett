@@ -30,7 +30,7 @@ namespace Jackett.Common.Indexers
                    link: "https://www.funfile.org/",
                    caps: new TorznabCapabilities
                    {
-                       SupportsImdbMovieSearch = true
+                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q, MovieSearchParam.ImdbId }
                        // SupportsImdbTVSearch = true (supported by the site but disabled due to #8107)
                    },
                    configService: configService,

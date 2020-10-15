@@ -36,7 +36,9 @@ namespace Jackett.Common.Indexers
                    name: "Toloka.to",
                    description: "Toloka is a Semi-Private Ukrainian torrent site with a thriving file-sharing community",
                    link: "https://toloka.to/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities {
+                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,

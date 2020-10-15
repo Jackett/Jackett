@@ -41,7 +41,7 @@ namespace Jackett.Common.Indexers
                    name: "BakaBT",
                    description: "Anime Comunity",
                    link: "https://bakabt.me/",
-                   caps: new TorznabCapabilities(TorznabCatType.TVAnime),
+                   caps: new TorznabCapabilities(),
                    configService: configService,
                    client: wc,
                    logger: l,
@@ -52,6 +52,7 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
+
             AddCategoryMapping(1, TorznabCatType.TVAnime, "Anime Series");
             AddCategoryMapping(2, TorznabCatType.TVAnime, "OVA");
             AddCategoryMapping(3, TorznabCatType.AudioOther, "Soundtrack");

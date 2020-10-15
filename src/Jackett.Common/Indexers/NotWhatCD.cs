@@ -18,6 +18,7 @@ namespace Jackett.Common.Indexers
                    link: "https://notwhat.cd/",
                    caps: new TorznabCapabilities
                    {
+                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q },
                        SupportedMusicSearchParamsList = new List<string> { "q", "album", "artist", "label", "year" }
                    },
                    configService: configService,

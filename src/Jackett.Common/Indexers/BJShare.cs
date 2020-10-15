@@ -67,7 +67,7 @@ namespace Jackett.Common.Indexers
                     link: "https://bj-share.info/",
                     caps: new TorznabCapabilities
                     {
-                        SupportsImdbMovieSearch = true
+                        MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q, MovieSearchParam.ImdbId }
                     },
                     configService: configService,
                     client: wc,

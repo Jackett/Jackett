@@ -36,7 +36,9 @@ namespace Jackett.Common.Indexers
                    name: "TorrentMafya",
                    description: "TorrentMafya is a Turkish general torrent tracker ",
                    link: "https://www.torrentmafya.org/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities {
+                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,

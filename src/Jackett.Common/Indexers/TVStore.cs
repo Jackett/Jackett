@@ -38,7 +38,7 @@ namespace Jackett.Common.Indexers
                  link: "https://tvstore.me/",
                  caps: new TorznabCapabilities
                  {
-                     SupportsImdbMovieSearch = true, // Needed for IMDb searches to work see #7977
+                     MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q, MovieSearchParam.ImdbId },
                      SupportsImdbTVSearch = true
                  },
                  configService: configService,
