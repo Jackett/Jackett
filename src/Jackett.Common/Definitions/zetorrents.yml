@@ -6,10 +6,11 @@ language: fr-fr
 type: public
 encoding: UTF-8
 links:
-  - https://wvw.zetorrents.io/
+  - https://vww.zetorrents.io/
 legacylinks:
   - https://www.zetorrents.co/
   - https://www.zetorrents.io/
+  - https://wvw.zetorrents.io/
 
 caps:
   categories:
