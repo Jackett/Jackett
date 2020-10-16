@@ -10,50 +10,48 @@ links:
 
 caps:
   categorymappings:
-    - {id: 47, cat: PC/Phone-Android, desc: "Application - Android"}
+    - {id: 18, cat: PC/0day, desc: "Application - PC"}
     - {id: 19, cat: PC/Mac, desc: "Application - Mac"}
     - {id: 21, cat: PC/Phone-Other, desc: "Application - Other"}
-    - {id: 18, cat: PC/0day, desc: "Application - PC"}
+    - {id: 47, cat: PC/Phone-Android, desc: "Application - Android"}
     - {id: 61, cat: Audio/Audiobook, desc: "Audio - Audio books"}
-    - {id: 63, cat: Audio/Lossless, desc: "Audio - Flac"}
     - {id: 60, cat: Audio, desc: "Audio - Music"}
+    - {id: 63, cat: Audio/Lossless, desc: "Audio - Flac"}
     - {id: 64, cat: Audio/Other, desc: "Audio - Other"}
     - {id: 9, cat: TV/Documentary, desc: "Documentaries - Other"}
-    - {id: 65, cat: Console/Other, desc: "Games - Android"}
-    - {id: 66, cat: Console/Other, desc: "Games - Other"}
     - {id: 10, cat: PC/Games, desc: "Games - PC"}
     - {id: 11, cat: Console/PS3, desc: "Games - PSX"}
     - {id: 13, cat: Console/Xbox 360, desc: "Games - Xbox360"}
-    - {id: 49, cat: Movies/3D, desc: "Movies - 3D"}
-    - {id: 48, cat: Movies/BluRay, desc: "Movies - Blu-ray"}
-    - {id: 2, cat: Movies/SD, desc: "Movies - Divx/Xvid"}
+    - {id: 66, cat: Console/Other, desc: "Games - Other"}
+    - {id: 65, cat: Console/Other, desc: "Games - Android"}
     - {id: 1, cat: Movies/DVD, desc: "Movies - DVD"}
+    - {id: 2, cat: Movies/SD, desc: "Movies - Divx/Xvid"}
     - {id: 42, cat: Movies/HD, desc: "Movies - HD"}
     - {id: 4, cat: Movies/Other, desc: "Movies - Other"}
-    - {id: 35, cat: Audio, desc: "Music - Album"}
-    - {id: 24, cat: Audio/Video, desc: "Music - DVD"}
+    - {id: 49, cat: Movies/3D, desc: "Movies - 3D"}
+    - {id: 48, cat: Movies/BluRay, desc: "Movies - Blu-ray"}
     - {id: 22, cat: Audio/MP3, desc: "Music - MP3"}
+    - {id: 24, cat: Audio/Video, desc: "Music - DVD"}
     - {id: 27, cat: Audio/Other, desc: "Music - Other"}
-    - {id: 26, cat: Audio, desc: "Music - Radio"}
-    - {id: 50, cat: Books, desc: "Other - Books"}
+    - {id: 35, cat: Audio, desc: "Music - Album"}
     - {id: 36, cat: Books/Ebook, desc: "Other - E-books"}
-    - {id: 51, cat: Books/Magazines, desc: "Other - Magazines"}
     - {id: 53, cat: Other, desc: "Other - Other"}
-    - {id: 37, cat: Other, desc: "Other - Pictures"}
-    - {id: 55, cat: XXX, desc: "Porn - Movie"}
-    - {id: 68, cat: XXX/Other, desc: "Porn - Other"}
-    - {id: 54, cat: XXX/Imageset, desc: "Porn - Picture"}
+    - {id: 51, cat: Books/Magazines, desc: "Other - Magazines"}
+    - {id: 50, cat: Books, desc: "Other - Books"}
     - {id: 56, cat: XXX/WMV, desc: "Porn - Video"}
+    - {id: 55, cat: XXX, desc: "Porn - Movie"}
+    - {id: 54, cat: XXX/Imageset, desc: "Porn - Picture"}
+    - {id: 68, cat: XXX/Other, desc: "Porn - Other"}
     - {id: 6, cat: TV, desc: "TV - Divx/Xvid"}
-    - {id: 59, cat: TV/HD, desc: "TV - Full HD"}
     - {id: 41, cat: TV/HD, desc: "TV - HD"}
-    - {id: 7, cat: TV, desc: "TV - SVCD/VCD"}
+    - {id: 59, cat: TV/HD, desc: "TV - Full HD"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -104,13 +102,13 @@ search:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
     cat: 0
-    # 0 active 1 incldead 2 onlydead
+    # 0 active, 1 incldead, 2 onlydead
     incldead: 1
-    # 0 all 1 notfree 2 onlyfree
+    # 0 all, 1 notfree, 2 onlyfree
     freeleech: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
-    # 0 both 1 local 2 external
+    # 0 both, 1 local, 2 external
     inclexternal: 0
-    # 0 all 1 English 2 etc...
+    # 0 all, 1 English, 2 etc...
     lang: 0
     sort: "{{ .Config.sort }}"
     order: "{{ .Config.type }}"
@@ -146,4 +144,6 @@ search:
       text: 0
     uploadvolumefactor:
       text: 1
+    minimumratio:
+      text: 1.0
 # TorrentTrader
