@@ -114,7 +114,7 @@ namespace Jackett.Common.Indexers
                 baseRelease.BannerUrl = new Uri(Configuration.StaticLink.Value + r.poster.url);
                 baseRelease.Comments = new Uri(SiteLink + "/release/" + r.code + ".html");
                 baseRelease.DownloadVolumeFactor = 0;
-                baseRelease.UploadVolumeFactor = 0;
+                baseRelease.UploadVolumeFactor = 1;
                 baseRelease.Category = new int[]{ TorznabCatType.TVAnime.ID };
                 foreach (var t in r.torrents.list) {
                     var release = (ReleaseInfo)baseRelease.Clone();
