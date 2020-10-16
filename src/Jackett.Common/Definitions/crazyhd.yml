@@ -124,13 +124,6 @@ login:
     path: index.php
     selector: a[href="logout.php"]
 
-ratio:
-  path: index.php
-  selector: span:contains("Ratio ")
-  filters:
-    - name: replace
-      args: ["Ratio ", ""]
-
 search:
   paths:
     - path: index.php?page=searchlist

@@ -144,7 +144,7 @@ search:
     downloadvolumefactor:
       case:
         "img[src=\"./pic/freeleech.png\"]": 0
-        "*": "1"
+        "*": 1
     uploadvolumefactor:
       text: 1
     minimumratio:

@@ -40,10 +40,6 @@ login:
   test:
     path: torrents.php
 
-ratio:
-  path: torrents.php
-  selector: li#stats_ratio > span
-
 search:
   paths:
     - path: ajax.php

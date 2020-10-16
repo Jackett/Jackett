@@ -66,13 +66,6 @@ login:
 #      path: /
 #      selector: a[href$="/logout"]
 
-ratio:
-  path: /
-  selector: li:has(i.fa-sync-alt)
-  filters:
-    - name: regexp
-      args: "Ratio : (\\d+)"
-
 search:
   paths:
     # https://blutopia.xyz/torrents/filter?

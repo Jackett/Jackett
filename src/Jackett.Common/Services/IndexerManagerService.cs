@@ -44,6 +44,7 @@ namespace Jackett.Common.Services
             {"passtheheadphones", "redacted"},
             {"rstorrent", "redstartorrent"},
             {"tehconnectionme", "anthelion"},
+            {"torrentseed", "latinop2p"},
             {"transmithenet", "nebulance"},
             {"yourexotic", "exoticaz"}
         };

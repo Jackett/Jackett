@@ -75,10 +75,6 @@ login:
     path: browse.php
     selector: a[href="logout.php"]
 
-ratio:
-  path: browse.php
-  selector: div#wel-radio b:nth-child(2)
-
 search:
   paths:
     # http://xwt-classics.net/browse.php?search=ricks&cat=0&incldead=1

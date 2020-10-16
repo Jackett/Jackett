@@ -114,13 +114,6 @@ login:
   test:
     path: my.php
 
-ratio:
-  path: my.php
-  selector: span.smallfont:has(span#sp_signed)
-  filters:
-    - name: regexp
-      args: "分享率 : (.*?)\u00a0\u00a0"
-
 search:
   paths:
     - path: browse.php

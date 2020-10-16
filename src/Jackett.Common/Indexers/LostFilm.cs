@@ -109,7 +109,7 @@ namespace Jackett.Common.Indexers
             Language = "ru-ru";
             Type = "semi-private";
 
-            AddCategoryMapping(1, TorznabCatType.Movies);
+            AddCategoryMapping(1, TorznabCatType.TV);
         }
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()

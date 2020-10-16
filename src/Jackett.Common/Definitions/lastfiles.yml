@@ -99,10 +99,6 @@ login:
   test:
     path: browse.php
 
-ratio:
-  path: browse.php
-  selector: font:contains("Ratio:") ~ font
-
 search:
   paths:
     - path: browse.php

@@ -140,10 +140,6 @@ login:
     path: torrents-search.php
     selector: a[href="account-logout.php"]
 
-ratio:
-  path: torrents-search.php
-  selector: li:contains("Ratio:") a b
-
 search:
   paths:
     # http://amigos-share.club/torrents-search.php?search=&sort=id&order=desc&page=1
