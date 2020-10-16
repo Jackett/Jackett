@@ -171,9 +171,11 @@ namespace Jackett.Common.Indexers
                     if (!isAudio) // audio tracks don't have banner either description
                     {
                         // small cover only for movies
-                        if (!isSerie && !string.IsNullOrWhiteSpace(torrent.Element("smallcover")?.Value))
+                        var smallCover = torrent.Element("smallcover");
+                        var normalCover = torrent.Element("cover");
+                        if (!isSerie && !string.IsNullOrWhiteSpace(smallCover?.Value) && smallCover.Value.StartsWith("https://"))
                             banner = new Uri(torrent.FirstValue("smallcover"));
-                        else if (!string.IsNullOrWhiteSpace(torrent.Element("cover")?.Value))
+                        else if (!string.IsNullOrWhiteSpace(normalCover?.Value) && normalCover.Value.StartsWith("https://"))
                             banner = new Uri(torrent.FirstValue("cover"));
 
                         description = torrent.Element("encodestatus") != null ?
