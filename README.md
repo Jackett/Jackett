@@ -30,6 +30,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * ACGsou (36DM)
  * Anidex
  * AniLibria
+ * Animedia
  * Anime Tosho
  * AniRena
  * AniSource
