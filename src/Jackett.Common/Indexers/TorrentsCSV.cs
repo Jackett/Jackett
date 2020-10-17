@@ -19,7 +19,6 @@ namespace Jackett.Common.Indexers
     public class TorrentsCSV : BaseWebIndexer
     {
         private string SearchEndpoint => SiteLink + "service/search";
-        private string NewEndpoint => SiteLink + "service/new";
 
         private new ConfigurationData configData => base.configData;
 
@@ -56,22 +55,33 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query) {
             var releases = new List<ReleaseInfo>();
-
             var searchString = query.GetQueryString();
+
+            if (string.IsNullOrWhiteSpace(searchString)) // not supported
+            {
+                releases.Add(new ReleaseInfo
+                {
+                    Title = "[NOT IMPLEMENTED] Empty search is unsupported in this indexer",
+                    Guid = new Uri(SiteLink),
+                    Comments = new Uri(SiteLink),
+                    MagnetUri = new Uri("magnet:?xt=urn:btih:3333333333333333333333333333333333333333"), // unknown torrent
+                    Category = new List<int> { TorznabCatType.Other.ID },
+                    PublishDate = new DateTime(),
+                });
+                return releases;
+            }
+
             if (!string.IsNullOrWhiteSpace(searchString) && searchString.Length < 3)
                 return releases; // search needs at least 3 characters
 
             var qc = new NameValueCollection
             {
-                { "size", "100" }
+                { "size", "100" },
+                { "q", searchString }
             };
-            if (!string.IsNullOrWhiteSpace(searchString))
-                qc.Add("q", searchString );
 
-            var searchUrl = (string.IsNullOrWhiteSpace(searchString) ? NewEndpoint : SearchEndpoint)
-                            + "?" + qc.GetQueryString();
+            var searchUrl = SearchEndpoint + "?" + qc.GetQueryString();
             var response = await RequestWithCookiesAndRetryAsync(searchUrl);
-
             try
             {
                 var jsonStart = response.ContentString;
