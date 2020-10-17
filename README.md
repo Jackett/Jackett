@@ -241,6 +241,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Audiobook Torrents (ABT + RNS)
  * AvistaZ (AsiaTorrents)
  * Awesome-HD (AHD)
+ * Borgzelle
  * BTGigs (TG)
  * BTNext (BTNT)
  * BTSCHOOL
