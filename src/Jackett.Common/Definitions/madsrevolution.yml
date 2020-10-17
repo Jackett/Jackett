@@ -123,6 +123,7 @@ search:
   inputs:
     $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}{{ if .Config.freeleech }}action=uploadonly&{{ else }}{{ end }}"
     searchstr: "{{ .Keywords }}"
+    # site does not support imdbid searching or present imdb links in results.
 
   rows:
     selector: table#torrent_table > tbody > tr.torrent:has(a[href^="torrents.php?action=download&id="])
@@ -170,4 +171,9 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
-# engine tbd
+    minimumratio:
+      text: 0.8
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
+# engine n/a
