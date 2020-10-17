@@ -396,6 +396,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * LinkoManija
  * LosslessClub
  * M-Team TP (MTTP)
+ * MaDs Revolution
  * Magico (Trellas)
  * Majomparádé (TurkDepo)
  * MicroBit (µBit)
