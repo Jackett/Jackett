@@ -34,6 +34,7 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "ru-ru";
             Type = "semi-private";
+                    AddCategoryMapping(1, TorznabCatType.TVAnime, "Anime");
         }
 
         private ConfigurationDataBasicLogin Configuration
