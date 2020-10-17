@@ -43,6 +43,7 @@ caps:
   modes:
     search: [q]
     tv-search: [q, season, ep]
+    book-search: [q]
 
 search:
   paths:

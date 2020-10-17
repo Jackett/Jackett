@@ -97,6 +97,7 @@ caps:
     search: [q]
     tv-search: [q]
     music-search: [q]
+    book-search: [q]
 
 search:
   paths:

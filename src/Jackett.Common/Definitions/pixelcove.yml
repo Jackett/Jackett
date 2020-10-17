@@ -57,6 +57,7 @@ caps:
 
   modes:
     search: [q]
+    book-search: [q]
 
 settings:
   - name: username
