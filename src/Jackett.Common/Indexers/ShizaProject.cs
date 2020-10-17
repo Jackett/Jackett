@@ -29,7 +29,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
-                   configData: new ConfigurationDataBasicLogin())
+                   configData: new  ConfigurationDataBasicLoginWithEmail())
         {
             Encoding = Encoding.UTF8;
             Language = "ru-ru";
@@ -37,9 +37,9 @@ namespace Jackett.Common.Indexers
                     AddCategoryMapping(1, TorznabCatType.TVAnime, "Anime");
         }
 
-        private ConfigurationDataBasicLogin Configuration
+        private  ConfigurationDataBasicLoginWithEmail Configuration
         {
-            get => (ConfigurationDataBasicLogin)configData;
+            get => ( ConfigurationDataBasicLoginWithEmail)configData;
             set => configData = value;
         }
 
@@ -49,7 +49,7 @@ namespace Jackett.Common.Indexers
         private string LoginUrl => SiteLink + "accounts/login";
 
         /// <summary>
-        /// https://tr.ShizaProject.com/index.php?do=search
+        /// http://shiza-project.com/releases/search
         /// </summary>
         private string SearchUrl => SiteLink + "releases/search";
 
@@ -59,7 +59,7 @@ namespace Jackett.Common.Indexers
 
             var data = new Dictionary<string, string>
             {
-                { "field-email", Configuration.Username.Value },
+                { "field-email", Configuration.Email.Value },
                 { "field-password", Configuration.Password.Value }
             };
 
