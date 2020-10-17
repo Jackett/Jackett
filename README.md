@@ -110,6 +110,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * RuTracker.RU
  * seleZen
  * Sexy-Pics
+ * ShizaProject
  * shokweb
  * ShowRSS
  * SkyTorrentsClone
