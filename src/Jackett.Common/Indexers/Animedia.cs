@@ -119,18 +119,20 @@ namespace Jackett.Common.Indexers
                 var parser = new HtmlParser();
                 var document = await parser.ParseDocumentAsync(result.ContentString);
 
-                var baseRelease = new ReleaseInfo();
-                baseRelease.Title = composeBaseTitle(document);
-                baseRelease.BannerUrl = new Uri(document.QuerySelector("div.widget__post-info__poster > a").Attributes["href"].Value);
-                baseRelease.Comments = uri;
-                baseRelease.DownloadVolumeFactor = 0;
-                baseRelease.UploadVolumeFactor = 1;
-                baseRelease.Category = new int[]{ TorznabCatType.TVAnime.ID };
-
+                var baseRelease = new ReleaseInfo
+                {
+                    Title = composeBaseTitle(document),
+                    BannerUrl = new Uri(document.QuerySelector("div.widget__post-info__poster > a").Attributes["href"].Value),
+                    Comments = uri,
+                    DownloadVolumeFactor = 0,
+                    UploadVolumeFactor = 1,
+                    Category = new int[]{ TorznabCatType.TVAnime.ID },
+                };
                 foreach (var t in document.QuerySelectorAll("ul.media__tabs__nav > li > a"))
                 {
                     var release = (ReleaseInfo)baseRelease.Clone();
-                    var tr = document.QuerySelector("div" + t.Attributes["href"].Value);
+                    var tr_id = t.Attributes["href"].Value;
+                    var tr = document.QuerySelector("div" + tr_id);
                     release.Title += " - " + composeTitleAdditionalInfo(t, tr);
                     release.Link = new Uri(document.QuerySelector("div.download_tracker > a.btn__green").Attributes["href"].Value);
                     release.MagnetUri = new Uri(document.QuerySelector("div.download_tracker > a.btn__d-gray").Attributes["href"].Value);
@@ -139,6 +141,7 @@ namespace Jackett.Common.Indexers
                     release.Grabs = long.Parse(document.QuerySelector("div.circle_grey_text_top").Text());
                     release.PublishDate = getReleaseDate(tr);
                     release.Size = getReleaseSize(tr);
+                    release.Guid = new Uri(uri.ToString() + tr_id);
                     releases.Add(release);
                 }
             }
