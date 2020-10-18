@@ -33,7 +33,9 @@ namespace Jackett.Common.Indexers
                    name: "Partis",
                    description: "Partis is a SLOVENIAN Private Torrent Tracker",
                    link: "https://www.partis.si/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities{
+                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,

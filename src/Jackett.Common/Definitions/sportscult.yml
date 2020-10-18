@@ -12,6 +12,7 @@ caps:
   categorymappings:
     - {id: 47, cat: TV/Sport, desc: "EPL"}
     - {id: 41, cat: TV/Sport, desc: "American Football"}
+    - {id: 54, cat: TV/Sport, desc: "AutoMotoRacing"}
     - {id: 17, cat: TV/Sport, desc: "Athletics"}
     - {id: 51, cat: TV/Sport, desc: "Baseball"}
     - {id: 34, cat: TV/Sport, desc: "Bodybuilding/Fitness"}
@@ -153,8 +154,10 @@ search:
     date:
       selector: td:nth-child(5)
       filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02/01/2006"
+          args: "02/01/2006 -07:00"
     downloadvolumefactor:
       case:
         img[src="gold/gold.gif"]: 0

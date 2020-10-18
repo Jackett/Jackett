@@ -46,7 +46,9 @@ namespace Jackett.Common.Indexers
                    name: "Internet Archive",
                    description: "Internet Archive is a non-profit digital library offering free universal access to books, movies & music, as well as 406 billion archived web pages",
                    link: "https://archive.org/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities{
+                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,

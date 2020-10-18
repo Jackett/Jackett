@@ -35,7 +35,9 @@ namespace Jackett.Common.Indexers
                    name: "Anthelion", // old name: TehConnection.me
                    description: "A movies tracker",
                    link: "https://anthelion.me/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities {
+                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,

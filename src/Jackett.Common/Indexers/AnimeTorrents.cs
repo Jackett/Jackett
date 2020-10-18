@@ -37,7 +37,9 @@ namespace Jackett.Common.Indexers
                    name: "AnimeTorrents",
                    description: "Definitive source for anime and manga",
                    link: "https://animetorrents.me/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities {
+                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q }
+                   },
                    configService: configService,
                    client: c,
                    logger: l,

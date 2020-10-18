@@ -40,6 +40,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BTDB
  * BTDIGG
  * BTSOW
+ * Byrutor
  * CiliPro (LIAORENCILI)
  * ConCen
  * Corsaro.red
@@ -60,6 +61,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * GamesTorrents
  * GkTorrent
  * GloDLS
+ * GTorrent
  * HDReactor
  * IBit
  * Idope
@@ -71,6 +73,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * KickAssTorrent (kat.li)
  * KickAssTorrent (KATcr)
  * Legit Torrents
+ * LePorno.info
  * LimeTorrents
  * LinuxTracker
  * MacTorrents
@@ -242,6 +245,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Audiobook Torrents (ABT + RNS)
  * AvistaZ (AsiaTorrents)
  * Awesome-HD (AHD)
+ * Borgzelle
  * BTGigs (TG)
  * BTNext (BTNT)
  * BTSCHOOL

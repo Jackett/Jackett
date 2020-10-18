@@ -94,6 +94,7 @@ caps:
 
   modes:
     search: [q]
+    movie-search: [q]
     book-search: [q]
 
 settings:

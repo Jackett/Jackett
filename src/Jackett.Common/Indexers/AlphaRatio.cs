@@ -19,7 +19,7 @@ namespace Jackett.Common.Indexers
                    link: "https://alpharatio.cc/",
                    caps: new TorznabCapabilities
                    {
-                       SupportsImdbMovieSearch = true
+                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q, MovieSearchParam.ImdbId }
                    },
                    configService: configService,
                    client: wc,

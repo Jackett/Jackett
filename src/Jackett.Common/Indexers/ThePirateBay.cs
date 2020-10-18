@@ -22,8 +22,8 @@ namespace Jackett.Common.Indexers
     {
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://thepiratebay.org/",
-            "https://pirateproxy.cloud/",
-            "https://tpb18.ukpass.co/",
+            "https://pirateproxy.dev/",
+            "https://tpb19.ukpass.co/",
             "https://tpb.sadzawka.tk/",
             "https://www.tpbay.win/",
             "https://tpb.cnp.cx/",
@@ -49,6 +49,8 @@ namespace Jackett.Common.Indexers
             "https://knaben.ru/",
             "https://piratebayztemzmv.onion.pet/",
             "https://piratebayztemzmv.onion.ly/",
+            "https://pirateproxy.cloud/",
+            "https://tpb18.ukpass.co/",
         };
 
         private const string KeyInfoHash = "{info_hash}";
@@ -74,7 +76,9 @@ namespace Jackett.Common.Indexers
                 name: "The Pirate Bay",
                 description: "Pirate Bay (TPB) is the galaxy’s most resilient Public BitTorrent site",
                 link: "https://thepiratebay.org/",
-                caps: new TorznabCapabilities(),
+                caps: new TorznabCapabilities {
+                    MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q }
+                },
                 configService: configService,
                 client: client,
                 logger: logger,

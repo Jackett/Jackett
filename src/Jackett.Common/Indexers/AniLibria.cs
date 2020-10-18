@@ -2,23 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using AngleSharp.Dom;
-using AngleSharp.Html.Parser;
-using AngleSharp.Html.Dom;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
-using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System.Text.RegularExpressions;
 
 namespace Jackett.Common.Indexers
 {
@@ -44,11 +37,8 @@ namespace Jackett.Common.Indexers
             // Configure the category mappings
             AddCategoryMapping(1, TorznabCatType.TVAnime, "Anime");
         }
-        private ConfigurationDataAniLibria Configuration
-        {
-            get => (ConfigurationDataAniLibria)configData;
-            set => configData = value;
-        }
+
+        private ConfigurationDataAniLibria Configuration => (ConfigurationDataAniLibria)configData;
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
@@ -66,7 +56,7 @@ namespace Jackett.Common.Indexers
             => query.IsTest || string.IsNullOrWhiteSpace(query.SearchTerm)
             ? await FetchNewReleases()
             : await PerformSearch(query);
-        
+
         private async Task<IEnumerable<ReleaseInfo>> PerformSearch(TorznabQuery query)
         {
             var queryParameters = new NameValueCollection
@@ -75,9 +65,9 @@ namespace Jackett.Common.Indexers
                 { "filter", "names,poster.url,code,torrents.list,season.year" },
             };
             var response = await RequestWithCookiesAndRetryAsync(Configuration.ApiLink.Value + "/searchTitles?" + queryParameters.GetQueryString());
-            if (response.Status != System.Net.HttpStatusCode.OK)
+            if (response.Status != HttpStatusCode.OK)
                 throw new WebException($"AniLibria search returned unexpected result. Expected 200 OK but got {response.Status}.", WebExceptionStatus.ProtocolError);
-            
+
             var results = ParseApiResults(response.ContentString);
             return results.Where(release => query.MatchQueryStringAND(release.Title));
         }
@@ -90,7 +80,7 @@ namespace Jackett.Common.Indexers
                 { "filter", "names,poster.url,code,torrents.list,season.year" },
             };
             var response = await RequestWithCookiesAndRetryAsync(Configuration.ApiLink.Value + "/getUpdates?" + queryParameters.GetQueryString());
-            if (response.Status != System.Net.HttpStatusCode.OK)
+            if (response.Status != HttpStatusCode.OK)
                 throw new WebException($"AniLibria search returned unexpected result. Expected 200 OK but got {response.Status}.", WebExceptionStatus.ProtocolError);
 
             return ParseApiResults(response.ContentString);
@@ -109,13 +99,18 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
             foreach (dynamic r in JArray.Parse(json)) {
-                var baseRelease = new ReleaseInfo();
-                baseRelease.Title = composeTitle(r);
-                baseRelease.BannerUrl = new Uri(Configuration.StaticLink.Value + r.poster.url);
-                baseRelease.Comments = new Uri(SiteLink + "/release/" + r.code + ".html");
-                baseRelease.DownloadVolumeFactor = 0;
-                baseRelease.UploadVolumeFactor = 1;
-                baseRelease.Category = new int[]{ TorznabCatType.TVAnime.ID };
+                var baseRelease = new ReleaseInfo
+                {
+                    Title = composeTitle(r),
+                    BannerUrl = new Uri(Configuration.StaticLink.Value + r.poster.url),
+                    Comments = new Uri(SiteLink + "/release/" + r.code + ".html"),
+                    DownloadVolumeFactor = 0,
+                    UploadVolumeFactor = 1,
+                    Category = new []
+                    {
+                        TorznabCatType.TVAnime.ID
+                    }
+                };
                 foreach (var t in r.torrents.list) {
                     var release = (ReleaseInfo)baseRelease.Clone();
                     release.Title += " [" + t.quality["string"] + "] - " + t.series["string"];
@@ -124,7 +119,8 @@ namespace Jackett.Common.Indexers
                     release.Peers = t.leechers + t.seeders;
                     release.Grabs = t.downloads;
                     release.Link = new Uri(SiteLink + t.url);
-                    release.PublishDate = new System.DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc).AddSeconds(Convert.ToDouble(t.uploaded_timestamp)).ToLocalTime();
+                    release.Guid = new Uri(SiteLink + t.url);
+                    release.PublishDate = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).AddSeconds(Convert.ToDouble(t.uploaded_timestamp)).ToLocalTime();
                     releases.Add(release);
                 }
             }

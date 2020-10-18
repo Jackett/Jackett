@@ -40,7 +40,9 @@ namespace Jackett.Common.Indexers
                    name: "Darmowe torenty",
                    description: "Darmowe torenty is a POLISH Semi-Private Torrent Tracker for MOVIES / TV / GENERAL",
                    link: "https://darmowe-torenty.pl/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities {
+                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,

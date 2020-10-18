@@ -50,7 +50,9 @@ namespace Jackett.Common.Indexers
                    name: "Corsaro.red",
                    description: "Italian Torrents",
                    link: "https://corsaro.red/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities {
+                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,

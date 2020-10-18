@@ -116,10 +116,10 @@ namespace Jackett.Common.Indexers
                 // SupportsImdbTVSearch temporarily disabled due to #8107
                 // SupportsImdbTVSearch = Definition.Caps.Modes.Any(c => c.Key == "tv-search" && c.Value.Contains("imdbid")),
                 SupportsTvdbSearch = Definition.Caps.Modes.Any(c => c.Key == "tv-search" && c.Value.Contains("tvdbid")),
-                SupportsImdbMovieSearch = Definition.Caps.Modes.Any(c => c.Key == "movie-search" && c.Value.Contains("imdbid")),
-                SupportsTmdbMovieSearch = Definition.Caps.Modes.Any(c => c.Key == "movie-search" && c.Value.Contains("tmdbid")),
                 BookSearchAvailable = Definition.Caps.Modes.Any(c => c.Key == "book-search" && c.Value.Contains("author") && c.Value.Contains("title"))
             };
+            if (Definition.Caps.Modes.ContainsKey("movie-search"))
+                TorznabCaps.ParseMovieSearchParams(Definition.Caps.Modes["movie-search"]);
             if (Definition.Caps.Modes.ContainsKey("music-search"))
                 TorznabCaps.SupportedMusicSearchParamsList = Definition.Caps.Modes["music-search"];
 
@@ -1624,10 +1624,10 @@ namespace Jackett.Common.Indexers
                                             if (Filter.Args != null)
                                                 CharacterLimit = int.Parse(Filter.Args);
 
-                                            if (query.ImdbID != null && TorznabCaps.SupportsImdbMovieSearch)
+                                            if (query.ImdbID != null && TorznabCaps.MovieSearchImdbAvailable)
                                                 break; // skip andmatch filter for imdb searches
 
-                                            if (query.TmdbID != null && TorznabCaps.SupportsTmdbMovieSearch)
+                                            if (query.TmdbID != null && TorznabCaps.MovieSearchTmdbAvailable)
                                                 break; // skip andmatch filter for tmdb searches
 
                                             if (query.TvdbID != null && TorznabCaps.SupportsTvdbSearch)

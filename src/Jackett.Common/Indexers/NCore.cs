@@ -48,7 +48,7 @@ namespace Jackett.Common.Indexers
                  link: "https://ncore.cc/",
                  caps: new TorznabCapabilities
                  {
-                     SupportsImdbMovieSearch = true,
+                     MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q, MovieSearchParam.ImdbId }
                      // supported by the site but disabled due to #8107
                      // SupportsImdbTVSearch = true
                  },
@@ -61,6 +61,7 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "hu-hu";
             Type = "private";
+
             AddCategoryMapping("xvid_hun", TorznabCatType.MoviesSD, "Film SD/HU");
             AddCategoryMapping("xvid", TorznabCatType.MoviesSD, "Film SD/EN");
             AddCategoryMapping("dvd_hun", TorznabCatType.MoviesDVD, "Film DVDR/HU");

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Jackett.Common.Indexers.Abstract;
 using Jackett.Common.Models;
@@ -16,7 +17,9 @@ namespace Jackett.Common.Indexers
                    name: "Psytorrents",
                    description: "Psytorrents (PSY) is a Private Torrent Tracker for ELECTRONIC MUSIC",
                    link: "https://psytorrents.info/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities{
+                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,

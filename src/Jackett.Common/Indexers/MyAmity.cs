@@ -33,7 +33,9 @@ namespace Jackett.Common.Indexers
                    name: "myAmity",
                    description: "A German general tracker.",
                    link: "https://ttv2.myamity.info/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities{
+                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,
