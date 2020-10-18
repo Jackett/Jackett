@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Jackett.Common.Indexers.Abstract;
 using Jackett.Common.Models;
@@ -17,7 +18,7 @@ namespace Jackett.Common.Indexers
                    link: "https://avistaz.to/",
                    caps: new TorznabCapabilities
                    {
-                       SupportsImdbMovieSearch = true
+                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q, MovieSearchParam.ImdbId }
                        // SupportsImdbTVSearch = true (supported by the site but disabled due to #8107)
                    },
                    configService: configService,

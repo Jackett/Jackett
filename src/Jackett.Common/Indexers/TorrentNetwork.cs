@@ -38,7 +38,9 @@ namespace Jackett.Common.Indexers
                    name: "Torrent Network",
                    description: "Torrent Network (TN) is a GERMAN Private site for TV / MOVIES / GENERAL",
                    link: "https://tntracker.org/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities {
+                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,

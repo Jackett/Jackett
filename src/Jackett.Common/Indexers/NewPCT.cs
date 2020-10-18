@@ -121,10 +121,9 @@ namespace Jackett.Common.Indexers
                    name: "NewPCT",
                    description: "NewPCT - Descargar peliculas, series y estrenos torrent gratis",
                    link: "https://pctmix.com/",
-                   caps: new TorznabCapabilities(TorznabCatType.TV,
-                                                 TorznabCatType.TVSD,
-                                                 TorznabCatType.TVHD,
-                                                 TorznabCatType.Movies),
+                   caps: new TorznabCapabilities {
+                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,
@@ -146,6 +145,11 @@ namespace Jackett.Common.Indexers
 
             var removeMovieYearItem = new BoolItem { Name = "Remove year from movie results (enable for Radarr)", Value = false };
             configData.AddDynamic("RemoveMovieYear", removeMovieYearItem);
+
+            AddCategoryMapping(1, TorznabCatType.Movies);
+            AddCategoryMapping(2, TorznabCatType.TV);
+            AddCategoryMapping(3, TorznabCatType.TVSD);
+            AddCategoryMapping(4, TorznabCatType.TVHD);
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

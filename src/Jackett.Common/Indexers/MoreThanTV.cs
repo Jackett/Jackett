@@ -33,15 +33,15 @@ namespace Jackett.Common.Indexers
 
         private ConfigurationDataBasicLogin ConfigData => (ConfigurationDataBasicLogin)configData;
 
-        public MoreThanTV(IIndexerConfigurationService configService, Utils.Clients.WebClient c, Logger l, IProtectionService ps)
+        public MoreThanTV(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps)
             : base(id: "morethantv",
                    name: "MoreThanTV",
                    description: "Private torrent tracker for TV / MOVIES, and the internal tracker for the release group DRACULA.",
                    link: "https://www.morethantv.me/",
-                   caps: new TorznabCapabilities(
-                       TorznabCatType.Movies,
-                       TorznabCatType.TV,
-                       TorznabCatType.Other),
+                   caps: new TorznabCapabilities
+                   {
+                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q, MovieSearchParam.ImdbId }
+                   },
                    configService: configService,
                    client: c,
                    logger: l,
@@ -52,7 +52,9 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "private";
 
-            TorznabCaps.SupportsImdbMovieSearch = true;
+            AddCategoryMapping(1, TorznabCatType.Movies);
+            AddCategoryMapping(2, TorznabCatType.TV);
+            AddCategoryMapping(3, TorznabCatType.Other);
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

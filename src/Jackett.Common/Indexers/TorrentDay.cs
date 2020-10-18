@@ -53,7 +53,7 @@ namespace Jackett.Common.Indexers
                    link: "https://tday.love/",
                    caps: new TorznabCapabilities
                    {
-                       SupportsImdbMovieSearch = true
+                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q, MovieSearchParam.ImdbId }
                        // SupportsImdbTVSearch = true (supported by the site but disabled due to #8107)
                    },
                    configService: configService,
@@ -171,7 +171,7 @@ namespace Jackett.Common.Indexers
                 foreach (var row in rows)
                 {
                     var title = (string)row.name;
-                    if ((!query.IsImdbQuery || !TorznabCaps.SupportsImdbMovieSearch) && !query.MatchQueryStringAND(title))
+                    if ((!query.IsImdbQuery || !TorznabCaps.MovieSearchImdbAvailable) && !query.MatchQueryStringAND(title))
                         continue;
                     var torrentId = (long)row.t;
                     var comments = new Uri(SiteLink + "details.php?id=" + torrentId);

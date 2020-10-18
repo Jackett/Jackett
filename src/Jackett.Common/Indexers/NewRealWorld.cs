@@ -34,7 +34,9 @@ namespace Jackett.Common.Indexers
                    name: "New Real World",
                    description: "A German general tracker.",
                    link: "https://nrw-tracker.eu/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities{
+                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,

@@ -25,7 +25,9 @@ namespace Jackett.Common.Indexers
                  name: "TorrentHeaven",
                  description: "A German general tracker.",
                  link: "https://newheaven.nl/",
-                 caps: new TorznabCapabilities(),
+                 caps: new TorznabCapabilities {
+                     MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q }
+                 },
                  configService: configService,
                  client: wc,
                  logger: l,

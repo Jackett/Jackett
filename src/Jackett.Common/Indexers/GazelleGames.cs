@@ -280,7 +280,7 @@ namespace Jackett.Common.Indexers
                             continue;
                         var qDetailsLink = Row.QuerySelector("a[href^=\"torrents.php?id=\"]");
                         var title = qDetailsLink.TextContent.Replace(", Freeleech!", "").Replace(", Neutral Leech!", "");
-                        if (stickyGroup && (query.ImdbID == null || !TorznabCaps.SupportsImdbMovieSearch) && !query.MatchQueryStringAND(title)) // AND match for sticky releases
+                        if (stickyGroup && (query.ImdbID == null || !TorznabCaps.MovieSearchImdbAvailable) && !query.MatchQueryStringAND(title)) // AND match for sticky releases
                             continue;
                         var qDescription = qDetailsLink.QuerySelector("span.torrent_info_tags");
                         var qDLLink = Row.QuerySelector("a[href^=\"torrents.php?action=download\"]");

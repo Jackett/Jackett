@@ -28,7 +28,9 @@ namespace Jackett.Common.Indexers
                    name: "Milkie",
                    description: "Milkie.cc (ME) is private torrent tracker for 0day / general",
                    link: "https://milkie.cc/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities{
+                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,

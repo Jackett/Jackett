@@ -33,7 +33,9 @@ namespace Jackett.Common.Indexers
                    name: "SceneTime",
                    description: "Always on time",
                    link: "https://www.scenetime.com/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities {
+                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q }
+                   },
                    configService: configService,
                    client: w,
                    logger: l,

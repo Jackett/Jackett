@@ -43,7 +43,7 @@ namespace Jackett.Common.Indexers
                    link: "https://www.fuzer.me/",
                    caps: new TorznabCapabilities
                    {
-                       SupportsImdbMovieSearch = true
+                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q, MovieSearchParam.ImdbId }
                    },
                    configService: configService,
                    client: w,

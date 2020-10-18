@@ -352,7 +352,7 @@ namespace Jackett.Server.Controllers
                     return GetErrorXML(201, "Incorrect parameter: invalid imdbid format");
                 }
 
-                if (CurrentQuery.IsMovieSearch && !CurrentIndexer.TorznabCaps.SupportsImdbMovieSearch)
+                if (CurrentQuery.IsMovieSearch && !CurrentIndexer.TorznabCaps.MovieSearchImdbAvailable)
                 {
                     logger.Warn($"A search request with imdbid from {Request.HttpContext.Connection.RemoteIpAddress} was made but the indexer {CurrentIndexer.DisplayName} doesn't support it.");
                     return GetErrorXML(203, "Function Not Available: imdbid is not supported for movie search by this indexer");
@@ -367,7 +367,7 @@ namespace Jackett.Server.Controllers
 
             if (CurrentQuery.TmdbID != null)
             {
-                if (CurrentQuery.IsMovieSearch && !CurrentIndexer.TorznabCaps.SupportsTmdbMovieSearch)
+                if (CurrentQuery.IsMovieSearch && !CurrentIndexer.TorznabCaps.MovieSearchTmdbAvailable)
                 {
                     logger.Warn($"A search request with tmdbid from {Request.HttpContext.Connection.RemoteIpAddress} was made but the indexer {CurrentIndexer.DisplayName} doesn't support it.");
                     return GetErrorXML(203, "Function Not Available: tmdbid is not supported for movie search by this indexer");
