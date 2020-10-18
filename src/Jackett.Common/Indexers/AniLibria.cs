@@ -23,7 +23,13 @@ namespace Jackett.Common.Indexers
                    name: "AniLibria",
                    description: "AniLibria is a Public torrent tracker for anime, voiced on russian by AniLibria team",
                    link: "https://www.anilibria.tv/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities
+                   {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,

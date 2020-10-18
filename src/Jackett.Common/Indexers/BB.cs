@@ -39,7 +39,15 @@ namespace Jackett.Common.Indexers
                    description: "bB is a Private Torrent Tracker for 0DAY / GENERAL",
                    link: StringUtil.FromBase64("aHR0cHM6Ly9iYWNvbmJpdHMub3JnLw=="),
                    caps: new TorznabCapabilities {
-                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q }
+                       // TODO: add music and book search
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q
+                       }
                    },
                    configService: configService,
                    client: w,

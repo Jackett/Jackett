@@ -24,7 +24,13 @@ namespace Jackett.Common.Indexers
                    name: "ExoticaZ",
                    description: "ExoticaZ (YourExotic) is a Private Torrent Tracker for 3X",
                    link: "https://exoticaz.to/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities
+                   {
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q
+                       }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,

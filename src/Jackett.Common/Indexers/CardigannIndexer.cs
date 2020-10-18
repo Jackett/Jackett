@@ -113,11 +113,10 @@ namespace Jackett.Common.Indexers
             Type = Definition.Type;
             TorznabCaps = new TorznabCapabilities
             {
-                // SupportsImdbTVSearch temporarily disabled due to #8107
-                // SupportsImdbTVSearch = Definition.Caps.Modes.Any(c => c.Key == "tv-search" && c.Value.Contains("imdbid")),
-                SupportsTvdbSearch = Definition.Caps.Modes.Any(c => c.Key == "tv-search" && c.Value.Contains("tvdbid")),
                 BookSearchAvailable = Definition.Caps.Modes.Any(c => c.Key == "book-search" && c.Value.Contains("author") && c.Value.Contains("title"))
             };
+            if (Definition.Caps.Modes.ContainsKey("tv-search"))
+                TorznabCaps.ParseTvSearchParams(Definition.Caps.Modes["tv-search"]);
             if (Definition.Caps.Modes.ContainsKey("movie-search"))
                 TorznabCaps.ParseMovieSearchParams(Definition.Caps.Modes["movie-search"]);
             if (Definition.Caps.Modes.ContainsKey("music-search"))
@@ -1630,7 +1629,7 @@ namespace Jackett.Common.Indexers
                                             if (query.TmdbID != null && TorznabCaps.MovieSearchTmdbAvailable)
                                                 break; // skip andmatch filter for tmdb searches
 
-                                            if (query.TvdbID != null && TorznabCaps.SupportsTvdbSearch)
+                                            if (query.TvdbID != null && TorznabCaps.TvSearchTvdbAvailable)
                                                 break; // skip andmatch filter for tvdb searches
 
                                             var queryKeywords = variables[".Keywords"] as string;

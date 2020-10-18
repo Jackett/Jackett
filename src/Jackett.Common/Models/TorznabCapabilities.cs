@@ -5,6 +5,16 @@ using System.Xml.Linq;
 
 namespace Jackett.Common.Models
 {
+    public enum TvSearchParam
+    {
+        Q,
+        Season,
+        Ep,
+        ImdbId,
+        TvdbId,
+        RId,
+    }
+
     public enum MovieSearchParam
     {
         Q,
@@ -19,10 +29,14 @@ namespace Jackett.Common.Models
 
         public bool SearchAvailable { get; set; }
 
-        public bool TVSearchAvailable { get; set; }
-        public bool SupportsImdbTVSearch { get; set; }
-        public bool SupportsTvdbSearch { get; set; }
-        public bool SupportsTVRageSearch { get; set; }
+        public List<TvSearchParam> TvSearchParams;
+        public bool TvSearchAvailable => (TvSearchParams.Count > 0);
+        public bool TvSearchSeasonAvailable => (TvSearchParams.Contains(TvSearchParam.Season));
+        public bool TvSearchEpAvailable => (TvSearchParams.Contains(TvSearchParam.Ep));
+        //TvSearchImdbAvailable temporarily disabled due to #8107
+        public bool TvSearchImdbAvailable => false; // (TvSearchParams.Contains(TvSearchParam.ImdbId));
+        public bool TvSearchTvdbAvailable => (TvSearchParams.Contains(TvSearchParam.TvdbId));
+        public bool TvSearchTvRageAvailable => (TvSearchParams.Contains(TvSearchParam.RId));
 
         public List<MovieSearchParam> MovieSearchParams;
         public bool MovieSearchAvailable => (MovieSearchParams.Count > 0);
@@ -39,29 +53,25 @@ namespace Jackett.Common.Models
         public TorznabCapabilities()
         {
             SearchAvailable = true;
-            TVSearchAvailable = true;
-            SupportsImdbTVSearch = false;
-            SupportsTvdbSearch = false;
-            SupportsTVRageSearch = false;
+            TvSearchParams = new List<TvSearchParam>();
             MovieSearchParams = new List<MovieSearchParam>();
             SupportedMusicSearchParamsList = new List<string>();
             BookSearchAvailable = false;
             Categories = new List<TorznabCategory>();
         }
 
-        private string SupportedTVSearchParams
+        public void ParseTvSearchParams(IEnumerable<string> paramsList)
         {
-            get
-            {
-                var parameters = new List<string>() { "q", "season", "ep" };
-                if (SupportsImdbTVSearch)
-                    parameters.Add("imdbid");
-                if (SupportsTvdbSearch)
-                    parameters.Add("tvdbid");
-                if (SupportsTVRageSearch)
-                    parameters.Add("rid");
-                return string.Join(",", parameters);
-            }
+            if (paramsList == null)
+                return;
+            foreach (var paramStr in paramsList)
+                if (Enum.TryParse(paramStr, true, out TvSearchParam param))
+                    if (!TvSearchParams.Contains(param))
+                        TvSearchParams.Add(param);
+                    else
+                        throw new Exception($"Duplicate tv-search param: {paramStr}");
+                else
+                    throw new Exception($"Not supported tv-search param: {paramStr}");
         }
 
         public void ParseMovieSearchParams(IEnumerable<string> paramsList)
@@ -78,10 +88,25 @@ namespace Jackett.Common.Models
                     throw new Exception($"Not supported movie-search param: {paramStr}");
         }
 
+        private string SupportedTvSearchParams()
+        {
+            var parameters = new List<string> { "q" }; // q is always enabled
+            if (TvSearchSeasonAvailable)
+                parameters.Add("season");
+            if (TvSearchEpAvailable)
+                parameters.Add("ep");
+            if (TvSearchImdbAvailable)
+                parameters.Add("imdbid");
+            if (TvSearchTvdbAvailable)
+                parameters.Add("tvdbid");
+            if (TvSearchTvRageAvailable)
+                parameters.Add("rid");
+            return string.Join(",", parameters);
+        }
+
         private string SupportedMovieSearchParams()
         {
-            // TODO: always enable q? It can't be disabled
-            var parameters = new List<string> { "q" };
+            var parameters = new List<string> { "q" }; // q is always enabled
             if (MovieSearchImdbAvailable)
                 parameters.Add("imdbid");
             if (MovieSearchTmdbAvailable)
@@ -130,8 +155,8 @@ namespace Jackett.Common.Models
                             new XAttribute("supportedParams", "q")
                         ),
                         new XElement("tv-search",
-                            new XAttribute("available", TVSearchAvailable ? "yes" : "no"),
-                            new XAttribute("supportedParams", SupportedTVSearchParams)
+                            new XAttribute("available", TvSearchAvailable ? "yes" : "no"),
+                            new XAttribute("supportedParams", SupportedTvSearchParams())
                         ),
                         new XElement("movie-search",
                             new XAttribute("available", MovieSearchAvailable ? "yes" : "no"),
@@ -174,10 +199,7 @@ namespace Jackett.Common.Models
         public static TorznabCapabilities Concat(TorznabCapabilities lhs, TorznabCapabilities rhs)
         {
             lhs.SearchAvailable = lhs.SearchAvailable || rhs.SearchAvailable;
-            lhs.TVSearchAvailable = lhs.TVSearchAvailable || rhs.TVSearchAvailable;
-            lhs.SupportsImdbTVSearch = lhs.SupportsImdbTVSearch || rhs.SupportsImdbTVSearch;
-            lhs.SupportsTvdbSearch = lhs.SupportsTvdbSearch || rhs.SupportsTvdbSearch;
-            lhs.SupportsTVRageSearch = lhs.SupportsTVRageSearch || rhs.SupportsTVRageSearch;
+            lhs.TvSearchParams = lhs.TvSearchParams.Union(rhs.TvSearchParams).ToList();
             lhs.MovieSearchParams = lhs.MovieSearchParams.Union(rhs.MovieSearchParams).ToList();
             // TODO: add music search
             lhs.BookSearchAvailable = lhs.BookSearchAvailable || rhs.BookSearchAvailable;

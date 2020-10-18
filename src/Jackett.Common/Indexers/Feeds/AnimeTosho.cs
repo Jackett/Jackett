@@ -21,7 +21,13 @@ namespace Jackett.Common.Indexers.Feeds
                    name: "Anime Tosho",
                    description: "AnimeTosho (AT) is an automated service that provides torrent files, magnet links and DDL for all anime releases",
                    link: "https://animetosho.org/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities
+                   {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       }
+                   },
                    configService: configService,
                    client: client,
                    logger: logger,

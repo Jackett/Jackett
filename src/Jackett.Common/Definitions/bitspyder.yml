@@ -45,7 +45,6 @@ caps:
     - {id: 45, cat: Books, desc: "Ethical hacking"}
     - {id: 59, cat: Books, desc: "WEB | SocialMedia"}
 
-
   modes:
     search: [q]
     book-search: [q]

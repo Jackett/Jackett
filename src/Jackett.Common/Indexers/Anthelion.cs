@@ -36,7 +36,14 @@ namespace Jackett.Common.Indexers
                    description: "A movies tracker",
                    link: "https://anthelion.me/",
                    caps: new TorznabCapabilities {
-                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q }
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q
+                       }
                    },
                    configService: configService,
                    client: wc,

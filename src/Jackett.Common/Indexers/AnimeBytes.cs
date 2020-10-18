@@ -44,7 +44,14 @@ namespace Jackett.Common.Indexers
                    configService: configService,
                    client: client,
                    caps: new TorznabCapabilities {
-                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q }
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q
+                       }
                    },
                    logger: l,
                    p: ps,

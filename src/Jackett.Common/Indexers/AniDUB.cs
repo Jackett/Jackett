@@ -32,7 +32,14 @@ namespace Jackett.Common.Indexers
                    name: "AniDUB",
                    description: "AniDUB Tracker is a semi-private russian tracker and release group for anime",
                    link: "https://tr.anidub.com/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities
+                   {
+                       // TODO: add music, movie, book search
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,

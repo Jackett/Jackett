@@ -36,7 +36,13 @@ namespace Jackett.Common.Indexers
                    name: "Shazbat",
                    description: "Modern indexer",
                    link: "https://www.shazbat.tv/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities
+                   {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       }
+                   },
                    configService: configService,
                    client: c,
                    logger: l,

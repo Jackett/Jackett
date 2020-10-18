@@ -38,7 +38,14 @@ namespace Jackett.Common.Indexers
                    link: "https://passthepopcorn.me/",
                    caps: new TorznabCapabilities
                    {
-                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q, MovieSearchParam.ImdbId }
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q, MovieSearchParam.ImdbId
+                       }
                    },
                    configService: configService,
                    client: c,

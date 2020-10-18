@@ -38,8 +38,14 @@ namespace Jackett.Common.Indexers
                  link: "https://tvstore.me/",
                  caps: new TorznabCapabilities
                  {
-                     MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q, MovieSearchParam.ImdbId },
-                     SupportsImdbTVSearch = true
+                     TvSearchParams = new List<TvSearchParam>
+                     {
+                         TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
+                     },
+                     MovieSearchParams = new List<MovieSearchParam>
+                     {
+                         MovieSearchParam.Q, MovieSearchParam.ImdbId
+                     },
                  },
                  configService: configService,
                  client: wc,
@@ -50,6 +56,7 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "hu-hu";
             Type = "private";
+
             AddCategoryMapping(1, TorznabCatType.TV);
             AddCategoryMapping(2, TorznabCatType.TVHD);
             AddCategoryMapping(3, TorznabCatType.TVSD);

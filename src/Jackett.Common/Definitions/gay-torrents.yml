@@ -59,6 +59,7 @@ caps:
 
   modes:
     search: [q]
+    tv-search: [q]
     movie-search: [q]
     book-search: [q]
 

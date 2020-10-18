@@ -12,7 +12,6 @@ using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
-using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 
@@ -32,8 +31,17 @@ namespace Jackett.Common.Indexers
                  name: "TorrentSeeds",
                  description: "TorrentSeeds is a Private site for MOVIES / TV / GENERAL",
                  link: "https://torrentseeds.org/",
-                 caps: new TorznabCapabilities{
-                     MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q }
+                 caps: new TorznabCapabilities
+                 {
+                     // TODO: add music and book search
+                     TvSearchParams = new List<TvSearchParam>
+                     {
+                         TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                     },
+                     MovieSearchParams = new List<MovieSearchParam>
+                     {
+                         MovieSearchParam.Q
+                     }
                  },
                  configService: configService,
                  client: wc,

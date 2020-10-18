@@ -39,7 +39,10 @@ namespace Jackett.Common.Indexers
                    link: "https://pixelhd.me/",
                    caps: new TorznabCapabilities
                    {
-                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q, MovieSearchParam.ImdbId }
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q, MovieSearchParam.ImdbId
+                       }
                    },
                    configService: configService,
                    logger: logger,

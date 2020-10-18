@@ -32,7 +32,13 @@ namespace Jackett.Common.Indexers
                    name: "Animedia",
                    description: "Animedia is a public russian tracker and release group for anime.",
                    link: "https://tt.animedia.tv/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities
+                   {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,
@@ -80,7 +86,7 @@ namespace Jackett.Common.Indexers
             }
 
             const string ReleaseLinksSelector = "a.ads-list__item__title";
-            
+
             var releases = new List<ReleaseInfo>();
 
             try
@@ -157,7 +163,7 @@ namespace Jackett.Common.Indexers
             var name_ru = r.QuerySelector("div.media__post__header > h1").Text().Trim();
             var name_en = r.QuerySelector("div.media__panel > div:nth-of-type(1) > div.col-l:nth-of-type(1) > div > span").Text().Trim();
             var name_orig = r.QuerySelector("div.media__panel > div:nth-of-type(1) > div.col-l:nth-of-type(2) > div > span").Text().Trim();
-            
+
             var title = name_ru + " / " + name_en;
             if (name_en != name_orig) {
                 title += " / " + name_orig;

@@ -24,7 +24,13 @@ namespace Jackett.Common.Indexers
                    name: "ShizaProject",
                    description: "ShizaProject Tracker is a semi-private russian tracker and release group for anime",
                    link: "http://shiza-project.com/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities
+                   {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,
@@ -101,7 +107,7 @@ namespace Jackett.Common.Indexers
             }
 
             const string ReleaseLinksSelector = "article.grid-card > a.card-box";
-            
+
             var releases = new List<ReleaseInfo>();
 
             try

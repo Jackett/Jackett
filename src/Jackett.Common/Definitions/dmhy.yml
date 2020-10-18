@@ -32,6 +32,7 @@ caps:
 
   modes:
     search: [q]
+    tv-search: [q]
     music-search: [q]
     book-search: [q]
 

@@ -39,8 +39,16 @@ namespace Jackett.Common.Indexers
                    name: "ImmortalSeed",
                    description: "ImmortalSeed (iS) is a Private Torrent Tracker for MOVIES / TV / GENERAL",
                    link: "https://immortalseed.me/",
-                   caps: new TorznabCapabilities{
-                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q }
+                   caps: new TorznabCapabilities {
+                       // TODO: add music and book search
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q
+                       }
                    },
                    configService: configService,
                    client: wc,

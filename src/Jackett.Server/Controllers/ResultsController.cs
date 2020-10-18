@@ -358,7 +358,7 @@ namespace Jackett.Server.Controllers
                     return GetErrorXML(203, "Function Not Available: imdbid is not supported for movie search by this indexer");
                 }
 
-                if (CurrentQuery.IsTVSearch && !CurrentIndexer.TorznabCaps.SupportsImdbTVSearch)
+                if (CurrentQuery.IsTVSearch && !CurrentIndexer.TorznabCaps.TvSearchImdbAvailable)
                 {
                     logger.Warn($"A search request with imdbid from {Request.HttpContext.Connection.RemoteIpAddress} was made but the indexer {CurrentIndexer.DisplayName} doesn't support it.");
                     return GetErrorXML(203, "Function Not Available: imdbid is not supported for TV search by this indexer");
@@ -376,7 +376,7 @@ namespace Jackett.Server.Controllers
 
             if (CurrentQuery.TvdbID != null)
             {
-                if (CurrentQuery.IsTVSearch && !CurrentIndexer.TorznabCaps.SupportsTvdbSearch)
+                if (CurrentQuery.IsTVSearch && !CurrentIndexer.TorznabCaps.TvSearchAvailable)
                 {
                     logger.Warn($"A search request with tvdbid from {Request.HttpContext.Connection.RemoteIpAddress} was made but the indexer {CurrentIndexer.DisplayName} doesn't support it.");
                     return GetErrorXML(203, "Function Not Available: tvdbid is not supported for movie search by this indexer");

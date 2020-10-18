@@ -98,8 +98,15 @@ namespace Jackett.Common.Indexers
                    name: "LostFilm.tv",
                    description: "Unique portal about foreign series",
                    link: "https://www.lostfilm.run/",
-                   caps: new TorznabCapabilities{
-                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q }
+                   caps: new TorznabCapabilities {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q
+                       }
                    },
                    configService: configService,
                    client: wc,
@@ -111,6 +118,7 @@ namespace Jackett.Common.Indexers
             Language = "ru-ru";
             Type = "semi-private";
 
+            // TODO: review if there is only this category (movie search is enabled)
             AddCategoryMapping(1, TorznabCatType.TV);
         }
 
