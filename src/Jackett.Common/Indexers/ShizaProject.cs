@@ -38,11 +38,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(1, TorznabCatType.TVAnime, "Anime");
         }
 
-        private  ConfigurationDataBasicLoginWithEmail Configuration
-        {
-            get => ( ConfigurationDataBasicLoginWithEmail)configData;
-            set => configData = value;
-        }
+        private ConfigurationDataBasicLoginWithEmail Configuration => (ConfigurationDataBasicLoginWithEmail)configData;
 
         /// <summary>
         /// http://shiza-project.com/accounts/login
@@ -149,25 +145,29 @@ namespace Jackett.Common.Indexers
                 var document = await parser.ParseDocumentAsync(result.ContentString);
                 var r = document.QuerySelector("div.release > div.wrapper-release");
 
-                var baseRelease = new ReleaseInfo();
-                baseRelease.Title = composeBaseTitle(r);
-                baseRelease.BannerUrl = new Uri(SiteLink + r.QuerySelector("a[data-fancybox]").Attributes["href"].Value);
-                baseRelease.Comments = uri;
-                baseRelease.DownloadVolumeFactor = 0;
-                baseRelease.UploadVolumeFactor = 1;
-                baseRelease.Category = new int[]{ TorznabCatType.TVAnime.ID };
+                var baseRelease = new ReleaseInfo(){
+                    Title = composeBaseTitle(r),
+                    BannerUrl = new Uri(SiteLink + r.QuerySelector("a[data-fancybox]").Attributes["href"].Value),
+                    Comments = uri,
+                    DownloadVolumeFactor = 0,
+                    UploadVolumeFactor = 1,
+                    Category = new int[]{ TorznabCatType.TVAnime.ID },
+                };
 
                 foreach (var t in r.QuerySelectorAll("a[data-toggle]"))
                 {
                     var release = (ReleaseInfo)baseRelease.Clone();
                     release.Title += " " + t.Text().Trim();
-                    var tr = r.QuerySelector("div" + t.Attributes["href"].Value);
+                    var tr_id = t.Attributes["href"].Value;
+                    var tr = r.QuerySelector("div" + tr_id);
                     release.Link = new Uri(tr.QuerySelector("a.button--success").Attributes["href"].Value);
                     release.Seeders = long.Parse(tr.QuerySelector("div.torrent-counter > div:nth-of-type(1)").Text().Trim().Split(' ')[0]);
                     release.Peers = release.Seeders + long.Parse(tr.QuerySelector("div.torrent-counter > div:nth-of-type(2)").Text().Trim().Split(' ')[0]);
                     release.Grabs = long.Parse(tr.QuerySelector("div.torrent-counter > div:nth-of-type(3)").Text().Trim().Split(' ')[0]);
                     release.PublishDate = DateTime.Parse(tr.QuerySelector("time.torrent-time").Text());
                     release.Size = getReleaseSize(tr);
+                    release.Guid = new Uri(uri.ToString() + tr_id);
+                    logger.Info(release.Guid);
                     releases.Add(release);
                 }
             }
