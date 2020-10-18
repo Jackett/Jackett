@@ -43,6 +43,11 @@ namespace Jackett.Common.Indexers
             {"11", "portugués"},
             {"12", "esperanto"}
         };
+        
+        public override string[] AlternativeSiteLinks { get; protected set; } = {
+            "https://epublibre.org/",
+            "https://epublibre.unblockit.lat/"
+        };
 
         public EpubLibre(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base(id: "epublibre",
