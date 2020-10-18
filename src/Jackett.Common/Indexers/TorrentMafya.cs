@@ -121,15 +121,6 @@ namespace Jackett.Common.Indexers
             var sizeContent = mainColumn.QuerySelector("span.boyut")?.TextContent;
             var magnetLink = mainColumn.QuerySelector("a[href^=\"magnet:?xt=\"]")?.GetAttribute("href");
             var fileLink = mainColumn.QuerySelector("a[title^=\"İndir\"]")?.GetAttribute("href");
-            var rowLink = (Uri)null;
-            if (!string.IsNullOrEmpty(magnetLink))
-            {
-                rowLink = new Uri(magnetLink);
-            } else if (!string.IsNullOrEmpty(fileLink))
-            {
-                rowLink = new Uri(fileLink);
-            }
-
             var detailsLink = new Uri(firstColumn.QuerySelector("a").GetAttribute("href"));
             var category = ParseReleaseCategory(firstColumn.QuerySelector("i")?.ClassList);
             var seederContent = mainColumn.QuerySelector("span.sayiGonderen")?.TextContent;
@@ -140,14 +131,15 @@ namespace Jackett.Common.Indexers
             {
                 Title = firstColumn.QuerySelector("a")?.TextContent,
                 Comments = detailsLink,
+                Guid = detailsLink,
+                Link = string.IsNullOrWhiteSpace(fileLink) ? null : new Uri(fileLink),
+                MagnetUri = string.IsNullOrWhiteSpace(magnetLink) ? null : new Uri(magnetLink),
                 PublishDate = ParseReleasePublishDate(row.col2),
                 Category = category,
                 Seeders = seeders,
                 Peers = seeders + leechers,
                 DownloadVolumeFactor = 0,
                 UploadVolumeFactor = 1,
-                Link = rowLink,
-                Guid = rowLink,
                 Size = !string.IsNullOrEmpty(sizeContent) ? ReleaseInfo.GetBytes(sizeContent) : 0
             };
         }
