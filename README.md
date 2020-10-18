@@ -61,6 +61,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * GamesTorrents
  * GkTorrent
  * GloDLS
+ * GTorrent
  * HDReactor
  * IBit
  * Idope
