@@ -1,50 +1,54 @@
 ---
-id: torrentseed
-name: TorrentSeed
-description: "TorrentSeed is a Latin American Private Torrent Tracker for MOVIES / TV / GENERAL"
+id: latinop2p
+name: LatinoP2P
+description: "LatinoP2P is a Latin American Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: es-419
 type: private
 encoding: UTF-8
 links:
+  - https://latinop2p.com/
+legacylinks:
   - https://torrentseed.cl/
 
 caps:
   categorymappings:
-    - {id: 49, cat: PC/Phone-Android, desc: "Android"}
-    - {id: 15, cat: TV/Anime, desc: "Anime"}
-    - {id: 47, cat: Books/Comics, desc: "Comic"}
-    - {id: 33, cat: TV/Sport, desc: "Deportes"}
-    - {id: 62, cat: TV/Documentary, desc: "Documentales"}
-    - {id: 38, cat: Books/Other, desc: "e-Learning"}
-    - {id: 39, cat: Console/NDS, desc: "Juegos Nintendo"}
-    - {id: 42, cat: PC/Games, desc: "Juegos PC"}
-    - {id: 41, cat: Console/PS4, desc: "Juegos PlayStation"}
-    - {id: 40, cat: Console/Xbox, desc: "Juegos XBOX"}
-    - {id: 14, cat: Books, desc: "Libros"}
-    - {id: 50, cat: PC, desc: "Programas Linux"}
-    - {id: 52, cat: PC/Mac, desc: "Programas MacOS"}
-    - {id: 45, cat: Audio/Video, desc: "Musica Video"}
-    - {id: 43, cat: Audio/Lossless, desc: "Musica FLAC"}
-    - {id: 44, cat: Audio/MP3, desc: "Musica MP3"}
-    - {id: 48, cat: Other, desc: "Otros"}
-    - {id: 55, cat: Movies/HD, desc: "Peliculas 1080p"}
-    - {id: 54, cat: Movies/HD, desc: "Peliculas 1440p (2K)"}
-    - {id: 56, cat: Movies/3D, desc: "Peliculas  3D"}
-    - {id: 57, cat: Movies/UHD, desc: "Peliculas  4K"}
-    - {id: 58, cat: Movies/HD, desc: "Peliculas 720p"}
-    - {id: 59, cat: Movies/BluRay, desc: "Peliculas Bluray"}
-    - {id: 60, cat: Movies/DVD, desc: "Peliculas DVD"}
-    - {id: 61, cat: Movies/SD, desc: "Peliculas SD"}
-    - {id: 53, cat: TV, desc: "TV Series"}
-    - {id: 11, cat: Other, desc: "VIP"}
-    - {id: 51, cat: PC/0day, desc: "Programas Windows"}
-    - {id: 12, cat: XXX, desc: "XXX"}
+    - {id: 3, cat: PC/Phone-Android, desc: "Android"}
+    - {id: 4, cat: TV/Anime, desc: "Anime"}
+    - {id: 5, cat: Books/Comics, desc: "Comic"}
+    - {id: 7, cat: TV/Documentary, desc: "Documentales"}
+    - {id: 13, cat: Books/Other, desc: "e-Learning"}
+    - {id: 12, cat: Books/Ebook, desc: "eBooks"}
+    - {id: 8, cat: Console/NDS, desc: "Juegos Nintendo"}
+    - {id: 17, cat: PC/Games, desc: "Juegos PC"}
+    - {id: 18, cat: Console/PS4, desc: "Juegos PlayStation"}
+    - {id: 19, cat: Console/Xbox, desc: "Juegos Xbox"}
+    - {id: 20, cat: PC, desc: "Programas Linux"}
+    - {id: 21, cat: PC/Mac, desc: "Programas MacOS"}
+    - {id: 9, cat: Movies/HD, desc: "Peliculas 1080p"}
+    - {id: 27, cat: Movies/HD, desc: "Peliculas 1440p (2K)"}
+    - {id: 28, cat: Movies/3D, desc: "Peliculas  3D"}
+    - {id: 29, cat: Movies/UHD, desc: "Peliculas  4K"}
+    - {id: 10, cat: Movies/HD, desc: "Peliculas 720p"}
+    - {id: 30, cat: Movies/BluRay, desc: "Peliculas Bluray"}
+    - {id: 31, cat: Movies/DVD, desc: "Peliculas DVD"}
+    - {id: 32, cat: Movies/SD, desc: "Peliculas SD"}
+    - {id: 22, cat: Audio/Lossless, desc: "Musica FLAC"}
+    - {id: 23, cat: Audio/MP3, desc: "Musica MP3"}
+    - {id: 24, cat: Audio/Other, desc: "Musica Otros"}
+    - {id: 25, cat: Audio/Video, desc: "Musica Video"}
+    - {id: 26, cat: Other, desc: "Otros"}
+    - {id: 6, cat: TV/Sport, desc: "Deportes"}
+    - {id: 16, cat: TV, desc: "TV Series"}
+    - {id: 15, cat: Other, desc: "VIP"}
+    - {id: 33, cat: PC/0day, desc: "Programas Windows"}
+    - {id: 14, cat: XXX, desc: "XXX"}
 
   modes:
     search: [q, imdbid]
     tv-search: [q, season, ep, imdbid]
     movie-search: [q, imdbid]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -80,15 +84,8 @@ login:
   error:
     - selector: table:has(td.thead:contains("error"))
   test:
-    path: messages.php
+    path: index.php
     selector: a[href*="/logout.php?logouthash="]
-
-ratio:
-  path: messages.php
-  selector: div.welcomeback
-  filters:
-    - name: regexp
-      args: "Ratio: (.+?) |  Bonus:"
 
 search:
   paths:
@@ -97,6 +94,7 @@ search:
     # does not support multi categories so defaulting to ALL
     do: search
     category: 0
+    # yes incldead, no activeonly
     include_dead_torrents: yes
     keywords: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
     # t_name, t_description, t_both, t_uploader, t_genre
@@ -138,7 +136,7 @@ search:
           args: (\d{2}-\d{2}-\d{4} \d{2}:\d{2})
       filters:
         - name: append
-          args: " +02:00"
+          args: " +02:00" # EET
         - name: dateparse
           args: "02-01-2006 15:04 -07:00"
     download:

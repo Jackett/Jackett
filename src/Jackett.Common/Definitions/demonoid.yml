@@ -10,7 +10,7 @@ links:
   - https://www.demonoid.is/
   - https://www.dnoid.to/
   - https://www.dnoid.pw/
-  - https://demonoid.unblockit.top/
+  - https://demonoid.unblockit.lat/
 legacylinks:
   - https://demonoid.unblockit.pro/
   - https://demonoid.unblockit.one/
@@ -23,6 +23,7 @@ legacylinks:
   - https://demonoid.unblockit.pw/
   - https://demonoid.unblockit.id/
   - https://demonoid.unblockit.win/
+  - https://demonoid.unblockit.top/
 
 caps:
   categorymappings:
@@ -280,6 +281,7 @@ caps:
     tv-search: [q, season, ep, imdbid]
     movie-search: [q, imdbid]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: cookie

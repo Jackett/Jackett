@@ -8,8 +8,7 @@ encoding: UTF-8
 followredirect: true
 links:
   - https://newkatcr.co/
-  - https://kat.root.yt/
-  - https://kat.unblockit.top/
+  - https://kat.unblockit.lat/
   - https://katcr.unblocked.rest/
 legacylinks:
   - https://kickasstorrent.cr/ # possible 3rd kickasstorrent site/clone?
@@ -29,6 +28,8 @@ legacylinks:
   - https://katcr.unblocked.bar/
   - https://katcr.proxyportal.pw/
   - https://katcr.uk-unblock.pro/
+  - https://kat.unblockit.top/
+  - https://kat.root.yt/ # 403 Forbidden
 
 caps:
   categorymappings:
@@ -230,4 +231,12 @@ search:
       text: 0
     uploadvolumefactor:
       text: 1
+    imdb:
+      selector: a[href^="/find/content/ttimdb/tt"]
+      attribute: href
+      filters:
+        - name: regexp
+          args: "/(tt\\d+)/"
+        - name: append
+          args: "https://www.imdb.com/title/"
 # engine n/a

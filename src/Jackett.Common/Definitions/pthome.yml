@@ -29,6 +29,7 @@ caps:
     tv-search: [q, season, ep, imdbid]
     movie-search: [q, imdbid]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: cookie
@@ -53,15 +54,6 @@ login:
     cookie: "{{ .Config.cookie }}"
   test:
     path: index.php
-
-ratio:
-  path: index.php
-  selector: table tr td.bottom
-  filters:
-    - name: replace
-      args: ["分享率:", "Ratio:"] # for simplified chinese language setting
-    - name: regexp
-      args: "Ratio:\\s(.*?)\\s\\s"
 
 search:
   paths:

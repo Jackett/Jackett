@@ -10,7 +10,7 @@ links:
   - https://www.torlock.com/
   - https://www.torlock2.com/
   - https://www.torlock.icu/
-  - https://torlock.unblockit.top/
+  - https://torlock.unblockit.lat/
 legacylinks:
   - https://torlock.com/
   - https://torlock.unblockit.pro/
@@ -19,6 +19,7 @@ legacylinks:
   - https://torlock.unblockit.pw/
   - https://torlock.unblockit.id/
   - https://torlock.unblockit.win/
+  - https://torlock.unblockit.top/
 
 caps:
   categorymappings:
@@ -39,6 +40,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: sort

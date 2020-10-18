@@ -9,7 +9,7 @@ followredirect: true
 links:
   - https://www.ettvcentral.com/
   - https://ettv.unblockninja.com/
-  - https://ettv.unblockit.top/
+  - https://ettv.unblockit.lat/
   - https://ettv.unblocked.rest/
 legacylinks:
   - https://www.ettv.tv/
@@ -31,6 +31,7 @@ legacylinks:
   - https://ettv.uk-unblock.pro/
   - https://ettv.root.yt/ # currently redirects to ettvcentral.com
   - https://www.ettv.be/
+  - https://ettv.unblockit.top/
 
 caps:
   categorymappings:
@@ -92,6 +93,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: sort

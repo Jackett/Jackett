@@ -7,7 +7,7 @@ using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 using Assert = NUnit.Framework.Assert;
 
-namespace Jackett.Test.Definitions
+namespace Jackett.Test.Common.Definitions
 {
     [TestFixture]
     public class DefinitionsParserTests

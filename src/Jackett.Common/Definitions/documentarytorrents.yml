@@ -76,6 +76,7 @@ caps:
     search: [q]
     tv-search: [q]
     movie-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -117,10 +118,6 @@ login:
   test:
     path: index.php
     selector: a[href$="/account-logout.php"]
-
-ratio:
-  path: index.php
-  selector: img[title="Ratio"]
 
 search:
   paths:

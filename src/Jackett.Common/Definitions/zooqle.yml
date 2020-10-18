@@ -9,7 +9,7 @@ followredirect: true
 links:
   - https://zooqle.com/
   - https://zooqle.unblockninja.com/
-  - https://zooqle.unblockit.top/
+  - https://zooqle.unblockit.lat/
   - https://zooqle.unblocked.rest/
 legacylinks:
   - https://zooqle.unblockit.pro/
@@ -26,6 +26,7 @@ legacylinks:
   - https://zooqle.unblocked.bar/
   - https://zooqle.proxyportal.pw/
   - https://zooqle.uk-unblock.pro/
+  - https://zooqle.unblockit.top/
 
 caps:
   categories:
@@ -44,6 +45,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: sort

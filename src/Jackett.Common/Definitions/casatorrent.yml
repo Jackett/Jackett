@@ -69,6 +69,7 @@ caps:
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -128,10 +129,6 @@ login:
   test:
     path: torrents-search.php
     selector: a[href="account-logout.php"]
-
-ratio:
-  path: torrents-search.php
-  selector: div#infobar b
 
 search:
   paths:

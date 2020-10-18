@@ -18,17 +18,19 @@ caps:
     - {id: 21, cat: Movies/HD, desc: "Full HD"}
     - {id: 31, cat: TV/HD, desc: "Serie TV 720P"}
     - {id: 25, cat: Audio, desc: "Musica"}
+    - {id: 26, cat: PC/Games, desc: "PC-Game"}
     - {id: 27, cat: PC, desc: "Software"}
     - {id: 28, cat: Books, desc: "Letture"}
     - {id: 32, cat: Other, desc: "Navigazione Saghe"}
-    - {id: 35, cat: Other, desc: "Cat. provvisoria"}
+    - {id: 35, cat: Other, desc: "Happy Hour"}
     - {id: 37, cat: Other, desc: "Tutte le saghe"}
 
   modes:
-    search: [q, imdbid]
-    tv-search: [q, season, ep, imdbid]
-    movie-search: [q, imdbid]
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -63,9 +65,8 @@ settings:
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
 
 login:
-  path: sbg_login_new.php
-  method: form
-  form: form[action="index.php?page=login"]
+  path: index.php?page=login
+  method: post
   inputs:
     uid: "{{ .Config.username }}"
     pwd: "{{ .Config.password }}"
@@ -95,16 +96,16 @@ search:
     - name: replace
       args: ["-", ""]
   inputs:
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBIDShort }}{{ else }}{{ .Keywords }}{{ end }}"
+    search: "{{ .Keywords }}"
     page: torrents
     category: "{{ range .Categories }}{{.}};{{end}}"
-    options: "{{ if .Query.IMDBID }}4{{ else }}0{{ end }}"
-    # 0 all 1 active 2 dead
+    # 0 all, 1 active, 2 dead
     active: 0
     # 0 filename, 1 file&descr, 2 descr, 3 uploader, 5 gold, 6 silver, 7 bronze
     options: "{{ if .Config.freeleech }}5{{ else }}0{{ end }}"
     order: "{{ .Config.sort }}"
     by: "{{ .Config.type }}"
+    # does not support imdbid searching or provide imdb link in results.
 
   rows:
     selector: table > tbody > tr > td > table.lista > tbody > tr:has(a[href^="index.php?page=torrent-details&id="])
@@ -142,7 +143,7 @@ search:
       selector: td:nth-last-child(7)
       filters:
         - name: append
-          args: " +01:00"
+          args: " +01:00" # CET
         - name: dateparse
           args: "02/01/2006 -07:00"
     grabs:
@@ -173,5 +174,8 @@ search:
         img[alt="10x Upload Multiplier"]: 10
         "*": 1
     minimumratio:
-      text: 0.9
+      text: 1.0
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
 # xbtitFM v2.2.09

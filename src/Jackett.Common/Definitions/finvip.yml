@@ -38,7 +38,7 @@ caps:
     - {id: 1, cat: TV/SD, desc: "Sarjat DVD (series)"}
     - {id: 30, cat: TV, desc: "Sarjat (series)"}
     - {id: 41, cat: TV/HD, desc: "Sarjat HD (series)"}
-    - {id: 43, cat: TV, desc: "Salkkarit (?)"}
+    - {id: 43, cat: TV, desc: "Salkkarit (Soap Opera)"}
     - {id: 40, cat: TV/Sport, desc: "Urheilu (sport)"}
     - {id: 31, cat: Other, desc: "Muut (other)"}
 
@@ -47,6 +47,7 @@ caps:
     tv-search: [q, season, ep, imdbid]
     movie-search: [q, imdbid]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -153,8 +154,10 @@ search:
       # 23/12/2019 07:57
       selector: td:nth-last-child(4)
       filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02/01/2006 15:04"
+          args: "02/01/2006 15:04 -07:00"
     description:
       selector: td a[href^="index.php?page=torrent-details"]
       remove: a

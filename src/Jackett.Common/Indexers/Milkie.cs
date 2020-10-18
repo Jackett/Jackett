@@ -76,8 +76,8 @@ namespace Jackett.Common.Indexers
                 { "ps", "100" }
             };
 
-            if (!string.IsNullOrWhiteSpace(query.SearchTerm))
-                qc.Add("query", query.SearchTerm);
+            if (!string.IsNullOrWhiteSpace(query.GetQueryString()))
+                qc.Add("query", query.GetQueryString());
 
             if (query.HasSpecifiedCategories)
                 qc.Add("categories", string.Join(",", MapTorznabCapsToTrackers(query)));

@@ -29,7 +29,7 @@ namespace Jackett.Common.Indexers
                    name: "Nebulance",
                    description: "At Nebulance we will change the way you think about TV",
                    link: "https://nebulance.io/",
-                   caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                   caps: new TorznabCapabilities(),
                    configService: configService,
                    client: c,
                    logger: l,
@@ -41,6 +41,10 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
+
+            AddCategoryMapping(1, TorznabCatType.TV);
+            AddCategoryMapping(2, TorznabCatType.TVSD);
+            AddCategoryMapping(3, TorznabCatType.TVHD);
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -150,6 +154,8 @@ namespace Jackett.Common.Indexers
                         Seeders = seeds,
                         Peers = seeds + leechers,
                         BannerUrl = bannerUri,
+                        MinimumRatio = 0, // ratioless
+                        MinimumSeedTime = 86400, // 24 hours
                         DownloadVolumeFactor = 0, // ratioless tracker
                         UploadVolumeFactor = 1
                     };

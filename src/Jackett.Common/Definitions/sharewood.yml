@@ -52,6 +52,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -119,13 +120,6 @@ login:
 #      path: /
 #      selector: a[href$="/logout"]
 
-ratio:
-  path: /
-  selector: li:has(i.fa-signal)
-  filters:
-    - name: regexp
-      args: "Ratio : (\\d+)"
-
 search:
   paths:
     - path: filterTorrents
@@ -188,6 +182,8 @@ search:
       filters:
         - name: replace
           args: ["il y a ", ""]
+        - name: replace
+          args: ["seconde", "second"]
         - name: replace
           args: ["heure", "hour"]
         - name: replace

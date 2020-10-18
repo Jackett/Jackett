@@ -22,7 +22,7 @@ caps:
     - {id: 10, cat: Movies/3D, desc: "Movies 3D"}
     - {id: 11, cat: Movies, desc: "Movies Pack"}
     - {id: 12, cat: Movies/BluRay, desc: "Movies Bluray"}
-    - {id: 33, cat: Movies/BluRay, desc: "Movies  Bluray - Rips"}
+    - {id: 33, cat: Movies/HD, desc: "Movies  Full-HD"}
     - {id: 14, cat: TV/HD, desc: "TV HD"}
     - {id: 15, cat: TV/WEB-DL, desc: "TV WEB-DL"}
     - {id: 16, cat: TV/SD, desc: "TV SD"}
@@ -43,6 +43,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -130,8 +131,10 @@ search:
     date:
       selector: td:nth-child(5)
       filters:
+        - name: append
+          args: " +02:00" # EET
         - name: dateparse
-          args: "02.01.200615:04:05"
+          args: "02.01.200615:04:05 -07:00"
     grabs:
       selector: td:nth-child(7)
     seeders:

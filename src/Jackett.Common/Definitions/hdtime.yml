@@ -29,6 +29,7 @@ caps:
     tv-search: [q, season, ep, imdbid]
     movie-search: [q, imdbid]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -128,7 +129,7 @@ search:
       optional: true
       filters:
         - name: append
-          args: " +08:00"
+          args: " +08:00" # CST
         - name: dateparse
           args: "2006-01-02 15:04:05 -07:00"
     date:
@@ -137,7 +138,7 @@ search:
       optional: true
       filters:
         - name: append
-          args: " +08:00"
+          args: " +08:00" # CST
         - name: dateparse
           args: "2006-01-0215:04:05 -07:00"
     size:

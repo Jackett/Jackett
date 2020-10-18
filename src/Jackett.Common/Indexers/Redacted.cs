@@ -13,7 +13,7 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class Redacted : GazelleTracker
     {
-        protected override string DownloadUrl => SiteLink + "ajax.php?action=download&usetoken=" + (useTokens ? "1" : "0") + "&id=";
+        protected override string DownloadUrl => SiteLink + "torrents.php?action=download&usetoken=" + (useTokens ? "1" : "0") + "&id=";
 
         public Redacted(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base(id: "redacted",
@@ -29,13 +29,14 @@ namespace Jackett.Common.Indexers
                    logger: l,
                    p: ps,
                    supportsFreeleechTokens: true,
-                   has2Fa: false,
-                   useApiKey: true,
-                   instructionMessageOptional: "<ol><li>Go to Redacted's site and open your account settings.</li><li>Go to <b>Access Settings</b> tab and copy the API Key.</li><li>Ensure that you've checked <b>Confirm API Key</b>.</li><li>Finally, click <b>Save Profile</b>.</li></ol>"
+                   has2Fa: true,
+                   useApiKey: false
                 )
         {
             Language = "en-us";
             Type = "private";
+
+            webclient.EmulateBrowser = false; // Issue #9751
 
             AddCategoryMapping(1, TorznabCatType.Audio, "Music");
             AddCategoryMapping(2, TorznabCatType.PC, "Applications");

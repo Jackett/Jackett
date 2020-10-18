@@ -55,6 +55,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -97,13 +98,6 @@ login:
   test:
     path: /
     selector: a[href="/logout.php"]
-
-ratio:
-  path: /
-  selector: p.sajatadatok font
-  filters:
-    - name: replace
-      args: [",", ""]
 
 search:
   paths:

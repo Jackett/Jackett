@@ -8,7 +8,7 @@ encoding: UTF-8
 followredirect: true
 links:
   - https://www.torrentdownload.info/
-  - https://torrentdownload.unblockit.top/
+  - https://torrentdownload.unblockit.lat/
   - https://torrentdownload.unblocked.rest/
 legacylinks:
   - https://torrentdownload.unblockit.pro/
@@ -25,6 +25,7 @@ legacylinks:
   - https://torrentdownload.unblocked.bar/
   - https://torrentdownload.proxyportal.pw/
   - https://torrentdownload.uk-unblock.pro/
+  - https://torrentdownload.unblockit.top/
 
 caps:
   categories:
@@ -67,12 +68,14 @@ caps:
     "Television": TV
     "VideoMobile": Movies
     "XXX": XXX
+    "XXXVideo": XXX
 
   modes:
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: cookie

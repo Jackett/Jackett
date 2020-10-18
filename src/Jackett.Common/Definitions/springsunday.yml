@@ -67,15 +67,6 @@ login:
     path: index.php
     selector: a[href="logout.php"]
 
-ratio:
-  path: index.php
-  selector: span.medium:has(a[href^="userdetails.php"])
-  filters:
-    - name: replace
-      args: ["分享率：", "Ratio: "] # for simplified chinese language setting
-    - name: regexp
-      args: "Ratio: (\\d+)"
-
 search:
   paths:
     - path: torrents.php

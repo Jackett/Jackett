@@ -22,6 +22,7 @@ caps:
     tv-search: [q, season, ep, imdbid]
     movie-search: [q, imdbid]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -30,6 +31,10 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -66,21 +71,20 @@ login:
   test:
     path: torrents.php
 
-ratio:
-  path: torrents.php
-  selector: div.user-info-extend > dl > dt:contains("Ratio:") + dd
-
 search:
   paths:
     - path: torrents.php
   inputs:
     $raw: "{{ range .Categories }}cat={{.}}&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-    search_area: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    # 0 title, 1 descr, 2 uploader, 4 imdb url
+    search_area: "{{ if .Query.IMDBID }}4{{ else }}0{{ end }}"
+    # 0 AND, 1 OR, 2 exact
     search_mode: 0
-    spstate: 0
-    inclbookmarked: 0
-    incldead: 1
+    # 0 all, 1 normal, 2 free, 3 2x, 4 2xFree, 4 50%, 6 2x 50%, 7 30%
+    spstate: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
+    # 0 incldead, 1 active , 2 dead
+    incldead: 0
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
 
@@ -90,15 +94,15 @@ search:
       - name: andmatch
 
   fields:
-    title:
-      selector: td.name > div > a[href*="-torrent-"][title]
-      attribute: title
     category:
       selector: td.category > a
       attribute: href
       filters:
         - name: querystring
           args: cat
+    title:
+      selector: td.name > div > a[href*="-torrent-"][title]
+      attribute: title
     details:
       selector: td.name > div > a[href*="-torrent-"][title]
       attribute: href
@@ -117,8 +121,33 @@ search:
         - name: prepend
           args: "download.php?id="
     date:
-      selector: td:nth-child(5)
+      # 2020-10-05<br/>14:43:24
+      selector: td:nth-child(5):contains("-")
+      optional: true
       filters:
+        - name: append
+          args: " +08:00" # CST
+        - name: dateparse
+          args: "2006-01-0215:04:05 -07:00"
+    date:
+      # 2 days<br/>23 hours
+      selector: td:nth-child(5):not(:contains("-"))
+      optional: true
+      filters:
+        - name: re_replace
+          args: ["year|years", "years "]
+        - name: re_replace
+          args: ["month|months", "months "]
+        - name: re_replace
+          args: ["week|weeks", "weeks "]
+        - name: re_replace
+          args: ["day|days", "days "]
+        - name: re_replace
+          args: ["second|seconds", "seconds "]
+        - name: re_replace
+          args: ["minute|minutes", "minutes "]
+        - name: re_replace
+          args: ["hour|hours", "hours "]
         - name: timeago
     size:
       selector: td:nth-child(6)
@@ -138,4 +167,6 @@ search:
       case:
         "span.label:contains(\"2X\")": 2
         "*": 1
-# NexusPHP
+    minimumratio:
+      text: 0.5
+# NexusPHP 1.0

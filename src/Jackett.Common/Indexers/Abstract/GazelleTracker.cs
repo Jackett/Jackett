@@ -368,8 +368,8 @@ namespace Jackett.Common.Indexers.Abstract
         {
             var apiKey = configData.ApiKey;
             var headers = apiKey != null ? new Dictionary<string, string> { ["Authorization"] = apiKey.Value } : null;
-
-            var content = await base.Download(link, RequestType.GET, headers: headers);
+            var response = await base.RequestWithCookiesAsync(link.ToString(), null, RequestType.GET, headers: headers);
+            var content = response.ContentBytes;
 
             // Check if we're out of FL tokens/torrent is to large
             // most gazelle trackers will simply return the torrent anyway but e.g. redacted will return an error

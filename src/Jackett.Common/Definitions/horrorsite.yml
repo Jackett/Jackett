@@ -42,6 +42,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -147,8 +148,10 @@ search:
           args: (\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2})
         - name: replace
           args: ["\xA0", " "]
+        - name: append
+          args: " +01:00" # CET
         - name: dateparse
-          args: "2006-01-02 15:04:05"
+          args: "2006-01-02 15:04:05 -07:00"
     size:
       selector: td:nth-last-child(5) > u
     grabs:

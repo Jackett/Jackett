@@ -278,6 +278,7 @@ namespace Jackett.Updater
                 "Definitions/bitme.yml",
                 "Definitions/bittorrentam.yml",
                 "Definitions/blubits.yml",
+                "Definitions/brobits.yml",
                 "Definitions/bt-scene.yml",
                 "Definitions/btbit.yml",
                 "Definitions/bteye.yml",
@@ -288,6 +289,8 @@ namespace Jackett.Updater
                 "Definitions/cinefilhd.yml",
                 "Definitions/crazyscorner.yml",
                 "Definitions/czteam.yml",
+                "Definitions/cztorrent.yml",
+                "Definitions/darmowetorenty.yml", // migrated to C#
                 "Definitions/demonsite.yml",
                 "Definitions/digbt.yml",
                 "Definitions/downloadville.yml",
@@ -333,6 +336,7 @@ namespace Jackett.Updater
                 "Definitions/lapausetorrents.yml",
                 "Definitions/lemencili.yml",
                 "Definitions/leparadisdunet.yml",
+                "Definitions/leporno.yml",
                 "Definitions/maniatorrent.yml",
                 "Definitions/manicomioshare.yml",
                 "Definitions/megabliz.yml",
@@ -370,8 +374,8 @@ namespace Jackett.Updater
                 "Definitions/sharingue.yml",
                 "Definitions/skytorrents.yml",
                 "Definitions/solidtorrents.yml", // migrated to C#
+                "Definitions/soundpark.yml", // to be migrated to C#
                 "Definitions/speed-share.yml",
-                "Definitions/sporthd.yml",
                 "Definitions/t411.yml",
                 "Definitions/t411v2.yml",
                 "Definitions/tazmaniaden.yml",
@@ -390,6 +394,7 @@ namespace Jackett.Updater
                 "Definitions/torrentkim.yml",
                 "Definitions/torrentproject.yml",
                 "Definitions/torrentrex.yml",
+                "Definitions/torrentseed.yml", // renamed to latinop2p #9065
                 "Definitions/torrentseeds.yml", // migrated to c#
                 "Definitions/torrentsmd.yml",
                 "Definitions/torrentvault.yml",
@@ -406,6 +411,7 @@ namespace Jackett.Updater
                 "Definitions/utorrents.yml", // same as SzeneFZ now
                 "Definitions/vanila.yml",
                 "Definitions/vhstapes.yml",
+                "Definitions/world-of-tomorrow.yml", // #9213
                 "Definitions/waffles.yml",
                 "Definitions/worldofp2p.yml",
                 "Definitions/worldwidetorrents.yml",

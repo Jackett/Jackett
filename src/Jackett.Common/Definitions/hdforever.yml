@@ -8,6 +8,21 @@ encoding: UTF-8
 links:
   - https://hdf.world/
 
+caps:
+  categorymappings:
+    - {id: 1, cat: Movies, desc: "Film"}
+    - {id: 2, cat: Movies, desc: "Dessin animé"}
+    - {id: 3, cat: Movies, desc: "Bonus BD"}
+    - {id: 4, cat: Movies, desc: "Concert"}
+    - {id: 5, cat: TV, desc: "Série"}
+    - {id: 6, cat: TV/Anime, desc: "Série anim"}
+    - {id: 7, cat: Movies, desc: "Documentaire"}
+
+  modes:
+    search: [q]
+    tv-search: [q]
+    movie-search: [q]
+
 settings:
   - name: username
     type: text
@@ -15,25 +30,52 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: usetoken
     type: checkbox
     label: Always try to use the FreeLeech Token
     default: false
-
-caps:
-  categories:
-    1: Movies
-    2: Movies
-    3: Movies
-    4: Movies
-    5: TV
-    6: TV/Anime
-    7: Movies
-  modes:
-    search: [q]
-    tv-search: [q]
-    movie-search: [q]
-    music-search: [q]
+  - name: multilang
+    type: checkbox
+    label: Replace MULTI by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTI by this language
+    default: FRENCH
+    options:
+      FRENCH: "FRENCH"
+      MULTI.FRENCH: "MULTI.FRENCH"
+      ENGLISH: "ENGLISH"
+      MULTI.ENGLISH: "MULTI.ENGLISH"
+      VOSTFR: "VOSTFR"
+      MULTI.VOSTFR: "MULTI.VOSTFR"
+  - name: vostfr
+    type: checkbox
+    label: Replace VOSTFR with ENGLISH
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: "time"
+    options:
+      "time": "created"
+      "seeders": "seeders"
+      "size": "size"
+  - name: type
+    type: select
+    label: Order requested from site
+    default: "desc"
+    options:
+      "desc": "desc"
+      "asc": "asc"
+  - name: info_radarr
+    type: info
+    label: About Radarr
+    default: The HD-F web site cannot find movies if you use the release year in a title search. When you define your Radarr v3 Indexer remember to tick the <i>Remove year from search string</i> checkbox.
 
 login:
   path: login.php
@@ -42,28 +84,40 @@ login:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
     keeplogged: 1
-    login: "Log in"
   error:
     - selector: form#loginform > span.warning
   test:
     path: torrents.php
-
-ratio:
-  path: torrents.php
-  selector: li#stats_ratio > span
+    selector: a[href^="logout.php?auth="]
 
 search:
+  # https://hdf.world/torrents.php?groupname=blood&freetorrent=1&order_by=time&order_way=desc&action=advanced&searchsubmit=1
   path: torrents.php
   inputs:
     $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
-    searchstr: "{{ .Query.Keywords }}"
-    order_by: time
-    order_way: desc
-    action: basic
+    groupname: "{{ .Keywords }}"
+    order_by: "{{ .Config.sort }}"
+    order_way: "{{ .Config.type }}"
+    action: advanced
     searchsubmit: 1
+    # 1 freeleech, 2 neutral, 3 both, 0 normal
+    freetorrent: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+    # site does not support imdbid search or display imdb links in results
+
   rows:
     selector: table#torrent_table > tbody > tr.torrent
+
   fields:
+    category:
+      selector: td.cats_col
+      case:
+        div.cats_film: 1
+        div.cats_dessinanimé: 2
+        div.cats_bonusbd: 3
+        div.cats_concert: 4
+        div.cats_série: 5
+        div.cats_sérieanim: 6
+        div.cats_documentaire: 7
     download-regular:
       selector: a[href^="torrents.php?action=download&"]
       attribute: href
@@ -75,7 +129,7 @@ search:
           args: "&usetoken=1"
     download:
       text: "{{if .Config.usetoken}}{{ .Result.download-usetoken }}{{else}}{{ .Result.download-regular }}{{end}}"
-    title:
+    title_phase1:
       selector: div.group_info
       remove: span:nth-child(1), div.tags
       filters:
@@ -178,24 +232,34 @@ search:
           args: [".VOF", ".FRENCH"]
         - name: replace
           args: [".VFQ.MULTI", ".MULTI.VFQ"]
+    title_multilang:
+      text: "{{ .Result.title_phase1 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)([\\s|\\.|-]*multi[\\s|\\.|-]*)", ".{{ .Config.multilanguage }}."]
+    title_phase2:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    title_vostfr:
+      text: "{{ .Result.title_phase2 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)([\\s|\\.|-]*vostfr[\\s|\\.|-]*)", ".ENGLISH."]
+        - name: re_replace
+          args: ["(?i)([\\s|\\.|-]*subfrench[\\s|\\.|-]*)", ".ENGLISH."]
+    title:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
     description:
       selector: div.group_info
+    banner:
+      selector: div.group_image img
+      attribute: src
+      optional: true
     details:
       selector: a[href^="torrents.php?id="]
       attribute: href
     comments:
       selector: a[href^="torrents.php?id="]
       attribute: href
-    category:
-      selector: td.cats_col
-      case:
-        div.cats_film: 1
-        div.cats_dessinanimé: 2
-        div.cats_bonusbd: 3
-        div.cats_concert: 4
-        div.cats_série: 5
-        div.cats_sérieanim: 6
-        div.cats_doc: 7
     files:
       selector: td:nth-child(3)
     date:
@@ -233,11 +297,16 @@ search:
       selector: td:nth-child(8)
     downloadvolumefactor:
       case:
-        "div.group_info:contains(\"/ Free\")": "0"
-        "div.group_info:contains(\"↓75%\")": "0.75"
-        "div.group_info:contains(\"↓50%\")": "0.50"
-        "div.group_info:contains(\"↓25%\")": "0.25"
-        "*": "1"
+        "div.group_info:contains(\"/ Free\")": 0
+        "div.group_info:contains(\"↓75%\")": 0.75
+        "div.group_info:contains(\"↓50%\")": 0.50
+        "div.group_info:contains(\"↓25%\")": 0.25 # for this site this is the count ratio, which is 25% of the total torrent size. (I.E. it's 75% free)
+        "*": 1
     uploadvolumefactor:
-      case:
-        "*": "1"
+      text: 1
+    minimumratio:
+      text: 0.6
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
+# Gazelle

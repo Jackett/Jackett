@@ -618,6 +618,7 @@ caps:
     tv-search: [q]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username

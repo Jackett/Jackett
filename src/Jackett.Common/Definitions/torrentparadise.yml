@@ -123,6 +123,7 @@ caps:
     "OTHEREBOOKS": Other
     "OTHEROTHER": Other
     "OTHERPICTURES": Other
+    "OTHERSOUNDCLIPS": Other
     "PELICULASCVCD": TV/SD
     "PELICULASDIVX": TV/SD
     "PELICULASHDRIP": TV/HD
@@ -155,6 +156,7 @@ caps:
     "TVSDX264X265": TV/SD
     "TVSHOWS": TV
     "TVSPORT": TV/Sport
+    "TVULTRAHD4K": TV/UHD
     "TVTVPACKS": TV
     "VIDEO": Movies
     "UNSORTEDUNSORTED": Other
@@ -183,6 +185,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings: []
 

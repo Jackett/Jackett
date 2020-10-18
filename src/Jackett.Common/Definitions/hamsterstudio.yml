@@ -274,6 +274,10 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -309,8 +313,8 @@ search:
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
-    # 0 active 1 incdead 2 onlydead 3 gold 4 seedfree
-    incldead: "1"
+    # 0 active, 1 incdead, 2 onlydead, 3 gold, 4 seedfree
+    incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
 
@@ -350,8 +354,10 @@ search:
     date:
       selector: i
       filters:
+        - name: append
+          args: " +03:00" # MSK
         - name: dateparse
-          args: "2006-01-02 15:04:05"
+          args: "2006-01-02 15:04:05 -07:00"
     seeders:
       selector: td:nth-child(6)
       filters:
@@ -373,4 +379,5 @@ search:
       case:
         img[src="pic/diamond.png"]: 2
         "*": 1
+# minimumratio: ratioless
 # TBDev v2.1.12

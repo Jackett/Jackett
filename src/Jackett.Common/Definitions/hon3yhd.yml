@@ -54,6 +54,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -139,7 +140,23 @@ search:
     leechers:
       selector: td:nth-child(10)
     date:
-      selector: td:nth-child(6)
+      # Today<br/>06:07 AM
+      # Yesterday<br/>12:47 AM
+      selector: td:nth-child(6):contains("day")
+      optional: true
+      filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
+        - name: fuzzytime
+    date:
+      # Oct 1 2020<br/>07:56 AM
+      selector: td:nth-child(6):not(:contains("day"))
+      optional: true
+      filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
+        - name: dateparse
+          args: "Jan 2 2006 03:04 PM -07:00"
     downloadvolumefactor:
       case:
         "a.info > b:contains(\"Free\")": 0

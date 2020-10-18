@@ -46,6 +46,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -71,15 +72,6 @@ login:
     - selector: table.tableinborder:contains("Anmeldung Gescheitert!") > tbody > tr > td.tablea
   test:
     path: usercp.php
-
-ratio:
-  path: usercp.php
-  selector: div#lmtd table > tbody > tr:contains("Ratio:") > td:nth-child(2)
-  filters:
-    - name: replace
-      args: [".", ""]
-    - name: replace
-      args: [",", "."]
 
 search:
   paths:

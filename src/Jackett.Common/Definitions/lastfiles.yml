@@ -59,6 +59,7 @@ caps:
     tv-search: [q, season, ep, imdbid]
     movie-search: [q, imdbid]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -98,10 +99,6 @@ login:
     - selector: td.embedded:has(h2:contains("failed"))
   test:
     path: browse.php
-
-ratio:
-  path: browse.php
-  selector: font:contains("Ratio:") ~ font
 
 search:
   paths:
@@ -143,8 +140,10 @@ search:
     date:
       selector: td:nth-child(3)
       filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02-01-200615:04:05"
+          args: "02-01-200615:04:05 -07:00"
     size:
       selector: td:nth-child(4)
     grabs:

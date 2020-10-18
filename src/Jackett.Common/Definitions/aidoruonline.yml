@@ -70,10 +70,6 @@ login:
     path: /
     selector: a[href="account-logout.php"]
 
-ratio:
-  path: /
-  selector: td:contains("Ratio") ~ td
-
 search:
   paths:
     # https://aidoru-online.me/get_ttable.php?pcat=Show+All&scat=3%2C4%2C5%2C6&subbed=&fl=&resd=&p=0&searchstr=peace&deadlive=0&sortcol=id&sortorder=desc&startdt=&enddt=

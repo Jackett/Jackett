@@ -96,13 +96,6 @@ login:
 #      path: /
 #      selector: a[href$="/logout"]
 
-ratio:
-  path: /
-  selector: li:has(i.fa-sync-alt)
-  filters:
-    - name: regexp
-      args: "Ratio : (\\d+)"
-
 search:
   paths:
     - path: torrents/filter
@@ -169,6 +162,8 @@ search:
         # translations for Turkish|Estonian|Danish|Italian|Polish|Norwegian|Portuguese|Czech|Russian|Romanian|Spanish|French|German|Bulgarian|Dutch|Chinese|Japanese
         - name: re_replace
           args: ["(?i)(önce|tagasi|geleden|fa|temu|siden|há|atrás|nazpět|назад|acum|în urmă|hace|il y a|vor|преди|前)", " ago"]
+        - name: re_replace
+          args: ["(?i)(saniye|sekundit|sekunder|secondi|sekund|segundos|sekundami|секунд|secunde|secondes|Sekunden|секунди|seconden|秒前)", "seconds"]
         - name: re_replace
           args: ["(?i)(minutit|minutter|minuti|minuty|minutos|минуты|минут|Minuten|минути|minuten)", "minutes"]
         - name: re_replace

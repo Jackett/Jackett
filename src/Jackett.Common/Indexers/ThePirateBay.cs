@@ -22,8 +22,8 @@ namespace Jackett.Common.Indexers
     {
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://thepiratebay.org/",
-            "https://pirateproxy.cloud/",
-            "https://tpb18.ukpass.co/",
+            "https://pirateproxy.dev/",
+            "https://tpb19.ukpass.co/",
             "https://tpb.sadzawka.tk/",
             "https://www.tpbay.win/",
             "https://tpb.cnp.cx/",
@@ -181,7 +181,7 @@ namespace Jackett.Common.Indexers
 
             var queryCollection = new NameValueCollection
             {
-                { "q", query.SearchTerm },
+                { "q", query.GetQueryString() },
                 { "cat", queryStringCategories }
             };
 

@@ -3,19 +3,18 @@ using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
 using NUnit.Framework;
 
-namespace Jackett.Test.Services
+namespace Jackett.Test.Server.Services
 {
     [TestFixture]
     internal class ProtectionServiceTests : TestBase
     {
-
         [Test]
         public void Should_be_able_to_encrypt_and_decrypt()
         {
             var ss = TestUtil.Container.Resolve<ServerConfig>();
             ss.InstanceId = "12345678";
             var ps = TestUtil.Container.Resolve<IProtectionService>();
-            var input = "test123";
+            const string input = "test123";
             var protectedInput = ps.Protect(input);
             var output = ps.UnProtect(protectedInput);
 

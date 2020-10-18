@@ -113,6 +113,7 @@ caps:
     search: [q]
     tv-search: [q]
     movie-search: [q]
+    book-search: [q]
 
 search:
   paths:

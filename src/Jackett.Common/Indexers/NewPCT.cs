@@ -75,12 +75,12 @@ namespace Jackett.Common.Indexers
             },
             new DownloadMatcher
             {
-                MatchRegex = new Regex(@"nalt\s*=\s*'([^\/]*)"),
-                MatchEvaluator = m => string.Format("/download/{0}.torrent", m.Groups[1])
+                MatchRegex = new Regex(@"window\.location\.href\s*=\s*""([^""]+)"""),
+                MatchEvaluator = m => $"https:{m.Groups[1]}"
             },
         };
 
-        private readonly int _maxDailyPages = 4;
+        private readonly int _maxDailyPages = 1;
         private readonly int _maxMoviesPages = 6;
         private readonly int[] _allTvCategories = (new [] {TorznabCatType.TV }).Concat(TorznabCatType.TV.SubCategories).Select(c => c.ID).ToArray();
         private readonly int[] _allMoviesCategories = (new [] { TorznabCatType.Movies }).Concat(TorznabCatType.Movies.SubCategories).Select(c => c.ID).ToArray();
@@ -92,15 +92,15 @@ namespace Jackett.Common.Indexers
         private DateTime _dailyNow;
         private int _dailyResultIdx;
 
-        private readonly string _searchJsonUrl = "get/result/";
         private readonly string _dailyUrl = "ultimas-descargas/pg/{0}";
+        private readonly string _searchJsonUrl = "get/result/";
         private readonly string[] _seriesLetterUrls = { "series/letter/{0}", "series-hd/letter/{0}" };
         private readonly string[] _seriesVoLetterUrls = { "series-vo/letter/{0}" };
         private readonly string[] _voUrls = { "serie-vo", "serievo" };
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
-            "https://pctreload.com/",
-            "https://pctmix.com/"
+            "https://pctmix.com/",
+            "https://pctreload.com/"
         };
 
         public override string[] LegacySiteLinks { get; protected set; } = {
@@ -120,7 +120,7 @@ namespace Jackett.Common.Indexers
             : base(id: "newpct",
                    name: "NewPCT",
                    description: "NewPCT - Descargar peliculas, series y estrenos torrent gratis",
-                   link: "https://pctreload.com/",
+                   link: "https://pctmix.com/",
                    caps: new TorznabCapabilities(TorznabCatType.TV,
                                                  TorznabCatType.TVSD,
                                                  TorznabCatType.TVHD,
@@ -339,12 +339,12 @@ namespace Jackett.Common.Indexers
 
             try
             {
-                var rows = doc.QuerySelectorAll("ul.noticias-series > li");
+                var rows = doc.QuerySelectorAll("div.page-box > ul > li");
                 foreach (var row in rows)
                 {
                     var qDiv = row.QuerySelector("div.info");
                     var title = qDiv.QuerySelector("h2").TextContent.Trim();
-                    var detailsUrl = qDiv.QuerySelector("a").GetAttribute("href");
+                    var detailsUrl = SiteLink + qDiv.QuerySelector("a").GetAttribute("href").TrimStart('/');
 
                     // TODO: move this check to GetReleaseFromData to apply all releases
                     if (!_includeVo && _voUrls.Any(vo => detailsUrl.ToLower().Contains(vo.ToLower())))

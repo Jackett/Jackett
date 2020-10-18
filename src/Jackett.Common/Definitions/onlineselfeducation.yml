@@ -65,6 +65,7 @@ caps:
 
   modes:
     search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -149,8 +150,10 @@ search:
       selector: td:nth-child(7):not(:contains("day"))
       optional: true
       filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "Jan 2 2006 03:04 PM"
+          args: "Jan 2 2006 03:04 PM -07:00"
     size:
       selector: td:nth-child(8)
     grabs:
@@ -166,4 +169,5 @@ search:
       text: 1
     uploadvolumefactor:
       text: 1
+# minimumratio: appears ratioless
 # engine n/a

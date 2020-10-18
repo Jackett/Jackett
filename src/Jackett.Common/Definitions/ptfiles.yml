@@ -39,6 +39,7 @@ caps:
     tv-search: [q, season, ep, imdbid]
     movie-search: [q, imdbid]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -144,6 +145,7 @@ search:
     leechers:
       selector: td:nth-last-child(2) > span > b:nth-child(2)
     date:
+      # timeago
       selector: td:nth-child(2) > span > span > small
       filters:
         - name: replace
