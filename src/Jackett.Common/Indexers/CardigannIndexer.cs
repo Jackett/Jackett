@@ -111,16 +111,8 @@ namespace Jackett.Common.Indexers
                 DefaultSiteLink += "/";
             Language = Definition.Language;
             Type = Definition.Type;
-            TorznabCaps = new TorznabCapabilities
-            {
-                BookSearchAvailable = Definition.Caps.Modes.Any(c => c.Key == "book-search" && c.Value.Contains("author") && c.Value.Contains("title"))
-            };
-            if (Definition.Caps.Modes.ContainsKey("tv-search"))
-                TorznabCaps.ParseTvSearchParams(Definition.Caps.Modes["tv-search"]);
-            if (Definition.Caps.Modes.ContainsKey("movie-search"))
-                TorznabCaps.ParseMovieSearchParams(Definition.Caps.Modes["movie-search"]);
-            if (Definition.Caps.Modes.ContainsKey("music-search"))
-                TorznabCaps.ParseMusicSearchParams(Definition.Caps.Modes["music-search"]);
+            TorznabCaps = new TorznabCapabilities();
+            TorznabCaps.ParseCardigannSearchModes(Definition.Caps.Modes);
 
             // init config Data
             configData = new ConfigurationData();

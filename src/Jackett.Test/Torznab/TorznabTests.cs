@@ -55,7 +55,10 @@ namespace Jackett.Test.Torznab
             Assert.False(TorznabCaps.MusicSearchArtistAvailable);
             Assert.False(TorznabCaps.MusicSearchLabelAvailable);
             Assert.False(TorznabCaps.MusicSearchYearAvailable);
+            Assert.IsEmpty(TorznabCaps.BookSearchParams);
             Assert.False(TorznabCaps.BookSearchAvailable);
+            Assert.False(TorznabCaps.BookSearchTitleAvailable);
+            Assert.False(TorznabCaps.BookSearchAuthorAvailable);
             Assert.AreEqual(0, TorznabCaps.Categories.Count);
 
             // add "int" category (parent category)
@@ -247,7 +250,10 @@ namespace Jackett.Test.Torznab
                 Links = new List<string>{ "https://example.com" },
                 Caps = new capabilitiesBlock
                 {
-                    Modes = new Dictionary<string, List<string>>()
+                    Modes = new Dictionary<string, List<string>>
+                    {
+                        {"search", new List<string>{"q"}}
+                    }
                 },
                 Search = new searchBlock()
             };
@@ -271,7 +277,10 @@ namespace Jackett.Test.Torznab
             Assert.False(indexer.TorznabCaps.MusicSearchArtistAvailable);
             Assert.False(indexer.TorznabCaps.MusicSearchLabelAvailable);
             Assert.False(indexer.TorznabCaps.MusicSearchYearAvailable);
+            Assert.IsEmpty(indexer.TorznabCaps.BookSearchParams);
             Assert.False(indexer.TorznabCaps.BookSearchAvailable);
+            Assert.False(indexer.TorznabCaps.BookSearchTitleAvailable);
+            Assert.False(indexer.TorznabCaps.BookSearchAuthorAvailable);
             Assert.AreEqual(0, indexer.TorznabCaps.Categories.Count);
 
             definition = new IndexerDefinition // test categories (same as in C# indexer)
@@ -279,7 +288,10 @@ namespace Jackett.Test.Torznab
                 Links = new List<string>{ "https://example.com" },
                 Caps = new capabilitiesBlock
                 {
-                    Modes = new Dictionary<string, List<string>>(),
+                    Modes = new Dictionary<string, List<string>>
+                    {
+                        {"search", new List<string>{"q"}}
+                    },
                     Categories = new Dictionary<string, string>
                     {
                         {"1", TorznabCatType.Movies.Name}, // integer cat (has children)
@@ -334,7 +346,7 @@ namespace Jackett.Test.Torznab
                         {"tv-search", new List<string>{ "q", "season", "ep", "imdbid", "tvdbid", "rid" }},
                         {"movie-search", new List<string>{ "q", "imdbid", "tmdbid" }},
                         {"music-search", new List<string>{ "q", "album", "artist", "label", "year" }},
-                        {"book-search", new List<string>{ "q", "author", "title" }}
+                        {"book-search", new List<string>{ "q", "title", "author" }}
                     },
                     Categories = new Dictionary<string, string>()
                 },
@@ -343,22 +355,52 @@ namespace Jackett.Test.Torznab
             indexer = new CardigannIndexer(null, null, null, null, definition);
 
             Assert.True(indexer.TorznabCaps.SearchAvailable);
+            Assert.AreEqual(
+                new List<TvSearchParam>
+                {
+                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId, TvSearchParam.TvdbId, TvSearchParam.RId
+                },
+                indexer.TorznabCaps.TvSearchParams
+                );
             Assert.True(indexer.TorznabCaps.TvSearchAvailable);
+            Assert.True(indexer.TorznabCaps.TvSearchSeasonAvailable);
+            Assert.True(indexer.TorznabCaps.TvSearchEpAvailable);
             // TODO: SupportsImdbTVSearch is disabled in Jackett.Common.Models.TorznabCapabilities.TvSearchImdbAvailable
             Assert.False(indexer.TorznabCaps.TvSearchImdbAvailable);
             Assert.True(indexer.TorznabCaps.TvSearchTvdbAvailable);
             Assert.True(indexer.TorznabCaps.TvSearchTvRageAvailable);
             Assert.AreEqual(
-                new List<MovieSearchParam> { MovieSearchParam.Q, MovieSearchParam.ImdbId, MovieSearchParam.TmdbId },
+                new List<MovieSearchParam>
+                {
+                    MovieSearchParam.Q, MovieSearchParam.ImdbId, MovieSearchParam.TmdbId
+                },
                 indexer.TorznabCaps.MovieSearchParams
                 );
             Assert.True(indexer.TorznabCaps.MovieSearchAvailable);
             Assert.True(indexer.TorznabCaps.MovieSearchImdbAvailable);
             Assert.True(indexer.TorznabCaps.MovieSearchTmdbAvailable);
-            // TODO: improve this assert
-            Assert.AreEqual(5, indexer.TorznabCaps.MusicSearchParams.Count);
+            Assert.AreEqual(
+                new List<MusicSearchParam>
+                {
+                    MusicSearchParam.Q, MusicSearchParam.Album, MusicSearchParam.Artist, MusicSearchParam.Label, MusicSearchParam.Year
+                },
+                indexer.TorznabCaps.MusicSearchParams
+                );
             Assert.True(indexer.TorznabCaps.MusicSearchAvailable);
+            Assert.True(indexer.TorznabCaps.MusicSearchAlbumAvailable);
+            Assert.True(indexer.TorznabCaps.MusicSearchArtistAvailable);
+            Assert.True(indexer.TorznabCaps.MusicSearchLabelAvailable);
+            Assert.True(indexer.TorznabCaps.MusicSearchYearAvailable);
+            Assert.AreEqual(
+                new List<BookSearchParam>
+                {
+                    BookSearchParam.Q, BookSearchParam.Title, BookSearchParam.Author
+                },
+                indexer.TorznabCaps.BookSearchParams
+                );
             Assert.True(indexer.TorznabCaps.BookSearchAvailable);
+            Assert.True(indexer.TorznabCaps.BookSearchTitleAvailable);
+            Assert.True(indexer.TorznabCaps.BookSearchAuthorAvailable);
 
             // test Jackett UI categories (internal JSON) => same code path as C# indexer
             // test Torznab caps (XML) => same code path as C# indexer
