@@ -49,8 +49,12 @@ namespace Jackett.Test.Torznab
             Assert.False(TorznabCaps.MovieSearchAvailable);
             Assert.False(TorznabCaps.MovieSearchImdbAvailable);
             Assert.False(TorznabCaps.MovieSearchTmdbAvailable);
-            Assert.IsEmpty(TorznabCaps.SupportedMusicSearchParamsList);
+            Assert.IsEmpty(TorznabCaps.MusicSearchParams);
             Assert.False(TorznabCaps.MusicSearchAvailable);
+            Assert.False(TorznabCaps.MusicSearchAlbumAvailable);
+            Assert.False(TorznabCaps.MusicSearchArtistAvailable);
+            Assert.False(TorznabCaps.MusicSearchLabelAvailable);
+            Assert.False(TorznabCaps.MusicSearchYearAvailable);
             Assert.False(TorznabCaps.BookSearchAvailable);
             Assert.AreEqual(0, TorznabCaps.Categories.Count);
 
@@ -261,8 +265,12 @@ namespace Jackett.Test.Torznab
             Assert.False(indexer.TorznabCaps.MovieSearchAvailable);
             Assert.False(indexer.TorznabCaps.MovieSearchImdbAvailable);
             Assert.False(indexer.TorznabCaps.MovieSearchTmdbAvailable);
-            Assert.IsEmpty(indexer.TorznabCaps.SupportedMusicSearchParamsList);
+            Assert.IsEmpty(indexer.TorznabCaps.MusicSearchParams);
             Assert.False(indexer.TorznabCaps.MusicSearchAvailable);
+            Assert.False(indexer.TorznabCaps.MusicSearchAlbumAvailable);
+            Assert.False(indexer.TorznabCaps.MusicSearchArtistAvailable);
+            Assert.False(indexer.TorznabCaps.MusicSearchLabelAvailable);
+            Assert.False(indexer.TorznabCaps.MusicSearchYearAvailable);
             Assert.False(indexer.TorznabCaps.BookSearchAvailable);
             Assert.AreEqual(0, indexer.TorznabCaps.Categories.Count);
 
@@ -348,7 +356,7 @@ namespace Jackett.Test.Torznab
             Assert.True(indexer.TorznabCaps.MovieSearchImdbAvailable);
             Assert.True(indexer.TorznabCaps.MovieSearchTmdbAvailable);
             // TODO: improve this assert
-            Assert.AreEqual(5, indexer.TorznabCaps.SupportedMusicSearchParamsList.Count);
+            Assert.AreEqual(5, indexer.TorznabCaps.MusicSearchParams.Count);
             Assert.True(indexer.TorznabCaps.MusicSearchAvailable);
             Assert.True(indexer.TorznabCaps.BookSearchAvailable);
 

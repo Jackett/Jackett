@@ -31,9 +31,9 @@ namespace Jackett.Common.Indexers
                        {
                            MovieSearchParam.Q
                        },
-                       SupportedMusicSearchParamsList = new List<string>
+                       MusicSearchParams = new List<MusicSearchParam>
                        {
-                           "q", "album", "artist", "label", "year"
+                           MusicSearchParam.Q, MusicSearchParam.Album, MusicSearchParam.Artist, MusicSearchParam.Label, MusicSearchParam.Year
                        }
                    },
                    configService: configService,
