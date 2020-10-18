@@ -40,6 +40,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BTDB
  * BTDIGG
  * BTSOW
+ * Byrutor
  * CiliPro (LIAORENCILI)
  * ConCen
  * Corsaro.red
