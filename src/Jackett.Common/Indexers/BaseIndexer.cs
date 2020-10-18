@@ -285,7 +285,7 @@ namespace Jackett.Common.Indexers
             if (query.HasSpecifiedCategories)
                 if (!caps.SupportsCategories(query.Categories))
                     return false;
-            if (caps.SupportsImdbTVSearch && query.IsImdbQuery && query.IsTVSearch)
+            if (caps.TvSearchImdbAvailable && query.IsImdbQuery && query.IsTVSearch)
                 return true;
             if (caps.MovieSearchImdbAvailable && query.IsImdbQuery && query.IsMovieSearch)
                 return true;
@@ -293,7 +293,7 @@ namespace Jackett.Common.Indexers
                 return false;
             if (caps.SearchAvailable && query.IsSearch)
                 return true;
-            if (caps.TVSearchAvailable && query.IsTVSearch)
+            if (caps.TvSearchAvailable && query.IsTVSearch)
                 return true;
             if (caps.MovieSearchAvailable && query.IsMovieSearch)
                 return true;
@@ -301,9 +301,9 @@ namespace Jackett.Common.Indexers
                 return true;
             if (caps.BookSearchAvailable && query.IsBookSearch)
                 return true;
-            if (caps.SupportsTVRageSearch && query.IsTVRageSearch)
+            if (caps.TvSearchTvRageAvailable && query.IsTVRageSearch)
                 return true;
-            if (caps.SupportsTvdbSearch && query.IsTvdbSearch)
+            if (caps.TvSearchTvdbAvailable && query.IsTvdbSearch)
                 return true;
             if (caps.MovieSearchImdbAvailable && query.IsImdbQuery)
                 return true;

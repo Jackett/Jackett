@@ -21,8 +21,14 @@ namespace Jackett.Common.Indexers
                    link: "https://secret-cinema.pw/",
                    caps: new TorznabCapabilities
                    {
-                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q, MovieSearchParam.ImdbId },
-                       SupportedMusicSearchParamsList = new List<string> { "q", "album", "artist", "label", "year" }
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q, MovieSearchParam.ImdbId
+                       },
+                       SupportedMusicSearchParamsList = new List<string>
+                       {
+                           "q", "album", "artist", "label", "year"
+                       }
                    },
                    configService: configService,
                    client: wc,

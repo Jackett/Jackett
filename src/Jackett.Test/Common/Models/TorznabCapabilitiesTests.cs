@@ -13,15 +13,17 @@ namespace Jackett.Test.Common.Models
         [Test]
         public void TestConstructors()
         {
-            // TODO: tv search should be disabled by default
             // TODO: initialize MusicSearchAvailable
             var torznabCaps = new TorznabCapabilities();
             Assert.True(torznabCaps.SearchAvailable);
 
-            Assert.True(torznabCaps.TVSearchAvailable);
-            Assert.False(torznabCaps.SupportsImdbTVSearch);
-            Assert.False(torznabCaps.SupportsTvdbSearch);
-            Assert.False(torznabCaps.SupportsTVRageSearch);
+            Assert.IsEmpty(torznabCaps.TvSearchParams);
+            Assert.False(torznabCaps.TvSearchAvailable);
+            Assert.False(torznabCaps.TvSearchSeasonAvailable);
+            Assert.False(torznabCaps.TvSearchEpAvailable);
+            Assert.False(torznabCaps.TvSearchImdbAvailable);
+            Assert.False(torznabCaps.TvSearchTvdbAvailable);
+            Assert.False(torznabCaps.TvSearchTvRageAvailable);
 
             Assert.IsEmpty(torznabCaps.MovieSearchParams);
             Assert.False(torznabCaps.MovieSearchAvailable);
@@ -87,15 +89,14 @@ namespace Jackett.Test.Common.Models
             // test all features disabled
             torznabCaps = new TorznabCapabilities
             {
-                SearchAvailable = false,
-                TVSearchAvailable = false
+                SearchAvailable = false
             };
             xDocument = torznabCaps.GetXDocument();
             var xDoumentSearching = xDocument.Root?.Element("searching");
             Assert.AreEqual("no", xDoumentSearching?.Element("search")?.Attribute("available")?.Value);
             Assert.AreEqual("q", xDoumentSearching?.Element("search")?.Attribute("supportedParams")?.Value);
             Assert.AreEqual("no", xDoumentSearching?.Element("tv-search")?.Attribute("available")?.Value);
-            Assert.AreEqual("q,season,ep", xDoumentSearching?.Element("tv-search")?.Attribute("supportedParams")?.Value);
+            Assert.AreEqual("q", xDoumentSearching?.Element("tv-search")?.Attribute("supportedParams")?.Value);
             Assert.AreEqual("no", xDoumentSearching?.Element("movie-search")?.Attribute("available")?.Value);
             Assert.AreEqual("q", xDoumentSearching?.Element("movie-search")?.Attribute("supportedParams")?.Value);
             Assert.AreEqual("no", xDoumentSearching?.Element("music-search")?.Attribute("available")?.Value);
@@ -111,11 +112,14 @@ namespace Jackett.Test.Common.Models
             torznabCaps = new TorznabCapabilities
             {
                 SearchAvailable = true,
-                TVSearchAvailable = true,
-                SupportsImdbTVSearch = true,
-                SupportsTvdbSearch = true,
-                SupportsTVRageSearch = true,
-                MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q, MovieSearchParam.ImdbId, MovieSearchParam.TmdbId },
+                TvSearchParams = new List<TvSearchParam>
+                {
+                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId, TvSearchParam.TvdbId, TvSearchParam.RId
+                },
+                MovieSearchParams = new List<MovieSearchParam>
+                {
+                    MovieSearchParam.Q, MovieSearchParam.ImdbId, MovieSearchParam.TmdbId
+                },
                 SupportedMusicSearchParamsList = new List<string>{"q", "album", "artist", "label", "year"},
                 BookSearchAvailable = true
             };
@@ -124,7 +128,7 @@ namespace Jackett.Test.Common.Models
             Assert.AreEqual("yes", xDoumentSearching?.Element("search")?.Attribute("available")?.Value);
             Assert.AreEqual("q", xDoumentSearching?.Element("search")?.Attribute("supportedParams")?.Value);
             Assert.AreEqual("yes", xDoumentSearching?.Element("tv-search")?.Attribute("available")?.Value);
-            Assert.AreEqual("q,season,ep,imdbid,tvdbid,rid", xDoumentSearching?.Element("tv-search")?.Attribute("supportedParams")?.Value);
+            Assert.AreEqual("q,season,ep,tvdbid,rid", xDoumentSearching?.Element("tv-search")?.Attribute("supportedParams")?.Value);
             Assert.AreEqual("yes", xDoumentSearching?.Element("movie-search")?.Attribute("available")?.Value);
             Assert.AreEqual("q,imdbid,tmdbid", xDoumentSearching?.Element("movie-search")?.Attribute("supportedParams")?.Value);
             Assert.AreEqual("yes", xDoumentSearching?.Element("music-search")?.Attribute("available")?.Value);

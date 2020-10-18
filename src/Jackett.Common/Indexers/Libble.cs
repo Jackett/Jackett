@@ -63,7 +63,6 @@ namespace Jackett.Common.Indexers
                    link: "https://libble.me/",
                    caps: new TorznabCapabilities
                    {
-                       TVSearchAvailable = false,
                        SupportedMusicSearchParamsList = new List<string> { "q", "album", "artist", "label", "year" }
                    },
                    configService: configService,

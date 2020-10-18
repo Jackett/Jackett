@@ -22,8 +22,19 @@ namespace Jackett.Common.Indexers
                    link: "https://redacted.ch/",
                    caps: new TorznabCapabilities
                    {
-                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q },
-                       SupportedMusicSearchParamsList = new List<string> { "q", "album", "artist", "label", "year" }
+                       // TODO: add book search
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q
+                       },
+                       SupportedMusicSearchParamsList = new List<string>
+                       {
+                           "q", "album", "artist", "label", "year"
+                       }
                    },
                    configService: configService,
                    client: wc,

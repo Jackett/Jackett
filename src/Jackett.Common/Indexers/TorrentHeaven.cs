@@ -26,7 +26,15 @@ namespace Jackett.Common.Indexers
                  description: "A German general tracker.",
                  link: "https://newheaven.nl/",
                  caps: new TorznabCapabilities {
-                     MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q }
+                     // TODO: add music and book search
+                     TvSearchParams = new List<TvSearchParam>
+                     {
+                         TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                     },
+                     MovieSearchParams = new List<MovieSearchParam>
+                     {
+                         MovieSearchParam.Q
+                     }
                  },
                  configService: configService,
                  client: wc,
@@ -37,8 +45,10 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "de-de";
             Type = "private";
+
             // incomplete CA chain
             wc.AddTrustedCertificate(new Uri(SiteLink).Host, "cbf23ac75b07255ad7548a87567a839d23f31576");
+
             AddCategoryMapping(1, TorznabCatType.PCGames, "GAMES/PC");
             AddCategoryMapping(3, TorznabCatType.Console, "GAMES/Sonstige");
             AddCategoryMapping(59, TorznabCatType.ConsolePS4, "GAMES/PlayStation");

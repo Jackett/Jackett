@@ -18,8 +18,14 @@ namespace Jackett.Common.Indexers
                    link: "https://cinemaz.to/",
                    caps: new TorznabCapabilities
                    {
-                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q, MovieSearchParam.ImdbId }
-                       // SupportsImdbTVSearch = true (supported by the site but disabled due to #8107)
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
+                       },
+                       MovieSearchParams = new List<MovieSearchParam> {
+                           MovieSearchParam.Q, MovieSearchParam.ImdbId
+
+                       }
                    },
                    configService: configService,
                    client: wc,

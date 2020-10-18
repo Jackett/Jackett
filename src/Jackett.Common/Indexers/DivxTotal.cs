@@ -51,7 +51,14 @@ namespace Jackett.Common.Indexers
                    description: "DivxTotal is a SPANISH site for Movies, TV series and Software",
                    link: "https://www.divxtotal.la/",
                    caps: new TorznabCapabilities {
-                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q }
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q
+                       }
                    },
                    configService: configService,
                    client: w,

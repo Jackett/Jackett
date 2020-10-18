@@ -32,7 +32,13 @@ namespace Jackett.Common.Indexers
                    name: "ShowRSS",
                    description: "showRSS is a service that allows you to keep track of your favorite TV shows",
                    link: "https://showrss.info/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities
+                   {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,

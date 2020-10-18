@@ -37,15 +37,14 @@ namespace Jackett.Test.Torznab
         [Test]
         public void TestCSharpTorznabCategories()
         {
-            // TODO: make sure TVSearchAvailable is false by default
-            // by default all indexers have 0 categories
-            Assert.AreEqual(0, TorznabCaps.Categories.Count);
-
             Assert.True(TorznabCaps.SearchAvailable);
-            Assert.True(TorznabCaps.TVSearchAvailable);
-            Assert.False(TorznabCaps.SupportsImdbTVSearch);
-            Assert.False(TorznabCaps.SupportsTvdbSearch);
-            Assert.False(TorznabCaps.SupportsTVRageSearch);
+            Assert.IsEmpty(TorznabCaps.TvSearchParams);
+            Assert.False(TorznabCaps.TvSearchAvailable);
+            Assert.False(TorznabCaps.TvSearchSeasonAvailable);
+            Assert.False(TorznabCaps.TvSearchEpAvailable);
+            Assert.False(TorznabCaps.TvSearchImdbAvailable);
+            Assert.False(TorznabCaps.TvSearchTvdbAvailable);
+            Assert.False(TorznabCaps.TvSearchTvRageAvailable);
             Assert.IsEmpty(TorznabCaps.MovieSearchParams);
             Assert.False(TorznabCaps.MovieSearchAvailable);
             Assert.False(TorznabCaps.MovieSearchImdbAvailable);
@@ -53,6 +52,7 @@ namespace Jackett.Test.Torznab
             Assert.IsEmpty(TorznabCaps.SupportedMusicSearchParamsList);
             Assert.False(TorznabCaps.MusicSearchAvailable);
             Assert.False(TorznabCaps.BookSearchAvailable);
+            Assert.AreEqual(0, TorznabCaps.Categories.Count);
 
             // add "int" category (parent category)
             AddCategoryMapping(1, TorznabCatType.Movies);
@@ -249,15 +249,14 @@ namespace Jackett.Test.Torznab
             };
             var indexer = new CardigannIndexer(null, null, null, null, definition);
 
-            // by default all indexers have 0 categories
-            Assert.AreEqual(0, indexer.TorznabCaps.Categories.Count);
-
-            // TODO: make sure TVSearchAvailable is false by default
             Assert.True(indexer.TorznabCaps.SearchAvailable);
-            Assert.True(indexer.TorznabCaps.TVSearchAvailable);
-            Assert.False(indexer.TorznabCaps.SupportsImdbTVSearch);
-            Assert.False(indexer.TorznabCaps.SupportsTvdbSearch);
-            Assert.False(indexer.TorznabCaps.SupportsTVRageSearch);
+            Assert.IsEmpty(indexer.TorznabCaps.TvSearchParams);
+            Assert.False(indexer.TorznabCaps.TvSearchAvailable);
+            Assert.False(indexer.TorznabCaps.TvSearchSeasonAvailable);
+            Assert.False(indexer.TorznabCaps.TvSearchEpAvailable);
+            Assert.False(indexer.TorznabCaps.TvSearchImdbAvailable);
+            Assert.False(indexer.TorznabCaps.TvSearchTvdbAvailable);
+            Assert.False(indexer.TorznabCaps.TvSearchTvRageAvailable);
             Assert.IsEmpty(indexer.TorznabCaps.MovieSearchParams);
             Assert.False(indexer.TorznabCaps.MovieSearchAvailable);
             Assert.False(indexer.TorznabCaps.MovieSearchImdbAvailable);
@@ -265,6 +264,7 @@ namespace Jackett.Test.Torznab
             Assert.IsEmpty(indexer.TorznabCaps.SupportedMusicSearchParamsList);
             Assert.False(indexer.TorznabCaps.MusicSearchAvailable);
             Assert.False(indexer.TorznabCaps.BookSearchAvailable);
+            Assert.AreEqual(0, indexer.TorznabCaps.Categories.Count);
 
             definition = new IndexerDefinition // test categories (same as in C# indexer)
             {
@@ -323,7 +323,7 @@ namespace Jackett.Test.Torznab
                     Modes = new Dictionary<string, List<string>>
                     {
                         {"search", new List<string>{ "q" }},
-                        {"tv-search", new List<string>{ "q", "season", "ep", "rid", "tvdbid", "imdbid" }},
+                        {"tv-search", new List<string>{ "q", "season", "ep", "imdbid", "tvdbid", "rid" }},
                         {"movie-search", new List<string>{ "q", "imdbid", "tmdbid" }},
                         {"music-search", new List<string>{ "q", "album", "artist", "label", "year" }},
                         {"book-search", new List<string>{ "q", "author", "title" }}
@@ -335,12 +335,11 @@ namespace Jackett.Test.Torznab
             indexer = new CardigannIndexer(null, null, null, null, definition);
 
             Assert.True(indexer.TorznabCaps.SearchAvailable);
-            Assert.True(indexer.TorznabCaps.TVSearchAvailable);
-            // TODO: SupportsImdbTVSearch is disabled in Jackett.Common\Indexers\CardigannIndexer.cs : 114
-            Assert.False(indexer.TorznabCaps.SupportsImdbTVSearch);
-            Assert.True(indexer.TorznabCaps.SupportsTvdbSearch);
-            // TODO: TVRage search is not implemented in Cardigann
-            Assert.False(indexer.TorznabCaps.SupportsTVRageSearch);
+            Assert.True(indexer.TorznabCaps.TvSearchAvailable);
+            // TODO: SupportsImdbTVSearch is disabled in Jackett.Common.Models.TorznabCapabilities.TvSearchImdbAvailable
+            Assert.False(indexer.TorznabCaps.TvSearchImdbAvailable);
+            Assert.True(indexer.TorznabCaps.TvSearchTvdbAvailable);
+            Assert.True(indexer.TorznabCaps.TvSearchTvRageAvailable);
             Assert.AreEqual(
                 new List<MovieSearchParam> { MovieSearchParam.Q, MovieSearchParam.ImdbId, MovieSearchParam.TmdbId },
                 indexer.TorznabCaps.MovieSearchParams

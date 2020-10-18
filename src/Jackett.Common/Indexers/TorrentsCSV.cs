@@ -27,7 +27,17 @@ namespace Jackett.Common.Indexers
                    name: "Torrents.csv",
                    description: "Torrents.csv is a self-hostable, open source torrent search engine and database",
                    link: "https://torrents-csv.ml/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities
+                   {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q
+                       }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,

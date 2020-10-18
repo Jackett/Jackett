@@ -43,7 +43,7 @@ namespace Jackett.Common.Indexers
             {"11", "portugués"},
             {"12", "esperanto"}
         };
-        
+
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://epublibre.org/",
             "https://epublibre.unblockit.lat/"
@@ -54,6 +54,7 @@ namespace Jackett.Common.Indexers
                    name: "EpubLibre",
                    description: "Más libros, Más libres",
                    link: "https://epublibre.org/",
+                   // TODO: add book search
                    caps: new TorznabCapabilities(),
                    configService: configService,
                    client: wc,

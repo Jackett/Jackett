@@ -41,7 +41,14 @@ namespace Jackett.Common.Indexers
                    name: "BakaBT",
                    description: "Anime Comunity",
                    link: "https://bakabt.me/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities
+                   {
+                       // TODO: add music and book search
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,

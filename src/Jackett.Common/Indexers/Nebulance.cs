@@ -29,7 +29,13 @@ namespace Jackett.Common.Indexers
                    name: "Nebulance",
                    description: "At Nebulance we will change the way you think about TV",
                    link: "https://nebulance.io/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities
+                   {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       }
+                   },
                    configService: configService,
                    client: c,
                    logger: l,

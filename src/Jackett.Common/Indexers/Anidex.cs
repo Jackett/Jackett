@@ -29,7 +29,13 @@ namespace Jackett.Common.Indexers
                    name: "Anidex",
                    description: "Anidex is a Public torrent tracker and indexer, primarily for English fansub groups of anime",
                    link: "https://anidex.info/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities
+                   {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,

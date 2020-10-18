@@ -34,7 +34,15 @@ namespace Jackett.Common.Indexers
                    name: "BroadcasTheNet",
                    description: "BroadcasTheNet (BTN) is an invite-only torrent tracker focused on TV shows",
                    link: "https://broadcasthe.net/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities
+                   {
+                       LimitsDefault = 100,
+                       LimitsMax = 1000,
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,
@@ -44,9 +52,6 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
-
-            TorznabCaps.LimitsDefault = 100;
-            TorznabCaps.LimitsMax = 1000;
 
             AddCategoryMapping("SD", TorznabCatType.TVSD, "SD");
             AddCategoryMapping("720p", TorznabCatType.TVHD, "720p");

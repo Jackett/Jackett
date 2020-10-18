@@ -77,7 +77,15 @@ namespace Jackett.Common.Indexers
                 description: "Pirate Bay (TPB) is the galaxy’s most resilient Public BitTorrent site",
                 link: "https://thepiratebay.org/",
                 caps: new TorznabCapabilities {
-                    MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q }
+                    // TODO: add music and book search
+                    TvSearchParams = new List<TvSearchParam>
+                    {
+                        TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                    },
+                    MovieSearchParams = new List<MovieSearchParam>
+                    {
+                        MovieSearchParam.Q
+                    }
                 },
                 configService: configService,
                 client: client,
@@ -90,11 +98,6 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "public";
 
-            AddCategoryMappings();
-        }
-
-        private void AddCategoryMappings()
-        {
             // Audio
             AddCategoryMapping(100, TorznabCatType.Audio, "Audio");
             AddCategoryMapping(101, TorznabCatType.Audio, "Music");
