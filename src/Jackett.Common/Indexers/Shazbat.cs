@@ -36,10 +36,7 @@ namespace Jackett.Common.Indexers
                    name: "Shazbat",
                    description: "Modern indexer",
                    link: "https://www.shazbat.tv/",
-                   caps: new TorznabCapabilities(
-                       TorznabCatType.TV,
-                       TorznabCatType.TVHD,
-                       TorznabCatType.TVSD),
+                   caps: new TorznabCapabilities(),
                    configService: configService,
                    client: c,
                    logger: l,
@@ -49,6 +46,10 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
+
+            AddCategoryMapping(1, TorznabCatType.TV);
+            AddCategoryMapping(2, TorznabCatType.TVSD);
+            AddCategoryMapping(3, TorznabCatType.TVHD);
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -124,7 +125,7 @@ namespace Jackett.Common.Indexers
                         foreach (var child in titleRow.Children)
                             child.Remove();
                         release.Title = titleRow.TextContent.Trim();
-                        if ((query.ImdbID == null || !TorznabCaps.SupportsImdbMovieSearch) &&
+                        if ((query.ImdbID == null || !TorznabCaps.MovieSearchImdbAvailable) &&
                             !query.MatchQueryStringAND(release.Title))
                             continue;
                         var bannerStyle = row.QuerySelector("div[style^=\"cursor: pointer; background-image:url\"]")

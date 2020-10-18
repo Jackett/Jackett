@@ -51,7 +51,7 @@ namespace Jackett.Common.Indexers
                    link: "https://hdts.ru/", // Domain https://hdts.ru/ seems more reliable
                    caps: new TorznabCapabilities
                    {
-                       SupportsImdbMovieSearch = true
+                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q, MovieSearchParam.ImdbId }
                        // SupportsImdbTVSearch = true (supported by the site but disabled due to #8107)
                    },
                    configService: configService,

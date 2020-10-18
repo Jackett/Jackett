@@ -37,7 +37,7 @@ namespace Jackett.Common.Indexers
                    link: "https://torrent-syndikat.org/",
                    caps: new TorznabCapabilities
                    {
-                       SupportsImdbMovieSearch = true
+                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q, MovieSearchParam.ImdbId }
                    },
                    configService: configService,
                    client: w,
@@ -101,8 +101,8 @@ namespace Jackett.Common.Indexers
             var releases = await PerformQuery(new TorznabQuery());
 
             await ConfigureIfOK(
-                string.Empty, 
-                releases.Any(), 
+                string.Empty,
+                releases.Any(),
                 () => throw new Exception("Could not find any releases"));
 
             return IndexerConfigurationStatus.Completed;
@@ -223,7 +223,7 @@ namespace Jackett.Common.Indexers
                     {
                         release.Description = string.Join(Environment.NewLine, descriptions);
                     }
-                    
+
                     releases.Add(release);
                 }
             }

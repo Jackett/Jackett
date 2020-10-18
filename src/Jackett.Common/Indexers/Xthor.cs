@@ -46,7 +46,9 @@ namespace Jackett.Common.Indexers
                    name: "Xthor",
                    description: "General French Private Tracker",
                    link: "https://xthor.tk/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities {
+                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q }
+                   },
                    configService: configService,
                    client: w,
                    logger: l,

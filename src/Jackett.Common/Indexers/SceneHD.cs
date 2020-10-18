@@ -33,7 +33,7 @@ namespace Jackett.Common.Indexers
                    configService: configService,
                    caps: new TorznabCapabilities
                    {
-                       SupportsImdbMovieSearch = true
+                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q, MovieSearchParam.ImdbId }
                    },
                    client: c,
                    logger: l,

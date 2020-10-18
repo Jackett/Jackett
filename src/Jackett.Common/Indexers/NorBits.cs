@@ -49,7 +49,7 @@ namespace Jackett.Common.Indexers
                    link: "https://norbits.net/",
                    caps: new TorznabCapabilities
                    {
-                       SupportsImdbMovieSearch = true
+                       MovieSearchParams = new List<MovieSearchParam> {MovieSearchParam.Q, MovieSearchParam.ImdbId }
                    },
                    configService: configService,
                    client: w,

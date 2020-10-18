@@ -40,7 +40,9 @@ namespace Jackett.Common.Indexers
                    name: "Solid Torrents",
                    description: "Solid Torrents is a Public torrent meta-search engine",
                    link: "https://solidtorrents.net/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities {
+                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,

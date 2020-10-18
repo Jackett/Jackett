@@ -287,9 +287,9 @@ namespace Jackett.Common.Indexers
                     return false;
             if (caps.SupportsImdbTVSearch && query.IsImdbQuery && query.IsTVSearch)
                 return true;
-            if (caps.SupportsImdbMovieSearch && query.IsImdbQuery && query.IsMovieSearch)
+            if (caps.MovieSearchImdbAvailable && query.IsImdbQuery && query.IsMovieSearch)
                 return true;
-            else if (!caps.SupportsImdbMovieSearch && query.IsImdbQuery && query.QueryType != "TorrentPotato") // potato query should always contain imdb+search term
+            else if (!caps.MovieSearchImdbAvailable && query.IsImdbQuery && query.QueryType != "TorrentPotato") // potato query should always contain imdb+search term
                 return false;
             if (caps.SearchAvailable && query.IsSearch)
                 return true;
@@ -305,9 +305,9 @@ namespace Jackett.Common.Indexers
                 return true;
             if (caps.SupportsTvdbSearch && query.IsTvdbSearch)
                 return true;
-            if (caps.SupportsImdbMovieSearch && query.IsImdbQuery)
+            if (caps.MovieSearchImdbAvailable && query.IsImdbQuery)
                 return true;
-            if (caps.SupportsTmdbMovieSearch && query.IsTmdbQuery)
+            if (caps.MovieSearchTmdbAvailable && query.IsTmdbQuery)
                 return true;
 
             return false;
@@ -583,11 +583,7 @@ namespace Jackett.Common.Indexers
         {
             categoryMapping.Add(new CategoryMapping(trackerCategory, trackerCategoryDesc, newznabCategory.ID));
             if (!TorznabCaps.Categories.Contains(newznabCategory))
-            {
                 TorznabCaps.Categories.Add(newznabCategory);
-                if (TorznabCatType.Movies.Contains(newznabCategory))
-                    TorznabCaps.MovieSearchAvailable = true;
-            }
 
             // add 1:1 categories
             if (trackerCategoryDesc != null && trackerCategory != null)

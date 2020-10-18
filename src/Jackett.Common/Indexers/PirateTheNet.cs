@@ -38,7 +38,7 @@ namespace Jackett.Common.Indexers
                    link: "http://piratethenet.org/",
                    caps: new TorznabCapabilities
                    {
-                       SupportsImdbMovieSearch = true
+                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q, MovieSearchParam.ImdbId }
                    },
                    configService: configService,
                    client: w,

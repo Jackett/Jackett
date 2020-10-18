@@ -36,7 +36,9 @@ namespace Jackett.Common.Indexers
                    name: "Cinecalidad",
                    description: "Películas Full HD en Castellano y Latino Dual.",
                    link: "https://www.cinecalidad.is/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities {
+                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,

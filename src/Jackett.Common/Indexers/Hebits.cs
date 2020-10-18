@@ -34,7 +34,9 @@ namespace Jackett.Common.Indexers
                    name: "Hebits",
                    description: "The Israeli Tracker",
                    link: "https://hebits.net/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities{
+                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,

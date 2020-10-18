@@ -43,15 +43,9 @@ namespace Jackett.Common.Indexers
                    link: "https://animebytes.tv/",
                    configService: configService,
                    client: client,
-                   caps: new TorznabCapabilities(TorznabCatType.TVAnime,
-                                                 TorznabCatType.Movies,
-                                                 TorznabCatType.BooksComics,
-                                                 TorznabCatType.ConsolePSP,
-                                                 TorznabCatType.ConsoleOther,
-                                                 TorznabCatType.PCGames,
-                                                 TorznabCatType.AudioMP3,
-                                                 TorznabCatType.AudioLossless,
-                                                 TorznabCatType.AudioOther),
+                   caps: new TorznabCapabilities {
+                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q }
+                   },
                    logger: l,
                    p: ps,
                    configData: new ConfigurationDataAnimeBytes("Note: Go to AnimeBytes site and open your account settings. Go to 'Account' tab, move cursor over black part near 'Passkey' and copy its value. Your username is case sensitive."))

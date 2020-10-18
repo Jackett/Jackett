@@ -74,7 +74,9 @@ namespace Jackett.Common.Indexers
                 name: "The Pirate Bay",
                 description: "Pirate Bay (TPB) is the galaxy’s most resilient Public BitTorrent site",
                 link: "https://thepiratebay.org/",
-                caps: new TorznabCapabilities(),
+                caps: new TorznabCapabilities {
+                    MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q }
+                },
                 configService: configService,
                 client: client,
                 logger: logger,

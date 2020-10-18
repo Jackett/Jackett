@@ -5,6 +5,13 @@ using System.Xml.Linq;
 
 namespace Jackett.Common.Models
 {
+    public enum MovieSearchParam
+    {
+        Q,
+        ImdbId,
+        TmdbId
+    }
+
     public class TorznabCapabilities
     {
         public int? LimitsMax { get; set; }
@@ -13,20 +20,17 @@ namespace Jackett.Common.Models
         public bool SearchAvailable { get; set; }
 
         public bool TVSearchAvailable { get; set; }
-
-        public bool MovieSearchAvailable { get; set; }
-
-        public bool SupportsTVRageSearch { get; set; }
-        public bool SupportsTvdbSearch { get; set; }
-
-        public bool SupportsImdbMovieSearch { get; set; }
-        public bool SupportsTmdbMovieSearch { get; set; }
-
         public bool SupportsImdbTVSearch { get; set; }
+        public bool SupportsTvdbSearch { get; set; }
+        public bool SupportsTVRageSearch { get; set; }
 
-        public bool MusicSearchAvailable => (SupportedMusicSearchParamsList.Count > 0);
+        public List<MovieSearchParam> MovieSearchParams;
+        public bool MovieSearchAvailable => (MovieSearchParams.Count > 0);
+        public bool MovieSearchImdbAvailable => (MovieSearchParams.Contains(MovieSearchParam.ImdbId));
+        public bool MovieSearchTmdbAvailable => (MovieSearchParams.Contains(MovieSearchParam.TmdbId));
 
         public List<string> SupportedMusicSearchParamsList;
+        public bool MusicSearchAvailable => (SupportedMusicSearchParamsList.Count > 0);
 
         public bool BookSearchAvailable { get; set; }
 
@@ -34,33 +38,15 @@ namespace Jackett.Common.Models
 
         public TorznabCapabilities()
         {
-            Categories = new List<TorznabCategory>();
             SearchAvailable = true;
             TVSearchAvailable = true;
-            MovieSearchAvailable = false;
-            SupportsTVRageSearch = false;
-            SupportsTvdbSearch = false;
-            SupportsImdbMovieSearch = false;
-            SupportsTmdbMovieSearch = false;
             SupportsImdbTVSearch = false;
-            SupportedMusicSearchParamsList = new List<string>();
-            BookSearchAvailable = false;
-        }
-
-        public TorznabCapabilities(params TorznabCategory[] cats)
-        {
-            SearchAvailable = true;
-            TVSearchAvailable = true;
-            SupportsTVRageSearch = false;
             SupportsTvdbSearch = false;
-            SupportsImdbMovieSearch = false;
-            SupportsTmdbMovieSearch = false;
-            SupportsImdbTVSearch = false;
+            SupportsTVRageSearch = false;
+            MovieSearchParams = new List<MovieSearchParam>();
             SupportedMusicSearchParamsList = new List<string>();
             BookSearchAvailable = false;
             Categories = new List<TorznabCategory>();
-            Categories.AddRange(cats);
-            MovieSearchAvailable = Categories.Any(i => TorznabCatType.Movies.Contains(i));
         }
 
         private string SupportedTVSearchParams
@@ -68,27 +54,39 @@ namespace Jackett.Common.Models
             get
             {
                 var parameters = new List<string>() { "q", "season", "ep" };
-                if (SupportsTVRageSearch)
-                    parameters.Add("rid");
-                if (SupportsTvdbSearch)
-                    parameters.Add("tvdbid");
                 if (SupportsImdbTVSearch)
                     parameters.Add("imdbid");
+                if (SupportsTvdbSearch)
+                    parameters.Add("tvdbid");
+                if (SupportsTVRageSearch)
+                    parameters.Add("rid");
                 return string.Join(",", parameters);
             }
         }
 
-        private string SupportedMovieSearchParams
+        public void ParseMovieSearchParams(IEnumerable<string> paramsList)
         {
-            get
-            {
-                var parameters = new List<string>() { "q" };
-                if (SupportsImdbMovieSearch)
-                    parameters.Add("imdbid");
-                if (SupportsTmdbMovieSearch)
-                    parameters.Add("tmdbid");
-                return string.Join(",", parameters);
-            }
+            if (paramsList == null)
+                return;
+            foreach (var paramStr in paramsList)
+                if (Enum.TryParse(paramStr, true, out MovieSearchParam param))
+                    if (!MovieSearchParams.Contains(param))
+                        MovieSearchParams.Add(param);
+                    else
+                        throw new Exception($"Duplicate movie-search param: {paramStr}");
+                else
+                    throw new Exception($"Not supported movie-search param: {paramStr}");
+        }
+
+        private string SupportedMovieSearchParams()
+        {
+            // TODO: always enable q? It can't be disabled
+            var parameters = new List<string> { "q" };
+            if (MovieSearchImdbAvailable)
+                parameters.Add("imdbid");
+            if (MovieSearchTmdbAvailable)
+                parameters.Add("tmdbid");
+            return string.Join(",", parameters);
         }
 
         private string SupportedMusicSearchParams => string.Join(",", SupportedMusicSearchParamsList);
@@ -137,7 +135,7 @@ namespace Jackett.Common.Models
                         ),
                         new XElement("movie-search",
                             new XAttribute("available", MovieSearchAvailable ? "yes" : "no"),
-                            new XAttribute("supportedParams", SupportedMovieSearchParams)
+                            new XAttribute("supportedParams", SupportedMovieSearchParams())
                         ),
                         new XElement("music-search",
                             new XAttribute("available", MusicSearchAvailable ? "yes" : "no"),
@@ -177,15 +175,13 @@ namespace Jackett.Common.Models
         {
             lhs.SearchAvailable = lhs.SearchAvailable || rhs.SearchAvailable;
             lhs.TVSearchAvailable = lhs.TVSearchAvailable || rhs.TVSearchAvailable;
-            lhs.MovieSearchAvailable = lhs.MovieSearchAvailable || rhs.MovieSearchAvailable;
-            lhs.BookSearchAvailable = lhs.BookSearchAvailable || rhs.BookSearchAvailable;
-            lhs.SupportsTVRageSearch = lhs.SupportsTVRageSearch || rhs.SupportsTVRageSearch;
-            lhs.SupportsTvdbSearch = lhs.SupportsTvdbSearch || rhs.SupportsTvdbSearch;
-            lhs.SupportsImdbMovieSearch = lhs.SupportsImdbMovieSearch || rhs.SupportsImdbMovieSearch;
-            lhs.SupportsTmdbMovieSearch = lhs.SupportsTmdbMovieSearch || rhs.SupportsTmdbMovieSearch;
             lhs.SupportsImdbTVSearch = lhs.SupportsImdbTVSearch || rhs.SupportsImdbTVSearch;
+            lhs.SupportsTvdbSearch = lhs.SupportsTvdbSearch || rhs.SupportsTvdbSearch;
+            lhs.SupportsTVRageSearch = lhs.SupportsTVRageSearch || rhs.SupportsTVRageSearch;
+            lhs.MovieSearchParams = lhs.MovieSearchParams.Union(rhs.MovieSearchParams).ToList();
+            // TODO: add music search
+            lhs.BookSearchAvailable = lhs.BookSearchAvailable || rhs.BookSearchAvailable;
             lhs.Categories.AddRange(rhs.Categories.Where(x => x.ID < 100000).Except(lhs.Categories)); // exclude indexer specific categories (>= 100000)
-
             return lhs;
         }
     }
