@@ -120,7 +120,7 @@ namespace Jackett.Common.Indexers
             if (Definition.Caps.Modes.ContainsKey("movie-search"))
                 TorznabCaps.ParseMovieSearchParams(Definition.Caps.Modes["movie-search"]);
             if (Definition.Caps.Modes.ContainsKey("music-search"))
-                TorznabCaps.SupportedMusicSearchParamsList = Definition.Caps.Modes["music-search"];
+                TorznabCaps.ParseMusicSearchParams(Definition.Caps.Modes["music-search"]);
 
             // init config Data
             configData = new ConfigurationData();

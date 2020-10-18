@@ -13,7 +13,6 @@ namespace Jackett.Test.Common.Models
         [Test]
         public void TestConstructors()
         {
-            // TODO: initialize MusicSearchAvailable
             var torznabCaps = new TorznabCapabilities();
             Assert.True(torznabCaps.SearchAvailable);
 
@@ -30,8 +29,12 @@ namespace Jackett.Test.Common.Models
             Assert.False(torznabCaps.MovieSearchImdbAvailable);
             Assert.False(torznabCaps.MovieSearchTmdbAvailable);
 
-            Assert.IsEmpty(torznabCaps.SupportedMusicSearchParamsList);
-            Assert.False(torznabCaps.MusicSearchAvailable); // init
+            Assert.IsEmpty(torznabCaps.MusicSearchParams);
+            Assert.False(torznabCaps.MusicSearchAvailable);
+            Assert.False(torznabCaps.MusicSearchAlbumAvailable);
+            Assert.False(torznabCaps.MusicSearchArtistAvailable);
+            Assert.False(torznabCaps.MusicSearchLabelAvailable);
+            Assert.False(torznabCaps.MusicSearchYearAvailable);
 
             Assert.False(torznabCaps.BookSearchAvailable);
 
@@ -100,13 +103,12 @@ namespace Jackett.Test.Common.Models
             Assert.AreEqual("no", xDoumentSearching?.Element("movie-search")?.Attribute("available")?.Value);
             Assert.AreEqual("q", xDoumentSearching?.Element("movie-search")?.Attribute("supportedParams")?.Value);
             Assert.AreEqual("no", xDoumentSearching?.Element("music-search")?.Attribute("available")?.Value);
-            Assert.AreEqual("", xDoumentSearching?.Element("music-search")?.Attribute("supportedParams")?.Value);
+            Assert.AreEqual("q", xDoumentSearching?.Element("music-search")?.Attribute("supportedParams")?.Value);
             Assert.AreEqual("no", xDoumentSearching?.Element("audio-search")?.Attribute("available")?.Value);
-            Assert.AreEqual("", xDoumentSearching?.Element("audio-search")?.Attribute("supportedParams")?.Value);
+            Assert.AreEqual("q", xDoumentSearching?.Element("audio-search")?.Attribute("supportedParams")?.Value);
             Assert.AreEqual("no", xDoumentSearching?.Element("book-search")?.Attribute("available")?.Value);
             Assert.AreEqual("q", xDoumentSearching?.Element("book-search")?.Attribute("supportedParams")?.Value);
 
-            // TODO: validate invalid music params
             // TODO: book parameters should be configurable?
             // test all features enabled
             torznabCaps = new TorznabCapabilities
@@ -120,7 +122,10 @@ namespace Jackett.Test.Common.Models
                 {
                     MovieSearchParam.Q, MovieSearchParam.ImdbId, MovieSearchParam.TmdbId
                 },
-                SupportedMusicSearchParamsList = new List<string>{"q", "album", "artist", "label", "year"},
+                MusicSearchParams = new List<MusicSearchParam>
+                {
+                    MusicSearchParam.Q, MusicSearchParam.Album, MusicSearchParam.Artist, MusicSearchParam.Label, MusicSearchParam.Year
+                },
                 BookSearchAvailable = true
             };
             xDocument = torznabCaps.GetXDocument();

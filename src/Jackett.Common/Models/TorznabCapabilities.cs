@@ -22,6 +22,15 @@ namespace Jackett.Common.Models
         TmdbId
     }
 
+    public enum MusicSearchParam
+    {
+        Q,
+        Album,
+        Artist,
+        Label,
+        Year
+    }
+
     public class TorznabCapabilities
     {
         public int? LimitsMax { get; set; }
@@ -43,8 +52,12 @@ namespace Jackett.Common.Models
         public bool MovieSearchImdbAvailable => (MovieSearchParams.Contains(MovieSearchParam.ImdbId));
         public bool MovieSearchTmdbAvailable => (MovieSearchParams.Contains(MovieSearchParam.TmdbId));
 
-        public List<string> SupportedMusicSearchParamsList;
-        public bool MusicSearchAvailable => (SupportedMusicSearchParamsList.Count > 0);
+        public List<MusicSearchParam> MusicSearchParams;
+        public bool MusicSearchAvailable => (MusicSearchParams.Count > 0);
+        public bool MusicSearchAlbumAvailable => (MusicSearchParams.Contains(MusicSearchParam.Album));
+        public bool MusicSearchArtistAvailable => (MusicSearchParams.Contains(MusicSearchParam.Artist));
+        public bool MusicSearchLabelAvailable => (MusicSearchParams.Contains(MusicSearchParam.Label));
+        public bool MusicSearchYearAvailable => (MusicSearchParams.Contains(MusicSearchParam.Year));
 
         public bool BookSearchAvailable { get; set; }
 
@@ -55,7 +68,7 @@ namespace Jackett.Common.Models
             SearchAvailable = true;
             TvSearchParams = new List<TvSearchParam>();
             MovieSearchParams = new List<MovieSearchParam>();
-            SupportedMusicSearchParamsList = new List<string>();
+            MusicSearchParams = new List<MusicSearchParam>();
             BookSearchAvailable = false;
             Categories = new List<TorznabCategory>();
         }
@@ -88,6 +101,20 @@ namespace Jackett.Common.Models
                     throw new Exception($"Not supported movie-search param: {paramStr}");
         }
 
+        public void ParseMusicSearchParams(IEnumerable<string> paramsList)
+        {
+            if (paramsList == null)
+                return;
+            foreach (var paramStr in paramsList)
+                if (Enum.TryParse(paramStr, true, out MusicSearchParam param))
+                    if (!MusicSearchParams.Contains(param))
+                       MusicSearchParams.Add(param);
+                    else
+                        throw new Exception($"Duplicate music-search param: {paramStr}");
+                else
+                    throw new Exception($"Not supported Music-search param: {paramStr}");
+        }
+
         private string SupportedTvSearchParams()
         {
             var parameters = new List<string> { "q" }; // q is always enabled
@@ -114,7 +141,19 @@ namespace Jackett.Common.Models
             return string.Join(",", parameters);
         }
 
-        private string SupportedMusicSearchParams => string.Join(",", SupportedMusicSearchParamsList);
+        private string SupportedMusicSearchParams()
+        {
+            var parameters = new List<string> { "q" }; // q is always enabled
+            if (MusicSearchAlbumAvailable)
+                parameters.Add("album");
+            if (MusicSearchArtistAvailable)
+                parameters.Add("artist");
+            if (MusicSearchLabelAvailable)
+                parameters.Add("label");
+            if (MusicSearchYearAvailable)
+                parameters.Add("year");
+            return string.Join(",", parameters);
+        }
 
         private string SupportedBookSearchParams
         {
@@ -164,12 +203,12 @@ namespace Jackett.Common.Models
                         ),
                         new XElement("music-search",
                             new XAttribute("available", MusicSearchAvailable ? "yes" : "no"),
-                            new XAttribute("supportedParams", SupportedMusicSearchParams)
+                            new XAttribute("supportedParams", SupportedMusicSearchParams())
                         ),
                         // inconsistend but apparently already used by various newznab indexers (see #1896)
                         new XElement("audio-search",
                             new XAttribute("available", MusicSearchAvailable ? "yes" : "no"),
-                            new XAttribute("supportedParams", SupportedMusicSearchParams)
+                            new XAttribute("supportedParams", SupportedMusicSearchParams())
                         ),
                         new XElement("book-search",
                             new XAttribute("available", BookSearchAvailable ? "yes" : "no"),
@@ -201,7 +240,7 @@ namespace Jackett.Common.Models
             lhs.SearchAvailable = lhs.SearchAvailable || rhs.SearchAvailable;
             lhs.TvSearchParams = lhs.TvSearchParams.Union(rhs.TvSearchParams).ToList();
             lhs.MovieSearchParams = lhs.MovieSearchParams.Union(rhs.MovieSearchParams).ToList();
-            // TODO: add music search
+            lhs.MusicSearchParams = lhs.MusicSearchParams.Union(rhs.MusicSearchParams).ToList();
             lhs.BookSearchAvailable = lhs.BookSearchAvailable || rhs.BookSearchAvailable;
             lhs.Categories.AddRange(rhs.Categories.Where(x => x.ID < 100000).Except(lhs.Categories)); // exclude indexer specific categories (>= 100000)
             return lhs;
