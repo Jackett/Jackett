@@ -49,6 +49,8 @@ namespace Jackett.Common.Indexers
             "https://knaben.ru/",
             "https://piratebayztemzmv.onion.pet/",
             "https://piratebayztemzmv.onion.ly/",
+            "https://pirateproxy.cloud/",
+            "https://tpb18.ukpass.co/",
         };
 
         private const string KeyInfoHash = "{info_hash}";
