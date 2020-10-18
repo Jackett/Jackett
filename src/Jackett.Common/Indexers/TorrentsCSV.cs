@@ -67,6 +67,11 @@ namespace Jackett.Common.Indexers
                     MagnetUri = new Uri("magnet:?xt=urn:btih:3333333333333333333333333333333333333333"), // unknown torrent
                     Category = new List<int> { TorznabCatType.Other.ID },
                     PublishDate = new DateTime(),
+                    Grabs = 0,
+                    Seeders = 0,
+                    Peers = 0,
+                    DownloadVolumeFactor = 0,
+                    UploadVolumeFactor = 1,
                 });
                 return releases;
             }
