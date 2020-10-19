@@ -53,8 +53,13 @@ namespace Jackett.Common.Indexers
                    name: "EpubLibre",
                    description: "Más libros, Más libres",
                    link: "https://epublibre.org/",
-                   // TODO: add book search
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities
+                   {
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q // TODO: add more book parameters
+                       }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,

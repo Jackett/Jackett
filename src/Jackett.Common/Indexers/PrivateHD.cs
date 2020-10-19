@@ -18,7 +18,6 @@ namespace Jackett.Common.Indexers
                    link: "https://privatehd.to/",
                    caps: new TorznabCapabilities
                    {
-                       // TODO: add music search
                        TvSearchParams = new List<TvSearchParam>
                        {
                            TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
@@ -26,6 +25,10 @@ namespace Jackett.Common.Indexers
                        MovieSearchParams = new List<MovieSearchParam>
                        {
                            MovieSearchParam.Q, MovieSearchParam.ImdbId
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
                        }
                    },
                    configService: configService,

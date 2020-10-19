@@ -48,7 +48,6 @@ namespace Jackett.Common.Indexers
                  link: "https://ncore.cc/",
                  caps: new TorznabCapabilities
                  {
-                     // TODO: add music and book search
                      TvSearchParams = new List<TvSearchParam>
                      {
                          TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
@@ -56,6 +55,14 @@ namespace Jackett.Common.Indexers
                      MovieSearchParams = new List<MovieSearchParam>
                      {
                          MovieSearchParam.Q, MovieSearchParam.ImdbId
+                     },
+                     MusicSearchParams = new List<MusicSearchParam>
+                     {
+                         MusicSearchParam.Q
+                     },
+                     BookSearchParams = new List<BookSearchParam>
+                     {
+                         BookSearchParam.Q
                      }
                  },
                  configService: configService,

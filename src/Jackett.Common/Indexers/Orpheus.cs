@@ -18,7 +18,6 @@ namespace Jackett.Common.Indexers
                    link: "https://orpheus.network/",
                    caps: new TorznabCapabilities
                    {
-                       // TODO: add book search
                        TvSearchParams = new List<TvSearchParam>
                        {
                            TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
@@ -30,6 +29,10 @@ namespace Jackett.Common.Indexers
                        MusicSearchParams = new List<MusicSearchParam>
                        {
                            MusicSearchParam.Q, MusicSearchParam.Album, MusicSearchParam.Artist, MusicSearchParam.Label, MusicSearchParam.Year
+                       },
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q
                        }
                    },
                    configService: configService,

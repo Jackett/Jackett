@@ -36,7 +36,6 @@ namespace Jackett.Common.Indexers
                    link: "https://www.xspeeds.eu/",
                    caps: new TorznabCapabilities
                    {
-                       // TODO: add book search
                        TvSearchParams = new List<TvSearchParam>
                        {
                            TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
@@ -44,6 +43,10 @@ namespace Jackett.Common.Indexers
                        MovieSearchParams = new List<MovieSearchParam>
                        {
                            MovieSearchParam.Q, MovieSearchParam.ImdbId
+                       },
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q
                        }
                    },
                    configService: configService,
