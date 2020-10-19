@@ -26,9 +26,9 @@ namespace Jackett.Common.Indexers
     {
         private static string ApiEndpoint => "https://api.xthor.tk/";
 
-        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
+        public override string[] LegacySiteLinks { get; protected set; } = {
             "https://xthor.bz/",
-            "https://xthor.to",
+            "https://xthor.to"
         };
 
         private string TorrentCommentUrl => TorrentDescriptionUrl;
@@ -490,7 +490,7 @@ namespace Jackett.Common.Indexers
             Output("\nQuerying tracker for results....");
 
             // Build WebRequest for index
-            var myIndexRequest = new WebRequest()
+            var myIndexRequest = new WebRequest
             {
                 Type = RequestType.GET,
                 Url = request,

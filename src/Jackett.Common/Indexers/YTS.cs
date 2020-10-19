@@ -19,10 +19,10 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class YTS : BaseWebIndexer
     {
-        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
+        public override string[] LegacySiteLinks { get; protected set; } = {
             "https://yts.ag/",
             "https://yts.am/",
-            "https://yts.lt/",
+            "https://yts.lt/"
         };
 
         private string ApiEndpoint => SiteLink + "api/v2/list_movies.json";

@@ -70,7 +70,7 @@ namespace Jackett.Common.Indexers
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
                 { "password", configData.Password.Value },
-                { "login", "Login" },
+                { "login", "Login" }
             };
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl);

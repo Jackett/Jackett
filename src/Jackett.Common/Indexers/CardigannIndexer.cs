@@ -37,7 +37,7 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        protected readonly string[] OptionalFields = new string[] { "imdb", "rageid", "tvdbid", "banner" };
+        protected readonly string[] OptionalFields = { "imdb", "rageid", "tvdbid", "banner" };
 
         private static readonly string[] _SupportedLogicFunctions =
         {
@@ -1301,7 +1301,7 @@ namespace Jackett.Common.Indexers
                                 var rawStr = applyGoTemplateText(Input.Value, variables, WebUtility.UrlEncode);
                                 foreach (var part in rawStr.Split('&'))
                                 {
-                                    var parts = part.Split(new char[] { '=' }, 2);
+                                    var parts = part.Split(new[] { '=' }, 2);
                                     var key = parts[0];
                                     if (key.Length == 0)
                                         continue;

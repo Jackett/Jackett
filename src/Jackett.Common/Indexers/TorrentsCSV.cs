@@ -81,7 +81,7 @@ namespace Jackett.Common.Indexers
                     Seeders = 0,
                     Peers = 0,
                     DownloadVolumeFactor = 0,
-                    UploadVolumeFactor = 1,
+                    UploadVolumeFactor = 1
                 });
                 return releases;
             }
@@ -171,7 +171,7 @@ namespace Jackett.Common.Indexers
                         Seeders = seeders,
                         Peers = leechers + seeders,
                         DownloadVolumeFactor = 0,
-                        UploadVolumeFactor = 1,
+                        UploadVolumeFactor = 1
                     };
 
                     releases.Add(release);

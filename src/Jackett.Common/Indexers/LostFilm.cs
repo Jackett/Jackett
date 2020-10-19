@@ -22,8 +22,8 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     internal class LostFilm : BaseWebIndexer
     {
-        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
-            "https://www.lostfilm.tv/",
+        public override string[] LegacySiteLinks { get; protected set; } = {
+            "https://www.lostfilm.tv/"
         };
 
         private static readonly Regex parsePlayEpisodeRegex = new Regex("PlayEpisode\\('(?<id>\\d{1,3})(?<season>\\d{3})(?<episode>\\d{3})'\\)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -730,7 +730,7 @@ namespace Jackett.Common.Indexers
 
                         // Ru title: downloadLink.TextContent.Replace("\n", "");
                         // En title should be manually constructed.
-                        var titleComponents = new string[] {
+                        var titleComponents = new[] {
                             serieTitle, details.GetEpisodeString(), episodeName, techInfo
                         };
                         var downloadLink = row.QuerySelector("div.inner-box--link > a");

@@ -276,7 +276,7 @@ namespace Jackett.Common.Indexers
                 {"searchseriesid", ""},
                 {"tab", "listseries"},
                 {"function", "Search"},
-                {"string", searchTerm}, // eretz + nehedert
+                {"string", searchTerm} // eretz + nehedert
             };
             var site = new UriBuilder
             {

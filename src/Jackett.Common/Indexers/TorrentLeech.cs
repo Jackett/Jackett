@@ -27,7 +27,7 @@ namespace Jackett.Common.Indexers
 
         public override string[] LegacySiteLinks { get; protected set; } =
         {
-            "https://v4.torrentleech.org/",
+            "https://v4.torrentleech.org/"
         };
 
         public TorrentLeech(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)

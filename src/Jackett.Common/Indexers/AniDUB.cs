@@ -86,7 +86,7 @@ namespace Jackett.Common.Indexers
                 { "/dorama/korea_dorama", "7" },
                 { "/dorama/china_dorama", "8" },
                 { "/dorama", "9" },
-                { "/anons_ongoing", "12" },
+                { "/anons_ongoing", "12" }
             };
 
         private static ICollection<string> DefaultSearchCategories => new[] { "0" };
@@ -574,7 +574,7 @@ namespace Jackett.Common.Indexers
                 { "beforeafter", "after" },
                 { "sortby", "" },
                 { "resorder", "desc" },
-                { "showposts", "1" },
+                { "showposts", "1" }
             };
 
             data.AddRange(PrepareCategoriesQuery(query));

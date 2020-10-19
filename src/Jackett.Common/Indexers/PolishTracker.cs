@@ -22,7 +22,7 @@ namespace Jackett.Common.Indexers
         private static string CdnUrl => "https://cdn.pte.nu/";
 
         public override string[] LegacySiteLinks { get; protected set; } = {
-            "https://polishtracker.net/",
+            "https://polishtracker.net/"
         };
 
         private new ConfigurationDataCookie configData => (ConfigurationDataCookie)base.configData;

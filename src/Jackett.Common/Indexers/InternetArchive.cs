@@ -79,12 +79,12 @@ namespace Jackett.Common.Indexers
             var order = new SelectItem(new Dictionary<string, string>
             {
                 {"desc", "desc"},
-                {"asc", "asc"},
+                {"asc", "asc"}
             })
             { Name = "Order requested from site", Value = "desc" };
             configData.AddDynamic("order", order);
 
-            var titleOnly = new BoolItem() { Name = "Search only in title", Value = true };
+            var titleOnly = new BoolItem { Name = "Search only in title", Value = true };
             configData.AddDynamic("titleOnly", titleOnly);
 
             AddCategoryMapping("audio", TorznabCatType.Audio);

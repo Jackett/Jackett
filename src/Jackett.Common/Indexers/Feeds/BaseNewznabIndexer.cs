@@ -63,7 +63,7 @@ namespace Jackett.Common.Indexers.Feeds
                 Seeders = seeders,
                 Peers = peers,
                 InfoHash = attributes.First(e => e.Attribute("name").Value == "infohash").Attribute("value").Value,
-                MagnetUri = new Uri(attributes.First(e => e.Attribute("name").Value == "magneturl").Attribute("value").Value),
+                MagnetUri = new Uri(attributes.First(e => e.Attribute("name").Value == "magneturl").Attribute("value").Value)
             };
             return release;
         }

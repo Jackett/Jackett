@@ -111,7 +111,7 @@ namespace Jackett.Common.Indexers
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var searchStrings = new List<string>(new string[] { query.GetQueryString() });
+            var searchStrings = new List<string>(new[] { query.GetQueryString() });
 
             if (string.IsNullOrEmpty(query.Episode) && (query.Season > 0))
                 // Tracker naming rules: If query is for a whole season, "Season #" instead of "S##".
@@ -163,7 +163,7 @@ namespace Jackett.Common.Indexers
                         release.MinimumRatio = 1;
                         release.MinimumSeedTime = 172800; // 48 hours
 
-                        var catStr = row.Children[0].FirstElementChild.GetAttribute("href").Split(new char[] { '[', ']' })[1];
+                        var catStr = row.Children[0].FirstElementChild.GetAttribute("href").Split(new[] { '[', ']' })[1];
                         release.Category = MapTrackerCatToNewznab(catStr);
 
                         var qDetails = row.Children[1].QuerySelector("a[title='View Torrent']");

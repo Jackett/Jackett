@@ -121,7 +121,7 @@ namespace Jackett.Common.Indexers
             };
             searchUrl += "?" + queryCollection.GetQueryString();
 
-            var extraHeaders = new Dictionary<string, string>()
+            var extraHeaders = new Dictionary<string, string>
             {
                 { "X-Requested-With", "XMLHttpRequest" }
             };

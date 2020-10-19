@@ -68,7 +68,7 @@ namespace Jackett.Common.Indexers
             var queryParameters = new NameValueCollection
             {
                 { "search", query.SearchTerm },
-                { "filter", "names,poster.url,code,torrents.list,season.year" },
+                { "filter", "names,poster.url,code,torrents.list,season.year" }
             };
             var response = await RequestWithCookiesAndRetryAsync(Configuration.ApiLink.Value + "/searchTitles?" + queryParameters.GetQueryString());
             if (response.Status != HttpStatusCode.OK)
@@ -83,7 +83,7 @@ namespace Jackett.Common.Indexers
             var queryParameters = new NameValueCollection
             {
                 { "limit", "100" },
-                { "filter", "names,poster.url,code,torrents.list,season.year" },
+                { "filter", "names,poster.url,code,torrents.list,season.year" }
             };
             var response = await RequestWithCookiesAndRetryAsync(Configuration.ApiLink.Value + "/getUpdates?" + queryParameters.GetQueryString());
             if (response.Status != HttpStatusCode.OK)

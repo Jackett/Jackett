@@ -21,9 +21,9 @@ namespace Jackett.Common.Indexers
     {
         private string SearchUrl => SiteLink + "api/v1/search";
 
-        private readonly Dictionary<string, string> APIHeaders = new Dictionary<string, string>()
+        private readonly Dictionary<string, string> APIHeaders = new Dictionary<string, string>
         {
-            {"Accept", "application/json, text/plain, */*"},
+            {"Accept", "application/json, text/plain, */*"}
         };
 
         private readonly int MAX_RESULTS_PER_PAGE = 20;

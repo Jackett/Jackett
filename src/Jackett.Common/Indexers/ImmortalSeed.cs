@@ -23,8 +23,8 @@ namespace Jackett.Common.Indexers
         private string LoginUrl => SiteLink + "takelogin.php";
         private string QueryString => "?do=search&keywords={0}&search_type=t_name&category=0&include_dead_torrents=no";
 
-        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
-            "http://immortalseed.me/",
+        public override string[] LegacySiteLinks { get; protected set; } = {
+            "http://immortalseed.me/"
         };
 
         private new ConfigurationDataBasicLogin configData

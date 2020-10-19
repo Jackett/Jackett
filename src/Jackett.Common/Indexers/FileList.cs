@@ -22,7 +22,7 @@ namespace Jackett.Common.Indexers
             "http://filelist.ro/",
             "https://filelist.ro/",
             "https://flro.org/",
-            "http://flro.org/",
+            "http://flro.org/"
         };
 
         private string ApiUrl => SiteLink + "api.php";

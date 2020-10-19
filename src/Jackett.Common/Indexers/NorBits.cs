@@ -134,7 +134,7 @@ namespace Jackett.Common.Indexers
         private async Task DoLogin()
         {
             // Build WebRequest for index
-            var myIndexRequest = new WebRequest()
+            var myIndexRequest = new WebRequest
             {
                 Type = RequestType.GET,
                 Url = SiteLink,
@@ -153,7 +153,7 @@ namespace Jackett.Common.Indexers
             };
 
             // Build WebRequest for login
-            var myRequestLogin = new WebRequest()
+            var myRequestLogin = new WebRequest
             {
                 Type = RequestType.GET,
                 Url = LoginUrl,
@@ -169,7 +169,7 @@ namespace Jackett.Common.Indexers
             await webclient.GetResultAsync(myRequestLogin);
 
             // Build WebRequest for submitting authentification
-            var request = new WebRequest()
+            var request = new WebRequest
             {
                 PostData = pairs,
                 Referer = LoginUrl,

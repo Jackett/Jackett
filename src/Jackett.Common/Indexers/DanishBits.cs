@@ -15,8 +15,8 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class DanishBits : CouchPotatoTracker
     {
-        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
-            "http://danishbits.org/",
+        public override string[] LegacySiteLinks { get; protected set; } = {
+            "http://danishbits.org/"
         };
 
         private new ConfigurationDataUserPasskey configData

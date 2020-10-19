@@ -180,7 +180,7 @@ namespace Jackett.Common.Indexers
 
         private string FixYearPosition(string title, string year)
         {
-            int index = title.LastIndexOf('-');
+            var index = title.LastIndexOf('-');
             // If its a series
             if (index != -1)
             {

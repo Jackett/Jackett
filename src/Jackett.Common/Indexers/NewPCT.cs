@@ -23,7 +23,7 @@ namespace Jackett.Common.Indexers
         private enum ReleaseType
         {
             Tv,
-            Movie,
+            Movie
         }
 
         private class NewpctRelease : ReleaseInfo
@@ -77,7 +77,7 @@ namespace Jackett.Common.Indexers
             {
                 MatchRegex = new Regex(@"window\.location\.href\s*=\s*""([^""]+)"""),
                 MatchEvaluator = m => $"https:{m.Groups[1]}"
-            },
+            }
         };
 
         private readonly int _maxDailyPages = 1;

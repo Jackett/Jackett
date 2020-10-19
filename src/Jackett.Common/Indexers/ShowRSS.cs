@@ -104,7 +104,7 @@ namespace Jackett.Common.Indexers
                         Seeders = 1,
                         Peers = 2,
                         DownloadVolumeFactor = 0,
-                        UploadVolumeFactor = 1,
+                        UploadVolumeFactor = 1
                     };
                     releases.Add(release);
                 }

@@ -117,7 +117,7 @@ namespace Jackett.Common.Indexers
 
             movieListSearchUrl += "?" + queryCollection.GetQueryString();
 
-            var authHeaders = new Dictionary<string, string>()
+            var authHeaders = new Dictionary<string, string>
             {
                 { "ApiUser", configData.User.Value },
                 { "ApiKey", configData.Key.Value }
@@ -153,7 +153,7 @@ namespace Jackett.Common.Indexers
                             {"action", "download"},
                             {"id", torrentId},
                             {"authkey", AuthKey},
-                            {"torrent_pass", PassKey},
+                            {"torrent_pass", PassKey}
                         };
                         var free = !(torrent["FreeleechType"] is null);
 

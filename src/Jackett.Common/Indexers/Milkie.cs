@@ -116,7 +116,7 @@ namespace Jackett.Common.Indexers
                     var comments = new Uri($"{SiteLink}browse/{torrent.Id}");
                     var publishDate = DateTimeUtil.FromUnknown(torrent.CreatedAt);
 
-                    var release = new ReleaseInfo()
+                    var release = new ReleaseInfo
                     {
                         Title = torrent.ReleaseName,
                         Link = link,

@@ -194,7 +194,7 @@ namespace Jackett.Common.Indexers
                     var dlLink = qDownloadLink.GetAttribute("href");
                     if (dlLink.Contains("javascript")) // depending on the user agent the DL link is a javascript call
                     {
-                        var dlLinkParts = dlLink.Split(new char[] { '\'', ',' });
+                        var dlLinkParts = dlLink.Split(new[] { '\'', ',' });
                         dlLink = SiteLink + "download/" + dlLinkParts[3] + "/" + dlLinkParts[5];
                     }
                     var link = new Uri(dlLink);

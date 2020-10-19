@@ -27,7 +27,7 @@ namespace Jackett.Common.Indexers
         private Dictionary<string, string> CategoryMappings = new Dictionary<string, string>{
             { "cats_music", "Music" },
             { "cats_libblemixtapes", "Libble Mixtapes" },
-            { "cats_musicvideos", "Music Videos" },
+            { "cats_musicvideos", "Music Videos" }
         };
         class VolumeFactorTag
         {
@@ -46,7 +46,7 @@ namespace Jackett.Common.Indexers
                     DownloadVolumeFactor = 0,
                     UploadVolumeFactor = 1
                 }
-            },
+            }
         };
 
         private new ConfigurationDataBasicLogin configData
@@ -171,7 +171,7 @@ namespace Jackett.Common.Indexers
                 var albumRows = dom.QuerySelectorAll("table#torrent_table > tbody > tr:has(strong > a[href*=\"torrents.php?id=\"])");
                 foreach (var row in albumRows)
                 {
-                    Regex releaseGroupRegex = new Regex(@"torrents\.php\?id=([0-9]+)");
+                    var releaseGroupRegex = new Regex(@"torrents\.php\?id=([0-9]+)");
 
                     var albumNameNode = row.QuerySelector("strong > a[href*=\"torrents.php?id=\"]");
                     var artistsNameNodes = row.QuerySelectorAll("strong > a[href*=\"artist.php?id=\"]");
@@ -182,7 +182,7 @@ namespace Jackett.Common.Indexers
                     var releaseArtist = "Various Artists";
                     if (artistsNameNodes.Count() > 0)
                     {
-                        List<string> aristNames = new List<string>();
+                        var aristNames = new List<string>();
                         foreach (var aristNode in artistsNameNodes)
                         {
                             aristNames.Add(aristNode.TextContent.Trim());
@@ -269,11 +269,11 @@ namespace Jackett.Common.Indexers
                             release.DownloadVolumeFactor = 1;
                             release.UploadVolumeFactor = 1;
                             var releaseTags = releaseMediaType.Split('/').Select(tag => tag.Trim()).ToList();
-                            for (int i = releaseTags.Count - 1; i >= 0; i--)
+                            for (var i = releaseTags.Count - 1; i >= 0; i--)
                             {
-                                string releaseTag = releaseTags[i];
+                                var releaseTag = releaseTags[i];
                                 if (VolumeTagMappings.ContainsKey(releaseTag)) {
-                                    VolumeFactorTag volumeFactor = VolumeTagMappings[releaseTag];
+                                    var volumeFactor = VolumeTagMappings[releaseTag];
                                     release.DownloadVolumeFactor = volumeFactor.DownloadVolumeFactor;
                                     release.UploadVolumeFactor = volumeFactor.UploadVolumeFactor;
                                     releaseTags.RemoveAt(i);
