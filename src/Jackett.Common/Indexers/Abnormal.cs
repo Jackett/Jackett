@@ -21,7 +21,7 @@ using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
-using WebRequest = Jackett.Common.Utils.Clients.WebRequest;
+using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
 namespace Jackett.Common.Indexers
 {
@@ -48,10 +48,10 @@ namespace Jackett.Common.Indexers
         private ConfigurationDataAbnormal ConfigData
         {
             get => (ConfigurationDataAbnormal)configData;
-            set => base.configData = value;
+            set => configData = value;
         }
 
-        public Abnormal(IIndexerConfigurationService configService, Utils.Clients.WebClient w, Logger l, IProtectionService ps)
+        public Abnormal(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
             : base(id: "abnormal",
                    name: "Abnormal",
                    description: "General French Private Tracker",

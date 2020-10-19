@@ -490,7 +490,7 @@ namespace Jackett.Common.Indexers
             Output("\nQuerying tracker for results....");
 
             // Build WebRequest for index
-            var myIndexRequest = new Utils.Clients.WebRequest()
+            var myIndexRequest = new WebRequest()
             {
                 Type = RequestType.GET,
                 Url = request,

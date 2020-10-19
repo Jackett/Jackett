@@ -459,7 +459,7 @@ namespace Jackett.Common.Indexers
 
         protected async Task<WebResult> RequestLoginAndFollowRedirect(string url, IEnumerable<KeyValuePair<string, string>> data, string cookies, bool returnCookiesFromFirstCall, string redirectUrlOverride = null, string referer = null, bool accumulateCookies = false)
         {
-            var request = new Utils.Clients.WebRequest()
+            var request = new WebRequest()
             {
                 Url = url,
                 Type = RequestType.POST,
