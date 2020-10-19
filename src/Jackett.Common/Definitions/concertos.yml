@@ -19,7 +19,7 @@ caps:
     - {id: 9, cat: Audio, desc: "Podcast"}
 
   modes:
-    search: [q, imdbid]
+    search: [q]
     tv-search: [q, imdbid]
     movie-search: [q, imdbid]
     music-search: [q]

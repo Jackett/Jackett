@@ -16,7 +16,7 @@ caps:
     - {id: 5, cat: Movies/Other, desc: "Trailer"}
 
   modes:
-    search: [q, imdbid]
+    search: [q]
     tv-search: [q, season, ep, imdbid, tvdbid]
     movie-search: [q, imdbid, tmdbid]
 

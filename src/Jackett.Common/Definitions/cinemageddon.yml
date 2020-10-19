@@ -35,7 +35,7 @@ caps:
     - {id: 22, cat: Movies, desc: "Trailers"}
 
   modes:
-    search: [q, imdbid]
+    search: [q]
     movie-search: [q, imdbid]
 
 login:

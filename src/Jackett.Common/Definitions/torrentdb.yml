@@ -18,7 +18,7 @@ caps:
     - {id: 6, cat: XXX, desc: "XXX"}
 
   modes:
-    search: [q, imdbid]
+    search: [q]
     tv-search: [q, imdbid]
     movie-search: [q, imdbid]
     music-search: [q]

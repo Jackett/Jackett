@@ -34,7 +34,7 @@ caps:
     - {id: 65, cat: Movies/3D, desc: "3D Blu-Ray 1080p"}
 
   modes:
-    search: [q, imdbid]
+    search: [q]
     movie-search: [q, imdbid]
 
 settings:

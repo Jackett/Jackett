@@ -88,7 +88,7 @@ caps:
     - {id: 9999, cat: Other, desc: "unsort"}
 
   modes:
-    search: [q, imdbid]
+    search: [q]
     tv-search: [q, season, ep]
     movie-search: [q, imdbid]
     music-search: [q]

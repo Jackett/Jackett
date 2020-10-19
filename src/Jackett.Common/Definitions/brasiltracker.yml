@@ -14,7 +14,7 @@ caps:
     - {id: 1, cat: Other, desc: "Filmes/Series/Música"}
 
   modes:
-    search: [q, imdbid]
+    search: [q]
     tv-search: [q, season, ep]
     movie-search: [q, imdbid]
 

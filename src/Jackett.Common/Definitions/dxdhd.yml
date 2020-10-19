@@ -24,7 +24,7 @@ caps:
     - {id: 12, cat: TV/Anime, desc: "Anime-Movie"}
 
   modes:
-    search: [q, imdbid]
+    search: [q]
     tv-search: [q, season, ep, imdbid]
     movie-search: [q, imdbid]
     music-search: [q]
