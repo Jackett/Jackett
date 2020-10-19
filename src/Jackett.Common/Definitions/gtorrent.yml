@@ -34,7 +34,7 @@ search:
     story: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
 
   rows:
-    selector: div.blog_brief_news:has(div.uploaded)
+    selector: div.blog_brief_news:not(div.first_line):not(:has(div.uploaded:empty))
     filters:
       - name: andmatch
 
