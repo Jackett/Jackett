@@ -173,7 +173,6 @@ namespace Jackett.Common.Indexers
                     release.PublishDate = DateTime.Parse(tr.QuerySelector("time.torrent-time").Text());
                     release.Size = getReleaseSize(tr);
                     release.Guid = new Uri(uri.ToString() + tr_id);
-                    logger.Info(release.Guid);
                     releases.Add(release);
                 }
             }

@@ -31,6 +31,13 @@ namespace Jackett.Common.Models
         Year
     }
 
+    public enum BookSearchParam
+    {
+        Q,
+        Title,
+        Author
+    }
+
     public class TorznabCapabilities
     {
         public int? LimitsMax { get; set; }
@@ -59,9 +66,12 @@ namespace Jackett.Common.Models
         public bool MusicSearchLabelAvailable => (MusicSearchParams.Contains(MusicSearchParam.Label));
         public bool MusicSearchYearAvailable => (MusicSearchParams.Contains(MusicSearchParam.Year));
 
-        public bool BookSearchAvailable { get; set; }
+        public List<BookSearchParam> BookSearchParams;
+        public bool BookSearchAvailable => (BookSearchParams.Count > 0);
+        public bool BookSearchTitleAvailable => (BookSearchParams.Contains(BookSearchParam.Title));
+        public bool BookSearchAuthorAvailable => (BookSearchParams.Contains(BookSearchParam.Author));
 
-        public List<TorznabCategory> Categories { get; private set; }
+        public List<TorznabCategory> Categories { get; set; }
 
         public TorznabCapabilities()
         {
@@ -69,11 +79,41 @@ namespace Jackett.Common.Models
             TvSearchParams = new List<TvSearchParam>();
             MovieSearchParams = new List<MovieSearchParam>();
             MusicSearchParams = new List<MusicSearchParam>();
-            BookSearchAvailable = false;
+            BookSearchParams = new List<BookSearchParam>();
             Categories = new List<TorznabCategory>();
         }
 
-        public void ParseTvSearchParams(IEnumerable<string> paramsList)
+        public void ParseCardigannSearchModes(Dictionary<string,List<string>> modes)
+        {
+            if (modes == null || !modes.Any())
+                throw new Exception("At least one search mode is required");
+            if (!modes.ContainsKey("search"))
+                throw new Exception("The search mode 'search' is mandatory");
+            foreach (var entry in modes)
+                switch (entry.Key)
+                {
+                    case "search":
+                        if (entry.Value == null || entry.Value.Count != 1 || entry.Value[0] != "q")
+                            throw new Exception("In search mode 'search' only 'q' parameter is supported and it's mandatory");
+                        break;
+                    case "tv-search":
+                        ParseTvSearchParams(entry.Value);
+                        break;
+                    case "movie-search":
+                        ParseMovieSearchParams(entry.Value);
+                        break;
+                    case "music-search":
+                        ParseMusicSearchParams(entry.Value);
+                        break;
+                    case "book-search":
+                        ParseBookSearchParams(entry.Value);
+                        break;
+                    default:
+                        throw new Exception($"Unsupported search mode: {entry.Key}");
+                }
+        }
+
+        private void ParseTvSearchParams(IEnumerable<string> paramsList)
         {
             if (paramsList == null)
                 return;
@@ -87,7 +127,7 @@ namespace Jackett.Common.Models
                     throw new Exception($"Not supported tv-search param: {paramStr}");
         }
 
-        public void ParseMovieSearchParams(IEnumerable<string> paramsList)
+        private void ParseMovieSearchParams(IEnumerable<string> paramsList)
         {
             if (paramsList == null)
                 return;
@@ -101,7 +141,7 @@ namespace Jackett.Common.Models
                     throw new Exception($"Not supported movie-search param: {paramStr}");
         }
 
-        public void ParseMusicSearchParams(IEnumerable<string> paramsList)
+        private void ParseMusicSearchParams(IEnumerable<string> paramsList)
         {
             if (paramsList == null)
                 return;
@@ -112,7 +152,21 @@ namespace Jackett.Common.Models
                     else
                         throw new Exception($"Duplicate music-search param: {paramStr}");
                 else
-                    throw new Exception($"Not supported Music-search param: {paramStr}");
+                    throw new Exception($"Not supported music-search param: {paramStr}");
+        }
+
+        private void ParseBookSearchParams(IEnumerable<string> paramsList)
+        {
+            if (paramsList == null)
+                return;
+            foreach (var paramStr in paramsList)
+                if (Enum.TryParse(paramStr, true, out BookSearchParam param))
+                    if (!BookSearchParams.Contains(param))
+                        BookSearchParams.Add(param);
+                    else
+                        throw new Exception($"Duplicate book-search param: {paramStr}");
+                else
+                    throw new Exception($"Not supported book-search param: {paramStr}");
         }
 
         private string SupportedTvSearchParams()
@@ -155,15 +209,14 @@ namespace Jackett.Common.Models
             return string.Join(",", parameters);
         }
 
-        private string SupportedBookSearchParams
+        private string SupportedBookSearchParams()
         {
-            get
-            {
-                var parameters = new List<string>() { "q" };
-                if (BookSearchAvailable)
-                    parameters.Add("author,title");
-                return string.Join(",", parameters);
-            }
+            var parameters = new List<string> { "q" }; // q is always enabled
+            if (BookSearchTitleAvailable)
+                parameters.Add("title");
+            if (BookSearchAuthorAvailable)
+                parameters.Add("author");
+            return string.Join(",", parameters);
         }
 
         public bool SupportsCategories(int[] categories)
@@ -212,7 +265,7 @@ namespace Jackett.Common.Models
                         ),
                         new XElement("book-search",
                             new XAttribute("available", BookSearchAvailable ? "yes" : "no"),
-                            new XAttribute("supportedParams", SupportedBookSearchParams)
+                            new XAttribute("supportedParams", SupportedBookSearchParams())
                         )
                     ),
                     new XElement("categories",
@@ -241,7 +294,7 @@ namespace Jackett.Common.Models
             lhs.TvSearchParams = lhs.TvSearchParams.Union(rhs.TvSearchParams).ToList();
             lhs.MovieSearchParams = lhs.MovieSearchParams.Union(rhs.MovieSearchParams).ToList();
             lhs.MusicSearchParams = lhs.MusicSearchParams.Union(rhs.MusicSearchParams).ToList();
-            lhs.BookSearchAvailable = lhs.BookSearchAvailable || rhs.BookSearchAvailable;
+            lhs.BookSearchParams = lhs.BookSearchParams.Union(rhs.BookSearchParams).ToList();
             lhs.Categories.AddRange(rhs.Categories.Where(x => x.ID < 100000).Except(lhs.Categories)); // exclude indexer specific categories (>= 100000)
             return lhs;
         }

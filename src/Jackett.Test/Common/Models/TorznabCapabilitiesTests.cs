@@ -36,29 +36,47 @@ namespace Jackett.Test.Common.Models
             Assert.False(torznabCaps.MusicSearchLabelAvailable);
             Assert.False(torznabCaps.MusicSearchYearAvailable);
 
+            Assert.IsEmpty(torznabCaps.BookSearchParams);
             Assert.False(torznabCaps.BookSearchAvailable);
+            Assert.False(torznabCaps.BookSearchTitleAvailable);
+            Assert.False(torznabCaps.BookSearchAuthorAvailable);
 
             Assert.IsEmpty(torznabCaps.Categories);
         }
 
         [Test]
-        public void TestParseMovieSearchParams()
+        public void TestParseCardigannSearchModes()
         {
             var torznabCaps = new TorznabCapabilities();
-            torznabCaps.ParseMovieSearchParams(null);
-            Assert.IsEmpty(torznabCaps.MovieSearchParams);
+            torznabCaps.ParseCardigannSearchModes(new Dictionary<string, List<string>>
+            {
+                {"search", new List<string> {"q"}},
+                {"tv-search", new List<string> {"q"}},
+                {"movie-search", new List<string> {"q"}},
+                {"music-search", new List<string> {"q"}},
+                {"book-search", new List<string> {"q"}}
+            });
+            Assert.True(torznabCaps.SearchAvailable);
+            Assert.True(torznabCaps.TvSearchAvailable);
+            Assert.True(torznabCaps.MovieSearchAvailable);
+            Assert.True(torznabCaps.MusicSearchAvailable);
+            Assert.True(torznabCaps.BookSearchAvailable);
 
             torznabCaps = new TorznabCapabilities();
-            torznabCaps.ParseMovieSearchParams(new List<string>());
-            Assert.IsEmpty(torznabCaps.MovieSearchParams);
+            try
+            {
+                torznabCaps.ParseCardigannSearchModes(null); // null search modes
+                Assert.Fail();
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
 
             torznabCaps = new TorznabCapabilities();
-            torznabCaps.ParseMovieSearchParams(new List<string> {"q", "imdbid"});
-            Assert.AreEqual(new List<MovieSearchParam> { MovieSearchParam.Q, MovieSearchParam.ImdbId }, torznabCaps.MovieSearchParams);
-
-            torznabCaps = new TorznabCapabilities();
-            try {
-                torznabCaps.ParseMovieSearchParams(new List<string> {"q", "q"}); // duplicate param
+            try
+            {
+                torznabCaps.ParseCardigannSearchModes(new Dictionary<string, List<string>>()); // empty search modes
                 Assert.Fail();
             }
             catch (Exception)
@@ -68,7 +86,247 @@ namespace Jackett.Test.Common.Models
 
             torznabCaps = new TorznabCapabilities();
             try {
-                torznabCaps.ParseMovieSearchParams(new List<string> {"bad"}); // unsupported param
+                torznabCaps.ParseCardigannSearchModes(new Dictionary<string, List<string>>
+                {
+                    {"bad", new List<string> {"q"}} // bad search mode
+                });
+                Assert.Fail();
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+
+            torznabCaps = new TorznabCapabilities();
+            try {
+                torznabCaps.ParseCardigannSearchModes(new Dictionary<string, List<string>>
+                {
+                    {"search", new List<string> {"bad"}} // search mode with bad parameters
+                });
+                Assert.Fail();
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+        }
+
+        [Test]
+        public void TestParseTvSearchParams()
+        {
+            var torznabCaps = new TorznabCapabilities();
+            torznabCaps.ParseCardigannSearchModes(new Dictionary<string, List<string>>
+            {
+                {"search", new List<string>{"q"}},
+                {"tv-search", null}
+            });
+            Assert.IsEmpty(torznabCaps.MovieSearchParams);
+
+            torznabCaps = new TorznabCapabilities();
+            torznabCaps.ParseCardigannSearchModes(new Dictionary<string, List<string>>
+            {
+                {"search", new List<string>{"q"}},
+                {"tv-search", new List<string>()}
+            });
+            Assert.IsEmpty(torznabCaps.MovieSearchParams);
+
+            torznabCaps = new TorznabCapabilities();
+            torznabCaps.ParseCardigannSearchModes(new Dictionary<string, List<string>>
+            {
+                {"search", new List<string>{"q"}},
+                {"tv-search", new List<string> {"q", "tvdbid"}}
+            });
+            Assert.AreEqual(new List<TvSearchParam> { TvSearchParam.Q, TvSearchParam.TvdbId }, torznabCaps.TvSearchParams);
+
+            torznabCaps = new TorznabCapabilities();
+            try {
+                torznabCaps.ParseCardigannSearchModes(new Dictionary<string, List<string>>
+                {
+                    {"search", new List<string>{"q"}},
+                    {"tv-search", new List<string> {"q", "q"}} // duplicate param
+                });
+                Assert.Fail();
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+
+            torznabCaps = new TorznabCapabilities();
+            try {
+                torznabCaps.ParseCardigannSearchModes(new Dictionary<string, List<string>>
+                {
+                    {"search", new List<string>{"q"}},
+                    {"tv-search", new List<string> {"bad"}} // unsupported param
+                });
+                Assert.Fail();
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+        }
+
+        [Test]
+        public void TestParseMovieSearchParams()
+        {
+            var torznabCaps = new TorznabCapabilities();
+            torznabCaps.ParseCardigannSearchModes(new Dictionary<string, List<string>>
+            {
+                {"search", new List<string>{"q"}},
+                {"movie-search", null}
+            });
+            Assert.IsEmpty(torznabCaps.MovieSearchParams);
+
+            torznabCaps = new TorznabCapabilities();
+            torznabCaps.ParseCardigannSearchModes(new Dictionary<string, List<string>>
+            {
+                {"search", new List<string>{"q"}},
+                {"movie-search", new List<string>()}
+            });
+            Assert.IsEmpty(torznabCaps.MovieSearchParams);
+
+            torznabCaps = new TorznabCapabilities();
+            torznabCaps.ParseCardigannSearchModes(new Dictionary<string, List<string>>
+            {
+                {"search", new List<string>{"q"}},
+                {"movie-search", new List<string> {"q", "imdbid"}}
+            });
+            Assert.AreEqual(new List<MovieSearchParam> { MovieSearchParam.Q, MovieSearchParam.ImdbId }, torznabCaps.MovieSearchParams);
+
+            torznabCaps = new TorznabCapabilities();
+            try {
+                torznabCaps.ParseCardigannSearchModes(new Dictionary<string, List<string>>
+                {
+                    {"search", new List<string>{"q"}},
+                    {"movie-search", new List<string> {"q", "q"}} // duplicate param
+                });
+                Assert.Fail();
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+
+            torznabCaps = new TorznabCapabilities();
+            try {
+                torznabCaps.ParseCardigannSearchModes(new Dictionary<string, List<string>>
+                {
+                    {"search", new List<string>{"q"}},
+                    {"movie-search", new List<string> {"bad"}} // unsupported param
+                });
+                Assert.Fail();
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+        }
+
+        [Test]
+        public void TestParseMusicSearchParams()
+        {
+            var torznabCaps = new TorznabCapabilities();
+            torznabCaps.ParseCardigannSearchModes(new Dictionary<string, List<string>>
+            {
+                {"search", new List<string>{"q"}},
+                {"music-search", null}
+            });
+            Assert.IsEmpty(torznabCaps.MovieSearchParams);
+
+            torznabCaps = new TorznabCapabilities();
+            torznabCaps.ParseCardigannSearchModes(new Dictionary<string, List<string>>
+            {
+                {"search", new List<string>{"q"}},
+                {"music-search", new List<string>()}
+            });
+            Assert.IsEmpty(torznabCaps.MovieSearchParams);
+
+            torznabCaps = new TorznabCapabilities();
+            torznabCaps.ParseCardigannSearchModes(new Dictionary<string, List<string>>
+            {
+                {"search", new List<string>{"q"}},
+                {"music-search", new List<string> {"q", "label"}}
+            });
+            Assert.AreEqual(new List<MusicSearchParam> { MusicSearchParam.Q, MusicSearchParam.Label }, torznabCaps.MusicSearchParams);
+
+            torznabCaps = new TorznabCapabilities();
+            try {
+                torznabCaps.ParseCardigannSearchModes(new Dictionary<string, List<string>>
+                {
+                    {"search", new List<string>{"q"}},
+                    {"music-search", new List<string> {"q", "q"}} // duplicate param
+                });
+                Assert.Fail();
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+
+            torznabCaps = new TorznabCapabilities();
+            try {
+                torznabCaps.ParseCardigannSearchModes(new Dictionary<string, List<string>>
+                {
+                    {"search", new List<string>{"q"}},
+                    {"music-search", new List<string> {"bad"}} // unsupported param
+                });
+                Assert.Fail();
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+        }
+
+        [Test]
+        public void TestParseBookSearchParams()
+        {
+            var torznabCaps = new TorznabCapabilities();
+            torznabCaps.ParseCardigannSearchModes(new Dictionary<string, List<string>>
+            {
+                {"search", new List<string>{"q"}},
+                {"book-search", null}
+            });
+            Assert.IsEmpty(torznabCaps.MovieSearchParams);
+
+            torznabCaps = new TorznabCapabilities();
+            torznabCaps.ParseCardigannSearchModes(new Dictionary<string, List<string>>
+            {
+                {"search", new List<string>{"q"}},
+                {"book-search", new List<string>()}
+            });
+            Assert.IsEmpty(torznabCaps.MovieSearchParams);
+
+            torznabCaps = new TorznabCapabilities();
+            torznabCaps.ParseCardigannSearchModes(new Dictionary<string, List<string>>
+            {
+                {"search", new List<string>{"q"}},
+                {"book-search", new List<string> {"q", "title"}}
+            });
+            Assert.AreEqual(new List<BookSearchParam> { BookSearchParam.Q, BookSearchParam.Title }, torznabCaps.BookSearchParams);
+
+            torznabCaps = new TorznabCapabilities();
+            try {
+                torznabCaps.ParseCardigannSearchModes(new Dictionary<string, List<string>>
+                {
+                    {"search", new List<string>{"q"}},
+                    {"book-search", new List<string> {"q", "q"}} // duplicate param
+                });
+                Assert.Fail();
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+
+            torznabCaps = new TorznabCapabilities();
+            try {
+                torznabCaps.ParseCardigannSearchModes(new Dictionary<string, List<string>>
+                {
+                    {"search", new List<string>{"q"}},
+                    {"book-search", new List<string> {"bad"}} // unsupported param
+                });
                 Assert.Fail();
             }
             catch (Exception)
@@ -88,7 +346,6 @@ namespace Jackett.Test.Common.Models
             Assert.True(xDocument.Root?.Element("searching")?.HasElements);
             Assert.False(xDocument.Root?.Element("categories")?.HasElements);
 
-            // TODO: remove params when it's disabled. Review Torznab specs
             // test all features disabled
             torznabCaps = new TorznabCapabilities
             {
@@ -109,7 +366,6 @@ namespace Jackett.Test.Common.Models
             Assert.AreEqual("no", xDoumentSearching?.Element("book-search")?.Attribute("available")?.Value);
             Assert.AreEqual("q", xDoumentSearching?.Element("book-search")?.Attribute("supportedParams")?.Value);
 
-            // TODO: book parameters should be configurable?
             // test all features enabled
             torznabCaps = new TorznabCapabilities
             {
@@ -126,7 +382,10 @@ namespace Jackett.Test.Common.Models
                 {
                     MusicSearchParam.Q, MusicSearchParam.Album, MusicSearchParam.Artist, MusicSearchParam.Label, MusicSearchParam.Year
                 },
-                BookSearchAvailable = true
+                BookSearchParams = new List<BookSearchParam>
+                {
+                    BookSearchParam.Q, BookSearchParam.Title, BookSearchParam.Author
+                },
             };
             xDocument = torznabCaps.GetXDocument();
             xDoumentSearching = xDocument.Root?.Element("searching");
@@ -141,7 +400,7 @@ namespace Jackett.Test.Common.Models
             Assert.AreEqual("yes", xDoumentSearching?.Element("audio-search")?.Attribute("available")?.Value);
             Assert.AreEqual("q,album,artist,label,year", xDoumentSearching?.Element("audio-search")?.Attribute("supportedParams")?.Value);
             Assert.AreEqual("yes", xDoumentSearching?.Element("book-search")?.Attribute("available")?.Value);
-            Assert.AreEqual("q,author,title", xDoumentSearching?.Element("book-search")?.Attribute("supportedParams")?.Value);
+            Assert.AreEqual("q,title,author", xDoumentSearching?.Element("book-search")?.Attribute("supportedParams")?.Value);
 
             // test categories
             torznabCaps = new TorznabCapabilities
