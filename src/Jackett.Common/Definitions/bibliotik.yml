@@ -18,7 +18,7 @@ caps:
 
   modes:
     search: [q]
-    book-search: [q, author, title]
+    book-search: [q, title, author]
 
 settings:
   - name: username
