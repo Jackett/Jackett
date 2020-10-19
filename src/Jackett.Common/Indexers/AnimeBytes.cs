@@ -183,7 +183,7 @@ namespace Jackett.Common.Indexers
             var response = await RequestWithCookiesAndRetryAsync(queryUrl);
             if (!response.ContentString.StartsWith("{")) // not JSON => error
                 throw new ExceptionWithConfigData("unexcepted response (not JSON)", configData);
-            dynamic json = JsonConvert.DeserializeObject<dynamic>(response.ContentString);
+            var json = JsonConvert.DeserializeObject<dynamic>(response.ContentString);
 
             // Parse
             try
@@ -216,7 +216,7 @@ namespace Jackett.Common.Indexers
                         {
                             if (group["Synonymns"] is JArray)
                             {
-                                List<string> allSyonyms = group["Synonymns"].ToObject<List<string>>();
+                                var allSyonyms = group["Synonymns"].ToObject<List<string>>();
 
                                 if (AddJapaneseTitle && allSyonyms.Count >= 1)
                                     synonyms.Add(allSyonyms[0]);
@@ -226,7 +226,7 @@ namespace Jackett.Common.Indexers
                                     synonyms.AddRange(allSyonyms[2].Split(',').Select(t => t.Trim()));
                             } else
                             {
-                                Dictionary<int, string> allSynonyms = group["Synonymns"].ToObject<Dictionary<int, string>>();
+                                var allSynonyms = group["Synonymns"].ToObject<Dictionary<int, string>>();
 
                                 if (AddJapaneseTitle && allSynonyms.ContainsKey(0))
                                     synonyms.Add(allSynonyms[0]);

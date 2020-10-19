@@ -101,7 +101,7 @@ namespace Jackett.Common.Indexers
                 // Prepare the search query
                 var queryParameters = new NameValueCollection
                 {
-                    { "q", query.SearchTerm},
+                    { "q", query.SearchTerm}
                 };
                 result = await RequestWithCookiesAndRetryAsync(SearchUrl + "?" + queryParameters.GetQueryString());
             }
@@ -151,13 +151,14 @@ namespace Jackett.Common.Indexers
                 var document = await parser.ParseDocumentAsync(result.ContentString);
                 var r = document.QuerySelector("div.release > div.wrapper-release");
 
-                var baseRelease = new ReleaseInfo(){
+                var baseRelease = new ReleaseInfo
+                {
                     Title = composeBaseTitle(r),
                     BannerUrl = new Uri(SiteLink + r.QuerySelector("a[data-fancybox]").Attributes["href"].Value),
                     Comments = uri,
                     DownloadVolumeFactor = 0,
                     UploadVolumeFactor = 1,
-                    Category = new int[]{ TorznabCatType.TVAnime.ID },
+                    Category = new[]{ TorznabCatType.TVAnime.ID }
                 };
 
                 foreach (var t in r.QuerySelectorAll("a[data-toggle]"))

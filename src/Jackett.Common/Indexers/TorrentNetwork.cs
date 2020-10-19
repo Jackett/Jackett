@@ -22,9 +22,9 @@ namespace Jackett.Common.Indexers
         private string APIUrl => SiteLink + "api/";
         private string passkey;
 
-        private readonly Dictionary<string, string> APIHeaders = new Dictionary<string, string>()
+        private readonly Dictionary<string, string> APIHeaders = new Dictionary<string, string>
         {
-            {"Content-Type", "application/json"},
+            {"Content-Type", "application/json"}
         };
 
         private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
@@ -59,8 +59,8 @@ namespace Jackett.Common.Indexers
             Language = "de-de";
             Type = "private";
 
-            configData.AddDynamic("token", new HiddenItem() { Name = "token" });
-            configData.AddDynamic("passkey", new HiddenItem() { Name = "passkey" });
+            configData.AddDynamic("token", new HiddenItem { Name = "token" });
+            configData.AddDynamic("passkey", new HiddenItem { Name = "passkey" });
 
             AddCategoryMapping(24, TorznabCatType.MoviesSD, "Movies GER/SD");
             AddCategoryMapping(18, TorznabCatType.MoviesHD, "Movies GER/720p");
@@ -138,7 +138,7 @@ namespace Jackett.Common.Indexers
                 APIUrl + endpoint, method: RequestType.POST, referer: SiteLink, headers: APIHeaders, rawbody: jsonData);
             if (!result.ContentString.StartsWith("{")) // not JSON => error
                 throw new ExceptionWithConfigData(result.ContentString, configData);
-            dynamic json = JsonConvert.DeserializeObject<dynamic>(result.ContentString);
+            var json = JsonConvert.DeserializeObject<dynamic>(result.ContentString);
             return json;
         }
 
@@ -233,7 +233,7 @@ namespace Jackett.Common.Indexers
                         // 50 % Down
                         1 => 0.5,
                         // All others 100% down
-                        _ => 1,
+                        _ => 1
                     };
                     var release = new ReleaseInfo
                     {

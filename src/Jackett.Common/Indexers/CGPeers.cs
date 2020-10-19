@@ -10,8 +10,8 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class CGPeers : GazelleTracker
     {
-        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
-            "https://www.cgpeers.com/",
+        public override string[] LegacySiteLinks { get; protected set; } = {
+            "https://www.cgpeers.com/"
         };
 
         public CGPeers(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)

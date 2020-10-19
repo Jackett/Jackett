@@ -46,7 +46,7 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "private";
 
-            configData.AddDynamic("searchgroupnames", new BoolItem() { Name = "Search Group Names Only", Value = false });
+            configData.AddDynamic("searchgroupnames", new BoolItem { Name = "Search Group Names Only", Value = false });
 
             // Apple
             AddCategoryMapping("Mac", TorznabCatType.ConsoleOther, "Mac");
@@ -316,7 +316,7 @@ namespace Jackett.Common.Indexers
                             Title = title,
                             Description = qDescription?.TextContent,
                             UploadVolumeFactor = qNeutralLeech is null ? 1 : 0,
-                            DownloadVolumeFactor = qFreeLeech != null || qNeutralLeech != null ? 0 : 1,
+                            DownloadVolumeFactor = qFreeLeech != null || qNeutralLeech != null ? 0 : 1
                         };
                         releases.Add(release);
                     }

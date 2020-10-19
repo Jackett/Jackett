@@ -132,7 +132,7 @@ namespace Jackett.Common.Indexers
                     Comments = uri,
                     DownloadVolumeFactor = 0,
                     UploadVolumeFactor = 1,
-                    Category = new int[]{ TorznabCatType.TVAnime.ID },
+                    Category = new[]{ TorznabCatType.TVAnime.ID }
                 };
                 foreach (var t in document.QuerySelectorAll("ul.media__tabs__nav > li > a"))
                 {

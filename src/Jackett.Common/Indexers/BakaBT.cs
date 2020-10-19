@@ -79,7 +79,7 @@ namespace Jackett.Common.Indexers
 
         private async Task DoLogin()
         {
-            var loginForm = await webclient.GetResultAsync(new Utils.Clients.WebRequest()
+            var loginForm = await webclient.GetResultAsync(new Utils.Clients.WebRequest
             {
                 Url = LoginUrl,
                 Type = RequestType.GET
@@ -157,7 +157,7 @@ namespace Jackett.Common.Indexers
 
                     currentCategories = GetNextCategory(row, currentCategories);
 
-                    var stringSeparator = new string[] { " | " };
+                    var stringSeparator = new[] { " | " };
                     var titles = titleSeries.Split(stringSeparator, StringSplitOptions.RemoveEmptyEntries);
                     if (titles.Count() > 1 && !AddRomajiTitle)
                         titles = titles.Skip(1).ToArray();
@@ -233,7 +233,7 @@ namespace Jackett.Common.Indexers
 
         private ICollection<int> GetNextCategory(IElement row, ICollection<int> currentCategories)
         {
-            string nextCategoryName = GetCategoryName(row);
+            var nextCategoryName = GetCategoryName(row);
             if (nextCategoryName != null)
             {
                 currentCategories = MapTrackerCatDescToNewznab(nextCategoryName);

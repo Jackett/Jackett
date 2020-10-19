@@ -64,8 +64,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(16, TorznabCatType.TVAnime, "Other");
 
             // Configure the language select option
-            var languageSelect = new SelectItem(new Dictionary<string, string>()
-            {
+            var languageSelect = new SelectItem(new Dictionary<string, string>
+                {
                 {"1", "English"},
                 {"2", "Japanese"},
                 {"3", "Polish"},
@@ -102,8 +102,8 @@ namespace Jackett.Common.Indexers
             configData.AddDynamic("languageid", languageSelect);
 
             // Configure the sort selects
-            var sortBySelect = new SelectItem(new Dictionary<string, string>()
-            {
+            var sortBySelect = new SelectItem(new Dictionary<string, string>
+                {
                 {"upload_timestamp", "created"},
                 {"seeders", "seeders"},
                 {"size", "size"},
@@ -112,7 +112,7 @@ namespace Jackett.Common.Indexers
             { Name = "Sort by", Value = "upload_timestamp" };
             configData.AddDynamic("sortrequestedfromsite", sortBySelect);
 
-            var orderSelect = new SelectItem(new Dictionary<string, string>()
+            var orderSelect = new SelectItem(new Dictionary<string, string>
                 {
                     {"desc", "Descending"},
                     {"asc", "Ascending"}
@@ -146,7 +146,7 @@ namespace Jackett.Common.Indexers
                 { "q", query.SearchTerm ?? string.Empty },
                 { "s", GetSortBy },
                 { "o", GetOrder },
-                { "group", "0" }, // No group
+                { "group", "0" } // No group
             };
 
             // Get specified categories

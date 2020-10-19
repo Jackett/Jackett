@@ -147,7 +147,7 @@ namespace Jackett.Common.Indexers
             }
 
             // Getting login form to retrieve CSRF token
-            var myRequest = new Utils.Clients.WebRequest()
+            var myRequest = new Utils.Clients.WebRequest
             {
                 Url = LoginUrl
             };
@@ -164,7 +164,7 @@ namespace Jackett.Common.Indexers
             };
 
             // Do the login
-            var request = new Utils.Clients.WebRequest()
+            var request = new Utils.Clients.WebRequest
             {
                 PostData = pairs,
                 Referer = LoginUrl,

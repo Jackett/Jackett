@@ -32,7 +32,7 @@ namespace Jackett.Common.Indexers
             "https://tpb.skynetcloud.site/",
             "https://piratetoday.xyz/",
             "https://piratenow.xyz/",
-            "https://piratesbaycc.com/",
+            "https://piratesbaycc.com/"
         };
 
         public override string[] LegacySiteLinks { get; protected set; } = {
@@ -50,7 +50,7 @@ namespace Jackett.Common.Indexers
             "https://piratebayztemzmv.onion.pet/",
             "https://piratebayztemzmv.onion.ly/",
             "https://pirateproxy.cloud/",
-            "https://tpb18.ukpass.co/",
+            "https://tpb18.ukpass.co/"
         };
 
         private const string KeyInfoHash = "{info_hash}";

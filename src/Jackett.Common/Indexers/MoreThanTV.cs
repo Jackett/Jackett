@@ -23,7 +23,7 @@ namespace Jackett.Common.Indexers
     public class MoreThanTV : BaseWebIndexer
     {
         public override string[] LegacySiteLinks { get; protected set; } = {
-            "https://www.morethan.tv/",
+            "https://www.morethan.tv/"
         };
 
         private string LoginUrl => SiteLink + "login.php";

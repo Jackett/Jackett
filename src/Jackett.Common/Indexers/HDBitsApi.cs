@@ -39,7 +39,7 @@ namespace Jackett.Common.Indexers
                        MovieSearchParams = new List<MovieSearchParam>
                        {
                            MovieSearchParam.Q, MovieSearchParam.ImdbId
-                       },
+                       }
                    },
                    configService: configService,
                    client: wc,

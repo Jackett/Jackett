@@ -27,7 +27,7 @@ namespace Jackett.Common.Indexers
         private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
 
         public override string[] LegacySiteLinks { get; protected set; } = {
-            "https://tehconnection.me/",
+            "https://tehconnection.me/"
         };
 
         public Anthelion(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)

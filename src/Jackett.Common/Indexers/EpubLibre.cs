@@ -25,7 +25,7 @@ namespace Jackett.Common.Indexers
         private const int MaxSearchPageLimit = 6; // 18 items per page * 6 pages = 108
         private readonly Dictionary<string, string> _apiHeaders = new Dictionary<string, string>
         {
-            {"X-Requested-With", "XMLHttpRequest"},
+            {"X-Requested-With", "XMLHttpRequest"}
         };
         private readonly Dictionary<string, string> _languages = new Dictionary<string, string>
         {

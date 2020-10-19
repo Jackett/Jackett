@@ -22,7 +22,7 @@ namespace Jackett.Common.Indexers
         public string SiteLink { get; protected set; }
         public virtual string[] LegacySiteLinks { get; protected set; }
         public string DefaultSiteLink { get; protected set; }
-        public virtual string[] AlternativeSiteLinks { get; protected set; } = new string[] { };
+        public virtual string[] AlternativeSiteLinks { get; protected set; } = { };
         public string DisplayDescription { get; protected set; }
         public string DisplayName { get; protected set; }
         public string Language { get; protected set; }
@@ -459,7 +459,7 @@ namespace Jackett.Common.Indexers
 
         protected async Task<WebResult> RequestLoginAndFollowRedirect(string url, IEnumerable<KeyValuePair<string, string>> data, string cookies, bool returnCookiesFromFirstCall, string redirectUrlOverride = null, string referer = null, bool accumulateCookies = false)
         {
-            var request = new WebRequest()
+            var request = new WebRequest
             {
                 Url = url,
                 Type = RequestType.POST,
@@ -566,7 +566,7 @@ namespace Jackett.Common.Indexers
                     redirRequestCookies = (overrideCookies != null ? overrideCookies : "");
                 }
                 // Do redirect
-                var redirectedResponse = await webclient.GetResultAsync(new WebRequest()
+                var redirectedResponse = await webclient.GetResultAsync(new WebRequest
                 {
                     Url = overrideRedirectUrl ?? incomingResponse.RedirectingTo,
                     Referer = referrer,

@@ -70,7 +70,7 @@ namespace Jackett.Common.Indexers
             Language = "es-es";
             Type = "public";
 
-            var matchWords = new BoolItem() { Name = "Match words in title", Value = true };
+            var matchWords = new BoolItem { Name = "Match words in title", Value = true };
             configData.AddDynamic("MatchWords", matchWords);
 
             AddCategoryMapping(DivxTotalCategories.Peliculas, TorznabCatType.MoviesSD);
@@ -313,7 +313,7 @@ namespace Jackett.Common.Indexers
                 Seeders = 1,
                 Peers = 2,
                 DownloadVolumeFactor = 0,
-                UploadVolumeFactor = 1,
+                UploadVolumeFactor = 1
             };
             releases.Add(release);
         }

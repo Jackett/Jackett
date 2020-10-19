@@ -103,7 +103,7 @@ namespace Jackett.Common.Indexers.Abstract
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
                 { "password", configData.Password.Value },
-                { "keeplogged", "1"},
+                { "keeplogged", "1"}
             };
 
             if (!string.IsNullOrWhiteSpace(cookie))
