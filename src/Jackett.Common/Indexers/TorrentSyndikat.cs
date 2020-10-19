@@ -7,12 +7,10 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
-using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 using WebClient = Jackett.Common.Utils.Clients.WebClient;
@@ -26,8 +24,8 @@ namespace Jackett.Common.Indexers
 
         private ConfigurationDataAPIKey ConfigData
         {
-            get => (ConfigurationDataAPIKey)base.configData;
-            set => base.configData = value;
+            get => (ConfigurationDataAPIKey)configData;
+            set => configData = value;
         }
 
         public TorrentSyndikat(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
@@ -155,7 +153,7 @@ namespace Jackett.Common.Indexers
 
                 foreach (var row in jsonContent.Value<JArray>("rows"))
                 {
-                    var dateTime = new DateTime(1970,1,1,0,0,0,0,System.DateTimeKind.Utc);
+                    var dateTime = new DateTime(1970,1,1,0,0,0,0,DateTimeKind.Utc);
 
                     var id = row.Value<string>("id");
                     var comments = new Uri(SiteLink + "details.php?id=" + id);
@@ -250,7 +248,7 @@ namespace Jackett.Common.Indexers
             return response.ContentBytes;
         }
 
-        private static void CheckResponseStatus(System.Net.HttpStatusCode status, string scope)
+        private static void CheckResponseStatus(HttpStatusCode status, string scope)
         {
             switch (status)
             {

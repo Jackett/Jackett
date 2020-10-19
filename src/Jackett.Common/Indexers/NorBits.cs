@@ -42,7 +42,7 @@ namespace Jackett.Common.Indexers
 
         private ConfigurationDataNorbits ConfigData => (ConfigurationDataNorbits)configData;
 
-        public NorBits(IIndexerConfigurationService configService, Utils.Clients.WebClient w, Logger l, IProtectionService ps)
+        public NorBits(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
             : base(id: "norbits",
                    name: "NorBits",
                    description: "NorBits is a Norwegian Private site for MOVIES / TV / GENERAL",
@@ -134,7 +134,7 @@ namespace Jackett.Common.Indexers
         private async Task DoLogin()
         {
             // Build WebRequest for index
-            var myIndexRequest = new Utils.Clients.WebRequest()
+            var myIndexRequest = new WebRequest()
             {
                 Type = RequestType.GET,
                 Url = SiteLink,
@@ -153,7 +153,7 @@ namespace Jackett.Common.Indexers
             };
 
             // Build WebRequest for login
-            var myRequestLogin = new Utils.Clients.WebRequest()
+            var myRequestLogin = new WebRequest()
             {
                 Type = RequestType.GET,
                 Url = LoginUrl,
@@ -169,7 +169,7 @@ namespace Jackett.Common.Indexers
             await webclient.GetResultAsync(myRequestLogin);
 
             // Build WebRequest for submitting authentification
-            var request = new Utils.Clients.WebRequest()
+            var request = new WebRequest()
             {
                 PostData = pairs,
                 Referer = LoginUrl,
@@ -504,11 +504,11 @@ namespace Jackett.Common.Indexers
             var file = Directory + request.GetHashCode() + ".json";
 
             // Checking modes states
-            if (System.IO.File.Exists(file))
+            if (File.Exists(file))
             {
                 // File exist... loading it right now !
                 Output("Loading results from hard drive cache ..." + request.GetHashCode() + ".json");
-                results = JsonConvert.DeserializeObject<WebResult>(System.IO.File.ReadAllText(file));
+                results = JsonConvert.DeserializeObject<WebResult>(File.ReadAllText(file));
             }
             else
             {
@@ -517,7 +517,7 @@ namespace Jackett.Common.Indexers
 
                 // Cached file didn't exist for our query, writing it right now !
                 Output("Writing results to hard drive cache ..." + request.GetHashCode() + ".json");
-                System.IO.File.WriteAllText(file, JsonConvert.SerializeObject(results));
+                File.WriteAllText(file, JsonConvert.SerializeObject(results));
             }
             return results;
         }
@@ -571,7 +571,7 @@ namespace Jackett.Common.Indexers
                 // Check if there is file older than ... and delete them
                 Output("\nCleaning Provider Storage folder... in progress.");
                 System.IO.Directory.GetFiles(Directory)
-                .Select(f => new System.IO.FileInfo(f))
+                .Select(f => new FileInfo(f))
                 .Where(f => f.LastAccessTime < DateTime.Now.AddMilliseconds(-Convert.ToInt32(ConfigData.HardDriveCacheKeepTime.Value)))
                 .ToList()
                 .ForEach(f =>
