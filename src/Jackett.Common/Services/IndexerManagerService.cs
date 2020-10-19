@@ -175,7 +175,7 @@ namespace Jackett.Common.Services
                     }
                     catch (Exception e)
                     {
-                        logger.Error($"Error while creating Cardigann instance from Definition: {e}");
+                        logger.Error($"Error while creating Cardigann instance from definition ID={definition.Id}: {e}");
                         return null;
                     }
                 }).Where(cardigannIndexer => cardigannIndexer != null).ToList(); // Explicit conversion to list to avoid repeated resource loading
