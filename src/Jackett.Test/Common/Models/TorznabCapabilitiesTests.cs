@@ -443,7 +443,49 @@ namespace Jackett.Test.Common.Models
             Assert.AreEqual(TorznabCatType.MoviesSD.Name, xDoumentCategories?[1].Attribute("name")?.Value);
         }
 
-        // TODO: test concatenation
+        [Test]
+        public void TestTorznabConcat()
+        {
+            var torznabCaps1 = new TorznabCapabilities();
+            var torznabCaps2 = new TorznabCapabilities();
+            var res = TorznabCapabilities.Concat(torznabCaps1, torznabCaps2);
+
+            Assert.True(res.SearchAvailable);
+            Assert.IsEmpty(res.TvSearchParams);
+            Assert.IsEmpty(res.MovieSearchParams);
+            Assert.IsEmpty(res.MusicSearchParams);
+            Assert.IsEmpty(res.BookSearchParams);
+            Assert.IsEmpty(res.Categories);
+
+            torznabCaps1 = new TorznabCapabilities
+            {
+                SearchAvailable = false,
+                TvSearchParams = new List<TvSearchParam> {TvSearchParam.Q},
+                MovieSearchParams = new List<MovieSearchParam> {MovieSearchParam.Q},
+                MusicSearchParams = new List<MusicSearchParam> {MusicSearchParam.Q},
+                BookSearchParams = new List<BookSearchParam> {BookSearchParam.Q},
+                Categories = new List<TorznabCategory>{TorznabCatType.Movies, new TorznabCategory(100001, "CustomCat1")}
+            };
+            torznabCaps2 = new TorznabCapabilities
+            {
+                SearchAvailable = false,
+                TvSearchParams = new List<TvSearchParam> {TvSearchParam.Season},
+                MovieSearchParams = new List<MovieSearchParam> {MovieSearchParam.ImdbId},
+                MusicSearchParams = new List<MusicSearchParam> {MusicSearchParam.Artist},
+                BookSearchParams = new List<BookSearchParam> {BookSearchParam.Title},
+                Categories = new List<TorznabCategory>{TorznabCatType.TVAnime, new TorznabCategory(100002, "CustomCat2")}
+            };
+            res = TorznabCapabilities.Concat(torznabCaps1, torznabCaps2);
+
+            Assert.False(res.SearchAvailable);
+            Assert.True(res.TvSearchParams.Count == 2);
+            Assert.True(res.MovieSearchParams.Count == 2);
+            Assert.True(res.MusicSearchParams.Count == 2);
+            Assert.True(res.BookSearchParams.Count == 2);
+            Assert.True(res.Categories.Count == 3); // only CustomCat2 is removed
+        }
+
         // TODO: test SupportsCategories
+        // TODO: test categories in GetXDocument
     }
 }
