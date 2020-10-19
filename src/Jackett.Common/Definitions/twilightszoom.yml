@@ -80,7 +80,7 @@ caps:
 
   modes:
     search: [q]
-    music-search: [q, album, artist, label, year]
+    music-search: [q, album, artist]
 
 settings:
   - name: username

@@ -54,7 +54,7 @@ caps:
   modes:
     search: [q]
     movie-search: [q]
-    music-search: [q, album, artist, label, year]
+    music-search: [q, artist]
     book-search: [q]
 
 login:
@@ -93,8 +93,8 @@ search:
     category:
       optional: true
       case:
-        a[href="/browse.php?ext=1&bitrate=Lossless"]: "3040"
-        a[href="/browse.php?ext=1&format=MP3"]: "3010"
+        a[href="/browse.php?ext=1&bitrate=Lossless"]: 3040
+        a[href="/browse.php?ext=1&format=MP3"]: 3010
     details:
       selector: a[href^="details.php?id="]
       attribute: href
@@ -113,15 +113,14 @@ search:
       selector: td:nth-child(7)
       filters:
         - name: append
-          args: " +0000"
+          args: " +00:00" # GMT
         - name: dateparse
-          args: "2006-01-0215:04:05 -0700"
+          args: "2006-01-0215:04:05 -07:00"
     grabs:
       selector: td:nth-child(9)
     downloadvolumefactor:
       case:
-        img[alt="Free Leech"]: "0"
-        "*": "1"
+        img[alt="Free Leech"]: 0
+        "*": 1
     uploadvolumefactor:
-      case:
-        "*": "1"
+      text: 1
