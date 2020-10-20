@@ -40,8 +40,8 @@ namespace Jackett.Common.Indexers
                    name: "Solid Torrents",
                    description: "Solid Torrents is a Public torrent meta-search engine",
                    link: "https://solidtorrents.net/",
-                   caps: new TorznabCapabilities {
-                       // TODO: add music and book search
+                   caps: new TorznabCapabilities
+                   {
                        TvSearchParams = new List<TvSearchParam>
                        {
                            TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
@@ -49,6 +49,14 @@ namespace Jackett.Common.Indexers
                        MovieSearchParams = new List<MovieSearchParam>
                        {
                            MovieSearchParam.Q
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
+                       },
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q
                        }
                    },
                    configService: configService,

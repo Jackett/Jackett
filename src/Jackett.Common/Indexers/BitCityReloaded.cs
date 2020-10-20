@@ -35,8 +35,8 @@ namespace Jackett.Common.Indexers
                    name: "Bit-City Reloaded",
                    description: "A German general tracker.",
                    link: "https://bc-reloaded.net/",
-                   caps: new TorznabCapabilities {
-                       // TODO: add music and book search
+                   caps: new TorznabCapabilities
+                   {
                        TvSearchParams = new List<TvSearchParam>
                        {
                            TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
@@ -44,6 +44,14 @@ namespace Jackett.Common.Indexers
                        MovieSearchParams = new List<MovieSearchParam>
                        {
                            MovieSearchParam.Q
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
+                       },
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q
                        }
                    },
                    configService: configService,

@@ -51,7 +51,6 @@ namespace Jackett.Common.Indexers
                    link: "https://hdts.ru/", // Domain https://hdts.ru/ seems more reliable
                    caps: new TorznabCapabilities
                    {
-                       // TODO: add music search
                        TvSearchParams = new List<TvSearchParam>
                        {
                            TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
@@ -59,6 +58,10 @@ namespace Jackett.Common.Indexers
                        MovieSearchParams = new List<MovieSearchParam>
                        {
                            MovieSearchParam.Q, MovieSearchParam.ImdbId
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
                        }
                    },
                    configService: configService,

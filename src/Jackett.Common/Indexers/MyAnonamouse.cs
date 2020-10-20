@@ -30,8 +30,13 @@ namespace Jackett.Common.Indexers
                    description: "Friendliness, Warmth and Sharing",
                    link: "https://www.myanonamouse.net/",
                    configService: configService,
-                   // TODO: add book search
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities
+                   {
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q
+                       }
+                   },
                    client: c,
                    logger: l,
                    p: ps,

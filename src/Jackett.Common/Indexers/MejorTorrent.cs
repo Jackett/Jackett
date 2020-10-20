@@ -48,8 +48,8 @@ namespace Jackett.Common.Indexers
                    name: "MejorTorrent",
                    description: "MejorTorrent - Hay veces que un torrent viene mejor! :)",
                    link: "https://www.mejortorrentt.net/",
-                   caps: new TorznabCapabilities {
-                       // TODO: add music search
+                   caps: new TorznabCapabilities
+                   {
                        TvSearchParams = new List<TvSearchParam>
                        {
                            TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
@@ -57,6 +57,10 @@ namespace Jackett.Common.Indexers
                        MovieSearchParams = new List<MovieSearchParam>
                        {
                            MovieSearchParam.Q
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
                        }
                    },
                    configService: configService,

@@ -34,10 +34,17 @@ namespace Jackett.Common.Indexers
                    link: "https://tr.anidub.com/",
                    caps: new TorznabCapabilities
                    {
-                       // TODO: add music, movie, book search
                        TvSearchParams = new List<TvSearchParam>
                        {
                            TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
+                       },
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q
                        }
                    },
                    configService: configService,

@@ -36,8 +36,13 @@ namespace Jackett.Common.Indexers
                    name: "Torrentech",
                    description: "Torrentech (TTH) is a Private Torrent Tracker for ELECTRONIC MUSIC",
                    link: "https://www.torrentech.org/",
-                   // TODO: add music search
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities
+                   {
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
+                       }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,

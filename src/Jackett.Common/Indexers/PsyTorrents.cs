@@ -17,11 +17,15 @@ namespace Jackett.Common.Indexers
                    name: "Psytorrents",
                    description: "Psytorrents (PSY) is a Private Torrent Tracker for ELECTRONIC MUSIC",
                    link: "https://psytorrents.info/",
-                   caps: new TorznabCapabilities{
-                       // TODO: add music search
+                   caps: new TorznabCapabilities
+                   {
                        MovieSearchParams = new List<MovieSearchParam>
                        {
                            MovieSearchParam.Q
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
                        }
                    },
                    configService: configService,
