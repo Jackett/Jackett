@@ -28,18 +28,6 @@ caps:
     movie-search: [q]
     music-search: [q]
 
-#  login:
-#    path: takelogin.php
-#    method: post
-#    inputs:
-#      username: "{{ .Config.username }}"
-#      password: "{{ .Config.password }}"
-#    error:
-#      - selector: div.error
-#    test:
-#      path: index.php
-#      selector: a[href="/logout.php"]
-
 settings:
   - name: cookie
     type: text
@@ -106,8 +94,10 @@ search:
     date:
       selector: td > div > small
       filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02-01-2006 15:04"
+          args: "02-01-2006 15:04 -07:00"
     seeders:
       selector: td:nth-child(4)
       filters:
