@@ -188,7 +188,23 @@ search:
     files:
       selector: td:nth-child(6)
     date:
-      selector: td:nth-child(8)
+      # Yesterday<br /> 11:29 PM
+      # Today<br /> 05:23 PM
+      selector: td:nth-child(8):contains("day")
+      optional: true
+      filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
+        - name: fuzzytime
+    date:
+      # Oct 17 2020<br /> 02:55 PM
+      selector: td:nth-child(8):not(:contains("day"))
+      optional: true
+      filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
+        - name: dateparse
+          args: "Jan 02 2006 03:04 PM -07:00"
     size:
       selector: td:nth-child(9)
     grabs:
