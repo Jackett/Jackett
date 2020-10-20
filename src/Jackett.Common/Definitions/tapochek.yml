@@ -162,6 +162,7 @@ caps:
     - {id: 909, cat: Movies/HD, desc: "Новинки 2018-2019 (HD и HD Rips) с рекламой"}
     - {id: 908, cat: Movies, desc: "Экранки и Low-рипы с рекламой"}
     - {id: 74, cat: Movies/Foreign, desc: "Зарубежное кино"}
+    - {id: 963, cat: Movies/UHD, desc: "Зарубежное кино | UHD 4K"}
     - {id: 121, cat: Movies/BluRay, desc: "Зарубежное кино | Blu-Ray и BDRemux"}
     - {id: 122, cat: Movies/HD, desc: "Зарубежное кино | HD Rips"}
     - {id: 123, cat: Movies/DVD, desc: "Зарубежное кино | DVD"}
@@ -301,9 +302,10 @@ caps:
     # Software      # Программное обеспечение
     - {id: 202, cat: PC/Mac, desc: "Mac OS (для Apple Macintosh)"}
     - {id: 203, cat: PC/Mac, desc: "Mac OS (для РС-Hackintosh)"}
-    - {id: 204, cat: PC/Mac, desc: "Программы для просмотра и обработки видео Mac OS"}
-    - {id: 205, cat: PC/Mac, desc: "Программы для создания и обработки графики Mac OS"}
-    - {id: 206, cat: PC/Mac, desc: "Аудио редакторы и конверторы для Mac OS"}
+    - {id: 208, cat: PC/Mac, desc: "[macOS] Архиваторы и файловые менеджеры"}
+    - {id: 204, cat: PC/Mac, desc: "[macOS] Проигрыватели и кодеки"}
+    - {id: 205, cat: PC/Mac, desc: "[macOS] Офисные приложения и редакторы"}
+    - {id: 206, cat: PC/Mac, desc: "[macOS] Работа с носителями и медиа"}
     - {id: 939, cat: PC/Mac, desc: "[macOS] Информационная безопасность"}
     - {id: 940, cat: PC/Mac, desc: "[macOS] Интернет-приложения"}
     - {id: 207, cat: PC/Mac, desc: "Системные программы для Mac OS"}
@@ -546,6 +548,7 @@ search:
     size:
       selector: td:nth-child(6) > u
     date:
+      # unix
       selector: td:last-child > u
     seeders:
       selector: td.seedmed > b
@@ -558,4 +561,6 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
+    minimumratio:
+      text: 0.5
 # TorrentPier
