@@ -10,7 +10,9 @@ links:
 
 caps:
   categories:
-    1: Other
+    1: TV
+    2: Movies
+    3: Other
 
   modes:
     search: [q]
@@ -18,24 +20,29 @@ caps:
     movie-search: [q]
 
 settings:
-  - name: info
-    type: info
-    default: 7torrents does not use categories. In your software Indexer settings, set the category to 7000.
+  - name: category-id
+    type: select
+    label: The 7torrents web site does not provide categories. Select the category you want Jackett to set on all results returned.
+    default: 3
+    options:
+      1: TV
+      2: Movies
+      3: Other
   - name: sort
     type: select
     label: Sort requested from site
-    default: "created"
+    default: created
     options:
-      "created": "created"
-      "length": "size"
-      "seeders": "seeders"
+      created: created
+      length: size
+      seeders: seeders
 
 search:
   # https://www.7torrents.cc/search?query=2020&sort=created
   paths:
     - path: search
   inputs:
-    query: "{{ if .Keywords }}{{ .Keywords }}{{else}} {{end}}"
+    query: "{{ if .Keywords }}{{ .Keywords }}{{ else }} {{ end }}"
     sort: "{{ .Config.sort }}"
 
   rows:
@@ -43,7 +50,7 @@ search:
 
   fields:
     category:
-      text: 1
+      text: "{{ .Config.category-id }}"
     title:
       selector: div.media
       attribute: data-name
