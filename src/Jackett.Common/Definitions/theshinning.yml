@@ -81,7 +81,7 @@ search:
     - path: filterTorrents
   inputs:
     $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    search: "{{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     description: ""
     uploader: ""
     imdb: "{{ .Query.IMDBIDShort }}"
@@ -141,8 +141,10 @@ search:
     date:
       selector: time
       filters:
+        - name: append
+          args: " +01:00" # CET
         - name: dateparse
-          args: "02/01/2006 15:04:05"
+          args: "02/01/2006 15:04:05 -07:00"
     downloadvolumefactor:
       case:
         i[class*="fa-id-badge text-orange"]: 0 # 24 Hour FreeLeech From BON Store
