@@ -10,7 +10,9 @@ links:
 
 caps:
   categories:
-    1: Other
+    1: TV
+    2: Movies
+    3: Other
 
   modes:
     search: [q]
@@ -18,17 +20,22 @@ caps:
     movie-search: [q]
 
 settings:
-  - name: info
-    type: info
-    default: BTDigg does not use categories. In your software Indexer settings, set the category to 7000.
+  - name: category-id
+    type: select
+    label: The BTDigg web site does not provide categories. Select the category you want Jackett to set on all results returned.
+    default: 3
+    options:
+      1: TV
+      2: Movies
+      3: Other
   - name: sort
     type: select
     label: Sort requested from site
-    default: "0"
+    default: 0
     options:
-      "0": "relevance"
-      "2": "created"
-      "3": "size"
+      0: relevance
+      2: created
+      3: size
 
 search:
   # https://btdig.com/search?q=test&order=2
@@ -36,7 +43,7 @@ search:
   paths:
     - path: search
   inputs:
-    q: "{{ if .Keywords }}{{ .Keywords }}{{else}}test{{end}}"
+    q: "{{ if .Keywords }}{{ .Keywords }}{{ else }}test{{ end }}"
     # 0 relevance 2 age 3 size 4 files
     order: "{{ .Config.sort }}"
 
@@ -46,10 +53,10 @@ search:
       - name: andmatch
 
   fields:
+    category:
+      text: "{{ .Config.category-id }}"
     title:
       selector: div.torrent_name a
-    category:
-      text: 1
     details:
       selector: div.torrent_name a
       attribute: href
