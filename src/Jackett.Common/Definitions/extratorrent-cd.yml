@@ -14,7 +14,9 @@ legacylinks:
 
 caps:
   categories:
-    other: Other
+    1: TV
+    2: Movies
+    3: Other
 
   modes:
     search: [q]
@@ -22,9 +24,14 @@ caps:
     movie-search: [q]
 
 settings:
-  - name: info
-    type: info
-    default: ExtraTorrent-cd does not use categories. In your software Indexer settings, set the category to 7000.
+  - name: category-id
+    type: select
+    label: The ExtraTorrent web site does not provide categories. Select the category you want Jackett to set on all results returned.
+    default: 3
+    options:
+      1: TV
+      2: Movies
+      3: Other
 
 search:
   paths:
@@ -41,7 +48,7 @@ search:
 
   fields:
     category:
-      text: other # issue #8228
+      text: "{{ .Config.category-id }}"
     title:
       selector: a[href*="/torrent/"][title^="view"]
     details:
@@ -54,31 +61,29 @@ search:
       selector: a[href^="magnet:?xt="]
       attribute: href
     date:
-      selector: td:nth-last-of-type(5):contains("Y-day-"), td:nth-last-of-type(5):contains("Today-")
+      # Y-day-2020 (seriously!?!, like there's a Y-day-2019 ?)
+      # Today-22:03
+      selector: td:nth-last-of-type(5):contains("day")
       optional: true
       filters:
         - name: replace
           args: ["\xA0", " "]
         - name: re_replace
-          args: ["(Today-.*)", "Today"]
+          args: ["(Today-)", "Today "]
         - name: re_replace
           args: ["(Y-day-.*)", "Yesterday"]
         - name: fuzzytime
     date:
-      selector: td:nth-last-of-type(5):contains(":"):not(:contains("Y-day-")):not(:contains("Today-"))
-      optional: true
-      filters:
-        - name: replace
-          args: ["\xA0", " "]
-        - name: fuzzytime
-    date:
-      selector: td:nth-last-of-type(5):not(:contains(":")):not(:contains("Y-day-")):not(:contains("Today-"))
+      # 12-27-2019
+      selector: td:nth-last-of-type(5):not(:contains(":")):not(:contains("day"))
       optional: true
       filters:
         - name: replace
           args: ["\xA0", "-"]
+        - name: append
+          args: " -07:00" # PDT
         - name: dateparse
-          args: "01-02-2006"
+          args: "01-02-2006 -07:00"
     size:
       selector: td:nth-last-of-type(4)
     seeders:
