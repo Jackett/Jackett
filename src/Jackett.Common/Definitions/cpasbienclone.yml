@@ -21,8 +21,10 @@ legacylinks:
   - https://cpasbiens.ind-unblock.xyz/
 
 caps:
-  categorymappings:
-    - {id: other, cat: Other, desc: "Movies/TV/Other"}
+  categories:
+    1: TV
+    2: Movies
+    3: Other
 
   modes:
     search: [q]
@@ -30,6 +32,14 @@ caps:
     movie-search: [q]
 
 settings:
+  - name: category-id
+    type: select
+    label: The cpasbien clone web site does not provide categories. Select the category you want Jackett to set on all results returned.
+    default: 3
+    options:
+      1: TV
+      2: Movies
+      3: Other
   - name: multilang
     type: checkbox
     label: Replace MULTI by another language in release name
@@ -62,10 +72,6 @@ settings:
       "?trie-poid-a": "size asc"
       "?trie-nom-d": "title desc"
       "?trie-nom-a": "title asc"
-  - name: info_categories
-    type: info
-    label: "About categories"
-    default: "cpasbien clone does not show <b>Categories</b> in its Search Results.<br />To use this indexer with Sonarr/Radarr set your indexer category to <b>7000</b>."
 
 download:
   selector: a[href^="magnet:"]
@@ -80,7 +86,7 @@ search:
 
   fields:
     category:
-      text: other
+      text: "{{ .Config.category-id }}"
     site_date:
       selector: a
       filters:
