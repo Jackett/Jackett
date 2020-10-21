@@ -11,8 +11,10 @@ legacylinks:
   - http://forums.mvgroup.org/
 
 caps:
-  categorymappings:
-    - {id: 1, cat: TV, desc: "TV"}
+  categories:
+    1: TV
+    2: Movies
+    3: Other
 
   modes:
     search: [q]
@@ -26,6 +28,14 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: category-id
+    type: select
+    label: The MVGroup web site does not provide categories. Select the category you want Jackett to set on all results returned.
+    default: 3
+    options:
+      1: TV
+      2: Movies
+      3: Other
   - name: hidef
     type: checkbox
     label: Show MVGroup HiDef Releases only
@@ -98,10 +108,6 @@ settings:
     type: checkbox
     label: Strip the S01E01 from the Torznab search requests
     default: false
-  - name: info
-    type: info
-    label: Category for Sonarr and Radarr
-    default: MVGroup does not use categories. In your Sonarr or Radarr Torznab Indexer settings, set the category to 100001.
   - name: sort
     type: select
     label: Sort requested from site
@@ -156,7 +162,7 @@ search:
 
   fields:
     category:
-      text: 1
+      text: "{{ .Config.category-id }}"
     title:
       # fallback title (to prevent abend if optional is not found)
       text: "title not found"
