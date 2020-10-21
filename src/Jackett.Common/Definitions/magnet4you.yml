@@ -21,7 +21,9 @@ legacylinks:
 
 caps:
   categories:
-    1: Other
+    1: TV
+    2: Movies
+    3: Other
 
   modes:
     search: [q]
@@ -29,29 +31,34 @@ caps:
     movie-search: [q]
 
 settings:
-  - name: info
-    type: info
-    default: Magnet4You does not use categories. In your software Indexer settings, set the category to 7000.
+  - name: category-id
+    type: select
+    label: The Magnet4You web site does not provide categories. Select the category you want Jackett to set on all results returned.
+    default: 3
+    options:
+      1: TV
+      2: Movies
+      3: Other
   - name: sort
     type: select
     label: Sort requested from site
-    default: "uploaded"
+    default: uploaded
     options:
-      "uploaded": "created"
-      "seed": "seeders"
-      "size": "size"
-      "title": "name"
+      uploaded: created
+      seed: seeders
+      size: size
+      title: name
 
 search:
   paths:
-    - path: "{{ if .Keywords }}search.php?s={{ .Keywords }}&sort={{ .Config.sort }}{{else}}browse.php?sort={{ .Config.sort }}{{end}}"
+    - path: "{{ if .Keywords }}search.php?s={{ .Keywords }}&sort={{ .Config.sort }}{{ else }}browse.php?sort={{ .Config.sort }}{{ end }}"
 
   rows:
     selector: table.tb4 > tbody > tr:has(a[href^="magnet:?xt="])
 
   fields:
     category:
-      text: 1
+      text: "{{ .Config.category-id }}"
     title:
       selector: a[href^="magnet/"]
     details:
