@@ -14,7 +14,6 @@ caps:
   categorymappings:
     # Apps
     - {id: 65, cat: PC/Phone-Android, desc: "Apps Android"}
-    - {id: 83, cat: PC/Phone-IOS, desc: "Apps iOS"}
     - {id: 107, cat: PC/0day, desc: "Apps Linux"}
     - {id: 48, cat: PC/Mac, desc: "Apps MAC"}
     - {id: 109, cat: PC, desc: "Apps Sonstige"}
@@ -24,42 +23,38 @@ caps:
     - {id: 104, cat: Audio, desc: "Audio Disco's"}
     - {id: 38, cat: Audio/Audiobook, desc: "Audio Hörspiel"}
     - {id: 6, cat: Audio, desc: "Audio Musik"}
-    - {id: 82, cat: Audio, desc: "Audio Tracks"}
     - {id: 29, cat: Audio/Video, desc: "Audio Videos"}
     # Doku
-    - {id: 113, cat: TV/Documentary, desc: "Doku 3D"}
     - {id: 130, cat: TV/Documentary, desc: "Doku Bluray"}
-    - {id: 131, cat: TV/Documentary, desc: "Doku DVDR"}
     - {id: 76, cat: TV/Documentary, desc: "Doku HD"}
     - {id: 78, cat: TV/Documentary, desc: "Doku Packs"}
     - {id: 75, cat: TV/Documentary, desc: "Doku SD"}
-    - {id: 114, cat: TV/Documentary, desc: "Doku Sonstige"}
-    - {id: 77, cat: TV/Documentary, desc: "Doku Untouched"}
+    - {id: 113, cat: TV/Documentary, desc: "Doku UHD"}
     # Filme
     - {id: 54, cat: Movies/HD, desc: "Filme 1080p"}
     - {id: 5, cat: Movies/3D, desc: "Filme 3D"}
     - {id: 55, cat: Movies/HD, desc: "Filme 720p"}
-    - {id: 111, cat: Movies, desc: "Filme Anime"}
     - {id: 43, cat: Movies/BluRay, desc: "Filme BluRay"}
     - {id: 20, cat: Movies/DVD, desc: "Filme DVDR"}
     - {id: 120, cat: Movies/Foreign, desc: "Filme Int."}
     - {id: 119, cat: Movies, desc: "Filme Remux"}
+    - {id: 36, cat: Movies/HD, desc: "Filme SD"}
     - {id: 121, cat: Movies/UHD, desc: "Filme UHD"}
     - {id: 124, cat: Movies/UHD, desc: "Filme UHD Remux"}
-    - {id: 36, cat: Movies/HD, desc: "Filme SD"}
     # Serien
     - {id: 112, cat: TV/Anime, desc: "Serien Anime"}
     - {id: 128, cat: TV/HD, desc: "Serien Bluray"}
     - {id: 129, cat: TV/SD, desc: "Serien DVDR"}
     - {id: 69, cat: TV/HD, desc: "Serien HD"}
     - {id: 72, cat: TV/Foreign, desc: "Serien Int."}
-    - {id: 68, cat: TV/SD, desc: "Serien Packs SD"}
     - {id: 66, cat: TV/SD, desc: "Serien SD"}
     - {id: 125, cat: TV/HD, desc: "Serien Packs HD"}
+    - {id: 68, cat: TV/SD, desc: "Serien Packs SD"}
     - {id: 126, cat: TV/UHD, desc: "Serien Packs UHD"}
     - {id: 108, cat: TV, desc: "Serien TV-Shows"}
     - {id: 127, cat: TV/UHD, desc: "Serien TV-Shows UHD"}
     # Sonstige
+    - {id: 133, cat: PC/0day, desc: "Sonstige 0day"}
     - {id: 117, cat: Other, desc: "Sonstige Diverses"}
     - {id: 28, cat: Books, desc: "Sonstige eBooks"}
     - {id: 42, cat: TV/Sport, desc: "Sonstige Sport"}
@@ -67,7 +62,6 @@ caps:
     - {id: 9, cat: Other, desc: "Sonstige Wallpaper"}
     - {id: 64, cat: XXX, desc: "Sonstige XXX"}
     # Spiele
-    - {id: 115, cat: PC/Mac, desc: "Spiele MAC"}
     - {id: 37, cat: Console/NDS, desc: "Spiele Nintendo"}
     - {id: 4, cat: PC/Games, desc: "Spiele PC"}
     - {id: 58, cat: Console/PS4, desc: "Spiele PSX"}
@@ -102,19 +96,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "added"
+    default: added
     options:
-      "added": "created"
-      "seeds": "seeders"
-      "size": "size"
-      "name": "title"
+      added: created
+      seeds: seeders
+      size: size
+      name: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   path: landing.php
@@ -191,8 +185,10 @@ search:
       filters:
         - name: re_replace
           args: ["\\s", " "]
+        - name: append
+          args: " +01:00" # CET
         - name: dateparse
-          args: "02.01.200615:04:05"
+          args: "02.01.200615:04:05 -07:00"
     downloadvolumefactor:
       case:
         "font[color=\"#730d1e\"]:contains(\"[OnlyUpload]\")": 0
@@ -200,7 +196,7 @@ search:
     uploadvolumefactor:
       text: 1
     minimumratio:
-      text: 0.7
+      text: 0.8
     minimumseedtime:
       # 2 days (as seconds = 2 x 24 x 60 x 60)
       text: 172800
