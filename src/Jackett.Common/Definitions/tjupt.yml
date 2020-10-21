@@ -44,19 +44,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "4"
+    default: 4
     options:
-      "4": "created"
-      "7": "seeders"
-      "5": "size"
-      "1": "title"
+      4: created
+      7: seeders
+      5: size
+      1: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
   - name: info_tpp
     type: info
     label: Results Per Page
@@ -129,7 +129,7 @@ search:
       optional: true
       filters:
         - name: append
-          args: " +08:00"
+          args: " +08:00" # CST
         - name: dateparse
           args: "2006-01-02 15:04:05 -07:00"
     date:
@@ -138,7 +138,7 @@ search:
       optional: true
       filters:
         - name: append
-          args: " +08:00"
+          args: " +08:00" # CST
         - name: dateparse
           args: "2006-01-0215:04:05 -07:00"
     size:
@@ -166,4 +166,6 @@ search:
     description:
       selector: td:nth-child(2)
       remove: a, img
+    minimumratio:
+      text: 0.8
 # NexusPHP Standard v1.5 Beta 4 (custom ulvf dlvf)
