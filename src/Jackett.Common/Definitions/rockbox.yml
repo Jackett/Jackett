@@ -26,19 +26,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "data"
+    default: data
     options:
-      "data": "created"
-      "seeds": "seeders"
-      "size": "size"
-      "filename": "title"
+      data: created
+      seeds: seeders
+      size: size
+      filename: title
   - name: type
     type: select
     label: Order requested from site
-    default: "DESC"
+    default: DESC
     options:
-      "DESC": "desc"
-      "ASC": "asc"
+      DESC: desc
+      ASC: asc
 
 login:
   path: login.php
@@ -48,9 +48,7 @@ login:
     uid: "{{ .Config.username }}"
     pwd: "{{ .Config.password }}"
   error:
-    - selector: div.errorSummary
-      message:
-        selector: div.errorSummary ul li
+    - selector: div > font[color="#FF0000"]
   test:
     path: index.php
     selector: a[href="logout.php"]
@@ -117,4 +115,4 @@ search:
     minimumseedtime:
       # 1 day (as seconds = 24 x 60 x 60)
       text: 86400
-# BtitTracker (customised)
+# BtitTracker 1.3.1 customised
