@@ -37,19 +37,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "created_at"
+    default: created_at
     options:
-      "created_at": "created"
-      "seeders": "seeders"
-      "size": "size"
-      "name": "title"
+      created_at: created
+      seeders: seeders
+      size: size
+      name: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   path: login
@@ -72,8 +72,13 @@ login:
 search:
   paths:
     # https://torrentdb.net/filter/torrents?search=&tags=&freeleech=1&sorting=created_at&direction=desc&qty=25
-    # note: bug at web site means adding freeleech= or freeleech=0 still returns only freeleech, so use of the input block here does not work!
-    - path: "filter/torrents?{{ range .Categories }}categories[]={{.}}&{{end}}{{ if .Config.freeleech }}freeleech=1&{{ else }}{{ end }}search={{ if .Query.IMDBID }}{{ .Query.IMDBIDShort }}{{ else }}{{ .Keywords }}{{ end }}&tags=&sorting={{ .Config.sort }}&direction={{ .Config.type }}&qty=100"
+    - path: "filter/torrents
+    $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}{{ if .Config.freeleech }}freeleech=1&{{ else }}{{ end }}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBIDShort }}{{ else }}{{ .Keywords }}{{ end }}"
+    tags: ""
+    sorting: "{{ .Config.sort }}"
+    direction: "{{ .Config.type }}"
+    qty: 100
 
   rows:
     selector: table > tbody > tr
