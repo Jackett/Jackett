@@ -1,17 +1,18 @@
 ---
 id: korsar
 name: Korsar
-description: "Korsar is a RUSSIAN Semi-Private Torrent Tracker for MOVIES / TV / GENERAL"
+description: "Korsar is a RUSSIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: ru-ru
-type: semi-private
+type: private
 encoding: UTF-8
 links:
-  - http://korsar.rest/
+  - http://filbi1976.org/
 legacylinks:
   - https://korsar.tv/
   - http://korsar.info/
   - https://korsar.info/
   - http://korsar.tv/
+  - http://korsar.rest/
 
 caps:
   categorymappings:
