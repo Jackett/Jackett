@@ -72,7 +72,8 @@ login:
 search:
   paths:
     # https://torrentdb.net/filter/torrents?search=&tags=&freeleech=1&sorting=created_at&direction=desc&qty=25
-    - path: "filter/torrents
+    - path: filter/torrents
+  inputs:
     $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}{{ if .Config.freeleech }}freeleech=1&{{ else }}{{ end }}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBIDShort }}{{ else }}{{ .Keywords }}{{ end }}"
     tags: ""
