@@ -88,11 +88,11 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site (Applies only to Search with Keywords)
-    default: "d"
+    default: d
     options:
-      "d": "created"
-      "s": "seeders"
-      "_": "size"
+      d: created
+      s: seeders
+      _: size
 
 download:
   selector: a[href^="magnet:?xt="]
