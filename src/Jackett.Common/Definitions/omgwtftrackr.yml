@@ -77,18 +77,18 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "time"
+    default: time
     options:
-      "time": "created"
-      "seeders": "seeders"
-      "size": "size"
+      time: created
+      seeders: seeders
+      size: size
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   path: login.php
