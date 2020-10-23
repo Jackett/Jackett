@@ -79,7 +79,7 @@ search:
   inputs:
     $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
-    incldead: "
+    incldead: 1
 
   rows:
     selector: table.tableinborder > tbody > tr:has(a[href^="download.php"])
