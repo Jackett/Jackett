@@ -62,11 +62,11 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "date"
+    default: date
     options:
-      "date": "created"
-      "seeds": "seeders"
-      "size": "size"
+      date: created
+      seeds: seeders
+      size: size
 
 download:
   # the .torrent url is on the on the details page
