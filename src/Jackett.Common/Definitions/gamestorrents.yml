@@ -13,15 +13,15 @@ legacylinks:
 
 caps:
   categories:
-    "juegos-pc": PC/Games
-    "juegos-psp": Console/PSP
-    "juegos-ps3": Console/PS3
-    "juegos-ps4": Console/PS4
-    "juegos-ps2": Console/PS Vita
-    "juegos-mac": PC/Mac
-    "juegos-xbox360": Console/Xbox 360
-    "juegos-wii": Console/Wii
-    "juegos-nds": Console/NDS
+    juegos-pc: PC/Games
+    juegos-psp: Console/PSP
+    juegos-ps3: Console/PS3
+    juegos-ps4: Console/PS4
+    juegos-ps2: Console/PS Vita
+    juegos-mac: PC/Mac
+    juegos-xbox360: Console/Xbox 360
+    juegos-wii: Console/Wii
+    juegos-nds: Console/NDS
 
   modes:
     search: [q]

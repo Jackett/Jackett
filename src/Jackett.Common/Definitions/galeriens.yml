@@ -204,12 +204,12 @@ settings:
     label: Replace MULTI by this language
     default: FRENCH
     options:
-      FRENCH: "FRENCH"
-      MULTI.FRENCH: "MULTI.FRENCH"
-      ENGLISH: "ENGLISH"
-      MULTI.ENGLISH: "MULTI.ENGLISH"
-      VOSTFR: "VOSTFR"
-      MULTI.VOSTFR: "MULTI.VOSTFR"
+      FRENCH: FRENCH
+      MULTI.FRENCH: MULTI.FRENCH
+      ENGLISH: ENGLISH
+      MULTI.ENGLISH: MULTI.ENGLISH
+      VOSTFR: VOSTFR
+      MULTI.VOSTFR: MULTI.VOSTFR
   - name: vostfr
     type: checkbox
     label: Replace VOSTFR with ENGLISH
@@ -217,33 +217,33 @@ settings:
   - name: torrentlanguage
     type: select
     label: Torrent Language
-    default: "0"
+    default: 0
     options:
-      "0": "Toutes Les Langues"
-      "1": "Allemand"
-      "2": "Anglais(UK)"
-      "3": "Anglais(US)"
-      "4": "Arabe"
-      "5": "Bengali"
-      "6": "Cantonais"
-      "7": " Coréen"
-      "8": "Danois"
-      "9": "Espagnol"
-      "10": "Flamand"
-      "11": " Français"
-      "12": " Hébreu"
-      "13": "Hindi"
-      "14": "Italien"
-      "15": "Japonais"
-      "16": "Mandarin"
-      "17": "Multi"
-      "24": "Multi Truefrench"
-      "18": "Perse"
-      "19": "Portuguais"
-      "20": " Québécois"
-      "21": "Russe"
-      "22": " Suédois"
-      "23": "Ukrainien"
+      0: "Toutes Les Langues"
+      1: Allemand
+      2: Anglais(UK)
+      3: Anglais(US)
+      4: Arabe
+      5: Bengali
+      6: Cantonais
+      7: Coréen
+      8: Danois
+      9: Espagnol
+      10: Flamand
+      11: Français
+      12: Hébreu
+      13: Hindi
+      14: Italien
+      15: Japonais
+      16: Mandarin
+      17: Multi
+      24: "Multi Truefrench"
+      18: Perse
+      19: Portuguais
+      20: Québécois
+      21: Russe
+      22: Suédois
+      23: Ukrainien
 
 login:
   method: cookie
