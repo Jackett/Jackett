@@ -22,6 +22,8 @@ legacylinks:
 
 caps:
   categories:
+    tv: TV
+    movies: Movies
     other: Other
 
   modes:
@@ -29,7 +31,15 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
 
-settings: []
+settings:
+  - name: category-id
+    type: select
+    label: The BTSOW web site does not provide categories. Select the category you want Jackett to set on all results returned.
+    default: other
+    options:
+      tv: TV
+      movies: Movies
+      other: Other
 
 download:
   selector: a#magnetOpen
@@ -42,7 +52,7 @@ search:
     selector: div.row:has(a[href*="/detail/hash/"])
   fields:
     category:
-      text: other
+      text: "{{ .Config.category-id }}"
     title:
       selector: a[href*="/detail/hash/"]
       attribute: title
