@@ -657,19 +657,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "t"
+    default: t
     options:
-      "t": "created"
-      "ts": "seeders"
-      "sz": "size"
-      "i": "title"
+      t: created
+      ts: seeders
+      sz: size
+      i: title
   - name: type
     type: select
     label: Order requested from site
-    default: "d"
+    default: d
     options:
-      "d": "desc"
-      "a": "asc"
+      d: desc
+      a: asc
 
 download:
   selector: a[href^="./download/file.php?id="]
