@@ -23,17 +23,17 @@ legacylinks:
 
 caps:
   categories:
-    "other": Other
+    other: Other
     # category=
-    "album": Audio
-    "ebook": Books
-    "movie": Movies
-    "show": TV
+    album: Audio
+    ebook: Books
+    movie: Movies
+    show: TV
     # type=
-    "audio": Audio
-    "doc": Books
-    "games": PC/Games
-    "software": PC
+    audio: Audio
+    doc: Books
+    games: PC/Games
+    software: PC
 
   modes:
     search: [q]
@@ -46,10 +46,10 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "created"
+    default: created
     options:
-      "created": "created"
-      "seeders": "seeders"
+      created: created
+      seeders: seeders
 
 search:
   # https://skytorrents.to/?search=mr+mercedes+s02e05&sort=created

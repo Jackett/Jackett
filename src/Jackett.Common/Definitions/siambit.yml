@@ -81,13 +81,13 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "15"
+    default: 15
     options:
-      "15": "created"
-      "8": "seeders"
-      "5": "size"
-      "1": "title desc"
-      "14": "title asc"
+      15: created
+      8: seeders
+      5: size
+      1: title desc
+      14: title asc
   - name: info_results
     type: info
     label: Search results
