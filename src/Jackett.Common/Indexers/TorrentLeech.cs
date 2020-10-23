@@ -255,7 +255,7 @@ namespace Jackett.Common.Indexers
                         UploadVolumeFactor = 1,
                         DownloadVolumeFactor = dlVolumeFactor,
                         MinimumRatio = 1,
-                        MinimumSeedTime = 172800 // 48 hours
+                        MinimumSeedTime = 864000 // 10 days for registered users, less for upgraded users
                     };
 
                     releases.Add(release);
