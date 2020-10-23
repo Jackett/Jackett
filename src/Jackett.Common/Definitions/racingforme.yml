@@ -161,7 +161,7 @@ settings:
     options:
       date_desc: "created desc"
       date_asc: "created asc"
-      sd_desc: 'seeders desc"
+      sd_desc: "seeders desc"
       sd_asc: "seeders asc"
       sz_desc: "size desc"
       sz_asc: "size asc"
