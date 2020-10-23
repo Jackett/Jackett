@@ -295,7 +295,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * CrazyHD
  * CrazySpirits
  * CrnaBerza
- * DanishBits (DB)
  * Darius Tracker
  * Dark-Shadow
  * Dark Tracker
