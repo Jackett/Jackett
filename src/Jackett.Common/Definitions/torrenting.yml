@@ -67,8 +67,11 @@ login:
 search:
   paths:
     # https://torrenting.com/t?1=&5=&free=on&q=climax&qf=ti
-    # note: &free= or &free is treated as fleeleech so use if input block here does not work!
-    - path: "t?{{ range .Categories }}{{.}}=&{{end}}{{ if .Config.freeleech }}free=on&{{ else }}{{ end }}q={{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}&qf={{ if .Query.IMDBID }}adv{{ else }}ti{{ end }}"
+    - path: t
+  inputs:
+    $raw: "{{ range .Categories }}{{.}}=&{{end}}{{ if .Config.freeleech }}free=on&{{ else }}{{ end }}"
+    q: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    qf: "{{ if .Query.IMDBID }}adv{{ else }}ti{{ end }}"
 
   rows:
     selector: table#torrentsTable > tbody > tr:has(td.torrentNameInfo)
@@ -102,8 +105,6 @@ search:
     size:
       selector: td:nth-last-child(3)
     downloadvolumefactor:
-      text: 1
-    downloadvolumefactor:
       case:
         "span:contains(\"FreeLeech\")": 0
         "*": 1
@@ -112,6 +113,6 @@ search:
     minimumratio:
       text: 1.1
     minimumseedtime:
-       # 3 days
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
       text: 259200
 # engine n/a
