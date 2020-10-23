@@ -157,16 +157,16 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "date_desc"
+    default: date_desc
     options:
-      "date_desc": "created desc"
-      "date_asc": "created asc"
-      "sd_desc": "seeders desc"
-      "sd_asc": "seeders asc"
-      "sz_desc": "size desc"
-      "sz_asc": "size asc"
-      "name_desc": "title desc"
-      "name_asc": "title asc"
+      date_desc: "created desc"
+      date_asc: "created asc"
+      sd_desc: 'seeders desc"
+      sd_asc: "seeders asc"
+      sz_desc: "size desc"
+      sz_asc: "size asc"
+      name_desc: "title desc"
+      name_asc: "title asc"
 
 login:
   path: login

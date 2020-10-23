@@ -66,7 +66,6 @@ caps:
     - {id: 182, cat: Other, desc: "Разное"}
     - {id: 789, cat: Other, desc: "Автомобильный раздел"}
     - {id: 797, cat: Other, desc: "Караоке Онлайн"}
-
     - {id: 137, cat: Other, desc: "Форумы"}
     - {id: 138, cat: Other, desc: "О нашем сайте"}
     - {id: 140, cat: Other, desc: "Новости трекера"}
@@ -285,17 +284,17 @@ settings:
     label: Sort requested from site
     default: "t"
     options:
-      "t": "created"
-      "ts": "seeders"
-      "sz": "size"
-      "i": "title"
+      t: created
+      ts: seeders
+      sz: size
+      i: title
   - name: type
     type: select
     label: Order requested from site
-    default: "d"
+    default: d
     options:
-      "d": "desc"
-      "a": "asc"
+      d: desc
+      a: asc
 
 download:
   selector: a[href^="./download/file.php?id="]
