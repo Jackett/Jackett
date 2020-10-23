@@ -22,11 +22,11 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "added"
+    default: added
     options:
-      "added": "created"
-      "seeders": "seeders"
-      "name": "title"
+      added: created
+      seeders: seeders
+      name: title
 
 search:
   paths:

@@ -59,19 +59,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "8"
+    default: 8
     options:
-      "8": "created"
-      "6": "seeders"
-      "4": "size"
-      "1": "title"
+      8: created
+      6: seeders
+      4: size
+      1: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
   - name: info
     type: info
     label: Results Per Page

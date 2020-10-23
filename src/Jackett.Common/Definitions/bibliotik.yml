@@ -30,25 +30,25 @@ settings:
   - name: orderby
     type: select
     label: Sort requested from site
-    default: "relevance"
+    default: relevance
     options:
-      "relevance": "relevance"
-      "year": "year"
-      "size": "size"
-      "duration": "duration"
-      "added": "added"
-      "leechers": "leechers"
-      "seeders": "seeders"
-      "snatches": "snatches"
-      "comments": "comments"
-      "files": "files"
+      relevance: relevance
+      year: year
+      size: size
+      duration: duration
+      added: added
+      leechers: leechers
+      seeders: seeders
+      snatches: snatches
+      comments: comments
+      files: files
   - name: order
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   path: /

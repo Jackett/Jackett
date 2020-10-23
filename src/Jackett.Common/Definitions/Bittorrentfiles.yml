@@ -23,7 +23,6 @@ caps:
     - {id: 49, cat: Movies/Foreign, desc: "Movie International"}
     - {id: 78, cat: Movies/UHD, desc: "Movie UHD"}
     - {id: 85, cat: Movies/HD, desc: "Movie x265"}
-
     # Serien
     - {id: 79, cat: TV/HD, desc: "Staffeln HD"}
     - {id: 56, cat: TV/SD, desc: "Staffeln SD"}
@@ -33,14 +32,12 @@ caps:
     - {id: 80, cat: TV/HD, desc: "Folgen HD/BD"}
     - {id: 7, cat: TV/SD, desc: "Folgen SD"}
     - {id: 55, cat: TV/Foreign, desc: "Folgen International"}
-
     # Doku
     - {id: 91, cat: TV/Documentary, desc: "Doku UHD"}
     - {id: 64, cat: TV/Documentary, desc: "Doku HD"}
     - {id: 36, cat: TV/Documentary, desc: "Doku SD"}
     - {id: 81, cat: TV/Documentary, desc: "Doku 3D"}
     - {id: 82, cat: TV/Documentary, desc: "Doku Packs"}
-
     # Spiele
     - {id: 4, cat: PC/Games, desc: "Spiele Windows"}
     - {id: 92, cat: PC/Mac, desc: "Spiele Mac"}
@@ -50,7 +47,6 @@ caps:
     - {id: 95, cat: Console/NDS, desc: "Spiele Nintendo"}
     - {id: 96, cat: Console/PSP, desc: "Spiele Playstation"}
     - {id: 42, cat: Console/Other, desc: "Spiele Andere"}
-
     # Musik
     - {id: 66, cat: Audio, desc: "Musik Alben"}
     - {id: 75, cat: Audio, desc: "Musik Singles"}
@@ -63,17 +59,14 @@ caps:
     - {id: 6, cat: Audio, desc: "Musik Misc"}
     - {id: 51, cat: Audio, desc: "Musik OST"}
     - {id: 67, cat: Audio, desc: "Musik Sampler"}
-
     # App
     - {id: 98, cat: PC/0day, desc: "App Windows"}
     - {id: 62, cat: PC/Mac, desc: "App Mac OS"}
     - {id: 63, cat: PC/0day, desc: "App Linux"}
     - {id: 34, cat: PC, desc: "App Andere"}
-
     # Sport
     - {id: 74, cat: TV/Sport, desc: "Sport HD"}
     - {id: 39, cat: TV/Sport, desc: "Sport SD"}
-
     # Sonstiges
     - {id: 41, cat: Books/Comics, desc: "Sonstiges A-Book"}
     - {id: 33, cat: TV/Anime, desc: "Sonstiges Anime"}
@@ -85,7 +78,6 @@ caps:
     - {id: 38, cat: Other, desc: "Sonstiges Kids"}
     - {id: 47, cat: Other, desc: "Sonstiges Line"}
     - {id: 9, cat: Other, desc: "Sonstiges Andere"}
-
     # XXX
     - {id: 58, cat: Books/Comics, desc: "XXX HD"}
     - {id: 46, cat: XXX, desc: "XXX Hentai"}
@@ -116,19 +108,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "added"
+    default: added
     options:
-      "added": "created"
-      "seeds": "seeders"
-      "size": "size"
-      "name": "title"
+      added: created
+      seeds: seeders
+      size: size
+      name: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   path: signin.php

@@ -71,19 +71,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "0"
+    default: 0
     options:
-      "0": "created"
-      "6": "seeders"
-      "4": "size"
-      "1": "title"
+      0: created
+      6: seeders
+      4: size
+      1: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   path: takelogin.php

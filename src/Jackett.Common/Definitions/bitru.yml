@@ -10,16 +10,16 @@ links:
 
 caps:
   categories:
-    "movie": Movies
-    "serial": TV
-    "music": Audio
-    "game": PC/Games
-    "soft": PC
-    "literature": Books
-    "audiobook": Audio/Audiobook
-    "video": Movies
-    "image": Other
-    "xxx": XXX
+    movie: Movies
+    serial: TV
+    music: Audio
+    game: PC/Games
+    soft: PC
+    literature: Books
+    audiobook: Audio/Audiobook
+    video: Movies
+    image: Other
+    xxx: XXX
 
   modes:
     search: [q]
@@ -32,18 +32,18 @@ settings:
   - name: adverts
     type: select
     label: Include Advertising
-    default: "_"
+    default: _
     options:
-      "_": "yes"
-      "no": "no"
+      _: yes
+      no: no
   - name: sort
     type: select
     label: Sort requested from site
-    default: "_"
+    default: _
     options:
-      "_": "created"
-      "seeders": "seeders"
-      "size": "size"
+      _: created
+      seeders: seeders
+      size: size
 
 search:
   paths:

@@ -75,19 +75,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "added"
+    default: added
     options:
-      "added": "created"
-      "seed": "seeders"
-      "size": "size"
-      "name": "title"
+      added: created
+      seed: seeders
+      size: size
+      name: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 search:
   # https://bigfangroup.org/browse.php?search=black+lightning&cat=0&incldead=0&year=0&format=0
