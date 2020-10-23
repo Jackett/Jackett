@@ -13,14 +13,24 @@ links:
 
 caps:
   categories:
-    "other": Other
+    tv: TV
+    movies: Movies
+    other: Other
 
   modes:
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q]
 
-settings: []
+settings:
+  - name: category-id
+    type: select
+    label: The TorrentKitty web site does not provide categories. Select the category you want Jackett to set on all results returned.
+    default: other
+    options:
+      tv: TV
+      movies: Movies
+      other: Other
 
 search:
   paths:
@@ -31,7 +41,7 @@ search:
 
   fields:
     category:
-      text: other
+      text: "{{ .Config.category-id }}"
     title:
       selector: td.name
     details:
