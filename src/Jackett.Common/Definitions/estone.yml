@@ -54,18 +54,18 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "feltoltve"
+    default: feltoltve
     options:
-      "feltoltve": "created"
-      "feltoltok": "seeders"
-      "meret": "size"
+      feltoltve: created
+      feltoltok: seeders
+      meret: size
   - name: type
     type: select
     label: Order requested from site
-    default: "DESC"
+    default: DESC
     options:
-      "DESC": "desc"
-      "ASC": "asc"
+      DESC: desc
+      ASC: asc
 
 login:
   path: login.php
