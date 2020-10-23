@@ -49,12 +49,12 @@ settings:
     label: Replace MULTI by this language
     default: FRENCH
     options:
-      FRENCH: "FRENCH"
-      MULTI.FRENCH: "MULTI.FRENCH"
-      ENGLISH: "ENGLISH"
-      MULTI.ENGLISH: "MULTI.ENGLISH"
-      VOSTFR: "VOSTFR"
-      MULTI.VOSTFR: "MULTI.VOSTFR"
+      FRENCH: FRENCH
+      MULTI.FRENCH: MULTI.FRENCH
+      ENGLISH: ENGLISH
+      MULTI.ENGLISH: MULTI.ENGLISH
+      VOSTFR: VOSTFR
+      MULTI.VOSTFR: MULTI.VOSTFR
   - name: vostfr
     type: checkbox
     label: Replace VOSTFR with ENGLISH
@@ -62,16 +62,16 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site (Only works for searches with Keywords)
-    default: "?trie-date-d"
+    default: ?trie-date-d
     options:
-      "?trie-date-d": "created desc"
-      "?trie-date-a": "created asc"
-      "?trie-seeds-d": "seeders desc"
-      "?trie-seeds-a": "seeders asc"
-      "?trie-poid-d": "size desc"
-      "?trie-poid-a": "size asc"
-      "?trie-nom-d": "title desc"
-      "?trie-nom-a": "title asc"
+      ?trie-date-d: created desc
+      ?trie-date-a: created asc
+      ?trie-seeds-d: seeders desc
+      ?trie-seeds-a: seeders asc
+      ?trie-poid-d: size desc
+      ?trie-poid-a: size asc
+      ?trie-nom-d: title desc
+      ?trie-nom-a: title asc
 
 download:
   selector: a[href^="magnet:"]

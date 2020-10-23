@@ -91,12 +91,12 @@ settings:
     label: Replace MULTI by this language
     default: FRENCH
     options:
-      FRENCH: "FRENCH"
-      MULTI.FRENCH: "MULTI.FRENCH"
-      ENGLISH: "ENGLISH"
-      MULTI.ENGLISH: "MULTI.ENGLISH"
-      VOSTFR: "VOSTFR"
-      MULTI.VOSTFR: "MULTI.VOSTFR"
+      FRENCH: FRENCH
+      MULTI.FRENCH: MULTI.FRENCH
+      ENGLISH: ENGLISH
+      MULTI.ENGLISH: MULTI.ENGLISH
+      VOSTFR: VOSTFR
+      MULTI.VOSTFR: MULTI.VOSTFR
   - name: vostfr
     type: checkbox
     label: Replace VOSTFR with ENGLISH
@@ -104,19 +104,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "id"
+    default: id
     options:
-      "id": "created"
-      "seeders": "seeders"
-      "size": "size"
-      "name": "title"
+      id: created
+      seeders: seeders
+      size: size
+      name: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   path: account-login.php

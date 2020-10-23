@@ -19,19 +19,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "created"
+    default: created
     options:
-      "created": "created"
-      "seeds": "seeders"
-      "size": "size"
-      "title": "title"
+      created: created
+      seeds: seeders
+      size: size
+      title: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 search:
   paths:
