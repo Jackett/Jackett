@@ -12,16 +12,16 @@ settings:
   - name: category
     type: select
     label: Category
-    default: "todos"
+    default: todos
     options:
-      todos: "todos"
-      anime: "anime"
-      manga: "manga"
-      dorama: "dorama"
-      videojuego: "videojuego"
-      BSO: "BSO"
-      PV: "PV"
-      otros: "otros"
+      todos: todos
+      anime: anime
+      manga: manga
+      dorama: dorama
+      videojuego: videojuego
+      BSO: BSO
+      PV: PV
+      otros: otros
   - name: info
     type: info
     label: Direct Downloads

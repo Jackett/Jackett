@@ -58,52 +58,52 @@ settings:
   - name: cat
     type: select
     label: Category
-    default: "0"
+    default: 0
     options:
-      "0": "all"
-      "cartoons": "Мультики (cartoons)"
-      "tv": "ТВ Передача (tv)"
-      "sport": "Спорт (sport)"
-      "action": "Боевик (action)"
-      "comedy": "Комедия (comedy)"
-      "thriller": "Триллер (thriller)"
-      "classic": "Классика (classic)"
-      "history": "Исторический (history)"
-      "mystic": "Мистика (mystic)"
-      "sci-fi": "Фантастика (sci-fi)"
-      "horror": "Ужасы (horror)"
-      "drama": "Драма (drama)"
-      "adventure": "Приключения (adventure)"
-      "detective": "Детектив (detective)"
-      "concert": "Концерт (concert)"
-      "anime": "Аниме (anime)"
-      "epic": "Мелодрама (epic)"
-      "documental": "Док. Фильм (documental)"
-      "serials": "Сериал (serials)"
-      "fantasy": "Фентези (fantasy)"
-      "war": "Военный (war)"
-      "family": "Семейный (family)"
-      "tales": "Сказка (tales)"
-      "catastroph": "Катастрофа (catastroph)"
-      "games": "Игры (games)"
-      "software": "Программы (software)"
-      "videoclips": "Видеоклип (videoclips)"
-      "wallpapers": "Картинки (wallpapers)"
-      "eng-music": "Eng Музыка (eng-music)"
-      "rus-music": "Rus Музыка (rus-music)"
-      "books": "Книги (books)"
-      "phone": "Телефон (phone)"
+      0: all
+      cartoons: "Мультики (cartoons)"
+      tv: "ТВ Передача (tv)"
+      sport: "Спорт (sport)"
+      action: "Боевик (action)"
+      comedy: "Комедия (comedy)"
+      thriller: "Триллер (thriller)"
+      classic: "Классика (classic)"
+      history: "Исторический (history)"
+      mystic: "Мистика (mystic)"
+      sci-fi: "Фантастика (sci-fi)"
+      horror: "Ужасы (horror)"
+      drama: "Драма (drama)"
+      adventure: "Приключения (adventure)"
+      detective: "Детектив (detective)"
+      concert: "Концерт (concert)"
+      anime: "Аниме (anime)"
+      epic: "Мелодрама (epic)"
+      documental: "Док. Фильм (documental)"
+      serials: "Сериал (serials)"
+      fantasy: "Фентези (fantasy)"
+      war: "Военный (war)"
+      family: "Семейный (family)"
+      tales: "Сказка (tales)"
+      catastroph: "Катастрофа (catastroph)"
+      games: "Игры (games)"
+      software: "Программы (software)"
+      videoclips: "Видеоклип (videoclips)"
+      wallpapers: "Картинки (wallpapers)"
+      eng-music: "Eng Музыка (eng-music)"
+      rus-music: "Rus Музыка (rus-music)"
+      books: "Книги (books)"
+      phone: "Телефон (phone)"
   - name: sort
     type: select
     label: Sort requested from site
-    default: "dateD"
+    default: dateD
     options:
-      "dateD": "created desc"
-      "dateA": "created asc"
-      "seedD": "seeders desc"
-      "seedA": "seeders asc"
-      "sizeD": "size desc"
-      "sizeA": "size asc"
+      dateD: created desc
+      dateA: created asc
+      seedD: seeders desc
+      seedA: seeders asc
+      sizeD: size desc
+      sizeA: size asc
 
 search:
   paths:
