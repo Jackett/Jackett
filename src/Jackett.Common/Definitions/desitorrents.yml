@@ -111,14 +111,14 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    # while the grabs and date columns are merged due (see #9849), the time sort on the website fails with "selected sorting wrong: time".
-    # default: "time"
-    default: "relevance"
+    # while the grabs and date columns are merged due (see #9849), the time sort on the website fails with: "selected sorting wrong: time".
+    # default: time
+    default: relevance
     options:
-      # "time": "created"
-      "seeders": "seeders"
-      "size": "size"
-      "relevance": "title"
+      # time: created
+      seeders: seeders
+      size: size
+      relevance: title
 
 login:
   path: login.php?from=index1
@@ -153,6 +153,8 @@ search:
       args: ["\\", ""]
     - name: re_replace
       args: ["\",\"paging.*", ""]
+    - name: re_replace
+      args: ["</th<th>", "</th><th>"] # fix for #9849
     - name: prepend
       args: "<table>"
     - name: append
@@ -252,17 +254,10 @@ search:
     leechers:
       selector: th:nth-child(10)
     grabs:
-      # issue #9849 the ajax stream contains <th>27</th<th>2020-10-05 03:55:34</th> (note the broken th terminator for grabs)
       selector: th:nth-child(11)
-      filters:
-        - name: regexp
-          args: ^(\d+)\d{4}-
     date:
-      # selector: th:nth-child(12) issue #9849
-      selector: th:nth-child(11)
+      selector: th:nth-child(12)
       filters:
-        - name: regexp
-          args: (\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})
         - name: append
           args: " +00:00" # GMT
         - name: dateparse
