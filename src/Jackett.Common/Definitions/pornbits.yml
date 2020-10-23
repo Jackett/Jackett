@@ -12,7 +12,7 @@ legacylinks:
 
 caps:
   categories:
-    "xxx": XXX
+    xxx: XXX
 
   modes:
     search: [q]
@@ -33,14 +33,14 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "date_desc"
+    default: date_desc
     options:
-      "date_desc": "created desc"
-      "date_asc": "created asc"
-      "seeds_desc": "seeders desc"
-      "seeds_asc": "seeders asc"
-      "size_desc": "size desc"
-      "size_asc": "size asc"
+      date_desc: created desc
+      date_asc: created asc
+      seeds_desc: seeders desc
+      seeds_asc: seeders asc
+      size_desc: size desc
+      size_asc: size asc
 
 login:
   path: login

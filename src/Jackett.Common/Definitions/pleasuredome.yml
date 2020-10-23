@@ -83,19 +83,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "data"
+    default: data
     options:
-      "data": "created"
-      "s.seeds": "seeders"
-      "n.size": "size"
-      "n.filename": "title"
+      data: created
+      s.seeds: seeders
+      n.size: size
+      n.filename: title
   - name: type
     type: select
     label: Order requested from site
-    default: "DESC"
+    default: DESC
     options:
-      "DESC": "desc"
-      "ASC": "asc"
+      DESC: desc
+      ASC: asc
 
 login:
   path: index.php

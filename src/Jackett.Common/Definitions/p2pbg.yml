@@ -77,17 +77,17 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "data"
+    default: data
     options:
-      "data": "created"
-      "size": "size"
+      data: created
+      size: size
   - name: type
     type: select
     label: Order requested from site
-    default: "DESC"
+    default: DESC
     options:
-      "DESC": "desc"
-      "ASC": "asc"
+      DESC: desc
+      ASC: asc
 
 login:
   path: index.php?page=login

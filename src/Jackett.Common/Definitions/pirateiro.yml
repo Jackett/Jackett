@@ -22,14 +22,14 @@ legacylinks:
 
 caps:
   categories:
-    "cat100": TV/Anime
-    "cat200": PC
-    "cat300": Movies
-    "cat400": Console
-    "cat500": Audio
-    "cat600": Other
-    "cat700": TV
-    "cat800": XXX
+    cat100: TV/Anime
+    cat200: PC
+    cat300: Movies
+    cat400: Console
+    cat500: Audio
+    cat600: Other
+    cat700: TV
+    cat800: XXX
 
   modes:
     search: [q]
@@ -41,11 +41,11 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "enviado"
+    default: enviado
     options:
-      "enviado": "created"
-      "seeders": "seeders"
-      "tamanho": "size"
+      enviado: created
+      seeders: seeders
+      tamanho: size
 
 search:
   paths:
