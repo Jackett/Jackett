@@ -106,19 +106,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "3"
+    default: 3
     options:
-      "3": "created"
-      "5": "seeders"
-      "4": "size"
-      "2": "title"
+      3: created
+      5: seeders
+      4: size
+      2: title
   - name: type
     type: select
     label: Order requested from site
-    default: "2"
+    default: 2
     options:
-      "2": "desc"
-      "1": "asc"
+      2: desc
+      1: asc
   - name: info
     type: info
     label: Results Per Page
@@ -215,8 +215,10 @@ search:
     date:
       selector: td:nth-child(7)
       filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02/01/2006"
+          args: "02/01/2006 -07:00"
     download:
       selector: a[href^="download.php"]
       attribute: href
