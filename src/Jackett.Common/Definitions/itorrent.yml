@@ -15,13 +15,13 @@ legacylinks:
 
 caps:
   categories:
-    "app": PC
-    "book": Books
-    "game": PC/Games
-    "movies": Movies
-    "music": Audio
-    "heart": XXX
-    "tv": TV
+    app: PC
+    book: Books
+    game: PC/Games
+    movies: Movies
+    music: Audio
+    heart: XXX
+    tv: TV
 
   modes:
     search: [q]
@@ -34,19 +34,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "date_added"
+    default: date_added
     options:
-      "date_added": "created"
-      "seeders": "seeders"
-      "size": "size"
-      "title": "title"
+      date_added: created
+      seeders: seeders
+      size: size
+      title: title
   - name: type
     type: select
     label: Order requested from site
-    default: "DESC"
+    default: DESC
     options:
-      "DESC": "desc"
-      "ASC": "asc"
+      DESC: desc
+      ASC: asc
 
 
 download:
