@@ -78,11 +78,12 @@ search:
   path: browse.php
   inputs:
     $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-    search: "{{ .Query.Keywords }}"
-    incldead: "1"
+    search: "{{ .Keywords }}"
+    incldead: "
 
   rows:
     selector: table.tableinborder > tbody > tr:has(a[href^="download.php"])
+
   fields:
     title:
       selector: a[href^="details.php"]
@@ -121,5 +122,5 @@ search:
         img[src="pic/oupic.gif"]: "0"
         "*": "1"
     uploadvolumefactor:
-      case:
-        "*": "1"
+      text: 1
+# engine tbd

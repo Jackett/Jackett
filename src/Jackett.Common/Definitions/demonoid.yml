@@ -294,13 +294,13 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "added"
+    default: _
     options:
-      "_": "created"
-      "S": "seeders desc"
-      "s": "seeders asc"
-      "B": "size desc"
-      "b": "size asc"
+      _: created
+      S: seeders desc
+      s: seeders asc
+      B: size desc
+      b: size asc
 
 login:
   method: cookie

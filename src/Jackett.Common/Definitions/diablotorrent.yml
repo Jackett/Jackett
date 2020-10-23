@@ -68,10 +68,10 @@ login:
     referer: ""
     nev: "{{ .Config.username }}"
     jelszo: "{{ .Config.password }}"
-    fsv: "0"
-    login: "1"
-    belepes: "1"
-    rhash: "123"
+    fsv: 0
+    login: 1
+    belepes: 1
+    rhash: 123
   test:
     path: browse
 
@@ -81,11 +81,13 @@ search:
   inputs:
     $raw: "{{range .Categories}}category[]={{.}}&{{end}}"
     search: "{{ .Keywords }}"
-    s_alapjan: "7"
-    s_sorrend: "desc"
+    s_alapjan: 7
+    s_sorrend: desc
+
   rows:
     selector: div.torrent_row, div.torrent_details
     after: 1
+
   fields:
     download:
       selector: div.box_download > a
@@ -113,7 +115,7 @@ search:
       selector: div.box_uploaded
       filters:
         - name: append
-          args: " +01:00"
+          args: " +01:00" # CET
         - name: dateparse
           args: "2006-01-0215:04:05 -07:00"
     size:
@@ -133,7 +135,7 @@ search:
       selector: div.torrent_row_magyarcim
       remove: span.torrent_row_new
     downloadvolumefactor:
-      text: "0"
+      text: 0
     uploadvolumefactor:
-      case:
-        "*": "1"
+      text: 1
+# engine tbd

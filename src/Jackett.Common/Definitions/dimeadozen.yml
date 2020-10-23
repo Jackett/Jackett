@@ -90,7 +90,7 @@ login:
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
-    returnto: "index.php"
+    returnto: index.php
     logout: ""
   error:
     - selector: table.message:contains("Error")
