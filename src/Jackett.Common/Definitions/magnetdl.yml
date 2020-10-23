@@ -24,13 +24,13 @@ legacylinks:
 
 caps:
   categories:
-    "TV": TV
-    "Movie": Movies
-    "Music": Audio
-    "E-Book": Books/Ebook
-    "Game": PC/Games
-    "Software": PC
-    "Other": Other
+    TV: TV
+    Movie: Movies
+    Music: Audio
+    E-Book: Books/Ebook
+    Game: PC/Games
+    Software: PC
+    Other: Other
 
   modes:
     search: [q]
@@ -43,18 +43,18 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "age"
+    default: age
     options:
-      "age": "created"
-      "se": "seeders"
-      "size": "size"
+      age: created
+      se: seeders
+      size: size
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 search:
   headers:

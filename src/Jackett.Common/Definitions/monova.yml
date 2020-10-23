@@ -29,15 +29,15 @@ legacylinks:
 
 caps:
   categories:
-    "venus-mars": XXX
-    "video-camera": Movies
-    "music": Audio
-    "book": Books
-    "gamepad": PC/Games
-    "cog": PC/0day
-    "venus-mars": XXX
-    "list": Other
-    "picture-o": Other/Misc
+    venus-mars: XXX
+    video-camera: Movies
+    music: Audio
+    book: Books
+    gamepad: PC/Games
+    cog: PC/0day
+    venus-mars: XXX
+    list: Other
+    picture-o: Other/Misc
 
   modes:
     search: [q]

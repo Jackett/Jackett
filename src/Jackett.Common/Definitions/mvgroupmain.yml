@@ -43,59 +43,59 @@ settings:
   - name: withsubs
     type: select
     label: Subtitles
-    default: "_"
+    default: _
     options:
-      "_": "-OFF-"
-      "alb": "Albanian"
-      "ara": "Arabic"
-      "arm": "Armenian"
-      "ass": "Assyrian"
-      "bos": "Bosnian"
-      "bul": "Bulgarian"
-      "cat": "Catalan"
-      "chi": "Chinese, simplified"
-      "zho": "Chinese, traditional"
-      "hrv": "Croatian"
-      "cze": "Czech"
-      "dan": "Danish"
-      "dut": "Dutch"
-      "eng": "English"
-      "est": "Estonian"
-      "fin": "Finnish"
-      "fre": "French"
-      "glg": "Galician"
-      "geo": "Georgian"
-      "ger": "German"
-      "ell": "Greek"
-      "heb": "Hebrew"
-      "hin": "Hindi"
-      "hun": "Hungarian"
-      "ice": "Icelandic"
-      "ind": "Indonesian"
-      "ita": "Italian"
-      "jpn": "Japanese"
-      "kaz": "Kazakh"
-      "kor": "Korean"
-      "lav": "Latvian"
-      "lit": "Lithuanian"
-      "ltz": "Luxembourgish"
-      "mac": "Macedonian"
-      "may": "Malay"
-      "nor": "Norwegian"
-      "per": "Persian"
-      "pol": "Polish"
-      "por": "Portuguese"
-      "rum": "Romanian"
-      "rus": "Russian"
-      "scc": "Serbian"
-      "slo": "Slovak"
-      "slv": "Slovenian"
-      "spa": "Spanish"
-      "swe": "Swedish"
-      "tha": "Thai"
-      "tur": "Turkish"
-      "ukr": "Ukrainian"
-      "vie": "Vietnamese"
+      _: -OFF-
+      alb: Albanian
+      ara: Arabic
+      arm: Armenian
+      ass: Assyrian
+      bos: Bosnian
+      bul: Bulgarian
+      cat: Catalan
+      chi: "Chinese, simplified"
+      zho: "Chinese, traditional"
+      hrv: Croatian
+      cze: Czech
+      dan: Danish
+      dut: Dutch
+      eng: English
+      est: Estonian
+      fin: Finnish
+      fre: French
+      glg: Galician
+      geo: Georgian
+      ger: German
+      ell: Greek
+      heb: Hebrew
+      hin: Hindi
+      hun: Hungarian
+      ice: Icelandic
+      ind: Indonesian
+      ita: Italian
+      jpn: Japanese
+      kaz: Kazakh
+      kor: Korean
+      lav: Latvian
+      lit: Lithuanian
+      ltz: Luxembourgish
+      mac: Macedonian
+      may: Malay
+      nor: Norwegian
+      per: Persian
+      pol: Polish
+      por: Portuguese
+      rum: Romanian
+      rus: Russian
+      scc: Serbian
+      slo: Slovak
+      slv: Slovenian
+      spa: Spanish
+      swe: Swedish
+      tha: Thai
+      tur: Turkish
+      ukr: Ukrainian
+      vie: Vietnamese
   - name: seed
     type: checkbox
     label: Only released and seeded torrents
@@ -111,18 +111,18 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "added"
+    default: added
     options:
-      "added": "created"
-      "seeders": "seeders"
-      "filename": "title"
+      added: created
+      seeders: seeders
+      filename: title
   - name: type
     type: select
     label: Order requested from site
-    default: "DESC"
+    default: DESC
     options:
-      "DESC": "desc"
-      "ASC": "asc"
+      DESC: desc
+      ASC: asc
 
 login:
   path: index.php?act=Login&CODE=00

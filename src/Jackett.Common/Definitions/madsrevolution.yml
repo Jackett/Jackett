@@ -90,19 +90,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "s3"
+    default: s3
     options:
-      "s3": "created"
-      "s6": "seeders"
-      "s4": "size"
-      "s1": "title"
+      s3: created
+      s6: seeders
+      s4: size
+      s1: title
   - name: type
     type: select
     label: Order requested from site
-    default: "DESC"
+    default: DESC
     options:
-      "DESC": "desc"
-      "ASC": "asc"
+      DESC: desc
+      ASC: asc
 
 login:
   path: login.php
