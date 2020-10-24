@@ -1,9 +1,4 @@
 ---
-# By LA5T for https://x-ite.me (25.07.2018 17:34 UTC+2)
-#
-# TODO:
-#    x-ite.me doesn't support altering the number of results, therefore only the 20 first results are shown (this is hardcoded), Jackett may support pagination in the future tho
-#
 id: xiteme
 name: x-ite.me
 description: "Tracker for LGBTQ movies, TV, books, magazines, anime, PC and XXX."
@@ -20,14 +15,6 @@ settings:
   - name: password
     type: password
     label: Password
-  - name: incldead
-    type: select
-    label: Status
-    default: 1
-    options:
-      0: Active
-      1: "Active and Inactive"
-      2: Inactive
 
 caps:
   categorymappings:
@@ -101,7 +88,6 @@ caps:
     movie-search: [q]
     book-search: [q]
 
-
 login:
   method: post
   path: account-login.php
@@ -123,9 +109,11 @@ search:
   inputs:
     $raw: "{{range .Categories}}&c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
-    incldead: "{{ .Config.incldead }}"
+    incldead: 1
+
   rows:
     selector: tr.t-row
+
   fields:
     title:
       selector: td:nth-child(2) > a:nth-child(1) > b:nth-child(1)
@@ -158,7 +146,7 @@ search:
         - name: re_replace
           args: ["(\\d{2})-(\\d{2})-(\\d{4}) ((?:\\d{2}:?){3})", "$3-$2-$1 $4"]
         - name: append
-          args: " +01:00"
+          args: " +01:00" # CET
         - name: dateparse
           args: "2006-01-02 15:04:05 -07:00"
     downloadvolumefactor:
@@ -166,5 +154,5 @@ search:
         "td:nth-child(2) > a:nth-child(1) > span:nth-child(2)": 0
         "*": 1
     uploadvolumefactor:
-      case:
-        "*": 1
+      text: 1
+# engine tbd

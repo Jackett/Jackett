@@ -82,7 +82,7 @@ search:
         - name: replace
           args: ["前天", "Yesterday"] # dont have a day before yesterday time do we?
         - name: append
-          args: " +08:00"
+          args: " +08:00" # CST
         - name: fuzzytime
     date:
       # 03/02 12:44 (no year, so big problem for older dates which will appear as "0m ago" because 12/24 is in the future if today is 04/28)
@@ -90,7 +90,7 @@ search:
       optional: true
       filters:
         - name: append
-          args: " +08:00"
+          args: " +08:00" # CST
         - name: dateparse
           args: "01/02 15:04 -07:00"
     downloadvolumefactor:
