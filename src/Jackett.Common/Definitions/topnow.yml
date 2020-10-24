@@ -24,7 +24,7 @@ caps:
 settings:
   - name: category-id
     type: select
-    label: The 7torrents web site does not provide categories. Select the category you want Jackett to set on all results returned.
+    label: The TopNow web site does not provide categories. Select the category you want Jackett to set on all results returned.
     default: other
     options:
       tv: TV

@@ -13,7 +13,8 @@ legacylinks:
 
 caps:
   categories:
-    1: TV # Sports
+    1: TV/Sport
+
   modes:
     search: [q]
     tv-search: [q, season, ep]
@@ -39,7 +40,7 @@ search:
     - path: browse.php
   inputs:
     $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
-    search: "{{ .Query.Keywords }}"
+    search: "{{ .Keywords }}"
   rows:
     selector: table[border="1"] tr:not(:first-child)
   fields:
@@ -67,8 +68,7 @@ search:
     leechers:
       selector: td:nth-child(9)
     downloadvolumefactor:
-      case:
-        "*": "1"
+      text: 1
     uploadvolumefactor:
-      case:
-        "*": "1"
+      text: 1
+# engine tbd

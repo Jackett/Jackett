@@ -65,7 +65,6 @@ caps:
 
   modes:
     search: [q]
-    book-search: [q]
 
 login:
   path: login.php
