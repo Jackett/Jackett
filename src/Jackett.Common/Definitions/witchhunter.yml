@@ -69,18 +69,18 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "4"
+    default: 4
     options:
-      "4": "created"
-      "7": "seeders"
-      "5": "size"
+      4: created
+      7: seeders
+      5: size
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   path: takelogin.php
@@ -152,7 +152,7 @@ search:
         - name: replace
           args: ["\u00a0", " "]
         - name: append
-          args: " +02:00"
+          args: " +02:00" # EET
         - name: dateparse
           args: "2006-01-02 15:04:05 -07:00"
     files:
@@ -167,11 +167,11 @@ search:
       selector: td:nth-last-child(2)
     downloadvolumefactor:
       case:
-        font:contains("x0"): 0
+        "font:contains(\"x0\")": 0
         "*": 1
     uploadvolumefactor:
       case:
-        font:contains("x2"): 2
+        "font:contains(\"x2\")": 2
         "*": 1
     minimumratio:
       text: 1.0
