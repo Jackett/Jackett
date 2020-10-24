@@ -12,6 +12,8 @@ legacylinks:
 
 caps:
   categorymappings:
+    - {id: 74, cat: TV/Sport, desc: "AEW"}
+    - {id: 75, cat: TV/Sport, desc: "AEW HD"}
     - {id: 47, cat: TV/Sport, desc: "Boxing"}
     - {id: 14, cat: Movies, desc: "Documentary"}
     - {id: 20, cat: TV/Sport, desc: "DVD"}
@@ -60,8 +62,6 @@ caps:
     - {id: 54, cat: TV/Sport, desc: "WWE Superstars HD"}
     - {id: 19, cat: TV/Sport, desc: "WWE Velocity"}
     - {id: 31, cat: TV/Sport, desc: "WWE Vintage"}
-    - {id: 74, cat: TV/Sport, desc: "AEW"}
-    - {id: 75, cat: TV/Sport, desc: "AEW HD"}
 
   modes:
     search: [q]
@@ -86,19 +86,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "4"
+    default: 4
     options:
-      "4": "created"
-      "7": "seeders"
-      "5": "size"
-      "1": "title"
+      4: created
+      7: seeders
+      5: size
+      1: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   path: takelogin.php
@@ -167,8 +167,10 @@ search:
     date:
       selector: td:nth-child(5)
       filters:
+        - name: append
+          args: " -07:00" # PDT
         - name: dateparse
-          args: "2006-01-0215:04:05"
+          args: "2006-01-0215:04:05 -07:00"
     downloadvolumefactor:
       case:
         img[src="pic/freeleech.png"]: 0
