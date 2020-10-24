@@ -80,19 +80,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "6"
+    default: 6
     options:
-      "6": "created"
-      "9": "seeders"
-      "7": "size"
-      "2": "title"
+      6: created
+      9: seeders
+      7: size
+      2: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   path: takelogin.php
@@ -146,10 +146,13 @@ search:
     size:
       selector: td:nth-child(6)
     date:
+      # 2020-10-2411:18:30
       selector: td:nth-child(5)
       filters:
-        - name: regexp
-          args: ([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))
+        - name: append
+          args: " +02:00" # EET
+        - name: dateparse
+          args: "2006-01-0215:04:05 -07:00"
     seeders:
       selector: td:nth-child(8)
     leechers:
