@@ -298,6 +298,7 @@ namespace Jackett.Updater
                 "Definitions/dreamteam.yml",
                 "Definitions/eggmeon.yml",
                 "Definitions/elitehd.yml",
+                "Definitions/elitetorrent-biz.yml",
                 "Definitions/elittracker.yml",
                 "Definitions/eotforum.yml",
                 "Definitions/estrenosdtl.yml",

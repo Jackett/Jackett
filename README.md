@@ -50,7 +50,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Demonoid
  * dmhy
  * E-Hentai
- * EliteTorrent.biz
  * Epizod
  * ETTV
  * EXT Torrents
