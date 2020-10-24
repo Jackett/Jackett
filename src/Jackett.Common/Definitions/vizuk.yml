@@ -22,7 +22,6 @@ caps:
     - {id: 34, cat: Movies/UHD, desc: "Películas FullBR 1080p"}
     - {id: 94, cat: Movies/BluRay, desc: "Películas Remux 1080p"}
     - {id: 36, cat: Movies/HD, desc: "Películas BDRip 1080p"}
-    - {id: 98, cat: Movies/HD, desc: "Películas BDRip 1080p x265"}
     - {id: 42, cat: Movies/HD, desc: "Películas BDRip 720p"}
     - {id: 37, cat: Movies/HD, desc: "Películas Micro 1080p"}
     - {id: 45, cat: Movies/HD, desc: "Películas Micro 720p"}
@@ -31,15 +30,6 @@ caps:
     - {id: 67, cat: Movies/3D, desc: "Películas 3D Remux"}
     - {id: 68, cat: Movies/3D, desc: "Películas 3D Rip (SBS/OU)"}
     - {id: 64, cat: Movies/HD, desc: "Películas Web-DL-2.0"}
-    - {id: 49, cat: TV/HD, desc: "Series"}
-    - {id: 59, cat: TV/HD, desc: "Series UHD F/R/Rip 4K"}
-    - {id: 61, cat: TV/HD, desc: "Series Full/Remux 1080p"}
-    - {id: 90, cat: TV/HD, desc: "Series BDRip 1080p"}
-    - {id: 91, cat: TV/HD, desc: "Series BDRip 720p"}
-    - {id: 92, cat: TV/HD, desc: "Series Web-DL-2.0"}
-    - {id: 95, cat: TV/HD, desc: "Series HDTV"}
-    - {id: 96, cat: TV/HD, desc: "Series HDTV 1080p"}
-    - {id: 97, cat: TV/HD, desc: "Series HDTV 720p"}
     - {id: 47, cat: Movies, desc: "Animación"}
     - {id: 69, cat: Movies/UHD, desc: "Animación UHDFull 4K"}
     - {id: 72, cat: Movies/UHD, desc: "Animación UHDRemux 4K"}
@@ -57,10 +47,6 @@ caps:
     - {id: 77, cat: Movies/3D, desc: "Animación 3D Remux"}
     - {id: 78, cat: Movies/3D, desc: "Animación 3D Rip (SBS/OU)"}
     - {id: 79, cat: Movies/HD, desc: "Animación Web-DL-2.0"}
-    - {id: 50, cat: Other/Misc, desc: "Música , Conciertos, Teatro y Deportes"}
-    - {id: 62, cat: Audio/MP3, desc: "Música"}
-    - {id: 63, cat: TV/Sport, desc: "Deporte"}
-    - {id: 21, cat: Movies/HD, desc: "Teatro"}
     - {id: 48, cat: Movies, desc: "Documentales"}
     - {id: 80, cat: Movies/UHD, desc: "Documentales UHDFull 4K"}
     - {id: 81, cat: Movies/UHD, desc: "Documentales UHDRemux 4K"}
@@ -74,6 +60,19 @@ caps:
     - {id: 87, cat: Movies/3D, desc: "Documentales 3D Remux"}
     - {id: 88, cat: Movies/3D, desc: "Documentales 3D Rip (SBS/OU)"}
     - {id: 89, cat: Movies/HD, desc: "Documentales Web-DL-2.0"}
+    - {id: 96, cat: TV/HD, desc: "Documentales HDTV 1080p"}
+    - {id: 97, cat: TV/HD, desc: "Documentales HDTV 720p"}
+    - {id: 49, cat: TV/HD, desc: "Series"}
+    - {id: 59, cat: TV/HD, desc: "Series UHD F/R/Rip 4K"}
+    - {id: 61, cat: TV/HD, desc: "Series Full/Remux 1080p"}
+    - {id: 90, cat: TV/HD, desc: "Series BDRip 1080p"}
+    - {id: 91, cat: TV/HD, desc: "Series BDRip 720p"}
+    - {id: 92, cat: TV/HD, desc: "Series Web-DL-2.0"}
+    - {id: 95, cat: TV/HD, desc: "Series HDTV"}
+    - {id: 50, cat: Other/Misc, desc: "Música , Conciertos, Teatro y Deportes"}
+    - {id: 62, cat: Audio/MP3, desc: "Música"}
+    - {id: 63, cat: TV/Sport, desc: "Deporte"}
+    - {id: 21, cat: Movies/HD, desc: "Teatro"}
     - {id: 93, cat: XXX, desc: "XXX"}
 
   modes:
@@ -96,18 +95,18 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "added"
+    default: added
     options:
-      "added": "created"
-      "seeders": "seeders"
-      "size": "size"
+      added: created
+      seeders: seeders
+      size: size
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   path: ajax/login.php
@@ -176,8 +175,10 @@ search:
           args: "(?<=Subido )(.*)(?= por)"
         - name: replace
           args: [": ", ":"]
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02-01-2006 15:04"
+          args: "02-01-2006 15:04 -07:00"
     date:
       selector: td.torrent_name:contains("Subido"):not(:contains("-")), .torrentOwner:contains("Subido"):not(:contains("-"))
       optional: true
@@ -213,8 +214,10 @@ search:
       filters:
         - name: regexp
           args: "(?<=Uploaded )(.*)(?= by)"
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02-01-2006 15:04"
+          args: "02-01-2006 15:04 -07:00"
     date:
       selector: td.torrent_name:contains("Uploaded"):not(:contains("-")), .torrentOwner:contains("Uploaded"):not(:contains("-"))
       optional: true
