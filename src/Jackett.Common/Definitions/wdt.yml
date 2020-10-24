@@ -10,6 +10,7 @@ links:
 
 caps:
   categorymappings:
+    # note: when refreshing categories also update $raw
     - {id: 14, cat: Audio/Audiobook, desc: "Audiobooks"}
     - {id: 16, cat: Audio, desc: "Music Audio"}
     - {id: 13, cat: Audio, desc: "Podcasts"}
@@ -67,19 +68,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "4"
+    default: 4
     options:
-      "4": "created"
-      "7": "seeders"
-      "5": "size"
-      "1": "title"
+      4: created
+      7: seeders
+      5: size
+      1: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
   - name: info_results
     type: info
     label: Search results
@@ -94,7 +95,7 @@ login:
     password: "{{ .Config.password }}"
     use_ssl: 1
     perm_ssl: ""
-    returnto: "/"
+    returnto: /
   error:
     - selector: table.main:contains("Login failed!")
       message:
@@ -111,7 +112,7 @@ search:
     - path: browse.php
   inputs:
     $raw: "cats3[]=14&cats3[]=16&cats3[]=13&cats3[]=15&cats5[]=29&cats5[]=28&cats5[]=30&cats5[]=18&cats1[]=34&cats1[]=9&cats1[]=33&cats6[]=32&cats6[]=31&cats6[]=20&cats7[]=19&cats7[]=35&cats7[]=36&cats2[]=37&cats2[]=38&cats2[]=12&cats2[]=40&cats2[]=44&cats2[]=11&cats2[]=42&cats2[]=43&cats2[]=21&cats2[]=22&cats2[]=41&cats2[]=10&cats4[]=26&cats4[]=24&cats4[]=27&cats4[]=17&cats4[]=23&cats4[]=25"
-    search: "{{.Keywords}}"
+    search: "{{ .Keywords }}"
     # title, descr, genre, all
     searchin: title
     # 0 active, 1 incldead, 2 onlydead
@@ -147,8 +148,10 @@ search:
     date:
       selector: td:nth-child(7)
       filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "Jan 2 2006 03:04 PM"
+          args: "Jan 2 2006 03:04 PM -07:00"
     size:
       selector: td:nth-child(8)
     grabs:
@@ -162,12 +165,11 @@ search:
       selector: td:nth-child(11)
     downloadvolumefactor:
       case:
-        a.info:contains("[FREE]"): 0
-        a.info:contains("[SILVER]"): 0.5
+        "a.info:contains(\"[FREE]\")": 0
+        "a.info:contains(\"[SILVER]\")": 0.5
         "*": 1
     uploadvolumefactor:
-      case:
-        "*": 1
+      text: 1
     minimumratio:
       text: 1.0
     minimumseedtime:
