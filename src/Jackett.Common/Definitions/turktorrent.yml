@@ -15,46 +15,16 @@ caps:
   categorymappings:
     - {id: 36, cat: Movies, desc: "Film"}
     - {id: 59, cat: Movies, desc: "Türk Filmi"}
-    - {id: 61, cat: Movies/3D, desc: "3D"}
-    - {id: 18, cat: Movies, desc: "Anime - Çizgi Türkçe"}
-    - {id: 19, cat: Movies, desc: "Anime - Çizgi TR Altyazı"}
-    - {id: 20, cat: Movies, desc: "Boxset Türkçe"}
-    - {id: 21, cat: Movies, desc: "Boxset Tr Altyzı"}
-    - {id: 22, cat: Movies/DVD, desc: "DVD Disk Türkçe"}
-    - {id: 23, cat: Movies/DVD, desc: "DVD Disk Tr Altyazı"}
-    - {id: 24, cat: Movies/BluRay, desc: "Bluray Disk Türkçe"}
-    - {id: 25, cat: Movies/BluRay, desc: "Bluray Disk Tr Altyazı"}
-    - {id: 26, cat: Movies/UHD, desc: "4K UHD Disk Türkçe"}
-    - {id: 27, cat: Movies/UHD, desc: "4K UHD Disk Tr Altyazı"}
-    - {id: 28, cat: Movies/HD, desc: "X265 Türkçe"}
-    - {id: 29, cat: Movies/HD, desc: "X265 Tr Altyazı"}
-    - {id: 30, cat: Movies/HD, desc: "X264 Türkçe"}
-    - {id: 37, cat: Movies/HD, desc: "X264 Tr Altyazı"}
-    - {id: 63, cat: Movies/SD, desc: "XviD Türkçe"}
-    - {id: 64, cat: Movies/SD, desc: "XviD Tr Altyazı"}
-    - {id: 31, cat: TV, desc: "Dizi"}
-    - {id: 32, cat: TV, desc: "Dizi Yerli"}
-    - {id: 33, cat: TV, desc: "Dizi Yabancı Orjinal Dil / Tr Dublaj "}
-    - {id: 34, cat: TV, desc: "Dizi Boxset"}
-    - {id: 35, cat: TV, desc: "Netflix"}
-    - {id: 41, cat: TV, desc: "Netflix Anime - Çizgi"}
-    - {id: 39, cat: TV, desc: "Netflix Film"}
-    - {id: 38, cat: TV, desc: "Netflix Dizi"}
-    - {id: 40, cat: TV, desc: "Netflix Belgesel"}
-    - {id: 42, cat: Audio, desc: "Müzik"}
-    - {id: 43, cat: Audio, desc: "Müzik Türkçe"}
-    - {id: 44, cat: Audio, desc: "Müzik Yabancı"}
-    - {id: 45, cat: Audio, desc: "Müzik Seri Albüm - Diskografi"}
-    - {id: 2, cat: Console, desc: "Oyun"}
-    - {id: 46, cat: Console, desc: "Oyun PC"}
-    - {id: 3, cat: Console, desc: "Oyun Sony PS"}
-    - {id: 4, cat: Console, desc: "Oyun Wii"}
-    - {id: 14, cat: Console, desc: "Oyun XboX"}
-    - {id: 16, cat: Console, desc: "Oyun Nintendo"}
-    - {id: 47, cat: PC, desc: "Programlar"}
-    - {id: 48, cat: PC, desc: "Programlar Windows"}
-    - {id: 49, cat: PC, desc: "Programlar MaC"}
-    - {id: 50, cat: PC, desc: "Programlar Mobile"}
+    - {id: 61, cat: Movies/3D, desc: "Film 3D"}
+    - {id: 18, cat: Movies, desc: "Anime - Çizgi"}
+    - {id: 20, cat: Movies, desc: "Film Boxset"}
+    - {id: 22, cat: Movies/DVD, desc: "Film DVD Disk"}
+    - {id: 24, cat: Movies/BluRay, desc: "Film Bluray Disk"}
+    - {id: 26, cat: Movies/UHD, desc: "4Film K UHD Disk"}
+    - {id: 28, cat: Movies/HD, desc: "Film X265"}
+    - {id: 30, cat: Movies/HD, desc: "Film X264"}
+    - {id: 69, cat: Movies/WEBDL, desc: "Film H264 WEB-DL"}
+    - {id: 63, cat: Movies/SD, desc: "Film XviD"}
     - {id: 51, cat: Other, desc: "Diğer"}
     - {id: 62, cat: Other, desc: "Diğer Eğitim"}
     - {id: 52, cat: Other, desc: "Diğer Belgesel"}
@@ -63,6 +33,29 @@ caps:
     - {id: 55, cat: Other, desc: "Diğer Duvar Kağıtları"}
     - {id: 56, cat: Other, desc: "Diğer  Her Şey"}
     - {id: 65, cat: Books/Ebook, desc: "E-Kitap"}
+    - {id: 2, cat: Console, desc: "Oyun"}
+    - {id: 46, cat: Console, desc: "Oyun PC"}
+    - {id: 3, cat: Console, desc: "Oyun Sony PS"}
+    - {id: 4, cat: Console, desc: "Oyun Wii"}
+    - {id: 14, cat: Console, desc: "Oyun XboX"}
+    - {id: 16, cat: Console, desc: "Oyun Nintendo"}
+    - {id: 35, cat: TV, desc: "Netflix"}
+    - {id: 41, cat: TV, desc: "Netflix Anime - Çizgi"}
+    - {id: 39, cat: TV, desc: "Netflix Film"}
+    - {id: 38, cat: TV, desc: "Netflix Dizi"}
+    - {id: 40, cat: TV, desc: "Netflix Belgesel"}
+    - {id: 31, cat: TV, desc: "Dizi"}
+    - {id: 32, cat: TV, desc: "Dizi Yerli"}
+    - {id: 33, cat: TV, desc: "Dizi Yabancı Orjinal Dil / Tr Dublaj "}
+    - {id: 34, cat: TV, desc: "Dizi Boxset"}
+    - {id: 42, cat: Audio, desc: "Müzik"}
+    - {id: 43, cat: Audio, desc: "Müzik Türkçe"}
+    - {id: 44, cat: Audio, desc: "Müzik Yabancı"}
+    - {id: 45, cat: Audio, desc: "Müzik Seri Albüm - Diskografi"}
+    - {id: 47, cat: PC, desc: "Programlar"}
+    - {id: 48, cat: PC, desc: "Programlar Windows"}
+    - {id: 49, cat: PC, desc: "Programlar MaC"}
+    - {id: 50, cat: PC, desc: "Programlar Mobile"}
 
   modes:
     search: [q]
@@ -89,18 +82,18 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "added"
+    default: added
     options:
-      "added": "created"
-      "seeders": "seeders"
-      "size": "size"
+      added: created
+      seeders: seeders
+      size: size
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   path: ?p=home&pid=1
@@ -165,8 +158,10 @@ search:
       filters:
         - name: regexp
           args: "Uploaded (.+?) by"
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02-01-2006 15:04"
+          args: "02-01-2006 15:04 -07:00"
     date:
       optional: true
       # Uploaded Friday at 05:11 by
