@@ -113,15 +113,15 @@ settings:
     label: Catégorie
     default: all
     options:
-      all: "Tous"
-      2145: "Film/Vidéo"
-      2139: "Audio"
-      2144: "Application"
-      2142: "Jeu vidéo"
-      2140: "eBook"
-      2141: "Emulation"
-      2143: "GPS"
-      2188: "XXX"
+      all: Tous
+      2145: Film/Vidéo
+      2139: Audio
+      2144: Application
+      2142: Jeu vidéo
+      2140: eBook
+      2141: Emulation
+      2143: GPS
+      2188: XXX
   - name: filter_title
     type: checkbox
     label: Try to normalize releases names by moving year after the title
@@ -135,12 +135,12 @@ settings:
     label: Replace MULTI by this language
     default: FRENCH
     options:
-      FRENCH: "FRENCH"
-      MULTI.FRENCH: "MULTI.FRENCH"
-      ENGLISH: "ENGLISH"
-      MULTI.ENGLISH: "MULTI.ENGLISH"
-      VOSTFR: "VOSTFR"
-      MULTI.VOSTFR: "MULTI.VOSTFR"
+      FRENCH: FRENCH
+      MULTI.FRENCH: MULTI.FRENCH
+      ENGLISH: ENGLISH
+      MULTI.ENGLISH: MULTI.ENGLISH
+      VOSTFR: VOSTFR
+      MULTI.VOSTFR: MULTI.VOSTFR
   - name: vostfr
     type: checkbox
     label: Replace VOSTFR with ENGLISH
@@ -156,19 +156,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "publish_date"
+    default: publish_date
     options:
-      "publish_date": "created"
-      "seed": "seeders"
-      "size": "size"
-      "name": "title"
+      publish_date: created
+      seed: seeders
+      size: size
+      name: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   method: form
