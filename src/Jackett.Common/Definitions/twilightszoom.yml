@@ -96,19 +96,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "4"
+    default: 4
     options:
-      "4": "created"
-      "7": "seeders"
-      "5": "size"
-      "1": "title"
+      4: created
+      7: seeders
+      5: size
+      1: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   path: login.php
@@ -117,7 +117,7 @@ login:
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
-    returnto: "/"
+    returnto: /
     perm_ssl: 1
   error:
     - selector: td.embedded:has(h2:contains("failed"))
@@ -176,8 +176,10 @@ search:
       selector: td:nth-last-child(6):not(:contains("day"))
       optional: true
       filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "Jan 2 2006 03:04 PM"
+          args: "Jan 2 2006 03:04 PM -07:00"
     size:
       selector: td:nth-last-child(5)
     grabs:
