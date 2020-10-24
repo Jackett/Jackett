@@ -10,17 +10,17 @@ links:
 
 caps:
   categorymappings:
+    - {id: 1, cat: TV, desc: "TV Kids"}
+    - {id: 24, cat: TV, desc: "TV Teens"}
+    - {id: 2, cat: TV, desc: "TV Family"}
+    - {id: 15, cat: TV, desc: "TV Educational"}
+    - {id: 16, cat: Movies, desc: "Movies Family"}
+    - {id: 23, cat: Movies, desc: "Movies Teen"}
     - {id: 5, cat: Audio, desc: "Music"}
     - {id: 6, cat: Audio/Audiobook, desc: "Audiobooks"}
     - {id: 4, cat: Books/Comics, desc: "Comics"}
     - {id: 7, cat: Books/EBook, desc: "E-Books"}
-    - {id: 16, cat: Movies, desc: "Family Movies"}
-    - {id: 23, cat: Movies, desc: "Teen Movies"}
     - {id: 8, cat: PC/Games, desc: "Games"}
-    - {id: 1, cat: TV, desc: "Kids"}
-    - {id: 2, cat: TV, desc: "Family"}
-    - {id: 15, cat: TV, desc: "Educational"}
-    - {id: 24, cat: TV, desc: "Teens"}
 
   modes:
     search: [q]
@@ -47,19 +47,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "data"
+    default: data
     options:
-      "data": "created"
-      "seeds": "seeders"
-      "size": "size"
-      "filename": "title"
+      data: created
+      seeds: seeders
+      size: size
+      filename: title
   - name: type
     type: select
     label: Order requested from site
-    default: "DESC"
+    default: DESC
     options:
-      "DESC": "desc"
-      "ASC": "asc"
+      DESC: desc
+      ASC: asc
 
 login:
   path: index.php?page=login
@@ -142,8 +142,10 @@ search:
       filters:
         - name: re_replace
           args: ["[,]|[\\s+]|[//\xa0],\\/g", " "]
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "January 02  2006  03:04:05 PM"
+          args: "January 02  2006  03:04:05 PM -07:00"
     seeders:
       selector: td:nth-child(6)
     leechers:
