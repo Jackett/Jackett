@@ -29,7 +29,7 @@ search:
     s: "{{ .Keywords }}"
 
   rows:
-    selector: article
+    selector: article:has(h3)
 
   fields:
     category:
