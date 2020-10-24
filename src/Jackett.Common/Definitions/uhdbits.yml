@@ -13,9 +13,6 @@ caps:
     1: Movies
     2: Audio
     3: TV
-    4: Audio
-    5: PC
-    6: Other
 
   modes:
     search: [q]
@@ -44,18 +41,18 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "time"
+    default: time
     options:
-      "time": "created"
-      "seeders": "seeders"
-      "size": "size"
+      time: created
+      seeders: seeders
+      size: size
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   path: login.php
@@ -160,7 +157,7 @@ search:
         - name: replace
           args: [",", ""]
         - name: append
-          args: " +07:00"
+          args: " +07:00" # ICT
         - name: dateparse
           args: "Jan 02 2006 15:04 -07:00"
     downloadvolumefactor:

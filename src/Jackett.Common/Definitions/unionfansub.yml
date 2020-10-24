@@ -48,19 +48,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "4"
+    default: 4
     options:
-      "4": "created"
-      "7": "seeders"
-      "5": "size"
-      "1": "title"
+      4: created
+      7: seeders
+      5: size
+      1: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   path: http://foro.unionfansub.com/member.php
@@ -82,7 +82,7 @@ search:
   path: browse.php
   inputs:
     $raw: "{{ range .Categories }}&c{{.}}=1{{end}}"
-    # 0 active 1 incldead 2 onlydead
+    # 0 active, 1 incldead, 2 onlydead
     incldead: 1
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
