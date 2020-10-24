@@ -298,6 +298,8 @@ namespace Jackett.Common.Indexers
                     else
                         release.UploadVolumeFactor = 1;
 
+                    release.MinimumRatio = 0.8;
+
                     releases.Add(release);
                 }
             }
