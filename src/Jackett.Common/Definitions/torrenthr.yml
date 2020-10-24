@@ -49,7 +49,7 @@ login:
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
-    ssl: "yes"
+    ssl: yes
   error:
     - selector: div.glavni:has(div.glavni_naslov:contains("Greška"))
   test:
@@ -60,12 +60,14 @@ search:
     - path: browse.php
   inputs:
     $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-    search: "{{ .Query.Keywords }}"
-    incldead: "1"
-    sort: "4"
-    type: "desc"
+    search: "{{ .Keywords }}"
+    incldead: 1
+    sort: 4
+    type: desc
+
   rows:
     selector: div.glavni_txt table > tbody > tr[id^="record-"]
+
   fields:
     title:
       selector: a[href^="details.php?id="]
@@ -104,10 +106,10 @@ search:
     grabs:
       selector: td:nth-child(7)
       filters:
-        - name: regexp
-          args: ([\d,]+)
         - name: replace
           args: [",", ""]
+        - name: regexp
+          args: (\d+)
     seeders:
       selector: td:nth-child(9)
     leechers:
@@ -120,19 +122,20 @@ search:
         - name: regexp
           args: "return overlibImage\\('.*','(.*)'\\);"
     downloadvolumefactor:
-      text: "0"
+      text: 0
     uploadvolumefactor:
-      text: "1"
+      text: 1
     date:
       selector: td:nth-child(2) > small
       filters:
         - name: replace
           args: [" u ", " "]
         - name: append
-          args: " +00:00"
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "02.01.2006 15:04:05 -07:00"
     description:
       optional: true
       selector: td:nth-child(2)
       remove: a, br, small
+# engine tbd

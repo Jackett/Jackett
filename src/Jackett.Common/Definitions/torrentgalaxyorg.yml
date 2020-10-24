@@ -82,19 +82,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "id"
+    default: id
     options:
-      "id": "created"
-      "seeders": "seeders"
-      "size": "size"
-      "name": "title"
+      id: created
+      seeders: seeders
+      size: size
+      name: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   # https://torrentgalaxy.to/galaxyfence.php?f&dropoff=%2Ftorrents.php%3Fsearch%3DHarry%2BPotter

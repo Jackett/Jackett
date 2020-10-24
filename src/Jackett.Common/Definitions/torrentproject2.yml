@@ -21,8 +21,8 @@ caps:
     "Video Lq": Movies/Foreign
     "audio mp3": Audio/MP3
     "audio lossless": Audio/Lossless
-    "video": Movies
-    "ebooks": Books/Ebook
+    video: Movies
+    ebooks: Books/Ebook
     "Ebooks Comics": Books/Comics
     "Ebooks Magazines": Other
     "Ebooks Audiobook": Audio/Audiobook
@@ -31,10 +31,10 @@ caps:
     "Games Nintendo": Console
     "Games PlayStation": Console
     "Games XBox": Console/XBox
-    "Mobile": PC/Phone-Other
-    "Applications": PC
-    "Images": Other
-    "Other": Other
+    Mobile: PC/Phone-Other
+    Applications: PC
+    Images: Other
+    Other: Other
 
   modes:
     search: [q]
@@ -51,12 +51,12 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "latest"
+    default: latest
     options:
-      "latest": "created desc"
-      "oldest": "created asc"
-      "seeders": "seeders"
-      "size": "size"
+      latest: "created desc"
+      oldest: "created asc"
+      seeders: seeders
+      size: size
   - name: info
     type: info
     label: A note about TP2
@@ -74,7 +74,7 @@ download:
 
 search:
   paths:
-    - path: "?t={{ if .Keywords }}{{ re_replace .Keywords \" \" \"+\" }}{{else}}test{{end}}&orderby={{ .Config.sort }}{{ if .Config.filter-verified }}&safe=on{{else}}{{end}}"
+    - path: "?t={{ if .Keywords }}{{ re_replace .Keywords \" \" \"+\" }}{{ else }}test{{ end }}&orderby={{ .Config.sort }}{{ if .Config.filter-verified }}&safe=on{{ else }}{{ end }}"
       followredirect: true
 
   rows:

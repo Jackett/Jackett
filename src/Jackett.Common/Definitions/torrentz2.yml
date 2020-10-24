@@ -35,25 +35,25 @@ caps:
   categories:
     "video tv": TV
     "video anime": TV/Anime
-    "video": Movies
+    video: Movies
     "movies divx xvid": Movies
     "video movie dvd": Movies
     "video movie dvdrip": Movies
     "video movie hd": Movies/HD
-    "ebook": Books/Ebook
+    ebook: Books/Ebook
     "ebook comics": Books/Comics
     "ebook magazine": Books/Magazines
     "ebook tutorial": Books/Technical
     "ebook audio book": Audio/Audiobook
-    "audio": Audio
+    audio: Audio
     "audio music lossless": Audio/Lossless
     "audio music mp3": Audio/MP3
-    "application": PC/0day
-    "game": PC/Games
+    application: PC/0day
+    game: PC/Games
     "game pc": PC/Games
     "game xbox": Console/Xbox
     "game nintendo": Console/NDS
-    "adult": XXX
+    adult: XXX
     "adult amateur": XXX
     "adult anal": XXX
     "adult asian": XXX
@@ -68,8 +68,8 @@ caps:
     "adult milf": XXX
     "adult squirting": XXX
     "adult tattoo": XXX
-    "other": Other
-    "images": Other
+    other: Other
+    images: Other
 
 
   modes:
@@ -95,19 +95,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "A"
+    default: A
     options:
-      "_": "peers"
-      "N": "rating"
-      "A": "created"
-      "S": "size"
+      _: peers
+      N: rating
+      A: created
+      S: size
 
 search:
   paths:
-    - path: "{{if .Config.filter-verified }}verified{{else}}search{{end}}{{ re_replace .Config.sort \"_\" \"\" }}"
+    - path: "{{if .Config.filter-verified }}verified{{ else }}search{{ end }}{{ re_replace .Config.sort \"_\" \"\" }}"
   inputs:
-    f: "{{ if .Keywords }}title: {{ .Keywords }}{{else}}{{end}}"
-    safe: "{{ if .Config.filter-safe }}1{{else}}0{{end}}"
+    f: "{{ if .Keywords }}title: {{ .Keywords }}{{ else }}{{ end }}"
+    safe: "{{ if .Config.filter-safe }}1{{ else }}0{{ end }}"
 
   rows:
     selector: "html body #wrap .results dl:has(a)"
@@ -131,7 +131,7 @@ search:
         - name: append
           args: ".torrent"
     download:
-      text: "{{if .Config.itorrents-links}}{{ .Result.download-itorrents }}{{else}}{{end}}"
+      text: "{{if .Config.itorrents-links}}{{ .Result.download-itorrents }}{{ else }}{{ end }}"
     magfile:
       text: "{{ .Result.title }}"
       filters:

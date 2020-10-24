@@ -17,12 +17,10 @@ caps:
     BluRay原盘: Movies/BluRay # BluRay original disc
     影视2160p: Movies/UHD # Media - 2160p
     UHD原盘: Movies/UHD # Blu-ray UHD
-
     # 纪录片 Docs
     纪录片720p: Movies/HD # Documentary 720p
     纪录片1080i/p: Movies/HD # Documentary 1080i / p
     纪录片BluRay原盘: Movies/BluRay # Documentary BluRay Original
-
     # 剧集 TV
     欧美剧720p: TV/HD # TV Series - EU/US - 720p
     欧美剧1080i/p: TV/HD # TV Series - EU/US - 1080i/p
@@ -30,18 +28,15 @@ caps:
     大陆港台剧1080i/p: TV/HD # TV Series - CN - 1080i/p
     大陆港台剧720p: TV/HD # TV Series - CN - 720p
     高清韩剧: TV/HD # TV Series - KR
-
     # 剧集包 TV Packs
     欧美剧包: TV/HD # TV Packs - EU/US
     日剧包: TV/HD # TV Packs - JP
     韩剧包: TV/HD # TV Packs - CN
     华语剧包: TV/HD # TV Packs - KR
-
     # 音乐 Audio
     (电影原声&Game)OST: Audio # OST - (Movie & Game) Track
     无损音乐FLAC&APE: Audio/Lossless  # FLAC & APE
     MV&amp;演唱会: Audio/Video # MV & Concert
-
     # 其他 Other
     高清体育节目: TV/Sport # HD Sports
     高清动漫: TV/Anime # HD Animation
@@ -51,42 +46,35 @@ caps:
     MiniVideo: Other # MiniVideo
     补充音轨: Audio # Supplemental audio tracks
     iPhone/iPad视频: PC/Phone-Other # IPhone / iPad video
-
     # 单机游戏
     PC: PC/Games # Games - PC
     MAC: PC/Mac # Games - MAC
-
     # 微软系列
     XBOX360: Console/Xbox 360 # MicroSoft - XBOX360
     XBOX1: Console/Xbox # MicroSoft - XBOX360
     XBLA: Console/Xbox # MicroSoft - XBLA
     XBOX+to+XBOX360: Console/Xbox # MicroSoft - XBOX to XBOX360
-
     # 索尼系列
     PS2: Console/Other # SONY - PS2
     PSP: Console/PSP # SONY - PSP
     PS4: Console/PS4 # SONY - PS4
     PS3: Console/PS3 # SONY - PS3
     PSV: Console/PS Vita # SONY - PSV
-
     # 任天堂系列
     WIIU: Console/WiiU # Nintendo - WIIU
     WII: Console/Wii # Nintendo- WII
     SWITCH: Console/Other # Nintendo - SWITCH
     NDS: Console/NDS # Nintendo - NDS
     NGC: Console/Other # Nintendo - NGC
-
     # 主机影视
     PS3兼容高清: Console/PS3 # Video - HD - PS3
     PSP兼容高清&标清: Console/PSP # Video - SD&HD - PSP
     XBOX360兼容高清: Console/Xbox 360 # Video - HD - XBOX360
     Game+Video: Console/Other # Video - Game Video
-
     # 软件
     APPZ: PC # Software - APPZ
     Game+Ebook: Books/Ebook # Software - Game Ebook
     Ebook: Books/Ebook # Software - Ebook
-
     # 苹果系列
     iPhone/iPad游戏: PC/Phone-IOS # Apple - Game - iPhone/iPad
     iPad书籍: Books/Ebook # Apple - Book - iPad
@@ -176,9 +164,9 @@ search:
       selector: td:nth-child(5)
       filters:
         - name: append
-          args: " +0800"
+          args: " +08:00" # CST
         - name: dateparse
-          args: "2006-01-0215:04:05 -0700"
+          args: "2006-01-0215:04:05 -07:00"
     imdb:
       optional: true
       selector: span.imdb_rate > a

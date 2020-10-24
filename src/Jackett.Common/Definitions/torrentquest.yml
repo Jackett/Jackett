@@ -10,13 +10,13 @@ links:
 
 caps:
   categories:
-    "TV": TV
-    "Movie": Movies
-    "Music": Audio
-    "E-Book": Books/Ebook
-    "Game": PC/Games
-    "Software": PC
-    "Other": Other
+    TV: TV
+    Movie: Movies
+    Music: Audio
+    E-Book: Books/Ebook
+    Game: PC/Games
+    Software: PC
+    Other: Other
 
   modes:
     search: [q]
@@ -29,18 +29,18 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "age"
+    default: age
     options:
-      "age": "created"
-      "se": "seeders"
-      "size": "size"
+      age: created
+      se: seeders
+      size: size
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 search:
   headers:
@@ -55,8 +55,8 @@ search:
     # return movie and tv results if there are no search parms supplied (for use with the TEST button)
     # https://torrentquest.com/download/movies/se/desc/
     # https://torrentquest.com/m/mandalorian-s01e07/age/desc/
-    - path: "{{ if .Keywords }}{{ re_replace .Keywords \"(.).*\" \"$1\" }}/{{ .Keywords }}{{else}}download/movies{{end}}/{{ .Config.sort }}/{{ .Config.type }}/"
-    - path: "{{ if .Keywords }}{{else}}download/tv/{{ .Config.sort }}/{{ .Config.type }}/{{end}}"
+    - path: "{{ if .Keywords }}{{ re_replace .Keywords \"(.).*\" \"$1\" }}/{{ .Keywords }}{{ else }}download/movies{{ end }}/{{ .Config.sort }}/{{ .Config.type }}/"
+    - path: "{{ if .Keywords }}{{ else }}download/tv/{{ .Config.sort }}/{{ .Config.type }}/{{ end }}"
 
   rows:
     selector: tr:has(td.m)

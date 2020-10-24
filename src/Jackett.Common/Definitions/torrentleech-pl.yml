@@ -52,27 +52,10 @@ settings:
     type: info
     label: How to get the Cookie
     default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
-
   - name: drop_polish_prefix
     type: checkbox
     label: Drop the Polish title prefix
     default: false
-#    - name: sort
-#      type: select
-#      label: Sort requested from site
-#      default: "4"
-#      options:
-#        "4": "created"
-#        "7": "seeders"
-#        "5": "size"
-#        "1": "title"
-#    - name: type
-#      type: select
-#      label: Order requested from site
-#      default: "desc"
-#      options:
-#        "desc": "desc"
-#        "asc": "asc"
 
 login:
   method: cookie
@@ -88,18 +71,16 @@ search:
     - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-    # 0 onlyactive 1 all 2 onlydead 3 free
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    # 0 onlyactive, 1 all, 2 onlydead, 3 free
     incldead: 1
-    # 0 title 1 descr 2 both
+    # 0 title, 1 descr, 2 both
     titlesearch: "{{ if .Query.IMDBID }}1{{else}}0{{end}}"
-    # 0 all 1 polish 2 not polish
+    # 0 all, 1 polish, 2 not polish
     polish: 0
     cat_film: ""
-    # subtitles 0 everything 1 yes 2 no
+    # subtitles: 0 everything,  1 yes,  2 no
     napisy: 0
-#      sort: "{{ .Config.sort }}"
-#      type: "{{ .Config.type }}"
   keywordsfilters:
     # remove the year from the titles as the site chokes on them during search #7424
     - name: re_replace
@@ -157,7 +138,7 @@ search:
       selector: td:nth-child(4)
       filters:
         - name: append
-          args: " +00:00"
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "2006-01-0215:04:05 -07:00"
     size:

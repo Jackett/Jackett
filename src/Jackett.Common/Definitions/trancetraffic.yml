@@ -31,10 +31,14 @@ search:
   paths:
     - path: browse.php
   inputs:
-    search: "{{if .Query.Artist}}{{ .Query.Artist }}{{else}}{{ .Keywords }}{{end}}"
+    search: "{{if .Query.Artist}}{{ .Query.Artist }}{{ else }}{{ .Keywords }}{{ end }}"
+
   rows:
     selector: table.mainouter table > tbody > tr:has(a[href^="details.php?id="])
+
   fields:
+    category:
+      text: 1
     download:
       selector: a[href^="download.php/"]
       attribute: href
@@ -43,13 +47,11 @@ search:
     details:
       selector: a[href^="details.php?id="]
       attribute: href
-    category:
-      text: 1
     date:
       selector: td:nth-child(6)
       filters:
         - name: append
-          args: " +00:00"
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "2006-01-0215:04:05 -07:00"
     seeders:
@@ -60,14 +62,13 @@ search:
       selector: td:nth-child(8)
       filters:
         - name: regexp
-          args: ([\d,]+)
+          args: (\d+)
     files:
       selector: td:nth-child(4)
     size:
       selector: td:nth-child(7)
     downloadvolumefactor:
-      case:
-        "*": "1"
+      text: 1
     uploadvolumefactor:
-      case:
-        "*": "1"
+      text: 1
+# engine tbd
