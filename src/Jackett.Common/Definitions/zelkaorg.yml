@@ -145,8 +145,8 @@ search:
           args: src=([^\s]+)
     downloadvolumefactor:
       case:
-        "a[style=\"color: #b9a100;\"][href^=\"details.php?\"]": "0"
-        *: 1
+        "a[style=\"color: #b9a100;\"][href^=\"details.php?\"]": 0
+        "*": 1
     uploadvolumefactor:
       text: 1
 # engine tbd
