@@ -50,8 +50,9 @@ caps:
     - {id: 82, cat: TV/Sport, desc: "TV Sport SD"}
     - {id: 16, cat: TV/Anime, desc: "TV Anime"}
     - {id: 32, cat: TV/HD, desc: "TV Bluray"}
-    - {id: 23, cat: TV/Documentary, desc: "TV Docs"}
-    - {id: 35, cat: TV/HD, desc: "TV HD X264"}
+    - {id: 76, cat: TV/Documentary, desc: "TV Docs"}
+    - {id: 23, cat: TV/SD, desc: "TV DVDR"}
+    - {id: 35, cat: TV/HD, desc: "TV HD H264"}
     - {id: 37, cat: TV/HD, desc: "TV HD H265"}
     - {id: 47, cat: TV, desc: "TV Packs"}
     - {id: 31, cat: TV, desc: "TV Rips"}
@@ -79,19 +80,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "4"
+    default: 4
     options:
-      "4": "created"
-      "7": "seeders"
-      "5": "size"
-      "1": "title"
+      4: created
+      7: seeders
+      5: size
+      1: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   path: takelogin.php
@@ -100,7 +101,7 @@ login:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
     use_ssl: 1
-    submitme: "X"
+    submitme: X
   error:
     - selector: table.main:contains("Login failed!")
   test:
@@ -175,8 +176,10 @@ search:
       optional: true
       selector: td:nth-last-child(6):not(:contains("day"))
       filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "Jan 2 2006 03:04 PM"
+          args: "Jan 2 2006 03:04 PM -07:00"
     size:
       selector: td:nth-last-child(5)
     grabs:
