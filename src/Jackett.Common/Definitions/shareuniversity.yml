@@ -12,7 +12,7 @@ certificates:
 
 caps:
   categorymappings:
-   - {id: 1, cat: Movies, desc: "Movies"}
+    - {id: 1, cat: Movies, desc: "Movies"}
     - {id: 8, cat: Movies, desc: "Movies Boxset"}
     - {id: 2, cat: TV, desc: "TV"}
     - {id: 9, cat: TV, desc: "TV Boxset"}
