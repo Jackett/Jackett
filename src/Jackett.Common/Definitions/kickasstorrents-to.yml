@@ -51,7 +51,7 @@ download:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}usearch/{{ .Keywords }}/{{else}}new/{{end}}?sortby={{ .Config.sort }}&sort={{ .Config.type }}"
+    - path: "{{ if .Keywords }}usearch/{{ .Keywords }}/{{ else }}new/{{ end }}?sortby={{ .Config.sort }}&sort={{ .Config.type }}"
 
   rows:
     selector: table.data tr.odd, table.data tr.even

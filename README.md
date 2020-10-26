@@ -70,8 +70,8 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Internet Archive (archive.org)
  * Isohunt2
  * iTorrent
- * KickAssTorrent (kat.li)
  * KickAssTorrent (KATcr)
+ * kickasstorrents (kickass.ws)
  * kickasstorrents.to
  * Legit Torrents
  * LePorno.info

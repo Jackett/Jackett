@@ -1,7 +1,7 @@
 ---
 id: kickasstorrent-kathow
-name: KickAssTorrent (kat.li)
-description: "kat.li is a Public KickAssTorrent clone for TV / MOVIES / GENERAL"
+name: kickasstorrents (kickass.ws)
+description: "kickasstorrents (kickass.ws) is a Public KickAssTorrent clone for TV / MOVIES / GENERAL"
 language: en-us
 type: public
 encoding: UTF-8
@@ -28,18 +28,18 @@ legacylinks:
 
 caps:
   categories:
-    movies: Movies
-    tv: TV
-    music: Audio
+    applications: PC
     books: Books
     games: Console
-    applications: PC
-    xxx: XXX
+    movies: Movies
+    music: Audio
     other: Other
+    tv: TV
+    xxx: XXX
     # additional from proxy
-    video: TV # Movies
-    porn: XXX
     audio: Audio
+    porn: XXX
+    video: TV # Movies
 
   modes:
     search: [q]
@@ -65,13 +65,12 @@ settings:
       desc: desc
       asc: asc
 
-
 search:
   paths:
-    - path: "{{ if .Keywords }}usearch/{{ .Keywords }}/{{else}}new/{{end}}?field={{ .Config.sort }}&sorder={{ .Config.type }}"
+    - path: "{{ if .Keywords }}usearch/{{ .Keywords }}/{{ else }}new/{{ end }}?field={{ .Config.sort }}&sorder={{ .Config.type }}"
 
   rows:
-    selector: table[class="data"] tr[id]
+    selector: table.data tr[id]
 
   fields:
     category:
@@ -92,9 +91,9 @@ search:
         - name: replace
           args: ["Video", "movies"]
     title:
-      selector: td:nth-child(1) > div > div > a[class="cellMainLink"]
+      selector: a[class="cellMainLink"]
     details:
-      selector: td:nth-child(1) > div > div > a[class="cellMainLink"]
+      selector: a[class="cellMainLink"]
       attribute: href
     download:
       optional: true
@@ -118,6 +117,8 @@ search:
           args: ["[.](?=.*[.])", ""]
     date:
       selector: td:nth-child(3)
+      filters:
+        - name: timeago
     seeders:
       selector: td:nth-child(4)
       filters:
