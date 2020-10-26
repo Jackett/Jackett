@@ -168,6 +168,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * ArenaBG
  * BaibaKo
  * BookTracker
+ * BootyTape
  * CasStudioTV
  * cool-torrent
  * Darmowe torrenty
