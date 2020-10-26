@@ -1,0 +1,92 @@
+---
+id: kickasstorrents-to
+name: kickssstorrents.to
+description: "kickasstorrents.to is a Public KickAssTorrent clone for TV / MOVIES / GENERAL"
+language: en-us
+type: public
+encoding: UTF-8
+links:
+  - https://kickasstorrents.to/
+
+caps:
+  categories:
+    anime: TV/Anime
+    apps: PC
+    books: Books
+    documentaries: TV/Documentary
+    games: Console
+    movies: Movies
+    music: Audio
+    other: Other
+    tv: TV
+    xxx: XXX
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: time
+    options:
+      time: created
+      seeders: seeders
+      size: size
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+download:
+  selector: a[href^="magnet:?xt="]
+  attribute: href
+
+search:
+  paths:
+    - path: "{{ if .Keywords }}usearch/{{ .Keywords }}/{{else}}new/{{end}}?sortby={{ .Config.sort }}&sort={{ .Config.type }}"
+
+  rows:
+    selector: table.data tr.odd, table.data tr.even
+
+  fields:
+    category:
+      selector: span > strong > a
+      attribute: href
+      filters:
+        - name: tolower
+        - name: trim
+          args: /
+    title:
+      selector: a[class="cellMainLink"]
+    details:
+      selector: a[class="cellMainLink"]
+      attribute: href
+    download:
+      selector: a[class="cellMainLink"]
+      attribute: href
+    size:
+      selector: td:nth-child(2)
+    date:
+      selector: td:nth-child(4)
+      attribute: title
+      filters:
+        - name: replace
+          args: ["<br/>", " "]
+        - name: timeago
+    seeders:
+      selector: td:nth-child(5)
+    leechers:
+      selector: td:nth-child(6)
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a
