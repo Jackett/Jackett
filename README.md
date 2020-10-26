@@ -513,6 +513,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * ToTheGlory (TTG)
  * Torrent Network (TN)
  * Torrent Sector Crew (TSC)
+ * Torrent Surf
  * Torrent-Syndikat
  * TOrrent-tuRK (TORK)
  * Torrent.LT
