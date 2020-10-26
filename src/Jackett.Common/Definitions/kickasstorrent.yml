@@ -11,8 +11,8 @@ links:
   - https://kat.unblockit.lat/
   - https://katcr.unblocked.rest/
 legacylinks:
-  - https://kickasstorrent.cr/ # possible 3rd kickasstorrent site/clone?
-  - https://katcr.to/ # possible 3rd kickasstorrent site/clone?
+  - https://kickasstorrent.cr/ # kickasstorrents-to proxy
+  - https://katcr.to/ # kickasstorrents-to proxy
   - https://kat.unblockit.one/
   - https://katcr.black-mirror.xyz/
   - https://katcr.unblocked.casa/
@@ -24,12 +24,12 @@ legacylinks:
   - https://katcr.co/
   - https://kat.unblockit.id/
   - https://kat.unblockit.win/
-  - https://kickasstorrents.unblockninja.com/ # now kickasstorrent-kathow proxy
+  - https://kickasstorrents.unblockninja.com/ # currently kickasstorrents-to proxy
   - https://katcr.unblocked.bar/
   - https://katcr.proxyportal.pw/
   - https://katcr.uk-unblock.pro/
   - https://kat.unblockit.top/
-  - https://kat.root.yt/ # 403 Forbidden
+  - https://kat.root.yt/ # currently kickasstorrents-to proxy
 
 caps:
   categorymappings:
