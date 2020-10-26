@@ -880,6 +880,11 @@ namespace Jackett.Common.Indexers
                 configData.CookieHeader.Value = string.Join("; ", Login.Cookies);
             landingResult = await RequestWithCookiesAsync(LoginUrl.AbsoluteUri, referer: SiteLink);
 
+            if (landingResult.IsRedirect)
+            {
+                await FollowIfRedirect(landingResult, LoginUrl.AbsoluteUri, overrideCookies: landingResult.Cookies, accumulateCookies: true);
+            }
+
             var htmlParser = new HtmlParser();
             landingResultDocument = htmlParser.ParseDocument(landingResult.ContentString);
 
