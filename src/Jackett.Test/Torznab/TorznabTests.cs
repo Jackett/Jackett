@@ -30,7 +30,6 @@ namespace Jackett.Test.Torznab
         {
         }
 
-        public override TorznabCapabilities TorznabCaps { get; protected set; }
         public override Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson) => throw new NotImplementedException();
         protected override Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query) => throw new NotImplementedException();
 
@@ -59,162 +58,39 @@ namespace Jackett.Test.Torznab
             Assert.False(TorznabCaps.BookSearchAvailable);
             Assert.False(TorznabCaps.BookSearchTitleAvailable);
             Assert.False(TorznabCaps.BookSearchAuthorAvailable);
-            Assert.AreEqual(0, TorznabCaps.Categories.Count);
+            Assert.AreEqual(0, TorznabCaps.Categories.GetTorznabCategories().Count);
 
-            // add "int" category (parent category)
-            AddCategoryMapping(1, TorznabCatType.Movies);
-            Assert.AreEqual(1, TorznabCaps.Categories.Count);
-            Assert.AreEqual(2000, TorznabCaps.Categories[0].ID);
-
-            // add "string" category (child category)
+            // simple category tests
+            AddCategoryMapping("1", TorznabCatType.Movies);
             AddCategoryMapping("mov_sd", TorznabCatType.MoviesSD);
-            Assert.AreEqual(2, TorznabCaps.Categories.Count);
-            Assert.AreEqual(2030, TorznabCaps.Categories[1].ID);
-
-            // add subcategory of books (child category)
-            AddCategoryMapping(33, TorznabCatType.BooksComics);
-            Assert.AreEqual(3, TorznabCaps.Categories.Count);
-            Assert.AreEqual(7020, TorznabCaps.Categories[2].ID);
-
-            // add int category with description => custom category. it's converted into 2 different categories
-            AddCategoryMapping(44, TorznabCatType.ConsoleXbox, "Console/Xbox_c");
-            Assert.AreEqual(5, TorznabCaps.Categories.Count);
-            Assert.AreEqual(1040, TorznabCaps.Categories[3].ID);
-            Assert.AreEqual(100044, TorznabCaps.Categories[4].ID);
-
-            // TODO: we should add a way to add custom categories for string categories
-            // https://github.com/Sonarr/Sonarr/wiki/Implementing-a-Torznab-indexer#caps-endpoint
-            // add string category with description. it's converted into 1 category
+            AddCategoryMapping("33", TorznabCatType.BooksComics);
+            AddCategoryMapping("44", TorznabCatType.ConsoleXbox, "Console/Xbox_c");
             AddCategoryMapping("con_wii", TorznabCatType.ConsoleWii, "Console/Wii_c");
-            Assert.AreEqual(6, TorznabCaps.Categories.Count);
-            Assert.AreEqual(1030, TorznabCaps.Categories[5].ID);
+            AddCategoryMapping("45", TorznabCatType.ConsoleXbox, "Console/Xbox_c2");
 
-            // add another int category with description that maps to ConsoleXbox (there are 2 tracker cats => 1 torznab cat)
-            AddCategoryMapping(45, TorznabCatType.ConsoleXbox, "Console/Xbox_c2");
-            Assert.AreEqual(7, TorznabCaps.Categories.Count);
-            Assert.AreEqual(100045, TorznabCaps.Categories[6].ID); // 1040 is duplicated and it is not added
-
-            // TODO: test AddMultiCategoryMapping
-            // TODO: add duplicates: different trackerCat but same newznabCat
-            // TODO: duplicates are not working well because we keep 2 internal lists with categories. One is deduplicated
-            // and the other doesn't
-            // add duplicate
-            //AddCategoryMapping(1, TorznabCatType.Movies, "Movies");
-            //Assert.AreEqual(6, TorznabCaps.Categories.Count);
-
-            // test MapTorznabCapsToTrackers: maps TorznazQuery cats => Tracker cats
-            var query = new TorznabQuery(); // no cats
+            var query = new TorznabQuery // int category with subcategories (parent cat)
+            {
+                Categories = new [] { TorznabCatType.Movies.ID }
+            };
             var trackerCats = MapTorznabCapsToTrackers(query);
-            Assert.AreEqual(0, trackerCats.Count);
-
-            query = new TorznabQuery // a lot of cats (mixed types)
-            {
-                Categories = TorznabCaps.Categories.Select(c => c.ID).ToArray()
-            };
-            trackerCats = MapTorznabCapsToTrackers(query);
-            Assert.AreEqual(6, trackerCats.Count);
-            Assert.AreEqual("1", trackerCats[0]);
-            Assert.AreEqual("mov_sd", trackerCats[1]);
-            Assert.AreEqual("33", trackerCats[2]);
-            Assert.AreEqual("44", trackerCats[3]);
-            Assert.AreEqual("45", trackerCats[4]);
-            Assert.AreEqual("con_wii", trackerCats[5]);
-
-            query = new TorznabQuery // int category with subcategories (parent cat)
-            {
-                Categories = new [] { 2000 } // Movies
-            };
-            trackerCats = MapTorznabCapsToTrackers(query);
             Assert.AreEqual(2, trackerCats.Count);
             Assert.AreEqual("1", trackerCats[0]); // Movies
             Assert.AreEqual("mov_sd", trackerCats[1]); // Movies SD
-
-            query = new TorznabQuery // string child category
-            {
-                Categories = new [] { 2030 } // Movies SD
-            };
-            trackerCats = MapTorznabCapsToTrackers(query);
-            Assert.AreEqual(1, trackerCats.Count);
-            Assert.AreEqual("mov_sd", trackerCats[0]); // Movies SD
-            trackerCats = MapTorznabCapsToTrackers(query, true); // get parent
-            Assert.AreEqual(2, trackerCats.Count);
-            Assert.AreEqual("1", trackerCats[0]); // Movies
-            Assert.AreEqual("mov_sd", trackerCats[1]); // Movies SD
-
-            query = new TorznabQuery // duplicate category (1 toznab cat => 2 indexer cats)
-            {
-                Categories = new [] { 1040 } // ConsoleXbox
-            };
-            trackerCats = MapTorznabCapsToTrackers(query);
-            Assert.AreEqual(2, trackerCats.Count);
-            Assert.AreEqual("44", trackerCats[0]);
-            Assert.AreEqual("45", trackerCats[1]);
-
-            query = new TorznabQuery // custom cat
-            {
-                Categories = new [] { 100001 } // Movies
-            };
-            trackerCats = MapTorznabCapsToTrackers(query);
-            Assert.AreEqual(1, trackerCats.Count);
-            Assert.AreEqual("1", trackerCats[0]); // Movies
-
-            query = new TorznabQuery // unknown category
-            {
-                Categories = new [] { 9999 }
-            };
-            trackerCats = MapTorznabCapsToTrackers(query);
-            Assert.AreEqual(0, trackerCats.Count);
 
             // TODO: this is wrong, custom cat 100001 doesn't exists (it's not defined by us)
-            // test MapTrackerCatToNewznab: maps Tracker cat ID => Torznab cats
             var torznabCats = MapTrackerCatToNewznab("1").ToList();
             Assert.AreEqual(2, torznabCats.Count);
             Assert.AreEqual(2000, torznabCats[0]);
             Assert.AreEqual(100001, torznabCats[1]);
 
-            torznabCats = MapTrackerCatToNewznab("mov_sd").ToList();
-            Assert.AreEqual(1, torznabCats.Count);
-            Assert.AreEqual(2030, torznabCats[0]);
-
-            torznabCats = MapTrackerCatToNewznab("44").ToList(); // 44 and 45 maps to ConsoleXbox but different custom cat
-            Assert.AreEqual(2, torznabCats.Count);
-            Assert.AreEqual(1040, torznabCats[0]);
-            Assert.AreEqual(100044, torznabCats[1]);
-            torznabCats = MapTrackerCatToNewznab("45").ToList();
-            Assert.AreEqual(2, torznabCats.Count);
-            Assert.AreEqual(1040, torznabCats[0]);
-            Assert.AreEqual(100045, torznabCats[1]);
-
-            // TODO: this is wrong, we are returning cat 109999 which doesn't exist
-            //torznabCats = MapTrackerCatToNewznab("9999").ToList(); // unknown cat
-            //Assert.AreEqual(0, torznabCats.Count);
-
-            torznabCats = MapTrackerCatToNewznab(null).ToList(); // null
-            Assert.AreEqual(0, torznabCats.Count);
-
-            // TODO: I think this method should be removed because description can be non-unique
-            // test MapTrackerCatDescToNewznab: maps Tracker cat Description => Torznab cats
-            torznabCats = MapTrackerCatDescToNewznab("Console/Xbox_c").ToList(); // Console/Xbox_c and Console/Xbox_c2 maps to ConsoleXbox but different custom cat
-            Assert.AreEqual(2, torznabCats.Count);
-            Assert.AreEqual(1040, torznabCats[0]);
-            Assert.AreEqual(100044, torznabCats[1]);
-
-            torznabCats = MapTrackerCatDescToNewznab("Console/Xbox_c2").ToList();
-            Assert.AreEqual(2, torznabCats.Count);
-            Assert.AreEqual(1040, torznabCats[0]);
-            Assert.AreEqual(100045, torznabCats[1]);
-
             torznabCats = MapTrackerCatDescToNewznab("Console/Wii_c").ToList();
             Assert.AreEqual(1, torznabCats.Count);
             Assert.AreEqual(1030, torznabCats[0]);
 
-            torznabCats = MapTrackerCatDescToNewznab("9999").ToList(); // unknown cat
-            Assert.AreEqual(0, torznabCats.Count);
-
-            torznabCats = MapTrackerCatDescToNewznab(null).ToList(); // null
-            Assert.AreEqual(0, torznabCats.Count);
-
-            // TODO: move these methods to TorznabCaps or TorznabQuery classess
+            // TODO: test AddMultiCategoryMapping
+            // TODO: add duplicates: different trackerCat but same newznabCat
+            // TODO: duplicates are not working well because we keep 2 internal lists with categories. One is deduplicated
+            // and the other doesn't
 
             // test Jackett UI categories (internal JSON)
             var dto = new Jackett.Common.Models.DTO.Indexer(this);
@@ -281,7 +157,7 @@ namespace Jackett.Test.Torznab
             Assert.False(indexer.TorznabCaps.BookSearchAvailable);
             Assert.False(indexer.TorznabCaps.BookSearchTitleAvailable);
             Assert.False(indexer.TorznabCaps.BookSearchAuthorAvailable);
-            Assert.AreEqual(0, indexer.TorznabCaps.Categories.Count);
+            Assert.AreEqual(0, indexer.TorznabCaps.Categories.GetTorznabCategories().Count);
 
             definition = new IndexerDefinition // test categories (same as in C# indexer)
             {
@@ -325,16 +201,16 @@ namespace Jackett.Test.Torznab
             indexer = new CardigannIndexer(null, null, null, null, definition);
 
             // TODO: test duplicates
-            Assert.AreEqual(7, indexer.TorznabCaps.Categories.Count);
-            Assert.AreEqual(2000, indexer.TorznabCaps.Categories[0].ID);
-            Assert.AreEqual(2030, indexer.TorznabCaps.Categories[1].ID);
-            Assert.AreEqual(7020, indexer.TorznabCaps.Categories[2].ID);
-            Assert.AreEqual(1040, indexer.TorznabCaps.Categories[3].ID);
-            Assert.AreEqual(100044, indexer.TorznabCaps.Categories[4].ID);
-            Assert.AreEqual(1030, indexer.TorznabCaps.Categories[5].ID);
-            Assert.AreEqual(100045, indexer.TorznabCaps.Categories[6].ID);
+            var cats = indexer.TorznabCaps.Categories.GetTorznabCategories();
+            Assert.AreEqual(7, cats.Count);
+            Assert.AreEqual(2000, cats[0].ID);
+            Assert.AreEqual(2030, cats[1].ID);
+            Assert.AreEqual(7020, cats[2].ID);
+            Assert.AreEqual(1040, cats[3].ID);
+            Assert.AreEqual(100044, cats[4].ID);
+            Assert.AreEqual(1030, cats[5].ID);
+            Assert.AreEqual(100045, cats[6].ID);
 
-            // TODO: we are not validating modes or params in each mode. ie: search is not required/supported and it's used
             definition = new IndexerDefinition // test search modes
             {
                 Links = new List<string>{ "https://example.com" },
