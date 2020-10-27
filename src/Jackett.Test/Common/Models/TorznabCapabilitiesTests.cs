@@ -41,7 +41,8 @@ namespace Jackett.Test.Common.Models
             Assert.False(torznabCaps.BookSearchTitleAvailable);
             Assert.False(torznabCaps.BookSearchAuthorAvailable);
 
-            Assert.IsEmpty(torznabCaps.Categories);
+            Assert.IsEmpty(torznabCaps.Categories.GetTorznabCategories());
+            Assert.IsEmpty(torznabCaps.Categories.GetTrackerCategories());
         }
 
         [Test]
@@ -403,10 +404,8 @@ namespace Jackett.Test.Common.Models
             Assert.AreEqual("q,title,author", xDoumentSearching?.Element("book-search")?.Attribute("supportedParams")?.Value);
 
             // test categories
-            torznabCaps = new TorznabCapabilities
-            {
-                Categories = {TorznabCatType.MoviesSD} // child category
-            };
+            torznabCaps = new TorznabCapabilities();
+            torznabCaps.Categories.AddCategoryMapping("c1", TorznabCatType.MoviesSD); // child category
             xDocument = torznabCaps.GetXDocument();
             var xDoumentCategories = xDocument.Root?.Element("categories")?.Elements("category").ToList();
             Assert.AreEqual(1, xDoumentCategories?.Count);
@@ -414,10 +413,9 @@ namespace Jackett.Test.Common.Models
             Assert.AreEqual(TorznabCatType.MoviesSD.Name, xDoumentCategories?.First().Attribute("name")?.Value);
 
             // TODO: child category is duplicated. should we add just parent and child without other subcats?
-            torznabCaps = new TorznabCapabilities
-            {
-                Categories = {TorznabCatType.Movies, TorznabCatType.MoviesSD} // parent and child category
-            };
+            torznabCaps = new TorznabCapabilities();
+            torznabCaps.Categories.AddCategoryMapping("c1", TorznabCatType.Movies); // parent and child category
+            torznabCaps.Categories.AddCategoryMapping("c2", TorznabCatType.MoviesSD);
             xDocument = torznabCaps.GetXDocument();
             xDoumentCategories = xDocument.Root?.Element("categories")?.Elements("category").ToList();
             Assert.AreEqual(2, xDoumentCategories?.Count);
@@ -430,10 +428,9 @@ namespace Jackett.Test.Common.Models
             Assert.AreEqual(TorznabCatType.MoviesForeign.ID.ToString(), xDoumentSubCategories?.First().Attribute("id")?.Value);
             Assert.AreEqual(TorznabCatType.MoviesForeign.Name, xDoumentSubCategories?.First().Attribute("name")?.Value);
 
-            // TODO: review Torznab spec about custom cats => https://github.com/Sonarr/Sonarr/wiki/Implementing-a-Torznab-indexer#caps-endpoint
-            torznabCaps = new TorznabCapabilities{
-                Categories = {new TorznabCategory(100001, "CustomCat"), TorznabCatType.MoviesSD} // custom category
-            };
+            torznabCaps = new TorznabCapabilities();
+            torznabCaps.Categories.AddCategoryMapping("c1", new TorznabCategory(100001, "CustomCat")); // custom category
+            torznabCaps.Categories.AddCategoryMapping("c2", TorznabCatType.MoviesSD);
             xDocument = torznabCaps.GetXDocument();
             xDoumentCategories = xDocument.Root?.Element("categories")?.Elements("category").ToList();
             Assert.AreEqual(2, xDoumentCategories?.Count);
@@ -455,7 +452,7 @@ namespace Jackett.Test.Common.Models
             Assert.IsEmpty(res.MovieSearchParams);
             Assert.IsEmpty(res.MusicSearchParams);
             Assert.IsEmpty(res.BookSearchParams);
-            Assert.IsEmpty(res.Categories);
+            Assert.IsEmpty(res.Categories.GetTorznabCategories());
 
             torznabCaps1 = new TorznabCapabilities
             {
@@ -463,18 +460,20 @@ namespace Jackett.Test.Common.Models
                 TvSearchParams = new List<TvSearchParam> {TvSearchParam.Q},
                 MovieSearchParams = new List<MovieSearchParam> {MovieSearchParam.Q},
                 MusicSearchParams = new List<MusicSearchParam> {MusicSearchParam.Q},
-                BookSearchParams = new List<BookSearchParam> {BookSearchParam.Q},
-                Categories = new List<TorznabCategory>{TorznabCatType.Movies, new TorznabCategory(100001, "CustomCat1")}
+                BookSearchParams = new List<BookSearchParam> {BookSearchParam.Q}
             };
+            torznabCaps1.Categories.AddCategoryMapping("1", TorznabCatType.Movies);
+            torznabCaps1.Categories.AddCategoryMapping("c1", new TorznabCategory(100001, "CustomCat1"));
             torznabCaps2 = new TorznabCapabilities
             {
                 SearchAvailable = false,
                 TvSearchParams = new List<TvSearchParam> {TvSearchParam.Season},
                 MovieSearchParams = new List<MovieSearchParam> {MovieSearchParam.ImdbId},
                 MusicSearchParams = new List<MusicSearchParam> {MusicSearchParam.Artist},
-                BookSearchParams = new List<BookSearchParam> {BookSearchParam.Title},
-                Categories = new List<TorznabCategory>{TorznabCatType.TVAnime, new TorznabCategory(100002, "CustomCat2")}
+                BookSearchParams = new List<BookSearchParam> {BookSearchParam.Title}
             };
+            torznabCaps2.Categories.AddCategoryMapping("2", TorznabCatType.TVAnime);
+            torznabCaps2.Categories.AddCategoryMapping("c2", new TorznabCategory(100002, "CustomCat2"));
             res = TorznabCapabilities.Concat(torznabCaps1, torznabCaps2);
 
             Assert.False(res.SearchAvailable);
@@ -482,10 +481,7 @@ namespace Jackett.Test.Common.Models
             Assert.True(res.MovieSearchParams.Count == 2);
             Assert.True(res.MusicSearchParams.Count == 2);
             Assert.True(res.BookSearchParams.Count == 2);
-            Assert.True(res.Categories.Count == 3); // only CustomCat2 is removed
+            Assert.True(res.Categories.GetTorznabCategories().Count == 3); // only CustomCat2 is removed
         }
-
-        // TODO: test SupportsCategories
-        // TODO: test categories in GetXDocument
     }
 }

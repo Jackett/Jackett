@@ -71,7 +71,7 @@ namespace Jackett.Common.Models
         public bool BookSearchTitleAvailable => (BookSearchParams.Contains(BookSearchParam.Title));
         public bool BookSearchAuthorAvailable => (BookSearchParams.Contains(BookSearchParam.Author));
 
-        public List<TorznabCategory> Categories { get; set; }
+        public readonly TorznabCapabilitiesCategories Categories;
 
         public TorznabCapabilities()
         {
@@ -80,7 +80,7 @@ namespace Jackett.Common.Models
             MovieSearchParams = new List<MovieSearchParam>();
             MusicSearchParams = new List<MusicSearchParam>();
             BookSearchParams = new List<BookSearchParam>();
-            Categories = new List<TorznabCategory>();
+            Categories = new TorznabCapabilitiesCategories();
         }
 
         public void ParseCardigannSearchModes(Dictionary<string,List<string>> modes)
@@ -219,14 +219,6 @@ namespace Jackett.Common.Models
             return string.Join(",", parameters);
         }
 
-        public bool SupportsCategories(int[] categories)
-        {
-            var subCategories = Categories.SelectMany(c => c.SubCategories);
-            var allCategories = Categories.Concat(subCategories);
-            var supportsCategory = allCategories.Any(i => categories.Any(c => c == i.ID));
-            return supportsCategory;
-        }
-
         public XDocument GetXDocument()
         {
             var xdoc = new XDocument(
@@ -269,7 +261,7 @@ namespace Jackett.Common.Models
                         )
                     ),
                     new XElement("categories",
-                        from c in Categories.OrderBy(x => x.ID < 100000 ? "z" + x.ID.ToString() : x.Name)
+                        from c in Categories.GetTorznabCategories().OrderBy(x => x.ID < 100000 ? "z" + x.ID.ToString() : x.Name)
                         select new XElement("category",
                             new XAttribute("id", c.ID),
                             new XAttribute("name", c.Name),
@@ -295,7 +287,7 @@ namespace Jackett.Common.Models
             lhs.MovieSearchParams = lhs.MovieSearchParams.Union(rhs.MovieSearchParams).ToList();
             lhs.MusicSearchParams = lhs.MusicSearchParams.Union(rhs.MusicSearchParams).ToList();
             lhs.BookSearchParams = lhs.BookSearchParams.Union(rhs.BookSearchParams).ToList();
-            lhs.Categories.AddRange(rhs.Categories.Where(x => x.ID < 100000).Except(lhs.Categories)); // exclude indexer specific categories (>= 100000)
+            lhs.Categories.Concat(rhs.Categories);
             return lhs;
         }
     }

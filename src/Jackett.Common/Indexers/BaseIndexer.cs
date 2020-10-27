@@ -283,7 +283,7 @@ namespace Jackett.Common.Indexers
             var caps = TorznabCaps;
 
             if (query.HasSpecifiedCategories)
-                if (!caps.SupportsCategories(query.Categories))
+                if (!caps.Categories.SupportsCategories(query.Categories))
                     return false;
             if (caps.TvSearchImdbAvailable && query.IsImdbQuery && query.IsTVSearch)
                 return true;
@@ -577,127 +577,29 @@ namespace Jackett.Common.Indexers
             }
         }
 
-        protected List<string> GetAllTrackerCategories() => categoryMapping.Select(x => x.TrackerCategory).ToList();
+        protected List<string> GetAllTrackerCategories() =>
+            TorznabCaps.Categories.GetTrackerCategories();
 
-        protected void AddCategoryMapping(string trackerCategory, TorznabCategory newznabCategory, string trackerCategoryDesc = null)
-        {
-            categoryMapping.Add(new CategoryMapping(trackerCategory, trackerCategoryDesc, newznabCategory.ID));
-            if (!TorznabCaps.Categories.Contains(newznabCategory))
-                TorznabCaps.Categories.Add(newznabCategory);
+        protected void AddCategoryMapping(string trackerCategory, TorznabCategory newznabCategory, string trackerCategoryDesc = null) =>
+            TorznabCaps.Categories.AddCategoryMapping(trackerCategory, newznabCategory, trackerCategoryDesc);
 
-            // add 1:1 categories
-            if (trackerCategoryDesc != null && trackerCategory != null)
-            {
-                //TODO convert to int.TryParse() to avoid using throw as flow control
-                try
-                {
-                    var trackerCategoryInt = int.Parse(trackerCategory);
-                    var CustomCat = new TorznabCategory(trackerCategoryInt + 100000, trackerCategoryDesc);
-                    if (!TorznabCaps.Categories.Contains(CustomCat))
-                        TorznabCaps.Categories.Add(CustomCat);
-                }
-                catch (FormatException)
-                {
-                    // trackerCategory is not an integer, continue
-                }
-            }
-        }
-
-        protected void AddCategoryMapping(int trackerCategory, TorznabCategory newznabCategory, string trackerCategoryDesc = null) => AddCategoryMapping(trackerCategory.ToString(), newznabCategory, trackerCategoryDesc);
+        protected void AddCategoryMapping(int trackerCategory, TorznabCategory newznabCategory, string trackerCategoryDesc = null) =>
+            AddCategoryMapping(trackerCategory.ToString(), newznabCategory, trackerCategoryDesc);
 
         protected void AddMultiCategoryMapping(TorznabCategory newznabCategory, params int[] trackerCategories)
         {
             foreach (var trackerCat in trackerCategories)
-            {
                 AddCategoryMapping(trackerCat, newznabCategory);
-            }
         }
 
-        protected virtual List<string> MapTorznabCapsToTrackers(TorznabQuery query, bool mapChildrenCatsToParent = false)
-        {
-            var result = new List<string>();
-            foreach (var cat in query.Categories)
-            {
-                // use 1:1 mapping to tracker categories for newznab categories >= 100000
-                if (cat >= 100000)
-                {
-                    result.Add((cat - 100000).ToString());
-                    continue;
-                }
+        protected List<string> MapTorznabCapsToTrackers(TorznabQuery query, bool mapChildrenCatsToParent = false) =>
+            TorznabCaps.Categories.MapTorznabCapsToTrackers(query, mapChildrenCatsToParent);
 
-                var queryCats = new List<int> { cat };
-                var newznabCat = TorznabCatType.AllCats.FirstOrDefault(c => c.ID == cat);
-                if (newznabCat != null)
-                {
-                    queryCats.AddRange(newznabCat.SubCategories.Select(c => c.ID));
-                }
+        protected ICollection<int> MapTrackerCatToNewznab(string input) =>
+            TorznabCaps.Categories.MapTrackerCatToNewznab(input);
 
-                if (mapChildrenCatsToParent)
-                {
-                    var parentNewznabCat = TorznabCatType.AllCats.FirstOrDefault(c => c.SubCategories.Contains(newznabCat));
-                    if (parentNewznabCat != null)
-                    {
-                        queryCats.Add(parentNewznabCat.ID);
-                    }
-                }
-
-                foreach (var mapping in categoryMapping.Where(c => queryCats.Contains(c.NewzNabCategory)))
-                {
-                    result.Add(mapping.TrackerCategory);
-                }
-            }
-
-            return result.Distinct().ToList();
-        }
-
-        protected ICollection<int> MapTrackerCatToNewznab(string input)
-        {
-            if (input == null)
-                return new List<int>();
-
-            var cats = categoryMapping.Where(m => m.TrackerCategory != null && m.TrackerCategory.ToLowerInvariant() == input.ToLowerInvariant()).Select(c => c.NewzNabCategory).ToList();
-
-            // 1:1 category mapping
-            try
-            {
-                var trackerCategoryInt = int.Parse(input);
-                cats.Add(trackerCategoryInt + 100000);
-            }
-            catch (FormatException)
-            {
-                // input is not an integer, continue
-            }
-
-            return cats;
-        }
-
-        protected ICollection<int> MapTrackerCatDescToNewznab(string input)
-        {
-            var cats = new List<int>();
-            if (null != input)
-            {
-                var mapping = categoryMapping.Where(m => m.TrackerCategoryDesc != null && m.TrackerCategoryDesc.ToLowerInvariant() == input.ToLowerInvariant()).FirstOrDefault();
-                if (mapping != null)
-                {
-                    cats.Add(mapping.NewzNabCategory);
-
-                    if (mapping.TrackerCategory != null)
-                    {
-                        // 1:1 category mapping
-                        try
-                        {
-                            var trackerCategoryInt = int.Parse(mapping.TrackerCategory);
-                            cats.Add(trackerCategoryInt + 100000);
-                        }
-                        catch (FormatException)
-                        {
-                            // mapping.TrackerCategory is not an integer, continue
-                        }
-                    }
-                }
-            }
-            return cats;
-        }
+        protected ICollection<int> MapTrackerCatDescToNewznab(string input) =>
+            TorznabCaps.Categories.MapTrackerCatDescToNewznab(input);
 
         private IEnumerable<ReleaseInfo> CleanLinks(IEnumerable<ReleaseInfo> releases)
         {
@@ -748,7 +650,6 @@ namespace Jackett.Common.Indexers
 
         public override TorznabCapabilities TorznabCaps { get; protected set; }
 
-        private readonly List<CategoryMapping> categoryMapping = new List<CategoryMapping>();
         protected WebClient webclient;
         protected readonly string downloadUrlBase = "";
     }
