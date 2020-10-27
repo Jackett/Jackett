@@ -117,7 +117,8 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * ShizaProject
  * shokweb
  * ShowRSS
- * SkyTorrentsClone
+ * SkyTorrentsClone (*.lol)
+ * SkyTorrentsClone2 (*.to)
  * Solid Torrents
  * sosulki
  * sukebei-Pantsu
