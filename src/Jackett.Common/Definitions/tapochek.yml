@@ -93,15 +93,15 @@ caps:
     - {id: 45, cat: PC/Games, desc: "MMORPG"}
     - {id: 46, cat: PC/Games, desc: "Для самых маленьких"}
     # Games for Consoles      # Игры для Консолей
-    - {id: 69, cat: Console/Xbox, desc: "Xbox"}
-    - {id: 86, cat: Console/Xbox 360, desc: "XBox360 | Игры"}
-    - {id: 646, cat: Console/Xbox 360, desc: "XBox360 | JTAG"}
-    - {id: 87, cat: Console/Xbox 360, desc: "XBox360 | 360E"}
-    - {id: 89, cat: Console/Xbox 360, desc: "XBox360 | Demo"}
-    - {id: 612, cat: Console/Xbox 360, desc: "XBox360 | Live"}
-    - {id: 614, cat: Console/Xbox 360, desc: "XBox360 | Soft"}
-    - {id: 88, cat: Console/Xbox, desc: "XBox | Игры"}
-    - {id: 85, cat: Console/Xbox, desc: "Прочее | Архив (XBox)"}
+    - {id: 69, cat: Console/XBox, desc: "Xbox"}
+    - {id: 86, cat: Console/XBox 360, desc: "XBox360 | Игры"}
+    - {id: 646, cat: Console/XBox 360, desc: "XBox360 | JTAG"}
+    - {id: 87, cat: Console/XBox 360, desc: "XBox360 | 360E"}
+    - {id: 89, cat: Console/XBox 360, desc: "XBox360 | Demo"}
+    - {id: 612, cat: Console/XBox 360, desc: "XBox360 | Live"}
+    - {id: 614, cat: Console/XBox 360, desc: "XBox360 | Soft"}
+    - {id: 88, cat: Console/XBox, desc: "XBox | Игры"}
+    - {id: 85, cat: Console/XBox, desc: "Прочее | Архив (XBox)"}
     - {id: 70, cat: Console/PSP, desc: "PlayStation"}
     - {id: 910, cat: Console/PS4, desc: "PS4 | Игры"}
     - {id: 911, cat: Console/PS4, desc: "PS4 | Сцена"}
@@ -126,7 +126,7 @@ caps:
     - {id: 115, cat: Console/Wii, desc: "Wii | Игры"}
     - {id: 899, cat: Console/WiiU, desc: "Wii U | Игры"}
     - {id: 900, cat: Console/WiiU, desc: "Wii U | Сцена"}
-    - {id: 381, cat: Console/Wiiware/VC, desc: "WiiWare | Игры"}
+    - {id: 381, cat: Console/Wiiware, desc: "WiiWare | Игры"}
     - {id: 382, cat: Console, desc: "GameCube | Игры"}
     - {id: 349, cat: Console, desc: "Sega"}
     - {id: 350, cat: Console, desc: "Dreamcast | Игры"}
@@ -156,7 +156,7 @@ caps:
     - {id: 886, cat: Movies/3D, desc: "Новинки (3D)"}
     - {id: 964, cat: Movies/UHD, desc: "Новинки (UHD 4K)"}
     - {id: 934, cat: Movies/BluRay, desc: "Новинки 2018-2019 (Blu-Ray и BDRemux)"}
-    - {id: 431, cat: Movies/WEBDL, desc: "Новинки 2018-2019 (Web-DL, HD Rips)"}
+    - {id: 431, cat: Movies/WEB-DL, desc: "Новинки 2018-2019 (Web-DL, HD Rips)"}
     - {id: 430, cat: Movies, desc: "Новинки 2018-2019 (Rips)"}
     - {id: 703, cat: Movies, desc: "Экранки и Low-рипы (CAMRip, TS, WEBRip)"}
     - {id: 909, cat: Movies/HD, desc: "Новинки 2018-2019 (HD и HD Rips) с рекламой"}
@@ -175,7 +175,7 @@ caps:
     - {id: 133, cat: Movies/DVD, desc: "Советское кино | DVD"}
     - {id: 135, cat: Movies, desc: "Советское кино | Rips"}
     - {id: 869, cat: Movies/3D, desc: "3D"}
-    - {id: 161, cat: TV/FOREIGN, desc: "Зарубежные сериалы"}
+    - {id: 161, cat: TV/Foreign, desc: "Зарубежные сериалы"}
     - {id: 160, cat: TV, desc: "Отечественные cериалы"}
     - {id: 320, cat: TV, desc: "Мультфильмы"}
     - {id: 325, cat: TV/SD, desc: "Мультфильмы | DVD"}
@@ -392,13 +392,13 @@ caps:
     - {id: 626, cat: PC, desc: "Карты для навигаторов"}
     - {id: 627, cat: PC, desc: "Плееры"}
     - {id: 628, cat: PC, desc: "Разное (Мобильные устройства и КПК)"}
-    - {id: 622, cat: PC/Phone-IOS, desc: "Apple Mobile Device Software"}
-    - {id: 667, cat: PC/Phone-IOS, desc: "Прошивки (iPhone/iPod Touch/iPad)"}
-    - {id: 668, cat: PC/Phone-IOS, desc: "Программы (iPhone/iPod Touch/iPad)"}
-    - {id: 669, cat: PC/Phone-IOS, desc: "Игры (iPhone/iPod Touch/iPad)"}
-    - {id: 670, cat: PC/Phone-IOS, desc: "Видео (iPhone/iPod Touch/iPad)"}
-    - {id: 672, cat: PC/Phone-IOS, desc: "Разное (iPhone/iPod Touch/iPad)"}
-    - {id: 671, cat: PC/Phone-IOS, desc: "Музыка (iPhone/iPod Touch/iPad)"}
+    - {id: 622, cat: PC/Mobile-iOS, desc: "Apple Mobile Device Software"}
+    - {id: 667, cat: PC/Mobile-iOS, desc: "Прошивки (iPhone/iPod Touch/iPad)"}
+    - {id: 668, cat: PC/Mobile-iOS, desc: "Программы (iPhone/iPod Touch/iPad)"}
+    - {id: 669, cat: PC/Mobile-iOS, desc: "Игры (iPhone/iPod Touch/iPad)"}
+    - {id: 670, cat: PC/Mobile-iOS, desc: "Видео (iPhone/iPod Touch/iPad)"}
+    - {id: 672, cat: PC/Mobile-iOS, desc: "Разное (iPhone/iPod Touch/iPad)"}
+    - {id: 671, cat: PC/Mobile-iOS, desc: "Музыка (iPhone/iPod Touch/iPad)"}
     - {id: 639, cat: PC, desc: "Обучающие видеоматериалы"}
     - {id: 640, cat: PC, desc: "Мультимедийные материалы"}
     - {id: 642, cat: PC, desc: "Разное"}

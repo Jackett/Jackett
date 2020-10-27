@@ -12,12 +12,12 @@ caps:
   categorymappings:
     - {id: 104, cat: XXX, desc: "Adultos: Fotos +18"}
     - {id: 120, cat: TV/Anime, desc: "Anime: Anime"}
-    - {id: 122, cat: PC/Phone-Android, desc: "Aplicativos: Android"}
-    - {id: 115, cat: PC/Phone-Other, desc: "Aplicativos: Celular"}
+    - {id: 122, cat: PC/Mobile-Android, desc: "Aplicativos: Android"}
+    - {id: 115, cat: PC/Mobile-Other, desc: "Aplicativos: Celular"}
     - {id: 129, cat: PC, desc: "Aplicativos: Linux"}
     - {id: 19, cat: PC/Mac, desc: "Aplicativos: Mac"}
     - {id: 18, cat: PC, desc: "Aplicativos: PC"}
-    - {id: 123, cat: PC/Phone-Other, desc: "Aplicativos: Symbian"}
+    - {id: 123, cat: PC/Mobile-Other, desc: "Aplicativos: Symbian"}
     - {id: 94, cat: PC/0day, desc: "Aplicativos: Windows"}
     - {id: 9, cat: Other, desc: "Cursos: Apostilas"}
     - {id: 113, cat: Other, desc: "Cursos: Curso"}

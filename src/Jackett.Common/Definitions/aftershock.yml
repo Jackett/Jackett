@@ -18,7 +18,7 @@ caps:
     - {id: 191, cat: Movies/DVD, desc: "DVD-9Hun"}
     - {id: 1, cat: Movies/DVD, desc: "DVDEng"}
     - {id: 4, cat: Movies/DVD, desc: "DVDHun"}
-    - {id: 23, cat: Books/Ebook, desc: "E-Book"}
+    - {id: 23, cat: Books/EBook, desc: "E-Book"}
     - {id: 3, cat: Movies, desc: "Film Pack"}
     - {id: 185, cat: Audio/Lossless, desc: "FLACeng"}
     - {id: 188, cat: Audio/Lossless, desc: "FLAChu"}
@@ -30,14 +30,14 @@ caps:
     - {id: 130, cat: Console, desc: "JátékKonzol"}
     - {id: 38, cat: Console/PSP, desc: "JátékPS2"}
     - {id: 44, cat: Console, desc: "Jatekrip"}
-    - {id: 131, cat: Console/Xbox, desc: "JátékX-box"}
+    - {id: 131, cat: Console/XBox, desc: "JátékX-box"}
     - {id: 140, cat: Other, desc: "Képek"}
     - {id: 141, cat: Other, desc: "Klipek"}
     - {id: 154, cat: Other, desc: "MeseEng"}
     - {id: 155, cat: Other, desc: "MeseHun"}
     - {id: 176, cat: Other, desc: "Mikro HDEng"}
     - {id: 174, cat: Other, desc: "Mikro HDHun"}
-    - {id: 37, cat: PC/Phone-Other, desc: "MobilPDA"}
+    - {id: 37, cat: PC/Mobile-Other, desc: "MobilPDA"}
     - {id: 35, cat: PC, desc: "ProgramEgyéb"}
     - {id: 170, cat: PC/ISO, desc: "ProgramIso"}
     - {id: 24, cat: TV, desc: "Sorozat Eng"}
@@ -45,7 +45,7 @@ caps:
     - {id: 167, cat: Movies/SD, desc: "Xvid CamEng"}
     - {id: 166, cat: Movies/SD, desc: "Xvid CamHun"}
     - {id: 9, cat: Movies/SD, desc: "XvidHun"}
-    - {id: 169, cat: XXX/Imageset, desc: "XXX Képek"}
+    - {id: 169, cat: XXX/ImageSet, desc: "XXX Képek"}
     - {id: 39, cat: XXX, desc: "XXXFilm"}
     - {id: 28, cat: Audio, desc: "ZeneEng"}
     - {id: 29, cat: Audio, desc: "ZeneHun"}

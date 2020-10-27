@@ -50,9 +50,9 @@ caps:
     - {id: 126, cat: TV/HD, desc: "PBS: HD"}
     - {id: 127, cat: TV/SD, desc: "PBS: Xvid / x264"}
     - {id: 72, cat: TV/HD, desc: "Politics: HD"}
-    - {id: 112, cat: Books/Ebook, desc: "Politics: Ebook"}
+    - {id: 112, cat: Books/EBook, desc: "Politics: Ebook"}
     - {id: 70, cat: TV/SD, desc: "Politics: Xvid / x264"}
-    - {id: 114, cat: Books/Ebook, desc: "Reference: Ebook"}
+    - {id: 114, cat: Books/EBook, desc: "Reference: Ebook"}
     - {id: 117, cat: Audio/Audiobook, desc: "Reference: Audio Book"}
     - {id: 56, cat: TV/HD, desc: "Religion: HD"}
     - {id: 54, cat: TV/SD, desc: "Religion: Xvid / x264"}

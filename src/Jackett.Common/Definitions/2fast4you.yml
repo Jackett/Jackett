@@ -18,7 +18,7 @@ caps:
     - {id: 56, cat: TV/Anime, desc: "Animation: DVDRip"}
     - {id: 18, cat: PC/0day, desc: "Applications: PC"}
     - {id: 16, cat: PC/Games, desc: "Applications: Jeux"}
-    - {id: 19, cat: PC/Phone-Android, desc: "Applications: Android"}
+    - {id: 19, cat: PC/Mobile-Android, desc: "Applications: Android"}
     - {id: 17, cat: PC/0day, desc: "Applications: Autres"}
     - {id: 67, cat: TV, desc: "Autres: Emission TV"}
     - {id: 68, cat: TV/Sport, desc: "Autres: Sport"}
@@ -35,7 +35,7 @@ caps:
     - {id: 51, cat: Books, desc: "E-Books: BD"}
     - {id: 95, cat: Movies, desc: "Films: Film Divx XviD"}
     - {id: 66, cat: Movies, desc: "Films: VOSTFR"}
-    - {id: 71, cat: Movies/WEBDL, desc: "Films: WEB-DL"}
+    - {id: 71, cat: Movies/WEB-DL, desc: "Films: WEB-DL"}
     - {id: 65, cat: Movies, desc: "Films: VO"}
     - {id: 72, cat: Movies/SD, desc: "Films: TVRip/HDTV"}
     - {id: 70, cat: Movies/HD, desc: "Films: MHD X265"}

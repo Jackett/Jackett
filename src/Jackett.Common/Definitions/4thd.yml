@@ -17,7 +17,7 @@ caps:
     - {id: 27, cat: Movies/HD, desc: "MoviesHD"}
     - {id: 29, cat: Movies/SD, desc: "Movies/SD"}
     - {id: 26, cat: Movies/SD, desc: "Movies/XviD"}
-    - {id: 41, cat: TV/FOREIGN, desc: "Foreign tv"}
+    - {id: 41, cat: TV/Foreign, desc: "Foreign tv"}
     - {id: 40, cat: TV, desc: "Mini-Series"}
     - {id: 43, cat: TV/HD, desc: "TV H265"}
     - {id: 42, cat: TV, desc: "TV Movie"}
@@ -32,7 +32,7 @@ caps:
     - {id: 37, cat: Audio, desc: "Radio"}
     - {id: 9, cat: PC/0day, desc: "Apps/PC"}
     - {id: 34, cat: Audio/Audiobook, desc: "Audiobooks"}
-    - {id: 25, cat: Books/Ebook, desc: "eBooks"}
+    - {id: 25, cat: Books/EBook, desc: "eBooks"}
 
   modes:
     search: [q]

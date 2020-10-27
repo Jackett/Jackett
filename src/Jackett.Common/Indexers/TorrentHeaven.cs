@@ -62,8 +62,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(59, TorznabCatType.ConsolePS4, "GAMES/PlayStation");
             AddCategoryMapping(60, TorznabCatType.ConsolePSP, "GAMES/PSP");
             AddCategoryMapping(63, TorznabCatType.ConsoleWii, "GAMES/Wii");
-            AddCategoryMapping(67, TorznabCatType.ConsoleXbox360, "GAMES/XBOX 360");
-            AddCategoryMapping(68, TorznabCatType.PCPhoneOther, "GAMES/PDA / Handy");
+            AddCategoryMapping(67, TorznabCatType.ConsoleXBox360, "GAMES/XBOX 360");
+            AddCategoryMapping(68, TorznabCatType.PCMobileOther, "GAMES/PDA / Handy");
             AddCategoryMapping(72, TorznabCatType.ConsoleNDS, "GAMES/NDS");
             AddCategoryMapping(7, TorznabCatType.MoviesDVD, "MOVIES/DVD");
             AddCategoryMapping(8, TorznabCatType.MoviesSD, "MOVIES/SD");
@@ -89,13 +89,13 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(52, TorznabCatType.TVDocumentary, "TV/Doku HD");
             AddCategoryMapping(53, TorznabCatType.TV, "TV/Serien Complete Packs");
             AddCategoryMapping(54, TorznabCatType.TVSport, "TV/Sport");
-            AddCategoryMapping(66, TorznabCatType.TVFOREIGN, "TV/International");
+            AddCategoryMapping(66, TorznabCatType.TVForeign, "TV/International");
             AddCategoryMapping(22, TorznabCatType.Books, "MISC/EBooks");
             AddCategoryMapping(24, TorznabCatType.Other, "MISC/Sonstiges");
             AddCategoryMapping(25, TorznabCatType.Other, "MISC/Tonspuren");
             AddCategoryMapping(108, TorznabCatType.TVAnime, "MISC/Anime");
             AddCategoryMapping(28, TorznabCatType.PC, "APPLICATIONS/PC");
-            AddCategoryMapping(29, TorznabCatType.PCPhoneOther, "APPLICATIONS/Mobile");
+            AddCategoryMapping(29, TorznabCatType.PCMobileOther, "APPLICATIONS/Mobile");
             AddCategoryMapping(30, TorznabCatType.PC, "APPLICATIONS/Sonstige");
             AddCategoryMapping(70, TorznabCatType.PC, "APPLICATIONS/Linux");
             AddCategoryMapping(71, TorznabCatType.PCMac, "APPLICATIONS/Mac");

@@ -65,7 +65,7 @@ namespace Jackett.Common.Indexers
 
             AddCategoryMapping(1, TorznabCatType.MoviesDVD, "DVD-R Swesub");
             AddCategoryMapping(2, TorznabCatType.TV, "DVD-R TV");
-            AddCategoryMapping(3, TorznabCatType.BooksEbook, "eBok");
+            AddCategoryMapping(3, TorznabCatType.BooksEBook, "eBok");
             AddCategoryMapping(4, TorznabCatType.MoviesHD, "Film 1080");
             AddCategoryMapping(5, TorznabCatType.Movies3D, "Film 3D");
             AddCategoryMapping(6, TorznabCatType.MoviesHD, "Film 720");
@@ -73,7 +73,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(8, TorznabCatType.TV, "Svensk TV");
             AddCategoryMapping(9, TorznabCatType.AudioAudiobook, "Ljudböcker");
             AddCategoryMapping(10, TorznabCatType.AudioVideo, "Musikvideos");
-            AddCategoryMapping(11, TorznabCatType.BooksMagazines, "E-tidningar");
+            AddCategoryMapping(11, TorznabCatType.BooksMags, "E-tidningar");
             AddCategoryMapping(12, TorznabCatType.Audio, "Musik");
             AddCategoryMapping(13, TorznabCatType.Other, "Omslag");
             AddCategoryMapping(14, TorznabCatType.Other, "Övrigt");
@@ -82,7 +82,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(17, TorznabCatType.ConsolePS3, "PS3");
             AddCategoryMapping(18, TorznabCatType.TV, "TV");
             AddCategoryMapping(19, TorznabCatType.ConsoleWii, "Wii");
-            AddCategoryMapping(20, TorznabCatType.ConsoleXbox, "Xbox");
+            AddCategoryMapping(20, TorznabCatType.ConsoleXBox, "Xbox");
             AddCategoryMapping(21, TorznabCatType.MoviesOther, "Xvid");
             AddCategoryMapping(22, TorznabCatType.XXX, "XXX");
             AddCategoryMapping(24, TorznabCatType.MoviesUHD, "Film 4K");

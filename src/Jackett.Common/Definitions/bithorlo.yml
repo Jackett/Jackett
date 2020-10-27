@@ -35,7 +35,7 @@ caps:
     - {id: 13, cat: Audio, desc: "Zene/Hun"}
     # Egyéb
     - {id: 20, cat: Other, desc: "Képek"}
-    - {id: 21, cat: PC/Phone-Other, desc: "Mobil"}
+    - {id: 21, cat: PC/Mobile-Other, desc: "Mobil"}
     # Program
     - {id: 22, cat: PC/0day, desc: "Win/Program/ISO"}
     - {id: 23, cat: PC/0day, desc: "Win/Program/Rip"}

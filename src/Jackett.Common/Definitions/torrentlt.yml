@@ -23,7 +23,7 @@ caps:
     - {id: 32, cat: Movies, desc: "Filmai / Rus"}
     - {id: 1, cat: PC/Games, desc: "Žaidimai / PC"}
     - {id: 50, cat: Console/PS4, desc: "Žaidimai / PlayStation"}
-    - {id: 51, cat: Console/Xbox 360, desc: "Žaidimai / XBOX-360"}
+    - {id: 51, cat: Console/XBox 360, desc: "Žaidimai / XBOX-360"}
     - {id: 73, cat: Console, desc: "Žaidimai / Priedai"}
     - {id: 36, cat: Console/Other, desc: "Žaidimai / Kita"}
     - {id: 80, cat: Movies/HD, desc: "HD / Animacija LT"}
@@ -48,7 +48,7 @@ caps:
     - {id: 10, cat: PC/0day, desc: "Soft / PC"}
     - {id: 44, cat: PC/Mac, desc: "Soft / MAC"}
     - {id: 61, cat: PC, desc: "Soft / PDA"}
-    - {id: 75, cat: PC/Phone-Other, desc: "Soft / Kita"}
+    - {id: 75, cat: PC/Mobile-Other, desc: "Soft / Kita"}
     - {id: 40, cat: TV/Sport, desc: "Sport / Kita"}
     - {id: 62, cat: TV/Sport, desc: "Sport / Basketball"}
     - {id: 63, cat: TV/Sport, desc: "Sport / Cars"}
@@ -59,7 +59,7 @@ caps:
     - {id: 39, cat: TV/Documentary, desc: "TV / Dokumentika"}
     - {id: 28, cat: TV, desc: "TV / Kita"}
     - {id: 21, cat: XXX, desc: "pr0n"}
-    - {id: 71, cat: XXX/Packs, desc: "pr0n / pack"}
+    - {id: 71, cat: XXX/Pack, desc: "pr0n / pack"}
     - {id: 30, cat: Other, desc: "Kita"}
     - {id: 77, cat: Other, desc: "Educational"}
     - {id: 41, cat: Books, desc: "E-Books"}

@@ -10,7 +10,7 @@ links:
 
 caps:
   categorymappings:
-    - {id: 1, cat: Books/Ebook, desc: "Ebooks"}
+    - {id: 1, cat: Books/EBook, desc: "Ebooks"}
 
   modes:
     search: [q]

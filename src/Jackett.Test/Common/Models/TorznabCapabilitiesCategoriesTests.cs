@@ -53,10 +53,10 @@ namespace Jackett.Test.Common.Models
             // add subcategory of books (child category)
             tcc.AddCategoryMapping("33", TorznabCatType.BooksComics);
             Assert.AreEqual(3, cats.Count);
-            Assert.AreEqual(7020, cats[2].ID);
+            Assert.AreEqual(7030, cats[2].ID);
 
             // add int category with description => custom category. it's converted into 2 different categories
-            tcc.AddCategoryMapping("44", TorznabCatType.ConsoleXbox, "Console/Xbox_c");
+            tcc.AddCategoryMapping("44", TorznabCatType.ConsoleXBox, "Console/Xbox_c");
             Assert.AreEqual(5, cats.Count);
             Assert.AreEqual(1040, cats[3].ID);
             Assert.AreEqual(100044, cats[4].ID);
@@ -69,7 +69,7 @@ namespace Jackett.Test.Common.Models
             Assert.AreEqual(1030, cats[5].ID);
 
             // add another int category with description that maps to ConsoleXbox (there are 2 tracker cats => 1 torznab cat)
-            tcc.AddCategoryMapping("45", TorznabCatType.ConsoleXbox, "Console/Xbox_c2");
+            tcc.AddCategoryMapping("45", TorznabCatType.ConsoleXBox, "Console/Xbox_c2");
             Assert.AreEqual(7, cats.Count);
             Assert.AreEqual(100045, cats[6].ID); // 1040 is duplicated and it is not added
         }
@@ -107,7 +107,7 @@ namespace Jackett.Test.Common.Models
 
             query = new TorznabQuery // duplicate category (1 toznab cat => 2 indexer cats)
             {
-                Categories = new [] { TorznabCatType.ConsoleXbox.ID }
+                Categories = new [] { TorznabCatType.ConsoleXBox.ID }
             };
             trackerCats = tcc.MapTorznabCapsToTrackers(query);
             Assert.AreEqual(2, trackerCats.Count);
@@ -223,9 +223,9 @@ namespace Jackett.Test.Common.Models
             tcc.AddCategoryMapping("1", TorznabCatType.Movies);
             tcc.AddCategoryMapping("mov_sd", TorznabCatType.MoviesSD);
             tcc.AddCategoryMapping("33", TorznabCatType.BooksComics);
-            tcc.AddCategoryMapping("44", TorznabCatType.ConsoleXbox, "Console/Xbox_c");
+            tcc.AddCategoryMapping("44", TorznabCatType.ConsoleXBox, "Console/Xbox_c");
             tcc.AddCategoryMapping("con_wii", TorznabCatType.ConsoleWii, "Console/Wii_c");
-            tcc.AddCategoryMapping("45", TorznabCatType.ConsoleXbox, "Console/Xbox_c2");
+            tcc.AddCategoryMapping("45", TorznabCatType.ConsoleXBox, "Console/Xbox_c2");
             return tcc;
         }
     }

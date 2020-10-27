@@ -26,12 +26,12 @@ caps:
     - {id: 160, cat: Console/PS3, desc: "Játék/PS2-PS3"}
     - {id: 189, cat: Console/PSP, desc: "Játék/PSP"}
     - {id: 184, cat: Console/Wii, desc: "Játék/Wii"}
-    - {id: 150, cat: Console/Xbox, desc: "Játék/XBOX (XBOX360)"}
+    - {id: 150, cat: Console/XBox, desc: "Játék/XBOX (XBOX360)"}
     - {id: 182, cat: Audio/Lossless, desc: "Lossless"}
     - {id: 90, cat: Audio/MP3, desc: "Mp3/Eng"}
     - {id: 50, cat: Audio/MP3, desc: "Mp3/Hun"}
     - {id: 100, cat: Audio/Video, desc: "Music-Video"}
-    - {id: 180, cat: PC/Phone-Other, desc: "Program/Mobil"}
+    - {id: 180, cat: PC/Mobile-Other, desc: "Program/Mobil"}
     - {id: 170, cat: PC/0day, desc: "Program/PC"}
     - {id: 80, cat: TV, desc: "Sorozat/Eng"}
     - {id: 40, cat: TV, desc: "Sorozat/Hun"}

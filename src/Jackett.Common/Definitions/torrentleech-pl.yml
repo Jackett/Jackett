@@ -24,11 +24,11 @@ caps:
     - {id: 64, cat: Movies, desc: "Filmy/Kino Polskie"}
     - {id: 59, cat: Movies, desc: "Filmy/PACK"}
     - {id: 40, cat: Movies/SD, desc: "Filmy/SD"}
-    - {id: 68, cat: Movies/WEBDL, desc: "Filmy/WEB-DL"}
+    - {id: 68, cat: Movies/WEB-DL, desc: "Filmy/WEB-DL"}
     - {id: 62, cat: Console, desc: "Gry/Dodatki"}
     - {id: 41, cat: Console, desc: "Gry/Konsole"}
     - {id: 42, cat: PC/Games, desc: "Gry/PC"}
-    - {id: 44, cat: PC/Phone-Other, desc: "GSM/PDA"}
+    - {id: 44, cat: PC/Mobile-Other, desc: "GSM/PDA"}
     - {id: 57, cat: Audio/Video, desc: "Koncerty/Teledyski"}
     - {id: 63, cat: Audio/Lossless, desc: "Muzyka/FLAC"}
     - {id: 46, cat: Audio/MP3, desc: "Muzyka/MP3"}

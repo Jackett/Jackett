@@ -12,7 +12,7 @@ caps:
   categorymappings:
     - {id: 23, cat: Movies, desc: "Кино"}
     - {id: 18, cat: TV/WEB-DL, desc: "Веб-сериалы"}
-    - {id: 19, cat: TV/OTHER, desc: "Разные сериалы"}
+    - {id: 19, cat: TV/Other, desc: "Разные сериалы"}
     - {id: 10, cat: Audio, desc: "Музыка"}
     - {id: 29, cat: TV, desc: "Лечение (Пациенты)"}
     - {id: 37, cat: TV, desc: "Сериалы с ТВ"}

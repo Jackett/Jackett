@@ -40,9 +40,9 @@ caps:
     "video movie dvd": Movies
     "video movie dvdrip": Movies
     "video movie hd": Movies/HD
-    ebook: Books/Ebook
+    ebook: Books/EBook
     "ebook comics": Books/Comics
-    "ebook magazine": Books/Magazines
+    "ebook magazine": Books/Mags
     "ebook tutorial": Books/Technical
     "ebook audio book": Audio/Audiobook
     audio: Audio
@@ -51,7 +51,7 @@ caps:
     application: PC/0day
     game: PC/Games
     "game pc": PC/Games
-    "game xbox": Console/Xbox
+    "game xbox": Console/XBox
     "game nintendo": Console/NDS
     adult: XXX
     "adult amateur": XXX

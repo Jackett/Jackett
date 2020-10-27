@@ -36,20 +36,20 @@ caps:
     - {id: 50, cat: Audio, desc: "Music Διάφορα (Other)"}
     - {id: 33, cat: PC/Games, desc: "Games PC"}
     - {id: 34, cat: Console/PSP, desc: "Games Playstation/PSP"}
-    - {id: 35, cat: Console/Xbox, desc: "Games Xbox"}
+    - {id: 35, cat: Console/XBox, desc: "Games Xbox"}
     - {id: 36, cat: TV/Anime, desc: "Anime /Μεταγλωτισμένα"}
     - {id: 37, cat: TV/Anime, desc: "Anime /Subtitled"}
     - {id: 40, cat: Books/Comics, desc: "Comics"}
-    - {id: 41, cat: Books/Magazines, desc: "Magazines"}
-    - {id: 42, cat: Books/Ebook, desc: "E-books"}
-    - {id: 43, cat: Books/Ebook, desc: "PDF"}
+    - {id: 41, cat: Books/Mags, desc: "Magazines"}
+    - {id: 42, cat: Books/EBook, desc: "E-books"}
+    - {id: 43, cat: Books/EBook, desc: "PDF"}
     - {id: 44, cat: Other, desc: "Images"}
     - {id: 45, cat: TV/Sport, desc: "Football Leagues"}
     - {id: 46, cat: TV/Sport, desc: "Formula 1"}
     - {id: 48, cat: PC/0day, desc: "Apps Win"}
     - {id: 8, cat: PC, desc: "Apps Linux"}
     - {id: 9, cat: PC/Mac, desc: "Apps Mac"}
-    - {id: 49, cat: PC/Phone-Other, desc: "Apps Mobile"}
+    - {id: 49, cat: PC/Mobile-Other, desc: "Apps Mobile"}
 
   modes:
     search: [q]

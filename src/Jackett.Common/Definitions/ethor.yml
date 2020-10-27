@@ -22,7 +22,7 @@ caps:
     - {id: 41, cat: Console, desc: "Jeux/Portable"}
     - {id: 34, cat: Console/PS4, desc: "Jeux/PS2-PS3"}
     - {id: 38, cat: Console/Wii, desc: "Jeux/Wii-GC"}
-    - {id: 40, cat: Console/Xbox, desc: "Jeux/Xbox360"}
+    - {id: 40, cat: Console/XBox, desc: "Jeux/Xbox360"}
     - {id: 6, cat: Audio, desc: "Musique"}
     - {id: 37, cat: Audio/Video, desc: "Musique/Video"}
     - {id: 48, cat: TV/HD, desc: "Série-Télé/Bluray"}

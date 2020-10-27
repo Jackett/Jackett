@@ -84,7 +84,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(19, TorznabCatType.MoviesForeign, "Filme HD-RO");
             AddCategoryMapping(20, TorznabCatType.MoviesBluRay, "Filme Blu-Ray");
             AddCategoryMapping(21, TorznabCatType.TVHD, "Seriale HD");
-            AddCategoryMapping(22, TorznabCatType.PCPhoneOther, "Mobile");
+            AddCategoryMapping(22, TorznabCatType.PCMobileOther, "Mobile");
             AddCategoryMapping(23, TorznabCatType.TVSD, "Seriale SD");
             AddCategoryMapping(24, TorznabCatType.TVAnime, "Anime");
             AddCategoryMapping(25, TorznabCatType.Movies3D, "Filme 3D");

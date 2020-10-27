@@ -17,10 +17,10 @@ caps:
     - {id: 120, cat: Movies/BluRay, desc: "Películas JMBD"}
     - {id: 34, cat: Movies/HD, desc: "Películas BDrip 1080p"}
     - {id: 99, cat: Movies/HD, desc: "Películas BDrip 720p"}
-    - {id: 140, cat: Movies/WEBDL, desc: "Películas WEB-DL AMAZON"}
-    - {id: 141, cat: Movies/WEBDL, desc: "Películas WEB-DL APPLE TV+"}
-    - {id: 142, cat: Movies/WEBDL, desc: "Películas WEB-DL HBO"}
-    - {id: 143, cat: Movies/WEBDL, desc: "Películas WEB-DL NETFLIX"}
+    - {id: 140, cat: Movies/WEB-DL, desc: "Películas WEB-DL AMAZON"}
+    - {id: 141, cat: Movies/WEB-DL, desc: "Películas WEB-DL APPLE TV+"}
+    - {id: 142, cat: Movies/WEB-DL, desc: "Películas WEB-DL HBO"}
+    - {id: 143, cat: Movies/WEB-DL, desc: "Películas WEB-DL NETFLIX"}
     - {id: 37, cat: Movies/Other, desc: "Películas HDTVrip"}
     - {id: 119, cat: Movies/HD, desc: "Películas HDiTunes"}
     - {id: 84, cat: Movies/HD, desc: "Películas MicroHD 1080p"}
@@ -55,7 +55,7 @@ caps:
     - {id: 53, cat: Movies/BluRay, desc: "Documentales Full Bluray"}
     - {id: 59, cat: Movies/3D, desc: "Documentales 3D"}
     - {id: 64, cat: Movies/BluRay, desc: "Documentales BDremux"}
-    - {id: 138, cat: Movies/WEBDL, desc: "Documentales WEB-DL"}
+    - {id: 138, cat: Movies/WEB-DL, desc: "Documentales WEB-DL"}
     - {id: 122, cat: Movies/BluRay, desc: "Documentales JMBD"}
     - {id: 68, cat: Movies/HD, desc: "Documentales BDrip 1080p"}
     - {id: 106, cat: Movies/HD, desc: "Documentales BDrip 720p"}

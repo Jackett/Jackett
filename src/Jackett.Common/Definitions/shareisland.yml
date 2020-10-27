@@ -15,8 +15,8 @@ caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Movie"}
     - {id: 2, cat: TV, desc: "Serie TV"}
-    - {id: 15, cat: Books/Ebook, desc: "Ebook"}
-    - {id: 17, cat: Books/Magazines, desc: "Riviste e Giornali"}
+    - {id: 15, cat: Books/EBook, desc: "Ebook"}
+    - {id: 17, cat: Books/Mags, desc: "Riviste e Giornali"}
     - {id: 19, cat: XXX, desc: "XXX"}
     - {id: 3, cat: Audio, desc: "Music"}
     - {id: 7, cat: PC/Games, desc: "Games"}

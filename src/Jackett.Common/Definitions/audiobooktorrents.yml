@@ -40,40 +40,40 @@ caps:
     - {id: 260, cat: Audio/Audiobook, desc: "Thriller and Suspense"}
     - {id: 290, cat: Audio/Audiobook, desc: "Urban Fantasy"}
     - {id: 300, cat: Audio/Audiobook, desc: "Western"}
-    - {id: 400, cat: Books/Ebook, desc: "[E] Action/Adventure"}
-    - {id: 410, cat: Books/Ebook, desc: "[E] Adult / Erotica"}
-    - {id: 420, cat: Books/Ebook, desc: "[E] Arts &amp; Crafts (Hobbies)"}
-    - {id: 430, cat: Books/Ebook, desc: "[E] Biography/Memoirs"}
-    - {id: 730, cat: Books/Ebook, desc: "[E] Collections"}
-    - {id: 440, cat: Books/Ebook, desc: "[E] Comic Books"}
-    - {id: 450, cat: Books/Ebook, desc: "[E] Computer Learning"}
-    - {id: 460, cat: Books/Ebook, desc: "[E] Cookery"}
-    - {id: 470, cat: Books/Ebook, desc: "[E] Crime/Thriller/Mystery"}
-    - {id: 480, cat: Books/Ebook, desc: "[E] Fantasy"}
-    - {id: 490, cat: Books/Ebook, desc: "[E] Forteana"}
-    - {id: 500, cat: Books/Ebook, desc: "[E] General Fiction"}
-    - {id: 510, cat: Books/Ebook, desc: "[E] Historical Fiction"}
-    - {id: 520, cat: Books/Ebook, desc: "[E] History/Documentary"}
-    - {id: 530, cat: Books/Ebook, desc: "[E] Horror"}
-    - {id: 540, cat: Books/Ebook, desc: "[E] Humor ( Comedy)"}
-    - {id: 550, cat: Books/Ebook, desc: "[E] LGBT"}
-    - {id: 560, cat: Books/Ebook, desc: "[E] Literary Fiction"}
-    - {id: 570, cat: Books/Ebook, desc: "[E] Magazines - all"}
-    - {id: 580, cat: Books/Ebook, desc: "[E] Non-Fiction"}
-    - {id: 590, cat: Books/Ebook, desc: "[E] Paranormal Romance"}
-    - {id: 600, cat: Books/Ebook, desc: "[E] Reference/Educational"}
-    - {id: 610, cat: Books/Ebook, desc: "[E] Religion and Spirituality"}
-    - {id: 620, cat: Books/Ebook, desc: "[E] Romance"}
-    - {id: 630, cat: Books/Ebook, desc: "[E] Sci-Fi"}
-    - {id: 640, cat: Books/Ebook, desc: "[E] Sci-Fi/Apocalyptic"}
-    - {id: 650, cat: Books/Ebook, desc: "[E] Self-Help"}
-    - {id: 660, cat: Books/Ebook, desc: "[E] Sports/Fitness"}
-    - {id: 670, cat: Books/Ebook, desc: "[E] Travel"}
-    - {id: 680, cat: Books/Ebook, desc: "[E] Unsorted"}
-    - {id: 690, cat: Books/Ebook, desc: "[E] Urban Fantasy/Paranormal"}
-    - {id: 700, cat: Books/Ebook, desc: "[E] Western"}
-    - {id: 710, cat: Books/Ebook, desc: "[E] Young Adult"}
-    - {id: 720, cat: Books/Ebook, desc: "[E] Young Children"}
+    - {id: 400, cat: Books/EBook, desc: "[E] Action/Adventure"}
+    - {id: 410, cat: Books/EBook, desc: "[E] Adult / Erotica"}
+    - {id: 420, cat: Books/EBook, desc: "[E] Arts &amp; Crafts (Hobbies)"}
+    - {id: 430, cat: Books/EBook, desc: "[E] Biography/Memoirs"}
+    - {id: 730, cat: Books/EBook, desc: "[E] Collections"}
+    - {id: 440, cat: Books/EBook, desc: "[E] Comic Books"}
+    - {id: 450, cat: Books/EBook, desc: "[E] Computer Learning"}
+    - {id: 460, cat: Books/EBook, desc: "[E] Cookery"}
+    - {id: 470, cat: Books/EBook, desc: "[E] Crime/Thriller/Mystery"}
+    - {id: 480, cat: Books/EBook, desc: "[E] Fantasy"}
+    - {id: 490, cat: Books/EBook, desc: "[E] Forteana"}
+    - {id: 500, cat: Books/EBook, desc: "[E] General Fiction"}
+    - {id: 510, cat: Books/EBook, desc: "[E] Historical Fiction"}
+    - {id: 520, cat: Books/EBook, desc: "[E] History/Documentary"}
+    - {id: 530, cat: Books/EBook, desc: "[E] Horror"}
+    - {id: 540, cat: Books/EBook, desc: "[E] Humor ( Comedy)"}
+    - {id: 550, cat: Books/EBook, desc: "[E] LGBT"}
+    - {id: 560, cat: Books/EBook, desc: "[E] Literary Fiction"}
+    - {id: 570, cat: Books/EBook, desc: "[E] Magazines - all"}
+    - {id: 580, cat: Books/EBook, desc: "[E] Non-Fiction"}
+    - {id: 590, cat: Books/EBook, desc: "[E] Paranormal Romance"}
+    - {id: 600, cat: Books/EBook, desc: "[E] Reference/Educational"}
+    - {id: 610, cat: Books/EBook, desc: "[E] Religion and Spirituality"}
+    - {id: 620, cat: Books/EBook, desc: "[E] Romance"}
+    - {id: 630, cat: Books/EBook, desc: "[E] Sci-Fi"}
+    - {id: 640, cat: Books/EBook, desc: "[E] Sci-Fi/Apocalyptic"}
+    - {id: 650, cat: Books/EBook, desc: "[E] Self-Help"}
+    - {id: 660, cat: Books/EBook, desc: "[E] Sports/Fitness"}
+    - {id: 670, cat: Books/EBook, desc: "[E] Travel"}
+    - {id: 680, cat: Books/EBook, desc: "[E] Unsorted"}
+    - {id: 690, cat: Books/EBook, desc: "[E] Urban Fantasy/Paranormal"}
+    - {id: 700, cat: Books/EBook, desc: "[E] Western"}
+    - {id: 710, cat: Books/EBook, desc: "[E] Young Adult"}
+    - {id: 720, cat: Books/EBook, desc: "[E] Young Children"}
 
   modes:
     search: [q]

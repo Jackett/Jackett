@@ -70,18 +70,18 @@ caps:
     - {id: 74, cat: PC/0day, desc: "Software - Windows"}
     - {id: 75, cat: PC, desc: "Software - Linux"}
     - {id: 76, cat: PC/Mac, desc: "Software - MAC"}
-    - {id: 77, cat: PC/Phone-Other, desc: "Software - Otras Plataformas"}
-    - {id: 115, cat: PC/Phone-Android, desc: "Software - Android"}
+    - {id: 77, cat: PC/Mobile-Other, desc: "Software - Otras Plataformas"}
+    - {id: 115, cat: PC/Mobile-Android, desc: "Software - Android"}
     - {id: 25, cat: PC/Games, desc: "Juegos - Microsoft"}
     - {id: 26, cat: Console, desc: "Juegos - Sony"}
     - {id: 27, cat: PC/Games, desc: "Juegos - PC"}
     - {id: 28, cat: Console/NDS, desc: "Juegos - Nintendo"}
     - {id: 34, cat: Console/Other, desc: "Juegos - Otros"}
     - {id: 113, cat: Console/Other, desc: "Juegos - Emuladores/Otras P."}
-    - {id: 6, cat: Books/Ebook, desc: "eBooks - eBooks"}
+    - {id: 6, cat: Books/EBook, desc: "eBooks - eBooks"}
     - {id: 131, cat: Books/Comics, desc: "eBooks - Cómics"}
     - {id: 134, cat: Books, desc: "eBooks - Manga"}
-    - {id: 132, cat: Books/Magazines, desc: "eBooks - Revistas"}
+    - {id: 132, cat: Books/Mags, desc: "eBooks - Revistas"}
     - {id: 72, cat: Books/Other, desc: "eBooks - Otros"}
     - {id: 133, cat: Books, desc: "eBooks - Adulto (+18)"}
     - {id: 92, cat: Other, desc: "Otros formatos - Animación"}

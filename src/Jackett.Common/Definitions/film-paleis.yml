@@ -18,7 +18,7 @@ caps:
     - {id: 5, cat: Movies/DVD, desc: " DVD Films"}
     - {id: 7, cat: Movies/UHD, desc: " 4K films"}
     - {id: 8, cat: XXX, desc: " Erotiek"}
-    - {id: 9, cat: PC/Phone-Other, desc: " GSM/Navigatie"}
+    - {id: 9, cat: PC/Mobile-Other, desc: " GSM/Navigatie"}
     - {id: 10, cat: Audio, desc: " Muziek Album"}
     - {id: 11, cat: Audio/Other, desc: " Muziek Diverse"}
     - {id: 12, cat: Console/NDS, desc: " Nintendo"}
@@ -28,7 +28,7 @@ caps:
     - {id: 17, cat: PC, desc: " PC Spellen"}
     - {id: 19, cat: TV, desc: " TV Series"}
     - {id: 21, cat: Movies/SD, desc: " Divx/Xvid"}
-    - {id: 24, cat: Books/Ebook, desc: " E-Books"}
+    - {id: 24, cat: Books/EBook, desc: " E-Books"}
     - {id: 26, cat: Audio/Other, desc: " Cabaret"}
     - {id: 27, cat: TV/Documentary, desc: " Documentaire"}
     - {id: 31, cat: Movies/HD, desc: " FP-release"}

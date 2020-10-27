@@ -48,9 +48,9 @@ caps:
     - {id: 84, cat: Audio/Video, desc: "Другое Видеоклипы"}
     - {id: 85, cat: PC/Games, desc: "Другое Игры"}
     - {id: 86, cat: PC/0day, desc: "Другое Программы"}
-    - {id: 87, cat: Console/Xbox, desc: "Другое XBox"}
+    - {id: 87, cat: Console/XBox, desc: "Другое XBox"}
     - {id: 88, cat: Console/PSP, desc: "Другое PSP"}
-    - {id: 89, cat: Books/Magazines, desc: "Другое Журналы"}
+    - {id: 89, cat: Books/Mags, desc: "Другое Журналы"}
     - {id: 90, cat: Other, desc: "Другое Графика"}
     - {id: 93, cat: Other, desc: "Другое Библиотека"}
     - {id: 94, cat: Console/PS3, desc: "Другое PS3"}

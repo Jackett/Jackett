@@ -24,7 +24,7 @@ caps:
     - {id: 12, cat: PC/0day, desc: "Win Update"}
     - {id: 13, cat: PC/0day, desc: "Win VST"}
     - {id: 14, cat: PC/0day, desc: "Win VSTi"}
-    - {id: 15, cat: PC/Phone-Other, desc: "Handheld App"}
+    - {id: 15, cat: PC/Mobile-Other, desc: "Handheld App"}
 
   modes:
     search: [q]

@@ -73,9 +73,9 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("Video", TorznabCatType.Movies);
             AddCategoryMapping("Image", TorznabCatType.OtherMisc);
             AddCategoryMapping("Document", TorznabCatType.BooksComics);
-            AddCategoryMapping("eBook", TorznabCatType.BooksEbook);
+            AddCategoryMapping("eBook", TorznabCatType.BooksEBook);
             AddCategoryMapping("Program", TorznabCatType.PC0day);
-            AddCategoryMapping("Android", TorznabCatType.PCPhoneAndroid);
+            AddCategoryMapping("Android", TorznabCatType.PCMobileAndroid);
             AddCategoryMapping("Archive", TorznabCatType.Other);
             AddCategoryMapping("Diskimage", TorznabCatType.PCISO);
             AddCategoryMapping("Sourcecode", TorznabCatType.MoviesOther);

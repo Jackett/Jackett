@@ -30,7 +30,7 @@ caps:
     - {id: 31, cat: PC/Games, desc: "Játék/Pc/Iso"}
     - {id: 29, cat: PC/Games, desc: "Játék/Pc/Rip"}
     - {id: 54, cat: Console/PS3, desc: "Játék/PS2/PS3"}
-    - {id: 32, cat: Console/Xbox, desc: "Játék/XBOX"}
+    - {id: 32, cat: Console/XBox, desc: "Játék/XBOX"}
     - {id: 50, cat: Books, desc: "Könyv/Eng"}
     - {id: 27, cat: Books, desc: "Könyv/Hun"}
     - {id: 65, cat: Other, desc: "Képek"}
@@ -39,7 +39,7 @@ caps:
     - {id: 84, cat: Audio/Lossless, desc: "Lossless/Hun"}
     - {id: 68, cat: Movies/DVD, desc: "Mese/DVD"}
     - {id: 69, cat: Movies/SD, desc: "Mese/XviD"}
-    - {id: 67, cat: PC/Phone-Other, desc: "Mobiltelefon"}
+    - {id: 67, cat: PC/Mobile-Other, desc: "Mobiltelefon"}
     - {id: 26, cat: Audio/MP3, desc: "Mp3/Eng"}
     - {id: 25, cat: Audio/MP3, desc: "Mp3/Hun"}
     - {id: 14, cat: PC, desc: "Program/Egyéb"}

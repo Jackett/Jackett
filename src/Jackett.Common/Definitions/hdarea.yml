@@ -17,7 +17,7 @@ caps:
     - {id: 410, cat: Movies/HD, desc: "Movies 1080p"}
     - {id: 411, cat: Movies/HD, desc: "Movies 720p"}
     - {id: 414, cat: Movies/DVD, desc: "Movies DVD"}
-    - {id: 412, cat: Movies/WEBDL, desc: "Movies WEB-DL"}
+    - {id: 412, cat: Movies/WEB-DL, desc: "Movies WEB-DL"}
     - {id: 413, cat: Movies/HD, desc: "Movies HDTV"}
     - {id: 417, cat: Movies/Other, desc: "Movies iPad"}
     - {id: 404, cat: TV/Documentary, desc: "Documentaries"}

@@ -11,8 +11,8 @@ links:
 caps:
   categorymappings:
     # LIBREDICOLA
-    - {id: 13, cat: Books/Magazines, desc: "Giornali e Riviste"}
-    - {id: 15, cat: Books/Ebook, desc: "E-Book"}
+    - {id: 13, cat: Books/Mags, desc: "Giornali e Riviste"}
+    - {id: 15, cat: Books/EBook, desc: "E-Book"}
     - {id: 16, cat: Books/Comics, desc: "Fumetti"}
     - {id: 70, cat: Books, desc: "Manuali e Guide"}
     - {id: 72, cat: Audio/Audiobook, desc: "Audio Libri"}
@@ -61,7 +61,7 @@ caps:
     - {id: 47, cat: PC/Games, desc: "PC Games"}
     - {id: 48, cat: Console/PS3, desc: "PC Giochi PS2-PS3"}
     - {id: 49, cat: Console/Wii, desc: "PC Giochi Nintendo Wii"}
-    - {id: 50, cat: Console/Xbox, desc: "PC Giochi Xbox"}
+    - {id: 50, cat: Console/XBox, desc: "PC Giochi Xbox"}
     - {id: 51, cat: Console/PSP, desc: "PC Giochi PSP"}
     - {id: 52, cat: Console/3DS, desc: "PC Giochi DS-DS3"}
     # SOFTWARE
@@ -70,8 +70,8 @@ caps:
     - {id: 69, cat: PC, desc: "PC Portable"}
     - {id: 56, cat: PC, desc: "PC Linux"}
     # CELLULARI-PALMARI
-    - {id: 68, cat: PC/Phone-IOS, desc: "IPhone-IPad"}
-    - {id: 71, cat: PC/Phone-Android, desc: "Android APP"}
+    - {id: 68, cat: PC/Mobile-iOS, desc: "IPhone-IPad"}
+    - {id: 71, cat: PC/Mobile-Android, desc: "Android APP"}
     - {id: 74, cat: Other, desc: "Varie"}
     - {id: 75, cat: Other, desc: "Immagini Wallpaper"}
 

@@ -70,7 +70,7 @@ namespace Jackett.Common.Indexers
             Language = "es-es";
             Type = "public";
 
-            AddCategoryMapping(1, TorznabCatType.BooksEbook);
+            AddCategoryMapping(1, TorznabCatType.BooksEBook);
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -136,7 +136,7 @@ namespace Jackett.Common.Indexers
                             PublishDate = lastPublishDate,
                             BannerUrl = banner,
                             Description = description,
-                            Category = new List<int> { TorznabCatType.BooksEbook.ID },
+                            Category = new List<int> { TorznabCatType.BooksEBook.ID },
                             Size = 5242880, // 5 MB
                             Seeders = 1,
                             Peers = 2,

@@ -11,7 +11,7 @@ links:
 caps:
   categorymappings:
     - {id: 14, cat: PC/0day, desc: "Apps"}
-    - {id: 12, cat: Books/Ebook, desc: "E-BOOKS"}
+    - {id: 12, cat: Books/EBook, desc: "E-BOOKS"}
     - {id: 7, cat: Console, desc: "Games/Console"}
     - {id: 9, cat: Console/Other, desc: "Games/Handheld"}
     - {id: 10, cat: PC/Mac, desc: "Games/Mac"}

@@ -23,7 +23,7 @@ caps:
     - {id: 6320, cat: TV/Anime, desc: "Animations - Yaoi"}
     - {id: 9700, cat: Books/Comics, desc: "Comics & Manga - Adult"}
     - {id: 5000, cat: XXX, desc: "Fetish - All"}
-    - {id: 7700, cat: XXX/Imageset, desc: "Images - Fetish"}
+    - {id: 7700, cat: XXX/ImageSet, desc: "Images - Fetish"}
     - {id: 1050, cat: Movies, desc: "Movies - Biography"}
     - {id: 1150, cat: Movies, desc: "Movies - Crime"}
     - {id: 1250, cat: Movies, desc: "Movies - Experimental"}
@@ -36,7 +36,7 @@ caps:
     - {id: 6310, cat: TV/Anime, desc: "Animations - Yuri"}
     - {id: 9600, cat: Books/Comics, desc: "Comics & Manga - Cartoon"}
     - {id: 13000, cat: PC/Games, desc: "Games - All"}
-    - {id: 7900, cat: XXX/Imageset, desc: "Images - Other"}
+    - {id: 7900, cat: XXX/ImageSet, desc: "Images - Other"}
     - {id: 1070, cat: Movies, desc: "Movies - Bollywood"}
     - {id: 1170, cat: Movies, desc: "Movies - Documentary"}
     - {id: 1270, cat: Movies, desc: "Movies - Family"}
@@ -49,7 +49,7 @@ caps:
     - {id: 14000, cat: PC, desc: "Applications - All"}
     - {id: 9200, cat: Books/Comics, desc: "Comics & Manga - Hentai"}
     - {id: 4000, cat: XXX, desc: "Hardcore - All"}
-    - {id: 8000, cat: Books/Magazines, desc: "Magazines - All"}
+    - {id: 8000, cat: Books/Mags, desc: "Magazines - All"}
     - {id: 1090, cat: Movies, desc: "Movies - Comedy"}
     - {id: 1190, cat: Movies, desc: "Movies - Drama"}
     - {id: 1290, cat: Movies, desc: "Movies - Fantasy"}
@@ -61,7 +61,7 @@ caps:
     - {id: 6120, cat: TV/Anime, desc: "Animations - Shoujo Ai"}
     - {id: 11000, cat: Audio/Audiobook, desc: "Audio Books - All"}
     - {id: 9100, cat: Books/Comics, desc: "Comics & Manga - Manga"}
-    - {id: 7500, cat: XXX/Imageset, desc: "Images - Adult"}
+    - {id: 7500, cat: XXX/ImageSet, desc: "Images - Adult"}
     - {id: 1010, cat: Movies, desc: "Movies - Action"}
     - {id: 1110, cat: Movies, desc: "Movies - Coming of Age"}
     - {id: 1210, cat: Movies, desc: "Movies - Eastern"}
@@ -73,7 +73,7 @@ caps:
     - {id: 6330, cat: TV/Anime, desc: "Animations - Shounen Ai"}
     - {id: 10000, cat: Books, desc: "Books - All"}
     - {id: 9900, cat: Books/Comics, desc: "Comics & Manga - Other"}
-    - {id: 7300, cat: XXX/Imageset, desc: "Images - Erotic"}
+    - {id: 7300, cat: XXX/ImageSet, desc: "Images - Erotic"}
     - {id: 1030, cat: Movies, desc: "Movies - Adventure"}
     - {id: 1130, cat: Movies, desc: "Movies - Coming Out"}
     - {id: 1230, cat: Movies, desc: "Movies - Entertainment"}

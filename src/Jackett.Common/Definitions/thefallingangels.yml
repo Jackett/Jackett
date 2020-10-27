@@ -12,13 +12,13 @@ caps:
   categorymappings:
     - {id: 107, cat: PC/0day, desc: "Apps Windows"}
     - {id: 132, cat: PC/Mac, desc: "Apps Mac-OSX"}
-    - {id: 105, cat: PC/Phone-Other, desc: "Apps Other"}
+    - {id: 105, cat: PC/Mobile-Other, desc: "Apps Other"}
     - {id: 116, cat: PC/Games, desc: "Games PC"}
     - {id: 155, cat: Console/NDS, desc: "Games Nintendo DS"}
     - {id: 134, cat: Console, desc: "Games Switch"}
     - {id: 138, cat: Console/Wii, desc: "Games Nintendo Wii"}
     - {id: 124, cat: Console/PSP, desc: "Games PSP / PS 1-4"}
-    - {id: 139, cat: Console/Xbox, desc: "Games XBOX"}
+    - {id: 139, cat: Console/XBox, desc: "Games XBOX"}
     - {id: 140, cat: Movies/HD, desc: "Movies HD"}
     - {id: 141, cat: Movies/SD, desc: "Movies SD"}
     - {id: 125, cat: Movies/UHD, desc: "Movies Ultra HD"}
@@ -35,8 +35,8 @@ caps:
     - {id: 154, cat: TV/Documentary, desc: "Dokus Pack"}
     - {id: 149, cat: TV/HD, desc: "Serien HD"}
     - {id: 151, cat: TV/SD, desc: "Serien SD"}
-    - {id: 150, cat: TV/OTHER, desc: "Serien Pack"}
-    - {id: 136, cat: TV/FOREIGN, desc: "Serien Englisch"}
+    - {id: 150, cat: TV/Other, desc: "Serien Pack"}
+    - {id: 136, cat: TV/Foreign, desc: "Serien Englisch"}
     - {id: 152, cat: TV/Sport, desc: "Sport HD"}
     - {id: 153, cat: TV/Sport, desc: "Sport SD"}
     - {id: 135, cat: TV/Sport, desc: "Sport Ultra HD"}
@@ -52,9 +52,9 @@ caps:
     - {id: 161, cat: TV/HD, desc: "Kids Serien HD"}
     - {id: 162, cat: TV/SD, desc: "Kids Serien SD"}
     - {id: 112, cat: Audio/Audiobook, desc: "Kids Hörbuch"}
-    - {id: 115, cat: Books/Magazines, desc: "Books Zeitschriften"}
+    - {id: 115, cat: Books/Mags, desc: "Books Zeitschriften"}
     - {id: 114, cat: Books/Comics, desc: "Books Comics"}
-    - {id: 117, cat: Books/Ebook, desc: "Books Romane"}
+    - {id: 117, cat: Books/EBook, desc: "Books Romane"}
     - {id: 156, cat: Books, desc: "Books Packs"}
     - {id: 130, cat: Books, desc: "Books FSK 18"}
     - {id: 159, cat: TV/Anime, desc: "Anime Movies HD"}

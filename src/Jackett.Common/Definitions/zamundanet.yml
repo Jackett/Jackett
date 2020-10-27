@@ -30,7 +30,7 @@ caps:
     - {id: 4, cat: PC/ISO, desc: "Games ISO"}
     - {id: 21, cat: PC/Games, desc: "Games PC Rip"}
     - {id: 17, cat: Console/PS3, desc: "Games PS"}
-    - {id: 40, cat: Console/Xbox, desc: "Games Xbox"}
+    - {id: 40, cat: Console/XBox, desc: "Games Xbox"}
     - {id: 12, cat: Console, desc: "Games Console"}
     - {id: 54, cat: PC, desc: "Games Linux"}
     - {id: 6, cat: Audio, desc: "Music"}
@@ -40,12 +40,12 @@ caps:
     - {id: 34, cat: Audio/Lossless, desc: "Music Lossless"}
     - {id: 38, cat: PC/Mac, desc: "Programs Mac"}
     - {id: 1, cat: PC/ISO, desc: "Programs PC ISO"}
-    - {id: 22, cat: PC/Phone-Other, desc: "Programs Other"}
+    - {id: 22, cat: PC/Mobile-Other, desc: "Programs Other"}
     - {id: 43, cat: TV/Sport, desc: "Sport HD"}
     - {id: 41, cat: TV/Sport, desc: "Sport SD"}
-    - {id: 36, cat: PC/Phone-Other, desc: "Programs Mobile/GSM"}
-    - {id: 52, cat: PC/Phone-Android, desc: "Android/Games"}
-    - {id: 53, cat: PC/Phone-Android, desc: "Android/Apps"}
+    - {id: 36, cat: PC/Mobile-Other, desc: "Programs Mobile/GSM"}
+    - {id: 52, cat: PC/Mobile-Android, desc: "Android/Games"}
+    - {id: 53, cat: PC/Mobile-Android, desc: "Android/Apps"}
     - {id: 26, cat: Other, desc: "Other"}
     - {id: 23, cat: Other, desc: "Clips"}
     - {id: 32, cat: Books/Comics, desc: "Books Comics"}

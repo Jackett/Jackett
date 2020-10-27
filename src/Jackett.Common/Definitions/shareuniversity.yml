@@ -20,7 +20,7 @@ caps:
     - {id: 21, cat: TV, desc: "TV Series Boxset"}
     - {id: 6, cat: PC, desc: "Appz"}
     - {id: 13, cat: Audio/Audiobook, desc: "AudioBooks"}
-    - {id: 4, cat: Books/Ebook, desc: "E-Books"}
+    - {id: 4, cat: Books/EBook, desc: "E-Books"}
     - {id: 16, cat: Other, desc: "Elearning"}
     - {id: 5, cat: Console, desc: "Games"}
     - {id: 19, cat: Movies, desc: "Kids Movies"}

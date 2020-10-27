@@ -12,16 +12,16 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: 3, cat: PC/Phone-Android, desc: "Android"}
+    - {id: 3, cat: PC/Mobile-Android, desc: "Android"}
     - {id: 4, cat: TV/Anime, desc: "Anime"}
     - {id: 5, cat: Books/Comics, desc: "Comic"}
     - {id: 7, cat: TV/Documentary, desc: "Documentales"}
     - {id: 13, cat: Books/Other, desc: "e-Learning"}
-    - {id: 12, cat: Books/Ebook, desc: "eBooks"}
+    - {id: 12, cat: Books/EBook, desc: "eBooks"}
     - {id: 8, cat: Console/NDS, desc: "Juegos Nintendo"}
     - {id: 17, cat: PC/Games, desc: "Juegos PC"}
     - {id: 18, cat: Console/PS4, desc: "Juegos PlayStation"}
-    - {id: 19, cat: Console/Xbox, desc: "Juegos Xbox"}
+    - {id: 19, cat: Console/XBox, desc: "Juegos Xbox"}
     - {id: 20, cat: PC, desc: "Programas Linux"}
     - {id: 21, cat: PC/Mac, desc: "Programas MacOS"}
     - {id: 9, cat: Movies/HD, desc: "Peliculas 1080p"}

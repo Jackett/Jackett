@@ -39,7 +39,7 @@ caps:
     - {id: 124, cat: Movies, desc: " |- Зарубежные фильмы"}
     - {id: 123, cat: Movies, desc: " |- Отечественные фильмы (Новинки)"}
     - {id: 122, cat: Movies, desc: " |- Отечественные фильмы"}
-    - {id: 689, cat: Movies/WEBDL, desc: " |- Фильмы WEB-DLRip, HDTVRip "}
+    - {id: 689, cat: Movies/WEB-DL, desc: " |- Фильмы WEB-DLRip, HDTVRip "}
     - {id: 121, cat: Movies, desc: " |- Классика зарубежного кино (фильмы вышедшие до 1980 года)"}
     - {id: 120, cat: Movies, desc: " |- Классика отечественного кино (фильмы вышедшие до ..."}
     - {id: 126, cat: Movies, desc: " |- Антологии"}
@@ -180,15 +180,15 @@ caps:
     - {id: 554, cat: PC/Games, desc: " |- Эротические игры"}
     - {id: 14, cat: Console, desc: "Игры для Консолей"}
     - {id: 115, cat: Console, desc: " |- Новые релизы"}
-    - {id: 114, cat: Console/Xbox 360, desc: " |- XBox360 "}
-    - {id: 674, cat: Console/Xbox 360, desc: " |- XBox360 | Kinect "}
+    - {id: 114, cat: Console/XBox 360, desc: " |- XBox360 "}
+    - {id: 674, cat: Console/XBox 360, desc: " |- XBox360 | Kinect "}
     - {id: 113, cat: Console/NDS, desc: " |- NDS "}
     - {id: 288, cat: Console/PS3, desc: " |- Playstation 2 "}
     - {id: 290, cat: Console/PS3, desc: " |- Playstation 3 "}
     - {id: 531, cat: Console, desc: "Программы / Прошивки"}
     - {id: 532, cat: Console, desc: " |- Новые релизы"}
     - {id: 533, cat: Console/PS3, desc: " |- Playstation 3 "}
-    - {id: 535, cat: Console/Xbox 360, desc: " |- XBox360 "}
+    - {id: 535, cat: Console/XBox 360, desc: " |- XBox360 "}
     - {id: 534, cat: Console/PSP, desc: " |- PSP "}
     - {id: 277, cat: Console, desc: "Всё для игр"}
     - {id: 291, cat: Console, desc: " |- Новые релизы"}
@@ -460,29 +460,29 @@ caps:
     - {id: 762, cat: Books, desc: " |- Аудиокниги на немецком языке"}
     - {id: 761, cat: Books, desc: " |- Аудиокниги на английском языке"}
     # Мобильные устройства Mobile
-    - {id: 433, cat: PC/Phone-Other, desc: "Приложения для мобильных телефонов и КПК, КМК"}
-    - {id: 436, cat: PC/Phone-Other, desc: " |- Новые релизы"}
-    - {id: 437, cat: PC/Phone-Android, desc: " |- Android OS "}
-    - {id: 435, cat: PC/Phone-Other, desc: " |- Windows Mobile "}
-    - {id: 439, cat: PC/Phone-Other, desc: " |- Symbian "}
-    - {id: 438, cat: PC/Phone-IOS, desc: " |- iOS "}
-    - {id: 440, cat: PC/Phone-Other, desc: " |- Java "}
-    - {id: 434, cat: PC/Phone-Other, desc: "Игры"}
-    - {id: 441, cat: PC/Phone-Other, desc: " |- Новые релизы"}
-    - {id: 442, cat: PC/Phone-Android, desc: " |- Android OS "}
-    - {id: 443, cat: PC/Phone-Other, desc: " |- Symbian "}
-    - {id: 444, cat: PC/Phone-IOS, desc: " |- iOS "}
-    - {id: 446, cat: PC/Phone-Other, desc: " |- Java "}
-    - {id: 445, cat: PC/Phone-Other, desc: " |- Windows Mobile "}
-    - {id: 575, cat: PC/Phone-Other, desc: " |- Игры для Windows Phone 7,8 "}
-    - {id: 447, cat: PC/Phone-Other, desc: "Софт для работы с телефоном"}
-    - {id: 448, cat: PC/Phone-Other, desc: "Прошивки"}
-    - {id: 449, cat: PC/Phone-Other, desc: " |- Новые релизы"}
-    - {id: 450, cat: PC/Phone-Android, desc: " |- Android OS "}
-    - {id: 451, cat: PC/Phone-Other, desc: " |- Windows Mobile "}
-    - {id: 452, cat: PC/Phone-Other, desc: " |- Symbian "}
-    - {id: 454, cat: PC/Phone-IOS, desc: " |- iOS "}
-    - {id: 455, cat: PC/Phone-Other, desc: " |- Java "}
+    - {id: 433, cat: PC/Mobile-Other, desc: "Приложения для мобильных телефонов и КПК, КМК"}
+    - {id: 436, cat: PC/Mobile-Other, desc: " |- Новые релизы"}
+    - {id: 437, cat: PC/Mobile-Android, desc: " |- Android OS "}
+    - {id: 435, cat: PC/Mobile-Other, desc: " |- Windows Mobile "}
+    - {id: 439, cat: PC/Mobile-Other, desc: " |- Symbian "}
+    - {id: 438, cat: PC/Mobile-iOS, desc: " |- iOS "}
+    - {id: 440, cat: PC/Mobile-Other, desc: " |- Java "}
+    - {id: 434, cat: PC/Mobile-Other, desc: "Игры"}
+    - {id: 441, cat: PC/Mobile-Other, desc: " |- Новые релизы"}
+    - {id: 442, cat: PC/Mobile-Android, desc: " |- Android OS "}
+    - {id: 443, cat: PC/Mobile-Other, desc: " |- Symbian "}
+    - {id: 444, cat: PC/Mobile-iOS, desc: " |- iOS "}
+    - {id: 446, cat: PC/Mobile-Other, desc: " |- Java "}
+    - {id: 445, cat: PC/Mobile-Other, desc: " |- Windows Mobile "}
+    - {id: 575, cat: PC/Mobile-Other, desc: " |- Игры для Windows Phone 7,8 "}
+    - {id: 447, cat: PC/Mobile-Other, desc: "Софт для работы с телефоном"}
+    - {id: 448, cat: PC/Mobile-Other, desc: "Прошивки"}
+    - {id: 449, cat: PC/Mobile-Other, desc: " |- Новые релизы"}
+    - {id: 450, cat: PC/Mobile-Android, desc: " |- Android OS "}
+    - {id: 451, cat: PC/Mobile-Other, desc: " |- Windows Mobile "}
+    - {id: 452, cat: PC/Mobile-Other, desc: " |- Symbian "}
+    - {id: 454, cat: PC/Mobile-iOS, desc: " |- iOS "}
+    - {id: 455, cat: PC/Mobile-Other, desc: " |- Java "}
     # Книги и журналы Books
     - {id: 610, cat: Books, desc: " |- Новые релизы"}
     - {id: 611, cat: Books, desc: " |- Кино, театр, ТВ, мультипликация"}

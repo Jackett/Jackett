@@ -26,12 +26,12 @@ caps:
     - {id: 28, cat: PC/Games, desc: "Játék/ISO"}
     - {id: 30, cat: PC/Games, desc: "Játék/Rip"}
     - {id: 32, cat: Console, desc: "Konzol"}
-    - {id: 34, cat: PC/Phone-Other, desc: "Mobil"}
+    - {id: 34, cat: PC/Mobile-Other, desc: "Mobil"}
     - {id: 44, cat: Books, desc: "Könyv/Hun"}
     - {id: 33, cat: Books, desc: "Könyv/Eng"}
     - {id: 31, cat: Other, desc: "Képek"}
     - {id: 39, cat: XXX, desc: "XXX/Film"}
-    - {id: 49, cat: XXX/Imageset, desc: "XXX/Kép"}
+    - {id: 49, cat: XXX/ImageSet, desc: "XXX/Kép"}
 
   modes:
     search: [q]

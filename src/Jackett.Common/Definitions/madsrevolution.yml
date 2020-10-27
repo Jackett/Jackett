@@ -23,7 +23,7 @@ caps:
     - {id: 48, cat: TV/HD, desc: "Serien x264"}
     - {id: 27, cat: TV/SD, desc: "Serien DivX/XviD"}
     - {id: 25, cat: TV/SD, desc: "Serien DVD-R"}
-    - {id: 8, cat: TV/OTHER, desc: "Serien Unsorted"}
+    - {id: 8, cat: TV/Other, desc: "Serien Unsorted"}
     - {id: 38, cat: Audio, desc: "Musik Album"}
     - {id: 37, cat: Audio, desc: "Musik Single/EP"}
     - {id: 40, cat: Audio/Video, desc: "Musik Video"}
@@ -32,7 +32,7 @@ caps:
     - {id: 44, cat: PC/0day, desc: "Software Windows"}
     - {id: 42, cat: PC/Mac, desc: "Software Mac"}
     - {id: 41, cat: PC, desc: "Software Linux"}
-    - {id: 43, cat: PC/Phone-Other, desc: "Software Mobile"}
+    - {id: 43, cat: PC/Mobile-Other, desc: "Software Mobile"}
     - {id: 11, cat: PC, desc: "Software Unsorted"}
     - {id: 12, cat: PC/Games, desc: "Spiele PC"}
     - {id: 13, cat: Console, desc: "Spiele Konsole"}
@@ -53,7 +53,7 @@ caps:
     - {id: 29, cat: TV/Sport, desc: "Sport DVD-R"}
     - {id: 9, cat: TV/Sport, desc: "Sport Unsorted"}
     - {id: 15, cat: Audio/Audiobook, desc: "Books aBooks"}
-    - {id: 18, cat: Books/Ebook, desc: "Books eBooks"}
+    - {id: 18, cat: Books/EBook, desc: "Books eBooks"}
     - {id: 56, cat: XXX, desc: "XXX UHD"}
     - {id: 36, cat: XXX, desc: "XXX 1080p"}
     - {id: 34, cat: XXX, desc: "XXX 720p"}

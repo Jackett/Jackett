@@ -103,7 +103,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(10, TorznabCatType.PCGames, "Games/Win");
             AddCategoryMapping(12, TorznabCatType.ConsoleWii, "Games/Wii");
             AddCategoryMapping(13, TorznabCatType.ConsolePS4, "Games/PSX");
-            AddCategoryMapping(14, TorznabCatType.ConsoleXbox, "Games/XBOX");
+            AddCategoryMapping(14, TorznabCatType.ConsoleXBox, "Games/XBOX");
 
             AddCategoryMapping(4, TorznabCatType.PCMac, "Apps/Mac");
             AddCategoryMapping(5, TorznabCatType.PC0day, "Apps/Win");

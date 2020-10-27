@@ -20,8 +20,8 @@ caps:
     - {id: 13, cat: PC/Games, desc: "jeux"}
     - {id: 14, cat: Other, desc: "Dox"}
     - {id: 15, cat: PC/0day, desc: "APPS"}
-    - {id: 16, cat: Books/Magazines, desc: "Journaux-Mags"}
-    - {id: 17, cat: Books/Ebook, desc: "Ebooks"}
+    - {id: 16, cat: Books/Mags, desc: "Journaux-Mags"}
+    - {id: 17, cat: Books/EBook, desc: "Ebooks"}
     - {id: 18, cat: TV, desc: "Spectacles"}
     - {id: 19, cat: TV, desc: "TV Spectacles"}
     - {id: 20, cat: TV/Documentary, desc: "TV DOC"}

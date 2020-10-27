@@ -27,8 +27,8 @@ namespace Jackett.Common.Indexers
 
             AddCategoryMapping(1, TorznabCatType.PCMac, "MacOS Apps");
             AddCategoryMapping(2, TorznabCatType.PCMac, "MacOS Games");
-            AddCategoryMapping(3, TorznabCatType.PCPhoneIOS, "iOS Apps");
-            AddCategoryMapping(4, TorznabCatType.PCPhoneIOS, "iOS Games");
+            AddCategoryMapping(3, TorznabCatType.PCMobileiOS, "iOS Apps");
+            AddCategoryMapping(4, TorznabCatType.PCMobileiOS, "iOS Games");
             AddCategoryMapping(5, TorznabCatType.Other, "Graphics");
             AddCategoryMapping(6, TorznabCatType.Audio, "Audio");
             AddCategoryMapping(7, TorznabCatType.Other, "Tutorials");

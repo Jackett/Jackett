@@ -10,32 +10,32 @@ links:
 
 caps:
   categorymappings:
-    - {id: 2, cat: Books/Ebook, desc: "Roman"}
-    - {id: 3, cat: Books/Ebook, desc: "Thriller"}
-    - {id: 4, cat: Books/Ebook, desc: "Diverse"}
-    - {id: 7, cat: Books/Ebook, desc: "Jeugd"}
-    - {id: 8, cat: Books/Ebook, desc: "Oorlog"}
-    - {id: 9, cat: Books/Ebook, desc: "Luisterboeken"}
-    - {id: 10, cat: Books/Ebook, desc: "Stripboeken"}
-    - {id: 11, cat: Books/Ebook, desc: "Crime"}
-    - {id: 13, cat: Books/Ebook, desc: "Detective"}
-    - {id: 15, cat: Books/Ebook, desc: "Erothiek"}
-    - {id: 16, cat: Books/Ebook, desc: "Tijdschriften"}
-    - {id: 17, cat: Books/Ebook, desc: "Hobby"}
-    - {id: 19, cat: Books/Ebook, desc: "Medisch"}
-    - {id: 21, cat: Books/Ebook, desc: "Sport"}
-    - {id: 50, cat: Books/Ebook, desc: "Kookboeken"}
-    - {id: 51, cat: Books/Ebook, desc: "Fantasy"}
-    - {id: 52, cat: Books/Ebook, desc: "Kerst"}
-    - {id: 53, cat: Books/Ebook, desc: "Waargebeurd"}
-    - {id: 56, cat: Books/Ebook, desc: "Engels"}
-    - {id: 57, cat: Books/Ebook, desc: "Maatschappij"}
-    - {id: 58, cat: Books/Ebook, desc: "Biografie"}
-    - {id: 61, cat: Books/Ebook, desc: "Geschiedenis"}
-    - {id: 60, cat: Books/Ebook, desc: "Sci-Fi"}
-    - {id: 64, cat: Books/Ebook, desc: "Literatuur"}
-    - {id: 65, cat: Books/Ebook, desc: "Non-Fiction"}
-    - {id: 66, cat: Books/Ebook, desc: "Bladmuziek"}
+    - {id: 2, cat: Books/EBook, desc: "Roman"}
+    - {id: 3, cat: Books/EBook, desc: "Thriller"}
+    - {id: 4, cat: Books/EBook, desc: "Diverse"}
+    - {id: 7, cat: Books/EBook, desc: "Jeugd"}
+    - {id: 8, cat: Books/EBook, desc: "Oorlog"}
+    - {id: 9, cat: Books/EBook, desc: "Luisterboeken"}
+    - {id: 10, cat: Books/EBook, desc: "Stripboeken"}
+    - {id: 11, cat: Books/EBook, desc: "Crime"}
+    - {id: 13, cat: Books/EBook, desc: "Detective"}
+    - {id: 15, cat: Books/EBook, desc: "Erothiek"}
+    - {id: 16, cat: Books/EBook, desc: "Tijdschriften"}
+    - {id: 17, cat: Books/EBook, desc: "Hobby"}
+    - {id: 19, cat: Books/EBook, desc: "Medisch"}
+    - {id: 21, cat: Books/EBook, desc: "Sport"}
+    - {id: 50, cat: Books/EBook, desc: "Kookboeken"}
+    - {id: 51, cat: Books/EBook, desc: "Fantasy"}
+    - {id: 52, cat: Books/EBook, desc: "Kerst"}
+    - {id: 53, cat: Books/EBook, desc: "Waargebeurd"}
+    - {id: 56, cat: Books/EBook, desc: "Engels"}
+    - {id: 57, cat: Books/EBook, desc: "Maatschappij"}
+    - {id: 58, cat: Books/EBook, desc: "Biografie"}
+    - {id: 61, cat: Books/EBook, desc: "Geschiedenis"}
+    - {id: 60, cat: Books/EBook, desc: "Sci-Fi"}
+    - {id: 64, cat: Books/EBook, desc: "Literatuur"}
+    - {id: 65, cat: Books/EBook, desc: "Non-Fiction"}
+    - {id: 66, cat: Books/EBook, desc: "Bladmuziek"}
 
   modes:
     search: [q]

@@ -58,7 +58,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(52, TorznabCatType.PCMac, "Apple/All");
             AddCategoryMapping(22, TorznabCatType.PC, "Apps/misc");
             AddCategoryMapping(1, TorznabCatType.PC, "Apps/PC");
-            AddCategoryMapping(28, TorznabCatType.TVFOREIGN, "Foreign Titles");
+            AddCategoryMapping(28, TorznabCatType.TVForeign, "Foreign Titles");
             AddCategoryMapping(50, TorznabCatType.Console, "Games/Consoles");
             AddCategoryMapping(42, TorznabCatType.PCGames, "Games/Pack");
             AddCategoryMapping(4, TorznabCatType.PCGames, "Games/PC");
@@ -84,8 +84,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(33, TorznabCatType.TVSD, "TV/SD");
             AddCategoryMapping(32, TorznabCatType.TVUHD, "TV/UHD");
             AddCategoryMapping(39, TorznabCatType.XXXx264, "XXX/HD");
-            AddCategoryMapping(24, TorznabCatType.XXXImageset, "XXX/IMGSET");
-            AddCategoryMapping(21, TorznabCatType.XXXPacks, "XXX/Pack");
+            AddCategoryMapping(24, TorznabCatType.XXXImageSet, "XXX/IMGSET");
+            AddCategoryMapping(21, TorznabCatType.XXXPack, "XXX/Pack");
             AddCategoryMapping(9, TorznabCatType.XXXXviD, "XXX/SD");
             AddCategoryMapping(29, TorznabCatType.XXX, "XXX/Web");
         }

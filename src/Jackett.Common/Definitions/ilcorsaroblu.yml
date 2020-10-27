@@ -17,23 +17,23 @@ caps:
     # Adult
     - {id: 12, cat: XXX, desc: "Adult"}
     # Applicazioni
-    - {id: 5, cat: PC/Phone-Android, desc: "Android"}
-    - {id: 30, cat: PC/Phone-IOS, desc: "iOS / iPhone"}
+    - {id: 5, cat: PC/Mobile-Android, desc: "Android"}
+    - {id: 30, cat: PC/Mobile-iOS, desc: "iOS / iPhone"}
     - {id: 7, cat: PC/0day, desc: "Windows"}
     - {id: 8, cat: PC, desc: "Linux"}
     - {id: 9, cat: PC/Mac, desc: "Mac"}
     - {id: 40, cat: PC, desc: "Emulatori"}
     - {id: 34, cat: PC, desc: "Student's Office"}
     # Books
-    - {id: 6, cat: Books/Ebook, desc: "Books"}
+    - {id: 6, cat: Books/EBook, desc: "Books"}
     - {id: 45, cat: Books/Comics, desc: "Fumetti"}
-    - {id: 51, cat: Books/Ebook, desc: "Pdf"}
-    - {id: 33, cat: Books/Ebook, desc: "Romanzi"}
-    - {id: 26, cat: Books/Magazines, desc: "Edicola: Giornali/Quotidiani"}
+    - {id: 51, cat: Books/EBook, desc: "Pdf"}
+    - {id: 33, cat: Books/EBook, desc: "Romanzi"}
+    - {id: 26, cat: Books/Mags, desc: "Edicola: Giornali/Quotidiani"}
     # Games
     - {id: 3, cat: PC/Games, desc: "Games PC"}
     - {id: 27, cat: Console, desc: "Games Console"}
-    - {id: 41, cat: Console/Xbox, desc: "Games Xbox360"}
+    - {id: 41, cat: Console/XBox, desc: "Games Xbox360"}
     - {id: 43, cat: Console, desc: "Games Retro"}
     - {id: 47, cat: Console/NDS, desc: "Games Nintendo"}
     # Music

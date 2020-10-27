@@ -28,7 +28,7 @@ caps:
     # SOFTWARE
     - {id: 9, cat: PC/0day, desc: "Software"}
     # PHONE
-    - {id: 12, cat: PC/Phone-Other, desc: "Applicazioni"}
+    - {id: 12, cat: PC/Mobile-Other, desc: "Applicazioni"}
     # OTHER
     - {id: 14, cat: Other, desc: "Varie & Altro"}
     # EBOOK

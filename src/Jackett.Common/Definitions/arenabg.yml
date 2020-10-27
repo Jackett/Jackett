@@ -46,20 +46,20 @@ caps:
     - {id: "pc-rip", cat: PC, desc: "Games / PC RIP"}
     - {id: "ps2", cat: Console, desc: "Games / PS2"}
     - {id: "psp", cat: Console/PSP, desc: "Games / PSP"}
-    - {id: "xbox", cat: Console/Xbox, desc: "Games / XBOX"}
-    - {id: "xbox-360", cat: Console/Xbox 360, desc: "Games / XBOX-360"}
+    - {id: "xbox", cat: Console/XBox, desc: "Games / XBOX"}
+    - {id: "xbox-360", cat: Console/XBox 360, desc: "Games / XBOX-360"}
     - {id: "ps3", cat: Console/PS3, desc: "Games / PS3"}
     - {id: "wii", cat: Console/Wii, desc: "Games / WII"}
     - {id: "PS4", cat: Console/PS4, desc: "Games / PS4"}
     - {id: "software", cat: PC, desc: "Software"}
     - {id: "pc-iso", cat: PC/ISO, desc: "Software / PC ISO"}
-    - {id: "pdasmartphone", cat: PC/Phone-Other, desc: "Software / Smartphone"}
+    - {id: "pdasmartphone", cat: PC/Mobile-Other, desc: "Software / Smartphone"}
     - {id: "tutorial", cat: PC, desc: "Software / Tutorial"}
-    - {id: "android", cat: PC/Phone-Android, desc: "Software / Android"}
-    - {id: "ios", cat: PC/Phone-IOS, desc: "Software / iOS"}
+    - {id: "android", cat: PC/Mobile-Android, desc: "Software / Android"}
+    - {id: "ios", cat: PC/Mobile-iOS, desc: "Software / iOS"}
     - {id: "misc", cat: Other/Misc, desc: "Misc"}
     - {id: "other", cat: Other, desc: "Misc / Other"}
-    - {id: "e-books", cat: Books/Ebook, desc: "Misc / e-Books"}
+    - {id: "e-books", cat: Books/EBook, desc: "Misc / e-Books"}
     - {id: "sports", cat: TV/Sport, desc: "Misc / Sports"}
     - {id: "0-day", cat: PC/0day, desc: "Misc / 0-Day"}
     - {id: "xxx", cat: XXX, desc: "XXX"}

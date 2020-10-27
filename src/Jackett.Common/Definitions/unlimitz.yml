@@ -17,7 +17,7 @@ caps:
     - {id: 90, cat: Movies, desc: "ซีรีย์ (หนังชุด) [movie series]"}
     - {id: 92, cat: Console, desc: "เกมส์ (non PC) [games]"}
     - {id: 91, cat: PC/Games, desc: "เกมส์ (PC) [games]"}
-    - {id: 100, cat: PC/Phone-Other, desc: "โปรแกรมที่ใช้บน (มือถือ) [mobiles]"}
+    - {id: 100, cat: PC/Mobile-Other, desc: "โปรแกรมที่ใช้บน (มือถือ) [mobiles]"}
     - {id: 82, cat: PC, desc: "โปรแกรมที่ใช้บน (Linux)"}
     - {id: 83, cat: PC/0day, desc: "โปรแกรมที่ใช้บน (Windows)"}
     - {id: 110, cat: Audio, desc: "เพลงไทย [Thai music]"}

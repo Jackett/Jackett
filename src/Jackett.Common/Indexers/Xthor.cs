@@ -98,28 +98,28 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(9, TorznabCatType.MoviesOther, "VOSTFR");
 
             // Series
-            AddCategoryMapping(104, TorznabCatType.TVOTHER, "BLURAY");
-            AddCategoryMapping(13, TorznabCatType.TVOTHER, "PACK VF");
+            AddCategoryMapping(104, TorznabCatType.TVOther, "BLURAY");
+            AddCategoryMapping(13, TorznabCatType.TVOther, "PACK VF");
             AddCategoryMapping(15, TorznabCatType.TVHD, "HD VF");
             AddCategoryMapping(14, TorznabCatType.TVSD, "SD VF");
-            AddCategoryMapping(98, TorznabCatType.TVOTHER, "PACK VOSTFR");
+            AddCategoryMapping(98, TorznabCatType.TVOther, "PACK VOSTFR");
             AddCategoryMapping(17, TorznabCatType.TVHD, "HD VF VOSTFR");
             AddCategoryMapping(16, TorznabCatType.TVSD, "SD VF VOSTFR");
             AddCategoryMapping(101, TorznabCatType.TVAnime, "PACK ANIME");
             AddCategoryMapping(32, TorznabCatType.TVAnime, "ANIME VF");
             AddCategoryMapping(110, TorznabCatType.TVAnime, "ANIME VOSTFR");
-            AddCategoryMapping(123, TorznabCatType.TVOTHER, "ANIMATION");
+            AddCategoryMapping(123, TorznabCatType.TVOther, "ANIMATION");
             AddCategoryMapping(109, TorznabCatType.TVDocumentary, "DOCS");
-            AddCategoryMapping(30, TorznabCatType.TVOTHER, "EMISSIONS");
-            AddCategoryMapping(34, TorznabCatType.TVOTHER, "SPORT");
+            AddCategoryMapping(30, TorznabCatType.TVOther, "EMISSIONS");
+            AddCategoryMapping(34, TorznabCatType.TVOther, "SPORT");
 
             // Music
             AddCategoryMapping(20, TorznabCatType.AudioVideo, "CONCERT");
 
             // Books
-            AddCategoryMapping(24, TorznabCatType.BooksEbook, "ENOOKS NOVEL");
-            AddCategoryMapping(96, TorznabCatType.BooksMagazines, "EBOOKS MAGAZINES");
-            AddCategoryMapping(116, TorznabCatType.BooksEbook, "EBOOKS NOVEL JUNIOR");
+            AddCategoryMapping(24, TorznabCatType.BooksEBook, "ENOOKS NOVEL");
+            AddCategoryMapping(96, TorznabCatType.BooksMags, "EBOOKS MAGAZINES");
+            AddCategoryMapping(116, TorznabCatType.BooksEBook, "EBOOKS NOVEL JUNIOR");
             AddCategoryMapping(99, TorznabCatType.BooksOther, "EBOOKS BD");
             AddCategoryMapping(102, TorznabCatType.BooksComics, "EBOOKS COMICS");
             AddCategoryMapping(103, TorznabCatType.BooksOther, "EBOOKS MANGA");
@@ -129,13 +129,13 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(27, TorznabCatType.ConsolePS3, "PS GAMES");
             AddCategoryMapping(111, TorznabCatType.PCMac, "MAC GAMES");
             AddCategoryMapping(112, TorznabCatType.PC, "LINUX GAMES");
-            AddCategoryMapping(26, TorznabCatType.ConsoleXbox360, "XBOX GAMES");
+            AddCategoryMapping(26, TorznabCatType.ConsoleXBox360, "XBOX GAMES");
             AddCategoryMapping(28, TorznabCatType.ConsoleWii, "WII GAMES");
             AddCategoryMapping(29, TorznabCatType.ConsoleNDS, "NDS GAMES");
             AddCategoryMapping(117, TorznabCatType.PC, "ROM");
             AddCategoryMapping(21, TorznabCatType.PC, "PC SOFTWARE");
             AddCategoryMapping(22, TorznabCatType.PCMac, "MAC SOFTWARE");
-            AddCategoryMapping(23, TorznabCatType.PCPhoneAndroid, "ANDROID");
+            AddCategoryMapping(23, TorznabCatType.PCMobileAndroid, "ANDROID");
 
             // XxX
             AddCategoryMapping(36, TorznabCatType.XXX, "XxX / Films");

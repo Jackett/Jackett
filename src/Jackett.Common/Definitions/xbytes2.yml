@@ -36,7 +36,7 @@ caps:
     - {id: 65, cat: Console, desc: "Juegos Retro"}
     - {id: 33, cat: Books, desc: "Libros"}
     - {id: 7, cat: PC/0day, desc: "Software"}
-    - {id: 40, cat: PC/Phone-Other, desc: "Telefonos y tablets"}
+    - {id: 40, cat: PC/Mobile-Other, desc: "Telefonos y tablets"}
     - {id: 12, cat: XXX, desc: "Adult"}
     - {id: 32, cat: Other, desc: "Otros"}
     # internal cats not provided in search category dropdown !?!

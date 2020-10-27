@@ -98,7 +98,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(3, TorznabCatType.PC0day, "Aplicativos");
             AddCategoryMapping(8, TorznabCatType.Other, "Apostilas/Tutoriais");
             AddCategoryMapping(19, TorznabCatType.AudioAudiobook, "Audiobook");
-            AddCategoryMapping(16, TorznabCatType.TVOTHER, "Desenho Animado");
+            AddCategoryMapping(16, TorznabCatType.TVOther, "Desenho Animado");
             AddCategoryMapping(18, TorznabCatType.TVDocumentary, "Documentários");
             AddCategoryMapping(10, TorznabCatType.Books, "E-Books");
             AddCategoryMapping(20, TorznabCatType.TVSport, "Esportes");
@@ -106,7 +106,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(12, TorznabCatType.MoviesOther, "Histórias em Quadrinhos");
             AddCategoryMapping(5, TorznabCatType.Audio, "Músicas");
             AddCategoryMapping(7, TorznabCatType.Other, "Outros");
-            AddCategoryMapping(9, TorznabCatType.BooksMagazines, "Revistas");
+            AddCategoryMapping(9, TorznabCatType.BooksMags, "Revistas");
             AddCategoryMapping(2, TorznabCatType.TV, "Seriados");
             AddCategoryMapping(17, TorznabCatType.TV, "Shows");
             AddCategoryMapping(13, TorznabCatType.TV, "Stand Up Comedy");
@@ -115,7 +115,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(4, TorznabCatType.PCGames, "Jogos");
             AddCategoryMapping(199, TorznabCatType.XXX, "Filmes Adultos");
             AddCategoryMapping(200, TorznabCatType.XXX, "Jogos Adultos");
-            AddCategoryMapping(201, TorznabCatType.XXXImageset, "Fotos Adultas");
+            AddCategoryMapping(201, TorznabCatType.XXXImageSet, "Fotos Adultas");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

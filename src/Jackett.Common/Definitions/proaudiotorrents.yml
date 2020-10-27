@@ -13,7 +13,7 @@ legacylinks:
 caps:
   categorymappings:
     - {id: 24, cat: PC/0day, desc: "DJ Applications"}
-    - {id: 3, cat: Books/Ebook, desc: "Ebooks"}
+    - {id: 3, cat: Books/EBook, desc: "Ebooks"}
     - {id: 4, cat: PC, desc: "Expansions & Addons"}
     - {id: 5, cat: PC, desc: "HYBRID PC/MAC"}
     - {id: 26, cat: Other, desc: "Independent"}

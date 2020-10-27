@@ -676,16 +676,16 @@ caps:
     - {id: 1391, cat: Other, desc: "Растровые и Векторные Клипарты"}
     - {id: 1272, cat: Other, desc: "Photoshop (Уроки) и Видеокурсы"}
     - {id: 1392, cat: Other, desc: "Заготовки, виньетки, рамки"}
-    - {id: 1408, cat: PC/Phone-Other, desc: "Мобильные устройства"}
-    - {id: 1409, cat: PC/Phone-Android, desc: "Android"}
-    - {id: 1411, cat: PC/Phone-Android, desc: "18+ -Android"}
-    - {id: 1418, cat: PC/Phone-Android, desc: "TV|Видео|IPTV - Android"}
-    - {id: 1419, cat: PC/Phone-Android, desc: "Утилиты|Система - Android"}
-    - {id: 1420, cat: PC/Phone-Android, desc: "Видеоплееры|Аудиоплееры - Android"}
-    - {id: 1421, cat: PC/Phone-Android, desc: "VPN|Интернет - Android"}
-    - {id: 1422, cat: PC/Phone-Android, desc: "Соцсети|Мессенджеры - Android"}
-    - {id: 1423, cat: PC/Phone-Android, desc: "Авто|Карты - Android"}
-    - {id: 1424, cat: PC/Phone-Android, desc: "Редакторы|Фоторедакторы - Android"}
+    - {id: 1408, cat: PC/Mobile-Other, desc: "Мобильные устройства"}
+    - {id: 1409, cat: PC/Mobile-Android, desc: "Android"}
+    - {id: 1411, cat: PC/Mobile-Android, desc: "18+ -Android"}
+    - {id: 1418, cat: PC/Mobile-Android, desc: "TV|Видео|IPTV - Android"}
+    - {id: 1419, cat: PC/Mobile-Android, desc: "Утилиты|Система - Android"}
+    - {id: 1420, cat: PC/Mobile-Android, desc: "Видеоплееры|Аудиоплееры - Android"}
+    - {id: 1421, cat: PC/Mobile-Android, desc: "VPN|Интернет - Android"}
+    - {id: 1422, cat: PC/Mobile-Android, desc: "Соцсети|Мессенджеры - Android"}
+    - {id: 1423, cat: PC/Mobile-Android, desc: "Авто|Карты - Android"}
+    - {id: 1424, cat: PC/Mobile-Android, desc: "Редакторы|Фоторедакторы - Android"}
     - {id: 243, cat: Audio, desc: "Музыка"}
     - {id: 26, cat: Audio, desc: "Правила и предложения по улучшению раздела 'Музыка'"}
     - {id: 96, cat: Audio, desc: "HD Видео"}

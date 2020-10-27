@@ -28,14 +28,14 @@ caps:
     - {id: 65, cat: TV/HD, desc: "Serien 720p"}
     - {id: 66, cat: TV/HD, desc: "Serien 1080p"}
     - {id: 68, cat: TV/UHD, desc: "Serien 2160p"}
-    - {id: 69, cat: TV/FOREIGN, desc: "Serien Ger-Subbed"}
-    - {id: 70, cat: TV/FOREIGN, desc: "Serien International"}
+    - {id: 69, cat: TV/Foreign, desc: "Serien Ger-Subbed"}
+    - {id: 70, cat: TV/Foreign, desc: "Serien International"}
     - {id: 76, cat: TV/SD, desc: "Serienpacks SD x264/x265"}
     - {id: 77, cat: TV/HD, desc: "Serienpacks 720p"}
     - {id: 78, cat: TV/HD, desc: "Serienpacks 1080p"}
     - {id: 81, cat: TV/UHD, desc: "Serienpacks 2160p"}
-    - {id: 79, cat: TV/FOREIGN, desc: "Serienpacks Ger-Subbed"}
-    - {id: 80, cat: TV/FOREIGN, desc: "Serienpacks International"}
+    - {id: 79, cat: TV/Foreign, desc: "Serienpacks Ger-Subbed"}
+    - {id: 80, cat: TV/Foreign, desc: "Serienpacks International"}
     - {id: 115, cat: Movies/SD, desc: "Kids-Filme SD x264/x265"}
     - {id: 116, cat: Movies/HD, desc: "Kids-Filme 720p"}
     - {id: 117, cat: Movies/HD, desc: "Kids-Filme 1080p"}
@@ -45,7 +45,7 @@ caps:
     - {id: 112, cat: TV/SD, desc: "Kids-Serien Packs SD"}
     - {id: 113, cat: TV/HD, desc: "Kids-Serien Packs 720p"}
     - {id: 114, cat: TV/HD, desc: "Kids-Serien Packs 1080p"}
-    - {id: 127, cat: TV/FOREIGN, desc: "Kids-Serien International"}
+    - {id: 127, cat: TV/Foreign, desc: "Kids-Serien International"}
     - {id: 98, cat: TV/SD, desc: "Tatort SD x264/x265"}
     - {id: 99, cat: TV/HD, desc: "Tatort 720p"}
     - {id: 105, cat: TV/SD, desc: "Daily Soaps SD x264/x265"}
@@ -75,20 +75,20 @@ caps:
     - {id: 75, cat: Audio/Video, desc: "Audio Musikvideo"}
     - {id: 123, cat: PC, desc: "Software Windows"}
     - {id: 124, cat: PC, desc: "Software Linux"}
-    - {id: 125, cat: PC/Phone-Android, desc: "Software Android"}
+    - {id: 125, cat: PC/Mobile-Android, desc: "Software Android"}
     - {id: 126, cat: PC/Mac, desc: "Software MacOS"}
     - {id: 132, cat: PC/Games, desc: "Spiele Windows"}
     - {id: 133, cat: PC/Mac, desc: "Spiele MacOS"}
     - {id: 134, cat: Console, desc: "Spiele Nintendo"}
-    - {id: 90, cat: Books/Magazines, desc: "Diverses Zeitschriften"}
-    - {id: 89, cat: Books/Ebook, desc: "Diverses E-Books"}
+    - {id: 90, cat: Books/Mags, desc: "Diverses Zeitschriften"}
+    - {id: 89, cat: Books/EBook, desc: "Diverses E-Books"}
     - {id: 91, cat: XXX/x264, desc: "XXX SD x264/x265"}
     - {id: 92, cat: XXX/x264, desc: "XXX 720p"}
     - {id: 93, cat: XXX/x264, desc: "XXX 1080p"}
-    - {id: 95, cat: XXX/Packs, desc: "XXX Packs SD"}
-    - {id: 96, cat: XXX/Packs, desc: "XXX Packs HD"}
-    - {id: 94, cat: XXX/Imageset, desc: "XXX Magazine"}
-    - {id: 97, cat: XXX/Imageset, desc: "XXX Pics"}
+    - {id: 95, cat: XXX/Pack, desc: "XXX Packs SD"}
+    - {id: 96, cat: XXX/Pack, desc: "XXX Packs HD"}
+    - {id: 94, cat: XXX/ImageSet, desc: "XXX Magazine"}
+    - {id: 97, cat: XXX/ImageSet, desc: "XXX Pics"}
 
   modes:
     search: [q]

@@ -15,7 +15,7 @@ caps:
     - {id: 44, cat: Other, desc: "Bots no Cat yet"}
     - {id: 46, cat: TV/Documentary, desc: "documentary-TV and Movies"}
     - {id: 35, cat: Audio/Audiobook, desc: "E-books (audio)"}
-    - {id: 13, cat: Books/Ebook, desc: "E-Books (text)"}
+    - {id: 13, cat: Books/EBook, desc: "E-Books (text)"}
     - {id: 48, cat: Movies, desc: "Filled Requests"}
     - {id: 6, cat: Console, desc: "Games/console"}
     - {id: 7, cat: Console, desc: "Games/handheld"}

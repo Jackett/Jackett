@@ -40,7 +40,7 @@ caps:
     # App
     - {id: 12, cat: PC/0day, desc: "App PC"}
     - {id: 125, cat: PC/Mac, desc: "App MacOS"}
-    - {id: 11, cat: PC/Phone-Other, desc: "App Mobil"}
+    - {id: 11, cat: PC/Mobile-Other, desc: "App Mobil"}
     # Sport
     - {id: 61, cat: TV/Sport, desc: "Sport HD"}
     - {id: 62, cat: TV/Sport, desc: "Sport SD"}
@@ -52,12 +52,12 @@ caps:
     - {id: 132, cat: Other, desc: "Internal Sonstiges"}
     # Sonstiges
     - {id: 64, cat: TV/Anime, desc: "Anime"}
-    - {id: 96, cat: Books/Ebook, desc: "e-Book"}
+    - {id: 96, cat: Books/EBook, desc: "e-Book"}
     - {id: 63, cat: Audio/Audiobook, desc: "Hörbuch"}
     - {id: 71, cat: Other, desc: "Anderes"}
     # XXX
     - {id: 73, cat: XXX/x264, desc: "XXX HD"}
-    - {id: 75, cat: XXX/Packs, desc: "XXX Pack"}
+    - {id: 75, cat: XXX/Pack, desc: "XXX Pack"}
     - {id: 76, cat: XXX/XviD, desc: "XXX SD"}
     - {id: 124, cat: XXX/Other, desc: "XXX Clips"}
     - {id: 133, cat: XXX/Other, desc: "XXX A/E-book"}

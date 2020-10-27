@@ -36,17 +36,17 @@ legacylinks:
 caps:
   categorymappings:
     - {id: 28, cat: TV/Anime, desc: "Anime - All"}
-    - {id: 20, cat: PC/Phone-Other, desc: "Apps - Mobile"}
+    - {id: 20, cat: PC/Mobile-Other, desc: "Apps - Mobile"}
     - {id: 19, cat: PC/Mac, desc: "Apps - OS"}
     - {id: 21, cat: PC, desc: "Apps - Other"}
     - {id: 18, cat: PC/0day, desc: "Apps - Windows"}
     - {id: 13, cat: Audio/Audiobook, desc: "Books - Audiobooks"}
-    - {id: 12, cat: Books/Ebook, desc: "Books - Ebooks"}
+    - {id: 12, cat: Books/EBook, desc: "Books - Ebooks"}
     - {id: 14, cat: Books/Technical, desc: "Books - Education"}
-    - {id: 15, cat: Books/Magazines, desc: "Books - Magazine"}
+    - {id: 15, cat: Books/Mags, desc: "Books - Magazine"}
     - {id: 9, cat: TV/Documentary, desc: "Documentaries - All"}
     - {id: 11, cat: Console, desc: "Games - Console"}
-    - {id: 43, cat: PC/Phone-Other, desc: "Games - Mobile"}
+    - {id: 43, cat: PC/Mobile-Other, desc: "Games - Mobile"}
     - {id: 17, cat: Console/Other, desc: "Games - Other"}
     - {id: 10, cat: PC/Games, desc: "Games - Windows"}
     - {id: 3, cat: Movies/UHD, desc: "Movies - 2K/4K UHD"}
@@ -65,7 +65,7 @@ caps:
     - {id: 33, cat: Other, desc: "Other - Training"}
     - {id: 41, cat: TV/HD, desc: "TV - Episodes HD"}
     - {id: 5, cat: TV/SD, desc: "TV - Episodes SD"}
-    - {id: 6, cat: TV/OTHER, desc: "TV - Packs"}
+    - {id: 6, cat: TV/Other, desc: "TV - Packs"}
     - {id: 7, cat: TV/Sport, desc: "TV - Sports"}
     - {id: 35, cat: XXX, desc: "XXX - HD"}
     - {id: 47, cat: XXX, desc: "XXX - Misc"}

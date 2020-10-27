@@ -15,8 +15,8 @@ caps:
     - {id: 16, cat: Audio, desc: "Music Audio"}
     - {id: 13, cat: Audio, desc: "Podcasts"}
     - {id: 15, cat: Audio, desc: "Wrestling Themes"}
-    - {id: 29, cat: Books/Ebook, desc: "Ebooks"}
-    - {id: 28, cat: Books/Magazines, desc: "Magazines"}
+    - {id: 29, cat: Books/EBook, desc: "Ebooks"}
+    - {id: 28, cat: Books/Mags, desc: "Magazines"}
     - {id: 30, cat: Books/Other, desc: "Misc"}
     - {id: 18, cat: Books/Other, desc: "Wrestling Newsletters"}
     - {id: 34, cat: TV/Sport, desc: "Impact Wrestling PPV / One Nig"}
@@ -27,7 +27,7 @@ caps:
     - {id: 20, cat: TV/Sport, desc: "Packs"}
     - {id: 19, cat: PC, desc: "Computer Programs"}
     - {id: 35, cat: PC/Games, desc: "Games"}
-    - {id: 36, cat: PC/Phone-Other, desc: "Mobile Apps"}
+    - {id: 36, cat: PC/Mobile-Other, desc: "Mobile Apps"}
     - {id: 37, cat: TV/Sport, desc: "Boxing"}
     - {id: 38, cat: TV/Sport, desc: "Classics"}
     - {id: 12, cat: TV/Documentary, desc: "Documentary"}

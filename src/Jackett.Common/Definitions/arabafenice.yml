@@ -55,14 +55,14 @@ caps:
 
     # GAMES
     - {id: 25, cat: Console/PS4, desc: "Sony Games"}
-    - {id: 26, cat: Console/Xbox, desc: "XboX Games"}
+    - {id: 26, cat: Console/XBox, desc: "XboX Games"}
     - {id: 27, cat: Console/Other, desc: "Nintendo Games"}
     - {id: 28, cat: PC/Games, desc: "PC Games"}
 
     # SOFTWARE
     - {id: 30, cat: PC/ISO, desc: "Windows APP"}
-    - {id: 31, cat: PC/Phone-IOS, desc: "Apple APP"}
-    - {id: 32, cat: PC/Phone-Android, desc: "Android APP"}
+    - {id: 31, cat: PC/Mobile-iOS, desc: "Apple APP"}
+    - {id: 32, cat: PC/Mobile-Android, desc: "Android APP"}
 
   modes:
     search: [q]

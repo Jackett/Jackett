@@ -71,8 +71,8 @@ caps:
     - {id: 83, cat: PC/Games, desc: "Games/XBOX"}
     - {id: 86, cat: PC/Games, desc: "Games/Playstation"}
     # books
-    - {id: 92, cat: Books/Magazines, desc: "Books/Magazine"}
-    - {id: 93, cat: Books/Ebook, desc: "Books/Novels"}
+    - {id: 92, cat: Books/Mags, desc: "Books/Magazine"}
+    - {id: 93, cat: Books/EBook, desc: "Books/Novels"}
     - {id: 95, cat: Books, desc: "Books/Newspapers"}
     - {id: 133, cat: Audio/Audiobook, desc: "Books/Audiobooks"}
     # Sport

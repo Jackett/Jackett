@@ -36,7 +36,7 @@ caps:
     - {id: 22, cat: Books, desc: "Könyv/Hun"}
     - {id: 35, cat: TV/Anime, desc: "Mese/Eng"}
     - {id: 36, cat: TV/Anime, desc: "Mese/Hun"}
-    - {id: 25, cat: PC/Phone-Other, desc: "Mobil"}
+    - {id: 25, cat: PC/Mobile-Other, desc: "Mobil"}
     - {id: 30, cat: PC/ISO, desc: "Programok/ISO"}
     - {id: 31, cat: PC/0day, desc: "Programok/RIP"}
     - {id: 33, cat: TV, desc: "Sorozat/Eng"}

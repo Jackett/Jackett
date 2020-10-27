@@ -82,7 +82,7 @@ namespace Jackett.Common.Indexers
             // TNTVillage cats
             AddCategoryMapping(1, TorznabCatType.TV, "TV Movies");
             AddCategoryMapping(2, TorznabCatType.Audio, "Music");
-            AddCategoryMapping(3, TorznabCatType.BooksEbook, "eBooks");
+            AddCategoryMapping(3, TorznabCatType.BooksEBook, "eBooks");
             AddCategoryMapping(4, TorznabCatType.Movies, "Movies");
             AddCategoryMapping(6, TorznabCatType.PC, "Linux");
             AddCategoryMapping(7, TorznabCatType.TVAnime, "Anime");
@@ -107,8 +107,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(32, TorznabCatType.Console, "Nintendo Games");
             AddCategoryMapping(34, TorznabCatType.AudioAudiobook, "Audiobook");
             AddCategoryMapping(35, TorznabCatType.Audio, "Podcasts");
-            AddCategoryMapping(36, TorznabCatType.BooksMagazines, "Newspapers");
-            AddCategoryMapping(37, TorznabCatType.PCPhoneOther, "Phone Apps");
+            AddCategoryMapping(36, TorznabCatType.BooksMags, "Newspapers");
+            AddCategoryMapping(37, TorznabCatType.PCMobileOther, "Phone Apps");
         }
 
         private string ApiLatest => $"{SiteLink}api/latests";

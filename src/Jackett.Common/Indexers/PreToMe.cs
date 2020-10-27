@@ -67,24 +67,24 @@ namespace Jackett.Common.Indexers
             AddCategoryMappingAndParent("cat[]=22&tags=Linux", TorznabCatType.PC, TorznabCatType.PC);
 
             // Ebooks
-            AddCategoryMappingAndParent("cat[]=27", TorznabCatType.BooksEbook);
+            AddCategoryMappingAndParent("cat[]=27", TorznabCatType.BooksEBook);
 
             // Games
             AddCategoryMappingAndParent("cat[]=4", TorznabCatType.Console);
             AddCategoryMappingAndParent("cat[]=4&tags=PC", TorznabCatType.PCGames, TorznabCatType.Console);
             AddCategoryMappingAndParent("cat[]=4&tags=RIP", TorznabCatType.PCGames, TorznabCatType.Console);
             AddCategoryMappingAndParent("cat[]=4&tags=ISO", TorznabCatType.PCGames, TorznabCatType.Console);
-            AddCategoryMappingAndParent("cat[]=4&tags=XBOX360", TorznabCatType.ConsoleXbox360, TorznabCatType.Console);
+            AddCategoryMappingAndParent("cat[]=4&tags=XBOX360", TorznabCatType.ConsoleXBox360, TorznabCatType.Console);
             AddCategoryMappingAndParent("cat[]=4&tags=PS3", TorznabCatType.ConsolePS3, TorznabCatType.Console);
             AddCategoryMappingAndParent("cat[]=4&tags=Wii", TorznabCatType.ConsoleWii, TorznabCatType.Console);
             AddCategoryMappingAndParent("cat[]=4&tags=PSP", TorznabCatType.ConsolePSP, TorznabCatType.Console);
             AddCategoryMappingAndParent("cat[]=4&tags=NSD", TorznabCatType.ConsoleNDS, TorznabCatType.Console);
-            AddCategoryMappingAndParent("cat[]=4&tags=XBox", TorznabCatType.ConsoleXbox, TorznabCatType.Console);
+            AddCategoryMappingAndParent("cat[]=4&tags=XBox", TorznabCatType.ConsoleXBox, TorznabCatType.Console);
             AddCategoryMappingAndParent("cat[]=4&tags=PS2", TorznabCatType.ConsoleOther, TorznabCatType.Console);
 
             // Miscellaneous
             AddCategoryMappingAndParent("cat[]=31", TorznabCatType.Other);
-            AddCategoryMappingAndParent("cat[]=31&tags=Ebook", TorznabCatType.BooksEbook, TorznabCatType.Other);
+            AddCategoryMappingAndParent("cat[]=31&tags=Ebook", TorznabCatType.BooksEBook, TorznabCatType.Other);
             AddCategoryMappingAndParent("cat[]=31&tags=RARFiX", TorznabCatType.Other, TorznabCatType.Other);
 
             // Movies

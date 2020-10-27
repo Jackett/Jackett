@@ -26,16 +26,16 @@ caps:
     "audio mp3": Audio/MP3
     "audio lossless": Audio/Lossless
     video: Movies
-    ebooks: Books/Ebook
+    ebooks: Books/EBook
     "Ebooks Comics": Books/Comics
     "Ebooks Magazines": Other
     "Ebooks Audiobook": Audio/Audiobook
-    "Ebooks Tutorials": Books/Ebook
+    "Ebooks Tutorials": Books/EBook
     "Games PC": PC/Games
     "Games Nintendo": Console
     "Games PlayStation": Console
     "Games XBox": Console/XBox
-    Mobile: PC/Phone-Other
+    Mobile: PC/Mobile-Other
     Applications: PC
     Images: Other
     Other: Other

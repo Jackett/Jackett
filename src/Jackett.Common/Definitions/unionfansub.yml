@@ -28,7 +28,7 @@ caps:
     - {id: 7, cat: TV/Anime, desc: "Manga"}
     - {id: 8, cat: TV/Anime, desc: "Manga/Hentai"}
     - {id: 17, cat: Books, desc: "Novelas"}
-    - {id: 12, cat: TV/OTHER, desc: "Otros"}
+    - {id: 12, cat: TV/Other, desc: "Otros"}
     - {id: 11, cat: TV, desc: "Programas"}
 
   modes:

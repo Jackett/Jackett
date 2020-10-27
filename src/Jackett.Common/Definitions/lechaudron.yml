@@ -61,25 +61,25 @@ caps:
     - {id: 56, cat: Movies/HD, desc: "Films - MHD 720p"}
     - {id: 57, cat: Movies, desc: "Films - REMUX"}
     - {id: 58, cat: Movies, desc: "Films - TVRIP"}
-    - {id: 59, cat: Movies/WEBDL, desc: "Films - WEB-DL"}
-    - {id: 60, cat: Movies/WEBDL, desc: "Films - WEB-DL 1080p"}
-    - {id: 61, cat: Movies/WEBDL, desc: "Films - WEB-DL 720p"}
-    - {id: 62, cat: Movies/WEBDL, desc: "Films - WEBRIP"}
+    - {id: 59, cat: Movies/WEB-DL, desc: "Films - WEB-DL"}
+    - {id: 60, cat: Movies/WEB-DL, desc: "Films - WEB-DL 1080p"}
+    - {id: 61, cat: Movies/WEB-DL, desc: "Films - WEB-DL 720p"}
+    - {id: 62, cat: Movies/WEB-DL, desc: "Films - WEBRIP"}
     - {id: 64, cat: Console/3DS, desc: "Jeux - 3DS-DS"}
-    - {id: 65, cat: PC/Phone-IOS, desc: "Jeux - IOS-OSX"}
+    - {id: 65, cat: PC/Mobile-iOS, desc: "Jeux - IOS-OSX"}
     - {id: 66, cat: PC/Games, desc: "Jeux - PC"}
     - {id: 67, cat: Console/PSP, desc: "Jeux - PS-PSP-X"}
     - {id: 68, cat: Console/Wii, desc: "Jeux - Wii - Wii-U"}
-    - {id: 69, cat: Console/Xbox, desc: "Jeux - XBOX"}
+    - {id: 69, cat: Console/XBox, desc: "Jeux - XBOX"}
     - {id: 35, cat: Audio/Audiobook, desc: "Livres - Audio-Book"}
     - {id: 36, cat: Books, desc: "Livres - BD"}
-    - {id: 37, cat: Books/Magazines, desc: "Livres - Magazine"}
+    - {id: 37, cat: Books/Mags, desc: "Livres - Magazine"}
     - {id: 38, cat: Books/Comics, desc: "Livres - MANGAS"}
     - {id: 39, cat: Books, desc: "Livres - Presse"}
-    - {id: 40, cat: Books/Ebook, desc: "Livres - Roman"}
-    - {id: 70, cat: PC/Phone-Android, desc: "Logiciels - ANDROID"}
+    - {id: 40, cat: Books/EBook, desc: "Livres - Roman"}
+    - {id: 70, cat: PC/Mobile-Android, desc: "Logiciels - ANDROID"}
     - {id: 71, cat: PC/Mac, desc: "Logiciels - APPLE"}
-    - {id: 72, cat: PC/Phone-IOS, desc: "Logiciels - IPHONE"}
+    - {id: 72, cat: PC/Mobile-iOS, desc: "Logiciels - IPHONE"}
     - {id: 73, cat: PC, desc: "Logiciels - LINUX"}
     - {id: 74, cat: PC/0day, desc: "Logiciels - WINDOWS"}
     - {id: 75, cat: TV, desc: "Pack - 3D"}

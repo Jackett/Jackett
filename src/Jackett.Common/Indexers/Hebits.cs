@@ -82,7 +82,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(28, TorznabCatType.AudioLossless, "מוזיקה - Flac (Music Flac)");
             AddCategoryMapping(35, TorznabCatType.AudioVideo, "הופעות (Music Concerts)");
             AddCategoryMapping(30, TorznabCatType.Audio, "פסי קול (Music OST)");
-            AddCategoryMapping(32, TorznabCatType.PCPhoneOther, "סלולאר (Mobile)");
+            AddCategoryMapping(32, TorznabCatType.PCMobileOther, "סלולאר (Mobile)");
             AddCategoryMapping(26, TorznabCatType.Books, "ספרים (Books)");
             AddCategoryMapping(22, TorznabCatType.PC, "תוכנות (Apps)");
             AddCategoryMapping(29, TorznabCatType.Other, "שונות (Other)");

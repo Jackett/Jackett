@@ -41,7 +41,7 @@ caps:
     - {id: 26, cat: Audio/Video, desc: "Hudební videa"}
     - {id: 45, cat: Audio, desc: "Soundtrack"}
     - {id: 21, cat: PC, desc: "Programy"}
-    - {id: 27, cat: PC/Phone-Other, desc: "Mobil, PDA"}
+    - {id: 27, cat: PC/Mobile-Other, desc: "Mobil, PDA"}
     - {id: 58, cat: Other, desc: "Neschválené"}
 
   modes:

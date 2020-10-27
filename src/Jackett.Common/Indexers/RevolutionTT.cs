@@ -63,12 +63,12 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("22", TorznabCatType.PC0day);
             AddCategoryMapping("1", TorznabCatType.PCISO);
             AddCategoryMapping("36", TorznabCatType.Books);
-            AddCategoryMapping("36", TorznabCatType.BooksEbook);
+            AddCategoryMapping("36", TorznabCatType.BooksEBook);
             AddCategoryMapping("4", TorznabCatType.PCGames);
             AddCategoryMapping("21", TorznabCatType.PCGames);
             AddCategoryMapping("16", TorznabCatType.ConsolePS3);
             AddCategoryMapping("40", TorznabCatType.ConsoleWii);
-            AddCategoryMapping("39", TorznabCatType.ConsoleXbox360);
+            AddCategoryMapping("39", TorznabCatType.ConsoleXBox360);
             AddCategoryMapping("35", TorznabCatType.ConsoleNDS);
             AddCategoryMapping("34", TorznabCatType.ConsolePSP);
             AddCategoryMapping("2", TorznabCatType.PCMac);
@@ -82,9 +82,9 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("8", TorznabCatType.AudioLossless);
             AddCategoryMapping("46", TorznabCatType.AudioOther);
             AddCategoryMapping("29", TorznabCatType.AudioVideo);
-            AddCategoryMapping("43", TorznabCatType.TVOTHER);
+            AddCategoryMapping("43", TorznabCatType.TVOther);
             AddCategoryMapping("42", TorznabCatType.TVHD);
-            AddCategoryMapping("45", TorznabCatType.TVOTHER);
+            AddCategoryMapping("45", TorznabCatType.TVOther);
             AddCategoryMapping("41", TorznabCatType.TVSD);
             AddCategoryMapping("7", TorznabCatType.TVSD);
             AddCategoryMapping("9", TorznabCatType.XXX);

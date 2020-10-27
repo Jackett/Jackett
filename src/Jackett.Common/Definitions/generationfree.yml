@@ -19,17 +19,17 @@ caps:
     - {id: 10, cat: TV/HD, desc: "Animation: HD720P"}
     - {id: 11, cat: TV/HD, desc: "Animation: HD1080P"}
     - {id: 140, cat: PC, desc: "Applications: Noel"}
-    - {id: 19, cat: PC/Phone-Android, desc: "Applications: Android"}
-    - {id: 38, cat: PC/Phone-Other, desc: "Applications: Mobile Phone"}
+    - {id: 19, cat: PC/Mobile-Android, desc: "Applications: Android"}
+    - {id: 38, cat: PC/Mobile-Other, desc: "Applications: Mobile Phone"}
     - {id: 40, cat: PC, desc: "Applications: Linux"}
     - {id: 17, cat: PC/Mac, desc: "Applications: Mac"}
     - {id: 16, cat: PC/Games, desc: "Applications: Jeux"}
     - {id: 18, cat: PC/0day, desc: "Applications: PC"}
     - {id: 117, cat: PC, desc: "Applications: Appli-autre"}
-    - {id: 67, cat: TV/OTHER, desc: "Autres: Emission TV"}
-    - {id: 141, cat: TV/OTHER, desc: "Autres: Noel"}
+    - {id: 67, cat: TV/Other, desc: "Autres: Emission TV"}
+    - {id: 141, cat: TV/Other, desc: "Autres: Noel"}
     - {id: 142, cat: TV/Sport, desc: "Autres: Emission sport"}
-    - {id: 90, cat: Books/Ebook, desc: "BD: Livres"}
+    - {id: 90, cat: Books/EBook, desc: "BD: Livres"}
     - {id: 132, cat: TV/Documentary, desc: "Documentaires: BluRay"}
     - {id: 133, cat: TV/Documentary, desc: "Documentaires: 4k"}
     - {id: 134, cat: TV/Documentary, desc: "Documentaires: Vostfr"}
@@ -38,13 +38,13 @@ caps:
     - {id: 76, cat: TV/Documentary, desc: "Documentaires: TVRip/HDTV"}
     - {id: 15, cat: TV/Documentary, desc: "Documentaires: HD"}
     - {id: 139, cat: TV/Documentary, desc: "Documentaires: Noel"}
-    - {id: 138, cat: Books/Ebook, desc: "E-Books: Noel"}
+    - {id: 138, cat: Books/EBook, desc: "E-Books: Noel"}
     - {id: 62, cat: Audio/Audiobook, desc: "E-Books: E-Books Audio"}
-    - {id: 52, cat: Books/Ebook, desc: "E-Books: Revue - Journaux"}
-    - {id: 53, cat: Books/Ebook, desc: "E-Books: Livre Anglais"}
-    - {id: 49, cat: Books/Ebook, desc: "E-Books: Manuel Anglais"}
-    - {id: 36, cat: Books/Ebook, desc: "E-Books: Livres Français"}
-    - {id: 50, cat: Books/Ebook, desc: "E-Books: Manuel Français"}
+    - {id: 52, cat: Books/EBook, desc: "E-Books: Revue - Journaux"}
+    - {id: 53, cat: Books/EBook, desc: "E-Books: Livre Anglais"}
+    - {id: 49, cat: Books/EBook, desc: "E-Books: Manuel Anglais"}
+    - {id: 36, cat: Books/EBook, desc: "E-Books: Livres Français"}
+    - {id: 50, cat: Books/EBook, desc: "E-Books: Manuel Français"}
     - {id: 89, cat: Movies/BluRay, desc: "Films: BD/BR Rip"}
     - {id: 88, cat: Movies/BluRay, desc: "Films: Full BD/BR"}
     - {id: 104, cat: Movies/BluRay, desc: "Films: Film-BDRip"}
@@ -59,18 +59,18 @@ caps:
     - {id: 95, cat: Movies/BluRay, desc: "Films: bluray"}
     - {id: 129, cat: Movies/BluRay, desc: "Films: Remux Bluray"}
     - {id: 69, cat: Movies/3D, desc: "Films: Film 3D"}
-    - {id: 110, cat: Movies/WEBDL, desc: "Films: WEBRip"}
+    - {id: 110, cat: Movies/WEB-DL, desc: "Films: WEBRip"}
     - {id: 65, cat: Movies, desc: "Films: VO"}
     - {id: 54, cat: Movies/HD, desc: "Films: MHD 1080P"}
-    - {id: 71, cat: Movies/WEBDL, desc: "Films: WEB-DL"}
+    - {id: 71, cat: Movies/WEB-DL, desc: "Films: WEB-DL"}
     - {id: 145, cat: Movies/SD, desc: "Films: VHS"}
-    - {id: 102, cat: Movies/WEBDL, desc: "Films: WEB-DL 720P"}
+    - {id: 102, cat: Movies/WEB-DL, desc: "Films: WEB-DL 720P"}
     - {id: 103, cat: Movies/HD, desc: "Films: Film-HDRIP"}
     - {id: 130, cat: Movies/HD, desc: "Films: HD720P"}
-    - {id: 111, cat: Movies/WEBDL, desc: "Films: WEBRip-720P"}
+    - {id: 111, cat: Movies/WEB-DL, desc: "Films: WEBRip-720P"}
     - {id: 1, cat: Movies/UHD, desc: "Films: Remux Bluray 4K"}
-    - {id: 112, cat: Movies/WEBDL, desc: "Films: WEBrip-1080P"}
-    - {id: 101, cat: Movies/WEBDL, desc: "Films: WEB-DL 1080P"}
+    - {id: 112, cat: Movies/WEB-DL, desc: "Films: WEBrip-1080P"}
+    - {id: 101, cat: Movies/WEB-DL, desc: "Films: WEB-DL 1080P"}
     - {id: 87, cat: XXX, desc: "Films: XXX"}
     - {id: 2, cat: Movies/HD, desc: "Films: HD1080P"}
     - {id: 4, cat: Movies/DVD, desc: "Films: DVD5"}
@@ -82,8 +82,8 @@ caps:
     - {id: 92, cat: Movies/UHD, desc: "Films: 4K"}
     - {id: 135, cat: Movies, desc: "Films: Noel"}
     - {id: 59, cat: TV, desc: "Films: Spectacle"}
-    - {id: 78, cat: PC/Phone-Other, desc: "GPS: Radars"}
-    - {id: 77, cat: PC/Phone-Other, desc: "GPS: Cartes"}
+    - {id: 78, cat: PC/Mobile-Other, desc: "GPS: Radars"}
+    - {id: 77, cat: PC/Mobile-Other, desc: "GPS: Cartes"}
     - {id: 125, cat: TV/Anime, desc: "Mangas: DVDRip"}
     - {id: 124, cat: TV/Anime, desc: "Mangas: HD720P"}
     - {id: 137, cat: Audio, desc: "Musique: Noel"}

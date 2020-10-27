@@ -13,7 +13,7 @@ caps:
     - {id: 1, cat: Movies, desc: "Movies"}
     - {id: 2, cat: TV, desc: "TV"}
     - {id: 3, cat: Audio, desc: "Music"}
-    - {id: 4, cat: Books/Ebook, desc: "Ebook"}
+    - {id: 4, cat: Books/EBook, desc: "Ebook"}
     - {id: 5, cat: TV, desc: "TV Pack"}
     - {id: 6, cat: PC, desc: "Software"}
     - {id: 7, cat: Movies, desc: "Movie Pack"}

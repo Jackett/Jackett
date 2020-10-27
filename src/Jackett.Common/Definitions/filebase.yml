@@ -41,7 +41,7 @@ caps:
     - {id: eng-music, cat: Audio, desc: "Eng Музыка (eng-music)"}
     - {id: rus-music, cat: Audio, desc: "Rus Музыка (rus-music)"}
     - {id: books, cat: Books, desc: "Книги (books)"}
-    - {id: phone, cat: PC/Phone-Other, desc: "Телефон (phone)"}
+    - {id: phone, cat: PC/Mobile-Other, desc: "Телефон (phone)"}
 
   modes:
     search: [q]

@@ -91,8 +91,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(39, TorznabCatType.ConsoleWii, "Games/Wii");
             AddCategoryMapping(45, TorznabCatType.ConsolePS3, "Games/PS3");
             AddCategoryMapping(35, TorznabCatType.Console, "Games/Nintendo");
-            AddCategoryMapping(33, TorznabCatType.ConsoleXbox360, "Games/XboX360");
-            AddCategoryMapping(46, TorznabCatType.PCPhoneOther, "Mobile");
+            AddCategoryMapping(33, TorznabCatType.ConsoleXBox360, "Games/XboX360");
+            AddCategoryMapping(46, TorznabCatType.PCMobileOther, "Mobile");
             AddCategoryMapping(24, TorznabCatType.PC0day, "Apps/0DAY");
             AddCategoryMapping(51, TorznabCatType.PCMac, "Mac");
             AddCategoryMapping(54, TorznabCatType.Books, "Educational");
