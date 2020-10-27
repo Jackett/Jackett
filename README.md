@@ -124,7 +124,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * sukebei.Nyaa.si
  * The Pirate Bay (TPB)
  * Tokyo Tosho
- * TopNow
  * Torlock
  * TOROS
  * Torrent Bomb (토렌트봄)

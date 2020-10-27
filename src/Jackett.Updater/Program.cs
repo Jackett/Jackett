@@ -390,6 +390,7 @@ namespace Jackett.Updater
                 "Definitions/thepiratebay.yml", // migrated to c#
                 "Definitions/tigers-dl.yml",
                 "Definitions/tntvillage.yml",
+                "Definitions/topnow.yml",
                 "Definitions/torrentcouch.yml",
                 "Definitions/torrenthane.yml",
                 "Definitions/torrentkim.yml",
