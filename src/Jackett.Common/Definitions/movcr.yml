@@ -31,7 +31,7 @@ caps:
 settings:
   - name: info_8000
     type: info
-    label: About MovCr Categores
+    label: About MovCr Categories
     default: MovCr does not return categories in its search results page. To add to Sonarr or Radarr replace all categories with 8000(Other).
 
 download:

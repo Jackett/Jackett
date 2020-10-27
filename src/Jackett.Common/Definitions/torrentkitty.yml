@@ -24,7 +24,7 @@ caps:
 settings:
   - name: info_8000
     type: info
-    label: About TorrentKitty Categores
+    label: About TorrentKitty Categories
     default: TorrentKitty does not return categories in its search results page. To add to Sonarr or Radarr replace all categories with 8000(Other).
 
 search:

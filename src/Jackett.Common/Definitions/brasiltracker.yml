@@ -26,7 +26,7 @@ settings:
     label: Password
   - name: info_8000
     type: info
-    label: About BrasilTracker Categores
+    label: About BrasilTracker Categories
     default: BrasilTracker does not return categories in its search results page. To add to Sonarr or Radarr replace all categories with 8000(Other).
   - name: freeleech
     type: checkbox
