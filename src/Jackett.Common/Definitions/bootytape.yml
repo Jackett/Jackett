@@ -3,7 +3,7 @@ id: bootytape
 name: BootyTape
 language: en-us
 description: "BootyTape is a Semi-Private site for 3X"
-type: private
+type: semi-private
 encoding: UTF-8
 links:
   - https://ssl.bootytape.com/
