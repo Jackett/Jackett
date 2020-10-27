@@ -63,16 +63,16 @@
 6050: XXX/Other
 6060: XXX/Imageset
 6070: XXX/Packs
-7000: Other
-7010: Other/Misc
-7020: Other/Hashed
-8000: Books
-8010: Books/Ebook
-8020: Books/Comics
-8030: Books/Magazines
-8040: Books/Technical
-8050: Books/Other
-8060: Books/Foreign
+7000: Books
+7010: Books/Ebook
+7020: Books/Comics
+7030: Books/Magazines
+7040: Books/Technical
+7050: Books/Other
+7060: Books/Foreign
+8000: Other
+8010: Other/Misc
+8020: Other/Hashed
 
 "; #>
 using System.Collections.Generic;

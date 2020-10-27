@@ -61,10 +61,10 @@ settings:
       oldest: "created asc"
       seeders: seeders
       size: size
-  - name: info
+  - name: info_8000
     type: info
-    label: A note about TP2
-    default: TP2 does not display categories in its search results page. To add to Sonarr or Radarr replace all categories with 7000.
+    label: About TorrentProject2 Categories
+    default: TorrentProject2 does not return categories in its search results page. To add to Sonarr or Radarr replace all categories with 8000(Other).
 
 download:
   selector: "#download > div:nth-child(2) > div:nth-child(1) > a"

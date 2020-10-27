@@ -21,9 +21,7 @@ legacylinks:
 
 caps:
   categories:
-    1: TV
-    2: Movies
-    3: Other
+    Other: Other
 
   modes:
     search: [q]
@@ -31,14 +29,10 @@ caps:
     movie-search: [q]
 
 settings:
-  - name: category-id
-    type: select
-    label: The Magnet4You web site does not provide categories. Select the category you want Jackett to set on all results returned.
-    default: 3
-    options:
-      1: TV
-      2: Movies
-      3: Other
+  - name: info_8000
+    type: info
+    label: About Magnet4You Categores
+    default: Magnet4You does not return categories in its search results page. To add to Sonarr or Radarr replace all categories with 8000(Other).
   - name: sort
     type: select
     label: Sort requested from site
@@ -58,7 +52,7 @@ search:
 
   fields:
     category:
-      text: "{{ .Config.category-id }}"
+      text: Other
     title:
       selector: a[href^="magnet/"]
     details:
