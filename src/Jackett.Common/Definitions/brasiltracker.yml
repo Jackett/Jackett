@@ -10,9 +10,7 @@ links:
 
 caps:
   categories:
-    1: TV
-    2: Movies
-    3: Other
+    Other: Other
 
   modes:
     search: [q]
@@ -26,14 +24,10 @@ settings:
   - name: password
     type: password
     label: Password
-  - name: category-id
-    type: select
-    label: The BrasilTracker web site does not provide categories. Select the category you want Jackett to set on all results returned.
-    default: 3
-    options:
-      1: TV
-      2: Movies
-      3: Other
+  - name: info_8000
+    type: info
+    label: About BrasilTracker Categores
+    default: BrasilTracker does not return categories in its search results page. To add to Sonarr or Radarr replace all categories with 8000(Other).
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -91,7 +85,7 @@ search:
 
   fields:
     category:
-      text: "{{ .Config.category-id }}"
+      text: Other
     details:
       selector: a[href^="torrents.php?id="]
       attribute: href

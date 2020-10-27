@@ -43,9 +43,7 @@ legacylinks:
 
 caps:
   categories:
-    1: TV
-    2: Movies
-    3: Other
+    Other: Other
 
   modes:
     search: [q]
@@ -68,14 +66,10 @@ settings:
     type: info
     label: How to get the User-Agent
     default: "<ol><li>From the same place you fetched the cookie,<li>Find <b>'user-agent:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole user-agent string <i>(everything after 'user-agent: ')</i> and <b>Paste</b> here.</ol>"
-  - name: category-id
-    type: select
-    label: The cpabien web site does not provide categories. Select the category you want Jackett to set on all results returned.
-    default: 3
-    options:
-      1: TV
-      2: Movies
-      3: Other
+  - name: info_8000
+    type: info
+    label: About cpasbien Categores
+    default: cpasbien does not return categories in its search results page. To add to Sonarr or Radarr replace all categories with 8000(Other).
   - name: multilang
     type: checkbox
     label: Replace MULTI by another language in release name
@@ -125,7 +119,7 @@ search:
 
   fields:
     category:
-      text: "{{ .Config.category-id }}"
+      text: Other
     site_date:
       selector: a
       filters:

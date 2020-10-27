@@ -14,9 +14,7 @@ links:
 
 caps:
   categories:
-    tv: TV
-    movies: Movies
-    other: Other
+    Other: Other
 
   modes:
     search: [q]
@@ -24,14 +22,10 @@ caps:
     movie-search: [q]
 
 settings:
-  - name: category-id
-    type: select
-    label: The TorrentKitty web site does not provide categories. Select the category you want Jackett to set on all results returned.
-    default: other
-    options:
-      tv: TV
-      movies: Movies
-      other: Other
+  - name: info_8000
+    type: info
+    label: About TorrentKitty Categores
+    default: TorrentKitty does not return categories in its search results page. To add to Sonarr or Radarr replace all categories with 8000(Other).
 
 search:
   paths:
@@ -42,7 +36,7 @@ search:
 
   fields:
     category:
-      text: "{{ .Config.category-id }}"
+      text: Other
     title:
       selector: td.name
     details:

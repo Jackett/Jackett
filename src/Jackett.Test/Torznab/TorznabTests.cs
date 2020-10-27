@@ -74,7 +74,7 @@ namespace Jackett.Test.Torznab
             // add subcategory of books (child category)
             AddCategoryMapping(33, TorznabCatType.BooksComics);
             Assert.AreEqual(3, TorznabCaps.Categories.Count);
-            Assert.AreEqual(8020, TorznabCaps.Categories[2].ID);
+            Assert.AreEqual(7020, TorznabCaps.Categories[2].ID);
 
             // add int category with description => custom category. it's converted into 2 different categories
             AddCategoryMapping(44, TorznabCatType.ConsoleXbox, "Console/Xbox_c");
@@ -226,7 +226,7 @@ namespace Jackett.Test.Torznab
             Assert.AreEqual("1040", dtoCaps[3].ID);
             Assert.AreEqual("2000", dtoCaps[4].ID);
             Assert.AreEqual("2030", dtoCaps[5].ID);
-            Assert.AreEqual("8020", dtoCaps[6].ID);
+            Assert.AreEqual("7020", dtoCaps[6].ID);
 
             // test Torznab caps (XML) => more in Common.Model.TorznabCapabilitiesTests
             var xDocument = TorznabCaps.GetXDocument();
@@ -238,7 +238,7 @@ namespace Jackett.Test.Torznab
             Assert.AreEqual("1040", xDoumentCategories?[3].Attribute("id")?.Value);
             Assert.AreEqual("2000", xDoumentCategories?[4].Attribute("id")?.Value); // Movies
             Assert.AreEqual("2030", xDoumentCategories?[5].Attribute("id")?.Value);
-            Assert.AreEqual("8020", xDoumentCategories?[6].Attribute("id")?.Value);
+            Assert.AreEqual("7020", xDoumentCategories?[6].Attribute("id")?.Value);
             Assert.AreEqual(9, xDoumentCategories?[4]?.Elements("subcat").ToList().Count); // Movies
         }
 
@@ -328,7 +328,7 @@ namespace Jackett.Test.Torznab
             Assert.AreEqual(7, indexer.TorznabCaps.Categories.Count);
             Assert.AreEqual(2000, indexer.TorznabCaps.Categories[0].ID);
             Assert.AreEqual(2030, indexer.TorznabCaps.Categories[1].ID);
-            Assert.AreEqual(8020, indexer.TorznabCaps.Categories[2].ID);
+            Assert.AreEqual(7020, indexer.TorznabCaps.Categories[2].ID);
             Assert.AreEqual(1040, indexer.TorznabCaps.Categories[3].ID);
             Assert.AreEqual(100044, indexer.TorznabCaps.Categories[4].ID);
             Assert.AreEqual(1030, indexer.TorznabCaps.Categories[5].ID);
