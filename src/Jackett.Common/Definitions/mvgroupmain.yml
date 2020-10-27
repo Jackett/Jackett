@@ -28,7 +28,7 @@ settings:
     label: Password
   - name: info_8000
     type: info
-    label: About MVGroup Categores
+    label: About MVGroup Categories
     default: MVGroup does not return categories in its search results page. To add to Sonarr or Radarr replace all categories with 8000(Other).
   - name: hidef
     type: checkbox

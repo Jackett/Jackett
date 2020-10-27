@@ -68,7 +68,7 @@ settings:
     default: "<ol><li>From the same place you fetched the cookie,<li>Find <b>'user-agent:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole user-agent string <i>(everything after 'user-agent: ')</i> and <b>Paste</b> here.</ol>"
   - name: info_8000
     type: info
-    label: About cpasbien Categores
+    label: About cpasbien Categories
     default: cpasbien does not return categories in its search results page. To add to Sonarr or Radarr replace all categories with 8000(Other).
   - name: multilang
     type: checkbox
