@@ -881,8 +881,7 @@ namespace Jackett.Common.Indexers
             landingResult = await RequestWithCookiesAsync(LoginUrl.AbsoluteUri, referer: SiteLink);
 
             // Some sites have a temporary redirect before the login page, we need to process it.
-            // This check only apply to sites requiring it, which is currently: Yggtorrent
-            if (Definition.Id == "yggtorrent" && landingResult.IsRedirect)
+            if (Definition.Followredirect)
             {
                 await FollowIfRedirect(landingResult, LoginUrl.AbsoluteUri, overrideCookies: landingResult.Cookies, accumulateCookies: true);
             }
