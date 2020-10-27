@@ -880,6 +880,12 @@ namespace Jackett.Common.Indexers
                 configData.CookieHeader.Value = string.Join("; ", Login.Cookies);
             landingResult = await RequestWithCookiesAsync(LoginUrl.AbsoluteUri, referer: SiteLink);
 
+            // Some sites have a temporary redirect before the login page, we need to process it.
+            if (Definition.Followredirect)
+            {
+                await FollowIfRedirect(landingResult, LoginUrl.AbsoluteUri, overrideCookies: landingResult.Cookies, accumulateCookies: true);
+            }
+
             var htmlParser = new HtmlParser();
             landingResultDocument = htmlParser.ParseDocument(landingResult.ContentString);
 
