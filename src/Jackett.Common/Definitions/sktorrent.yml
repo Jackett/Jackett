@@ -31,7 +31,7 @@ caps:
     - {id: 30, cat: PC/Games, desc: "Hry na Konzole"}
     - {id: 37, cat: PC/Games, desc: "Hry na Linux"}
     - {id: 59, cat: PC/Games, desc: "Hry na Mac"}
-    - {id: 16, cat: TV, desc: "TV Seriály"}
+    - {id: 16, cat: TV, desc: "TV Seriál"}
     - {id: 17, cat: TV/Documentary, desc: "TV Dokument"}
     - {id: 42, cat: TV, desc: "TV Pořad"}
     - {id: 44, cat: TV/Sport, desc: "TV Sport"}
@@ -63,9 +63,13 @@ login:
   test:
     path: torrent/index.php
 
+download:
+  selector: a[href^="download.php?id="]
+  attribute: href
+
 search:
   paths:
-    - path: torrent/torrents.php
+    - path: torrent/torrents_v2.php
   inputs:
     search: "{{ .Keywords }}"
     category: "{{ range .Categories }}{{.}};{{end}}"
@@ -76,66 +80,61 @@ search:
       args: replace
 
   rows:
-    selector: table.lista > tbody > tr > td > table.lista > tbody > tr:has(a[href^="details.php?id="])
+    selector: table.lista > tbody > tr > td:has(a[href^="details.php?name="])
 
   fields:
+    category:
+      selector: a[href^="torrents_v2.php?category="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: category
     title:
-      selector: td.lista a[href^="details.php?id="]
+      selector: a[href^="details.php?name="]
       attribute: title
       filters:
         - name: re_replace
           args: [".*? / ", ""]
         - name: diacritics
           args: replace
-        - name: replace
-          args: ["serie", ""]
-        - name: replace
-          args: ["Serie", ""]
+        - name: re_replace
+          args: ["(?i)serie", ""]
         - name: re_replace
           args: ["(\\d{2})\\.", "S$1"]
         - name: re_replace
           args: ["(\\d{1})\\.", "S0$1"]
-    category:
-      selector: td:nth-child(1) a[href^="torrents.php?category="]
-      attribute: href
-      filters:
-        - name: querystring
-          args: category
     details:
-      selector: td.lista a[href^="details.php?id="]
+      selector: a[href^="details.php?name="]
       attribute: href
     download:
-      selector: td.lista a[href^="download.php?id="]
+      selector: a[href^="details.php?name="]
       attribute: href
     size:
-      selector: td:nth-child(3)
+      selector: div > div
       filters:
         - name: split
           args: ["|", 0]
         - name: regexp
           args: "Velkost (.+?) ?$"
     date:
-      selector: td:nth-child(3)
+      selector: div > div
       filters:
-        - name: split
-          args: ["|", 1]
-        - name: replace
-          args: ["Pridany ", ""]
-        - name: replace
-          args: ["o ", ""]
+        - name: regexp
+          args: "Pridany (\\d{2}/\\d{2}/\\d{4})"
         - name: append
           args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02/01/2006 15:04 -07:00"
+          args: "02/01/2006 -07:00"
     seeders:
-      selector: td:nth-child(5) > a
-    leechers:
-      selector: td:nth-child(6) > a
-    grabs:
-      selector: td:nth-child(7)
+      selector: div > div
       filters:
-        - name: replace
-          args: ["---", "0"]
+        - name: regexp
+          args: "Odosielaju : (\\d+)"
+    leechers:
+      selector: div > div
+      filters:
+        - name: regexp
+          args: "Stahuju : (\\d+)"
     downloadvolumefactor:
       text: 1
     uploadvolumefactor:
