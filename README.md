@@ -340,7 +340,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Galeriens (LaPauseTorrents)
  * Gay-Torrents.net
  * Gay-Torrents.org [![(invite needed)][inviteneeded]](#)
- * GAYtorrent.ru [![(invite needed)][inviteneeded]](#)
+ * GAYtorrent.ru
  * GazelleGames (GGn) [![(invite needed)][inviteneeded]](#)
  * Generation-Free
  * GigaTorrents
