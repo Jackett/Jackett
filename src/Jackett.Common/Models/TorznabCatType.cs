@@ -65,9 +65,12 @@ namespace Jackett.Common.Models
         public static readonly TorznabCategory XXXWMV = new TorznabCategory(6020, "XXX/WMV");
         public static readonly TorznabCategory XXXXviD = new TorznabCategory(6030, "XXX/XviD");
         public static readonly TorznabCategory XXXx264 = new TorznabCategory(6040, "XXX/x264");
+        public static readonly TorznabCategory XXXUHD = new TorznabCategory(6045, "XXX/UHD");
         public static readonly TorznabCategory XXXPack = new TorznabCategory(6050, "XXX/Pack");
         public static readonly TorznabCategory XXXImageSet = new TorznabCategory(6060, "XXX/ImageSet");
         public static readonly TorznabCategory XXXOther = new TorznabCategory(6070, "XXX/Other");
+        public static readonly TorznabCategory XXXSD = new TorznabCategory(6080, "XXX/SD");
+        public static readonly TorznabCategory XXXWEBDL = new TorznabCategory(6090, "XXX/WEB-DL");
 
         public static readonly TorznabCategory Books = new TorznabCategory(7000, "Books");
         public static readonly TorznabCategory BooksMags = new TorznabCategory(7010, "Books/Mags");
