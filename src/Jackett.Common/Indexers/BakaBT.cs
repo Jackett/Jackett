@@ -71,10 +71,10 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(3, TorznabCatType.AudioOther, "Soundtrack");
             AddCategoryMapping(4, TorznabCatType.BooksComics, "Manga");
             AddCategoryMapping(5, TorznabCatType.TVAnime, "Anime Movie");
-            AddCategoryMapping(6, TorznabCatType.TVOTHER, "Live Action");
+            AddCategoryMapping(6, TorznabCatType.TVOther, "Live Action");
             AddCategoryMapping(7, TorznabCatType.BooksOther, "Artbook");
             AddCategoryMapping(8, TorznabCatType.AudioVideo, "Music Video");
-            AddCategoryMapping(9, TorznabCatType.BooksEbook, "Light Novel");
+            AddCategoryMapping(9, TorznabCatType.BooksEBook, "Light Novel");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

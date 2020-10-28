@@ -13,7 +13,7 @@ caps:
   categories:
   categorymappings:
     - {id: 42, cat: Movies/BluRay, desc: "Blu-ray"}
-    - {id: 36, cat: PC/Phone-Other, desc: "Mobile/GSM"}
+    - {id: 36, cat: PC/Mobile-Other, desc: "Mobile/GSM"}
     - {id: 50, cat: TV, desc: "TV"}
     - {id: 9, cat: XXX, desc: "XXX"}
     - {id: 48, cat: XXX, desc: "XXX/3D"}
@@ -25,7 +25,7 @@ caps:
     - {id: 4, cat: PC/Games, desc: "Games/PC ISO"}
     - {id: 21, cat: PC/Games, desc: "Games/PC Rip"}
     - {id: 17, cat: Console/PS3, desc: "Games/PS"}
-    - {id: 40, cat: Console/Xbox, desc: "Games/Xbox"}
+    - {id: 40, cat: Console/XBox, desc: "Games/Xbox"}
     - {id: 12, cat: Console/Other, desc: "Games/Console"}
     - {id: 23, cat: Audio/Video, desc: "Clips/Concerts"}
     - {id: 32, cat: Books/Comics, desc: "Books/Comics"}

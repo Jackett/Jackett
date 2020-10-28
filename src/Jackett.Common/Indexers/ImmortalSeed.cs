@@ -75,10 +75,10 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(54, TorznabCatType.TVDocumentary, "Documentary - HD");
             AddCategoryMapping(41, TorznabCatType.BooksComics, "Comics");
             AddCategoryMapping(25, TorznabCatType.PCGames, "Games");
-            AddCategoryMapping(29, TorznabCatType.ConsoleXbox, "Games Xbox");
+            AddCategoryMapping(29, TorznabCatType.ConsoleXBox, "Games Xbox");
             AddCategoryMapping(27, TorznabCatType.PCGames, "Games-PC Rips");
             AddCategoryMapping(28, TorznabCatType.ConsolePS4, "Games-PSx");
-            AddCategoryMapping(49, TorznabCatType.PCPhoneOther, "Mobile");
+            AddCategoryMapping(49, TorznabCatType.PCMobileOther, "Mobile");
             AddCategoryMapping(59, TorznabCatType.MoviesUHD, "Movies-4k");
             AddCategoryMapping(60, TorznabCatType.MoviesForeign, "Non-English 4k Movies");
             AddCategoryMapping(16, TorznabCatType.MoviesHD, "Movies HD");
@@ -102,11 +102,11 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(9, TorznabCatType.TVSD, "TV - Standard Definition - XviD");
             AddCategoryMapping(4, TorznabCatType.TVHD, "TV Season Packs - HD");
             AddCategoryMapping(6, TorznabCatType.TVSD, "TV Season Packs - SD");
-            AddCategoryMapping(22, TorznabCatType.BooksEbook, "Ebooks");
+            AddCategoryMapping(22, TorznabCatType.BooksEBook, "Ebooks");
             AddCategoryMapping(26, TorznabCatType.PCGames, "Games-PC ISO");
-            AddCategoryMapping(46, TorznabCatType.BooksMagazines, "Magazines");
-            AddCategoryMapping(50, TorznabCatType.PCPhoneIOS, "IOS");
-            AddCategoryMapping(51, TorznabCatType.PCPhoneAndroid, "Android");
+            AddCategoryMapping(46, TorznabCatType.BooksMags, "Magazines");
+            AddCategoryMapping(50, TorznabCatType.PCMobileiOS, "IOS");
+            AddCategoryMapping(51, TorznabCatType.PCMobileAndroid, "Android");
             AddCategoryMapping(52, TorznabCatType.PC0day, "Windows");
             AddCategoryMapping(53, TorznabCatType.TVDocumentary, "Documentary - SD");
         }

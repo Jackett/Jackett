@@ -22,7 +22,7 @@ caps:
     - {id: 36, cat: Books, desc: "IPExpert"}
     - {id: 37, cat: Books, desc: "Tuts+"}
     - {id: 38, cat: Books, desc: "Pluralsight"}
-    - {id: 39, cat: Books/Ebook, desc: "E-Books"}
+    - {id: 39, cat: Books/EBook, desc: "E-Books"}
     - {id: 40, cat: Books, desc: "CBT-Videos"}
     - {id: 41, cat: Books, desc: "Linux-CBT"}
     - {id: 42, cat: Books, desc: "VTC"}
@@ -30,7 +30,7 @@ caps:
     - {id: 44, cat: Books, desc: "TrainSignal"}
     - {id: 50, cat: Books, desc: "LiveLessons"}
     - {id: 47, cat: Books, desc: "Health"}
-    - {id: 48, cat: Books/Magazines, desc: "Magazines"}
+    - {id: 48, cat: Books/Mags, desc: "Magazines"}
     - {id: 49, cat: Books, desc: "CourseWare"}
     - {id: 51, cat: Books, desc: "Programming"}
     - {id: 52, cat: Books, desc: "Graphic & Design"}

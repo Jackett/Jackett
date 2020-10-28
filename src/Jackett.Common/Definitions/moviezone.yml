@@ -10,10 +10,10 @@ links:
 
 caps:
   categorymappings:
-    - {id: 76, cat: PC/Phone-Android, desc: "Android"}
+    - {id: 76, cat: PC/Mobile-Android, desc: "Android"}
     - {id: 68, cat: Movies/DVD, desc: "DVD-9"}
-    - {id: 60, cat: Books/Ebook, desc: "eBook/Eng"}
-    - {id: 61, cat: Books/Ebook, desc: "eBook/Hun"}
+    - {id: 60, cat: Books/EBook, desc: "eBook/Eng"}
+    - {id: 61, cat: Books/EBook, desc: "eBook/Hun"}
     - {id: 37, cat: Movies/DVD, desc: "Film/DVD-R/Eng"}
     - {id: 38, cat: Movies/DVD, desc: "Film/DVD-R/Hun"}
     - {id: 48, cat: Movies/HD, desc: "Film/HD/Eng"}
@@ -28,7 +28,7 @@ caps:
     - {id: 51, cat: PC/Games, desc: "Játék/ISO"}
     - {id: 53, cat: Console/PSP, desc: "Játék/PS"}
     - {id: 52, cat: PC/Games, desc: "Játék/Rip"}
-    - {id: 56, cat: Console/Xbox, desc: "Játék/Xbox (X-360)"}
+    - {id: 56, cat: Console/XBox, desc: "Játék/Xbox (X-360)"}
     - {id: 75, cat: Other, desc: "Képek"}
     - {id: 74, cat: XXX, desc: "Képek/XXX"}
     - {id: 86, cat: Audio/Video, desc: "Klip"}
@@ -37,8 +37,8 @@ caps:
     - {id: 49, cat: Audio/MP3, desc: "Mp3/Hun"}
     - {id: 45, cat: PC/ISO, desc: "Program/ISO"}
     - {id: 44, cat: PC, desc: "Program/Misc"}
-    - {id: 36, cat: PC/Phone-Other, desc: "Program/Mobil"}
-    - {id: 46, cat: PC/Phone-Other, desc: "Program/PDA"}
+    - {id: 36, cat: PC/Mobile-Other, desc: "Program/Mobil"}
+    - {id: 46, cat: PC/Mobile-Other, desc: "Program/PDA"}
     - {id: 42, cat: TV/Anime, desc: "Rajzfilm/Eng"}
     - {id: 43, cat: TV/Anime, desc: "Rajzfilm/Hun"}
     - {id: 57, cat: TV, desc: "Sorozat/Eng"}

@@ -25,10 +25,10 @@ caps:
     - {id: 11, cat: Audio, desc: "Koncerti/Spotovi"}
     - {id: 28, cat: Console/Wii, desc: "Igre/Wii"}
     - {id: 30, cat: Books/Comics, desc: "Stripovi"}
-    - {id: 38, cat: PC/Phone-Other, desc: "Smartphone"}
+    - {id: 38, cat: PC/Mobile-Other, desc: "Smartphone"}
     - {id: 40, cat: Movies/BluRay, desc: "Filmovi/BD"}
     - {id: 3, cat: Audio/MP3, desc: "Glazba/MP3"}
-    - {id: 26, cat: Console/Xbox, desc: "Igre/Xbox"}
+    - {id: 26, cat: Console/XBox, desc: "Igre/Xbox"}
     - {id: 10, cat: XXX, desc: "XXX/SD"}
     - {id: 16, cat: TV, desc: "THR Packs"}
     - {id: 15, cat: TV/Sport, desc: "Sport"}

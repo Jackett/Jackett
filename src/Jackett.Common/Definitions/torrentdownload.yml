@@ -36,14 +36,14 @@ caps:
     AnimeEnglishtranslated: TV/Anime
     AnimeAnimeOther: TV/Anime
     Applications: PC/0day
-    ApplicationsAndroid: PC/Phone-Android
+    ApplicationsAndroid: PC/Mobile-Android
     AudioBooks: Audio/Audiobook
     BooksAcademic: Books
     BooksEbooks: Books
     BooksEducational: Books
     BooksFiction: Books
     BooksNonfiction: Books
-    Ebooks: Books/Ebook
+    Ebooks: Books/EBook
     Games: Console
     GamesWindows: PC/Games
     Movies: Movies

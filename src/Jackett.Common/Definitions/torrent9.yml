@@ -51,7 +51,7 @@ caps:
     - {id: ebook, cat: Books, desc: "Books"}
     - {id: logiciels, cat: PC, desc: "Software"}
     - {id: jeux-pc, cat: PC/Games, desc: "PC Games"}
-    - {id: jeux-consoles, cat: Console/Xbox360, desc: "Console Games"}
+    - {id: jeux-consoles, cat: Console/XBox 360, desc: "Console Games"}
 
   modes:
     search: [q]

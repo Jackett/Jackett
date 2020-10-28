@@ -85,7 +85,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(10, TorznabCatType.TVHD, "סדרות HD");
             AddCategoryMapping(62, TorznabCatType.TVSD, "סדרות ישראליות");
             AddCategoryMapping(63, TorznabCatType.TVHD, "סדרות ישראליות HD");
-            AddCategoryMapping(84, TorznabCatType.TVOTHER, "סדרות מדובבות");
+            AddCategoryMapping(84, TorznabCatType.TVOther, "סדרות מדובבות");
 
             // מוזיקה
             AddCategoryMapping(14, TorznabCatType.Audio, "מוזיקה עולמית");
@@ -96,14 +96,14 @@ namespace Jackett.Common.Indexers
             // משחקים
             AddCategoryMapping(11, TorznabCatType.PCGames, "משחקים PC");
             AddCategoryMapping(12, TorznabCatType.ConsoleOther, "משחקים PS");
-            AddCategoryMapping(55, TorznabCatType.ConsoleXbox, "משחקים XBOX");
+            AddCategoryMapping(55, TorznabCatType.ConsoleXBox, "משחקים XBOX");
             AddCategoryMapping(56, TorznabCatType.ConsoleWii, "משחקים WII");
-            AddCategoryMapping(57, TorznabCatType.PCPhoneOther, "משחקי קונסולות ניידות");
+            AddCategoryMapping(57, TorznabCatType.PCMobileOther, "משחקי קונסולות ניידות");
 
             // תוכנה
-            AddCategoryMapping(13, TorznabCatType.PCPhoneAndroid, "אפליקציות לאנדרואיד");
+            AddCategoryMapping(13, TorznabCatType.PCMobileAndroid, "אפליקציות לאנדרואיד");
             AddCategoryMapping(15, TorznabCatType.PC0day, "תוכנות PC");
-            AddCategoryMapping(70, TorznabCatType.PCPhoneIOS, "אפליקציות לאייפון");
+            AddCategoryMapping(70, TorznabCatType.PCMobileiOS, "אפליקציות לאייפון");
             AddCategoryMapping(71, TorznabCatType.PCMac, "תוכנות MAC");
 
             // שונות

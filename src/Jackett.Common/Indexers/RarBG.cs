@@ -83,9 +83,9 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(25, TorznabCatType.AudioLossless, "Music/FLAC");
             AddCategoryMapping(27, TorznabCatType.PCGames, "Games/PC ISO");
             AddCategoryMapping(28, TorznabCatType.PCGames, "Games/PC RIP");
-            AddCategoryMapping(32, TorznabCatType.ConsoleXbox360, "Games/XBOX-360");
+            AddCategoryMapping(32, TorznabCatType.ConsoleXBox360, "Games/XBOX-360");
             AddCategoryMapping(33, TorznabCatType.PCISO, "Software/PC ISO");
-            AddCategoryMapping(35, TorznabCatType.BooksEbook, "e-Books");
+            AddCategoryMapping(35, TorznabCatType.BooksEBook, "e-Books");
             AddCategoryMapping(40, TorznabCatType.ConsolePS3, "Games/PS3");
             AddCategoryMapping(41, TorznabCatType.TVHD, "TV HD Episodes");
             AddCategoryMapping(42, TorznabCatType.MoviesBluRay, "Movies/Full BD");

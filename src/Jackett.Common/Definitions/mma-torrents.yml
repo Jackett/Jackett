@@ -31,13 +31,13 @@ caps:
     - {id: 93, cat: Audio/Other, desc: "Instructional - Audio"}
     - {id: 112, cat: TV/Sport, desc: "Instructional - DVD/ISO/WEB"}
     - {id: 113, cat: Movies/DVD, desc: "Instructional - DVDRip/Other"}
-    - {id: 73, cat: Books/Ebook, desc: "Instructional - E-book"}
-    - {id: 83, cat: TV/OTHER, desc: "Instructional - Fitness"}
+    - {id: 73, cat: Books/EBook, desc: "Instructional - E-book"}
+    - {id: 83, cat: TV/Other, desc: "Instructional - Fitness"}
     - {id: 124, cat: TV/Sport, desc: "JJ/BJJ - Events"}
     - {id: 85, cat: TV/Sport, desc: "JJ/BJJ - Misc/Other"}
     - {id: 99, cat: TV/Sport, desc: "Kickboxing - HD"}
     - {id: 84, cat: TV/Sport, desc: "Kickboxing - SD"}
-    - {id: 111, cat: Books/Magazines, desc: "Magazines - All"}
+    - {id: 111, cat: Books/Mags, desc: "Magazines - All"}
     - {id: 58, cat: Other/Misc, desc: "Misc - All"}
     - {id: 63, cat: TV/Sport, desc: "Misc - MMA Special"}
     - {id: 62, cat: Movies/Other, desc: "Movies - MMA Related"}

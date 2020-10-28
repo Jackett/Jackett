@@ -34,8 +34,8 @@ caps:
     - {id: 31, cat: TV/SD, desc: "Serien SD"}
     - {id: 32, cat: TV/SD, desc: "Serien Pack|SD"}
     - {id: 33, cat: TV, desc: "Serien TV/Shows"}
-    - {id: 34, cat: TV/FOREIGN, desc: "Serien International"}
-    - {id: 35, cat: TV/OTHER, desc: "Serien Sonstiges"}
+    - {id: 34, cat: TV/Foreign, desc: "Serien International"}
+    - {id: 35, cat: TV/Other, desc: "Serien Sonstiges"}
     - {id: 36, cat: TV/Documentary, desc: "Doku HD"}
     - {id: 37, cat: TV/Documentary, desc: "Doku Pack|HD"}
     - {id: 38, cat: TV/Documentary, desc: "Doku SD"}
@@ -44,18 +44,18 @@ caps:
     - {id: 41, cat: TV/Documentary, desc: "Doku Sonstiges"}
     - {id: 42, cat: PC/Games, desc: "Games Windows"}
     - {id: 43, cat: Console/PSP, desc: "Games Playstation"}
-    - {id: 44, cat: Console/Xbox, desc: "Games XBox"}
+    - {id: 44, cat: Console/XBox, desc: "Games XBox"}
     - {id: 45, cat: Console/NDS, desc: "Games Nintendo"}
     - {id: 46, cat: PC/Games, desc: "Games Macintosh"}
     - {id: 47, cat: Console/Other, desc: "Games Sonstiges"}
     - {id: 48, cat: PC/0day, desc: "Software Windows"}
     - {id: 49, cat: PC/Mac, desc: "Software Macintosh"}
-    - {id: 50, cat: PC/Phone-Other, desc: "Software Handy-PDA"}
+    - {id: 50, cat: PC/Mobile-Other, desc: "Software Handy-PDA"}
     - {id: 51, cat: PC, desc: "Software Linux"}
     - {id: 52, cat: PC, desc: "Software Sonstiges"}
-    - {id: 53, cat: Books/Ebook, desc: "Ebook Buch"}
+    - {id: 53, cat: Books/EBook, desc: "Ebook Buch"}
     - {id: 54, cat: Books/Comics, desc: "Ebook Comic"}
-    - {id: 55, cat: Books/Magazines, desc: "Ebook Magazin"}
+    - {id: 55, cat: Books/Mags, desc: "Ebook Magazin"}
     - {id: 56, cat: Books, desc: "Ebook Zeitung"}
     - {id: 57, cat: Books/Other, desc: "Ebook Sonstiges"}
     - {id: 58, cat: TV/Sport, desc: "Sport Fußball"}

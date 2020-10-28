@@ -12,7 +12,7 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: 1, cat: Books/Magazines, desc: "Cărți/Reviste"}
+    - {id: 1, cat: Books/Mags, desc: "Cărți/Reviste"}
     - {id: 2, cat: Other, desc: "Desene SD"}
     - {id: 3, cat: Other, desc: "Diverse n/a"}
     - {id: 5, cat: Movies/BluRay, desc: "Filme Blu-Ray"}
@@ -26,7 +26,7 @@ caps:
     - {id: 13, cat: Console, desc: "Jocuri Console"}
     - {id: 14, cat: PC/Games, desc: "Jocuri PC"}
     - {id: 15, cat: Audio, desc: "Muzică"}
-    - {id: 16, cat: PC/Phone-Other, desc: "Mobile"}
+    - {id: 16, cat: PC/Mobile-Other, desc: "Mobile"}
     - {id: 17, cat: PC, desc: "Programe	"}
     - {id: 18, cat: TV/HD, desc: "Seriale HD"}
     - {id: 19, cat: TV/HD, desc: "Seriale HD-RO	"}

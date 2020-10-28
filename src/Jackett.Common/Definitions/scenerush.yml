@@ -23,7 +23,7 @@ caps:
     - {id: 8, cat: TV/Anime, desc: "Anime"}
     - {id: 9, cat: Audio, desc: "Audio"}
     - {id: 10, cat: Other, desc: "Other"}
-    - {id: 11, cat: Console/Xbox 360, desc: "XBOX 360"}
+    - {id: 11, cat: Console/XBox 360, desc: "XBOX 360"}
     - {id: 12, cat: Console/PSP, desc: "PSP"}
     - {id: 13, cat: TV/Documentary, desc: "Doc"}
     - {id: 14, cat: Movies/DVD, desc: "Movies DVD"}
@@ -40,13 +40,13 @@ caps:
     - {id: 33, cat: Console/Wii, desc: "WII"}
     - {id: 34, cat: Console/PS3, desc: "PS3"}
     - {id: 35, cat: TV/Anime, desc: "Anime HD"}
-    - {id: 36, cat: PC/Phone-Android, desc: "Android"}
+    - {id: 36, cat: PC/Mobile-Android, desc: "Android"}
     - {id: 37, cat: Movies/DVD, desc: "Custom DVDR"}
     - {id: 38, cat: Movies/Other, desc: "CAM TS"}
     - {id: 39, cat: Other, desc: "GPS"}
     - {id: 40, cat: Console/PS4, desc: "PS4"}
     - {id: 41, cat: Movies/BluRay, desc: "BDRIP"}
-    - {id: 42, cat: Movies/WEBDL, desc: "WEB DL"}
+    - {id: 42, cat: Movies/WEB-DL, desc: "WEB DL"}
     - {id: 43, cat: Books, desc: "Ebook"}
     - {id: 44, cat: TV/Sport, desc: "Sports"}
     - {id: 46, cat: Movies/UHD, desc: "4K"}

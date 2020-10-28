@@ -12,7 +12,7 @@ caps:
   categorymappings:
     - {id: 14, cat: PC, desc: "-- Appz --"}
     - {id: 15, cat: Books/Comics, desc: "-- Comics --"}
-    - {id: 17, cat: Books/Ebook, desc: "-- E-books --"}
+    - {id: 17, cat: Books/EBook, desc: "-- E-books --"}
     - {id: 16, cat: PC/Games, desc: "-- Games --"}
     - {id: 19, cat: Audio, desc: "-- Music --"}
     - {id: 82, cat: Other, desc: "-- Other --"}

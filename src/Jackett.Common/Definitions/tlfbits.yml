@@ -23,7 +23,7 @@ caps:
     - {id: 418, cat: Console/PS3, desc: "Game/PS3"}
     - {id: 419, cat: Console/PSP, desc: "Game/PSP"}
     - {id: 420, cat: Console/Wii, desc: "Game/WII"}
-    - {id: 421, cat: Console/Xbox 360, desc: "Game/Xbox360"}
+    - {id: 421, cat: Console/XBox 360, desc: "Game/Xbox360"}
     - {id: 429, cat: Console, desc: "Game/Archive"}
     - {id: 422, cat: PC, desc: "APPS"}
     - {id: 423, cat: PC/0day, desc: "0day"}

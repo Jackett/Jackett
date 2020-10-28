@@ -96,14 +96,14 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("clip", TorznabCatType.AudioVideo, "Zene Klip");
             AddCategoryMapping("xxx_xvid", TorznabCatType.XXXXviD, "XXX SD");
             AddCategoryMapping("xxx_dvd", TorznabCatType.XXXDVD, "XXX DVDR");
-            AddCategoryMapping("xxx_imageset", TorznabCatType.XXXImageset, "XXX Imageset");
+            AddCategoryMapping("xxx_imageset", TorznabCatType.XXXImageSet, "XXX Imageset");
             AddCategoryMapping("xxx_hd", TorznabCatType.XXX, "XXX HD");
             AddCategoryMapping("game_iso", TorznabCatType.PCGames, "Játék PC/ISO");
             AddCategoryMapping("game_rip", TorznabCatType.PCGames, "Játék PC/RIP");
             AddCategoryMapping("console", TorznabCatType.Console, "Játék Konzol");
             AddCategoryMapping("iso", TorznabCatType.PCISO, "Program Prog/ISO");
             AddCategoryMapping("misc", TorznabCatType.PC0day, "Program Prog/RIP");
-            AddCategoryMapping("mobil", TorznabCatType.PCPhoneOther, "Program Prog/Mobil");
+            AddCategoryMapping("mobil", TorznabCatType.PCMobileOther, "Program Prog/Mobil");
             AddCategoryMapping("ebook_hun", TorznabCatType.Books, "Könyv eBook/HU");
             AddCategoryMapping("ebook", TorznabCatType.Books, "Könyv eBook/EN");
         }

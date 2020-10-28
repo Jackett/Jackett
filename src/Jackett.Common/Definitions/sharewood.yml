@@ -26,15 +26,15 @@ caps:
     - {id: "Podcasts", cat: Audio, desc: "Audio Podcasts"}
     - {id: "AudioBooks", cat: Audio/Audiobook, desc: "Audio Books"}
     - {id: "Windows", cat: PC/0day, desc: " Applications Windows"}
-    - {id: "APK", cat: PC/Phone-Android, desc: " Applications Android"}
-    - {id: "GPS", cat: PC/Phone-Other, desc: " Applications GPS"}
-    - {id: "Ebooks", cat: Books/Ebook, desc: "Books Ebooks"}
-    - {id: "BDs", cat: Books/Ebook, desc: "Books BDs"}
-    - {id: "Presse", cat: Books/Magazines, desc: "Books Presse"}
+    - {id: "APK", cat: PC/Mobile-Android, desc: " Applications Android"}
+    - {id: "GPS", cat: PC/Mobile-Other, desc: " Applications GPS"}
+    - {id: "Ebooks", cat: Books/EBook, desc: "Books Ebooks"}
+    - {id: "BDs", cat: Books/EBook, desc: "Books BDs"}
+    - {id: "Presse", cat: Books/Mags, desc: "Books Presse"}
     - {id: "Mangas", cat: Books/Comics, desc: "Books Mangas"}
     - {id: "Comics", cat: Books/Comics, desc: "Books Comics"}
     - {id: "Nintendo", cat: Console/NDS, desc: "Jeux Nintendo"}
-    - {id: "Microsoft", cat: Console/Xbox, desc: "Jeux Microsoft"}
+    - {id: "Microsoft", cat: Console/XBox, desc: "Jeux Microsoft"}
     - {id: "Linux", cat: PC/Games, desc: "Jeux Linux"}
     - {id: "Mac", cat: PC/Games, desc: "Jeux Mac"}
     - {id: "Sony", cat: Console/PSP, desc: "Jeux Sony"}

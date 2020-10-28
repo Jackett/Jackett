@@ -27,7 +27,7 @@ caps:
     - {id: "Erotyka", cat: XXX, desc: "Erotyka"}
     - {id: "Muzyka", cat: Audio, desc: "Muzyka"}
     - {id: "Programy", cat: PC, desc: "Programy"}
-    - {id: "GSM", cat: PC/Phone-Other, desc: "GSM/PDA"}
+    - {id: "GSM", cat: PC/Mobile-Other, desc: "GSM/PDA"}
     - {id: "Konsole", cat: Console, desc: "Konsole"}
     - {id: "Gry PC", cat: PC/Games, desc: "Gry PC"}
     - {id: "Dla Dzieci", cat: Movies, desc: "Dla Dzieci"}

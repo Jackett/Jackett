@@ -67,17 +67,17 @@ caps:
     - {id: 97, cat: PC/Games, desc: " |- Бонусные видеодиски"}
     - {id: 96, cat: PC/Games, desc: " |- Телепередачи/интервью"}
     - {id: 95, cat: PC/Games, desc: " |- Киберспорт"}
-    - {id: 101, cat: Console/Xbox, desc: "Xbox "}
-    - {id: 139, cat: Console/Xbox 360, desc: " |- XBox360 | Игры"}
-    - {id: 1068, cat: Console/Xbox One, desc: " |- Xbox One | Игры"}
-    - {id: 554, cat: Console/Xbox 360, desc: " |- XBox360 | Kinect "}
-    - {id: 730, cat: Console/Xbox 360, desc: " |- XBox360 | GOD Игры"}
-    - {id: 138, cat: Console/Xbox 360, desc: " |- XBox360 | JTAG "}
-    - {id: 137, cat: Console/Xbox 360, desc: " |- XBox360 | 360E "}
-    - {id: 136, cat: Console/Xbox 360, desc: " |- XBox360 | Demo "}
-    - {id: 135, cat: Console/Xbox 360, desc: " |- XBox360 | Live "}
-    - {id: 134, cat: Console/Xbox 360, desc: " |- XBox360 | Soft "}
-    - {id: 133, cat: Console/Xbox, desc: " |- XBox | Игры"}
+    - {id: 101, cat: Console/XBox, desc: "Xbox "}
+    - {id: 139, cat: Console/XBox 360, desc: " |- XBox360 | Игры"}
+    - {id: 1068, cat: Console/XBox One, desc: " |- Xbox One | Игры"}
+    - {id: 554, cat: Console/XBox 360, desc: " |- XBox360 | Kinect "}
+    - {id: 730, cat: Console/XBox 360, desc: " |- XBox360 | GOD Игры"}
+    - {id: 138, cat: Console/XBox 360, desc: " |- XBox360 | JTAG "}
+    - {id: 137, cat: Console/XBox 360, desc: " |- XBox360 | 360E "}
+    - {id: 136, cat: Console/XBox 360, desc: " |- XBox360 | Demo "}
+    - {id: 135, cat: Console/XBox 360, desc: " |- XBox360 | Live "}
+    - {id: 134, cat: Console/XBox 360, desc: " |- XBox360 | Soft "}
+    - {id: 133, cat: Console/XBox, desc: " |- XBox | Игры"}
     - {id: 102, cat: Console/PSP, desc: "PlayStation "}
     - {id: 1067, cat: Console/PS4, desc: " |- PS4 | Игры"}
     - {id: 127, cat: Console/PS3, desc: " |- PS3 | Игры"}
@@ -94,7 +94,7 @@ caps:
     - {id: 103, cat: Console/NDS, desc: "Nintendo "}
     - {id: 113, cat: Console/NDS, desc: " |- NDS | Игры"}
     - {id: 112, cat: Console/Wii, desc: " |- Wii | Игры"}
-    - {id: 111, cat: Console/Wiiware/VC, desc: " |- WiiWare | Игры"}
+    - {id: 111, cat: Console/Wiiware, desc: " |- WiiWare | Игры"}
     - {id: 110, cat: Console, desc: " |- GameCube | Игры"}
     - {id: 104, cat: Console, desc: "Sega "}
     - {id: 108, cat: Console, desc: " |- Dreamcast | Игры"}
@@ -130,15 +130,15 @@ caps:
     - {id: 922, cat: TV/Sport, desc: " |- Евро 2012 "}
     - {id: 931, cat: TV/Sport, desc: " |- Лига Чемпионов 2012-2013 "}
     - {id: 1130, cat: TV/Sport, desc: " |- Чемпионат Мира 2014 "}
-    - {id: 737, cat: TV/OTHER, desc: "Видео для Консолей"}
-    - {id: 987, cat: TV/OTHER, desc: " |- PSVita | Видео"}
-    - {id: 748, cat: TV/OTHER, desc: " |- PSP | CAMRip/TS/Scr "}
-    - {id: 747, cat: TV/OTHER, desc: " |- PSP | Фильмы"}
-    - {id: 743, cat: TV/OTHER, desc: " |- PSP | Cериалы"}
-    - {id: 742, cat: TV/OTHER, desc: " |- PSP | Аниме"}
-    - {id: 741, cat: TV/OTHER, desc: " |- PSP | Мультфильмы"}
-    - {id: 739, cat: TV/OTHER, desc: " |- PSP | Телепередачи/Документальное кино"}
-    - {id: 738, cat: TV/OTHER, desc: " |- PSP | UMD Video "}
+    - {id: 737, cat: TV/Other, desc: "Видео для Консолей"}
+    - {id: 987, cat: TV/Other, desc: " |- PSVita | Видео"}
+    - {id: 748, cat: TV/Other, desc: " |- PSP | CAMRip/TS/Scr "}
+    - {id: 747, cat: TV/Other, desc: " |- PSP | Фильмы"}
+    - {id: 743, cat: TV/Other, desc: " |- PSP | Cериалы"}
+    - {id: 742, cat: TV/Other, desc: " |- PSP | Аниме"}
+    - {id: 741, cat: TV/Other, desc: " |- PSP | Мультфильмы"}
+    - {id: 739, cat: TV/Other, desc: " |- PSP | Телепередачи/Документальное кино"}
+    - {id: 738, cat: TV/Other, desc: " |- PSP | UMD Video "}
     - {id: 211, cat: TV/Anime, desc: "Аниме (Основной)"}
     - {id: 517, cat: TV/Anime, desc: " |- Аниме | Rips "}
     - {id: 518, cat: TV/Anime, desc: " |- Аниме | HD Rips "}

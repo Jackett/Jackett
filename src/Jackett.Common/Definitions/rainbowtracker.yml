@@ -49,7 +49,7 @@ caps:
     - {id: 26, cat: TV, desc: "Сериалы - Маленькая Британия / Little Britain "}
     - {id: 21, cat: TV, desc: "Сериалы - Молокососы / Skins. season "}
     - {id: 15, cat: TV, desc: "Сериалы - Близкие друзья / Queer as folk "}
-    - {id: 25, cat: XXX/Imageset, desc: "Фото, Картинки"}
+    - {id: 25, cat: XXX/ImageSet, desc: "Фото, Картинки"}
     - {id: 10, cat: XXX, desc: "Pron "}
     - {id: 16, cat: XXX, desc: "Pron - Pron-Фильмы"}
     - {id: 86, cat: XXX, desc: "Pron - Pron-Фильмы (азиатские)"}

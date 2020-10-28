@@ -97,11 +97,11 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(33, TorznabCatType.AudioVideo, "Audio / Videos");
 
             AddCategoryMapping(17, TorznabCatType.Books, "Misc / eBooks");
-            AddCategoryMapping(5, TorznabCatType.PCPhoneOther, "Misc / Mobile");
+            AddCategoryMapping(5, TorznabCatType.PCMobileOther, "Misc / Mobile");
             AddCategoryMapping(39, TorznabCatType.Other, "Misc / Bildung");
 
-            AddCategoryMapping(36, TorznabCatType.TVFOREIGN, "Englisch / Serien");
-            AddCategoryMapping(57, TorznabCatType.TVFOREIGN, "Englisch / Serienpacks");
+            AddCategoryMapping(36, TorznabCatType.TVForeign, "Englisch / Serien");
+            AddCategoryMapping(57, TorznabCatType.TVForeign, "Englisch / Serienpacks");
             AddCategoryMapping(37, TorznabCatType.MoviesForeign, "Englisch / Filme");
             AddCategoryMapping(47, TorznabCatType.Books, "Englisch / eBooks");
             AddCategoryMapping(48, TorznabCatType.Other, "Englisch / Bildung");

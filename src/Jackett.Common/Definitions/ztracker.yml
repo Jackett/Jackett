@@ -38,7 +38,7 @@ caps:
     - {id: 45, cat: Console, desc: "Game/Konzol"}
     - {id: 18, cat: Other, desc: "Képek"}
     - {id: 17, cat: XXX, desc: "Képek/XXX"}
-    - {id: 24, cat: PC/Phone-Other, desc: "Program/Mobil"}
+    - {id: 24, cat: PC/Mobile-Other, desc: "Program/Mobil"}
     - {id: 1, cat: PC/0day, desc: "Program/PC"}
     - {id: 44, cat: TV/HD, desc: "Sorozat/HD-HUN"}
     - {id: 46, cat: TV/HD, desc: "Sorozat/HD"}

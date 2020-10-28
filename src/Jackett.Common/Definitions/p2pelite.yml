@@ -12,43 +12,43 @@ caps:
   categorymappings:
     - {id: 19, cat: PC, desc: "Apps"}
     - {id: 11, cat: Audio/Audiobook, desc: "Audio Books"}
-    - {id: 40, cat: Books/Ebook, desc: "Best Sellers"}
-    - {id: 17, cat: Books/Ebook, desc: "Biographical"}
-    - {id: 27, cat: Books/Ebook, desc: "Business/Finance"}
-    - {id: 8, cat: Books/Ebook, desc: "Children"}
-    - {id: 30, cat: Books/Ebook, desc: "Classic"}
+    - {id: 40, cat: Books/EBook, desc: "Best Sellers"}
+    - {id: 17, cat: Books/EBook, desc: "Biographical"}
+    - {id: 27, cat: Books/EBook, desc: "Business/Finance"}
+    - {id: 8, cat: Books/EBook, desc: "Children"}
+    - {id: 30, cat: Books/EBook, desc: "Classic"}
     - {id: 2, cat: Books/Comics, desc: "Comics/GraphicNovels/Manga"}
-    - {id: 14, cat: Books/Ebook, desc: "Computer"}
-    - {id: 15, cat: Books/Ebook, desc: "Cookbooks"}
-    - {id: 22, cat: Books/Ebook, desc: "Crime/Thriller/Mystery"}
-    - {id: 10, cat: Books/Ebook, desc: "DIY"}
-    - {id: 6, cat: Books/Ebook, desc: "Educational"}
+    - {id: 14, cat: Books/EBook, desc: "Computer"}
+    - {id: 15, cat: Books/EBook, desc: "Cookbooks"}
+    - {id: 22, cat: Books/EBook, desc: "Crime/Thriller/Mystery"}
+    - {id: 10, cat: Books/EBook, desc: "DIY"}
+    - {id: 6, cat: Books/EBook, desc: "Educational"}
     - {id: 12, cat: Books/Other, desc: "Educational Videos"}
-    - {id: 20, cat: Books/Ebook, desc: "Erotica/over 18"}
-    - {id: 23, cat: Books/Ebook, desc: "Fantasy"}
-    - {id: 1, cat: Books/Ebook, desc: "Fiction"}
-    - {id: 18, cat: Books/Ebook, desc: "Gardening"}
-    - {id: 21, cat: Books/Ebook, desc: "Health"}
-    - {id: 33, cat: Books/Ebook, desc: "Historical Fiction"}
-    - {id: 16, cat: Books/Ebook, desc: "History"}
-    - {id: 4, cat: Books/Ebook, desc: "Hobby/Pastimes"}
-    - {id: 29, cat: Books/Ebook, desc: "Horror"}
-    - {id: 5, cat: Books/Ebook, desc: "Language Learning"}
-    - {id: 7, cat: Books/Magazines, desc: "Magazines"}
+    - {id: 20, cat: Books/EBook, desc: "Erotica/over 18"}
+    - {id: 23, cat: Books/EBook, desc: "Fantasy"}
+    - {id: 1, cat: Books/EBook, desc: "Fiction"}
+    - {id: 18, cat: Books/EBook, desc: "Gardening"}
+    - {id: 21, cat: Books/EBook, desc: "Health"}
+    - {id: 33, cat: Books/EBook, desc: "Historical Fiction"}
+    - {id: 16, cat: Books/EBook, desc: "History"}
+    - {id: 4, cat: Books/EBook, desc: "Hobby/Pastimes"}
+    - {id: 29, cat: Books/EBook, desc: "Horror"}
+    - {id: 5, cat: Books/EBook, desc: "Language Learning"}
+    - {id: 7, cat: Books/Mags, desc: "Magazines"}
     - {id: 13, cat: Books/Other, desc: "Misc"}
     - {id: 34, cat: Audio, desc: "Music"}
-    - {id: 37, cat: Books/Ebook, desc: "New Adult"}
-    - {id: 28, cat: Books/Ebook, desc: "Non-English"}
-    - {id: 3, cat: Books/Ebook, desc: "Non-Fiction/Reference"}
-    - {id: 24, cat: Books/Ebook, desc: "Paranormal Romance"}
-    - {id: 39, cat: Books/Ebook, desc: "Philosophy"}
-    - {id: 25, cat: Books/Ebook, desc: "Romance"}
-    - {id: 26, cat: Books/Ebook, desc: "SciFi"}
-    - {id: 9, cat: Books/Ebook, desc: "Teens"}
+    - {id: 37, cat: Books/EBook, desc: "New Adult"}
+    - {id: 28, cat: Books/EBook, desc: "Non-English"}
+    - {id: 3, cat: Books/EBook, desc: "Non-Fiction/Reference"}
+    - {id: 24, cat: Books/EBook, desc: "Paranormal Romance"}
+    - {id: 39, cat: Books/EBook, desc: "Philosophy"}
+    - {id: 25, cat: Books/EBook, desc: "Romance"}
+    - {id: 26, cat: Books/EBook, desc: "SciFi"}
+    - {id: 9, cat: Books/EBook, desc: "Teens"}
     - {id: 32, cat: Other, desc: "torrent not modded"}
-    - {id: 35, cat: Books/Ebook, desc: "True Crime"}
-    - {id: 38, cat: Books/Ebook, desc: "Urban Fantasy"}
-    - {id: 31, cat: Books/Ebook, desc: "Western"}
+    - {id: 35, cat: Books/EBook, desc: "True Crime"}
+    - {id: 38, cat: Books/EBook, desc: "Urban Fantasy"}
+    - {id: 31, cat: Books/EBook, desc: "Western"}
 
   modes:
     search: [q]

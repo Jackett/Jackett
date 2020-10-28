@@ -32,11 +32,11 @@ caps:
     - {id: 18, cat: Movies/HD, desc: "Animations - M-HD 1080p"}
     - {id: 19, cat: Movies/HD, desc: "Animations - M-HD 720p"}
     - {id: 20, cat: Movies, desc: "Animations - Remux"}
-    - {id: 21, cat: Movies/WEBDL, desc: "Animations - TVRip"}
-    - {id: 24, cat: Movies/WEBDL, desc: "Animations - WEB-DL"}
-    - {id: 22, cat: Movies/WEBDL, desc: "Animations - WEB-DL 1080p"}
-    - {id: 23, cat: Movies/WEBDL, desc: "Animations - WEB-DL 720p"}
-    - {id: 25, cat: Movies/WEBDL, desc: "Animations - WEBRip"}
+    - {id: 21, cat: Movies/WEB-DL, desc: "Animations - TVRip"}
+    - {id: 24, cat: Movies/WEB-DL, desc: "Animations - WEB-DL"}
+    - {id: 22, cat: Movies/WEB-DL, desc: "Animations - WEB-DL 1080p"}
+    - {id: 23, cat: Movies/WEB-DL, desc: "Animations - WEB-DL 720p"}
+    - {id: 25, cat: Movies/WEB-DL, desc: "Animations - WEBRip"}
     - {id: 26, cat: Movies/HD, desc: "Animations - X265"}
     - {id: 49, cat: TV/Documentary, desc: "Documentaires - Doc-Spectacle"}
     - {id: 48, cat: TV/Documentary, desc: "Documentaires - Emission TV"}
@@ -61,11 +61,11 @@ caps:
     - {id: 73, cat: Movies/HD, desc: "Films - M-HD 1080p"}
     - {id: 74, cat: Movies/HD, desc: "Films - M-HD 720p"}
     - {id: 75, cat: Movies, desc: "Films - Remux"}
-    - {id: 76, cat: Movies/WEBDL, desc: "Films - TVRip"}
-    - {id: 77, cat: Movies/WEBDL, desc: "Films - WEB-DL"}
-    - {id: 78, cat: Movies/WEBDL, desc: "Films - WEB-DL 1080p"}
-    - {id: 79, cat: Movies/WEBDL, desc: "Films - WEB-DL 720p"}
-    - {id: 80, cat: Movies/WEBDL, desc: "Films - WEBRip"}
+    - {id: 76, cat: Movies/WEB-DL, desc: "Films - TVRip"}
+    - {id: 77, cat: Movies/WEB-DL, desc: "Films - WEB-DL"}
+    - {id: 78, cat: Movies/WEB-DL, desc: "Films - WEB-DL 1080p"}
+    - {id: 79, cat: Movies/WEB-DL, desc: "Films - WEB-DL 720p"}
+    - {id: 80, cat: Movies/WEB-DL, desc: "Films - WEBRip"}
     - {id: 81, cat: Movies/HD, desc: "Films - X265"}
     - {id: 82, cat: Movies/3D, desc: "Films-VOSTFR - 3D"}
     - {id: 84, cat: Movies/UHD, desc: "Films-VOSTFR - 4K Light"}
@@ -86,28 +86,28 @@ caps:
     - {id: 98, cat: Movies/HD, desc: "Films-VOSTFR - M-HD 1080p"}
     - {id: 99, cat: Movies/HD, desc: "Films-VOSTFR - M-HD 720p"}
     - {id: 100, cat: Movies, desc: "Films-VOSTFR - Remux"}
-    - {id: 101, cat: Movies/WEBDL, desc: "Films-VOSTFR - TVRip"}
-    - {id: 102, cat: Movies/WEBDL, desc: "Films-VOSTFR - WEB-DL"}
-    - {id: 103, cat: Movies/WEBDL, desc: "Films-VOSTFR - WEB-DL 1080p"}
-    - {id: 104, cat: Movies/WEBDL, desc: "Films-VOSTFR - WEB-DL 720p"}
-    - {id: 105, cat: Movies/WEBDL, desc: "Films-VOSTFR - WEBRip"}
+    - {id: 101, cat: Movies/WEB-DL, desc: "Films-VOSTFR - TVRip"}
+    - {id: 102, cat: Movies/WEB-DL, desc: "Films-VOSTFR - WEB-DL"}
+    - {id: 103, cat: Movies/WEB-DL, desc: "Films-VOSTFR - WEB-DL 1080p"}
+    - {id: 104, cat: Movies/WEB-DL, desc: "Films-VOSTFR - WEB-DL 720p"}
+    - {id: 105, cat: Movies/WEB-DL, desc: "Films-VOSTFR - WEBRip"}
     - {id: 106, cat: Movies/HD, desc: "Films-VOSTFR - X265"}
     - {id: 107, cat: Console/3DS, desc: "Jeux - 3DS-DS"}
-    - {id: 108, cat: PC/Phone-IOS, desc: "Jeux - IOS-OSX"}
+    - {id: 108, cat: PC/Mobile-iOS, desc: "Jeux - IOS-OSX"}
     - {id: 109, cat: PC/Games, desc: "Jeux - PC"}
     - {id: 110, cat: Console/PS3, desc: "Jeux - PS3 - PS4"}
     - {id: 111, cat: Console/PSP, desc: "Jeux - PSP-PSX"}
     - {id: 112, cat: Console/Wii, desc: "Jeux - WII"}
     - {id: 113, cat: Console/WiiU, desc: "Jeux - WII-U"}
-    - {id: 114, cat: Console/Xbox, desc: "Jeux - XBOX"}
+    - {id: 114, cat: Console/XBox, desc: "Jeux - XBOX"}
     - {id: 52, cat: Books, desc: "Livres - BD"}
     - {id: 56, cat: Audio/Audiobook, desc: "Livres - Livres Audio"}
     - {id: 55, cat: Books/Comics, desc: "Livres - Mangas"}
-    - {id: 54, cat: Books/Magazines, desc: "Livres - Press"}
-    - {id: 53, cat: Books/Ebook, desc: "Livres - Romans"}
-    - {id: 115, cat: PC/Phone-Android, desc: "Logiciels - ANDROID"}
+    - {id: 54, cat: Books/Mags, desc: "Livres - Press"}
+    - {id: 53, cat: Books/EBook, desc: "Livres - Romans"}
+    - {id: 115, cat: PC/Mobile-Android, desc: "Logiciels - ANDROID"}
     - {id: 118, cat: PC/Mac, desc: "Logiciels - APPLE"}
-    - {id: 116, cat: PC/Phone-IOS, desc: "Logiciels - IPHONE"}
+    - {id: 116, cat: PC/Mobile-iOS, desc: "Logiciels - IPHONE"}
     - {id: 117, cat: PC, desc: "Logiciels - LINUX"}
     - {id: 119, cat: PC/0day, desc: "Logiciels - WINDOWS"}
     - {id: 120, cat: Audio/Lossless, desc: "Musiques - FLAC"}

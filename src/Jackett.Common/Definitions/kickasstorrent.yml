@@ -35,7 +35,7 @@ caps:
   categorymappings:
     - {id: 118, cat: TV/Anime, desc: "Anime - English Translated"}
     - {id: 133, cat: TV/Anime, desc: "Anime - Other"}
-    - {id: 144, cat: PC/Phone-Other, desc: "Applications - Handheld"}
+    - {id: 144, cat: PC/Mobile-Other, desc: "Applications - Handheld"}
     - {id: 142, cat: PC/0day, desc: "Applications - Linux"}
     - {id: 140, cat: PC/Mac, desc: "Applications - Mac"}
     - {id: 131, cat: PC/0day, desc: "Applications - Other"}
@@ -62,7 +62,7 @@ caps:
     - {id: 97, cat: Console/PS4, desc: "Games - Playstation"}
     - {id: 91, cat: Console/Wii, desc: "Games - Wii"}
     - {id: 85, cat: PC/Games, desc: "Games - Windows"}
-    - {id: 90, cat: Console/Xbox, desc: "Games - Xbox"}
+    - {id: 90, cat: Console/XBox, desc: "Games - Xbox"}
     - {id: 69, cat: Movies/3D, desc: "Movies - 3D Movies"}
     - {id: 80, cat: Movies, desc: "Movies - Animation"}
     - {id: 79, cat: Movies, desc: "Movies - Asian/Bollywood"}
@@ -100,7 +100,7 @@ caps:
     - {id: 124, cat: XXX, desc: "XXX - Books"}
     - {id: 125, cat: XXX, desc: "XXX - Hentai"}
     - {id: 123, cat: XXX, desc: "XXX - Magazines"}
-    - {id: 122, cat: XXX/Imageset, desc: "XXX - Pictures"}
+    - {id: 122, cat: XXX/ImageSet, desc: "XXX - Pictures"}
     - {id: 121, cat: XXX, desc: "XXX - UltraHD"}
     - {id: 119, cat: XXX, desc: "XXX - Videos"}
     - {id: 126, cat: XXX, desc: "XXX - XXX Games"}

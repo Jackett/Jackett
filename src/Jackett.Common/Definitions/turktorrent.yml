@@ -23,7 +23,7 @@ caps:
     - {id: 26, cat: Movies/UHD, desc: "4Film K UHD Disk"}
     - {id: 28, cat: Movies/HD, desc: "Film X265"}
     - {id: 30, cat: Movies/HD, desc: "Film X264"}
-    - {id: 69, cat: Movies/WEBDL, desc: "Film H264 WEB-DL"}
+    - {id: 69, cat: Movies/WEB-DL, desc: "Film H264 WEB-DL"}
     - {id: 63, cat: Movies/SD, desc: "Film XviD"}
     - {id: 51, cat: Other, desc: "Diğer"}
     - {id: 62, cat: Other, desc: "Diğer Eğitim"}
@@ -32,7 +32,7 @@ caps:
     - {id: 54, cat: TV/Sport, desc: "Spor"}
     - {id: 55, cat: Other, desc: "Diğer Duvar Kağıtları"}
     - {id: 56, cat: Other, desc: "Diğer  Her Şey"}
-    - {id: 65, cat: Books/Ebook, desc: "E-Kitap"}
+    - {id: 65, cat: Books/EBook, desc: "E-Kitap"}
     - {id: 2, cat: Console, desc: "Oyun"}
     - {id: 46, cat: Console, desc: "Oyun PC"}
     - {id: 3, cat: Console, desc: "Oyun Sony PS"}

@@ -12,7 +12,7 @@ caps:
   categorymappings:
     - {id: 5, cat: TV/Anime, desc: "Anime"}
     - {id: 25, cat: TV/Documentary, desc: "Dokumentit (docs)"}
-    - {id: 6, cat: Books/Ebook, desc: "eBooks"}
+    - {id: 6, cat: Books/EBook, desc: "eBooks"}
     - {id: 26, cat: TV, desc: "Kannet/Tekstit (subs)"}
     - {id: 20, cat: TV/SD, desc: "Lasten DVD (kids)"}
     - {id: 33, cat: TV/SD, desc: "Lasten XviD (kids)"}
@@ -28,13 +28,13 @@ caps:
     - {id: 9, cat: PC/Mac, desc: "Ohjelmat Mac (apps)"}
     - {id: 17, cat: PC/Games, desc: "Pelit PC (games)"}
     - {id: 18, cat: Console/PSP, desc: "Pelit PlayStation (games)"}
-    - {id: 19, cat: Console/Xbox, desc: "Pelit Xbox (games)"}
+    - {id: 19, cat: Console/XBox, desc: "Pelit Xbox (games)"}
     - {id: 35, cat: Console/Wii, desc: "Pelit Wii (games)"}
     - {id: 22, cat: XXX, desc: "Pr0n DVD (xxx)"}
     - {id: 23, cat: XXX, desc: "Pr0n XviD (xxx)"}
     - {id: 36, cat: XXX, desc: "Pr0n Muut (xxx)"}
     - {id: 47, cat: XXX, desc: "Pr0n HD (xxx)"}
-    - {id: 24, cat: PC/Phone-Other, desc: "Puhelimeen (phone)"}
+    - {id: 24, cat: PC/Mobile-Other, desc: "Puhelimeen (phone)"}
     - {id: 1, cat: TV/SD, desc: "Sarjat DVD (series)"}
     - {id: 30, cat: TV, desc: "Sarjat (series)"}
     - {id: 41, cat: TV/HD, desc: "Sarjat HD (series)"}

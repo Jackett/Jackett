@@ -113,7 +113,7 @@ caps:
     - {id: 76, cat: Console, desc: " |- Аркады"}
     - {id: 1538, cat: Console, desc: "Игры для консолей"}
     - {id: 1539, cat: Console/PSP, desc: " |- PlayStation"}
-    - {id: 878, cat: Console/Xbox, desc: " |- XBox"}
+    - {id: 878, cat: Console/XBox, desc: " |- XBox"}
     # Документалистика, развлекательные телепередачи, спорт Docs
     - {id: 11, cat: TV/Documentary, desc: "Документальные фильмы и телепередачи"}
     - {id: 12, cat: TV, desc: "Развлекательные телепередачи"}
@@ -278,23 +278,23 @@ caps:
     - {id: 1503, cat: PC, desc: " |- Дополнительные материалы для мультимедиа"}
     - {id: 968, cat: PC, desc: " |- Разное (Программы для работы с мультимедиа и 3D)"}
     # Все для мобильных устройств Mobiles
-    - {id: 1287, cat: PC/Phone-Other, desc: "Видео"}
-    - {id: 1307, cat: PC/Phone-Other, desc: " |- Мобильные телефоны"}
-    - {id: 1306, cat: PC/Phone-IOS, desc: " |- iPhone"}
-    - {id: 1305, cat: PC/Phone-IOS, desc: " |- iPad"}
+    - {id: 1287, cat: PC/Mobile-Other, desc: "Видео"}
+    - {id: 1307, cat: PC/Mobile-Other, desc: " |- Мобильные телефоны"}
+    - {id: 1306, cat: PC/Mobile-iOS, desc: " |- iPhone"}
+    - {id: 1305, cat: PC/Mobile-iOS, desc: " |- iPad"}
     - {id: 1289, cat: PC, desc: "Программы"}
     - {id: 1302, cat: PC, desc: " |- Мобильные телефоны"}
-    - {id: 1301, cat: PC/Phone-Android, desc: " |- Android OS"}
+    - {id: 1301, cat: PC/Mobile-Android, desc: " |- Android OS"}
     - {id: 1298, cat: PC, desc: " |- Symbian OS"}
-    - {id: 1293, cat: PC/Phone-Other, desc: " |- Windows Mobile"}
-    - {id: 1292, cat: PC/Phone-IOS, desc: " |- iPhone"}
-    - {id: 1291, cat: PC/Phone-IOS, desc: " |- Apple Macintosh"}
+    - {id: 1293, cat: PC/Mobile-Other, desc: " |- Windows Mobile"}
+    - {id: 1292, cat: PC/Mobile-iOS, desc: " |- iPhone"}
+    - {id: 1291, cat: PC/Mobile-iOS, desc: " |- Apple Macintosh"}
     - {id: 1294, cat: PC, desc: "Игры"}
     - {id: 1303, cat: PC, desc: " |- Мобильные телефоны"}
-    - {id: 1300, cat: PC/Phone-Android, desc: " |- Android OS"}
+    - {id: 1300, cat: PC/Mobile-Android, desc: " |- Android OS"}
     - {id: 1299, cat: PC, desc: " |- Symbian OS"}
-    - {id: 1296, cat: PC/Phone-IOS, desc: " |- iPhone"}
-    - {id: 1295, cat: PC/Phone-Other, desc: " |- Windows Mobile"}
+    - {id: 1296, cat: PC/Mobile-iOS, desc: " |- iPhone"}
+    - {id: 1295, cat: PC/Mobile-Other, desc: " |- Windows Mobile"}
     # Клубничка ХХХ 18+️
     - {id: 1490, cat: XXX, desc: "Эротика (не порно)"}
     - {id: 1491, cat: XXX, desc: " |-  Эротические фильмы ≪с переводом Rus≫"}

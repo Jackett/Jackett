@@ -57,7 +57,7 @@ caps:
     - {id: 38, cat: XXX, desc: "Vintage"}
     - {id: 39, cat: XXX, desc: "Wrestling"}
     - {id: 17, cat: PC, desc: "Applications"}
-    - {id: 31, cat: XXX/Imageset, desc: "Images"}
+    - {id: 31, cat: XXX/ImageSet, desc: "Images"}
     - {id: 49, cat: Books, desc: "Books"}
     - {id: 41, cat: Movies, desc: "Non-Porn"}
     - {id: 41, cat: TV, desc: "Non-Porn"}

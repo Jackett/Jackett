@@ -23,7 +23,7 @@ caps:
     - {id: 41, cat: Movies/3D, desc: "HD / 3D видео (HD / 3D video)"}
     - {id: 47, cat: Movies, desc: "HDv 0day Team"}
     - {id: 17, cat: PC/Games, desc: "Игры / ПК (Games / PC)"}
-    - {id: 25, cat: Console/Xbox 360, desc: "Игры / XBOX360 (Games / XBOX360)"}
+    - {id: 25, cat: Console/XBox 360, desc: "Игры / XBOX360 (Games / XBOX360)"}
     - {id: 33, cat: Console/PSP, desc: "Игры / PSP - PS2 (Games / PSP - PS2)"}
     - {id: 37, cat: Console/PS3, desc: "Игры / PS3 (Games / PS3)"}
     - {id: 18, cat: PC/0day, desc: "Софт / Windows (Software / Windows)"}

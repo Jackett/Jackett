@@ -87,18 +87,18 @@ caps:
     - {id: 19, cat: PC/Mac, desc: "Apps/Mac"}
     - {id: 20, cat: PC, desc: "Apps/Linux"}
     - {id: 21, cat: PC, desc: "Apps/Other"}
-    - {id: 56, cat: PC/Phone-Android, desc: "Apps/Android"}
-    - {id: 57, cat: PC/Phone-IOS, desc: "Apps/iOS"}
+    - {id: 56, cat: PC/Mobile-Android, desc: "Apps/Android"}
+    - {id: 57, cat: PC/Mobile-iOS, desc: "Apps/iOS"}
 
     # Games
     - {id: 10, cat: PC/Games, desc: "Games/PC Game"}
     - {id: 11, cat: Console/Other, desc: "Games/PS2"}
     - {id: 12, cat: Console/PSP, desc: "Games/PSP"}
-    - {id: 13, cat: Console/Xbox, desc: "Games/Xbox"}
-    - {id: 14, cat: Console/Xbox 360, desc: "Games/Xbox360"}
+    - {id: 13, cat: Console/XBox, desc: "Games/Xbox"}
+    - {id: 14, cat: Console/XBox 360, desc: "Games/Xbox360"}
     - {id: 15, cat: Console/Other, desc: "Games/PS1"}
     - {id: 16, cat: Console/Other, desc: "Games/Dreamcast"}
-    - {id: 17, cat: PC/Phone-Other, desc: "Games/Other"}
+    - {id: 17, cat: PC/Mobile-Other, desc: "Games/Other"}
     - {id: 43, cat: Console/PS3, desc: "Games/PS3"}
     - {id: 44, cat: Console/Wii, desc: "Games/Wii"}
     - {id: 45, cat: Console/NDS, desc: "Games/DS"}
@@ -109,7 +109,7 @@ caps:
 
     # XXX
     - {id: 48, cat: XXX/DVD, desc: "XXX/Video"}
-    - {id: 49, cat: XXX/Imageset, desc: "XXX/Picture"}
+    - {id: 49, cat: XXX/ImageSet, desc: "XXX/Picture"}
     - {id: 50, cat: XXX, desc: "XXX/Magazine"}
     - {id: 51, cat: XXX, desc: "XXX/Hentai"}
     - {id: 67, cat: XXX, desc: "XXX/Games"}
@@ -118,7 +118,7 @@ caps:
     - {id: 33, cat: Other, desc: "Other/Emulation"}
     - {id: 34, cat: Books, desc: "Other/Tutorial"}
     - {id: 35, cat: Other, desc: "Other/Sounds"}
-    - {id: 36, cat: Books/Ebook, desc: "Other/E-books"}
+    - {id: 36, cat: Books/EBook, desc: "Other/E-books"}
     - {id: 37, cat: Other, desc: "Other/Images"}
     - {id: 38, cat: Other, desc: "Other/Mobile Phone"}
     - {id: 39, cat: Books/Comics, desc: "Other/Comics"}

@@ -38,7 +38,7 @@ caps:
     - {id: 38, cat: Audio/Lossless, desc: "Lossless/Eng"}
     - {id: 22, cat: PC, desc: "Programok/egyéb"}
     - {id: 21, cat: PC, desc: "Játékok/Rip/Dox"}
-    - {id: 32, cat: Console/Xbox360, desc: "Játékok/Xbox360"}
+    - {id: 32, cat: Console/XBox 360, desc: "Játékok/Xbox360"}
     - {id: 27, cat: Other, desc: "Klipek"}
 
   modes:

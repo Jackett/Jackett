@@ -20,10 +20,10 @@ caps:
     - {id: 69, cat: TV/Anime, desc: "Anime: Anime"}
     - {id: 116, cat: TV/Anime, desc: "Anime: Filmes"}
     - {id: 118, cat: TV/Anime, desc: "Anime: Séries"}
-    - {id: 23, cat: PC/Phone-Android, desc: "Aplicativos: Android"}
-    - {id: 27, cat: PC/Phone-IOS, desc: "Aplicativos: iPad"}
-    - {id: 26, cat: PC/Phone-IOS, desc: "Aplicativos: iPhone"}
-    - {id: 28, cat: PC/Phone-IOS, desc: "Aplicativos: iPod"}
+    - {id: 23, cat: PC/Mobile-Android, desc: "Aplicativos: Android"}
+    - {id: 27, cat: PC/Mobile-iOS, desc: "Aplicativos: iPad"}
+    - {id: 26, cat: PC/Mobile-iOS, desc: "Aplicativos: iPhone"}
+    - {id: 28, cat: PC/Mobile-iOS, desc: "Aplicativos: iPod"}
     - {id: 25, cat: PC, desc: "Aplicativos: Linux"}
     - {id: 22, cat: PC/Mac, desc: "Aplicativos: Mac"}
     - {id: 21, cat: PC/0day, desc: "Aplicativos: Windows"}
@@ -49,9 +49,9 @@ caps:
     - {id: 79, cat: Console/PS4, desc: "Jogos: Ps4"}
     - {id: 82, cat: Console/PSP, desc: "Jogos: PSP"}
     - {id: 55, cat: Console/Wii, desc: "Jogos: Wii"}
-    - {id: 54, cat: Console/Xbox 360, desc: "Jogos: Xbox360"}
-    - {id: 56, cat: Console/Xbox, desc: "Jogos: Xbox"}
-    - {id: 78, cat: Console/Xbox One, desc: "Jogos: Xbox One"}
+    - {id: 54, cat: Console/XBox 360, desc: "Jogos: Xbox360"}
+    - {id: 56, cat: Console/XBox, desc: "Jogos: Xbox"}
+    - {id: 78, cat: Console/XBox One, desc: "Jogos: Xbox One"}
     - {id: 29, cat: Audio, desc: "Musica: Axé"}
     - {id: 38, cat: Audio, desc: "Musica: Blues"}
     - {id: 39, cat: Audio, desc: "Musica: Dance"}

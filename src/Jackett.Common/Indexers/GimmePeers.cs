@@ -65,17 +65,17 @@ namespace Jackett.Common.Indexers
 
             AddCategoryMapping(1, TorznabCatType.TVAnime, "Anime");
             AddCategoryMapping(3, TorznabCatType.BooksOther, "Tutorials");
-            AddCategoryMapping(5, TorznabCatType.BooksEbook, "Ebooks");
+            AddCategoryMapping(5, TorznabCatType.BooksEBook, "Ebooks");
             AddCategoryMapping(29, TorznabCatType.AudioAudiobook, "Abooks");
             AddCategoryMapping(9, TorznabCatType.ConsoleNDS, "Game-NIN");
             AddCategoryMapping(10, TorznabCatType.PCGames, "Game-WIN");
             AddCategoryMapping(11, TorznabCatType.ConsolePS3, "Game-PS");
-            AddCategoryMapping(12, TorznabCatType.ConsoleXbox, "Game-XBOX");
+            AddCategoryMapping(12, TorznabCatType.ConsoleXBox, "Game-XBOX");
             AddCategoryMapping(7, TorznabCatType.Audio, "Music");
             AddCategoryMapping(2, TorznabCatType.PCMac, "App-MAC");
             AddCategoryMapping(4, TorznabCatType.PC0day, "App-WIN");
             AddCategoryMapping(27, TorznabCatType.PC, "App-LINUX");
-            AddCategoryMapping(6, TorznabCatType.PCPhoneOther, "Mobile");
+            AddCategoryMapping(6, TorznabCatType.PCMobileOther, "Mobile");
             AddCategoryMapping(8, TorznabCatType.Other, "Other");
 
             AddCategoryMapping(20, TorznabCatType.TVHD, "TV-HD");

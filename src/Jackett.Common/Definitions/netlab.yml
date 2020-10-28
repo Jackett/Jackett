@@ -12,13 +12,13 @@ caps:
   categorymappings:
     - {id: 1, cat: Movies/DVD, desc: "DVD5"}
     - {id: 4, cat: Movies/DVD, desc: "DVD9"}
-    - {id: 5, cat: Movies/WEBDL, desc: "MPEG/AVI"}
+    - {id: 5, cat: Movies/WEB-DL, desc: "MPEG/AVI"}
     - {id: 6, cat: Audio, desc: "Музыка (Music)"}
     - {id: 7, cat: PC/Games, desc: "Игры (Games)"}
     - {id: 9, cat: PC/0day, desc: "Программы (Apps)"}
     - {id: 10, cat: TV/HD, desc: "HDTV"}
     - {id: 11, cat: Audio/Audiobook, desc: "Аудио Книги (Audiobooks)"}
-    - {id: 12, cat: Books/Ebook, desc: "Книги (Ebooks)"}
+    - {id: 12, cat: Books/EBook, desc: "Книги (Ebooks)"}
     - {id: 14, cat: Other, desc: "Разное (Other)"}
     - {id: 15, cat: Audio/Video, desc: "МузDVD (Music/Video)"}
 

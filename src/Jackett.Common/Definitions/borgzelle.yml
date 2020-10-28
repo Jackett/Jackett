@@ -17,7 +17,7 @@ caps:
     - {id: 12, cat: TV, desc: "Serien"}
     - {id: 14, cat: Audio/Video, desc: "Musikvideo"}
     - {id: 15, cat: TV/Documentary, desc: "Doku"}
-    - {id: 16, cat: TV/OTHER, desc: "Comedy"}
+    - {id: 16, cat: TV/Other, desc: "Comedy"}
     - {id: 18, cat: TV/Anime, desc: "Anime"}
     - {id: 6, cat: Movies/SD, desc: "Movie XviD/DivX"}
     - {id: 34, cat: Movies/UHD, desc: "Movie UHD"}
@@ -33,11 +33,11 @@ caps:
     - {id: 26, cat: Console, desc: "Spiele Konsolen"}
     - {id: 30, cat: Other, desc: "Diverse Wallpaper"}
     - {id: 31, cat: Other, desc: "Sonstiges"}
-    - {id: 29, cat: Books/Ebook, desc: "E-Book"}
+    - {id: 29, cat: Books/EBook, desc: "E-Book"}
     - {id: 19, cat: Audio, desc: "Musik"}
     - {id: 20, cat: Audio/Audiobook, desc: "Hörbuch"}
     - {id: 21, cat: PC/0day, desc: "Software Windows"}
-    - {id: 23, cat: PC/Phone-Other, desc: "Software PDA/Handy"}
+    - {id: 23, cat: PC/Mobile-Other, desc: "Software PDA/Handy"}
     - {id: 22, cat: PC/Mac, desc: "Software MAC"}
     - {id: 24, cat: PC, desc: "Software Linux"}
 

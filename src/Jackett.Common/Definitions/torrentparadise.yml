@@ -25,13 +25,13 @@ caps:
     ANIMEDUBBEDSUBBED: TV/Anime
     APPLICATIONS: PC
     APPLICATIONSANDROID: PC
-    APPLICATIONSHANDHELD: PC/Phone-Other
+    APPLICATIONSHANDHELD: PC/Mobile-Other
     APPLICATIONSMAC: PC/Mac
     APPLICATIONSOTHEROS: PC
     APPLICATIONSWINDOWS: PC/0day
     APPS: PC
     APPSANDROID: PC
-    APPSHANDHELD: PC/Phone-Other
+    APPSHANDHELD: PC/Mobile-Other
     APPSMAC: PC/Mac
     APPSOTHEROS: PC
     APPSPC: PC
@@ -50,16 +50,16 @@ caps:
     BOOKS: Books
     BOOKSAUDIO: Audio/Audiobook
     BOOKSCOMICS: Books/Comics
-    BOOKSEBOOKS: Books/Ebook
-    BOOKSMAGAZINES: Books/Magazines
+    BOOKSEBOOKS: Books/EBook
+    BOOKSMAGAZINES: Books/Mags
     BOOKSNONFICTION: Books
     BOOKSTEXTBOOKS: Books
     COMICSNEM43COMICS: Books/Comics
     DESIPORN: XXX
     DOCUMENTARIES: TV/Documentary
     DVDRVIDEO: Movies/DVD
-    EBOOKS: Books/Ebook
-    EBOOKSTUTORIALS: Books/Ebook
+    EBOOKS: Books/EBook
+    EBOOKSTUTORIALS: Books/EBook
     ESTRENOS: XXX
     FLAC: Audio/Lossless
     FLACMUSIC: Audio/Lossless
@@ -75,8 +75,8 @@ caps:
     GAMESWII: Console/Wii
     GAMESWIIU: Console/WiiU
     GAMESWINDOWS: PC/Games
-    GAMESXBOX: Console/Xbox
-    GAMESXBOX360: Console/Xbox 360
+    GAMESXBOX: Console/XBox
+    GAMESXBOX360: Console/XBox 360
     IMAGES: Other
     JAPANESEANIME: TV/Anime
     JUEGOS: Console
@@ -87,11 +87,11 @@ caps:
     JUEGOSPSP: Console/PSP
     JUEGOSWII: Console/Wii
     JUEGOSWIIU: Console/WiiU
-    JUEGOSXBOX: Console/Xbox
-    JUEGOSXBOX360: Console/Xbox 360
+    JUEGOSXBOX: Console/XBox
+    JUEGOSXBOX360: Console/XBox 360
     MACINTOSH: PC/Mac
     MISCELLANEOUS: Other
-    MOBILE: PC/Phone-Other
+    MOBILE: PC/Mobile-Other
     MOVIES: Movies
     MOVIESBLURAYDISCREMUX: Movies/HD
     MOVIESBOLLYWOOD: Movies
@@ -140,7 +140,7 @@ caps:
     PORNPICTURES: XXX
     SERIES: TV
     SOFTWARE: PC
-    SOFTWAREANDROID: PC/Phone-Android
+    SOFTWAREANDROID: PC/Mobile-Android
     SOFTWAREMAC: PC/Mac
     SOFTWAREWINDOWS: PC/0day
     SPORTS: TV/Sport

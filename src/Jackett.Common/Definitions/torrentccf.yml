@@ -30,7 +30,7 @@ caps:
     - {id: 616, cat: PC, desc: "Appz"}
     - {id: 617, cat: PC/Games, desc: "PC Games"}
     - {id: 618, cat: Console/PS4, desc: "Playstation"}
-    - {id: 619, cat: Console/Xbox, desc: "Xbox"}
+    - {id: 619, cat: Console/XBox, desc: "Xbox"}
     - {id: 620, cat: Console/Wii, desc: "Wii"}
     - {id: 621, cat: Other, desc: "Others"}
 

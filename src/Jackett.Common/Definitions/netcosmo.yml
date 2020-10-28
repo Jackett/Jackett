@@ -11,7 +11,7 @@ links:
 caps:
   categorymappings:
     - {id: 14, cat: Movies, desc: "Screener"}
-    - {id: 39, cat: Movies/WEBDL, desc: "BDRip - Download WEB"}
+    - {id: 39, cat: Movies/WEB-DL, desc: "BDRip - Download WEB"}
     - {id: 15, cat: Movies/HD, desc: "Rip H264"}
     - {id: 16, cat: Movies/HD, desc: "Rip H265"}
     - {id: 24, cat: Movies/UHD, desc: "Rip 4K"}

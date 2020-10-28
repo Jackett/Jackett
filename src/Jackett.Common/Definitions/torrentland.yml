@@ -45,7 +45,7 @@ caps:
     - {id: 84, cat: TV/HD, desc: "Series - H265"}
     - {id: 22, cat: TV/SD, desc: "Series - DVD"}
     - {id: 20, cat: TV/SD, desc: "Series - HDRip"}
-    - {id: 51, cat: TV/OTHER, desc: "Series - Otros Formatos"}
+    - {id: 51, cat: TV/Other, desc: "Series - Otros Formatos"}
     # Documentales
     - {id: 53, cat: TV/Documentary, desc: "Documentales - HD"}
     - {id: 52, cat: TV/Documentary, desc: "Documentales - SD"}
@@ -62,13 +62,13 @@ caps:
     - {id: 60, cat: TV/Sport, desc: "Deportes - SD"}
     # internal cats not provided in search category dropdown !?!
     # found by fishing
-    - {id: 37, cat: Books/Ebook, desc: "Ebook"}
+    - {id: 37, cat: Books/EBook, desc: "Ebook"}
     - {id: 47, cat: Audio/Lossless, desc: "Music Lossless"}
     - {id: 31, cat: Audio/Video, desc: "Music Video"}
     - {id: 19, cat: Audio/MP3, desc: "Music MP3"}
     - {id: 29, cat: PC/Games, desc: "PC Game"}
     - {id: 26, cat: Console/Wii, desc: "Console Wii / WiiU"}
-    - {id: 27, cat: Console/Xbox 360, desc: "Console Xbox360"}
+    - {id: 27, cat: Console/XBox 360, desc: "Console Xbox360"}
     - {id: 28, cat: Console/PSP, desc: "Console PSP / PS3"}
     - {id: 42, cat: PC/ISO, desc: "PC ISO"}
     - {id: 44, cat: PC, desc: "PC"}
@@ -79,10 +79,10 @@ caps:
     - {id: 43, cat: PC/Mac, desc: "PC Mac"}
     - {id: 30, cat: Console/NDS, desc: "Console NDS"}
     - {id: 48, cat: Audio/Video, desc: "Music Video"}
-    - {id: 25, cat: Books/Ebook, desc: "Ebook"}
-    - {id: 0, cat: Books/Ebook, desc: "Ebook"}
+    - {id: 25, cat: Books/EBook, desc: "Ebook"}
+    - {id: 0, cat: Books/EBook, desc: "Ebook"}
     - {id: 24, cat: XXX, desc: "Adultos"}
-    - {id: 64, cat: PC/Phone-Android, desc: "PC Android"}
+    - {id: 64, cat: PC/Mobile-Android, desc: "PC Android"}
     - {id: 21, cat: TV/Documentary, desc: "Documentales"}
 
   modes:

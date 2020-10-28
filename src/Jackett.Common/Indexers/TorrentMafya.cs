@@ -59,7 +59,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("programs", TorznabCatType.PC, "Program");
             AddCategoryMapping("movies", TorznabCatType.Movies, "Film");
             AddCategoryMapping("tv", TorznabCatType.TV, "Dizi");
-            AddCategoryMapping("apk", TorznabCatType.PCPhoneAndroid, "APK");
+            AddCategoryMapping("apk", TorznabCatType.PCMobileAndroid, "APK");
         }
 
         private static DateTime ParseReleasePublishDate(string date)
@@ -107,7 +107,7 @@ namespace Jackett.Common.Indexers
                 result.Add(TorznabCatType.PC.ID);
             } else if (classes.Contains("fa-android"))
             {
-                result.Add(TorznabCatType.PCPhoneAndroid.ID);
+                result.Add(TorznabCatType.PCMobileAndroid.ID);
             }
             return result;
         }

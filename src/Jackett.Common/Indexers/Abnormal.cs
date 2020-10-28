@@ -94,9 +94,9 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("TV|HD|VOSTFR", TorznabCatType.TVHD);                // HD VOSTFR
             AddCategoryMapping("TV|SD|VF", TorznabCatType.TVSD);                    // SD VF
             AddCategoryMapping("TV|HD|VF", TorznabCatType.TVHD);                    // HD VF
-            AddCategoryMapping("TV|PACK|FR", TorznabCatType.TVOTHER);               // PACK FR
-            AddCategoryMapping("TV|PACK|VOSTFR", TorznabCatType.TVOTHER);           // PACK VOSTFR
-            AddCategoryMapping("TV|EMISSIONS", TorznabCatType.TVOTHER);             // EMISSIONS
+            AddCategoryMapping("TV|PACK|FR", TorznabCatType.TVOther);               // PACK FR
+            AddCategoryMapping("TV|PACK|VOSTFR", TorznabCatType.TVOther);           // PACK VOSTFR
+            AddCategoryMapping("TV|EMISSIONS", TorznabCatType.TVOther);             // EMISSIONS
 
             // Anime
             AddCategoryMapping("ANIME", TorznabCatType.TVAnime);                    // ANIME
@@ -112,7 +112,7 @@ namespace Jackett.Common.Indexers
             // Other
             AddCategoryMapping("PC|APP", TorznabCatType.PC);                        // PC
             AddCategoryMapping("PC|GAMES", TorznabCatType.PCGames);                 // GAMES
-            AddCategoryMapping("EBOOKS", TorznabCatType.BooksEbook);                // EBOOKS
+            AddCategoryMapping("EBOOKS", TorznabCatType.BooksEBook);                // EBOOKS
         }
 
         /// <summary>

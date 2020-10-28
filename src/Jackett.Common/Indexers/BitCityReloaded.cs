@@ -79,8 +79,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(11, TorznabCatType.ConsoleNDS); // Games/Nintendo DS
             AddCategoryMapping(10, TorznabCatType.PCGames); // Games/PC
             AddCategoryMapping(13, TorznabCatType.ConsoleWii); // Games/Wii
-            AddCategoryMapping(14, TorznabCatType.ConsoleXbox); // Games/Xbox & 360
-            AddCategoryMapping(15, TorznabCatType.PCPhoneOther); // Handy & PDA
+            AddCategoryMapping(14, TorznabCatType.ConsoleXBox); // Games/Xbox & 360
+            AddCategoryMapping(15, TorznabCatType.PCMobileOther); // Handy & PDA
             AddCategoryMapping(16, TorznabCatType.AudioAudiobook); // Hörspiel/Hörbuch
             AddCategoryMapping(30, TorznabCatType.Other); // International
             AddCategoryMapping(17, TorznabCatType.Other); // MegaPack
@@ -92,15 +92,15 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(9, TorznabCatType.MoviesOther); // Movie/XviD,DivX,h264
             AddCategoryMapping(26, TorznabCatType.XXX); // Movie/XXX
             AddCategoryMapping(41, TorznabCatType.XXXOther); // Movie/XXX/Other
-            AddCategoryMapping(42, TorznabCatType.XXXPacks); // Movie/XXX/Pack
+            AddCategoryMapping(42, TorznabCatType.XXXPack); // Movie/XXX/Pack
             AddCategoryMapping(45, TorznabCatType.MoviesHD); // Movies/4K
             AddCategoryMapping(33, TorznabCatType.MoviesBluRay); // Movies/BluRay
             AddCategoryMapping(18, TorznabCatType.Audio); // Musik
             AddCategoryMapping(19, TorznabCatType.AudioVideo); // Musik Videos
-            AddCategoryMapping(44, TorznabCatType.TVOTHER); // Serie/DVD/R
+            AddCategoryMapping(44, TorznabCatType.TVOther); // Serie/DVD/R
             AddCategoryMapping(22, TorznabCatType.TVHD); // Serie/HDTV
             AddCategoryMapping(38, TorznabCatType.TV); // Serie/Pack
-            AddCategoryMapping(23, TorznabCatType.TVOTHER); // Serie/XviD,DivX,h264
+            AddCategoryMapping(23, TorznabCatType.TVOther); // Serie/XviD,DivX,h264
             AddCategoryMapping(25, TorznabCatType.TVSport); // Sport
         }
 

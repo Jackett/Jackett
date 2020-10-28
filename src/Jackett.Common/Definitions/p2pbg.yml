@@ -25,8 +25,8 @@ caps:
     - {id: 38, cat: TV/Anime, desc: "TV-Cartoons"}
     - {id: 8, cat: PC/Games, desc: "Games-PC ISO"}
     - {id: 9, cat: PC/Games, desc: "Games-PC Rips"}
-    - {id: 21, cat: Console/Xbox, desc: "Games-XboX"}
-    - {id: 22, cat: Console/Xbox 360, desc: "Games-X360"}
+    - {id: 21, cat: Console/XBox, desc: "Games-XboX"}
+    - {id: 22, cat: Console/XBox 360, desc: "Games-X360"}
     - {id: 33, cat: Console/Wii, desc: "Games-Wii"}
     - {id: 20, cat: Console/PSP, desc: "Games-PSP"}
     - {id: 23, cat: Console/PS3, desc: "Games-PS3"}
@@ -45,13 +45,13 @@ caps:
     - {id: 37, cat: Other/Misc, desc: "Pictures"}
     - {id: 4, cat: Other, desc: "Other"}
     - {id: 6, cat: Books, desc: "Books"}
-    - {id: 52, cat: PC/Phone-Other, desc: "Mobile-GSM"}
-    - {id: 40, cat: PC/Phone-IOS, desc: "Mobile-iPhone"}
+    - {id: 52, cat: PC/Mobile-Other, desc: "Mobile-GSM"}
+    - {id: 40, cat: PC/Mobile-iOS, desc: "Mobile-iPhone"}
     - {id: 51, cat: TV/Sport, desc: "Sport"}
     - {id: 5, cat: TV/Sport, desc: "Sport F1"}
     - {id: 13, cat: XXX, desc: "XXX"}
     - {id: 54, cat: XXX/x264, desc: "XXX HD"}
-    - {id: 32, cat: XXX/Imageset, desc: "XXX Pictures"}
+    - {id: 32, cat: XXX/ImageSet, desc: "XXX Pictures"}
     - {id: 56, cat: XXX, desc: "XXX 3D"}
     - {id: 53, cat: XXX, desc: "XXX Hentai"}
     - {id: 48, cat: XXX, desc: "XXX BG Amateurs"}

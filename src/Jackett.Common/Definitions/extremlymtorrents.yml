@@ -23,18 +23,18 @@ caps:
     - {id: 41, cat: TV, desc: "TVRip"}
     - {id: 6, cat: Audio, desc: "Music Mp3 | FLAC"}
     - {id: 9, cat: TV, desc: "Kidz | Cartoons"}
-    - {id: 8, cat: Books/Ebook, desc: "Comics | EBook"}
+    - {id: 8, cat: Books/EBook, desc: "Comics | EBook"}
     - {id: 10, cat: TV, desc: "TV Episode | Season Complete"}
     - {id: 27, cat: Movies/DVD, desc: "DVD | PAL | NTSC"}
-    - {id: 25, cat: Movies/WEBDL, desc: "WEBRip | WEB-DL"}
+    - {id: 25, cat: Movies/WEB-DL, desc: "WEBRip | WEB-DL"}
     - {id: 35, cat: Movies, desc: "BRRip | BDRip | HDRip"}
     - {id: 3, cat: PC, desc: "Applications"}
     - {id: 17, cat: Console/PSP, desc: "PSP | Playstation "}
     - {id: 30, cat: TV/SD, desc: "PDTV | SDTV"}
     - {id: 18, cat: Console/PS3, desc: "PS3 | Playstation 3 "}
     - {id: 46, cat: Console/PS4, desc: "PS4 | PlayStation 4"}
-    - {id: 20, cat: PC/Phone-IOS, desc: "Iphone iOS"}
-    - {id: 19, cat: PC/Phone-Android, desc: "Android Apk"}
+    - {id: 20, cat: PC/Mobile-iOS, desc: "Iphone iOS"}
+    - {id: 19, cat: PC/Mobile-Android, desc: "Android Apk"}
     - {id: 21, cat: Movies, desc: "Pack"}
     - {id: 49, cat: TV/UHD, desc: "TV UHD | 2160p | Episodes"}
     - {id: 24, cat: Audio/Video, desc: "VideoClip"}
@@ -48,9 +48,9 @@ caps:
     - {id: 29, cat: PC/0day, desc: "Windows PC"}
     - {id: 7, cat: PC/Mac, desc: "Mac"}
     - {id: 23, cat: PC, desc: "Linux"}
-    - {id: 32, cat: PC/Phone-Other, desc: "GPS Navigation"}
+    - {id: 32, cat: PC/Mobile-Other, desc: "GPS Navigation"}
     - {id: 45, cat: Audio, desc: "Vinyl Rip"}
-    - {id: 2, cat: Console/Xbox 360, desc: "XBOX 360"}
+    - {id: 2, cat: Console/XBox 360, desc: "XBOX 360"}
     - {id: 1, cat: PC/Games, desc: "Games PC"}
     - {id: 14, cat: Other, desc: "Wallpapers"}
     - {id: 44, cat: Movies, desc: "Bollywood"}

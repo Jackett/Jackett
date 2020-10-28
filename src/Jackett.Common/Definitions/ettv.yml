@@ -48,8 +48,8 @@ caps:
     - {id: 75, cat: TV/Anime, desc: "Anime - Others"}
     - {id: 56, cat: Audio/Audiobook, desc: "Books - Audio"}
     - {id: 55, cat: Books/Comics, desc: "Books - Comics"}
-    - {id: 53, cat: Books/Ebook, desc: "Books - Ebooks"}
-    - {id: 54, cat: Books/Magazines, desc: "Books - Magazines"}
+    - {id: 53, cat: Books/EBook, desc: "Books - Ebooks"}
+    - {id: 54, cat: Books/Mags, desc: "Books - Magazines"}
     - {id: 68, cat: Books/Other, desc: "Books - Others"}
     - {id: 90, cat: Books/Other, desc: "Books - Others"}
     - {id: 58, cat: PC/Games, desc: "Games - Android"}
@@ -74,10 +74,10 @@ caps:
     - {id: 69, cat: Audio/Other, desc: "Music - Others"}
     - {id: 95, cat: Other/Misc, desc: "Others - Misc"}
     - {id: 78, cat: Other, desc: "Others - Unsorted"}
-    - {id: 63, cat: PC/Phone-Android, desc: "Software - Android"}
+    - {id: 63, cat: PC/Mobile-Android, desc: "Software - Android"}
     - {id: 64, cat: PC/Mac, desc: "Software - Mac"}
     - {id: 70, cat: PC, desc: "Software - Others"}
-    - {id: 62, cat: PC/0Day, desc: "Software - Windows"}
+    - {id: 62, cat: PC/0day, desc: "Software - Windows"}
     - {id: 94, cat: Books, desc: "Tutorials - Tutorials"}
     - {id: 79, cat: TV/Documentary, desc: "Documentary"}
     - {id: 41, cat: TV/HD, desc: "TV - HD/X264/H264"}

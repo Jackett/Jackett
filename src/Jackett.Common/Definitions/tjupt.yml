@@ -20,7 +20,7 @@ caps:
     - {id: 408, cat: PC, desc: "Software软件"}
     - {id: 409, cat: Console, desc: "Games游戏"}
     - {id: 411, cat: Books, desc: "Books纪录片"}
-    - {id: 412, cat: PC/Phone-Other, desc: "Mobile移动视频"}
+    - {id: 412, cat: PC/Mobile-Other, desc: "Mobile移动视频"}
     - {id: 410, cat: Other, desc: "Misc其他"}
 
   modes:

@@ -50,17 +50,17 @@ namespace Jackett.Common.Indexers
 
             // Apple
             AddCategoryMapping("Mac", TorznabCatType.ConsoleOther, "Mac");
-            AddCategoryMapping("iOS", TorznabCatType.PCPhoneIOS, "iOS");
+            AddCategoryMapping("iOS", TorznabCatType.PCMobileiOS, "iOS");
             AddCategoryMapping("Apple Bandai Pippin", TorznabCatType.ConsoleOther, "Apple Bandai Pippin");
 
             // Google
-            AddCategoryMapping("Android", TorznabCatType.PCPhoneAndroid, "Android");
+            AddCategoryMapping("Android", TorznabCatType.PCMobileAndroid, "Android");
 
             // Microsoft
             AddCategoryMapping("DOS", TorznabCatType.PCGames, "DOS");
             AddCategoryMapping("Windows", TorznabCatType.PCGames, "Windows");
-            AddCategoryMapping("Xbox", TorznabCatType.ConsoleXbox, "Xbox");
-            AddCategoryMapping("Xbox 360", TorznabCatType.ConsoleXbox360, "Xbox 360");
+            AddCategoryMapping("Xbox", TorznabCatType.ConsoleXBox, "Xbox");
+            AddCategoryMapping("Xbox 360", TorznabCatType.ConsoleXBox360, "Xbox 360");
 
             // Nintendo
             AddCategoryMapping("Game Boy", TorznabCatType.ConsoleOther, "Game Boy");
@@ -176,7 +176,7 @@ namespace Jackett.Common.Indexers
             // special categories (real categories/not platforms)
             AddCategoryMapping("OST", TorznabCatType.AudioOther, "OST");
             AddCategoryMapping("Applications", TorznabCatType.PC0day, "Applications");
-            AddCategoryMapping("E-Books", TorznabCatType.BooksEbook, "E-Books");
+            AddCategoryMapping("E-Books", TorznabCatType.BooksEBook, "E-Books");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

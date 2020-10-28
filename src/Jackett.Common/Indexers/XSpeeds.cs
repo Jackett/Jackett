@@ -72,7 +72,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(65, TorznabCatType.TVDocumentary, "Documentaries");
             AddCategoryMapping(10, TorznabCatType.MoviesDVD, "DVDR");
             AddCategoryMapping(72, TorznabCatType.MoviesForeign, "Foreign");
-            AddCategoryMapping(74, TorznabCatType.TVOTHER, "Kids");
+            AddCategoryMapping(74, TorznabCatType.TVOther, "Kids");
             AddCategoryMapping(44, TorznabCatType.TVSport, "MMA");
             AddCategoryMapping(11, TorznabCatType.Movies, "Movie Boxsets");
             AddCategoryMapping(12, TorznabCatType.Movies, "Movies");
@@ -97,7 +97,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(16, TorznabCatType.TVSD, "TV-SD");
             AddCategoryMapping(7, TorznabCatType.ConsoleWii, "Wii Games");
             AddCategoryMapping(43, TorznabCatType.TVSport, "Wrestling");
-            AddCategoryMapping(8, TorznabCatType.ConsoleXbox, "Xbox Games");
+            AddCategoryMapping(8, TorznabCatType.ConsoleXBox, "Xbox Games");
 
             // RSS Textual categories
             AddCategoryMapping("4K Movies", TorznabCatType.MoviesUHD);
@@ -113,7 +113,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("Documentaries", TorznabCatType.TVDocumentary);
             AddCategoryMapping("DVDR", TorznabCatType.MoviesDVD);
             AddCategoryMapping("Foreign", TorznabCatType.MoviesForeign);
-            AddCategoryMapping("Kids", TorznabCatType.TVOTHER);
+            AddCategoryMapping("Kids", TorznabCatType.TVOther);
             AddCategoryMapping("MMA", TorznabCatType.TVSport);
             AddCategoryMapping("Movie Boxsets", TorznabCatType.Movies);
             AddCategoryMapping("Movies", TorznabCatType.Movies);
@@ -137,7 +137,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("TV-SD", TorznabCatType.TVSD);
             AddCategoryMapping("Wii Games", TorznabCatType.ConsoleWii);
             AddCategoryMapping("Wrestling", TorznabCatType.TVSport);
-            AddCategoryMapping("Xbox Games", TorznabCatType.ConsoleXbox);
+            AddCategoryMapping("Xbox Games", TorznabCatType.ConsoleXBox);
         }
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()

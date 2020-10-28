@@ -24,7 +24,7 @@ caps:
     - {id: 18, cat: Books/Comics, desc: "Komiks CZ/SK lokalizace"}
     - {id: 16, cat: Other, desc: "Foto,obrázky"}
     - {id: 20, cat: Console, desc: "Konzole"}
-    - {id: 21, cat: PC/Phone-Other, desc: "Mobilmánia"}
+    - {id: 21, cat: PC/Mobile-Other, desc: "Mobilmánia"}
     - {id: 22, cat: Other, desc: "Ostatní CZ/SK scéna"}
     - {id: 23, cat: Other, desc: "Na prani non CZ/SK"}
     - {id: 27, cat: Other, desc: "TreZzoR rls"}

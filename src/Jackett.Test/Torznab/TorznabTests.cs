@@ -64,9 +64,9 @@ namespace Jackett.Test.Torznab
             AddCategoryMapping("1", TorznabCatType.Movies);
             AddCategoryMapping("mov_sd", TorznabCatType.MoviesSD);
             AddCategoryMapping("33", TorznabCatType.BooksComics);
-            AddCategoryMapping("44", TorznabCatType.ConsoleXbox, "Console/Xbox_c");
+            AddCategoryMapping("44", TorznabCatType.ConsoleXBox, "Console/Xbox_c");
             AddCategoryMapping("con_wii", TorznabCatType.ConsoleWii, "Console/Wii_c");
-            AddCategoryMapping("45", TorznabCatType.ConsoleXbox, "Console/Xbox_c2");
+            AddCategoryMapping("45", TorznabCatType.ConsoleXBox, "Console/Xbox_c2");
 
             var query = new TorznabQuery // int category with subcategories (parent cat)
             {
@@ -102,7 +102,7 @@ namespace Jackett.Test.Torznab
             Assert.AreEqual("1040", dtoCaps[3].ID);
             Assert.AreEqual("2000", dtoCaps[4].ID);
             Assert.AreEqual("2030", dtoCaps[5].ID);
-            Assert.AreEqual("7020", dtoCaps[6].ID);
+            Assert.AreEqual("7030", dtoCaps[6].ID);
 
             // test Torznab caps (XML) => more in Common.Model.TorznabCapabilitiesTests
             var xDocument = TorznabCaps.GetXDocument();
@@ -114,7 +114,7 @@ namespace Jackett.Test.Torznab
             Assert.AreEqual("1040", xDoumentCategories?[3].Attribute("id")?.Value);
             Assert.AreEqual("2000", xDoumentCategories?[4].Attribute("id")?.Value); // Movies
             Assert.AreEqual("2030", xDoumentCategories?[5].Attribute("id")?.Value);
-            Assert.AreEqual("7020", xDoumentCategories?[6].Attribute("id")?.Value);
+            Assert.AreEqual("7030", xDoumentCategories?[6].Attribute("id")?.Value);
             Assert.AreEqual(9, xDoumentCategories?[4]?.Elements("subcat").ToList().Count); // Movies
         }
 
@@ -179,7 +179,7 @@ namespace Jackett.Test.Torznab
                         new CategorymappingBlock // integer cat with description (child cat) => generates custom cat 100044
                         {
                             id = "44",
-                            cat = TorznabCatType.ConsoleXbox.Name,
+                            cat = TorznabCatType.ConsoleXBox.Name,
                             desc = "Console/Xbox_c"
                         },
                         new CategorymappingBlock // string cat with description (child cat)
@@ -191,7 +191,7 @@ namespace Jackett.Test.Torznab
                         new CategorymappingBlock // duplicate category (2 indexer cats => 1 toznab cat)
                         {
                             id = "45",
-                            cat = TorznabCatType.ConsoleXbox.Name,
+                            cat = TorznabCatType.ConsoleXBox.Name,
                             desc = "Console/Xbox_c2"
                         },
                     }
@@ -205,7 +205,7 @@ namespace Jackett.Test.Torznab
             Assert.AreEqual(7, cats.Count);
             Assert.AreEqual(2000, cats[0].ID);
             Assert.AreEqual(2030, cats[1].ID);
-            Assert.AreEqual(7020, cats[2].ID);
+            Assert.AreEqual(7030, cats[2].ID);
             Assert.AreEqual(1040, cats[3].ID);
             Assert.AreEqual(100044, cats[4].ID);
             Assert.AreEqual(1030, cats[5].ID);

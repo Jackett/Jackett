@@ -120,7 +120,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(203, TorznabCatType.AudioVideo, "Music Videos");
             AddCategoryMapping(204, TorznabCatType.MoviesOther, "Movie Clips");
             AddCategoryMapping(205, TorznabCatType.TV, "TV");
-            AddCategoryMapping(206, TorznabCatType.TVOTHER, "Handheld");
+            AddCategoryMapping(206, TorznabCatType.TVOther, "Handheld");
             AddCategoryMapping(207, TorznabCatType.MoviesHD, "HD - Movies");
             AddCategoryMapping(208, TorznabCatType.TVHD, "HD - TV shows");
             AddCategoryMapping(209, TorznabCatType.Movies3D, "3D");
@@ -130,16 +130,16 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(301, TorznabCatType.PC, "Windows");
             AddCategoryMapping(302, TorznabCatType.PCMac, "Mac");
             AddCategoryMapping(303, TorznabCatType.PC, "UNIX");
-            AddCategoryMapping(304, TorznabCatType.PCPhoneOther, "Handheld");
-            AddCategoryMapping(305, TorznabCatType.PCPhoneIOS, "IOS (iPad/iPhone)");
-            AddCategoryMapping(306, TorznabCatType.PCPhoneAndroid, "Android");
+            AddCategoryMapping(304, TorznabCatType.PCMobileOther, "Handheld");
+            AddCategoryMapping(305, TorznabCatType.PCMobileiOS, "IOS (iPad/iPhone)");
+            AddCategoryMapping(306, TorznabCatType.PCMobileAndroid, "Android");
             AddCategoryMapping(399, TorznabCatType.PC, "Other OS");
             // Games
             AddCategoryMapping(400, TorznabCatType.Console, "Games");
             AddCategoryMapping(401, TorznabCatType.PCGames, "PC");
             AddCategoryMapping(402, TorznabCatType.PCMac, "Mac");
             AddCategoryMapping(403, TorznabCatType.ConsolePS4, "PSx");
-            AddCategoryMapping(404, TorznabCatType.ConsoleXbox, "XBOX360");
+            AddCategoryMapping(404, TorznabCatType.ConsoleXBox, "XBOX360");
             AddCategoryMapping(405, TorznabCatType.ConsoleWii, "Wii");
             AddCategoryMapping(406, TorznabCatType.ConsoleOther, "Handheld");
             AddCategoryMapping(407, TorznabCatType.ConsoleOther, "IOS (iPad/iPhone)");
@@ -149,7 +149,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(500, TorznabCatType.XXX, "Porn");
             AddCategoryMapping(501, TorznabCatType.XXX, "Movies");
             AddCategoryMapping(502, TorznabCatType.XXXDVD, "Movies DVDR");
-            AddCategoryMapping(503, TorznabCatType.XXXImageset, "Pictures");
+            AddCategoryMapping(503, TorznabCatType.XXXImageSet, "Pictures");
             AddCategoryMapping(504, TorznabCatType.XXX, "Games");
             AddCategoryMapping(505, TorznabCatType.XXX, "HD - Movies");
             AddCategoryMapping(506, TorznabCatType.XXX, "Movie Clips");

@@ -19,7 +19,7 @@ caps:
     - {id: 24, cat: Movies/SD, desc: "Movies/XVID"}
     - {id: 16, cat: Movies, desc: "Old Movies"}
     - {id: 15, cat: Movies, desc: "Movies Mobile"}
-    - {id: 54, cat: Movies/WEBDL, desc: "Movies/WEB-DL"}
+    - {id: 54, cat: Movies/WEB-DL, desc: "Movies/WEB-DL"}
     - {id: 56, cat: TV/Documentary, desc: "Documentary"}
     - {id: 18, cat: Movies, desc: "Movie Packs"}
     - {id: 32, cat: Movies/UHD, desc: "Movies/4K-RO"}
@@ -31,7 +31,7 @@ caps:
     - {id: 59, cat: Movies/SD, desc: "Movies/Cam-Ro"}
     - {id: 25, cat: Movies/SD, desc: "Movies/XVID-Ro"}
     - {id: 17, cat: Movies, desc: "Old Movies Ro"}
-    - {id: 55, cat: Movies/WEBDL, desc: "Movies/WEB-DL Ro"}
+    - {id: 55, cat: Movies/WEB-DL, desc: "Movies/WEB-DL Ro"}
     - {id: 57, cat: TV/Documentary, desc: "Documentary-Ro"}
     - {id: 62, cat: Movies/3D, desc: "Movies/3D-RO"}
     - {id: 19, cat: Movies, desc: "Movie Packs Ro"}
@@ -40,7 +40,7 @@ caps:
     - {id: 13, cat: TV/HD, desc: "HDTV"}
     - {id: 14, cat: TV/HD, desc: "HDTV-Ro"}
     - {id: 28, cat: Audio, desc: "Music"}
-    - {id: 51, cat: PC/Phone-Android, desc: "Android Apps & Games"}
+    - {id: 51, cat: PC/Mobile-Android, desc: "Android Apps & Games"}
     - {id: 26, cat: PC/0day, desc: "Software"}
     - {id: 30, cat: PC/ISO, desc: "Games PC-ISO"}
     - {id: 33, cat: PC/Games, desc: "Game Packs"}

@@ -83,12 +83,12 @@ caps:
 
     - {id: 6, cat: PC, desc: "Programs"}
     - {id: 18, cat: PC/0day, desc: "Programs PC"}
-    - {id: 40, cat: PC/Phone-Android, desc: "Programs Android"}
+    - {id: 40, cat: PC/Mobile-Android, desc: "Programs Android"}
     - {id: 19, cat: PC/Mac, desc: "Programs Mac"}
 
     - {id: 2, cat: PC/Games, desc: "Games"}
     - {id: 27, cat: PC/Games, desc: "Games PC"}
-    - {id: 68, cat: PC/Phone-Android, desc: "Games Android"}
+    - {id: 68, cat: PC/Mobile-Android, desc: "Games Android"}
 
     - {id: 88, cat: Other, desc: "Tutorials / Design / Accessories"}
     - {id: 89, cat: Other, desc: "Tutorials Photoshop"}

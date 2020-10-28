@@ -35,14 +35,14 @@ caps:
     - {id: 67, cat: Movies, desc: "Films Pack Films"}
     - {id: 68, cat: Movies, desc: "Films VostFR"}
     - {id: 69, cat: Movies, desc: "Films VO"}
-    - {id: 70, cat: Movies/WEBDL, desc: "Films WebRip 1080p"}
-    - {id: 71, cat: Movies/WEBDL, desc: "Films WebRip 720p"}
-    - {id: 73, cat: Movies/WEBDL, desc: "Films Webrip"}
-    - {id: 72, cat: Movies/WEBDL, desc: "Films WEB DL"}
+    - {id: 70, cat: Movies/WEB-DL, desc: "Films WebRip 1080p"}
+    - {id: 71, cat: Movies/WEB-DL, desc: "Films WebRip 720p"}
+    - {id: 73, cat: Movies/WEB-DL, desc: "Films Webrip"}
+    - {id: 72, cat: Movies/WEB-DL, desc: "Films WEB DL"}
     - {id: 99, cat: Movies, desc: "Films Remux"}
     - {id: 98, cat: TV/Anime, desc: "Films Film Animées"}
-    - {id: 122, cat: Movies/WEBDL, desc: "Films Web-DL 1080P"}
-    - {id: 123, cat: Movies/WEBDL, desc: "Films WEB-DL 720p"}
+    - {id: 122, cat: Movies/WEB-DL, desc: "Films Web-DL 1080P"}
+    - {id: 123, cat: Movies/WEB-DL, desc: "Films WEB-DL 720p"}
     - {id: 126, cat: Movies, desc: "Films HDTV"}
     # Jeux
     - {id: 114, cat: PC/Games, desc: "Jeux PC"}
@@ -52,20 +52,20 @@ caps:
     - {id: 118, cat: Console, desc: "Jeux Switch"}
     - {id: 119, cat: Console/Wii, desc: "Jeux Wii"}
     - {id: 120, cat: Console/WiiU, desc: "Jeux WiiU"}
-    - {id: 121, cat: Console/Xbox, desc: "Jeux Xbox"}
+    - {id: 121, cat: Console/XBox, desc: "Jeux Xbox"}
     # Livre
     - {id: 100, cat: Audio/Audiobook, desc: "Livre Audio"}
-    - {id: 101, cat: Books/Ebook, desc: "Livre Epub"}
+    - {id: 101, cat: Books/EBook, desc: "Livre Epub"}
     - {id: 102, cat: Books, desc: "Livre Mangas"}
     - {id: 103, cat: Books, desc: "Livres BD"}
     - {id: 104, cat: Books/Comics, desc: "Livres Comics"}
-    - {id: 105, cat: Books/Magazines, desc: "Livres Press"}
+    - {id: 105, cat: Books/Mags, desc: "Livres Press"}
     - {id: 106, cat: Books, desc: "Livres Romans"}
     # Logiciel
     - {id: 110, cat: PC/0day, desc: "Logiciel Windows"}
     - {id: 111, cat: PC, desc: "Logiciel Linux"}
-    - {id: 113, cat: PC/Phone-IOS, desc: "Logiciel Apple"}
-    - {id: 112, cat: PC/Phone-Other, desc: "Logiciel Smart Phone"}
+    - {id: 113, cat: PC/Mobile-iOS, desc: "Logiciel Apple"}
+    - {id: 112, cat: PC/Mobile-Other, desc: "Logiciel Smart Phone"}
     # Musiques
     - {id: 125, cat: Audio/Video, desc: "Musiques Videos Pack"}
     - {id: 107, cat: Audio/MP3, desc: "Musiques MP3"}

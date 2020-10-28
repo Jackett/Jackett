@@ -667,28 +667,28 @@ caps:
     - {id: 1140, cat: Audio/Audiobook, desc: "Аудиоспектакли"}
     # Мобильные устройства
     # Mobile devices
-    - {id: 1173, cat: PC/Phone-Other, desc: "F.A.Q. по разделу / Прочее"}
-    - {id: 1166, cat: PC/Phone-Other, desc: "Windows Phone"}
-    - {id: 1176, cat: PC/Phone-Other, desc: " |- Игры"}
-    - {id: 1175, cat: PC/Phone-Other, desc: " |- Программы"}
-    - {id: 1174, cat: PC/Phone-Other, desc: " |- Прошивки"}
-    - {id: 1202, cat: PC/Phone-Other, desc: " |- Разное"}
-    - {id: 1167, cat: PC/Phone-Other, desc: "Android"}
-    - {id: 1179, cat: PC/Phone-Other, desc: " |- Игры"}
-    - {id: 1178, cat: PC/Phone-Other, desc: " |- Программы"}
-    - {id: 1177, cat: PC/Phone-Other, desc: " |- Прошивки"}
-    - {id: 1203, cat: PC/Phone-Other, desc: " |- Разное"}
-    - {id: 1168, cat: PC/Phone-Other, desc: "iOS"}
-    - {id: 1182, cat: PC/Phone-Other, desc: " |- Игры"}
-    - {id: 1181, cat: PC/Phone-Other, desc: " |- Программы"}
-    - {id: 1180, cat: PC/Phone-Other, desc: " |- Прошивки"}
-    - {id: 1205, cat: PC/Phone-Other, desc: " |- Разное"}
-    - {id: 1170, cat: PC/Phone-Other, desc: "Другие ОС"}
-    - {id: 1188, cat: PC/Phone-Other, desc: " |- Игры"}
-    - {id: 1187, cat: PC/Phone-Other, desc: " |- Программы"}
-    - {id: 1186, cat: PC/Phone-Other, desc: " |- Прошивки"}
-    - {id: 1206, cat: PC/Phone-Other, desc: " |- Разное"}
-    - {id: 1172, cat: PC/Phone-Other, desc: "Программы для PC"}
+    - {id: 1173, cat: PC/Mobile-Other, desc: "F.A.Q. по разделу / Прочее"}
+    - {id: 1166, cat: PC/Mobile-Other, desc: "Windows Phone"}
+    - {id: 1176, cat: PC/Mobile-Other, desc: " |- Игры"}
+    - {id: 1175, cat: PC/Mobile-Other, desc: " |- Программы"}
+    - {id: 1174, cat: PC/Mobile-Other, desc: " |- Прошивки"}
+    - {id: 1202, cat: PC/Mobile-Other, desc: " |- Разное"}
+    - {id: 1167, cat: PC/Mobile-Other, desc: "Android"}
+    - {id: 1179, cat: PC/Mobile-Other, desc: " |- Игры"}
+    - {id: 1178, cat: PC/Mobile-Other, desc: " |- Программы"}
+    - {id: 1177, cat: PC/Mobile-Other, desc: " |- Прошивки"}
+    - {id: 1203, cat: PC/Mobile-Other, desc: " |- Разное"}
+    - {id: 1168, cat: PC/Mobile-Other, desc: "iOS"}
+    - {id: 1182, cat: PC/Mobile-Other, desc: " |- Игры"}
+    - {id: 1181, cat: PC/Mobile-Other, desc: " |- Программы"}
+    - {id: 1180, cat: PC/Mobile-Other, desc: " |- Прошивки"}
+    - {id: 1205, cat: PC/Mobile-Other, desc: " |- Разное"}
+    - {id: 1170, cat: PC/Mobile-Other, desc: "Другие ОС"}
+    - {id: 1188, cat: PC/Mobile-Other, desc: " |- Игры"}
+    - {id: 1187, cat: PC/Mobile-Other, desc: " |- Программы"}
+    - {id: 1186, cat: PC/Mobile-Other, desc: " |- Прошивки"}
+    - {id: 1206, cat: PC/Mobile-Other, desc: " |- Разное"}
+    - {id: 1172, cat: PC/Mobile-Other, desc: "Программы для PC"}
     # Программное обеспечение
     # Software
     - {id: 349, cat: PC, desc: "Mac OS. Программное обеспечение под них"}

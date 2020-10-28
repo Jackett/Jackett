@@ -13,34 +13,34 @@ caps:
     - {id: 2, cat: Movies/DVD, desc: "Film DVD"}
     - {id: 4, cat: Movies/HD, desc: "Film 1080P"}
     - {id: 15, cat: Movies/BluRay, desc: "Film Bluray"}
-    - {id: 16, cat: Movies/WEBDL, desc: "Film Web"}
+    - {id: 16, cat: Movies/WEB-DL, desc: "Film Web"}
     - {id: 17, cat: Movies/Other, desc: "Film Iso"}
     - {id: 19, cat: Movies/HD, desc: "Film 720P"}
     - {id: 59, cat: Movies/Other, desc: "Film Divers"}
     - {id: 64, cat: Movies/Other, desc: "Film Rip"}
     - {id: 46, cat: TV/HD, desc: "Série 1080P"}
     - {id: 48, cat: TV/HD, desc: "Série Bluray"}
-    - {id: 60, cat: TV/OTHER, desc: "Série Divers"}
-    - {id: 12, cat: TV/OTHER, desc: "Série DVDRip"}
+    - {id: 60, cat: TV/Other, desc: "Série Divers"}
+    - {id: 12, cat: TV/Other, desc: "Série DVDRip"}
     - {id: 30, cat: TV/HD, desc: "Série 720P"}
     - {id: 23, cat: TV/WEB-DL, desc: "Série Web"}
     - {id: 44, cat: TV/HD, desc: "Pack Séries 1080P"}
-    - {id: 38, cat: TV/OTHER, desc: "Pack Séries intégrale"}
+    - {id: 38, cat: TV/Other, desc: "Pack Séries intégrale"}
     - {id: 41, cat: TV/WEB-DL, desc: "Pack Séries Web"}
     - {id: 45, cat: TV/HD, desc: "Pack Séries 720P"}
-    - {id: 63, cat: TV/OTHER, desc: "Pack Séries Divers"}
+    - {id: 63, cat: TV/Other, desc: "Pack Séries Divers"}
     - {id: 10, cat: XXX, desc: "XxX Film"}
     - {id: 13, cat: PC/0day, desc: "Apps Win"}
     - {id: 14, cat: PC/Mac, desc: "Apps Mac"}
-    - {id: 52, cat: PC/Phone-IOS, desc: "Apps Iphone"}
-    - {id: 53, cat: PC/Phone-Android, desc: "Apps android"}
+    - {id: 52, cat: PC/Mobile-iOS, desc: "Apps Iphone"}
+    - {id: 53, cat: PC/Mobile-Android, desc: "Apps android"}
     - {id: 5, cat: Audio/MP3, desc: "Music Mp3"}
     - {id: 6, cat: Audio/Lossless, desc: "Music FLAC"}
     - {id: 7, cat: PC/Games, desc: "Jeux Win"}
     - {id: 8, cat: Console/PS3, desc: "Jeux PS3"}
     - {id: 54, cat: PC/Games, desc: "Jeux Pc"}
     - {id: 55, cat: Console/PS4, desc: "Jeux PS4"}
-    - {id: 56, cat: Console/Xbox 360, desc: "Jeux XBOX 360"}
+    - {id: 56, cat: Console/XBox 360, desc: "Jeux XBOX 360"}
     - {id: 57, cat: Console/Other, desc: "Jeux androïd"}
 
   modes:

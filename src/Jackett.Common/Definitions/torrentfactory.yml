@@ -37,7 +37,7 @@ caps:
     - {id: 35, cat: PC/0day, desc: "Software - Linux"}
     - {id: 36, cat: PC/Mac, desc: "Software - Mac"}
     - {id: 37, cat: PC/0day, desc: "Software - Windows"}
-    - {id: 89, cat: PC/Phone-Android, desc: "Software - Android"}
+    - {id: 89, cat: PC/Mobile-Android, desc: "Software - Android"}
     - {id: 52, cat: Movies/HD, desc: "HDrip DVDrip - Peliculas"}
     - {id: 53, cat: TV, desc: "HDrip DVDrip - Series"}
     - {id: 62, cat: Audio/Video, desc: "HDrip DVDrip - Musica"}
@@ -51,14 +51,14 @@ caps:
     - {id: 103, cat: Movies/HD, desc: "MicroHD - Peliculas"}
     - {id: 54, cat: XXX, desc: "XXX - xxx (Hetero)"}
     - {id: 74, cat: XXX, desc: "XXX - xxxy (Gay)"}
-    - {id: 76, cat: XXX/Imageset, desc: "XXX - xxx (Imagenes)"}
+    - {id: 76, cat: XXX/ImageSet, desc: "XXX - xxx (Imagenes)"}
     - {id: 85, cat: XXX, desc: "XXX - xxx Hentai"}
-    - {id: 55, cat: Books/Ebook, desc: "Ebooks - LIBROS"}
-    - {id: 63, cat: Books/Magazines, desc: "Ebooks - Publicacion Semanal"}
-    - {id: 64, cat: Books/Magazines, desc: "Ebooks - Prensa Diaria"}
+    - {id: 55, cat: Books/EBook, desc: "Ebooks - LIBROS"}
+    - {id: 63, cat: Books/Mags, desc: "Ebooks - Publicacion Semanal"}
+    - {id: 64, cat: Books/Mags, desc: "Ebooks - Prensa Diaria"}
     - {id: 79, cat: Books/Other, desc: "Ebooks - Adultos Ebooks"}
-    - {id: 83, cat: Books/Magazines, desc: "Ebooks - Publicacion Quincena"}
-    - {id: 88, cat: Books/Magazines, desc: "Ebooks - Publicacion Mensual"}
+    - {id: 83, cat: Books/Mags, desc: "Ebooks - Publicacion Quincena"}
+    - {id: 88, cat: Books/Mags, desc: "Ebooks - Publicacion Mensual"}
     - {id: 97, cat: Books/Comics, desc: "Ebooks - Comic eBooks"}
     # not listed / unknown
     - {id: 50, cat: Other, desc: "Desconocida"}

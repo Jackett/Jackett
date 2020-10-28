@@ -29,7 +29,7 @@ caps:
     - {id: GAMES, cat: PC/Games, desc: "Games"}
     - {id: SOFTWARE, cat: PC, desc: "Software"}
     - {id: ANIME, cat: TV/Anime, desc: "Anime"}
-    - {id: EBOOKS, cat: Books/Ebook, desc: "Books"}
+    - {id: EBOOKS, cat: Books/EBook, desc: "Books"}
     - {id: OTHER, cat: Other, desc: "Other"}
     - {id: ADULT, cat: XXX, desc: "Adult"}
     - {id: AUDIOBOOK, cat: Audio/Audiobook, desc: "Audiobook"}

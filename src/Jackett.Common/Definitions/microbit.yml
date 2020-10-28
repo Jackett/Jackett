@@ -27,7 +27,7 @@ caps:
     - {id: 18, cat: PC/Games, desc: "Játék/Rip"}
     - {id: 19, cat: Other, desc: "Képek"}
     - {id: 11, cat: Audio/Video, desc: "Klippek/Videók"}
-    - {id: 8, cat: PC/Phone-Other, desc: "Mobil"}
+    - {id: 8, cat: PC/Mobile-Other, desc: "Mobil"}
     - {id: 35, cat: Books, desc: "Oktató Anyagok"}
     - {id: 28, cat: PC, desc: "PC/Egyéb"}
     - {id: 21, cat: PC/ISO, desc: "PC/ISO"}

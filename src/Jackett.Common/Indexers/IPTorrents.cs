@@ -108,9 +108,9 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(24, TorznabCatType.TVSD, "TV/DVD-R");
             AddCategoryMapping(25, TorznabCatType.TVSD, "TV/DVD-Rip");
             AddCategoryMapping(66, TorznabCatType.TVSD, "TV/Mobile");
-            AddCategoryMapping(82, TorznabCatType.TVFOREIGN, "TV/Non-English");
+            AddCategoryMapping(82, TorznabCatType.TVForeign, "TV/Non-English");
             AddCategoryMapping(65, TorznabCatType.TV, "TV/Packs");
-            AddCategoryMapping(83, TorznabCatType.TVFOREIGN, "TV/Packs/Non-English");
+            AddCategoryMapping(83, TorznabCatType.TVForeign, "TV/Packs/Non-English");
             AddCategoryMapping(79, TorznabCatType.TVSD, "TV/SD/x264");
             AddCategoryMapping(22, TorznabCatType.TVWEBDL, "TV/Web-DL");
             AddCategoryMapping(5, TorznabCatType.TVHD, "TV/x264");
@@ -126,7 +126,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(71, TorznabCatType.ConsolePS3, "Games/PS3");
             AddCategoryMapping(40, TorznabCatType.ConsolePSP, "Games/PSP");
             AddCategoryMapping(50, TorznabCatType.ConsoleWii, "Games/Wii");
-            AddCategoryMapping(44, TorznabCatType.ConsoleXbox360, "Games/Xbox-360");
+            AddCategoryMapping(44, TorznabCatType.ConsoleXBox360, "Games/Xbox-360");
 
             AddCategoryMapping(75, TorznabCatType.Audio, "Music");
             AddCategoryMapping(3, TorznabCatType.AudioMP3, "Music/Audio");
@@ -145,16 +145,16 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(95, TorznabCatType.BooksOther, "Educational");
             AddCategoryMapping(98, TorznabCatType.Other, "Fonts");
             AddCategoryMapping(69, TorznabCatType.PCMac, "Mac");
-            AddCategoryMapping(92, TorznabCatType.BooksMagazines, "Magazines / Newspapers");
-            AddCategoryMapping(58, TorznabCatType.PCPhoneOther, "Mobile");
+            AddCategoryMapping(92, TorznabCatType.BooksMags, "Magazines / Newspapers");
+            AddCategoryMapping(58, TorznabCatType.PCMobileOther, "Mobile");
             AddCategoryMapping(36, TorznabCatType.Other, "Pics/Wallpapers");
 
             AddCategoryMapping(88, TorznabCatType.XXX, "XXX");
             AddCategoryMapping(85, TorznabCatType.XXXOther, "XXX/Magazines");
             AddCategoryMapping(8, TorznabCatType.XXX, "XXX/Movie");
             AddCategoryMapping(81, TorznabCatType.XXX, "XXX/Movie/0Day");
-            AddCategoryMapping(91, TorznabCatType.XXXPacks, "XXX/Packs");
-            AddCategoryMapping(84, TorznabCatType.XXXImageset, "XXX/Pics/Wallpapers");
+            AddCategoryMapping(91, TorznabCatType.XXXPack, "XXX/Packs");
+            AddCategoryMapping(84, TorznabCatType.XXXImageSet, "XXX/Pics/Wallpapers");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

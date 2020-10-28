@@ -67,7 +67,7 @@ caps:
     - {id: 94, cat: Other, desc: "Sonstiges HD-XXX Pics"}
     - {id: 98, cat: Other, desc: "Sonstiges to sort"}
     # E-Book
-    - {id: 103, cat: Books/Ebook, desc: "E-Book Mixed"}
+    - {id: 103, cat: Books/EBook, desc: "E-Book Mixed"}
 
   modes:
     search: [q]

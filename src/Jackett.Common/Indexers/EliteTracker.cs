@@ -70,8 +70,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(59, TorznabCatType.TVAnime, "Animes - Serie");
 
             AddCategoryMapping(3, TorznabCatType.PC0day, "APPLICATION");
-            AddCategoryMapping(74, TorznabCatType.PCPhoneAndroid, "APPLICATION - ANDROID");
-            AddCategoryMapping(57, TorznabCatType.PCPhoneIOS, "APPLICATION - IPHONE");
+            AddCategoryMapping(74, TorznabCatType.PCMobileAndroid, "APPLICATION - ANDROID");
+            AddCategoryMapping(57, TorznabCatType.PCMobileiOS, "APPLICATION - IPHONE");
             AddCategoryMapping(6, TorznabCatType.PC0day, "APPLICATION - LINUX");
             AddCategoryMapping(5, TorznabCatType.PCMac, "APPLICATION - MAC");
             AddCategoryMapping(4, TorznabCatType.PC0day, "APPLICATION - WINDOWS");
@@ -106,7 +106,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(15, TorznabCatType.Console, "JEUX VIDEO");
             AddCategoryMapping(76, TorznabCatType.Console3DS, "JEUX VIDEO - 3DS");
             AddCategoryMapping(18, TorznabCatType.ConsoleNDS, "JEUX VIDEO - DS");
-            AddCategoryMapping(55, TorznabCatType.PCPhoneIOS, "JEUX VIDEO - IPHONE");
+            AddCategoryMapping(55, TorznabCatType.PCMobileiOS, "JEUX VIDEO - IPHONE");
             AddCategoryMapping(80, TorznabCatType.PCGames, "JEUX VIDEO - LINUX");
             AddCategoryMapping(96, TorznabCatType.ConsoleOther, "JEUX VIDEO - NSW");
             AddCategoryMapping(79, TorznabCatType.PCMac, "JEUX VIDEO - OSX");
@@ -118,9 +118,9 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(75, TorznabCatType.ConsolePS3, "JEUX VIDEO - PSX");
             AddCategoryMapping(19, TorznabCatType.ConsoleWii, "JEUX VIDEO - WII");
             AddCategoryMapping(83, TorznabCatType.ConsoleWiiU, "JEUX VIDEO - WiiU");
-            AddCategoryMapping(16, TorznabCatType.ConsoleXbox, "JEUX VIDEO - XBOX");
-            AddCategoryMapping(82, TorznabCatType.ConsoleXboxOne, "JEUX VIDEO - XBOX ONE");
-            AddCategoryMapping(17, TorznabCatType.ConsoleXbox360, "JEUX VIDEO - XBOX360");
+            AddCategoryMapping(16, TorznabCatType.ConsoleXBox, "JEUX VIDEO - XBOX");
+            AddCategoryMapping(82, TorznabCatType.ConsoleXBoxOne, "JEUX VIDEO - XBOX ONE");
+            AddCategoryMapping(17, TorznabCatType.ConsoleXBox360, "JEUX VIDEO - XBOX360");
 
             AddCategoryMapping(23, TorznabCatType.Audio, "MUSIQUES");
             AddCategoryMapping(26, TorznabCatType.Audio, "MUSIQUES - CLIP/CONCERT");

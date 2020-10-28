@@ -26,7 +26,7 @@ caps:
     - {id: 75, cat: Other, desc: "Képek"}
     - {id: 107, cat: Books, desc: "eBook/Eng"}
     - {id: 61, cat: Books, desc: "eBook/Hun"}
-    - {id: 106, cat: PC/Phone-Other, desc: "Mobil"}
+    - {id: 106, cat: PC/Mobile-Other, desc: "Mobil"}
     - {id: 50, cat: Audio/MP3, desc: "Mp3/Eng"}
     - {id: 49, cat: Audio/MP3, desc: "Mp3/Hun"}
     - {id: 45, cat: PC, desc: "Program ISO /RIP"}

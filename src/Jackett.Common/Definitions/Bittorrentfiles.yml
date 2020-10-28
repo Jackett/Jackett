@@ -43,7 +43,7 @@ caps:
     - {id: 92, cat: PC/Mac, desc: "Spiele Mac"}
     - {id: 93, cat: PC, desc: "Spiele Linux"}
     - {id: 97, cat: Console/XBox, desc: "Spiele XBOX"}
-    - {id: 94, cat: PC/Phone-Other, desc: "Spiele Mobile"}
+    - {id: 94, cat: PC/Mobile-Other, desc: "Spiele Mobile"}
     - {id: 95, cat: Console/NDS, desc: "Spiele Nintendo"}
     - {id: 96, cat: Console/PSP, desc: "Spiele Playstation"}
     - {id: 42, cat: Console/Other, desc: "Spiele Andere"}
@@ -70,11 +70,11 @@ caps:
     # Sonstiges
     - {id: 41, cat: Books/Comics, desc: "Sonstiges A-Book"}
     - {id: 33, cat: TV/Anime, desc: "Sonstiges Anime"}
-    - {id: 35, cat: Books/Ebook, desc: "Sonstiges e-Book-DE"}
-    - {id: 90, cat: Books/Ebook, desc: "Sonstiges e-Book-INT"}
+    - {id: 35, cat: Books/EBook, desc: "Sonstiges e-Book-DE"}
+    - {id: 90, cat: Books/EBook, desc: "Sonstiges e-Book-INT"}
     - {id: 65, cat: Other, desc: "Sonstiges E-Learning"}
     - {id: 37, cat: PC, desc: "Sonstiges Mobile"}
-    - {id: 87, cat: Books/Magazines, desc: "Sonstiges E-Paper"}
+    - {id: 87, cat: Books/Mags, desc: "Sonstiges E-Paper"}
     - {id: 38, cat: Other, desc: "Sonstiges Kids"}
     - {id: 47, cat: Other, desc: "Sonstiges Line"}
     - {id: 9, cat: Other, desc: "Sonstiges Andere"}
@@ -82,7 +82,7 @@ caps:
     - {id: 58, cat: Books/Comics, desc: "XXX HD"}
     - {id: 46, cat: XXX, desc: "XXX Hentai"}
     - {id: 35, cat: XXX/Other, desc: "XXX Andere"}
-    - {id: 59, cat: XXX/Packs, desc: "XXX Pack"}
+    - {id: 59, cat: XXX/Pack, desc: "XXX Pack"}
     - {id: 27, cat: XXX, desc: "XXX SD"}
     - {id: 76, cat: XXX, desc: "XXX Andere"}
 

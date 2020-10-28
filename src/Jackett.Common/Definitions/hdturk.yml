@@ -13,7 +13,7 @@ legacylinks:
 caps:
   categorymappings:
     - {id: 37, cat: Other, desc: "Diğer"}
-    - {id: 210, cat: Books/Ebook, desc: "E-Kitap"}
+    - {id: 210, cat: Books/EBook, desc: "E-Kitap"}
     - {id: 208, cat: Other, desc: "Eğitim"}
     - {id: 101, cat: Other, desc: "Resim"}
     - {id: 15, cat: TV, desc: "TV Dizi/Show/Spor"}

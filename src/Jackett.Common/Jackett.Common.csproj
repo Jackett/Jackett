@@ -153,7 +153,6 @@
     <Content Include="Content\login.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Models\TorznabCatType.tt" />
     <Content Include="Resources\validator_reply.xml" />
   </ItemGroup>
 
@@ -168,11 +167,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Models\TorznabCatType.generated.cs">
-      <DependentUpon>TorznabCatType.tt</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -207,10 +201,6 @@
     </None>
     <None Update="Content\fonts\glyphicons-halflings-regular.woff2">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Models\TorznabCatType.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>TorznabCatType.generated.cs</LastGenOutput>
     </None>
   </ItemGroup>
 

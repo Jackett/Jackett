@@ -39,20 +39,20 @@ caps:
     - {id: 61, cat: Audio/MP3, desc: "Music MP3 Boxset"}
     - {id: 24, cat: Audio/Lossless, desc: "Music Flac"}
     - {id: 62, cat: Audio/Lossless, desc: "Music Flac Boxset"}
-    - {id: 28, cat: PC/Phone-Android, desc: "Apps Android"}
-    - {id: 29, cat: PC/Phone-IOS, desc: "Apps iOS"}
+    - {id: 28, cat: PC/Mobile-Android, desc: "Apps Android"}
+    - {id: 29, cat: PC/Mobile-iOS, desc: "Apps iOS"}
     - {id: 25, cat: PC/0day, desc: "Apps Windows"}
     - {id: 26, cat: PC, desc: "Apps Linux"}
     - {id: 27, cat: PC/Mac, desc: "Apps MacOS"}
     - {id: 30, cat: PC/Games, desc: "Games Windows"}
     - {id: 31, cat: PC, desc: "Games Linux"}
     - {id: 32, cat: PC/Mac, desc: "Games MacOS"}
-    - {id: 33, cat: PC/Phone-Android, desc: "Games Android"}
-    - {id: 34, cat: PC/Phone-IOS, desc: "Games iOS"}
+    - {id: 33, cat: PC/Mobile-Android, desc: "Games Android"}
+    - {id: 34, cat: PC/Mobile-iOS, desc: "Games iOS"}
     - {id: 35, cat: Console/NDS, desc: "Games Nintendo"}
     - {id: 38, cat: Console/PSP, desc: "Games Playstation"}
-    - {id: 39, cat: Console/Xbox, desc: "Games XBox"}
-    - {id: 41, cat: Books/Ebook, desc: "Books E-Book"}
+    - {id: 39, cat: Console/XBox, desc: "Games XBox"}
+    - {id: 41, cat: Books/EBook, desc: "Books E-Book"}
     - {id: 42, cat: Audio/Audiobook, desc: "Books Audiobook"}
     - {id: 43, cat: Books/Technical, desc: "Books Education"}
 

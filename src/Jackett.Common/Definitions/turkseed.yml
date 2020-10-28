@@ -12,7 +12,7 @@ caps:
   categorymappings:
     - {id: 46, cat: Movies/3D, desc: "3D"}
     - {id: 47, cat: Movies/UHD, desc: "4K"}
-    - {id: 61, cat: PC/Phone-Android, desc: "Android"}
+    - {id: 61, cat: PC/Mobile-Android, desc: "Android"}
     - {id: 48, cat: TV/Anime, desc: "Animasyon"}
     - {id: 59, cat: PC, desc: "İşletim Sistemi"}
     - {id: 40, cat: TV/Documentary, desc: "Belgesel"}
@@ -21,7 +21,7 @@ caps:
     - {id: 4, cat: Other, desc: "Diğer"}
     - {id: 42, cat: Movies, desc: "Dini"}
     - {id: 51, cat: Movies/DVD, desc: "DVD"}
-    - {id: 41, cat: Books/Ebook, desc: "E-Kitap"}
+    - {id: 41, cat: Books/EBook, desc: "E-Kitap"}
     - {id: 64, cat: Books, desc: "Eğitim"}
     - {id: 55, cat: Audio/Lossless, desc: "FLAC"}
     - {id: 52, cat: Movies/HD, desc: "HD"}

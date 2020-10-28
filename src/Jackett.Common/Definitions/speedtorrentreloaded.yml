@@ -33,7 +33,7 @@ caps:
     - {id: 4, cat: PC/Games, desc: "PC-Games"}
     - {id: 84, cat: Console/PS3, desc: "PS3/PS4"}
     - {id: 84, cat: Console/PS4, desc: "PS3/PS4"}
-    - {id: 85, cat: Console/Xbox 360, desc: "Xbox-360"}
+    - {id: 85, cat: Console/XBox 360, desc: "Xbox-360"}
     - {id: 28, cat: PC/0day, desc: "Windows-Programme"}
     - {id: 18, cat: PC/0day, desc: "Appz-Sonstige"}
     - {id: 14, cat: Audio/Other, desc: "Alben / Sampler / Singles"}
@@ -43,7 +43,7 @@ caps:
     - {id: 71, cat: Audio/Other, desc: "Soundtracks"}
     - {id: 70, cat: Audio/Lossless, desc: "Flac"}
     - {id: 72, cat: Audio, desc: "Musik-Packs"}
-    - {id: 19, cat: Books/Ebook, desc: "EBooks"}
+    - {id: 19, cat: Books/EBook, desc: "EBooks"}
     - {id: 87, cat: TV/Anime, desc: "Anime"}
     - {id: 96, cat: Other, desc: "Sonstiges"}
     - {id: 23, cat: TV/Sport, desc: "Wrestling"}

@@ -12,8 +12,8 @@ caps:
   categorymappings:
     - {id: 18, cat: PC/0day, desc: "Application - PC"}
     - {id: 19, cat: PC/Mac, desc: "Application - Mac"}
-    - {id: 21, cat: PC/Phone-Other, desc: "Application - Other"}
-    - {id: 47, cat: PC/Phone-Android, desc: "Application - Android"}
+    - {id: 21, cat: PC/Mobile-Other, desc: "Application - Other"}
+    - {id: 47, cat: PC/Mobile-Android, desc: "Application - Android"}
     - {id: 61, cat: Audio/Audiobook, desc: "Audio - Audio books"}
     - {id: 60, cat: Audio, desc: "Audio - Music"}
     - {id: 63, cat: Audio/Lossless, desc: "Audio - Flac"}
@@ -21,7 +21,7 @@ caps:
     - {id: 9, cat: TV/Documentary, desc: "Documentaries - Other"}
     - {id: 10, cat: PC/Games, desc: "Games - PC"}
     - {id: 11, cat: Console/PS3, desc: "Games - PSX"}
-    - {id: 13, cat: Console/Xbox 360, desc: "Games - Xbox360"}
+    - {id: 13, cat: Console/XBox 360, desc: "Games - Xbox360"}
     - {id: 66, cat: Console/Other, desc: "Games - Other"}
     - {id: 65, cat: Console/Other, desc: "Games - Android"}
     - {id: 1, cat: Movies/DVD, desc: "Movies - DVD"}
@@ -34,13 +34,13 @@ caps:
     - {id: 24, cat: Audio/Video, desc: "Music - DVD"}
     - {id: 27, cat: Audio/Other, desc: "Music - Other"}
     - {id: 35, cat: Audio, desc: "Music - Album"}
-    - {id: 36, cat: Books/Ebook, desc: "Other - E-books"}
+    - {id: 36, cat: Books/EBook, desc: "Other - E-books"}
     - {id: 53, cat: Other, desc: "Other - Other"}
-    - {id: 51, cat: Books/Magazines, desc: "Other - Magazines"}
+    - {id: 51, cat: Books/Mags, desc: "Other - Magazines"}
     - {id: 50, cat: Books, desc: "Other - Books"}
     - {id: 56, cat: XXX/WMV, desc: "Porn - Video"}
     - {id: 55, cat: XXX, desc: "Porn - Movie"}
-    - {id: 54, cat: XXX/Imageset, desc: "Porn - Picture"}
+    - {id: 54, cat: XXX/ImageSet, desc: "Porn - Picture"}
     - {id: 68, cat: XXX/Other, desc: "Porn - Other"}
     - {id: 6, cat: TV, desc: "TV - Divx/Xvid"}
     - {id: 41, cat: TV/HD, desc: "TV - HD"}

@@ -115,7 +115,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(18, TorznabCatType.ConsolePS3, "PS3");
             AddCategoryMapping(8, TorznabCatType.ConsolePSP, "PSP");
             AddCategoryMapping(10, TorznabCatType.ConsoleWii, "Wii");
-            AddCategoryMapping(9, TorznabCatType.ConsoleXbox360, "Xbox-360");
+            AddCategoryMapping(9, TorznabCatType.ConsoleXBox360, "Xbox-360");
 
             AddCategoryMapping(24, TorznabCatType.TVSD, "TV/480p");
             AddCategoryMapping(32, TorznabCatType.TVHD, "TV/Bluray");
@@ -129,7 +129,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(2, TorznabCatType.TVSD, "TV/XviD");
 
             AddCategoryMapping(6, TorznabCatType.XXX, "XXX/Movies");
-            AddCategoryMapping(15, TorznabCatType.XXXPacks, "XXX/Packs");
+            AddCategoryMapping(15, TorznabCatType.XXXPack, "XXX/Packs");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

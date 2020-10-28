@@ -66,7 +66,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(39, TorznabCatType.TVAnime); // Anime: HD|1080p
             AddCategoryMapping(38, TorznabCatType.TVAnime); // Anime: HD|720p
             AddCategoryMapping(1, TorznabCatType.TVAnime); // Anime: SD
-            AddCategoryMapping(7, TorznabCatType.PCPhoneOther); // Appz: Handy-PDA
+            AddCategoryMapping(7, TorznabCatType.PCMobileOther); // Appz: Handy-PDA
             AddCategoryMapping(36, TorznabCatType.PCMac); // Appz: Mac
             AddCategoryMapping(18, TorznabCatType.PC); // Appz: Sonstiges
             AddCategoryMapping(17, TorznabCatType.PC); // Appz: Win
@@ -80,10 +80,10 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(2, TorznabCatType.TVDocumentary); // Dokus: SD
             AddCategoryMapping(3, TorznabCatType.Books); // Ebooks: Bücher
             AddCategoryMapping(52, TorznabCatType.BooksComics); // Ebooks: Comics
-            AddCategoryMapping(53, TorznabCatType.BooksMagazines); // Ebooks: Magazine
+            AddCategoryMapping(53, TorznabCatType.BooksMags); // Ebooks: Magazine
             AddCategoryMapping(55, TorznabCatType.BooksOther); // Ebooks: XXX
             AddCategoryMapping(54, TorznabCatType.BooksOther); // Ebooks: Zeitungen
-            AddCategoryMapping(47, TorznabCatType.PCPhoneOther); // Games: Andere
+            AddCategoryMapping(47, TorznabCatType.PCMobileOther); // Games: Andere
             AddCategoryMapping(32, TorznabCatType.PCMac); // Games: Mac
             AddCategoryMapping(41, TorznabCatType.ConsoleNDS); // Games: NDS/3DS
             AddCategoryMapping(4, TorznabCatType.PCGames); // Games: PC
@@ -91,7 +91,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(9, TorznabCatType.ConsolePS3); // Games: PS3
             AddCategoryMapping(6, TorznabCatType.ConsolePSP); // Games: PSP
             AddCategoryMapping(28, TorznabCatType.ConsoleWii); // Games: Wii
-            AddCategoryMapping(31, TorznabCatType.ConsoleXbox); // Games: XboX
+            AddCategoryMapping(31, TorznabCatType.ConsoleXBox); // Games: XboX
             AddCategoryMapping(51, TorznabCatType.Movies3D); // Movies: 3D
             AddCategoryMapping(37, TorznabCatType.MoviesBluRay); // Movies: BluRay
             AddCategoryMapping(25, TorznabCatType.MoviesHD); // Movies: HD|1080p
@@ -105,15 +105,15 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(56, TorznabCatType.TVHD); // Serien: Packs|HD
             AddCategoryMapping(44, TorznabCatType.TVSD); // Serien: Packs|SD
             AddCategoryMapping(16, TorznabCatType.TVSD); // Serien: SD
-            AddCategoryMapping(10, TorznabCatType.TVOTHER); // Serien: TV/Shows
-            AddCategoryMapping(21, TorznabCatType.TVFOREIGN); // Serien: US TV
+            AddCategoryMapping(10, TorznabCatType.TVOther); // Serien: TV/Shows
+            AddCategoryMapping(21, TorznabCatType.TVForeign); // Serien: US TV
             AddCategoryMapping(24, TorznabCatType.TVSport); // Sport: Diverses
             AddCategoryMapping(23, TorznabCatType.TVSport); // Sport: Wrestling
             AddCategoryMapping(57, TorznabCatType.Movies); // Tracker - Crew: pmHD
             AddCategoryMapping(58, TorznabCatType.MoviesHD); // Ultra-HD: 4K
             AddCategoryMapping(46, TorznabCatType.XXXOther); // XXX: Diverses
             AddCategoryMapping(50, TorznabCatType.XXX); // XXX: HD
-            AddCategoryMapping(45, TorznabCatType.XXXPacks); // XXX: Packs
+            AddCategoryMapping(45, TorznabCatType.XXXPack); // XXX: Packs
             AddCategoryMapping(27, TorznabCatType.XXX); // XXX: SD
         }
 

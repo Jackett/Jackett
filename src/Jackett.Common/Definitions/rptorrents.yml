@@ -14,9 +14,9 @@ caps:
     - {id: 2, cat: PC/0day, desc: "Apps Windows"}
     - {id: 3, cat: PC/Mac, desc: "Apps  Mac"}
     - {id: 4, cat: PC, desc: "Apps Linux"}
-    - {id: 34, cat: PC/Phone-Other, desc: "Apps Mobile"}
+    - {id: 34, cat: PC/Mobile-Other, desc: "Apps Mobile"}
     - {id: 6, cat: TV/Anime, desc: "Movie Cartoons"}
-    - {id: 7, cat: Movies/WEBDL, desc: "Movies WEB-DL"}
+    - {id: 7, cat: Movies/WEB-DL, desc: "Movies WEB-DL"}
     - {id: 32, cat: Movies/UHD, desc: "Movies 4k"}
     - {id: 9, cat: Movies/HD, desc: "Movies HD"}
     - {id: 10, cat: Movies/3D, desc: "Movies 3D"}
@@ -35,7 +35,7 @@ caps:
     - {id: 35, cat: PC/Games, desc: "Games Pack"}
     - {id: 36, cat: XXX, desc: "Movie XXX"}
     - {id: 37, cat: Movies/SD, desc: "Movies SD"}
-    - {id: 38, cat: Books/Ebook, desc: "Books eBooks"}
+    - {id: 38, cat: Books/EBook, desc: "Books eBooks"}
     - {id: 39, cat: Audio/Audiobook, desc: "Books Audio"}
 
   modes:

@@ -17,16 +17,16 @@ caps:
     "/anime/": TV/Anime
     "/anime/english-translated/": TV/Anime
     "/applications/": PC
-    "/applications/android/": PC/Phone-Android
-    "/applications/ios/": PC/Phone-IOS
+    "/applications/android/": PC/Mobile-Android
+    "/applications/ios/": PC/Mobile-iOS
     "/applications/linux/": PC
     "/applications/mac/": PC/Mac
-    "/applications/other-applications/": PC/Phone-Other
+    "/applications/other-applications/": PC/Mobile-Other
     "/applications/windows/": PC/0day
     "/books/": Books
     "/books/audio-books/": Audio/Audiobook
     "/books/comics/": Books/Comics
-    "/books/ebooks/": Books/Ebook
+    "/books/ebooks/": Books/EBook
     "/games/": PC/Games
     "/games/nds/": Console/NDS
     "/games/other-games/": Console/Other
@@ -35,7 +35,7 @@ caps:
     "/games/ps4/": Console/PS4
     "/games/psp/": Console/PSP
     "/games/wii/": Console/Wii
-    "/games/xbox360/": Console/Xbox 360
+    "/games/xbox360/": Console/XBox 360
     "/movies/": Movies
     "/movies/3d-movies/": Movies/3D
     "/movies/bollywood/": Movies

@@ -69,10 +69,10 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(1, TorznabCatType.PC0day, "Applications");
             AddCategoryMapping(14, TorznabCatType.PC, "Applications: Linux");
             AddCategoryMapping(37, TorznabCatType.PCMac, "Applications: Mac");
-            AddCategoryMapping(19, TorznabCatType.PCPhoneOther, "Applications: Mobile");
+            AddCategoryMapping(19, TorznabCatType.PCMobileOther, "Applications: Mobile");
             AddCategoryMapping(62, TorznabCatType.TV, "TV Cartoons");
             AddCategoryMapping(3, TorznabCatType.TVAnime, "TV Anime / Hentai");
-            AddCategoryMapping(6, TorznabCatType.BooksEbook, "E-books");
+            AddCategoryMapping(6, TorznabCatType.BooksEBook, "E-books");
             AddCategoryMapping(5, TorznabCatType.Audio, "Music");
             AddCategoryMapping(64, TorznabCatType.AudioVideo, "Music Video");
             AddCategoryMapping(18, TorznabCatType.Other, "Images");

@@ -12,7 +12,7 @@ caps:
   categorymappings:
     - {id: 73, cat: Audio/Audiobook, desc: "Misc/Abooks"}
     - {id: 74, cat: Other, desc: "Misc/All"}
-    - {id: 72, cat: Books/Ebook, desc: "Misc/Ebooks"}
+    - {id: 72, cat: Books/EBook, desc: "Misc/Ebooks"}
     - {id: 71, cat: PC/Games, desc: "Misc/Games"}
     - {id: 70, cat: PC/0day, desc: "Misc/Software"}
     - {id: 60, cat: Movies/HD, desc: "Movies/HD"}
@@ -21,7 +21,7 @@ caps:
     - {id: 62, cat: Movies, desc: "Movies/Untouched"}
     - {id: 66, cat: TV/Documentary, desc: "TV/Doku HD"}
     - {id: 67, cat: TV/Documentary, desc: "TV/Doku SD"}
-    - {id: 69, cat: TV/OTHER, desc: "TV/Misc"}
+    - {id: 69, cat: TV/Other, desc: "TV/Misc"}
     - {id: 64, cat: TV/HD, desc: "TV/Serien HD"}
     - {id: 65, cat: TV/SD, desc: "TV/Serien SD"}
     - {id: 68, cat: TV/Sport, desc: "TV/Sport"}

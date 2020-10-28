@@ -45,15 +45,15 @@ caps:
     日本综艺: TV/HD # TV Shows - JP
     MiniVideo: Other # MiniVideo
     补充音轨: Audio # Supplemental audio tracks
-    iPhone/iPad视频: PC/Phone-Other # IPhone / iPad video
+    iPhone/iPad视频: PC/Mobile-Other # IPhone / iPad video
     # 单机游戏
     PC: PC/Games # Games - PC
     MAC: PC/Mac # Games - MAC
     # 微软系列
-    XBOX360: Console/Xbox 360 # MicroSoft - XBOX360
-    XBOX1: Console/Xbox # MicroSoft - XBOX360
-    XBLA: Console/Xbox # MicroSoft - XBLA
-    XBOX+to+XBOX360: Console/Xbox # MicroSoft - XBOX to XBOX360
+    XBOX360: Console/XBox 360 # MicroSoft - XBOX360
+    XBOX1: Console/XBox # MicroSoft - XBOX360
+    XBLA: Console/XBox # MicroSoft - XBLA
+    XBOX+to+XBOX360: Console/XBox # MicroSoft - XBOX to XBOX360
     # 索尼系列
     PS2: Console/Other # SONY - PS2
     PSP: Console/PSP # SONY - PSP
@@ -69,16 +69,16 @@ caps:
     # 主机影视
     PS3兼容高清: Console/PS3 # Video - HD - PS3
     PSP兼容高清&标清: Console/PSP # Video - SD&HD - PSP
-    XBOX360兼容高清: Console/Xbox 360 # Video - HD - XBOX360
+    XBOX360兼容高清: Console/XBox 360 # Video - HD - XBOX360
     Game+Video: Console/Other # Video - Game Video
     # 软件
     APPZ: PC # Software - APPZ
-    Game+Ebook: Books/Ebook # Software - Game Ebook
-    Ebook: Books/Ebook # Software - Ebook
+    Game+Ebook: Books/EBook # Software - Game Ebook
+    Ebook: Books/EBook # Software - Ebook
     # 苹果系列
-    iPhone/iPad游戏: PC/Phone-IOS # Apple - Game - iPhone/iPad
-    iPad书籍: Books/Ebook # Apple - Book - iPad
-    iPhone/iPad软件: PC/Phone-IOS # Apple - Software - iPhone/iPad
+    iPhone/iPad游戏: PC/Mobile-iOS # Apple - Game - iPhone/iPad
+    iPad书籍: Books/EBook # Apple - Book - iPad
+    iPhone/iPad软件: PC/Mobile-iOS # Apple - Software - iPhone/iPad
 
   modes:
     search: [q]

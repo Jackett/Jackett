@@ -65,7 +65,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(40, TorznabCatType.OtherMisc); // Miscellaneous
             AddCategoryMapping(19, TorznabCatType.Movies); // Movies
             AddCategoryMapping(6, TorznabCatType.Audio); // Music
-            AddCategoryMapping(31, TorznabCatType.PCPhoneOther); // Portable
+            AddCategoryMapping(31, TorznabCatType.PCMobileOther); // Portable
             AddCategoryMapping(49, TorznabCatType.Other); // Tutorials
             AddCategoryMapping(7, TorznabCatType.TV); // TV
         }

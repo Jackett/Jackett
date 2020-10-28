@@ -29,7 +29,7 @@ caps:
     - {id: 47, cat: Movies, desc: "Movies/Packs"}
     - {id: 49, cat: Movies/HD, desc: "Movies/x265"}
     - {id: 55, cat: TV/Sport, desc: "Sports"}
-    - {id: 82, cat: TV/FOREIGN, desc: "TV/Non-English"}
+    - {id: 82, cat: TV/Foreign, desc: "TV/Non-English"}
     - {id: 93, cat: Audio, desc: "Music/Packs"}
     - {id: 99, cat: TV/HD, desc: "TV/x265"}
 

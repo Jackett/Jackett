@@ -13,7 +13,7 @@ legacylinks:
 caps:
   categorymappings:
     # Apps
-    - {id: 65, cat: PC/Phone-Android, desc: "Apps Android"}
+    - {id: 65, cat: PC/Mobile-Android, desc: "Apps Android"}
     - {id: 107, cat: PC/0day, desc: "Apps Linux"}
     - {id: 48, cat: PC/Mac, desc: "Apps MAC"}
     - {id: 109, cat: PC, desc: "Apps Sonstige"}
@@ -66,7 +66,7 @@ caps:
     - {id: 4, cat: PC/Games, desc: "Spiele PC"}
     - {id: 58, cat: Console/PS4, desc: "Spiele PSX"}
     - {id: 116, cat: Other, desc: "Spiele Sonstige"}
-    - {id: 50, cat: Console/Xbox, desc: "Spiele XBOX"}
+    - {id: 50, cat: Console/XBox, desc: "Spiele XBOX"}
 
   modes:
     search: [q]

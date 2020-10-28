@@ -83,13 +83,13 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(26, TorznabCatType.TVSD, "TV Episodes");
             AddCategoryMapping(27, TorznabCatType.TV, "TV Boxsets");
             AddCategoryMapping(32, TorznabCatType.TVHD, "TV Episodes HD");
-            AddCategoryMapping(44, TorznabCatType.TVFOREIGN, "TV Foreign");
+            AddCategoryMapping(44, TorznabCatType.TVForeign, "TV Foreign");
 
             AddCategoryMapping(3, TorznabCatType.PCGames, "Games");
             AddCategoryMapping(17, TorznabCatType.PCGames, "Games PC");
-            AddCategoryMapping(18, TorznabCatType.ConsoleXbox, "Games XBOX");
-            AddCategoryMapping(19, TorznabCatType.ConsoleXbox360, "Games XBOX360");
-            AddCategoryMapping(40, TorznabCatType.ConsoleXboxOne, "Games XBOXONE");
+            AddCategoryMapping(18, TorznabCatType.ConsoleXBox, "Games XBOX");
+            AddCategoryMapping(19, TorznabCatType.ConsoleXBox360, "Games XBOX360");
+            AddCategoryMapping(40, TorznabCatType.ConsoleXBoxOne, "Games XBOXONE");
             AddCategoryMapping(20, TorznabCatType.ConsolePS3, "Games PS2");
             AddCategoryMapping(21, TorznabCatType.ConsolePS3, "Games Mac");
             AddCategoryMapping(22, TorznabCatType.ConsolePSP, "Games PSP");
@@ -108,13 +108,13 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(35, TorznabCatType.TV, "TV Cartoons");
 
             AddCategoryMapping(5, TorznabCatType.Books, "Books");
-            AddCategoryMapping(45, TorznabCatType.BooksEbook, "Books EBooks");
+            AddCategoryMapping(45, TorznabCatType.BooksEBook, "Books EBooks");
             AddCategoryMapping(46, TorznabCatType.BooksComics, "Books Comics");
 
             AddCategoryMapping(6, TorznabCatType.PC, "Apps");
             AddCategoryMapping(23, TorznabCatType.PCISO, "PC ISO");
             AddCategoryMapping(24, TorznabCatType.PCMac, "PC Mac");
-            AddCategoryMapping(25, TorznabCatType.PCPhoneOther, "PC Mobile");
+            AddCategoryMapping(25, TorznabCatType.PCMobileOther, "PC Mobile");
             AddCategoryMapping(33, TorznabCatType.PC0day, "PC 0-day");
             AddCategoryMapping(38, TorznabCatType.Other, "Education");
         }

@@ -100,9 +100,9 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(229, TorznabCatType.TVDocumentary, "|-History Channel");
             AddCategoryMapping(230, TorznabCatType.TVDocumentary, "|-Інші іноземні документальні фільми");
 
-            AddCategoryMapping(119, TorznabCatType.TVOTHER, "Телепередачі українською");
-            AddCategoryMapping(18, TorznabCatType.TVOTHER, "|-Музичне відео");
-            AddCategoryMapping(132, TorznabCatType.TVOTHER, "|-Телевізійні шоу та програми");
+            AddCategoryMapping(119, TorznabCatType.TVOther, "Телепередачі українською");
+            AddCategoryMapping(18, TorznabCatType.TVOther, "|-Музичне відео");
+            AddCategoryMapping(132, TorznabCatType.TVOther, "|-Телевізійні шоу та програми");
 
             AddCategoryMapping(157, TorznabCatType.TVSport, "Український спорт");
             AddCategoryMapping(235, TorznabCatType.TVSport, "|-Олімпіада");
@@ -160,7 +160,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(179, TorznabCatType.Books, "|-Наукова література (гуманітарні дисципліни)");
             AddCategoryMapping(180, TorznabCatType.Books, "|-Наукова література (природничі дисципліни)");
             AddCategoryMapping(183, TorznabCatType.Books, "|-Навчальна та довідкова");
-            AddCategoryMapping(181, TorznabCatType.BooksMagazines, "|-Періодика");
+            AddCategoryMapping(181, TorznabCatType.BooksMags, "|-Періодика");
             AddCategoryMapping(182, TorznabCatType.Books, "|-Батькам та малятам");
             AddCategoryMapping(184, TorznabCatType.BooksComics, "|-Графіка (комікси, манґа, BD та інше)");
 
@@ -180,9 +180,9 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(26, TorznabCatType.PC, "|-Linux");
             AddCategoryMapping(27, TorznabCatType.PCMac, "|-Mac OS");
             // AddCategoryMapping(240, TorznabCatType.PC, "Інші OS");
-            AddCategoryMapping(211, TorznabCatType.PCPhoneAndroid, "|-Android");
-            AddCategoryMapping(122, TorznabCatType.PCPhoneIOS, "|-iOS");
-            AddCategoryMapping(40, TorznabCatType.PCPhoneOther, "|-Інші мобільні платформи");
+            AddCategoryMapping(211, TorznabCatType.PCMobileAndroid, "|-Android");
+            AddCategoryMapping(122, TorznabCatType.PCMobileiOS, "|-iOS");
+            AddCategoryMapping(40, TorznabCatType.PCMobileOther, "|-Інші мобільні платформи");
 
             // AddCategoryMapping(241, TorznabCatType.Other, "Інше");
             // AddCategoryMapping(203, TorznabCatType.Other, "|-Інфодиски, електронні підручники, відеоуроки");
@@ -193,8 +193,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(259, TorznabCatType.PCGames, "|-Mac ігри");
             AddCategoryMapping(29, TorznabCatType.PCGames, "|-Українізації, доповнення, патчі...");
             AddCategoryMapping(30, TorznabCatType.PCGames, "|-Мобільні та консольні ігри");
-            AddCategoryMapping(41, TorznabCatType.PCPhoneIOS, "|-iOS");
-            AddCategoryMapping(212, TorznabCatType.PCPhoneAndroid, "|-Android");
+            AddCategoryMapping(41, TorznabCatType.PCMobileiOS, "|-iOS");
+            AddCategoryMapping(212, TorznabCatType.PCMobileAndroid, "|-Android");
             AddCategoryMapping(205, TorznabCatType.PCGames, "Переклад ігор українською");
         }
 

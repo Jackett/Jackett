@@ -15,7 +15,7 @@ caps:
     - {id: 3, cat: PC/0day, desc: "Appz/PC"}
     - {id: 35, cat: TV, desc: "Big Brother"}
     - {id: 28, cat: Books/Comics, desc: "Comics"}
-    - {id: 4, cat: Books/Ebook, desc: "E-Book"}
+    - {id: 4, cat: Books/EBook, desc: "E-Book"}
     - {id: 39, cat: Console, desc: "Games/Console"}
     - {id: 33, cat: PC/Games, desc: "Games/PC"}
     - {id: 27, cat: Other, desc: "Misc"}

@@ -28,7 +28,7 @@ caps:
     - {id: 91, cat: Movies/Other, desc: "Movies Kids Inglês"}
     - {id: 113, cat: Movies/Other, desc: "Movies Kids PT-BR"}
     - {id: 114, cat: Movies/Other, desc: "Movies Kids PT-PT"}
-    - {id: 77, cat: Movies/WEBDL, desc: "Movies WEB-DL"}
+    - {id: 77, cat: Movies/WEB-DL, desc: "Movies WEB-DL"}
     - {id: 85, cat: Movies/DVD, desc: "Movies Custom-DVDR"}
     - {id: 14, cat: Movies/SD, desc: "Movies DVDRip/XViD"}
     - {id: 98, cat: Movies/Other, desc: "Movies Juvenil"}
@@ -64,24 +64,24 @@ caps:
     - {id: 81, cat: Console/PS3, desc: "Games PS3"}
     - {id: 82, cat: Console/PS4, desc: "Games PS4"}
     - {id: 83, cat: Console/PSP, desc: "Games PSP"}
-    - {id: 95, cat: Console/PSVita, desc: "Games PSVITA"}
+    - {id: 95, cat: Console/PS Vita, desc: "Games PSVITA"}
     - {id: 4, cat: Console/Wii, desc: "Games Wii"}
-    - {id: 26, cat: Console/Xbox360, desc: "Games XBOX360"}
-    - {id: 84, cat: Console/Xbox, desc: "Games XONE"}
+    - {id: 26, cat: Console/XBox 360, desc: "Games XBOX360"}
+    - {id: 84, cat: Console/XBox, desc: "Games XONE"}
     - {id: 6, cat: PC, desc: "Applications"}
     - {id: 18, cat: PC/ISO, desc: "Applications PC"}
     - {id: 19, cat: PC/Mac, desc: "Applications Macintosh"}
     - {id: 34, cat: PC/ISO, desc: "Applications Linux"}
     - {id: 44, cat: Other, desc: "Miscellaneous"}
     - {id: 54, cat: Audio/Audiobook, desc: "Books Audiobook"}
-    - {id: 57, cat: Books/Ebook, desc: "Books E-Books"}
+    - {id: 57, cat: Books/EBook, desc: "Books E-Books"}
     - {id: 58, cat: Books/Comics, desc: "Books Comics"}
     - {id: 59, cat: Books, desc: "Books Educational"}
-    - {id: 60, cat: Books/Magazines, desc: "Books Magazines/Journals"}
+    - {id: 60, cat: Books/Mags, desc: "Books Magazines/Journals"}
     - {id: 61, cat: Other, desc: "Pics/Wallpapers"}
-    - {id: 62, cat: PC/Phone-Android, desc: "Android"}
-    - {id: 63, cat: PC/Phone-IOS, desc: "iOS"}
-    - {id: 66, cat: PC/Phone-Other, desc: "WindowsPhone"}
+    - {id: 62, cat: PC/Mobile-Android, desc: "Android"}
+    - {id: 63, cat: PC/Mobile-iOS, desc: "iOS"}
+    - {id: 66, cat: PC/Mobile-Other, desc: "WindowsPhone"}
     - {id: 90, cat: Other, desc: "GPS"}
     - {id: 68, cat: Other, desc: "Others"}
     - {id: 100, cat: Other, desc: "Revistas"}
@@ -92,8 +92,8 @@ caps:
     - {id: 41, cat: XXX, desc: "XXX"}
     - {id: 64, cat: XXX, desc: "XXX-Magazines"}
     - {id: 65, cat: XXX, desc: "XXX-Movies"}
-    - {id: 67, cat: XXX/Packs, desc: "XXX-Packs"}
-    - {id: 69, cat: XXX/Imageset, desc: "XXX-Pics/Wallpapers"}
+    - {id: 67, cat: XXX/Pack, desc: "XXX-Packs"}
+    - {id: 69, cat: XXX/ImageSet, desc: "XXX-Pics/Wallpapers"}
 
   modes:
     search: [q]

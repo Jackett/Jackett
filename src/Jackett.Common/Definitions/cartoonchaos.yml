@@ -55,7 +55,7 @@ caps:
     - {id: 43, cat: Audio/Other, desc: "Misc Audio"}
     - {id: 14, cat: TV, desc: "Banned"}
     - {id: 29, cat: TV, desc: "Public Domain"}
-    - {id: 42, cat: TV/FOREIGN, desc: "Foreign Language"}
+    - {id: 42, cat: TV/Foreign, desc: "Foreign Language"}
     - {id: 28, cat: TV, desc: "Animated Adverts"}
     - {id: 45, cat: TV/Documentary, desc: "Documentaries"}
 

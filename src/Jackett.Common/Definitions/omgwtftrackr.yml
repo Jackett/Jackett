@@ -32,13 +32,13 @@ caps:
     - {id: 20, cat: TV/SD, desc: "en/TV-X264-SD"}
     - {id: 21, cat: Console/Wii, desc: "en/WII"}
     - {id: 22, cat: Movies/HD, desc: "en/X264"}
-    - {id: 23, cat: Console/Xbox 360, desc: "en/XBOX360"}
-    - {id: 24, cat: Console/Xbox One, desc: "en/XBOXONE"}
+    - {id: 23, cat: Console/XBox 360, desc: "en/XBOX360"}
+    - {id: 24, cat: Console/XBox One, desc: "en/XBOXONE"}
     - {id: 25, cat: Movies/SD, desc: "en/XVID"}
     - {id: 26, cat: XXX, desc: "en/XXX"}
     - {id: 27, cat: XXX/Other, desc: "en/XXX-0DAY"}
     - {id: 28, cat: XXX/DVD, desc: "en/XXX-DVDR"}
-    - {id: 29, cat: XXX/Imageset, desc: "en/XXX-iMAGESETS"}
+    - {id: 29, cat: XXX/ImageSet, desc: "en/XXX-iMAGESETS"}
     - {id: 30, cat: Movies/BluRay, desc: "de/BLURAY"}
     - {id: 31, cat: Movies/DVD, desc: "de/DVDR"}
     - {id: 32, cat: TV, desc: "de/TV"}

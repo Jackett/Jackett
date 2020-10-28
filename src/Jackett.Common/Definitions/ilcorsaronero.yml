@@ -31,12 +31,12 @@ caps:
     - {id: 3, cat: PC/Games, desc: "Games PC", default: true}
     - {id: 4, cat: Other, desc: "Other", default: true}
     - {id: 5, cat: TV/Anime, desc: "Anime", default: true}
-    - {id: 6, cat: Books/Ebook, desc: "Ebooks", default: true}
+    - {id: 6, cat: Books/EBook, desc: "Ebooks", default: true}
     - {id: 7, cat: PC/0day, desc: "App Windows", default: true}
     - {id: 8, cat: PC, desc: "App Linux", default: true}
     - {id: 9, cat: PC/Mac, desc: "App Mac", default: true}
     - {id: 13, cat: Console/PSP, desc: "Games Playstation", default: true}
-    - {id: 14, cat: Console/Xbox, desc: "Games Xbox", default: true}
+    - {id: 14, cat: Console/XBox, desc: "Games Xbox", default: true}
     - {id: 15, cat: TV, desc: "TV Series", default: true}
     - {id: 16, cat: Other, desc: "Other", default: true}
     - {id: 18, cat: Audio/Audiobook, desc: "Audio Book", default: true}
