@@ -388,6 +388,7 @@ namespace Jackett.Updater
                 "Definitions/thetorrents.yml",
                 "Definitions/the-madhouse.yml",
                 "Definitions/thepiratebay.yml", // migrated to c#
+                "Definitions/theunknown.yml", // became 3evils #9678
                 "Definitions/tigers-dl.yml",
                 "Definitions/tntvillage.yml",
                 "Definitions/topnow.yml",

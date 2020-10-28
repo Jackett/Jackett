@@ -66,7 +66,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * IBit
  * Idope
  * Il CorSaRo Blu
- * Il Corsaro Nero <!-- maintained by bonny1992 -->
+ * Il Corsaro Nero
  * Internet Archive (archive.org)
  * Isohunt2
  * iTorrent
@@ -80,7 +80,8 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * MacTorrents
  * Magnet4You
  * MagnetDL
- * MejorTorrent <!-- maintained by ivandelabeldad -->
+ * MejorTorrent
+ * MixTapeTorrent
  * Monova
  * MovCr
  * MoviesDVDR
