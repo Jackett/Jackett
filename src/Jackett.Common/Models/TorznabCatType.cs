@@ -153,9 +153,12 @@ namespace Jackett.Common.Models
             XXXWMV,
             XXXXviD,
             XXXx264,
+            XXXUHD,
             XXXPack,
             XXXImageSet,
             XXXOther,
+            XXXSD,
+            XXXWEBDL,
             Books,
             BooksMags,
             BooksEBook,
@@ -242,9 +245,12 @@ namespace Jackett.Common.Models
                     XXXWMV,
                     XXXXviD,
                     XXXx264,
+                    XXXUHD,
                     XXXPack,
                     XXXImageSet,
-                    XXXOther
+                    XXXOther,
+                    XXXSD,
+                    XXXWEBDL
                 });
             Books.SubCategories.AddRange(
                 new List<TorznabCategory>
