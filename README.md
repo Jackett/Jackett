@@ -181,6 +181,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Erzsebet.pl
  * ExKinoRay
  * ExtremlymTorrents (XTR)
+ * Genesis-Movement
  * HamsterStudio
  * IV-Torrents
  * KinoNaVse100
