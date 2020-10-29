@@ -44,7 +44,6 @@ caps:
     - {id: 79, cat: TV/Anime, desc: "Anime/Dubbed"}
     - {id: 80, cat: TV/Anime, desc: "Anime/Subbed"}
     - {id: 81, cat: TV/Anime, desc: "Anime/Raw"}
-
     # Audio
     - {id: 22, cat: Audio/MP3, desc: "Music/MP3"}
     - {id: 23, cat: Audio/Lossless, desc: "Music/Lossless"}
@@ -58,7 +57,6 @@ caps:
     - {id: 60, cat: Audio, desc: "Music/Single"}
     - {id: 68, cat: Audio, desc: "Music/Concerts"}
     - {id: 69, cat: Audio, desc: "Music/AAC"}
-
     # Movies
     - {id: 1, cat: Movies/DVD, desc: "Movies/DVD"}
     - {id: 2, cat: Movies/SD, desc: "Movies/Divx/Xvid"}
@@ -71,7 +69,6 @@ caps:
     - {id: 70, cat: Movies/HD, desc: "Movies/HEVC/x265"}
     - {id: 73, cat: Movies, desc: "Movies/Bollywood"}
     - {id: 76, cat: Movies/UHD, desc: "Movies/UHD"}
-
     # TV
     - {id: 5, cat: TV, desc: "TV/DVD"}
     - {id: 6, cat: TV, desc: "TV/Divx/Xvid"}
@@ -81,7 +78,6 @@ caps:
     - {id: 74, cat: TV, desc: "TV/Cartoons"}
     - {id: 75, cat: TV/SD, desc: "TV/SD"}
     - {id: 9, cat: TV/Documentary, desc: "TV/Documentary"}
-
     # Apps
     - {id: 18, cat: PC, desc: "Apps/PC Software"}
     - {id: 19, cat: PC/Mac, desc: "Apps/Mac"}
@@ -89,31 +85,28 @@ caps:
     - {id: 21, cat: PC, desc: "Apps/Other"}
     - {id: 56, cat: PC/Mobile-Android, desc: "Apps/Android"}
     - {id: 57, cat: PC/Mobile-iOS, desc: "Apps/iOS"}
-
     # Games
     - {id: 10, cat: PC/Games, desc: "Games/PC Game"}
-    - {id: 11, cat: Console/Other, desc: "Games/PS2"}
+    - {id: 11, cat: Console/PS3, desc: "Games/PS2"}
     - {id: 12, cat: Console/PSP, desc: "Games/PSP"}
     - {id: 13, cat: Console/XBox, desc: "Games/Xbox"}
     - {id: 14, cat: Console/XBox 360, desc: "Games/Xbox360"}
-    - {id: 15, cat: Console/Other, desc: "Games/PS1"}
+    - {id: 15, cat: Console/PS3, desc: "Games/PS1"}
     - {id: 16, cat: Console/Other, desc: "Games/Dreamcast"}
     - {id: 17, cat: PC/Mobile-Other, desc: "Games/Other"}
     - {id: 43, cat: Console/PS3, desc: "Games/PS3"}
     - {id: 44, cat: Console/Wii, desc: "Games/Wii"}
     - {id: 45, cat: Console/NDS, desc: "Games/DS"}
-    - {id: 46, cat: Console, desc: "Games/GameCube"}
+    - {id: 46, cat: Console/Other, desc: "Games/GameCube"}
     - {id: 72, cat: Console/3DS, desc: "Games/3DS"}
     - {id: 77, cat: Console/PS4, desc: "Games/PS4"}
     - {id: 82, cat: Console/Other, desc: "Games/Switch"}
-
     # XXX
     - {id: 48, cat: XXX/DVD, desc: "XXX/Video"}
     - {id: 49, cat: XXX/ImageSet, desc: "XXX/Picture"}
     - {id: 50, cat: XXX, desc: "XXX/Magazine"}
     - {id: 51, cat: XXX, desc: "XXX/Hentai"}
     - {id: 67, cat: XXX, desc: "XXX/Games"}
-
     # Other
     - {id: 33, cat: Other, desc: "Other/Emulation"}
     - {id: 34, cat: Books, desc: "Other/Tutorial"}
@@ -139,10 +132,10 @@ settings:
     label: Download link
     default: "magnet:"
     options:
-      "http://itorrents.org/": "iTorrents.org"
-      "http://torrage.info/": "Torrage.info"
-      "http://btcache.me/": "BTcache.me"
-      "magnet:": "magnet"
+      "http://itorrents.org/": iTorrents.org
+      "http://torrage.info/": Torrage.info
+      "http://btcache.me/": BTcache.me
+      "magnet:": magnet
   - name: sort
     type: select
     label: Sort requested from site
@@ -167,9 +160,9 @@ download:
 search:
   paths:
     # present first page of movies tv and music results if there are no search parms supplied (20 hits per page)
-    - path: "{{if or (.Query.Album) (.Query.Artist) (.Keywords) }}sort-search{{else}}cat/Movies{{end}}{{if or (.Query.Album) (.Query.Artist) }}/{{ or (.Query.Album) (.Query.Artist) }}{{else}}/{{ .Keywords }}{{end}}{{if or (.Query.Album) (.Query.Artist) (.Keywords) }}/{{else}}{{end}}{{ .Config.sort }}/{{ .Config.type }}/1/"
-    - path: "{{if or (.Query.Album) (.Query.Artist) (.Keywords) }}sort-search{{else}}cat/TV{{end}}{{if or (.Query.Album) (.Query.Artist) }}/{{ or (.Query.Album) (.Query.Artist) }}{{else}}/{{ .Keywords }}{{end}}{{if or (.Query.Album) (.Query.Artist) (.Keywords) }}/{{else}}{{end}}{{ .Config.sort }}/{{ .Config.type }}/{{if or (.Query.Album) (.Query.Artist) (.Keywords) }}2{{else}}1{{end}}/"
-    - path: "{{if or (.Query.Album) (.Query.Artist) (.Keywords) }}sort-search{{else}}cat/Music{{end}}{{if or (.Query.Album) (.Query.Artist) }}/{{ or (.Query.Album) (.Query.Artist) }}{{else}}/{{ .Keywords }}{{end}}{{if or (.Query.Album) (.Query.Artist) (.Keywords) }}/{{else}}{{end}}{{ .Config.sort }}/{{ .Config.type }}/{{if or (.Query.Album) (.Query.Artist) (.Keywords) }}3{{else}}1{{end}}/"
+    - path: "{{ if or .Query.Album .Query.Artist .Keywords }}sort-search{{ else }}cat/Movies{{ end }}{{ if or .Query.Album .Query.Artist }}/{{ or .Query.Album .Query.Artist }}{{ else }}/{{ .Keywords }}{{ end }}{{ if or .Query.Album .Query.Artist .Keywords }}/{{ else }}{{ end }}{{ .Config.sort }}/{{ .Config.type }}/1/"
+    - path: "{{ if or .Query.Album .Query.Artist .Keywords }}sort-search{{ else }}cat/TV{{ end }}{{ if or .Query.Album .Query.Artist }}/{{ or .Query.Album .Query.Artist }}{{ else }}/{{ .Keywords }}{{ end }}{{ if or .Query.Album .Query.Artist .Keywords }}/{{ else }}{{ end }}{{ .Config.sort }}/{{ .Config.type }}/{{ if or .Query.Album .Query.Artist .Keywords }}2{{ else }}1{{ end }}/"
+    - path: "{{ if or .Query.Album .Query.Artist .Keywords }}sort-search{{ else }}cat/Music{{ end }}{{ if or .Query.Album .Query.Artist }}/{{ or .Query.Album .Query.Artist }}{{ else }}/{{ .Keywords }}{{ end }}{{ if or .Query.Album .Query.Artist .Keywords }}/{{ else }}{{ end }}{{ .Config.sort }}/{{ .Config.type }}/{{ if or .Query.Album .Query.Artist .Keywords }}3{{ else }}1{{ end }}/"
   keywordsfilters:
     - name: replace # use this as a workaround till #893 is implemented
       args: ["Greys Anatomy", "Grey's Anatomy"]
@@ -221,14 +214,8 @@ search:
       optional: true
       selector: td[class^="coll-date"]:not(:contains(":")):not(:contains("'"))
       filters:
-        - name: replace
-          args: ["st", ""]
-        - name: replace
-          args: ["nd", ""]
-        - name: replace
-          args: ["rd", ""]
-        - name: replace
-          args: ["th", ""]
+        - name: re_replace
+          args: ["st|nd|rd|th", ""]
         - name: dateparse
           args: "3pm Jan. 2"
     date:
@@ -238,14 +225,8 @@ search:
       filters:
         - name: replace
           args: ["'", ""]
-        - name: replace
-          args: ["st", ""]
-        - name: replace
-          args: ["nd", ""]
-        - name: replace
-          args: ["rd", ""]
-        - name: replace
-          args: ["th", ""]
+        - name: re_replace
+          args: ["st|nd|rd|th", ""]
         - name: dateparse
           args: "Jan. 2 06"
     date:

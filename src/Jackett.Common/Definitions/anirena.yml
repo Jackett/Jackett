@@ -32,11 +32,12 @@ caps:
   modes:
     search: [q]
     tv-search: [q, season, ep]
+    music-search: [q]
     book-search: [q]
 
 search:
   paths:
-    - path: "{{if .Keywords}}?s={{ .Keywords}}{{else}}{{end}}"
+    - path: "{{ if .Keywords }}?s={{ .Keywords}}{{ else }}{{ end }}"
 
   rows:
     selector: table tbody tr:has(td.torrents_small_type_data1)
