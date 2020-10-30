@@ -1,10 +1,15 @@
 using System.Linq;
 using Jackett.Common.Models;
+using Jackett.Test.TestHelpers;
 using NUnit.Framework;
 using Assert = NUnit.Framework.Assert;
 
 namespace Jackett.Test.Common.Models
 {
+    // TODO: add duplicates: different trackerCat but same newznabCat
+    // TODO: duplicates are not working well because we keep 2 internal lists with categories. One is de-duplicated
+    // and the other doesn't
+
     [TestFixture]
     public class TorznabCapabilitiesCategoriesTests
     {
@@ -220,12 +225,7 @@ namespace Jackett.Test.Common.Models
         private static TorznabCapabilitiesCategories CreateTestDataset()
         {
             var tcc = new TorznabCapabilitiesCategories();
-            tcc.AddCategoryMapping("1", TorznabCatType.Movies);
-            tcc.AddCategoryMapping("mov_sd", TorznabCatType.MoviesSD);
-            tcc.AddCategoryMapping("33", TorznabCatType.BooksComics);
-            tcc.AddCategoryMapping("44", TorznabCatType.ConsoleXBox, "Console/Xbox_c");
-            tcc.AddCategoryMapping("con_wii", TorznabCatType.ConsoleWii, "Console/Wii_c");
-            tcc.AddCategoryMapping("45", TorznabCatType.ConsoleXBox, "Console/Xbox_c2");
+            TestCategories.AddTestCategories(tcc);
             return tcc;
         }
     }

@@ -7,7 +7,7 @@ using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
 using NLog;
 
-namespace Jackett.Test
+namespace Jackett.Test.TestHelpers
 {
 
     // Currently not used in any Unit tests. Leaving it for potential future testing purposes.

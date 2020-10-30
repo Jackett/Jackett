@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Jackett.Common.Models;
+using Jackett.Test.TestHelpers;
 using NUnit.Framework;
 using Assert = NUnit.Framework.Assert;
 
@@ -353,19 +354,19 @@ namespace Jackett.Test.Common.Models
                 SearchAvailable = false
             };
             xDocument = torznabCaps.GetXDocument();
-            var xDoumentSearching = xDocument.Root?.Element("searching");
-            Assert.AreEqual("no", xDoumentSearching?.Element("search")?.Attribute("available")?.Value);
-            Assert.AreEqual("q", xDoumentSearching?.Element("search")?.Attribute("supportedParams")?.Value);
-            Assert.AreEqual("no", xDoumentSearching?.Element("tv-search")?.Attribute("available")?.Value);
-            Assert.AreEqual("q", xDoumentSearching?.Element("tv-search")?.Attribute("supportedParams")?.Value);
-            Assert.AreEqual("no", xDoumentSearching?.Element("movie-search")?.Attribute("available")?.Value);
-            Assert.AreEqual("q", xDoumentSearching?.Element("movie-search")?.Attribute("supportedParams")?.Value);
-            Assert.AreEqual("no", xDoumentSearching?.Element("music-search")?.Attribute("available")?.Value);
-            Assert.AreEqual("q", xDoumentSearching?.Element("music-search")?.Attribute("supportedParams")?.Value);
-            Assert.AreEqual("no", xDoumentSearching?.Element("audio-search")?.Attribute("available")?.Value);
-            Assert.AreEqual("q", xDoumentSearching?.Element("audio-search")?.Attribute("supportedParams")?.Value);
-            Assert.AreEqual("no", xDoumentSearching?.Element("book-search")?.Attribute("available")?.Value);
-            Assert.AreEqual("q", xDoumentSearching?.Element("book-search")?.Attribute("supportedParams")?.Value);
+            var xDocumentSearching = xDocument.Root?.Element("searching");
+            Assert.AreEqual("no", xDocumentSearching?.Element("search")?.Attribute("available")?.Value);
+            Assert.AreEqual("q", xDocumentSearching?.Element("search")?.Attribute("supportedParams")?.Value);
+            Assert.AreEqual("no", xDocumentSearching?.Element("tv-search")?.Attribute("available")?.Value);
+            Assert.AreEqual("q", xDocumentSearching?.Element("tv-search")?.Attribute("supportedParams")?.Value);
+            Assert.AreEqual("no", xDocumentSearching?.Element("movie-search")?.Attribute("available")?.Value);
+            Assert.AreEqual("q", xDocumentSearching?.Element("movie-search")?.Attribute("supportedParams")?.Value);
+            Assert.AreEqual("no", xDocumentSearching?.Element("music-search")?.Attribute("available")?.Value);
+            Assert.AreEqual("q", xDocumentSearching?.Element("music-search")?.Attribute("supportedParams")?.Value);
+            Assert.AreEqual("no", xDocumentSearching?.Element("audio-search")?.Attribute("available")?.Value);
+            Assert.AreEqual("q", xDocumentSearching?.Element("audio-search")?.Attribute("supportedParams")?.Value);
+            Assert.AreEqual("no", xDocumentSearching?.Element("book-search")?.Attribute("available")?.Value);
+            Assert.AreEqual("q", xDocumentSearching?.Element("book-search")?.Attribute("supportedParams")?.Value);
 
             // test all features enabled
             torznabCaps = new TorznabCapabilities
@@ -389,55 +390,75 @@ namespace Jackett.Test.Common.Models
                 },
             };
             xDocument = torznabCaps.GetXDocument();
-            xDoumentSearching = xDocument.Root?.Element("searching");
-            Assert.AreEqual("yes", xDoumentSearching?.Element("search")?.Attribute("available")?.Value);
-            Assert.AreEqual("q", xDoumentSearching?.Element("search")?.Attribute("supportedParams")?.Value);
-            Assert.AreEqual("yes", xDoumentSearching?.Element("tv-search")?.Attribute("available")?.Value);
-            Assert.AreEqual("q,season,ep,tvdbid,rid", xDoumentSearching?.Element("tv-search")?.Attribute("supportedParams")?.Value);
-            Assert.AreEqual("yes", xDoumentSearching?.Element("movie-search")?.Attribute("available")?.Value);
-            Assert.AreEqual("q,imdbid,tmdbid", xDoumentSearching?.Element("movie-search")?.Attribute("supportedParams")?.Value);
-            Assert.AreEqual("yes", xDoumentSearching?.Element("music-search")?.Attribute("available")?.Value);
-            Assert.AreEqual("q,album,artist,label,year", xDoumentSearching?.Element("music-search")?.Attribute("supportedParams")?.Value);
-            Assert.AreEqual("yes", xDoumentSearching?.Element("audio-search")?.Attribute("available")?.Value);
-            Assert.AreEqual("q,album,artist,label,year", xDoumentSearching?.Element("audio-search")?.Attribute("supportedParams")?.Value);
-            Assert.AreEqual("yes", xDoumentSearching?.Element("book-search")?.Attribute("available")?.Value);
-            Assert.AreEqual("q,title,author", xDoumentSearching?.Element("book-search")?.Attribute("supportedParams")?.Value);
+            xDocumentSearching = xDocument.Root?.Element("searching");
+            Assert.AreEqual("yes", xDocumentSearching?.Element("search")?.Attribute("available")?.Value);
+            Assert.AreEqual("q", xDocumentSearching?.Element("search")?.Attribute("supportedParams")?.Value);
+            Assert.AreEqual("yes", xDocumentSearching?.Element("tv-search")?.Attribute("available")?.Value);
+            Assert.AreEqual("q,season,ep,tvdbid,rid", xDocumentSearching?.Element("tv-search")?.Attribute("supportedParams")?.Value);
+            Assert.AreEqual("yes", xDocumentSearching?.Element("movie-search")?.Attribute("available")?.Value);
+            Assert.AreEqual("q,imdbid,tmdbid", xDocumentSearching?.Element("movie-search")?.Attribute("supportedParams")?.Value);
+            Assert.AreEqual("yes", xDocumentSearching?.Element("music-search")?.Attribute("available")?.Value);
+            Assert.AreEqual("q,album,artist,label,year", xDocumentSearching?.Element("music-search")?.Attribute("supportedParams")?.Value);
+            Assert.AreEqual("yes", xDocumentSearching?.Element("audio-search")?.Attribute("available")?.Value);
+            Assert.AreEqual("q,album,artist,label,year", xDocumentSearching?.Element("audio-search")?.Attribute("supportedParams")?.Value);
+            Assert.AreEqual("yes", xDocumentSearching?.Element("book-search")?.Attribute("available")?.Value);
+            Assert.AreEqual("q,title,author", xDocumentSearching?.Element("book-search")?.Attribute("supportedParams")?.Value);
 
             // test categories
             torznabCaps = new TorznabCapabilities();
             torznabCaps.Categories.AddCategoryMapping("c1", TorznabCatType.MoviesSD); // child category
             xDocument = torznabCaps.GetXDocument();
-            var xDoumentCategories = xDocument.Root?.Element("categories")?.Elements("category").ToList();
-            Assert.AreEqual(1, xDoumentCategories?.Count);
-            Assert.AreEqual(TorznabCatType.MoviesSD.ID.ToString(), xDoumentCategories?.First().Attribute("id")?.Value);
-            Assert.AreEqual(TorznabCatType.MoviesSD.Name, xDoumentCategories?.First().Attribute("name")?.Value);
+            var xDocumentCategories = xDocument.Root?.Element("categories")?.Elements("category").ToList();
+            Assert.AreEqual(1, xDocumentCategories?.Count);
+            Assert.AreEqual(TorznabCatType.MoviesSD.ID.ToString(), xDocumentCategories?.First().Attribute("id")?.Value);
+            Assert.AreEqual(TorznabCatType.MoviesSD.Name, xDocumentCategories?.First().Attribute("name")?.Value);
 
             // TODO: child category is duplicated. should we add just parent and child without other subcats?
             torznabCaps = new TorznabCapabilities();
             torznabCaps.Categories.AddCategoryMapping("c1", TorznabCatType.Movies); // parent and child category
             torznabCaps.Categories.AddCategoryMapping("c2", TorznabCatType.MoviesSD);
             xDocument = torznabCaps.GetXDocument();
-            xDoumentCategories = xDocument.Root?.Element("categories")?.Elements("category").ToList();
-            Assert.AreEqual(2, xDoumentCategories?.Count);
-            Assert.AreEqual(TorznabCatType.Movies.ID.ToString(), xDoumentCategories?.First().Attribute("id")?.Value);
-            Assert.AreEqual(TorznabCatType.Movies.Name, xDoumentCategories?.First().Attribute("name")?.Value);
-            Assert.AreEqual(TorznabCatType.MoviesSD.ID.ToString(), xDoumentCategories?[1].Attribute("id")?.Value);
-            Assert.AreEqual(TorznabCatType.MoviesSD.Name, xDoumentCategories?[1].Attribute("name")?.Value);
-            var xDoumentSubCategories = xDoumentCategories?.First()?.Elements("subcat").ToList();
-            Assert.AreEqual(9, xDoumentSubCategories?.Count);
-            Assert.AreEqual(TorznabCatType.MoviesForeign.ID.ToString(), xDoumentSubCategories?.First().Attribute("id")?.Value);
-            Assert.AreEqual(TorznabCatType.MoviesForeign.Name, xDoumentSubCategories?.First().Attribute("name")?.Value);
+            xDocumentCategories = xDocument.Root?.Element("categories")?.Elements("category").ToList();
+            Assert.AreEqual(2, xDocumentCategories?.Count);
+            Assert.AreEqual(TorznabCatType.Movies.ID.ToString(), xDocumentCategories?.First().Attribute("id")?.Value);
+            Assert.AreEqual(TorznabCatType.Movies.Name, xDocumentCategories?.First().Attribute("name")?.Value);
+            Assert.AreEqual(TorznabCatType.MoviesSD.ID.ToString(), xDocumentCategories?[1].Attribute("id")?.Value);
+            Assert.AreEqual(TorznabCatType.MoviesSD.Name, xDocumentCategories?[1].Attribute("name")?.Value);
+            var xDocumentSubCategories = xDocumentCategories?.First()?.Elements("subcat").ToList();
+            Assert.AreEqual(9, xDocumentSubCategories?.Count);
+            Assert.AreEqual(TorznabCatType.MoviesForeign.ID.ToString(), xDocumentSubCategories?.First().Attribute("id")?.Value);
+            Assert.AreEqual(TorznabCatType.MoviesForeign.Name, xDocumentSubCategories?.First().Attribute("name")?.Value);
 
             torznabCaps = new TorznabCapabilities();
             torznabCaps.Categories.AddCategoryMapping("c1", new TorznabCategory(100001, "CustomCat")); // custom category
             torznabCaps.Categories.AddCategoryMapping("c2", TorznabCatType.MoviesSD);
             xDocument = torznabCaps.GetXDocument();
-            xDoumentCategories = xDocument.Root?.Element("categories")?.Elements("category").ToList();
-            Assert.AreEqual(2, xDoumentCategories?.Count);
-            Assert.AreEqual("100001", xDoumentCategories?[0].Attribute("id")?.Value); // custom cats are first in the list
-            Assert.AreEqual("CustomCat", xDoumentCategories?[0].Attribute("name")?.Value);
-            Assert.AreEqual(TorznabCatType.MoviesSD.ID.ToString(), xDoumentCategories?[1].Attribute("id")?.Value);
-            Assert.AreEqual(TorznabCatType.MoviesSD.Name, xDoumentCategories?[1].Attribute("name")?.Value);
+            xDocumentCategories = xDocument.Root?.Element("categories")?.Elements("category").ToList();
+            Assert.AreEqual(2, xDocumentCategories?.Count);
+            Assert.AreEqual("100001", xDocumentCategories?[0].Attribute("id")?.Value); // custom cats are first in the list
+            Assert.AreEqual("CustomCat", xDocumentCategories?[0].Attribute("name")?.Value);
+            Assert.AreEqual(TorznabCatType.MoviesSD.ID.ToString(), xDocumentCategories?[1].Attribute("id")?.Value);
+            Assert.AreEqual(TorznabCatType.MoviesSD.Name, xDocumentCategories?[1].Attribute("name")?.Value);
+        }
+
+        [Test]
+        public void TestTorznabCapsCategories()
+        {
+            var torznabCaps = new TorznabCapabilities();
+            TestCategories.AddTestCategories(torznabCaps.Categories);
+
+            // test Torznab caps (XML) => more in Common.Model.TorznabCapabilitiesTests
+            var xDocument = torznabCaps.GetXDocument();
+            var xDocumentCategories = xDocument.Root?.Element("categories")?.Elements("category").ToList();
+            Assert.AreEqual(7, xDocumentCategories?.Count);
+            Assert.AreEqual("100044", xDocumentCategories?[0].Attribute("id")?.Value);
+            Assert.AreEqual("100045", xDocumentCategories?[1].Attribute("id")?.Value);
+            Assert.AreEqual("1030", xDocumentCategories?[2].Attribute("id")?.Value);
+            Assert.AreEqual("1040", xDocumentCategories?[3].Attribute("id")?.Value);
+            Assert.AreEqual("2000", xDocumentCategories?[4].Attribute("id")?.Value); // Movies
+            Assert.AreEqual("2030", xDocumentCategories?[5].Attribute("id")?.Value);
+            Assert.AreEqual("7030", xDocumentCategories?[6].Attribute("id")?.Value);
+            Assert.AreEqual(9, xDocumentCategories?[4]?.Elements("subcat").ToList().Count); // Movies
         }
 
         [Test]
