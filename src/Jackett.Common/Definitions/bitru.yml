@@ -132,8 +132,10 @@ search:
           args: ["ноября", "November"]
         - name: replace
           args: ["декабря", "December"]
+        - name: append
+          args: " +03:00" # MSK
         - name: dateparse
-          args: "02 January 2006 15:04"
+          args: "02 January 2006 15:04 -07:00"
     size:
       selector: td:nth-child(3)
       filters:
