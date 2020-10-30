@@ -29,12 +29,14 @@ caps:
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q]
+    music-search: [q]
+    book-search: [q]
 
 settings:
   - name: info_8000
     type: info
     label: About BTSOW Categories
-    default: BTSOW does not return categories in its search results page. To add to Sonarr or Radarr replace all categories with 8000(Other).
+    default: BTSOW does not return categories in its search results.</br>To add to your Apps' Torznab indexer, replace all categories with 8000(Other).
 
 download:
   selector: a#magnetOpen
@@ -42,7 +44,7 @@ download:
 
 search:
   paths:
-    - path: "search/{{ if .Keywords }}{{ .Keywords }}{{else}}{{ .Today.Year }}{{end}}"
+    - path: "search/{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
   rows:
     selector: div.row:has(a[href*="/detail/hash/"])
   fields:
@@ -60,8 +62,10 @@ search:
     date:
       selector: div.date
       filters:
+        - name: append
+          args: " -00:00" # GMT
         - name: dateparse
-          args: "2006-01-02"
+          args: "2006-01-02 -07:00"
     size:
       selector: div.size
     seeders:
