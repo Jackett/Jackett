@@ -14,12 +14,16 @@ caps:
   categories:
     series: TV
     films: Movies
+    musique: Audio
+    ebook: Books
     other: Other
 
   modes:
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q]
+    music-search: [q]
+    book-search: [q]
 
 settings:
   - name: multilang
@@ -125,16 +129,16 @@ search:
         - name: dateparse
           args: "2006-01-02 15:04:05-07:00"
     cat:
-      text: other
-    cat:
       selector: a[href*="/category/"]
       attribute: href
       optional: true
       filters:
         - name: split
           args: ["/", 4]
+    cat:
+      text: "{{ if .Result.cat }}{{ .Result.cat }}{{ else }}other{{ end }}"
     size:
-      text: "{{ if eq .Result.cat \"series\" }}512 MB{{else}}2 GB{{end}}"
+      text: "{{ if eq .Result.cat \"ebook\" }}1 MB{{ else }}{{ end }}{{ if eq .Result.cat \"musique\" }}128 MB{{ else }}{{ end }}{{ if or (eq .Result.cat \"series\") (eq .Result.cat \"other\") }}512 MB{{ else }}{{ end }}{{ if eq .Result.cat \"films\" }}2 GB{{ else }}{{ end }}"
     seeders:
       text: 1
     leechers:
