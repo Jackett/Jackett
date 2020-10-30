@@ -95,6 +95,8 @@ search:
   rows:
     selector: table[class="ttable_headinner"] > tbody > tr:not(:has(td.ttable_head))
     after: 1
+    filters:
+      - name: andmatch
 
   fields:
     category:
