@@ -110,6 +110,15 @@ login:
     path: index.php
     selector: a[href="logout.php"]
 
+download:
+  before:
+    path: ajax_det_poll.php
+    method: post
+    inputs:
+      set_thanks: Merci
+      det_id: "{{ .DownloadUri.Query.torrent }}"
+      ajax: yes
+
 search:
   paths:
     - path: selection.php
@@ -129,8 +138,6 @@ search:
     category:
       selector: div.kat_cat_pic
       filters:
-        - name: strdump
-          args: cat
       case:
         ":contains(\"Film\"):contains(\"DVD\")": 2
         ":contains(\"Film\"):contains(\"1080P\")": 4
@@ -164,12 +171,6 @@ search:
         ":contains(\"Jeux\"):contains(\"PS4\")": 55
         ":contains(\"Jeux\"):contains(\"XBOX 360\")": 56
         ":contains(\"Jeux\"):contains(\"androïd\")": 57
-    id:
-      selector: a[href^="details.php?id="]
-      attribute: href
-      filters:
-        - name: querystring
-          args: id
     title_phase1:
       selector: a[href^="details.php?id="]
     title_multilang:
@@ -192,7 +193,11 @@ search:
       selector: a[href^="details.php?id="]
       attribute: href
     download:
-      text: "download.php?torrent={{ .Result.id }}"
+      selector: a[href^="details.php?id="]
+      attribute: href
+      filters:
+        - name: replace
+          args: ["details.php?id=", "download.php?torrent="]
     seeders:
       selector: div.selection_unter_aa > b
     leechers:
