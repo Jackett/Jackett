@@ -259,11 +259,12 @@ search:
     pn: ""
     # all words
     allw: 1
+  keywordsfilters:
+    - name: re_replace
+      args: ["(\\w+)", " +$1"] # prepend + to each word
 
   rows:
     selector: tr[id^="tor_"]:has(a[href^="magnet:?xt="])
-    filters:
-      - name: andmatch
 
   fields:
     category:
