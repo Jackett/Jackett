@@ -89,6 +89,8 @@ caps:
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q]
+    music-search: [q]
+    book-search: [q]
 
 settings: []
 
@@ -98,7 +100,7 @@ search:
       method: post
       followredirect: true
   inputs:
-    keyword: "{{ if .Keywords }}{{ .Keywords }}{{else}}{{ .Today.Year }}{{end}}"
+    keyword: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
 
   rows:
     selector: div.list-area > dl.item
@@ -119,8 +121,10 @@ search:
     date:
       selector: dd.attr span:nth-child(1) b
       filters:
+        - name: append
+          args: " +08:00" # CST
         - name: dateparse
-          args: "2006-01-02"
+          args: "2006-01-02 -07:00"
     size:
       selector: dd.attr span:nth-child(2) b
     seeders:
