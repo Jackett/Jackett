@@ -64,6 +64,7 @@ search:
       selector: td.views-field-name a
       attribute: href
     date:
+      # 3 hours 27 min
       selector: td.views-field-created
     size:
       selector: td.views-field-size
