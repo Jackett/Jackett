@@ -33,7 +33,7 @@ settings:
   - name: info_8000
     type: info
     label: About cpasbienclone Categories
-    default: cpasbienclone does not return categories in its search results page. To add to Sonarr or Radarr replace all categories with 8000(Other).
+    default: cpasbienclone does not return categories in its search results.</br>To add to your Apps' Torznab indexer, replace all categories with 8000(Other).
   - name: multilang
     type: checkbox
     label: Replace MULTI by another language in release name
@@ -73,7 +73,7 @@ download:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}search_torrent/{{ .Keywords }}{{ .Config.sort }}{{else}}home/{{end}}"
+    - path: "{{ if .Keywords }}search_torrent/{{ .Keywords }}{{ .Config.sort }}{{ else }}home/{{ end }}"
 
   rows:
     selector: table.table-corps > tbody > tr:has(a)
