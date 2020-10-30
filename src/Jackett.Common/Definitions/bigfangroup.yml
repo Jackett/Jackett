@@ -11,54 +11,49 @@ links:
 
 caps:
   categorymappings:
-    # Movies
+    - {id: 51, cat: Movies/3D, desc: "3D"}
+    - {id: 12, cat: TV, desc: "Анимация"}
+    - {id: 35, cat: Audio/Audiobook, desc: "Аудио-книги"}
     - {id: 13, cat: Movies, desc: "Боевик"}
-    - {id: 18, cat: Movies, desc: "Катастрофа"}
-    - {id: 19, cat: Movies, desc: "Мелодрама"}
-    - {id: 21, cat: Movies, desc: "Драма"}
-    - {id: 22, cat: Movies, desc: "Триллер"}
-    - {id: 23, cat: Movies, desc: "Фантастика"}
-    - {id: 24, cat: Movies, desc: "Комедия"}
-    - {id: 26, cat: Movies, desc: "Ужасы"}
-    - {id: 27, cat: Movies, desc: "Приключения"}
-    - {id: 28, cat: Movies, desc: "Исторический"}
-    - {id: 29, cat: Movies/Foreign, desc: "Наше кино"}
-    - {id: 30, cat: Movies, desc: "Фэнтази"}
-    - {id: 31, cat: Movies, desc: "Мистика"}
-    - {id: 33, cat: Movies, desc: "Военный"}
-    - {id: 36, cat: Movies, desc: "Криминал"}
-    - {id: 39, cat: Movies, desc: "Детектив"}
-    - {id: 47, cat: Movies, desc: "Сказки"}
-    - {id: 48, cat: Movies, desc: "Вестерн"}
     - {id: 52, cat: Movies, desc: "Биография"}
+    - {id: 33, cat: Movies, desc: "Военный"}
+    - {id: 45, cat: Audio/Video, desc: "Видеоклипы"}
+    - {id: 48, cat: Movies, desc: "Вестерн"}
+    - {id: 21, cat: Movies, desc: "Драма"}
+    - {id: 32, cat: TV/Documentary, desc: "Документальный"}
+    - {id: 39, cat: Movies, desc: "Детектив"}
+    - {id: 44, cat: Audio, desc: "Зарубежная музыка"}
+    - {id: 5, cat: PC/Games, desc: "Игры"}
+    - {id: 28, cat: Movies, desc: "Исторический"}
+    - {id: 18, cat: Movies, desc: "Катастрофа"}
+    - {id: 24, cat: Movies, desc: "Комедия"}
+    - {id: 36, cat: Movies, desc: "Криминал"}
+    - {id: 38, cat: Books, desc: "Книги и журналы"}
     - {id: 53, cat: Movies, desc: "Классика"}
+    - {id: 54, cat: Audio, desc: "Классическая музыка"}
+    - {id: 19, cat: Movies, desc: "Мелодрама"}
+    - {id: 20, cat: Movies, desc: "Мультфильм"}
+    - {id: 31, cat: Movies, desc: "Мистика"}
+    - {id: 46, cat: Audio, desc: "Муз. сборники"}
+    - {id: 29, cat: Movies/Foreign, desc: "Наше кино"}
+    - {id: 49, cat: TV, desc: "Научно-популярное"}
+    - {id: 50, cat: TV, desc: "Новости"}
+    - {id: 27, cat: Movies, desc: "Приключения"}
+    - {id: 9, cat: Other, desc: "Разное"}
+    - {id: 43, cat: Audio/Foreign, desc: "Русская музыка"}
+    - {id: 1, cat: PC, desc: "Софт"}
+    - {id: 11, cat: TV, desc: "Сериалы"}
+    - {id: 37, cat: TV/Sport, desc: "Спорт"}
+    - {id: 47, cat: Movies, desc: "Сказки"}
+    - {id: 55, cat: Audio, desc: "Саундтрек"}
+    - {id: 25, cat: TV, desc: "ТВ-шоу"}
+    - {id: 22, cat: Movies, desc: "Триллер"}
+    - {id: 26, cat: Movies, desc: "Ужасы"}
+    - {id: 23, cat: Movies, desc: "Фантастика"}
+    - {id: 30, cat: Movies, desc: "Фэнтази"}
+    - {id: 42, cat: XXX, desc: "Эротика"}
     - {id: 14, cat: Movies/HD, desc: "HDTV"}
     - {id: 15, cat: Movies/DVD, desc: "DVD"}
-    - {id: 51, cat: Movies/3D, desc: "3D"}
-    - {id: 20, cat: Movies, desc: "Мультфильм"}
-    # Audio
-    - {id: 35, cat: Audio/Audiobook, desc: "Аудио-книги"}
-    - {id: 43, cat: Audio/Foreign, desc: "Русская музыка"}
-    - {id: 44, cat: Audio, desc: "Зарубежная музыка"}
-    - {id: 45, cat: Audio/Video, desc: "Видеоклипы"}
-    - {id: 46, cat: Audio, desc: "Муз. сборники"}
-    - {id: 54, cat: Audio, desc: "Классическая музыка"}
-    - {id: 55, cat: Audio, desc: "Саундтрек"}
-    # TV
-    - {id: 11, cat: TV, desc: "Сериалы"}
-    - {id: 25, cat: TV, desc: "ТВ-шоу"}
-    - {id: 37, cat: TV/Sport, desc: "Спорт"}
-    - {id: 50, cat: TV, desc: "Новости"}
-    - {id: 49, cat: TV, desc: "Научно-популярное"}
-    - {id: 32, cat: TV/Documentary, desc: "Документальный"}
-    - {id: 12, cat: TV, desc: "Анимация"}
-    # PC
-    - {id: 1, cat: PC, desc: "Софт"}
-    - {id: 5, cat: PC/Games, desc: "Игры"}
-    # Other
-    - {id: 38, cat: Books, desc: "Книги и журналы"}
-    - {id: 42, cat: XXX, desc: "Эротика"}
-    - {id: 9, cat: Other, desc: "Разное"}
 
   modes:
     search: [q]
@@ -183,8 +178,10 @@ search:
           args: ["ноября", "November"]
         - name: replace
           args: ["декабря", "December"]
+        - name: append
+          args: " +03:00" # MSK
         - name: dateparse
-          args: "2 January 2006 15:04:05"
+          args: "2 January 2006 15:04:05 -07:00"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
