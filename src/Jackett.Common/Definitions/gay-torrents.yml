@@ -85,6 +85,8 @@ search:
     textsearch: "{{ .Keywords }}"
   rows:
     selector: ul.TorrentList
+    filters:
+      - name: andmatch
   fields:
     category:
       selector: .TorrentList1 > a
