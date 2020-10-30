@@ -115,6 +115,8 @@ search:
 
   rows:
     selector: tr.t-row
+    filters:
+      - name: andmatch
 
   fields:
     category:
