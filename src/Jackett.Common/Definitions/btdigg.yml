@@ -16,12 +16,14 @@ caps:
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q]
+    music-search: [q]
+    book-search: [q]
 
 settings:
   - name: info_8000
     type: info
     label: About BTDigg Categories
-    default: BTDigg does not return categories in its search results page. To add to Sonarr or Radarr replace all categories with 8000(Other).
+    default: BTDigg does not return categories in its search results.</br>To add to your Apps' Torznab indexer, replace all categories with 8000(Other).
   - name: sort
     type: select
     label: Sort requested from site
