@@ -607,6 +607,8 @@ search:
     nm: "{{ .Keywords }}"
     # find a username
     pn: ""
+    # all words
+    allw: 1
   keywordsfilters:
     - name: re_replace
       args: ["(\\w+)", " +$1"] # prepend + to each word
