@@ -69,6 +69,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("anime[dvd_special]", TorznabCatType.TVAnime, "DVD Special");
             AddCategoryMapping("anime[bd_special]", TorznabCatType.TVAnime, "BD Special");
             AddCategoryMapping("anime[movie]", TorznabCatType.Movies, "Movie");
+            AddCategoryMapping("audio", TorznabCatType.Audio, "Music");
             AddCategoryMapping("gamec[game]", TorznabCatType.PCGames, "Game");
             AddCategoryMapping("gamec[visual_novel]", TorznabCatType.PCGames, "Visual Novel");
             AddCategoryMapping("printedtype[manga]", TorznabCatType.BooksComics, "Manga");
