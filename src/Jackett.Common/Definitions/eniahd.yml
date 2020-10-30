@@ -127,11 +127,12 @@ search:
     pn: ""
     # search by partial word
     allw: 0
+  keywordsfilters:
+    - name: re_replace
+      args: ["(\\w+)", " +$1"] # prepend + to each word
 
   rows:
     selector: tr[id^="tor_"]:has(a[href^="./dl.php?id="])
-    filters:
-      - name: andmatch
 
   fields:
     title:
