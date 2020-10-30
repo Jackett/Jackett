@@ -262,6 +262,8 @@ search:
 
   rows:
     selector: tr[id^="tor_"]:has(a[href^="magnet:?xt="])
+    filters:
+      - name: andmatch
 
   fields:
     category:
