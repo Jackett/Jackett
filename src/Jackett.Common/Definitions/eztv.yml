@@ -46,7 +46,7 @@ settings: []
 
 search:
   paths:
-    - path: "{{ if .Keywords }}search/{{ .Keywords }}{{else}}/{{end}}"
+    - path: "{{ if .Keywords }}search/{{ .Keywords }}{{ else }}/{{ end }}"
   keywordsfilters:
     - name: re_replace
       args: ["S[0-9]{2}([^E]|$)", ""] # remove season tag without episode (search doesn't support it)
@@ -73,7 +73,7 @@ search:
       selector: td:nth-child(3) a.magnet, td:nth-child(3) a
       attribute: href
     size:
-      text: "500 MB"
+      text: "512 MB"
     size:
       optional: true
       selector: td:nth-child(4)
