@@ -83,7 +83,7 @@ download:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}search/?order={{ .Config.sort }}&sort={{ .Config.type }}&q={{ .Keywords }}{{ else }}latest/?order={{ .Config.sort }}&sort={{ .Config.type }}{{ end }}"
+    - path: "{{ if .Keywords }}search/?q={{ .Keywords }}&{{ else }}latest/?{{ end }}order={{ .Config.sort }}&sort={{ .Config.type }}"
 
   rows:
     selector: table.table-striped > tbody > tr
