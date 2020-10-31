@@ -117,7 +117,7 @@ search:
     - name: re_replace # S01E01 to 1 1
       args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "$1 $2"]
   inputs:
-    # all activeonly deadonly
+    # all, liveonly, deadonly
     t: all
     c: "{{ .Config.cat }}"
     s: "{{ .Config.sort }}"
@@ -134,14 +134,13 @@ search:
         - name: split
           args: ["/", 2]
     torrent_id:
-#        selector: td:nth-child(2) a # for some obscure reason counting from the top does not work for this selector!?!?!??!
-      selector: td:nth-last-child(8) a
+      selector: td:nth-child(2) a
       attribute: href
       filters:
         - name: split
           args: ["/", 3]
     title:
-      selector: td:nth-last-child(8) a
+      selector: td:nth-child(2)
       filters:
         # normalize to SXXEYY format
         - name: replace
@@ -171,15 +170,17 @@ search:
         - name: replace
           args: ["HDTVRip", "HDTV"]
     details:
-      selector: td:nth-last-child(8) a
+      selector: td:nth-child(2) a
       attribute: href
     download:
       text: "{{ .Config.sitelink }}download.php?id={{ .Result.torrent_id }}"
     date:
       selector: td:nth-child(4)
       filters:
+        - name: append
+          args: " +03:00" # MSK
         - name: dateparse
-          args: "02/01/06"
+          args: "02/01/06 -07:00"
     size:
       selector: td:nth-child(5)
       filters:
