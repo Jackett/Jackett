@@ -884,7 +884,7 @@ search:
     tracker_search: torrent
     keywords: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
     terms: all
-    fp: 1
+    fp: 0
     author: ""
     sc: 1
     sf: titleonly
