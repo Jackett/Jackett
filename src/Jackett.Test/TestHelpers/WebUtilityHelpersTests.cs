@@ -3,7 +3,7 @@ using System.Web;
 using Jackett.Common.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Jackett.Test
+namespace Jackett.Test.TestHelpers
 {
     [TestClass]
     public class WebUtilityHelpersTests
