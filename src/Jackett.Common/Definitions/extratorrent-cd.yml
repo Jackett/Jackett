@@ -20,12 +20,14 @@ caps:
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q]
+    music-search: [q]
+    book-search: [q]
 
 settings:
   - name: info_8000
     type: info
     label: About ExtraTorrent Categories
-    default: ExtraTorrent does not return categories in its search results page. To add to Sonarr or Radarr replace all categories with 8000(Other).
+    default: ExtraTorrent does not return categories in its search results.</br>To add to your Apps' Torznab indexer, replace all categories with 8000(Other).
 
 search:
   paths:
