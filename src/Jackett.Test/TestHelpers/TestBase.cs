@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-namespace Jackett.Test
+namespace Jackett.Test.TestHelpers
 {
     internal abstract class TestBase
     {

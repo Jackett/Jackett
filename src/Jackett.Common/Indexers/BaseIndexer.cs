@@ -583,9 +583,11 @@ namespace Jackett.Common.Indexers
         protected void AddCategoryMapping(string trackerCategory, TorznabCategory newznabCategory, string trackerCategoryDesc = null) =>
             TorznabCaps.Categories.AddCategoryMapping(trackerCategory, newznabCategory, trackerCategoryDesc);
 
+        // TODO: remove this method ?
         protected void AddCategoryMapping(int trackerCategory, TorznabCategory newznabCategory, string trackerCategoryDesc = null) =>
             AddCategoryMapping(trackerCategory.ToString(), newznabCategory, trackerCategoryDesc);
 
+        // TODO: remove this method and use AddCategoryMapping instead. this method doesn't allow to create custom cats
         protected void AddMultiCategoryMapping(TorznabCategory newznabCategory, params int[] trackerCategories)
         {
             foreach (var trackerCat in trackerCategories)

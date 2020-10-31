@@ -1,4 +1,5 @@
 using Jackett.Common.Utils;
+using Jackett.Test.TestHelpers;
 using NUnit.Framework;
 
 namespace Jackett.Test.Common.Utils

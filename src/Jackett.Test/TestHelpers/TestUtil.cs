@@ -9,7 +9,7 @@ using Jackett.Common.Utils.Clients;
 using Microsoft.AspNetCore.DataProtection;
 using NLog;
 
-namespace Jackett.Test
+namespace Jackett.Test.TestHelpers
 {
     internal static class TestUtil
     {

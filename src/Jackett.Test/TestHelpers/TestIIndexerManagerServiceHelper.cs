@@ -5,7 +5,7 @@ using Jackett.Common.Indexers;
 using Jackett.Common.Services.Interfaces;
 using Newtonsoft.Json.Linq;
 
-namespace Jackett.Test
+namespace Jackett.Test.TestHelpers
 {
     internal class TestIndexerManagerServiceHelper : IIndexerManagerService
     {
