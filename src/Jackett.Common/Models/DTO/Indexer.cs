@@ -51,14 +51,11 @@ namespace Jackett.Common.Models.DTO
             site_link = indexer.SiteLink;
             language = indexer.Language;
             last_error = indexer.LastError;
-            potatoenabled = indexer.TorznabCaps.Categories.GetTorznabCategories().Any(i => TorznabCatType.Movies.Contains(i));
+            potatoenabled = indexer.TorznabCaps.Categories.GetTorznabCategoryTree().Any(i => TorznabCatType.Movies.Contains(i));
 
             alternativesitelinks = indexer.AlternativeSiteLinks;
 
-            caps = indexer.TorznabCaps.Categories.GetTorznabCategories()
-                .GroupBy(p => p.ID)
-                .Select(g => g.First())
-                .OrderBy(c => c.ID < 100000 ? "z" + c.ID.ToString() : c.Name)
+            caps = indexer.TorznabCaps.Categories.GetTorznabCategoryList(true)
                 .Select(c => new Capability
                 {
                     ID = c.ID.ToString(),
