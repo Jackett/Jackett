@@ -899,6 +899,15 @@ search:
     selector: li.row:has(a[href^="./download/file.php?id="])
 
   fields:
+    category:
+      text: 726
+    category|noappend:
+      selector: a[href*="/viewtopic.php?f="]
+      attribute: href
+      optional: true
+      filters:
+        - name: querystring
+          args: f
     title:
       selector: a.topictitle
     details:
@@ -906,12 +915,6 @@ search:
       attribute: href
     description:
       selector: dt a:last-of-type
-    category:
-      selector: a[href*="/viewtopic.php?f="]
-      attribute: href
-      filters:
-        - name: querystring
-          args: f
     download:
       selector: a[href^="./download/file.php?id="]
       attribute: href
