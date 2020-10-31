@@ -97,14 +97,14 @@ search:
     category:
       selector: td:nth-child(1) > i
       case:
-        .Films: "movies"
-        .Séries: "tvshows"
-        .Logiciels: "softwares"
-        .Musique: "music"
-        .Jeux-Consoles: "console-games"
-        .Jeux-PC: "pc-games"
-        .Ebook: "books"
-        .Porno: "xxx"
+        .Films: movies
+        .Séries: tvshows
+        .Logiciels: softwares
+        .Musique: music
+        .Jeux-Consoles: console-games
+        .Jeux-PC: pc-games
+        .Ebook: books
+        .Porno: xxx
     site_date:
       selector: td:nth-child(1) a
       filters:
