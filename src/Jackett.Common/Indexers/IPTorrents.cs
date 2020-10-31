@@ -122,9 +122,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(47, TorznabCatType.ConsoleNDS, "Games/Nintendo DS");
             AddCategoryMapping(43, TorznabCatType.PCISO, "Games/PC-ISO");
             AddCategoryMapping(45, TorznabCatType.PCGames, "Games/PC-Rip");
-            AddCategoryMapping(39, TorznabCatType.ConsolePS3, "Games/PS2");
             AddCategoryMapping(71, TorznabCatType.ConsolePS3, "Games/PS3");
-            AddCategoryMapping(40, TorznabCatType.ConsolePSP, "Games/PSP");
             AddCategoryMapping(50, TorznabCatType.ConsoleWii, "Games/Wii");
             AddCategoryMapping(44, TorznabCatType.ConsoleXBox360, "Games/Xbox-360");
 
