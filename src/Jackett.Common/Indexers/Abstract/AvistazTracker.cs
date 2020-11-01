@@ -80,8 +80,6 @@ namespace Jackett.Common.Indexers.Abstract
             switch(row.Value<string>("type"))
             {
                 case "Movie":
-                    if (query.Categories.Contains(TorznabCatType.Movies.ID))
-                        cats.Add(TorznabCatType.Movies.ID);
                     cats.Add(resolution switch
                     {
                         var res when _hdResolutions.Contains(res) => TorznabCatType.MoviesHD.ID,
@@ -90,8 +88,6 @@ namespace Jackett.Common.Indexers.Abstract
                     });
                     break;
                 case "TV-Show":
-                    if (query.Categories.Contains(TorznabCatType.TV.ID))
-                        cats.Add(TorznabCatType.TV.ID);
                     cats.Add(resolution switch
                     {
                         var res when _hdResolutions.Contains(res) => TorznabCatType.TVHD.ID,
