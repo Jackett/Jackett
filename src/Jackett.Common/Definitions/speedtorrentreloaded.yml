@@ -86,7 +86,7 @@ settings:
       asc: asc
 
 login:
-  path: login.php
+  path: sessioncheck.php?session=1
   method: form
   form: form
   inputs:
