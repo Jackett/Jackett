@@ -77,7 +77,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
-                   configData: new ConfigurationDataCookie("For best results, change the 'Torrents per page' option to 100 in the website Settings."))
+                   configData: new ConfigurationDataCookie("For best results, change the 'Torrents per page' option to 100 and check the 'Torrents - Show files count' option in the website Settings."))
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
@@ -235,9 +235,17 @@ namespace Jackett.Common.Indexers
                     var cat = MapTrackerCatToNewznab(catIcon.GetAttribute("href").Substring(1));
 
                     var size = ReleaseInfo.GetBytes(row.Children[5].TextContent);
-                    var grabs = ParseUtil.CoerceInt(row.Children[6].TextContent);
-                    var seeders = ParseUtil.CoerceInt(row.Children[7].TextContent);
-                    var leechers = ParseUtil.CoerceInt(row.Children[8].TextContent);
+
+                    var colIndex = 6;
+                    int? files = null;
+                    if (row.Children.Length == 10) // files column is enabled in the site settings
+                    {
+                        files = ParseUtil.CoerceInt(row.Children[colIndex].TextContent.Replace("Go to files", ""));
+                        colIndex++;
+                    }
+                    var grabs = ParseUtil.CoerceInt(row.Children[colIndex++].TextContent);
+                    var seeders = ParseUtil.CoerceInt(row.Children[colIndex++].TextContent);
+                    var leechers = ParseUtil.CoerceInt(row.Children[colIndex].TextContent);
                     var dlVolumeFactor = row.QuerySelector("span.free") != null ? 0 : 1;
 
                     var release = new ReleaseInfo
@@ -250,6 +258,7 @@ namespace Jackett.Common.Indexers
                         Category = cat,
                         Description = description,
                         Size = size,
+                        Files = files,
                         Grabs = grabs,
                         Seeders = seeders,
                         Peers = seeders + leechers,
