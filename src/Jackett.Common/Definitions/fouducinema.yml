@@ -10,6 +10,9 @@ links:
 
 caps:
   categorymappings:
+    # when refreshing categories dont forget to update the category case block
+    - {id: 65, cat: TV/Documentary, desc: "Documentaires Divers"}
+    - {id: 66, cat: TV/Documentary, desc: "Documentaires audio"}
     - {id: 2, cat: Movies/DVD, desc: "Film DVD"}
     - {id: 4, cat: Movies/HD, desc: "Film 1080P"}
     - {id: 15, cat: Movies/BluRay, desc: "Film Bluray"}
@@ -17,7 +20,8 @@ caps:
     - {id: 17, cat: Movies/Other, desc: "Film Iso"}
     - {id: 19, cat: Movies/HD, desc: "Film 720P"}
     - {id: 59, cat: Movies/Other, desc: "Film Divers"}
-    - {id: 64, cat: Movies/Other, desc: "Film Rip"}
+    - {id: 67, cat: Movies/Other, desc: "Film Vob"}
+    - {id: 69, cat: Movies/DVD, desc: "Film DVD-r"}
     - {id: 46, cat: TV/HD, desc: "Série 1080P"}
     - {id: 48, cat: TV/HD, desc: "Série Bluray"}
     - {id: 60, cat: TV/Other, desc: "Série Divers"}
@@ -139,6 +143,8 @@ search:
       selector: div.kat_cat_pic
       filters:
       case:
+        ":contains(\"Documentaires\"):contains(\"Divers\")": 65
+        ":contains(\"Documentaires\"):contains(\"audio\")": 66
         ":contains(\"Film\"):contains(\"DVD\")": 2
         ":contains(\"Film\"):contains(\"1080P\")": 4
         ":contains(\"Film\"):contains(\"Bluray\")": 15
@@ -146,18 +152,19 @@ search:
         ":contains(\"Film\"):contains(\"Iso\")": 17
         ":contains(\"Film\"):contains(\"720P\")": 19
         ":contains(\"Film\"):contains(\"Divers\")": 59
-        ":contains(\"Film\"):contains(\"Rip\")": 64
-        ":contains(\"Séries\"):contains(\"1080P\")": 44
-        ":contains(\"Séries\"):contains(\"intégrale\")": 38
-        ":contains(\"Séries\"):contains(\"Web\")": 41
-        ":contains(\"Séries\"):contains(\"720P\")": 45
-        ":contains(\"Séries\"):contains(\"Divers\")": 63
+        ":contains(\"Film\"):contains(\"Vob\")": 67
+        ":contains(\"Film\"):contains(\"DVD-r\")": 69
         ":contains(\"Série\"):contains(\"1080P\")": 46
         ":contains(\"Série\"):contains(\"Bluray\")": 48
         ":contains(\"Série\"):contains(\"Divers\")": 60
         ":contains(\"Série\"):contains(\"DVDRip\")": 12
         ":contains(\"Série\"):contains(\"720P\")": 30
         ":contains(\"Série\"):contains(\"Web\")": 23
+        ":contains(\"Séries\"):contains(\"1080P\")": 44
+        ":contains(\"Séries\"):contains(\"intégrale\")": 38
+        ":contains(\"Séries\"):contains(\"Web\")": 41
+        ":contains(\"Séries\"):contains(\"720P\")": 45
+        ":contains(\"Séries\"):contains(\"Divers\")": 63
         ":contains(\"XxX\"):contains(\"Film\")": 10
         ":contains(\"Apps\"):contains(\"Win\")": 13
         ":contains(\"Apps\"):contains(\"Mac\")": 14
