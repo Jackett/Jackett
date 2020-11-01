@@ -99,6 +99,7 @@ namespace Jackett.Test.Common.Indexers
                 TorznabCatType.Books.CopyWithoutSubCategories(),
                 TorznabCatType.Console.CopyWithoutSubCategories(),
                 new TorznabCategory(100044, "Console/Xbox_c"),
+                new TorznabCategory(137107, "Console/Wii_c"),
                 new TorznabCategory(100045, "Console/Xbox_c2")
             };
             expected[0].SubCategories.Add(TorznabCatType.MoviesSD.CopyWithoutSubCategories());

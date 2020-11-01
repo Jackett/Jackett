@@ -40,6 +40,7 @@ namespace Jackett.Test.Common.Models
                 TorznabCatType.Books.CopyWithoutSubCategories(),
                 TorznabCatType.Console.CopyWithoutSubCategories(),
                 new TorznabCategory(100044, "Console/Xbox_c"),
+                new TorznabCategory(137107, "Console/Wii_c"),
                 new TorznabCategory(100040, "Console/Xbox_c2")
             };
             expected[0].SubCategories.Add(TorznabCatType.MoviesSD.CopyWithoutSubCategories());
@@ -55,6 +56,7 @@ namespace Jackett.Test.Common.Models
                 TorznabCatType.Console.CopyWithoutSubCategories(),
                 TorznabCatType.Movies.CopyWithoutSubCategories(),
                 TorznabCatType.Books.CopyWithoutSubCategories(),
+                new TorznabCategory(137107, "Console/Wii_c"),
                 new TorznabCategory(100044, "Console/Xbox_c"),
                 new TorznabCategory(100040, "Console/Xbox_c2")
             };
@@ -82,6 +84,7 @@ namespace Jackett.Test.Common.Models
                 TorznabCatType.ConsoleXBox.CopyWithoutSubCategories(),
                 TorznabCatType.ConsoleWii.CopyWithoutSubCategories(),
                 new TorznabCategory(100044, "Console/Xbox_c"),
+                new TorznabCategory(137107, "Console/Wii_c"),
                 new TorznabCategory(100040, "Console/Xbox_c2")
             };
             TestCategories.CompareCategoryTrees(expected, cats);
@@ -97,6 +100,7 @@ namespace Jackett.Test.Common.Models
                 TorznabCatType.MoviesSD.CopyWithoutSubCategories(),
                 TorznabCatType.Books.CopyWithoutSubCategories(),
                 TorznabCatType.BooksComics.CopyWithoutSubCategories(),
+                new TorznabCategory(137107, "Console/Wii_c"),
                 new TorznabCategory(100044, "Console/Xbox_c"),
                 new TorznabCategory(100040, "Console/Xbox_c2")
             };
@@ -149,9 +153,7 @@ namespace Jackett.Test.Common.Models
             expected.Add(new TorznabCategory(100044, "Console/Xbox_c"));
             TestCategories.CompareCategoryTrees(expected, cats);
 
-            // TODO: we should add a way to add custom categories for string categories
-            // https://github.com/Sonarr/Sonarr/wiki/Implementing-a-Torznab-indexer#caps-endpoint
-            // add string category with description. it's converted into 1 category
+            // add string category with description => custom category. it's converted into 2 different categories
             // - Movies
             //   - MoviesSD
             // - Books
@@ -160,8 +162,10 @@ namespace Jackett.Test.Common.Models
             //   - ConsoleXBox
             //   + ConsoleWii
             // - Custom Cat "Console/Xbox_c"
+            // + Custom Cat "Console/Wii_c"
             tcc.AddCategoryMapping("con_wii", TorznabCatType.ConsoleWii, "Console/Wii_c");
             expected[2].SubCategories.Add(TorznabCatType.ConsoleWii.CopyWithoutSubCategories());
+            expected.Add(new TorznabCategory(137107, "Console/Wii_c"));
             TestCategories.CompareCategoryTrees(expected, cats);
 
             // add another int category with description that maps to ConsoleXbox (there are 2 tracker cats => 1 torznab cat)
@@ -173,6 +177,7 @@ namespace Jackett.Test.Common.Models
             //   - ConsoleXBox (this is not added again)
             //   - ConsoleWii
             // - Custom Cat "Console/Xbox_c"
+            // - Custom Cat "Console/Wii_c"
             // + Custom Cat "Console/Xbox_c2"
             tcc.AddCategoryMapping("45", TorznabCatType.ConsoleXBox, "Console/Xbox_c2");
             expected.Add(new TorznabCategory(100045, "Console/Xbox_c2"));
@@ -210,7 +215,7 @@ namespace Jackett.Test.Common.Models
             Assert.AreEqual("1", trackerCats[0]); // Movies
             Assert.AreEqual("mov_sd", trackerCats[1]); // Movies SD
 
-            query = new TorznabQuery // duplicate category (1 toznab cat => 2 indexer cats)
+            query = new TorznabQuery // duplicate category (1 torznab cat => 2 indexer cats)
             {
                 Categories = new [] { TorznabCatType.ConsoleXBox.ID }
             };
@@ -219,17 +224,32 @@ namespace Jackett.Test.Common.Models
             Assert.AreEqual("44", trackerCats[0]);
             Assert.AreEqual("40", trackerCats[1]);
 
-            query = new TorznabQuery // custom cat
+            query = new TorznabQuery // custom cat "integer"
             {
-                Categories = new [] { 100001 } // Movies
+                Categories = new [] { 100044 } // Console/Xbox_c
             };
             trackerCats = tcc.MapTorznabCapsToTrackers(query);
             Assert.AreEqual(1, trackerCats.Count);
-            Assert.AreEqual("1", trackerCats[0]); // Movies
+            Assert.AreEqual("44", trackerCats[0]); // Console/Xbox_c
+
+            query = new TorznabQuery // custom cat "string"
+            {
+                Categories = new [] { 137107 } // Console/Wii_c
+            };
+            trackerCats = tcc.MapTorznabCapsToTrackers(query);
+            Assert.AreEqual(1, trackerCats.Count);
+            Assert.AreEqual("con_wii", trackerCats[0]); // Console/Wii_c
 
             query = new TorznabQuery // unknown category
             {
                 Categories = new [] { 9999 }
+            };
+            trackerCats = tcc.MapTorznabCapsToTrackers(query);
+            Assert.AreEqual(0, trackerCats.Count);
+
+            query = new TorznabQuery // unknown custom cat
+            {
+                Categories = new [] { 100001 }
             };
             trackerCats = tcc.MapTorznabCapsToTrackers(query);
             Assert.AreEqual(0, trackerCats.Count);
@@ -241,17 +261,16 @@ namespace Jackett.Test.Common.Models
             // MapTrackerCatToNewznab: maps Tracker cat ID => Torznab cats
             var tcc = CreateTestDataset();
 
-            // TODO: this is wrong, custom cat 100001 doesn't exists (it's not defined by us)
-            var torznabCats = tcc.MapTrackerCatToNewznab("1").ToList();
-            Assert.AreEqual(2, torznabCats.Count);
+            var torznabCats = tcc.MapTrackerCatToNewznab("1").ToList(); // "integer" id without custom cat
+            Assert.AreEqual(1, torznabCats.Count);
             Assert.AreEqual(2000, torznabCats[0]);
-            Assert.AreEqual(100001, torznabCats[1]);
 
-            torznabCats = tcc.MapTrackerCatToNewznab("mov_sd").ToList();
+            torznabCats = tcc.MapTrackerCatToNewznab("mov_sd").ToList(); // "string" id without custom cat
             Assert.AreEqual(1, torznabCats.Count);
             Assert.AreEqual(2030, torznabCats[0]);
 
-            torznabCats = tcc.MapTrackerCatToNewznab("44").ToList(); // 44 and 45 maps to ConsoleXbox but different custom cat
+            // "integer" id with custom cats. 44 and 40 maps to ConsoleXbox but different custom cat
+            torznabCats = tcc.MapTrackerCatToNewznab("44").ToList(); 
             Assert.AreEqual(2, torznabCats.Count);
             Assert.AreEqual(1040, torznabCats[0]);
             Assert.AreEqual(100044, torznabCats[1]);
@@ -260,9 +279,17 @@ namespace Jackett.Test.Common.Models
             Assert.AreEqual(1040, torznabCats[0]);
             Assert.AreEqual(100040, torznabCats[1]);
 
-            // TODO: this is wrong, we are returning cat 109999 which doesn't exist
-            //torznabCats = tcc.MapTrackerCatToNewznab("9999").ToList(); // unknown cat
-            //Assert.AreEqual(0, torznabCats.Count);
+            // "string" id with custom cats
+            torznabCats = tcc.MapTrackerCatToNewznab("con_wii").ToList(); 
+            Assert.AreEqual(2, torznabCats.Count);
+            Assert.AreEqual(1030, torznabCats[0]);
+            Assert.AreEqual(137107, torznabCats[1]);
+
+            torznabCats = tcc.MapTrackerCatToNewznab("9999").ToList(); // unknown cat
+            Assert.AreEqual(0, torznabCats.Count);
+
+            torznabCats = tcc.MapTrackerCatToNewznab("con_unknown").ToList(); // unknown custom cat
+            Assert.AreEqual(0, torznabCats.Count);
 
             torznabCats = tcc.MapTrackerCatToNewznab(null).ToList(); // null
             Assert.AreEqual(0, torznabCats.Count);
@@ -274,21 +301,24 @@ namespace Jackett.Test.Common.Models
             // MapTrackerCatDescToNewznab: maps Tracker cat Description => Torznab cats
             var tcc = CreateTestDataset();
 
-            var torznabCats = tcc.MapTrackerCatDescToNewznab("Console/Xbox_c").ToList(); // Console/Xbox_c and Console/Xbox_c2 maps to ConsoleXbox but different custom cat
+            // "integer" id with custom cats
+            // Console/Xbox_c and Console/Xbox_c2 maps to ConsoleXbox but different custom cat
+            var torznabCats = tcc.MapTrackerCatDescToNewznab("Console/Xbox_c").ToList();
             Assert.AreEqual(2, torznabCats.Count);
             Assert.AreEqual(1040, torznabCats[0]);
             Assert.AreEqual(100044, torznabCats[1]);
-
             torznabCats = tcc.MapTrackerCatDescToNewznab("Console/Xbox_c2").ToList();
             Assert.AreEqual(2, torznabCats.Count);
             Assert.AreEqual(1040, torznabCats[0]);
             Assert.AreEqual(100040, torznabCats[1]);
 
+            // "string" id with custom cats
             torznabCats = tcc.MapTrackerCatDescToNewznab("Console/Wii_c").ToList();
-            Assert.AreEqual(1, torznabCats.Count);
+            Assert.AreEqual(2, torznabCats.Count);
             Assert.AreEqual(1030, torznabCats[0]);
+            Assert.AreEqual(137107, torznabCats[1]);
 
-            torznabCats = tcc.MapTrackerCatDescToNewznab("9999").ToList(); // unknown cat
+            torznabCats = tcc.MapTrackerCatDescToNewznab("Unknown/Cat").ToList(); // unknown cat
             Assert.AreEqual(0, torznabCats.Count);
 
             torznabCats = tcc.MapTrackerCatDescToNewznab(null).ToList(); // null
@@ -306,6 +336,7 @@ namespace Jackett.Test.Common.Models
             Assert.True(tcc.SupportsCategories(new []{ 100040 })); // custom cat
             Assert.False(tcc.SupportsCategories(new []{ TorznabCatType.Movies3D.ID })); // not supported child cat
             Assert.False(tcc.SupportsCategories(new []{ 9999 })); // unknown cat
+            Assert.False(tcc.SupportsCategories(new []{ 100001 })); // unknown custom cat
             Assert.False(tcc.SupportsCategories(new int[]{})); // empty list
             Assert.False(tcc.SupportsCategories(null)); // null
         }
@@ -338,6 +369,7 @@ namespace Jackett.Test.Common.Models
                 TorznabCatType.Books.CopyWithoutSubCategories(),
                 TorznabCatType.Console.CopyWithoutSubCategories(),
                 new TorznabCategory(100044, "Console/Xbox_c"),
+                new TorznabCategory(137107, "Console/Wii_c"),
                 new TorznabCategory(100040, "Console/Xbox_c2")
             };
             expected[0].SubCategories.Add(TorznabCatType.MoviesSD.CopyWithoutSubCategories());

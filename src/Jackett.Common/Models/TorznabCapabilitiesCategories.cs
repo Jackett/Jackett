@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Jackett.Common.Models
 {
@@ -9,7 +11,9 @@ namespace Jackett.Common.Models
         private readonly List<CategoryMapping> _categoryMapping = new List<CategoryMapping>();
         private readonly List<TorznabCategory> _torznabCategoryTree = new List<TorznabCategory>();
 
-        public List<string> GetTrackerCategories() => _categoryMapping.Select(x => x.TrackerCategory).ToList();
+        public List<string> GetTrackerCategories() => _categoryMapping
+            .Where(m => m.NewzNabCategory < 100000)
+            .Select(m => m.TrackerCategory).Distinct().ToList();
 
         public List<TorznabCategory> GetTorznabCategoryTree(bool sorted = false)
         {
@@ -46,114 +50,57 @@ namespace Jackett.Common.Models
 
         public void AddCategoryMapping(string trackerCategory, TorznabCategory torznabCategory, string trackerCategoryDesc = null)
         {
-            // add torznab cat
             _categoryMapping.Add(new CategoryMapping(trackerCategory, trackerCategoryDesc, torznabCategory.ID));
             AddTorznabCategoryTree(torznabCategory);
 
-            // TODO: fix this. it's only working for integer "trackerCategory"
-            // create custom cats (1:1 categories)
-            if (trackerCategoryDesc != null && trackerCategory != null)
+            if (trackerCategoryDesc == null)
+                return;
+
+            // create custom cats (1:1 categories) if trackerCategoryDesc is defined
+            // - if trackerCategory is "integer" we use that number to generate custom category id
+            // - if trackerCategory is "string" we compute a hash to generate fixed integer id for the custom category
+            //   the hash is not perfect but it should work in most cases. we can't use sequential numbers because
+            //   categories are updated frequently and the id must be fixed to work in 3rd party apps
+            if (!int.TryParse(trackerCategory, out var trackerCategoryInt))
             {
-                //TODO convert to int.TryParse() to avoid using throw as flow control
-                try
-                {
-                    var trackerCategoryInt = int.Parse(trackerCategory);
-                    var customCat = new TorznabCategory(trackerCategoryInt + 100000, trackerCategoryDesc);
-                    AddTorznabCategoryTree(customCat);
-                }
-                catch (FormatException)
-                {
-                    // trackerCategory is not an integer, continue
-                }
+                var hashed = SHA1.Create().ComputeHash(Encoding.UTF8.GetBytes(trackerCategory));
+                trackerCategoryInt = BitConverter.ToUInt16(hashed, 0); // id between 0 and 65535 < 100000
             }
+            var customCat = new TorznabCategory(trackerCategoryInt + 100000, trackerCategoryDesc);
+            _categoryMapping.Add(new CategoryMapping(trackerCategory, trackerCategoryDesc, customCat.ID));
+            AddTorznabCategoryTree(customCat);
         }
 
         public List<string> MapTorznabCapsToTrackers(TorznabQuery query, bool mapChildrenCatsToParent = false)
         {
-            var result = new List<string>();
-            foreach (var cat in query.Categories)
-            {
-                // use 1:1 mapping to tracker categories for newznab categories >= 100000
-                if (cat >= 100000)
-                {
-                    result.Add((cat - 100000).ToString());
-                    continue;
-                }
-
-                var queryCats = new List<int> { cat };
-                var newznabCat = TorznabCatType.AllCats.FirstOrDefault(c => c.ID == cat);
-                if (newznabCat != null)
-                {
-                    queryCats.AddRange(newznabCat.SubCategories.Select(c => c.ID));
-                }
-
-                if (mapChildrenCatsToParent)
-                {
-                    var parentNewznabCat = TorznabCatType.AllCats.FirstOrDefault(c => c.SubCategories.Contains(newznabCat));
-                    if (parentNewznabCat != null)
-                    {
-                        queryCats.Add(parentNewznabCat.ID);
-                    }
-                }
-
-                foreach (var mapping in _categoryMapping.Where(c => queryCats.Contains(c.NewzNabCategory)))
-                {
-                    result.Add(mapping.TrackerCategory);
-                }
-            }
-
-            return result.Distinct().ToList();
+            var expandedQueryCats = ExpandTorznabQueryCategories(query, mapChildrenCatsToParent);
+            var result = _categoryMapping
+                .Where(c => expandedQueryCats.Contains(c.NewzNabCategory))
+                .Select(mapping => mapping.TrackerCategory).Distinct().ToList();
+            return result;
         }
 
-        public ICollection<int> MapTrackerCatToNewznab(string input)
+        public ICollection<int> MapTrackerCatToNewznab(string trackerCategory)
         {
-            if (input == null)
+            if (string.IsNullOrWhiteSpace(trackerCategory))
                 return new List<int>();
-
             var cats = _categoryMapping
-                       .Where(m => m.TrackerCategory != null && m.TrackerCategory.ToLowerInvariant() == input.ToLowerInvariant())
+                       .Where(m =>
+                           !string.IsNullOrWhiteSpace(m.TrackerCategory) &&
+                           string.Equals(m.TrackerCategory, trackerCategory, StringComparison.InvariantCultureIgnoreCase))
                        .Select(c => c.NewzNabCategory).ToList();
-
-            // 1:1 category mapping
-            try
-            {
-                var trackerCategoryInt = int.Parse(input);
-                cats.Add(trackerCategoryInt + 100000);
-            }
-            catch (FormatException)
-            {
-                // input is not an integer, continue
-            }
-
             return cats;
         }
 
-        public ICollection<int> MapTrackerCatDescToNewznab(string input)
+        public ICollection<int> MapTrackerCatDescToNewznab(string trackerCategoryDesc)
         {
-            var cats = new List<int>();
-            if (null != input)
-            {
-                var mapping = _categoryMapping
-                    .FirstOrDefault(m => m.TrackerCategoryDesc != null && m.TrackerCategoryDesc.ToLowerInvariant() == input.ToLowerInvariant());
-                if (mapping != null)
-                {
-                    cats.Add(mapping.NewzNabCategory);
-
-                    if (mapping.TrackerCategory != null)
-                    {
-                        // 1:1 category mapping
-                        try
-                        {
-                            var trackerCategoryInt = int.Parse(mapping.TrackerCategory);
-                            cats.Add(trackerCategoryInt + 100000);
-                        }
-                        catch (FormatException)
-                        {
-                            // mapping.TrackerCategory is not an integer, continue
-                        }
-                    }
-                }
-            }
+            if (string.IsNullOrWhiteSpace(trackerCategoryDesc))
+                return new List<int>();
+            var cats = _categoryMapping
+                .Where(m =>
+                    !string.IsNullOrWhiteSpace(m.TrackerCategoryDesc) &&
+                    string.Equals(m.TrackerCategoryDesc, trackerCategoryDesc, StringComparison.InvariantCultureIgnoreCase))
+                .Select(c => c.NewzNabCategory).ToList();
             return cats;
         }
 
@@ -172,6 +119,36 @@ namespace Jackett.Common.Models
             // exclude indexer specific categories (>= 100000)
             // we don't concat _categoryMapping because it makes no sense for the aggregate indexer
             rhs.GetTorznabCategoryList().Where(x => x.ID < 100000).ToList().ForEach(AddTorznabCategoryTree);
+        }
+
+        /// <summary>
+        /// If there are parent categories in TorznabQuery.Categories the children categories are added
+        /// </summary>
+        /// <param name="query">Search query</param>
+        /// <param name="mapChildrenCatsToParent">If enabled, children categories will add the parent category to the list</param>
+        /// <returns></returns>
+        public List<int> ExpandTorznabQueryCategories(TorznabQuery query, bool mapChildrenCatsToParent = false)
+        {
+            var expandedQueryCats = new List<int>();
+            foreach (var queryCategory in query.Categories)
+            {
+                expandedQueryCats.Add(queryCategory);
+                if (queryCategory >= 100000)
+                    continue;
+                var parentCat = _torznabCategoryTree.FirstOrDefault(c => c.ID == queryCategory);
+                if (parentCat != null)
+                    // if it's parent cat we add all the children
+                    expandedQueryCats.AddRange(parentCat.SubCategories.Select(c => c.ID));
+                else if (mapChildrenCatsToParent)
+                {
+                    // if it's child cat and mapChildrenCatsToParent is enabled we add the parent
+                    var queryCategoryTorznab = new TorznabCategory(queryCategory, "");
+                    parentCat = _torznabCategoryTree.FirstOrDefault(c => c.Contains(queryCategoryTorznab));
+                    if (parentCat != null)
+                        expandedQueryCats.Add(parentCat.ID);
+                }
+            }
+            return expandedQueryCats.Distinct().ToList();
         }
 
         private void AddTorznabCategoryTree(TorznabCategory torznabCategory)

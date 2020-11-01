@@ -442,17 +442,19 @@ namespace Jackett.Test.Common.Models
             // test Torznab caps (XML) => more in Common.Model.TorznabCapabilitiesTests
             var xDocument = torznabCaps.GetXDocument();
             var xDocumentCategories = xDocument.Root?.Element("categories")?.Elements("category").ToList();
-            Assert.AreEqual(5, xDocumentCategories?.Count);
+            Assert.AreEqual(6, xDocumentCategories?.Count);
             Assert.AreEqual("1000", xDocumentCategories?[0].Attribute("id")?.Value);
             Assert.AreEqual(2, xDocumentCategories?[0]?.Elements("subcat").ToList().Count);
             Assert.AreEqual("2000", xDocumentCategories?[1].Attribute("id")?.Value);
             Assert.AreEqual(1, xDocumentCategories?[1]?.Elements("subcat").ToList().Count);
             Assert.AreEqual("7000", xDocumentCategories?[2].Attribute("id")?.Value);
             Assert.AreEqual(1, xDocumentCategories?[2]?.Elements("subcat").ToList().Count);
-            Assert.AreEqual("100044", xDocumentCategories?[3].Attribute("id")?.Value);
+            Assert.AreEqual("137107", xDocumentCategories?[3].Attribute("id")?.Value);
             Assert.AreEqual(0, xDocumentCategories?[3]?.Elements("subcat").ToList().Count);
-            Assert.AreEqual("100040", xDocumentCategories?[4].Attribute("id")?.Value);
+            Assert.AreEqual("100044", xDocumentCategories?[4].Attribute("id")?.Value);
             Assert.AreEqual(0, xDocumentCategories?[4]?.Elements("subcat").ToList().Count);
+            Assert.AreEqual("100040", xDocumentCategories?[5].Attribute("id")?.Value);
+            Assert.AreEqual(0, xDocumentCategories?[5]?.Elements("subcat").ToList().Count);
         }
 
         [Test]

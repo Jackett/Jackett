@@ -69,18 +69,18 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "public";
 
-            AddCategoryMapping("Audio", TorznabCatType.Audio);
-            AddCategoryMapping("Video", TorznabCatType.Movies);
-            AddCategoryMapping("Image", TorznabCatType.OtherMisc);
-            AddCategoryMapping("Document", TorznabCatType.BooksComics);
-            AddCategoryMapping("eBook", TorznabCatType.BooksEBook);
-            AddCategoryMapping("Program", TorznabCatType.PC0day);
-            AddCategoryMapping("Android", TorznabCatType.PCMobileAndroid);
-            AddCategoryMapping("Archive", TorznabCatType.Other);
-            AddCategoryMapping("Diskimage", TorznabCatType.PCISO);
-            AddCategoryMapping("Sourcecode", TorznabCatType.MoviesOther);
-            AddCategoryMapping("Database", TorznabCatType.MoviesDVD);
-            AddCategoryMapping("Unknown", TorznabCatType.Other);
+            AddCategoryMapping("Audio", TorznabCatType.Audio, "Audio");
+            AddCategoryMapping("Video", TorznabCatType.Movies, "Video");
+            AddCategoryMapping("Image", TorznabCatType.OtherMisc, "Image");
+            AddCategoryMapping("Document", TorznabCatType.BooksComics, "Document");
+            AddCategoryMapping("eBook", TorznabCatType.BooksEBook, "eBook");
+            AddCategoryMapping("Program", TorznabCatType.PC0day, "Program");
+            AddCategoryMapping("Android", TorznabCatType.PCMobileAndroid, "Android");
+            AddCategoryMapping("Archive", TorznabCatType.Other, "Archive");
+            AddCategoryMapping("Diskimage", TorznabCatType.PCISO, "Diskimage");
+            AddCategoryMapping("Sourcecode", TorznabCatType.MoviesOther, "Sourcecode");
+            AddCategoryMapping("Database", TorznabCatType.MoviesDVD, "Database");
+            AddCategoryMapping("Unknown", TorznabCatType.Other, "Unknown");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

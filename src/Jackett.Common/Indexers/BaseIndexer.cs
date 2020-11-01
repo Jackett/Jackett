@@ -266,16 +266,8 @@ namespace Jackett.Common.Indexers
             if (query.Categories.Length == 0)
                 return results;
 
-            // TODO: move this code to TorznabCapabilitiesCategories and use indexer tree instead of general
             // expand parent categories from the query
-            var expandedQueryCats = new List<int>();
-            foreach (var queryCategory in query.Categories)
-            {
-                expandedQueryCats.Add(queryCategory);
-                var parentCat = TorznabCatType.ParentCats.FirstOrDefault(c => c.ID == queryCategory);
-                if (parentCat != null)
-                    expandedQueryCats.AddRange(parentCat.SubCategories.Select(c => c.ID));
-            }
+            var expandedQueryCats = TorznabCaps.Categories.ExpandTorznabQueryCategories(query);
 
             var filteredResults = results.Where(result =>
                 result.Category?.Any() != true ||
