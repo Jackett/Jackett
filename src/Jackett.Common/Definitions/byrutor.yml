@@ -284,7 +284,7 @@ search:
     resorder: desc
 
   rows:
-    selector: div.short_search:not(div.shor_subtitles span:nth-child(2):empty)
+    selector: div.short_search:has(div.shor_subtitles span:nth-child(2):contains("Б"))
 
   fields:
     category:

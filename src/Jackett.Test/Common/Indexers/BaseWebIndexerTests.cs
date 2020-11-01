@@ -38,7 +38,7 @@ namespace Jackett.Test.Common.Indexers
             Assert.False(caps.BookSearchAvailable);
             Assert.False(caps.BookSearchTitleAvailable);
             Assert.False(caps.BookSearchAuthorAvailable);
-            Assert.AreEqual(0, caps.Categories.GetTorznabCategories().Count);
+            Assert.AreEqual(0, caps.Categories.GetTorznabCategoryTree().Count);
         }
 
         [Test]
@@ -66,26 +66,24 @@ namespace Jackett.Test.Common.Indexers
             var filteredResults = indexer._FilterResults(query, results).ToList();
             Assert.AreEqual(4, filteredResults.Count);
 
-            // TODO: fix this, we should return MoviesSD and null
             query = new TorznabQuery // with child category
             {
                 Categories = new [] { TorznabCatType.MoviesSD.ID }
+            };
+            filteredResults = indexer._FilterResults(query, results).ToList();
+            Assert.AreEqual(2, filteredResults.Count);
+            Assert.AreEqual(TorznabCatType.MoviesSD.ID, filteredResults[0].Category.First());
+            Assert.AreEqual(null, filteredResults[1].Category);
+
+            query = new TorznabQuery // with parent category
+            {
+                Categories = new [] { TorznabCatType.Movies.ID }
             };
             filteredResults = indexer._FilterResults(query, results).ToList();
             Assert.AreEqual(3, filteredResults.Count);
             Assert.AreEqual(TorznabCatType.Movies.ID, filteredResults[0].Category.First());
             Assert.AreEqual(TorznabCatType.MoviesSD.ID, filteredResults[1].Category.First());
             Assert.AreEqual(null, filteredResults[2].Category);
-
-            // TODO: fix this, we should return Movies, MoviesSD and null
-            query = new TorznabQuery // with parent category
-            {
-                Categories = new [] { TorznabCatType.Movies.ID }
-            };
-            filteredResults = indexer._FilterResults(query, results).ToList();
-            Assert.AreEqual(2, filteredResults.Count);
-            Assert.AreEqual(TorznabCatType.Movies.ID, filteredResults[0].Category.First());
-            Assert.AreEqual(null, filteredResults[1].Category);
 
             query = new TorznabQuery // with custom category
             {
@@ -104,9 +102,17 @@ namespace Jackett.Test.Common.Indexers
 
             // you can find more complex tests in TorznabCapabilitiesCategoriesTests.cs
             indexer._AddCategoryMapping("11", TorznabCatType.MoviesSD, "MoviesSD");
-            Assert.AreEqual(2, indexer.TorznabCaps.Categories.GetTorznabCategories().Count);
+            var expected = new List<TorznabCategory>
+            {
+                TorznabCatType.Movies.CopyWithoutSubCategories(),
+                new TorznabCategory(100011, "MoviesSD")
+            };
+            expected[0].SubCategories.Add(TorznabCatType.MoviesSD.CopyWithoutSubCategories());
+            TestCategories.CompareCategoryTrees(expected, indexer.TorznabCaps.Categories.GetTorznabCategoryTree());
+
             indexer._AddCategoryMapping(14, TorznabCatType.MoviesHD);
-            Assert.AreEqual(3, indexer.TorznabCaps.Categories.GetTorznabCategories().Count);
+            expected[0].SubCategories.Add(TorznabCatType.MoviesHD.CopyWithoutSubCategories());
+            TestCategories.CompareCategoryTrees(expected, indexer.TorznabCaps.Categories.GetTorznabCategoryTree());
         }
 
         [Test]
@@ -115,7 +121,7 @@ namespace Jackett.Test.Common.Indexers
             var indexer = new TestWebIndexer();
 
             indexer._AddMultiCategoryMapping(TorznabCatType.MoviesHD,19, 18);
-            Assert.AreEqual(1, indexer.TorznabCaps.Categories.GetTorznabCategories().Count);
+            Assert.AreEqual(1, indexer.TorznabCaps.Categories.GetTorznabCategoryTree().Count);
         }
 
         [Test]

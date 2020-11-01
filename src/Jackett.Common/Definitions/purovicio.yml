@@ -21,6 +21,7 @@ caps:
     - {id: 7, cat: Other, desc: "Various"}
     - {id: 8, cat: XXX, desc: "XXX"}
     - {id: 9, cat: Other, desc: "Cursos"}
+    - {id: 10, cat: PC/ISO, desc: "Sistemas Operativos"}
 
   modes:
     search: [q]

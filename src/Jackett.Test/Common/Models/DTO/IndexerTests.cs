@@ -37,14 +37,16 @@ namespace Jackett.Test.Common.Models.DTO
             // test Jackett UI categories (internal JSON)
             var dto = new Indexer(indexer);
             var dtoCaps = dto.caps.ToList();
-            Assert.AreEqual(7, dtoCaps.Count);
-            Assert.AreEqual("100044", dtoCaps[0].ID);
-            Assert.AreEqual("100045", dtoCaps[1].ID);
-            Assert.AreEqual("1030", dtoCaps[2].ID);
-            Assert.AreEqual("1040", dtoCaps[3].ID);
-            Assert.AreEqual("2000", dtoCaps[4].ID);
-            Assert.AreEqual("2030", dtoCaps[5].ID);
+            Assert.AreEqual(9, dtoCaps.Count);
+            Assert.AreEqual("1000", dtoCaps[0].ID);
+            Assert.AreEqual("1030", dtoCaps[1].ID);
+            Assert.AreEqual("1040", dtoCaps[2].ID);
+            Assert.AreEqual("2000", dtoCaps[3].ID);
+            Assert.AreEqual("2030", dtoCaps[4].ID);
+            Assert.AreEqual("7000", dtoCaps[5].ID);
             Assert.AreEqual("7030", dtoCaps[6].ID);
+            Assert.AreEqual("100044", dtoCaps[7].ID);
+            Assert.AreEqual("100040", dtoCaps[8].ID);
 
             // movies categories enable potato search
             Assert.True(dto.potatoenabled);

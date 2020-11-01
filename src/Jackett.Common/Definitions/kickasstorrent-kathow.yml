@@ -77,8 +77,11 @@ search:
 
   fields:
     category:
+      text: other
+    category|noappend:
       selector: span[id^="cat_"] > strong > a
       attribute: href
+      optional: true
       filters:
         - name: tolower
         - name: trim
@@ -103,8 +106,14 @@ search:
         - name: timeago
     seeders:
       selector: td:nth-child(4)
+      filters:
+        - name: replace
+          args: ["N/A", 0]
     leechers:
       selector: td:nth-child(5)
+      filters:
+        - name: replace
+          args: ["N/A", 0]
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

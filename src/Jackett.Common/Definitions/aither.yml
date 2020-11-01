@@ -10,14 +10,15 @@ links:
 
 caps:
   categorymappings:
-    - {id: 1, cat: Movies, desc: "Movies"}
-    - {id: 9, cat: TV/Sport, desc: "Sports"}
+    - {id: 1, cat: Movies, desc: "Movie"}
+    - {id: 9, cat: TV/Sport, desc: "Sport"}
     - {id: 2, cat: TV, desc: "TV"}
     - {id: 3, cat: Audio, desc: "Music"}
     - {id: 4, cat: Console, desc: "Games"}
-    - {id: 10, cat: PC, desc: "Apps"}
+    - {id: 10, cat: PC, desc: "Software & Apps"}
     - {id: 11, cat: Books, desc: "Ebooks & Magazines"}
     - {id: 14, cat: Audio/Audiobook, desc: "Audiobooks"}
+    - {id: 15, cat: Other, desc: "Education"}
     - {id: 6, cat: XXX, desc: "XXX"}
 
   modes:

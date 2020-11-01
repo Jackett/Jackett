@@ -250,7 +250,7 @@ namespace Jackett.Common.Models
                             new XAttribute("available", MusicSearchAvailable ? "yes" : "no"),
                             new XAttribute("supportedParams", SupportedMusicSearchParams())
                         ),
-                        // inconsistend but apparently already used by various newznab indexers (see #1896)
+                        // inconsistent but apparently already used by various newznab indexers (see #1896)
                         new XElement("audio-search",
                             new XAttribute("available", MusicSearchAvailable ? "yes" : "no"),
                             new XAttribute("supportedParams", SupportedMusicSearchParams())
@@ -261,7 +261,7 @@ namespace Jackett.Common.Models
                         )
                     ),
                     new XElement("categories",
-                        from c in Categories.GetTorznabCategories().OrderBy(x => x.ID < 100000 ? "z" + x.ID.ToString() : x.Name)
+                        from c in Categories.GetTorznabCategoryTree(true)
                         select new XElement("category",
                             new XAttribute("id", c.ID),
                             new XAttribute("name", c.Name),

@@ -100,6 +100,12 @@ caps:
     - {id: 1347, cat: TV/HD, desc: " |- BDRip 1080p , HDTV 1080 , WEB-DL 1080р"}
     - {id: 1348, cat: TV/HD, desc: " |- BDRip 720p , WEB-DL 720p , HDTVRip 720p"}
     - {id: 1349, cat: TV/SD, desc: " |- DVD5 , DVD9"}
+    # Документалистика, развлекательные телепередачи, спорт Docs
+    - {id: 11, cat: TV/Documentary, desc: "Документальные фильмы и телепередачи"}
+    - {id: 12, cat: TV, desc: "Развлекательные телепередачи"}
+    - {id: 13, cat: TV/Sport, desc: "Спорт"}
+    - {id: 1621, cat: TV/Sport, desc: " |- Формула 1"}
+    - {id: 1622, cat: TV/Sport, desc: " |- Автоспорт"}
     # Игры Games
     - {id: 60, cat: PC/Games, desc: "Игры для PC"}
     - {id: 73, cat: Console, desc: " |- Горячие новинки 2020 года (только AAA проекты)"}
@@ -114,12 +120,6 @@ caps:
     - {id: 1538, cat: Console, desc: "Игры для консолей"}
     - {id: 1539, cat: Console/PSP, desc: " |- PlayStation"}
     - {id: 878, cat: Console/XBox, desc: " |- XBox"}
-    # Документалистика, развлекательные телепередачи, спорт Docs
-    - {id: 11, cat: TV/Documentary, desc: "Документальные фильмы и телепередачи"}
-    - {id: 12, cat: TV, desc: "Развлекательные телепередачи"}
-    - {id: 13, cat: TV/Sport, desc: "Спорт"}
-    - {id: 1621, cat: TV/Sport, desc: " |- Формула 1"}
-    - {id: 1622, cat: TV/Sport, desc: " |- Автоспорт"}
     # Книги, Журналы, Аудиокниги Books
     - {id: 726, cat: Books, desc: "Художественная литература, журналы, газеты"}
     - {id: 728, cat: Books, desc: " |- Журналы и газеты"}
@@ -182,6 +182,12 @@ caps:
     - {id: 1599, cat: Audio/MP3, desc: " |- Отечественный Rock"}
     - {id: 1600, cat: Audio/MP3, desc: " |- Отечественный Metal"}
     - {id: 1601, cat: Audio/MP3, desc: " |- Сборники Rock, Metal"}
+    - {id: 1626, cat: Audio/MP3, desc: " |- Зарубежный джаз (mp3)"}
+    - {id: 1625, cat: Audio/Lossless, desc: " |- Зарубежный джаз (Lossless)"}
+    - {id: 1627, cat: Audio/MP3, desc: " |- Зарубежный блюз (mp3)"}
+    - {id: 1624, cat: Audio/Lossless, desc: " |- Зарубежный блюз (Lossless)"}
+    - {id: 1628, cat: Audio/MP3, desc: " |- Отечественный джаз и блюз (mp3)"}
+    - {id: 1629, cat: Audio/Lossless, desc: " |- Отечественный джаз и блюз (Lossless)"}
     - {id: 1171, cat: Audio/MP3, desc: "Электронная музыка"}
     - {id: 1610, cat: Audio/MP3, desc: " |- Goa Trance, Psy-Trance"}
     - {id: 1611, cat: Audio/MP3, desc: " |- PsyChill, Ambient, Dub"}
@@ -206,8 +212,6 @@ caps:
     - {id: 1167, cat: Audio/MP3, desc: " |- Отечественный Рэп, Хип-Хоп"}
     - {id: 1173, cat: Audio/MP3, desc: " |- Rap, Hip-hop, R'n'B"}
     - {id: 1607, cat: Audio/MP3, desc: " |- Rap, Hip-hop, R'n'B"}
-    - {id: 1563, cat: Audio/MP3, desc: " |- Jazz, Blues, Swing"}
-    - {id: 1605, cat: Audio/MP3, desc: " |- Blues"}
     - {id: 1604, cat: Audio/MP3, desc: " |- Reggae, Ska, Dub"}
     - {id: 1562, cat: Audio/MP3, desc: " |- Инструментальная и классическая музыка"}
     - {id: 1185, cat: Audio/MP3, desc: " |- New Age, Relax, Meditative"}
@@ -222,7 +226,6 @@ caps:
     - {id: 1214, cat: Audio/Lossless, desc: " |- Pop music"}
     - {id: 1215, cat: Audio/Lossless, desc: " |- Rock, Punk, Metal, Alternative music"}
     - {id: 1217, cat: Audio/Lossless, desc: " |- Electronic and club music"}
-    - {id: 1394, cat: Audio/Lossless, desc: " |- Jazz, Blues, Soul"}
     - {id: 1308, cat: Audio/Lossless, desc: " |- Официальные сборники зарубежных исполнителей"}
     - {id: 1534, cat: Audio/Lossless, desc: " |- Classical and instrumental music"}
     - {id: 1231, cat: Audio/Lossless, desc: " |- Other musical genres"}
