@@ -15,7 +15,7 @@ caps:
     - {id: 2, cat: TV, desc: "TV"}
     - {id: 3, cat: Audio, desc: "Music"}
     - {id: 4, cat: Console, desc: "Games"}
-    - {id: 10, cat: PC, desc: "software & Apps"}
+    - {id: 10, cat: PC, desc: "Software & Apps"}
     - {id: 11, cat: Books, desc: "Ebooks & Magazines"}
     - {id: 14, cat: Audio/Audiobook, desc: "Audiobooks"}
     - {id: 15, cat: Other, desc: "Education"}
