@@ -221,7 +221,7 @@ namespace Jackett.Common.Indexers
                     var link = new Uri(SiteLink + qLink.GetAttribute("href").TrimStart('/'));
 
                     var descrSplit = row.QuerySelector("div.sub").TextContent.Split('|');
-                    var publishDate = DateTimeUtil.FromTimeAgo(descrSplit.Last());
+                    var publishDate = DateTimeUtil.FromTimeAgo(descrSplit.Last().Substring(0, descrSplit.Last().LastIndexOf("by") + 1));
                     var description = descrSplit.Length > 1 ? "Tags: " + descrSplit.First().Trim() : "";
 
                     var catIcon = row.QuerySelector("td:nth-of-type(1) a");
