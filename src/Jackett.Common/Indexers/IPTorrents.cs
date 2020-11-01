@@ -209,7 +209,7 @@ namespace Jackett.Common.Indexers
                 var rows = doc.QuerySelectorAll("table[id='torrents'] > tbody > tr");
                 foreach (var row in rows.Skip(1))
                 {
-                    var qTitleLink = row.QuerySelector("a[href^=\"/details.php?id=\"]");
+                    var qTitleLink = row.QuerySelector("a.hv");
                     if (qTitleLink == null) // no results
                         continue;
 
@@ -220,13 +220,9 @@ namespace Jackett.Common.Indexers
                     var qLink = row.QuerySelector("a[href^=\"/download.php/\"]");
                     var link = new Uri(SiteLink + qLink.GetAttribute("href").TrimStart('/'));
 
-                    var descrSplit = row.QuerySelector(".t_ctime").TextContent.Split('|');
-                    var dateSplit = descrSplit.Last().Trim().Split(new[] { " by " }, StringSplitOptions.None);
-                    var publishDate = DateTimeUtil.FromTimeAgo(dateSplit.First());
+                    var descrSplit = row.QuerySelector("div.sub").TextContent.Split('|');
+                    var publishDate = DateTimeUtil.FromTimeAgo(descrSplit.Last());
                     var description = descrSplit.Length > 1 ? "Tags: " + descrSplit.First().Trim() : "";
-                    if (dateSplit.Length > 1)
-                        description += " Uploader: " + dateSplit.Last();
-                    description = description.Trim();
 
                     var catIcon = row.QuerySelector("td:nth-of-type(1) a");
                     if (catIcon == null)
@@ -237,10 +233,11 @@ namespace Jackett.Common.Indexers
                     var cat = MapTrackerCatToNewznab(catIcon.GetAttribute("href").Substring(1));
 
                     var size = ReleaseInfo.GetBytes(row.Children[5].TextContent);
-                    var grabs = ParseUtil.CoerceInt(row.Children[6].TextContent);
-                    var seeders = ParseUtil.CoerceInt(row.QuerySelector(".t_seeders").TextContent.Trim());
-                    var leechers = ParseUtil.CoerceInt(row.QuerySelector(".t_leechers").TextContent.Trim());
-                    var dlVolumeFactor = row.QuerySelector("span.t_tag_free_leech") != null ? 0 : 1;
+                    var files = ParseUtil.CoerceInt(row.Children[6].TextContent.Replace("Go to files", ""));
+                    var grabs = ParseUtil.CoerceInt(row.Children[7].TextContent);
+                    var seeders = ParseUtil.CoerceInt(row.Children[8].TextContent);
+                    var leechers = ParseUtil.CoerceInt(row.Children[9].TextContent);
+                    var dlVolumeFactor = row.QuerySelector("span.free") != null ? 0 : 1;
 
                     var release = new ReleaseInfo
                     {
@@ -252,6 +249,7 @@ namespace Jackett.Common.Indexers
                         Category = cat,
                         Description = description,
                         Size = size,
+                        Files = files,
                         Grabs = grabs,
                         Seeders = seeders,
                         Peers = seeders + leechers,
