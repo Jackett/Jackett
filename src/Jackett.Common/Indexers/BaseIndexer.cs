@@ -266,9 +266,21 @@ namespace Jackett.Common.Indexers
             if (query.Categories.Length == 0)
                 return results;
 
-            var filteredResults = results.Where(
-                result => result.Category?.Any() != true || query.Categories.Intersect(result.Category).Any() ||
-                          TorznabCatType.QueryContainsParentCategory(query.Categories, result.Category));
+            // TODO: move this code to TorznabCapabilitiesCategories and use indexer tree instead of general
+            // expand parent categories from the query
+            var expandedQueryCats = new List<int>();
+            foreach (var queryCategory in query.Categories)
+            {
+                expandedQueryCats.Add(queryCategory);
+                var parentCat = TorznabCatType.ParentCats.FirstOrDefault(c => c.ID == queryCategory);
+                if (parentCat != null)
+                    expandedQueryCats.AddRange(parentCat.SubCategories.Select(c => c.ID));
+            }
+
+            var filteredResults = results.Where(result =>
+                result.Category?.Any() != true ||
+                expandedQueryCats.Intersect(result.Category).Any()
+                );
 
             return filteredResults;
         }

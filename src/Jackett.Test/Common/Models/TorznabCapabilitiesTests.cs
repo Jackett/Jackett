@@ -42,7 +42,7 @@ namespace Jackett.Test.Common.Models
             Assert.False(torznabCaps.BookSearchTitleAvailable);
             Assert.False(torznabCaps.BookSearchAuthorAvailable);
 
-            Assert.IsEmpty(torznabCaps.Categories.GetTorznabCategories());
+            Assert.IsEmpty(torznabCaps.Categories.GetTorznabCategoryTree());
             Assert.IsEmpty(torznabCaps.Categories.GetTrackerCategories());
         }
 
@@ -405,40 +405,32 @@ namespace Jackett.Test.Common.Models
             Assert.AreEqual("q,title,author", xDocumentSearching?.Element("book-search")?.Attribute("supportedParams")?.Value);
 
             // test categories
-            torznabCaps = new TorznabCapabilities();
-            torznabCaps.Categories.AddCategoryMapping("c1", TorznabCatType.MoviesSD); // child category
+            torznabCaps = new TorznabCapabilities(); // child category
+            torznabCaps.Categories.AddCategoryMapping("c1", TorznabCatType.MoviesSD); 
             xDocument = torznabCaps.GetXDocument();
             var xDocumentCategories = xDocument.Root?.Element("categories")?.Elements("category").ToList();
             Assert.AreEqual(1, xDocumentCategories?.Count);
-            Assert.AreEqual(TorznabCatType.MoviesSD.ID.ToString(), xDocumentCategories?.First().Attribute("id")?.Value);
-            Assert.AreEqual(TorznabCatType.MoviesSD.Name, xDocumentCategories?.First().Attribute("name")?.Value);
+            Assert.AreEqual(TorznabCatType.Movies.ID.ToString(), xDocumentCategories?[0].Attribute("id")?.Value);
+            Assert.AreEqual(TorznabCatType.Movies.Name, xDocumentCategories?[0].Attribute("name")?.Value);
+            var xDocumentSubCategories = xDocumentCategories?[0]?.Elements("subcat").ToList();
+            Assert.AreEqual(1, xDocumentSubCategories?.Count);
+            Assert.AreEqual(TorznabCatType.MoviesSD.ID.ToString(), xDocumentSubCategories?[0].Attribute("id")?.Value);
+            Assert.AreEqual(TorznabCatType.MoviesSD.Name, xDocumentSubCategories?[0].Attribute("name")?.Value);
 
-            // TODO: child category is duplicated. should we add just parent and child without other subcats?
-            torznabCaps = new TorznabCapabilities();
-            torznabCaps.Categories.AddCategoryMapping("c1", TorznabCatType.Movies); // parent and child category
+            torznabCaps = new TorznabCapabilities(); // parent (with description generates a custom cat) and child category
+            torznabCaps.Categories.AddCategoryMapping("1", TorznabCatType.Movies, "Classic Movies"); 
             torznabCaps.Categories.AddCategoryMapping("c2", TorznabCatType.MoviesSD);
             xDocument = torznabCaps.GetXDocument();
             xDocumentCategories = xDocument.Root?.Element("categories")?.Elements("category").ToList();
             Assert.AreEqual(2, xDocumentCategories?.Count);
-            Assert.AreEqual(TorznabCatType.Movies.ID.ToString(), xDocumentCategories?.First().Attribute("id")?.Value);
-            Assert.AreEqual(TorznabCatType.Movies.Name, xDocumentCategories?.First().Attribute("name")?.Value);
-            Assert.AreEqual(TorznabCatType.MoviesSD.ID.ToString(), xDocumentCategories?[1].Attribute("id")?.Value);
-            Assert.AreEqual(TorznabCatType.MoviesSD.Name, xDocumentCategories?[1].Attribute("name")?.Value);
-            var xDocumentSubCategories = xDocumentCategories?.First()?.Elements("subcat").ToList();
-            Assert.AreEqual(9, xDocumentSubCategories?.Count);
-            Assert.AreEqual(TorznabCatType.MoviesForeign.ID.ToString(), xDocumentSubCategories?.First().Attribute("id")?.Value);
-            Assert.AreEqual(TorznabCatType.MoviesForeign.Name, xDocumentSubCategories?.First().Attribute("name")?.Value);
-
-            torznabCaps = new TorznabCapabilities();
-            torznabCaps.Categories.AddCategoryMapping("c1", new TorznabCategory(100001, "CustomCat")); // custom category
-            torznabCaps.Categories.AddCategoryMapping("c2", TorznabCatType.MoviesSD);
-            xDocument = torznabCaps.GetXDocument();
-            xDocumentCategories = xDocument.Root?.Element("categories")?.Elements("category").ToList();
-            Assert.AreEqual(2, xDocumentCategories?.Count);
-            Assert.AreEqual("100001", xDocumentCategories?[0].Attribute("id")?.Value); // custom cats are first in the list
-            Assert.AreEqual("CustomCat", xDocumentCategories?[0].Attribute("name")?.Value);
-            Assert.AreEqual(TorznabCatType.MoviesSD.ID.ToString(), xDocumentCategories?[1].Attribute("id")?.Value);
-            Assert.AreEqual(TorznabCatType.MoviesSD.Name, xDocumentCategories?[1].Attribute("name")?.Value);
+            Assert.AreEqual(TorznabCatType.Movies.ID.ToString(), xDocumentCategories?[0].Attribute("id")?.Value);
+            Assert.AreEqual(TorznabCatType.Movies.Name, xDocumentCategories?[0].Attribute("name")?.Value);
+            xDocumentSubCategories = xDocumentCategories?[0]?.Elements("subcat").ToList();
+            Assert.AreEqual(1, xDocumentSubCategories?.Count);
+            Assert.AreEqual(TorznabCatType.MoviesSD.ID.ToString(), xDocumentSubCategories?[0].Attribute("id")?.Value);
+            Assert.AreEqual(TorznabCatType.MoviesSD.Name, xDocumentSubCategories?[0].Attribute("name")?.Value);
+            Assert.AreEqual("100001", xDocumentCategories?[1].Attribute("id")?.Value); // custom cats are first in the list
+            Assert.AreEqual("Classic Movies", xDocumentCategories?[1].Attribute("name")?.Value);
         }
 
         [Test]
@@ -450,15 +442,17 @@ namespace Jackett.Test.Common.Models
             // test Torznab caps (XML) => more in Common.Model.TorznabCapabilitiesTests
             var xDocument = torznabCaps.GetXDocument();
             var xDocumentCategories = xDocument.Root?.Element("categories")?.Elements("category").ToList();
-            Assert.AreEqual(7, xDocumentCategories?.Count);
-            Assert.AreEqual("100044", xDocumentCategories?[0].Attribute("id")?.Value);
-            Assert.AreEqual("100045", xDocumentCategories?[1].Attribute("id")?.Value);
-            Assert.AreEqual("1030", xDocumentCategories?[2].Attribute("id")?.Value);
-            Assert.AreEqual("1040", xDocumentCategories?[3].Attribute("id")?.Value);
-            Assert.AreEqual("2000", xDocumentCategories?[4].Attribute("id")?.Value); // Movies
-            Assert.AreEqual("2030", xDocumentCategories?[5].Attribute("id")?.Value);
-            Assert.AreEqual("7030", xDocumentCategories?[6].Attribute("id")?.Value);
-            Assert.AreEqual(9, xDocumentCategories?[4]?.Elements("subcat").ToList().Count); // Movies
+            Assert.AreEqual(5, xDocumentCategories?.Count);
+            Assert.AreEqual("1000", xDocumentCategories?[0].Attribute("id")?.Value);
+            Assert.AreEqual(2, xDocumentCategories?[0]?.Elements("subcat").ToList().Count);
+            Assert.AreEqual("2000", xDocumentCategories?[1].Attribute("id")?.Value);
+            Assert.AreEqual(1, xDocumentCategories?[1]?.Elements("subcat").ToList().Count);
+            Assert.AreEqual("7000", xDocumentCategories?[2].Attribute("id")?.Value);
+            Assert.AreEqual(1, xDocumentCategories?[2]?.Elements("subcat").ToList().Count);
+            Assert.AreEqual("100044", xDocumentCategories?[3].Attribute("id")?.Value);
+            Assert.AreEqual(0, xDocumentCategories?[3]?.Elements("subcat").ToList().Count);
+            Assert.AreEqual("100040", xDocumentCategories?[4].Attribute("id")?.Value);
+            Assert.AreEqual(0, xDocumentCategories?[4]?.Elements("subcat").ToList().Count);
         }
 
         [Test]
@@ -473,7 +467,7 @@ namespace Jackett.Test.Common.Models
             Assert.IsEmpty(res.MovieSearchParams);
             Assert.IsEmpty(res.MusicSearchParams);
             Assert.IsEmpty(res.BookSearchParams);
-            Assert.IsEmpty(res.Categories.GetTorznabCategories());
+            Assert.IsEmpty(res.Categories.GetTorznabCategoryTree());
 
             torznabCaps1 = new TorznabCapabilities
             {
@@ -502,7 +496,7 @@ namespace Jackett.Test.Common.Models
             Assert.True(res.MovieSearchParams.Count == 2);
             Assert.True(res.MusicSearchParams.Count == 2);
             Assert.True(res.BookSearchParams.Count == 2);
-            Assert.True(res.Categories.GetTorznabCategories().Count == 3); // only CustomCat2 is removed
+            Assert.True(res.Categories.GetTorznabCategoryTree().Count == 3); // only CustomCat2 is removed
         }
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Jackett.Common.Indexers;
 using Jackett.Common.Models;
+using Jackett.Test.TestHelpers;
 using NUnit.Framework;
 
 namespace Jackett.Test.Common.Indexers
@@ -48,7 +49,7 @@ namespace Jackett.Test.Common.Indexers
             Assert.False(indexer.TorznabCaps.BookSearchAvailable);
             Assert.False(indexer.TorznabCaps.BookSearchTitleAvailable);
             Assert.False(indexer.TorznabCaps.BookSearchAuthorAvailable);
-            Assert.AreEqual(0, indexer.TorznabCaps.Categories.GetTorznabCategories().Count);
+            Assert.AreEqual(0, indexer.TorznabCaps.Categories.GetTorznabCategoryTree().Count);
 
             definition = new IndexerDefinition // test categories (same as in C# indexer)
             {
@@ -91,16 +92,20 @@ namespace Jackett.Test.Common.Indexers
             };
             indexer = new CardigannIndexer(null, null, null, null, definition);
 
-            // TODO: test duplicates
-            var cats = indexer.TorznabCaps.Categories.GetTorznabCategories();
-            Assert.AreEqual(7, cats.Count);
-            Assert.AreEqual(2000, cats[0].ID);
-            Assert.AreEqual(2030, cats[1].ID);
-            Assert.AreEqual(7030, cats[2].ID);
-            Assert.AreEqual(1040, cats[3].ID);
-            Assert.AreEqual(100044, cats[4].ID);
-            Assert.AreEqual(1030, cats[5].ID);
-            Assert.AreEqual(100045, cats[6].ID);
+            // test categories
+            var expected = new List<TorznabCategory>
+            {
+                TorznabCatType.Movies.CopyWithoutSubCategories(),
+                TorznabCatType.Books.CopyWithoutSubCategories(),
+                TorznabCatType.Console.CopyWithoutSubCategories(),
+                new TorznabCategory(100044, "Console/Xbox_c"),
+                new TorznabCategory(100045, "Console/Xbox_c2")
+            };
+            expected[0].SubCategories.Add(TorznabCatType.MoviesSD.CopyWithoutSubCategories());
+            expected[1].SubCategories.Add(TorznabCatType.BooksComics.CopyWithoutSubCategories());
+            expected[2].SubCategories.Add(TorznabCatType.ConsoleXBox.CopyWithoutSubCategories());
+            expected[2].SubCategories.Add(TorznabCatType.ConsoleWii.CopyWithoutSubCategories());
+            TestCategories.CompareCategoryTrees(expected, indexer.TorznabCaps.Categories.GetTorznabCategoryTree());
 
             definition = new IndexerDefinition // test search modes
             {
