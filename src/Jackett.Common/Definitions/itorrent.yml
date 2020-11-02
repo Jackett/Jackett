@@ -14,14 +14,14 @@ legacylinks:
   - https://itorrent.unblockit.me/ # currently mirroring 01torrent.net
 
 caps:
-  categories:
-    app: PC
-    book: Books
-    game: PC/Games
-    movies: Movies
-    music: Audio
-    heart: XXX
-    tv: TV
+  categorymappings:
+    - {id: app, cat: PC, desc: Apps}
+    - {id: book, cat: Books, desc: Books}
+    - {id: game, cat: PC/Games, desc: Games}
+    - {id: movies, cat: Movies, desc: Movies}
+    - {id: music, cat: Audio, desc: Music}
+    - {id: heart, cat: XXX, desc: XXX}
+    - {id: tv, cat: TV, desc: TV}
 
   modes:
     search: [q]
@@ -82,14 +82,18 @@ search:
       optional: true
       attribute: title
       filters:
+        - name: append
+          args: " +01:00" # CET
         - name: dateparse
-          args: "2006.01.02 15:04"
+          args: "2006.01.02 15:04 -07:00"
     date:
       selector: td:nth-child(4):not(:has(span))
       optional: true
       filters:
+        - name: append
+          args: " +01:00" # CET
         - name: dateparse
-          args: "2006.01.02"
+          args: "2006.01.02 -07:00"
     size:
       selector: td:nth-child(5)
     grabs:

@@ -13,17 +13,17 @@ links:
   - https://kat.root.yt/
 
 caps:
-  categories:
-    anime: TV/Anime
-    apps: PC
-    books: Books
-    documentaries: TV/Documentary
-    games: Console
-    movies: Movies
-    music: Audio
-    other: Other
-    tv: TV
-    xxx: XXX
+  categorymappings:
+    - {id: anime, cat: TV/Anime, desc: Anime}
+    - {id: apps, cat: PC, desc: Apps}
+    - {id: books, cat: Books, desc: Books}
+    - {id: documentaries, cat: TV/Documentary, desc: Documentaries}
+    - {id: games, cat: Console, desc: Games}
+    - {id: movies, cat: Movies, desc: Movies}
+    - {id: music, cat: Audio, desc: Music}
+    - {id: other, cat: Other, desc: Other}
+    - {id: tv, cat: TV, desc: TV}
+    - {id: xxx, cat: XXX, desc: XXX}
 
   modes:
     search: [q]

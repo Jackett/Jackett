@@ -34,15 +34,15 @@ legacylinks:
   - https://kickasstorrents.unblockninja.com/ # currently kickasstorrents-to proxy
 
 caps:
-  categories:
-    applications: PC
-    books: Books
-    games: Console
-    movies: Movies
-    music: Audio
-    other: Other
-    tv: TV
-    xxx: XXX
+  categorymappings:
+    - {id: applications, cat: PC, desc: Apps}
+    - {id: books, cat: Books, desc: Books}
+    - {id: games, cat: Console, desc: Games}
+    - {id: movies, cat: Movies, desc: Movies}
+    - {id: music, cat: Audio, desc: Music}
+    - {id: other, cat: Other, desc: Other}
+    - {id: tv, cat: TV, desc: TV}
+    - {id: xxx, cat: XXX, desc: XXX}
 
   modes:
     search: [q]
