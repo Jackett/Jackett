@@ -26,15 +26,6 @@ namespace Jackett.Common.Indexers
         private string CommentsUrl => SiteLink + "details/";
         private string LinkUrl => SiteLink + "download/";
 
-        private readonly NameValueCollection _trackers = new NameValueCollection
-        {
-            {"tr", "udp://tracker.coppersurfer.tk:6969/announce"},
-            {"tr", "udp://tracker.leechers-paradise.org:6969/announce"},
-            {"tr", "udp://tracker.opentrackr.org:1337/announce"},
-            {"tr", "udp://tracker.internetwarriors.net:1337/announce"},
-            {"tr", "udp://open.demonii.si:1337/announce"}
-        };
-
         private string _sort;
         private string _order;
         private bool _titleOnly;
@@ -206,19 +197,12 @@ namespace Jackett.Common.Indexers
                 Peers = 2,
                 Grabs = GetFieldAs<long>("downloads", torrent),
                 Link = link,
-                MagnetUri = GenerateMagnetLink(btih, title),
-                InfoHash = btih,
+                InfoHash = btih, // magnet link is auto generated from infohash
                 DownloadVolumeFactor = 0,
                 UploadVolumeFactor = 1
             };
 
             return release;
-        }
-
-        private Uri GenerateMagnetLink(string btih, string title)
-        {
-            _trackers.Set("dn", title);
-            return new Uri("magnet:?xt=urn:btih:" + btih + "&" + _trackers.GetQueryString());
         }
 
         private static T GetFieldAs<T>(string field, JToken torrent) =>

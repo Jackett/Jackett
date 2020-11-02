@@ -112,58 +112,18 @@ namespace Jackett.Common.Indexers
                     var seeders = torrent.Value<int>("seeders");
                     var leechers = torrent.Value<int>("leechers");
                     var grabs = ParseUtil.CoerceInt(torrent.Value<string>("completed") ?? "0");
-                    var infohash = torrent.Value<JToken>("infohash").ToString();
+                    var infoHash = torrent.Value<JToken>("infohash").ToString();
 
                     // convert unix timestamp to human readable date
                     var publishDate = new DateTime(1970, 1, 1, 0, 0, 0, 0);
                     publishDate = publishDate.AddSeconds(torrent.Value<long>("created_unix"));
 
-                    // construct magnet link from infohash with public trackers
-                    // TODO move trackers to List for reuse elsewhere
-                    // TODO dynamically generate list periodically from online tracker repositories like
-                    // https://github.com/ngosang/trackerslist
-                    var magnet = new Uri("magnet:?xt=urn:btih:" + infohash +
-                        "&tr=udp://tracker.coppersurfer.tk:6969/announce" +
-                        "&tr=udp://tracker.leechers-paradise.org:6969/announce" +
-                        "&tr=udp://tracker.internetwarriors.net:1337/announce" +
-                        "&tr=udp://tracker.opentrackr.org:1337/announce" +
-                        "&tr=udp://9.rarbg.to:2710/announce" +
-                        "&tr=udp://exodus.desync.com:6969/announce" +
-                        "&tr=udp://explodie.org:6969/announce" +
-                        "&tr=udp://tracker2.itzmx.com:6961/announce" +
-                        "&tr=udp://tracker1.itzmx.com:8080/announce" +
-                        "&tr=udp://tracker.torrent.eu.org:451/announce" +
-                        "&tr=udp://tracker.tiny-vps.com:6969/announce" +
-                        "&tr=udp://tracker.port443.xyz:6969/announce" +
-                        "&tr=udp://thetracker.org:80/announce" +
-                        "&tr=udp://open.stealth.si:80/announce" +
-                        "&tr=udp://open.demonii.si:1337/announce" +
-                        "&tr=udp://ipv4.tracker.harry.lu:80/announce" +
-                        "&tr=udp://denis.stalker.upeer.me:6969/announce" +
-                        "&tr=udp://tracker1.wasabii.com.tw:6969/announce" +
-                        "&tr=udp://tracker.dler.org:6969/announce" +
-                        "&tr=udp://tracker.cyberia.is:6969/announce" +
-                        "&tr=udp://tracker4.itzmx.com:2710/announce" +
-                        "&tr=udp://tracker.uw0.xyz:6969/announce" +
-                        "&tr=udp://tracker.moeking.me:6969/announce" +
-                        "&tr=udp://retracker.lanta-net.ru:2710/announce" +
-                        "&tr=udp://tracker.nyaa.uk:6969/announce" +
-                        "&tr=udp://tracker.novg.net:6969/announce" +
-                        "&tr=udp://tracker.iamhansen.xyz:2000/announce" +
-                        "&tr=udp://tracker.filepit.to:6969/announce" +
-                        "&tr=udp://tracker.dyn.im:6969/announce" +
-                        "&tr=udp://torrentclub.tech:6969/announce" +
-                        "&tr=udp://tracker.tvunderground.org.ru:3218/announce" +
-                        "&tr=udp://tracker.open-tracker.org:1337/announce" +
-                        "&tr=udp://tracker.justseed.it:1337/announce");
-
                     var release = new ReleaseInfo
                     {
                         Title = title,
                         Comments = new Uri(SiteLink), // there is no comments or details link
-                        Guid = magnet,
-                        MagnetUri = magnet,
-                        InfoHash = infohash,
+                        Guid = new Uri($"magnet:?xt=urn:btih:{infoHash}"),
+                        InfoHash = infoHash, // magnet link is auto generated from infohash
                         Category = new List<int> { TorznabCatType.Other.ID },
                         PublishDate = publishDate,
                         Size = size,
