@@ -10,7 +10,7 @@ namespace Jackett.Test.TestHelpers
         {
             // these categories are chosen to test all kind of category types:
             // - with integer and string id
-            // - with and without description
+            // - with and without description (with description we generate custom cats)
             // - parent and child categories
             // - custom categories are not added automatically but they are created from other categories automatically
             // - categories and subcategories are unsorted to test the sort when required

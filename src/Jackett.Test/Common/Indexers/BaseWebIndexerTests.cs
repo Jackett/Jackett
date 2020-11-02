@@ -45,6 +45,7 @@ namespace Jackett.Test.Common.Indexers
         public void TestFilterResults()
         {
             var indexer = new TestWebIndexer();
+            indexer.AddTestCategories();
             var results = new List<ReleaseInfo>
             {
                 new ReleaseInfo
@@ -59,12 +60,16 @@ namespace Jackett.Test.Common.Indexers
                 {
                     Category = new List<int> { TorznabCatType.BooksEBook.ID, 100004 } // torznab (mandatory) + custom cat
                 },
+                new ReleaseInfo
+                {
+                    Category = new List<int> { TorznabCatType.AudioLossless.ID } // unsupported category in this indexer
+                },
                 new ReleaseInfo()
             };
 
             var query = new TorznabQuery(); // without categories
             var filteredResults = indexer._FilterResults(query, results).ToList();
-            Assert.AreEqual(4, filteredResults.Count);
+            Assert.AreEqual(5, filteredResults.Count);
 
             query = new TorznabQuery // with child category
             {
@@ -148,11 +153,9 @@ namespace Jackett.Test.Common.Indexers
             indexer.AddTestCategories();
 
             // you can find more complex tests in TorznabCapabilitiesCategoriesTests.cs
-            // TODO: this is wrong, custom cat 100001 doesn't exists (it's not defined by us)
             var torznabCats = indexer._MapTrackerCatToNewznab("1").ToList();
-            Assert.AreEqual(2, torznabCats.Count);
+            Assert.AreEqual(1, torznabCats.Count);
             Assert.AreEqual(2000, torznabCats[0]);
-            Assert.AreEqual(100001, torznabCats[1]);
         }
 
         [Test]
@@ -163,8 +166,9 @@ namespace Jackett.Test.Common.Indexers
 
             // you can find more complex tests in TorznabCapabilitiesCategoriesTests.cs
             var torznabCats = indexer._MapTrackerCatDescToNewznab("Console/Wii_c").ToList();
-            Assert.AreEqual(1, torznabCats.Count);
+            Assert.AreEqual(2, torznabCats.Count);
             Assert.AreEqual(1030, torznabCats[0]);
+            Assert.AreEqual(137107, torznabCats[1]);
         }
     }
 }
