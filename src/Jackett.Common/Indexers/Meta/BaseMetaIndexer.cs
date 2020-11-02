@@ -48,19 +48,14 @@ namespace Jackett.Common.Indexers.Meta
 
         public override async Task<IndexerResult> ResultsForQuery(TorznabQuery query)
         {
+            if (!CanHandleQuery(query))
+                return new IndexerResult(this, new ReleaseInfo[0]);
+
             try
             {
-                if (!CanHandleQuery(query))
-                    return new IndexerResult(this, new ReleaseInfo[0]);
                 var results = await PerformQuery(query);
-                var correctedResults = results.Select(r =>
-                {
-                    if (r.PublishDate > DateTime.Now)
-                        r.PublishDate = DateTime.Now;
-                    return r;
-                });
-
-                return new IndexerResult(this, correctedResults);
+                // the results are already filtered and fixed by each indexer
+                return new IndexerResult(this, results);
             }
             catch (Exception ex)
             {

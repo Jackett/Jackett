@@ -263,18 +263,42 @@ namespace Jackett.Common.Indexers
 
         protected virtual IEnumerable<ReleaseInfo> FilterResults(TorznabQuery query, IEnumerable<ReleaseInfo> results)
         {
-            if (query.Categories.Length == 0)
-                return results;
+            var filteredResults = results;
 
-            // expand parent categories from the query
-            var expandedQueryCats = TorznabCaps.Categories.ExpandTorznabQueryCategories(query);
+            // filter results with wrong categories
+            if (query.Categories.Length > 0)
+            {
+                // expand parent categories from the query
+                var expandedQueryCats = TorznabCaps.Categories.ExpandTorznabQueryCategories(query);
 
-            var filteredResults = results.Where(result =>
-                result.Category?.Any() != true ||
-                expandedQueryCats.Intersect(result.Category).Any()
+                filteredResults = filteredResults.Where(result =>
+                    result.Category?.Any() != true ||
+                    expandedQueryCats.Intersect(result.Category).Any()
                 );
+            }
+
+            // eliminate excess results
+            if (query.Limit > 0)
+                filteredResults = filteredResults.Take(query.Limit);
 
             return filteredResults;
+        }
+
+        protected virtual IEnumerable<ReleaseInfo> FixResults(TorznabQuery query, IEnumerable<ReleaseInfo> results)
+        {
+            var fixedResults = results.Select(r =>
+            {
+                // add origin
+                r.Origin = this;
+
+                // fix publish date
+                // some trackers do not keep their clocks up to date and can be ~20 minutes out!
+                if (r.PublishDate > DateTime.Now)
+                    r.PublishDate = DateTime.Now;
+
+                return r;
+            });
+            return fixedResults;
         }
 
         public virtual bool CanHandleQuery(TorznabQuery query)
@@ -328,26 +352,14 @@ namespace Jackett.Common.Indexers
 
         public virtual async Task<IndexerResult> ResultsForQuery(TorznabQuery query)
         {
+            if (!CanHandleQuery(query))
+                return new IndexerResult(this, new ReleaseInfo[0]);
+
             try
             {
-                if (!CanHandleQuery(query))
-                    return new IndexerResult(this, new ReleaseInfo[0]);
                 var results = await PerformQuery(query);
                 results = FilterResults(query, results);
-                if (query.Limit > 0)
-                {
-                    results = results.Take(query.Limit);
-                }
-                results = results.Select(r =>
-                {
-                    r.Origin = this;
-
-                    // Some trackers do not keep their clocks up to date and can be ~20 minutes out!
-                    if (r.PublishDate > DateTime.Now)
-                        r.PublishDate = DateTime.Now;
-                    return r;
-                });
-
+                results = FixResults(query, results);
                 return new IndexerResult(this, results);
             }
             catch (Exception ex)
