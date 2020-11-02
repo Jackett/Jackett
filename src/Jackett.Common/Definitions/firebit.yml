@@ -25,7 +25,7 @@ caps:
     - {id: "Мультфильмы", cat: TV/Anime, desc: "Мультфильмы"}
     - {id: "Программы", cat: PC, desc: "Программы"}
     - {id: "Программы Видео", cat: PC, desc: "Программы Видео"}
-    - {id: "Программы FAQ", cat: PC, desc: }
+    - {id: "Программы FAQ", cat: PC, desc: "Программы FAQ"}
     - {id: "Программы Web Оформление", cat: PC, desc: "Программы Web Оформление"}
     - {id: "Linux", cat: PC, desc: "Linux"}
     - {id: "Мобилка", cat: PC/Mobile-Other, desc: "Мобилка"}
