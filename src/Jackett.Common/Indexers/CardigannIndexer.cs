@@ -1330,7 +1330,7 @@ namespace Jackett.Common.Indexers
                 }
                 var searchUrlUri = new Uri(searchUrl);
 
-                logger.Info($"Fetching: {searchUrl}");
+                logger.Debug($"Fetching URL: {searchUrl}");
 
                 // send HTTP request
                 Dictionary<string, string> headers = null;
