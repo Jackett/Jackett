@@ -96,18 +96,19 @@ namespace Jackett.Common.Indexers
 
         private JArray CheckResponse(WebResult result)
         {
+            var results = result.ContentString;
             try
             {
-                var json = JsonConvert.DeserializeObject<dynamic>(result.ContentString);
+                var json = JsonConvert.DeserializeObject<dynamic>(results);
                 if (!(json is JObject) || !(json["results"] is JArray) || json["results"] == null)
                     throw new Exception("Server error");
                 return (JArray)json["results"];
             }
             catch (Exception e)
             {
-                logger.Error("CheckResponse() Error: ", e.Message);
-                throw new ExceptionWithConfigData(result.ContentString, ConfigData);
+                OnParseError(results, e);
             }
+            return null;
         }
 
         private async Task<JArray> SendSearchRequest(string searchString, string category, int page)

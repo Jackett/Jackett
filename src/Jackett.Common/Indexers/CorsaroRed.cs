@@ -127,23 +127,22 @@ namespace Jackett.Common.Indexers
 
         private dynamic CheckResponse(WebResult result)
         {
+            var results = result.ContentString;
             try
             {
-                var json = JsonConvert.DeserializeObject<dynamic>(result.ContentString);
-
-                switch (json)
+                var json = JsonConvert.DeserializeObject<dynamic>(results);
+                return json switch
                 {
-                    case JObject _ when json["ok"] != null && (bool)json["ok"] == false:
-                        throw new Exception("Server error");
-                    default:
-                        return json;
-                }
+                    JObject _ when json["ok"] != null && (bool) json["ok"] == false =>
+                        throw new Exception("Server error"),
+                    _ => json
+                };
             }
             catch (Exception e)
             {
-                logger.Error("checkResponse() Error: ", e.Message);
-                throw new ExceptionWithConfigData(result.ContentString, configData);
+                OnParseError(results, e);
             }
+            return null;
         }
 
         private async Task<dynamic> SendApiRequest(IEnumerable<KeyValuePair<string, string>> data)
