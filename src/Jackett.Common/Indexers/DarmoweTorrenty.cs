@@ -171,10 +171,7 @@ namespace Jackett.Common.Indexers
             var detailsLink = new Uri(SiteLink + details.GetAttribute("href"));
             var encodedDownloadLink = detailsRow.QuerySelector("a[id^=\"download_\"]").GetAttribute("data-href");
             var siteDownloadLink =  new Uri(SiteLink + Uri.UnescapeDataString(StringUtil.FromBase64(encodedDownloadLink)));
-            var hash = HttpUtility.ParseQueryString(siteDownloadLink.Query)["id"];
-            var magnet =
-                $"magnet:?xt=urn:btih:{hash}&tr=udp://tracker.opentrackr.org:1337&tr=udp://tracker.coppersurfer.tk:6969&tr=udp://tracker.internetwarriors.net:1337&tr=udp://tracker.leechers-paradise.org:6969";
-            var downloadLink = new Uri(magnet);
+            var infoHash = HttpUtility.ParseQueryString(siteDownloadLink.Query)["id"];
             var bannerLink = detailsRow.QuerySelector("img[src^=\"./imgtorrent/\"]")?.GetAttribute("src");
             var seeders = seedsMatch.Success ? int.Parse(seedsMatch.Groups[1].Value) : 0;
             var leechers = leechersMatch.Success ? int.Parse(leechersMatch.Groups[1].Value) : 0;
@@ -189,7 +186,7 @@ namespace Jackett.Common.Indexers
                 PublishDate = date,
                 DownloadVolumeFactor = 0,
                 UploadVolumeFactor = 1,
-                Link = downloadLink,
+                InfoHash = infoHash, // magnet link is auto generated from infohash
                 Guid = detailsLink,
                 Comments = detailsLink,
                 Size = sizeMatch.Success ? ReleaseInfo.GetBytes(sizeMatch.Groups[1].Value) : 0
