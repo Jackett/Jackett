@@ -124,7 +124,7 @@ namespace Jackett.Test.Common.Indexers
         }
 
         [Test]
-        public void TestFixResults()
+        public void TestFixResultsOriginPublishDate()
         {
             var indexer = new TestWebIndexer();
             var query = new TorznabQuery();
@@ -142,6 +142,44 @@ namespace Jackett.Test.Common.Indexers
             var fixedResults = indexer._FixResults(query, results).ToList();
             Assert.AreEqual(indexer.Id, fixedResults.First().Origin.Id);
             Assert.AreEqual(DateTime.Now.Year, fixedResults.First().PublishDate.Year);
+        }
+
+        [Test]
+        public void TestFixResultsMagnet()
+        {
+            var indexer = new TestWebIndexer();
+            var query = new TorznabQuery();
+
+            // get info_hash from magnet
+            var results = new List<ReleaseInfo>
+            {
+                new ReleaseInfo
+                {
+                    MagnetUri = new Uri("magnet:?xt=urn:btih:3333333333333333333333333333333333333333&dn=Title&tr=udp%3A%2F%2Ftracker.com%3A6969")
+                }
+            };
+            Assert.AreEqual(null, results.First().InfoHash);
+            var fixedResults = indexer._FixResults(query, results).ToList();
+            Assert.AreEqual("3333333333333333333333333333333333333333", fixedResults.First().InfoHash);
+
+            // build magnet from info_hash (private site), not allowed
+            results = new List<ReleaseInfo>
+            {
+                new ReleaseInfo
+                {
+                    Title = "Tracker Title",
+                    InfoHash = "3333333333333333333333333333333333333333"
+                }
+            };
+            Assert.AreEqual(null, results.First().MagnetUri);
+            fixedResults = indexer._FixResults(query, results).ToList();
+            Assert.AreEqual(null, fixedResults.First().MagnetUri);
+
+            // build magnet from info_hash (public, semi-private sites)
+            indexer.SetType("public");
+            Assert.AreEqual(null, results.First().MagnetUri);
+            fixedResults = indexer._FixResults(query, results).ToList();
+            Assert.True(fixedResults.First().MagnetUri.ToString().Contains("3333333333333333333333333333333333333333"));
         }
 
         [Test]
