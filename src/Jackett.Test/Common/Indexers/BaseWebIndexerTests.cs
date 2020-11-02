@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Jackett.Common.Models;
@@ -42,7 +43,7 @@ namespace Jackett.Test.Common.Indexers
         }
 
         [Test]
-        public void TestFilterResults()
+        public void TestFilterResultsCategories()
         {
             var indexer = new TestWebIndexer();
             indexer.AddTestCategories();
@@ -98,6 +99,49 @@ namespace Jackett.Test.Common.Indexers
             Assert.AreEqual(2, filteredResults.Count);
             Assert.AreEqual(TorznabCatType.BooksEBook.ID, filteredResults[0].Category.First());
             Assert.AreEqual(null, filteredResults[1].Category);
+        }
+
+        [Test]
+        public void TestFilterResultsLimit()
+        {
+            var indexer = new TestWebIndexer();
+            var results = new List<ReleaseInfo>
+            {
+                new ReleaseInfo(),
+                new ReleaseInfo()
+            };
+
+            var query = new TorznabQuery();
+            var filteredResults = indexer._FilterResults(query, results).ToList();
+            Assert.AreEqual(2, filteredResults.Count);
+
+            query = new TorznabQuery
+            {
+                Limit = 1
+            };
+            filteredResults = indexer._FilterResults(query, results).ToList();
+            Assert.AreEqual(1, filteredResults.Count);
+        }
+
+        [Test]
+        public void TestFixResults()
+        {
+            var indexer = new TestWebIndexer();
+            var query = new TorznabQuery();
+            var results = new List<ReleaseInfo>
+            {
+                new ReleaseInfo
+                {
+                    PublishDate = new DateTime(3000, 1, 1) // future date
+                }
+            };
+
+            // fix origin and publish date
+            Assert.AreEqual(null, results.First().Origin);
+            Assert.AreEqual(3000, results.First().PublishDate.Year);
+            var fixedResults = indexer._FixResults(query, results).ToList();
+            Assert.AreEqual(indexer.Id, fixedResults.First().Origin.Id);
+            Assert.AreEqual(DateTime.Now.Year, fixedResults.First().PublishDate.Year);
         }
 
         [Test]
