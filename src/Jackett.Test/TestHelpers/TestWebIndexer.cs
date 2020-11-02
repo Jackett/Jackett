@@ -44,6 +44,7 @@ namespace Jackett.Test.TestHelpers
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // public methods to test private methods
+        public void SetType(string type) => Type = type;
 
         public IEnumerable<ReleaseInfo> _FilterResults(TorznabQuery query, IEnumerable<ReleaseInfo> results) =>
             FilterResults(query, results);
