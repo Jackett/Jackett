@@ -417,7 +417,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * MoreThanTV (MTV)
  * Movie Zone (Mz)
  * MyAnonamouse (MAM)
- * myAmity
  * MySpleen [![(invite needed)][inviteneeded]](#)
  * NBTorrents [![(invite needed)][inviteneeded]](#)
  * NCore
