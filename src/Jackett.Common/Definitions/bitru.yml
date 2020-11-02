@@ -9,17 +9,17 @@ links:
   - http://bitru.org/ # site forces http, https is not supported
 
 caps:
-  categories:
-    movie: Movies
-    serial: TV
-    music: Audio
-    game: PC/Games
-    soft: PC
-    literature: Books
-    audiobook: Audio/Audiobook
-    video: Movies
-    image: Other
-    xxx: XXX
+  categorymappings:
+    - {id: movie, cat: Movies, desc: Movie}
+    - {id: serial, cat: TV, desc: Serial}
+    - {id: music, cat: Audio, desc: Music}
+    - {id: game, cat: PC/Games, desc: Game}
+    - {id: soft, cat: PC, desc: Software}
+    - {id: literature, cat: Books, desc: Literature}
+    - {id: audiobook, cat: Audio/Audiobook, desc: Audiobook}
+    - {id: video, cat: Movies, desc: Movies}
+    - {id: image, cat: Other, desc: Image}
+    - {id: xxx, cat: XXX, desc: xxx}
 
   modes:
     search: [q]

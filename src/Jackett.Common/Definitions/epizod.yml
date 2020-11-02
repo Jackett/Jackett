@@ -11,12 +11,12 @@ legacylinks:
   - https://www.epizod.tv/
 
 caps:
-  categories:
-    series: TV
-    films: Movies
-    musique: Audio
-    ebook: Books
-    other: Other
+  categorymappings:
+    - {id: series, cat: TV, desc: SÉRIES}
+    - {id: films, cat: Movies, desc: FILMS}
+    - {id: musique, cat: Audio, desc: MUSIQUE}
+    - {id: ebook, cat: Books, desc: EBOOK}
+    - {id: other, cat: Other, desc: OTHER}
 
   modes:
     search: [q]

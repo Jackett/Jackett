@@ -21,30 +21,30 @@ legacylinks:
   - http://firebit.biz/
 
 caps:
-  categories:
-    "Мультфильмы": TV/Anime
-    "Программы": PC
-    "Программы Видео": PC
-    "Программы FAQ": PC
-    "Программы Web Оформление": PC
-    "Linux": PC
-    "Мобилка": PC/Mobile-Other
-    "Мобилка Игры": PC/Mobile-Other
-    "Литература": Books
-    "Игры": PC/Games
-    "Игры Мобилка": PC/Games
-    "Фильмы": Movies
-    "Фильмы Видео": Movies
-    "Фильмы Сериалы": Movies
-    "Фильмы Скоро на трекере": Movies
-    "Видео": Movies
-    "Музыка": Audio
-    "Музыка Фильмы": Audio
-    "Видео Музыка": Audio/Video
-    "Фильмы Музыка Видео": Audio/Video
-    "Музыка Видео": Audio/Video
-    "Другие категории": Other
-    "Сериалы": TV
+  categorymappings:
+    - {id: "Мультфильмы", cat: TV/Anime, desc: "Мультфильмы"}
+    - {id: "Программы", cat: PC, desc: "Программы"}
+    - {id: "Программы Видео", cat: PC, desc: "Программы Видео"}
+    - {id: "Программы FAQ", cat: PC, desc: }
+    - {id: "Программы Web Оформление", cat: PC, desc: "Программы Web Оформление"}
+    - {id: "Linux", cat: PC, desc: "Linux"}
+    - {id: "Мобилка", cat: PC/Mobile-Other, desc: "Мобилка"}
+    - {id: "Мобилка Игры", cat: PC/Mobile-Other, desc: "Мобилка Игры"}
+    - {id: "Литература", cat: Books, desc: "Литература"}
+    - {id: "Игры", cat: PC/Games, desc: "Игры"}
+    - {id: "Игры Мобилка", cat: PC/Games, desc: "Игры Мобилка"}
+    - {id: "Фильмы", cat: Movies, desc: "Фильмы"}
+    - {id: "Фильмы Видео", cat: Movies, desc: "Фильмы Видео"}
+    - {id: "Фильмы Сериалы", cat: Movies, desc: "Фильмы Сериалы"}
+    - {id: "Фильмы Скоро на трекере", cat: Movies, desc: "Фильмы Скоро на трекере"}
+    - {id: "Видео", cat: Movies, desc: "Видео"}
+    - {id: "Музыка", cat: Audio, desc: "Музыка"}
+    - {id: "Музыка Фильмы", cat: Audio, desc: "Музыка Фильмы"}
+    - {id: "Видео Музыка", cat: Audio/Video, desc: "Видео Музыка"}
+    - {id: "Фильмы Музыка Видео", cat: Audio/Video, desc: "Фильмы Музыка Видео"}
+    - {id: "Музыка Видео", cat: Audio/Video, desc: "Музыка Видео"}
+    - {id: "Другие категории", cat: Other, desc: "Другие категории"}
+    - {id: "Сериалы", cat: TV, desc: "Сериалы"}
 
   modes:
     search: [q]
