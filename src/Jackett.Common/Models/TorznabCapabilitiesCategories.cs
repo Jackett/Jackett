@@ -29,7 +29,7 @@ namespace Jackett.Common.Models
                     var newCat = new TorznabCategory(c.ID, c.Name);
                     newCat.SubCategories.AddRange(sortedSubCats);
                     return newCat;
-                }).OrderBy(x => x.ID > 100000 ? "zzz" + x.Name : x.ID.ToString()).ToList();
+                }).OrderBy(x => x.ID >= 100000 ? "zzz" + x.Name : x.ID.ToString()).ToList();
 
             return sortedTree;
         }
