@@ -71,7 +71,7 @@ search:
         - name: fuzzytime
     date:
       # 12-27-2019
-      selector: td:nth-last-of-type(5):not(:contains(":")):not(:contains("day"))
+      selector: td:nth-last-of-type(5):not(:contains(":")):not(:contains("day")):not(:contains("ago"))
       optional: true
       filters:
         - name: replace
@@ -80,6 +80,16 @@ search:
           args: " -07:00" # PDT
         - name: dateparse
           args: "01-02-2006 -07:00"
+    date:
+      # 4-mins-ago
+      selector: td:nth-last-of-type(5):contains("ago")
+      optional: true
+      filters:
+        - name: replace
+          args: ["\xA0", "-"]
+        - name: replace
+          args: ["-", " "]
+        - name: timeago
     size:
       selector: td:nth-last-of-type(4)
     seeders:
