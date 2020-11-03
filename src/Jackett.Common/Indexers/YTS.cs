@@ -154,20 +154,7 @@ namespace Jackett.Common.Indexers
                         var imdb = movie_item.Value<string>("imdb_code");
                         release.Imdb = ParseUtil.GetImdbID(imdb);
 
-                        // API does not provide magnet link, so, construct it
-                        var magnet_uri = "magnet:?xt=urn:btih:" + torrent_info.Value<string>("hash") +
-                        "&dn=" + movie_item.Value<string>("slug") +
-                        "&tr=udp://open.demonii.com:1337/announce" +
-                        "&tr=udp://tracker.openbittorrent.com:80" +
-                        "&tr=udp://tracker.coppersurfer.tk:6969" +
-                        "&tr=udp://glotorrents.pw:6969/announce" +
-                        "&tr=udp://tracker.opentrackr.org:1337/announce" +
-                        "&tr=udp://torrent.gresille.org:80/announce" +
-                        "&tr=udp://p4p.arenabg.com:1337" +
-                        "&tr=udp://tracker.leechers-paradise.org:6969";
-
-                        release.MagnetUri = new Uri(magnet_uri);
-                        release.InfoHash = torrent_info.Value<string>("hash");
+                        release.InfoHash = torrent_info.Value<string>("hash"); // magnet link is auto generated from infohash
 
                         // ex: 2015-08-16 21:25:08 +0000
                         var dateStr = torrent_info.Value<string>("date_uploaded");

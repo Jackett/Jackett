@@ -70,45 +70,48 @@ search:
     - path: torrents.php
   keywordsfilters:
     - name: re_replace
-      args: ["S(\\d{2})E(\\d{2})", "$1 $2"]
+      args: ["(?i)S(\\d{2})E(\\d{2})", "$1 $2"]
   inputs:
     search: "{{ .Keywords }}"
-    category: "0"
-    active: "1"
+    category: 0
+    active: 1
+
   rows:
     selector: tr.torrenty_lista
+
   fields:
-    title:
-      selector: a[href^="details.php?slug="]
-      attribute: title
-      filters:
-        - name: replace
-          args: ["Zobrazit detaily: ", ""]
-        - name: re_replace
-          args: [".*? / ", ""]
-        - name: diacritics
-          args: replace
     category:
       selector: a[href^="torrents.php?onlycat="]
       attribute: href
       filters:
         - name: querystring
           args: onlycat
+    title:
+      selector: a[href^="details.php?slug="]
+      attribute: title
+      filters:
+        # Czech, English
+        - name: re_replace
+          args: ["(?i)(Zobrazit detaily: |View details: )", ""]
+        - name: re_replace
+          args: [".*? / ", ""]
+        - name: diacritics
+          args: replace
     details:
       selector: a[href^="details.php?slug="]
       attribute: href
     download:
       selector: a[href^="download.php?slug="]
       attribute: href
-    size:
-      selector: td:nth-child(7)
     date:
       selector: td:nth-child(6)
       filters:
         - name: append
-          args: " +02:00"
+          args: " +02:00" # EET
         - name: dateparse
           args: "2/1/2006 15:04 -07:00"
+    size:
+      selector: td:nth-child(7)
     seeders:
       selector: td:nth-child(8) a
     leechers:
@@ -119,8 +122,7 @@ search:
         - name: replace
           args: ["---", "0"]
     downloadvolumefactor:
-      case:
-        "*": "1"
+      text: 1
     uploadvolumefactor:
-      case:
-        "*": "1"
+      text: 1
+# engine tbd

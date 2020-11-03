@@ -53,18 +53,7 @@ namespace Jackett.Common.Indexers
             "https://tpb18.ukpass.co/"
         };
 
-        private const string KeyInfoHash = "{info_hash}";
-
         private static readonly Uri _ApiBaseUri = new Uri("https://apibay.org/");
-
-        private static readonly string _MagnetUri =
-            $"magnet:?xt=urn:btih:{KeyInfoHash}&tr=udp%3A%2F%2Ftracker.coppersurfer.tk" +
-            "%3A6969%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2920%2Fannounce&tr=udp%3" +
-            "A%2F%2Ftracker.opentrackr.org%3A1337&tr=udp%3A%2F%2Ftracker.internetwar" +
-            "riors.net%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.or" +
-            "g%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fann" +
-            "ounce&tr=udp%3A%2F%2Ftracker.pirateparty.gr%3A6969%2Fannounce&tr=udp%3A" +
-            "%2F%2Ftracker.cyberia.is%3A6969%2Fannounce";
 
         public ThePirateBay(
             IIndexerConfigurationService configService,
@@ -224,28 +213,23 @@ namespace Jackett.Common.Indexers
 
         private ReleaseInfo CreateReleaseInfo(QueryResponseItem item)
         {
-            var magnetUri = new Uri(_MagnetUri.Replace(KeyInfoHash, item.InfoHash));
-
+            var commentsUri = item.Id == 0 ? null : new Uri($"{SiteLink}description.php?id={item.Id}");
+            var imdbId = string.IsNullOrEmpty(item.Imdb) ? null : ParseUtil.GetImdbID(item.Imdb);
             return new ReleaseInfo
             {
                 Title = item.Name,
                 Category = MapTrackerCatToNewznab(item.Category.ToString()),
-                Comments = item.Id == 0
-                    ? null
-                    : new Uri($"{SiteLink}description.php?id={item.Id}"),
-                MagnetUri = magnetUri,
-                InfoHash = item.InfoHash,
+                Guid = commentsUri,
+                Comments = commentsUri,
+                InfoHash = item.InfoHash, // magnet link is auto generated from infohash
                 PublishDate = DateTimeUtil.UnixTimestampToDateTime(item.Added),
-                Guid = magnetUri,
                 Seeders = item.Seeders,
                 Peers = item.Seeders + item.Leechers,
                 Size = item.Size,
                 Files = item.NumFiles,
                 DownloadVolumeFactor = 0,
                 UploadVolumeFactor = 1,
-                Imdb = string.IsNullOrEmpty(item.Imdb)
-                    ? null
-                    : ParseUtil.GetImdbID(item.Imdb)
+                Imdb = imdbId
             };
         }
 

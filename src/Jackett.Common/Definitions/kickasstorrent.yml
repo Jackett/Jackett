@@ -8,7 +8,7 @@ encoding: UTF-8
 followredirect: true
 links:
   - https://newkatcr.co/
-  - https://kat.unblockit.lat/
+  - https://kat.unblockit.app/
   - https://katcr.unblocked.rest/
 legacylinks:
   - https://kickasstorrent.cr/ # kickasstorrents-to proxy
@@ -30,6 +30,7 @@ legacylinks:
   - https://katcr.uk-unblock.pro/
   - https://kat.unblockit.top/
   - https://kat.root.yt/ # currently kickasstorrents-to proxy
+  - https://kat.unblockit.lat/
 
 caps:
   categorymappings:

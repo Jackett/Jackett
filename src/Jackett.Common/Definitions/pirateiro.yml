@@ -9,7 +9,7 @@ followredirect: true
 links:
   - https://pirateiro.com/
   - https://pirateiro.eu/
-  - https://pirateiro.unblockit.lat/
+  - https://pirateiro.unblockit.app/
 legacylinks:
   - http://pirateiro.com/
   - https://pirateiro.unblockit.pro/
@@ -19,17 +19,18 @@ legacylinks:
   - https://pirateiro.unblockit.id/
   - https://pirateiro.unblockit.win/
   - https://pirateiro.unblockit.top/
+  - https://pirateiro.unblockit.lat/
 
 caps:
-  categories:
-    cat100: TV/Anime
-    cat200: PC
-    cat300: Movies
-    cat400: Console
-    cat500: Audio
-    cat600: Other
-    cat700: TV
-    cat800: XXX
+  categorymappings:
+    - {id: cat100, cat: TV/Anime, desc: Anime}
+    - {id: cat200, cat: PC, desc: Software}
+    - {id: cat300, cat: Movies, desc: Movies}
+    - {id: cat400, cat: Console, desc: Games}
+    - {id: cat500, cat: Audio, desc: Music}
+    - {id: cat600, cat: Other, desc: Other}
+    - {id: cat700, cat: TV, desc: TV}
+    - {id: cat800, cat: XXX, desc: Adult}
 
   modes:
     search: [q]
@@ -83,7 +84,7 @@ search:
       attribute: title
       filters:
         - name: append
-          args: " +01:00"
+          args: " +01:00" #CET
         - name: dateparse
           args: "02/01/2006 15:04:05 -07:00"
     size:
