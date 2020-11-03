@@ -13,14 +13,14 @@ certificates:
 settings: []
 
 caps:
-  categories:
-    "影视": Movies # Movie
-    "安装包": PC/ISO # installation package
-    "其他": Other # Other
-    "音乐": Audio # Music
-    "文档书籍": Books # Documents Book
-    "压缩文件": PC # Compressed Files
-    "图像": Other/Misc # Image
+  categorymappings:
+    - {id: "影视", cat: Movies, desc: "影视(Movie)"}
+    - {id: "安装包", cat: PC/ISO, desc: "安装包(Installation Package)"}
+    - {id: "其他", cat: Other, desc: "其他(Other)"}
+    - {id: "音乐", cat: Audio, desc: "音乐(Music)"}
+    - {id: "文档书籍", cat: Books, desc: "文档书籍(Documents Book)"}
+    - {id: "压缩文件", cat: PC, desc: "压缩文件(Compressed Files)"}
+    - {id: "图像", cat: Other/Misc, desc: "图像(Image)"}
 
   modes:
     search: [q]
@@ -32,7 +32,7 @@ search:
   paths:
     # https://shokweb.com/ (latest)
     # https://shokweb.com/search/supergirl%20s04e01 (search)
-    - path: "{{ if .Keywords }}/search/{{ .Keywords }}{{else}}{{end}}"
+    - path: "{{ if .Keywords }}/search/{{ .Keywords }}{{ else }}{{ end }}"
 
   rows:
     selector: div:has(a[href^="magnet:?"])
@@ -40,10 +40,10 @@ search:
       - name: andmatch
 
   fields:
-    title:
-      selector: a[href^="/post/"]
     category:
       selector: p:has(img) span:nth-last-child(4)
+    title:
+      selector: a[href^="/post/"]
     details:
       selector: a[href^="/post/"]
       attribute: href
