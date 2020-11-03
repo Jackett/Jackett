@@ -15,7 +15,7 @@ legacylinks:
 caps:
   categorymappings:
     - {id: "/anime/", cat: TV/Anime, desc: Anime}
-    - {id: "/anime/english-translated/", cat: TV/Anime, desc: "Anime Englisg Translated"}
+    - {id: "/anime/english-translated/", cat: TV/Anime, desc: "Anime English Translated"}
     - {id: "/applications/", cat: PC, desc: Apps}
     - {id: "/applications/android/", cat: PC/Mobile-Android, desc: "Apps Android"}
     - {id: "/applications/ios/", cat: PC/Mobile-iOS, desc: "Apps iOS"}
