@@ -9,14 +9,14 @@ links:
   - https://torrentquest.com/
 
 caps:
-  categories:
-    TV: TV
-    Movie: Movies
-    Music: Audio
-    E-Book: Books/EBook
-    Game: PC/Games
-    Software: PC
-    Other: Other
+  categorymappings:
+    - {id: TV, cat: TV, desc: "TV Shows"}
+    - {id: Movie, cat: Movies, desc: Movies}
+    - {id: Music, cat: Audio, desc: Music}
+    - {id: E-Book, cat: Books/EBook, desc: E-Books}
+    - {id: Game, cat: PC/Games, desc: Games}
+    - {id: Software, cat: PC, desc: Software}
+    - {id: Other, cat: Other, desc: Other}
 
   modes:
     search: [q]
@@ -62,14 +62,14 @@ search:
     selector: tr:has(td.m)
 
   fields:
-    title:
-      selector: td.n a
-      attribute: title
     category:
       text: Other
     category|noappend:
       optional: true
       selector: td[class^="t"]
+    title:
+      selector: td.n a
+      attribute: title
     details:
       selector: td.n a
       attribute: href
