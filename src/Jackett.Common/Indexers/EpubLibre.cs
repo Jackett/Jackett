@@ -45,6 +45,10 @@ namespace Jackett.Common.Indexers
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://epublibre.org/",
+            "https://epublibre.unblockit.app/"
+        };
+
+        public override string[] LegacySiteLinks { get; protected set; } = {
             "https://epublibre.unblockit.lat/"
         };
 
