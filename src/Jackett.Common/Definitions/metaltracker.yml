@@ -11,10 +11,10 @@ legacylinks:
   - http://en.metal-tracker.com/
 
 caps:
-  categories:
-    Books: Audio/Audiobook
-    Video: Audio/Video
-    Music: Audio/MP3
+  categorymappings:
+    - {id: Books, cat: Audio/Audiobook, desc: Books}
+    - {id: Video, cat: Audio/Video, desc: Videos}
+    - {id: Music, cat: Audio/MP3, desc: Music}
 
   modes:
     search: [q]
@@ -65,7 +65,7 @@ search:
     - path: torrents/search.html
       method: post
   inputs:
-    "SearchTorrentsForm[nameTorrent]": "{{ if or (.Query.Artist) (.Query.Album) }}{{ or (.Query.Artist) (.Query.Album) }}{{else}}{{ .Keywords }}{{end}}"
+    "SearchTorrentsForm[nameTorrent]": "{{ if or (.Query.Artist) (.Query.Album) }}{{ or (.Query.Artist) (.Query.Album) }}{{ else }}{{ .Keywords }}{{ end }}"
     "SearchTorrentsForm[sort]": "{{ .Config.sort }}"
     "SearchTorrentsForm[sortType]": "{{ .Config.type }}"
     go-search: Search

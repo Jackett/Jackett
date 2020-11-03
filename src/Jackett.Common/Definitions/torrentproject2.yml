@@ -17,28 +17,16 @@ legacylinks:
   - https://torrentproject.cc/
 
 caps:
-  categories:
-    "video tv": TV
-    "video dvd": Movies/SD
-    "Video Dvdrip": Movies/SD
-    "video hdrip": Movies/HD
-    "Video Lq": Movies/Foreign
-    "audio mp3": Audio/MP3
-    "audio lossless": Audio/Lossless
-    video: Movies
-    ebooks: Books/EBook
-    "Ebooks Comics": Books/Comics
-    "Ebooks Magazines": Other
-    "Ebooks Audiobook": Audio/Audiobook
-    "Ebooks Tutorials": Books/EBook
-    "Games PC": PC/Games
-    "Games Nintendo": Console
-    "Games PlayStation": Console
-    "Games XBox": Console/XBox
-    Mobile: PC/Mobile-Other
-    Applications: PC
-    Images: Other
-    Other: Other
+  categorymappings:
+    - {id: Movies, cat: Movies, desc: Movies}
+    - {id: Music, cat: Audio, desc: Music}
+    - {id: Apps, cat: PC/0day, desc: Apps}
+    - {id: Mobile, cat: PC/Mobile-Other, desc: Mobile}
+    - {id: Games, cat: PC/Games, desc: Games}
+    - {id: TV, cat: TV, desc: TV}
+    - {id: Documentaries, cat: TV/Documentary, desc: Documentaries}
+    - {id: XXX, cat: XXX, desc: XXX}
+    - {id: Other, cat: Other, desc: Other}
 
   modes:
     search: [q]
@@ -61,10 +49,6 @@ settings:
       oldest: "created asc"
       seeders: seeders
       size: size
-  - name: info_8000
-    type: info
-    label: About TorrentProject2 Categories
-    default: TorrentProject2 does not return categories in its search results page. To add to Sonarr or Radarr replace all categories with 8000(Other).
 
 download:
   selector: "#download > div:nth-child(2) > div:nth-child(1) > a"
@@ -78,8 +62,8 @@ download:
 
 search:
   paths:
-    - path: "?t={{ if .Keywords }}{{ re_replace .Keywords \" \" \"+\" }}{{ else }}test{{ end }}&orderby={{ .Config.sort }}{{ if .Config.filter-verified }}&safe=on{{ else }}{{ end }}"
-      followredirect: true
+    - path: "browse?t={{ if .Keywords }}{{ re_replace .Keywords \" \" \"+\" }}{{ else }}{{ end }}&orderby={{ .Config.sort }}{{ if .Config.filter-verified }}&safe=on{{ else }}{{ end }}"
+    - path: "browse?t={{ if .Keywords }}{{ re_replace .Keywords \" \" \"+\" }}{{ else }}{{ end }}&orderby={{ .Config.sort }}{{ if .Config.filter-verified }}&safe=on{{ else }}{{ end }}&p=1"
 
   rows:
     selector: "#similarfiles div:has(a[href^=\"/t\"])"

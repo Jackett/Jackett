@@ -296,6 +296,14 @@ namespace Jackett.Common.Indexers
                 if (r.PublishDate > DateTime.Now)
                     r.PublishDate = DateTime.Now;
 
+                // generate magnet link from info hash (not allowed for private sites)
+                if (r.MagnetUri == null && !string.IsNullOrWhiteSpace(r.InfoHash) && Type != "private")
+                    r.MagnetUri = MagnetUtil.InfoHashToPublicMagnet(r.InfoHash, r.Title);
+
+                // generate info hash from magnet link
+                if (r.MagnetUri != null && string.IsNullOrWhiteSpace(r.InfoHash))
+                    r.InfoHash = MagnetUtil.MagnetToInfoHash(r.MagnetUri);
+
                 return r;
             });
             return fixedResults;
