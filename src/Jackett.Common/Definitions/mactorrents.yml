@@ -12,10 +12,10 @@ legacylinks:
   - https://www.mac-torrents.com/
 
 caps:
-  categories:
-    "mac-os-apps": PC/Mac
-    "games": PC/Games
-    "uncategorized": Other
+  categorymappings:
+    - {id: "mac-os-apps", cat: PC/Mac, desc: "Apps"}
+    - {id: "games", cat: PC/Games, desc: Games}
+    - {id: "uncategorized", cat: Other, desc: Uncategorized}
 
   modes:
     search: [q]
@@ -60,7 +60,7 @@ search:
         - name: dateparse
           args: "2006-01-02 15:04:05-07:00"
     size:
-      text: "500 MB"
+      text: "512 MB"
     seeders:
       text: 1
     leechers:
