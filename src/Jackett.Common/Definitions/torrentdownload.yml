@@ -8,7 +8,7 @@ encoding: UTF-8
 followredirect: true
 links:
   - https://www.torrentdownload.info/
-  - https://torrentdownload.unblockit.lat/
+  - https://torrentdownload.unblockit.app/
   - https://torrentdownload.unblocked.rest/
 legacylinks:
   - https://torrentdownload.unblockit.pro/
@@ -26,6 +26,7 @@ legacylinks:
   - https://torrentdownload.proxyportal.pw/
   - https://torrentdownload.uk-unblock.pro/
   - https://torrentdownload.unblockit.top/
+  - https://torrentdownload.unblockit.lat/
 
 caps:
   categorymappings:
