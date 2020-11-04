@@ -1,6 +1,9 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Jackett.Common.Models.IndexerConfig.Bespoke
 {
-    public class ConfigurationDataSceneTime : ConfigurationData
+    [ExcludeFromCodeCoverage]
+    internal class ConfigurationDataSceneTime : ConfigurationData
     {
         public StringItem Username { get; private set; }
         public StringItem Password { get; private set; }

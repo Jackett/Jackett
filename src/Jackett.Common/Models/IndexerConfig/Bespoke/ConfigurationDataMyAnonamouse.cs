@@ -1,7 +1,9 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Jackett.Common.Models.IndexerConfig.Bespoke
 {
-
-    public class ConfigurationDataMyAnonamouse : ConfigurationData
+    [ExcludeFromCodeCoverage]
+    internal class ConfigurationDataMyAnonamouse : ConfigurationData
     {
         public StringItem MamId { get; private set; }
         public DisplayItem MamIdHint { get; private set; }
