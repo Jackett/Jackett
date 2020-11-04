@@ -330,7 +330,7 @@ search:
     by: "{{ .Config.type }}"
 
   rows:
-    selector: table.lista[width="100%"] > tbody > tr:has(a[href^="index.php?page=torrents&category="])
+    selector: table.lista[width="100%"] > tbody > tr:has(a[href^="index.php?page=torrent-details&id="][title])
 
   fields:
     category:
