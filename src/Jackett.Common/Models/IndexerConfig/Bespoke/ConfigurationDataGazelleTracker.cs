@@ -1,6 +1,9 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Jackett.Common.Models.IndexerConfig.Bespoke
 {
-    public class ConfigurationDataGazelleTracker : ConfigurationData
+    [ExcludeFromCodeCoverage]
+    internal class ConfigurationDataGazelleTracker : ConfigurationData
     {
         public StringItem Username { get; private set; }
         public StringItem Password { get; private set; }

@@ -1,5 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Jackett.Common.Models.IndexerConfig.Bespoke
 {
+    [ExcludeFromCodeCoverage]
     internal class ConfigurationDataAnimeBytes : ConfigurationDataUserPasskey
     {
         public BoolItem IncludeRaw { get; private set; }
