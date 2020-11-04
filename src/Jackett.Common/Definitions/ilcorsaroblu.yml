@@ -133,7 +133,7 @@ search:
   inputs:
     page: torrents
     search: "{{ .Keywords }}"
-    category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{else}}0{{end}}"
+    category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{ else }}0{{ end }}"
     # 0 title, 1 title & descr, 2 descr, 3 uploaders, 5 gold, 6 silver, 7 bronze
     options: "{{ if .Config.freeleech }}5{{ else }}0{{ end }}"
     # 0 all, 1 activeonly, 2 deadonly
@@ -148,6 +148,12 @@ search:
       - name: andmatch
 
   fields:
+    category:
+      selector: a[href^="index.php?page=torrents&category="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: category
     title:
       selector: td:nth-child(2) > a
       filters:
@@ -174,6 +180,9 @@ search:
           args: ["(?i)\\b(?:Puntate\\s*)(\\d+)\\s?(\\d+)", "E0$1-0$2"]
         - name: re_replace # rimozioni varie
           args: ["(?i)(Serie completa|Completat?a?|in pausa)", ""]
+    details:
+      selector: td:nth-child(2) > a
+      attribute: href
     download:
       optional: true
       selector: a[href^="download.php?id="]
@@ -186,36 +195,16 @@ search:
           args: http://itorrents.org/torrent/
         - name: append
           args: ".torrent"
-    _magnetfilename: # convert title to valid magnet filename
-      text: "{{ .Result.title }}"
-      filters:
-        - name: validfilename
-        - name: urlencode
-    magnet: # generate magnet link from download link
+    infohash:
       optional: true
       selector: a[href^="download.php?id="]
       attribute: href
       filters:
         - name: querystring
           args: id
-        - name: prepend
-          args: "magnet:?xt=urn:btih:"
-        - name: append
-          args: "&dn={{ .Result._magnetfilename }}.torrent"
-        - name: append
-          args: "&tr=udp://tracker.openbittorrent.com:80/announce&tr=udp://tracker.opentrackr.org:1337/announce"
     magnet:
       optional: true
       selector: a[href^="magnet:?xt="]
-      attribute: href
-    category:
-      selector: a[href^="index.php?page=torrents&category="]
-      attribute: href
-      filters:
-        - name: querystring
-          args: category
-    details:
-      selector: td:nth-child(2) > a
       attribute: href
     size:
       selector: td:nth-last-child(2)
