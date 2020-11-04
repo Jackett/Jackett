@@ -193,8 +193,6 @@ namespace Jackett.Common.Utils.Clients
                                  }{bodySize} bytes{body}");
             }
 
-            if (result.Headers.TryGetValue("server", out var server) && server[0] == "cloudflare-nginx")
-                result.ContentString = BrowserUtil.DecodeCloudFlareProtectedEmailFromHTML(result.ContentString);
             return result;
         }
 
