@@ -9,10 +9,10 @@ links:
   - https://uhdbits.org/
 
 caps:
-  categories:
-    1: Movies
-    2: Audio
-    3: TV
+  categorymappings:
+    - {id: 1, cat: Movies, desc: Movies}
+    - {id: 2, cat: Audio, desc: Music}
+    - {id: 3, cat: TV, desc: TV}
 
   modes:
     search: [q]
@@ -84,13 +84,14 @@ search:
 
   rows:
     selector: table#torrent_table > tbody > tr.torrent
+
   fields:
     category:
       selector: a[href^="torrents.php?filter_cat"]
       attribute: href
       filters:
         - name: regexp
-          args: "\\[(\\d+?)\\]"
+          args: "\\[(\\d+)\\]"
     # note: there are optional extra colums
     download:
       selector: a[title="Download"]
