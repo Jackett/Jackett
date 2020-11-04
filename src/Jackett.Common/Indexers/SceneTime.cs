@@ -8,7 +8,6 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
-using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
@@ -21,8 +20,6 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class SceneTime : BaseWebIndexer
     {
-        private string StartPageUrl => SiteLink + "login.php";
-        private string LoginUrl => SiteLink + "takelogin1.php";
         private string SearchUrl => SiteLink + "browse.php";
         private string DownloadUrl => SiteLink + "download.php/{0}/download.torrent";
 
@@ -88,80 +85,26 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(116, TorznabCatType.Audio, "Music Pack");
         }
 
-        public override async Task<ConfigurationData> GetConfigurationForSetup()
-        {
-            WebResult loginPage;
-            try
-            {
-                loginPage = await RequestWithCookiesAsync(StartPageUrl, string.Empty);
-            }
-            catch (Exception)
-            {
-                // The login page is protected by Cloudflare
-                return configData;
-            }
-
-            var parser = new HtmlParser();
-            var dom = parser.ParseDocument(loginPage.ContentString);
-            var recaptcha = dom.QuerySelector(".g-recaptcha");
-            if (recaptcha != null)
-            {
-                var result = configData;
-                result.Captcha.Version = "2";
-                result.CookieHeader.Value = loginPage.Cookies;
-                result.Captcha.SiteKey = recaptcha.GetAttribute("data-sitekey");
-                return result;
-            }
-
-            var stdResult = new ConfigurationDataBasicLogin
-            {
-                SiteLink = { Value = configData.SiteLink.Value },
-                Username = { Value = configData.Username.Value },
-                Password = { Value = configData.Password.Value },
-                CookieHeader = { Value = loginPage.Cookies }
-            };
-            return stdResult;
-        }
-
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-            var pairs = new Dictionary<string, string> {
-                { "username", configData.Username.Value },
-                { "password", configData.Password.Value },
-                { "g-recaptcha-response", configData.Captcha.Value }
-            };
 
-            if (!string.IsNullOrWhiteSpace(configData.Captcha.Cookie))
+            CookieHeader = configData.Cookie.Value;
+            try
             {
-                CookieHeader = configData.Captcha.Cookie;
-                try
-                {
-                    var results = await PerformQuery(new TorznabQuery());
-                    if (!results.Any())
-                        throw new Exception("Found 0 results in the tracker");
+                var results = await PerformQuery(new TorznabQuery());
+                if (!results.Any())
+                    throw new Exception("Found 0 results in the tracker");
 
-                    IsConfigured = true;
-                    SaveConfig();
-                    return IndexerConfigurationStatus.Completed;
-                }
-                catch (Exception e)
-                {
-                    IsConfigured = false;
-                    throw new Exception("Your cookie did not work: " + e.Message);
-                }
+                IsConfigured = true;
+                SaveConfig();
+                return IndexerConfigurationStatus.Completed;
             }
-
-            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl);
-            await ConfigureIfOK(result.Cookies, result.ContentString != null && result.ContentString.Contains("logout.php"), () =>
+            catch (Exception e)
             {
-                var parser = new HtmlParser();
-                var dom = parser.ParseDocument(result.ContentString);
-                var errorMessage = dom.QuerySelector("td.text").TextContent.Trim();
-                throw new ExceptionWithConfigData(errorMessage, configData);
-            });
-
-            return IndexerConfigurationStatus.RequiresTesting;
+                IsConfigured = false;
+                throw new Exception("Your cookie did not work: " + e.Message);
+            }
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)

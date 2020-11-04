@@ -24,8 +24,6 @@ $.fn.focusWithoutScrolling = function () {
 
 $(document).ready(function () {
     $.ajaxSetup({ cache: false });
-    //window.jackettIsLocal = window.location.hostname === '127.0.0.1';
-    window.jackettIsLocal = false; // reCaptcha can't be solved via 127.0.0.1 anymore. This loophold was fixed by google around 2.10.2017
 
     Handlebars.registerHelper('if_eq', function(a, b, opts) {
 	    if (a == b)
@@ -511,79 +509,13 @@ function populateConfigItems(configForm, config) {
     var $formItemContainer = configForm.find(".config-setup-form");
     $formItemContainer.empty();
 
-    $('.jackettrecaptcha').remove();
-
-    var hasReacaptcha = false;
-    var captchaItem = null;
-    for (var i = 0; i < config.length; i++) {
-        if (config[i].type === 'recaptcha') {
-            hasReacaptcha = true;
-            captchaItem = config[i];
-        }
-        else if (config[i].id === 'cookieheader' && hasReacaptcha) { // inject cookie into captcha item
-            captchaItem.cookieheader = config[i].value;
-            console.log(captchaItem);
-        }
-    }
-
     var setupItemTemplate = Handlebars.compile($("#setup-item").html());
-    if (hasReacaptcha && !window.jackettIsLocal && false) { // disable this for now, use inline cookie (below)
-        var setupValueTemplate = Handlebars.compile($("#setup-item-nonlocalrecaptcha").html());
-        captchaItem.value_element = setupValueTemplate(captchaItem);
-        var template = setupItemTemplate(captchaItem);
+    for (var i = 0; i < config.length; i++) {
+        var item = config[i];
+        var setupValueTemplate = Handlebars.compile($("#setup-item-" + item.type).html());
+        item.value_element = setupValueTemplate(item);
+        var template = setupItemTemplate(item);
         $formItemContainer.append(template);
-    } else {
-
-        for (var i = 0; i < config.length; i++) {
-            var item = config[i];
-            if ((item.id === 'username' || item.id === 'password') && hasReacaptcha) {
-                continue; // skip username/password if there's a recaptcha
-            }
-            if (item.type != 'recaptcha') {
-                var setupValueTemplate = Handlebars.compile($("#setup-item-" + item.type).html());
-                item.value_element = setupValueTemplate(item);
-                var template = setupItemTemplate(item);
-                $formItemContainer.append(template);
-            }
-            if (item.type === 'recaptcha') {
-                // inject cookie dialog until recaptcha can be solved again
-                var setupValueTemplate = Handlebars.compile($("#setup-item-nonlocalrecaptcha").html());
-                captchaItem.value_element = setupValueTemplate(captchaItem);
-                var template = setupItemTemplate(captchaItem);
-                $formItemContainer.append(template);
-                /*
-                var jackettrecaptcha = $('.jackettrecaptcha');
-                jackettrecaptcha.data("version", item.version);
-                switch (item.version) {
-                    case "1":
-                        // The v1 reCAPTCHA code uses document.write() calls to write the CAPTCHA to the location where the script was loaded.
-                        // As it's loaded async this doesn't work.
-                        // We use an iframe to work around this problem.
-                        var html = '<script type="text/javascript" src="https://www.google.com/recaptcha/api/challenge?k='+encodeURIComponent(item.sitekey)+'"></script>';
-                        var frame = document.createElement('iframe');
-                        frame.id = "jackettrecaptchaiframe";
-                        frame.style.height = "145px";
-                        frame.style.weight = "326px";
-                        frame.style.border = "none";
-                        frame.onload = function () {
-                            // auto resize iframe to content
-                            frame.style.height = frame.contentWindow.document.body.scrollHeight + 'px';
-                            frame.style.width = frame.contentWindow.document.body.scrollWidth + 'px';
-                        }
-                        jackettrecaptcha.append(frame);
-                        frame.contentDocument.open();
-                        frame.contentDocument.write(html);
-                        frame.contentDocument.close();
-                        break;
-                    case "2":
-                        grecaptcha.render(jackettrecaptcha[0], {
-                            'sitekey': item.sitekey
-                        });
-                        break;
-                }
-                */
-            }
-        }
     }
 }
 
@@ -630,24 +562,6 @@ function getConfigModalJson(configForm) {
                 });
             case "inputselect":
                 itemEntry.value = $el.find(".setup-item-inputselect select").val();
-                break;
-            case "recaptcha":
-                if (window.jackettIsLocal) {
-                    var version = $el.find('.jackettrecaptcha').data("version");
-                    switch (version) {
-                        case "1":
-                            var frameDoc = $("#jackettrecaptchaiframe")[0].contentDocument;
-                            itemEntry.version = version;
-                            itemEntry.challenge = $("#recaptcha_challenge_field", frameDoc).val()
-                            itemEntry.value = $("#recaptcha_response_field", frameDoc).val()
-                            break;
-                        case "2":
-                            itemEntry.value = $('.g-recaptcha-response').val();
-                            break;
-                    }
-                } else {
-                    itemEntry.cookie = $el.find(".setup-item-recaptcha input").val();
-                }
                 break;
         }
         configJson.push(itemEntry)

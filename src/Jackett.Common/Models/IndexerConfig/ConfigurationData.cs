@@ -20,8 +20,7 @@ namespace Jackett.Common.Models.IndexerConfig
             InputSelect,
             DisplayImage,
             DisplayInfo,
-            HiddenData,
-            Recaptcha
+            HiddenData
         }
 
         public HiddenItem CookieHeader { get; private set; } = new HiddenItem { Name = "CookieHeader" };
@@ -89,12 +88,6 @@ namespace Jackett.Common.Models.IndexerConfig
                     case ItemType.InputSelect:
                         ((SelectItem)item).Value = arrItem.Value<string>("value");
                         break;
-                    case ItemType.Recaptcha:
-                        ((RecaptchaItem)item).Value = arrItem.Value<string>("value");
-                        ((RecaptchaItem)item).Cookie = arrItem.Value<string>("cookie");
-                        ((RecaptchaItem)item).Version = arrItem.Value<string>("version");
-                        ((RecaptchaItem)item).Challenge = arrItem.Value<string>("challenge");
-                        break;
                 }
             }
         }
@@ -113,10 +106,6 @@ namespace Jackett.Common.Models.IndexerConfig
                 };
                 switch (item.ItemType)
                 {
-                    case ItemType.Recaptcha:
-                        jObject["sitekey"] = ((RecaptchaItem)item).SiteKey;
-                        jObject["version"] = ((RecaptchaItem)item).Version;
-                        break;
                     case ItemType.InputString:
                     case ItemType.HiddenData:
                     case ItemType.DisplayInfo:
@@ -181,7 +170,7 @@ namespace Jackett.Common.Models.IndexerConfig
             if (!forDisplay)
             {
                 properties = properties
-                    .Where(p => p.ItemType == ItemType.HiddenData || p.ItemType == ItemType.InputBool || p.ItemType == ItemType.InputString || p.ItemType == ItemType.InputCheckbox || p.ItemType == ItemType.InputSelect || p.ItemType == ItemType.Recaptcha || p.ItemType == ItemType.DisplayInfo)
+                    .Where(p => p.ItemType == ItemType.HiddenData || p.ItemType == ItemType.InputBool || p.ItemType == ItemType.InputString || p.ItemType == ItemType.InputCheckbox || p.ItemType == ItemType.InputSelect || p.ItemType == ItemType.DisplayInfo)
                     .ToList();
             }
 
@@ -237,17 +226,6 @@ namespace Jackett.Common.Models.IndexerConfig
             public string Value { get; set; }
             public string Cookie { get; set; }
             public StringItem() => ItemType = ItemType.InputString;
-        }
-
-        public class RecaptchaItem : StringItem
-        {
-            public string Version { get; set; }
-            public string Challenge { get; set; }
-            public RecaptchaItem()
-            {
-                Version = "2";
-                ItemType = ItemType.Recaptcha;
-            }
         }
 
         public class BoolItem : Item

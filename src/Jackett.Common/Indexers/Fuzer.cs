@@ -5,7 +5,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Helpers;
@@ -28,13 +27,8 @@ namespace Jackett.Common.Indexers
         };
 
         private string SearchUrl => SiteLink + "browse.php";
-        private string LoginUrl => SiteLink + "login.php";
 
-        private new ConfigurationDataRecaptchaLogin configData
-        {
-            get => (ConfigurationDataRecaptchaLogin)base.configData;
-            set => base.configData = value;
-        }
+        private new ConfigurationDataCookie configData => (ConfigurationDataCookie)base.configData;
 
         public Fuzer(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
             : base(id: "fuzer",
@@ -64,7 +58,7 @@ namespace Jackett.Common.Indexers
                    client: w,
                    logger: l,
                    p: ps,
-                   configData: new ConfigurationDataRecaptchaLogin())
+                   configData: new ConfigurationDataCookie())
         {
             Encoding = Encoding.GetEncoding("windows-1255");
             Language = "he-il";
@@ -121,70 +115,26 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(76, TorznabCatType.TV, "סדרות");
         }
 
-        public override async Task<ConfigurationData> GetConfigurationForSetup()
-        {
-            var loginPage = await RequestWithCookiesAsync(LoginUrl, string.Empty);
-            var parser = new HtmlParser();
-            var cq = parser.ParseDocument(loginPage.ContentString);
-            var captcha = cq.QuerySelector(".g-recaptcha"); // invisible recaptcha
-            if (captcha != null)
-            {
-                var result = configData;
-                result.CookieHeader.Value = loginPage.Cookies;
-                result.Captcha.SiteKey = captcha.GetAttribute("data-sitekey");
-                result.Captcha.Version = "2";
-                return result;
-            }
-            else
-            {
-                var result = new ConfigurationDataBasicLogin();
-                result.SiteLink.Value = configData.SiteLink.Value;
-                result.Instructions.Value = configData.Instructions.Value;
-                result.Username.Value = configData.Username.Value;
-                result.Password.Value = configData.Password.Value;
-                result.CookieHeader.Value = loginPage.Cookies;
-                return result;
-            }
-        }
-
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-            if (!string.IsNullOrWhiteSpace(configData.Captcha.Cookie))
-            {
-                CookieHeader = configData.Captcha.Cookie;
-                try
-                {
-                    var results = await PerformQuery(new TorznabQuery());
-                    if (!results.Any())
-                        throw new Exception("Found 0 results in the tracker");
-                    IsConfigured = true;
-                    SaveConfig();
-                    return IndexerConfigurationStatus.Completed;
-                }
-                catch (Exception e)
-                {
-                    IsConfigured = false;
-                    throw new Exception("Your cookie did not work: " + e.Message);
-                }
-            }
 
-            var loginPage = await RequestWithCookiesAsync(LoginUrl, string.Empty);
-            var pairs = new Dictionary<string, string>
+            CookieHeader = configData.Cookie.Value;
+            try
             {
-                {"vb_login_username", configData.Username.Value},
-                {"vb_login_password", ""},
-                {"securitytoken", "guest"},
-                {"do", "login"},
-                {"vb_login_md5password", StringUtil.Hash(configData.Password.Value).ToLower()},
-                {"vb_login_md5password_utf", StringUtil.Hash(configData.Password.Value).ToLower()},
-                {"cookieuser", "1"}
-            };
-            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, null, LoginUrl);
-            await ConfigureIfOK(result.Cookies, result.ContentString?.Contains("images/loading.gif") == true,
-                                () => throw new ExceptionWithConfigData("Couldn't login", configData));
-            Thread.Sleep(2);
-            return IndexerConfigurationStatus.RequiresTesting;
+                var results = await PerformQuery(new TorznabQuery());
+                if (!results.Any())
+                    throw new Exception("Found 0 results in the tracker");
+
+                IsConfigured = true;
+                SaveConfig();
+                return IndexerConfigurationStatus.Completed;
+            }
+            catch (Exception e)
+            {
+                IsConfigured = false;
+                throw new Exception("Your cookie did not work: " + e.Message);
+            }
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)

@@ -21,11 +21,9 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class BitHDTV : BaseWebIndexer
     {
-        private string LoginUrl => SiteLink + "login.php";
-        private string TakeLoginUrl => SiteLink + "takelogin.php";
         private string SearchUrl => SiteLink + "torrents.php";
 
-        private new ConfigurationDataRecaptchaLogin configData => (ConfigurationDataRecaptchaLogin)base.configData;
+        private new ConfigurationDataCookie configData => (ConfigurationDataCookie)base.configData;
 
         public BitHDTV(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
             : base(id: "bithdtv",
@@ -47,7 +45,7 @@ namespace Jackett.Common.Indexers
                    client: w,
                    logger: l,
                    p: ps,
-                   configData: new ConfigurationDataRecaptchaLogin("For best results, change the 'Torrents per page' setting to 100 in your profile."))
+                   configData: new ConfigurationDataCookie("For best results, change the 'Torrents per page' setting to 100 in your profile."))
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "en-us";
@@ -66,59 +64,26 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(11, TorznabCatType.XXX); // XXX
         }
 
-        public override async Task<ConfigurationData> GetConfigurationForSetup()
-        {
-            var result = configData;
-            var loginPage = await RequestWithCookiesAsync(LoginUrl, configData.CookieHeader.Value);
-            if (loginPage.IsRedirect)
-                return result; // already logged in
-            var parser = new HtmlParser();
-            var cq = parser.ParseDocument(loginPage.ContentString);
-            var recaptchaSiteKey = cq.QuerySelector(".g-recaptcha")?.GetAttribute("data-sitekey");
-            result.CookieHeader.Value = loginPage.Cookies;
-            result.Captcha.SiteKey = recaptchaSiteKey;
-            result.Captcha.Version = "2";
-            return result;
-        }
-
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-            var pairs = new Dictionary<string, string>
-            {
-                {"username", configData.Username.Value},
-                {"password", configData.Password.Value},
-                {"g-recaptcha-response", configData.Captcha.Value}
-            };
-            if (!string.IsNullOrWhiteSpace(configData.Captcha.Cookie))
-            {
-                // Cookie was manually supplied
-                CookieHeader = configData.Captcha.Cookie;
-                try
-                {
-                    var results = await PerformQuery(new TorznabQuery());
-                    if (!results.Any())
-                        throw new Exception("Found 0 results in the tracker");
-                    IsConfigured = true;
-                    SaveConfig();
-                    return IndexerConfigurationStatus.Completed;
-                }
-                catch (Exception e)
-                {
-                    IsConfigured = false;
-                    throw new Exception("Your cookie did not work: " + e.Message);
-                }
-            }
 
-            var response = await RequestLoginAndFollowRedirect(TakeLoginUrl, pairs, null, true, referer: SiteLink);
-            await ConfigureIfOK(response.Cookies, response.ContentString?.Contains("logout.php") == true, () =>
+            CookieHeader = configData.Cookie.Value;
+            try
             {
-                var parser = new HtmlParser();
-                var dom = parser.ParseDocument(response.ContentString);
-                var errorMessage = dom.QuerySelector("table.detail td.text").FirstChild.TextContent.Trim();
-                throw new ExceptionWithConfigData(errorMessage, configData);
-            });
-            return IndexerConfigurationStatus.RequiresTesting;
+                var results = await PerformQuery(new TorznabQuery());
+                if (!results.Any())
+                    throw new Exception("Found 0 results in the tracker");
+
+                IsConfigured = true;
+                SaveConfig();
+                return IndexerConfigurationStatus.Completed;
+            }
+            catch (Exception e)
+            {
+                IsConfigured = false;
+                throw new Exception("Your cookie did not work: " + e.Message);
+            }
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
