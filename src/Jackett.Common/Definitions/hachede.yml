@@ -33,6 +33,7 @@ caps:
     - {id: 137, cat: TV/HD, desc: "Series WEB-DL DISNEY PLUS"}
     - {id: 139, cat: TV/HD, desc: "Series WEB-DL APPLE TV+"}
     - {id: 44, cat: TV/Other, desc: "Series HDTVrip"}
+    - {id: 144, cat: TV/HD, desc: "Series WEB-DL ATRESPLAYER PREMIUM"}
     - {id: 89, cat: TV/HD, desc: "Series HDiTunes"}
     - {id: 57, cat: TV/HD, desc: "Series Full Bluray"}
     - {id: 40, cat: TV/HD, desc: "Series BDRemux"}
