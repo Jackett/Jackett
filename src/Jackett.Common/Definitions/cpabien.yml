@@ -69,7 +69,7 @@ settings:
   - name: info_8000
     type: info
     label: About cpasbien Categories
-    default: cpasbien does not return categories in its search results page. To add to Sonarr or Radarr replace all categories with 8000(Other).
+    default: cpasbien does not return categories in its search results.</br>To add to your Apps' Torznab indexer, replace all categories with 8000(Other).
   - name: multilang
     type: checkbox
     label: Replace MULTI by another language in release name

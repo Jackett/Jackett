@@ -23,7 +23,7 @@ settings:
   - name: info_8000
     type: info
     label: About Torrent4You Categories
-    default: Torrent4You does not return categories in its search results page. To add to Sonarr or Radarr replace all categories with 8000(Other).
+    default: Torrent4You does not return categories in its search results.</br>To add to your Apps' Torznab indexer, replace all categories with 8000(Other).
   - name: sort
     type: select
     label: Sort requested from site
