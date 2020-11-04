@@ -149,8 +149,7 @@ namespace Jackett.Common.Indexers
                         release.Comments = new Uri(SiteLink + qLinkComm.GetAttribute("href"));
                         var dateString = row.QuerySelector(".datetime")?.GetAttribute("data-timestamp");
                         if (dateString != null)
-                            release.PublishDate = DateTimeUtil
-                                                  .UnixTimestampToDateTime(ParseUtil.CoerceDouble(dateString)).ToLocalTime();
+                            release.PublishDate = DateTimeUtil.UnixTimestampToDateTime(ParseUtil.CoerceDouble(dateString));
                         var infoString = row.QuerySelector("td:nth-of-type(4)").TextContent;
                         release.Size = ParseUtil.CoerceLong(
                             Regex.Match(infoString, "\\((\\d+)\\)").Value.Replace("(", "").Replace(")", ""));

@@ -4,7 +4,7 @@ using Jackett.Common.Helpers;
 using NUnit.Framework;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
-namespace Jackett.Test.TestHelpers
+namespace Jackett.Test.Common.Helpers
 {
     [TestFixture]
     public class WebUtilityHelpersTests
@@ -54,6 +54,13 @@ namespace Jackett.Test.TestHelpers
         }
 
         [Test]
+        public void WebUtilityHelpers_UrlEncode_BadEncodes()
+        {
+            var encoded = WebUtilityHelpers.UrlEncode(null, Encoding.UTF8);
+            Assert.AreEqual("", encoded);
+        }
+
+        [Test]
         public void WebUtilityHelpers_UrlDecode_CorrectlyDecodes()
         {
             foreach (var encoding in _codePagesToTest)
@@ -67,6 +74,13 @@ namespace Jackett.Test.TestHelpers
                     Assert.AreEqual(netString, webUtilityString, $"{testString} did not match the expected decoded value after encoding with {encoding.EncodingName})");
                 }
             }
+        }
+
+        [Test]
+        public void WebUtilityHelpers_UrlDecode_BadDecodes()
+        {
+            var decoded = WebUtilityHelpers.UrlDecode(null, Encoding.UTF8);
+            Assert.AreEqual("", decoded);
         }
     }
 }
