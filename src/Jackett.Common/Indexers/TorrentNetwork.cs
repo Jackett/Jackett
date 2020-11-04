@@ -233,7 +233,7 @@ namespace Jackett.Common.Indexers
                     //var row13 = (string)torrent[13];
                     //var row14 = (long)torrent[14];
                     var link = new Uri(SiteLink + "sdownload/" + torrentID + "/" + passkey);
-                    var publishDate = DateTimeUtil.UnixTimestampToDateTime((double)torrent[3]).ToLocalTime();
+                    var publishDate = DateTimeUtil.UnixTimestampToDateTime((double)torrent[3]);
                     var downloadVolumeFactor = (long)torrent[10] switch
                     {
                         // Only Up

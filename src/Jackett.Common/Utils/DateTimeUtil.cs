@@ -4,6 +4,9 @@ using System.Text.RegularExpressions;
 
 namespace Jackett.Common.Utils
 {
+    /// <summary>
+    /// All functions MUST return local time (local time zone)
+    /// </summary>
     public static class DateTimeUtil
     {
         public const string Rfc1123ZPattern = "ddd, dd MMM yyyy HH':'mm':'ss z";
@@ -27,7 +30,7 @@ namespace Jackett.Common.Utils
         {
             var unixStart = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
             var unixTimeStampInTicks = (long)(unixTime * TimeSpan.TicksPerSecond);
-            return new DateTime(unixStart.Ticks + unixTimeStampInTicks);
+            return new DateTime(unixStart.Ticks + unixTimeStampInTicks).ToLocalTime();
         }
 
         public static double DateTimeToUnixTimestamp(DateTime dt)
@@ -50,14 +53,14 @@ namespace Jackett.Common.Utils
             str = str.Replace("and", "");
 
             var timeAgo = TimeSpan.Zero;
-            var timeagoRegex = new Regex(@"\s*?([\d\.]+)\s*?([^\d\s\.]+)\s*?");
-            var timeagoMatches = timeagoRegex.Match(str);
+            var timeAgoRegex = new Regex(@"\s*?([\d\.]+)\s*?([^\d\s\.]+)\s*?");
+            var timeAgoMatches = timeAgoRegex.Match(str);
 
-            while (timeagoMatches.Success)
+            while (timeAgoMatches.Success)
             {
-                var val = ParseUtil.CoerceFloat(timeagoMatches.Groups[1].Value);
-                var unit = timeagoMatches.Groups[2].Value;
-                timeagoMatches = timeagoMatches.NextMatch();
+                var val = ParseUtil.CoerceFloat(timeAgoMatches.Groups[1].Value);
+                var unit = timeAgoMatches.Groups[2].Value;
+                timeAgoMatches = timeAgoMatches.NextMatch();
 
                 if (unit.Contains("sec") || unit == "s")
                     timeAgo += TimeSpan.FromSeconds(val);
@@ -101,14 +104,14 @@ namespace Jackett.Common.Utils
             {
                 str = ParseUtil.NormalizeSpace(str);
                 if (str.ToLower().Contains("now"))
-                    return DateTime.UtcNow;
+                    return DateTime.Now;
 
                 // ... ago
                 var match = _TimeAgoRegexp.Match(str);
                 if (match.Success)
                 {
-                    var timeago = str;
-                    return FromTimeAgo(timeago);
+                    var timeAgo = str;
+                    return FromTimeAgo(timeAgo);
                 }
 
                 // Today ...
