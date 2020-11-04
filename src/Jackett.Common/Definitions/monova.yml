@@ -1,7 +1,7 @@
 ---
 id: monova
 name: Monova
-description: "Monova is a Public torrent index."
+description: "Monova is a Public torrent index"
 language: en-us
 type: public
 encoding: UTF-8
@@ -52,7 +52,7 @@ search:
   paths:
     # https://monova.to/search?term=vikings+s05e05
     # https://monova.to/video
-    - path: "{{ if .Keywords }}search?term={{ .Keywords }}{ {else }}video{{ end }}"
+    - path: "{{ if .Keywords }}search?term={{ .Keywords }}{{ else }}video{{ end }}"
     - path: "{{ if .Keywords }}search?term={{ .Keywords }}&{{ else }}video?{{ end }}page=2"
     - path: "{{ if .Keywords }}search?term={{ .Keywords }}&{{ else }}video?{{ end }}page=3"
     - path: "{{ if .Keywords }}search?term={{ .Keywords }}&{{ else }}video?{{ end }}page=4"
@@ -79,23 +79,12 @@ search:
     details:
       selector: td.torrent_name a
       attribute: href
-    _magnetfilename: # convert title to valid magnet filename
-      text: "{{ .Result.title }}"
-      filters:
-        - name: validfilename
-        - name: urlencode
-    magnet: # generate magnet link from details link
+    infohash:
       selector: td.torrent_name a
       attribute: href
       filters:
         - name: regexp
           args: ([0-9A-Fa-f]{40})
-        - name: prepend
-          args: "magnet:?xt=urn:btih:"
-        - name: append
-          args: "&dn={{ .Result._magnetfilename }}.torrent"
-        - name: append
-          args: "&tr=udp://tracker.opentrackr.org:1337&tr=udp://tracker.coppersurfer.tk:6969&tr=udp://tracker.internetwarriors.net:1337&tr=udp://tracker.leechers-paradise.org:6969"
     size:
       optional: true
       selector: td.center-align
