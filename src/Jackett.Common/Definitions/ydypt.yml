@@ -10,18 +10,18 @@ links:
 
 caps:
   categorymappings:
-    - {id: 420, cat: Movies/BluRay, desc: "电影BluRay"}
-    - {id: 423, cat: Movies/HD, desc: "电影HD"}
-    - {id: 424, cat: TV/HD, desc: "剧集BluRay"}
-    - {id: 421, cat: TV/HD, desc: "剧集HD"}
-    - {id: 506, cat: XXX, desc: "有码 AV BluRay"}
-    - {id: 500, cat: XXX, desc: "有码 AV HD"}
-    - {id: 507, cat: XXX, desc: "无码 AV BluRay"}
-    - {id: 501, cat: XXX, desc: "无码 AV HD"}
-    - {id: 503, cat: XXX, desc: "欧美 AV"}
-    - {id: 502, cat: XXX, desc: "国产自拍"}
-    - {id: 509, cat: XXX, desc: "里番 H-Anime"}
-    - {id: 422, cat: XXX, desc: "其他"}
+    - {id: 420, cat: Movies/BluRay, desc: "电影BluRay Movies"}
+    - {id: 423, cat: Movies/HD, desc: "电影HD Movies"}
+    - {id: 424, cat: TV/HD, desc: "剧集BluRay TV"}
+    - {id: 421, cat: TV/HD, desc: "剧集HD TV"}
+    - {id: 506, cat: XXX, desc: "有码censured BluRay 3X"}
+    - {id: 500, cat: XXX, desc: "有码censured HD 3X"}
+    - {id: 507, cat: XXX, desc: "无码uncensured BluRay 3X"}
+    - {id: 501, cat: XXX, desc: "无码uncensured HD 3X"}
+    - {id: 503, cat: XXX, desc: "欧美Euro&USA 3X"}
+    - {id: 502, cat: XXX, desc: "国产自拍Homemade 3X"}
+    - {id: 509, cat: XXX, desc: "里番H-Anime"}
+    - {id: 422, cat: XXX, desc: "其他Other 3X"}
 
   modes:
     search: [q]
