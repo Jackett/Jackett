@@ -93,7 +93,7 @@ search:
     # 0 all, 1 popular, 2 classic, 3 recomended, 4 normal
     picktype: 0
     # 0 title, 3 uploader, 4 movie info, 5 movie number, 6 torrent hash, 7 active
-    search_area: "{{ if .Query.IMDBID }}5{{else}}0{{end}}"
+    search_area: "{{ if .Query.IMDBID }}5{{ else }}0{{ end }}"
     # 0 AND, 1 OR, 2 exact
     search_mode: 0
     sort: "{{ .Config.sort }}"
@@ -117,7 +117,7 @@ search:
       optional: true
       selector: a[title][href^="details.php?id="]
       attribute: title
-    # note: final title processing is at the bottom after descrptions is fetched.
+    # note: final title processing is at the bottom after descriptions is fetched.
     details:
       selector: a[href^="details.php?id="]
       attribute: href
@@ -176,8 +176,8 @@ search:
       selector: td:nth-child(2)
       remove: a, img
     title_english:
-      remove: a, img, b, span
       selector: td:nth-child(2)
+      remove: a, img, b, span
     title:
       text: "{{ if and .Config.english_title .Result.title_english }}{{ .Result.title_english }}{{ else }}{{ .Result.title_raw }}{{ end }}"
 # engine n/a (likely based on NexusPHP)
