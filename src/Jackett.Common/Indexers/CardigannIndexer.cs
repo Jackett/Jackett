@@ -502,47 +502,6 @@ namespace Jackett.Common.Indexers
                 var queryCollection = new NameValueCollection();
                 var pairs = new Dictionary<string, string>();
 
-                var CaptchaConfigItem = (RecaptchaItem)configData.GetDynamic("Captcha");
-
-                if (CaptchaConfigItem != null)
-                {
-                    if (!string.IsNullOrWhiteSpace(CaptchaConfigItem.Cookie))
-                    {
-                        // for remote users just set the cookie and return
-                        CookieHeader = CaptchaConfigItem.Cookie;
-                        return true;
-                    }
-
-                    var CloudFlareCaptchaChallenge = landingResultDocument.QuerySelector("script[src=\"/cdn-cgi/scripts/cf.challenge.js\"]");
-                    if (CloudFlareCaptchaChallenge != null)
-                    {
-                        var CloudFlareQueryCollection = new NameValueCollection
-                        {
-                            ["id"] = CloudFlareCaptchaChallenge.GetAttribute("data-ray"),
-
-                            ["g-recaptcha-response"] = CaptchaConfigItem.Value
-                        };
-                        var ClearanceUrl = resolvePath("/cdn-cgi/l/chk_captcha?" + CloudFlareQueryCollection.GetQueryString());
-                        var ClearanceResult = await RequestWithCookiesAsync(ClearanceUrl.ToString(), referer: SiteLink);
-
-                        if (ClearanceResult.IsRedirect) // clearance successfull
-                        {
-                            // request real login page again
-                            landingResult = await RequestWithCookiesAsync(LoginUrl, referer: SiteLink);
-                            var htmlParser = new HtmlParser();
-                            landingResultDocument = htmlParser.ParseDocument(landingResult.ContentString);
-                        }
-                        else
-                        {
-                            throw new ExceptionWithConfigData(string.Format("Login failed: Cloudflare clearance failed using cookies {0}: {1}", CookieHeader, ClearanceResult.ContentString), configData);
-                        }
-                    }
-                    else
-                    {
-                        pairs.Add("g-recaptcha-response", CaptchaConfigItem.Value);
-                    }
-                }
-
                 var FormSelector = Login.Form;
                 if (FormSelector == null)
                     FormSelector = "form";
@@ -886,35 +845,9 @@ namespace Jackett.Common.Indexers
                 await FollowIfRedirect(landingResult, LoginUrl.AbsoluteUri, overrideCookies: landingResult.Cookies, accumulateCookies: true);
             }
 
+            var hasCaptcha = false;
             var htmlParser = new HtmlParser();
             landingResultDocument = htmlParser.ParseDocument(landingResult.ContentString);
-
-            var hasCaptcha = false;
-
-            var cloudFlareCaptchaScript = landingResultDocument.QuerySelector("script[src*=\"/recaptcha/api.js\"]");
-            var cloudFlareCaptchaGroup = landingResultDocument.QuerySelector("#recaptca_group");
-            var cloudFlareCaptchaDisplay = true;
-            if (cloudFlareCaptchaGroup != null)
-            {
-                var cloudFlareCaptchaGroupStyle = cloudFlareCaptchaGroup.GetAttribute("style");
-                if (cloudFlareCaptchaGroupStyle != null)
-                    cloudFlareCaptchaDisplay = !cloudFlareCaptchaGroupStyle.Contains("display:none;");
-            }
-            var grecaptcha = landingResultDocument.QuerySelector(".g-recaptcha");
-            if (cloudFlareCaptchaScript != null && grecaptcha != null && cloudFlareCaptchaDisplay)
-            {
-                hasCaptcha = true;
-                var CaptchaItem = new RecaptchaItem
-                {
-                    Name = "Captcha",
-                    Version = "2",
-                    // some sites don't store the sitekey in the .g-recaptcha div (e.g. cloudflare captcha challenge page)
-                    SiteKey = grecaptcha.GetAttribute("data-sitekey") ??
-                              landingResultDocument.QuerySelector("[data-sitekey]").GetAttribute("data-sitekey")
-                };
-
-                configData.AddDynamic("Captcha", CaptchaItem);
-            }
 
             if (Login.Captcha != null)
             {

@@ -30,7 +30,6 @@
     <script type="text/javascript" src="../bootstrap/bootstrap.min.js?changed=2017083001"></script>
     <script type="text/javascript" src="../libs/bootstrap-notify.js?changed=2017083001"></script>
     <script type="text/javascript" src="../libs/bootstrap-multiselect.js?changed=2017083001"></script>
-    <!--<script type="text/javascript" src="https://www.google.com/recaptcha/api.js?render=explicit" async defer></script>-->
 
     <link rel="stylesheet" type="text/css" href="../bootstrap/bootstrap.min.css?changed=2017083001">
     <link rel="stylesheet" type="text/css" href="../animate.css?changed=2017083001">
@@ -205,13 +204,6 @@
 
     <div id="modals"></div>
 
-    <script id="setup-item-nonlocalrecaptcha" type="text/x-handlebars-template">
-        <div class="setup-item-recaptcha">
-            <p>This site requires you to solve a ReCaptcha. It's no longer possible to solve the captcha in Jackett. Please enter the cookie for the site manually. <a href="https://github.com/Jackett/Jackett/wiki/Finding-cookies" target="_blank">See here</a> on how get the cookies.</p>
-            <div class="setup-item-label">Full cookie header</div>
-            <input class="form-control" type="text" value="{{cookieheader}}" />
-        </div>
-    </script>
     <script id="setup-item" type="text/x-handlebars-template">
         <div class="setup-item form-group" data-id="{{id}}" data-value="{{value}}" data-type="{{type}}">
             <div class="setup-item-label">{{name}}</div>
@@ -260,10 +252,6 @@
                 {{/ifCond}}
                 {{/each}}
             </select>
-        </div>
-    </script>
-    <script id="setup-item-recaptcha" type="text/x-handlebars-template">
-        <div class="jackettrecaptcha">
         </div>
     </script>
     <script id="setup-item-displayimage" type="text/x-handlebars-template">
@@ -692,6 +680,6 @@
     </script>
 
     <script type="text/javascript" src="../libs/api.js?changed=2017083001"></script>
-    <script type="text/javascript" src="../custom.js?changed=20200926"></script>
+    <script type="text/javascript" src="../custom.js?changed=20201104"></script>
 </body>
 </html>

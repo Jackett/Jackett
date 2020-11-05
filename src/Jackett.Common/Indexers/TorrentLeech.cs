@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -23,7 +22,7 @@ namespace Jackett.Common.Indexers
     {
         private string LoginUrl => SiteLink + "user/account/login/";
         private string SearchUrl => SiteLink + "torrents/browse/list/";
-        private new ConfigurationDataRecaptchaLogin configData => (ConfigurationDataRecaptchaLogin)base.configData;
+        private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
 
         public override string[] LegacySiteLinks { get; protected set; } =
         {
@@ -58,7 +57,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
-                   configData: new ConfigurationDataRecaptchaLogin(
+                   configData: new ConfigurationDataBasicLogin(
                        "For best results, change the 'Default Number of Torrents per Page' setting to 100 in your Profile."))
         {
             Encoding = Encoding.UTF8;
@@ -119,58 +118,9 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(38, TorznabCatType.Other, "Education");
         }
 
-        public override async Task<ConfigurationData> GetConfigurationForSetup()
-        {
-            var loginPage = await RequestWithCookiesAsync(LoginUrl, string.Empty);
-            var parser = new HtmlParser();
-            var dom = parser.ParseDocument(loginPage.ContentString);
-            var captcha = dom.QuerySelector(".g-recaptcha");
-            if (captcha != null)
-            {
-                var result = configData;
-                result.CookieHeader.Value = loginPage.Cookies;
-                result.Captcha.SiteKey = captcha.GetAttribute("data-sitekey");
-                result.Captcha.Version = "2";
-                return result;
-            }
-            else
-            {
-                var result = new ConfigurationDataBasicLogin
-                {
-                    SiteLink = { Value = configData.SiteLink.Value },
-                    Instructions = { Value = configData.Instructions.Value },
-                    Username = { Value = configData.Username.Value },
-                    Password = { Value = configData.Password.Value },
-                    CookieHeader = { Value = loginPage.Cookies }
-                };
-                return result;
-            }
-        }
-
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-
-            if (!string.IsNullOrWhiteSpace(configData.Captcha.Cookie))
-            {
-                CookieHeader = configData.Captcha.Cookie;
-                try
-                {
-                    var results = await PerformQuery(new TorznabQuery());
-                    if (!results.Any())
-                        throw new Exception("Found 0 results in the tracker");
-
-                    IsConfigured = true;
-                    SaveConfig();
-                    return IndexerConfigurationStatus.Completed;
-                }
-                catch (Exception e)
-                {
-                    IsConfigured = false;
-                    throw new Exception("Your cookie did not work: " + e.Message);
-                }
-            }
-
             await DoLogin();
             return IndexerConfigurationStatus.RequiresTesting;
         }
