@@ -107,6 +107,7 @@ login:
 
 search:
   paths:
+    # https://sportscult.org/index.php?search=&page=torrents&category=0&active=0&order=3&by=2
     - path: index.php
   inputs:
     $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
@@ -119,7 +120,7 @@ search:
     by: "{{ .Config.type }}"
 
   rows:
-    selector: table[cellspacing!="1"].lista > tbody > tr:has(a[href^="index.php?page=torrents&category="])
+    selector: table.lista:last-of-type > tbody > tr:has(a[href^="index.php?page=torrents&category="])
 
   fields:
     category:
@@ -129,12 +130,14 @@ search:
         - name: querystring
           args: category
     title:
-      remove: span
-      selector: td:nth-child(2)
+      selector: a[href^="index.php?page=torrent-details&id="]
       filters:
         # strip the upright bars in the title
         - name: re_replace
           args: ["( \\| )+", " "]
+    details:
+      selector: a[href^="index.php?page=torrent-details&id="]
+      attribute: href
     download:
       selector: a[href^="download.php?id="]
       attribute: href
@@ -142,9 +145,6 @@ search:
         # strip the upright bars in the title's filename
         - name: re_replace
           args: ["(\\+%7C\\+)+", "+"]
-    details:
-      selector: a[href^="index.php?page=torrent-details&id="]
-      attribute: href
     size:
       selector: td:nth-child(4)
     seeders:
