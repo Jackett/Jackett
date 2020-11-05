@@ -64,19 +64,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "4"
+    default: 4
     options:
-      "4": "created"
-      "7": "seeders"
-      "5": "size"
-      "1": "title"
+      4: created
+      7: seeders
+      5: size
+      1: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   path: belepes.php
@@ -102,9 +102,9 @@ search:
       args: ["[^a-zA-Z0-9]+", "%"]
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    keywords: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    keywords: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     # t_name, t_description, t_both, t_uploader
-    search_type: "{{ if .Query.IMDBID }}t_description{{else}}t_name{{end}}"
+    search_type: "{{ if .Query.IMDBID }}t_description{{ else }}t_name{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
     # does not return imdb link in results
@@ -113,12 +113,27 @@ search:
     selector: table[border="1"] > tbody > tr:has(a[href*="details.php?id="])
 
   fields:
+    category:
+      selector: a[href^="/browse_old.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
     title:
       selector: a[href*="details.php?id="][onmouseover]
       attribute: onmouseover
       filters:
         - name: regexp
           args: <font class=\\'smalltext\\'>(.*?)</font>
+    details:
+      selector: a[href*="details.php?id="][onmouseover]
+      attribute: href
+    download:
+      selector: a[href*="details.php?id="]
+      attribute: href
+      filters:
+        - name: replace
+          args: ["details.php", "download.php"]
     banner:
       selector: a[href*="details.php?id="][onmouseover]
       attribute: onmouseover
@@ -129,25 +144,6 @@ search:
       optional: true
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
-    details:
-      selector: a[href*="details.php?id="][onmouseover]
-      attribute: href
-    category:
-      selector: a[href^="/browse_old.php?cat="]
-      attribute: href
-      filters:
-        - name: querystring
-          args: cat
-    download:
-      selector: a[href*="details.php?id="]
-      attribute: href
-      filters:
-        - name: replace
-          args: ["details.php", "download.php"]
-    seeders:
-      selector: td:nth-child(7)
-    leechers:
-      selector: td:nth-child(8)
     files:
       selector: td:nth-child(5)
     size:
@@ -156,6 +152,10 @@ search:
       selector: td:nth-child(11):has(b)
       optional: true
       remove: b
+    seeders:
+      selector: td:nth-child(7)
+    leechers:
+      selector: td:nth-child(8)
     downloadvolumefactor:
       case:
         img[src="./pic/freedownload.gif"]: 0
