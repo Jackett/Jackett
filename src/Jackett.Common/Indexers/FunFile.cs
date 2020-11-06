@@ -57,17 +57,17 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "private";
 
-            AddCategoryMapping(44, TorznabCatType.TVAnime); // Anime
-            AddCategoryMapping(22, TorznabCatType.PC); // Applications
-            AddCategoryMapping(43, TorznabCatType.AudioAudiobook); // Audio Books
-            AddCategoryMapping(27, TorznabCatType.Books); // Ebook
-            AddCategoryMapping(4, TorznabCatType.PCGames); // Games
-            AddCategoryMapping(40, TorznabCatType.OtherMisc); // Miscellaneous
-            AddCategoryMapping(19, TorznabCatType.Movies); // Movies
-            AddCategoryMapping(6, TorznabCatType.Audio); // Music
-            AddCategoryMapping(31, TorznabCatType.PCMobileOther); // Portable
-            AddCategoryMapping(49, TorznabCatType.Other); // Tutorials
-            AddCategoryMapping(7, TorznabCatType.TV); // TV
+            AddCategoryMapping(44, TorznabCatType.TVAnime, "Anime");
+            AddCategoryMapping(22, TorznabCatType.PC, "Applications");
+            AddCategoryMapping(43, TorznabCatType.AudioAudiobook, "Audio Books");
+            AddCategoryMapping(27, TorznabCatType.Books, "Ebook");
+            AddCategoryMapping(4, TorznabCatType.PCGames, "Games");
+            AddCategoryMapping(40, TorznabCatType.OtherMisc, "Miscellaneous");
+            AddCategoryMapping(19, TorznabCatType.Movies, "Movies");
+            AddCategoryMapping(6, TorznabCatType.Audio, "Music");
+            AddCategoryMapping(31, TorznabCatType.PCMobileOther, "Portable");
+            AddCategoryMapping(49, TorznabCatType.Other, "Tutorials");
+            AddCategoryMapping(7, TorznabCatType.TV, "TV");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

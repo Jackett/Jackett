@@ -76,7 +76,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("anime[movie]", TorznabCatType.Movies, "Movie");
             AddCategoryMapping("audio", TorznabCatType.Audio, "Music");
             AddCategoryMapping("gamec[game]", TorznabCatType.PCGames, "Game");
-            AddCategoryMapping("gamec[visual_novel]", TorznabCatType.PCGames, "Visual Novel");
+            AddCategoryMapping("gamec[visual_novel]", TorznabCatType.PCGames, "Game Visual Novel");
             AddCategoryMapping("printedtype[manga]", TorznabCatType.BooksComics, "Manga");
             AddCategoryMapping("printedtype[oneshot]", TorznabCatType.BooksComics, "Oneshot");
             AddCategoryMapping("printedtype[anthology]", TorznabCatType.BooksComics, "Anthology");

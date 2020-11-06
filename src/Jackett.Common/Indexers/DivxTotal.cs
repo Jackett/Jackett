@@ -73,13 +73,13 @@ namespace Jackett.Common.Indexers
             var matchWords = new BoolItem { Name = "Match words in title", Value = true };
             configData.AddDynamic("MatchWords", matchWords);
 
-            AddCategoryMapping(DivxTotalCategories.Peliculas, TorznabCatType.MoviesSD);
-            AddCategoryMapping(DivxTotalCategories.PeliculasHd, TorznabCatType.MoviesSD);
-            AddCategoryMapping(DivxTotalCategories.Peliculas3D, TorznabCatType.MoviesHD);
-            AddCategoryMapping(DivxTotalCategories.PeliculasDvdr, TorznabCatType.MoviesDVD);
-            AddCategoryMapping(DivxTotalCategories.Series, TorznabCatType.TVSD);
-            AddCategoryMapping(DivxTotalCategories.Programas, TorznabCatType.PC);
-            AddCategoryMapping(DivxTotalCategories.Otros, TorznabCatType.OtherMisc);
+            AddCategoryMapping(DivxTotalCategories.Peliculas, TorznabCatType.MoviesSD, "Peliculas");
+            AddCategoryMapping(DivxTotalCategories.PeliculasHd, TorznabCatType.MoviesHD, "Peliculas HD");
+            AddCategoryMapping(DivxTotalCategories.Peliculas3D, TorznabCatType.Movies3D, "Peliculas 3D");
+            AddCategoryMapping(DivxTotalCategories.PeliculasDvdr, TorznabCatType.MoviesDVD, "Peliculas DVD-r");
+            AddCategoryMapping(DivxTotalCategories.Series, TorznabCatType.TVSD, "Series");
+            AddCategoryMapping(DivxTotalCategories.Programas, TorznabCatType.PC, "Programas");
+            AddCategoryMapping(DivxTotalCategories.Otros, TorznabCatType.OtherMisc, "Otros");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

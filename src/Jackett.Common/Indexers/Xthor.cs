@@ -98,26 +98,26 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(9, TorznabCatType.MoviesOther, "VOSTFR");
 
             // Series
-            AddCategoryMapping(104, TorznabCatType.TVOther, "BLURAY");
-            AddCategoryMapping(13, TorznabCatType.TVOther, "PACK VF");
-            AddCategoryMapping(15, TorznabCatType.TVHD, "HD VF");
-            AddCategoryMapping(14, TorznabCatType.TVSD, "SD VF");
-            AddCategoryMapping(98, TorznabCatType.TVOther, "PACK VOSTFR");
-            AddCategoryMapping(17, TorznabCatType.TVHD, "HD VF VOSTFR");
-            AddCategoryMapping(16, TorznabCatType.TVSD, "SD VF VOSTFR");
-            AddCategoryMapping(101, TorznabCatType.TVAnime, "PACK ANIME");
+            AddCategoryMapping(104, TorznabCatType.TVOther, "TV BLURAY");
+            AddCategoryMapping(13, TorznabCatType.TVOther, "TV PACK VF");
+            AddCategoryMapping(15, TorznabCatType.TVHD, "TV HD VF");
+            AddCategoryMapping(14, TorznabCatType.TVSD, "TV SD VF");
+            AddCategoryMapping(98, TorznabCatType.TVOther, "TV PACK VOSTFR");
+            AddCategoryMapping(17, TorznabCatType.TVHD, "TV HD VF VOSTFR");
+            AddCategoryMapping(16, TorznabCatType.TVSD, "TV SD VF VOSTFR");
+            AddCategoryMapping(101, TorznabCatType.TVAnime, "ANIME PACK");
             AddCategoryMapping(32, TorznabCatType.TVAnime, "ANIME VF");
             AddCategoryMapping(110, TorznabCatType.TVAnime, "ANIME VOSTFR");
-            AddCategoryMapping(123, TorznabCatType.TVOther, "ANIMATION");
-            AddCategoryMapping(109, TorznabCatType.TVDocumentary, "DOCS");
-            AddCategoryMapping(30, TorznabCatType.TVOther, "EMISSIONS");
-            AddCategoryMapping(34, TorznabCatType.TVOther, "SPORT");
+            AddCategoryMapping(123, TorznabCatType.TVOther, "TV ANIMATION");
+            AddCategoryMapping(109, TorznabCatType.TVDocumentary, "TV DOCS");
+            AddCategoryMapping(30, TorznabCatType.TVOther, "TV EMISSIONS");
+            AddCategoryMapping(34, TorznabCatType.TVOther, "TV SPORT");
 
             // Music
             AddCategoryMapping(20, TorznabCatType.AudioVideo, "CONCERT");
 
             // Books
-            AddCategoryMapping(24, TorznabCatType.BooksEBook, "ENOOKS NOVEL");
+            AddCategoryMapping(24, TorznabCatType.BooksEBook, "EBOOKS NOVEL");
             AddCategoryMapping(96, TorznabCatType.BooksMags, "EBOOKS MAGAZINES");
             AddCategoryMapping(116, TorznabCatType.BooksEBook, "EBOOKS NOVEL JUNIOR");
             AddCategoryMapping(99, TorznabCatType.BooksOther, "EBOOKS BD");

@@ -66,15 +66,15 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "private";
 
-            AddCategoryMapping(1, TorznabCatType.TVAnime, "Anime Series");
-            AddCategoryMapping(2, TorznabCatType.TVAnime, "OVA");
-            AddCategoryMapping(3, TorznabCatType.AudioOther, "Soundtrack");
-            AddCategoryMapping(4, TorznabCatType.BooksComics, "Manga");
-            AddCategoryMapping(5, TorznabCatType.TVAnime, "Anime Movie");
-            AddCategoryMapping(6, TorznabCatType.TVOther, "Live Action");
-            AddCategoryMapping(7, TorznabCatType.BooksOther, "Artbook");
-            AddCategoryMapping(8, TorznabCatType.AudioVideo, "Music Video");
-            AddCategoryMapping(9, TorznabCatType.BooksEBook, "Light Novel");
+            AddCategoryMapping(1, TorznabCatType.TVAnime, "Anime/Series");
+            AddCategoryMapping(2, TorznabCatType.TVAnime, "Anime/OVA");
+            AddCategoryMapping(3, TorznabCatType.AudioOther, "Audio/Soundtrack");
+            AddCategoryMapping(4, TorznabCatType.BooksComics, "Books/Manga");
+            AddCategoryMapping(5, TorznabCatType.TVAnime, "Anime/Movie");
+            AddCategoryMapping(6, TorznabCatType.TVOther, "TV/Live Action");
+            AddCategoryMapping(7, TorznabCatType.BooksOther, "Books/Artbook");
+            AddCategoryMapping(8, TorznabCatType.AudioVideo, "Audio/Music Video");
+            AddCategoryMapping(9, TorznabCatType.BooksEBook, "Books/Light Novel");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

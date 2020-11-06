@@ -76,12 +76,12 @@ namespace Jackett.Common.Indexers
             var matchWords = new BoolItem { Name = "Match words in title", Value = true };
             configData.AddDynamic("MatchWords", matchWords);
 
-            AddCategoryMapping(MejorTorrentCatType.Pelicula, TorznabCatType.Movies);
-            AddCategoryMapping(MejorTorrentCatType.Serie, TorznabCatType.TVSD);
-            AddCategoryMapping(MejorTorrentCatType.SerieHd, TorznabCatType.TVHD);
-            AddCategoryMapping(MejorTorrentCatType.Musica, TorznabCatType.Audio);
+            AddCategoryMapping(MejorTorrentCatType.Pelicula, TorznabCatType.Movies, "Pelicula");
+            AddCategoryMapping(MejorTorrentCatType.Serie, TorznabCatType.TVSD, "Serie");
+            AddCategoryMapping(MejorTorrentCatType.SerieHd, TorznabCatType.TVHD, "Serie HD");
+            AddCategoryMapping(MejorTorrentCatType.Musica, TorznabCatType.Audio, "Musica");
             // Other category is disabled because we have problems parsing documentaries
-            //AddCategoryMapping(MejorTorrentCatType.Otro, TorznabCatType.Other);
+            //AddCategoryMapping(MejorTorrentCatType.Otro, TorznabCatType.Other, "Otro");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

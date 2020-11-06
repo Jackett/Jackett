@@ -57,25 +57,25 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "private";
 
-            AddCategoryMapping(1, TorznabCatType.MoviesSD); // Anime Movie
-            AddCategoryMapping(6, TorznabCatType.MoviesHD); // Anime Movie HD
-            AddCategoryMapping(2, TorznabCatType.TVAnime); // Anime Series
-            AddCategoryMapping(7, TorznabCatType.TVAnime); // Anime Series HD
-            AddCategoryMapping(5, TorznabCatType.XXXDVD); // Hentai (censored)
-            AddCategoryMapping(9, TorznabCatType.XXXDVD); // Hentai (censored) HD
-            AddCategoryMapping(4, TorznabCatType.XXXDVD); // Hentai (un-censored)
-            AddCategoryMapping(8, TorznabCatType.XXXDVD); // Hentai (un-censored) HD
-            AddCategoryMapping(13, TorznabCatType.BooksForeign); // Light Novel
-            AddCategoryMapping(3, TorznabCatType.BooksComics); // Manga
-            AddCategoryMapping(10, TorznabCatType.BooksComics); // Manga 18+
-            AddCategoryMapping(11, TorznabCatType.TVAnime); // OVA
-            AddCategoryMapping(12, TorznabCatType.TVAnime); // OVA HD
-            AddCategoryMapping(14, TorznabCatType.BooksComics); // Doujin Anime
-            AddCategoryMapping(15, TorznabCatType.XXXDVD); // Doujin Anime 18+
-            AddCategoryMapping(16, TorznabCatType.AudioForeign); // Doujin Music
-            AddCategoryMapping(17, TorznabCatType.BooksComics); // Doujinshi
-            AddCategoryMapping(18, TorznabCatType.BooksComics); // Doujinshi 18+
-            AddCategoryMapping(19, TorznabCatType.Audio); // OST
+            AddCategoryMapping(1, TorznabCatType.MoviesSD, "Anime Movie");
+            AddCategoryMapping(6, TorznabCatType.MoviesHD, "Anime Movie HD");
+            AddCategoryMapping(2, TorznabCatType.TVAnime, "Anime Series");
+            AddCategoryMapping(7, TorznabCatType.TVAnime, "Anime Series HD");
+            AddCategoryMapping(5, TorznabCatType.XXXDVD, "Hentai (censored)");
+            AddCategoryMapping(9, TorznabCatType.XXXDVD, "Hentai (censored) HD");
+            AddCategoryMapping(4, TorznabCatType.XXXDVD, "Hentai (un-censored)");
+            AddCategoryMapping(8, TorznabCatType.XXXDVD, "Hentai (un-censored) HD");
+            AddCategoryMapping(13, TorznabCatType.BooksForeign, "Light Novel");
+            AddCategoryMapping(3, TorznabCatType.BooksComics, "Manga");
+            AddCategoryMapping(10, TorznabCatType.BooksComics, "Manga 18+");
+            AddCategoryMapping(11, TorznabCatType.TVAnime, "OVA");
+            AddCategoryMapping(12, TorznabCatType.TVAnime, "OVA HD");
+            AddCategoryMapping(14, TorznabCatType.BooksComics, "Doujin Anime");
+            AddCategoryMapping(15, TorznabCatType.XXXDVD, "Doujin Anime 18+");
+            AddCategoryMapping(16, TorznabCatType.AudioForeign, "Doujin Music");
+            AddCategoryMapping(17, TorznabCatType.BooksComics, "Doujinshi");
+            AddCategoryMapping(18, TorznabCatType.BooksComics, "Doujinshi 18+");
+            AddCategoryMapping(19, TorznabCatType.Audio, "OST");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

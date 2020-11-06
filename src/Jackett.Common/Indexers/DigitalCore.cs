@@ -71,13 +71,13 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(6, TorznabCatType.MoviesHD, "Movies/1080p");
             AddCategoryMapping(7, TorznabCatType.MoviesHD, "Movies/PACKS");
 
-            AddCategoryMapping(8, TorznabCatType.TVHD, "Tv/720p");
-            AddCategoryMapping(9, TorznabCatType.TVHD, "Tv/1080p");
-            AddCategoryMapping(10, TorznabCatType.TVSD, "Tv/SD");
-            AddCategoryMapping(11, TorznabCatType.TVSD, "Tv/DVDR");
-            AddCategoryMapping(12, TorznabCatType.TVHD, "Tv/PACKS");
-            AddCategoryMapping(13, TorznabCatType.TVUHD, "Tv/4K");
-            AddCategoryMapping(14, TorznabCatType.TVHD, "Tv/BluRay");
+            AddCategoryMapping(8, TorznabCatType.TVHD, "TV/720p");
+            AddCategoryMapping(9, TorznabCatType.TVHD, "TV/1080p");
+            AddCategoryMapping(10, TorznabCatType.TVSD, "TV/SD");
+            AddCategoryMapping(11, TorznabCatType.TVSD, "TV/DVDR");
+            AddCategoryMapping(12, TorznabCatType.TVHD, "TV/PACKS");
+            AddCategoryMapping(13, TorznabCatType.TVUHD, "TV/4K");
+            AddCategoryMapping(14, TorznabCatType.TVHD, "TV/BluRay");
 
             AddCategoryMapping(17, TorznabCatType.Other, "Unknown");
             AddCategoryMapping(18, TorznabCatType.PC0day, "Apps/0day");

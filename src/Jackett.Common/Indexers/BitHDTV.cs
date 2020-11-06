@@ -51,17 +51,17 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "private";
 
-            AddCategoryMapping(1, TorznabCatType.TVAnime); // Anime
-            AddCategoryMapping(2, TorznabCatType.MoviesBluRay); // Blu-ray
-            AddCategoryMapping(4, TorznabCatType.TVDocumentary); // Documentaries
-            AddCategoryMapping(6, TorznabCatType.AudioLossless); // HQ Audio
-            AddCategoryMapping(7, TorznabCatType.Movies); // Movies
-            AddCategoryMapping(8, TorznabCatType.AudioVideo); // Music Videos
-            AddCategoryMapping(9, TorznabCatType.Other); // Other
-            AddCategoryMapping(5, TorznabCatType.TVSport); // Sports
-            AddCategoryMapping(10, TorznabCatType.TV); // TV
-            AddCategoryMapping(12, TorznabCatType.TV); // TV/Seasonpack
-            AddCategoryMapping(11, TorznabCatType.XXX); // XXX
+            AddCategoryMapping(1, TorznabCatType.TVAnime, "Anime");
+            AddCategoryMapping(2, TorznabCatType.MoviesBluRay, "Movies/Blu-ray");
+            AddCategoryMapping(4, TorznabCatType.TVDocumentary, "Documentaries");
+            AddCategoryMapping(6, TorznabCatType.AudioLossless, "HQ Audio");
+            AddCategoryMapping(7, TorznabCatType.Movies, "Movies");
+            AddCategoryMapping(8, TorznabCatType.AudioVideo, "Music Videos");
+            AddCategoryMapping(9, TorznabCatType.Other, "Other");
+            AddCategoryMapping(5, TorznabCatType.TVSport, "Sports");
+            AddCategoryMapping(10, TorznabCatType.TV, "TV");
+            AddCategoryMapping(12, TorznabCatType.TV, "TV/Seasonpack");
+            AddCategoryMapping(11, TorznabCatType.XXX, "XXX");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

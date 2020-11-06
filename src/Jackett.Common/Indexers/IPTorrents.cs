@@ -101,7 +101,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(100, TorznabCatType.Movies, "Movie/x265");
 
             AddCategoryMapping(73, TorznabCatType.TV, "TV");
-            AddCategoryMapping(26, TorznabCatType.TVDocumentary, "Documentaries");
+            AddCategoryMapping(26, TorznabCatType.TVDocumentary, "TV/Documentaries");
             AddCategoryMapping(55, TorznabCatType.TVSport, "Sports");
             AddCategoryMapping(78, TorznabCatType.TVSD, "TV/480p");
             AddCategoryMapping(23, TorznabCatType.TVHD, "TV/BD");
@@ -133,19 +133,19 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(37, TorznabCatType.AudioVideo, "Music/Video");
             AddCategoryMapping(21, TorznabCatType.AudioVideo, "Podcast");
 
-            AddCategoryMapping(76, TorznabCatType.Other, "Miscellaneous");
+            AddCategoryMapping(76, TorznabCatType.Other, "Other/Miscellaneous");
             AddCategoryMapping(60, TorznabCatType.TVAnime, "Anime");
             AddCategoryMapping(1, TorznabCatType.PC0day, "Appz");
             AddCategoryMapping(86, TorznabCatType.PC0day, "Appz/Non-English");
             AddCategoryMapping(64, TorznabCatType.AudioAudiobook, "AudioBook");
             AddCategoryMapping(35, TorznabCatType.Books, "Books");
-            AddCategoryMapping(94, TorznabCatType.BooksComics, "Comics");
-            AddCategoryMapping(95, TorznabCatType.BooksOther, "Educational");
-            AddCategoryMapping(98, TorznabCatType.Other, "Fonts");
-            AddCategoryMapping(69, TorznabCatType.PCMac, "Mac");
-            AddCategoryMapping(92, TorznabCatType.BooksMags, "Magazines / Newspapers");
-            AddCategoryMapping(58, TorznabCatType.PCMobileOther, "Mobile");
-            AddCategoryMapping(36, TorznabCatType.Other, "Pics/Wallpapers");
+            AddCategoryMapping(94, TorznabCatType.BooksComics, "Books/Comics");
+            AddCategoryMapping(95, TorznabCatType.BooksOther, "Books/Educational");
+            AddCategoryMapping(98, TorznabCatType.Other, "Other/Fonts");
+            AddCategoryMapping(69, TorznabCatType.PCMac, "Appz/Mac");
+            AddCategoryMapping(92, TorznabCatType.BooksMags, "Books/Magazines & Newspapers");
+            AddCategoryMapping(58, TorznabCatType.PCMobileOther, "Appz/Mobile");
+            AddCategoryMapping(36, TorznabCatType.Other, "Other/Pics/Wallpapers");
 
             AddCategoryMapping(88, TorznabCatType.XXX, "XXX");
             AddCategoryMapping(85, TorznabCatType.XXXOther, "XXX/Magazines");

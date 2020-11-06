@@ -93,11 +93,11 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(39, TorznabCatType.Audio, "Muzyka Soundtracki");
             AddCategoryMapping(40, TorznabCatType.Audio, "Muzyka Teledyski/Koncerty");
             AddCategoryMapping(20, TorznabCatType.PCMobileOther, "GSM/PDA");
-            AddCategoryMapping(42, TorznabCatType.PCMobileOther, " Tapety GSM/PDA");
-            AddCategoryMapping(43, TorznabCatType.PCMobileOther, " Programy GSM/PDA");
-            AddCategoryMapping(44, TorznabCatType.PCMobileOther, " Filmy GSM/PDA");
-            AddCategoryMapping(45, TorznabCatType.PCMobileOther, " Dzwonki GSM/PDA");
-            AddCategoryMapping(46, TorznabCatType.PCMobileOther, " Gry GSM/PDA");
+            AddCategoryMapping(42, TorznabCatType.PCMobileOther, "Tapety GSM/PDA");
+            AddCategoryMapping(43, TorznabCatType.PCMobileOther, "Programy GSM/PDA");
+            AddCategoryMapping(44, TorznabCatType.PCMobileOther, "Filmy GSM/PDA");
+            AddCategoryMapping(45, TorznabCatType.PCMobileOther, "Dzwonki GSM/PDA");
+            AddCategoryMapping(46, TorznabCatType.PCMobileOther, "Gry GSM/PDA");
             AddCategoryMapping(21, TorznabCatType.Books, "Książki/Czasopisma");
             AddCategoryMapping(47, TorznabCatType.BooksEBook, "Książki/Czasopisma E-Booki");
             AddCategoryMapping(48, TorznabCatType.AudioAudiobook, "Książki/Czasopisma Audio-Booki");

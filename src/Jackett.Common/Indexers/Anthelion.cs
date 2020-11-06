@@ -55,9 +55,9 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "private";
 
-            AddCategoryMapping("1", TorznabCatType.Movies, "Feature Film");
-            AddCategoryMapping("2", TorznabCatType.Movies, "Short Film");
-            AddCategoryMapping("3", TorznabCatType.TV, "Miniseries");
+            AddCategoryMapping("1", TorznabCatType.Movies, "Film/Feature");
+            AddCategoryMapping("2", TorznabCatType.Movies, "Film/Short");
+            AddCategoryMapping("3", TorznabCatType.TV, "TV/Miniseries");
             AddCategoryMapping("4", TorznabCatType.Other, "Other");
         }
 

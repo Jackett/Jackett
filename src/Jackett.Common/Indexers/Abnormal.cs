@@ -79,40 +79,29 @@ namespace Jackett.Common.Indexers
             // NET::ERR_CERT_DATE_INVALID expired ‎29 ‎July ‎2020
             w.AddTrustedCertificate(new Uri(SiteLink).Host, "9cb32582b564256146616afddbdb8e7c94c428ed");
 
-            // Movies
-            AddCategoryMapping("MOVIE|DVDR", TorznabCatType.MoviesDVD);             // DVDR
-            AddCategoryMapping("MOVIE|DVDRIP", TorznabCatType.MoviesSD);            // DVDRIP
-            AddCategoryMapping("MOVIE|BDRIP", TorznabCatType.MoviesSD);             // BDRIP
-            AddCategoryMapping("MOVIE|VOSTFR", TorznabCatType.MoviesOther);         // VOSTFR
-            AddCategoryMapping("MOVIE|HD|720p", TorznabCatType.MoviesHD);           // HD 720P
-            AddCategoryMapping("MOVIE|HD|1080p", TorznabCatType.MoviesHD);          // HD 1080P
-            AddCategoryMapping("MOVIE|REMUXBR", TorznabCatType.MoviesBluRay);       // REMUX BLURAY
-            AddCategoryMapping("MOVIE|FULLBR", TorznabCatType.MoviesBluRay);        // FULL BLURAY
-
-            // Series
-            AddCategoryMapping("TV|SD|VOSTFR", TorznabCatType.TV);                  // SD VOSTFR
-            AddCategoryMapping("TV|HD|VOSTFR", TorznabCatType.TVHD);                // HD VOSTFR
-            AddCategoryMapping("TV|SD|VF", TorznabCatType.TVSD);                    // SD VF
-            AddCategoryMapping("TV|HD|VF", TorznabCatType.TVHD);                    // HD VF
-            AddCategoryMapping("TV|PACK|FR", TorznabCatType.TVOther);               // PACK FR
-            AddCategoryMapping("TV|PACK|VOSTFR", TorznabCatType.TVOther);           // PACK VOSTFR
-            AddCategoryMapping("TV|EMISSIONS", TorznabCatType.TVOther);             // EMISSIONS
-
-            // Anime
-            AddCategoryMapping("ANIME", TorznabCatType.TVAnime);                    // ANIME
-
-            // Documentaries
-            AddCategoryMapping("DOCS", TorznabCatType.TVDocumentary);               // DOCS
-
-            // Music
-            AddCategoryMapping("MUSIC|FLAC", TorznabCatType.AudioLossless);         // FLAC
-            AddCategoryMapping("MUSIC|MP3", TorznabCatType.AudioMP3);               // MP3
-            AddCategoryMapping("MUSIC|CONCERT", TorznabCatType.AudioVideo);         // CONCERT
-
-            // Other
-            AddCategoryMapping("PC|APP", TorznabCatType.PC);                        // PC
-            AddCategoryMapping("PC|GAMES", TorznabCatType.PCGames);                 // GAMES
-            AddCategoryMapping("EBOOKS", TorznabCatType.BooksEBook);                // EBOOKS
+            AddCategoryMapping("MOVIE|DVDR", TorznabCatType.MoviesDVD, "DVDR");
+            AddCategoryMapping("MOVIE|DVDRIP", TorznabCatType.MoviesSD, "DVDRIP");
+            AddCategoryMapping("MOVIE|BDRIP", TorznabCatType.MoviesSD, "BDRIP");
+            AddCategoryMapping("MOVIE|VOSTFR", TorznabCatType.MoviesOther, "VOSTFR");
+            AddCategoryMapping("MOVIE|HD|720p", TorznabCatType.MoviesHD, "HD 720P");
+            AddCategoryMapping("MOVIE|HD|1080p", TorznabCatType.MoviesHD, "HD 1080P");
+            AddCategoryMapping("MOVIE|REMUXBR", TorznabCatType.MoviesBluRay, "REMUX BLURAY");
+            AddCategoryMapping("MOVIE|FULLBR", TorznabCatType.MoviesBluRay, "FULL BLURAY");
+            AddCategoryMapping("TV|SD|VOSTFR", TorznabCatType.TV, "TV SD VOSTFR");
+            AddCategoryMapping("TV|HD|VOSTFR", TorznabCatType.TVHD, "TV HD VOSTFR");
+            AddCategoryMapping("TV|SD|VF", TorznabCatType.TVSD, "TV SD VF");
+            AddCategoryMapping("TV|HD|VF", TorznabCatType.TVHD, "TV HD VF");
+            AddCategoryMapping("TV|PACK|FR", TorznabCatType.TVOther, "TV PACK FR");
+            AddCategoryMapping("TV|PACK|VOSTFR", TorznabCatType.TVOther, "TV PACK VOSTFR");
+            AddCategoryMapping("TV|EMISSIONS", TorznabCatType.TVOther, "TV EMISSIONS");
+            AddCategoryMapping("ANIME", TorznabCatType.TVAnime, "ANIME");
+            AddCategoryMapping("DOCS", TorznabCatType.TVDocumentary, "TV DOCS");
+            AddCategoryMapping("MUSIC|FLAC", TorznabCatType.AudioLossless, "FLAC");
+            AddCategoryMapping("MUSIC|MP3", TorznabCatType.AudioMP3, "MP3");
+            AddCategoryMapping("MUSIC|CONCERT", TorznabCatType.AudioVideo, "CONCERT");
+            AddCategoryMapping("PC|APP", TorznabCatType.PC, "PC");
+            AddCategoryMapping("PC|GAMES", TorznabCatType.PCGames, "GAMES");
+            AddCategoryMapping("EBOOKS", TorznabCatType.BooksEBook, "EBOOKS");
         }
 
         /// <summary>

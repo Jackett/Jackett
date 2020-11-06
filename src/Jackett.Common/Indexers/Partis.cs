@@ -84,8 +84,8 @@ namespace Jackett.Common.Indexers
 
             // TV Show
             AddCategoryMapping(53, TorznabCatType.TVWEBDL, "TV WEB-DL");
-            AddCategoryMapping(60, TorznabCatType.TVSD, "TV-XviD");
-            AddCategoryMapping(38, TorznabCatType.TVSD, "SD-TV");
+            AddCategoryMapping(60, TorznabCatType.TVSD, "TV XviD");
+            AddCategoryMapping(38, TorznabCatType.TVSD, "TV SD");
             AddCategoryMapping(51, TorznabCatType.TVHD, "TV 1080p/i");
             AddCategoryMapping(52, TorznabCatType.TVHD, "TV 720p/i");
 
