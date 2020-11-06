@@ -99,20 +99,22 @@ namespace Jackett.Common.Models
                                 new XAttribute("type", "application/x-bittorrent")
                             ),
                             r.Category == null ? null : from c in r.Category select GetTorznabElement("category", c),
-                            GetTorznabElement("magneturl", r.MagnetUri?.AbsoluteUri),
-                            GetTorznabElement("rageid", r.RageID),
-                            GetTorznabElement("thetvdb", r.TVDBId),
                             GetTorznabElement("imdb", r.Imdb?.ToString("D7")),
-                            GetTorznabElement("tmdb", r.TMDb),
+                            GetTorznabElement("imdbid", r.Imdb != null ? "tt" + r.Imdb?.ToString("D7") : null),
+                            GetTorznabElement("rageid", r.RageID),
+                            GetTorznabElement("tvdbid", r.TVDBId),
+                            GetTorznabElement("tmdbid", r.TMDb),
                             GetTorznabElement("author", RemoveInvalidXMLChars(r.Author)),
                             GetTorznabElement("booktitle", RemoveInvalidXMLChars(r.BookTitle)),
                             GetTorznabElement("seeders", r.Seeders),
                             GetTorznabElement("peers", r.Peers),
+                            GetTorznabElement("magneturl", r.MagnetUri?.AbsoluteUri),
                             GetTorznabElement("infohash", RemoveInvalidXMLChars(r.InfoHash)),
                             GetTorznabElement("minimumratio", r.MinimumRatio),
                             GetTorznabElement("minimumseedtime", r.MinimumSeedTime),
                             GetTorznabElement("downloadvolumefactor", r.DownloadVolumeFactor),
-                            GetTorznabElement("uploadvolumefactor", r.UploadVolumeFactor)
+                            GetTorznabElement("uploadvolumefactor", r.UploadVolumeFactor),
+                            GetTorznabElement("coverurl", r.BannerUrl?.AbsoluteUri)
                         )
                     )
                 )

@@ -74,7 +74,7 @@ namespace Jackett.Test.Common.Models
             var xml = resultPage.ToXml(link);
 
             Assert.AreEqual(5, Regex.Matches(xml, validText).Count);
-            Assert.AreEqual(9, Regex.Matches(xml, validLink).Count);
+            Assert.AreEqual(10, Regex.Matches(xml, validLink).Count);
 
             // this should be in another test but it's here to avoid creating the whole object again
             Assert.True(xml.Contains("Tue, 22 Sep 2020 00:00:00 "));
