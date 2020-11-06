@@ -648,7 +648,7 @@ search:
     - name: re_replace # S01E01 to сезон 1 серии 1
       args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "сезон $1 серии $2"]
   inputs:
-    $raw: "{{ if .Categories }}{{ range .Categories }}f[]={{.}}&{{end}}{{else}}f[]=-1{{end}}"
+    $raw: "{{ if .Categories }}{{ range .Categories }}f[]={{.}}&{{end}}{{ else }}f[]=-1{{ end }}"
     prev_allw: 0
     prev_a: 0
     prev_dla: 0
@@ -692,6 +692,12 @@ search:
     selector: tr[id^="tor_"]:has(a[href^="magnet:?xt="])
 
   fields:
+    category:
+      selector: a.gen
+      attribute: href
+      filters:
+        - name: querystring
+          args: f
     title:
       selector: a.genmed:nth-child(2), a.seedmed:nth-child(2)
       filters:
@@ -716,12 +722,6 @@ search:
     magnet:
       selector: a[href^="magnet:?xt="]
       attribute: href
-    category:
-      selector: a.gen
-      attribute: href
-      filters:
-        - name: querystring
-          args: f
     size:
       selector: td:nth-child(7) > u
     seeders:

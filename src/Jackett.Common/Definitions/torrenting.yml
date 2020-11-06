@@ -77,20 +77,20 @@ search:
     selector: table#torrentsTable > tbody > tr:has(td.torrentNameInfo)
 
   fields:
-    download:
-      selector: a[href^="/download.php/"]
-      attribute: href
-    title:
-      selector: a[href^="/details.php?id="]
-    details:
-      selector: a[href^="/details.php?id="]
-      attribute: href
     category:
       selector: a[href^="?"]
       attribute: href
       filters:
         - name: replace
           args: ["?", ""]
+    title:
+      selector: a[href^="/details.php?id="]
+    details:
+      selector: a[href^="/details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="/download.php/"]
+      attribute: href
     date:
       selector: td.torrentNameInfo > div
       filters:

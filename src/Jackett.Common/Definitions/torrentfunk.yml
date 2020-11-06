@@ -58,14 +58,14 @@ search:
       - name: andmatch
 
   fields:
-    title:
-      selector: div a[href^="/torrent/"]
     category:
       selector: td[class^="tv"], td[class^="tn"]
       attribute: class
       filters:
         - name: regexp
           args: (\d+)
+    title:
+      selector: div a[href^="/torrent/"]
     details:
       selector: div a[href^="/torrent/"]
       attribute: href
@@ -93,8 +93,10 @@ search:
       selector: td:nth-child(2):not(:contains("day"))
       optional: true
       filters:
+        - name: append
+          args: " -07:00" # PDT
         - name: dateparse
-          args: "2 Jan"
+          args: "2 Jan -07:00"
     size:
       selector: td:nth-child(3)
     seeders:

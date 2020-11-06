@@ -230,8 +230,10 @@ search:
           args: (\d{2}[\.|\/]\d{2}[\.|\/]\d{4})
         - name: re_replace
           args: ["\\/", "."]
+        - name: append
+          args: " +03:00" # MSK
         - name: dateparse
-          args: "02.01.2006"
+          args: "02.01.2006 -07:00"
     date:
       text: "{{ if .Result.find_date }}{{ .Result.find_date}}{{ else }}now{{ end }}"
     downloadvolumefactor:

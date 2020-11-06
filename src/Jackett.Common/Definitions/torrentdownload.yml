@@ -107,7 +107,7 @@ login:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}search{{ re_replace .Config.sort \"_\" \"\" }}?q={{ .Keywords }}{{else}}{{end}}"
+    - path: "{{ if .Keywords }}search{{ re_replace .Config.sort \"_\" \"\" }}?q={{ .Keywords }}{{ else }}{{ end }}"
 
   rows:
     selector: table.table2 > tbody > tr:has(span.smallish)
@@ -135,6 +135,7 @@ search:
           args: ["Last Month", "1 month ago"]
         - name: replace
           args: ["+", " ago"]
+        - name: timeago
     size:
       selector: td:nth-child(3)
     seeders:

@@ -138,15 +138,18 @@ search:
     selector: "table.tablebrowse > tbody > tr:has(a[href^=\"download_ssl.php\"]){{ if .Config.freeleech }}:has(font[color=\"#730d1e\"]:contains(\"[OnlyUpload]\")){{ else }}{{ end }}"
 
   fields:
-    title:
-      selector: a[title][href^="details.php"]
-      attribute: title
     category:
       selector: a[href*="cat="]
       attribute: href
       filters:
         - name: querystring
           args: cat
+    title:
+      selector: a[title][href^="details.php"]
+      attribute: title
+    details:
+      selector: a[title][href^="details.php"]
+      attribute: href
     comments:
       selector: a[href*="&tocomm="]
       attribute: href

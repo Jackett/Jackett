@@ -69,6 +69,12 @@ search:
     selector: div.glavni_txt table > tbody > tr[id^="record-"]
 
   fields:
+    category:
+      selector: td.kategorije > a[href^="browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
     title:
       selector: a[href^="details.php?id="]
     title:
@@ -85,12 +91,6 @@ search:
     details:
       selector: a[href^="details.php?id="]
       attribute: href
-    category:
-      selector: td.kategorije > a[href^="browse.php?cat="]
-      attribute: href
-      filters:
-        - name: querystring
-          args: cat
     download:
       selector: a[href^="download.php?id="]
       attribute: href

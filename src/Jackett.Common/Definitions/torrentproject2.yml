@@ -83,7 +83,13 @@ search:
       selector: span > a
       attribute: href
     date:
+      # 2020-11-05 07:34:44
       selector: div > span:nth-child(4)
+      filters:
+        - name: append
+          args: " -07:00" # PDT
+        - name: dateparse
+          args: "2006-01-02 15:04:05 -07:00"
     size:
       selector: div > span:nth-child(5)
       filters:
