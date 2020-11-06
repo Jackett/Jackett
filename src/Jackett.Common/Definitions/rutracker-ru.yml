@@ -206,12 +206,15 @@ caps:
     - {id: 1575, cat: Audio/MP3, desc: " |- Traditional Electronic, Ambient, Modern Classical,..."}
     - {id: 1576, cat: Audio/MP3, desc: " |- Industrial, Noise, EBM, Dark Electro, Aggrotech,..."}
     - {id: 1577, cat: Audio/MP3, desc: " |- Electronic music (разные стили)"}
+    - {id: 1630, cat: Audio/MP3, desc: "Рэп, Хип-Хоп, R'n'B"}
+    - {id: 1631, cat: Audio/MP3, desc: " |- Рэп, Хип-Хоп, R'n'B"}
+    - {id: 1632, cat: Audio/MP3, desc: " |- Отечественный Рэп, Хип-Хоп (lossless)"}
+    - {id: 1633, cat: Audio/MP3, desc: " |- Зарубежный Рэп, Хип-Хоп (mp3)"}
+    - {id: 1634, cat: Audio/MP3, desc: " |- Зарубежный Рэп, Хип-Хоп (lossless)"}
     - {id: 1540, cat: Audio/MP3, desc: "Остальные муз. жанры, + Видео"}
     - {id: 1578, cat: Audio/MP3, desc: " |- Российская попса (альбомы, синглы)"}
     - {id: 1170, cat: Audio/MP3, desc: " |- Русский шансон"}
     - {id: 1167, cat: Audio/MP3, desc: " |- Отечественный Рэп, Хип-Хоп"}
-    - {id: 1173, cat: Audio/MP3, desc: " |- Rap, Hip-hop, R'n'B"}
-    - {id: 1607, cat: Audio/MP3, desc: " |- Rap, Hip-hop, R'n'B"}
     - {id: 1604, cat: Audio/MP3, desc: " |- Reggae, Ska, Dub"}
     - {id: 1562, cat: Audio/MP3, desc: " |- Инструментальная и классическая музыка"}
     - {id: 1185, cat: Audio/MP3, desc: " |- New Age, Relax, Meditative"}
