@@ -565,6 +565,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * YingK
  * Zamunda.net
  * Zelka.org
+ * ZonaQ
 </details>
 
 Trackers marked with [![(invite needed)][inviteneeded]](#) have no active maintainer and may be missing features or be broken. If you have an invite for them please send it to garfieldsixtynine -at- gmail.com to get them fixed/improved.
