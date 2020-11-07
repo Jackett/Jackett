@@ -128,8 +128,8 @@ namespace Jackett.Common.Indexers
                     var posterStr = row.QuerySelector("img")?.GetAttribute("src");
                     var poster = !string.IsNullOrWhiteSpace(posterStr) ? new Uri(posterStr) : null;
 
-                    var commentsUri = new Uri(SiteLink + row.QuerySelector("a[data-src]").GetAttribute("href"));
-                    var linkUri = new Uri(SiteLink + row.QuerySelector("a[href*='action=download']").GetAttribute("href"));
+                    var details = new Uri(SiteLink + row.QuerySelector("a[data-src]").GetAttribute("href"));
+                    var link = new Uri(SiteLink + row.QuerySelector("a[href*='action=download']").GetAttribute("href"));
 
                     var qColSize = row.QuerySelector("td:nth-child(3)");
                     var size = ReleaseInfo.GetBytes(qColSize.Children[0].TextContent);
@@ -149,9 +149,9 @@ namespace Jackett.Common.Indexers
                     var release = new ReleaseInfo
                     {
                         Title = title,
-                        Guid = commentsUri,
-                        Comments = commentsUri,
-                        Link = linkUri,
+                        Guid = details,
+                        Details = details,
+                        Link = link,
                         Category = new List<int> { TvCategoryParser.ParseTvShowQuality(title) },
                         Size = size,
                         Files = files,

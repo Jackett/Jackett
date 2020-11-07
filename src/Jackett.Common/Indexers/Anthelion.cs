@@ -116,7 +116,7 @@ namespace Jackett.Common.Indexers
                     var tags = row.QuerySelector("div.torrent_info").FirstChild.TextContent.Replace(" / ", " ").Trim();
                     var title = $"{qDetailsLink.TextContent} {year} {tags}";
                     var description = row.QuerySelector("div.tags").TextContent.Trim();
-                    var comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
+                    var details = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
                     var torrentId = qDetailsLink.GetAttribute("href").Split('=').Last();
                     var link = new Uri(SiteLink + "torrents.php?action=download&id=" + torrentId);
                     var posterStr = qDetailsLink.GetAttribute("data-cover");
@@ -156,7 +156,7 @@ namespace Jackett.Common.Indexers
                         PublishDate = publishDate,
                         Category = category,
                         Link = link,
-                        Comments = comments,
+                        Details = details,
                         Guid = link,
                         Imdb = imdb,
                         Poster = poster,

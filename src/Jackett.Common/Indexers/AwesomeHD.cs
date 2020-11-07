@@ -166,7 +166,7 @@ namespace Jackett.Common.Indexers
 
                     var torrentId = torrent.FirstValue("id");
                     var groupId = torrent.FirstValue("groupid");
-                    var comments = new Uri($"{TorrentUrl}?id={groupId}&torrentid={torrentId}");
+                    var details = new Uri($"{TorrentUrl}?id={groupId}&torrentid={torrentId}");
                     var link = new Uri($"{TorrentUrl}?action=download&id={torrentId}&authkey={authkey}&torrent_pass={passkey}");
 
                     var publishDate = DateTime.Parse(torrent.FirstValue("time"));
@@ -197,7 +197,7 @@ namespace Jackett.Common.Indexers
                     var release = new ReleaseInfo
                     {
                         Title = title.ToString(),
-                        Comments = comments,
+                        Details = details,
                         Link = link,
                         Guid = link,
                         PublishDate = publishDate,

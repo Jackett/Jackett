@@ -188,7 +188,7 @@ namespace Jackett.Common.Indexers
                     if ((!query.IsImdbQuery || !TorznabCaps.MovieSearchImdbAvailable) && !query.MatchQueryStringAND(title))
                         continue;
                     var torrentId = (long)row.t;
-                    var comments = new Uri(SiteLink + "details.php?id=" + torrentId);
+                    var details = new Uri(SiteLink + "details.php?id=" + torrentId);
                     var seeders = (int)row.seeders;
                     var imdbId = (string)row["imdb-id"];
                     var downloadMultiplier = (double?)row["download-multiplier"] ?? 1;
@@ -199,8 +199,8 @@ namespace Jackett.Common.Indexers
                     var release = new ReleaseInfo
                     {
                         Title = title,
-                        Comments = comments,
-                        Guid = comments,
+                        Details = details,
+                        Guid = details,
                         Link = link,
                         PublishDate = publishDate,
                         Category = MapTrackerCatToNewznab(row.c.ToString()),

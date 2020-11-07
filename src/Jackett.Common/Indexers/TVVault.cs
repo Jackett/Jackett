@@ -118,7 +118,7 @@ namespace Jackett.Common.Indexers
 
                     var description = qDetailsLink.NextSibling.TextContent.Trim();
                     title += " " + description;
-                    var comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
+                    var details = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
                     var torrentId = qDetailsLink.GetAttribute("href").Split('=').Last();
                     var link = new Uri(SiteLink + "torrents.php?action=download&id=" + torrentId);
 
@@ -142,7 +142,7 @@ namespace Jackett.Common.Indexers
                         PublishDate = publishDate,
                         Category = category,
                         Link = link,
-                        Comments = comments,
+                        Details = details,
                         Guid = link,
                         Seeders = seeders,
                         Peers = leechers + seeders,

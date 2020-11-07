@@ -146,9 +146,6 @@ search:
         - name: replace
           args: ["y", "years"]
         - name: timeago
-    comments:
-      selector: a[href*="#comments"]
-      attribute: href
     size:
       selector: td:nth-child(6)
     seeders:

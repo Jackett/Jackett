@@ -34,9 +34,7 @@ namespace Jackett.Common.Indexers
     {
         private string LoginUrl => SiteLink + "login.php";
         private string SearchUrl => SiteLink + "torrents.php";
-        private string TorrentCommentUrl => TorrentDescriptionUrl;
-        private string TorrentDescriptionUrl => SiteLink + "torrents.php?id=";
-        private string TorrentDownloadUrl => SiteLink + "torrents.php?action=download&id={id}&authkey={auth_key}&torrent_pass={torrent_pass}";
+        private string DetailsUrl => SiteLink + "torrents.php?id=";
         private string ReplaceMulti => ConfigData.ReplaceMulti.Value;
         private bool Latency => ConfigData.Latency.Value;
         private bool DevMode => ConfigData.DevMode.Value;
@@ -342,12 +340,8 @@ namespace Jackett.Common.Indexers
                     output("Released on: " + date);
 
                     // Torrent Details URL
-                    var detailsLink = new Uri(TorrentDescriptionUrl + id);
-                    output("Details: " + detailsLink.AbsoluteUri);
-
-                    // Torrent Comments URL
-                    var commentsLink = new Uri(TorrentCommentUrl + id);
-                    output("Comments Link: " + commentsLink.AbsoluteUri);
+                    var details = new Uri(DetailsUrl + id);
+                    output("Details: " + details.AbsoluteUri);
 
                     // Torrent Download URL
                     Uri downloadLink = null;
@@ -382,8 +376,8 @@ namespace Jackett.Common.Indexers
                         Peers = seeders + leechers,
                         PublishDate = date,
                         Size = size,
-                        Guid = detailsLink,
-                        Comments = commentsLink,
+                        Guid = details,
+                        Details = details,
                         Link = downloadLink,
                         MinimumRatio = 1,
                         MinimumSeedTime = 172800, // 48 hours

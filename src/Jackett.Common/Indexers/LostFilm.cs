@@ -445,7 +445,7 @@ namespace Jackett.Common.Indexers
                 var playButton = document.QuerySelector("div.external-btn");
                 if (playButton != null && !playButton.ClassList.Contains("inactive"))
                 {
-                    var comments = new Uri(url);
+                    var details = new Uri(url);
 
                     var dateString = document.QuerySelector("div.title-block > div.details-pane > div.left-box").TextContent;
                     dateString = TrimString(dateString, "eng: ", " г."); // '... Дата выхода eng: 09 марта 2012 г. ...' -> '09 марта 2012'
@@ -464,7 +464,7 @@ namespace Jackett.Common.Indexers
 
                     foreach (var release in episodeReleases)
                     {
-                        release.Comments = comments;
+                        release.Details = details;
                         release.PublishDate = date;
                     }
                     releases.AddRange(episodeReleases);
@@ -526,14 +526,14 @@ namespace Jackett.Common.Indexers
                         var dateColumn = lastEpisode.QuerySelector("td.delta");
                         var date = DateFromEpisodeColumn(dateColumn);
 
-                        var comments = new Uri(url); // Current season(-s) page url
+                        var details = new Uri(url); // Current season(-s) page url
 
                         var urlDetails = new TrackerUrlDetails(seasonButton);
                         var seasonReleases = await FetchTrackerReleases(urlDetails);
 
                         foreach (var release in seasonReleases)
                         {
-                            release.Comments = comments;
+                            release.Details = details;
                             release.PublishDate = date;
                         }
 
@@ -592,14 +592,14 @@ namespace Jackett.Common.Indexers
                             var link = dateColumn.GetAttribute("onclick"); // goTo('/series/Prison_Break/season_5/episode_9/',false)
                             link = TrimString(link, '\'', '\'');
                             var episodeUrl = SiteLink + link.TrimStart('/');
-                            var comments = new Uri(episodeUrl);
+                            var details = new Uri(episodeUrl);
 
                             var urlDetails = new TrackerUrlDetails(playButton);
                             var episodeReleases = await FetchTrackerReleases(urlDetails);
 
                             foreach (var release in episodeReleases)
                             {
-                                release.Comments = comments;
+                                release.Details = details;
                                 release.PublishDate = date;
                             }
                             releases.AddRange(episodeReleases);

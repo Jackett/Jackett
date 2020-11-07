@@ -121,15 +121,15 @@ namespace Jackett.Common.Indexers
                 foreach (var torrent in response.Torrents)
                 {
                     var link = new Uri($"{TorrentsEndpoint}/{torrent.Id}/torrent?{dlQueryParams.GetQueryString()}");
-                    var comments = new Uri($"{SiteLink}browse/{torrent.Id}");
+                    var details = new Uri($"{SiteLink}browse/{torrent.Id}");
                     var publishDate = DateTimeUtil.FromUnknown(torrent.CreatedAt);
 
                     var release = new ReleaseInfo
                     {
                         Title = torrent.ReleaseName,
                         Link = link,
-                        Comments = comments,
-                        Guid = comments,
+                        Details = details,
+                        Guid = details,
                         PublishDate = publishDate,
                         Category = MapTrackerCatToNewznab(torrent.Category.ToString()),
                         Size = torrent.Size,

@@ -89,12 +89,12 @@ namespace Jackett.Common.Indexers
                     var magnetUri = new Uri(node.SelectSingleNode("link")?.InnerText);
                     var publishDate = DateTime.Parse(node.SelectSingleNode("pubDate").InnerText, CultureInfo.InvariantCulture);
                     var infoHash = node.SelectSingleNode(".//*[local-name()='info_hash']").InnerText;
-                    var commentsUri = new Uri(BrowseUrl + node.SelectSingleNode(".//*[local-name()='show_id']").InnerText);
+                    var details = new Uri(BrowseUrl + node.SelectSingleNode(".//*[local-name()='show_id']").InnerText);
 
                     var release = new ReleaseInfo
                     {
                         Title = title,
-                        Comments = commentsUri,
+                        Details = details,
                         Category = new List<int> { category },
                         Guid = magnetUri,
                         PublishDate = publishDate,

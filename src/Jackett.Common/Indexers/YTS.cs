@@ -167,7 +167,7 @@ namespace Jackett.Common.Indexers
                         release.DownloadVolumeFactor = 0;
                         release.UploadVolumeFactor = 1;
 
-                        release.Comments = new Uri(movie_item.Value<string>("url"));
+                        release.Details = new Uri(movie_item.Value<string>("url"));
                         release.Poster = new Uri(movie_item.Value<string>("large_cover_image"));
                         release.Guid = release.Link;
 

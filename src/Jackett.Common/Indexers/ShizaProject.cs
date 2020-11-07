@@ -155,7 +155,7 @@ namespace Jackett.Common.Indexers
                 {
                     Title = composeBaseTitle(r),
                     Poster = new Uri(SiteLink + r.QuerySelector("a[data-fancybox]").Attributes["href"].Value),
-                    Comments = uri,
+                    Details = uri,
                     DownloadVolumeFactor = 0,
                     UploadVolumeFactor = 1,
                     Category = new[]{ TorznabCatType.TVAnime.ID }

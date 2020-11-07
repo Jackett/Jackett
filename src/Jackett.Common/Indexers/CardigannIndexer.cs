@@ -1395,19 +1395,10 @@ namespace Jackett.Common.Indexers
                                             break;
                                         case "details":
                                             var url = resolvePath(value, searchUrlUri);
-                                            release.Guid = url;
-                                            release.Comments = url;
+                                            release.Details = url;
                                             if (release.Guid == null)
                                                 release.Guid = url;
                                             value = url.ToString();
-                                            break;
-                                        case "comments":
-                                            var CommentsUrl = resolvePath(value, searchUrlUri);
-                                            if (release.Comments == null)
-                                                release.Comments = CommentsUrl;
-                                            if (release.Guid == null)
-                                                release.Guid = CommentsUrl;
-                                            value = CommentsUrl.ToString();
                                             break;
                                         case "title":
                                             if (FieldModifiers.Contains("append"))

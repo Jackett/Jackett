@@ -152,8 +152,8 @@ namespace Jackett.Common.Indexers
 
                     var qLink = row.Children[1].FirstElementChild;
                     release.Title = qLink.TextContent.Trim();
-                    release.Comments = new Uri(SiteLink + qLink.GetAttribute("href"));
-                    release.Guid = release.Comments;
+                    release.Details = new Uri(SiteLink + qLink.GetAttribute("href"));
+                    release.Guid = release.Details;
 
                     var imdbLink = row.Children[1].QuerySelector("a[href*=imdb]");
                     if (imdbLink != null)

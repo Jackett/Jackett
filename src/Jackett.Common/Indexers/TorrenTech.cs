@@ -139,14 +139,14 @@ namespace Jackett.Common.Indexers
 
                         var qDetailsLink = Row.QuerySelector("a[onmouseover][href*=\"index.php?showtopic=\"]");
                         release.Title = qDetailsLink.TextContent;
-                        release.Comments = new Uri(qDetailsLink.GetAttribute("href"));
-                        release.Link = release.Comments;
+                        release.Details = new Uri(qDetailsLink.GetAttribute("href"));
+                        release.Link = release.Details;
                         release.Guid = release.Link;
 
                         release.DownloadVolumeFactor = 1;
                         release.UploadVolumeFactor = 1;
 
-                        var id = QueryHelpers.ParseQuery(release.Comments.Query)["showtopic"].FirstOrDefault();
+                        var id = QueryHelpers.ParseQuery(release.Details.Query)["showtopic"].FirstOrDefault();
 
                         var desc = Row.QuerySelector("span.desc");
                         var forange = desc.QuerySelector("font.forange");

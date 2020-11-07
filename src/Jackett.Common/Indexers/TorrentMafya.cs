@@ -138,7 +138,7 @@ namespace Jackett.Common.Indexers
             return new ReleaseInfo
             {
                 Title = firstColumn.QuerySelector("a")?.TextContent,
-                Comments = detailsLink,
+                Details = detailsLink,
                 Guid = detailsLink,
                 Link = string.IsNullOrWhiteSpace(fileLink) ? null : new Uri(fileLink),
                 MagnetUri = string.IsNullOrWhiteSpace(magnetLink) ? null : new Uri(magnetLink),

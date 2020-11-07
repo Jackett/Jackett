@@ -150,9 +150,6 @@ search:
     details:
       selector: a[title][href^="details.php"]
       attribute: href
-    comments:
-      selector: a[href*="&tocomm="]
-      attribute: href
     download:
       selector: a[href^="download_ssl.php"]
       attribute: href

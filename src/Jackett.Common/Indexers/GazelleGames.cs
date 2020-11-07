@@ -296,10 +296,11 @@ namespace Jackett.Common.Indexers
                         var publishDate = DateTime.SpecifyKind(
                             DateTime.ParseExact(Time, "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture),
                             DateTimeKind.Unspecified).ToLocalTime();
-                        var comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
+                        var details = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
                         var grabs = ParseUtil.CoerceLong(qGrabs.TextContent);
                         var leechers = ParseUtil.CoerceInt(qLeechers.TextContent);
                         var size = ReleaseInfo.GetBytes(sizeString);
+
                         var release = new ReleaseInfo
                         {
                             MinimumRatio = 1,
@@ -307,7 +308,7 @@ namespace Jackett.Common.Indexers
                             Category = GroupCategory,
                             PublishDate = publishDate,
                             Size = size,
-                            Comments = comments,
+                            Details = details,
                             Link = link,
                             Guid = link,
                             Grabs = grabs,

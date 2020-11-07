@@ -135,11 +135,11 @@ namespace Jackett.Common.Indexers
                     configData.Passkey.Value);
                 var seeders = (int)r["seeders"];
                 var publishDate = DateTimeUtil.UnixTimestampToDateTime((int)r["utadded"]);
-                var comments = new Uri(SiteLink + "details.php?id=" + (string)r["id"]);
+                var details = new Uri(SiteLink + "details.php?id=" + (string)r["id"]);
                 var release = new ReleaseInfo
                 {
                     Title = (string)r["name"],
-                    Comments = comments,
+                    Details = details,
                     Link = link,
                     Category = MapTrackerCatToNewznab((string)r["type_category"]),
                     Size = (long)r["size"],

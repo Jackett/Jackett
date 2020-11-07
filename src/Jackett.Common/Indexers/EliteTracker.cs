@@ -213,7 +213,7 @@ namespace Jackett.Common.Indexers
                     var title = row.Children[1].QuerySelector("a").TextContent;
                     var qLinks = row.Children[2].QuerySelectorAll("a");
                     var link = new Uri(configData.TorrentHTTPSMode.Value ? qLinks[1].GetAttribute("href") : qLinks[0].GetAttribute("href"));
-                    var comments = new Uri(row.Children[1].QuerySelector("a").GetAttribute("href"));
+                    var details = new Uri(row.Children[1].QuerySelector("a").GetAttribute("href"));
                     var size = row.Children[4].TextContent;
                     var grabs = row.Children[5].QuerySelector("a").TextContent;
                     var seeders = ParseUtil.CoerceInt(row.Children[6].QuerySelector("a").TextContent);
@@ -233,7 +233,7 @@ namespace Jackett.Common.Indexers
                         Category = MapTrackerCatToNewznab(cat),
                         Title = title,
                         Link = link,
-                        Comments = comments,
+                        Details = details,
                         Size = ReleaseInfo.GetBytes(size),
                         Seeders = seeders,
                         Grabs = ParseUtil.CoerceLong(grabs),

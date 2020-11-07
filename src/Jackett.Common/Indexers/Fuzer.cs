@@ -191,9 +191,9 @@ namespace Jackett.Common.Indexers
                                     release.Seeders;
                     var fullSize = row.QuerySelector("td:nth-child(4)").TextContent;
                     release.Size = ReleaseInfo.GetBytes(fullSize);
-                    release.Comments = new Uri(SiteLink + row.QuerySelector("a.threadlink[href]").GetAttribute("href"));
+                    release.Details = new Uri(SiteLink + row.QuerySelector("a.threadlink[href]").GetAttribute("href"));
                     release.Link = new Uri(SiteLink + row.QuerySelector("a:has(div.dlimg)").GetAttribute("href"));
-                    release.Guid = release.Comments;
+                    release.Guid = release.Details;
                     //some releases have invalid poster URLs, ignore the posters in this case
                     if (Uri.TryCreate(row.QuerySelector("a[imgsrc]").GetAttribute("imgsrc"),
                                       UriKind.Absolute, out var poster))

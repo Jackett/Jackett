@@ -129,7 +129,7 @@ namespace Jackett.Common.Indexers
                 {
                     Title = composeBaseTitle(document),
                     Poster = new Uri(document.QuerySelector("div.widget__post-info__poster > a").Attributes["href"].Value),
-                    Comments = uri,
+                    Details = uri,
                     DownloadVolumeFactor = 0,
                     UploadVolumeFactor = 1,
                     Category = new[]{ TorznabCatType.TVAnime.ID }

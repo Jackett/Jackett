@@ -109,7 +109,7 @@ namespace Jackett.Common.Indexers
                 {
                     Title = composeTitle(r),
                     Poster = new Uri(Configuration.StaticLink.Value + r.poster.url),
-                    Comments = new Uri(SiteLink + "/release/" + r.code + ".html"),
+                    Details = new Uri(SiteLink + "/release/" + r.code + ".html"),
                     DownloadVolumeFactor = 0,
                     UploadVolumeFactor = 1,
                     Category = new []

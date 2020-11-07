@@ -179,9 +179,9 @@ namespace Jackett.Common.Indexers
             bool matchWords)
         {
             var anchor = row.QuerySelector("a");
-            var commentsLink = anchor.GetAttribute("href");
+            var detailsStr = anchor.GetAttribute("href");
             var title = anchor.TextContent.Trim();
-            var cat = commentsLink.Split('/')[3];
+            var cat = detailsStr.Split('/')[3];
             var categories = MapTrackerCatToNewznab(cat);
             var publishStr = row.QuerySelectorAll("td")[2].TextContent.Trim();
             var publishDate = TryToParseDate(publishStr, DateTime.Now);
@@ -197,24 +197,24 @@ namespace Jackett.Common.Indexers
 
             // parsing is different for each category
             if (cat == DivxTotalCategories.Series)
-                await ParseSeriesRelease(releases, query, commentsLink, cat, publishDate);
+                await ParseSeriesRelease(releases, query, detailsStr, cat, publishDate);
             else if (query.Episode == null) // if it's scene series, we don't return other categories
             {
                 if (cat == DivxTotalCategories.Peliculas || cat == DivxTotalCategories.PeliculasHd ||
                     cat == DivxTotalCategories.Peliculas3D || cat == DivxTotalCategories.PeliculasDvdr)
-                    ParseMovieRelease(releases, query, title, commentsLink, cat, publishDate, sizeStr);
+                    ParseMovieRelease(releases, query, title, detailsStr, cat, publishDate, sizeStr);
                 else
                 {
                     var size = TryToParseSize(sizeStr, DivxTotalFizeSizes.Otros);
-                    GenerateRelease(releases, title, commentsLink, commentsLink, cat, publishDate, size);
+                    GenerateRelease(releases, title, detailsStr, detailsStr, cat, publishDate, size);
                 }
             }
         }
 
         private async Task ParseSeriesRelease(ICollection<ReleaseInfo> releases, TorznabQuery query,
-            string commentsLink, string cat, DateTime publishDate)
+            string detailsStr, string cat, DateTime publishDate)
         {
-            var result = await RequestWithCookiesAsync(commentsLink);
+            var result = await RequestWithCookiesAsync(detailsStr);
 
             if (result.Status != HttpStatusCode.OK)
                 throw new ExceptionWithConfigData(result.ContentString, configData);
@@ -249,14 +249,14 @@ namespace Jackett.Common.Indexers
                     if (query.Episode != null && !episodeTitle.Contains(query.GetEpisodeSearchString()))
                         continue;
 
-                    GenerateRelease(releases, episodeTitle, commentsLink, downloadLink, cat, episodePublish,
+                    GenerateRelease(releases, episodeTitle, detailsStr, downloadLink, cat, episodePublish,
                         DivxTotalFizeSizes.Series);
                 }
             }
         }
 
         private void ParseMovieRelease(ICollection<ReleaseInfo> releases, TorznabQuery query, string title,
-            string commentsLink, string cat, DateTime publishDate, string sizeStr)
+            string detailsStr, string cat, DateTime publishDate, string sizeStr)
         {
             // parse tags in title, we need to put the year after the real title (before the tags)
             // La Maldicion ( HD-CAM)
@@ -292,18 +292,18 @@ namespace Jackett.Common.Indexers
             else
                 throw new Exception("Unknown category " + cat);
 
-            GenerateRelease(releases, title, commentsLink, commentsLink, cat, publishDate, size);
+            GenerateRelease(releases, title, detailsStr, detailsStr, cat, publishDate, size);
         }
 
-        private void GenerateRelease(ICollection<ReleaseInfo> releases, string title, string commentsLink,
+        private void GenerateRelease(ICollection<ReleaseInfo> releases, string title, string detailsStr,
             string downloadLink, string cat, DateTime publishDate, long size)
         {
             var link = new Uri(downloadLink);
-            var comments = new Uri(commentsLink);
+            var details = new Uri(detailsStr);
             var release = new ReleaseInfo
             {
                 Title = title,
-                Comments = comments,
+                Details = details,
                 Link = link,
                 Guid = link,
                 Category = MapTrackerCatToNewznab(cat),

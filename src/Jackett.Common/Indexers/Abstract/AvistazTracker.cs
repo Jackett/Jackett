@@ -172,7 +172,7 @@ without this configuration the torrent download does not work.<br/>You can find 
                 var jsonContent = JToken.Parse(response.ContentString);
                 foreach (var row in jsonContent.Value<JArray>("data"))
                 {
-                    var comments = new Uri(row.Value<string>("url"));
+                    var details = new Uri(row.Value<string>("url"));
                     var link = new Uri(row.Value<string>("download"));
                     var publishDate = DateTime.ParseExact(row.Value<string>("created_at"), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
 
@@ -210,8 +210,8 @@ without this configuration the torrent download does not work.<br/>You can find 
                         Title = row.Value<string>("file_name"),
                         Link = link,
                         InfoHash = row.Value<string>("info_hash"),
-                        Comments = comments,
-                        Guid = comments,
+                        Details = details,
+                        Guid = details,
                         Category = cats,
                         PublishDate = publishDate,
                         Description = description,

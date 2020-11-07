@@ -164,7 +164,7 @@ namespace Jackett.Common.Indexers
 
                     var link = row.QuerySelector("td:nth-of-type(2) a:nth-of-type(1)");
                     release.Guid = new Uri(SiteLink + link.GetAttribute("href"));
-                    release.Comments = release.Guid;
+                    release.Details = release.Guid;
                     release.Title = link.TextContent.Trim();
                     release.Description = release.Title;
 

@@ -174,8 +174,8 @@ namespace Jackett.Common.Indexers
                     release.Files = row.numfiles;
                     release.Grabs = row.times_completed;
 
-                    release.Comments = new Uri(SiteLink + "torrent/" + row.id.ToString() + "/");
-                    release.Guid = release.Comments;
+                    release.Details = new Uri(SiteLink + "torrent/" + row.id.ToString() + "/");
+                    release.Guid = release.Details;
                     release.Link = new Uri(SiteLink + "api/v1/torrents/download/" + row.id.ToString());
 
                     if (row.frileech == 1)

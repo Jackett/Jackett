@@ -163,9 +163,9 @@ namespace Jackett.Common.Indexers
                         continue;
 
                     var title = qTitleLink.TextContent.Trim();
-                    var commentsLink = qTitleLink.GetAttribute("href");
-                    var comments = new Uri(commentsLink);
-                    var link = new Uri(commentsLink.Replace("/index.php?page=torrent-details&", "/download.php?"));
+                    var detailsStr = qTitleLink.GetAttribute("href");
+                    var details = new Uri(detailsStr);
+                    var link = new Uri(detailsStr.Replace("/index.php?page=torrent-details&", "/download.php?"));
                     var qPoster = qTitleLink.GetAttribute("title");
                     var poster = qPoster != null ? new Uri(qPoster) : null;
 
@@ -188,8 +188,8 @@ namespace Jackett.Common.Indexers
                     var release = new ReleaseInfo
                     {
                         Title = title,
-                        Comments = comments,
-                        Guid = comments,
+                        Details = details,
+                        Guid = details,
                         Link = link,
                         PublishDate = publishDate,
                         Poster = poster,

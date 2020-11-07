@@ -184,7 +184,7 @@ namespace Jackett.Common.Indexers
 
                     var title = row.QuerySelector("td[class='lft'] > div > a").TextContent.Trim();
                     var link = new Uri(SiteLink + row.QuerySelector("img[title='Download']").ParentElement.GetAttribute("href").TrimStart('/'));
-                    var comments = new Uri(SiteLink + row.QuerySelector("td[class='lft'] > div > a").GetAttribute("href").TrimStart('/'));
+                    var details = new Uri(SiteLink + row.QuerySelector("td[class='lft'] > div > a").GetAttribute("href").TrimStart('/'));
                     var size = ReleaseInfo.GetBytes(cells[5].TextContent);
                     var grabs = ParseUtil.CoerceInt(cells[6].TextContent);
                     var seeders = ParseUtil.CoerceInt(cells[7].TextContent);
@@ -201,7 +201,7 @@ namespace Jackett.Common.Indexers
                         Title = title,
                         Link = link,
                         Guid = link,
-                        Comments = comments,
+                        Details = details,
                         PublishDate = publishDate,
                         Category = MapTrackerCatToNewznab(cat),
                         Size = size,

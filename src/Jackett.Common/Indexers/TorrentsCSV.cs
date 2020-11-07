@@ -73,7 +73,7 @@ namespace Jackett.Common.Indexers
                 {
                     Title = "[NOT IMPLEMENTED] Empty search is unsupported in this indexer",
                     Guid = new Uri(SiteLink),
-                    Comments = new Uri(SiteLink),
+                    Details = new Uri(SiteLink),
                     MagnetUri = new Uri("magnet:?xt=urn:btih:3333333333333333333333333333333333333333"), // unknown torrent
                     Category = new List<int> { TorznabCatType.Other.ID },
                     PublishDate = new DateTime(),
@@ -121,7 +121,7 @@ namespace Jackett.Common.Indexers
                     var release = new ReleaseInfo
                     {
                         Title = title,
-                        Comments = new Uri(SiteLink), // there is no comments or details link
+                        Details = new Uri(SiteLink), // there is no details link
                         Guid = new Uri($"magnet:?xt=urn:btih:{infoHash}"),
                         InfoHash = infoHash, // magnet link is auto generated from infohash
                         Category = new List<int> { TorznabCatType.Other.ID },

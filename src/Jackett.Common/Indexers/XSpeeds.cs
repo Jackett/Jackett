@@ -264,7 +264,7 @@ namespace Jackett.Common.Indexers
 
                     release.Guid = new Uri(row.QuerySelector("td:nth-of-type(3) a").GetAttribute("href"));
                     release.Link = release.Guid;
-                    release.Comments = new Uri(qDetails.GetAttribute("href"));
+                    release.Details = new Uri(qDetails.GetAttribute("href"));
                     //08-08-2015 12:51
                     release.PublishDate = DateTime.ParseExact(
                         row.QuerySelectorAll("td:nth-of-type(2) div").Last().TextContent.Trim(), "dd-MM-yyyy H:mm",

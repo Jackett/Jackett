@@ -92,9 +92,6 @@ search:
     download:
       selector: td.descargar a
       attribute: href
-    comments:
-      selector: td.foro a
-      attribute: href
     description:
       optional: true
       selector: td.titulo a[class]

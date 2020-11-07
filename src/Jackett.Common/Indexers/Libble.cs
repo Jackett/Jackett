@@ -240,7 +240,7 @@ namespace Jackett.Common.Indexers
 
                             release.Link = new Uri(SiteLink + releaseDownloadDetails.GetAttribute("href"));
                             release.Guid = release.Link;
-                            release.Comments = new Uri(SiteLink + albumNameNode.GetAttribute("href"));
+                            release.Details = new Uri(SiteLink + albumNameNode.GetAttribute("href"));
 
                             // Aug 31 2020, 15:50
                             try

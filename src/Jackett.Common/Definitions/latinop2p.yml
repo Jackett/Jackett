@@ -145,9 +145,6 @@ search:
     magnet:
       selector: a[href^="magnet:?xt="]
       attribute: href
-    comments:
-      selector: td:nth-child(4) a
-      attribute: href
     size:
       selector: td:nth-child(5)
     grabs:

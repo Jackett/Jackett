@@ -340,8 +340,8 @@ namespace Jackett.Common.Indexers.Abstract
             release.Size = (long)torrent["size"];
             release.Seeders = (int)torrent["seeders"];
             release.Peers = (int)torrent["leechers"] + release.Seeders;
-            release.Comments = new Uri(DetailsUrl + torrentId);
-            release.Guid = release.Comments;
+            release.Details = new Uri(DetailsUrl + torrentId);
+            release.Guid = release.Details;
             release.Link = new Uri(DownloadUrl + torrentId);
             var category = (string)torrent["category"];
             if (category == null || category.Contains("Select Category"))

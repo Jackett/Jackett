@@ -31,8 +31,7 @@ namespace Jackett.Common.Indexers
             "https://xthor.to"
         };
 
-        private string TorrentCommentUrl => TorrentDescriptionUrl;
-        private string TorrentDescriptionUrl => SiteLink + "details.php?id={id}";
+        private string TorrentDetailsUrl => SiteLink + "details.php?id={id}";
         private string ReplaceMulti => ConfigData.ReplaceMulti.Value;
         private bool EnhancedAnime => ConfigData.EnhancedAnime.Value;
         private bool DevMode => ConfigData.DevMode.Value;
@@ -254,8 +253,8 @@ namespace Jackett.Common.Indexers
 
                         var publishDate = DateTimeUtil.UnixTimestampToDateTime(torrent.added);
                         //TODO replace with download link?
-                        var guid = new Uri(TorrentDescriptionUrl.Replace("{id}", torrent.id.ToString()));
-                        var comments = new Uri(TorrentCommentUrl.Replace("{id}", torrent.id.ToString()));
+                        var guid = new Uri(TorrentDetailsUrl.Replace("{id}", torrent.id.ToString()));
+                        var details = new Uri(TorrentDetailsUrl.Replace("{id}", torrent.id.ToString()));
                         var link = new Uri(torrent.download_link);
                         var release = new ReleaseInfo
                         {
@@ -273,7 +272,7 @@ namespace Jackett.Common.Indexers
                             UploadVolumeFactor = 1,
                             DownloadVolumeFactor = (torrent.freeleech == 1 ? 0 : 1),
                             Guid = guid,
-                            Comments = comments,
+                            Details = details,
                             Link = link,
                             TMDb = torrent.tmdb_id
                         };

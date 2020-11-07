@@ -149,7 +149,7 @@ namespace Jackett.Common.Indexers
                     }
 
                     release.Guid = new Uri(qTitleLink.GetAttribute("href"));
-                    release.Comments = release.Guid;
+                    release.Details = release.Guid;
 
                     var dateString = row.QuerySelector("td:nth-of-type(5)").TextContent;
                     release.PublishDate = DateTime.ParseExact(dateString, "dd MMM yy", CultureInfo.InvariantCulture);
@@ -161,10 +161,10 @@ namespace Jackett.Common.Indexers
                     }
                     else
                     {
-                        // use comments link as placeholder
+                        // use details link as placeholder
                         // null causes errors during export to torznab
                         // skipping the release prevents newbie users from adding the tracker (empty result)
-                        release.Link = release.Comments;
+                        release.Link = release.Details;
                     }
 
                     var sizeStr = row.QuerySelector("td:nth-of-type(6)").TextContent;

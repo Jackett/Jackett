@@ -211,7 +211,7 @@ namespace Jackett.Common.Indexers
                     var dateGerman = DateTime.SpecifyKind(DateTime.ParseExact(dateStr, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture), DateTimeKind.Unspecified);
                     var pubDateUtc = TimeZoneInfo.ConvertTimeToUtc(dateGerman, germanyTz);
                     var files = ParseUtil.CoerceInt(row.QuerySelector("td:contains(Datei) > strong ~ strong").TextContent);
-                    var comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
+                    var details = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
                     var leechers = ParseUtil.CoerceInt(qLeechers.Text());
                     var size = ReleaseInfo.GetBytes(qSize.TextContent.Replace(".", "").Replace(",", "."));
                     var downloadVolumeFactor = row.QuerySelector("img[title=\"OnlyUpload\"]") != null ? 0 : 1;
@@ -222,7 +222,7 @@ namespace Jackett.Common.Indexers
                         Title = title,
                         Category = MapTrackerCatToNewznab(catStr),
                         Link = link,
-                        Comments = comments,
+                        Details = details,
                         Guid = link,
                         Size = size,
                         Seeders = seeders,

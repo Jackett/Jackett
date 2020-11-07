@@ -304,7 +304,7 @@ namespace Jackett.Common.Indexers
                             MinimumRatio = 1,
                             MinimumSeedTime = 0,
                             Title = title,
-                            Comments = link,
+                            Details = link,
                             Description = qForumLink.TextContent,
                             Link = link,
                             Guid = link,

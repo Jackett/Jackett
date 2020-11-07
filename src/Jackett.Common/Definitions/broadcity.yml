@@ -104,9 +104,6 @@ search:
     download:
       selector: a[href*="download.php?id="]
       attribute: href
-    comments:
-      selector: td:nth-child(4) a
-      attribute: href
     size:
       selector: td:nth-child(5)
     grabs:

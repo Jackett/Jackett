@@ -183,8 +183,8 @@ namespace Jackett.Common.Indexers
                     if (!query.MatchQueryStringAND(release.Title))
                         continue;
 
-                    release.Comments = new Uri(SiteLink + "/" + qLink.GetAttribute("href"));
-                    release.Guid = release.Comments;
+                    release.Details = new Uri(SiteLink + "/" + qLink.GetAttribute("href"));
+                    release.Guid = release.Details;
 
                     var torrentId = qLink.GetAttribute("href").Split('=')[1];
                     release.Link = new Uri(string.Format(DownloadUrl, torrentId));

@@ -100,7 +100,7 @@ namespace Jackett.Common.Indexers.Abstract
                     var release = new ReleaseInfo
                     {
                         Title = (string)r["release_name"],
-                        Comments = new Uri((string)r["details_url"]),
+                        Details = new Uri((string)r["details_url"]),
                         Link = new Uri((string)r["download_url"])
                     };
                     release.Guid = release.Link;

@@ -146,7 +146,7 @@ namespace Jackett.Common.Indexers
                         release.Link = new Uri(SiteLink + qLink.GetAttribute("href"));
                         release.Guid = release.Link;
                         var qLinkComm = row.QuerySelector("td:nth-of-type(5) a.internal");
-                        release.Comments = new Uri(SiteLink + qLinkComm.GetAttribute("href"));
+                        release.Details = new Uri(SiteLink + qLinkComm.GetAttribute("href"));
                         var dateString = row.QuerySelector(".datetime")?.GetAttribute("data-timestamp");
                         if (dateString != null)
                             release.PublishDate = DateTimeUtil.UnixTimestampToDateTime(ParseUtil.CoerceDouble(dateString));

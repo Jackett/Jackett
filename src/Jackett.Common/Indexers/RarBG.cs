@@ -168,7 +168,7 @@ namespace Jackett.Common.Indexers
                     var infoHash = magnetStr.Split(':')[3].Split('&')[0];
 
                     // append app_id to prevent api server returning 403 forbidden
-                    var comments = new Uri(item.Value<string>("info_page") + "&app_id=" + _appId);
+                    var details = new Uri(item.Value<string>("info_page") + "&app_id=" + _appId);
 
                     // ex: 2015-08-16 21:25:08 +0000
                     var dateStr = item.Value<string>("pubdate").Replace(" +0000", "");
@@ -185,7 +185,7 @@ namespace Jackett.Common.Indexers
                         Category = MapTrackerCatDescToNewznab(item.Value<string>("category")),
                         MagnetUri = magnetUri,
                         InfoHash = infoHash,
-                        Comments = comments,
+                        Details = details,
                         PublishDate = publishDate,
                         Guid = magnetUri,
                         Seeders = seeders,

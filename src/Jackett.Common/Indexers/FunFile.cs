@@ -133,7 +133,7 @@ namespace Jackett.Common.Indexers
 
                     var qDetailsLink = row.QuerySelector("a[href^=\"details.php?id=\"]");
                     var title = qDetailsLink.GetAttribute("title").Trim();
-                    var comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
+                    var details = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
 
                     var qCatLink = row.QuerySelector("a[href^=\"browse.php?cat=\"]");
                     var catStr = qCatLink.GetAttribute("href").Split('=')[1].Split('&')[0];
@@ -152,7 +152,7 @@ namespace Jackett.Common.Indexers
                     var release = new ReleaseInfo
                     {
                         Title = title,
-                        Comments = comments,
+                        Details = details,
                         Link = link,
                         Guid = link,
                         Category = MapTrackerCatToNewznab(catStr),

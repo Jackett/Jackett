@@ -221,7 +221,7 @@ namespace Jackett.Common.Indexers
                 foreach (JArray torrent in data)
                 {
                     var torrentID = (long)torrent[2];
-                    var comments = new Uri(SiteLink + "torrent/" + torrentID);
+                    var details = new Uri(SiteLink + "torrent/" + torrentID);
                     //var preDelaySeconds = (long)torrent[4];
                     var seeders = (int)torrent[6];
                     //var imdbRating = (double)torrent[8] / 10;
@@ -249,8 +249,8 @@ namespace Jackett.Common.Indexers
                         MinimumSeedTime = 172800, // 48 hours
                         Category = MapTrackerCatToNewznab(torrent[0].ToString()),
                         Title = torrent[1].ToString(),
-                        Comments = comments,
-                        Guid = comments,
+                        Details = details,
+                        Guid = details,
                         Link = link,
                         PublishDate = publishDate,
                         Size = (long)torrent[5],

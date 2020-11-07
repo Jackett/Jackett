@@ -241,7 +241,7 @@ namespace Jackett.Common.Indexers
         {
             //https://corsaro.red/details/E5BB62E2E58C654F4450325046723A3F013CD7A4
             var magnetUri = new Uri((string)torrent["magnet"]);
-            var comments = new Uri($"{SiteLink}details/{(string)torrent["hash"]}");
+            var details = new Uri($"{SiteLink}details/{(string)torrent["hash"]}");
             var seeders = (int)torrent["seeders"];
             var publishDate = torrent["last_updated"] != null
                 ? DateTime.Parse((string)torrent["last_updated"])
@@ -256,10 +256,10 @@ namespace Jackett.Common.Indexers
                 Seeders = seeders,
                 InfoHash = (string)torrent["hash"],
                 MagnetUri = magnetUri,
-                Comments = comments,
+                Details = details,
                 DownloadVolumeFactor = 0,
                 UploadVolumeFactor = 1,
-                Guid = comments,
+                Guid = details,
                 Peers = seeders + (int)torrent["leechers"],
                 PublishDate = publishDate,
                 Category = MapTrackerCatToNewznab(cat),

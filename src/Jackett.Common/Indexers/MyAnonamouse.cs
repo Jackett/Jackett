@@ -265,8 +265,8 @@ namespace Jackett.Common.Indexers
                     release.Category = MapTrackerCatToNewznab(category);
 
                     release.Link = new Uri(sitelink, "/tor/download.php?tid=" + id);
-                    release.Comments = new Uri(sitelink, "/t/" + id);
-                    release.Guid = release.Comments;
+                    release.Details = new Uri(sitelink, "/t/" + id);
+                    release.Guid = release.Details;
 
                     var dateStr = item.Value<string>("added");
                     var dateTime = DateTime.ParseExact(dateStr, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
