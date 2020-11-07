@@ -271,8 +271,8 @@ namespace Jackett.Common.Indexers
             var files = ParseUtil.CoerceLong(qFiles.TextContent);
             var qPublishDate = row.QuerySelector(".time.tooltip").Attributes["title"].Value;
             var publishDate = DateTime.ParseExact(qPublishDate, "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
-            var qBanner = row.QuerySelector("div.tp-banner img")?.GetAttribute("src");
-            var banner = (qBanner != null && !qBanner.Contains("/static/styles/")) ? new Uri(qBanner) : null;
+            var qPoster = row.QuerySelector("div.tp-banner img")?.GetAttribute("src");
+            var poster = (qPoster != null && !qPoster.Contains("/static/styles/")) ? new Uri(qPoster) : null;
             var description = row.QuerySelector("div.tags")?.TextContent.Trim();
 
             var torrentData = row.QuerySelectorAll(".number_column");
@@ -285,13 +285,14 @@ namespace Jackett.Common.Indexers
             var leechers = int.Parse(torrentData[3].TextContent, NumberStyles.AllowThousands, CultureInfo.InvariantCulture);
             var comments = new Uri(CommentsUrl + torrentId);
             var link = new Uri(DownloadUrl + torrentId);
+
             return new ReleaseInfo
             {
                 Title = title,
                 Category = new List<int> { category }, // Who seasons movies right
                 Link = link,
                 PublishDate = publishDate,
-                BannerUrl = banner,
+                Poster = poster,
                 Description = description,
                 Seeders = seeders,
                 Peers = seeders + leechers,

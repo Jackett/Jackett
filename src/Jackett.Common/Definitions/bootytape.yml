@@ -103,7 +103,7 @@ search:
       attribute: href
     description:
       selector: div.specg
-    banner:
+    poster:
       selector: img[src*="/thbx/imgx/"]
       attribute: src
       optional: true

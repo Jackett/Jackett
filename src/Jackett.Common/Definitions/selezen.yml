@@ -112,7 +112,7 @@ search:
     download:
       selector: div.short-title > a
       attribute: href
-    banner:
+    poster:
       selector: img.poster
       attribute: src
       optional: true

@@ -1,6 +1,6 @@
 # Femdomcult uses the Luminance code, which is based on gazelle
 # ajax.php API additionally needs the auth=$authkey argument
-# Because the API is e.g. missing banner images we use screen scraping instead of the generic gazelle based approach
+# Because the API is e.g. missing poster images we use screen scraping instead of the generic gazelle based approach
 ---
 id: femdomcult
 name: Femdomcult
@@ -106,7 +106,7 @@ search:
     details:
       selector: a[href^="torrents.php?id="]
       attribute: href
-    banner:
+    poster:
       selector: td:nth-child(2) > script
       filters:
         - name: regexp

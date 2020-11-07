@@ -82,7 +82,7 @@ search:
     description:
       selector: img[width="60"]
       attribute: title
-    banner:
+    poster:
       selector: a[onmouseover]
       optional: true
       attribute: onmouseover

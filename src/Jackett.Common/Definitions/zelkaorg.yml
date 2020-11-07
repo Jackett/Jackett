@@ -136,7 +136,7 @@ search:
       selector: td:nth-child(8)
     leechers:
       selector: td:nth-child(9)
-    banner:
+    poster:
       selector: td:nth-child(2) > a:nth-child(1)
       attribute: onmouseover
       filters:

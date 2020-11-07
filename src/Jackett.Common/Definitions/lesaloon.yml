@@ -185,7 +185,7 @@ search:
     download:
       selector: td a[href^="download.php?id="]
       attribute: href
-    banner:
+    poster:
       selector: a[href^="index.php?page=torrent-details"][onmouseover]
       attribute: onmouseover
       filters:

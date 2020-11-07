@@ -44,7 +44,7 @@ search:
     download:
       selector: a
       attribute: href
-    banner:
+    poster:
       selector: img
       attribute: src
       optional: true

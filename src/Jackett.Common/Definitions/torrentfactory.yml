@@ -145,7 +145,7 @@ search:
     download:
       selector: a[href^="download.php"]
       attribute: href
-    banner:
+    poster:
       optional: true
       selector: td[valign="middle"] a
       attribute: onmouseover

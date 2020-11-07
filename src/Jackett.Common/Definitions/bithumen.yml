@@ -97,7 +97,7 @@ search:
     imdb:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
-    banner:
+    poster:
       selector: a[onmouseover^="bithumen.UI.images.coverShow"]
       attribute: onmouseover
       filters:

@@ -118,7 +118,7 @@ namespace Jackett.Common.Indexers
                         if (!CheckTitleMatchWords(query.GetQueryString(), title))
                             continue; // skip if it doesn't contain all words
 
-                        var banner = new Uri(row.QuerySelector("img[id=catalog]").GetAttribute("src"));
+                        var poster = new Uri(row.QuerySelector("img[id=catalog]").GetAttribute("src"));
                         var qLink = row.QuerySelector("a");
                         var comments = new Uri(qLink.GetAttribute("href"));
 
@@ -138,7 +138,7 @@ namespace Jackett.Common.Indexers
                             Link = comments,
                             Guid = comments,
                             PublishDate = lastPublishDate,
-                            BannerUrl = banner,
+                            Poster = poster,
                             Description = description,
                             Category = new List<int> { TorznabCatType.BooksEBook.ID },
                             Size = 5242880, // 5 MB

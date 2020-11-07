@@ -130,7 +130,7 @@ search:
           args: ["(?i)(\\ssubfrench\\s)", " ENGLISH "]
     title:
       text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
-    banner:
+    poster:
       selector: a.torrentlink > img.img-responsive
       attribute: src
     details:

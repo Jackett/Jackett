@@ -46,7 +46,7 @@ search:
           args: "film(\\d+)-"
         - name: prepend
           args: "download.php?id="
-    banner:
+    poster:
       selector: img.im
       attribute: src
     date:

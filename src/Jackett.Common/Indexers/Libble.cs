@@ -261,7 +261,7 @@ namespace Jackett.Common.Indexers
                             release.Seeders = ParseUtil.CoerceInt(releaseSeedsCountDetails.TextContent.Trim());
                             release.Peers = release.Seeders + ParseUtil.CoerceInt(releasePeersCountDetails.TextContent.Trim());
                             release.Size = ReleaseInfo.GetBytes(releaseSizeDetails.TextContent.Trim());
-                            release.BannerUrl = releaseThumbnailUri;
+                            release.Poster = releaseThumbnailUri;
                             release.Category = releaseNewznabCategory;
                             release.MinimumSeedTime = 259200; // 72 hours
 

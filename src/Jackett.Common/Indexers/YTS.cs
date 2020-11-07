@@ -168,7 +168,7 @@ namespace Jackett.Common.Indexers
                         release.UploadVolumeFactor = 1;
 
                         release.Comments = new Uri(movie_item.Value<string>("url"));
-                        release.BannerUrl = new Uri(movie_item.Value<string>("large_cover_image"));
+                        release.Poster = new Uri(movie_item.Value<string>("large_cover_image"));
                         release.Guid = release.Link;
 
                         // map the quality to a newznab category for torznab compatibility (for Radarr, etc)

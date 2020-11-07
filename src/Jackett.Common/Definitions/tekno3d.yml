@@ -99,7 +99,7 @@ search:
           args: [">", "1"]
         - name: replace
           args: ["</b", ""]
-    banner:
+    poster:
       selector: a[href^="details.php?id="]
       optional: true
       attribute: onmouseover

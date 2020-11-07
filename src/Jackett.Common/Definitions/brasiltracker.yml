@@ -94,7 +94,7 @@ search:
       attribute: href
     description:
       selector: div.tags
-    banner:
+    poster:
       selector: img[alt="Cover"]
       attribute: src
       optional: true

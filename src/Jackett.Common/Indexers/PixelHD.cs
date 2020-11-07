@@ -159,7 +159,7 @@ namespace Jackett.Common.Indexers
                 foreach (var Group in Groups)
                 {
                     var groupPoster = Group.QuerySelector("img.classBrowsePoster");
-                    var bannerURL = new Uri(SiteLink + groupPoster.GetAttribute("src"));
+                    var poster = new Uri(SiteLink + groupPoster.GetAttribute("src"));
 
                     long? IMDBId = null;
                     var imdbLink = Group.QuerySelector("a[href*=\"www.imdb.com/title/tt\"]");
@@ -201,7 +201,7 @@ namespace Jackett.Common.Indexers
                             Peers = leechers + seeders,
                             Grabs = grabs,
                             PublishDate = publishDate,
-                            BannerUrl = bannerURL,
+                            Poster = poster,
                             Imdb = IMDBId
                         };
                         releases.Add(release);

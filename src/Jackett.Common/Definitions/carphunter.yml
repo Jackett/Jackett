@@ -137,7 +137,7 @@ search:
       optional: true
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
-    banner:
+    poster:
       optional: true
       selector: a[onmouseover]
       attribute: onmouseover

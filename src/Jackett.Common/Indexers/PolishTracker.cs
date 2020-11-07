@@ -139,15 +139,15 @@ namespace Jackett.Common.Indexers
                     var publishDate = DateTime.Parse(torrent.added.ToString());
                     var imdbId = ParseUtil.GetImdbID(torrent.imdb_id.ToString());
 
-                    Uri banner = null;
+                    Uri poster = null;
                     if ((bool)torrent.poster)
                     {
                         if (torrent["imdb_id"] != null)
-                            banner = new Uri(CdnUrl + "images/torrents/poster/imd/l/" + torrent["imdb_id"] + ".jpg");
+                            poster = new Uri(CdnUrl + "images/torrents/poster/imd/l/" + torrent["imdb_id"] + ".jpg");
                         else if (torrent["cdu_id"] != null)
-                            banner = new Uri(CdnUrl + "images/torrents/poster/cdu/b/" + torrent["cdu_id"] + "_front.jpg");
+                            poster = new Uri(CdnUrl + "images/torrents/poster/cdu/b/" + torrent["cdu_id"] + "_front.jpg");
                         else if (torrent["steam_id"] != null)
-                            banner = new Uri(CdnUrl + "images/torrents/poster/ste/l/" + torrent["steam_id"] + ".jpg");
+                            poster = new Uri(CdnUrl + "images/torrents/poster/ste/l/" + torrent["steam_id"] + ".jpg");
                     }
 
                     var descriptions = new List<string>();
@@ -171,7 +171,7 @@ namespace Jackett.Common.Indexers
                         Seeders = (int)torrent.seeders,
                         Peers = (int)torrent.seeders + (int)torrent.leechers,
                         Imdb = imdbId,
-                        BannerUrl = banner,
+                        Poster = poster,
                         Description = description,
                         MinimumRatio = 1,
                         MinimumSeedTime = 259200, // 72 hours (I can't verify this, but this is a safe value in most trackers)

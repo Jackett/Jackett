@@ -187,7 +187,7 @@ namespace Jackett.Common.Indexers
 
                     if (!string.IsNullOrWhiteSpace(row.firstpic.ToString()))
                     {
-                        release.BannerUrl = (row.firstpic);
+                        release.Poster = (row.firstpic);
                     }
 
 
@@ -202,7 +202,7 @@ namespace Jackett.Common.Indexers
                         descriptions.Add("Rating: " + row.rating);
                         //descriptions.Add("Plot: " + row.plot);
 
-                        release.BannerUrl = new Uri(SiteLink + "img/imdb/" + row.imdbid2 + ".jpg");
+                        release.Poster = new Uri(SiteLink + "img/imdb/" + row.imdbid2 + ".jpg");
                     }
 
                     if ((int)row.p2p == 1)

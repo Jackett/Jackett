@@ -48,7 +48,7 @@ search:
     download:
       selector: a.download
       attribute: href
-    banner:
+    poster:
       selector: div.blog-media p a img
       attribute: data-src
     date:

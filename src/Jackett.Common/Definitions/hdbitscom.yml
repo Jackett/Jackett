@@ -70,7 +70,7 @@ search:
       selector: a[href*="imdb.com/title/tt"]
       optional: true
       attribute: href
-    banner:
+    poster:
       selector: img[alt="Cover"]
       optional: true
       attribute: src

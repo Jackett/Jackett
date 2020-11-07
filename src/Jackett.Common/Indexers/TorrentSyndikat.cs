@@ -191,7 +191,7 @@ namespace Jackett.Common.Indexers
                     var poster = row.Value<string>("poster");
                     if (!string.IsNullOrWhiteSpace(poster))
                     {
-                        release.BannerUrl = new Uri(SiteLink + poster.Substring(1));
+                        release.Poster = new Uri(SiteLink + poster.Substring(1));
                     }
 
                     var descriptions = new List<string>();

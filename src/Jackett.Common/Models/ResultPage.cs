@@ -114,7 +114,7 @@ namespace Jackett.Common.Models
                             GetTorznabElement("minimumseedtime", r.MinimumSeedTime),
                             GetTorznabElement("downloadvolumefactor", r.DownloadVolumeFactor),
                             GetTorznabElement("uploadvolumefactor", r.UploadVolumeFactor),
-                            GetTorznabElement("coverurl", r.BannerUrl?.AbsoluteUri)
+                            GetTorznabElement("coverurl", r.Poster?.AbsoluteUri)
                         )
                     )
                 )

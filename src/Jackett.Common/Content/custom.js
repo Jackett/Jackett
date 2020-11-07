@@ -651,14 +651,14 @@ function updateReleasesRow(row)
     var labels = $(row).find("span.release-labels");
     var TitleLink = $(row).find("td.Title > a");
     var IMDBId = $(row).data("imdb");
-    var Banner = $(row).data("banner");
+    var Poster = $(row).data("poster");
     var Description = $(row).data("description");
     var DownloadVolumeFactor = parseFloat($(row).find("td.DownloadVolumeFactor").html());
     var UploadVolumeFactor = parseFloat($(row).find("td.UploadVolumeFactor").html());
 
     var TitleTooltip = "";
-    if (Banner)
-        TitleTooltip += "<img src='" + Banner + "' /><br />";
+    if (Poster)
+        TitleTooltip += "<img src='" + Poster + "' /><br />";
     if (Description)
         TitleTooltip += Description;
 

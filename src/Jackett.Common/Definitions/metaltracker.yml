@@ -76,7 +76,7 @@ search:
   fields:
     title:
       selector: a h3
-    banner:
+    poster:
       selector: .thumb a img
       attribute: src
     details:

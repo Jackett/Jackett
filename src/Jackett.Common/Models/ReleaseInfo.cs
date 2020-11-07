@@ -28,7 +28,7 @@ namespace Jackett.Common.Models
         public string BookTitle { get; set; }
         public long? Seeders { get; set; }
         public long? Peers { get; set; }
-        public Uri BannerUrl { get; set; }
+        public Uri Poster { get; set; }
         public string InfoHash { get; set; }
         public Uri MagnetUri { get; set; }
         public double? MinimumRatio { get; set; }
@@ -65,7 +65,7 @@ namespace Jackett.Common.Models
             BookTitle = copyFrom.BookTitle;
             Seeders = copyFrom.Seeders;
             Peers = copyFrom.Peers;
-            BannerUrl = copyFrom.BannerUrl;
+            Poster = copyFrom.Poster;
             InfoHash = copyFrom.InfoHash;
             MagnetUri = copyFrom.MagnetUri;
             MinimumRatio = copyFrom.MinimumRatio;
@@ -108,6 +108,6 @@ namespace Jackett.Common.Models
         public static long BytesFromKB(float kb) => (long)(kb * 1024f);
 
         public override string ToString() =>
-            $"[ReleaseInfo: Title={Title}, Guid={Guid}, Link={Link}, Comments={Comments}, PublishDate={PublishDate}, Category={Category}, Size={Size}, Files={Files}, Grabs={Grabs}, Description={Description}, RageID={RageID}, TVDBId={TVDBId}, Imdb={Imdb}, TMDb={TMDb}, Seeders={Seeders}, Peers={Peers}, BannerUrl={BannerUrl}, InfoHash={InfoHash}, MagnetUri={MagnetUri}, MinimumRatio={MinimumRatio}, MinimumSeedTime={MinimumSeedTime}, DownloadVolumeFactor={DownloadVolumeFactor}, UploadVolumeFactor={UploadVolumeFactor}, Gain={Gain}]";
+            $"[ReleaseInfo: Title={Title}, Guid={Guid}, Link={Link}, Comments={Comments}, PublishDate={PublishDate}, Category={Category}, Size={Size}, Files={Files}, Grabs={Grabs}, Description={Description}, RageID={RageID}, TVDBId={TVDBId}, Imdb={Imdb}, TMDb={TMDb}, Seeders={Seeders}, Peers={Peers}, Poster={Poster}, InfoHash={InfoHash}, MagnetUri={MagnetUri}, MinimumRatio={MinimumRatio}, MinimumSeedTime={MinimumSeedTime}, DownloadVolumeFactor={DownloadVolumeFactor}, UploadVolumeFactor={UploadVolumeFactor}, Gain={Gain}]";
     }
 }

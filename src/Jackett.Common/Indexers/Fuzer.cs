@@ -194,10 +194,10 @@ namespace Jackett.Common.Indexers
                     release.Comments = new Uri(SiteLink + row.QuerySelector("a.threadlink[href]").GetAttribute("href"));
                     release.Link = new Uri(SiteLink + row.QuerySelector("a:has(div.dlimg)").GetAttribute("href"));
                     release.Guid = release.Comments;
-                    //some releases have invalid banner URLs, ignore the banners in this case
+                    //some releases have invalid poster URLs, ignore the posters in this case
                     if (Uri.TryCreate(row.QuerySelector("a[imgsrc]").GetAttribute("imgsrc"),
-                                      UriKind.Absolute, out var banner))
-                        release.BannerUrl = banner;
+                                      UriKind.Absolute, out var poster))
+                        release.Poster = poster;
                     var dateStringAll = row.QuerySelector("div.up_info2").ChildNodes.Last().TextContent;
                     var dateParts = dateStringAll.Split(' ');
                     var dateString = dateParts[dateParts.Length - 2] + " " + dateParts[dateParts.Length - 1];

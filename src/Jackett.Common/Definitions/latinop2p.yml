@@ -126,7 +126,7 @@ search:
     details:
       selector: a[href*="torrent-details-"]
       attribute: href
-    banner:
+    poster:
       selector: div[id^="port-content-"] img
       attribute: src
     date:

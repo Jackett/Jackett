@@ -128,7 +128,7 @@ namespace Jackett.Common.Indexers
                 var baseRelease = new ReleaseInfo
                 {
                     Title = composeBaseTitle(document),
-                    BannerUrl = new Uri(document.QuerySelector("div.widget__post-info__poster > a").Attributes["href"].Value),
+                    Poster = new Uri(document.QuerySelector("div.widget__post-info__poster > a").Attributes["href"].Value),
                     Comments = uri,
                     DownloadVolumeFactor = 0,
                     UploadVolumeFactor = 1,

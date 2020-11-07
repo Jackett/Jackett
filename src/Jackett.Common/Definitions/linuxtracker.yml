@@ -350,7 +350,7 @@ search:
       filters:
         - name: querystring
           args: id
-    banner:
+    poster:
       selector: img[src*="/images/categories/"]
       attribute: src
     date:

@@ -292,12 +292,12 @@ namespace Jackett.Common.Indexers
                             Size = size,
                             Category = MapTrackerCatToNewznab(cat)
                         };
-                        var banner = row.QuerySelector("img.infobar_ico")?.GetAttribute("onmouseover");
-                        if (banner != null)
+                        var posterStr = row.QuerySelector("img.infobar_ico")?.GetAttribute("onmouseover");
+                        if (posterStr != null)
                         {
                             // static call to Regex.Match caches the pattern, so we aren't recompiling every loop.
-                            var bannerMatch = Regex.Match(banner, @"mutat\('(.*?)', '", RegexOptions.Compiled);
-                            release.BannerUrl = new Uri(bannerMatch.Groups[1].Value);
+                            var posterMatch = Regex.Match(posterStr, @"mutat\('(.*?)', '", RegexOptions.Compiled);
+                            release.Poster = new Uri(posterMatch.Groups[1].Value);
                         }
 
                         //TODO there is room for improvement here.

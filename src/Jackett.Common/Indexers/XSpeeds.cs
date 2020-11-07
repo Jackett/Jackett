@@ -273,9 +273,9 @@ namespace Jackett.Common.Indexers
                     release.Peers = release.Seeders + ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(8)").TextContent.Trim());
                     release.Size = ReleaseInfo.GetBytes(row.QuerySelector("td:nth-of-type(5)").TextContent.Trim());
 
-                    var qBanner = row.QuerySelector("td:nth-of-type(2) .tooltip-content img");
-                    if (qBanner != null)
-                        release.BannerUrl = new Uri(qBanner.GetAttribute("src"));
+                    var qPoster = row.QuerySelector("td:nth-of-type(2) .tooltip-content img");
+                    if (qPoster != null)
+                        release.Poster = new Uri(qPoster.GetAttribute("src"));
 
                     var cat = row.QuerySelector("td:nth-of-type(1) a").GetAttribute("href");
                     var catSplit = cat.LastIndexOf('=');

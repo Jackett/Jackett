@@ -219,7 +219,7 @@ namespace Jackett.Common.Indexers
                 var date = GetDateFromShowPage(url, content);
 
                 var baseTitle = GetBaseTitle(categories, content);
-                var bannerUrl = GetBannerUrl(url, content);
+                var poster = GetPoster(url, content);
 
                 foreach (var releaseNode in content.QuerySelectorAll(ReleasesSelector))
                 {
@@ -252,7 +252,7 @@ namespace Jackett.Common.Indexers
                         Description = GetReleaseDescription(tabNode),
                         Seeders = seeders,
                         Peers = GetReleaseLeechers(tabNode) + seeders,
-                        BannerUrl = bannerUrl
+                        Poster = poster
                     };
 
                     releases.Add(release);
@@ -362,18 +362,15 @@ namespace Jackett.Common.Indexers
             }
         }
 
-        private Uri GetBannerUrl(string url, IElement content)
+        private Uri GetPoster(string url, IElement content)
         {
-            var bannerNode = content.QuerySelector(".poster_bg .poster img");
-            var bannerSrc = bannerNode.GetAttribute("src");
+            var posterNode = content.QuerySelector(".poster_bg .poster img");
+            var posterSrc = posterNode.GetAttribute("src");
 
-            if (Uri.TryCreate(bannerSrc, UriKind.Absolute, out var bannerUrl))
-            {
-                return bannerUrl;
-            }
+            if (Uri.TryCreate(posterSrc, UriKind.Absolute, out var poster))
+                return poster;
 
-            logger.Warn($"[AniDub] Banner URL couldn't be parsed on '{url}'. Banner node src: {bannerSrc}");
-
+            logger.Warn($"[AniDub] Poster URL couldn't be parsed on '{url}'. Poster node src: {posterSrc}");
             return null;
         }
 

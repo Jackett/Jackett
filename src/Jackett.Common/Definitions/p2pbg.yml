@@ -148,7 +148,7 @@ search:
           args: "download.php?id="
         - name: append
           args: "&f={{.Result.title}}.torrent"
-    banner:
+    poster:
       selector: td img[src="/torrentimg/pic.png"]
       attribute: onmouseover
       filters:

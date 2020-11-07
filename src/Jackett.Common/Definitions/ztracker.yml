@@ -134,7 +134,7 @@ search:
       filters:
         - name: replace
           args: ["details.php", "download.php"]
-    banner:
+    poster:
       selector: a[href*="details.php?id="][onmouseover]
       attribute: onmouseover
       filters:

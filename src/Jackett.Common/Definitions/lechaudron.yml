@@ -234,7 +234,7 @@ search:
     download:
       selector: a[onmouseover]
       attribute: href
-    banner:
+    poster:
       selector: a[onmouseover]
       attribute: onmouseover
       filters:

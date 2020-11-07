@@ -102,7 +102,7 @@ search:
       filters:
         - name: querystring
           args: cat
-    banner:
+    poster:
       selector: img[src*="/covers/"]
       attribute: src
     title:

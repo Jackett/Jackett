@@ -108,7 +108,7 @@ namespace Jackett.Common.Indexers
                 var baseRelease = new ReleaseInfo
                 {
                     Title = composeTitle(r),
-                    BannerUrl = new Uri(Configuration.StaticLink.Value + r.poster.url),
+                    Poster = new Uri(Configuration.StaticLink.Value + r.poster.url),
                     Comments = new Uri(SiteLink + "/release/" + r.code + ".html"),
                     DownloadVolumeFactor = 0,
                     UploadVolumeFactor = 1,

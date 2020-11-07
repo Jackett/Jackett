@@ -144,7 +144,7 @@ search:
     download:
       selector: td a.torrent_size
       attribute: href
-    banner:
+    poster:
       selector: td[class$="torrent_info"] a
       attribute: data-poster-preview
     seeders:

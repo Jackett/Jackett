@@ -166,8 +166,8 @@ namespace Jackett.Common.Indexers
                     var commentsLink = qTitleLink.GetAttribute("href");
                     var comments = new Uri(commentsLink);
                     var link = new Uri(commentsLink.Replace("/index.php?page=torrent-details&", "/download.php?"));
-                    var qBanner = qTitleLink.GetAttribute("title");
-                    var banner = qBanner != null ? new Uri(qBanner) : null;
+                    var qPoster = qTitleLink.GetAttribute("title");
+                    var poster = qPoster != null ? new Uri(qPoster) : null;
 
                     var publishDateStr = row.Children[4].InnerHtml.Split('>').Last();
                     var publishDate = DateTime.ParseExact(publishDateStr, "dd/MM/yyyy", CultureInfo.InvariantCulture);
@@ -192,7 +192,7 @@ namespace Jackett.Common.Indexers
                         Guid = comments,
                         Link = link,
                         PublishDate = publishDate,
-                        BannerUrl = banner,
+                        Poster = poster,
                         Category = cat,
                         Size = size,
                         Grabs = grabs,

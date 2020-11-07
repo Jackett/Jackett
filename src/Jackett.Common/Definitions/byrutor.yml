@@ -305,7 +305,7 @@ search:
     download:
       selector: div.short_titles > a
       attribute: href
-    banner:
+    poster:
       selector: img
       attribute: src
       optional: true

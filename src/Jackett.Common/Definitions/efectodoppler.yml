@@ -87,7 +87,7 @@ search:
     details:
       selector: a[href^="torrents.php?id="]
       attribute: href
-    banner:
+    poster:
       selector: div.group_image img
       attribute: src
     download:

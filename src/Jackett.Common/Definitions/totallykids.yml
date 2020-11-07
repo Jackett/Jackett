@@ -117,7 +117,7 @@ search:
           args: [" http://anonym.to?javascript:popdetails('", ""]
         - name: replace
           args: ["');", ""]
-    banner:
+    poster:
       selector: td a[href^="index.php?page=torrent-details"]
       attribute: onmouseover
       filters:

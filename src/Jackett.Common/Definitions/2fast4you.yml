@@ -203,7 +203,7 @@ search:
       filters:
         - name: replace
           args: ["torrents-details.php", "download.php"]
-    banner:
+    poster:
       selector: img.rounded-img
       attribute: src
     size:

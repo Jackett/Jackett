@@ -111,7 +111,7 @@ search:
     details:
       selector: a.view-torrent
       attribute: href
-    banner:
+    poster:
       optional: true
       selector: div.torrent-poster img
       attribute: src

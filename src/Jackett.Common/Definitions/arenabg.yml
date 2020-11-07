@@ -177,7 +177,7 @@ search:
       filters:
         - name: replace
           args: ["-", "0"]
-    banner:
+    poster:
       selector: td.filename div:nth-child(2) a
       attribute: onmouseover
       filters:

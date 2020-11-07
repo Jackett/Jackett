@@ -372,9 +372,9 @@ namespace Jackett.Common.Indexers
                     _dailyResultIdx++;
                     var publishDate = _dailyNow - TimeSpan.FromMilliseconds(_dailyResultIdx);
 
-                    var banner = "https:" + row.QuerySelector("img").GetAttribute("src");
+                    var poster = "https:" + row.QuerySelector("img").GetAttribute("src");
 
-                    var release = GetReleaseFromData(releaseType, title, detailsUrl, quality, language, size, publishDate, banner);
+                    var release = GetReleaseFromData(releaseType, title, detailsUrl, quality, language, size, publishDate, poster);
                     releases.Add(release);
                 }
             }
@@ -430,9 +430,9 @@ namespace Jackett.Common.Indexers
                     var publishDate = DateTime.ParseExact(qDiv.ChildNodes[3].TextContent.Trim(), "dd-MM-yyyy", null);
                     var size = ReleaseInfo.GetBytes(qDiv.ChildNodes[5].TextContent.Trim());
 
-                    var banner = "https:" + row.QuerySelector("img").GetAttribute("src");
+                    var poster = "https:" + row.QuerySelector("img").GetAttribute("src");
 
-                    var release = GetReleaseFromData(ReleaseType.Tv, title, detailsUrl, quality, language, size, publishDate, banner);
+                    var release = GetReleaseFromData(ReleaseType.Tv, title, detailsUrl, quality, language, size, publishDate, poster);
                     releases.Add(release);
                 }
             }
@@ -513,7 +513,7 @@ namespace Jackett.Common.Indexers
                     var sizeString = item["torrentSize"].ToString();
                     var size = !sizeString.Contains("NAN") ? ReleaseInfo.GetBytes(sizeString) : 0;
                     DateTime.TryParseExact(item["torrentDateAdded"].ToString(), "dd/MM/yyyy", null, DateTimeStyles.None, out var publishDate);
-                    var banner = SiteLink + item["imagen"].ToString().TrimStart('/');
+                    var poster = SiteLink + item["imagen"].ToString().TrimStart('/');
 
                     // we have another search for series
                     var titleLower = title.ToLower();
@@ -567,7 +567,7 @@ namespace Jackett.Common.Indexers
                     if (!string.IsNullOrWhiteSpace(year) && !_titleYearRegex.Match(title).Success)
                         title += " " + year;
 
-                    var release = GetReleaseFromData(ReleaseType.Movie, title, detailsUrl, quality, language, size, publishDate, banner);
+                    var release = GetReleaseFromData(ReleaseType.Movie, title, detailsUrl, quality, language, size, publishDate, poster);
                     releases.Add(release);
                 }
             }
@@ -612,7 +612,7 @@ namespace Jackett.Common.Indexers
                 : ReleaseType.Movie;
 
         private NewpctRelease GetReleaseFromData(ReleaseType releaseType, string title, string detailsUrl, string quality,
-                                                 string language, long size, DateTime publishDate, string banner)
+                                                 string language, long size, DateTime publishDate, string poster)
         {
             var result = new NewpctRelease
             {
@@ -667,7 +667,7 @@ namespace Jackett.Common.Indexers
             result.Guid = result.Link;
             result.Comments = result.Link;
             result.PublishDate = publishDate;
-            result.BannerUrl = new Uri(banner);
+            result.Poster = new Uri(poster);
             result.Seeders = 1;
             result.Peers = 2;
             result.Size = size;

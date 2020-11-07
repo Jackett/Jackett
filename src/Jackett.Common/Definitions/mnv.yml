@@ -130,7 +130,7 @@ search:
     download:
       selector: a[href^="download.php"]
       attribute: href
-    banner:
+    poster:
       selector: a[href^="details.php"]
       attribute: onMouseover
       filters:

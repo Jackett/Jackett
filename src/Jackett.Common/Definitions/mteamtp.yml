@@ -148,7 +148,7 @@ search:
     download:
       selector: a[href^="download.php?id="]
       attribute: href
-    banner:
+    poster:
       selector: img[alt="torrent thumbnail"]
       attribute: src
       filters:

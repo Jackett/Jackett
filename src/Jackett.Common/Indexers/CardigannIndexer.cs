@@ -37,7 +37,7 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        protected readonly string[] OptionalFields = { "imdb", "rageid", "tvdbid", "banner" };
+        protected readonly string[] OptionalFields = { "imdb", "rageid", "tvdbid", "poster" };
 
         private static readonly string[] _SupportedLogicFunctions =
         {
@@ -1515,13 +1515,13 @@ namespace Jackett.Common.Indexers
                                         case "booktitle":
                                             release.BookTitle = value;
                                             break;
-                                        case "banner":
+                                        case "poster":
                                             if (!string.IsNullOrWhiteSpace(value))
                                             {
-                                                var bannerurl = resolvePath(value, searchUrlUri);
-                                                release.BannerUrl = bannerurl;
+                                                var poster = resolvePath(value, searchUrlUri);
+                                                release.Poster = poster;
                                             }
-                                            value = release.BannerUrl.ToString();
+                                            value = release.Poster.ToString();
                                             break;
                                         default:
                                             break;

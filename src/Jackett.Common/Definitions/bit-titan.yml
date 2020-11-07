@@ -177,7 +177,7 @@ search:
     download:
       selector: div.tor-metadl a
       attribute: href
-    banner:
+    poster:
       selector: div[id^="details-"] img
       attribute: src
     seeders:

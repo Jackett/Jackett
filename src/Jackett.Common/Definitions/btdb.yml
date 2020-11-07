@@ -83,7 +83,7 @@ search:
     magnet:
       selector: a[href^="magnet:?xt="]
       attribute: href
-    banner:
+    poster:
       selector: a.img-thumbnail img
       attribute: src
       filters:

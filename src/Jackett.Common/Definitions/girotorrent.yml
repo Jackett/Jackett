@@ -205,7 +205,7 @@ search:
     download:
       selector: a[href^="index.php?page=downloadcheck&id="]
       attribute: href
-    banner:
+    poster:
       optional: true
       selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
       attribute: onmouseover
