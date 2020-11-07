@@ -123,7 +123,7 @@ search:
     details:
       selector: a.tname
       attribute: href
-    banner:
+    poster:
       selector: a.tname
       attribute: onmouseover
       filters:

@@ -36,7 +36,7 @@ search:
     download:
       selector: a[href*="/download/"]
       attribute: href
-    banner:
+    poster:
       selector: img
       attribute: src
       optional: true

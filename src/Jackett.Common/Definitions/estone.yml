@@ -121,7 +121,7 @@ search:
       filters:
         - name: replace
           args: ["torrent_", "download.php?id="]
-    banner:
+    poster:
       selector: img[onmouseover]
       attribute: onmouseover
       filters:

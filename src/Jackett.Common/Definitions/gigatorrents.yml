@@ -124,7 +124,7 @@ search:
       selector: a[href^="http://anonym.to/?http://imdb.com/title/"]
       optional: true
       attribute: href
-    banner:
+    poster:
       selector: img.imdb-info
       optional: true
       attribute: data-url

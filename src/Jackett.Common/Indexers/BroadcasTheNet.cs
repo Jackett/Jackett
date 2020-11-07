@@ -181,7 +181,7 @@ namespace Jackett.Common.Indexers
                             Imdb = imdb
                         };
                         if (!string.IsNullOrEmpty(btnResult.SeriesBanner))
-                            release.BannerUrl = new Uri(btnResult.SeriesBanner);
+                            release.Poster = new Uri(btnResult.SeriesBanner);
                         if (!release.Category.Any()) // default to TV
                             release.Category.Add(TorznabCatType.TV.ID);
 

@@ -246,11 +246,11 @@ namespace Jackett.Common.Indexers
                     var qTooltip = row.Children[1].QuerySelector("div.tooltip-content");
                     if (qTooltip != null)
                     {
-                        var banner = qTooltip.QuerySelector("img");
-                        if (banner != null)
+                        var qPoster = qTooltip.QuerySelector("img");
+                        if (qPoster != null)
                         {
-                            release.BannerUrl = new Uri(banner.GetAttribute("src"));
-                            banner.Remove();
+                            release.Poster = new Uri(qPoster.GetAttribute("src"));
+                            qPoster.Remove();
                         }
 
                         qTooltip.QuerySelector("div:contains(\"Total Hits\")").Remove();

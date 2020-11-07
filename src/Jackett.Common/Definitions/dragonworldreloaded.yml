@@ -198,7 +198,7 @@ search:
         ":has(div.kat_cat_pic_name:contains(\"XXX\")):has(div.kat_cat_pic_name_b:contains(\"Hentai Serie\"))": "110"
         ":has(div.kat_cat_pic_name:contains(\"XXX\")):has(div.kat_cat_pic_name_b:contains(\"Hentai Movie\"))": "111"
         ":has(div.kat_cat_pic_name:contains(\"XXX\")):has(div.kat_cat_pic_name_b:contains(\"SexBooks\"))": "116"
-    banner:
+    poster:
       selector: div[id^="details"] img
       attribute: src
     size:

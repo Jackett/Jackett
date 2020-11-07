@@ -159,7 +159,7 @@ search:
     download:
       selector: .torrentImages > span:first-child a
       attribute: href
-    banner:
+    poster:
       optional: true
       selector: td.torrent_image div.relativeDiv div:not(.category_image) a, .previewImage a
       attribute: href

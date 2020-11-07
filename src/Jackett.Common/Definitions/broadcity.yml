@@ -90,7 +90,7 @@ search:
       filters:
         - name: querystring
           args: category
-    banner:
+    poster:
       selector: div[id^="port-content-"] img
       attribute: src
     date:

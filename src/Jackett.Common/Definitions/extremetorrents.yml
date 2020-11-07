@@ -110,7 +110,7 @@ search:
     download:
       selector: a[href^="details.php?id="]
       attribute: href
-    banner:
+    poster:
       selector: div[id^="Style"] img
       attribute: src
     size:

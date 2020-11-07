@@ -115,7 +115,7 @@ search:
     download:
       selector: div.postTitle h2 a
       attribute: href
-    banner:
+    poster:
       optional: true
       selector: img
       attribute: src

@@ -23,7 +23,7 @@ namespace Jackett.Common.Indexers
     {
         private string SearchUrl => SiteLink + "torrents.php?";
         private string LoginUrl => SiteLink + "login.php";
-        private readonly Regex _bannerRegex = new Regex(@"src=\\'./([^']+)\\'", RegexOptions.IgnoreCase);
+        private readonly Regex _posterRegex = new Regex(@"src=\\'./([^']+)\\'", RegexOptions.IgnoreCase);
         private readonly HashSet<string> _freeleechRanks = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
             "VIP",
@@ -161,8 +161,8 @@ namespace Jackett.Common.Indexers
                     var title = mainLink.TextContent;
                     var comments = new Uri(SiteLink + mainLink.GetAttribute("href"));
 
-                    var bannerMatch = _bannerRegex.Match(mainLink.GetAttribute("onmouseover"));
-                    var banner = bannerMatch.Success ? new Uri(SiteLink + bannerMatch.Groups[1].Value.Replace("\\", "/")) : null;
+                    var posterMatch = _posterRegex.Match(mainLink.GetAttribute("onmouseover"));
+                    var poster = posterMatch.Success ? new Uri(SiteLink + posterMatch.Groups[1].Value.Replace("\\", "/")) : null;
 
                     var link = new Uri(SiteLink + row.Children[4].FirstElementChild.GetAttribute("href"));
                     var description = row.Children[2].QuerySelector("span").TextContent;
@@ -227,7 +227,7 @@ namespace Jackett.Common.Indexers
                         PublishDate = publishDate,
                         Category = cat,
                         Description = description,
-                        BannerUrl = banner,
+                        Poster = poster,
                         Imdb = imdb,
                         Size = size,
                         Grabs = grabs,

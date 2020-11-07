@@ -134,12 +134,12 @@ namespace Jackett.Common.Indexers
                         if ((query.ImdbID == null || !TorznabCaps.MovieSearchImdbAvailable) &&
                             !query.MatchQueryStringAND(release.Title))
                             continue;
-                        var bannerStyle = row.QuerySelector("div[style^=\"cursor: pointer; background-image:url\"]")
+                        var posterStyle = row.QuerySelector("div[style^=\"cursor: pointer; background-image:url\"]")
                                              ?.GetAttribute("style");
-                        if (!string.IsNullOrEmpty(bannerStyle))
+                        if (!string.IsNullOrEmpty(posterStyle))
                         {
-                            var bannerImg = Regex.Match(bannerStyle, @"url\('(.*?)'\);").Groups[1].Value;
-                            release.BannerUrl = new Uri(SiteLink + bannerImg);
+                            var posterStr = Regex.Match(posterStyle, @"url\('(.*?)'\);").Groups[1].Value;
+                            release.Poster = new Uri(SiteLink + posterStr);
                         }
 
                         var qLink = row.QuerySelector("td:nth-of-type(5) a");

@@ -165,7 +165,7 @@ namespace Jackett.Common.Indexers
                     title += _language.Equals("castellano") ? " MULTi/SPANiSH" : " MULTi/LATiN SPANiSH";
                     title += " 1080p BDRip x264";
 
-                    var banner = new Uri(qImg.GetAttribute("src"));
+                    var poster = new Uri(qImg.GetAttribute("src"));
                     var link = new Uri(row.QuerySelector("a").GetAttribute("href"));
 
                     var release = new ReleaseInfo
@@ -175,7 +175,7 @@ namespace Jackett.Common.Indexers
                         Comments = link,
                         Guid = link,
                         Category = new List<int> { TorznabCatType.MoviesHD.ID },
-                        BannerUrl = banner,
+                        Poster = poster,
                         Size = 2147483648, // 2 GB
                         Files = 1,
                         Seeders = 1,

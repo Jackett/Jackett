@@ -172,7 +172,7 @@ search:
           args: ["(?i)\\b(?:[\\/\\|]?Episodio\\s?(\\d+)|Puntata\\s?(\\d+))", "E$1$2"]
         - name: re_replace # Episodi 4 5 to E04-05
           args: ["(?i)\\b(?:Puntate\\s*)(\\d+)\\s?(\\d+)", "E0$1-0$2"]
-    banner:
+    poster:
       selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
       attribute: onmouseover
       filters:

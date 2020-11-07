@@ -128,7 +128,7 @@ search:
     download:
       selector: a[href^="download.php?torrent="]
       attribute: href
-    banner:
+    poster:
       selector: a.preview
       attribute: href
       optional: true

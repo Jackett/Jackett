@@ -114,7 +114,7 @@ search:
   fields:
     title:
       selector: a[href^="details.php?id="]
-    banner:
+    poster:
       selector: a[href^="details.php?id="][onmouseover]
       attribute: onmouseover
       filters:

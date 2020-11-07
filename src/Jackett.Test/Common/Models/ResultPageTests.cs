@@ -64,7 +64,7 @@ namespace Jackett.Test.Common.Models
                             Description = text,
                             Author = text,
                             BookTitle = text,
-                            BannerUrl = link,
+                            Poster = link,
                             InfoHash = text,
                             MagnetUri = link,
                             Origin = new TestIndexer()

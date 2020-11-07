@@ -224,7 +224,7 @@ search:
       selector: a[href^="download_ssl.php?torrent="]
       optional: true
       attribute: href
-    banner:
+    poster:
       selector: div[id^="details"] img
       attribute: src
     size:

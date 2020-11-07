@@ -156,7 +156,7 @@ search:
     download:
       selector: a[href^="download_ssl.php"]
       attribute: href
-    banner:
+    poster:
       selector: a.thumbnail > span > img
       attribute: src
     grabs:

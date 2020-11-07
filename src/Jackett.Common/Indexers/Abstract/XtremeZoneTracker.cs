@@ -130,8 +130,8 @@ namespace Jackett.Common.Indexers.Abstract
                     // "description" field in API has too much HTML code
                     var description = row.Value<string>("short_description");
 
-                    var jBanner = row.Value<string>("poster");
-                    var banner = (string.IsNullOrEmpty(jBanner) || !jBanner.StartsWith("http")) ? null : new Uri(jBanner);
+                    var posterStr = row.Value<string>("poster");
+                    var poster = string.IsNullOrEmpty(posterStr) || !posterStr.StartsWith("http") ? null : new Uri(posterStr);
 
                     var dlVolumeFactor = row.Value<bool>("is_half_download") ? 0.5: 1.0;
                     dlVolumeFactor = row.Value<bool>("is_freeleech") ? 0.0 : dlVolumeFactor;
@@ -146,7 +146,7 @@ namespace Jackett.Common.Indexers.Abstract
                         Category =  MapTrackerCatToNewznab(cat),
                         PublishDate = publishDate,
                         Description = description,
-                        BannerUrl = banner,
+                        Poster = poster,
                         Size = row.Value<long>("size"),
                         Grabs = row.Value<long>("times_completed"),
                         Seeders = row.Value<int>("seeders"),

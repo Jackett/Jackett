@@ -84,7 +84,7 @@ search:
     download:
       selector: div.h2 > a
       attribute: href
-    banner:
+    poster:
       selector: div.entry_content a.entry__content-image img
       attribute: src
       optional: true

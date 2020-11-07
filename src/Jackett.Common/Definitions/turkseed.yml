@@ -129,7 +129,7 @@ search:
     download:
       selector: a[href*="/details.php?id="]
       attribute: href
-    banner:
+    poster:
       selector: img[src*="/torrents/images/"]
       attribute: src
     date:

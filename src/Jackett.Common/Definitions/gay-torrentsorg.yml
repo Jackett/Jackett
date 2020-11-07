@@ -105,7 +105,7 @@ search:
     details:
       selector: a[href^="details.php?id="]
       attribute: href
-    banner:
+    poster:
       optional: true
       selector: a.screenshot
       attribute: rel

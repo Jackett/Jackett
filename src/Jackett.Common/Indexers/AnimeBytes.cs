@@ -189,8 +189,8 @@ namespace Jackett.Common.Indexers
                     foreach (var group in groups)
                     {
                         var synonyms = new List<string>();
-                        var image = (string)group["Image"];
-                        var imageUrl = (string.IsNullOrWhiteSpace(image) ? null : new Uri(image));
+                        var posterStr = (string)group["Image"];
+                        var poster = (string.IsNullOrWhiteSpace(posterStr) ? null : new Uri(posterStr));
                         var year = (int)group["Year"];
                         var groupName = (string)group["GroupName"];
                         var seriesName = (string)group["SeriesName"];
@@ -375,7 +375,7 @@ namespace Jackett.Common.Indexers
                                     Comments = commentsLinkUri,
                                     Guid = guid,
                                     Link = linkUri,
-                                    BannerUrl = imageUrl,
+                                    Poster = poster,
                                     PublishDate = publishDate,
                                     Category = category,
                                     Description = description,

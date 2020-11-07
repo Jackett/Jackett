@@ -146,7 +146,7 @@ search:
     download:
       selector: a[href^="download.php?id="]
       attribute: href
-    banner:
+    poster:
       selector: a[href^="file.php?id="]
       attribute: onmouseover
       filters:

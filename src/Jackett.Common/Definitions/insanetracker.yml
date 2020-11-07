@@ -123,11 +123,11 @@ search:
       optional: true
       selector: a[title="IMDb link"]
       attribute: href
-    banner:
+    poster:
       optional: true
       selector: img[alt="offer"]
       attribute: src
-    banner:
+    poster:
       optional: true
       selector: a.cover
       attribute: href

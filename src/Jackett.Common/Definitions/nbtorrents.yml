@@ -111,7 +111,7 @@ search:
     details:
       selector: td a[href^="details.php?id="]
       attribute: href
-    banner:
+    poster:
       selector: td a[href^="details.php?id="]
       optional: true
       attribute: onmouseover

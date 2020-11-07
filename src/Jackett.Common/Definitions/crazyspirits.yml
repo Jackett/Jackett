@@ -235,7 +235,7 @@ search:
     download:
       selector: a[href^="torrents-details.php?id="]
       attribute: href
-    banner:
+    poster:
       selector: a[onmouseover][href^="torrents-details.php?id="]
       attribute: onmouseover
       filters:

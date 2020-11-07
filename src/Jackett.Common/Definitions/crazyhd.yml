@@ -161,7 +161,7 @@ search:
       filters:
         - name: querystring
           args: category
-    banner:
+    poster:
       selector: div.list-name a.tlink
       optional: true
       attribute: onmouseover

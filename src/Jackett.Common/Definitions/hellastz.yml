@@ -120,7 +120,7 @@ search:
           args: category
     title:
       selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
-    banner:
+    poster:
       selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
       attribute: onmouseover
       filters:

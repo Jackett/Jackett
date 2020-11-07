@@ -119,8 +119,8 @@ namespace Jackett.Common.Indexers
                     var comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
                     var torrentId = qDetailsLink.GetAttribute("href").Split('=').Last();
                     var link = new Uri(SiteLink + "torrents.php?action=download&id=" + torrentId);
-                    var bannerStr = qDetailsLink.GetAttribute("data-cover");
-                    var banner = !string.IsNullOrWhiteSpace(bannerStr) ? new Uri(qDetailsLink.GetAttribute("data-cover")) : null;
+                    var posterStr = qDetailsLink.GetAttribute("data-cover");
+                    var poster = !string.IsNullOrWhiteSpace(posterStr) ? new Uri(qDetailsLink.GetAttribute("data-cover")) : null;
 
                     var files = ParseUtil.CoerceLong(row.QuerySelector("td:nth-child(3)").TextContent);
                     var publishDate = DateTimeUtil.FromTimeAgo(row.QuerySelector("td:nth-child(4)").TextContent);
@@ -159,7 +159,7 @@ namespace Jackett.Common.Indexers
                         Comments = comments,
                         Guid = link,
                         Imdb = imdb,
-                        BannerUrl = banner,
+                        Poster = poster,
                         Seeders = seeders,
                         Peers = leechers + seeders,
                         Size = size,

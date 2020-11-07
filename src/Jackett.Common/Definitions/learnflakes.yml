@@ -138,7 +138,7 @@ search:
     download:
       selector: a[href*="?p=torrents&pid=10&action=download&tid="]
       attribute: href
-    banner:
+    poster:
       optional: true
       selector: a[href*="data/torrents/torrent_images/"]
       attribute: href

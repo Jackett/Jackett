@@ -96,7 +96,7 @@ search:
     download:
       selector: a[href*="/download/"]
       attribute: href
-    banner:
+    poster:
       optional: true
       selector: img.browse_poster
       attribute: src

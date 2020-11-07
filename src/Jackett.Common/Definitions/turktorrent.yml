@@ -188,7 +188,7 @@ search:
       selector: a[rel="torrent_leechers"]
     grabs:
       selector: a[rel="times_completed"]
-    banner:
+    poster:
       optional: true
       selector: a[rel="fancybox"]
       attribute: href

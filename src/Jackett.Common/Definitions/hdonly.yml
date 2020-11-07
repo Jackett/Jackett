@@ -255,7 +255,7 @@ search:
       text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
     description:
       selector: div.group_info
-    banner:
+    poster:
       selector: div.group_image img
       attribute: src
       optional: true

@@ -180,7 +180,7 @@ search:
           args: ["(?i)\\bT(\\d+)", "S$1"]
         - name: append
           args: " [Spanish]"
-    banner:
+    poster:
       optional: true
       selector: td:nth-child(2) a
       attribute: onmouseover

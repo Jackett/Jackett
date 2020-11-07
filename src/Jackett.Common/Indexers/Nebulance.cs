@@ -125,8 +125,8 @@ namespace Jackett.Common.Indexers
                             title = title.Remove(title.LastIndexOf(".", StringComparison.Ordinal));
                     }
 
-                    var bannerStr = row.QuerySelector("img")?.GetAttribute("src");
-                    var bannerUri = !string.IsNullOrWhiteSpace(bannerStr) ? new Uri(bannerStr) : null;
+                    var posterStr = row.QuerySelector("img")?.GetAttribute("src");
+                    var poster = !string.IsNullOrWhiteSpace(posterStr) ? new Uri(posterStr) : null;
 
                     var commentsUri = new Uri(SiteLink + row.QuerySelector("a[data-src]").GetAttribute("href"));
                     var linkUri = new Uri(SiteLink + row.QuerySelector("a[href*='action=download']").GetAttribute("href"));
@@ -159,7 +159,7 @@ namespace Jackett.Common.Indexers
                         Grabs = grabs,
                         Seeders = seeds,
                         Peers = seeds + leechers,
-                        BannerUrl = bannerUri,
+                        Poster = poster,
                         MinimumRatio = 0, // ratioless
                         MinimumSeedTime = 86400, // 24 hours
                         DownloadVolumeFactor = 0, // ratioless tracker

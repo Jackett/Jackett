@@ -177,7 +177,7 @@ namespace Jackett.Common.Indexers
                     release.UploadVolumeFactor = 1;
 
                     if (!string.IsNullOrWhiteSpace(row.customcover.ToString()))
-                        release.BannerUrl = new Uri(SiteLink + row.customcover);
+                        release.Poster = new Uri(SiteLink + row.customcover);
 
                     if (row.imdbid2 != null && row.imdbid2.ToString().StartsWith("tt"))
                     {
@@ -190,7 +190,7 @@ namespace Jackett.Common.Indexers
                         descriptions.Add("Rating: " + row.rating);
                         descriptions.Add("Plot: " + row.plot);
 
-                        release.BannerUrl = new Uri(SiteLink + "img/imdb/" + row.imdbid2 + ".jpg");
+                        release.Poster = new Uri(SiteLink + "img/imdb/" + row.imdbid2 + ".jpg");
                     }
 
                     if ((int)row.p2p == 1)

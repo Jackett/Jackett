@@ -209,7 +209,7 @@ search:
       filters:
         - name: replace
           args: ["details.php?id=", "download.php?torrent="]
-    banner:
+    poster:
       selector: div[id^="details"] img
       attribute: src
       optional: true

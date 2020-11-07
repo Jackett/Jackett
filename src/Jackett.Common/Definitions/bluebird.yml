@@ -80,7 +80,7 @@ search:
       selector: td:nth-child(5)
     leechers:
       selector: td:nth-child(6)
-    banner:
+    poster:
       selector: a.tname
       attribute: onmouseover
       filters:

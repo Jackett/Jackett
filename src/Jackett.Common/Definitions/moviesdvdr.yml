@@ -105,7 +105,7 @@ search:
     download:
       selector: a
       attribute: href
-    banner:
+    poster:
       selector: img.attachment-post-thumbnail
       attribute: src
     date:

@@ -154,7 +154,7 @@ namespace Jackett.Common.Indexers
                 var baseRelease = new ReleaseInfo
                 {
                     Title = composeBaseTitle(r),
-                    BannerUrl = new Uri(SiteLink + r.QuerySelector("a[data-fancybox]").Attributes["href"].Value),
+                    Poster = new Uri(SiteLink + r.QuerySelector("a[data-fancybox]").Attributes["href"].Value),
                     Comments = uri,
                     DownloadVolumeFactor = 0,
                     UploadVolumeFactor = 1,

@@ -222,15 +222,15 @@ namespace Jackett.Common.Indexers.Abstract
                     var description = tags?.Any() == true && !string.IsNullOrEmpty(tags[0].ToString())
                         ? "Tags: " + string.Join(", ", tags) + "\n"
                         : null;
-                    Uri banner = null;
+                    Uri poster = null;
                     if (!string.IsNullOrEmpty(cover))
-                        banner = new Uri(cover);
+                        poster = new Uri(cover);
                     var release = new ReleaseInfo
                     {
                         PublishDate = groupTime,
                         Title = title.ToString(),
                         Description = description,
-                        BannerUrl = banner
+                        Poster = poster
                     };
 
 

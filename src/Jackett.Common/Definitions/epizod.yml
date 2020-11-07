@@ -117,7 +117,7 @@ search:
     download:
       selector: div.post-cover > a
       attribute: href
-    banner:
+    poster:
       selector: img[data-lazy-src]
       attribute: data-lazy-src
     date:

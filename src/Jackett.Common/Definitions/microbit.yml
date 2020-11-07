@@ -124,7 +124,7 @@ search:
     details:
       selector: a[href^="torrentdetails.php?id="]
       attribute: href
-    banner:
+    poster:
       selector: a.poster
       attribute: href
     grabs:

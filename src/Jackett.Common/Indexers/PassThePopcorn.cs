@@ -139,8 +139,8 @@ namespace Jackett.Common.Indexers
                     var movieTitle = (string)movie["Title"];
                     var year = (string)movie["Year"];
                     var movieImdbIdStr = (string)movie["ImdbId"];
-                    var coverStr = (string)movie["Cover"];
-                    var coverUri = !string.IsNullOrEmpty(coverStr) ? new Uri(coverStr) : null;
+                    var posterStr = (string)movie["Cover"];
+                    var poster = !string.IsNullOrEmpty(posterStr) ? new Uri(posterStr) : null;
                     var movieImdbId = !string.IsNullOrEmpty(movieImdbIdStr) ? (long?)long.Parse(movieImdbIdStr) : null;
                     var movieGroupId = (string)movie["GroupId"];
                     foreach (var torrent in movie["Torrents"])
@@ -182,7 +182,7 @@ namespace Jackett.Common.Indexers
                         {
                             Title = releaseName,
                             Description = $"Title: {movieTitle}",
-                            BannerUrl = coverUri,
+                            Poster = poster,
                             Imdb = movieImdbId,
                             Comments = comments,
                             Size = size,

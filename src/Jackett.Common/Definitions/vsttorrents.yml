@@ -42,7 +42,7 @@ search:
     download:
       selector: h3 > a
       attribute: href
-    banner:
+    poster:
       selector: img
       attribute: src
     description:

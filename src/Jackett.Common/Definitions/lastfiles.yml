@@ -128,7 +128,7 @@ search:
     details:
       selector: a[href^="details.php?id="]
       attribute: href
-    banner:
+    poster:
       selector: a[href^="details.php?id="]
       attribute: onmouseover
       filters:

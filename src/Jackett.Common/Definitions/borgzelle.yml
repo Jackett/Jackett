@@ -130,7 +130,7 @@ search:
     download:
       selector: a[href^="torrents.php?action=download&id="]
       attribute: href
-    banner:
+    poster:
       selector: a[href^="torrents.php?torrentid="] span img
       attribute: src
     date:

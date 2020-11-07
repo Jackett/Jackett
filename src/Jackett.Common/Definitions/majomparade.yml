@@ -135,7 +135,7 @@ search:
       optional: true
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
-    banner:
+    poster:
       optional: true
       selector: img[src="pic/borito.png"], a[href^="details.php?id="] > b[title*="Torrent neve:"]
       attribute: title

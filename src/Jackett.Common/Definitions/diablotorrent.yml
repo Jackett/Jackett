@@ -120,7 +120,7 @@ search:
           args: "2006-01-0215:04:05 -07:00"
     size:
       selector: div.box_size
-    banner:
+    poster:
       optional: true
       selector: a.cover_a
       attribute: title

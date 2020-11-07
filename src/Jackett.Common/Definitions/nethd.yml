@@ -106,7 +106,7 @@ search:
     details:
       selector: td.name > div > a[href*="-torrent-"][title]
       attribute: href
-    banner:
+    poster:
       selector: td.name > a.poster-preview img
       attribute: src
     comments:

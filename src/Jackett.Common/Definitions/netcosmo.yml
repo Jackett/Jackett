@@ -125,7 +125,7 @@ search:
           args: ["(\\d{2})x(\\d{2})", "S$1E$2"]
         - name: re_replace
           args: ["(\\d{1})x(\\d{2})", "S0$1E$2"]
-    banner:
+    poster:
       selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
       attribute: onmouseover
       filters:

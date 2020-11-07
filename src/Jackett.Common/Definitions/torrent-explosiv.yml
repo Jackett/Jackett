@@ -211,7 +211,7 @@ search:
         ":has(div.kat_cat_pic_name:contains(\"XXX\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": "76"
         ":has(div.kat_cat_pic_name:contains(\"XXX\")):has(div.kat_cat_pic_name_b:contains(\"Clips\"))": "147"
         ":has(div.kat_cat_pic_name:contains(\"XXX\")):has(div.kat_cat_pic_name_b:contains(\"DVD\"))": "302"
-    banner:
+    poster:
       selector: div[id^="details"] img
       attribute: src
     size:

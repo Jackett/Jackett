@@ -79,7 +79,7 @@ search:
     download:
       selector: div.news_text > a
       attribute: href
-    banner:
+    poster:
       selector: img[src*="/uploads/posts/"]
       attribute: src
       optional: true

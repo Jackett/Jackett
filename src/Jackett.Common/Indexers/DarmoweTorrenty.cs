@@ -172,7 +172,8 @@ namespace Jackett.Common.Indexers
             var encodedDownloadLink = detailsRow.QuerySelector("a[id^=\"download_\"]").GetAttribute("data-href");
             var siteDownloadLink =  new Uri(SiteLink + Uri.UnescapeDataString(StringUtil.FromBase64(encodedDownloadLink)));
             var infoHash = HttpUtility.ParseQueryString(siteDownloadLink.Query)["id"];
-            var bannerLink = detailsRow.QuerySelector("img[src^=\"./imgtorrent/\"]")?.GetAttribute("src");
+            var posterStr = detailsRow.QuerySelector("img[src^=\"./imgtorrent/\"]")?.GetAttribute("src");
+            var poster = !string.IsNullOrEmpty(posterStr) ? new Uri(SiteLink + posterStr) : null;
             var seeders = seedsMatch.Success ? int.Parse(seedsMatch.Groups[1].Value) : 0;
             var leechers = leechersMatch.Success ? int.Parse(leechersMatch.Groups[1].Value) : 0;
             var peers = seeders + leechers;
@@ -181,7 +182,7 @@ namespace Jackett.Common.Indexers
                 Title = details.TextContent,
                 Category = categories,
                 Seeders = seeders,
-                BannerUrl = !string.IsNullOrEmpty(bannerLink) ? new Uri(SiteLink + bannerLink) : null,
+                Poster = poster,
                 Peers = peers,
                 PublishDate = date,
                 DownloadVolumeFactor = 0,

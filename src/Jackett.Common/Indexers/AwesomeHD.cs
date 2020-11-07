@@ -176,17 +176,17 @@ namespace Jackett.Common.Indexers
                     var peers = seeders + int.Parse(torrent.FirstValue("leechers"));
                     var freeleech = double.Parse(torrent.FirstValue("freeleech"));
 
-                    Uri banner = null;
+                    Uri poster = null;
                     string description = null;
-                    if (!isAudio) // audio tracks don't have banner either description
+                    if (!isAudio) // audio tracks don't have poster either description
                     {
                         // small cover only for movies
                         var smallCover = torrent.Element("smallcover");
                         var normalCover = torrent.Element("cover");
                         if (!isSerie && !string.IsNullOrWhiteSpace(smallCover?.Value) && smallCover.Value.StartsWith("https://"))
-                            banner = new Uri(torrent.FirstValue("smallcover"));
+                            poster = new Uri(torrent.FirstValue("smallcover"));
                         else if (!string.IsNullOrWhiteSpace(normalCover?.Value) && normalCover.Value.StartsWith("https://"))
-                            banner = new Uri(torrent.FirstValue("cover"));
+                            poster = new Uri(torrent.FirstValue("cover"));
 
                         description = torrent.Element("encodestatus") != null ?
                             $"Encode status: {torrent.FirstValue("encodestatus")}" : null;
@@ -202,7 +202,7 @@ namespace Jackett.Common.Indexers
                         Guid = link,
                         PublishDate = publishDate,
                         Category = cat,
-                        BannerUrl = banner,
+                        Poster = poster,
                         Description = description,
                         Imdb = imdb,
                         Size = size,

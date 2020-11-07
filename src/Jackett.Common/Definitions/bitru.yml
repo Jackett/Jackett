@@ -81,7 +81,7 @@ search:
       filters:
         - name: replace
           args: ["Присутствует реклама", "Contains Adverts"]
-    banner:
+    poster:
       selector: a[href^="details.php?id="]
       attribute: onmouseover
       filters:
