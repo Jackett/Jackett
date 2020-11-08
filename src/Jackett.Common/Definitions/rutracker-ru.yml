@@ -104,8 +104,6 @@ caps:
     - {id: 11, cat: TV/Documentary, desc: "Документальные фильмы и телепередачи"}
     - {id: 12, cat: TV, desc: "Развлекательные телепередачи"}
     - {id: 13, cat: TV/Sport, desc: "Спорт"}
-    - {id: 1621, cat: TV/Sport, desc: " |- Формула 1"}
-    - {id: 1622, cat: TV/Sport, desc: " |- Автоспорт"}
     # Игры Games
     - {id: 60, cat: PC/Games, desc: "Игры для PC"}
     - {id: 73, cat: Console, desc: " |- Горячие новинки 2020 года (только AAA проекты)"}
@@ -142,6 +140,14 @@ caps:
     - {id: 1315, cat: Audio/Audiobook, desc: " |- Детская аудиокнига"}
     - {id: 1223, cat: Audio/Audiobook, desc: " |- Аудиокниги Учебная, Научная и Техническая литература"}
     # Музыка (Lossy) Music
+    - {id: 1635, cat: Audio/MP3, desc: "Зарубежная музыка (Disco, Italo-Disco, Eurodance,.."}
+    - {id: 1636, cat: Audio/MP3, desc: " |- Сборники поп музыки (50/50 общие mp3)"}
+    - {id: 1647, cat: Audio/Lossless, desc: " |- Зарубежная поп музыка (Lossless)"}
+    - {id: 1643, cat: Audio/MP3, desc: " |- Зарубежная поп музыка (альбомы, синглы mp3)"}
+    - {id: 1637, cat: Audio/MP3, desc: " |- Зарубежная поп-музыка (сборники mp3)"}
+    - {id: 1638, cat: Audio/MP3, desc: " |- Eurodance, Disco, Hi-NRG, Technopop (Сборники mp3)"}
+    - {id: 1639, cat: Audio/MP3, desc: " |- Club, Dance, Hands Up (Сборники mp3)"}
+    - {id: 1640, cat: Audio/Lossless, desc: " |- Зарубежный шансон (mp3, Lossless)"}
     - {id: 1177, cat: Audio/MP3, desc: "Неофициальные и внежанровые сборники"}
     - {id: 1179, cat: Audio/MP3, desc: " |- Сборники поп музыки (50/50 общие)"}
     - {id: 1178, cat: Audio/MP3, desc: " |- Зарубежные поп сборники"}
@@ -150,6 +156,7 @@ caps:
     - {id: 1427, cat: Audio/MP3, desc: " |- Сборники Российской поп музыки"}
     - {id: 1561, cat: Audio/MP3, desc: " |- Сборники Русского шансона"}
     - {id: 1168, cat: Audio/MP3, desc: "Рок музыка"}
+    - {id: 1652, cat: Audio/Lossless, desc: " |- Зарубежная рок музыка (Lossless)"}
     - {id: 1200, cat: Audio/MP3, desc: " |- Зарубежный Classic Rock&Hard Rock"}
     - {id: 1552, cat: Audio/MP3, desc: " |- Зарубежный Progressive&Art-Rock"}
     - {id: 1565, cat: Audio/MP3, desc: " |- Зарубежный Folk-Rock, Folk-Punk, Songwriter"}
@@ -159,6 +166,7 @@ caps:
     - {id: 1566, cat: Audio/MP3, desc: " |- Зарубежный Rockabilly, Rock'n'Roll"}
     - {id: 1556, cat: Audio/MP3, desc: " |- Сборники зарубежного рока"}
     - {id: 1579, cat: Audio/MP3, desc: "Зарубежный Metal"}
+    - {id: 1653, cat: Audio/Lossless, desc: " |- Зарубежный Metal (Lossless)"}
     - {id: 1588, cat: Audio/MP3, desc: " |- Avant-garde, Experimental Metal"}
     - {id: 1580, cat: Audio/MP3, desc: " |- Black Metal"}
     - {id: 1581, cat: Audio/MP3, desc: " |- Death, Doom"}
@@ -179,6 +187,7 @@ caps:
     - {id: 1596, cat: Audio/MP3, desc: " |- Gothic Rock&Dark Folk"}
     - {id: 1597, cat: Audio/MP3, desc: " |- Avant-garde, Experimental Rock"}
     - {id: 1598, cat: Audio/MP3, desc: "Отечественный Rock, Metal"}
+    - {id: 1645, cat: Audio/Lossless, desc: " |- Отечественный Rock, Metal (Lossless)"}
     - {id: 1599, cat: Audio/MP3, desc: " |- Отечественный Rock"}
     - {id: 1600, cat: Audio/MP3, desc: " |- Отечественный Metal"}
     - {id: 1601, cat: Audio/MP3, desc: " |- Сборники Rock, Metal"}
@@ -189,6 +198,7 @@ caps:
     - {id: 1628, cat: Audio/MP3, desc: " |- Отечественный джаз и блюз (mp3)"}
     - {id: 1629, cat: Audio/Lossless, desc: " |- Отечественный джаз и блюз (Lossless)"}
     - {id: 1171, cat: Audio/MP3, desc: "Электронная музыка"}
+    - {id: 1648, cat: Audio/Lossless, desc: " |- Electronic and club music (Lossless)"}
     - {id: 1610, cat: Audio/MP3, desc: " |- Goa Trance, Psy-Trance"}
     - {id: 1611, cat: Audio/MP3, desc: " |- PsyChill, Ambient, Dub"}
     - {id: 1457, cat: Audio/MP3, desc: " |- Trance"}
@@ -208,30 +218,16 @@ caps:
     - {id: 1577, cat: Audio/MP3, desc: " |- Electronic music (разные стили)"}
     - {id: 1630, cat: Audio/MP3, desc: "Рэп, Хип-Хоп, R'n'B"}
     - {id: 1631, cat: Audio/MP3, desc: " |- Рэп, Хип-Хоп, R'n'B"}
-    - {id: 1632, cat: Audio/MP3, desc: " |- Отечественный Рэп, Хип-Хоп (lossless)"}
+    - {id: 1632, cat: Audio/Lossless, desc: " |- Отечественный Рэп, Хип-Хоп (lossless)"}
     - {id: 1633, cat: Audio/MP3, desc: " |- Зарубежный Рэп, Хип-Хоп (mp3)"}
-    - {id: 1634, cat: Audio/MP3, desc: " |- Зарубежный Рэп, Хип-Хоп (lossless)"}
+    - {id: 1634, cat: Audio/Lossless, desc: " |- Зарубежный Рэп, Хип-Хоп (lossless)"}
     - {id: 1540, cat: Audio/MP3, desc: "Остальные муз. жанры, + Видео"}
-    - {id: 1578, cat: Audio/MP3, desc: " |- Российская попса (альбомы, синглы)"}
-    - {id: 1170, cat: Audio/MP3, desc: " |- Русский шансон"}
-    - {id: 1167, cat: Audio/MP3, desc: " |- Отечественный Рэп, Хип-Хоп"}
     - {id: 1604, cat: Audio/MP3, desc: " |- Reggae, Ska, Dub"}
+    - {id: 1651, cat: Audio/Lossless, desc: " |- Классическая и инструментальная музыка (Lossless)"}
     - {id: 1562, cat: Audio/MP3, desc: " |- Инструментальная и классическая музыка"}
     - {id: 1185, cat: Audio/MP3, desc: " |- New Age, Relax, Meditative"}
+    - {id: 1649, cat: Audio/Lossless, desc: " |- Other musical genres (Lossless)"}
     - {id: 1183, cat: Audio/MP3, desc: " |- Музыкальное видео (все жанры)"}
-    # Музыка (Lossless) Music
-    - {id: 1210, cat: Audio/Lossless, desc: "Отечественная музыка (Lossless)"}
-    - {id: 1211, cat: Audio/Lossless, desc: " |- Поп музыка"}
-    - {id: 1212, cat: Audio/Lossless, desc: " |- Отечественный Рок, Панк, Метал, Альтернатива."}
-    - {id: 1213, cat: Audio/Lossless, desc: " |- Шансон, авторская песня"}
-    - {id: 1309, cat: Audio/Lossless, desc: " |- Официальные сборники отечественных исполнителей"}
-    - {id: 1209, cat: Audio/Lossless, desc: "Зарубежная музыка (Lossless)"}
-    - {id: 1214, cat: Audio/Lossless, desc: " |- Pop music"}
-    - {id: 1215, cat: Audio/Lossless, desc: " |- Rock, Punk, Metal, Alternative music"}
-    - {id: 1217, cat: Audio/Lossless, desc: " |- Electronic and club music"}
-    - {id: 1308, cat: Audio/Lossless, desc: " |- Официальные сборники зарубежных исполнителей"}
-    - {id: 1534, cat: Audio/Lossless, desc: " |- Classical and instrumental music"}
-    - {id: 1231, cat: Audio/Lossless, desc: " |- Other musical genres"}
     # Программное обеспечение Software
     - {id: 105, cat: PC, desc: "Операционные системы"}
     - {id: 1120, cat: PC, desc: " |- Windows 10"}
