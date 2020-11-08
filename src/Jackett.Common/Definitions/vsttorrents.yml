@@ -30,6 +30,8 @@ search:
 
   rows:
     selector: article:has(h3)
+    filters:
+      - name: andmatch
 
   fields:
     category:
