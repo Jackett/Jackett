@@ -215,7 +215,7 @@ namespace Jackett.Common.Indexers
 
                     // drop invalid char that seems to have cropped up in some titles. #6582
                     var title = qTitleLink.TextContent.Trim().Replace("\u000f", "");
-                    var comments = new Uri(SiteLink + qTitleLink.GetAttribute("href").TrimStart('/'));
+                    var details = new Uri(SiteLink + qTitleLink.GetAttribute("href").TrimStart('/'));
 
                     var qLink = row.QuerySelector("a[href^=\"/download.php/\"]");
                     var link = new Uri(SiteLink + qLink.GetAttribute("href").TrimStart('/'));
@@ -251,8 +251,8 @@ namespace Jackett.Common.Indexers
                     var release = new ReleaseInfo
                     {
                         Title = title,
-                        Comments = comments,
-                        Guid = comments,
+                        Details = details,
+                        Guid = details,
                         Link = link,
                         PublishDate = publishDate,
                         Category = cat,

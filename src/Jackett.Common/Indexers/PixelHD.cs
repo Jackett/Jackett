@@ -182,11 +182,12 @@ namespace Jackett.Common.Indexers
                         var Leechers = Row.QuerySelector("td:nth-child(8)");
                         var link = new Uri(SiteLink + Row.QuerySelector("a[href^=\"torrents.php?action=download\"]").GetAttribute("href"));
                         var seeders = ParseUtil.CoerceInt(Seeders.TextContent);
-                        var comments = new Uri(SiteLink + title.GetAttribute("href"));
+                        var details = new Uri(SiteLink + title.GetAttribute("href"));
                         var size = ReleaseInfo.GetBytes(Size.TextContent);
                         var leechers = ParseUtil.CoerceInt(Leechers.TextContent);
                         var grabs = ParseUtil.CoerceLong(Grabs.TextContent);
                         var publishDate = DateTimeUtil.FromTimeAgo(added.TextContent);
+
                         var release = new ReleaseInfo
                         {
                             MinimumRatio = 1,
@@ -194,7 +195,7 @@ namespace Jackett.Common.Indexers
                             Title = group + " " + title.TextContent,
                             Category = new List<int> { TorznabCatType.MoviesHD.ID },
                             Link = link,
-                            Comments = comments,
+                            Details = details,
                             Guid = link,
                             Size = size,
                             Seeders = seeders,

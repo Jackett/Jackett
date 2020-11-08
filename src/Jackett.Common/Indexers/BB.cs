@@ -175,8 +175,8 @@ namespace Jackett.Common.Indexers
                         release.Category = MapTrackerCatToNewznab(catStr);
 
                         var qDetails = row.Children[1].QuerySelector("a[title='View Torrent']");
-                        release.Comments = new Uri(BaseUri + qDetails.GetAttribute("href"));
-                        release.Guid = release.Comments;
+                        release.Details = new Uri(BaseUri + qDetails.GetAttribute("href"));
+                        release.Guid = release.Details;
 
                         var qDownload = row.Children[1].QuerySelector("a[title='Download']");
                         release.Link = new Uri(BaseUri + qDownload.GetAttribute("href"));

@@ -199,8 +199,8 @@ namespace Jackett.Common.Indexers
                         release.Seeders = ParseIntValueFromRow(r, nameof(release.Seeders), "td:nth-child(9)");
                         release.Peers = ParseIntValueFromRow(r, nameof(release.Peers), "td:nth-child(10)") + release.Seeders;
                         release.Grabs = ParseIntValueFromRow(r, nameof(release.Grabs), "td:nth-child(11)");
-                        release.Comments = ParseValueFromRow(r, nameof(release.Comments), "td:nth-child(3) a", (e) => GetAbsoluteUrl(e.Attributes["href"].Value));
-                        release.Guid = release.Comments;
+                        release.Details = ParseValueFromRow(r, nameof(release.Details), "td:nth-child(3) a", (e) => GetAbsoluteUrl(e.Attributes["href"].Value));
+                        release.Guid = release.Details;
                         release.DownloadVolumeFactor = 0;
                         release.UploadVolumeFactor = 1;
 

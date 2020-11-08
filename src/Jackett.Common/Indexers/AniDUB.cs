@@ -241,7 +241,7 @@ namespace Jackett.Common.Indexers
                     {
                         Title = BuildReleaseTitle(baseTitle, tabNode),
                         Guid = guid,
-                        Comments = uri,
+                        Details = uri,
                         Link = GetReleaseLink(tabNode),
                         PublishDate = date,
                         Category = categories,

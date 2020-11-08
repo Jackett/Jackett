@@ -118,7 +118,7 @@ namespace Jackett.Common.Indexers
                     var release = new ReleaseInfo
                     {
                         Title = torrent.name,
-                        Comments = new Uri($"{TorrentsUrl}/{torrent.infoHash}"),
+                        Details = new Uri($"{TorrentsUrl}/{torrent.infoHash}"),
                         Guid = details,
                         InfoHash = torrent.infoHash,
                         PublishDate = publishDate,

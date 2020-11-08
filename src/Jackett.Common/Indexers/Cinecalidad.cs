@@ -172,7 +172,7 @@ namespace Jackett.Common.Indexers
                     {
                         Title = title,
                         Link = link,
-                        Comments = link,
+                        Details = link,
                         Guid = link,
                         Category = new List<int> { TorznabCatType.MoviesHD.ID },
                         Poster = poster,

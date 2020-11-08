@@ -153,9 +153,9 @@ namespace Jackett.Common.Indexers
 
                 foreach (var row in rows.Skip(1))
                 {
-                    var qComments = row.QuerySelector(".br_right > a");
-                    var comments = new Uri(SiteLink + qComments.GetAttribute("href"));
-                    var title = qComments.QuerySelector("b").TextContent;
+                    var qDetails = row.QuerySelector(".br_right > a");
+                    var details = new Uri(SiteLink + qDetails.GetAttribute("href"));
+                    var title = qDetails.QuerySelector("b").TextContent;
 
                     var qLink = row.QuerySelector("td:nth-child(4) > a");
                     if (qLink == null)
@@ -179,8 +179,8 @@ namespace Jackett.Common.Indexers
 
                     var release = new ReleaseInfo
                     {
-                        Comments = comments,
-                        Guid = comments,
+                        Details = details,
+                        Guid = details,
                         Title = title,
                         Link = link,
                         PublishDate = publishDate,

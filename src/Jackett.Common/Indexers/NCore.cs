@@ -249,10 +249,8 @@ namespace Jackett.Common.Indexers
                         var downloadId = ParseUtil.GetArgumentFromQueryString(torrentLink, "id");
 
                         //Build site links
-                        var baseLink = SiteLink + "torrents.php?action=details&id=" + downloadId;
+                        var details = new Uri(SiteLink + "torrents.php?action=details&id=" + downloadId);
                         var downloadLink = SiteLink + "torrents.php?action=download&id=" + downloadId;
-                        var commentsUri = new Uri(baseLink + "#comments");
-                        var guidUri = new Uri(baseLink);
                         var linkUri = new Uri(QueryHelpers.AddQueryString(downloadLink, "key", key));
 
                         var seeders = ParseUtil.CoerceInt(row.QuerySelector(".box_s2 a").TextContent);
@@ -283,8 +281,8 @@ namespace Jackett.Common.Indexers
                             DownloadVolumeFactor = 0,
                             UploadVolumeFactor = 1,
                             Link = linkUri,
-                            Comments = commentsUri,
-                            Guid = guidUri,
+                            Details = details,
+                            Guid = details,
                             Seeders = seeders,
                             Peers = leechers + seeders,
                             Imdb = imdbId,

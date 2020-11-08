@@ -1448,7 +1448,7 @@ namespace Jackett.Common.Indexers
                             continue;
                         var qDetailsLink = row.QuerySelector("td.t-title-col > div.t-title > a.tLink");
                         var qSize = row.QuerySelector("td.tor-size");
-                        var comments = new Uri(SiteLink + "forum/" + qDetailsLink.GetAttribute("href"));
+                        var details = new Uri(SiteLink + "forum/" + qDetailsLink.GetAttribute("href"));
                         var seeders = 0;
                         var qSeeders = row.QuerySelector("td:nth-child(7)");
                         if (qSeeders != null && !qSeeders.TextContent.Contains("дн"))
@@ -1470,9 +1470,9 @@ namespace Jackett.Common.Indexers
                             MinimumRatio = 1,
                             MinimumSeedTime = 0,
                             Title = qDetailsLink.TextContent,
-                            Comments = comments,
+                            Details = details,
                             Link = link,
-                            Guid = comments,
+                            Guid = details,
                             Size = size,
                             Seeders = seeders,
                             Peers = leechers + seeders,

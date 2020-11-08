@@ -156,7 +156,7 @@ namespace Jackett.Common.Indexers
                     var release = new ReleaseInfo();
                     var link = row.QuerySelector("td:nth-of-type(2) a:nth-of-type(2)");
                     release.Guid = new Uri(SiteLink + link.GetAttribute("href"));
-                    release.Comments = release.Guid;
+                    release.Details = release.Guid;
                     release.Title = link.GetAttribute("title");
 
                     // There isn't a title attribute if the release name isn't truncated.

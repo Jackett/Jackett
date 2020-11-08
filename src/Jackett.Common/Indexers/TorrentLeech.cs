@@ -180,7 +180,7 @@ namespace Jackett.Common.Indexers
                         continue;
 
                     var torrentId = row["fid"].ToString();
-                    var comments = new Uri(SiteLink + "torrent/" + torrentId);
+                    var details = new Uri(SiteLink + "torrent/" + torrentId);
                     var link = new Uri(SiteLink + "download/" + torrentId + "/" + row["filename"]);
                     var publishDate = DateTime.ParseExact(row["addedTimestamp"].ToString(), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
                     var seeders = (int)row["seeders"];
@@ -192,8 +192,8 @@ namespace Jackett.Common.Indexers
                     var release = new ReleaseInfo
                     {
                         Title = title,
-                        Comments = comments,
-                        Guid = comments,
+                        Details = details,
+                        Guid = details,
                         Link = link,
                         PublishDate = publishDate,
                         Category = MapTrackerCatToNewznab(row["categoryID"].ToString()),

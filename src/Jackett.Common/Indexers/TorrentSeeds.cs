@@ -185,8 +185,8 @@ namespace Jackett.Common.Indexers
                     var qDlLink = row.QuerySelector("a[href^=\"/download.php?torrent=\"]");
 
                     release.Link = new Uri(SiteLink + qDlLink.GetAttribute("href").TrimStart('/'));
-                    release.Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href").TrimStart('/'));
-                    release.Guid = release.Comments;
+                    release.Details = new Uri(SiteLink + qDetailsLink.GetAttribute("href").TrimStart('/'));
+                    release.Guid = release.Details;
 
                     var qColumns = row.QuerySelectorAll("td");
                     release.Files = ParseUtil.CoerceInt(qColumns[3].TextContent);

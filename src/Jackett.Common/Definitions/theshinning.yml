@@ -119,10 +119,6 @@ search:
       filters:
         - name: replace
           args: ["https://theshinning.me/img/nocover.png", ""]
-    comments:
-      selector: a[href*="#comments"]
-      attribute: href
-      optional: true
     imdb:
       optional: true
       selector: a[href*="imdb.com/title/tt"]

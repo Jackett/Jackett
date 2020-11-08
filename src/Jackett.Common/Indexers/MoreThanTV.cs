@@ -29,7 +29,7 @@ namespace Jackett.Common.Indexers
         private string LoginUrl => SiteLink + "login.php";
         private string SearchUrl => SiteLink + "ajax.php?action=browse&searchstr=";
         private string DownloadUrl => SiteLink + "torrents.php?action=download&id=";
-        private string CommentsUrl => SiteLink + "torrents.php?torrentid=";
+        private string DetailsUrl => SiteLink + "torrents.php?torrentid=";
 
         private ConfigurationDataBasicLogin ConfigData => (ConfigurationDataBasicLogin)configData;
 
@@ -283,7 +283,7 @@ namespace Jackett.Common.Indexers
             var grabs = int.Parse(torrentData[1].TextContent, NumberStyles.AllowThousands, CultureInfo.InvariantCulture);
             var seeders = int.Parse(torrentData[2].TextContent, NumberStyles.AllowThousands, CultureInfo.InvariantCulture);
             var leechers = int.Parse(torrentData[3].TextContent, NumberStyles.AllowThousands, CultureInfo.InvariantCulture);
-            var comments = new Uri(CommentsUrl + torrentId);
+            var details = new Uri(DetailsUrl + torrentId);
             var link = new Uri(DownloadUrl + torrentId);
 
             return new ReleaseInfo
@@ -299,8 +299,8 @@ namespace Jackett.Common.Indexers
                 Files = files,
                 Size = size,
                 Grabs = grabs,
-                Guid = comments,
-                Comments = comments,
+                Guid = details,
+                Details = details,
                 DownloadVolumeFactor = 0, // ratioless tracker
                 UploadVolumeFactor = 1
             };

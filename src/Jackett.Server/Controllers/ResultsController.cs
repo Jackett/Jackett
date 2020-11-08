@@ -523,7 +523,7 @@ namespace Jackett.Server.Controllers
                 {
                     release_name = release.Title + "[" + CurrentIndexer.DisplayName + "]", // Suffix the indexer so we can see which tracker we are using in CPS as it just says torrentpotato >.>
                     torrent_id = release.Guid.AbsoluteUri, // GUID and (Link or Magnet) are mandatory
-                    details_url = release.Comments?.AbsoluteUri,
+                    details_url = release.Details?.AbsoluteUri,
                     download_url = (release.Link != null ? release.Link.AbsoluteUri : release.MagnetUri.AbsoluteUri),
                     imdb_id = release.Imdb.HasValue ? ParseUtil.GetFullImdbID("tt" + release.Imdb) : null,
                     freeleech = (release.DownloadVolumeFactor == 0 ? true : false),

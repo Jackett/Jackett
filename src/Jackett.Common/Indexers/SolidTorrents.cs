@@ -164,16 +164,17 @@ namespace Jackett.Common.Indexers
         private ReleaseInfo MakeRelease(JToken torrent)
         {
             // https://solidtorrents.net/view/5e10885d651df640a70ee826
-            var comments = new Uri(SiteLink + "view/" + (string)torrent["_id"]);
+            var details = new Uri(SiteLink + "view/" + (string)torrent["_id"]);
             var swarm = torrent["swarm"];
             var seeders = (int)swarm["seeders"];
             var publishDate = torrent["imported"] != null ? DateTime.Parse((string)torrent["imported"]) : DateTime.Now;
             var magnetUri = new Uri((string)torrent["magnet"]);
+
             return new ReleaseInfo
             {
                 Title = (string)torrent["title"],
-                Comments = comments,
-                Guid = comments,
+                Details = details,
+                Guid = details,
                 PublishDate = publishDate,
                 Category = MapTrackerCatToNewznab((string)torrent["category"]),
                 Size = (long)torrent["size"],

@@ -262,9 +262,6 @@ search:
     details:
       selector: a[href^="torrents.php?id="]
       attribute: href
-    comments:
-      selector: a[href^="torrents.php?id="]
-      attribute: href
     files:
       selector: td:nth-child(3)
     date:

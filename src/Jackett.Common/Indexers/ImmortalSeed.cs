@@ -170,7 +170,7 @@ namespace Jackett.Common.Indexers
                     var qLink = row.QuerySelector("a[href*=\"download.php\"]");
                     release.Link = new Uri(qLink.GetAttribute("href"));
                     release.Guid = release.Link;
-                    release.Comments = new Uri(qDetails.GetAttribute("href"));
+                    release.Details = new Uri(qDetails.GetAttribute("href"));
 
                     // 07-22-2015 11:08 AM
                     var dateString = row.QuerySelectorAll("td:nth-of-type(2) div").Last().LastChild.TextContent.Trim();

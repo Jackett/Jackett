@@ -126,9 +126,6 @@ search:
     details:
       selector: a[href^="torrents-details.php?id="]
       attribute: href
-    comments:
-      selector: a[href^="comments.php?type=torrent&id="]
-      attribute: href
     download:
       selector: a[href^="download.php?id="]
       attribute: href

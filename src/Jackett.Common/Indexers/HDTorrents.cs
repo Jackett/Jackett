@@ -159,7 +159,7 @@ namespace Jackett.Common.Indexers
                 {
                     var mainLink = row.Children[2].QuerySelector("a");
                     var title = mainLink.TextContent;
-                    var comments = new Uri(SiteLink + mainLink.GetAttribute("href"));
+                    var details = new Uri(SiteLink + mainLink.GetAttribute("href"));
 
                     var posterMatch = _posterRegex.Match(mainLink.GetAttribute("onmouseover"));
                     var poster = posterMatch.Success ? new Uri(SiteLink + posterMatch.Groups[1].Value.Replace("\\", "/")) : null;
@@ -221,8 +221,8 @@ namespace Jackett.Common.Indexers
                     var release = new ReleaseInfo
                     {
                         Title = title,
-                        Comments = comments,
-                        Guid = comments,
+                        Details = details,
+                        Guid = details,
                         Link = link,
                         PublishDate = publishDate,
                         Category = cat,

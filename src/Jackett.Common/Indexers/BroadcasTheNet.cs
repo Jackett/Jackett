@@ -158,12 +158,12 @@ namespace Jackett.Common.Indexers
                             descriptions.Add("Youtube Trailer: <a href=\"" + btnResult.YoutubeTrailer + "\">" + btnResult.YoutubeTrailer + "</a>");
                         var imdb = ParseUtil.GetImdbID(btnResult.ImdbID);
                         var link = new Uri(btnResult.DownloadURL);
-                        var comments = new Uri($"{SiteLink}torrents.php?id={btnResult.GroupID}&torrentid={btnResult.TorrentID}");
+                        var details = new Uri($"{SiteLink}torrents.php?id={btnResult.GroupID}&torrentid={btnResult.TorrentID}");
                         var publishDate = DateTimeUtil.UnixTimestampToDateTime(btnResult.Time);
                         var release = new ReleaseInfo
                         {
                             Category = MapTrackerCatToNewznab(btnResult.Resolution),
-                            Comments = comments,
+                            Details = details,
                             Guid = link,
                             Link = link,
                             MinimumRatio = 1,

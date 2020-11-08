@@ -163,7 +163,7 @@ namespace Jackett.Common.Indexers
                     var dateTime = new DateTime(1970,1,1,0,0,0,0,DateTimeKind.Utc);
 
                     var id = row.Value<string>("id");
-                    var comments = new Uri(SiteLink + "details.php?id=" + id);
+                    var details = new Uri(SiteLink + "details.php?id=" + id);
                     var seeders = row.Value<int>("seeders");
 
                     var release = new ReleaseInfo
@@ -172,8 +172,8 @@ namespace Jackett.Common.Indexers
                         MinimumSeedTime = 96 * 60 * 60,
                         DownloadVolumeFactor = 1,
                         UploadVolumeFactor = 1,
-                        Guid = comments,
-                        Comments = comments,
+                        Guid = details,
+                        Details = details,
                         Link = new Uri(SiteLink + "download.php?id=" + id),
                         Title = row.Value<string>("name"),
                         Category = MapTrackerCatToNewznab(row.Value<int>("category").ToString()),

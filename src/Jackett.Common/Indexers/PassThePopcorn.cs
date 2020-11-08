@@ -171,7 +171,7 @@ namespace Jackett.Common.Indexers
                             continue;
                         var link = new Uri($"{SearchUrl}?{releaseLinkQuery.GetQueryString()}");
                         var seeders = int.Parse((string)torrent["Seeders"]);
-                        var comments = new Uri($"{SearchUrl}?id={WebUtility.UrlEncode(movieGroupId)}&torrentid={WebUtility.UrlEncode(torrentId)}");
+                        var details = new Uri($"{SearchUrl}?id={WebUtility.UrlEncode(movieGroupId)}&torrentid={WebUtility.UrlEncode(torrentId)}");
                         var size = long.Parse((string)torrent["Size"]);
                         var grabs = long.Parse((string)torrent["Snatched"]);
                         var publishDate = DateTime.ParseExact((string)torrent["UploadTime"],
@@ -184,7 +184,7 @@ namespace Jackett.Common.Indexers
                             Description = $"Title: {movieTitle}",
                             Poster = poster,
                             Imdb = movieImdbId,
-                            Comments = comments,
+                            Details = details,
                             Size = size,
                             Grabs = grabs,
                             Seeders = seeders,

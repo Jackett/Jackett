@@ -178,10 +178,6 @@ search:
       filters:
         - name: regexp
           args: "src=\\\\'(.*?)\\\\'"
-    comments:
-      selector: td:nth-child(7) a
-      attribute: href
-      optional: true
     download:
       selector: a[href^="download.php"]
       attribute: href

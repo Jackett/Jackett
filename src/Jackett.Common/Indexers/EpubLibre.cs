@@ -120,7 +120,7 @@ namespace Jackett.Common.Indexers
 
                         var poster = new Uri(row.QuerySelector("img[id=catalog]").GetAttribute("src"));
                         var qLink = row.QuerySelector("a");
-                        var comments = new Uri(qLink.GetAttribute("href"));
+                        var details = new Uri(qLink.GetAttribute("href"));
 
                         var qTooltip = parser.ParseDocument(qLink.GetAttribute("data-content"));
                         // we get the language from the last class tag => class="pull-right sprite idioma_5"
@@ -134,9 +134,9 @@ namespace Jackett.Common.Indexers
                         var release = new ReleaseInfo
                         {
                             Title = title,
-                            Comments = comments,
-                            Link = comments,
-                            Guid = comments,
+                            Details = details,
+                            Link = details,
+                            Guid = details,
                             PublishDate = lastPublishDate,
                             Poster = poster,
                             Description = description,

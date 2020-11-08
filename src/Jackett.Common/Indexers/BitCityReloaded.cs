@@ -176,7 +176,7 @@ namespace Jackett.Common.Indexers
 
                     var titleLink = row.QuerySelector("table tbody tr:nth-of-type(1) td a:has(b)");
                     var dlLink = row.QuerySelector("td.tableb > a:has(img[title=\"Torrent herunterladen\"])");
-                    release.Comments = new Uri(SiteLink + titleLink.GetAttribute("href").Replace("&hit=1", ""));
+                    release.Details = new Uri(SiteLink + titleLink.GetAttribute("href").Replace("&hit=1", ""));
                     release.Link = new Uri(SiteLink + dlLink.GetAttribute("href"));
                     release.Title = titleLink.TextContent.Trim();
 

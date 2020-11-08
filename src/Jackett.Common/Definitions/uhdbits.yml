@@ -127,12 +127,6 @@ search:
           args: [" / 2x", ""]
         - name: re_replace
           args: [" / ", " "]
-    comments:
-      selector: a.torrent_name
-      attribute: href
-      filters:
-        - name: replace
-          args: ["\t", " "]
     details:
       selector: a.torrent_name
       attribute: href

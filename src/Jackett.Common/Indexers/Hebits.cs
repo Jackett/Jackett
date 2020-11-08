@@ -142,7 +142,7 @@ namespace Jackett.Common.Indexers
                     var titleParts = qTitle.TextContent.Split('/');
                     release.Title = titleParts.Length >= 2 ? titleParts[1].Trim() : titleParts[0].Trim();
                     var qDetailsLink = qTitle.QuerySelector("a[href^=\"details.php\"]");
-                    release.Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
+                    release.Details = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
                     release.Link = new Uri(SiteLink + row.QuerySelector("a[href^=\"download.php\"]").GetAttribute("href"));
                     release.Guid = release.Link;
                     var dateString = row.QuerySelector("div:last-child").TextContent.Trim();

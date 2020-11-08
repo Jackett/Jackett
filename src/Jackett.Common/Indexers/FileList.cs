@@ -140,7 +140,7 @@ namespace Jackett.Common.Indexers
                     var release = new ReleaseInfo
                     {
                         Title = (string)row["name"],
-                        Comments = detailsUri,
+                        Details = detailsUri,
                         Link = link,
                         Category = MapTrackerCatDescToNewznab((string)row["category"]),
                         Size = (long)row["size"],

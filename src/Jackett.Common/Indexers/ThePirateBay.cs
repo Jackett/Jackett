@@ -213,14 +213,14 @@ namespace Jackett.Common.Indexers
 
         private ReleaseInfo CreateReleaseInfo(QueryResponseItem item)
         {
-            var commentsUri = item.Id == 0 ? null : new Uri($"{SiteLink}description.php?id={item.Id}");
+            var details = item.Id == 0 ? null : new Uri($"{SiteLink}description.php?id={item.Id}");
             var imdbId = string.IsNullOrEmpty(item.Imdb) ? null : ParseUtil.GetImdbID(item.Imdb);
             return new ReleaseInfo
             {
                 Title = item.Name,
                 Category = MapTrackerCatToNewznab(item.Category.ToString()),
-                Guid = commentsUri,
-                Comments = commentsUri,
+                Guid = details,
+                Details = details,
                 InfoHash = item.InfoHash, // magnet link is auto generated from infohash
                 PublishDate = DateTimeUtil.UnixTimestampToDateTime(item.Added),
                 Seeders = item.Seeders,

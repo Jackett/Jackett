@@ -194,7 +194,7 @@ namespace Jackett.Common.Indexers
                         release.Category = currentCategories;
                         release.Description = row.QuerySelector("span.tags")?.TextContent;
                         release.Guid = new Uri(SiteLink + qTitleLink.GetAttribute("href"));
-                        release.Comments = release.Guid;
+                        release.Details = release.Guid;
 
                         release.Link = new Uri(SiteLink + row.QuerySelector(".peers a").GetAttribute("href"));
 

@@ -116,9 +116,6 @@ search:
           args: ["No downloads yet", "0"]
         - name: regexp
           args: ([\d,]+)
-    comments:
-      selector: a[href^="details.php?id="]
-      attribute: href
     download:
       selector: a[href^="download.php?id="]
       attribute: href

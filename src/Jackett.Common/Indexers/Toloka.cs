@@ -279,7 +279,7 @@ namespace Jackett.Common.Indexers
                         var timestr = Row.QuerySelector("td:nth-child(13)").TextContent;
                         var forum = Row.QuerySelector("td:nth-child(2) > a");
                         var forumid = forum.GetAttribute("href").Split('=')[1];
-                        var comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
+                        var details = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
                         var link = new Uri(SiteLink + qDownloadLink.GetAttribute("href"));
                         var size = ReleaseInfo.GetBytes(qSize.TextContent);
                         var leechers = ParseUtil.CoerceInt(Row.QuerySelector("td:nth-child(11) > b").TextContent);
@@ -289,9 +289,9 @@ namespace Jackett.Common.Indexers
                             MinimumRatio = 1,
                             MinimumSeedTime = 0,
                             Title = qDetailsLink.TextContent,
-                            Comments = comments,
+                            Details = details,
                             Link = link,
-                            Guid = comments,
+                            Guid = details,
                             Size = size,
                             Seeders = seeders,
                             Peers = leechers + seeders,

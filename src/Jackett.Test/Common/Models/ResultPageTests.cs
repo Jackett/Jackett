@@ -59,7 +59,7 @@ namespace Jackett.Test.Common.Models
                             Title = text,
                             Guid = link,
                             Link = link,
-                            Comments = link,
+                            Details = link,
                             PublishDate = new DateTime(2020, 09, 22),
                             Description = text,
                             Author = text,

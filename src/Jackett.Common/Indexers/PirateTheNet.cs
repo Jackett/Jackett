@@ -173,7 +173,7 @@ namespace Jackett.Common.Indexers
                     var seeders = ParseUtil.CoerceInt(qSeeders.Text());
                     var files = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(4)").TextContent);
                     var grabs = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(8)").TextContent);
-                    var comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
+                    var details = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
                     var size = ReleaseInfo.GetBytes(sizeStr);
                     var leechers = ParseUtil.CoerceInt(qLeechers.Text());
                     var title = qDetailsLink.GetAttribute("alt");
@@ -184,7 +184,7 @@ namespace Jackett.Common.Indexers
                         Title = title,
                         Category = MapTrackerCatToNewznab(catStr),
                         Link = link,
-                        Comments = comments,
+                        Details = details,
                         Guid = link,
                         PublishDate = pubDateUtc.ToLocalTime(),
                         Size = size,

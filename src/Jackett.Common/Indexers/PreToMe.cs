@@ -231,7 +231,7 @@ namespace Jackett.Common.Indexers
                     if (!query.MatchQueryStringAND(title))
                         continue; // we have to skip bad titles due to tags + any word search
 
-                    var comments = new Uri(SiteLink + qLink.GetAttribute("href"));
+                    var details = new Uri(SiteLink + qLink.GetAttribute("href"));
                     var link = new Uri(SiteLink + row.Children[2].QuerySelector("a").GetAttribute("href"));
                     var dateStr = Regex.Replace(row.Children[5].InnerHtml, @"\<br[\s]{0,1}[\/]{0,1}\>", " ");
                     var publishDate = DateTimeUtil.FromTimeAgo(dateStr);
@@ -245,8 +245,8 @@ namespace Jackett.Common.Indexers
                     var release = new ReleaseInfo
                     {
                         Title = title,
-                        Comments = comments,
-                        Guid = comments,
+                        Details = details,
+                        Guid = details,
                         Link = link,
                         PublishDate = publishDate,
                         Size = size,

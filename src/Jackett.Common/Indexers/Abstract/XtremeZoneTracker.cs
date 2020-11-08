@@ -122,7 +122,7 @@ namespace Jackett.Common.Indexers.Abstract
                 foreach (var row in rows)
                 {
                     var id = row.Value<string>("id");
-                    var comments = new Uri($"{SiteLink}browse/{id}");
+                    var details = new Uri($"{SiteLink}browse/{id}");
                     var link = new Uri($"{SiteLink}api/torrent/{id}/download");
                     var publishDate = DateTime.Parse(row.Value<string>("created_at"), CultureInfo.InvariantCulture);
                     var cat = row.Value<JToken>("category").Value<string>("id");
@@ -141,8 +141,8 @@ namespace Jackett.Common.Indexers.Abstract
                     {
                         Title = row.Value<string>("name"),
                         Link = link,
-                        Comments = comments,
-                        Guid = comments,
+                        Details = details,
+                        Guid = details,
                         Category =  MapTrackerCatToNewznab(cat),
                         PublishDate = publishDate,
                         Description = description,

@@ -665,7 +665,7 @@ namespace Jackett.Common.Indexers
             result.Title = FixedTitle(result, quality, language);
             result.Link = new Uri(detailsUrl);
             result.Guid = result.Link;
-            result.Comments = result.Link;
+            result.Details = result.Link;
             result.PublishDate = publishDate;
             result.Poster = new Uri(poster);
             result.Seeders = 1;

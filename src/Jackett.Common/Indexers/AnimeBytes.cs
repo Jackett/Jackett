@@ -273,8 +273,7 @@ namespace Jackett.Common.Indexers
                             var uploadTimeString = (string)torrent["UploadTime"];
                             var uploadTime = DateTime.ParseExact(uploadTimeString, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
                             var publishDate = DateTime.SpecifyKind(uploadTime, DateTimeKind.Utc).ToLocalTime();
-                            var commentsLink = SiteLink + "torrent/" + torrentId + "/group";
-                            var commentsLinkUri = new Uri(commentsLink);
+                            var details = new Uri(SiteLink + "torrent/" + torrentId + "/group");
                             var size = (long)torrent["Size"];
                             var snatched = (long)torrent["Snatched"];
                             var seeders = (int)torrent["Seeders"];
@@ -366,13 +365,13 @@ namespace Jackett.Common.Indexers
                                     $"{title} {year} {releaseGroup}{infoString}" :
                                     $"{releaseGroup}{title} {releaseInfo} {infoString}";
 
-                                var guid = new Uri(commentsLinkUri + "&nh=" + StringUtil.Hash(title));
+                                var guid = new Uri(details + "&nh=" + StringUtil.Hash(title));
                                 var release = new ReleaseInfo
                                 {
                                     MinimumRatio = 1,
                                     MinimumSeedTime = minimumSeedTime,
                                     Title = releaseTitle,
-                                    Comments = commentsLinkUri,
+                                    Details = details,
                                     Guid = guid,
                                     Link = linkUri,
                                     Poster = poster,

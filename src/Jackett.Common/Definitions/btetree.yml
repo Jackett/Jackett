@@ -55,9 +55,6 @@ search:
       attribute: href
     files:
       selector: td:nth-child(4)
-    comments:
-      selector: td:nth-child(5) a
-      attribute: href
     date:
       selector: td:nth-child(6)
       filters:

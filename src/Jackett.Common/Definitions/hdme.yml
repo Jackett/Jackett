@@ -116,7 +116,7 @@ search:
     title:
       selector: td:nth-child(3) > a
       attribute: title
-    comments:
+    details:
       selector: td:nth-child(3) > a
       attribute: href
     download:

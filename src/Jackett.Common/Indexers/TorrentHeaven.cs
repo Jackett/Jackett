@@ -233,7 +233,7 @@ namespace Jackett.Common.Indexers
                     else
                         downloadFactor = 1;
                     var title = titleRegexp.Match(qDetailsLink.GetAttribute("onmouseover")).Groups[1].Value;
-                    var comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
+                    var details = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
                     var size = ReleaseInfo.GetBytes(qColumn1[1].TextContent);
                     var seeders = ParseUtil.CoerceInt(qColumn2[2].TextContent);
                     var leechers = ParseUtil.CoerceInt(qColumn1[3].TextContent);
@@ -246,7 +246,7 @@ namespace Jackett.Common.Indexers
                         MinimumSeedTime = 0,
                         Title = title,
                         Category = MapTrackerCatToNewznab(catStr),
-                        Comments = comments,
+                        Details = details,
                         Link = link,
                         Guid = link,
                         Size = size,

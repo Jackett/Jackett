@@ -134,7 +134,7 @@ namespace Jackett.Common.Indexers
                 foreach (var torrent in torrents)
                 {
                     var torrentId = (long)torrent.id;
-                    var comments = new Uri(SiteLink + "torrents/" + torrentId);
+                    var details = new Uri(SiteLink + "torrents/" + torrentId);
                     var link = new Uri(SiteLink + "download/" + torrentId);
                     var publishDate = DateTime.Parse(torrent.added.ToString());
                     var imdbId = ParseUtil.GetImdbID(torrent.imdb_id.ToString());
@@ -161,8 +161,8 @@ namespace Jackett.Common.Indexers
                     var release = new ReleaseInfo
                     {
                         Title = torrent.name.ToString(),
-                        Comments = comments,
-                        Guid = comments,
+                        Details = details,
+                        Guid = details,
                         Link = link,
                         PublishDate = publishDate,
                         Category = MapTrackerCatToNewznab(torrent.category.ToString()),

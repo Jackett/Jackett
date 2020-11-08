@@ -189,7 +189,7 @@ namespace Jackett.Common.Indexers
                 UploadVolumeFactor = 1,
                 InfoHash = infoHash, // magnet link is auto generated from infohash
                 Guid = detailsLink,
-                Comments = detailsLink,
+                Details = detailsLink,
                 Size = sizeMatch.Success ? ReleaseInfo.GetBytes(sizeMatch.Groups[1].Value) : 0
             };
             return release;

@@ -199,8 +199,8 @@ namespace Jackett.Common.Indexers
 
                         // Title and torrent link
                         release.Title = qDetailsLink.TextContent;
-                        release.Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href").TrimStart('/'));
-                        release.Guid = release.Comments;
+                        release.Details = new Uri(SiteLink + qDetailsLink.GetAttribute("href").TrimStart('/'));
+                        release.Guid = release.Details;
 
                         // Date of torrent creation
                         var liopis = Row.QuerySelector("div.listeklink div span.middle");

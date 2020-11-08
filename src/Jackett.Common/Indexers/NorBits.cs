@@ -30,8 +30,7 @@ namespace Jackett.Common.Indexers
         private string LoginUrl => SiteLink + "login.php";
         private string LoginCheckUrl => SiteLink + "takelogin.php";
         private string SearchUrl => SiteLink + "browse.php";
-        private string TorrentCommentUrl => SiteLink + "details.php?id={id}&comonly=1#page1";
-        private string TorrentDescriptionUrl => SiteLink + "details.php?id={id}";
+        private string TorrentDetailsUrl => SiteLink + "details.php?id={id}";
         private string TorrentDownloadUrl => SiteLink + "download.php?id={id}&passkey={passkey}";
         private bool Latency => ConfigData.Latency.Value;
         private bool DevMode => ConfigData.DevMode.Value;
@@ -359,12 +358,8 @@ namespace Jackett.Common.Indexers
                         Output("Released on: " + date);
 
                         // Torrent Details URL
-                        var detailsLink = new Uri(TorrentDescriptionUrl.Replace("{id}", id.ToString()));
-                        Output("Details: " + detailsLink.AbsoluteUri);
-
-                        // Torrent Comments URL
-                        var commentsLink = new Uri(TorrentCommentUrl.Replace("{id}", id.ToString()));
-                        Output("Comments Link: " + commentsLink.AbsoluteUri);
+                        var details = new Uri(TorrentDetailsUrl.Replace("{id}", id.ToString()));
+                        Output("Details: " + details.AbsoluteUri);
 
                         // Torrent Download URL
                         var passkey = row.QuerySelector("td:nth-of-type(2) > a:nth-of-type(2)").GetAttribute("href");
@@ -383,8 +378,8 @@ namespace Jackett.Common.Indexers
                             Size = size,
                             Files = files,
                             Grabs = completed,
-                            Guid = detailsLink,
-                            Comments = commentsLink,
+                            Guid = details,
+                            Details = details,
                             Link = downloadLink,
                             MinimumRatio = 1,
                             MinimumSeedTime = 172800 // 48 hours

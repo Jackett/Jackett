@@ -411,7 +411,7 @@ namespace Jackett.Common.Indexers
                         var size = qSize.TextContent;
                         release.Size = ReleaseInfo.GetBytes(size);
                         release.Link = new Uri(SiteLink + qDlLink.GetAttribute("href"));
-                        release.Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
+                        release.Details = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
                         release.Guid = release.Link;
                         release.Grabs = ParseUtil.CoerceLong(qGrabs.TextContent);
                         release.Seeders = ParseUtil.CoerceInt(qSeeders.TextContent);
@@ -539,7 +539,7 @@ namespace Jackett.Common.Indexers
                         release.Title += " " + extraInfo.TrimEnd();
                         release.Category = MapTrackerCatToNewznab(catStr);
                         release.Link = new Uri(SiteLink + qDlLink.GetAttribute("href"));
-                        release.Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
+                        release.Details = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
                         release.Guid = release.Link;
                         release.Seeders = ParseUtil.CoerceInt(qSeeders.TextContent);
                         release.Peers = ParseUtil.CoerceInt(qLeechers.TextContent) + release.Seeders;

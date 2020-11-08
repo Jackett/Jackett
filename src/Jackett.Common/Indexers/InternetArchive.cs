@@ -23,7 +23,7 @@ namespace Jackett.Common.Indexers
     public class InternetArchive : BaseWebIndexer
     {
         private string SearchUrl => SiteLink + "advancedsearch.php";
-        private string CommentsUrl => SiteLink + "details/";
+        private string DetailsUrl => SiteLink + "details/";
         private string LinkUrl => SiteLink + "download/";
 
         private string _sort;
@@ -181,15 +181,15 @@ namespace Jackett.Common.Indexers
         {
             var id = GetFieldAs<string>("identifier", torrent);
             var title = GetFieldAs<string>("title", torrent) ?? id;
-            var comments = new Uri(CommentsUrl + id);
+            var details = new Uri(DetailsUrl + id);
             var btih = GetFieldAs<string>("btih", torrent);
             var link = new Uri(LinkUrl + id + "/" + id + "_archive.torrent");
 
             var release = new ReleaseInfo
             {
                 Title = title,
-                Comments = comments,
-                Guid = comments,
+                Details = details,
+                Guid = details,
                 PublishDate = GetFieldAs<DateTime>("publicdate", torrent),
                 Category = MapTrackerCatToNewznab(GetFieldAs<string>("mediatype", torrent)),
                 Size = GetFieldAs<long>("item_size", torrent),
