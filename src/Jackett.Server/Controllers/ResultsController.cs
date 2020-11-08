@@ -139,8 +139,9 @@ namespace Jackett.Server.Controllers
 
             if (!resultController.CurrentIndexer.CanHandleQuery(resultController.CurrentQuery))
             {
-                context.Result = ResultsController.GetErrorActionResult(context.RouteData, HttpStatusCode.BadRequest, 201, $"{resultController.CurrentIndexer.Id} " +
-                    $"does not support the requested query. Please check the capabilities (t=caps) and make sure the search mode and categories are supported.");
+                context.Result = ResultsController.GetErrorActionResult(context.RouteData, HttpStatusCode.BadRequest, 201, 
+                    $"{resultController.CurrentIndexer.Id} does not support the requested query. " +
+                    "Please check the capabilities (t=caps) and make sure the search mode and parameters are supported.");
 
             }
         }
@@ -211,13 +212,11 @@ namespace Jackett.Server.Controllers
             var manualResult = new ManualSearchResult();
             var trackers = IndexerService.GetAllIndexers().ToList().Where(t => t.IsConfigured);
             if (request.Tracker != null)
-            {
                 trackers = trackers.Where(t => request.Tracker.Contains(t.Id));
-            }
-
             trackers = trackers.Where(t => t.CanHandleQuery(CurrentQuery));
 
-            var tasks = trackers.ToList().Select(t => t.ResultsForQuery(CurrentQuery)).ToList();
+            var isMetaIndexer = request.Tracker == null || request.Tracker.Length > 1;
+            var tasks = trackers.ToList().Select(t => t.ResultsForQuery(CurrentQuery, isMetaIndexer)).ToList();
             try
             {
                 var aggregateTask = Task.WhenAll(tasks);
