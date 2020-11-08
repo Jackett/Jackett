@@ -24,12 +24,17 @@ download:
 
 search:
   paths:
+    # http://vsthouse.ru/search/?q=drummer&m=load&t=0
     - path: search
   inputs:
     q: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+    m: load
+    t: 0
 
   rows:
     selector: table.eBlock:has(div.eDetails:contains(":"))
+    filters:
+      - name: andmatch
 
   fields:
     category:
