@@ -107,7 +107,7 @@ settings:
 
 search:
   paths:
-    # http://www.filebase.ws/torrents/search/?s=dateD&t=all&c=serials&search=mandalorian&t=all
+    # http://www.filebase.ws/torrents/search/?s=dateD&t=all&c=serials&search=mandalorian
     - path: torrents/search/
   keywordsfilters:
     - name: diacritics
@@ -128,13 +128,13 @@ search:
 
   fields:
     category:
-      selector: td:nth-child(1) a
+      selector: td:nth-child(1) > a
       attribute: href
       filters:
         - name: split
           args: ["/", 2]
     torrent_id:
-      selector: td:nth-child(2) a
+      selector: td:nth-child(2) > a
       attribute: href
       filters:
         - name: split
@@ -170,7 +170,7 @@ search:
         - name: replace
           args: ["HDTVRip", "HDTV"]
     details:
-      selector: td:nth-child(2) a
+      selector: td:nth-child(2) > a
       attribute: href
     download:
       text: "{{ .Config.sitelink }}download.php?id={{ .Result.torrent_id }}"
