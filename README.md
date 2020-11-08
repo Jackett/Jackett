@@ -190,6 +190,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Kinozal
  * Korsar
  * LostFilm.tv
+ * Magnetico (Local DHT) [[site](https://github.com/boramalper/magnetico)]
  * MVGroup Forum
  * MVGroup Main
  * Marine Tracker
