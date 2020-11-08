@@ -326,19 +326,30 @@ namespace Jackett.Test.Common.Models
         }
 
         [Test]
-        public void TestSupportsCategories()
+        public void TestSupportedCategories()
         {
             var tcc = CreateTestDataset();
 
-            Assert.True(tcc.SupportsCategories(new []{ TorznabCatType.Movies.ID })); // parent cat
-            Assert.True(tcc.SupportsCategories(new []{ TorznabCatType.MoviesSD.ID })); // child cat
-            Assert.True(tcc.SupportsCategories(new []{ TorznabCatType.Movies.ID, TorznabCatType.MoviesSD.ID })); // parent & child
-            Assert.True(tcc.SupportsCategories(new []{ 100040 })); // custom cat
-            Assert.False(tcc.SupportsCategories(new []{ TorznabCatType.Movies3D.ID })); // not supported child cat
-            Assert.False(tcc.SupportsCategories(new []{ 9999 })); // unknown cat
-            Assert.False(tcc.SupportsCategories(new []{ 100001 })); // unknown custom cat
-            Assert.False(tcc.SupportsCategories(new int[]{})); // empty list
-            Assert.False(tcc.SupportsCategories(null)); // null
+            Assert.AreEqual( new[] { TorznabCatType.Movies.ID }, // parent cat
+                tcc.SupportedCategories(new []{ TorznabCatType.Movies.ID }));
+            Assert.AreEqual( new[] { TorznabCatType.MoviesSD.ID }, // child cat
+                tcc.SupportedCategories(new []{ TorznabCatType.MoviesSD.ID }));
+            Assert.AreEqual( new[] { TorznabCatType.Movies.ID, TorznabCatType.MoviesSD.ID }, //  parent & child cat
+                tcc.SupportedCategories(new []{ TorznabCatType.Movies.ID, TorznabCatType.MoviesSD.ID }));
+            Assert.AreEqual( new[] { 100040 }, // custom cat
+                tcc.SupportedCategories(new []{ 100040 })); 
+            Assert.AreEqual( new[] { TorznabCatType.Movies.ID }, // mixed good and bad
+                tcc.SupportedCategories(new []{ TorznabCatType.Movies.ID, 9999 }));
+            Assert.AreEqual( new int[] {}, // not supported child cat
+                tcc.SupportedCategories(new []{ TorznabCatType.Movies3D.ID }));
+            Assert.AreEqual( new int[] {}, // unknown cat
+                tcc.SupportedCategories(new []{ 9999 }));
+            Assert.AreEqual( new int[] {}, // unknown custom cat
+                tcc.SupportedCategories(new []{ 100001 }));
+            Assert.AreEqual( new int[]{}, // empty list
+                tcc.SupportedCategories(new int[]{}));
+            Assert.AreEqual( new int[] {}, // null
+                tcc.SupportedCategories(null));
         }
 
         [Test]

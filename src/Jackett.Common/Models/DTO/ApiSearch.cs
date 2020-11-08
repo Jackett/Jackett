@@ -41,7 +41,6 @@ namespace Jackett.Common.Models.DTO
 
             stringQuery.SearchTerm = queryStr;
             stringQuery.Categories = request.Category ?? new int[0];
-            stringQuery.ExpandCatsToSubCats();
 
             // try to build an IMDB Query (tt plus 6 to 8 digits)
             if (stringQuery.SanitizedSearchTerm.StartsWith("tt") && stringQuery.SanitizedSearchTerm.Length <= 10)
@@ -57,7 +56,6 @@ namespace Jackett.Common.Models.DTO
                         Season = stringQuery.Season,
                         Episode = stringQuery.Episode,
                     };
-                    imdbQuery.ExpandCatsToSubCats();
 
                     return imdbQuery;
                 }
