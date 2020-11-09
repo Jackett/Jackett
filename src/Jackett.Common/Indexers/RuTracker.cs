@@ -149,6 +149,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(893, TorznabCatType.TVAnime, "|- Японские мультфильмы");
             AddCategoryMapping(809, TorznabCatType.Audio, "|- Звуковые дорожки (Аниме)");
             AddCategoryMapping(9, TorznabCatType.TV, "Русские сериалы");
+            AddCategoryMapping(81, TorznabCatType.TVHD, "|- Русские сериалы (HD Video)");
             AddCategoryMapping(80, TorznabCatType.TV, "|- Возвращение Мухтара");
             AddCategoryMapping(1535, TorznabCatType.TV, "|- Воронины");
             AddCategoryMapping(188, TorznabCatType.TV, "|- Чернобыль: Зона отчуждения");
@@ -451,7 +452,9 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(2452, TorznabCatType.Books, "|- История Азии и Африки");
             AddCategoryMapping(2445, TorznabCatType.Books, "|- История Америки, Австралии, Океании");
             AddCategoryMapping(2435, TorznabCatType.Books, "|- История России");
+            AddCategoryMapping(667, TorznabCatType.Books, "|- История России до 1917 года");
             AddCategoryMapping(2436, TorznabCatType.Books, "|- Эпоха СССР");
+            AddCategoryMapping(1335, TorznabCatType.Books, "|- История России после 1991 года");
             AddCategoryMapping(2453, TorznabCatType.Books, "|- История стран бывшего СССР");
             AddCategoryMapping(2320, TorznabCatType.Books, "|- Этнография, антропология");
             AddCategoryMapping(1801, TorznabCatType.Books, "|- Международные отношения. Дипломатия");
@@ -666,8 +669,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(1592, TorznabCatType.BooksOther, "|- Ушу");
             AddCategoryMapping(1595, TorznabCatType.BooksOther, "|- Разное");
             AddCategoryMapping(1556, TorznabCatType.BooksTechnical, "Компьютерные видеоуроки и обучающие интерактивные DVD");
-            AddCategoryMapping(1557, TorznabCatType.BooksTechnical, "|- Архив (Компьютерные видеоуроки)");
             AddCategoryMapping(1560, TorznabCatType.BooksTechnical, "|- Компьютерные сети и безопасность");
+            AddCategoryMapping(1991, TorznabCatType.BooksTechnical, "|- Devops");
             AddCategoryMapping(1561, TorznabCatType.BooksTechnical, "|- ОС и серверные программы Microsoft");
             AddCategoryMapping(1653, TorznabCatType.BooksTechnical, "|- Офисные программы Microsoft");
             AddCategoryMapping(1570, TorznabCatType.BooksTechnical, "|- ОС и программы семейства UNIX");
@@ -798,7 +801,6 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(1773, TorznabCatType.Audio, "|- Отечественная Ska музыка (lossy и lossless)");
             AddCategoryMapping(2233, TorznabCatType.Audio, "|- Reggae, Ska, Dub (компиляции) (lossy и lossless)");
             AddCategoryMapping(416, TorznabCatType.Audio, "Саундтреки, караоке и мюзиклы");
-            AddCategoryMapping(782, TorznabCatType.Audio, "|- Караоке (аудио)");
             AddCategoryMapping(2377, TorznabCatType.AudioVideo, "|- Караоке (видео)");
             AddCategoryMapping(468, TorznabCatType.Audio, "|- Минусовки (lossy и lossless)");
             AddCategoryMapping(691, TorznabCatType.AudioLossless, "|- Саундтреки к отечественным фильмам (lossless)");
@@ -1043,7 +1045,6 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(1170, TorznabCatType.Audio, "|- Конверсии SACD");
             AddCategoryMapping(1759, TorznabCatType.Audio, "|- Конверсии Blu-Ray, ADVD и DVD-Audio");
             AddCategoryMapping(1852, TorznabCatType.Audio, "|- Апмиксы-Upmixes/Даунмиксы-Downmix");
-            AddCategoryMapping(2510, TorznabCatType.AudioVideo, "|- Советская эстрада, ретро, романсы (Видео)");
             AddCategoryMapping(413, TorznabCatType.AudioVideo, "Музыкальное SD видео");
             AddCategoryMapping(445, TorznabCatType.AudioVideo, "|- Классическая и современная академическая музыка (Видео)");
             AddCategoryMapping(702, TorznabCatType.AudioVideo, "|- Опера, Оперетта и Мюзикл (Видео) ");
@@ -1121,12 +1122,12 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(900, TorznabCatType.PCGames, "|- Визуальные новеллы");
             AddCategoryMapping(128, TorznabCatType.PCGames, "|- Для самых маленьких");
             AddCategoryMapping(2204, TorznabCatType.PCGames, "|- Логические игры");
+            AddCategoryMapping(278, TorznabCatType.PCGames, "|- Шахматы");
             AddCategoryMapping(2118, TorznabCatType.PCGames, "|- Многопользовательские игры");
             AddCategoryMapping(52, TorznabCatType.PCGames, "|- Ролевые игры");
             AddCategoryMapping(54, TorznabCatType.PCGames, "|- Симуляторы");
             AddCategoryMapping(51, TorznabCatType.PCGames, "|- Стратегии в реальном времени");
             AddCategoryMapping(2226, TorznabCatType.PCGames, "|- Пошаговые стратегии");
-            AddCategoryMapping(278, TorznabCatType.PCGames, "|- Шахматы");
             AddCategoryMapping(2228, TorznabCatType.PCGames, "|- IBM-PC-несовместимые компьютеры");
             AddCategoryMapping(139, TorznabCatType.PCGames, "Прочее для Windows-игр");
             AddCategoryMapping(2478, TorznabCatType.PCGames, "|- Официальные патчи, моды, плагины, дополнения");
@@ -1488,7 +1489,6 @@ namespace Jackett.Common.Indexers
                             TorznabCatType.TV.SubCategories.Any(subCat => release.Category.Contains(subCat.ID)))
                         {
                             // extract season and episodes
-                            //var regex = new Regex(".+\\/\\s([^а-яА-я\\/]+)\\s\\/.+Сезон\\s*[:]*\\s+(\\d+).+(?:Серии|Эпизод)+\\s*[:]*\\s+(\\d+-*\\d*).+,\\s+(.+)\\].+(\\(.+\\)).*");
                             var regex = new Regex(".+\\/\\s([^а-яА-я\\/]+)\\s\\/.+Сезон\\s*[:]*\\s+(\\d+).+(?:Серии|Эпизод)+\\s*[:]*\\s+(\\d+-*\\d*).+,\\s+(.+)\\][\\s]?(.*)");
 
                             var title = regex.Replace(release.Title, "$1 - S$2E$3 - rus $4 $5");
