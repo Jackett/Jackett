@@ -127,6 +127,8 @@ search:
   keywordsfilters:
     - name: re_replace
       args: ["S0?(\\d{1,2})E(\\d{1,2})", "$1x$2"]
+    - name: re_replace
+      args: ["\\s*(19|20)\\d{2}$", ""] # Fix for Radarr. Remove the year
   inputs:
     p: torrents
     page: 1
@@ -152,7 +154,7 @@ search:
       selector: td.torrent_name > a, .newIndicator > a
       filters:
         - name: append
-          args: " [spanish]"
+          args: " SPANiSH"
     details:
       selector: td.torrent_name > a, .newIndicator > a
       attribute: href

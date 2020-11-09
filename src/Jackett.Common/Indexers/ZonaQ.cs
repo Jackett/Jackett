@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
@@ -178,6 +179,9 @@ namespace Jackett.Common.Indexers
                         continue;
 
                     var title = qTitleLink.TextContent.Trim();
+                    title += " SPANiSH"; // fix for Radarr
+                    title = Regex.Replace(title, "4k", "2160p", RegexOptions.IgnoreCase);
+
                     var detailsStr = qTitleLink.GetAttribute("href");
                     var details = new Uri(detailsStr);
                     var link = new Uri(detailsStr.Replace("/index.php?page=torrent-details&", "/download.php?"));

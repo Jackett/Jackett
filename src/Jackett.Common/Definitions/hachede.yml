@@ -183,6 +183,12 @@ search:
           args: ["\\.+", "."] # More than 1 dot -> .
         - name: re_replace
           args: ["^\\.", ""] # Delete first dot
+        - name: re_replace
+          args: [".BR.", ".BDRip."] # Fix for Radarr
+        - name: re_replace
+          args: ["(?i)m720p", "MicroHD.720p"] # Fix for Radarr
+        - name: re_replace
+          args: ["(?i)m1080p", "MicroHD.1080p"] # Fix for Radarr
     details:
       selector: td.torrent_name > a, .newIndicator > a
       attribute: href
