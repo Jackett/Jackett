@@ -344,6 +344,7 @@ namespace Jackett.Common.Indexers
                 if (queryMatch.Success)
                     quality = queryMatch.Groups[1].Value;
                 quality = quality.Trim().Replace("-", " ");
+                quality = Regex.Replace(quality, "HDRip", "BDRip", RegexOptions.IgnoreCase); // fix for Radarr
             }
 
             // add the year

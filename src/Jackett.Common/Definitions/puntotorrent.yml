@@ -260,7 +260,7 @@ search:
         - name: append
           args: "2160p.Spanish-PuntoTorrent"
 
-    title|append: # 1080
+    title|append: # 1080p
       selector: td:nth-child(2) a:contains("1080"),a:contains("microhd"),a:contains("mhd"),a:contains("BDRemux"):not(:contains("2160"))
       optional: true
       filters:
@@ -269,7 +269,7 @@ search:
         - name: append
           args: "1080p.Spanish-PuntoTorrent"
 
-    title|append: # 720
+    title|append: # 720p
       selector: td:nth-child(2) a:contains("720")
       optional: true
       filters:
@@ -278,14 +278,14 @@ search:
         - name: append
           args: "720p.Spanish-PuntoTorrent"
 
-    title|append: # 480
-      selector: td:nth-child(2) a:contains("Xvid"),a:contains("XVID"),a:contains("xvid")
+    title|append: # 480p
+      selector: td:nth-child(2) a:contains("480"),a:contains("Xvid"),a:contains("XVID"),a:contains("xvid")
       optional: true
       filters:
         - name: re_replace
           args: [".", ""]
         - name: append
-          args: "480.Spanish-PuntoTorrent"
+          args: "480p.Spanish-PuntoTorrent"
 
     title:
       selector: td:nth-child(2) a:contains("VOSE")
