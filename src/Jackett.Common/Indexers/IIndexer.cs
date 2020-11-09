@@ -51,7 +51,7 @@ namespace Jackett.Common.Indexers
 
         void Unconfigure();
 
-        Task<IndexerResult> ResultsForQuery(TorznabQuery query);
+        Task<IndexerResult> ResultsForQuery(TorznabQuery query, bool isMetaIndexer=false);
 
         bool CanHandleQuery(TorznabQuery query);
     }

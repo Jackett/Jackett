@@ -210,24 +210,5 @@ namespace Jackett.Common.Models
             }
             return episodeString;
         }
-
-        public void ExpandCatsToSubCats()
-        {
-            if (Categories.Count() == 0)
-                return;
-            var newCatList = new List<int>();
-            newCatList.AddRange(Categories);
-            foreach (var cat in Categories)
-            {
-                var majorCat = TorznabCatType.AllCats.Where(c => c.ID == cat).FirstOrDefault();
-                // If we search for TV we should also search for all sub cats
-                if (majorCat != null)
-                {
-                    newCatList.AddRange(majorCat.SubCategories.Select(s => s.ID));
-                }
-            }
-
-            Categories = newCatList.Distinct().ToArray();
-        }
     }
 }

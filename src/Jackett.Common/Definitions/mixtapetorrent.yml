@@ -31,6 +31,8 @@ search:
   rows:
     selector: dl.search-results > dt, dl.search-results > dd
     after: 1
+    filters:
+      - name: andmatch
 
   fields:
     category:
@@ -50,8 +52,10 @@ search:
       filters:
         - name: regexp
           args: "(\\w{3} \\d{1,2} \\d{4} - \\d{1,2}:\\d{2}[a|p]m)"
+        - name: append
+          args: " -07:00" # PDT
         - name: dateparse
-          args: "Jan 2 2006 - 3:04pm"
+          args: "Jan 2 2006 - 3:04pm -07:00"
     size:
       text: "128 MB"
     seeders:

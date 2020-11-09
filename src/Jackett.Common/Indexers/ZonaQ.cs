@@ -6,6 +6,8 @@ using System.Globalization;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
@@ -121,8 +123,22 @@ namespace Jackett.Common.Indexers
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-            await DoLogin();
-            return IndexerConfigurationStatus.RequiresTesting;
+            try
+            {
+                await DoLogin();
+                var results = await PerformQuery(new TorznabQuery());
+                if (!results.Any())
+                    throw new Exception("Found 0 results in the tracker");
+
+                IsConfigured = true;
+                SaveConfig();
+                return IndexerConfigurationStatus.Completed;
+            }
+            catch (Exception e)
+            {
+                IsConfigured = false;
+                throw new Exception("Login error: " + e.Message);
+            }
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
@@ -163,6 +179,9 @@ namespace Jackett.Common.Indexers
                         continue;
 
                     var title = qTitleLink.TextContent.Trim();
+                    title += " SPANiSH"; // fix for Radarr
+                    title = Regex.Replace(title, "4k", "2160p", RegexOptions.IgnoreCase);
+
                     var detailsStr = qTitleLink.GetAttribute("href");
                     var details = new Uri(detailsStr);
                     var link = new Uri(detailsStr.Replace("/index.php?page=torrent-details&", "/download.php?"));
@@ -218,6 +237,7 @@ namespace Jackett.Common.Indexers
         private async Task DoLogin()
         {
             // The first page set the cookies and the session_id
+            CookieHeader = "";
             var result = await RequestWithCookiesAsync(Login1Url,  "");
             var parser = new HtmlParser();
             var dom = parser.ParseDocument(result.ContentString);
@@ -228,6 +248,7 @@ namespace Jackett.Common.Indexers
             // The second page send the login with the hash
             // The hash is reverse engineering from https://www.zonaq.pw/retorno/2/smf/Themes/smf_ZQ/scripts/script.js
             // doForm.hash_passwrd.value = hex_sha1(hex_sha1(doForm.user.value.php_to8bit().php_strtolower() + doForm.passwrd.value.php_to8bit()) + cur_session_id);
+            Thread.Sleep(3000);
             var hashPassword = Sha1Hash(Sha1Hash(configData.Username.Value.ToLower() + configData.Password.Value) + sessionId);
             var pairs = new Dictionary<string, string> {
                 { "user", configData.Username.Value },
@@ -238,23 +259,25 @@ namespace Jackett.Common.Indexers
             {
                 {"X-Requested-With", "XMLHttpRequest"}
             };
-            result = await RequestWithCookiesAsync(Login2Url,  null, RequestType.POST, data: pairs, headers: headers);
+            result = await RequestWithCookiesAsync(Login2Url, method: RequestType.POST, data: pairs, headers: headers);
             var message = JObject.Parse(result.ContentString)["msg"]?.ToString();
             if (message == "puerta_2")
             {
                 // The third page sets the cookie duration
+                Thread.Sleep(3000);
                 pairs = new Dictionary<string, string> {
                     { "passwd", "" },
                     { "cookielength", "43200" }, // 1 month
                     { "respuesta", "" }
                 };
-                result = await RequestWithCookiesAsync(Login3Url,  null, RequestType.POST, data: pairs, headers: headers);
+                result = await RequestWithCookiesAsync(Login3Url, method: RequestType.POST, data: pairs, headers: headers);
                 message = JObject.Parse(result.ContentString)["msg"]?.ToString();
             }
             if (message != "last_door")
                 throw new ExceptionWithConfigData($"Login error: {message}", configData);
 
             // The forth page sets the last cookie
+            Thread.Sleep(3000);
             await RequestWithCookiesAsync(Login4Url);
         }
 

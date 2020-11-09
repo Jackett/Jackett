@@ -317,15 +317,11 @@ namespace Jackett.Common.Indexers
                 return true;
 
             var caps = TorznabCaps;
-
-            if (query.HasSpecifiedCategories)
-                if (!caps.Categories.SupportsCategories(query.Categories))
-                    return false;
             if (caps.TvSearchImdbAvailable && query.IsImdbQuery && query.IsTVSearch)
                 return true;
             if (caps.MovieSearchImdbAvailable && query.IsImdbQuery && query.IsMovieSearch)
                 return true;
-            else if (!caps.MovieSearchImdbAvailable && query.IsImdbQuery && query.QueryType != "TorrentPotato") // potato query should always contain imdb+search term
+            if (!caps.MovieSearchImdbAvailable && query.IsImdbQuery && query.QueryType != "TorrentPotato") // potato query should always contain imdb+search term
                 return false;
             if (caps.SearchAvailable && query.IsSearch)
                 return true;
@@ -349,6 +345,27 @@ namespace Jackett.Common.Indexers
             return false;
         }
 
+        protected bool CanHandleCategories(TorznabQuery query, bool isMetaIndexer = false)
+        {
+            // https://torznab.github.io/spec-1.3-draft/torznab/Specification-v1.3.html#cat-parameter
+            if (query.HasSpecifiedCategories)
+            {
+                var supportedCats = TorznabCaps.Categories.SupportedCategories(query.Categories);
+                if (supportedCats.Length == 0)
+                {
+                    if (!isMetaIndexer)
+                        logger.Error($"All categories provided are unsupported in {DisplayName}: {string.Join(",", query.Categories)}");
+                    return false;
+                }
+                if (supportedCats.Length != query.Categories.Length && !isMetaIndexer)
+                {
+                    var unsupportedCats = query.Categories.Except(supportedCats);
+                    logger.Warn($"Some of the categories provided are unsupported in {DisplayName}: {string.Join(",", unsupportedCats)}");
+                }
+            }
+            return true;
+        }
+
         public void Unconfigure()
         {
             IsConfigured = false;
@@ -358,9 +375,9 @@ namespace Jackett.Common.Indexers
 
         public abstract Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson);
 
-        public virtual async Task<IndexerResult> ResultsForQuery(TorznabQuery query)
+        public virtual async Task<IndexerResult> ResultsForQuery(TorznabQuery query, bool isMetaIndexer)
         {
-            if (!CanHandleQuery(query))
+            if (!CanHandleQuery(query) || !CanHandleCategories(query, isMetaIndexer))
                 return new IndexerResult(this, new ReleaseInfo[0]);
 
             try
@@ -637,9 +654,9 @@ namespace Jackett.Common.Indexers
             return releases;
         }
 
-        public override async Task<IndexerResult> ResultsForQuery(TorznabQuery query)
+        public override async Task<IndexerResult> ResultsForQuery(TorznabQuery query, bool isMetaIndexer)
         {
-            var result = await base.ResultsForQuery(query);
+            var result = await base.ResultsForQuery(query, isMetaIndexer);
             result.Releases = CleanLinks(result.Releases);
 
             return result;

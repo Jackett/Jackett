@@ -139,6 +139,8 @@ search:
           args: ["\\.+", "."] # More than 1 dot -> .
         - name: re_replace
           args: ["^\\.", ""] # Delete first dot
+        - name: re_replace
+          args: ["UHDRip", "BDRip"] # Fix for Radarr
     poster:
       selector: a[onmouseover][href^="index.php?page=torrent-details"]
       attribute: onmouseover

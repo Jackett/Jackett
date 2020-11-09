@@ -85,8 +85,6 @@ namespace Jackett.Common.Models.DTO
             if (!string.IsNullOrWhiteSpace(request.author))
                 query.Author = request.author;
 
-            query.ExpandCatsToSubCats();
-
             return query;
         }
     }

@@ -104,14 +104,13 @@ namespace Jackett.Common.Models
             return cats;
         }
 
-        public bool SupportsCategories(int[] categories)
+        public int[] SupportedCategories(int[] categories)
         {
-            if (categories == null)
-                return false;
+            if (categories == null || categories.Length == 0)
+                return new int[0];
             var subCategories = _torznabCategoryTree.SelectMany(c => c.SubCategories);
             var allCategories = _torznabCategoryTree.Concat(subCategories);
-            var supportsCategory = allCategories.Any(i => categories.Any(c => c == i.ID));
-            return supportsCategory;
+            return allCategories.Where(c => categories.Contains(c.ID)).Select(c => c.ID).ToArray();
         }
 
         public void Concat(TorznabCapabilitiesCategories rhs)
