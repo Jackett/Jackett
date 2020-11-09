@@ -131,7 +131,7 @@ namespace Jackett.Common.Indexers.Abstract
                     var description = row.Value<string>("short_description");
 
                     var posterStr = row.Value<string>("poster");
-                    var poster = string.IsNullOrEmpty(posterStr) || !posterStr.StartsWith("http") ? null : new Uri(posterStr);
+                    var poster = Uri.TryCreate(posterStr, UriKind.Absolute, out var posterUri) ? posterUri : null;
 
                     var dlVolumeFactor = row.Value<bool>("is_half_download") ? 0.5: 1.0;
                     dlVolumeFactor = row.Value<bool>("is_freeleech") ? 0.0 : dlVolumeFactor;
