@@ -10,6 +10,8 @@ links:
 legacylinks:
   - https://xxxtor.org/ # redirects to .com
   - https://xxxtor.info/ # redirects to .com
+certificates:
+  - 49538cc58d5b5e7b70b4a3b2454f952103701342 # expired 09 November 2020
 
 caps:
   categorymappings:
