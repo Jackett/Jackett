@@ -78,8 +78,7 @@ namespace Jackett.Common.Indexers
 
             await ConfigureIfOK(result.Cookies, IsAuthorized(result), () =>
             {
-                const string ErrorSelector = "div.card-content > div.alert-error";
-                var errorMessage = document.QuerySelector(ErrorSelector).Text().Trim();
+                var errorMessage = document.QuerySelector("div.alert-error").Text().Trim();
                 throw new ExceptionWithConfigData(errorMessage, Configuration);
             });
 
@@ -194,7 +193,7 @@ namespace Jackett.Common.Indexers
         private bool IsAuthorized(WebResult result) {
             var parser = new HtmlParser();
             var document = parser.ParseDocument(result.ContentString);
-            return document.QuerySelector("div.header-content > div.profile-menu") != null;
+            return document.QuerySelector("div.profile-menu > a").Attributes["href"].Value.EndsWith("/logout");
         }
 
         private static long getReleaseSize(IElement tr)
