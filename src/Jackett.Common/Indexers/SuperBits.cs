@@ -87,6 +87,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(22, TorznabCatType.XXX, "XXX");
             AddCategoryMapping(24, TorznabCatType.MoviesUHD, "Film 4K");
             AddCategoryMapping(26, TorznabCatType.TV, "TV DK");
+            AddCategoryMapping(27, TorznabCatType.TV, "TV NO");
+            AddCategoryMapping(28, TorznabCatType.TV, "TV FI");            
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
