@@ -10,11 +10,7 @@ links:
 
 caps:
   categorymappings:
-    - {id: 1, cat: Movies, desc: "Movies"}
-    - {id: 2, cat: TV, desc: "TV"}
-    - {id: 3, cat: Audio, desc: "Music"}
-    - {id: 4, cat: Audio/Video, desc: "Music Videos"}
-    - {id: 5, cat: Console, desc: "Game"}
+    - {id: 1, cat: Other, desc: "Movies, TV, Music, MV, Game, Blockbuster"}
 
   modes:
     search: [q]
@@ -72,7 +68,6 @@ search:
   paths:
     - path: torrents/filter
   inputs:
-    $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
     search: "{{ if .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
     description: ""
     uploader: ""
@@ -82,47 +77,35 @@ search:
     mal: ""
     igdb: ""
     sorting: "{{ .Config.sort }}"
-    sort: "{{ .Config.sort }}"
     direction: "{{ .Config.type }}"
-    qty: 50
+    view: list
+    qty: 100
     freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
 
   rows:
-    selector: table > tbody > tr
+    selector: table > tbody > tr:has(a[href^="magnet:?dn="])
 
   fields:
     category:
-      selector: a[href*="/categories/"]
-      attribute: href
-      filters:
-        - name: regexp
-          args: "/categories/(\\d+)"
+      text: 1
     title:
-      selector: a.view-torrent
+      selector: a[href*="/torrents/"]
+    details:
+      selector: a[href*="/torrents/"]
+      attribute: href
     download:
       selector: a[href*="/download/"]
       attribute: href
-    details:
-      selector: a.view-torrent
+    magnet:
+      selector: a[href^="magnet:?dn="]
       attribute: href
     poster:
       optional: true
-      selector: div.torrent-poster img
+      selector: img.tps
       attribute: src
       filters:
         - name: replace
           args: ["https://via.placeholder.com/600x900", ""]
-    size:
-      selector: td:nth-last-child(4)
-    seeders:
-      selector: td:nth-last-child(3)
-    leechers:
-      selector: td:nth-last-child(2)
-    grabs:
-      selector: td:nth-last-child(1)
-      filters:
-        - name: regexp
-          args: (\d+)
     imdb:
       optional: true
       selector: a[href*="imdb.com/title/tt"]
@@ -132,7 +115,7 @@ search:
       selector: a[href*="themoviedb.org/movie/"]
       attribute: href
     date:
-      selector: time
+      selector: td:nth-last-child(6)
       filters:
         # translations for Turkish|Estonian|Danish|Italian|Polish|Norwegian|Portuguese|Czech|Russian|Romanian|Spanish|French|German|Bulgarian|Dutch|Chinese|Japanese|Swedish
         - name: re_replace
@@ -169,6 +152,15 @@ search:
           args: ["(?i) (an)", "year"]
         - name: re_replace
           args: ["(?i)(För |und)", ""] # Misc removals
+        - name: timeago
+    size:
+      selector: td:nth-last-child(5)
+    seeders:
+      selector: td:nth-last-child(4)
+    leechers:
+      selector: td:nth-last-child(3)
+    grabs:
+      selector: td:nth-last-child(2)
     downloadvolumefactor:
       case:
         i[class*="fa-id-badge text-orange"]: 0 # 24 Hour FreeLeech From BON Store
@@ -187,4 +179,4 @@ search:
         "*": 1
     minimumratio:
       text: 0.4
-# UNIT3D 2.7.0
+# UNIT3D 2.7.0 (Customised)
