@@ -570,7 +570,7 @@ namespace Jackett.Common.Indexers
                 { "full_search", "1" },
                 { "result_from", "1" },
                 { "story", NormalizeSearchQuery(query)},
-                { "titleonly", "0" },
+                { "titleonly", "3" },
                 { "searchuser", "" },
                 { "replyless", "0" },
                 { "replylimit", "0" },
