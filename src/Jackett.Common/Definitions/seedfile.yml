@@ -138,6 +138,7 @@ search:
           args: ["(?i) (an)", "year"]
         - name: re_replace
           args: ["(?i)(För |und)", ""] # Misc removals
+        - name: timeago
     size:
       selector: td:nth-last-child(4)
     seeders:

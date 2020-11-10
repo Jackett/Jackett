@@ -169,6 +169,7 @@ search:
           args: ["(?i) (an)", "year"]
         - name: re_replace
           args: ["(?i)(För |und)", ""] # Misc removals
+        - name: timeago
     downloadvolumefactor:
       case:
         i[class*="fa-id-badge text-orange"]: 0 # 24 Hour FreeLeech From BON Store
