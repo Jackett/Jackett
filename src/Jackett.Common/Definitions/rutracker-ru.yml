@@ -145,15 +145,17 @@ caps:
     - {id: 1647, cat: Audio/Lossless, desc: " |- Зарубежная поп музыка (Lossless)"}
     - {id: 1643, cat: Audio/MP3, desc: " |- Зарубежная поп музыка (альбомы, синглы mp3)"}
     - {id: 1637, cat: Audio/MP3, desc: " |- Зарубежная поп-музыка (сборники mp3)"}
+    - {id: 1655, cat: Audio/Lossless, desc: " |- Eurodance, Disco, Hi-NRG, Technopop (Lossless)"}
+    - {id: 1654, cat: Audio/MP3, desc: " |- Eurodance, Disco, Hi-NRG, Technopop (mp3)"}
     - {id: 1638, cat: Audio/MP3, desc: " |- Eurodance, Disco, Hi-NRG, Technopop (Сборники mp3)"}
     - {id: 1639, cat: Audio/MP3, desc: " |- Club, Dance, Hands Up (Сборники mp3)"}
     - {id: 1640, cat: Audio/Lossless, desc: " |- Зарубежный шансон (mp3, Lossless)"}
     - {id: 1177, cat: Audio/MP3, desc: "Неофициальные и внежанровые сборники"}
-    - {id: 1179, cat: Audio/MP3, desc: " |- Сборники поп музыки (50/50 общие)"}
-    - {id: 1178, cat: Audio/MP3, desc: " |- Зарубежные поп сборники"}
-    - {id: 1606, cat: Audio/MP3, desc: " |- Eurodance, Disco, Hi-NRG, Technopop (Сборники)"}
-    - {id: 1603, cat: Audio/MP3, desc: " |- Club, Dance, Hands Up (Сборники)"}
+    - {id: 1642, cat: Audio/MP3, desc: " |- Российская попса (альбомы, синглы mp3)"}
+    - {id: 1644, cat: Audio/Lossless, desc: " |- Отечественная поп музыка (Lossless)"}
     - {id: 1427, cat: Audio/MP3, desc: " |- Сборники Российской поп музыки"}
+    - {id: 1646, cat: Audio/Loessless, desc: " |- Шансон, авторская песня (Lossless)"}
+    - {id: 1641, cat: Audio/MP3, desc: " |- Шансон и авторская песня (mp3)"}
     - {id: 1561, cat: Audio/MP3, desc: " |- Сборники Русского шансона"}
     - {id: 1168, cat: Audio/MP3, desc: "Рок музыка"}
     - {id: 1652, cat: Audio/Lossless, desc: " |- Зарубежная рок музыка (Lossless)"}
