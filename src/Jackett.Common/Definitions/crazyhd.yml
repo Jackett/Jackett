@@ -163,7 +163,6 @@ search:
           args: category
     poster:
       selector: div.list-name a.tlink
-      optional: true
       attribute: onmouseover
       filters:
         - name: regexp

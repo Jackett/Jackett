@@ -76,8 +76,7 @@ search:
       selector: a[href*="download.php?id="]
       attribute: href
     imdb:
-      optional: true
-      selector: a[href*="www.imdb.com/title/"]
+      selector: a[href*="imdb.com/title/tt"]
       attribute: href
     date:
       selector: td:nth-child(4)

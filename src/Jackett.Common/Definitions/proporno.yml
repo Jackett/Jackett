@@ -82,7 +82,6 @@ search:
     poster:
       selector: img[src*="/uploads/posts/"]
       attribute: src
-      optional: true
     date:
       # Сегодня, 19:56
       selector: div.mini:contains("Сегодня")

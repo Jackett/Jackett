@@ -115,11 +115,9 @@ search:
     poster:
       selector: img.poster
       attribute: src
-      optional: true
     imdb:
-      selector: a[href*="www.imdb.com/title/tt"]
+      selector: a[href*="imdb.com/title/tt"]
       attribute: href
-      optional: true
     description:
       selector: span.noimg
     date:

@@ -103,7 +103,6 @@ search:
         - name: prepend
           args: "{{ .Result.description }}"
     imdb:
-      optional: true
       selector: a[href*="imdb.com/title/tt"]
     grabs:
       selector: td:nth-child(6)

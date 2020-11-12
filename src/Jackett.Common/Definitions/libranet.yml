@@ -84,7 +84,6 @@ search:
       attribute: title
     poster:
       selector: a[onmouseover]
-      optional: true
       attribute: onmouseover
       filters:
         - name: regexp

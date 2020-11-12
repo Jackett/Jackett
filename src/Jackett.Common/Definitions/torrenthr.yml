@@ -115,7 +115,6 @@ search:
     leechers:
       selector: td:nth-child(10)
     poster:
-      optional: true
       selector: a[href^="details.php?id="][onmousemove]
       attribute: onmousemove
       filters:

@@ -144,7 +144,6 @@ search:
         - name: regexp
           args: "src=(.*?) width="
     imdb:
-      optional: true
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     files:

@@ -106,7 +106,6 @@ search:
       selector: a[href^="details.php?id="]
       attribute: href
     poster:
-      optional: true
       selector: a.screenshot
       attribute: rel
     grabs:

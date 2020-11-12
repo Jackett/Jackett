@@ -47,7 +47,6 @@ search:
     poster:
       selector: img
       attribute: src
-      optional: true
     date:
       text: now
     size:

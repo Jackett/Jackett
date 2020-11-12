@@ -258,7 +258,6 @@ search:
     poster:
       selector: div.group_image img
       attribute: src
-      optional: true
     details:
       selector: a[href^="torrents.php?id="]
       attribute: href

@@ -131,7 +131,6 @@ search:
           args: src=([^\s]+)
     imdb:
       selector: a[href*="imdb.com/title/tt"]
-      optional: true
       attribute: href
     category:
       selector: a[href^="browse.php?cat="]

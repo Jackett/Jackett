@@ -91,7 +91,6 @@ search:
       attribute: href
     poster:
       selector: a[href^="details.php?id="]
-      optional: true
       attribute: onmouseover
       filters:
         - name: regexp

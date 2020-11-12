@@ -121,14 +121,12 @@ search:
     size:
       selector: div.box_size
     poster:
-      optional: true
       selector: a.cover_a
       attribute: title
       filters:
         - name: regexp
           args: src='(.*?)'
     imdb:
-      optional: true
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     description:

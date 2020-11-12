@@ -162,11 +162,9 @@ search:
       selector: .torrentImages > span:first-child a
       attribute: href
     poster:
-      optional: true
       selector: td.torrent_image div.relativeDiv div:not(.category_image) a, .previewImage a
       attribute: href
     imdb:
-      optional: true
       selector: .torrentFlags a[href*="www.imdb.com/title/tt"]
       attribute: href
     date:

@@ -133,7 +133,6 @@ search:
       selector: a[href^="download.php?id="]
       attribute: href
     imdb:
-      optional: true
       selector: div.imdb_100 > a
       attribute: href
     date:

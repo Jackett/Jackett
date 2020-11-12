@@ -180,7 +180,6 @@ search:
       selector: a[href*="?p=torrents"][href*="&action=download"]
       attribute: href
     imdb:
-      optional: true
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     size:
@@ -192,7 +191,6 @@ search:
     grabs:
       selector: a[rel="times_completed"]
     poster:
-      optional: true
       selector: a[rel="fancybox"]
       attribute: href
     description:

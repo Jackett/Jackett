@@ -131,11 +131,9 @@ search:
     poster:
       selector: a.preview
       attribute: href
-      optional: true
     imdb:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
-      optional: true
     files:
       selector: td:nth-last-child(7)
       filters:

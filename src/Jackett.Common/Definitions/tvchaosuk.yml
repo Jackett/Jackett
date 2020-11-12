@@ -116,7 +116,6 @@ search:
       selector: a.view-torrent
       attribute: href
     poster:
-      optional: true
       selector: div.torrent-poster img
       attribute: src
       filters:
@@ -134,7 +133,6 @@ search:
         - name: regexp
           args: (\d+)
     imdb:
-      optional: true
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     date:

@@ -156,11 +156,9 @@ search:
     imdb:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
-      optional: true
     poster:
       selector: div[id^="details-"] div div img
       attribute: src
-      optional: true
       filters:
         - name: replace
           args: ["cloud-data/standard_cover/ebook_t.png", ""]

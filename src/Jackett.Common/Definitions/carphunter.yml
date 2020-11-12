@@ -134,11 +134,9 @@ search:
         - name: replace
           args: ["/details", "/download"]
     imdb:
-      optional: true
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     poster:
-      optional: true
       selector: a[onmouseover]
       attribute: onmouseover
       filters:

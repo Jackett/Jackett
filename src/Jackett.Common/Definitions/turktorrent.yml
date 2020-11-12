@@ -189,7 +189,6 @@ search:
     grabs:
       selector: a[rel="times_completed"]
     poster:
-      optional: true
       selector: a[rel="fancybox"]
       attribute: href
     downloadvolumefactor:

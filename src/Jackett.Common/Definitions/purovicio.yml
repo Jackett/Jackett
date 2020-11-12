@@ -106,14 +106,12 @@ search:
       selector: a.view-torrent
       attribute: href
     poster:
-      optional: true
       selector: div.torrent-poster img
       attribute: src
       filters:
         - name: replace
           args: ["https://via.placeholder.com/600x900", ""]
     imdb:
-      optional: true
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     size:

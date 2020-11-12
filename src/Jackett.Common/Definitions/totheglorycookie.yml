@@ -168,7 +168,6 @@ search:
         - name: dateparse
           args: "2006-01-0215:04:05 -07:00"
     imdb:
-      optional: true
       selector: span.imdb_rate > a
       attribute: href
     downloadvolumefactor:

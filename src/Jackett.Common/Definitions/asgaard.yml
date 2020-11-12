@@ -157,7 +157,6 @@ search:
         - name: regexp
           args: cats\[\]=(\d+)$
     poster:
-      optional: true
       selector: img.tooltip-poster
       attribute: src
     download:

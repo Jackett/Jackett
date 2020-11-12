@@ -106,7 +106,6 @@ search:
       selector: a.torrent-name
       attribute: href
     poster:
-      optional: true
       selector: div.torrent-poster img
       attribute: src
       filters:
@@ -125,7 +124,6 @@ search:
     grabs:
       selector: a[href$="/history"]
     imdb:
-      optional: true
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     downloadvolumefactor:

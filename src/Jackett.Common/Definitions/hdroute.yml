@@ -80,11 +80,9 @@ search:
     imdb:
       selector: div.torrent-imdb
       attribute: href
-      optional: true
     poster:
       selector: div.introForPic img
       attribute: src
-      optional: true
       filters:
         - name: replace
           args: ["./img/theme1/default.jpg", ""]

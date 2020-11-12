@@ -106,7 +106,6 @@ search:
     poster:
       selector: img[src*="/thbx/imgx/"]
       attribute: src
-      optional: true
     files:
       text: 1
     files:

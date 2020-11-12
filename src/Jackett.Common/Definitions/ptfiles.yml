@@ -124,11 +124,9 @@ search:
       attribute: href
     imdb:
       selector: a[href*="imdb.com/title/tt"]
-      optional: true
       attribute: href
     poster:
       selector: a[rel="gallery"]
-      optional: true
       attribute: href
     files:
       selector: td:nth-last-child(5)

@@ -87,7 +87,6 @@ search:
     poster:
       selector: div.entry_content a.entry__content-image img
       attribute: src
-      optional: true
     date:
       selector: span.entry__date:contains("Вчера"), span.entry__date:contains("Сегодня")
       optional: true

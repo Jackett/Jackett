@@ -133,7 +133,6 @@ search:
       optional: true
       selector: div.torrent_name_col > a
     poster:
-      optional: true
       selector: img#poster
       attribute: data-src
     date:

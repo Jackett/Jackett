@@ -135,7 +135,6 @@ search:
     poster:
       selector: a[href^="details.php?id="]
       attribute: onmouseover
-      optional: true
       filters:
         #  onmouseover="Tip('<b>blahblah /><img src=\'img.php/tvmaze/80.jpg\' blahblah />');"
         # <img src=\'./pic/noposter.png\'

@@ -100,18 +100,15 @@ search:
       selector: a[href^="magnet:?dn="]
       attribute: href
     poster:
-      optional: true
       selector: img.tps
       attribute: src
       filters:
         - name: replace
           args: ["https://via.placeholder.com/600x900", ""]
     imdb:
-      optional: true
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     tmdbid:
-      optional: true
       selector: a[href*="themoviedb.org/movie/"]
       attribute: href
     date:

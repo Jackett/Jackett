@@ -206,7 +206,6 @@ search:
       selector: a[href^="index.php?page=downloadcheck&id="]
       attribute: href
     poster:
-      optional: true
       selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
       attribute: onmouseover
       filters:

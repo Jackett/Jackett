@@ -48,7 +48,6 @@ search:
       selector: a[href^="download.php?id="]
       attribute: href
     poster:
-      optional: true
       selector: img.thumbnail
       attribute: src
     size:

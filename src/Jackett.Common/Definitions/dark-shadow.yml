@@ -212,11 +212,9 @@ search:
     poster:
       selector: div[id^="details"] img
       attribute: src
-      optional: true
     imdb:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
-      optional: true
     size:
       selector: div.selection_unter_ad
       filters:

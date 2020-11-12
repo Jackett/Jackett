@@ -39,7 +39,6 @@ search:
     poster:
       selector: img
       attribute: src
-      optional: true
     actress:
       selector: a[href^="/actress/"]
       optional: true

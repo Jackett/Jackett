@@ -146,7 +146,6 @@ search:
       selector: a[href^="download.php"]
       attribute: href
     poster:
-      optional: true
       selector: td[valign="middle"] a
       attribute: onmouseover
       filters:

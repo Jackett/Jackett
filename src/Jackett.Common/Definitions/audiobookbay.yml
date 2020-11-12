@@ -116,7 +116,6 @@ search:
       selector: div.postTitle h2 a
       attribute: href
     poster:
-      optional: true
       selector: img
       attribute: src
     _date:

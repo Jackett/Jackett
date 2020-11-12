@@ -97,11 +97,9 @@ search:
     poster:
       selector: img[alt="Cover"]
       attribute: src
-      optional: true
     imdb:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
-      optional: true
     files:
       selector: td:nth-child(3)
     date:

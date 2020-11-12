@@ -129,7 +129,6 @@ search:
     poster:
       selector: div.film-img a img
       attribute: src
-      optional: true
     date:
       selector: span:has(i.fa-calendar-o)
       filters:

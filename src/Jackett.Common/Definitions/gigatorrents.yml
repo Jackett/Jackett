@@ -121,12 +121,10 @@ search:
       selector: a[href^="/details.php?id="]
       attribute: href
     imdb:
-      selector: a[href^="http://anonym.to/?http://imdb.com/title/"]
-      optional: true
+      selector: a[href^="imdb.com/title/tt"]
       attribute: href
     poster:
       selector: img.imdb-info
-      optional: true
       attribute: data-url
     category:
       selector: a[href^="/torrentek.php?cat="]

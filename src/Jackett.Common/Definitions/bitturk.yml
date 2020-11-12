@@ -187,7 +187,6 @@ search:
       selector: a[rel="times_completed"]
     poster:
       selector: a[rel="fancybox"]
-      optional: true
       attribute: href
     downloadvolumefactor:
       case:
