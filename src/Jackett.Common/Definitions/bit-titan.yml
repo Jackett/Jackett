@@ -152,7 +152,7 @@ search:
     # note: although tmdbid appears as option 12, searching for this yields no results.
     durchsuche: "{{ if .Query.IMDBID }}11{{ else }}1{{ end }}"
     # incldead: 1 active, 2 all, 3 onlydead, 4 highlight, 5 bookmark, 6 onlyups, 7 freeleech, 8 multi2, 9 multi5, 10 multi10, 11 25%d,l 12 50%dl, 13 75%dl
-    # note: searching with freeleech yielded no results, using onlyups works.
+    # note: searching with 6(freeleech) yielded no results, using 7(onlyups) works.
     suchein: "{{ if .Config.freeleech }}6{{ else }}2{{ end }}"
     # cat: 1 all, 1000 film, 2000 tv, 3000 docs, 4000 sport, 5000 xxx, 6000 games, 7000 apps, 8000 music, 9000 other
     sucheaus: 1

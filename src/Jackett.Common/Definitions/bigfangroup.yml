@@ -91,7 +91,7 @@ search:
   inputs:
     search: "{{ .Keywords }}"
     cat: 0
-    # 0 active 1 incldead 2 onlydead 3 gold 4 noseed 5 silver 7 BFG
+    # 0 active, 1 incldead, 2 onlydead, 3 gold, 4 noseed, 5 silver, 7 BFG
     incldead: 1
     ajax: 1
     year: 0
