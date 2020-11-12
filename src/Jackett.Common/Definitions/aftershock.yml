@@ -145,7 +145,7 @@ search:
           args: "src=(.*?) width="
     imdb:
       optional: true
-      selector: a[href^="https://www.imdb.com/title"]
+      selector: a[href*="imdb.com/title/tt"]
       attribute: href
     files:
       selector: td:nth-last-child(6)
@@ -162,8 +162,10 @@ search:
       filters:
         - name: re_replace
           args: ["\\s", " "]
+        - name: append
+          args: " +01:00" # CET
         - name: dateparse
-          args: "2006-01-02 15:04:05"
+          args: "2006-01-02 15:04:05 -07:00"
     downloadvolumefactor:
       case:
         span.icon_gift: 0
