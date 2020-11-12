@@ -200,8 +200,10 @@ search:
       filters:
         - name: regexp
           args: "le: </b>(.*?)<br"
+        - name: append
+          args: " +01:00" # CET
         - name: dateparse
-          args: "02-01-2006"
+          args: "02-01-2006 -07:00"
     downloadvolumefactor:
       case:
         img[src="images/free.gif"]: 0
