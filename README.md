@@ -224,7 +224,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * 0day.kiev
  * 1ptbar
  * 2 Fast 4 You
- * 32Pages (32P)
  * 3ChangTrai (3CT) [![(invite needed)][inviteneeded]](#)
  * 3D Torrents (3DT) [![(invite needed)][inviteneeded]](#)
  * 3evils
