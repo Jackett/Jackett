@@ -165,9 +165,9 @@ search:
     p: torrents
     pid: 32
     $raw: "{{ range .Categories }}cid[]={{.}}&{{end}}"
-    keywords: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    keywords: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     # name, description, both, uploader
-    search_type: "{{ if .Query.IMDBID }}description{{else}}name{{end}}"
+    search_type: "{{ if .Query.IMDBID }}description{{ else }}name{{ end }}"
     "sortOptions[sortBy]": "{{ .Config.sort }}"
     "sortOptions[sortOrder]": "{{ .Config.type }}"
   error:
@@ -177,14 +177,14 @@ search:
     selector: table#torrents_table_classic > tbody > tr:has(td.torrent_name)
 
   fields:
-    title:
-      selector: a[href*="?p=torrents&pid=10&action=details"]
     category:
       selector: div.category_image > a
       attribute: href
       filters:
         - name: querystring
           args: cid
+    title:
+      selector: a[href*="?p=torrents&pid=10&action=details"]
     details:
       selector: a[href*="?p=torrents&pid=10&action=details"]
       attribute: href
@@ -201,11 +201,9 @@ search:
       selector: a[rel="times_completed"]
     poster:
       selector: a[rel="fancybox"]
-      optional: true
       attribute: href
     imdb:
       # a href="http://tracker.btnext.com/data/torrents/imdb/tt0249677.jpg"
-      optional: true
       selector: a[href*="/imdb/tt"]
       attribute: href
       filters:
@@ -240,8 +238,10 @@ search:
           args: ["às ", ""] # at
         - name: replace
           args: ["at ", ""]
+        - name: append
+          args: " +00:00" # WET
         - name: dateparse
-          args: "02-01-2006 15:04"
+          args: "02-01-2006 15:04 -07:00"
     date:
       selector: td.torrent_name:not(:has(abbr.timeago)):contains("day"), td.torrent_name:not(:has(abbr.timeago)):contains("Domingo"), td.torrent_name:not(:has(abbr.timeago)):contains("Sábado"), td.torrent_name:not(:has(abbr.timeago)):contains("Quinta"), td.torrent_name:not(:has(abbr.timeago)):contains("Sexta"), td.torrent_name:not(:has(abbr.timeago)):contains("Quarta"), td.torrent_name:not(:has(abbr.timeago)):contains("Terça"), td.torrent_name:not(:has(abbr.timeago)):contains("Segunda"), td.torrent_name:not(:has(abbr.timeago)):contains("ontem"), td.torrent_name:not(:has(abbr.timeago)):contains("Hoje")
       optional: true
