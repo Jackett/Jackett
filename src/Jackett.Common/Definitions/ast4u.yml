@@ -53,7 +53,7 @@ settings:
   - name: info
     type: info
     label: Results Per Page
-    default: For best results, change the 'Torrentliste' setting to "Platzsparendes Layout mit PopUp für zusätzliche Informationen" in your profile.
+    default: For best results, change the <b>Torrentliste</b> setting to <i>Platzsparendes Layout mit PopUp für zusätzliche Informationen</i> in your profile.
 
 login:
   path: takelogin.php
@@ -70,13 +70,14 @@ search:
     - path: browse.php
   inputs:
     $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-    search: "{{ .Query.Keywords }}"
-    incldead: "0"
-    orderby: "added"
-    sort: "desc"
+    search: "{{ .Keywords }}"
+    incldead: 0
+    orderby: added
+    sort: desc
 
   rows:
     selector: table.tableinborder > tbody > tr:has(a[href^="details.php"])
+
   fields: # note: two alternative layouts available
     title:
       selector: a[href^="details.php"]
@@ -117,15 +118,15 @@ search:
         - name: replace
           args: [" ", ""]
         - name: append
-          args: " +2:00"
+          args: " +2:00" # EET
         - name: replace
           args: ["\xA0", ""]
         - name: dateparse
           args: "02.01.200615:04:05 -07:00"
     downloadvolumefactor:
       case:
-        img[src="/pic/free.gif"]: "0"
-        "*": "1"
+        img[src="/pic/free.gif"]: 0
+        "*": 1
     uploadvolumefactor:
-      case:
-        "*": "1"
+      text: 1
+# engine tbd

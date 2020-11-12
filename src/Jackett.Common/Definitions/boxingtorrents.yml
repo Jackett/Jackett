@@ -86,7 +86,7 @@ search:
     # https://tc-boxing.com/browse.php?search=tyson&cat=0&incldead=1
     - path: browse.php
   inputs:
-    $raw: "{{ if .Categories }}{{ range .Categories }}c{{.}}=1&{{end}}{{else}}cat=0{{end}}"
+    $raw: "{{ if .Categories }}{{ range .Categories }}c{{.}}=1&{{end}}{{ else }}cat=0{{ end }}"
     # 1 incldead, null active
     incldead: 1
     # 1 freeleech only, null all

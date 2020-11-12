@@ -13,7 +13,6 @@ legacylinks:
 caps:
   categorymappings:
 
-    # Movies
     - {id: 11, cat: Movies/HD, desc: "DSS"}
     - {id: 1, cat: Movies, desc: "Screener"}
     - {id: 2, cat: Movies, desc: "DVDRip & BDRip"}
@@ -21,17 +20,11 @@ caps:
     - {id: 5, cat: Movies/UHD, desc: "Ultra HD 4K"}
     - {id: 6, cat: TV, desc: "Serie TV"}
     - {id: 4, cat: TV/Anime, desc: "Cartoni"}
-    # GAMES
     - {id: 7, cat: PC/Games, desc: "Giochi"}
-    # MUSIC
     - {id: 8, cat: Audio, desc: "Musica"}
-    # SOFTWARE
     - {id: 9, cat: PC/0day, desc: "Software"}
-    # PHONE
     - {id: 12, cat: PC/Mobile-Other, desc: "Applicazioni"}
-    # OTHER
     - {id: 14, cat: Other, desc: "Varie & Altro"}
-    # EBOOK
     - {id: 13, cat: Books, desc: "Libri & Edicola"}
 
   modes:
@@ -80,7 +73,7 @@ search:
     active: 0
 
   rows:
-    selector: table > tbody > tr > td > table.lista > tbody > tr:has(a[href^="index.php?page=torrent-details&id="]){{if .Config.donor }}{{else}}:not(:has(img[src*="keditbookmarks.png"])){{end}}
+    selector: table > tbody > tr > td > table.lista > tbody > tr:has(a[href^="index.php?page=torrent-details&id="]){{ if .Config.donor }}{{ else }}:not(:has(img[src*="keditbookmarks.png"])){{ end }}
 
   fields:
     download:
@@ -115,7 +108,7 @@ search:
       selector: td:nth-last-child(8)
       filters:
         - name: append
-          args: " +01:00"
+          args: " +01:00" # CET
         - name: dateparse
           args: "02/01/2006 -07:00"
     grabs:
