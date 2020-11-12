@@ -261,6 +261,7 @@ namespace Jackett.Updater
                 "CsQuery.dll",
                 "CurlSharp.dll",
                 "CurlSharp.pdb",
+                "Definitions/32pages.yml",
                 "Definitions/420files.yml",
                 "Definitions/academictorrents.yml",
                 "Definitions/alein.yml",
