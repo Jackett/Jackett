@@ -37,7 +37,7 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        protected readonly string[] OptionalFields = { "imdb", "rageid", "tvdbid", "poster" };
+        protected readonly string[] OptionalFields = { "imdb", "rageid", "tmdbid", "tvdbid", "poster" };
 
         private static readonly string[] _SupportedLogicFunctions =
         {
