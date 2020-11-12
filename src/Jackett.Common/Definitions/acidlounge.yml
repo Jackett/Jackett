@@ -83,9 +83,11 @@ search:
   inputs:
     $raw: "{{range .Categories}}cid[]={{.}}&{{end}}"
     search: "{{ .Keywords }}"
-    search_type: "title"
+    search_type: title
+
   rows:
     selector: table#browse_torrents_table > tbody > tr[id^="torrent_row_"]
+
   fields:
     title:
       selector: a.torrent_name
@@ -119,15 +121,15 @@ search:
           args: ([\d\.]+)
     downloadvolumefactor:
       case:
-        ":root div#notice_ratioBoostingMadness": "0"
-        "*": "1"
+        ":root div#notice_ratioBoostingMadness": 0
+        "*": 1
     uploadvolumefactor:
-      case:
-        "*": "1"
+      text: 1
     date:
       selector: td.torrent_table_dateAdded
       filters:
         - name: append
-          args: " +01:00"
+          args: " +01:00" # CET
         - name: dateparse
           args: "2006-01-02 15:04:05 -07:00"
+# engine tbd
