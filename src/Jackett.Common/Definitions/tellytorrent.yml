@@ -77,7 +77,7 @@ search:
     - path: torrents/filter
   inputs:
     $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    search: "{{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}" # for dashboard imdbid search
     description: ""
     uploader: ""
     imdb: "{{ .Query.IMDBIDShort }}"
@@ -85,10 +85,13 @@ search:
     tmdb: "{{ .Query.TMDBID }}"
     mal: ""
     igdb: ""
+    start_year: ""
+    end_year: ""
     sorting: "{{ .Config.sort }}"
-    sort: "{{ .Config.sort }}"
     direction: "{{ .Config.type }}"
     qty: 100
+    page: 0
+    view: list
     freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
 
   rows:
@@ -114,7 +117,9 @@ search:
       attribute: src
       filters:
         - name: replace
-          args: ["https://via.placeholder.com/600x900", ""]
+          args: ["&w=52&h=80", "&w=180&h=270"] # for display on dashboard
+        - name: replace
+          args: ["https://images.weserv.nl/?url=https://via.placeholder.com/52x80&w=180&h=270", ""]
     size:
       selector: td:nth-last-child(4)
     seeders:
@@ -192,4 +197,4 @@ search:
     minimumseedtime:
       # 1 day (as seconds = 24 x 60 x 60)
       text: 86400
-# UNIT3D 2.7.0
+# UNIT3D 4.0.0
