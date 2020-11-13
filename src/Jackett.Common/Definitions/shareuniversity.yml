@@ -34,8 +34,8 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep, imdbid]
-    movie-search: [q, imdbid]
+    tv-search: [q, season, ep, imdbid, tvdbid]
+    movie-search: [q, imdbid, tmdbid]
     music-search: [q]
     book-search: [q]
 
@@ -92,16 +92,18 @@ search:
     - path: filterTorrents
   inputs:
     $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    search: "{{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}" # for dashboard imdbid search
     description: ""
     uploader: ""
     imdb: "{{ .Query.IMDBIDShort }}"
-    tvdb: ""
-    tmdb: ""
+    tvdb: "{{ .Query.TVDBID }}"
+    tmdb: "{{ .Query.TMDBID }}"
+    mal: ""
     sorting: "{{ .Config.sort }}"
-    sort: "{{ .Config.sort }}"
     direction: "{{ .Config.type }}"
     qty: 100
+    page: 0
+    view: list
     freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
 
   rows:
@@ -126,8 +128,12 @@ search:
       selector: div.torrent-poster img
       attribute: src
       filters:
+        - name: prepend
+          args: "https://images.weserv.nl/?url=" # for display on dashboard
+        - name: append
+          args: "&w=180&h=270" # for display on dashboard
         - name: replace
-          args: ["https://via.placeholder.com/600x900", ""]
+          args: ["https://images.weserv.nl/?url=https://i.imgur.com/IPRVhUJ.png&w=180&h=270", ""]
     size:
       selector: td:nth-last-child(4)
     seeders:
@@ -141,6 +147,9 @@ search:
           args: (\d+)
     imdb:
       selector: a[href*="imdb.com/title/tt"]
+      attribute: href
+    tmdbid:
+      selector: a[href*="themoviedb.org/movie/"]
       attribute: href
     date:
       selector: time
@@ -197,6 +206,8 @@ search:
         i[class*="fa-globe text-green"]: 2 # Global Double Upload
         i[class*="fa-certificate text-pink"]: 2 # Featured Torrent
         "*": 1
+    minimumratio:
+      text: 0.4
     minimumseedtime:
       # 2 days (as seconds = 2 x 24 x 60 x 60)
       text: 172800

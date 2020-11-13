@@ -68,7 +68,7 @@ search:
   paths:
     - path: torrents/filter
   inputs:
-    search: "{{ if .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    search: "{{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}" # for dashboard imdbid search
     description: ""
     uploader: ""
     imdb: "{{ .Query.IMDBIDShort }}"
@@ -76,10 +76,13 @@ search:
     tmdb: "{{ .Query.TMDBID }}"
     mal: ""
     igdb: ""
+    start_year: ""
+    end_year: ""
     sorting: "{{ .Config.sort }}"
     direction: "{{ .Config.type }}"
-    view: list
     qty: 100
+    page: 0
+    view: list
     freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
 
   rows:
@@ -103,8 +106,12 @@ search:
       selector: img.tps
       attribute: src
       filters:
+        - name: prepend
+          args: "https://images.weserv.nl/?url=" # for display on dashboard
+        - name: append
+          args: "&w=180&h=270" # for display on dashboard
         - name: replace
-          args: ["https://via.placeholder.com/600x900", ""]
+          args: ["https://images.weserv.nl/?url=https://via.placeholder.com/600x900&w=180&h=270", ""]
     imdb:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href

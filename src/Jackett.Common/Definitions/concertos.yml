@@ -74,7 +74,7 @@ search:
     - path: torrents
   inputs:
     $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
-    title: "{{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    title: "{{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}" # for dashboard imdbid search
     imdb: "{{ .Query.IMDBIDShort }}"
     freeleech: "{{ if .Config.freeleech }}on{{ else }}{{ end }}"
     order_by: "{{ .Config.sort }}"

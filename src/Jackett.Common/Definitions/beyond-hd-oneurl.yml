@@ -16,7 +16,7 @@ caps:
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid]
-    movie-search: [q, imdbid]
+    movie-search: [q, imdbid, tmdbid]
 
 settings:
   - name: oneurl
@@ -55,10 +55,10 @@ search:
     - path: torrents
   inputs:
     $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    search: "{{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}" # for dashboard imdbid search
     uploader: ""
     imdb: "{{ .Query.IMDBIDShort }}"
-    tmdb: ""
+    tmdb: "{{ .Query.TMDBID }}"
     sorting: "{{ .Config.sort }}"
     direction: "{{ .Config.type }}"
     qty: 100
@@ -105,6 +105,9 @@ search:
       selector: a[href$="/history"]
     imdb:
       selector: a[href*="imdb.com/title/tt"]
+      attribute: href
+    tmdbid:
+      selector: a[href*="themoviedb.org/movie/"]
       attribute: href
     downloadvolumefactor:
       case:
