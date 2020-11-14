@@ -165,10 +165,10 @@ login:
 download:
   before:
     path: thanks.php
-    method: "get"
+    method: get
     inputs:
       id: "{{ .DownloadUri.Query.id }}"
-      to: "give"
+      to: give
       torrent: "{{ .DownloadUri.Query.id }}"
   selector: "a[href^=\"/{{ .DownloadUri.Query.id }}/\"]"
   attribute: href

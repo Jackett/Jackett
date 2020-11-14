@@ -144,7 +144,7 @@ search:
   paths:
     - path: selection.php
   inputs:
-    $raw: "{{ if .Categories }}{{ range .Categories }}scat[]={{.}}&{{end}}{{else}}{{end}}"
+    $raw: "{{ if .Categories }}{{ range .Categories }}scat[]={{.}}&{{end}}{{ else }}{{ end }}"
     search: "{{ .Keywords }}"
     blah: 0
     orderby: "{{ .Config.sort }}"
@@ -154,8 +154,6 @@ search:
     selector: div.content_wrap > div.selection_wrap:has(a[href^="details.php?id="])
 
   fields:
-    title:
-      selector: a[href^="details.php?id="]
     category:
       selector: a[href^="selection.php?cat="]
       attribute: href
@@ -164,6 +162,8 @@ search:
           args: cat
         - name: replace
           args: ["#2", ""]
+    title:
+      selector: a[href^="details.php?id="]
     details:
       selector: a[href^="details.php?id="]
       attribute: href
@@ -187,10 +187,10 @@ search:
     date:
       selector: div.selection_unter_ab
       filters:
-        - name: append
-          args: " +01:00"
         - name: replace
           args: ["um ", ""]
+        - name: append
+          args: " +01:00" # CET
         - name: dateparse
           args: "02.01.2006 15:04:05 -07:00"
     downloadvolumefactor:

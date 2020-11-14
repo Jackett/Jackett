@@ -1,7 +1,7 @@
 ---
 id: ethor
 name: Ethor.net (Thor's Land)
-description: "A French gerneral tracker"
+description: "A French general tracker"
 language: fr-fr
 type: private
 encoding: UTF-8
@@ -76,7 +76,7 @@ login:
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
-    secure_cookie: "0"
+    secure_cookie: 0
   error:
     - selector: :contains("\"status\":\"error\"")
   test:
@@ -87,7 +87,7 @@ search:
     - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     advcat: 0
     incldead: 1
     stype: b
@@ -116,9 +116,9 @@ search:
       text: "{{ .Result._title_original }}"
       filters:
         - name: re_replace
-          args: ["S(\\d{2}) E(\\d{2})", "S$1E$2"]
+          args: ["(?i)S(\\d{2}) E(\\d{2})", "S$1E$2"]
         - name: re_replace
-          args: ["S(\\d{1}) E(\\d{2})", "S0$1E$2"]
+          args: ["(?i)S(\\d{1}) E(\\d{2})", "S0$1E$2"]
     _title_multilang:
       text: "{{ .Result._title_normalized }}"
       filters:
@@ -127,7 +127,7 @@ search:
         - name: re_replace
           args: ["(?i)[\\.\\s\\[\\-]VFQ[\\.\\s\\]\\-]", ".{{ .Config.multilanguage }}."]
     title:
-      text: "{{if .Config.multilang }}{{ .Result._title_multilang }}{{else}}{{ .Result._title_normalized }}{{end}}"
+      text: "{{if .Config.multilang }}{{ .Result._title_multilang }}{{ else }}{{ .Result._title_normalized }}{{ end }}"
     category:
       selector: a[href^="/browse.php?cat="]
       attribute: href
@@ -145,7 +145,7 @@ search:
       selector: td:nth-child(7)
       filters:
         - name: regexp
-          args: "(\\d+)"
+          args: (\d+)
     seeders:
       selector: td:nth-child(8)
     leechers:
@@ -154,7 +154,7 @@ search:
       selector: td:nth-child(5)
       filters:
         - name: append
-          args: " -05:00" # timezone offset
+          args: " -05:00" # timezone offset? is this correct? usually France is on CET +01:00
         - name: dateparse
           args: "2006-01-0215:04:05 -07:00"
     downloadvolumefactor:
