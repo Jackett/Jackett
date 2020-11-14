@@ -43,12 +43,12 @@ search:
     - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    s: "{{ if .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-    # discount 0 all 1 none 2 30% 3 50% 4 70% 5 free 6 tempo free
+    s: "{{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    # discount 0 all, 1 none, 2 30%, 3 50%, 4 70%, 5 free, 6 tempo free
     dp: 0
-    # dates 0 all  1 thes week 2 this month 3 this season 4 this year
+    # dates 0 all,  1 this week, 2 this month, 3 this season, 4 this year
     add: 0
-    # order: 1 uptime 2 imdb 3 comment 4 size 5 complete 6 upload
+    # order: 1 uptime, 2 imdb, 3 commen,t 4 size, 5 complete, 6 upload
     or: 1
     action: s
     imdb: "{{ if .Query.IMDBID }}{{ .Query.IMDBIDShort }}{{else}}{{end}}"
@@ -75,8 +75,10 @@ search:
     date:
       selector: div.torrent_added
       filters:
+        - name: append
+          args: " +08:00" # CST
         - name: dateparse
-          args: "2006-01-0215:04:05"
+          args: "2006-01-0215:04:05 -07:00"
     imdb:
       selector: div.torrent-imdb
       attribute: href
