@@ -209,8 +209,10 @@ search:
           args: "(?<=Subido )(.*)(?= por)"
         - name: replace
           args: [": ", ":"]
+        - name: append
+          args: " +01:00" # CET
         - name: dateparse
-          args: "02-01-2006 15:04"
+          args: "02-01-2006 15:04 -07:00"
     date:
       selector: td.torrent_name:contains("Subido"):not(:contains("-")), .torrentOwner:contains("Subido"):not(:contains("-"))
       optional: true
@@ -246,8 +248,10 @@ search:
       filters:
         - name: regexp
           args: "(?<=Uploaded )(.*)(?= by)"
+        - name: append
+          args: " +01:00" # CET
         - name: dateparse
-          args: "02-01-2006 15:04"
+          args: "02-01-2006 15:04 -07:00"
     date:
       selector: td.torrent_name:contains("Uploaded"):not(:contains("-")), .torrentOwner:contains("Uploaded"):not(:contains("-"))
       optional: true
