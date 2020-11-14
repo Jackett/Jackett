@@ -115,7 +115,7 @@ search:
     # does not support imdbid search and does not supply imdb link in results.
 
   rows:
-    selector: table.table.table-bordered > tbody > tr:has(a[href^="download.php?id="])
+    selector: table.table.table-bordered > tbody > tr:has(a[href^="download.php?id="]):not(:has(td[style*="background-color"]))
 
   fields:
     download:
