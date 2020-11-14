@@ -65,12 +65,14 @@ search:
     - path: browse.php
   inputs:
     $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-    search: "{{ .Query.Keywords }}"
+    search: "{{ .Keywords }}"
     incldead: 1
     polish: 0
     blah: 0
+
   rows:
     selector: table#line > tbody > tr:has(a[href^="details.php?id="])
+
   fields:
     title:
       selector: a[href^="details.php?id="]
@@ -115,7 +117,7 @@ search:
       selector: tr, br
       filters:
         - name: append
-          args: " +00:00"
+          args: " +01:00" # CET
         - name: dateparse
           args: "2006-01-0215:04:05 -07:00"
     seeders:
@@ -130,3 +132,4 @@ search:
       case:
         "img[src=\"pic/double.png\"]": 2
         "*": 1
+# engine tbd
