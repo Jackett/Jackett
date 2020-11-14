@@ -146,9 +146,9 @@ search:
   path: index.php
   keywordsfilters:
     - name: re_replace
-      args: ["S0?(\\d{1,2})E(\\d{1,2})", "$1x$2"]
+      args: ["(?i)S0?(\\d{1,2})E(\\d{1,2})", "$1x$2"]
     - name: re_replace
-      args: ["S0?(\\d{1,2})", " $1 "]
+      args: ["(?i)S0?(\\d{1,2})", " $1 "]
     - name: re_replace
       args: ["[^a-zA-Z0-9]+", " "]
   inputs:
@@ -214,8 +214,10 @@ search:
     date:
       selector: td:nth-child(5)
       filters:
+        - name: append
+          args: " +01:00" # CET
         - name: dateparse
-          args: "02/01/2006"
+          args: "02/01/2006 -07:00"
     download:
       selector: a[href^="download.php"]
       attribute: href
@@ -236,3 +238,4 @@ search:
         img[src$="8x.gif"]: 8
         img[src$="9x.gif"]: 9
         "*": 1
+# engine tbd
