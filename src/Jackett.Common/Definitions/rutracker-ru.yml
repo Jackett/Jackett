@@ -154,7 +154,7 @@ caps:
     - {id: 1642, cat: Audio/MP3, desc: " |- Российская попса (альбомы, синглы mp3)"}
     - {id: 1644, cat: Audio/Lossless, desc: " |- Отечественная поп музыка (Lossless)"}
     - {id: 1427, cat: Audio/MP3, desc: " |- Сборники Российской поп музыки"}
-    - {id: 1646, cat: Audio/Loessless, desc: " |- Шансон, авторская песня (Lossless)"}
+    - {id: 1646, cat: Audio/Lossless, desc: " |- Шансон, авторская песня (Lossless)"}
     - {id: 1641, cat: Audio/MP3, desc: " |- Шансон и авторская песня (mp3)"}
     - {id: 1561, cat: Audio/MP3, desc: " |- Сборники Русского шансона"}
     - {id: 1168, cat: Audio/MP3, desc: "Рок музыка"}
