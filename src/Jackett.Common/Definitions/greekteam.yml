@@ -122,7 +122,7 @@ search:
       selector: td:has(a[href$="filelist=1"]) ~ td ~ td > nobr
       filters:
         - name: append
-          args: " +02:00"
+          args: " +02:00" # EET
         - name: dateparse
           args: "2006-01-0215:04:05 -07:00"
     size:

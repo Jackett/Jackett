@@ -73,10 +73,12 @@ search:
     - path: browse.php
   inputs:
     # $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-    search: "{{if .Query.Artist}}{{ .Query.Artist }}{{else}}{{ .Keywords }}{{end}}"
+    search: "{{ if .Query.Artist }}{{ .Query.Artist }}{{ else }}{{ .Keywords }}{{ end }}"
     incldead: 1
+
   rows:
     selector: table.mainouter > tbody > tr > td.outer > table > tbody > tr.mouse_out
+
   fields:
     description:
       optional: true
@@ -84,6 +86,9 @@ search:
     title:
       selector: td:nth-child(2)
       remove: font
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
     category:
       selector: a[href^="browse.php?cat="]
       attribute: href
@@ -95,20 +100,11 @@ search:
       case:
         a[href="/browse.php?ext=1&bitrate=Lossless"]: 3040
         a[href="/browse.php?ext=1&format=MP3"]: 3010
-    details:
-      selector: a[href^="details.php?id="]
-      attribute: href
     download:
       selector: a[href^="download.php"]
       attribute: href
     files:
       selector: td:nth-child(5)
-    size:
-      selector: td:nth-child(8)
-    seeders:
-      selector: td:nth-child(10)
-    leechers:
-      selector: td:nth-child(11)
     date:
       selector: td:nth-child(7)
       filters:
@@ -116,11 +112,18 @@ search:
           args: " +00:00" # GMT
         - name: dateparse
           args: "2006-01-0215:04:05 -07:00"
+    size:
+      selector: td:nth-child(8)
     grabs:
       selector: td:nth-child(9)
+    seeders:
+      selector: td:nth-child(10)
+    leechers:
+      selector: td:nth-child(11)
     downloadvolumefactor:
       case:
         img[alt="Free Leech"]: 0
         "*": 1
     uploadvolumefactor:
       text: 1
+# engine tbd

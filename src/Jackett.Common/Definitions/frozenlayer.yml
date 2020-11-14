@@ -43,17 +43,17 @@ caps:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}buscar/descargas/{{ .Config.category }}/{{ .Keywords }}?search=Buscar{{else}}descargas{{end}}"
-    - path: "{{ if .Keywords }}buscar/descargas/{{ .Config.category }}/{{ .Keywords }}?search=Buscar&page=2{{else}}descargas{{end}}"
+    - path: "{{ if .Keywords }}buscar/descargas/{{ .Config.category }}/{{ .Keywords }}?search=Buscar{{ else }}descargas{{ end }}"
+    - path: "{{ if .Keywords }}buscar/descargas/{{ .Config.category }}/{{ .Keywords }}?search=Buscar&page=2{{ else }}descargas{{ end }}"
   keywordsfilters:
     - name: re_replace # remove first season from search string
-      args: ["(S1)", ""]
+      args: ["(?i)(S1)", ""]
     - name: re_replace # switch second season from search string
-      args: ["(S2)", "segunda temporada"]
+      args: ["(?i)(S2)", "segunda temporada"]
     - name: re_replace # switch third season from search string
-      args: ["(S3)", "tercera temporada"]
+      args: ["(?i)(S3)", "tercera temporada"]
     - name: re_replace # remove E from episode number from search string
-      args: ["E([0-9]+)", "$1"]
+      args: ["(?i)E([0-9]+)", "$1"]
 
   rows:
     selector: table#descargas > tbody > tr:has(td:has(a[href^="magnet:?"]))
