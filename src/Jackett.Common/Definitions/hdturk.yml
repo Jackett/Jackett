@@ -108,7 +108,7 @@ search:
   inputs:
     # does not support multi categories so defaulting to ALL
     do: search
-    keywords: "{{.Keywords}}"
+    keywords: "{{ .Keywords }}"
     category: 0
     search_type: t_name
     include_dead_torrents: yes
@@ -138,8 +138,10 @@ search:
         - name: regexp
           args: (\d{2}-\d{2}-\d{4} \d{2}:\d{2})
       filters:
+        - name: append
+          args: " +03:00" # TRT
         - name: dateparse
-          args: "02-01-2006 15:04"
+          args: "02-01-2006 15:04 -07:00"
     download:
       selector: a[href*="download.php?id="]
       attribute: href
@@ -153,11 +155,11 @@ search:
       selector: td:nth-child(8)
     downloadvolumefactor:
       case:
-        img[src$="/freedownload.gif"]: "0"
-        img[src$="/silverdownload.gif"]: "0.5"
-        "*": "1"
+        img[src$="/freedownload.gif"]: 0
+        img[src$="/silverdownload.gif"]: 0.5
+        "*": 1
     uploadvolumefactor:
       case:
-        img[src$="/x2.gif"]: "2"
-        "*": "1"
+        img[src$="/x2.gif"]: 2
+        "*": 1
 # TS Special Edition v.7.5
