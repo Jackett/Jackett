@@ -109,11 +109,11 @@ login:
 download:
   before:
     path: ajax_det_poll.php
-    method: "post"
+    method: post
     inputs:
-      set_thanks: "thanks"
+      set_thanks: thanks
       det_id: "{{ .DownloadUri.Query.torrent }}"
-      ajax: "yes"
+      ajax: yes
 
 search:
   paths:
@@ -126,17 +126,17 @@ search:
   rows:
     selector: div.selection_wrap
   fields:
+    title:
+      selector: a.selection_a
+    details:
+      selector: a.selection_a
+      attribute: href
     download:
       selector: a.selection_a
       attribute: href
       filters:
         - name: replace
           args: ["details.php?id=", "download.php?torrent="]
-    title:
-      selector: a.selection_a
-    details:
-      selector: a.selection_a
-      attribute: href
     category:
       selector: div.kat_cat_pic
       case:
@@ -231,13 +231,6 @@ search:
           args: [".", ""]
         - name: replace
           args: [",", "."]
-    downloadvolumefactor:
-      case:
-        ":root:has(div.onlyup)": "0"
-        "*": "1"
-    uploadvolumefactor:
-      case:
-        "*": "1"
     date:
       # Heute 13:30:04
       # Gestern 09:10:10
@@ -255,8 +248,18 @@ search:
       filters:
         - name: replace
           args: [" um", ""]
+        - name: append
+          args: " +01:00" # CET
         - name: dateparse
-          args: "02.01.2006 15:04:05"
+          args: "02.01.2006 15:04:05 -07:00"
     description:
       selector: selection_unter_af
       optional: true
+    downloadvolumefactor:
+      case:
+        ":root:has(div.onlyup)": 0
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+# MR and MST tbd
+# engine tbd
