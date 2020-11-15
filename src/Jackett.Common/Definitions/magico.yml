@@ -6,10 +6,11 @@ language: el-gr
 type: private
 encoding: UTF-8
 links:
-  - https://magico.club/
+  - https://magico.fun/
 legacylinks:
   - https://magico.info/
   - https://magico.one/
+  - https://magico.club/
 
 caps:
   categorymappings:
