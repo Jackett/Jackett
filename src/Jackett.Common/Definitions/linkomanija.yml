@@ -65,51 +65,53 @@ search:
     - path: browse.php
   inputs:
     $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-    search: "{{ .Query.Keywords }}"
-    incldead: "1"
+    search: "{{ .Keywords }}"
+    incldead: 1
+
   rows:
     selector: table> tbody > tr:has(a[href^="details?"])
     filters:
       - name: andmatch
+
   fields:
-    download:
-      selector: a[href^="download.php?id="]
-      attribute: href
-    title:
-      selector: a[href^="details?"]
-    description:
-      optional: true
-      selector: td:nth-child(2) > span
-    details:
-      selector: a[href^="details?"]
-      attribute: href
     category:
       selector: a[href^="browse.php?cat="]
       attribute: href
       filters:
         - name: querystring
           args: cat
-    seeders:
-      selector: td:nth-child(8)
-    leechers:
-      selector: td:nth-child(9)
-    grabs:
-      selector: td:nth-child(7)
+    title:
+      selector: a[href^="details?"]
+    details:
+      selector: a[href^="details?"]
+      attribute: href
+    download:
+      selector: a[href^="download.php?id="]
+      attribute: href
+    description:
+      optional: true
+      selector: td:nth-child(2) > span
     files:
       selector: td:nth-child(3)
-    size:
-      selector: td:nth-child(6)
-    downloadvolumefactor:
-      case:
-        img[src="//static.linkomanija.net/images/flag_green.gif"]: "0"
-        "*": "1"
-    uploadvolumefactor:
-      case:
-        "*": "1"
     date:
       selector: td:nth-child(5)
       filters:
         - name: append
-          args: " +01:00"
+          args: " +02:00" # EET
         - name: dateparse
           args: "2006-01-0215:04:05 -07:00"
+    size:
+      selector: td:nth-child(6)
+    grabs:
+      selector: td:nth-child(7)
+    seeders:
+      selector: td:nth-child(8)
+    leechers:
+      selector: td:nth-child(9)
+    downloadvolumefactor:
+      case:
+        img[src="//static.linkomanija.net/images/flag_green.gif"]: 0
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+# engine tbd

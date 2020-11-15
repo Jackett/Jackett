@@ -91,14 +91,14 @@ search:
   paths:
     - path: browse.php
   inputs:
-    # does not support multi categories so defaulting to ALL
     do: search
+    # does not support multi categories so defaulting to ALL
     category: 0
     # yes incldead, no activeonly
     include_dead_torrents: yes
-    keywords: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    keywords: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     # t_name, t_description, t_both, t_uploader, t_genre
-    search_type: "{{ if .Query.IMDBID }}t_genre{{else}}t_name{{end}}"
+    search_type: "{{ if .Query.IMDBID }}t_genre{{ else }}t_name{{ end }}"
     sort: "{{ .Config.sort }}"
     order: "{{ .Config.type }}"
     # does not return imdb link in results

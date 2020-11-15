@@ -175,8 +175,7 @@ search:
         img[src$="/torrent_free.png"]: 0
         "*": 1
     uploadvolumefactor:
-      case:
-        "*": 1
+      text: 1
     minimumratio:
       text: 1.0
 # TSUE 2.2
