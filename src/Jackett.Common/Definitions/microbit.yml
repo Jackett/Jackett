@@ -141,8 +141,10 @@ search:
     date:
       selector: td:nth-child(9)
       filters:
+        - name: append
+          args: " +01:00" # CET
         - name: dateparse
-          args: "2006.01.02. 15:04"
+          args: "2006.01.02. 15:04 -07:00"
     downloadvolumefactor:
       text: 1
     downloadvolumefactor:
