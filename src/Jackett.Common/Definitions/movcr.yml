@@ -62,8 +62,10 @@ search:
       selector: td.seeds:contains("-")
       optional: true
       filters:
+        - name: append
+          args: " +05:30" # IST
         - name: dateparse
-          args: "2006-01-02"
+          args: "2006-01-02 -07:00"
     date:
       selector: td.seeds:not(:contains("-"))
       optional: true
