@@ -149,7 +149,7 @@ search:
     order: "{{ .Config.type }}"
   keywordsfilters:
     - name: re_replace
-      args: ["S01E01", "{{ if .Config.stripS01E01 }}{{ else }}S01E01{{ end }}"] # optionally remove S01E01 from search
+      args: ["(?i)S01E01", "{{ if .Config.stripS01E01 }}{{ else }}S01E01{{ end }}"] # optionally remove S01E01 from search
 
   rows:
     selector: tr:has(a.magnetlink)

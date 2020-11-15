@@ -128,8 +128,10 @@ search:
     date:
       selector: td:nth-of-type(7)
       filters:
+        - name: append
+          args: " +05:30" # IST
         - name: dateparse
-          args: "Jan 2 2006 03:04 PM"
+          args: "Jan 2 2006 03:04 PM -07:00"
     size:
       selector: td:nth-of-type(8)
     grabs:

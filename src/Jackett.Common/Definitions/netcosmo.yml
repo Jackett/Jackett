@@ -90,9 +90,9 @@ search:
   keywordsfilters:
     # most ITA TV torrents are in XXxYY format, so we search without S/E prefixes and filter later
     - name: re_replace
-      args: ["S0?(\\d{1,2})", " $1 "]
+      args: ["(?i)S0?(\\d{1,2})", " $1 "]
     - name: re_replace
-      args: ["E(\\d{2,3})", " $1 "]
+      args: ["(?i)E(\\d{2,3})", " $1 "]
     - name: replace
       args: ["-", ""]
   inputs:
