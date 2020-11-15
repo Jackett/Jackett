@@ -48,7 +48,7 @@ search:
     dp: 0
     # dates 0 all,  1 this week, 2 this month, 3 this season, 4 this year
     add: 0
-    # order: 1 uptime, 2 imdb, 3 commen,t 4 size, 5 complete, 6 upload
+    # order: 1 uptime, 2 imdb, 3 comment, 4 size, 5 complete, 6 upload
     or: 1
     action: s
     imdb: "{{ if .Query.IMDBID }}{{ .Query.IMDBIDShort }}{{else}}{{end}}"
