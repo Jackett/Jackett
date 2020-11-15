@@ -152,7 +152,7 @@ search:
     - name: re_replace
       args: ["(?i)E(\\d+)", " $1 "]
     - name: re_replace
-      args: ["[^a-zA-Z0-9]+", " "]
+      args: ["[\\.\\-,_\\[\\]\\(\\)]+", " "]
   inputs:
     page: torrents
     $raw: "&category={{ range .Categories }}{{.}};{{end}}"
