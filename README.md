@@ -411,6 +411,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * MaDs Revolution
  * Magico (Trellas)
  * Majomparádé (TurkDepo)
+ * MeseVilág (Fairytale World)
  * MicroBit (µBit)
  * Milkie
  * MMA-Torrents
