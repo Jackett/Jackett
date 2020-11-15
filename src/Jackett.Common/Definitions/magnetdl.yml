@@ -71,7 +71,7 @@ search:
     # https://www.magnetdl.com/download/movies/se/desc/
     # https://www.magnetdl.com/m/mandalorian-s01e07/age/desc/
     - path: "{{ if .Keywords }}{{ re_replace .Keywords \"(.).*\" \"$1\" }}/{{ .Keywords }}/{{ .Config.sort }}/{{ .Config.type }}/{{ else }}download/movies/{{ end }}"
-    - path: "{{ if .Keywords }}/{{ .Config.sort }}/{{ .Config.type }}/{{ else }}download/tv/{{ end }}"
+    - path: "{{ if .Keywords }}{{ re_replace .Keywords \"(.).*\" \"$1\" }}/{{ .Keywords }}/{{ .Config.sort }}/{{ .Config.type }}/2/{{ else }}download/tv/{{ end }}"
 
   rows:
     selector: tr:has(td.m)
