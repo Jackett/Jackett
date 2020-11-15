@@ -62,10 +62,10 @@ search:
     - path: tags.php
   inputs:
     search: "{{ .Keywords }}"
-    # 0 poster 1 list
+    # 0 poster, 1 list
     where: 1
     per: 50
-    # 0 all 1 active 2 dead
+    # 0 all, 1 active, 2 dead
     active: 1
     order: "{{ .Config.sort }}"
     by: "{{ .Config.type }}"
@@ -74,17 +74,17 @@ search:
     selector: table[width="100%"] > tbody > tr:has(a[onclick="getMagnet(this)"])
 
   fields:
-    title:
-      selector: a[href^="/torrent/"]
-    details:
-      selector: a[href^="/torrent/"]
-      attribute: href
     category:
       selector: a[href^="/tags.php?tags="]
       attribute: href
       filters:
         - name: querystring
           args: tags
+    title:
+      selector: a[href^="/torrent/"]
+    details:
+      selector: a[href^="/torrent/"]
+      attribute: href
     download:
       selector: a[onclick="getMagnet(this)"]
       attribute: title
@@ -96,8 +96,10 @@ search:
     date:
       selector: td:nth-child(1)
       filters:
+        - name: append
+          args: " +01:00" # CET
         - name: dateparse
-          args: "02/01/2006"
+          args: "02/01/2006 -07:00"
     size:
       selector: td:nth-child(4)
     seeders:
