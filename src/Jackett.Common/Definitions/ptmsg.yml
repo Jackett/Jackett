@@ -40,10 +40,6 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
-  - name: info_tpp
-    type: info
-    label: Results Per Page
-    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
   - name: sort
     type: select
     label: Sort requested from site
@@ -60,6 +56,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_icon
+    type: info
+    label: Torrents
+    default: <b>Download icon</b> must be enabled on your account profile.
   - name: info_tpp
     type: info
     label: Results Per Page
@@ -116,7 +116,7 @@ search:
       attribute: href
     date:
       # time type: time elapsed (default)
-      selector: td:nth-child(4) > span[title]
+      selector: td:nth-child(3) > span[title]
       attribute: title
       optional: true
       filters:
@@ -126,7 +126,7 @@ search:
           args: "2006-01-02 15:04:05 -07:00"
     date:
       # time added
-      selector: td:nth-child(4):not(:has(span))
+      selector: td:nth-child(3):not(:has(span))
       optional: true
       filters:
         - name: append
@@ -134,13 +134,13 @@ search:
         - name: dateparse
           args: "2006-01-0215:04:05 -07:00"
     size:
-      selector: td:nth-child(5)
+      selector: td:nth-child(4)
     seeders:
-      selector: td:nth-child(6)
+      selector: td:nth-child(5)
     leechers:
-      selector: td:nth-child(7)
+      selector: td:nth-child(6)
     grabs:
-      selector: td:nth-child(8)
+      selector: td:nth-child(7)
     downloadvolumefactor:
       case:
         img.pro_free: 0
