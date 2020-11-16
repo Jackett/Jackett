@@ -50,9 +50,9 @@ search:
     page: torrents
     $raw: "category={{ range .Categories }}{{.}};{{end}}"
     search: "{{ .Keywords }}"
-    # 0 file 1 file&descr 2 descr 3 uploaders
+    # 0 file, 1 file&descr, 2 descr, 3 uploaders
     option: 0
-    # 0 all 1 active 2 dead
+    # 0 all, 1 active, 2 dead
     active: 0
     order: "{{ .Config.sort }}"
     by: "{{ .Config.type }}"
@@ -88,8 +88,10 @@ search:
       filters:
         - name: regexp
           args: "AddDate:\\s*\u00a0\\s*(.+?)$"
+        - name: append
+          args: " -07:00" # PDT
         - name: dateparse
-          args: "15:04:05 02/01/2006"
+          args: "15:04:05 02/01/2006 -07:00"
     seeders:
       selector: td[valign="middle"] > p:nth-child(5)
       filters:

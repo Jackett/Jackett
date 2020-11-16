@@ -151,8 +151,10 @@ search:
       # 19/01/2019
       selector: td:nth-last-child(9)
       filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02/01/2006"
+          args: "02/01/2006 -07:00"
     size:
       selector: td:nth-last-child(8)
     seeders:

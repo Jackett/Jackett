@@ -60,8 +60,10 @@ search:
       selector: p.is-6 > a
       attribute: href
       filters:
+        - name: append
+          args: " -07:00" # PDT
         - name: dateparse
-          args: "/2006/01/02"
+          args: "/2006/01/02 -07:00"
     size:
       selector: span.is-size-6
     seeders:

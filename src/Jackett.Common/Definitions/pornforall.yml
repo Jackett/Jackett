@@ -55,8 +55,10 @@ search:
       filters:
         - name: querystring
           args: date
+        - name: append
+          args: " +03:00" # MSK
         - name: dateparse
-          args: "2006-01-02"
+          args: "2006-01-02 -07:00"
     size:
       selector: font[color="grey"]
       filters:
