@@ -126,8 +126,10 @@ search:
         # 30.10.2019 14:49
         - name: regexp
           args: "(\\d{1,2}\\.\\d{2}\\.\\d{4} \\d{1,2}\\:\\d{2})"
+        - name: append
+          args: " +03:00" # MSK
         - name: dateparse
-          args: "2.01.2006 15:04"
+          args: "2.01.2006 15:04 -07:00"
     seeders:
       selector: i.fa-arrow-up ~ span
     leechers:
