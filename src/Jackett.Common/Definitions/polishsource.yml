@@ -78,16 +78,16 @@ search:
     - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-    # 0 onlyactive 1 all 2 onlydead
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    # 0 onlyactive, 1 all, 2 onlydead
     incldead: 1
-    # 0 all 1 scene 2 notscene 3 internal
+    # 0 all, 1 scene, 2 notscene, 3 internal
     scene: 0
-    # 0 all 1 Polish 2 non-Polish 4 subtitled
+    # 0 all, 1 Polish, 2 non-Polish, 4 subtitled
     pl: 0
     # subcat blank=all
     sub: ""
-    # title both nfo
+    # title, both, nfo
     search_in: "{{ if .Query.IMDBID }}nfo{{else}}title{{end}}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
@@ -140,7 +140,7 @@ search:
       selector: td:nth-child(4)
       filters:
         - name: append
-          args: " +00:00"
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "2006-01-0215:04:05 -07:00"
     size:

@@ -89,7 +89,7 @@ login:
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
-    returnto: "/"
+    returnto: /
     perm_ssl: 1
   error:
     - selector: td.embedded:has(h2:contains("failed"))

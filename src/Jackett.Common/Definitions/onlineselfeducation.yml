@@ -110,9 +110,9 @@ search:
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
-    # title descr all
+    # title, descr, all
     searchin: title
-    # 1 incldead 0 active 2 onlydead
+    # 1 incldead, 0 active, 2 onlydead
     incldead: 1
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"

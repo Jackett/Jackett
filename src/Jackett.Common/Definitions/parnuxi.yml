@@ -179,7 +179,7 @@ search:
     - path: search.php
   inputs:
     tracker_search: torrent
-    keywords: "{{ if .Keywords }}{{ .Keywords }}{{else}}{{ .Today.Year }}{{end}}"
+    keywords: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
     terms: all
     fp: 1
     author: ""
@@ -233,13 +233,14 @@ search:
       # (09.03.2020)
       selector: a.topictitle
       optional: true
+      # do not append TZ else text {{if}} will not work if date not found
       filters:
         - name: regexp
           args: (\d{2}\.\d{2}\.\d{4})
         - name: dateparse
           args: "02.01.2006"
     date:
-      text: "{{ if .Result.find_date }}{{ .Result.find_date}}{{else}}now{{end}}"
+      text: "{{ if .Result.find_date }}{{ .Result.find_date }}{{ else }}now{{ end }}"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

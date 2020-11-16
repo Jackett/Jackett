@@ -108,7 +108,7 @@ search:
     - path: index.php
   inputs:
     page: torrents
-    category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{else}}0;{{end}}"
+    category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{ else }}0;{{ end }}"
     search: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ end }}"
     # 0 all 1, active, 2 dead
     active: 0
