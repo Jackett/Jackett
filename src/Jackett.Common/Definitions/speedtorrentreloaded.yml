@@ -90,7 +90,7 @@ login:
   method: form
   form: form
   inputs:
-    take: "yes"
+    take: yes
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
     secure_code: "{{ .Config.secure_code }}"
@@ -102,7 +102,7 @@ search:
     - path: tfiles.php
   inputs:
     showsearch: 1
-    $raw: "{{ if .Categories }}{{ range .Categories }}c{{.}}=1&{{end}}{{else}}{{end}}"
+    $raw: "{{ if .Categories }}{{ range .Categories }}c{{.}}=1&{{end}}{{ else }}{{ end }}"
     search: "{{ .Keywords }}"
     orderby: "{{ .Config.sort }}"
     sort: "{{ .Config.type }}"
@@ -112,26 +112,26 @@ search:
     selector: tr:has(a[href^="details.php?id="])
 
   fields:
-    title:
-      selector: a[href^="details.php?id="]
-    poster:
-      selector: a[href^="details.php?id="][onmouseover]
-      attribute: onmouseover
-      filters:
-        - name: regexp
-          args: "<img src=(.*) width="
     category:
       selector: a[href^="tfiles.php?cat="]
       attribute: href
       filters:
         - name: querystring
           args: cat
+    title:
+      selector: a[href^="details.php?id="]
     details:
       selector: a[href^="details.php?id="]
       attribute: href
     download:
       selector: a[href^="download.php?torrent="]
       attribute: href
+    poster:
+      selector: a[href^="details.php?id="][onmouseover]
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: "<img src=(.*) width="
     grabs:
       selector: tr > th > span:nth-child(5)
       filters:
@@ -162,7 +162,7 @@ search:
         - name: regexp
           args: "(\\d{2}\\.\\d{2}\\.\\d{4}\\s\\d{2}:\\d{2}:\\d{2})"
         - name: append
-          args: " +01:00"
+          args: " +01:00" # CET
         - name: replace
           args: ["\xA0", " "]
         - name: replace

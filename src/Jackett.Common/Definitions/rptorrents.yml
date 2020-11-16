@@ -102,7 +102,7 @@ search:
     freeleech: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
     # 0 both, 1 localonly, 2 extonly
     inclexternal: 0
-    # 0 al,l 1 English, 2 etc...
+    # 0 all, 1 English, 2 etc...
     lang: 0
     sort: "{{ .Config.sort }}"
     order: "{{ .Config.type }}"
