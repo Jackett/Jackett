@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -34,7 +33,15 @@ namespace Jackett.Common.Indexers
                    name: "BroadcasTheNet",
                    description: "BroadcasTheNet (BTN) is an invite-only torrent tracker focused on TV shows",
                    link: "https://broadcasthe.net/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities
+                   {
+                       LimitsDefault = 100,
+                       LimitsMax = 1000,
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,
@@ -44,9 +51,6 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
-
-            TorznabCaps.LimitsDefault = 100;
-            TorznabCaps.LimitsMax = 1000;
 
             AddCategoryMapping("SD", TorznabCatType.TVSD, "SD");
             AddCategoryMapping("720p", TorznabCatType.TVHD, "720p");
@@ -89,36 +93,46 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            var searchString = query.GetQueryString();
+            var searchString = query.SearchTerm != null ? query.SearchTerm : "";
             var btnResults = query.Limit;
             if (btnResults == 0)
                 btnResults = (int)TorznabCaps.LimitsDefault;
             var btnOffset = query.Offset;
             var releases = new List<ReleaseInfo>();
+            var searchParam = new Dictionary<string, string>();
 
-            // If only the season is searched for then change format to match expected format
-            var seasonOnlyMatch = new Regex(@".*\s[Ss]{1}\d{2}(?<![Ee]{1}\d{2,3})?$").Match(searchString);
-            if (seasonOnlyMatch.Success)
+            // If only the season/episode is searched for then change format to match expected format
+            if (query.Season > 0 && query.Episode == null)
             {
-                searchString = Regex.Replace(searchString, @"[Ss]{1}\d{2}", $"Season {query.Season}");
+                searchParam["name"] = $"Season {query.Season}";
+                searchParam["category"] = "Season";
+            } else if (query.Season > 0 && int.Parse(query.Episode) > 0)
+            {
+                searchParam["name"] = string.Format("S{0:00}E{1:00}", query.Season, int.Parse(query.Episode));
+                searchParam["category"] = "Episode";
             }
+
+            searchParam["search"] = searchString.Replace(" ", "%");
 
             var parameters = new JArray
             {
                 new JValue(configData.Key.Value),
-                new JValue(searchString.Trim()),
+                JObject.FromObject(searchParam),
                 new JValue(btnResults),
                 new JValue(btnOffset)
             };
-            var response = await PostDataWithCookiesAndRetry(APIBASE, null, null, null, new Dictionary<string, string>()
-            {
-                { "Accept", "application/json-rpc, application/json"},
-                {"Content-Type", "application/json-rpc"}
-            }, JsonRPCRequest("getTorrents", parameters), false);
+
+            var response = await RequestWithCookiesAndRetryAsync(
+                APIBASE, method: RequestType.POST,
+                headers: new Dictionary<string, string>
+                {
+                    {"Accept", "application/json-rpc, application/json"},
+                    {"Content-Type", "application/json-rpc"}
+                }, rawbody: JsonRPCRequest("getTorrents", parameters), emulateBrowser: false);
 
             try
             {
-                var btnResponse = JsonConvert.DeserializeObject<BTNRPCResponse>(response.Content);
+                var btnResponse = JsonConvert.DeserializeObject<BTNRPCResponse>(response.ContentString);
 
                 if (btnResponse?.Result?.Torrents != null)
                 {
@@ -144,12 +158,12 @@ namespace Jackett.Common.Indexers
                             descriptions.Add("Youtube Trailer: <a href=\"" + btnResult.YoutubeTrailer + "\">" + btnResult.YoutubeTrailer + "</a>");
                         var imdb = ParseUtil.GetImdbID(btnResult.ImdbID);
                         var link = new Uri(btnResult.DownloadURL);
-                        var comments = new Uri($"{SiteLink}torrents.php?id={btnResult.GroupID}&torrentid={btnResult.TorrentID}");
+                        var details = new Uri($"{SiteLink}torrents.php?id={btnResult.GroupID}&torrentid={btnResult.TorrentID}");
                         var publishDate = DateTimeUtil.UnixTimestampToDateTime(btnResult.Time);
                         var release = new ReleaseInfo
                         {
                             Category = MapTrackerCatToNewznab(btnResult.Resolution),
-                            Comments = comments,
+                            Details = details,
                             Guid = link,
                             Link = link,
                             MinimumRatio = 1,
@@ -167,7 +181,7 @@ namespace Jackett.Common.Indexers
                             Imdb = imdb
                         };
                         if (!string.IsNullOrEmpty(btnResult.SeriesBanner))
-                            release.BannerUrl = new Uri(btnResult.SeriesBanner);
+                            release.Poster = new Uri(btnResult.SeriesBanner);
                         if (!release.Category.Any()) // default to TV
                             release.Category.Add(TorznabCatType.TV.ID);
 
@@ -177,7 +191,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
             return releases;
         }

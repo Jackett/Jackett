@@ -78,7 +78,8 @@ namespace Jackett.Server.Controllers
             var saveDir = config.blackholedir;
             var updateDisabled = config.updatedisabled;
             var preRelease = config.prerelease;
-            var logging = config.logging;
+            var enhancedLogging = config.logging;
+
             var basePathOverride = config.basepathoverride;
             if (basePathOverride != null)
             {
@@ -101,9 +102,6 @@ namespace Jackett.Server.Controllers
             serverConfig.RuntimeSettings.BasePath = serverService.BasePath();
             configService.SaveConfig(serverConfig);
 
-            Helper.SetLogLevel(logging ? LogLevel.Debug : LogLevel.Info);
-            serverConfig.RuntimeSettings.TracingEnabled = logging;
-
             if (omdbApiKey != serverConfig.OmdbApiKey || omdbApiUrl != serverConfig.OmdbApiUrl)
             {
                 serverConfig.OmdbApiKey = omdbApiKey;
@@ -122,8 +120,8 @@ namespace Jackett.Server.Controllers
                 if (config.proxy_port < 1 || config.proxy_port > 65535)
                     throw new Exception("The port you have selected is invalid, it must be below 65535.");
 
+                serverConfig.ProxyType = string.IsNullOrWhiteSpace(config.proxy_url) ? ProxyType.Disabled : config.proxy_type;
                 serverConfig.ProxyUrl = config.proxy_url;
-                serverConfig.ProxyType = config.proxy_type;
                 serverConfig.ProxyPort = config.proxy_port;
                 serverConfig.ProxyUsername = config.proxy_username;
                 serverConfig.ProxyPassword = config.proxy_password;
@@ -188,10 +186,17 @@ namespace Jackett.Server.Controllers
 
             if (webHostRestartNeeded)
             {
+                // we have to restore log level when the server restarts because we are not saving the state in the
+                // configuration. when the server restarts the UI is inconsistent with the active log level
+                // https://github.com/Jackett/Jackett/issues/8315
+                setEnhancedLogLevel(false);
+
                 Thread.Sleep(500);
                 logger.Info("Restarting webhost due to configuration change");
                 Helper.RestartWebHost();
             }
+            else
+                setEnhancedLogLevel(enhancedLogging);
 
             serverConfig.ConfigChanged();
 
@@ -200,5 +205,11 @@ namespace Jackett.Server.Controllers
 
         [HttpGet]
         public List<CachedLog> Logs() => logCache.Logs;
+
+        private void setEnhancedLogLevel(bool enabled)
+        {
+            Helper.SetLogLevel(enabled ? LogLevel.Debug : LogLevel.Info);
+            serverConfig.RuntimeSettings.TracingEnabled = enabled;
+        }
     }
 }

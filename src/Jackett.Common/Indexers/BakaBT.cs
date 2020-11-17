@@ -5,11 +5,12 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
-using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
@@ -23,10 +24,14 @@ namespace Jackett.Common.Indexers
         private string SearchUrl => SiteLink + "browse.php?only=0&hentai=1&incomplete=1&lossless=1&hd=1&multiaudio=1&bonus=1&reorder=1&q=";
         private string LoginUrl => SiteLink + "login.php";
         private readonly string LogoutStr = "<a href=\"logout.php\">Logout</a>";
+        private bool AddRomajiTitle => configData.AddRomajiTitle.Value;
+        private bool AppendSeason => configData.AppendSeason.Value;
 
-        private new ConfigurationDataBasicLogin configData
+        private readonly List<int> defaultCategories = new List<int> { TorznabCatType.TVAnime.ID };
+
+        private new ConfigurationDataBakaBT configData
         {
-            get => (ConfigurationDataBasicLogin)base.configData;
+            get => (ConfigurationDataBakaBT)base.configData;
             set => base.configData = value;
         }
 
@@ -35,17 +40,41 @@ namespace Jackett.Common.Indexers
                    name: "BakaBT",
                    description: "Anime Comunity",
                    link: "https://bakabt.me/",
-                   caps: new TorznabCapabilities(TorznabCatType.TVAnime),
+                   caps: new TorznabCapabilities
+                   {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
+                       },
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q
+                       }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
-                   configData: new ConfigurationDataBasicLogin("To prevent 0-results-error, Enable the " +
+                   configData: new ConfigurationDataBakaBT("To prevent 0-results-error, Enable the " +
                                                                "Show-Adult-Content option in your BakaBT account Settings."))
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
+
+            AddCategoryMapping(1, TorznabCatType.TVAnime, "Anime Series");
+            AddCategoryMapping(2, TorznabCatType.TVAnime, "OVA");
+            AddCategoryMapping(3, TorznabCatType.AudioOther, "Soundtrack");
+            AddCategoryMapping(4, TorznabCatType.BooksComics, "Manga");
+            AddCategoryMapping(5, TorznabCatType.TVAnime, "Anime Movie");
+            AddCategoryMapping(6, TorznabCatType.TVOther, "Live Action");
+            AddCategoryMapping(7, TorznabCatType.BooksOther, "Artbook");
+            AddCategoryMapping(8, TorznabCatType.AudioVideo, "Music Video");
+            AddCategoryMapping(9, TorznabCatType.BooksEBook, "Light Novel");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -57,7 +86,7 @@ namespace Jackett.Common.Indexers
 
         private async Task DoLogin()
         {
-            var loginForm = await webclient.GetString(new Utils.Clients.WebRequest()
+            var loginForm = await webclient.GetResultAsync(new Utils.Clients.WebRequest
             {
                 Url = LoginUrl,
                 Type = RequestType.GET
@@ -69,8 +98,14 @@ namespace Jackett.Common.Indexers
                 { "returnto", "/index.php" }
             };
 
+            var parser = new HtmlParser();
+            var dom = parser.ParseDocument(loginForm.ContentString);
+            var loginKey = dom.QuerySelector("input[name=\"loginKey\"]");
+            if (loginKey != null)
+                pairs["loginKey"] = loginKey.GetAttribute("value");
+
             var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginForm.Cookies, true, null, SiteLink);
-            var responseContent = response.Content;
+            var responseContent = response.ContentString;
             await ConfigureIfOK(response.Cookies, responseContent.Contains(LogoutStr), () =>
             {
                 var parser = new HtmlParser();
@@ -83,31 +118,28 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            var queryCopy = query.Clone(); // we can't change the original object
-            // This tracker only deals with full seasons so chop off the episode/season number if we have it D:
-            if (!string.IsNullOrWhiteSpace(queryCopy.SearchTerm))
-            {
-                var splitindex = queryCopy.SearchTerm.LastIndexOf(' ');
-                if (splitindex > -1)
-                    queryCopy.SearchTerm = queryCopy.SearchTerm.Substring(0, splitindex);
-            }
+            var searchString = query.SanitizedSearchTerm;
+
+            var match = Regex.Match(query.SanitizedSearchTerm, @".*(?=\s(?:[Ee]\d+|\d+)$)");
+            if (match.Success)
+                searchString = match.Value;
 
             var releases = new List<ReleaseInfo>();
-            var searchString = queryCopy.SanitizedSearchTerm;
             var episodeSearchUrl = SearchUrl + WebUtility.UrlEncode(searchString);
-            var response = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
-            if (!response.Content.Contains(LogoutStr))
+            var response = await RequestWithCookiesAndRetryAsync(episodeSearchUrl);
+            if (!response.ContentString.Contains(LogoutStr))
             {
                 //Cookie appears to expire after a period of time or logging in to the site via browser
                 await DoLogin();
-                response = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
+                response = await RequestWithCookiesAndRetryAsync(episodeSearchUrl);
             }
 
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(response.Content);
+                var dom = parser.ParseDocument(response.ContentString);
                 var rows = dom.QuerySelectorAll(".torrents tr.torrent, .torrents tr.torrent_alt");
+                ICollection<int> currentCategories = new List<int> { TorznabCatType.TVAnime.ID };
 
                 foreach (var row in rows)
                 {
@@ -130,14 +162,20 @@ namespace Jackett.Common.Indexers
                     var titleSeries = title.Substring(0, titleSplit);
                     var releaseInfo = title.Substring(titleSplit);
 
-                    // For each over each pipe deliminated name
-                    foreach (var name in titleSeries.Split("|".ToCharArray(), StringSplitOptions.RemoveEmptyEntries))
+                    currentCategories = GetNextCategory(row, currentCategories);
+
+                    var stringSeparator = new[] { " | " };
+                    var titles = titleSeries.Split(stringSeparator, StringSplitOptions.RemoveEmptyEntries);
+                    if (titles.Count() > 1 && !AddRomajiTitle)
+                        titles = titles.Skip(1).ToArray();
+
+                    foreach (var name in titles)
                     {
                         var release = new ReleaseInfo();
 
                         release.Title = (name + releaseInfo).Trim();
                         // Ensure the season is defined as this tracker only deals with full seasons
-                        if (release.Title.IndexOf("Season") == -1)
+                        if (release.Title.IndexOf("Season") == -1 && AppendSeason)
                         {
                             // Insert before the release info
                             var aidx = release.Title.IndexOf('(');
@@ -150,13 +188,13 @@ namespace Jackett.Common.Indexers
                                 bidx = release.Title.Length;
 
                             var insertPoint = Math.Min(aidx, bidx);
-                            release.Title = release.Title.Substring(0, insertPoint) + "Season 1 " + release.Title.Substring(insertPoint);
+                            release.Title = release.Title.Substring(0, insertPoint) + " Season 1 " + release.Title.Substring(insertPoint);
                         }
 
-                        release.Category = new List<int> { TorznabCatType.TVAnime.ID };
+                        release.Category = currentCategories;
                         release.Description = row.QuerySelector("span.tags")?.TextContent;
                         release.Guid = new Uri(SiteLink + qTitleLink.GetAttribute("href"));
-                        release.Comments = release.Guid;
+                        release.Details = release.Guid;
 
                         release.Link = new Uri(SiteLink + row.QuerySelector(".peers a").GetAttribute("href"));
 
@@ -189,28 +227,60 @@ namespace Jackett.Common.Indexers
 
                         releases.Add(release);
                     }
+
                 }
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
 
             return releases;
         }
 
+        private ICollection<int> GetNextCategory(IElement row, ICollection<int> currentCategories)
+        {
+            var nextCategoryName = GetCategoryName(row);
+            if (nextCategoryName != null)
+            {
+                currentCategories = MapTrackerCatDescToNewznab(nextCategoryName);
+                if (currentCategories.Count == 0)
+                    return defaultCategories;
+            }
+
+            return currentCategories;
+        }
+
+        private string GetCategoryName(IElement row)
+        {
+            var categoryElement = row.QuerySelector("td.category span");
+            if (categoryElement == null)
+            {
+                return null;
+            }
+
+            var categoryName = categoryElement.GetAttribute("title");
+
+            if (!string.IsNullOrWhiteSpace(categoryName))
+            {
+                return categoryName;
+            }
+
+            return null;
+        }
+
         public override async Task<byte[]> Download(Uri link)
         {
-            var downloadPage = await RequestStringWithCookies(link.ToString());
+            var downloadPage = await RequestWithCookiesAsync(link.ToString());
             var parser = new HtmlParser();
-            var dom = parser.ParseDocument(downloadPage.Content);
+            var dom = parser.ParseDocument(downloadPage.ContentString);
             var downloadLink = dom.QuerySelectorAll(".download_link").First().GetAttribute("href");
 
             if (string.IsNullOrWhiteSpace(downloadLink))
                 throw new Exception("Unable to find download link.");
 
-            var response = await RequestBytesWithCookies(SiteLink + downloadLink);
-            return response.Content;
+            var response = await RequestWithCookiesAsync(SiteLink + downloadLink);
+            return response.ContentBytes;
         }
     }
 }

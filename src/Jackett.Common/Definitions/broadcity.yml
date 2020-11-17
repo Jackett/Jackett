@@ -42,41 +42,21 @@ caps:
     movie-search: [q]
 
 settings:
-  - name: username
+  - name: cookie
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: Cookie
   - name: info
     type: info
-    label: Captcha Text Note
-    default: The <i>Captcha Text</i> code is <b>case sensitive</b>.
+    label: How to get the Cookie
+    default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
 
 login:
-  path: login.php
-  method: form
-  form: form[action$="takelogin.php"]
+  method: cookie
   inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-  captcha:
-    type: image
-    selector: img#regimage
-    input: imagestring
-  error:
-    - selector: table:contains("Hata")
-    - selector: table:contains("Login Giriş Kilitlendi!")
+    cookie: "{{ .Config.cookie }}"
   test:
     path: index.php
     selector: a[href*="/logout.php?logouthash="]
-
-ratio:
-  path: index.php
-  selector: div#top div:nth-child(2) span:nth-child(2)
-  filters:
-    - name: regexp
-      args: "Ratio: (.+?) Bonus:"
 
 search:
   paths:
@@ -96,6 +76,12 @@ search:
     selector: table#sortabletable tbody tr:has(div[id^="port-target-"])
 
   fields:
+    category:
+      selector: a[href*="browse.php?category="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: category
     title:
       selector: div[id^="port-target-"] a
       filters:
@@ -104,13 +90,10 @@ search:
     details:
       selector: div[id^="port-target-"] a
       attribute: href
-    category:
-      selector: a[href*="browse.php?category="]
+    download:
+      selector: a[href*="download.php?id="]
       attribute: href
-      filters:
-        - name: querystring
-          args: category
-    banner:
+    poster:
       selector: div[id^="port-content-"] img
       attribute: src
     date:
@@ -119,14 +102,10 @@ search:
         - name: regexp
           args: (\d{2}-\d{2}-\d{4} \d{2}:\d{2})
       filters:
+        - name: append
+          args: " +03:00" # TRT
         - name: dateparse
-          args: "02-01-2006 15:04"
-    download:
-      selector: a[href*="download.php?id="]
-      attribute: href
-    comments:
-      selector: td:nth-child(4) a
-      attribute: href
+          args: "02-01-2006 15:04 -07:00"
     size:
       selector: td:nth-child(5)
     grabs:

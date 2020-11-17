@@ -18,15 +18,14 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class PolishTracker : BaseWebIndexer
     {
-        private string LoginUrl => SiteLink + "login";
         private string SearchUrl => SiteLink + "apitorrents";
         private static string CdnUrl => "https://cdn.pte.nu/";
 
         public override string[] LegacySiteLinks { get; protected set; } = {
-            "https://polishtracker.net/",
+            "https://polishtracker.net/"
         };
 
-        private new ConfigurationDataBasicLoginWithEmail configData => (ConfigurationDataBasicLoginWithEmail)base.configData;
+        private new ConfigurationDataCookie configData => (ConfigurationDataCookie)base.configData;
 
         public PolishTracker(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base(id: "polishtracker",
@@ -35,14 +34,28 @@ namespace Jackett.Common.Indexers
                    link: "https://pte.nu/",
                    caps: new TorznabCapabilities
                    {
-                       SupportsImdbMovieSearch = true
-                       // SupportsImdbTVSearch = true (supported by the site but disabled due to #8107)
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q, MovieSearchParam.ImdbId
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
+                       },
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q
+                       }
                    },
                    configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
-                   configData: new ConfigurationDataBasicLoginWithEmail())
+                   configData: new ConfigurationDataCookie())
         {
             Encoding = Encoding.UTF8;
             Language = "pl-pl";
@@ -66,21 +79,22 @@ namespace Jackett.Common.Indexers
         {
             LoadValuesFromJson(configJson);
 
-            var pairs = new Dictionary<string, string>
+            CookieHeader = configData.Cookie.Value;
+            try
             {
-                { "email", configData.Email.Value },
-                { "pass", configData.Password.Value }
-            };
-            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, SiteLink);
+                var results = await PerformQuery(new TorznabQuery());
+                if (!results.Any())
+                    throw new Exception("Found 0 results in the tracker");
 
-            await ConfigureIfOK(result.Cookies, result.Cookies?.Contains("id=") == true, () =>
+                IsConfigured = true;
+                SaveConfig();
+                return IndexerConfigurationStatus.Completed;
+            }
+            catch (Exception)
             {
-                var errorMessage = result.Content;
-                if (errorMessage.Contains("Error!"))
-                    errorMessage = "E-mail or password is incorrect";
-                throw new ExceptionWithConfigData(errorMessage, configData);
-            });
-            return IndexerConfigurationStatus.RequiresTesting;
+                IsConfigured = false;
+                throw;
+            }
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
@@ -104,18 +118,14 @@ namespace Jackett.Common.Indexers
                 qc.Add("cat[]", cat);
 
             var searchUrl = SearchUrl + "?" + qc.GetQueryString();
-            var result = await RequestStringWithCookiesAndRetry(searchUrl, null, SearchUrl);
+            var result = await RequestWithCookiesAndRetryAsync(searchUrl, referer: SearchUrl);
             if (result.IsRedirect)
-            {
-                // re-login
-                await ApplyConfiguration(null);
-                result = await RequestStringWithCookiesAndRetry(searchUrl, null, SearchUrl);
-            }
+                throw new Exception($"Your cookie did not work. Please, configure the tracker again. Message: {result.ContentString}");
 
-            if (!result.Content.StartsWith("{")) // not JSON => error
-                throw new ExceptionWithConfigData(result.Content, configData);
+            if (!result.ContentString.StartsWith("{")) // not JSON => error
+                throw new ExceptionWithConfigData(result.ContentString, configData);
 
-            var json = JsonConvert.DeserializeObject<dynamic>(result.Content);
+            var json = JsonConvert.DeserializeObject<dynamic>(result.ContentString);
             try
             {
                 var torrents = json["torrents"]; // latest torrents
@@ -124,20 +134,20 @@ namespace Jackett.Common.Indexers
                 foreach (var torrent in torrents)
                 {
                     var torrentId = (long)torrent.id;
-                    var comments = new Uri(SiteLink + "torrents/" + torrentId);
+                    var details = new Uri(SiteLink + "torrents/" + torrentId);
                     var link = new Uri(SiteLink + "download/" + torrentId);
                     var publishDate = DateTime.Parse(torrent.added.ToString());
                     var imdbId = ParseUtil.GetImdbID(torrent.imdb_id.ToString());
 
-                    Uri banner = null;
+                    Uri poster = null;
                     if ((bool)torrent.poster)
                     {
                         if (torrent["imdb_id"] != null)
-                            banner = new Uri(CdnUrl + "images/torrents/poster/imd/l/" + torrent["imdb_id"] + ".jpg");
+                            poster = new Uri(CdnUrl + "images/torrents/poster/imd/l/" + torrent["imdb_id"] + ".jpg");
                         else if (torrent["cdu_id"] != null)
-                            banner = new Uri(CdnUrl + "images/torrents/poster/cdu/b/" + torrent["cdu_id"] + "_front.jpg");
+                            poster = new Uri(CdnUrl + "images/torrents/poster/cdu/b/" + torrent["cdu_id"] + "_front.jpg");
                         else if (torrent["steam_id"] != null)
-                            banner = new Uri(CdnUrl + "images/torrents/poster/ste/l/" + torrent["steam_id"] + ".jpg");
+                            poster = new Uri(CdnUrl + "images/torrents/poster/ste/l/" + torrent["steam_id"] + ".jpg");
                     }
 
                     var descriptions = new List<string>();
@@ -151,8 +161,8 @@ namespace Jackett.Common.Indexers
                     var release = new ReleaseInfo
                     {
                         Title = torrent.name.ToString(),
-                        Comments = comments,
-                        Guid = comments,
+                        Details = details,
+                        Guid = details,
                         Link = link,
                         PublishDate = publishDate,
                         Category = MapTrackerCatToNewznab(torrent.category.ToString()),
@@ -161,7 +171,7 @@ namespace Jackett.Common.Indexers
                         Seeders = (int)torrent.seeders,
                         Peers = (int)torrent.seeders + (int)torrent.leechers,
                         Imdb = imdbId,
-                        BannerUrl = banner,
+                        Poster = poster,
                         Description = description,
                         MinimumRatio = 1,
                         MinimumSeedTime = 259200, // 72 hours (I can't verify this, but this is a safe value in most trackers)

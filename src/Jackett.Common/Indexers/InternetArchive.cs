@@ -23,17 +23,8 @@ namespace Jackett.Common.Indexers
     public class InternetArchive : BaseWebIndexer
     {
         private string SearchUrl => SiteLink + "advancedsearch.php";
-        private string CommentsUrl => SiteLink + "details/";
+        private string DetailsUrl => SiteLink + "details/";
         private string LinkUrl => SiteLink + "download/";
-
-        private readonly NameValueCollection _trackers = new NameValueCollection
-        {
-            {"tr", "udp://tracker.coppersurfer.tk:6969/announce"},
-            {"tr", "udp://tracker.leechers-paradise.org:6969/announce"},
-            {"tr", "udp://tracker.opentrackr.org:1337/announce"},
-            {"tr", "udp://tracker.internetwarriors.net:1337/announce"},
-            {"tr", "udp://open.demonii.si:1337/announce"}
-        };
 
         private string _sort;
         private string _order;
@@ -46,7 +37,25 @@ namespace Jackett.Common.Indexers
                    name: "Internet Archive",
                    description: "Internet Archive is a non-profit digital library offering free universal access to books, movies & music, as well as 406 billion archived web pages",
                    link: "https://archive.org/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities
+                   {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
+                       },
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q
+                       }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,
@@ -69,12 +78,12 @@ namespace Jackett.Common.Indexers
             var order = new SelectItem(new Dictionary<string, string>
             {
                 {"desc", "desc"},
-                {"asc", "asc"},
+                {"asc", "asc"}
             })
             { Name = "Order requested from site", Value = "desc" };
             configData.AddDynamic("order", order);
 
-            var titleOnly = new BoolItem() { Name = "Search only in title", Value = true };
+            var titleOnly = new BoolItem { Name = "Search only in title", Value = true };
             configData.AddDynamic("titleOnly", titleOnly);
 
             AddCategoryMapping("audio", TorznabCatType.Audio);
@@ -143,20 +152,20 @@ namespace Jackett.Common.Indexers
                 {"output", "json"}
             };
             var fullSearchUrl = SearchUrl + "?" + qc.GetQueryString();
-            var result = await RequestStringWithCookiesAndRetry(fullSearchUrl);
+            var result = await RequestWithCookiesAndRetryAsync(fullSearchUrl);
             foreach (var torrent in ParseResponse(result))
                 releases.Add(MakeRelease(torrent));
 
             return releases;
         }
 
-        private JArray ParseResponse(WebClientStringResult result)
+        private JArray ParseResponse(WebResult result)
         {
             try
             {
                 if (result.Status != HttpStatusCode.OK)
                     throw new Exception("Response code error. HTTP code: " + result.Status);
-                var json = JsonConvert.DeserializeObject<dynamic>(result.Content);
+                var json = JsonConvert.DeserializeObject<dynamic>(result.ContentString);
                 if (!(json is JObject) || !(json["response"] is JObject) || !(json["response"]["docs"] is JArray))
                     throw new Exception("Response format error");
                 return (JArray)json["response"]["docs"];
@@ -164,7 +173,7 @@ namespace Jackett.Common.Indexers
             catch (Exception e)
             {
                 logger.Error("ParseResponse Error: ", e.Message);
-                throw new ExceptionWithConfigData(result.Content, ConfigData);
+                throw new ExceptionWithConfigData(result.ContentString, ConfigData);
             }
         }
 
@@ -172,15 +181,15 @@ namespace Jackett.Common.Indexers
         {
             var id = GetFieldAs<string>("identifier", torrent);
             var title = GetFieldAs<string>("title", torrent) ?? id;
-            var comments = new Uri(CommentsUrl + id);
+            var details = new Uri(DetailsUrl + id);
             var btih = GetFieldAs<string>("btih", torrent);
             var link = new Uri(LinkUrl + id + "/" + id + "_archive.torrent");
 
             var release = new ReleaseInfo
             {
                 Title = title,
-                Comments = comments,
-                Guid = comments,
+                Details = details,
+                Guid = details,
                 PublishDate = GetFieldAs<DateTime>("publicdate", torrent),
                 Category = MapTrackerCatToNewznab(GetFieldAs<string>("mediatype", torrent)),
                 Size = GetFieldAs<long>("item_size", torrent),
@@ -188,21 +197,12 @@ namespace Jackett.Common.Indexers
                 Peers = 2,
                 Grabs = GetFieldAs<long>("downloads", torrent),
                 Link = link,
-                MagnetUri = GenerateMagnetLink(btih, title),
-                InfoHash = btih,
-                MinimumRatio = 1,
-                MinimumSeedTime = 172800, // 48 hours
+                InfoHash = btih, // magnet link is auto generated from infohash
                 DownloadVolumeFactor = 0,
                 UploadVolumeFactor = 1
             };
 
             return release;
-        }
-
-        private Uri GenerateMagnetLink(string btih, string title)
-        {
-            _trackers.Set("dn", title);
-            return new Uri("magnet:?xt=urn:btih:" + btih + "&" + _trackers.GetQueryString());
         }
 
         private static T GetFieldAs<T>(string field, JToken torrent) =>

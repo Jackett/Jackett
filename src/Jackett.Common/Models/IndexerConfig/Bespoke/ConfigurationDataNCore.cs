@@ -1,9 +1,11 @@
+using System.Diagnostics.CodeAnalysis;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Jackett.Common.Models.IndexerConfig.Bespoke
 {
-    public class ConfigurationDataNCore : ConfigurationData
+    [ExcludeFromCodeCoverage]
+    internal class ConfigurationDataNCore : ConfigurationData
     {
         public StringItem Username { get; private set; }
         public StringItem Password { get; private set; }

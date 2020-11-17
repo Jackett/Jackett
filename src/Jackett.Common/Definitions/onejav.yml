@@ -14,8 +14,6 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q]
-    movie-search: [q]
 
 settings: []
 
@@ -38,12 +36,9 @@ search:
     download:
       selector: a[href*="/download/"]
       attribute: href
-    banner:
+    poster:
       selector: img
       attribute: src
-      optional: true
-    actress:
-      text: ""
     actress:
       selector: a[href^="/actress/"]
       optional: true
@@ -51,15 +46,11 @@ search:
         - name: prepend
           args: "Actress: "
     tags:
-      text: ""
-    tags:
       selector: div.tags
       optional: true
       filters:
         - name: prepend
           args: "Tags: "
-    descr:
-      text: ""
     descr:
       selector: p.level
       optional: true
@@ -69,8 +60,10 @@ search:
       selector: p.is-6 > a
       attribute: href
       filters:
+        - name: append
+          args: " -07:00" # PDT
         - name: dateparse
-          args: "/2006/01/02"
+          args: "/2006/01/02 -07:00"
     size:
       selector: span.is-size-6
     seeders:

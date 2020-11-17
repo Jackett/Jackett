@@ -15,7 +15,7 @@ settings:
   - name: cat-id
     type: select
     label: Category
-    default: "_"
+    default: _
     options:
       _: "All categories"
       3_: "Anime"
@@ -44,19 +44,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "2"
+    default: 2
     options:
-      "2": "created"
-      "5": "seeders"
-      "4": "size"
-      "1": "title"
+      2: created
+      5: seeders
+      4: size
+      1: title
   - name: type
     type: select
     label: Order requested from site
-    default: "false"
+    default: false
     options:
-      "false": "desc"
-      "true": "asc"
+      false: desc
+      true: asc
 
 
 caps:
@@ -97,6 +97,7 @@ caps:
     search: [q]
     tv-search: [q]
     music-search: [q]
+    book-search: [q]
 
 search:
   paths:
@@ -104,7 +105,7 @@ search:
   inputs:
     q: "{{ .Keywords }}"
     c: "{{ .Config.cat-id }}"
-    # 0 all 1 remakes 2 trusted 3 A+
+    # 0 all, 1 remakes, 2 trusted, 3 A+
     s: 0
     sort: "{{ .Config.sort }}"
     order: "{{ .Config.type }}"
@@ -143,10 +144,13 @@ search:
       selector: td.tr-dl
       optional: true
     date:
+      # 	Nov 15, 2020
       selector: td.date-short
       filters:
+        - name: append
+          args: " +00:00" # GMT
         - name: dateparse
-          args: "2006-01-02T15:04:05Z"
+          args: "Jan 2, 2006 -07:00"
     size:
       selector: td.tr-size
       filters:

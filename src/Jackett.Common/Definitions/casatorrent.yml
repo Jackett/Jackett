@@ -15,9 +15,9 @@ legacylinks:
 caps:
   categorymappings:
     - {id: 65, cat: Movies/HD, desc: "BD: BD"}
-    - {id: 68, cat: Books/Magazines, desc: "Ebooks:  Presse"}
+    - {id: 68, cat: Books/Mags, desc: "Ebooks:  Presse"}
     - {id: 90, cat: Audio/Audiobook, desc: "Ebooks: Audio books"}
-    - {id: 56, cat: Books/Ebook, desc: "Ebooks: Ebooks"}
+    - {id: 56, cat: Books/EBook, desc: "Ebooks: Ebooks"}
     - {id: 95, cat: Books/Comics, desc: "Ebooks: Mangas"}
     - {id: 84, cat: XXX, desc: "Ebooks: XXX"}
     - {id: 54, cat: Movies/3D, desc: "Films: 3D"}
@@ -41,8 +41,8 @@ caps:
     - {id: 98, cat: Movies, desc: "Films: VFSTFR"}
     - {id: 89, cat: Movies, desc: "Films: VO"}
     - {id: 55, cat: Movies, desc: "Films: VOSTFR"}
-    - {id: 58, cat: Movies/WEBDL, desc: "Films: Web - DL"}
-    - {id: 57, cat: Movies/WEBDL, desc: "Films: WebRip"}
+    - {id: 58, cat: Movies/WEB-DL, desc: "Films: Web - DL"}
+    - {id: 57, cat: Movies/WEB-DL, desc: "Films: WebRip"}
     - {id: 72, cat: Movies/HD, desc: "Films: x265"}
     - {id: 1, cat: XXX, desc: "Films: XXX"}
     - {id: 97, cat: Console, desc: "Jeux : Android"}
@@ -69,6 +69,7 @@ caps:
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -77,22 +78,45 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: multilang
+    type: checkbox
+    label: Replace MULTI by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTI by this language
+    default: FRENCH
+    options:
+      FRENCH: FRENCH
+      MULTI.FRENCH: MULTI.FRENCH
+      ENGLISH: ENGLISH
+      MULTI.ENGLISH: MULTI.ENGLISH
+      VOSTFR: VOSTFR
+      MULTI.VOSTFR: MULTI.VOSTFR
+  - name: vostfr
+    type: checkbox
+    label: Replace VOSTFR with ENGLISH
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
-    default: "id"
+    default: id
     options:
-      "id": "created"
-      "seeders": "seeders"
-      "size": "size"
-      "name": "title"
+      id: created
+      seeders: seeders
+      size: size
+      name: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   path: account-login.php
@@ -106,10 +130,6 @@ login:
     path: torrents-search.php
     selector: a[href="account-logout.php"]
 
-ratio:
-  path: torrents-search.php
-  selector: div#infobar b
-
 search:
   paths:
     - path: torrents-search.php
@@ -117,7 +137,7 @@ search:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
     incldead: 1
-    freeleech: 0
+    freeleech: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
     lang: 0
     sort: "{{ .Config.sort }}"
     order: "{{ .Config.type }}"
@@ -129,21 +149,37 @@ search:
     selector: table.ttable_headinner > tbody > tr.t-row
 
   fields:
-    title:
-      selector: a[href^="torrents-details.php?id="] b
     category:
       selector: a[href^="torrents.php?cat="]
       attribute: href
       filters:
         - name: querystring
           args: cat
+    title_phase1:
+      selector: a[href^="torrents-details.php?id="] b
+    title_multilang:
+      text: "{{ .Result.title_phase1 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)(\\smulti\\s)", " {{ .Config.multilanguage }} "]
+    title_phase2:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    title_vostfr:
+      text: "{{ .Result.title_phase2 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)(\\svostfr\\s)", " ENGLISH "]
+        - name: re_replace
+          args: ["(?i)(\\ssubfrench\\s)", " ENGLISH "]
+    title:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
     details:
       selector: a[href^="torrents-details.php?id="]
       attribute: href
     download:
       selector: a[href^="download.php?id="]
       attribute: href
-    banner:
+    poster:
       selector: img[src*="/uploads/images/"]
       attribute: src
     grabs:
@@ -164,13 +200,14 @@ search:
       filters:
         - name: regexp
           args: "le: </b>(.*?)<br"
+        - name: append
+          args: " +01:00" # CET
         - name: dateparse
-          args: "02-01-2006"
+          args: "02-01-2006 -07:00"
     downloadvolumefactor:
       case:
         img[src="images/free.gif"]: 0
         "*": 1
     uploadvolumefactor:
-      case:
-        "*": 1
+      text: 1
 # engine n/a

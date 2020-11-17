@@ -7,6 +7,9 @@ type: public
 encoding: UTF-8
 links:
   - https://isohunt.nz/
+  - https://isohunt.fun/
+  - https://isohunt.tv/
+  - https://isohunt.ch/
 legacylinks:
   - https://isohunt2.net/
 
@@ -27,31 +30,32 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: category
     type: select
     label: Category Filter
-    default: "0"
+    default: 0
     options:
-      "0": "All"
-      "1": "Anime"
-      "2": "Software"
-      "3": "Games"
-      "4": "Adult"
-      "5": "Movies"
-      "6": "Music"
-      "7": "Other"
-      "8": "Series & TV"
-      "9": "Books"
+      0: All
+      1: Anime
+      2: Software
+      3: Games
+      4: Adult
+      5: Movies
+      6: Music
+      7: Other
+      8: "Series & TV"
+      9: Books
   - name: sort
     type: select
     label: Sort requested from site
-    default: "created_at"
+    default: created_at
     options:
-      "created_at": "created"
-      "seeders": "seeders"
-      "size": "size"
+      created_at: created
+      seeders: seeders
+      size: size
 
 download:
   selector: a.btn-magnet

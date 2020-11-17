@@ -24,7 +24,7 @@ caps:
     - {id: 12, cat: PC/0day, desc: "Win Update"}
     - {id: 13, cat: PC/0day, desc: "Win VST"}
     - {id: 14, cat: PC/0day, desc: "Win VSTi"}
-    - {id: 15, cat: PC/Phone-Other, desc: "Handheld App"}
+    - {id: 15, cat: PC/Mobile-Other, desc: "Handheld App"}
 
   modes:
     search: [q]
@@ -37,16 +37,15 @@ settings:
     type: info
     label: How to get the Cookie
     default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
-
   - name: sort
     type: select
     label: Sort requested from site
-    default: "0"
+    default: 0
     options:
-      "0": "created"
-      "5": "seeders"
-      "2": "size"
-      "1": "title"
+      0: created
+      5: seeders
+      2: size
+      1: title
 
 login:
   method: cookie
@@ -60,10 +59,10 @@ search:
     # https://theaudioscene.net/torrentsettings/torrentbrowse.php?SrcCat=0&SrcDat=0&SrcEnd=0&search=
     - path: torrentsettings/torrentbrowse.php
   inputs:
-    # catalog 0 all
+    # category: 0 all
     SrcCat: 0
     SrcDat: "{{ .Config.sort }}"
-    # 0 new&old 1 new only 2 old only
+    # 0 new&old, 1 new only, 2 old only
     SrcEnd: 0
     search: "{{ .Keywords }}"
 
@@ -92,21 +91,21 @@ search:
     category:
       selector: img[src^="/images/categories/"]
       case:
-        img[title="Tutorial"]: "1"
-        img[title="Addon"]: "2"
-        img[title="Hybrid Update"]: "3"
-        img[title="Hybrid Win/Mac"]: "4"
-        img[title="Mac App"]: "5"
-        img[title="Mac Update"]: "6"
-        img[title="Mac VST"]: "7"
-        img[title="Mac VSTi"]: "8"
-        img[title="Unknown"]: "9"
-        img[title="SampleCD"]: "10"
-        img[title="Win App"]: "11"
-        img[title="Win Update"]: "12"
-        img[title="Win VST"]: "13"
-        img[title="Win VSTi"]: "14"
-        img[title="Handheld App"]: "15"
+        img[title="Tutorial"]: 1
+        img[title="Addon"]: 2
+        img[title="Hybrid Update"]: 3
+        img[title="Hybrid Win/Mac"]: 4
+        img[title="Mac App"]: 5
+        img[title="Mac Update"]: 6
+        img[title="Mac VST"]: 7
+        img[title="Mac VSTi"]: 8
+        img[title="Unknown"]: 9
+        img[title="SampleCD"]: 10
+        img[title="Win App"]: 11
+        img[title="Win Update"]: 12
+        img[title="Win VST"]: 13
+        img[title="Win VSTi"]: 14
+        img[title="Handheld App"]: 15
     size:
       selector: td[id$="_6"]
     seeders:
@@ -119,4 +118,6 @@ search:
       text: 1
     uploadvolumefactor:
       text: 1
+    minimumratio:
+      text: 1.0
 # engine n/a

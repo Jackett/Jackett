@@ -22,7 +22,7 @@ caps:
     - {id: 409, cat: Other, desc: "Misc/其他"}
 
   modes:
-    search: [q, imdbid]
+    search: [q]
     tv-search: [q, season, ep, imdbid]
     movie-search: [q, imdbid]
     music-search: [q]
@@ -35,7 +35,10 @@ settings:
     type: info
     label: How to get the Cookie
     default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
-
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: info_tpp
     type: info
     label: Results Per Page
@@ -48,13 +51,6 @@ login:
   test:
     path: torrents.php
 
-ratio:
-  path: torrents.php
-  selector: table#info_block
-  filters:
-    - name: regexp
-      args: "Ratio:\\s(.*?)\\s\\s"
-
 download:
   method: post
 
@@ -63,16 +59,14 @@ search:
     - path: torrents.php
   inputs:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
-    search: "{{if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-    # 0=including dead 1=active 2=dead
+    search: "{{if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    # 0=incldead, 1=active, 2=dead
     incldead: 0
-    # show promotions 0=all 1=normal 2=free 3=2x 4=2x free 5=50% 6=2x50% 7=30%
-    spstate: 0
-    # 0=all 1=bookmarked 2=not
-    inclbookmarked: 0
-    # 0=title 1=descr 3=uploaded 4=imdb url
-    search_area: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
-    # 0=AND 1=OR 2=exact
+    # show promotions 0=all, 1=normal, 2=free, 3=2x, 4=2xfree, 5=50%, 6=2x50%, 7=30%
+    spstate: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
+    # 0=title, 1=descr, 3=uploader, 4=imdb url
+    search_area: "{{ if .Query.IMDBID }}4{{ else }}0{{ end }}"
+    # 0=AND, 1=OR, 2=exact
     search_mode: 0
 
   rows:
@@ -94,7 +88,7 @@ search:
       selector: a[title][href^="details.php?id="]
       attribute: href
     download:
-      selector: form[action^="download.php?id="]
+      selector: form[action*="/download.php?id="]
       attribute: action
     imdb:
       selector: a[href*="imdb.com/title/tt"]
@@ -112,7 +106,7 @@ search:
       attribute: title
       filters:
         - name: append
-          args: " +08:00"
+          args: " +08:00" # CST
         - name: dateparse
           args: "2006-01-02 15:04:05 -07:00"
     downloadvolumefactor:

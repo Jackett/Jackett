@@ -9,16 +9,13 @@ links:
   - https://uhdbits.org/
 
 caps:
-  categories:
-    1: Movies
-    2: Audio
-    3: TV
-    4: Audio
-    5: PC
-    6: Other
+  categorymappings:
+    - {id: 1, cat: Movies, desc: Movies}
+    - {id: 2, cat: Audio, desc: Music}
+    - {id: 3, cat: TV, desc: TV}
 
   modes:
-    search: [q, imdbid]
+    search: [q]
     tv-search: [q, season, ep, imdbid]
     movie-search: [q, imdbid]
     music-search: [q]
@@ -37,6 +34,25 @@ settings:
     type: info
     label: "About 2FA code"
     default: "Only fill in the <b>2FA code</b> box if you have enabled <b>2FA</b> on the UHDBits Web Site. Otherwise just leave it empty."
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: time
+    options:
+      time: created
+      seeders: seeders
+      size: size
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
 
 login:
   path: login.php
@@ -51,32 +67,31 @@ login:
   test:
     path: top10.php
 
-ratio:
-  path: top10.php
-  selector: span.r99
-
 search:
   paths:
+    # https://uhdbits.org/torrents.php?groupname=&filelist=&description=&artistname=&recordlabel=&remastertitle=&remasterrecordlabel=&rating=0&rating1=10&freetorrent=1&searchstr=&taglist=&tags_type=1&order_by=time&order_way=desc&action=advanced&searchsubmit=1
     - path: torrents.php
   inputs:
     $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
-    searchstr: "{{ if .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    searchstr: "{{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     imdbid: "{{ .Query.IMDBIDShort }}"
     tags_type: 1
-    order_by: time
-    order_way: desc
+    freetorrent: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+    order_by: "{{ .Config.sort }}"
+    order_way: "{{ .Config.type }}"
     action: advanced
     searchsubmit: 1
 
   rows:
     selector: table#torrent_table > tbody > tr.torrent
+
   fields:
     category:
       selector: a[href^="torrents.php?filter_cat"]
       attribute: href
       filters:
         - name: regexp
-          args: "\\[(\\d+?)\\]"
+          args: "\\[(\\d+)\\]"
     # note: there are optional extra colums
     download:
       selector: a[title="Download"]
@@ -112,12 +127,6 @@ search:
           args: [" / 2x", ""]
         - name: re_replace
           args: [" / ", " "]
-    comments:
-      selector: a.torrent_name
-      attribute: href
-      filters:
-        - name: replace
-          args: ["\t", " "]
     details:
       selector: a.torrent_name
       attribute: href
@@ -143,7 +152,7 @@ search:
         - name: replace
           args: [",", ""]
         - name: append
-          args: " +07:00"
+          args: " +07:00" # ICT
         - name: dateparse
           args: "Jan 02 2006 15:04 -07:00"
     downloadvolumefactor:
@@ -157,4 +166,6 @@ search:
       case:
         "strong.blink_me:contains(\"2x\")": 2
         "*": 1
-# engine tbd
+    minimumratio:
+      text: 0.6
+# engine n/a

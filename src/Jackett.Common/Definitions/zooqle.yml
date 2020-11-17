@@ -8,10 +8,9 @@ encoding: UTF-8
 followredirect: true
 links:
   - https://zooqle.com/
-  - https://zooqle.unblockit.id/
-  - https://zooqle.unblocked.bar/
-  - https://zooqle.proxyportal.pw/
-  - https://zooqle.uk-unblock.pro/
+  - https://zooqle.unblockninja.com/
+  - https://zooqle.unblockit.app/
+  - https://zooqle.unblocked.rest/
 legacylinks:
   - https://zooqle.unblockit.pro/
   - https://zooqle.unblockit.one/
@@ -22,46 +21,54 @@ legacylinks:
   - https://zooqle.ind-unblock.xyz/
   - https://zooqle.unblockit.me/
   - https://zooqle.unblockit.pw/
+  - https://zooqle.unblockit.id/
+  - https://zooqle.unblockit.win/
+  - https://zooqle.unblocked.bar/
+  - https://zooqle.proxyportal.pw/
+  - https://zooqle.uk-unblock.pro/
+  - https://zooqle.unblockit.top/
+  - https://zooqle.unblockit.lat/
 
 caps:
-  categories:
-    "anime": TV/Anime
-    "app": PC
-    "book": Books
-    "files": Other/Misc
-    "game": PC/Games
-    "movies": Movies
-    "music": Audio
-    "other": Other
-    "tv": TV
+  categorymappings:
+    - {id: anime, cat: TV/Anime, desc: Anime}
+    - {id: app, cat: PC, desc: App}
+    - {id: book, cat: Books, desc: Book}
+    - {id: files, cat: Other/Misc, desc: Files}
+    - {id: game, cat: PC/Games, desc: Game}
+    - {id: movies, cat: Movies, desc: Movies}
+    - {id: music, cat: Audio, desc: Music}
+    - {id: other, cat: Other, desc: Other}
+    - {id: tv, cat: TV, desc: TV}
 
   modes:
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "dt"
+    default: dt
     options:
-      "dt": "created"
-      "ns": "seeders"
-      "sz": "size"
+      dt: created
+      ns: seeders
+      sz: size
   - name: type
     type: select
     label: Order requested from site
-    default: "d"
+    default: d
     options:
-      "d": "desc"
-      "a": "asc"
+      d: desc
+      a: asc
 
 search:
   # includes only verified torrents
   paths:
-    - path: "search?{{ if .Keywords }}s={{ .Config.sort }}&v=t&sd={{ .Config.type }}&q={{ .Keywords }}{{else}}s={{ .Config.sort }}&v=t&sd={{ .Config.type }}&q= *{{end}}{{ if .Categories }} category:{{ range .Categories }}{{.}},{{end}}{{else}}{{end}}"
+    - path: "search?s={{ .Config.sort }}&v=t&sd={{ .Config.type }}&q={{ if .Keywords }}{{ .Keywords }}{{ else }} *{{ end }}{{ if .Categories }} category:{{ range .Categories }}{{.}},{{end}}{{ else }}{{ end }}"
 
   rows:
     selector: tr:has(td[class^="text-muted3"])
@@ -111,6 +118,8 @@ search:
         - name: replace
           args: ["– N/A –", "0 Bytes"]
     seeders:
+      text: 0
+    seeders:
       # seeders can be missing
       optional: true
       selector: td:nth-child(6) div
@@ -120,6 +129,8 @@ search:
           args: [" ", 1]
         - name: replace
           args: [",", ""]
+    leechers:
+      text: 0
     leechers:
       # leechers can be missing
       optional: true

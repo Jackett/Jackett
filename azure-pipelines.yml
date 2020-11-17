@@ -166,6 +166,14 @@ stages:
               targetFolder: $(Build.BinariesDirectory)/Jackett
 
           - task: CopyFiles@2
+            displayName: Copy Windows Specific Scripts (Windows only)
+            condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
+            inputs:
+              SourceFolder: $(Build.SourcesDirectory)
+              contents: jackett_launcher.bat
+              targetFolder: $(Build.BinariesDirectory)/Jackett
+
+          - task: CopyFiles@2
             displayName: Copy Mono Specific Scripts
             condition: and(succeeded(), startsWith(variables['buildDescription'], 'Mono'))
             inputs:

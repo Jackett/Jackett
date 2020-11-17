@@ -46,6 +46,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -66,50 +67,42 @@ login:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
     secure_pin: "{{ .Config.pin }}"
-    returnto: "/"
+    returnto: /
   error:
     - selector: table.tableinborder:contains("Anmeldung Gescheitert!") > tbody > tr > td.tablea
   test:
     path: usercp.php
-
-ratio:
-  path: usercp.php
-  selector: div#lmtd table > tbody > tr:contains("Ratio:") > td:nth-child(2)
-  filters:
-    - name: replace
-      args: [".", ""]
-    - name: replace
-      args: [",", "."]
 
 search:
   paths:
     - path: browse.php
   inputs:
     $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-    search: "{{ .Query.Keywords }}"
-    showsearch: "1"
-    orderby: "added"
-    sort: "desc"
-    incldead: "1"
+    search: "{{ .Keywords }}"
+    showsearch: 1
+    orderby: added
+    sort: desc
+    incldead: 1
 
   rows:
     selector: table.tableinborder[summary] > tbody > tr
     filters:
       - name: andmatch
+
   fields:
-    download:
-      selector: a[href^="download.php?torrent="]
-      attribute: href
-    title:
-      selector: a[href^="details.php?id="]:has(b)
     category:
       selector: a[href^="browse.php?cat="]
       attribute: href
       filters:
         - name: querystring
           args: cat
-    comments:
+    title:
+      selector: a[href^="details.php?id="]:has(b)
+    details:
       selector: td.tablea > table > tbody > tr:nth-child(2) > td:nth-child(4) > a
+      attribute: href
+    download:
+      selector: a[href^="download.php?torrent="]
       attribute: href
     size:
       selector: td.tablea > table > tbody > tr:nth-child(2) > td:nth-child(1) > b:nth-child(1)
@@ -126,12 +119,15 @@ search:
       filters:
         - name: replace
           args: ["\u00a0", " "]
+        - name: append
+          args: " +01:00" # CET
         - name: dateparse
-          args: "02.01.2006 15:04:05"
+          args: "02.01.2006 15:04:05 -07:00"
     downloadvolumefactor:
       case:
-        "font[color=\"red\"]:contains(\"Only Upload\")": "0"
-        "*": "1"
+        "font[color=\"red\"]:contains(\"Only Upload\")": 0
+        "*": 1
     uploadvolumefactor:
-      case:
-        "*": "1"
+      text: 1
+# MR and MST tbd
+# engine tbd

@@ -23,14 +23,14 @@ caps:
     - {id: 63, cat: Books, desc: "College"}
     - {id: 53, cat: Books, desc: "Cooking"}
     - {id: 42, cat: Books, desc: "Documentary"}
-    - {id: 37, cat: Books/Ebook, desc: "e-Books"}
+    - {id: 37, cat: Books/EBook, desc: "e-Books"}
     - {id: 65, cat: Books, desc: "Engineering"}
     - {id: 54, cat: Books, desc: "Health-Fitness"}
     - {id: 64, cat: Books, desc: "Kids"}
     - {id: 47, cat: Books, desc: "Languages"}
     - {id: 49, cat: Books, desc: "Linux CBTs"}
     - {id: 43, cat: Books, desc: "Lynda.com"}
-    - {id: 57, cat: Books/Magazines, desc: "Magazines"}
+    - {id: 57, cat: Books/Mags, desc: "Magazines"}
     - {id: 71, cat: Books, desc: "Pluralsight"}
     - {id: 60, cat: Books, desc: "Medical"}
     - {id: 44, cat: Books, desc: "Misc Learning"}
@@ -45,9 +45,9 @@ caps:
     - {id: 45, cat: Books, desc: "Ethical hacking"}
     - {id: 59, cat: Books, desc: "WEB | SocialMedia"}
 
-
   modes:
     search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -59,19 +59,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "8"
+    default: 8
     options:
-      "8": "created"
-      "6": "seeders"
-      "4": "size"
-      "1": "title"
+      8: created
+      6: seeders
+      4: size
+      1: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
   - name: info
     type: info
     label: Results Per Page
@@ -94,9 +94,9 @@ search:
     - path: browse.php
   inputs:
     search: "{{ .Keywords }}"
-    # 0 active 1 incldead 2 onlydead
+    # 0 active, 1 incldead, 2 onlydead
     incldead: 1
-    # 0 title 1 default
+    # 0 title, 1 default
     scope: 0
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
@@ -149,7 +149,7 @@ search:
         - name: replace
           args: ["\xA0", " "]
         - name: append
-          args: " +00:00"
+          args: " +00:00" # GMT
         - name: dateparse
           args: "2006-01-02 15:04:05 -07:00"
     date:
@@ -159,17 +159,19 @@ search:
       filters:
         - name: replace
           args: ["Upploaded at - ", ""]
+        - name: replace
+          args: ["\xA0", " "]
         - name: append
-          args: " +00:00"
+          args: " +00:00" # GMT
         - name: dateparse
           args: "2006-01-02 15:04:05 -07:00"
     downloadvolumefactor:
-      case:
-        "*": "1"
+      text: 1
     uploadvolumefactor:
-      case:
-        "*": "1"
+      text: 1
     description:
       optional: true
       selector: font[color="#990000"]
+    minimumratio:
+      text: 1.0
 # custom v4

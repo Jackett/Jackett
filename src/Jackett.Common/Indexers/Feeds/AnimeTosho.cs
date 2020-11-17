@@ -21,26 +21,24 @@ namespace Jackett.Common.Indexers.Feeds
                    name: "Anime Tosho",
                    description: "AnimeTosho (AT) is an automated service that provides torrent files, magnet links and DDL for all anime releases",
                    link: "https://animetosho.org/",
+                   caps: new TorznabCapabilities
+                   {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       }
+                   },
                    configService: configService,
                    client: client,
                    logger: logger,
                    p: ps,
                    configData: new ConfigurationData())
         {
-            // TODO
-            // this might be downloaded and refreshed instead of hard-coding it
-            TorznabCaps = new TorznabCapabilities(new TorznabCategory(5070, "Anime"))
-            {
-                SearchAvailable = true,
-                TVSearchAvailable = false,
-                MovieSearchAvailable = false,
-                SupportsImdbMovieSearch = false,
-                SupportsTVRageSearch = false
-            };
-
             Encoding = Encoding.UTF8;
             Language = "en-en";
             Type = "public";
+
+            AddCategoryMapping(1, TorznabCatType.TVAnime);
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
@@ -63,8 +61,6 @@ namespace Jackett.Common.Indexers.Feeds
             // add some default values if none returned by feed
             release.Seeders = release.Seeders > 0 ? release.Seeders : 0;
             release.Peers = release.Peers > 0 ? release.Peers : 0;
-            release.MinimumRatio = 1;
-            release.MinimumSeedTime = 172800; // 48 hours
             release.DownloadVolumeFactor = release.DownloadVolumeFactor > 0 ? release.DownloadVolumeFactor : 0;
             release.UploadVolumeFactor = release.UploadVolumeFactor > 0 ? release.UploadVolumeFactor : 1;
             return release;

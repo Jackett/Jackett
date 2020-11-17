@@ -10,9 +10,9 @@ links:
 
 caps:
   categorymappings:
-    - {id: 106, cat: PC/Phone-Other, desc: "Mobile Apps"}
-    - {id: 161, cat: PC/Phone-IOS, desc: "Mobile Apps iOS"}
-    - {id: 160, cat: PC/Phone-Android, desc: "Mobile Apps Android"}
+    - {id: 106, cat: PC/Mobile-Other, desc: "Mobile Apps"}
+    - {id: 161, cat: PC/Mobile-iOS, desc: "Mobile Apps iOS"}
+    - {id: 160, cat: PC/Mobile-Android, desc: "Mobile Apps Android"}
     - {id: 12, cat: PC, desc: "AUDIOAPPS"}
     - {id: 32, cat: PC, desc: "AUDIOAPPS DAW Apps"}
     - {id: 175, cat: PC, desc: "AUDIOAPPS Ableton"}
@@ -163,14 +163,18 @@ caps:
     - {id: 168, cat: Audio/Other, desc: "PRESETS Toontrack"}
     - {id: 21, cat: Other, desc: "UPDATE"}
     - {id: 222, cat: Other, desc: "GFXNEWS 3D"}
+    - {id: 235, cat: Other, desc: "GFXNEWS APPS ANDROID & IOS"}
     - {id: 207, cat: Other, desc: "GFXNEWS APPS WIN"}
     - {id: 215, cat: Other, desc: "GFXNEWS APPS LINUX"}
     - {id: 214, cat: Other, desc: "GFXNEWS APPS MAC"}
     - {id: 211, cat: Other, desc: "GFXNEWS BOOKS"}
     - {id: 224, cat: Other, desc: "GFXNEWS CAD/CAM"}
+    - {id: 237, cat: Other, desc: "GFXNEWS DAZ3D"}
     - {id: 212, cat: Other, desc: "GFXNEWS FONTS"}
     - {id: 213, cat: Other, desc: "GFXNEWS FOOTAGE"}
+    - {id: 233, cat: Other, desc: "GFXNEWS GAME DEVELOPMENT"}
     - {id: 226, cat: Other, desc: "GFXNEWS MAGAZINE"}
+    - {id: 234, cat: Other, desc: "GFXNEWS MATERIAL"}
     - {id: 216, cat: Other, desc: "GFXNEWS PHOTOSTOCK"}
     - {id: 220, cat: Other, desc: "GFXNEWS PHOTOGRAPHY - ART"}
     - {id: 227, cat: Other, desc: "GFXNEWS PHOTOSHOP"}
@@ -181,14 +185,17 @@ caps:
     - {id: 225, cat: Other, desc: "GFXNEWS PLUGINS LINUX"}
     - {id: 223, cat: Other, desc: "GFXNEWS PLUGINS MAC"}
     - {id: 210, cat: Other, desc: "GFXNEWS PLUGINS WIN"}
+    - {id: 236, cat: Other, desc: "GFXNEWS POSER"}
     - {id: 217, cat: Other, desc: "GFXNEWS SCRIPTS - WEB PROGRAMMING"}
     - {id: 218, cat: Other, desc: "GFXNEWS TEMPLATES"}
     - {id: 232, cat: Other, desc: "GFXNEWS TEXTURES"}
     - {id: 219, cat: Other, desc: "GFXNEWS TUTORIALS"}
+    - {id: 238, cat: Other, desc: "GFXNEWS VECTOR GRAPHICS"}
     - {id: 221, cat: Other, desc: "GFXNEWS VIDEO PRODUCTION"}
 
   modes:
     search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -200,19 +207,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "1"
+    default: 1
     options:
-      "1": "created"
-      "10": "seeders"
-      "7": "size"
-      "2": "title"
+      1: created
+      10: seeders
+      7: size
+      2: title
   - name: type
     type: select
     label: Order requested from site
-    default: "2"
+    default: 2
     options:
-      "2": "desc"
-      "1": "asc"
+      2: desc
+      1: asc
 
 login:
   path: login.php
@@ -267,8 +274,10 @@ search:
     dateheaders:
       selector: td[colspan="20"] > strong
       filters:
+        - name: append
+          args: " -07:00" # PDT
         - name: dateparse
-          args: "01-02-2006"
+          args: "01-02-2006 -07:00"
 
   fields:
     title:
@@ -318,4 +327,6 @@ search:
       text: 1
     uploadvolumefactor:
       text: 1
+    minimumratio:
+      text: 0.8
 # engine n/a

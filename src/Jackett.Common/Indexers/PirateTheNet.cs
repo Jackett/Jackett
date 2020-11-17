@@ -38,7 +38,10 @@ namespace Jackett.Common.Indexers
                    link: "http://piratethenet.org/",
                    caps: new TorznabCapabilities
                    {
-                       SupportsImdbMovieSearch = true
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q, MovieSearchParam.ImdbId
+                       }
                    },
                    configService: configService,
                    client: w,
@@ -76,8 +79,8 @@ namespace Jackett.Common.Indexers
             LoadValuesFromJson(configJson);
             CookieHeader = ""; // clear old cookies
 
-            var result1 = await RequestStringWithCookies(CaptchaUrl);
-            var json1 = JObject.Parse(result1.Content);
+            var result1 = await RequestWithCookiesAsync(CaptchaUrl);
+            var json1 = JObject.Parse(result1.ContentString);
             var captchaSelection = json1["images"][0]["hash"];
 
             var pairs = new Dictionary<string, string> {
@@ -88,7 +91,7 @@ namespace Jackett.Common.Indexers
 
             var result2 = await RequestLoginAndFollowRedirect(LoginUrl, pairs, result1.Cookies, true, null, null, true);
 
-            await ConfigureIfOK(result2.Cookies, result2.Content.Contains("logout.php"), () =>
+            await ConfigureIfOK(result2.Cookies, result2.ContentString.Contains("logout.php"), () =>
                                     throw new ExceptionWithConfigData("Login Failed", configData));
             return IndexerConfigurationStatus.RequiresTesting;
         }
@@ -125,18 +128,18 @@ namespace Jackett.Common.Indexers
 
             var searchUrl = SearchUrl + "?" + qc.GetQueryString();
 
-            var results = await RequestStringWithCookiesAndRetry(searchUrl);
+            var results = await RequestWithCookiesAndRetryAsync(searchUrl);
             if (results.IsRedirect)
             {
                 // re-login
                 await ApplyConfiguration(null);
-                results = await RequestStringWithCookiesAndRetry(searchUrl);
+                results = await RequestWithCookiesAndRetryAsync(searchUrl);
             }
 
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(results.Content);
+                var dom = parser.ParseDocument(results.ContentString);
                 var rows = dom.QuerySelectorAll("table.main > tbody > tr");
                 foreach (var row in rows.Skip(1))
                 {
@@ -170,7 +173,7 @@ namespace Jackett.Common.Indexers
                     var seeders = ParseUtil.CoerceInt(qSeeders.Text());
                     var files = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(4)").TextContent);
                     var grabs = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(8)").TextContent);
-                    var comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
+                    var details = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
                     var size = ReleaseInfo.GetBytes(sizeStr);
                     var leechers = ParseUtil.CoerceInt(qLeechers.Text());
                     var title = qDetailsLink.GetAttribute("alt");
@@ -181,7 +184,7 @@ namespace Jackett.Common.Indexers
                         Title = title,
                         Category = MapTrackerCatToNewznab(catStr),
                         Link = link,
-                        Comments = comments,
+                        Details = details,
                         Guid = link,
                         PublishDate = pubDateUtc.ToLocalTime(),
                         Size = size,
@@ -197,7 +200,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return releases;

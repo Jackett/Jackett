@@ -41,13 +41,14 @@ caps:
     - {id: eng-music, cat: Audio, desc: "Eng Музыка (eng-music)"}
     - {id: rus-music, cat: Audio, desc: "Rus Музыка (rus-music)"}
     - {id: books, cat: Books, desc: "Книги (books)"}
-    - {id: phone, cat: PC/Phone-Other, desc: "Телефон (phone)"}
+    - {id: phone, cat: PC/Mobile-Other, desc: "Телефон (phone)"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: striprussian
@@ -57,56 +58,56 @@ settings:
   - name: cat
     type: select
     label: Category
-    default: "0"
+    default: 0
     options:
-      "0": "all"
-      "cartoons": "Мультики (cartoons)"
-      "tv": "ТВ Передача (tv)"
-      "sport": "Спорт (sport)"
-      "action": "Боевик (action)"
-      "comedy": "Комедия (comedy)"
-      "thriller": "Триллер (thriller)"
-      "classic": "Классика (classic)"
-      "history": "Исторический (history)"
-      "mystic": "Мистика (mystic)"
-      "sci-fi": "Фантастика (sci-fi)"
-      "horror": "Ужасы (horror)"
-      "drama": "Драма (drama)"
-      "adventure": "Приключения (adventure)"
-      "detective": "Детектив (detective)"
-      "concert": "Концерт (concert)"
-      "anime": "Аниме (anime)"
-      "epic": "Мелодрама (epic)"
-      "documental": "Док. Фильм (documental)"
-      "serials": "Сериал (serials)"
-      "fantasy": "Фентези (fantasy)"
-      "war": "Военный (war)"
-      "family": "Семейный (family)"
-      "tales": "Сказка (tales)"
-      "catastroph": "Катастрофа (catastroph)"
-      "games": "Игры (games)"
-      "software": "Программы (software)"
-      "videoclips": "Видеоклип (videoclips)"
-      "wallpapers": "Картинки (wallpapers)"
-      "eng-music": "Eng Музыка (eng-music)"
-      "rus-music": "Rus Музыка (rus-music)"
-      "books": "Книги (books)"
-      "phone": "Телефон (phone)"
+      0: all
+      cartoons: "Мультики (cartoons)"
+      tv: "ТВ Передача (tv)"
+      sport: "Спорт (sport)"
+      action: "Боевик (action)"
+      comedy: "Комедия (comedy)"
+      thriller: "Триллер (thriller)"
+      classic: "Классика (classic)"
+      history: "Исторический (history)"
+      mystic: "Мистика (mystic)"
+      sci-fi: "Фантастика (sci-fi)"
+      horror: "Ужасы (horror)"
+      drama: "Драма (drama)"
+      adventure: "Приключения (adventure)"
+      detective: "Детектив (detective)"
+      concert: "Концерт (concert)"
+      anime: "Аниме (anime)"
+      epic: "Мелодрама (epic)"
+      documental: "Док. Фильм (documental)"
+      serials: "Сериал (serials)"
+      fantasy: "Фентези (fantasy)"
+      war: "Военный (war)"
+      family: "Семейный (family)"
+      tales: "Сказка (tales)"
+      catastroph: "Катастрофа (catastroph)"
+      games: "Игры (games)"
+      software: "Программы (software)"
+      videoclips: "Видеоклип (videoclips)"
+      wallpapers: "Картинки (wallpapers)"
+      eng-music: "Eng Музыка (eng-music)"
+      rus-music: "Rus Музыка (rus-music)"
+      books: "Книги (books)"
+      phone: "Телефон (phone)"
   - name: sort
     type: select
     label: Sort requested from site
-    default: "dateD"
+    default: dateD
     options:
-      "dateD": "created desc"
-      "dateA": "created asc"
-      "seedD": "seeders desc"
-      "seedA": "seeders asc"
-      "sizeD": "size desc"
-      "sizeA": "size asc"
+      dateD: created desc
+      dateA: created asc
+      seedD: seeders desc
+      seedA: seeders asc
+      sizeD: size desc
+      sizeA: size asc
 
 search:
   paths:
-    # http://www.filebase.ws/torrents/search/?s=dateD&t=all&c=serials&search=mandalorian&t=all
+    # http://www.filebase.ws/torrents/search/?s=dateD&t=all&c=serials&search=mandalorian
     - path: torrents/search/
   keywordsfilters:
     - name: diacritics
@@ -116,7 +117,7 @@ search:
     - name: re_replace # S01E01 to 1 1
       args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "$1 $2"]
   inputs:
-    # all activeonly deadonly
+    # all, liveonly, deadonly
     t: all
     c: "{{ .Config.cat }}"
     s: "{{ .Config.sort }}"
@@ -127,20 +128,19 @@ search:
 
   fields:
     category:
-      selector: td:nth-child(1) a
+      selector: td:nth-child(1) > a
       attribute: href
       filters:
         - name: split
           args: ["/", 2]
     torrent_id:
-#        selector: td:nth-child(2) a # for some obscure reason counting from the top does not work for this selector!?!?!??!
-      selector: td:nth-last-child(8) a
+      selector: td:nth-child(2) > a
       attribute: href
       filters:
         - name: split
           args: ["/", 3]
     title:
-      selector: td:nth-last-child(8) a
+      selector: td:nth-child(2)
       filters:
         # normalize to SXXEYY format
         - name: replace
@@ -170,15 +170,17 @@ search:
         - name: replace
           args: ["HDTVRip", "HDTV"]
     details:
-      selector: td:nth-last-child(8) a
+      selector: td:nth-child(2) > a
       attribute: href
     download:
       text: "{{ .Config.sitelink }}download.php?id={{ .Result.torrent_id }}"
     date:
       selector: td:nth-child(4)
       filters:
+        - name: append
+          args: " +03:00" # MSK
         - name: dateparse
-          args: "02/01/06"
+          args: "02/01/06 -07:00"
     size:
       selector: td:nth-child(5)
       filters:

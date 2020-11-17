@@ -14,15 +14,15 @@ caps:
     - {id: 2, cat: PC/0day, desc: "Apps Windows"}
     - {id: 3, cat: PC/Mac, desc: "Apps  Mac"}
     - {id: 4, cat: PC, desc: "Apps Linux"}
-    - {id: 34, cat: PC/Phone-Other, desc: "Apps Mobile"}
+    - {id: 34, cat: PC/Mobile-Other, desc: "Apps Mobile"}
     - {id: 6, cat: TV/Anime, desc: "Movie Cartoons"}
-    - {id: 7, cat: Movies/WEBDL, desc: "Movies WEB-DL"}
+    - {id: 7, cat: Movies/WEB-DL, desc: "Movies WEB-DL"}
     - {id: 32, cat: Movies/UHD, desc: "Movies 4k"}
     - {id: 9, cat: Movies/HD, desc: "Movies HD"}
     - {id: 10, cat: Movies/3D, desc: "Movies 3D"}
     - {id: 11, cat: Movies, desc: "Movies Pack"}
     - {id: 12, cat: Movies/BluRay, desc: "Movies Bluray"}
-    - {id: 33, cat: Movies/BluRay, desc: "Movies  Bluray - Rips"}
+    - {id: 33, cat: Movies/HD, desc: "Movies  Full-HD"}
     - {id: 14, cat: TV/HD, desc: "TV HD"}
     - {id: 15, cat: TV/WEB-DL, desc: "TV WEB-DL"}
     - {id: 16, cat: TV/SD, desc: "TV SD"}
@@ -35,7 +35,7 @@ caps:
     - {id: 35, cat: PC/Games, desc: "Games Pack"}
     - {id: 36, cat: XXX, desc: "Movie XXX"}
     - {id: 37, cat: Movies/SD, desc: "Movies SD"}
-    - {id: 38, cat: Books/Ebook, desc: "Books eBooks"}
+    - {id: 38, cat: Books/EBook, desc: "Books eBooks"}
     - {id: 39, cat: Audio/Audiobook, desc: "Books Audio"}
 
   modes:
@@ -43,6 +43,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -51,22 +52,26 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
-    default: "id"
+    default: id
     options:
-      "id": "created"
-      "seeders": "seeders"
-      "size": "size"
-      "name": "title"
+      id: created
+      seeders: seeders
+      size: size
+      name: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   path: account-login.php
@@ -89,15 +94,15 @@ search:
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
-    # 0 name & desc 1 name 2 desc 3 genre
+    # 0 name & desc, 1 name, 2 desc, 3 genre
     incldesc: 1
-    # 0 active 1 incldead 2 onlydead
+    # 0 active, 1 incldead, 2 onlydead
     incldead: 1
-    # 0 inclfree 1 notfree 2 onlyfree
-    freeleech: 0
-    # 0 both 1 localonly 2 extonly
+    # 0 inclfree, 1 notfree, 2 onlyfree
+    freeleech: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
+    # 0 both, 1 localonly, 2 extonly
     inclexternal: 0
-    # 0 all 1 English 2 etc...
+    # 0 all, 1 English, 2 etc...
     lang: 0
     sort: "{{ .Config.sort }}"
     order: "{{ .Config.type }}"
@@ -126,8 +131,10 @@ search:
     date:
       selector: td:nth-child(5)
       filters:
+        - name: append
+          args: " +02:00" # EET
         - name: dateparse
-          args: "02.01.200615:04:05"
+          args: "02.01.200615:04:05 -07:00"
     grabs:
       selector: td:nth-child(7)
     seeders:
@@ -143,4 +150,6 @@ search:
       case:
         img[src="images/t_extern.png"]: 0
         "*": 1
+    minimumratio:
+      text: 1.0
 # TorrentTrader-Ro 3.0

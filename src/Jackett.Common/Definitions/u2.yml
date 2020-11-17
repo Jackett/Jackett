@@ -31,6 +31,7 @@ caps:
     search: [q]
     tv-search: [q, season, ep]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: cookie
@@ -40,23 +41,26 @@ settings:
     type: info
     label: How to get the Cookie
     default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
-
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
-    default: "4"
+    default: 4
     options:
-      "4": "created"
-      "7": "seeders"
-      "5": "size"
-      "1": "title"
+      4: created
+      7: seeders
+      5: size
+      1: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
   - name: info_tpp
     type: info
     label: Results Per Page
@@ -76,13 +80,13 @@ search:
   inputs:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
-    # 0 incldead 1 active 2 dead
+    # 0 incldead, 1 active, 2 dead
     incldead: 0
-    # 0 all 1 normal 2 free 3 2x 4 2xfree 5 50% 6 2x50% 7 30% 8 other
-    spstate: 0
-    # 0 title 1 descr 3 uploaded 4 AniDB 5 infohash
+    # 0 all, 1 normal, 2 free, 3 2x, 4 2xfree, 5 50%, 6 2x50%, 7 30%, 8 all promotions
+    spstate: "{{ if .Config.freeleech }}8{{ else }}0{{ end }}"
+    # 0 title, 1 descr, 3 uploader, 4 AniDB, 5 infohash
     search_area: 0
-    # 0 AND 1 OR 2 exact
+    # 0 AND, 1 OR, 2 exact
     search_mode: 0
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
@@ -116,7 +120,7 @@ search:
       optional: true
       filters:
         - name: append
-          args: " +08:00"
+          args: " +08:00" # CST
         - name: dateparse
           args: "2006-01-02 15:04:05 -07:00"
     date:
@@ -125,7 +129,7 @@ search:
       optional: true
       filters:
         - name: append
-          args: " +08:00"
+          args: " +08:00" # CST
         - name: dateparse
           args: "2006-01-0215:04:05 -07:00"
     size:

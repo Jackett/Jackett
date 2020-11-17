@@ -11,8 +11,8 @@ legacylinks:
   - http://forums.mvgroup.org/
 
 caps:
-  categorymappings:
-    - {id: 1, cat: TV, desc: "TV"}
+  categories:
+    Other: Other
 
   modes:
     search: [q]
@@ -26,6 +26,10 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: info_8000
+    type: info
+    label: About MVGroup Categories
+    default: MVGroup does not return categories in its search results.</br>To add to your Apps' Torznab indexer, replace all categories with 8000(Other).
   - name: hidef
     type: checkbox
     label: Show MVGroup HiDef Releases only
@@ -33,59 +37,59 @@ settings:
   - name: withsubs
     type: select
     label: Subtitles
-    default: "_"
+    default: _
     options:
-      "_": "-OFF-"
-      "alb": "Albanian"
-      "ara": "Arabic"
-      "arm": "Armenian"
-      "ass": "Assyrian"
-      "bos": "Bosnian"
-      "bul": "Bulgarian"
-      "cat": "Catalan"
-      "chi": "Chinese, simplified"
-      "zho": "Chinese, traditional"
-      "hrv": "Croatian"
-      "cze": "Czech"
-      "dan": "Danish"
-      "dut": "Dutch"
-      "eng": "English"
-      "est": "Estonian"
-      "fin": "Finnish"
-      "fre": "French"
-      "glg": "Galician"
-      "geo": "Georgian"
-      "ger": "German"
-      "ell": "Greek"
-      "heb": "Hebrew"
-      "hin": "Hindi"
-      "hun": "Hungarian"
-      "ice": "Icelandic"
-      "ind": "Indonesian"
-      "ita": "Italian"
-      "jpn": "Japanese"
-      "kaz": "Kazakh"
-      "kor": "Korean"
-      "lav": "Latvian"
-      "lit": "Lithuanian"
-      "ltz": "Luxembourgish"
-      "mac": "Macedonian"
-      "may": "Malay"
-      "nor": "Norwegian"
-      "per": "Persian"
-      "pol": "Polish"
-      "por": "Portuguese"
-      "rum": "Romanian"
-      "rus": "Russian"
-      "scc": "Serbian"
-      "slo": "Slovak"
-      "slv": "Slovenian"
-      "spa": "Spanish"
-      "swe": "Swedish"
-      "tha": "Thai"
-      "tur": "Turkish"
-      "ukr": "Ukrainian"
-      "vie": "Vietnamese"
+      _: -OFF-
+      alb: Albanian
+      ara: Arabic
+      arm: Armenian
+      ass: Assyrian
+      bos: Bosnian
+      bul: Bulgarian
+      cat: Catalan
+      chi: "Chinese, simplified"
+      zho: "Chinese, traditional"
+      hrv: Croatian
+      cze: Czech
+      dan: Danish
+      dut: Dutch
+      eng: English
+      est: Estonian
+      fin: Finnish
+      fre: French
+      glg: Galician
+      geo: Georgian
+      ger: German
+      ell: Greek
+      heb: Hebrew
+      hin: Hindi
+      hun: Hungarian
+      ice: Icelandic
+      ind: Indonesian
+      ita: Italian
+      jpn: Japanese
+      kaz: Kazakh
+      kor: Korean
+      lav: Latvian
+      lit: Lithuanian
+      ltz: Luxembourgish
+      mac: Macedonian
+      may: Malay
+      nor: Norwegian
+      per: Persian
+      pol: Polish
+      por: Portuguese
+      rum: Romanian
+      rus: Russian
+      scc: Serbian
+      slo: Slovak
+      slv: Slovenian
+      spa: Spanish
+      swe: Swedish
+      tha: Thai
+      tur: Turkish
+      ukr: Ukrainian
+      vie: Vietnamese
   - name: seed
     type: checkbox
     label: Only released and seeded torrents
@@ -98,25 +102,21 @@ settings:
     type: checkbox
     label: Strip the S01E01 from the Torznab search requests
     default: false
-  - name: info
-    type: info
-    label: Category for Sonarr and Radarr
-    default: MVGroup does not use categories. In your Sonarr or Radarr Torznab Indexer settings, set the category to 100001.
   - name: sort
     type: select
     label: Sort requested from site
-    default: "added"
+    default: added
     options:
-      "added": "created"
-      "seeders": "seeders"
-      "filename": "title"
+      added: created
+      seeders: seeders
+      filename: title
   - name: type
     type: select
     label: Order requested from site
-    default: "DESC"
+    default: DESC
     options:
-      "DESC": "desc"
-      "ASC": "asc"
+      DESC: desc
+      ASC: asc
 
 login:
   path: index.php?act=Login&CODE=00
@@ -142,19 +142,21 @@ search:
   paths:
     - path: maintracker.php
   inputs:
-    seed: "{{ if .Config.seed }}1{{else}}0{{end}}"
+    seed: "{{ if .Config.seed }}1{{ else }}0{{ end }}"
     withsubs: "{{ re_replace .Config.withsubs \"_\" \"\" }}"
-    filter: "{{ if .Config.hidef }}hd+{{else}}{{end}}{{ .Keywords }}"
+    filter: "{{ if .Config.hidef }}hd+{{ else }}{{ end }}{{ .Keywords }}"
     orderby: "{{ .Config.sort }}"
     order: "{{ .Config.type }}"
   keywordsfilters:
     - name: re_replace
-      args: ["S01E01", "{{ if .Config.stripS01E01 }}{{else}}S01E01{{end}}"] # optionally remove S01E01 from search
+      args: ["(?i)S01E01", "{{ if .Config.stripS01E01 }}{{ else }}S01E01{{ end }}"] # optionally remove S01E01 from search
 
   rows:
     selector: tr:has(a.magnetlink)
 
   fields:
+    category:
+      text: Other
     title:
       # fallback title (to prevent abend if optional is not found)
       text: "title not found"
@@ -165,7 +167,7 @@ search:
         - name: re_replace
           args: ["^BBC (.*)", "{{ if .Config.dropbbc }}{{ else }}BBC {{ end }}$1"]
         - name: append
-          args: "{{ if .Config.stripS01E01 }}{{else}} S01E01{{end}}"
+          args: "{{ if .Config.stripS01E01 }}{{ else }} S01E01{{ end }}"
     details:
       optional: true
       selector: td.singleindent a[href^="/index.php?showtopic="]
@@ -176,15 +178,15 @@ search:
     magnet:
       selector: td a.magnetlink
       attribute: href
-    category:
-      text: 1
     size:
       text: "500 MB"
     date:
       selector: td:nth-of-type(3)
       filters:
+        - name: append
+          args: " +00:00" # GMT
         - name: dateparse
-          args: "2006/01/02"
+          args: "2006/01/02 -07:00"
     seeders:
       selector: td:nth-of-type(4)
     leechers:

@@ -40,12 +40,12 @@ caps:
     - {id: 29, cat: Other, desc: "Egyéb / Képek"}
     - {id: 12, cat: PC/Games, desc: "Játék / PC"}
     - {id: 14, cat: Console/PS4, desc: "Játék / PS"}
-    - {id: 39, cat: Console/Xbox, desc: "Játék / Xbox"}
+    - {id: 39, cat: Console/XBox, desc: "Játék / Xbox"}
     - {id: 40, cat: Console/Other, desc: "Játék / Egyéb"}
     - {id: 16, cat: PC/ISO, desc: "Programok / PC"}
-    - {id: 24, cat: PC/Phone-Other, desc: "Programok / Mobil"}
+    - {id: 24, cat: PC/Mobile-Other, desc: "Programok / Mobil"}
     - {id: 53, cat: PC/0day, desc: "Programok / Egyéb"}
-    - {id: 17, cat: XXX/Xvid, desc: "Pornó / XviD"}
+    - {id: 17, cat: XXX/XviD, desc: "Pornó / XviD"}
     - {id: 34, cat: XXX/DVD, desc: "Pornó / DVD-R"}
     - {id: 35, cat: XXX, desc: "Pornó / HD"}
     - {id: 36, cat: XXX, desc: "Pornó / Képek"}
@@ -58,6 +58,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 login:
   path: login
@@ -67,10 +68,10 @@ login:
     referer: ""
     nev: "{{ .Config.username }}"
     jelszo: "{{ .Config.password }}"
-    fsv: "0"
-    login: "1"
-    belepes: "1"
-    rhash: "123"
+    fsv: 0
+    login: 1
+    belepes: 1
+    rhash: 123
   test:
     path: browse
 
@@ -80,26 +81,28 @@ search:
   inputs:
     $raw: "{{range .Categories}}category[]={{.}}&{{end}}"
     search: "{{ .Keywords }}"
-    s_alapjan: "7"
-    s_sorrend: "desc"
+    s_alapjan: 7
+    s_sorrend: desc
+
   rows:
     selector: div.torrent_row, div.torrent_details
     after: 1
+
   fields:
-    download:
-      selector: div.box_download > a
-      attribute: href
-    title:
-      selector: a.box_name_a > span
-    details:
-      selector: a.box_name_a
-      attribute: href
     category:
       selector: div.box_category > img
       attribute: onclick
       filters:
         - name: regexp
           args: "category\\((\\d+),\\d+\\);"
+    title:
+      selector: a.box_name_a > span
+    details:
+      selector: a.box_name_a
+      attribute: href
+    download:
+      selector: div.box_download > a
+      attribute: href
     seeders:
       selector: div.box_seeders
     leechers:
@@ -112,27 +115,25 @@ search:
       selector: div.box_uploaded
       filters:
         - name: append
-          args: " +01:00"
+          args: " +01:00" # CET
         - name: dateparse
           args: "2006-01-0215:04:05 -07:00"
     size:
       selector: div.box_size
-    banner:
-      optional: true
+    poster:
       selector: a.cover_a
       attribute: title
       filters:
         - name: regexp
           args: src='(.*?)'
     imdb:
-      optional: true
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     description:
       selector: div.torrent_row_magyarcim
       remove: span.torrent_row_new
     downloadvolumefactor:
-      text: "0"
+      text: 0
     uploadvolumefactor:
-      case:
-        "*": "1"
+      text: 1
+# engine tbd

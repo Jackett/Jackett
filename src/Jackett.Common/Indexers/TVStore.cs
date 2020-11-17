@@ -38,8 +38,14 @@ namespace Jackett.Common.Indexers
                  link: "https://tvstore.me/",
                  caps: new TorznabCapabilities
                  {
-                     SupportsImdbMovieSearch = true, // Needed for IMDb searches to work see #7977
-                     SupportsImdbTVSearch = true
+                     TvSearchParams = new List<TvSearchParam>
+                     {
+                         TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
+                     },
+                     MovieSearchParams = new List<MovieSearchParam>
+                     {
+                         MovieSearchParam.Q, MovieSearchParam.ImdbId
+                     }
                  },
                  configService: configService,
                  client: wc,
@@ -50,6 +56,7 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "hu-hu";
             Type = "private";
+
             AddCategoryMapping(1, TorznabCatType.TV);
             AddCategoryMapping(2, TorznabCatType.TVHD);
             AddCategoryMapping(3, TorznabCatType.TVSD);
@@ -66,7 +73,7 @@ namespace Jackett.Common.Indexers
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-            var loginPage = await RequestStringWithCookies(LoginPageUrl, string.Empty);
+            var loginPage = await RequestWithCookiesAsync(LoginPageUrl, string.Empty);
             var pairs = new Dictionary<string, string>
             {
                 {"username", configData.Username.Value},
@@ -76,7 +83,7 @@ namespace Jackett.Common.Indexers
             };
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, referer: SiteLink);
             await ConfigureIfOK(
-                result.Cookies, result.Content?.Contains("Főoldal") == true,
+                result.Cookies, result.ContentString?.Contains("Főoldal") == true,
                 () => throw new ExceptionWithConfigData("Error while trying to login.", configData));
             return IndexerConfigurationStatus.RequiresTesting;
         }
@@ -119,7 +126,7 @@ namespace Jackett.Common.Indexers
         /// <param name="alreadyFound">Number of the already found torrents.(used for limit)</param>
         /// <param name="limit">The limit to the number of torrents to download </param>
         /// <param name="previouslyParsedOnPage">Current position in parsed results</param>
-        private async Task<List<ReleaseInfo>> ParseTorrentsAsync(WebClientStringResult results, int alreadyFound, int limit,
+        private async Task<List<ReleaseInfo>> ParseTorrentsAsync(WebResult results, int alreadyFound, int limit,
                                                                  int previouslyParsedOnPage)
         {
             var releases = new List<ReleaseInfo>();
@@ -137,7 +144,7 @@ namespace Jackett.Common.Indexers
                  * First 3 items per page are total results, results per page, and results this page
                  * There is also a tail of ~4 items after the results for some reason. Looks like \1\\\
                  */
-                var parameters = results.Content.Split('\\');
+                var parameters = results.ContentString.Split('\\');
                 var torrentsThisPage = int.Parse(parameters[2]);
                 var maxTorrents = Math.Min(torrentsThisPage, limit - alreadyFound);
                 var rows = parameters.Skip(3) //Skip pages info
@@ -163,8 +170,8 @@ namespace Jackett.Common.Indexers
                     queryParams["id"] = torrentId;
                     queryParams["now"] = DateTimeUtil.DateTimeToUnixTimestamp(DateTime.UtcNow)
                                                      .ToString(CultureInfo.InvariantCulture);
-                    var filesList = (await RequestStringWithCookiesAndRetry(SearchUrl + "?" + queryParams.GetQueryString()))
-                        .Content;
+                    var filesList = (await RequestWithCookiesAndRetryAsync(SearchUrl + "?" + queryParams.GetQueryString()))
+                        .ContentString;
                     var firstFileName = filesList.Split(
                         new[]
                         {
@@ -203,7 +210,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return releases;
@@ -215,8 +222,8 @@ namespace Jackett.Common.Indexers
         /// </summary>
         private async Task PopulateImdbMapAsync()
         {
-            var result = await RequestStringWithCookiesAndRetry(BrowseUrl);
-            foreach (Match match in _seriesInfoMatch.Matches(result.Content))
+            var result = await RequestWithCookiesAndRetryAsync(BrowseUrl);
+            foreach (Match match in _seriesInfoMatch.Matches(result.ContentString))
             {
                 var internalId = int.Parse(match.Groups["seriesID"].Value);
                 var imdbId = long.Parse(match.Groups["ImdbId"].Value);
@@ -280,9 +287,9 @@ namespace Jackett.Common.Indexers
                     queryParams.Add("e", query.Episode);
             }
 
-            var results = await RequestStringWithCookiesAndRetry(SearchUrl + "?" + queryParams.GetQueryString());
+            var results = await RequestWithCookiesAndRetryAsync(SearchUrl + "?" + queryParams.GetQueryString());
             // Parse page Information from result
-            var content = results.Content;
+            var content = results.ContentString;
             var splits = content.Split('\\');
             var totalFound = int.Parse(splits[0]);
             var torrentPerPage = int.Parse(splits[1]);
@@ -302,7 +309,7 @@ namespace Jackett.Common.Indexers
             for (var page = startPage; page <= pages && releases.Count < query.Limit; page++)
             {
                 queryParams["page"] = page.ToString();
-                results = await RequestStringWithCookiesAndRetry(SearchUrl + "?" + queryParams.GetQueryString());
+                results = await RequestWithCookiesAndRetryAsync(SearchUrl + "?" + queryParams.GetQueryString());
                 releases.AddRange(await ParseTorrentsAsync(results, releases.Count, query.Limit, previouslyParsedOnPage));
                 previouslyParsedOnPage = 0;
             }

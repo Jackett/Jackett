@@ -74,7 +74,7 @@ namespace Jackett.Updater
             }
             catch (Exception e)
             {
-                logger.Error(e, "Exception applying update!");
+                logger.Error($"Exception applying update!\n{e}");
             }
         }
 
@@ -111,27 +111,24 @@ namespace Jackett.Updater
                         }
                         catch (Exception e)
                         {
-                            logger.Error(e, "Error while sending SIGTERM to " + pid.ToString());
+                            logger.Error($"Error while sending SIGTERM to {pid}\n{e}");
                         }
                         if (!exited)
-                            logger.Info("Process " + pid.ToString() + " didn't exit within 2 seconds after a SIGTERM");
+                            logger.Info($"Process {pid} didn't exit within 2 seconds after a SIGTERM");
                     }
                     if (!exited)
-                    {
                         proc.Kill(); // send SIGKILL
-                    }
                     exited = proc.WaitForExit(5000);
                     if (!exited)
-                        logger.Info("Process " + pid.ToString() + " didn't exit within 5 seconds after a SIGKILL");
+                        logger.Info($"Process {pid} didn't exit within 5 seconds after a SIGKILL");
                 }
                 catch (ArgumentException)
                 {
-                    logger.Info("Process " + pid.ToString() + " is already dead");
+                    logger.Info($"Process {pid} is already dead");
                 }
                 catch (Exception e)
                 {
-                    logger.Info("Error killing process " + pid.ToString());
-                    logger.Info(e);
+                    logger.Error($"Error killing process {pid}\n{e}");
                 }
             }
         }
@@ -140,9 +137,7 @@ namespace Jackett.Updater
         {
             var updateLocation = GetUpdateLocation();
             if (!(updateLocation.EndsWith("\\") || updateLocation.EndsWith("/")))
-            {
                 updateLocation += Path.DirectorySeparatorChar;
-            }
 
             var pids = new int[] { };
             if (options.KillPids != null)
@@ -157,18 +152,17 @@ namespace Jackett.Updater
             if (isWindows)
             {
                 if (trayProcesses.Length > 0)
-                {
                     foreach (var proc in trayProcesses)
-                    {
                         try
                         {
-                            logger.Info("Killing tray process " + proc.Id);
+                            logger.Info($"Killing tray process {proc.Id}");
                             proc.Kill();
                             trayRunning = true;
                         }
-                        catch { }
-                    }
-                }
+                        catch (Exception e)
+                        {
+                            logger.Error(e);
+                        }
 
                 // on unix we don't have to wait (we can overwrite files which are in use)
                 // On unix we kill the PIDs after the update so e.g. systemd can automatically restart the process
@@ -201,9 +195,7 @@ namespace Jackett.Updater
                             logger.Info("Deleted " + fileForDelete);
                         }
                         else
-                        {
                             logger.Info("File for deleting not found: " + fileForDelete);
-                        }
                     }
                     catch (Exception e)
                     {
@@ -214,7 +206,7 @@ namespace Jackett.Updater
 
             logger.Info("Finding files in: " + updateLocation);
             var files = Directory.GetFiles(updateLocation, "*.*", SearchOption.AllDirectories).OrderBy(x => x).ToList();
-            logger.Info($"{files.Count()} update files found");
+            logger.Info($"{files.Count} update files found");
 
             try
             {
@@ -223,22 +215,17 @@ namespace Jackett.Updater
                     var fileName = Path.GetFileName(file).ToLowerInvariant();
 
                     if (fileName.EndsWith(".zip") || fileName.EndsWith(".tar") || fileName.EndsWith(".gz"))
-                    {
                         continue;
-                    }
 
                     var fileCopySuccess = CopyUpdateFile(options.Path, file, updateLocation, false);
 
-                    if (!fileCopySuccess)
-                    {
-                        //Perform second attempt, this time removing the target file first
+                    if (!fileCopySuccess) //Perform second attempt, this time removing the target file first
                         CopyUpdateFile(options.Path, file, updateLocation, true);
-                    }
                 }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                logger.Error(ex);
+                logger.Error(e);
             }
 
             logger.Info("File copying complete");
@@ -274,8 +261,11 @@ namespace Jackett.Updater
                 "CsQuery.dll",
                 "CurlSharp.dll",
                 "CurlSharp.pdb",
+                "Definitions/32pages.yml",
                 "Definitions/420files.yml",
+                "Definitions/academictorrents.yml",
                 "Definitions/alein.yml",
+                "Definitions/alexfilm.yml",
                 "Definitions/anidex.yml", // migrated to C#
                 "Definitions/aox.yml",
                 "Definitions/apollo.yml", // migrated to C# gazelle base tracker
@@ -284,12 +274,15 @@ namespace Jackett.Updater
                 "Definitions/avg.yml",
                 "Definitions/awesomehd.yml", // migrated to C#
                 "Definitions/b2s-share.yml",
+                "Definitions/badasstorrents.yml", // to be migrated to c#
                 "Definitions/bithq.yml",
                 "Definitions/bitme.yml",
                 "Definitions/bittorrentam.yml",
                 "Definitions/blubits.yml",
+                "Definitions/brobits.yml",
                 "Definitions/bt-scene.yml",
                 "Definitions/btbit.yml",
+                "Definitions/bteye.yml",
                 "Definitions/btkitty.yml",
                 "Definitions/btstornet.yml",
                 "Definitions/btxpress.yml",
@@ -297,11 +290,16 @@ namespace Jackett.Updater
                 "Definitions/cinefilhd.yml",
                 "Definitions/crazyscorner.yml",
                 "Definitions/czteam.yml",
+                "Definitions/cztorrent.yml",
+                "Definitions/darmowetorenty.yml", // migrated to C#
+                "Definitions/demonsite.yml",
                 "Definitions/digbt.yml",
+                "Definitions/downloadville.yml",
                 "Definitions/dragonworld.yml",
                 "Definitions/dreamteam.yml",
                 "Definitions/eggmeon.yml",
                 "Definitions/elitehd.yml",
+                "Definitions/elitetorrent-biz.yml",
                 "Definitions/elittracker.yml",
                 "Definitions/eotforum.yml",
                 "Definitions/estrenosdtl.yml",
@@ -310,6 +308,7 @@ namespace Jackett.Updater
                 "Definitions/exoticaz.yml", // migrated to C#
                 "Definitions/extratorrentclone.yml",
                 "Definitions/feedurneed.yml",
+                "Definitions/filmsclub.yml",
                 "Definitions/freakstrackingsystem.yml",
                 "Definitions/freedomhd.yml",
                 "Definitions/gdf76.yml",
@@ -329,17 +328,23 @@ namespace Jackett.Updater
                 "Definitions/idopeclone.yml",
                 "Definitions/iloveclassics.yml",
                 "Definitions/infinityt.yml",
+                "Definitions/inperil.yml",
                 "Definitions/isohunt.yml",
+                "Definitions/kapaki.yml",
                 "Definitions/katcrs.yml",
+                "Definitions/kaztorka.yml",
                 "Definitions/kikibt.yml",
+                "Definitions/liaorencili.yml",
                 "Definitions/lapausetorrents.yml",
                 "Definitions/lemencili.yml",
                 "Definitions/leparadisdunet.yml",
+                "Definitions/leporno.yml",
                 "Definitions/maniatorrent.yml",
                 "Definitions/manicomioshare.yml",
                 "Definitions/megabliz.yml",
                 "Definitions/metal-iplay-ro.yml", // renamed to romanianmetaltorrents
                 "Definitions/mkvcage.yml",
+                "Definitions/moecat.yml",
                 "Definitions/music-master.yml",
                 "Definitions/nachtwerk.yml",
                 "Definitions/nexttorrent.yml",
@@ -350,6 +355,7 @@ namespace Jackett.Updater
                 "Definitions/nyoo.yml",
                 "Definitions/passionetorrent.yml",
                 "Definitions/polishtracker.yml",
+                "Definitions/pt99.yml",
                 "Definitions/qctorrent.yml",
                 "Definitions/qxr.yml",
                 "Definitions/rapidetracker.yml",
@@ -370,6 +376,7 @@ namespace Jackett.Updater
                 "Definitions/sharingue.yml",
                 "Definitions/skytorrents.yml",
                 "Definitions/solidtorrents.yml", // migrated to C#
+                "Definitions/soundpark.yml", // to be migrated to C#
                 "Definitions/speed-share.yml",
                 "Definitions/t411.yml",
                 "Definitions/t411v2.yml",
@@ -381,12 +388,17 @@ namespace Jackett.Updater
                 "Definitions/theresurrection.yml",
                 "Definitions/thetorrents.yml",
                 "Definitions/the-madhouse.yml",
+                "Definitions/thepiratebay.yml", // migrated to c#
+                "Definitions/theunknown.yml", // became 3evils #9678
                 "Definitions/tigers-dl.yml",
                 "Definitions/tntvillage.yml",
+                "Definitions/topnow.yml",
                 "Definitions/torrentcouch.yml",
+                "Definitions/torrenthane.yml",
                 "Definitions/torrentkim.yml",
                 "Definitions/torrentproject.yml",
                 "Definitions/torrentrex.yml",
+                "Definitions/torrentseed.yml", // renamed to latinop2p #9065
                 "Definitions/torrentseeds.yml", // migrated to c#
                 "Definitions/torrentsmd.yml",
                 "Definitions/torrentvault.yml",
@@ -395,14 +407,20 @@ namespace Jackett.Updater
                 "Definitions/torrof.yml",
                 "Definitions/torviet.yml",
                 "Definitions/tspate.yml",
+                "Definitions/turknova.yml",
+                "Definitions/u-torrents.yml",
                 "Definitions/ultimategamerclub.yml",
                 "Definitions/ultrahdclub.yml",
+                "Definitions/uniotaku.yml", // to be migrated to c#
                 "Definitions/utorrents.yml", // same as SzeneFZ now
                 "Definitions/vanila.yml",
+                "Definitions/vhstapes.yml",
+                "Definitions/world-of-tomorrow.yml", // #9213
                 "Definitions/waffles.yml",
                 "Definitions/worldofp2p.yml",
                 "Definitions/worldwidetorrents.yml",
                 "Definitions/xktorrent.yml",
+                "Definitions/xtremefile.yml",
                 "Definitions/xtremezone.yml", // migrated to C# XtremeZone base tracker
                 "Definitions/yourexotic.yml", // renamed to exoticaz.yml
                 "Microsoft.Owin.dll",
@@ -469,12 +487,13 @@ namespace Jackett.Updater
                 {
                     logger.Info("Starting Windows service");
 
-                    if (ServerUtil.IsUserAdministrator())
+                    try
                     {
                         windowsService.Start();
                     }
-                    else
+                    catch
                     {
+                        logger.Info("Failed to start service. Attempting to start console.");
                         try
                         {
                             var consolePath = Path.Combine(options.Path, "JackettConsole.exe");
@@ -482,7 +501,7 @@ namespace Jackett.Updater
                         }
                         catch
                         {
-                            logger.Error("Failed to get admin rights to start the service.");
+                            logger.Error("Failed to start the service or console.");
                         }
                     }
                 }
@@ -602,14 +621,7 @@ namespace Jackett.Updater
         private string GetJackettConsolePath(string directoryPath)
         {
             var variants = new Variants();
-            if (variants.IsNonWindowsDotNetCoreVariant(variant))
-            {
-                return Path.Combine(directoryPath, "jackett");
-            }
-            else
-            {
-                return Path.Combine(directoryPath, "JackettConsole.exe");
-            }
+            return Path.Combine(directoryPath, variants.IsNonWindowsDotNetCoreVariant(variant) ? "jackett" : "JackettConsole.exe");
         }
 
         private static void UnhandledExceptionTrapper(object sender, UnhandledExceptionEventArgs e)

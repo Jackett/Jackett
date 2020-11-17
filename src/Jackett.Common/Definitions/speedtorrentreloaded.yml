@@ -33,7 +33,7 @@ caps:
     - {id: 4, cat: PC/Games, desc: "PC-Games"}
     - {id: 84, cat: Console/PS3, desc: "PS3/PS4"}
     - {id: 84, cat: Console/PS4, desc: "PS3/PS4"}
-    - {id: 85, cat: Console/Xbox 360, desc: "Xbox-360"}
+    - {id: 85, cat: Console/XBox 360, desc: "Xbox-360"}
     - {id: 28, cat: PC/0day, desc: "Windows-Programme"}
     - {id: 18, cat: PC/0day, desc: "Appz-Sonstige"}
     - {id: 14, cat: Audio/Other, desc: "Alben / Sampler / Singles"}
@@ -43,7 +43,7 @@ caps:
     - {id: 71, cat: Audio/Other, desc: "Soundtracks"}
     - {id: 70, cat: Audio/Lossless, desc: "Flac"}
     - {id: 72, cat: Audio, desc: "Musik-Packs"}
-    - {id: 19, cat: Books/Ebook, desc: "EBooks"}
+    - {id: 19, cat: Books/EBook, desc: "EBooks"}
     - {id: 87, cat: TV/Anime, desc: "Anime"}
     - {id: 96, cat: Other, desc: "Sonstiges"}
     - {id: 23, cat: TV/Sport, desc: "Wrestling"}
@@ -56,6 +56,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -70,26 +71,26 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "added"
+    default: added
     options:
-      "added": "created"
-      "seeds": "seeders"
-      "size": "size"
-      "name": "title"
+      added: created
+      seeds: seeders
+      size: size
+      name: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
-  path: login.php
+  path: sessioncheck.php?session=1
   method: form
   form: form
   inputs:
-    take: "yes"
+    take: yes
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
     secure_code: "{{ .Config.secure_code }}"
@@ -101,7 +102,7 @@ search:
     - path: tfiles.php
   inputs:
     showsearch: 1
-    $raw: "{{ if .Categories }}{{ range .Categories }}c{{.}}=1&{{end}}{{else}}{{end}}"
+    $raw: "{{ if .Categories }}{{ range .Categories }}c{{.}}=1&{{end}}{{ else }}{{ end }}"
     search: "{{ .Keywords }}"
     orderby: "{{ .Config.sort }}"
     sort: "{{ .Config.type }}"
@@ -111,26 +112,26 @@ search:
     selector: tr:has(a[href^="details.php?id="])
 
   fields:
-    title:
-      selector: a[href^="details.php?id="]
-    banner:
-      selector: a[href^="details.php?id="][onmouseover]
-      attribute: onmouseover
-      filters:
-        - name: regexp
-          args: "<img src=(.*) width="
     category:
       selector: a[href^="tfiles.php?cat="]
       attribute: href
       filters:
         - name: querystring
           args: cat
+    title:
+      selector: a[href^="details.php?id="]
     details:
       selector: a[href^="details.php?id="]
       attribute: href
     download:
       selector: a[href^="download.php?torrent="]
       attribute: href
+    poster:
+      selector: a[href^="details.php?id="][onmouseover]
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: "<img src=(.*) width="
     grabs:
       selector: tr > th > span:nth-child(5)
       filters:
@@ -161,7 +162,7 @@ search:
         - name: regexp
           args: "(\\d{2}\\.\\d{2}\\.\\d{4}\\s\\d{2}:\\d{2}:\\d{2})"
         - name: append
-          args: " +01:00"
+          args: " +01:00" # CET
         - name: replace
           args: ["\xA0", " "]
         - name: replace

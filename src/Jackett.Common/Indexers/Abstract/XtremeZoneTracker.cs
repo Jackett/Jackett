@@ -10,6 +10,7 @@ using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -74,8 +75,9 @@ namespace Jackett.Common.Indexers.Abstract
                 { "password", configData.Password.Value.Trim() }
             };
             var jsonData = JsonConvert.SerializeObject(body);
-            var result = await PostDataWithCookies(LoginUrl, null, headers: ApiHeaders, rawbody: jsonData);
-            var json = JObject.Parse(result.Content);
+            var result = await RequestWithCookiesAsync(
+                LoginUrl, method: RequestType.POST, headers: ApiHeaders, rawbody: jsonData);
+            var json = JObject.Parse(result.ContentString);
             _token = json.Value<string>("token");
             if (_token == null)
                 throw new Exception(json.Value<string>("message"));
@@ -105,22 +107,22 @@ namespace Jackett.Common.Indexers.Abstract
                 await RenewalTokenAsync();
 
             var searchUrl = SearchUrl + "?" + qc.GetQueryString();
-            var response = await RequestStringWithCookies(searchUrl, headers: GetSearchHeaders());
+            var response = await RequestWithCookiesAsync(searchUrl, headers: GetSearchHeaders());
             if (response.Status == HttpStatusCode.Unauthorized)
             {
                 await RenewalTokenAsync(); // re-login
-                response = await RequestStringWithCookies(searchUrl, headers: GetSearchHeaders());
+                response = await RequestWithCookiesAsync(searchUrl, headers: GetSearchHeaders());
             }
             else if (response.Status != HttpStatusCode.OK)
-                throw new Exception($"Unknown error in search: {response.Content}");
+                throw new Exception($"Unknown error in search: {response.ContentString}");
 
             try
             {
-                var rows = JArray.Parse(response.Content);
+                var rows = JArray.Parse(response.ContentString);
                 foreach (var row in rows)
                 {
                     var id = row.Value<string>("id");
-                    var comments = new Uri($"{SiteLink}browse/{id}");
+                    var details = new Uri($"{SiteLink}browse/{id}");
                     var link = new Uri($"{SiteLink}api/torrent/{id}/download");
                     var publishDate = DateTime.Parse(row.Value<string>("created_at"), CultureInfo.InvariantCulture);
                     var cat = row.Value<JToken>("category").Value<string>("id");
@@ -128,8 +130,8 @@ namespace Jackett.Common.Indexers.Abstract
                     // "description" field in API has too much HTML code
                     var description = row.Value<string>("short_description");
 
-                    var jBanner = row.Value<string>("poster");
-                    var banner = (string.IsNullOrEmpty(jBanner) || !jBanner.StartsWith("http")) ? null : new Uri(jBanner);
+                    var posterStr = row.Value<string>("poster");
+                    var poster = Uri.TryCreate(posterStr, UriKind.Absolute, out var posterUri) ? posterUri : null;
 
                     var dlVolumeFactor = row.Value<bool>("is_half_download") ? 0.5: 1.0;
                     dlVolumeFactor = row.Value<bool>("is_freeleech") ? 0.0 : dlVolumeFactor;
@@ -139,12 +141,12 @@ namespace Jackett.Common.Indexers.Abstract
                     {
                         Title = row.Value<string>("name"),
                         Link = link,
-                        Comments = comments,
-                        Guid = comments,
+                        Details = details,
+                        Guid = details,
                         Category =  MapTrackerCatToNewznab(cat),
                         PublishDate = publishDate,
                         Description = description,
-                        BannerUrl = banner,
+                        Poster = poster,
                         Size = row.Value<long>("size"),
                         Grabs = row.Value<long>("times_completed"),
                         Seeders = row.Value<int>("seeders"),
@@ -160,22 +162,22 @@ namespace Jackett.Common.Indexers.Abstract
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
             return releases;
         }
 
         public override async Task<byte[]> Download(Uri link)
         {
-            var response = await RequestBytesWithCookies(link.ToString(), headers: GetSearchHeaders());
+            var response = await RequestWithCookiesAsync(link.ToString(), headers: GetSearchHeaders());
             if (response.Status == HttpStatusCode.Unauthorized)
             {
                 await RenewalTokenAsync();
-                response = await RequestBytesWithCookies(link.ToString(), headers: GetSearchHeaders());
+                response = await RequestWithCookiesAsync(link.ToString(), headers: GetSearchHeaders());
             }
             else if (response.Status != HttpStatusCode.OK)
-                throw new Exception($"Unknown error in download: {response.Content}");
-            return response.Content;
+                throw new Exception($"Unknown error in download: {response.ContentBytes}");
+            return response.ContentBytes;
         }
 
         private Dictionary<string, string> GetSearchHeaders() => new Dictionary<string, string>

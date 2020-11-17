@@ -29,56 +29,64 @@ caps:
     - {id: 47, cat: Movies, desc: "Movies/Packs"}
     - {id: 49, cat: Movies/HD, desc: "Movies/x265"}
     - {id: 55, cat: TV/Sport, desc: "Sports"}
-    - {id: 82, cat: TV/FOREIGN, desc: "TV/Non-English"}
+    - {id: 82, cat: TV/Foreign, desc: "TV/Non-English"}
     - {id: 93, cat: Audio, desc: "Music/Packs"}
     - {id: 99, cat: TV/HD, desc: "TV/x265"}
 
   modes:
-    search: [q, imdbid]
+    search: [q]
     tv-search: [q, season, ep, imdbid]
     movie-search: [q, imdbid]
     music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info
+    type: info
+    label: How to get the Cookie
+    default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
 
 login:
-  path: login.php
-  method: form
-  form: form[action="do-login.php"]
+  method: cookie
   inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-  error:
-    - selector: td.embedded:has(h2:contains("failed"))
+    cookie: "{{ .Config.cookie }}"
   test:
     path: t
 
 search:
   paths:
-    # https://torrenting.com/t?29=&34=&30=&q=&qf=ti
+    # https://torrenting.com/t?1=&5=&free=on&q=climax&qf=ti
     - path: t
   inputs:
-    $raw: "{{ range .Categories }}{{.}}=&{{end}}"
-    q: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-    # ti title, ta tags, all title tags descr, adv advanced
-    qf: "{{ if .Query.IMDBID }}adv{{else}}ti{{end}}"
+    $raw: "{{ range .Categories }}{{.}}=&{{end}}{{ if .Config.freeleech }}free=on&{{ else }}{{ end }}"
+    q: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    qf: "{{ if .Query.IMDBID }}adv{{ else }}ti{{ end }}"
 
   rows:
     selector: table#torrentsTable > tbody > tr:has(td.torrentNameInfo)
 
   fields:
-    download:
-      selector: a[href^="/download.php/"]
-      attribute: href
-    title:
-      selector: a[href^="/details.php?id="]
-    details:
-      selector: a[href^="/details.php?id="]
-      attribute: href
     category:
       selector: a[href^="?"]
       attribute: href
       filters:
         - name: replace
           args: ["?", ""]
+    title:
+      selector: a[href^="/details.php?id="]
+    details:
+      selector: a[href^="/details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="/download.php/"]
+      attribute: href
     date:
       selector: td.torrentNameInfo > div
       filters:
@@ -93,8 +101,6 @@ search:
     size:
       selector: td:nth-last-child(3)
     downloadvolumefactor:
-      text: 1
-    downloadvolumefactor:
       case:
         "span:contains(\"FreeLeech\")": 0
         "*": 1
@@ -103,6 +109,6 @@ search:
     minimumratio:
       text: 1.1
     minimumseedtime:
-       # 3 days
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
       text: 259200
 # engine n/a

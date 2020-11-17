@@ -54,7 +54,7 @@ namespace Jackett.Common.Indexers.Feeds
                 Title = item.FirstValue("title"),
                 Guid = new Uri(item.FirstValue("guid")),
                 Link = new Uri(item.FirstValue("link")),
-                Comments = new Uri(item.FirstValue("comments")),
+                Details = new Uri(item.FirstValue("comments")),
                 PublishDate = DateTime.Parse(item.FirstValue("pubDate")),
                 Category = new List<int> { int.Parse(attributes.First(e => e.Attribute("name").Value == "category").Attribute("value").Value) },
                 Size = size,
@@ -63,7 +63,7 @@ namespace Jackett.Common.Indexers.Feeds
                 Seeders = seeders,
                 Peers = peers,
                 InfoHash = attributes.First(e => e.Attribute("name").Value == "infohash").Attribute("value").Value,
-                MagnetUri = new Uri(attributes.First(e => e.Attribute("name").Value == "magneturl").Attribute("value").Value),
+                MagnetUri = new Uri(attributes.First(e => e.Attribute("name").Value == "magneturl").Attribute("value").Value)
             };
             return release;
         }

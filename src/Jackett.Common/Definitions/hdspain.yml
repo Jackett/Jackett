@@ -17,23 +17,29 @@ caps:
     - {id: 6, cat: TV/Documentary, desc: "Documentales"}
     - {id: 11, cat: TV/Sport, desc: "Deportes"}
     - {id: 7, cat: Audio/Video, desc: "Música/Espec."}
-    - {id: 9, cat: TV/OTHER, desc: "Programas TV"}
+    - {id: 9, cat: TV/Other, desc: "Programas TV"}
     - {id: 8, cat: Audio/Lossless, desc: "Audios"}
     - {id: 10, cat: XXX/x264, desc: "XXX"}
+
   modes:
     search: [q]
     tv-search: [q]
     movie-search: [q]
     music-search: [q]
 
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info
+    type: info
+    label: How to get the Cookie
+    default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
+
 login:
-  path: index.php
-  method: form
+  method: cookie
   inputs:
-    usuario: "{{ .Config.username }}"
-    contrasena: "{{ .Config.password }}"
-  error:
-    - selector: p.error
+    cookie: "{{ .Config.cookie }}"
   test:
     path: index.php
     selector: .tcabecera
@@ -44,16 +50,18 @@ search:
     - name: re_replace
       args: ["(?i)\\bS0*(\\d+)\\b", "T$1"]
     - name: re_replace
-      args: ["S0?(\\d{1,2})E(\\d{1,2})", "$1x$2"]
+      args: ["(?i)S0?(\\d{1,2})E(\\d{1,2})", "$1x$2"]
   inputs:
     sec: listado
     ord: 9
     b: "{{ .Keywords }}"
-    ver: "0"
-    relanz: "0"
+    ver: 0
+    relanz: 0
     $raw: "{{range .Categories}}&cat[]={{.}}{{end}}"
+
   rows:
     selector: "table.listatorrents tr:not(:first-child)"
+
   fields:
     category:
       selector: td.categorias a
@@ -61,8 +69,6 @@ search:
       filters:
         - name: querystring
           args: cat
-    extras:
-      text: ""
     extras:
       optional: true
       selector: td.titulo a[class]
@@ -83,9 +89,12 @@ search:
     details:
       selector: td.titulo a[id]
       attribute: href
-    comments:
-      selector: td.foro a
+    download:
+      selector: td.descargar a
       attribute: href
+    description:
+      optional: true
+      selector: td.titulo a[class]
     size:
       selector: td.tamano
     seeders:
@@ -137,14 +146,12 @@ search:
           args: ["Noviembre", "November"]
         - name: replace
           args: ["Diciembre", "December"]
+        - name: append
+          args: " +01:00" # CET
         - name: dateparse
-          args: "Monday 2 January 2006, 15:04"
-    download:
-      selector: td.descargar a
-      attribute: href
-
+          args: "Monday 2 January 2006, 15:04 -07:00"
     downloadvolumefactor:
-      text: "1"
+      text: 1
     downloadvolumefactor:
       optional: true
       selector: td.descargar a b strong
@@ -153,9 +160,8 @@ search:
           args: [" X2", ""]
         - name: replace
           args: ["Freeleech", "0"]
-
     uploadvolumefactor:
-      text: "1"
+      text: 1
     uploadvolumefactor:
       optional: true
       selector: td.descargar a b strong
@@ -163,9 +169,7 @@ search:
         - name: replace
           args: ["Freeleech X2", "2"]
     minimumratio:
-      text: "1.0"
+      text: 1.0
     minimumseedtime:
-      text: "345600"
-    description:
-      optional: true
-      selector: td.titulo a[class]
+      text: 345600
+# engine tbd

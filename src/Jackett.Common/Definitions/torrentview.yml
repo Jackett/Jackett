@@ -7,7 +7,7 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://torrentview15.net/
+  - https://torrentview23.net/
 legacylinks:
   - https://torrentview.net/
   - https://torrentview3.net/
@@ -22,6 +22,14 @@ legacylinks:
   - https://torrentview12.net/
   - https://torrentview13.net/
   - https://torrentview14.net/
+  - https://torrentview15.net/
+  - https://torrentview16.net/
+  - https://torrentview17.net/
+  - https://torrentview18.net/
+  - https://torrentview19.net/
+  - https://torrentview20.net/
+  - https://torrentview21.net/
+  - https://torrentview22.net/
 
 caps:
   categorymappings:
@@ -37,6 +45,9 @@ caps:
 
   modes:
     search: [q]
+    tv-search: [q]
+    movie-search: [q]
+    music-search: [q]
 
 settings: []
 
@@ -55,7 +66,7 @@ search:
     gr_id: ""
     # search in: title
     sfl: wr_subject
-    stx: "{{ if .Keywords }}{{ .Keywords }}{{else}}금요일{{end}}"
+    stx: "{{ if .Keywords }}{{ .Keywords }}{{ else }}금요일{{ end }}"
     # search operand: or, and
     sop: and
 
@@ -81,8 +92,10 @@ search:
       selector: time
       attribute: datetime
       filters:
+        - name: replace
+          args: ["T", " "]
         - name: dateparse
-          args: "2006-01-02T15:04:05+09:00"
+          args: "2006-01-02 15:04:05+09:00"
     cat:
       selector: div.media-heading > a[href^="./board.php"]
       attribute: href
@@ -90,7 +103,7 @@ search:
         - name: querystring
           args: bo_table
     size:
-      text: "{{ if ne .Result.cat \"mov\" }}512 MB{{else}}2 GB{{end}}"
+      text: "{{ if ne .Result.cat \"mov\" }}512 MB{{ else }}2 GB{{ end }}"
     seeders:
       text: 1
     leechers:

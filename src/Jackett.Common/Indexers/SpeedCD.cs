@@ -39,8 +39,22 @@ namespace Jackett.Common.Indexers
                    link: "https://speed.cd/",
                    caps: new TorznabCapabilities
                    {
-                       SupportsImdbMovieSearch = true
-                       // SupportsImdbTVSearch = true (supported by the site but disabled due to #8107)
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q, MovieSearchParam.ImdbId
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
+                       },
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q
+                       }
                    },
                    configService: configService,
                    client: wc,
@@ -77,13 +91,14 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(39, TorznabCatType.ConsoleWii, "Games/Wii");
             AddCategoryMapping(45, TorznabCatType.ConsolePS3, "Games/PS3");
             AddCategoryMapping(35, TorznabCatType.Console, "Games/Nintendo");
-            AddCategoryMapping(33, TorznabCatType.ConsoleXbox360, "Games/XboX360");
-            AddCategoryMapping(46, TorznabCatType.PCPhoneOther, "Mobile");
+            AddCategoryMapping(33, TorznabCatType.ConsoleXBox360, "Games/XboX360");
+            AddCategoryMapping(46, TorznabCatType.PCMobileOther, "Mobile");
             AddCategoryMapping(24, TorznabCatType.PC0day, "Apps/0DAY");
             AddCategoryMapping(51, TorznabCatType.PCMac, "Mac");
             AddCategoryMapping(54, TorznabCatType.Books, "Educational");
             AddCategoryMapping(27, TorznabCatType.Books, "Books-Mags");
             AddCategoryMapping(26, TorznabCatType.Audio, "Music/Audio");
+            AddCategoryMapping(3, TorznabCatType.Audio, "Music/Flac");
             AddCategoryMapping(44, TorznabCatType.Audio, "Music/Pack");
             AddCategoryMapping(29, TorznabCatType.AudioVideo, "Music/Video");
         }
@@ -103,7 +118,7 @@ namespace Jackett.Common.Indexers
             };
             var result = await RequestLoginAndFollowRedirect(LoginUrl1, pairs, null, true, null, SiteLink);
             var tokenRegex = new Regex(@"name=\\""a\\"" value=\\""([^""]+)\\""");
-            var matches = tokenRegex.Match(result.Content);
+            var matches = tokenRegex.Match(result.ContentString);
             if (!matches.Success)
                 throw new Exception("Error parsing the login form");
             var token = matches.Groups[1].Value;
@@ -115,12 +130,12 @@ namespace Jackett.Common.Indexers
             };
             result = await RequestLoginAndFollowRedirect(LoginUrl2, pairs, result.Cookies, true, null, SiteLink);
 
-            await ConfigureIfOK(result.Cookies, result.Content?.Contains("/browse.php") == true, () =>
+            await ConfigureIfOK(result.Cookies, result.ContentString?.Contains("/browse.php") == true, () =>
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(result.Content);
+                var dom = parser.ParseDocument(result.ContentString);
                 var errorMessage = dom.QuerySelector("h5")?.TextContent;
-                if (result.Content.Contains("Wrong Captcha!"))
+                if (result.ContentString.Contains("Wrong Captcha!"))
                     errorMessage = "Captcha required due to a failed login attempt. Login via a browser to whitelist your IP and then reconfigure Jackett.";
                 throw new Exception(errorMessage);
             });
@@ -150,17 +165,17 @@ namespace Jackett.Common.Indexers
             }
 
             var searchUrl = SearchUrl + string.Join("/", qc);
-            var response = await RequestStringWithCookiesAndRetry(searchUrl);
-            if (!response.Content.Contains("/logout.php")) // re-login
+            var response = await RequestWithCookiesAndRetryAsync(searchUrl);
+            if (!response.ContentString.Contains("/logout.php")) // re-login
             {
                 await DoLogin();
-                response = await RequestStringWithCookiesAndRetry(searchUrl);
+                response = await RequestWithCookiesAndRetryAsync(searchUrl);
             }
 
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(response.Content);
+                var dom = parser.ParseDocument(response.ContentString);
                 var rows = dom.QuerySelectorAll("div.boxContent > table > tbody > tr");
 
                 foreach (var row in rows)
@@ -169,7 +184,7 @@ namespace Jackett.Common.Indexers
 
                     var title = row.QuerySelector("td[class='lft'] > div > a").TextContent.Trim();
                     var link = new Uri(SiteLink + row.QuerySelector("img[title='Download']").ParentElement.GetAttribute("href").TrimStart('/'));
-                    var comments = new Uri(SiteLink + row.QuerySelector("td[class='lft'] > div > a").GetAttribute("href").TrimStart('/'));
+                    var details = new Uri(SiteLink + row.QuerySelector("td[class='lft'] > div > a").GetAttribute("href").TrimStart('/'));
                     var size = ReleaseInfo.GetBytes(cells[5].TextContent);
                     var grabs = ParseUtil.CoerceInt(cells[6].TextContent);
                     var seeders = ParseUtil.CoerceInt(cells[7].TextContent);
@@ -186,7 +201,7 @@ namespace Jackett.Common.Indexers
                         Title = title,
                         Link = link,
                         Guid = link,
-                        Comments = comments,
+                        Details = details,
                         PublishDate = publishDate,
                         Category = MapTrackerCatToNewznab(cat),
                         Size = size,
@@ -204,7 +219,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
             return releases;
         }

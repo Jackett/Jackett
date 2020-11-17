@@ -90,7 +90,7 @@ login:
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
-    returnto: "index.php"
+    returnto: index.php
     logout: ""
   error:
     - selector: table.message:contains("Error")
@@ -143,8 +143,10 @@ search:
     date:
       selector: td:nth-child(5)
       filters:
+        - name: append
+          args: " -00:00" # GMT
         - name: dateparse
-          args: "2006-01-0215:04:05"
+          args: "2006-01-0215:04:05 -07:00"
     size:
       selector: td:nth-child(6)
     grabs:
@@ -160,4 +162,6 @@ search:
       text: 1
     uploadvolumefactor:
       text: 1
+    minimumratio:
+      text: 0.25
 # EzTorrent 0.7

@@ -12,11 +12,11 @@ legacylinks:
 
 caps:
   categories:
-    "Music": Audio
+    Music: Audio
 
   modes:
     search: [q]
-    music-search: [q, album, artist, label, year]
+    music-search: [q, artist]
 
 login:
   path: login.php
@@ -36,10 +36,6 @@ login:
   test:
     path: browse.php
     selector: a[href="logout.php"]
-
-ratio:
-  path: browse.php
-  selector: img:contains("Ratio =") > img
 
 download:
   method: get
@@ -72,8 +68,7 @@ search:
           args: ["download2.php?id=", "download.php/"]
         - name: append
           args: "/{{ .Result.title }}.torrent"
-    banner:
-      optional: true
+    poster:
       selector: td:nth-child(2) a
       attribute: onmouseover
       filters:

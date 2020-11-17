@@ -139,8 +139,9 @@ namespace Jackett.Server.Controllers
 
             if (!resultController.CurrentIndexer.CanHandleQuery(resultController.CurrentQuery))
             {
-                context.Result = ResultsController.GetErrorActionResult(context.RouteData, HttpStatusCode.BadRequest, 201, $"{resultController.CurrentIndexer.Id} " +
-                    $"does not support the requested query. Please check the capabilities (t=caps) and make sure the search mode and categories are supported.");
+                context.Result = ResultsController.GetErrorActionResult(context.RouteData, HttpStatusCode.BadRequest, 201, 
+                    $"{resultController.CurrentIndexer.Id} does not support the requested query. " +
+                    "Please check the capabilities (t=caps) and make sure the search mode and parameters are supported.");
 
             }
         }
@@ -211,28 +212,26 @@ namespace Jackett.Server.Controllers
             var manualResult = new ManualSearchResult();
             var trackers = IndexerService.GetAllIndexers().ToList().Where(t => t.IsConfigured);
             if (request.Tracker != null)
-            {
                 trackers = trackers.Where(t => request.Tracker.Contains(t.Id));
-            }
-
             trackers = trackers.Where(t => t.CanHandleQuery(CurrentQuery));
 
-            var tasks = trackers.ToList().Select(t => t.ResultsForQuery(CurrentQuery)).ToList();
+            var isMetaIndexer = request.Tracker == null || request.Tracker.Length > 1;
+            var tasks = trackers.ToList().Select(t => t.ResultsForQuery(CurrentQuery, isMetaIndexer)).ToList();
             try
             {
                 var aggregateTask = Task.WhenAll(tasks);
                 await aggregateTask;
             }
-            catch (AggregateException aex)
+            catch (AggregateException e)
             {
-                foreach (var ex in aex.InnerExceptions)
+                foreach (var ex in e.InnerExceptions)
                 {
                     logger.Error(ex);
                 }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                logger.Error(ex);
+                logger.Error(e);
             }
 
             manualResult.Indexers = tasks.Select(t =>
@@ -352,16 +351,34 @@ namespace Jackett.Server.Controllers
                     return GetErrorXML(201, "Incorrect parameter: invalid imdbid format");
                 }
 
-                if (CurrentQuery.IsMovieSearch && !CurrentIndexer.TorznabCaps.SupportsImdbMovieSearch)
+                if (CurrentQuery.IsMovieSearch && !CurrentIndexer.TorznabCaps.MovieSearchImdbAvailable)
                 {
                     logger.Warn($"A search request with imdbid from {Request.HttpContext.Connection.RemoteIpAddress} was made but the indexer {CurrentIndexer.DisplayName} doesn't support it.");
                     return GetErrorXML(203, "Function Not Available: imdbid is not supported for movie search by this indexer");
                 }
 
-                if (CurrentQuery.IsTVSearch && !CurrentIndexer.TorznabCaps.SupportsImdbTVSearch)
+                if (CurrentQuery.IsTVSearch && !CurrentIndexer.TorznabCaps.TvSearchImdbAvailable)
                 {
                     logger.Warn($"A search request with imdbid from {Request.HttpContext.Connection.RemoteIpAddress} was made but the indexer {CurrentIndexer.DisplayName} doesn't support it.");
                     return GetErrorXML(203, "Function Not Available: imdbid is not supported for TV search by this indexer");
+                }
+            }
+
+            if (CurrentQuery.TmdbID != null)
+            {
+                if (CurrentQuery.IsMovieSearch && !CurrentIndexer.TorznabCaps.MovieSearchTmdbAvailable)
+                {
+                    logger.Warn($"A search request with tmdbid from {Request.HttpContext.Connection.RemoteIpAddress} was made but the indexer {CurrentIndexer.DisplayName} doesn't support it.");
+                    return GetErrorXML(203, "Function Not Available: tmdbid is not supported for movie search by this indexer");
+                }
+            }
+
+            if (CurrentQuery.TvdbID != null)
+            {
+                if (CurrentQuery.IsTVSearch && !CurrentIndexer.TorznabCaps.TvSearchAvailable)
+                {
+                    logger.Warn($"A search request with tvdbid from {Request.HttpContext.Connection.RemoteIpAddress} was made but the indexer {CurrentIndexer.DisplayName} doesn't support it.");
+                    return GetErrorXML(203, "Function Not Available: tvdbid is not supported for movie search by this indexer");
                 }
             }
 
@@ -422,10 +439,10 @@ namespace Jackett.Server.Controllers
 
                 return Content(xml, "application/rss+xml", Encoding.UTF8);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                logger.Error(ex);
-                return GetErrorXML(900, ex.ToString());
+                logger.Error(e);
+                return GetErrorXML(900, e.ToString());
             }
         }
 
@@ -505,7 +522,7 @@ namespace Jackett.Server.Controllers
                 {
                     release_name = release.Title + "[" + CurrentIndexer.DisplayName + "]", // Suffix the indexer so we can see which tracker we are using in CPS as it just says torrentpotato >.>
                     torrent_id = release.Guid.AbsoluteUri, // GUID and (Link or Magnet) are mandatory
-                    details_url = release.Comments?.AbsoluteUri,
+                    details_url = release.Details?.AbsoluteUri,
                     download_url = (release.Link != null ? release.Link.AbsoluteUri : release.MagnetUri.AbsoluteUri),
                     imdb_id = release.Imdb.HasValue ? ParseUtil.GetFullImdbID("tt" + release.Imdb) : null,
                     freeleech = (release.DownloadVolumeFactor == 0 ? true : false),

@@ -1,7 +1,7 @@
 ---
 id: fouducinema
 name: Fou-Du-Cinema
-description: "Fou-Du-Cinema is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
+description: "Fou-Du-Cinema (FdC) is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: fr-fr
 type: private
 encoding: UTF-8
@@ -10,156 +10,248 @@ links:
 
 caps:
   categorymappings:
-    - {id: 1, cat: TV/Documentary, desc: "Documentaires - Films"}
-    - {id: 42, cat: Movies/3D, desc: "Films - 3D"}
-    - {id: 43, cat: Movies/UHD, desc: "Films - 4K"}
-    - {id: 2, cat: TV/Anime, desc: "Films - Animation"}
-    - {id: 45, cat: Movies/WEBDL, desc: "Films - BDRiP/BRRiP"}
-    - {id: 3, cat: Movies/BluRay, desc: "Films - Bluray 1080p"}
-    - {id: 4, cat: Movies/BluRay, desc: "Films - BluRay 720p"}
-    - {id: 6, cat: Movies/DVD, desc: "Films - DVD-R"}
-    - {id: 7, cat: Movies/WEBDL, desc: "Films - DVDRIP"}
-    - {id: 8, cat: Movies/SD, desc: "Films - F-SCR"}
-    - {id: 5, cat: Movies/BluRay, desc: "Films - Full BluRay"}
-    - {id: 9, cat: TV/HD, desc: "Films - HDTV"}
-    - {id: 47, cat: TV/HD, desc: "Films - HDTV-1080P"}
-    - {id: 46, cat: TV/HD, desc: "Films - HDTV-720P"}
-    - {id: 10, cat: TV/HD, desc: "Films - M-HD"}
-    - {id: 11, cat: Movies, desc: "Films - PACK"}
-    - {id: 12, cat: TV/WEB-DL, desc: "Films - TVRIP"}
-    - {id: 48, cat: Movies/SD, desc: "Films - VHS"}
-    - {id: 14, cat: Movies/WEBDL, desc: "Films - WEBRIP-DL"}
-    - {id: 44, cat: XXX, desc: "Films - XXX"}
-    - {id: 15, cat: Console/3DS, desc: "Jeux - 3DS-DS"}
-    - {id: 16, cat: Console, desc: "Jeux - ANDROID"}
-    - {id: 17, cat: Console, desc: "Jeux - IOS-OSX"}
-    - {id: 18, cat: PC/Games, desc: "Jeux - PC"}
-    - {id: 19, cat: Console/PS3, desc: "Jeux - PSP-PSX"}
-    - {id: 20, cat: Console/Wii, desc: "Jeux - WII"}
-    - {id: 21, cat: Console/WiiU, desc: "Jeux - WII-U"}
-    - {id: 22, cat: Console/Xbox 360, desc: "Jeux - XBOX 360/720"}
-    - {id: 23, cat: Books, desc: "Livres - BD"}
-    - {id: 24, cat: Books, desc: "Livres - Press-Mag"}
-    - {id: 25, cat: Books, desc: "Livres - Romans"}
-    - {id: 26, cat: PC/Mac, desc: "lLogiciels - APPLE"}
-    - {id: 27, cat: PC, desc: "Logiciels - LINUX"}
-    - {id: 28, cat: PC/Phone-Other, desc: "Logiciels - SMARTPHONE"}
-    - {id: 29, cat: PC/0day, desc: "Logiciels - WINDOWS"}
-    - {id: 30, cat: TV/Anime, desc: "Series - Animation"}
-    - {id: 33, cat: TV/HD, desc: "Series - Blu-Ray"}
-    - {id: 34, cat: TV/SD, desc: "Series - DVD-R"}
-    - {id: 35, cat: TV/WEB-DL, desc: "Series - DVDRIP"}
-    - {id: 31, cat: TV/HD, desc: "Series - HD 1080p"}
-    - {id: 32, cat: TV/HD, desc: "Series - HD 720p"}
-    - {id: 36, cat: TV/HD, desc: "Series - HDTV"}
-    - {id: 37, cat: TV, desc: "Series - M-HD"}
-    - {id: 38, cat: TV, desc: "Series - Pack"}
-    - {id: 39, cat: TV, desc: "Series - TVRIP"}
-    - {id: 41, cat: TV, desc: "Series - WEBRIP-DL"}
+    # when refreshing categories dont forget to update the category case block
+    - {id: 65, cat: TV/Documentary, desc: "Documentaires Divers"}
+    - {id: 66, cat: TV/Documentary, desc: "Documentaires audio"}
+    - {id: 2, cat: Movies/DVD, desc: "Film DVD"}
+    - {id: 4, cat: Movies/HD, desc: "Film 1080P"}
+    - {id: 15, cat: Movies/BluRay, desc: "Film Bluray"}
+    - {id: 16, cat: Movies/WEB-DL, desc: "Film Web"}
+    - {id: 17, cat: Movies/Other, desc: "Film Iso"}
+    - {id: 19, cat: Movies/HD, desc: "Film 720P"}
+    - {id: 59, cat: Movies/Other, desc: "Film Divers"}
+    - {id: 67, cat: Movies/Other, desc: "Film Vob"}
+    - {id: 69, cat: Movies/DVD, desc: "Film DVD-r"}
+    - {id: 46, cat: TV/HD, desc: "Série 1080P"}
+    - {id: 48, cat: TV/HD, desc: "Série Bluray"}
+    - {id: 60, cat: TV/Other, desc: "Série Divers"}
+    - {id: 12, cat: TV/Other, desc: "Série DVDRip"}
+    - {id: 30, cat: TV/HD, desc: "Série 720P"}
+    - {id: 23, cat: TV/WEB-DL, desc: "Série Web"}
+    - {id: 44, cat: TV/HD, desc: "Pack Séries 1080P"}
+    - {id: 38, cat: TV/Other, desc: "Pack Séries intégrale"}
+    - {id: 41, cat: TV/WEB-DL, desc: "Pack Séries Web"}
+    - {id: 45, cat: TV/HD, desc: "Pack Séries 720P"}
+    - {id: 63, cat: TV/Other, desc: "Pack Séries Divers"}
+    - {id: 10, cat: XXX, desc: "XxX Film"}
+    - {id: 13, cat: PC/0day, desc: "Apps Win"}
+    - {id: 14, cat: PC/Mac, desc: "Apps Mac"}
+    - {id: 52, cat: PC/Mobile-iOS, desc: "Apps Iphone"}
+    - {id: 53, cat: PC/Mobile-Android, desc: "Apps android"}
+    - {id: 5, cat: Audio/MP3, desc: "Music Mp3"}
+    - {id: 6, cat: Audio/Lossless, desc: "Music FLAC"}
+    - {id: 7, cat: PC/Games, desc: "Jeux Win"}
+    - {id: 8, cat: Console/PS3, desc: "Jeux PS3"}
+    - {id: 54, cat: PC/Games, desc: "Jeux Pc"}
+    - {id: 55, cat: Console/PS4, desc: "Jeux PS4"}
+    - {id: 56, cat: Console/XBox 360, desc: "Jeux XBOX 360"}
+    - {id: 57, cat: Console/Other, desc: "Jeux androïd"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: multilang
+    type: checkbox
+    label: Replace MULTI by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTI by this language
+    default: FRENCH
+    options:
+      FRENCH: FRENCH
+      MULTI.FRENCH: MULTI.FRENCH
+      ENGLISH: ENGLISH
+      MULTI.ENGLISH: MULTI.ENGLISH
+      VOSTFR: VOSTFR
+      MULTI.VOSTFR: MULTI.VOSTFR
+  - name: vostfr
+    type: checkbox
+    label: Replace VOSTFR with ENGLISH
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: added
+    options:
+      added: created
+      seeds: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
 
 login:
-  path: TTV3/Connexion
-  method: post
+  path: login.php
+  method: form
+  form: form[action="/login.php"]
+  cookies: ["JAVA=OK"] # avoid jscheck redirect
+  captcha:
+    type: image
+    selector: img[src^="cap/captcha_math.php?codeCaptcha="]
+    input: stringCaptcha
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
   error:
-    - selector: font[color="red"]
+    - selector: div#login_error
   test:
-    path: TTV3/Bienvenue
-    selector: a[href$="/TTV3/Deconnexion"]
-
+    path: index.php
+    selector: a[href="logout.php"]
 
 download:
   before:
-    # <form action='https://fou-du-cinema.net/TTV3/Torrents/Thank' name='thanksform' method='post'>
-    # <input type=hidden name=torrent value=329>
-    path: TTV3/Torrents/Thank
+    path: ajax_det_poll.php
     method: post
     inputs:
-      torrent: "{{ re_replace .DownloadUri.PathAndQuery \"^(.+?)(\\d+)$\" \"$2\" }}"
-  selector: a[href*="/Telechargement/"]
-  attribute: href
+      set_thanks: Merci
+      det_id: "{{ .DownloadUri.Query.torrent }}"
+      ajax: yes
 
 search:
   paths:
-    # https://fou-du-cinema.net/TTV3/Torrents/Recherche?search=mortal+legends&cat=0&incldead=1&freeleech=0&lang=0
-    # categories for searching are unsupported
-    - path: TTV3/Torrents/Recherche
+    - path: selection.php
   inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
-    # 0 active 1 incldead 2 onlydead
-    incldead: 1
-    # 0 not important 1 no 2 yes
-    freeleech: 0
-    # 0 all 1 German etc...
-    lang: 0
+    # 0 name, 1 descr, 2 both
+    blah: 0
+    orderby: "{{ .Config.sort }}"
+    sort: "{{ .Config.type }}"
+    # site does not support imdbid searches or provide imdb links in results
 
   rows:
-    selector: tr:has(a[onmouseover])
+    selector: div.content_wrap > div.selection_wrap:has(a[href^="details.php?id="])
 
   fields:
     category:
-      selector: a[href*="/SousCategories/"]
-      attribute: href
+      selector: div.kat_cat_pic
       filters:
-        - name: regexp
-          args: (\d+)$
-    title:
-      selector: a[href*="/SousCategories/"]
-      attribute: alt
+      case:
+        ":contains(\"Documentaires\"):contains(\"Divers\")": 65
+        ":contains(\"Documentaires\"):contains(\"audio\")": 66
+        ":contains(\"Film\"):contains(\"DVD\")": 2
+        ":contains(\"Film\"):contains(\"1080P\")": 4
+        ":contains(\"Film\"):contains(\"Bluray\")": 15
+        ":contains(\"Film\"):contains(\"Web\")": 16
+        ":contains(\"Film\"):contains(\"Iso\")": 17
+        ":contains(\"Film\"):contains(\"720P\")": 19
+        ":contains(\"Film\"):contains(\"Divers\")": 59
+        ":contains(\"Film\"):contains(\"Vob\")": 67
+        ":contains(\"Film\"):contains(\"DVD-r\")": 69
+        ":contains(\"Série\"):contains(\"1080P\")": 46
+        ":contains(\"Série\"):contains(\"Bluray\")": 48
+        ":contains(\"Série\"):contains(\"Divers\")": 60
+        ":contains(\"Série\"):contains(\"DVDRip\")": 12
+        ":contains(\"Série\"):contains(\"720P\")": 30
+        ":contains(\"Série\"):contains(\"Web\")": 23
+        ":contains(\"Séries\"):contains(\"1080P\")": 44
+        ":contains(\"Séries\"):contains(\"intégrale\")": 38
+        ":contains(\"Séries\"):contains(\"Web\")": 41
+        ":contains(\"Séries\"):contains(\"720P\")": 45
+        ":contains(\"Séries\"):contains(\"Divers\")": 63
+        ":contains(\"XxX\"):contains(\"Film\")": 10
+        ":contains(\"Apps\"):contains(\"Win\")": 13
+        ":contains(\"Apps\"):contains(\"Mac\")": 14
+        ":contains(\"Apps\"):contains(\"Iphone\")": 52
+        ":contains(\"Apps\"):contains(\"android\")": 53
+        ":contains(\"Music\"):contains(\"Mp3\")": 5
+        ":contains(\"Music\"):contains(\"FLAC\")": 6
+        ":contains(\"Jeux\"):contains(\"Win\")": 7
+        ":contains(\"Jeux\"):contains(\"PS3\")": 8
+        ":contains(\"Jeux\"):contains(\"Pc\")": 54
+        ":contains(\"Jeux\"):contains(\"PS4\")": 55
+        ":contains(\"Jeux\"):contains(\"XBOX 360\")": 56
+        ":contains(\"Jeux\"):contains(\"androïd\")": 57
+    title_phase1:
+      selector: a[href^="details.php?id="]
+    title_multilang:
+      text: "{{ .Result.title_phase1 }}"
       filters:
-        - name: regexp
-          args: "^..(.+)"
         - name: re_replace
-          args: ["\\.", " "]
+          args: ["(?i)([\\s|\\.|-]multi[\\s|\\.|-])", ".{{ .Config.multilanguage }}."]
+    title_phase2:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    title_vostfr:
+      text: "{{ .Result.title_phase2 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)([\\s|\\.|-]vostfr[\\s|\\.|-])", ".ENGLISH."]
+        - name: re_replace
+          args: ["(?i)([\\s|\\.|-]subfrench[\\s|\\.|-])", ".ENGLISH."]
+    title:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
     details:
-      selector: a[onmouseover]
+      selector: a[href^="details.php?id="]
       attribute: href
     download:
-      selector: a[onmouseover]
+      selector: a[href^="details.php?id="]
       attribute: href
-    banner:
-      selector: a[onmouseover]
-      attribute: onmouseover
       filters:
-        - name: regexp
-          args: "src= (.*?)><"
-    date:
-      selector: font[color="#F2F2F2"]
-      filters:
-        - name: regexp
-          args: "Il\\s*y\\s*a\\s*(\\d+\\s*\\w+)\\s*"
         - name: replace
-          args: ["heure", "hour"]
-        - name: replace
-          args: ["Jour", "day"]
-        - name: replace
-          args: ["Semaine", "week"]
-        - name: replace
-          args: ["Mois", "months"]
-        - name: replace
-          args: ["An", "year"]
-        - name: append
-          args: " ago"
-    size:
-      selector: td:nth-last-child(5)
-    grabs:
-      selector: td:nth-last-child(4)
+          args: ["details.php?id=", "download.php?torrent="]
     seeders:
-      selector: td:nth-last-child(3)
+      selector: div.selection_unter_aa > b
     leechers:
-      selector: td:nth-last-child(2)
+      selector: div.selection_unter_aaa > b
+    date:
+      # Aujourd'hui à 06:26:25
+      # Hier à 05:15:19
+      selector: div.selection_unter_ab:not(:contains("."))
+      optional: true
+      filters:
+        - name: replace
+          args: ["Aujourd'hui à ", "Today "]
+        - name: replace
+          args: ["Hier à ", "Yesterday "]
+        - name: append
+          args: " +01:00" # CET
+        - name: fuzzytime
+    date:
+      # Le 17.10.2020 à 04:39:44
+      selector: div.selection_unter_ab:contains(".")
+      optional: true
+      filters:
+        - name: replace
+          args: ["Le ", ""]
+        - name: replace
+          args: ["à ", ""]
+        - name: append
+          args: " +01:00" # CET
+        - name: dateparse
+          args: "02.01.2006 15:04:05 -07:00"
+    size:
+      selector: div.selection_unter_ad
+      filters:
+        - name: replace
+          args: [",", "."]
+    grabs:
+      selector: div.selection_unter_ae
+      filters:
+        - name: replace
+          args: [" x", ""]
     downloadvolumefactor:
-      case:
-        img[src$="/images/Torrents/TLibre.png"]: 0
-        img[src$="/images/Torrents/freeleech.png"]: 0
-        "*": 1
+      text: 1
     uploadvolumefactor:
       text: 1
-# TT3.00 FRENCH
+    minimumratio:
+      text: 0.5
+    minimumseedtime:
+      # 2.5days (as seconds =  2.5 x 24 x 60 x 60)
+      text: 216000
+# 3xT

@@ -31,8 +31,18 @@ namespace Jackett.Common.Indexers
                    link: "https://awesome-hd.me/",
                    caps: new TorznabCapabilities
                    {
-                       SupportsImdbMovieSearch = true
-                       // SupportsImdbTVSearch = true (supported by the site but disabled due to #8107)
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q, MovieSearchParam.ImdbId
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
+                       }
                    },
                    configService: configService,
                    client: c,
@@ -100,13 +110,13 @@ namespace Jackett.Common.Indexers
             }
 
             var searchUrl = SearchUrl + "?" + qc.GetQueryString();
-            var results = await RequestStringWithCookies(searchUrl);
-            if (string.IsNullOrWhiteSpace(results.Content))
+            var results = await RequestWithCookiesAsync(searchUrl);
+            if (string.IsNullOrWhiteSpace(results.ContentString))
                 throw new Exception("Empty response. Please, check the Passkey.");
 
             try
             {
-                var doc = XDocument.Parse(results.Content);
+                var doc = XDocument.Parse(results.ContentString);
 
                 var errorMsg = doc.Descendants("error").FirstOrDefault()?.Value;
                 if (errorMsg?.Contains("No Results") == true)
@@ -156,7 +166,7 @@ namespace Jackett.Common.Indexers
 
                     var torrentId = torrent.FirstValue("id");
                     var groupId = torrent.FirstValue("groupid");
-                    var comments = new Uri($"{TorrentUrl}?id={groupId}&torrentid={torrentId}");
+                    var details = new Uri($"{TorrentUrl}?id={groupId}&torrentid={torrentId}");
                     var link = new Uri($"{TorrentUrl}?action=download&id={torrentId}&authkey={authkey}&torrent_pass={passkey}");
 
                     var publishDate = DateTime.Parse(torrent.FirstValue("time"));
@@ -166,15 +176,17 @@ namespace Jackett.Common.Indexers
                     var peers = seeders + int.Parse(torrent.FirstValue("leechers"));
                     var freeleech = double.Parse(torrent.FirstValue("freeleech"));
 
-                    Uri banner = null;
+                    Uri poster = null;
                     string description = null;
-                    if (!isAudio) // audio tracks don't have banner either description
+                    if (!isAudio) // audio tracks don't have poster either description
                     {
                         // small cover only for movies
-                        if (!isSerie && !string.IsNullOrWhiteSpace(torrent.Element("smallcover")?.Value))
-                            banner = new Uri(torrent.FirstValue("smallcover"));
-                        else if (!string.IsNullOrWhiteSpace(torrent.Element("cover")?.Value))
-                            banner = new Uri(torrent.FirstValue("cover"));
+                        var smallCover = torrent.Element("smallcover");
+                        var normalCover = torrent.Element("cover");
+                        if (!isSerie && !string.IsNullOrWhiteSpace(smallCover?.Value) && smallCover.Value.StartsWith("https://"))
+                            poster = new Uri(torrent.FirstValue("smallcover"));
+                        else if (!string.IsNullOrWhiteSpace(normalCover?.Value) && normalCover.Value.StartsWith("https://"))
+                            poster = new Uri(torrent.FirstValue("cover"));
 
                         description = torrent.Element("encodestatus") != null ?
                             $"Encode status: {torrent.FirstValue("encodestatus")}" : null;
@@ -185,12 +197,12 @@ namespace Jackett.Common.Indexers
                     var release = new ReleaseInfo
                     {
                         Title = title.ToString(),
-                        Comments = comments,
+                        Details = details,
                         Link = link,
                         Guid = link,
                         PublishDate = publishDate,
                         Category = cat,
-                        BannerUrl = banner,
+                        Poster = poster,
                         Description = description,
                         Imdb = imdb,
                         Size = size,
@@ -208,7 +220,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return releases;

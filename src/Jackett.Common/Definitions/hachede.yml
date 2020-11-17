@@ -17,10 +17,10 @@ caps:
     - {id: 120, cat: Movies/BluRay, desc: "Películas JMBD"}
     - {id: 34, cat: Movies/HD, desc: "Películas BDrip 1080p"}
     - {id: 99, cat: Movies/HD, desc: "Películas BDrip 720p"}
-    - {id: 140, cat: Movies/WEBDL, desc: "Películas WEB-DL AMAZON"}
-    - {id: 141, cat: Movies/WEBDL, desc: "Películas WEB-DL APPLE TV+"}
-    - {id: 142, cat: Movies/WEBDL, desc: "Películas WEB-DL HBO"}
-    - {id: 143, cat: Movies/WEBDL, desc: "Películas WEB-DL NETFLIX"}
+    - {id: 140, cat: Movies/WEB-DL, desc: "Películas WEB-DL AMAZON"}
+    - {id: 141, cat: Movies/WEB-DL, desc: "Películas WEB-DL APPLE TV+"}
+    - {id: 142, cat: Movies/WEB-DL, desc: "Películas WEB-DL HBO"}
+    - {id: 143, cat: Movies/WEB-DL, desc: "Películas WEB-DL NETFLIX"}
     - {id: 37, cat: Movies/Other, desc: "Películas HDTVrip"}
     - {id: 119, cat: Movies/HD, desc: "Películas HDiTunes"}
     - {id: 84, cat: Movies/HD, desc: "Películas MicroHD 1080p"}
@@ -33,6 +33,7 @@ caps:
     - {id: 137, cat: TV/HD, desc: "Series WEB-DL DISNEY PLUS"}
     - {id: 139, cat: TV/HD, desc: "Series WEB-DL APPLE TV+"}
     - {id: 44, cat: TV/Other, desc: "Series HDTVrip"}
+    - {id: 144, cat: TV/HD, desc: "Series WEB-DL ATRESPLAYER PREMIUM"}
     - {id: 89, cat: TV/HD, desc: "Series HDiTunes"}
     - {id: 57, cat: TV/HD, desc: "Series Full Bluray"}
     - {id: 40, cat: TV/HD, desc: "Series BDRemux"}
@@ -55,7 +56,7 @@ caps:
     - {id: 53, cat: Movies/BluRay, desc: "Documentales Full Bluray"}
     - {id: 59, cat: Movies/3D, desc: "Documentales 3D"}
     - {id: 64, cat: Movies/BluRay, desc: "Documentales BDremux"}
-    - {id: 138, cat: Movies/WEBDL, desc: "Documentales WEB-DL"}
+    - {id: 138, cat: Movies/WEB-DL, desc: "Documentales WEB-DL"}
     - {id: 122, cat: Movies/BluRay, desc: "Documentales JMBD"}
     - {id: 68, cat: Movies/HD, desc: "Documentales BDrip 1080p"}
     - {id: 106, cat: Movies/HD, desc: "Documentales BDrip 720p"}
@@ -115,22 +116,25 @@ settings:
     type: info
     label: How to get the Cookie
     default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
-
+  - name: freeleech
+    type: checkbox
+    label: Filter freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
-    default: "added"
+    default: added
     options:
-      "added": "created"
-      "seeders": "seeders"
-      "size": "size"
+      added: created
+      seeders: seeders
+      size: size
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   method: cookie
@@ -157,7 +161,7 @@ search:
     "sortOptions[sortOrder]": "{{ .Config.type }}"
 
   rows:
-    selector: table#torrents_table_classic > tbody > tr:not(:first-child), .torrent-box[id^="torrent_"]
+    selector: "table#torrents_table_classic > tbody > tr:not(:first-child), .torrent-box[id^=\"torrent_\"]{{ if .Config.freeleech }}:has(img[src$=\"/torrent_free.png\"]){{ else }}{{ end }}"
 
   fields:
     category:
@@ -169,21 +173,33 @@ search:
     title:
       selector: td.torrent_name > a, .newIndicator > a
       filters:
+        - name: re_replace
+          args: ["(?i)full", "BRDISK."] # FULL(BR/UHD) -> BRDISK
+        - name: re_replace
+          args: ["\\W", "."] # Spaces and other characters -> .
         - name: append
-          args: " [spanish]"
+          args: ".Spanish-HacheDe"
+        - name: re_replace
+          args: ["\\.+", "."] # More than 1 dot -> .
+        - name: re_replace
+          args: ["^\\.", ""] # Delete first dot
+        - name: re_replace
+          args: [".BR.", ".BDRip."] # Fix for Radarr
+        - name: re_replace
+          args: ["(?i)m720p", "MicroHD.720p"] # Fix for Radarr
+        - name: re_replace
+          args: ["(?i)m1080p", "MicroHD.1080p"] # Fix for Radarr
     details:
       selector: td.torrent_name > a, .newIndicator > a
       attribute: href
     download:
       selector: .torrentImages > span:first-child a
       attribute: href
-    banner:
-      optional: true
+    poster:
       selector: td.torrent_image div.relativeDiv div:not(.category_image) a, .previewImage a
       attribute: href
     imdb:
-      optional: true
-      selector: .torrentFlags a[href*="www.imdb.com/title/tt"]
+      selector: .torrentFlags a[href*="imdb.com/title/tt"]
       attribute: href
     date:
       selector: td.torrent_name:contains("Subido"):contains("-"), .torrentOwner:contains("Subido"):contains("-")
@@ -193,8 +209,10 @@ search:
           args: "(?<=Subido )(.*)(?= por)"
         - name: replace
           args: [": ", ":"]
+        - name: append
+          args: " +01:00" # CET
         - name: dateparse
-          args: "02-01-2006 15:04"
+          args: "02-01-2006 15:04 -07:00"
     date:
       selector: td.torrent_name:contains("Subido"):not(:contains("-")), .torrentOwner:contains("Subido"):not(:contains("-"))
       optional: true
@@ -230,8 +248,10 @@ search:
       filters:
         - name: regexp
           args: "(?<=Uploaded )(.*)(?= by)"
+        - name: append
+          args: " +01:00" # CET
         - name: dateparse
-          args: "02-01-2006 15:04"
+          args: "02-01-2006 15:04 -07:00"
     date:
       selector: td.torrent_name:contains("Uploaded"):not(:contains("-")), .torrentOwner:contains("Uploaded"):not(:contains("-"))
       optional: true

@@ -9,10 +9,8 @@ followredirect: true
 links:
   - https://www.torrentdownloads.info/
   - https://www.torrentdownloads.me/
-  - https://torrentdownloads.unblockit.id/
-  - https://torrentdownloads.unblocked.bar/
-  - https://torrentdownloads.proxyportal.pw/
-  - https://torrentdownloads.uk-unblock.pro/
+  - https://torrentdownloads.unblockit.app/
+  - https://torrentdownloads.unblocked.rest/
 legacylinks:
   - https://torrentdownloads.unblockit.pro/
   - https://torrentdownloads.unblockit.one/
@@ -23,6 +21,13 @@ legacylinks:
   - https://torrentdownloads.ind-unblock.xyz/
   - https://torrentdownloads.unblockit.me/
   - https://torrentdownloads.unblockit.pw/
+  - https://torrentdownloads.unblockit.id/
+  - https://torrentdownloads.unblockit.win/
+  - https://torrentdownloads.unblocked.bar/
+  - https://torrentdownloads.proxyportal.pw/
+  - https://torrentdownloads.uk-unblock.pro/
+  - https://torrentdownloads.unblockit.top/
+  - https://torrentdownloads.unblockit.lat/
 
 caps:
   categorymappings:
@@ -42,6 +47,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: downloadlink
@@ -58,15 +64,21 @@ download:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}/search/{{else}}/today/{{end}}"
+    - path: "{{ if .Keywords }}/search/{{ else }}/today/{{ end }}"
   inputs:
     $raw: "{{ range .Categories }}s_cat={{.}}&{{end}}"
     search: "{{ .Keywords }}"
 
   rows:
-    selector: div.inner_container > div:has(p:has(a[href^="/torrent/"]))
+    selector: div.inner_container > div:has(p:has(a[href^="/torrent/"])):not(:has(span.__cf_email__))
 
   fields:
+    category:
+      selector: img[src^="/templates/new/images/icons/menu_icon"]
+      attribute: src
+      filters:
+        - name: regexp
+          args: (\d+)
     title:
       selector: p:nth-child(1) > a
       attribute: title
@@ -87,12 +99,6 @@ search:
       selector: span:nth-child(4)
     leechers:
       selector: span:nth-child(3)
-    category:
-      selector: img[src^="/templates/new/images/icons/menu_icon"]
-      attribute: src
-      filters:
-        - name: regexp
-          args: (\d+)
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

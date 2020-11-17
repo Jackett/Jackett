@@ -6,7 +6,10 @@ language: ru-ru
 type: public
 encoding: windows-1251
 links:
-  - http://pornolive.org/ # site does not support https ERR_CONNECTION_REFUSED
+  - https://www.pornolive.org/
+legacylinks:
+  - http://pornolive.org/
+  - https://pornolive.org/
 
 caps:
   categorymappings:
@@ -14,26 +17,24 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q]
-    movie-search: [q]
 
 settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "4"
+    default: 4
     options:
-      "4": "created"
-      "7": "seeders"
-      "5": "size"
-      "1": "title"
+      4: created
+      7: seeders
+      5: size
+      1: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 search:
   paths:
@@ -65,8 +66,10 @@ search:
     date:
       selector: font.mnav
       filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "2006-01-02 15:04:05"
+          args: "2006-01-02 15:04:05 -07:00"
     size:
       selector: td:nth-child(3)
     seeders:
@@ -83,4 +86,6 @@ search:
       text: 0
     uploadvolumefactor:
       text: 1
+    minimumratio:
+      text: 0.31
 # TBDev

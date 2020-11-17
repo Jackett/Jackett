@@ -49,6 +49,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -61,22 +62,26 @@ settings:
     type: info
     label: Results Per Page
     default: For best results, change the 'Torrents per page' setting to 100 on your 'Personal Options' from the 'Personal' menu on the Crna Berza webpage.
+  - name: freeleech
+    type: checkbox
+    label: Filter freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
-    default: "4"
+    default: 4
     options:
-      "4": "created"
-      "7": "seeders"
-      "5": "size"
-      "1": "title"
+      4: created
+      7: seeders
+      5: size
+      1: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   path: login.php
@@ -95,13 +100,6 @@ login:
     path: browse.php
     selector: a[href$="/logout.php"]
 
-ratio:
-  path: browse.php
-  selector: div div font:contains("Ratio:")
-  filters:
-    - name: regexp
-      args: "Ratio:\\s(.*?)\\s\\s"
-
 search:
   paths:
     # http://www.crnaberza.com/browse.php?c52=1&c20=1&c34=1&incldead=1&search=star+trek
@@ -109,16 +107,16 @@ search:
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
-    # 0 title 1 descr 2 both
+    # 0 title, 1 descr, 2 both
     blah: 0
-    # 0 active 1 incldead 2 onlydead
+    # 0 active, 1 incldead, 2 onlydead
     incldead: 1
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
     # does not support searching imdbid and does not return imdb links
 
   rows:
-    selector: tr:has(td.trowtorrent)
+    selector: "tr:has(td.trowtorrent){{ if .Config.freeleech }}:has(img[src$=\"/pic/freedownload.gif\"]){{ else }}{{ end }}"
 
   fields:
     category:
@@ -147,13 +145,17 @@ search:
           args: ["Danas", "Today"]
         - name: replace
           args: ["Juče", "Yesterday"]
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
     date:
       # Feb 14 2019<br>10:20 AM
       optional: true
       selector: td:nth-of-type(6):not(:contains("Juče")):not(:contains("Danas"))
       filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "Jan 2 2006 03:04 PM"
+          args: "Jan 2 2006 03:04 PM -07:00"
     size:
       selector: td:nth-of-type(7)
     grabs:
@@ -171,4 +173,9 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 7 day (as seconds = 7 x 24 x 60 x 60)
+      text: 604800
 # U-232

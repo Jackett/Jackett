@@ -3,32 +3,29 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
-using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
+using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
     public class TorrentSyndikat : BaseWebIndexer
     {
-        private string SearchUrl => SiteLink + "browse.php";
-        private string LoginUrl => SiteLink + "eing2.php";
-        private string CaptchaUrl => SiteLink + "simpleCaptcha.php?numImages=1";
-        private readonly TimeZoneInfo germanyTz;
+        private string ApiBase => SiteLink + "api_9djWe8Tb2NE3p6opyqnh/v1";
 
-        private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
+        private ConfigurationDataAPIKey ConfigData
         {
-            get => (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData;
-            set => base.configData = value;
+            get => (ConfigurationDataAPIKey)configData;
+            set => configData = value;
         }
 
         public TorrentSyndikat(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
@@ -38,20 +35,32 @@ namespace Jackett.Common.Indexers
                    link: "https://torrent-syndikat.org/",
                    caps: new TorznabCapabilities
                    {
-                       SupportsImdbMovieSearch = true
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q, MovieSearchParam.ImdbId
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
+                       },
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q
+                       }
                    },
                    configService: configService,
                    client: w,
                    logger: l,
                    p: ps,
-                   configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
+                   configData: new ConfigurationDataAPIKey())
         {
             Encoding = Encoding.UTF8;
             Language = "de-de";
             Type = "private";
-
-            configData.DisplayText.Value = "Only the results from the first search result page are shown, adjust your profile settings to show the maximum.";
-            configData.DisplayText.Name = "Notice";
 
             AddCategoryMapping(2, TorznabCatType.PC, "Apps / Windows");
             AddCategoryMapping(13, TorznabCatType.PC, "Apps / Linux");
@@ -88,164 +97,179 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(33, TorznabCatType.AudioVideo, "Audio / Videos");
 
             AddCategoryMapping(17, TorznabCatType.Books, "Misc / eBooks");
-            AddCategoryMapping(5, TorznabCatType.PCPhoneOther, "Misc / Mobile");
+            AddCategoryMapping(5, TorznabCatType.PCMobileOther, "Misc / Mobile");
             AddCategoryMapping(39, TorznabCatType.Other, "Misc / Bildung");
 
-            AddCategoryMapping(36, TorznabCatType.TVFOREIGN, "Englisch / Serien");
-            AddCategoryMapping(57, TorznabCatType.TVFOREIGN, "Englisch / Serienpacks");
+            AddCategoryMapping(36, TorznabCatType.TVForeign, "Englisch / Serien");
+            AddCategoryMapping(57, TorznabCatType.TVForeign, "Englisch / Serienpacks");
             AddCategoryMapping(37, TorznabCatType.MoviesForeign, "Englisch / Filme");
             AddCategoryMapping(47, TorznabCatType.Books, "Englisch / eBooks");
             AddCategoryMapping(48, TorznabCatType.Other, "Englisch / Bildung");
             AddCategoryMapping(49, TorznabCatType.TVSport, "Englisch / Sport");
-
-            var startTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 3, 0, 0), 3, 5, DayOfWeek.Sunday);
-            var endTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 4, 0, 0), 10, 5, DayOfWeek.Sunday);
-            var delta = new TimeSpan(1, 0, 0);
-            var adjustment = TimeZoneInfo.AdjustmentRule.CreateAdjustmentRule(new DateTime(1999, 10, 1), DateTime.MaxValue.Date, delta, startTransition, endTransition);
-            TimeZoneInfo.AdjustmentRule[] adjustments = { adjustment };
-            germanyTz = TimeZoneInfo.CreateCustomTimeZone("W. Europe Standard Time", new TimeSpan(1, 0, 0), "(GMT+01:00) W. Europe Standard Time", "W. Europe Standard Time", "W. Europe DST Time", adjustments);
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            LoadValuesFromJson(configJson);
-            CookieHeader = "";
+            ConfigData.LoadValuesFromJson(configJson);
+            var releases = await PerformQuery(new TorznabQuery());
 
-            var result1 = await RequestStringWithCookies(CaptchaUrl);
-            var json1 = JObject.Parse(result1.Content);
-            var captchaSelection = json1["images"][0]["hash"];
+            await ConfigureIfOK(
+                string.Empty,
+                releases.Any(),
+                () => throw new Exception("Could not find any releases"));
 
-            var pairs = new Dictionary<string, string> {
-                { "username", configData.Username.Value },
-                { "password", configData.Password.Value },
-                { "captchaSelection", (string)captchaSelection },
-                { "submitme", "X" }
-            };
-
-            var result2 = await RequestLoginAndFollowRedirect(LoginUrl, pairs, result1.Cookies, true, null, null, true);
-
-            await ConfigureIfOK(result2.Cookies, result2.Content.Contains("/logout.php"),
-                () => throw new ExceptionWithConfigData(result2.Content, configData));
-            return IndexerConfigurationStatus.RequiresTesting;
+            return IndexerConfigurationStatus.Completed;
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var queryCollection = new NameValueCollection
-            {
-                {"incldead", "1"},
-                {"rel_type", "0"} // Alle
-            };
 
-            if (query.ImdbID != null)
+            var searchString = query.GetQueryString();
+            var queryCollection = new NameValueCollection {{"apikey", ConfigData.Key.Value}};
+
+            queryCollection.Add("limit", "50"); // Default 30
+            //queryCollection.Add("ponly", true); // Torrents with products only
+
+            if (query.ImdbIDShort != null)
             {
-                queryCollection.Add("searchin", "imdb");
-                queryCollection.Add("search", query.ImdbID);
+                queryCollection.Add("imdbId", query.ImdbIDShort);
             }
-            else
+            else if (!string.IsNullOrWhiteSpace(searchString))
             {
-                queryCollection.Add("searchin", "title");
-
-                if (!string.IsNullOrWhiteSpace(query.GetQueryString()))
-                {
-                    // use AND+wildcard operator to avoid getting to many useless results
-                    var searchStringArray = Regex.Split(
-                        query.SanitizedSearchTerm, "[ _.-]+",
-                        RegexOptions.Compiled).Select(term => $"+{term}");
-
-                    // If only season search add * wildcard to get all episodes
-                    var tvEpisode = query.GetEpisodeSearchString();
-                    if (!string.IsNullOrWhiteSpace(tvEpisode))
-                    {
-                        if (tvEpisode.StartsWith("S") && !tvEpisode.Contains("E"))
-                            tvEpisode += "*";
-                        searchStringArray = searchStringArray.Append($"+{tvEpisode}");
-                    }
-
-                    queryCollection.Add("search", string.Join(" ", searchStringArray));
-                }
-
+                // Suffix the first occurence of `s01` surrounded by whitespace with *
+                // That way we also search for single episodes in a whole season search
+                var regex = new Regex(@"(^|\s)(s\d{2})(\s|$)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                queryCollection.Add("searchstring", regex.Replace(searchString.Trim(), @"$1$2*$3"));
             }
-            foreach (var cat in MapTorznabCapsToTrackers(query))
-                queryCollection.Add("c" + cat, "1");
 
-            var searchUrl = SearchUrl + "?" + queryCollection.GetQueryString();
-
-            var results = await RequestStringWithCookiesAndRetry(searchUrl);
-
-            if (results.IsRedirect)
+            var cats = string.Join(",", MapTorznabCapsToTrackers(query));
+            if (!string.IsNullOrEmpty(cats))
             {
-                await ApplyConfiguration(null);
-                results = await RequestStringWithCookiesAndRetry(searchUrl);
+                queryCollection.Add("cats", cats);
             }
+
+            var searchUrl = ApiBase + "/browse.php?" + queryCollection.GetQueryString();
+            var response = await RequestWithCookiesAsync(searchUrl, string.Empty);
 
             try
             {
-                var parser = new HtmlParser();
-                var dom = parser.ParseDocument(results.Content);
-                var rows = dom.QuerySelectorAll("table.torrent_table > tbody > tr");
-                var globalFreeleech = dom.QuerySelector("legend:contains(\"Freeleech\")+ul > li > b:contains(\"Freeleech\")") != null;
-                foreach (var row in rows.Skip(1))
+                CheckResponseStatus(response.Status, "browse");
+
+                var jsonContent = JObject.Parse(response.ContentString);
+
+                foreach (var row in jsonContent.Value<JArray>("rows"))
                 {
+                    var dateTime = new DateTime(1970,1,1,0,0,0,0,DateTimeKind.Utc);
 
-                    var catStr = row.Children[0].FirstElementChild.GetAttribute("href").Split('=')[1].Split('&')[0];
+                    var id = row.Value<string>("id");
+                    var details = new Uri(SiteLink + "details.php?id=" + id);
+                    var seeders = row.Value<int>("seeders");
 
-                    var qLink = row.Children[2].FirstElementChild;
-
-                    var descCol = row.Children[1];
-                    var torrentTag = descCol.QuerySelectorAll("span.torrent-tag");
-                    //Empty list gives string.Empty in string.Join
-                    var description = string.Join(", ", torrentTag.Select(x => x.InnerHtml));
-                    var qCommentLink = descCol.QuerySelector("a[href*=\"details.php\"]");
-                    var comments = new Uri(SiteLink + qCommentLink.GetAttribute("href").Replace("&hit=1", ""));
-
-                    var torrentDetails = descCol.QuerySelector(".torrent_details");
-                    var rawDateStr = torrentDetails.ChildNodes[1].TextContent;
-                    var dateStr = rawDateStr.Replace("von", "")
-                                            .Replace("Heute", "Today")
-                                            .Replace("Gestern", "Yesterday");
-                    var dateGerman = DateTimeUtil.FromUnknown(dateStr);
-                    var pubDateUtc = TimeZoneInfo.ConvertTimeToUtc(dateGerman, germanyTz);
-                    var longFromString = ParseUtil.GetLongFromString(descCol.QuerySelector("a[href*=\"&searchin=imdb\"]")?.GetAttribute("href"));
-                    var sizeFileCountRowChilds = row.Children[5].Children;
-                    var seeders = ParseUtil.CoerceInt(row.Children[7].TextContent);
-                    var link = new Uri(SiteLink + qLink.GetAttribute("href"));
-                    var files = ParseUtil.CoerceInt(sizeFileCountRowChilds[2].TextContent);
-                    var leechers = ParseUtil.CoerceInt(row.Children[8].TextContent);
-                    var grabs = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(7)").TextContent);
-                    var downloadVolumeFactor = globalFreeleech || row.QuerySelector("span.torrent-tag-free") != null
-                        ? 0 : 1;
-                    var size = ReleaseInfo.GetBytes(sizeFileCountRowChilds[0].TextContent);
                     var release = new ReleaseInfo
                     {
                         MinimumRatio = 1,
-                        MinimumSeedTime = 345600, //8 days
-                        Category = MapTrackerCatToNewznab(catStr),
-                        Link = link,
-                        Description = description,
-                        Title = qCommentLink.GetAttribute("title"),
-                        Comments = comments,
-                        Guid = comments,
-                        PublishDate = pubDateUtc.ToLocalTime(),
-                        Imdb = longFromString,
-                        Size = size,
-                        Files = files,
+                        MinimumSeedTime = 96 * 60 * 60,
+                        DownloadVolumeFactor = 1,
+                        UploadVolumeFactor = 1,
+                        Guid = details,
+                        Details = details,
+                        Link = new Uri(SiteLink + "download.php?id=" + id),
+                        Title = row.Value<string>("name"),
+                        Category = MapTrackerCatToNewznab(row.Value<int>("category").ToString()),
+                        PublishDate = dateTime.AddSeconds(row.Value<long>("added")).ToLocalTime(),
+                        Size = row.Value<long>("size"),
+                        Files = row.Value<long>("numfiles"),
                         Seeders = seeders,
-                        Peers = leechers + seeders,
-                        Grabs = grabs,
-                        DownloadVolumeFactor = downloadVolumeFactor,
-                        UploadVolumeFactor = 1
+                        Peers = seeders + row.Value<int>("leechers"),
+                        Grabs = row.Value<int>("snatched"),
+                        Imdb = row.Value<long?>("imdbId"),
+                        TVDBId = row.Value<long?>("tvdbId"),
+                        TMDb = row.Value<long?>("tmdbId")
                     };
+
+                    var poster = row.Value<string>("poster");
+                    if (!string.IsNullOrWhiteSpace(poster))
+                    {
+                        release.Poster = new Uri(SiteLink + poster.Substring(1));
+                    }
+
+                    var descriptions = new List<string>();
+                    var title = row.Value<string>("title");
+                    var titleOrigin = row.Value<string>("title_origin");
+                    var year = row.Value<int?>("year");
+                    var pid = row.Value<int?>("pid");
+                    var releaseType = row.Value<string>("release_type");
+                    var tags = row.Value<JArray>("tags");
+                    var genres = row.Value<JArray>("genres");
+
+                    if (!string.IsNullOrWhiteSpace(title))
+                    {
+                        descriptions.Add("Title: " + title);
+                    }
+                    if (!string.IsNullOrWhiteSpace(titleOrigin))
+                    {
+                        descriptions.Add("Original Title: " + titleOrigin);
+                    }
+                    if (year > 0)
+                    {
+                        descriptions.Add("Year: " + year);
+                    }
+                    if (pid > 0)
+                    {
+                        descriptions.Add("Product-Link: " + SiteLink + "product.php?pid=" + pid);
+                    }
+                    if (genres != null && genres.Any())
+                    {
+                        descriptions.Add("Genres: " + string.Join(", ", genres));
+                    }
+                    if (tags != null && tags.Any())
+                    {
+                        descriptions.Add("Tags: " + string.Join(", ", tags));
+                    }
+                    if (!string.IsNullOrWhiteSpace(releaseType))
+                    {
+                        descriptions.Add("Release Type: " + releaseType);
+                    }
+
+                    if (descriptions.Any())
+                    {
+                        release.Description = string.Join(Environment.NewLine, descriptions);
+                    }
+
                     releases.Add(release);
                 }
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
 
             return releases;
+        }
+
+        public override async Task<byte[]> Download(Uri link)
+        {
+            var response = await RequestWithCookiesAsync(link.ToString() + "&apikey=" + ConfigData.Key.Value, string.Empty);
+            CheckResponseStatus(response.Status, "download");
+            return response.ContentBytes;
+        }
+
+        private static void CheckResponseStatus(HttpStatusCode status, string scope)
+        {
+            switch (status)
+            {
+                case HttpStatusCode.OK:
+                    return;
+                case HttpStatusCode.BadRequest:
+                    throw new Exception("Unknown or missing parameters");
+                case HttpStatusCode.Unauthorized:
+                    throw new Exception("Wrong API-Key");
+                case HttpStatusCode.Forbidden:
+                    throw new Exception("API-Key has no authorization for the endpoint / scope " + scope);
+                default:
+                    throw new Exception("Unexpected response status code " + status);
+            }
         }
     }
 }

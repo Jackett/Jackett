@@ -6,12 +6,17 @@ language: ru-ru
 type: semi-private
 encoding: UTF-8
 links:
+  - http://iv-torrents.com/
+legacylinks:
   - https://iv-torrents.ru/
+  - https://iv-torrents.com/
 
 caps:
   categorymappings:
     # Navigon / Navitel Other
-    - {id: 710, cat: Other, desc: "Навител/Navitel "}
+    - {id: 710, cat: Other, desc: "Навител/Navitel"}
+    - {id: 737, cat: Other, desc: "Garmin"}
+    - {id: 738, cat: Other, desc: "Разное - системы навигации и карты"}
     # Кинематограф Movies
     - {id: 687, cat: Movies, desc: "Трейлеры к фильмам"}
     - {id: 15, cat: Movies, desc: "Кино (общение)"}
@@ -34,7 +39,7 @@ caps:
     - {id: 124, cat: Movies, desc: " |- Зарубежные фильмы"}
     - {id: 123, cat: Movies, desc: " |- Отечественные фильмы (Новинки)"}
     - {id: 122, cat: Movies, desc: " |- Отечественные фильмы"}
-    - {id: 689, cat: Movies/WEBDL, desc: " |- Фильмы WEB-DLRip, HDTVRip "}
+    - {id: 689, cat: Movies/WEB-DL, desc: " |- Фильмы WEB-DLRip, HDTVRip "}
     - {id: 121, cat: Movies, desc: " |- Классика зарубежного кино (фильмы вышедшие до 1980 года)"}
     - {id: 120, cat: Movies, desc: " |- Классика отечественного кино (фильмы вышедшие до ..."}
     - {id: 126, cat: Movies, desc: " |- Антологии"}
@@ -45,13 +50,15 @@ caps:
     - {id: 415, cat: Movies, desc: " |- Разное"}
     - {id: 19, cat: Movies/HD, desc: "HD "}
     - {id: 48, cat: Movies/HD, desc: " |- Новые релизы"}
+    - {id: 735, cat: Movies/HD, desc: " |- 60fps"}
     - {id: 50, cat: Movies/HD, desc: " |- Зарубежные фильмы HD (Новинки)"}
-    - {id: 516, cat: Movies/HD, desc: " |- Антологии"}
     - {id: 51, cat: Movies/HD, desc: " |- Наши фильмы HD (Новинки)"}
     - {id: 52, cat: Movies/HD, desc: " |- Зарубежные фильмы HD (BD и Remux)"}
     - {id: 54, cat: Movies/HD, desc: " |- Наши фильмы HD (BD и Remux)"}
+    - {id: 736, cat: Movies/HD, desc: " |- UHD Video"}
     - {id: 53, cat: Movies/HD, desc: " |- Зарубежные фильмы (Рипы 720p и 1080p)"}
     - {id: 55, cat: Movies/HD, desc: " |- Наши фильмы (Рипы 720p и 1080p)"}
+    - {id: 516, cat: Movies/HD, desc: " |- Антологии"}
     - {id: 686, cat: Movies/HD, desc: " |- HD фильмы WEB-DLRip, HDTVRip (720 и 1080)"}
     - {id: 681, cat: Movies/HD, desc: " |- Классика зарубежного кино (фильмы вышедшие до 1980 года)"}
     - {id: 682, cat: Movies/HD, desc: " |- Классика отечественного кино (фильмы вышедшие до ..."}
@@ -62,6 +69,15 @@ caps:
     - {id: 57, cat: Movies/DVD, desc: " |- Наши фильмы DVD "}
     - {id: 58, cat: Movies/DVD, desc: " |- Зарубежные мультфильмы DVD "}
     - {id: 59, cat: Movies/DVD, desc: " |- Наши мультфильмы DVD "}
+    - {id: 338, cat: Movies/3D, desc: "3D "}
+    - {id: 346, cat: Movies/3D, desc: " |- F.A.Q."}
+    - {id: 339, cat: Movies/3D, desc: " |- Новые релизы"}
+    - {id: 340, cat: Movies/3D, desc: " |- 3D Зарубежные фильмы"}
+    - {id: 341, cat: Movies/3D, desc: " |- 3D Отечественные фильмы"}
+    - {id: 343, cat: Movies/3D, desc: " |- 3D Зарубежные мультфильмы"}
+    - {id: 344, cat: Movies/3D, desc: " |- 3D отечественные мультфильмы"}
+    - {id: 342, cat: Movies/3D, desc: " |- 3D Документальные фильмы"}
+    - {id: 345, cat: Movies/3D, desc: " |- 3D Спорт"}
     - {id: 400, cat: TV/Documentary, desc: "Документальные фильмы, Научно-познавательные фильмы"}
     - {id: 401, cat: TV/Documentary, desc: " |- Новые релизы"}
     - {id: 405, cat: TV/Documentary, desc: " |- BBC / Discovery / National Geographic "}
@@ -98,37 +114,34 @@ caps:
     - {id: 572, cat: XXX, desc: " |- Журналы/Книги"}
     - {id: 573, cat: XXX, desc: " |- Полнометражные PRON-фильмы (с русским переводом)"}
     - {id: 574, cat: XXX, desc: " |- Разное"}
-    # 3D Movies
-    - {id: 346, cat: Movies/3D, desc: "F.A.Q."}
-    - {id: 338, cat: Movies/3D, desc: "3D "}
-    - {id: 339, cat: Movies/3D, desc: " |- Новые релизы"}
-    - {id: 340, cat: Movies/3D, desc: " |- 3D Зарубежные фильмы"}
-    - {id: 341, cat: Movies/3D, desc: " |- 3D Отечественные фильмы"}
-    - {id: 343, cat: Movies/3D, desc: " |- 3D Зарубежные мультфильмы"}
-    - {id: 344, cat: Movies/3D, desc: " |- 3D отечественные мультфильмы"}
-    - {id: 342, cat: Movies/3D, desc: " |- 3D Документальные фильмы"}
-    - {id: 345, cat: Movies/3D, desc: " |- 3D Спорт"}
     # Обучающее видео Other
     - {id: 468, cat: Other, desc: "Видеоуроки и обучающие интерактивные диски"}
     - {id: 470, cat: Other, desc: " |- Новые релизы"}
+    - {id: 733, cat: Other, desc: " |- Йога"}
+    - {id: 576, cat: Other, desc: " |- Кулинария"}
+    - {id: 578, cat: Other, desc: " |- Фокусы и трюки"}
+    - {id: 525, cat: Other, desc: " |- Пикап и психология"}
+    - {id: 734, cat: Other, desc: " |- Видео- и фотосъёмка"}
     - {id: 522, cat: Other, desc: " |- Спорт, Фитнес и аэробика"}
     - {id: 579, cat: Other, desc: " |- Беременность, роды, материнство"}
     - {id: 521, cat: Other, desc: " |- Бизнес, экономика и финансы"}
-    - {id: 576, cat: Other, desc: " |- Кулинария"}
-    - {id: 525, cat: Other, desc: " |- Пикап и психология"}
     - {id: 580, cat: Other, desc: " |- Рыболовство и подводная охота"}
     - {id: 581, cat: Other, desc: " |- Строительство, ремонт и дизайн"}
     - {id: 523, cat: Other, desc: " |- Учебные видео для детей и родителей"}
     - {id: 577, cat: Other, desc: " |- Уличные и клубные танцы"}
-    - {id: 578, cat: Other, desc: " |- Фокусы и трюки"}
     - {id: 680, cat: Other, desc: " |- Фотография, работа с фото"}
     - {id: 696, cat: Other, desc: " |- Прочие видеокурсы и уроки"}
     - {id: 469, cat: Other, desc: "Компьютерные видеоуроки и обучающие интерактивные диски"}
-    - {id: 475, cat: Other, desc: " |- Новые релизы"}
-    - {id: 472, cat: Other, desc: " |- Веб-дизайн, Программирование"}
     - {id: 517, cat: Other, desc: " |- 2D-графика"}
     - {id: 694, cat: Other, desc: " |- 3D-графика, моделирование"}
+    - {id: 729, cat: Other, desc: " |- Работа со звуком"}
+    - {id: 766, cat: Other, desc: " |- ZBrush"}
     - {id: 473, cat: Other, desc: " |- Работа с видео"}
+    - {id: 426, cat: Other, desc: " |- Autodesk 3ds Max"}
+    - {id: 425, cat: Other, desc: " |- Adobe Photoshop"}
+    - {id: 427, cat: Other, desc: " |- Инженерные и научные программы (видеоуроки)"}
+    - {id: 424, cat: Other, desc: " |- WEB, SMM, SEO, интернет-маркетинг"}
+    - {id: 472, cat: Other, desc: " |- Веб-дизайн, Программирование"}
     - {id: 474, cat: Other, desc: " |- Компьютерные сети и безопасность"}
     # Игры Games
     - {id: 97, cat: Console, desc: " |- Новые релизы"}
@@ -167,15 +180,15 @@ caps:
     - {id: 554, cat: PC/Games, desc: " |- Эротические игры"}
     - {id: 14, cat: Console, desc: "Игры для Консолей"}
     - {id: 115, cat: Console, desc: " |- Новые релизы"}
-    - {id: 114, cat: Console/Xbox 360, desc: " |- XBox360 "}
-    - {id: 674, cat: Console/Xbox 360, desc: " |- XBox360 | Kinect "}
+    - {id: 114, cat: Console/XBox 360, desc: " |- XBox360 "}
+    - {id: 674, cat: Console/XBox 360, desc: " |- XBox360 | Kinect "}
     - {id: 113, cat: Console/NDS, desc: " |- NDS "}
     - {id: 288, cat: Console/PS3, desc: " |- Playstation 2 "}
     - {id: 290, cat: Console/PS3, desc: " |- Playstation 3 "}
     - {id: 531, cat: Console, desc: "Программы / Прошивки"}
     - {id: 532, cat: Console, desc: " |- Новые релизы"}
     - {id: 533, cat: Console/PS3, desc: " |- Playstation 3 "}
-    - {id: 535, cat: Console/Xbox 360, desc: " |- XBox360 "}
+    - {id: 535, cat: Console/XBox 360, desc: " |- XBox360 "}
     - {id: 534, cat: Console/PSP, desc: " |- PSP "}
     - {id: 277, cat: Console, desc: "Всё для игр"}
     - {id: 291, cat: Console, desc: " |- Новые релизы"}
@@ -319,6 +332,7 @@ caps:
     - {id: 210, cat: PC, desc: " |- Резервное копирование и программы для защиты информации"}
     - {id: 209, cat: PC, desc: " |- Разное"}
     - {id: 37, cat: PC, desc: "Программы для работы с мультимедиа и 3D "}
+    - {id: 731, cat: PC, desc: " |- 3D моделирование, рендеринг и плагины для них"}
     - {id: 208, cat: PC, desc: " |- Новые релизы"}
     - {id: 207, cat: PC, desc: " |- Графические редакторы"}
     - {id: 206, cat: PC, desc: " |- Редакторы видео"}
@@ -329,6 +343,7 @@ caps:
     - {id: 201, cat: PC, desc: " |- Работа со звуком"}
     - {id: 38, cat: PC, desc: "Веб-разработка и программирование"}
     - {id: 200, cat: PC, desc: " |- Новые релизы"}
+    - {id: 730, cat: PC, desc: " |- Среды программирования, компиляторы и вспомогател..."}
     - {id: 199, cat: PC, desc: " |- Редакторы для веб-дизайна"}
     - {id: 198, cat: PC, desc: " |- Скрипты и шаблоны"}
     - {id: 197, cat: PC, desc: " |- Среды программирования, компиляторы и вспомогател..."}
@@ -355,6 +370,8 @@ caps:
     - {id: 257, cat: Audio, desc: "Предложения по улучшению раздела Музыка"}
     - {id: 41, cat: Audio, desc: "Отечественная музыка"}
     - {id: 273, cat: Audio, desc: " |- Новые релизы"}
+    - {id: 765, cat: Audio, desc: " |- Отечественная поп-музыка (lossless)"}
+    - {id: 764, cat: Audio, desc: " |- Отечественная поп-музыка (сборники) (lossy)"}
     - {id: 272, cat: Audio, desc: " |- Электронная музыка"}
     - {id: 271, cat: Audio, desc: " |- Рэп, Хип - Хоп, R'n'B "}
     - {id: 270, cat: Audio, desc: " |- Поп музыка"}
@@ -403,7 +420,9 @@ caps:
     - {id: 584, cat: Other, desc: " |- Новые релизы"}
     - {id: 585, cat: Other, desc: " |- Оригинальные каталоги по подбору запчастей"}
     - {id: 586, cat: Other, desc: " |- Неоригинальные каталоги по подбору запчастей"}
+    - {id: 587, cat: Other, desc: " |- Программы по диагностике и ремонту"}
     - {id: 588, cat: Other, desc: " |- Тюнинг, чиптюнинг, настройка"}
+    - {id: 589, cat: Other, desc: " |- Книги по ремонту/обслуживанию/эксплуатации ТС"}
     - {id: 590, cat: Other, desc: " |- Мультимедийки по ремонту/обслуживанию/эксплуатации ТС"}
     - {id: 592, cat: Other, desc: " |- Виртуальная автошкола"}
     - {id: 593, cat: Other, desc: " |- Видеоуроки по вождению транспортных средств"}
@@ -414,6 +433,56 @@ caps:
     - {id: 601, cat: Other, desc: " |- Top Gear/Топ Гир"}
     - {id: 602, cat: Other, desc: " |- Тест драйв/Обзоры/Автосалоны"}
     - {id: 603, cat: Other, desc: " |- Тюнинг/форсаж"}
+    # Обучение иностранным языкам
+    - {id: 739, cat: Books, desc: "Иностранные языки для взрослых"}
+    - {id: 751, cat: Books, desc: " |- Русский язык как иностранный"}
+    - {id: 750, cat: Books, desc: " |- Японский язык"}
+    - {id: 749, cat: Books, desc: " |- Китайский язык"}
+    - {id: 748, cat: Books, desc: " |- Арабский язык"}
+    - {id: 747, cat: Books, desc: " |- Итальянский язык"}
+    - {id: 746, cat: Books, desc: " |- Испанский язык"}
+    - {id: 745, cat: Books, desc: " |- Французский язык"}
+    - {id: 744, cat: Books, desc: " |- Немецкий язык"}
+    - {id: 743, cat: Books, desc: " |- Английский язык (для взрослых)"}
+    - {id: 740, cat: Books, desc: "Иностранные языки для детей"}
+    - {id: 755, cat: Books, desc: " |- Школьные учебники, ЕГЭ, ОГЭ"}
+    - {id: 754, cat: Books, desc: " |- Восточные языки (для детей)"}
+    - {id: 753, cat: Books, desc: " |- Другие европейские языки (для детей)"}
+    - {id: 752, cat: Books, desc: " |- Английский язык (для детей)"}
+    - {id: 741, cat: Books, desc: "удожественная литература (ин.языки)"}
+    - {id: 760, cat: Books, desc: " |- Художественная литература на восточных языках"}
+    - {id: 759, cat: Books, desc: " |- Художественная литература на других европейских языках"}
+    - {id: 758, cat: Books, desc: " |- Художественная литература на других европейских языках"}
+    - {id: 757, cat: Books, desc: " |- Художественная литература на французском языке"}
+    - {id: 756, cat: Books, desc: " |- Художественная литература на английском языке"}
+    - {id: 742, cat: Books, desc: "Аудиокниги на иностранных языках"}
+    - {id: 763, cat: Books, desc: " |- Аудиокниги на других иностранных языках"}
+    - {id: 762, cat: Books, desc: " |- Аудиокниги на немецком языке"}
+    - {id: 761, cat: Books, desc: " |- Аудиокниги на английском языке"}
+    # Мобильные устройства Mobile
+    - {id: 433, cat: PC/Mobile-Other, desc: "Приложения для мобильных телефонов и КПК, КМК"}
+    - {id: 436, cat: PC/Mobile-Other, desc: " |- Новые релизы"}
+    - {id: 437, cat: PC/Mobile-Android, desc: " |- Android OS "}
+    - {id: 435, cat: PC/Mobile-Other, desc: " |- Windows Mobile "}
+    - {id: 439, cat: PC/Mobile-Other, desc: " |- Symbian "}
+    - {id: 438, cat: PC/Mobile-iOS, desc: " |- iOS "}
+    - {id: 440, cat: PC/Mobile-Other, desc: " |- Java "}
+    - {id: 434, cat: PC/Mobile-Other, desc: "Игры"}
+    - {id: 441, cat: PC/Mobile-Other, desc: " |- Новые релизы"}
+    - {id: 442, cat: PC/Mobile-Android, desc: " |- Android OS "}
+    - {id: 443, cat: PC/Mobile-Other, desc: " |- Symbian "}
+    - {id: 444, cat: PC/Mobile-iOS, desc: " |- iOS "}
+    - {id: 446, cat: PC/Mobile-Other, desc: " |- Java "}
+    - {id: 445, cat: PC/Mobile-Other, desc: " |- Windows Mobile "}
+    - {id: 575, cat: PC/Mobile-Other, desc: " |- Игры для Windows Phone 7,8 "}
+    - {id: 447, cat: PC/Mobile-Other, desc: "Софт для работы с телефоном"}
+    - {id: 448, cat: PC/Mobile-Other, desc: "Прошивки"}
+    - {id: 449, cat: PC/Mobile-Other, desc: " |- Новые релизы"}
+    - {id: 450, cat: PC/Mobile-Android, desc: " |- Android OS "}
+    - {id: 451, cat: PC/Mobile-Other, desc: " |- Windows Mobile "}
+    - {id: 452, cat: PC/Mobile-Other, desc: " |- Symbian "}
+    - {id: 454, cat: PC/Mobile-iOS, desc: " |- iOS "}
+    - {id: 455, cat: PC/Mobile-Other, desc: " |- Java "}
     # Книги и журналы Books
     - {id: 610, cat: Books, desc: " |- Новые релизы"}
     - {id: 611, cat: Books, desc: " |- Кино, театр, ТВ, мультипликация"}
@@ -482,35 +551,12 @@ caps:
     - {id: 672, cat: Books, desc: " |- Международные отношения. Дипломатия"}
     - {id: 496, cat: Audio/Audiobook, desc: "Аудиокниги"}
     - {id: 639, cat: Audio/Audiobook, desc: " |- Новые релизы"}
-    - {id: 640, cat: Audio/Audiobook, desc: " |- Фантастика, фэнтези"}
+    - {id: 732, cat: Audio/Audiobook, desc: " |- [Аудио] Российская фантастика, фэнтези, мистика, ужас..."}
+    - {id: 640, cat: Audio/Audiobook, desc: " |- [Аудио] Зарубежная фантастика, фэнтези, мистика, ужас..."}
     - {id: 697, cat: Audio/Audiobook, desc: "Коллекционирование, увлечения и хобби"}
     - {id: 698, cat: Audio/Audiobook, desc: " |- Моделизм"}
     - {id: 699, cat: Audio/Audiobook, desc: " |- Настольные игры"}
     - {id: 700, cat: Audio/Audiobook, desc: " |- Прочие хобби"}
-    # Мобильные устройства Mobile
-    - {id: 433, cat: PC/Phone-Other, desc: "Приложения для мобильных телефонов и КПК, КМК"}
-    - {id: 436, cat: PC/Phone-Other, desc: " |- Новые релизы"}
-    - {id: 437, cat: PC/Phone-Android, desc: " |- Android OS "}
-    - {id: 435, cat: PC/Phone-Other, desc: " |- Windows Mobile "}
-    - {id: 439, cat: PC/Phone-Other, desc: " |- Symbian "}
-    - {id: 438, cat: PC/Phone-IOS, desc: " |- iOS "}
-    - {id: 440, cat: PC/Phone-Other, desc: " |- Java "}
-    - {id: 434, cat: PC/Phone-Other, desc: "Игры"}
-    - {id: 441, cat: PC/Phone-Other, desc: " |- Новые релизы"}
-    - {id: 442, cat: PC/Phone-Android, desc: " |- Android OS "}
-    - {id: 443, cat: PC/Phone-Other, desc: " |- Symbian "}
-    - {id: 444, cat: PC/Phone-IOS, desc: " |- iOS "}
-    - {id: 446, cat: PC/Phone-Other, desc: " |- Java "}
-    - {id: 445, cat: PC/Phone-Other, desc: " |- Windows Mobile "}
-    - {id: 575, cat: PC/Phone-Other, desc: " |- Игры для Windows Phone 7,8 "}
-    - {id: 447, cat: PC/Phone-Other, desc: "Софт для работы с телефоном"}
-    - {id: 448, cat: PC/Phone-Other, desc: "Прошивки"}
-    - {id: 449, cat: PC/Phone-Other, desc: " |- Новые релизы"}
-    - {id: 450, cat: PC/Phone-Android, desc: " |- Android OS "}
-    - {id: 451, cat: PC/Phone-Other, desc: " |- Windows Mobile "}
-    - {id: 452, cat: PC/Phone-Other, desc: " |- Symbian "}
-    - {id: 454, cat: PC/Phone-IOS, desc: " |- iOS "}
-    - {id: 455, cat: PC/Phone-Other, desc: " |- Java "}
     # Обои / Рисунки / Картинки Other
     - {id: 457, cat: Other, desc: "Обои"}
     - {id: 458, cat: Other, desc: "Иконки"}
@@ -521,14 +567,20 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
-  - name: username
+  - name: cookie
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: Cookie
+  - name: info
+    type: info
+    label: How to get the Cookie
+    default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: striprussian
     type: checkbox
     label: Strip Russian Letters
@@ -536,31 +588,24 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "1"
+    default: 1
     options:
-      "1": "created"
-      "10": "seeders"
-      "7": "size"
-      "2": "title"
+      1: created
+      10: seeders
+      7: size
+      2: title
   - name: type
     type: select
     label: Order requested from site
-    default: "2"
+    default: 2
     options:
-      "2": "desc"
-      "1": "asc"
+      2: desc
+      1: asc
 
 login:
-  path: login.php
-  method: form
-  form: form[action="login.php"]
+  method: cookie
   inputs:
-    login_username: "{{ .Config.username }}"
-    login_password: "{{ .Config.password }}"
-    redirect: /
-    autologin: on
-  error:
-    - selector: table.error
+    cookie: "{{ .Config.cookie }}"
   test:
     path: index.php
     selector: a[href="./login.php?logout=1"]
@@ -614,6 +659,7 @@ search:
     pn: ""
     # search by partial word
     allw: 0
+    tor_type: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
 
   rows:
     selector: tr[id^="tor_"]:has(a[href^="./dl.php?id="])
@@ -670,6 +716,7 @@ search:
     grabs:
       selector: td:nth-child(9)
     date:
+      # unix
       selector: td:last-child > u
     downloadvolumefactor:
       case:

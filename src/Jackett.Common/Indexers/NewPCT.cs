@@ -23,7 +23,7 @@ namespace Jackett.Common.Indexers
         private enum ReleaseType
         {
             Tv,
-            Movie,
+            Movie
         }
 
         private class NewpctRelease : ReleaseInfo
@@ -75,12 +75,12 @@ namespace Jackett.Common.Indexers
             },
             new DownloadMatcher
             {
-                MatchRegex = new Regex(@"nalt\s*=\s*'([^\/]*)"),
-                MatchEvaluator = m => string.Format("/download/{0}.torrent", m.Groups[1])
-            },
+                MatchRegex = new Regex(@"window\.location\.href\s*=\s*""([^""]+)"""),
+                MatchEvaluator = m => $"https:{m.Groups[1]}"
+            }
         };
 
-        private readonly int _maxDailyPages = 4;
+        private readonly int _maxDailyPages = 1;
         private readonly int _maxMoviesPages = 6;
         private readonly int[] _allTvCategories = (new [] {TorznabCatType.TV }).Concat(TorznabCatType.TV.SubCategories).Select(c => c.ID).ToArray();
         private readonly int[] _allMoviesCategories = (new [] { TorznabCatType.Movies }).Concat(TorznabCatType.Movies.SubCategories).Select(c => c.ID).ToArray();
@@ -92,15 +92,14 @@ namespace Jackett.Common.Indexers
         private DateTime _dailyNow;
         private int _dailyResultIdx;
 
-        private readonly string _searchJsonUrl = "get/result/";
         private readonly string _dailyUrl = "ultimas-descargas/pg/{0}";
+        private readonly string _searchJsonUrl = "get/result/";
         private readonly string[] _seriesLetterUrls = { "series/letter/{0}", "series-hd/letter/{0}" };
         private readonly string[] _seriesVoLetterUrls = { "series-vo/letter/{0}" };
         private readonly string[] _voUrls = { "serie-vo", "serievo" };
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
-            "https://descargas2020.org/",
-            "https://pctnew.org/",
+            "https://pctmix.com/",
             "https://pctreload.com/"
         };
 
@@ -113,17 +112,25 @@ namespace Jackett.Common.Indexers
             "http://torrentrapid.com/",
             "http://tumejortorrent.com/",
             "http://pctnew.com/",
+            "https://descargas2020.org/",
+            "https://pctnew.org/"
         };
 
         public NewPCT(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base(id: "newpct",
                    name: "NewPCT",
                    description: "NewPCT - Descargar peliculas, series y estrenos torrent gratis",
-                   link: "https://descargas2020.org/",
-                   caps: new TorznabCapabilities(TorznabCatType.TV,
-                                                 TorznabCatType.TVSD,
-                                                 TorznabCatType.TVHD,
-                                                 TorznabCatType.Movies),
+                   link: "https://pctmix.com/",
+                   caps: new TorznabCapabilities {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q
+                       }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,
@@ -145,6 +152,11 @@ namespace Jackett.Common.Indexers
 
             var removeMovieYearItem = new BoolItem { Name = "Remove year from movie results (enable for Radarr)", Value = false };
             configData.AddDynamic("RemoveMovieYear", removeMovieYearItem);
+
+            AddCategoryMapping(1, TorznabCatType.Movies);
+            AddCategoryMapping(2, TorznabCatType.TV);
+            AddCategoryMapping(3, TorznabCatType.TVSD);
+            AddCategoryMapping(4, TorznabCatType.TVHD);
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -162,9 +174,9 @@ namespace Jackett.Common.Indexers
 
         public override async Task<byte[]> Download(Uri linkParam)
         {
-            var results = await RequestStringWithCookiesAndRetry(linkParam.AbsoluteUri);
+            var results = await RequestWithCookiesAndRetryAsync(linkParam.AbsoluteUri);
 
-            var uriLink = ExtractDownloadUri(results.Content, linkParam.AbsoluteUri);
+            var uriLink = ExtractDownloadUri(results.ContentString, linkParam.AbsoluteUri);
             if (uriLink == null)
                 throw new Exception("Download link not found!");
 
@@ -210,11 +222,11 @@ namespace Jackett.Common.Indexers
                 while (pg <= _maxDailyPages)
                 {
                     var pageUrl = SiteLink + string.Format(_dailyUrl, pg);
-                    var results = await RequestStringWithCookiesAndRetry(pageUrl);
-                    if (results == null || string.IsNullOrEmpty(results.Content))
+                    var results = await RequestWithCookiesAndRetryAsync(pageUrl);
+                    if (results == null || string.IsNullOrEmpty(results.ContentString))
                         break;
 
-                    var items = ParseDailyContent(results.Content);
+                    var items = ParseDailyContent(results.ContentString);
                     if (items == null || !items.Any())
                         break;
 
@@ -303,14 +315,14 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
 
             // Episodes list
-            var results = await RequestStringWithCookiesAndRetry(uri.AbsoluteUri);
-            var seriesEpisodesUrl = ParseSeriesListContent(results.Content, seriesName);
+            var results = await RequestWithCookiesAndRetryAsync(uri.AbsoluteUri);
+            var seriesEpisodesUrl = ParseSeriesListContent(results.ContentString, seriesName);
 
             // TV serie list
             if (!string.IsNullOrEmpty(seriesEpisodesUrl))
             {
-                results = await RequestStringWithCookiesAndRetry(seriesEpisodesUrl);
-                var items = ParseEpisodesListContent(results.Content);
+                results = await RequestWithCookiesAndRetryAsync(seriesEpisodesUrl);
+                var items = ParseEpisodesListContent(results.ContentString);
                 if (items != null && items.Any())
                     releases.AddRange(items);
             }
@@ -338,12 +350,12 @@ namespace Jackett.Common.Indexers
 
             try
             {
-                var rows = doc.QuerySelectorAll("ul.noticias-series > li");
+                var rows = doc.QuerySelectorAll("div.page-box > ul > li");
                 foreach (var row in rows)
                 {
                     var qDiv = row.QuerySelector("div.info");
                     var title = qDiv.QuerySelector("h2").TextContent.Trim();
-                    var detailsUrl = qDiv.QuerySelector("a").GetAttribute("href");
+                    var detailsUrl = SiteLink + qDiv.QuerySelector("a").GetAttribute("href").TrimStart('/');
 
                     // TODO: move this check to GetReleaseFromData to apply all releases
                     if (!_includeVo && _voUrls.Any(vo => detailsUrl.ToLower().Contains(vo.ToLower())))
@@ -360,9 +372,9 @@ namespace Jackett.Common.Indexers
                     _dailyResultIdx++;
                     var publishDate = _dailyNow - TimeSpan.FromMilliseconds(_dailyResultIdx);
 
-                    var banner = "https:" + row.QuerySelector("img").GetAttribute("src");
+                    var poster = "https:" + row.QuerySelector("img").GetAttribute("src");
 
-                    var release = GetReleaseFromData(releaseType, title, detailsUrl, quality, language, size, publishDate, banner);
+                    var release = GetReleaseFromData(releaseType, title, detailsUrl, quality, language, size, publishDate, poster);
                     releases.Add(release);
                 }
             }
@@ -418,9 +430,9 @@ namespace Jackett.Common.Indexers
                     var publishDate = DateTime.ParseExact(qDiv.ChildNodes[3].TextContent.Trim(), "dd-MM-yyyy", null);
                     var size = ReleaseInfo.GetBytes(qDiv.ChildNodes[5].TextContent.Trim());
 
-                    var banner = "https:" + row.QuerySelector("img").GetAttribute("src");
+                    var poster = "https:" + row.QuerySelector("img").GetAttribute("src");
 
-                    var release = GetReleaseFromData(ReleaseType.Tv, title, detailsUrl, quality, language, size, publishDate, banner);
+                    var release = GetReleaseFromData(ReleaseType.Tv, title, detailsUrl, quality, language, size, publishDate, poster);
                     releases.Add(release);
                 }
             }
@@ -463,8 +475,8 @@ namespace Jackett.Common.Indexers
                     {"pg", pg.ToString()}
                 };
 
-                var results = await PostDataWithCookies(searchJsonUrl, queryCollection);
-                var items = ParseSearchJsonContent(results.Content, year);
+                var results = await RequestWithCookiesAsync(searchJsonUrl, method: RequestType.POST, data: queryCollection);
+                var items = ParseSearchJsonContent(results.ContentString, year);
                 if (!items.Any())
                     break;
 
@@ -501,7 +513,7 @@ namespace Jackett.Common.Indexers
                     var sizeString = item["torrentSize"].ToString();
                     var size = !sizeString.Contains("NAN") ? ReleaseInfo.GetBytes(sizeString) : 0;
                     DateTime.TryParseExact(item["torrentDateAdded"].ToString(), "dd/MM/yyyy", null, DateTimeStyles.None, out var publishDate);
-                    var banner = SiteLink + item["imagen"].ToString().TrimStart('/');
+                    var poster = SiteLink + item["imagen"].ToString().TrimStart('/');
 
                     // we have another search for series
                     var titleLower = title.ToLower();
@@ -555,7 +567,7 @@ namespace Jackett.Common.Indexers
                     if (!string.IsNullOrWhiteSpace(year) && !_titleYearRegex.Match(title).Success)
                         title += " " + year;
 
-                    var release = GetReleaseFromData(ReleaseType.Movie, title, detailsUrl, quality, language, size, publishDate, banner);
+                    var release = GetReleaseFromData(ReleaseType.Movie, title, detailsUrl, quality, language, size, publishDate, poster);
                     releases.Add(release);
                 }
             }
@@ -600,7 +612,7 @@ namespace Jackett.Common.Indexers
                 : ReleaseType.Movie;
 
         private NewpctRelease GetReleaseFromData(ReleaseType releaseType, string title, string detailsUrl, string quality,
-                                                 string language, long size, DateTime publishDate, string banner)
+                                                 string language, long size, DateTime publishDate, string poster)
         {
             var result = new NewpctRelease
             {
@@ -653,16 +665,14 @@ namespace Jackett.Common.Indexers
             result.Title = FixedTitle(result, quality, language);
             result.Link = new Uri(detailsUrl);
             result.Guid = result.Link;
-            result.Comments = result.Link;
+            result.Details = result.Link;
             result.PublishDate = publishDate;
-            result.BannerUrl = new Uri(banner);
+            result.Poster = new Uri(poster);
             result.Seeders = 1;
             result.Peers = 2;
             result.Size = size;
             result.DownloadVolumeFactor = 0;
             result.UploadVolumeFactor = 1;
-            result.MinimumRatio = 1;
-            result.MinimumSeedTime = 172800; // 48 hours
 
             return result;
         }

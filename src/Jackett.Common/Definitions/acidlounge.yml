@@ -10,7 +10,7 @@ links:
 
 caps:
   categorymappings:
-    - {id: 79, cat: PC/Phone-Android, desc: "Android"}
+    - {id: 79, cat: PC/Mobile-Android, desc: "Android"}
     - {id: 61, cat: TV/Anime, desc: "Anime"}
     - {id: 55, cat: PC/0day, desc: "Appz/0-Day"}
     - {id: 59, cat: PC/Mac, desc: "Appz/Mac"}
@@ -26,9 +26,9 @@ caps:
     - {id: 4, cat: PC/Games, desc: "Games/PC"}
     - {id: 42, cat: Console/PS3, desc: "Games/PS3"}
     - {id: 56, cat: Console/Wii, desc: "Games/Wii"}
-    - {id: 36, cat: Console/Xbox360, desc: "Games/xbox360"}
+    - {id: 36, cat: Console/XBox 360, desc: "Games/xbox360"}
     - {id: 69, cat: Other, desc: "Halloween"}
-    - {id: 80, cat: PC/Phone-IOS, desc: "iPhone / iPad"}
+    - {id: 80, cat: PC/Mobile-iOS, desc: "iPhone / iPad"}
     - {id: 46, cat: Other, desc: "Kids"}
     - {id: 63, cat: PC, desc: "Linux"}
     - {id: 49, cat: Other, desc: "Misc"}
@@ -59,6 +59,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 login:
   path: Main/?act=Login
@@ -82,9 +83,11 @@ search:
   inputs:
     $raw: "{{range .Categories}}cid[]={{.}}&{{end}}"
     search: "{{ .Keywords }}"
-    search_type: "title"
+    search_type: title
+
   rows:
     selector: table#browse_torrents_table > tbody > tr[id^="torrent_row_"]
+
   fields:
     title:
       selector: a.torrent_name
@@ -118,15 +121,15 @@ search:
           args: ([\d\.]+)
     downloadvolumefactor:
       case:
-        ":root div#notice_ratioBoostingMadness": "0"
-        "*": "1"
+        ":root div#notice_ratioBoostingMadness": 0
+        "*": 1
     uploadvolumefactor:
-      case:
-        "*": "1"
+      text: 1
     date:
       selector: td.torrent_table_dateAdded
       filters:
         - name: append
-          args: " +01:00"
+          args: " +01:00" # CET
         - name: dateparse
           args: "2006-01-02 15:04:05 -07:00"
+# engine tbd

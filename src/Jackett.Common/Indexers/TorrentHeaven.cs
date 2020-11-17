@@ -25,7 +25,25 @@ namespace Jackett.Common.Indexers
                  name: "TorrentHeaven",
                  description: "A German general tracker.",
                  link: "https://newheaven.nl/",
-                 caps: new TorznabCapabilities(),
+                 caps: new TorznabCapabilities
+                 {
+                     TvSearchParams = new List<TvSearchParam>
+                     {
+                         TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                     },
+                     MovieSearchParams = new List<MovieSearchParam>
+                     {
+                         MovieSearchParam.Q
+                     },
+                     MusicSearchParams = new List<MusicSearchParam>
+                     {
+                         MusicSearchParam.Q
+                     },
+                     BookSearchParams = new List<BookSearchParam>
+                     {
+                         BookSearchParam.Q
+                     }
+                 },
                  configService: configService,
                  client: wc,
                  logger: l,
@@ -35,15 +53,17 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "de-de";
             Type = "private";
+
             // incomplete CA chain
             wc.AddTrustedCertificate(new Uri(SiteLink).Host, "cbf23ac75b07255ad7548a87567a839d23f31576");
+
             AddCategoryMapping(1, TorznabCatType.PCGames, "GAMES/PC");
             AddCategoryMapping(3, TorznabCatType.Console, "GAMES/Sonstige");
             AddCategoryMapping(59, TorznabCatType.ConsolePS4, "GAMES/PlayStation");
             AddCategoryMapping(60, TorznabCatType.ConsolePSP, "GAMES/PSP");
             AddCategoryMapping(63, TorznabCatType.ConsoleWii, "GAMES/Wii");
-            AddCategoryMapping(67, TorznabCatType.ConsoleXbox360, "GAMES/XBOX 360");
-            AddCategoryMapping(68, TorznabCatType.PCPhoneOther, "GAMES/PDA / Handy");
+            AddCategoryMapping(67, TorznabCatType.ConsoleXBox360, "GAMES/XBOX 360");
+            AddCategoryMapping(68, TorznabCatType.PCMobileOther, "GAMES/PDA / Handy");
             AddCategoryMapping(72, TorznabCatType.ConsoleNDS, "GAMES/NDS");
             AddCategoryMapping(7, TorznabCatType.MoviesDVD, "MOVIES/DVD");
             AddCategoryMapping(8, TorznabCatType.MoviesSD, "MOVIES/SD");
@@ -69,13 +89,13 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(52, TorznabCatType.TVDocumentary, "TV/Doku HD");
             AddCategoryMapping(53, TorznabCatType.TV, "TV/Serien Complete Packs");
             AddCategoryMapping(54, TorznabCatType.TVSport, "TV/Sport");
-            AddCategoryMapping(66, TorznabCatType.TVFOREIGN, "TV/International");
+            AddCategoryMapping(66, TorznabCatType.TVForeign, "TV/International");
             AddCategoryMapping(22, TorznabCatType.Books, "MISC/EBooks");
             AddCategoryMapping(24, TorznabCatType.Other, "MISC/Sonstiges");
             AddCategoryMapping(25, TorznabCatType.Other, "MISC/Tonspuren");
             AddCategoryMapping(108, TorznabCatType.TVAnime, "MISC/Anime");
             AddCategoryMapping(28, TorznabCatType.PC, "APPLICATIONS/PC");
-            AddCategoryMapping(29, TorznabCatType.PCPhoneOther, "APPLICATIONS/Mobile");
+            AddCategoryMapping(29, TorznabCatType.PCMobileOther, "APPLICATIONS/Mobile");
             AddCategoryMapping(30, TorznabCatType.PC, "APPLICATIONS/Sonstige");
             AddCategoryMapping(70, TorznabCatType.PC, "APPLICATIONS/Linux");
             AddCategoryMapping(71, TorznabCatType.PCMac, "APPLICATIONS/Mac");
@@ -109,17 +129,17 @@ namespace Jackett.Common.Indexers
                 pairs.Add("proofcode", configData.CaptchaText.Value);
             var result = await RequestLoginAndFollowRedirect(
                 IndexUrl, pairs, configData.CaptchaCookie.Value, true, referer: IndexUrl, accumulateCookies: true);
-            if (result.Content == null || (!result.Content.Contains("login_complete") &&
-                                           !result.Content.Contains("index.php?strWebValue=account&strWebAction=logout")))
+            if (result.ContentString == null || (!result.ContentString.Contains("login_complete") &&
+                                           !result.ContentString.Contains("index.php?strWebValue=account&strWebAction=logout")))
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(result.Content);
+                var dom = parser.ParseDocument(result.ContentString);
                 var errorMessageEl = dom.QuerySelector("table > tbody > tr > td[valign=top][width=100%]");
-                var errorMessage = errorMessageEl != null ? errorMessageEl.InnerHtml : result.Content;
+                var errorMessage = errorMessageEl != null ? errorMessageEl.InnerHtml : result.ContentString;
                 throw new ExceptionWithConfigData(errorMessage, configData);
             }
 
-            var result2 = await RequestStringWithCookies(LoginCompleteUrl, result.Cookies);
+            var result2 = await RequestWithCookiesAsync(LoginCompleteUrl, result.Cookies);
             await ConfigureIfOK(
                 result2.Cookies, result2.Cookies?.Contains("pass") == true,
                 () => throw new ExceptionWithConfigData("Didn't get a user/pass cookie", configData));
@@ -128,15 +148,15 @@ namespace Jackett.Common.Indexers
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var loginPage = await RequestStringWithCookies(IndexUrl, string.Empty);
+            var loginPage = await RequestWithCookiesAsync(IndexUrl, string.Empty);
             var parser = new HtmlParser();
-            var dom = parser.ParseDocument(loginPage.Content);
+            var dom = parser.ParseDocument(loginPage.ContentString);
             var qCaptchaImg = dom.QuerySelector("td.tablea > img");
             if (qCaptchaImg != null)
             {
                 var captchaUrl = SiteLink + qCaptchaImg.GetAttribute("src");
-                var captchaImage = await RequestBytesWithCookies(captchaUrl, loginPage.Cookies);
-                configData.CaptchaImage.Value = captchaImage.Content;
+                var captchaImage = await RequestWithCookiesAsync(captchaUrl, loginPage.Cookies);
+                configData.CaptchaImage.Value = captchaImage.ContentBytes;
             }
             else
                 configData.CaptchaImage.Value = Array.Empty<byte>();
@@ -182,12 +202,12 @@ namespace Jackett.Common.Indexers
             foreach (var cat in MapTorznabCapsToTrackers(query))
                 queryCollection.Add("dirs" + cat, "1");
             searchUrl += "?" + queryCollection.GetQueryString();
-            var response = await RequestStringWithCookies(searchUrl);
+            var response = await RequestWithCookiesAsync(searchUrl);
             var titleRegexp = new Regex(@"^return buildTable\('(.*?)',\s+");
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(response.Content);
+                var dom = parser.ParseDocument(response.ContentString);
                 var rows = dom.QuerySelectorAll("table.torrenttable > tbody > tr");
                 foreach (var row in rows.Skip(1))
                 {
@@ -213,11 +233,11 @@ namespace Jackett.Common.Indexers
                     else
                         downloadFactor = 1;
                     var title = titleRegexp.Match(qDetailsLink.GetAttribute("onmouseover")).Groups[1].Value;
-                    var comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
-                    var size = ReleaseInfo.GetBytes(qColumn2[1].TextContent);
-                    var seeders = ParseUtil.CoerceInt(qColumn1[3].TextContent);
-                    var leechers = ParseUtil.CoerceInt(qColumn2[3].TextContent);
-                    var grabs = ParseUtil.CoerceInt(qColumn2[2].TextContent);
+                    var details = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
+                    var size = ReleaseInfo.GetBytes(qColumn1[1].TextContent);
+                    var seeders = ParseUtil.CoerceInt(qColumn2[2].TextContent);
+                    var leechers = ParseUtil.CoerceInt(qColumn1[3].TextContent);
+                    var grabs = ParseUtil.CoerceInt(qColumn1[2].TextContent);
                     var publishDate = TimeZoneInfo.ConvertTime(dateGerman, germanyTz, TimeZoneInfo.Local);
 
                     var release = new ReleaseInfo
@@ -226,7 +246,7 @@ namespace Jackett.Common.Indexers
                         MinimumSeedTime = 0,
                         Title = title,
                         Category = MapTrackerCatToNewznab(catStr),
-                        Comments = comments,
+                        Details = details,
                         Link = link,
                         Guid = link,
                         Size = size,
@@ -242,7 +262,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
 
             return releases;

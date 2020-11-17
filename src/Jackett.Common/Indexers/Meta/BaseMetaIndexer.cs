@@ -23,7 +23,7 @@ namespace Jackett.Common.Indexers.Meta
                    name: name,
                    description: description,
                    link: "http://127.0.0.1/",
-                   caps: null,
+                   caps: new TorznabCapabilities(),
                    configService: configService,
                    client: client,
                    logger: logger,
@@ -46,21 +46,16 @@ namespace Jackett.Common.Indexers.Meta
 
         public override Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson) => Task.FromResult(IndexerConfigurationStatus.Completed);
 
-        public override async Task<IndexerResult> ResultsForQuery(TorznabQuery query)
+        public override async Task<IndexerResult> ResultsForQuery(TorznabQuery query, bool isMetaIndexer)
         {
+            if (!CanHandleQuery(query) || !CanHandleCategories(query, true))
+                return new IndexerResult(this, new ReleaseInfo[0]);
+
             try
             {
-                if (!CanHandleQuery(query))
-                    return new IndexerResult(this, new ReleaseInfo[0]);
                 var results = await PerformQuery(query);
-                var correctedResults = results.Select(r =>
-                {
-                    if (r.PublishDate > DateTime.Now)
-                        r.PublishDate = DateTime.Now;
-                    return r;
-                });
-
-                return new IndexerResult(this, correctedResults);
+                // the results are already filtered and fixed by each indexer
+                return new IndexerResult(this, results);
             }
             catch (Exception ex)
             {
@@ -71,11 +66,11 @@ namespace Jackett.Common.Indexers.Meta
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var indexers = validIndexers;
-            IEnumerable<Task<IndexerResult>> supportedTasks = indexers.Where(i => i.CanHandleQuery(query)).Select(i => i.ResultsForQuery(query)).ToList(); // explicit conversion to List to execute LINQ query
+            IEnumerable<Task<IndexerResult>> supportedTasks = indexers.Where(i => i.CanHandleQuery(query)).Select(i => i.ResultsForQuery(query, true)).ToList(); // explicit conversion to List to execute LINQ query
 
             var fallbackStrategies = fallbackStrategyProvider.FallbackStrategiesForQuery(query);
             var fallbackQueries = fallbackStrategies.Select(async f => await f.FallbackQueries()).SelectMany(t => t.Result);
-            var fallbackTasks = fallbackQueries.SelectMany(q => indexers.Where(i => !i.CanHandleQuery(query) && i.CanHandleQuery(q)).Select(i => i.ResultsForQuery(q.Clone())));
+            var fallbackTasks = fallbackQueries.SelectMany(q => indexers.Where(i => !i.CanHandleQuery(query) && i.CanHandleQuery(q)).Select(i => i.ResultsForQuery(q.Clone(), true)));
             var tasks = supportedTasks.Concat(fallbackTasks.ToList()); // explicit conversion to List to execute LINQ query
 
             // When there are many indexers used by a metaindexer querying each and every one of them can take very very

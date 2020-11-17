@@ -36,7 +36,22 @@ namespace Jackett.Common.Indexers
                    link: "https://superbits.org/",
                    caps: new TorznabCapabilities
                    {
-                       SupportsImdbMovieSearch = true
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q, MovieSearchParam.ImdbId
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
+                       },
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q
+                       }
                    },
                    configService: configService,
                    client: w,
@@ -50,7 +65,7 @@ namespace Jackett.Common.Indexers
 
             AddCategoryMapping(1, TorznabCatType.MoviesDVD, "DVD-R Swesub");
             AddCategoryMapping(2, TorznabCatType.TV, "DVD-R TV");
-            AddCategoryMapping(3, TorznabCatType.BooksEbook, "eBok");
+            AddCategoryMapping(3, TorznabCatType.BooksEBook, "eBok");
             AddCategoryMapping(4, TorznabCatType.MoviesHD, "Film 1080");
             AddCategoryMapping(5, TorznabCatType.Movies3D, "Film 3D");
             AddCategoryMapping(6, TorznabCatType.MoviesHD, "Film 720");
@@ -58,7 +73,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(8, TorznabCatType.TV, "Svensk TV");
             AddCategoryMapping(9, TorznabCatType.AudioAudiobook, "Ljudböcker");
             AddCategoryMapping(10, TorznabCatType.AudioVideo, "Musikvideos");
-            AddCategoryMapping(11, TorznabCatType.BooksMagazines, "E-tidningar");
+            AddCategoryMapping(11, TorznabCatType.BooksMags, "E-tidningar");
             AddCategoryMapping(12, TorznabCatType.Audio, "Musik");
             AddCategoryMapping(13, TorznabCatType.Other, "Omslag");
             AddCategoryMapping(14, TorznabCatType.Other, "Övrigt");
@@ -67,11 +82,13 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(17, TorznabCatType.ConsolePS3, "PS3");
             AddCategoryMapping(18, TorznabCatType.TV, "TV");
             AddCategoryMapping(19, TorznabCatType.ConsoleWii, "Wii");
-            AddCategoryMapping(20, TorznabCatType.ConsoleXbox, "Xbox");
+            AddCategoryMapping(20, TorznabCatType.ConsoleXBox, "Xbox");
             AddCategoryMapping(21, TorznabCatType.MoviesOther, "Xvid");
             AddCategoryMapping(22, TorznabCatType.XXX, "XXX");
             AddCategoryMapping(24, TorznabCatType.MoviesUHD, "Film 4K");
             AddCategoryMapping(26, TorznabCatType.TV, "TV DK");
+            AddCategoryMapping(27, TorznabCatType.TV, "TV NO");
+            AddCategoryMapping(28, TorznabCatType.TV, "TV FI");            
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -128,13 +145,13 @@ namespace Jackett.Common.Indexers
             searchUrl += "?" + queryCollection.GetQueryString();
             foreach (var cat in MapTorznabCapsToTrackers(query))
                 searchUrl += "&categories[]=" + cat;
-            var results = await RequestStringWithCookies(searchUrl, null, SiteLink);
+            var results = await RequestWithCookiesAsync(searchUrl, referer: SiteLink);
 
             try
             {
                 //var json = JArray.Parse(results.Content);
-                dynamic json = JsonConvert.DeserializeObject<dynamic>(results.Content);
-                foreach (var row in json ?? System.Linq.Enumerable.Empty<dynamic>())
+                var json = JsonConvert.DeserializeObject<dynamic>(results.ContentString);
+                foreach (var row in json ?? Enumerable.Empty<dynamic>())
                 {
                     var release = new ReleaseInfo();
                     var descriptions = new List<string>();
@@ -151,8 +168,8 @@ namespace Jackett.Common.Indexers
                     release.Files = row.numfiles;
                     release.Grabs = row.times_completed;
 
-                    release.Comments = new Uri(SiteLink + "torrent/" + row.id.ToString() + "/");
-                    release.Guid = release.Comments;
+                    release.Details = new Uri(SiteLink + "torrent/" + row.id.ToString() + "/");
+                    release.Guid = release.Details;
                     release.Link = new Uri(SiteLink + "api/v1/torrents/download/" + row.id.ToString());
 
                     if (row.frileech == 1)
@@ -162,7 +179,7 @@ namespace Jackett.Common.Indexers
                     release.UploadVolumeFactor = 1;
 
                     if (!string.IsNullOrWhiteSpace(row.customcover.ToString()))
-                        release.BannerUrl = new Uri(SiteLink + row.customcover);
+                        release.Poster = new Uri(SiteLink + row.customcover);
 
                     if (row.imdbid2 != null && row.imdbid2.ToString().StartsWith("tt"))
                     {
@@ -175,7 +192,7 @@ namespace Jackett.Common.Indexers
                         descriptions.Add("Rating: " + row.rating);
                         descriptions.Add("Plot: " + row.plot);
 
-                        release.BannerUrl = new Uri(SiteLink + "img/imdb/" + row.imdbid2 + ".jpg");
+                        release.Poster = new Uri(SiteLink + "img/imdb/" + row.imdbid2 + ".jpg");
                     }
 
                     if ((int)row.p2p == 1)
@@ -205,7 +222,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return releases;

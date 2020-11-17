@@ -13,7 +13,6 @@ legacylinks:
 caps:
   categorymappings:
 
-    # Movies
     - {id: 11, cat: Movies/HD, desc: "DSS"}
     - {id: 1, cat: Movies, desc: "Screener"}
     - {id: 2, cat: Movies, desc: "DVDRip & BDRip"}
@@ -21,23 +20,11 @@ caps:
     - {id: 5, cat: Movies/UHD, desc: "Ultra HD 4K"}
     - {id: 6, cat: TV, desc: "Serie TV"}
     - {id: 4, cat: TV/Anime, desc: "Cartoni"}
-
-    # GAMES
     - {id: 7, cat: PC/Games, desc: "Giochi"}
-
-    # MUSIC
     - {id: 8, cat: Audio, desc: "Musica"}
-
-    # SOFTWARE
     - {id: 9, cat: PC/0day, desc: "Software"}
-
-    # PHONE
-    - {id: 12, cat: PC/Phone-Other, desc: "Applicazioni"}
-
-    # OTHER
+    - {id: 12, cat: PC/Mobile-Other, desc: "Applicazioni"}
     - {id: 14, cat: Other, desc: "Varie & Altro"}
-
-    # EBOOK
     - {id: 13, cat: Books, desc: "Libri & Edicola"}
 
   modes:
@@ -45,6 +32,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -85,42 +73,42 @@ search:
     active: 0
 
   rows:
-    selector: table > tbody > tr > td > table.lista > tbody > tr:has(a[href^="index.php?page=torrent-details&id="]){{if .Config.donor }}{{else}}:not(:has(img[src*="keditbookmarks.png"])){{end}}
+    selector: table > tbody > tr > td > table.lista > tbody > tr:has(a[href^="index.php?page=torrent-details&id="]){{ if .Config.donor }}{{ else }}:not(:has(img[src*="keditbookmarks.png"])){{ end }}
 
   fields:
-    download:
-      selector: a[href^="index.php?page=torrent-details&id="]
-      attribute: href
-      filters:
-        - name: replace
-          args: ["index.php?page=torrent-details&id=", "download.php?id="]
-    title:
-      selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
-      filters:
-        - name: re_replace # rimozioni varie
-          args: ["(?i)(\\[Richiesta\\])", ""]
-    banner:
-      selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
-      attribute: onmouseover
-      filters:
-        - name: regexp
-          args: "src=(.*?) "
     category:
       selector: a[href^="index.php?page=torrents&category="]
       attribute: href
       filters:
         - name: querystring
           args: category
+    title:
+      selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
+      filters:
+        - name: re_replace # rimozioni varie
+          args: ["(?i)(\\[Richiesta\\])", ""]
     details:
       selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
       attribute: href
+    download:
+      selector: a[href^="index.php?page=torrent-details&id="]
+      attribute: href
+      filters:
+        - name: replace
+          args: ["index.php?page=torrent-details&id=", "download.php?id="]
+    poster:
+      selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: "src=(.*?) "
     size:
       selector: td:nth-last-child(2)
     date:
       selector: td:nth-last-child(8)
       filters:
         - name: append
-          args: " +01:00"
+          args: " +01:00" # CET
         - name: dateparse
           args: "02/01/2006 -07:00"
     grabs:

@@ -5,16 +5,16 @@ description: "TenYardTorrents (TYT) is a Private Torrent Tracker for AMERICAN FO
 language: en-us
 type: private
 encoding: UTF-8
-certificates:
-  - C77A88F4AC9798E3E5B18C4AA6CE2ABF32ECF025 # NET::ERR_CERT_COMMON_NAME_INVALID
 links:
-  - https://tenyardtracker.com/
+  - https://talk.tenyardtracker.com/
 legacylinks:
   - http://tenyardtracker.com/
+  - https://tenyardtracker.com/
 
 caps:
   categories:
-    1: TV # Sports
+    1: TV/Sport
+
   modes:
     search: [q]
     tv-search: [q, season, ep]
@@ -35,16 +35,12 @@ login:
     path: my.php
     # selector: a[href="members.php?action=logout"]
 
-ratio:
-  path: browse.php
-  selector: "#status_bar"
-
 search:
   paths:
     - path: browse.php
   inputs:
     $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
-    search: "{{ .Query.Keywords }}"
+    search: "{{ .Keywords }}"
   rows:
     selector: table[border="1"] tr:not(:first-child)
   fields:
@@ -72,8 +68,7 @@ search:
     leechers:
       selector: td:nth-child(9)
     downloadvolumefactor:
-      case:
-        "*": "1"
+      text: 1
     uploadvolumefactor:
-      case:
-        "*": "1"
+      text: 1
+# engine tbd

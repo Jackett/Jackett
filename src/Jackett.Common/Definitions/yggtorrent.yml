@@ -7,7 +7,7 @@ type: semi-private
 encoding: UTF-8
 followredirect: true
 links:
-  - https://yggtorrent.se/
+  - https://www.yggtorrent.si/
   # don't forget to also change bellow in settings !
 legacylinks:
   - https://yggtorrent.com/
@@ -33,6 +33,7 @@ legacylinks:
   - https://www3.yggtorrent.pe/
   - https://www5.yggtorrent.pe/
   - https://yggtorrent.ws/
+  - https://yggtorrent.se/
 
 caps:
   categorymappings:
@@ -94,12 +95,13 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: searchanddlurl
     label: Search and download URL
     type: text
-    default: www2.yggtorrent.se
+    default: www2.yggtorrent.si
   - name: username
     type: text
     label: Username
@@ -111,15 +113,15 @@ settings:
     label: Catégorie
     default: all
     options:
-      all: "Tous"
-      2145: "Film/Vidéo"
-      2139: "Audio"
-      2144: "Application"
-      2142: "Jeu vidéo"
-      2140: "eBook"
-      2141: "Emulation"
-      2143: "GPS"
-      2188: "XXX"
+      all: Tous
+      2145: Film/Vidéo
+      2139: Audio
+      2144: Application
+      2142: Jeu vidéo
+      2140: eBook
+      2141: Emulation
+      2143: GPS
+      2188: XXX
   - name: filter_title
     type: checkbox
     label: Try to normalize releases names by moving year after the title
@@ -133,12 +135,12 @@ settings:
     label: Replace MULTI by this language
     default: FRENCH
     options:
-      FRENCH: "FRENCH"
-      MULTI.FRENCH: "MULTI.FRENCH"
-      ENGLISH: "ENGLISH"
-      MULTI.ENGLISH: "MULTI.ENGLISH"
-      VOSTFR: "VOSTFR"
-      MULTI.VOSTFR: "MULTI.VOSTFR"
+      FRENCH: FRENCH
+      MULTI.FRENCH: MULTI.FRENCH
+      ENGLISH: ENGLISH
+      MULTI.ENGLISH: MULTI.ENGLISH
+      VOSTFR: VOSTFR
+      MULTI.VOSTFR: MULTI.VOSTFR
   - name: vostfr
     type: checkbox
     label: Replace VOSTFR with ENGLISH
@@ -154,19 +156,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "publish_date"
+    default: publish_date
     options:
-      "publish_date": "created"
-      "seed": "seeders"
-      "size": "size"
-      "name": "title"
+      publish_date: created
+      seed: seeders
+      size: size
+      name: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   method: form
@@ -198,17 +200,17 @@ search:
     # BY
     # One Punch Man S02E10 OR One Punch Man S02E02
     - name: re_replace # S 1-9 & EP >= 10
-      args: ["(.*)[sS]([1-9])\\s(\\d{2,3})$", "$1 S0$2E$3"]
+      args: ["(?i)(.*)s([1-9])\\s(\\d{2,3})$", "$1 S0$2E$3"]
     - name: re_replace # S 1-9 & EP 1-9
-      args: ["(.*)[sS]([1-9])\\s(\\d{1})$", "$1 S0$2E0$3"]
+      args: ["(?i)(.*)s([1-9])\\s(\\d{1})$", "$1 S0$2E0$3"]
     - name: re_replace # S >= 10 & EP >= 10
-      args: ["(.*)[sS]([1-9][0-9])\\s(\\d{2,3})$", "$1 S0$2E$3"]
+      args: ["(?i)(.*)s([1-9][0-9])\\s(\\d{2,3})$", "$1 S0$2E$3"]
     - name: re_replace # S >= 10 & EP 1-9
-      args: ["(.*)[sS]([1-9][0-9])\\s(\\d{1})$", "$1 S0$2E0$3"]
+      args: ["(?i)(.*)s([1-9][0-9])\\s(\\d{1})$", "$1 S0$2E0$3"]
     - name: re_replace # Full season S 1-9
-      args: ["(.*)[sS]([1-9])$", "$1 S0$2"]
+      args: ["(?i)(.*)s([1-9])$", "$1 S0$2"]
     - name: re_replace # Full season S >= 10
-      args: ["(.*)[sS]([1-9][0-9])$", "$1 S$2"]
+      args: ["(?i)(.*)s([1-9][0-9])$", "$1 S$2"]
     # END ANIME HACK
     - name: replace
       args: ["\"", ""]
@@ -218,14 +220,10 @@ search:
   paths:
     - path: "https://{{ .Config.searchanddlurl }}/{{ if .Config.betasearchengine }}new_search{{else}}engine{{end}}/search?category={{ .Config.category }}&name={{ if .Config.betasearchengine }}{{ .Keywords }}{{else}}{{ re_replace .Keywords \"\\b[^\\s]+\\b\"  \"\"$&\"\"}}{{end}}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}"
       followredirect: true
-    - path: "https://{{ .Config.searchanddlurl }}/{{ if .Config.betasearchengine }}new_search{{else}}engine{{end}}/search?category={{ .Config.category }}&name={{ if .Config.betasearchengine }}{{ .Keywords }}{{else}}{{ re_replace .Keywords \"\\b[^\\s]+\\b\"  \"\"$&\"\"}}{{end}}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}&page=50"
-      followredirect: true
-    #Saison Word
+    # Saison Word
     - path: "https://{{ .Config.searchanddlurl }}/{{ if .Config.betasearchengine }}new_search{{else}}engine{{end}}/search?category={{ .Config.category }}&name={{ re_replace .Keywords \"[sS]0(\\d{1,2})\"  \"Saison.$1\"}}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}"
       followredirect: true
-    #- path: "https://{{ .Config.searchanddlurl }}/{{ if .Config.betasearchengine }}new_search{{else}}engine{{end}}/search?category={{ .Config.category }}&name={{ re_replace .Keywords \"[sS]0(\\d{1,2})\"  \"Saison $1\"}}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}"
-    #  followredirect: true
-      
+
   rows:
     selector: table.table > tbody > tr
 
@@ -240,26 +238,25 @@ search:
       selector: td:nth-child(2) > a
       filters:
         - name: re_replace # S 1-9 & EP >= 10
-          args: ["(.*)[sS]([1-9])\\s(\\d{2,3})$", "$1 S0$2E$3"]
+          args: ["(?i)(.*)s([1-9])\\s(\\d{2,3})$", "$1 S0$2E$3"]
         - name: re_replace # S 1-9 & EP 1-9
-          args: ["(.*)[sS]([1-9])\\s(\\d{1})$", "$1 S0$2E0$3"]
+          args: ["(?i)(.*)s([1-9])\\s(\\d{1})$", "$1 S0$2E0$3"]
         - name: re_replace # S >= 10 & EP >= 10
-          args: ["(.*)[sS]([1-9][0-9])\\s(\\d{2,3})$", "$1 S0$2E$3"]
+          args: ["(?i)(.*)s([1-9][0-9])\\s(\\d{2,3})$", "$1 S0$2E$3"]
         - name: re_replace # S >= 10 & EP 1-9
-          args: ["(.*)[sS]([1-9][0-9])\\s(\\d{1})$", "$1 S0$2E0$3"]
+          args: ["(?i)(.*)s([1-9][0-9])\\s(\\d{1})$", "$1 S0$2E0$3"]
         - name: re_replace # Full season S 1-9
-          args: ["(.*)[sS]([1-9])$", "$1 S0$2"]
+          args: ["(?i)(.*)s([1-9])$", "$1 S0$2"]
         - name: re_replace # Full season S >= 10
-          args: ["(.*)[sS]([1-9][0-9])$", "$1 S$2"]
+          args: ["(?i)(.*)s([1-9][0-9])$", "$1 S$2"]
         - name: re_replace
-          args: ["([Mm][Uu][Ll][Tt][Ii])", "MULTi"]
+          args: ["(?i)(multi)", "MULTi"]
         # Replace French Saison by Season
         - name: re_replace
-          args: ["([Ss]aison|[Ss]aison |SAISON|SAISON )([1-9])", "S0$2"]
+          args: ["(?i)(saison|saison )([1-9])", "S0$2"]
         - name: re_replace
-          args: ["([Ss]aison|[Ss]aison |SAISON|SAISON )(\\d{1,4})", "S$2"]
+          args: ["(?i)(saison|saison )(\\d{1,4})", "S$2"]
     title_filtered:
-      #selector: td:nth-child(2) > a
       text: "{{ .Result.title_normal }}"
       filters:
         - name: re_replace
@@ -273,21 +270,21 @@ search:
           args: ["(\\s{2,5})", " "]
         - name: trim
     title_phase1:
-      text: "{{ if .Config.filter_title }}{{ .Result.title_filtered }}{{else}}{{ .Result.title_normal }}{{end}}"
+      text: "{{ if .Config.filter_title }}{{ .Result.title_filtered }}{{ else }}{{ .Result.title_normal }}{{ end }}"
     title_multilang:
       text: "{{ .Result.title_phase1 }}"
       filters:
         - name: re_replace
-          args: ["[\\.\\s\\[\\-][Mm][Uu][Ll][Tt][Ii][\\.\\s\\]\\-]", ".{{ .Config.multilanguage }}."]
+          args: ["(?i)[\\.\\s\\[\\-]multi[\\.\\s\\]\\-]", ".{{ .Config.multilanguage }}."]
     title_phase2:
       text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{else}}{{ .Result.title_phase1 }}{{end}}"
     title_vostfr:
       text: "{{ .Result.title_phase2 }}"
       filters:
         - name: re_replace
-          args: ["[\\.\\s\\[\\-][Vv][Oo][Ss][Tt][Ff][Rr][\\.\\s\\]\\-]", ".ENGLISH."]
+          args: ["(?i)[\\.\\s\\[\\-]vostfr[\\.\\s\\]\\-]", ".ENGLISH."]
         - name: re_replace
-          args: ["[\\.\\s\\[\\-][Ss][Uu][Bb][Ff][Rr][Ee][Nn][Cc][Hh][\\.\\s\\]\\-]", ".ENGLISH."]
+          args: ["(?i)[\\.\\s\\[\\-]subfrench[\\.\\s\\]\\-]", ".ENGLISH."]
     title_phase3:
       text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{else}}{{ .Result.title_phase2 }}{{end}}"
     title_anime:
@@ -305,10 +302,6 @@ search:
     category:
       # changed the catid into and hidden div as of last tracker problem
       selector: ":nth-child(1) > div.hidden"
-    comments:
-      optional: true
-      selector: td:nth-child(1) > a[href$="#comments"]
-      attribute: href
     download:
       text: "https://{{ .Config.searchanddlurl }}/engine/download_torrent?id={{ .Result._id }}"
     date:
@@ -357,3 +350,4 @@ search:
       text: 1
     uploadvolumefactor:
       text: 1
+# engine n/a

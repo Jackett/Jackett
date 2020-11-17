@@ -37,7 +37,22 @@ namespace Jackett.Common.Indexers
                    link: "https://rarbg.to/",
                    caps: new TorznabCapabilities
                    {
-                       SupportsImdbMovieSearch = true
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q, MovieSearchParam.ImdbId
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
+                       },
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q
+                       }
                    },
                    configService: configService,
                    client: wc,
@@ -68,9 +83,9 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(25, TorznabCatType.AudioLossless, "Music/FLAC");
             AddCategoryMapping(27, TorznabCatType.PCGames, "Games/PC ISO");
             AddCategoryMapping(28, TorznabCatType.PCGames, "Games/PC RIP");
-            AddCategoryMapping(32, TorznabCatType.ConsoleXbox360, "Games/XBOX-360");
+            AddCategoryMapping(32, TorznabCatType.ConsoleXBox360, "Games/XBOX-360");
             AddCategoryMapping(33, TorznabCatType.PCISO, "Software/PC ISO");
-            AddCategoryMapping(35, TorznabCatType.BooksEbook, "e-Books");
+            AddCategoryMapping(35, TorznabCatType.BooksEBook, "e-Books");
             AddCategoryMapping(40, TorznabCatType.ConsolePS3, "Games/PS3");
             AddCategoryMapping(41, TorznabCatType.TVHD, "TV HD Episodes");
             AddCategoryMapping(42, TorznabCatType.MoviesBluRay, "Movies/Full BD");
@@ -111,14 +126,17 @@ namespace Jackett.Common.Indexers
             return IndexerConfigurationStatus.Completed;
         }
 
-        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query) {
+        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+            => await PerformQueryWithRetry(query, true);
+
+        private async Task<IEnumerable<ReleaseInfo>> PerformQueryWithRetry(TorznabQuery query, bool retry) {
             var releases = new List<ReleaseInfo>();
 
             // check the token and renewal if necessary
             await RenewalTokenAsync();
 
-            var response = await RequestStringWithCookiesAndRetry(BuildSearchUrl(query));
-            var jsonContent = JObject.Parse(response.Content);
+            var response = await RequestWithCookiesAndRetryAsync(BuildSearchUrl(query));
+            var jsonContent = JObject.Parse(response.ContentString);
             var errorCode = jsonContent.Value<int>("error_code");
             switch (errorCode)
             {
@@ -127,14 +145,16 @@ namespace Jackett.Common.Indexers
                 case 2:
                 case 4: // invalid token
                     await RenewalTokenAsync(true); // force renewal token
-                    response = await RequestStringWithCookiesAndRetry(BuildSearchUrl(query));
-                    jsonContent = JObject.Parse(response.Content);
+                    response = await RequestWithCookiesAndRetryAsync(BuildSearchUrl(query));
+                    jsonContent = JObject.Parse(response.ContentString);
                     break;
                 case 10: // imdb not found, see issue #1486
                 case 20: // no results found
-                    return releases;
+                    // the api returns "no results" in some valid queries. we do one retry on this case but we can't do more
+                    // because we can't distinguish between search without results and api malfunction
+                    return retry ? await PerformQueryWithRetry(query, false) : releases;
                 default:
-                    throw new Exception("Unknown error code: " + errorCode + " response: " + response.Content);
+                    throw new Exception("Unknown error code: " + errorCode + " response: " + response.ContentString);
             }
 
             try
@@ -148,7 +168,7 @@ namespace Jackett.Common.Indexers
                     var infoHash = magnetStr.Split(':')[3].Split('&')[0];
 
                     // append app_id to prevent api server returning 403 forbidden
-                    var comments = new Uri(item.Value<string>("info_page") + "&app_id=" + _appId);
+                    var details = new Uri(item.Value<string>("info_page") + "&app_id=" + _appId);
 
                     // ex: 2015-08-16 21:25:08 +0000
                     var dateStr = item.Value<string>("pubdate").Replace(" +0000", "");
@@ -165,14 +185,12 @@ namespace Jackett.Common.Indexers
                         Category = MapTrackerCatDescToNewznab(item.Value<string>("category")),
                         MagnetUri = magnetUri,
                         InfoHash = infoHash,
-                        Comments = comments,
+                        Details = details,
                         PublishDate = publishDate,
                         Guid = magnetUri,
                         Seeders = seeders,
                         Peers = leechers + seeders,
                         Size = size,
-                        MinimumRatio = 1,
-                        MinimumSeedTime = 172800, // 48 hours
                         DownloadVolumeFactor = 0,
                         UploadVolumeFactor = 1
                     };
@@ -191,7 +209,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
 
             return releases;
@@ -258,8 +276,8 @@ namespace Jackett.Common.Indexers
                     { "app_id", _appId }
                 };
                 var tokenUrl = ApiEndpoint + "?" + qc.GetQueryString();
-                var result = await RequestStringWithCookiesAndRetry(tokenUrl);
-                var json = JObject.Parse(result.Content);
+                var result = await RequestWithCookiesAndRetryAsync(tokenUrl);
+                var json = JObject.Parse(result.ContentString);
                 _token = json.Value<string>("token");
                 _lastTokenFetch = DateTime.Now;
             }

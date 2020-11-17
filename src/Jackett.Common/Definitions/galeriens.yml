@@ -32,11 +32,11 @@ caps:
     - {id: 18, cat: Movies/HD, desc: "Animations - M-HD 1080p"}
     - {id: 19, cat: Movies/HD, desc: "Animations - M-HD 720p"}
     - {id: 20, cat: Movies, desc: "Animations - Remux"}
-    - {id: 21, cat: Movies/WEBDL, desc: "Animations - TVRip"}
-    - {id: 24, cat: Movies/WEBDL, desc: "Animations - WEB-DL"}
-    - {id: 22, cat: Movies/WEBDL, desc: "Animations - WEB-DL 1080p"}
-    - {id: 23, cat: Movies/WEBDL, desc: "Animations - WEB-DL 720p"}
-    - {id: 25, cat: Movies/WEBDL, desc: "Animations - WEBRip"}
+    - {id: 21, cat: Movies/WEB-DL, desc: "Animations - TVRip"}
+    - {id: 24, cat: Movies/WEB-DL, desc: "Animations - WEB-DL"}
+    - {id: 22, cat: Movies/WEB-DL, desc: "Animations - WEB-DL 1080p"}
+    - {id: 23, cat: Movies/WEB-DL, desc: "Animations - WEB-DL 720p"}
+    - {id: 25, cat: Movies/WEB-DL, desc: "Animations - WEBRip"}
     - {id: 26, cat: Movies/HD, desc: "Animations - X265"}
     - {id: 49, cat: TV/Documentary, desc: "Documentaires - Doc-Spectacle"}
     - {id: 48, cat: TV/Documentary, desc: "Documentaires - Emission TV"}
@@ -61,11 +61,11 @@ caps:
     - {id: 73, cat: Movies/HD, desc: "Films - M-HD 1080p"}
     - {id: 74, cat: Movies/HD, desc: "Films - M-HD 720p"}
     - {id: 75, cat: Movies, desc: "Films - Remux"}
-    - {id: 76, cat: Movies/WEBDL, desc: "Films - TVRip"}
-    - {id: 77, cat: Movies/WEBDL, desc: "Films - WEB-DL"}
-    - {id: 78, cat: Movies/WEBDL, desc: "Films - WEB-DL 1080p"}
-    - {id: 79, cat: Movies/WEBDL, desc: "Films - WEB-DL 720p"}
-    - {id: 80, cat: Movies/WEBDL, desc: "Films - WEBRip"}
+    - {id: 76, cat: Movies/WEB-DL, desc: "Films - TVRip"}
+    - {id: 77, cat: Movies/WEB-DL, desc: "Films - WEB-DL"}
+    - {id: 78, cat: Movies/WEB-DL, desc: "Films - WEB-DL 1080p"}
+    - {id: 79, cat: Movies/WEB-DL, desc: "Films - WEB-DL 720p"}
+    - {id: 80, cat: Movies/WEB-DL, desc: "Films - WEBRip"}
     - {id: 81, cat: Movies/HD, desc: "Films - X265"}
     - {id: 82, cat: Movies/3D, desc: "Films-VOSTFR - 3D"}
     - {id: 84, cat: Movies/UHD, desc: "Films-VOSTFR - 4K Light"}
@@ -86,28 +86,28 @@ caps:
     - {id: 98, cat: Movies/HD, desc: "Films-VOSTFR - M-HD 1080p"}
     - {id: 99, cat: Movies/HD, desc: "Films-VOSTFR - M-HD 720p"}
     - {id: 100, cat: Movies, desc: "Films-VOSTFR - Remux"}
-    - {id: 101, cat: Movies/WEBDL, desc: "Films-VOSTFR - TVRip"}
-    - {id: 102, cat: Movies/WEBDL, desc: "Films-VOSTFR - WEB-DL"}
-    - {id: 103, cat: Movies/WEBDL, desc: "Films-VOSTFR - WEB-DL 1080p"}
-    - {id: 104, cat: Movies/WEBDL, desc: "Films-VOSTFR - WEB-DL 720p"}
-    - {id: 105, cat: Movies/WEBDL, desc: "Films-VOSTFR - WEBRip"}
+    - {id: 101, cat: Movies/WEB-DL, desc: "Films-VOSTFR - TVRip"}
+    - {id: 102, cat: Movies/WEB-DL, desc: "Films-VOSTFR - WEB-DL"}
+    - {id: 103, cat: Movies/WEB-DL, desc: "Films-VOSTFR - WEB-DL 1080p"}
+    - {id: 104, cat: Movies/WEB-DL, desc: "Films-VOSTFR - WEB-DL 720p"}
+    - {id: 105, cat: Movies/WEB-DL, desc: "Films-VOSTFR - WEBRip"}
     - {id: 106, cat: Movies/HD, desc: "Films-VOSTFR - X265"}
     - {id: 107, cat: Console/3DS, desc: "Jeux - 3DS-DS"}
-    - {id: 108, cat: PC/Phone-IOS, desc: "Jeux - IOS-OSX"}
+    - {id: 108, cat: PC/Mobile-iOS, desc: "Jeux - IOS-OSX"}
     - {id: 109, cat: PC/Games, desc: "Jeux - PC"}
     - {id: 110, cat: Console/PS3, desc: "Jeux - PS3 - PS4"}
     - {id: 111, cat: Console/PSP, desc: "Jeux - PSP-PSX"}
     - {id: 112, cat: Console/Wii, desc: "Jeux - WII"}
     - {id: 113, cat: Console/WiiU, desc: "Jeux - WII-U"}
-    - {id: 114, cat: Console/Xbox, desc: "Jeux - XBOX"}
+    - {id: 114, cat: Console/XBox, desc: "Jeux - XBOX"}
     - {id: 52, cat: Books, desc: "Livres - BD"}
     - {id: 56, cat: Audio/Audiobook, desc: "Livres - Livres Audio"}
     - {id: 55, cat: Books/Comics, desc: "Livres - Mangas"}
-    - {id: 54, cat: Books/Magazines, desc: "Livres - Press"}
-    - {id: 53, cat: Books/Ebook, desc: "Livres - Romans"}
-    - {id: 115, cat: PC/Phone-Android, desc: "Logiciels - ANDROID"}
+    - {id: 54, cat: Books/Mags, desc: "Livres - Press"}
+    - {id: 53, cat: Books/EBook, desc: "Livres - Romans"}
+    - {id: 115, cat: PC/Mobile-Android, desc: "Logiciels - ANDROID"}
     - {id: 118, cat: PC/Mac, desc: "Logiciels - APPLE"}
-    - {id: 116, cat: PC/Phone-IOS, desc: "Logiciels - IPHONE"}
+    - {id: 116, cat: PC/Mobile-iOS, desc: "Logiciels - IPHONE"}
     - {id: 117, cat: PC, desc: "Logiciels - LINUX"}
     - {id: 119, cat: PC/0day, desc: "Logiciels - WINDOWS"}
     - {id: 120, cat: Audio/Lossless, desc: "Musiques - FLAC"}
@@ -181,14 +181,9 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
-#    - name: username
-#      type: text
-#      label: Username
-#    - name: password
-#      type: password
-#      label: Password
   - name: cookie
     type: text
     label: Cookie
@@ -196,46 +191,61 @@ settings:
     type: info
     label: How to get the Cookie
     default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
-
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: multilang
+    type: checkbox
+    label: Replace MULTI by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTI by this language
+    default: FRENCH
+    options:
+      FRENCH: FRENCH
+      MULTI.FRENCH: MULTI.FRENCH
+      ENGLISH: ENGLISH
+      MULTI.ENGLISH: MULTI.ENGLISH
+      VOSTFR: VOSTFR
+      MULTI.VOSTFR: MULTI.VOSTFR
+  - name: vostfr
+    type: checkbox
+    label: Replace VOSTFR with ENGLISH
+    default: false
   - name: torrentlanguage
     type: select
     label: Torrent Language
-    default: "0"
+    default: 0
     options:
-      "0": "Toutes Les Langues"
-      "1": "Allemand"
-      "2": "Anglais(UK)"
-      "3": "Anglais(US)"
-      "4": "Arabe"
-      "5": "Bengali"
-      "6": "Cantonais"
-      "7": " Coréen"
-      "8": "Danois"
-      "9": "Espagnol"
-      "10": "Flamand"
-      "11": " Français"
-      "12": " Hébreu"
-      "13": "Hindi"
-      "14": "Italien"
-      "15": "Japonais"
-      "16": "Mandarin"
-      "17": "Multi"
-      "24": "Multi Truefrench"
-      "18": "Perse"
-      "19": "Portuguais"
-      "20": " Québécois"
-      "21": "Russe"
-      "22": " Suédois"
-      "23": "Ukrainien"
+      0: "Toutes Les Langues"
+      1: Allemand
+      2: Anglais(UK)
+      3: Anglais(US)
+      4: Arabe
+      5: Bengali
+      6: Cantonais
+      7: Coréen
+      8: Danois
+      9: Espagnol
+      10: Flamand
+      11: Français
+      12: Hébreu
+      13: Hindi
+      14: Italien
+      15: Japonais
+      16: Mandarin
+      17: Multi
+      24: "Multi Truefrench"
+      18: Perse
+      19: Portuguais
+      20: Québécois
+      21: Russe
+      22: Suédois
+      23: Ukrainien
 
 login:
-#    path: TTV3/Connexion
-#    method: post
-#    inputs:
-#      username: "{{ .Config.username }}"
-#      password: "{{ .Config.password }}"
-#    error:
-#      - selector: font[color="red"]
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"
@@ -244,6 +254,13 @@ login:
     selector: a[href$="/TTV3/Deconnexion"]
 
 download:
+  before:
+    # https://galeriens.com/TTV3/Torrents/11222/Remercier
+    # note http GET does not seem to work as the html suggests, so using same as LeChaudron which is also a TT3.00FRENCH engine.
+    path: "/TTV3/Torrents/{{ re_replace .DownloadUri.PathAndQuery \"^(.+?)(\\d+)$\" \"$2\" }}/Remercier"
+    method: post
+    inputs:
+      torrent: "{{ re_replace .DownloadUri.PathAndQuery \"^(.+?)(\\d+)$\" \"$2\" }}"
   selector: a[href*="/Telechargement/"]
   attribute: href
 
@@ -254,15 +271,15 @@ search:
     - path: TTV3/Torrents/Recherche
   inputs:
     recherche: "{{ .Keywords }}"
-    # searchtype un (one word) tout (all words) exacte (exact expression)
-    type: "tout"
-    # searchin  nomtorrent (name) or desctorrent (descr)
-    endroit: "nomtorrent"
-    # language 11 french 17 multi
+    # searchtype: un (one word), tout (all words), exacte (exact expression)
+    type: tout
+    # searchin:  nomtorrent (name), desctorrent (descr)
+    endroit: nomtorrent
+    # language: 11 french, 17 multi
     langue: "{{ .Config.torrentlanguage }}"
-    # freeleech oui (yes) non (no) peuimporte (ignore)
-    tl: "peuimporte"
-    # does bot support imdbid search and does not return imdb link in results.
+    # freeleech: oui (yes), non (no), peuimporte (ignore)
+    tl: "{{ if .Config.freeleech }}oui{{ else }}peuimporte{{ end }}"
+    # does not support imdbid search and does not return imdb link in results.
 
   rows:
     selector: table.sortable tbody tr
@@ -273,15 +290,31 @@ search:
       filters:
         - name: regexp
           args: (\d+)$
-    title:
+    title_phase1:
       selector: a[onmouseover]
+    title_multilang:
+      text: "{{ .Result.title_phase1 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)(\\smulti\\s)", " {{ .Config.multilanguage }} "]
+    title_phase2:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    title_vostfr:
+      text: "{{ .Result.title_phase2 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)(\\svostfr\\s)", " ENGLISH "]
+        - name: re_replace
+          args: ["(?i)(\\ssubfrench\\s)", " ENGLISH "]
+    title:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
     details:
       selector: a[onmouseover]
       attribute: href
     download:
       selector: a[onmouseover]
       attribute: href
-    banner:
+    poster:
       selector: a[onmouseover]
       attribute: onmouseover
       filters:
@@ -322,8 +355,13 @@ search:
           args: " ago"
     downloadvolumefactor:
       case:
-        img[src$="/images/Torrents/TLibre.png"]: "0"
-        "*": "1"
+        img[src$="/images/Torrents/TLibre.png"]: 0
+        "*": 1
     uploadvolumefactor:
       text: 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
 # TT3.00 FRENCH

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Jackett.Common.Indexers.Abstract;
 using Jackett.Common.Models;
@@ -22,8 +23,22 @@ namespace Jackett.Common.Indexers
                 link: "https://icetorrent.org/",
                 caps: new TorznabCapabilities
                 {
-                    SupportsImdbMovieSearch = true
-                    // SupportsImdbTVSearch = true (supported by the site but disabled due to #8107)
+                    TvSearchParams = new List<TvSearchParam>
+                    {
+                        TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
+                    },
+                    MovieSearchParams = new List<MovieSearchParam>
+                    {
+                        MovieSearchParam.Q, MovieSearchParam.ImdbId
+                    },
+                    MusicSearchParams = new List<MusicSearchParam>
+                    {
+                        MusicSearchParam.Q
+                    },
+                    BookSearchParams = new List<BookSearchParam>
+                    {
+                        BookSearchParam.Q
+                    }
                 },
                 configService: configService,
                 client: wc,
@@ -54,10 +69,10 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(1, TorznabCatType.PC0day, "Applications");
             AddCategoryMapping(14, TorznabCatType.PC, "Applications: Linux");
             AddCategoryMapping(37, TorznabCatType.PCMac, "Applications: Mac");
-            AddCategoryMapping(19, TorznabCatType.PCPhoneOther, "Applications: Mobile");
+            AddCategoryMapping(19, TorznabCatType.PCMobileOther, "Applications: Mobile");
             AddCategoryMapping(62, TorznabCatType.TV, "TV Cartoons");
             AddCategoryMapping(3, TorznabCatType.TVAnime, "TV Anime / Hentai");
-            AddCategoryMapping(6, TorznabCatType.BooksEbook, "E-books");
+            AddCategoryMapping(6, TorznabCatType.BooksEBook, "E-books");
             AddCategoryMapping(5, TorznabCatType.Audio, "Music");
             AddCategoryMapping(64, TorznabCatType.AudioVideo, "Music Video");
             AddCategoryMapping(18, TorznabCatType.Other, "Images");

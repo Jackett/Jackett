@@ -32,7 +32,21 @@ namespace Jackett.Common.Indexers
                    name: "AniDUB",
                    description: "AniDUB Tracker is a semi-private russian tracker and release group for anime",
                    link: "https://tr.anidub.com/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities
+                   {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
+                       },
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q
+                       }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,
@@ -79,7 +93,7 @@ namespace Jackett.Common.Indexers
                 { "/dorama/korea_dorama", "7" },
                 { "/dorama/china_dorama", "8" },
                 { "/dorama", "9" },
-                { "/anons_ongoing", "12" },
+                { "/anons_ongoing", "12" }
             };
 
         private static ICollection<string> DefaultSearchCategories => new[] { "0" };
@@ -119,7 +133,7 @@ namespace Jackett.Common.Indexers
             );
 
             var parser = new HtmlParser();
-            var document = await parser.ParseDocumentAsync(result.Content);
+            var document = await parser.ParseDocumentAsync(result.ContentString);
 
             await ConfigureIfOK(result.Cookies, IsAuthorized(result), () =>
             {
@@ -145,7 +159,7 @@ namespace Jackett.Common.Indexers
 
         private async Task EnsureAuthorized()
         {
-            var result = await RequestStringWithCookiesAndRetry(SiteLink);
+            var result = await RequestWithCookiesAndRetryAsync(SiteLink);
 
             if (!IsAuthorized(result))
             {
@@ -156,14 +170,13 @@ namespace Jackett.Common.Indexers
         private async Task<List<ReleaseInfo>> FetchNewReleases()
         {
             const string ReleaseLinksSelector = "#dle-content > .story > .story_h > .lcol > h2 > a";
-
-            var result = await RequestStringWithCookiesAndRetry(SiteLink);
+            var result = await RequestWithCookiesAndRetryAsync(SiteLink);
             var releases = new List<ReleaseInfo>();
 
             try
             {
                 var parser = new HtmlParser();
-                var document = await parser.ParseDocumentAsync(result.Content);
+                var document = await parser.ParseDocumentAsync(result.ContentString);
 
                 foreach (var linkNode in document.QuerySelectorAll(ReleaseLinksSelector))
                 {
@@ -173,7 +186,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(result.Content, ex);
+                OnParseError(result.ContentString, ex);
             }
 
             return releases;
@@ -195,18 +208,18 @@ namespace Jackett.Common.Indexers
                 return releases;
             }
 
-            var result = await RequestStringWithCookiesAndRetry(url);
+            var result = await RequestWithCookiesAndRetryAsync(url);
 
             try
             {
                 var parser = new HtmlParser();
-                var document = await parser.ParseDocumentAsync(result.Content);
+                var document = await parser.ParseDocumentAsync(result.ContentString);
                 var content = document.GetElementById(ContentId);
 
                 var date = GetDateFromShowPage(url, content);
 
                 var baseTitle = GetBaseTitle(categories, content);
-                var bannerUrl = GetBannerUrl(url, content);
+                var poster = GetPoster(url, content);
 
                 foreach (var releaseNode in content.QuerySelectorAll(ReleasesSelector))
                 {
@@ -228,7 +241,7 @@ namespace Jackett.Common.Indexers
                     {
                         Title = BuildReleaseTitle(baseTitle, tabNode),
                         Guid = guid,
-                        Comments = uri,
+                        Details = uri,
                         Link = GetReleaseLink(tabNode),
                         PublishDate = date,
                         Category = categories,
@@ -239,7 +252,7 @@ namespace Jackett.Common.Indexers
                         Description = GetReleaseDescription(tabNode),
                         Seeders = seeders,
                         Peers = GetReleaseLeechers(tabNode) + seeders,
-                        BannerUrl = bannerUrl
+                        Poster = poster
                     };
 
                     releases.Add(release);
@@ -247,7 +260,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(result.Content, ex);
+                OnParseError(result.ContentString, ex);
             }
 
             return releases;
@@ -349,18 +362,15 @@ namespace Jackett.Common.Indexers
             }
         }
 
-        private Uri GetBannerUrl(string url, IElement content)
+        private Uri GetPoster(string url, IElement content)
         {
-            var bannerNode = content.QuerySelector(".poster_bg .poster img");
-            var bannerSrc = bannerNode.GetAttribute("src");
+            var posterNode = content.QuerySelector(".poster_bg .poster img");
+            var posterSrc = posterNode.GetAttribute("src");
 
-            if (Uri.TryCreate(bannerSrc, UriKind.Absolute, out var bannerUrl))
-            {
-                return bannerUrl;
-            }
+            if (Uri.TryCreate(posterSrc, UriKind.Absolute, out var poster))
+                return poster;
 
-            logger.Warn($"[AniDub] Banner URL couldn't be parsed on '{url}'. Banner node src: {bannerSrc}");
-
+            logger.Warn($"[AniDub] Poster URL couldn't be parsed on '{url}'. Poster node src: {posterSrc}");
             return null;
         }
 
@@ -509,8 +519,8 @@ namespace Jackett.Common.Indexers
             return domDate.NodeValue.Trim();
         }
 
-        private bool IsAuthorized(WebClientStringResult result) =>
-            result.Content.Contains("index.php?action=logout");
+        private bool IsAuthorized(WebResult result) =>
+            result.ContentString.Contains("index.php?action=logout");
 
         private IEnumerable<int> ParseCategories(Uri showUri)
         {
@@ -529,13 +539,12 @@ namespace Jackett.Common.Indexers
             const string searchLinkSelector = "#dle-content > .searchitem > h3 > a";
 
             var releases = new List<ReleaseInfo>();
-
-            var response = await PostDataWithCookiesAndRetry(SearchUrl, PreparePostData(query));
+            var response = await RequestWithCookiesAndRetryAsync(SearchUrl, method: RequestType.POST, data: PreparePostData(query));
 
             try
             {
                 var parser = new HtmlParser();
-                var document = await parser.ParseDocumentAsync(response.Content);
+                var document = await parser.ParseDocumentAsync(response.ContentString);
 
                 foreach (var linkNode in document.QuerySelectorAll(searchLinkSelector))
                 {
@@ -545,7 +554,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
 
             return releases;
@@ -561,7 +570,7 @@ namespace Jackett.Common.Indexers
                 { "full_search", "1" },
                 { "result_from", "1" },
                 { "story", NormalizeSearchQuery(query)},
-                { "titleonly", "0" },
+                { "titleonly", "3" },
                 { "searchuser", "" },
                 { "replyless", "0" },
                 { "replylimit", "0" },
@@ -569,7 +578,7 @@ namespace Jackett.Common.Indexers
                 { "beforeafter", "after" },
                 { "sortby", "" },
                 { "resorder", "desc" },
-                { "showposts", "1" },
+                { "showposts", "1" }
             };
 
             data.AddRange(PrepareCategoriesQuery(query));

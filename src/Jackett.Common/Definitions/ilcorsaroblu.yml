@@ -17,23 +17,23 @@ caps:
     # Adult
     - {id: 12, cat: XXX, desc: "Adult"}
     # Applicazioni
-    - {id: 5, cat: PC/Phone-Android, desc: "Android"}
-    - {id: 30, cat: PC/Phone-IOS, desc: "iOS / iPhone"}
+    - {id: 5, cat: PC/Mobile-Android, desc: "Android"}
+    - {id: 30, cat: PC/Mobile-iOS, desc: "iOS / iPhone"}
     - {id: 7, cat: PC/0day, desc: "Windows"}
     - {id: 8, cat: PC, desc: "Linux"}
     - {id: 9, cat: PC/Mac, desc: "Mac"}
     - {id: 40, cat: PC, desc: "Emulatori"}
     - {id: 34, cat: PC, desc: "Student's Office"}
     # Books
-    - {id: 6, cat: Books/Ebook, desc: "Books"}
+    - {id: 6, cat: Books/EBook, desc: "Books"}
     - {id: 45, cat: Books/Comics, desc: "Fumetti"}
-    - {id: 51, cat: Books/Ebook, desc: "Pdf"}
-    - {id: 33, cat: Books/Ebook, desc: "Romanzi"}
-    - {id: 26, cat: Books/Magazines, desc: "Edicola: Giornali/Quotidiani"}
+    - {id: 51, cat: Books/EBook, desc: "Pdf"}
+    - {id: 33, cat: Books/EBook, desc: "Romanzi"}
+    - {id: 26, cat: Books/Mags, desc: "Edicola: Giornali/Quotidiani"}
     # Games
     - {id: 3, cat: PC/Games, desc: "Games PC"}
     - {id: 27, cat: Console, desc: "Games Console"}
-    - {id: 41, cat: Console/Xbox, desc: "Games Xbox360"}
+    - {id: 41, cat: Console/XBox, desc: "Games Xbox360"}
     - {id: 43, cat: Console, desc: "Games Retro"}
     - {id: 47, cat: Console/NDS, desc: "Games Nintendo"}
     # Music
@@ -72,6 +72,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -80,22 +81,26 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
-    default: "3"
+    default: 3
     options:
-      "3": "created"
-      "5": "seeders"
-      "4": "size"
-      "2": "title"
+      3: created
+      5: seeders
+      4: size
+      2: title
   - name: type
     type: select
     label: Order requested from site
-    default: "2"
+    default: 2
     options:
-      "2": "desc"
-      "1": "asc"
+      2: desc
+      1: asc
   - name: info
     type: info
     label: Results Per Page
@@ -128,10 +133,10 @@ search:
   inputs:
     page: torrents
     search: "{{ .Keywords }}"
-    category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{else}}0{{end}}"
-    # 0 title 1 title & descr 2 descr 3 uploaders 5 gold 6 silver 7 bronze
-    options: 0
-    # 0 all 1 activeonly 2 deadonly
+    category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{ else }}0{{ end }}"
+    # 0 title, 1 title & descr, 2 descr, 3 uploaders, 5 gold, 6 silver, 7 bronze
+    options: "{{ if .Config.freeleech }}5{{ else }}0{{ end }}"
+    # 0 all, 1 activeonly, 2 deadonly
     active: 0
     order: "{{ .Config.sort }}"
     by: "{{ .Config.type }}"
@@ -143,6 +148,12 @@ search:
       - name: andmatch
 
   fields:
+    category:
+      selector: a[href^="index.php?page=torrents&category="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: category
     title:
       selector: td:nth-child(2) > a
       filters:
@@ -169,6 +180,9 @@ search:
           args: ["(?i)\\b(?:Puntate\\s*)(\\d+)\\s?(\\d+)", "E0$1-0$2"]
         - name: re_replace # rimozioni varie
           args: ["(?i)(Serie completa|Completat?a?|in pausa)", ""]
+    details:
+      selector: td:nth-child(2) > a
+      attribute: href
     download:
       optional: true
       selector: a[href^="download.php?id="]
@@ -181,36 +195,16 @@ search:
           args: http://itorrents.org/torrent/
         - name: append
           args: ".torrent"
-    _magnetfilename: # convert title to valid magnet filename
-      text: "{{ .Result.title }}"
-      filters:
-        - name: validfilename
-        - name: urlencode
-    magnet: # generate magnet link from download link
+    infohash:
       optional: true
       selector: a[href^="download.php?id="]
       attribute: href
       filters:
         - name: querystring
           args: id
-        - name: prepend
-          args: "magnet:?xt=urn:btih:"
-        - name: append
-          args: "&dn={{ .Result._magnetfilename }}.torrent"
-        - name: append
-          args: "&tr=udp://tracker.openbittorrent.com:80/announce&tr=udp://tracker.opentrackr.org:1337/announce"
     magnet:
       optional: true
       selector: a[href^="magnet:?xt="]
-      attribute: href
-    category:
-      selector: a[href^="index.php?page=torrents&category="]
-      attribute: href
-      filters:
-        - name: querystring
-          args: category
-    details:
-      selector: td:nth-child(2) > a
       attribute: href
     size:
       selector: td:nth-last-child(2)
@@ -223,8 +217,10 @@ search:
       selector: td:nth-last-child(7):contains('/')
       optional: true
       filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02/01/2006"
+          args: "02/01/2006 -07:00"
     grabs:
       selector: td:nth-last-child(4)
       filters:
@@ -242,4 +238,5 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
+# minimumratio: appears to be ratioless
 # xbtit

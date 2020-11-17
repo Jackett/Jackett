@@ -70,18 +70,18 @@ caps:
     - {id: 74, cat: PC/0day, desc: "Software - Windows"}
     - {id: 75, cat: PC, desc: "Software - Linux"}
     - {id: 76, cat: PC/Mac, desc: "Software - MAC"}
-    - {id: 77, cat: PC/Phone-Other, desc: "Software - Otras Plataformas"}
-    - {id: 115, cat: PC/Phone-Android, desc: "Software - Android"}
+    - {id: 77, cat: PC/Mobile-Other, desc: "Software - Otras Plataformas"}
+    - {id: 115, cat: PC/Mobile-Android, desc: "Software - Android"}
     - {id: 25, cat: PC/Games, desc: "Juegos - Microsoft"}
     - {id: 26, cat: Console, desc: "Juegos - Sony"}
     - {id: 27, cat: PC/Games, desc: "Juegos - PC"}
     - {id: 28, cat: Console/NDS, desc: "Juegos - Nintendo"}
     - {id: 34, cat: Console/Other, desc: "Juegos - Otros"}
     - {id: 113, cat: Console/Other, desc: "Juegos - Emuladores/Otras P."}
-    - {id: 6, cat: Books/Ebook, desc: "eBooks - eBooks"}
+    - {id: 6, cat: Books/EBook, desc: "eBooks - eBooks"}
     - {id: 131, cat: Books/Comics, desc: "eBooks - Cómics"}
     - {id: 134, cat: Books, desc: "eBooks - Manga"}
-    - {id: 132, cat: Books/Magazines, desc: "eBooks - Revistas"}
+    - {id: 132, cat: Books/Mags, desc: "eBooks - Revistas"}
     - {id: 72, cat: Books/Other, desc: "eBooks - Otros"}
     - {id: 133, cat: Books, desc: "eBooks - Adulto (+18)"}
     - {id: 92, cat: Other, desc: "Otros formatos - Animación"}
@@ -98,6 +98,7 @@ caps:
     tv-search: [q]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -106,22 +107,26 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
-    default: "3"
+    default: 3
     options:
-      "3": "created"
-      "5": "seeders"
-      "4": "size"
-      "2": "title"
+      3: created
+      5: seeders
+      4: size
+      2: title
   - name: type
     type: select
     label: Order requested from site
-    default: "2"
+    default: 2
     options:
-      "2": "desc"
-      "1": "asc"
+      2: desc
+      1: asc
   - name: info
     type: info
     label: Results Per Page
@@ -147,11 +152,12 @@ search:
     - name: re_replace
       args: ["(?i)E(\\d+)", " $1 "]
     - name: re_replace
-      args: ["[^a-zA-Z0-9]+", " "]
+      args: ["[\\.\\-,_\\[\\]\\(\\)]+", " "]
   inputs:
     page: torrents
     $raw: "&category={{ range .Categories }}{{.}};{{end}}"
-    active: 1
+    # 0 all, 1 onlyactive, 2 onlydead, 3 gold, 4 silver, 5 upx2, 6 upx3
+    active: "{{ if .Config.freeleech }}3{{ else }}0{{ end }}"
     search: "{{ .Keywords }}"
     order: "{{ .Config.sort }}"
     by: "{{ .Config.type }}"
@@ -166,28 +172,11 @@ search:
       filters:
         - name: querystring
           args: category
-    title:
-      selector: td:nth-child(2) a:contains("VOSE")
+
+    title: # Clean Title
+      selector: td:nth-child(2)
       optional: true
       filters:
-        - name: append
-          args: " [English]"
-        - name: re_replace
-          args: ["(?i)T[\\s-_]?(\\d{1,2})(.*)\\[(\\d{1,2})[x|\\/|\\\\](\\d{1,2})\\]", "S$1E$3 $2"]
-        - name: re_replace
-          args: ["(?i)T[\\s-_]?(\\d{1,2})\\b", " S$1 "]
-        - name: re_replace
-          args: ["(?i)\\w*Temp\\w*\\b\\s?(\\d{1,2})(ª|\\D)?\\b", " S$1 "]
-        - name: re_replace
-          args: ["(?i)(\\d{1,2})(ª|\\D)?\\s?\\w*Temp\\w*\\b", " S$1 "]
-        - name: re_replace
-          args: ["(?i)(\\d{1,2})[x|\\/|\\\\](\\d{1,2})", "S$1E$2"]
-    title:
-      selector: td:nth-child(2) a:not(:contains("VOSE"))
-      optional: true
-      filters:
-        - name: append
-          args: " [Spanish]"
         - name: re_replace
           args: ["(?i)T[\\s-_]?(\\d{1,2})(.*)\\[(\\d{1,2})[x|\\/|\\\\](\\d{1,2})\\]", "S$1E$3 $2"]
         - name: re_replace
@@ -202,6 +191,118 @@ search:
           args: ["(?i)(\\d{1,2})[x|\\/|\\\\](\\d{1,2})", "S$1E$2"]
         - name: re_replace # S02/C01 => S02E01  /  S02xC01 => S02E01  /  S02C01 => S02E01
           args: ["(?i)S(\\d{1,2})[/x]?C(\\d{1,2})", "S$1E$2"]
+        - name: re_replace
+          args: ["(?i)\\[\\.[a-zA-Z.]+\\]", ""] # Delete [.Group]
+        - name: re_replace
+          args: [" SILVER:.*", ""] # Delete [SILVER...]
+        - name: re_replace
+          args: [" Torrent.*", ""] # Delete [Torrent x2...]
+        - name: re_replace
+          args: [" GOLDEN:.*", ""] # Delete [GOLDEN...]
+        - name: re_replace
+          args: ["\\W", "."] # Spaces and other characters -> .
+        - name: re_replace
+          args: ["\\.+", "."] # More than 1 dot -> .
+        - name: re_replace
+          args: ["^\\.", ""] # Delete first dot
+
+    title|append: # Remux
+      selector: td:nth-child(2) a:contains("REMUX"),a:contains("Remux"),a:contains("remux")
+      optional: true
+      filters:
+        - name: re_replace
+          args: [".", ""]
+        - name: append
+          args: "Remux."
+
+    title|append: # WEBDL
+      selector: td:nth-child(2) a:contains("WEB"),a:contains("web"),a:contains("Web")
+      optional: true
+      filters:
+        - name: re_replace
+          args: [".", ""]
+        - name: append
+          args: "WEBDL."
+
+    title|append: # HDTV
+      selector: td:nth-child(2) a:contains("HDTV"),a:contains("HDtv"),a:contains("hdtv")
+      optional: true
+      filters:
+        - name: re_replace
+          args: [".", ""]
+        - name: append
+          args: "HDTV."
+
+    title|append: # DVD
+      selector: td:nth-child(2) a:contains("DVD"),a:contains("dvd"),a:contains("Dvd")
+      optional: true
+      filters:
+        - name: re_replace
+          args: [".", ""]
+        - name: append
+          args: "DVD.Spanish-PuntoTorrent"
+
+    title|append: # BluRay
+      selector: td:nth-child(2) a:not(:contains("HDTV"))a:not(:contains("hdtv"))a:not(:contains("REMUX"))a:not(:contains("Remux"))a:not(:contains("remux"))a:not(:contains("WEB"))a:not(:contains("web"))a:not(:contains("Web"))a:contains("1080"),:contains("2160"):contains("uhd")
+      optional: true
+      filters:
+        - name: re_replace
+          args: [".", ""]
+        - name: append
+          args: "BluRay."
+
+    title|append: # 2160p
+      selector: td:nth-child(2) a:contains("2160"),a:contains("4k"),a:contains("4K"),a:contains("uhd"),a:contains("UHD")
+      optional: true
+      filters:
+        - name: re_replace
+          args: [".", ""]
+        - name: append
+          args: "2160p.Spanish-PuntoTorrent"
+
+    title|append: # 1080p
+      selector: td:nth-child(2) a:contains("1080"),a:contains("microhd"),a:contains("mhd"),a:contains("BDRemux"):not(:contains("2160"))
+      optional: true
+      filters:
+        - name: re_replace
+          args: [".", ""]
+        - name: append
+          args: "1080p.Spanish-PuntoTorrent"
+
+    title|append: # 720p
+      selector: td:nth-child(2) a:contains("720")
+      optional: true
+      filters:
+        - name: re_replace
+          args: [".", ""]
+        - name: append
+          args: "720p.Spanish-PuntoTorrent"
+
+    title|append: # 480p
+      selector: td:nth-child(2) a:contains("480"),a:contains("Xvid"),a:contains("XVID"),a:contains("xvid")
+      optional: true
+      filters:
+        - name: re_replace
+          args: [".", ""]
+        - name: append
+          args: "480p.Spanish-PuntoTorrent"
+
+    title:
+      selector: td:nth-child(2) a:contains("VOSE")
+      optional: true
+      filters:
+        - name: append
+          args: " | English"
+        - name: re_replace
+          args: ["(?i)T[\\s-_]?(\\d{1,2})(.*)\\[(\\d{1,2})[x|\\/|\\\\](\\d{1,2})\\]", "S$1E$3 $2"]
+        - name: re_replace
+          args: ["(?i)T[\\s-_]?(\\d{1,2})\\b", " S$1 "]
+        - name: re_replace
+          args: ["(?i)\\w*Temp\\w*\\b\\s?(\\d{1,2})(ª|\\D)?\\b", " S$1 "]
+        - name: re_replace
+          args: ["(?i)(\\d{1,2})(ª|\\D)?\\s?\\w*Temp\\w*\\b", " S$1 "]
+        - name: re_replace
+          args: ["(?i)(\\d{1,2})[x|\\/|\\\\](\\d{1,2})", "S$1E$2"]
     details:
       selector: a[href^="download.php"]
       attribute: href
@@ -230,8 +331,10 @@ search:
     date:
       selector: td:nth-child(5)
       filters:
+        - name: append
+          args: " +01:00" # CET
         - name: dateparse
-          args: "02/01/2006"
+          args: "02/01/2006 -07:00"
     download:
       selector: a[href^="download.php"]
       attribute: href

@@ -53,7 +53,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(60, TorznabCatType.XXX, "Документальные фильмы / Documentary & Reality");
             AddCategoryMapping(1644, TorznabCatType.XXX, "Нудизм-Натуризм / Nudity");
 
-            AddCategoryMapping(1111, TorznabCatType.XXXPacks, "Паки полных фильмов / Full Length Movies Packs");
+            AddCategoryMapping(1111, TorznabCatType.XXXPack, "Паки полных фильмов / Full Length Movies Packs");
             AddCategoryMapping(508, TorznabCatType.XXX, "Классические фильмы / Classic");
             AddCategoryMapping(555, TorznabCatType.XXX, "Фильмы с сюжетом / Feature & Vignettes");
             AddCategoryMapping(1673, TorznabCatType.XXX, "Гонзо-фильмы / Gonzo");
@@ -70,7 +70,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(1450, TorznabCatType.XXX, "Гонзо, Лесбо и Фильмы без сюжета (HD Video) / Gonzo, All Girl & Solo, All Sex (HD Video)");
 
             AddCategoryMapping(902, TorznabCatType.XXX, "Русские порнофильмы / Russian Full Length Movies");
-            AddCategoryMapping(1675, TorznabCatType.XXXPacks, "Паки русских порнороликов / Russian Clips Packs");
+            AddCategoryMapping(1675, TorznabCatType.XXXPack, "Паки русских порнороликов / Russian Clips Packs");
             AddCategoryMapping(36, TorznabCatType.XXX, "Сайтрипы с русскими актрисами 1991-2015 / Russian SiteRip's 1991-2015");
             AddCategoryMapping(1830, TorznabCatType.XXX, "Сайтрипы с русскими актрисами 1991-2015 (HD Video) / Russian SiteRip's 1991-2015 (HD Video)");
             AddCategoryMapping(1803, TorznabCatType.XXX, "Сайтрипы с русскими актрисами 2016-2019 / Russian SiteRip's 2016-2019");
@@ -78,9 +78,9 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(1741, TorznabCatType.XXX, "Русские Порноролики Разное / Russian Clips (various)");
             AddCategoryMapping(1676, TorznabCatType.XXX, "Русское любительское видео / Russian Amateur Video");
 
-            AddCategoryMapping(1780, TorznabCatType.XXXPacks, "Паки сайтрипов (HD Video) / SiteRip's Packs (HD Video)");
-            AddCategoryMapping(1110, TorznabCatType.XXXPacks, "Паки сайтрипов / SiteRip's Packs");
-            AddCategoryMapping(1678, TorznabCatType.XXXPacks, "Паки порнороликов по актрисам / Actresses Clips Packs");
+            AddCategoryMapping(1780, TorznabCatType.XXXPack, "Паки сайтрипов (HD Video) / SiteRip's Packs (HD Video)");
+            AddCategoryMapping(1110, TorznabCatType.XXXPack, "Паки сайтрипов / SiteRip's Packs");
+            AddCategoryMapping(1678, TorznabCatType.XXXPack, "Паки порнороликов по актрисам / Actresses Clips Packs");
             AddCategoryMapping(1124, TorznabCatType.XXX, "Сайтрипы 1991-2010 (HD Video) / SiteRip's 1991-2010 (HD Video)");
             AddCategoryMapping(1784, TorznabCatType.XXX, "Сайтрипы 2011-2012 (HD Video) / SiteRip's 2011-2012 (HD Video)");
             AddCategoryMapping(1769, TorznabCatType.XXX, "Сайтрипы 2013 (HD Video) / SiteRip's 2013 (HD Video)");
@@ -103,21 +103,21 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(284, TorznabCatType.XXX, "Порноролики Разное / Clips (various)");
             AddCategoryMapping(1823, TorznabCatType.XXX, "Порноролики в 3D и Virtual Reality (VR) / 3D & Virtual Reality Videos");
 
-            AddCategoryMapping(1801, TorznabCatType.XXXPacks, "Паки японских фильмов и сайтрипов / Full Length Japanese Movies Packs & SiteRip's Packs");
+            AddCategoryMapping(1801, TorznabCatType.XXXPack, "Паки японских фильмов и сайтрипов / Full Length Japanese Movies Packs & SiteRip's Packs");
             AddCategoryMapping(1719, TorznabCatType.XXX, "Японские фильмы и сайтрипы (DVD и HD Video) / Japanese Movies & SiteRip's (DVD & HD Video)");
             AddCategoryMapping(997, TorznabCatType.XXX, "Японские фильмы и сайтрипы 1991-2014 / Japanese Movies & SiteRip's 1991-2014");
             AddCategoryMapping(1818, TorznabCatType.XXX, "Японские фильмы и сайтрипы 2015-2019 / Japanese Movies & SiteRip's 2015-2019");
 
             AddCategoryMapping(1671, TorznabCatType.XXX, "Эротические студии (видео) / Erotic Video Library");
             AddCategoryMapping(1726, TorznabCatType.XXX, "Met-Art & MetModels");
-            AddCategoryMapping(883, TorznabCatType.XXXImageset, "Эротические студии Разное / Erotic Picture Gallery (various)");
-            AddCategoryMapping(1759, TorznabCatType.XXXImageset, "Паки сайтрипов эротических студий / Erotic Picture SiteRip's Packs");
-            AddCategoryMapping(1728, TorznabCatType.XXXImageset, "Любительское фото / Amateur Picture Gallery");
-            AddCategoryMapping(1729, TorznabCatType.XXXPacks, "Подборки по актрисам / Actresses Picture Packs");
-            AddCategoryMapping(38, TorznabCatType.XXXImageset, "Подборки сайтрипов / SiteRip's Picture Packs");
-            AddCategoryMapping(1757, TorznabCatType.XXXImageset, "Подборки сетов / Picture Sets Packs");
-            AddCategoryMapping(1735, TorznabCatType.XXXImageset, "Тематическое и нетрадиционное фото / Misc & Special Interest Picture Packs");
-            AddCategoryMapping(1731, TorznabCatType.XXXImageset, "Журналы / Magazines");
+            AddCategoryMapping(883, TorznabCatType.XXXImageSet, "Эротические студии Разное / Erotic Picture Gallery (various)");
+            AddCategoryMapping(1759, TorznabCatType.XXXImageSet, "Паки сайтрипов эротических студий / Erotic Picture SiteRip's Packs");
+            AddCategoryMapping(1728, TorznabCatType.XXXImageSet, "Любительское фото / Amateur Picture Gallery");
+            AddCategoryMapping(1729, TorznabCatType.XXXPack, "Подборки по актрисам / Actresses Picture Packs");
+            AddCategoryMapping(38, TorznabCatType.XXXImageSet, "Подборки сайтрипов / SiteRip's Picture Packs");
+            AddCategoryMapping(1757, TorznabCatType.XXXImageSet, "Подборки сетов / Picture Sets Packs");
+            AddCategoryMapping(1735, TorznabCatType.XXXImageSet, "Тематическое и нетрадиционное фото / Misc & Special Interest Picture Packs");
+            AddCategoryMapping(1731, TorznabCatType.XXXImageSet, "Журналы / Magazines");
 
             AddCategoryMapping(1679, TorznabCatType.XXX, "Хентай: основной подраздел / Hentai: main subsection");
             AddCategoryMapping(1740, TorznabCatType.XXX, "Хентай в высоком качестве (DVD и HD) / Hentai DVD & HD");
@@ -153,10 +153,10 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(1767, TorznabCatType.XXX, "Классические гей-фильмы (до 1990 года) / Classic Gay Films (Pre-1990's)");
             AddCategoryMapping(1755, TorznabCatType.XXX, "Гей-фильмы в высоком качестве (DVD и HD) / High-Quality Full Length Movies (Gay DVD & HD)");
             AddCategoryMapping(1787, TorznabCatType.XXX, "Азиатские гей-фильмы в высоком качестве (DVD и HD) / High-Quality Full Length Asian Movies (Gay DVD & HD)");
-            AddCategoryMapping(1763, TorznabCatType.XXXPacks, "ПАКи гей-роликов и сайтрипов / Clip's & SiteRip's Packs (Gay)");
+            AddCategoryMapping(1763, TorznabCatType.XXXPack, "ПАКи гей-роликов и сайтрипов / Clip's & SiteRip's Packs (Gay)");
             AddCategoryMapping(1777, TorznabCatType.XXX, "Гей-ролики в высоком качестве (HD Video) / Gay Clips (HD Video)");
             AddCategoryMapping(1691, TorznabCatType.XXX, "Ролики, SiteRip'ы и сцены из гей-фильмов / Clips & Movie Scenes (Gay)");
-            AddCategoryMapping(1692, TorznabCatType.XXXImageset, "Гей-журналы, фото, разное / Magazines, Photo, Rest (Gay)");
+            AddCategoryMapping(1692, TorznabCatType.XXXImageSet, "Гей-журналы, фото, разное / Magazines, Photo, Rest (Gay)");
 
             AddCategoryMapping(1817, TorznabCatType.XXX, "Обход блокировки");
             AddCategoryMapping(1670, TorznabCatType.XXX, "Эротическое видео / Erotic&Softcore");
@@ -183,14 +183,14 @@ namespace Jackett.Common.Indexers
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
             configData.CookieHeader.Value = null;
-            var response = await RequestStringWithCookies(LoginUrl);
+            var response = await RequestWithCookiesAsync(LoginUrl);
             var LoginResultParser = new HtmlParser();
-            var LoginResultDocument = LoginResultParser.ParseDocument(response.Content);
+            var LoginResultDocument = LoginResultParser.ParseDocument(response.ContentString);
             var captchaimg = LoginResultDocument.QuerySelector("img[src*=\"/captcha/\"]");
             if (captchaimg != null)
             {
-                var captchaImage = await RequestBytesWithCookies("https:" + captchaimg.GetAttribute("src"));
-                configData.CaptchaImage.Value = captchaImage.Content;
+                var captchaImage = await RequestWithCookiesAsync("https:" + captchaimg.GetAttribute("src"));
+                configData.CaptchaImage.Value = captchaImage.ContentBytes;
 
                 var codefield = LoginResultDocument.QuerySelector("input[name^=\"cap_code_\"]");
                 cap_code_field = codefield.GetAttribute("name");
@@ -226,12 +226,12 @@ namespace Jackett.Common.Indexers
             }
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, CookieHeader, true, null, LoginUrl, true);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("Вы зашли как:"), () =>
+            await ConfigureIfOK(result.Cookies, result.ContentString != null && result.ContentString.Contains("Вы зашли как:"), () =>
             {
-                logger.Debug(result.Content);
+                logger.Debug(result.ContentString);
                 var errorMessage = "Unknown error message, please report";
                 var LoginResultParser = new HtmlParser();
-                var LoginResultDocument = LoginResultParser.ParseDocument(result.Content);
+                var LoginResultDocument = LoginResultParser.ParseDocument(result.ContentString);
                 var errormsg = LoginResultDocument.QuerySelector("h4[class=\"warnColor1 tCenter mrg_16\"]");
                 if (errormsg != null)
                     errorMessage = errormsg.TextContent;
@@ -260,19 +260,19 @@ namespace Jackett.Common.Indexers
             }
 
             var searchUrl = SearchUrl + "?" + queryCollection.GetQueryString();
-            var results = await RequestStringWithCookies(searchUrl);
-            if (!results.Content.Contains("Вы зашли как:"))
+            var results = await RequestWithCookiesAsync(searchUrl);
+            if (!results.ContentString.Contains("Вы зашли как:"))
             {
                 // re login
                 await ApplyConfiguration(null);
-                results = await RequestStringWithCookies(searchUrl);
+                results = await RequestWithCookiesAsync(searchUrl);
             }
             try
             {
                 var RowsSelector = "table#tor-tbl > tbody > tr";
 
                 var SearchResultParser = new HtmlParser();
-                var SearchResultDocument = SearchResultParser.ParseDocument(results.Content);
+                var SearchResultDocument = SearchResultParser.ParseDocument(results.ContentString);
                 var Rows = SearchResultDocument.QuerySelectorAll(RowsSelector);
                 foreach (var Row in Rows)
                 {
@@ -304,7 +304,7 @@ namespace Jackett.Common.Indexers
                             MinimumRatio = 1,
                             MinimumSeedTime = 0,
                             Title = title,
-                            Comments = link,
+                            Details = link,
                             Description = qForumLink.TextContent,
                             Link = link,
                             Guid = link,
@@ -327,7 +327,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return releases;
@@ -337,8 +337,8 @@ namespace Jackett.Common.Indexers
         public override async Task<byte[]> Download(Uri link)
         {
             var downloadlink = link;
-            var response = await RequestStringWithCookies(link.ToString());
-            var results = response.Content;
+            var response = await RequestWithCookiesAsync(link.ToString());
+            var results = response.ContentString;
             var SearchResultParser = new HtmlParser();
             var SearchResultDocument = SearchResultParser.ParseDocument(results);
             var downloadSelector = "a[class=\"dl-stub dl-link\"]";

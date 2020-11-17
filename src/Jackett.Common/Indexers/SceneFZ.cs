@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Jackett.Common.Indexers.Abstract;
 using Jackett.Common.Models;
@@ -23,8 +24,22 @@ namespace Jackett.Common.Indexers
                 link: "https://scenefz.me/",
                 caps: new TorznabCapabilities
                 {
-                    SupportsImdbMovieSearch = true
-                    // SupportsImdbTVSearch = true (supported by the site but disabled due to #8107)
+                    TvSearchParams = new List<TvSearchParam>
+                    {
+                        TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
+                    },
+                    MovieSearchParams = new List<MovieSearchParam>
+                    {
+                        MovieSearchParam.Q, MovieSearchParam.ImdbId
+                    },
+                    MusicSearchParams = new List<MusicSearchParam>
+                    {
+                        MusicSearchParam.Q
+                    },
+                    BookSearchParams = new List<BookSearchParam>
+                    {
+                        BookSearchParam.Q
+                    }
                 },
                 configService: configService,
                 client: wc,
@@ -45,19 +60,19 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(61, TorznabCatType.MoviesUHD, "Movies-UHD");
 
             AddCategoryMapping(41, TorznabCatType.TV, "TV-Packs");
-            AddCategoryMapping(66, TorznabCatType.TVFOREIGN, "TV-Packs-RO");
+            AddCategoryMapping(66, TorznabCatType.TVForeign, "TV-Packs-RO");
             AddCategoryMapping(45, TorznabCatType.TVSD, "TV-SD");
             AddCategoryMapping(46, TorznabCatType.TVSD, "TV-SD-RO");
             AddCategoryMapping(43, TorznabCatType.TVHD, "TV-HD");
             AddCategoryMapping(44, TorznabCatType.TVHD, "TV-HD-RO");
-            AddCategoryMapping(60, TorznabCatType.TVFOREIGN, "TV-RO");
+            AddCategoryMapping(60, TorznabCatType.TVForeign, "TV-RO");
 
             AddCategoryMapping(11, TorznabCatType.PCGames, "Games-PC");
             AddCategoryMapping(52, TorznabCatType.Console, "Games-Console");
             AddCategoryMapping(1, TorznabCatType.PC0day, "Appz");
             AddCategoryMapping(14, TorznabCatType.PC, "Linux");
             AddCategoryMapping(37, TorznabCatType.PCMac, "Mac");
-            AddCategoryMapping(19, TorznabCatType.PCPhoneOther, "Mobile");
+            AddCategoryMapping(19, TorznabCatType.PCMobileOther, "Mobile");
 
             AddCategoryMapping(62, TorznabCatType.TV, "Cartoons");
             AddCategoryMapping(3, TorznabCatType.TVAnime, "Anime/Hentai");
@@ -75,7 +90,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(15, TorznabCatType.XXX, "XXX");
             AddCategoryMapping(47, TorznabCatType.XXX, "XXX-DVD");
             AddCategoryMapping(48, TorznabCatType.XXX, "XXX-HD");
-            AddCategoryMapping(49, TorznabCatType.XXXImageset, "XXX-IMGSet");
+            AddCategoryMapping(49, TorznabCatType.XXXImageSet, "XXX-IMGSet");
             AddCategoryMapping(50, TorznabCatType.XXX, "XXX-Packs");
             AddCategoryMapping(51, TorznabCatType.XXX, "XXX-SD");
         }

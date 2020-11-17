@@ -7,9 +7,7 @@ type: public
 encoding: UTF-8
 links:
   - https://magnet4you.me/
-  - https://magnet4you.unblocked.bar/
-  - https://magnet4you.proxyportal.pw/
-  - https://magnet4you.uk-unblock.pro/
+  - https://magnet4you.unblocked.rest/
 legacylinks:
   - http://magnet4you.me/
   - https://magnet4you.black-mirror.xyz/
@@ -17,10 +15,13 @@ legacylinks:
   - https://magnet4you.proxyportal.fun/
   - https://magnet4you.uk-unblock.xyz/
   - https://magnet4you.ind-unblock.xyz/
+  - https://magnet4you.unblocked.bar/
+  - https://magnet4you.proxyportal.pw/
+  - https://magnet4you.uk-unblock.pro/
 
 caps:
   categories:
-    1: Other
+    Other: Other
 
   modes:
     search: [q]
@@ -28,29 +29,30 @@ caps:
     movie-search: [q]
 
 settings:
-  - name: info
+  - name: info_8000
     type: info
-    default: Magnet4You does not use categories. In your software Indexer settings, set the category to 7000.
+    label: About Magnet4You Categories
+    default: Magnet4You does not return categories in its search results.</br>To add to your Apps' Torznab indexer, replace all categories with 8000(Other).
   - name: sort
     type: select
     label: Sort requested from site
-    default: "uploaded"
+    default: uploaded
     options:
-      "uploaded": "created"
-      "seed": "seeders"
-      "size": "size"
-      "title": "name"
+      uploaded: created
+      seed: seeders
+      size: size
+      title: name
 
 search:
   paths:
-    - path: "{{ if .Keywords }}search.php?s={{ .Keywords }}&sort={{ .Config.sort }}{{else}}browse.php?sort={{ .Config.sort }}{{end}}"
+    - path: "{{ if .Keywords }}search.php?s={{ .Keywords }}&sort={{ .Config.sort }}{{ else }}browse.php?sort={{ .Config.sort }}{{ end }}"
 
   rows:
     selector: table.tb4 > tbody > tr:has(a[href^="magnet:?xt="])
 
   fields:
     category:
-      text: 1
+      text: Other
     title:
       selector: a[href^="magnet/"]
     details:

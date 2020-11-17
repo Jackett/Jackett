@@ -6,7 +6,10 @@ language: ru-ru
 type: public
 encoding: windows-1251
 links:
+  - https://pc-torrents.games/
+legacylinks:
   - https://pc-torrent.org/
+  - https://pc-torrent.pro/
 
 caps:
   categorymappings:
@@ -41,10 +44,9 @@ search:
     download:
       selector: a
       attribute: href
-    banner:
+    poster:
       selector: img
       attribute: src
-      optional: true
     date:
       text: now
     size:

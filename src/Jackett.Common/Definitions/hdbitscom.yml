@@ -35,10 +35,6 @@ login:
   test:
     path: torrents.php
 
-ratio:
-  path: torrents.php
-  selector: li#stats_ratio > span
-
 search:
   paths:
     - path: torrents.php
@@ -67,16 +63,14 @@ search:
         div.cats_tvseries: 3
         div.cats_applications: 4
         div.cats_xxx: 5
-    comments:
+    details:
       selector: a[href^="torrents.php?id="]
       attribute: href
     imdb:
       selector: a[href*="imdb.com/title/tt"]
-      optional: true
       attribute: href
-    banner:
+    poster:
       selector: img[alt="Cover"]
-      optional: true
       attribute: src
     files:
       selector: td:nth-child(3)

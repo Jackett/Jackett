@@ -20,11 +20,11 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site (Applies only to Keyword searches)
-    default: "td-1"
+    default: td-1
     options:
-      "td-1": "created"
-      "s-1": "seeders"
-      "na-1": "title"
+      td-1: created
+      s-1: seeders
+      na-1: title
 
 download:
   selector: a[href^="magnet:?xt="]
@@ -48,7 +48,7 @@ search:
     download:
       selector: h3 a
       attribute: href
-    banner:
+    poster:
       selector: img[src^="/pic/"]
       attribute: src
     subcat:

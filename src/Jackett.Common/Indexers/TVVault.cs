@@ -34,8 +34,14 @@ namespace Jackett.Common.Indexers
                    link: "https://tv-vault.me/",
                    caps: new TorznabCapabilities
                    {
-                       SupportsImdbMovieSearch = true
-                       // SupportsImdbTVSearch = true (supported by the site but disabled due to #8107)
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q, MovieSearchParam.ImdbId
+                       }
                    },
                    configService: configService,
                    client: wc,
@@ -64,10 +70,10 @@ namespace Jackett.Common.Indexers
             };
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl, true);
-            await ConfigureIfOK(result.Cookies, result.Content?.Contains("logout.php") == true, () =>
+            await ConfigureIfOK(result.Cookies, result.ContentString?.Contains("logout.php") == true, () =>
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(result.Content);
+                var dom = parser.ParseDocument(result.ContentString);
                 var errorMessage = dom.QuerySelector("form#loginform").TextContent.Trim();
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
@@ -94,13 +100,13 @@ namespace Jackett.Common.Indexers
                 qc.Add("searchstr", StripSearchString(query.GetQueryString()));
 
             var searchUrl = BrowseUrl + "?" + qc.GetQueryString();
-            var results = await RequestStringWithCookies(searchUrl);
+            var results = await RequestWithCookiesAsync(searchUrl);
             try
             {
                 var seasonRegEx = new Regex(@$"Season\s+0*{query.Season}[^\d]", RegexOptions.IgnoreCase);
 
                 var parser = new HtmlParser();
-                var doc = parser.ParseDocument(results.Content);
+                var doc = parser.ParseDocument(results.ContentString);
                 var rows = doc.QuerySelectorAll("table.torrent_table > tbody > tr.torrent");
                 foreach (var row in rows)
                 {
@@ -112,7 +118,7 @@ namespace Jackett.Common.Indexers
 
                     var description = qDetailsLink.NextSibling.TextContent.Trim();
                     title += " " + description;
-                    var comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
+                    var details = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
                     var torrentId = qDetailsLink.GetAttribute("href").Split('=').Last();
                     var link = new Uri(SiteLink + "torrents.php?action=download&id=" + torrentId);
 
@@ -136,7 +142,7 @@ namespace Jackett.Common.Indexers
                         PublishDate = publishDate,
                         Category = category,
                         Link = link,
-                        Comments = comments,
+                        Details = details,
                         Guid = link,
                         Seeders = seeders,
                         Peers = leechers + seeders,
@@ -151,7 +157,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return releases;

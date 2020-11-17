@@ -1,5 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Jackett.Common.Models.IndexerConfig.Bespoke
 {
+    [ExcludeFromCodeCoverage]
     internal class ConfigurationDataXthor : ConfigurationData
     {
         public DisplayItem CredentialsWarning { get; private set; }

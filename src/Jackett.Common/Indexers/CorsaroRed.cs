@@ -50,7 +50,25 @@ namespace Jackett.Common.Indexers
                    name: "Corsaro.red",
                    description: "Italian Torrents",
                    link: "https://corsaro.red/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities
+                   {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
+                       },
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q
+                       }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,
@@ -64,7 +82,7 @@ namespace Jackett.Common.Indexers
             // TNTVillage cats
             AddCategoryMapping(1, TorznabCatType.TV, "TV Movies");
             AddCategoryMapping(2, TorznabCatType.Audio, "Music");
-            AddCategoryMapping(3, TorznabCatType.BooksEbook, "eBooks");
+            AddCategoryMapping(3, TorznabCatType.BooksEBook, "eBooks");
             AddCategoryMapping(4, TorznabCatType.Movies, "Movies");
             AddCategoryMapping(6, TorznabCatType.PC, "Linux");
             AddCategoryMapping(7, TorznabCatType.TVAnime, "Anime");
@@ -89,8 +107,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(32, TorznabCatType.Console, "Nintendo Games");
             AddCategoryMapping(34, TorznabCatType.AudioAudiobook, "Audiobook");
             AddCategoryMapping(35, TorznabCatType.Audio, "Podcasts");
-            AddCategoryMapping(36, TorznabCatType.BooksMagazines, "Newspapers");
-            AddCategoryMapping(37, TorznabCatType.PCPhoneOther, "Phone Apps");
+            AddCategoryMapping(36, TorznabCatType.BooksMags, "Newspapers");
+            AddCategoryMapping(37, TorznabCatType.PCMobileOther, "Phone Apps");
         }
 
         private string ApiLatest => $"{SiteLink}api/latests";
@@ -107,36 +125,36 @@ namespace Jackett.Common.Indexers
             return IndexerConfigurationStatus.Completed;
         }
 
-        private dynamic CheckResponse(WebClientStringResult result)
+        private dynamic CheckResponse(WebResult result)
         {
+            var results = result.ContentString;
             try
             {
-                var json = JsonConvert.DeserializeObject<dynamic>(result.Content);
-
-                switch (json)
+                var json = JsonConvert.DeserializeObject<dynamic>(results);
+                return json switch
                 {
-                    case JObject _ when json["ok"] != null && (bool)json["ok"] == false:
-                        throw new Exception("Server error");
-                    default:
-                        return json;
-                }
+                    JObject _ when json["ok"] != null && (bool) json["ok"] == false =>
+                        throw new Exception("Server error"),
+                    _ => json
+                };
             }
             catch (Exception e)
             {
-                logger.Error("checkResponse() Error: ", e.Message);
-                throw new ExceptionWithConfigData(result.Content, configData);
+                OnParseError(results, e);
             }
+            return null;
         }
 
         private async Task<dynamic> SendApiRequest(IEnumerable<KeyValuePair<string, string>> data)
         {
-            var result = await PostDataWithCookiesAndRetry(ApiSearch, data, null, SiteLink, _apiHeaders, null, true);
+            var result = await RequestWithCookiesAndRetryAsync(
+                ApiSearch, null, RequestType.POST, SiteLink, data, _apiHeaders, null, true);
             return CheckResponse(result);
         }
 
         private async Task<dynamic> SendApiRequestLatest()
         {
-            var result = await RequestStringWithCookiesAndRetry(ApiLatest, null, SiteLink, _apiHeaders);
+            var result = await RequestWithCookiesAndRetryAsync(ApiLatest, referer: SiteLink, headers: _apiHeaders);
             return CheckResponse(result);
         }
 
@@ -223,7 +241,7 @@ namespace Jackett.Common.Indexers
         {
             //https://corsaro.red/details/E5BB62E2E58C654F4450325046723A3F013CD7A4
             var magnetUri = new Uri((string)torrent["magnet"]);
-            var comments = new Uri($"{SiteLink}details/{(string)torrent["hash"]}");
+            var details = new Uri($"{SiteLink}details/{(string)torrent["hash"]}");
             var seeders = (int)torrent["seeders"];
             var publishDate = torrent["last_updated"] != null
                 ? DateTime.Parse((string)torrent["last_updated"])
@@ -238,12 +256,10 @@ namespace Jackett.Common.Indexers
                 Seeders = seeders,
                 InfoHash = (string)torrent["hash"],
                 MagnetUri = magnetUri,
-                Comments = comments,
-                MinimumRatio = 1,
-                MinimumSeedTime = 172800, // 48 hours
+                Details = details,
                 DownloadVolumeFactor = 0,
                 UploadVolumeFactor = 1,
-                Guid = comments,
+                Guid = details,
                 Peers = seeders + (int)torrent["leechers"],
                 PublishDate = publishDate,
                 Category = MapTrackerCatToNewznab(cat),

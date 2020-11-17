@@ -7,15 +7,12 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://katcr.co/
-  - https://kat.root.yt/
-  - https://kat.unblockit.id/
-  - https://katcr.unblocked.bar/
-  - https://katcr.proxyportal.pw/
-  - https://katcr.uk-unblock.pro/
+  - https://newkatcr.co/
+  - https://kat.unblockit.app/
+  - https://katcr.unblocked.rest/
 legacylinks:
-  - https://kickasstorrent.cr/ # possible 3rd kickasstorrent site/clone?
-  - https://katcr.to/ # possible 3rd kickasstorrent site/clone?
+  - https://kickasstorrent.cr/ # kickasstorrents-to proxy
+  - https://katcr.to/ # kickasstorrents-to proxy
   - https://kat.unblockit.one/
   - https://katcr.black-mirror.xyz/
   - https://katcr.unblocked.casa/
@@ -24,13 +21,22 @@ legacylinks:
   - https://katcr.ind-unblock.xyz/
   - https://kat.unblockit.me/
   - https://kat.unblockit.pw/
-  - https://kickasstorrents.unblockninja.com/ # down
+  - https://katcr.co/
+  - https://kat.unblockit.id/
+  - https://kat.unblockit.win/
+  - https://kickasstorrents.unblockninja.com/ # currently kickasstorrents-to proxy
+  - https://katcr.unblocked.bar/
+  - https://katcr.proxyportal.pw/
+  - https://katcr.uk-unblock.pro/
+  - https://kat.unblockit.top/
+  - https://kat.root.yt/ # currently kickasstorrents-to proxy
+  - https://kat.unblockit.lat/
 
 caps:
   categorymappings:
     - {id: 118, cat: TV/Anime, desc: "Anime - English Translated"}
     - {id: 133, cat: TV/Anime, desc: "Anime - Other"}
-    - {id: 144, cat: PC/Phone-Other, desc: "Applications - Handheld"}
+    - {id: 144, cat: PC/Mobile-Other, desc: "Applications - Handheld"}
     - {id: 142, cat: PC/0day, desc: "Applications - Linux"}
     - {id: 140, cat: PC/Mac, desc: "Applications - Mac"}
     - {id: 131, cat: PC/0day, desc: "Applications - Other"}
@@ -57,7 +63,7 @@ caps:
     - {id: 97, cat: Console/PS4, desc: "Games - Playstation"}
     - {id: 91, cat: Console/Wii, desc: "Games - Wii"}
     - {id: 85, cat: PC/Games, desc: "Games - Windows"}
-    - {id: 90, cat: Console/Xbox, desc: "Games - Xbox"}
+    - {id: 90, cat: Console/XBox, desc: "Games - Xbox"}
     - {id: 69, cat: Movies/3D, desc: "Movies - 3D Movies"}
     - {id: 80, cat: Movies, desc: "Movies - Animation"}
     - {id: 79, cat: Movies, desc: "Movies - Asian/Bollywood"}
@@ -95,7 +101,7 @@ caps:
     - {id: 124, cat: XXX, desc: "XXX - Books"}
     - {id: 125, cat: XXX, desc: "XXX - Hentai"}
     - {id: 123, cat: XXX, desc: "XXX - Magazines"}
-    - {id: 122, cat: XXX/Imageset, desc: "XXX - Pictures"}
+    - {id: 122, cat: XXX/ImageSet, desc: "XXX - Pictures"}
     - {id: 121, cat: XXX, desc: "XXX - UltraHD"}
     - {id: 119, cat: XXX, desc: "XXX - Videos"}
     - {id: 126, cat: XXX, desc: "XXX - XXX Games"}
@@ -111,7 +117,7 @@ settings: []
 
 search:
   paths:
-    - path: "{{ if .Keywords }}katsearch/page/1/{{ .Keywords }}{{else}}category/latest/page/1{{end}}"
+    - path: "{{ if .Keywords }}search/?q={{ .Keywords }}{{ else }}v2/category/latest/1/6/{{ end }}"
 
   rows:
     selector: table.torrents_table > tbody > tr
@@ -128,7 +134,10 @@ search:
       selector: a[href^="magnet:?xt="]
       attribute: href
     category:
+      text: 138
+    category|noappend:
       selector: span.torrents_table__upload_info
+      optional: true
       case:
         ":has(a:contains(\"Anime\")):contains(\"English Translated\")": 118
         ":has(a:contains(\"Anime\")):contains(\"Other\")": 133
@@ -208,19 +217,13 @@ search:
     files:
       selector: td[data-title="Files"]
     date:
-      selector: td[data-title="Age"]:contains("-")
+      selector: td[data-title="Age"][title]
       attribute: title
-      optional: true
       filters:
+        - name: replace
+          args: ["(UTC)", "+00:00"]
         - name: dateparse
-          args: "2006-01-02"
-    date:
-      selector: td[data-title="Age"]:not(:contains("-"))
-      attribute: title
-      optional: true
-      filters:
-        - name: dateparse
-          args: "2006-01-02 15:04:05"
+          args: "2006-01-02 15:04:05 -07:00"
     seeders:
       selector: td[data-title="Seed"]
     leechers:
@@ -229,4 +232,12 @@ search:
       text: 0
     uploadvolumefactor:
       text: 1
+    imdb:
+      selector: a[href^="/find/content/ttimdb/tt"]
+      attribute: href
+      filters:
+        - name: regexp
+          args: "/(tt\\d+)/"
+        - name: append
+          args: "https://www.imdb.com/title/"
 # engine n/a

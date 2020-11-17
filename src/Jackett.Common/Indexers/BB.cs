@@ -36,9 +36,27 @@ namespace Jackett.Common.Indexers
         public BB(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
             : base(id: "bb",
                    name: "bB",
-                   description: "BaconBits (bB) is a Private Torrent Tracker for 0DAY / GENERAL",
+                   description: "bB is a Private Torrent Tracker for 0DAY / GENERAL",
                    link: StringUtil.FromBase64("aHR0cHM6Ly9iYWNvbmJpdHMub3JnLw=="),
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities
+                   {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
+                       },
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q
+                       }
+                   },
                    configService: configService,
                    client: w,
                    logger: l,
@@ -53,8 +71,10 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(1, TorznabCatType.AudioMP3);
             AddCategoryMapping(1, TorznabCatType.AudioLossless);
             AddCategoryMapping(2, TorznabCatType.PC);
-            AddCategoryMapping(3, TorznabCatType.BooksEbook);
+            AddCategoryMapping(3, TorznabCatType.BooksEBook);
             AddCategoryMapping(4, TorznabCatType.AudioAudiobook);
+            AddCategoryMapping(5, TorznabCatType.Other);
+            AddCategoryMapping(6, TorznabCatType.BooksMags);
             AddCategoryMapping(7, TorznabCatType.BooksComics);
             AddCategoryMapping(8, TorznabCatType.TVAnime);
             AddCategoryMapping(9, TorznabCatType.Movies);
@@ -62,6 +82,9 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(10, TorznabCatType.TVSD);
             AddCategoryMapping(10, TorznabCatType.TV);
             AddCategoryMapping(11, TorznabCatType.PCGames);
+            AddCategoryMapping(12, TorznabCatType.Console);
+            AddCategoryMapping(13, TorznabCatType.Other);
+            AddCategoryMapping(14, TorznabCatType.Other);
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -75,10 +98,10 @@ namespace Jackett.Common.Indexers
             };
 
             var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, SiteLink);
-            await ConfigureIfOK(response.Cookies, response.Content != null && response.Content.Contains("logout.php"), () =>
+            await ConfigureIfOK(response.Cookies, response.ContentString != null && response.ContentString.Contains("logout.php"), () =>
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(response.Content);
+                var dom = parser.ParseDocument(response.ContentString);
                 var messageEl = dom.QuerySelectorAll("#loginform");
                 var messages = new List<string>();
                 for (var i = 0; i < 13; i++)
@@ -96,7 +119,7 @@ namespace Jackett.Common.Indexers
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var searchStrings = new List<string>(new string[] { query.GetQueryString() });
+            var searchStrings = new List<string>(new[] { query.GetQueryString() });
 
             if (string.IsNullOrEmpty(query.Episode) && (query.Season > 0))
                 // Tracker naming rules: If query is for a whole season, "Season #" instead of "S##".
@@ -122,8 +145,8 @@ namespace Jackett.Common.Indexers
 
                 request_urls.Add(SearchUrl + queryCollection.GetQueryString());
             }
-            var downloadTasksQuery =
-                from url in request_urls select RequestStringWithCookiesAndRetry(url);
+
+            var downloadTasksQuery = from url in request_urls select RequestWithCookiesAndRetryAsync(url);
 
             var responses = await Task.WhenAll(downloadTasksQuery.ToArray());
 
@@ -134,12 +157,12 @@ namespace Jackett.Common.Indexers
                 if (results.IsRedirect)
                 {
                     await ApplyConfiguration(null);
-                    results = await RequestStringWithCookiesAndRetry(request_urls[i]);
+                    results = await RequestWithCookiesAndRetryAsync(request_urls[i]);
                 }
                 try
                 {
                     var parser = new HtmlParser();
-                    var dom = parser.ParseDocument(results.Content);
+                    var dom = parser.ParseDocument(results.ContentString);
                     var rows = dom.QuerySelectorAll("#torrent_table > tbody > tr.torrent");
                     foreach (var row in rows)
                     {
@@ -148,16 +171,15 @@ namespace Jackett.Common.Indexers
                         release.MinimumRatio = 1;
                         release.MinimumSeedTime = 172800; // 48 hours
 
-                        var catStr = row.Children[0].FirstElementChild.GetAttribute("href").Split(new char[] { '[', ']' })[1];
+                        var catStr = row.Children[0].FirstElementChild.GetAttribute("href").Split(new[] { '[', ']' })[1];
                         release.Category = MapTrackerCatToNewznab(catStr);
 
-                        var qLink = row.Children[1].QuerySelector("a");
-                        var linkStr = qLink.GetAttribute("href");
-                        release.Comments = new Uri(BaseUrl + "/" + linkStr);
-                        release.Guid = release.Comments;
+                        var qDetails = row.Children[1].QuerySelector("a[title='View Torrent']");
+                        release.Details = new Uri(BaseUri + qDetails.GetAttribute("href"));
+                        release.Guid = release.Details;
 
                         var qDownload = row.Children[1].QuerySelector("a[title='Download']");
-                        release.Link = new Uri(BaseUrl + "/" + qDownload.GetAttribute("href"));
+                        release.Link = new Uri(BaseUri + qDownload.GetAttribute("href"));
 
                         var dateStr = row.Children[3].TextContent.Trim().Replace(" and", "");
                         release.PublishDate = DateTimeUtil.FromTimeAgo(dateStr);
@@ -166,7 +188,6 @@ namespace Jackett.Common.Indexers
                         release.Size = ReleaseInfo.GetBytes(sizeStr);
 
                         release.Files = ParseUtil.CoerceInt(row.Children[2].TextContent.Trim());
-                        release.Grabs = ParseUtil.CoerceInt(row.Children[6].TextContent.Trim());
                         release.Seeders = ParseUtil.CoerceInt(row.Children[7].TextContent.Trim());
                         release.Peers = ParseUtil.CoerceInt(row.Children[8].TextContent.Trim()) + release.Seeders;
 
@@ -195,7 +216,7 @@ namespace Jackett.Common.Indexers
                 }
                 catch (Exception ex)
                 {
-                    OnParseError(results.Content, ex);
+                    OnParseError(results.ContentString, ex);
                 }
             }
             return releases;

@@ -7,7 +7,7 @@
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta charset="utf-8" />
-    <meta name="referrer" content="no-referrer" /> <!-- Don't send referrer when loading third party ressources (E.g. Empornium banner images won't load) -->
+    <meta name="referrer" content="no-referrer" /> <!-- Don't send referrer when loading third party resources (E.g. Empornium poster images won't load) -->
     <link rel="apple-touch-icon" href="../apple-touch-icon.png" />
     <link rel="apple-touch-icon" sizes="57x57" href="../apple-touch-icon-57x57.png" />
     <link rel="apple-touch-icon" sizes="72x72" href="../apple-touch-icon-72x72.png" />
@@ -30,7 +30,6 @@
     <script type="text/javascript" src="../bootstrap/bootstrap.min.js?changed=2017083001"></script>
     <script type="text/javascript" src="../libs/bootstrap-notify.js?changed=2017083001"></script>
     <script type="text/javascript" src="../libs/bootstrap-multiselect.js?changed=2017083001"></script>
-    <!--<script type="text/javascript" src="https://www.google.com/recaptcha/api.js?render=explicit" async defer></script>-->
 
     <link rel="stylesheet" type="text/css" href="../bootstrap/bootstrap.min.css?changed=2017083001">
     <link rel="stylesheet" type="text/css" href="../animate.css?changed=2017083001">
@@ -143,9 +142,10 @@
         <div class="input-area">
             <span class="input-header">Proxy type: </span>
             <select id="jackett-proxy-type" class="form-control input-right">
-                <option value="0">http</option>
-                <option value="1">socks4</option>
-                <option value="2">socks5</option>
+                <option value="-1">Disabled</option>
+                <option value="0">HTTP</option>
+                <option value="1">SOCKS4</option>
+                <option value="2">SOCKS5</option>
             </select>
         </div>
         <div id="proxy-warning" hidden>
@@ -154,8 +154,8 @@
             </span>
         </div>
         <div class="input-area">
-            <span class="input-header">Proxy url: </span>
-            <input id="jackett-proxy-url" class="form-control input-right" type="text" value="" placeholder="Blank to disable">
+            <span class="input-header">Proxy URL: </span>
+            <input id="jackett-proxy-url" class="form-control input-right" type="text" value="" placeholder="">
         </div>
         <div class="input-area">
             <span class="input-header">Proxy port: </span>
@@ -204,13 +204,6 @@
 
     <div id="modals"></div>
 
-    <script id="setup-item-nonlocalrecaptcha" type="text/x-handlebars-template">
-        <div class="setup-item-recaptcha">
-            <p>This site requires you to solve a ReCaptcha. It's no longer possible to solve the captcha in Jackett. Please enter the cookie for the site manually. <a href="https://github.com/Jackett/Jackett/wiki/Finding-cookies" target="_blank">See here</a> on how get the cookies.</p>
-            <div class="setup-item-label">Full cookie header</div>
-            <input class="form-control" type="text" value="{{cookieheader}}" />
-        </div>
-    </script>
     <script id="setup-item" type="text/x-handlebars-template">
         <div class="setup-item form-group" data-id="{{id}}" data-value="{{value}}" data-type="{{type}}">
             <div class="setup-item-label">{{name}}</div>
@@ -259,10 +252,6 @@
                 {{/ifCond}}
                 {{/each}}
             </select>
-        </div>
-    </script>
-    <script id="setup-item-recaptcha" type="text/x-handlebars-template">
-        <div class="jackettrecaptcha">
         </div>
     </script>
     <script id="setup-item-displayimage" type="text/x-handlebars-template">
@@ -413,13 +402,13 @@
                             </thead>
                             <tbody>
                                 {{#each releases}}
-                                <tr class="jackett-releases-row" data-imdb="{{Imdb}}" data-banner="{{BannerUrl}}" data-description="{{Description}}">
+                                <tr class="jackett-releases-row" data-imdb="{{Imdb}}" data-poster="{{Poster}}" data-description="{{Description}}">
                                     <td class="fit">{{PublishDate}}</td>
                                     <td class="fit">{{FirstSeen}}</td>
                                     <td class="fit">{{jacketTimespan PublishDate}}</td>
                                     <td class="fit">{{jacketTimespan FirstSeen}}</td>
                                     <td class="fit">{{Tracker}}</td>
-                                    <td class="Title"><a href="{{Comments}}">{{Title}}</a> <span class="release-labels"></span></td>
+                                    <td class="Title"><a href="{{Details}}">{{Title}}</a> <span class="release-labels"></span></td>
                                     <td class="fit">{{Size}}</td>
                                     <td class="fit">{{jacketSize Size}}</td>
                                     <td class="fit">{{Files}}</td>
@@ -536,11 +525,11 @@
             </thead>
             <tbody>
                 {{#each Results}}
-                <tr class="jackett-search-results-row" data-imdb="{{Imdb}}" data-banner="{{BannerUrl}}" data-description="{{Description}}">
+                <tr class="jackett-search-results-row" data-imdb="{{Imdb}}" data-poster="{{Poster}}" data-description="{{Description}}">
                     <td>{{PublishDate}}</td>
                     <td>{{jacketTimespan PublishDate}}</td>
                     <td>{{Tracker}}</td>
-                    <td class="Title"><a href="{{Comments}}" target="_blank">{{Title}}</a> <span class="release-labels"></span></td>
+                    <td class="Title"><a href="{{Details}}" target="_blank">{{Title}}</a> <span class="release-labels"></span></td>
                     <td>{{Size}}</td>
                     <td class="fit">{{jacketSize Size}}</td>
                     <td>{{Files}}</td>
@@ -691,6 +680,6 @@
     </script>
 
     <script type="text/javascript" src="../libs/api.js?changed=2017083001"></script>
-    <script type="text/javascript" src="../custom.js?changed=20200410"></script>
+    <script type="text/javascript" src="../custom.js?changed=20201107"></script>
 </body>
 </html>

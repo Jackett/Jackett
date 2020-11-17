@@ -9,47 +9,49 @@ links:
   - http://bitru.org/ # site forces http, https is not supported
 
 caps:
-  categories:
-    "movie": Movies
-    "serial": TV
-    "music": Audio
-    "game": PC/Games
-    "soft": PC
-    "literature": Books
-    "audiobook": Audio/Audiobook
-    "video": Movies
-    "image": Other
-    "xxx": XXX
+  categorymappings:
+    - {id: movie, cat: Movies, desc: Movie}
+    - {id: serial, cat: TV, desc: Serial}
+    - {id: music, cat: Audio, desc: Music}
+    - {id: game, cat: PC/Games, desc: Game}
+    - {id: soft, cat: PC, desc: Software}
+    - {id: literature, cat: Books, desc: Literature}
+    - {id: audiobook, cat: Audio/Audiobook, desc: Audiobook}
+    - {id: video, cat: Movies, desc: Movies}
+    - {id: image, cat: Other, desc: Image}
+    - {id: xxx, cat: XXX, desc: xxx}
 
   modes:
     search: [q]
+    tv-search: [q]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: adverts
     type: select
     label: Include Advertising
-    default: "yes"
+    default: _
     options:
-      "yes": "yes"
-      "no": "no"
+      _: yes
+      no: no
   - name: sort
     type: select
     label: Sort requested from site
-    default: "_"
+    default: _
     options:
-      "_": "created"
-      "seeders": "seeders"
-      "size": "size"
+      _: created
+      seeders: seeders
+      size: size
 
 search:
   paths:
     - path: browse.php
   inputs:
     s: "{{ .Keywords }}"
-    rek: "{{ .Config.adverts }}"
-    sort: "{{ re_replace .Config.sort \"_\" \"\"}}"
+    rek: "{{ re_replace .Config.adverts \"_\" \"\" }}"
+    sort: "{{ re_replace .Config.sort \"_\" \"\" }}"
 
   rows:
     selector: table.browse-list > tbody > tr
@@ -79,7 +81,7 @@ search:
       filters:
         - name: replace
           args: ["Присутствует реклама", "Contains Adverts"]
-    banner:
+    poster:
       selector: a[href^="details.php?id="]
       attribute: onmouseover
       filters:
@@ -111,7 +113,7 @@ search:
         - name: replace
           args: ["февраля", "February"]
         - name: replace
-          args: ["марта ", "March"]
+          args: ["марта", "March"]
         - name: replace
           args: ["апреля", "April"]
         - name: replace
@@ -130,8 +132,10 @@ search:
           args: ["ноября", "November"]
         - name: replace
           args: ["декабря", "December"]
+        - name: append
+          args: " +03:00" # MSK
         - name: dateparse
-          args: "02 January 2006 15:04"
+          args: "02 January 2006 15:04 -07:00"
     size:
       selector: td:nth-child(3)
       filters:

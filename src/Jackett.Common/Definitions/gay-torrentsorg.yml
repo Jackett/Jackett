@@ -1,7 +1,7 @@
 ---
 id: gay-torrentsorg
 name: gay-torrents.org
-description: "Gay-Torrents.org is a Private Torrent Tracker for GAY XXX"
+description: "Gay-Torrents.org is a Private Torrent Tracker for GAY 3X"
 language: en-us
 type: private
 encoding: UTF-8
@@ -16,18 +16,10 @@ settings:
   - name: password
     type: password
     label: Password
-  - name: active
-    type: select
-    label: Status
-    default: 0
-    options:
-      0: "Active and Inactive"
-      1: Active
-      2: Inactive
   - name: info_categories
     type: info
     label: "Hidden categories"
-    default: "Results for categories hidden in profile will not be visible."
+    default: "Results for categories hidden in account profile will not be visible."
   - name: info_results
     type: info
     label: "Search results"
@@ -65,7 +57,7 @@ caps:
     - {id: 38, cat: XXX, desc: "Vintage"}
     - {id: 39, cat: XXX, desc: "Wrestling"}
     - {id: 17, cat: PC, desc: "Applications"}
-    - {id: 31, cat: XXX/Imageset, desc: "Images"}
+    - {id: 31, cat: XXX/ImageSet, desc: "Images"}
     - {id: 49, cat: Books, desc: "Books"}
     - {id: 41, cat: Movies, desc: "Non-Porn"}
     - {id: 41, cat: TV, desc: "Non-Porn"}
@@ -73,6 +65,9 @@ caps:
 
   modes:
     search: [q]
+    tv-search: [q]
+    movie-search: [q]
+    book-search: [q]
 
 login:
   method: post
@@ -91,10 +86,13 @@ search:
       method: get
   inputs:
     $raw: "{{range .Categories}}category[]={{.}}&{{end}}"
-    search: "{{ .Query.Keywords }}"
-    active: "{{ .Config.active }}"
+    search: "{{ .Keywords }}"
+    # 0 both, 1 active, 2 dead
+    active: 0
+
   rows:
     selector: div.torrent
+
   fields:
     title:
       selector: div:nth-child(2) > div:nth-child(1) > a:nth-child(1)
@@ -107,8 +105,7 @@ search:
     details:
       selector: a[href^="details.php?id="]
       attribute: href
-    banner:
-      optional: true
+    poster:
       selector: a.screenshot
       attribute: rel
     grabs:
@@ -118,9 +115,6 @@ search:
           args: ["No downloads yet", "0"]
         - name: regexp
           args: ([\d,]+)
-    comments:
-      selector: a[href^="details.php?id="]
-      attribute: href
     download:
       selector: a[href^="download.php?id="]
       attribute: href
@@ -146,6 +140,5 @@ search:
         "div:nth-child(2) > div:nth-child(3) > a:contains(\"-25%\")": 0.25
         "*": 1
     uploadvolumefactor:
-      case:
-        "*": 1
+      text: 1
 # engine tbd

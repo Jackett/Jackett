@@ -9,27 +9,31 @@ followredirect: true
 links:
   - https://www.torrentfunk.com/
   - https://www.torrentfunk2.com/
-  - https://torrentfunk.unblockit.id/
+  - https://torrentfunk.unblockit.app/
 legacylinks:
   - https://torrentfunk.unblockit.pro/
   - https://torrentfunk.unblockit.one/
   - https://torrentfunk.unblockit.me/
   - https://torrentfunk.unblockit.pw/
+  - https://torrentfunk.unblockit.id/
+  - https://torrentfunk.unblockit.win/
+  - https://torrentfunk.unblockit.top/
+  - https://torrentfunk.unblockit.lat/
 
 caps:
-  categories:
-    1: Movies
-    2: Audio
-    3: TV
-    4: PC/Games
-    5: PC
-    6: TV/Anime
-    7: XXX
-    8: Other
-    9: Other
-    0: Other
-    10: Other
-    11: Other
+  categorymappings:
+    - {id: 1, cat: Movies, desc: Movies}
+    - {id: 2, cat: Audio, desc: Music}
+    - {id: 3, cat: TV, desc: Television}
+    - {id: 4, cat: PC/Games, desc: Games}
+    - {id: 5, cat: PC, desc: Software}
+    - {id: 6, cat: TV/Anime, desc: Anime}
+    - {id: 7, cat: XXX, desc: Adult}
+    - {id: 8, cat: Other, desc: Other(tbd)}
+    - {id: 9, cat: Other, desc: Other(tbd)}
+    - {id: 0, cat: Other, desc: Other(tbd)}
+    - {id: 10, cat: Other, desc: Other(tbd)}
+    - {id: 11, cat: Other, desc: Other(tbd)}
 
   modes:
     search: [q]
@@ -54,14 +58,14 @@ search:
       - name: andmatch
 
   fields:
-    title:
-      selector: div a[href^="/torrent/"]
     category:
       selector: td[class^="tv"], td[class^="tn"]
       attribute: class
       filters:
         - name: regexp
           args: (\d+)
+    title:
+      selector: div a[href^="/torrent/"]
     details:
       selector: div a[href^="/torrent/"]
       attribute: href
@@ -89,8 +93,10 @@ search:
       selector: td:nth-child(2):not(:contains("day"))
       optional: true
       filters:
+        - name: append
+          args: " -07:00" # PDT
         - name: dateparse
-          args: "2 Jan"
+          args: "2 Jan -07:00"
     size:
       selector: td:nth-child(3)
     seeders:

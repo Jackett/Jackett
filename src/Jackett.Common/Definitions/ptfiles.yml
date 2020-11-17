@@ -27,7 +27,7 @@ caps:
     - {id: 42, cat: TV/SD, desc: "TV/SD X264 Episodes"}
     - {id: 33, cat: TV/HD, desc: "TV/HD Episodes"}
     - {id: 22, cat: Other, desc: "Misc"}
-    - {id: 24, cat: PC/Phone-Other, desc: "Mobile"}
+    - {id: 24, cat: PC/Mobile-Other, desc: "Mobile"}
     - {id: 6, cat: Audio, desc: "Music"}
     - {id: 39, cat: TV, desc: "TV/Seasons"}
     - {id: 4, cat: PC/Games, desc: "Games/PC"}
@@ -35,10 +35,11 @@ caps:
     - {id: 9, cat: XXX, desc: "XXX"}
 
   modes:
-    search: [q, imdbid]
+    search: [q]
     tv-search: [q, season, ep, imdbid]
     movie-search: [q, imdbid]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -47,22 +48,26 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
-    default: "4"
+    default: 4
     options:
-      "4": "created"
-      "7": "seeders"
-      "5": "size"
-      "1": "title"
+      4: created
+      7: seeders
+      5: size
+      1: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   path: loginproc/
@@ -71,24 +76,26 @@ login:
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
-    force_ssl: "on"
+    force_ssl: on
     ssl: ""
   error:
-    - selector: "p.error:contains(strong)"
+    - selector: p.error:contains(strong)
   test:
     path: browse.php
 
 search:
   paths:
     # https://ptfiles.net/browse.php?search=tt3612126&incldead=1&title=1
+    # https://ptfiles.net/browse.php?free=1&search=&incldead=1&title=0
     - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-    # 0 active 1 both 2 dead 3 needseed
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    # 0 active, 1 both, 2 dead, 3 needseed
     incldead: 0
-    # 0 title 1 descr 2 both 3 genre
-    title: "{{ if .Query.IMDBID }}1{{else}}0{{end}}"
+    # 0 title, 1 descr, 2 both, 3 genre
+    title: "{{ if .Query.IMDBID }}1{{ else }}0{{ end }}"
+    free: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
 
@@ -117,11 +124,9 @@ search:
       attribute: href
     imdb:
       selector: a[href*="imdb.com/title/tt"]
-      optional: true
       attribute: href
-    banner:
+    poster:
       selector: a[rel="gallery"]
-      optional: true
       attribute: href
     files:
       selector: td:nth-last-child(5)
@@ -138,21 +143,26 @@ search:
     leechers:
       selector: td:nth-last-child(2) > span > b:nth-child(2)
     date:
+      # timeago
       selector: td:nth-child(2) > span > span > small
       filters:
         - name: replace
           args: ["Uploaded: ", ""]
     downloadvolumefactor:
       case:
-        "span.tool:contains(\"[FREE]\")": "0"
-        "*": "1"
+        "span.tool:contains(\"[FREE]\")": 0
+        "*": 1
     uploadvolumefactor:
-      case:
-        "*": "1"
+      text: 1
     description:
       selector: td:nth-child(2) > span:has(span > small)
       remove: span:nth-child(1), span.tool, a[title^="Search all"], br ~ b > small
       filters:
         - name: trim
           args: "/"
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
 # TBDev Custom

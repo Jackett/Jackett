@@ -21,36 +21,37 @@ legacylinks:
   - http://firebit.biz/
 
 caps:
-  categories:
-    "Мультфильмы": TV/Anime
-    "Программы": PC
-    "Программы Видео": PC
-    "Программы FAQ": PC
-    "Программы Web Оформление": PC
-    "Linux": PC
-    "Мобилка": PC/Phone-Other
-    "Мобилка Игры": PC/Phone-Other
-    "Литература": Books
-    "Игры": PC/Games
-    "Игры Мобилка": PC/Games
-    "Фильмы": Movies
-    "Фильмы Видео": Movies
-    "Фильмы Сериалы": Movies
-    "Фильмы Скоро на трекере": Movies
-    "Видео": Movies
-    "Музыка": Audio
-    "Музыка Фильмы": Audio
-    "Видео Музыка": Audio/Video
-    "Фильмы Музыка Видео": Audio/Video
-    "Музыка Видео": Audio/Video
-    "Другие категории": Other
-    "Сериалы": TV
+  categorymappings:
+    - {id: "Мультфильмы", cat: TV/Anime, desc: "Мультфильмы"}
+    - {id: "Программы", cat: PC, desc: "Программы"}
+    - {id: "Программы Видео", cat: PC, desc: "Программы Видео"}
+    - {id: "Программы FAQ", cat: PC, desc: "Программы FAQ"}
+    - {id: "Программы Web Оформление", cat: PC, desc: "Программы Web Оформление"}
+    - {id: "Linux", cat: PC, desc: "Linux"}
+    - {id: "Мобилка", cat: PC/Mobile-Other, desc: "Мобилка"}
+    - {id: "Мобилка Игры", cat: PC/Mobile-Other, desc: "Мобилка Игры"}
+    - {id: "Литература", cat: Books, desc: "Литература"}
+    - {id: "Игры", cat: PC/Games, desc: "Игры"}
+    - {id: "Игры Мобилка", cat: PC/Games, desc: "Игры Мобилка"}
+    - {id: "Фильмы", cat: Movies, desc: "Фильмы"}
+    - {id: "Фильмы Видео", cat: Movies, desc: "Фильмы Видео"}
+    - {id: "Фильмы Сериалы", cat: Movies, desc: "Фильмы Сериалы"}
+    - {id: "Фильмы Скоро на трекере", cat: Movies, desc: "Фильмы Скоро на трекере"}
+    - {id: "Видео", cat: Movies, desc: "Видео"}
+    - {id: "Музыка", cat: Audio, desc: "Музыка"}
+    - {id: "Музыка Фильмы", cat: Audio, desc: "Музыка Фильмы"}
+    - {id: "Видео Музыка", cat: Audio/Video, desc: "Видео Музыка"}
+    - {id: "Фильмы Музыка Видео", cat: Audio/Video, desc: "Фильмы Музыка Видео"}
+    - {id: "Музыка Видео", cat: Audio/Video, desc: "Музыка Видео"}
+    - {id: "Другие категории", cat: Other, desc: "Другие категории"}
+    - {id: "Сериалы", cat: TV, desc: "Сериалы"}
 
   modes:
     search: [q]
     tv-search: [q]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings: []
 
@@ -63,8 +64,8 @@ search:
   # http://firebit.net/%D1%84%D0%B8%D0%BB%D1%8C%D0%BC/  # movies
   # http://firebit.net/%D1%81%D0%B5%D1%80%D0%B8%D0%B0%D0%BB/ # tv
   paths:
-    - path: "{{ if .Keywords }}index.php?do=search&type=simple&q={{ .Keywords }}{{else}}%D1%84%D0%B8%D0%BB%D1%8C%D0%BC/{{end}}"
-    - path: "{{ if .Keywords }}index.php?do=search&type=simple&q=abcd1234{{else}}%D1%81%D0%B5%D1%80%D0%B8%D0%B0%D0%BB/{{end}}"
+    - path: "{{ if .Keywords }}index.php?do=search&type=simple&q={{ .Keywords }}{{ else }}%D1%84%D0%B8%D0%BB%D1%8C%D0%BC/{{ end }}"
+    - path: "{{ if .Keywords }}index.php?do=search&type=simple&q=abcd1234{{ else }}%D1%81%D0%B5%D1%80%D0%B8%D0%B0%D0%BB/{{ end }}"
 
   rows:
     selector: "{{ if .Keywords }}table.torrents tbody tr{{ else }}div[id^=\"post-id-\"]{{ end }}"
@@ -96,8 +97,10 @@ search:
     date:
       selector: td:nth-child(5), li.meta-date
       filters:
+        - name: append
+          args: " +03:00" # MSK
         - name: dateparse
-          args: "02.01.2006 15:04:05"
+          args: "02.01.2006 15:04:05 -07:00"
     seeders:
       selector: td.l1, li.meta-sead
     leechers:

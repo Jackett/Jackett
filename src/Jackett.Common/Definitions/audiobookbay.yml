@@ -7,13 +7,14 @@ type: public
 encoding: UTF-8
 links:
   - http://audiobookbay.nl/ # site forces http, does not support https
+  - https://audiobookbay.unblockit.app/
 legacylinks:
   - https://audiobookbay.la/
+  - https://audiobookbay.unblockit.lat/
 
 caps:
   categorymappings:
     - {id: "(Post)apocalyptic", cat: Audio/Audiobook, desc: "(Post)apocalyptic"}
-    - {id: "True", cat: Audio/Audiobook, desc: "True Crime"}
     - {id: Action, cat: Audio/Audiobook, desc: "Action"}
     - {id: Adults, cat: Audio/Audiobook, desc: "Adults"}
     - {id: Adventure, cat: Audio/Audiobook, desc: "Adventure"}
@@ -39,12 +40,12 @@ caps:
     - {id: History, cat: Audio/Audiobook, desc: "History"}
     - {id: Horror, cat: Audio/Audiobook, desc: "Horror"}
     - {id: Humor, cat: Audio/Audiobook, desc: "Humor"}
-    - {id: LGBT, cat: Audio/Audiobook, desc: "LGBT"}
     - {id: Lecture, cat: Audio/Audiobook, desc: "Lecture"}
     - {id: Lesbian, cat: Audio/Audiobook, desc: "Lesbian"}
+    - {id: LGBT, cat: Audio/Audiobook, desc: "LGBT"}
     - {id: Libertarian, cat: Audio/Audiobook, desc: "Libertarian"}
-    - {id: LitRPG, cat: Audio/Audiobook, desc: "LitRPG"}
     - {id: Literature, cat: Audio/Audiobook, desc: "Literature"}
+    - {id: LitRPG, cat: Audio/Audiobook, desc: "LitRPG"}
     - {id: Military, cat: Audio/Audiobook, desc: "Military"}
     - {id: Misc., cat: Audio/Audiobook, desc: "Misc. Non-fiction"}
     - {id: Mystery, cat: Audio/Audiobook, desc: "Mystery"}
@@ -67,12 +68,14 @@ caps:
     - {id: Teen, cat: Audio/Audiobook, desc: "Teen & Young Adult"}
     - {id: The, cat: Audio/Audiobook, desc: "The Undead"}
     - {id: Thriller, cat: Audio/Audiobook, desc: "Thriller"}
+    - {id: "True", cat: Audio/Audiobook, desc: "True Crime"}
     - {id: Tutorial, cat: Audio/Audiobook, desc: "Tutorial"}
     - {id: Violence, cat: Audio/Audiobook, desc: "Violence"}
     - {id: Westerns, cat: Audio/Audiobook, desc: "Westerns"}
 
   modes:
     search: [q]
+    book-search: [q]
 
 settings: []
 
@@ -99,6 +102,11 @@ search:
     selector: div.post:has(div[class="postTitle"])
 
   fields:
+    category:
+      selector: div.postInfo
+      filters:
+        - name: regexp
+          args: "Category: (.+?)\\s"
     title:
       selector: div.postTitle
     details:
@@ -107,15 +115,9 @@ search:
     download:
       selector: div.postTitle h2 a
       attribute: href
-    banner:
-      optional: true
+    poster:
       selector: img
       attribute: src
-    category:
-      selector: div.postInfo
-      filters:
-        - name: regexp
-          args: "Category: (.+?)\\s"
     _date:
       selector: div.postContent
       filters:

@@ -48,9 +48,22 @@ namespace Jackett.Common.Indexers
                  link: "https://ncore.cc/",
                  caps: new TorznabCapabilities
                  {
-                     SupportsImdbMovieSearch = true,
-                     // supported by the site but disabled due to #8107
-                     // SupportsImdbTVSearch = true
+                     TvSearchParams = new List<TvSearchParam>
+                     {
+                         TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
+                     },
+                     MovieSearchParams = new List<MovieSearchParam>
+                     {
+                         MovieSearchParam.Q, MovieSearchParam.ImdbId
+                     },
+                     MusicSearchParams = new List<MusicSearchParam>
+                     {
+                         MusicSearchParam.Q
+                     },
+                     BookSearchParams = new List<BookSearchParam>
+                     {
+                         BookSearchParam.Q
+                     }
                  },
                  configService: configService,
                  client: wc,
@@ -61,6 +74,7 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "hu-hu";
             Type = "private";
+
             AddCategoryMapping("xvid_hun", TorznabCatType.MoviesSD, "Film SD/HU");
             AddCategoryMapping("xvid", TorznabCatType.MoviesSD, "Film SD/EN");
             AddCategoryMapping("dvd_hun", TorznabCatType.MoviesDVD, "Film DVDR/HU");
@@ -82,14 +96,14 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("clip", TorznabCatType.AudioVideo, "Zene Klip");
             AddCategoryMapping("xxx_xvid", TorznabCatType.XXXXviD, "XXX SD");
             AddCategoryMapping("xxx_dvd", TorznabCatType.XXXDVD, "XXX DVDR");
-            AddCategoryMapping("xxx_imageset", TorznabCatType.XXXImageset, "XXX Imageset");
+            AddCategoryMapping("xxx_imageset", TorznabCatType.XXXImageSet, "XXX Imageset");
             AddCategoryMapping("xxx_hd", TorznabCatType.XXX, "XXX HD");
             AddCategoryMapping("game_iso", TorznabCatType.PCGames, "Játék PC/ISO");
             AddCategoryMapping("game_rip", TorznabCatType.PCGames, "Játék PC/RIP");
             AddCategoryMapping("console", TorznabCatType.Console, "Játék Konzol");
             AddCategoryMapping("iso", TorznabCatType.PCISO, "Program Prog/ISO");
             AddCategoryMapping("misc", TorznabCatType.PC0day, "Program Prog/RIP");
-            AddCategoryMapping("mobil", TorznabCatType.PCPhoneOther, "Program Prog/Mobil");
+            AddCategoryMapping("mobil", TorznabCatType.PCMobileOther, "Program Prog/Mobil");
             AddCategoryMapping("ebook_hun", TorznabCatType.Books, "Könyv eBook/HU");
             AddCategoryMapping("ebook", TorznabCatType.Books, "Könyv eBook/EN");
         }
@@ -99,7 +113,7 @@ namespace Jackett.Common.Indexers
             LoadValuesFromJson(configJson);
             if (configData.Hungarian.Value == false && configData.English.Value == false)
                 throw new ExceptionWithConfigData("Please select at least one language.", configData);
-            var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
+            var loginPage = await RequestWithCookiesAsync(LoginUrl, string.Empty);
             var pairs = new Dictionary<string, string>
             {
                 {"nev", configData.Username.Value},
@@ -113,10 +127,10 @@ namespace Jackett.Common.Indexers
                 pairs.Add("2factor", configData.TwoFactor.Value);
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, referer: SiteLink);
             await ConfigureIfOK(
-                result.Cookies, result.Content?.Contains("profile.php") == true, () =>
+                result.Cookies, result.ContentString?.Contains("profile.php") == true, () =>
                 {
                     var parser = new HtmlParser();
-                    var dom = parser.ParseDocument(result.Content);
+                    var dom = parser.ParseDocument(result.ContentString);
                     var msgContainer = dom.QuerySelector("#hibauzenet table tbody tr")?.Children[1];
                     throw new ExceptionWithConfigData(msgContainer?.TextContent ?? "Error while trying to login.", configData);
                 });
@@ -166,9 +180,10 @@ namespace Jackett.Common.Indexers
                 cats = cats.Except(_languageCats).ToList();
 
             pairs.Add("kivalasztott_tipus[]", string.Join(",", cats));
-            var results = await PostDataWithCookiesAndRetry(SearchUrl, pairs.ToEnumerable(true));
+            var results = await RequestWithCookiesAndRetryAsync(
+                SearchUrl, null, RequestType.POST, null, pairs.ToEnumerable(true));
             var parser = new HtmlParser();
-            var dom = parser.ParseDocument(results.Content);
+            var dom = parser.ParseDocument(results.ContentString);
 
             // find number of torrents / page
             var torrentPerPage = dom.QuerySelectorAll(".box_torrent").Length;
@@ -199,7 +214,8 @@ namespace Jackett.Common.Indexers
             for (var page = startPage; page <= pages && releases.Count < limit; page++)
             {
                 pairs["oldal"] = page.ToString();
-                results = await PostDataWithCookiesAndRetry(SearchUrl, pairs.ToEnumerable(true));
+                results = await RequestWithCookiesAndRetryAsync(
+                    SearchUrl, null, RequestType.POST, null, pairs.ToEnumerable(true));
                 releases.AddRange(ParseTorrents(results, episodeString, query, releases.Count, limit, previouslyParsedOnPage));
                 previouslyParsedOnPage = 0;
             }
@@ -207,14 +223,14 @@ namespace Jackett.Common.Indexers
             return releases;
         }
 
-        private List<ReleaseInfo> ParseTorrents(WebClientStringResult results, string episodeString, TorznabQuery query,
+        private List<ReleaseInfo> ParseTorrents(WebResult results, string episodeString, TorznabQuery query,
                                                 int alreadyFound, int limit, int previouslyParsedOnPage)
         {
             var releases = new List<ReleaseInfo>();
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(results.Content);
+                var dom = parser.ParseDocument(results.ContentString);
                 var rows = dom.QuerySelectorAll(".box_torrent").Skip(previouslyParsedOnPage).Take(limit - alreadyFound);
 
                 var key = ParseUtil.GetArgumentFromQueryString(
@@ -233,10 +249,8 @@ namespace Jackett.Common.Indexers
                         var downloadId = ParseUtil.GetArgumentFromQueryString(torrentLink, "id");
 
                         //Build site links
-                        var baseLink = SiteLink + "torrents.php?action=details&id=" + downloadId;
+                        var details = new Uri(SiteLink + "torrents.php?action=details&id=" + downloadId);
                         var downloadLink = SiteLink + "torrents.php?action=download&id=" + downloadId;
-                        var commentsUri = new Uri(baseLink + "#comments");
-                        var guidUri = new Uri(baseLink);
                         var linkUri = new Uri(QueryHelpers.AddQueryString(downloadLink, "key", key));
 
                         var seeders = ParseUtil.CoerceInt(row.QuerySelector(".box_s2 a").TextContent);
@@ -267,8 +281,8 @@ namespace Jackett.Common.Indexers
                             DownloadVolumeFactor = 0,
                             UploadVolumeFactor = 1,
                             Link = linkUri,
-                            Comments = commentsUri,
-                            Guid = guidUri,
+                            Details = details,
+                            Guid = details,
                             Seeders = seeders,
                             Peers = leechers + seeders,
                             Imdb = imdbId,
@@ -276,12 +290,12 @@ namespace Jackett.Common.Indexers
                             Size = size,
                             Category = MapTrackerCatToNewznab(cat)
                         };
-                        var banner = row.QuerySelector("img.infobar_ico")?.GetAttribute("onmouseover");
-                        if (banner != null)
+                        var posterStr = row.QuerySelector("img.infobar_ico")?.GetAttribute("onmouseover");
+                        if (posterStr != null)
                         {
                             // static call to Regex.Match caches the pattern, so we aren't recompiling every loop.
-                            var bannerMatch = Regex.Match(banner, @"mutat\('(.*?)', '", RegexOptions.Compiled);
-                            release.BannerUrl = new Uri(bannerMatch.Groups[1].Value);
+                            var posterMatch = Regex.Match(posterStr, @"mutat\('(.*?)', '", RegexOptions.Compiled);
+                            release.Poster = new Uri(posterMatch.Groups[1].Value);
                         }
 
                         //TODO there is room for improvement here.
@@ -333,7 +347,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return releases;

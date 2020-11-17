@@ -12,7 +12,7 @@ settings:
   - name: cat-id
     type: select
     label: Category
-    default: "0_0"
+    default: 0_0
     options:
       0_0: "All categories"
       1_0: "Art"
@@ -27,18 +27,18 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "id"
+    default: id
     options:
-      "id": "created"
-      "seeders": "seeders"
-      "size": "size"
+      id: created
+      seeders: seeders
+      size: size
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 caps:
   categorymappings:

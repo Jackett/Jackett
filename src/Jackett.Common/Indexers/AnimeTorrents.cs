@@ -1,4 +1,4 @@
-using System;
+ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
@@ -37,7 +37,16 @@ namespace Jackett.Common.Indexers
                    name: "AnimeTorrents",
                    description: "Definitive source for anime and manga",
                    link: "https://animetorrents.me/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q
+                       }
+                   },
                    configService: configService,
                    client: c,
                    logger: l,
@@ -48,25 +57,25 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "private";
 
-            AddCategoryMapping(1, TorznabCatType.MoviesSD); // Anime Movie
-            AddCategoryMapping(6, TorznabCatType.MoviesHD); // Anime Movie HD
-            AddCategoryMapping(2, TorznabCatType.TVAnime); // Anime Series
-            AddCategoryMapping(7, TorznabCatType.TVAnime); // Anime Series HD
-            AddCategoryMapping(5, TorznabCatType.XXXDVD); // Hentai (censored)
-            AddCategoryMapping(9, TorznabCatType.XXXDVD); // Hentai (censored) HD
-            AddCategoryMapping(4, TorznabCatType.XXXDVD); // Hentai (un-censored)
-            AddCategoryMapping(8, TorznabCatType.XXXDVD); // Hentai (un-censored) HD
-            AddCategoryMapping(13, TorznabCatType.BooksForeign); // Light Novel
-            AddCategoryMapping(3, TorznabCatType.BooksComics); // Manga
-            AddCategoryMapping(10, TorznabCatType.BooksComics); // Manga 18+
-            AddCategoryMapping(11, TorznabCatType.TVAnime); // OVA
-            AddCategoryMapping(12, TorznabCatType.TVAnime); // OVA HD
-            AddCategoryMapping(14, TorznabCatType.BooksComics); // Doujin Anime
-            AddCategoryMapping(15, TorznabCatType.XXXDVD); // Doujin Anime 18+
-            AddCategoryMapping(16, TorznabCatType.AudioForeign); // Doujin Music
-            AddCategoryMapping(17, TorznabCatType.BooksComics); // Doujinshi
-            AddCategoryMapping(18, TorznabCatType.BooksComics); // Doujinshi 18+
-            AddCategoryMapping(19, TorznabCatType.Audio); // OST
+            AddCategoryMapping(1, TorznabCatType.MoviesSD, "Anime Movie");
+            AddCategoryMapping(6, TorznabCatType.MoviesHD, "Anime Movie HD");
+            AddCategoryMapping(2, TorznabCatType.TVAnime, "Anime Series");
+            AddCategoryMapping(7, TorznabCatType.TVAnime, "Anime Series HD");
+            AddCategoryMapping(5, TorznabCatType.XXXDVD, "Hentai (censored)");
+            AddCategoryMapping(9, TorznabCatType.XXXDVD, "Hentai (censored) HD");
+            AddCategoryMapping(4, TorznabCatType.XXXDVD, "Hentai (un-censored)");
+            AddCategoryMapping(8, TorznabCatType.XXXDVD, "Hentai (un-censored) HD");
+            AddCategoryMapping(13, TorznabCatType.BooksForeign, "Light Novel");
+            AddCategoryMapping(3, TorznabCatType.BooksComics, "Manga");
+            AddCategoryMapping(10, TorznabCatType.BooksComics, "Manga 18+");
+            AddCategoryMapping(11, TorznabCatType.TVAnime, "OVA");
+            AddCategoryMapping(12, TorznabCatType.TVAnime, "OVA HD");
+            AddCategoryMapping(14, TorznabCatType.BooksComics, "Doujin Anime");
+            AddCategoryMapping(15, TorznabCatType.XXXDVD, "Doujin Anime 18+");
+            AddCategoryMapping(16, TorznabCatType.AudioForeign, "Doujin Music");
+            AddCategoryMapping(17, TorznabCatType.BooksComics, "Doujinshi");
+            AddCategoryMapping(18, TorznabCatType.BooksComics, "Doujinshi 18+");
+            AddCategoryMapping(19, TorznabCatType.Audio, "OST");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -79,13 +88,13 @@ namespace Jackett.Common.Indexers
                 { "rememberme[]", "1" }
             };
 
-            var loginPage = await RequestStringWithCookiesAndRetry(LoginUrl, "", LoginUrl);
+            var loginPage = await RequestWithCookiesAndRetryAsync(LoginUrl, "", RequestType.GET, LoginUrl);
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
+            await ConfigureIfOK(result.Cookies, result.ContentString != null && result.ContentString.Contains("logout.php"), () =>
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(result.Content);
+                var dom = parser.ParseDocument(result.ContentString);
                 var errorMessage = dom.QuerySelector(".ui-state-error").Text().Trim();
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
@@ -112,14 +121,15 @@ namespace Jackett.Common.Indexers
             };
             searchUrl += "?" + queryCollection.GetQueryString();
 
-            var extraHeaders = new Dictionary<string, string>()
+            var extraHeaders = new Dictionary<string, string>
             {
                 { "X-Requested-With", "XMLHttpRequest" }
             };
 
-            var response = await RequestStringWithCookiesAndRetry(searchUrl, null, SearchUrlReferer, extraHeaders);
+            var response = await RequestWithCookiesAndRetryAsync(
+                searchUrl, referer: SearchUrlReferer, headers: extraHeaders);
 
-            var results = response.Content;
+            var results = response.ContentString;
             try
             {
                 var parser = new HtmlParser();
@@ -139,7 +149,7 @@ namespace Jackett.Common.Indexers
                     }
 
                     release.Guid = new Uri(qTitleLink.GetAttribute("href"));
-                    release.Comments = release.Guid;
+                    release.Details = release.Guid;
 
                     var dateString = row.QuerySelector("td:nth-of-type(5)").TextContent;
                     release.PublishDate = DateTime.ParseExact(dateString, "dd MMM yy", CultureInfo.InvariantCulture);
@@ -151,10 +161,10 @@ namespace Jackett.Common.Indexers
                     }
                     else
                     {
-                        // use comments link as placeholder
+                        // use details link as placeholder
                         // null causes errors during export to torznab
                         // skipping the release prevents newbie users from adding the tracker (empty result)
-                        release.Link = release.Comments;
+                        release.Link = release.Details;
                     }
 
                     var sizeStr = row.QuerySelector("td:nth-of-type(6)").TextContent;

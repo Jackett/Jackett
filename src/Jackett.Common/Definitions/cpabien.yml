@@ -7,7 +7,7 @@ type: semi-private
 encoding: UTF-8
 followredirect: true
 links:
-  - https://wvw.cpasbien-fr.fr/
+  - https://wwwv.cpasbien-fr.fr/
 legacylinks:
   - http://www.cpasbiens.cc/
   - http://www.cpabien.cm/
@@ -39,10 +39,11 @@ legacylinks:
   - https://www.cpasbien.lol/
   - https://www.gktorrent.biz/
   - https://vww.cpasbien-fr.fr/
+  - https://wvw.cpasbien-fr.fr/
 
 caps:
-  categorymappings:
-    - {id: other, cat: Other, desc: "Movies/TV/Other"}
+  categories:
+    Other: Other
 
   modes:
     search: [q]
@@ -65,10 +66,29 @@ settings:
     type: info
     label: How to get the User-Agent
     default: "<ol><li>From the same place you fetched the cookie,<li>Find <b>'user-agent:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole user-agent string <i>(everything after 'user-agent: ')</i> and <b>Paste</b> here.</ol>"
-  - name: info_categories
+  - name: info_8000
     type: info
-    label: "About categories"
-    default: "cpasbien does not show <b>Categories</b> in its Search Results.<br />To use this indexer with Sonarr/Radarr set your indexer category to <b>7000</b>."
+    label: About cpasbien Categories
+    default: cpasbien does not return categories in its search results.</br>To add to your Apps' Torznab indexer, replace all categories with 8000(Other).
+  - name: multilang
+    type: checkbox
+    label: Replace MULTI by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTI by this language
+    default: FRENCH
+    options:
+      FRENCH: FRENCH
+      MULTI.FRENCH: MULTI.FRENCH
+      ENGLISH: ENGLISH
+      MULTI.ENGLISH: MULTI.ENGLISH
+      VOSTFR: VOSTFR
+      MULTI.VOSTFR: MULTI.VOSTFR
+  - name: vostfr
+    type: checkbox
+    label: Replace VOSTFR with ENGLISH
+    default: false
 
 login:
   method: cookie
@@ -82,39 +102,63 @@ download:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}index.php?do=search&subaction=search{{else}}{{end}}"
+    - path: "{{ if .Keywords }}index.php?do=search&subaction=search{{ else }}{{ end }}"
       method: post
   inputs:
-    story: "{{ if .Keywords }}{{ .Keywords }}{{else}}{{end}}"
+    story: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ end }}"
   # does not support imdbid search and does not return imdb link in results.
+  keywordsfilters:
+    # if searching for season packs swith S01 to saison 1 #9712
+    - name: re_replace
+      args: ["(?i)(S0)(\\d{1,2})$", "saison $2"]
+    - name: re_replace
+      args: ["(?i)(S)(\\d{1,3})$", "saison $2"]
 
   rows:
     selector: div#gauche > table > tbody > tr:has(a)
 
   fields:
     category:
-      text: other
+      text: Other
     site_date:
       selector: a
       filters:
         # date is at the end of the title, so we get it and name it site_date
         - name: regexp
-          args: "(\\w+)$"
-    title:
+          args: "(19|20\\d{2})$"
+    title_phase1:
       selector: a
       filters:
         # now we put the date at the right place according scene naming rules using .Result.site_date
-        - name: replace
-          args: [" FRENCH", " {{ .Result.site_date }} FRENCH"]
-        - name: replace
-          args: ["MULTI", "{{ .Result.site_date }} MULTI"]
-        - name: replace
-          args: ["TRUEFRENCH", "{{ .Result.site_date }} TRUEFRENCH"]
-        - name: replace
-          args: ["VOSTFR", "{{ .Result.site_date }} VOSTFR"]
+        - name: re_replace
+          args: ["(?i)( FRENCH)", " {{ .Result.site_date }} FRENCH"]
+        - name: re_replace
+          args: ["(?i)( MULTI)", " {{ .Result.site_date }} MULTI"]
+        - name: re_replace
+          args: ["(?i)( TRUEFRENCH)", " {{ .Result.site_date }} TRUEFRENCH"]
+        - name: re_replace
+          args: ["(?i)( VOSTFR)", " {{ .Result.site_date }} VOSTFR"]
+        - name: re_replace
+          args: ["(?i)( SUBFRENCH)", " {{ .Result.site_date }} SUBFRENCH"]
         # and we delete it at the end
         - name: re_replace
-          args: ["(\\w+)$", ""]
+          args: ["(19|20\\d{2})$", ""]
+    title_multilang:
+      text: "{{ .Result.title_phase1 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)(\\smulti\\s)", " {{ .Config.multilanguage }} "]
+    title_phase2:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    title_vostfr:
+      text: "{{ .Result.title_phase2 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)(\\svostfr\\s)", " ENGLISH "]
+        - name: re_replace
+          args: ["(?i)(\\ssubfrench\\s)", " ENGLISH "]
+    title:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
     details:
       selector: a
       attribute: href

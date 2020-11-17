@@ -24,6 +24,7 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class DivxTotal : BaseWebIndexer
     {
+        private const string DownloadLink = "/download_tt.php";
         private const int MaxResultsPerPage = 15;
         private const int MaxSearchPageLimit = 3;
         private static class DivxTotalCategories
@@ -49,7 +50,16 @@ namespace Jackett.Common.Indexers
                    name: "DivxTotal",
                    description: "DivxTotal is a SPANISH site for Movies, TV series and Software",
                    link: "https://www.divxtotal.la/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q
+                       }
+                   },
                    configService: configService,
                    client: w,
                    logger: l,
@@ -60,16 +70,16 @@ namespace Jackett.Common.Indexers
             Language = "es-es";
             Type = "public";
 
-            var matchWords = new BoolItem() { Name = "Match words in title", Value = true };
+            var matchWords = new BoolItem { Name = "Match words in title", Value = true };
             configData.AddDynamic("MatchWords", matchWords);
 
-            AddCategoryMapping(DivxTotalCategories.Peliculas, TorznabCatType.MoviesSD);
-            AddCategoryMapping(DivxTotalCategories.PeliculasHd, TorznabCatType.MoviesSD);
-            AddCategoryMapping(DivxTotalCategories.Peliculas3D, TorznabCatType.MoviesHD);
-            AddCategoryMapping(DivxTotalCategories.PeliculasDvdr, TorznabCatType.MoviesDVD);
-            AddCategoryMapping(DivxTotalCategories.Series, TorznabCatType.TVSD);
-            AddCategoryMapping(DivxTotalCategories.Programas, TorznabCatType.PC);
-            AddCategoryMapping(DivxTotalCategories.Otros, TorznabCatType.OtherMisc);
+            AddCategoryMapping(DivxTotalCategories.Peliculas, TorznabCatType.MoviesSD, "Peliculas");
+            AddCategoryMapping(DivxTotalCategories.PeliculasHd, TorznabCatType.MoviesHD, "Peliculas HD");
+            AddCategoryMapping(DivxTotalCategories.Peliculas3D, TorznabCatType.Movies3D, "Peliculas 3D");
+            AddCategoryMapping(DivxTotalCategories.PeliculasDvdr, TorznabCatType.MoviesDVD, "Peliculas DVD-r");
+            AddCategoryMapping(DivxTotalCategories.Series, TorznabCatType.TVSD, "Series");
+            AddCategoryMapping(DivxTotalCategories.Programas, TorznabCatType.PC, "Programas");
+            AddCategoryMapping(DivxTotalCategories.Otros, TorznabCatType.OtherMisc, "Otros");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -99,15 +109,15 @@ namespace Jackett.Common.Indexers
             do
             {
                 var url = SiteLink + "page/" + page + "/?" + qc.GetQueryString();
-                var result = await RequestStringWithCookies(url);
+                var result = await RequestWithCookiesAsync(url);
 
                 if (result.Status != HttpStatusCode.OK)
-                    throw new ExceptionWithConfigData(result.Content, configData);
+                    throw new ExceptionWithConfigData(result.ContentString, configData);
 
                 try
                 {
                     var searchResultParser = new HtmlParser();
-                    var doc = searchResultParser.ParseDocument(result.Content);
+                    var doc = searchResultParser.ParseDocument(result.ContentString);
 
                     var table = doc.QuerySelector("table.table");
                     if (table == null)
@@ -135,7 +145,7 @@ namespace Jackett.Common.Indexers
                 }
                 catch (Exception ex)
                 {
-                    OnParseError(result.Content, ex);
+                    OnParseError(result.ContentString, ex);
                 }
 
                 page++; // update page number
@@ -150,33 +160,28 @@ namespace Jackett.Common.Indexers
             // for tv series we already have the link
             var downloadUrl = link.ToString();
             // for other categories we have to do another step
-            if (!downloadUrl.EndsWith(".torrent"))
+            if (!downloadUrl.Contains(DownloadLink))
             {
-                var result = await RequestStringWithCookies(downloadUrl);
+                var result = await RequestWithCookiesAsync(downloadUrl);
 
                 if (result.Status != HttpStatusCode.OK)
-                    throw new ExceptionWithConfigData(result.Content, configData);
+                    throw new ExceptionWithConfigData(result.ContentString, configData);
 
                 var searchResultParser = new HtmlParser();
-                var doc = searchResultParser.ParseDocument(result.Content);
-
-                var onclick = doc.QuerySelector("a[onclick*=\"/torrent\"]")
-                    .GetAttribute("onclick");
-                downloadUrl = OnclickToDownloadLink(onclick);
+                var doc = searchResultParser.ParseDocument(result.ContentString);
+                downloadUrl = GetDownloadLink(doc);
             }
-
             var content = await base.Download(new Uri(downloadUrl));
             return content;
         }
-
 
         private async Task ParseRelease(ICollection<ReleaseInfo> releases, IParentNode row, TorznabQuery query,
             bool matchWords)
         {
             var anchor = row.QuerySelector("a");
-            var commentsLink = anchor.GetAttribute("href");
+            var detailsStr = anchor.GetAttribute("href");
             var title = anchor.TextContent.Trim();
-            var cat = commentsLink.Split('/')[3];
+            var cat = detailsStr.Split('/')[3];
             var categories = MapTrackerCatToNewznab(cat);
             var publishStr = row.QuerySelectorAll("td")[2].TextContent.Trim();
             var publishDate = TryToParseDate(publishStr, DateTime.Now);
@@ -192,32 +197,30 @@ namespace Jackett.Common.Indexers
 
             // parsing is different for each category
             if (cat == DivxTotalCategories.Series)
-            {
-                await ParseSeriesRelease(releases, query, commentsLink, cat, publishDate);
-            }
+                await ParseSeriesRelease(releases, query, detailsStr, cat, publishDate);
             else if (query.Episode == null) // if it's scene series, we don't return other categories
             {
                 if (cat == DivxTotalCategories.Peliculas || cat == DivxTotalCategories.PeliculasHd ||
                     cat == DivxTotalCategories.Peliculas3D || cat == DivxTotalCategories.PeliculasDvdr)
-                    ParseMovieRelease(releases, query, title, commentsLink, cat, publishDate, sizeStr);
+                    ParseMovieRelease(releases, query, title, detailsStr, cat, publishDate, sizeStr);
                 else
                 {
                     var size = TryToParseSize(sizeStr, DivxTotalFizeSizes.Otros);
-                    GenerateRelease(releases, title, commentsLink, commentsLink, cat, publishDate, size);
+                    GenerateRelease(releases, title, detailsStr, detailsStr, cat, publishDate, size);
                 }
             }
         }
 
         private async Task ParseSeriesRelease(ICollection<ReleaseInfo> releases, TorznabQuery query,
-            string commentsLink, string cat, DateTime publishDate)
+            string detailsStr, string cat, DateTime publishDate)
         {
-            var result = await RequestStringWithCookies(commentsLink);
+            var result = await RequestWithCookiesAsync(detailsStr);
 
             if (result.Status != HttpStatusCode.OK)
-                throw new ExceptionWithConfigData(result.Content, configData);
+                throw new ExceptionWithConfigData(result.ContentString, configData);
 
             var searchResultParser = new HtmlParser();
-            var doc = searchResultParser.ParseDocument(result.Content);
+            var doc = searchResultParser.ParseDocument(result.ContentString);
 
             var tables = doc.QuerySelectorAll("table.table");
             foreach (var table in tables)
@@ -234,8 +237,7 @@ namespace Jackett.Common.Indexers
 
                     var anchor = row.QuerySelector("a");
                     var episodeTitle = anchor.TextContent.Trim();
-                    var onclick = anchor.GetAttribute("onclick");
-                    var downloadLink = OnclickToDownloadLink(onclick);
+                    var downloadLink = GetDownloadLink(row);
                     var episodePublishStr = row.QuerySelectorAll("td")[3].TextContent.Trim();
                     var episodePublish = TryToParseDate(episodePublishStr, publishDate);
 
@@ -247,14 +249,14 @@ namespace Jackett.Common.Indexers
                     if (query.Episode != null && !episodeTitle.Contains(query.GetEpisodeSearchString()))
                         continue;
 
-                    GenerateRelease(releases, episodeTitle, commentsLink, downloadLink, cat, episodePublish,
+                    GenerateRelease(releases, episodeTitle, detailsStr, downloadLink, cat, episodePublish,
                         DivxTotalFizeSizes.Series);
                 }
             }
         }
 
         private void ParseMovieRelease(ICollection<ReleaseInfo> releases, TorznabQuery query, string title,
-            string commentsLink, string cat, DateTime publishDate, string sizeStr)
+            string detailsStr, string cat, DateTime publishDate, string sizeStr)
         {
             // parse tags in title, we need to put the year after the real title (before the tags)
             // La Maldicion ( HD-CAM)
@@ -290,18 +292,18 @@ namespace Jackett.Common.Indexers
             else
                 throw new Exception("Unknown category " + cat);
 
-            GenerateRelease(releases, title, commentsLink, commentsLink, cat, publishDate, size);
+            GenerateRelease(releases, title, detailsStr, detailsStr, cat, publishDate, size);
         }
 
-        private void GenerateRelease(ICollection<ReleaseInfo> releases, string title, string commentsLink,
+        private void GenerateRelease(ICollection<ReleaseInfo> releases, string title, string detailsStr,
             string downloadLink, string cat, DateTime publishDate, long size)
         {
             var link = new Uri(downloadLink);
-            var comments = new Uri(commentsLink);
+            var details = new Uri(detailsStr);
             var release = new ReleaseInfo
             {
                 Title = title,
-                Comments = comments,
+                Details = details,
                 Link = link,
                 Guid = link,
                 Category = MapTrackerCatToNewznab(cat),
@@ -310,21 +312,14 @@ namespace Jackett.Common.Indexers
                 Files = 1,
                 Seeders = 1,
                 Peers = 2,
-                MinimumRatio = 1,
-                MinimumSeedTime = 172800, // 48 hours
                 DownloadVolumeFactor = 0,
-                UploadVolumeFactor = 1,
+                UploadVolumeFactor = 1
             };
             releases.Add(release);
         }
 
-        private static string OnclickToDownloadLink(string onclick)
-        {
-            // onclick="post('/download/torrent.php', {u: 'aHR0cHM6Ly93d3cuZGl2eHRvdGF='});"
-            var base64EncodedData = onclick.Split('\'')[3];
-            var base64EncodedBytes = Convert.FromBase64String(base64EncodedData);
-            return Encoding.UTF8.GetString(base64EncodedBytes);
-        }
+        private static string GetDownloadLink(IParentNode dom) =>
+            dom.QuerySelector($"a[href*=\"{DownloadLink}\"]")?.GetAttribute("href");
 
         private static bool CheckTitleMatchWords(string queryStr, string title)
         {
@@ -413,22 +408,21 @@ namespace Jackett.Common.Indexers
             }
             catch
             {
-                // ignored
+                return dateDefault;
             }
-            return dateDefault;
         }
 
         private static long TryToParseSize(string sizeToParse, long sizeDefault)
         {
             try
             {
-                return ReleaseInfo.GetBytes(sizeToParse);
+                var parsedSize = ReleaseInfo.GetBytes(sizeToParse);
+                return parsedSize > 0 ? parsedSize : sizeDefault;
             }
             catch
             {
-                // ignored
+                return sizeDefault;
             }
-            return sizeDefault;
         }
     }
 }

@@ -11,6 +11,7 @@ links:
 
 caps:
   categorymappings:
+    - {id: 511, cat: Movies/HD, desc: "Форум HD Video/RIP"}
     # 3D
     - {id: 801, cat: Movies/3D, desc: " | Фильмы в формате 3D"}
     - {id: 802, cat: Movies/3D, desc: " | Мультфильмы в формате 3D"}
@@ -25,7 +26,7 @@ caps:
     - {id: 1055, cat: Movies, desc: "Новинки проката"}
     - {id: 1058, cat: Movies, desc: " | Портал для новинок"}
     - {id: 1056, cat: Movies/SD, desc: " | Новинки (CamRip|TS)"}
-    - {id: 1057, cat: Movies/WEBDL, desc: " | Новинки (HD|DVD|BD|WEB|TV|SAT|PDTV|-Rip)"}
+    - {id: 1057, cat: Movies/WEB-DL, desc: " | Новинки (HD|DVD|BD|WEB|TV|SAT|PDTV|-Rip)"}
     - {id: 1059, cat: Movies, desc: " | Новинки (BD|HDTV|DVD)"}
     - {id: 57, cat: Movies, desc: "Зарубежные фильмы"}
     - {id: 1021, cat: Movies, desc: " | Фильмы 2011-2020"}
@@ -121,12 +122,12 @@ caps:
     - {id: 269, cat: PC/Games, desc: "Архив"}
     # Консоли
     # Console
-    - {id: 679, cat: Console/Xbox, desc: "XBox"}
-    - {id: 684, cat: Console/Xbox, desc: " | XBox360 | Игры"}
-    - {id: 683, cat: Console/Xbox, desc: " | XBox360 | Демоверсии"}
-    - {id: 682, cat: Console/Xbox, desc: " | Xbox360 | Live"}
-    - {id: 681, cat: Console/Xbox, desc: " | XBox360 | Программы / Прошивки"}
-    - {id: 680, cat: Console/Xbox, desc: " | XBox | Игры"}
+    - {id: 679, cat: Console/XBox, desc: "XBox"}
+    - {id: 684, cat: Console/XBox, desc: " | XBox360 | Игры"}
+    - {id: 683, cat: Console/XBox, desc: " | XBox360 | Демоверсии"}
+    - {id: 682, cat: Console/XBox, desc: " | Xbox360 | Live"}
+    - {id: 681, cat: Console/XBox, desc: " | XBox360 | Программы / Прошивки"}
+    - {id: 680, cat: Console/XBox, desc: " | XBox | Игры"}
     - {id: 685, cat: Console/PS3, desc: "PlayStation"}
     - {id: 694, cat: Console/PS3, desc: " | Playstation 3 | Игры"}
     - {id: 693, cat: Console/PS3, desc: " | Playstation 3 | PSN Игры"}
@@ -517,8 +518,8 @@ caps:
     - {id: 914, cat: PC, desc: " | Справочные системы"}
     - {id: 915, cat: PC, desc: " | Общий архив раздела &quot;Справочно-правовые системы&quot;"}
     - {id: 908, cat: PC, desc: "Системы навигации и карты, ГИС"}
-    - {id: 1107, cat: PC/Phone-IOS, desc: " | iOS"}
-    - {id: 1106, cat: PC/Phone-Android, desc: " | Android"}
+    - {id: 1107, cat: PC/Mobile-iOS, desc: " | iOS"}
+    - {id: 1106, cat: PC/Mobile-Android, desc: " | Android"}
     - {id: 1105, cat: PC, desc: " | Garmin"}
     - {id: 1104, cat: PC/0day, desc: " | Windows XP/Vista/7/8/8.1/10"}
     - {id: 1103, cat: PC/0day, desc: " | Windows CE"}
@@ -549,27 +550,27 @@ caps:
     - {id: 909, cat: PC, desc: "Разное"}
     # Смартфоны и Планшеты
     # mobiles
-    - {id: 921, cat: PC/Phone-Other, desc: "Windows Phone 7"}
-    - {id: 936, cat: PC/Phone-Other, desc: " | Прошивки"}
-    - {id: 935, cat: PC/Phone-Other, desc: " | Игры"}
-    - {id: 934, cat: PC/Phone-Other, desc: " | Программы"}
-    - {id: 1079, cat: PC/Phone-Other, desc: " | Архив"}
-    - {id: 922, cat: PC/Phone-Other, desc: "Windows Mobile 5.x - 6.x"}
-    - {id: 927, cat: PC/Phone-Other, desc: " | Прошивки"}
-    - {id: 926, cat: PC/Phone-Other, desc: " | Игры"}
-    - {id: 925, cat: PC/Phone-Other, desc: " | Программы"}
-    - {id: 1080, cat: PC/Phone-Other, desc: " | Архив"}
-    - {id: 923, cat: PC/Phone-Android, desc: "Android"}
-    - {id: 930, cat: PC/Phone-Android, desc: " | Игры"}
-    - {id: 929, cat: PC/Phone-Android, desc: " | Программы"}
-    - {id: 928, cat: PC/Phone-Android, desc: " | Прошивки"}
-    - {id: 1081, cat: PC/Phone-Android, desc: " | Архив"}
-    - {id: 924, cat: PC/Phone-Other, desc: "Symbian"}
-    - {id: 933, cat: PC/Phone-Other, desc: " | Игры"}
-    - {id: 932, cat: PC/Phone-Other, desc: " | Программы"}
-    - {id: 931, cat: PC/Phone-Other, desc: " | Прошивки"}
-    - {id: 1082, cat: PC/Phone-Other, desc: " | Архив"}
-    - {id: 1048, cat: PC/Phone-Other, desc: "Архив"}
+    - {id: 921, cat: PC/Mobile-Other, desc: "Windows Phone 7"}
+    - {id: 936, cat: PC/Mobile-Other, desc: " | Прошивки"}
+    - {id: 935, cat: PC/Mobile-Other, desc: " | Игры"}
+    - {id: 934, cat: PC/Mobile-Other, desc: " | Программы"}
+    - {id: 1079, cat: PC/Mobile-Other, desc: " | Архив"}
+    - {id: 922, cat: PC/Mobile-Other, desc: "Windows Mobile 5.x - 6.x"}
+    - {id: 927, cat: PC/Mobile-Other, desc: " | Прошивки"}
+    - {id: 926, cat: PC/Mobile-Other, desc: " | Игры"}
+    - {id: 925, cat: PC/Mobile-Other, desc: " | Программы"}
+    - {id: 1080, cat: PC/Mobile-Other, desc: " | Архив"}
+    - {id: 923, cat: PC/Mobile-Android, desc: "Android"}
+    - {id: 930, cat: PC/Mobile-Android, desc: " | Игры"}
+    - {id: 929, cat: PC/Mobile-Android, desc: " | Программы"}
+    - {id: 928, cat: PC/Mobile-Android, desc: " | Прошивки"}
+    - {id: 1081, cat: PC/Mobile-Android, desc: " | Архив"}
+    - {id: 924, cat: PC/Mobile-Other, desc: "Symbian"}
+    - {id: 933, cat: PC/Mobile-Other, desc: " | Игры"}
+    - {id: 932, cat: PC/Mobile-Other, desc: " | Программы"}
+    - {id: 931, cat: PC/Mobile-Other, desc: " | Прошивки"}
+    - {id: 1082, cat: PC/Mobile-Other, desc: " | Архив"}
+    - {id: 1048, cat: PC/Mobile-Other, desc: "Архив"}
     # Авто и Мото
     # Auto and Bikes
     - {id: 1095, cat: TV/Sport, desc: "Книги по ремонту/обслуживанию/эксплуатации ТС"}
@@ -610,6 +611,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -625,19 +627,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "1"
+    default: 1
     options:
-      "1": "created"
-      "10": "seeders"
-      "7": "size"
-      "2": "title"
+      1: created
+      10: seeders
+      7: size
+      2: title
   - name: type
     type: select
     label: Order requested from site
-    default: "2"
+    default: 2
     options:
-      "2": "desc"
-      "1": "asc"
+      2: desc
+      1: asc
 
 login:
   path: login.php
@@ -784,6 +786,7 @@ search:
     grabs:
       selector: td:nth-child(9)
     date:
+      # unix
       selector: td:last-child > u
     downloadvolumefactor:
       case:

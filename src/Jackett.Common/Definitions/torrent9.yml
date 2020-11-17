@@ -8,8 +8,8 @@ encoding: UTF-8
 followredirect: true
 links:
   - https://www.oxtorrent.me/
-  - https://ww1.torrent9.is/
-  - https://ww1.torrent9.to/
+  - https://www.torrent9.gg/
+  - https://torrent9.to/
 
 legacylinks:
   - http://www.torrent9.ec/
@@ -31,7 +31,6 @@ legacylinks:
   - https://wvw.t9.pe/
   - https://www4.torrent9.to/
   - https://www.torrent9.cat/
-  - https://www.torrent9.is/
   - https://www.torrent09.uno/
   - https://torrent9.unblockninja.com/ # this is a proxy for torrent9clone
   - https://www.torrent9.pl/ # this is a proxy for torrent9clone
@@ -40,6 +39,9 @@ legacylinks:
   - https://torrent9.proxyportal.fun/ # this is a proxy for torrent9clone
   - https://torrent9.uk-unblock.xyz/ # this is a proxy for torrent9clone
   - https://torrent9.ind-unblock.xyz/ # this is a proxy for torrent9clone
+  - https://ww1.torrent9.is/
+  - https://ww1.torrent9.to/
+  - https://www.torrent9.is/
 
 caps:
   categorymappings:
@@ -49,15 +51,39 @@ caps:
     - {id: ebook, cat: Books, desc: "Books"}
     - {id: logiciels, cat: PC, desc: "Software"}
     - {id: jeux-pc, cat: PC/Games, desc: "PC Games"}
-    - {id: jeux-consoles, cat: Console/Xbox360, desc: "Console Games"}
+    - {id: jeux-consoles, cat: Console/XBox 360, desc: "Console Games"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
-settings: []
+settings:
+  - name: multilang
+    type: checkbox
+    label: Replace MULTI by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTI by this language
+    default: FRENCH
+    options:
+      FRENCH: FRENCH
+      MULTI.FRENCH: MULTI.FRENCH
+      ENGLISH: ENGLISH
+      MULTI.ENGLISH: MULTI.ENGLISH
+      VOSTFR: VOSTFR
+      MULTI.VOSTFR: MULTI.VOSTFR
+  - name: vostfr
+    type: checkbox
+    label: Replace VOSTFR with ENGLISH
+    default: false
+  - name: info_131681
+    type: info
+    label: About Torrent9 Categories
+    default: Torrent9 only returns category <b>Movies</b> in its <i>Keywordless</i> search results page.</br>To pass your apps' indexer TEST you will need to include the 131681(Movies) category.
 
 download:
   selector: a[href^="magnet:?"]
@@ -65,7 +91,13 @@ download:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}/search_torrent/{{ .Keywords }}{{else}}/top_torrent/{{end}}"
+    - path: "{{ if .Keywords }}/search_torrent/{{ .Keywords }}{{ else }}/top_torrent/{{ end }}"
+  keywordsfilters:
+    # if searching for season packs swith S01 to saison 1 #9712
+    - name: re_replace
+      args: ["(?i)(S0)(\\d{1,2})$", "saison $2"]
+    - name: re_replace
+      args: ["(?i)(S)(\\d{1,3})$", "saison $2"]
 
   rows:
     selector: table.table-striped > tbody > tr
@@ -73,30 +105,6 @@ search:
       - name: andmatch
 
   fields:
-    site_date:
-      selector: td:nth-child(1) a
-      filters:
-        # year is at the end of the title, so we get it and name it site_date
-        - name: regexp
-          args: "(\\d{4})$"
-    title:
-      selector: td:nth-child(1) a
-      filters:
-        # now we put the date at the right place according scene naming rules using .Result.site_date
-        - name: replace
-          args: [" FRENCH", " {{ .Result.site_date }} FRENCH"]
-        - name: replace
-          args: ["MULTI", "{{ .Result.site_date }} MULTI"]
-        - name: replace
-          args: ["TRUEFRENCH", "{{ .Result.site_date }} TRUEFRENCH"]
-        - name: replace
-          args: ["VOSTFR", "{{ .Result.site_date }} VOSTFR"]
-        # and we delete it at the end
-        - name: re_replace
-          args: ["(\\d{4})$", ""]
-    details:
-      selector: td:nth-child(1) a
-      attribute: href
     category:
       selector: td:nth-child(1) i
       case:
@@ -107,11 +115,53 @@ search:
         i[class="fa fa-gamepad"]: jeux-pc
         i[class="fa fa-laptop"]: logiciels
         i[class="fa fa-book"]: ebook
+    site_date:
+      selector: td:nth-child(1) a
+      filters:
+        # year is at the end of the title, so we get it and name it site_date
+        - name: regexp
+          args: "(19|20\\d{2})$"
+    title_phase1:
+      selector: td:nth-child(1) a
+      filters:
+        # now we put the date at the right place according scene naming rules using .Result.site_date
+        - name: re_replace
+          args: ["(?i)( FRENCH)", " {{ .Result.site_date }} FRENCH"]
+        - name: re_replace
+          args: ["(?i)( MULTI)", " {{ .Result.site_date }} MULTI"]
+        - name: re_replace
+          args: ["(?i)( TRUEFRENCH)", " {{ .Result.site_date }} TRUEFRENCH"]
+        - name: re_replace
+          args: ["(?i)( VOSTFR)", " {{ .Result.site_date }} VOSTFR"]
+        - name: re_replace
+          args: ["(?i)( SUBFRENCH)", " {{ .Result.site_date }} SUBFRENCH"]
+        # and we delete it at the end
+        - name: re_replace
+          args: ["(19|20\\d{2})$", ""]
+    title_multilang:
+      text: "{{ .Result.title_phase1 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)(\\smulti\\s)", " {{ .Config.multilanguage }} "]
+    title_phase2:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    title_vostfr:
+      text: "{{ .Result.title_phase2 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)(\\svostfr\\s)", " ENGLISH "]
+        - name: re_replace
+          args: ["(?i)(\\ssubfrench\\s)", " ENGLISH "]
+    title:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
+    details:
+      selector: td:nth-child(1) a
+      attribute: href
     download:
       selector: td:nth-child(1) a
       attribute: href
     date:
-      text: "now"
+      text: now
     size:
       selector: td:nth-child(2)
     seeders:

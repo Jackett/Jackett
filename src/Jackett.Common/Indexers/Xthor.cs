@@ -17,6 +17,7 @@ using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
+using WebRequest = Jackett.Common.Utils.Clients.WebRequest;
 
 namespace Jackett.Common.Indexers
 {
@@ -25,13 +26,12 @@ namespace Jackett.Common.Indexers
     {
         private static string ApiEndpoint => "https://api.xthor.tk/";
 
-        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
+        public override string[] LegacySiteLinks { get; protected set; } = {
             "https://xthor.bz/",
-            "https://xthor.to",
+            "https://xthor.to"
         };
 
-        private string TorrentCommentUrl => TorrentDescriptionUrl;
-        private string TorrentDescriptionUrl => SiteLink + "details.php?id={id}";
+        private string TorrentDetailsUrl => SiteLink + "details.php?id={id}";
         private string ReplaceMulti => ConfigData.ReplaceMulti.Value;
         private bool EnhancedAnime => ConfigData.EnhancedAnime.Value;
         private bool DevMode => ConfigData.DevMode.Value;
@@ -45,7 +45,25 @@ namespace Jackett.Common.Indexers
                    name: "Xthor",
                    description: "General French Private Tracker",
                    link: "https://xthor.tk/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities
+                   {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
+                       },
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q
+                       }
+                   },
                    configService: configService,
                    client: w,
                    logger: l,
@@ -79,28 +97,28 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(9, TorznabCatType.MoviesOther, "VOSTFR");
 
             // Series
-            AddCategoryMapping(104, TorznabCatType.TVOTHER, "BLURAY");
-            AddCategoryMapping(13, TorznabCatType.TVOTHER, "PACK VF");
-            AddCategoryMapping(15, TorznabCatType.TVHD, "HD VF");
-            AddCategoryMapping(14, TorznabCatType.TVSD, "SD VF");
-            AddCategoryMapping(98, TorznabCatType.TVOTHER, "PACK VOSTFR");
-            AddCategoryMapping(17, TorznabCatType.TVHD, "HD VF VOSTFR");
-            AddCategoryMapping(16, TorznabCatType.TVSD, "SD VF VOSTFR");
-            AddCategoryMapping(101, TorznabCatType.TVAnime, "PACK ANIME");
+            AddCategoryMapping(104, TorznabCatType.TVOther, "TV BLURAY");
+            AddCategoryMapping(13, TorznabCatType.TVOther, "TV PACK VF");
+            AddCategoryMapping(15, TorznabCatType.TVHD, "TV HD VF");
+            AddCategoryMapping(14, TorznabCatType.TVSD, "TV SD VF");
+            AddCategoryMapping(98, TorznabCatType.TVOther, "TV PACK VOSTFR");
+            AddCategoryMapping(17, TorznabCatType.TVHD, "TV HD VF VOSTFR");
+            AddCategoryMapping(16, TorznabCatType.TVSD, "TV SD VF VOSTFR");
+            AddCategoryMapping(101, TorznabCatType.TVAnime, "ANIME PACK");
             AddCategoryMapping(32, TorznabCatType.TVAnime, "ANIME VF");
             AddCategoryMapping(110, TorznabCatType.TVAnime, "ANIME VOSTFR");
-            AddCategoryMapping(123, TorznabCatType.TVOTHER, "ANIMATION");
-            AddCategoryMapping(109, TorznabCatType.TVDocumentary, "DOCS");
-            AddCategoryMapping(30, TorznabCatType.TVOTHER, "EMISSIONS");
-            AddCategoryMapping(34, TorznabCatType.TVOTHER, "SPORT");
+            AddCategoryMapping(123, TorznabCatType.TVOther, "TV ANIMATION");
+            AddCategoryMapping(109, TorznabCatType.TVDocumentary, "TV DOCS");
+            AddCategoryMapping(30, TorznabCatType.TVOther, "TV EMISSIONS");
+            AddCategoryMapping(34, TorznabCatType.TVOther, "TV SPORT");
 
             // Music
             AddCategoryMapping(20, TorznabCatType.AudioVideo, "CONCERT");
 
             // Books
-            AddCategoryMapping(24, TorznabCatType.BooksEbook, "ENOOKS NOVEL");
-            AddCategoryMapping(96, TorznabCatType.BooksMagazines, "EBOOKS MAGAZINES");
-            AddCategoryMapping(116, TorznabCatType.BooksEbook, "EBOOKS NOVEL JUNIOR");
+            AddCategoryMapping(24, TorznabCatType.BooksEBook, "EBOOKS NOVEL");
+            AddCategoryMapping(96, TorznabCatType.BooksMags, "EBOOKS MAGAZINES");
+            AddCategoryMapping(116, TorznabCatType.BooksEBook, "EBOOKS NOVEL JUNIOR");
             AddCategoryMapping(99, TorznabCatType.BooksOther, "EBOOKS BD");
             AddCategoryMapping(102, TorznabCatType.BooksComics, "EBOOKS COMICS");
             AddCategoryMapping(103, TorznabCatType.BooksOther, "EBOOKS MANGA");
@@ -110,13 +128,13 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(27, TorznabCatType.ConsolePS3, "PS GAMES");
             AddCategoryMapping(111, TorznabCatType.PCMac, "MAC GAMES");
             AddCategoryMapping(112, TorznabCatType.PC, "LINUX GAMES");
-            AddCategoryMapping(26, TorznabCatType.ConsoleXbox360, "XBOX GAMES");
+            AddCategoryMapping(26, TorznabCatType.ConsoleXBox360, "XBOX GAMES");
             AddCategoryMapping(28, TorznabCatType.ConsoleWii, "WII GAMES");
             AddCategoryMapping(29, TorznabCatType.ConsoleNDS, "NDS GAMES");
             AddCategoryMapping(117, TorznabCatType.PC, "ROM");
             AddCategoryMapping(21, TorznabCatType.PC, "PC SOFTWARE");
             AddCategoryMapping(22, TorznabCatType.PCMac, "MAC SOFTWARE");
-            AddCategoryMapping(23, TorznabCatType.PCPhoneAndroid, "ANDROID");
+            AddCategoryMapping(23, TorznabCatType.PCMobileAndroid, "ANDROID");
 
             // XxX
             AddCategoryMapping(36, TorznabCatType.XXX, "XxX / Films");
@@ -235,8 +253,8 @@ namespace Jackett.Common.Indexers
 
                         var publishDate = DateTimeUtil.UnixTimestampToDateTime(torrent.added);
                         //TODO replace with download link?
-                        var guid = new Uri(TorrentDescriptionUrl.Replace("{id}", torrent.id.ToString()));
-                        var comments = new Uri(TorrentCommentUrl.Replace("{id}", torrent.id.ToString()));
+                        var guid = new Uri(TorrentDetailsUrl.Replace("{id}", torrent.id.ToString()));
+                        var details = new Uri(TorrentDetailsUrl.Replace("{id}", torrent.id.ToString()));
                         var link = new Uri(torrent.download_link);
                         var release = new ReleaseInfo
                         {
@@ -254,7 +272,7 @@ namespace Jackett.Common.Indexers
                             UploadVolumeFactor = 1,
                             DownloadVolumeFactor = (torrent.freeleech == 1 ? 0 : 1),
                             Guid = guid,
-                            Comments = comments,
+                            Details = details,
                             Link = link,
                             TMDb = torrent.tmdb_id
                         };
@@ -479,7 +497,7 @@ namespace Jackett.Common.Indexers
             Output("\nQuerying tracker for results....");
 
             // Build WebRequest for index
-            var myIndexRequest = new Utils.Clients.WebRequest()
+            var myIndexRequest = new WebRequest
             {
                 Type = RequestType.GET,
                 Url = request,
@@ -488,12 +506,12 @@ namespace Jackett.Common.Indexers
             };
 
             // Request our first page
-            var results = await webclient.GetString(myIndexRequest);
+            var results = await webclient.GetResultAsync(myIndexRequest);
             if (results.Status == HttpStatusCode.InternalServerError) // See issue #2110
-                throw new Exception("Internal Server Error (" + results.Content + "), probably you reached the API limits, please reduce the number of queries");
+                throw new Exception("Internal Server Error (" + results.ContentString + "), probably you reached the API limits, please reduce the number of queries");
 
             // Return results from tracker
-            return results.Content;
+            return results.ContentString;
         }
 
         /// <summary>

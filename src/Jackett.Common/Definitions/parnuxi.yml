@@ -154,26 +154,24 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q]
-    movie-search: [q]
 
 settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "t"
+    default: t
     options:
-      "t": "created"
-      "ts": "seeders"
-      "sz": "size"
-      "i": "title"
+      t: created
+      ts: seeders
+      sz: size
+      i: title
   - name: type
     type: select
     label: Order requested from site
-    default: "d"
+    default: d
     options:
-      "d": "desc"
-      "a": "asc"
+      d: desc
+      a: asc
 
 search:
   paths:
@@ -181,7 +179,7 @@ search:
     - path: search.php
   inputs:
     tracker_search: torrent
-    keywords: "{{ if .Keywords }}{{ .Keywords }}{{else}}{{ .Today.Year }}{{end}}"
+    keywords: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
     terms: all
     fp: 1
     author: ""
@@ -235,13 +233,14 @@ search:
       # (09.03.2020)
       selector: a.topictitle
       optional: true
+      # do not append TZ else text {{if}} will not work if date not found
       filters:
         - name: regexp
           args: (\d{2}\.\d{2}\.\d{4})
         - name: dateparse
           args: "02.01.2006"
     date:
-      text: "{{ if .Result.find_date }}{{ .Result.find_date}}{{else}}now{{end}}"
+      text: "{{ if .Result.find_date }}{{ .Result.find_date }}{{ else }}now{{ end }}"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

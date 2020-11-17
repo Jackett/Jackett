@@ -8,7 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
-using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
@@ -20,14 +20,9 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class MyAnonamouse : BaseWebIndexer
     {
-        private string LoginUrl => SiteLink + "takelogin.php";
         private string SearchUrl => SiteLink + "tor/js/loadSearchJSONbasic.php";
 
-        private new ConfigurationDataMyAnonamouse configData
-        {
-            get => (ConfigurationDataMyAnonamouse)base.configData;
-            set => base.configData = value;
-        }
+        private new ConfigurationDataMyAnonamouse configData => (ConfigurationDataMyAnonamouse)base.configData;
 
         public MyAnonamouse(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps)
             : base(id: "myanonamouse",
@@ -35,7 +30,13 @@ namespace Jackett.Common.Indexers
                    description: "Friendliness, Warmth and Sharing",
                    link: "https://www.myanonamouse.net/",
                    configService: configService,
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities
+                   {
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q
+                       }
+                   },
                    client: c,
                    logger: l,
                    p: ps,
@@ -47,7 +48,7 @@ namespace Jackett.Common.Indexers
             webclient.EmulateBrowser = false;
 
             AddCategoryMapping("13", TorznabCatType.AudioAudiobook, "AudioBooks");
-            AddCategoryMapping("14", TorznabCatType.BooksEbook, "E-Books");
+            AddCategoryMapping("14", TorznabCatType.BooksEBook, "E-Books");
             AddCategoryMapping("15", TorznabCatType.AudioAudiobook, "Musicology");
             AddCategoryMapping("16", TorznabCatType.AudioAudiobook, "Radio");
             AddCategoryMapping("39", TorznabCatType.AudioAudiobook, "Audiobooks - Action/Adventure");
@@ -85,45 +86,45 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("108", TorznabCatType.AudioAudiobook, "Audiobooks - Urban Fantasy");
             AddCategoryMapping("48", TorznabCatType.AudioAudiobook, "Audiobooks - Western");
             AddCategoryMapping("111", TorznabCatType.AudioAudiobook, "Audiobooks - Young Adult");
-            AddCategoryMapping("60", TorznabCatType.BooksEbook, "Ebooks - Action/Adventure");
-            AddCategoryMapping("71", TorznabCatType.BooksEbook, "Ebooks - Art");
-            AddCategoryMapping("72", TorznabCatType.BooksEbook, "Ebooks - Biographical");
-            AddCategoryMapping("90", TorznabCatType.BooksEbook, "Ebooks - Business");
+            AddCategoryMapping("60", TorznabCatType.BooksEBook, "Ebooks - Action/Adventure");
+            AddCategoryMapping("71", TorznabCatType.BooksEBook, "Ebooks - Art");
+            AddCategoryMapping("72", TorznabCatType.BooksEBook, "Ebooks - Biographical");
+            AddCategoryMapping("90", TorznabCatType.BooksEBook, "Ebooks - Business");
             AddCategoryMapping("61", TorznabCatType.BooksComics, "Ebooks - Comics/Graphic novels");
-            AddCategoryMapping("73", TorznabCatType.BooksEbook, "Ebooks - Computer/Internet");
-            AddCategoryMapping("101", TorznabCatType.BooksEbook, "Ebooks - Crafts");
-            AddCategoryMapping("62", TorznabCatType.BooksEbook, "Ebooks - Crime/Thriller");
-            AddCategoryMapping("63", TorznabCatType.BooksEbook, "Ebooks - Fantasy");
-            AddCategoryMapping("107", TorznabCatType.BooksEbook, "Ebooks - Food");
-            AddCategoryMapping("64", TorznabCatType.BooksEbook, "Ebooks - General Fiction");
-            AddCategoryMapping("74", TorznabCatType.BooksEbook, "Ebooks - General Non-Fiction");
-            AddCategoryMapping("102", TorznabCatType.BooksEbook, "Ebooks - Historical Fiction");
-            AddCategoryMapping("76", TorznabCatType.BooksEbook, "Ebooks - History");
-            AddCategoryMapping("77", TorznabCatType.BooksEbook, "Ebooks - Home/Garden");
-            AddCategoryMapping("65", TorznabCatType.BooksEbook, "Ebooks - Horror");
-            AddCategoryMapping("103", TorznabCatType.BooksEbook, "Ebooks - Humor");
-            AddCategoryMapping("115", TorznabCatType.BooksEbook, "Ebooks - Illusion/Magic");
-            AddCategoryMapping("91", TorznabCatType.BooksEbook, "Ebooks - Instructional");
-            AddCategoryMapping("66", TorznabCatType.BooksEbook, "Ebooks - Juvenile");
-            AddCategoryMapping("78", TorznabCatType.BooksEbook, "Ebooks - Language");
-            AddCategoryMapping("67", TorznabCatType.BooksEbook, "Ebooks - Literary Classics");
-            AddCategoryMapping("79", TorznabCatType.BooksMagazines, "Ebooks - Magazines/Newspapers");
+            AddCategoryMapping("73", TorznabCatType.BooksEBook, "Ebooks - Computer/Internet");
+            AddCategoryMapping("101", TorznabCatType.BooksEBook, "Ebooks - Crafts");
+            AddCategoryMapping("62", TorznabCatType.BooksEBook, "Ebooks - Crime/Thriller");
+            AddCategoryMapping("63", TorznabCatType.BooksEBook, "Ebooks - Fantasy");
+            AddCategoryMapping("107", TorznabCatType.BooksEBook, "Ebooks - Food");
+            AddCategoryMapping("64", TorznabCatType.BooksEBook, "Ebooks - General Fiction");
+            AddCategoryMapping("74", TorznabCatType.BooksEBook, "Ebooks - General Non-Fiction");
+            AddCategoryMapping("102", TorznabCatType.BooksEBook, "Ebooks - Historical Fiction");
+            AddCategoryMapping("76", TorznabCatType.BooksEBook, "Ebooks - History");
+            AddCategoryMapping("77", TorznabCatType.BooksEBook, "Ebooks - Home/Garden");
+            AddCategoryMapping("65", TorznabCatType.BooksEBook, "Ebooks - Horror");
+            AddCategoryMapping("103", TorznabCatType.BooksEBook, "Ebooks - Humor");
+            AddCategoryMapping("115", TorznabCatType.BooksEBook, "Ebooks - Illusion/Magic");
+            AddCategoryMapping("91", TorznabCatType.BooksEBook, "Ebooks - Instructional");
+            AddCategoryMapping("66", TorznabCatType.BooksEBook, "Ebooks - Juvenile");
+            AddCategoryMapping("78", TorznabCatType.BooksEBook, "Ebooks - Language");
+            AddCategoryMapping("67", TorznabCatType.BooksEBook, "Ebooks - Literary Classics");
+            AddCategoryMapping("79", TorznabCatType.BooksMags, "Ebooks - Magazines/Newspapers");
             AddCategoryMapping("80", TorznabCatType.BooksTechnical, "Ebooks - Math/Science/Tech");
-            AddCategoryMapping("92", TorznabCatType.BooksEbook, "Ebooks - Medical");
-            AddCategoryMapping("118", TorznabCatType.BooksEbook, "Ebooks - Mixed Collections");
-            AddCategoryMapping("94", TorznabCatType.BooksEbook, "Ebooks - Mystery");
-            AddCategoryMapping("120", TorznabCatType.BooksEbook, "Ebooks - Nature");
-            AddCategoryMapping("95", TorznabCatType.BooksEbook, "Ebooks - Philosophy");
-            AddCategoryMapping("81", TorznabCatType.BooksEbook, "Ebooks - Pol/Soc/Relig");
-            AddCategoryMapping("82", TorznabCatType.BooksEbook, "Ebooks - Recreation");
-            AddCategoryMapping("68", TorznabCatType.BooksEbook, "Ebooks - Romance");
-            AddCategoryMapping("69", TorznabCatType.BooksEbook, "Ebooks - Science Fiction");
-            AddCategoryMapping("75", TorznabCatType.BooksEbook, "Ebooks - Self-Help");
-            AddCategoryMapping("96", TorznabCatType.BooksEbook, "Ebooks - Travel/Adventure");
-            AddCategoryMapping("104", TorznabCatType.BooksEbook, "Ebooks - True Crime");
-            AddCategoryMapping("109", TorznabCatType.BooksEbook, "Ebooks - Urban Fantasy");
-            AddCategoryMapping("70", TorznabCatType.BooksEbook, "Ebooks - Western");
-            AddCategoryMapping("112", TorznabCatType.BooksEbook, "Ebooks - Young Adult");
+            AddCategoryMapping("92", TorznabCatType.BooksEBook, "Ebooks - Medical");
+            AddCategoryMapping("118", TorznabCatType.BooksEBook, "Ebooks - Mixed Collections");
+            AddCategoryMapping("94", TorznabCatType.BooksEBook, "Ebooks - Mystery");
+            AddCategoryMapping("120", TorznabCatType.BooksEBook, "Ebooks - Nature");
+            AddCategoryMapping("95", TorznabCatType.BooksEBook, "Ebooks - Philosophy");
+            AddCategoryMapping("81", TorznabCatType.BooksEBook, "Ebooks - Pol/Soc/Relig");
+            AddCategoryMapping("82", TorznabCatType.BooksEBook, "Ebooks - Recreation");
+            AddCategoryMapping("68", TorznabCatType.BooksEBook, "Ebooks - Romance");
+            AddCategoryMapping("69", TorznabCatType.BooksEBook, "Ebooks - Science Fiction");
+            AddCategoryMapping("75", TorznabCatType.BooksEBook, "Ebooks - Self-Help");
+            AddCategoryMapping("96", TorznabCatType.BooksEBook, "Ebooks - Travel/Adventure");
+            AddCategoryMapping("104", TorznabCatType.BooksEBook, "Ebooks - True Crime");
+            AddCategoryMapping("109", TorznabCatType.BooksEBook, "Ebooks - Urban Fantasy");
+            AddCategoryMapping("70", TorznabCatType.BooksEBook, "Ebooks - Western");
+            AddCategoryMapping("112", TorznabCatType.BooksEBook, "Ebooks - Young Adult");
             AddCategoryMapping("19", TorznabCatType.AudioAudiobook, "Guitar/Bass Tabs");
             AddCategoryMapping("20", TorznabCatType.AudioAudiobook, "Individual Sheet");
             AddCategoryMapping("24", TorznabCatType.AudioAudiobook, "Individual Sheet MP3");
@@ -146,15 +147,12 @@ namespace Jackett.Common.Indexers
         {
             LoadValuesFromJson(configJson);
 
-            // TODO: implement captcha
             CookieHeader = "mam_id=" + configData.MamId.Value;
             try
             {
                 var results = await PerformQuery(new TorznabQuery());
-                if (results.Count() == 0)
-                {
+                if (!results.Any())
                     throw new Exception("Your man_id did not work");
-                }
 
                 IsConfigured = true;
                 SaveConfig();
@@ -176,7 +174,7 @@ namespace Jackett.Common.Indexers
                 {"tor[text]", query.GetQueryString()},
                 {"tor[srchIn][title]", "true"},
                 {"tor[srchIn][author]", "true"},
-                {"tor[searchType]", "all"},
+                {"tor[searchType]", configData.ExcludeVip?.Value == true ? "nVIP" : "all"}, // exclude VIP torrents
                 {"tor[searchIn]", "torrents"},
                 {"tor[hash]", ""},
                 {"tor[sortType]", "default"},
@@ -184,9 +182,11 @@ namespace Jackett.Common.Indexers
                 {"thumbnails", "1"}, // gives links for thumbnail sized versions of their posters
                 //{ "posterLink", "1"}, // gives links for a full sized poster
                 //{ "dlLink", "1"}, // include the url to download the torrent
-                {"description", "1"}, // include the description
+                {"description", "1"} // include the description
                 //{"bookmarks", "0"} // include if the item is bookmarked or not
             };
+
+            // Exclude VIP torrents
 
             var catList = MapTorznabCapsToTrackers(query);
             if (catList.Any())
@@ -199,33 +199,24 @@ namespace Jackett.Common.Indexers
                 }
             }
             else
-            {
                 qParams.Add("tor[cat][]", "0");
-            }
 
             var urlSearch = SearchUrl;
             if (qParams.Count > 0)
-            {
                 urlSearch += $"?{qParams.GetQueryString()}";
-            }
 
-            var response = await RequestStringWithCookiesAndRetry(urlSearch);
-            if (response.Content.StartsWith("Error"))
-            {
-                throw new Exception(response.Content);
-            }
+            var response = await RequestWithCookiesAndRetryAsync(urlSearch);
+            if (response.ContentString.StartsWith("Error"))
+                throw new Exception(response.ContentString);
 
             try
             {
-                var jsonContent = JObject.Parse(response.Content);
+                var jsonContent = JObject.Parse(response.ContentString);
                 var sitelink = new Uri(SiteLink);
 
                 var error = jsonContent.Value<string>("error");
-                if (error != null)
-                {
-                    if (error == "Nothing returned, out of 0")
-                        return releases;
-                }
+                if (error != null && error == "Nothing returned, out of 0")
+                    return releases;
 
                 foreach (var item in jsonContent.Value<JArray>("data"))
                 {
@@ -237,22 +228,28 @@ namespace Jackett.Common.Indexers
 
                     release.Description = item.Value<string>("description");
 
-                    var author_info = item.Value<string>("author_info");
+                    var authorInfo = item.Value<string>("author_info");
                     string author = null;
-                    if (!string.IsNullOrWhiteSpace(author_info))
-                    {
-                        author_info = Regex.Unescape(author_info);
-                        var author_info_json = JObject.Parse(author_info);
-                        author = author_info_json.First.Last.Value<string>();
-                    }
+                    if (!string.IsNullOrWhiteSpace(authorInfo))
+                        try
+                        {
+                            authorInfo = Regex.Unescape(authorInfo);
+                            var authorInfoJson = JObject.Parse(authorInfo);
+                            author = authorInfoJson.First.Last.Value<string>();
+                        }
+                        catch (Exception)
+                        {
+                            // the JSON on author_info field can be malformed due to double quotes
+                            logger.Warn($"{DisplayName} error parsing author_info: {authorInfo}");
+                        }
                     if (author != null)
                         release.Title += " by " + author;
 
                     var flags = new List<string>();
 
-                    var lang_code = item.Value<string>("lang_code");
-                    if (!string.IsNullOrEmpty(lang_code))
-                        flags.Add(lang_code);
+                    var langCode = item.Value<string>("lang_code");
+                    if (!string.IsNullOrEmpty(langCode))
+                        flags.Add(langCode);
 
                     var filetype = item.Value<string>("filetype");
                     if (!string.IsNullOrEmpty(filetype))
@@ -261,12 +258,15 @@ namespace Jackett.Common.Indexers
                     if (flags.Count > 0)
                         release.Title += " [" + string.Join(" / ", flags) + "]";
 
+                    if (item.Value<int>("vip") == 1)
+                        release.Title += " [VIP]";
+
                     var category = item.Value<string>("category");
                     release.Category = MapTrackerCatToNewznab(category);
 
                     release.Link = new Uri(sitelink, "/tor/download.php?tid=" + id);
-                    release.Comments = new Uri(sitelink, "/t/" + id);
-                    release.Guid = release.Comments;
+                    release.Details = new Uri(sitelink, "/t/" + id);
+                    release.Guid = release.Details;
 
                     var dateStr = item.Value<string>("added");
                     var dateTime = DateTime.ParseExact(dateStr, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
@@ -278,12 +278,8 @@ namespace Jackett.Common.Indexers
                     release.Peers = item.Value<int>("leechers") + release.Seeders;
                     var size = item.Value<string>("size");
                     release.Size = ReleaseInfo.GetBytes(size);
-                    var free = item.Value<int>("free");
 
-                    if (free == 1)
-                        release.DownloadVolumeFactor = 0;
-                    else
-                        release.DownloadVolumeFactor = 1;
+                    release.DownloadVolumeFactor = item.Value<int>("free") == 1 ? 0 : 1;
                     release.UploadVolumeFactor = 1;
 
                     releases.Add(release);
@@ -291,7 +287,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
 
             return releases;

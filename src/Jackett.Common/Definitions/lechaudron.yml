@@ -61,25 +61,25 @@ caps:
     - {id: 56, cat: Movies/HD, desc: "Films - MHD 720p"}
     - {id: 57, cat: Movies, desc: "Films - REMUX"}
     - {id: 58, cat: Movies, desc: "Films - TVRIP"}
-    - {id: 59, cat: Movies/WEBDL, desc: "Films - WEB-DL"}
-    - {id: 60, cat: Movies/WEBDL, desc: "Films - WEB-DL 1080p"}
-    - {id: 61, cat: Movies/WEBDL, desc: "Films - WEB-DL 720p"}
-    - {id: 62, cat: Movies/WEBDL, desc: "Films - WEBRIP"}
+    - {id: 59, cat: Movies/WEB-DL, desc: "Films - WEB-DL"}
+    - {id: 60, cat: Movies/WEB-DL, desc: "Films - WEB-DL 1080p"}
+    - {id: 61, cat: Movies/WEB-DL, desc: "Films - WEB-DL 720p"}
+    - {id: 62, cat: Movies/WEB-DL, desc: "Films - WEBRIP"}
     - {id: 64, cat: Console/3DS, desc: "Jeux - 3DS-DS"}
-    - {id: 65, cat: PC/Phone-IOS, desc: "Jeux - IOS-OSX"}
+    - {id: 65, cat: PC/Mobile-iOS, desc: "Jeux - IOS-OSX"}
     - {id: 66, cat: PC/Games, desc: "Jeux - PC"}
     - {id: 67, cat: Console/PSP, desc: "Jeux - PS-PSP-X"}
     - {id: 68, cat: Console/Wii, desc: "Jeux - Wii - Wii-U"}
-    - {id: 69, cat: Console/Xbox, desc: "Jeux - XBOX"}
+    - {id: 69, cat: Console/XBox, desc: "Jeux - XBOX"}
     - {id: 35, cat: Audio/Audiobook, desc: "Livres - Audio-Book"}
     - {id: 36, cat: Books, desc: "Livres - BD"}
-    - {id: 37, cat: Books/Magazines, desc: "Livres - Magazine"}
+    - {id: 37, cat: Books/Mags, desc: "Livres - Magazine"}
     - {id: 38, cat: Books/Comics, desc: "Livres - MANGAS"}
     - {id: 39, cat: Books, desc: "Livres - Presse"}
-    - {id: 40, cat: Books/Ebook, desc: "Livres - Roman"}
-    - {id: 70, cat: PC/Phone-Android, desc: "Logiciels - ANDROID"}
+    - {id: 40, cat: Books/EBook, desc: "Livres - Roman"}
+    - {id: 70, cat: PC/Mobile-Android, desc: "Logiciels - ANDROID"}
     - {id: 71, cat: PC/Mac, desc: "Logiciels - APPLE"}
-    - {id: 72, cat: PC/Phone-IOS, desc: "Logiciels - IPHONE"}
+    - {id: 72, cat: PC/Mobile-iOS, desc: "Logiciels - IPHONE"}
     - {id: 73, cat: PC, desc: "Logiciels - LINUX"}
     - {id: 74, cat: PC/0day, desc: "Logiciels - WINDOWS"}
     - {id: 75, cat: TV, desc: "Pack - 3D"}
@@ -129,6 +129,7 @@ caps:
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q]
+    book-search: [q]
 
 settings:
   - name: cookie
@@ -138,22 +139,29 @@ settings:
     type: info
     label: How to get the Cookie
     default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
-  - name: sort
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: multilang
+    type: checkbox
+    label: Replace MULTI by another language in release name
+    default: false
+  - name: multilanguage
     type: select
-    label: Sort requested from site
-    default: "id"
+    label: Replace MULTI by this language
+    default: FRENCH
     options:
-      "id": "created"
-      "seeders": "seeders"
-      "size": "size"
-      "name": "title"
-  - name: order
-    type: select
-    label: Order requested from site
-    default: "desc"
-    options:
-      "desc": "desc"
-      "asc": "asc"
+      FRENCH: FRENCH
+      MULTI.FRENCH: MULTI.FRENCH
+      ENGLISH: ENGLISH
+      MULTI.ENGLISH: MULTI.ENGLISH
+      VOSTFR: VOSTFR
+      MULTI.VOSTFR: MULTI.VOSTFR
+  - name: vostfr
+    type: checkbox
+    label: Replace VOSTFR with ENGLISH
+    default: false
 
 login:
   method: cookie
@@ -164,25 +172,28 @@ login:
     selector: a[href$="/TTV3/Deconnexion"]
 
 download:
+  before:
+    # <form method="post" action="https://lechaudron.nl/TTV3/Torrents/5610/remercier">
+    # <input type="hidden" name="torrent" value="5610">
+    path: "/TTV3/Torrents/{{ re_replace .DownloadUri.PathAndQuery \"^(.+?)(\\d+)$\" \"$2\" }}/remercier"
+    method: post
+    inputs:
+      torrent: "{{ re_replace .DownloadUri.PathAndQuery \"^(.+?)(\\d+)$\" \"$2\" }}"
   selector: a[href*="/Telechargement/"]
   attribute: href
 
 search:
   paths:
-    # https://lechaudron.nl/TTV3/Torrents/Recherche?search=aladdin&cat=0&incldead=1&freeleech=0&lang=0
+    # https://lechaudron.nl/TTV3/Torrents/Recherche?search=&endroit=nomtorrent&langue=0&tl=oui
     - path: TTV3/Torrents/Recherche
   inputs:
     search: "{{ .Keywords }}"
-    # categories for searching are unsupported
-    cat: 0
-    # 0 active, 1 incldead, 2 onlydead
-    incldead: 1
-    # 2 yes, 1 no, 0 both
-    freeleech: 0
+    # nomtorrent, desctorrent
+    endroit: nomtorrent
+    # non, oui, peuimporte
+    tl: "{{ if .Config.freeleech }}oui{{ else }}peuimporte{{ end }}"
     # 0 all, 2 English, etc
-    lang: 0
-    sort: "{{ .Config.sort }}"
-    order: "{{ .Config.order }}"
+    langue: 0
     # does not support imdbid searches and does not return imdb link in results
 
   rows:
@@ -195,19 +206,35 @@ search:
       filters:
         - name: regexp
           args: (\d+)$
-    title:
+    title_phase1:
       selector: a[href*="/SousCategories/"]
       attribute: alt
       filters:
         - name: regexp
           args: "^..(.+)"
+    title_multilang:
+      text: "{{ .Result.title_phase1 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)(\\smulti\\s)", " {{ .Config.multilanguage }} "]
+    title_phase2:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    title_vostfr:
+      text: "{{ .Result.title_phase2 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)(\\svostfr\\s)", " ENGLISH "]
+        - name: re_replace
+          args: ["(?i)(\\ssubfrench\\s)", " ENGLISH "]
+    title:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
     details:
       selector: a[onmouseover]
       attribute: href
     download:
       selector: a[onmouseover]
       attribute: href
-    banner:
+    poster:
       selector: a[onmouseover]
       attribute: onmouseover
       filters:
@@ -248,9 +275,13 @@ search:
       selector: td:nth-last-child(2)
     downloadvolumefactor:
       case:
-        img[src$="/images/Torrents/TLibre.png"]: 0
         img[src$="/images/Torrents/freeleech.png"]: 0
         "*": 1
     uploadvolumefactor:
       text: 1
+    minimumratio:
+      text: 0.95
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
 # TT3.00 FRENCH

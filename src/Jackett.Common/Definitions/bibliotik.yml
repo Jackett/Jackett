@@ -13,11 +13,12 @@ caps:
     - {id: 1, cat: PC, desc: "Applications"}
     - {id: 3, cat: Audio/Audiobook, desc: "Audiobooks"}
     - {id: 4, cat: Books/Comics, desc: "Comics"}
-    - {id: 5, cat: Books/Ebook, desc: "eBooks"}
-    - {id: 7, cat: Books/Magazines, desc: "Magazines"}
+    - {id: 5, cat: Books/EBook, desc: "eBooks"}
+    - {id: 7, cat: Books/Mags, desc: "Magazines"}
 
   modes:
     search: [q]
+    book-search: [q, title, author]
 
 settings:
   - name: username
@@ -29,36 +30,34 @@ settings:
   - name: orderby
     type: select
     label: Sort requested from site
-    default: "relevance"
+    default: relevance
     options:
-      "relevance": "relevance"
-      "year": "year"
-      "size": "size"
-      "duration": "duration"
-      "added": "added"
-      "leechers": "leechers"
-      "seeders": "seeders"
-      "snatches": "snatches"
-      "comments": "comments"
-      "files": "files"
+      relevance: relevance
+      year: year
+      size: size
+      duration: duration
+      added: added
+      leechers: leechers
+      seeders: seeders
+      snatches: snatches
+      comments: comments
+      files: files
   - name: order
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   path: /
-  method: form
-  form: form#loginform
-  submitpath: /
+  method: post
   inputs:
-    action: login
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
-    keeploggedin: 1
+    keeplogged: 1
+    login: "Log In!"
   error:
     - selector: center:first-of-type
   test:
@@ -69,7 +68,7 @@ search:
   paths:
     - path: torrents/
   inputs:
-    search: "{{ .Keywords }}"
+    search: "{{ if .Query.Author }} @authors {{ .Query.Author }}{{else}}{{end}}{{ if .Query.Title }} @title {{ .Query.Title }}{{else}}{{end}}{{ .Keywords }}"
     $raw: "{{ range .Categories }}cat[]={{.}}&{{end}}"
     orderby: "{{ .Config.orderby }}"
     order: "{{ .Config.order }}"
@@ -86,39 +85,48 @@ search:
         div[title="Comics"]: 4
         div[title="Ebooks"]: 5
         div[title="Magazines"]: 7
+    _author:
+      selector: .authorLink
+      optional: true
+    _editor:
+      selector: .editorLink
+      optional: true
+    author:
+      text: "{{ or (.Result._author) (.Result._editor) }}"
     _year:
       selector: .torYear
       optional: true
     _filetype:
       selector: .torFormat
       optional: true
-    title:
+    _retail:
+      selector: .torRetail
+      optional: true
+    booktitle:
       selector: .title a
+    title:
+      text: "{{.Result.booktitle}}"
       filters:
         - name: append
-          args: "{{ if .Result._year }} {{ .Result._year }}{{else}}{{end}}{{ if .Result._filetype }} {{ .Result._filetype }}{{else}}{{end}}"
+          args: "{{ if .Result.author }} by {{ .Result.author }}{{else}}{{end}}{{ if .Result._year }} {{ .Result._year }}{{else}}{{end}}{{ if .Result._filetype }} {{ .Result._filetype }}{{else}}{{end}}{{ if .Result._retail }} {{ .Result._retail }}{{else}}{{end}}"
     details:
       selector: .title a
       attribute: href
     date:
       optional: true
       selector: .t_files_size_added time
-      filters:
-        - name: timeago
+      attribute: datetime
     download:
       selector: a[title="Download"]
       attribute: href
-#      files:
-#        selector: .t_files_size_added
-#        filters:
-#          - name: regexp
-#            args: "^\\s*(\\d+)\\s*file"
-    size:
+    files:
       selector: .t_files_size_added
       filters:
-        - name: split
-          args: [",", 1]
-        - name: trim
+        - name: regexp
+          args: "^\\s*(\\d+)\\s*file"
+    size:
+      selector: .t_files_size_added span
+      attribute: data-bytecount
     seeders:
       text: 0
     seeders:

@@ -12,6 +12,7 @@ caps:
   categorymappings:
     - {id: 47, cat: TV/Sport, desc: "EPL"}
     - {id: 41, cat: TV/Sport, desc: "American Football"}
+    - {id: 54, cat: TV/Sport, desc: "AutoMotoRacing"}
     - {id: 17, cat: TV/Sport, desc: "Athletics"}
     - {id: 51, cat: TV/Sport, desc: "Baseball"}
     - {id: 34, cat: TV/Sport, desc: "Bodybuilding/Fitness"}
@@ -61,6 +62,8 @@ caps:
 
   modes:
     search: [q]
+    tv-search: [q]
+    movie-search: [q]
 
 settings:
   - name: username
@@ -72,19 +75,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "3"
+    default: 3
     options:
-      "3": "created"
-      "5": "seeders"
-      "4": "size"
-      "2": "title"
+      3: created
+      5: seeders
+      4: size
+      2: title
   - name: type
     type: select
     label: Order requested from site
-    default: "2"
+    default: 2
     options:
-      "2": "desc"
-      "1": "asc"
+      2: desc
+      1: asc
   - name: info
     type: info
     label: Results Per Page
@@ -104,18 +107,20 @@ login:
 
 search:
   paths:
+    # https://sportscult.org/index.php?search=&page=torrents&category=0&active=0&order=3&by=2
     - path: index.php
   inputs:
     $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
     search: "{{ .Keywords }}"
     page: torrents
     category: 0
-    active: 1
+    # 0 all, 1 active, 2 dead
+    active: 0
     order: "{{ .Config.sort }}"
     by: "{{ .Config.type }}"
 
   rows:
-    selector: table[cellspacing!="1"].lista > tbody > tr:has(a[href^="index.php?page=torrents&category="])
+    selector: table.lista:last-of-type:not(:has(td.block:contains("Our Team Recommend"))) > tbody > tr:has(a[href^="index.php?page=torrents&category="])
 
   fields:
     category:
@@ -125,12 +130,14 @@ search:
         - name: querystring
           args: category
     title:
-      remove: span
-      selector: td:nth-child(2)
+      selector: a[href^="index.php?page=torrent-details&id="]
       filters:
         # strip the upright bars in the title
         - name: re_replace
           args: ["( \\| )+", " "]
+    details:
+      selector: a[href^="index.php?page=torrent-details&id="]
+      attribute: href
     download:
       selector: a[href^="download.php?id="]
       attribute: href
@@ -138,9 +145,6 @@ search:
         # strip the upright bars in the title's filename
         - name: re_replace
           args: ["(\\+%7C\\+)+", "+"]
-    details:
-      selector: a[href^="index.php?page=torrent-details&id="]
-      attribute: href
     size:
       selector: td:nth-child(4)
     seeders:
@@ -152,12 +156,20 @@ search:
     date:
       selector: td:nth-child(5)
       filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02/01/2006"
+          args: "02/01/2006 -07:00"
     downloadvolumefactor:
       case:
+        img[src="gold/gold.gif"]: 0
+        img[src="gold/silver.gif"]: 0.5
         "*": 1
     uploadvolumefactor:
-      case:
-        "*": 1
+      text: 1
+    minimumratio:
+      text: 0.9
+    minimumseedtime:
+      # 36 hours (as seconds = 36 x 60 x 60)
+      text: 129600
 # xbtit 2.3.0

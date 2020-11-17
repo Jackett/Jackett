@@ -9,8 +9,6 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using CloudflareSolverRe;
-using com.LandonKey.SocksWebProxy;
-using com.LandonKey.SocksWebProxy.Proxy;
 using Jackett.Common.Helpers;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
@@ -27,93 +25,31 @@ namespace Jackett.Common.Utils.Clients
         private HttpClientHandler clientHandlr;
         private HttpClient client;
 
-        protected static Dictionary<string, ICollection<string>> trustedCertificates = new Dictionary<string, ICollection<string>>();
-        protected static string webProxyUrl;
-        protected static IWebProxy webProxy;
-
-        [DebuggerNonUserCode] // avoid "Exception User-Unhandled" Visual Studio messages
-        public static bool ValidateCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
-        {
-            if (sender.GetType() != typeof(HttpWebRequest))
-                return sslPolicyErrors == SslPolicyErrors.None;
-
-            var request = (HttpWebRequest)sender;
-            var hash = certificate.GetCertHashString();
-
-
-            trustedCertificates.TryGetValue(hash, out var hosts);
-            if (hosts != null)
-            {
-                if (hosts.Contains(request.Host))
-                    return true;
-            }
-
-            if (sslPolicyErrors != SslPolicyErrors.None)
-            {
-                // Throw exception with certificate details, this will cause a "Exception User-Unhandled" when running it in the Visual Studio debugger.
-                // The certificate is only available inside this function, so we can't catch it at the calling method.
-                throw new Exception("certificate validation failed: " + certificate.ToString());
-            }
-
-            return sslPolicyErrors == SslPolicyErrors.None;
-        }
-
-        public static void InitProxy(ServerConfig serverConfig)
-        {
-            // dispose old SocksWebProxy
-            if (webProxy is SocksWebProxy proxy)
-                proxy.Dispose();
-            webProxy = null;
-            webProxyUrl = serverConfig.GetProxyUrl();
-            if (!string.IsNullOrWhiteSpace(webProxyUrl))
-            {
-                if (serverConfig.ProxyType != ProxyType.Http)
-                {
-                    var addresses = Dns.GetHostAddressesAsync(serverConfig.ProxyUrl).Result;
-                    var socksConfig = new ProxyConfig
-                    {
-                        SocksAddress = addresses.FirstOrDefault(),
-                        Username = serverConfig.ProxyUsername,
-                        Password = serverConfig.ProxyPassword,
-                        Version = serverConfig.ProxyType == ProxyType.Socks4 ?
-                        ProxyConfig.SocksVersion.Four :
-                        ProxyConfig.SocksVersion.Five
-                    };
-                    if (serverConfig.ProxyPort.HasValue)
-                    {
-                        socksConfig.SocksPort = serverConfig.ProxyPort.Value;
-                    }
-                    webProxy = new SocksWebProxy(socksConfig, false);
-                }
-                else
-                {
-                    NetworkCredential creds = null;
-                    if (!serverConfig.ProxyIsAnonymous)
-                    {
-                        var username = serverConfig.ProxyUsername;
-                        var password = serverConfig.ProxyPassword;
-                        creds = new NetworkCredential(username, password);
-                    }
-                    webProxy = new WebProxy(webProxyUrl)
-                    {
-                        BypassProxyOnLocal = false,
-                        Credentials = creds
-                    };
-                }
-            }
-        }
-
         public HttpWebClient2(IProcessService p, Logger l, IConfigurationService c, ServerConfig sc)
             : base(p: p,
                    l: l,
                    c: c,
                    sc: sc)
         {
-            if (webProxyUrl == null)
-                InitProxy(sc);
-
             cookies = new CookieContainer();
             CreateClient();
+        }
+
+        [DebuggerNonUserCode] // avoid "Exception User-Unhandled" Visual Studio messages
+        public static bool ValidateCertificate(HttpRequestMessage request, X509Certificate2 certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+        {
+            var hash = certificate.GetCertHashString();
+
+            trustedCertificates.TryGetValue(hash, out var hosts);
+            if (hosts != null && hosts.Contains(request.RequestUri.Host))
+                    return true;
+
+            // Throw exception with certificate details, this will cause a "Exception User-Unhandled" when running it in the Visual Studio debugger.
+            // The certificate is only available inside this function, so we can't catch it at the calling method.
+            if (sslPolicyErrors != SslPolicyErrors.None)
+                throw new Exception("certificate validation failed: " + certificate);
+
+            return sslPolicyErrors == SslPolicyErrors.None;
         }
 
         public void CreateClient()
@@ -132,6 +68,12 @@ namespace Jackett.Common.Utils.Clients
                 AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
             };
 
+            // custom certificate validation handler (netcore version)
+            if (serverConfig.RuntimeSettings.IgnoreSslErrors == true)
+                clientHandlr.ServerCertificateCustomValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
+            else
+                clientHandlr.ServerCertificateCustomValidationCallback = ValidateCertificate;
+
             clearanceHandlr.InnerHandler = clientHandlr;
             client = new HttpClient(clearanceHandlr);
         }
@@ -139,10 +81,7 @@ namespace Jackett.Common.Utils.Clients
         // Called everytime the ServerConfig changes
         public override void OnNext(ServerConfig value)
         {
-            var newProxyUrl = serverConfig.GetProxyUrl();
-            if (webProxyUrl != newProxyUrl) // if proxy URL changed
-                InitProxy(serverConfig);
-
+            base.OnNext(value);
             // recreate client if needed (can't just change the proxy attribute)
             if (!ReferenceEquals(clientHandlr.Proxy, webProxy))
             {
@@ -152,19 +91,12 @@ namespace Jackett.Common.Utils.Clients
 
         public override void Init()
         {
-            if (serverConfig.RuntimeSettings.IgnoreSslErrors == true)
-            {
-                logger.Info(string.Format("HttpWebClient2: Disabling certificate validation"));
-                ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => { return true; };
-            }
+            base.Init();
 
             ServicePointManager.SecurityProtocol = (SecurityProtocolType)192 | (SecurityProtocolType)768 | (SecurityProtocolType)3072;
-
-            // custom handler for our own internal certificates
-            ServicePointManager.ServerCertificateValidationCallback += ValidateCertificate;
         }
 
-        protected override async Task<WebClientByteResult> Run(WebRequest webRequest)
+        protected override async Task<WebResult> Run(WebRequest webRequest)
         {
             HttpResponseMessage response = null;
             var request = new HttpRequestMessage();
@@ -232,9 +164,9 @@ namespace Jackett.Common.Utils.Clients
 
             response = await client.SendAsync(request);
 
-            var result = new WebClientByteResult
+            var result = new WebResult
             {
-                Content = await response.Content.ReadAsByteArrayAsync()
+                ContentBytes = await response.Content.ReadAsByteArrayAsync()
             };
 
             foreach (var header in response.Headers)
@@ -262,7 +194,7 @@ namespace Jackett.Common.Utils.Clients
                             redirval = value.Substring(start + 1);
                             result.RedirectingTo = redirval;
                             // normally we don't want a serviceunavailable (503) to be a redirect, but that's the nature
-                            // of this cloudflare approach..don't want to alter BaseWebResult.IsRedirect because normally
+                            // of this cloudflare approach..don't want to alter WebResult.IsRedirect because normally
                             // it shoudln't include service unavailable..only if we have this redirect header.
                             response.StatusCode = System.Net.HttpStatusCode.Redirect;
                             redirtime = int.Parse(value.Substring(0, end));
@@ -318,18 +250,6 @@ namespace Jackett.Common.Utils.Clients
             }
             ServerUtil.ResureRedirectIsFullyQualified(webRequest, result);
             return result;
-        }
-
-        public override void AddTrustedCertificate(string host, string hash)
-        {
-            hash = hash.ToUpper();
-            trustedCertificates.TryGetValue(hash.ToUpper(), out var hosts);
-            if (hosts == null)
-            {
-                hosts = new HashSet<string>();
-                trustedCertificates[hash] = hosts;
-            }
-            hosts.Add(host);
         }
     }
 }

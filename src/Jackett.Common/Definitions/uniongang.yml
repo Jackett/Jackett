@@ -11,7 +11,7 @@ links:
 caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Movies SATRip / DVDRip / HDRip"}
-    - {id: 21, cat: Movies/WEBDL, desc: "Movies WEB-DLRip / WEB-DL"}
+    - {id: 21, cat: Movies/WEB-DL, desc: "Movies WEB-DLRip / WEB-DL"}
     - {id: 2, cat: Movies/HD, desc: "Movies x264"}
     - {id: 3, cat: Movies/DVD, desc: "Movies DVD5"}
     - {id: 4, cat: Movies/DVD, desc: "Movies DVD9"}
@@ -93,8 +93,10 @@ search:
     date:
       selector: i
       filters:
+        - name: append
+          args: " +03:00" # MSK
         - name: dateparse
-          args: "2006-01-02 15:04:05"
+          args: "2006-01-02 15:04:05 -07:00"
     files:
       selector: td:nth-last-child(5)
     size:
@@ -118,3 +120,4 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
+# engine tbd

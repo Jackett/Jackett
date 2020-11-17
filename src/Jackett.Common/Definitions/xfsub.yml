@@ -6,8 +6,8 @@ language: zh-cn
 type: public
 encoding: UTF-8
 links:
-  - https://bt.xfsub.org/
   - http://share.xfapi.top:88/
+  - https://bt.xfsub.org/
 
 settings: []
 
@@ -27,7 +27,7 @@ caps:
     - {id: 12, cat: TV, desc: "日韩综艺 (JP+KR Shows)"}
     - {id: 13, cat: TV, desc: "台湾连续剧 (TW Series)"}
     - {id: 14, cat: Movies/3D, desc: "3D立体电影 (Movies3D)"}
-    - {id: 15, cat: Books/Ebook, desc: "Books"}
+    - {id: 15, cat: Books/EBook, desc: "Books"}
     - {id: 16, cat: TV, desc: "国产电视剧 (CH Series)"}
     - {id: 17, cat: TV, desc: "特摄 (Tokusatsu)"}
 
@@ -36,10 +36,11 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 search:
   paths:
-    - path: "{{ if .Keywords }}search.php?keyword={{ .Keywords }}{{else}}{{end}}"
+    - path: "{{ if .Keywords }}search.php?keyword={{ .Keywords }}{{ else }}{{ end }}"
 
   rows:
     selector: table#listTable > tbody > tr:has(a[href^="sort-"])
@@ -81,7 +82,7 @@ search:
         - name: replace
           args: ["前天", "Yesterday"] # dont have a day before yesterday time do we?
         - name: append
-          args: " +08:00"
+          args: " +08:00" # CST
         - name: fuzzytime
     date:
       # 03/02 12:44 (no year, so big problem for older dates which will appear as "0m ago" because 12/24 is in the future if today is 04/28)
@@ -89,11 +90,11 @@ search:
       optional: true
       filters:
         - name: append
-          args: " +08:00"
+          args: " +08:00" # CST
         - name: dateparse
           args: "01/02 15:04 -07:00"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
       text: 1
-# engine n/a
+# engine HamotionCloud (customised)

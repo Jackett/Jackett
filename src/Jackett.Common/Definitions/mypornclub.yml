@@ -22,6 +22,9 @@ settings: []
 download:
   selector: a[href^="magnet:?xt="]
   attribute: href
+  filters:
+    - name: re_replace
+      args: ["\\s+", " "]
 
 search:
   paths:
