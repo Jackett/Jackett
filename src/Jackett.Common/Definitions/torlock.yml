@@ -62,7 +62,7 @@ settings:
 
 search:
   paths:
-    - path: "{{if .Keywords}}/all/torrents/{{ .Keywords }}.html?sort={{ .Config.sort }}&order={{ .Config.type }}{{ else }}/fresh.html{{ end }}"
+    - path: "{{ if .Keywords }}/all/torrents/{{ .Keywords }}.html?sort={{ .Config.sort }}&order={{ .Config.type }}{{ else }}/fresh.html{{ end }}"
   keywordsfilters:
     - name: tolower
     - name: re_replace
@@ -90,7 +90,7 @@ search:
         span.tv9: IMAGES
         span.tv10: EBOOKS
         span.tv12: AUDIOBOOK
-        "*": "OTHER" # some torrents have invalid categories
+        "*": OTHER # some torrents have invalid categories
     title:
       selector: td:nth-child(1) > div > a
     details:
@@ -136,4 +136,4 @@ search:
       text: 0
     uploadvolumefactor:
       text: 1
-# Engine n/a
+# engine n/a

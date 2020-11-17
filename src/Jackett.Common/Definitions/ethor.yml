@@ -127,7 +127,7 @@ search:
         - name: re_replace
           args: ["(?i)[\\.\\s\\[\\-]VFQ[\\.\\s\\]\\-]", ".{{ .Config.multilanguage }}."]
     title:
-      text: "{{if .Config.multilang }}{{ .Result._title_multilang }}{{ else }}{{ .Result._title_normalized }}{{ end }}"
+      text: "{{ if .Config.multilang }}{{ .Result._title_multilang }}{{ else }}{{ .Result._title_normalized }}{{ end }}"
     category:
       selector: a[href^="/browse.php?cat="]
       attribute: href
