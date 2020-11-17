@@ -10,6 +10,7 @@ links:
   - https://www.oxtorrent.me/
   - https://www.torrent9.gg/
   - https://torrent9.to/
+  - https://torrent9.unblockninja.com/
 
 legacylinks:
   - http://www.torrent9.ec/
@@ -32,7 +33,6 @@ legacylinks:
   - https://www4.torrent9.to/
   - https://www.torrent9.cat/
   - https://www.torrent09.uno/
-  - https://torrent9.unblockninja.com/ # this is a proxy for torrent9clone
   - https://www.torrent9.pl/ # this is a proxy for torrent9clone
   - https://torrent9.black-mirror.xyz/ # this is a proxy for torrent9clone
   - https://torrent9.unblocked.casa/ # this is a proxy for torrent9clone
@@ -164,6 +164,16 @@ search:
       text: now
     size:
       selector: td:nth-child(2)
+      filters:
+        # support for proxies
+        - name: replace
+          args: ["Ko", "KB"]
+        - name: replace
+          args: ["Mo", "MB"]
+        - name: replace
+          args: ["Go", "GB"]
+        - name: replace
+          args: ["To", "TB"]
     seeders:
       text: 0
     seeders:
