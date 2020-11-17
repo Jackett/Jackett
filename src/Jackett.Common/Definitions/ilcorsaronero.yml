@@ -10,6 +10,7 @@ links:
   - https://ilcorsaronero.link/
   - https://ilcorsaronero.fun/
   - https://ilcorsaronero.pro/
+  - https://ilcorsaronero.torrentbay.to/
 legacylinks:
   - https://ilcorsaronero.live/
   - https://ilcorsaronero.vip/
@@ -22,7 +23,7 @@ legacylinks:
   - https://ilcorsaronero.unblockit.one/
   - https://ilcorsaronero.xyz/
   - https://ilcorsaronero.unblockit.me/
-  - https://ilcorsaronero.unblockit.pw/ # not working, likely to be removed soon
+  - https://ilcorsaronero.unblockit.pw/
 
 caps:
   categorymappings:
@@ -60,9 +61,6 @@ search:
     - path: "{{ if .Keywords }}advsearch.php?&category={{ range .Categories }}{{.}};{{end}}&search={{ .Keywords }}&order=data&by=DESC&page=0{{ else }}/browse/0{{ end }}"
     - path: "{{ if .Keywords }}advsearch.php?&category={{ range .Categories }}{{.}};{{end}}&search={{ .Keywords }}&order=data&by=DESC&page=1{{ else }}/browse/1{{ end }}"
     - path: "{{ if .Keywords }}advsearch.php?&category={{ range .Categories }}{{.}};{{end}}&search={{ .Keywords }}&order=data&by=DESC&page=2{{ else }}/browse/2{{ end }}"
-    - path: "{{ if .Keywords }}advsearch.php?&category={{ range .Categories }}{{.}};{{end}}&search={{ .Keywords }}&order=data&by=DESC&page=3{{ else }}/browse/3{{ end }}"
-    - path: "{{ if .Keywords }}advsearch.php?&category={{ range .Categories }}{{.}};{{end}}&search={{ .Keywords }}&order=data&by=DESC&page=4{{ else }}/browse/4{{ end }}"
-    - path: "{{ if .Keywords }}advsearch.php?&category={{ range .Categories }}{{.}};{{end}}&search={{ .Keywords }}&order=data&by=DESC&page=5{{ else }}/browse/5{{ end }}"
   keywordsfilters:
     - name: re_replace # S01 to 1
       args: ["(?i)\\bS0*(\\d+)\\b", "$1"]
