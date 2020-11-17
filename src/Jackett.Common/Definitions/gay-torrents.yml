@@ -81,7 +81,7 @@ search:
   paths:
     - path: "{{if .Query.Keywords}}search.php{{ else }}torrentslist.php{{ end }}"
   inputs:
-    $raw: "{{range .Categories}}type={{.}}&{{end}}"
+    $raw: "{{ range .Categories }}type={{.}}&{{end}}"
     textsearch: "{{ .Keywords }}"
   keywordsfilters:
     - name: re_replace

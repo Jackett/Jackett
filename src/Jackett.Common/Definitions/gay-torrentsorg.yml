@@ -85,7 +85,7 @@ search:
     - path: torrents_beta.php
       method: get
   inputs:
-    $raw: "{{range .Categories}}category[]={{.}}&{{end}}"
+    $raw: "{{ range .Categories }}category[]={{.}}&{{end}}"
     search: "{{ .Keywords }}"
     # 0 both, 1 active, 2 dead
     active: 0

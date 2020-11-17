@@ -123,7 +123,7 @@ search:
     ch: 300
     t: 0
     submit: Search
-    $raw: "{{range .Categories}}&fid[]={{.}}{{end}}"
+    $raw: "{{ range .Categories }}&fid[]={{.}}{{end}}"
 
   rows:
     selector: table.tablebg > tbody > tr:has(a[href^="./download/file.php?id="])

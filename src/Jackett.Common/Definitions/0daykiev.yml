@@ -99,7 +99,7 @@ search:
     - name: re_replace # S01E01 to Сезон 1 Серии 1
       args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "езон $1 ерии $2"]
   inputs:
-    $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
     # 0 active, 1 incldead, 2 onlydead, 3 gold, 4 noseed, 5 silver
     incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
