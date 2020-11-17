@@ -12,7 +12,8 @@ namespace Jackett.Common.Indexers
     public class IceTorrent : XtremeZoneTracker
     {
         public override string[] LegacySiteLinks { get; protected set; } = {
-            "https://www.icetorrent.org/"
+            "https://www.icetorrent.org/",
+            "https://icetorrent.org/"
         };
 
         public IceTorrent(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
@@ -20,7 +21,7 @@ namespace Jackett.Common.Indexers
                 id: "icetorrent",
                 name: "ICE Torrent",
                 description: "ICE Torrent is a ratioless ROMANIAN Private Torrent Tracker for 0DAY / GENERAL",
-                link: "https://icetorrent.org/",
+                link: "https://speedapp.io/",
                 caps: new TorznabCapabilities
                 {
                     TvSearchParams = new List<TvSearchParam>
