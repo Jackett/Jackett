@@ -62,7 +62,7 @@ settings:
 
 search:
   paths:
-    - path: "{{if .Keywords}}/all/torrents/{{ .Keywords }}.html?sort={{ .Config.sort }}&order={{ .Config.type }}{{else}}/fresh.html{{end}}"
+    - path: "{{if .Keywords}}/all/torrents/{{ .Keywords }}.html?sort={{ .Config.sort }}&order={{ .Config.type }}{{ else }}/fresh.html{{ end }}"
   keywordsfilters:
     - name: tolower
     - name: re_replace
@@ -110,8 +110,10 @@ search:
       selector: td:nth-child(2):contains("/")
       optional: true
       filters:
+        - name: append
+          args: " -07:00" # PDT
         - name: dateparse
-          args: "1/2/2006"
+          args: "1/2/2006 -07:00"
     date:
       selector: td:nth-child(2):contains("Today"), td:nth-child(2):contains("Yesterday")
       optional: true

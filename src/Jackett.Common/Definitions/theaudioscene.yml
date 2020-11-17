@@ -75,8 +75,10 @@ search:
           args: ["Added On ", ""]
         - name: re_replace
           args: ["(th|st|nd|rd)", ""]
+        - name: append
+          args: " -07:00" # PDT
         - name: dateparse
-          args: "Jan 02 2006"
+          args: "Jan 02 2006 -07:00"
 
   fields:
     title:

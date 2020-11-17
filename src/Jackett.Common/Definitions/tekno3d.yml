@@ -76,7 +76,7 @@ search:
     # title descr genre all
     searchin: title
     incldead: 1
-    only_free: "{{ if .Config.onlyfree }}1{{else}}0{{end}}"
+    only_free: "{{ if .Config.onlyfree }}1{{ else }}0{{ end }}"
   keywordsfilters:
     - name: re_replace
       args: ["(\\w+)", " +$1"] # prepend + to each word
@@ -84,6 +84,7 @@ search:
   rows:
     selector: tr.highlight, tr.browse_color, tr.freeleech_color, tr[id^="kdescr"]
     after: 1
+
   fields:
     category:
       selector: a[href^="browse.php?cat="]
@@ -120,8 +121,10 @@ search:
       selector: td:nth-of-type(7):not(:contains("day"))
       optional: true
       filters:
+        - name: append
+          args: " -07:00" # PDT
         - name: dateparse
-          args: "Jan 2 2006 03:04 PM"
+          args: "Jan 2 2006 03:04 PM -07:00"
     size:
       selector: td:nth-of-type(8)
     grabs:
@@ -144,3 +147,4 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
+# engine tbd
