@@ -74,8 +74,8 @@ search:
       selector: span.btntitle
       attribute: title
     details:
-      # details page is only accessible via  form and post which Cardigann does not support.
-      text: /
+      # details page is only accessible via form and post which Cardigann does not support.
+      text: "{{ .Config.sitelink }}"
     download:
       selector: a[href^="magnet:?xt="]
       attribute: href
@@ -94,7 +94,7 @@ search:
     _size:
       selector: td:nth-child(6)
     size:
-      text: "{{ if .Result._size }}{{ .Result._size }}{{else}}0 B{{end}}"
+      text: "{{ if .Result._size }}{{ .Result._size }}{{ else }}0 B{{ end }}"
     seeders:
       selector: td:nth-child(3)
     leechers:

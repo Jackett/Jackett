@@ -103,8 +103,8 @@ search:
   paths:
     - path: browse.php
   inputs:
-    $raw: "{{ if .Categories}}{{ range .Categories }}c{{.}}=1&{{end}}{{else}}cat=0{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    $raw: "{{ if .Categories}}{{ range .Categories }}c{{.}}=1&{{end}}{{ else }}cat=0{{ end }}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}" # for dashboard imdbid search
     # 1 active, 2 incldead, 3 onlydead, 4 free
     # note: searching with 4 (freeleech) does not return any results!
     # incldead: "{{ if .Config.freeleech }}4{{ else }}2{{ end }}"

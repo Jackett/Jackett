@@ -64,7 +64,7 @@ search:
     - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}" # for dashboard imdbid search
     incldead: 1
 
   rows:
@@ -123,7 +123,7 @@ search:
     size:
       selector: td:nth-child(6) > u
     downloadvolumefactor:
-      text: "1"
+      text: 1
     downloadvolumefactor:
       optional: true
       selector: td:nth-child(6) > nobr > font:contains(" × ")
@@ -131,7 +131,7 @@ search:
         - name: replace
           args: ["×", ""]
     uploadvolumefactor:
-      text: "1"
+      text: 1
     uploadvolumefactor:
       optional: true
       selector: td:nth-child(5) > nobr > font:contains(" × ")

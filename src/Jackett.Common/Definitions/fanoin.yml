@@ -98,7 +98,7 @@ search:
     - path: browse_old.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}" # for dashboard imdbid search
     # 0 active 1 incldead 2 onlydead
     incldead: 1
     sort: "{{ .Config.sort }}"

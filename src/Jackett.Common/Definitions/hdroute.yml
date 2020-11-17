@@ -51,7 +51,7 @@ search:
     # order: 1 uptime, 2 imdb, 3 comment, 4 size, 5 complete, 6 upload
     or: 1
     action: s
-    imdb: "{{ if .Query.IMDBID }}{{ .Query.IMDBIDShort }}{{else}}{{end}}"
+    imdb: "{{ if .Query.IMDBID }}{{ .Query.IMDBIDShort }}{{ else }}{{ end }}"
 
   rows:
     selector: div#unsticky-torrent-table dl, div#sticky-torrent-table dl

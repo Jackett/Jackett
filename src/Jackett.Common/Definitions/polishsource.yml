@@ -78,7 +78,7 @@ search:
     - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}" # for dashboard imdbid search
     # 0 onlyactive, 1 all, 2 onlydead
     incldead: 1
     # 0 all, 1 scene, 2 notscene, 3 internal
@@ -88,7 +88,7 @@ search:
     # subcat blank=all
     sub: ""
     # title, both, nfo
-    search_in: "{{ if .Query.IMDBID }}nfo{{else}}title{{end}}"
+    search_in: "{{ if .Query.IMDBID }}nfo{{ else }}title{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
 

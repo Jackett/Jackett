@@ -68,7 +68,7 @@ search:
   paths:
     - path: torrents/
   inputs:
-    search: "{{ if .Query.Author }} @authors {{ .Query.Author }}{{else}}{{end}}{{ if .Query.Title }} @title {{ .Query.Title }}{{else}}{{end}}{{ .Keywords }}"
+    search: "{{ if .Query.Author }} @authors {{ .Query.Author }}{{ else }}{{ end }}{{ if .Query.Title }} @title {{ .Query.Title }}{{ else }}{{ end }}{{ .Keywords }}"
     $raw: "{{ range .Categories }}cat[]={{.}}&{{end}}"
     orderby: "{{ .Config.orderby }}"
     order: "{{ .Config.order }}"
@@ -105,10 +105,10 @@ search:
     booktitle:
       selector: .title a
     title:
-      text: "{{.Result.booktitle}}"
+      text: "{{ .Result.booktitle }}"
       filters:
         - name: append
-          args: "{{ if .Result.author }} by {{ .Result.author }}{{else}}{{end}}{{ if .Result._year }} {{ .Result._year }}{{else}}{{end}}{{ if .Result._filetype }} {{ .Result._filetype }}{{else}}{{end}}{{ if .Result._retail }} {{ .Result._retail }}{{else}}{{end}}"
+          args: "{{ if .Result.author }} by {{ .Result.author }}{{ else }}{{ end }}{{ if .Result._year }} {{ .Result._year }}{{ else }}{ {end }}{{ if .Result._filetype }} {{ .Result._filetype }}{{ else }}{{ end }}{{ if .Result._retail }} {{ .Result._retail }}{{ else }}{{ end }}"
     details:
       selector: .title a
       attribute: href
@@ -143,9 +143,7 @@ search:
       optional: true
       selector: .snatches
     downloadvolumefactor:
-      case:
-        "*": 1
+      text: 1
     uploadvolumefactor:
-      case:
-        "*": 1
+      text: 1
 # engine tbc

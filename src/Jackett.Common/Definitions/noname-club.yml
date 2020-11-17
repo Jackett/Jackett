@@ -745,7 +745,7 @@ search:
     - path: forum/tracker.php
       method: post
   inputs:
-    $raw: "{{ if .Categories }}{{ range .Categories }}f[]={{.}}&{{end}}{{else}}f[]=-1{{end}}"
+    $raw: "{{ if .Categories }}{{ range .Categories }}f[]={{.}}&{{end}}{{ else }}f[]=-1{{ end }}"
     o: "{{ .Config.sort }}"
     s: "{{ .Config.type }}"
     tm: -1
@@ -805,7 +805,7 @@ search:
         - name: re_replace
           args: [".*(\\d{2}-\\d{2}-\\d{4})(\\d{2}:\\d{2})", "$1 $2"]
         - name: append
-          args: ":00 +03:00"
+          args: ":00 +03:00" # MSK
         - name: dateparse
           args: "02-01-2006 15:04:05 -07:00"
     seeders:
