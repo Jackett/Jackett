@@ -60,8 +60,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(61, TorznabCatType.MoviesUHD, "Movies: 4K (2160p)");
             AddCategoryMapping(41, TorznabCatType.TV, "TV Packs");
             AddCategoryMapping(66, TorznabCatType.TV, "TV Packs Ro");
-            AddCategoryMapping(45, TorznabCatType.TV, "TV Episodes");
-            AddCategoryMapping(46, TorznabCatType.TV, "TV Episodes Ro");
+            AddCategoryMapping(45, TorznabCatType.TVSD, "TV Episodes");
+            AddCategoryMapping(46, TorznabCatType.TVSD, "TV Episodes Ro");
             AddCategoryMapping(43, TorznabCatType.TVHD, "TV Episodes HD");
             AddCategoryMapping(44, TorznabCatType.TVHD, "TV Episodes HD Ro");
             AddCategoryMapping(60, TorznabCatType.TV, "TV Ro");
@@ -82,11 +82,11 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(9, TorznabCatType.TVDocumentary, "TV Documentary");
             AddCategoryMapping(63, TorznabCatType.TVDocumentary, "TV Documentary Ro");
             AddCategoryMapping(65, TorznabCatType.Other, "Tutorial");
-            AddCategoryMapping(67, TorznabCatType.Other, "Miscellaneous");
+            AddCategoryMapping(67, TorznabCatType.OtherMisc, "Miscellaneous");
             AddCategoryMapping(15, TorznabCatType.XXX, "XXX Movies");
             AddCategoryMapping(47, TorznabCatType.XXX, "XXX DVD");
             AddCategoryMapping(48, TorznabCatType.XXX, "XXX HD");
-            AddCategoryMapping(49, TorznabCatType.XXX, "XXX Images");
+            AddCategoryMapping(49, TorznabCatType.XXXImageSet, "XXX Images");
             AddCategoryMapping(50, TorznabCatType.XXX, "XXX Packs");
             AddCategoryMapping(51, TorznabCatType.XXX, "XXX SD");
         }
