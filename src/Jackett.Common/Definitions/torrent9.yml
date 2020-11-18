@@ -10,6 +10,7 @@ links:
   - https://www.oxtorrent.me/
   - https://www.torrent9.gg/
   - https://torrent9.to/
+  - https://torrent9.li/
   - https://torrent9.unblockninja.com/
 
 legacylinks:
@@ -80,6 +81,19 @@ settings:
     type: checkbox
     label: Replace VOSTFR with ENGLISH
     default: false
+  - name: sort
+    type: select
+    label: Sort requested from site (Only works for searches with Keywords)
+    default: ?trie-date-d
+    options:
+      ?trie-date-d: created desc
+      ?trie-date-a: created asc
+      ?trie-seeds-d: seeders desc
+      ?trie-seeds-a: seeders asc
+      ?trie-poid-d: size desc
+      ?trie-poid-a: size asc
+      ?trie-nom-d: title desc
+      ?trie-nom-a: title asc
   - name: info_131681
     type: info
     label: About Torrent9 Categories
@@ -91,9 +105,9 @@ download:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}/search_torrent/{{ .Keywords }}{{ else }}/top_torrent/{{ end }}"
+    - path: "{{ if .Keywords }}/search_torrent/{{ .Keywords }}{{ .Config.sort }}{{ else }}/top_torrent/{{ end }}"
   keywordsfilters:
-    # if searching for season packs swith S01 to saison 1 #9712
+    # if searching for season packs with S01 to saison 1 #9712
     - name: re_replace
       args: ["(?i)(S0)(\\d{1,2})$", "saison $2"]
     - name: re_replace
@@ -174,6 +188,9 @@ search:
           args: ["Go", "GB"]
         - name: replace
           args: ["To", "TB"]
+        # support for search with keywords on *.li which returns sizes nnnnn.n without unit indicator.
+        - name: re_replace
+          args: ["(\\d+)\\.\\d(?!KB|MB|GB|TB)", "$1 MB"]
     seeders:
       text: 0
     seeders:
