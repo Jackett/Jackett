@@ -12,6 +12,7 @@ namespace Jackett.Common.Indexers
     public class SceneFZ : XtremeZoneTracker
     {
         public override string[] LegacySiteLinks { get; protected set; } = {
+            "https://scenefz.me/",
             "https://www.scenefz.me/",
             "https://www.u-torrents.ro/"
         };
@@ -21,7 +22,7 @@ namespace Jackett.Common.Indexers
                 id: "scenefz",
                 name: "SceneFZ",
                 description: "SceneFZ is a ratioless ROMANIAN Private Torrent Tracker for MOVIES / TV / GENERAL",
-                link: "https://scenefz.me/",
+                link: "https://speedapp.io/",
                 caps: new TorznabCapabilities
                 {
                     TvSearchParams = new List<TvSearchParam>
