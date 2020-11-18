@@ -1,0 +1,98 @@
+---
+id: torrentproject
+name: TorrentProject
+description: "TorrentProject is a Public torrent meta-search engine"
+language: en-us
+type: public
+encoding: UTF-8
+links:
+  - https://torrentproject.to
+  - https://torrentproject.torrentbay.to/
+
+caps:
+  categorymappings:
+    # site uses › not >
+    - {id: "video › movie", cat: Movies, desc: "Video Movie"}
+    - {id: "video › movie› hdrip", cat: Movies, desc: "Video Movie HDRip"}
+    - {id: "video › movie› dvdrip", cat: Movies/SD, desc: "Video Movie DVDRip"}
+    - {id: audio, cat: Audio, desc: Audio}
+    - {id: "audio › album", cat: Audio, desc: "Audio Album"}
+    - {id: "audio › mp3", cat: Audio/MP3, desc: "Audio MP3"}
+    - {id: "audio › album› mp3", cat: Audio/MP3, desc: "Audio Album MP3"}
+    - {id: "audio › lossless", cat: Audio/Lossless, desc: "Audio Lossless"}
+    - {id: "audio › album› lossless", cat: Audio/Lossless, desc: "Audio Album Lossless"}
+    - {id: software, cat: PC/0day, desc: Software}
+    - {id: mobile, cat: PC/Mobile-Other, desc: Mobile}
+    - {id: games, cat: PC/Games, desc: Games}
+    - {id: "games › pc", cat: PC/Games, desc: "Games PC"}
+    - {id: tv, cat: TV, desc: TV}
+    - {id: video, cat: TV, desc: Video}
+    - {id: "video › show", cat: TV, desc: "Video Show"}
+    - {id: "video › show› movie", cat: TV, desc: "Video Show Movie"}
+    - {id: anime, cat: TV/Anime, desc: Anime}
+    - {id: adult, cat: XXX, desc: Adult}
+    - {id: "video › movie› adult", cat: XXX, desc: "Video Movie Adult"}
+    - {id: "video › show› adult", cat: XXX, desc: "Video Show Adult"}
+    - {id: "› books", cat: Books, desc: Books}
+    - {id: "doc › ebook", cat: Books/EBook, desc: "Doc Ebook"}
+    - {id: other, cat: Other, desc: Other}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: latest
+    options:
+      latest: "created desc"
+      oldest: "created asc"
+      seeders: seeders
+      sizebg: "size desc"
+      sizesm: "size asc"
+
+search:
+  paths:
+    - path: "?t={{ if .Keywords }}{{ .Keywords }}{{ else }}{{ end }}&orderby={{ .Config.sort }}"
+    - path: "?t={{ if .Keywords }}{{ .Keywords }}{{ else }}{{ end }}&orderby={{ .Config.sort }}&page=2"
+
+  rows:
+    selector: "#similarfiles div:has(a[href^=\"/\"])"
+
+  fields:
+    category:
+      text: Other
+    category|noappend:
+      optional: true
+      selector: div > span:nth-child(1) > span:nth-child(2)
+    title:
+      selector: span > a
+    details:
+      selector: span > a
+      attribute: href
+    infohash:
+      selector: span > a
+      attribute: href
+      filters:
+        - name: split
+          args: ["/", 1]
+    date:
+      selector: div > span:nth-child(4)
+      filters:
+        - name: timeago
+    size:
+      selector: div > span:nth-child(5)
+    seeders:
+      selector: div > span:nth-child(2)
+    leechers:
+      selector: div > span:nth-child(3)
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a
