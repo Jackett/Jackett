@@ -12,6 +12,7 @@ namespace Jackett.Common.Indexers
     public class XtremeZone : XtremeZoneTracker
     {
         public override string[] LegacySiteLinks { get; protected set; } = {
+            "https://myxz.eu/",
             "https://www.myxz.eu/",
             "https://www.myxz.org/"
         };
@@ -21,7 +22,7 @@ namespace Jackett.Common.Indexers
                 id: "xtremezone",
                 name: "Xtreme Zone",
                 description: "Xtreme Zone (MYXZ) is a ROMANIAN Private Torrent Tracker for MOVIES / TV / GENERAL",
-                link: "https://myxz.eu/",
+                link: "https://speedapp.io/",
                 caps: new TorznabCapabilities
                 {
                     TvSearchParams = new List<TvSearchParam>
