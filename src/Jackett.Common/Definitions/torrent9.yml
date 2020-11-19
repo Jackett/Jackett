@@ -7,10 +7,10 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://www.oxtorrent.me/
   - https://www.torrent9.gg/
   - https://torrent9.to/
   - https://torrent9.unblockninja.com/
+  - https://www.oxtorrent.me/
 
 legacylinks:
   - http://www.torrent9.ec/
