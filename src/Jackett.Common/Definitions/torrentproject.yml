@@ -67,7 +67,7 @@ search:
     - path: "?t={{ .Keywords }}&amp;orderby={{ .Config.sort }}&amp;page=2"
 
   rows:
-    selector: "#similarfiles div:has(a[href^=\"/\"]):not(:has(a[class^="notpicked"]))"
+    selector: "#similarfiles div:has(a[href^=\"/\"]):not(:has(a[class^=\"notpicked\"]))"
 
   fields:
     category:
