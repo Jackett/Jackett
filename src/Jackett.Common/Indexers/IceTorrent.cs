@@ -20,7 +20,7 @@ namespace Jackett.Common.Indexers
             : base(
                 id: "icetorrent",
                 name: "ICE Torrent",
-                description: "ICE Torrent is a ratioless ROMANIAN Private Torrent Tracker for 0DAY / GENERAL",
+                description: "ICE Torrent is a ROMANIAN Private Torrent Tracker for MOVIES / TV / GENERAL",
                 link: "https://speedapp.io/",
                 caps: new TorznabCapabilities
                 {

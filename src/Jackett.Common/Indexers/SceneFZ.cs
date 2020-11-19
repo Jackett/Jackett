@@ -21,7 +21,7 @@ namespace Jackett.Common.Indexers
             : base(
                 id: "scenefz",
                 name: "SceneFZ",
-                description: "SceneFZ is a ratioless ROMANIAN Private Torrent Tracker for MOVIES / TV / GENERAL",
+                description: "SceneFZ is a ROMANIAN Private Torrent Tracker for MOVIES / TV / GENERAL",
                 link: "https://speedapp.io/",
                 caps: new TorznabCapabilities
                 {
