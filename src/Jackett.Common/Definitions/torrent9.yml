@@ -7,8 +7,8 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://www.torrent9.gg/
   - https://torrent9.to/
+  - https://www.torrent9.gg/
   - https://torrent9.unblockninja.com/
   - https://www.oxtorrent.me/
 
