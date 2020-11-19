@@ -11,31 +11,36 @@ links:
 
 caps:
   categorymappings:
-    # site uses › not >
-    - {id: "video › movie", cat: Movies, desc: "Video Movie"}
-    - {id: "video › movie› hdrip", cat: Movies, desc: "Video Movie HDRip"}
-    - {id: "video › movie› dvdrip", cat: Movies/SD, desc: "Video Movie DVDRip"}
+    - {id: adult, cat: XXX, desc: Adult}
+    - {id: anime, cat: TV/Anime, desc: Anime}
     - {id: audio, cat: Audio, desc: Audio}
-    - {id: "audio › album", cat: Audio, desc: "Audio Album"}
-    - {id: "audio › mp3", cat: Audio/MP3, desc: "Audio MP3"}
-    - {id: "audio › album› mp3", cat: Audio/MP3, desc: "Audio Album MP3"}
-    - {id: "audio › lossless", cat: Audio/Lossless, desc: "Audio Lossless"}
-    - {id: "audio › album› lossless", cat: Audio/Lossless, desc: "Audio Album Lossless"}
-    - {id: software, cat: PC/0day, desc: Software}
-    - {id: mobile, cat: PC/Mobile-Other, desc: Mobile}
+    - {id: audioalbum, cat: Audio, desc: "Audio Album"}
+    - {id: audioalbumlossless, cat: Audio/Lossless, desc: "Audio Album Lossless"}
+    - {id: audioalbummp3, cat: Audio/MP3, desc: "Audio Album MP3"}
+    - {id: audiolossless, cat: Audio/Lossless, desc: "Audio Lossless"}
+    - {id: audiomp3, cat: Audio/MP3, desc: "Audio MP3"}
+    - {id: books, cat: Books, desc: Books}
+    - {id: docebook, cat: Books/EBook, desc: "Doc Ebook"}
     - {id: games, cat: PC/Games, desc: Games}
-    - {id: "games › pc", cat: PC/Games, desc: "Games PC"}
+    - {id: gamesnintendo, cat: Console/NDS, desc: "Games Nintendo"}
+    - {id: gamespc, cat: PC/Games, desc: "Games PC"}
+    - {id: gamesxbox, cat: Console/XBox, desc: "Games Xbox"}
+    - {id: literature, cat: Books, desc: Literature}
+    - {id: misc, cat: Other/Misc, desc: Misc}
+    - {id: mobile, cat: PC/Mobile-Other, desc: Mobile}
+    - {id: other, cat: Other, desc: Other}
+    - {id: playstation, cat: Console/PSP, desc: "Games Playstation"}
+    - {id: software, cat: PC/0day, desc: Software}
     - {id: tv, cat: TV, desc: TV}
     - {id: video, cat: TV, desc: Video}
-    - {id: "video › show", cat: TV, desc: "Video Show"}
-    - {id: "video › show› movie", cat: TV, desc: "Video Show Movie"}
-    - {id: anime, cat: TV/Anime, desc: Anime}
-    - {id: adult, cat: XXX, desc: Adult}
-    - {id: "video › movie› adult", cat: XXX, desc: "Video Movie Adult"}
-    - {id: "video › show› adult", cat: XXX, desc: "Video Show Adult"}
-    - {id: "› books", cat: Books, desc: Books}
-    - {id: "doc › ebook", cat: Books/EBook, desc: "Doc Ebook"}
-    - {id: other, cat: Other, desc: Other}
+    - {id: videomovie, cat: Movies, desc: "Video Movie"}
+    - {id: videomovieadult, cat: XXX, desc: "Video Movie Adult"}
+    - {id: videomoviedvdrip, cat: Movies/SD, desc: "Video Movie DVDRip"}
+    - {id: videomoviehdrip, cat: Movies, desc: "Video Movie HDRip"}
+    - {id: videoshow, cat: TV, desc: "Video Show"}
+    - {id: videoshowadult, cat: XXX, desc: "Video Show Adult"}
+    - {id: videoshowmovie, cat: TV, desc: "Video Show Movie"}
+    - {id: xxx, cat: XXX, desc: Adult}
 
   modes:
     search: [q]
@@ -58,8 +63,8 @@ settings:
 
 search:
   paths:
-    - path: "?t={{ if .Keywords }}{{ .Keywords }}{{ else }}{{ end }}&orderby={{ .Config.sort }}"
-    - path: "?t={{ if .Keywords }}{{ .Keywords }}{{ else }}{{ end }}&orderby={{ .Config.sort }}&page=2"
+    - path: "?t={{ .Keywords }}&amp;orderby={{ .Config.sort }}"
+    - path: "?t={{ .Keywords }}&amp;orderby={{ .Config.sort }}&amp;page=2"
 
   rows:
     selector: "#similarfiles div:has(a[href^=\"/\"])"
@@ -70,6 +75,10 @@ search:
     category|noappend:
       optional: true
       selector: div > span:nth-child(1) > span:nth-child(2)
+      filters:
+        - name: re_replace
+          args: ["[^a-zA-Z0-9]+", ""]
+        - name: tolower
     title:
       selector: span > a
     details:
@@ -87,6 +96,9 @@ search:
         - name: timeago
     size:
       selector: div > span:nth-child(5)
+    description:
+      optional: true
+      selector: div > span:nth-child(1) > span:nth-child(2)
     seeders:
       selector: div > span:nth-child(2)
     leechers:
