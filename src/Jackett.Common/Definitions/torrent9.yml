@@ -84,16 +84,17 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site (Only works for searches with Keywords)
-    default: ?trie-date-d
+    default: ".html"
     options:
-      ?trie-date-d: created desc
-      ?trie-date-a: created asc
-      ?trie-seeds-d: seeders desc
-      ?trie-seeds-a: seeders asc
-      ?trie-poid-d: size desc
-      ?trie-poid-a: size asc
-      ?trie-nom-d: title desc
-      ?trie-nom-a: title asc
+      ".html": best
+      ".html,trie-date-d": created desc
+      ".html,trie-date-a": created asc
+      ".html,trie-seeds-d": seeders desc
+      ".html,trie-seeds-a": seeders asc
+      ".html,trie-poid-d": size desc
+      ".html,trie-poid-a": size asc
+      ".html,trie-nom-d": title desc
+      ".html,trie-nom-a": title asc
   - name: info_131681
     type: info
     label: About Torrent9 Categories
@@ -105,13 +106,15 @@ download:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}/search_torrent/{{ .Keywords }}{{ .Config.sort }}{{ else }}/top_torrent/{{ end }}"
+    - path: "{{ if .Keywords }}/search_torrent/{{ .Keywords }}{{ .Config.sort }}{{ else }}/top_torrent.html{{ end }}"
   keywordsfilters:
     # if searching for season packs with S01 to saison 1 #9712
     - name: re_replace
       args: ["(?i)(S0)(\\d{1,2})$", "saison $2"]
     - name: re_replace
       args: ["(?i)(S)(\\d{1,3})$", "saison $2"]
+    - name: replace
+      args: [" ", "-"]
 
   rows:
     selector: table.table-striped > tbody > tr
@@ -179,7 +182,6 @@ search:
     size:
       selector: td:nth-child(2)
       filters:
-        # support for proxies
         - name: replace
           args: ["Ko", "KB"]
         - name: replace
