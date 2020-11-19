@@ -157,7 +157,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * UnionDHT
  * VSTHouse
  * VST Torrents
- * XFSUB
  * xxxAdultTorrent
  * xxxtor
  * xxxtorrents

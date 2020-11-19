@@ -419,6 +419,7 @@ namespace Jackett.Updater
                 "Definitions/waffles.yml",
                 "Definitions/worldofp2p.yml",
                 "Definitions/worldwidetorrents.yml",
+                "Definitions/xfsub.yml",
                 "Definitions/xktorrent.yml",
                 "Definitions/xtremefile.yml",
                 "Definitions/xtremezone.yml", // migrated to C# XtremeZone base tracker
