@@ -46,7 +46,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Byrutor
  * CiliPro (LIAORENCILI)
  * ConCen
- * Corsaro.red
  * cpasbien
  * cpasbienClone
  * Demonoid
