@@ -10,7 +10,6 @@ links:
   - https://www.oxtorrent.me/
   - https://www.torrent9.gg/
   - https://torrent9.to/
-  - https://torrent9.li/
   - https://torrent9.unblockninja.com/
 
 legacylinks:
@@ -43,6 +42,7 @@ legacylinks:
   - https://ww1.torrent9.is/
   - https://ww1.torrent9.to/
   - https://www.torrent9.is/
+  - https://torrent9.li/ # not a proxy for torrent9 or torrent9clone
 
 caps:
   categorymappings:
@@ -188,9 +188,6 @@ search:
           args: ["Go", "GB"]
         - name: replace
           args: ["To", "TB"]
-        # support for search with keywords on *.li which returns sizes nnnnn.n without unit indicator.
-        - name: re_replace
-          args: ["(\\d+)\\.\\d(?!KB|MB|GB|TB)", "$1 MB"]
     seeders:
       text: 0
     seeders:
