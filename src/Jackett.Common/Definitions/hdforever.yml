@@ -38,6 +38,10 @@ settings:
     type: checkbox
     label: Always try to use the FreeLeech Token
     default: false
+  - name: info_token
+    type: info
+    label: About the Freeleech token
+    default: If you <b>do not</b> have any <i>Freeleech tokens</i> then do not tick this box.</br>Attempting a token download when you have no tokens will generate an <b>error</b>.
   - name: multilang
     type: checkbox
     label: Replace MULTI by another language in release name
