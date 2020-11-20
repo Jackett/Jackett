@@ -335,6 +335,7 @@ namespace Jackett.Updater
                 "Definitions/kaztorka.yml",
                 "Definitions/kickasstorrent.yml",
                 "Definitions/kikibt.yml",
+                "Definitions/korsar.yml",
                 "Definitions/liaorencili.yml",
                 "Definitions/lapausetorrents.yml",
                 "Definitions/lemencili.yml",
