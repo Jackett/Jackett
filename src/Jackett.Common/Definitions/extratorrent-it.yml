@@ -835,7 +835,6 @@ caps:
 
     # Apps
     - {id: 7, cat: PC, desc: "Software"}
-    - {id: 416, cat: PC/Mobile-Other, desc: "Software - Mobile"}
     - {id: 532, cat: PC, desc: "Software - KeyGen / Tools"}
     - {id: 17, cat: PC, desc: "Software - Linux"}
     - {id: 27, cat: PC/Mac, desc: "Software - Mac"}
@@ -904,7 +903,7 @@ caps:
     - {id: 6, cat: Other, desc: "Pictures"}
     - {id: 9, cat: Other, desc: "Other"}
     - {id: 53, cat: Other, desc: "Pictures - Other"}
-    - {id: 52, cat: Other, desc: "Wallpapers"}
+    - {id: 52, cat: Other, desc: "Pictures - Wallpapers"}
     - {id: 80, cat: Other, desc: "Other - Articles"}
     - {id: 143, cat: Other, desc: "Other - Comics"}
     - {id: 85, cat: Other, desc: "Other - Funny clips"}
@@ -919,6 +918,7 @@ caps:
     - {id: 1023, cat: Other, desc: "Other - Nulled Scripts"}
 
     # Mobile
+    - {id: 416, cat: PC/Mobile-Other, desc: "Mobile"}
     - {id: 752, cat: PC/Mobile-Other, desc: "Mobile - Games for Android"}
     - {id: 746, cat: PC/Mobile-Other, desc: "Mobile - Games for Apple iPod, iPod Touch, iPad, iPhone"}
     - {id: 745, cat: PC/Mobile-Other, desc: "Mobile - Games for Java"}
