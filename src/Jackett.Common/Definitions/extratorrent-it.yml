@@ -61,7 +61,6 @@ caps:
     - {id: 525, cat: TV/Anime, desc: "Anime - Strawberry Panic"}
     - {id: 953, cat: TV/Anime, desc: "Anime - Sword Art Online II"}
     - {id: 958, cat: TV/Anime, desc: "Anime - Tokyo Ghoul"}
-
     # Audio
     - {id: 5, cat: Audio, desc: "Music"}
     - {id: 54, cat: Audio, desc: "Music - Alternative"}
@@ -77,7 +76,7 @@ caps:
     - {id: 971, cat: Audio, desc: "Music - Discography"}
     - {id: 60, cat: Audio, desc: "Music - Drum N Bass"}
     - {id: 61, cat: Audio, desc: "Music - Electronic"}
-    - {id: 850, cat: Audio, desc: "Music - FLAC"}
+    - {id: 850, cat: Audio/Lossless, desc: "Music - FLAC"}
     - {id: 519, cat: Audio, desc: "Music - Folk"}
     - {id: 62, cat: Audio, desc: "Music - Game Music"}
     - {id: 233, cat: Audio, desc: "Music - Gothic"}
@@ -95,7 +94,7 @@ caps:
     - {id: 68, cat: Audio, desc: "Music - Metal"}
     - {id: 526, cat: Audio, desc: "Music - Motown"}
     - {id: 79, cat: Audio, desc: "Music - Music - Other"}
-    - {id: 69, cat: Audio, desc: "Music - Music Videos"}
+    - {id: 69, cat: Audio/Video, desc: "Music - Music Videos"}
     - {id: 522, cat: Audio, desc: "Music - Non-English"}
     - {id: 507, cat: Audio, desc: "Music - Now That's What I Call Music"}
     - {id: 70, cat: Audio, desc: "Music - Pop"}
@@ -119,12 +118,11 @@ caps:
     - {id: 1004, cat: Audio, desc: "Music - Box Set"}
     - {id: 1005, cat: Audio, desc: "Music - Concerts"}
     - {id: 1006, cat: Audio, desc: "Music - Discography"}
-    - {id: 1007, cat: Audio, desc: "Music - DVD"}
+    - {id: 1007, cat: Audio/Video, desc: "Music - DVD"}
     - {id: 1008, cat: Audio/Lossless, desc: "Music - Lossless"}
     - {id: 1009, cat: Audio/MP3, desc: "Music - MP3"}
     - {id: 1011, cat: Audio, desc: "Music - Radio"}
     - {id: 1012, cat: Audio, desc: "Music - Single"}
-
     # Movies
     - {id: 4, cat: Movies, desc: "Movies"}
     - {id: 419, cat: Movies, desc: "Movies - Action"}
@@ -149,7 +147,7 @@ caps:
     - {id: 602, cat: Movies, desc: "Movies - History"}
     - {id: 40, cat: Movies, desc: "Movies - Horror"}
     - {id: 41, cat: Movies, desc: "Movies - Kids"}
-    - {id: 150, cat: Movies, desc: "Movies - KVCD"}
+    - {id: 150, cat: Movies/SD, desc: "Movies - KVCD"}
     - {id: 974, cat: Movies, desc: "Movies - Lollywood"}
     - {id: 42, cat: Movies, desc: "Movies - Martial Arts"}
     - {id: 44, cat: Movies/Other, desc: "Movies - Other"}
@@ -168,14 +166,13 @@ caps:
     - {id: 671, cat: Movies, desc: "Movies - Travel"}
     - {id: 307, cat: Movies, desc: "Movies - War"}
     - {id: 601, cat: Movies, desc: "Movies - Western"}
-    - {id: 1024, cat: Movies, desc: "Movies - HEVC/x265"}
-    - {id: 1030, cat: Movies, desc: "Movies - Divx/Xvid"}
-    - {id: 1031, cat: Movies, desc: "Movies - h.264/x264"}
+    - {id: 1024, cat: Movies/HD, desc: "Movies - HEVC/x265"}
+    - {id: 1030, cat: Movies/SD, desc: "Movies - Divx/Xvid"}
+    - {id: 1031, cat: Movies/HD, desc: "Movies - h.264/x264"}
     - {id: 1032, cat: Movies/HD, desc: "Movies - HD"}
-    - {id: 1033, cat: Movies, desc: "Movies - MP4"}
-    - {id: 1034, cat: Movies, desc: "Movies - SVCD/VCD"}
+    - {id: 1033, cat: Movies/HD, desc: "Movies - MP4"}
+    - {id: 1034, cat: Movies/SD, desc: "Movies - SVCD/VCD"}
     - {id: 1035, cat: Movies, desc: "Movies - YIFY"}
-
     # TV
     - {id: 8, cat: TV, desc: "TV"}
     - {id: 986, cat: TV, desc: "TV - 12 Monkeys"}
@@ -304,7 +301,7 @@ caps:
     - {id: 644, cat: TV, desc: "TV - Dirty Jobs"}
     - {id: 122, cat: TV, desc: "TV - Discovery Channel"}
     - {id: 167, cat: TV, desc: "TV - Doctor Who"}
-    - {id: 968, cat: TV, desc: "TV - Documentary"}
+    - {id: 968, cat: TV/Documentary, desc: "TV - Documentary"}
     - {id: 606, cat: TV, desc: "TV - Dollhouse"}
     - {id: 839, cat: TV, desc: "TV - Dont Trust the Bitch in Apartment"}
     - {id: 326, cat: TV, desc: "TV - Dr Who"}
@@ -504,7 +501,7 @@ caps:
     - {id: 940, cat: TV, desc: "TV - Naked And Afraid"}
     - {id: 203, cat: TV, desc: "TV - NASA 50 Years Of Space Exploration"}
     - {id: 899, cat: TV, desc: "TV - Nashville"}
-    - {id: 636, cat: TV, desc: "TV - National Geographic"}
+    - {id: 636, cat: TV/Documentary, desc: "TV - National Geographic"}
     - {id: 120, cat: TV, desc: "TV - NCIS"}
     - {id: 920, cat: TV, desc: "TV - Necessary Roughness"}
     - {id: 841, cat: TV, desc: "TV - New Girl"}
@@ -522,7 +519,7 @@ caps:
     - {id: 424, cat: TV, desc: "TV - Only Fools And Horses"}
     - {id: 935, cat: TV, desc: "TV - Orange Is The New Black"}
     - {id: 881, cat: TV, desc: "TV - Orphan Black"}
-    - {id: 113, cat: TV, desc: "TV - Other"}
+    - {id: 113, cat: TV/Other, desc: "TV - Other"}
     - {id: 365, cat: TV, desc: "TV - Out of Practice S01E"}
     - {id: 248, cat: TV, desc: "TV - Outer Limits"}
     - {id: 646, cat: TV, desc: "TV - Outer Space Astronauts"}
@@ -584,7 +581,7 @@ caps:
     - {id: 929, cat: TV, desc: "TV - Rizzoli and Isles"}
     - {id: 209, cat: TV, desc: "TV - Robot Chicken"}
     - {id: 888, cat: TV, desc: "TV - Rogue"}
-    - {id: 944, cat: TV, desc: "TV - ROH-Wrestling"}
+    - {id: 944, cat: TV/Sport, desc: "TV - ROH-Wrestling"}
     - {id: 255, cat: TV, desc: "TV - Rome"}
     - {id: 849, cat: TV, desc: "TV - Rookie Blue"}
     - {id: 694, cat: TV, desc: "TV - Royal Pains"}
@@ -629,7 +626,7 @@ caps:
     - {id: 845, cat: TV, desc: "TV - Spike TV"}
     - {id: 607, cat: TV, desc: "TV - Spooks"}
     - {id: 131, cat: TV, desc: "TV - Sports Illustrated"}
-    - {id: 159, cat: TV, desc: "TV - Sports related"}
+    - {id: 159, cat: TV/Sport, desc: "TV - Sports related"}
     - {id: 378, cat: TV, desc: "TV - Stacked"}
     - {id: 379, cat: TV, desc: "TV - Star Trek"}
     - {id: 563, cat: TV, desc: "TV - Star Wars The Clone Wars"}
@@ -767,7 +764,7 @@ caps:
     - {id: 268, cat: TV, desc: "TV - Threshold"}
     - {id: 796, cat: TV, desc: "TV - Thundercats"}
     - {id: 216, cat: TV, desc: "TV - TLC Connections"}
-    - {id: 904, cat: TV, desc: "TV - TNA-Wrestling"}
+    - {id: 904, cat: TV/Sport, desc: "TV - TNA-Wrestling"}
     - {id: 399, cat: TV, desc: "TV - Tonight Show With Jay Leno"}
     - {id: 616, cat: TV, desc: "TV - Top Chef"}
     - {id: 224, cat: TV, desc: "TV - Top Gear"}
@@ -786,7 +783,7 @@ caps:
     - {id: 930, cat: TV, desc: "TV - Twisted"}
     - {id: 401, cat: TV, desc: "TV - Two And A Half Men"}
     - {id: 337, cat: TV, desc: "TV - Tyrant"}
-    - {id: 793, cat: TV, desc: "TV - UFC"}
+    - {id: 793, cat: TV/Sport, desc: "TV - UFC"}
     - {id: 814, cat: TV, desc: "TV - Ugly Americans"}
     - {id: 559, cat: TV, desc: "TV - Ugly Betty"}
     - {id: 155, cat: TV, desc: "TV - UK"}
@@ -821,18 +818,17 @@ caps:
     - {id: 673, cat: TV, desc: "TV - Witches of East End"}
     - {id: 408, cat: TV, desc: "TV - Without A Trace"}
     - {id: 800, cat: TV, desc: "TV - Workaholics"}
-    - {id: 127, cat: TV, desc: "TV - WWE - Wrestling"}
+    - {id: 127, cat: TV/Sport, desc: "TV - WWE - Wrestling"}
     - {id: 228, cat: TV, desc: "TV - X Files"}
     - {id: 770, cat: TV, desc: "TV - X-Men"}
     - {id: 265, cat: TV, desc: "TV - Young and the Restless"}
     - {id: 801, cat: TV, desc: "TV - Young Justice"}
     - {id: 889, cat: TV, desc: "TV - Zero Hour US"}
-    - {id: 1025, cat: TV, desc: "TV - HEVC/x265"}
-    - {id: 1026, cat: TV, desc: "TV - Divx/Xvid"}
-    - {id: 1027, cat: TV, desc: "TV - DVD"}
-    - {id: 1028, cat: TV, desc: "TV/HD - HD"}
-    - {id: 1029, cat: TV, desc: "TV - SVCD/VCD"}
-
+    - {id: 1025, cat: TV/HD, desc: "TV - HEVC/x265"}
+    - {id: 1026, cat: TV/SD, desc: "TV - Divx/Xvid"}
+    - {id: 1027, cat: TV/SD, desc: "TV - DVD"}
+    - {id: 1028, cat: TV/HD, desc: "TV/HD - HD"}
+    - {id: 1029, cat: TV/SD, desc: "TV - SVCD/VCD"}
     # Apps
     - {id: 7, cat: PC, desc: "Software"}
     - {id: 532, cat: PC, desc: "Software - KeyGen / Tools"}
@@ -847,7 +843,6 @@ caps:
     - {id: 22, cat: PC, desc: "Software - Windows - Security"}
     - {id: 23, cat: PC, desc: "Software - Windows - Sound Editing"}
     - {id: 24, cat: PC, desc: "Software - Windows - Video Apps"}
-
     # Games
     - {id: 3, cat: PC/Games, desc: "Games"}
     - {id: 136, cat: PC/Games, desc: "Games - fixes/patches"}
@@ -871,7 +866,6 @@ caps:
     - {id: 1014, cat: Console/3DS, desc: "Games - Nintendo 3DS"}
     - {id: 1015, cat: Console, desc: "Games - Dreamcast"}
     - {id: 1016, cat: Console, desc: "Games - GameCube"}
-
     # XXX
     - {id: 533, cat: XXX, desc: "XXX"}
     - {id: 943, cat: XXX, desc: "XXX - Animation/Hentai"}
@@ -884,11 +878,10 @@ caps:
     - {id: 970, cat: XXX, desc: "XXX - Virtual Reality"}
     - {id: 806, cat: XXX, desc: "XXX - Wallpapers"}
     - {id: 811, cat: XXX, desc: "XXX - Books"}
-
     # Books
     - {id: 2, cat: Books, desc: "Books"}
     - {id: 625, cat: Books, desc: "Books - Adventure"}
-    - {id: 51, cat: Books, desc: "Books - Audio books"}
+    - {id: 51, cat: Audio/Audiobook, desc: "Books - Audio books"}
     - {id: 848, cat: Books/Comics, desc: "Books - Comics"}
     - {id: 624, cat: Books, desc: "Books - Crime"}
     - {id: 623, cat: Books, desc: "Books - Drama"}
@@ -898,7 +891,6 @@ caps:
     - {id: 465, cat: Books/Mags, desc: "Books - Magazines"}
     - {id: 1000, cat: Books, desc: "Books - Sexual Fitness and Education"}
     - {id: 626, cat: Books, desc: "Books - True Stories"}
-
     # Other
     - {id: 6, cat: Other, desc: "Pictures"}
     - {id: 9, cat: Other, desc: "Other"}
@@ -916,7 +908,6 @@ caps:
     - {id: 1021, cat: Other, desc: "Other - Tutorials"}
     - {id: 1022, cat: Other, desc: "Other - Sounds"}
     - {id: 1023, cat: Other, desc: "Other - Nulled Scripts"}
-
     # Mobile
     - {id: 416, cat: PC/Mobile-Other, desc: "Mobile"}
     - {id: 752, cat: PC/Mobile-Other, desc: "Mobile - Games for Android"}
@@ -944,7 +935,7 @@ settings: []
 
 search:
   paths:
-    - path: "{{ if .Keywords }}search/?search={{ .Keywords }}{{else}}/home{{end}}"
+    - path: "{{ if .Keywords }}search/?search={{ .Keywords }}{{ else }}/home{{ end }}"
 
   rows:
     selector: tr[class^="tl"]
