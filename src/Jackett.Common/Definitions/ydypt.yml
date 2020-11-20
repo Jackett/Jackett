@@ -77,7 +77,7 @@ login:
 
 search:
   paths:
-     # https://pt.hdbd.us/torrents.php?incldead=0&spstate=0&picktype=0&inclbookmarked=0&search=&search_area=0&search_mode=0
+    # https://pt.hdbd.us/torrents.php?incldead=0&spstate=0&picktype=0&inclbookmarked=0&search=&search_area=0&search_mode=0
     - path: torrents.php
   inputs:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
