@@ -56,6 +56,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * ETTV
  * EXT Torrents
  * ExtraTorrent.cd
+ * ExtraTorrent.it
  * EZTV
  * Filebase
  * FireBit
@@ -188,7 +189,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * KinoNaVse100
  * Kinorun
  * Kinozal
- * Korsar
  * LostFilm.tv
  * Magnetico (Local DHT) [[site](https://github.com/boramalper/magnetico)]
  * MVGroup Forum
