@@ -145,6 +145,7 @@ caps:
     - {id: 2063, cat: PC/ISO, desc: "Linuxfx"}
     - {id: 2064, cat: PC/ISO, desc: "Liquid Lemur"}
     - {id: 2191, cat: PC/ISO, desc: "Live Raizo"}
+    - {id: 316, cat: PC/ISO, desc: "Livecd"}
     - {id: 1218, cat: PC/ISO, desc: "Lubuntu"}
     - {id: 2163, cat: PC/ISO, desc: "MOFO Linux"}
     - {id: 2177, cat: PC/ISO, desc: "MX Linux"}
