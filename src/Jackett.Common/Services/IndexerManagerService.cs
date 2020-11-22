@@ -42,6 +42,7 @@ namespace Jackett.Common.Services
             {"metaliplayro", "romanianmetaltorrents"},
             {"nnm-club", "noname-club"},
             {"passtheheadphones", "redacted"},
+            {"puntorrent", "puntotorrent"},
             {"rstorrent", "redstartorrent"},
             {"tehconnectionme", "anthelion"},
             {"torrentseed", "latinop2p"},
