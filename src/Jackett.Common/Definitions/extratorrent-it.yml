@@ -827,7 +827,7 @@ caps:
     - {id: 1025, cat: TV/HD, desc: "TV - HEVC/x265"}
     - {id: 1026, cat: TV/SD, desc: "TV - Divx/Xvid"}
     - {id: 1027, cat: TV/SD, desc: "TV - DVD"}
-    - {id: 1028, cat: TV/HD, desc: "TV/HD - HD"}
+    - {id: 1028, cat: TV/HD, desc: "TV - HD"}
     - {id: 1029, cat: TV/SD, desc: "TV - SVCD/VCD"}
     # Apps
     - {id: 7, cat: PC, desc: "Software"}
@@ -857,7 +857,7 @@ caps:
     - {id: 13, cat: Console, desc: "Games - ROMS/Retro"}
     - {id: 15, cat: Console, desc: "Games - Sega Saturn"}
     - {id: 14, cat: PC/Games, desc: "Games - Video Demonstrations"}
-    - {id: 701, cat: Console/Wii, desc: "Games -Wii"}
+    - {id: 701, cat: Console/Wii, desc: "Games - Wii"}
     - {id: 421, cat: PC/Games, desc: "Games - Windows"}
     - {id: 10, cat: PC/Games, desc: "Games - Windows Kids Games"}
     - {id: 16, cat: Console/XBox, desc: "Games - XBox"}
