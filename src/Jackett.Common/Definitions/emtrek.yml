@@ -10,6 +10,7 @@ links:
 
 caps:
   categorymappings:
+    # when refreshing categories remember to use the list on the tracker.php page and not the search.php page.
     # Игры для PC (pc games)
     - {id: 317, cat: PC/Games, desc: "Игры для Linux"}
     - {id: 174, cat: PC/Games, desc: " |- Патчи"}
@@ -192,6 +193,9 @@ caps:
     - {id: 121, cat: Other, desc: "Обои / Рисунки / Картинки"}
     # Корзина (other)
     - {id: 2, cat: Other, desc: "Для пробных раздач"}
+    # the following forums are not in the tracker pull down list.
+    # Архив (archive)
+    - {id: 20, cat: Other, desc: "Архив"}
 
   modes:
     search: [q]
