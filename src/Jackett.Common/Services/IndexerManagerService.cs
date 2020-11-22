@@ -38,15 +38,18 @@ namespace Jackett.Common.Services
         {
             {"broadcastthenet", "broadcasthenet"},
             {"cili180", "cilipro"},
+            {"icetorrent", "speedapp"},
             {"liaorencili", "cilipro"},
             {"metaliplayro", "romanianmetaltorrents"},
             {"nnm-club", "noname-club"},
             {"passtheheadphones", "redacted"},
             {"puntorrent", "puntotorrent"},
             {"rstorrent", "redstartorrent"},
+            {"scenefz", "speedapp"},
             {"tehconnectionme", "anthelion"},
             {"torrentseed", "latinop2p"},
             {"transmithenet", "nebulance"},
+            {"xtremezone", "speedapp"},
             {"yourexotic", "exoticaz"}
         };
 

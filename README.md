@@ -384,7 +384,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Horror Site
  * HQSource (HQS)
  * HuSh [![(invite needed)][inviteneeded]](#)
- * ICE Torrent
  * IPTorrents (IPT)
  * ImmortalSeed (iS)
  * Immortuos
@@ -469,7 +468,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * RevolutionTT
  * Romanian Metal Torrents (RMT) [![(invite needed)][inviteneeded]](#)
  * RPTorrents
- * SceneFZ
  * SceneHD
  * ScenePalace (SP)
  * SceneRush
@@ -484,6 +482,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * SiamBIT
  * SnowPT (SSPT)
  * SoulVoice [![(invite needed)][inviteneeded]](#)
+ * SpeedApp (SceneFZ, XtreMeZone / MYXZ, ICE Torrent)
  * SpaceTorrent
  * SpeedCD
  * Speedmaster HD
@@ -561,7 +560,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * XWT-Classics
  * XWTorrents (XWT)
  * Xthor
- * XtreMeZone (MYXZ)
  * YDYPT
  * YingK
  * Zamunda.net
