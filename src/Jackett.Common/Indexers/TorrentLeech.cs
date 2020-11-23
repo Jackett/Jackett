@@ -192,6 +192,8 @@ namespace Jackett.Common.Indexers
                     // freeleech #6579 #6624 #7367
                     var dlMultiplier = row["download_multiplier"].ToString();
                     var dlVolumeFactor = string.IsNullOrEmpty(dlMultiplier) ? 1 : ParseUtil.CoerceInt(dlMultiplier);
+                    if (configData.Freeleech.Value && dlMultiplier != "0")
+                        continue;
 
                     var release = new ReleaseInfo
                     {
