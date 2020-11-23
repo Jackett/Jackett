@@ -22,7 +22,7 @@ namespace Jackett.Common.Indexers
     {
         private string LoginUrl => SiteLink + "user/account/login/";
         private string SearchUrl => SiteLink + "torrents/browse/list/";
-        private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
+        private new ConfigurationDataBasicLoginWithFreeleech configData => (ConfigurationDataBasicLoginWithFreeleech)base.configData;
 
         public override string[] LegacySiteLinks { get; protected set; } =
         {
@@ -57,7 +57,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
-                   configData: new ConfigurationDataBasicLogin(
+                   configData: new ConfigurationDataBasicLoginWithFreeleech(
                        "For best results, change the 'Default Number of Torrents per Page' setting to 100 in your Profile."))
         {
             Encoding = Encoding.UTF8;
@@ -151,6 +151,10 @@ namespace Jackett.Common.Indexers
             searchString = Regex.Replace(searchString, @"(^|\s)-", " ");
 
             var searchUrl = SearchUrl;
+
+            if (configData.Freeleech.Value)
+                searchUrl += "facets/tags%3AFREELEECH/";
+
             if (query.IsImdbQuery)
                 searchUrl += "imdbID/" + query.ImdbID + "/";
             else if (!string.IsNullOrWhiteSpace(searchString))
