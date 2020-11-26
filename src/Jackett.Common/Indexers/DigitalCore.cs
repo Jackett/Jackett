@@ -164,7 +164,7 @@ namespace Jackett.Common.Indexers
                     var tags = new List<string>();
 
                     release.MinimumRatio = 1.1;
-                    release.MinimumSeedTime = 172800; // 48 hours
+                    release.MinimumSeedTime = 432000; // 120 hours
                     release.Title = row.name;
                     release.Category = MapTrackerCatToNewznab(row.category.ToString());
                     release.Size = row.size;
