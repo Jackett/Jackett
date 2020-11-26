@@ -163,7 +163,7 @@ search:
         img[src$="/x2.gif"]: 2
         "*": 1
     minimumratio:
-      text: 0.8
+      text: 1.0
     minimumseedtime:
       # 3.75days (as seconds =  3.75 x 24 x 60 x 60)
       text: 324000
