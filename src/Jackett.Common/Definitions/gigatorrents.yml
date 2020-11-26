@@ -165,6 +165,9 @@ search:
       filters:
         - name: trim
           args: "x"
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
     date:
       selector: td:nth-child(2)
       remove: a
