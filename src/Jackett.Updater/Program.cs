@@ -303,6 +303,7 @@ namespace Jackett.Updater
                 "Definitions/elittracker.yml",
                 "Definitions/eotforum.yml",
                 "Definitions/estrenosdtl.yml",
+                "Definitions/ethor.yml",
                 "Definitions/evolutionpalace.yml",
                 "Definitions/extratorrent-ag.yml",
                 "Definitions/exoticaz.yml", // migrated to C#
