@@ -51,7 +51,9 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
-                   configData: new ConfigurationDataBasicLogin("Configure the URL, username and password from your local magneticow.<br>Default credentials are: username=username, password=password."))
+                   configData: new ConfigurationDataBasicLogin("Configure the URL, username and password from your local magneticow.<br>" +
+                               "Default credentials are: username=username, password=password.<br>" +
+                               "If you have many torrents, it is recommended to use PostgreSQL database to make queries faster. With SQLite, timeouts may occur."))
 
         {
             Encoding = Encoding.UTF8;
