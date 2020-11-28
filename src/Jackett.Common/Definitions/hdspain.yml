@@ -83,7 +83,7 @@ search:
         - name: prepend
           args: "{{ .Result.extras }} "
         - name: append
-          args: " [Spanish]"
+          args: " Spanish"
         - name: re_replace
           args: ["(?i)T(\\d{1,2})\\b", "S$1"]
     details:
