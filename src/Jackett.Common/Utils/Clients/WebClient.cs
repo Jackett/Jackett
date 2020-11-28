@@ -168,14 +168,24 @@ namespace Jackett.Common.Utils.Clients
 
         public virtual async Task<WebResult> GetResultAsync(WebRequest request)
         {
-            logger.Debug($"WebClient({ClientType}).GetResultAsync(Method: {request.Type} Url: {request.Url})");
+            if (logger.IsDebugEnabled) // performance optimization
+            {
+                var postData = "";
+                if (request.Type == RequestType.POST)
+                {
+                    var lines = request.PostData.Select(kvp => kvp.Key + "=" + kvp.Value);
+                    postData = $" PostData: {{{string.Join(", ", lines)}}} RawBody: {request.RawBody}";
+                }
+                logger.Debug($"WebClient({ClientType}).GetResultAsync(Method: {request.Type} Url: {request.Url}{postData})");
+            }
+
             PrepareRequest(request);
             await DelayRequest(request);
             var result = await Run(request);
             lastRequest = DateTime.Now;
             result.Request = request;
 
-            if (logger.IsDebugEnabled) // optimization to compute result.ContentString in debug mode only
+            if (logger.IsDebugEnabled) // performance optimization to compute result.ContentString in debug mode only
             {
                 var body = "";
                 var bodySize = 0;
