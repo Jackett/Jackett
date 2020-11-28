@@ -128,10 +128,16 @@ namespace Jackett.Common.Indexers
             {
                 var parser = new HtmlParser();
                 var dom = parser.ParseDocument(results.ContentString);
-                var preotectedLink = dom.QuerySelector("a[service=BitTorrent]").GetAttribute("href");
-                preotectedLink = SiteLink + preotectedLink.TrimStart('/');
+                var protectedLink = dom.QuerySelector("a[service=BitTorrent]").GetAttribute("href");
+                if (protectedLink.Contains("/ouo.io/"))
+                {
+                    // protected link =>
+                    // https://ouo.io/qs/qsW6rCh4?s=https://www.cinecalidad.is/protect/v2.php?i=A8--9InL&title=High+Life+%282018%29
+                    var linkParts = protectedLink.Split('=');
+                    protectedLink = protectedLink.Replace(linkParts[0] + "=", "");
+                }
 
-                results = await RequestWithCookiesAsync(preotectedLink);
+                results = await RequestWithCookiesAsync(protectedLink);
                 dom = parser.ParseDocument(results.ContentString);
                 var magnetUrl = dom.QuerySelector("a[href^=magnet]").GetAttribute("href");
                 return await base.Download(new Uri(magnetUrl));
