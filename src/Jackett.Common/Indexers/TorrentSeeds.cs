@@ -12,6 +12,7 @@ using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 
@@ -54,7 +55,7 @@ namespace Jackett.Common.Indexers
                  client: wc,
                  logger: l,
                  p: ps,
-                 configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
+                 configData: new ConfigurationDataBasicLoginWithRSSAndDisplay("For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile."))
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
@@ -139,8 +140,6 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            var releases = new List<ReleaseInfo>();
-
             // remove operator characters
             var cleanSearchString = Regex.Replace(query.GetQueryString().Trim(), "[ _.+-]+", " ", RegexOptions.Compiled);
 
@@ -156,15 +155,86 @@ namespace Jackett.Common.Indexers
                 queryCollection.Add("query", cleanSearchString);
             foreach (var cat in MapTorznabCapsToTrackers(query))
                 queryCollection.Add($"cat[{cat}]", "1");
+
             searchUrl += "?" + queryCollection.GetQueryString();
             var response = await RequestWithCookiesAndRetryAsync(searchUrl);
+
+            // handle cookie expiration
             var results = response.ContentString;
-            if (!results.Contains("/logout.php?"))
+            if ((response.IsRedirect && response.RedirectingTo.Contains("/login.php?")) ||
+                (!response.IsRedirect && !results.Contains("/logout.php?")))
             {
-                await ApplyConfiguration(null);
+                await ApplyConfiguration(null); // re-login
                 response = await RequestWithCookiesAndRetryAsync(searchUrl);
-                results = response.ContentString;
             }
+
+            // handle single entries
+            if (response.IsRedirect)
+            {
+                var detailsLink = new Uri(response.RedirectingTo);
+                await FollowIfRedirect(response, accumulateCookies: true);
+                return ParseSingleResult(response, detailsLink);
+            }
+
+            return ParseMultiResult(response);
+        }
+
+        private List<ReleaseInfo> ParseSingleResult(WebResult response, Uri detailsLink)
+        {
+            var releases = new List<ReleaseInfo>();
+            var results = response.ContentString;
+
+            try
+            {
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(results);
+                var content = dom.QuerySelector("tbody:has(script)");
+                var release = new ReleaseInfo();
+                release.MinimumRatio = 1;
+                release.MinimumSeedTime = 72 * 60 * 60;
+                var catStr = content.QuerySelector("tr:has(td:contains(\"Type\"))").Children[1].TextContent;
+                release.Category = MapTrackerCatDescToNewznab(catStr);
+                var qLink = content.QuerySelector("tr:has(td:contains(\"Download\"))")
+                                   .QuerySelector("a[href*=\"download.php?torrent=\"]");
+                release.Link = new Uri(SiteLink + qLink.GetAttribute("href"));
+                release.Title = dom.QuerySelector("h1").TextContent.Trim();
+                release.Details = detailsLink;
+                release.Guid = detailsLink;
+                var qSize = content.QuerySelector("tr:has(td.heading:contains(\"Size\"))").Children[1].TextContent
+                                   .Split('(')[0].Trim();
+                release.Size = ReleaseInfo.GetBytes(qSize);
+                var peerStats = content.QuerySelector("tr:has(td:has(a[href^=\"./peerlist_xbt.php?id=\"]))").Children[1]
+                                       .TextContent.Split(',');
+                var qSeeders = peerStats[0].Replace(" seeder(s)", "").Trim();
+                var qLeechers = peerStats[1].Split('=')[0].Replace(" leecher(s) ", "").Trim();
+                release.Seeders = ParseUtil.CoerceInt(qSeeders);
+                release.Peers = ParseUtil.CoerceInt(qLeechers) + release.Seeders;
+                var rawDateStr = content.QuerySelector("tr:has(td:contains(\"Added\"))").Children[1].TextContent;
+                var dateUpped = DateTimeUtil.FromUnknown(rawDateStr.Replace(",", string.Empty));
+
+                // Mar 4 2020, 05:47 AM
+                release.PublishDate = dateUpped.ToLocalTime();
+                var qGrabs = content.QuerySelector("tr:has(td:contains(\"Snatched\"))").Children[1];
+                release.Grabs = ParseUtil.CoerceInt(qGrabs.TextContent.Replace(" time(s)", ""));
+                var qFiles = content.QuerySelector("tr:has(td:has(a[href^=\"./filelist.php?id=\"]))").Children[1];
+                release.Files = ParseUtil.CoerceInt(qFiles.TextContent.Replace(" files", ""));
+                var qRatio = content.QuerySelector("tr:has(td:contains(\"Ratio After Download\"))").Children[1];
+                release.DownloadVolumeFactor = qRatio.QuerySelector("del") != null ? 0 : 1;
+                release.UploadVolumeFactor = 1;
+                releases.Add(release);
+            }
+            catch (Exception ex)
+            {
+                OnParseError(results, ex);
+            }
+
+            return releases;
+        }
+
+        private List<ReleaseInfo> ParseMultiResult(WebResult response)
+        {
+            var releases = new List<ReleaseInfo>();
+            var results = response.ContentString;
 
             try
             {
@@ -215,5 +285,6 @@ namespace Jackett.Common.Indexers
 
             return releases;
         }
+
     }
 }
