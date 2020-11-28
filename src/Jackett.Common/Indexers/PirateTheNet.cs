@@ -47,14 +47,11 @@ namespace Jackett.Common.Indexers
                    client: w,
                    logger: l,
                    p: ps,
-                   configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
+                   configData: new ConfigurationDataBasicLoginWithRSSAndDisplay("Only the results from the first search result page are shown, adjust your profile settings to show the maximum."))
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
-
-            configData.DisplayText.Value = "Only the results from the first search result page are shown, adjust your profile settings to show the maximum.";
-            configData.DisplayText.Name = "Notice";
 
             AddCategoryMapping("1080P", TorznabCatType.MoviesHD, "1080P");
             AddCategoryMapping("2160P", TorznabCatType.MoviesHD, "2160P");
