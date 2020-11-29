@@ -73,7 +73,7 @@ search:
         - name: re_replace
           args: ["- Episodio ([0-9]*)", "$1"]
         - name: append
-          args: " [spanish]"
+          args: " Spanish"
     details:
       selector: td.tit a
       attribute: href
