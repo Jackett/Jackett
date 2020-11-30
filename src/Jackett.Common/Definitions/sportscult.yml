@@ -102,8 +102,10 @@ login:
     pwd: "{{ .Config.password }}"
   error:
     - selector: span:contains("Password Incorrect")
+    - selector: span:contains("Username Incorrect")
   test:
     path: index.php
+    selector: a[href="logout.php"]
 
 search:
   paths:
