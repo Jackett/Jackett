@@ -482,7 +482,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * SnowPT (SSPT)
  * SoulVoice [![(invite needed)][inviteneeded]](#)
  * SpeedApp (SceneFZ, XtreMeZone / MYXZ, ICE Torrent)
- * SpaceTorrent
  * SpeedCD
  * Speedmaster HD
  * SpeedTorrent Reloaded
