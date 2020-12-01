@@ -30,25 +30,20 @@ settings:
   - name: orderby
     type: select
     label: Sort requested from site
-    default: relevance
+    default:  added
     options:
-      relevance: relevance
-      year: year
+      "@relevance": relevance
+      title: title
       size: size
-      duration: duration
       added: added
-      leechers: leechers
       seeders: seeders
-      snatches: snatches
-      comments: comments
-      files: files
   - name: order
     type: select
     label: Order requested from site
-    default: desc
+    default: DESC
     options:
-      desc: desc
-      asc: asc
+      DESC: desc
+      ASC: asc
 
 login:
   path: /
@@ -146,4 +141,4 @@ search:
       text: 1
     uploadvolumefactor:
       text: 1
-# engine tbc
+# engine n/a
