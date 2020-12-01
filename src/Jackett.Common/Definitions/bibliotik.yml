@@ -81,19 +81,29 @@ search:
         div[title="Ebooks"]: 5
         div[title="Magazines"]: 7
     _author:
+      text: ""
+    _author:
       selector: .authorLink
       optional: true
+    _editor:
+      text: ""
     _editor:
       selector: .editorLink
       optional: true
     author:
       text: "{{ or (.Result._author) (.Result._editor) }}"
     _year:
+      text: ""
+    _year:
       selector: .torYear
       optional: true
     _filetype:
+      text: ""
+    _filetype:
       selector: .torFormat
       optional: true
+    _retail:
+      text: ""
     _retail:
       selector: .torRetail
       optional: true
