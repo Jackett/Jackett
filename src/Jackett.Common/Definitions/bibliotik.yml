@@ -30,7 +30,7 @@ settings:
   - name: orderby
     type: select
     label: Sort requested from site
-    default:  added
+    default: added
     options:
       "@relevance": relevance
       title: title
