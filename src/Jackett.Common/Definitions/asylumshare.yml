@@ -178,7 +178,7 @@ search:
       args: ["(19|20[0-9]{2})", ""]
     # prepend + to each word
     - name: re_replace
-      args: ["(\\w+)", " +$1"]
+      args: ["(\\w+)", "+$1"]
 
   rows:
     selector: tr.t-row:has(a[href^="download.php?id="])
