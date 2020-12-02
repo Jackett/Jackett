@@ -81,7 +81,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * LinuxTracker
  * MacTorrents
  * Magnet4You
- * MagnetDL
  * MejorTorrent
  * MixTapeTorrent
  * Monova
@@ -145,7 +144,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * TorrentParadise
  * TorrentProject
  * TorrentProject2
- * TorrentQuest
  * Torrents.csv
  * Torrentv
  * TorrentView (토렌트뷰)
