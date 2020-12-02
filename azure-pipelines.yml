@@ -6,8 +6,8 @@ variables:
   patchVersion: $[counter(variables['minorVersion'], 1)]  # this will reset when we bump minor
   jackettVersion: $(majorVersion).$(minorVersion).$(patchVersion)
   buildConfiguration: Release
-  netCoreFramework: netcoreapp3.1
-  netCoreSdkVersion: 3.1.x
+  netCoreFramework: net5.0
+  netCoreSdkVersion: 5.0.x
   # system.debug: true
 
 trigger:
