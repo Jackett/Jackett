@@ -85,6 +85,13 @@ stages:
               installationPath: $(Agent.ToolsDirectory)/dotnet
 
           - task: DotNetCoreCLI@2
+            displayName: Dotnet Restore Jackett
+            inputs:
+              command: restore
+              projects: 'src/Jackett.sln'
+              arguments: '--runtime $(runtime)'
+
+          - task: DotNetCoreCLI@2
             displayName: Build Jackett Server
             inputs:
               command: publish
