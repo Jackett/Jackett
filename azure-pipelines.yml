@@ -111,6 +111,14 @@ stages:
               arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework) --output $(Build.BinariesDirectory) /p:AssemblyVersion=$(jackettVersion) /p:FileVersion=$(jackettVersion) /p:InformationalVersion=$(jackettVersion) /p:Version=$(jackettVersion)'
 
           - task: DotNetCoreCLI@2
+            displayName: Dotnet Restore Jackett (Windows only)
+            condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
+            inputs:
+              command: restore
+              projects: 'src/Jackett.Tray/Jackett.Tray.csproj'
+              arguments: '--runtime $(runtime)'
+
+          - task: DotNetCoreCLI@2
             displayName: Build Jackett Tray (Windows only)
             condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
             inputs:
