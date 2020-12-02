@@ -85,7 +85,8 @@ stages:
               installationPath: $(Agent.ToolsDirectory)/dotnet
 
           - task: DotNetCoreCLI@2
-            displayName: Dotnet Restore Jackett
+            displayName: Dotnet Restore Jackett (Windows only)
+            condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
             inputs:
               command: restore
               projects: 'src/Jackett.sln'
