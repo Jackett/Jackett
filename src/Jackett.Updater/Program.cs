@@ -342,6 +342,7 @@ namespace Jackett.Updater
                 "Definitions/lemencili.yml",
                 "Definitions/leparadisdunet.yml",
                 "Definitions/leporno.yml",
+                "Definitions/magnetdl.yml",
                 "Definitions/maniatorrent.yml",
                 "Definitions/manicomioshare.yml",
                 "Definitions/megabliz.yml",
@@ -400,6 +401,7 @@ namespace Jackett.Updater
                 "Definitions/torrentcouch.yml",
                 "Definitions/torrenthane.yml",
                 "Definitions/torrentkim.yml",
+                "Definitions/torrentquest.yml",
                 "Definitions/torrentrex.yml",
                 "Definitions/torrentseed.yml", // renamed to latinop2p #9065
                 "Definitions/torrentseeds.yml", // migrated to c#
