@@ -785,7 +785,7 @@ dotnet publish Jackett.Server -f net5.0 --self-contained -r osx-x64 -c Debug # t
 
 
 ```bash
-sudo apt install mono-complete nuget msbuild dotnet-sdk-5.0 # install build tools (Debian/ubuntu)
+sudo apt install nuget msbuild dotnet-sdk-5.0 # install build tools (Debian/ubuntu)
 git clone https://github.com/Jackett/Jackett.git
 cd Jackett/src
 
