@@ -54,8 +54,6 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "private";
 
-            webclient.AddTrustedCertificate(new Uri(SiteLink).Host, "19E6BB78D720790595EBBAFA3B0D2F6282E211F6");
-
             AddCategoryMapping(23, TorznabCatType.TVAnime, "Anime");
             AddCategoryMapping(52, TorznabCatType.PCMac, "Apple/All");
             AddCategoryMapping(22, TorznabCatType.PC, "Apps/misc");
