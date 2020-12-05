@@ -341,7 +341,7 @@ namespace Jackett.Updater
                 "Definitions/lemencili.yml",
                 "Definitions/leparadisdunet.yml",
                 "Definitions/leporno.yml",
-                "Definitions/liaorencili.yml",
+                "Definitions/liaorencili.yml", // renamed to cilipro
                 "Definitions/magnetdl.yml",
                 "Definitions/maniatorrent.yml",
                 "Definitions/manicomioshare.yml",
@@ -475,8 +475,6 @@ namespace Jackett.Updater
                 "Indexers/btstornet.json.bak",
                 "Indexers/btxpress.json",
                 "Indexers/btxpress.json.bak",
-                "Indexers/cili180.json", // renamed to liaorencili
-                "Indexers/cili180.json.bak", // renamed to liaorencili
                 "Indexers/cinefilhd.json",
                 "Indexers/cinefilhd.json.bak",
                 "Indexers/crazyscorner.json",
@@ -549,8 +547,6 @@ namespace Jackett.Updater
                 "Indexers/horriblesubs.json.bak",
                 "Indexers/hyperay.json",
                 "Indexers/hyperay.json.bak",
-                "Indexers/icetorrent.json", // renamed to speedapp
-                "Indexers/icetorrent.json.bak", // renamed to speedapp
                 "Indexers/idopeclone.json",
                 "Indexers/idopeclone.json.bak",
                 "Indexers/iloveclassics.json",
@@ -581,8 +577,6 @@ namespace Jackett.Updater
                 "Indexers/leparadisdunet.json.bak",
                 "Indexers/leporno.json",
                 "Indexers/leporno.json.bak",
-                "Indexers/liaorencili.json",
-                "Indexers/liaorencili.json.bak",
                 "Indexers/magnetdl.json",
                 "Indexers/magnetdl.json.bak",
                 "Indexers/maniatorrent.json",
@@ -591,8 +585,6 @@ namespace Jackett.Updater
                 "Indexers/manicomioshare.json.bak",
                 "Indexers/megabliz.json",
                 "Indexers/megabliz.json.bak",
-                "Indexers/metal-iplay-ro.json", // renamed to romanianmetaltorrents
-                "Indexers/metal-iplay-ro.json.bak", // renamed to romanianmetaltorrents
                 "Indexers/mkvcage.json",
                 "Indexers/mkvcage.json.bak",
                 "Indexers/moecat.json",
@@ -603,8 +595,6 @@ namespace Jackett.Updater
                 "Indexers/nachtwerk.json.bak",
                 "Indexers/nexttorrent.json",
                 "Indexers/nexttorrent.json.bak",
-                "Indexers/nnm-club.json", // renamed to noname-club
-                "Indexers/nnm-club.json.bak", // renamed to noname-club
                 "Indexers/nordichd.json",
                 "Indexers/nordichd.json.bak",
                 "Indexers/nostalgic.json", // renamed to vhstapes
@@ -637,8 +627,6 @@ namespace Jackett.Updater
                 "Indexers/rockhardlossless.json.bak",
                 "Indexers/rodvd.json",
                 "Indexers/rodvd.json.bak",
-                "Indexers/scenefz.json", // renamed to speedapp
-                "Indexers/scenefz.json.bak", // renamed to speedapp
                 "Indexers/scenereactor.json",
                 "Indexers/scenereactor.json.bak",
                 "Indexers/scenexpress.json",
@@ -695,8 +683,6 @@ namespace Jackett.Updater
                 "Indexers/torrentquest.json.bak",
                 "Indexers/torrentrex.json",
                 "Indexers/torrentrex.json.bak",
-                "Indexers/torrentseed.json", // renamed to latinop2p #9065
-                "Indexers/torrentseed.json.bak", // renamed to latinop2p #9065
                 "Indexers/torrentsmd.json",
                 "Indexers/torrentsmd.json.bak",
                 "Indexers/torrentvault.json",
@@ -741,10 +727,6 @@ namespace Jackett.Updater
                 "Indexers/xktorrent.json.bak",
                 "Indexers/xtremefile.json",
                 "Indexers/xtremefile.json.bak",
-                "Indexers/xtremezone.json", // renamed to speedapp
-                "Indexers/xtremezone.json.bak", // renamed to speedapp
-                "Indexers/yourexotic.json", // renamed to exoticaz
-                "Indexers/yourexotic.json.bak", // renamed to exoticaz
                 "Microsoft.Owin.dll",
                 "Microsoft.Owin.FileSystems.dll",
                 "Microsoft.Owin.Host.HttpListener.dll",
