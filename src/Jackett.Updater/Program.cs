@@ -469,6 +469,8 @@ namespace Jackett.Updater
                 "Indexers/btbit.json.bak",
                 "Indexers/bteye.json",
                 "Indexers/bteye.json.bak",
+                "Indexers/btgigs.json",
+                "Indexers/btgigs.json.bak",
                 "Indexers/btkitty.json",
                 "Indexers/btkitty.json.bak",
                 "Indexers/btstornet.json",
