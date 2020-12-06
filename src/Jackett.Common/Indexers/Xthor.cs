@@ -75,74 +75,74 @@ namespace Jackett.Common.Indexers
             Language = "fr-fr";
             Type = "private";
 
-            // Movies
-            AddCategoryMapping(118, TorznabCatType.MoviesBluRay, "UHD FULL BLURAY");
-            AddCategoryMapping(119, TorznabCatType.MoviesBluRay, "UHD BLURAY REMUX");
-            AddCategoryMapping(107, TorznabCatType.MoviesUHD, "UHD 2160P X265");
-            AddCategoryMapping(1, TorznabCatType.MoviesBluRay, "FULL BLURAY");
-            AddCategoryMapping(2, TorznabCatType.MoviesBluRay, "BLURAY REMUX");
-            AddCategoryMapping(100, TorznabCatType.MoviesHD, "HD 1080P X265");
-            AddCategoryMapping(4, TorznabCatType.MoviesHD, "HD 1080P X264");
-            AddCategoryMapping(5, TorznabCatType.MoviesHD, "HD 720P X264");
-            AddCategoryMapping(7, TorznabCatType.MoviesSD, "SD X264");
-            AddCategoryMapping(8, TorznabCatType.MoviesDVD, "FULL DVD");
-            AddCategoryMapping(3, TorznabCatType.Movies3D, "3D");
-            AddCategoryMapping(6, TorznabCatType.MoviesSD, "XVID");
-            AddCategoryMapping(122, TorznabCatType.MoviesHD, "HDTV");
-            AddCategoryMapping(94, TorznabCatType.MoviesWEBDL, "WEBDL");
-            AddCategoryMapping(95, TorznabCatType.MoviesWEBDL, "WEBRIP");
-            AddCategoryMapping(12, TorznabCatType.TVDocumentary, "DOCS");
-            AddCategoryMapping(33, TorznabCatType.MoviesOther, "SPECTACLE");
-            AddCategoryMapping(31, TorznabCatType.MoviesOther, "ANIMATION");
-            AddCategoryMapping(9, TorznabCatType.MoviesOther, "VOSTFR");
+            // Movies / Films
+            AddCategoryMapping(118, TorznabCatType.MoviesBluRay, "Films 2160p/Bluray");
+            AddCategoryMapping(119, TorznabCatType.MoviesBluRay, "Films 2160p/Remux");
+            AddCategoryMapping(107, TorznabCatType.MoviesUHD, "Films 2160p/x265");
+            AddCategoryMapping(1, TorznabCatType.MoviesBluRay, "Films 1080p/BluRay");
+            AddCategoryMapping(2, TorznabCatType.MoviesBluRay, "Films 1080p/Remux");
+            AddCategoryMapping(100, TorznabCatType.MoviesHD, "Films 1080p/x265");
+            AddCategoryMapping(4, TorznabCatType.MoviesHD, "Films 1080p/x264");
+            AddCategoryMapping(5, TorznabCatType.MoviesHD, "Films 720p/x264");
+            AddCategoryMapping(7, TorznabCatType.MoviesSD, "Films SD/x264");
+            AddCategoryMapping(3, TorznabCatType.Movies3D, "Films 3D");
+            AddCategoryMapping(6, TorznabCatType.MoviesSD, "Films XviD");
+            AddCategoryMapping(8, TorznabCatType.MoviesDVD, "Films DVD");
+            AddCategoryMapping(122, TorznabCatType.MoviesHD, "Films HDTV");
+            AddCategoryMapping(94, TorznabCatType.MoviesWEBDL, "Films WEBDL");
+            AddCategoryMapping(95, TorznabCatType.MoviesWEBDL, "Films WEBRiP");
+            AddCategoryMapping(12, TorznabCatType.TVDocumentary, "Films Documentaire");
+            AddCategoryMapping(31, TorznabCatType.MoviesOther, "Films Animation");
+            AddCategoryMapping(33, TorznabCatType.MoviesOther, "Films Spectacle");
+            AddCategoryMapping(125, TorznabCatType.TVSport, "Films Sports");
+            AddCategoryMapping(20, TorznabCatType.AudioVideo, "Films Concerts, Clips");
+            AddCategoryMapping(9, TorznabCatType.MoviesOther, "Films VOSTFR");
 
-            // Series
-            AddCategoryMapping(104, TorznabCatType.TVOther, "TV BLURAY");
-            AddCategoryMapping(13, TorznabCatType.TVOther, "TV PACK VF");
-            AddCategoryMapping(15, TorznabCatType.TVHD, "TV HD VF");
-            AddCategoryMapping(14, TorznabCatType.TVSD, "TV SD VF");
-            AddCategoryMapping(98, TorznabCatType.TVOther, "TV PACK VOSTFR");
-            AddCategoryMapping(17, TorznabCatType.TVHD, "TV HD VF VOSTFR");
-            AddCategoryMapping(16, TorznabCatType.TVSD, "TV SD VF VOSTFR");
-            AddCategoryMapping(101, TorznabCatType.TVAnime, "ANIME PACK");
-            AddCategoryMapping(32, TorznabCatType.TVAnime, "ANIME VF");
-            AddCategoryMapping(110, TorznabCatType.TVAnime, "ANIME VOSTFR");
-            AddCategoryMapping(123, TorznabCatType.TVOther, "TV ANIMATION");
-            AddCategoryMapping(109, TorznabCatType.TVDocumentary, "TV DOCS");
-            AddCategoryMapping(30, TorznabCatType.TVOther, "TV EMISSIONS");
-            AddCategoryMapping(34, TorznabCatType.TVOther, "TV SPORT");
+            // TV / Series
+            AddCategoryMapping(104, TorznabCatType.TVOther, "Series BluRay");
+            AddCategoryMapping(13, TorznabCatType.TVOther, "Series Pack VF");
+            AddCategoryMapping(15, TorznabCatType.TVHD, "Series HD VF");
+            AddCategoryMapping(14, TorznabCatType.TVSD, "Series SD VF");
+            AddCategoryMapping(98, TorznabCatType.TVOther, "Series Pack VOSTFR");
+            AddCategoryMapping(17, TorznabCatType.TVHD, "Series HD VOSTFR");
+            AddCategoryMapping(16, TorznabCatType.TVSD, "Series SD VOSTFR");
+            AddCategoryMapping(101, TorznabCatType.TVAnime, "Series Packs Anime");
+            AddCategoryMapping(32, TorznabCatType.TVAnime, "Series Animes");
+            AddCategoryMapping(110, TorznabCatType.TVAnime, "Series Anime VOSTFR");
+            AddCategoryMapping(123, TorznabCatType.TVOther, "Series Animation");
+            AddCategoryMapping(109, TorznabCatType.TVDocumentary, "Series DOC");
+            AddCategoryMapping(34, TorznabCatType.TVOther, "Series Sport");
+            AddCategoryMapping(30, TorznabCatType.TVOther, "Series Emission TV");
 
-            // Music
-            AddCategoryMapping(20, TorznabCatType.AudioVideo, "CONCERT");
+            // XxX / MISC
+            AddCategoryMapping(36, TorznabCatType.XXX, "MISC XxX/Films");
+            AddCategoryMapping(105, TorznabCatType.XXX, "MISC XxX/Séries");
+            AddCategoryMapping(114, TorznabCatType.XXX, "MISC XxX/Lesbiennes");
+            AddCategoryMapping(115, TorznabCatType.XXX, "MISC XxX/Gays");
+            AddCategoryMapping(113, TorznabCatType.XXX, "MISC XxX/Hentai");
+            AddCategoryMapping(120, TorznabCatType.XXX, "MISC XxX/Magazines");
 
-            // Books
-            AddCategoryMapping(24, TorznabCatType.BooksEBook, "EBOOKS NOVEL");
-            AddCategoryMapping(96, TorznabCatType.BooksMags, "EBOOKS MAGAZINES");
-            AddCategoryMapping(116, TorznabCatType.BooksEBook, "EBOOKS NOVEL JUNIOR");
-            AddCategoryMapping(99, TorznabCatType.BooksOther, "EBOOKS BD");
-            AddCategoryMapping(102, TorznabCatType.BooksComics, "EBOOKS COMICS");
-            AddCategoryMapping(103, TorznabCatType.BooksOther, "EBOOKS MANGA");
+            // Books / Livres
+            AddCategoryMapping(24, TorznabCatType.BooksEBook, "Livres Romans");
+            AddCategoryMapping(124, TorznabCatType.AudioAudiobook, "Livres Audio Books");
+            AddCategoryMapping(96, TorznabCatType.BooksMags, "Livres  Magazines");
+            AddCategoryMapping(99, TorznabCatType.BooksOther, "Livres Bandes dessinées");
+            AddCategoryMapping(116, TorznabCatType.BooksEBook, "Livres Romans Jeunesse");
+            AddCategoryMapping(102, TorznabCatType.BooksComics, "Livres Comics");
+            AddCategoryMapping(103, TorznabCatType.BooksOther, "Livres Mangas");
 
-            // SOFTWARE
-            AddCategoryMapping(25, TorznabCatType.PCGames, "PC GAMES");
-            AddCategoryMapping(27, TorznabCatType.ConsolePS3, "PS GAMES");
-            AddCategoryMapping(111, TorznabCatType.PCMac, "MAC GAMES");
-            AddCategoryMapping(112, TorznabCatType.PC, "LINUX GAMES");
-            AddCategoryMapping(26, TorznabCatType.ConsoleXBox360, "XBOX GAMES");
-            AddCategoryMapping(28, TorznabCatType.ConsoleWii, "WII GAMES");
-            AddCategoryMapping(29, TorznabCatType.ConsoleNDS, "NDS GAMES");
-            AddCategoryMapping(117, TorznabCatType.PC, "ROM");
-            AddCategoryMapping(21, TorznabCatType.PC, "PC SOFTWARE");
-            AddCategoryMapping(22, TorznabCatType.PCMac, "MAC SOFTWARE");
-            AddCategoryMapping(23, TorznabCatType.PCMobileAndroid, "ANDROID");
-
-            // XxX
-            AddCategoryMapping(36, TorznabCatType.XXX, "XxX / Films");
-            AddCategoryMapping(105, TorznabCatType.XXX, "XxX / Séries");
-            AddCategoryMapping(114, TorznabCatType.XXX, "XxX / Lesbiennes");
-            AddCategoryMapping(115, TorznabCatType.XXX, "XxX / Gays");
-            AddCategoryMapping(113, TorznabCatType.XXX, "XxX / Hentai");
-            AddCategoryMapping(120, TorznabCatType.XXX, "XxX / Magazines");
+            // SOFTWARE / Logiciels
+            AddCategoryMapping(25, TorznabCatType.PCGames, "Logiciels Jeux PC");
+            AddCategoryMapping(27, TorznabCatType.ConsolePS3, "Logiciels Playstation");
+            AddCategoryMapping(111, TorznabCatType.PCMac, "Logiciels Jeux MAC");
+            AddCategoryMapping(26, TorznabCatType.ConsoleXBox360, "Logiciels XboX");
+            AddCategoryMapping(112, TorznabCatType.PC, "Logiciels Jeux Linux");
+            AddCategoryMapping(28, TorznabCatType.ConsoleWii, "Logiciels Nintendo");
+            AddCategoryMapping(29, TorznabCatType.ConsoleNDS, "Logiciels NDS");
+            AddCategoryMapping(117, TorznabCatType.PC, "Logiciels ROM");
+            AddCategoryMapping(21, TorznabCatType.PC, "Logiciels Applis PC");
+            AddCategoryMapping(22, TorznabCatType.PCMac, "Logiciels Applis Mac");
+            AddCategoryMapping(23, TorznabCatType.PCMobileAndroid, "Logiciels Smartphone");
         }
 
         /// <summary>
