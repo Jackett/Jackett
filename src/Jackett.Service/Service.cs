@@ -30,7 +30,7 @@ namespace Jackett.Service
             LogManager.Configuration = LoggingSetup.GetLoggingConfiguration(runtimeSettings);
             logger = LogManager.GetCurrentClassLogger();
 
-            logger.Info("Initiating Jackett Service v" + EnvironmentUtil.JackettVersion);
+            logger.Info("Initiating Jackett Service " + EnvironmentUtil.JackettVersion());
 
             processService = new ProcessService(logger);
         }

@@ -36,7 +36,7 @@ namespace Jackett.Updater
             LogManager.Configuration = LoggingSetup.GetLoggingConfiguration(runtimeSettings);
             logger = LogManager.GetCurrentClassLogger();
 
-            logger.Info("Jackett Updater v" + GetCurrentVersion());
+            logger.Info("Jackett Updater " + EnvironmentUtil.JackettVersion());
             logger.Info("Options \"" + string.Join("\" \"", args) + "\"");
 
             var variants = new Variants();
@@ -76,13 +76,6 @@ namespace Jackett.Updater
             {
                 logger.Error($"Exception applying update!\n{e}");
             }
-        }
-
-        private string GetCurrentVersion()
-        {
-            var assembly = Assembly.GetExecutingAssembly();
-            var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
-            return fvi.FileVersion;
         }
 
         private void KillPids(int[] pids)
@@ -835,7 +828,7 @@ namespace Jackett.Updater
                 {
                     var startInfo = new ProcessStartInfo()
                     {
-                        Arguments = $"--UpdatedVersion \" {EnvironmentUtil.JackettVersion}\"",
+                        Arguments = $"--UpdatedVersion \" {EnvironmentUtil.JackettVersion()}\"",
                         FileName = Path.Combine(options.Path, "JackettTray.exe"),
                         UseShellExecute = true
                     };
