@@ -81,7 +81,6 @@ caps:
     - {id: 9020, cat: Books/EBook, desc: "Books E-Book"}
     - {id: 9030, cat: Books, desc: "Books E-Paper"}
     - {id: 9040, cat: Books, desc: "Books E-Learning"}
-    - {id: 9050, cat: TV, desc: "TV Kids"}
     - {id: 9060, cat: TV/Anime, desc: "Anime HD"}
     - {id: 9070, cat: TV/Anime, desc: "Anime SD"}
     - {id: 9080, cat: TV/Anime, desc: "Anime Pack"}
@@ -90,7 +89,7 @@ caps:
   modes:
     search: [q]
     tv-search: [q, season, ep]
-    movie-search: [q, imdbid]
+    movie-search: [q]
     music-search: [q]
     book-search: [q]
 
@@ -111,9 +110,9 @@ settings:
     default: 1
     options:
       1: created
-      8: seeders
-      6: size
-      2: title
+      2: seeders
+      5: size
+      9: title
   - name: type
     type: select
     label: Order requested from site
@@ -137,97 +136,108 @@ login:
   error:
     - selector: div#login_error
   test:
-    path: browse.php
-    selector: a[href="logout.php"]
+    path: index.php
+#    selector: a[href="logout.php"] # ajax does not return a full page so cant test this.
 
 search:
   paths:
-    - path: browse.php
+    - path: ajax_browse.php
+      method: post
   inputs:
-    suchfeld: 2
-    alleanzeigen: 1
-    $raw: "{{ range .Categories }}kategorie[]={{.}}&{{end}}"
-    suche: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
-    # searchin: 1 name, 2 descr, 3 all, 4 genre, 5 movei titles, 6 actors, 7 authors, 8 directors, 9 filmcrew, 10 plot, 11 imdbid, 12 tmdbid
-    # note: although tmdbid appears as option 12, searching for this yields no results.
-    durchsuche: "{{ if .Query.IMDBID }}11{{ else }}1{{ end }}"
-    # incldead: 1 active, 2 all, 3 onlydead, 4 highlight, 5 bookmark, 6 onlyups, 7 freeleech, 8 multi2, 9 multi5, 10 multi10, 11 25%d,l 12 50%dl, 13 75%dl
-    # note: searching with 6(freeleech) yielded no results, using 7(onlyups) works.
-    suchein: "{{ if .Config.freeleech }}6{{ else }}2{{ end }}"
-    # cat: 1 all, 1000 film, 2000 tv, 3000 docs, 4000 sport, 5000 xxx, 6000 games, 7000 apps, 8000 music, 9000 other
-    sucheaus: 1
-    sortierenach: "{{ .Config.sort }}"
-    sortierung: "{{ .Config.type }}"
+    # allCats=1000&categories[]=1010&categories[]=1020&search=&limit=1&searchIn=0&orderBy=1&order=1
+    $raw: "{{ if .Categories }}{{ range .Categories }}categories[]={{.}}&{{end}}{{ else }}{{ end }}"
+    # cat: (empty) all, 1000 film, 2000 tv, 3000 docs, 4000 sport, 5000 xxx, 6000 games, 7000 apps, 8000 music, 9000 other
+    allCats: ""
+    search: "{{ .Keywords }}"
+    # 1 25, 2 50, 3 75, 4 100
+    limit: 1
+    # searchin: 0 all, 1 active, 2 dead, 3 highlights, 4 bookmarks, 5 uploads, 10 bots, 11 onlyupload, 12 multiplier, 13 %download, 14 freeleech
+    # note: freeleech on this site means download and upload is not counted, whereas OU means download is free and upload is counted
+    # 14 yields no freeleech, but 11 returns results
+    searchin: "{{ if .Config.freeleech }}11{{ else }}0{{ end }}"
+    orderBy: "{{ .Config.sort }}"
+    order: "{{ .Config.type }}"
+  headers:
+    x-requested-with: ["XMLHttpRequest"]
 
   rows:
-    selector: table.tableinborder[border="0"][cellspacing="0"][cellpadding="0"] tr
+    selector: table.tableinborder tr:has(.catPic)
 
   fields:
     category:
-      selector: a.bt-cat
-      attribute: href
+      selector: td.catPic > img
+      attribute: src
       filters:
         - name: regexp
-          args: (\d+)$
+          args: (\d+).png$
     title:
-      selector: a.tor-name
+      selector: a[href^="details.php?id="]
     details:
-      selector: a.tor-name
+      selector: a[href^="details.php?id="]
       attribute: href
     download:
-      selector: div.tor-metadl a
-      attribute: href
-    poster:
-      selector: div[id^="details-"] img
-      attribute: src
+      # a[onlick="downloadTorrent(383718);"] --> a[href="download.php?torrent=383559"]
+      selector: td.tdl > a
+      attribute: onclick
+      filters:
+        - name: regexp
+          args: (\d+)
+        - name: prepend
+          args: "download.php?torrent="
     seeders:
-      selector: div.tor-seeder
+      selector: td.peers:has(i[title="Seeders"])
     leechers:
-      selector: div.tor-leecher
+      selector: td.peers:has(i[title="Leechers"])
     grabs:
-      selector: div.tor-snatcher
+      selector: td.peers:has(i[title="Snatchers"])
       # 2 flavours of dates
     date:
-      # Heute 13:30:04
-      # Gestern 09:10:10
-      selector: div.tor-date:not(:contains("."))
+      # &nbsp;Heute 13:30:04
+      # &nbsp;Gestern 22:44:23
+      selector: td.added:not(:contains("."))
       optional: true
       filters:
+        - name: replace
+          args: ["\u00a0", ""]
         - name: replace
           args: ["Heute", "Today"]
         - name: replace
           args: ["Gestern", "Yesterday"]
         - name: append
           args: " +01:00" # CET
+        - name: fuzzytime
     date:
-      # &nbsp;&nbsp;27.05.2019 <b>12:52:11</b>
-      selector: div.tor-date:contains(".")
+      # &nbsp;24.05.2019 20:15:38
+      selector: td.added:contains(".")
       optional: true
       filters:
-        - name: replace
-          args: ["\u00a0", ""]
         - name: append
           args: " +01:00" # CET
         - name: dateparse
           args: "02.01.2006 15:04:05 -07:00"
     size:
-      selector: div.tor-size
+      selector: td.size
       filters:
+        - name: replace
+          args: ["\u00a0", ""]
         - name: replace
           args: [".", ""]
         - name: replace
           args: [",", "."]
     downloadvolumefactor:
       case:
-        font.ou: 0 # only upload is counted
-        font.fl: 0 # freeleech neither dl or ul is counted
+        "span:contains(\"OU\")": 0 # only upload is counted
+        "span:contains(\"FL\")": 0 # freeleech neither dl or ul is counted (identity unconfirmed)
+        "span:contains(\"%25\")": .25 # 75% free
+        "span:contains(\"%50\")": .5 # 50% free
+        "span:contains(\"%75\")": .75 # 25% free
         "*": 1
     uploadvolumefactor:
       case:
-        "font.mu:contains(\"2x\")": 2
-        "font.mu:contains(\"5x\")": 5
-        "font.mu:contains(\"10x\")": 10
-        font.fl: 0 # freeleech neither dl or ul is counted
+        "span:contains(\"2x\")": 2
+        "span:contains(\"5x\")": 5
+        "span:contains(\"10x\")": 10
+        "span:contains(\"FL\")": 0 # freeleech neither dl or ul is counted
         "*": 1
     minimumseedtime:
       # 2 day (as seconds = 2 x 24 x 60 x 60)
