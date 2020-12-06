@@ -435,8 +435,9 @@ stages:
             displayName: Publish Code Coverage (Windows only)
             condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
             inputs:
-              codeCoverageTool: Cobertura
+              codeCoverageTool: cobertura
               summaryFileLocation: $(Build.SourcesDirectory)/coverlet/reports/Cobertura.xml
+              failIfCoverageEmpty: true
 
   - stage: Integration
     displayName: Integration Tests
