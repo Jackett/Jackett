@@ -97,7 +97,7 @@ namespace Jackett.Common.Services
                 logger.Info("Skipping checking for new releases as the debugger is attached.");
                 return;
             }
-            var currentVersion = $"v{GetCurrentVersion()}";
+            var currentVersion = EnvironmentUtil.JackettVersion();
             if (currentVersion == "v0.0.0")
             {
                 logger.Info("Skipping checking for new releases because Jackett is runing in IDE.");
@@ -168,13 +168,6 @@ namespace Jackett.Common.Services
             variant == Variants.JackettVariant.CoreLinuxArm32 || variant == Variants.JackettVariant.CoreLinuxArm64
                 ? Path.Combine(tempDirectory, "Jackett", "JackettUpdater")
                 : Path.Combine(tempDirectory, "Jackett", "JackettUpdater.exe");
-
-        private string GetCurrentVersion()
-        {
-            var assembly = Assembly.GetExecutingAssembly();
-            var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
-            return fvi.ProductVersion;
-        }
 
         private WebRequest SetDownloadHeaders(WebRequest req)
         {
