@@ -88,6 +88,9 @@ namespace Jackett.Server.Controllers
                     throw new Exception("The Base Path Override must start with a /");
             }
 
+            var cacheEnabled = config.cache_enabled;
+            var cacheTtl = config.cache_ttl;
+            var cacheMaxResultsPerIndexer = config.cache_max_results_per_indexer;
             var omdbApiKey = config.omdbkey;
             var omdbApiUrl = config.omdburl;
 
@@ -99,6 +102,10 @@ namespace Jackett.Server.Controllers
             serverConfig.UpdateDisabled = updateDisabled;
             serverConfig.UpdatePrerelease = preRelease;
             serverConfig.BasePathOverride = basePathOverride;
+            serverConfig.CacheEnabled = cacheEnabled;
+            serverConfig.CacheTtl = cacheTtl;
+            serverConfig.CacheMaxResultsPerIndexer = cacheMaxResultsPerIndexer;
+
             serverConfig.RuntimeSettings.BasePath = serverService.BasePath();
             configService.SaveConfig(serverConfig);
 

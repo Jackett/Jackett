@@ -41,35 +41,37 @@ namespace Jackett.Common.Indexers
             "ebook"
         };
 
-        public NCore(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps) :
-            base(id: "ncore",
-                 name: "nCore",
-                 description: "A Hungarian private torrent site.",
-                 link: "https://ncore.cc/",
-                 caps: new TorznabCapabilities
-                 {
-                     TvSearchParams = new List<TvSearchParam>
-                     {
-                         TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
-                     },
-                     MovieSearchParams = new List<MovieSearchParam>
-                     {
-                         MovieSearchParam.Q, MovieSearchParam.ImdbId
-                     },
-                     MusicSearchParams = new List<MusicSearchParam>
-                     {
-                         MusicSearchParam.Q
-                     },
-                     BookSearchParams = new List<BookSearchParam>
-                     {
-                         BookSearchParam.Q
-                     }
-                 },
-                 configService: configService,
-                 client: wc,
-                 logger: l,
-                 p: ps,
-                 configData: new ConfigurationDataNCore())
+        public NCore(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
+            : base(id: "ncore",
+                  name: "nCore",
+                  description: "A Hungarian private torrent site.",
+                  link: "https://ncore.cc/",
+                  caps: new TorznabCapabilities
+                  {
+                      TvSearchParams = new List<TvSearchParam>
+                      {
+                          TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
+                      },
+                      MovieSearchParams = new List<MovieSearchParam>
+                      {
+                          MovieSearchParam.Q, MovieSearchParam.ImdbId
+                      },
+                      MusicSearchParams = new List<MusicSearchParam>
+                      {
+                          MusicSearchParam.Q
+                      },
+                      BookSearchParams = new List<BookSearchParam>
+                      {
+                          BookSearchParam.Q
+                      }
+                  },
+                  configService: configService,
+                  client: wc,
+                  logger: l,
+                  p: ps,
+                  cacheService: cs,
+                  configData: new ConfigurationDataNCore())
         {
             Encoding = Encoding.UTF8;
             Language = "hu-hu";

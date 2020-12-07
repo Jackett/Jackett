@@ -11,7 +11,8 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class Orpheus : GazelleTracker
     {
-        public Orpheus(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public Orpheus(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "orpheus",
                    name: "Orpheus",
                    description: "A music tracker",
@@ -39,6 +40,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
+                   cs: cs,
                    supportsFreeleechTokens: true,
                    has2Fa: true)
         {

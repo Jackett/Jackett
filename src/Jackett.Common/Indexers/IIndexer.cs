@@ -12,11 +12,13 @@ namespace Jackett.Common.Indexers
     {
         public IIndexer Indexer { get; set; }
         public IEnumerable<ReleaseInfo> Releases { get; set; }
+        public bool IsFromCache;
 
-        public IndexerResult(IIndexer Indexer, IEnumerable<ReleaseInfo> Releases)
+        public IndexerResult(IIndexer indexer, IEnumerable<ReleaseInfo> releases, bool isFromCache)
         {
-            this.Indexer = Indexer;
-            this.Releases = Releases;
+            Indexer = indexer;
+            Releases = releases;
+            IsFromCache = isFromCache;
         }
     }
 

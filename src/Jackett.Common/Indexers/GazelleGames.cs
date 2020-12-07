@@ -30,7 +30,8 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        public GazelleGames(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public GazelleGames(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "gazellegames",
                    name: "GazelleGames",
                    description: "A gaming tracker.",
@@ -40,6 +41,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataCookie())
         {
             Encoding = Encoding.UTF8;

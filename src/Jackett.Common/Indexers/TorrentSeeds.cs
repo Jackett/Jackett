@@ -27,35 +27,37 @@ namespace Jackett.Common.Indexers
 
         private new ConfigurationDataBasicLoginWithRSSAndDisplay configData => (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData;
 
-        public TorrentSeeds(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps) :
-            base(id: "torrentseeds",
-                 name: "TorrentSeeds",
-                 description: "TorrentSeeds is a Private site for MOVIES / TV / GENERAL",
-                 link: "https://torrentseeds.org/",
-                 caps: new TorznabCapabilities
-                 {
-                     TvSearchParams = new List<TvSearchParam>
-                     {
-                         TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
-                     },
-                     MovieSearchParams = new List<MovieSearchParam>
-                     {
+        public TorrentSeeds(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
+            IProtectionService ps, ICacheService cs)
+            : base(id: "torrentseeds",
+                   name: "TorrentSeeds",
+                   description: "TorrentSeeds is a Private site for MOVIES / TV / GENERAL",
+                   link: "https://torrentseeds.org/",
+                   caps: new TorznabCapabilities
+                   {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
                          MovieSearchParam.Q
-                     },
-                     MusicSearchParams = new List<MusicSearchParam>
-                     {
-                         MusicSearchParam.Q
-                     },
-                     BookSearchParams = new List<BookSearchParam>
-                     {
-                         BookSearchParam.Q
-                     }
-                 },
-                 configService: configService,
-                 client: wc,
-                 logger: l,
-                 p: ps,
-                 configData: new ConfigurationDataBasicLoginWithRSSAndDisplay("For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile."))
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
+                       },
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q
+                       }
+                   },
+                   configService: configService,
+                   client: wc,
+                   logger: l,
+                   p: ps,
+                   cacheService: cs,
+                   configData: new ConfigurationDataBasicLoginWithRSSAndDisplay("For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile."))
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";

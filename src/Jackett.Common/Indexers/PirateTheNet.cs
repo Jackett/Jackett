@@ -31,7 +31,8 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        public PirateTheNet(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
+        public PirateTheNet(IIndexerConfigurationService configService, WebClient w, Logger l,
+            IProtectionService ps, ICacheService cs)
             : base(id: "piratethenet",
                    name: "PirateTheNet",
                    description: "A movie tracker",
@@ -47,6 +48,7 @@ namespace Jackett.Common.Indexers
                    client: w,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataBasicLoginWithRSSAndDisplay("Only the results from the first search result page are shown, adjust your profile settings to show the maximum."))
         {
             Encoding = Encoding.UTF8;

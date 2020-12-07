@@ -13,7 +13,8 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class DICMusic : GazelleTracker
     {
-        public DICMusic(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public DICMusic(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "dicmusic",
                    name: "DICMusic",
                    description: "DICMusic is a CHINESE Private Torrent Tracker for MUSIC",
@@ -29,6 +30,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
+                   cs: cs,
                    supportsFreeleechTokens: true,
                    has2Fa: true)
         {

@@ -32,7 +32,8 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        public AnimeTorrents(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps)
+        public AnimeTorrents(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "animetorrents",
                    name: "AnimeTorrents",
                    description: "Definitive source for anime and manga",
@@ -51,6 +52,7 @@ namespace Jackett.Common.Indexers
                    client: c,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.UTF8;

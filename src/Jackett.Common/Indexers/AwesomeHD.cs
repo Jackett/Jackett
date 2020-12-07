@@ -24,7 +24,8 @@ namespace Jackett.Common.Indexers
         private readonly Regex _removeYearRegex = new Regex(@" [\(\[]?(19|20)\d{2}[\)\]]?$", RegexOptions.Compiled);
         private new ConfigurationDataPasskey configData => (ConfigurationDataPasskey)base.configData;
 
-        public AwesomeHD(IIndexerConfigurationService configService, Utils.Clients.WebClient c, Logger l, IProtectionService ps)
+        public AwesomeHD(IIndexerConfigurationService configService, Utils.Clients.WebClient c, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "awesomehd",
                    name: "Awesome-HD",
                    description: "An HD tracker",
@@ -48,6 +49,7 @@ namespace Jackett.Common.Indexers
                    client: c,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataPasskey("Note: You can find the Passkey in your profile, " +
                                                             "next to Personal information."))
         {

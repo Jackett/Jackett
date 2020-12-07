@@ -35,7 +35,8 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        public DarmoweTorenty(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public DarmoweTorenty(IIndexerConfigurationService configService, WebClient wc, Logger l,
+            IProtectionService ps, ICacheService cs)
             : base(id: "darmowetorenty",
                    name: "Darmowe torenty",
                    description: "Darmowe torenty is a POLISH Semi-Private Torrent Tracker for MOVIES / TV / GENERAL",
@@ -63,6 +64,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
             Encoding = Encoding.GetEncoding("iso-8859-2");

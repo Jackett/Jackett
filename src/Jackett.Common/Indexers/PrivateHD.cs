@@ -11,7 +11,8 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class PrivateHD : AvistazTracker
     {
-        public PrivateHD(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public PrivateHD(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "privatehd",
                    name: "PrivateHD",
                    description: "BitTorrent site for High Quality, High Definition (HD) movies and TV Shows",
@@ -34,7 +35,9 @@ namespace Jackett.Common.Indexers
                    configService: configService,
                    client: wc,
                    logger: l,
-                   p: ps)
+                   p: ps,
+                   cs: cs
+                   )
         {
             AddCategoryMapping(1, TorznabCatType.Movies);
             AddCategoryMapping(1, TorznabCatType.MoviesUHD);

@@ -60,7 +60,8 @@ namespace Jackett.Common.Indexers
             {"greys anatomy", "grey's anatomy"}
         };
 
-        public BJShare(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public BJShare(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             :  base(id: "bjshare",
                     name: "BJ-Share",
                     description: "A brazilian tracker.",
@@ -88,6 +89,7 @@ namespace Jackett.Common.Indexers
                     client: wc,
                     logger: l,
                     p: ps,
+                    cacheService: cs,
                     configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
             Encoding = Encoding.UTF8;

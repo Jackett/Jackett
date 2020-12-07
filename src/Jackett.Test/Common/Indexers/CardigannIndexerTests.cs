@@ -25,7 +25,7 @@ namespace Jackett.Test.Common.Indexers
                 },
                 Search = new searchBlock()
             };
-            var indexer = new CardigannIndexer(null, null, null, null, definition);
+            var indexer = new CardigannIndexer(null, null, null, null, null, definition);
 
             Assert.True(indexer.TorznabCaps.SearchAvailable);
             Assert.IsEmpty(indexer.TorznabCaps.TvSearchParams);
@@ -90,7 +90,7 @@ namespace Jackett.Test.Common.Indexers
                 },
                 Search = new searchBlock()
             };
-            indexer = new CardigannIndexer(null, null, null, null, definition);
+            indexer = new CardigannIndexer(null, null, null, null, null, definition);
 
             // test categories
             var expected = new List<TorznabCategory>
@@ -125,7 +125,7 @@ namespace Jackett.Test.Common.Indexers
                 },
                 Search = new searchBlock()
             };
-            indexer = new CardigannIndexer(null, null, null, null, definition);
+            indexer = new CardigannIndexer(null, null, null, null, null, definition);
 
             Assert.True(indexer.TorznabCaps.SearchAvailable);
             Assert.AreEqual(

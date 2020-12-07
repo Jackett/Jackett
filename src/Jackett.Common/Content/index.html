@@ -33,8 +33,8 @@
 
     <link rel="stylesheet" type="text/css" href="../bootstrap/bootstrap.min.css?changed=2017083001">
     <link rel="stylesheet" type="text/css" href="../animate.css?changed=2017083001">
-    <link rel="stylesheet" type="text/css" href="../custom.css?changed=20200223" media="only screen and (min-device-width: 480px)">
-    <link rel="stylesheet" type="text/css" href="../custom_mobile.css?changed=20200223" media="only screen and (max-device-width: 480px)">
+    <link rel="stylesheet" type="text/css" href="../custom.css?changed=20201208" media="only screen and (min-device-width: 480px)">
+    <link rel="stylesheet" type="text/css" href="../custom_mobile.css?changed=20201208" media="only screen and (max-device-width: 480px)">
     <link rel="stylesheet" type="text/css" href="../css/jquery.dataTables.min.css?changed=2017083001">
     <link rel="stylesheet" type="text/css" href="../css/bootstrap-multiselect.css?changed=2017083001" />
     <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css?changed=2017083001">
@@ -127,7 +127,7 @@
             </a>
         </div>
         <div class="input-area">
-            <span class="input-header">Base Path Override: </span>
+            <span class="input-header">Base path override: </span>
             <input id="jackett-basepathoverride" class="form-control input-right" type="text" value="" placeholder="/jackett">
         </div>
         <div class="input-area">
@@ -135,7 +135,7 @@
             <input id="jackett-port" class="form-control input-right" type="text" value="" placeholder="9117">
         </div>
         <div class="input-area">
-            <span class="input-header">Manual download blackhole directory: </span>
+            <span class="input-header">Blackhole directory: </span>
             <input id="jackett-savedir" class="form-control input-right" type="text" value="" placeholder="c:\torrents\">
         </div>
 
@@ -187,6 +187,18 @@
         <div class="input-area">
             <span class="input-header">Enhanced logging: </span>
             <input id="jackett-logging" class="form-control input-right" type="checkbox" />
+        </div>
+        <div class="input-area">
+            <span class="input-header">Cache enabled (recommended): </span>
+            <input id="jackett-cache-enabled" class="form-control input-right" type="checkbox" />
+        </div>
+        <div class="input-area">
+            <span class="input-header">Cache TTL (seconds): </span>
+            <input id="jackett-cache-ttl" class="form-control input-right" type="text" value="" placeholder="">
+        </div>
+        <div class="input-area">
+            <span class="input-header">Cache max results per indexer: </span>
+            <input id="jackett-cache-max-results-per-indexer" class="form-control input-right" type="text" value="" placeholder="">
         </div>
         <div class="input-area">
             <span class="input-header">OMDB API key: </span>
@@ -680,6 +692,6 @@
     </script>
 
     <script type="text/javascript" src="../libs/api.js?changed=2017083001"></script>
-    <script type="text/javascript" src="../custom.js?changed=20201107"></script>
+    <script type="text/javascript" src="../custom.js?changed=20201208"></script>
 </body>
 </html>

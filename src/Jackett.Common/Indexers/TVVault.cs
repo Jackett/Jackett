@@ -27,7 +27,8 @@ namespace Jackett.Common.Indexers
 
         private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
 
-        public TVVault(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public TVVault(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "tvvault",
                    name: "TV-Vault",
                    description: "A TV tracker for old shows",
@@ -47,6 +48,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.UTF8;

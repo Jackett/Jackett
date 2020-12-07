@@ -24,7 +24,8 @@ namespace Jackett.Common.Indexers
 
         private new ConfigurationDataMyAnonamouse configData => (ConfigurationDataMyAnonamouse)base.configData;
 
-        public MyAnonamouse(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps)
+        public MyAnonamouse(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "myanonamouse",
                    name: "MyAnonamouse",
                    description: "Friendliness, Warmth and Sharing",
@@ -40,6 +41,7 @@ namespace Jackett.Common.Indexers
                    client: c,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataMyAnonamouse())
         {
             Encoding = Encoding.UTF8;

@@ -49,7 +49,8 @@ namespace Jackett.Common.Indexers
             "https://www.divxtotal.la/"
         };
 
-        public DivxTotal(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
+        public DivxTotal(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "divxtotal",
                    name: "DivxTotal",
                    description: "DivxTotal is a SPANISH site for Movies, TV series and Software",
@@ -68,6 +69,7 @@ namespace Jackett.Common.Indexers
                    client: w,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationData())
         {
             Encoding = Encoding.UTF8;
