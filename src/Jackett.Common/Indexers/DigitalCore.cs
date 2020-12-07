@@ -88,6 +88,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(22, TorznabCatType.AudioMP3, "Music/MP3");
             AddCategoryMapping(23, TorznabCatType.AudioLossless, "Music/FLAC");
             AddCategoryMapping(24, TorznabCatType.Audio, "Music/MTV");
+            AddCategoryMapping(29, TorznabCatType.Audio, "Music/PACKS");
 
             AddCategoryMapping(25, TorznabCatType.PCGames, "Games/PC");
             AddCategoryMapping(26, TorznabCatType.Console, "Games/NSW");
@@ -95,9 +96,12 @@ namespace Jackett.Common.Indexers
 
             AddCategoryMapping(28, TorznabCatType.Books, "Ebooks");
 
-            AddCategoryMapping(30, TorznabCatType.XXX, "XXX/SD");
+            AddCategoryMapping(30, TorznabCatType.XXXSD, "XXX/SD");
             AddCategoryMapping(31, TorznabCatType.XXX, "XXX/HD");
-            AddCategoryMapping(32, TorznabCatType.XXX, "XXX/4K");
+            AddCategoryMapping(32, TorznabCatType.XXXUHD, "XXX/4K");
+            AddCategoryMapping(35, TorznabCatType.XXXSD, "XXX/Movies/SD");
+            AddCategoryMapping(36, TorznabCatType.XXX, "XXX/Movies/HD");
+            AddCategoryMapping(37, TorznabCatType.XXXUHD, "XXX/Movies/4K");
             AddCategoryMapping(34, TorznabCatType.XXXImageSet, "XXX/Imagesets");
         }
 

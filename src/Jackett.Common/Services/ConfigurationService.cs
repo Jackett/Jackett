@@ -224,7 +224,7 @@ namespace Jackett.Common.Services
 
         public string GetSonarrConfigFile() => Path.Combine(GetAppDataFolder(), "sonarr_api.json");
 
-        public string GetVersion() => EnvironmentUtil.JackettVersion;
+        public string GetVersion() => EnvironmentUtil.JackettVersion();
 
         public ServerConfig BuildServerConfig(RuntimeSettings runtimeSettings)
         {
