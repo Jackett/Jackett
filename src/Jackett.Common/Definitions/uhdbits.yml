@@ -81,6 +81,10 @@ search:
     order_way: "{{ .Config.type }}"
     action: advanced
     searchsubmit: 1
+  keywordsfilters:
+    # if searching for season packs switch S01 to season 1 #10423
+    - name: re_replace
+      args: ["(?i)(S)(\\d{1,3})$", "season $2"]
 
   rows:
     selector: table#torrent_table > tbody > tr.torrent
@@ -127,6 +131,9 @@ search:
           args: [" / 2x", ""]
         - name: re_replace
           args: [" / ", " "]
+        #  #10423
+        - name: re_replace
+          args: ["(?i)(season )", "S"]
     details:
       selector: a.torrent_name
       attribute: href

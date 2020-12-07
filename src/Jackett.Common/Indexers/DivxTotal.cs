@@ -45,11 +45,15 @@ namespace Jackett.Common.Indexers
             public static long Otros => 524288000; // 500 MB
         }
 
+        public override string[] LegacySiteLinks { get; protected set; } = {
+            "https://www.divxtotal.la/"
+        };
+
         public DivxTotal(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
             : base(id: "divxtotal",
                    name: "DivxTotal",
                    description: "DivxTotal is a SPANISH site for Movies, TV series and Software",
-                   link: "https://www.divxtotal.la/",
+                   link: "https://www.divxtotal.one/",
                    caps: new TorznabCapabilities {
                        TvSearchParams = new List<TvSearchParam>
                        {
