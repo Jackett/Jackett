@@ -22,6 +22,7 @@ caps:
     - {id: 34, cat: Movies/UHD, desc: "Películas FullBR 1080p"}
     - {id: 94, cat: Movies/BluRay, desc: "Películas Remux 1080p"}
     - {id: 36, cat: Movies/HD, desc: "Películas BDRip 1080p"}
+    - {id: 98, cat: Movies/HD, desc: "Películas BDRip 1080p x265"}
     - {id: 42, cat: Movies/HD, desc: "Películas BDRip 720p"}
     - {id: 37, cat: Movies/HD, desc: "Películas Micro 1080p"}
     - {id: 45, cat: Movies/HD, desc: "Películas Micro 720p"}
@@ -45,7 +46,6 @@ caps:
     - {id: 75, cat: Movies/HD, desc: "Animación M2TS-MTS-AVCHD-HDTV"}
     - {id: 76, cat: Movies/3D, desc: "Animación 3D FullBR"}
     - {id: 77, cat: Movies/3D, desc: "Animación 3D Remux"}
-    - {id: 78, cat: Movies/3D, desc: "Animación 3D Rip (SBS/OU)"}
     - {id: 79, cat: Movies/HD, desc: "Animación Web-DL-2.0"}
     - {id: 48, cat: Movies, desc: "Documentales"}
     - {id: 80, cat: Movies/UHD, desc: "Documentales UHDFull 4K"}
