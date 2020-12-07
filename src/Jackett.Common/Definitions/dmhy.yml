@@ -29,10 +29,15 @@ caps:
     - {id: 21, cat: Console, desc: "遊戲周邊 (game periphery)"}
     - {id: 12, cat: Other/Misc, desc: "特攝 (special photo)"}
     - {id: 1, cat: Other, desc: "其他 (other)"}
+    # Anime as Movies (Radarr uses t=movie):
+    - {id: 2, cat: Movies/Other, desc: "動畫 (Anime)"}
+    - {id: 31, cat: Movies/Other, desc: "季度全集 (Quarterly Complete)"}
+    - {id: 7, cat: Movies/Other, desc: "RAW"}
 
   modes:
     search: [q]
     tv-search: [q]
+    movie-search: [q]
     music-search: [q]
     book-search: [q]
 
