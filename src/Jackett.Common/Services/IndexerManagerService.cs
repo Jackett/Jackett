@@ -73,6 +73,7 @@ namespace Jackett.Common.Services
             InitIndexers();
             InitCardigannIndexers(path);
             InitAggregateIndexer();
+            RemoveLegacyConfigurations();
         }
 
         private void MigrateRenamedIndexers()
@@ -232,6 +233,23 @@ namespace Jackett.Common.Services
             {
                 Indexers = indexers.Values
             };
+        }
+
+        public void RemoveLegacyConfigurations()
+        {
+            var directoryInfo = new DirectoryInfo(globalConfigService.GetIndexerConfigDir());
+            if (!directoryInfo.Exists)
+                return; // the directory does not exist the first start
+            var files = directoryInfo.GetFiles("*.json*");
+            foreach (var file in files)
+            {
+                var indexerId = file.Name.Replace(".bak", "").Replace(".json", "");
+                if (!indexers.ContainsKey(indexerId) && File.Exists(file.FullName))
+                {
+                    logger.Info($"Removing old configuration file: {file.FullName}");
+                    File.Delete(file.FullName);
+                }
+            }
         }
 
         public IIndexer GetIndexer(string name)
