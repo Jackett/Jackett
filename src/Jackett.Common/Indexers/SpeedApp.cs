@@ -26,11 +26,12 @@ namespace Jackett.Common.Indexers
             {"Accept", "application/json"},
             {"Content-Type", "application/json"}
         };
+        // API DOC: https://speedapp.io/api/doc
         private string LoginUrl => SiteLink + "api/login";
         private string SearchUrl => SiteLink + "api/torrent";
         private string _token;
 
-        private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
+        private new ConfigurationDataBasicLoginWithEmail configData => (ConfigurationDataBasicLoginWithEmail)base.configData;
 
         public override string[] LegacySiteLinks { get; protected set; } = {
             "https://www.icetorrent.org/",
@@ -72,7 +73,7 @@ namespace Jackett.Common.Indexers
                 client: wc,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataBasicLogin())
+                configData: new ConfigurationDataBasicLoginWithEmail())
         {
             Encoding = Encoding.UTF8;
             Language = "ro-ro";
@@ -143,7 +144,7 @@ namespace Jackett.Common.Indexers
         {
             var body = new Dictionary<string, string>
             {
-                { "username", configData.Username.Value.Trim() },
+                { "username", configData.Email.Value.Trim() },
                 { "password", configData.Password.Value.Trim() }
             };
             var jsonData = JsonConvert.SerializeObject(body);
