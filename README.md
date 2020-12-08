@@ -20,7 +20,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
 
 #### Supported Systems
 * Windows 7SP1 or greater
-* Linux [supported operating systems here](https://github.com/dotnet/core/blob/master/release-notes/3.1/3.1-supported-os.md#linux)
+* Linux [supported operating systems here](https://github.com/dotnet/core/blob/master/release-notes/5.0/5.0-supported-os.md#linux)
 * macOS 10.13 or greater
 
 <details> <summary> <b> Supported Public Trackers </b> </summary>
@@ -587,12 +587,13 @@ We recommend you install Jackett as a Windows service using the supplied install
 
 To get started with using the installer for Jackett, follow the steps below:
 
-1. Download the latest version of the Windows installer, "Jackett.Installer.Windows.exe" from the [releases](https://github.com/Jackett/Jackett/releases/latest) page.
-2. When prompted if you would like this app to make changes to your computer, select "yes".
-3. If you would like to install Jackett as a Windows Service, make sure the "Install as Windows Service" checkbox is filled.
-4. Once the installation has finished, check the "Launch Jackett" box to get started.
-5. Navigate your web browser to http://127.0.0.1:9117
-6. You're now ready to begin adding your trackers and using Jackett.
+1. Check if you need any .NET prerequisites installed, see https://docs.microsoft.com/en-us/dotnet/core/install/windows?tabs=net50#dependencies
+2. Download the latest version of the Windows installer, "Jackett.Installer.Windows.exe" from the [releases](https://github.com/Jackett/Jackett/releases/latest) page.
+3. When prompted if you would like this app to make changes to your computer, select "yes".
+4. If you would like to install Jackett as a Windows Service, make sure the "Install as Windows Service" checkbox is filled.
+5. Once the installation has finished, check the "Launch Jackett" box to get started.
+6. Navigate your web browser to http://127.0.0.1:9117
+7. You're now ready to begin adding your trackers and using Jackett.
 
 When installed as a service the tray icon acts as a way to open/start/stop Jackett. If you opted to not install it as a service then Jackett will run its web server from the tray tool.
 
@@ -756,7 +757,7 @@ To use it, please just request a free API key on [OMDb](http://www.omdbapi.com/a
 ## Building from source
 
 ### Windows
-* Install the .NET Core [SDK](https://www.microsoft.com/net/download/windows)
+* Install the .NET 5 [SDK](https://www.microsoft.com/net/download/windows)
 * Clone Jackett
 * Open PowerShell and from the `src` directory, run `dotnet restore`
 * Open the Jackett solution in Visual Studio 2019 (version 16.4 or above)
@@ -776,21 +777,21 @@ git clone https://github.com/Jackett/Jackett.git
 cd Jackett/src
 
 # dotnet core version
-dotnet publish Jackett.Server -f netcoreapp3.1 --self-contained -r osx-x64 -c Debug # takes care of everything
-./Jackett.Server/bin/Debug/netcoreapp3.1/osx-x64/jackett # run jackett
+dotnet publish Jackett.Server -f net5.0 --self-contained -r osx-x64 -c Debug # takes care of everything
+./Jackett.Server/bin/Debug/net5.0/osx-x64/jackett # run jackett
 ```
 
 ### Linux
 
 
 ```bash
-sudo apt install mono-complete nuget msbuild dotnet-sdk-3.1 # install build tools (Debian/ubuntu)
+sudo apt install nuget msbuild dotnet-sdk-5.0 # install build tools (Debian/ubuntu)
 git clone https://github.com/Jackett/Jackett.git
 cd Jackett/src
 
 # dotnet core version
-dotnet publish Jackett.Server -f netcoreapp3.1 --self-contained -r linux-x64 -c Debug # takes care of everything
-./Jackett.Server/bin/Debug/netcoreapp3.1/linux-x64/jackett # run jackett
+dotnet publish Jackett.Server -f net5.0 --self-contained -r linux-x64 -c Debug # takes care of everything
+./Jackett.Server/bin/Debug/net5.0/linux-x64/jackett # run jackett
 ```
 
 ## Screenshots
