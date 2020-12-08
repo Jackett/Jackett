@@ -83,8 +83,22 @@ search:
       selector: span > a
       attribute: href
     date:
+      # Sep. 7th '10
+      selector: div > span:nth-child(4):not(:contains(":"))
+      optional: true
+      filters:
+        - name: re_replace
+          args: ["(?i)(st|nd|rd|th)", ""]
+        - name: replace
+          args: ["'", ""]
+        - name: append
+          args: " -07:00" # PDT
+        - name: dateparse
+          args: "Jan. 2 06 -07:00"
+    date:
       # 2020-11-05 07:34:44
-      selector: div > span:nth-child(4)
+      selector: div > span:nth-child(4):contains(":")
+      optional: true
       filters:
         - name: append
           args: " -07:00" # PDT

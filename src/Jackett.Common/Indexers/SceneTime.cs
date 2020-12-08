@@ -167,7 +167,7 @@ namespace Jackett.Common.Indexers
                 {
                     // TODO convert to initializer
                     var release = new ReleaseInfo();
-                    release.MinimumRatio = 0.31;
+                    release.MinimumRatio = 1;
                     release.MinimumSeedTime = 259200; // 72 hours
 
                     var qCatLink = row.Children[categoryIndex].QuerySelector("a");

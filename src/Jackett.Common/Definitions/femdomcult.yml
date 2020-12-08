@@ -82,8 +82,7 @@ search:
     title: "{{ .Keywords }}"
     order_by: "{{ .Config.sort }}"
     order_way: "{{ .Config.type }}"
-    action: basic
-    searchsubmit: 1
+    action: advanced
 
   rows:
     # exclude redbar torrents
@@ -117,9 +116,12 @@ search:
           args: ["/static/common/noartwork/noimage.png", ""]
     files:
       selector: td:nth-child(3)
+    date: # some torrents have "Never" date
+      text: 20 years ago
     date:
       selector: td:nth-child(5) > span
       attribute: title
+      optional: true
       filters:
         - name: append
           args: " +00:00" # auto adjusted by site account profile

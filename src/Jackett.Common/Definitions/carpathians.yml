@@ -158,4 +158,9 @@ search:
         img[src="pic/double.png"]: 2
         img[src="pic/doubledouble2.png"]: 4
         "*": 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
 # TBDev & XBTT

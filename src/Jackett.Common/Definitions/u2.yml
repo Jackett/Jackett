@@ -26,10 +26,22 @@ caps:
     - {id: 23, cat: Books, desc: "台译漫画 (TW Books)"}
     - {id: 30, cat: Audio, desc: "Lossless Music"}
     - {id: 40, cat: Other, desc: "Others"}
+    # Anime as Movies (Radarr uses t=movie):
+    - {id: 9, cat: Movies/Other, desc: "U2-Rip"}
+    - {id: 411, cat: Movies/Other, desc: "U2-RBD"}
+    - {id: 413, cat: Movies/Other, desc: "Web"}
+    - {id: 12, cat: Movies/HD, desc: "BDRip"}
+    - {id: 13, cat: Movies/Other, desc: "DVDRip"}
+    - {id: 14, cat: Movies/Other, desc: "HDTVRip"}
+    - {id: 15, cat: Movies/Other, desc: "DVDISO"}
+    - {id: 16, cat: Movies/BluRay, desc: "BDMV"}
+    - {id: 17, cat: Movies/Other, desc: "LQRip"}
+    - {id: 412, cat: Movies/BluRay, desc: "加流重灌 (Modded Blu-rays)"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep]
+    movie-search: [q]
     music-search: [q]
     book-search: [q]
 

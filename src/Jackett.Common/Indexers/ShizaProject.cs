@@ -69,7 +69,7 @@ namespace Jackett.Common.Indexers
             var result = await RequestLoginAndFollowRedirect(
                 LoginUrl,
                 data,
-                CookieHeader,
+                null,
                 returnCookiesFromFirstCall: true
             );
 
@@ -93,6 +93,8 @@ namespace Jackett.Common.Indexers
 
         // If the search string is empty use the latest releases
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query) {
+            await EnsureAuthorized();
+
             WebResult result;
             if (query.IsTest || string.IsNullOrWhiteSpace(query.SearchTerm)) {
                 result = await RequestWithCookiesAndRetryAsync(SiteLink);
@@ -106,7 +108,6 @@ namespace Jackett.Common.Indexers
             }
 
             const string ReleaseLinksSelector = "article.grid-card > a.card-box";
-
             var releases = new List<ReleaseInfo>();
 
             try
@@ -191,9 +192,7 @@ namespace Jackett.Common.Indexers
 
         // Appending id to differentiate between different quality versions
         private bool IsAuthorized(WebResult result) {
-            var parser = new HtmlParser();
-            var document = parser.ParseDocument(result.ContentString);
-            return document.QuerySelector("div.profile-menu > a").Attributes["href"].Value.EndsWith("/logout");
+            return result.ContentString.Contains("/logout");
         }
 
         private static long getReleaseSize(IElement tr)
