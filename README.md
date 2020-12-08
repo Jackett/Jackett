@@ -586,7 +586,7 @@ We recommend you install Jackett as a Windows service using the supplied install
 
 To get started with using the installer for Jackett, follow the steps below:
 
-1. check if you need any .NET prerequisites installed, see https://docs.microsoft.com/en-us/dotnet/core/install/windows?tabs=net50#dependencies
+1. Check if you need any .NET prerequisites installed, see https://docs.microsoft.com/en-us/dotnet/core/install/windows?tabs=net50#dependencies
 2. Download the latest version of the Windows installer, "Jackett.Installer.Windows.exe" from the [releases](https://github.com/Jackett/Jackett/releases/latest) page.
 3. When prompted if you would like this app to make changes to your computer, select "yes".
 4. If you would like to install Jackett as a Windows Service, make sure the "Install as Windows Service" checkbox is filled.
