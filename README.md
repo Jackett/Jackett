@@ -586,12 +586,13 @@ We recommend you install Jackett as a Windows service using the supplied install
 
 To get started with using the installer for Jackett, follow the steps below:
 
-1. Download the latest version of the Windows installer, "Jackett.Installer.Windows.exe" from the [releases](https://github.com/Jackett/Jackett/releases/latest) page.
-2. When prompted if you would like this app to make changes to your computer, select "yes".
-3. If you would like to install Jackett as a Windows Service, make sure the "Install as Windows Service" checkbox is filled.
-4. Once the installation has finished, check the "Launch Jackett" box to get started.
-5. Navigate your web browser to http://127.0.0.1:9117
-6. You're now ready to begin adding your trackers and using Jackett.
+1. check if you need any .NET prerequisites installed, see https://docs.microsoft.com/en-us/dotnet/core/install/windows?tabs=net50#dependencies
+2. Download the latest version of the Windows installer, "Jackett.Installer.Windows.exe" from the [releases](https://github.com/Jackett/Jackett/releases/latest) page.
+3. When prompted if you would like this app to make changes to your computer, select "yes".
+4. If you would like to install Jackett as a Windows Service, make sure the "Install as Windows Service" checkbox is filled.
+5. Once the installation has finished, check the "Launch Jackett" box to get started.
+6. Navigate your web browser to http://127.0.0.1:9117
+7. You're now ready to begin adding your trackers and using Jackett.
 
 When installed as a service the tray icon acts as a way to open/start/stop Jackett. If you opted to not install it as a service then Jackett will run its web server from the tray tool.
 
