@@ -61,6 +61,7 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "private";
 
+            // NOTE: Tracker Category Description must match Type/Category in details page!
             AddCategoryMapping(37, TorznabCatType.TVAnime, "Anime/HD");
             AddCategoryMapping(9, TorznabCatType.TVAnime, "Anime/SD");
             AddCategoryMapping(72, TorznabCatType.TVAnime, "Anime/UHD");
@@ -77,7 +78,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(16, TorznabCatType.ConsoleWii, "Console/WII");
             AddCategoryMapping(29, TorznabCatType.ConsoleWiiU, "Console/WIIU");
             AddCategoryMapping(17, TorznabCatType.ConsoleXBox360, "Console/XBOX360");
-            AddCategoryMapping(32, TorznabCatType.BooksEBook, "Books/EBooks");
+            AddCategoryMapping(32, TorznabCatType.BooksEBook, "E-books");
             AddCategoryMapping(63, TorznabCatType.ConsoleOther, "Games/DOX");
             AddCategoryMapping(2, TorznabCatType.PCGames, "Games/ISO");
             AddCategoryMapping(12, TorznabCatType.PCGames, "Games/PC Rips");
@@ -207,9 +208,9 @@ namespace Jackett.Common.Indexers
                 var release = new ReleaseInfo();
                 release.MinimumRatio = 1;
                 release.MinimumSeedTime = 72 * 60 * 60;
-                var catStr = content.QuerySelector("tr:has(td:contains(\"Type\"))").Children[1].TextContent;
+                var catStr = content.QuerySelector("tr:has(td.heading:contains(\"Type\"))").Children[1].TextContent;
                 release.Category = MapTrackerCatDescToNewznab(catStr);
-                var qLink = content.QuerySelector("tr:has(td:contains(\"Download\"))")
+                var qLink = content.QuerySelector("tr:has(td.heading:contains(\"Download\"))")
                                    .QuerySelector("a[href*=\"download.php?torrent=\"]");
                 release.Link = new Uri(SiteLink + qLink.GetAttribute("href"));
                 release.Title = dom.QuerySelector("h1").TextContent.Trim();
@@ -224,16 +225,16 @@ namespace Jackett.Common.Indexers
                 var qLeechers = peerStats[1].Split('=')[0].Replace(" leecher(s) ", "").Trim();
                 release.Seeders = ParseUtil.CoerceInt(qSeeders);
                 release.Peers = ParseUtil.CoerceInt(qLeechers) + release.Seeders;
-                var rawDateStr = content.QuerySelector("tr:has(td:contains(\"Added\"))").Children[1].TextContent;
+                var rawDateStr = content.QuerySelector("tr:has(td.heading:contains(\"Added\"))").Children[1].TextContent;
                 var dateUpped = DateTimeUtil.FromUnknown(rawDateStr.Replace(",", string.Empty));
 
                 // Mar 4 2020, 05:47 AM
                 release.PublishDate = dateUpped.ToLocalTime();
-                var qGrabs = content.QuerySelector("tr:has(td:contains(\"Snatched\"))").Children[1];
+                var qGrabs = content.QuerySelector("tr:has(td.heading:contains(\"Snatched\"))").Children[1];
                 release.Grabs = ParseUtil.CoerceInt(qGrabs.TextContent.Replace(" time(s)", ""));
-                var qFiles = content.QuerySelector("tr:has(td:has(a[href^=\"./filelist.php?id=\"]))").Children[1];
+                var qFiles = content.QuerySelector("tr:has(td.heading:has(a[href^=\"./filelist.php?id=\"]))").Children[1];
                 release.Files = ParseUtil.CoerceInt(qFiles.TextContent.Replace(" files", ""));
-                var qRatio = content.QuerySelector("tr:has(td:contains(\"Ratio After Download\"))").Children[1];
+                var qRatio = content.QuerySelector("tr:has(td.heading:contains(\"Ratio After Download\"))").Children[1];
                 release.DownloadVolumeFactor = qRatio.QuerySelector("del") != null ? 0 : 1;
                 release.UploadVolumeFactor = 1;
                 releases.Add(release);
