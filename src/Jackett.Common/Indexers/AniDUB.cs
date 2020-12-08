@@ -614,9 +614,6 @@ namespace Jackett.Common.Indexers
                 searchQuery = SeasonInfoRegex.Replace(searchQuery, string.Empty);
                 searchQuery += $" TV-{query.Season}";
             }
-
-            // Search is normalized with '+' instead of spaces
-            return searchQuery.ToLowerInvariant().Replace(" ", "+");
         }
     }
 }
