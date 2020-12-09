@@ -309,7 +309,7 @@ search:
     sf: titleonly
     fp: 1
     tracker_search: torrent
-    keywords: "{{ if .Keywords }}{{ .Keywords }}{{else}}{{ .Today.Year }}{{end}}"
+    keywords: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
     sk: "{{ .Config.sort }}"
     sd: "{{ .Config.type }}"
     $raw: "{{ range .Categories }}&fid[]={{.}}{{end}}"

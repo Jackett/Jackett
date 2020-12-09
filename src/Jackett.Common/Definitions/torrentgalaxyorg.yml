@@ -124,7 +124,7 @@ search:
     order: "{{ .Config.type }}"
 
   rows:
-    selector: div[class="tgxtablerow"]
+    selector: div.tgxtable > div:has(div[class="tgxtablecell shrink"])
 
   fields:
     category:
@@ -165,13 +165,13 @@ search:
     date:
       # 20Mins ago
       optional: true
-      selector: div.tgxtablecell:last-of-type:contains("ago")
+      selector: div td:last-of-type:contains("ago")
       filters:
         - name: timeago
     date:
       # 24/12/18 13:55
       optional: true
-      selector: div.tgxtablecell:last-of-type small:contains(":")
+      selector: div td:last-of-type small:contains(":")
       filters:
         - name: append
           args: " -07:00" # PDT

@@ -30,25 +30,20 @@ settings:
   - name: orderby
     type: select
     label: Sort requested from site
-    default: relevance
+    default: added
     options:
-      relevance: relevance
-      year: year
+      "@relevance": relevance
+      title: title
       size: size
-      duration: duration
       added: added
-      leechers: leechers
       seeders: seeders
-      snatches: snatches
-      comments: comments
-      files: files
   - name: order
     type: select
     label: Order requested from site
-    default: desc
+    default: DESC
     options:
-      desc: desc
-      asc: asc
+      DESC: desc
+      ASC: asc
 
 login:
   path: /
@@ -68,7 +63,7 @@ search:
   paths:
     - path: torrents/
   inputs:
-    search: "{{ if .Query.Author }} @authors {{ .Query.Author }}{{else}}{{end}}{{ if .Query.Title }} @title {{ .Query.Title }}{{else}}{{end}}{{ .Keywords }}"
+    search: "{{ if .Query.Author }} @authors {{ .Query.Author }}{{ else }}{{ end }}{{ if .Query.Title }} @title {{ .Query.Title }}{{ else }}{{ end }}{{ .Keywords }}"
     $raw: "{{ range .Categories }}cat[]={{.}}&{{end}}"
     orderby: "{{ .Config.orderby }}"
     order: "{{ .Config.order }}"
@@ -105,10 +100,10 @@ search:
     booktitle:
       selector: .title a
     title:
-      text: "{{.Result.booktitle}}"
+      text: "{{ .Result.booktitle }}"
       filters:
         - name: append
-          args: "{{ if .Result.author }} by {{ .Result.author }}{{else}}{{end}}{{ if .Result._year }} {{ .Result._year }}{{else}}{{end}}{{ if .Result._filetype }} {{ .Result._filetype }}{{else}}{{end}}{{ if .Result._retail }} {{ .Result._retail }}{{else}}{{end}}"
+          args: "{{ if .Result.author }} by {{ .Result.author }}{{ else }}{{ end }}{{ if .Result._year }} {{ .Result._year }}{{ else }}{{ end }}{{ if .Result._filetype }} {{ .Result._filetype }}{{ else }}{{ end }}{{ if .Result._retail }} {{ .Result._retail }}{{ else }}{{ end }}"
     details:
       selector: .title a
       attribute: href
@@ -143,9 +138,7 @@ search:
       optional: true
       selector: .snatches
     downloadvolumefactor:
-      case:
-        "*": 1
+      text: 1
     uploadvolumefactor:
-      case:
-        "*": 1
-# engine tbc
+      text: 1
+# engine n/a

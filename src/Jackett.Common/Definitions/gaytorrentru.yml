@@ -108,7 +108,7 @@ search:
   paths:
     - path: browse.php
   inputs:
-    $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
     # 0 active, 1 both, 2 dead
     incldead: 1

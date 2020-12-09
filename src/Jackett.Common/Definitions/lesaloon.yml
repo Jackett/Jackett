@@ -124,7 +124,7 @@ login:
   inputs:
     uid: "{{ .Config.username }}"
     pwd: "{{ .Config.password }}"
-    rememberme: forever
+    rememberme: ""
   captcha:
     type: image
     selector: img[src^="access_code/"]

@@ -97,7 +97,7 @@ search:
   path: torrents.php
   inputs:
     # does not support categories, uses releasetype for single filter so we canot do multi releasetype filtering either.
-    # $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
+    # $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
     groupname: "{{ .Keywords }}"
     order_by: "{{ .Config.sort }}"
     order_way: "{{ .Config.type }}"

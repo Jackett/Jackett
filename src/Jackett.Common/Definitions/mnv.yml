@@ -98,7 +98,7 @@ search:
   # https://mnvv2.info/browse.php?showsearch=1&c13=1&c3=1&search=&blah=0&incldead=1&team=0&orderby=added&sort=desc&language=all
   path: browse.php
   inputs:
-    $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
     # 0 name, 1 descr, 2 both, 3 filelist
     blah: 0

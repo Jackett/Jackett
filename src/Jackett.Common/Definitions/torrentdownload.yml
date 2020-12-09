@@ -32,6 +32,7 @@ caps:
   categorymappings:
     - {id: Adult, cat: XXX, desc: Adult}
     - {id: AdultPornHDVideo, cat: XXX, desc: "Adult Porn HD Video"}
+    - {id: AdultPornPictures, cat: XXX, desc: "Adult Porn Pictures"}
     - {id: AdultPornVideo, cat: XXX, desc: "Adult Porn Video"}
     - {id: Anime, cat: TV/Anime, desc: Anime}
     - {id: AnimeEnglishtranslated, cat: TV/Anime, desc: "Anime English translated"}
@@ -71,6 +72,7 @@ caps:
     - {id: XXX, cat: XXX, desc: XXX}
     - {id: XXXVideo, cat: XXX, desc: "XXX Video"}
     - {id: XXXHDVideo, cat: XXX, desc: "XXX HD Video"}
+    - {id: XXXPictures, cat: XXX, desc: "XXX Pictures"}
 
   modes:
     search: [q]

@@ -104,7 +104,7 @@ search:
     # supports search using imdbid, does not return imdb links in results
 
   rows:
-    selector: div.torrent_panel > div.torrent_group > div.group_content
+    selector: div.group_content
 
   fields:
     category:
@@ -137,12 +137,12 @@ search:
       attribute: data-src
     date:
       # time type: time elapsed (default)
-      selector: div.time_col > span[title]
+      selector: div.time_col span[title]
       attribute: title
       optional: true
       filters:
         - name: append
-          args: " +08:00" #CST
+          args: " +08:00" # CST
         - name: dateparse
           args: "2006-01-02 15:04:05 -07:00"
     date:

@@ -48,8 +48,10 @@ search:
     date:
       selector: td.date
       filters:
+        - name: append
+          args: " -07:00" # PDT
         - name: dateparse
-          args: "2006-01-02"
+          args: "2006-01-02 -07:00"
     size:
       selector: td.size
     seeders:

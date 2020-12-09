@@ -166,7 +166,7 @@ search:
     order: "{{ .Config.type }}"
   # torrents-search.php does not support imdbid search or return imdb links.
   keywordsfilters:
-  # drop the year from searches since site titles do not include year
+    # drop the year from searches since site titles do not include year
     - name: re_replace
       args: ["(19|20[0-9]{2})", ""]
 

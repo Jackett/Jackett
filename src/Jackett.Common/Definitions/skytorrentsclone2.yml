@@ -6,11 +6,10 @@ language: en-us
 type: public
 encoding: UTF-8
 links:
-  - https://skytorrents.to/
+  - https://www.skytorrents.to/
   - https://skytorrents.org/
   - https://skytorrents.net/
 legacylinks:
-  - https://www.skytorrents.to/
   - https://skytorrents.black-mirror.xyz/
   - https://skytorrents.unblocked.casa/
   - https://skytorrents.proxyportal.fun/
@@ -20,6 +19,7 @@ legacylinks:
   - https://skytorrents.proxyportal.pw/ # Jackett search fails 'Returning Redirect' & 'Relogin required' loop
   - https://skytorrents.uk-unblock.pro/ # Jackett search fails 'Returning Redirect' & 'Relogin required' loop
   - https://www.skytorrents.lol/ # redirects to skytorrents.to
+  - https://skytorrents.to/ # redirects to www.*
 
 caps:
   categorymappings:

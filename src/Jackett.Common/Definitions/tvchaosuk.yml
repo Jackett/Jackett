@@ -83,7 +83,7 @@ search:
     - path: torrents/filter
   inputs:
     $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}" # for dashboard imdbid search
+    search: "{{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}" # for dashboard imdbid search
     description: ""
     uploader: ""
     imdb: "{{ .Query.IMDBIDShort }}"

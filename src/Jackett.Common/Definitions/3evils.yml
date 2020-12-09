@@ -98,7 +98,7 @@ search:
     # https://www.3evils.net/browse.php?c16=1&c17=1&c3=1&c4=1&search=&searchin=title&incldead=0&only_free=1
     - path: browse.php
   inputs:
-    $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
     # title, descr, genre, all
     searchin: title

@@ -108,7 +108,7 @@ search:
     ch: 300
     t: 0
     submit: Search
-    $raw: "{{range .Categories}}&fid[]={{.}}{{end}}"
+    $raw: "{{ range .Categories }}&fid[]={{.}}{{end}}"
 
   rows:
     selector: div.forumbg > div.inner > ul.topiclist > li.row > dl.icon:has(a[href^="./download/file.php?id="])

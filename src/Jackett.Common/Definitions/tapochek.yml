@@ -499,7 +499,7 @@ search:
     # https://tapochek.net/tracker.php?f=-1&gold=1&silver=1&o=1&s=2&tm=-1&sns=-1#results
     - path: tracker.php
   inputs:
-    $raw: "{{ if .Categories }}{{ range .Categories }}f[]={{.}}&{{end}}{{else}}f[]=-1{{end}}"
+    $raw: "{{ if .Categories }}{{ range .Categories }}f[]={{.}}&{{end}}{{ else }}f[]=-1{{ end }}"
     nm: "{{ .Keywords }}"
     o: "{{ .Config.sort }}"
     s: "{{ .Config.type }}"

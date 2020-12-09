@@ -114,15 +114,6 @@ login:
   test:
     path: selection.php
 
-#  download:
-#    before:
-#      path: ajax_det_poll.php
-#      method: "post"
-#      inputs:
-#        set_thanks: "thanks"
-#        det_id: "{{ .DownloadUri.Query.torrent }}"
-#        ajax: "yes"
-
 search:
   paths:
     - path: selection.php

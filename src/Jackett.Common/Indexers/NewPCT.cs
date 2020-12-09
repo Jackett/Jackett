@@ -552,6 +552,7 @@ namespace Jackett.Common.Indexers
 
                     // we have to guess the language (words DUAL or MULTI are not supported in Radarr)
                     var language = "spanish";
+                    if (titleLower.Contains("latino")) language += " latino";
                     if ((titleLower.Contains("castellano") && titleLower.Contains("ingles")) ||
                         (titleLower.Contains("spanish") && titleLower.Contains("english")) ||
                         titleLower.Contains("[es-en]") || titleLower.Contains("multilenguaje"))

@@ -667,7 +667,7 @@ search:
     - name: re_replace # S01E01 to сезон 1 серии 1
       args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "сезон $1 серии $2"]
   inputs:
-    $raw: "{{ if .Categories }}{{ range .Categories }}f[]={{.}}&{{end}}{{else}}f[]=-1{{end}}"
+    $raw: "{{ if .Categories }}{{ range .Categories }}f[]={{.}}&{{end}}{{ else }}f[]=-1{{ end }}"
     prev_allw: 1
     prev_a: 0
     prev_dla: 0
@@ -682,9 +682,9 @@ search:
     prev_df: 1
     prev_ds: 0
     prev_tor_type: 0
-    # sort by 1=registered 2=topicTitle 4=completed 10=seed 11=leech 12=up 13=down 5=replies 6=views 7=size 8=lastPost 9=seedLastSeen
+    # sort by 1=registered, 2=topicTitle, 4=completed, 10=seed, 11=leech, 12=up, 13=down, 5=replies, 6=views, 7=size, 8=lastPost, 9=seedLastSeen
     o: "{{ .Config.sort }}"
-    # 1=asc 2=desc
+    # 1=asc, 2=desc
     s: "{{ .Config.type }}"
     # show category
     dc: 0

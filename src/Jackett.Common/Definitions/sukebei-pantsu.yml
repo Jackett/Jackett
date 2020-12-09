@@ -198,10 +198,13 @@ search:
       selector: td.tr-dl
       optional: true
     date:
+      # 	Nov 15, 2020
       selector: td.date-short
       filters:
+        - name: append
+          args: " +00:00" # GMT
         - name: dateparse
-          args: "2006-01-02T15:04:05Z"
+          args: "Jan 2, 2006 -07:00"
     size:
       selector: td.tr-size
       filters:

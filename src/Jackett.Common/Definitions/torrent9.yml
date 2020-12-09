@@ -7,9 +7,10 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://www.oxtorrent.me/
-  - https://www.torrent9.gg/
   - https://torrent9.to/
+  - https://www.torrent9.gg/
+  - https://torrent9.unblockninja.com/
+  - https://www.oxtorrent.me/
 
 legacylinks:
   - http://www.torrent9.ec/
@@ -32,7 +33,6 @@ legacylinks:
   - https://www4.torrent9.to/
   - https://www.torrent9.cat/
   - https://www.torrent09.uno/
-  - https://torrent9.unblockninja.com/ # this is a proxy for torrent9clone
   - https://www.torrent9.pl/ # this is a proxy for torrent9clone
   - https://torrent9.black-mirror.xyz/ # this is a proxy for torrent9clone
   - https://torrent9.unblocked.casa/ # this is a proxy for torrent9clone
@@ -42,6 +42,7 @@ legacylinks:
   - https://ww1.torrent9.is/
   - https://ww1.torrent9.to/
   - https://www.torrent9.is/
+  - https://torrent9.li/ # not a proxy for torrent9 or torrent9clone
 
 caps:
   categorymappings:
@@ -80,6 +81,20 @@ settings:
     type: checkbox
     label: Replace VOSTFR with ENGLISH
     default: false
+  - name: sort
+    type: select
+    label: Sort requested from site (Only works for searches with Keywords)
+    default: ".html"
+    options:
+      ".html": best
+      ".html,trie-date-d": created desc
+      ".html,trie-date-a": created asc
+      ".html,trie-seeds-d": seeders desc
+      ".html,trie-seeds-a": seeders asc
+      ".html,trie-poid-d": size desc
+      ".html,trie-poid-a": size asc
+      ".html,trie-nom-d": title desc
+      ".html,trie-nom-a": title asc
   - name: info_131681
     type: info
     label: About Torrent9 Categories
@@ -91,13 +106,15 @@ download:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}/search_torrent/{{ .Keywords }}{{ else }}/top_torrent/{{ end }}"
+    - path: "{{ if .Keywords }}/search_torrent/{{ .Keywords }}{{ .Config.sort }}{{ else }}/top_torrent.html{{ end }}"
   keywordsfilters:
-    # if searching for season packs swith S01 to saison 1 #9712
+    # if searching for season packs with S01 to saison 1 #9712
     - name: re_replace
       args: ["(?i)(S0)(\\d{1,2})$", "saison $2"]
     - name: re_replace
       args: ["(?i)(S)(\\d{1,3})$", "saison $2"]
+    - name: replace
+      args: [" ", "-"]
 
   rows:
     selector: table.table-striped > tbody > tr
@@ -164,6 +181,15 @@ search:
       text: now
     size:
       selector: td:nth-child(2)
+      filters:
+        - name: replace
+          args: ["Ko", "KB"]
+        - name: replace
+          args: ["Mo", "MB"]
+        - name: replace
+          args: ["Go", "GB"]
+        - name: replace
+          args: ["To", "TB"]
     seeders:
       text: 0
     seeders:

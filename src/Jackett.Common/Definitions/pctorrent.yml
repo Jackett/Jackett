@@ -26,7 +26,7 @@ download:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}?do=search&subaction=search&search_start=0&full_search=1&result_from=1&story={{ .Keywords }}{{else}}{{end}}"
+    - path: "{{ if .Keywords }}?do=search&subaction=search&search_start=0&full_search=1&result_from=1&story={{ .Keywords }}{{ else }}{{ end }}"
 
   rows:
     selector: div.dshort:has(div.d3-raz):not(:has(div.d3-raz:contains("Анонс!"))) # no size means indirect download via 3rd party site, not supported by cardigann. #8020

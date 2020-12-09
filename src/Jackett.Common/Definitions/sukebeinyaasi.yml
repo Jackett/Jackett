@@ -63,7 +63,7 @@ search:
     - path: /
   inputs:
     q: "{{ .Keywords }}"
-    # 0 no filter 1 no remakes 2 trusted only
+    # 0 no filter, 1 no remakes, 2 trusted only
     f: 0
     c: "{{ .Config.cat-id }}"
     s: "{{ .Config.sort }}"
@@ -98,9 +98,9 @@ search:
       selector: td:nth-child(5)
       filters:
         - name: append
-          args: " -00"
+          args: " -00:00" # GMT
         - name: dateparse
-          args: "2006-01-02 15:04 -07"
+          args: "2006-01-02 15:04 -07:00"
     seeders:
       selector: td:nth-child(6)
     leechers:

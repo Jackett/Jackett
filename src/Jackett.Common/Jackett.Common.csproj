@@ -22,10 +22,10 @@
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="MimeMapping" Version="1.0.1.30" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="NLog" Version="4.7.4" />
+    <PackageReference Include="NLog" Version="4.7.5" />
     <PackageReference Include="SharpZipLib" Version="1.2.0" />
-    <PackageReference Include="System.IO.FileSystem.AccessControl" Version="4.7.0" />
-    <PackageReference Include="System.ServiceProcess.ServiceController" Version="4.7.0" />
+    <PackageReference Include="System.IO.FileSystem.AccessControl" Version="5.0.0" />
+    <PackageReference Include="System.ServiceProcess.ServiceController" Version="5.0.0" />
     <PackageReference Include="YamlDotNet" Version="8.1.2" />
   </ItemGroup>
 

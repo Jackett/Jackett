@@ -6,11 +6,12 @@ language: en-us
 type: public
 encoding: UTF-8
 links:
-  - https://torrentparadise.la/
+  - https://torrentparadise.cc/
 legacylinks:
   - https://torrentparadise.org/
   - https://torrentparadise.cl/
   - https://torrentparadise.to/
+  - https://torrentparadise.la/
 
 caps:
   categories:
@@ -55,6 +56,7 @@ caps:
     BOOKSMAGAZINES: Books/Mags
     BOOKSNONFICTION: Books
     BOOKSTEXTBOOKS: Books
+    BOOKSTUTORIALS: Books
     COMICSNEM43COMICS: Books/Comics
     DESIPORN: XXX
     DOCUMENTARIES: TV/Documentary
@@ -78,6 +80,7 @@ caps:
     GAMESWINDOWS: PC/Games
     GAMESXBOX: Console/XBox
     GAMESXBOX360: Console/XBox 360
+    HDMOVIES: Movies/HD
     IMAGES: Other
     JAPANESEANIME: TV/Anime
     JUEGOS: Console
@@ -105,11 +108,13 @@ caps:
     MOVIESHD720P: Movies/HD
     MOVIESHD1080P: Movies/HD
     MOVIESHEVCX265: Movies/HD
+    MOVIESHIGHRESMOVIES: Movies/HD
     MOVIESSPANISHLANGUAGE: Movies
     MOVIESSPANISHLATINAMERICA: Movies
     MOVIESULTRAHD4K: Movies/UHD
     MOVIESX264H264: Movies/HD
     MOVIESXVID: Movies/SD
+    MOVIESWEBRIPX264X265: Movies/HD
     MP3: Audio/MP3
     MP3MUSIC: Audio/MP3
     MSICA: Other
@@ -144,6 +149,7 @@ caps:
     SOFTWAREANDROID: PC/Mobile-Android
     SOFTWAREMAC: PC/Mac
     SOFTWAREWINDOWS: PC/0day
+    SOTFTWARE: PC
     SPORTS: TV/Sport
     TVHDSPORTS: TV/Sport
     TUTORIALS: Other

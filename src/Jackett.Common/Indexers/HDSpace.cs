@@ -55,35 +55,25 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "private";
 
-            AddCategoryMapping(15, TorznabCatType.MoviesBluRay); // Movie / Blu-ray
-            AddMultiCategoryMapping(TorznabCatType.MoviesHD,
-                                    19, // Movie / 1080p
-                                    18, // Movie / 720p
-                                    40, // Movie / Remux
-                                    16 // Movie / HD-DVD
-                );
-            AddMultiCategoryMapping(TorznabCatType.TVHD,
-                                    21, // TV Show / 720p HDTV
-                                    22 // TV Show / 1080p HDTV
-                );
-            AddMultiCategoryMapping(TorznabCatType.TVDocumentary,
-                                    24, // Documentary / 720p
-                                    25 // Documentary / 1080p
-                );
-            AddMultiCategoryMapping(TorznabCatType.TVAnime,
-                                    27, // Animation / 720p
-                                    28 // Animation / 1080p
-                );
-            AddCategoryMapping(30, TorznabCatType.AudioLossless); // Music / HQ Audio
-            AddCategoryMapping(31, TorznabCatType.AudioVideo); // Music / Videos
-            AddMultiCategoryMapping(TorznabCatType.XXX,
-                                    33, // XXX / 720p
-                                    34 // XXX / 1080p
-                );
-            AddCategoryMapping(36, TorznabCatType.MoviesOther); // Trailers
-            AddCategoryMapping(37, TorznabCatType.PC); // Software
-            AddCategoryMapping(38, TorznabCatType.Other); // Others
-            AddCategoryMapping(41, TorznabCatType.MoviesUHD); // Movie / 4K UHD
+            AddCategoryMapping(15, TorznabCatType.MoviesBluRay, "Movie / Blu-ray");
+            AddCategoryMapping(19, TorznabCatType.MoviesHD, "Movie / 1080p");
+            AddCategoryMapping(18, TorznabCatType.MoviesHD, "Movie / 720p");
+            AddCategoryMapping(40, TorznabCatType.MoviesHD, "Movie / Remux");
+            AddCategoryMapping(16, TorznabCatType.MoviesHD, "Movie / HD-DVD");
+            AddCategoryMapping(41, TorznabCatType.MoviesUHD, "Movie / 4K UHD");
+            AddCategoryMapping(21, TorznabCatType.TVHD, "TV Show / 720p HDTV");
+            AddCategoryMapping(22, TorznabCatType.TVHD, "TV Show / 1080p HDTV");
+            AddCategoryMapping(24, TorznabCatType.TVDocumentary, "Documentary / 720p");
+            AddCategoryMapping(25, TorznabCatType.TVDocumentary, "Documentary / 1080p");
+            AddCategoryMapping(27, TorznabCatType.TVAnime, "Animation / 720p");
+            AddCategoryMapping(28, TorznabCatType.TVAnime, "Animation / 1080p");
+            AddCategoryMapping(30, TorznabCatType.AudioLossless, "Music / HQ Audio");
+            AddCategoryMapping(31, TorznabCatType.AudioVideo, "Music / Videos");
+            AddCategoryMapping(33, TorznabCatType.XXX, "XXX / 720p");
+            AddCategoryMapping(34, TorznabCatType.XXX, "XXX / 1080p");
+            AddCategoryMapping(36, TorznabCatType.MoviesOther, "Trailers");
+            AddCategoryMapping(37, TorznabCatType.PC, "Software");
+            AddCategoryMapping(38, TorznabCatType.Other, "Others");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -148,7 +138,7 @@ namespace Jackett.Common.Indexers
 
                     var release = new ReleaseInfo();
                     release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800; // 48 hours
+                    release.MinimumSeedTime = 86400; // 24 hours
 
                     var qLink = row.Children[1].FirstElementChild;
                     release.Title = qLink.TextContent.Trim();

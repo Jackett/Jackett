@@ -109,7 +109,7 @@ search:
     - path: music.php
       categories: [406, 408, 434]
   inputs:
-    $raw: "{{range .Categories}}cat{{.}}=1&{{end}}"
+    $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     # 0 incldead, 1 active, 2 dead
     incldead: 0

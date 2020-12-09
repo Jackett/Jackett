@@ -90,6 +90,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(53, TorznabCatType.TV, "TV/Serien Complete Packs");
             AddCategoryMapping(54, TorznabCatType.TVSport, "TV/Sport");
             AddCategoryMapping(66, TorznabCatType.TVForeign, "TV/International");
+            AddCategoryMapping(110, TorznabCatType.TVUHD, "TV/Serien - 4K");
             AddCategoryMapping(22, TorznabCatType.Books, "MISC/EBooks");
             AddCategoryMapping(24, TorznabCatType.Other, "MISC/Sonstiges");
             AddCategoryMapping(25, TorznabCatType.Other, "MISC/Tonspuren");
@@ -237,7 +238,6 @@ namespace Jackett.Common.Indexers
                     var size = ReleaseInfo.GetBytes(qColumn1[1].TextContent);
                     var seeders = ParseUtil.CoerceInt(qColumn2[2].TextContent);
                     var leechers = ParseUtil.CoerceInt(qColumn1[3].TextContent);
-                    var grabs = ParseUtil.CoerceInt(qColumn1[2].TextContent);
                     var publishDate = TimeZoneInfo.ConvertTime(dateGerman, germanyTz, TimeZoneInfo.Local);
 
                     var release = new ReleaseInfo
@@ -253,7 +253,6 @@ namespace Jackett.Common.Indexers
                         Seeders = seeders,
                         Peers = leechers + seeders,
                         PublishDate = publishDate,
-                        Grabs = grabs,
                         DownloadVolumeFactor = downloadFactor,
                         UploadVolumeFactor = 1
                     };

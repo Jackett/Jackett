@@ -14,6 +14,7 @@ using Jackett.Common.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
+using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
 {
@@ -63,6 +64,8 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
+
+            configData.AddDynamic("freeleech", new BoolItem { Name = "Search freeleech only", Value = false });
 
             AddCategoryMapping(1, TorznabCatType.Movies, "Movies");
             AddCategoryMapping(8, TorznabCatType.MoviesSD, "Movies Cam");
@@ -151,6 +154,10 @@ namespace Jackett.Common.Indexers
             searchString = Regex.Replace(searchString, @"(^|\s)-", " ");
 
             var searchUrl = SearchUrl;
+
+            if (((BoolItem) configData.GetDynamic("freeleech")).Value)
+                searchUrl += "facets/tags%3AFREELEECH/";
+
             if (query.IsImdbQuery)
                 searchUrl += "imdbID/" + query.ImdbID + "/";
             else if (!string.IsNullOrWhiteSpace(searchString))
