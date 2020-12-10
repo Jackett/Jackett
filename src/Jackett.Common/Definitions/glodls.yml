@@ -9,7 +9,7 @@ followredirect: true
 links:
   - https://www.gtdb.to/
   - https://glodls.to/
-  - https://glotorrents.unblockit.app/
+  - https://glotorrents.unblockit.dev/
   - https://glodls.unblocked.rest/
 legacylinks:
   - https://glodls.rocks/
@@ -30,6 +30,7 @@ legacylinks:
   - https://gtdb.to/
   - https://glotorrents.unblockit.top/
   - https://glotorrents.unblockit.lat/
+  - https://glotorrents.unblockit.app/
 
 caps:
   categorymappings:
