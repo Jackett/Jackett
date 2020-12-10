@@ -9,7 +9,7 @@ followredirect: true
 links:
   - https://www.ettvcentral.com/
   - https://ettv.unblockninja.com/
-  - https://ettv.unblockit.lat/
+  - https://ettv.unblockit.dev/
   - https://ettv.unblocked.rest/
 legacylinks:
   - https://www.ettv.tv/
@@ -32,6 +32,8 @@ legacylinks:
   - https://ettv.root.yt/ # currently redirects to ettvcentral.com
   - https://www.ettv.be/
   - https://ettv.unblockit.top/
+  - https://ettv.unblockit.lat/
+  - https://ettv.unblockit.app/
 
 caps:
   categorymappings:
