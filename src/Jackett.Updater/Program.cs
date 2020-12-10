@@ -350,6 +350,7 @@ namespace Jackett.Updater
                 "Definitions/nostalgic.yml", // renamed to vhstapes
                 "Definitions/nyaa.yml",
                 "Definitions/nyoo.yml",
+                "Definitions/omgwtftrackr.yml",
                 "Definitions/passionetorrent.yml",
                 "Definitions/polishtracker.yml",
                 "Definitions/pt99.yml",
