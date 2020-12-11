@@ -128,7 +128,7 @@ namespace Jackett.Common.Indexers
             IProtectionService ps = null;
             if (useProtectionService)
                 ps = protectionService;
-            configData.LoadValuesFromJson(jsonConfig, ps);
+            configData.LoadConfigDataValuesFromJson(jsonConfig, ps);
             if (string.IsNullOrWhiteSpace(configData.SiteLink.Value))
             {
                 configData.SiteLink.Value = DefaultSiteLink;

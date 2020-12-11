@@ -66,7 +66,7 @@ namespace Jackett.Common.Indexers
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
             var releases = await PerformQuery(new TorznabQuery());
 
             await ConfigureIfOK(string.Empty, releases.Count() > 0,
