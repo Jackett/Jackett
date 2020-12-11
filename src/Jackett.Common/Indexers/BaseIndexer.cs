@@ -220,29 +220,7 @@ namespace Jackett.Common.Indexers
                 catch (Exception ex)
                 {
                     if (ex.Message != "The provided payload cannot be decrypted because it was not protected with this protection provider.")
-                    {
                         logger.Info($"Password could not be unprotected using Microsoft.AspNetCore.DataProtection - {Id} : " + ex);
-                    }
-
-                    logger.Info($"Attempting legacy Unprotect - {Id} : ");
-
-                    try
-                    {
-                        var unprotectedPassword = protectionService.LegacyUnProtect(passwordValue);
-                        //Password successfully unprotected using Windows/Mono DPAPI
-
-                        passwordPropertyValue.Value = unprotectedPassword;
-                        SaveConfig();
-                        IsConfigured = true;
-
-                        logger.Info($"Password successfully migrated for {Id}");
-
-                        return true;
-                    }
-                    catch (Exception exception)
-                    {
-                        logger.Info($"Password could not be unprotected using legacy DPAPI - {Id} : " + exception);
-                    }
                 }
             }
 
