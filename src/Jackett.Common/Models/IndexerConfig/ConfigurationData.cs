@@ -32,9 +32,7 @@ namespace Jackett.Common.Models.IndexerConfig
 
         }
 
-        public ConfigurationData(JToken json, IProtectionService ps) => LoadValuesFromJson(json, ps);
-
-        public void LoadValuesFromJson(JToken json, IProtectionService ps = null)
+        public void LoadConfigDataValuesFromJson(JToken json, IProtectionService ps = null)
         {
             if (json == null)
                 return;
