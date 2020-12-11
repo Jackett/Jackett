@@ -31,7 +31,8 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        public Shazbat(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps)
+        public Shazbat(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "shazbat",
                    name: "Shazbat",
                    description: "Modern indexer",
@@ -47,6 +48,7 @@ namespace Jackett.Common.Indexers
                    client: c,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataBasicLoginWithRSS())
         {
             Encoding = Encoding.UTF8;

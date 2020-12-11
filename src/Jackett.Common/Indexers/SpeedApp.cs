@@ -44,7 +44,8 @@ namespace Jackett.Common.Indexers
             "https://www.myxz.org/"
         };
 
-        public SpeedApp(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public SpeedApp(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(
                 id: "speedapp",
                 name: "SpeedApp",
@@ -73,6 +74,7 @@ namespace Jackett.Common.Indexers
                 client: wc,
                 logger: l,
                 p: ps,
+                cacheService: cs,
                 configData: new ConfigurationDataBasicLoginWithEmail())
         {
             Encoding = Encoding.UTF8;

@@ -58,11 +58,13 @@ namespace Jackett.Common.Indexers
             @$"\b({string.Join("|", _SupportedLogicFunctions.Select(Regex.Escape))})(?:\s+(\(?\.[^\)\s]+\)?|""[^""]+"")){{2,}}");
 
         public CardigannIndexer(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
-                                IProtectionService ps, IndexerDefinition Definition)
+                                IProtectionService ps, ICacheService cs, IndexerDefinition Definition)
             : base(configService: configService,
                    client: wc,
                    logger: l,
-                   p: ps)
+                   p: ps,
+                   cacheService: cs
+                   )
         {
             this.Definition = Definition;
             Id = Definition.Id;

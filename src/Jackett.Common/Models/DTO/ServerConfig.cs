@@ -28,6 +28,12 @@ namespace Jackett.Common.Models.DTO
         [DataMember]
         public string basepathoverride { get; set; }
         [DataMember]
+        public bool cache_enabled { get; set; }
+        [DataMember]
+        public long cache_ttl { get; set; }
+        [DataMember]
+        public long cache_max_results_per_indexer { get; set; }
+        [DataMember]
         public string omdbkey { get; set; }
         [DataMember]
         public string omdburl { get; set; }
@@ -61,6 +67,9 @@ namespace Jackett.Common.Models.DTO
             password = string.IsNullOrEmpty(config.AdminPassword) ? string.Empty : config.AdminPassword.Substring(0, 10);
             logging = config.RuntimeSettings.TracingEnabled;
             basepathoverride = config.BasePathOverride;
+            cache_enabled = config.CacheEnabled;
+            cache_ttl = config.CacheTtl;
+            cache_max_results_per_indexer = config.CacheMaxResultsPerIndexer;
             omdbkey = config.OmdbApiKey;
             omdburl = config.OmdbApiUrl;
             app_version = version;

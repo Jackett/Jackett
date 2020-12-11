@@ -55,7 +55,8 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        public Libble(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public Libble(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "libble",
                    name: "Libble",
                    description: "Libble is a Private Torrent Tracker for MUSIC",
@@ -71,6 +72,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.UTF8;

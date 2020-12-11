@@ -18,7 +18,7 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class AniLibria : BaseWebIndexer
     {
-        public AniLibria(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)
+        public AniLibria(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
             : base(id: "AniLibria",
                    name: "AniLibria",
                    description: "AniLibria is a Public torrent tracker for anime, voiced on russian by AniLibria team",
@@ -34,6 +34,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataAniLibria())
         {
             Encoding = Encoding.UTF8;

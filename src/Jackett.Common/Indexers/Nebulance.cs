@@ -24,7 +24,8 @@ namespace Jackett.Common.Indexers
 
         private new ConfigurationDataBasicLoginWith2FA configData => (ConfigurationDataBasicLoginWith2FA)base.configData;
 
-        public Nebulance(IIndexerConfigurationService configService, Utils.Clients.WebClient c, Logger l, IProtectionService ps)
+        public Nebulance(IIndexerConfigurationService configService, Utils.Clients.WebClient c, Logger l,
+            IProtectionService ps, ICacheService cs)
             : base(id: "nebulance",
                    name: "Nebulance",
                    description: "At Nebulance we will change the way you think about TV",
@@ -40,6 +41,7 @@ namespace Jackett.Common.Indexers
                    client: c,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataBasicLoginWith2FA(@"If 2FA is disabled, let the field empty.
  We recommend to disable 2FA because re-login will require manual actions.
 <br/>For best results, change the 'Torrents per page' setting to 100 in your profile on the NBL webpage."))

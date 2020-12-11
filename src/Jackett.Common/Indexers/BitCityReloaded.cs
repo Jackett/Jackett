@@ -30,7 +30,8 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        public BitCityReloaded(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public BitCityReloaded(IIndexerConfigurationService configService, WebClient wc, Logger l,
+            IProtectionService ps, ICacheService cs)
             : base(id: "bitcityreloaded",
                    name: "Bit-City Reloaded",
                    description: "A German general tracker.",
@@ -58,6 +59,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataBasicLoginWithRSSAndDisplay("Only the results from the first search result page are shown, adjust your profile settings to show a reasonable amount (it looks like there's no maximum)."))
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");

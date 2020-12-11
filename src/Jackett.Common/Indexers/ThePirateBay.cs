@@ -55,12 +55,8 @@ namespace Jackett.Common.Indexers
 
         private static readonly Uri _ApiBaseUri = new Uri("https://apibay.org/");
 
-        public ThePirateBay(
-            IIndexerConfigurationService configService,
-            WebClient client,
-            Logger logger,
-            IProtectionService p
-            ) : base(
+        public ThePirateBay(IIndexerConfigurationService configService, WebClient client, Logger logger,
+            IProtectionService ps, ICacheService cs) : base(
                 id: "thepiratebay",
                 name: "The Pirate Bay",
                 description: "Pirate Bay (TPB) is the galaxy’s most resilient Public BitTorrent site",
@@ -87,7 +83,8 @@ namespace Jackett.Common.Indexers
                 configService: configService,
                 client: client,
                 logger: logger,
-                p: p,
+                p: ps,
+                cacheService: cs,
                 configData: new ConfigurationData()
                 )
         {

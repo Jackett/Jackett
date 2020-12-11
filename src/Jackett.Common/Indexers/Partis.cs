@@ -28,7 +28,8 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        public Partis(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public Partis(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "partis",
                    name: "Partis",
                    description: "Partis is a SLOVENIAN Private Torrent Tracker",
@@ -56,6 +57,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.UTF8;

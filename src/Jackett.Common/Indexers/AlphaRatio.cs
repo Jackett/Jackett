@@ -12,7 +12,8 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class AlphaRatio : GazelleTracker
     {
-        public AlphaRatio(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public AlphaRatio(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "alpharatio",
                    name: "AlphaRatio",
                    description: "AlphaRatio (AR) is a Private Torrent Tracker for 0DAY / GENERAL",
@@ -32,6 +33,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
+                   cs: cs,
                    supportsFreeleechTokens: true,
                    imdbInTags: true)
         {

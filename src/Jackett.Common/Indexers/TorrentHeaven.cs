@@ -20,35 +20,37 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class TorrentHeaven : BaseWebIndexer
     {
-        public TorrentHeaven(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps) :
-            base(id: "torrentheaven",
-                 name: "TorrentHeaven",
-                 description: "A German general tracker.",
-                 link: "https://newheaven.nl/",
-                 caps: new TorznabCapabilities
-                 {
-                     TvSearchParams = new List<TvSearchParam>
-                     {
-                         TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
-                     },
-                     MovieSearchParams = new List<MovieSearchParam>
-                     {
-                         MovieSearchParam.Q
-                     },
-                     MusicSearchParams = new List<MusicSearchParam>
-                     {
-                         MusicSearchParam.Q
-                     },
-                     BookSearchParams = new List<BookSearchParam>
-                     {
-                         BookSearchParam.Q
-                     }
-                 },
-                 configService: configService,
-                 client: wc,
-                 logger: l,
-                 p: ps,
-                 configData: new ConfigurationDataCaptchaLogin())
+        public TorrentHeaven(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
+            : base(id: "torrentheaven",
+                   name: "TorrentHeaven",
+                   description: "A German general tracker.",
+                   link: "https://newheaven.nl/",
+                   caps: new TorznabCapabilities
+                   {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q
+                       },
+                        MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
+                       },
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q
+                       }
+                   },
+                   configService: configService,
+                   client: wc,
+                   logger: l,
+                   p: ps,
+                   cacheService: cs,
+                   configData: new ConfigurationDataCaptchaLogin())
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "de-de";

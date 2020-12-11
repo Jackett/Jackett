@@ -30,7 +30,8 @@ namespace Jackett.Common.Indexers
             "https://v4.torrentleech.org/"
         };
 
-        public TorrentLeech(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)
+        public TorrentLeech(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
+            IProtectionService ps, ICacheService cs)
             : base(id: "torrentleech",
                    name: "TorrentLeech",
                    description: "This is what happens when you seed",
@@ -58,6 +59,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataBasicLogin(
                        "For best results, change the 'Default Number of Torrents per Page' setting to 100 in your Profile."))
         {

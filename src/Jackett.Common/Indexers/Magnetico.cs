@@ -23,7 +23,8 @@ namespace Jackett.Common.Indexers
 
         private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
 
-        public Magnetico(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public Magnetico(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "magnetico",
                    name: "Magnetico (Local DHT)",
                    description: "Magnetico is a self-hosted BitTorrent DHT search engine",
@@ -51,6 +52,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataBasicLogin("Configure the URL, username and password from your local magneticow.<br>" +
                                "Default credentials are: username=username, password=password.<br>" +
                                "If you have many torrents, it is recommended to use PostgreSQL database to make queries faster. With SQLite, timeouts may occur."))

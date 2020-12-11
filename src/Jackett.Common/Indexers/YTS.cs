@@ -33,7 +33,8 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        public YTS(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public YTS(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "yts",
                    name: "YTS",
                    description: "YTS is a Public torrent site specialising in HD movies of small size",
@@ -46,6 +47,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationData())
         {
             Encoding = Encoding.GetEncoding("windows-1252");
