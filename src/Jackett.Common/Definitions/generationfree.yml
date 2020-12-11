@@ -13,30 +13,30 @@ caps:
     - {id: 106, cat: TV/HD, desc: "Animation: HDTV"}
     - {id: 108, cat: TV/WEB-DL, desc: "Animation: WEBDL"}
     - {id: 56, cat: TV/SD, desc: "Animation: DVDRip"}
-    - {id: 109, cat: TV/WEB-DL, desc: "Animation: WEBRIP"}
+    - {id: 109, cat: TV/WEB-DL, desc: "Animation: WEB-Rip"}
     - {id: 13, cat: TV/SD, desc: "Animation: DVD"}
     - {id: 105, cat: TV/HD, desc: "Animation: Bluray"}
     - {id: 10, cat: TV/HD, desc: "Animation: HD720P"}
     - {id: 11, cat: TV/HD, desc: "Animation: HD1080P"}
     - {id: 140, cat: PC, desc: "Applications: Noel"}
-    - {id: 19, cat: PC/Mobile-Android, desc: "Applications: Android"}
+    - {id: 17, cat: PC/Mac, desc: "Applications: Mac"}
     - {id: 38, cat: PC/Mobile-Other, desc: "Applications: Mobile Phone"}
     - {id: 40, cat: PC, desc: "Applications: Linux"}
-    - {id: 17, cat: PC/Mac, desc: "Applications: Mac"}
-    - {id: 16, cat: PC/Games, desc: "Applications: Jeux"}
-    - {id: 18, cat: PC/0day, desc: "Applications: PC"}
+    - {id: 19, cat: PC/Mobile-Android, desc: "Applications: Android"}
     - {id: 117, cat: PC, desc: "Applications: Appli-autre"}
+    - {id: 18, cat: PC/0day, desc: "Applications: PC"}
+    - {id: 16, cat: PC/Games, desc: "Applications: Jeux"}
     - {id: 67, cat: TV/Other, desc: "Autres: Emission TV"}
-    - {id: 141, cat: TV/Other, desc: "Autres: Noel"}
     - {id: 142, cat: TV/Sport, desc: "Autres: Emission sport"}
-    - {id: 90, cat: Books/EBook, desc: "BD: Livres"}
+    - {id: 141, cat: TV/Other, desc: "Autres: Noel"}
+    - {id: 90, cat: Books/EBook, desc: "BD: Bande Dessinée"}
     - {id: 132, cat: TV/Documentary, desc: "Documentaires: BluRay"}
     - {id: 133, cat: TV/Documentary, desc: "Documentaires: 4k"}
     - {id: 134, cat: TV/Documentary, desc: "Documentaires: Vostfr"}
     - {id: 147, cat: TV/Documentary, desc: "Documentaires: Web Dl"}
+    - {id: 15, cat: TV/Documentary, desc: "Documentaires: HD"}
     - {id: 14, cat: TV/Documentary, desc: "Documentaires: DivX"}
     - {id: 76, cat: TV/Documentary, desc: "Documentaires: TVRip/HDTV"}
-    - {id: 15, cat: TV/Documentary, desc: "Documentaires: HD"}
     - {id: 139, cat: TV/Documentary, desc: "Documentaires: Noel"}
     - {id: 138, cat: Books/EBook, desc: "E-Books: Noel"}
     - {id: 62, cat: Audio/Audiobook, desc: "E-Books: E-Books Audio"}
@@ -45,77 +45,82 @@ caps:
     - {id: 49, cat: Books/EBook, desc: "E-Books: Manuel Anglais"}
     - {id: 36, cat: Books/EBook, desc: "E-Books: Livres Français"}
     - {id: 50, cat: Books/EBook, desc: "E-Books: Manuel Français"}
-    - {id: 89, cat: Movies/BluRay, desc: "Films: BD/BR Rip"}
-    - {id: 88, cat: Movies/BluRay, desc: "Films: Full BD/BR"}
-    - {id: 104, cat: Movies/BluRay, desc: "Films: Film-BDRip"}
-    - {id: 72, cat: TV/HD, desc: "Films: TVRip/HDTV"}
-    - {id: 91, cat: Movies, desc: "Films: RemuX"}
     - {id: 94, cat: Movies/DVD, desc: "Films: DVDscreen"}
-    - {id: 96, cat: Movies/HD, desc: "Films: HDlight"}
-    - {id: 66, cat: Movies, desc: "Films: VOSTFR"}
+    - {id: 72, cat: TV/HD, desc: "Films: TVRip/HDTV"}
+    - {id: 88, cat: Movies/BluRay, desc: "Films: Full BD/BR"}
+    - {id: 91, cat: Movies, desc: "Films: RemuX"}
+    - {id: 89, cat: Movies/BluRay, desc: "Films: BRRIP"}
     - {id: 3, cat: Movies/DVD, desc: "Films: DVDRIP"}
-    - {id: 55, cat: Movies/HD, desc: "Films: MHD 720P"}
+    - {id: 66, cat: Movies, desc: "Films: VOSTFR"}
+    - {id: 96, cat: Movies/HD, desc: "Films: HDlight"}
+    - {id: 104, cat: Movies/BluRay, desc: "Films: BDRip"}
     - {id: 131, cat: Movies/3D, desc: "Films: Remux Bluray 3D"}
-    - {id: 95, cat: Movies/BluRay, desc: "Films: bluray"}
+    - {id: 55, cat: Movies/HD, desc: "Films: MHD 720P"}
     - {id: 129, cat: Movies/BluRay, desc: "Films: Remux Bluray"}
-    - {id: 69, cat: Movies/3D, desc: "Films: Film 3D"}
     - {id: 110, cat: Movies/WEB-DL, desc: "Films: WEBRip"}
-    - {id: 65, cat: Movies, desc: "Films: VO"}
-    - {id: 54, cat: Movies/HD, desc: "Films: MHD 1080P"}
     - {id: 71, cat: Movies/WEB-DL, desc: "Films: WEB-DL"}
+    - {id: 95, cat: Movies/BluRay, desc: "Films: bluray"}
+    - {id: 54, cat: Movies/HD, desc: "Films: MHD 1080P"}
+    - {id: 65, cat: Movies, desc: "Films: VO"}
+    - {id: 69, cat: Movies/3D, desc: "Films: Film 3D"}
+    - {id: 1, cat: Movies/HD, desc: "Films: HD720P"}
+    - {id: 111, cat: Movies/WEB-DL, desc: "Films: WEBRIP-720P"}
+    - {id: 130, cat: Movies/UHD, desc: "Films:  Remux Bluray 4K"}
     - {id: 145, cat: Movies/SD, desc: "Films: VHS"}
-    - {id: 102, cat: Movies/WEB-DL, desc: "Films: WEB-DL 720P"}
     - {id: 103, cat: Movies/HD, desc: "Films: Film-HDRIP"}
-    - {id: 130, cat: Movies/HD, desc: "Films: HD720P"}
-    - {id: 111, cat: Movies/WEB-DL, desc: "Films: WEBRip-720P"}
-    - {id: 1, cat: Movies/UHD, desc: "Films: Remux Bluray 4K"}
-    - {id: 112, cat: Movies/WEB-DL, desc: "Films: WEBrip-1080P"}
-    - {id: 101, cat: Movies/WEB-DL, desc: "Films: WEB-DL 1080P"}
+    - {id: 102, cat: Movies/WEB-DL, desc: "Films: WEB-DL 720P"}
     - {id: 87, cat: XXX, desc: "Films: XXX"}
+    - {id: 112, cat: Movies/WEB-DL, desc: "Films: WEBRIP-1080P"}
+    - {id: 101, cat: Movies/WEB-DL, desc: "Films: WEB-DL 1080P"}
     - {id: 2, cat: Movies/HD, desc: "Films: HD1080P"}
-    - {id: 4, cat: Movies/DVD, desc: "Films: DVD5"}
     - {id: 126, cat: Movies/HD, desc: "Films: HD X265"}
-    - {id: 100, cat: Movies/UHD, desc: "Films: 4KLight"}
+    - {id: 4, cat: Movies/DVD, desc: "Films: DVD5"}
     - {id: 70, cat: Movies/HD, desc: "Films: MHD X265"}
+    - {id: 100, cat: Movies/UHD, desc: "Films: 4KLight"}
     - {id: 5, cat: Movies/DVD, desc: "Films: DVD9"}
     - {id: 128, cat: Movies/UHD, desc: "Films: Webdl 4K"}
-    - {id: 92, cat: Movies/UHD, desc: "Films: 4K"}
     - {id: 135, cat: Movies, desc: "Films: Noel"}
-    - {id: 59, cat: TV, desc: "Films: Spectacle"}
+    - {id: 92, cat: Movies/UHD, desc: "Films: 4K"}
+    - {id: 59, cat: Movies, desc: "Films: Spectacle"}
+    - {id: 150, cat: Movies, desc: "Films: .Film série"}
+    - {id: 151, cat: Movies, desc: "Films: .Série animation"}
+    - {id: 152, cat: Movies, desc: "Films: Sports"}
     - {id: 78, cat: PC/Mobile-Other, desc: "GPS: Radars"}
     - {id: 77, cat: PC/Mobile-Other, desc: "GPS: Cartes"}
-    - {id: 125, cat: TV/Anime, desc: "Mangas: DVDRip"}
     - {id: 124, cat: TV/Anime, desc: "Mangas: HD720P"}
+    - {id: 125, cat: TV/Anime, desc: "Mangas: DVDRip"}
     - {id: 137, cat: Audio, desc: "Musique: Noel"}
-    - {id: 24, cat: Audio/Lossless, desc: "Musique: Single Flac"}
     - {id: 22, cat: Audio/MP3, desc: "Musique: Album MP3"}
-    - {id: 23, cat: Audio/Lossless, desc: "Musique: Album Flac"}
     - {id: 115, cat: Audio/MP3, desc: "Musique: Coffret mp3"}
-    - {id: 143, cat: Audio/MP3, desc: "Musique: Wav"}
     - {id: 25, cat: Audio/MP3, desc: "Musique: Single MP3"}
-    - {id: 75, cat: Audio, desc: "Musique: Concert TVRip"}
-    - {id: 58, cat: Audio, desc: "Musique: Concert"}
+    - {id: 143, cat: Audio/MP3, desc: "Musique: Wav"}
+    - {id: 23, cat: Audio/Lossless, desc: "Musique: Album Flac"}
+    - {id: 24, cat: Audio/Lossless, desc: "Musique: Single Flac"}
     - {id: 64, cat: Audio, desc: "Musique: Mégamix Maison"}
-    - {id: 97, cat: Audio, desc: "Musique: Podcast"}
     - {id: 98, cat: Audio, desc: "Musique: karaoké"}
+    - {id: 97, cat: Audio, desc: "Musique: Podcast"}
+    - {id: 58, cat: Audio, desc: "Musique: Concert"}
+    - {id: 75, cat: Audio, desc: "Musique: Concert TVRip"}
     - {id: 116, cat: Audio/Lossless, desc: "Musique: Coffret flac"}
-    - {id: 113, cat: TV, desc: "Serie TV: Episode QC"}
-    - {id: 63, cat: TV, desc: "Serie TV: Episode VO"}
-    - {id: 74, cat: TV/HD, desc: "Serie TV: TVRip/HDTV"}
     - {id: 6, cat: TV, desc: "Serie TV: Saison FR"}
-    - {id: 136, cat: TV, desc: "Serie TV: Noel"}
+    - {id: 74, cat: TV/HD, desc: "Serie TV: TVRip/HDTV"}
     - {id: 7, cat: TV, desc: "Serie TV: Episode FR"}
+    - {id: 136, cat: TV, desc: "Serie TV: Noel"}
+    - {id: 63, cat: TV, desc: "Serie TV: Episode VO"}
     - {id: 12, cat: TV, desc: "Serie TV: Animation"}
-    - {id: 120, cat: TV/HD, desc: "Serie TV: Episode Bluray 1080p"}
-    - {id: 93, cat: TV, desc: "Serie TV: Saison VOSTFR"}
+    - {id: 113, cat: TV, desc: "Serie TV: Episode QC"}
+    - {id: 121, cat: TV/HD, desc: "Serie TV: Saison Bluray 720p"}
     - {id: 122, cat: TV/HD, desc: "Serie TV: Saison Bluray 1080p"}
     - {id: 73, cat: TV/WEB-DL, desc: "Serie TV: WEB-DL"}
-    - {id: 121, cat: TV/HD, desc: "Serie TV: Saison Bluray 720p"}
     - {id: 119, cat: TV/HD, desc: "Serie TV: Episode Bluray 720p"}
+    - {id: 93, cat: TV, desc: "Serie TV: Saison VOSTFR"}
+    - {id: 120, cat: TV/HD, desc: "Serie TV: Episode Bluray 1080p"}
     - {id: 144, cat: TV/WEB-DL, desc: "Serie TV: WEB-Rip"}
-    - {id: 61, cat: TV, desc: "Serie TV: Episode VOSTFR"}
     - {id: 146, cat: TV/SD, desc: "Serie TV: VHSrip"}
+    - {id: 61, cat: TV, desc: "Serie TV: Episode VOSTFR"}
     - {id: 114, cat: TV, desc: "Serie TV: Saison QC"}
+    - {id: 148, cat: TV/UHD, desc: "Serie TV: Saison 4K"}
+    - {id: 149, cat: TV/UHD, desc: "Serie TV: Episode 4K"}
 
   modes:
     search: [q]
