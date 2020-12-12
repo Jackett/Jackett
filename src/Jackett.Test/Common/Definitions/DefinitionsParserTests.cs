@@ -15,14 +15,13 @@ namespace Jackett.Test.Common.Definitions
         [Test]
         public void LoadAndParseAllCardigannDefinitions()
         {
-            // Use EscapedCodeBase to avoid Uri reserved characters from causing bugs
-            // https://stackoverflow.com/questions/896572
-            var applicationFolder = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().EscapedCodeBase).LocalPath);
-            var definitionsFolder = Path.GetFullPath(Path.Combine(applicationFolder, "Definitions"));
+            var applicationFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? "";
+            var definitionsFolder = Path.Combine(applicationFolder, "Definitions");
             var deserializer = new DeserializerBuilder()
                                .WithNamingConvention(CamelCaseNamingConvention.Instance)
                                .Build();
             var files = new DirectoryInfo(definitionsFolder).GetFiles("*.yml");
+            Assert.True(files.Length > 0);
             foreach (var file in files)
                 try
                 {

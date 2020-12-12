@@ -261,9 +261,7 @@ namespace Jackett.Tray
 
         private void StartConsoleApplication()
         {
-            var applicationFolder = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath);
-
-            var exePath = Path.Combine(applicationFolder, "JackettConsole.exe");
+            var exePath = Path.Combine(EnvironmentUtil.JackettInstallationPath(), "JackettConsole.exe");
 
             var startInfo = new ProcessStartInfo()
             {

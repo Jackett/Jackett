@@ -163,7 +163,7 @@ namespace Jackett.Server.Controllers
                     {
                         try
                         {
-                            var consoleExePath = System.Reflection.Assembly.GetExecutingAssembly().CodeBase.Replace(".dll", ".exe");
+                            var consoleExePath = EnvironmentUtil.JackettExecutablePath().Replace(".dll", ".exe");
                             processService.StartProcessAndLog(consoleExePath, "--ReserveUrls", true);
                         }
                         catch

@@ -6,6 +6,7 @@ using System.Reflection;
 using System.ServiceProcess;
 using Jackett.Common.Services;
 using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
 using NLog;
 
 namespace Jackett.Server.Services
@@ -49,10 +50,7 @@ namespace Jackett.Server.Services
             }
             else
             {
-                // Use EscapedCodeBase to avoid Uri reserved characters from causing bugs
-                // https://stackoverflow.com/questions/896572
-                var applicationFolder = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().EscapedCodeBase).LocalPath);
-
+                var applicationFolder = EnvironmentUtil.JackettInstallationPath();
                 var exePath = Path.Combine(applicationFolder, SERVICEEXE);
                 if (!File.Exists(exePath) && Debugger.IsAttached)
                 {
