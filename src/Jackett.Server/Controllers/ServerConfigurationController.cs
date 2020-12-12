@@ -22,11 +22,14 @@ namespace Jackett.Server.Controllers
         private readonly IProcessService processService;
         private readonly IIndexerManagerService indexerService;
         private readonly ISecuityService securityService;
+        private readonly ICacheService cacheService;
         private readonly IUpdateService updater;
         private readonly ILogCacheService logCache;
         private readonly Logger logger;
 
-        public ServerConfigurationController(IConfigurationService c, IServerService s, IProcessService p, IIndexerManagerService i, ISecuityService ss, IUpdateService u, ILogCacheService lc, Logger l, ServerConfig sc)
+        public ServerConfigurationController(IConfigurationService c, IServerService s, IProcessService p,
+            IIndexerManagerService i, ISecuityService ss, ICacheService cs, IUpdateService u, ILogCacheService lc,
+            Logger l, ServerConfig sc)
         {
             configService = c;
             serverConfig = sc;
@@ -34,6 +37,7 @@ namespace Jackett.Server.Controllers
             processService = p;
             indexerService = i;
             securityService = ss;
+            cacheService = cs;
             updater = u;
             logCache = lc;
             logger = l;
@@ -134,6 +138,9 @@ namespace Jackett.Server.Controllers
                 serverConfig.ProxyPassword = config.proxy_password;
                 configService.SaveConfig(serverConfig);
                 webHostRestartNeeded = true;
+
+                // Remove all results from cache so we can test the new proxy
+                cacheService.CleanCache();
             }
 
             if (port != serverConfig.Port || external != serverConfig.AllowExternal)
@@ -150,7 +157,7 @@ namespace Jackett.Server.Controllers
                 configService.SaveConfig(serverConfig);
 
                 // On Windows change the url reservations
-                if (System.Environment.OSVersion.Platform != PlatformID.Unix)
+                if (Environment.OSVersion.Platform != PlatformID.Unix)
                 {
                     if (!ServerUtil.IsUserAdministrator())
                     {
@@ -170,7 +177,7 @@ namespace Jackett.Server.Controllers
                     }
                     else
                     {
-                        serverService.ReserveUrls(true);
+                        serverService.ReserveUrls();
                     }
                 }
 
@@ -196,14 +203,14 @@ namespace Jackett.Server.Controllers
                 // we have to restore log level when the server restarts because we are not saving the state in the
                 // configuration. when the server restarts the UI is inconsistent with the active log level
                 // https://github.com/Jackett/Jackett/issues/8315
-                setEnhancedLogLevel(false);
+                SetEnhancedLogLevel(false);
 
                 Thread.Sleep(500);
                 logger.Info("Restarting webhost due to configuration change");
                 Helper.RestartWebHost();
             }
             else
-                setEnhancedLogLevel(enhancedLogging);
+                SetEnhancedLogLevel(enhancedLogging);
 
             serverConfig.ConfigChanged();
 
@@ -213,7 +220,7 @@ namespace Jackett.Server.Controllers
         [HttpGet]
         public List<CachedLog> Logs() => logCache.Logs;
 
-        private void setEnhancedLogLevel(bool enabled)
+        private void SetEnhancedLogLevel(bool enabled)
         {
             Helper.SetLogLevel(enabled ? LogLevel.Debug : LogLevel.Info);
             serverConfig.RuntimeSettings.TracingEnabled = enabled;

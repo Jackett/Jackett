@@ -25,6 +25,8 @@ namespace Jackett.Common.Services
     ///     before testing the configuration
     ///   * When there is some error/exception in the indexer => The results are not cached so we can retry in the
     ///     next request
+    ///   * When the user changes proxy configuration => We call CleanCache to remove all cached results. The user will
+    ///     be able to test the proxy
     /// * We want to limit the memory usage, so we try to remove elements from cache ASAP:
     ///   * Each indexer can have a maximum number of results in memory. If the limit is exceeded we remove old results
     ///   * Cached results expire after some time
@@ -78,7 +80,7 @@ namespace Jackett.Common.Services
 
                 _logger.Debug($"CACHE CacheResults / Indexer: {trackerCache.TrackerId} / Added: {releases.Count} releases");
 
-                PruneCacheByMaxResultsPerIndexer(); // remove old results if we exceed the maximum limit
+                PruneCacheByMaxResultsPerIndexer(trackerCache); // remove old results if we exceed the maximum limit
             }
         }
 
@@ -159,6 +161,18 @@ namespace Jackett.Common.Services
             }
         }
 
+        public void CleanCache()
+        {
+            lock (_cache)
+            {
+                if (!IsCacheEnabled())
+                    return;
+
+                _cache.Clear();
+                _logger.Debug("CACHE CleanCache");
+            }
+        }
+
         private bool IsCacheEnabled()
         {
             if (!_serverConfig.CacheEnabled)
@@ -191,27 +205,26 @@ namespace Jackett.Common.Services
             }
         }
 
-        private void PruneCacheByMaxResultsPerIndexer()
+        private void PruneCacheByMaxResultsPerIndexer(TrackerCache trackerCache)
         {
+            // Remove queries exceeding max results per indexer
+            var resultsPerQuery = trackerCache.Queries
+                .OrderByDescending(q => q.Value.Created) // newest first
+                .Select(q => new Tuple<string, int>(q.Key, q.Value.Results.Count)).ToList();
+
             var prunedCounter = 0;
-            foreach (var trackerCache in _cache.Values)
+            while (true)
             {
-                // Remove queries exceeding max results per indexer
-                var resultsPerQuery = trackerCache.Queries
-                    .OrderByDescending(q => q.Value.Created) // newest first
-                    .Select(q => new Tuple<string, int>(q.Key, q.Value.Results.Count)).ToList();
-                while (true)
-                {
-                    var total = resultsPerQuery.Select(q => q.Item2).Sum();
-                    if (total <= _serverConfig.CacheMaxResultsPerIndexer)
-                        break;
-                    trackerCache.Queries.Remove(resultsPerQuery.Pop().Item1); // remove the older
-                    prunedCounter++;
-                }
+                var total = resultsPerQuery.Select(q => q.Item2).Sum();
+                if (total <= _serverConfig.CacheMaxResultsPerIndexer)
+                    break;
+                trackerCache.Queries.Remove(resultsPerQuery.Pop().Item1); // remove the older
+                prunedCounter++;
             }
+
             if (_logger.IsDebugEnabled)
             {
-                _logger.Debug($"CACHE PruneCacheByMaxResultsPerIndexer / Pruned queries: {prunedCounter}");
+                _logger.Debug($"CACHE PruneCacheByMaxResultsPerIndexer / Indexer: {trackerCache.TrackerId} / Pruned queries: {prunedCounter}");
                 PrintCacheStatus();
             }
         }
