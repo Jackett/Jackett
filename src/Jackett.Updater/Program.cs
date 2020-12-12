@@ -516,7 +516,7 @@ namespace Jackett.Updater
                     if (isWindows)
                     {
                         //User didn't initiate the update from Windows service and wasn't running Jackett via the tray, must have started from the console
-                        startInfo.Arguments = $"/K {startInfo.FileName} {startInfo.Arguments}";
+                        startInfo.Arguments = $"/K \"{startInfo.FileName}\" {startInfo.Arguments}";
                         startInfo.FileName = "cmd.exe";
                         startInfo.CreateNoWindow = false;
                         startInfo.WindowStyle = ProcessWindowStyle.Normal;
@@ -524,7 +524,7 @@ namespace Jackett.Updater
 
                     if (variant == Variants.JackettVariant.Mono)
                     {
-                        startInfo.Arguments = startInfo.FileName + " " + startInfo.Arguments;
+                        startInfo.Arguments = $"\"{startInfo.FileName}\" {startInfo.Arguments}";
                         startInfo.FileName = "mono";
                     }
 
@@ -535,7 +535,7 @@ namespace Jackett.Updater
                         startInfo.CreateNoWindow = true;
                     }
 
-                    logger.Info("Starting Jackett: " + startInfo.FileName + " " + startInfo.Arguments);
+                    logger.Info($"Starting Jackett: \"{startInfo.FileName }\" {startInfo.Arguments}");
                     Process.Start(startInfo);
                 }
             }
