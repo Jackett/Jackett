@@ -10,6 +10,8 @@ using NLog;
 
 namespace Jackett.Server.Services
 {
+// This code is Windows specific but we are already doing the checks our way
+#pragma warning disable CA1416
     public class ServiceConfigService : IServiceConfigService
     {
         private const string NAME = "Jackett";
@@ -103,4 +105,5 @@ namespace Jackett.Server.Services
             }
         }
     }
+#pragma warning restore CA1416
 }
