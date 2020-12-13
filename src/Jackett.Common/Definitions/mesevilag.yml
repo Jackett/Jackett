@@ -51,14 +51,13 @@ settings:
       4: created
       7: seeders
       5: size
-      1: title
   - name: type
     type: select
     label: Order requested from site
-    default: 2
+    default: desc
     options:
-      2: desc
-      1: asc
+      desc: desc
+      asc: asc
   - name: info
     type: info
     label: Results Per Page
@@ -93,7 +92,7 @@ search:
       args: ["[^a-zA-Z0-9]+", "%"]
 
   rows:
-    selector: table[cellpadding="3"] > tbody > tr:has(a[onmouseover])
+    selector: table[cellpadding="5"] > tbody > tr:has(a[onmouseover])
 
   fields:
     category:
@@ -103,17 +102,20 @@ search:
         - name: querystring
           args: cat
     title:
-      selector: a[href^="details.php?id="]
+      selector: a[href^="javascript:"]
       attribute: title
     details:
-      selector: a[href^="details.php?id="]
-      attribute: href
-    download:
-      selector: a[href^="details.php?id="]
-      attribute: href
+      selector: span
+      attribute: id
       filters:
         - name: replace
-          args: ["details.php?", "download.php?"]
+          args: ["span_bookmark_", "details.php?id="]
+    download:
+      selector: span
+      attribute: id
+      filters:
+        - name: replace
+          args: ["span_bookmark_", "download.php?id="]
     imdb:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
